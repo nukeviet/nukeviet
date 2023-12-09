@@ -176,3 +176,13 @@ $lang_module['2step_oauth_dels_mail_content'] = '%1$s<br /><br />Administration 
 $lang_module['ip_version'] = 'IP Version';
 $lang_module['other_info'] = 'Other information';
 $lang_module['admin_user_logout'] = 'Forced logout from user account when logged in as administrator';
+$lang_module['lev_expired'] = 'Valid until';
+$lang_module['lev_expired_error'] = 'The validity time must be greater than the current time';
+$lang_module['lev_expired_note'] = 'Leave blank = indefinitely';
+$lang_module['after_exp_action'] = 'Action after expiration';
+$lang_module['downgrade_to_modadmin'] = 'Downgrade to Modules admin';
+$lang_module['downgrade_to_modadmin_note'] = 'If not checked, the admin account will be suspended after expiration';
+$lang_module['downgrade_to_modadmin_res'] = 'After that, will be downgraded to Modules admin';
+$lang_module['unlimited'] = 'Unlimited';
+$lang_module['admin_rights_expired'] = 'Admin rights have expired';
+$lang_module['lev_expired_suspend'] = 'Suspend the admin rights of user %s because the validity period has expired';

@@ -79,28 +79,31 @@ if ($nv_Request->get_title('checkss', 'post') == $checkss) {
         $adminpass = '';
     } else {
         if ($row['lev'] == 3) {
-            $is_delCache = false;
-            $array_keys = array_keys($site_mods);
-            foreach ($array_keys as $mod) {
-                if (!empty($mod)) {
-                    if (!empty($site_mods[$mod]['admins'])) {
-                        $admins = array_map('intval', explode(',', $site_mods[$mod]['admins']));
-                        if (in_array($admin_id, $admins, true)) {
-                            $admins = array_diff($admins, [$admin_id]);
-                            $admins = implode(',', $admins);
-
-                            $sth = $db->prepare('UPDATE ' . NV_MODULES_TABLE . ' SET admins= :admins WHERE title= :mod');
-                            $sth->bindParam(':admins', $admins, PDO::PARAM_STR);
-                            $sth->bindParam(':mod', $mod, PDO::PARAM_STR);
-                            $sth->execute();
-
-                            $is_delCache = true;
+            foreach ($global_config['setup_langs'] as $l) {
+                $is_delCache = false;
+                $_site_mods = nv_site_mods($l);
+                $array_keys = array_keys($_site_mods);
+                foreach ($array_keys as $mod) {
+                    if (!empty($mod)) {
+                        if (!empty($_site_mods[$mod]['admins'])) {
+                            $admins = array_map('intval', explode(',', $_site_mods[$mod]['admins']));
+                            if (in_array($admin_id, $admins, true)) {
+                                $admins = array_diff($admins, [$admin_id]);
+                                $admins = implode(',', $admins);
+    
+                                $sth = $db->prepare('UPDATE ' . $db_config['prefix'] . '_' . $l . '_modules SET admins= :admins WHERE title= :mod');
+                                $sth->bindParam(':admins', $admins, PDO::PARAM_STR);
+                                $sth->bindParam(':mod', $mod, PDO::PARAM_STR);
+                                $sth->execute();
+    
+                                $is_delCache = true;
+                            }
                         }
                     }
                 }
-            }
-            if ($is_delCache) {
-                $nv_Cache->delMod('modules');
+                if ($is_delCache) {
+                    $nv_Cache->delMod('modules', $l);
+                }
             }
         }
 

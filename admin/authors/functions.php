@@ -43,12 +43,18 @@ function nv_admin_add_result($result)
     $xtpl = new XTemplate('add.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/authors');
 
     $lev = ($result['lev'] == 2) ? $nv_Lang->getGlobal('level2') : $nv_Lang->getGlobal('level3');
+    $lev_expired = !empty($result['lev_expired']) ? $result['lev_expired'] : $nv_Lang->getModule('unlimited');
     $contents = [];
     $contents['admin_id'] = $result['admin_id'];
     $contents['title'] = $nv_Lang->getModule('nv_admin_add_title');
     $contents['info'] = [];
     $contents['info']['lev'] = [$nv_Lang->getModule('lev'), $lev];
     $contents['info']['modules'] = [$nv_Lang->getModule('nv_admin_modules'), $result['modules']];
+    $contents['info']['lev_expired'] = [$nv_Lang->getModule('lev_expired'), $lev_expired];
+    if ($result['downgrade_to_modadmin']) {
+        $inf = !empty($result['after_modules']) ? ': ' . $result['after_modules'] : ''; 
+        $contents['info']['after_exp_action'] = [$nv_Lang->getModule('after_exp_action'), $nv_Lang->getModule('downgrade_to_modadmin') . $inf];
+    }
     $contents['info']['position'] = [$nv_Lang->getModule('position'), $result['position']];
     $contents['info']['editor'] = [$nv_Lang->getModule('editor'), (!empty($result['editor']) ? $result['editor'] : $nv_Lang->getModule('not_use'))];
     $contents['info']['allow_files_type'] = [$nv_Lang->getModule('allow_files_type'), (!empty($result['allow_files_type']) ? implode(', ', $result['allow_files_type']) : $nv_Lang->getGlobal('no'))];

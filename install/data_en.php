@@ -106,6 +106,7 @@ $install_lang['cron']['cron_auto_check_version'] = 'Check NukeViet version';
 $install_lang['cron']['cron_notification_autodel'] = 'Delete old notification';
 $install_lang['cron']['cron_remove_expired_inform'] = 'Remove expired notifications';
 $install_lang['cron']['cron_apilogs_autodel'] = 'Remove expired API-logs';
+$install_lang['cron']['cron_expadmin_handling'] = 'Handling expired admins';
 
 $install_lang['groups']['NukeViet-Fans'] = 'NukeViet-Fans';
 $install_lang['groups']['NukeViet-Admins'] = 'NukeViet-Admins';

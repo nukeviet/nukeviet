@@ -176,3 +176,13 @@ $lang_module['2step_oauth_dels_mail_content'] = '%1$s<br /><br />L\'administrati
 $lang_module['ip_version'] = 'Version IP';
 $lang_module['other_info'] = 'Autres informations';
 $lang_module['admin_user_logout'] = 'Déconnexion forcée du compte utilisateur lors de la connexion en tant qu\'administrateur';
+$lang_module['lev_expired'] = 'Valable jusqu\'au';
+$lang_module['lev_expired_error'] = 'La durée de validité doit être supérieure à l\'heure actuelle';
+$lang_module['lev_expired_note'] = 'Laisser vide = indéfiniment';
+$lang_module['after_exp_action'] = 'Action après expiration';
+$lang_module['downgrade_to_modadmin'] = 'Revenir à l\'administrateur des modules';
+$lang_module['downgrade_to_modadmin_note'] = 'Si cette case n\'est pas cochée, le compte administrateur sera suspendu après expiration';
+$lang_module['downgrade_to_modadmin_res'] = 'Après cela, sera rétrogradé vers l\'administrateur des modules';
+$lang_module['unlimited'] = 'Illimité';
+$lang_module['admin_rights_expired'] = 'Les droits d\'administrateur ont expiré';
+$lang_module['lev_expired_suspend'] = 'Suspendre les droits d\'administrateur de l\'utilisateur %s car la période de validité a expiré';

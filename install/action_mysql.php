@@ -81,6 +81,8 @@ $sql_create_table[] = 'CREATE TABLE ' . NV_AUTHORS_GLOBALTABLE . " (
   admin_id int(11) unsigned NOT NULL,
   editor varchar(100) DEFAULT '',
   lev tinyint(1) unsigned NOT NULL DEFAULT '0',
+  lev_expired INT(11) UNSIGNED NOT NULL DEFAULT '0',
+  after_exp_action MEDIUMTEXT NULL DEFAULT NULL,
   files_level varchar(255) DEFAULT '',
   position varchar(255) NOT NULL,
   main_module varchar(50) NOT NULL DEFAULT 'siteinfo',

@@ -162,7 +162,7 @@ if ($allow_change) {
                     }
                 }
             }
-            nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=suspend&id=' . $id);
+            nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
         }
     } else {
         $adminpass = $new_reason = '';
@@ -204,6 +204,7 @@ if (empty($susp_reason)) {
     $result2 = $db->query('SELECT userid, username, first_name, last_name FROM ' . NV_USERS_GLOBALTABLE . ' WHERE userid IN (' . $ads . ')');
 
     $ads = [];
+    $ads[0] = $nv_Lang->getGlobal('system');
     while ($row2 = $result2->fetch()) {
         $ads[$row2['userid']] = '<a href="' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;admin_id=' . $row2['userid'] . '">' . $row2['first_name'] . '</a>';
     }

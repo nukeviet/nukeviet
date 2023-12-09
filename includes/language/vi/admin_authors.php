@@ -176,3 +176,13 @@ $lang_module['2step_oauth_dels_mail_content'] = '%1$s<br /><br />Ban quản tr�
 $lang_module['ip_version'] = 'Loại IP';
 $lang_module['other_info'] = 'Thông tin khác';
 $lang_module['admin_user_logout'] = 'Buộc đăng xuất khỏi tài khoản người dùng khi đăng nhập với tư cách quản trị viên';
+$lang_module['lev_expired'] = 'Hiệu lực đến hết ngày';
+$lang_module['lev_expired_error'] = 'Vui lòng điền thời gian hiệu lực lớn hơn thời gian hiện tại';
+$lang_module['lev_expired_note'] = 'Để trống = vô thời hạn';
+$lang_module['after_exp_action'] = 'Hành động sau khi hết hiệu lực';
+$lang_module['downgrade_to_modadmin'] = 'Hạ cấp làm Quản lý module';
+$lang_module['downgrade_to_modadmin_note'] = 'Nếu không chọn, tài khoản admin sẽ bị đình chỉ sau khi hết hạn';
+$lang_module['downgrade_to_modadmin_res'] = 'Sau đó sẽ hạ cấp làm Quản lý module';
+$lang_module['unlimited'] = 'Vô thời hạn';
+$lang_module['admin_rights_expired'] = 'Quyền admin hết thời hạn hiệu lực';
+$lang_module['lev_expired_suspend'] = 'Đình chỉ quyền admin của user %s vì đã hết thời hạn hiệu lực';

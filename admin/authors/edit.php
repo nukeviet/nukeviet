@@ -41,19 +41,31 @@ if (empty($allowed)) {
     nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
 }
 
+$allmods = [];
+foreach ($global_config['setup_langs'] as $l) {
+    $allmods[$l] = nv_site_mods($l);
+}
+
 $old_modules = [];
 if ($row['lev'] == 3) {
-    $array_keys = array_keys($site_mods);
-    foreach ($array_keys as $mod) {
-        if (!empty($mod)) {
-            if (!empty($site_mods[$mod]['admins'])) {
-                if (in_array($admin_id, array_map('intval', explode(',', $site_mods[$mod]['admins'])), true)) {
-                    $old_modules[] = $mod;
+    foreach ($allmods as $l => $_site_mods) {
+        $array_keys = array_keys($_site_mods);
+        foreach ($array_keys as $mod) {
+            if (!empty($mod)) {
+                if (!empty($_site_mods[$mod]['admins'])) {
+                    if (in_array($admin_id, array_map('intval', explode(',', $_site_mods[$mod]['admins'])), true)) {
+                        !isset($old_modules[$l]) && $old_modules[$l] = [];
+                        $old_modules[$l][] = $mod;
+                    }
                 }
             }
         }
     }
 }
+
+$old_lev_expired = !empty($row['lev_expired']) ? date('d.m.Y', $row['lev_expired']) : '';
+$old_downgrade_to_modadmin = !empty($row['after_exp_action']) ? true : false;
+$old_after_modules = $old_downgrade_to_modadmin ? json_decode($row['after_exp_action'], true) : [];
 
 $sql = 'SELECT * FROM ' . NV_USERS_GLOBALTABLE . ' WHERE userid=' . $admin_id;
 $row_user = $db->query($sql)->fetch();
@@ -71,13 +83,26 @@ $adminThemes = [''];
 $adminThemes = array_merge($adminThemes, nv_scandir(NV_ROOTDIR . '/themes', $global_config['check_theme_admin']));
 unset($adminThemes[0]);
 $checkss = md5(NV_CHECK_SESSION . '_' . $module_name . '_' . $op . '_' . $admin_id);
+
+$editors = [];
+$dirs = nv_scandir(NV_ROOTDIR . '/' . NV_EDITORSDIR, '/^[a-zA-Z0-9_]+$/');
+if (!empty($dirs)) {
+    foreach ($dirs as $dir) {
+        if (file_exists(NV_ROOTDIR . '/' . NV_EDITORSDIR . '/' . $dir . '/nv.php')) {
+            $editors[] = $dir;
+        }
+    }
+}
+
 if ($nv_Request->get_int('save', 'post', 0)) {
     if ($checkss != $nv_Request->get_string('checkss', 'post')) {
         nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
     }
     $editor = $nv_Request->get_title('editor', 'post', '');
+    (!empty($editors) and !empty($editor) and !in_array($editor, $editors, true)) && $editor = '';
+
     if (defined('NV_IS_SPADMIN')) {
-        $allow_files_type = $nv_Request->get_array('allow_files_type', 'post', []);
+        $allow_files_type = $nv_Request->get_typed_array('allow_files_type', 'post', 'title', []);
         $allow_modify_files = $nv_Request->get_int('allow_modify_files', 'post', 0);
         $allow_create_subdirectories = $nv_Request->get_int('allow_create_subdirectories', 'post', 0);
         $allow_modify_subdirectories = $nv_Request->get_int('allow_modify_subdirectories', 'post', 0);
@@ -89,66 +114,111 @@ if ($nv_Request->get_int('save', 'post', 0)) {
     }
 
     $lev = ((defined('NV_IS_SPADMIN') and $admin_info['level'] == 1) and $row['admin_id'] != $admin_info['admin_id']) ? $nv_Request->get_int('lev', 'post', 0) : $row['lev'];
-    $modules = (defined('NV_IS_SPADMIN') and $row['admin_id'] != $admin_info['admin_id']) ? $nv_Request->get_array('modules', 'post', []) : $old_modules;
+    $lev_expired = (defined('NV_IS_SPADMIN') and $row['admin_id'] != $admin_info['admin_id']) ? $nv_Request->get_title('lev_expired', 'post', '') : $old_lev_expired;
+    $downgrade_to_modadmin = ((defined('NV_IS_SPADMIN') and $admin_info['level'] == 1) and $row['admin_id'] != $admin_info['admin_id']) ? $nv_Request->get_bool('downgrade_to_modadmin', 'post', false) : $old_downgrade_to_modadmin;
+    ($lev == 3 or empty($lev_expired)) && $downgrade_to_modadmin = false;
+
+    if ($lev == 3 and defined('NV_IS_SPADMIN') and $row['admin_id'] != $admin_info['admin_id']) {
+        $modules = [];
+        $_modules = isset($_POST['modules']) ? $_POST['modules'] : [];
+        if (!empty($_modules)) {
+            foreach ($_modules as $l => $vs) {
+                if (!empty($vs)) {
+                    foreach ($vs as $m) {
+                        if (isset($allmods[$l][$m])) {
+                            !isset($modules[$l]) && $modules[$l] = [];
+                            $modules[$l][] = $m;
+                        }
+                    }
+                }
+            }
+        }
+    } else {
+        $modules = $old_modules;
+    }
+    ($lev == 2) && $modules = [];
+
+    $ss_after_modules = [];
+    if (((defined('NV_IS_SPADMIN') and $admin_info['level'] == 1) and $row['admin_id'] != $admin_info['admin_id'] and $downgrade_to_modadmin)) {
+        $after_modules = [];
+        $_after_modules = isset($_POST['after_modules']) ? $_POST['after_modules'] : [];
+        if (!empty($_after_modules)) {
+            foreach ($_after_modules as $l => $vs) {
+                if (!empty($vs)) {
+                    foreach ($vs as $m) {
+                        if (isset($allmods[$l][$m])) {
+                            !isset($after_modules[$l]) && $after_modules[$l] = [];
+                            $after_modules[$l][] = $m;
+                            $ss_after_modules[] = $m . ' (' . $language_array[$l]['name'] . ')';
+                        }
+                    }
+                }
+            }
+        }
+    } else {
+        $after_modules = $old_after_modules;
+    }
+
     $position = ((defined('NV_IS_SPADMIN') and $admin_info['level'] == 1) or (defined('NV_IS_SPADMIN') and $row['lev'] != 1 and $row['admin_id'] != $admin_info['admin_id'])) ? $nv_Request->get_title('position', 'post') : $row['position'];
     $main_module = $nv_Request->get_title('main_module', 'post', 'siteinfo');
-
-    if ($lev == 2) {
-        $modules = [];
-    }
-
-    if (!empty($modules)) {
-        $modules = array_intersect(array_keys($site_mods), $modules);
-    }
+    $admin_theme = $nv_Request->get_string('admin_theme', 'post');
+    $admin_theme = (!empty($admin_theme) and in_array($admin_theme, $adminThemes, true)) ? $admin_theme : '';
 
     if (empty($position)) {
         $error = $nv_Lang->getModule('position_incorrect');
     } else {
-        $add_modules = array_diff($modules, $old_modules);
-        $del_modules = array_diff($old_modules, $modules);
+        foreach ($global_config['setup_langs'] as $l) {
+            if (isset($modules[$l]) or isset($old_modules[$l])) {
+                !isset($modules[$l]) && $modules[$l] = [];
+                !isset($old_modules[$l]) && $old_modules[$l] = [];
 
-        if (!empty($add_modules)) {
-            foreach ($add_modules as $mod) {
-                $admins = (!empty($site_mods[$mod]['admins'])) ? explode(',', $site_mods[$mod]['admins']) : [];
-                array_push($admins, $admin_id);
-                $admins = array_map('intval', $admins);
-                $admins = (!empty($admins)) ? implode(',', $admins) : '';
+                $add_modules = array_diff($modules[$l],  $old_modules[$l]);
+                $del_modules = array_diff( $old_modules[$l], $modules[$l]);
 
-                $sth = $db->prepare('UPDATE ' . NV_MODULES_TABLE . ' SET admins= :admins WHERE title= :mod');
-                $sth->bindParam(':admins', $admins, PDO::PARAM_STR);
-                $sth->bindParam(':mod', $mod, PDO::PARAM_STR);
-                $sth->execute();
+                if (!empty($add_modules)) {
+                    foreach ($add_modules as $mod) {
+                        $admins = (!empty($allmods[$l][$mod]['admins']) ? $allmods[$l][$mod]['admins'] . ',' : '') . $admin_id;
+                        $admins = array_map('intval', explode(',', $admins));
+                        $admins = array_unique($admins);
+                        $admins = implode(',', $admins);
+                        $sth = $db->prepare('UPDATE ' . $db_config['prefix'] . '_' . $l . '_modules SET admins= :admins WHERE title= :mod');
+                        $sth->bindParam(':admins', $admins, PDO::PARAM_STR);
+                        $sth->bindParam(':mod', $mod, PDO::PARAM_STR);
+                        $sth->execute();
+                    }
+                }
+                if (!empty($del_modules)) {
+                    foreach ($del_modules as $mod) {
+                        $admins = (!empty($allmods[$l][$mod]['admins'])) ? explode(',', $allmods[$l][$mod]['admins']) : [];
+                        $admins = array_diff($admins, [
+                            $admin_id,
+                            0
+                        ]);
+                        $admins = array_map('intval', $admins);
+                        $admins = (!empty($admins)) ? implode(',', $admins) : '';
+        
+                        $sth = $db->prepare('UPDATE ' . $db_config['prefix'] . '_' . $l . '_modules SET admins= :admins WHERE title= :mod');
+                        $sth->bindParam(':admins', $admins, PDO::PARAM_STR);
+                        $sth->bindParam(':mod', $mod, PDO::PARAM_STR);
+                        $sth->execute();
+                    }
+                }
+        
+                if (!empty($add_modules) or !empty($del_modules)) {
+                    $nv_Cache->delMod('modules', $l);
+                }
             }
-        }
-        if (!empty($del_modules)) {
-            foreach ($del_modules as $mod) {
-                $admins = (!empty($site_mods[$mod]['admins'])) ? explode(',', $site_mods[$mod]['admins']) : [];
-                $admins = array_diff($admins, [
-                    $admin_id,
-                    0
-                ]);
-                $admins = array_map('intval', $admins);
-                $admins = (!empty($admins)) ? implode(',', $admins) : '';
-
-                $sth = $db->prepare('UPDATE ' . NV_MODULES_TABLE . ' SET admins= :admins WHERE title= :mod');
-                $sth->bindParam(':admins', $admins, PDO::PARAM_STR);
-                $sth->bindParam(':mod', $mod, PDO::PARAM_STR);
-                $sth->execute();
-            }
-        }
-
-        if (!empty($add_modules) or !empty($del_modules)) {
-            $nv_Cache->delMod('modules');
         }
 
         $allow_files_type = array_values(array_intersect($global_config['file_allowed_ext'], $allow_files_type));
         $files_level = (!empty($allow_files_type) ? implode(',', $allow_files_type) : '') . '|' . $allow_modify_files . '|' . $allow_create_subdirectories . '|' . $allow_modify_subdirectories;
+        unset($matches);
+        $lev_expired_sql = preg_match('/^(0?[1-9]|[12][0-9]|3[01])[\/\-\.](0?[1-9]|1[012])[\/\-\.](\d{4})$/', $lev_expired, $matches) ? mktime(23, 59, 59, $matches[2], $matches[1], $matches[3]) : 0;
+        $after_modules_sql = $downgrade_to_modadmin ? json_encode($after_modules) : '';
 
-        $admin_theme = $nv_Request->get_string('admin_theme', 'post');
-        $admin_theme = (!empty($admin_theme) and in_array($admin_theme, $adminThemes, true)) ? $admin_theme : '';
-
-        $sth = $db->prepare('UPDATE ' . NV_AUTHORS_GLOBALTABLE . ' SET editor = :editor, lev=' . $lev . ', files_level= :files_level, position= :position, main_module = :main_module, admin_theme = :admin_theme WHERE admin_id=' . $admin_id);
+        $sth = $db->prepare('UPDATE ' . NV_AUTHORS_GLOBALTABLE . ' SET editor = :editor, lev=' . $lev . ', lev_expired=' . $lev_expired_sql . ', after_exp_action=:after_exp_action, files_level= :files_level, position= :position, main_module = :main_module, admin_theme = :admin_theme, edittime=' . NV_CURRENTTIME . ' WHERE admin_id=' . $admin_id);
         $sth->bindParam(':editor', $editor, PDO::PARAM_STR);
+        $sth->bindParam(':after_exp_action', $after_modules_sql, PDO::PARAM_STR);
         $sth->bindParam(':files_level', $files_level, PDO::PARAM_STR);
         $sth->bindParam(':position', $position, PDO::PARAM_STR);
         $sth->bindParam(':main_module', $main_module, PDO::PARAM_STR);
@@ -199,59 +269,112 @@ if ($nv_Request->get_int('save', 'post', 0)) {
                 (!empty($allow_modify_subdirectories) ? $nv_Lang->getGlobal('yes') : $nv_Lang->getGlobal('no'))
             ];
         }
-        if ($lev == 2 and $lev != $row['lev']) {
-            $result['change']['lev'] = [
-                $nv_Lang->getModule('lev'),
-                $nv_Lang->getGlobal('level' . $row['lev']),
-                $nv_Lang->getGlobal('level' . $lev)
-            ];
-        } elseif ($lev == 3 and $lev != $row['lev']) {
-            $result['change']['lev'] = [
-                $nv_Lang->getModule('lev'),
-                $nv_Lang->getGlobal('level' . $row['lev']),
-                $nv_Lang->getGlobal('level' . $lev)
-            ];
-            $old = [];
-            if (!empty($old_modules)) {
-                foreach ($old_modules as $m) {
-                    $old[] = $site_mods[$m]['custom_title'];
-                }
+        if ($lev == 2) {
+            if ($lev != $row['lev']) {
+                $result['change']['lev'] = [
+                    $nv_Lang->getModule('lev'),
+                    $nv_Lang->getGlobal('level' . $row['lev']),
+                    $nv_Lang->getGlobal('level' . $lev)
+                ];
             }
-            $old = (!empty($old)) ? implode(', ', $old) : '';
-            $new = [];
-            if (!empty($modules)) {
-                foreach ($modules as $m) {
-                    $new[] = $site_mods[$m]['custom_title'];
-                }
+            if ($lev_expired_sql != $row['lev_expired']) {
+                $result['change']['lev_expired'] = [
+                    $nv_Lang->getModule('lev_expired'),
+                    !empty($old_lev_expired) ? $old_lev_expired : $nv_Lang->getModule('unlimited'),
+                    !empty($lev_expired) ? $lev_expired : $nv_Lang->getModule('unlimited')
+                ];
             }
-            $new = (!empty($new)) ? implode(', ', $new) : '';
-
-            $result['change']['modules'] = [
-                $nv_Lang->getModule('nv_admin_modules'),
-                $old,
-                $new
-            ];
-        } elseif ($lev == 3 and $lev == $row['lev']) {
-            if (!empty($add_modules) or !empty($del_modules)) {
+            
+            if ($downgrade_to_modadmin != $old_downgrade_to_modadmin or $after_modules != $old_after_modules) {
+                $old_afm = [];
+                if (!empty($old_after_modules)) {
+                    foreach ($old_after_modules as $l => $mds) {
+                        foreach ($mds as $m) {
+                            $old_afm[] = $m . ' (' . $language_array[$l]['name'] . ')';
+                        }
+                    }
+                }
+                $old_afm = (!empty($old_afm)) ? implode(', ', $old_afm) : '';
+                $afm = !empty($after_modules) ? implode(', ', $ss_after_modules) : '';
+                $result['change']['after_exp_action'] = [
+                    $nv_Lang->getModule('after_exp_action'),
+                    $old_downgrade_to_modadmin ? $nv_Lang->getModule('downgrade_to_modadmin') . $old_afm : '',
+                    $downgrade_to_modadmin ? $nv_Lang->getModule('downgrade_to_modadmin') . $afm : ''
+                ];
+            }
+        } elseif ($lev == 3) {
+            if ($lev != $row['lev']) {
+                $result['change']['lev'] = [
+                    $nv_Lang->getModule('lev'),
+                    $nv_Lang->getGlobal('level' . $row['lev']),
+                    $nv_Lang->getGlobal('level' . $lev)
+                ];
                 $old = [];
                 if (!empty($old_modules)) {
-                    foreach ($old_modules as $m) {
-                        $old[] = $site_mods[$m]['custom_title'];
+                    foreach ($old_modules as $l => $mds) {
+                        foreach ($mds as $m) {
+                            $old[] = $m . ' (' . $language_array[$l]['name'] . ')';
+                        }
                     }
                 }
                 $old = (!empty($old)) ? implode(', ', $old) : '';
                 $new = [];
                 if (!empty($modules)) {
-                    foreach ($modules as $m) {
-                        $new[] = $site_mods[$m]['custom_title'];
+                    foreach ($modules as $l => $mds) {
+                        foreach ($mds as $m) {
+                            $new[] = $m . ' (' . $language_array[$l]['name'] . ')';
+                        }
                     }
                 }
                 $new = (!empty($new)) ? implode(', ', $new) : '';
+    
                 $result['change']['modules'] = [
                     $nv_Lang->getModule('nv_admin_modules'),
                     $old,
                     $new
                 ];
+
+                if ($lev_expired_sql != $row['lev_expired']) {
+                    $result['change']['lev_expired'] = [
+                        $nv_Lang->getModule('lev_expired'),
+                        !empty($old_lev_expired) ? $old_lev_expired : $nv_Lang->getModule('unlimited'),
+                        !empty($lev_expired) ? $lev_expired : $nv_Lang->getModule('unlimited')
+                    ];
+                }
+            } else {
+                if (!empty($add_modules) or !empty($del_modules)) {
+                    $old = [];
+                    if (!empty($old_modules)) {
+                        foreach ($old_modules as $l => $mds) {
+                            foreach ($mds as $m) {
+                                $old[] = $m . ' (' . $language_array[$l]['name'] . ')';
+                            }
+                        }
+                    }
+                    $old = (!empty($old)) ? implode(', ', $old) : '';
+                    $new = [];
+                    if (!empty($modules)) {
+                        foreach ($modules as $l => $mds) {
+                            foreach ($mds as $m) {
+                                $new[] = $m . ' (' . $language_array[$l]['name'] . ')';
+                            }
+                        }
+                    }
+                    $new = (!empty($new)) ? implode(', ', $new) : '';
+                    $result['change']['modules'] = [
+                        $nv_Lang->getModule('nv_admin_modules'),
+                        $old,
+                        $new
+                    ];
+                }
+
+                if ($lev_expired_sql != $row['lev_expired']) {
+                    $result['change']['lev_expired'] = [
+                        $nv_Lang->getModule('lev_expired'),
+                        !empty($old_lev_expired) ? $old_lev_expired : $nv_Lang->getModule('unlimited'),
+                        !empty($lev_expired) ? $lev_expired : $nv_Lang->getModule('unlimited')
+                    ];
+                }
             }
         }
         if ($position != $row['position']) {
@@ -280,103 +403,34 @@ if ($nv_Request->get_int('save', 'post', 0)) {
     $position = $row['position'];
     $editor = $row['editor'];
     $admin_theme = $row['admin_theme'];
+    $main_module = $row['main_module'];
     $allow_files_type = $old_allow_files_type;
     $allow_modify_files = $old_allow_modify_files;
     $allow_create_subdirectories = $old_allow_create_subdirectories;
     $allow_modify_subdirectories = $old_allow_modify_subdirectories;
+    $lev_expired = $old_lev_expired;
+    $downgrade_to_modadmin = $old_downgrade_to_modadmin;
+    $after_modules = $old_after_modules;
 }
 
 $page_title = $nv_Lang->getModule('nv_admin_edit');
 
-$contents = [];
-$contents['info'] = (!empty($error)) ? $error : $nv_Lang->getModule('nv_admin_edit_info', $row_user['username']);
-$contents['is_error'] = (!empty($error)) ? 1 : 0;
-$contents['action'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=edit&amp;admin_id=' . $admin_id;
-if (defined('NV_IS_SPADMIN') and $row['admin_id'] != $admin_info['admin_id']) {
-    $mods = [];
-    $array_keys = array_keys($site_mods);
-    foreach ($array_keys as $mod) {
-        $mods[$mod]['checked'] = in_array($mod, $modules, true) ? 1 : 0;
-        $mods[$mod]['custom_title'] = $site_mods[$mod]['custom_title'];
-    }
-
-    $contents['lev'] = [
-        $nv_Lang->getModule('lev'),
-        $nv_Lang->getModule('if_level3_selected'),
-        $mods
-    ];
-
-    if (defined('NV_IS_SPADMIN') and $admin_info['level'] == 1) {
-        array_push($contents['lev'], $lev, $nv_Lang->getGlobal('level2'), $nv_Lang->getGlobal('level3'));
-    }
-}
-if ((defined('NV_IS_SPADMIN') and $admin_info['level'] == 1) or (defined('NV_IS_SPADMIN') and $row['lev'] != 1 and $row['admin_id'] != $admin_info['admin_id'])) {
-    $contents['position'] = [
-        $nv_Lang->getModule('position'),
-        $position,
-        $nv_Lang->getModule('position_info')
-    ];
-}
-
-$editors = [];
-$dirs = nv_scandir(NV_ROOTDIR . '/' . NV_EDITORSDIR, '/^[a-zA-Z0-9_]+$/');
-if (!empty($dirs)) {
-    foreach ($dirs as $dir) {
-        if (file_exists(NV_ROOTDIR . '/' . NV_EDITORSDIR . '/' . $dir . '/nv.php')) {
-            $editors[] = $dir;
-        }
-    }
-}
-
-if (!empty($editors)) {
-    $contents['editor'] = [
-        $nv_Lang->getModule('editor'),
-        $editors,
-        $editor,
-        $nv_Lang->getModule('not_use')
-    ];
-}
-
-if (defined('NV_IS_SPADMIN')) {
-    if (!empty($global_config['file_allowed_ext'])) {
-        $contents['allow_files_type'] = [
-            $nv_Lang->getModule('allow_files_type'),
-            $global_config['file_allowed_ext'],
-            $allow_files_type
-        ];
-    }
-
-    $contents['allow_modify_files'] = [
-        $nv_Lang->getModule('allow_modify_files'),
-        $allow_modify_files
-    ];
-    $contents['allow_create_subdirectories'] = [
-        $nv_Lang->getModule('allow_create_subdirectories'),
-        $allow_create_subdirectories
-    ];
-    $contents['allow_modify_subdirectories'] = [
-        $nv_Lang->getModule('allow_modify_subdirectories'),
-        $allow_modify_subdirectories
-    ];
-}
-
 $array_module = [];
 if ($admin_id != $admin_info['userid']) {
-    $edit_admin_mods = [];
     $result = $db->query('SELECT * FROM ' . $db_config['dbsystem'] . '.' . NV_AUTHORS_GLOBALTABLE . '_module WHERE act_' . $row['lev'] . ' = 1 ORDER BY weight ASC');
     while ($_row = $result->fetch()) {
-        $_row['custom_title'] = $nv_Lang->existsGlobal($_row['lang_key']) ? $nv_Lang->getGlobal($_row['lang_key']) : $_row['module'];
-        $edit_admin_mods[$_row['module']] = $_row;
+        $array_module[$_row['module']] = [
+            'module' => $_row['module'],
+            'title' => $nv_Lang->existsGlobal($_row['lang_key']) ? $nv_Lang->getGlobal($_row['lang_key']) : $_row['module']
+        ];
     }
 } else {
-    $edit_admin_mods = $admin_mods;
-}
-
-foreach ($edit_admin_mods as $mod) {
-    $array_module[$mod['module']] = [
-        'module' => $mod['module'],
-        'title' => $mod['custom_title']
-    ];
+    foreach ($admin_mods as $mod) {
+        $array_module[$mod['module']] = [
+            'module' => $mod['module'],
+            'title' => $mod['custom_title']
+        ];
+    }
 }
 
 foreach ($site_mods as $index => $value) {
@@ -393,90 +447,105 @@ foreach ($site_mods as $index => $value) {
 
 // Parse content
 $xtpl = new XTemplate('edit.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/authors');
-$xtpl->assign('CLASS', $contents['is_error'] ? ' class="error"' : '');
-$xtpl->assign('INFO', $contents['info']);
-$xtpl->assign('ACTION', $contents['action']);
+$xtpl->assign('CLASS', !empty($error) ? ' class="error"' : '');
+$xtpl->assign('INFO', !empty($error) ? $error : $nv_Lang->getModule('nv_admin_edit_info', $row_user['username']));
+$xtpl->assign('ACTION', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=edit&amp;admin_id=' . $admin_id);
 $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
+$xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
 $xtpl->assign('CHECKSS', $checkss);
+
+if ((defined('NV_IS_SPADMIN') and $admin_info['level'] == 1) or (defined('NV_IS_SPADMIN') and $row['lev'] != 1 and $row['admin_id'] != $admin_info['admin_id'])) {
+    $xtpl->assign('POSITION', $position);
+    $xtpl->parse('edit.position');
+}
 
 foreach ($adminThemes as $_admin_theme) {
     $xtpl->assign('THEME_NAME', $_admin_theme);
-    $xtpl->assign('THEME_SELECTED', ($_admin_theme == $admin_theme ? ' selected="selected"' : ''));
+    $xtpl->assign('THEME_SELECTED', $_admin_theme == $admin_theme ? ' selected="selected"' : '');
     $xtpl->parse('edit.admin_theme');
 }
 
-if (isset($contents['editor'])) {
-    $xtpl->assign('EDITOR0', $contents['editor'][0]);
-    $xtpl->assign('EDITOR3', $contents['editor'][3]);
-    foreach ($contents['editor'][1] as $edt) {
+if (!empty($editors)) {
+    foreach ($editors as $edt) {
         $xtpl->assign('VALUE', $edt);
-        $xtpl->assign('SELECTED', $edt == $contents['editor'][2] ? ' selected="selected"' : '');
+        $xtpl->assign('SELECTED', $edt == $editor ? ' selected="selected"' : '');
         $xtpl->parse('edit.editor.loop');
     }
     $xtpl->parse('edit.editor');
 }
 
-if (isset($contents['allow_files_type'])) {
-    $xtpl->assign('ALLOW_FILES_TYPE', $contents['allow_files_type'][0]);
+foreach ($array_module as $module) {
+    $module['selected'] = ($module['module'] == $main_module) ? 'selected="selected"' : '';
+    $xtpl->assign('MODULE', $module);
+    $xtpl->parse('edit.module');
+}
 
-    foreach ($contents['allow_files_type'][1] as $tp) {
+if (defined('NV_IS_SPADMIN') and !empty($global_config['file_allowed_ext'])) {
+    foreach ($global_config['file_allowed_ext'] as $tp) {
         $xtpl->assign('VALUE', $tp);
-        $xtpl->assign('CHECKED', in_array($tp, $contents['allow_files_type'][2], true) ? ' checked="checked"' : '');
+        $xtpl->assign('CHECKED', in_array($tp, $allow_files_type, true) ? ' checked="checked"' : '');
         $xtpl->parse('edit.allow_files_type.loop');
     }
     $xtpl->parse('edit.allow_files_type');
 }
 
-if (isset($contents['allow_modify_files'])) {
-    $xtpl->assign('ALLOW_MODIFY_FILES', $contents['allow_modify_files'][0]);
-    $xtpl->assign('CHECKED', $contents['allow_modify_files'][1] ? ' checked="checked"' : '');
+if (defined('NV_IS_SPADMIN')) {
+    $xtpl->assign('CHECKED', $allow_modify_files ? ' checked="checked"' : '');
     $xtpl->parse('edit.allow_modify_files');
-}
 
-if (isset($contents['allow_create_subdirectories'])) {
-    $xtpl->assign('ALLOW_CREATE_SUBDIRECTORIES', $contents['allow_create_subdirectories'][0]);
-    $xtpl->assign('CHECKED', $contents['allow_create_subdirectories'][1] ? ' checked="checked"' : '');
+    $xtpl->assign('CHECKED', $allow_create_subdirectories ? ' checked="checked"' : '');
     $xtpl->parse('edit.allow_create_subdirectories');
-}
 
-if (isset($contents['allow_modify_subdirectories'])) {
-    $xtpl->assign('ALLOW_MODIFY_SUBDIRECTORIES', $contents['allow_modify_subdirectories'][0]);
-    $xtpl->assign('CHECKED', $contents['allow_modify_subdirectories'][1] ? ' checked="checked"' : '');
+    $xtpl->assign('CHECKED', $allow_modify_subdirectories ? ' checked="checked"' : '');
     $xtpl->parse('edit.allow_modify_subdirectories');
 }
 
-if (isset($contents['lev'])) {
-    $xtpl->assign('LEV0', $contents['lev'][0]);
-    $xtpl->assign('LEV1', $contents['lev'][1]);
+if (defined('NV_IS_SPADMIN') and $row['admin_id'] != $admin_info['admin_id']) {
+    $xtpl->assign('LEV_EXPIRED', $lev_expired);
 
-    if (isset($contents['lev'][3])) {
-        $xtpl->assign('LEV4', $contents['lev'][4]);
-        $xtpl->assign('LEV5', $contents['lev'][5]);
-        $xtpl->assign('CHECKED2', $contents['lev'][3] == 2 ? ' checked="checked"' : '');
-        $xtpl->assign('CHECKED3', $contents['lev'][3] == 3 ? ' checked="checked"' : '');
-        $xtpl->assign('STYLE', $contents['lev'][3] == 3 ? 'visibility:visible;display:block;' : 'visibility:hidden;display:none;');
+    if ($admin_info['level'] == 1) {
+        $xtpl->assign('CHECKED2', $lev == 2 ? ' checked="checked"' : '');
+        $xtpl->assign('CHECKED3', $lev == 3 ? ' checked="checked"' : '');
         $xtpl->parse('edit.lev.if');
+
+        if ($lev == 2) {
+            $xtpl->parse('edit.lev.modslist_hidden');
+        }
+
+        $xtpl->assign('DOWNGRADE_TO_MODADMIN_CHECKED', $downgrade_to_modadmin ? ' checked="checked"' : '');
+        if ($lev == 3 or empty($lev_expired)) {
+            $xtpl->parse('edit.lev.after_exp_action.hidden');
+        }
+        if (!$downgrade_to_modadmin) {
+            $xtpl->parse('edit.lev.after_exp_action.modslist2_hidden');
+        }
+
+        foreach ($allmods as $lg => $mds) {
+            $xtpl->assign('LANG_AFTER_MODS', ['code' => $lg, 'name' => $language_array[$lg]['name']]);
+            foreach ($mds as $mod => $vls) {
+                $xtpl->assign('MOD_VALUE', $mod);
+                $xtpl->assign('MOD_CHECKED', (!empty($after_modules[$lg]) and in_array($mod, $after_modules[$lg], true)) ? 'checked="checked"' : '');
+                $xtpl->assign('CUSTOM_TITLE', $vls['custom_title']);
+                $xtpl->parse('edit.lev.after_exp_action.lang_after_mods.mod');
+            }
+            $xtpl->parse('edit.lev.after_exp_action.lang_after_mods');
+        }
+
+        $xtpl->parse('edit.lev.after_exp_action');
     }
-    foreach ($contents['lev'][2] as $mod => $value) {
-        $xtpl->assign('VALUE', $mod);
-        $xtpl->assign('CHECKED', !empty($value['checked']) ? 'checked="checked"' : '');
-        $xtpl->assign('CUSTOM_TITLE', $value['custom_title']);
-        $xtpl->parse('edit.lev.loop');
+
+    foreach ($allmods as $lg => $mds) {
+        $xtpl->assign('LANG_MODS', ['code' => $lg, 'name' => $language_array[$lg]['name']]);
+        foreach ($mds as $mod => $dts) {
+            $xtpl->assign('VALUE', $mod);
+            $xtpl->assign('CHECKED', (!empty($modules[$lg]) and in_array($mod, $modules[$lg], true)) ? 'checked="checked"' : '');
+            $xtpl->assign('CUSTOM_TITLE', $dts['custom_title']);
+            $xtpl->parse('edit.lev.lang_mods.loop');
+        }
+        $xtpl->parse('edit.lev.lang_mods');
     }
+
     $xtpl->parse('edit.lev');
-}
-
-if (isset($contents['position'])) {
-    $xtpl->assign('POSITION0', $contents['position'][0]);
-    $xtpl->assign('POSITION1', $contents['position'][1]);
-    $xtpl->assign('POSITION2', $contents['position'][2]);
-    $xtpl->parse('edit.position');
-}
-
-foreach ($array_module as $module) {
-    $module['selected'] = $row['main_module'] == $module['module'] ? 'selected="selected"' : '';
-    $xtpl->assign('MODULE', $module);
-    $xtpl->parse('edit.module');
 }
 
 $xtpl->parse('edit');

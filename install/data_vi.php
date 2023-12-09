@@ -106,6 +106,7 @@ $install_lang['cron']['cron_auto_check_version'] = 'Kiểm tra phiên bản Nuke
 $install_lang['cron']['cron_notification_autodel'] = 'Xóa thông báo cũ';
 $install_lang['cron']['cron_remove_expired_inform'] = 'Xóa thông báo quá hạn';
 $install_lang['cron']['cron_apilogs_autodel'] = 'Xóa các API-log hết hạn';
+$install_lang['cron']['cron_expadmin_handling'] = 'Xử lý admin quá hạn';
 
 $install_lang['groups']['NukeViet-Fans'] = 'Người hâm mộ';
 $install_lang['groups']['NukeViet-Admins'] = 'Người quản lý';
