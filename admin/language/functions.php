@@ -179,12 +179,7 @@ function nv_admin_write_lang($dirlang, $idfile)
     $content_lang .= NV_FILEHEAD . "\n\n";
 
     if ($langtype != 'lang_theme') {
-        if ($admin_file) {
-            $content_lang .= "if (!defined('NV_ADMIN') or !defined('NV_MAINFILE')) {\n";
-        } else {
-            $content_lang .= "if (!defined('NV_MAINFILE')) {\n";
-        }
-
+        $content_lang .= "if (!defined('NV_MAINFILE')) {\n";
         $content_lang .= "    exit('Stop!!!');\n}\n\n";
 
         empty($array_translator['info']) && $array_translator['info'] = '';
