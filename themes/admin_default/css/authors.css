@@ -70,3 +70,9 @@
     width: 25%;
     min-width: 200px;
 }
+
+.inactive td,
+.inactive td a {
+    color: #666;
+    text-decoration: line-through;
+}

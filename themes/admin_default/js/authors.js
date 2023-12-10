@@ -27,7 +27,7 @@ function nv_chang_weight(mid) {
     var nv_timer = nv_settimeout_disable('id_weight_' + mid, 5000);
     var new_vid = $("#id_weight_" + mid).val();
     var checkss = $("input[name='checkss']").val();
-    $.post(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=module&nocache=' + new Date().getTime(), 'changeweight=' + mid + '&new_vid=' + new_vid + '&checkss=' + checkss, function (res) {
+    $.post(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=module&nocache=' + new Date().getTime(), 'changeweight=' + mid + '&new_vid=' + new_vid + '&checkss=' + checkss, function(res) {
         $("#main_module").html(res);
     });
     return;
@@ -37,7 +37,7 @@ function nv_chang_act(mid, act) {
     if (confirm(nv_is_change_act_confirm[0])) {
         var nv_timer = nv_settimeout_disable('change_act_' + act + '_' + mid, 5000);
         var checkss = $("input[name='checkss']").val();
-        $.post(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=module&nocache=' + new Date().getTime(), 'changact=' + act + '&mid=' + mid + '&checkss=' + checkss, function (res) {
+        $.post(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=module&nocache=' + new Date().getTime(), 'changact=' + act + '&mid=' + mid + '&checkss=' + checkss, function(res) {
             nv_set_disable_false('change_act_' + act + '_' + mid);
         });
     } else {
@@ -50,7 +50,7 @@ function nv_chang_act(mid, act) {
 // Xóa hết Oauth của quản trị
 function nv_del_oauthall(userid, tokend) {
     if (confirm(nv_is_del_confirm[0])) {
-        $.post(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=2step&admin_id=' + userid + '&nocache=' + new Date().getTime(), 'delall=' + tokend, function (res) {
+        $.post(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=2step&admin_id=' + userid + '&nocache=' + new Date().getTime(), 'delall=' + tokend, function(res) {
             if (res == 'OK') {
                 location.reload();
             } else {
@@ -63,7 +63,7 @@ function nv_del_oauthall(userid, tokend) {
 // Xóa một Oauth của quản trị
 function nv_del_oauthone(id, userid, tokend) {
     if (confirm(nv_is_del_confirm[0])) {
-        $.post(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=2step&admin_id=' + userid + '&nocache=' + new Date().getTime(), 'del=' + tokend + '&id=' + id, function (res) {
+        $.post(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=2step&admin_id=' + userid + '&nocache=' + new Date().getTime(), 'del=' + tokend + '&id=' + id, function(res) {
             if (res == 'OK') {
                 location.reload();
             } else {
@@ -73,12 +73,12 @@ function nv_del_oauthone(id, userid, tokend) {
     }
 }
 
-$(function () {
-    $('.number').on('input', function () {
+$(function() {
+    $('.number').on('input', function() {
         $(this).val($(this).val().replace(/[^0-9]/gi, ''))
     });
 
-    $('[data-toggle=checkall]').on('click', function () {
+    $('[data-toggle=checkall]').on('click', function() {
         var obj = $(this).parents('[data-toggle=checklist]');
         $('[data-toggle=checkitem]', obj).prop("checked", $(this).data('check-value'))
     });
@@ -91,7 +91,7 @@ $(function () {
             showOtherMonths: true,
             showOn: 'focus'
         });
-        $('#lev_expired_btn').click(function () {
+        $('#lev_expired_btn').click(function() {
             $("#lev_expired").datepicker('show');
         });
         $('#lev_expired_clear').on('click', function() {
@@ -99,7 +99,7 @@ $(function () {
         })
     };
 
-    $("#addadmin").submit(function (e) {
+    $("#addadmin").submit(function(e) {
         e.preventDefault();
         var that = $(this),
             a = that.serialize(),
@@ -109,7 +109,7 @@ $(function () {
             type: "POST",
             url: that.attr("action"),
             data: a,
-            success: function (c) {
+            success: function(c) {
                 if (c == "OK") {
                     window.location = result_url;
                 } else {
@@ -120,7 +120,7 @@ $(function () {
         })
     });
 
-    $('[name=lev]').on('click', function () {
+    $('[name=lev]').on('click', function() {
         var lev_expired = $('[name=lev_expired]').val();
 
         if ($(this).attr('value') == '2') {
@@ -143,7 +143,7 @@ $(function () {
         }
     });
 
-    $('[name=downgrade_to_modadmin]').on('change', function () {
+    $('[name=downgrade_to_modadmin]').on('change', function() {
         if ($(this).is(':checked')) {
             $('#modslist2 input').prop('disabled', false);
             $('#modslist2').slideDown()
@@ -153,7 +153,7 @@ $(function () {
         }
     });
 
-    $('[name=lev_expired]').on('change', function () {
+    $('[name=lev_expired]').on('change', function() {
         var lev_expired = $(this).val(),
             lev = $('[name=lev]:checked').val();
         if ($('#after_exp_action').length) {
@@ -165,5 +165,35 @@ $(function () {
                 $('#after_exp_action input').prop('disabled', true)
             }
         }
+    });
+
+    $('#suspend-form').on('submit', function(e) {
+        e.preventDefault();
+        var form = $(this),
+            url = form.attr('action'),
+            data = form.serialize();
+        if ($('#new_reason').length) {
+            if ($('#new_reason').val().length < 3) {
+                alert($('#new_reason').data('error'));
+                $('#new_reason').focus();
+                return !1
+            }
+        }
+
+        $("input[type=submit]", form).prop("disabled", true);
+        $.ajax({
+            type: "POST",
+            url: url,
+            data: data,
+            dataType: "json",
+            success: function(c) {
+                if (c.status == "error") {
+                    alert(c.mess);
+                    $("input[type=submit]", form).prop("disabled", false);
+                } else if (c.status == "OK") {
+                    window.location = c.redirect
+                }
+            }
+        })
     })
 });
