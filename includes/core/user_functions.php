@@ -254,13 +254,19 @@ function nv_blocks_content($sitecontent)
 
                 if ($_row['module'] == 'theme') {
                     if (theme_file_exists($global_config['module_theme'] . '/blocks/' . $_row['file_name'])) {
-                        include NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/blocks/' . $_row['file_name'];
+                        $block_config['real_theme'] = $global_config['module_theme'];
+                        $block_config['real_path'] = NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/blocks';
+                        include $block_config['real_path'] . '/' . $_row['file_name'];
                     }
                 } elseif (isset($sys_mods[$_row['module']]['module_file']) and !empty($sys_mods[$_row['module']]['module_file'])) {
                     if (theme_file_exists($global_config['module_theme'] . '/modules/' . $sys_mods[$_row['module']]['module_file'] . '/' . $_row['file_name'])) {
-                        include NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $sys_mods[$_row['module']]['module_file'] . '/' . $_row['file_name'];
+                        $block_config['real_theme'] = $global_config['module_theme'];
+                        $block_config['real_path'] = NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $sys_mods[$_row['module']]['module_file'];
+                        include $block_config['real_path'] . '/' . $_row['file_name'];
                     } elseif (module_file_exists($sys_mods[$_row['module']]['module_file'] . '/blocks/' . $_row['file_name'])) {
-                        include NV_ROOTDIR . '/modules/' . $sys_mods[$_row['module']]['module_file'] . '/blocks/' . $_row['file_name'];
+                        $block_config['real_theme'] = $sys_mods[$_row['module']]['module_file'];
+                        $block_config['real_path'] = NV_ROOTDIR . '/modules/' . $sys_mods[$_row['module']]['module_file'] . '/blocks';
+                        include $block_config['real_path'] . '/' . $_row['file_name'];
                     }
                 }
                 unset($block_config);
