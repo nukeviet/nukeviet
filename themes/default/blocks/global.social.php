@@ -104,7 +104,7 @@ if (!nv_function_exists('nv_menu_theme_social')) {
         }
 
         $stpl = new \NukeViet\Template\NVSmarty();
-        $stpl->setTemplateDir(str_replace(DIRECTORY_SEPARATOR, '/', __DIR__));
+        $stpl->setTemplateDir($block_config['real_path']);
         $stpl->assign('LANG', $nv_Lang);
         $stpl->assign('SOCIALS', $socials);
 

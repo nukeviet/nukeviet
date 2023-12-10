@@ -170,7 +170,7 @@ if (!nv_function_exists('nv_company_info')) {
         }, $block_config['company_website']);
 
         $stpl = new \NukeViet\Template\NVSmarty();
-        $stpl->setTemplateDir(str_replace(DIRECTORY_SEPARATOR, '/', __DIR__));
+        $stpl->setTemplateDir($block_config['real_path']);
         $stpl->assign('LANG', $nv_Lang);
         $stpl->assign('SITE_LOGO', NV_MY_DOMAIN . NV_BASE_SITEURL . $global_config['site_logo']);
         $stpl->assign('DATA', $block_config);

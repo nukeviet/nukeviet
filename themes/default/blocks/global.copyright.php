@@ -81,7 +81,7 @@ if (!nv_function_exists('nv_copyright_info')) {
         empty($block_config['copyright_url']) && $block_config['copyright_url'] = 'http://' . $global_config['my_domains'][0];
 
         $stpl = new \NukeViet\Template\NVSmarty();
-        $stpl->setTemplateDir(str_replace(DIRECTORY_SEPARATOR, '/', __DIR__));
+        $stpl->setTemplateDir($block_config['real_path']);
         $stpl->assign('LANG', $nv_Lang);
         $stpl->assign('DATA', $block_config);
 

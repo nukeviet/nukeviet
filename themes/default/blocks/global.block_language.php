@@ -37,7 +37,7 @@ if (!nv_function_exists('nv_block_language')) {
         }
 
         $stpl = new \NukeViet\Template\NVSmarty();
-        $stpl->setTemplateDir(str_replace(DIRECTORY_SEPARATOR, '/', __DIR__));
+        $stpl->setTemplateDir($block_config['real_path']);
         $stpl->assign('LANG', $nv_Lang);
         $stpl->assign('LANGS', $langs);
         return $stpl->fetch('global.block_language.tpl');

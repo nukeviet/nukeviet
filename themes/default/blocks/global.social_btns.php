@@ -93,16 +93,11 @@ if (!nv_function_exists('nv_menu_theme_social_btns')) {
      */
     function nv_menu_theme_social_btns($block_config)
     {
-        global $global_config, $nv_Lang;
+        global $nv_Lang;
 
         if (empty($block_config['name'])) {
             return '';
         }
-
-        $block_theme = get_tpl_dir([$global_config['module_theme'], $global_config['site_theme']], 'default', '/blocks/global.social.tpl');
-        $xtpl = new XTemplate('global.social_btns.tpl', NV_ROOTDIR . '/themes/' . $block_theme . '/blocks');
-        $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_global);
-        $xtpl->assign('BLOCK_THEME', $block_theme);
 
         $block_config['name'] = array_map('trim', explode(',', $block_config['name']));
         $block_config['url'] = array_map('trim', explode(',', $block_config['url']));
@@ -125,7 +120,7 @@ if (!nv_function_exists('nv_menu_theme_social_btns')) {
         }
 
         $stpl = new \NukeViet\Template\NVSmarty();
-        $stpl->setTemplateDir(str_replace(DIRECTORY_SEPARATOR, '/', __DIR__));
+        $stpl->setTemplateDir($block_config['real_path']);
         $stpl->assign('LANG', $nv_Lang);
         $stpl->assign('SOCIALS', $socials);
 
