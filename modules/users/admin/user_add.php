@@ -377,13 +377,17 @@ if ($nv_Request->isset_request('confirm', 'post')) {
         @nv_sendmail_async([$gconfigs['site_name'], $gconfigs['site_email']], $_user['email'], $mail_subject, $mail_message, '', false, false, [], [], true, [], $maillang);
     }
 
+    $redirect = $nv_redirect != '' ? nv_redirect_decrypt($nv_redirect) . '&userid=' . $userid : '';
+    if (isset($admin_mods['authors']) and defined('NV_IS_GODADMIN') or (defined('NV_IS_SPADMIN') and ($global_config['spadmin_add_admin'] == 1 or $global_config['idsite'] > 0))) {
+        $is_admin_add = $nv_Request->get_bool('admin_add', 'post', false);
+        if ($is_admin_add) {
+            $redirect = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=authors&' . NV_OP_VARIABLE . '=add&userid=' . $_user['username'];
+        }
+    }
     nv_jsonOutput([
         'status' => 'ok',
         'input' => '',
-        'username' => $_user['username'],
-        'admin_add' => (isset($admin_mods['authors']) and defined('NV_IS_GODADMIN') or (defined('NV_IS_SPADMIN') and ($global_config['spadmin_add_admin'] == 1 or $global_config['idsite'] > 0))) ? 'yes' : 'no',
-        'mess' => $nv_Lang->getModule('admin_add', $_user['username']),
-        'nv_redirect' => $nv_redirect != '' ? nv_redirect_decrypt($nv_redirect) . '&userid=' . $userid : ''
+        'nv_redirect' => $redirect
     ]);
 }
 
@@ -619,6 +623,9 @@ if (defined('NV_IS_USER_FORUM')) {
     }
     if ($have_custom_fields) {
         $xtpl->parse('main.edit_user.field');
+    }
+    if (isset($admin_mods['authors']) and defined('NV_IS_GODADMIN') or (defined('NV_IS_SPADMIN') and ($global_config['spadmin_add_admin'] == 1 or $global_config['idsite'] > 0))) {
+        $xtpl->parse('main.edit_user.admin_add');
     }
 
     $xtpl->parse('main.edit_user');

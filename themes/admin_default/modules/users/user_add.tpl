@@ -328,6 +328,13 @@
         </table>
         <!-- END: field -->
     </div>
+    <!-- BEGIN: admin_add -->
+    <div class="text-center mb">
+        <label>
+            <input type="checkbox" name="admin_add" value="1">{LANG.admin_add}
+        </label>
+    </div>
+    <!-- END: admin_add -->
     <div class="text-center">
         <input type="hidden" name="confirm" value="1" />
         <input type="hidden" name="checkss" value="{DATA.checkss}" />

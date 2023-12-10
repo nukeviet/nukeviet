@@ -30,11 +30,6 @@ function user_validForm(a) {
                 $("[name=\"" + b.input + "\"]", a).focus();
             } else {
                 location_href = typeof(b.nv_redirect) != "undefined" && b.nv_redirect != '' ? b.nv_redirect : (script_name + "?" + nv_lang_variable + "=" + nv_lang_data + "&" + nv_name_variable + "=" + nv_module_name + "&" + nv_fc_variable);
-                if (b.admin_add == "yes") {
-                    if (confirm(b.mess)) {
-                        location_href = script_name + "?" + nv_name_variable + "=authors&" + nv_fc_variable + '=add&userid=' + b.username;
-                    }
-                }
                 window.location.href = location_href;
             }
         }
