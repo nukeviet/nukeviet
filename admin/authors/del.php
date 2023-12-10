@@ -90,12 +90,12 @@ if ($nv_Request->get_title('checkss', 'post') == $checkss) {
                             if (in_array($admin_id, $admins, true)) {
                                 $admins = array_diff($admins, [$admin_id]);
                                 $admins = implode(',', $admins);
-    
+
                                 $sth = $db->prepare('UPDATE ' . $db_config['prefix'] . '_' . $l . '_modules SET admins= :admins WHERE title= :mod');
                                 $sth->bindParam(':admins', $admins, PDO::PARAM_STR);
                                 $sth->bindParam(':mod', $mod, PDO::PARAM_STR);
                                 $sth->execute();
-    
+
                                 $is_delCache = true;
                             }
                         }

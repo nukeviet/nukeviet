@@ -126,7 +126,7 @@ if ($nv_Request->get_int('save', 'post', 0)) {
     $allow_modify_subdirectories = $nv_Request->get_int('allow_modify_subdirectories', 'post', 0);
     $modules = [];
     if ($lev == 3) {
-        $_modules = isset($_POST['modules']) ? $_POST['modules'] : [];
+        $_modules = $_POST['modules'] ?? [];
         if (!empty($_modules)) {
             foreach ($_modules as $l => $vs) {
                 if (!empty($vs)) {
@@ -145,7 +145,7 @@ if ($nv_Request->get_int('save', 'post', 0)) {
     $after_modules = [];
     $ss_after_modules = [];
     if ($downgrade_to_modadmin) {
-        $_after_modules = isset($_POST['after_modules']) ? $_POST['after_modules'] : [];
+        $_after_modules = $_POST['after_modules'] ?? [];
         if (!empty($_after_modules)) {
             foreach ($_after_modules as $l => $vs) {
                 if (!empty($vs)) {

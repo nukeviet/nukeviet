@@ -39,7 +39,6 @@ if ($nv_Request->get_title('state', 'get', '') !== $nv_Request->get_title('oauth
             'code' => $nv_Request->get_title('code', 'get', '')
         ]);
         /**
-         *
          * @var \NukeViet\OAuth\OAuth2\GoogleUser $ownerDetails
          */
         $ownerDetails = $provider->getResourceOwner($token);

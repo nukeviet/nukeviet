@@ -120,7 +120,7 @@ if ($nv_Request->get_int('save', 'post', 0)) {
 
     if ($lev == 3 and defined('NV_IS_SPADMIN') and $row['admin_id'] != $admin_info['admin_id']) {
         $modules = [];
-        $_modules = isset($_POST['modules']) ? $_POST['modules'] : [];
+        $_modules = $_POST['modules'] ?? [];
         if (!empty($_modules)) {
             foreach ($_modules as $l => $vs) {
                 if (!empty($vs)) {
@@ -141,7 +141,7 @@ if ($nv_Request->get_int('save', 'post', 0)) {
     $ss_after_modules = [];
     if (((defined('NV_IS_SPADMIN') and $admin_info['level'] == 1) and $row['admin_id'] != $admin_info['admin_id'] and $downgrade_to_modadmin)) {
         $after_modules = [];
-        $_after_modules = isset($_POST['after_modules']) ? $_POST['after_modules'] : [];
+        $_after_modules = $_POST['after_modules'] ?? [];
         if (!empty($_after_modules)) {
             foreach ($_after_modules as $l => $vs) {
                 if (!empty($vs)) {
@@ -172,8 +172,8 @@ if ($nv_Request->get_int('save', 'post', 0)) {
                 !isset($modules[$l]) && $modules[$l] = [];
                 !isset($old_modules[$l]) && $old_modules[$l] = [];
 
-                $add_modules = array_diff($modules[$l],  $old_modules[$l]);
-                $del_modules = array_diff( $old_modules[$l], $modules[$l]);
+                $add_modules = array_diff($modules[$l], $old_modules[$l]);
+                $del_modules = array_diff($old_modules[$l], $modules[$l]);
 
                 if (!empty($add_modules)) {
                     foreach ($add_modules as $mod) {
@@ -196,14 +196,14 @@ if ($nv_Request->get_int('save', 'post', 0)) {
                         ]);
                         $admins = array_map('intval', $admins);
                         $admins = (!empty($admins)) ? implode(',', $admins) : '';
-        
+
                         $sth = $db->prepare('UPDATE ' . $db_config['prefix'] . '_' . $l . '_modules SET admins= :admins WHERE title= :mod');
                         $sth->bindParam(':admins', $admins, PDO::PARAM_STR);
                         $sth->bindParam(':mod', $mod, PDO::PARAM_STR);
                         $sth->execute();
                     }
                 }
-        
+
                 if (!empty($add_modules) or !empty($del_modules)) {
                     $nv_Cache->delMod('modules', $l);
                 }
@@ -284,7 +284,7 @@ if ($nv_Request->get_int('save', 'post', 0)) {
                     !empty($lev_expired) ? $lev_expired : $nv_Lang->getModule('unlimited')
                 ];
             }
-            
+
             if ($downgrade_to_modadmin != $old_downgrade_to_modadmin or $after_modules != $old_after_modules) {
                 $old_afm = [];
                 if (!empty($old_after_modules)) {
@@ -327,7 +327,7 @@ if ($nv_Request->get_int('save', 'post', 0)) {
                     }
                 }
                 $new = (!empty($new)) ? implode(', ', $new) : '';
-    
+
                 $result['change']['modules'] = [
                     $nv_Lang->getModule('nv_admin_modules'),
                     $old,
