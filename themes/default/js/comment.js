@@ -168,11 +168,6 @@ $(function() {
             });
         }
 
-        // Comment form submit button
-        commentform.on('submit', function() {
-            return commFormSubmit(this)
-        });
-
         // Comment form reset button
         $('[data-toggle=commReset]', commentform).on('click', function(e) {
             e.preventDefault();
