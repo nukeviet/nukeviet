@@ -38,15 +38,28 @@ function nv_validCheck(a) {
     return !0
 }
 
-function nv_validForm(a) {
+function feedback_precheck(a) {
     $(".has-error", a).removeClass("has-error");
     $(".nv-info", a).removeClass("error success").html($(".nv-info", a).attr("data-mess"));
     var c = 0;
     $(a).find(".required,input[data-callback]").each(function() {
         $(this).val(trim(strip_tags($(this).val())));
-        if (!nv_validCheck(this)) return c++, $(this).attr("data-current-mess", $(this).attr("data-mess")), nv_validErrorShow(this), !1
+        if (!nv_validCheck(this)) {
+            c++;
+            $(this).attr("data-current-mess", $(this).attr("data-mess"));
+            nv_validErrorShow(this);
+            return !1
+        }
     });
-    c || ($(a).find("[type='submit']").prop("disabled", !0), $.ajax({
+
+    return !c
+}
+
+function nv_validForm(a) {
+    $(".has-error", a).removeClass("has-error");
+    $(".nv-info", a).removeClass("error success").html($(".nv-info", a).attr("data-mess"));
+    $(a).find("[type='submit']").prop("disabled", !0);
+    $.ajax({
         type: $(a).prop("method"),
         cache: !1,
         url: $(a).prop("action"),
@@ -81,7 +94,7 @@ function nv_validForm(a) {
 
             }
         }
-    }));
+    });
     return !1
 };
 

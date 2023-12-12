@@ -1,6 +1,6 @@
 <!-- BEGIN: main -->
 <div class="nv-fullbg">
-    <form method="post" action="{ACTION_FILE}" data-toggle="feedback" novalidate<!-- BEGIN: captcha --> data-captcha="fcode"<!-- END: captcha --><!-- BEGIN: recaptcha --> data-recaptcha2="1"<!-- END: recaptcha --><!-- BEGIN: recaptcha3 --> data-recaptcha3="1"<!-- END: recaptcha3 -->>
+    <form method="post" action="{ACTION_FILE}" data-toggle="feedback" data-precheck="feedback_precheck" novalidate<!-- BEGIN: captcha --> data-captcha="fcode"<!-- END: captcha --><!-- BEGIN: recaptcha --> data-recaptcha2="1"<!-- END: recaptcha --><!-- BEGIN: recaptcha3 --> data-recaptcha3="1"<!-- END: recaptcha3 -->>
         <!-- BEGIN: cats -->
         <div class="form-group">
             <div class="input-group">

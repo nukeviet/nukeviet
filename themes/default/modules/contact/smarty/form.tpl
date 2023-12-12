@@ -1,5 +1,5 @@
 <div class="nv-fullbg">
-    <form method="post" action="{$ACTION_FILE}" data-toggle="feedback" novalidate{if $CAPTCHA == 'captcha'} data-captcha="fcode"{elseif $CAPTCHA == 'recaptcha'} data-recaptcha2="1"{elseif $CAPTCHA == 'recaptcha3'} data-recaptcha3="1"{/if}>
+    <form method="post" action="{$ACTION_FILE}" data-toggle="feedback" data-precheck="feedback_precheck" novalidate{if $CAPTCHA == 'captcha'} data-captcha="fcode"{elseif $CAPTCHA == 'recaptcha'} data-recaptcha2="1"{elseif $CAPTCHA == 'recaptcha3'} data-recaptcha3="1"{/if}>
 {if !empty($CATS)}
 {$count=count($CATS)}
         <div class="form-group">

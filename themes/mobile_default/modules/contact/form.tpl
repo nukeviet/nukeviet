@@ -1,6 +1,6 @@
 <!-- BEGIN: main -->
 <div>
-    <form method="post" action="{ACTION_FILE}" data-toggle="feedback" novalidate<!-- BEGIN: captcha --> data-captcha="fcode"
+    <form method="post" action="{ACTION_FILE}" data-toggle="feedback" data-precheck="feedback_precheck" novalidate<!-- BEGIN: captcha --> data-captcha="fcode"
         <!-- END: captcha -->
         <!-- BEGIN: recaptcha --> data-recaptcha2="1"
         <!-- END: recaptcha -->
