@@ -209,15 +209,27 @@ function validReset(a) {
     formChangeCaptcha(a);
 }
 
-function login_validForm(a) {
+function login_form_precheck(a) {
     $(".has-error", a).removeClass("has-error");
-    var c = 0,
-        b = [];
+    var c = 0;
     $(a).find(".required").each(function() {
         "password" == $(a).prop("type") && $(this).val(trim(strip_tags($(this).val())));
-        if (!validCheck(this)) return c++, $(".tooltip-current", a).removeClass("tooltip-current"), $(this).addClass("tooltip-current").attr("data-current-mess", $(this).attr("data-mess")), validErrorShow(this), !1
+        if (!validCheck(this)) {
+            c++;
+            $(".tooltip-current", a).removeClass("tooltip-current");
+            $(this).addClass("tooltip-current").attr("data-current-mess", $(this).attr("data-mess"));
+            validErrorShow(this);
+            return !1
+        }
     });
-    c || (b.type = $(a).prop("method"), b.url = $(a).prop("action"), b.data = $(a).serialize(), formErrorHidden(a), $(a).find("input,button,select,textarea").prop("disabled", !0), $.ajax({
+
+    return !c
+}
+
+function login_validForm(a) {
+    $(".has-error", a).removeClass("has-error");
+    var b = [];
+    b.type = $(a).prop("method"), b.url = $(a).prop("action"), b.data = $(a).serialize(), formErrorHidden(a), $(a).find("input,button,select,textarea").prop("disabled", !0), $.ajax({
         type: b.type,
         cache: !1,
         url: b.url,
@@ -267,7 +279,7 @@ function login_validForm(a) {
                 $('.loginstep1, .loginstep2, .cant_do_2step, .loginCaptcha', a).toggleClass('hidden');
             }
         }
-    }));
+    });
     return !1
 }
 
