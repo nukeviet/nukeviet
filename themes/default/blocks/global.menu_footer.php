@@ -78,7 +78,7 @@ if (!nv_function_exists('nv_menu_theme_default_footer')) {
             }
         }
         $stpl = new \NukeViet\Template\NVSmarty();
-        $stpl->setTemplateDir($block_config['real_path']);
+        $stpl->setTemplateDir($block_config['real_path'] . '/smarty');
         $stpl->assign('MENU', $menus);
 
         return $stpl->fetch('global.menu_footer.tpl');

@@ -1,7 +1,9 @@
+<!-- BEGIN: main -->
 <ul class="menu">
-{foreach $MENU as $item}
+    <!-- BEGIN: footer_menu -->
     <li>
-        <a href="{$item.link}">{$item.title}</a>
+        <a href="{FOOTER_MENU.link}">{FOOTER_MENU.title}</a>
     </li>
-{/foreach}
+    <!-- END: footer_menu -->
 </ul>
+<!-- END: main -->

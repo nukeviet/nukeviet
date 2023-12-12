@@ -38,7 +38,7 @@ if (!nv_function_exists('nv_block_theme_switch')) {
         }
 
         $stpl = new \NukeViet\Template\NVSmarty();
-        $stpl->setTemplateDir($block_config['real_path']);
+        $stpl->setTemplateDir($block_config['real_path'] . '/smarty');
         $stpl->assign('LANG', $nv_Lang);
         $stpl->assign('CONFIG', $block_config);
         $stpl->assign('TOKEND', NV_CHECK_SESSION);

@@ -68,7 +68,7 @@ if (!nv_function_exists('nv_module_menu')) {
         }
 
         $stpl = new \NukeViet\Template\NVSmarty();
-        $stpl->setTemplateDir($block_config['real_path']);
+        $stpl->setTemplateDir($block_config['real_path'] . '/smarty');
         $stpl->assign('MENUID', $block_config['bid']);
         $stpl->assign('MOD', $mod);
         $stpl->assign('MENU', $menu);

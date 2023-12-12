@@ -42,7 +42,7 @@ if (!nv_function_exists('nv_block_qr_code')) {
         $block_config['title'] = 'QR-Code: ' . str_replace('"', '&quot;', ($page_title ?: $global_config['site_name']));
 
         $stpl = new \NukeViet\Template\NVSmarty();
-        $stpl->setTemplateDir($block_config['real_path']);
+        $stpl->setTemplateDir($block_config['real_path'] . '/smarty');
         $stpl->assign('QRCODE', $block_config);
 
         return $stpl->fetch('global.QR_code.tpl');

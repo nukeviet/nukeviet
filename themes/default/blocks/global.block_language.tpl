@@ -1,10 +1,15 @@
-{if !empty($LANGS)}
+<!-- BEGIN: main -->
+<!-- BEGIN: language -->
 <div class="language">
-    {$LANG->get('langsite')}:
+    {SELECT_LANGUAGE}:
     <select name="lang" class="nv_change_site_lang">
-{foreach $LANGS as $l}
-        <option value="{$l.url}"{if $l.sel} selected="selected"{/if}>{$l.name}</option>
-{/foreach}
+        <!-- BEGIN: langitem -->
+            <option value="{LANGSITEURL}" title="{SELECTLANGSITE}">{LANGSITENAME}</option>
+        <!-- END: langitem -->
+        <!-- BEGIN: langcuritem -->
+            <option value="{LANGSITEURL}" title="{SELECTLANGSITE}" selected="selected">{LANGSITENAME}</option>
+        <!-- END: langcuritem -->
     </select>
 </div>
-{/if}
+<!-- END: language -->
+<!-- END: main -->
