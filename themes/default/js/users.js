@@ -271,20 +271,36 @@ function login_validForm(a) {
     return !1
 }
 
-function reg_validForm(a) {
+function reg_form_precheck(a) {
     // Xử lý các trình soạn thảo
     if ("undefined" != typeof CKEDITOR)
         for (var c in CKEDITOR.instances) $("#" + c).val(CKEDITOR.instances[c].getData());
     $(".has-error", a).removeClass("has-error");
-    var e = 0;
-    c = [];
+    c = 0;
     $(a).find("input.required,input[data-callback],textarea.required,select.required,div.required").each(function() {
         var b = $(this).prop("tagName");
         "INPUT" != b && "TEXTAREA" != b || "password" == $(a).prop("type") || "radio" == $(a).prop("type") || "checkbox" == $(a).prop("type") || $(this).val(trim(strip_tags($(this).val())));
-        if (!validCheck(this)) return e++,
-            $(".tooltip-current", a).removeClass("tooltip-current"), $(this).addClass("tooltip-current").attr("data-current-mess", $(this).attr("data-mess")), validErrorShow(this), !1
+        if (!validCheck(this)) {
+            c++;
+            $(".tooltip-current", a).removeClass("tooltip-current");
+            $(this).addClass("tooltip-current").attr("data-current-mess", $(this).attr("data-mess"));
+            validErrorShow(this);
+            return !1
+        }
     });
-    e || (c.type = $(a).prop("method"), c.url = $(a).prop("action"), c.data = $(a).serialize(), formErrorHidden(a), $(a).find("input,button,select,textarea").prop("disabled", !0), $.ajax({
+
+    return !c
+}
+
+function reg_validForm(a) {
+    $(".has-error", a).removeClass("has-error");
+    var c = [];
+    c.type = $(a).prop("method");
+    c.url = $(a).prop("action");
+    c.data = $(a).serialize();
+    formErrorHidden(a);
+    $(a).find("input,button,select,textarea").prop("disabled", !0);
+    $.ajax({
         type: c.type,
         cache: !1,
         url: c.url,
@@ -317,7 +333,7 @@ function reg_validForm(a) {
         error: function(b, d, f) {
             window.console.log ? console.log(b.status + ": " + f) : alert(b.status + ": " + f)
         }
-    }));
+    });
 
     return !1
 }
