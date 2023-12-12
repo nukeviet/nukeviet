@@ -17,8 +17,6 @@ $array_ignore_save = [
     NV_AUTHORS_GLOBALTABLE,
     NV_AUTHORS_GLOBALTABLE . '_config',
     NV_AUTHORS_GLOBALTABLE . '_module',
-    NV_AUTHORS_GLOBALTABLE . '_api_credential',
-    NV_AUTHORS_GLOBALTABLE . '_api_role',
     $db_config['prefix'] . '_banners_click',
     $db_config['prefix'] . '_cookies',
     $db_config['prefix'] . '_counter',
