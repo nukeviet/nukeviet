@@ -1,5 +1,5 @@
 <!-- BEGIN: main -->
-<form id="sendmailForm" action="{SENDMAIL.action}" method="post" class="margin-lg" role="form" data-toggle="newsSendMail" <!-- BEGIN: captcha --> data-captcha="nv_seccode"<!-- END: captcha --><!-- BEGIN: recaptcha --> data-recaptcha2="1"<!-- END: recaptcha --><!-- BEGIN: recaptcha3 --> data-recaptcha3="1"<!-- END: recaptcha3 -->>
+<form id="sendmailForm" action="{SENDMAIL.action}" method="post" class="margin-lg" role="form" data-toggle="newsSendMail" data-precheck="newsSendMail_precheck" <!-- BEGIN: captcha --> data-captcha="nv_seccode"<!-- END: captcha --><!-- BEGIN: recaptcha --> data-recaptcha2="1"<!-- END: recaptcha --><!-- BEGIN: recaptcha3 --> data-recaptcha3="1"<!-- END: recaptcha3 -->>
     <div class="form-horizontal">
         <div class="form-group">
             <label for="friend_email" class="col-sm-8 control-label">{LANG.sendmail_email}<em>*</em></label>

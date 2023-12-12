@@ -146,7 +146,7 @@ function newsSendMailModal(fm, url, sess) {
     }
 }
 
-function newsSendMail(form) {
+function newsSendMail_precheck(form) {
     $('.has-error', form).removeClass('has-error');
     var a = $("[name=friend_email]", form).val();
     a = trim(strip_tags(a));
@@ -190,8 +190,14 @@ function newsSendMail(form) {
             return !1
         }
     }
+
+    return !0
+}
+
+function newsSendMail(form) {
+    $('.has-error', form).removeClass('has-error');
     $("[name=your_message]", form).length && $("[name=your_message]", form).val(trim(strip_tags($("[name=your_message]", form).val())));
-    a = $(form).serialize();
+    var a = $(form).serialize();
     $("input,button,textarea", form).prop("disabled", !0);
     $.ajax({
         type: $(form).prop("method"),
