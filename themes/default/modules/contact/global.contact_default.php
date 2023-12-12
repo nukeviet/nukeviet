@@ -17,12 +17,14 @@ if (!nv_function_exists('nv_contact_default_info')) {
     /**
      * nv_contact_default_info()
      *
-     * @param string $module
+     * @param array $block_config
      * @return string|void
      */
-    function nv_contact_default_info($module)
+    function nv_contact_default_info($block_config)
     {
         global $nv_Cache, $site_mods, $nv_Lang;
+
+        $module = $block_config['module'];
 
         if (!isset($site_mods[$module])) {
             return '';
@@ -88,7 +90,7 @@ if (!nv_function_exists('nv_contact_default_info')) {
         }
 
         $stpl = new \NukeViet\Template\NVSmarty();
-        $stpl->setTemplateDir(str_replace(DIRECTORY_SEPARATOR, '/', __DIR__));
+        $stpl->setTemplateDir($block_config['real_path'] . '/smarty');
         $stpl->assign('LANG', $nv_Lang);
         $stpl->assign('DATA', $default_department['cd']);
         $stpl->assign('MODULE_URL', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module . '&amp;' . NV_OP_VARIABLE . '=' . $default_department['alias']);
@@ -98,5 +100,5 @@ if (!nv_function_exists('nv_contact_default_info')) {
 }
 
 if (defined('NV_SYSTEM')) {
-    $content = nv_contact_default_info($block_config['module']);
+    $content = nv_contact_default_info($block_config);
 }

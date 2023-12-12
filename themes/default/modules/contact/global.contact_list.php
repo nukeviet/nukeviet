@@ -17,12 +17,14 @@ if (!nv_function_exists('nv_contact_list_info')) {
     /**
      * nv_contact_list_info()
      *
-     * @param string $module
+     * @param array $block_config
      * @return string|void
      */
-    function nv_contact_list_info($module)
+    function nv_contact_list_info($block_config)
     {
         global $nv_Cache, $site_mods, $global_config, $module_name, $nv_Lang;
+
+        $module = $block_config['module'];
 
         if (!isset($site_mods[$module]) or $module == $module_name) {
             return '';
@@ -104,7 +106,7 @@ if (!nv_function_exists('nv_contact_list_info')) {
         }
 
         $stpl = new \NukeViet\Template\NVSmarty();
-        $stpl->setTemplateDir(str_replace(DIRECTORY_SEPARATOR, '/', __DIR__));
+        $stpl->setTemplateDir($block_config['real_path'] . '/smarty');
         $stpl->assign('LANG', $nv_Lang);
         $stpl->assign('DEPARTMENTS', $departments);
 
@@ -113,5 +115,5 @@ if (!nv_function_exists('nv_contact_list_info')) {
 }
 
 if (defined('NV_SYSTEM')) {
-    $content = nv_contact_list_info($block_config['module']);
+    $content = nv_contact_list_info($block_config);
 }

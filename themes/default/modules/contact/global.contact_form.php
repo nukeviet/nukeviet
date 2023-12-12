@@ -32,7 +32,7 @@ if (!nv_function_exists('nv_block_contact_form')) {
         $blockCss = theme_file_exists($block_config['real_theme'] . '/css/contact.css') ? $block_config['real_theme'] : 'default';
 
         $stpl = new \NukeViet\Template\NVSmarty();
-        $stpl->setTemplateDir($block_config['real_path']);
+        $stpl->setTemplateDir($block_config['real_path'] . '/smarty');
         $stpl->assign('LANG', $nv_Lang);
         $stpl->assign('JS', NV_STATIC_URL . 'themes/' . $blockJs . '/js/contact.js');
         $stpl->assign('CSS', NV_STATIC_URL . 'themes/' . $blockCss . '/css/contact.css');

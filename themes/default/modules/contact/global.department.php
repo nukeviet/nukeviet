@@ -105,7 +105,7 @@ if (!nv_function_exists('nv_department_info')) {
         }
 
         $stpl = new \NukeViet\Template\NVSmarty();
-        $stpl->setTemplateDir($block_config['real_path']);
+        $stpl->setTemplateDir($block_config['real_path'] . '/smarty');
         $stpl->assign('LANG', $nv_Lang);
         $stpl->assign('DEPARTMENT', $departments[$block_config['departmentid']]);
 

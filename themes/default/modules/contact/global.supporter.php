@@ -161,7 +161,7 @@ if (!nv_function_exists('nv_contact_supporter')) {
         }
 
         $stpl = new \NukeViet\Template\NVSmarty();
-        $stpl->setTemplateDir($block_config['real_path']);
+        $stpl->setTemplateDir($block_config['real_path'] . '/smarty');
         $stpl->assign('LANG', $nv_Lang);
         $stpl->assign('SUPPORTERS', $supporters);
 
