@@ -6,7 +6,7 @@
     <li><a href="{MANAGEMENT.stats}">{LANG.client_stats}</a></li>
 </ul>
 <!-- END: management -->
-<form id="frm" action="{FORM_ACTION}" method="post" enctype="multipart/form-data" role="form" class="form-horizontal" data-toggle="afSubmit"<!-- BEGIN: captcha --> data-captcha="captcha"<!-- END: captcha --><!-- BEGIN: recaptcha --> data-recaptcha2="1"<!-- END: recaptcha --><!-- BEGIN: recaptcha3 --> data-recaptcha3="1"<!-- END: recaptcha3 -->>
+<form id="frm" action="{FORM_ACTION}" method="post" enctype="multipart/form-data" role="form" class="form-horizontal" data-toggle="afSubmit" data-precheck="afSubmit_precheck"<!-- BEGIN: captcha --> data-captcha="captcha"<!-- END: captcha --><!-- BEGIN: recaptcha --> data-recaptcha2="1"<!-- END: recaptcha --><!-- BEGIN: recaptcha3 --> data-recaptcha3="1"<!-- END: recaptcha3 -->>
     <div class="form-group">
         <label for="block" class="col-sm-6 control-label">{LANG.plan_title}:</label>
         <div class="col-sm-18">

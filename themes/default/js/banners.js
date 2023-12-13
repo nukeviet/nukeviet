@@ -7,7 +7,7 @@
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
-function afSubmit(form) {
+function afSubmit_precheck(form) {
     $(".has-error", form).removeClass("has-error");
     if ($('[name=title]', form).val().length < 3) {
         $('[name=title]', form).parent().addClass('has-error');
@@ -37,6 +37,11 @@ function afSubmit(form) {
         return !1
     }
 
+    return !0
+}
+
+function afSubmit(form) {
+    $(".has-error", form).removeClass("has-error");
     var data = new FormData(form);
     $("input,button,select", form).prop("disabled", !0);
     $.ajax({
