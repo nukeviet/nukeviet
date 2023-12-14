@@ -2019,36 +2019,40 @@ a.btn {
     height: auto;
 }
 
-.nv-block-rss li {
+.nv-block-rss {
+    padding-left: 0;
+    list-style: none;
+    margin-bottom: 0;
+}
+
+.nv-block-rss li:not(:last-child) {
     border-bottom-width: 1px;
     border-bottom-color: #dcdcdc;
     border-bottom-style: solid;
+    padding-bottom: 10px;
 }
 
-.nv-block-rss li:last-child {
-    border: none;
-    padding-bottom: 0;
+.nv-block-rss li:not(:first-child) {
+    padding-top: 10px;
 }
 
-.nv-block-rss li:first-child {
-    padding-top: 0;
+.nv-block-rss li::after {
+    display: block;
+    content: "";
+    clear: both;
 }
 
 .nv-block-rss img {
     padding: 4px;
-    line-height: 1.42857143;
     background-color: #fff;
     border-width: 1px;
     border-style: solid;
     border-color: #dcdcdc;
     border-radius: 4px;
-    display: inline-block;
-    max-width: 100%;
+    float: left;
+    width: 120px;
     height: auto;
-    position: relative;
-    top: 4px;
-    margin-right: 10px;
-    margin-bottom: 5px;
+    margin: 4px 10px 5px 0;
 }
 
 .enable-animate .nv-block-rss img {
