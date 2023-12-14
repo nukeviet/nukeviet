@@ -314,9 +314,9 @@
                 origTime = $('[name=add_time]', actionFormObj).val();
             if (val && origTime != '') {
                 origTime = origTime.split('/');
-                var date = new Date(origTime[2], origTime[1], origTime[0], 0, 0, 0);
+                var date = new Date(origTime[2], origTime[1]-1, origTime[0], 0, 0, 0);
                 date.setDate(date.getDate() + val);
-                exp_time = date.getDate().toString().padStart(2, '0') + '/' + date.getMonth().toString().padStart(2, '0') + '/' + date.getFullYear();
+                exp_time = date.getDate().toString().padStart(2, '0') + '/' + (date.getMonth()+1).toString().padStart(2, '0') + '/' + date.getFullYear();
                 $('[name=exp_time]', actionFormObj).val(exp_time);
                 $('[name=exp_hour]', actionFormObj).val($('[name=add_hour]', actionFormObj).val());
                 $('[name=exp_min]', actionFormObj).val($('[name=add_min]', actionFormObj).val());
