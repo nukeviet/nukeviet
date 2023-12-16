@@ -62,6 +62,8 @@ class Functions
             'body' => $body
         ];
         $response = $this->_client->index($params);
+
+        return $response;
     }
 
     /**
@@ -80,6 +82,8 @@ class Functions
         $params['body']['doc'] = $body;
 
         $response = $this->_client->update($params);
+
+        return $response;
     }
 
     /**
@@ -96,6 +100,8 @@ class Functions
         $params['id'] = $id;
 
         $response = $this->_client->delete($params);
+
+        return $response;
     }
 
     /**
