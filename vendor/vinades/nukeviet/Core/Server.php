@@ -105,7 +105,14 @@ class Server
          * Ví dụ Server thiết lập HTTP proxy, load balancer
          */
         $original_host = $this->getEnv(['HTTP_X_FORWARDED_HOST', 'X-Forwarded-Host']);
-        $original_protocol = $this->getEnv(['HTTP_X_FORWARDED_PROTO', 'X-Forwarded-Proto']);
+        $original_protocol = false;
+        if (isset($_SERVER['HTTP_CF_VISITOR'])) {
+            $cf_visitor = json_decode($_SERVER['HTTP_CF_VISITOR'], true);
+            !empty($cf_visitor['scheme']) && $original_protocol = $cf_visitor['scheme'];
+        }
+        if (empty($original_protocol)) {
+            $original_protocol = $this->getEnv(['HTTP_X_FORWARDED_PROTO', 'X-Forwarded-Proto']);
+        }
         $original_port = $this->getEnv(['HTTP_X_FORWARDED_PORT', 'X-Forwarded-Port']);
         // Nếu có FORWARDED_HOST hoặc FORWARDED_PROTO
         if ($original_host !== false or $original_protocol !== false) {
