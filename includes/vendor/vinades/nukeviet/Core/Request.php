@@ -226,6 +226,8 @@ class Request
      * @since 4.6.00
      */
     private $autoACAO = false;
+    private $nat_ports = [];
+    static $Server;
 
     /**
      * __construct()
@@ -301,6 +303,11 @@ class Request
         $this->allowNullOrigin = !empty($config['allow_null_origin']) ? true : false;
         $this->allowNullOriginIps = !empty($config['ip_allow_null_origin']) ? ((array) $config['ip_allow_null_origin']) : [];
         $this->autoACAO = !empty($config['auto_acao']) ? true : false;
+        if (!empty($config['nat_ports'])) {
+            foreach ($config['nat_ports'] as $port) {
+                preg_match('/^[0-9]+$/', $port) && $this->nat_ports[] = (string) $port;
+            }
+        }
 
         $this->remote_ip = !empty($ip) ? $ip : Ips::$remote_ip;
         if (Ips::ip2long($this->remote_ip) === false) {
@@ -309,10 +316,8 @@ class Request
 
         $this->cookie_key = md5($this->cookie_key);
 
-        if ($nv_Server === false) {
-            $nv_Server = new Server();
-        }
-        $this->Initialize($nv_Server);
+        self::$Server = ($nv_Server === false) ? new Server() : $nv_Server;
+        $this->Initialize();
         $this->get_cookie_save_path();
 
         $this->sessionStart(!empty($config['https_only']));
@@ -321,10 +326,8 @@ class Request
 
     /**
      * Initialize()
-     *
-     * @param \NukeViet\Core\Server $nv_Server
      */
-    private function Initialize($nv_Server)
+    private function Initialize()
     {
         if (sizeof($_GET)) {
             $array_keys = array_keys($_GET);
@@ -368,7 +371,7 @@ class Request
         if (defined('NV_BASE_SITEURL')) {
             $base_siteurl = preg_replace('/[\/]+$/', '', NV_BASE_SITEURL);
         } else {
-            $base_siteurl = $nv_Server->getWebsitePath();
+            $base_siteurl = self::$Server->getWebsitePath();
         }
 
         if (NV_ROOTDIR !== $doc_root . $base_siteurl) {
@@ -386,17 +389,17 @@ class Request
         if (defined('NV_SERVER_NAME')) {
             $this->server_name = NV_SERVER_NAME;
         } else {
-            $this->server_name = $nv_Server->getServerHost();
+            $this->server_name = self::$Server->getServerHost();
         }
         if (defined('NV_SERVER_PROTOCOL')) {
             $this->server_protocol = NV_SERVER_PROTOCOL;
         } else {
-            $this->server_protocol = $nv_Server->getServerProtocol();
+            $this->server_protocol = self::$Server->getServerProtocol();
         }
         if (defined('NV_SERVER_PORT')) {
             $this->server_port = NV_SERVER_PORT;
         } else {
-            $this->server_port = $nv_Server->getServerPort();
+            $this->server_port = self::$Server->getServerPort();
         }
 
         $this->base_siteurl = $base_siteurl;
@@ -406,7 +409,7 @@ class Request
         if (defined('NV_MY_DOMAIN')) {
             $this->my_current_domain = NV_MY_DOMAIN;
         } else {
-            $this->my_current_domain = $nv_Server->getOriginalDomain();
+            $this->my_current_domain = self::$Server->getOriginalDomain();
         }
 
         $this->headerstatus = (substr(php_sapi_name(), 0, 3) == 'cgi') ? 'Status:' : $_SERVER['SERVER_PROTOCOL'];
@@ -498,13 +501,24 @@ class Request
         if (!empty($this->origin)) {
             $origin = parse_url($this->origin);
             if (isset($origin['scheme']) and in_array($origin['scheme'], ['http', 'https', 'ftp', 'gopher'], true) and isset($origin['host'])) {
-                $_SERVER['HTTP_ORIGIN'] = ($origin['scheme'] . '://' . $origin['host'] . ((isset($origin['port']) and $origin['port'] != '80' and $origin['port'] != '443') ? (':' . $origin['port']) : ''));
+                $origin['port'] = (isset($origin['port']) and $origin['port'] != '80' and $origin['port'] != '443') ? (string) $origin['port'] : '';
+                $scheme_host_origin = $origin['scheme'] . '://' . $origin['host'];
+                $_SERVER['HTTP_ORIGIN'] = $scheme_host_origin . (!empty($origin['port']) ? ':' . $origin['port'] : '');
                 $this->origin = $_SERVER['HTTP_ORIGIN'];
 
+                $this->origin_key = 0;
                 if ($this->my_current_domain == $this->origin) {
                     $this->origin_key = 1;
-                } else {
-                    $this->origin_key = 0;
+                } elseif (!empty($this->nat_ports)) {
+                    $host = self::$Server->getOriginalHost();
+                    if (filter_var($host, FILTER_VALIDATE_IP, FILTER_FLAG_IPV6) !== false) {
+                        $host = '[' . $host . ']';
+                    }
+                    $ports = $this->nat_ports;
+                    $ports[] = (string) self::$Server->getOriginalPort();
+                    if (($scheme_host_origin == self::$Server->getOriginalProtocol() . '://' . $host) and in_array($origin['port'], $ports, true)) {
+                        $this->origin_key = 1;
+                    }
                 }
             } elseif (strtolower($this->origin) == 'null') {
                 // Null Origin xem như là Cross-Site
@@ -1587,7 +1601,7 @@ class Request
      * get_typed_array()
      *
      * @param string      $name
-     * @param string|null  $mode
+     * @param string|null $mode
      * @param string|null $type
      * @param mixed|null  $default
      * @param bool        $specialchars
