@@ -26,6 +26,7 @@ class Optimizer
     private $_meta = [];
     private $_title = '<title></title>';
     private $_style = [];
+    private $_other_style = [];
     private $_links = [];
     private $_cssLinks = [];
     private $_jsMatches = [];
@@ -105,7 +106,7 @@ class Optimizer
         $this->_meta['http-equiv'] = $this->_meta['name'] = $this->_meta['other'] = [];
         $this->_meta['charset'] = '';
 
-        $regex = "/<(meta)\s([^>]*)\s*>|<(title)>\s*([^<]*)\s*<\/title>|<(link)\s([^>]*)\s*>|<(style)[^>]*>\s*([^\<]*)\s*<\/style>|<\s*\b(script)\b[^>]*>(.*?)<\s*\/\s*script\s*>/is";
+        $regex = "/<(meta)\s([^>]*)\s*>|<(title)>\s*([^<]*)\s*<\/title>|<(link)\s([^>]*)\s*>|<(style)([^>]*)>\s*([^\<]*)\s*<\/style>|<\s*\b(script)\b[^>]*>(.*?)<\s*\/\s*script\s*>/is";
         $matches = $matches2 = [];
         if (preg_match_all($regex, $this->_content, $matches, PREG_SET_ORDER)) {
             foreach ($matches as $ele) {
@@ -140,8 +141,12 @@ class Optimizer
                     }
                 }
                 // Xác định css-inline
-                elseif ($ele[7] == 'style' and !empty($ele[8])) {
-                    $this->_style[] = $ele[8];
+                elseif ($ele[7] == 'style' and !empty($ele[9])) {
+                    if (empty($ele[8])) {
+                        $this->_style[] = $ele[9];
+                    } else {
+                        $this->_other_style[] = $ele[0];
+                    }
                 }
                 // Xác định mã js
                 else {
@@ -246,6 +251,9 @@ class Optimizer
         }
         if (!empty($this->_style)) {
             $head .= '<style>' . implode($this->eol, $this->_style) . '</style>' . $this->eol;
+        }
+        if (!empty($this->_other_style)) {
+            $head .= implode($this->eol, $this->_other_style) . $this->eol;
         }
 
         if (str_contains($this->_content, '<head>')) {
