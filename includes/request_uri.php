@@ -97,7 +97,7 @@ if ($global_config['rewrite_endurl'] != $global_config['rewrite_exturl'] and pre
         $_GET[NV_NAME_VARIABLE] = $matches[1];
         $_GET[NV_OP_VARIABLE] = 'tag';
         $_GET['alias'] = urldecode($matches[2]);
-    } elseif (preg_match('/^' . $base_siteurl_quote . '([a-z]{2}+)\/([a-z0-9\-]+)\/tag\/([^\'\?\&]+)$/i', $request_uri, $matches)) {
+    } elseif (preg_match('/^' . $base_siteurl_quote . '([a-z]{2})\/([a-z0-9\-]+)\/tag\/([^\'\?\&]+)$/i', $request_uri, $matches)) {
         $_GET[NV_LANG_VARIABLE] = $matches[1];
         $_GET[NV_NAME_VARIABLE] = $matches[2];
         $_GET[NV_OP_VARIABLE] = 'tag';
