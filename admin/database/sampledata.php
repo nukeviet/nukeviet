@@ -76,7 +76,7 @@ if ($nv_Request->isset_request('delete', 'post')) {
 
 // Tiến trình quét bằng AJAX
 if ($nv_Request->isset_request('startwrite', 'get')) {
-    if ($sys_info['ini_set_support']) {
+    if ($sys_info['allowed_set_time_limit']) {
         set_time_limit(0);
     }
 
