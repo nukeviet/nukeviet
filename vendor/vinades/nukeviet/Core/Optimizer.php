@@ -28,6 +28,7 @@ class Optimizer
     private $_meta = [];
     private $_title = '<title></title>';
     private $_style = [];
+    private $_other_style = [];
     private $_links = [];
     private $_cssLinks = [];
     private $_jsMatches = [];
@@ -134,8 +135,12 @@ class Optimizer
                     }
                 } elseif (preg_match("/^<title>[^<]+<\/title>/is", $tag)) {
                     $this->_title = $tag;
-                } elseif (preg_match("/^<style[^>]*>([^<]*)<\/style>/is", $tag, $matches2)) {
-                    $this->_style[] = $matches2[1];
+                } elseif (preg_match("/^<style\s*([^>]*)\s*>([^<]*)<\/style>/is", $tag, $matches2)) {
+                    if (empty($matches2[1])) {
+                        $this->_style[] = $matches2[2];
+                    } else {
+                        $this->_other_style[] = $matches2[0];
+                    }
                 } elseif (preg_match('/^<link/', $tag)) {
                     preg_match_all("/([a-zA-Z]+)\s*=\s*[\"|']([^\"']+)/is", $tag, $matches2);
                     $combine = array_combine($matches2[1], $matches2[2]);
@@ -263,6 +268,9 @@ class Optimizer
         }
         if (!empty($this->_style)) {
             $head .= '<style>' . implode($this->eol, $this->_style) . '</style>' . $this->eol;
+        }
+        if (!empty($this->_other_style)) {
+            $head .= implode($this->eol, $this->_other_style) . $this->eol;
         }
 
         if (preg_match('/\<head\>/', $this->_content)) {
