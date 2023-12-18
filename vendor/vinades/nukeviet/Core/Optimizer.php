@@ -62,7 +62,10 @@ class Optimizer
      */
     public function process($jquery = true)
     {
-        $conditionRegex = "/<\!--\[if([^\]]+)\].*?\[endif\]-->/is";
+        $conditionRegex = [
+            "/<\!--\[if([^\]]+)\].*?\[endif\]-->/is",
+            '/<(noscript)([^>]*)>((?:(?!<\/noscript>).)*?)<\s*\/\s*noscript\s*>/smix'
+        ];
         $this->_content = preg_replace_callback($conditionRegex, [$this, 'conditionCallback'], $this->_content);
 
         $_jsSrc = [];
