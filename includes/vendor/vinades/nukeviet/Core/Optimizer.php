@@ -98,10 +98,12 @@ class Optimizer
             ($_isFullBuffer and $jquery) && $this->_jsMatches[] = '<script src="' . ASSETS_STATIC_URL . '/js/jquery/jquery.min.js"></script>';
         }
 
-        // Thay thế tạm thời HTML-conductions [if...]...[endif]
-        $this->_content = preg_replace_callback("/<\!--\[if([^\]]+)\].*?\[endif\]-->/is", [$this, 'conditionCallback'], $this->_content);
-        // Thay thế tạm thời js-inline
-        $this->_content = preg_replace_callback('/<script([^>]*)data\-show\=["|\']inline["|\']([^>]*)>((?:(?!<\/script>).)*?)<\s*\/\s*script\s*>/smix', [$this, 'inlinejsCallback'], $this->_content);
+        // Thay thế tạm thời HTML-conductions [if...]...[endif], noscript, js-inline
+        $this->_content = preg_replace_callback([
+            "/<\!--\[(if)([^\]]+)\].*?\[endif\]-->/is",
+            '/<(noscript)([^>]*)>((?:(?!<\/noscript>).)*?)<\s*\/\s*noscript\s*>/smix',
+            '/<(script)([^>]*)data\-show\=["|\']inline["|\']([^>]*)>((?:(?!<\/script>).)*?)<\s*\/\s*script\s*>/smix'
+        ], [$this, 'inlineCallback'], $this->_content);
 
         $this->_meta['http-equiv'] = $this->_meta['name'] = $this->_meta['other'] = [];
         $this->_meta['charset'] = '';
@@ -164,7 +166,7 @@ class Optimizer
             $this->_content = preg_replace($htmlRegex, '', $this->_content);
         }
 
-        // Trả về nội dung của các js-inline hoặc HTML-conductions [if...]...[endif]
+        // Trả về nội dung của các js-inline hoặc HTML-conductions [if...]...[endif], <noscript>...</noscript>
         if (!empty($this->_inlineContents)) {
             $this->_content = preg_replace(array_keys($this->_inlineContents), array_values($this->_inlineContents), $this->_content);
         }
@@ -291,32 +293,21 @@ class Optimizer
     }
 
     /**
-     * conditionCallback()
+     * inlineCallback()
      *
      * @param array $matches
      * @return string
      */
-    private function conditionCallback($matches)
+    private function inlineCallback($matches)
     {
         $num = $this->_inlineContentsCount;
-        $this->_inlineContents['/\{\|condition\_' . $num . '\|\}/'] = $matches[0];
+        if ($matches[1] == 'script') {
+            $this->_inlineContents['/\{\|inline\_' . $num . '\|\}/'] = '<script' . rtrim($matches[2]) . $matches[3] . '>' . $matches[4] . '</script>';
+        } else {
+            $this->_inlineContents['/\{\|inline\_' . $num . '\|\}/'] = $matches[0];
+        }
         ++$this->_inlineContentsCount;
 
-        return '{|condition_' . $num . '|}';
-    }
-
-    /**
-     * inlinejsCallback()
-     *
-     * @param array $matches
-     * @return string
-     */
-    private function inlinejsCallback($matches)
-    {
-        $num = $this->_inlineContentsCount;
-        $this->_inlineContents['/\{\|jsinline\_' . $num . '\|\}/'] = '<script' . rtrim($matches[1]) . $matches[2] . '>' . $matches[3] . '</script>';
-        ++$this->_inlineContentsCount;
-
-        return '{|jsinline_' . $num . '|}';
+        return '{|inline_' . $num . '|}';
     }
 }
