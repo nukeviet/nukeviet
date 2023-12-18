@@ -17,6 +17,64 @@ define('NV_ROOTDIR', pathinfo(str_replace(DIRECTORY_SEPARATOR, '/', __FILE__), P
 
 require NV_ROOTDIR . '/includes/mainfile.php';
 
+/**
+ * variables_identify()
+ * Identify variables from the rewritten URL
+ *
+ * @return array
+ */
+function variables_identify()
+{
+    global $nv_Server, $global_config;
+
+    if (isset($_SERVER['UNENCODED_URL'])) {
+        $_SERVER['REQUEST_URI'] = $_SERVER['UNENCODED_URL'];
+    }
+
+    $base_siteurl = $nv_Server->getWebsitePath();
+    !empty($base_siteurl) && $base_siteurl = preg_replace('#/api\.php(.*)$#', '', $base_siteurl);
+    $base_siteurl = '/';
+    $base_siteurl_quote = nv_preg_quote($base_siteurl);
+
+    $request_uri = preg_replace('/(' . $base_siteurl_quote . ')api\.php\/?/', '\\1', $_SERVER['REQUEST_URI']);
+    $request_uri = parse_url($request_uri);
+    $request_uri = urldecode($request_uri['path']);
+
+    $return = [];
+    if (preg_match('/^' . $base_siteurl_quote . 'nvapi([a-zA-Z0-9\-]*)\/([a-zA-Z0-9\-\/]*)$/', $request_uri, $matches)) {
+        if (preg_match('/^\-([a-zA-Z0-9\-]+)$/', $matches[1], $matches2)) {
+            $pa = explode('-', $matches2[1], 2);
+            if (!empty($pa[0])) {
+                if (in_array($pa[0], $global_config['setup_langs'], true)) {
+                    $return[NV_LANG_VARIABLE] = $pa[0];
+                    if (!empty($pa[1])) {
+                        $return['module'] = $pa[1];
+                    }
+                } else {
+                    $return['module'] = $matches2[1];
+                }
+
+                if (preg_match('/^([a-zA-Z0-9\-]+)\/?$/', $matches[2], $matches3)) {
+                    $return['action'] = $matches3[1];
+                }
+            }
+        }
+    }
+
+    return $return;
+}
+
+$get_variables = variables_identify();
+if (!empty($get_variables[NV_LANG_VARIABLE])) {
+    $_GET[NV_LANG_VARIABLE] = $get_variables[NV_LANG_VARIABLE];
+}
+if (!empty($get_variables['module'])) {
+    $_GET['module'] = $get_variables['module'];
+}
+if (!empty($get_variables['action'])) {
+    $_GET['action'] = $get_variables['action'];
+}
+
 use NukeViet\Api\Api;
 use NukeViet\Api\ApiResult;
 use NukeViet\Uapi\Uapi;
@@ -95,9 +153,9 @@ if ($credential_data['method'] == 'password_verify' and !password_verify($apisec
 
 // Thông tin request
 $api_request = [];
-$api_request['action'] = $nv_Request->get_title('action', 'post', '');
-$api_request['module'] = $nv_Request->get_title('module', 'post', '');
-$api_request['language'] = $nv_Request->get_title(NV_LANG_VARIABLE, 'post', '');
+$api_request['action'] = $nv_Request->get_title('action', 'post,get', '');
+$api_request['module'] = $nv_Request->get_title('module', 'post,get', '');
+$api_request['language'] = $nv_Request->get_title(NV_LANG_VARIABLE, 'post,get', '');
 
 if (empty($api_request['action'])) {
     $apiresults->setCode(ApiResult::CODE_MISSING_REQUEST_CMD)

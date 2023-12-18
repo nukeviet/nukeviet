@@ -299,6 +299,7 @@ class Sconfig
         $config_contents .= $t . $t . "rewrite ^/sitemap\-([a-z]+)\.xml\$ /index.php?language=\$1&nv=SitemapIndex last;\n";
         $config_contents .= $t . $t . "rewrite ^/sitemap\-([a-z]+)\.([a-zA-Z0-9\-]+)\.xml\$ /index.php?language=\$1&nv=\$2&op=sitemap last;\n";
         $config_contents .= $t . $t . "rewrite ^/sitemap\-([a-z]+)\.([a-zA-Z0-9\-]+)\.([a-zA-Z0-9\-]+)\.xml\$ /index.php?language=\$1&nv=\$2&op=sitemap/\$3 last;\n";
+        $config_contents .= $t . $t . "rewrite ^/nvapi([a-zA-Z0-9\-]*)/.* /api.php last;\n";
         $config_contents .= $t . $t . "if (!-e \$request_filename) {\n";
         $config_contents .= $t . $t . $t . 'rewrite ^/(.*)(' . $this->rewrite_exts . ")\$ /index.php;\n";
         $config_contents .= $t . $t . "}\n";
@@ -601,13 +602,18 @@ class Sconfig
         $rewrite_rule .= '</rule>';
 
         $rewrite_rule .= '<rule name="nv_rule_' . ++$rulename . '">';
-        $rewrite_rule .= "<match url=\"^(.*?)sitemap\-([a-z]{2})\.([a-zA-Z0-9-]+)\.xml$\" ignoreCase=\"false\" />";
+        $rewrite_rule .= "<match url=\"^(.*?)sitemap\-([a-z]{2})\.([a-zA-Z0-9\-]+)\.xml$\" ignoreCase=\"false\" />";
         $rewrite_rule .= '<action type="Rewrite" url="index.php?' . NV_LANG_VARIABLE . '={R:2}&amp;' . NV_NAME_VARIABLE . '={R:3}&amp;' . NV_OP_VARIABLE . '=sitemap" appendQueryString="false" />';
         $rewrite_rule .= '</rule>';
 
         $rewrite_rule .= '<rule name="nv_rule_' . ++$rulename . '">';
-        $rewrite_rule .= "<match url=\"^(.*?)sitemap\-([a-z]{2})\.([a-zA-Z0-9-]+)\.([a-zA-Z0-9-]+)\.xml$\" ignoreCase=\"false\" />";
+        $rewrite_rule .= "<match url=\"^(.*?)sitemap\-([a-z]{2})\.([a-zA-Z0-9\-]+)\.([a-zA-Z0-9\-]+)\.xml$\" ignoreCase=\"false\" />";
         $rewrite_rule .= '<action type="Rewrite" url="index.php?' . NV_LANG_VARIABLE . '={R:2}&amp;' . NV_NAME_VARIABLE . '={R:3}&amp;' . NV_OP_VARIABLE . '=sitemap/{R:4}" appendQueryString="false" />';
+        $rewrite_rule .= '</rule>';
+
+        $rewrite_rule .= '<rule name="nv_rule_' . ++$rulename . '">';
+        $rewrite_rule .= "<match url=\"^(.*?)nvapi([a-zA-Z0-9\-]*)/.*\" ignoreCase=\"false\" />";
+        $rewrite_rule .= '<action type="Rewrite" url="api.php" />';
         $rewrite_rule .= '</rule>';
 
         $rewrite_rule .= '<rule name="nv_rule_' . ++$rulename . '">';
@@ -625,12 +631,12 @@ class Sconfig
         $rewrite_rule .= '</rule>';
 
         $rewrite_rule .= '<rule name="nv_rule_' . ++$rulename . '" stopProcessing="true">';
-        $rewrite_rule .= "<match url=\"^([a-zA-Z0-9-\/]+)\/([a-zA-Z0-9-]+)$\" ignoreCase=\"false\" />";
+        $rewrite_rule .= "<match url=\"^([a-zA-Z0-9-\/]+)\/([a-zA-Z0-9\-]+)$\" ignoreCase=\"false\" />";
         $rewrite_rule .= '<action type="Redirect" redirectType="Permanent" url="' . NV_BASE_SITEURL . '{R:1}/{R:2}/" />';
         $rewrite_rule .= '</rule>';
 
         $rewrite_rule .= '<rule name="nv_rule_' . ++$rulename . '" stopProcessing="true">';
-        $rewrite_rule .= '<match url="^([a-zA-Z0-9-]+)$" ignoreCase="false" />';
+        $rewrite_rule .= '<match url="^([a-zA-Z0-9\-]+)$" ignoreCase="false" />';
         $rewrite_rule .= '<action type="Redirect" redirectType="Permanent" url="' . NV_BASE_SITEURL . '{R:1}/" />';
         $rewrite_rule .= '</rule>';
         $rewrite_rule .= '<!-- NUKEVIET_REWRITE_END -->';
@@ -665,8 +671,9 @@ class Sconfig
 
         $rewrite_rule .= "  RewriteRule ^(.*?)sitemap\.xml$ index.php?" . NV_NAME_VARIABLE . "=SitemapIndex [L]\n";
         $rewrite_rule .= "  RewriteRule ^(.*?)sitemap\-([a-z]{2})\.xml$ index.php?" . NV_LANG_VARIABLE . '=$2&' . NV_NAME_VARIABLE . "=SitemapIndex [L]\n";
-        $rewrite_rule .= "  RewriteRule ^(.*?)sitemap\-([a-z]{2})\.([a-zA-Z0-9-]+)\.xml$ index.php?" . NV_LANG_VARIABLE . '=$2&' . NV_NAME_VARIABLE . '=$3&' . NV_OP_VARIABLE . "=sitemap [L]\n";
-        $rewrite_rule .= "  RewriteRule ^(.*?)sitemap\-([a-z]{2})\.([a-zA-Z0-9-]+)\.([a-zA-Z0-9-]+)\.xml$ index.php?" . NV_LANG_VARIABLE . '=$2&' . NV_NAME_VARIABLE . '=$3&' . NV_OP_VARIABLE . "=sitemap/$4 [L]\n";
+        $rewrite_rule .= "  RewriteRule ^(.*?)sitemap\-([a-z]{2})\.([a-zA-Z0-9\-]+)\.xml$ index.php?" . NV_LANG_VARIABLE . '=$2&' . NV_NAME_VARIABLE . '=$3&' . NV_OP_VARIABLE . "=sitemap [L]\n";
+        $rewrite_rule .= "  RewriteRule ^(.*?)sitemap\-([a-z]{2})\.([a-zA-Z0-9\-]+)\.([a-zA-Z0-9\-]+)\.xml$ index.php?" . NV_LANG_VARIABLE . '=$2&' . NV_NAME_VARIABLE . '=$3&' . NV_OP_VARIABLE . "=sitemap/$4 [L]\n";
+        $rewrite_rule .= "  RewriteRule ^(.*?)nvapi([a-zA-Z0-9\-]*)/.* api.php [L]\n";
         $rewrite_rule .= "\n";
 
         // Rewrite for other module's rule
@@ -677,8 +684,8 @@ class Sconfig
 
         $rewrite_rule .= "  RewriteRule (.*)tag\/([^?]+)$ index.php [L]\n";
 
-        $rewrite_rule .= "  RewriteRule ^([a-zA-Z0-9-\/]+)\/([a-zA-Z0-9-]+)$ " . NV_BASE_SITEURL . "$1/$2/ [L,R=301]\n";
-        $rewrite_rule .= '  RewriteRule ^([a-zA-Z0-9-]+)$ ' . NV_BASE_SITEURL . "$1/ [L,R=301]\n";
+        $rewrite_rule .= "  RewriteRule ^([a-zA-Z0-9\-\/]+)\/([a-zA-Z0-9\-]+)$ " . NV_BASE_SITEURL . "$1/$2/ [L,R=301]\n";
+        $rewrite_rule .= '  RewriteRule ^([a-zA-Z0-9\-]+)$ ' . NV_BASE_SITEURL . "$1/ [L,R=301]\n";
         $rewrite_rule .= "</IfModule>\n\n";
         $rewrite_rule .= "#NUKEVIET_REWRITE_END\n";
         $rewrite_rule .= "##################################################################################\n";

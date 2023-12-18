@@ -754,8 +754,8 @@ function nv_groups_add_user($group_id, $userid, $approved = 1, $mod_data = 'user
 {
     global $db, $db_config, $global_config;
 
-    $group_id = intval($group_id);
-    $userid = intval($userid);
+    $group_id = (int) $group_id;
+    $userid = (int) $userid;
 
     $_mod_table = ($mod_data == 'users') ? NV_USERS_GLOBALTABLE : $db_config['prefix'] . '_' . $mod_data;
     $query = $db->query('SELECT COUNT(*) FROM ' . $_mod_table . ' WHERE userid=' . $userid);
@@ -800,8 +800,8 @@ function nv_groups_del_user($group_id, $userid, $mod_data = 'users')
 {
     global $db, $db_config, $global_config;
 
-    $group_id = intval($group_id);
-    $userid = intval($userid);
+    $group_id = (int) $group_id;
+    $userid = (int) $userid;
 
     $_mod_table = ($mod_data == 'users') ? NV_USERS_GLOBALTABLE : $db_config['prefix'] . '_' . $mod_data;
     $row = $db->query('SELECT data, approved FROM ' . $_mod_table . '_groups_users WHERE group_id=' . $group_id . ' AND userid=' . $userid)->fetch();
@@ -2359,6 +2359,63 @@ function urlRewriteWithDomain($url, $domain)
     }
 
     return $domain . $url;
+}
+
+/**
+ * api_url_create()
+ *
+ * @param array  $params bao gồm $params['language], $params['module'], $params['action']
+ * @param string $domain
+ * @return string
+ */
+function api_url_create($params = [], $domain = '')
+{
+    global $global_config;
+
+    if ($global_config['rewrite_enable']) {
+        $url = 'nvapi';
+        !empty($params['language']) && $url .= '-' . $params['language'];
+        !empty($params['module']) && $url .= '-' . $params['module'];
+        !empty($params['action']) && $url .= '/' . $params['action'];
+        $url = nv_apply_hook('', 'get_rewrite_domain', [], '') . NV_BASE_SITEURL . $url . '/';
+
+        if (empty($domain)) {
+            return $url;
+        }
+
+        if (str_starts_with($url, $domain)) {
+            return $url;
+        }
+
+        str_starts_with($url, NV_MY_DOMAIN) && $url = substr($url, strlen(NV_MY_DOMAIN));
+
+        return $domain . $url;
+    }
+
+    $url = nv_apply_hook('', 'get_rewrite_domain', [], '') . NV_BASE_SITEURL . 'api.php';
+    if (!empty($domain)) {
+        if (!str_starts_with($url, $domain)) {
+            str_starts_with($url, NV_MY_DOMAIN) && $url = substr($url, strlen(NV_MY_DOMAIN));
+            $url = $domain . $url;
+        }
+    }
+
+    $_params = [];
+    if (!empty($params['language'])) {
+        $_params[NV_LANG_VARIABLE] = $params['language'];
+    }
+    if (!empty($params['module'])) {
+        $_params['module'] = $params['module'];
+    }
+    if (!empty($params['action'])) {
+        $_params['action'] = $params['action'];
+    }
+
+    if (!empty($_params)) {
+        $url .= '?' . http_build_query($_params, '', '&');
+    }
+
+    return $url;
 }
 
 /**
