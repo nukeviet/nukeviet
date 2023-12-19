@@ -108,13 +108,30 @@ function server_info_update($config_ini_file)
 }
 
 /**
+ * check_ini()
+ *
+ * @param array  $ini_set
+ * @param string $key
+ * @param string $new_value
+ */
+function check_ini(&$ini_set, $key, $new_value)
+{
+    $value = ini_get($key);
+    if ($value != $new_value) {
+        if (ini_set($key, $new_value) !== false) {
+            ini_get($key) == $new_value && $ini_set[$key] = $new_value;
+        }
+    }
+}
+
+/**
  * set_ini_file()
  *
  * @param array $sys_info
  */
 function set_ini_file(&$sys_info)
 {
-    global $config_ini_file, $ini_list, $global_config;
+    global $config_ini_file, $global_config;
 
     $content_config = '<?php' . "\n\n";
     $content_config .= NV_FILEHEAD . "\n\n";
@@ -254,67 +271,91 @@ function set_ini_file(&$sys_info)
     }
     $content_config .= "\$sys_info['ip6_support'] = " . ($sys_info['ip6_support'] ? 'true' : 'false') . ";\n";
 
+    $ini_set = [];
     if ($sys_info['ini_set_support']) {
-        ini_set('display_startup_errors', 0);
-        version_compare(PHP_VERSION, '8.0.0', '<') && ini_set('track_errors', 1);
-        ini_set('log_errors', 0);
-        ini_set('display_errors', 0);
+        check_ini($ini_set, 'display_startup_errors', 0);
 
-        if (strcasecmp($global_config['session_handler'], $ini_list['session.save_handler']) != 0) {
+        if (version_compare(PHP_VERSION, '8.0.0', '<')) {
+            check_ini($ini_set, 'track_errors', 1);
+        }
+
+        check_ini($ini_set, 'log_errors', 0);
+        check_ini($ini_set, 'display_errors', 0);
+
+        $session_save_handler = ini_get('session.save_handler');
+        $session_save_path = ini_get('session.save_path');
+        if (strcasecmp($global_config['session_handler'], $session_save_handler) != 0) {
             if ($global_config['session_handler'] == 'memcached' and in_array('memcached', $sys_info['support_cache'], true) and defined('NV_MEMCACHED_HOST') and defined('NV_MEMCACHED_PORT') and NV_MEMCACHED_HOST != '' and NV_MEMCACHED_PORT != '') {
-                if (ini_set('session.save_handler', 'memcached') !== false) {
-                    if (ini_set('session.save_path', NV_MEMCACHED_HOST . ':' . NV_MEMCACHED_PORT) === false) {
-                        ini_restore('session.save_handler');
-                    }
+                ini_set('session.save_handler', 'memcached');
+                $session_save_path != NV_MEMCACHED_HOST . ':' . NV_MEMCACHED_PORT && ini_set('session.save_path', NV_MEMCACHED_HOST . ':' . NV_MEMCACHED_PORT);
+                $new_session_save_handler = ini_get('session.save_handler');
+                $new_session_save_path = ini_get('session.save_path');
+                if ($new_session_save_handler == 'memcached' and $new_session_save_path == NV_MEMCACHED_HOST . ':' . NV_MEMCACHED_PORT) {
+                    $ini_set['session.save_handler'] = 'memcached';
+                    $new_session_save_path != $session_save_path && $ini_set['session.save_path'] = NV_MEMCACHED_HOST . ':' . NV_MEMCACHED_PORT;
+                    $session_save_handler = $new_session_save_handler;
+                    $session_save_path = $new_session_save_path;
+                } else {
+                    ini_set('session.save_handler', $session_save_handler);
+                    $new_session_save_path != $session_save_path && ini_set('session.save_path', $session_save_path);
                 }
             } elseif ($global_config['session_handler'] == 'redis' and in_array('redis', $sys_info['support_cache'], true) and defined('NV_REDIS_HOST') and defined('NV_REDIS_PORT') and NV_REDIS_HOST != '' and NV_REDIS_PORT != '') {
-                if (ini_set('session.save_handler', 'redis') !== false) {
-                    if (ini_set('session.save_path', NV_REDIS_HOST . ':' . NV_REDIS_PORT) === false) {
-                        ini_restore('session.save_handler');
-                    }
+                ini_set('session.save_handler', 'redis');
+                $session_save_path != NV_REDIS_HOST . ':' . NV_REDIS_PORT && ini_set('session.save_path', NV_REDIS_HOST . ':' . NV_REDIS_PORT);
+                $new_session_save_handler = ini_get('session.save_handler');
+                $new_session_save_path = ini_get('session.save_path');
+                if ($new_session_save_handler == 'redis' and $new_session_save_path == NV_REDIS_HOST . ':' . NV_REDIS_PORT) {
+                    $ini_set['session.save_handler'] = 'redis';
+                    $new_session_save_path != $session_save_path && $ini_set['session.save_path'] = NV_REDIS_HOST . ':' . NV_REDIS_PORT;
+                    $session_save_handler = $new_session_save_handler;
+                    $session_save_path = $new_session_save_path;
+                } else {
+                    ini_set('session.save_handler', $session_save_handler);
+                    $new_session_save_path != $session_save_path && ini_set('session.save_path', $session_save_path);
                 }
             }
         }
 
         if (!isset($_SESSION)) {
-            if (strcasecmp(ini_get('session.save_handler'), 'memcached') == 0) {
-                ini_set('memcached.sess_prefix', 'nv');
-                ini_set('memcached.sess_locking', '1');
-                ini_set('memcached.sess_binary_protocol', 'Off');
+            if (strcasecmp($session_save_handler, 'memcached') == 0) {
+                check_ini($ini_set, 'memcached.sess_prefix', 'nv');
+                check_ini($ini_set, 'memcached.sess_locking', '1');
+                check_ini($ini_set, 'memcached.sess_binary_protocol', 'Off');
             }
 
-            ini_set('session.use_trans_sid', 0);
-            ini_set('session.auto_start', 0);
-            ini_set('session.use_cookies', 1);
-            ini_set('session.use_only_cookies', 1);
-            ini_set('session.cookie_httponly', 1);
-            ini_set('session.gc_probability', 1);
+            check_ini($ini_set, 'session.use_trans_sid', 0);
+            check_ini($ini_set, 'session.auto_start', 0);
+            check_ini($ini_set, 'session.use_cookies', 1);
+            check_ini($ini_set, 'session.use_only_cookies', 1);
+            check_ini($ini_set, 'session.cookie_httponly', 1);
+            check_ini($ini_set, 'session.gc_probability', 1);
+
             //Kha nang chay Garbage Collection - trinh xoa session da het han truoc khi bat dau session_start();
-            ini_set('session.gc_divisor', 1000);
+            check_ini($ini_set, 'session.gc_divisor', 1000);
             //gc_probability / gc_divisor = phan tram (phan nghin) kha nang chay Garbage Collection
-            ini_set('session.gc_maxlifetime', 3600);
+            check_ini($ini_set, 'session.gc_maxlifetime', 3600);
             //thoi gian sau khi het han phien lam viec de Garbage Collection tien hanh xoa, 60 phut
-            ini_set('session.cache_limiter', 'nocache');
+            check_ini($ini_set, 'session.cache_limiter', 'nocache');
         }
 
-        ini_set('allow_url_fopen', 1);
-        ini_set('user_agent', 'NV4');
-        ini_set('default_charset', strtoupper($global_config['site_charset']));
+        check_ini($ini_set, 'allow_url_fopen', 1);
+        check_ini($ini_set, 'user_agent', 'NV4');
+        check_ini($ini_set, 'default_charset', strtoupper($global_config['site_charset']));
 
-        if ((int) ini_get('memory_limit') < 64) {
-            ini_set('memory_limit', '64M');
+        $memory_limit = ini_get('memory_limit');
+        if ((int) $memory_limit < 64) {
+            if (ini_set('memory_limit', '64M') !== false) {
+                (int) ini_get('memory_limit') == 64 && $ini_set['memory_limit'] = '64M';
+            }
         }
 
-        ini_set('arg_separator.output', '&');
-        ini_set('auto_detect_line_endings', 0);
+        check_ini($ini_set, 'arg_separator.output', '&');
+        check_ini($ini_set, 'auto_detect_line_endings', 0);
     }
 
-    $ini_list_new = ini_get_all(null, false);
-
-    $diff = array_diff_assoc($ini_list_new, $ini_list);
-    if (!empty($diff)) {
+    if (!empty($ini_set)) {
         $content_config .= "\n";
-        foreach ($diff as $key => $value) {
+        foreach ($ini_set as $key => $value) {
             $content_config .= "ini_set('" . $key . "', '" . $value . "');\n";
         }
     }
@@ -347,8 +388,6 @@ if (isset($_POST['__serverInfoUpdate'])) {
     server_info_update($config_ini_file);
     exit(0);
 }
-
-$ini_list = ini_get_all(null, false);
 
 $sys_info['server_headers'] = [];
 $sys_info['is_http2'] = false;
@@ -394,6 +433,8 @@ if (!function_exists('openssl_encrypt')) {
 }
 
 //Neu he thong khong ho tro session se bao loi
-if (!extension_loaded('session') or empty($ini_list['session.save_handler']) or ($ini_list['session.save_handler'] != 'files' and empty($ini_list['session.save_path']))) {
+$session_save_handler = ini_get('session.save_handler');
+$session_save_path = ini_get('session.save_path');
+if (!extension_loaded('session') or empty($session_save_handler) or ($session_save_handler != 'files' and empty($session_save_path))) {
     exit('Session object not supported');
 }
