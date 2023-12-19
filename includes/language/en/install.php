@@ -46,6 +46,7 @@ $lang_module['result'] = 'Result';
 $lang_module['php_support'] = 'Support php';
 $lang_module['php_version'] = 'PHP version';
 $lang_module['pdo_support'] = 'Support PHP Data Objects';
+$lang_module['curl_support'] = 'Support cURL library';
 $lang_module['request'] = 'Require';
 $lang_module['required_off'] = 'Require off';
 $lang_module['required_on'] = 'Require on';

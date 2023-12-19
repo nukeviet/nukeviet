@@ -46,6 +46,7 @@ $lang_module['result'] = 'Kết quả';
 $lang_module['php_support'] = 'Hỗ trợ PHP';
 $lang_module['php_version'] = 'Phiên bản PHP';
 $lang_module['pdo_support'] = 'Hỗ trợ PHP Data Objects';
+$lang_module['curl_support'] = 'Hỗ trợ thư viện cURL';
 $lang_module['request'] = 'Yêu cầu';
 $lang_module['required_off'] = 'Bắt buộc tắt';
 $lang_module['required_on'] = 'Bắt buộc hỗ trợ';

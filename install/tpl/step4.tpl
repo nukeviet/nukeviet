@@ -18,34 +18,39 @@
         <td class="alt"><span class="{DATA_REQUEST.class_pdo_support}">{DATA_REQUEST.pdo_support}</span></td>
     </tr>
     <tr>
-        <th scope="row" class="spec">{LANG.opendir_support}</th>
-        <td>{LANG.request}</td>
-        <td><span class="{DATA_REQUEST.class_opendir_support}">{DATA_REQUEST.opendir_support}</span></td>
+        <th scope="row" class="spec">{LANG.curl_support}</th>
+        <td>{LANG.required_on}</td>
+        <td><span class="{DATA_REQUEST.class_curl_support}">{DATA_REQUEST.curl_support}</span></td>
     </tr>
     <tr>
-        <th scope="row" class="specalt">{LANG.gd_support}</th>
+        <th scope="row" class="specalt">{LANG.opendir_support}</th>
         <td class="alt">{LANG.request}</td>
-        <td class="alt"><span class="{DATA_REQUEST.class_gd_support}">{DATA_REQUEST.gd_support}</span></td>
+        <td class="alt"><span class="{DATA_REQUEST.class_opendir_support}">{DATA_REQUEST.opendir_support}</span></td>
     </tr>
     <tr>
-        <th scope="row" class="spec">{LANG.xml_support}</th>
+        <th scope="row" class="spec">{LANG.gd_support}</th>
         <td>{LANG.request}</td>
-        <td><span class="{DATA_REQUEST.class_xml_support}">{DATA_REQUEST.xml_support}</span></td>
+        <td><span class="{DATA_REQUEST.class_gd_support}">{DATA_REQUEST.gd_support}</span></td>
     </tr>
     <tr>
-        <th scope="row" class="specalt">{LANG.openssl_support}</th>
+        <th scope="row" class="specalt">{LANG.xml_support}</th>
         <td class="alt">{LANG.request}</td>
-        <td class="alt"><span class="{DATA_REQUEST.class_openssl_support}">{DATA_REQUEST.openssl_support}</span></td>
+        <td class="alt"><span class="{DATA_REQUEST.class_xml_support}">{DATA_REQUEST.xml_support}</span></td>
     </tr>
     <tr>
-        <th scope="row" class="spec">{LANG.session_support}</th>
+        <th scope="row" class="spec">{LANG.openssl_support}</th>
         <td>{LANG.request}</td>
-        <td><span class="{DATA_REQUEST.class_session_support}">{DATA_REQUEST.session_support}</span></td>
+        <td><span class="{DATA_REQUEST.class_openssl_support}">{DATA_REQUEST.openssl_support}</span></td>
     </tr>
     <tr>
-        <th scope="row" class="specalt">{LANG.fileuploads_support}</th>
+        <th scope="row" class="specalt">{LANG.session_support}</th>
         <td class="alt">{LANG.request}</td>
-        <td class="alt"><span class="{DATA_REQUEST.class_fileuploads_support}">{DATA_REQUEST.fileuploads_support}</span></td>
+        <td class="alt"><span class="{DATA_REQUEST.class_session_support}">{DATA_REQUEST.session_support}</span></td>
+    </tr>
+    <tr>
+        <th scope="row" class="spec">{LANG.fileuploads_support}</th>
+        <td>{LANG.request}</td>
+        <td><span class="{DATA_REQUEST.class_fileuploads_support}">{DATA_REQUEST.fileuploads_support}</span></td>
     </tr>
     <tr>
         <th scope="row" class="specalt">{LANG.json_support}</th>
@@ -98,11 +103,6 @@
         <th scope="row" class="specalt">Extension Zip Support</th>
         <td class="alt">{LANG.is_support}</td>
         <td class="alt"><span class="{DATA_SUPPORT.class_zip_support}">{DATA_SUPPORT.zip_support}</span></td>
-    </tr>
-    <tr>
-        <th scope="row" class="spec">Client URL Library (curl)</th>
-        <td>{LANG.is_support}</td>
-        <td><span class="{DATA_SUPPORT.class_curl_support}">{DATA_SUPPORT.curl_support}</span></td>
     </tr>
 </table>
 <ul class="control_t fr">
