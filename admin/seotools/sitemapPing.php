@@ -39,26 +39,24 @@ function nv_sitemapPing($module, $link)
     $link = $link . urlencode($myUrl);
 
     $result = false;
-    if ($sys_info['curl_support']) {
-        $c = curl_init();
-        curl_setopt($c, CURLOPT_RETURNTRANSFER, 1);
-        $open_basedir = @ini_get('open_basedir') ? true : false;
-        if (! $open_basedir) {
-            curl_setopt($c, CURLOPT_FOLLOWLOCATION, true);
-            curl_setopt($c, CURLOPT_MAXREDIRS, 20);
-        }
-        curl_setopt($c, CURLOPT_TIMEOUT, 30);
-        curl_setopt($c, CURLOPT_URL, $link);
-        curl_exec($c);
-        if (! curl_errno($c)) {
-            $response = curl_getinfo($c);
-
-            if ($response['http_code'] == 200) {
-                $result = true;
-            }
-        }
-        curl_close($c);
+    $c = curl_init();
+    curl_setopt($c, CURLOPT_RETURNTRANSFER, 1);
+    $open_basedir = @ini_get('open_basedir') ? true : false;
+    if (!$open_basedir) {
+        curl_setopt($c, CURLOPT_FOLLOWLOCATION, true);
+        curl_setopt($c, CURLOPT_MAXREDIRS, 20);
     }
+    curl_setopt($c, CURLOPT_TIMEOUT, 30);
+    curl_setopt($c, CURLOPT_URL, $link);
+    curl_exec($c);
+    if (!curl_errno($c)) {
+        $response = curl_getinfo($c);
+
+        if ($response['http_code'] == 200) {
+            $result = true;
+        }
+    }
+    curl_close($c);
 
     if (! $result and nv_function_exists('fsockopen')) {
         $url_parts = parse_url($link);

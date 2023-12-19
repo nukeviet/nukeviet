@@ -16,7 +16,7 @@ if (headers_sent() or connection_status() != 0 or connection_aborted()) {
     trigger_error('Warning: Headers already sent', E_USER_WARNING);
 }
 
-$nv_resquest_serverext_key = array('php_support', 'opendir_support', 'gd_support', 'xml_support', 'openssl_support', 'session_support', 'fileuploads_support', 'json_support');
+$nv_resquest_serverext_key = array('php_support', 'opendir_support', 'curl_support', 'gd_support', 'xml_support', 'openssl_support', 'session_support', 'fileuploads_support', 'json_support');
 
 if ($sys_info['ini_set_support']) {
     ini_set('session.use_trans_sid', 0);
