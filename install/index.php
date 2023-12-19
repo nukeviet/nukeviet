@@ -342,7 +342,6 @@ if ($step == 1) {
     $array_support['zlib_support'] = ($sys_info['zlib_support']) ? 1 : 0;
     $array_support['zip_support'] = (extension_loaded('zip')) ? 1 : 0;
     $array_support['mbstring_support'] = (extension_loaded('mbstring')) ? 1 : 0;
-    $array_support['curl_support'] = (extension_loaded('curl')) ? 1 : 0;
     foreach ($array_support as $_key => $_support) {
         $array_support['class_' . $_key] = ($_support) ? 'highlight_green' : 'highlight_red';
         $array_support[$_key] = ($_support) ? $nv_Lang->getModule('compatible') : $nv_Lang->getModule('not_compatible');

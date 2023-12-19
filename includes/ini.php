@@ -409,6 +409,11 @@ if (version_compare(PHP_VERSION, '5.6.0') < 0) {
     trigger_error('You are running an unsupported PHP version. Please upgrade to PHP 5.6 or higher before trying to install Nukeviet Portal', 256);
 }
 
+//Neu he thong khong ho tro curl se bao loi
+if (!(extension_loaded('curl') and (empty($sys_info['disable_functions']) or (!empty($sys_info['disable_functions']) and !preg_grep('/^curl\_/', $sys_info['disable_functions']))))) {
+    trigger_error('The cURL library is not installed or its underlying functions are blocked', 256);
+}
+
 //Neu he thong khong ho tro opendir se bao loi
 if (!(function_exists('opendir') and !in_array('opendir', $sys_info['disable_functions'], true))) {
     trigger_error('Opendir function is not supported', 256);
