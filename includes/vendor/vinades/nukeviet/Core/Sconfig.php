@@ -29,6 +29,7 @@ class Sconfig
     private $my_domains = '';
     private $rewrite_exts = '';
     private $server_configs = [];
+    private $setup_langs = [];
 
     public function __construct($global_configs)
     {
@@ -38,6 +39,8 @@ class Sconfig
         $server_config_file = NV_ROOTDIR . '/' . NV_DATADIR . '/server_config.json';
         $server_configs = file_get_contents($server_config_file);
         $this->server_configs = json_decode($server_configs, true);
+        $this->setup_langs = !empty($global_configs['setup_langs']) ? $global_configs['setup_langs'] : [NV_LANG_DATA];
+        asort($this->setup_langs);
     }
 
     /**
@@ -299,7 +302,10 @@ class Sconfig
         $config_contents .= $t . $t . "rewrite ^/sitemap\-([a-z]+)\.xml\$ /index.php?language=\$1&nv=SitemapIndex last;\n";
         $config_contents .= $t . $t . "rewrite ^/sitemap\-([a-z]+)\.([a-zA-Z0-9\-]+)\.xml\$ /index.php?language=\$1&nv=\$2&op=sitemap last;\n";
         $config_contents .= $t . $t . "rewrite ^/sitemap\-([a-z]+)\.([a-zA-Z0-9\-]+)\.([a-zA-Z0-9\-]+)\.xml\$ /index.php?language=\$1&nv=\$2&op=sitemap/\$3 last;\n";
-        $config_contents .= $t . $t . "rewrite ^/nvapi([a-zA-Z0-9\-]*)/.* /api.php last;\n";
+        $config_contents .= $t . $t . "rewrite ^/api\/(" . implode('|', $this->setup_langs) . ")\/([a-zA-Z0-9]+)\/([a-zA-Z0-9]+)\/?\$ api.php?" . NV_LANG_VARIABLE . "=\$1&module=\$2&action=\$3 last;\n";
+        $config_contents .= $t . $t . "rewrite ^/api\/(" . implode('|', $this->setup_langs) . ")\/([a-zA-Z0-9]+)\/?\$ api.php?" . NV_LANG_VARIABLE . "=\$1&action=\$2 last;\n";
+        $config_contents .= $t . $t . "rewrite ^/api\/([a-zA-Z0-9]+)\/([a-zA-Z0-9]+)\/?\$ api.php?module=\$1&action=\$2 last;\n";
+        $config_contents .= $t . $t . "rewrite ^/api\/([a-zA-Z0-9]+)\/?\$ api.php?action=\$1 last;\n";
         $config_contents .= $t . $t . "if (!-e \$request_filename) {\n";
         $config_contents .= $t . $t . $t . 'rewrite ^/(.*)(' . $this->rewrite_exts . ")\$ /index.php;\n";
         $config_contents .= $t . $t . "}\n";
@@ -612,8 +618,23 @@ class Sconfig
         $rewrite_rule .= '</rule>';
 
         $rewrite_rule .= '<rule name="nv_rule_' . ++$rulename . '">';
-        $rewrite_rule .= "<match url=\"^(.*?)nvapi([a-zA-Z0-9\-]*)/.*\" ignoreCase=\"false\" />";
-        $rewrite_rule .= '<action type="Rewrite" url="api.php" />';
+        $rewrite_rule .= "<match url=\"^(.*?)api\/(" . implode('|', $this->setup_langs) . ")\/([a-zA-Z0-9]+)\/([a-zA-Z0-9]+)\/?$\" ignoreCase=\"false\" />";
+        $rewrite_rule .= '<action type="Rewrite" url="api.php?' . NV_LANG_VARIABLE . '={R:2}&amp;module={R:3}&amp;action={R:4}" appendQueryString="false" />';
+        $rewrite_rule .= '</rule>';
+
+        $rewrite_rule .= '<rule name="nv_rule_' . ++$rulename . '">';
+        $rewrite_rule .= "<match url=\"^(.*?)api\/(" . implode('|', $this->setup_langs) . ")\/([a-zA-Z0-9]+)\/?$\" ignoreCase=\"false\" />";
+        $rewrite_rule .= '<action type="Rewrite" url="api.php?' . NV_LANG_VARIABLE . '={R:2}&amp;action={R:3}" appendQueryString="false" />';
+        $rewrite_rule .= '</rule>';
+
+        $rewrite_rule .= '<rule name="nv_rule_' . ++$rulename . '">';
+        $rewrite_rule .= "<match url=\"^(.*?)api\/([a-zA-Z0-9]+)\/([a-zA-Z0-9]+)\/?$\" ignoreCase=\"false\" />";
+        $rewrite_rule .= '<action type="Rewrite" url="api.php?module={R:2}&amp;action={R:3}" appendQueryString="false" />';
+        $rewrite_rule .= '</rule>';
+
+        $rewrite_rule .= '<rule name="nv_rule_' . ++$rulename . '">';
+        $rewrite_rule .= "<match url=\"^(.*?)api\/([a-zA-Z0-9]+)\/?$\" ignoreCase=\"false\" />";
+        $rewrite_rule .= '<action type="Rewrite" url="api.php?action={R:2}" appendQueryString="false" />';
         $rewrite_rule .= '</rule>';
 
         $rewrite_rule .= '<rule name="nv_rule_' . ++$rulename . '">';
@@ -655,7 +676,9 @@ class Sconfig
         $rewrite_rule = "##################################################################################\n";
         $rewrite_rule .= "#NUKEVIET_REWRITE_START //Please do not change the contents of the following lines\n";
         $rewrite_rule .= "##################################################################################\n\n";
-        $rewrite_rule .= "#Options +FollowSymLinks\n\n";
+        $rewrite_rule .= "<IfModule mod_negotiation.c>\n";
+        $rewrite_rule .= "  Options -MultiViews\n";
+        $rewrite_rule .= "</IfModule>\n\n";
         $rewrite_rule .= "<IfModule mod_rewrite.c>\n";
         $rewrite_rule .= "  RewriteEngine On\n";
         $rewrite_rule .= '  RewriteBase ' . NV_BASE_SITEURL . "\n";
@@ -673,7 +696,10 @@ class Sconfig
         $rewrite_rule .= "  RewriteRule ^(.*?)sitemap\-([a-z]{2})\.xml$ index.php?" . NV_LANG_VARIABLE . '=$2&' . NV_NAME_VARIABLE . "=SitemapIndex [L]\n";
         $rewrite_rule .= "  RewriteRule ^(.*?)sitemap\-([a-z]{2})\.([a-zA-Z0-9\-]+)\.xml$ index.php?" . NV_LANG_VARIABLE . '=$2&' . NV_NAME_VARIABLE . '=$3&' . NV_OP_VARIABLE . "=sitemap [L]\n";
         $rewrite_rule .= "  RewriteRule ^(.*?)sitemap\-([a-z]{2})\.([a-zA-Z0-9\-]+)\.([a-zA-Z0-9\-]+)\.xml$ index.php?" . NV_LANG_VARIABLE . '=$2&' . NV_NAME_VARIABLE . '=$3&' . NV_OP_VARIABLE . "=sitemap/$4 [L]\n";
-        $rewrite_rule .= "  RewriteRule ^(.*?)nvapi([a-zA-Z0-9\-]*)/.* api.php [L]\n";
+        $rewrite_rule .= "  RewriteRule ^(.*?)api\/(" . implode('|', $this->setup_langs) . ")\/([a-zA-Z0-9]+)\/([a-zA-Z0-9]+)\/?$ api.php?language=$2&module=$3&action=$4 [L]\n";
+        $rewrite_rule .= "  RewriteRule ^(.*?)api\/(" . implode('|', $this->setup_langs) . ")\/([a-zA-Z0-9]+)\/?$ api.php?language=$2&action=$3 [L]\n";
+        $rewrite_rule .= "  RewriteRule ^(.*?)api\/([a-zA-Z0-9]+)\/([a-zA-Z0-9]+)\/?$ api.php?module=$2&action=$3 [L]\n";
+        $rewrite_rule .= "  RewriteRule ^(.*?)api\/([a-zA-Z0-9]+)\/?$ api.php?action=$2 [L]\n";
         $rewrite_rule .= "\n";
 
         // Rewrite for other module's rule

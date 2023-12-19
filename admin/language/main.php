@@ -303,6 +303,8 @@ if (defined('NV_IS_GODADMIN') or ($global_config['idsite'] > 0 and defined('NV_I
             }
 
             nv_save_file_config_global();
+            $global_config['setup_langs'][] = $keylang;
+            nv_rewrite_change();
 
             nv_jsonOutput([
                 'status' => 'OK',
@@ -377,6 +379,12 @@ if (defined('NV_IS_GODADMIN') or ($global_config['idsite'] > 0 and defined('NV_I
         $nv_Cache->delAll();
 
         nv_save_file_config_global();
+        $global_config['setup_langs'] = array_filter($global_config['setup_langs'], function ($lang) {
+            global $deletekeylang;
+
+            return $lang != $deletekeylang;
+        });
+        nv_rewrite_change();
 
         nv_htmlOutput('OK');
     }

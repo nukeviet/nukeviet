@@ -2364,20 +2364,34 @@ function urlRewriteWithDomain($url, $domain)
 /**
  * api_url_create()
  *
- * @param array  $params bao gồm $params['language], $params['module'], $params['action']
+ * @param string $action
+ * @param string $language
+ * @param string $module
  * @param string $domain
- * @return string
+ * @return false|string
  */
-function api_url_create($params = [], $domain = '')
+function api_url_create($action, $language = '', $module = '', $domain = '')
 {
     global $global_config;
 
+    if (empty($action) or !preg_match('/^[a-zA-Z0-9]+$/', $action)) {
+        return false;
+    }
+
+    if (!empty($language) and !preg_match('/^[a-z]{2}$/', $language)) {
+        $language = '';
+    }
+
+    if (!empty($module) and !preg_match('/^[a-zA-Z0-9]+$/', $module)) {
+        $module = '';
+    }
+
     if ($global_config['rewrite_enable']) {
-        $url = 'nvapi';
-        !empty($params['language']) && $url .= '-' . $params['language'];
-        !empty($params['module']) && $url .= '-' . $params['module'];
-        !empty($params['action']) && $url .= '/' . $params['action'];
-        $url = nv_apply_hook('', 'get_rewrite_domain', [], '') . NV_BASE_SITEURL . $url . '/';
+        $url = nv_apply_hook('', 'get_rewrite_domain', [], '') . NV_BASE_SITEURL . 'api';
+        !empty($language) && $url .= '/' . $language;
+        !empty($module) && $url .= '/' . $module;
+        $url .= '/' . $action;
+        $url .= '/';
 
         if (empty($domain)) {
             return $url;
@@ -2400,20 +2414,16 @@ function api_url_create($params = [], $domain = '')
         }
     }
 
-    $_params = [];
-    if (!empty($params['language'])) {
-        $_params[NV_LANG_VARIABLE] = $params['language'];
+    $params = [];
+    if (!empty($language)) {
+        $params[NV_LANG_VARIABLE] = $language;
     }
-    if (!empty($params['module'])) {
-        $_params['module'] = $params['module'];
+    if (!empty($module)) {
+        $params['module'] = $module;
     }
-    if (!empty($params['action'])) {
-        $_params['action'] = $params['action'];
-    }
+    $params['action'] = $action;
 
-    if (!empty($_params)) {
-        $url .= '?' . http_build_query($_params, '', '&');
-    }
+    $url .= '?' . http_build_query($params, '', '&');
 
     return $url;
 }
