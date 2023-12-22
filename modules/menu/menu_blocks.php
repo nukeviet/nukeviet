@@ -173,3 +173,56 @@ function nv_smenu_blocks($style, $list_cats, $list_sub, &$submenu_active, $block
 
     return $xtpl->text('tree');
 }
+
+/**
+ * menu_getdata()
+ *
+ * @param array $list
+ * @param int   $parentid
+ * @param array $block_config
+ * @param bool  $is_show
+ * @return array
+ */
+function menu_getdata($list, $parentid, $block_config, $is_show = false)
+{
+    global $site_mods;
+
+    $search = ['&amp;', '&lt;', '&gt;', '&#x005C;', '&#x002F;', '&#40;', '&#41;', '&#42;', '&#91;', '&#93;', '&#33;', '&#x3D;', '&#x23;', '&#x25;', '&#x5E;', '&#x3A;', '&#x7B;', '&#x7D;', '&#x60;', '&#x7E;'];
+    $replace = ['&', '<', '>', '\\', '/', '(', ')', '*', '[', ']', '!', '=', '#', '%', '^', ':', '{', '}', '`', '~'];
+
+    $menus = [];
+    foreach ($list as $row) {
+        if ($row['parentid'] == $parentid) {
+            if ((empty($row['module_name']) or (!empty($row['module_name']) and !empty($site_mods[$row['module_name']]))) and nv_user_in_groups($row['groups_view'])) {
+                $row['link'] = nv_url_rewrite(str_replace($search, $replace, $row['link']), true);
+                switch ($row['target']) {
+                    case 1:
+                        $row['target'] = '';
+                        break;
+                    case 3:
+                        $row['target'] = 'data-toggle="winCMD" data-cmd="open" data-url="' . $row['link'] . '" data-win-name="targetWindow" data-win-opts="toolbar=no,location=no,status=no,menubar=no,scrollbars=yes,resizable=yes"';
+                        break;
+                    default:
+                        $row['target'] = 'data-target="_blank"';
+                }
+                $row['title_trim'] = nv_clean60($row['title'], $block_config['title_length']);
+                empty($row['note']) && $row['note'] = $row['title'];
+                !empty($row['icon']) && $row['icon'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/menu/' . $row['icon'];
+                $row['is_active'] = is_current_url($row['link'], $row['active_type']);
+                $row['is_show'] = $is_show;
+                $row['sub'] = menu_getdata($list, $row['id'], $block_config, $row['is_active']);
+                if (!$row['is_active'] and !empty($row['sub'])) {
+                    foreach ($row['sub'] as $subrow) {
+                        if ($subrow['is_active']) {
+                            $row['is_active'] = true;
+                            break;
+                        }
+                    }
+                }
+                $menus[$row['id']] = $row;
+            }
+        }
+    }
+
+    return $menus;
+}
