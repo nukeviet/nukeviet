@@ -100,7 +100,8 @@
 
 .metismenu .sidebar-nav ul a:hover,
 .metismenu .sidebar-nav ul a:focus,
-.metismenu .sidebar-nav ul a:active {
+.metismenu .sidebar-nav ul a:active,
+.metismenu .sidebar-nav ul .active > a {
     color: #fff;
     text-decoration: none;
     background-image: linear-gradient(to right,
