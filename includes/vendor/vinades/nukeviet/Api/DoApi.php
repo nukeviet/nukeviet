@@ -54,15 +54,22 @@ class DoApi
     private $error = '';
 
     /**
+     * @var boolean gọi api rewrite hay không
+     */
+    protected $rewrite_support;
+
+    /**
      * @param string $apiurl
      * @param string $apikey
      * @param string $apisecret
+     * @param boolean $rewrite
      */
-    public function __construct($apiurl, $apikey, $apisecret)
+    public function __construct($apiurl, $apikey, $apisecret, $rewrite = false)
     {
         $this->apikey = $apikey;
         $this->apisecret = $apisecret;
         $this->apiurl = $apiurl;
+        $this->rewrite_support = $rewrite;
     }
 
     /**
@@ -141,9 +148,36 @@ class DoApi
             'sslverify' => false
         ];
 
+        // Xử lý nếu gọi API rewrite
+        $api_url = $this->apiurl;
+        if ($this->rewrite_support and !empty($args['body']['action'])) {
+            $url_info = parse_url($api_url);
+            if (!isset($url_info['scheme'], $url_info['host'], $url_info['path']) and substr($url_info['path'], -7) != 'api.php') {
+                throw new \Exception('Wrong apiurl!!!');
+            }
+            $api_url = $url_info['scheme'] . '://' . $url_info['host'];
+            if (isset($url_info['port'])) {
+                $api_url .= ':' . $url_info['port'];
+            }
+            $api_url .= substr($url_info['path'], 0, -7);
+            $getVars = ['api'];
+            if (!empty($args['body']['language'])) {
+                $getVars[] = $args['body']['language'];
+                unset($args['body']['language']);
+            }
+            if (!empty($args['body']['module'])) {
+                $getVars[] = $args['body']['module'];
+                unset($args['body']['module']);
+            }
+            $getVars[] = $args['body']['action'];
+            unset($args['body']['action']);
+
+            $api_url .= implode('/', $getVars);
+        }
+
         $http = new Http($global_config, NV_TEMP_DIR);
         $http->reset();
-        $responsive = $http->post($this->apiurl, $args);
+        $responsive = $http->post($api_url, $args);
 
         if (!empty(Http::$error)) {
             $this->error = 'Error Code ' . Http::$error['code'] . ': ' . Http::$error['message'];
