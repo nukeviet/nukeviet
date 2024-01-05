@@ -167,6 +167,9 @@ $is_submit_form = (($nv_Request->get_int('save', 'post') == 1) ? true : false);
 $restore_id = $nv_Request->get_absint('restore', 'post,get', 0);
 $restore_hash = $nv_Request->get_title('restorehash', 'post,get', '');
 
+$langues = nv_parse_ini_file(NV_ROOTDIR . '/includes/ini/langs.ini', true);
+$langues = ['x-default' => ['name' => $nv_Lang->getModule('lang_default')]] + $langues;
+
 $rowcontent = [
     'id' => '',
     'catid' => $catid,
@@ -217,7 +220,8 @@ $rowcontent = [
     'instant_creatauto' => 0,
     'mode' => 'add',
     'voicedata' => [],
-    'group_view' => ''
+    'group_view' => '',
+    'localversions' => []
 ];
 
 $rowcontent['topictext'] = '';
@@ -296,6 +300,7 @@ if ($rowcontent['id'] == 0) {
 
     // Lấy các file đính kèm
     $body_contents = $db->query('SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_detail WHERE id=' . $rowcontent['id'])->fetch();
+    $body_contents['localversions'] = !empty($body_contents['localization']) ? json_decode($body_contents['localization'], true) : [];
     $rowcontent = array_merge($rowcontent, $body_contents);
     unset($body_contents);
 
@@ -691,6 +696,20 @@ if ($is_submit_form) {
     $tags = $nv_Request->get_typed_array('tags', 'post', 'title', []);
     $rowcontent['tags'] = !empty($tags) ? implode(',', $tags) : '';
 
+    // Phien ban ngon ngu
+    $rowcontent['localversions'] = [];
+    $enable_localization = (int) $nv_Request->get_bool('enable_localization', 'post');
+    if ($enable_localization) {
+        $locallangs = $nv_Request->get_typed_array('locallang', 'post', 'title', []);
+        $locallinks = $nv_Request->get_typed_array('locallink', 'post', 'title', []);
+    
+        foreach($locallangs as $key => $lg) {
+            if (!isset($rowcontent['localversions'][$lg]) and isset($langues[$lg]) and !empty($locallinks[$key]) and nv_is_url($locallinks[$key])) {
+                $rowcontent['localversions'][$lg] = $locallinks[$key];
+            }
+        }
+    }
+
     if (empty($rowcontent['title'])) {
         $error[] = $nv_Lang->getModule('error_title');
     } elseif (empty($rowcontent['listcatid'])) {
@@ -921,10 +940,12 @@ if ($is_submit_form) {
                     ' . $rowcontent['allowed_print'] . ',
                     ' . $rowcontent['allowed_save'] . ',
                     ' . $rowcontent['auto_nav'] . ',
-                    :group_view
+                    :group_view,
+                    :localization
                 )');
 
                 $voicedata = empty($rowcontent['voicedata']) ? '' : json_encode($rowcontent['voicedata']);
+                $localization = empty($rowcontent['localversions']) ? '' : json_encode($rowcontent['localversions']);
 
                 $stmt->bindParam(':files', $rowcontent['files'], PDO::PARAM_STR);
                 $stmt->bindParam(':titlesite', $rowcontent['titlesite'], PDO::PARAM_STR);
@@ -935,6 +956,7 @@ if ($is_submit_form) {
                 $stmt->bindParam(':keywords', $rowcontent['keywords'], PDO::PARAM_STR, strlen($rowcontent['keywords']));
                 $stmt->bindParam(':sourcetext', $rowcontent['sourcetext'], PDO::PARAM_STR, strlen($rowcontent['sourcetext']));
                 $stmt->bindParam(':group_view', $rowcontent['group_view'], PDO::PARAM_STR, strlen($rowcontent['group_view']));
+                $stmt->bindParam(':localization', $localization, PDO::PARAM_STR, strlen($localization));
                 $ct_query[] = (int) $stmt->execute();
 
                 foreach ($catids as $catid) {
@@ -1048,10 +1070,12 @@ if ($is_submit_form) {
                     allowed_print=' . (int) ($rowcontent['allowed_print']) . ',
                     allowed_save=' . (int) ($rowcontent['allowed_save']) . ',
                     auto_nav=' . (int) ($rowcontent['auto_nav']) . ',
-                    group_view=:group_view
+                    group_view=:group_view,
+                    localization=:localization
                 WHERE id =' . $rowcontent['id']);
 
                 $voicedata = empty($rowcontent['voicedata']) ? '' : json_encode($rowcontent['voicedata']);
+                $localization = empty($rowcontent['localversions']) ? '' : json_encode($rowcontent['localversions']);
 
                 $sth->bindParam(':files', $rowcontent['files'], PDO::PARAM_STR);
                 $sth->bindParam(':titlesite', $rowcontent['titlesite'], PDO::PARAM_STR);
@@ -1062,6 +1086,7 @@ if ($is_submit_form) {
                 $sth->bindParam(':keywords', $rowcontent['keywords'], PDO::PARAM_STR, strlen($rowcontent['keywords']));
                 $sth->bindParam(':sourcetext', $rowcontent['sourcetext'], PDO::PARAM_STR, strlen($rowcontent['sourcetext']));
                 $sth->bindParam(':group_view', $rowcontent['group_view'], PDO::PARAM_STR, strlen($rowcontent['group_view']));
+                $sth->bindParam(':localization', $localization, PDO::PARAM_STR, strlen($localization));
 
                 $ct_query[] = (int) $sth->execute();
 
@@ -1468,6 +1493,30 @@ foreach ($array_imgposition as $id_imgposition => $title_imgposition) {
     $xtpl->assign('title_imgposition', $title_imgposition);
     $xtpl->assign('posl', $sl);
     $xtpl->parse('main.looppos');
+}
+
+// Phien ban ngon ngu
+$archive_checked = ($rowcontent['archive']) ? ' checked="checked"' : '';
+$xtpl->assign('localization_checked', !empty($rowcontent['localversions']) ? ' checked="checked"' : '');
+$xtpl->assign('localization_in', !empty($rowcontent['localversions']) ? ' in' : '');
+
+if (empty($rowcontent['localversions'])) {
+    $rowcontent['localversions'] = [
+        '' => ''
+    ];
+}
+
+foreach ($rowcontent['localversions'] as $l => $url) {
+    foreach ($langues as $code => $vls) {
+        $xtpl->assign('LOCALVERSION_LANG', [
+            'code' => $code,
+            'name' => $vls['name'],
+            'sel' => $code == $l ? ' selected="selected"' : ''
+        ]);
+        $xtpl->parse('main.localversion.locallang');
+    }
+    $xtpl->assign('LOCALVERSION', ['link' => $url]);
+    $xtpl->parse('main.localversion');
 }
 
 // time update

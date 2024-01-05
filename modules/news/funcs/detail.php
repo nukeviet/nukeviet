@@ -30,9 +30,11 @@ if (empty($news_contents)) {
     nv_info_die($nv_Lang->getGlobal('error_404_title'), $nv_Lang->getGlobal('error_404_title'), $nv_Lang->getGlobal('error_404_content') . $redirect, 404);
 }
 
-$body_contents = $db_slave->query('SELECT titlesite, description, bodyhtml, voicedata, keywords, sourcetext, files, layout_func, imgposition, copyright, allowed_send, allowed_print, allowed_save, auto_nav, group_view FROM ' . NV_PREFIXLANG . '_' . $module_data . '_detail where id=' . $news_contents['id'])->fetch();
+$body_contents = $db_slave->query('SELECT titlesite, description, bodyhtml, voicedata, keywords, sourcetext, files, layout_func, imgposition, copyright, allowed_send, allowed_print, allowed_save, auto_nav, group_view, localization FROM ' . NV_PREFIXLANG . '_' . $module_data . '_detail where id=' . $news_contents['id'])->fetch();
 $news_contents = array_merge($news_contents, $body_contents);
 unset($body_contents);
+
+$localversions = !empty($news_contents['localization']) ? json_decode($news_contents['localization'], true) : [];
 
 // Tải về đính kèm
 if ($nv_Request->isset_request('download', 'get')) {
@@ -77,6 +79,16 @@ if ($nv_Request->isset_request('pdf', 'get')) {
 // Kiểm tra URL, không cho đánh tùy ý phần alias
 $page_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $global_array_cat[$news_contents['catid']]['alias'] . '/' . $news_contents['alias'] . '-' . $news_contents['id'] . $global_config['rewrite_exturl'];
 $news_contents['link'] = $canonicalUrl = getCanonicalUrl($page_url, true);
+if (!empty($localversions)) {
+    $localversions[NV_LANG_DATA] = $canonicalUrl;
+    foreach ($localversions as $l => $u) {
+        $nv_html_links[] = [
+            'rel' => 'alternate',
+            'href' => $u,
+            'hreflang' => $l
+        ];
+    }
+}
 
 /*
  * Không có quyền xem bài viết thì dừng

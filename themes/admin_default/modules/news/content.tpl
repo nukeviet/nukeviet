@@ -136,8 +136,8 @@
                                     <input class="form-control" type="text" name="files[]" id="file_{FILEUPL.id}" value="{FILEUPL.value}" title="{LANG.fileupload}" />
                                     <span class="input-group-btn">
                                         <button type="button" data-toggle="selectfile" data-target="file_{FILEUPL.id}" data-path="{UPLOAD_CURRENT}" data-currentpath="{UPLOAD_CURRENT}" data-type="file" class="btn btn-info" title="{GLANG.browse_file}"><em class="fa fa-folder-open-o"></em></button>
-                                        <button type="button" class="btn btn-default" data-toggle="add_file">&plus;</button>
                                         <button type="button" class="btn btn-default" data-toggle="del_file">&times;</button>
+                                        <button type="button" class="btn btn-default" data-toggle="add_file">&plus;</button>
                                     </span>
                                 </div>
                                 <!-- END: files -->
@@ -151,6 +151,36 @@
                     <tr>
                         <td>{LANG.content_external_link}:</td>
                         <td><input type="checkbox" value="1" name="external_link" {external_link_checked} /></td>
+                    </tr>
+                    <tr>
+                        <td>{LANG.localization}:</td>
+                        <td>
+                            <label><input type="checkbox" value="1" name="enable_localization" id="enable_localization"{localization_checked} /> {LANG.enable_localization}</label>
+                            <div class="collapse{localization_in}" id="localization_sector">
+                                <div class="locallist mb">
+                                    <!-- BEGIN: localversion -->
+                                    <div class="localitem mb row" style="width: 100%;">
+                                        <div class="col-xs-6">
+                                            <select class="form-control" name="locallang[]" style="width: 100%;">
+                                                <option value="">{LANG.select_lang}</option>
+                                                <!-- BEGIN: locallang -->
+                                                <option value="{LOCALVERSION_LANG.code}"{LOCALVERSION_LANG.sel}>{LOCALVERSION_LANG.name}</option>
+                                                <!-- END: locallang -->
+                                            </select>
+                                        </div>
+                                        <div class="col-xs-12">
+                                            <input type="text" class="form-control" name="locallink[]" value="{LOCALVERSION.link}" placeholder="{LANG.local_url}..." style="width: 100%;">
+                                        </div>
+                                        <div class="col-xs-6">
+                                            <button class="btn btn-default" type="button" data-toggle="del_local">&times;</button>
+                                            <button class="btn btn-default" type="button" data-toggle="add_local">&plus;</button>
+                                        </div>
+                                    </div>
+                                    <!-- END: localversion -->
+                                </div>
+                                <div class="small">{LANG.select_lang_note}</div>
+                            </div>
+                        </td>
                     </tr>
                 </tbody>
             </table>

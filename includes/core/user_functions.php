@@ -597,7 +597,7 @@ function nv_html_meta_tags($html = true)
  */
 function nv_html_links($html = true)
 {
-    global $canonicalUrl, $prevPage, $nextPage, $global_config, $nv_Lang;
+    global $canonicalUrl, $prevPage, $nextPage, $nv_html_links, $global_config, $nv_Lang;
 
     $return = [];
     if (!empty($canonicalUrl)) {
@@ -681,6 +681,10 @@ function nv_html_links($html = true)
                 }
             }
         }
+    }
+
+    if (!empty($nv_html_links)) {
+        $return = array_merge_recursive($return, $nv_html_links);
     }
 
     if (!$html) {

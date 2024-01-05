@@ -770,6 +770,31 @@ $(function() {
         $('.list-report .checkall').prop('checked', $('.list-report .checkitem:not(:checked').length == 0)
     });
 
+    //Kích hoạt khai báo phiên bản ngôn ngữ
+    $('#enable_localization').on('change', function() {
+        $('#localization_sector').collapse($(this).is(':checked') ? 'show' : 'hide')
+    });
+
+    // Content: Add local version
+    $('body').on('click', '[data-toggle=add_local]', function() {
+        var item = $(this).parents('.localitem'),
+            new_item = item.clone();
+        $('[name^=locallang], [name^=locallink]', new_item).val('');
+        item.after(new_item)
+    });
+
+    // Content: remove local version
+    $('body').on('click', '[data-toggle=del_local]', function() {
+        var item = $(this).parents('.localitem'),
+            locallist = $(this).parents('.locallist');
+        if ($('.localitem', locallist).length > 1) {
+            item.remove()
+        } else {
+            $('[name^=locallang], [name^=locallink]', item).val('');
+            $('#enable_localization').trigger('click')
+        }
+    });
+
 });
 
 function nv_sort_content(id, w) {
