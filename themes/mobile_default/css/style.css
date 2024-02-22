@@ -361,6 +361,10 @@ ol {
     margin-left:0 !important;
 }
 
+.nv-docviewer {
+    margin-bottom: 8px;
+}
+
 .well {
     padding:8px
 }

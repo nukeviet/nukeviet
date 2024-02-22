@@ -1,5 +1,5 @@
 ﻿/**
- * @license Copyright (c) 2003-2023, CKSource Holding sp. z o.o. All rights reserved.
+ * @license Copyright (c) 2003-2024, CKSource Holding sp. z o.o. All rights reserved.
  * For licensing, see LICENSE.md or https://ckeditor.com/legal/ckeditor-oss-license/
  */
 
@@ -13,10 +13,10 @@
  * (1) https://ckeditor.com/cke4/builder
  *     Visit online builder to build CKEditor from scratch.
  *
- * (2) https://ckeditor.com/cke4/builder/e92d9a94b1ba78f83b960624027bc850
+ * (2) https://ckeditor.com/cke4/builder/539b0b5ed5652ac9343119446e1de04d
  *     Visit online builder to build CKEditor, starting with the same setup as before.
  *
- * (3) https://ckeditor.com/cke4/builder/download/e92d9a94b1ba78f83b960624027bc850
+ * (3) https://ckeditor.com/cke4/builder/download/539b0b5ed5652ac9343119446e1de04d
  *     Straight download link to the latest version of CKEditor (Optimized) with the same setup as before.
  *
  * NOTE:
@@ -44,6 +44,7 @@ var CKBUILDER_CONFIG = {
 		'README.md',
 		'bender-err.log',
 		'bender-out.log',
+		'bender-runner.config.json',
 		'bender.ci.js',
 		'bender.js',
 		'dev',
@@ -77,7 +78,6 @@ var CKBUILDER_CONFIG = {
 		'floatingspace' : 1,
 		'font' : 1,
 		'format' : 1,
-		'googledocs' : 1,
 		'horizontalrule' : 1,
 		'htmlwriter' : 1,
 		'iframe' : 1,
@@ -113,7 +113,6 @@ var CKBUILDER_CONFIG = {
 		'undo' : 1,
 		'uploadfile' : 1,
 		'uploadimage' : 1,
-		'video' : 1,
 		'wysiwygarea' : 1,
 		'youtube' : 1
 	},
