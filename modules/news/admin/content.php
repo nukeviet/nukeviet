@@ -702,7 +702,7 @@ if ($is_submit_form) {
     if ($enable_localization) {
         $locallangs = $nv_Request->get_typed_array('locallang', 'post', 'title', []);
         $locallinks = $nv_Request->get_typed_array('locallink', 'post', 'title', []);
-    
+
         foreach($locallangs as $key => $lg) {
             if (!isset($rowcontent['localversions'][$lg]) and isset($langues[$lg]) and !empty($locallinks[$key]) and nv_is_url($locallinks[$key])) {
                 $rowcontent['localversions'][$lg] = $locallinks[$key];
@@ -923,7 +923,7 @@ if ($is_submit_form) {
                 $stmt = $db->prepare('INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . '_detail (
                     id, titlesite, description, bodyhtml, voicedata, keywords, sourcetext,
                     files, imgposition, layout_func, copyright,
-                    allowed_send, allowed_print, allowed_save, auto_nav, group_view
+                    allowed_send, allowed_print, allowed_save, auto_nav, group_view, localization
                 ) VALUES (
                     ' . $rowcontent['id'] . ',
                     :titlesite,
