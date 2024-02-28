@@ -319,7 +319,7 @@ if ((defined('NV_IS_SPADMIN') and $admin_info['level'] == 1) or (defined('NV_IS_
 }
 
 $editors = [];
-$dirs = nv_scandir(NV_ROOTDIR . '/' . NV_EDITORSDIR, '/^[a-zA-Z0-9_]+$/');
+$dirs = nv_scandir(NV_ROOTDIR . '/' . NV_EDITORSDIR, '/^[a-zA-Z0-9_\-]+$/');
 if (!empty($dirs)) {
     foreach ($dirs as $dir) {
         if (file_exists(NV_ROOTDIR . '/' . NV_EDITORSDIR . '/' . $dir . '/nv.php')) {

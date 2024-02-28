@@ -209,6 +209,13 @@ function insertvaluetofield() {
         }
         window.close();
     } else {
+        // Tùy biến xử lý cho các trình soạn thảo khác
+        if (window.NVFileManagerSelectCallback) {
+            NVFileManagerSelectCallback(fullPath, $("img[title='" + selFile + "']").attr("alt"));
+            return;
+        }
+
+        // Xử lý mặc định cho CKEditor 4
         if (window.opener === null) {
             return !1;
         }

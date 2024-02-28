@@ -50,19 +50,12 @@ if ($popup) {
         $sys_max_size_local = $global_config['nv_overflow_size'];
     }
 
-    $xtpl->assign('NV_MY_DOMAIN', NV_MY_DOMAIN);
-    $xtpl->assign('NV_BASE_SITEURL', NV_BASE_SITEURL);
     $xtpl->assign('ADMIN_THEME', $global_config['module_theme']);
-    $xtpl->assign('NV_OP_VARIABLE', NV_OP_VARIABLE);
-    $xtpl->assign('NV_NAME_VARIABLE', NV_NAME_VARIABLE);
     $xtpl->assign('MODULE_NAME', $module_name);
-    $xtpl->assign('NV_LANG_INTERFACE', NV_LANG_INTERFACE);
     $xtpl->assign('LANG', $lang_module);
     $xtpl->assign('NV_MAX_SIZE_REMOTE', nv_convertfromBytes($sys_max_size));
     $xtpl->assign('NV_MAX_SIZE_LOCAL', nv_convertfromBytes($sys_max_size_local));
     $xtpl->assign('NV_MAX_SIZE_BYTES', $sys_max_size_local);
-    $xtpl->assign('NV_MAX_WIDTH', NV_MAX_WIDTH);
-    $xtpl->assign('NV_MAX_HEIGHT', NV_MAX_HEIGHT);
     $xtpl->assign('NV_MIN_WIDTH', 10);
     $xtpl->assign('NV_MIN_HEIGHT', 10);
     $xtpl->assign('CURRENTPATH', $currentpath);
@@ -71,6 +64,7 @@ if ($popup) {
     $xtpl->assign('AREA', $area);
     $xtpl->assign('ALT', $alt);
     $xtpl->assign('FUNNUM', $nv_Request->get_int('CKEditorFuncNum', 'get', 0));
+    $xtpl->assign('EDITOR_ID', $nv_Request->get_title('editor_id', 'get', ''));
     $xtpl->assign('NV_CHUNK_SIZE', $global_config['upload_chunk_size']);
     $xtpl->assign('SELFILE', $selectfile);
 
@@ -115,6 +109,11 @@ if ($popup) {
 
     if (!$global_config['nv_auto_resize']) {
         $xtpl->parse('main.no_auto_resize');
+    }
+
+    if (!empty($admin_info['editor']) and file_exists(NV_ROOTDIR . '/' . NV_EDITORSDIR . '/' . $admin_info['editor'] . '/nv.callback.js')) {
+        $xtpl->assign('EDITOR', $admin_info['editor']);
+        $xtpl->parse('main.custom_callback');
     }
 
     $xtpl->parse('main');
