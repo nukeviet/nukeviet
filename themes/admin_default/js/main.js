@@ -185,8 +185,8 @@ $(document).ready(function() {
         locationReplace($(this).data("location"))
     });
 
-    //XSSsanitize
-    $('body').on('click', '[type=submit]:not([name])', function(e) {
+    // XSSsanitize
+    $('body').on('click', '[type=submit]:not([name],.ck-button-save)', function(e) {
         var form = $(this).parents('form');
         if (!$('[name=submit]', form).length) {
             btnClickSubmit(e,form)
