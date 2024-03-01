@@ -7,6 +7,23 @@
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
+:root {
+    --nv-border-color: #dddddd;
+    --nv-image-style-spacing: 20px;
+    --nv-inline-image-style-spacing: calc(var(--nv-image-style-spacing) / 2);
+    --nv-highlight-marker-blue: hsl(201, 97%, 72%);
+    --nv-highlight-marker-green: hsl(120, 93%, 68%);
+    --nv-highlight-marker-pink: hsl(345, 96%, 73%);
+    --nv-highlight-marker-yellow: hsl(60, 97%, 73%);
+    --nv-highlight-pen-green: hsl(112, 100%, 27%);
+    --nv-highlight-pen-red: hsl(0, 85%, 49%);
+    --nv-font-size-xs: 10px;
+    --nv-font-size-sm: 12px;
+    --nv-font-size-md: 14px;
+    --nv-font-size-lg: 16px;
+    --nv-font-size-xxl: 22px;
+}
+
 @font-face {
     font-family: 'NukeVietIcons';
     src: url('../../default/fonts/NukeVietIcons.woff2') format('woff2'),
