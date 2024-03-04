@@ -193,7 +193,7 @@ if (defined('NV_EDITOR')) {
 $row['description'] = nv_htmlspecialchars(nv_br2nl($row['description']));
 $row['bodytext'] = htmlspecialchars(nv_editor_br2nl($row['bodytext']));
 if (defined('NV_EDITOR') and nv_function_exists('nv_aleditor')) {
-    $row['bodytext'] = nv_aleditor('bodytext', '100%', '300px', $row['bodytext']);
+    $row['bodytext'] = nv_aleditor('bodytext', '100%', '500px', $row['bodytext']);
 } else {
     $row['bodytext'] = '<textarea style="width:100%;height:300px" name="bodytext">' . $row['bodytext'] . '</textarea>';
 }
