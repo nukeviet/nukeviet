@@ -82,7 +82,7 @@ if ($nv_Request->isset_request('delete_id', 'get') and $nv_Request->isset_reques
             $result = $db->query($sql);
             while (list($id, $weight) = $result->fetch(3)) {
                 --$weight;
-                $db->query('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_supporter SET weight=' . $weight . ' WHERE id=' . (int) $id) . ' AND departmentid=' . $departmentid;
+                $db->query('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_supporter SET weight=' . $weight . ' WHERE id=' . $id . ' AND departmentid=' . $departmentid);
             }
         }
         $nv_Cache->delMod($module_name);
