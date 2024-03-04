@@ -242,7 +242,7 @@
                         <div class="modal-content">
                             <div class="modal-header">
                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                                <h4 class="modal-title">{LANG.addfile}</h4>
+                                <div class="modal-title h3"><strong>{LANG.addfile}</strong></div>
                             </div>
                             <div class="modal-body">
                                 <p class="fileinput" style="display:flex;justify-content:center;margin-top:20px;margin-bottom:20px"></p>

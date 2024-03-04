@@ -25,17 +25,17 @@
                     <!-- BEGIN: allowed_send -->
                     <li><a class="dimgray" title="{LANG.sendmail}" href="#" data-toggle="newsSendMailModal" data-obj="#newsSendMailModal" data-url="{URL_SENDMAIL}" data-ss="{CHECKSESSION}"><em class="fa fa-envelope fa-lg">&nbsp;</em></a></li>
                     <!-- START FORFOOTER -->
-<div class="modal fade" id="newsSendMailModal" tabindex="-1" role="dialog" data-loaded="false">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title">{LANG.sendmail}</h4>
-            </div>
-            <div class="modal-body"></div>
-        </div>
-    </div>
-</div>
+                    <div class="modal fade" id="newsSendMailModal" tabindex="-1" role="dialog" data-loaded="false">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                    <div class="modal-title h2"><strong>{LANG.sendmail}</strong></div>
+                                </div>
+                                <div class="modal-body"></div>
+                            </div>
+                        </div>
+                    </div>
                     <!-- END FORFOOTER -->
                     <!-- END: allowed_send -->
                     <!-- BEGIN: allowed_print -->
