@@ -157,8 +157,8 @@ ErrorDocument 504 /error.php?code=504
   RewriteRule ^(.*?)sitemap\-([a-z]{2})\.xml$ index.php?language=$2&nv=SitemapIndex [L]
   RewriteRule ^(.*?)sitemap\-([a-z]{2})\.([a-zA-Z0-9\-]+)\.xml$ index.php?language=$2&nv=$3&op=sitemap [L]
   RewriteRule ^(.*?)sitemap\-([a-z]{2})\.([a-zA-Z0-9\-]+)\.([a-zA-Z0-9\-]+)\.xml$ index.php?language=$2&nv=$3&op=sitemap/$4 [L]
-  RewriteRule ^(.*?)api\/(vi)\/([a-zA-Z0-9]+)\/([a-zA-Z0-9]+)\/?$ api.php?language=$2&module=$3&action=$4 [L]
-  RewriteRule ^(.*?)api\/(vi)\/([a-zA-Z0-9]+)\/?$ api.php?language=$2&action=$3 [L]
+  RewriteRule ^(.*?)api\/(en|fr|vi)\/([a-zA-Z0-9]+)\/([a-zA-Z0-9]+)\/?$ api.php?language=$2&module=$3&action=$4 [L]
+  RewriteRule ^(.*?)api\/(en|fr|vi)\/([a-zA-Z0-9]+)\/?$ api.php?language=$2&action=$3 [L]
   RewriteRule ^(.*?)api\/([a-zA-Z0-9]+)\/([a-zA-Z0-9]+)\/?$ api.php?module=$2&action=$3 [L]
   RewriteRule ^(.*?)api\/([a-zA-Z0-9]+)\/?$ api.php?action=$2 [L]
 
