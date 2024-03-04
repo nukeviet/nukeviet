@@ -246,8 +246,9 @@ function nv_error404()
  *
  * @param string $html
  * @param string $type
+ * @param array $custom_headers
  */
-function nv_htmlOutput($html, $type = 'html')
+function nv_htmlOutput($html, $type = 'html', $custom_headers = [])
 {
     global $global_config, $headers, $nv_BotManager;
 
@@ -267,8 +268,12 @@ function nv_htmlOutput($html, $type = 'html')
     if (!empty($global_config['nv_rp_act']) and !empty($global_config['nv_rp'])) {
         $html_headers['Referrer-Policy'] = $global_config['nv_rp'];
     }
-    if ($type == 'json') {
-        $html_headers['Content-Type'] = 'application/json';
+    $content_types = [
+        'json' => 'application/json',
+        'xml' => 'text/xml; charset=utf-8'
+    ];
+    if (isset($content_types[$type])) {
+        $html_headers['Content-Type'] = $content_types[$type];
     } else {
         $html_headers['Content-Type'] = 'text/html; charset=' . $global_config['site_charset'];
     }
@@ -286,6 +291,9 @@ function nv_htmlOutput($html, $type = 'html')
     if (!empty($headers)) {
         // $headers sẽ ghi đè $html_headers
         $html_headers = array_merge($html_headers, $headers);
+    }
+    if (!empty($custom_headers)) {
+        $html_headers = array_merge($html_headers, $custom_headers);
     }
 
     if (!isset($_SERVER['HTTPS']) or $_SERVER['HTTPS'] != 'on') {
@@ -306,7 +314,9 @@ function nv_htmlOutput($html, $type = 'html')
         }
     }
 
-    ob_start('ob_gzhandler');
+    if (!isset($html_headers['Content-Encoding'])) {
+        ob_start('ob_gzhandler');
+    }
     echo $html;
     exit(0);
 }
@@ -347,19 +357,11 @@ function nv_xmlOutput($content, $lastModified)
         $content = trim($content);
     }
 
-    @header('Last-Modified: ' . gmdate('D, d M Y H:i:s', $lastModified) . ' GMT');
-    @header('Expires: ' . gmdate('D, d M Y H:i:s', $lastModified) . ' GMT');
-    @header('Content-Type: text/xml; charset=utf-8');
-    @header('Cache-Control: no-store, max-age=0');
-
-    if (defined('NV_ADMIN') or NV_ANTI_IFRAME != 0) {
-        header('X-Frame-Options: SAMEORIGIN');
-    }
-
-    header('X-Content-Type-Options: nosniff');
-    header('X-XSS-Protection: 1; mode=block');
-
-    @header('Pragma: no-cache');
+    $lastModified = gmdate('D, d M Y H:i:s', $lastModified) . ' GMT';
+    $custom_headers = [
+        'Last-Modified' => $lastModified,
+        'Expires' => $lastModified
+    ];
 
     $encoding = 'none';
 
@@ -379,13 +381,12 @@ function nv_xmlOutput($content, $lastModified)
 
     if ($encoding != 'none') {
         $content = gzencode($content, 6, $encoding == 'gzip' ? FORCE_GZIP : FORCE_DEFLATE);
-        header('Content-Encoding: ' . $encoding);
-        header('Content-Length: ' . strlen($content));
-        header('Vary: Accept-Encoding');
+        $custom_headers['Content-Encoding'] = $encoding;
+        $custom_headers['Content-Length'] = strlen($content);
+        $custom_headers['Vary'] = 'Accept-Encoding';
     }
 
-    print_r($content);
-    exit(0);
+    nv_htmlOutput($content, 'xml', $custom_headers);
 }
 
 /**
