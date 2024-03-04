@@ -32,9 +32,9 @@ function nv_aleditor($textareaname, $width = '100%', $height = '450px', $val = '
         if (defined('NV_IS_ADMIN')) {
             $return .= "<script type=\"text/javascript\">
             CKEDITOR.on('dialogDefinition', function(e) {
-                if (e.data.name == 'image2' || e.data.name == 'video' || e.data.name == 'googledocs' || e.data.name == 'link') {
+                if (e.data.name == 'image2' || e.data.name == 'video' || e.data.name == 'docviewer' || e.data.name == 'link') {
                     var contents;
-                    if (e.data.name == 'googledocs') {
+                    if (e.data.name == 'docviewer') {
                         contents = e.data.definition.getContents('settingsTab');
                     } else {
                         contents = e.data.definition.getContents('info');
