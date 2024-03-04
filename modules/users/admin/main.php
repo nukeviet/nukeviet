@@ -168,6 +168,7 @@ while ($row = $result2->fetch()) {
         'regdate' => date('d/m/Y H:i', $row['regdate']),
         'checked' => $row['active'] ? ' checked="checked"' : '',
         'disabled' => ($is_setactive) ? ' onclick="nv_chang_status(' . $row['userid'] . ');"' : ' disabled="disabled"',
+        'setactive' => $is_setactive,
         'is_edit' => $is_edit,
         'is_delete' => $is_delete,
         'level' => $lang_module['level0'],
@@ -225,10 +226,12 @@ if (!empty($admin_in)) {
         }
         if (!$users_list[$row['admin_id']]['is_edit']) {
             $users_list[$row['admin_id']]['disabled'] = ' disabled="disabled"';
+            $users_list[$row['admin_id']]['setactive'] = false;
         }
     }
     if (isset($users_list[$admin_info['admin_id']])) {
         $users_list[$admin_info['admin_id']]['disabled'] = ' disabled="disabled"';
+        $users_list[$admin_info['admin_id']]['setactive'] = false;
         $users_list[$admin_info['admin_id']]['is_edit'] = true;
     }
 }
@@ -304,6 +307,8 @@ while ($group = $result->fetch()) {
 $xtpl->assign('SELECTED_NEW_USERS', $usactive == -2 ? ' selected="selected"' : '');
 $view_user_allowed = nv_user_in_groups($global_config['whoviewuser']);
 $has_choose = false;
+$set_active_num = 0;
+$delete_num = 0;
 
 foreach ($users_list as $u) {
     if ($u['active_obj'] == 'SYSTEM') {
@@ -348,9 +353,15 @@ foreach ($users_list as $u) {
         if ($u['is_newuser'] and in_array('setofficial', $allow_func, true)) {
             $xtpl->parse('main.xusers.set_official');
         }
-        if ($is_setactive and $u['is_delete']) {
+        if ($u['setactive'] or $u['is_delete']) {
             $has_choose = true;
             $xtpl->parse('main.xusers.choose');
+        }
+        if ($u['setactive']) {
+            ++$set_active_num;
+        }
+        if ($u['is_delete']) {
+            ++$delete_num;
         }
     }
 
@@ -358,11 +369,14 @@ foreach ($users_list as $u) {
 }
 
 $has_footer = false;
-$array_action = [
-    'del' => $lang_module['delete'],
-    'active' => $lang_module['memberlist_active'],
-    'unactive' => $lang_module['memberlist_unactive']
-];
+$array_action = [];
+if ($delete_num > 0) {
+    $array_action['del'] = $lang_module['delete'];
+}
+if ($set_active_num > 0) {
+    $array_action['active'] = $lang_module['memberlist_active'];
+    $array_action['unactive'] = $lang_module['memberlist_unactive'];
+}
 if ($has_choose) {
     $has_footer = true;
     foreach ($array_action as $action_key => $action_lang) {
