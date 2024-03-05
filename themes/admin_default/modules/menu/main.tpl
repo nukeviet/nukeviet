@@ -106,6 +106,7 @@
         $('#menulist [data-toggle="popover"]').popover({
             html: true,
             placement: 'top',
+            sanitize: false,
             content: function() {
                 return '<a href="' + $(this).data('contents') + '" target="_blank">' + $(this).data('contents') + '</a>';
             },

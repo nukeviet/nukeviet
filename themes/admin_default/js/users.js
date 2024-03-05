@@ -753,7 +753,7 @@ $(document).ready(function() {
         } else {
             $('input[name=required],input[name=show_register],input[name=user_editable],input[name=show_profile]').prop('disabled', false).parents('.item').removeClass('hidden')
         }
-        
+
     });
     $("input[name=required],input[name=show_register]").click(function() {
         if ($("input[name='required']:checked").val() == 1) {
@@ -832,7 +832,8 @@ $(document).ready(function() {
                 html: true,
                 placement: "bottom",
                 content: getPopoverContent(this),
-                trigger: "manual"
+                trigger: "manual",
+                sanitize: false
             });
             $(this).popover('show');
             $(this).on('shown.bs.popover', function() {
@@ -983,7 +984,7 @@ $(document).ready(function() {
                     that.show();
                 }
             };
-        
+
         var modalObj = $('#' + $(this).data('modal')),
             fileAccept = modalObj.data('accept'),
             maxsize = parseInt(modalObj.data('maxsize')),
@@ -1012,7 +1013,7 @@ $(document).ready(function() {
                                 return !1;
                             }
                         }
-        
+
                         // Check file size
                         if (typeof ($(this)[0].files) != "undefined") {
                             if ($(this)[0].files[0].size > maxsize) {

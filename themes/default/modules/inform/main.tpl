@@ -156,6 +156,7 @@
                 'trigger': 'focus',
                 'placement': 'top',
                 'html': true,
+                'sanitize': false,
                 'content': content
             })
         })
