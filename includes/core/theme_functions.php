@@ -230,7 +230,7 @@ function nv_htmlOutput($html, $type = 'html', $custom_headers = [])
         $html_headers['Referrer-Policy'] = $global_config['nv_rp'];
     }
     if (!empty($global_config['nv_pp_act']) and !empty($global_config['nv_pp'])) {
-        $html_headers['Referrer-Policy'] = $global_config['nv_pp'];
+        $html_headers['Permissions-Policy'] = $global_config['nv_pp'];
     }
     if (!empty($global_config['nv_fp_act']) and !empty($global_config['nv_fp'])) {
         $html_headers['Feature-Policy'] = $global_config['nv_fp'];
