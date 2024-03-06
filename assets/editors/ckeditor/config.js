@@ -19,7 +19,7 @@ CKEDITOR.editorConfig = function( config ) {
     config.youtube_autoplay = true;
     config.codeSnippet_theme = 'github';
     config.iframe_attributes = {
-        sandbox: 'allow-scripts allow-same-origin allow-forms',
+        sandbox: 'allow-scripts allow-same-origin allow-forms allow-presentation',
         allow: 'autoplay'
     };
     // Default setting.

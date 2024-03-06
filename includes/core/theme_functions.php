@@ -256,6 +256,12 @@ function nv_htmlOutput($html, $type = 'html', $custom_headers = [])
     if (!empty($global_config['nv_rp_act']) and !empty($global_config['nv_rp'])) {
         $html_headers['Referrer-Policy'] = $global_config['nv_rp'];
     }
+    if (!empty($global_config['nv_pp_act']) and !empty($global_config['nv_pp'])) {
+        $html_headers['Permissions-Policy'] = $global_config['nv_pp'];
+    }
+    if (!empty($global_config['nv_fp_act']) and !empty($global_config['nv_fp'])) {
+        $html_headers['Feature-Policy'] = $global_config['nv_fp'];
+    }
     $content_types = [
         'json' => 'application/json',
         'xml' => 'text/xml; charset=utf-8'
