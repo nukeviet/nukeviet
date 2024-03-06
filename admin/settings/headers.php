@@ -12,7 +12,6 @@ if (!defined('NV_ADMIN') or !defined('NV_MAINFILE') or !defined('NV_IS_MODADMIN'
     exit('Stop!!!');
 }
 
-$errormess = '';
 $selectedtab = $nv_Request->get_int('selectedtab', 'get,post', 0);
 if ($selectedtab < 0 or $selectedtab > 2) {
     $selectedtab = 0;
