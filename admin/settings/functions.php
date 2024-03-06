@@ -43,7 +43,7 @@ unset($page_title, $select_options);
 
 define('NV_IS_FILE_SETTINGS', true);
 
-//Document
+// Documents
 $array_url_instruction['main'] = 'https://wiki.nukeviet.vn/nukeviet4:admin:settings';
 $array_url_instruction['system'] = 'https://wiki.nukeviet.vn/nukeviet4:admin:settings:system';
 $array_url_instruction['smtp'] = 'https://wiki.nukeviet.vn/nukeviet4:admin:settings:smtp';

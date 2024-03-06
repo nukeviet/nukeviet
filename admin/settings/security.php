@@ -70,13 +70,58 @@ $rp_directives = [
     'strict-origin-when-cross-origin' => $nv_Lang->getModule('rp_strict_origin_when_cross_origin'),
     'unsafe-url' => $nv_Lang->getModule('rp_unsafe_url')
 ];
+$pp_default = [
+    'ignore' => 1,
+    'none' => 0,
+    'all' => 0,
+    'self' => 0,
+    'hosts' => []
+];
+$pp_directives = [
+    'accelerometer' => $pp_default,
+    'ambient-light-sensor' => $pp_default,
+    'autoplay' => $pp_default,
+    'battery' => $pp_default,
+    'browsing-topics' => $pp_default, // Thay thế cho interest-cohort
+    'camera' => $pp_default,
+    'display-capture' => $pp_default,
+    'document-domain' => $pp_default,
+    'encrypted-media' => $pp_default,
+    'execution-while-not-rendered' => $pp_default,
+    'execution-while-out-of-viewport' => $pp_default,
+    'fullscreen' => $pp_default,
+    'gamepad' => $pp_default,
+    'geolocation' => $pp_default,
+    'gyroscope' => $pp_default,
+    'hid' => $pp_default,
+    'identity-credentials-get' => $pp_default,
+    'idle-detection' => $pp_default,
+    'local-fonts' => $pp_default,
+    'magnetometer' => $pp_default,
+    'microphone' => $pp_default,
+    'midi' => $pp_default,
+    'otp-credentials' => $pp_default,
+    'payment' => $pp_default,
+    'picture-in-picture' => $pp_default,
+    'publickey-credentials-create' => $pp_default,
+    'publickey-credentials-get' => $pp_default,
+    'screen-wake-lock' => $pp_default,
+    'serial' => $pp_default,
+    'speaker-selection' => $pp_default,
+    'storage-access' => $pp_default,
+    'usb' => $pp_default,
+    'web-share' => $pp_default,
+    'window-management' => $pp_default,
+    'xr-spatial-tracking' => $pp_default,
+];
 
+$max_tab = 7;
 $selectedtab = $nv_Request->get_int('selectedtab', 'get,post', 0);
 if (!defined('NV_IS_GODADMIN')) {
-    if ($selectedtab < 5 or $selectedtab > 6) {
+    if ($selectedtab < 5 or $selectedtab > $max_tab) {
         $selectedtab = 5;
     }
-} elseif ($selectedtab < 0 or $selectedtab > 6) {
+} elseif ($selectedtab < 0 or $selectedtab > $max_tab) {
     $selectedtab = 0;
 }
 
@@ -326,7 +371,7 @@ if (defined('NV_IS_GODADMIN') and ($action == 'fip' or $action == 'bip')) {
                 WHERE id=' . $id);
         } else {
             $db->query('DELETE FROM ' . $db_config['prefix'] . '_ips WHERE type = ' . $type . ' AND ip = ' . $db->quote($post['ip']));
-            $sth = $db->prepare('INSERT INTO ' . $db_config['prefix'] . '_ips (type, ip, mask, area, begintime, endtime, notice) VALUES 
+            $sth = $db->prepare('INSERT INTO ' . $db_config['prefix'] . '_ips (type, ip, mask, area, begintime, endtime, notice) VALUES
             (' . $type . ', :ip, ' . $post['mask'] . ', ' . $post['area'] . ', ' . $post['begintime'] . ', ' . $post['endtime'] . ', :notice )');
         }
         $sth->bindParam(':ip', $post['ip'], PDO::PARAM_STR);
@@ -772,6 +817,77 @@ if ($nv_Request->isset_request('rpsave', 'post') and $checkss == $nv_Request->ge
     ]);
 }
 
+// Thiết lập PP
+if ($nv_Request->isset_request('ppsave', 'post') and $checkss == $nv_Request->get_string('checkss', 'post')) {
+    $post = [];
+    $post['nv_pp'] = [];
+    $post['nv_fp'] = [];
+    $post['nv_pp_act'] = (int) $nv_Request->get_bool('nv_pp_act', 'post', false);
+    $post['nv_fp_act'] = (int) $nv_Request->get_bool('nv_fp_act', 'post', false);
+
+    $postvs = $nv_Request->get_array('directives', 'post', []);
+    foreach ($pp_directives as $directive => $sources) {
+        if (!isset($postvs[$directive]) or !is_array($postvs[$directive]) or !empty($postvs[$directive]['ignore'])) {
+            continue;
+        }
+        $rs = $rs_fp = [];
+        if (!empty($postvs[$directive]['all'])) {
+            $rs = '*';
+            $rs_fp = '*';
+        } elseif (!empty($postvs[$directive]['none'])) {
+            $rs = '()';
+            $rs_fp = "'none'";
+        } else {
+            if (!empty($postvs[$directive]['self'])) {
+                $rs[] = 'self';
+                $rs_fp[] = "'self'";
+            }
+            $hosts = empty($postvs[$directive]['hosts']) ? [] : array_filter(array_unique(array_map('trim', explode('<nv>', nv_nl2br(nv_strtolower(strip_tags($postvs[$directive]['hosts'])), '<nv>')))));
+            foreach ($hosts as $host) {
+                if (!preg_match('/^[a-z]+\:\/\/[\w\.\-\*]+$/u', $host)) {
+                    continue;
+                }
+                $rs[] = '"' . $host . '"';
+
+                // FP không hỗ trợ wildcard do đó loại bỏ các dòng wildcard
+                if (strpos($host, '*') === false) {
+                    $rs_fp[] = $host;
+                }
+            }
+        }
+
+        if (!empty($rs) and is_array($rs)) {
+            $rs = '(' . implode(' ', $rs) . ')';
+        }
+        if (!empty($rs_fp) and is_array($rs_fp)) {
+            $rs_fp = implode(' ', $rs_fp);
+        }
+
+        if (!empty($rs)) {
+            $post['nv_pp'][] = $directive . '=' . $rs;
+        }
+        if (!empty($rs_fp)) {
+            $post['nv_fp'][] = $directive . ' ' . $rs_fp;
+        }
+    }
+
+    $post['nv_pp'] = empty($post['nv_pp']) ? '' : implode(', ', $post['nv_pp']);
+    $post['nv_fp'] = empty($post['nv_fp']) ? '' : implode('; ', $post['nv_fp']);
+
+    $sth = $db->prepare('UPDATE ' . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = 'sys' AND module = 'site' AND config_name = :config_name");
+    foreach ($post as $config_name => $config_value) {
+        $sth->bindParam(':config_value', $config_value, PDO::PARAM_STR);
+        $sth->bindParam(':config_name', $config_name, PDO::PARAM_STR, 30);
+        $sth->execute();
+    }
+
+    $nv_Cache->delMod('settings');
+
+    nv_jsonOutput([
+        'status' => 'OK'
+    ]);
+}
+
 $global_config_list = $global_config;
 $global_config_list['admin_2step_opt'] = empty($global_config['admin_2step_opt']) ? [] : explode(',', $global_config['admin_2step_opt']);
 $global_config_list['domains_whitelist'] = empty($global_config['domains_whitelist']) ? '' : implode("\n", $global_config['domains_whitelist']);
@@ -828,6 +944,50 @@ if (!empty($global_config['nv_csp'])) {
     $directives = [];
 }
 
+/*
+ * Xử lý ngược pp trong DB thành biến.
+ * Trong DB lưu giá trị thân thiện mục đích để dùng ngay vào header không phải qua xử lý tốn tài nguyên nữa
+ */
+$ppval_directives = [];
+$_directives = !empty($global_config['nv_pp']) ? array_map('trim', explode(',', $global_config['nv_pp'])) : [];
+foreach ($_directives as $_dvs) {
+    if (preg_match('/^([a-z0-9\-]+)[\s]*\=[\s]*(.*?)$/i', $_dvs, $m)) {
+        if (!isset($pp_directives[$m[1]])) {
+            continue;
+        }
+        $name = $m[1];
+        $ppval_directives[$name] = [
+            'ignore' => 0,
+            'none' => 0,
+            'all' => 0,
+            'self' => 0,
+            'hosts' => []
+        ];
+        $_dv = trim($m[2]);
+        if ($_dv == '*') {
+            // Cho phép tất cả
+            $ppval_directives[$name]['all'] = 1;
+        } elseif ($_dv == '()') {
+            // Cấm tất cả
+            $ppval_directives[$name]['none'] = 1;
+        } elseif (!empty($_dv)) {
+            // Trường hợp còn lại có thể là self + các domain
+            $_dv = explode('<nv>', preg_replace('/[\s]+/', '<nv>', trim(str_replace(['(', ')', '"'], '', $_dv))));
+            foreach ($_dv as $_dvi) {
+                if (empty($_dvi)) {
+                    continue;
+                }
+                if ($_dvi == 'self') {
+                    $ppval_directives[$name]['self'] = 1;
+                } else {
+                    $ppval_directives[$name]['hosts'][] = $_dvi;
+                }
+            }
+        }
+    }
+}
+unset($_directives);
+
 $xtpl = new XTemplate($op . '.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
 $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
 $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
@@ -837,7 +997,7 @@ $xtpl->assign('FORM_ACTION', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE 
 $xtpl->assign('SELECTEDTAB', $selectedtab);
 $xtpl->assign('CHECKSS', $checkss);
 
-for ($i = 0; $i <= 6; ++$i) {
+for ($i = 0; $i <= $max_tab; ++$i) {
     $xtpl->assign('TAB' . $i . '_ACTIVE', $i == $selectedtab ? ' active' : '');
     $xtpl->assign('TAB' . $i . '_SEL', $i == $selectedtab ? ' selected="selected"' : '');
 }
@@ -1060,7 +1220,10 @@ if (defined('NV_IS_GODADMIN')) {
     $xtpl->parse('main.sys_contents');
 }
 
-//csp_directive
+// Xử lý giao diện config CSP
+$xtpl->assign('CSP_ACT', $global_config['nv_csp_act'] ? ' checked="checked"' : '');
+$xtpl->assign('CSP_OPTIONS', $global_config['nv_csp_act'] ? ' in' : '');
+
 foreach ($csp_directives as $name => $sources) {
     $direct = [
         'name' => $name,
@@ -1089,9 +1252,6 @@ foreach ($csp_directives as $name => $sources) {
         }
     }
 
-    $xtpl->assign('CSP_ACT', $global_config['nv_csp_act'] ? ' checked="checked"' : '');
-    $xtpl->assign('CSP_OPTIONS', $global_config['nv_csp_act'] ? ' in' : '');
-
     if ($name == 'script-src') {
         $xtpl->assign('CSP_SCRIPT_NONCE', $global_config['nv_csp_script_nonce'] ? ' checked="checked"' : '');
         $xtpl->parse('main.csp_directive.csp_script_nonce');
@@ -1110,6 +1270,44 @@ foreach ($rp_directives as $name => $desc) {
     ];
     $xtpl->assign('RP_DIRECTIVE', $rp_direct);
     $xtpl->parse('main.rp_directive');
+}
+
+// Xử lý giao diện cho PP
+$xtpl->assign('PP_ACT', empty($global_config['nv_pp_act']) ? '' : ' checked="checked"');
+$xtpl->assign('FP_ACT', empty($global_config['nv_fp_act']) ? '' : ' checked="checked"');
+$xtpl->assign('PP_OPTIONS', (!empty($global_config['nv_pp_act']) or !empty($global_config['nv_fp_act'])) ? ' in' : '');
+
+foreach ($pp_directives as $name => $sources) {
+    $direct = [
+        'name' => $name,
+        'desc' => $nv_Lang->getModule('pp_' . str_replace('-', '_', $name))
+    ];
+    $xtpl->assign('DIRECTIVE', $direct);
+
+    $value = isset($ppval_directives[$name]) ? $ppval_directives[$name] : $sources;
+
+    foreach ($sources as $key => $default) {
+        $val = '';
+        if ($key == 'hosts' and !empty($value[$key])) {
+            $val = implode("\n", $value[$key]);
+        }
+        $source = [
+            'key' => $key,
+            'val' => $val,
+            'rows' => empty($val) ? 2 : 4,
+            'checked' => !empty($value[$key]) ? ' checked="checked"' : '',
+            'disabled' => (!in_array($key, ['all', 'none', 'ignore']) and (!empty($value['all']) or !empty($value['none']) or !empty($value['ignore']))) ? ' disabled' : '',
+            'name' => $nv_Lang->existsModule('pp_source_' . $name . '_' . $key) ? $nv_Lang->getModule('pp_source_' . $name . '_' . $key) : $nv_Lang->getModule('pp_source_' . $key)
+        ];
+        $xtpl->assign('SOURCE', $source);
+        if ($key != 'hosts') {
+            $xtpl->parse('main.pp_directive.checkbox');
+        } else {
+            $xtpl->parse('main.pp_directive.input');
+        }
+    }
+
+    $xtpl->parse('main.pp_directive');
 }
 
 $xtpl->parse('main');
