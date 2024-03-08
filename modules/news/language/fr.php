@@ -225,6 +225,7 @@ $lang_module['newday'] = 'Icone des nouvelles (par jour)';
 $lang_module['hitstotal'] = 'Nombre de regard';
 $lang_module['checkall'] = 'Sélectionner tout';
 $lang_module['uncheckall'] = 'Désélectionner tout';
+$lang_module['cat_layout'] = 'Disposition des catégories';
 $lang_module['cat_instant_view'] = 'Voir URL du flux RSS article instantanée';
 $lang_module['cat_instant_viewsimple'] = 'Voir URL de flux RSS';
 $lang_module['cat_instant_title'] = 'Les flux RSS, URL instantanée';

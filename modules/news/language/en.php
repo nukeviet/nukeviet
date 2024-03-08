@@ -225,6 +225,7 @@ $lang_module['newday'] = 'Show new icon (day)';
 $lang_module['hitstotal'] = 'Number view';
 $lang_module['checkall'] = 'Check all';
 $lang_module['uncheckall'] = 'Uncheck all';
+$lang_module['cat_layout'] = 'Layout for categories';
 $lang_module['cat_instant_view'] = 'See the RSS feed URL for instant messages';
 $lang_module['cat_instant_viewsimple'] = 'View the RSS URL';
 $lang_module['cat_instant_title'] = 'RSS feed URL instantaneously';
