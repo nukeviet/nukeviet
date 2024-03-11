@@ -50,14 +50,15 @@ if (defined('NV_ADMIN') or !defined('NV_ANTI_IFRAME') or NV_ANTI_IFRAME != 0) {
 if (!defined('NV_ADMIN') and !empty($global_config['nv_csp_act']) and !empty($global_config['nv_csp'])) {
     $html_headers['Content-Security-Policy'] = nv_unhtmlspecialchars($global_config['nv_csp']);
 }
-
 if (!empty($global_config['nv_rp_act']) and !empty($global_config['nv_rp'])) {
     $html_headers['Referrer-Policy'] = $global_config['nv_rp'];
 }
-
-// Chặn Google FLoC (thu thập dữ liệu người dùng mà không cần cookie của Google)
-// https://github.com/WICG/floc/blob/main/README.md
-$html_headers['Permissions-Policy'] = 'interest-cohort=()';
+if (!empty($global_config['nv_pp_act']) and !empty($global_config['nv_pp'])) {
+    $html_headers['Permissions-Policy'] = $global_config['nv_pp'];
+}
+if (!empty($global_config['nv_fp_act']) and !empty($global_config['nv_fp'])) {
+    $html_headers['Feature-Policy'] = $global_config['nv_fp'];
+}
 
 $html_headers['Content-Type'] = 'text/html; charset=' . $global_config['site_charset'];
 $html_headers['Last-Modified'] = gmdate('D, d M Y H:i:s', strtotime('-1 day')) . ' GMT';

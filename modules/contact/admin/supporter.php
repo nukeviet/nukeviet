@@ -18,6 +18,8 @@ if ($nv_Request->isset_request('change_status', 'post, get')) {
     $id = $nv_Request->get_int('id', 'post, get', 0);
     $content = 'NO_' . $id;
 
+    nv_insert_logs(NV_LANG_DATA, $module_name, 'LOG_STATUS_SUPPORTER', 'ID: ' . $id, $admin_info['userid']);
+
     $query = 'SELECT act FROM ' . NV_PREFIXLANG . '_' . $module_data . '_supporter WHERE id=' . $id;
     $row = $db->query($query)->fetch();
     if (isset($row['act'])) {
@@ -39,6 +41,7 @@ if ($nv_Request->isset_request('ajax_action', 'post')) {
     $new_vid = $nv_Request->get_int('new_vid', 'post', 0);
     $content = 'NO_' . $id;
     if ($new_vid > 0) {
+        nv_insert_logs(NV_LANG_DATA, $module_name, 'LOG_SUPPORTER_WEIGHT', 'ID: ' . $id . ', W: ' . $new_vid, $admin_info['userid']);
         $sql = 'SELECT id FROM ' . NV_PREFIXLANG . '_' . $module_data . '_supporter WHERE id!=' . $id . ' AND departmentid=' . $departmentid . ' ORDER BY weight ASC';
         $result = $db->query($sql);
         $weight = 0;
@@ -66,6 +69,8 @@ if ($nv_Request->isset_request('delete_id', 'get') and $nv_Request->isset_reques
     $departmentid = $nv_Request->get_int('departmentid', 'get');
     $delete_checkss = $nv_Request->get_string('delete_checkss', 'get');
     if ($id > 0 and $delete_checkss == md5($id . NV_CACHE_PREFIX . $client_info['session_id'])) {
+        nv_insert_logs(NV_LANG_DATA, $module_name, 'LOG_DEL_SUPPORTER', 'ID: ' . $id, $admin_info['userid']);
+
         $weight = 0;
         $sql = 'SELECT weight FROM ' . NV_PREFIXLANG . '_' . $module_data . '_supporter WHERE id =' . $db->quote($id) . ' AND departmentid=' . $departmentid;
         $result = $db->query($sql);
@@ -77,7 +82,7 @@ if ($nv_Request->isset_request('delete_id', 'get') and $nv_Request->isset_reques
             $result = $db->query($sql);
             while (list($id, $weight) = $result->fetch(3)) {
                 --$weight;
-                $db->query('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_supporter SET weight=' . $weight . ' WHERE id=' . (int) $id) . ' AND departmentid=' . $departmentid;
+                $db->query('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_supporter SET weight=' . $weight . ' WHERE id=' . $id . ' AND departmentid=' . $departmentid);
             }
         }
         $nv_Cache->delMod($module_name);

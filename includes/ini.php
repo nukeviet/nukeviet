@@ -19,8 +19,8 @@ if (headers_sent() or connection_status() != 0 or connection_aborted()) {
 
 /**
  * server_info_update()
- * 
- * @param string $config_ini_file 
+ *
+ * @param string $config_ini_file
  */
 function server_info_update($config_ini_file)
 {
@@ -201,7 +201,7 @@ function set_ini_file(&$sys_info)
     $content_config .= "\$sys_info['fileuploads_support'] = " . ($sys_info['fileuploads_support'] ? 'true' : 'false') . ";\n";
 
     //curl_support
-    $sys_info['curl_support'] = (extension_loaded('curl') and (empty($sys_info['disable_functions']) or (!empty($sys_info['disable_functions']) and !preg_grep('/^curl\_/', $sys_info['disable_functions'])))) ? true : false;
+    $sys_info['curl_support'] = (extension_loaded('curl') and function_exists('curl_init') and !in_array('curl_init', $sys_info['disable_functions'], true)) ? true : false;
     $content_config .= "\$sys_info['curl_support'] = " . ($sys_info['curl_support'] ? 'true' : 'false') . ";\n";
 
     //ftp_support

@@ -74,12 +74,16 @@ if ($nv_Request->isset_request('save', 'post')) {
     if (empty($error)) {
         try {
             if (empty($row['id'])) {
+                nv_insert_logs(NV_LANG_DATA, $module_name, 'LOG_ADD_SUPPORTER', 'NAME: ' . $row['full_name'], $admin_info['userid']);
+
                 $stmt = $db->prepare('INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . '_supporter (departmentid, full_name, image, phone, email, others, weight) VALUES (:departmentid, :full_name, :image, :phone, :email, :others, :weight)');
 
                 $weight = $db->query('SELECT max(weight) FROM ' . NV_PREFIXLANG . '_' . $module_data . '_supporter WHERE departmentid=' . $row['departmentid'])->fetchColumn();
                 $weight = (int) $weight + 1;
                 $stmt->bindParam(':weight', $weight, PDO::PARAM_INT);
             } else {
+                nv_insert_logs(NV_LANG_DATA, $module_name, 'LOG_EDIT_SUPPORTER', 'ID: ' . $row['id'] . ', NAME: ' . $row['full_name'], $admin_info['userid']);
+
                 $stmt = $db->prepare('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_supporter SET departmentid = :departmentid, full_name = :full_name, image = :image, phone = :phone, email = :email, others = :others WHERE id=' . $row['id']);
             }
             $stmt->bindParam(':departmentid', $row['departmentid'], PDO::PARAM_INT);

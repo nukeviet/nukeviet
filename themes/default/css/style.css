@@ -443,10 +443,6 @@ ol {
     margin-left: 0 !important;
 }
 
-.nv-docviewer {
-    margin-bottom: 8px;
-}
-
 .well {
     padding: 8px;
     line-height: 18px;
@@ -598,6 +594,7 @@ div.check-box label [type='radio'] {
     font-weight: normal !important;
 }
 
+/* CKEditor 4 contents css */
 figure {
     position: relative;
     margin: 5px 0 10px 0;
@@ -685,6 +682,10 @@ figure.avatar figcaption {
     background-color: #357ebd;
     color: #fff;
     font-size: 11px;
+}
+
+.nv-docviewer {
+    margin-bottom: 8px;
 }
 
 /* CKEditor 5 supported */

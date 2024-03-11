@@ -28,10 +28,11 @@ if (isset($admin_mods['language'])) {
 $submenu['smtp'] = $lang_module['smtp_config'];
 
 if ($site_fulladmin) {
-    $submenu['security'] = $lang_module['security'];
+    $submenu['headers'] = $lang_module['headers'];
 }
 
 if (defined('NV_IS_GODADMIN')) {
+    $submenu['security'] = $lang_module['security'];
     $submenu['plugin'] = $lang_module['plugin'];
     $submenu['cronjobs'] = $lang_global['mod_cronjobs'];
     $submenu['ftp'] = $lang_module['ftp_config'];
