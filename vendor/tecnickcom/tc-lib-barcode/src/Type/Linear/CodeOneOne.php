@@ -1,4 +1,5 @@
 <?php
+
 /**
  * CodeOneOne.php
  *
@@ -6,7 +7,7 @@
  * @category    Library
  * @package     Barcode
  * @author      Nicola Asuni <info@tecnick.com>
- * @copyright   2010-2016 Nicola Asuni - Tecnick.com LTD
+ * @copyright   2010-2023 Nicola Asuni - Tecnick.com LTD
  * @license     http://www.gnu.org/copyleft/lesser.html GNU-LGPL v3 (see LICENSE.TXT)
  * @link        https://github.com/tecnickcom/tc-lib-barcode
  *
@@ -15,7 +16,7 @@
 
 namespace Com\Tecnick\Barcode\Type\Linear;
 
-use \Com\Tecnick\Barcode\Exception as BarcodeException;
+use Com\Tecnick\Barcode\Exception as BarcodeException;
 
 /**
  * Com\Tecnick\Barcode\Type\Linear\CodeOneOne;
@@ -27,7 +28,7 @@ use \Com\Tecnick\Barcode\Exception as BarcodeException;
  * @category    Library
  * @package     Barcode
  * @author      Nicola Asuni <info@tecnick.com>
- * @copyright   2010-2016 Nicola Asuni - Tecnick.com LTD
+ * @copyright   2010-2023 Nicola Asuni - Tecnick.com LTD
  * @license     http://www.gnu.org/copyleft/lesser.html GNU-LGPL v3 (see LICENSE.TXT)
  * @link        https://github.com/tecnickcom/tc-lib-barcode
  */
@@ -63,9 +64,9 @@ class CodeOneOne extends \Com\Tecnick\Barcode\Type\Linear
     /**
      * Calculate the checksum.
      *
-     * @param $code (string) code to represent.
+     * @param string $code Code to represent.
      *
-     * @return char checksum.
+     * @return string char checksum.
      */
     protected function getChecksum($code)
     {
@@ -111,7 +112,7 @@ class CodeOneOne extends \Com\Tecnick\Barcode\Type\Linear
             }
         }
         $kcheck %= 11;
-        return $ccheck.$kcheck;
+        return $ccheck . $kcheck;
     }
 
     /**
@@ -119,13 +120,11 @@ class CodeOneOne extends \Com\Tecnick\Barcode\Type\Linear
      */
     protected function formatCode()
     {
-        $this->extcode = 'S'.$this->code.$this->getChecksum($this->code).'S';
+        $this->extcode = 'S' . $this->code . $this->getChecksum($this->code) . 'S';
     }
 
     /**
-     * Get the bars array
-     *
-     * @return array
+     * Set the bars array.
      *
      * @throws BarcodeException in case of error
      */
@@ -139,7 +138,7 @@ class CodeOneOne extends \Com\Tecnick\Barcode\Type\Linear
         for ($chr = 0; $chr < $clen; ++$chr) {
             $char = $this->extcode[$chr];
             if (!isset($this->chbar[$char])) {
-                throw new BarcodeException('Invalid character: chr('.ord($char).')');
+                throw new BarcodeException('Invalid character: chr(' . ord($char) . ')');
             }
             for ($pos = 0; $pos < 6; ++$pos) {
                 $bar_width = intval($this->chbar[$char][$pos]);

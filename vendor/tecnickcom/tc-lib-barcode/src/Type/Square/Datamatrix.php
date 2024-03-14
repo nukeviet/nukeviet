@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Datamatrix.php
  *
@@ -6,7 +7,7 @@
  * @category    Library
  * @package     Barcode
  * @author      Nicola Asuni <info@tecnick.com>
- * @copyright   2010-2020 Nicola Asuni - Tecnick.com LTD
+ * @copyright   2010-2023 Nicola Asuni - Tecnick.com LTD
  * @license     http://www.gnu.org/copyleft/lesser.html GNU-LGPL v3 (see LICENSE.TXT)
  * @link        https://github.com/tecnickcom/tc-lib-barcode
  *
@@ -15,9 +16,9 @@
 
 namespace Com\Tecnick\Barcode\Type\Square;
 
-use \Com\Tecnick\Barcode\Exception as BarcodeException;
-use \Com\Tecnick\Barcode\Type\Square\Datamatrix\Data;
-use \Com\Tecnick\Barcode\Type\Square\Datamatrix\Encode;
+use Com\Tecnick\Barcode\Exception as BarcodeException;
+use Com\Tecnick\Barcode\Type\Square\Datamatrix\Data;
+use Com\Tecnick\Barcode\Type\Square\Datamatrix\Encode;
 
 /**
  * Com\Tecnick\Barcode\Type\Square\Datamatrix
@@ -29,7 +30,7 @@ use \Com\Tecnick\Barcode\Type\Square\Datamatrix\Encode;
  * @category    Library
  * @package     Barcode
  * @author      Nicola Asuni <info@tecnick.com>
- * @copyright   2010-2016 Nicola Asuni - Tecnick.com LTD
+ * @copyright   2010-2023 Nicola Asuni - Tecnick.com LTD
  * @license     http://www.gnu.org/copyleft/lesser.html GNU-LGPL v3 (see LICENSE.TXT)
  * @link        https://github.com/tecnickcom/tc-lib-barcode
  */
@@ -73,7 +74,7 @@ class Datamatrix extends \Com\Tecnick\Barcode\Type\Square
     /**
      * Datamatrix variant (N=default, GS1=FNC1 codeword in first place)
      *
-     * @var string
+     * @var bool
      */
     protected $gsonemode = false;
 
@@ -85,10 +86,12 @@ class Datamatrix extends \Com\Tecnick\Barcode\Type\Square
     protected function setParameters()
     {
         parent::setParameters();
+
         // shape
         if (isset($this->params[0]) && ($this->params[0] == 'R')) {
             $this->shape = 'R';
         }
+
         // mode
         if (isset($this->params[1]) && ($this->params[1] == 'GS1')) {
             $this->gsonemode = true;
@@ -146,17 +149,17 @@ class Datamatrix extends \Com\Tecnick\Barcode\Type\Square
 
         // number of data codewords
         $ncw = count($this->cdw);
-        
+
         // check size
         if ($ncw > 1560) {
             throw new BarcodeException('the input is too large to fit the barcode');
         }
-        
+
         // get minimum required matrix size.
         $params = Data::getPaddingSize($this->shape, $ncw);
         $this->addPadding($params[11], $ncw);
 
-        $errorCorrection = new \Com\Tecnick\Barcode\Type\Square\Datamatrix\ErrorCorrection;
+        $errorCorrection = new \Com\Tecnick\Barcode\Type\Square\Datamatrix\ErrorCorrection();
         $this->cdw = $errorCorrection->getErrorCorrection($this->cdw, $params[13], $params[14], $params[15]);
 
         return $params;

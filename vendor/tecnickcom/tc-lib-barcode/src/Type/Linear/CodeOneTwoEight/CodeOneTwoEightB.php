@@ -1,4 +1,5 @@
 <?php
+
 /**
  * B.php
  *
@@ -6,7 +7,7 @@
  * @category    Library
  * @package     Barcode
  * @author      Nicola Asuni <info@tecnick.com>
- * @copyright   2010-2016 Nicola Asuni - Tecnick.com LTD
+ * @copyright   2010-2023 Nicola Asuni - Tecnick.com LTD
  * @license     http://www.gnu.org/copyleft/lesser.html GNU-LGPL v3 (see LICENSE.TXT)
  * @link        https://github.com/tecnickcom/tc-lib-barcode
  *
@@ -15,7 +16,7 @@
 
 namespace Com\Tecnick\Barcode\Type\Linear\CodeOneTwoEight;
 
-use \Com\Tecnick\Barcode\Exception as BarcodeException;
+use Com\Tecnick\Barcode\Exception as BarcodeException;
 
 /**
  * Com\Tecnick\Barcode\Type\Linear\CodeOneTwoEight\B;
@@ -27,7 +28,7 @@ use \Com\Tecnick\Barcode\Exception as BarcodeException;
  * @category    Library
  * @package     Barcode
  * @author      Nicola Asuni <info@tecnick.com>
- * @copyright   2010-2016 Nicola Asuni - Tecnick.com LTD
+ * @copyright   2010-2023 Nicola Asuni - Tecnick.com LTD
  * @license     http://www.gnu.org/copyleft/lesser.html GNU-LGPL v3 (see LICENSE.TXT)
  * @link        https://github.com/tecnickcom/tc-lib-barcode
  */
@@ -39,7 +40,7 @@ class CodeOneTwoEightB extends \Com\Tecnick\Barcode\Type\Linear\CodeOneTwoEight
      * @var string
      */
     protected $format = 'C128B';
-    
+
     /**
      * Get the code point array
      *
@@ -48,12 +49,9 @@ class CodeOneTwoEightB extends \Com\Tecnick\Barcode\Type\Linear\CodeOneTwoEight
     protected function getCodeData()
     {
         $code = $this->code;
-        // array of symbols
-        $code_data = array();
-        // length of the code
         $len = strlen($code);
-        $startid = 104;
+        $code_data = array();
         $this->getCodeDataB($code_data, $code, $len);
-        return $this->finalizeCodeData($code_data, $startid);
+        return $this->finalizeCodeData($code_data, 104);
     }
 }

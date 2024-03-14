@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Postnet.php
  *
@@ -6,7 +7,7 @@
  * @category    Library
  * @package     Barcode
  * @author      Nicola Asuni <info@tecnick.com>
- * @copyright   2010-2016 Nicola Asuni - Tecnick.com LTD
+ * @copyright   2010-2023 Nicola Asuni - Tecnick.com LTD
  * @license     http://www.gnu.org/copyleft/lesser.html GNU-LGPL v3 (see LICENSE.TXT)
  * @link        https://github.com/tecnickcom/tc-lib-barcode
  *
@@ -15,7 +16,7 @@
 
 namespace Com\Tecnick\Barcode\Type\Linear;
 
-use \Com\Tecnick\Barcode\Exception as BarcodeException;
+use Com\Tecnick\Barcode\Exception as BarcodeException;
 
 /**
  * Com\Tecnick\Barcode\Type\Linear\Postnet;
@@ -27,7 +28,7 @@ use \Com\Tecnick\Barcode\Exception as BarcodeException;
  * @category    Library
  * @package     Barcode
  * @author      Nicola Asuni <info@tecnick.com>
- * @copyright   2010-2016 Nicola Asuni - Tecnick.com LTD
+ * @copyright   2010-2023 Nicola Asuni - Tecnick.com LTD
  * @license     http://www.gnu.org/copyleft/lesser.html GNU-LGPL v3 (see LICENSE.TXT)
  * @link        https://github.com/tecnickcom/tc-lib-barcode
  */
@@ -61,9 +62,9 @@ class Postnet extends \Com\Tecnick\Barcode\Type\Linear
     /**
      * Calculate the checksum.
      *
-     * @param $code (string) code to represent.
+     * @param string $code Code to represent.
      *
-     * @return char checksum.
+     * @return int char checksum.
      */
     protected function getChecksum($code)
     {
@@ -85,13 +86,11 @@ class Postnet extends \Com\Tecnick\Barcode\Type\Linear
     protected function formatCode()
     {
         $code = preg_replace('/[-\s]+/', '', $this->code);
-        $this->extcode = $code.$this->getChecksum($code);
+        $this->extcode = $code . $this->getChecksum($code);
     }
 
     /**
-     * Get the bars array
-     *
-     * @return array
+     * Set the bars array.
      *
      * @throws BarcodeException in case of error
      */
@@ -108,7 +107,7 @@ class Postnet extends \Com\Tecnick\Barcode\Type\Linear
         for ($chr = 0; $chr < $clen; ++$chr) {
             $char = $this->extcode[$chr];
             if (!isset($this->chbar[$char])) {
-                throw new BarcodeException('Invalid character: chr('.ord($char).')');
+                throw new BarcodeException('Invalid character: chr(' . ord($char) . ')');
             }
             for ($pos = 0; $pos < 5; ++$pos) {
                 $bar_height = intval($this->chbar[$char][$pos]);
