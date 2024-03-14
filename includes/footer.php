@@ -45,9 +45,14 @@ if (defined('NV_ADMIN') or !defined('NV_ANTI_IFRAME') or NV_ANTI_IFRAME != 0) {
 if (!empty($global_config['nv_csp_act']) and !empty($global_config['nv_csp'])) {
     $html_headers['Content-Security-Policy'] = nv_unhtmlspecialchars($global_config['nv_csp']);
 }
-
 if (!empty($global_config['nv_rp_act']) and !empty($global_config['nv_rp'])) {
     $html_headers['Referrer-Policy'] = $global_config['nv_rp'];
+}
+if (!empty($global_config['nv_pp_act']) and !empty($global_config['nv_pp'])) {
+    $html_headers['Permissions-Policy'] = $global_config['nv_pp'];
+}
+if (!empty($global_config['nv_fp_act']) and !empty($global_config['nv_fp'])) {
+    $html_headers['Feature-Policy'] = $global_config['nv_fp'];
 }
 
 $html_headers['Content-Type'] = 'text/html; charset=' . $global_config['site_charset'];

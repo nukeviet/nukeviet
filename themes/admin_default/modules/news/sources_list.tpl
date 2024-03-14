@@ -68,6 +68,7 @@ $(function() {
             })
         }).popover({
             html: true,
+            sanitize: false,
             content: function() {
                 $('.topic_change_weight', ppc).attr('data-sourceid', $(this).data('sourceid')).attr('data-current-weight', $(this).data('current-weight'));
                 $('.new-weight', ppc).attr('value', $(this).data('current-weight'));

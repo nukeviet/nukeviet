@@ -1,6 +1,21 @@
 CHANGE LOG: NUKEVIET CMS
 http://nukeviet.vn
 
+NUKEVIET 4.4.08:
+- Module news: do not put search keywords in the page title
+- Fix upload error when filename contains character %
+- Fix breadcrumb error when zooming the screen
+- Fix error in determining domain name when activating proxy on the server
+- Force DOMPurify to listen to the site's security configuration
+- Accepts style tags that contain attributes
+- Fix error of content in noscript tag being pushed out
+- Required cURL library to be enabled
+- Update CKeditor 4.22.1 and rename plugin googledocs to docviewer
+- Add full HTTP header for function nv_xmlOutput
+- Fix errors in account suspension/activation/delete operations in administration area
+- Add Permissions-Policy and Feature-Policy header management
+- Update Jquery v3.7.1, Jquery Validate v1.20.0, DOMPurify v3.0.9
+
 NUKEVIET 4.4.07:
 - Fix class image on PHP 8+ and no exif extension
 - Fix installation error on subfolder (#3537)

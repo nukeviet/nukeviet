@@ -15,7 +15,7 @@ if (!defined('NV_ADMIN') or !defined('NV_MAINFILE') or !defined('NV_IS_MODADMIN'
 $allow_func = ['main', 'language', 'smtp'];
 if ($site_fulladmin) {
     $allow_func[] = 'system';
-    $allow_func[] = 'security';
+    $allow_func[] = 'headers';
 }
 if (defined('NV_IS_GODADMIN')) {
     $allow_func[] = 'ftp';
@@ -25,6 +25,7 @@ if (defined('NV_IS_GODADMIN')) {
     $allow_func[] = 'cronjobs_del';
     $allow_func[] = 'cronjobs_act';
     $allow_func[] = 'plugin';
+    $allow_func[] = 'security';
     $allow_func[] = 'variables';
 }
 
@@ -38,11 +39,12 @@ unset($page_title, $select_options);
 
 define('NV_IS_FILE_SETTINGS', true);
 
-//Document
+// Documents
 $array_url_instruction['main'] = 'https://wiki.nukeviet.vn/nukeviet4:admin:settings';
 $array_url_instruction['system'] = 'https://wiki.nukeviet.vn/nukeviet4:admin:settings:system';
 $array_url_instruction['smtp'] = 'https://wiki.nukeviet.vn/nukeviet4:admin:settings:smtp';
 $array_url_instruction['security'] = 'https://wiki.nukeviet.vn/nukeviet4:admin:settings:security';
+$array_url_instruction['headers'] = 'https://wiki.nukeviet.vn/nukeviet4:admin:settings:headers';
 $array_url_instruction['plugin'] = 'https://wiki.nukeviet.vn/nukeviet4:admin:settings:plugin';
 $array_url_instruction['cronjobs'] = 'https://wiki.nukeviet.vn/nukeviet4:admin:settings:cronjobs';
 $array_url_instruction['ftp'] = 'https://wiki.nukeviet.vn/nukeviet4:admin:settings:ftp';
