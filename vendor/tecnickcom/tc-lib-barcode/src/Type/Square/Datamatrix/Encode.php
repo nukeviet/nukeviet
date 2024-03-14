@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Encode.php
  *
@@ -6,7 +7,7 @@
  * @category    Library
  * @package     Barcode
  * @author      Nicola Asuni <info@tecnick.com>
- * @copyright   2015-2020 Nicola Asuni - Tecnick.com LTD
+ * @copyright   2015-2023 Nicola Asuni - Tecnick.com LTD
  * @license     http://www.gnu.org/copyleft/lesser.html GNU-LGPL v3 (see LICENSE.TXT)
  * @link        https://github.com/tecnickcom/tc-lib-barcode
  *
@@ -15,8 +16,8 @@
 
 namespace Com\Tecnick\Barcode\Type\Square\Datamatrix;
 
-use \Com\Tecnick\Barcode\Exception as BarcodeException;
-use \Com\Tecnick\Barcode\Type\Square\Datamatrix\Data;
+use Com\Tecnick\Barcode\Exception as BarcodeException;
+use Com\Tecnick\Barcode\Type\Square\Datamatrix\Data;
 
 /**
  * Com\Tecnick\Barcode\Type\Square\Datamatrix\Encode
@@ -28,26 +29,12 @@ use \Com\Tecnick\Barcode\Type\Square\Datamatrix\Data;
  * @category    Library
  * @package     Barcode
  * @author      Nicola Asuni <info@tecnick.com>
- * @copyright   2015-2016 Nicola Asuni - Tecnick.com LTD
+ * @copyright   2015-2023 Nicola Asuni - Tecnick.com LTD
  * @license     http://www.gnu.org/copyleft/lesser.html GNU-LGPL v3 (see LICENSE.TXT)
  * @link        https://github.com/tecnickcom/tc-lib-barcode
  */
 class Encode extends \Com\Tecnick\Barcode\Type\Square\Datamatrix\EncodeTxt
 {
-    /**
-     * Store last used encoding for data codewords.
-     *
-     * @var int
-     */
-    public $last_enc;
-
-    /**
-     * Datamatrix shape key (S=square, R=rectangular)
-     *
-     * @var string
-     */
-    public $shape;
-
     /**
      * Initialize a new encode object
      *
@@ -61,7 +48,7 @@ class Encode extends \Com\Tecnick\Barcode\Type\Square\Datamatrix\EncodeTxt
     /**
      * Encode ASCII
      *
-     * @param int    $cdw
+     * @param array  $cdw
      * @param int    $cdw_num
      * @param int    $pos
      * @param int    $data_length
@@ -70,7 +57,8 @@ class Encode extends \Com\Tecnick\Barcode\Type\Square\Datamatrix\EncodeTxt
      */
     public function encodeASCII(&$cdw, &$cdw_num, &$pos, &$data_length, &$data, &$enc)
     {
-        if (($data_length > 1)
+        if (
+            ($data_length > 1)
             && ($pos < ($data_length - 1))
             && ($this->isCharMode(ord($data[$pos]), Data::ENC_ASCII_NUM)
                 && $this->isCharMode(ord($data[$pos + 1]), Data::ENC_ASCII_NUM)
@@ -112,7 +100,7 @@ class Encode extends \Com\Tecnick\Barcode\Type\Square\Datamatrix\EncodeTxt
      * Encode EDF4
      *
      * @param int    $epos
-     * @param int    $cdw
+     * @param array  $cdw
      * @param int    $cdw_num
      * @param int    $pos
      * @param int    $data_length
@@ -134,22 +122,31 @@ class Encode extends \Com\Tecnick\Barcode\Type\Square\Datamatrix\EncodeTxt
             return true;
         }
         if ($field_length < 4) {
-            // set unlatch character
-            $temp_cw[] = 0x1f;
-            ++$field_length;
-            // fill empty characters
-            for ($i = $field_length; $i < 4; ++$i) {
-                $temp_cw[] = 0;
-            }
             $enc = Data::ENC_ASCII;
             $this->last_enc = $enc;
+            $params = Data::getPaddingSize($this->shape, ($cdw_num + $field_length + ($data_length - $epos)));
+            if (($params[11] - $cdw_num) > 2) {
+                // set unlatch character
+                $temp_cw[] = 0x1f;
+                ++$field_length;
+                // fill empty characters
+                for ($i = $field_length; $i < 4; ++$i) {
+                    $temp_cw[] = 0;
+                }
+            } else {
+                return true;
+            }
         }
         // encodes four data characters in three codewords
-        if ($field_length > 2) {
-            $cdw[] = (($temp_cw[0] & 0x3F) << 2) + (($temp_cw[1] & 0x30) >> 4);
+        $cdw[] = (($temp_cw[0] & 0x3F) << 2) + (($temp_cw[1] & 0x30) >> 4);
+        $cdw_num++;
+        if ($field_length > 1) {
             $cdw[] = (($temp_cw[1] & 0x0F) << 4) + (($temp_cw[2] & 0x3C) >> 2);
+            $cdw_num++;
+        }
+        if ($field_length > 2) {
             $cdw[] = (($temp_cw[2] & 0x03) << 6) + ($temp_cw[3] & 0x3F);
-            $cdw_num += 3;
+            $cdw_num++;
         }
         $temp_cw = array();
         $pos = $epos;
@@ -185,7 +182,8 @@ class Encode extends \Com\Tecnick\Barcode\Type\Square\Datamatrix\EncodeTxt
                 $temp_cw[] = $chr;
                 ++$field_length;
             }
-            if (($field_length == 4)
+            if (
+                ($field_length == 4)
                 || ($epos == $data_length)
                 || !$this->isCharMode($chr, Data::ENC_EDF)
             ) {
@@ -199,7 +197,7 @@ class Encode extends \Com\Tecnick\Barcode\Type\Square\Datamatrix\EncodeTxt
     /**
      * Encode Base256
      *
-     * @param int    $cdw
+     * @param array  $cdw
      * @param int    $cdw_num
      * @param int    $pos
      * @param int    $data_length
@@ -232,7 +230,7 @@ class Encode extends \Com\Tecnick\Barcode\Type\Square\Datamatrix\EncodeTxt
             $cdw[] = $this->get255StateCodeword($field_length, ($cdw_num + 1));
             ++$cdw_num;
         } else {
-            $cdw[] = $this->get255StateCodeword((floor($field_length / 250) + 249), ($cdw_num + 1));
+            $cdw[] = $this->get255StateCodeword(((int)floor($field_length / 250) + 249), ($cdw_num + 1));
             $cdw[] = $this->get255StateCodeword(($field_length % 250), ($cdw_num + 2));
             $cdw_num += 2;
         }

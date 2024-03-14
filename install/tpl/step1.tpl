@@ -103,6 +103,10 @@
         <div class="list-member-other-version">
             <h4>{LANG.thanks_list_member_other_version}:</h4>
             <div class="version">
+                <h5>{LANG.thanks_other_version} 4.5.05</h5>
+                    <a target="_blank" href="https://github.com/vinades">VINADES.,JSC (45 commits)</a>,
+                    <a target="_blank" href="https://github.com/hoaquynhtim99">hoaquynhtim99 (1 commits)</a>,
+                    <a target="_blank" href="https://github.com/hiidemo">hiidemo (1 commits)</a>
                 <h5>{LANG.thanks_other_version} 4.5.04</h5>
                     <a target="_blank" href="https://github.com/vinades">VINADES.,JSC (38 commits)</a>,
                     <a target="_blank" href="https://github.com/hoaquynhtim99">hoaquynhtim99 (2 commits)</a>

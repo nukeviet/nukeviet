@@ -1,5 +1,25 @@
 CHANGE LOG: NUKEVIET CMS
 http://nukeviet.vn
+NUKEVIET 4.5.05
+- Fix CKEditor 4 iframe, delete plugin googledocs and replace with docviewer
+- Fix upload error when filename contains character %
+- Support location: hash in link menu
+- Display the result counter in admin module news
+- Fix breadcrumb error when zooming the screen
+- Fix error in determining domain name when activating proxy on the server
+- Cloudflare Flexible SSL support
+- Multi-port support
+- Accepts style tags that contain attributes
+- Fix error of content in noscript tag being pushed out
+- Required cURL library to be enabled
+- Add Ckeditor Classic 5 v41.0
+- Save system log in the module contact supporter area
+- Add full header for function nv_xmlOutput
+- Fixed errors in account suspension/activation/delete operations in administration area
+- Add Permissions-Policy and Feature-Policy header management
+- Support choosing layout for news category
+- Update version: PHPMailer v6.9.1, Jquery v3.7.1, jquery.validator v1.20.0, DOMPurify v2.4.7 and v3.0.9
+
 NUKEVIET 4.5.04
 - Update: CKEditor v4.22.1, PHPMailer v6.8.0, Jquery v3.7.0, DOMPurify 2.4.6 and 3.0.4
 - Improved check rewrite-support

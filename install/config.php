@@ -37,7 +37,7 @@ $array_data['socialbutton'] = 1;
 $array_data['dev_mode'] = 0;
 
 $global_config['unofficial_mode'] = 0; // Cảnh báo bản thử nghiệm
-$global_config['version'] = '4.5.04'; // NukeViet 4.5
+$global_config['version'] = '4.5.05'; // NukeViet 4.5
 $global_config['site_email'] = '';
 $global_config['site_phone'] = '';
 $global_config['error_set_logs'] = 1;

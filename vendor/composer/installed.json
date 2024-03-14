@@ -1,733 +1,752 @@
-[
-    {
-        "name": "and/oauth",
-        "version": "dev-master",
-        "version_normalized": "dev-master",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/logical-and/php-oauth.git",
-            "reference": "700b769807affc1c5d04ec5a77be69a10a12e52b"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/logical-and/php-oauth/zipball/700b769807affc1c5d04ec5a77be69a10a12e52b",
-            "reference": "700b769807affc1c5d04ec5a77be69a10a12e52b",
-            "shasum": ""
-        },
-        "require": {
-            "ext-reflection": "*",
-            "ext-spl": "*",
-            "gregwar/image": "~2.0.18",
-            "kriswallsmith/buzz": "~0.13",
-            "league/url": "~3.2",
-            "php": ">=5.4.0"
-        },
-        "require-dev": {
-            "phpunit/phpunit": "~4.6",
-            "predis/predis": "0.8.*@dev",
-            "symfony/http-foundation": "~2.1"
-        },
-        "suggest": {
-            "ext-openssl": "Allows for usage of secure connections with the stream-based HTTP client.",
-            "predis/predis": "Allows using the Redis storage backend.",
-            "symfony/http-foundation": "Allows using the Symfony Session storage backend."
-        },
-        "time": "2020-12-05T07:15:22+00:00",
-        "type": "library",
-        "extra": {
-            "branch-alias": {
-                "dev-master": "0.7-dev"
-            }
-        },
-        "installation-source": "source",
-        "autoload": {
-            "psr-4": {
-                "OAuth\\": "src"
-            }
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "MIT"
+{
+        "packages": [
+                {
+                        "name": "and/oauth",
+                        "version": "dev-master",
+                        "version_normalized": "dev-master",
+                        "source": {
+                                "type": "git",
+                                "url": "https://github.com/logical-and/php-oauth.git",
+                                "reference": "700b769807affc1c5d04ec5a77be69a10a12e52b"
+                        },
+                        "dist": {
+                                "type": "zip",
+                                "url": "https://api.github.com/repos/logical-and/php-oauth/zipball/700b769807affc1c5d04ec5a77be69a10a12e52b",
+                                "reference": "700b769807affc1c5d04ec5a77be69a10a12e52b",
+                                "shasum": ""
+                        },
+                        "require": {
+                                "ext-reflection": "*",
+                                "ext-spl": "*",
+                                "gregwar/image": "~2.0.18",
+                                "kriswallsmith/buzz": "~0.13",
+                                "league/url": "~3.2",
+                                "php": ">=5.4.0"
+                        },
+                        "require-dev": {
+                                "phpunit/phpunit": "~4.6",
+                                "predis/predis": "0.8.*@dev",
+                                "symfony/http-foundation": "~2.1"
+                        },
+                        "suggest": {
+                                "ext-openssl": "Allows for usage of secure connections with the stream-based HTTP client.",
+                                "predis/predis": "Allows using the Redis storage backend.",
+                                "symfony/http-foundation": "Allows using the Symfony Session storage backend."
+                        },
+                        "time": "2020-12-05T07:15:22+00:00",
+                        "type": "library",
+                        "extra": {
+                                "branch-alias": {
+                                        "dev-master": "0.7-dev"
+                                }
+                        },
+                        "installation-source": "source",
+                        "autoload": {
+                                "psr-4": {
+                                        "OAuth\\": "src"
+                                }
+                        },
+                        "notification-url": "https://packagist.org/downloads/",
+                        "license": [
+                                "MIT"
+                        ],
+                        "authors": [
+                                {
+                                        "name": "And",
+                                        "email": "and.webdev@gmail.com",
+                                        "role": "Developer"
+                                },
+                                {
+                                        "name": "David Desberg",
+                                        "email": "david@daviddesberg.com",
+                                        "role": "Developer of OAuth"
+                                },
+                                {
+                                        "name": "Pieter Hordijk",
+                                        "email": "info@pieterhordijk.com",
+                                        "role": "Developer of OAuth"
+                                },
+                                {
+                                        "name": "Luciano Mammino",
+                                        "email": "lmammino@oryzone.com",
+                                        "homepage": "http://oryzone.com",
+                                        "role": "Developer of UserData package"
+                                }
+                        ],
+                        "description": "Simple and amazing OAuth library with many providers. Just try it out!",
+                        "keywords": [
+                                "Authentication",
+                                "Buffer",
+                                "Harvest",
+                                "amazon",
+                                "authorization",
+                                "bitbucket",
+                                "bitly",
+                                "box",
+                                "dailymotion",
+                                "deviantart",
+                                "dropbox",
+                                "etsy",
+                                "eve",
+                                "eveonline",
+                                "facebook",
+                                "fitbit",
+                                "flickr",
+                                "foursquare",
+                                "github",
+                                "google",
+                                "instagram",
+                                "jawbone",
+                                "linkedin",
+                                "mailchimp",
+                                "microsoft",
+                                "oauth",
+                                "oauth1",
+                                "oauth2",
+                                "paypal",
+                                "pocket",
+                                "reddit",
+                                "runkeeper",
+                                "scoopit",
+                                "security",
+                                "soundcloud",
+                                "spotify",
+                                "tumblr",
+                                "twitter",
+                                "ustream",
+                                "vkontakte",
+                                "yahoo"
+                        ],
+                        "support": {
+                                "issues": "https://github.com/logical-and/php-oauth/issues",
+                                "source": "https://github.com/logical-and/php-oauth/tree/master"
+                        },
+                        "install-path": "../and/oauth"
+                },
+                {
+                        "name": "gregwar/cache",
+                        "version": "v1.0.13",
+                        "version_normalized": "1.0.13.0",
+                        "target-dir": "Gregwar/Cache",
+                        "source": {
+                                "type": "git",
+                                "url": "https://github.com/Gregwar/Cache.git",
+                                "reference": "184cc341c25298ff7d584f86b55b6ca26626da4f"
+                        },
+                        "dist": {
+                                "type": "zip",
+                                "url": "https://api.github.com/repos/Gregwar/Cache/zipball/184cc341c25298ff7d584f86b55b6ca26626da4f",
+                                "reference": "184cc341c25298ff7d584f86b55b6ca26626da4f",
+                                "shasum": ""
+                        },
+                        "require": {
+                                "php": ">=5.3"
+                        },
+                        "time": "2021-04-20T07:23:58+00:00",
+                        "type": "library",
+                        "installation-source": "dist",
+                        "autoload": {
+                                "psr-0": {
+                                        "Gregwar\\Cache": ""
+                                }
+                        },
+                        "notification-url": "https://packagist.org/downloads/",
+                        "license": [
+                                "MIT"
+                        ],
+                        "authors": [
+                                {
+                                        "name": "Gregwar",
+                                        "email": "g.passault@gmail.com"
+                                }
+                        ],
+                        "description": "A lightweight file-system cache system",
+                        "keywords": [
+                                "cache",
+                                "caching",
+                                "file-system",
+                                "system"
+                        ],
+                        "support": {
+                                "issues": "https://github.com/Gregwar/Cache/issues",
+                                "source": "https://github.com/Gregwar/Cache/tree/v1.0.13"
+                        },
+                        "install-path": "../gregwar/cache/Gregwar/Cache"
+                },
+                {
+                        "name": "gregwar/image",
+                        "version": "v2.0.28",
+                        "version_normalized": "2.0.28.0",
+                        "target-dir": "Gregwar/Image",
+                        "source": {
+                                "type": "git",
+                                "url": "https://github.com/Gregwar/Image.git",
+                                "reference": "c1390f5fafe2dfb4ba83a6c7bc56f75ea18c0311"
+                        },
+                        "dist": {
+                                "type": "zip",
+                                "url": "https://api.github.com/repos/Gregwar/Image/zipball/c1390f5fafe2dfb4ba83a6c7bc56f75ea18c0311",
+                                "reference": "c1390f5fafe2dfb4ba83a6c7bc56f75ea18c0311",
+                                "shasum": ""
+                        },
+                        "require": {
+                                "ext-gd": "*",
+                                "gregwar/cache": "^1.0.6",
+                                "php": "^5.6 || ^7.0 || ^8.0"
+                        },
+                        "require-dev": {
+                                "sllh/php-cs-fixer-styleci-bridge": "~1.0",
+                                "symfony/phpunit-bridge": "^2.7.4 || ^3.0"
+                        },
+                        "suggest": {
+                                "behat/transliterator": "Transliterator provides ability to set non-latin1 pretty names"
+                        },
+                        "time": "2021-02-17T15:57:20+00:00",
+                        "type": "library",
+                        "installation-source": "dist",
+                        "autoload": {
+                                "psr-0": {
+                                        "Gregwar\\Image": ""
+                                }
+                        },
+                        "notification-url": "https://packagist.org/downloads/",
+                        "license": [
+                                "MIT"
+                        ],
+                        "authors": [
+                                {
+                                        "name": "Grégoire Passault",
+                                        "email": "g.passault@gmail.com",
+                                        "homepage": "http://www.gregwar.com/"
+                                }
+                        ],
+                        "description": "Image handling",
+                        "homepage": "https://github.com/Gregwar/Image",
+                        "keywords": [
+                                "gd",
+                                "image"
+                        ],
+                        "support": {
+                                "issues": "https://github.com/Gregwar/Image/issues",
+                                "source": "https://github.com/Gregwar/Image/tree/v2.0.28"
+                        },
+                        "install-path": "../gregwar/image/Gregwar/Image"
+                },
+                {
+                        "name": "kriswallsmith/buzz",
+                        "version": "v0.15",
+                        "version_normalized": "0.15.0.0",
+                        "source": {
+                                "type": "git",
+                                "url": "https://github.com/kriswallsmith/Buzz.git",
+                                "reference": "d4041666c3ffb379af02a92dabe81c904b35fab8"
+                        },
+                        "dist": {
+                                "type": "zip",
+                                "url": "https://api.github.com/repos/kriswallsmith/Buzz/zipball/d4041666c3ffb379af02a92dabe81c904b35fab8",
+                                "reference": "d4041666c3ffb379af02a92dabe81c904b35fab8",
+                                "shasum": ""
+                        },
+                        "require": {
+                                "php": ">=5.3.0"
+                        },
+                        "require-dev": {
+                                "phpunit/phpunit": "3.7.*"
+                        },
+                        "suggest": {
+                                "ext-curl": "*"
+                        },
+                        "time": "2015-06-25T17:26:56+00:00",
+                        "type": "library",
+                        "installation-source": "dist",
+                        "autoload": {
+                                "psr-0": {
+                                        "Buzz": "lib/"
+                                }
+                        },
+                        "notification-url": "https://packagist.org/downloads/",
+                        "license": [
+                                "MIT"
+                        ],
+                        "authors": [
+                                {
+                                        "name": "Kris Wallsmith",
+                                        "email": "kris.wallsmith@gmail.com",
+                                        "homepage": "http://kriswallsmith.net/"
+                                }
+                        ],
+                        "description": "Lightweight HTTP client",
+                        "homepage": "https://github.com/kriswallsmith/Buzz",
+                        "keywords": [
+                                "curl",
+                                "http client"
+                        ],
+                        "support": {
+                                "issues": "https://github.com/kriswallsmith/Buzz/issues",
+                                "source": "https://github.com/kriswallsmith/Buzz/tree/v0.15"
+                        },
+                        "install-path": "../kriswallsmith/buzz"
+                },
+                {
+                        "name": "league/url",
+                        "version": "3.3.5",
+                        "version_normalized": "3.3.5.0",
+                        "source": {
+                                "type": "git",
+                                "url": "https://github.com/thephpleague/url.git",
+                                "reference": "1ae2c3ce29a7c5438339ff6388225844e6479da8"
+                        },
+                        "dist": {
+                                "type": "zip",
+                                "url": "https://api.github.com/repos/thephpleague/url/zipball/1ae2c3ce29a7c5438339ff6388225844e6479da8",
+                                "reference": "1ae2c3ce29a7c5438339ff6388225844e6479da8",
+                                "shasum": ""
+                        },
+                        "require": {
+                                "ext-mbstring": "*",
+                                "php": ">=5.3.0",
+                                "true/punycode": "^2.0"
+                        },
+                        "require-dev": {
+                                "phpunit/phpunit": "^4.0"
+                        },
+                        "time": "2015-07-15T08:24:12+00:00",
+                        "type": "library",
+                        "extra": {
+                                "branch-alias": {
+                                        "dev-master": "3.3-dev"
+                                }
+                        },
+                        "installation-source": "dist",
+                        "autoload": {
+                                "psr-4": {
+                                        "League\\Url\\": "src"
+                                }
+                        },
+                        "notification-url": "https://packagist.org/downloads/",
+                        "license": [
+                                "MIT"
+                        ],
+                        "authors": [
+                                {
+                                        "name": "Ignace Nyamagana Butera",
+                                        "email": "nyamsprod@gmail.com",
+                                        "homepage": "https://github.com/nyamsprod/",
+                                        "role": "Developer"
+                                }
+                        ],
+                        "description": "League/url is a lightweight PHP Url manipulating library",
+                        "homepage": "http://url.thephpleague.com",
+                        "keywords": [
+                                "parse_url",
+                                "php",
+                                "url"
+                        ],
+                        "support": {
+                                "forum": "https://groups.google.com/forum/#!forum/thephpleague",
+                                "issues": "https://github.com/thephpleague/url/issues",
+                                "source": "https://github.com/thephpleague/url/tree/3.x"
+                        },
+                        "abandoned": "league/uri",
+                        "install-path": "../league/url"
+                },
+                {
+                        "name": "phpmailer/phpmailer",
+                        "version": "v6.9.1",
+                        "version_normalized": "6.9.1.0",
+                        "source": {
+                                "type": "git",
+                                "url": "https://github.com/PHPMailer/PHPMailer.git",
+                                "reference": "039de174cd9c17a8389754d3b877a2ed22743e18"
+                        },
+                        "dist": {
+                                "type": "zip",
+                                "url": "https://api.github.com/repos/PHPMailer/PHPMailer/zipball/039de174cd9c17a8389754d3b877a2ed22743e18",
+                                "reference": "039de174cd9c17a8389754d3b877a2ed22743e18",
+                                "shasum": ""
+                        },
+                        "require": {
+                                "ext-ctype": "*",
+                                "ext-filter": "*",
+                                "ext-hash": "*",
+                                "php": ">=5.5.0"
+                        },
+                        "require-dev": {
+                                "dealerdirect/phpcodesniffer-composer-installer": "^1.0",
+                                "doctrine/annotations": "^1.2.6 || ^1.13.3",
+                                "php-parallel-lint/php-console-highlighter": "^1.0.0",
+                                "php-parallel-lint/php-parallel-lint": "^1.3.2",
+                                "phpcompatibility/php-compatibility": "^9.3.5",
+                                "roave/security-advisories": "dev-latest",
+                                "squizlabs/php_codesniffer": "^3.7.2",
+                                "yoast/phpunit-polyfills": "^1.0.4"
+                        },
+                        "suggest": {
+                                "decomplexity/SendOauth2": "Adapter for using XOAUTH2 authentication",
+                                "ext-mbstring": "Needed to send email in multibyte encoding charset or decode encoded addresses",
+                                "ext-openssl": "Needed for secure SMTP sending and DKIM signing",
+                                "greew/oauth2-azure-provider": "Needed for Microsoft Azure XOAUTH2 authentication",
+                                "hayageek/oauth2-yahoo": "Needed for Yahoo XOAUTH2 authentication",
+                                "league/oauth2-google": "Needed for Google XOAUTH2 authentication",
+                                "psr/log": "For optional PSR-3 debug logging",
+                                "symfony/polyfill-mbstring": "To support UTF-8 if the Mbstring PHP extension is not enabled (^1.2)",
+                                "thenetworg/oauth2-azure": "Needed for Microsoft XOAUTH2 authentication"
+                        },
+                        "time": "2023-11-25T22:23:28+00:00",
+                        "type": "library",
+                        "installation-source": "dist",
+                        "autoload": {
+                                "psr-4": {
+                                        "PHPMailer\\PHPMailer\\": "src/"
+                                }
+                        },
+                        "notification-url": "https://packagist.org/downloads/",
+                        "license": [
+                                "LGPL-2.1-only"
+                        ],
+                        "authors": [
+                                {
+                                        "name": "Marcus Bointon",
+                                        "email": "phpmailer@synchromedia.co.uk"
+                                },
+                                {
+                                        "name": "Jim Jagielski",
+                                        "email": "jimjag@gmail.com"
+                                },
+                                {
+                                        "name": "Andy Prevost",
+                                        "email": "codeworxtech@users.sourceforge.net"
+                                },
+                                {
+                                        "name": "Brent R. Matzelle"
+                                }
+                        ],
+                        "description": "PHPMailer is a full-featured email creation and transfer class for PHP",
+                        "support": {
+                                "issues": "https://github.com/PHPMailer/PHPMailer/issues",
+                                "source": "https://github.com/PHPMailer/PHPMailer/tree/v6.9.1"
+                        },
+                        "funding": [
+                                {
+                                        "url": "https://github.com/Synchro",
+                                        "type": "github"
+                                }
+                        ],
+                        "install-path": "../phpmailer/phpmailer"
+                },
+                {
+                        "name": "symfony/polyfill-mbstring",
+                        "version": "v1.18.1",
+                        "version_normalized": "1.18.1.0",
+                        "source": {
+                                "type": "git",
+                                "url": "https://github.com/symfony/polyfill-mbstring.git",
+                                "reference": "a6977d63bf9a0ad4c65cd352709e230876f9904a"
+                        },
+                        "dist": {
+                                "type": "zip",
+                                "url": "https://api.github.com/repos/symfony/polyfill-mbstring/zipball/a6977d63bf9a0ad4c65cd352709e230876f9904a",
+                                "reference": "a6977d63bf9a0ad4c65cd352709e230876f9904a",
+                                "shasum": ""
+                        },
+                        "require": {
+                                "php": ">=5.3.3"
+                        },
+                        "suggest": {
+                                "ext-mbstring": "For best performance"
+                        },
+                        "time": "2020-07-14T12:35:20+00:00",
+                        "type": "library",
+                        "extra": {
+                                "branch-alias": {
+                                        "dev-master": "1.18-dev"
+                                },
+                                "thanks": {
+                                        "name": "symfony/polyfill",
+                                        "url": "https://github.com/symfony/polyfill"
+                                }
+                        },
+                        "installation-source": "dist",
+                        "autoload": {
+                                "psr-4": {
+                                        "Symfony\\Polyfill\\Mbstring\\": ""
+                                },
+                                "files": [
+                                        "bootstrap.php"
+                                ]
+                        },
+                        "notification-url": "https://packagist.org/downloads/",
+                        "license": [
+                                "MIT"
+                        ],
+                        "authors": [
+                                {
+                                        "name": "Nicolas Grekas",
+                                        "email": "p@tchwork.com"
+                                },
+                                {
+                                        "name": "Symfony Community",
+                                        "homepage": "https://symfony.com/contributors"
+                                }
+                        ],
+                        "description": "Symfony polyfill for the Mbstring extension",
+                        "homepage": "https://symfony.com",
+                        "keywords": [
+                                "compatibility",
+                                "mbstring",
+                                "polyfill",
+                                "portable",
+                                "shim"
+                        ],
+                        "support": {
+                                "source": "https://github.com/symfony/polyfill-mbstring/tree/v1.18.1"
+                        },
+                        "funding": [
+                                {
+                                        "url": "https://symfony.com/sponsor",
+                                        "type": "custom"
+                                },
+                                {
+                                        "url": "https://github.com/fabpot",
+                                        "type": "github"
+                                },
+                                {
+                                        "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
+                                        "type": "tidelift"
+                                }
+                        ],
+                        "install-path": "../symfony/polyfill-mbstring"
+                },
+                {
+                        "name": "tecnickcom/tc-lib-barcode",
+                        "version": "1.18.4",
+                        "version_normalized": "1.18.4.0",
+                        "source": {
+                                "type": "git",
+                                "url": "https://github.com/tecnickcom/tc-lib-barcode.git",
+                                "reference": "cd81392e6e1e57e0f6ff8519b1edbc11d8e47a44"
+                        },
+                        "dist": {
+                                "type": "zip",
+                                "url": "https://api.github.com/repos/tecnickcom/tc-lib-barcode/zipball/cd81392e6e1e57e0f6ff8519b1edbc11d8e47a44",
+                                "reference": "cd81392e6e1e57e0f6ff8519b1edbc11d8e47a44",
+                                "shasum": ""
+                        },
+                        "require": {
+                                "ext-bcmath": "*",
+                                "ext-date": "*",
+                                "ext-gd": "*",
+                                "ext-pcre": "*",
+                                "php": ">=5.6",
+                                "tecnickcom/tc-lib-color": "^1.14"
+                        },
+                        "require-dev": {
+                                "pdepend/pdepend": "2.13.0",
+                                "phpmd/phpmd": "2.13.0",
+                                "phpunit/phpunit": "10.1.2 || 9.6.7 || 8.5.31 || 7.5.20 || 6.5.14 || 5.7.27 || 4.8.36",
+                                "squizlabs/php_codesniffer": "3.7.2 || 2.9.2"
+                        },
+                        "time": "2023-10-23T09:30:01+00:00",
+                        "type": "library",
+                        "installation-source": "dist",
+                        "autoload": {
+                                "psr-4": {
+                                        "Com\\Tecnick\\Barcode\\": "src"
+                                }
+                        },
+                        "notification-url": "https://packagist.org/downloads/",
+                        "license": [
+                                "LGPL-3.0-or-later"
+                        ],
+                        "authors": [
+                                {
+                                        "name": "Nicola Asuni",
+                                        "email": "info@tecnick.com",
+                                        "role": "lead"
+                                }
+                        ],
+                        "description": "PHP library to generate linear and bidimensional barcodes",
+                        "homepage": "http://www.tecnick.com",
+                        "keywords": [
+                                "3 of 9",
+                                "ANSI MH10.8M-1983",
+                                "CBC",
+                                "CODABAR",
+                                "CODE 11",
+                                "CODE 128 A B C",
+                                "CODE 39",
+                                "CODE 93",
+                                "EAN 13",
+                                "EAN 8",
+                                "ECC200",
+                                "ISO IEC 15438 2006",
+                                "ISO IEC 16022",
+                                "ISO IEC 24778 2008",
+                                "Intelligent Mail Barcode",
+                                "Interleaved 2 of 5",
+                                "KIX",
+                                "Klant",
+                                "MSI",
+                                "Onecode",
+                                "PHARMACODE",
+                                "PHARMACODE TWO-TRACKS",
+                                "POSTNET",
+                                "RMS4CC",
+                                "Standard 2 of 5",
+                                "UPC-A",
+                                "UPC-E",
+                                "USD-3",
+                                "USPS-B-3200",
+                                "USS-93",
+                                "aztec",
+                                "barcode",
+                                "datamatrix",
+                                "pdf417",
+                                "planet",
+                                "qr-code",
+                                "royal mail",
+                                "tc-lib-barcode",
+                                "upc"
+                        ],
+                        "support": {
+                                "issues": "https://github.com/tecnickcom/tc-lib-barcode/issues",
+                                "source": "https://github.com/tecnickcom/tc-lib-barcode/tree/1.18.4"
+                        },
+                        "funding": [
+                                {
+                                        "url": "https://www.paypal.com/cgi-bin/webscr?cmd=_donations&currency_code=GBP&business=paypal@tecnick.com&item_name=donation%20for%20tc-lib-barcode%20project",
+                                        "type": "custom"
+                                }
+                        ],
+                        "install-path": "../tecnickcom/tc-lib-barcode"
+                },
+                {
+                        "name": "tecnickcom/tc-lib-color",
+                        "version": "1.14.39",
+                        "version_normalized": "1.14.39.0",
+                        "source": {
+                                "type": "git",
+                                "url": "https://github.com/tecnickcom/tc-lib-color.git",
+                                "reference": "f7a414e7ddbdcd98105506ca1eecc68d4820fb89"
+                        },
+                        "dist": {
+                                "type": "zip",
+                                "url": "https://api.github.com/repos/tecnickcom/tc-lib-color/zipball/f7a414e7ddbdcd98105506ca1eecc68d4820fb89",
+                                "reference": "f7a414e7ddbdcd98105506ca1eecc68d4820fb89",
+                                "shasum": ""
+                        },
+                        "require": {
+                                "ext-pcre": "*",
+                                "php": ">=5.3"
+                        },
+                        "require-dev": {
+                                "pdepend/pdepend": "2.13.0",
+                                "phpmd/phpmd": "2.13.0",
+                                "phpunit/phpunit": "10.1.2 || 9.6.7 || 8.5.31 || 7.5.20 || 6.5.14 || 5.7.27 || 4.8.36",
+                                "squizlabs/php_codesniffer": "3.7.2 || 2.9.2"
+                        },
+                        "time": "2023-10-23T09:28:20+00:00",
+                        "type": "library",
+                        "installation-source": "dist",
+                        "autoload": {
+                                "psr-4": {
+                                        "Com\\Tecnick\\Color\\": "src"
+                                }
+                        },
+                        "notification-url": "https://packagist.org/downloads/",
+                        "license": [
+                                "LGPL-3.0-or-later"
+                        ],
+                        "authors": [
+                                {
+                                        "name": "Nicola Asuni",
+                                        "email": "info@tecnick.com",
+                                        "role": "lead"
+                                }
+                        ],
+                        "description": "PHP library to manipulate various color representations",
+                        "homepage": "http://www.tecnick.com",
+                        "keywords": [
+                                "cmyk",
+                                "color",
+                                "colors",
+                                "colour",
+                                "colours",
+                                "hsl",
+                                "hsla",
+                                "javascript",
+                                "rgb",
+                                "rgba",
+                                "tc-lib-color",
+                                "web"
+                        ],
+                        "support": {
+                                "issues": "https://github.com/tecnickcom/tc-lib-color/issues",
+                                "source": "https://github.com/tecnickcom/tc-lib-color/tree/1.14.39"
+                        },
+                        "funding": [
+                                {
+                                        "url": "https://www.paypal.com/cgi-bin/webscr?cmd=_donations&currency_code=GBP&business=paypal@tecnick.com&item_name=donation%20for%20tc-lib-color%20project",
+                                        "type": "custom"
+                                }
+                        ],
+                        "install-path": "../tecnickcom/tc-lib-color"
+                },
+                {
+                        "name": "true/punycode",
+                        "version": "v2.1.1",
+                        "version_normalized": "2.1.1.0",
+                        "source": {
+                                "type": "git",
+                                "url": "https://github.com/true/php-punycode.git",
+                                "reference": "a4d0c11a36dd7f4e7cd7096076cab6d3378a071e"
+                        },
+                        "dist": {
+                                "type": "zip",
+                                "url": "https://api.github.com/repos/true/php-punycode/zipball/a4d0c11a36dd7f4e7cd7096076cab6d3378a071e",
+                                "reference": "a4d0c11a36dd7f4e7cd7096076cab6d3378a071e",
+                                "shasum": ""
+                        },
+                        "require": {
+                                "php": ">=5.3.0",
+                                "symfony/polyfill-mbstring": "^1.3"
+                        },
+                        "require-dev": {
+                                "phpunit/phpunit": "~4.7",
+                                "squizlabs/php_codesniffer": "~2.0"
+                        },
+                        "time": "2016-11-16T10:37:54+00:00",
+                        "type": "library",
+                        "installation-source": "dist",
+                        "autoload": {
+                                "psr-4": {
+                                        "TrueBV\\": "src/"
+                                }
+                        },
+                        "notification-url": "https://packagist.org/downloads/",
+                        "license": [
+                                "MIT"
+                        ],
+                        "authors": [
+                                {
+                                        "name": "Renan Gonçalves",
+                                        "email": "renan.saddam@gmail.com"
+                                }
+                        ],
+                        "description": "A Bootstring encoding of Unicode for Internationalized Domain Names in Applications (IDNA)",
+                        "homepage": "https://github.com/true/php-punycode",
+                        "keywords": [
+                                "idna",
+                                "punycode"
+                        ],
+                        "support": {
+                                "issues": "https://github.com/true/php-punycode/issues",
+                                "source": "https://github.com/true/php-punycode/tree/master"
+                        },
+                        "abandoned": true,
+                        "install-path": "../true/punycode"
+                }
         ],
-        "authors": [
-            {
-                "name": "And",
-                "email": "and.webdev@gmail.com",
-                "role": "Developer"
-            },
-            {
-                "name": "David Desberg",
-                "email": "david@daviddesberg.com",
-                "role": "Developer of OAuth"
-            },
-            {
-                "name": "Pieter Hordijk",
-                "email": "info@pieterhordijk.com",
-                "role": "Developer of OAuth"
-            },
-            {
-                "name": "Luciano Mammino",
-                "email": "lmammino@oryzone.com",
-                "homepage": "http://oryzone.com",
-                "role": "Developer of UserData package"
-            }
-        ],
-        "description": "Simple and amazing OAuth library with many providers. Just try it out!",
-        "keywords": [
-            "Authentication",
-            "Buffer",
-            "Harvest",
-            "amazon",
-            "authorization",
-            "bitbucket",
-            "bitly",
-            "box",
-            "dailymotion",
-            "deviantart",
-            "dropbox",
-            "etsy",
-            "eve",
-            "eveonline",
-            "facebook",
-            "fitbit",
-            "flickr",
-            "foursquare",
-            "github",
-            "google",
-            "instagram",
-            "jawbone",
-            "linkedin",
-            "mailchimp",
-            "microsoft",
-            "oauth",
-            "oauth1",
-            "oauth2",
-            "paypal",
-            "pocket",
-            "reddit",
-            "runkeeper",
-            "scoopit",
-            "security",
-            "soundcloud",
-            "spotify",
-            "tumblr",
-            "twitter",
-            "ustream",
-            "vkontakte",
-            "yahoo"
-        ],
-        "support": {
-            "issues": "https://github.com/logical-and/php-oauth/issues",
-            "source": "https://github.com/logical-and/php-oauth/tree/master"
-        }
-    },
-    {
-        "name": "gregwar/cache",
-        "version": "v1.0.13",
-        "version_normalized": "1.0.13.0",
-        "target-dir": "Gregwar/Cache",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/Gregwar/Cache.git",
-            "reference": "184cc341c25298ff7d584f86b55b6ca26626da4f"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/Gregwar/Cache/zipball/184cc341c25298ff7d584f86b55b6ca26626da4f",
-            "reference": "184cc341c25298ff7d584f86b55b6ca26626da4f",
-            "shasum": ""
-        },
-        "require": {
-            "php": ">=5.3"
-        },
-        "time": "2021-04-20T07:23:58+00:00",
-        "type": "library",
-        "installation-source": "dist",
-        "autoload": {
-            "psr-0": {
-                "Gregwar\\Cache": ""
-            }
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "MIT"
-        ],
-        "authors": [
-            {
-                "name": "Gregwar",
-                "email": "g.passault@gmail.com"
-            }
-        ],
-        "description": "A lightweight file-system cache system",
-        "keywords": [
-            "cache",
-            "caching",
-            "file-system",
-            "system"
-        ],
-        "support": {
-            "issues": "https://github.com/Gregwar/Cache/issues",
-            "source": "https://github.com/Gregwar/Cache/tree/v1.0.13"
-        }
-    },
-    {
-        "name": "gregwar/image",
-        "version": "v2.0.28",
-        "version_normalized": "2.0.28.0",
-        "target-dir": "Gregwar/Image",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/Gregwar/Image.git",
-            "reference": "c1390f5fafe2dfb4ba83a6c7bc56f75ea18c0311"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/Gregwar/Image/zipball/c1390f5fafe2dfb4ba83a6c7bc56f75ea18c0311",
-            "reference": "c1390f5fafe2dfb4ba83a6c7bc56f75ea18c0311",
-            "shasum": ""
-        },
-        "require": {
-            "ext-gd": "*",
-            "gregwar/cache": "^1.0.6",
-            "php": "^5.6 || ^7.0 || ^8.0"
-        },
-        "require-dev": {
-            "sllh/php-cs-fixer-styleci-bridge": "~1.0",
-            "symfony/phpunit-bridge": "^2.7.4 || ^3.0"
-        },
-        "suggest": {
-            "behat/transliterator": "Transliterator provides ability to set non-latin1 pretty names"
-        },
-        "time": "2021-02-17T15:57:20+00:00",
-        "type": "library",
-        "installation-source": "dist",
-        "autoload": {
-            "psr-0": {
-                "Gregwar\\Image": ""
-            }
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "MIT"
-        ],
-        "authors": [
-            {
-                "name": "Grégoire Passault",
-                "email": "g.passault@gmail.com",
-                "homepage": "http://www.gregwar.com/"
-            }
-        ],
-        "description": "Image handling",
-        "homepage": "https://github.com/Gregwar/Image",
-        "keywords": [
-            "gd",
-            "image"
-        ],
-        "support": {
-            "issues": "https://github.com/Gregwar/Image/issues",
-            "source": "https://github.com/Gregwar/Image/tree/v2.0.28"
-        }
-    },
-    {
-        "name": "kriswallsmith/buzz",
-        "version": "v0.15",
-        "version_normalized": "0.15.0.0",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/kriswallsmith/Buzz.git",
-            "reference": "d4041666c3ffb379af02a92dabe81c904b35fab8"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/kriswallsmith/Buzz/zipball/d4041666c3ffb379af02a92dabe81c904b35fab8",
-            "reference": "d4041666c3ffb379af02a92dabe81c904b35fab8",
-            "shasum": ""
-        },
-        "require": {
-            "php": ">=5.3.0"
-        },
-        "require-dev": {
-            "phpunit/phpunit": "3.7.*"
-        },
-        "suggest": {
-            "ext-curl": "*"
-        },
-        "time": "2015-06-25T17:26:56+00:00",
-        "type": "library",
-        "installation-source": "dist",
-        "autoload": {
-            "psr-0": {
-                "Buzz": "lib/"
-            }
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "MIT"
-        ],
-        "authors": [
-            {
-                "name": "Kris Wallsmith",
-                "email": "kris.wallsmith@gmail.com",
-                "homepage": "http://kriswallsmith.net/"
-            }
-        ],
-        "description": "Lightweight HTTP client",
-        "homepage": "https://github.com/kriswallsmith/Buzz",
-        "keywords": [
-            "curl",
-            "http client"
-        ],
-        "support": {
-            "issues": "https://github.com/kriswallsmith/Buzz/issues",
-            "source": "https://github.com/kriswallsmith/Buzz/tree/v0.15"
-        }
-    },
-    {
-        "name": "league/url",
-        "version": "3.3.5",
-        "version_normalized": "3.3.5.0",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/thephpleague/url.git",
-            "reference": "1ae2c3ce29a7c5438339ff6388225844e6479da8"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/thephpleague/url/zipball/1ae2c3ce29a7c5438339ff6388225844e6479da8",
-            "reference": "1ae2c3ce29a7c5438339ff6388225844e6479da8",
-            "shasum": ""
-        },
-        "require": {
-            "ext-mbstring": "*",
-            "php": ">=5.3.0",
-            "true/punycode": "^2.0"
-        },
-        "require-dev": {
-            "phpunit/phpunit": "^4.0"
-        },
-        "time": "2015-07-15T08:24:12+00:00",
-        "type": "library",
-        "extra": {
-            "branch-alias": {
-                "dev-master": "3.3-dev"
-            }
-        },
-        "installation-source": "dist",
-        "autoload": {
-            "psr-4": {
-                "League\\Url\\": "src"
-            }
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "MIT"
-        ],
-        "authors": [
-            {
-                "name": "Ignace Nyamagana Butera",
-                "email": "nyamsprod@gmail.com",
-                "homepage": "https://github.com/nyamsprod/",
-                "role": "Developer"
-            }
-        ],
-        "description": "League/url is a lightweight PHP Url manipulating library",
-        "homepage": "http://url.thephpleague.com",
-        "keywords": [
-            "parse_url",
-            "php",
-            "url"
-        ],
-        "support": {
-            "forum": "https://groups.google.com/forum/#!forum/thephpleague",
-            "issues": "https://github.com/thephpleague/url/issues",
-            "source": "https://github.com/thephpleague/url/tree/3.x"
-        },
-        "abandoned": "league/uri"
-    },
-    {
-        "name": "phpmailer/phpmailer",
-        "version": "v6.8.0",
-        "version_normalized": "6.8.0.0",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/PHPMailer/PHPMailer.git",
-            "reference": "df16b615e371d81fb79e506277faea67a1be18f1"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/PHPMailer/PHPMailer/zipball/df16b615e371d81fb79e506277faea67a1be18f1",
-            "reference": "df16b615e371d81fb79e506277faea67a1be18f1",
-            "shasum": ""
-        },
-        "require": {
-            "ext-ctype": "*",
-            "ext-filter": "*",
-            "ext-hash": "*",
-            "php": ">=5.5.0"
-        },
-        "require-dev": {
-            "dealerdirect/phpcodesniffer-composer-installer": "^0.7.2",
-            "doctrine/annotations": "^1.2.6 || ^1.13.3",
-            "php-parallel-lint/php-console-highlighter": "^1.0.0",
-            "php-parallel-lint/php-parallel-lint": "^1.3.2",
-            "phpcompatibility/php-compatibility": "^9.3.5",
-            "roave/security-advisories": "dev-latest",
-            "squizlabs/php_codesniffer": "^3.7.1",
-            "yoast/phpunit-polyfills": "^1.0.4"
-        },
-        "suggest": {
-            "ext-mbstring": "Needed to send email in multibyte encoding charset or decode encoded addresses",
-            "ext-openssl": "Needed for secure SMTP sending and DKIM signing",
-            "greew/oauth2-azure-provider": "Needed for Microsoft Azure XOAUTH2 authentication",
-            "hayageek/oauth2-yahoo": "Needed for Yahoo XOAUTH2 authentication",
-            "league/oauth2-google": "Needed for Google XOAUTH2 authentication",
-            "psr/log": "For optional PSR-3 debug logging",
-            "symfony/polyfill-mbstring": "To support UTF-8 if the Mbstring PHP extension is not enabled (^1.2)",
-            "thenetworg/oauth2-azure": "Needed for Microsoft XOAUTH2 authentication"
-        },
-        "time": "2023-03-06T14:43:22+00:00",
-        "type": "library",
-        "installation-source": "dist",
-        "autoload": {
-            "psr-4": {
-                "PHPMailer\\PHPMailer\\": "src/"
-            }
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "LGPL-2.1-only"
-        ],
-        "authors": [
-            {
-                "name": "Marcus Bointon",
-                "email": "phpmailer@synchromedia.co.uk"
-            },
-            {
-                "name": "Jim Jagielski",
-                "email": "jimjag@gmail.com"
-            },
-            {
-                "name": "Andy Prevost",
-                "email": "codeworxtech@users.sourceforge.net"
-            },
-            {
-                "name": "Brent R. Matzelle"
-            }
-        ],
-        "description": "PHPMailer is a full-featured email creation and transfer class for PHP",
-        "funding": [
-            {
-                "url": "https://github.com/Synchro",
-                "type": "github"
-            }
-        ]
-    },
-    {
-        "name": "symfony/polyfill-mbstring",
-        "version": "v1.18.1",
-        "version_normalized": "1.18.1.0",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/symfony/polyfill-mbstring.git",
-            "reference": "a6977d63bf9a0ad4c65cd352709e230876f9904a"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/symfony/polyfill-mbstring/zipball/a6977d63bf9a0ad4c65cd352709e230876f9904a",
-            "reference": "a6977d63bf9a0ad4c65cd352709e230876f9904a",
-            "shasum": ""
-        },
-        "require": {
-            "php": ">=5.3.3"
-        },
-        "suggest": {
-            "ext-mbstring": "For best performance"
-        },
-        "time": "2020-07-14T12:35:20+00:00",
-        "type": "library",
-        "extra": {
-            "branch-alias": {
-                "dev-master": "1.18-dev"
-            },
-            "thanks": {
-                "name": "symfony/polyfill",
-                "url": "https://github.com/symfony/polyfill"
-            }
-        },
-        "installation-source": "dist",
-        "autoload": {
-            "psr-4": {
-                "Symfony\\Polyfill\\Mbstring\\": ""
-            },
-            "files": [
-                "bootstrap.php"
-            ]
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "MIT"
-        ],
-        "authors": [
-            {
-                "name": "Nicolas Grekas",
-                "email": "p@tchwork.com"
-            },
-            {
-                "name": "Symfony Community",
-                "homepage": "https://symfony.com/contributors"
-            }
-        ],
-        "description": "Symfony polyfill for the Mbstring extension",
-        "homepage": "https://symfony.com",
-        "keywords": [
-            "compatibility",
-            "mbstring",
-            "polyfill",
-            "portable",
-            "shim"
-        ],
-        "support": {
-            "source": "https://github.com/symfony/polyfill-mbstring/tree/v1.18.1"
-        },
-        "funding": [
-            {
-                "url": "https://symfony.com/sponsor",
-                "type": "custom"
-            },
-            {
-                "url": "https://github.com/fabpot",
-                "type": "github"
-            },
-            {
-                "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
-                "type": "tidelift"
-            }
-        ]
-    },
-    {
-        "name": "tecnickcom/tc-lib-barcode",
-        "version": "1.17.6",
-        "version_normalized": "1.17.6.0",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/tecnickcom/tc-lib-barcode.git",
-            "reference": "a8a7183e2be6379e522dc825a3b7a3af5394a9e7"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/tecnickcom/tc-lib-barcode/zipball/a8a7183e2be6379e522dc825a3b7a3af5394a9e7",
-            "reference": "a8a7183e2be6379e522dc825a3b7a3af5394a9e7",
-            "shasum": ""
-        },
-        "require": {
-            "ext-bcmath": "*",
-            "ext-date": "*",
-            "ext-gd": "*",
-            "ext-pcre": "*",
-            "php": ">=5.4",
-            "tecnickcom/tc-lib-color": "^1.14"
-        },
-        "require-dev": {
-            "pdepend/pdepend": "2.8.0",
-            "phploc/phploc": "7.0.2 || 6.0.2 || 5.0.0 || 4.0.1 || 3.0.1 || 2.1.5",
-            "phpmd/phpmd": "2.9.1",
-            "phpunit/phpunit": "9.5.0 || 8.5.13 || 7.5.20 || 6.5.14 || 5.7.27 || 4.8.36",
-            "sebastian/phpcpd": "6.0.3 || 5.0.2 || 4.1.0 || 3.0.1 || 2.0.4",
-            "squizlabs/php_codesniffer": "3.5.8 || 2.9.2"
-        },
-        "time": "2021-02-07T13:18:02+00:00",
-        "type": "library",
-        "installation-source": "dist",
-        "autoload": {
-            "psr-4": {
-                "Com\\Tecnick\\Barcode\\": "src"
-            }
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "LGPL-3.0"
-        ],
-        "authors": [
-            {
-                "name": "Nicola Asuni",
-                "email": "info@tecnick.com",
-                "role": "lead"
-            }
-        ],
-        "description": "PHP library to generate linear and bidimensional barcodes",
-        "homepage": "http://www.tecnick.com",
-        "keywords": [
-            "3 of 9",
-            "ANSI MH10.8M-1983",
-            "CBC",
-            "CODABAR",
-            "CODE 11",
-            "CODE 128 A B C",
-            "CODE 39",
-            "CODE 93",
-            "EAN 13",
-            "EAN 8",
-            "ECC200",
-            "Intelligent Mail Barcode",
-            "Interleaved 2 of 5",
-            "KIX",
-            "Klant",
-            "MSI",
-            "Onecode",
-            "PHARMACODE",
-            "PHARMACODE TWO-TRACKS",
-            "POSTNET",
-            "RMS4CC",
-            "Standard 2 of 5",
-            "UPC-A",
-            "UPC-E",
-            "USD-3",
-            "USPS-B-3200",
-            "USS-93",
-            "barcode",
-            "datamatrix",
-            "pdf417",
-            "planet",
-            "qr-code",
-            "royal mail",
-            "tc-lib-barcode",
-            "upc"
-        ],
-        "support": {
-            "issues": "https://github.com/tecnickcom/tc-lib-barcode/issues",
-            "source": "https://github.com/tecnickcom/tc-lib-barcode/tree/1.17.6"
-        },
-        "funding": [
-            {
-                "url": "https://www.paypal.com/cgi-bin/webscr?cmd=_donations&currency_code=GBP&business=paypal@tecnick.com&item_name=donation%20for%20tc-lib-barcode%20project",
-                "type": "custom"
-            }
-        ]
-    },
-    {
-        "name": "tecnickcom/tc-lib-color",
-        "version": "1.14.6",
-        "version_normalized": "1.14.6.0",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/tecnickcom/tc-lib-color.git",
-            "reference": "83cdb57fd900901c6aa2af8cfd67202518fb69b2"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/tecnickcom/tc-lib-color/zipball/83cdb57fd900901c6aa2af8cfd67202518fb69b2",
-            "reference": "83cdb57fd900901c6aa2af8cfd67202518fb69b2",
-            "shasum": ""
-        },
-        "require": {
-            "ext-pcre": "*",
-            "php": ">=5.3"
-        },
-        "require-dev": {
-            "pdepend/pdepend": "2.8.0",
-            "phploc/phploc": "7.0.2 || 6.0.2 || 5.0.0 || 4.0.1 || 3.0.1 || 2.1.5",
-            "phpmd/phpmd": "2.9.1",
-            "phpunit/phpunit": "9.5.0 || 8.5.13 || 7.5.20 || 6.5.14 || 5.7.27 || 4.8.36",
-            "sebastian/phpcpd": "6.0.3 || 5.0.2 || 4.1.0 || 3.0.1 || 2.0.4",
-            "squizlabs/php_codesniffer": "3.5.8 || 2.9.2"
-        },
-        "time": "2021-02-07T13:13:45+00:00",
-        "type": "library",
-        "installation-source": "dist",
-        "autoload": {
-            "psr-4": {
-                "Com\\Tecnick\\Color\\": "src"
-            }
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "LGPL-3.0"
-        ],
-        "authors": [
-            {
-                "name": "Nicola Asuni",
-                "email": "info@tecnick.com",
-                "role": "lead"
-            }
-        ],
-        "description": "PHP library to manipulate various color representations",
-        "homepage": "http://www.tecnick.com",
-        "keywords": [
-            "cmyk",
-            "color",
-            "colors",
-            "colour",
-            "colours",
-            "hsl",
-            "hsla",
-            "javascript",
-            "rgb",
-            "rgba",
-            "tc-lib-color",
-            "web"
-        ],
-        "support": {
-            "issues": "https://github.com/tecnickcom/tc-lib-color/issues",
-            "source": "https://github.com/tecnickcom/tc-lib-color/tree/1.14.6"
-        },
-        "funding": [
-            {
-                "url": "https://www.paypal.com/cgi-bin/webscr?cmd=_donations&currency_code=GBP&business=paypal@tecnick.com&item_name=donation%20for%20tc-lib-color%20project",
-                "type": "custom"
-            }
-        ]
-    },
-    {
-        "name": "true/punycode",
-        "version": "v2.1.1",
-        "version_normalized": "2.1.1.0",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/true/php-punycode.git",
-            "reference": "a4d0c11a36dd7f4e7cd7096076cab6d3378a071e"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/true/php-punycode/zipball/a4d0c11a36dd7f4e7cd7096076cab6d3378a071e",
-            "reference": "a4d0c11a36dd7f4e7cd7096076cab6d3378a071e",
-            "shasum": ""
-        },
-        "require": {
-            "php": ">=5.3.0",
-            "symfony/polyfill-mbstring": "^1.3"
-        },
-        "require-dev": {
-            "phpunit/phpunit": "~4.7",
-            "squizlabs/php_codesniffer": "~2.0"
-        },
-        "time": "2016-11-16T10:37:54+00:00",
-        "type": "library",
-        "installation-source": "dist",
-        "autoload": {
-            "psr-4": {
-                "TrueBV\\": "src/"
-            }
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "MIT"
-        ],
-        "authors": [
-            {
-                "name": "Renan Gonçalves",
-                "email": "renan.saddam@gmail.com"
-            }
-        ],
-        "description": "A Bootstring encoding of Unicode for Internationalized Domain Names in Applications (IDNA)",
-        "homepage": "https://github.com/true/php-punycode",
-        "keywords": [
-            "idna",
-            "punycode"
-        ],
-        "support": {
-            "issues": "https://github.com/true/php-punycode/issues",
-            "source": "https://github.com/true/php-punycode/tree/master"
-        },
-        "abandoned": true
-    }
-]
+        "dev": true,
+        "dev-package-names": []
+}
