@@ -37,7 +37,7 @@ $contents['type'] = ($type != 'str') ? 'all' : 'str';
 $contents['savetype'] = ($ext != 'sql') ? 'gz' : 'sql';
 
 $file_ext = ($contents['savetype'] == 'sql') ? 'sql' : 'sql.gz';
-$file_name = NV_CHECK_SESSION . '_backupdata_' . date('Y-m-d-H-i', time()) . '.' . $file_ext;
+$file_name = date('Y-m-d-H-i-s') . '_backupdata_' . NV_CHECK_SESSION . '.' . $file_ext;
 
 $log_dir = NV_ROOTDIR . '/' . NV_LOGS_DIR . '/dump_backup';
 if ($global_config['idsite']) {

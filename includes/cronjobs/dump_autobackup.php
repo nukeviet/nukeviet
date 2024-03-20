@@ -32,14 +32,15 @@ function cron_dump_autobackup()
     $file_ext = ($contents['savetype'] == 'sql') ? 'sql' : 'sql.gz';
     $log_dir = NV_ROOTDIR . '/' . NV_LOGS_DIR . '/dump_backup';
 
-    $contents['filename'] = $log_dir . '/' . md5(nv_genpass(10) . NV_CHECK_SESSION) . '_' . $current_day . '.' . $file_ext;
+    $contents['filename'] = $log_dir . '/' . date('Y-m-d-H-i-s') . '_' . md5(nv_genpass(10) . NV_CHECK_SESSION) . '.' . $file_ext;
 
     if (!file_exists($contents['filename'])) {
         if ($dh = opendir($log_dir)) {
             while (($file = readdir($dh)) !== false) {
-                if (preg_match('/^([a-zA-Z0-9]+)\_([0-9]+)\.(' . nv_preg_quote($file_ext) . ')/', $file, $m)) {
-                    if ((int) ($m[2]) > 0 and (int) ($m[2]) < $w_day) {
-                        @unlink($log_dir . '/' . $file);
+                if (preg_match('/^([0-9]{4})\-([0-9]{1,2})\-([0-9]{1,2})\-([0-9]{1,2})\-([0-9]{1,2})\-([0-9]{1,2})\_[a-zA-Z0-9]+\.(' . nv_preg_quote($file_ext) . ')/', $file, $m)) {
+                    $fctime = mktime(intval($m[4]), intval($m[5]), intval($m[6]), intval($m[2]), intval($m[3]), intval($m[1]));
+                    if ($fctime !== false and $fctime < $w_day) {
+                        unlink($log_dir . '/' . $file);
                     }
                 }
             }
