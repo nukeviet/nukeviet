@@ -1052,14 +1052,12 @@ if ($nv_update_config['step'] == 1) {
 
             $type = $nv_Request->get_title('type', 'get', '');
 
-            $current_day = mktime(0, 0, 0, date('n', NV_CURRENTTIME), date('j', NV_CURRENTTIME), date('Y', NV_CURRENTTIME));
-
             $contents = [];
             $contents['savetype'] = ($type == 'sql') ? 'sql' : 'gz';
             $file_ext = ($contents['savetype'] == 'sql') ? 'sql' : 'sql.gz';
             $log_dir = NV_ROOTDIR . '/' . NV_LOGS_DIR . '/dump_backup';
 
-            $contents['filename'] = $log_dir . '/' . md5(nv_genpass(10) . NV_CHECK_SESSION) . '_' . $current_day . '.' . $file_ext;
+            $contents['filename'] = $log_dir . '/' . date('Y-m-d-H-i-s') . '_' . md5(nv_genpass(10) . NV_CHECK_SESSION) . '.' . $file_ext;
 
             if (!file_exists($contents['filename'])) {
                 $contents['tables'] = [];
