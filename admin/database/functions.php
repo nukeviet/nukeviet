@@ -24,9 +24,7 @@ $allow_func = [
     'savefile',
     'download',
     'optimize',
-    'file',
-    'getfile',
-    'delfile'
+    'file'
 ];
 if (defined('NV_IS_GODADMIN')) {
     $allow_func[] = 'setting';
