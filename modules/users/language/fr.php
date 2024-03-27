@@ -254,6 +254,7 @@ $lang_module['verifykey_empty'] = 'Code de certifier n\'est pas déclaré';
 $lang_module['verifykey_issend'] = 'Le code de certifier vient d\'être envoyé. Vous devez attendre %1$d minutes pour demander à nouveau un code de certifier';
 $lang_module['edit_mail_subject'] = 'La mise à jour les infos du compte réussite';
 $lang_module['edit_mail_content'] = '%1$s<br /><br /> Votre compte sur le site Web %2$s est mise à jour avec nouveau %3$s qui est <strong>%4$s</strong>.<br /><br /> C\'est un courier automatique qui est envoyé à votre email à partir du site %2$s.';
+$lang_module['edit_mail_content_pw'] = '%1$s<br /><br /> Votre compte sur le site Web %2$s est mise à jour avec un nouveau mot %3$s.<br /><br /> C\'est un courier automatique qui est envoyé à votre email à partir du site %2$s.';
 $lang_module['email_not_change'] = 'Même email que celui actuel';
 $lang_module['required'] = 'Ce zone est obligatoire';
 $lang_module['safe_mode'] = 'Mode sans échec';

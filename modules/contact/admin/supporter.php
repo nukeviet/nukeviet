@@ -14,8 +14,6 @@ if (!defined('NV_IS_FILE_ADMIN')) {
 }
 
 /**
- * supporter_fix_weight()
- *
  * @param int $departmentid
  * @param int $skip_id
  * @param int $skip_weight
@@ -59,6 +57,7 @@ if ($nv_Request->isset_request('fc', 'post')) {
             ]);
         }
 
+        nv_insert_logs(NV_LANG_DATA, $module_name, 'LOG_SUPPORTER_WEIGHT', 'ID: ' . $id . ', W: ' . $new_weight, $admin_info['userid']);
         supporter_fix_weight($supporter['departmentid'], $id, $new_weight);
         $db->query('UPDATE ' . NV_MOD_TABLE . '_supporter SET weight=' . $new_weight . ' WHERE id=' . $id);
         $nv_Cache->delMod($module_name);
@@ -160,10 +159,14 @@ if ($nv_Request->isset_request('fc', 'post')) {
             $post['others'] = !empty($others) ? json_encode($others) : '';
             try {
                 if (empty($id)) {
+                    nv_insert_logs(NV_LANG_DATA, $module_name, 'LOG_ADD_SUPPORTER', 'NAME: ' . $post['full_name'], $admin_info['userid']);
+
                     $weight = $db->query('SELECT max(weight) FROM ' . NV_MOD_TABLE . '_supporter WHERE departmentid=' . $post['departmentid'])->fetchColumn();
                     $weight = (int) $weight + 1;
                     $stmt = $db->prepare('INSERT INTO ' . NV_MOD_TABLE . '_supporter (departmentid, full_name, image, phone, email, others, weight) VALUES (' . $post['departmentid'] . ', :full_name, :image, :phone, :email, :others, ' . $weight . ')');
                 } else {
+                    nv_insert_logs(NV_LANG_DATA, $module_name, 'LOG_EDIT_SUPPORTER', 'ID: ' . $id . ', NAME: ' . $post['full_name'], $admin_info['userid']);
+
                     if ($post['departmentid'] == $supporter['departmentid']) {
                         $weight = (int) $supporter['weight'];
                     } else {
@@ -259,6 +262,8 @@ if ($nv_Request->isset_request('fc', 'post')) {
             ]);
         }
 
+        nv_insert_logs(NV_LANG_DATA, $module_name, 'LOG_DEL_SUPPORTER', 'ID: ' . $id . ', NAME: ' . $supporter['full_name'], $admin_info['userid']);
+
         $db->query('DELETE FROM ' . NV_MOD_TABLE . '_supporter  WHERE id = ' . $id);
         supporter_fix_weight($supporter['departmentid']);
         $nv_Cache->delMod($module_name);
@@ -280,6 +285,8 @@ if ($nv_Request->isset_request('fc', 'post')) {
         }
 
         $new_status = !empty($supporter['act']) ? 0 : 1;
+
+        nv_insert_logs(NV_LANG_DATA, $module_name, 'LOG_STATUS_SUPPORTER', 'ID: ' . $id . ', NAME: ' . $supporter['full_name'], $admin_info['userid']);
 
         $db->query('UPDATE ' . NV_MOD_TABLE . '_supporter SET act=' . $new_status . ' WHERE id=' . $id);
         $nv_Cache->delMod($module_name);

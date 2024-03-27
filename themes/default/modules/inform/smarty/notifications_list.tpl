@@ -66,7 +66,8 @@
                 'trigger': 'focus',
                 'placement': 'top',
                 'html': true,
-                'content': content
+                'content': content,
+                'sanitize': false
             })
         })
     }){/literal}

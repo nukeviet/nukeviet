@@ -744,6 +744,14 @@ $(document).ready(function() {
         }
     });
 
+    $('#pp-settings [data-toggle="pp_act"]').on('change', function() {
+        if ($('#pp-settings [data-toggle="pp_act"]:checked').length > 0) {
+            $($(this).data('target')).collapse('show');
+        } else {
+            $($(this).data('target')).collapse('hide');
+        }
+    });
+
     $('#csp-settings [data-toggle=none]').on('click', function() {
         if ($(this).is(':checked')) {
             var conf = confirm($(this).parents('form').data('confirm'));
@@ -754,6 +762,20 @@ $(document).ready(function() {
             }
         } else {
             $('[name^=directives]', $(this).parents('.directive')).prop('disabled', false)
+        }
+    });
+
+    // Xử lý khi chọn giá trị nguồn ở thiết lập PP
+    $('#pp-settings [data-toggle=none], #pp-settings [data-toggle=all], #pp-settings [data-toggle=ignore]').on('click', function() {
+        if ($(this).is(':checked')) {
+            if ($('[data-toggle=none]:checked,[data-toggle=all]:checked,[data-toggle=ignore]:checked', $(this).parents('.directive')).not(this).length > 0 || confirm($(this).parents('form').data('cfnone'))) {
+                $('[name^=directives]', $(this).parents('.directive')).not('[data-toggle=none],[data-toggle=all],[data-toggle=ignore]').prop('disabled', true);
+                $('[data-toggle=none],[data-toggle=all],[data-toggle=ignore]', $(this).parents('.directive')).not(this).prop('checked', false);
+            } else {
+                $(this).prop('checked', false);
+            }
+        } else {
+            $('[name^=directives]', $(this).parents('.directive')).prop('disabled', false);
         }
     });
 

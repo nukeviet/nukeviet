@@ -23,7 +23,7 @@ CKEDITOR.editorConfig = function( config ) {
     config.resize_minHeight = 100;
     config.resize_maxHeight = 600;
     config.iframe_attributes = {
-        sandbox: 'allow-scripts allow-same-origin allow-forms',
+        sandbox: 'allow-scripts allow-same-origin allow-forms allow-presentation',
         allow: 'autoplay'
     };
     // Default setting.

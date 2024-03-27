@@ -580,7 +580,8 @@ $(function() {
                 html: true,
                 placement: "bottom",
                 content: getPopoverContent(this),
-                trigger: "manual"
+                trigger: "manual",
+                sanitize: false
             });
             $(this).popover('show');
             $(this).on('shown.bs.popover', function() {

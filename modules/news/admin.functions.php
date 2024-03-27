@@ -51,10 +51,14 @@ $array_allowed_comm = [
     $nv_Lang->getGlobal('level4')
 ];
 
+// Xác định layout giao diện của module đang dùng
+$selectthemes = (!empty($site_mods[$module_name]['theme'])) ? $site_mods[$module_name]['theme'] : $global_config['site_theme'];
+$layout_array = nv_scandir(NV_ROOTDIR . '/themes/' . $selectthemes . '/layout', $global_config['check_op_layout']);
+
 define('NV_IS_FILE_ADMIN', true);
 require_once NV_ROOTDIR . '/modules/' . $module_file . '/global.functions.php';
 
-//Document
+// Documents
 $array_url_instruction['main'] = 'https://wiki.nukeviet.vn/nukeviet4:admin:news';
 $array_url_instruction['cat'] = 'https://wiki.nukeviet.vn/nukeviet4:admin:news#quản_ly_chuyen_mục';
 $array_url_instruction['content'] = 'https://wiki.nukeviet.vn/nukeviet4:admin:news#them_bai_viet';

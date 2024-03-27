@@ -254,6 +254,7 @@ $lang_module['verifykey_empty'] = 'The verification code is undeclared';
 $lang_module['verifykey_issend'] = 'A verifykey have been sent a moment ago. After %1$d  minutes you can request for other verifykey .';
 $lang_module['edit_mail_subject'] = 'Update account infomation success';
 $lang_module['edit_mail_content'] = '%1$s<br /><br />Your account on the website  %2$s has been updated with %3$s new <strong>%4$s</strong>.<br /><br />These are automatic messages sent to your e-mail inbox from website %2$s.';
+$lang_module['edit_mail_content_pw'] = '%1$s<br /><br />Your account on the website  %2$s has been updated with a new %3$s.<br /><br />These are automatic messages sent to your e-mail inbox from website %2$s.';
 $lang_module['email_not_change'] = 'Email nothing new other than email is being used !';
 $lang_module['required'] = 'This field is required';
 $lang_module['safe_mode'] = 'Safe mode';

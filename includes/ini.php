@@ -201,7 +201,7 @@ function set_ini_file(&$sys_info)
     $content_config .= "\$sys_info['fileuploads_support'] = " . ($sys_info['fileuploads_support'] ? 'true' : 'false') . ";\n";
 
     //curl_support
-    $sys_info['curl_support'] = (extension_loaded('curl') and (empty($sys_info['disable_functions']) or (!empty($sys_info['disable_functions']) and !preg_grep('/^curl\_/', $sys_info['disable_functions'])))) ? true : false;
+    $sys_info['curl_support'] = (extension_loaded('curl') and function_exists('curl_init') and !in_array('curl_init', $sys_info['disable_functions'], true)) ? true : false;
     $content_config .= "\$sys_info['curl_support'] = " . ($sys_info['curl_support'] ? 'true' : 'false') . ";\n";
 
     //ftp_support
@@ -281,7 +281,7 @@ function set_ini_file(&$sys_info)
 
         check_ini($ini_set, 'log_errors', 0);
         check_ini($ini_set, 'display_errors', 0);
-        
+
         $session_save_handler = ini_get('session.save_handler');
         $session_save_path = ini_get('session.save_path');
         if (strcasecmp($global_config['session_handler'], $session_save_handler) != 0) {

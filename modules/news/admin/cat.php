@@ -22,7 +22,7 @@ if (defined('NV_EDITOR')) {
 $currentpath = NV_UPLOADS_DIR . '/' . $module_upload;
 $error = $admins = '';
 $savecat = 0;
-[$catid, $parentid, $title, $titlesite, $alias, $description, $descriptionhtml, $keywords, $groups_view, $image, $viewdescription, $featured, $ad_block_cat] = [
+[$catid, $parentid, $title, $titlesite, $alias, $description, $descriptionhtml, $keywords, $groups_view, $image, $viewdescription, $featured, $ad_block_cat, $layout_func] = [
     0,
     0,
     '',
@@ -35,13 +35,12 @@ $savecat = 0;
     '',
     0,
     0,
+    '',
     ''
 ];
 
 $groups_list = nv_groups_list();
-
 $parentid = $nv_Request->get_int('parentid', 'get,post', 0);
-
 $catid = $nv_Request->get_int('catid', 'get', 0);
 
 if ($catid > 0 and isset($global_array_cat[$catid])) {
@@ -57,6 +56,7 @@ if ($catid > 0 and isset($global_array_cat[$catid])) {
     $groups_view = $global_array_cat[$catid]['groups_view'];
     $featured = $global_array_cat[$catid]['featured'];
     $ad_block_cat = $global_array_cat[$catid]['ad_block_cat'];
+    $layout_func = $global_array_cat[$catid]['layout_func'];
 
     if (!defined('NV_IS_ADMIN_MODULE')) {
         if (!(isset($array_cat_admin[$admin_id][$parentid]) and $array_cat_admin[$admin_id][$parentid]['admin'] == 1)) {
@@ -115,6 +115,11 @@ if (!empty($savecat)) {
     $_ad_block_cat = $nv_Request->get_array('ad_block_cat', 'post', []);
     $ad_block_cat = !empty($_ad_block_cat) ? implode(',', $_ad_block_cat) : '';
 
+    $layout_func = $nv_Request->get_title('layout_func', 'post', '');
+    if (!in_array('layout.' . $layout_func . '.tpl', $layout_array)) {
+        $layout_func = '';
+    }
+
     $image = $nv_Request->get_string('image', 'post', '');
     if (nv_is_file($image, NV_UPLOADS_DIR . '/' . $module_upload)) {
         $lu = strlen(NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/');
@@ -135,8 +140,17 @@ if (!empty($savecat)) {
         $viewcat = 'viewcat_page_new';
         $subcatid = '';
 
-        $sql = 'INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . "_cat (parentid, title, titlesite, alias, description, descriptionhtml, image, viewdescription, weight, sort, lev, viewcat, numsubcat, subcatid, numlinks, newday, featured, ad_block_cat, keywords, admins, add_time, edit_time, groups_view, status) VALUES
-			(:parentid, :title, :titlesite, :alias, :description, :descriptionhtml, '', '" . $viewdescription . "', :weight, '0', '0', :viewcat, '0', :subcatid, '3', '2', :featured, :ad_block_cat, :keywords, :admins, " . NV_CURRENTTIME . ', ' . NV_CURRENTTIME . ', :groups_view, 1)';
+        $sql = 'INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . "_cat (
+            parentid, title, titlesite, alias, description, descriptionhtml,
+            image, viewdescription, weight, sort, lev, viewcat, numsubcat,
+            subcatid, numlinks, newday, featured, ad_block_cat, layout_func, keywords,
+            admins, add_time, edit_time, groups_view, status
+        ) VALUES (
+            :parentid, :title, :titlesite, :alias, :description, :descriptionhtml,
+            '', '" . $viewdescription . "', :weight, '0', '0', :viewcat, '0',
+            :subcatid, '3', '2', :featured, :ad_block_cat, :layout_func, :keywords, :admins,
+            " . NV_CURRENTTIME . ', ' . NV_CURRENTTIME . ', :groups_view, 1
+        )';
 
         $data_insert = [];
         $data_insert['parentid'] = $parentid;
@@ -153,6 +167,7 @@ if (!empty($savecat)) {
         $data_insert['groups_view'] = $groups_view;
         $data_insert['featured'] = $featured;
         $data_insert['ad_block_cat'] = $ad_block_cat;
+        $data_insert['layout_func'] = $layout_func;
 
         $newcatid = $db->insert_id($sql, 'catid', $data_insert);
         if ($newcatid > 0) {
@@ -180,7 +195,13 @@ if (!empty($savecat)) {
             $error = $nv_Lang->getModule('errorsave');
         }
     } elseif ($catid > 0 and $title != '') {
-        $stmt = $db->prepare('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_cat SET parentid= :parentid, title= :title, titlesite=:titlesite, alias = :alias, description = :description, descriptionhtml = :descriptionhtml, image= :image, viewdescription= :viewdescription,featured=:featured, ad_block_cat=:ad_block_cat, keywords= :keywords, groups_view= :groups_view, edit_time=' . NV_CURRENTTIME . ' WHERE catid =' . $catid);
+        $stmt = $db->prepare('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_cat SET
+            parentid= :parentid, title= :title, titlesite=:titlesite, alias = :alias,
+            description = :description, descriptionhtml = :descriptionhtml,
+            image= :image, viewdescription= :viewdescription,featured=:featured,
+            ad_block_cat=:ad_block_cat, layout_func=:layout_func, keywords= :keywords, groups_view= :groups_view,
+            edit_time=' . NV_CURRENTTIME . '
+        WHERE catid =' . $catid);
         $stmt->bindParam(':parentid', $parentid, PDO::PARAM_INT);
         $stmt->bindParam(':title', $title, PDO::PARAM_STR);
         $stmt->bindParam(':titlesite', $titlesite, PDO::PARAM_STR);
@@ -193,6 +214,7 @@ if (!empty($savecat)) {
         $stmt->bindParam(':groups_view', $groups_view, PDO::PARAM_STR);
         $stmt->bindParam(':featured', $featured, PDO::PARAM_INT);
         $stmt->bindParam(':ad_block_cat', $ad_block_cat, PDO::PARAM_STR);
+        $stmt->bindParam(':layout_func', $layout_func, PDO::PARAM_STR);
         $stmt->execute();
 
         if ($stmt->rowCount()) {
@@ -385,6 +407,16 @@ if (!empty($array_cat_list)) {
         $descriptionhtml = '<textarea style="width: 100%" name="descriptionhtml" id="descriptionhtml" cols="20" rows="15">' . $descriptionhtml . '</textarea>';
     }
     $xtpl->assign('DESCRIPTIONHTML', $descriptionhtml);
+
+    // Xuất hiển thị các layout
+    foreach ($layout_array as $value) {
+        $value = preg_replace($global_config['check_op_layout'], '\\1', $value);
+        $xtpl->assign('LAYOUT_FUNC', [
+            'key' => $value,
+            'selected' => ($layout_func == $value) ? ' selected="selected"' : ''
+        ]);
+        $xtpl->parse('main.content.layout_func');
+    }
 
     $xtpl->parse('main.content');
 }

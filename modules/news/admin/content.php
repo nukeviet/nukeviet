@@ -83,10 +83,6 @@ if (defined('NV_EDITOR')) {
     require_once NV_ROOTDIR . '/' . NV_EDITORSDIR . '/' . NV_EDITOR . '/nv.php';
 }
 
-// Lựa chọn Layout
-$selectthemes = (!empty($site_mods[$module_name]['theme'])) ? $site_mods[$module_name]['theme'] : $global_config['site_theme'];
-$layout_array = nv_scandir(NV_ROOTDIR . '/themes/' . $selectthemes . '/layout', $global_config['check_op_layout']);
-
 // Xác định và tạo các thư mục upload
 $username_alias = change_alias($admin_info['username']);
 $array_structure_image = [];
@@ -664,6 +660,9 @@ if ($is_submit_form) {
     }
     // Lua chon Layout
     $rowcontent['layout_func'] = $nv_Request->get_title('layout_func', 'post', '');
+    if (!in_array('layout.' . $rowcontent['layout_func'] . '.tpl', $layout_array)) {
+        $rowcontent['layout_func'] = '';
+    }
 
     // Tự động tạo mục lục
     $rowcontent['auto_nav'] = $nv_Request->get_int('auto_nav', 'post', 0);

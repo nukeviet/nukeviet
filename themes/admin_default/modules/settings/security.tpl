@@ -17,6 +17,7 @@
                 <!-- END: sys_tabs -->
                 <option value="settingCSP" {TAB5_SEL}>{LANG.csp}</option>
                 <option value="settingRP" {TAB6_SEL}>{LANG.rp}</option>
+                <option value="settingPP" {TAB7_SEL}>{LANG.pp}</option>
             </select>
         </div>
         <ul class="nav nav-pills nav-stacked hidden-xs hidden-sm" role="tablist" id="settingTabs">
@@ -29,6 +30,7 @@
             <!-- END: sys_tabs2 -->
             <li role="presentation" class="{TAB5_ACTIVE}"><a href="#settingCSP" aria-controls="settingCSP" aria-offsets="5" role="tab" data-toggle="pill" data-location="{FORM_ACTION}&amp;selectedtab=5"><em class="fa fa-caret-right"></em> {LANG.csp}</a></li>
             <li role="presentation" class="{TAB6_ACTIVE}"><a href="#settingRP" aria-controls="settingRP" aria-offsets="6" role="tab" data-toggle="pill" data-location="{FORM_ACTION}&amp;selectedtab=6"><em class="fa fa-caret-right"></em> {LANG.rp}</a></li>
+            <li role="presentation" class="{TAB7_ACTIVE}"><a href="#settingPP" aria-controls="settingPP" aria-offsets="7" role="tab" data-toggle="pill" data-location="{FORM_ACTION}&amp;selectedtab=7"><em class="fa fa-caret-right"></em> {LANG.pp}</a></li>
         </ul>
     </div>
     <div class="col-md-18 col-md-pull-6">
@@ -828,6 +830,67 @@
                             </li>
                             <!-- END: rp_directive -->
                         </ul>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Thiết lập PP -->
+            <div role="tabpanel" class="tab-pane{TAB7_ACTIVE}" id="settingPP">
+                <form action="{FORM_ACTION}" method="post" class="form-horizontal ajax-submit" id="pp-settings" data-cfnone="{LANG.csp_source_none_confirm}">
+                    <ul class="list-group">
+                        <li class="list-group-item active">
+                            <strong>{LANG.pp}</strong>
+                        </li>
+
+                        <li class="list-group-item">
+                            <p class="help-block">{LANG.pp_desc} <a href="https://www.w3.org/TR/permissions-policy/" target="_blank">{LANG.csp_details}</a>.</p>
+                            <p class="help-block">{LANG.pp_desc2}.</p>
+                            <p class="help-block">{LANG.pp_desc3}.</p>
+                            <label class="checkbox-inline">
+                                <input type="checkbox" class="form-control" value="1" name="nv_pp_act" data-target="#pp_options" data-toggle="pp_act" {PP_ACT}> <strong>{LANG.pp_act}</strong>
+                            </label>
+                            <label class="checkbox-inline">
+                                <input type="checkbox" class="form-control" value="1" name="nv_fp_act" data-target="#pp_options" data-toggle="pp_act"{FP_ACT}> <strong>{LANG.fp_act}</strong>
+                            </label>
+                        </li>
+                    </ul>
+                    <div class="panel-group collapse{PP_OPTIONS}" id="pp_options" role="tablist">
+                        <!-- BEGIN: pp_directive -->
+                        <div class="panel panel-default directive">
+                            <a class="panel-heading" style="display: block;text-decoration:none" role="tab" id="heading-pp-{DIRECTIVE.name}" data-toggle="collapse" href="#collapse-pp-{DIRECTIVE.name}" aria-expanded="true" aria-controls="collapse-pp-{DIRECTIVE.name}">
+                                <strong>{DIRECTIVE.name}</strong>
+                            </a>
+                            <div id="collapse-pp-{DIRECTIVE.name}" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="heading-pp-{DIRECTIVE.name}">
+                                <div class="panel-body">
+                                    <div class="help-block" style="margin-top:0">{DIRECTIVE.desc}</div>
+                                    <div class="m-bottom">
+                                        <p><strong>{LANG.csp_source_value}</strong></p>
+                                        <!-- BEGIN: checkbox -->
+                                        <span style="margin-right:15px">
+                                            <label>
+                                                <input type="checkbox" class="form-control" name="directives[{DIRECTIVE.name}][{SOURCE.key}]" value="1" data-toggle="{SOURCE.key}" {SOURCE.checked}{SOURCE.disabled}> {SOURCE.key}
+                                            </label>
+                                            <a href="#" data-toggle="popover" data-placement="auto" data-trigger="focus" data-content="{SOURCE.name}"><em class="fa fa-question-circle-o fa-pointer"></em></a>
+                                        </span>
+                                        <!-- END: checkbox -->
+                                    </div>
+                                    <!-- BEGIN: input -->
+                                    <div class="form-group mb-0">
+                                        <p><strong>{SOURCE.name}:</strong> <a href="#" data-toggle="popover" data-placement="auto" data-trigger="focus" data-content="{LANG.pp_source_hosts_note}"><em class="fa fa-question-circle-o fa-pointer"></em></a></p>
+                                        <textarea rows="{SOURCE.rows}" type="text" class="form-control" name="directives[{DIRECTIVE.name}][{SOURCE.key}]" {SOURCE.disabled}>{SOURCE.val}</textarea>
+                                        <div class="help-block mb-0">{LANG.csp_source_hosts_help}</div>
+                                    </div>
+                                    <!-- END: input -->
+                                </div>
+                            </div>
+                        </div>
+                        <!-- END: pp_directive -->
+                    </div>
+                    <div class="text-center">
+                        <input type="hidden" name="selectedtab" value="{SELECTEDTAB}" />
+                        <input type="hidden" name="checkss" value="{CHECKSS}" />
+                        <input type="hidden" name="ppsave" value="1" />
+                        <input type="submit" value="{GLANG.submit}" class="btn btn-primary" />
                     </div>
                 </form>
             </div>

@@ -558,7 +558,8 @@ function nv_capcha_txt($seccode, $type = 'captcha')
                 'headers' => [
                     'Referer' => NV_MY_DOMAIN
                 ],
-                'body' => $request
+                'body' => $request,
+                'httpversion' => '1.1'
             ];
             $array = $NV_Http->post('https://www.google.com/recaptcha/api/siteverify', $args);
             if (is_array($array) and !empty($array['body'])) {

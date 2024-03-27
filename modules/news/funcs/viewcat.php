@@ -54,6 +54,11 @@ if (!empty($global_array_cat[$catid]['image'])) {
     $meta_property['og:image:alt'] = $global_array_cat[$catid]['title'];
 }
 
+// Layout tùy chỉnh
+if (!empty($global_array_cat[$catid]['layout_func'])) {
+    $module_info['layout_funcs'][$op_file] = $global_array_cat[$catid]['layout_func'];
+}
+
 if (empty($contents)) {
     $array_catpage = [];
     $array_cat_other = [];

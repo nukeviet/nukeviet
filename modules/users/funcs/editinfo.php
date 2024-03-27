@@ -903,15 +903,17 @@ if ($checkss == $array_data['checkss'] and $array_data['type'] == 'basic') {
     oldPassSave($edit_userid, $row['password'], $row['pass_creation_time']);
     nv_apply_hook($module_name, 'user_change_password', [$row, $new_password]);
 
+    $sitename = '<a href="' . NV_MY_DOMAIN . NV_BASE_SITEURL . '">' . $global_config['site_name'] . '</a>';
+    $greeting = greeting_for_user_create($row['username'], $row['first_name'], $row['last_name'], $row['gender']);
     if ($global_config['send_pass']) {
-        $sitename = '<a href="' . NV_MY_DOMAIN . NV_BASE_SITEURL . '">' . $global_config['site_name'] . '</a>';
-        $greeting = greeting_for_user_create($row['username'], $row['first_name'], $row['last_name'], $row['gender']);
         $message = $nv_Lang->getModule('edit_mail_content', $greeting, $sitename, $nv_Lang->getGlobal('password'), $new_password);
-        @nv_sendmail_async([
-            $global_config['site_name'],
-            $global_config['site_email']
-        ], $row['email'], $nv_Lang->getModule('edit_mail_subject'), $message);
+    } else {
+        $message = $nv_Lang->getModule('edit_mail_content_pw', $greeting, $sitename, $nv_Lang->getGlobal('password'));
     }
+    @nv_sendmail_async([
+        $global_config['site_name'],
+        $global_config['site_email']
+    ], $row['email'], $nv_Lang->getModule('edit_mail_subject'), $message);
 
     $mess = $nv_Lang->getModule('editinfo_ok');
     if ($nv_Request->get_bool('forcedrelogin', 'post', false)) {

@@ -254,6 +254,7 @@ $lang_module['verifykey_empty'] = 'Mã xác minh chưa được khai báo';
 $lang_module['verifykey_issend'] = 'Việc gửi mã xác minh đã được thực hiện cách đây không lâu. Sau %1$d phút nữa bạn mới có thể đề nghị gửi lại mã xác minh.';
 $lang_module['edit_mail_subject'] = 'Hồ sơ của bạn đã được cập nhật';
 $lang_module['edit_mail_content'] = '%1$s<br /><br />Tài khoản của bạn tại website %2$s đã được cập nhật với %3$s mới là <strong>%4$s</strong>.<br /><br />Đây là thư tự động được gửi đến email của bạn từ website %2$s.';
+$lang_module['edit_mail_content_pw'] = '%1$s<br /><br />Tài khoản của bạn tại website %2$s đã được cập nhật %3$s mới.<br /><br />Đây là thư tự động được gửi đến email của bạn từ website %2$s.';
 $lang_module['email_not_change'] = 'Email mới không có gì khác so với email đang được sử dụng!';
 $lang_module['required'] = 'Trường này là bắt buộc.';
 $lang_module['safe_mode'] = 'Chế độ an toàn';
