@@ -17,9 +17,9 @@ if (!function_exists('array_is_list')) {
     /**
      * array_is_list()
      * Kiểm tra mảng có phải có dạng danh sách hay không (key từ 0 đến n)
-     * 
-     * @param mixed $a 
-     * @return bool 
+     *
+     * @param mixed $a
+     * @return bool
      */
     function array_is_list($a)
     {
@@ -571,7 +571,8 @@ function nv_capcha_txt($seccode)
                 'headers' => [
                     'Referer' => NV_MY_DOMAIN
                 ],
-                'body' => $request
+                'body' => $request,
+                'httpversion' => '1.1'
             ];
             $array = $NV_Http->post('https://www.google.com/recaptcha/api/siteverify', $args);
             if (is_array($array) and !empty($array['body'])) {
@@ -1528,7 +1529,7 @@ function nv_sendmail($from, $to, $subject, $message, $files = '', $AddEmbeddedIm
 
         $mail->Subject = nv_unhtmlspecialchars($sm_parameters['subject']);
         // https://www.php.net/manual/en/function.mail.php
-        // Lines should not be larger than 70 characters. 
+        // Lines should not be larger than 70 characters.
         $mail->WordWrap = 70;
         $mail->Body = $sm_parameters['message'];
         $mail->AltBody = strip_tags($message);
@@ -2879,7 +2880,7 @@ function nv_local_api($cmd, $params, $adminidentity = '', $module = '')
 /**
  * nv_autoLinkDisable()
  * Disable email engines from automatically hyperlinking a URL
- * 
+ *
  * @param string $text
  * @return string
  */
@@ -2893,12 +2894,12 @@ function nv_autoLinkDisable($text)
  * Make an asynchronous POST request
  * Thực hiện yêu cầu POST không đồng bộ trong nội bộ site mà không cần chờ phản hồi
  * => Không ảnh hưởng, không trì hoãn tiến trình đang chạy
- * 
+ *
  * post_async()
- * 
- * @param mixed $url 
- * @param mixed $params 
- * @param array $headers 
+ *
+ * @param mixed $url
+ * @param mixed $params
+ * @param array $headers
  */
 function post_async($url, $params, $headers = [])
 {
