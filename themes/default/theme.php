@@ -28,6 +28,11 @@ function nv_mailHTML($title, $content, $footer = '')
     $xtpl->assign('MESSAGE_TITLE', $title);
     $xtpl->assign('MESSAGE_CONTENT', $content);
     $xtpl->assign('MESSAGE_FOOTER', $footer);
+
+    if (!empty($global_config['site_phone'])) {
+        $xtpl->parse('main.phonenumber');
+    }
+    
     $xtpl->parse('main');
     return $xtpl->text('main');
 }
