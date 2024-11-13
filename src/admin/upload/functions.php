@@ -32,7 +32,7 @@ $allow_func = [
     'dlimg', 'renameimg', 'moveimg', 'folderlist',
     'delfolder', 'renamefolder', 'createfolder',
     'upload', 'addlogo', 'cropimg', 'rotateimg', 'download',
-    'webpconvert', 'compressimage', 'qualitychange'
+    'webpconvert', 'compressimage', 'qualitychange', 'js'
 ];
 
 if (defined('NV_IS_SPADMIN')) {

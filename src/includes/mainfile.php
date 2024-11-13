@@ -33,6 +33,8 @@ if (file_exists(NV_ROOTDIR . '/' . NV_DATADIR . '/config_global.php')) {
     require NV_ROOTDIR . '/' . NV_DATADIR . '/config_global.php';
 }
 
+define('SYS_CACHE_TIMESTAMP', $global_config['timestamp'] ?? NV_CURRENTTIME);
+
 // Vendor autoload
 require NV_ROOTDIR . '/includes/vendor/autoload.php';
 if (file_exists(NV_ROOTDIR . '/vendor/autoload.php')) {

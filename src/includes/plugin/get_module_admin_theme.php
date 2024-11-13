@@ -28,10 +28,7 @@ nv_add_hook($module_name, 'get_module_admin_theme', $priority, function ($vars) 
     if (($module_info['module_file'] ?? '') == 'users' and in_array($op, ['config'])) {
         return $new_theme;
     }
-    if (in_array($module_name, ['themes', 'emailtemplates', 'settings', 'seotools', 'modules', 'extensions', 'webtools', 'language', 'siteinfo', 'authors', 'database'])) {
-        return $new_theme;
-    }
-    if ($module_name == 'upload' and in_array($op, ['config', 'thumbconfig', 'uploadconfig'])) {
+    if (in_array($module_name, ['upload', 'themes', 'emailtemplates', 'settings', 'seotools', 'modules', 'extensions', 'webtools', 'language', 'siteinfo', 'authors', 'database'])) {
         return $new_theme;
     }
 

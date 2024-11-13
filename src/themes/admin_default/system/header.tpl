@@ -30,6 +30,7 @@
                  nv_my_ofs = {NV_SITE_TIMEZONE_OFFSET},
                  nv_my_abbr = '{NV_CURRENTTIME}',
                  nv_cookie_prefix = '{NV_COOKIE_PREFIX}',
+                 nv_cache_timestamp = '{TIMESTAMP}',
                  nv_check_pass_mstime = '{NV_CHECK_PASS_MSTIME}',
                  nv_safemode = {NV_SAFEMODE},
                  nv_area_admin = 1,

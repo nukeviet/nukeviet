@@ -33,6 +33,7 @@
         nv_my_ofs = {round($smarty.const.NV_SITE_TIMEZONE_OFFSET / 3600)},
         nv_my_abbr = '{$smarty.const.NV_CURRENTTIME}',
         nv_cookie_prefix = '{$GCONFIG.cookie_prefix}',
+        nv_cache_timestamp = '{$GCONFIG.timestamp}',
         nv_check_pass_mstime = '{($GCONFIG.admin_check_pass_time - 62) * 1000}',
         nv_safemode = {$ADMIN_INFO.safemode},
         nv_area_admin = 1,
