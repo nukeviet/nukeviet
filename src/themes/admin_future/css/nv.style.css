@@ -25324,7 +25324,6 @@ readers do not read off random characters that represent icons */
 .main-content {
   margin-left: 14rem;
   min-height: calc(100vh - 3.75rem - 3.75rem);
-  margin-top: 3.75rem;
   transition: margin-left 0.2s ease-in-out;
 }
 @media (max-width: 767.98px) {
@@ -25671,7 +25670,7 @@ readers do not read off random characters that represent icons */
 }
 .header-outer {
   background-color: var(--nv-header-bg-color);
-  position: fixed;
+  position: sticky;
   top: 0;
   left: 0;
   width: 100%;
@@ -25947,7 +25946,6 @@ readers do not read off random characters that represent icons */
 @media (max-width: 767.98px) {
   .left-sidebar {
     position: static;
-    margin-top: 3.75rem;
     --bs-border-width: 0;
     width: 100%;
     height: auto;
@@ -27180,6 +27178,329 @@ p + .image-style-side {
   /*rtl:begin:ignore*/
   left: 3px;
   /*rtl:end:ignore*/
+}
+
+.fmm-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1056;
+  width: 100vw;
+  height: 100vh;
+  background-color: #000;
+}
+.fmm-backdrop.show {
+  opacity: 0.5;
+}
+
+.fmm {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1057;
+  display: none;
+  width: 100%;
+  height: 100%;
+  overflow-x: hidden;
+  overflow-y: auto;
+  outline: 0;
+}
+
+.fmm-dialog {
+  position: relative;
+  width: auto;
+  pointer-events: none;
+  margin: 1rem;
+}
+
+.fmm.fade .fmm-dialog {
+  transition: transform 0.3s ease-out;
+  transform: translate(0, -50px);
+}
+
+.fmm.show .fmm-dialog {
+  transform: none;
+}
+
+.fmm-content {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  pointer-events: auto;
+  background-color: var(--bs-body-bg);
+  background-clip: padding-box;
+  border: 1px solid transparent;
+  border-radius: var(--bs-border-radius-lg);
+  outline: 0;
+}
+
+.fmm-header {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  padding: 0.5rem 1rem;
+  border-bottom: 1px solid var(--bs-border-color);
+  border-top-left-radius: calc(var(--bs-border-radius-lg) - (var(--bs-border-width)));
+  border-top-right-radius: calc(var(--bs-border-radius-lg) - (var(--bs-border-width)));
+}
+.fmm-header .btn-close {
+  padding: 0.5rem;
+  margin-left: auto;
+}
+
+.fmm-body {
+  position: relative;
+  flex: 1 1 auto;
+}
+
+.fms-ctn-page {
+  height: calc(100vh - 3.75rem - 3.125rem - 3rem - 3.75rem);
+}
+
+.fms-ctn-fmm {
+  height: calc(100vh - 1.5 * 0.8125rem - 4rem);
+}
+
+.fms-ctn {
+  width: 100%;
+  height: 100%;
+  display: flex;
+}
+
+.fms-wraper {
+  height: 100%;
+  position: relative;
+}
+
+.fms-loader {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--bs-border-radius);
+  background-color: rgba(var(--bs-secondary-rgb), 0.5);
+  color: var(--bs-primary);
+  z-index: 10;
+  display: none;
+}
+.fms-loader.show {
+  display: flex;
+}
+
+.fmm .fms-loader {
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+}
+
+.fms-tree {
+  flex: 0 0 15rem;
+  max-width: 15rem;
+  border-right: 1px solid var(--bs-border-color);
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+}
+.fms-tree .fms-tree-scroller {
+  height: 100%;
+  position: relative;
+  overflow: hidden;
+}
+.fms-tree ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.fms-tree li.active > .tree-item {
+  background-color: var(--bs-primary);
+}
+.fms-tree li.active > .tree-item > .tree-name,
+.fms-tree li.active > .tree-item > .tree-name > .tree-size,
+.fms-tree li.active > .tree-item > .tree-collapse > .tree-icon {
+  color: var(--bs-body-bg);
+}
+.fms-tree a {
+  color: var(--bs-body-color);
+}
+.fms-tree .tree-name {
+  font-weight: 500;
+  padding: 0.5rem 0;
+}
+.fms-tree .tree-name:hover {
+  color: var(--bs-link-color);
+}
+.fms-tree .tree-name .tree-size {
+  font-weight: 400;
+  color: var(--bs-secondary-color);
+}
+.fms-tree .tree-item {
+  display: flex;
+  align-items: center;
+  padding: 0 0.5rem 0 1rem;
+  line-height: 1;
+}
+.fms-tree .tree-collapse {
+  padding: 0.5rem;
+}
+
+.fms-tree-scroller > ul > li > .tree-item {
+  padding-left: calc(0 * 0.75rem);
+}
+.fms-tree-scroller > ul > li > .sub-tree > ul > li > .tree-item {
+  padding-left: calc(1 * 0.75rem);
+}
+.fms-tree-scroller > ul > li > .sub-tree > ul > li > .sub-tree > ul > li > .tree-item {
+  padding-left: calc(2 * 0.75rem);
+}
+.fms-tree-scroller > ul > li > .sub-tree > ul > li > .sub-tree > ul > li > .sub-tree > ul > li > .tree-item {
+  padding-left: calc(3 * 0.75rem);
+}
+.fms-tree-scroller > ul > li > .sub-tree > ul > li > .sub-tree > ul > li > .sub-tree > ul > li > .sub-tree > ul > li > .tree-item {
+  padding-left: calc(4 * 0.75rem);
+}
+.fms-tree-scroller > ul > li > .sub-tree > ul > li > .sub-tree > ul > li > .sub-tree > ul > li > .sub-tree > ul > li > .sub-tree > ul > li > .tree-item {
+  padding-left: calc(5 * 0.75rem);
+}
+.fms-tree-scroller > ul > li > .sub-tree > ul > li > .sub-tree > ul > li > .sub-tree > ul > li > .sub-tree > ul > li > .sub-tree > ul > li > .sub-tree > ul > li > .tree-item {
+  padding-left: calc(6 * 0.75rem);
+}
+.fms-tree-scroller > ul > li > .sub-tree > ul > li > .sub-tree > ul > li > .sub-tree > ul > li > .sub-tree > ul > li > .sub-tree > ul > li > .sub-tree > ul > li > .sub-tree > ul > li > .tree-item {
+  padding-left: calc(7 * 0.75rem);
+}
+.fms-tree-scroller > ul > li > .sub-tree > ul > li > .sub-tree > ul > li > .sub-tree > ul > li > .sub-tree > ul > li > .sub-tree > ul > li > .sub-tree > ul > li > .sub-tree > ul > li > .sub-tree > ul > li > .tree-item {
+  padding-left: calc(8 * 0.75rem);
+}
+.fms-tree-scroller > ul > li > .sub-tree > ul > li > .sub-tree > ul > li > .sub-tree > ul > li > .sub-tree > ul > li > .sub-tree > ul > li > .sub-tree > ul > li > .sub-tree > ul > li > .sub-tree > ul > li > .sub-tree > ul > li > .tree-item {
+  padding-left: calc(9 * 0.75rem);
+}
+.fms-tree-scroller > ul > li > .sub-tree > ul > li > .sub-tree > ul > li > .sub-tree > ul > li > .sub-tree > ul > li > .sub-tree > ul > li > .sub-tree > ul > li > .sub-tree > ul > li > .sub-tree > ul > li > .sub-tree > ul > li > .sub-tree > ul > li > .tree-item {
+  padding-left: calc(10 * 0.75rem);
+}
+.fms-tree-scroller > ul > li > .sub-tree > ul > li > .sub-tree > ul > li > .sub-tree > ul > li > .sub-tree > ul > li > .sub-tree > ul > li > .sub-tree > ul > li > .sub-tree > ul > li > .sub-tree > ul > li > .sub-tree > ul > li > .sub-tree > ul > li > .sub-tree > ul > li > .tree-item {
+  padding-left: calc(11 * 0.75rem);
+}
+.fms-tree-scroller > ul > li > .sub-tree > ul > li > .sub-tree > ul > li > .sub-tree > ul > li > .sub-tree > ul > li > .sub-tree > ul > li > .sub-tree > ul > li > .sub-tree > ul > li > .sub-tree > ul > li > .sub-tree > ul > li > .sub-tree > ul > li > .sub-tree > ul > li > .sub-tree > ul > li > .tree-item {
+  padding-left: calc(12 * 0.75rem);
+}
+.fms-tree-scroller > ul > li > .sub-tree > ul > li > .sub-tree > ul > li > .sub-tree > ul > li > .sub-tree > ul > li > .sub-tree > ul > li > .sub-tree > ul > li > .sub-tree > ul > li > .sub-tree > ul > li > .sub-tree > ul > li > .sub-tree > ul > li > .sub-tree > ul > li > .sub-tree > ul > li > .sub-tree > ul > li > .tree-item {
+  padding-left: calc(13 * 0.75rem);
+}
+.fms-tree-scroller > ul > li > .sub-tree > ul > li > .sub-tree > ul > li > .sub-tree > ul > li > .sub-tree > ul > li > .sub-tree > ul > li > .sub-tree > ul > li > .sub-tree > ul > li > .sub-tree > ul > li > .sub-tree > ul > li > .sub-tree > ul > li > .sub-tree > ul > li > .sub-tree > ul > li > .sub-tree > ul > li > .sub-tree > ul > li > .tree-item {
+  padding-left: calc(14 * 0.75rem);
+}
+.fms-tree-scroller > ul > li > .sub-tree > ul > li > .sub-tree > ul > li > .sub-tree > ul > li > .sub-tree > ul > li > .sub-tree > ul > li > .sub-tree > ul > li > .sub-tree > ul > li > .sub-tree > ul > li > .sub-tree > ul > li > .sub-tree > ul > li > .sub-tree > ul > li > .sub-tree > ul > li > .sub-tree > ul > li > .sub-tree > ul > li > .sub-tree > ul > li > .tree-item {
+  padding-left: calc(15 * 0.75rem);
+}
+.fms-tree-scroller > ul > li > .sub-tree > ul > li > .sub-tree > ul > li > .sub-tree > ul > li > .sub-tree > ul > li > .sub-tree > ul > li > .sub-tree > ul > li > .sub-tree > ul > li > .sub-tree > ul > li > .sub-tree > ul > li > .sub-tree > ul > li > .sub-tree > ul > li > .sub-tree > ul > li > .sub-tree > ul > li > .sub-tree > ul > li > .sub-tree > ul > li > .sub-tree > ul > li > .tree-item {
+  padding-left: calc(16 * 0.75rem);
+}
+.fms-tree-scroller > ul > li > .sub-tree > ul > li > .sub-tree > ul > li > .sub-tree > ul > li > .sub-tree > ul > li > .sub-tree > ul > li > .sub-tree > ul > li > .sub-tree > ul > li > .sub-tree > ul > li > .sub-tree > ul > li > .sub-tree > ul > li > .sub-tree > ul > li > .sub-tree > ul > li > .sub-tree > ul > li > .sub-tree > ul > li > .sub-tree > ul > li > .sub-tree > ul > li > .sub-tree > ul > li > .tree-item {
+  padding-left: calc(17 * 0.75rem);
+}
+.fms-tree-scroller > ul > li > .sub-tree > ul > li > .sub-tree > ul > li > .sub-tree > ul > li > .sub-tree > ul > li > .sub-tree > ul > li > .sub-tree > ul > li > .sub-tree > ul > li > .sub-tree > ul > li > .sub-tree > ul > li > .sub-tree > ul > li > .sub-tree > ul > li > .sub-tree > ul > li > .sub-tree > ul > li > .sub-tree > ul > li > .sub-tree > ul > li > .sub-tree > ul > li > .sub-tree > ul > li > .sub-tree > ul > li > .tree-item {
+  padding-left: calc(18 * 0.75rem);
+}
+.fms-tree-scroller > ul > li > .sub-tree > ul > li > .sub-tree > ul > li > .sub-tree > ul > li > .sub-tree > ul > li > .sub-tree > ul > li > .sub-tree > ul > li > .sub-tree > ul > li > .sub-tree > ul > li > .sub-tree > ul > li > .sub-tree > ul > li > .sub-tree > ul > li > .sub-tree > ul > li > .sub-tree > ul > li > .sub-tree > ul > li > .sub-tree > ul > li > .sub-tree > ul > li > .sub-tree > ul > li > .sub-tree > ul > li > .sub-tree > ul > li > .tree-item {
+  padding-left: calc(19 * 0.75rem);
+}
+
+.fms-section {
+  flex: 1;
+  height: 100%;
+}
+
+.fms-contents {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding: 0.5rem 1rem;
+}
+
+.fms-files-ctn {
+  flex: 1;
+  margin-left: -0.875rem;
+  margin-right: -0.875rem;
+  min-height: 4rem;
+}
+
+.fms-files {
+  overflow: hidden;
+  position: relative;
+  height: 100%;
+}
+
+.fms-actions-bar {
+  padding-bottom: 1rem;
+}
+
+.fms-files-page {
+  display: flex;
+  justify-content: center;
+  padding-top: 0.5rem;
+}
+
+.fms-files-wraper {
+  padding-left: 0.875rem;
+  padding-right: 0.875rem;
+  margin-top: -1rem;
+}
+.fms-files-wraper > ul {
+  list-style: none;
+  padding: 0;
+  margin: 0 -0.5rem;
+  display: flex;
+  flex-wrap: wrap;
+}
+.fms-files-wraper > ul > li {
+  padding: 0 0.5rem;
+  flex: 0 0 20%;
+  max-width: 20%;
+  margin-top: 1rem;
+}
+.fms-files-wraper .file {
+  border: 1px solid var(--bs-border-color);
+  border-radius: 0.1875rem;
+}
+.fms-files-wraper .file .thumb {
+  height: 0;
+  padding-bottom: 75%;
+  position: relative;
+  overflow: hidden;
+  border-top-left-radius: calc(0.1875rem - 1px);
+  border-top-right-radius: calc(0.1875rem - 1px);
+}
+.fms-files-wraper .file .thumb img {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate3d(-50%, -50%, 0);
+  max-width: 100%;
+  height: auto;
+}
+.fms-files-wraper .file .thumb.thumb-v img {
+  max-height: 100%;
+  width: auto;
+}
+.fms-files-wraper .file .thumb-bg,
+.fms-files-wraper .file .thumb-blur {
+  position: absolute;
+  z-index: 0;
+  width: 100%;
+  height: 100%;
+  left: 0;
+  top: 0;
+}
+.fms-files-wraper .file .thumb-bg {
+  background-color: #000;
+  opacity: 0.1;
+}
+.fms-files-wraper .file .thumb-blur {
+  filter: blur(0.5rem);
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
 }
 
 /*# sourceMappingURL=nv.style.css.map */

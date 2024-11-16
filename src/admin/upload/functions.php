@@ -28,8 +28,8 @@ $array_url_instruction['config'] = 'https://wiki.nukeviet.vn/nukeviet4:admin:upl
 $array_url_instruction['uploadconfig'] = 'https://wiki.nukeviet.vn/nukeviet4:admin:upload:uploadconfig';
 
 $allow_func = [
-    'main', 'imglist', 'delimg', 'createimg',
-    'dlimg', 'renameimg', 'moveimg', 'folderlist',
+    'main', 'delimg', 'createimg',
+    'dlimg', 'renameimg', 'moveimg',
     'delfolder', 'renamefolder', 'createfolder',
     'upload', 'addlogo', 'cropimg', 'rotateimg', 'download',
     'webpconvert', 'compressimage', 'qualitychange', 'js'
@@ -43,7 +43,7 @@ if (defined('NV_IS_SPADMIN')) {
 }
 
 /**
- * nv_check_allow_upload_dir()
+ * Trả lại các quyền thao tác với thư mục nếu có
  *
  * @param mixed $dir
  */
@@ -84,7 +84,7 @@ function nv_check_allow_upload_dir($dir)
         }
     }
 
-    // Quyen cua dieu hanh toi cao va dieu hanh chung
+    // Quyền điều hành tối cao và điều hành chung
     if (defined('NV_IS_SPADMIN')) {
         $level['view_dir'] = true;
 
@@ -149,6 +149,9 @@ function nv_check_allow_upload_dir($dir)
             $level['rotate_file'] = true;
         }
     }
+    if (empty($level)) {
+        return [];
+    }
 
     // Tự động chèn logo
     $level['auto_logo'] = false;
@@ -165,9 +168,9 @@ function nv_check_allow_upload_dir($dir)
 }
 
 /**
- * nv_check_path_upload()
+ * Kiểm tra thư mục có thuộc trình quản lý tệp tin không
  *
- * @param mixed $path
+ * @param string $path
  */
 function nv_check_path_upload($path)
 {

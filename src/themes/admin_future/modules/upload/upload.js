@@ -3,10 +3,11 @@
 /**
  * NukeViet có cơ chế kiểm soát tệp js local load nhiều lần
  * nên không cần quan tâm xử lý cơ chế tệp này được gọi nhiều lần
+ * {* Lưu ý: Tệp này được gọi bằng smarty *}
  */
 document.addEventListener('DOMContentLoaded', () => {
     let cssNum = 0, jsNum = 0, ready = false;
-    let amountCss = 2, amountJs = 6;
+    let amountCss = 3, amountJs = 7;
 
     // Tải jquery UI
     if (typeof $.ui == "undefined") {
@@ -41,6 +42,14 @@ document.addEventListener('DOMContentLoaded', () => {
         loadScript(nv_base_siteurl + "assets/js/plupload/plupload.full.min.js", nv_base_siteurl + "assets/js/language/plupload-" + nv_lang_interface + ".js");
     } else {
         jsNum += 2;
+    }
+    // Tải PerfectScrollbar
+    if (typeof PerfectScrollbar == "undefined") {
+        loadScript(nv_base_siteurl + "assets/js/perfect-scrollbar/min.js");
+        loadCSS(nv_base_siteurl + "assets/js/perfect-scrollbar/style.css");
+    } else {
+        jsNum++;
+        cssNum++;
     }
 
     // Xuất ra event sẵn sàng
@@ -96,165 +105,283 @@ document.addEventListener('DOMContentLoaded', () => {
     fireReady();
 });
 
+const nukeviet = window.nukeviet || {};
+
+/**
+ * Class xử lý trình quản lý tệp tin
+ */
+nukeviet.Picker = class {
+    html_modal = `{$HTML_POPUP}`;
+    html_container = `{$HTML_CONTENT}`;
+    html_backdrop = `<div class="fmm-backdrop fade"></div>`;
+
+    // Hàm khởi tạo
+    constructor(element, options) {
+        this.$element = $(element);
+        this.settings = $.extend({
+            show: 'button', // button|inline
+            path: '', // Thư mục được tải lên dạng uploads/module/...
+            currentpath: '', // Active thư mục này
+            type: '', // image|file
+            imgfile: '', // Select tệp này
+        }, options);
+
+        this.fmm = null;
+        this.fms = null;
+        this.fs = null;
+        this.ts = null;
+        this.bodyEndPadding = 0;
+        this.bodyOverflow = '';
+
+        this.init();
+    }
+
+    // Dựng trình quản lý tệp tin
+    init() {
+        let cfg = this.settings;
+        let self = this;
+        if (cfg.show == 'inline') {
+            self.fms = $(self.html_container);
+            self.$element.replaceWith(self.fms);
+            self.initContainer();
+            return;
+        }
+
+        this.$element.on('click', function(e) {
+            e.preventDefault();
+            self.showModal();
+        });
+    }
+
+    // Xử lý các sự kiện sau khi dựng được container
+    initContainer() {
+        let self = this;
+
+        // Xử lý khi đổ thư mục con ra
+        $(self.fms).on('show.bs.collapse', '[data-toggle="collapseTree"]', function(e) {
+            e.stopPropagation();
+            let btn = $('[aria-controls="' + $(e.target).attr('id') + '"]', self.fms);
+            let icon = $('[data-toggle="tree-icon"]', btn);
+            icon.removeClass(icon.data('icon')).addClass('fa-folder-open');
+        });
+        $(self.fms).on('shown.bs.collapse', '[data-toggle="collapseTree"]', function(e) {
+            e.stopPropagation();
+            self.ts.update();
+        });
+
+        // Xử lý khi thu thư mục con lại
+        $(self.fms).on('hide.bs.collapse', '[data-toggle="collapseTree"]', function(e) {
+            e.stopPropagation();
+            let btn = $('[aria-controls="' + $(e.target).attr('id') + '"]', self.fms);
+            let icon = $('[data-toggle="tree-icon"]', btn);
+            icon.removeClass('fa-folder-open').addClass(icon.data('icon'));
+        });
+        $(self.fms).on('hidden.bs.collapse', '[data-toggle="collapseTree"]', function(e) {
+            e.stopPropagation();
+            self.ts.update();
+        });
+
+        // Tạo các thanh cuộn
+        self.fs = new PerfectScrollbar($('[data-toggle="file-scroller"]', self.fms)[0], {
+            wheelPropagation: false
+        });
+        self.ts = new PerfectScrollbar($('[data-toggle="tree-scroller"]', self.fms)[0], {
+            wheelPropagation: false
+        });
+
+        // Lấy nội dung
+        self.fetchAll();
+    }
+
+    // Đóng trình quản lý tệp tin dạng popup
+    hideModal() {
+        let self = this;
+
+        if (self.fmm) {
+            self.fmm.removeClass('show');
+            self.fmm.removeAttr('aria-modal');
+            self.fmm.attr('aria-hidden', 'true');
+
+            setTimeout(() => {
+                self.fmm[0].style.display = 'none';
+                self.fmm.remove();
+                self.fmm = null;
+                self.fms = null;
+                self.fs = null;
+                self.ts = null;
+            }, 300);
+        }
+
+        if (self.backdrop) {
+            self.backdrop.removeClass('show');
+            setTimeout(() => {
+                self.backdrop.remove();
+                self.backdrop = null;
+            }, 150);
+        }
+
+        // Trả lại các thuộc tính style của body
+        setTimeout(() => {
+            const body = document.body;
+            body.style.paddingRight = self.bodyEndPadding;
+            body.style.overflow = self.bodyOverflow;
+            if (body.getAttribute('style') === '') {
+                body.removeAttribute('style');
+            }
+        }, 300);
+    }
+
+    // Mở modal lên để chuẩn bị xây dựng trình quản lý tệp tin
+    showModal() {
+        let self = this;
+
+        // Tạo HTML cho modal và lắng nghe các sự kiện
+        self.fmm = $(self.html_modal);
+        $('body').append(self.fmm);
+
+        self.fmm.on('click', '[data-dismiss="fmm"]', function() {
+            self.hideModal();
+        });
+
+        // Đình chỉ thanh cuộn của body
+        const body = document.body;
+        self.bodyEndPadding = body.style.paddingRight;
+        self.bodyOverflow = body.style.overflow;
+
+        body.style.paddingRight = self.scrollbarWidth() + 'px';
+        body.style.overflow = 'hidden';
+
+        // Tạo hiệu ứng của nền mỗi lần mở modal
+        self.backdrop = $(self.html_backdrop);
+        $('body').append(self.backdrop);
+        setTimeout(() => {
+            self.backdrop && self.backdrop.addClass('show');
+        }, 1);
+
+        // Hiệu ứng mở modal lên
+        self.fmm[0].style.display = 'block';
+        setTimeout(() => {
+            self.fmm.addClass('show');
+            self.fmm.attr('aria-modal', 'true');
+            self.fmm.removeAttr('aria-hidden');
+        }, 1);
+
+        setTimeout(() => {
+            self.fms = $(self.html_container);
+            $('[data-toggle="fmm-body"]', self.fmm).html(self.fms);
+            self.initContainer();
+        }, 310);
+    }
+
+    fetchTree() {
+        this.fetch(true, false);
+    }
+
+    fetchFile() {
+        this.fetch(false, true);
+    }
+
+    fetchAll() {
+        this.fetch(true, true);
+    }
+
+    fetch(tree, file) {
+        let self = this;
+        $.ajax({
+            type: 'POST',
+            url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=main&nocache=' + new Date().getTime(),
+            data: {
+                checkss: $('body').data('checksess'),
+                show_file: file ? 1 : 0,
+                show_folder: tree ? 1 : 0,
+                path: self.settings.path,
+                currentpath: self.settings.currentpath,
+                type: self.settings.type,
+                imgfile: self.settings.imgfile,
+            },
+            dataType: 'json',
+            cache: false,
+            success: function(respon) {
+                self.hideLoader();
+                if (respon.status != 'success') {
+                    nvToast(respon.mess, 'error');
+                    return;
+                }
+                if (tree) {
+                    $('[data-toggle="tree-scroller"]', self.fms).html(respon.folders);
+                    self.ts.update();
+                }
+                if (file) {
+                    $('[data-toggle="file-scroller"]', self.fms).html(respon.files);
+                    $('[data-toggle="pagination"]', self.fms).html(respon.pagination);
+                    self.fs.update();
+                }
+            },
+            error: function(xhr, text, err) {
+                self.hideLoader();
+                nvToast(err, 'error');
+                console.log(xhr, text, err);
+            }
+        });
+    }
+
+    // Hiển thị loader, chặn thao tác
+    showLoader() {
+        $('[data-toggle="loader"]', this.fms).addClass('show');
+    }
+
+    // Ẩn loader, cho phép thao tác
+    hideLoader() {
+        $('[data-toggle="loader"]', this.fms).removeClass('show');
+    }
+
+    /**
+     * Khởi tạo tĩnh theo cách nukeviet.Picker.getOrCreateInstance()
+     */
+    static getOrCreateInstance(selector, options) {
+        let element;
+        if (selector instanceof Element) {
+            element = selector;
+        } else {
+            element = document.querySelector(selector);
+        }
+        if (!$.data(element, 'nv.picker')) {
+            $.data(element, 'nv.picker', new nukeviet.Picker(element, options));
+        }
+        return $.data(element, 'nv.picker');
+    }
+
+    // Độ rộng thanh cuộn
+    scrollbarWidth = () => {
+        const outer = document.createElement('div');
+        outer.style.visibility = 'hidden';
+        outer.style.overflow = 'scroll';
+        outer.style.msOverflowStyle = 'scrollbar';
+        outer.style.position = 'fixed';
+        document.body.appendChild(outer);
+
+        const inner = document.createElement('div');
+        outer.appendChild(inner);
+
+        const scrollbarWidth = outer.offsetWidth - inner.offsetWidth;
+
+        outer.parentNode.removeChild(outer);
+
+        return scrollbarWidth;
+    }
+};
+
 /*
  * Xử lý trình quản lý file ở các nút duyệt file
+ * Dạng Jquery
  */
 (($) => {
-    var NVBrowseFile = function(element, options) {
-        var self = this;
-
-        this.$elements = $(element);
-        this.options = options;
-
-        /*
-         * Thiết lập mở modal khi ấn vào nút nhấn
-         */
-        $(element).on('click', function() {
-            $(self.options.templateContainerID).data('btn', this);
-            $(self.options.templateContainerID).modal('show');
-        });
-    }
-
-    NVBrowseFile.VERSION = '5.0.00';
-
-    NVBrowseFile.DEFAULTS = {
-        adminBaseUrl: "",
-        templateLoader: '<div class="card card-filemanager card-border-color card-border-color-primary loading"><div class="filemanager-loader"><div><i class="fas fa-spinner fa-pulse"></i></div></div></div>',
-        path: 'uploads', // Thư mục upload gốc
-        currentpath: 'uploads', // Thư mục upload hiện tại (thư mục con hoặc là thư mục gốc)
-        type: 'file', // file|image|flash
-        area: '', // Đối tượng trả về đường dẫn => Build ra currentfile
-        alt: '', // Đối tượng trả về ALT image
-        templateContainer: '<div id="mdNVFileManagerPopup" tabindex="-1" role="dialog" class="modal" data-backdrop="static"><div class="modal-dialog full-width modal-filemanager"><div class="modal-content"><div class="modal-header"><button type="button" data-dismiss="modal" aria-hidden="true" class="close"><span class="fas fa-times"></span></button></div><div class="modal-body"></div></div></div></div>',
-        templateContainerID: '#mdNVFileManagerPopup',
-        restype: 'filepath', // filepath|folderpath
-        onPicked: null // Hàm xử lý khi chọn ảnh xong
-    };
-
-    /*
-     * Thiết lập Upload lên mẫu đã tải
-     */
-    NVBrowseFile.prototype.init = function() {
-        var self = this;
-        var data = {
-            baseurl: self.options.adminBaseUrl,
-            path: self.options.path,
-            currentpath: self.options.currentpath,
-            type: self.options.type,
-            restype: self.options.restype,
-            area: self.options.area,
-            alt: self.options.alt,
-            imgfile: '', // File đang chọn
-            templateContainerID: NVBrowseFile.DEFAULTS.templateContainerID,
-            onPicked: self.options.onPicked // Event khi chọn ảnh xong
-        };
-
-        if (data.area != '' && $(data.area).length == 1) {
-            data.imgfile = $(data.area).val();
-        }
-
-        // Xử lý các thành phần
-        window.fileManager = new NVCoreFileBrowser();
-        window.fileManager.init(data);
-        window.fileManagerLoaded = true;
-
-        /*
-         * Build thêm thanh cuộn
-         */
-        $('.nv-scroller', self.$element).each(function(k, v) {
-            nvScrollbar.push(new PerfectScrollbar(v, {
-                wheelPropagation: $(this).data('wheel') ? true : false
-            }));
-        });
-    }
-
-    NVBrowseFile.prototype.strRand = function(a) {
-        for (var b = "", d = 0; d < a; d++) {
-            b += "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890".charAt(Math.floor(Math.random() * 62));
-        }
-        return b;
-    }
-
-    function Plugin(option) {
-        /*
-         * Build modal để dùng chung
-         */
-        if (!$(NVBrowseFile.DEFAULTS.templateContainerID).length) {
-            $('body:first').append(NVBrowseFile.DEFAULTS.templateContainer);
-
-            /*
-             * Thiết lập trình quản lý file lên khi mở xong modal
-             */
-            $(NVBrowseFile.DEFAULTS.templateContainerID).on('shown.bs.modal', function(e) {
-                var modalEle = $(e.currentTarget);
-                var btn = $(modalEle.data('btn'));
-                var uploadApi = btn.data('nv.upload');
-                var url = uploadApi.options.adminBaseUrl + 'index.php?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=upload&nocache=' + uploadApi.strRand(10);
-
-                $('.modal-body', modalEle).html(uploadApi.options.templateLoader);
-                $.ajax({
-                    method: "GET",
-                    url: url,
-                    data: {
-                        popup: 1,
-                        alt: uploadApi.options.alt,
-                        area: uploadApi.options.area,
-                        type: uploadApi.options.type,
-                        imgfile: uploadApi.options.imgfile,
-                    },
-                    dataType: "json",
-                    cache: false
-                }).done(function(data) {
-                    $('.modal-body', modalEle).html(data.container);
-                    if (typeof window.fileManager == "undefined") {
-                        $('body:first').append(data.modals);
-                    }
-                    uploadApi.init();
-                }).fail(function() {
-                    alert("Ajax request Error, please reload your browser!!!");
-                });
-            });
-
-            /*
-             * Hủy dữ liệu quản lý file khi đóng modal
-             */
-            $(NVBrowseFile.DEFAULTS.templateContainerID).on('hidden.bs.modal', function(e) {
-                var modalEle = $(e.currentTarget);
-                $('.modal-body', modalEle).html('');
-
-                // Fix multi modal
-                if ($('.modal-backdrop.show').length) {
-                    $('body').addClass('modal-open');
-                }
-            });
-        }
-
+    $.fn.nvPicker = function(options) {
         return this.each(function() {
-            var $this = $(this);
-            var options = $.extend({}, NVBrowseFile.DEFAULTS, $this.data(), typeof option == 'object' && option);
-            var data = $this.data('nv.upload');
-
-            if (!data && option == 'destroy') {
-                return true;
-            }
-            if (!data) {
-                $this.data('nv.upload', (data = new NVBrowseFile(this, options)));
-            }
-            if (typeof option == 'string') {
-                data[option]();
+            if (!$.data(this, 'nv.picker')) {
+                // Đảm bảo chỉ khởi tạo 1 lần duy nhất
+                $.data(this, 'nv.picker', new nukeviet.Picker(this, options));
             }
         });
-    }
-
-    var old = $.fn.nvBrowseFile;
-
-    $.fn.nvBrowseFile = Plugin;
-    $.fn.nvBrowseFile.Constructor = NVBrowseFile;
-
-    // nvBrowseFile NO CONFLICT
-    // =================
-    $.fn.nvBrowseFile.noConflict = function() {
-        $.fn.nvBrowseFile = old;
-        return this;
-    }
+    };
 })(jQuery);

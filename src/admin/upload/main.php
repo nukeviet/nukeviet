@@ -14,31 +14,141 @@ if (!defined('NV_IS_FILE_ADMIN')) {
 }
 
 $page_title = $nv_Lang->getModule('upload_manager');
-$contents = '';
 
-$path = (defined('NV_IS_SPADMIN')) ? '' : NV_UPLOADS_DIR;
-$path = nv_check_path_upload($nv_Request->get_string('path', 'get', $path));
-$currentpath = nv_check_path_upload($nv_Request->get_string('currentpath', 'get', $path));
-$type = $nv_Request->get_string('type', 'get');
-$popup = $nv_Request->get_int('popup', 'get', 0);
-$area = htmlspecialchars(trim($nv_Request->get_string('area', 'get')), ENT_QUOTES);
-$alt = htmlspecialchars(trim($nv_Request->get_string('alt', 'get')), ENT_QUOTES);
-$currentfile = $nv_Request->get_string('currentfile', 'get', '');
+/**
+ * @param string $message
+ */
+function show_error($message)
+{
+    global $nv_Request;
 
+    if ($nv_Request->isset_request('checkss', 'post')) {
+        nv_jsonOutput([
+            'status' => 'error',
+            'mess' => $message
+        ]);
+    }
+
+    $contents = nv_theme_alert('', $message, 'danger');
+
+    include NV_ROOTDIR . '/includes/header.php';
+    echo nv_admin_theme($contents);
+    include NV_ROOTDIR . '/includes/footer.php';
+}
+
+$request = [];
+
+/*
+ * Hiển thị cây thư mục tại đây, mặc định là NV_UPLOADS_DIR. Nếu là mặc định NV_UPLOADS_DIR:
+ * Điều hành chung list hết thư mục con trong uploads
+ * Quản lí module list các module mình có quyền quản lí
+ */
+$request['path_request'] = trim($nv_Request->get_string('path', 'post,get', ''), ' /');
+$request['path'] = nv_check_path_upload($request['path_request']);
+if ($request['path_request'] !== $request['path']) {
+    show_error($nv_Lang->getModule('notallowed'));
+}
+
+// Đứng ở đây so với path bên trên
+$request['currentpath_request'] = trim($nv_Request->get_string('currentpath', 'post,get', ''), ' /');
+$request['currentpath'] = nv_check_path_upload($request['currentpath_request']);
+if ($request['path_request'] !== $request['path']) {
+    show_error($nv_Lang->getModule('notallowed'));
+}
+
+$request['type'] = $nv_Request->get_title('type', 'post,get', '');
+$request['show_file'] = (int) $nv_Request->get_bool('show_file', 'post', false);
+$request['show_folder'] = (int) $nv_Request->get_bool('show_folder', 'post', false);
+$request['area'] = htmlspecialchars(trim($nv_Request->get_string('area', 'get,post')), ENT_QUOTES);
+$request['alt'] = htmlspecialchars(trim($nv_Request->get_string('alt', 'get,post')), ENT_QUOTES);
+
+$request['page'] = $nv_Request->get_absint('page', 'post,get', 1);
+if ($request['page'] > 9999 or $request['page'] < 1) {
+    $request['page'] = 1;
+}
+$request['order'] = $nv_Request->get_int('order', 'post', 0);
+
+if ($request['type'] != 'image') {
+    $request['type'] = 'file';
+}
+
+// Kiểm tra tệp được chọn có thuộc thư mục quản lí không nếu có lấy nó không thì bỏ ra
 $selectfile = '';
+$currentfile = $nv_Request->get_string('currentfile', 'get,post', '');
 if (!empty($currentfile)) {
     $selectfile = nv_string_to_filename(pathinfo($currentfile, PATHINFO_BASENAME));
     $currentfilepath = nv_check_path_upload(pathinfo($currentfile, PATHINFO_DIRNAME));
-    if (!empty($currentfilepath) and !empty($selectfile)) {
-        $currentpath = $currentfilepath;
+    if (!empty($currentfilepath) and !empty($selectfile) and !empty(nv_check_allow_upload_dir($currentfilepath))) {
+        $request['currentpath'] = $currentfilepath;
+    } else {
+        $selectfile = '';
     }
 }
-if (empty($currentpath)) {
-    $currentpath = NV_UPLOADS_DIR;
+$request['currentfile'] = $selectfile;
+
+/*
+ * Khi chỉ ra path hoặc current path mà không thuộc quyền quản lý sẽ chặn thao tác
+ * thay vì trỏ về thư mục gốc. Nhằm mục đích nếu lập trình nút duyệt file ở module trỏ về sai thư mục
+ * thì không cho upload ở thư mục khác, như thế khi lưu hoặc xử lý sẽ sai lệch tính độc lập của module
+ */
+if ((!empty($request['path']) and empty(nv_check_allow_upload_dir($request['path']))) or (!empty($request['currentpath']) and empty(nv_check_allow_upload_dir($request['currentpath'])))) {
+    show_error($nv_Lang->getModule('notallowed'));
 }
 
-if ($type != 'image') {
-    $type = 'file';
+// Khi không chỉ ra thì path mặc định là thư mục uploads. Trường hợp truy cập vào module quản lý file sẽ ra cái này
+if (empty($request['path'])) {
+    $request['path'] = NV_UPLOADS_DIR;
+}
+if (empty($request['currentpath'])) {
+    $request['currentpath'] = $request['path'];
+}
+// Kiểm tra currentpath phải bằng path hoặc nằm trong path
+if ($request['currentpath'] != $request['path'] and !preg_match('/^' . nv_preg_quote($request['path'] . '/') . '/', $request['currentpath'])) {
+    $request['currentpath'] = $request['path'];
+}
+
+// Kiểm tra lại currentfile có nằm trong currentpath hay không
+if (!empty($request['currentfile']) and !preg_match('/^' . nv_preg_quote($request['currentpath'] . '/' . $request['currentfile']) . '$/', $currentfile)) {
+    $request['currentfile'] = '';
+}
+
+/**
+ * Đệ quy cây thư mục
+ *
+ * @param string $dir
+ * @param array $array_folders
+ * @return array
+ */
+function viewdirtree($dir, $array_folders)
+{
+    global $array_dirname, $request;
+
+    if (empty($dir)) {
+        return [];
+    }
+
+    $tree = [];
+    $_dirlist = preg_grep('/^(' . nv_preg_quote($dir) . ')\/([^\/]+)$/', array_keys($array_dirname));
+
+    foreach ($_dirlist as $_dir) {
+        $check_allowed = nv_check_allow_upload_dir($_dir);
+        if (empty($check_allowed)) {
+            continue;
+        }
+
+        $tree[] = [
+            'uuid' => md5($_dir),
+            'title' => basename($_dir),
+            'path' => $_dir,
+            'allowed' => $check_allowed,
+            'size' => empty($array_folders[$_dir]) ? 0 : nv_convertfromBytes($array_folders[$_dir]),
+            'sub' => viewdirtree($_dir, $array_folders),
+            'open' => ($_dir == $request['currentpath'] or str_contains($request['currentpath'], $_dir . '/')),
+            'active' => $_dir == $request['currentpath']
+        ];
+    }
+
+    return $tree;
 }
 
 $template = get_tpl_dir([$global_config['module_theme'], $global_config['admin_theme']], 'admin_default', '/modules/' . $module_file . '/uploadconfig.tpl');
@@ -48,7 +158,117 @@ $tpl->assign('LANG', $nv_Lang);
 $tpl->assign('MODULE_NAME', $module_name);
 $tpl->assign('OP', $op);
 
+// Xử lý yêu cầu qua ajax
+if ($nv_Request->isset_request('checkss', 'post')) {
+    if ($nv_Request->get_title('checkss', 'post', '') !== NV_CHECK_SESSION) {
+        nv_jsonOutput([
+            'status' => 'error',
+            'mess' => 'Session error!!!'
+        ]);
+    }
+
+    $html_folders = $html_files = $html_pagination = '';
+
+    // Lấy thư mục
+    if ($request['show_folder']) {
+        $array_folders = [];
+        if (!empty($global_config['show_folder_size'])) {
+            $sql = 'SELECT dirname, total_size FROM ' . NV_UPLOAD_GLOBALTABLE . '_dir WHERE
+            dirname=' . $db->quote($request['path']) . " OR dirname LIKE '" . $db->dblikeescape($request['path'] . '/') . "%'";
+            $result = $db->query($sql);
+            while ($row = $result->fetch()) {
+                $array_folders[$row['dirname']] = $row['total_size'];
+            }
+            $result->closeCursor();
+        }
+
+        $allowed = nv_check_allow_upload_dir($request['path']);
+        $trees = [[
+            'uuid' => md5($request['path']),
+            'title' => basename($request['path']),
+            'path' => $request['path'],
+            'allowed' => $allowed,
+            'size' => (empty($array_folders[$request['path']]) or empty($allowed)) ? 0 : nv_convertfromBytes($array_folders[$request['path']]),
+            'sub' => viewdirtree($request['path'], $array_folders),
+            'open' => true,
+            'active' => $request['path'] == $request['currentpath']
+        ]];
+
+        $tpl->assign('TREES', $trees);
+        $html_folders = $tpl->fetch('foldlist.tpl');
+    }
+
+    // Lấy tệp tin
+    if ($request['show_file']) {
+        $allowed = nv_check_allow_upload_dir($request['currentpath']);
+        if (!empty($allowed['view_dir']) and isset($array_dirname[$request['currentpath']])) {
+            if ($refresh) {
+                if ($sys_info['allowed_set_time_limit']) {
+                    set_time_limit(0);
+                }
+                nv_filesListRefresh($request['currentpath']);
+            }
+
+            $db->sqlreset()->select('COUNT(tb1.name)')->from(NV_UPLOAD_GLOBALTABLE . '_file tb1');
+
+                //->join('INNER JOIN ' . NV_UPLOAD_GLOBALTABLE . '_dir tb2 ON tb1.did=tb2.did');
+
+            $where = [];
+            $where[] = 'tb1.did=' . $array_dirname[$request['currentpath']];
+
+            if (!empty($where)) {
+                $db->where(implode(' AND ', $where));
+            }
+
+            $num_items = $db->query($db->sql())->fetchColumn();
+            $per_page = 60;
+
+            $db->select('tb1.*');
+            if ($request['order'] == 1) {
+                $db->order('tb1.mtime ASC');
+            } elseif ($request['order'] == 2) {
+                $db->order('tb1.title ASC');
+            } else {
+                $db->order('tb1.mtime DESC');
+            }
+
+            $db->limit($per_page)->offset(($request['page'] - 1) * $per_page);
+
+            $result = $db->query($db->sql());
+
+            $files = [];
+            while ($row = $result->fetch()) {
+                $file = [];
+                $file['src'] = NV_BASE_SITEURL . $row['src'] . '?' . $row['mtime'];
+                $file['width'] = $row['srcwidth'];
+                $file['height'] = $row['srcheight'];
+
+                $files[] = $file;
+            }
+            $result->closeCursor();
+
+            $tpl->assign('FILES', $files);
+            $html_files = $tpl->fetch('listfile.tpl');
+            $html_pagination = nv_generate_page('#', $num_items, $per_page, $request['page']);
+        }
+    }
+
+    nv_jsonOutput([
+        'status' => 'success',
+        'folders' => $html_folders,
+        'files' => $html_files,
+        'pagination' => $html_pagination
+    ]);
+}
+
 $contents = $tpl->fetch('main.tpl');
+
+
+
+
+
+
+
 
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_admin_theme($contents);

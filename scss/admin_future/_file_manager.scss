@@ -1,0 +1,316 @@
+// Trình quản lí tệp tin
+
+.fmm-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: $zindex-fmm-backdrop;
+    width: 100vw;
+    height: 100vh;
+    background-color: $modal-backdrop-bg;
+
+    &.show {
+        opacity: $modal-backdrop-opacity;
+    }
+}
+
+.fmm {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: $zindex-fmm;
+    display: none;
+    width: 100%;
+    height: 100%;
+    overflow-x: hidden;
+    overflow-y: auto;
+    outline: 0;
+}
+
+.fmm-dialog {
+    position: relative;
+    width: auto;
+    pointer-events: none;
+    margin: 1rem;
+}
+
+.fmm.fade .fmm-dialog {
+    transition: transform .3s ease-out;
+    transform: translate(0, -50px);
+}
+
+.fmm.show .fmm-dialog {
+    transform: none;
+}
+
+.fmm-content {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    pointer-events: auto;
+    background-color: $modal-content-bg;
+    background-clip: padding-box;
+    border: 1px solid transparent;
+    border-radius: $modal-content-border-radius;
+    outline: 0;
+}
+
+.fmm-header {
+    display: flex;
+    flex-shrink: 0;
+    align-items: center;
+    padding: .5rem 1rem;
+    border-bottom: 1px solid var(--bs-border-color);
+    border-top-left-radius: $modal-content-inner-border-radius;
+    border-top-right-radius: $modal-content-inner-border-radius;
+
+    .btn-close {
+        padding: .5rem;
+        margin-left: auto;
+    }
+}
+
+.fmm-body {
+    position: relative;
+    flex: 1 1 auto;
+}
+
+.fms-ctn-page {
+    height: calc(100vh - $header-height - $breadcrumb-height - 2 * map-get($spacers, 4) - $footer-height);
+}
+
+.fms-ctn-fmm {
+    height: calc(100vh - #{$line-height-base} * #{$font-size-base} - 4rem);
+}
+
+.fms-ctn {
+    width: 100%;
+    height: 100%;
+    display: flex;
+}
+
+.fms-wraper {
+    height: 100%;
+    position: relative;
+}
+
+.fms-loader {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    align-items: center;
+    justify-content: center;
+    border-radius: $card-border-radius;
+    background-color: rgba(var(--bs-secondary-rgb), .5);
+    color: var(--bs-primary);
+    z-index: 10;
+    display: none;
+
+    &.show {
+        display: flex;
+    }
+}
+
+.fmm {
+    .fms-loader {
+        border-top-left-radius: 0;
+        border-top-right-radius: 0;
+    }
+}
+
+.fms-tree {
+    flex: 0 0 15rem;
+    max-width: 15rem;
+    border-right: 1px solid var(--bs-border-color);
+    padding-top: .5rem;
+    padding-bottom: .5rem;
+
+    .fms-tree-scroller {
+        height: 100%;
+        position: relative;
+        overflow: hidden;
+    }
+
+    ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    li.active {
+        >.tree-item {
+            background-color: var(--bs-primary);
+
+            >.tree-name,
+            >.tree-name>.tree-size,
+            >.tree-collapse>.tree-icon {
+                color: var(--bs-body-bg);
+            }
+        }
+    }
+
+    a {
+        color: var(--bs-body-color);
+    }
+
+    .tree-name {
+        font-weight: 500;
+        padding: .5rem 0;
+
+        &:hover {
+            color: var(--bs-link-color);
+        }
+
+        .tree-size {
+            font-weight: 400;
+            color: var(--bs-secondary-color);
+        }
+    }
+
+    .tree-item {
+        display: flex;
+        align-items: center;
+        padding: 0 .5rem 0 1rem;
+        line-height: 1;
+    }
+
+    .tree-collapse {
+        padding: .5rem;
+    }
+}
+
+// Hỗ trợ 20 cấp thư mục con
+@mixin tree-padding($level: 0, $max-level: 19) {
+    >.tree-item {
+        padding-left: calc(#{$level} * .75rem);
+    }
+    @if $level < $max-level {
+        >.sub-tree {
+            >ul>li {
+                @include tree-padding($level + 1, $max-level);
+            }
+        }
+    }
+}
+
+.fms-tree-scroller {
+    >ul>li {
+        @include tree-padding();
+    }
+}
+
+.fms-section {
+    flex: 1;
+    height: 100%;
+}
+
+.fms-contents {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    padding: .5rem 1rem;
+}
+
+.fms-files-ctn {
+    flex: 1;
+    margin-left: -.875rem;
+    margin-right: -.875rem;
+    min-height: 4rem;
+}
+
+.fms-files {
+    overflow: hidden;
+    position: relative;
+    height: 100%;
+}
+
+.fms-actions-bar {
+    padding-bottom: 1rem;
+}
+
+.fms-files-page {
+    display: flex;
+    justify-content: center;
+    padding-top: .5rem;
+}
+
+.fms-files-wraper {
+    padding-left: .875rem;
+    padding-right: .875rem;
+
+    margin-top: -1rem;
+
+    >ul {
+        list-style: none;
+        padding: 0;
+        margin: 0 -.5rem;
+        display: flex;
+        flex-wrap: wrap;
+
+        >li {
+            padding: 0 .5rem;
+            flex: 0 0 20%;
+            max-width: 20%;
+            margin-top: 1rem;
+        }
+    }
+
+    .file {
+        border: 1px solid var(--bs-border-color);
+        border-radius: $border-radius;
+
+        .thumb {
+            height: 0;
+            padding-bottom: 75%;
+            position: relative;
+            overflow: hidden;
+            border-top-left-radius: subtract($border-radius, 1px);
+            border-top-right-radius: subtract($border-radius, 1px);
+
+            img {
+                position: absolute;
+                left: 50%;
+                top: 50%;
+                transform: translate3d(-50%, -50%, 0);
+
+                max-width: 100%;
+                height: auto;
+            }
+
+            &.thumb-v {
+                img {
+                    max-height: 100%;
+                    width: auto;
+                }
+            }
+        }
+
+        .thumb-bg,
+        .thumb-blur {
+            position: absolute;
+            z-index: 0;
+            width: 100%;
+            height: 100%;
+            left: 0;
+            top: 0;
+        }
+
+        .thumb-bg {
+            background-color: $black;
+            opacity: .1;
+        }
+
+        .thumb-blur {
+            filter: blur(.5rem);
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: cover;
+        }
+    }
+
+    //&.view-grid {
+    //}
+}
