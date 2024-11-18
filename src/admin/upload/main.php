@@ -56,17 +56,19 @@ if ($request['path_request'] !== $request['path']) {
     show_error($nv_Lang->getModule('notallowed'));
 }
 
-$request['type'] = $nv_Request->get_title('type', 'post,get', '');
+$request['type'] = $nv_Request->get_title('type', 'post', '');
 $request['show_file'] = (int) $nv_Request->get_bool('show_file', 'post', false);
 $request['show_folder'] = (int) $nv_Request->get_bool('show_folder', 'post', false);
-$request['area'] = htmlspecialchars(trim($nv_Request->get_string('area', 'get,post')), ENT_QUOTES);
-$request['alt'] = htmlspecialchars(trim($nv_Request->get_string('alt', 'get,post')), ENT_QUOTES);
+$request['area'] = htmlspecialchars(trim($nv_Request->get_string('area', 'post')), ENT_QUOTES);
+$request['alt'] = htmlspecialchars(trim($nv_Request->get_string('alt', 'post')), ENT_QUOTES);
 
-$request['page'] = $nv_Request->get_absint('page', 'post,get', 1);
+$request['q'] = nv_string_to_filename(htmlspecialchars(trim($nv_Request->get_string('q', 'post')), ENT_QUOTES));
+$request['page'] = $nv_Request->get_absint('page', 'post', 1);
 if ($request['page'] > 9999 or $request['page'] < 1) {
     $request['page'] = 1;
 }
 $request['order'] = $nv_Request->get_int('order', 'post', 0);
+$request['author'] = $nv_Request->get_int('author', 'post', 0);
 
 if ($request['type'] != 'image') {
     $request['type'] = 'file';
@@ -140,6 +142,7 @@ function viewdirtree($dir, $array_folders)
             'uuid' => md5($_dir),
             'title' => basename($_dir),
             'path' => $_dir,
+            'fetch_path' => $_dir,
             'allowed' => $check_allowed,
             'size' => empty($array_folders[$_dir]) ? 0 : nv_convertfromBytes($array_folders[$_dir]),
             'sub' => viewdirtree($_dir, $array_folders),
@@ -167,7 +170,13 @@ if ($nv_Request->isset_request('checkss', 'post')) {
         ]);
     }
 
-    $html_folders = $html_files = $html_pagination = '';
+    $respon = [
+        'status' => 'success',
+        'folders' => '',
+        'files' => '',
+        'pagination' => '',
+        'view' => null
+    ];
 
     // Lấy thư mục
     if ($request['show_folder']) {
@@ -187,6 +196,7 @@ if ($nv_Request->isset_request('checkss', 'post')) {
             'uuid' => md5($request['path']),
             'title' => basename($request['path']),
             'path' => $request['path'],
+            'fetch_path' => $request['path'] == NV_UPLOADS_DIR ? '' : $request['path'],
             'allowed' => $allowed,
             'size' => (empty($array_folders[$request['path']]) or empty($allowed)) ? 0 : nv_convertfromBytes($array_folders[$request['path']]),
             'sub' => viewdirtree($request['path'], $array_folders),
@@ -195,7 +205,7 @@ if ($nv_Request->isset_request('checkss', 'post')) {
         ]];
 
         $tpl->assign('TREES', $trees);
-        $html_folders = $tpl->fetch('foldlist.tpl');
+        $respon['folders'] = $tpl->fetch('foldlist.tpl');
     }
 
     // Lấy tệp tin
@@ -211,10 +221,23 @@ if ($nv_Request->isset_request('checkss', 'post')) {
 
             $db->sqlreset()->select('COUNT(tb1.name)')->from(NV_UPLOAD_GLOBALTABLE . '_file tb1');
 
-                //->join('INNER JOIN ' . NV_UPLOAD_GLOBALTABLE . '_dir tb2 ON tb1.did=tb2.did');
-
             $where = [];
             $where[] = 'tb1.did=' . $array_dirname[$request['currentpath']];
+
+            if (!empty($request['q'])) {
+                $db->join('INNER JOIN ' . NV_UPLOAD_GLOBALTABLE . '_dir tb2 ON tb1.did=tb2.did');
+
+                $dbkey = $db->dblikeescape($request['q']);
+
+                $where[] = "(tb1.title LIKE '%" . $dbkey . "%' OR tb1.alt LIKE '%" . $dbkey . "%')";
+                $where[] = "(tb2.dirname='" . $request['currentpath'] . "' OR tb2.dirname LIKE '" . $request['currentpath'] . "/%')";
+            }
+            if ($request['type'] != 'file') {
+                $where[] = "tb1.type=" . $db->quote($request['type']);
+            }
+            if ($request['author'] == 1) {
+                $where[] = "tb1.userid=" . $admin_info['admin_id'];
+            }
 
             if (!empty($where)) {
                 $db->where(implode(' AND ', $where));
@@ -237,28 +260,36 @@ if ($nv_Request->isset_request('checkss', 'post')) {
             $result = $db->query($db->sql());
 
             $files = [];
+            $num_file = $num_images = 0;
             while ($row = $result->fetch()) {
                 $file = [];
                 $file['src'] = NV_BASE_SITEURL . $row['src'] . '?' . $row['mtime'];
                 $file['width'] = $row['srcwidth'];
                 $file['height'] = $row['srcheight'];
+                $file['alt'] = $row['alt'];
+                $file['name'] = $row['name'];
+                $file['real_name'] = $row['title'];
+
+                if ($row['type'] == 'image' or $row['ext'] == 'swf') {
+                    $num_images++;
+                    $file['size'] = str_replace('|', ' x ', $row['sizes']) . ' px';
+                } else {
+                    $num_file++;
+                    $file['size'] = nv_convertfromBytes($row['filesize']);
+                }
 
                 $files[] = $file;
             }
             $result->closeCursor();
 
             $tpl->assign('FILES', $files);
-            $html_files = $tpl->fetch('listfile.tpl');
-            $html_pagination = nv_generate_page('#', $num_items, $per_page, $request['page']);
+            $respon['files'] = $tpl->fetch('listfile.tpl');
+            $respon['pagination'] = nv_generate_page('#page', $num_items, $per_page, $request['page']);
+            $respon['view'] = $num_file > ($num_images * 2) ? 'list' : 'grid';
         }
     }
 
-    nv_jsonOutput([
-        'status' => 'success',
-        'folders' => $html_folders,
-        'files' => $html_files,
-        'pagination' => $html_pagination
-    ]);
+    nv_jsonOutput($respon);
 }
 
 $contents = $tpl->fetch('main.tpl');

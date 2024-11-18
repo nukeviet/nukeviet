@@ -23,6 +23,7 @@ $tpl->assign('OP', $op);
 
 $tpl->assign('HTML_POPUP', escapeForJs($tpl->fetch('upload_modal.tpl')));
 $tpl->assign('HTML_CONTENT', escapeForJs($tpl->fetch('upload_ctn.tpl')));
+$tpl->assign('HTML_DIALOG', escapeForJs($tpl->fetch('upload_dialog.tpl')));
 
 $contents = $tpl->fetch('upload.js');
 

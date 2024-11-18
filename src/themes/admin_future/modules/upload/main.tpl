@@ -9,6 +9,7 @@ document.addEventListener('nv.upload.ready', () => {
     new nukeviet.Picker('#btn-picker', {
         //path: 'uploads/news',
         currentpath: 'uploads/news/2024_06',
+        type: 'image'
     });
 });
 </script>

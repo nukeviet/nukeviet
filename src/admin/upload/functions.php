@@ -633,7 +633,7 @@ $array_documents = ['doc', 'xls', 'chm', 'pdf', 'docx', 'xlsx'];
 $array_dirname = [];
 $array_thumb_config = [];
 
-$refresh = $nv_Request->isset_request('refresh', 'get');
+$refresh = $nv_Request->isset_request('refresh', 'post');
 $path = nv_check_path_upload($nv_Request->get_string('path', 'get', NV_UPLOADS_DIR));
 
 $sql = 'SELECT * FROM ' . NV_UPLOAD_GLOBALTABLE . '_dir ORDER BY dirname ASC';
@@ -649,7 +649,7 @@ while ($row = $result->fetch()) {
 }
 unset($array_dirname['']);
 
-if ($nv_Request->isset_request('dirListRefresh', 'get')) {
+if ($nv_Request->isset_request('dirListRefresh', 'post')) {
     $real_dirlist = nv_listUploadDir(NV_UPLOADS_DIR);
     $dirlist = array_keys($array_dirname);
     $result_no_exit = array_diff($dirlist, $real_dirlist);

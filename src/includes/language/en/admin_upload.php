@@ -167,6 +167,7 @@ $lang_module['thumb_dir_default'] = 'Default configuration';
 $lang_module['thumb_default_size_note'] = 'The maximum default size is %d x %d pixels';
 $lang_module['thumb_dir_size_note'] = 'Maximum size is 1000 x 1000 pixels';
 $lang_module['search'] = 'Search';
+$lang_module['order_type'] = 'Sort type';
 $lang_module['order0'] = 'Sort by date new';
 $lang_module['order1'] = 'Sort by date old';
 $lang_module['order2'] = 'Sort by file name';

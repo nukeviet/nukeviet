@@ -1,6 +1,8 @@
 {function writeTrees trees=[]}
 {foreach from=$trees item=tree}
-<li{if $tree.active} class="active"{/if}>
+<li{if $tree.active} class="active"{/if}
+    data-dir="{$tree.fetch_path}"
+>
     <div class="tree-item">
         {if not empty($tree.sub)}
         <a class="tree-collapse" data-bs-toggle="collapse" data-bs-target="#fms-tree-{$tree.uuid}" role="button" aria-expanded="{$tree.open ? 'true' : 'false'}" aria-controls="fms-tree-{$tree.uuid}">
@@ -9,7 +11,7 @@
         {else}
         <span class="tree-collapse"><i class="tree-icon fa-fw pe-none fa-solid {($tree.open and not empty($tree.sub)) ? 'fa-folder-open' : 'fa-folder'}" data-toggle="tree-icon" data-icon="fa-folder"></i></span>
         {/if}
-        <a href="#" class="tree-name">
+        <a href="#" class="tree-name" data-toggle="tree-name">
             <span class="pe-none">{$tree.title}</span>
             {if not empty($tree.size)}<span class="pe-none tree-size">({$tree.size})</span>{/if}
         </a>
