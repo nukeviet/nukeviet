@@ -34,25 +34,22 @@
                                 <li><a class="dropdown-item" href="#" data-order="2">{$LANG->getModule('order2')}</a></li>
                             </ul>
                         </div>
-                        <a class="p-1" href="#" data-toggle="filter-q">
-                            <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+                        <a class="p-1" href="#" data-toggle="filter-q" data-q="" title="{$LANG->getModule('search_by_key')}" aria-label="{$LANG->getModule('search_by_key')}" data-label-clear="{$LANG->getModule('search_clear_key')}" data-label-search="{$LANG->getModule('search_by_key')}">
+                            <i class="fa-solid fa-magnifying-glass fa-lg fa-fw" data-icon-clear="fa-ban text-danger" data-icon-search="fa-magnifying-glass"></i>
                         </a>
                     </div>
                     <div class="ms-auto d-flex align-items-center">
                         <div class="d-flex align-items-center gap-2">
-                            <div class="btn-group">
-                                <button type="button" class="btn btn-sm btn-primary">Tải file lên</button>
+                            <div class="d-none p-1" data-toggle="upload-notallowed">
+                                <span data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-title="{$LANG->getModule('notupload')}" title="{$LANG->getModule('notupload')}" aria-label="{$LANG->getModule('notupload')}"><i class="fa-solid fa-triangle-exclamation text-danger"></i></span>
+                            </div>
+                            <div class="d-none btn-group" data-toggle="upload-group">
+                                <button type="button" class="btn btn-sm btn-primary" data-toggle="upload-local-btn">{$LANG->getModule('upload_mode_local')}</button>
                                 <button type="button" class="btn btn-sm btn-primary dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown" aria-expanded="false">
-                                    <span class="visually-hidden">Tải file lên</span>
+                                    <span class="visually-hidden">{$LANG->getModule('upload_mode')}</span>
                                 </button>
                                 <ul class="dropdown-menu">
-                                    <li><a class="dropdown-item" href="#">Action</a></li>
-                                    <li><a class="dropdown-item" href="#">Another action</a></li>
-                                    <li><a class="dropdown-item" href="#">Something else here</a></li>
-                                    <li>
-                                        <hr class="dropdown-divider">
-                                    </li>
-                                    <li><a class="dropdown-item" href="#">Separated link</a></li>
+                                    <li><a class="dropdown-item" href="#" data-toggle="upload-remote-btn">{$LANG->getModule('upload_mode_remote')}</a></li>
                                 </ul>
                             </div>
                             <a class="p-1" href="#" data-toggle="list-grid" data-icon-list="fa-list-ul" data-icon-grid="fa-border-all" data-view="grid" aria-label="{$LANG->getModule('upload_view_detail')}" data-label-list="{$LANG->getModule('upload_view_thumbnail')}" data-label-grid="{$LANG->getModule('upload_view_detail')}">

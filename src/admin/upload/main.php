@@ -139,7 +139,7 @@ function viewdirtree($dir, $array_folders)
         }
 
         $tree[] = [
-            'uuid' => md5($_dir),
+            'uuid' => uniqid(),
             'title' => basename($_dir),
             'path' => $_dir,
             'fetch_path' => $_dir,
@@ -193,10 +193,10 @@ if ($nv_Request->isset_request('checkss', 'post')) {
 
         $allowed = nv_check_allow_upload_dir($request['path']);
         $trees = [[
-            'uuid' => md5($request['path']),
+            'uuid' => uniqid(),
             'title' => basename($request['path']),
             'path' => $request['path'],
-            'fetch_path' => $request['path'] == NV_UPLOADS_DIR ? '' : $request['path'],
+            'fetch_path' => ($request['path'] == NV_UPLOADS_DIR and !defined('NV_IS_SPADMIN')) ? '' : $request['path'],
             'allowed' => $allowed,
             'size' => (empty($array_folders[$request['path']]) or empty($allowed)) ? 0 : nv_convertfromBytes($array_folders[$request['path']]),
             'sub' => viewdirtree($request['path'], $array_folders),
@@ -222,7 +222,6 @@ if ($nv_Request->isset_request('checkss', 'post')) {
             $db->sqlreset()->select('COUNT(tb1.name)')->from(NV_UPLOAD_GLOBALTABLE . '_file tb1');
 
             $where = [];
-            $where[] = 'tb1.did=' . $array_dirname[$request['currentpath']];
 
             if (!empty($request['q'])) {
                 $db->join('INNER JOIN ' . NV_UPLOAD_GLOBALTABLE . '_dir tb2 ON tb1.did=tb2.did');
@@ -231,6 +230,8 @@ if ($nv_Request->isset_request('checkss', 'post')) {
 
                 $where[] = "(tb1.title LIKE '%" . $dbkey . "%' OR tb1.alt LIKE '%" . $dbkey . "%')";
                 $where[] = "(tb2.dirname='" . $request['currentpath'] . "' OR tb2.dirname LIKE '" . $request['currentpath'] . "/%')";
+            } else {
+                $where[] = 'tb1.did=' . $array_dirname[$request['currentpath']];
             }
             if ($request['type'] != 'file') {
                 $where[] = "tb1.type=" . $db->quote($request['type']);

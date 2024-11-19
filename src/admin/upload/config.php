@@ -62,7 +62,9 @@ if ($nv_Request->isset_request('save', 'post')) {
         $sth->execute();
     }
 
-    $nv_Cache->delAll();
+    $db->query('UPDATE ' . NV_CONFIG_GLOBALTABLE . " SET config_value = '" . NV_CURRENTTIME . "' WHERE lang = 'sys' AND module = 'global' AND config_name = 'timestamp'");
+    nv_save_file_config_global();
+
     nv_jsonOutput([
         'status' => 'success',
         'mess' => $nv_Lang->getGlobal('save_success'),

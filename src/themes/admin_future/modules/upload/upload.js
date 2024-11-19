@@ -7,7 +7,7 @@
  */
 document.addEventListener('DOMContentLoaded', () => {
     let cssNum = 0, jsNum = 0, ready = false;
-    let amountCss = 3, amountJs = 7;
+    let amountCss = 3, amountJs = 9;
 
     // Tải jquery UI
     if (typeof $.ui == "undefined") {
@@ -50,6 +50,12 @@ document.addEventListener('DOMContentLoaded', () => {
     } else {
         jsNum++;
         cssNum++;
+    }
+    // Tải select2
+    if (typeof $.fn.select2 == "undefined") {
+        loadScript(nv_base_siteurl + "assets/js/select2/select2.min.js", nv_base_siteurl + "assets/js/select2/i18n/" + nv_lang_interface + ".js");
+    } else {
+        jsNum += 2;
     }
 
     // Xuất ra event sẵn sàng
@@ -148,12 +154,20 @@ nukeviet.Picker = class {
         this.html_dialog = this.html_dialog.replace(/\[prefix\]/g, this.fmdId);
         this.html_container = this.html_container.replace(/\[prefix\]/g, this.fmsId);
 
+        this.up = null;
+
+        this.constant = {
+            auto_alt: {$UPLOAD_AUTO_ALT},
+            alt_require: {$UPLOAD_ALT_REQUIRE}
+        }
+
         this.init();
     }
 
     // Dựng trình quản lý tệp tin
     init() {
         let cfg = this.settings;
+
         const self = this;
         if (cfg.show == 'inline') {
             self.fms = $(self.html_container);
@@ -262,12 +276,33 @@ nukeviet.Picker = class {
             tree.addClass('active');
             self.page = 1;
             self.fetchFile();
+            self.initUploader();
         });
 
         // Nút tìm kiếm
         $('[data-toggle="filter-q"]', self.fms).on('click', function(e) {
             e.preventDefault();
+
+            const fq = $(this);
+            if (fq.data('q') != '') {
+                const icon = $('i', fq);
+                fq.data('q', '');
+                fq.attr('title', fq.data('label-search'));
+                fq.attr('aria-label', fq.data('label-search'));
+                icon.removeClass(icon.data('icon-clear')).addClass(icon.data('icon-search'));
+
+                self.page = 1;
+                self.fetchFile();
+                return;
+            }
+
             self.showDialog('search');
+        });
+
+        // Nút upload tệp từ internet
+        $('[data-toggle="upload-remote-btn"]', self.fms).on('click', function(e) {
+            e.preventDefault();
+            self.showDialog('upload-remote');
         });
 
         // Nút reload
@@ -291,8 +326,23 @@ nukeviet.Picker = class {
 
         // Đóng các dialog
         self.fmd.on('click', '[data-dismiss="fmd"]', function() {
-            self.hideDialog(this);
+            self.hideDialog($(this).closest('.fmd'));
         });
+
+        // Select2 trong các dialog
+        $('[data-toggle="select2"]', self.fmd).select2({
+            language: nv_lang_interface,
+            dir: $('html').attr('dir'),
+            width: '100%'
+        });
+
+        // Submit form trong các dialog
+        $('form', self.fmd).on('submit', function(e) {
+            self.submitDialogCallback(this, e);
+        });
+
+        // Handler lỗi trong các dialog
+        self.handlerDialogError();
 
         // Kiểu danh sách hoặc lưới
         $('[data-toggle="list-grid"]', self.fms).on('click', function(e) {
@@ -301,8 +351,44 @@ nukeviet.Picker = class {
             self.fs.update();
         });
 
+        // Tooltip trong container
+        $('[data-bs-toggle="tooltip"]', self.fms).each(function() {
+            new bootstrap.Tooltip(this);
+        });
+
+        // Tự xác định alt khi nhập url upload remote
+        self.fmd.filter('[data-dialog="upload-remote"]').on('keyup', '[name="fileurl"]', function() {
+            if (!self.constant.auto_alt) {
+                return;
+            }
+            const dig = $(this).closest('.fmd');
+            $('[name="filealt"]', dig).val(self.getAlt($(this).val()));
+        });
+
+        // Xử lý sự kiện khi click vào khu vực file
+        $('[data-toggle="file-scroller"]', self.fms).on('click', function(e) {
+            self.handlerFileClick(e);
+        });
+
         // Lấy nội dung
         self.fetchAll();
+    }
+
+    // Thiết lập trình upload
+    initUploader() {
+        const self = this;
+        if (self.up) {
+            self.up.destroy();
+            self.up = null;
+        }
+        const tree = $('[data-toggle="tree-scroller"]', self.fms).find('li.active');
+        if (tree.length != 1 || !tree.data('allowed-upload-file')) {
+            $('[data-toggle="upload-notallowed"]', self.fms).removeClass('d-none');
+            $('[data-toggle="upload-group"]', self.fms).addClass('d-none');
+            return;
+        }
+        $('[data-toggle="upload-notallowed"]', self.fms).addClass('d-none');
+        $('[data-toggle="upload-group"]', self.fms).removeClass('d-none');
     }
 
     // Đóng trình quản lý tệp tin dạng popup
@@ -323,6 +409,7 @@ nukeviet.Picker = class {
                 self.fs = null;
                 self.ts = null;
                 self.qs = null;
+                self.up = null;
             }, 300);
         }
 
@@ -431,6 +518,12 @@ nukeviet.Picker = class {
             pr.refresh = 1;
         }
 
+        // Tìm theo từ khóa
+        const q = $('[data-toggle="filter-q"]', self.fms);
+        if (q.length && q.data('q') && q.data('q').toString().length > 0) {
+            pr.q = q.data('q');
+        }
+
         $.ajax({
             type: 'POST',
             url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=main&nocache=' + new Date().getTime(),
@@ -446,6 +539,7 @@ nukeviet.Picker = class {
                 if (tree) {
                     $('[data-toggle="tree-scroller"]', self.fms).html(respon.folders);
                     self.ts.update();
+                    self.initUploader();
                 }
                 if (file) {
                     $('[data-toggle="file-scroller"]', self.fms).html(respon.files);
@@ -554,6 +648,31 @@ nukeviet.Picker = class {
         return result;
     }
 
+    // Xử lý ẩn error trong các form ở dialog
+    handlerDialogError() {
+        const self = this;
+        $('select', self.fmd).on('change keyup', function() {
+            $(this).removeClass('is-invalid is-valid');
+            if ($(this).parent().is('.input-group')) {
+                $(this).parent().removeClass('is-invalid is-valid');
+            }
+        });
+        $('[type="text"], [type="password"], [type="number"], [type="email"], textarea', self.fmd).on('change keyup', function(e) {
+            if (e.type == "keyup" && e.which == 13) {
+                return;
+            }
+            let pr = $(this).parent();
+            let prAlso = $(this).parent().is('.input-group');
+            if (trim($(this).val()) == '' && $(this).is('.required')) {
+                $(this).addClass('is-invalid');
+                (prAlso && pr.addClass('is-invalid'));
+            } else {
+                $(this).removeClass('is-invalid is-valid');
+                (prAlso && pr.removeClass('is-invalid is-valid'));
+            }
+        });
+    }
+
     // Hiển thị các dialog
     showDialog(name) {
         const self = this;
@@ -569,6 +688,7 @@ nukeviet.Picker = class {
 
         body.style.paddingRight = self.scrollbarWidth() + 'px';
         body.style.overflow = 'hidden';
+        $('body').addClass('fmd-open');
 
         // Tạo hiệu ứng của nền mỗi lần mở modal
         self.backdropDig = $(self.html_dialog_backdrop);
@@ -585,17 +705,62 @@ nukeviet.Picker = class {
             dig.removeAttr('aria-hidden');
             self.showDialogCallback(name, dig);
         }, 1);
+        setTimeout(() => {
+            self.shownDialogCallback(name, dig);
+        }, 301);
+    }
+
+    // Xử lý khi Dialog bắt đầu mở lên
+    showDialogCallback(name, dialog) {
+        const self = this;
+
+        // Form tìm kiếm
+        if (name == 'search') {
+            $('[name="dir"]', dialog).html('');
+
+            $('[data-toggle="tree-name"]', self.fms).each(function() {
+                const tree = $(this).closest('li');
+                if (tree.data('dir') == '') {
+                    return;
+                }
+                const opt = $('<option></option>');
+                opt.attr('value', tree.data('uuid'));
+                opt.text(tree.data('path'));
+                if (tree.is('.active')) {
+                    opt.prop('selected', true);
+                }
+                $('[name="dir"]', dialog).append(opt);
+            });
+
+            $('[name="q"]', dialog).val('');
+            return;
+        }
+
+        // Upload file từ internet
+        if (name == 'upload-remote') {
+            $('[name="fileurl"]', dialog).val('');
+            $('[name="filealt"]', dialog).val('');
+            $('[name="path"]', dialog).val(self.getCurrentPath());
+            return;
+        }
     }
 
     // Xử lý sau khi Dialog được mở lên
-    showDialogCallback(name, dialog) {
-        console.log(name, dialog);
+    shownDialogCallback(name, dialog) {
+        if (name == 'search') {
+            $('[name="q"]', dialog).focus();
+            return;
+        }
+
+        if (name == 'upload-remote') {
+            $('[name="fileurl"]', dialog).focus();
+            return;
+        }
     }
 
     // Đóng các dialog
-    hideDialog(btn) {
+    hideDialog(dig) {
         const self = this;
-        const dig = $(btn).closest('.fmd');
 
         dig.removeClass('show');
         dig.removeAttr('aria-modal');
@@ -616,12 +781,209 @@ nukeviet.Picker = class {
             if (body.getAttribute('style') === '') {
                 body.removeAttribute('style');
             }
+            $('body').removeClass('fmd-open');
+            self.hideDialogCallback(dig);
         }, 300);
     }
 
     // Xử lý sau khi Dialog đóng lại
     hideDialogCallback(dialog) {
-        //
+        $('.is-invalid', dialog).removeClass('is-invalid');
+    }
+
+    // Xử lý khi submit các form trong Dialog
+    submitDialogCallback(form, event) {
+        event.preventDefault();
+
+        const dig = $(form).closest('.fmd');
+        const self = this;
+
+        // Form tìm kiếm
+        if (dig.data('dialog') == 'search') {
+            if (trim($('[name="q"]', dig).val()) === '') {
+                $('[name="q"]', dig).addClass('is-invalid').focus();
+                return;
+            }
+
+            const fq = $('[data-toggle="filter-q"]', self.fms);
+            const icon = $('i', fq);
+            fq.data('q', trim($('[name="q"]', dig).val()));
+            fq.attr('title', fq.data('label-clear'));
+            fq.attr('aria-label', fq.data('label-clear'));
+            icon.removeClass(icon.data('icon-search')).addClass(icon.data('icon-clear'));
+
+            $('[data-toggle="tree-scroller"]', self.fms).find('.active').removeClass('active');
+            $('[data-uuid="' + $('[name="dir"]', dig).val() + '"]', self.fms).addClass('active');
+            self.openToTree($('[name="dir"]', dig).val());
+
+            self.hideDialog(dig);
+            self.page = 1;
+            self.fetchFile();
+            self.initUploader();
+            return;
+        }
+
+        // Form upload file từ internet
+        if (dig.data('dialog') == 'upload-remote') {
+            let url = trim($('[name="fileurl"]', dig).val());
+            // {literal}
+            const regex = /^(?:(?:https?|ftp):\/\/)(?:\S+(?::\S*)?@|\d{1,3}(?:\.\d{1,3}){3}|(?:(?:[a-z\d\u00a1-\uffff]+-?)*[a-z\d\u00a1-\uffff]+)(?:\.(?:[a-z\d\u00a1-\uffff]+-?)*[a-z\d\u00a1-\uffff]+)*(?:\.[a-z\u00a1-\uffff]{2,6}))(?::\d+)?(?:\/[^\s]*)?$/gm;
+            // {/literal}
+            if (url != '' && /^(https?|ftp):\/\//i.test(url) === false) {
+                url = 'https://' + url;
+                $('[name="fileurl"]', dig).val(url);
+            }
+            if (url === '' || !regex.test(url)) {
+                $('[name="fileurl"]', dig).addClass('is-invalid').focus();
+                return;
+            }
+            if (self.constant.alt_require && trim($('[name="filealt"]', dig).val()) === '') {
+                $('[name="filealt"]', dig).addClass('is-invalid').focus();
+                return;
+            }
+            const data = $(form).serialize();
+            $('input, textarea, select, button', $(form)).prop('disabled', true);
+            $.ajax({
+                url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=upload&' + nv_fc_variable + '=upload&nocache=' + new Date().getTime(),
+                type: 'POST',
+                data: data,
+                cache: false,
+                success: function(respon) {
+                    $('input, textarea, select, button', $(form)).prop('disabled', false);
+                    const res = respon.split('_');
+                    if (res[0] == 'ERROR') {
+                        nvToast(res[1], 'error');
+                        return;
+                    }
+                    self.hideDialog(dig);
+                    self.page = 1;
+                    self.fetchFile();
+                    // FIXME chỗ này chưa xong
+                },
+                error: function(xhr, text, err) {
+                    $('input, textarea, select, button', $(form)).prop('disabled', false);
+                    nvToast(err, 'error');
+                    console.log(xhr, text, err);
+                }
+            });
+            return;
+        }
+    }
+
+    // Mở cây thư mục ra đến khi thấy được thư mục có uuid hiện tại
+    openToTree(uuid) {
+        const self = this;
+        const tree = $('[data-uuid="' + uuid + '"]', self.fms);
+        const ctn = $('[data-toggle="tree-scroller"]', self.fms);
+        tree.parentsUntil(ctn, 'li').each(function () {
+            const tree = $('#fms-tree-' + $(this).data('uuid'));
+            if (!tree.is('.show')) {
+                bootstrap.Collapse.getOrCreateInstance(tree[0]).show();
+            }
+        });
+    }
+
+    // Trả về mảng các file được chọn, nếu không có tệp trả về rỗng
+    getSelectedFile() {
+
+    }
+
+    // Chọn tệp
+    setSelectedFile() {
+
+    }
+
+    // Lấy alt từ tên tệp tin
+    getAlt(name) {
+        const lastChar = name.charAt(name.length - 1);
+        if (lastChar === '/' || lastChar === '\\') {
+            name = name.slice(0, -1);
+        }
+        name = decodeURIComponent(this.strDecode(name.replace(/^.*[\/\\]/g, '')).replace(/%([^\d].)/, "%25$1"));
+        name = name.split('.').slice(0, -1).join(' ');
+        name = name.replace(/[\_\-\s]+/gi, ' ');
+
+        return trim(name);
+    }
+
+    strDecode(string, quote_style) {
+        /*
+         * Source: http://phpjs.org/functions/htmlspecialchars_decode/
+         * Author: Mirek Slugen
+         */
+        var optTemp = 0,
+            i = 0,
+            noquotes = false;
+        if (typeof quote_style === 'undefined') {
+            quote_style = 2;
+        }
+        string = string.toString()
+            .replace(/&lt;/g, '<')
+            .replace(/&gt;/g, '>');
+        var OPTS = {
+            'ENT_NOQUOTES': 0,
+            'ENT_HTML_QUOTE_SINGLE': 1,
+            'ENT_HTML_QUOTE_DOUBLE': 2,
+            'ENT_COMPAT': 2,
+            'ENT_QUOTES': 3,
+            'ENT_IGNORE': 4
+        };
+        if (quote_style === 0) {
+            noquotes = true;
+        }
+        if (typeof quote_style !== 'number') {
+            quote_style = [].concat(quote_style);
+            for (i = 0; i < quote_style.length; i++) {
+                if (OPTS[quote_style[i]] === 0) {
+                    noquotes = true;
+                } else if (OPTS[quote_style[i]]) {
+                    optTemp = optTemp | OPTS[quote_style[i]];
+                }
+            }
+            quote_style = optTemp;
+        }
+        if (quote_style & OPTS.ENT_HTML_QUOTE_SINGLE) {
+            string = string.replace(/&#0*39;/g, "'");
+        }
+        if (!noquotes) {
+            string = string.replace(/&quot;/g, '"');
+        }
+        string = string.replace(/&amp;/g, '&');
+
+        return string;
+    }
+
+    // Lấy path đang active hiện tại
+    getCurrentPath() {
+        const tree = $('[data-toggle="tree-scroller"]', this.fms).find('li.active:first');
+        if (tree.length != 1) {
+            return '';
+        }
+        return tree.data('path');
+    }
+
+    // Xử lý event khi click chuột trái vào tệp tin
+    handlerFileClick(event) {
+
+        //console.log(event.ctrlKey);
+
+        const self = this;
+        let file = [];
+        if ($(event.target).is('[data-toggle="file"]')) {
+            file = $(event.target);
+        } else {
+            const ff = $(event.target).closest('[data-toggle="file"]');
+            if (ff.length == 1) {
+                file = ff;
+            }
+        }
+
+        $('[data-toggle="file"]', self.fms).removeClass('selected');
+
+        if (file.length == 1) {
+            file.addClass('selected');
+            return;
+        }
     }
 };
 

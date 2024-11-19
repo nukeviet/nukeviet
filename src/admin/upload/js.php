@@ -20,6 +20,19 @@ $tpl->assign('LANG', $nv_Lang);
 $tpl->assign('TEMPLATE', $template);
 $tpl->assign('MODULE_NAME', $module_name);
 $tpl->assign('OP', $op);
+$tpl->assign('GCONFIG', $global_config);
+
+// Các biến này tạo nhằm mục đích dễ nhìn trong JS, không bị cảnh báo syntax trong js
+$tpl->assign('UPLOAD_ALT_REQUIRE', !empty($global_config['upload_alt_require']) ? 'true' : 'false');
+$tpl->assign('UPLOAD_AUTO_ALT', !empty($global_config['upload_auto_alt']) ? 'true' : 'false');
+
+$upload_logo = $upload_logo_config = '';
+if (!empty($global_config['upload_logo']) and file_exists(NV_ROOTDIR . '/' . $global_config['upload_logo'])) {
+    $upload_logo = NV_BASE_SITEURL . $global_config['upload_logo'];
+    $logo_size = getimagesize(NV_ROOTDIR . '/' . $global_config['upload_logo']);
+    $upload_logo_config = $logo_size[0] . '|' . $logo_size[1] . '|' . $global_config['autologosize1'] . '|' . $global_config['autologosize2'] . '|' . $global_config['autologosize3'];
+}
+$tpl->assign('UPLOAD_LOGO', $upload_logo);
 
 $tpl->assign('HTML_POPUP', escapeForJs($tpl->fetch('upload_modal.tpl')));
 $tpl->assign('HTML_CONTENT', escapeForJs($tpl->fetch('upload_ctn.tpl')));

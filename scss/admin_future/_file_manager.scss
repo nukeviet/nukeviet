@@ -37,6 +37,12 @@
     z-index: $zindex-fmd;
 }
 
+.fmd-open {
+    .select2-dropdown {
+        --bs-dropdown-zindex: #{$zindex-fmd};
+    }
+}
+
 .fmm-dialog,
 .fmd-dialog {
     position: relative;
@@ -319,6 +325,7 @@
 // Hiển thị tệp dạng lưới
 .view-grid>.fms-files-wraper {
     margin-top: -1rem;
+    padding-bottom: 2px;
 
     >ul {
         >li {
@@ -332,6 +339,10 @@
     .file {
         border: 1px solid var(--bs-border-color);
         border-radius: $border-radius;
+
+        &.selected {
+            border-color: $primary;
+        }
 
         .thumb {
             height: 0;
@@ -399,6 +410,8 @@
 
 // Hiển thị tệp dạng danh sách
 .view-list>.fms-files-wraper {
+    padding-bottom: 1px;
+
     >ul {
         >li {
             flex: 0 0 100%;
@@ -410,7 +423,7 @@
     .file {
         border-bottom: 1px solid var(--bs-border-color);
         display: flex;
-        line-height: 1;
+        line-height: 1.3;
         padding-bottom: .5rem;
 
         .thumb {
@@ -429,6 +442,12 @@
         .info {
             flex: 0 0 7.5rem;
             max-width: 7.5rem;
+        }
+
+        &.selected {
+            .name {
+                color: $primary;
+            }
         }
     }
 }

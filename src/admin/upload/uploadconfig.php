@@ -191,6 +191,7 @@ if ($nv_Request->isset_request('save', 'post')) {
             $sth->execute();
         }
 
+        $db->query('UPDATE ' . NV_CONFIG_GLOBALTABLE . " SET config_value = '" . NV_CURRENTTIME . "' WHERE lang = 'sys' AND module = 'global' AND config_name = 'timestamp'");
         nv_save_file_config_global();
     } else {
         $nv_Cache->delMod('settings');

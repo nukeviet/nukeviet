@@ -2,6 +2,10 @@
 {foreach from=$trees item=tree}
 <li{if $tree.active} class="active"{/if}
     data-dir="{$tree.fetch_path}"
+    data-path="{$tree.path}"
+    data-uuid="{$tree.uuid}"
+    data-allowed-create-file="{$tree.allowed.create_file ?? 0}"
+    data-allowed-upload-file="{$tree.allowed.upload_file ?? 0}"
 >
     <div class="tree-item">
         {if not empty($tree.sub)}
