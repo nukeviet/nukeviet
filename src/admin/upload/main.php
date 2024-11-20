@@ -270,6 +270,7 @@ if ($nv_Request->isset_request('checkss', 'post')) {
                 $file['alt'] = $row['alt'];
                 $file['name'] = $row['name'];
                 $file['real_name'] = $row['title'];
+                $file['uuid'] = uniqid();
 
                 if ($row['type'] == 'image' or $row['ext'] == 'swf') {
                     $num_images++;
@@ -305,8 +306,6 @@ $contents = $tpl->fetch('main.tpl');
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_admin_theme($contents);
 include NV_ROOTDIR . '/includes/footer.php';
-
-
 
 $xtpl = new XTemplate('main.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
 

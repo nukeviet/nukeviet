@@ -2,7 +2,13 @@
     <ul>
         {foreach from=$FILES item=file}
         <li>
-            <div class="file" data-toggle="file">
+            <div class="file"
+                data-toggle="file"
+                data-name="{$file.real_name}"
+            >
+                <div class="sel">
+                    <input class="form-check-input" data-toggle="file-check" type="checkbox" id="{$file.uuid}-file-checkbox" value="" aria-label="{$LANG->getModule('selectimg')}">
+                </div>
                 <div class="thumb{if $file.height > $file.width} thumb-v{/if}">
                     <span class="thumb-blur" style="background-image: url({$file.src});"></span>
                     <span class="thumb-bg"></span>
@@ -13,6 +19,9 @@
                     <span class="name-cut">{$file.name}</span>
                 </div>
                 <div class="info">{$file.size}</div>
+                <div class="menu">
+                    <button type="button" data-toggle="file-menu" class="btn-menu btn btn-sm btn-secondary" aria-label="{$LANG->getGlobal('option')}"><i class="fa-solid fa-caret-down fa-fw"></i></button>
+                </div>
             </div>
         </li>
         {/foreach}

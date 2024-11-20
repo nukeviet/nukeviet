@@ -21,6 +21,7 @@ $tpl->assign('TEMPLATE', $template);
 $tpl->assign('MODULE_NAME', $module_name);
 $tpl->assign('OP', $op);
 $tpl->assign('GCONFIG', $global_config);
+$tpl->assign('DEBUG', (defined('NV_DEBUG') and NV_DEBUG == 1) ? 'true' : 'false');
 
 // Các biến này tạo nhằm mục đích dễ nhìn trong JS, không bị cảnh báo syntax trong js
 $tpl->assign('UPLOAD_ALT_REQUIRE', !empty($global_config['upload_alt_require']) ? 'true' : 'false');
@@ -34,9 +35,17 @@ if (!empty($global_config['upload_logo']) and file_exists(NV_ROOTDIR . '/' . $gl
 }
 $tpl->assign('UPLOAD_LOGO', $upload_logo);
 
+$sys_max_size = $sys_max_size_local = min($global_config['nv_max_size'], nv_converttoBytes(ini_get('upload_max_filesize')), nv_converttoBytes(ini_get('post_max_size')));
+if ($global_config['nv_overflow_size'] > $sys_max_size and $global_config['upload_chunk_size'] > 0) {
+    $sys_max_size_local = $global_config['nv_overflow_size'];
+}
+$tpl->assign('NV_MAX_SIZE_BYTES', $sys_max_size_local);
+$tpl->assign('NV_CHUNK_SIZE', $global_config['upload_chunk_size']);
+
 $tpl->assign('HTML_POPUP', escapeForJs($tpl->fetch('upload_modal.tpl')));
 $tpl->assign('HTML_CONTENT', escapeForJs($tpl->fetch('upload_ctn.tpl')));
 $tpl->assign('HTML_DIALOG', escapeForJs($tpl->fetch('upload_dialog.tpl')));
+$tpl->assign('HTML_QUEUE_ITEM', escapeForJs($tpl->fetch('upload_queue_item.tpl')));
 
 $contents = $tpl->fetch('upload.js');
 

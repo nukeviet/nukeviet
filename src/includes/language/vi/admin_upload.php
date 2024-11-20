@@ -44,6 +44,7 @@ $lang_module['upload_delfile'] = 'Xóa file';
 $lang_module['upload_cancel'] = 'Hủy';
 $lang_module['upload_createimage'] = 'Công cụ ảnh';
 $lang_module['upload_add_files'] = 'Thêm file';
+$lang_module['upload_progressbar'] = 'Tiến độ tải lên';
 $lang_module['type_file'] = 'Tất cả';
 $lang_module['type_image'] = 'Hình ảnh';
 $lang_module['rename'] = 'Đổi tên file';

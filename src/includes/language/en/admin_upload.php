@@ -44,6 +44,7 @@ $lang_module['upload_delfile'] = 'Delete file';
 $lang_module['upload_cancel'] = 'Cancel';
 $lang_module['upload_createimage'] = 'Create Image';
 $lang_module['upload_add_files'] = 'Add files';
+$lang_module['upload_progressbar'] = 'Upload progress';
 $lang_module['type_file'] = 'All file';
 $lang_module['type_image'] = 'File Image';
 $lang_module['rename'] = 'Rename';

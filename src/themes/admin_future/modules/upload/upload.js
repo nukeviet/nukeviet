@@ -120,6 +120,7 @@ nukeviet.Picker = class {
     html_modal = `{$HTML_POPUP}`;
     html_container = `{$HTML_CONTENT}`;
     html_dialog = `{$HTML_DIALOG}`;
+    html_queue_item = `{$HTML_QUEUE_ITEM}`;
     html_modal_backdrop = `<div class="fmm-backdrop fade"></div>`;
     html_dialog_backdrop = `<div class="fmd-backdrop fade"></div>`;
 
@@ -161,6 +162,7 @@ nukeviet.Picker = class {
             alt_require: {$UPLOAD_ALT_REQUIRE}
         }
 
+        this.debug = {$DEBUG};
         this.init();
     }
 
@@ -285,11 +287,7 @@ nukeviet.Picker = class {
 
             const fq = $(this);
             if (fq.data('q') != '') {
-                const icon = $('i', fq);
-                fq.data('q', '');
-                fq.attr('title', fq.data('label-search'));
-                fq.attr('aria-label', fq.data('label-search'));
-                icon.removeClass(icon.data('icon-clear')).addClass(icon.data('icon-search'));
+                self.removeFilterQ(fq);
 
                 self.page = 1;
                 self.fetchFile();
@@ -366,9 +364,74 @@ nukeviet.Picker = class {
         });
 
         // Xử lý sự kiện khi click vào khu vực file
-        $('[data-toggle="file-scroller"]', self.fms).on('click', function(e) {
-            self.handlerFileClick(e);
+        //$('[data-toggle="file-scroller"]', self.fms).on('click', function(e) {
+        //    self.handlerFileClick(e);
+        //});
+
+        /*
+        $('[data-toggle="file-scroller"]', self.fms).on('mousedown touchstart', function(e) {
+            if (e.type == 'mousedown' && (self.canTouch() || e.button != 0)) {
+                // Không xử lý thao tác nhấn chuột trên màn cảm ứng hoặc nhấn xuống chuột giữa, chuột phải
+                return;
+            }
+            console.log(e.type, Date.now(), e);
         });
+        $('[data-toggle="file-scroller"]', self.fms).on('mouseup touchend touchcancel', function(e) {
+            if (e.type == 'mouseup' && (self.canTouch() || e.button == 1)) {
+                // Không xử lý thao tác thả chuột trên màn cảm ứng hoặc thả chuột giữa
+                return;
+            }
+            if (e.type == 'mouseup' && e.button == 2) {
+                e.preventDefault();
+                e.stopPropagation();
+                console.log('context menu');
+                return;
+            }
+            console.log(e.type, Date.now(), e);
+        });
+        $('[data-toggle="file-scroller"]', self.fms).on('mousemove touchmove', function(e) {
+            //console.log(e.type);
+        });
+        $('[data-toggle="file-scroller"]', self.fms).on('click', function(e) {
+            console.log(e.type, Date.now());
+        });
+        */
+
+        // Mở menu chuột phải ở file. Không xử lý trên mobile
+        self.fms.on('contextmenu', '[data-toggle="file"]', function(e) {
+            const file = self.findFileFromEvent(e);
+            if (!file || self.canTouch()) {
+                return;
+            }
+            e.preventDefault();
+            console.log(file);
+        });
+
+        /**
+         * Mở menu chuột phải ở thư mục. Không xử lý trên mobile
+         * Trên mobile trượt phải hoặc trượt trái tên thư mục
+         */
+        self.fms.on('contextmenu', '[data-toggle="tree-name"]', function(e) {
+            if (self.canTouch()) {
+                return;
+            }
+            e.preventDefault();
+            const tree = $(this).closest('li');
+            console.log(tree);
+        });
+
+        // Check chọn file bằng input check
+        self.fms.on('change', '[data-toggle="file-check"]', function() {
+            const file = $(this).closest('[data-toggle="file"]');
+            if ($(this).is(':checked')) {
+                file.addClass('selected');
+            } else {
+                file.removeClass('selected');
+            }
+        });
+
+        // Xử lý các sự kiện liên quan upload
+        self.initUploadEvents();
 
         // Lấy nội dung
         self.fetchAll();
@@ -389,6 +452,171 @@ nukeviet.Picker = class {
         }
         $('[data-toggle="upload-notallowed"]', self.fms).addClass('d-none');
         $('[data-toggle="upload-group"]', self.fms).removeClass('d-none');
+
+        self.up = new plupload.Uploader({
+            runtimes: 'html5,flash,silverlight,html4',
+            browse_button: $('[data-toggle="upload-local-btn"]', self.fms)[0],
+            url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=upload&' + nv_fc_variable + '=upload&path=' + encodeURIComponent(self.getCurrentPath()) + '&nocache=' + new Date().getTime(),
+            flash_swf_url: nv_base_siteurl + 'assets/js/plupload/Moxie.swf',
+            silverlight_xap_url: nv_base_siteurl + 'assets/js/plupload/Moxie.xap',
+            //drop_element: 'upload-content',
+            file_data_name: 'upload',
+            multipart: true,
+            multipart_params: {
+                "filealt": "--"
+            },
+            filters: {
+                max_file_size: {$NV_MAX_SIZE_BYTES},
+                mime_types: []
+            },
+            chunk_size: {$NV_CHUNK_SIZE},
+            resize: false,
+            init: {
+                FilesAdded: (up, files) => {
+                    self.debug && console.log('Plupload FilesAdded', files, up);
+                    self.upQueueRender();
+                    self.upAppendList();
+                },
+                UploadProgress: (up, file) => {
+                    // Trạng thái upload của 1 tệp
+                    self.debug && console.log('Plupload UploadProgress', file, up);
+                    self.upStatusFile(file);
+                    self.upTotalPercent();
+                },
+                FileUploaded: (up, file, response) => {
+                    self.debug && console.log('Plupload FileUploaded', file, response, up);
+                    self.upStatusFile(file, response.response);
+                },
+                QueueChanged: () => {
+                    // Xóa hoặc thêm tệp
+                    self.debug && console.log('Plupload QueueChanged');
+                    if (self.up.files.length < 1) {
+                        self.upQueueReset();
+                        return;
+                    }
+
+                    // Tính toán tổng dung lượng
+                    let totalSize = 0;
+                    self.up.files.forEach(file => {
+                        totalSize += file.size;
+                    });
+                    $('[data-toggle="queue-size"]', self.fms).text(plupload.formatSize(totalSize));
+
+                    // Xử lý có độ trễ do event FilesAdded xảy ra trước
+                    setTimeout(() => {
+                        let qe = $('[data-toggle="queue-scroller"]', self.fms);
+                        if (qe.length) {
+                            qe[0].scrollTop = qe[0].scrollHeight;
+                        }
+                        if (self.qs) {
+                            self.qs.update();
+                        }
+                    }, 10);
+                },
+                BeforeUpload: (up, file) => {
+                    self.debug && console.log('Plupload BeforeUpload', file, up);
+
+                    // Thêm một số thiết lập cho tệp tin trước khi upload
+                    let filealt = '';
+                    let fi = $('#' + file.id);
+                    if (fi.length) {
+                        filealt = trim($('[name="queue_item_alt"]', fi).val());
+                    }
+                    self.up.settings.multipart_params = {
+                        filealt: filealt,
+                        autologo: ($('[name="queue_autologo"]', self.fms).is(':checked') ? 1 : 0)
+                    };
+                },
+                Error: (up, err) => {
+                    self.debug && console.log('Plupload Error', up, err);
+                },
+                UploadComplete: (up, files) => {
+                    self.debug && console.log('Plupload UploadComplete', up, files);
+
+                    $('[data-toggle="queue-stop"]', self.fms).addClass('d-none');
+                    $('[data-toggle="queue-continue"]', self.fms).addClass('d-none');
+
+                    if (self.up.total.failed > 0) {
+                        // Có tệp tải lên lỗi
+                        $('[data-toggle="queue-finish"]', self.fms).removeClass('d-none');
+                        return;
+                    }
+
+                    // Toàn bộ hoàn tất
+                    $('[data-toggle="queue-finishloader"]', self.fms).removeClass('d-none');
+                    setTimeout(() => {
+                        self.upFinish();
+                    }, 1000);
+                }
+            }
+        });
+        self.up.init();
+    }
+
+    // Xử lý các sự kiện khi upload
+    initUploadEvents() {
+        const self = this;
+
+        // Nút thêm tệp vào queue
+        $('[data-toggle="queue-add"]', self.fms).on('click', function() {
+            $('[data-toggle="upload-local-btn"]', self.fms)[0].click();
+        });
+
+        // Nút huỷ queue
+        $('[data-toggle="queue-cancel"]', self.fms).on('click', function() {
+            self.upQueueReset();
+            self.initUploader();
+        });
+
+        // Xóa tệp khỏi hàng đợi
+        self.fms.on('click', '[data-toggle="qitem-del"]', function(e) {
+            e.preventDefault();
+            const file = $(this).closest('[data-toggle="qitem"]');
+            self.up.removeFile(file.data('id'));
+            file.remove();
+        });
+
+        // Nút bắt đầu upload
+        $('[data-toggle="queue-start"]', self.fms).on('click', function() {
+            // Cuộn lên đầu
+            const qe = $('[data-toggle="queue-scroller"]', self.fms);
+            qe.length && (qe[0].scrollTop = 0);
+
+            // Build lại các nút
+            const queue = $('[data-toggle="queue-ctns"]', self.fms);
+            $('[data-toggle="queue-add"]', queue).addClass('d-none');
+            $('[data-toggle="queue-start"]', queue).addClass('d-none');
+            $('[data-toggle="queue-cancel"]', queue).addClass('d-none');
+            $('[data-toggle="queue-stop"]', queue).removeClass('d-none');
+
+            // Khởi động tiến trình progress
+            $('[data-toggle="queue-progress-value"]', self.fms).addClass('progress-bar-striped progress-bar-animated');
+
+            self.up.start();
+        });
+
+        // Nút dừng upload
+        $('[data-toggle="queue-stop"]', self.fms).on('click', function() {
+            const queue = $('[data-toggle="queue-ctns"]', self.fms);
+            $('[data-toggle="queue-stop"]', queue).addClass('d-none');
+            $('[data-toggle="queue-continue"]', queue).removeClass('d-none');
+            $('[data-toggle="queue-progress-value"]', self.fms).removeClass('progress-bar-striped progress-bar-animated');
+            self.up.stop();
+        });
+
+        // Nút tiếp tục upload
+        $('[data-toggle="queue-continue"]', self.fms).on('click', function() {
+            const queue = $('[data-toggle="queue-ctns"]', self.fms);
+            $('[data-toggle="queue-continue"]', queue).addClass('d-none');
+            $('[data-toggle="queue-stop"]', queue).removeClass('d-none');
+            $('[data-toggle="queue-progress-value"]', self.fms).addClass('progress-bar-striped progress-bar-animated');
+            self.up.start();
+        });
+
+        // Nút hoàn tất upload. Trong trường hợp có tệp lỗi
+        $('[data-toggle="queue-finish"]', self.fms).on('click', function() {
+            self.upFinish();
+        });
     }
 
     // Đóng trình quản lý tệp tin dạng popup
@@ -480,15 +708,15 @@ nukeviet.Picker = class {
         this.fetch(true, false);
     }
 
-    fetchFile() {
-        this.fetch(false, true);
+    fetchFile(options) {
+        this.fetch(false, true, options);
     }
 
     fetchAll() {
         this.fetch(true, true);
     }
 
-    fetch(tree, file) {
+    fetch(tree, file, options) {
         const self = this;
 
         self.showLoader();
@@ -542,10 +770,26 @@ nukeviet.Picker = class {
                     self.initUploader();
                 }
                 if (file) {
-                    $('[data-toggle="file-scroller"]', self.fms).html(respon.files);
+                    const fileCtn = $('[data-toggle="file-scroller"]', self.fms);
+                    fileCtn.html(respon.files);
                     $('[data-toggle="pagination"]', self.fms).html(respon.pagination);
 
                     self.switchView(respon.view);
+
+                    // Chọn tệp
+                    if (options && options.selected) {
+                        $('.selected', fileCtn).removeClass('selected');
+                        $('[data-toggle="file-check"]', fileCtn).prop('checked', false);
+                        options.selected.forEach(fname => {
+                            const file = $('[data-toggle="file"][data-name="' + fname + '"]', fileCtn);
+                            if (file.length != 1) {
+                                return;
+                            }
+                            file.addClass('selected');
+                            $('[data-toggle="file-check"]', file).prop('checked', true);
+                        });
+                    }
+
                     self.fs.update();
                 }
             },
@@ -856,9 +1100,10 @@ nukeviet.Picker = class {
                         return;
                     }
                     self.hideDialog(dig);
-                    self.page = 1;
-                    self.fetchFile();
-                    // FIXME chỗ này chưa xong
+                    self.resetFilter();
+                    self.fetchFile({
+                        selected: [respon]
+                    });
                 },
                 error: function(xhr, text, err) {
                     $('input, textarea, select, button', $(form)).prop('disabled', false);
@@ -964,8 +1209,7 @@ nukeviet.Picker = class {
 
     // Xử lý event khi click chuột trái vào tệp tin
     handlerFileClick(event) {
-
-        //console.log(event.ctrlKey);
+        this.debug && console.log('Click inside files', event);
 
         const self = this;
         let file = [];
@@ -984,6 +1228,213 @@ nukeviet.Picker = class {
             file.addClass('selected');
             return;
         }
+    }
+
+    // Xem thiết bị có hỗ trợ touch hay không
+    canTouch() {
+        return 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+    }
+
+    // Tìm file từ event
+    findFileFromEvent(event) {
+        if ($(event.target).is('[data-toggle="file"]')) {
+            return $(event.target);
+        }
+        const file = $(event.target).closest('[data-toggle="file"]');
+        if (file.length == 1) {
+            return file;
+        }
+        return false;
+    }
+
+    // Reset các bộ lọc về mặc định
+    resetFilter() {
+        const self = this;
+        const ftype = $('[data-toggle="filter-type"]', self.fms);
+        const fauthor = $('[data-toggle="filter-author"]', self.fms);
+        const forder = $('[data-toggle="filter-order"]', self.fms);
+        const fq = $('[data-toggle="filter-q"]', self.fms);
+
+        self.page = 1;
+        self.removeFilterQ(fq);
+
+        ftype.data('type', 'file');
+        $('button', ftype).text($('[data-type="file"]', ftype).text());
+
+        fauthor.data('author', '0');
+        $('button', fauthor).text($('[data-author="0"]', fauthor).text());
+
+        forder.data('order', '0');
+        $('button', forder).text($('[data-order="0"]', forder).text());
+    }
+
+    // Hủy lọc từ khóa
+    removeFilterQ(fq) {
+        const icon = $('i', fq);
+        fq.data('q', '');
+        fq.attr('title', fq.data('label-search'));
+        fq.attr('aria-label', fq.data('label-search'));
+        icon.removeClass(icon.data('icon-clear')).addClass(icon.data('icon-search'));
+    }
+
+    // Hiển thị hàng đợi upload lên
+    upQueueRender() {
+        const self = this;
+        const queue = $('[data-toggle="queue-ctns"]', self.fms);
+        if (queue.is(':visible')) {
+            return;
+        }
+        queue.removeClass('d-none');
+    }
+
+    // Reset hàng đợi tải lên về mặc định và ẩn nó
+    upQueueReset() {
+        const self = this;
+        const queue = $('[data-toggle="queue-ctns"]', self.fms);
+        $('[data-toggle="queue-items"]', queue).html('');
+        self.qs.update();
+        queue.addClass('d-none');
+
+        $('[name="queue_autologo"]', queue).prop('checked', false);
+        $('[data-toggle="queue-size"]', queue).text('0');
+
+        // Các nút công cụ upload
+        $('[data-toggle="queue-add"]', queue).removeClass('d-none').prop('disabled', false);
+        $('[data-toggle="queue-start"]', queue).removeClass('d-none').prop('disabled', false);
+        $('[data-toggle="queue-cancel"]', queue).removeClass('d-none').prop('disabled', false);
+        $('[data-toggle="queue-stop"]', queue).addClass('d-none').prop('disabled', false);
+        $('[data-toggle="queue-continue"]', queue).addClass('d-none').prop('disabled', false);
+        $('[data-toggle="queue-finishloader"]', queue).addClass('d-none').prop('disabled', false);
+        $('[data-toggle="queue-finish"]', queue).addClass('d-none').prop('disabled', false);
+
+        // Thanh tiến trình
+        $('[data-toggle="queue-progress-bar"]', queue).attr('aria-valuenow', '0');
+        $('[data-toggle="queue-progress-value"]', queue).removeClass('progress-bar-striped progress-bar-animated').text('').css({
+            width: 0
+        });
+    }
+
+    // Thêm tệp mới vào queue
+    upAppendList() {
+        const self = this;
+        const queue = $('[data-toggle="queue-items"]', self.fms);
+
+        self.up.files.forEach(file => {
+            let fi = $('#' + file.id, queue);
+            if (fi.length) {
+                return;
+            }
+            fi = $(self.html_queue_item);
+            fi.attr('id', file.id);
+            fi.data('id', file.id);
+            $('[data-toggle="qitem-name"]', fi).text(file.name);
+            $('[data-toggle="qitem-size"]', fi).text(plupload.formatSize(file.size));
+
+            if (self.constant.auto_alt) {
+                $('[data-toggle="qitem-alt"]', fi).val(self.getAlt(file.name));
+            }
+
+            queue.append(fi);
+            console.log(file);
+        });
+    }
+
+    // Cập nhật trạng thái của một tệp
+    upStatusFile(file, jsontext) {
+        const self = this;
+        const queue = $('[data-toggle="queue-items"]', self.fms);
+        const fi = $('#' + file.id, queue);
+        if (fi.length != 1) {
+            return;
+        }
+
+        if (jsontext) {
+            const check = jsontext.split('_');
+
+            if (check[0] == 'ERROR') {
+                file.status = plupload.FAILED;
+                file.hint = check[1];
+                self.up.total.uploaded--;
+                self.up.total.failed++;
+            } else {
+                file.name = jsontext;
+            }
+            $.each(self.up.files, function(i, f) {
+                if (f.id == file.id) {
+                    self.up.files[i].status = file.status;
+                    self.up.files[i].hint = file.hint;
+                    self.up.files[i].name = file.name;
+                }
+            });
+        }
+
+        $('[data-toggle="qitem-status"]', fi).text(file.percent + '%');
+
+        if (file.status == plupload.QUEUED) {
+            $('[data-toggle="qitem-del"]', fi).removeClass('d-none');
+            $('[data-toggle="qitem-uploading"]', fi).addClass('d-none');
+            $('[data-toggle="qitem-success"]', fi).addClass('d-none');
+            $('[data-toggle="qitem-error"]', fi).addClass('d-none');
+            return;
+        }
+        if (file.status == plupload.UPLOADING) {
+            $('[data-toggle="qitem-del"]', fi).addClass('d-none');
+            $('[data-toggle="qitem-uploading"]', fi).removeClass('d-none');
+            $('[data-toggle="qitem-success"]', fi).addClass('d-none');
+            $('[data-toggle="qitem-error"]', fi).addClass('d-none');
+            return;
+        }
+        if (file.status == plupload.FAILED) {
+            $('[data-toggle="qitem-del"]', fi).addClass('d-none');
+            $('[data-toggle="qitem-uploading"]', fi).addClass('d-none');
+            $('[data-toggle="qitem-success"]', fi).addClass('d-none');
+
+            const ierr = $('[data-toggle="qitem-error"]', fi);
+            ierr.removeClass('d-none').prop('title', file.hint);
+            ierr.removeClass('d-none').prop('data-bs-title', file.hint);
+            const tt = bootstrap.Tooltip.getOrCreateInstance(ierr[0]);
+            tt.setContent({
+                '.tooltip-inner': file.hint
+            });
+
+            return;
+        }
+        if (file.status == plupload.DONE) {
+            $('[data-toggle="qitem-del"]', fi).addClass('d-none');
+            $('[data-toggle="qitem-uploading"]', fi).addClass('d-none');
+            $('[data-toggle="qitem-success"]', fi).removeClass('d-none');
+            $('[data-toggle="qitem-error"]', fi).addClass('d-none');
+            return;
+        }
+    }
+
+    // Tổng tiến trình upload
+    upTotalPercent() {
+        $('[data-toggle="queue-progress-bar"]', this.fms).attr('aria-valuenow', this.up.total.percent);
+        $('[data-toggle="queue-progress-value"]', this.fms).text(this.up.total.percent + '%').css({
+            width: this.up.total.percent + '%'
+        });
+    }
+
+    // Xử lý khi kết thúc upload tệp tin. Có thể có tệp thành công có thể có tệp lỗi
+    upFinish() {
+        const self = this;
+
+        let upFiles = [];
+        if (self.up && self.up.files) {
+            self.up.files.forEach(file => {
+                if (file.status == plupload.DONE) {
+                    upFiles.push(file.name);
+                }
+            });
+        }
+
+        self.resetFilter();
+        self.upQueueReset();
+        self.initUploader();
+        self.fetchFile({
+            selected: upFiles
+        });
     }
 };
 

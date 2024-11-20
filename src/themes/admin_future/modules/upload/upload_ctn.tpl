@@ -70,33 +70,29 @@
             </div>
         </div>
     </div>
-    <div class="d-none" data-toggle="queue-ctns">
+    <div class="fms-upqueue-outer d-none" data-toggle="queue-ctns">
         <div class="fms-upqueue">
-            <div class="queue-tools d-flex gap-2 mb-2 align-items-center">
+            <div class="queue-tools d-flex gap-2 align-items-center">
                 <div class="tool-btns">
-                    <button data-toggle="addfile" type="button" class="btn btn-sm btn-primary"><i class="fa-solid fa-plus"></i> Thêm file</button>
-                    <button data-toggle="start" type="button" class="btn btn-sm btn-primary"><i class="fa-solid fa-play"></i> Tải file lên</button>
-                    <button data-toggle="cancel" type="button" class="btn btn-sm btn-secondary"><i class="fa-solid fa-xmark text-danger"></i> Hủy</button>
-                    <button data-toggle="stop" type="button" class="btn btn-sm btn-secondary d-none"><i class="fa-solid fa-pause"></i> Dừng</button>
-                    <button data-toggle="continue" type="button" class="btn btn-sm btn-secondary d-none"><i class="fa-solid fa-play"></i> Tiếp tục</button>
-                    <button data-toggle="finishloader" type="button" class="btn btn-sm btn-success d-none"><i class="fas fa-spinner fa-pulse"></i></button>
-                    <button data-toggle="finish" type="button" class="btn btn-sm btn-secondary d-none"><i class="fa-solid fa-check"></i> Hoàn tất</button>
+                    <button data-toggle="queue-add" type="button" class="btn btn-sm btn-primary"><i class="fa-solid fa-plus"></i> {$LANG->getModule('upload_add_files')}</button>
+                    <button data-toggle="queue-start" type="button" class="btn btn-sm btn-primary"><i class="fa-solid fa-play"></i> {$LANG->getModule('upload_mode_local')}</button>
+                    <button data-toggle="queue-cancel" type="button" class="btn btn-sm btn-secondary"><i class="fa-solid fa-xmark text-danger"></i> {$LANG->getModule('upload_cancel')}</button>
+                    <button data-toggle="queue-stop" type="button" class="btn btn-sm btn-secondary d-none"><i class="fa-solid fa-pause"></i> {$LANG->getModule('upload_stop')}</button>
+                    <button data-toggle="queue-continue" type="button" class="btn btn-sm btn-secondary d-none"><i class="fa-solid fa-play"></i> {$LANG->getModule('upload_continue')}</button>
+                    <button data-toggle="queue-finishloader" type="button" class="btn btn-sm btn-success d-none"><i class="fa-solid fa-spinner fa-spin-pulse"></i></button>
+                    <button data-toggle="queue-finish" type="button" class="btn btn-sm btn-secondary d-none"><i class="fa-solid fa-check"></i> {$LANG->getModule('upload_finish')}</button>
                 </div>
-                <div class="tool-sizes">
-                    1.9 MB
-                </div>
+                <div class="tool-sizes" data-toggle="queue-size">0</div>
                 <div class="tool-progress">
-                    <div class="progress" role="progressbar" aria-label="Animated striped example" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100">
-                        <div class="progress-bar progress-bar-striped progress-bar-animated" style="width: 75%">75%</div>
+                    <div data-toggle="queue-progress-bar" class="progress" role="progressbar" aria-label="{$LANG->getModule('upload_progressbar')}" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
+                        <div data-toggle="queue-progress-value" class="progress-bar" style="width: 0;"></div>
                     </div>
                 </div>
             </div>
-            <div class="queue-opts">
+            <div class="queue-opts{if empty($UPLOAD_LOGO)} d-none{/if}">
                 <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="" id="[prefix]flexCheckDefault">
-                    <label class="form-check-label text-truncate" for="[prefix]flexCheckDefault">
-                        Chèn logo vào tập tin tải lên (nếu là ảnh)
-                    </label>
+                    <input class="form-check-input" type="checkbox" value="1" name="queue_autologo" id="[prefix]-queue-autologo">
+                    <label class="form-check-label text-truncate" for="[prefix]-queue-autologo">{$LANG->getModule('autologo_for_upload')}</label>
                 </div>
             </div>
             <div class="queue-head">
@@ -107,17 +103,7 @@
                 <div class="queue-col-tool"></div>
             </div>
             <div class="queue-files" data-toggle="queue-scroller">
-                <div class="queue-files-items" data-toggle="queue-items">
-                    <div class="queue-files-item">
-                        <div class="queue-col-name">phuong oanh.jpg</div>
-                        <div class="queue-col-alt">
-                            <input name="xxx" data-toggle="fileAltInput" class="form-control form-control-sm" type="text" value="phuong oanh">
-                        </div>
-                        <div class="queue-col-size">281 KB</div>
-                        <div class="queue-col-status" data-toggle="filestatus">0%</div>
-                        <div class="queue-col-tool" data-toggle="fileaction"><i class="cursor-pointer text-primary far fa-times-circle file-delete"></i></div>
-                    </div>
-                </div>
+                <div class="queue-files-items" data-toggle="queue-items"></div>
             </div>
         </div>
     </div>
