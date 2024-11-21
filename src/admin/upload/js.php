@@ -26,6 +26,7 @@ $tpl->assign('DEBUG', (defined('NV_DEBUG') and NV_DEBUG == 1) ? 'true' : 'false'
 // Các biến này tạo nhằm mục đích dễ nhìn trong JS, không bị cảnh báo syntax trong js
 $tpl->assign('UPLOAD_ALT_REQUIRE', !empty($global_config['upload_alt_require']) ? 'true' : 'false');
 $tpl->assign('UPLOAD_AUTO_ALT', !empty($global_config['upload_auto_alt']) ? 'true' : 'false');
+$tpl->assign('COMPRESS_IMAGE_ACTIVE', (class_exists('Tinify\Tinify') and !empty($global_config['tinify_active']) and !empty($global_config['tinify_api'])) ? 'true' : 'false');
 
 $upload_logo = $upload_logo_config = '';
 if (!empty($global_config['upload_logo']) and file_exists(NV_ROOTDIR . '/' . $global_config['upload_logo'])) {

@@ -216,3 +216,5 @@ $lang_module['tinify_compress_note2'] = 'To use this tool, you need to add the T
 $lang_module['tinify_api_key'] = 'Tinify API Key';
 $lang_module['tinify_api_key_note'] = 'To get Tinify\'s API key, you need to register <a href="https://tinypng.com/developers">here</a>';
 $lang_module['show_folder_size'] = 'Show folder size in directory tree';
+$lang_module['upload_drop'] = 'Drop files here to upload';
+$lang_module['files_selected'] = '%d files selected';

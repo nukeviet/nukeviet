@@ -56,11 +56,11 @@ if ($request['path_request'] !== $request['path']) {
     show_error($nv_Lang->getModule('notallowed'));
 }
 
-$request['type'] = $nv_Request->get_title('type', 'post', '');
+$request['type'] = $nv_Request->get_title('type', 'post,get', '');
 $request['show_file'] = (int) $nv_Request->get_bool('show_file', 'post', false);
 $request['show_folder'] = (int) $nv_Request->get_bool('show_folder', 'post', false);
-$request['area'] = htmlspecialchars(trim($nv_Request->get_string('area', 'post')), ENT_QUOTES);
-$request['alt'] = htmlspecialchars(trim($nv_Request->get_string('alt', 'post')), ENT_QUOTES);
+$request['area'] = htmlspecialchars(trim($nv_Request->get_string('area', 'post,get')), ENT_QUOTES);
+$request['alt'] = htmlspecialchars(trim($nv_Request->get_string('alt', 'post,get')), ENT_QUOTES);
 
 $request['q'] = nv_string_to_filename(htmlspecialchars(trim($nv_Request->get_string('q', 'post')), ENT_QUOTES));
 $request['page'] = $nv_Request->get_absint('page', 'post', 1);
@@ -73,6 +73,10 @@ $request['author'] = $nv_Request->get_int('author', 'post', 0);
 if ($request['type'] != 'image') {
     $request['type'] = 'file';
 }
+
+$request['popup'] = (int) $nv_Request->get_bool('popup', 'post,get', false);
+$request['CKEditorFuncNum'] = $nv_Request->get_int('CKEditorFuncNum', 'post,get', 0);
+$request['editor_id'] = $nv_Request->get_title('editor_id', 'post,get', '');
 
 // Kiểm tra tệp được chọn có thuộc thư mục quản lí không nếu có lấy nó không thì bỏ ra
 $selectfile = '';
@@ -160,6 +164,7 @@ $tpl->setTemplateDir(NV_ROOTDIR . '/themes/' . $template . '/modules/' . $module
 $tpl->assign('LANG', $nv_Lang);
 $tpl->assign('MODULE_NAME', $module_name);
 $tpl->assign('OP', $op);
+$tpl->assign('REQUEST', $request);
 
 // Xử lý yêu cầu qua ajax
 if ($nv_Request->isset_request('checkss', 'post')) {
@@ -222,15 +227,16 @@ if ($nv_Request->isset_request('checkss', 'post')) {
             $db->sqlreset()->select('COUNT(tb1.name)')->from(NV_UPLOAD_GLOBALTABLE . '_file tb1');
 
             $where = [];
-
             if (!empty($request['q'])) {
                 $db->join('INNER JOIN ' . NV_UPLOAD_GLOBALTABLE . '_dir tb2 ON tb1.did=tb2.did');
 
                 $dbkey = $db->dblikeescape($request['q']);
+                $select = 'tb1.*,tb2.dirname';
 
                 $where[] = "(tb1.title LIKE '%" . $dbkey . "%' OR tb1.alt LIKE '%" . $dbkey . "%')";
                 $where[] = "(tb2.dirname='" . $request['currentpath'] . "' OR tb2.dirname LIKE '" . $request['currentpath'] . "/%')";
             } else {
+                $select = 'tb1.*';
                 $where[] = 'tb1.did=' . $array_dirname[$request['currentpath']];
             }
             if ($request['type'] != 'file') {
@@ -247,7 +253,7 @@ if ($nv_Request->isset_request('checkss', 'post')) {
             $num_items = $db->query($db->sql())->fetchColumn();
             $per_page = 60;
 
-            $db->select('tb1.*');
+            $db->select($select);
             if ($request['order'] == 1) {
                 $db->order('tb1.mtime ASC');
             } elseif ($request['order'] == 2) {
@@ -270,7 +276,9 @@ if ($nv_Request->isset_request('checkss', 'post')) {
                 $file['alt'] = $row['alt'];
                 $file['name'] = $row['name'];
                 $file['real_name'] = $row['title'];
+                $file['ext'] = $row['ext'];
                 $file['uuid'] = uniqid();
+                $file['path'] = NV_BASE_SITEURL . (empty($row['dirname']) ? $request['currentpath'] : $row['dirname']) . '/' . $row['title'];
 
                 if ($row['type'] == 'image' or $row['ext'] == 'swf') {
                     $num_images++;
@@ -296,16 +304,13 @@ if ($nv_Request->isset_request('checkss', 'post')) {
 
 $contents = $tpl->fetch('main.tpl');
 
-
-
-
-
-
-
-
 include NV_ROOTDIR . '/includes/header.php';
-echo nv_admin_theme($contents);
+echo nv_admin_theme($contents, !$request['popup']);
 include NV_ROOTDIR . '/includes/footer.php';
+
+
+
+
 
 $xtpl = new XTemplate('main.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
 

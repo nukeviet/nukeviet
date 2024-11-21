@@ -27222,6 +27222,10 @@ p + .image-style-side {
   --bs-dropdown-zindex: 1059;
 }
 
+.fmm-open .dropdown-menu-fms {
+  --bs-dropdown-zindex: 1057;
+}
+
 .fmm-dialog,
 .fmd-dialog {
   position: relative;
@@ -27308,6 +27312,10 @@ p + .image-style-side {
   height: calc(100vh - 3.75rem - 3.125rem - 3rem - 3.75rem);
 }
 
+.fms-ctn-fullscreen {
+  height: 100vh;
+}
+
 .fms-ctn-fmm {
   height: calc(100vh - 1.5 * 0.8125rem - 3rem);
 }
@@ -27326,6 +27334,31 @@ p + .image-style-side {
 .fms-wraper {
   height: 100%;
   position: relative;
+}
+.fms-wraper .dropzone-area {
+  position: absolute;
+  z-index: 4;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  background-color: rgba(var(--bs-secondary-bg-rgb), 0.95);
+  border: 2px dashed var(--bs-secondary);
+  border-radius: var(--bs-border-radius);
+  display: none;
+  color: var(--bs-secondary-color);
+}
+.fms-wraper .dropzone-area i {
+  font-size: 4rem;
+}
+.fms-wraper .dropzone-area.dragging {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.fms-wraper .dropzone-area.dragging.dragover {
+  color: var(--bs-success);
+  border-color: var(--bs-success);
 }
 
 .fms-loader {
@@ -27754,6 +27787,10 @@ p + .image-style-side {
   transform: translateY(-50%);
   color: var(--bs-danger);
   overflow: hidden;
+}
+
+.dropdown-menu-fms {
+  max-width: 12.5rem;
 }
 
 /*# sourceMappingURL=nv.style.css.map */

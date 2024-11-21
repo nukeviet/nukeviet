@@ -3,19 +3,20 @@
 document.addEventListener('nv.upload.ready', () => {
     new nukeviet.Picker('#inline-picker', {
         show: 'inline',
-        //path: 'uploads/news',
-        //currentpath: 'uploads/news/authors',
-    });
-    new nukeviet.Picker('#btn-picker', {
-        //path: 'uploads/news',
-        currentpath: 'uploads/news/2024_06',
-        type: 'image'
+        path: '{$REQUEST.path}',
+        currentpath: '{$REQUEST.currentpath}',
+        type: '{$REQUEST.type}',
+        popup: {$REQUEST.popup},
+        imgfile: '{$REQUEST.currentfile}',
+        CKEditorFuncNum: {$REQUEST.CKEditorFuncNum},
+        editorId: '{$REQUEST.editor_id}',
+        area: '{$REQUEST.area}',
+        alt: '{$REQUEST.alt}'
     });
 });
 </script>
-<div class="fms-ctn-page card">
+<div class="fms-ctn-{$REQUEST.popup ? 'fullscreen' : 'page'} card">
     <div id="inline-picker" class="h-100 d-flex align-items-center justify-content-center">
         <i class="fa-solid fa-spinner fa-spin-pulse fa-3x"></i>
     </div>
 </div>
-<button class="btn btn-primary mt-3" type="button" id="btn-picker">btn-picker</button>

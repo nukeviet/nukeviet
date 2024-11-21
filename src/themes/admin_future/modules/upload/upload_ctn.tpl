@@ -107,6 +107,14 @@
             </div>
         </div>
     </div>
+    <div class="dropzone-area" data-toggle="dropzone">
+        <div class="text-center pe-none">
+            <div class="mb-1 pe-none">
+                <i class="fa-solid fa-cloud-arrow-up pe-none"></i>
+            </div>
+            <div class="fs-5 fw-medium pe-none">{$LANG->getModule('upload_drop')}</div>
+        </div>
+    </div>
     <div class="fms-loader show" data-toggle="loader">
         <i class="fa-solid fa-spinner fa-spin-pulse fa-3x"></i>
     </div>

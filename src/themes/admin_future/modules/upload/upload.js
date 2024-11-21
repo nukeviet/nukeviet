@@ -117,12 +117,35 @@ const nukeviet = window.nukeviet || {};
  * Class xử lý trình quản lý tệp tin
  */
 nukeviet.Picker = class {
-    html_modal = `{$HTML_POPUP}`;
-    html_container = `{$HTML_CONTENT}`;
-    html_dialog = `{$HTML_DIALOG}`;
-    html_queue_item = `{$HTML_QUEUE_ITEM}`;
-    html_modal_backdrop = `<div class="fmm-backdrop fade"></div>`;
-    html_dialog_backdrop = `<div class="fmd-backdrop fade"></div>`;
+    htmlModal = `{$HTML_POPUP}`;
+    htmlContainer = `{$HTML_CONTENT}`;
+    htmlDialog = `{$HTML_DIALOG}`;
+    htmlQueueItem = `{$HTML_QUEUE_ITEM}`;
+    htmlModalBackdrop = `<div class="fmm-backdrop fade"></div>`;
+    htmlDialogBackdrop = `<div class="fmd-backdrop fade"></div>`;
+    lang = {
+        select: `{$LANG->getModule('select')}`,
+        compressImage: `{$LANG->getModule('compressimage')}`,
+        webpConvert: `{$LANG->getModule('webpconvert')}`,
+        qualityChange: `{$LANG->getModule('qualitychange')}`,
+        deleteFile: `{$LANG->getModule('upload_delfile')}`,
+        rename: `{$LANG->getModule('rename')}`,
+        move: `{$LANG->getModule('move')}`,
+        rotate: `{$LANG->getModule('rotate')}`,
+        crop: `{$LANG->getModule('crop')}`,
+        imgTool: `{$LANG->getModule('upload_createimage')}`,
+        addLogo: `{$LANG->getModule('addlogo')}`,
+        preview: `{$LANG->getModule('preview')}`,
+        download: `{$LANG->getModule('download')}`,
+        deleteDir: `{$LANG->getModule('deletefolder')}`,
+        renameDir: `{$LANG->getModule('renamefolder')}`,
+        reThumb: `{$LANG->getModule('recreatethumb')}`,
+        createDir: `{$LANG->getModule('createfolder')}`,
+        altRequired: `{$LANG->getModule('upload_alt_note')}`,
+        filesSelected: `{$LANG->getModule('files_selected')}`
+    }
+    menuTpl = '<ul class="dropdown-menu dropdown-menu-fms"></ul>';
+    imageExts = ["gif", "jpg", "jpeg", "pjpeg", "png", "webp"];
 
     // Hàm khởi tạo
     constructor(element, options) {
@@ -131,8 +154,13 @@ nukeviet.Picker = class {
             show: 'button', // button|inline
             path: '', // Thư mục được tải lên dạng uploads/module/...
             currentpath: '', // Active thư mục này
+            popup: 0, // 1 là dạng windowed 0 là dạng current page
             type: 'file', // image|file
             imgfile: '', // Select tệp này
+            CKEditorFuncNum: 0, // >0 là mở cho CKEditor4
+            editorId: '', // Khác rỗng là mở cho CKEditor5
+            area: '', // ID thẻ đổ src về khi pick.
+            alt: '' // ID thẻ đổ alt về khi pick.
         }, options);
 
         this.fmm = null;
@@ -143,8 +171,10 @@ nukeviet.Picker = class {
         this.qs = null;
         this.bodyEndPadding = 0;
         this.bodyOverflow = '';
+        this.bodyVScroll = false;
         this.bodyDigEndPadding = 0;
         this.bodyDigOverflow = '';
+        this.bodyDigVScroll = false;
 
         this.refresh = false;
         this.page = 1;
@@ -152,14 +182,15 @@ nukeviet.Picker = class {
         this.id = this.ranid();
         this.fmdId = 'fmd' + this.id;
         this.fmsId = 'fms' + this.id;
-        this.html_dialog = this.html_dialog.replace(/\[prefix\]/g, this.fmdId);
-        this.html_container = this.html_container.replace(/\[prefix\]/g, this.fmsId);
+        this.htmlDialog = this.htmlDialog.replace(/\[prefix\]/g, this.fmdId);
+        this.htmlContainer = this.htmlContainer.replace(/\[prefix\]/g, this.fmsId);
 
         this.up = null;
 
         this.constant = {
-            auto_alt: {$UPLOAD_AUTO_ALT},
-            alt_require: {$UPLOAD_ALT_REQUIRE}
+            compressImage: {$COMPRESS_IMAGE_ACTIVE},
+            autoAlt: {$UPLOAD_AUTO_ALT},
+            altRequire: {$UPLOAD_ALT_REQUIRE}
         }
 
         this.debug = {$DEBUG};
@@ -172,10 +203,14 @@ nukeviet.Picker = class {
 
         const self = this;
         if (cfg.show == 'inline') {
-            self.fms = $(self.html_container);
-            self.fmd = $(self.html_dialog);
+            self.fms = $(self.htmlContainer);
+            self.fmd = $(self.htmlDialog);
             self.$element.replaceWith(self.fms);
             self.fms.after(self.fmd);
+
+            self.menu = $(self.menuTpl);
+            $('body').append(self.menu);
+
             self.initContainer();
             return;
         }
@@ -244,7 +279,7 @@ nukeviet.Picker = class {
         });
         $(self.fms).on('shown.bs.collapse', '[data-toggle="collapseTree"]', function(e) {
             e.stopPropagation();
-            self.ts.update();
+            self.ts && self.ts.update();
         });
 
         // Xử lý khi thu thư mục con lại
@@ -256,19 +291,11 @@ nukeviet.Picker = class {
         });
         $(self.fms).on('hidden.bs.collapse', '[data-toggle="collapseTree"]', function(e) {
             e.stopPropagation();
-            self.ts.update();
+            self.ts && self.ts.update();
         });
 
         // Tạo các thanh cuộn
-        self.fs = new PerfectScrollbar($('[data-toggle="file-scroller"]', self.fms)[0], {
-            wheelPropagation: false
-        });
-        self.ts = new PerfectScrollbar($('[data-toggle="tree-scroller"]', self.fms)[0], {
-            wheelPropagation: false
-        });
-        self.qs = new PerfectScrollbar($('[data-toggle="queue-scroller"]', self.fms)[0], {
-            wheelPropagation: false
-        });
+        self.initScrollbar();
 
         // Xử lý khi bấm chuột trái vào thư mục
         $(self.fms).on('click', '[data-toggle="tree-name"]', function(e) {
@@ -346,7 +373,7 @@ nukeviet.Picker = class {
         $('[data-toggle="list-grid"]', self.fms).on('click', function(e) {
             e.preventDefault();
             self.switchView($(this).data('view') == 'list' ? 'grid' : 'list');
-            self.fs.update();
+            self.fs && self.fs.update();
         });
 
         // Tooltip trong container
@@ -356,17 +383,12 @@ nukeviet.Picker = class {
 
         // Tự xác định alt khi nhập url upload remote
         self.fmd.filter('[data-dialog="upload-remote"]').on('keyup', '[name="fileurl"]', function() {
-            if (!self.constant.auto_alt) {
+            if (!self.constant.autoAlt) {
                 return;
             }
             const dig = $(this).closest('.fmd');
             $('[name="filealt"]', dig).val(self.getAlt($(this).val()));
         });
-
-        // Xử lý sự kiện khi click vào khu vực file
-        //$('[data-toggle="file-scroller"]', self.fms).on('click', function(e) {
-        //    self.handlerFileClick(e);
-        //});
 
         /*
         $('[data-toggle="file-scroller"]', self.fms).on('mousedown touchstart', function(e) {
@@ -397,43 +419,25 @@ nukeviet.Picker = class {
         });
         */
 
-        // Mở menu chuột phải ở file. Không xử lý trên mobile
-        self.fms.on('contextmenu', '[data-toggle="file"]', function(e) {
-            const file = self.findFileFromEvent(e);
-            if (!file || self.canTouch()) {
-                return;
-            }
-            e.preventDefault();
-            console.log(file);
-        });
+        document.addEventListener('mousedown', self.handleDocStart);
+        document.addEventListener('touchstart', self.handleDocStart);
 
-        /**
-         * Mở menu chuột phải ở thư mục. Không xử lý trên mobile
-         * Trên mobile trượt phải hoặc trượt trái tên thư mục
-         */
-        self.fms.on('contextmenu', '[data-toggle="tree-name"]', function(e) {
-            if (self.canTouch()) {
-                return;
-            }
-            e.preventDefault();
-            const tree = $(this).closest('li');
-            console.log(tree);
-        });
+        // Xử lý sự kiện liên quan tệp tin
+        self.initFileEvents();
 
-        // Check chọn file bằng input check
-        self.fms.on('change', '[data-toggle="file-check"]', function() {
-            const file = $(this).closest('[data-toggle="file"]');
-            if ($(this).is(':checked')) {
-                file.addClass('selected');
-            } else {
-                file.removeClass('selected');
-            }
-        });
+        // Xử lý sự kiện liên quan thư mục
+        self.initTreeEvents();
 
         // Xử lý các sự kiện liên quan upload
         self.initUploadEvents();
 
-        // Lấy nội dung
+        // Xử lý các sự kiện kéo thả
+        self.initDrop();
+
+        // Xử lý các sự kiện trên menu
+        self.initMenuEvents();
+
+        // Lấy cây thư mục và file
         self.fetchAll();
     }
 
@@ -459,7 +463,7 @@ nukeviet.Picker = class {
             url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=upload&' + nv_fc_variable + '=upload&path=' + encodeURIComponent(self.getCurrentPath()) + '&nocache=' + new Date().getTime(),
             flash_swf_url: nv_base_siteurl + 'assets/js/plupload/Moxie.swf',
             silverlight_xap_url: nv_base_siteurl + 'assets/js/plupload/Moxie.xap',
-            //drop_element: 'upload-content',
+            drop_element: $('[data-toggle="dropzone"]', self.fms)[0],
             file_data_name: 'upload',
             multipart: true,
             multipart_params: {
@@ -508,9 +512,7 @@ nukeviet.Picker = class {
                         if (qe.length) {
                             qe[0].scrollTop = qe[0].scrollHeight;
                         }
-                        if (self.qs) {
-                            self.qs.update();
-                        }
+                        self.qs && self.qs.update();
                     }, 10);
                 },
                 BeforeUpload: (up, file) => {
@@ -578,6 +580,10 @@ nukeviet.Picker = class {
 
         // Nút bắt đầu upload
         $('[data-toggle="queue-start"]', self.fms).on('click', function() {
+            if (!self.upQueueCheck()) {
+                return;
+            }
+
             // Cuộn lên đầu
             const qe = $('[data-toggle="queue-scroller"]', self.fms);
             qe.length && (qe[0].scrollTop = 0);
@@ -606,6 +612,10 @@ nukeviet.Picker = class {
 
         // Nút tiếp tục upload
         $('[data-toggle="queue-continue"]', self.fms).on('click', function() {
+            if (!self.upQueueCheck()) {
+                return;
+            }
+
             const queue = $('[data-toggle="queue-ctns"]', self.fms);
             $('[data-toggle="queue-continue"]', queue).addClass('d-none');
             $('[data-toggle="queue-stop"]', queue).removeClass('d-none');
@@ -619,14 +629,188 @@ nukeviet.Picker = class {
         });
     }
 
+    // Xử lý event thả tệp vào để upload
+    initDrop() {
+        const self = this;
+        const drp = $('[data-toggle="dropzone"]', self.fms);
+
+        document.addEventListener('dragenter', self.handleDragenter);
+        document.addEventListener('dragleave', self.handleDragleave);
+        document.addEventListener('dragover', self.handleDragover);
+        document.addEventListener('drop', self.handleDrop);
+
+        drp.on('dragenter', function() {
+            self.debug && console.log('dragenter droparea event');
+            drp.addClass('dragover');
+        });
+        drp.on('dragleave', function(e) {
+            self.debug && console.log('dragleave droparea event', e);
+            if ($(e.target).is(drp)) {
+                drp.removeClass('dragover');
+            }
+        });
+        drp.on('dragover', function(e) {
+            e.preventDefault();
+            self.debug && console.log('dragover droparea event');
+        });
+        drp.on('drop', function() {
+            self.debug && console.log('drop droparea event');
+            drp.removeClass('dragging dragover');
+        });
+    }
+
+    // Sự kiện trên menu
+    initMenuEvents() {
+        const self = this;
+
+        // Chọn tệp và đóng trình quản lý file
+        self.menu.on('click', '[data-toggle="menu-file-select"]', function(e) {
+            e.preventDefault();
+            self.closeMenu();
+            const file = $('[data-toggle="file"][data-uuid="' + $(this).data('uuid') + '"]', self.fms);
+            const tree = $('[data-toggle="tree-scroller"] .active', self.fms);
+            if (!file.length || !tree.length) {
+                return;
+            }
+            if (self.settings.CKEditorFuncNum > 0 && window.opener && window.opener.CKEDITOR) {
+                // Trả về cho CKEditor 4
+                window.opener.CKEDITOR.tools.callFunction(self.settings.CKEditorFuncNum, file.data('path'), function() {
+                    var dialog = this.getDialog();
+                    if (dialog.getName() == 'image2') {
+                        var element = dialog.getContentElement('info', 'alt');
+                        if (element) {
+                            element.setValue(file.data('alt'));
+                        }
+                    }
+                });
+                window.close();
+                return;
+            }
+            // Trường hợp mở window
+            if (self.settings.popup) {
+                if (!opener || !opener.document) {
+                    return;
+                }
+                // Trả về input của opener
+                if (self.settings.area != '') {
+                    $('#' + self.settings.area, opener.document).val(file.data('path'));
+                    if (self.settings.alt != '') {
+                        $('#' + self.settings.alt, opener.document).val(file.data('alt'));
+                    }
+                    window.close();
+                    return;
+                }
+                return;
+            }
+        });
+    }
+
+    // Sự kiện trên file
+    initFileEvents() {
+        const self = this;
+
+        // Mở menu chuột phải ở file. Không xử lý trên mobile
+        self.fms.on('contextmenu', '[data-toggle="file"]', function(e) {
+            const file = self.findFileFromEvent(e);
+            if (!file || self.canTouch()) {
+                return;
+            }
+            e.preventDefault();
+
+            let files = self.getSelectedFile();
+            if (files.filter(file).length == 0) {
+                files = file;
+                self.setSelectedFile(file);
+            }
+            self.openFileMenu(files, e);
+        });
+
+        // Check chọn file bằng input check
+        self.fms.on('change', '[data-toggle="file-check"]', function() {
+            const file = $(this).closest('[data-toggle="file"]');
+            if ($(this).is(':checked')) {
+                file.addClass('selected');
+            } else {
+                file.removeClass('selected');
+            }
+        });
+
+        // Mở menu file bằng nút đổ xuống
+        self.fms.on('click', '[data-toggle="file-menu"]', function(e) {
+            const file = self.findFileFromEvent(e);
+            if (!file) {
+                return;
+            }
+
+            let files = self.getSelectedFile();
+            if (files.filter(file).length == 0) {
+                files = file;
+                self.setSelectedFile(file);
+            }
+            self.openFileMenu(files, e);
+        });
+    }
+
+    // Sự kiện trên thư mục
+    initTreeEvents() {
+        const self = this;
+
+        /**
+         * Mở menu chuột phải ở thư mục. Không xử lý trên mobile
+         * Trên mobile trượt phải hoặc trượt trái tên thư mục
+         */
+        self.fms.on('contextmenu', '[data-toggle="tree-name"]', function(e) {
+            if (self.canTouch()) {
+                return;
+            }
+            self.openFolderMenu($(this).closest('li'), e);
+        });
+    }
+
+    // Tạo các thanh cuộn
+    initScrollbar() {
+        this.destroyScrollbar();
+        this.fs = new PerfectScrollbar($('[data-toggle="file-scroller"]', this.fms)[0], {
+            wheelPropagation: false
+        });
+        this.ts = new PerfectScrollbar($('[data-toggle="tree-scroller"]', this.fms)[0], {
+            wheelPropagation: false
+        });
+        this.qs = new PerfectScrollbar($('[data-toggle="queue-scroller"]', this.fms)[0], {
+            wheelPropagation: false
+        });
+    }
+
+    // Xóa các thanh cuộn
+    destroyScrollbar() {
+        if (this.fs) {
+            this.fs.destroy();
+            this.fs = null;
+        }
+        if (this.ts) {
+            this.ts.destroy();
+            this.ts = null;
+        }
+        if (this.qs) {
+            this.qs.destroy();
+            this.qs = null;
+        }
+    }
+
     // Đóng trình quản lý tệp tin dạng popup
     hideModal() {
         const self = this;
 
         if (self.fmm) {
             self.fmm.removeClass('show');
-            self.fmm.removeAttr('aria-modal');
-            self.fmm.attr('aria-hidden', 'true');
+
+            document.removeEventListener('dragenter', self.handleDragenter);
+            document.removeEventListener('dragleave', self.handleDragleave);
+            document.removeEventListener('dragover', self.handleDragover);
+            document.removeEventListener('drop', self.handleDrop);
+
+            document.removeEventListener('mousedown', self.handleDocStart);
+            document.removeEventListener('touchstart', self.handleDocStart);
 
             setTimeout(() => {
                 self.fmm.remove();
@@ -638,6 +822,9 @@ nukeviet.Picker = class {
                 self.ts = null;
                 self.qs = null;
                 self.up = null;
+
+                self.menu.remove();
+                self.menu = null;
             }, 300);
         }
 
@@ -657,6 +844,7 @@ nukeviet.Picker = class {
             if (body.getAttribute('style') === '') {
                 body.removeAttribute('style');
             }
+            $('body').removeClass('fmm-open');
         }, 300);
     }
 
@@ -665,10 +853,13 @@ nukeviet.Picker = class {
         const self = this;
 
         // Tạo HTML cho modal và lắng nghe các sự kiện
-        self.fmm = $(self.html_modal);
-        self.fmd = $(self.html_dialog);
+        self.fmm = $(self.htmlModal);
+        self.fmd = $(self.htmlDialog);
         $('body').append(self.fmm);
         $('body').append(self.fmd);
+
+        self.menu = $(self.menuTpl);
+        $('body').append(self.menu);
 
         self.fmm.on('click', '[data-dismiss="fmm"]', function() {
             self.hideModal();
@@ -678,12 +869,15 @@ nukeviet.Picker = class {
         const body = document.body;
         self.bodyEndPadding = body.style.paddingRight;
         self.bodyOverflow = body.style.overflow;
+        self.bodyVScroll = document.documentElement.scrollHeight > window.innerHeight;
 
-        body.style.paddingRight = self.scrollbarWidth() + 'px';
+        self.bodyVScroll && (body.style.paddingRight = self.scrollbarWidth() + 'px');
         body.style.overflow = 'hidden';
 
+        $('body').addClass('fmm-open');
+
         // Tạo hiệu ứng của nền mỗi lần mở modal
-        self.backdrop = $(self.html_modal_backdrop);
+        self.backdrop = $(self.htmlModalBackdrop);
         $('body').append(self.backdrop);
         setTimeout(() => {
             self.backdrop && self.backdrop.addClass('show');
@@ -698,7 +892,7 @@ nukeviet.Picker = class {
         }, 1);
 
         setTimeout(() => {
-            self.fms = $(self.html_container);
+            self.fms = $(self.htmlContainer);
             $('[data-toggle="fmm-body"]', self.fmm).html(self.fms);
             self.initContainer();
         }, 310);
@@ -766,7 +960,7 @@ nukeviet.Picker = class {
                 }
                 if (tree) {
                     $('[data-toggle="tree-scroller"]', self.fms).html(respon.folders);
-                    self.ts.update();
+                    self.ts && self.ts.update();
                     self.initUploader();
                 }
                 if (file) {
@@ -790,7 +984,7 @@ nukeviet.Picker = class {
                         });
                     }
 
-                    self.fs.update();
+                    self.fs && self.fs.update();
                 }
             },
             error: function(xhr, text, err) {
@@ -929,13 +1123,14 @@ nukeviet.Picker = class {
         const body = document.body;
         self.bodyDigEndPadding = body.style.paddingRight;
         self.bodyDigOverflow = body.style.overflow;
+        self.bodyDigVScroll = document.documentElement.scrollHeight > window.innerHeight;
 
-        body.style.paddingRight = self.scrollbarWidth() + 'px';
+        self.bodyDigVScroll && (body.style.paddingRight = self.scrollbarWidth() + 'px');
         body.style.overflow = 'hidden';
         $('body').addClass('fmd-open');
 
         // Tạo hiệu ứng của nền mỗi lần mở modal
-        self.backdropDig = $(self.html_dialog_backdrop);
+        self.backdropDig = $(self.htmlDialogBackdrop);
         $('body').append(self.backdropDig);
         setTimeout(() => {
             self.backdropDig && self.backdropDig.addClass('show');
@@ -1007,8 +1202,6 @@ nukeviet.Picker = class {
         const self = this;
 
         dig.removeClass('show');
-        dig.removeAttr('aria-modal');
-        dig.attr('aria-hidden', 'true');
 
         self.backdropDig.removeClass('show');
         setTimeout(() => {
@@ -1027,6 +1220,8 @@ nukeviet.Picker = class {
             }
             $('body').removeClass('fmd-open');
             self.hideDialogCallback(dig);
+            dig.removeAttr('aria-modal');
+            dig.attr('aria-hidden', 'true');
         }, 300);
     }
 
@@ -1081,7 +1276,7 @@ nukeviet.Picker = class {
                 $('[name="fileurl"]', dig).addClass('is-invalid').focus();
                 return;
             }
-            if (self.constant.alt_require && trim($('[name="filealt"]', dig).val()) === '') {
+            if (self.constant.altRequire && trim($('[name="filealt"]', dig).val()) === '') {
                 $('[name="filealt"]', dig).addClass('is-invalid').focus();
                 return;
             }
@@ -1128,14 +1323,31 @@ nukeviet.Picker = class {
         });
     }
 
-    // Trả về mảng các file được chọn, nếu không có tệp trả về rỗng
+    // Trả về mảng các file (jquery) được chọn, nếu không có tệp trả về []
     getSelectedFile() {
-
+        return $('[data-toggle="file"].selected', this.fms);
     }
 
-    // Chọn tệp
-    setSelectedFile() {
+    /**
+     * Chọn tệp. File là jquery element
+     * append = true thì chọn thêm, không thì chỉ chọn nó
+     */
+    setSelectedFile(file, append) {
+        const self = this;
+        if (!append) {
+            self.clearSelectedFile();
+        }
+        file.addClass('selected');
+        $('[data-toggle="file-check"]', file).prop('checked', true);
+    }
 
+    // Hủy chọn hết file
+    clearSelectedFile() {
+        const self = this;
+        $('[data-toggle="file"].selected', self.fms).each(function() {
+            $('[data-toggle="file-check"]', $(this)).prop('checked', false);
+            $(this).removeClass('selected');
+        });
     }
 
     // Lấy alt từ tên tệp tin
@@ -1207,29 +1419,6 @@ nukeviet.Picker = class {
         return tree.data('path');
     }
 
-    // Xử lý event khi click chuột trái vào tệp tin
-    handlerFileClick(event) {
-        this.debug && console.log('Click inside files', event);
-
-        const self = this;
-        let file = [];
-        if ($(event.target).is('[data-toggle="file"]')) {
-            file = $(event.target);
-        } else {
-            const ff = $(event.target).closest('[data-toggle="file"]');
-            if (ff.length == 1) {
-                file = ff;
-            }
-        }
-
-        $('[data-toggle="file"]', self.fms).removeClass('selected');
-
-        if (file.length == 1) {
-            file.addClass('selected');
-            return;
-        }
-    }
-
     // Xem thiết bị có hỗ trợ touch hay không
     canTouch() {
         return 'ontouchstart' in window || navigator.maxTouchPoints > 0;
@@ -1237,14 +1426,30 @@ nukeviet.Picker = class {
 
     // Tìm file từ event
     findFileFromEvent(event) {
+        let file = [];
         if ($(event.target).is('[data-toggle="file"]')) {
-            return $(event.target);
+            file = $(event.target);
+        } else {
+            file = $(event.target).closest('[data-toggle="file"]');
         }
-        const file = $(event.target).closest('[data-toggle="file"]');
-        if (file.length == 1) {
-            return file;
+        if (file.length != 1 || file.closest(this.fms).length != 1) {
+            return false;
         }
-        return false;
+        return file;
+    }
+
+    // Tìm thư mục từ event
+    findTreeFromEvent(event) {
+        let tree = [];
+        if ($(event.target).is('[data-toggle="tree-name"]')) {
+            tree = $(event.target);
+        } else {
+            tree = $(event.target).closest('[data-toggle="tree-name"]');
+        }
+        if (tree.length != 1 || tree.closest(this.fms).length != 1) {
+            return false;
+        }
+        return tree.closest('li');
     }
 
     // Reset các bộ lọc về mặc định
@@ -1292,7 +1497,7 @@ nukeviet.Picker = class {
         const self = this;
         const queue = $('[data-toggle="queue-ctns"]', self.fms);
         $('[data-toggle="queue-items"]', queue).html('');
-        self.qs.update();
+        self.qs && self.qs.update();
         queue.addClass('d-none');
 
         $('[name="queue_autologo"]', queue).prop('checked', false);
@@ -1324,18 +1529,17 @@ nukeviet.Picker = class {
             if (fi.length) {
                 return;
             }
-            fi = $(self.html_queue_item);
+            fi = $(self.htmlQueueItem);
             fi.attr('id', file.id);
             fi.data('id', file.id);
             $('[data-toggle="qitem-name"]', fi).text(file.name);
             $('[data-toggle="qitem-size"]', fi).text(plupload.formatSize(file.size));
 
-            if (self.constant.auto_alt) {
+            if (self.constant.autoAlt) {
                 $('[data-toggle="qitem-alt"]', fi).val(self.getAlt(file.name));
             }
 
             queue.append(fi);
-            console.log(file);
         });
     }
 
@@ -1435,6 +1639,286 @@ nukeviet.Picker = class {
         self.fetchFile({
             selected: upFiles
         });
+    }
+
+    // Kiểm tra các alt nếu có bắt buộc nhập
+    upQueueCheck() {
+        const self = this;
+        if (!self.constant.altRequire) {
+            return true;
+        }
+        for (const file of self.up.files) {
+            if (file.status == plupload.QUEUED) {
+                const fi = $('#' + file.id);
+                if (!fi.length) {
+                    continue;
+                }
+                const ipt = $('[data-toggle="qitem-alt"]', fi);
+                if (trim(ipt.val()) == '') {
+                    ipt.focus();
+                    nvToast(self.lang.altRequired, 'error');
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    /**
+     * Các sự kiện liên quan kéo thả
+     */
+    handleDragenter = () => {
+        this.debug && console.log('dragenter document event');
+
+        const self = this;
+        const drp = $('[data-toggle="dropzone"]', self.fms);
+
+        // Không xử lí trên mobile
+        if (self.canTouch()) {
+            return;
+        }
+
+        // Không nhận sự kiện kéo thả vào nếu đã upload rồi
+        if ($('[data-toggle="queue-ctns"]', self.fms).is(':visible') && !$('[data-toggle="queue-cancel"]', self.fms).is(':visible')) {
+            drp.removeClass('dragging dragover');
+            return;
+        }
+
+        drp.addClass('dragging');
+    }
+    handleDragleave = (event) => {
+        this.debug && console.log('dragleave document event', event);
+        const self = this;
+        const drp = $('[data-toggle="dropzone"]', self.fms);
+        if (event.target === document || event.relatedTarget === null) {
+            drp.removeClass('dragging dragover');
+        }
+    }
+    handleDragover = (event) => {
+        this.debug && console.log('dragover document event');
+        event.preventDefault();
+    }
+    handleDrop = () => {
+        this.debug && console.log('drop document event');
+        const self = this;
+        const drp = $('[data-toggle="dropzone"]', self.fms);
+        drp.removeClass('dragging dragover');
+    }
+
+    // Xử lý khi nhấn xuống trên toàn bộ document
+    handleDocStart = (event) => {
+        if (event.type == 'mousedown' && (this.canTouch() || event.button != 0)) {
+            // Không xử lý thao tác nhấn chuột trên màn cảm ứng hoặc nhấn xuống chuột giữa, chuột phải
+            return;
+        }
+        this.debug && console.log('document ' + event.type);
+        const self = this;
+
+        // Đóng menu khi click ra ngoài menu
+        const menuClick = ($(event.target).is(self.menu) || $(event.target).closest(self.menu).length == 1);
+        if (!menuClick) {
+            self.closeMenu();
+        }
+
+        const fileClick = self.findFileFromEvent(event);
+        if (!fileClick && !menuClick) {
+            self.clearSelectedFile();
+        }
+
+        //if (!this.findTreeFromEvent(event) && !this.findFileFromEvent(event)) {
+        //    this.closeMenu();
+        ///}
+    }
+
+    // Tìm tọa độ con trỏ chuột trong document
+    getMousePositionFromEvent(event) {
+        let mouseX, mouseY;
+
+        if (event.changedTouches && event.changedTouches[0] && event.changedTouches[0].pageY > 0) {
+            mouseX = event.changedTouches[0].pageX;
+            mouseY = event.changedTouches[0].pageY;
+        } else if (event.originalEvent && typeof event.originalEvent.detail == 'object') {
+            mouseX = event.originalEvent.detail.pageX;
+            mouseY = event.originalEvent.detail.pageY;
+        } else if (event.originalEvent && event.originalEvent.pageX) {
+            mouseX = event.originalEvent.pageX;
+            mouseY = event.originalEvent.pageY;
+        } else if (event.pageX) {
+            mouseX = event.pageX;
+            mouseY = event.pageY;
+        } else {
+            nvToast('Error get mouse position!!!', 'error');
+            return [false, false];
+        }
+        if (mouseX < 0) {
+            mouseX = 0;
+        }
+        if (mouseY < 0) {
+            mouseY = 0;
+        }
+        return [mouseX, mouseY];
+    }
+
+    /**
+     * Mở menu file. File đã được bọc trong jquery.
+     * Có thể có nhiều file được chọn
+     */
+    openFileMenu(files, event) {
+        this.debug && console.log('Get file menu');
+        const self = this;
+        const [mouseX, mouseY] = self.getMousePositionFromEvent(event);
+        const tree = $('[data-toggle="tree-scroller"]', this.fms).find('li.active:first');
+        if (mouseX === false || tree.length != 1) {
+            self.closeMenu();
+            return;
+        }
+
+        let actions = 0;
+        let menuHeader = '';
+        if (files.length == 1) {
+            menuHeader = files.data('name');
+        } else {
+            menuHeader = self.lang.filesSelected.replace('%d', files.length);
+        }
+        let html = '<li><div class="dropdown-header fw-medium text-truncate-2 mb-2 pb-0 text-break text-wrap text-primary" title="' + menuHeader + '">' + menuHeader + '</div></li>';
+
+        if (files.length == 1) {
+            if (self.settings.CKEditorFuncNum > 0 || self.settings.area != '') {
+                actions++;
+                html += '<li><a class="dropdown-item" href="#" data-toggle="menu-file-select" data-uuid="' + files.data('uuid') + '"><i class="fa-solid fa-check text-success fa-fw"></i> ' + self.lang.select + '</a></li>';
+            }
+
+            actions += 2;
+            html += '<li><a class="dropdown-item" href="#"><i class="fa-solid fa-download fa-fw"></i> ' + self.lang.download + '</a></li>';
+            html += '<li><a class="dropdown-item" href="#"><i class="fa-solid fa-eye fa-fw"></i> ' + self.lang.preview + '</a></li>';
+
+            // Công cụ cơ bản của ảnh
+            if (self.imageExts.includes(files.data('ext')) && tree.data('allowed-create-file')) {
+                actions += 4;
+                html += '<li><a class="dropdown-item" href="#"><i class="fa-solid fa-file-image fa-fw"></i> ' + self.lang.addLogo + '</a></li>';
+                html += '<li><a class="dropdown-item" href="#"><i class="fa-solid fa-copy fa-fw"></i> ' + self.lang.imgTool + '</a></li>';
+                html += '<li><a class="dropdown-item" href="#"><i class="fa-solid fa-crop fa-fw"></i> ' + self.lang.crop + '</a></li>';
+                html += '<li><a class="dropdown-item" href="#"><i class="fa-solid fa-arrows-spin fa-fw"></i> ' + self.lang.rotate + '</a></li>';
+            }
+            if (tree.data('allowed-create-file')) {
+                // Tạo webp
+                if (['jpg', 'jpeg', 'png'].includes(files.data('ext'))) {
+                    actions++;
+                    html += '<li><a class="dropdown-item" href="#"><i class="fa-solid fa-wand-magic fa-fw"></i> ' + self.lang.webpConvert + '</a></li>';
+                }
+                // Giảm chất lượng
+                if (['jpg', 'jpeg', 'png', 'webp'].includes(files.data('ext'))) {
+                    actions++;
+                    html += '<li><a class="dropdown-item" href="#"><i class="fa-solid fa-arrow-down-short-wide fa-fw"></i> ' + self.lang.qualityChange + '</a></li>';
+
+                    // Nén ảnh
+                    if (self.constant.compressImage) {
+                        actions++;
+                        html += '<li><a class="dropdown-item" href="#"><i class="fa-solid fa-compress fa-fw"></i> ' + self.lang.compressImage + '</a></li>';
+                    }
+                }
+            }
+        }
+        if (tree.data('allowed-move-file')) {
+            actions++;
+            html += '<li><a class="dropdown-item" href="#"><i class="fa-solid fa-folder-tree fa-fw"></i> ' + self.lang.move + '</a></li>';
+        }
+        if (tree.data('allowed-rename-file') && files.length == 1) {
+            actions++;
+            html += '<li><a class="dropdown-item" href="#"><i class="fa-solid fa-pen fa-fw"></i> ' + self.lang.rename + '</a></li>';
+        }
+        if (tree.data('allowed-delete-file')) {
+            actions++;
+            html += '<li><a class="dropdown-item" href="#"><i class="fa-solid fa-trash text-danger fa-fw"></i> ' + self.lang.deleteFile + '</a></li>';
+        }
+
+        if (actions < 1) {
+            self.closeMenu();
+            return;
+        }
+
+        self.menu.html(html);
+        self.showMenuDependingMouse(mouseX, mouseY);
+    }
+
+    /**
+     * Mở menu thư mục. Tree đã được bọc trong jquery
+     * Chỉ có một thư mục
+     */
+    openFolderMenu(tree, event) {
+        this.debug && console.log('Get file menu');
+        const self = this;
+        const [mouseX, mouseY] = self.getMousePositionFromEvent(event);
+        if (mouseX === false) {
+            self.closeMenu();
+            return;
+        }
+
+        let actions = 0;
+        let html = '<li><div class="dropdown-header fw-medium text-truncate-2 mb-2 pb-0 text-break text-wrap text-primary" title="' + tree.data('title') + '">' + tree.data('title') + '</div></li>';
+        // Tạo thư mục con
+        if (tree.data('allowed-create-dir')) {
+            actions++;
+            html += '<li><a class="dropdown-item" href="#"><i class="fa-solid fa-folder-plus fa-fw"></i> ' + self.lang.createDir + '</a></li>';
+        }
+        if (tree.data('allowed-rethumb')) {
+            actions++;
+            html += '<li><a class="dropdown-item" href="#"><i class="fa-solid fa-repeat fa-fw"></i> ' + self.lang.reThumb + '</a></li>';
+        }
+        if (tree.data('allowed-rename-dir')) {
+            actions++;
+            html += '<li><a class="dropdown-item" href="#"><i class="fa-solid fa-pen fa-fw"></i> ' + self.lang.renameDir + '</a></li>';
+        }
+        if (tree.data('allowed-delete-dir')) {
+            actions++;
+            html += '<li><a class="dropdown-item" href="#"><i class="fa-solid fa-trash fa-fw text-danger"></i> ' + self.lang.deleteDir + '</a></li>';
+        }
+        if (actions < 1) {
+            self.closeMenu();
+            return;
+        }
+
+        event.preventDefault();
+        self.menu.html(html);
+        self.showMenuDependingMouse(mouseX, mouseY);
+    }
+
+    // Đóng menu lại
+    closeMenu() {
+        this.menu.removeClass('show').html('');
+        this.initScrollbar();
+    }
+
+    // Hiển thị menu theo vị trí thao tác
+    showMenuDependingMouse(mouseX, mouseY) {
+        const self = this;
+        self.menu.css({
+            ///transform: 'translate(' + mouseX + 'px, ' + mouseY + 'px)',
+            transform: 'translate(0px, 0px)',
+            left: -9999,
+            top: -9999,
+        });
+        self.menu.addClass('show');
+        let mW = self.menu.innerWidth();
+        let mH = self.menu.innerHeight();
+        let wW = $(window).width();
+        let wH = $(window).height();
+        let tranX = mouseX, tranY = mouseY;
+
+        if (tranX + 10 + mW > wW) {
+            tranX -= (tranX + 10 + mW) - wW;
+        }
+        if (tranY + 10 + mH > wH) {
+            tranY -= (tranY + 10 + mH) - wH;
+        }
+
+        self.menu.css({
+            transform: 'translate(' + tranX + 'px, ' + tranY + 'px)',
+            left: 0,
+            top: 0,
+        });
+
+        self.destroyScrollbar();
     }
 };
 

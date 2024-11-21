@@ -5,6 +5,10 @@
             <div class="file"
                 data-toggle="file"
                 data-name="{$file.real_name}"
+                data-ext="{$file.ext}"
+                data-uuid="{$file.uuid}"
+                data-path="{$file.path}"
+                data-alt="{$file.alt}"
             >
                 <div class="sel">
                     <input class="form-check-input" data-toggle="file-check" type="checkbox" id="{$file.uuid}-file-checkbox" value="" aria-label="{$LANG->getModule('selectimg')}">

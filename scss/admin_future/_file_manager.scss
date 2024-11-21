@@ -43,6 +43,12 @@
     }
 }
 
+.fmm-open {
+    .dropdown-menu-fms {
+        --bs-dropdown-zindex: #{$zindex-fmm};
+    }
+}
+
 .fmm-dialog,
 .fmd-dialog {
     position: relative;
@@ -133,6 +139,10 @@
     height: calc(100vh - $header-height - $breadcrumb-height - 2 * map-get($spacers, 4) - $footer-height);
 }
 
+.fms-ctn-fullscreen {
+    height: 100vh;
+}
+
 .fms-ctn-fmm {
     height: calc(100vh - #{$line-height-base} * #{$font-size-base} - 3rem);
 }
@@ -152,6 +162,35 @@
 .fms-wraper {
     height: 100%;
     position: relative;
+
+    .dropzone-area {
+        position: absolute;
+        z-index: 4;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        right: 0;
+        background-color: rgba(var(--bs-secondary-bg-rgb), .95);
+        border: 2px dashed var(--bs-secondary);
+        border-radius: $card-border-radius;
+        display: none;
+        color: var(--bs-secondary-color);
+
+        i {
+            font-size: 4rem;
+        }
+
+        &.dragging {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            &.dragover {
+                color: var(--bs-success);
+                border-color: var(--bs-success);
+            }
+        }
+    }
 }
 
 .fms-loader {
@@ -614,4 +653,8 @@
             overflow: hidden;
         }
     }
+}
+
+.dropdown-menu-fms {
+    max-width: 12.5rem;
 }
