@@ -16,7 +16,6 @@ if (!defined('NV_IS_FILE_ADMIN')) {
 $path = nv_check_path_upload($nv_Request->get_string('path', 'post,get', NV_UPLOADS_DIR));
 $check_allow_upload_dir = nv_check_allow_upload_dir($path);
 $newfilename = change_alias($nv_Request->get_title('newfilename', 'post', ''));
-$responseType = $nv_Request->get_title('responseType', 'get', '');
 $autologo = $nv_Request->get_int('autologo', 'post', 0);
 
 $chunk_upload = [];
@@ -186,28 +185,34 @@ if (isset($check_allow_upload_dir['over_capacity'])) {
     }
 }
 
+// Upload từ trình soạn thảo
 $editor = $nv_Request->get_title('editor', 'post,get', '');
 if (!preg_match('/^([a-zA-Z0-9\-\_]+)$/', $editor)) {
     $editor = '';
 }
 
+// Lỗi khi upload
 if (!empty($error)) {
-    // Lỗi upload
-    if ($responseType == 'json') {
-        $array_data = [];
-        $array_data['uploaded'] = 0;
-        $array_data['error'] = [
-            'message' => $error
-        ];
-
-        nv_jsonOutput($array_data);
-    } elseif (!empty($editor)) {
+    if (!empty($editor)) {
         require NV_ROOTDIR . '/' . NV_EDITORSDIR . '/' . $editor . '/nv.upload.error.php';
-    } else {
-        echo 'ERROR_' . $error;
     }
-} elseif (!empty($upload_info['complete'])) {
-    // Upload hoàn thành
+
+    // Khi upload chunks nếu 1 chunk lỗi thì trả về mã lỗi để nhận biết không đưa thêm các chunk sau đó
+    if ($chunk_upload['chunks'] > 1) {
+        http_response_code(406);
+    }
+
+    nv_jsonOutput([
+        'error' => [
+            'message' => $error
+        ]
+    ]);
+}
+
+// Upload hoàn thành
+if (!empty($upload_info['complete'])) {
+    nv_insert_logs(NV_LANG_DATA, $module_name, $nv_Lang->getModule('upload_file'), $path . '/' . $upload_info['basename'], $admin_info['userid']);
+
     if (isset($array_dirname[$path])) {
         $did = $array_dirname[$path];
         $info = nv_getFileInfo($path, $upload_info['basename']);
@@ -234,12 +239,20 @@ if (!empty($error)) {
         nv_dirListRefreshSize();
     }
 
-    nv_insert_logs(NV_LANG_DATA, $module_name, $nv_Lang->getModule('upload_file'), $path . '/' . $upload_info['basename'], $admin_info['userid']);
-
     if (!empty($editor)) {
         require NV_ROOTDIR . '/' . NV_EDITORSDIR . '/' . $editor . '/nv.upload.success.php';
-    } else {
-        echo $upload_info['basename'];
     }
+
+    nv_jsonOutput([
+        'url' => NV_BASE_SITEURL . $path . '/' . $upload_info['basename'],
+        'name' => $upload_info['basename'],
+        'ext' => $upload_info['ext'],
+        'mime' => $upload_info['mime'],
+        'size' => $upload_info['size'],
+        'isImg' => $upload_info['is_img'],
+        'isSvg' => $upload_info['is_svg'],
+        'imgInfo' => $upload_info['img_info'] ?? []
+    ]);
 }
-// Upload chunk hoàn thành
+
+// Upload chunk hoàn thành không cần trả về message gì

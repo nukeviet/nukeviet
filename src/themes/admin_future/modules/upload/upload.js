@@ -9,6 +9,16 @@ document.addEventListener('DOMContentLoaded', () => {
     let cssNum = 0, jsNum = 0, ready = false;
     let amountCss = 3, amountJs = 9;
 
+    // Extra{* Vui lòng giữ đúng cấu trúc này để render ra đúng
+    /**}
+
+    {if $EXTRA_JS neq ''}amountJs++;
+    // Tải callback của trình soạn thảo
+    loadScript("{$EXTRA_JS}");
+    {/if}
+    {**/
+    //*}
+
     // Tải jquery UI
     if (typeof $.ui == "undefined") {
         loadScript(nv_base_siteurl + "assets/js/jquery-ui/jquery-ui.min.js");
@@ -111,7 +121,7 @@ document.addEventListener('DOMContentLoaded', () => {
     fireReady();
 });
 
-const nukeviet = window.nukeviet || {};
+var nukeviet = nukeviet || {};
 
 /**
  * Class xử lý trình quản lý tệp tin
@@ -531,6 +541,12 @@ nukeviet.Picker = class {
                 },
                 Error: (up, err) => {
                     self.debug && console.log('Plupload Error', up, err);
+                    const msg = '[' + err.code + '] ' + err.status + ': ' + err.message;
+                    if (err.file) {
+                        self.upStatusFile(err.file, null, msg);
+                        return;
+                    }
+                    nvToast(msg, 'error');
                 },
                 UploadComplete: (up, files) => {
                     self.debug && console.log('Plupload UploadComplete', up, files);
@@ -668,12 +684,11 @@ nukeviet.Picker = class {
             e.preventDefault();
             self.closeMenu();
             const file = $('[data-toggle="file"][data-uuid="' + $(this).data('uuid') + '"]', self.fms);
-            const tree = $('[data-toggle="tree-scroller"] .active', self.fms);
-            if (!file.length || !tree.length) {
+            if (!file.length) {
                 return;
             }
+            // Trả về cho CKEditor 4 cũ
             if (self.settings.CKEditorFuncNum > 0 && window.opener && window.opener.CKEDITOR) {
-                // Trả về cho CKEditor 4
                 window.opener.CKEDITOR.tools.callFunction(self.settings.CKEditorFuncNum, file.data('path'), function() {
                     var dialog = this.getDialog();
                     if (dialog.getName() == 'image2') {
@@ -686,7 +701,21 @@ nukeviet.Picker = class {
                 window.close();
                 return;
             }
-            // Trường hợp mở window
+            // Trả về cho CKEditor 5 mới
+            if (self.settings.editorId != '' && nukeviet.Picker.EditorCallback) {
+                nukeviet.Picker.EditorCallback.forEach(callback => {
+                    callback(self.settings.editorId, {
+                        href: file.data('path'),
+                        alt: file.data('alt')
+                    });
+                });
+                if (self.settings.popup) {
+                    window.close();
+                    return;
+                }
+            }
+
+            // Trả về cho các dạng popup chọn cũ
             if (self.settings.popup) {
                 if (!opener || !opener.document) {
                     return;
@@ -700,6 +729,29 @@ nukeviet.Picker = class {
                     window.close();
                     return;
                 }
+                return;
+            }
+        });
+
+        // Tải về
+        self.menu.on('click', '[data-toggle="menu-file-download"]', function(e) {
+            e.preventDefault();
+            self.closeMenu();
+            const file = $('[data-toggle="file"][data-uuid="' + $(this).data('uuid') + '"]', self.fms);
+            const tree = $('[data-toggle="tree-scroller"] .active', self.fms);
+            if (!file.length || !tree.length) {
+                return;
+            }
+            const src = script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=dlimg&path=' + tree.data('path') + '&img=' + file.data('name');
+            $('[data-toggle="fms-iframe"]', self.fms).attr('src', src);
+        });
+
+        // Xem chi tiết
+        self.menu.on('click', '[data-toggle="menu-file-preview"]', function(e) {
+            e.preventDefault();
+            self.closeMenu();
+            const file = $('[data-toggle="file"][data-uuid="' + $(this).data('uuid') + '"]', self.fms);
+            if (!file.length) {
                 return;
             }
         });
@@ -1287,17 +1339,17 @@ nukeviet.Picker = class {
                 type: 'POST',
                 data: data,
                 cache: false,
+                dataType: 'json',
                 success: function(respon) {
                     $('input, textarea, select, button', $(form)).prop('disabled', false);
-                    const res = respon.split('_');
-                    if (res[0] == 'ERROR') {
-                        nvToast(res[1], 'error');
+                    if (respon.error) {
+                        nvToast(respon.error.message, 'error');
                         return;
                     }
                     self.hideDialog(dig);
                     self.resetFilter();
                     self.fetchFile({
-                        selected: [respon]
+                        selected: [respon.name]
                     });
                 },
                 error: function(xhr, text, err) {
@@ -1544,7 +1596,7 @@ nukeviet.Picker = class {
     }
 
     // Cập nhật trạng thái của một tệp
-    upStatusFile(file, jsontext) {
+    upStatusFile(file, jsontext, message) {
         const self = this;
         const queue = $('[data-toggle="queue-items"]', self.fms);
         const fi = $('#' + file.id, queue);
@@ -1553,23 +1605,29 @@ nukeviet.Picker = class {
         }
 
         if (jsontext) {
-            const check = jsontext.split('_');
-
-            if (check[0] == 'ERROR') {
-                file.status = plupload.FAILED;
-                file.hint = check[1];
-                self.up.total.uploaded--;
-                self.up.total.failed++;
-            } else {
-                file.name = jsontext;
-            }
-            $.each(self.up.files, function(i, f) {
-                if (f.id == file.id) {
-                    self.up.files[i].status = file.status;
-                    self.up.files[i].hint = file.hint;
-                    self.up.files[i].name = file.name;
+            try {
+                const jsonObj = JSON.parse(jsontext);
+                if (jsonObj.error) {
+                    file.status = plupload.FAILED;
+                    file.hint = jsonObj.error.message;
+                    self.up.total.uploaded--;
+                    self.up.total.failed++;
+                } else {
+                    file.name = jsonObj.name;
                 }
-            });
+                $.each(self.up.files, function(i, f) {
+                    if (f.id == file.id) {
+                        self.up.files[i].status = file.status;
+                        self.up.files[i].hint = file.hint;
+                        self.up.files[i].name = file.name;
+                    }
+                });
+            } catch (error) {
+                console.log(error, jsontext);
+            }
+        }
+        if (message) {
+            file.hint = message;
         }
 
         $('[data-toggle="qitem-status"]', fi).text(file.percent + '%');
@@ -1783,14 +1841,14 @@ nukeviet.Picker = class {
         let html = '<li><div class="dropdown-header fw-medium text-truncate-2 mb-2 pb-0 text-break text-wrap text-primary" title="' + menuHeader + '">' + menuHeader + '</div></li>';
 
         if (files.length == 1) {
-            if (self.settings.CKEditorFuncNum > 0 || self.settings.area != '') {
+            if (self.settings.editorId != '' || self.settings.CKEditorFuncNum > 0 || self.settings.area != '') {
                 actions++;
                 html += '<li><a class="dropdown-item" href="#" data-toggle="menu-file-select" data-uuid="' + files.data('uuid') + '"><i class="fa-solid fa-check text-success fa-fw"></i> ' + self.lang.select + '</a></li>';
             }
 
             actions += 2;
-            html += '<li><a class="dropdown-item" href="#"><i class="fa-solid fa-download fa-fw"></i> ' + self.lang.download + '</a></li>';
-            html += '<li><a class="dropdown-item" href="#"><i class="fa-solid fa-eye fa-fw"></i> ' + self.lang.preview + '</a></li>';
+            html += '<li><a class="dropdown-item" href="#" data-toggle="menu-file-download" data-uuid="' + files.data('uuid') + '"><i class="fa-solid fa-download fa-fw"></i> ' + self.lang.download + '</a></li>';
+            html += '<li><a class="dropdown-item" href="#" data-toggle="menu-file-preview" data-uuid="' + files.data('uuid') + '"><i class="fa-solid fa-eye fa-fw"></i> ' + self.lang.preview + '</a></li>';
 
             // Công cụ cơ bản của ảnh
             if (self.imageExts.includes(files.data('ext')) && tree.data('allowed-create-file')) {

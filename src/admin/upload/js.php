@@ -48,6 +48,13 @@ $tpl->assign('HTML_CONTENT', escapeForJs($tpl->fetch('upload_ctn.tpl')));
 $tpl->assign('HTML_DIALOG', escapeForJs($tpl->fetch('upload_dialog.tpl')));
 $tpl->assign('HTML_QUEUE_ITEM', escapeForJs($tpl->fetch('upload_queue_item.tpl')));
 
+// Load thêm tệp callback của trình soạn thảo nếu có
+$extra_js = '';
+if (!empty($admin_info['editor']) and file_exists(NV_ROOTDIR . '/' . NV_EDITORSDIR . '/' . $admin_info['editor'] . '/nv.callback.js')) {
+    $extra_js = NV_STATIC_URL . NV_EDITORSDIR . '/' . $admin_info['editor'] . '/nv.callback.js';
+}
+$tpl->assign('EXTRA_JS', $extra_js);
+
 $contents = $tpl->fetch('upload.js');
 
 unset($sys_info['server_headers']['content-type'], $sys_info['server_headers']['content-length']);

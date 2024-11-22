@@ -115,6 +115,7 @@
             <div class="fs-5 fw-medium pe-none">{$LANG->getModule('upload_drop')}</div>
         </div>
     </div>
+    <div class="fms-iframe"><iframe data-toggle="fms-iframe"></iframe></div>
     <div class="fms-loader show" data-toggle="loader">
         <i class="fa-solid fa-spinner fa-spin-pulse fa-3x"></i>
     </div>

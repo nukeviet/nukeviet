@@ -7,24 +7,27 @@
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
-window.NVFileManagerSelectCallback = function(href, alt) {
-    let editorId = $('[name="editor_id"]').val();
-    let editor = window.opener || [];
+'use strict';
+
+var nukeviet = nukeviet || {};
+nukeviet.Picker = nukeviet.Picker || {};
+nukeviet.Picker.EditorCallback = nukeviet.Picker.EditorCallback || [];
+nukeviet.Picker.EditorCallback.push((editorId, data) => {
+    let editor = window.opener || {};
     editor = editor.nveditor || [];
-    editor = editor[editorId] || [];
+    editor = editor[editorId] || null;
     if (!editor) {
-        throw new Error('No Editor!!!');
+        return;
     }
 
-    if (alt != '') {
+    if (data.alt && data.alt != '') {
         // Insert full image
-        editor.commands.get('nvbox').execute(href, {
-            alt: alt
+        editor.commands.get('nvbox').execute(data.href, {
+            alt: data.alt
         });
     } else {
         // Insert file
-        editor.commands.get('nvbox').execute(href);
+        editor.commands.get('nvbox').execute(data.href);
     }
     editor.editing.view.focus();
-    window.close();
-}
+});

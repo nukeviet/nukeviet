@@ -71,7 +71,7 @@ function nv_aleditor($textareaname, $width = '100%', $height = '450px', $val = '
             withCredentials: true
         }';
         $create[] = 'nvbox: {
-            browseUrl: "' . (NV_BASE_SITEURL . NV_ADMINDIR . '/index.php?' . NV_NAME_VARIABLE . '=upload&popup=1&CKEditorFuncNum=1&editor_id=' . $editor_id . '&path=' . $path . '&currentpath=' . $currentpath) . '",
+            browseUrl: "' . (NV_BASE_SITEURL . NV_ADMINDIR . '/index.php?' . NV_NAME_VARIABLE . '=upload&popup=1&editor_id=' . $editor_id . '&path=' . $path . '&currentpath=' . $currentpath) . '",
             options: {
                 noCache: false
             }
