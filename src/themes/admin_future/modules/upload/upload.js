@@ -134,6 +134,7 @@ nukeviet.Picker = class {
     htmlModalBackdrop = `<div class="fmm-backdrop fade"></div>`;
     htmlDialogBackdrop = `<div class="fmd-backdrop fade"></div>`;
     lang = {
+        copied: `{$LANG->getModule('filepathcopied')}`,
         select: `{$LANG->getModule('select')}`,
         compressImage: `{$LANG->getModule('compressimage')}`,
         webpConvert: `{$LANG->getModule('webpconvert')}`,
@@ -203,6 +204,7 @@ nukeviet.Picker = class {
             altRequire: {$UPLOAD_ALT_REQUIRE}
         }
 
+        this.lastTap = 0;
         this.debug = {$DEBUG};
         this.init();
     }
@@ -429,8 +431,8 @@ nukeviet.Picker = class {
         });
         */
 
-        document.addEventListener('mousedown', self.handleDocStart);
-        document.addEventListener('touchstart', self.handleDocStart);
+        document.addEventListener('mousedown', self.handleDocTapStart);
+        document.addEventListener('touchstart', self.handleDocTapStart);
 
         // Xử lý sự kiện liên quan tệp tin
         self.initFileEvents();
@@ -446,6 +448,9 @@ nukeviet.Picker = class {
 
         // Xử lý các sự kiện trên menu
         self.initMenuEvents();
+
+        // Xử lý các sự kiện trên dialog
+        self.initDialogEvents();
 
         // Lấy cây thư mục và file
         self.fetchAll();
@@ -687,50 +692,7 @@ nukeviet.Picker = class {
             if (!file.length) {
                 return;
             }
-            // Trả về cho CKEditor 4 cũ
-            if (self.settings.CKEditorFuncNum > 0 && window.opener && window.opener.CKEDITOR) {
-                window.opener.CKEDITOR.tools.callFunction(self.settings.CKEditorFuncNum, file.data('path'), function() {
-                    var dialog = this.getDialog();
-                    if (dialog.getName() == 'image2') {
-                        var element = dialog.getContentElement('info', 'alt');
-                        if (element) {
-                            element.setValue(file.data('alt'));
-                        }
-                    }
-                });
-                window.close();
-                return;
-            }
-            // Trả về cho CKEditor 5 mới
-            if (self.settings.editorId != '' && nukeviet.Picker.EditorCallback) {
-                nukeviet.Picker.EditorCallback.forEach(callback => {
-                    callback(self.settings.editorId, {
-                        href: file.data('path'),
-                        alt: file.data('alt')
-                    });
-                });
-                if (self.settings.popup) {
-                    window.close();
-                    return;
-                }
-            }
-
-            // Trả về cho các dạng popup chọn cũ
-            if (self.settings.popup) {
-                if (!opener || !opener.document) {
-                    return;
-                }
-                // Trả về input của opener
-                if (self.settings.area != '') {
-                    $('#' + self.settings.area, opener.document).val(file.data('path'));
-                    if (self.settings.alt != '') {
-                        $('#' + self.settings.alt, opener.document).val(file.data('alt'));
-                    }
-                    window.close();
-                    return;
-                }
-                return;
-            }
+            self.handleSelectFile(file);
         });
 
         // Tải về
@@ -754,6 +716,7 @@ nukeviet.Picker = class {
             if (!file.length) {
                 return;
             }
+            self.showDialog('preview', file);
         });
     }
 
@@ -819,6 +782,27 @@ nukeviet.Picker = class {
         });
     }
 
+    // Sự kiện trên các dialog
+    initDialogEvents() {
+        const self = this;
+
+        // Zoom ảnh
+        self.fmd.on('click', '[data-toggle="preview-zoom-in"]', function() {
+            const dialog = $(this).closest('.fmd');
+            if (!$(this).is('.is-img')) {
+                return;
+            }
+            $('[data-toggle="zoom-ctn"]', dialog).addClass('show');
+        });
+
+        // Zoom đóng zoom
+        self.fmd.on('click', '[data-toggle="preview-zoom-out"]', function(e) {
+            e.preventDefault();
+            const dialog = $(this).closest('.fmd');
+            $('[data-toggle="zoom-ctn"]', dialog).removeClass('show');
+        });
+    }
+
     // Tạo các thanh cuộn
     initScrollbar() {
         this.destroyScrollbar();
@@ -861,8 +845,8 @@ nukeviet.Picker = class {
             document.removeEventListener('dragover', self.handleDragover);
             document.removeEventListener('drop', self.handleDrop);
 
-            document.removeEventListener('mousedown', self.handleDocStart);
-            document.removeEventListener('touchstart', self.handleDocStart);
+            document.removeEventListener('mousedown', self.handleDocTapStart);
+            document.removeEventListener('touchstart', self.handleDocTapStart);
 
             setTimeout(() => {
                 self.fmm.remove();
@@ -1164,7 +1148,7 @@ nukeviet.Picker = class {
     }
 
     // Hiển thị các dialog
-    showDialog(name) {
+    showDialog(name, extra) {
         const self = this;
         const dig = self.fmd.filter('[data-dialog="' + name + '"]');
         if (dig.length != 1 || dig.is('.show')) {
@@ -1194,7 +1178,7 @@ nukeviet.Picker = class {
             dig.addClass('show');
             dig.attr('aria-modal', 'true');
             dig.removeAttr('aria-hidden');
-            self.showDialogCallback(name, dig);
+            self.showDialogCallback(name, dig, extra);
         }, 1);
         setTimeout(() => {
             self.shownDialogCallback(name, dig);
@@ -1202,7 +1186,7 @@ nukeviet.Picker = class {
     }
 
     // Xử lý khi Dialog bắt đầu mở lên
-    showDialogCallback(name, dialog) {
+    showDialogCallback(name, dialog, extra) {
         const self = this;
 
         // Form tìm kiếm
@@ -1234,17 +1218,88 @@ nukeviet.Picker = class {
             $('[name="path"]', dialog).val(self.getCurrentPath());
             return;
         }
+
+        // Xem chi tiết
+        if (name == 'preview') {
+            const file = extra;
+            $('[data-toggle="alt"]', dialog).text(file.data('alt'));
+            $('[data-toggle="filename"]', dialog).text(file.data('name'));
+            $('[data-toggle="mtime"]', dialog).text(file.data('mtime'));
+            $('[data-toggle="size"]', dialog).text(file.data('preview-size'));
+            $('[name="relative"]', dialog).val(file.data('path'));
+            $('[name="absolute"]', dialog).val(file.data('abs-path'));
+
+            const clipb1 = new ClipboardJS($('[data-toggle="btn-relative"]', dialog)[0]);
+            clipb1.on('success', () => {
+                nvToast(self.lang.copied, 'success');
+            });
+            $('[name="relative"]', dialog).data('clipb', clipb1);
+
+            const clipb2 = new ClipboardJS($('[data-toggle="btn-absolute"]', dialog)[0]);
+            clipb2.on('success', () => {
+                nvToast(self.lang.copied, 'success');
+            });
+            $('[name="absolute"]', dialog).data('clipb', clipb2);
+
+            // Ảnh nhỏ
+            const img1 = $('[data-toggle="preview-zoom-in"]', dialog);
+            img1.attr('alt', file.data('alt'));
+            img1.attr('src', file.data('thumb-src'));
+
+
+            if (file.data('type') == 'image') {
+                img1.addClass('is-img');
+
+                // Ảnh lớn
+                const img2 = $('[data-toggle="orig-img"]', dialog);
+                img2.attr('alt', file.data('alt'));
+                img2.attr('src', file.data('nocache-path'));
+                if (file.data('height') > file.data('width')) {
+                    img2.addClass('orig-img-v');
+                }
+            }
+
+            return;
+        }
     }
 
     // Xử lý sau khi Dialog được mở lên
     shownDialogCallback(name, dialog) {
+        // Tìm kiếm
         if (name == 'search') {
             $('[name="q"]', dialog).focus();
             return;
         }
 
+        // Upload file từ internet
         if (name == 'upload-remote') {
             $('[name="fileurl"]', dialog).focus();
+            return;
+        }
+    }
+
+    // Xử lý sau khi Dialog đóng lại
+    hideDialogCallback(dialog) {
+        $('.is-invalid', dialog).removeClass('is-invalid');
+
+        // Xem chi tiết
+        if (dialog.data('dialog') == 'preview') {
+            $('[data-toggle="alt"]', dialog).text('');
+            $('[data-toggle="filename"]', dialog).text('');
+            $('[data-toggle="mtime"]', dialog).text('');
+            $('[data-toggle="size"]', dialog).text('');
+            $('[type="text"]', dialog).val('');
+            $('[data-toggle="orig-img"]', dialog).removeClass('orig-img-v');
+            $('[data-toggle="preview-zoom-in"]', dialog).removeClass('is-img');
+
+            // Cả ảnh nhỏ và ảnh lớn
+            const img = $('img', dialog);
+            img.attr('alt', '');
+            img.attr('src', img.data('pix'));
+
+            $('[name="relative"]', dialog).data('clipb').destroy();
+            $('[name="absolute"]', dialog).data('clipb').destroy();
+
             return;
         }
     }
@@ -1275,11 +1330,6 @@ nukeviet.Picker = class {
             dig.removeAttr('aria-modal');
             dig.attr('aria-hidden', 'true');
         }, 300);
-    }
-
-    // Xử lý sau khi Dialog đóng lại
-    hideDialogCallback(dialog) {
-        $('.is-invalid', dialog).removeClass('is-invalid');
     }
 
     // Xử lý khi submit các form trong Dialog
@@ -1393,9 +1443,18 @@ nukeviet.Picker = class {
         $('[data-toggle="file-check"]', file).prop('checked', true);
     }
 
-    // Hủy chọn hết file
-    clearSelectedFile() {
+    // Hủy chọn file
+    clearSelectedFile(file) {
         const self = this;
+
+        // Hủy một
+        if (file) {
+            $('[data-toggle="file-check"]', file).prop('checked', false);
+            file.removeClass('selected');
+            return;
+        }
+
+        // Hủy hết
         $('[data-toggle="file"].selected', self.fms).each(function() {
             $('[data-toggle="file-check"]', $(this)).prop('checked', false);
             $(this).removeClass('selected');
@@ -1764,28 +1823,49 @@ nukeviet.Picker = class {
     }
 
     // Xử lý khi nhấn xuống trên toàn bộ document
-    handleDocStart = (event) => {
+    handleDocTapStart = (event) => {
         if (event.type == 'mousedown' && (this.canTouch() || event.button != 0)) {
             // Không xử lý thao tác nhấn chuột trên màn cảm ứng hoặc nhấn xuống chuột giữa, chuột phải
             return;
         }
-        this.debug && console.log('document ' + event.type);
+        this.debug && console.log('document ' + event.type, event);
         const self = this;
+        const cTime = new Date().getTime();
+        const cDiff = cTime - self.lastTap;
+        const doubleTap = (cDiff < 300 && cDiff > 0);
 
         // Đóng menu khi click ra ngoài menu
         const menuClick = ($(event.target).is(self.menu) || $(event.target).closest(self.menu).length == 1);
-        if (!menuClick) {
+        const menuIsOpen = self.menu.is(':visible');
+        const dialogIsOpen = $('body').is('.fmd-open');
+
+        if (!menuClick && !dialogIsOpen) {
             self.closeMenu();
         }
 
         const fileClick = self.findFileFromEvent(event);
-        if (!fileClick && !menuClick) {
+        const clickFileTool = (fileClick && ($(event.target).is('[data-toggle="file-check"]') || $(event.target).is('[data-toggle="file-menu"]') || $(event.target).closest('[data-toggle="file-menu"]').length > 0));
+
+        if (!fileClick && !menuClick && !menuIsOpen && !dialogIsOpen) {
             self.clearSelectedFile();
         }
 
-        //if (!this.findTreeFromEvent(event) && !this.findFileFromEvent(event)) {
-        //    this.closeMenu();
-        ///}
+        // Nhấp để chọn / bỏ chọn file
+        if (fileClick && !clickFileTool && !menuIsOpen && !doubleTap && !dialogIsOpen) {
+            if (fileClick.is('.selected')) {
+                self.clearSelectedFile(event.ctrlKey ? fileClick : null);
+            } else {
+                self.setSelectedFile(fileClick, event.ctrlKey);
+            }
+        }
+
+        // Click đúp thì chọn tệp đó luôn
+        if (doubleTap && fileClick) {
+            self.setSelectedFile(fileClick);
+            self.handleSelectFile(fileClick);
+        }
+
+        self.lastTap = cTime;
     }
 
     // Tìm tọa độ con trỏ chuột trong document
@@ -1977,6 +2057,55 @@ nukeviet.Picker = class {
         });
 
         self.destroyScrollbar();
+    }
+
+    // Xử lý trả về khi chọn file
+    handleSelectFile(file) {
+        const self = this;
+        // Trả về cho CKEditor 4 cũ
+        if (self.settings.CKEditorFuncNum > 0 && window.opener && window.opener.CKEDITOR) {
+            window.opener.CKEDITOR.tools.callFunction(self.settings.CKEditorFuncNum, file.data('path'), function() {
+                var dialog = this.getDialog();
+                if (dialog.getName() == 'image2') {
+                    var element = dialog.getContentElement('info', 'alt');
+                    if (element) {
+                        element.setValue(file.data('alt'));
+                    }
+                }
+            });
+            window.close();
+            return;
+        }
+        // Trả về cho CKEditor 5 mới
+        if (self.settings.editorId != '' && nukeviet.Picker.EditorCallback) {
+            nukeviet.Picker.EditorCallback.forEach(callback => {
+                callback(self.settings.editorId, {
+                    href: file.data('path'),
+                    alt: file.data('alt')
+                });
+            });
+            if (self.settings.popup) {
+                window.close();
+                return;
+            }
+        }
+
+        // Trả về cho các dạng popup chọn cũ
+        if (self.settings.popup) {
+            if (!opener || !opener.document) {
+                return;
+            }
+            // Trả về input của opener
+            if (self.settings.area != '') {
+                $('#' + self.settings.area, opener.document).val(file.data('path'));
+                if (self.settings.alt != '') {
+                    $('#' + self.settings.alt, opener.document).val(file.data('alt'));
+                }
+                window.close();
+                return;
+            }
+            return;
+        }
     }
 };
 

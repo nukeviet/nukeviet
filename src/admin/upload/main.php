@@ -279,13 +279,18 @@ if ($nv_Request->isset_request('checkss', 'post')) {
                 $file['ext'] = $row['ext'];
                 $file['uuid'] = uniqid();
                 $file['path'] = NV_BASE_SITEURL . (empty($row['dirname']) ? $request['currentpath'] : $row['dirname']) . '/' . $row['title'];
+                $file['abs_path'] = NV_MY_DOMAIN . $file['path'];
+                $file['nocache_path'] = $file['path'] . '?' . $row['mtime'];
+                $file['mtime'] = nv_datetime_format($row['mtime'], 0, 0);
+                $file['type'] = $row['type'];
 
                 if ($row['type'] == 'image' or $row['ext'] == 'swf') {
                     $num_images++;
                     $file['size'] = str_replace('|', ' x ', $row['sizes']) . ' px';
+                    $file['size_detail'] = $file['size'] . ' (' . nv_convertfromBytes($row['filesize']) . ')';
                 } else {
                     $num_file++;
-                    $file['size'] = nv_convertfromBytes($row['filesize']);
+                    $file['size'] = $file['size_detail'] = nv_convertfromBytes($row['filesize']);
                 }
 
                 $files[] = $file;

@@ -8,7 +8,15 @@
                 data-ext="{$file.ext}"
                 data-uuid="{$file.uuid}"
                 data-path="{$file.path}"
+                data-nocache-path="{$file.nocache_path}"
+                data-abs-path="{$file.abs_path}"
                 data-alt="{$file.alt}"
+                data-mtime="{$file.mtime}"
+                data-thumb-src="{$file.src}"
+                data-preview-size="{$file.size_detail}"
+                data-type="{$file.type}"
+                data-width="{$file.width}"
+                data-height="{$file.height}"
             >
                 <div class="sel">
                     <input class="form-check-input" data-toggle="file-check" type="checkbox" id="{$file.uuid}-file-checkbox" value="" aria-label="{$LANG->getModule('selectimg')}">

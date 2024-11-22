@@ -62,3 +62,42 @@
         </div>
     </div>
 </div>
+<div class="fmd fade" data-dialog="preview" id="[prefix]-preview" tabindex="-1" aria-labelledby="[prefix]-preview-label" aria-hidden="true">
+    <div class="fmd-dialog">
+        <div class="fmd-content">
+            <div class="fmd-header">
+                <div class="fmd-title text-truncate fs-5 fw-medium" id="[prefix]-preview-label">{$LANG->getModule('preview')}</div>
+                <button type="button" class="btn-close" data-dismiss="fmd" aria-label="{$LANG->getGlobal('close')}"></button>
+            </div>
+            <div class="fmd-body fmd-preview">
+                <div class="text-center">
+                    <div class="h2 mb-3 fw-medium" data-toggle="alt"></div>
+                    <div class="mb-2 position-relative img-thumb-outer">
+                        <img data-toggle="preview-zoom-in" src="{$smarty.const.ASSETS_STATIC_URL}/images/pix.gif" data-pix="{$smarty.const.ASSETS_STATIC_URL}/images/pix.gif" class="img-fluid img-thumb" alt="">
+                        <div class="zoom-img" data-toggle="zoom-ctn">
+                            <a href="#" data-toggle="preview-zoom-out" class="zoom-out link-light p-3 pe-4" aria-label="{$LANG->getGlobal('close')}"><i class="fa-solid fa-arrows-to-dot fa-lg"></i></a>
+                            <img data-toggle="orig-img" src="{$smarty.const.ASSETS_STATIC_URL}/images/pix.gif" data-pix="{$smarty.const.ASSETS_STATIC_URL}/images/pix.gif" class="orig-img" alt="">
+                        </div>
+                    </div>
+                    <div class="text-break mb-1 fw-medium" data-toggle="filename"></div>
+                    <div class="mb-1">{$LANG->getModule('upload_size')}: <span data-toggle="size"></span></div>
+                    <div class="mb-2">{$LANG->getModule('pubdate')}: <span data-toggle="mtime"></span></div>
+                </div>
+                <div class="mb-3">
+                    <label for="[prefix]-preview-relative" class="form-label fw-medium">{$LANG->getModule('filerelativepath')}:</label>
+                    <div class="input-group">
+                        <input class="form-control" name="relative" type="text" value="" id="[prefix]-preview-relative" aria-describedby="[prefix]-preview-relative-btn">
+                        <button class="btn btn-primary" type="button" id="[prefix]-preview-relative-btn" data-toggle="btn-relative" data-clipboard-target="#[prefix]-preview-relative">{$LANG->getGlobal('copy')}</button>
+                    </div>
+                </div>
+                <div>
+                    <label for="[prefix]-preview-absolute" class="form-label fw-medium">{$LANG->getModule('fileabsolutepath')}:</label>
+                    <div class="input-group">
+                        <input class="form-control" name="absolute" type="text" value="" id="[prefix]-preview-absolute" aria-describedby="[prefix]-preview-absolute-btn">
+                        <button class="btn btn-primary" type="button" id="[prefix]-preview-absolute-btn" data-toggle="btn-absolute" data-clipboard-target="#[prefix]-preview-absolute">{$LANG->getGlobal('copy')}</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

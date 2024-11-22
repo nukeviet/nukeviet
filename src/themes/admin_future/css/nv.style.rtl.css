@@ -27770,4 +27770,56 @@ p + .image-style-side {
   z-index: 0;
   overflow: hidden;
 }
+
+.fmd-preview .img-thumb-outer {
+  display: inline-block;
+}
+.fmd-preview .img-thumb {
+  position: relative;
+  z-index: 1;
+}
+.fmd-preview .img-thumb.is-img {
+  cursor: zoom-in;
+}
+.fmd-preview .zoom-img {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 100%;
+  height: 100%;
+  transition: background-color 0.15s ease-in-out, transform 0.15s ease-in-out;
+  z-index: 0;
+}
+.fmd-preview .zoom-img .orig-img {
+  max-width: 100%;
+  height: auto;
+}
+.fmd-preview .zoom-img.show {
+  z-index: 999999999;
+  background-color: rgba(var(--bs-dark-rgb), 0.9);
+  transform: scale(1);
+  position: fixed;
+  width: 100vw;
+  height: 100vh;
+}
+.fmd-preview .zoom-img.show .orig-img {
+  max-width: calc(100vw - 20px);
+  height: auto;
+  position: absolute;
+  right: 50%;
+  top: 50%;
+  transform: translate(50%, -50%);
+}
+.fmd-preview .zoom-img.show .orig-img.orig-img-v {
+  max-width: none;
+  max-height: calc(100vh - 20px);
+  width: auto;
+}
+.fmd-preview .zoom-out {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 2;
+  display: block;
+}
 /*# sourceMappingURL=nv.style.rtl.css.map */
