@@ -10,6 +10,8 @@
                 data-path="{$file.path}"
                 data-nocache-path="{$file.nocache_path}"
                 data-abs-path="{$file.abs_path}"
+                data-dir-path="{$file.dir_path}"
+                data-dir="{$file.dir}"
                 data-alt="{$file.alt}"
                 data-mtime="{$file.mtime}"
                 data-thumb-src="{$file.src}"
@@ -21,7 +23,7 @@
                 <div class="sel">
                     <input class="form-check-input" data-toggle="file-check" type="checkbox" id="{$file.uuid}-file-checkbox" value="" aria-label="{$LANG->getModule('selectimg')}">
                 </div>
-                <div class="thumb{if $file.height > $file.width} thumb-v{/if}">
+                <div class="thumb{if $file.height > 0 and ($file.width / $file.height) <= 1.3333333} thumb-v{/if}">
                     <span class="thumb-blur" style="background-image: url({$file.src});"></span>
                     <span class="thumb-bg"></span>
                     <img src="{$file.src}" alt="{$file.alt}">

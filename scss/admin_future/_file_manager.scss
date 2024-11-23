@@ -137,6 +137,10 @@
 
 .fms-ctn-page {
     height: calc(100vh - $header-height - $breadcrumb-height - 2 * map-get($spacers, 4) - $footer-height);
+
+    @include media-breakpoint-down(md) {
+        height: calc(100vh - $header-height - 2.5rem - 2 * map-get($spacers, 4) - $footer-height);
+    }
 }
 
 .fms-ctn-fullscreen {
@@ -157,6 +161,32 @@
     width: 100%;
     height: 100%;
     display: flex;
+
+    @include media-breakpoint-down(md) {
+        display: block;
+    }
+
+    .btn-toggle-tree {
+        display: none;
+
+        @include media-breakpoint-down(md) {
+            display: block;
+        }
+    }
+
+    .filter-mobile {
+        display: none;
+
+        @include media-breakpoint-down(xl) {
+            display: block;
+        }
+    }
+
+    @include media-breakpoint-down(xl) {
+        .filter-desktop {
+            display: none;
+        }
+    }
 }
 
 .fms-wraper {
@@ -226,6 +256,21 @@
     padding-top: .5rem;
     padding-bottom: .5rem;
 
+    @include media-breakpoint-down(md) {
+        position: fixed;
+        z-index: $zindex-fms-tree;
+        background-color: var(--bs-body-bg);
+        left: 0;
+        top: 0;
+        bottom: 0;
+        transform: translateX(calc(-100% - 10px));
+        transition: transform 0.15s ease-in-out;
+
+        &.show {
+            transform: translateX(0px);
+        }
+    }
+
     .fms-tree-scroller {
         height: 100%;
         position: relative;
@@ -243,6 +288,7 @@
             background-color: $primary;
 
             >.tree-name,
+            >.tree-menu,
             >.tree-name>.tree-size,
             >.tree-collapse>.tree-icon {
                 color: color-contrast($primary);
@@ -277,6 +323,14 @@
 
     .tree-collapse {
         padding: .5rem;
+    }
+
+    .tree-menu {
+        padding: .5rem;
+
+        @include media-breakpoint-up(md) {
+            display: none;
+        }
     }
 }
 
@@ -375,9 +429,39 @@
     >ul {
         >li {
             margin-top: 1rem;
-            flex: 0 0 20%;
-            max-width: 20%;
+            flex: 0 0 50%;
+            max-width: 50%;
             padding: 0 .5rem;
+
+            @include media-breakpoint-up(sm) {
+                flex: 0 0 33.333333333%;
+                max-width: 33.333333333%;
+            }
+
+            @include media-breakpoint-up(md) {
+                flex: 0 0 33.333333333%;
+                max-width: 33.333333333%;
+            }
+
+            @media (min-width: #{map-get($grid-breakpoints, md)}) and (max-width: 930px) {
+                flex: 0 0 50%;
+                max-width: 50%;
+            }
+
+            @include media-breakpoint-up(lg) {
+                flex: 0 0 25%;
+                max-width: 25%;
+            }
+
+            @include media-breakpoint-up(xl) {
+                flex: 0 0 20%;
+                max-width: 20%;
+            }
+
+            @media (min-width: 1920px) {
+                flex: 0 0 12.5%;
+                max-width: 12.5%;
+            }
         }
     }
 
@@ -457,6 +541,10 @@
             left: .5rem;
             z-index: 1;
 
+            @include media-breakpoint-up(md) {
+                display: none;
+            }
+
             input {
                 margin-top: 0;
             }
@@ -470,6 +558,26 @@
 
             --bs-btn-padding-y: 0;
             --bs-btn-padding-x: 1px;
+        }
+
+        @include media-breakpoint-up(md) {
+            .menu {
+                display: none;
+            }
+        }
+    }
+}
+
+// Thiết bị chỉ có touch thì hiển thị nút menu với mọi kích thước
+@include media-breakpoint-up(md) {
+    .fms-wraper.touch-only {
+        .view-grid>.fms-files-wraper {
+            .file {
+                .sel,
+                .menu {
+                    display: block;
+                }
+            }
         }
     }
 }

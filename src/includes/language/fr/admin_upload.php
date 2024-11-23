@@ -218,3 +218,4 @@ $lang_module['tinify_api_key_note'] = 'Pour obtenir la clé API de Tinify, vous 
 $lang_module['show_folder_size'] = 'Afficher la taille du dossier dans l\'arborescence des répertoires';
 $lang_module['upload_drop'] = 'Déposez les fichiers ici';
 $lang_module['files_selected'] = '%d fichiers sélectionnés';
+$lang_module['toggle_folders'] = 'Masquer et afficher l\'arborescence des répertoires';

@@ -23,10 +23,11 @@
         {else}
         <span class="tree-collapse"><i class="tree-icon fa-fw pe-none fa-solid {($tree.open and not empty($tree.sub)) ? 'fa-folder-open' : 'fa-folder'}" data-toggle="tree-icon" data-icon="fa-folder"></i></span>
         {/if}
-        <a href="#" class="tree-name" data-toggle="tree-name">
+        <a href="#" class="tree-name text-truncate" data-toggle="tree-name">
             <span class="pe-none">{$tree.title}</span>
             {if not empty($tree.size)}<span class="pe-none tree-size">({$tree.size})</span>{/if}
         </a>
+        <a href="#" class="tree-menu ms-auto" data-toggle="tree-menu" aria-label="..."><i class="fa-solid fa-ellipsis-vertical"></i></a>
     </div>
     {if not empty($tree.sub)}
     <div class="sub-tree collapse{$tree.open ? ' show' : ''}" id="fms-tree-{$tree.uuid}" data-toggle="collapseTree">

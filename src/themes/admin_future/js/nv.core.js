@@ -126,7 +126,6 @@ const nvConfirm = (message, cbConfirm, cbCancel, cancelBtn) => {
     }
 
     const id = 'alert-' + nv_randomPassword(8);
-    const isModal = body.classList.contains('modal-open');
 
     // Đối tượng box
     const box = document.createElement('div');
@@ -157,15 +156,14 @@ const nvConfirm = (message, cbConfirm, cbCancel, cancelBtn) => {
 
     const cOverflow = body.style.overflow;
     const cPaddingRight = body.style.paddingRight;
+    const cVScroll = document.documentElement.scrollHeight > window.innerHeight;
 
     setTimeout(() => {
         box.classList.add('show');
         backdrop.classList.add('show');
 
-        if (!isModal) {
-            body.style.overflow = 'hidden';
-            body.style.paddingRight = nvGetScrollbarWidth() + 'px';
-        }
+        body.style.overflow = 'hidden';
+        cVScroll && (body.style.paddingRight = nvGetScrollbarWidth() + 'px');
         body.classList.add('alert-open');
     }, 10);
 
@@ -173,18 +171,13 @@ const nvConfirm = (message, cbConfirm, cbCancel, cancelBtn) => {
     const close = (event) => {
         ([...box.querySelectorAll('button')].map(ele => ele.setAttribute('disabled', 'disabled')));
         body.classList.remove('alert-open');
-        if (!isModal) {
-            if (cOverflow) {
-                body.style.overflow = cOverflow;
-            } else {
-                body.style.removeProperty('overflow');
-            }
-            if (cPaddingRight) {
-                body.style.paddingRight = paddingRight;
-            } else {
-                body.style.removeProperty('padding-right');
-            }
+
+        body.style.overflow = cOverflow;
+        body.style.paddingRight = cPaddingRight;
+        if (body.getAttribute('style') === '') {
+            body.removeAttribute('style');
         }
+
         box.classList.remove('show');
         backdrop.classList.remove('show');
         setTimeout(() => {

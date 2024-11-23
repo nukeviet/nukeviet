@@ -281,6 +281,8 @@ if ($nv_Request->isset_request('checkss', 'post')) {
                 $file['path'] = NV_BASE_SITEURL . (empty($row['dirname']) ? $request['currentpath'] : $row['dirname']) . '/' . $row['title'];
                 $file['abs_path'] = NV_MY_DOMAIN . $file['path'];
                 $file['nocache_path'] = $file['path'] . '?' . $row['mtime'];
+                $file['dir_path'] = (empty($row['dirname']) ? $request['currentpath'] : $row['dirname']) . '/' . $row['title'];
+                $file['dir'] = (empty($row['dirname']) ? $request['currentpath'] : $row['dirname']);
                 $file['mtime'] = nv_datetime_format($row['mtime'], 0, 0);
                 $file['type'] = $row['type'];
 

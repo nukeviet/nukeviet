@@ -13,41 +13,58 @@ if (!defined('NV_IS_FILE_ADMIN')) {
     exit('Stop!!!');
 }
 
-$path = nv_check_path_upload($nv_Request->get_string('path', 'post'));
-$check_allow_upload_dir = nv_check_allow_upload_dir($path);
-if (!isset($check_allow_upload_dir['delete_file'])) {
-    exit('ERROR#' . $nv_Lang->getModule('notlevel'));
+if ($nv_Request->get_title('checkss', 'post', '') !== NV_CHECK_SESSION) {
+    nv_jsonOutput([
+        'status' => 'error',
+        'mess' => 'Error session!!!'
+    ]);
 }
 
-$files = array_map('basename', explode('|', htmlspecialchars(trim($nv_Request->get_string('file', 'post')), ENT_QUOTES)));
-
-// Check choose file
+// Tệp được xóa có thể nhiều thư mục khác nhau khi tìm kiếm
+$files = array_filter(explode('|', htmlspecialchars(trim($nv_Request->get_string('files', 'post', '')), ENT_QUOTES)));
 if (empty($files)) {
-    exit('ERROR#' . $nv_Lang->getModule('errorNotSelectFile'));
+    nv_jsonOutput([
+        'status' => 'error',
+        'mess' => $nv_Lang->getModule('errorNotSelectFile')
+    ]);
 }
 
-// Check file exists
+$deleted = 0;
+$error = '';
 foreach ($files as $file) {
+    $path = nv_check_path_upload(dirname($file));
+    $file = basename($file);
+    $check_allow = nv_check_allow_upload_dir($path);
+
+    // Kiểm tra quyền xóa file
+    if (empty($check_allow['delete_file'])) {
+        $error = $nv_Lang->getModule('notlevel');
+        continue;
+    }
     if (!nv_is_file(NV_BASE_SITEURL . $path . '/' . $file, $path)) {
-        exit('ERROR#' . $nv_Lang->getModule('file_no_exists') . ': ' . $file);
+        $error = $nv_Lang->getModule('file_no_exists') . ': ' . $file;
+        continue;
     }
-}
-
-// Do action: Delete
-foreach ($files as $file) {
-    @nv_deletefile(NV_ROOTDIR . '/' . $path . '/' . $file);
-
+    nv_insert_logs(NV_LANG_DATA, $module_name, $nv_Lang->getModule('upload_delfile'), $path . '/' . $file, $admin_info['userid']);
+    nv_deletefile(NV_ROOTDIR . '/' . $path . '/' . $file);
     if (preg_match('/^' . nv_preg_quote(NV_UPLOADS_DIR) . '\/(([a-z0-9\-\_\/]+\/)*([a-z0-9\-\_\.]+)(\.(gif|jpg|jpeg|png|bmp|webp)))$/i', $path . '/' . $file, $m)) {
-        @nv_deletefile(NV_ROOTDIR . '/' . NV_FILES_DIR . '/' . $m[1]);
-        @nv_deletefile(NV_ROOTDIR . '/' . NV_MOBILE_FILES_DIR . '/' . $m[1]);
+        nv_deletefile(NV_ROOTDIR . '/' . NV_FILES_DIR . '/' . $m[1]);
+        nv_deletefile(NV_ROOTDIR . '/' . NV_MOBILE_FILES_DIR . '/' . $m[1]);
     }
-
     if (isset($array_dirname[$path])) {
         $db->query('DELETE FROM ' . NV_UPLOAD_GLOBALTABLE . '_file WHERE did = ' . $array_dirname[$path] . " AND title='" . $file . "'");
         nv_dirListRefreshSize();
     }
-
-    nv_insert_logs(NV_LANG_DATA, $module_name, $nv_Lang->getModule('upload_delfile'), $path . '/' . $file, $admin_info['userid']);
+    $deleted++;
 }
 
-echo 'OK#Success!!!';
+if (!empty($error) and empty($deleted)) {
+    nv_jsonOutput([
+        'status' => 'error',
+        'mess' => $error
+    ]);
+}
+
+nv_jsonOutput([
+    'status' => 'success'
+]);

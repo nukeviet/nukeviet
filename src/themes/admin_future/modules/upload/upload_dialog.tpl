@@ -101,3 +101,67 @@
         </div>
     </div>
 </div>
+<div class="fmd fade" data-dialog="renamefile" id="[prefix]-renamefile" tabindex="-1" aria-labelledby="[prefix]-renamefile-label" aria-hidden="true">
+    <div class="fmd-dialog">
+        <div class="fmd-content">
+            <div class="fmd-header">
+                <div class="fmd-title text-truncate fs-5 fw-medium" id="[prefix]-renamefile-label">{$LANG->getModule('rename')}</div>
+                <button type="button" class="btn-close" data-dismiss="fmd" aria-label="{$LANG->getGlobal('close')}"></button>
+            </div>
+            <div class="fmd-body">
+                <form method="post" data-mode="ajform" action="{$smarty.const.NV_BASE_ADMINURL}index.php?{$smarty.const.NV_LANG_VARIABLE}={$smarty.const.NV_LANG_DATA}&amp;{$smarty.const.NV_NAME_VARIABLE}={$MODULE_NAME}&amp;{$smarty.const.NV_OP_VARIABLE}=renameimg" novalidate>
+                    <div class="mb-2">
+                        <div class="fw-medium fw-5 dialog-text" data-toggle="name"></div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="[prefix]-renamefile-name" class="form-label">{$LANG->getModule('rename_newname')} <span class="text-danger">(*)</span>:</label>
+                        <div class="input-group">
+                            <input class="form-control dialog-val" name="newname" type="text" value="" id="[prefix]-renamefile-name" aria-describedby="[prefix]-renamefile-name-text" autocomplete="off">
+                            <div class="input-group-text dialog-text" data-toggle="ext" id="[prefix]-renamefile-name-text"></div>
+                        </div>
+                        <div class="invalid-feedback">{$LANG->getModule('rename_noname')}</div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="[prefix]-renamefile-alt" class="form-label">{$LANG->getModule('altimage')} <span class="text-danger">(*)</span>:</label>
+                        <input class="form-control dialog-val" name="newalt" type="text" maxlength="200" value="" id="[prefix]-renamefile-alt">
+                        <div class="invalid-feedback">{$LANG->getModule('upload_alt_note')}</div>
+                    </div>
+                    <div class="hstack justify-content-end gap-2">
+                        <button type="submit" class="btn btn-primary"><i class="fa-solid fa-floppy-disk"></i> {$LANG->getGlobal('submit')}</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="fmd"><i class="fa-solid fa-xmark text-danger"></i> {$LANG->getGlobal('cancel')}</button>
+                    </div>
+                    <input type="hidden" name="path" value="" class="dialog-val">
+                    <input type="hidden" name="file" value="" class="dialog-val">
+                    <input type="hidden" name="checkss" value="" class="dialog-val">
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="fmd fade" data-dialog="filter" id="[prefix]-filter" tabindex="-1" aria-labelledby="[prefix]-filter-label" aria-hidden="true">
+    <div class="fmd-dialog">
+        <div class="fmd-content">
+            <div class="fmd-header">
+                <div class="fmd-title text-truncate fs-5 fw-medium" id="[prefix]-filter-label">{$LANG->getModule('filter_title')}</div>
+                <button type="button" class="btn-close" data-dismiss="fmd" aria-label="{$LANG->getGlobal('close')}"></button>
+            </div>
+            <div class="fmd-body">
+                <form method="post" action="" novalidate>
+                    <div class="mb-3">
+                        <select class="form-select" name="type"></select>
+                    </div>
+                    <div class="mb-3">
+                        <select class="form-select" name="author"></select>
+                    </div>
+                    <div class="mb-3">
+                        <select class="form-select" name="order"></select>
+                    </div>
+                    <div class="hstack justify-content-end gap-2">
+                        <button type="submit" class="btn btn-primary"><i class="fa-solid fa-filter"></i> {$LANG->getGlobal('submit')}</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="fmd"><i class="fa-solid fa-xmark text-danger"></i> {$LANG->getGlobal('cancel')}</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

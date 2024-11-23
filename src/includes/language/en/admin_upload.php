@@ -218,3 +218,4 @@ $lang_module['tinify_api_key_note'] = 'To get Tinify\'s API key, you need to reg
 $lang_module['show_folder_size'] = 'Show folder size in directory tree';
 $lang_module['upload_drop'] = 'Drop files here to upload';
 $lang_module['files_selected'] = '%d files selected';
+$lang_module['toggle_folders'] = 'Show or hide folder tree';

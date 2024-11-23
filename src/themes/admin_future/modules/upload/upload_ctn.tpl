@@ -1,13 +1,14 @@
 <div class="fms-wraper">
     <div class="fms-ctn">
-        <div class="fms-tree">
+        <div class="fms-tree" data-toggle="trees">
             <div class="fms-tree-scroller" data-toggle="tree-scroller"></div>
         </div>
         <div class="fms-section">
             <div class="fms-contents">
                 <div class="fms-actions-bar d-flex gap-2">
                     <div class="d-flex align-items-center gap-2">
-                        <div data-toggle="filter-type" data-type="file" class="dropdown" title="{$LANG->getModule('selectfiletype')}" aria-label="{$LANG->getModule('selectfiletype')}">
+                        <button type="button" class="btn btn-sm btn-primary btn-toggle-tree" data-toggle="toggle-trees" aria-label="{$LANG->getModule('toggle_folders')}"><i class="fa-solid fa-folder-tree pe-none"></i></button>
+                        <div data-toggle="filter-type" data-type="file" class="filter-desktop dropdown" title="{$LANG->getModule('selectfiletype')}" aria-label="{$LANG->getModule('selectfiletype')}">
                             <button class="btn btn-sm btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                             </button>
                             <ul class="dropdown-menu">
@@ -15,7 +16,7 @@
                                 <li><a class="dropdown-item" href="#" data-type="image">{$LANG->getModule('type_image')}</a></li>
                             </ul>
                         </div>
-                        <div data-toggle="filter-author" data-author="0" class="dropdown" title="{$LANG->getModule('author')}" aria-label="{$LANG->getModule('author')}">
+                        <div data-toggle="filter-author" data-author="0" class="filter-desktop dropdown" title="{$LANG->getModule('author')}" aria-label="{$LANG->getModule('author')}">
                             <button class="btn btn-sm btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                                 {$LANG->getModule('author0')}
                             </button>
@@ -24,7 +25,7 @@
                                 <li><a class="dropdown-item" href="#" data-author="1">{$LANG->getModule('author1')}</a></li>
                             </ul>
                         </div>
-                        <div data-toggle="filter-order" data-order="0" class="dropdown" title="{$LANG->getModule('order_type')}" aria-label="{$LANG->getModule('order_type')}">
+                        <div data-toggle="filter-order" data-order="0" class="filter-desktop dropdown" title="{$LANG->getModule('order_type')}" aria-label="{$LANG->getModule('order_type')}">
                             <button class="btn btn-sm btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                                 {$LANG->getModule('order0')}
                             </button>
@@ -34,6 +35,9 @@
                                 <li><a class="dropdown-item" href="#" data-order="2">{$LANG->getModule('order2')}</a></li>
                             </ul>
                         </div>
+                        <a class="p-1 filter-mobile" href="#" data-toggle="filter-extra" title="{$LANG->getModule('filter_title')}" aria-label="{$LANG->getModule('filter_title')}">
+                            <i class="fa-solid fa-filter fa-lg fa-fw"></i>
+                        </a>
                         <a class="p-1" href="#" data-toggle="filter-q" data-q="" title="{$LANG->getModule('search_by_key')}" aria-label="{$LANG->getModule('search_by_key')}" data-label-clear="{$LANG->getModule('search_clear_key')}" data-label-search="{$LANG->getModule('search_by_key')}">
                             <i class="fa-solid fa-magnifying-glass fa-lg fa-fw" data-icon-clear="fa-ban text-danger" data-icon-search="fa-magnifying-glass"></i>
                         </a>
