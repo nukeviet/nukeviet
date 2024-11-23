@@ -2108,18 +2108,18 @@ nukeviet.Picker = class {
     getMousePositionFromEvent(event) {
         let mouseX, mouseY;
 
-        if (event.changedTouches && event.changedTouches[0] && event.changedTouches[0].pageY > 0) {
-            mouseX = event.changedTouches[0].pageX;
-            mouseY = event.changedTouches[0].pageY;
+        if (event.changedTouches && event.changedTouches[0] && event.changedTouches[0].clientY > 0) {
+            mouseX = event.changedTouches[0].clientX;
+            mouseY = event.changedTouches[0].clientY;
         } else if (event.originalEvent && typeof event.originalEvent.detail == 'object') {
-            mouseX = event.originalEvent.detail.pageX;
-            mouseY = event.originalEvent.detail.pageY;
-        } else if (event.originalEvent && event.originalEvent.pageX) {
-            mouseX = event.originalEvent.pageX;
-            mouseY = event.originalEvent.pageY;
-        } else if (event.pageX) {
-            mouseX = event.pageX;
-            mouseY = event.pageY;
+            mouseX = event.originalEvent.detail.clientX;
+            mouseY = event.originalEvent.detail.clientY;
+        } else if (event.originalEvent && event.originalEvent.clientX) {
+            mouseX = event.originalEvent.clientX;
+            mouseY = event.originalEvent.clientY;
+        } else if (event.clientX) {
+            mouseX = event.clientX;
+            mouseY = event.clientY;
         } else {
             nvToast('Error get mouse position!!!', 'error');
             return [false, false];
@@ -2266,8 +2266,13 @@ nukeviet.Picker = class {
     // Hiển thị menu theo vị trí thao tác
     showMenuDependingMouse(mouseX, mouseY) {
         const self = this;
+        const scrollLeft = $(window).scrollLeft();
+        const scrollTop = $(window).scrollTop();
+
+        let tranX = mouseX + scrollLeft;
+        let tranY = mouseY + scrollTop;
+
         self.menu.css({
-            ///transform: 'translate(' + mouseX + 'px, ' + mouseY + 'px)',
             transform: 'translate(0px, 0px)',
             left: -9999,
             top: -9999,
@@ -2275,16 +2280,18 @@ nukeviet.Picker = class {
         self.menu.addClass('show');
         let mW = self.menu.innerWidth();
         let mH = self.menu.innerHeight();
-        let wW = $(window).width();
-        let wH = $(window).height();
-        let tranX = mouseX, tranY = mouseY;
+        let wW = document.documentElement.clientWidth;
+        let wH = document.documentElement.clientHeight;
 
-        if (tranX + 10 + mW > wW) {
-            tranX -= (tranX + 10 + mW) - wW;
+        const offset = 10;
+        if (tranX + mW + offset > scrollLeft + wW) {
+            tranX = scrollLeft + wW - mW - offset;
         }
-        if (tranY + 10 + mH > wH) {
-            tranY -= (tranY + 10 + mH) - wH;
+        if (tranY + mH + offset > scrollTop + wH) {
+            tranY = scrollTop + wH - mH - offset;
         }
+        tranX = Math.max(tranX, scrollLeft + offset);
+        tranY = Math.max(tranY, scrollTop + offset);
 
         self.menu.css({
             transform: 'translate(' + tranX + 'px, ' + tranY + 'px)',
