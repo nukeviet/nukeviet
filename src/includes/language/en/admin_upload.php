@@ -49,6 +49,7 @@ $lang_module['type_file'] = 'All file';
 $lang_module['type_image'] = 'File Image';
 $lang_module['rename'] = 'Rename';
 $lang_module['renamefolder'] = 'Rename Folder';
+$lang_module['renamefolder_nochange'] = 'Need to enter new name different from current name';
 $lang_module['deletefolder'] = 'Delete Folder';
 $lang_module['createfolder'] = 'Create Folder';
 $lang_module['recreatethumb'] = 'Recreate thumb images';

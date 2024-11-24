@@ -1,6 +1,6 @@
 {function writeTrees trees=[]}
 {foreach from=$trees item=tree}
-<li{if $tree.active} class="active"{/if}
+<li{if $tree.active} class="active"{/if} data-toggle="tree"
     data-dir="{$tree.fetch_path}"
     data-path="{$tree.path}"
     data-uuid="{$tree.uuid}"

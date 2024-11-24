@@ -134,6 +134,7 @@ nukeviet.Picker = class {
     htmlModalBackdrop = `<div class="fmm-backdrop fade"></div>`;
     htmlDialogBackdrop = `<div class="fmd-backdrop fade"></div>`;
     lang = {
+        delFolderConfirm: `{$LANG->getModule('delete_folder')}`,
         delImgConfirm: `{$LANG->getModule('upload_delimg_confirm')}`,
         delImgsConfirm: `{$LANG->getModule('upload_delimgs_confirm')}`,
         copied: `{$LANG->getModule('filepathcopied')}`,
@@ -706,7 +707,7 @@ nukeviet.Picker = class {
             if (!file.length || !tree.length) {
                 return;
             }
-            const src = script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=dlimg&path=' + tree.data('path') + '&img=' + file.data('name');
+            const src = script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=upload&' + nv_fc_variable + '=dlimg&path=' + tree.data('path') + '&img=' + file.data('name');
             $('[data-toggle="fms-iframe"]', self.fms).attr('src', src);
         });
 
@@ -747,7 +748,7 @@ nukeviet.Picker = class {
                 icon.removeClass(icon.data('icon')).addClass('fa-spinner fa-spin-pulse');
                 $.ajax({
                     type: 'POST',
-                    url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=delimg&nocache=' + new Date().getTime(),
+                    url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=upload&' + nv_fc_variable + '=delimg&nocache=' + new Date().getTime(),
                     data: {
                         files: fss,
                         checkss: $('body').data('checksess')
@@ -783,6 +784,87 @@ nukeviet.Picker = class {
                 return;
             }
             self.showDialog('renamefile', file);
+        });
+
+        // Tạo thư mục con
+        self.menu.on('click', '[data-toggle="menu-tree-create"]', function(e) {
+            e.preventDefault();
+            self.closeMenu();
+            const tree = $('[data-toggle="tree"][data-uuid="' + $(this).data('uuid') + '"]', self.fms);
+            if (!tree.length) {
+                return;
+            }
+            self.showDialog('createfolder', tree);
+        });
+
+        // Tạo lại ảnh thumb
+        self.menu.on('click', '[data-toggle="menu-tree-rethumb"]', function(e) {
+            e.preventDefault();
+            self.closeMenu();
+            const tree = $('[data-toggle="tree"][data-uuid="' + $(this).data('uuid') + '"]', self.fms);
+            if (!tree.length) {
+                return;
+            }
+            self.showDialog('rethumb', tree);
+        });
+
+        // Đổi tên thư mục
+        self.menu.on('click', '[data-toggle="menu-tree-rename"]', function(e) {
+            e.preventDefault();
+            self.closeMenu();
+            const tree = $('[data-toggle="tree"][data-uuid="' + $(this).data('uuid') + '"]', self.fms);
+            if (!tree.length) {
+                return;
+            }
+            self.showDialog('renamefolder', tree);
+        });
+
+        // Xóa thư mục
+        self.menu.on('click', '[data-toggle="menu-tree-delete"]', function(e) {
+            e.preventDefault();
+            const tree = $('[data-toggle="tree"][data-uuid="' + $(this).data('uuid') + '"]', self.fms);
+            if (!tree.length) {
+                self.closeMenu();
+                return;
+            }
+            const btn = $(this);
+            const icon = $('i', btn);
+            if (icon.is('.fa-spinner')) {
+                return;
+            }
+            nvConfirm(self.lang.delFolderConfirm, () => {
+                icon.removeClass(icon.data('icon')).addClass('fa-spinner fa-spin-pulse');
+                $.ajax({
+                    type: 'POST',
+                    url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=upload&' + nv_fc_variable + '=delfolder&nocache=' + new Date().getTime(),
+                    data: {
+                        path: tree.data('path'),
+                        checkss: $('body').data('checksess')
+                    },
+                    dataType: 'json',
+                    cache: false,
+                    success: function(res) {
+                        icon.removeClass('fa-spinner fa-spin-pulse').addClass(icon.data('icon'));
+                        if (res.status == 'error') {
+                            nvToast(res.mess, 'error');
+                            return;
+                        }
+                        self.closeMenu();
+                        self.page = 1;
+                        // Load lại tất cả, active thư mục cha của nó
+                        self.fetchAll({
+                            currentpath: tree.data('path').slice(0, tree.data('path').lastIndexOf('/'))
+                        });
+                    },
+                    error: function(xhr, text, err) {
+                        icon.removeClass('fa-spinner fa-spin-pulse').addClass(icon.data('icon'));
+                        nvToast(err, 'error');
+                        console.log(xhr, text, err);
+                    }
+                });
+            }, () => {
+                self.closeMenu();
+            });
         });
     }
 
@@ -869,6 +951,16 @@ nukeviet.Picker = class {
             e.preventDefault();
             const dialog = $(this).closest('.fmd');
             $('[data-toggle="zoom-ctn"]', dialog).removeClass('show');
+        });
+
+        // Submit tạo ảnh thumb
+        self.fmd.on('click', '[data-toggle="rethumb-btn-submit"]', function(e) {
+            e.preventDefault();
+            const dialog = $(this).closest('.fmd');
+            $('[data-toggle="btns"]', dialog).addClass('d-none');
+            $('[data-toggle="note"]', dialog).addClass('d-none');
+            $('[data-toggle="load"]', dialog).removeClass('d-none');
+            self.runReThumb(-1);
         });
     }
 
@@ -1008,16 +1100,16 @@ nukeviet.Picker = class {
         }, 310);
     }
 
-    fetchTree() {
-        this.fetch(true, false);
+    fetchTree(options) {
+        this.fetch(true, false, options);
     }
 
     fetchFile(options) {
         this.fetch(false, true, options);
     }
 
-    fetchAll() {
-        this.fetch(true, true);
+    fetchAll(options) {
+        this.fetch(true, true, options);
     }
 
     fetch(tree, file, options) {
@@ -1039,7 +1131,11 @@ nukeviet.Picker = class {
             page: self.page
         };
         const activeDir = $('[data-toggle="tree-scroller"] .active', self.fms);
-        if (activeDir.length) {
+        if (options && options.currentpath) {
+            // Chỉ định thư mục active cụ thể
+            pr.currentpath = options.currentpath;
+        } else if (activeDir.length) {
+            // Lấy thư mục active trong cây thư mục nếu có
             pr.currentpath = activeDir.data('dir');
         }
 
@@ -1058,7 +1154,7 @@ nukeviet.Picker = class {
 
         $.ajax({
             type: 'POST',
-            url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=main&nocache=' + new Date().getTime(),
+            url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=upload&' + nv_fc_variable + '=main&nocache=' + new Date().getTime(),
             data: pr,
             dataType: 'json',
             cache: false,
@@ -1391,6 +1487,30 @@ nukeviet.Picker = class {
                 sOrder.append(opt);
             });
         }
+
+        // Tạo thư mục con
+        if (name == 'createfolder') {
+            const tree = extra;
+            $('[name="path"]', dialog).val(tree.data('path'));
+            $('[name="checkss"]', dialog).val($('body').data('checksess'));
+            return;
+        }
+
+        // Đổi tên thư mục
+        if (name == 'renamefolder') {
+            const tree = extra;
+            $('[name="newname"]', dialog).val(tree.data('title'));
+            $('[name="path"]', dialog).val(tree.data('path'));
+            $('[name="checkss"]', dialog).val($('body').data('checksess'));
+            return;
+        }
+
+        // Tạo lại ảnh thumb
+        if (name == 'rethumb') {
+            const tree = extra;
+            dialog.data('path', tree.data('path'));
+            return;
+        }
     }
 
     // Xử lý sau khi Dialog được mở lên
@@ -1407,8 +1527,8 @@ nukeviet.Picker = class {
             return;
         }
 
-        // Đổi tên file
-        if (name == 'renamefile') {
+        // Đổi tên file, tạo thư mục con
+        if (name == 'renamefile' || name == 'createfolder' || name == 'renamefolder') {
             $('[name="newname"]', dialog).focus();
             return;
         }
@@ -1416,6 +1536,7 @@ nukeviet.Picker = class {
 
     // Xử lý sau khi Dialog đóng lại
     hideDialogCallback(dialog) {
+        // Reset các đối tượng chung
         $('.is-invalid', dialog).removeClass('is-invalid');
         $('.dialog-text', dialog).text('');
         $('.dialog-val', dialog).val('');
@@ -1445,9 +1566,23 @@ nukeviet.Picker = class {
         if (dialog.data('dialog') == 'filter') {
             $('select', dialog).html('');
         }
+
+        // Tạo lại ảnh thumb
+        if (dialog.data('dialog') == 'rethumb') {
+            $('[data-toggle="load"]', dialog).addClass('d-none');
+            $('[data-toggle="progress"]', dialog).addClass('d-none');
+            $('[data-toggle="finish"]', dialog).addClass('d-none');
+            $('[data-toggle="btns"]', dialog).removeClass('d-none');
+            $('[data-toggle="note"]', dialog).removeClass('d-none');
+
+            $('[data-toggle="progress-aria"]', dialog).attr('aria-valuenow', '0');
+            $('[data-toggle="progress-val"]', dialog).css({
+                width: '0%'
+            });
+        }
     }
 
-    // Đóng các dialog
+    // Đóng dialog. dig là đối tượng của jquery
     hideDialog(dig) {
         const self = this;
 
@@ -1633,6 +1768,15 @@ nukeviet.Picker = class {
                     if (a.status == 'OK' || a.status == 'ok' || a.status == 'success') {
                         $('input, textarea, select, button', $(form)).prop('disabled', false);
                         self.hideDialog(dig);
+
+                        if (dig.data('dialog') == 'createfolder' || dig.data('dialog') == 'renamefolder') {
+                            self.page = 1;
+                            self.fetchAll({
+                                currentpath: a.path
+                            });
+                            return;
+                        }
+
                         self.fetchFile({
                             selected: [a.name]
                         });
@@ -2363,19 +2507,19 @@ nukeviet.Picker = class {
         // Tạo thư mục con
         if (tree.data('allowed-create-dir')) {
             actions++;
-            html += '<li><a class="dropdown-item" href="#"><i class="fa-solid fa-folder-plus fa-fw"></i> ' + self.lang.createDir + '</a></li>';
+            html += '<li><a class="dropdown-item" href="#" data-toggle="menu-tree-create" data-uuid="' + tree.data('uuid') + '"><i class="fa-solid fa-folder-plus fa-fw"></i> ' + self.lang.createDir + '</a></li>';
         }
         if (tree.data('allowed-rethumb')) {
             actions++;
-            html += '<li><a class="dropdown-item" href="#"><i class="fa-solid fa-repeat fa-fw"></i> ' + self.lang.reThumb + '</a></li>';
+            html += '<li><a class="dropdown-item" href="#" data-toggle="menu-tree-rethumb" data-uuid="' + tree.data('uuid') + '"><i class="fa-solid fa-repeat fa-fw"></i> ' + self.lang.reThumb + '</a></li>';
         }
         if (tree.data('allowed-rename-dir')) {
             actions++;
-            html += '<li><a class="dropdown-item" href="#"><i class="fa-solid fa-pen fa-fw"></i> ' + self.lang.renameDir + '</a></li>';
+            html += '<li><a class="dropdown-item" href="#" data-toggle="menu-tree-rename" data-uuid="' + tree.data('uuid') + '"><i class="fa-solid fa-pen fa-fw"></i> ' + self.lang.renameDir + '</a></li>';
         }
         if (tree.data('allowed-delete-dir')) {
             actions++;
-            html += '<li><a class="dropdown-item" href="#"><i class="fa-solid fa-trash fa-fw text-danger"></i> ' + self.lang.deleteDir + '</a></li>';
+            html += '<li><a class="dropdown-item" href="#" data-toggle="menu-tree-delete" data-uuid="' + tree.data('uuid') + '"><i class="fa-solid fa-trash fa-fw text-danger"></i> ' + self.lang.deleteDir + '</a></li>';
         }
         if (actions < 1) {
             self.closeMenu();
@@ -2495,6 +2639,75 @@ nukeviet.Picker = class {
         } else {
             self.fms.removeClass('touch-only');
         }
+    }
+
+    // Xử lý tiến trình tạo lại ảnh thumb
+    runReThumb(idf) {
+        const self = this;
+        const dialog = self.fmd.filter('[data-dialog="rethumb"]');
+        if (!dialog.length || !dialog.is(':visible')) {
+            return;
+        }
+
+        $.ajax({
+            type: 'POST',
+            url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=upload&' + nv_fc_variable + '=recreatethumb&nocache=' + new Date().getTime(),
+            data: {
+                idf: idf,
+                path: dialog.data('path'),
+                checkss: $('body').data('checksess')
+            },
+            dataType: 'json',
+            cache: false,
+            success: function(res) {
+                // Lỗi
+                if (res.status == 'error') {
+                    nvToast(res.mess, 'error');
+                    return;
+                }
+                // Trường hợp đóng mất dialog hoặc modal
+                if (!self.fmd || !dialog.is(':visible')) {
+                    return;
+                }
+
+                let per = res.total <= 0 ? 100 : ((res.number / res.total) * 100);
+                per = parseFloat(per.toFixed(2));
+                $('[data-toggle="progress-aria"]', dialog).attr('aria-valuenow', per);
+                $('[data-toggle="progress-val"]', dialog).text(per + '%').css({
+                    width: (per + '%')
+                });
+                $('[data-toggle="current"]', dialog).text(res.number);
+                $('[data-toggle="total"]', dialog).text(res.total);
+
+                // Hoàn tất
+                if (res.finish) {
+                    $('[data-toggle="load"]', dialog).addClass('d-none');
+                    $('[data-toggle="progress"]', dialog).addClass('d-none');
+                    $('[data-toggle="finish"]', dialog).removeClass('d-none');
+                    setTimeout(() => {
+                        self.hideDialog(dialog);
+                        self.page = 1;
+                        self.fetchAll({
+                            currentpath: dialog.data('path')
+                        });
+                    }, 2000);
+                    return;
+                }
+                // Chạy tiếp
+                if (idf < 0) {
+                    // Build tiến trình
+                    $('[data-toggle="load"]', dialog).addClass('d-none');
+                    $('[data-toggle="progress"]', dialog).removeClass('d-none');
+                }
+                setTimeout(() => {
+                    self.runReThumb(res.number);
+                }, 1000);
+            },
+            error: function(xhr, text, err) {
+                nvToast(err, 'error');
+                console.log(xhr, text, err);
+            }
+        });
     }
 };
 

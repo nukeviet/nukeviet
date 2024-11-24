@@ -13,32 +13,62 @@ if (!defined('NV_IS_FILE_ADMIN')) {
     exit('Stop!!!');
 }
 
+if ($nv_Request->get_title('checkss', 'post', '') !== NV_CHECK_SESSION) {
+    nv_jsonOutput([
+        'status' => 'error',
+        'mess' => 'Error session!!!'
+    ]);
+}
+
 $path = nv_check_path_upload($nv_Request->get_string('path', 'post'));
 $newname = nv_string_to_filename(htmlspecialchars(trim($nv_Request->get_string('newname', 'post')), ENT_QUOTES));
-
 $check_allow_upload_dir = nv_check_allow_upload_dir($path);
 
 if (!isset($check_allow_upload_dir['rename_dir']) or $check_allow_upload_dir['rename_dir'] !== true) {
-    exit('ERROR_' . $nv_Lang->getModule('notlevel'));
+    nv_jsonOutput([
+        'status' => 'error',
+        'mess' => $nv_Lang->getModule('notlevel')
+    ]);
 }
 
 if (empty($path) or $path == NV_UPLOADS_DIR) {
-    exit('ERROR_' . $nv_Lang->getModule('notlevel'));
+    nv_jsonOutput([
+        'status' => 'error',
+        'mess' => $nv_Lang->getModule('notlevel')
+    ]);
 }
 
 if (empty($newname)) {
-    exit('ERROR_' . $nv_Lang->getModule('rename_nonamefolder'));
+    nv_jsonOutput([
+        'status' => 'error',
+        'input' => 'newname',
+        'mess' => $nv_Lang->getModule('rename_nonamefolder')
+    ]);
 }
 
 unset($matches);
 preg_match('/(.*)\/([a-z0-9\-\_]+)$/i', $path, $matches);
 if (!isset($matches) or empty($matches)) {
-    exit('ERROR_' . $nv_Lang->getModule('notlevel'));
+    nv_jsonOutput([
+        'status' => 'error',
+        'mess' => $nv_Lang->getModule('notlevel')
+    ]);
+}
+
+if ($newname == basename($path)) {
+    nv_jsonOutput([
+        'status' => 'error',
+        'input' => 'newname',
+        'mess' => $nv_Lang->getModule('renamefolder_nochange')
+    ]);
 }
 
 $newpath = $matches[1] . '/' . $newname;
-if (is_dir(NV_ROOTDIR . '/' . $newpath)) {
-    exit('ERROR_' . $nv_Lang->getModule('folder_exists'));
+if (file_exists(NV_ROOTDIR . '/' . $newpath)) {
+    nv_jsonOutput([
+        'status' => 'error',
+        'mess' => $nv_Lang->getModule('folder_exists')
+    ]);
 }
 
 if (rename(NV_ROOTDIR . '/' . $path, NV_ROOTDIR . '/' . $newpath)) {
@@ -67,7 +97,13 @@ if (rename(NV_ROOTDIR . '/' . $path, NV_ROOTDIR . '/' . $newpath)) {
     }
     nv_dirListRefreshSize();
     nv_insert_logs(NV_LANG_DATA, $module_name, $nv_Lang->getModule('renamefolder'), $path . ' -> ' . $newpath, $admin_info['userid']);
-    echo $newpath;
-} else {
-    exit('ERROR_' . $nv_Lang->getModule('rename_error_folder'));
+    nv_jsonOutput([
+        'status' => 'success',
+        'path' => $newpath
+    ]);
 }
+
+nv_jsonOutput([
+    'status' => 'error',
+    'mess' => $nv_Lang->getModule('rename_error_folder')
+]);

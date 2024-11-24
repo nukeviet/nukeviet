@@ -49,6 +49,7 @@ $lang_module['type_file'] = 'Tous les fichiers';
 $lang_module['type_image'] = 'Fichier Image';
 $lang_module['rename'] = 'Renommer le fichier';
 $lang_module['renamefolder'] = 'Renommer le répertoire';
+$lang_module['renamefolder_nochange'] = 'Besoin de saisir un nouveau nom différent du nom actuel';
 $lang_module['deletefolder'] = 'Supprimer le répertoire';
 $lang_module['createfolder'] = 'Créer  un répertoire';
 $lang_module['recreatethumb'] = 'Régénérer pouce image';

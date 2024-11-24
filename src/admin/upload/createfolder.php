@@ -13,24 +13,45 @@ if (!defined('NV_IS_FILE_ADMIN')) {
     exit('Stop!!!');
 }
 
+if ($nv_Request->get_title('checkss', 'post', '') !== NV_CHECK_SESSION) {
+    nv_jsonOutput([
+        'status' => 'error',
+        'mess' => 'Error session!!!'
+    ]);
+}
+
 $path = nv_check_path_upload($nv_Request->get_string('path', 'post'));
 $newname = nv_string_to_filename(htmlspecialchars(trim($nv_Request->get_string('newname', 'post')), ENT_QUOTES));
 
 $check_allow_upload_dir = nv_check_allow_upload_dir($path);
 
 if (!isset($check_allow_upload_dir['create_dir']) or $check_allow_upload_dir['create_dir'] !== true) {
-    exit('ERROR_' . $nv_Lang->getModule('notlevel'));
+    nv_jsonOutput([
+        'status' => 'error',
+        'mess' => $nv_Lang->getModule('notlevel')
+    ]);
 }
 if (empty($path)) {
-    exit('ERROR_' . $nv_Lang->getModule('notlevel'));
+    nv_jsonOutput([
+        'status' => 'error',
+        'mess' => $nv_Lang->getModule('notlevel')
+    ]);
 }
 if (empty($newname)) {
-    exit('ERROR_' . $nv_Lang->getModule('name_nonamefolder'));
+    nv_jsonOutput([
+        'status' => 'error',
+        'input' => 'newname',
+        'mess' => $nv_Lang->getGlobal('required_invalid')
+    ]);
 }
 
 $newpath = $path . '/' . $newname;
 if (is_dir(NV_ROOTDIR . '/' . $newpath)) {
-    exit('ERROR_' . $nv_Lang->getModule('folder_exists'));
+    nv_jsonOutput([
+        'status' => 'error',
+        'input' => 'newname',
+        'mess' => $nv_Lang->getModule('folder_exists')
+    ]);
 }
 
 $n_dir = nv_mkdir(NV_ROOTDIR . '/' . $path, $newname);
@@ -41,7 +62,14 @@ if (!empty($n_dir[0])) {
     $sth->execute();
 
     nv_insert_logs(NV_LANG_DATA, $module_name, $nv_Lang->getModule('createfolder'), $newpath, $admin_info['userid']);
-    echo $newpath;
-    exit();
+    nv_jsonOutput([
+        'status' => 'success',
+        'path' => $newpath
+    ]);
 }
-exit('ERROR_' . $n_dir[1]);
+
+nv_jsonOutput([
+    'status' => 'error',
+    'input' => 'newname',
+    'mess' => $n_dir[1]
+]);

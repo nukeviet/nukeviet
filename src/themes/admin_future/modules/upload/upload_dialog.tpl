@@ -1,3 +1,4 @@
+{* Dialog tìm kiếm *}
 <div class="fmd fade" data-dialog="search" id="[prefix]-search" tabindex="-1" aria-labelledby="[prefix]-search-label" aria-hidden="true">
     <div class="fmd-dialog">
         <div class="fmd-content">
@@ -27,6 +28,7 @@
         </div>
     </div>
 </div>
+{* Dialog upload file từ internet *}
 <div class="fmd fade" data-dialog="upload-remote" id="[prefix]-upload-remote" tabindex="-1" aria-labelledby="[prefix]-upload-remote-label" aria-hidden="true">
     <div class="fmd-dialog">
         <div class="fmd-content">
@@ -62,6 +64,7 @@
         </div>
     </div>
 </div>
+{* Dialog xem chi tiết file *}
 <div class="fmd fade" data-dialog="preview" id="[prefix]-preview" tabindex="-1" aria-labelledby="[prefix]-preview-label" aria-hidden="true">
     <div class="fmd-dialog">
         <div class="fmd-content">
@@ -101,6 +104,7 @@
         </div>
     </div>
 </div>
+{* Dialog đổi tên file *}
 <div class="fmd fade" data-dialog="renamefile" id="[prefix]-renamefile" tabindex="-1" aria-labelledby="[prefix]-renamefile-label" aria-hidden="true">
     <div class="fmd-dialog">
         <div class="fmd-content">
@@ -138,6 +142,7 @@
         </div>
     </div>
 </div>
+{* Dialog lọc theo loại, tác giả và sắp xếp (chế độ giao diện mobile) *}
 <div class="fmd fade" data-dialog="filter" id="[prefix]-filter" tabindex="-1" aria-labelledby="[prefix]-filter-label" aria-hidden="true">
     <div class="fmd-dialog">
         <div class="fmd-content">
@@ -161,6 +166,93 @@
                         <button type="button" class="btn btn-secondary" data-dismiss="fmd"><i class="fa-solid fa-xmark text-danger"></i> {$LANG->getGlobal('cancel')}</button>
                     </div>
                 </form>
+            </div>
+        </div>
+    </div>
+</div>
+{* Dialog tạo thư mục con *}
+<div class="fmd fade" data-dialog="createfolder" id="[prefix]-createfolder" tabindex="-1" aria-labelledby="[prefix]-createfolder-label" aria-hidden="true">
+    <div class="fmd-dialog">
+        <div class="fmd-content">
+            <div class="fmd-header">
+                <div class="fmd-title text-truncate fs-5 fw-medium" id="[prefix]-createfolder-label">{$LANG->getModule('createfolder')}</div>
+                <button type="button" class="btn-close" data-dismiss="fmd" aria-label="{$LANG->getGlobal('close')}"></button>
+            </div>
+            <div class="fmd-body">
+                <form method="post" data-mode="ajform" action="{$smarty.const.NV_BASE_ADMINURL}index.php?{$smarty.const.NV_LANG_VARIABLE}={$smarty.const.NV_LANG_DATA}&amp;{$smarty.const.NV_NAME_VARIABLE}={$MODULE_NAME}&amp;{$smarty.const.NV_OP_VARIABLE}=createfolder" novalidate>
+                    <div class="mb-3">
+                        <label for="[prefix]-createfolder-newname" class="form-label">{$LANG->getModule('foldername')} <span class="text-danger">(*)</span>:</label>
+                        <input class="form-control dialog-val" name="newname" type="text" value="" id="[prefix]-createfolder-newname" autocomplete="off">
+                        <div class="invalid-feedback">{$LANG->getGlobal('required_invalid')}</div>
+                    </div>
+                    <div class="hstack justify-content-end gap-2">
+                        <button type="submit" class="btn btn-primary"><i class="fa-solid fa-floppy-disk"></i> {$LANG->getGlobal('submit')}</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="fmd"><i class="fa-solid fa-xmark text-danger"></i> {$LANG->getGlobal('cancel')}</button>
+                    </div>
+                    <input type="hidden" name="path" value="" class="dialog-val">
+                    <input type="hidden" name="checkss" value="" class="dialog-val">
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{* Dialog đổi tên thư mục *}
+<div class="fmd fade" data-dialog="renamefolder" id="[prefix]-renamefolder" tabindex="-1" aria-labelledby="[prefix]-renamefolder-label" aria-hidden="true">
+    <div class="fmd-dialog">
+        <div class="fmd-content">
+            <div class="fmd-header">
+                <div class="fmd-title text-truncate fs-5 fw-medium" id="[prefix]-renamefolder-label">{$LANG->getModule('renamefolder')}</div>
+                <button type="button" class="btn-close" data-dismiss="fmd" aria-label="{$LANG->getGlobal('close')}"></button>
+            </div>
+            <div class="fmd-body">
+                <form method="post" data-mode="ajform" action="{$smarty.const.NV_BASE_ADMINURL}index.php?{$smarty.const.NV_LANG_VARIABLE}={$smarty.const.NV_LANG_DATA}&amp;{$smarty.const.NV_NAME_VARIABLE}={$MODULE_NAME}&amp;{$smarty.const.NV_OP_VARIABLE}=renamefolder" novalidate>
+                    <div class="mb-3">
+                        <label for="[prefix]-renamefolder-newname" class="form-label">{$LANG->getModule('rename_newname')} <span class="text-danger">(*)</span>:</label>
+                        <input class="form-control dialog-val" name="newname" type="text" value="" id="[prefix]-renamefolder-newname" autocomplete="off">
+                        <div class="invalid-feedback">{$LANG->getGlobal('required_invalid')}</div>
+                    </div>
+                    <div class="hstack justify-content-end gap-2">
+                        <button type="submit" class="btn btn-primary"><i class="fa-solid fa-floppy-disk"></i> {$LANG->getGlobal('submit')}</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="fmd"><i class="fa-solid fa-xmark text-danger"></i> {$LANG->getGlobal('cancel')}</button>
+                    </div>
+                    <input type="hidden" name="path" value="" class="dialog-val">
+                    <input type="hidden" name="checkss" value="" class="dialog-val">
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{* Dialog tạo lại ảnh thumb *}
+<div class="fmd fade" data-dialog="rethumb" id="[prefix]-rethumb" tabindex="-1" aria-labelledby="[prefix]-rethumb-label" aria-hidden="true">
+    <div class="fmd-dialog">
+        <div class="fmd-content">
+            <div class="fmd-header">
+                <div class="fmd-title text-truncate fs-5 fw-medium" id="[prefix]-rethumb-label">{$LANG->getModule('recreatethumb')}</div>
+                <button type="button" class="btn-close" data-dismiss="fmd" aria-label="{$LANG->getGlobal('close')}"></button>
+            </div>
+            <div class="fmd-body">
+                <div class="alert alert-info" data-toggle="note" role="alert">{$LANG->getModule('recreatethumb_note')}</div>
+                <div class="text-center d-none" data-toggle="load">
+                    <div class="mb-2">
+                        <i class="fa-solid fa-spinner fa-spin-pulse fa-3x"></i>
+                    </div>
+                    {$LANG->getModule('waiting')}
+                </div>
+                <div class="d-none" data-toggle="progress">
+                    <div data-toggle="progress-aria" class="progress mb-3" role="progressbar" aria-label="{$LANG->getModule('recreatethumb')}" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
+                        <div data-toggle="progress-val" class="progress-bar progress-bar-striped progress-bar-animated dialog-text" style="width: 0%;"></div>
+                    </div>
+                    <div class="text-center">
+                        {$LANG->getModule('recreatethumb')}: <strong class="dialog-text" data-toggle="current"></strong>/<strong class="dialog-text" data-toggle="total"></strong> file(s)
+                    </div>
+                </div>
+                <div class="d-none text-center alert alert-success mb-0" role="alert" data-toggle="finish">
+                    {$LANG->getModule('recreatethumb_result')} <strong class="dialog-text" data-toggle="total"></strong> file(s)
+                </div>
+                <div class="hstack justify-content-end gap-2" data-toggle="btns">
+                    <button type="button" class="btn btn-primary" data-toggle="rethumb-btn-submit"><i class="fa-solid fa-play"></i> {$LANG->getGlobal('submit')}</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="fmd"><i class="fa-solid fa-xmark text-danger"></i> {$LANG->getGlobal('cancel')}</button>
+                </div>
             </div>
         </div>
     </div>

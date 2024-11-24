@@ -97,7 +97,7 @@ $request['currentfile'] = $selectfile;
  * thay vì trỏ về thư mục gốc. Nhằm mục đích nếu lập trình nút duyệt file ở module trỏ về sai thư mục
  * thì không cho upload ở thư mục khác, như thế khi lưu hoặc xử lý sẽ sai lệch tính độc lập của module
  */
-if ((!empty($request['path']) and empty(nv_check_allow_upload_dir($request['path']))) or (!empty($request['currentpath']) and empty(nv_check_allow_upload_dir($request['currentpath'])))) {
+if ((!empty($request['path']) and $request['path'] != NV_UPLOADS_DIR and empty(nv_check_allow_upload_dir($request['path']))) or (!empty($request['currentpath']) and $request['currentpath'] != NV_UPLOADS_DIR and empty(nv_check_allow_upload_dir($request['currentpath'])))) {
     show_error($nv_Lang->getModule('notallowed'));
 }
 

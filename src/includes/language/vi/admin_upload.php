@@ -49,6 +49,7 @@ $lang_module['type_file'] = 'Tất cả';
 $lang_module['type_image'] = 'Hình ảnh';
 $lang_module['rename'] = 'Đổi tên file';
 $lang_module['renamefolder'] = 'Đổi tên thư mục';
+$lang_module['renamefolder_nochange'] = 'Cần nhập tên mới khác tên hiện tại';
 $lang_module['deletefolder'] = 'Xóa thư mục';
 $lang_module['createfolder'] = 'Tạo thư mục';
 $lang_module['recreatethumb'] = 'Tạo lại ảnh thumb';
