@@ -20,3 +20,19 @@ document.addEventListener('nv.upload.ready', () => {
         <i class="fa-solid fa-spinner fa-spin-pulse fa-3x"></i>
     </div>
 </div>
+<button ty class="btn btn-primary" id="open-picker">Picker</button>
+<script>
+document.addEventListener('nv.upload.ready', () => {
+    new nukeviet.Picker('#open-picker', {
+        path: '{$REQUEST.path}',
+        currentpath: '{$REQUEST.currentpath}',
+        type: '{$REQUEST.type}',
+        popup: {$REQUEST.popup},
+        imgfile: '{$REQUEST.currentfile}',
+        CKEditorFuncNum: {$REQUEST.CKEditorFuncNum},
+        editorId: '{$REQUEST.editor_id}',
+        area: '{$REQUEST.area}',
+        alt: '{$REQUEST.alt}'
+    });
+});
+</script>

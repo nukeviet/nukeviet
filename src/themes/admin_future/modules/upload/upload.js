@@ -2158,7 +2158,7 @@ nukeviet.Picker = class {
         if (!self.initSelectAble) {
             return;
         }
-        this.debug && console.log('document ' + event.type, event);
+
         const container = $('[data-toggle="file-scroller"]', self.fms)[0];
         const containerRect = container.getBoundingClientRect();
 

@@ -583,6 +583,48 @@
     }
 }
 
+// Responsive cho popup và dạng fullscreen
+.fmm,
+.fms-ctn-fullscreen {
+    @include media-breakpoint-between(md, lg) {
+        .fms-tree {
+            flex: 0 0 11.25rem;
+            max-width: 11.25rem;
+        }
+    }
+
+    .view-grid>.fms-files-wraper {
+        >ul {
+            >li {
+                @include media-breakpoint-up(sm) {
+                    flex: 0 0 33.333333333%;
+                    max-width: 33.333333333%;
+                }
+
+                @include media-breakpoint-up(md) {
+                    flex: 0 0 25%;
+                    max-width: 25%;
+                }
+
+                @include media-breakpoint-up(lg) {
+                    flex: 0 0 25%;
+                    max-width: 25%;
+                }
+
+                @include media-breakpoint-up(xl) {
+                    flex: 0 0 20%;
+                    max-width: 20%;
+                }
+
+                @media (min-width: 1920px) {
+                    flex: 0 0 12.5%;
+                    max-width: 12.5%;
+                }
+            }
+        }
+    }
+}
+
 // Thiết bị chỉ có touch thì hiển thị nút menu với mọi kích thước
 @include media-breakpoint-up(md) {
     .fms-wraper.touch-only {

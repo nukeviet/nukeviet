@@ -27758,6 +27758,49 @@ p + .image-style-side {
   }
 }
 
+@media (min-width: 768px) and (max-width: 991.98px) {
+  .fmm .fms-tree,
+  .fms-ctn-fullscreen .fms-tree {
+    flex: 0 0 11.25rem;
+    max-width: 11.25rem;
+  }
+}
+@media (min-width: 576px) {
+  .fmm .view-grid > .fms-files-wraper > ul > li,
+  .fms-ctn-fullscreen .view-grid > .fms-files-wraper > ul > li {
+    flex: 0 0 33.333333333%;
+    max-width: 33.333333333%;
+  }
+}
+@media (min-width: 768px) {
+  .fmm .view-grid > .fms-files-wraper > ul > li,
+  .fms-ctn-fullscreen .view-grid > .fms-files-wraper > ul > li {
+    flex: 0 0 25%;
+    max-width: 25%;
+  }
+}
+@media (min-width: 992px) {
+  .fmm .view-grid > .fms-files-wraper > ul > li,
+  .fms-ctn-fullscreen .view-grid > .fms-files-wraper > ul > li {
+    flex: 0 0 25%;
+    max-width: 25%;
+  }
+}
+@media (min-width: 1200px) {
+  .fmm .view-grid > .fms-files-wraper > ul > li,
+  .fms-ctn-fullscreen .view-grid > .fms-files-wraper > ul > li {
+    flex: 0 0 20%;
+    max-width: 20%;
+  }
+}
+@media (min-width: 1920px) {
+  .fmm .view-grid > .fms-files-wraper > ul > li,
+  .fms-ctn-fullscreen .view-grid > .fms-files-wraper > ul > li {
+    flex: 0 0 12.5%;
+    max-width: 12.5%;
+  }
+}
+
 @media (min-width: 768px) {
   .fms-wraper.touch-only .view-grid > .fms-files-wraper .file .sel,
   .fms-wraper.touch-only .view-grid > .fms-files-wraper .file .menu {
