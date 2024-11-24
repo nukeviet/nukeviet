@@ -1,4 +1,4 @@
-<script src="{$smarty.const.NV_BASE_ADMINURL}index.php?{$smarty.const.NV_LANG_VARIABLE}={$smarty.const.NV_LANG_DATA}&amp;{$smarty.const.NV_NAME_VARIABLE}=upload&amp;{$smarty.const.NV_OP_VARIABLE}=js&amp;l={$smarty.const.NV_LANG_INTERFACE}&amp;t={$smarty.const.SYS_CACHE_TIMESTAMP}"></script>
+<script src="{$smarty.const.NV_BASE_ADMINURL}index.php?{$smarty.const.NV_LANG_VARIABLE}={$smarty.const.NV_LANG_DATA}&amp;{$smarty.const.NV_NAME_VARIABLE}=upload&amp;{$smarty.const.NV_OP_VARIABLE}=js&amp;langinterface={$smarty.const.NV_LANG_INTERFACE}&amp;t={$smarty.const.SYS_CACHE_TIMESTAMP}"></script>
 <script>
 document.addEventListener('nv.upload.ready', () => {
     new nukeviet.Picker('#inline-picker', {

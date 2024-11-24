@@ -5,128 +5,141 @@
  * nên không cần quan tâm xử lý cơ chế tệp này được gọi nhiều lần
  * {* Lưu ý: Tệp này được gọi bằng smarty *}
  */
-document.addEventListener('DOMContentLoaded', () => {
-    let cssNum = 0, jsNum = 0, ready = false;
-    let amountCss = 3, amountJs = 9;
+(() => {
+    const loadApp = () => {
+        let cssNum = 0, jsNum = 0, ready = false;
+        let amountCss = 3, amountJs = 9;
 
-    // Extra{* Vui lòng giữ đúng cấu trúc này để render ra đúng
-    /**}
+        // Extra{* Vui lòng giữ đúng cấu trúc này để render ra đúng
+        /**}
 
-    {if $EXTRA_JS neq ''}amountJs++;
-    // Tải callback của trình soạn thảo
-    loadScript("{$EXTRA_JS}");
-    {/if}
-    {**/
-    //*}
+        {if $EXTRA_JS neq ''}amountJs++;
+        // Tải callback của trình soạn thảo
+        loadScript("{$EXTRA_JS}");
+        {/if}
+        {**/
+        //*}
 
-    // Tải jquery UI
-    if (typeof $.ui == "undefined") {
-        loadScript(nv_base_siteurl + "assets/js/jquery-ui/jquery-ui.min.js");
-        loadCSS(nv_base_siteurl + "assets/js/jquery-ui/jquery-ui.min.css");
-    } else {
-        jsNum++;
-        cssNum++;
-    }
-    // Tải Jquery Cropper
-    if (typeof $.fn.cropper == "undefined") {
-        loadScript(nv_base_siteurl + "assets/js/cropper/cropper.min.js");
-        loadCSS(nv_base_siteurl + "assets/js/cropper/cropper.min.css");
-    } else {
-        jsNum++;
-        cssNum++;
-    }
-    // Tải Jquery Rotate
-    if (typeof $.fn.rotate == "undefined") {
-        loadScript(nv_base_siteurl + "assets/js/jquery/jQueryRotate.js");
-    } else {
-        jsNum++;
-    }
-    // Tải Jquery clipboard
-    if (typeof ClipboardJS == "undefined") {
-        loadScript(nv_base_siteurl + "assets/js/clipboard/clipboard.min.js");
-    } else {
-        jsNum++;
-    }
-    // Tải Plpuload
-    if (typeof plupload == "undefined") {
-        loadScript(nv_base_siteurl + "assets/js/plupload/plupload.full.min.js", nv_base_siteurl + "assets/js/language/plupload-" + nv_lang_interface + ".js");
-    } else {
-        jsNum += 2;
-    }
-    // Tải PerfectScrollbar
-    if (typeof PerfectScrollbar == "undefined") {
-        loadScript(nv_base_siteurl + "assets/js/perfect-scrollbar/min.js");
-        loadCSS(nv_base_siteurl + "assets/js/perfect-scrollbar/style.css");
-    } else {
-        jsNum++;
-        cssNum++;
-    }
-    // Tải select2
-    if (typeof $.fn.select2 == "undefined") {
-        loadScript(nv_base_siteurl + "assets/js/select2/select2.min.js", nv_base_siteurl + "assets/js/select2/i18n/" + nv_lang_interface + ".js");
-    } else {
-        jsNum += 2;
-    }
-
-    // Xuất ra event sẵn sàng
-    function fireReady() {
-        if (cssNum < amountCss || jsNum < amountJs || ready) {
-            return;
-        }
-        ready = true;
-        // Event cho js thuần
-        document.dispatchEvent(new Event('nv.upload.ready'));
-
-        // Event cho Jquery
-        $(document).trigger("nv.upload.ready");
-    }
-
-    // Hàm tải JS
-    function loadCSS(url, urlnext) {
-        url += (url.includes('?') ? '&' : '?') + 't=' + nv_cache_timestamp;
-        const link = document.createElement("link");
-        link.rel = "stylesheet";
-        link.href = url;
-        link.onload = () => {
-            cssNum++;
-            fireReady();
-            if (urlnext) {
-                loadCSS(urlnext);
-            }
-        };
-        link.onerror = () => {
-            nvToast("Error load CSS: " + url, "error");
-        };
-        document.head.appendChild(link);
-    }
-
-    // Hàm tải JS
-    function loadScript(url, urlnext) {
-        url += (url.includes('?') ? '&' : '?') + 't=' + nv_cache_timestamp;
-        const script = document.createElement("script");
-        script.src = url;
-        script.onload = () => {
+        // Tải jquery UI
+        if (typeof $.ui == "undefined") {
+            loadScript(nv_base_siteurl + "assets/js/jquery-ui/jquery-ui.min.js");
+            loadCSS(nv_base_siteurl + "assets/js/jquery-ui/jquery-ui.min.css");
+        } else {
             jsNum++;
-            fireReady();
-            if (urlnext) {
-                loadScript(urlnext);
-            }
-        };
-        script.onerror = function() {
-            nvToast("Error load JS: " + url, "error");
-        };
-        document.body.appendChild(script);
-    }
+            cssNum++;
+        }
+        // Tải Jquery Cropper
+        if (typeof $.fn.cropper == "undefined") {
+            loadScript(nv_base_siteurl + "assets/js/cropper/cropper.min.js");
+            loadCSS(nv_base_siteurl + "assets/js/cropper/cropper.min.css");
+        } else {
+            jsNum++;
+            cssNum++;
+        }
+        // Tải Jquery Rotate
+        if (typeof $.fn.rotate == "undefined") {
+            loadScript(nv_base_siteurl + "assets/js/jquery/jQueryRotate.js");
+        } else {
+            jsNum++;
+        }
+        // Tải Jquery clipboard
+        if (typeof ClipboardJS == "undefined") {
+            loadScript(nv_base_siteurl + "assets/js/clipboard/clipboard.min.js");
+        } else {
+            jsNum++;
+        }
+        // Tải Plpuload
+        if (typeof plupload == "undefined") {
+            loadScript(nv_base_siteurl + "assets/js/plupload/plupload.full.min.js", nv_base_siteurl + "assets/js/language/plupload-" + nv_lang_interface + ".js");
+        } else {
+            jsNum += 2;
+        }
+        // Tải PerfectScrollbar
+        if (typeof PerfectScrollbar == "undefined") {
+            loadScript(nv_base_siteurl + "assets/js/perfect-scrollbar/min.js");
+            loadCSS(nv_base_siteurl + "assets/js/perfect-scrollbar/style.css");
+        } else {
+            jsNum++;
+            cssNum++;
+        }
+        // Tải select2
+        if (typeof $.fn.select2 == "undefined") {
+            loadScript(nv_base_siteurl + "assets/js/select2/select2.min.js", nv_base_siteurl + "assets/js/select2/i18n/" + nv_lang_interface + ".js");
+        } else {
+            jsNum += 2;
+        }
 
-    fireReady();
-});
+        // Xuất ra event sẵn sàng (chỉ chạy 1 lần duy nhất)
+        function fireReady() {
+            if (cssNum < amountCss || jsNum < amountJs || ready || window.nvUploadReady) {
+                return;
+            }
+            ready = true;
+            // Event cho js thuần
+            document.dispatchEvent(new Event('nv.upload.ready'));
+
+            // Event cho Jquery
+            $(document).trigger("nv.upload.ready");
+
+            window.nvUploadReady = true;
+        }
+
+        // Hàm tải JS
+        function loadCSS(url, urlnext) {
+            url += (url.includes('?') ? '&' : '?') + 't=' + nv_cache_timestamp;
+            const link = document.createElement("link");
+            link.rel = "stylesheet";
+            link.href = url;
+            link.onload = () => {
+                cssNum++;
+                fireReady();
+                if (urlnext) {
+                    loadCSS(urlnext);
+                }
+            };
+            link.onerror = () => {
+                nvToast("Error load CSS: " + url, "error");
+            };
+            document.head.appendChild(link);
+        }
+
+        // Hàm tải JS
+        function loadScript(url, urlnext) {
+            url += (url.includes('?') ? '&' : '?') + 't=' + nv_cache_timestamp;
+            const script = document.createElement("script");
+            script.src = url;
+            script.onload = () => {
+                jsNum++;
+                fireReady();
+                if (urlnext) {
+                    loadScript(urlnext);
+                }
+            };
+            script.onerror = function() {
+                nvToast("Error load JS: " + url, "error");
+            };
+            document.body.appendChild(script);
+        }
+
+        fireReady();
+    };
+    /**
+     * Nếu tệp này được gọi phạm vi toàn cục trong html của trang thì xử lý sau khi DOMContentLoaded
+     * Nếu tệp này được gọi sau khi DOM trang được tải xong thì thực thi ngay
+     */
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', loadApp);
+    } else {
+        loadApp();
+    }
+})();
 
 var nukeviet = nukeviet || {};
 
 /**
  * Class xử lý trình quản lý tệp tin
  */
-nukeviet.Picker = class {
+!nukeviet.Picker && (nukeviet.Picker = class {
     htmlModal = `{$HTML_POPUP}`;
     htmlContainer = `{$HTML_CONTENT}`;
     htmlDialog = `{$HTML_DIALOG}`;
@@ -239,6 +252,15 @@ nukeviet.Picker = class {
             e.preventDefault();
             self.showModal();
         });
+    }
+
+    // Hiển thị popup qua lệnh
+    show() {
+        const self = this;
+        if (self.settings.show == 'inline' || self.fmm) {
+            return;
+        }
+        self.showModal();
     }
 
     // Xử lý các sự kiện sau khi dựng được container
@@ -1114,6 +1136,7 @@ nukeviet.Picker = class {
 
     fetch(tree, file, options) {
         const self = this;
+        options = options || {};
 
         self.showLoader();
 
@@ -1131,12 +1154,15 @@ nukeviet.Picker = class {
             page: self.page
         };
         const activeDir = $('[data-toggle="tree-scroller"] .active', self.fms);
-        if (options && options.currentpath) {
+        if (options.currentpath) {
             // Chỉ định thư mục active cụ thể
             pr.currentpath = options.currentpath;
         } else if (activeDir.length) {
             // Lấy thư mục active trong cây thư mục nếu có
             pr.currentpath = activeDir.data('dir');
+        }
+        if (!options.selected && pr.imgfile != '') {
+            options.selected = [pr.imgfile.split('/').pop()];
         }
 
         // Reload lại cây thư mục và tệp tin
@@ -1177,7 +1203,7 @@ nukeviet.Picker = class {
                     self.switchView(respon.view);
 
                     // Chọn tệp
-                    if (options && options.selected) {
+                    if (options.selected) {
                         $('.selected', fileCtn).removeClass('selected');
                         $('[data-toggle="file-check"]', fileCtn).prop('checked', false);
                         options.selected.forEach(fname => {
@@ -2623,6 +2649,15 @@ nukeviet.Picker = class {
             }
             return;
         }
+
+        // Dạng trong trang mới
+        if (self.settings.area != '') {
+            $('#' + self.settings.area).val(file.data('path'));
+        }
+        if (self.settings.alt != '') {
+            $('#' + self.settings.alt).val(file.data('alt'));
+        }
+        self.hideModal();
     }
 
     // Có phải chế độ mobile không. Chế độ mobile tức là giao diện thu gọn cây thư mục
@@ -2709,7 +2744,12 @@ nukeviet.Picker = class {
             }
         });
     }
-};
+
+    // Thiết lập option động
+    setOption(name, value) {
+        this.settings[name] = value;
+    }
+});
 
 /*
  * Xử lý trình quản lý file ở các nút duyệt file

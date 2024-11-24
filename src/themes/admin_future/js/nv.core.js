@@ -797,27 +797,66 @@ $(function() {
         $(sltorA).prop('indeterminate', ($(sltorS + ':checked').length > 0 && $(sltorS + ':checked').length < $(sltorS).length));
     });
 
-    // Select File
+    /**
+     * Đoạn xử lý các nút mở trình quản lý file
+     */
+    let initPicker = false;
+    function showPicker(btn) {
+        let options = {};
+        options.path = btn.data('path') ? btn.data('path') : '';
+        options.currentpath = btn.data('currentpath') ? btn.data('currentpath') : options.path;
+        options.type = btn.data('type') ? btn.data('type') : 'file';
+        if (btn.data('alt')) {
+            options.alt = btn.data('alt');
+        }
+        if (btn.data('target')) {
+            options.area = btn.data('target');
+            options.imgfile = $('#' + btn.data('target')).val();
+        }
+        const picker = nukeviet.Picker.getOrCreateInstance(btn[0], options);
+        if (options.imgfile && options.imgfile != '') {
+            // Dùng để pick lần thứ 2 trở đi
+            picker.setOption('imgfile', options.imgfile);
+        }
+        picker.show();
+    }
+
+    function loadPicker() {
+        let script = document.createElement('script');
+        script.src = script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&langinterface=' + nv_lang_interface + '&' + nv_name_variable + '=upload&' + nv_fc_variable + '=js&t=' + nv_cache_timestamp;
+        script.async = true;
+        document.body.appendChild(script);
+        initPicker = true;
+    }
+
+    // Tải trước uploader nếu có nút selectfile
+    if ($('[data-toggle=selectfile]').length && (typeof nukeviet == 'undefined' || !nukeviet.Picker)) {
+        loadPicker();
+    }
+
+    // Nút chọn file/ảnh
     $('body').on('click', '[data-toggle=selectfile]', function(e) {
         e.preventDefault();
-        var area = $(this).data('target'),
-            alt = $(this).data('alt'),
-            path = $(this).data('path') ? $(this).data('path') : '',
-            currentpath = $(this).data('currentpath') ? $(this).data('currentpath') : path,
-            type = $(this).data('type') ? $(this).data('type') : 'image',
-            currentfile = $('#' + area).val(),
-            winname = $(this).data('winname') ? $(this).data('winname') : 'NVImg',
-            url = script_name + "?" + nv_lang_variable + "=" + nv_lang_data + "&" + nv_name_variable + "=upload&popup=1";
-        if (area) {
-            url += "&area=" + area + "&path=" + path + "&type=" + type + "&currentpath=" + currentpath;
-            if (currentfile) {
-                url += "&currentfile=" + rawurlencode(currentfile)
-            }
-            if (alt) {
-                url += "&alt=" + alt
-            }
-            nv_open_browse(url, winname, 1200, 675, "resizable=no,scrollbars=no,toolbar=no,location=no,status=no");
+        const btn = $(this);
+
+        // Load thư viện nếu chưa có
+        if (!initPicker && (typeof nukeviet == 'undefined' || !nukeviet.Picker)) {
+            loadPicker();
         }
+        // Xử lý trong trường hợp uploader chưa được tải sẵn (các DOM động)
+        if (!window.nvUploadReady) {
+            // Chỉ register event 1 lần duy nhất chờ do picker được tải và tự show
+            if (!btn.data('init-picker')) {
+                btn.data('init-picker', true);
+                document.addEventListener('nv.upload.ready', () => {
+                    showPicker(btn);
+                });
+            }
+            return;
+        }
+
+        // Show trực tiếp picker
+        showPicker(btn);
     });
 
     // Ajax submit
