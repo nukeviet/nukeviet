@@ -377,6 +377,21 @@
     overflow: hidden;
     position: relative;
     height: 100%;
+
+    &.disabled-select {
+        user-select: none;
+
+        * {
+            user-select: none;
+        }
+    }
+
+    .selection-box {
+        position: absolute;
+        border: 1px dashed var(--bs-success);
+        background: rgba(var(--bs-success-rgb), 0.2);
+        pointer-events: none;
+    }
 }
 
 .fms-actions-bar {

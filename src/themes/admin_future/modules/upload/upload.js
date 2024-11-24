@@ -207,6 +207,11 @@ nukeviet.Picker = class {
         }
 
         this.lastTap = 0;
+        this.lastTouchMove = 0;
+        this.selectionBox = null;
+        this.selectionStartX = null;
+        this.selectionStartY = null;
+
         this.debug = {$DEBUG};
         this.init();
     }
@@ -422,6 +427,11 @@ nukeviet.Picker = class {
 
         document.addEventListener('mousedown', self.handleDocTapStart);
         document.addEventListener('touchstart', self.handleDocTapStart);
+        document.addEventListener('mousemove', self.handleDocTapMove);
+        document.addEventListener('touchmove', self.handleDocTapMove);
+        document.addEventListener('mouseup', self.handleDocTapEnd);
+        document.addEventListener('touchend', self.handleDocTapEnd);
+        document.addEventListener('touchcancel', self.handleDocTapEnd);
 
         // Xử lý sự kiện liên quan tệp tin
         self.initFileEvents();
@@ -906,6 +916,11 @@ nukeviet.Picker = class {
 
             document.removeEventListener('mousedown', self.handleDocTapStart);
             document.removeEventListener('touchstart', self.handleDocTapStart);
+            document.removeEventListener('mousemove', self.handleDocTapMove);
+            document.removeEventListener('touchmove', self.handleDocTapMove);
+            document.removeEventListener('mouseup', self.handleDocTapEnd);
+            document.removeEventListener('touchend', self.handleDocTapEnd);
+            document.removeEventListener('touchcancel', self.handleDocTapEnd);
 
             setTimeout(() => {
                 self.fmm.remove();
@@ -2048,7 +2063,7 @@ nukeviet.Picker = class {
         drp.removeClass('dragging dragover');
     }
 
-    // Xử lý khi nhấn xuống trên toàn bộ document
+    // Xử lý khi nhấn xuống, lên, di chuyển trên toàn bộ document
     handleDocTapStart = (event) => {
         const input = this.detectInputSupport();
         if (event.type == 'mousedown' && (input == 'both' || event.button != 0)) {
@@ -2071,7 +2086,7 @@ nukeviet.Picker = class {
         const treeClick = ($(event.target).is('[data-toggle="toggle-trees"]') || $(event.target).is('[data-toggle="trees"]') || $(event.target).closest('[data-toggle="trees"]').length == 1);
         const treeIsOpen = (isMobile && $('[data-toggle="trees"]', self.fms).is('.show'));
 
-        if (!menuClick && !dialogIsOpen && !alertIsOpen) {
+        if (!menuClick && !dialogIsOpen && !alertIsOpen && menuIsOpen) {
             self.closeMenu();
         }
 
@@ -2101,6 +2116,121 @@ nukeviet.Picker = class {
         if (doubleTap && fileClick) {
             self.setSelectedFile(fileClick);
             self.handleSelectFile(fileClick);
+        }
+
+        self.initSelectAble = false;
+        const ctnSelect = $('[data-toggle="file-scroller"]', self.fms);
+        if (event.type == 'mousedown' && !fileClick && !menuIsOpen && !dialogIsOpen && !alertIsOpen && !treeIsOpen && ($(event.target).is(ctnSelect) || $(event.target).closest(ctnSelect).length == 1)) {
+            self.initSelectAble = true;
+            ctnSelect.addClass('disabled-select');
+        }
+    }
+    handleDocTapEnd = (event) => {
+        const input = this.detectInputSupport();
+        if (event.type == 'mouseup' && (input == 'both' || event.button != 0)) {
+            // Nếu có cả mouse và touch thì thỉ lấy 1 cái touch
+            return;
+        }
+        this.debug && console.log('document ' + event.type, event);
+        const self = this;
+        const ctnSelect = $('[data-toggle="file-scroller"]', self.fms);
+        self.initSelectAble = false;
+        ctnSelect.removeClass('disabled-select');
+        if (self.selectionBox) {
+            self.selectionBox.remove();
+            self.selectionBox = null;
+        }
+        self.selectionStartX = null;
+        self.selectionStartY = null;
+    }
+    handleDocTapMove = (event) => {
+        const input = this.detectInputSupport();
+        if (event.type == 'mousemove' && (input == 'both' || event.button != 0)) {
+            // Nếu có cả mouse và touch thì thỉ lấy 1 cái touch
+            return;
+        }
+        const self = this;
+        const now = Date.now();
+        if (now - self.lastTouchMove < 20) {
+            return;
+        }
+        self.lastTouchMove = now;
+        if (!self.initSelectAble) {
+            return;
+        }
+        this.debug && console.log('document ' + event.type, event);
+        const container = $('[data-toggle="file-scroller"]', self.fms)[0];
+        const containerRect = container.getBoundingClientRect();
+
+        /**
+         * Tọa độ: tại con trỏ chuột trừ đi lề trái, lề trên
+         * cộng với phần cuộn của container
+         */
+        let mouseX = event.clientX + container.scrollLeft - containerRect.left;
+        let mouseY = event.clientY + container.scrollTop - containerRect.top;
+
+        if (!self.selectionBox) {
+            // Tạo vùng chọn khi bắt đầu chọn
+            self.selectionBox = document.createElement('div');
+            self.selectionBox.className = 'selection-box';
+            self.selectionBox.style.left = mouseX + 'px';
+            self.selectionBox.style.top = mouseY + 'px';
+            container.appendChild(self.selectionBox);
+
+            self.selectionStartX = mouseX;
+            self.selectionStartY = mouseY;
+            self.selectionScrollMax = container.scrollHeight - container.clientHeight;
+        } else {
+            // Xử lý khi tiếp tục kéo chọn
+            let width = Math.abs(mouseX - self.selectionStartX);
+            let height = Math.abs(mouseY - self.selectionStartY);
+
+            self.selectionBox.style.width = width + 'px';
+            self.selectionBox.style.height = height + 'px';
+
+            // Nếu kéo ngược lại thì tính lại vị trí start
+            self.selectionBox.style.left = Math.min(mouseX, self.selectionStartX) + 'px';
+            self.selectionBox.style.top = Math.min(mouseY, self.selectionStartY) + 'px';
+
+            // Tính toán khi kéo ngược lên và đi ra khỏi xuống dưới
+            if (event.clientY > containerRect.bottom) {
+                container.scrollTop = Math.min(container.scrollTop + 30, self.selectionScrollMax);
+            }
+            if (event.clientY < containerRect.top) {
+                container.scrollTop = Math.max(container.scrollTop - 30, 0);
+            }
+
+            const selectionRect = {
+                left: parseFloat(self.selectionBox.style.left),
+                top: parseFloat(self.selectionBox.style.top),
+                right:
+                    parseFloat(self.selectionBox.style.left) +
+                    parseFloat(self.selectionBox.style.width),
+                bottom:
+                    parseFloat(self.selectionBox.style.top) +
+                    parseFloat(self.selectionBox.style.height),
+            };
+
+            $('[data-toggle="file"]', self.fms).each(function() {
+                const item = this;
+                const itemRect = item.getBoundingClientRect();
+                const itemRectRelativeToContainer = {
+                    left: itemRect.left - containerRect.left + container.scrollLeft,
+                    top: itemRect.top - containerRect.top + container.scrollTop,
+                    right: itemRect.right - containerRect.left + container.scrollLeft,
+                    bottom: itemRect.bottom - containerRect.top + container.scrollTop,
+                };
+                if (
+                    itemRectRelativeToContainer.left < selectionRect.right &&
+                    itemRectRelativeToContainer.right > selectionRect.left &&
+                    itemRectRelativeToContainer.top < selectionRect.bottom &&
+                    itemRectRelativeToContainer.bottom > selectionRect.top
+                ) {
+                    self.setSelectedFile($(item), true);
+                } else {
+                    self.clearSelectedFile($(item));
+                }
+            });
         }
     }
 
@@ -2269,8 +2399,8 @@ nukeviet.Picker = class {
         const scrollLeft = $(window).scrollLeft();
         const scrollTop = $(window).scrollTop();
 
-        let tranX = mouseX + scrollLeft;
-        let tranY = mouseY + scrollTop;
+        let tranX = mouseX + scrollLeft + 2;
+        let tranY = mouseY + scrollTop + 2;
 
         self.menu.css({
             transform: 'translate(0px, 0px)',

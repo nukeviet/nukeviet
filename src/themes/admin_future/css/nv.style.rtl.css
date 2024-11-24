@@ -27539,6 +27539,22 @@ p + .image-style-side {
   position: relative;
   height: 100%;
 }
+.fms-files.disabled-select {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  user-select: none;
+}
+.fms-files.disabled-select * {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  user-select: none;
+}
+.fms-files .selection-box {
+  position: absolute;
+  border: 1px dashed var(--bs-success);
+  background: rgba(var(--bs-success-rgb), 0.2);
+  pointer-events: none;
+}
 
 .fms-actions-bar {
   padding-bottom: 1rem;

@@ -89,7 +89,7 @@
                 <div class="tool-sizes" data-toggle="queue-size">0</div>
                 <div class="tool-progress">
                     <div data-toggle="queue-progress-bar" class="progress" role="progressbar" aria-label="{$LANG->getModule('upload_progressbar')}" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
-                        <div data-toggle="queue-progress-value" class="progress-bar" style="width: 0;"></div>
+                        <div data-toggle="queue-progress-value" class="progress-bar"></div>
                     </div>
                 </div>
             </div>
