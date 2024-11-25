@@ -21,18 +21,18 @@ function getFileSize(fileobj) {
         var fileSize = 0;
         //for IE
         if (navigator.userAgent.match(/msie/i)) {
-            //before making an object of ActiveXObject, 
+            //before making an object of ActiveXObject,
             //please make sure ActiveX is enabled in your IE browser
             var objFSO = new ActiveXObject("Scripting.FileSystemObject");
             var filePath = $(fileobj)[0].value;
             var objFile = objFSO.getFile(filePath);
             var fileSize = objFile.size; //size in b
-            fileSize = fileSize / 1048576; //size in mb 
+            fileSize = fileSize / 1048576; //size in mb
         }
         //for FF, Safari, Opeara and Others
         else {
             fileSize = $(fileobj)[0].files[0].size //size in b
-            fileSize = fileSize / 1048576; //size in mb 
+            fileSize = fileSize / 1048576; //size in mb
         }
         fileSize = fileSize.toFixed(2);
         return fileSize;
@@ -810,7 +810,7 @@ $(function() {
         e.preventDefault();
         var type = $('[data-toggle=change_attachment_type]').val();
         if (type == 'site') {
-            nv_open_browse(script_name + "?" + nv_name_variable + "=upload&popup=1&area=attachment&alt=&path=" + encodeURIComponent($(this).data('upload-dir')) + "&type=image&currentpath=" + encodeURIComponent($(this).data('upload-dir')), "Attachment", 850, 420, "resizable=no,scrollbars=no,toolbar=no,location=no,status=no");
+            nv_open_browse(script_name + "?" + nv_name_variable + "=upload&popup=1&area=attachment&alt=&path=" + encodeURIComponent($(this).data('upload-dir')) + "&type=image&currentpath=" + encodeURIComponent($(this).data('upload-dir')), "Attachment", 1200, 675, "resizable=no,scrollbars=no,toolbar=no,location=no,status=no");
         } else if (type == 'zalo' || type == 'file' || type == 'request') {
             var url = $('[data-toggle=change_attachment_type] option:selected').data('url');
             nv_open_browse(url, "Attachment", 500, 500, "resizable=no,scrollbars=no,toolbar=no,location=no,status=no");
@@ -900,7 +900,7 @@ $(function() {
 
     $('body').on('click', '[data-toggle=request_image], [data-toggle=list_image], [data-toggle=video_thumb], [data-toggle=cover_photo_url], [data-toggle=body_photo_url], [data-toggle=body_thumb], [data-toggle=video_avatar]', function(e) {
         e.preventDefault();
-        nv_open_browse(script_name + "?" + nv_name_variable + "=upload&popup=1&area=" + $(this).data('area') + "&alt=&path=" + encodeURIComponent($(this).data('upload-dir')) + "&type=image&currentpath=" + encodeURIComponent($(this).data('upload-dir')), "NVImg", 850, 420, "resizable=no,scrollbars=no,toolbar=no,location=no,status=no");
+        nv_open_browse(script_name + "?" + nv_name_variable + "=upload&popup=1&area=" + $(this).data('area') + "&alt=&path=" + encodeURIComponent($(this).data('upload-dir')) + "&type=image&currentpath=" + encodeURIComponent($(this).data('upload-dir')), "NVImg", 1200, 675, "resizable=no,scrollbars=no,toolbar=no,location=no,status=no");
     });
 
     $('[data-toggle=request_delete]').on('click', function(e) {

@@ -27748,22 +27748,22 @@ p + .image-style-side {
 @media (min-width: 992px) {
   .fmm .view-grid > .fms-files-wraper > ul > li,
   .fms-ctn-fullscreen .view-grid > .fms-files-wraper > ul > li {
-    flex: 0 0 25%;
-    max-width: 25%;
+    flex: 0 0 20%;
+    max-width: 20%;
   }
 }
 @media (min-width: 1200px) {
   .fmm .view-grid > .fms-files-wraper > ul > li,
   .fms-ctn-fullscreen .view-grid > .fms-files-wraper > ul > li {
-    flex: 0 0 20%;
-    max-width: 20%;
+    flex: 0 0 16.666666666%;
+    max-width: 16.666666666%;
   }
 }
 @media (min-width: 1920px) {
   .fmm .view-grid > .fms-files-wraper > ul > li,
   .fms-ctn-fullscreen .view-grid > .fms-files-wraper > ul > li {
-    flex: 0 0 12.5%;
-    max-width: 12.5%;
+    flex: 0 0 10%;
+    max-width: 10%;
   }
 }
 

@@ -441,8 +441,8 @@ function nv_isExternal(url) {
 }
 
 function nv_open_browse(theURL, winName, w, h, features) {
-    w = Math.min(w, (screen.availWidth ? screen.availWidth : screen.width) - 10);
-    h = Math.min(h, (screen.availHeight ? screen.availHeight : screen.height) - 10);
+    w = Math.min(w, (screen.availWidth ? screen.availWidth : screen.width) - 64);
+    h = Math.min(h, (screen.availHeight ? screen.availHeight : screen.height) - 64);
     var LeftPosition = (screen.width) ? (screen.width - w) / 2 : 0,
         TopPosition = (screen.height) ? (screen.height - h) / 2 : 0,
         settings = 'height=' + h + ',width=' + w + ',top=' + TopPosition + ',left=' + LeftPosition;

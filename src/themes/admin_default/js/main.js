@@ -329,7 +329,7 @@ $(document).ready(function() {
             if (alt) {
                 url += "&alt=" + alt
             }
-            nv_open_browse(url, winname, 850, 420, "resizable=no,scrollbars=no,toolbar=no,location=no,status=no");
+            nv_open_browse(url, winname, 1200, 675, "resizable=no,scrollbars=no,toolbar=no,location=no,status=no");
         }
     });
 
