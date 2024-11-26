@@ -13,27 +13,47 @@ if (!defined('NV_IS_FILE_ADMIN')) {
     exit('Stop!!!');
 }
 
-$page_title = $nv_Lang->getModule('addlogo');
+if ($nv_Request->get_title('checkss', 'post', '') !== NV_CHECK_SESSION) {
+    nv_jsonOutput([
+        'status' => 'error',
+        'mess' => 'Error session!!!'
+    ]);
+}
 
 $path = nv_check_path_upload($nv_Request->get_string('path', 'post,get'));
 $check_allow_upload_dir = nv_check_allow_upload_dir($path);
 
 if (!isset($check_allow_upload_dir['delete_file'])) {
-    exit('ERROR#' . $nv_Lang->getModule('notlevel'));
+    nv_jsonOutput([
+        'status' => 'error',
+        'mess' => $nv_Lang->getModule('notlevel')
+    ]);
 }
 
 $file = htmlspecialchars(trim($nv_Request->get_string('file', 'post,get')), ENT_QUOTES);
 $file = basename($file);
 
-if (empty($file) or !nv_is_file(NV_BASE_SITEURL . $path . '/' . $file, $path)) {
-    exit('ERROR#' . $nv_Lang->getModule('errorNotSelectFile') . NV_ROOTDIR . '/' . $path . '/' . $file);
+if (empty($file)) {
+    nv_jsonOutput([
+        'status' => 'error',
+        'mess' => $nv_Lang->getModule('errorNotSelectFile')
+    ]);
+}
+if (!nv_is_file(NV_BASE_SITEURL . $path . '/' . $file, $path)) {
+    nv_jsonOutput([
+        'status' => 'error',
+        'mess' => $nv_Lang->getModule('file_no_exists')
+    ]);
 }
 
 if ($nv_Request->isset_request('path', 'post') and $nv_Request->isset_request('x', 'post') and $nv_Request->isset_request('y', 'post')) {
     if (file_exists(NV_ROOTDIR . '/' . $global_config['upload_logo'])) {
         $upload_logo = NV_ROOTDIR . '/' . $global_config['upload_logo'];
     } else {
-        exit('ERROR#' . $nv_Lang->getModule('notlogo'));
+        nv_jsonOutput([
+            'status' => 'error',
+            'mess' => $nv_Lang->getModule('notlogo')
+        ]);
     }
 
     $config_logo = [];
@@ -76,9 +96,14 @@ if ($nv_Request->isset_request('path', 'post') and $nv_Request->isset_request('x
             nv_dirListRefreshSize();
         }
 
-        exit('OK#' . basename($file));
+        nv_jsonOutput([
+            'status' => 'success',
+            'name' => basename($file)
+        ]);
     }
-    exit('ERROR#' . $nv_Lang->getModule('notlevel'));
 }
 
-exit('ERROR#Error Access!!');
+nv_jsonOutput([
+    'status' => 'error',
+    'mess' => 'Error Access!!'
+]);

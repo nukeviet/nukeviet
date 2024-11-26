@@ -28,13 +28,28 @@ $tpl->assign('UPLOAD_ALT_REQUIRE', !empty($global_config['upload_alt_require']) 
 $tpl->assign('UPLOAD_AUTO_ALT', !empty($global_config['upload_auto_alt']) ? 'true' : 'false');
 $tpl->assign('COMPRESS_IMAGE_ACTIVE', (class_exists('Tinify\Tinify') and !empty($global_config['tinify_active']) and !empty($global_config['tinify_api'])) ? 'true' : 'false');
 
-$upload_logo = $upload_logo_config = '';
+$upload_logo = '';
+$logo_width = 0;
+$logo_height = 0;
+$logo_size_s = 0;
+$logo_size_m = 0;
+$logo_size_l = 0;
+
 if (!empty($global_config['upload_logo']) and file_exists(NV_ROOTDIR . '/' . $global_config['upload_logo'])) {
     $upload_logo = NV_BASE_SITEURL . $global_config['upload_logo'];
     $logo_size = getimagesize(NV_ROOTDIR . '/' . $global_config['upload_logo']);
-    $upload_logo_config = $logo_size[0] . '|' . $logo_size[1] . '|' . $global_config['autologosize1'] . '|' . $global_config['autologosize2'] . '|' . $global_config['autologosize3'];
+    $logo_width = intval($logo_size[0]);
+    $logo_height = intval($logo_size[1]);
+    $logo_size_s = floatval($global_config['autologosize1']);
+    $logo_size_m = floatval($global_config['autologosize2']);
+    $logo_size_l = floatval($global_config['autologosize3']);
 }
 $tpl->assign('UPLOAD_LOGO', $upload_logo);
+$tpl->assign('LOGO_WIDTH', $logo_width);
+$tpl->assign('LOGO_HEIGHT', $logo_height);
+$tpl->assign('LOGO_SIZE_S', $logo_size_s);
+$tpl->assign('LOGO_SIZE_M', $logo_size_m);
+$tpl->assign('LOGO_SIZE_L', $logo_size_l);
 
 $sys_max_size = $sys_max_size_local = min($global_config['nv_max_size'], nv_converttoBytes(ini_get('upload_max_filesize')), nv_converttoBytes(ini_get('post_max_size')));
 if ($global_config['nv_overflow_size'] > $sys_max_size and $global_config['upload_chunk_size'] > 0) {

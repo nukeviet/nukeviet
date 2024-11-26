@@ -271,8 +271,6 @@ if ($nv_Request->isset_request('checkss', 'post')) {
             while ($row = $result->fetch()) {
                 $file = [];
                 $file['src'] = NV_BASE_SITEURL . $row['src'] . '?' . $row['mtime'];
-                $file['width'] = $row['srcwidth'];
-                $file['height'] = $row['srcheight'];
                 $file['alt'] = $row['alt'];
                 $file['name'] = $row['name'];
                 $file['real_name'] = $row['title'];
@@ -286,6 +284,14 @@ if ($nv_Request->isset_request('checkss', 'post')) {
                 $file['mtime'] = nv_datetime_format($row['mtime'], 0, 0);
                 $file['type'] = $row['type'];
                 $file['filesize_show'] = nv_convertfromBytes($row['filesize']);
+
+                $sizes = explode('|', $row['sizes']);
+                $file['width'] = 0;
+                $file['height'] = 0;
+                if (!empty($sizes[1])) {
+                    $file['width'] = intval($sizes[0]);
+                    $file['height'] = intval($sizes[1]);
+                }
 
                 if ($row['type'] == 'image' or $row['ext'] == 'swf') {
                     $num_images++;

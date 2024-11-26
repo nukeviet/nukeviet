@@ -147,6 +147,7 @@ var nukeviet = nukeviet || {};
     htmlModalBackdrop = `<div class="fmm-backdrop fade"></div>`;
     htmlDialogBackdrop = `<div class="fmd-backdrop fade"></div>`;
     lang = {
+        notlogo: `{$LANG->getModule('notlogo')}`,
         moveMultiple: `{$LANG->getModule('move_multiple')}`,
         delFolderConfirm: `{$LANG->getModule('delete_folder')}`,
         delImgConfirm: `{$LANG->getModule('upload_delimg_confirm')}`,
@@ -216,9 +217,17 @@ var nukeviet = nukeviet || {};
         this.up = null;
 
         this.constant = {
+            logo: '{$UPLOAD_LOGO}',
             compressImage: {$COMPRESS_IMAGE_ACTIVE},
             autoAlt: {$UPLOAD_AUTO_ALT},
-            altRequire: {$UPLOAD_ALT_REQUIRE}
+            altRequire: {$UPLOAD_ALT_REQUIRE},
+            logoSize: {
+                width: {$LOGO_WIDTH},
+                height: {$LOGO_HEIGHT},
+                sizeS: {$LOGO_SIZE_S},
+                sizeM: {$LOGO_SIZE_M},
+                sizeL: {$LOGO_SIZE_L}
+            }
         }
 
         this.lastTap = 0;
@@ -959,6 +968,21 @@ var nukeviet = nukeviet || {};
                 return;
             }
             self.showDialog('qualitychange', file);
+        });
+
+        // Thêm logo
+        self.menu.on('click', '[data-toggle="menu-file-addlogo"]', function(e) {
+            e.preventDefault();
+            const file = self.getSelectedFile();
+            self.closeMenu();
+            if (file.length != 1) {
+                return;
+            }
+            if (self.constant.logo == '') {
+                nvToast(self.lang.notlogo, 'warning');
+                return;
+            }
+            self.showDialog('addlogo', file);
         });
     }
 
@@ -1731,6 +1755,112 @@ var nukeviet = nukeviet || {};
                 img2.addClass('orig-img-v');
             }
         }
+
+        // Thêm logo
+        if (name == 'addlogo') {
+            const file = extra;
+            const ctn = $('[data-toggle="logo-ctn"]', dialog);
+            const maxWidth = ctn.innerWidth();
+            const maxHeight = maxWidth;
+
+            $('[name="checkss"]', dialog).val($('body').data('checksess'));
+            $('[name="path"]', dialog).val(file.data('dir'));
+            $('[name="file"]', dialog).val(file.data('name'));
+
+            let imgWidth = file.data('width');
+            let imgHeight = file.data('height');
+            const ratio = imgWidth / imgHeight;
+
+            if (imgWidth > maxWidth || imgHeight > maxHeight) {
+                if (ratio > 1) {
+                    // Ảnh theo chiều ngang
+                    imgWidth = maxWidth;
+                    imgHeight = Math.floor(maxWidth / ratio);
+                } else {
+                    // Ảnh theo chiều dọc
+                    imgHeight = maxHeight;
+                    imgWidth = Math.floor(maxHeight * ratio);
+                }
+            }
+
+            $('[data-toggle="logo-area"]', dialog).css({
+                width: (imgWidth + 'px'),
+                height: (imgHeight + 'px')
+            });
+            $('[data-toggle="image"]', dialog).attr('src', file.data('nocache-path')).attr('alt', file.data('alt'));
+
+            // Tính toán kích thước của logo
+            let markW, markH;
+            if (imgWidth <= 150) {
+                markW = Math.ceil(imgWidth * self.constant.logoSize.sizeS / 100);
+            } else if (imgWidth < 350) {
+                markW = Math.ceil(imgWidth * self.constant.logoSize.sizeM / 100);
+            } else {
+                if (Math.ceil(imgWidth * self.constant.logoSize.sizeL / 100) > self.constant.logoSize.width) {
+                    markW = self.constant.logoSize.width;
+                } else {
+                    markW = Math.ceil(imgWidth * self.constant.logoSize.sizeL / 100);
+                }
+            }
+
+            markH = Math.ceil(markW * self.constant.logoSize.height / self.constant.logoSize.width);
+            if (markH > imgHeight) {
+                markH = imgHeight;
+                markW = Math.ceil(markH * self.constant.logoSize.width / self.constant.logoSize.height);
+            }
+
+            $('[data-toggle="image"]', dialog).cropper({
+                viewMode: 3,
+                dragMode: 'none',
+                aspectRatio: markW / markH,
+                responsive: true,
+                modal: true,
+                guides: false,
+                highlight: true,
+                autoCrop: false,
+                autoCropArea: .01,
+                movable: false,
+                rotatable: false,
+                scalable: false,
+                zoomable: false,
+                zoomOnTouch: false,
+                zoomOnWheel: false,
+                cropBoxMovable: true,
+                cropBoxResizable: true,
+                minContainerWidth: 10,
+                minContainerHeight: 10,
+                crop: function(e) {
+                    $('[name="x"]', dialog).val(parseInt(Math.floor(e.x)));
+                    $('[name="y"]', dialog).val(parseInt(Math.floor(e.y)));
+                    $('[name="w"]', dialog).val(parseInt(Math.floor(e.width)));
+                    $('[name="h"]', dialog).val(parseInt(Math.floor(e.height)));
+                },
+                built: function() {
+                    var imageData = $(this).cropper('getImageData');
+                    var cropBoxScale = imageData.naturalWidth / imageData.width;
+                    var cropBoxSize = {
+                        width: markW / cropBoxScale,
+                        height: markH / cropBoxScale
+                    };
+                    cropBoxSize.left = imageData.width - cropBoxSize.width - 10;
+                    cropBoxSize.top = imageData.height - cropBoxSize.height - 10;
+                    $(this).cropper('crop');
+                    $(this).cropper('setCropBoxData', {
+                        left: cropBoxSize.left,
+                        top: cropBoxSize.top,
+                        width: cropBoxSize.width,
+                        height: cropBoxSize.height
+                    });
+                    var wrapCropper = $(this).parent();
+                    $('.cropper-face', wrapCropper).css({
+                        'opacity': 1,
+                        'background-image': 'url(' + self.constant.logo + ')',
+                        'background-size': '100%',
+                        'background-color': 'transparent'
+                    });
+                }
+            });
+        }
     }
 
     // Xử lý sau khi Dialog được mở lên
@@ -1813,6 +1943,16 @@ var nukeviet = nukeviet || {};
             img.attr('alt', '');
             img.attr('src', img.data('pix'));
             return;
+        }
+
+        // Thêm logo
+        if (dialog.data('dialog') == 'addlogo') {
+            $('[data-toggle="logo-area"]', dialog).removeAttr('style');
+
+            const img = $('[data-toggle="image"]', dialog);
+            img.cropper('destroy');
+            img.attr('alt', '');
+            img.attr('src', img.data('pix'));
         }
     }
 
@@ -2699,7 +2839,7 @@ var nukeviet = nukeviet || {};
             // Công cụ cơ bản của ảnh
             if (self.imageExts.includes(files.data('ext')) && tree.data('allowed-create-file')) {
                 actions += 4;
-                html += '<li><a class="dropdown-item" href="#"><i class="fa-solid fa-file-image fa-fw"></i> ' + self.lang.addLogo + '</a></li>';
+                html += '<li><a class="dropdown-item" href="#" data-toggle="menu-file-addlogo" data-uuid="' + files.data('uuid') + '"><i class="fa-solid fa-file-image fa-fw"></i> ' + self.lang.addLogo + '</a></li>';
                 html += '<li><a class="dropdown-item" href="#"><i class="fa-solid fa-copy fa-fw"></i> ' + self.lang.imgTool + '</a></li>';
                 html += '<li><a class="dropdown-item" href="#"><i class="fa-solid fa-crop fa-fw"></i> ' + self.lang.crop + '</a></li>';
                 html += '<li><a class="dropdown-item" href="#"><i class="fa-solid fa-arrows-spin fa-fw"></i> ' + self.lang.rotate + '</a></li>';

@@ -27988,4 +27988,16 @@ p + .image-style-side {
   z-index: 2;
   display: block;
 }
+
+.fmd-addlogo .inner {
+  margin: 0 auto;
+}
+.fmd-addlogo .inner img {
+  width: 100%;
+  height: 100%;
+}
+
+.fmd-addlogo-ipt {
+  width: 3.75rem;
+}
 /*# sourceMappingURL=nv.style.rtl.css.map */
