@@ -147,6 +147,7 @@ var nukeviet = nukeviet || {};
     htmlModalBackdrop = `<div class="fmm-backdrop fade"></div>`;
     htmlDialogBackdrop = `<div class="fmd-backdrop fade"></div>`;
     lang = {
+        moveMultiple: `{$LANG->getModule('move_multiple')}`,
         delFolderConfirm: `{$LANG->getModule('delete_folder')}`,
         delImgConfirm: `{$LANG->getModule('upload_delimg_confirm')}`,
         delImgsConfirm: `{$LANG->getModule('upload_delimgs_confirm')}`,
@@ -888,6 +889,17 @@ var nukeviet = nukeviet || {};
                 self.closeMenu();
             });
         });
+
+        // Di chuyển file
+        self.menu.on('click', '[data-toggle="menu-file-move"]', function(e) {
+            e.preventDefault();
+            self.closeMenu();
+            const files = self.getSelectedFile();
+            if (!files.length) {
+                return;
+            }
+            self.showDialog('move', files);
+        });
     }
 
     // Sự kiện trên file
@@ -1537,6 +1549,41 @@ var nukeviet = nukeviet || {};
             dialog.data('path', tree.data('path'));
             return;
         }
+
+        // Di chuyển file
+        if (name == 'move') {
+            const files = extra;
+            $('[name="checkss"]', dialog).val($('body').data('checksess'));
+
+            if (files.length > 1) {
+                $('[data-toggle="name"]', dialog).text(self.lang.moveMultiple.replace('%s', files.length));
+            } else {
+                $('[data-toggle="name"]', dialog).text(files.data('dir-path'));
+            }
+
+            let fss = [];
+            files.each(function() {
+                fss.push($(this).data('dir-path'));
+            });
+            fss = fss.join('|');
+            $('[name="files"]', dialog).val(fss);
+
+            const selPath = $(files[0]).data('dir');
+            $('[data-toggle="tree-name"]', self.fms).each(function() {
+                const tree = $(this).closest('li');
+                if (tree.data('dir') == '' || !tree.data('allowed-create-file')) {
+                    return;
+                }
+                const opt = $('<option></option>');
+                opt.attr('value', tree.data('path'));
+                opt.data('uuid', tree.data('uuid'));
+                opt.text(tree.data('path'));
+                if (tree.data('path') == selPath) {
+                    opt.prop('selected', true);
+                }
+                $('[name="newpath"]', dialog).append(opt);
+            });
+        }
     }
 
     // Xử lý sau khi Dialog được mở lên
@@ -1566,6 +1613,7 @@ var nukeviet = nukeviet || {};
         $('.is-invalid', dialog).removeClass('is-invalid');
         $('.dialog-text', dialog).text('');
         $('.dialog-val', dialog).val('');
+        $('.dialog-html', dialog).html('');
 
         // Xem chi tiết
         if (dialog.data('dialog') == 'preview') {
@@ -1793,19 +1841,41 @@ var nukeviet = nukeviet || {};
 
                     if (a.status == 'OK' || a.status == 'ok' || a.status == 'success') {
                         $('input, textarea, select, button', $(form)).prop('disabled', false);
-                        self.hideDialog(dig);
 
+                        // Xử lý form tạo thư mục
                         if (dig.data('dialog') == 'createfolder' || dig.data('dialog') == 'renamefolder') {
                             self.page = 1;
                             self.fetchAll({
                                 currentpath: a.path
                             });
+                            self.hideDialog(dig);
+                            return;
+                        }
+
+                        // Xử lý form di chuyển file
+                        if (dig.data('dialog') == 'move') {
+                            self.page = 1;
+
+                            if ($('[name="gonewpath"]', dig).is(':checked')) {
+                                const uuid = $('option:selected', dig).data('uuid');
+                                $('[data-toggle="tree-scroller"]', self.fms).find('.active').removeClass('active');
+                                $('[data-uuid="' + uuid + '"]', self.fms).addClass('active');
+                                self.openToTree(uuid);
+                                self.resetFilter();
+                                self.fetchFile({
+                                    selected: a.files
+                                });
+                            } else {
+                                self.fetchFile();
+                            }
+                            self.hideDialog(dig);
                             return;
                         }
 
                         self.fetchFile({
                             selected: [a.name]
                         });
+                        self.hideDialog(dig);
                     }
                 },
                 error: function(xhr, text, err) {
@@ -2495,7 +2565,7 @@ var nukeviet = nukeviet || {};
         }
         if (tree.data('allowed-move-file')) {
             actions++;
-            html += '<li><a class="dropdown-item" href="#"><i class="fa-solid fa-folder-tree fa-fw"></i> ' + self.lang.move + '</a></li>';
+            html += '<li><a class="dropdown-item" href="#" data-toggle="menu-file-move" data-uuid="' + files.data('uuid') + '"><i class="fa-solid fa-folder-tree fa-fw"></i> ' + self.lang.move + '</a></li>';
         }
         if (tree.data('allowed-rename-file') && files.length == 1) {
             actions++;

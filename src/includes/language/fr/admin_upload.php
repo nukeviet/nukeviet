@@ -220,3 +220,4 @@ $lang_module['show_folder_size'] = 'Afficher la taille du dossier dans l\'arbore
 $lang_module['upload_drop'] = 'Déposez les fichiers ici';
 $lang_module['files_selected'] = '%d fichiers sélectionnés';
 $lang_module['toggle_folders'] = 'Masquer et afficher l\'arborescence des répertoires';
+$lang_module['move_same_folder'] = 'Le nouveau dossier doit être différent du dossier actuel';

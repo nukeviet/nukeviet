@@ -257,3 +257,40 @@
         </div>
     </div>
 </div>
+{* Dialog di chuyển file *}
+<div class="fmd fade" data-dialog="move" id="[prefix]-move" tabindex="-1" aria-labelledby="[prefix]-move-label" aria-hidden="true">
+    <div class="fmd-dialog">
+        <div class="fmd-content">
+            <div class="fmd-header">
+                <div class="fmd-title text-truncate fs-5 fw-medium" id="[prefix]-move-label">{$LANG->getModule('move')}</div>
+                <button type="button" class="btn-close" data-dismiss="fmd" aria-label="{$LANG->getGlobal('close')}"></button>
+            </div>
+            <div class="fmd-body">
+                <form method="post" data-mode="ajform" action="{$smarty.const.NV_BASE_ADMINURL}index.php?{$smarty.const.NV_LANG_VARIABLE}={$smarty.const.NV_LANG_DATA}&amp;{$smarty.const.NV_NAME_VARIABLE}={$MODULE_NAME}&amp;{$smarty.const.NV_OP_VARIABLE}=moveimg" novalidate>
+                    <div class="mb-2">
+                        <div class="fw-medium fw-5 dialog-text text-break" data-toggle="name"></div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="[prefix]-move-newpath" class="form-label">{$LANG->getModule('movefolder')} <span class="text-danger">(*)</span>:</label>
+                        <select class="form-select dialog-html" name="newpath" id="[prefix]-move-newpath"></select>
+                        <div class="invalid-feedback">{$LANG->getGlobal('required_invalid')}</div>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="mirror" value="1" id="[prefix]-move-mirror">
+                        <label class="form-check-label" for="[prefix]-move-mirror">{$LANG->getModule('mirrorFile')}</label>
+                    </div>
+                    <div class="form-check mb-3">
+                        <input class="form-check-input" type="checkbox" name="gonewpath" value="1" id="[prefix]-move-gonewpath">
+                        <label class="form-check-label" for="[prefix]-move-gonewpath">{$LANG->getModule('goNewPath')}</label>
+                    </div>
+                    <div class="hstack justify-content-end gap-2">
+                        <button type="submit" class="btn btn-primary"><i class="fa-solid fa-floppy-disk"></i> {$LANG->getGlobal('submit')}</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="fmd"><i class="fa-solid fa-xmark text-danger"></i> {$LANG->getGlobal('cancel')}</button>
+                    </div>
+                    <input type="hidden" name="files" value="" class="dialog-val">
+                    <input type="hidden" name="checkss" value="" class="dialog-val">
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
