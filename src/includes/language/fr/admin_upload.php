@@ -204,6 +204,7 @@ $lang_module['upload_overflow_help'] = 'Permet de télécharger des fichiers plu
 $lang_module['nv_mobile_mode_img'] = 'Créer une image pour le mode mobile';
 $lang_module['nv_mobile_mode_img_note'] = 'Largeur de l\'image (0 = aucune création)';
 $lang_module['webpconvert'] = 'Fichier avec l\'extension WEBP';
+$lang_module['webpconvert_exists'] = 'Le fichier WEBP du même nom existe déjà, le système ne le créera pas';
 $lang_module['compressimage'] = 'Compresser l\'image';
 $lang_module['qualitychange'] = 'Qualité d\'image';
 $lang_module['quality'] = 'Qualité';

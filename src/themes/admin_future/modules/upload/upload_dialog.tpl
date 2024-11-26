@@ -294,3 +294,61 @@
         </div>
     </div>
 </div>
+{* Dialog giảm chất lượng ảnh *}
+<div class="fmd fade" data-dialog="qualitychange" id="[prefix]-qualitychange" tabindex="-1" aria-labelledby="[prefix]-qualitychange-label" aria-hidden="true">
+    <div class="fmd-dialog">
+        <div class="fmd-content">
+            <div class="fmd-header">
+                <div class="fmd-title text-truncate fs-5 fw-medium" id="[prefix]-qualitychange-label">{$LANG->getModule('qualitychange')}</div>
+                <button type="button" class="btn-close" data-dismiss="fmd" aria-label="{$LANG->getGlobal('close')}"></button>
+            </div>
+            <div class="fmd-body fmd-preview">
+                <form method="post" data-mode="ajform" action="{$smarty.const.NV_BASE_ADMINURL}index.php?{$smarty.const.NV_LANG_VARIABLE}={$smarty.const.NV_LANG_DATA}&amp;{$smarty.const.NV_NAME_VARIABLE}={$MODULE_NAME}&amp;{$smarty.const.NV_OP_VARIABLE}=qualitychange" novalidate>
+                    <div class="text-center">
+                        <div class="mb-2 position-relative img-thumb-outer">
+                            <img data-toggle="preview-zoom-in" src="{$smarty.const.ASSETS_STATIC_URL}/images/pix.gif" data-pix="{$smarty.const.ASSETS_STATIC_URL}/images/pix.gif" class="img-fluid img-thumb is-img" alt="">
+                            <div class="zoom-img" data-toggle="zoom-ctn">
+                                <a href="#" data-toggle="preview-zoom-out" class="zoom-out link-light p-3 pe-4" aria-label="{$LANG->getGlobal('close')}"><i class="fa-solid fa-arrows-to-dot fa-lg"></i></a>
+                                <img data-toggle="orig-img" src="{$smarty.const.ASSETS_STATIC_URL}/images/pix.gif" data-pix="{$smarty.const.ASSETS_STATIC_URL}/images/pix.gif" class="orig-img" alt="">
+                            </div>
+                        </div>
+                        <div class="mb-1">{$LANG->getModule('original_filesize')}: <span class="dialog-text" data-toggle="sizeoriginal"></span></div>
+                        <div class="mb-2">{$LANG->getModule('filesize')}: <span class="dialog-text" data-toggle="sizenew"></span></div>
+                    </div>
+                    <div class="mb-3 hstack align-items-center justify-content-center gap-2 flex-wrap">
+                        <label for="[prefix]-qualitychange-quality">{$LANG->getModule('quality')}</label>
+                        <select class="dialog-select form-select w-auto mw-100" data-toggle="qualitychangeopt" name="quality" id="[prefix]-qualitychange-quality">
+                            <option value="">{$LANG->getModule('original_image')}</option>
+                            <option value="100">100</option>
+                            <option value="95">95</option>
+                            <option value="90">90</option>
+                            <option value="85">85</option>
+                            <option value="80">80</option>
+                            <option value="75">75</option>
+                            <option value="70">70</option>
+                            <option value="65">65</option>
+                            <option value="60">60</option>
+                            <option value="55">55</option>
+                            <option value="50">50</option>
+                            <option value="45">45</option>
+                            <option value="40">40</option>
+                            <option value="35">35</option>
+                            <option value="30">30</option>
+                            <option value="25">25</option>
+                            <option value="20">20</option>
+                            <option value="15">15</option>
+                            <option value="10">10</option>
+                        </select>
+                    </div>
+                    <div class="hstack justify-content-end gap-2 border-top pt-3">
+                        <button type="submit" class="btn btn-primary"><i class="fa-solid fa-floppy-disk"></i> {$LANG->getGlobal('submit')}</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="fmd"><i class="fa-solid fa-xmark text-danger"></i> {$LANG->getGlobal('cancel')}</button>
+                    </div>
+                    <input type="hidden" name="img" value="" class="dialog-val">
+                    <input type="hidden" name="path" value="" class="dialog-val">
+                    <input type="hidden" name="checkss" value="" class="dialog-val">
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

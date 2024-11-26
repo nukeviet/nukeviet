@@ -204,6 +204,7 @@ $lang_module['upload_overflow_help'] = 'Allows uploading files larger than the m
 $lang_module['nv_mobile_mode_img'] = 'Create image for mobile mode';
 $lang_module['nv_mobile_mode_img_note'] = 'Image width (0 = no creation)';
 $lang_module['webpconvert'] = 'Create file in WEBP format';
+$lang_module['webpconvert_exists'] = 'WEBP file with the same name already exists, the system does not create more';
 $lang_module['compressimage'] = 'Compress image';
 $lang_module['qualitychange'] = 'Image quality';
 $lang_module['quality'] = 'Quality';

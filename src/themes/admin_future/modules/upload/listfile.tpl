@@ -19,6 +19,7 @@
                 data-type="{$file.type}"
                 data-width="{$file.width}"
                 data-height="{$file.height}"
+                data-filesize="{$file.filesize_show}"
             >
                 <div class="sel">
                     <input class="form-check-input" data-toggle="file-check" type="checkbox" id="{$file.uuid}-file-checkbox" value="" aria-label="{$LANG->getModule('selectimg')}">

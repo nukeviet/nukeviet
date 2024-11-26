@@ -285,14 +285,15 @@ if ($nv_Request->isset_request('checkss', 'post')) {
                 $file['dir'] = (empty($row['dirname']) ? $request['currentpath'] : $row['dirname']);
                 $file['mtime'] = nv_datetime_format($row['mtime'], 0, 0);
                 $file['type'] = $row['type'];
+                $file['filesize_show'] = nv_convertfromBytes($row['filesize']);
 
                 if ($row['type'] == 'image' or $row['ext'] == 'swf') {
                     $num_images++;
                     $file['size'] = str_replace('|', ' x ', $row['sizes']) . ' px';
-                    $file['size_detail'] = $file['size'] . ' (' . nv_convertfromBytes($row['filesize']) . ')';
+                    $file['size_detail'] = $file['size'] . ' (' . $file['filesize_show'] . ')';
                 } else {
                     $num_file++;
-                    $file['size'] = $file['size_detail'] = nv_convertfromBytes($row['filesize']);
+                    $file['size'] = $file['size_detail'] = $file['filesize_show'];
                 }
 
                 $files[] = $file;

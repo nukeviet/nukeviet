@@ -13,31 +13,44 @@ if (!defined('NV_IS_FILE_ADMIN')) {
     exit('Stop!!!');
 }
 
+if ($nv_Request->get_title('checkss', 'post', '') !== NV_CHECK_SESSION) {
+    nv_jsonOutput([
+        'status' => 'error',
+        'mess' => 'Error session!!!'
+    ]);
+}
+
 $path = nv_check_path_upload($nv_Request->get_string('path', 'post'));
 $check_allow_upload_dir = nv_check_allow_upload_dir($path);
 
 if (!isset($check_allow_upload_dir['move_file'])) {
     nv_jsonOutput([
         'status' => 'error',
-        'mess' => 'ERROR#' . $nv_Lang->getModule('notlevel')
+        'mess' => $nv_Lang->getModule('notlevel')
     ]);
 }
 
 $img = htmlspecialchars(trim($nv_Request->get_string('img', 'post')), ENT_QUOTES);
 $img = basename($img);
 
-if (empty($img) or !nv_is_file(NV_BASE_SITEURL . $path . '/' . $img, $path)) {
+if (empty($img)) {
     nv_jsonOutput([
         'status' => 'error',
-        'mess' => 'ERROR#' . $nv_Lang->getModule('errorNotSelectFile') . NV_ROOTDIR . '/' . $path . '/' . $img
+        'mess' => $nv_Lang->getModule('errorNotSelectFile')
+    ]);
+}
+if (!nv_is_file(NV_BASE_SITEURL . $path . '/' . $img, $path)) {
+    nv_jsonOutput([
+        'status' => 'error',
+        'mess' => $nv_Lang->getModule('file_no_exists')
     ]);
 }
 
 $newimg = NukeViet\Files\Image::createFilename($img, 'webp');
 if (nv_is_file(NV_BASE_SITEURL . $path . '/' . $newimg, $path)) {
     nv_jsonOutput([
-        'status' => 'OK',
-        'file' => $newimg
+        'status' => 'info',
+        'mess' => $nv_Lang->getModule('webpconvert_exists')
     ]);
 }
 
@@ -57,6 +70,6 @@ if (isset($array_dirname[$path])) {
 nv_insert_logs(NV_LANG_DATA, $module_name, $nv_Lang->getModule('webpconvert'), $path . '/' . $newimg, $admin_info['userid']);
 
 nv_jsonOutput([
-    'status' => 'OK',
+    'status' => 'success',
     'file' => $newimg
 ]);

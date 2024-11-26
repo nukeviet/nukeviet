@@ -205,6 +205,7 @@ $lang_module['upload_overflow_help'] = 'Cho phép tải lên các tập tin có 
 $lang_module['nv_mobile_mode_img'] = 'Tạo hình ảnh cho chế độ di động';
 $lang_module['nv_mobile_mode_img_note'] = 'Chiều rộng hình ảnh (0 = không tạo)';
 $lang_module['webpconvert'] = 'Tạo file WEBP';
+$lang_module['webpconvert_exists'] = 'File WEBP cùng tên đã tồn tại, hệ thống không tạo thêm';
 $lang_module['compressimage'] = 'Nén ảnh';
 $lang_module['qualitychange'] = 'Chất lượng ảnh';
 $lang_module['quality'] = 'Chất lượng';

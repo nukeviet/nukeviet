@@ -900,6 +900,66 @@ var nukeviet = nukeviet || {};
             }
             self.showDialog('move', files);
         });
+
+        // Tạo file WEBP
+        self.menu.on('click', '[data-toggle="menu-file-webpconvert"]', function(e) {
+            e.preventDefault();
+            const file = self.getSelectedFile();
+            if (file.length != 1) {
+                self.closeMenu();
+                return;
+            }
+            const btn = $(this);
+            const icon = $('i', btn);
+            if (icon.is('.fa-spinner')) {
+                return;
+            }
+            icon.removeClass(icon.data('icon')).addClass('fa-spinner fa-spin-pulse');
+            $.ajax({
+                type: 'POST',
+                url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=upload&' + nv_fc_variable + '=webpconvert&nocache=' + new Date().getTime(),
+                data: {
+                    path: file.data('dir'),
+                    img: file.data('name'),
+                    checkss: $('body').data('checksess')
+                },
+                dataType: 'json',
+                cache: false,
+                success: function(res) {
+                    icon.removeClass('fa-spinner fa-spin-pulse').addClass(icon.data('icon'));
+                    if (res.status == 'error') {
+                        nvToast(res.mess, 'error');
+                        return;
+                    }
+                    if (res.status == 'info') {
+                        nvToast(res.mess, 'info');
+                        return;
+                    }
+                    self.closeMenu();
+                    self.page = 1;
+                    self.resetFilter()
+                    self.fetchFile({
+                        selected: [res.file]
+                    });
+                },
+                error: function(xhr, text, err) {
+                    icon.removeClass('fa-spinner fa-spin-pulse').addClass(icon.data('icon'));
+                    nvToast(err, 'error');
+                    console.log(xhr, text, err);
+                }
+            });
+        });
+
+        // Chất lượng ảnh
+        self.menu.on('click', '[data-toggle="menu-file-qualitychange"]', function(e) {
+            e.preventDefault();
+            self.closeMenu();
+            const file = $('[data-toggle="file"][data-uuid="' + $(this).data('uuid') + '"]', self.fms);
+            if (!file.length) {
+                return;
+            }
+            self.showDialog('qualitychange', file);
+        });
     }
 
     // Sự kiện trên file
@@ -995,6 +1055,65 @@ var nukeviet = nukeviet || {};
             $('[data-toggle="note"]', dialog).addClass('d-none');
             $('[data-toggle="load"]', dialog).removeClass('d-none');
             self.runReThumb(-1);
+        });
+
+        // Thay đổi chất lượng ảnh (thay đổi tùy chọn xem trước)
+        self.fmd.on('change', '[data-toggle="qualitychangeopt"]', function() {
+            const btn = $(this);
+            const dialog = btn.closest('.fmd');
+            const file = $('[data-toggle="file"][data-uuid="' + dialog.data('uuid') + '"]', self.fms);
+            if (!file.length) {
+                return;
+            }
+            const quality = btn.val();
+            const img1 = $('[data-toggle="preview-zoom-in"]', dialog);
+            const img2 = $('[data-toggle="orig-img"]', dialog);
+            // Không thay đổi chất lượng
+            if (quality == '') {
+                img1.attr('src', file.data('thumb-src'));
+                img2.attr('src', file.data('nocache-path'));
+                $('[data-toggle="sizenew"]', dialog).text(file.data('filesize'));
+                return;
+            }
+
+            // Cố định kích thước ảnh nhỏ
+            if (!img1.data('w')) {
+                img1.data('w', true);
+                img1.css({
+                    width: (img1.innerWidth() + 'px'),
+                    height: (img1.innerHeight() + 'px')
+                });
+            }
+
+            btn.prop('disabled', true);
+            $.ajax({
+                type: 'POST',
+                url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=upload&' + nv_fc_variable + '=qualitychange&nocache=' + new Date().getTime(),
+                data: {
+                    path: file.data('dir'),
+                    img: file.data('name'),
+                    quality: quality,
+                    preview: 1,
+                    checkss: $('body').data('checksess')
+                },
+                dataType: 'json',
+                cache: false,
+                success: function(res) {
+                    btn.prop('disabled', false);
+                    if (res.status == 'error') {
+                        nvToast(res.mess, 'error');
+                        return;
+                    }
+                    img1.attr('src', res.imgdata);
+                    img2.attr('src', res.imgdata);
+                    $('[data-toggle="sizenew"]', dialog).text(res.imglength);
+                },
+                error: function(xhr, text, err) {
+                    btn.prop('disabled', false);
+                    nvToast(err, 'error');
+                    console.log(xhr, text, err);
+                }
+            });
         });
     }
 
@@ -1454,7 +1573,6 @@ var nukeviet = nukeviet || {};
             img1.attr('alt', file.data('alt'));
             img1.attr('src', file.data('thumb-src'));
 
-
             if (file.data('type') == 'image') {
                 img1.addClass('is-img');
 
@@ -1584,6 +1702,35 @@ var nukeviet = nukeviet || {};
                 $('[name="newpath"]', dialog).append(opt);
             });
         }
+
+        // Chất lượng ảnh
+        if (name == 'qualitychange') {
+            const file = extra;
+
+            dialog.data('uuid', file.data('uuid'));
+            $('[name="checkss"]', dialog).val($('body').data('checksess'));
+            $('[name="path"]', dialog).val(file.data('dir'));
+            $('[name="img"]', dialog).val(file.data('name'));
+            $('[data-toggle="sizeoriginal"]', dialog).text(file.data('filesize'));
+            $('[data-toggle="sizenew"]', dialog).text(file.data('filesize'));
+
+            // Ảnh nhỏ
+            const img1 = $('[data-toggle="preview-zoom-in"]', dialog);
+            img1.attr('alt', file.data('alt'));
+            img1.attr('src', file.data('thumb-src'));
+
+            // Ảnh lớn
+            const img2 = $('[data-toggle="orig-img"]', dialog);
+            img2.attr('alt', file.data('alt'));
+            img2.attr('src', file.data('nocache-path'));
+
+            const rImg = file.data('width') / file.data('height');
+            const rScr = window.innerWidth / window.innerHeight;
+
+            if (rScr >= rImg) {
+                img2.addClass('orig-img-v');
+            }
+        }
     }
 
     // Xử lý sau khi Dialog được mở lên
@@ -1614,6 +1761,7 @@ var nukeviet = nukeviet || {};
         $('.dialog-text', dialog).text('');
         $('.dialog-val', dialog).val('');
         $('.dialog-html', dialog).html('');
+        $('.dialog-select', dialog).find('option').prop('selected', false);
 
         // Xem chi tiết
         if (dialog.data('dialog') == 'preview') {
@@ -1653,6 +1801,18 @@ var nukeviet = nukeviet || {};
             $('[data-toggle="progress-val"]', dialog).css({
                 width: '0%'
             });
+        }
+
+        // Chất lượng ảnh
+        if (dialog.data('dialog') == 'qualitychange') {
+            $('[data-toggle="orig-img"]', dialog).removeClass('orig-img-v');
+            $('[data-toggle="preview-zoom-in"]', dialog).removeAttr('style').data('w', false);
+
+            // Cả ảnh nhỏ và ảnh lớn
+            const img = $('img', dialog);
+            img.attr('alt', '');
+            img.attr('src', img.data('pix'));
+            return;
         }
     }
 
@@ -2548,12 +2708,12 @@ var nukeviet = nukeviet || {};
                 // Tạo webp
                 if (['jpg', 'jpeg', 'png'].includes(files.data('ext'))) {
                     actions++;
-                    html += '<li><a class="dropdown-item" href="#"><i class="fa-solid fa-wand-magic fa-fw"></i> ' + self.lang.webpConvert + '</a></li>';
+                    html += '<li><a class="dropdown-item" href="#" data-toggle="menu-file-webpconvert" data-uuid="' + files.data('uuid') + '"><i class="fa-solid fa-wand-magic fa-fw" data-icon="fa-wand-magic"></i> ' + self.lang.webpConvert + '</a></li>';
                 }
                 // Giảm chất lượng
                 if (['jpg', 'jpeg', 'png', 'webp'].includes(files.data('ext'))) {
                     actions++;
-                    html += '<li><a class="dropdown-item" href="#"><i class="fa-solid fa-arrow-down-short-wide fa-fw"></i> ' + self.lang.qualityChange + '</a></li>';
+                    html += '<li><a class="dropdown-item" href="#" data-toggle="menu-file-qualitychange" data-uuid="' + files.data('uuid') + '"><i class="fa-solid fa-arrow-down-short-wide fa-fw"></i> ' + self.lang.qualityChange + '</a></li>';
 
                     // Nén ảnh
                     if (self.constant.compressImage) {
