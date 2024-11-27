@@ -984,6 +984,17 @@ var nukeviet = nukeviet || {};
             }
             self.showDialog('addlogo', file);
         });
+
+        // Cắt ảnh
+        self.menu.on('click', '[data-toggle="menu-file-cropfile"]', function(e) {
+            e.preventDefault();
+            const file = self.getSelectedFile();
+            self.closeMenu();
+            if (file.length != 1) {
+                return;
+            }
+            self.showDialog('cropfile', file);
+        });
     }
 
     // Sự kiện trên file
@@ -1861,6 +1872,67 @@ var nukeviet = nukeviet || {};
                 }
             });
         }
+
+        // Cắt ảnh
+        if (name == 'cropfile') {
+            const file = extra;
+            const ctn = $('[data-toggle="logo-ctn"]', dialog);
+            const maxWidth = ctn.innerWidth();
+            const maxHeight = maxWidth;
+
+            $('[name="checkss"]', dialog).val($('body').data('checksess'));
+            $('[name="path"]', dialog).val(file.data('dir'));
+            $('[name="file"]', dialog).val(file.data('name'));
+
+            let imgWidth = file.data('width');
+            let imgHeight = file.data('height');
+            const ratio = imgWidth / imgHeight;
+
+            if (imgWidth > maxWidth || imgHeight > maxHeight) {
+                if (ratio > 1) {
+                    // Ảnh theo chiều ngang
+                    imgWidth = maxWidth;
+                    imgHeight = Math.floor(maxWidth / ratio);
+                } else {
+                    // Ảnh theo chiều dọc
+                    imgHeight = maxHeight;
+                    imgWidth = Math.floor(maxHeight * ratio);
+                }
+            }
+
+            $('[data-toggle="logo-area"]', dialog).css({
+                width: (imgWidth + 'px'),
+                height: (imgHeight + 'px')
+            });
+            $('[data-toggle="image"]', dialog).attr('src', file.data('nocache-path')).attr('alt', file.data('alt'));
+            $('[data-toggle="image"]', dialog).cropper({
+                viewMode: 3,
+                dragMode: 'crop',
+                aspectRatio: NaN,
+                responsive: true,
+                modal: true,
+                guides: false,
+                highlight: true,
+                autoCrop: true,
+                autoCropArea: 0.5,
+                movable: false,
+                rotatable: false,
+                scalable: false,
+                zoomable: false,
+                zoomOnTouch: false,
+                zoomOnWheel: false,
+                cropBoxMovable: true,
+                cropBoxResizable: true,
+                minContainerWidth: 10,
+                minContainerHeight: 10,
+                crop: function(e) {
+                    $('[name="x"]', dialog).val(parseInt(Math.floor(e.x)));
+                    $('[name="y"]', dialog).val(parseInt(Math.floor(e.y)));
+                    $('[name="w"]', dialog).val(parseInt(Math.floor(e.width)));
+                    $('[name="h"]', dialog).val(parseInt(Math.floor(e.height)));
+                }
+            });
+        }
     }
 
     // Xử lý sau khi Dialog được mở lên
@@ -1945,8 +2017,8 @@ var nukeviet = nukeviet || {};
             return;
         }
 
-        // Thêm logo
-        if (dialog.data('dialog') == 'addlogo') {
+        // Thêm logo + cắt ảnh
+        if (dialog.data('dialog') == 'addlogo' || dialog.data('dialog') == 'cropfile') {
             $('[data-toggle="logo-area"]', dialog).removeAttr('style');
 
             const img = $('[data-toggle="image"]', dialog);
@@ -2168,6 +2240,17 @@ var nukeviet = nukeviet || {};
                             } else {
                                 self.fetchFile();
                             }
+                            self.hideDialog(dig);
+                            return;
+                        }
+
+                        // Cắt ảnh thì về trang đầu
+                        if (dig.data('dialog') == 'cropfile') {
+                            self.resetFilter();
+                            self.page = 1;
+                            self.fetchFile({
+                                selected: [a.name]
+                            });
                             self.hideDialog(dig);
                             return;
                         }
@@ -2840,9 +2923,9 @@ var nukeviet = nukeviet || {};
             if (self.imageExts.includes(files.data('ext')) && tree.data('allowed-create-file')) {
                 actions += 4;
                 html += '<li><a class="dropdown-item" href="#" data-toggle="menu-file-addlogo" data-uuid="' + files.data('uuid') + '"><i class="fa-solid fa-file-image fa-fw"></i> ' + self.lang.addLogo + '</a></li>';
-                html += '<li><a class="dropdown-item" href="#"><i class="fa-solid fa-copy fa-fw"></i> ' + self.lang.imgTool + '</a></li>';
-                html += '<li><a class="dropdown-item" href="#"><i class="fa-solid fa-crop fa-fw"></i> ' + self.lang.crop + '</a></li>';
-                html += '<li><a class="dropdown-item" href="#"><i class="fa-solid fa-arrows-spin fa-fw"></i> ' + self.lang.rotate + '</a></li>';
+                html += '<li><a class="dropdown-item" href="#" data-toggle="menu-file-imgcreate" data-uuid="' + files.data('uuid') + '"><i class="fa-solid fa-copy fa-fw"></i> ' + self.lang.imgTool + '</a></li>';
+                html += '<li><a class="dropdown-item" href="#" data-toggle="menu-file-cropfile" data-uuid="' + files.data('uuid') + '"><i class="fa-solid fa-crop fa-fw"></i> ' + self.lang.crop + '</a></li>';
+                html += '<li><a class="dropdown-item" href="#" data-toggle="menu-file-rotatefile" data-uuid="' + files.data('uuid') + '"><i class="fa-solid fa-arrows-spin fa-fw"></i> ' + self.lang.rotate + '</a></li>';
             }
             if (tree.data('allowed-create-file')) {
                 // Tạo webp
