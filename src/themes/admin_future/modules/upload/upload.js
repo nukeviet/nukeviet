@@ -1034,6 +1034,51 @@ var nukeviet = nukeviet || {};
             }
             self.showDialog('rotatefile', file);
         });
+
+        // Nén ảnh
+        self.menu.on('click', '[data-toggle="menu-file-compress"]', function(e) {
+            e.preventDefault();
+            const file = self.getSelectedFile();
+            if (file.length != 1) {
+                self.closeMenu();
+                return;
+            }
+            const btn = $(this);
+            const icon = $('i', btn);
+            if (icon.is('.fa-spinner')) {
+                return;
+            }
+            icon.removeClass(icon.data('icon')).addClass('fa-spinner fa-spin-pulse');
+            $.ajax({
+                type: 'POST',
+                url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=upload&' + nv_fc_variable + '=compressimage&nocache=' + new Date().getTime(),
+                data: {
+                    path: file.data('dir'),
+                    img: file.data('name'),
+                    checkss: $('body').data('checksess')
+                },
+                dataType: 'json',
+                cache: false,
+                success: function(res) {
+                    icon.removeClass('fa-spinner fa-spin-pulse').addClass(icon.data('icon'));
+                    if (res.status == 'error') {
+                        nvToast(res.mess, 'error');
+                        return;
+                    }
+                    self.closeMenu();
+                    self.page = 1;
+                    self.resetFilter()
+                    self.fetchFile({
+                        selected: [res.file]
+                    });
+                },
+                error: function(xhr, text, err) {
+                    icon.removeClass('fa-spinner fa-spin-pulse').addClass(icon.data('icon'));
+                    nvToast(err, 'error');
+                    console.log(xhr, text, err);
+                }
+            });
+        });
     }
 
     // Sự kiện trên file
@@ -3164,7 +3209,7 @@ var nukeviet = nukeviet || {};
                     // Nén ảnh
                     if (self.constant.compressImage) {
                         actions++;
-                        html += '<li><a class="dropdown-item" href="#"><i class="fa-solid fa-compress fa-fw"></i> ' + self.lang.compressImage + '</a></li>';
+                        html += '<li><a class="dropdown-item" href="#" data-toggle="menu-file-compress" data-uuid="' + files.data('uuid') + '"><i class="fa-solid fa-compress fa-fw" data-icon="fa-compress"></i> ' + self.lang.compressImage + '</a></li>';
                     }
                 }
             }
