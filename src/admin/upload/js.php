@@ -51,6 +51,9 @@ $tpl->assign('LOGO_SIZE_S', $logo_size_s);
 $tpl->assign('LOGO_SIZE_M', $logo_size_m);
 $tpl->assign('LOGO_SIZE_L', $logo_size_l);
 
+$tpl->assign('MAX_WIDTH', NV_MAX_WIDTH);
+$tpl->assign('MAX_HEIGHT', NV_MAX_HEIGHT);
+
 $sys_max_size = $sys_max_size_local = min($global_config['nv_max_size'], nv_converttoBytes(ini_get('upload_max_filesize')), nv_converttoBytes(ini_get('post_max_size')));
 if ($global_config['nv_overflow_size'] > $sys_max_size and $global_config['upload_chunk_size'] > 0) {
     $sys_max_size_local = $global_config['nv_overflow_size'];

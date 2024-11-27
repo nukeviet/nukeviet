@@ -78,7 +78,11 @@ $request['popup'] = (int) $nv_Request->get_bool('popup', 'post,get', false);
 $request['CKEditorFuncNum'] = $nv_Request->get_int('CKEditorFuncNum', 'post,get', 0);
 $request['editor_id'] = $nv_Request->get_title('editor_id', 'post,get', '');
 
-// Kiểm tra tệp được chọn có thuộc thư mục quản lí không nếu có lấy nó không thì bỏ ra
+/*
+ * Kiểm tra tệp được chọn có thuộc thư mục quản lí không nếu có lấy nó, không thì bỏ ra
+ * Từ cái này xác định currentpath và ưu tiên hơn currentpath
+ * Áp dụng khi chọn tệp vào 1 ô sau đó chọn tiếp lần sau thì tự lấy và select tệp cũ
+ */
 $selectfile = '';
 $currentfile = $nv_Request->get_string('currentfile', 'get,post', '');
 if (!empty($currentfile)) {

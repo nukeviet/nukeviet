@@ -222,3 +222,5 @@ $lang_module['upload_drop'] = 'Drop files here to upload';
 $lang_module['files_selected'] = '%d files selected';
 $lang_module['toggle_folders'] = 'Show or hide folder tree';
 $lang_module['move_same_folder'] = 'The new folder to be selected must be different from the current folder';
+$lang_module['limit_max'] = 'Max';
+$lang_module['limit_min'] = 'Min';

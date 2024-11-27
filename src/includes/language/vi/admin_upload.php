@@ -223,3 +223,5 @@ $lang_module['upload_drop'] = 'Thả tệp vào đây để tải lên';
 $lang_module['files_selected'] = '%d tệp được chọn';
 $lang_module['toggle_folders'] = 'Ẩn hiện cây thư mục';
 $lang_module['move_same_folder'] = 'Thư mục mới cần chọn khác thư mục hiện tại';
+$lang_module['limit_max'] = 'Tối đa';
+$lang_module['limit_min'] = 'Tối thiểu';

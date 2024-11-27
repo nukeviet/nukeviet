@@ -28000,4 +28000,27 @@ p + .image-style-side {
 .fmd-addlogo-ipt {
   width: 3.75rem;
 }
+
+.fmd-imgcreate-img {
+  height: 0;
+  position: relative;
+  padding-bottom: 100%;
+}
+.fmd-imgcreate-img .inner {
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: var(--bs-secondary-bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.fmd-imgcreate-img .inner img {
+  -o-object-fit: contain;
+  object-fit: contain;
+  max-width: 100%;
+  max-height: 100%;
+}
 /*# sourceMappingURL=nv.style.rtl.css.map */

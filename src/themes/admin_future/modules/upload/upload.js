@@ -147,6 +147,14 @@ var nukeviet = nukeviet || {};
     htmlModalBackdrop = `<div class="fmm-backdrop fade"></div>`;
     htmlDialogBackdrop = `<div class="fmd-backdrop fade"></div>`;
     lang = {
+        errorMinX: `{$LANG->getModule('errorMinX')}`,
+        errorMaxX: `{$LANG->getModule('errorMaxX')}`,
+        errorMinY: `{$LANG->getModule('errorMinY')}`,
+        errorMaxY: `{$LANG->getModule('errorMaxY')}`,
+        errorEmptyY: `{$LANG->getModule('errorEmptyY')}`,
+        errorEmptyX: `{$LANG->getModule('errorEmptyX')}`,
+        limitMin: `{$LANG->getModule('limit_min')}`,
+        limitMax: `{$LANG->getModule('limit_max')}`,
         notlogo: `{$LANG->getModule('notlogo')}`,
         moveMultiple: `{$LANG->getModule('move_multiple')}`,
         delFolderConfirm: `{$LANG->getModule('delete_folder')}`,
@@ -227,6 +235,12 @@ var nukeviet = nukeviet || {};
                 sizeS: {$LOGO_SIZE_S},
                 sizeM: {$LOGO_SIZE_M},
                 sizeL: {$LOGO_SIZE_L}
+            },
+            image: {
+                minWidth: 10,
+                minHeight: 10,
+                maxWidth: {$MAX_WIDTH},
+                maxHeight: {$MAX_HEIGHT}
             }
         }
 
@@ -488,7 +502,9 @@ var nukeviet = nukeviet || {};
         self.handleDialogError();
 
         // Lấy cây thư mục và file
-        self.fetchAll();
+        self.fetchAll({
+            init: true
+        });
     }
 
     // Thiết lập trình upload
@@ -995,6 +1011,17 @@ var nukeviet = nukeviet || {};
             }
             self.showDialog('cropfile', file);
         });
+
+        // Tạo ảnh mới
+        self.menu.on('click', '[data-toggle="menu-file-imgcreate"]', function(e) {
+            e.preventDefault();
+            const file = self.getSelectedFile();
+            self.closeMenu();
+            if (file.length != 1) {
+                return;
+            }
+            self.showDialog('imgcreate', file);
+        });
     }
 
     // Sự kiện trên file
@@ -1149,6 +1176,37 @@ var nukeviet = nukeviet || {};
                     console.log(xhr, text, err);
                 }
             });
+        });
+
+        // Dialog tạo ảnh mới
+        self.fmd.on('keyup change', '[data-toggle="imgcreate-val"]', function() {
+            const dialog = $(this).closest('.fmd');
+            const file = $('[data-toggle="file"][data-uuid="' + dialog.data('uuid') + '"]', self.fms);
+            if (!file.length) {
+                return;
+            }
+            const ipt = $(this);
+            const val = parseInt(ipt.val());
+            const img = $('[data-toggle="image"]', dialog);
+
+            if (isNaN(val)) {
+                $('[name="width"]', dialog).val('');
+                $('[name="height"]', dialog).val('');
+                img.removeAttr('style');
+                return;
+            }
+
+            if (ipt.data('type') == 'w') {
+                // Nhập chiều rộng tính chiều cao
+                const size = self.calImageSize(file.data('width'), file.data('height'), val, null);
+                $('[name="height"]', dialog).val(size.height);
+                img.css({ width: (val + 'px') });
+            } else {
+                // Nhập chiều cao tính chiều rộng
+                const size = self.calImageSize(file.data('width'), file.data('height'), null, val);
+                $('[name="width"]', dialog).val(size.width);
+                img.css({ width: (size.width + 'px') });
+            }
         });
     }
 
@@ -1313,7 +1371,7 @@ var nukeviet = nukeviet || {};
             path: self.settings.path,
             currentpath: self.settings.currentpath,
             type: self.settings.type,
-            imgfile: self.settings.imgfile,
+            currentfile: '',
             type: $('[data-toggle="filter-type"]', self.fms).data('type'),
             author: $('[data-toggle="filter-author"]', self.fms).data('author'),
             order: $('[data-toggle="filter-order"]', self.fms).data('order'),
@@ -1327,8 +1385,13 @@ var nukeviet = nukeviet || {};
             // Lấy thư mục active trong cây thư mục nếu có
             pr.currentpath = activeDir.data('dir');
         }
-        if (!options.selected && pr.imgfile != '') {
-            options.selected = [pr.imgfile.split('/').pop()];
+        // Tự chọn tệp active từ imgfile
+        if (!options.selected && self.settings.imgfile != '' && options.init) {
+            options.selected = [self.settings.imgfile.split('/').pop()];
+        }
+        // Thiết lập tệp được chọn ở lần đầu
+        if (options.init) {
+            pr.currentfile = self.settings.imgfile;
         }
 
         // Reload lại cây thư mục và tệp tin
@@ -1933,6 +1996,29 @@ var nukeviet = nukeviet || {};
                 }
             });
         }
+
+        // Công cụ tạo ảnh mới
+        if (name == 'imgcreate') {
+            const file = extra;
+
+            dialog.data('uuid', file.data('uuid'));
+            $('[name="checkss"]', dialog).val($('body').data('checksess'));
+            $('[name="path"]', dialog).val(file.data('dir'));
+            $('[name="img"]', dialog).val(file.data('name'));
+
+            $('[data-toggle="name"]', dialog).text(file.data('name'));
+            $('[data-toggle="ogrisize"]', dialog).text(file.data('width') + ' x ' + file.data('height') + ' px');
+            const img = $('[data-toggle="image"]', dialog);
+            img.attr('alt', file.data('alt'));
+            img.attr('src', file.data('nocache-path'));
+
+            const limitMin = self.calImageSize(file.data('width'), file.data('height'), 1);
+            const limitMax = self.calImageSize(file.data('width'), file.data('height'), 999999);
+            $('[data-toggle="limitsize"]', dialog).text(self.lang.limitMax + ': ' + limitMax.width + ' x ' + limitMax.height + ', ' + self.lang.limitMin + ': ' + limitMin.width + ' x ' + limitMin.height + ' (pixels)');
+
+            $('[name="width"]', dialog).prop('min', limitMin.width).prop('max', limitMax.width);
+            $('[name="height"]', dialog).prop('min', limitMin.height).prop('max', limitMax.height);
+        }
     }
 
     // Xử lý sau khi Dialog được mở lên
@@ -1952,6 +2038,12 @@ var nukeviet = nukeviet || {};
         // Đổi tên file, tạo thư mục con
         if (name == 'renamefile' || name == 'createfolder' || name == 'renamefolder') {
             $('[name="newname"]', dialog).focus();
+            return;
+        }
+
+        // Tạo ảnh mới
+        if (name == 'imgcreate') {
+            $('[name="width"]', dialog).focus();
             return;
         }
     }
@@ -2025,6 +2117,14 @@ var nukeviet = nukeviet || {};
             img.cropper('destroy');
             img.attr('alt', '');
             img.attr('src', img.data('pix'));
+        }
+
+        // Tạo ảnh mới
+        if (dialog.data('dialog') == 'imgcreate') {
+            const img = $('[data-toggle="image"]', dialog);
+            img.attr('alt', '');
+            img.attr('src', img.data('pix'));
+            img.removeAttr('style');
         }
     }
 
@@ -2159,6 +2259,44 @@ var nukeviet = nukeviet || {};
             return;
         }
 
+        // Form công cụ ảnh, kiểm tra lỗi trước khi cho submit bình thường
+        if (dig.data('dialog') == 'imgcreate') {
+            const file = self.getSelectedFile();
+            if (file.length != 1) {
+                nvToast('No file selected!', 'error');
+                return;
+            }
+            const limitMin = self.calImageSize(file.data('width'), file.data('height'), 1);
+            const limitMax = self.calImageSize(file.data('width'), file.data('height'), 999999);
+            const width = parseInt($('[name="width"]', dig).val());
+            const height = parseInt($('[name="height"]', dig).val());
+
+            if (isNaN(width)) {
+                nvToast(self.lang.errorEmptyX, 'error');
+                return;
+            }
+            if (isNaN(height)) {
+                nvToast(self.lang.errorEmptyY, 'error');
+                return;
+            }
+            if (width < limitMin.width) {
+                nvToast(self.lang.errorMinX, 'error');
+                return;
+            }
+            if (height < limitMin.height) {
+                nvToast(self.lang.errorMinY, 'error');
+                return;
+            }
+            if (width > limitMax.width) {
+                nvToast(self.lang.errorMaxX, 'error');
+                return;
+            }
+            if (height > limitMax.height) {
+                nvToast(self.lang.errorMaxY, 'error');
+                return;
+            }
+        }
+
         // Các form ajax chung
         if ($(form).data('mode') == 'ajform') {
             if ($('.is-invalid:visible', $(form)).length > 0) {
@@ -2244,8 +2382,8 @@ var nukeviet = nukeviet || {};
                             return;
                         }
 
-                        // Cắt ảnh thì về trang đầu
-                        if (dig.data('dialog') == 'cropfile') {
+                        // Cắt ảnh, thêm logo, tạo ảnh mới thì về trang đầu
+                        if (dig.data('dialog') == 'addlogo' || dig.data('dialog') == 'cropfile' || dig.data('dialog') == 'imgcreate') {
                             self.resetFilter();
                             self.page = 1;
                             self.fetchFile({
@@ -3201,6 +3339,53 @@ var nukeviet = nukeviet || {};
     // Thiết lập option động
     setOption(name, value) {
         this.settings[name] = value;
+    }
+
+    // Tính toán kích thước của ảnh
+    calImageSize(imageWidth, imageHeight, displayWidth = null, displayHeight = null) {
+        const { minWidth, minHeight, maxWidth, maxHeight } = this.constant.image;
+
+        // Tính tỉ lệ gốc của ảnh
+        const aspectRatio = imageWidth / imageHeight;
+
+        let calculatedWidth, calculatedHeight;
+
+        // Xử lý khi truyền vào displayWidth hoặc displayHeight
+        if (displayWidth !== null) {
+            calculatedWidth = displayWidth;
+            calculatedHeight = calculatedWidth / aspectRatio;
+        } else if (displayHeight !== null) {
+            calculatedHeight = displayHeight;
+            calculatedWidth = calculatedHeight * aspectRatio;
+        } else {
+            calculatedWidth = imageWidth;
+            calculatedHeight = imageHeight;
+        }
+
+        // Đảm bảo kích thước không vượt quá max
+        if (calculatedWidth > maxWidth) {
+            calculatedWidth = maxWidth;
+            calculatedHeight = calculatedWidth / aspectRatio;
+        }
+        if (calculatedHeight > maxHeight) {
+            calculatedHeight = maxHeight;
+            calculatedWidth = calculatedHeight * aspectRatio;
+        }
+
+        // Đảm bảo kích thước không nhỏ hơn min
+        if (calculatedWidth < minWidth) {
+            calculatedWidth = minWidth;
+            calculatedHeight = calculatedWidth / aspectRatio;
+        }
+        if (calculatedHeight < minHeight) {
+            calculatedHeight = minHeight;
+            calculatedWidth = calculatedHeight * aspectRatio;
+        }
+
+        return {
+            width: Math.round(calculatedWidth),
+            height: Math.round(calculatedHeight),
+        };
     }
 });
 

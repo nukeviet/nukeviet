@@ -388,7 +388,7 @@
     </div>
 </div>
 {* Dialog cắt ảnh *}
-<div class="fmd fade" data-dialog="cropfile" id="[prefix]-addlogo" tabindex="-1" aria-labelledby="[prefix]-cropfile-label" aria-hidden="true">
+<div class="fmd fade" data-dialog="cropfile" id="[prefix]-cropfile" tabindex="-1" aria-labelledby="[prefix]-cropfile-label" aria-hidden="true">
     <div class="fmd-dialog">
         <div class="fmd-content">
             <div class="fmd-header">
@@ -421,6 +421,44 @@
                         <button type="button" class="btn btn-secondary" data-dismiss="fmd"><i class="fa-solid fa-xmark text-danger"></i> {$LANG->getGlobal('cancel')}</button>
                     </div>
                     <input type="hidden" name="file" value="" class="dialog-val">
+                    <input type="hidden" name="path" value="" class="dialog-val">
+                    <input type="hidden" name="checkss" value="" class="dialog-val">
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{* Dialog công cụ ảnh *}
+<div class="fmd fade" data-dialog="imgcreate" id="[prefix]-imgcreate" tabindex="-1" aria-labelledby="[prefix]-imgcreate-label" aria-hidden="true">
+    <div class="fmd-dialog">
+        <div class="fmd-content">
+            <div class="fmd-header">
+                <div class="fmd-title text-truncate fs-5 fw-medium" id="[prefix]-imgcreate-label">{$LANG->getModule('upload_createimage')}</div>
+                <button type="button" class="btn-close" data-dismiss="fmd" aria-label="{$LANG->getGlobal('close')}"></button>
+            </div>
+            <div class="fmd-body">
+                <form method="post" data-mode="ajform" action="{$smarty.const.NV_BASE_ADMINURL}index.php?{$smarty.const.NV_LANG_VARIABLE}={$smarty.const.NV_LANG_DATA}&amp;{$smarty.const.NV_NAME_VARIABLE}={$MODULE_NAME}&amp;{$smarty.const.NV_OP_VARIABLE}=createimg" novalidate>
+                    <div class="text-center mb-1 fw-medium text-break fs-5 dialog-text" data-toggle="name"></div>
+                    <div class="text-center mb-2">{$LANG->getModule('origSize')}: <span class="dialog-text" data-toggle="ogrisize"></span></div>
+                    <div class="mb-3 px-2">
+                        <div class="fmd-imgcreate-img">
+                            <div class="inner">
+                                <img data-toggle="image" src="{$smarty.const.ASSETS_STATIC_URL}/images/pix.gif" data-pix="{$smarty.const.ASSETS_STATIC_URL}/images/pix.gif" alt="">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mb-2 hstack align-items-center justify-content-center gap-2 flex-wrap">
+                        <span>{$LANG->getModule('upload_width')}</span><input type="number" name="width" data-toggle="imgcreate-val" data-type="w" value="" class="form-control dialog-val fw-75" autocomplete="off">
+                        <span>{$LANG->getModule('upload_height')}</span><input type="number" name="height" data-toggle="imgcreate-val" data-type="h" value="" class="form-control dialog-val fw-75" autocomplete="off">
+                    </div>
+                    <div class="mb-2 text-center">
+                        <div class="form-text dialog-text" data-toggle="limitsize"></div>
+                    </div>
+                    <div class="hstack justify-content-end gap-2 border-top pt-3">
+                        <button type="submit" class="btn btn-primary"><i class="fa-solid fa-floppy-disk"></i> {$LANG->getGlobal('submit')}</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="fmd"><i class="fa-solid fa-xmark text-danger"></i> {$LANG->getGlobal('cancel')}</button>
+                    </div>
+                    <input type="hidden" name="img" value="" class="dialog-val">
                     <input type="hidden" name="path" value="" class="dialog-val">
                     <input type="hidden" name="checkss" value="" class="dialog-val">
                 </form>

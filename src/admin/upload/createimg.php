@@ -13,11 +13,21 @@ if (!defined('NV_IS_FILE_ADMIN')) {
     exit('Stop!!!');
 }
 
+if ($nv_Request->get_title('checkss', 'post', '') !== NV_CHECK_SESSION) {
+    nv_jsonOutput([
+        'status' => 'error',
+        'mess' => 'Error session!!!'
+    ]);
+}
+
 $path = nv_check_path_upload($nv_Request->get_string('path', 'post'));
 $check_allow_upload_dir = nv_check_allow_upload_dir($path);
 
 if (!isset($check_allow_upload_dir['create_file'])) {
-    exit('ERROR_' . $nv_Lang->getModule('notlevel'));
+    nv_jsonOutput([
+        'status' => 'error',
+        'mess' => $nv_Lang->getModule('notlevel')
+    ]);
 }
 
 $width = $nv_Request->get_int('width', 'post');
@@ -69,6 +79,7 @@ if (isset($array_dirname[$path])) {
 }
 
 nv_insert_logs(NV_LANG_DATA, $module_name, $nv_Lang->getModule('upload_createimage'), $path . '/' . $file, $admin_info['userid']);
-
-echo $file;
-exit();
+nv_jsonOutput([
+    'status' => 'OK',
+    'name' => $file
+]);
