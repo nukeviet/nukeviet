@@ -844,11 +844,11 @@ $(function() {
             loadPicker();
         }
         // Xử lý trong trường hợp uploader chưa được tải sẵn (các DOM động)
-        if (!window.nvUploadReady) {
+        if (!window.nvPickerReady) {
             // Chỉ register event 1 lần duy nhất chờ do picker được tải và tự show
             if (!btn.data('init-picker')) {
                 btn.data('init-picker', true);
-                document.addEventListener('nv.upload.ready', () => {
+                document.addEventListener('nv.picker.ready', () => {
                     showPicker(btn);
                 });
             }

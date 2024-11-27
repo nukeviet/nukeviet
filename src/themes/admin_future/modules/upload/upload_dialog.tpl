@@ -272,7 +272,7 @@
                     </div>
                     <div class="mb-3">
                         <label for="[prefix]-move-newpath" class="form-label">{$LANG->getModule('movefolder')} <span class="text-danger">(*)</span>:</label>
-                        <select class="form-select dialog-html" name="newpath" id="[prefix]-move-newpath"></select>
+                        <select class="form-select dialog-html" data-toggle="select2" name="newpath" id="[prefix]-move-newpath"></select>
                         <div class="invalid-feedback">{$LANG->getGlobal('required_invalid')}</div>
                     </div>
                     <div class="form-check">

@@ -8,7 +8,7 @@
 (() => {
     const loadApp = () => {
         let cssNum = 0, jsNum = 0, ready = false;
-        let amountCss = 3, amountJs = 9;
+        let amountCss = 2, amountJs = 7;
 
         // Extra{* Vui lòng giữ đúng cấu trúc này để render ra đúng
         /**}
@@ -20,14 +20,6 @@
         {**/
         //*}
 
-        // Tải jquery UI
-        if (typeof $.ui == "undefined") {
-            loadScript(nv_base_siteurl + "assets/js/jquery-ui/jquery-ui.min.js");
-            loadCSS(nv_base_siteurl + "assets/js/jquery-ui/jquery-ui.min.css");
-        } else {
-            jsNum++;
-            cssNum++;
-        }
         // Tải Jquery Cropper
         if (typeof $.fn.cropper == "undefined") {
             loadScript(nv_base_siteurl + "assets/js/cropper/cropper.min.js");
@@ -35,12 +27,6 @@
         } else {
             jsNum++;
             cssNum++;
-        }
-        // Tải Jquery Rotate
-        if (typeof $.fn.rotate == "undefined") {
-            loadScript(nv_base_siteurl + "assets/js/jquery/jQueryRotate.js");
-        } else {
-            jsNum++;
         }
         // Tải Jquery clipboard
         if (typeof ClipboardJS == "undefined") {
@@ -71,17 +57,17 @@
 
         // Xuất ra event sẵn sàng (chỉ chạy 1 lần duy nhất)
         function fireReady() {
-            if (cssNum < amountCss || jsNum < amountJs || ready || window.nvUploadReady) {
+            if (cssNum < amountCss || jsNum < amountJs || ready || window.nvPickerReady) {
                 return;
             }
             ready = true;
             // Event cho js thuần
-            document.dispatchEvent(new Event('nv.upload.ready'));
+            document.dispatchEvent(new Event('nv.picker.ready'));
 
             // Event cho Jquery
-            $(document).trigger("nv.upload.ready");
+            $(document).trigger('nv.picker.ready');
 
-            window.nvUploadReady = true;
+            window.nvPickerReady = true;
         }
 
         // Hàm tải JS
