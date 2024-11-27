@@ -2,7 +2,7 @@
     position: fixed;
     top: 0;
     left: 0;
-    z-index: calc($zindex-modal + 1);
+    z-index: calc($zindex-fmd + 1);
     width: 100vw;
     height: 100vh;
     background-color: $modal-backdrop-bg;
@@ -14,6 +14,6 @@
 
 .alert-box {
     &.modal {
-        --bs-modal-zindex: #{calc($zindex-modal + 2)};
+        --bs-modal-zindex: #{calc($zindex-fmd + 2)};
     }
 }

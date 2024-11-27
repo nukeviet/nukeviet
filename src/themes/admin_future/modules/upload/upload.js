@@ -223,6 +223,7 @@ var nukeviet = nukeviet || {};
         this.htmlContainer = this.htmlContainer.replace(/\[prefix\]/g, this.fmsId);
 
         this.up = null;
+        this.isFocused = false;
 
         this.constant = {
             logo: '{$UPLOAD_LOGO}',
@@ -268,6 +269,10 @@ var nukeviet = nukeviet || {};
 
             self.menu = $(self.menuTpl);
             $('body').append(self.menu);
+
+            if ($('.fms-ctn', $('body')).length == 1) {
+                self.isFocused = true;
+            }
 
             self.initContainer();
             return;
@@ -480,6 +485,7 @@ var nukeviet = nukeviet || {};
         document.addEventListener('mouseup', self.handleDocTapEnd);
         document.addEventListener('touchend', self.handleDocTapEnd);
         document.addEventListener('touchcancel', self.handleDocTapEnd);
+        document.addEventListener('keydown', self.handleDocKeydown);
 
         // Xử lý sự kiện liên quan tệp tin
         self.initFileEvents();
@@ -1339,6 +1345,7 @@ var nukeviet = nukeviet || {};
     // Đóng trình quản lý tệp tin dạng popup
     hideModal() {
         const self = this;
+        self.isFocused = false;
 
         if (self.fmm) {
             self.fmm.removeClass('show');
@@ -1355,6 +1362,7 @@ var nukeviet = nukeviet || {};
             document.removeEventListener('mouseup', self.handleDocTapEnd);
             document.removeEventListener('touchend', self.handleDocTapEnd);
             document.removeEventListener('touchcancel', self.handleDocTapEnd);
+            document.removeEventListener('keydown', self.handleDocKeydown);
 
             setTimeout(() => {
                 self.fmm.remove();
@@ -1395,6 +1403,7 @@ var nukeviet = nukeviet || {};
     // Mở modal lên để chuẩn bị xây dựng trình quản lý tệp tin
     showModal() {
         const self = this;
+        self.isFocused = true;
 
         // Tạo HTML cho modal và lắng nghe các sự kiện
         self.fmm = $(self.htmlModal);
@@ -3123,6 +3132,81 @@ var nukeviet = nukeviet || {};
                 }
             });
         }
+    }
+
+    // Xử lý sự kiện bàn phím trên document
+    handleDocKeydown = (event) => {
+        const self = this;
+        this.debug && console.log('document ' + event.type, event);
+
+        let preventEvent = false;
+        const isMobile = self.isMobile();
+        const menuIsOpen = self.menu.is(':visible');
+        const dialogIsOpen = $('body').is('.fmd-open');
+        const alertIsOpen = $('body').is('.alert-open');
+        const treeIsOpen = (isMobile && $('[data-toggle="trees"]', self.fms).is('.show'));
+
+        if (self.isFocused) {
+            if (!menuIsOpen && !dialogIsOpen && !alertIsOpen && !treeIsOpen) {
+                if (event.keyCode == 65 && event.ctrlKey) {
+                    // Chọn hết các file
+                    preventEvent = true;
+
+                    $('[data-toggle="file"]:not(.selected)', self.fms).each(function() {
+                        self.setSelectedFile($(this), true);
+                    });
+                } else if (event.keyCode == 46) {
+                    // Xóa
+                    const files = self.getSelectedFile();
+                    if (files.length > 0) {
+                        const cMess = files.length > 1 ? self.lang.delImgsConfirm.replace('%s', files.length) : (self.lang.delImgConfirm + ' <strong class="text-break">' + files.data('name') + '<strong>');
+                        nvConfirm({
+                            html: true,
+                            message: cMess
+                        }, () => {
+                            let fss = [];
+                            files.each(function() {
+                                fss.push($(this).data('dir-path'));
+                            });
+                            fss = fss.join('|');
+                            $.ajax({
+                                type: 'POST',
+                                url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=upload&' + nv_fc_variable + '=delimg&nocache=' + new Date().getTime(),
+                                data: {
+                                    files: fss,
+                                    checkss: $('body').data('checksess')
+                                },
+                                dataType: 'json',
+                                cache: false,
+                                success: function(res) {
+                                    if (res.status == 'error') {
+                                        nvToast(res.mess, 'error');
+                                        return;
+                                    }
+                                    self.fetchFile();
+                                },
+                                error: function(xhr, text, err) {
+                                    nvToast(err, 'error');
+                                    console.log(xhr, text, err);
+                                }
+                            });
+                        });
+                    }
+                } else if (event.keyCode == 27) {
+                    // Hủy chọn
+                    const files = self.getSelectedFile();
+                    if (files.length > 0) {
+                        self.clearSelectedFile();
+                    }
+                }
+            }
+
+            if (menuIsOpen && !dialogIsOpen && !alertIsOpen && !treeIsOpen) {
+                self.closeMenu();
+            }
+        }
+
+        preventEvent && event.preventDefault();
     }
 
     // Tìm tọa độ con trỏ chuột trong document
