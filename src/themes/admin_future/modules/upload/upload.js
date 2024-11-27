@@ -249,6 +249,7 @@ var nukeviet = nukeviet || {};
         this.selectionBox = null;
         this.selectionStartX = null;
         this.selectionStartY = null;
+        this.intervalRotate = null;
 
         this.debug = {$DEBUG};
         this.init();
@@ -1022,6 +1023,17 @@ var nukeviet = nukeviet || {};
             }
             self.showDialog('imgcreate', file);
         });
+
+        // Xoay ảnh
+        self.menu.on('click', '[data-toggle="menu-file-rotatefile"]', function(e) {
+            e.preventDefault();
+            const file = self.getSelectedFile();
+            self.closeMenu();
+            if (file.length != 1) {
+                return;
+            }
+            self.showDialog('rotatefile', file);
+        });
     }
 
     // Sự kiện trên file
@@ -1207,6 +1219,45 @@ var nukeviet = nukeviet || {};
                 $('[name="width"]', dialog).val(size.width);
                 img.css({ width: (size.width + 'px') });
             }
+        });
+
+        // Dialog xoay ảnh
+        self.fmd.on('keyup change', '[data-toggle="rotatefile-direction"]', function() {
+            const dialog = $(this).closest('.fmd');
+            const file = $('[data-toggle="file"][data-uuid="' + dialog.data('uuid') + '"]', self.fms);
+            if (!file.length) {
+                return;
+            }
+            const ipt = $(this);
+            let val = parseInt(ipt.val());
+            if (isNaN(val) || val < 0 || val > 359) {
+                val = 0;
+                ipt.val(val);
+            }
+            const img = $('[data-toggle="image"]', dialog);
+            img.css({
+                transform: ('rotate(' + val + 'deg)')
+            });
+        });
+        self.fmd.on('click', '[data-toggle="rotatefile-btn90"]', function() {
+            const dialog = $(this).closest('.fmd');
+            const file = $('[data-toggle="file"][data-uuid="' + dialog.data('uuid') + '"]', self.fms);
+            if (!file.length) {
+                return;
+            }
+            const btn = $(this);
+            const ipt = $('[name="direction"]', dialog);
+            let val = parseInt(ipt.val());
+            if (isNaN(val) || val < 0 || val > 359) {
+                val = 0;
+            }
+
+            val = self.roundToDirection(val, btn.data('type'));
+            ipt.val(val);
+            const img = $('[data-toggle="image"]', dialog);
+            img.css({
+                transform: ('rotate(' + val + 'deg)')
+            });
         });
     }
 
@@ -2019,6 +2070,25 @@ var nukeviet = nukeviet || {};
             $('[name="width"]', dialog).prop('min', limitMin.width).prop('max', limitMax.width);
             $('[name="height"]', dialog).prop('min', limitMin.height).prop('max', limitMax.height);
         }
+
+        // Xoay ảnh
+        if (name == 'rotatefile') {
+            const file = extra;
+
+            dialog.data('uuid', file.data('uuid'));
+            $('[name="checkss"]', dialog).val($('body').data('checksess'));
+            $('[name="path"]', dialog).val(file.data('dir'));
+            $('[name="file"]', dialog).val(file.data('name'));
+
+            const size = self.calScaledSize(file.data('width'), file.data('height'), $('[data-toggle="display"]', dialog).innerWidth());
+            const img = $('[data-toggle="image"]', dialog);
+            img.attr('alt', file.data('alt'));
+            img.attr('src', file.data('nocache-path'));
+            img.css({
+                width: (size.displayWidth + 'px'),
+                height: (size.displayHeight + 'px')
+            });
+        }
     }
 
     // Xử lý sau khi Dialog được mở lên
@@ -2054,6 +2124,7 @@ var nukeviet = nukeviet || {};
         $('.is-invalid', dialog).removeClass('is-invalid');
         $('.dialog-text', dialog).text('');
         $('.dialog-val', dialog).val('');
+        $('.dialog-zero-val', dialog).val('0');
         $('.dialog-html', dialog).html('');
         $('.dialog-select', dialog).find('option').prop('selected', false);
 
@@ -2119,8 +2190,8 @@ var nukeviet = nukeviet || {};
             img.attr('src', img.data('pix'));
         }
 
-        // Tạo ảnh mới
-        if (dialog.data('dialog') == 'imgcreate') {
+        // Tạo ảnh mới, xoay ảnh
+        if (dialog.data('dialog') == 'imgcreate' || dialog.data('dialog') == 'rotatefile') {
             const img = $('[data-toggle="image"]', dialog);
             img.attr('alt', '');
             img.attr('src', img.data('pix'));
@@ -2382,8 +2453,8 @@ var nukeviet = nukeviet || {};
                             return;
                         }
 
-                        // Cắt ảnh, thêm logo, tạo ảnh mới thì về trang đầu
-                        if (dig.data('dialog') == 'addlogo' || dig.data('dialog') == 'cropfile' || dig.data('dialog') == 'imgcreate') {
+                        // Cắt ảnh, thêm logo, tạo ảnh mới, xoay ảnh thì về trang đầu
+                        if (dig.data('dialog') == 'rotatefile' || dig.data('dialog') == 'addlogo' || dig.data('dialog') == 'cropfile' || dig.data('dialog') == 'imgcreate') {
                             self.resetFilter();
                             self.page = 1;
                             self.fetchFile({
@@ -2885,6 +2956,16 @@ var nukeviet = nukeviet || {};
             self.initSelectAble = true;
             ctnSelect.addClass('disabled-select');
         }
+
+        if (dialogIsOpen) {
+            const dialog = self.fmd.filter($('.fmd:visible:first'));
+            const btn = $(event.target);
+            if (dialog.length == 1 && dialog.data('dialog') == 'rotatefile' && btn.is('[data-toggle="rotatefile-btn"]')) {
+                self.intervalRotate = setInterval(() => {
+                    self.runIntervalRotate(btn, dialog);
+                }, 20);
+            }
+        }
     }
     handleDocTapEnd = (event) => {
         const input = this.detectInputSupport();
@@ -2903,6 +2984,10 @@ var nukeviet = nukeviet || {};
         }
         self.selectionStartX = null;
         self.selectionStartY = null;
+        if (self.intervalRotate) {
+            clearInterval(self.intervalRotate);
+            self.intervalRotate = null;
+        }
     }
     handleDocTapMove = (event) => {
         const input = this.detectInputSupport();
@@ -3386,6 +3471,87 @@ var nukeviet = nukeviet || {};
             width: Math.round(calculatedWidth),
             height: Math.round(calculatedHeight),
         };
+    }
+
+    // Tính toán kích thước ảnh sao cho đường chéo của nó không vượt container
+    calScaledSize(width, height, containerWidth) {
+        // Tính đường chéo của ảnh gốc
+        const diagonal = Math.sqrt(width ** 2 + height ** 2);
+
+        // Nếu đường chéo đã nhỏ hơn hoặc bằng containerWidth, không cần co
+        if (diagonal <= containerWidth) {
+            return { displayWidth: width, displayHeight: height };
+        }
+
+        // Tính tỉ lệ co
+        const scale = containerWidth / diagonal;
+
+        // Tính kích thước mới
+        const displayWidth = width * scale;
+        const displayHeight = height * scale;
+
+        return {
+            displayWidth: Math.round(displayWidth),
+            displayHeight: Math.round(displayHeight),
+        };
+    }
+
+    // Tính toán xoay ảnh góc 90 độ
+    roundToDirection(value, direction) {
+        const angles = [0, 90, 180, 270];
+
+        // Nếu giá trị hiện tại khớp với một trong các giá trị trong mảng
+        let exactIndex = angles.indexOf(value);
+        if (exactIndex !== -1) {
+            if (direction === "r") {
+                return angles[(exactIndex + 1) % angles.length]; // Lấy giá trị tiếp theo (theo vòng)
+            } else if (direction === "l") {
+                return angles[(exactIndex - 1 + angles.length) % angles.length]; // Lấy giá trị trước đó (theo vòng)
+            }
+        }
+
+        // Nếu không khớp, xử lý giá trị gần nhất
+        if (direction === "l") {
+            for (let i = angles.length - 1; i >= 0; i--) {
+                if (value > angles[i]) {
+                    return angles[i];
+                }
+            }
+            return angles[angles.length - 1]; // Nếu nhỏ hơn góc nhỏ nhất, quay về 270
+        } else if (direction === "r") {
+            for (let i = 0; i < angles.length; i++) {
+                if (value < angles[i]) {
+                    return angles[i];
+                }
+            }
+            return angles[0]; // Nếu lớn hơn góc lớn nhất, quay về 0
+        }
+
+        return null; // Trường hợp không hợp lệ
+    }
+
+    // Xoay ảnh liên tục
+    runIntervalRotate(btn, dialog) {
+        const ipt = $('[name="direction"]', dialog);
+        let val = parseInt(ipt.val());
+        const img = $('[data-toggle="image"]', dialog);
+        if (isNaN(val)) {
+            val = 0;
+        }
+        if (btn.data('type') == 'r') {
+            val++;
+        } else {
+            val--;
+        }
+        if (val < 0) {
+            val = 359;
+        } else if (val > 359) {
+            val = 0;
+        }
+        ipt.val(val);
+        img.css({
+            transform: ('rotate(' + val + 'deg)')
+        });
     }
 });
 

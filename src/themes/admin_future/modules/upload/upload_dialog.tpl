@@ -466,3 +466,40 @@
         </div>
     </div>
 </div>
+{* Dialog xoay ảnh *}
+<div class="fmd fade" data-dialog="rotatefile" id="[prefix]-rotatefile" tabindex="-1" aria-labelledby="[prefix]-rotatefile-label" aria-hidden="true">
+    <div class="fmd-dialog">
+        <div class="fmd-content">
+            <div class="fmd-header">
+                <div class="fmd-title text-truncate fs-5 fw-medium" id="[prefix]-rotatefile-label">{$LANG->getModule('rotate')}</div>
+                <button type="button" class="btn-close" data-dismiss="fmd" aria-label="{$LANG->getGlobal('close')}"></button>
+            </div>
+            <div class="fmd-body">
+                <form method="post" data-mode="ajform" action="{$smarty.const.NV_BASE_ADMINURL}index.php?{$smarty.const.NV_LANG_VARIABLE}={$smarty.const.NV_LANG_DATA}&amp;{$smarty.const.NV_NAME_VARIABLE}={$MODULE_NAME}&amp;{$smarty.const.NV_OP_VARIABLE}=rotateimg" novalidate>
+                    <div class="text-center mb-1 fw-medium text-break fs-5 dialog-text" data-toggle="name"></div>
+                    <div class="mb-2 px-2">
+                        <div class="fmd-imgcreate-img">
+                            <div class="inner" data-toggle="display">
+                                <img data-toggle="image" src="{$smarty.const.ASSETS_STATIC_URL}/images/pix.gif" data-pix="{$smarty.const.ASSETS_STATIC_URL}/images/pix.gif" alt="">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mb-2 hstack align-items-center justify-content-center gap-2 flex-wrap">
+                        <input type="number" min="0" max="359" name="direction" value="0" data-toggle="rotatefile-direction" class="form-control dialog-zero-val fw-75" aria-label="{$LANG->getModule('rotate_direction')}">
+                        <button type="button" class="btn btn-secondary" data-toggle="rotatefile-btn90" data-type="l" aria-label="{$LANG->getModule('rotate_left90')}"><i class="fa-solid fa-rotate-left"></i> 90</button>
+                        <button type="button" class="btn btn-secondary" data-toggle="rotatefile-btn" data-type="l" aria-label="{$LANG->getModule('rotate_left')}"><i class="fa-solid fa-rotate-left pe-none"></i></button>
+                        <button type="button" class="btn btn-secondary" data-toggle="rotatefile-btn" data-type="r" aria-label="{$LANG->getModule('rotate_right')}"><i class="fa-solid fa-rotate-right pe-none"></i></button>
+                        <button type="button" class="btn btn-secondary" data-toggle="rotatefile-btn90" data-type="r" aria-label="{$LANG->getModule('rotate_right90')}"><i class="fa-solid fa-rotate-right"></i> 90</button>
+                    </div>
+                    <div class="hstack justify-content-end gap-2 border-top pt-3">
+                        <button type="submit" class="btn btn-primary"><i class="fa-solid fa-floppy-disk"></i> {$LANG->getGlobal('submit')}</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="fmd"><i class="fa-solid fa-xmark text-danger"></i> {$LANG->getGlobal('cancel')}</button>
+                    </div>
+                    <input type="hidden" name="file" value="" class="dialog-val">
+                    <input type="hidden" name="path" value="" class="dialog-val">
+                    <input type="hidden" name="checkss" value="" class="dialog-val">
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
