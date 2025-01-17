@@ -193,4 +193,19 @@ $(function() {
             }
         );
     });
+
+    // In code
+    $('[data-toggle="print-codes"]').on('click', function(e) {
+        e.preventDefault();
+        nv_open_browse($(this).attr('href'), 'printcodes', 800, 600);
+    });
+
+    // Copy code
+    const cBtn = $('[data-toggle="copy-codes"]');
+    if (cBtn.length) {
+        var clipboard = new ClipboardJS(cBtn[0]);
+        clipboard.on('success', function () {
+            $('span', cBtn).text(cBtn.data('copied'));
+        });
+    }
 });

@@ -7,6 +7,9 @@
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
+'use strict';
+
+var nukeviet = nukeviet || {};
 var nv_base_siteurl, nv_assets_dir, nv_lang_data, nv_lang_interface, nv_name_variable, nv_fc_variable, nv_lang_variable, nv_module_name, nv_func_name, nv_is_user, nv_area_admin, nv_my_ofs, nv_my_dst, nv_my_abbr, nv_cookie_prefix, nv_check_pass_mstime, theme_responsive, nv_safemode;
 var OP = -1 != navigator.userAgent.indexOf("Opera"),
     IE = -1 != navigator.userAgent.indexOf("MSIE") && !OP,
@@ -96,7 +99,7 @@ function nv_getCookie(name) {
 }
 
 function nv_check_timezone() {
-    var domainName = document.domain,
+    var domainName = location.hostname,
         cookieName = nv_cookie_prefix + '_cltz',
         currentTime = new Date(),
         summerTime = new Date(Date.UTC(2005, 6, 30, 0, 0, 0, 0)),
@@ -333,26 +336,6 @@ function nv_DigitalClock(div_id) {
     }
 }
 
-function nv_show_hidden(div_id, st) {
-    var divid = document.getElementById(div_id);
-    if (st == 2) {
-        if (divid.style.visibility == 'hidden' || divid.style.display == 'none') {
-            divid.style.visibility = 'visible';
-            divid.style.display = 'block';
-        } else {
-            divid.style.visibility = 'hidden';
-            divid.style.display = 'none';
-        }
-    } else if (st == 1) {
-        divid.style.visibility = 'visible';
-        divid.style.display = 'block';
-    } else {
-        divid.style.visibility = 'hidden';
-        divid.style.display = 'none';
-    }
-    return;
-}
-
 function nv_checkAll(oForm, cbName, caName, check_value) {
     if (typeof oForm == 'undefined' || typeof oForm[cbName] == 'undefined') {
         return false;
@@ -468,4 +451,36 @@ function nv_setIframeHeight(iframeId) {
     }
 }
 
+/**
+ * @param {string} base64url - The Base64 URL encoded string to convert.
+ * @returns {ArrayBuffer} The resulting ArrayBuffer.
+ */
+function base64UrlToArrayBuffer(base64url) {
+    const base64 = base64url.replace(/-/g, '+').replace(/_/g, '/');
+    const padding = base64.length % 4;
+    if (padding) {
+        base64.padEnd(base64.length + (4 - padding), '=');
+    }
+    const binaryString = atob(base64);
+    const buffer = new ArrayBuffer(binaryString.length);
+    const view = new Uint8Array(buffer);
+    for (let i = 0; i < binaryString.length; i++) {
+        view[i] = binaryString.charCodeAt(i);
+    }
+    return buffer;
+}
+
+/**
+ * @param {ArrayBuffer} buffer - The ArrayBuffer to be converted.
+ * @returns {string} The Base64 URL-safe encoded string.
+ */
+function arrayBufferToBase64Url(buffer) {
+    return btoa(String.fromCharCode.apply(null, new Uint8Array(buffer)))
+        .replace(/\+/g, "-")
+        .replace(/\//g, "_")
+        .replace(/=+$/, ""); // Loại bỏ padding
+}
+
 nv_check_timezone();
+
+nukeviet.WebAuthnSupported = 'PublicKeyCredential' in window && 'credentials' in navigator && 'create' in navigator.credentials && 'get' in navigator.credentials;

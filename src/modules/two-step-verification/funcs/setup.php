@@ -13,13 +13,12 @@ if (!defined('NV_MOD_2STEP_VERIFICATION')) {
     exit('Stop!!!');
 }
 
-if (!empty($user_info['active2step'])) {
-    nv_redirect_location(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
-}
-
 $page_title = $module_info['site_title'];
 $key_words = $module_info['keywords'];
 $page_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op;
+if (!empty($array_op[1]) and $array_op[1] == 'complete') {
+    $page_url .= '/' . $array_op[1];
+}
 
 $nv_redirect = '';
 if ($nv_Request->isset_request('nv_redirect', 'post,get')) {
@@ -37,6 +36,7 @@ if ($nv_Request->isset_request('nv_redirect', 'post,get')) {
 if (defined('SSO_CLIENT_DOMAIN')) {
     $sso_client = $nv_Request->get_title('client', 'get', '');
     if (!empty($sso_client)) {
+        /** @disregard P1011 */
         $allowed_client_origin = explode(',', SSO_CLIENT_DOMAIN);
         if (!in_array($sso_client, $allowed_client_origin, true)) {
             // 406 Not Acceptable
@@ -46,34 +46,59 @@ if (defined('SSO_CLIENT_DOMAIN')) {
     }
 }
 
-/**
- * @param mixed $array
- */
-function nv_json_result($array)
-{
-    global $nv_redirect, $nv_Request, $module_data;
+// Trang thông báo kết quả
+if (!empty($array_op[1]) and $array_op[1] == 'complete') {
+    $csrf = $nv_Request->get_title($module_data . '_setsuccess', 'session', '');
+    if (empty($user_info['active2step']) or empty($csrf) or !csrf_check($csrf, $module_data . '_setsuccess')) {
+        nv_redirect_location(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
+    }
+
+    $sql = 'SELECT * FROM ' . $db_config['prefix'] . '_' . $site_mods[NV_BRIDGE_USER_MODULE]['module_data'] . '_backupcodes WHERE userid=' . $user_info['userid'];
+    $backupcodes = $db->query($sql)->fetchAll();
+
+    $array_data = [];
+    $array_data['print_url'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=print';
+    $array_data['download_url'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;downloadcode=' . md5('downloadcode' . NV_CHECK_SESSION);
+    $array_data['text_codes'] = [];
+    foreach ($backupcodes as $code) {
+        $array_data['text_codes'][] = $code['code'];
+    }
+    $array_data['text_codes'] = implode("\n", $array_data['text_codes']);
+    $array_data['redirect'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name;
 
     if (!empty($nv_redirect)) {
-        $array['redirect'] = nv_redirect_decrypt($nv_redirect);
+        $array_data['redirect'] = nv_redirect_decrypt($nv_redirect);
     }
 
     if (defined('SSO_REGISTER_SECRET')) {
         $sso_client = $nv_Request->get_title('sso_client_' . $module_data, 'session', '');
         $sso_redirect = $nv_Request->get_title('sso_redirect_' . $module_data, 'session', '');
+        /** @disregard P1011 */
         $iv = substr(SSO_REGISTER_SECRET, 0, 16);
         $sso_redirect = strtr($sso_redirect, '-_,', '+/=');
+        /** @disregard P1011 */
         $sso_redirect = openssl_decrypt($sso_redirect, 'aes-256-cbc', SSO_REGISTER_SECRET, 0, $iv);
 
         if (!empty($sso_redirect) and !empty($sso_client) and str_starts_with($sso_redirect, $sso_client)) {
-            $array['redirect'] = $sso_redirect;
-            $array['client'] = $sso_client;
+            $array_data['redirect'] = $sso_redirect;
+            $array_data['redirect'] = $sso_client;
         }
 
         $nv_Request->unset_request('sso_client_' . $module_data, 'session');
         $nv_Request->unset_request('sso_redirect_' . $module_data, 'session');
     }
 
-    nv_jsonOutput($array);
+    $canonicalUrl = getCanonicalUrl($page_url, true, true);
+    $contents = nv_theme_complete_2step($backupcodes, $array_data);
+
+    include NV_ROOTDIR . '/includes/header.php';
+    echo nv_site_theme($contents);
+    include NV_ROOTDIR . '/includes/footer.php';
+}
+
+// Thiết lập
+if (!empty($user_info['active2step'])) {
+    nv_redirect_location(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
 }
 
 // Show QR-Image
@@ -115,7 +140,7 @@ if ($checkss == NV_CHECK_SESSION) {
     $opt = $nv_Request->get_title('opt', 'post', 6);
 
     if (!$GoogleAuthenticator->verifyOpt($secretkey, $opt)) {
-        nv_json_result([
+        nv_jsonOutput([
             'status' => 'error',
             'input' => 'opt',
             'mess' => $nv_Lang->getModule('wrong_confirm')
@@ -146,25 +171,15 @@ if ($checkss == NV_CHECK_SESSION) {
     }
 
     nv_creat_backupcodes();
-
-    if (!empty($global_config['allowuserloginmulti']) and $nv_Request->get_bool('forcedrelogin', 'post', false)) {
-        $checknum = md5(nv_genpass(10));
-        $stmt = $db->prepare('UPDATE ' . $db_config['prefix'] . '_' . $site_mods[NV_BRIDGE_USER_MODULE]['module_data'] . ' SET checknum=:checknum WHERE userid=' . $user_info['userid']);
-        $stmt->bindParam(':checknum', $checknum, PDO::PARAM_STR);
-        $stmt->execute();
-
-        $redirect = nv_redirect_encrypt(urlRewriteWithDomain(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name, NV_MY_DOMAIN));
-        $redirect = nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=users&' . NV_OP_VARIABLE . '=login&nv_redirect=' . $redirect, true);
-
-        nv_json_result([
-            'status' => 'ok',
-            'mess' => $nv_Lang->getModule('forcedrelogin_note'),
-            'redirect' => $redirect
-        ]);
+    $nv_Request->set_Session($module_data . '_setsuccess', csrf_create($module_data . '_setsuccess'));
+    $redirect = $page_url . '/complete';
+    if (!empty($nv_redirect)) {
+        $redirect .= '&amp;nv_redirect=' . $nv_redirect;
     }
 
-    nv_json_result([
-        'status' => 'ok'
+    nv_jsonOutput([
+        'status' => 'ok',
+        'redirect' => str_replace('&amp;', '&', nv_url_rewrite($redirect, true))
     ]);
 }
 

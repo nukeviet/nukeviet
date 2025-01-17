@@ -82,6 +82,43 @@ if ($nv_Request->isset_request('changecode2step', 'post')) {
 $sql = 'SELECT * FROM ' . $db_config['prefix'] . '_' . $site_mods[NV_BRIDGE_USER_MODULE]['module_data'] . '_backupcodes WHERE userid=' . $user_info['userid'];
 $backupcodes = $db->query($sql)->fetchAll();
 
+// Tải xuống code
+if ($nv_Request->isset_request('downloadcode', 'get') and $nv_Request->get_title('downloadcode', 'get', '') == md5('downloadcode' . NV_CHECK_SESSION)) {
+    $filename = change_alias(NV_SERVER_NAME) . '-recovery-codes.txt';
+    $data = '';
+
+    foreach ($backupcodes as $code) {
+        if (!empty($code['is_used'])) {
+            continue;
+        }
+        $data .= $code['code'] . "\n";
+    }
+
+    header('Pragma: public');
+    header('Expires: 0');
+    header('Cache-Control:');
+    header('Cache-Control: public');
+    header('Content-Description: File Transfer');
+    header('Content-Type: text/plain; charset=UTF-8');
+    header('Content-Disposition: attachment; filename="' . $filename . '";');
+    header('Last-Modified: ' . date('D, d M Y H:i:s \G\M\T', NV_CURRENTTIME));
+    header('Content-Length: ' . strlen($data));
+
+    echo $data;
+    exit();
+}
+
+// In code ra
+if ($array_op[0] ?? '' == 'print') {
+    $page_url .= '&amp;' . NV_OP_VARIABLE . '=print';
+    $canonicalUrl = getCanonicalUrl($page_url, true, true);
+
+    $contents = nv_theme_print_code($backupcodes);
+    include NV_ROOTDIR . '/includes/header.php';
+    echo nv_site_theme($contents, false);
+    include NV_ROOTDIR . '/includes/footer.php';
+}
+
 $autoshowcode = false;
 if ($nv_Request->isset_request('showcode_' . $module_data, 'session')) {
     $autoshowcode = true;

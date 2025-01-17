@@ -22,7 +22,7 @@ if (!defined('NV_MOD_2STEP_VERIFICATION')) {
  */
 function nv_theme_info_2step($backupcodes, $autoshowcode)
 {
-    global $module_info, $nv_Lang, $user_info, $module_name;
+    global $nv_Lang, $user_info, $module_name;
 
     $xtpl = new XTemplate('main.tpl', get_module_tpl_dir('main.tpl'));
     $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
@@ -78,7 +78,7 @@ function nv_theme_info_2step($backupcodes, $autoshowcode)
  */
 function nv_theme_config_2step($secretkey, $nv_redirect)
 {
-    global $module_info, $module_name, $op, $global_config;
+    global $module_name, $op;
 
     $xtpl = new XTemplate('config.tpl', get_module_tpl_dir('config.tpl'));
     $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
@@ -89,10 +89,6 @@ function nv_theme_config_2step($secretkey, $nv_redirect)
     $xtpl->assign('SECRETKEY', strtolower($secretkey));
     $xtpl->assign('QR_SRC', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '/qr-image/' . nv_genpass());
     $xtpl->assign('FORM_ACTION', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op);
-
-    if (!empty($global_config['allowuserloginmulti'])) {
-        $xtpl->parse('main.forcedrelogin');
-    }
 
     $xtpl->parse('main');
 
@@ -107,7 +103,7 @@ function nv_theme_config_2step($secretkey, $nv_redirect)
  */
 function nv_theme_confirm_password($is_pass_valid)
 {
-    global $module_info, $nv_Lang, $op, $module_name;
+    global $nv_Lang, $op, $module_name;
 
     $xtpl = new XTemplate('confirm_password.tpl', get_module_tpl_dir('confirm_password.tpl'));
     $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
@@ -126,4 +122,47 @@ function nv_theme_confirm_password($is_pass_valid)
     $xtpl->parse('pass_empty');
 
     return $xtpl->text('pass_empty');
+}
+
+/**
+ * Thông báo hoàn thành cài đặt xác thực hai bước
+ *
+ * @param array $backupcodes
+ * @param array $array_data
+ * @return string
+ */
+function nv_theme_complete_2step(array $backupcodes, array $array_data)
+{
+    $xtpl = new XTemplate('complete.tpl', get_module_tpl_dir('complete.tpl'));
+    $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
+    $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
+    $xtpl->assign('DATA', $array_data);
+
+    // Danh sách code
+    foreach ($backupcodes as $code) {
+        $xtpl->assign('CODE', $code);
+        $xtpl->parse('main.code');
+    }
+
+    $xtpl->parse('main');
+    return $xtpl->text('main');
+}
+
+function nv_theme_print_code(array $backupcodes)
+{
+    $xtpl = new XTemplate('print.tpl', get_module_tpl_dir('print.tpl'));
+    $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
+    $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
+
+    // Danh sách code
+    foreach ($backupcodes as $code) {
+        if (!empty($code['is_used'])) {
+            continue;
+        }
+        $xtpl->assign('CODE', $code);
+        $xtpl->parse('main.code');
+    }
+
+    $xtpl->parse('main');
+    return $xtpl->text('main');
 }

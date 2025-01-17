@@ -862,17 +862,10 @@ function nv_html_site_js($html = true, $other_js = [], $language_js = true, $glo
             ];
         }
 
-        if ($client_info['browser']['key'] == 'explorer') {
-            $return[] = [
-                'ext' => 1,
-                'content' => ASSETS_STATIC_URL . '/js/ie-global' . AUTO_MINIFIED . '.js'
-            ];
-        } else {
-            $return[] = [
-                'ext' => 1,
-                'content' => ASSETS_STATIC_URL . '/js/global' . AUTO_MINIFIED . '.js'
-            ];
-        }
+        $return[] = [
+            'ext' => 1,
+            'content' => ASSETS_STATIC_URL . '/js/global' . AUTO_MINIFIED . '.js'
+        ];
 
         $return[] = [
             'ext' => 1,

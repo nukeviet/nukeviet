@@ -94,6 +94,7 @@ if (in_array($lang, $array_lang_module_setup, true) and $num_module_exists > 1) 
     $sql_drop_module[] = 'DROP TABLE IF EXISTS ' . $db_config['prefix'] . '_' . $module_data . '_info';
     $sql_drop_module[] = 'DROP TABLE IF EXISTS ' . $db_config['prefix'] . '_' . $module_data . '_oldpass';
     $sql_drop_module[] = 'DROP TABLE IF EXISTS ' . $db_config['prefix'] . '_' . $module_data . '_openid';
+    $sql_drop_module[] = 'DROP TABLE IF EXISTS ' . $db_config['prefix'] . '_' . $module_data . '_passkey';
     $sql_drop_module[] = 'DROP TABLE IF EXISTS ' . $db_config['prefix'] . '_' . $module_data . '_question';
     $sql_drop_module[] = 'DROP TABLE IF EXISTS ' . $db_config['prefix'] . '_' . $module_data . '_reg';
     $sql_drop_module[] = 'DROP TABLE IF EXISTS ' . $db_config['prefix'] . '_' . $module_data . '_edit';
@@ -259,6 +260,23 @@ $sql_create_module[] = 'CREATE TABLE IF NOT EXISTS ' . $db_config['prefix'] . '_
     KEY userid (userid),
     KEY email (email)
 ) ENGINE=MyISAM";
+
+$sql_create_module[] = 'CREATE TABLE IF NOT EXISTS ' . $db_config['prefix'] . '_' . $module_data . "_passkey (
+    id int(11) unsigned NOT NULL AUTO_INCREMENT,
+    userid mediumint(8) unsigned NOT NULL DEFAULT '0',
+    keyid varchar(180) NOT NULL DEFAULT '' COMMENT 'Key ID',
+    publickey text NOT NULL COMMENT 'Public key',
+    userhandle varchar(100) NOT NULL DEFAULT '' COMMENT 'User handle',
+    counter int(11) unsigned NOT NULL DEFAULT '0' COMMENT 'Bộ đếm phát hiện thiết bị fake',
+    aaguid varchar(50) NOT NULL DEFAULT '' COMMENT 'GUID thiết bị',
+    type varchar(50) NOT NULL DEFAULT '' COMMENT 'Loại, thường chỉ là public-key',
+    created_at int(11) unsigned NOT NULL DEFAULT '0' COMMENT 'Tạo',
+    last_used_at int(11) unsigned NOT NULL DEFAULT '0' COMMENT 'Lần cuối sử dụng',
+    clid varchar(32) NOT NULL DEFAULT '' COMMENT 'ID trình duyệt tạo ra nó',
+    PRIMARY KEY (id),
+    UNIQUE KEY uid (userid, keyid),
+    UNIQUE KEY userhandle (userhandle)
+) ENGINE=MyISAM COMMENT 'Passkey của thành viên để đăng nhập/xác thực 2 bước'";
 
 $sql_create_module[] = 'CREATE TABLE IF NOT EXISTS ' . $db_config['prefix'] . '_' . $module_data . "_field (
     fid mediumint(8) NOT NULL AUTO_INCREMENT,

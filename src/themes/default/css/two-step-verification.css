@@ -34,8 +34,13 @@
 
 .recovery-code {
     padding: 7px 0;
+    letter-spacing: 5px;
 }
 
 .recovery-code span {
     font-family: 'Courier New';
+}
+
+.print-codes {
+    padding: 60px 30px 20px 30px;
 }

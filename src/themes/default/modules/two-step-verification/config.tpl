@@ -41,14 +41,6 @@
                     </div>
                 </div>
 
-                <!-- BEGIN: forcedrelogin -->
-                <div class="text-center margin-bottom-lg">
-                    <div class="checkbox">
-                        <label><input type="checkbox" class="form-control" name="forcedrelogin" value="1" style="margin-top:2px"> {LANG.forcedrelogin}</label>
-                    </div>
-                </div>
-                <!-- END: forcedrelogin -->
-                
                 <div class="text-center margin-bottom-lg">
                      <input type="hidden" name="checkss" value="{NV_CHECK_SESSION}" />
                      <input type="hidden" name="nv_redirect" value="{NV_REDIRECT}" />
@@ -59,4 +51,4 @@
     </div>
 </div>
 
-<!-- BEGIN: main -->
+<!-- END: main -->
