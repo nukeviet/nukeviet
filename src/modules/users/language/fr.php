@@ -229,6 +229,7 @@ $lang_module['edit_login'] = 'Nom de connexion';
 $lang_module['edit_email'] = 'Email';
 $lang_module['edit_question'] = 'Question secrète';
 $lang_module['edit_password'] = 'Mot de passe';
+$lang_module['edit_passkey'] = 'Passkey';
 $lang_module['edit_login_warning'] = 'Pour changer votre nom de connexion, vous devez re-déclarer votre mot de passe';
 $lang_module['edit_email_warning'] = 'Pour changer votre email, vous devez re-déclarer votre mot de passe et le code de certifier qui est envoyé';
 $lang_module['edit_question_warning'] = 'Veuillez remplir les champs ci-dessous pour créer une nouvelle question et réponse de sécurité (en remplaçant l\'ancienne question et réponse de sécurité).';

@@ -229,6 +229,7 @@ $lang_module['edit_login'] = 'Username';
 $lang_module['edit_email'] = 'Email';
 $lang_module['edit_question'] = 'Security question';
 $lang_module['edit_password'] = 'Password';
+$lang_module['edit_passkey'] = 'Passkey';
 $lang_module['edit_login_warning'] = 'To change username , you need delare your password.';
 $lang_module['edit_email_warning'] = 'To change the email , you should perform the following sequential steps : <br />1.Declaring password <br />2.Declaring new email address <br />3.Click on the button Send Verification Code<br />4.Check the mail notification is sent to the verification code address that you just declare, then enter this code in the box Verification code <br /> 5.Click Accept button.';
 $lang_module['edit_question_warning'] = 'Please complete the fields below to create a new security question and answer (replacing the old security question and answer).';

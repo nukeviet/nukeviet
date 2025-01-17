@@ -31,6 +31,9 @@
                 <!-- BEGIN: edit_password -->
                 <li class="{PASSWORD_ACTIVE}"><a data-toggle="tab" data-location="{EDITINFO_FORM}/password" href="#edit_password">{LANG.edit_password}</a></li>
                 <!-- END: edit_password -->
+                <!-- BEGIN: edit_passkey -->
+                <li class="{PASSKEY_ACTIVE}"><a data-toggle="tab" data-location="{EDITINFO_FORM}/passkey" href="#edit_passkey">{LANG.edit_passkey}</a></li>
+                <!-- END: edit_passkey -->
                 <!-- BEGIN: edit_langinterface -->
                 <li class="{LANGINTERFACE_ACTIVE}"><a data-toggle="tab" data-location="{EDITINFO_FORM}/langinterface" href="#edit_langinterface">{GLANG.langinterface}</a></li>
                 <!-- END: edit_langinterface -->
@@ -332,6 +335,36 @@
             </form>
         </div>
         <!-- END: tab_edit_password -->
+        <!-- BEGIN: tab_edit_passkey -->
+        <div id="edit_passkey" class="well-lg tab-pane fade {TAB_PASSKEY_ACTIVE}">
+            <!-- BEGIN: pass_not_confirmed -->
+            {HTML}
+            <!-- END: pass_not_confirmed -->
+            <!-- BEGIN: pass_confirmed -->
+            <form action="{EDITINFO_FORM}/passkey" id="passkey-form" method="post" autocomplete="off" novalidate>
+                <input type="hidden" name="checkss" value="{DATA.checkss}">
+                <div class="panel panel-default">
+                    <div class="panel-body text-center" data-toggle="ctn">
+                        <div class="margin-bottom">
+                            <i class="fa fa-key fa-4x" aria-hidden="true"></i>
+                        </div>
+                        <h2 class="margin-bottom">Đăng nhập không cần mật khẩu với khóa đăng nhập</h2>
+                        <p>Khóa đăng nhập là phương thức an toàn và hiện đại giúp bạn có thể đăng nhập vào tài khoản của mình mà chỉ cần sử dụng vân tay, khuôn mặt, khóa màn hình, PIN hoặc khóa bảo mật. Bạn cũng có thể sử dụng khóa đăng nhập làm phương thức xác thực hai bước sau khi đăng nhập bằng mật khẩu.</p>
+                        <button class="btn btn-primary hidden" type="button" data-toggle="passkey-add"><i class="fa fa-plus" aria-hidden="true" data-icon="fa-plus"></i> Thêm khóa đăng nhập</button>
+                        <div class="text-danger hidden" data-toggle="passkey-not-supported">Trình duyệt/thiết bị này không hỗ trợ WebAuthn nên chưa thể tạo khóa đăng nhập. Xin vui lòng sử dụng một trình duyệt/thiết bị khác hoặc thử lại sau</div>
+                        <div class="text-danger margin-top hidden" data-toggle="error"></div>
+                    </div>
+                </div>
+
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        s
+                    </div>
+                </div>
+            </form>
+            <!-- END: pass_confirmed -->
+        </div>
+        <!-- END: tab_edit_passkey -->
         <!-- BEGIN: tab_edit_langinterface -->
         <div id="edit_langinterface" class="well-lg tab-pane fade {TAB_LANGINTERFACE_ACTIVE}">
             <form action="{EDITINFO_FORM}/langinterface" method="post" role="form" class="form-horizontal" data-toggle="reg_validForm">

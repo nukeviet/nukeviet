@@ -883,31 +883,21 @@ function user_info($data, $array_field_config, $custom_fields, $types, $data_que
     $item_active = [
         'name' => $data['type']
     ];
-    if ($data['type'] == 'avatar') {
-        $item_active['title'] = $nv_Lang->getModule('edit_avatar');
-    } elseif ($data['type'] == 'username') {
-        $item_active['title'] = $nv_Lang->getModule('edit_login');
-    } elseif ($data['type'] == 'email') {
-        $item_active['title'] = $nv_Lang->getModule('edit_email');
-    } elseif ($data['type'] == 'password') {
-        $item_active['title'] = $nv_Lang->getModule('edit_password');
-    } elseif ($data['type'] == 'langinterface') {
-        $item_active['title'] = $nv_Lang->getGlobal('langinterface');
-    } elseif ($data['type'] == 'question') {
-        $item_active['title'] = $nv_Lang->getModule('edit_question');
-    } elseif ($data['type'] == 'openid') {
-        $item_active['title'] = $nv_Lang->getModule('openid_administrator');
-    } elseif ($data['type'] == 'group') {
-        $item_active['title'] = $nv_Lang->getModule('group');
-    } elseif ($data['type'] == 'others') {
-        $item_active['title'] = $nv_Lang->getModule('edit_others');
-    } elseif ($data['type'] == 'safemode') {
-        $item_active['title'] = $nv_Lang->getModule('safe_mode');
-    } elseif ($data['type'] == 'forcedrelogin') {
-        $item_active['title'] = $nv_Lang->getModule('forcedrelogin');
-    } else {
-        $item_active['title'] = $nv_Lang->getModule('edit_basic');
-    }
+    $titles = [
+        'avatar' => 'edit_avatar',
+        'username' => 'edit_login',
+        'email' => 'edit_email',
+        'password' => 'edit_password',
+        'passkey' => 'edit_passkey',
+        'langinterface' => 'langinterface',
+        'question' => 'edit_question',
+        'openid' => 'openid_administrator',
+        'group' => 'group',
+        'others' => 'edit_others',
+        'safemode' => 'safe_mode',
+        'forcedrelogin' => 'forcedrelogin'
+    ];
+    $item_active['title'] = isset($titles[$data['type']]) ? $nv_Lang->getModule($titles[$data['type']]) : $nv_Lang->getModule('edit_basic');
     $xtpl->assign('ITEM_ACTIVE', $item_active);
 
     if (defined('ACCESS_EDITUS')) {
@@ -948,6 +938,20 @@ function user_info($data, $array_field_config, $custom_fields, $types, $data_que
             $xtpl->parse('main.tab_edit_password.forcedrelogin');
         }
         $xtpl->parse('main.tab_edit_password');
+    }
+
+    // Tab passkey
+    // FIXME
+    if (in_array('passkey', $types, true)) {
+        if (!$data['confirmed_pass']) {
+            $xtpl->assign('HTML', user_confirm_pass());
+            $xtpl->parse('main.tab_edit_passkey.pass_not_confirmed');
+        } else {
+            $xtpl->parse('main.tab_edit_passkey.pass_confirmed');
+        }
+
+        $xtpl->parse('main.edit_passkey');
+        $xtpl->parse('main.tab_edit_passkey');
     }
 
     // Tab đổi ngôn ngữ hiển thị
@@ -2001,5 +2005,35 @@ function user_r2s($data, $page_url)
 
     $xtpl->parse('main');
 
+    return $xtpl->text('main');
+}
+
+/**
+ * Form xác nhận mật khẩu cho phiên
+ *
+ * @return string
+ * @throws Error
+ */
+function user_confirm_pass()
+{
+    global $module_name, $module_captcha, $global_config;
+
+    $xtpl = new XTemplate('confirm_pass.tpl', get_module_tpl_dir('confirm_pass.tpl'));
+    $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
+    $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
+    $xtpl->assign('FORM_ACTION', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=editinfo');
+
+    if ($module_captcha == 'recaptcha' and $global_config['recaptcha_ver'] == 3) {
+        // Nếu dùng reCaptcha v3
+        $xtpl->parse('main.recaptcha3');
+    } elseif ($module_captcha == 'recaptcha' and $global_config['recaptcha_ver'] == 2) {
+        // Nếu dùng reCaptcha v2
+        $xtpl->parse('main.recaptcha');
+    } elseif ($module_captcha == 'captcha') {
+        // Captcha mặc định
+        $xtpl->parse('main.captcha');
+    }
+
+    $xtpl->parse('main');
     return $xtpl->text('main');
 }

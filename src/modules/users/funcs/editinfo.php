@@ -287,7 +287,92 @@ $array_data = [];
 $array_data['checkss'] = md5(NV_CHECK_SESSION . '_' . $module_name . '_' . $op . '_' . $user_info['userid']);
 $array_data['awaitinginfo'] = [];
 $array_data['editcensor'] = $global_users_config['active_editinfo_censor'];
+$array_data['confirmed_pass'] = csrf_check($nv_Request->get_title($module_data . '_confirm_pass', 'session', ''), $module_data . '_confirm_pass');
+
 $checkss = $nv_Request->get_title('checkss', 'post', '');
+
+// Xác nhận mật khẩu
+if ($nv_Request->isset_request('confirm_pass', 'post')) {
+    if ($checkss !== NV_CHECK_SESSION) {
+        nv_jsonOutput([
+            'status' => 'error',
+            'input' => '',
+            'mess' => 'Session error!!!'
+        ]);
+    }
+
+    // Kiểm tra mã xác nhận
+    unset($nv_seccode);
+    if ($module_captcha == 'recaptcha') {
+        // Xác định giá trị của captcha nhập vào nếu sử dụng reCaptcha
+        $nv_seccode = $nv_Request->get_title('g-recaptcha-response', 'post', '');
+    } elseif ($module_captcha == 'captcha') {
+        // Xác định giá trị của captcha nhập vào nếu sử dụng captcha hình
+        $nv_seccode = $nv_Request->get_title('nv_seccode', 'post', '');
+    }
+    $check_seccode = isset($nv_seccode) ? nv_capcha_txt($nv_seccode, $module_captcha) : true;
+    if (!$check_seccode) {
+        nv_jsonOutput([
+            'status' => 'error',
+            'input' => 'nv_seccode',
+            'mess' => $module_captcha == 'recaptcha' ? $nv_Lang->getGlobal('securitycodeincorrect1') : $nv_Lang->getGlobal('securitycodeincorrect')
+        ]);
+    }
+
+    $nv_password = $nv_Request->get_title('password', 'post', '');
+    if (empty($nv_password)) {
+        nv_jsonOutput([
+            'status' => 'error',
+            'input' => 'password',
+            'mess' => $nv_Lang->getGlobal('password_empty')
+        ]);
+    }
+    $db_password = $db->query('SELECT password FROM ' . NV_MOD_TABLE . ' WHERE userid=' . $user_info['userid'])->fetchColumn();
+    if (empty($db_password)) {
+        nv_jsonOutput([
+            'status' => 'error',
+            'input' => 'password',
+            'mess' => $nv_Lang->getModule('error_no_password')
+        ]);
+    }
+
+    $blocker = new NukeViet\Core\Blocker(NV_ROOTDIR . '/' . NV_LOGS_DIR . '/ip_logs', NV_CLIENT_IP);
+    $rules = [
+        $global_config['login_number_tracking'],
+        $global_config['login_time_tracking'],
+        $global_config['login_time_ban']
+    ];
+    $blocker->trackLogin($rules, $global_config['is_login_blocker']);
+
+    if ($global_config['login_number_tracking'] and $blocker->is_blocklogin($user_info['username'])) {
+        nv_jsonOutput([
+            'status' => 'error',
+            'input' => '',
+            'mess' => $nv_Lang->getGlobal('userlogin_blocked', $global_config['login_number_tracking'], nv_datetime_format($blocker->login_block_end, 1))
+        ]);
+    }
+
+    if ($crypt->validate_password($nv_password, $db_password)) {
+        $blocker->reset_trackLogin($user_info['username']);
+        $nv_Request->set_Session($module_data . '_confirm_pass', csrf_create($module_data . '_confirm_pass'));
+        nv_jsonOutput([
+            'status' => 'ok',
+            'input' => '',
+            'mess' => ''
+        ]);
+    }
+
+    if ($global_config['login_number_tracking'] and !empty($nv_password)) {
+        $blocker->set_loginFailed($user_info['username'], NV_CURRENTTIME);
+    }
+
+    nv_jsonOutput([
+        'status' => 'error',
+        'input' => 'password',
+        'mess' => $nv_Lang->getGlobal('incorrect_password')
+    ]);
+}
+
 if (isset($array_op[2]) and !defined('ACCESS_EDITUS')) {
     if (empty($_POST)) {
         nv_redirect_location(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
@@ -422,9 +507,10 @@ if (!defined('ACCESS_EDITUS')) {
 if (!defined('ACCESS_EDITUS') or (defined('ACCESS_EDITUS') and defined('ACCESS_PASSUS'))) {
     $types[] = 'password';
 }
-// Thành viên mới có quyền bật tắt xác thực hai bước
+// Thành viên mới có quyền bật tắt xác thực hai bước và khóa đăng nhập
 if (!defined('ACCESS_EDITUS')) {
     $types[] = '2step';
+    $types[] = 'passkey';
 }
 // Thành viên có quyền đổi bí danh
 if ($array_data['allowloginchange'] and !defined('ACCESS_EDITUS')) {
@@ -1009,6 +1095,8 @@ if ($checkss == $array_data['checkss'] and $array_data['type'] == 'basic') {
         'input' => nv_url_rewrite($page_url . '/basic', true),
         'mess' => $mess
     ]);
+} elseif ($checkss == $array_data['checkss'] and $array_data['type'] == 'passkey') {
+    require NV_ROOTDIR . '/modules/' . $module_file . '/edit/passkey.php';
 } elseif ($checkss == $array_data['checkss'] and $array_data['type'] == 'question') {
     // Question
     $array_data['question'] = isset($array_field_config['question']) ? nv_substr($nv_Request->get_title('question', 'post', '', 1), 0, 255) : $row['question'];

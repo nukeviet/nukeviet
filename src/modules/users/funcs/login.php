@@ -51,6 +51,7 @@ if ($nv_Request->isset_request('nv_redirect', 'post,get')) {
 }
 
 if (defined('SSO_CLIENT_DOMAIN')) {
+    /** @disregard PHP0415 */
     $allowed_client_origin = explode(',', SSO_CLIENT_DOMAIN);
     $sso_client = $nv_Request->get_title('client', 'get', '');
     if (!empty($sso_client)) {
@@ -280,6 +281,7 @@ function new_openid_user_save($reg_username, $reg_email, $reg_password, $attribs
 
         // Callback sau khi đăng ký
         if (nv_function_exists('nv_user_register_callback')) {
+            /** @disregard PHP0417 */
             nv_user_register_callback($userid);
         }
 

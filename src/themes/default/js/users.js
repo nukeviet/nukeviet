@@ -565,6 +565,58 @@ function edit_group_submit(obj, old) {
     reg_validForm(obj);
 }
 
+// Form xác nhận mật khẩu để làm 1 việc nào quan trọng
+function confirm_pass_precheck(form) {
+    if (trim($('[name="password"]', form).val()) == '') {
+        $('[name="password"]', form).focus();
+        return false;
+    }
+    return true;
+}
+function confirm_pass_validForm(form) {
+    const data = {};
+    data.type = $(form).prop("method");
+    data.url = $(form).prop("action");
+    data.data = $(form).serialize();
+    formErrorHidden(form);
+
+    $(form).find("input,button,select,textarea").prop("disabled", true);
+
+    $.ajax({
+        type: data.type,
+        cache: false,
+        url: data.url,
+        data: data.data,
+        dataType: "json",
+        success: function(res) {
+            formChangeCaptcha(form);
+
+            if ("error" == res.status) {
+                $("input,button,select,textarea", form).prop("disabled", false);
+                $(".tooltip-current", form).removeClass("tooltip-current");
+
+                if (res.input && "" != res.input && $("[name='" + res.input + "']:visible", form).length) {
+                    $(form).find('[name="' + res.input + '"]:visible').each(function() {
+                        $(this).addClass("tooltip-current").attr("data-current-mess", res.mess);
+                        validErrorShow(this);
+                    });
+                    return;
+                }
+
+                $(".nv-info", form).html(res.mess).addClass("error").show();
+                $("html, body").animate({
+                    scrollTop: $(".nv-info", form).offset().top
+                }, 200);
+                return;
+            }
+
+            location.reload();
+        }
+    });
+
+    return false;
+}
+
 $(function() {
     // Delete user handler
     $('[data-toggle="admindeluser"]').click(function(e) {
@@ -823,4 +875,101 @@ $(function() {
         }
         return !1;
     });
+
+    $('body').on('submit', '[data-toggle=confirm_pass_validForm]', function() {
+        return confirm_pass_validForm(this);
+    });
+
+    // Xử lý passkey
+    const pkForm = $('#passkey-form');
+    if (pkForm.length) {
+        if (nukeviet.WebAuthnSupported) {
+            $('[data-toggle="passkey-add"]', pkForm).removeClass('hidden');
+            $('[data-toggle="passkey-not-supported"]', pkForm).addClass('hidden');
+        } else {
+            $('[data-toggle="passkey-add"]', pkForm).addClass('hidden');
+            $('[data-toggle="passkey-not-supported"]', pkForm).removeClass('hidden');
+        }
+
+        // Thêm passkey
+        $('[data-toggle="passkey-add"]', pkForm).on('click', function(e) {
+            e.preventDefault();
+            const btn = $(this);
+            const icon = $('i', btn);
+            if (icon.is('.fa-spinner')) {
+                return false;
+            }
+            const form = btn.closest('form');
+            const ctn = btn.closest('[data-toggle="ctn"]');
+            icon.removeClass(icon.data('icon')).addClass('fa-spinner fa-pulse');
+            $.ajax({
+                url: form.attr('action'),
+                type: 'post',
+                data: {
+                    checkss: $('[name="checkss"]', form).val(),
+                    create_challenge: 1,
+                },
+                dataType: 'json',
+                success: function(response) {
+                    if (response.status != 'ok') {
+                        icon.removeClass('fa-spinner fa-pulse').addClass(icon.data('icon'));
+                        $('[data-toggle="error"]', ctn).text(response.mess).removeClass('hidden');
+                        return;
+                    }
+
+                    let credentialOptions = JSON.parse(response.credentialOptions);
+                    credentialOptions.challenge = base64UrlToArrayBuffer(credentialOptions.challenge);
+                    credentialOptions.user.id = base64UrlToArrayBuffer(credentialOptions.user.id);
+                    if (credentialOptions.excludeCredentials.length > 0) {
+                        credentialOptions.excludeCredentials = credentialOptions.excludeCredentials.map(credential => {
+                            credential.id = base64UrlToArrayBuffer(credential.id);
+                            return credential;
+                        });
+                    }
+                    navigator.credentials.create({
+                        publicKey: credentialOptions
+                    }).then(credential => {
+                        // Sau khi đăng ký thành công, gửi dữ liệu về server
+                        const data = {
+                            checkss: $('[name="checkss"]', form).val(),
+                            save_credential: 1,
+                            credential: JSON.stringify({
+                                id: credential.id,
+                                type: credential.type,
+                                rawId: arrayBufferToBase64Url(credential.rawId),
+                                response: {
+                                    clientDataJSON: arrayBufferToBase64Url(credential.response.clientDataJSON),
+                                    attestationObject: arrayBufferToBase64Url(credential.response.attestationObject),
+                                }
+                            }),
+                        };
+                        $.ajax({
+                            url: 'WebAuthn.php',
+                            type: 'POST',
+                            data: data,
+                            dataType: 'json',
+                            success: function (response) {
+                                if (!response.success) {
+                                    alert(JSON.stringify(response));
+                                    return;
+                                }
+                                alert('Đăng ký passkey thành công');
+                            },
+                            error: function (xhr, status, error) {
+                                console.log(xhr.responseText);
+                                alert(error);
+                            }
+                        });
+                    }).catch(error => {
+                        $('[data-toggle="error"]', ctn).text(nukeviet.i18n.WebAuthnErrors.creat[error.name] || nukeviet.i18n.WebAuthnErrors.unknow).removeClass('hidden');
+                    });
+                },
+                error: function(xhr, status, error) {
+                    console.error(xhr, status, error);
+                    icon.removeClass('fa-spinner fa-pulse').addClass(icon.data('icon'));
+                    $('[data-toggle="error"]', ctn).text(nukeviet.i18n.WebAuthnErrors.unknow).removeClass('hidden');
+                }
+            });
+        });
+    }
 });

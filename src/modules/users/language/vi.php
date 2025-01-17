@@ -229,6 +229,7 @@ $lang_module['edit_login'] = 'Bí danh';
 $lang_module['edit_email'] = 'Email';
 $lang_module['edit_question'] = 'Câu hỏi bảo mật';
 $lang_module['edit_password'] = 'Mật khẩu';
+$lang_module['edit_passkey'] = 'Khóa truy cập';
 $lang_module['edit_login_warning'] = 'Để thay đổi bí danh, bạn cần khai báo lại mật khẩu.';
 $lang_module['edit_email_warning'] = '<p>Để thay đổi email, bạn cần thực hiện tuần tự các bước sau đây:</p><p>1.Khai báo lại mật khẩu<br />2.Khai báo email mới<br />3.Click vào nút Gửi Mã xác minh<br />4.Kiểm tra mail thông báo Mã xác minh được gửi đến địa chỉ mà bạn vừa khai báo, sau đó nhập mã này vào ô Mã xác minh<br />5.Click vào nút Chấp nhận.</p>';
 $lang_module['edit_question_warning'] = 'Vui lòng hoàn thành các trường bên dưới để tạo câu hỏi và câu trả lời bảo mật mới (thay thế cho câu hỏi và câu trả lời cũ).';
@@ -884,6 +885,8 @@ $lang_module['active2step_status0'] = 'Chưa kích hoạt xác thực 2 bước'
 $lang_module['active2step_status1'] = 'Đã kích hoạt xác thực 2 bước';
 $lang_module['active2step_status2'] = 'Đã gửi yêu cầu tắt xác thực 2 bước';
 $lang_module['config_deny'] = 'Cấu hình các từ giới hạn';
+$lang_module['pass_confirm'] = 'Xác nhận mật khẩu để tiếp tục';
+$lang_module['error_no_password'] = 'Bạn chưa có mật khẩu, vui lòng tạo mật khẩu trước';
 
 $lang_module['merge_field_active_deadline'] = 'Hạn hiệu lực kích hoạt';
 $lang_module['merge_field_link'] = 'Liên kết';
