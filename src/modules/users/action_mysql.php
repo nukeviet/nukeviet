@@ -273,6 +273,8 @@ $sql_create_module[] = 'CREATE TABLE IF NOT EXISTS ' . $db_config['prefix'] . '_
     created_at int(11) unsigned NOT NULL DEFAULT '0' COMMENT 'Tạo',
     last_used_at int(11) unsigned NOT NULL DEFAULT '0' COMMENT 'Lần cuối sử dụng',
     clid varchar(32) NOT NULL DEFAULT '' COMMENT 'ID trình duyệt tạo ra nó',
+    enable_login tinyint(1) NOT NULL DEFAULT '0' COMMENT 'Cho phép đăng nhập hay không',
+    nickname varchar(100) NOT NULL DEFAULT '' COMMENT 'Đặt tên gợi nhớ',
     PRIMARY KEY (id),
     UNIQUE KEY uid (userid, keyid),
     UNIQUE KEY userhandle (userhandle)

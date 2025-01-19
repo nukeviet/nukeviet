@@ -753,7 +753,7 @@ function user_lostactivelink($data, $question)
  */
 function user_info($data, $array_field_config, $custom_fields, $types, $data_questions, $data_openid, $groups, $pass_empty)
 {
-    global $module_info, $global_config, $nv_Lang, $module_name, $op, $global_array_genders, $is_custom_field, $user_info, $global_users_config, $group_lists, $group_id, $language_array;
+    global $module_info, $global_config, $nv_Lang, $module_name, $op, $global_array_genders, $is_custom_field, $user_info, $global_users_config, $group_lists, $group_id, $language_array, $client_info;
 
     [$template, $dir] = get_module_tpl_dir('info.tpl', true);
     $xtpl = new XTemplate('info.tpl', $dir);
@@ -947,6 +947,29 @@ function user_info($data, $array_field_config, $custom_fields, $types, $data_que
             $xtpl->assign('HTML', user_confirm_pass());
             $xtpl->parse('main.tab_edit_passkey.pass_not_confirmed');
         } else {
+            if (empty($data['login_keys'])) {
+                $xtpl->parse('main.tab_edit_passkey.pass_confirmed.no_loginkey');
+            } else {
+                foreach ($data['publicKeys'] as $publicKey) {
+                    if (empty($publicKey['enable_login'])) {
+                        continue;
+                    }
+
+                    $publicKey['created_at'] = nv_datetime_format($publicKey['created_at'], 1);
+                    $publicKey['last_used_at'] = nv_datetime_format($publicKey['last_used_at'], 1);
+
+                    $xtpl->assign('PUBLICKEY', $publicKey);
+
+                    if ($publicKey['clid'] == $client_info['clid']) {
+                        $xtpl->parse('main.tab_edit_passkey.pass_confirmed.loginkeys.loop.this_client');
+                    }
+
+                    $xtpl->parse('main.tab_edit_passkey.pass_confirmed.loginkeys.loop');
+                }
+
+                $xtpl->parse('main.tab_edit_passkey.pass_confirmed.loginkeys');
+            }
+
             $xtpl->parse('main.tab_edit_passkey.pass_confirmed');
         }
 

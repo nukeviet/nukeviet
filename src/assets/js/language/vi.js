@@ -86,12 +86,12 @@ var nukeviet = nukeviet || {};
 nukeviet.i18n = nukeviet.i18n || {};
 nukeviet.i18n.WebAuthnErrors = {
     creat: {
-        NotAllowedError: "Bạn đã từ chối yêu cầu đăng ký",
+        NotAllowedError: "Bạn đã từ chối yêu cầu",
         ConstraintError: "Một ràng buộc nào đó trong cấu hình của yêu cầu không được đáp ứng",
         InvalidStateError: "Khóa này đã được đăng ký trước đó, xin vui lòng tạo khóa khác",
         TypeError: "Một tham số trong yêu cầu không hợp lệ, xin vui lòng tải lại trang và thử lại",
         SecurityError: "Một vấn đề bảo mật xảy ra trong quá trình đăng ký, xin vui lòng tải lại trang và thử lại",
-        AbortError: "Bạn đã hủy bỏ quy trình đăng ký",
+        AbortError: "Bạn đã hủy bỏ yêu cầu",
         NotSupportedError: "Trình duyệt hoặc thiết bị không hỗ trợ WebAuthn hoặc không hỗ trợ tham số cụ thể được yêu cầu",
         NotReadableError: "Không thể đọc dữ liệu từ thiết bị xác thực",
         NotFoundError: "Không tìm thấy thiết bị xác thực phù hợp hoặc không có thiết bị nào sẵn sàng cho yêu cầu",

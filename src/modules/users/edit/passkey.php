@@ -98,20 +98,10 @@ if ($nv_Request->isset_request('create_challenge', 'post')) {
         residentKey: AuthenticatorSelectionCriteria::RESIDENT_KEY_REQUIREMENT_REQUIRED
     );
 
-    // Xác định các khóa đã đăng ký trước đó
-    $publicKeys = [];
-
-    $sql = 'SELECT id, keyid FROM ' . NV_MOD_TABLE . '_passkey WHERE userid=' . $edit_userid;
-    $result = $db->query($sql);
-    while ($_row = $result->fetch()) {
-        $publicKeys[] = $_row;
-    }
-    $result->closeCursor();
-
     // Attestation: không cần chứng thực mà vẫn đảm bảo bảo mật
     // Exclude Credentials - các chứng chỉ đã đăng ký trước đó, sẽ không đăng ký lại
     $excludeCredentials = [];
-    foreach ($publicKeys as $publicKey) {
+    foreach ($array_data['publicKeys'] as $publicKey) {
         $excludeCredentials[] = PublicKeyCredentialDescriptor::create('public-key', base64_decode($publicKey['keyid']));
     }
 
@@ -150,5 +140,179 @@ if ($nv_Request->isset_request('create_challenge', 'post')) {
 
 // Lưu khóa truy cập
 if ($nv_Request->isset_request('save_credential', 'post')) {
+    $challenge = json_decode($nv_Request->get_string($module_data . '_creat_challenge', 'session', ''), true);
+    if (!is_array($challenge)) {
+        $challenge = [];
+    }
+    if (empty($challenge) or empty($challenge['opts']) or empty($challenge['time']) or time() - $challenge['time'] > 300) {
+        nv_jsonOutput([
+            'status' => 'error',
+            'mess' => $nv_Lang->getModule('passkey_error_challenge'),
+        ]);
+    }
 
+    // Dịch ngược lại PublicKeyCredentialCreationOptions
+    try {
+        $credentialOptions = $serializer->deserialize(
+            $challenge['opts'],
+            PublicKeyCredentialCreationOptions::class,
+            'json'
+        );
+    } catch (Throwable $e) {
+        nv_jsonOutput([
+            'status' => 'error',
+            'mess' => $nv_Lang->getModule('passkey_error_challenge1'),
+        ]);
+    }
+
+    $credential = $nv_Request->get_string('credential', 'post', '', false, false);
+    if (empty($credential)) {
+        nv_jsonOutput([
+            'status' => 'error',
+            'mess' => $nv_Lang->getModule('passkey_error_credential'),
+        ]);
+    }
+
+    try {
+        $publicKeyCredential = $serializer->deserialize(
+            $credential,
+            PublicKeyCredential::class,
+            'json'
+        );
+    } catch (Throwable $e) {
+        nv_jsonOutput([
+            'status' => 'error',
+            'mess' => $nv_Lang->getModule('passkey_error_credential1'),
+        ]);
+    }
+    if (!$publicKeyCredential->response instanceof AuthenticatorAttestationResponse) {
+        nv_jsonOutput([
+            'status' => 'error',
+            'mess' => $nv_Lang->getModule('passkey_error_credential2'),
+        ]);
+    }
+
+    // Khởi tạo Validation
+    $csmFactory = new CeremonyStepManagerFactory();
+    $creationCSM = $csmFactory->creationCeremony();
+    $attestValidator = AuthenticatorAttestationResponseValidator::create($creationCSM);
+
+    try {
+        $publicKeyCredentialSource = $attestValidator->check(
+            $publicKeyCredential->response,
+            $credentialOptions,
+            NV_SERVER_NAME
+        );
+    } catch (Throwable $e) {
+        nv_jsonOutput([
+            'status' => 'error',
+            'mess' => $nv_Lang->getModule('passkey_error_validator'),
+        ]);
+    }
+
+    $credential = [];
+    $credential['id'] = base64_encode($publicKeyCredentialSource->publicKeyCredentialId);
+    $credential['publickey'] = base64_encode($publicKeyCredentialSource->credentialPublicKey);
+    $credential['userhandle'] = $publicKeyCredentialSource->userHandle;
+    $credential['counter'] = $publicKeyCredentialSource->counter;
+    $credential['aaguid'] = $publicKeyCredentialSource->aaguid;
+    $credential['type'] = $publicKeyCredentialSource->type;
+
+    $sql = 'SELECT id FROM ' . NV_MOD_TABLE . '_passkey WHERE userid=' . $edit_userid . ' AND keyid=' . $db->quote($credential['id']);
+    if ($db->query($sql)->fetchColumn()) {
+        nv_jsonOutput([
+            'status' => 'error',
+            'mess' => $nv_Lang->getModule('passkey_error_exist'),
+        ]);
+    }
+
+    $sql = 'INSERT INTO ' . NV_MOD_TABLE . '_passkey (
+        userid, keyid, publickey, userhandle, counter, aaguid, type, created_at, last_used_at, clid, enable_login, nickname
+    ) VALUES (
+        ' . $edit_userid . ', :keyid, :publickey, :userhandle, :counter, :aaguid, :type,
+        ' . NV_CURRENTTIME . ', ' . NV_CURRENTTIME . ', ' . $db->quote($client_info['clid']) . ', 1, :nickname
+    )';
+
+    $nickname = 'Passkey ' . ($array_data['login_keys'] + 1);
+
+    nv_insert_logs(NV_LANG_DATA, $module_name, 'log_add_passkey', $nickname, $edit_userid);
+
+    $stmt = $db->prepare($sql);
+    $stmt->bindParam(':keyid', $credential['id'], PDO::PARAM_STR);
+    $stmt->bindParam(':publickey', $credential['publickey'], PDO::PARAM_STR);
+    $stmt->bindParam(':userhandle', $credential['userhandle'], PDO::PARAM_STR);
+    $stmt->bindParam(':counter', $credential['counter'], PDO::PARAM_INT);
+    $stmt->bindParam(':aaguid', $credential['aaguid'], PDO::PARAM_STR);
+    $stmt->bindParam(':type', $credential['type'], PDO::PARAM_STR);
+    $stmt->bindParam(':nickname', $nickname, PDO::PARAM_STR);
+    $stmt->execute();
+
+    nv_jsonOutput([
+        'status' => 'ok',
+        'mess' => 'Success',
+    ]);
+}
+
+// Xóa passkey
+if ($nv_Request->isset_request('del', 'post')) {
+    $id = $nv_Request->get_int('del', 'post', 0);
+    $check_exists = false;
+    foreach ($array_data['publicKeys'] as $publicKey) {
+        if ($publicKey['id'] == $id) {
+            $check_exists = true;
+            break;
+        }
+    }
+    if (!$check_exists) {
+        nv_jsonOutput([
+            'status' => 'error',
+            'mess' => 'Passkey not found',
+        ]);
+    }
+
+    $sql = 'DELETE FROM ' . NV_MOD_TABLE . '_passkey WHERE userid=' . $edit_userid . ' AND id=' . $id;
+    $db->query($sql);
+
+    nv_insert_logs(NV_LANG_DATA, $module_name, 'log_del_passkey', 'id: ' . $id, $edit_userid);
+
+    nv_jsonOutput([
+        'status' => 'ok',
+        'mess' => 'Success',
+    ]);
+}
+
+// Sửa nickname
+if ($nv_Request->isset_request('edit', 'post')) {
+    $id = $nv_Request->get_int('edit', 'post', 0);
+    $check_exists = false;
+    foreach ($array_data['publicKeys'] as $publicKey) {
+        if ($publicKey['id'] == $id) {
+            $check_exists = true;
+            break;
+        }
+    }
+    if (!$check_exists) {
+        nv_jsonOutput([
+            'status' => 'error',
+            'mess' => 'Passkey not found',
+        ]);
+    }
+
+    $nickname = nv_substr($nv_Request->get_title('nickname', 'post', ''), 0, 100);
+    if (empty($nickname)) {
+        nv_jsonOutput([
+            'status' => 'error',
+            'mess' => 'Nickname is empty',
+        ]);
+    }
+
+    $sql = 'UPDATE ' . NV_MOD_TABLE . '_passkey SET nickname=' . $db->quote($nickname) . ' WHERE userid=' . $edit_userid . ' AND id=' . $id;
+    $db->query($sql);
+
+    nv_insert_logs(NV_LANG_DATA, $module_name, 'log_edit_passkey', 'id: ' . $id . '. New: ' . $nickname, $edit_userid);
+
+    nv_jsonOutput([
+        'status' => 'ok',
+        'mess' => 'Success',
+    ]);
 }

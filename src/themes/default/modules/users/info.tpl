@@ -343,25 +343,96 @@
             <!-- BEGIN: pass_confirmed -->
             <form action="{EDITINFO_FORM}/passkey" id="passkey-form" method="post" autocomplete="off" novalidate>
                 <input type="hidden" name="checkss" value="{DATA.checkss}">
+                <!-- BEGIN: no_loginkey -->
                 <div class="panel panel-default">
                     <div class="panel-body text-center" data-toggle="ctn">
                         <div class="margin-bottom">
                             <i class="fa fa-key fa-4x" aria-hidden="true"></i>
                         </div>
-                        <h2 class="margin-bottom">Đăng nhập không cần mật khẩu với khóa đăng nhập</h2>
-                        <p>Khóa đăng nhập là phương thức an toàn và hiện đại giúp bạn có thể đăng nhập vào tài khoản của mình mà chỉ cần sử dụng vân tay, khuôn mặt, khóa màn hình, PIN hoặc khóa bảo mật. Bạn cũng có thể sử dụng khóa đăng nhập làm phương thức xác thực hai bước sau khi đăng nhập bằng mật khẩu.</p>
-                        <button class="btn btn-primary hidden" type="button" data-toggle="passkey-add"><i class="fa fa-plus" aria-hidden="true" data-icon="fa-plus"></i> Thêm khóa đăng nhập</button>
-                        <div class="text-danger hidden" data-toggle="passkey-not-supported">Trình duyệt/thiết bị này không hỗ trợ WebAuthn nên chưa thể tạo khóa đăng nhập. Xin vui lòng sử dụng một trình duyệt/thiết bị khác hoặc thử lại sau</div>
+                        <h2 class="margin-bottom">{LANG.passkey_login_create}</h2>
+                        <p>{LANG.passkey_login_create_body}.</p>
+                        <button class="btn btn-primary hidden" type="button" data-toggle="passkey-add"><i class="fa fa-plus" aria-hidden="true" data-icon="fa-plus"></i> {LANG.passkey_add}</button>
+                        <div class="text-danger hidden" data-toggle="passkey-not-supported">{LANG.passkey_not_supported}</div>
                         <div class="text-danger margin-top hidden" data-toggle="error"></div>
                     </div>
                 </div>
-
-                <div class="panel panel-default">
-                    <div class="panel-heading">
-                        s
+                <!-- END: no_loginkey -->
+                <!-- BEGIN: loginkeys -->
+                <div class="text-danger margin-bottom hidden" data-toggle="passkey-not-supported">{LANG.passkey_not_supported}</div>
+                <p>{LANG.passkey_login_create_body}.</p>
+                <div class="panel panel-default" data-toggle="ctn">
+                    <div class="panel-heading usr-flex-header">
+                        <div class="h3">
+                            <strong>{LANG.passkey_list}</strong>
+                        </div>
+                        <button class="btn btn-primary hidden" type="button" data-toggle="passkey-add"><i class="fa fa-plus" aria-hidden="true" data-icon="fa-plus"></i> {LANG.passkey_add}</button>
+                    </div>
+                    <div class="panel-body text-danger hidden" data-toggle="error"></div>
+                    <ul class="list-group">
+                        <!-- BEGIN: loop -->
+                        <li class="list-group-item">
+                            <div class="usr-flex usr-justify-between usr-gap-2">
+                                <div>
+                                    <strong><i class="fa fa-key" aria-hidden="true"></i> {PUBLICKEY.nickname}</strong> <!-- BEGIN: this_client --><span class="label label-default">{LANG.passkey_seenthis}</span><!-- END: this_client -->
+                                    <div class="margin-top-sm text-muted">
+                                        {LANG.passkey_created_at}: {PUBLICKEY.created_at} |
+                                        {LANG.passkey_last_used_at}: {PUBLICKEY.last_used_at}.
+                                    </div>
+                                </div>
+                                <div>
+                                    <button type="button" class="btn btn-sm btn-default" data-toggle="edit" data-id="{PUBLICKEY.id}" data-nickname="{PUBLICKEY.nickname}"><i class="fa fa-pencil" data-icon="fa-pencil" aria-hidden="true"></i> {GLANG.edit}</button>
+                                    <button type="button" class="btn btn-sm btn-danger" data-toggle="del" data-id="{PUBLICKEY.id}"><i class="fa fa-trash" data-icon="fa-trash" aria-hidden="true"></i> {GLANG.delete}</button>
+                                </div>
+                            </div>
+                        </li>
+                        <!-- END: loop -->
+                    </ul>
+                </div>
+                <!-- END: loginkeys -->
+            </form>
+            <!-- START FORFOOTER -->
+            <div class="modal fade" tabindex="-1" role="dialog" data-toggle="md-complete-passkey">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="{GLANG.close}"><span aria-hidden="true">&times;</span></button>
+                            <div class="modal-title h3"><strong>{LANG.passkey_created}</strong></div>
+                        </div>
+                        <div class="modal-body">
+                            {LANG.passkey_created_body}
+                        </div>
+                        <div class="modal-footer">
+                            <div class="text-center">
+                                <button type="button" class="btn btn-success" data-toggle="passkey-reload">{GLANG.complete}</button>
+                            </div>
+                        </div>
                     </div>
                 </div>
-            </form>
+            </div>
+            <div class="modal fade" tabindex="-1" role="dialog" data-toggle="md-edit-passkey">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="{GLANG.close}"><span aria-hidden="true">&times;</span></button>
+                            <div class="modal-title h3"><strong>{LANG.passkey_nickname_edit}</strong></div>
+                        </div>
+                        <div class="modal-body">
+                            <form action="{EDITINFO_FORM}/passkey" id="passkey-form-nickname" method="post" autocomplete="off" novalidate>
+                                <input type="hidden" name="checkss" value="{DATA.checkss}">
+                                <input type="hidden" name="id" value="0">
+                                <div class="form-group">
+                                    <label for="element_nickname" class="control-label">{LANG.passkey_nickname} <span class="text-danger">(*)</span>:</label>
+                                    <input type="text" class="form-control" name="nickname" data-nickname="" id="element_nickname" value="" maxlength="100">
+                                </div>
+                                <div class="text-right">
+                                    <button type="submit" class="btn btn-primary"><i class="fa fa-floppy-o" data-icon="fa-floppy-o" aria-hidden="true"></i> {GLANG.save}</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- END FORFOOTER -->
             <!-- END: pass_confirmed -->
         </div>
         <!-- END: tab_edit_passkey -->

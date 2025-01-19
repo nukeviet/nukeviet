@@ -675,6 +675,26 @@ if (in_array('openid', $types, true) and $nv_Request->isset_request('server', 'g
     exit();
 }
 
+// Lấy các khóa truy cập khi vào trang quản lý khóa truy cập
+if ($array_data['type'] == 'passkey') {
+    $array_data['publicKeys'] = [];
+    $array_data['login_keys'] = 0;
+    $array_data['security_keys'] = 0;
+
+    $sql = 'SELECT id, keyid, created_at, last_used_at, clid, enable_login, nickname
+    FROM ' . NV_MOD_TABLE . '_passkey WHERE userid=' . $edit_userid;
+    $result = $db->query($sql);
+    while ($_row = $result->fetch()) {
+        $array_data['publicKeys'][$_row['keyid']] = $_row;
+        if (!empty($_row['enable_login'])) {
+            $array_data['login_keys']++;
+        } else {
+            $array_data['security_keys']++;
+        }
+    }
+    $result->closeCursor();
+}
+
 // Basic
 if ($checkss == $array_data['checkss'] and $array_data['type'] == 'basic') {
     $array_data['first_name'] = isset($array_field_config['first_name']) ? nv_substr($nv_Request->get_title('first_name', 'post', '', 1), 0, 255) : $row['first_name'];
