@@ -196,4 +196,23 @@ class Files extends Cache
 
         return $list;
     }
+
+    /**
+     * delItem()
+     *
+     * @param string $module_name
+     * @param string $filename
+     * @return bool
+     */
+    public function delItem($module_name, $filename)
+    {
+
+        $fullname = $this->_CacheDir . '/' . $module_name . '/' . $filename;
+
+        if (is_file($fullname) && unlink($fullname)) {
+            return true;
+        }
+
+        return false;
+    }
 }

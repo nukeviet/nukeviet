@@ -26,6 +26,8 @@ class Memcached extends Cache
 {
     private $_Cache;
 
+    private $_CacheDir = '/tmp';
+
     /**
      * __construct()
      *
@@ -127,5 +129,24 @@ class Memcached extends Cache
         $this->_Cache->set($cache_key, $list, $ttl);
 
         return $list;
+    }
+
+    /**
+     * delItem()
+     *
+     * @param string $module_name
+     * @param string $filename
+     * @return bool
+     */
+    public function delItem($module_name, $filename)
+    {
+
+        $fullname = $this->_CacheDir . '/' . $module_name . '/' . $filename;
+
+        if (is_file($fullname) && unlink($fullname)) {
+            return true;
+        }
+
+        return false;
     }
 }

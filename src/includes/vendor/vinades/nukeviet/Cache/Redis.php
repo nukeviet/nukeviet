@@ -26,6 +26,8 @@ class Redis extends Cache
 {
     private $_Cache;
 
+    private $_CacheDir = '/tmp';
+
     /**
      * __construct()
      *
@@ -173,5 +175,24 @@ class Redis extends Cache
         if ($ttl > 0) {
             $this->_Cache->expire($key, $ttl);
         }
+    }
+
+    /**
+     * delItem()
+     *
+     * @param string $module_name
+     * @param string $filename
+     * @return bool
+     */
+    public function delItem($module_name, $filename)
+    {
+
+        $fullname = $this->_CacheDir . '/' . $module_name . '/' . $filename;
+
+        if (is_file($fullname) && unlink($fullname)) {
+            return true;
+        }
+
+        return false;
     }
 }
