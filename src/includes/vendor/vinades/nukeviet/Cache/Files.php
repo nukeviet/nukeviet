@@ -128,7 +128,7 @@ class Files extends Cache
             return false;
         }
 
-        if($ttl > 0) {
+        if ($ttl > 0) {
             $ttl += rand(1, 10);
         }
 
