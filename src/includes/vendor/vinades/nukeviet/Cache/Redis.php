@@ -174,4 +174,23 @@ class Redis extends Cache
             $this->_Cache->expire($key, $ttl);
         }
     }
+
+    /**
+     * delItem()
+     *
+     * @param string $module_name
+     * @param string $filename
+     * @return bool
+     */
+    public function delItem($module_name, $filename)
+    {
+        $item_name = $module_name . '_' . md5($filename);
+
+        if ($this->_Cache->exists($item_name)) {
+            $this->_Cache->del($item_name);
+            return true;
+        }
+
+        return false;
+    }
 }

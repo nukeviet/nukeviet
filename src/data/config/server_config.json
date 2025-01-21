@@ -116,6 +116,8 @@
             "[composer\\.json]",
             "[default\\.(htaccess\\.txt|web\\.config\\.txt|php)]",
             "[mainfile\\.php]",
+            "[modules/[^/]+/blocks/[^/]+\\.json]",
+            "[themes/[^/]+/blocks/[^/]+\\.json]",
             "[web\\.config]",
             "{NV_CONFIG_FILENAME}"
         ],

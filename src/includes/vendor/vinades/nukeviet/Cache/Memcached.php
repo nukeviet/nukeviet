@@ -128,4 +128,16 @@ class Memcached extends Cache
 
         return $list;
     }
+
+    /**
+     * delItem()
+     *
+     * @param string $module_name
+     * @param string $filename
+     * @return bool
+     */
+    public function delItem($module_name, $filename)
+    {
+        return $this->_Cache->delete($module_name . '_' . md5($filename));
+    }
 }

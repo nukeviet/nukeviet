@@ -128,7 +128,7 @@ class Files extends Cache
             return false;
         }
 
-        if($ttl > 0) {
+        if ($ttl > 0) {
             $ttl += rand(1, 10);
         }
 
@@ -195,5 +195,24 @@ class Files extends Cache
         $this->setItem($modname, $cache_file, serialize($list));
 
         return $list;
+    }
+
+    /**
+     * delItem()
+     *
+     * @param string $module_name
+     * @param string $filename
+     * @return bool
+     */
+    public function delItem($module_name, $filename)
+    {
+
+        $fullname = $this->_CacheDir . '/' . $module_name . '/' . $filename;
+
+        if (is_file($fullname) && unlink($fullname)) {
+            return true;
+        }
+
+        return false;
     }
 }
