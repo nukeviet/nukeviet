@@ -12,6 +12,14 @@
     width: 400px;
 }
 
+.mb-0 {
+    margin-bottom: 0!important;
+}
+
+.mt-2 {
+    margin-top: 10px!important;
+}
+
 @media (max-width: 399px) {
     .login-box {
         width: 100%;
@@ -43,4 +51,32 @@
 
 .print-codes {
     padding: 60px 30px 20px 30px;
+}
+
+.tstep-flex {
+    display: flex;
+}
+
+.tstep-align-center {
+    align-items: center;
+}
+
+.tstep-justify-center {
+    justify-content: center;
+}
+
+.tstep-gap-1 {
+    gap: 5px;
+}
+
+.tstep-gap-2 {
+    gap: 10px;
+}
+
+.tstep-grow {
+    flex-grow: 1;
+}
+
+.tstep-shrink {
+    flex-shrink: 1;
 }

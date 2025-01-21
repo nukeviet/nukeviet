@@ -226,14 +226,19 @@ if ($nv_Request->isset_request('save_credential', 'post')) {
         ]);
     }
 
+    $enable_login = (int) $nv_Request->get_bool('enable_login', 'post', false);
+    if ($enable_login) {
+        $nickname = 'Passkey ' . ($array_data['login_keys'] + 1);
+    } else {
+        $nickname = 'Security key ' . ($array_data['security_keys'] + 1);
+    }
+
     $sql = 'INSERT INTO ' . NV_MOD_TABLE . '_passkey (
         userid, keyid, publickey, userhandle, counter, aaguid, type, created_at, last_used_at, clid, enable_login, nickname
     ) VALUES (
         ' . $edit_userid . ', :keyid, :publickey, :userhandle, :counter, :aaguid, :type,
-        ' . NV_CURRENTTIME . ', ' . NV_CURRENTTIME . ', ' . $db->quote($client_info['clid']) . ', 1, :nickname
+        ' . NV_CURRENTTIME . ', ' . NV_CURRENTTIME . ', ' . $db->quote($client_info['clid']) . ', ' . $enable_login . ', :nickname
     )';
-
-    $nickname = 'Passkey ' . ($array_data['login_keys'] + 1);
 
     nv_insert_logs(NV_LANG_DATA, $module_name, 'log_add_passkey', $nickname, $edit_userid);
 

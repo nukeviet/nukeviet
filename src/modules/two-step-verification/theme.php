@@ -16,18 +16,21 @@ if (!defined('NV_MOD_2STEP_VERIFICATION')) {
 /**
  * nv_theme_info_2step()
  *
- * @param array $backupcodes
+ * @param array $data
  * @param bool  $autoshowcode
  * @return string
  */
-function nv_theme_info_2step($backupcodes, $autoshowcode)
+function nv_theme_info_2step($data, $autoshowcode)
 {
-    global $nv_Lang, $user_info, $module_name;
+    global $nv_Lang, $user_info, $module_name, $global_config;
+
+    $template_js = get_tpl_dir([$global_config['module_theme'], $global_config['site_theme']], 'default', 'js/users.passkey.js');
 
     $xtpl = new XTemplate('main.tpl', get_module_tpl_dir('main.tpl'));
     $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
     $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
-    $xtpl->assign('NV_CHECK_SESSION', NV_CHECK_SESSION);
+    $xtpl->assign('DATA', $data);
+    $xtpl->assign('TEMPLATE_JS', $template_js);
 
     if (empty($user_info['active2step'])) {
         $xtpl->assign('LINK_TURNON', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=setup');
@@ -40,18 +43,6 @@ function nv_theme_info_2step($backupcodes, $autoshowcode)
         $xtpl->parse('main.off');
     } else {
         $code_unused = 0;
-        foreach ($backupcodes as $code) {
-            $code_unused += (!$code['is_used']);
-            $xtpl->assign('CODE', $code);
-
-            if ($code['is_used']) {
-                $xtpl->parse('main.backupcodeModal.code.used');
-            } else {
-                $xtpl->parse('main.backupcodeModal.code.unuse');
-            }
-
-            $xtpl->parse('main.backupcodeModal.code');
-        }
         $xtpl->parse('main.backupcodeModal');
 
         $xtpl->assign('NUM_CODE', $nv_Lang->getModule('backupcode_2step', $code_unused));
@@ -64,8 +55,40 @@ function nv_theme_info_2step($backupcodes, $autoshowcode)
         $xtpl->parse('main.on');
     }
 
-    $xtpl->parse('main');
+    // Mã dự phòng
+    if (empty($data['backupcodes'])) {
+        $xtpl->parse('main.btn_create_code');
+    } else {
+        $code_unused = 0;
 
+        foreach ($data['backupcodes'] as $code) {
+            $code_unused += !$code['is_used'];
+            $xtpl->assign('CODE', $code);
+
+            if ($code['is_used']) {
+                $xtpl->parse('main.bcodes.code.used');
+            } else {
+                $xtpl->parse('main.bcodes.code.unuse');
+            }
+
+            $xtpl->parse('main.bcodes.code');
+        }
+
+        $xtpl->parse('main.btn_view_code');
+        $xtpl->parse('main.bcodes');
+    }
+
+    // Ghi chú khóa đăng nhập làm xác thực 2 bước
+    if ($data['login_keys'] > 0) {
+        $xtpl->parse('main.note_login_keys');
+    }
+
+    // Nút thêm nếu chưa có khóa bảo mật
+    if ($data['security_keys'] == 0) {
+        $xtpl->parse('main.btn_add_key');
+    }
+
+    $xtpl->parse('main');
     return $xtpl->text('main');
 }
 
@@ -148,6 +171,10 @@ function nv_theme_complete_2step(array $backupcodes, array $array_data)
     return $xtpl->text('main');
 }
 
+/**
+ * @param array $backupcodes
+ * @return string
+ */
 function nv_theme_print_code(array $backupcodes)
 {
     $xtpl = new XTemplate('print.tpl', get_module_tpl_dir('print.tpl'));

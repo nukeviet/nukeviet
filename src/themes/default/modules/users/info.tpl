@@ -351,7 +351,7 @@
                         </div>
                         <h2 class="margin-bottom">{LANG.passkey_login_create}</h2>
                         <p>{LANG.passkey_login_create_body}.</p>
-                        <button class="btn btn-primary hidden" type="button" data-toggle="passkey-add"><i class="fa fa-plus" aria-hidden="true" data-icon="fa-plus"></i> {LANG.passkey_add}</button>
+                        <button class="btn btn-primary hidden" type="button" data-toggle="passkey-add" data-enable-login="1"><i class="fa fa-plus" aria-hidden="true" data-icon="fa-plus"></i> {LANG.passkey_add}</button>
                         <div class="text-danger hidden" data-toggle="passkey-not-supported">{LANG.passkey_not_supported}</div>
                         <div class="text-danger margin-top hidden" data-toggle="error"></div>
                     </div>
@@ -365,7 +365,7 @@
                         <div class="h3">
                             <strong>{LANG.passkey_list}</strong>
                         </div>
-                        <button class="btn btn-primary hidden" type="button" data-toggle="passkey-add"><i class="fa fa-plus" aria-hidden="true" data-icon="fa-plus"></i> {LANG.passkey_add}</button>
+                        <button class="btn btn-primary hidden" type="button" data-toggle="passkey-add" data-enable-login="1"><i class="fa fa-plus" aria-hidden="true" data-icon="fa-plus"></i> {LANG.passkey_add}</button>
                     </div>
                     <div class="panel-body text-danger hidden" data-toggle="error"></div>
                     <ul class="list-group">

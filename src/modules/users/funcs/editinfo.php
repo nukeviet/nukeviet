@@ -284,6 +284,7 @@ function nv_groups_list_pub2($edit_userid)
 }
 
 $array_data = [];
+// checkss khớp với modules/two-step-verification/funcs/main.php thay đổi cần cập nhật
 $array_data['checkss'] = md5(NV_CHECK_SESSION . '_' . $module_name . '_' . $op . '_' . $user_info['userid']);
 $array_data['awaitinginfo'] = [];
 $array_data['editcensor'] = $global_users_config['active_editinfo_censor'];

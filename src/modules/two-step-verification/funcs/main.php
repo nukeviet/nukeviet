@@ -22,6 +22,28 @@ if (empty($user_info['active2step']) and in_array((int) $global_config['two_step
     nv_redirect_location(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=setup');
 }
 
+$array_data = [];
+// checkss khớp với modules/users/funcs/editinfo.php thay đổi cần cập nhật
+$array_data['checkss'] = md5(NV_CHECK_SESSION . '_' . NV_BRIDGE_USER_MODULE . '_editinfo_' . $user_info['userid']);
+$array_data['form_url'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . NV_BRIDGE_USER_MODULE . '&amp;' . NV_OP_VARIABLE . '=editinfo/passkey';
+$array_data['publicKeys'] = [];
+$array_data['login_keys'] = 0;
+$array_data['security_keys'] = 0;
+
+// Lấy danh sách khóa đăng nhập, khóa bảo mật
+$sql = 'SELECT id, keyid, created_at, last_used_at, clid, enable_login, nickname
+FROM ' . $db_config['prefix'] . '_' . $site_mods[NV_BRIDGE_USER_MODULE]['module_data'] . '_passkey WHERE userid=' . $user_info['userid'];
+$result = $db->query($sql);
+while ($_row = $result->fetch()) {
+    $array_data['publicKeys'][$_row['keyid']] = $_row;
+    if (!empty($_row['enable_login'])) {
+        $array_data['login_keys']++;
+    } else {
+        $array_data['security_keys']++;
+    }
+}
+$result->closeCursor();
+
 /*
  * Tắt xác thực hai bước
  * Lưu ý quan trọng: Chỉ tài khoản thành viên đã full xác thực mới có thể tắt!
@@ -80,14 +102,14 @@ if ($nv_Request->isset_request('changecode2step', 'post')) {
 }
 
 $sql = 'SELECT * FROM ' . $db_config['prefix'] . '_' . $site_mods[NV_BRIDGE_USER_MODULE]['module_data'] . '_backupcodes WHERE userid=' . $user_info['userid'];
-$backupcodes = $db->query($sql)->fetchAll();
+$array_data['backupcodes'] = $db->query($sql)->fetchAll();
 
 // Tải xuống code
 if ($nv_Request->isset_request('downloadcode', 'get') and $nv_Request->get_title('downloadcode', 'get', '') == md5('downloadcode' . NV_CHECK_SESSION)) {
     $filename = change_alias(NV_SERVER_NAME) . '-recovery-codes.txt';
     $data = '';
 
-    foreach ($backupcodes as $code) {
+    foreach ($array_data['backupcodes'] as $code) {
         if (!empty($code['is_used'])) {
             continue;
         }
@@ -113,7 +135,7 @@ if ($array_op[0] ?? '' == 'print') {
     $page_url .= '&amp;' . NV_OP_VARIABLE . '=print';
     $canonicalUrl = getCanonicalUrl($page_url, true, true);
 
-    $contents = nv_theme_print_code($backupcodes);
+    $contents = nv_theme_print_code($array_data['backupcodes']);
     include NV_ROOTDIR . '/includes/header.php';
     echo nv_site_theme($contents, false);
     include NV_ROOTDIR . '/includes/footer.php';
@@ -127,7 +149,7 @@ if ($nv_Request->isset_request('showcode_' . $module_data, 'session')) {
 
 $canonicalUrl = getCanonicalUrl($page_url, true, true);
 
-$contents = nv_theme_info_2step($backupcodes, $autoshowcode);
+$contents = nv_theme_info_2step($array_data, $autoshowcode);
 
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_site_theme($contents);

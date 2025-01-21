@@ -33,14 +33,11 @@ $lang_module['cfg_step2_info'] = 'If the above operation is successful, the appl
 $lang_module['cfg_step2_info2'] = '6-digit code';
 $lang_module['cfg_step2'] = 'Step 2: Enter the code from the app';
 $lang_module['title_2step'] = 'Two-step authentication';
-$lang_module['status_2step'] = 'Two-step authentication is';
 $lang_module['active_2step'] = 'On';
 $lang_module['deactive_2step'] = 'Off';
 $lang_module['backupcode_2step'] = 'You have <strong>%d</strong> unused backup codes';
 $lang_module['backupcode_2step_view'] = 'See backup codes';
 $lang_module['backupcode_2step_note'] = 'Note: Please store backup codes carefully! If you lose your phone, you can use them to verify account access. If you forget your codes and lose your phone, you won\'t be able to sign in to your account.';
-$lang_module['turnoff2step'] = 'Turn off two-step authentication';
-$lang_module['turnon2step'] = 'Turn on two-step authentication';
 $lang_module['creat_other_code'] = 'Regenerate backup codes';
 $lang_module['change_2step_notvalid'] = 'Your account doesn\'t have a password, so Two-Step Authentication can\'t be changed. Please create a password and then return to this page.<br />Please <a href="%s">click here</a> to create a password';
 $lang_module['deactive_mess'] = 'Do you really want to turn off two-step authentication?';

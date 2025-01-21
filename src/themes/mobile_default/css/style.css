@@ -1098,8 +1098,12 @@ span.keyword {
     padding-bottom: 10px;
 }
 
-a.btn {
+a.btn:not(.btn-default) {
     color: #fff;
+}
+
+a.btn-default {
+    color: #666;
 }
 
 .container-simple {

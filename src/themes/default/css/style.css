@@ -1148,8 +1148,12 @@ span.keyword {
     background-color: #fff;
 }
 
-a.btn {
+a.btn:not(.btn-default) {
     color: #fff;
+}
+
+a.btn-default {
+    color: #666;
 }
 
 .section-header-bar {
