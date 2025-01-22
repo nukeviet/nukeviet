@@ -26,6 +26,8 @@ $array_data = [];
 // checkss khớp với modules/users/funcs/editinfo.php thay đổi cần cập nhật
 $array_data['checkss'] = md5(NV_CHECK_SESSION . '_' . NV_BRIDGE_USER_MODULE . '_editinfo_' . $user_info['userid']);
 $array_data['form_url'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . NV_BRIDGE_USER_MODULE . '&amp;' . NV_OP_VARIABLE . '=editinfo/passkey';
+$array_data['page_url'] = $page_url;
+$array_data['show_type'] = $nv_Request->get_title('type', 'get', '');
 $array_data['publicKeys'] = [];
 $array_data['login_keys'] = 0;
 $array_data['security_keys'] = 0;
@@ -52,12 +54,23 @@ $result->closeCursor();
 if ($nv_Request->isset_request('turnoff2step', 'post')) {
     $tokend = $nv_Request->get_title('tokend', 'post', '');
     if (!defined('NV_IS_AJAX') or $tokend != NV_CHECK_SESSION or !defined('NV_IS_USER')) {
-        nv_htmlOutput('Wrong URL');
+        nv_jsonOutput([
+            'status' => 'error',
+            'mess' => 'Not allowed!'
+        ]);
     }
 
     $sql = 'UPDATE ' . $db_config['prefix'] . '_' . $site_mods[NV_BRIDGE_USER_MODULE]['module_data'] . ' SET
         active2step=0, secretkey=\'\', last_update=' . NV_CURRENTTIME . '
     WHERE userid=' . $user_info['userid'];
+    $db->query($sql);
+
+    // Xóa security keys
+    $sql = 'DELETE FROM ' . $db_config['prefix'] . '_' . $site_mods[NV_BRIDGE_USER_MODULE]['module_data'] . '_passkey WHERE userid=' . $user_info['userid'] . ' AND enable_login=0';
+    $db->query($sql);
+
+    // Xóa mã dự phòng
+    $sql = 'DELETE FROM ' . $db_config['prefix'] . '_' . $site_mods[NV_BRIDGE_USER_MODULE]['module_data'] . '_backupcodes WHERE userid=' . $user_info['userid'];
     $db->query($sql);
 
     // Gửi email thông báo bảo mật
@@ -73,17 +86,23 @@ if ($nv_Request->isset_request('turnoff2step', 'post')) {
         ]
     ]];
     nv_sendmail_template_async([$module_file, NukeViet\Template\Email\Tpl2Step::DEACTIVATE_2STEP], $send_data);
-    nv_htmlOutput('OK');
+    nv_insert_logs(NV_LANG_DATA, $module_name, 'log_deactive_2step', '', $user_info['userid']);
+    nv_jsonOutput([
+        'status' => 'ok',
+        'mess' => 'OK'
+    ]);
 }
 
 // Tạo lại mã dự phòng
 if ($nv_Request->isset_request('changecode2step', 'post')) {
     $tokend = $nv_Request->get_title('tokend', 'post', '');
     if (!defined('NV_IS_AJAX') or $tokend != NV_CHECK_SESSION) {
-        nv_htmlOutput('Wrong URL');
+        nv_jsonOutput([
+            'status' => 'error',
+            'mess' => 'Not allowed!'
+        ]);
     }
     nv_creat_backupcodes();
-    $nv_Request->set_Session('showcode_' . $module_data, 1);
 
     // Gửi email thông báo bảo mật
     $send_data = [[
@@ -98,11 +117,26 @@ if ($nv_Request->isset_request('changecode2step', 'post')) {
         ]
     ]];
     nv_sendmail_template_async([$module_file, NukeViet\Template\Email\Tpl2Step::RENEW_BACKUPCODE], $send_data);
-    nv_htmlOutput('OK');
+    nv_insert_logs(NV_LANG_DATA, $module_name, 'log_renew_backupcode', '', $user_info['userid']);
+    nv_jsonOutput([
+        'status' => 'ok',
+        'mess' => 'OK'
+    ]);
 }
 
 $sql = 'SELECT * FROM ' . $db_config['prefix'] . '_' . $site_mods[NV_BRIDGE_USER_MODULE]['module_data'] . '_backupcodes WHERE userid=' . $user_info['userid'];
 $array_data['backupcodes'] = $db->query($sql)->fetchAll();
+
+$array_data['print_code_url'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=print';
+$array_data['download_code_url'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;downloadcode=' . md5('downloadcode' . NV_CHECK_SESSION);
+$array_data['text_codes'] = [];
+foreach ($array_data['backupcodes'] as $code) {
+    if (!empty($code['is_used'])) {
+        continue;
+    }
+    $array_data['text_codes'][] = $code['code'];
+}
+$array_data['text_codes'] = implode("\n", $array_data['text_codes']);
 
 // Tải xuống code
 if ($nv_Request->isset_request('downloadcode', 'get') and $nv_Request->get_title('downloadcode', 'get', '') == md5('downloadcode' . NV_CHECK_SESSION)) {
@@ -141,15 +175,9 @@ if ($array_op[0] ?? '' == 'print') {
     include NV_ROOTDIR . '/includes/footer.php';
 }
 
-$autoshowcode = false;
-if ($nv_Request->isset_request('showcode_' . $module_data, 'session')) {
-    $autoshowcode = true;
-    $nv_Request->unset_request('showcode_' . $module_data, 'session');
-}
+$canonicalUrl = getCanonicalUrl($page_url);
 
-$canonicalUrl = getCanonicalUrl($page_url, true, true);
-
-$contents = nv_theme_info_2step($array_data, $autoshowcode);
+$contents = nv_theme_info_2step($array_data);
 
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_site_theme($contents);

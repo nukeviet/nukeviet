@@ -148,21 +148,39 @@ $(function() {
         e.preventDefault();
         modalShowByObj($(this).attr('href'));
     });
+
     // Tắt xác thực 2 bước
-    $('[data-toggle="turnoff2step"]').click(function() {
-        $(this).prop('disabled', true);
-        var tokend = $(this).data('tokend');
-        $.post(
-            nv_base_siteurl + 'index.php?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&nocache=' + new Date().getTime(),
-            'turnoff2step=1&tokend=' + tokend,
-            function(res) {
-                if (res == 'OK') {
-                    window.location.reload(true);
-                } else {
-                    alert(res);
+    $('[data-toggle="turnoff2step"]').click(function(e) {
+        e.preventDefault();
+
+        const btn = $(this);
+        const icon = $('i', btn);
+        if (icon.is('.fa-spinner')) {
+            return false;
+        }
+        icon.removeClass(icon.data('icon')).addClass('fa-spinner fa-pulse');
+        $.ajax({
+            url: nv_base_siteurl + 'index.php?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&nocache=' + new Date().getTime(),
+            type: 'post',
+            data: {
+                tokend: btn.data('tokend'),
+                turnoff2step: 1
+            },
+            dataType: 'json',
+            success: function(response) {
+                if (response.status != 'ok') {
+                    icon.removeClass('fa-spinner fa-pulse').addClass(icon.data('icon'));
+                    alert(response.mess);
+                    return;
                 }
+                location.reload();
+            },
+            error: function(xhr, status, error) {
+                console.error(xhr, status, error);
+                icon.removeClass('fa-spinner fa-pulse').addClass(icon.data('icon'));
+                alert(error);
             }
-        );
+        });
     });
 
     $('[data-toggle=opt_validForm]').on('submit', function() {
@@ -178,20 +196,37 @@ $(function() {
     });
 
     // Đổi mã
-    $('[data-toggle="changecode2step"]').click(function() {
-        $(this).prop('disabled', true);
-        var tokend = $(this).data('tokend');
-        $.post(
-            nv_base_siteurl + 'index.php?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&nocache=' + new Date().getTime(),
-            'changecode2step=1&tokend=' + tokend,
-            function(res) {
-                if (res == 'OK') {
-                    window.location.reload(true);
-                } else {
-                    alert(res);
+    $('[data-toggle="changecode2step"]').on('click', function(e) {
+        e.preventDefault();
+
+        const btn = $(this);
+        const icon = $('i', btn);
+        if (icon.is('.fa-spinner')) {
+            return false;
+        }
+        icon.removeClass(icon.data('icon')).addClass('fa-spinner fa-pulse');
+        $.ajax({
+            url: nv_base_siteurl + 'index.php?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&nocache=' + new Date().getTime(),
+            type: 'post',
+            data: {
+                tokend: btn.data('tokend'),
+                changecode2step: 1
+            },
+            dataType: 'json',
+            success: function(response) {
+                if (response.status != 'ok') {
+                    icon.removeClass('fa-spinner fa-pulse').addClass(icon.data('icon'));
+                    alert(response.mess);
+                    return;
                 }
+                location.reload();
+            },
+            error: function(xhr, status, error) {
+                console.error(xhr, status, error);
+                icon.removeClass('fa-spinner fa-pulse').addClass(icon.data('icon'));
+                alert(error);
             }
-        );
+        });
     });
 
     // In code
@@ -208,4 +243,28 @@ $(function() {
             $('span', cBtn).text(cBtn.data('copied'));
         });
     }
+
+    // Xác nhận đã chép mã
+    $('.confirmed-codes').on('click', function() {
+        $('[data-toggle="confirm-complete"]').prop('disabled', false);
+    });
+    $('[data-toggle="confirm-complete"]').on('click', function() {
+        window.location.href = $(this).data('link');
+    });
+
+    // Đóng mở danh sách khóa bảo mật
+    $('#security-keys').on('hide.bs.collapse', function (e) {
+        locationReplace($(e.currentTarget).data('page-url'));
+    });
+    $('#security-keys').on('show.bs.collapse', function (e) {
+        locationReplace($(e.currentTarget).data('show-keys-url'));
+    });
+
+    // Đóng mở danh sách mã dự phòng
+    $('#recovery-codes').on('hide.bs.collapse', function (e) {
+        locationReplace($(e.currentTarget).data('page-url'));
+    });
+    $('#recovery-codes').on('show.bs.collapse', function (e) {
+        locationReplace($(e.currentTarget).data('show-codes-url'));
+    });
 });

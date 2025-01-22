@@ -18,6 +18,10 @@ $key_words = $module_info['keywords'];
 $page_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op;
 if (!empty($array_op[1]) and $array_op[1] == 'complete') {
     $page_url .= '/' . $array_op[1];
+
+    if (!empty($array_op[2]) and $array_op[2] == 'review') {
+        $page_url .= '/' . $array_op[2];
+    }
 }
 
 $nv_redirect = '';
@@ -46,25 +50,35 @@ if (defined('SSO_CLIENT_DOMAIN')) {
     }
 }
 
-// Trang thông báo kết quả
-if (!empty($array_op[1]) and $array_op[1] == 'complete') {
-    $csrf = $nv_Request->get_title($module_data . '_setsuccess', 'session', '');
-    if (empty($user_info['active2step']) or empty($csrf) or !csrf_check($csrf, $module_data . '_setsuccess')) {
+// Xem lại toàn bộ các xác thực 2 bước
+if (!empty($array_op[2]) and $array_op[2] == 'review' and $array_op[1] == 'complete') {
+    $csrf = $nv_Request->get_title($module_data . '_setreview', 'session', '');
+    if (empty($user_info['active2step']) or empty($csrf) or !csrf_check($csrf, $module_data . '_setreview')) {
         nv_redirect_location(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
     }
-
-    $sql = 'SELECT * FROM ' . $db_config['prefix'] . '_' . $site_mods[NV_BRIDGE_USER_MODULE]['module_data'] . '_backupcodes WHERE userid=' . $user_info['userid'];
-    $backupcodes = $db->query($sql)->fetchAll();
+    $nv_Request->unset_request($module_data . '_setreview', 'session');
 
     $array_data = [];
-    $array_data['print_url'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=print';
-    $array_data['download_url'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;downloadcode=' . md5('downloadcode' . NV_CHECK_SESSION);
-    $array_data['text_codes'] = [];
-    foreach ($backupcodes as $code) {
-        $array_data['text_codes'][] = $code['code'];
-    }
-    $array_data['text_codes'] = implode("\n", $array_data['text_codes']);
     $array_data['redirect'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name;
+    $array_data['link_passkey'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . NV_BRIDGE_USER_MODULE . '&amp;' . NV_OP_VARIABLE . '=editinfo/passkey';
+    $array_data['link_seckey'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name;
+    $array_data['publicKeys'] = [];
+    $array_data['login_keys'] = 0;
+    $array_data['security_keys'] = 0;
+
+    // Lấy danh sách khóa đăng nhập, khóa bảo mật
+    $sql = 'SELECT id, keyid, created_at, last_used_at, clid, enable_login, nickname
+    FROM ' . $db_config['prefix'] . '_' . $site_mods[NV_BRIDGE_USER_MODULE]['module_data'] . '_passkey WHERE userid=' . $user_info['userid'];
+    $result = $db->query($sql);
+    while ($_row = $result->fetch()) {
+        $array_data['publicKeys'][$_row['keyid']] = $_row;
+        if (!empty($_row['enable_login'])) {
+            $array_data['login_keys']++;
+        } else {
+            $array_data['security_keys']++;
+        }
+    }
+    $result->closeCursor();
 
     if (!empty($nv_redirect)) {
         $array_data['redirect'] = nv_redirect_decrypt($nv_redirect);
@@ -81,12 +95,42 @@ if (!empty($array_op[1]) and $array_op[1] == 'complete') {
 
         if (!empty($sso_redirect) and !empty($sso_client) and str_starts_with($sso_redirect, $sso_client)) {
             $array_data['redirect'] = $sso_redirect;
-            $array_data['redirect'] = $sso_client;
+            $array_data['client'] = $sso_client;
         }
 
         $nv_Request->unset_request('sso_client_' . $module_data, 'session');
         $nv_Request->unset_request('sso_redirect_' . $module_data, 'session');
     }
+
+    $canonicalUrl = getCanonicalUrl($page_url, true, true);
+    $contents = nv_theme_review_2step($array_data);
+
+    include NV_ROOTDIR . '/includes/header.php';
+    echo nv_site_theme($contents);
+    include NV_ROOTDIR . '/includes/footer.php';
+}
+
+// Trang thông báo kết quả
+if (!empty($array_op[1]) and $array_op[1] == 'complete') {
+    $csrf = $nv_Request->get_title($module_data . '_setsuccess', 'session', '');
+    if (empty($user_info['active2step']) or empty($csrf) or !csrf_check($csrf, $module_data . '_setsuccess')) {
+        nv_redirect_location(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
+    }
+    $nv_Request->unset_request($module_data . '_setsuccess', 'session');
+    $nv_Request->set_Session($module_data . '_setreview', csrf_create($module_data . '_setreview'));
+
+    $sql = 'SELECT * FROM ' . $db_config['prefix'] . '_' . $site_mods[NV_BRIDGE_USER_MODULE]['module_data'] . '_backupcodes WHERE userid=' . $user_info['userid'];
+    $backupcodes = $db->query($sql)->fetchAll();
+
+    $array_data = [];
+    $array_data['print_url'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=print';
+    $array_data['download_url'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;downloadcode=' . md5('downloadcode' . NV_CHECK_SESSION);
+    $array_data['text_codes'] = [];
+    foreach ($backupcodes as $code) {
+        $array_data['text_codes'][] = $code['code'];
+    }
+    $array_data['text_codes'] = implode("\n", $array_data['text_codes']);
+    $array_data['redirect'] = $page_url . '/review';
 
     $canonicalUrl = getCanonicalUrl($page_url, true, true);
     $contents = nv_theme_complete_2step($backupcodes, $array_data);

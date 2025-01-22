@@ -756,6 +756,8 @@ function user_info($data, $array_field_config, $custom_fields, $types, $data_que
     global $module_info, $global_config, $nv_Lang, $module_name, $op, $global_array_genders, $is_custom_field, $user_info, $global_users_config, $group_lists, $group_id, $language_array, $client_info;
 
     [$template, $dir] = get_module_tpl_dir('info.tpl', true);
+    $template_js = get_tpl_dir([$global_config['module_theme'], $global_config['site_theme']], 'default', 'js/users.passkey.js');
+
     $xtpl = new XTemplate('info.tpl', $dir);
 
     if (defined('ACCESS_EDITUS')) {
@@ -767,6 +769,7 @@ function user_info($data, $array_field_config, $custom_fields, $types, $data_que
     $xtpl->assign('AVATAR_DEFAULT', NV_STATIC_URL . 'themes/' . $template . '/images/' . $module_info['module_theme'] . '/no_avatar.png');
     $xtpl->assign('URL_AVATAR', nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=avatar/src', true));
     $xtpl->assign('TEMPLATE', $template);
+    $xtpl->assign('TEMPLATE_JS', $template_js);
     $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
     $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
     $xtpl->assign('NICK_MAXLENGTH', $global_config['nv_unickmax']);
@@ -941,7 +944,6 @@ function user_info($data, $array_field_config, $custom_fields, $types, $data_que
     }
 
     // Tab passkey
-    // FIXME
     if (in_array('passkey', $types, true)) {
         if (!$data['confirmed_pass']) {
             $xtpl->assign('HTML', user_confirm_pass());

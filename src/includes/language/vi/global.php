@@ -394,6 +394,7 @@ $lang_global['custom_range'] = 'Khác';
 $lang_global['copy_to_clipboard'] = 'Lưu vào bộ nhớ tạm';
 $lang_global['copied'] = 'Đã lưu!';
 $lang_global['complete'] = 'Hoàn tất';
+$lang_global['continue'] = 'Tiếp tục';
 $lang_global['greeting_for_user'] = 'Xin chào %1$s (bí danh: %2$s),';
 $lang_global['greeting_for_guest'] = 'Xin chào %s,';
 $lang_global['greeting_title'] = 'Ông/Bà %s';

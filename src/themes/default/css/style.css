@@ -22,6 +22,9 @@
     --nv-font-size-md: 14px;
     --nv-font-size-lg: 16px;
     --nv-font-size-xxl: 22px;
+    --nv-primary: #337ab7;
+    --nv-success: #5cb85c;
+    --nv-white: #fff;
 }
 
 @font-face {

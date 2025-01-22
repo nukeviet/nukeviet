@@ -214,4 +214,9 @@ $(function() {
             }
         });
     });
+
+    // Tooltip
+    $('[data-toggle="passkey-tooltip"]').tooltip({
+        container: 'body'
+    });
 });

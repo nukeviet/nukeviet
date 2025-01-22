@@ -14,78 +14,103 @@ if (!defined('NV_MOD_2STEP_VERIFICATION')) {
 }
 
 /**
- * nv_theme_info_2step()
- *
  * @param array $data
- * @param bool  $autoshowcode
  * @return string
  */
-function nv_theme_info_2step($data, $autoshowcode)
+function nv_theme_info_2step(array $data)
 {
-    global $nv_Lang, $user_info, $module_name, $global_config;
+    global $nv_Lang, $user_info, $module_name, $global_config, $client_info;
 
-    $template_js = get_tpl_dir([$global_config['module_theme'], $global_config['site_theme']], 'default', 'js/users.passkey.js');
 
     $xtpl = new XTemplate('main.tpl', get_module_tpl_dir('main.tpl'));
     $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
     $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
     $xtpl->assign('DATA', $data);
-    $xtpl->assign('TEMPLATE_JS', $template_js);
 
+    // Thông báo bật xác thực 2 bước để tiếp tục
     if (empty($user_info['active2step'])) {
         $xtpl->assign('LINK_TURNON', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=setup');
-        $xtpl->parse('main.turnon');
-    } else {
-        $xtpl->parse('main.turnoff');
+        $xtpl->parse('main.tstep_off');
+        return $xtpl->text('main.tstep_off');
     }
 
-    if (empty($user_info['active2step'])) {
-        $xtpl->parse('main.off');
-    } else {
-        $code_unused = 0;
-        $xtpl->parse('main.backupcodeModal');
-
-        $xtpl->assign('NUM_CODE', $nv_Lang->getModule('backupcode_2step', $code_unused));
-
-        if ($autoshowcode) {
-            $xtpl->parse('main.backupcode.autoshowcode');
-        }
-
-        $xtpl->parse('main.backupcode');
-        $xtpl->parse('main.on');
-    }
-
-    // Mã dự phòng
-    if (empty($data['backupcodes'])) {
-        $xtpl->parse('main.btn_create_code');
-    } else {
-        $code_unused = 0;
-
-        foreach ($data['backupcodes'] as $code) {
-            $code_unused += !$code['is_used'];
-            $xtpl->assign('CODE', $code);
-
-            if ($code['is_used']) {
-                $xtpl->parse('main.bcodes.code.used');
-            } else {
-                $xtpl->parse('main.bcodes.code.unuse');
-            }
-
-            $xtpl->parse('main.bcodes.code');
-        }
-
-        $xtpl->parse('main.btn_view_code');
-        $xtpl->parse('main.bcodes');
-    }
+    $template_js = get_tpl_dir([$global_config['module_theme'], $global_config['site_theme']], 'default', 'js/users.passkey.js');
+    $xtpl->assign('TEMPLATE_JS', $template_js);
 
     // Ghi chú khóa đăng nhập làm xác thực 2 bước
     if ($data['login_keys'] > 0) {
+        $xtpl->assign('MESSAGE', $nv_Lang->getModule('rcode_note', nv_number_format($data['login_keys'])));
         $xtpl->parse('main.note_login_keys');
     }
 
     // Nút thêm nếu chưa có khóa bảo mật
     if ($data['security_keys'] == 0) {
         $xtpl->parse('main.btn_add_key');
+    } else {
+        // Collapse danh sách khóa
+        if ($data['show_type'] == 'key') {
+            $xtpl->assign('CSS_SHOW_KEYS1', ' in');
+            $xtpl->assign('CSS_SHOW_KEYS2', 'true');
+        } else {
+            $xtpl->assign('CSS_SHOW_KEYS1', '');
+            $xtpl->assign('CSS_SHOW_KEYS2', 'false');
+        }
+
+        // Hiển thị danh sách khóa bảo mật
+        foreach ($data['publicKeys'] as $seckey) {
+            if (!empty($seckey['enable_login'])) {
+                continue;
+            }
+
+            $seckey['created_at'] = nv_datetime_format($seckey['created_at'], 1);
+            $seckey['last_used_at'] = nv_datetime_format($seckey['last_used_at'], 1);
+
+            $xtpl->assign('SECKEY', $seckey);
+
+            if ($seckey['clid'] == $client_info['clid']) {
+                $xtpl->parse('main.seckeys.loop.this_client');
+            }
+
+            $xtpl->parse('main.seckeys.loop');
+        }
+
+        $xtpl->assign('NUMBER_KEYS', $nv_Lang->getModule('number_keys', nv_number_format($data['security_keys'])));
+
+        $xtpl->parse('main.btn_show_key');
+        $xtpl->parse('main.configured_key');
+        $xtpl->parse('main.seckeys');
+    }
+
+    // Mã dự phòng
+    $code_unused = 0;
+    foreach ($data['backupcodes'] as $code) {
+        $code_unused += !$code['is_used'];
+        $xtpl->assign('CODE', $code);
+
+        if ($code['is_used']) {
+            $xtpl->parse('main.code.used');
+        } else {
+            $xtpl->parse('main.code.unuse');
+        }
+
+        $xtpl->parse('main.code');
+    }
+    $xtpl->assign('REMAIN_CODE', $nv_Lang->getModule('remain_code', nv_number_format($code_unused)));
+
+    // Thông báo còn ít mã dự phòng hoặc hết
+    if ($code_unused < 1) {
+        $xtpl->parse('main.usedup_code');
+    } elseif ($code_unused < 3) {
+        $xtpl->parse('main.lack_code');
+    }
+
+    // Collapse danh sách mã dự phòng
+    if ($data['show_type'] == 'code') {
+        $xtpl->assign('CSS_SHOW_CODES1', ' in');
+        $xtpl->assign('CSS_SHOW_CODES2', 'true');
+    } else {
+        $xtpl->assign('CSS_SHOW_CODES1', '');
+        $xtpl->assign('CSS_SHOW_CODES2', 'false');
     }
 
     $xtpl->parse('main');
@@ -163,8 +188,33 @@ function nv_theme_complete_2step(array $backupcodes, array $array_data)
 
     // Danh sách code
     foreach ($backupcodes as $code) {
+        if (!empty($code['is_used'])) {
+            continue;
+        }
         $xtpl->assign('CODE', $code);
         $xtpl->parse('main.code');
+    }
+
+    $xtpl->parse('main');
+    return $xtpl->text('main');
+}
+
+/**
+ * @param array $array_data
+ * @return string
+ */
+function nv_theme_review_2step(array $array_data)
+{
+    $xtpl = new XTemplate('review.tpl', get_module_tpl_dir('review.tpl'));
+    $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
+    $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
+    $xtpl->assign('DATA', $array_data);
+
+    if ($array_data['login_keys'] > 0) {
+        $xtpl->parse('main.configured_passkey');
+    }
+    if ($array_data['security_keys'] > 0) {
+        $xtpl->parse('main.configured_seckey');
     }
 
     $xtpl->parse('main');
