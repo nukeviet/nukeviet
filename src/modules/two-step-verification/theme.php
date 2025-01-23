@@ -117,7 +117,7 @@ function nv_theme_info_2step(array $data)
         $xtpl->assign('QR_SRC', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=qrimg&amp;t=' . nv_genpass());
         $xtpl->assign('FORM_ACTION', $data['page_url'] . '&amp;type=app');
         $xtpl->assign('NV_REDIRECT', '');
-        $xtpl->assign('SECRETKEY', $data['secretkey']);
+        $xtpl->assign('SECRETKEY', strtolower($data['secretkey']));
 
         $xtpl->parse('main.scroll_app');
         $xtpl->parse('main.edit_app');

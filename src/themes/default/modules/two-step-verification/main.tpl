@@ -26,7 +26,7 @@
             </div>
         </div>
     </li>
-    <li class="list-group-item tstep-flex tstep-gap-2" id="container-edit-app">
+    <li class="list-group-item tstep-flex tstep-gap-2" id="container-edit-app"<!-- BEGIN: scroll_app --> data-autoscroll="1"<!-- END: scroll_app -->>
         <div>
             <i class="fa fa-mobile fa-3x fa-fw text-center" aria-hidden="true"></i>
         </div>
@@ -51,9 +51,7 @@
             <i class="fa fa-key fa-3x fa-fw text-center" aria-hidden="true"></i>
         </div>
         <div class="tstep-grow tstep-shrink">
-            <form method="post" action="{DATA.form_url}" id="passkey-form"
-                <!-- BEGIN: scroll_app -->data-autoscroll="1"<!-- END: scroll_app -->
-            >
+            <form method="post" action="{DATA.form_url}" id="passkey-form">
                 <input type="hidden" name="checkss" value="{DATA.checkss}">
                 <div class="tstep-flex tstep-gap-2">
                     <div class="tstep-grow tstep-shrink">

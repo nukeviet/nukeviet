@@ -177,7 +177,43 @@ if ($array_op[0] ?? '' == 'print') {
 
 // Sửa App
 if ($array_data['show_type'] == 'app') {
-    $array_data['secretkey'] = strtolower(nv_get_secretkey());
+    $array_data['secretkey'] = nv_get_secretkey();
+
+    // Lưu thiết lập
+    if ($nv_Request->isset_request('checkss', 'post')) {
+        $checkss = $nv_Request->get_title('checkss', 'post', '');
+        if ($checkss !== NV_CHECK_SESSION) {
+            nv_jsonOutput([
+                'status' => 'error',
+                'input' => '',
+                'mess' => 'Session error!'
+            ]);
+        }
+
+        $opt = $nv_Request->get_title('opt', 'post', '');
+
+        if (!$GoogleAuthenticator->verifyOpt($array_data['secretkey'], $opt)) {
+            nv_jsonOutput([
+                'status' => 'error',
+                'input' => 'opt',
+                'mess' => $nv_Lang->getModule('wrong_confirm')
+            ]);
+        }
+
+        nv_insert_logs(NV_LANG_DATA, $module_name, 'log_edit_2step', '', $user_info['userid']);
+
+        $sql = 'UPDATE ' . $db_config['prefix'] . '_' . $site_mods[NV_BRIDGE_USER_MODULE]['module_data'] . ' SET
+            active2step=1, secretkey=' . $db->quote($array_data['secretkey']) . ', last_update=' . NV_CURRENTTIME . '
+        WHERE userid=' . $user_info['userid'];
+        $db->query($sql);
+
+        $nv_Request->unset_request($module_data . '_secretkey', 'session');
+
+        nv_jsonOutput([
+            'status' => 'ok',
+            'redirect' => str_replace('&amp;', '&', nv_url_rewrite($page_url, true))
+        ]);
+    }
 } elseif ($nv_Request->isset_request($module_data . '_secretkey', 'session')) {
     $nv_Request->unset_request($module_data . '_secretkey', 'session');
 }

@@ -267,8 +267,10 @@ $(function() {
     $('#recovery-codes').on('show.bs.collapse', function (e) {
         locationReplace($(e.currentTarget).data('show-codes-url'));
     });
+});
 
-    const pkForm = $('#passkey-form');
+$(window).on('load', function() {
+    const pkForm = $('#container-edit-app');
     if (pkForm.length) {
         if (pkForm.data('autoscroll')) {
             $('html, body').animate({

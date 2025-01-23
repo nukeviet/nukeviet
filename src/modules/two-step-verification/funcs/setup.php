@@ -130,7 +130,10 @@ if (!empty($array_op[1]) and $array_op[1] == 'complete') {
         $array_data['text_codes'][] = $code['code'];
     }
     $array_data['text_codes'] = implode("\n", $array_data['text_codes']);
-    $array_data['redirect'] = $page_url . '/review';
+    $array_data['redirect'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '/complete/review';
+    if (!empty($nv_redirect)) {
+        $array_data['redirect'] .= '&amp;nv_redirect=' . $nv_redirect;
+    }
 
     $canonicalUrl = getCanonicalUrl($page_url, true, true);
     $contents = nv_theme_complete_2step($backupcodes, $array_data);
@@ -150,7 +153,7 @@ $checkss = $nv_Request->get_title('checkss', 'post', '');
 $secretkey = nv_get_secretkey();
 
 if ($checkss == NV_CHECK_SESSION) {
-    $opt = $nv_Request->get_title('opt', 'post', 6);
+    $opt = $nv_Request->get_title('opt', 'post', '');
 
     if (!$GoogleAuthenticator->verifyOpt($secretkey, $opt)) {
         nv_jsonOutput([
