@@ -175,6 +175,13 @@ if ($array_op[0] ?? '' == 'print') {
     include NV_ROOTDIR . '/includes/footer.php';
 }
 
+// Sửa App
+if ($array_data['show_type'] == 'app') {
+    $array_data['secretkey'] = strtolower(nv_get_secretkey());
+} elseif ($nv_Request->isset_request($module_data . '_secretkey', 'session')) {
+    $nv_Request->unset_request($module_data . '_secretkey', 'session');
+}
+
 $canonicalUrl = getCanonicalUrl($page_url);
 
 $contents = nv_theme_info_2step($array_data);

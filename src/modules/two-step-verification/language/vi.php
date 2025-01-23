@@ -88,3 +88,4 @@ $lang_module['lack_code'] = 'Bạn đã dùng gần hết mã dự phòng, vui l
 $lang_module['usedup_code'] = 'Bạn đã dùng hết mã dự phòng, vui lòng tạo mới mã dự phòng ngay!';
 $lang_module['code_is_available'] = 'Mã này khả dụng';
 $lang_module['code_is_used'] = 'Mã đã được sử dụng';
+$lang_module['qr_expried'] = 'Hết thời gian chờ, tải lại trang để tạo mã mới';

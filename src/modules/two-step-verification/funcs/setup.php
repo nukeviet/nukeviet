@@ -145,40 +145,9 @@ if (!empty($user_info['active2step'])) {
     nv_redirect_location(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
 }
 
-// Show QR-Image
-if (isset($array_op[1]) and $array_op[1] == 'qr-image') {
-    $url = 'otpauth://totp/' . $user_info['email'] . '?secret=' . $secretkey . '&issuer=' . urlencode(NV_SERVER_NAME . ' | ' . $user_info['username']);
-
-    // instantiate the barcode class
-    $barcode = new Com\Tecnick\Barcode\Barcode();
-    // generate a barcode
-    $bobj = $barcode->getBarcodeObj(
-        'QRCODE,H',  // barcode type and additional comma-separated parameters
-        $url,        // data string to encode
-        -4,         // bar width (use absolute or negative value as multiplication factor)
-        -4,         // bar height (use absolute or negative value as multiplication factor)
-        'black',     // foreground color
-        [-2, -2, -2, -2] // padding (use absolute or negative values as multiplication factors)
-    )->setBackgroundColor('white'); // background color
-    $data = $bobj->getSvgCode();
-    header('Content-Type: image/svg+xml');
-    header('Cache-Control: private, must-revalidate, post-check=0, pre-check=0, max-age=1');
-    header('Pragma: public');
-    header('Expires: ' . gmdate('D, d M Y H:i:s', time() - 3600) . ' GMT'); // Date in the past
-    header('Last-Modified: ' . gmdate('D, d M Y H:i:s') . ' GMT');
-    header('Content-Disposition: inline; filename="' . md5($url) . '.svg";');
-    header('access-control-allow-origin: *');
-    header('Vary: Accept-Encoding');
-    if (empty($_SERVER['HTTP_ACCEPT_ENCODING'])) {
-        // the content length may vary if the server is using compression
-        header('Content-Length: ' . strlen($data));
-    }
-    echo $data;
-    exit();
-}
-
 // Verify code
 $checkss = $nv_Request->get_title('checkss', 'post', '');
+$secretkey = nv_get_secretkey();
 
 if ($checkss == NV_CHECK_SESSION) {
     $opt = $nv_Request->get_title('opt', 'post', 6);
@@ -193,9 +162,11 @@ if ($checkss == NV_CHECK_SESSION) {
 
     try {
         $sql = 'UPDATE ' . $db_config['prefix'] . '_' . $site_mods[NV_BRIDGE_USER_MODULE]['module_data'] . ' SET
-            active2step=1, last_update=' . NV_CURRENTTIME . '
+            active2step=1, secretkey=' . $db->quote($secretkey) . ', last_update=' . NV_CURRENTTIME . '
         WHERE userid=' . $user_info['userid'];
         $db->query($sql);
+
+        $nv_Request->unset_request($module_data . '_secretkey', 'session');
 
         // Gửi email thông báo bảo mật
         $send_data = [[

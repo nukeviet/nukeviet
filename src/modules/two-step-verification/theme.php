@@ -21,7 +21,6 @@ function nv_theme_info_2step(array $data)
 {
     global $nv_Lang, $user_info, $module_name, $global_config, $client_info;
 
-
     $xtpl = new XTemplate('main.tpl', get_module_tpl_dir('main.tpl'));
     $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
     $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
@@ -30,8 +29,8 @@ function nv_theme_info_2step(array $data)
     // Thông báo bật xác thực 2 bước để tiếp tục
     if (empty($user_info['active2step'])) {
         $xtpl->assign('LINK_TURNON', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=setup');
-        $xtpl->parse('main.tstep_off');
-        return $xtpl->text('main.tstep_off');
+        $xtpl->parse('off');
+        return $xtpl->text('off');
     }
 
     $template_js = get_tpl_dir([$global_config['module_theme'], $global_config['site_theme']], 'default', 'js/users.passkey.js');
@@ -113,6 +112,17 @@ function nv_theme_info_2step(array $data)
         $xtpl->assign('CSS_SHOW_CODES2', 'false');
     }
 
+    // Thiết lập tự cuộn trang xuống phần app
+    if ($data['show_type'] == 'app') {
+        $xtpl->assign('QR_SRC', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=qrimg&amp;t=' . nv_genpass());
+        $xtpl->assign('FORM_ACTION', $data['page_url'] . '&amp;type=app');
+        $xtpl->assign('NV_REDIRECT', '');
+        $xtpl->assign('SECRETKEY', $data['secretkey']);
+
+        $xtpl->parse('main.scroll_app');
+        $xtpl->parse('main.edit_app');
+    }
+
     $xtpl->parse('main');
     return $xtpl->text('main');
 }
@@ -135,7 +145,7 @@ function nv_theme_config_2step($secretkey, $nv_redirect)
     $xtpl->assign('NV_REDIRECT', $nv_redirect);
 
     $xtpl->assign('SECRETKEY', strtolower($secretkey));
-    $xtpl->assign('QR_SRC', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '/qr-image/' . nv_genpass());
+    $xtpl->assign('QR_SRC', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=qrimg&amp;t=' . nv_genpass());
     $xtpl->assign('FORM_ACTION', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op);
 
     $xtpl->parse('main');

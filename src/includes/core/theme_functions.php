@@ -152,6 +152,7 @@ function nv_htmlOutput($html, $type = 'html', $custom_headers = [])
         $html_headers['Feature-Policy'] = $global_config['nv_fp'];
     }
     $content_types = [
+        'svg' => 'image/svg+xml',
         'json' => 'application/json',
         'xml' => 'text/xml; charset=utf-8'
     ];

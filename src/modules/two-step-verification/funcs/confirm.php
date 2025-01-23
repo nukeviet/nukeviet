@@ -88,11 +88,9 @@ if ($tokend_confirm_password != $tokend) {
     $contents = nv_theme_confirm_password($is_pass_valid);
 } else {
     if (empty($nv_redirect)) {
-        header('Location: ' . nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name, true));
-        exit();
+        nv_redirect_location(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
     }
-    header('Location: ' . nv_redirect_decrypt($nv_redirect));
-    exit();
+    nv_redirect_location(nv_redirect_decrypt($nv_redirect));
 }
 
 $canonicalUrl = getCanonicalUrl($page_url, true, true);

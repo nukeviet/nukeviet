@@ -32,35 +32,6 @@ $GoogleAuthenticator = new \NukeViet\Core\GoogleAuthenticator();
 $nv_BotManager->setPrivate();
 
 /**
- * nv_get_user_secretkey()
- *
- * @return string
- */
-function nv_get_user_secretkey()
-{
-    global $db, $site_mods, $user_info, $db_config;
-
-    $module_data = $db_config['prefix'] . '_' . $site_mods[NV_BRIDGE_USER_MODULE]['module_data'];
-    $secretkey = $db->query('SELECT secretkey FROM ' . $module_data . ' WHERE userid=' . $user_info['userid'])->fetchColumn();
-
-    if (empty($secretkey)) {
-        global $GoogleAuthenticator;
-        while (1) {
-            $_secretkey = $GoogleAuthenticator->creatSecretkey();
-            if ($db->query('SELECT COUNT(*) FROM ' . $module_data . ' WHERE secretkey=' . $db->quote($_secretkey))->fetchColumn() == 0) {
-                if ($db->exec('UPDATE ' . $module_data . ' SET secretkey=' . $db->quote($_secretkey) . ', last_update=' . NV_CURRENTTIME . ' WHERE userid=' . $user_info['userid'])) {
-                    $secretkey = $_secretkey;
-                    break;
-                }
-                trigger_error('Error creat user secretkey!!!', 256);
-            }
-        }
-    }
-
-    return $secretkey;
-}
-
-/**
  * nv_creat_backupcodes()
  */
 function nv_creat_backupcodes()
@@ -84,14 +55,35 @@ function nv_creat_backupcodes()
     }
 }
 
-// Lấy mã bí mật
-$secretkey = nv_get_user_secretkey();
+/**
+ * Hàm tạo mã bí mật và lưu nó trong 30 phút
+ * @return string
+ */
+function nv_get_secretkey()
+{
+    global $nv_Request, $module_data, $GoogleAuthenticator;
+
+    $sess_secretkey = json_decode($nv_Request->get_string($module_data . '_secretkey', 'session', ''), true);
+    if (!is_array($sess_secretkey)) {
+        $sess_secretkey = [];
+    }
+    if (!empty($sess_secretkey['secretkey']) and NV_CURRENTTIME - ($sess_secretkey['time'] ?? 0) < 1800 and csrf_check($sess_secretkey['csrf'] ?? '', $module_data . '_secretkey')) {
+        return $sess_secretkey['secretkey'];
+    }
+
+    $secretkey = $GoogleAuthenticator->creatSecretkey();
+    $nv_Request->set_Session($module_data . '_secretkey', json_encode([
+        'secretkey' => $secretkey,
+        'csrf' => csrf_create($module_data . '_secretkey'),
+        'time' => NV_CURRENTTIME
+    ]));
+    return $secretkey;
+}
 
 $tokend_key = md5($user_info['username'] . '_' . $user_info['current_login'] . '_' . NV_BRIDGE_USER_MODULE . '_confirm_pass_' . NV_CHECK_SESSION);
 $tokend_confirm_password = $nv_Request->get_title($tokend_key, 'session', '');
 $tokend = md5(NV_BRIDGE_USER_MODULE . '_confirm_pass_' . NV_CHECK_SESSION);
 
 if ($tokend_confirm_password != $tokend and $op != 'confirm') {
-    header('Location: ' . nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $module_info['alias']['confirm'] . '&nv_redirect=' . nv_redirect_encrypt($client_info['selfurl']), true));
-    exit();
+    nv_redirect_location(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $module_info['alias']['confirm'] . '&nv_redirect=' . nv_redirect_encrypt($client_info['selfurl']));
 }

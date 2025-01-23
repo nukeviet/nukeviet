@@ -1,5 +1,4 @@
-<!-- BEGIN: main -->
-<!-- BEGIN: tstep_off -->
+<!-- BEGIN: off -->
 <div class="alert alert-info" role="alert">
     <div class="text-center">
         <i class="fa fa-lock fa-3x" aria-hidden="true"></i>
@@ -8,45 +7,54 @@
         <a class="btn btn-primary" href="{LINK_TURNON}">{LANG.title_2step_turnon}</a>
     </div>
 </div>
-<!-- END: tstep_off -->
+<!-- END: off -->
+
+<!-- BEGIN: main -->
 <script src="{NV_STATIC_URL}themes/{TEMPLATE_JS}/js/users.passkey.js"></script>
 <script type="text/javascript" src="{ASSETS_STATIC_URL}/js/clipboard/clipboard.min.js"></script>
-<form method="post" action="{DATA.form_url}" id="passkey-form">
-    <input type="hidden" name="checkss" value="{DATA.checkss}">
-    <ul class="list-group">
-        <li class="list-group-item active">
-            <div class="tstep-flex tstep-gap-2 tstep-justify-between tstep-align-center">
-                <div class="h2"><strong>{LANG.title_2step}</strong></div>
-                <div class="dropdown">
-                    <a id="tstep-turnoff-btn" href="#" class="tstep-flex tstep-align-center tstep-justify-center" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-                        <i class="fa fa-ellipsis-h text-white" aria-hidden="true"></i>
-                    </a>
-                    <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="tstep-turnoff-btn">
-                        <li><a id="btn-turnoff-2step" href="#md-turnoff-2step" data-target="#md-turnoff-2step" data-toggle="modal"><i class="fa fa-ban text-danger" data-icon="fa-ban" aria-hidden="true"></i> {LANG.turnoff_2step}</a></li>
-                    </ul>
-                </div>
+<ul class="list-group">
+    <li class="list-group-item active">
+        <div class="tstep-flex tstep-gap-2 tstep-justify-between tstep-align-center">
+            <div class="h2"><strong>{LANG.title_2step}</strong></div>
+            <div class="dropdown">
+                <a id="tstep-turnoff-btn" href="#" class="tstep-flex tstep-align-center tstep-justify-center" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                    <i class="fa fa-ellipsis-h text-white" aria-hidden="true"></i>
+                </a>
+                <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="tstep-turnoff-btn">
+                    <li><a id="btn-turnoff-2step" href="#md-turnoff-2step" data-target="#md-turnoff-2step" data-toggle="modal"><i class="fa fa-ban text-danger" data-icon="fa-ban" aria-hidden="true"></i> {LANG.turnoff_2step}</a></li>
+                </ul>
             </div>
-        </li>
-        <li class="list-group-item tstep-flex tstep-gap-2">
-            <div>
-                <i class="fa fa-mobile fa-3x fa-fw text-center" aria-hidden="true"></i>
+        </div>
+    </li>
+    <li class="list-group-item tstep-flex tstep-gap-2" id="container-edit-app">
+        <div>
+            <i class="fa fa-mobile fa-3x fa-fw text-center" aria-hidden="true"></i>
+        </div>
+        <div class="tstep-grow tstep-shrink">
+            <h3>
+                <strong>{LANG.tstep_app}</strong>
+                <span class="label label-success">{LANG.configured}</span>
+            </h3>
+            <div class="text-muted">{LANG.tstep_app_note}.</div>
+            <!-- BEGIN: edit_app -->
+            <div class="padding-top">
+                {FILE "form-setup-app.tpl"}
             </div>
-            <div class="tstep-grow tstep-shrink">
-                <h3>
-                    <strong>{LANG.tstep_app}</strong>
-                    <span class="label label-success">{LANG.configured}</span>
-                </h3>
-                <div class="text-muted">{LANG.tstep_app_note}.</div>
-            </div>
-            <div>
-                <button type="button" class="btn btn-default btn-sm"><i class="fa fa-pencil" aria-hidden="true"></i> {GLANG.edit}</button>
-            </div>
-        </li>
-        <li class="list-group-item tstep-flex tstep-gap-2" data-toggle="ctn">
-            <div>
-                <i class="fa fa-key fa-3x fa-fw text-center" aria-hidden="true"></i>
-            </div>
-            <div class="tstep-grow tstep-shrink">
+            <!-- END: edit_app -->
+        </div>
+        <div>
+            <a href="{DATA.page_url}&amp;type=app" class="btn btn-default btn-sm"><i class="fa fa-pencil" aria-hidden="true"></i> {GLANG.edit}</a>
+        </div>
+    </li>
+    <li class="list-group-item tstep-flex tstep-gap-2" data-toggle="ctn">
+        <div>
+            <i class="fa fa-key fa-3x fa-fw text-center" aria-hidden="true"></i>
+        </div>
+        <div class="tstep-grow tstep-shrink">
+            <form method="post" action="{DATA.form_url}" id="passkey-form"
+                <!-- BEGIN: scroll_app -->data-autoscroll="1"<!-- END: scroll_app -->
+            >
+                <input type="hidden" name="checkss" value="{DATA.checkss}">
                 <div class="tstep-flex tstep-gap-2">
                     <div class="tstep-grow tstep-shrink">
                         <h3>
@@ -99,55 +107,55 @@
                     </div>
                 </div>
                 <!-- END: seckeys -->
-            </div>
-        </li>
-        <li class="list-group-item active">
-            <div class="h2"><strong>{LANG.backup_methods}</strong></div>
-        </li>
-        <li class="list-group-item tstep-flex tstep-gap-2">
-            <div>
-                <i class="fa fa-terminal fa-3x fa-fw text-center" aria-hidden="true"></i>
-            </div>
-            <div class="tstep-grow tstep-shrink">
-                <h3>
-                    <strong>{LANG.recovery_codes}</strong>
-                    <span class="label label-default">{REMAIN_CODE}</span>
-                </h3>
-                <div class="text-muted">{LANG.recovery_codes_note}.</div>
-                <!-- BEGIN: usedup_code -->
-                <div class="alert alert-danger mb-0 mt-2" role="alert">{LANG.usedup_code}</div>
-                <!-- END: usedup_code -->
-                <!-- BEGIN: lack_code -->
-                <div class="alert alert-warning mb-0 mt-2" role="alert">{LANG.lack_code}</div>
-                <!-- END: lack_code -->
-                <div class="collapse{CSS_SHOW_CODES1}" id="recovery-codes" data-show-codes-url="{DATA.page_url}&amp;type=code" data-page-url="{DATA.page_url}">
-                    <div class="row">
-                        <!-- BEGIN: code -->
-                        <div class="col-xs-12 text-center">
-                            <div class="recovery-code">
-                                <!-- BEGIN: unuse --><i class="fa fa-check-circle text-success" aria-hidden="true" title="{LANG.code_is_available}" aria-label="{LANG.code_is_available}"></i><!-- END: unuse -->
-                                <!-- BEGIN: used --><i class="fa fa-ban text-danger" aria-hidden="true" title="{LANG.code_is_used}" aria-label="{LANG.code_is_used}"></i><!-- END: used -->
-                                <span>{CODE.code}</span>
-                            </div>
+            </form>
+        </div>
+    </li>
+    <li class="list-group-item active">
+        <div class="h2"><strong>{LANG.backup_methods}</strong></div>
+    </li>
+    <li class="list-group-item tstep-flex tstep-gap-2">
+        <div>
+            <i class="fa fa-terminal fa-3x fa-fw text-center" aria-hidden="true"></i>
+        </div>
+        <div class="tstep-grow tstep-shrink">
+            <h3>
+                <strong>{LANG.recovery_codes}</strong>
+                <span class="label label-default">{REMAIN_CODE}</span>
+            </h3>
+            <div class="text-muted">{LANG.recovery_codes_note}.</div>
+            <!-- BEGIN: usedup_code -->
+            <div class="alert alert-danger mb-0 mt-2" role="alert">{LANG.usedup_code}</div>
+            <!-- END: usedup_code -->
+            <!-- BEGIN: lack_code -->
+            <div class="alert alert-warning mb-0 mt-2" role="alert">{LANG.lack_code}</div>
+            <!-- END: lack_code -->
+            <div class="collapse{CSS_SHOW_CODES1}" id="recovery-codes" data-show-codes-url="{DATA.page_url}&amp;type=code" data-page-url="{DATA.page_url}">
+                <div class="row">
+                    <!-- BEGIN: code -->
+                    <div class="col-xs-12 text-center">
+                        <div class="recovery-code">
+                            <!-- BEGIN: unuse --><i class="fa fa-check-circle text-success" aria-hidden="true" title="{LANG.code_is_available}" aria-label="{LANG.code_is_available}"></i><!-- END: unuse -->
+                            <!-- BEGIN: used --><i class="fa fa-ban text-danger" aria-hidden="true" title="{LANG.code_is_used}" aria-label="{LANG.code_is_used}"></i><!-- END: used -->
+                            <span>{CODE.code}</span>
                         </div>
-                        <!-- END: code -->
                     </div>
-                    <div class="text-center margin-top-lg">
-                        <a class="btn btn-primary confirmed-codes" href="{DATA.download_code_url}"><i class="fa fa-download" aria-hidden="true"></i> {GLANG.download}</a>
-                        <a class="btn btn-primary confirmed-codes" href="{DATA.print_code_url}" data-toggle="print-codes"><i class="fa fa-print" aria-hidden="true"></i> {GLANG.print}</a>
-                        <button class="btn btn-primary confirmed-codes" type="button" data-toggle="copy-codes" data-clipboard-text="{DATA.text_codes}" data-copied="{GLANG.copied}"><i class="fa fa-clipboard" aria-hidden="true"></i> <span>{GLANG.copy_to_clipboard}</span></button>
-                    </div>
-                    <hr>
-                    <p class="text-muted">{LANG.creat_other_note}</p>
-                    <button type="button" class="btn btn-default" data-toggle="changecode2step" data-tokend="{NV_CHECK_SESSION}"><i class="fa fa-refresh" aria-hidden="true"></i> {LANG.creat_other_code}</button>
+                    <!-- END: code -->
                 </div>
+                <div class="text-center margin-top-lg">
+                    <a class="btn btn-primary confirmed-codes" href="{DATA.download_code_url}"><i class="fa fa-download" aria-hidden="true"></i> {GLANG.download}</a>
+                    <a class="btn btn-primary confirmed-codes" href="{DATA.print_code_url}" data-toggle="print-codes"><i class="fa fa-print" aria-hidden="true"></i> {GLANG.print}</a>
+                    <button class="btn btn-primary confirmed-codes" type="button" data-toggle="copy-codes" data-clipboard-text="{DATA.text_codes}" data-copied="{GLANG.copied}"><i class="fa fa-clipboard" aria-hidden="true"></i> <span>{GLANG.copy_to_clipboard}</span></button>
+                </div>
+                <hr>
+                <p class="text-muted">{LANG.creat_other_note}</p>
+                <button type="button" class="btn btn-default" data-toggle="changecode2step" data-tokend="{NV_CHECK_SESSION}"><i class="fa fa-refresh" aria-hidden="true"></i> {LANG.creat_other_code}</button>
             </div>
-            <div>
-                <button type="button" class="btn btn-default btn-sm" data-toggle="collapse" data-target="#recovery-codes" aria-expanded="{CSS_SHOW_CODES2}" aria-controls="recovery-codes"><i class="fa fa-eye"></i> {GLANG.view}</button>
-            </div>
-        </li>
-    </ul>
-</form>
+        </div>
+        <div>
+            <button type="button" class="btn btn-default btn-sm" data-toggle="collapse" data-target="#recovery-codes" aria-expanded="{CSS_SHOW_CODES2}" aria-controls="recovery-codes"><i class="fa fa-eye"></i> {GLANG.view}</button>
+        </div>
+    </li>
+</ul>
 <!-- START FORFOOTER -->
 <div class="modal fade" tabindex="-1" role="dialog" data-toggle="md-edit-passkey">
     <div class="modal-dialog" role="document">
