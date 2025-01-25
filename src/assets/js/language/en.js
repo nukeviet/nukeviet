@@ -81,3 +81,34 @@ NVJL.error406 = "Not Acceptable. Client browser does not accept the MIME type of
 NVJL.error500 = "Internal server error. You see this error message for a wide variety of server-side errors.";
 NVJL.error502 = "Bad Gateway. Web server received an invalid response while acting as a gateway or proxy. You receive this error message when you try to run a CGI script that does not return a valid set of HTTP headers.";
 NVJL.error503 = "Service Unavailable.";
+
+var nukeviet = nukeviet || {};
+nukeviet.i18n = nukeviet.i18n || {};
+nukeviet.i18n.WebAuthnErrors = {
+    creat: {
+        NotAllowedError: "You have denied the request",
+        ConstraintError: "A constraint in the request configuration was not met",
+        InvalidStateError: "This key has already been registered, please create a different key",
+        TypeError: "A parameter in the request is invalid, please reload the page and try again",
+        SecurityError: "A security issue occurred during registration, please reload the page and try again",
+        AbortError: "You have canceled the request",
+        NotSupportedError: "The browser or device does not support WebAuthn or the specific parameters requested",
+        NotReadableError: "Unable to read data from the authenticator",
+        NotFoundError: "No suitable authenticator found or no device is ready for the request",
+        DataError: "An error occurred in the provided data",
+        OperationError: "Internal error during authentication, please check your browser or device",
+        TimeoutError: "The authentication process took too long, please reload the page and try again",
+        InvalidAccessError: "Illegal access was blocked"
+    },
+    get: {
+        NotAllowedError: "You have denied the authentication request",
+        SecurityError: "The request is not secure and cannot be processed, please reload the page and try again",
+        TimeoutError: "The authentication or registration process timed out",
+        AbortError: "You have canceled the request",
+        NotSupportedError: "The browser or device does not support WebAuthn",
+        ConstraintError: "Constraints were not met (e.g., userVerification), please reload the page and try again",
+        InvalidStateError: "Invalid state (e.g., PublicKeyCredential was aborted), please reload the page and try again",
+        EncodingError: "Data encoding error (e.g., invalid Base64 URL-encoded), please reload the page and try again"
+    },
+    unknow: "Unknown error, please reload the page and try again"
+};

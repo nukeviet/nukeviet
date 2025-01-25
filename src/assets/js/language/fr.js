@@ -81,3 +81,34 @@ NVJL.error406 = "Inacceptable";
 NVJL.error500 = "Erreur de serveur interne";
 NVJL.error502 = "Bad Gateway";
 NVJL.error503 = "Service indisponible";
+
+var nukeviet = nukeviet || {};
+nukeviet.i18n = nukeviet.i18n || {};
+nukeviet.i18n.WebAuthnErrors = {
+    creat: {
+        NotAllowedError: "Vous avez refusé la demande",
+        ConstraintError: "Une contrainte dans la configuration de la demande n'est pas satisfaite",
+        InvalidStateError: "Cette clé a déjà été enregistrée, veuillez créer une autre clé",
+        TypeError: "Un paramètre dans la demande est invalide, veuillez recharger la page et réessayer",
+        SecurityError: "Un problème de sécurité est survenu lors de l'enregistrement, veuillez recharger la page et réessayer",
+        AbortError: "Vous avez annulé la demande",
+        NotSupportedError: "Le navigateur ou l'appareil ne prend pas en charge WebAuthn ou le paramètre spécifique demandé",
+        NotReadableError: "Impossible de lire les données depuis l'appareil d'authentification",
+        NotFoundError: "Aucun appareil d'authentification approprié trouvé ou aucun appareil prêt pour la demande",
+        DataError: "Une erreur est survenue dans les données fournies",
+        OperationError: "Erreur interne lors de l'authentification, vérifiez le navigateur ou l'appareil",
+        TimeoutError: "Le processus d'authentification a pris trop de temps, veuillez recharger la page et réessayer",
+        InvalidAccessError: "Accès illégal et bloqué"
+    },
+    get: {
+        NotAllowedError: "Vous avez refusé la demande d'authentification",
+        SecurityError: "La demande n'est pas sécurisée et ne peut pas être effectuée, veuillez recharger la page et réessayer",
+        TimeoutError: "Le processus d'authentification ou d'enregistrement a expiré",
+        AbortError: "Vous avez annulé la demande",
+        NotSupportedError: "Le navigateur ou l'appareil ne prend pas en charge WebAuthn",
+        ConstraintError: "Les contraintes (par exemple : userVerification) ne sont pas satisfaites, veuillez recharger la page et réessayer",
+        InvalidStateError: "État invalide (par exemple : PublicKeyCredential a été annulé), veuillez recharger la page et réessayer",
+        EncodingError: "Erreur liée au codage des données (par exemple : Base64 URL-encoded invalide), veuillez recharger la page et réessayer"
+    },
+    unknow: "Erreur inconnue, veuillez recharger la page et réessayer"
+};

@@ -966,17 +966,18 @@ $(function() {
                                     location.reload();
                                 },
                                 error: function (xhr, status, error) {
-                                    console.log(xhr.responseText);
-                                    alert(error);
+                                    console.log(xhr, status, error);
+                                    icon.removeClass('fa-spinner fa-pulse').addClass(icon.data('icon'));
+                                    err.text(nukeviet.i18n.WebAuthnErrors.get[error.name] || nukeviet.i18n.WebAuthnErrors.unknow).removeClass('hidden');
                                 }
                             });
                         }).catch(error => {
                             icon.removeClass('fa-spinner fa-pulse').addClass(icon.data('icon'));
-                            err.text(nukeviet.i18n.WebAuthnErrors.creat[error.name] || nukeviet.i18n.WebAuthnErrors.unknow).removeClass('hidden');
+                            err.text(nukeviet.i18n.WebAuthnErrors.get[error.name] || nukeviet.i18n.WebAuthnErrors.unknow).removeClass('hidden');
                         });
                     } catch (error) {
                         icon.removeClass('fa-spinner fa-pulse').addClass(icon.data('icon'));
-                        err.text(nukeviet.i18n.WebAuthnErrors.creat[error.name] || nukeviet.i18n.WebAuthnErrors.unknow).removeClass('hidden');
+                        err.text(nukeviet.i18n.WebAuthnErrors.get[error.name] || nukeviet.i18n.WebAuthnErrors.unknow).removeClass('hidden');
                     }
                 },
                 error: function(xhr, status, error) {
