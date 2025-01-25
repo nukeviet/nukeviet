@@ -50,6 +50,12 @@
             <button class="bsubmit btn btn-primary" type="submit">{GLANG.loginsubmit}</button>
         </div>
 
+        <div class="text-center margin-bottom-lg hidden" data-toggle="passkey-ctn" data-auth-url="{PASSKEY_AUTH}">
+            <button class="btn btn-success btn-block hidden" type="button" data-toggle="passkey-btn"><i class="fa fa-key" data-icon="fa-key" aria-hidden="true"></i> {GLANG.passkey_login}</button>
+            <a class="hidden" href="#" data-toggle="passkey-link">{GLANG.passkey_login}</a>
+            <div class="text-danger margin-top-sm hidden" data-toggle="passkey-error"></div>
+        </div>
+
         <!-- BEGIN: allowuserreg2_form -->
         <div class="form-group">
             <div class="text-right clearfix">

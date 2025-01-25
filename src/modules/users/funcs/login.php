@@ -19,6 +19,19 @@ if (defined('NV_IS_USER') or !$global_config['allowuserlogin']) {
     nv_redirect_location(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
 }
 
+$blocker = new NukeViet\Core\Blocker(NV_ROOTDIR . '/' . NV_LOGS_DIR . '/ip_logs', NV_CLIENT_IP);
+$rules = [
+    $global_config['login_number_tracking'],
+    $global_config['login_time_tracking'],
+    $global_config['login_time_ban']
+];
+$blocker->trackLogin($rules, $global_config['is_login_blocker']);
+
+// Xử lý phần đăng nhập qua passkey
+if (defined('NV_MOD_LOAD')) {
+    require NV_ROOTDIR . '/modules/' . $module_file . '/login/passkey.php';
+}
+
 $page_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op;
 
 // Dùng để bật giao diện login box
@@ -808,14 +821,6 @@ if (defined('NV_OPENID_ALLOWED') and $nv_Request->isset_request('server', 'get')
     include NV_ROOTDIR . '/includes/footer.php';
 }
 
-$blocker = new NukeViet\Core\Blocker(NV_ROOTDIR . '/' . NV_LOGS_DIR . '/ip_logs', NV_CLIENT_IP);
-$rules = [
-    $global_config['login_number_tracking'],
-    $global_config['login_time_tracking'],
-    $global_config['login_time_ban']
-];
-$blocker->trackLogin($rules, $global_config['is_login_blocker']);
-
 // Dang nhap kieu thong thuong
 if ($nv_Request->isset_request('_csrf, nv_login', 'post')) {
     $checkss = md5(NV_CHECK_SESSION . '_' . $module_name . '_' . $op);
@@ -985,7 +990,7 @@ if ($nv_Request->isset_request('_csrf, nv_login', 'post')) {
     }
 
     // Xác nhận đăng nhập thành công
-    validUserLog($row, 1, '');
+    validUserLog($row, 1);
     $nv_Request->unset_request('users_dismiss_captcha', 'session');
     $blocker->reset_trackLogin($nv_username);
 

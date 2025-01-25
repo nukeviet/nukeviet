@@ -676,8 +676,8 @@ if (in_array('openid', $types, true) and $nv_Request->isset_request('server', 'g
     exit();
 }
 
-// Lấy các khóa truy cập khi vào trang quản lý khóa truy cập
-if ($array_data['type'] == 'passkey') {
+// Lấy các khóa truy cập nếu có quyền
+if (in_array('passkey', $types, true)) {
     $array_data['publicKeys'] = [];
     $array_data['login_keys'] = 0;
     $array_data['security_keys'] = 0;

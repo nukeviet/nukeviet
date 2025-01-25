@@ -271,3 +271,65 @@ $module_emails[Emails::REQUEST_RESET_EMAIL] = [
     's' => '{if $email_reset eq 2}Khuyến cáo thay đổi email{else}Cần thay đổi email{/if}',
     'c' => '{$greeting_user}<br /><br />Ban quản trị website {$site_name} xin thông báo: Vì lý do bảo mật chúng tôi {if $email_reset eq 2}khuyến cáo bạn nên{else}đề nghị bạn nhanh chóng{/if} thay đổi email tài khoản của mình. Để thay đổi email, trước hết bạn cần truy cập vào trang <a href="{$link}">Quản lý tài khoản cá nhân</a>, chọn nút Thiết lập tài khoản, sau đó chọn nút Email và làm theo hướng dẫn.'
 ];
+$module_emails[Emails::SECURITY_KEY_ADD] = [
+    'is_system' => $is_system,
+    'pids' => $pids,
+    'pfile' => $pfile,
+    'catid' => $catid,
+    't' => 'Email thêm khóa bảo mật',
+    's' => 'Khóa bảo mật đã được thêm vào tài khoản của bạn',
+    'c' => '{$greeting_user}<br /><br />Một khóa bảo mật có tên &quot;{$security_key}&quot; vừa được thêm vào tài khoản của bạn tại website {$site_name}. Hành động này xuất phát từ:
+<ul>
+    <li>Trình duyệt: <strong>{$user_agent}</strong></li>
+    <li>IP: <strong>{$ip}</strong></li>
+    <li>Thời gian thao tác: <strong>{$action_time}</strong></li>
+</ul>
+<p>Chúng tôi gửi thông báo bắt buộc này đến email của bạn để đảm bảo chính bạn là người thực hiện. Trong trường hợp không phải là bạn, vui lòng khẩn trương truy cập <a href="{$tstep_link}">trang quản lí xác thực hai bước</a> để xem lại các khóa bảo mật. Đồng thời thực hiện <a href="{$pass_link}">đổi mật khẩu ngay</a> để đảm bảo an toàn.</p>
+Nhắc nhở: Bạn đã lưu trữ mã dự phòng của mình chưa? Nếu chưa xin vui lòng dành chút thời gian tải xuống và lưu trữ cẩn thận, vì đây là phương án cuối cùng đảm bảo bạn có thể truy cập vào tài khoản trong trường hợp mất các thiết bị để truy cập các phương án xác thực hai bước. Bạn có thể <a href="{$code_link}">tải chúng xuống tại đây</a>.'
+];
+$module_emails[Emails::PASSKEY_ADD] = [
+    'is_system' => $is_system,
+    'pids' => $pids,
+    'pfile' => $pfile,
+    'catid' => $catid,
+    't' => 'Email thêm khóa đăng nhập',
+    's' => 'Khóa đăng nhập đã được thêm vào tài khoản của bạn',
+    'c' => '{$greeting_user}<br /><br />Một khóa đăng nhập có tên &quot;{$passkey}&quot; vừa được thêm vào tài khoản của bạn tại website {$site_name}. Hành động này xuất phát từ:
+<ul>
+    <li>Trình duyệt: <strong>{$user_agent}</strong></li>
+    <li>IP: <strong>{$ip}</strong></li>
+    <li>Thời gian thao tác: <strong>{$action_time}</strong></li>
+</ul>
+Chúng tôi gửi thông báo bắt buộc này đến email của bạn để đảm bảo chính bạn là người thực hiện. Trong trường hợp không phải là bạn, vui lòng khẩn trương truy cập <a href="{$passkey_link}">trang quản lí khóa đăng nhập</a> để xem lại các khóa đăng nhập. Đồng thời thực hiện <a href="{$pass_link}">đổi mật khẩu ngay</a> để đảm bảo an toàn.'
+];
+$module_emails[Emails::SECURITY_KEY_DEL] = [
+    'is_system' => $is_system,
+    'pids' => $pids,
+    'pfile' => $pfile,
+    'catid' => $catid,
+    't' => 'Email xóa khóa bảo mật',
+    's' => 'Khóa bảo mật đã bị xóa khỏi tài khoản của bạn',
+    'c' => '{$greeting_user}<br /><br />Khóa bảo mật &quot;{$security_key}&quot; vừa bị xóa khỏi tài khoản của bạn tại website {$site_name}. Hành động này xuất phát từ:
+<ul>
+    <li>Trình duyệt: <strong>{$user_agent}</strong></li>
+    <li>IP: <strong>{$ip}</strong></li>
+    <li>Thời gian thao tác: <strong>{$action_time}</strong></li>
+</ul>
+<p>Chúng tôi gửi thông báo bắt buộc này đến email của bạn để đảm bảo chính bạn là người thực hiện. Trong trường hợp không phải là bạn, vui lòng khẩn trương truy cập <a href="{$tstep_link}">trang quản lí xác thực hai bước</a> để xem lại các khóa bảo mật. Đồng thời thực hiện <a href="{$pass_link}">đổi mật khẩu ngay</a> để đảm bảo an toàn.</p>
+Nhắc nhở: Bạn đã lưu trữ mã dự phòng của mình chưa? Nếu chưa xin vui lòng dành chút thời gian tải xuống và lưu trữ cẩn thận, vì đây là phương án cuối cùng đảm bảo bạn có thể truy cập vào tài khoản trong trường hợp mất các thiết bị để truy cập các phương án xác thực hai bước. Bạn có thể <a href="{$code_link}">tải chúng xuống tại đây</a>.'
+];
+$module_emails[Emails::PASSKEY_DEL] = [
+    'is_system' => $is_system,
+    'pids' => $pids,
+    'pfile' => $pfile,
+    'catid' => $catid,
+    't' => 'Email xóa khóa đăng nhập',
+    's' => 'Khóa đăng nhập đã bị xóa khỏi tài khoản của bạn',
+    'c' => '{$greeting_user}<br /><br />Khóa đăng nhập có tên &quot;{$passkey}&quot; vừa bị xóa khỏi tài khoản của bạn tại website {$site_name}. Hành động này xuất phát từ:
+<ul>
+    <li>Trình duyệt: <strong>{$user_agent}</strong></li>
+    <li>IP: <strong>{$ip}</strong></li>
+    <li>Thời gian thao tác: <strong>{$action_time}</strong></li>
+</ul>
+Chúng tôi gửi thông báo bắt buộc này đến email của bạn để đảm bảo chính bạn là người thực hiện. Trong trường hợp không phải là bạn, vui lòng khẩn trương truy cập <a href="{$passkey_link}">trang quản lí khóa đăng nhập</a> để xem lại các khóa đăng nhập. Đồng thời thực hiện <a href="{$pass_link}">đổi mật khẩu ngay</a> để đảm bảo an toàn.'
+];

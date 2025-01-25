@@ -90,6 +90,40 @@ class AdminLoginCest
      * @param \Tests\Support\AcceptanceTester $I
      * @return void
      *
+     * @group off-mail
+     */
+    public function offSendMail(AcceptanceTester $I)
+    {
+        $I->wantTo('Turn off send mail');
+
+        $I->login();
+
+        $I->amOnUrl($I->getDomain() . '/admin/vi/settings/smtp/');
+        $I->waitForElement('[data-toggle="smtp_test"]', 5);
+
+        // Cuộn đến chỗ tệp mẫu thư
+        $I->seeElementInDOM('#element_mail_tpl');
+        $I->scrollTo('#element_mail_tpl');
+        $I->wait(1);
+        $I->waitForElementVisible('#element_mail_tpl', 5);
+
+        // Chọn phương thức "No" nếu nó không chọn
+        if (!$I->tryToSeeCheckboxIsChecked('input[name="mailer_mode"][value="no"]')) {
+            $I->click('label[for="mailer_mode_no"]');
+        }
+        $I->wait(1);
+
+        // Lưu cấu hình
+        $I->submitForm('#sendmail-settings', []);
+        $I->waitForElementVisible('#site-toasts', 60);
+        $I->wait(1);
+        $I->see('Các thay đổi đã được ghi nhận');
+    }
+
+    /**
+     * @param \Tests\Support\AcceptanceTester $I
+     * @return void
+     *
      * @group smtp
      */
     public function saveConfigSmtp(AcceptanceTester $I)

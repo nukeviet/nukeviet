@@ -111,6 +111,7 @@ if ($checknum == $row['checknum']) {
 
                 // Callback sau khi đăng ký
                 if (nv_function_exists('nv_user_register_callback')) {
+                    /** @disregard P1010 */
                     nv_user_register_callback($userid);
                 }
 
@@ -142,8 +143,10 @@ if ($check_update_user) {
 $nv_redirect = nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name, true);
 if (defined('SSO_REGISTER_SECRET')) {
     $sso_redirect_users = $nv_Request->get_title('sso_redirect_users', 'session', '');
+    /** @disregard P1011 */
     $iv = substr(SSO_REGISTER_SECRET, 0, 16);
     $sso_redirect_users = strtr($sso_redirect_users, '-_,', '+/=');
+    /** @disregard P1011 */
     $sso_redirect_users = openssl_decrypt($sso_redirect_users, 'aes-256-cbc', SSO_REGISTER_SECRET, 0, $iv);
     if (!empty($sso_redirect_users)) {
         $nv_redirect = $sso_redirect_users;

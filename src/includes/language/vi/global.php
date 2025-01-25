@@ -270,6 +270,7 @@ $lang_global['edituser'] = 'Tài khoản';
 $lang_global['browse_file'] = 'Chọn file';
 $lang_global['browse_image'] = 'Chọn hình ảnh';
 $lang_global['openid_login'] = 'Đăng nhập bằng';
+$lang_global['passkey_login'] = 'Đăng nhập bằng khóa đăng nhập';
 $lang_global['breakcrum'] = 'Bạn đang ở';
 $lang_global['admin_access_denied1'] = 'Rất tiếc là hiện nay hệ thống không cho phép các quản trị đăng nhập';
 $lang_global['admin_access_denied2'] = 'Rất tiếc là hiện nay hệ thống không cho phép các quản trị module đăng nhập';

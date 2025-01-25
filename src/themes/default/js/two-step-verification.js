@@ -274,7 +274,7 @@ $(window).on('load', function() {
     if (pkForm.length) {
         if (pkForm.data('autoscroll')) {
             $('html, body').animate({
-                scrollTop: pkForm.offset().top
+                scrollTop: pkForm.offset().top - 60
             }, 100);
         }
     }

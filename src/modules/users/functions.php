@@ -52,7 +52,7 @@ function get_checknum($userid)
  * @param int   $current_mode
  * @throws PDOException
  */
-function validUserLog($array_user, $remember, $oauth_data, $current_mode = 0)
+function validUserLog($array_user, $remember, $oauth_data = [], $current_mode = 0)
 {
     global $db, $global_config, $nv_Request, $nv_Lang, $global_users_config, $module_name, $module_file, $client_info;
 

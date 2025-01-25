@@ -404,6 +404,7 @@ function user_login($is_ajax = false)
     $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
     $xtpl->assign('TEMPLATE', $template);
     $xtpl->assign('CSRF', md5(NV_CHECK_SESSION . '_' . $module_name . '_' . $op));
+    $xtpl->assign('PASSKEY_AUTH', mload_url_generate($module_name, 'login'));
 
     $array_gfx_chk = !empty($global_config['captcha_area']) ? explode(',', $global_config['captcha_area']) : [];
     $gfx_chk = (!empty($array_gfx_chk) and in_array('l', $array_gfx_chk, true)) ? 1 : 0;

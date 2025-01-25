@@ -109,6 +109,7 @@ The groups below require the website to be installed:
 - `stat` testing the access statistics feature.
 - `sendmail` testing the email sending function.
 - `smtp` enable and configure the SMTP email sending function.
+- `off-mail` disable email sending.
 - `all` test everything.
 
 **Next step:**

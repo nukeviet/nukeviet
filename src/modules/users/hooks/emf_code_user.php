@@ -99,6 +99,42 @@ $callback = function ($vars, $from_data, $receive_data) {
             'name' => $nv_Lang->getModule('group_name'),
             'data' => ''
         ];
+        $merge_fields['security_key'] = [
+            'name' => $nv_Lang->getModule('edit_seckey'),
+            'data' => ''
+        ];
+        $merge_fields['passkey'] = [
+            'name' => $nv_Lang->getModule('edit_passkey'),
+            'data' => ''
+        ];
+        $merge_fields['user_agent'] = [
+            'name' => $nv_Lang->getGlobal('browser'),
+            'data' => ''
+        ];
+        $merge_fields['ip'] = [
+            'name' => $nv_Lang->getGlobal('ip'),
+            'data' => ''
+        ];
+        $merge_fields['action_time'] = [
+            'name' => $nv_Lang->getModule('action_time'),
+            'data' => ''
+        ];
+        $merge_fields['tstep_link'] = [
+            'name' => $nv_Lang->getModule('tstep_link'),
+            'data' => ''
+        ];
+        $merge_fields['pass_link'] = [
+            'name' => $nv_Lang->getModule('pass_link'),
+            'data' => ''
+        ];
+        $merge_fields['code_link'] = [
+            'name' => $nv_Lang->getModule('code_link'),
+            'data' => ''
+        ];
+        $merge_fields['passkey_link'] = [
+            'name' => $nv_Lang->getModule('passkey_link'),
+            'data' => ''
+        ];
 
         if ($vars['mode'] != 'PRE') {
             // Field dữ liệu cho các fields
@@ -114,7 +150,10 @@ $callback = function ($vars, $from_data, $receive_data) {
             }
 
             // Các field dạng chuỗi thuần
-            $direct_keys = ['username', 'email', 'link', 'oauth_name', 'password', 'code', 'label', 'newvalue', 'group_name'];
+            $direct_keys = [
+                'username', 'email', 'link', 'oauth_name', 'password', 'code', 'label', 'newvalue', 'group_name',
+                'ip', 'security_key', 'passkey', 'user_agent', 'tstep_link', 'pass_link', 'code_link', 'passkey_link'
+            ];
             foreach ($direct_keys as $key) {
                 $merge_fields[$key]['data'] = $vars[$key] ?? '';
             }
@@ -126,7 +165,7 @@ $callback = function ($vars, $from_data, $receive_data) {
             }
 
             // Các field dạng thời gian
-            $time_keys = ['active_deadline', 'deadline'];
+            $time_keys = ['active_deadline', 'deadline', 'action_time'];
             foreach ($time_keys as $key) {
                 if (!empty($vars[$key]) and is_numeric($vars[$key])) {
                     $merge_fields[$key]['data'] = nv_datetime_format($vars[$key], 1);

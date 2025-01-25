@@ -154,4 +154,24 @@ class Emails
      * @var integer Email yêu cầu người dùng thay đổi email
      */
     public const REQUEST_RESET_EMAIL = 27;
+
+    /**
+     * @var integer Thông báo khóa bảo mật được thêm vào tài khoản
+     */
+    public const SECURITY_KEY_ADD = 28;
+
+    /**
+     * @var integer Thông báo khóa đăng nhập được thêm vào tài khoản
+     */
+    public const PASSKEY_ADD = 29;
+
+    /**
+     * @var integer Thông báo khóa bảo mật bị xóa
+     */
+    public const SECURITY_KEY_DEL = 30;
+
+    /**
+     * @var integer Thông báo khóa đăng nhập bị xóa
+     */
+    public const PASSKEY_DEL = 31;
 }

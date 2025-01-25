@@ -13,40 +13,82 @@ if (!defined('NV_IS_MOD_USER')) {
     exit('Stop!!!');
 }
 
+use Cose\Algorithm\Manager;
+use Cose\Algorithm\Signature\ECDSA;
+use Cose\Algorithm\Signature\RSA;
 use Cose\Algorithms;
+use NukeViet\Module\users\Shared\Emails;
+use NukeViet\Webauthn\CertificateChainValidator;
+use NukeViet\Webauthn\MetadataStatementRepository;
+use NukeViet\Webauthn\StatusReportRepository;
+use Symfony\Component\Clock\NativeClock;
 use Symfony\Component\Serializer\Encoder\JsonEncode;
 use Symfony\Component\Serializer\Normalizer\AbstractObjectNormalizer;
+use Webauthn\AttestationStatement\AndroidKeyAttestationStatementSupport;
+use Webauthn\AttestationStatement\AppleAttestationStatementSupport;
+use Webauthn\AttestationStatement\AttestationStatementSupportManager;
+use Webauthn\AttestationStatement\FidoU2FAttestationStatementSupport;
+use Webauthn\AttestationStatement\NoneAttestationStatementSupport;
+use Webauthn\AttestationStatement\PackedAttestationStatementSupport;
+use Webauthn\AttestationStatement\TPMAttestationStatementSupport;
 use Webauthn\AuthenticatorAttestationResponse;
+use Webauthn\AuthenticatorAttestationResponseValidator;
 use Webauthn\AuthenticatorSelectionCriteria;
+use Webauthn\CeremonyStep\CeremonyStepManagerFactory;
+use Webauthn\Denormalizer\WebauthnSerializerFactory;
 use Webauthn\PublicKeyCredential;
 use Webauthn\PublicKeyCredentialCreationOptions;
+use Webauthn\PublicKeyCredentialDescriptor;
 use Webauthn\PublicKeyCredentialParameters;
 use Webauthn\PublicKeyCredentialRpEntity;
 use Webauthn\PublicKeyCredentialUserEntity;
-use Webauthn\CeremonyStep\CeremonyStepManagerFactory;
-use Webauthn\AuthenticatorAttestationResponseValidator;
-use Webauthn\AuthenticatorAssertionResponseValidator;
-use Webauthn\PublicKeyCredentialDescriptor;
-use Webauthn\PublicKeyCredentialRequestOptions;
-use Webauthn\AuthenticatorAssertionResponse;
-use Webauthn\PublicKeyCredentialSource;
-use Webauthn\AttestationStatement\AttestationStatementSupportManager;
-use Webauthn\AttestationStatement\NoneAttestationStatementSupport;
-use Webauthn\Denormalizer\WebauthnSerializerFactory;
 
 /**
  * Chuẩn bị input loading
  */
+$clock = new NativeClock();
 
 // Trong website hoặc xác thực 2 bước chỉ cần Attestation None là đủ
 $attestMgr = AttestationStatementSupportManager::create();
 $attestMgr->add(NoneAttestationStatementSupport::create());
 
+$attestMgr->add(FidoU2FAttestationStatementSupport::create());
+$attestMgr->add(AppleAttestationStatementSupport::create());
+
+$attestMgr->add(AndroidKeyAttestationStatementSupport::create());
+$attestMgr->add(TPMAttestationStatementSupport::create($clock));
+
+$coseAlgorithmManager = Manager::create();
+$coseAlgorithmManager->add(ECDSA\ES256K::create());
+$coseAlgorithmManager->add(ECDSA\ES256::create());
+$coseAlgorithmManager->add(RSA\RS256::create());
+
+$attestMgr->add(PackedAttestationStatementSupport::create($coseAlgorithmManager));
+
 $factory = new WebauthnSerializerFactory($attestMgr);
 $serializer = $factory->create();
 
+// Dữ liệu chung của các email liên quan passkey
+$email_fields = [
+    'first_name' => $user_info['first_name'],
+    'last_name' => $user_info['last_name'],
+    'username' => $user_info['username'],
+    'email' => $user_info['email'],
+    'gender' => $user_info['gender'],
+    'lang' => NV_LANG_INTERFACE,
+    'ip' => NV_CLIENT_IP,
+    'user_agent' => nv_autoLinkDisable(NV_USER_AGENT),
+    'action_time' => NV_CURRENTTIME,
+    'tstep_link' => NV_MY_DOMAIN . nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=two-step-verification', true),
+    'pass_link' => NV_MY_DOMAIN . nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=editinfo/password', true),
+    'passkey_link' => NV_MY_DOMAIN . nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=editinfo/passkey', true),
+    'code_link' => NV_MY_DOMAIN . nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=two-step-verification&amp;type=code', true),
+];
+
 // Tạo thử thách
 if ($nv_Request->isset_request('create_challenge', 'post')) {
+    $enable_login = $nv_Request->get_bool('enable_login', 'post', false);
+
     /**
      * name: tên website
      * id: tên miền website
@@ -89,16 +131,28 @@ if ($nv_Request->isset_request('create_challenge', 'post')) {
     ];
 
     // Authenticator Selection
-    $authSelect = AuthenticatorSelectionCriteria::create(
-        // Không chỉ định
-        authenticatorAttachment: AuthenticatorSelectionCriteria::AUTHENTICATOR_ATTACHMENT_NO_PREFERENCE,
-        // Bắt buộc phải xác minh khi xác thực
-        userVerification: AuthenticatorSelectionCriteria::USER_VERIFICATION_REQUIREMENT_REQUIRED,
-        // Lưu khóa trên thiết bị để login không cần mật khẩu
-        residentKey: AuthenticatorSelectionCriteria::RESIDENT_KEY_REQUIREMENT_REQUIRED
-    );
+    if ($enable_login) {
+        // Yêu cầu tạo passkey
+        $authSelect = AuthenticatorSelectionCriteria::create(
+            // Sử dụng bất kì thiết bị nào
+            authenticatorAttachment: AuthenticatorSelectionCriteria::AUTHENTICATOR_ATTACHMENT_NO_PREFERENCE,
+            // Bắt buộc phải xác minh khi xác thực
+            userVerification: AuthenticatorSelectionCriteria::USER_VERIFICATION_REQUIREMENT_REQUIRED,
+            // Lưu khóa trên thiết bị để login không cần mật khẩu
+            residentKey: AuthenticatorSelectionCriteria::RESIDENT_KEY_REQUIREMENT_REQUIRED
+        );
+    } else {
+        // Yêu cầu tạo security key
+        $authSelect = AuthenticatorSelectionCriteria::create(
+            // Sử dụng bất kì thiết bị nào
+            authenticatorAttachment: AuthenticatorSelectionCriteria::AUTHENTICATOR_ATTACHMENT_NO_PREFERENCE,
+            // Xác minh người dùng nếu có thể, nếu không thì vẫn được
+            userVerification: AuthenticatorSelectionCriteria::USER_VERIFICATION_REQUIREMENT_PREFERRED,
+            // Không yêu cầu tạo Resident Key
+            residentKey: AuthenticatorSelectionCriteria::RESIDENT_KEY_REQUIREMENT_DISCOURAGED
+        );
+    }
 
-    // Attestation: không cần chứng thực mà vẫn đảm bảo bảo mật
     // Exclude Credentials - các chứng chỉ đã đăng ký trước đó, sẽ không đăng ký lại
     $excludeCredentials = [];
     foreach ($array_data['publicKeys'] as $publicKey) {
@@ -113,7 +167,7 @@ if ($nv_Request->isset_request('create_challenge', 'post')) {
         $challenge,
         $credentialParams,
         $authSelect,
-        null,
+        PublicKeyCredentialCreationOptions::ATTESTATION_CONVEYANCE_PREFERENCE_DIRECT,
         $excludeCredentials,
         60
     );
@@ -193,7 +247,18 @@ if ($nv_Request->isset_request('save_credential', 'post')) {
     }
 
     // Khởi tạo Validation
+    $metadataStatementRepository = new MetadataStatementRepository();
+    $statusReportRepository = new StatusReportRepository();
+    $certificateChainValidator = new CertificateChainValidator();
+
     $csmFactory = new CeremonyStepManagerFactory();
+    $csmFactory->setAttestationStatementSupportManager($attestMgr);
+    $csmFactory->enableMetadataStatementSupport(
+        $metadataStatementRepository,
+        $statusReportRepository,
+        $certificateChainValidator,
+    );
+
     $creationCSM = $csmFactory->creationCeremony();
     $attestValidator = AuthenticatorAttestationResponseValidator::create($creationCSM);
 
@@ -204,6 +269,7 @@ if ($nv_Request->isset_request('save_credential', 'post')) {
             NV_SERVER_NAME
         );
     } catch (Throwable $e) {
+        trigger_error($e);
         nv_jsonOutput([
             'status' => 'error',
             'mess' => $nv_Lang->getModule('passkey_error_validator'),
@@ -252,6 +318,24 @@ if ($nv_Request->isset_request('save_credential', 'post')) {
     $stmt->bindParam(':nickname', $nickname, PDO::PARAM_STR);
     $stmt->execute();
 
+    if ($enable_login) {
+        // Thông báo về khóa đăng nhập
+        $email_fields['passkey'] = $nickname;
+        $send_data = [[
+            'to' => $user_info['email'],
+            'data' => $email_fields
+        ]];
+        nv_sendmail_template_async([$module_name, Emails::PASSKEY_ADD], $send_data);
+    } else {
+        // Thông báo về khóa bảo mật
+        $email_fields['security_key'] = $nickname;
+        $send_data = [[
+            'to' => $user_info['email'],
+            'data' => $email_fields
+        ]];
+        nv_sendmail_template_async([$module_name, Emails::SECURITY_KEY_ADD], $send_data);
+    }
+
     nv_jsonOutput([
         'status' => 'ok',
         'mess' => 'Success',
@@ -261,14 +345,14 @@ if ($nv_Request->isset_request('save_credential', 'post')) {
 // Xóa passkey
 if ($nv_Request->isset_request('del', 'post')) {
     $id = $nv_Request->get_int('del', 'post', 0);
-    $check_exists = false;
+    $key_info = [];
     foreach ($array_data['publicKeys'] as $publicKey) {
         if ($publicKey['id'] == $id) {
-            $check_exists = true;
+            $key_info = $publicKey;
             break;
         }
     }
-    if (!$check_exists) {
+    if (empty($key_info)) {
         nv_jsonOutput([
             'status' => 'error',
             'mess' => 'Passkey not found',
@@ -278,7 +362,25 @@ if ($nv_Request->isset_request('del', 'post')) {
     $sql = 'DELETE FROM ' . NV_MOD_TABLE . '_passkey WHERE userid=' . $edit_userid . ' AND id=' . $id;
     $db->query($sql);
 
-    nv_insert_logs(NV_LANG_DATA, $module_name, 'log_del_passkey', 'id: ' . $id, $edit_userid);
+    nv_insert_logs(NV_LANG_DATA, $module_name, 'log_del_passkey', 'id: ' . $id . '. Type: ' . (empty($key_info['enable_login']) ? 'security key' : 'passkey'), $edit_userid);
+
+    if (!empty($key_info['enable_login'])) {
+        // Thông báo về khóa đăng nhập
+        $email_fields['passkey'] = $key_info['nickname'];
+        $send_data = [[
+            'to' => $user_info['email'],
+            'data' => $email_fields
+        ]];
+        nv_sendmail_template_async([$module_name, Emails::PASSKEY_DEL], $send_data);
+    } else {
+        // Thông báo về khóa bảo mật
+        $email_fields['security_key'] = $key_info['nickname'];
+        $send_data = [[
+            'to' => $user_info['email'],
+            'data' => $email_fields
+        ]];
+        nv_sendmail_template_async([$module_name, Emails::SECURITY_KEY_DEL], $send_data);
+    }
 
     nv_jsonOutput([
         'status' => 'ok',

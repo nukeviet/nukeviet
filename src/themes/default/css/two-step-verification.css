@@ -130,3 +130,8 @@
 .step-bar .step.completed .circle {
     background-color: var(--nv-success);
 }
+
+.w-fix-content {
+    width: fit-content;
+    max-width: 100%;
+}

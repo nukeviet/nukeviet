@@ -12,6 +12,16 @@
 <!-- BEGIN: main -->
 <script src="{NV_STATIC_URL}themes/{TEMPLATE_JS}/js/users.passkey.js"></script>
 <script type="text/javascript" src="{ASSETS_STATIC_URL}/js/clipboard/clipboard.min.js"></script>
+<div class="panel panel-default">
+    <div class="panel-body">
+        <div class="h2 margin-bottom-sm"><strong>{LANG.preferred_2fa_method}</strong></div>
+        <p>{LANG.preferred_2fa_method_help}</p>
+        <select class="form-control w-fix-content" name="preferred_2fa_method">
+            <option value="1">{LANG.tstep_key}</option>
+            <option value="0">{LANG.tstep_app}</option>
+        </select>
+    </div>
+</div>
 <ul class="list-group">
     <li class="list-group-item active">
         <div class="tstep-flex tstep-gap-2 tstep-justify-between tstep-align-center">
@@ -93,7 +103,6 @@
                             </div>
                             <div>
                                 <div class="tstep-flex tstep-gap-1">
-                                    <span data-toggle="passkey-tooltip" data-trigger="hover" data-title="{LANG.security_keys_upgrage}"><button type="button" class="btn btn-xs btn-default" data-toggle="upgrade" data-id="{SECKEY.id}" aria-label="{LANG.security_keys_upgrage}"><i class="fa fa-level-up" data-icon="fa-level-up" aria-hidden="true"></i></button></span>
                                     <button type="button" class="btn btn-xs btn-default" data-toggle="edit" data-id="{SECKEY.id}" data-nickname="{SECKEY.nickname}"><i class="fa fa-pencil" data-icon="fa-pencil" aria-hidden="true"></i> {GLANG.edit}</button>
                                     <button type="button" class="btn btn-xs btn-danger" data-toggle="del" data-id="{SECKEY.id}"><i class="fa fa-trash" data-icon="fa-trash" aria-hidden="true"></i> {GLANG.delete}</button>
                                 </div>

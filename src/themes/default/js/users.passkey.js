@@ -38,6 +38,7 @@ $(function() {
             data: {
                 checkss: $('[name="checkss"]', form).val(),
                 create_challenge: 1,
+                enable_login: btn.data('enable-login')
             },
             dataType: 'json',
             success: function(response) {
@@ -89,6 +90,7 @@ $(function() {
                                 location.reload();
                                 return;
                             }
+                            nv_setCookie(nv_cookie_prefix + '_pkey', 1, 3650, true, 'Strict');
                             $('[data-toggle="md-complete-passkey"]').modal('show');
                         },
                         error: function (xhr, status, error) {

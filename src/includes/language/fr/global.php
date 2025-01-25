@@ -270,6 +270,7 @@ $lang_global['edituser'] = 'Compte';
 $lang_global['browse_file'] = 'Parcourir...';
 $lang_global['browse_image'] = 'Parcourir...';
 $lang_global['openid_login'] = 'Se connecter avec OpenID';
+$lang_global['passkey_login'] = 'Se connecter avec une clé de passe';
 $lang_global['breakcrum'] = 'Vous êtes à';
 $lang_global['admin_access_denied1'] = 'Désolé! Le système ne permet pas la connection des administrateur en ce moment';
 $lang_global['admin_access_denied2'] = 'Désolé. La connexion des administrateurs de module n\'est pas permis en ce moment';

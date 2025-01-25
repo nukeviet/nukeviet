@@ -879,4 +879,112 @@ $(function() {
     $('body').on('submit', '[data-toggle=confirm_pass_validForm]', function() {
         return confirm_pass_validForm(this);
     });
+
+    // Xử lý passkey trên toàn bộ các form đăng nhập
+    $('form[data-toggle="userLogin"]').each(function() {
+        const form = $(this);
+        if (form.data('passkey-initialized') || !nukeviet.WebAuthnSupported) {
+            return;
+        }
+        form.data('passkey-initialized', true);
+
+        const ctn = $('[data-toggle="passkey-ctn"]', form);
+        const link = $('[data-toggle="passkey-link"]', form);
+        const btn = $('[data-toggle="passkey-btn"]', form);
+        const err = $('[data-toggle="passkey-error"]', form);
+        const icon = $('i', btn);
+
+        ctn.removeClass('hidden');
+
+        if (nv_getCookie(nv_cookie_prefix + '_pkey') == 1) {
+            btn.removeClass('hidden');
+        } else {
+            link.removeClass('hidden');
+        }
+
+        link.on('click', function(e) {
+            e.preventDefault();
+            link.addClass('hidden');
+            btn.removeClass('hidden').trigger('click');
+        });
+
+        // Đăng nhập bằng passkey
+        btn.on('click', function(e) {
+            e.preventDefault();
+            if (icon.is('.fa-spinner')) {
+                return;
+            }
+            err.text('').addClass('hidden');
+            icon.removeClass(icon.data('icon')).addClass('fa-spinner fa-pulse');
+            $.ajax({
+                url: ctn.data('auth-url'),
+                type: 'post',
+                data: {
+                    create_challenge: 1
+                },
+                dataType: 'json',
+                success: function(response) {
+                    if (response.status != 'ok') {
+                        icon.removeClass('fa-spinner fa-pulse').addClass(icon.data('icon'));
+                        err.text(response.mess || nukeviet.i18n.WebAuthnErrors.unknow).removeClass('hidden');
+                        return;
+                    }
+
+                    let requestOptions = JSON.parse(response.requestOptions);
+                    requestOptions.challenge = base64UrlToArrayBuffer(requestOptions.challenge);
+
+                    try {
+                        navigator.credentials.get({
+                            publicKey: requestOptions
+                        }).then(assertion => {
+                            const data = {
+                                auth_assertion: 1,
+                                assertion: JSON.stringify({
+                                    id: assertion.id,
+                                    type: assertion.type,
+                                    rawId: arrayBufferToBase64Url(assertion.rawId),
+                                    response: {
+                                        clientDataJSON: arrayBufferToBase64Url(assertion.response.clientDataJSON),
+                                        authenticatorData: arrayBufferToBase64Url(assertion.response.authenticatorData),
+                                        signature: arrayBufferToBase64Url(assertion.response.signature),
+                                        userHandle: arrayBufferToBase64Url(assertion.response.userHandle),
+                                    }
+                                }),
+                            };
+                            $.ajax({
+                                url: ctn.data('auth-url'),
+                                type: 'POST',
+                                data: data,
+                                dataType: 'json',
+                                success: function (response) {
+                                    if (response.status != 'ok') {
+                                        icon.removeClass('fa-spinner fa-pulse').addClass(icon.data('icon'));
+                                        err.text(response.mess).removeClass('hidden');
+                                        return;
+                                    }
+                                    nv_setCookie(nv_cookie_prefix + '_pkey', 1, 3650, true, 'Strict');
+                                    location.reload();
+                                },
+                                error: function (xhr, status, error) {
+                                    console.log(xhr.responseText);
+                                    alert(error);
+                                }
+                            });
+                        }).catch(error => {
+                            icon.removeClass('fa-spinner fa-pulse').addClass(icon.data('icon'));
+                            err.text(nukeviet.i18n.WebAuthnErrors.creat[error.name] || nukeviet.i18n.WebAuthnErrors.unknow).removeClass('hidden');
+                        });
+                    } catch (error) {
+                        icon.removeClass('fa-spinner fa-pulse').addClass(icon.data('icon'));
+                        err.text(nukeviet.i18n.WebAuthnErrors.creat[error.name] || nukeviet.i18n.WebAuthnErrors.unknow).removeClass('hidden');
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error(xhr, status, error);
+                    icon.removeClass('fa-spinner fa-pulse').addClass(icon.data('icon'));
+                    err.text(nukeviet.i18n.WebAuthnErrors.unknow).removeClass('hidden');
+                }
+            });
+        });
+    });
 });

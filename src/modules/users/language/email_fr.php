@@ -271,3 +271,65 @@ $module_emails[Emails::REQUEST_RESET_EMAIL] = [
     's' => '{if $email_reset eq 2}Changement d\'e-mail de compte recommandé{else}Besoin de changer l\'e-mail du compte{/if}',
     'c' => '{$greeting_user}<br /><br />L\'administration du site {$site_name} informe: Pour des raisons de sécurité, {if $email_reset eq 2}nous vous recommandons de modifier{else}vous devez changer{/if} l\'e-mail de votre compte dès que possible. Pour modifier votre e-mail, vous devez d\'abord vous rendre sur la page <a href="{$link}">Gestion du compte personnel</a>, sélectionner le bouton Paramètres du compte, puis le bouton E-mail, et suivre les instructions.'
 ];
+$module_emails[Emails::SECURITY_KEY_ADD] = [
+    'is_system' => $is_system,
+    'pids' => $pids,
+    'pfile' => $pfile,
+    'catid' => $catid,
+    't' => 'Email ajout de clé de sécurité',
+    's' => 'Une clé de sécurité a été ajoutée à votre compte',
+    'c' => '{$greeting_user}<br /><br />Une clé de sécurité nommée &quot;{$security_key}&quot; vient d\'être ajoutée à votre compte sur le site {$site_name}. Cette action provient de:
+<ul>
+    <li>Navigateur: <strong>{$user_agent}</strong></li>
+    <li>IP: <strong>{$ip}</strong></li>
+    <li>Heure de l\'action: <strong>{$action_time}</strong></li>
+</ul>
+<p>Nous envoyons cette notification obligatoire à votre email pour nous assurer que c\'est bien vous qui avez effectué cette action. Si ce n\'est pas le cas, veuillez rapidement accéder à <a href="{$tstep_link}">la page de gestion de l\'authentification à deux facteurs</a> pour vérifier les clés de sécurité. En même temps, veuillez <a href="{$pass_link}">changer immédiatement votre mot de passe</a> pour garantir la sécurité.</p>
+Rappel: Avez-vous sauvegardé vos codes de secours? Si ce n\'est pas le cas, veuillez prendre un moment pour les télécharger et les stocker en toute sécurité, car ils constituent la dernière méthode pour accéder à votre compte en cas de perte des dispositifs d\'authentification à deux facteurs. Vous pouvez <a href="{$code_link}">les télécharger ici</a>.'
+];
+$module_emails[Emails::PASSKEY_ADD] = [
+    'is_system' => $is_system,
+    'pids' => $pids,
+    'pfile' => $pfile,
+    'catid' => $catid,
+    't' => 'Email ajout de clé de passe',
+    's' => 'Une clé de passe a été ajoutée à votre compte',
+    'c' => '{$greeting_user}<br /><br />Une clé de passe nommée &quot;{$passkey}&quot; vient d\'être ajoutée à votre compte sur le site {$site_name}. Cette action provient de:
+<ul>
+    <li>Navigateur: <strong>{$user_agent}</strong></li>
+    <li>IP: <strong>{$ip}</strong></li>
+    <li>Heure de l\'action: <strong>{$action_time}</strong></li>
+</ul>
+<p>Nous envoyons cette notification obligatoire à votre email pour nous assurer que c\'est bien vous qui avez effectué cette action. Si ce n\'est pas le cas, veuillez rapidement accéder à <a href="{$passkey_link}">la page de gestion des clés de passe</a> pour vérifier les clés de passe. En même temps, veuillez <a href="{$pass_link}">changer immédiatement votre mot de passe</a> pour garantir la sécurité.</p>'
+];
+$module_emails[Emails::SECURITY_KEY_DEL] = [
+    'is_system' => $is_system,
+    'pids' => $pids,
+    'pfile' => $pfile,
+    'catid' => $catid,
+    't' => 'Email suppression de clé de sécurité',
+    's' => 'La clé de sécurité a été supprimée de votre compte',
+    'c' => '{$greeting_user}<br /><br />La clé de sécurité nommée &quot;{$security_key}&quot; vient d\'être supprimée de votre compte sur le site {$site_name}. Cette action provient de:
+<ul>
+    <li>Navigateur: <strong>{$user_agent}</strong></li>
+    <li>IP: <strong>{$ip}</strong></li>
+    <li>Heure de l\'action: <strong>{$action_time}</strong></li>
+</ul>
+<p>Nous envoyons cette notification obligatoire à votre email pour nous assurer que c\'est bien vous qui avez effectué cette action. Si ce n\'est pas le cas, veuillez rapidement accéder à <a href="{$tstep_link}">la page de gestion de l\'authentification à deux facteurs</a> pour vérifier les clés de sécurité. En même temps, veuillez <a href="{$pass_link}">changer immédiatement votre mot de passe</a> pour garantir la sécurité.</p>
+Rappel: Avez-vous sauvegardé vos codes de secours? Si ce n\'est pas le cas, veuillez prendre un moment pour les télécharger et les stocker en toute sécurité, car ils constituent la dernière méthode pour accéder à votre compte en cas de perte des dispositifs d\'authentification à deux facteurs. Vous pouvez <a href="{$code_link}">les télécharger ici</a>.'
+];
+$module_emails[Emails::PASSKEY_DEL] = [
+    'is_system' => $is_system,
+    'pids' => $pids,
+    'pfile' => $pfile,
+    'catid' => $catid,
+    't' => 'Email suppression de clé de passe',
+    's' => 'La clé de passe a été supprimée de votre compte',
+    'c' => '{$greeting_user}<br /><br />La clé de passe nommée &quot;{$passkey}&quot; vient d\'être supprimée de votre compte sur le site {$site_name}. Cette action provient de:
+<ul>
+    <li>Navigateur: <strong>{$user_agent}</strong></li>
+    <li>IP: <strong>{$ip}</strong></li>
+    <li>Heure de l\'action: <strong>{$action_time}</strong></li>
+</ul>
+<p>Nous envoyons cette notification obligatoire à votre email pour nous assurer que c\'est bien vous qui avez effectué cette action. Si ce n\'est pas le cas, veuillez rapidement accéder à <a href="{$passkey_link}">la page de gestion des clés de passe</a> pour vérifier les clés de passe. En même temps, veuillez <a href="{$pass_link}">changer immédiatement votre mot de passe</a> pour garantir la sécurité.</p>'
+];

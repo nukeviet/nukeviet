@@ -527,7 +527,8 @@ $installMods['two-step-verification'] = [
             'show_func' => 1,
             'theme_default' => 'left-main-right',
             'theme_mobile' => 'main'
-        ]
+        ],
+        'qrimg' => []
     ],
     'icon' => 'fa-solid fa-shield-halved'
 ];

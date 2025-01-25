@@ -271,3 +271,65 @@ $module_emails[Emails::REQUEST_RESET_EMAIL] = [
     's' => '{if $email_reset eq 2}Recommended email change{else}Need to change email{/if}',
     'c' => '{$greeting_user}<br /><br />The {$site_name} website administration informs: For security reasons, {if $email_reset eq 2}we recommend that you{else}you need to{/if} change your account email as soon as possible. To change your email, you need to first visit the <a href="{$link}">Manage Personal Account page</a>, select the Account Settings button, then the Email button, and follow the instructions.'
 ];
+$module_emails[Emails::SECURITY_KEY_ADD] = [
+    'is_system' => $is_system,
+    'pids' => $pids,
+    'pfile' => $pfile,
+    'catid' => $catid,
+    't' => 'Email adding security key',
+    's' => 'A security key has been added to your account',
+    'c' => '{$greeting_user}<br /><br />A security key named &quot;{$security_key}&quot; has just been added to your account on the website {$site_name}. This action originated from:
+<ul>
+    <li>Browser: <strong>{$user_agent}</strong></li>
+    <li>IP: <strong>{$ip}</strong></li>
+    <li>Action time: <strong>{$action_time}</strong></li>
+</ul>
+<p>We send this mandatory notification to your email to ensure that it was you who performed the action. If it was not you, please urgently visit the <a href="{$tstep_link}">two-step authentication management page</a> to review the security keys. Also, <a href="{$pass_link}">change your password immediately</a> to ensure safety.</p>
+Reminder: Have you stored your backup codes? If not, please take a moment to download and store them carefully, as they are the last resort to ensure you can access your account in case you lose the devices used for two-step authentication. You can <a href="{$code_link}">download them here</a>.'
+];
+$module_emails[Emails::PASSKEY_ADD] = [
+    'is_system' => $is_system,
+    'pids' => $pids,
+    'pfile' => $pfile,
+    'catid' => $catid,
+    't' => 'Email adding passkey',
+    's' => 'A passkey has been added to your account',
+    'c' => '{$greeting_user}<br /><br />A passkey named &quot;{$passkey}&quot; has just been added to your account on the website {$site_name}. This action originated from:
+<ul>
+    <li>Browser: <strong>{$user_agent}</strong></li>
+    <li>IP: <strong>{$ip}</strong></li>
+    <li>Action time: <strong>{$action_time}</strong></li>
+</ul>
+We send this mandatory notification to your email to ensure that it was you who performed the action. If it was not you, please urgently visit the <a href="{$passkey_link}">passkey management page</a> to review the passkeys. Also, <a href="{$pass_link}">change your password immediately</a> to ensure safety.'
+];
+$module_emails[Emails::SECURITY_KEY_DEL] = [
+    'is_system' => $is_system,
+    'pids' => $pids,
+    'pfile' => $pfile,
+    'catid' => $catid,
+    't' => 'Email deleting security key',
+    's' => 'Security key has been removed from your account',
+    'c' => '{$greeting_user}<br /><br />The security key named &quot;{$security_key}&quot; has just been removed from your account on the website {$site_name}. This action originated from:
+<ul>
+    <li>Browser: <strong>{$user_agent}</strong></li>
+    <li>IP: <strong>{$ip}</strong></li>
+    <li>Action time: <strong>{$action_time}</strong></li>
+</ul>
+<p>We send this mandatory notification to your email to ensure that it was you who performed the action. If it was not you, please urgently visit the <a href="{$tstep_link}">two-step authentication management page</a> to review the security keys. Also, <a href="{$pass_link}">change your password immediately</a> to ensure safety.</p>
+Reminder: Have you stored your backup codes? If not, please take a moment to download and store them carefully, as they are the last resort to ensure you can access your account in case you lose the devices used for two-step authentication. You can <a href="{$code_link}">download them here</a>.'
+];
+$module_emails[Emails::PASSKEY_DEL] = [
+    'is_system' => $is_system,
+    'pids' => $pids,
+    'pfile' => $pfile,
+    'catid' => $catid,
+    't' => 'Email deleting passkey',
+    's' => 'Passkey has been removed from your account',
+    'c' => '{$greeting_user}<br /><br />The passkey named &quot;{$passkey}&quot; has just been removed from your account on the website {$site_name}. This action originated from:
+<ul>
+    <li>Browser: <strong>{$user_agent}</strong></li>
+    <li>IP: <strong>{$ip}</strong></li>
+    <li>Action time: <strong>{$action_time}</strong></li>
+</ul>
+We send this mandatory notification to your email to ensure that it was you who performed the action. If it was not you, please urgently visit the <a href="{$passkey_link}">passkey management page</a> to review the passkeys. Also, <a href="{$pass_link}">change your password immediately</a> to ensure safety.'
+];
