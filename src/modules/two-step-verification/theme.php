@@ -123,6 +123,21 @@ function nv_theme_info_2step(array $data)
         $xtpl->parse('main.edit_app');
     }
 
+    // Xác thực 2 bước ưa thích
+    if ($data['pref_2fa'] == 2) {
+        $xtpl->assign('PREF_2FA_1', '');
+        $xtpl->assign('PREF_2FA_2', ' selected');
+    } elseif ($data['pref_2fa'] == 1) {
+        $xtpl->assign('PREF_2FA_1', ' selected');
+        $xtpl->assign('PREF_2FA_2', '');
+    } else {
+        $xtpl->assign('PREF_2FA_1', '');
+        $xtpl->assign('PREF_2FA_2', '');
+    }
+    if (!empty($data['publicKeys'])) {
+        $xtpl->parse('main.pref_2fa_key');
+    }
+
     $xtpl->parse('main');
     return $xtpl->text('main');
 }

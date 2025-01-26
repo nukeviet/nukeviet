@@ -147,6 +147,7 @@ $lang_module['mode_login_1'] = 'Regular login';
 $lang_module['mode_login_2'] = 'Login by OpenID';
 $lang_module['mode_login_3'] = 'Login by Oauth';
 $lang_module['mode_login_4'] = 'Login by CAS Server';
+$lang_module['mode_login_6'] = 'Login by passkey';
 $lang_module['openid_login2'] = 'Login using other OpenID';
 $lang_module['openid_note'] = 'OpenID is not registered. Please choose one of the following options';
 $lang_module['openid_without_email_note'] = 'The information provided by the third-party does not include an email address, so we are unable to automatically create an account for you.';

@@ -147,6 +147,7 @@ $lang_module['mode_login_1'] = 'Connexion de façon régulière';
 $lang_module['mode_login_2'] = 'Connexion par OpenID';
 $lang_module['mode_login_3'] = 'Connexion par Oauth';
 $lang_module['mode_login_4'] = 'Connexion par CAS Server';
+$lang_module['mode_login_6'] = 'Connexion par clé de passe';
 $lang_module['openid_login2'] = 'Connexion par un autre compte d\'OpenID';
 $lang_module['openid_note'] = 'OpenID n\'est pas enregistré. Veuillez choisir l\'une des options suivantes';
 $lang_module['openid_without_email_note'] = 'Les informations fournies par le tiers n\'incluent pas d\'adresse e-mail, nous ne sommes donc pas en mesure de créer automatiquement un compte pour vous.';

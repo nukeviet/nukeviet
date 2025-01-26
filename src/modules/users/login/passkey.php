@@ -160,7 +160,7 @@ if ($nv_Request->isset_request('auth_assertion', 'post')) {
 
     $sql = 'SELECT
         tb2.*, tb1.id passkey_id, tb1.enable_login, tb1.keyid, tb1.userhandle,
-        tb1.publickey, tb1.counter keycounter, tb1.aaguid, tb1.type keytype
+        tb1.publickey, tb1.counter keycounter, tb1.aaguid, tb1.type keytype, tb1.nickname passkey_name
     FROM ' . NV_MOD_TABLE . '_passkey tb1
     INNER JOIN ' . NV_MOD_TABLE . ' tb2 ON tb1.userid=tb2.userid
     WHERE tb1.userhandle=:userhandle AND tb1.keyid=:keyid';
@@ -236,7 +236,9 @@ if ($nv_Request->isset_request('auth_assertion', 'post')) {
     $stmt->execute();
     unset($credential);
 
-    validUserLog($row, 1);
+    validUserLog($row, 1, [
+        'nickname' => $row['passkey_name'],
+    ], 6);
     $blocker->reset_trackLogin($row['username']);
     $blocker->reset_trackLogin($row['email']);
 

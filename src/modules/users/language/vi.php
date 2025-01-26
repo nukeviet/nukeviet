@@ -147,6 +147,7 @@ $lang_module['mode_login_1'] = 'Đăng nhập theo kiểu thông thường';
 $lang_module['mode_login_2'] = 'Đăng nhập bằng OpenID';
 $lang_module['mode_login_3'] = 'Đăng nhập bằng Oauth';
 $lang_module['mode_login_4'] = 'Đăng nhập bằng CAS Server';
+$lang_module['mode_login_6'] = 'Đăng nhập bằng khóa đăng nhập';
 $lang_module['openid_login2'] = 'Đăng nhập bằng OpenID khác';
 $lang_module['openid_note'] = 'Vui lòng chọn một trong các tùy chọn sau';
 $lang_module['openid_without_email_note'] = 'Thông tin do bên thứ ba cung cấp không bao gồm địa chỉ email nên chúng tôi không thể tạo tự động tài khoản cho bạn.';

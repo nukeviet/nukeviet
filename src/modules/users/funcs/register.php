@@ -48,6 +48,7 @@ if ($global_config['max_user_number'] > 0) {
     $user_number = $db->query($sql)->fetchColumn();
     if ($user_number >= $global_config['max_user_number']) {
         if (defined('NV_REGISTER_DOMAIN')) {
+            /** @disregard P1011 */
             nv_redirect_location(NV_REGISTER_DOMAIN . NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&nv_redirect=' . nv_redirect_encrypt($client_info['selfurl']));
         } else {
             $contents = $nv_Lang->getGlobal('limit_user_number', $global_config['max_user_number']);
@@ -379,9 +380,11 @@ if ($checkss == $array_register['checkss']) {
             ];
             if (defined('SSO_REGISTER_SECRET')) {
                 $sso_redirect_users = $nv_Request->get_title('sso_redirect_' . $module_data, 'session', '');
-                $iv = substr(SSO_REGISTER_SECRET, 0, 16);
+                /** @disregard P1011 */
+                $iv = substr(SSO_REGISTER_SECRET, 0, 16); // phpcs:ignore
                 $sso_redirect_users = strtr($sso_redirect_users, '-_,', '+/=');
-                $sso_redirect_users = openssl_decrypt($sso_redirect_users, 'aes-256-cbc', SSO_REGISTER_SECRET, 0, $iv);
+                /** @disregard P1011 */
+                $sso_redirect_users = openssl_decrypt($sso_redirect_users, 'aes-256-cbc', SSO_REGISTER_SECRET, 0, $iv); // phpcs:ignore
                 if (!empty($sso_redirect_users)) {
                     $array['input'] = $sso_redirect_users;
                 }
@@ -477,7 +480,7 @@ if ($checkss == $array_register['checkss']) {
                     'last_openid' => '',
                     'language' => ''
                 ];
-                validUserLog($array_user, 1, '');
+                validUserLog($array_user, 1);
 
                 $nv_redirect = nv_redirect_decrypt($nv_redirect);
                 $url = !empty($nv_redirect) ? $nv_redirect : NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name;
@@ -491,7 +494,8 @@ if ($checkss == $array_register['checkss']) {
 
             // Callback sau khi đăng ký
             if (nv_function_exists('nv_user_register_callback')) {
-                nv_user_register_callback($userid);
+                /** @disregard P1010 */
+                nv_user_register_callback($userid); // phpcs:ignore
             }
 
             $nv_redirect = '';

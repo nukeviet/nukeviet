@@ -44,21 +44,28 @@ function get_checknum($userid)
 }
 
 /**
- * validUserLog()
+ * Xác lập phiên đăng nhập của người dùng
  *
  * @param array $array_user
  * @param int   $remember
- * @param array $oauth_data
+ * @param array $mode_data
  * @param int   $current_mode
  * @throws PDOException
  */
-function validUserLog($array_user, $remember, $oauth_data = [], $current_mode = 0)
+function validUserLog($array_user, $remember, $mode_data = [], $current_mode = 0)
 {
-    global $db, $global_config, $nv_Request, $nv_Lang, $global_users_config, $module_name, $module_file, $client_info;
+    global $db, $global_config, $nv_Lang, $global_users_config, $module_name, $module_file, $client_info;
 
     $remember = (int) $remember;
     $checknum = get_checknum($array_user['userid']);
-    $opid = empty($oauth_data) ? '' : $oauth_data['id'];
+    $opid = $passkey = $mode_extra = '';
+    if (!empty($mode_data)) {
+        if (in_array($current_mode, [2, 3, 4], true)) {
+            $opid = $mode_extra = $mode_data['id'];
+        } elseif ($current_mode == 6) {
+            $passkey = $mode_extra = $mode_data['nickname'];
+        }
+    }
 
     // Thay đổi rule tạo hash, login ở đây cần xem xét tương tự tại includes/core/admin_login.php
     $user = [
@@ -83,6 +90,7 @@ function validUserLog($array_user, $remember, $oauth_data = [], $current_mode = 
         last_ip = :last_ip,
         last_agent = :last_agent,
         last_openid = :opid,
+        last_passkey = :passkey,
         remember = ' . $remember . '
         WHERE userid=' . $array_user['userid']);
 
@@ -90,6 +98,7 @@ function validUserLog($array_user, $remember, $oauth_data = [], $current_mode = 
     $stmt->bindValue(':last_ip', NV_CLIENT_IP, PDO::PARAM_STR);
     $stmt->bindValue(':last_agent', NV_USER_AGENT, PDO::PARAM_STR);
     $stmt->bindValue(':opid', $opid, PDO::PARAM_STR);
+    $stmt->bindValue(':passkey', $passkey, PDO::PARAM_STR);
     $stmt->execute();
 
     if ($global_config['allowuserloginmulti']) {
@@ -98,13 +107,15 @@ function validUserLog($array_user, $remember, $oauth_data = [], $current_mode = 
         $db->query('DELETE FROM ' . NV_MOD_TABLE . '_login WHERE userid=' . $array_user['userid']);
     }
 
-    $sth = $db->prepare('INSERT INTO ' . NV_MOD_TABLE . '_login
-        (userid, clid, logtime, mode, agent, ip, openid) VALUES
-        (' . $array_user['userid'] . ', :clid, ' . NV_CURRENTTIME . ', ' . $current_mode . ', :agent, :ip, :openid)');
+    $sth = $db->prepare('INSERT INTO ' . NV_MOD_TABLE . '_login (
+        userid, clid, logtime, mode, agent, ip, mode_extra
+    ) VALUES (
+        ' . $array_user['userid'] . ', :clid, ' . NV_CURRENTTIME . ', ' . $current_mode . ', :agent, :ip, :mode_extra
+    )');
     $sth->bindValue(':clid', $client_info['clid'], PDO::PARAM_STR);
     $sth->bindValue(':agent', NV_USER_AGENT, PDO::PARAM_STR);
     $sth->bindValue(':ip', NV_CLIENT_IP, PDO::PARAM_STR);
-    $sth->bindValue(':openid', $opid, PDO::PARAM_STR);
+    $sth->bindValue(':mode_extra', $mode_extra, PDO::PARAM_STR);
     $sth->execute();
 
     NukeViet\Core\User::set_userlogin_hash($user, $remember);
@@ -132,7 +143,13 @@ function validUserLog($array_user, $remember, $oauth_data = [], $current_mode = 
     }
 
     if (!empty($global_users_config['active_user_logs'])) {
-        $log_message = $opid ? ($nv_Lang->getModule('userloginviaopt') . ' ' . $oauth_data['provider']) : $nv_Lang->getModule('st_login');
+        if (!empty($passkey)) {
+            $log_message = $nv_Lang->getModule('mode_login_6') . ' ' . $passkey;
+        } elseif (!empty($opid)) {
+            $log_message = $nv_Lang->getModule('userloginviaopt') . ' ' . $mode_data['provider'];
+        } else {
+            $log_message = $nv_Lang->getModule('st_login');
+        }
         nv_insert_logs(NV_LANG_DATA, $module_name, '[' . $array_user['username'] . '] ' . $log_message, ' Client IP:' . NV_CLIENT_IP, 0);
     }
 }
@@ -335,6 +352,7 @@ function nv_del_user($userid)
     $db->query('DELETE FROM ' . NV_MOD_TABLE . '_groups_users WHERE userid=' . $userid);
     $db->query('DELETE FROM ' . NV_MOD_TABLE . '_openid WHERE userid=' . $userid);
     $db->query('DELETE FROM ' . NV_MOD_TABLE . '_info WHERE userid=' . $userid);
+    $db->query('DELETE FROM ' . NV_MOD_TABLE . '_passkey WHERE userid=' . $userid);
 
     nv_insert_logs(NV_LANG_DATA, $module_name, 'log_del_user', 'userid ' . $userid, $user_info['userid']);
 
@@ -381,8 +399,10 @@ function opidr_login($openid_info)
     if (defined('SSO_REGISTER_SECRET')) {
         $sso_client = $nv_Request->get_title('sso_client_' . $module_data, 'session', '');
         $sso_redirect = $nv_Request->get_title('sso_redirect_' . $module_data, 'session', '');
+        /** @disregard P1011 */
         $iv = substr(SSO_REGISTER_SECRET, 0, 16);
         $sso_redirect = strtr($sso_redirect, '-_,', '+/=');
+        /** @disregard P1011 */
         $sso_redirect = openssl_decrypt($sso_redirect, 'aes-256-cbc', SSO_REGISTER_SECRET, 0, $iv);
 
         if (!empty($sso_redirect) and !empty($sso_client) and str_starts_with($sso_redirect, $sso_client)) {

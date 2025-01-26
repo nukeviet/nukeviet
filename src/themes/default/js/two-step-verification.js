@@ -267,6 +267,34 @@ $(function() {
     $('#recovery-codes').on('show.bs.collapse', function (e) {
         locationReplace($(e.currentTarget).data('show-codes-url'));
     });
+
+    // Thay đổi phương án xác thực 2 bước ưu thích
+    $('[data-toggle="preferred_2fa_method"]').on('change', function() {
+        const btn = $(this);
+        const value = btn.val();
+        btn.prop('disabled', true);
+        $.ajax({
+            url: nv_base_siteurl + 'index.php?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&nocache=' + new Date().getTime(),
+            type: 'post',
+            data: {
+                change_preferred_2fa: btn.data('checkss'),
+                pref_2fa: value
+            },
+            dataType: 'json',
+            success: function(response) {
+                if (response.status != 'ok') {
+                    alert(response.mess);
+                }
+                location.reload();
+            },
+            error: function(xhr, status, error) {
+                console.error(xhr, status, error);
+                btn.prop('disabled', false);
+                alert(error);
+                location.reload();
+            }
+        });
+    });
 });
 
 $(window).on('load', function() {

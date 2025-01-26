@@ -31,6 +31,7 @@ $array_data['show_type'] = $nv_Request->get_title('type', 'get', '');
 $array_data['publicKeys'] = [];
 $array_data['login_keys'] = 0;
 $array_data['security_keys'] = 0;
+$array_data['pref_2fa'] = $user_info['pref_2fa'];
 
 // Lấy danh sách khóa đăng nhập, khóa bảo mật
 $sql = 'SELECT id, keyid, created_at, last_used_at, clid, enable_login, nickname
@@ -45,6 +46,46 @@ while ($_row = $result->fetch()) {
     }
 }
 $result->closeCursor();
+
+// Lưu phương thức xác thực 2 bước ưu thích
+if ($nv_Request->isset_request('change_preferred_2fa', 'post')) {
+    if (!defined('NV_IS_AJAX') or $nv_Request->get_title('change_preferred_2fa', 'post', '') !== NV_CHECK_SESSION) {
+        nv_jsonOutput([
+            'status' => 'error',
+            'mess' => 'Not allowed!'
+        ]);
+    }
+    $pref_2fa = $nv_Request->get_int('pref_2fa', 'post', 0);
+    if (!in_array($pref_2fa, [1, 2], true)) {
+        nv_jsonOutput([
+            'status' => 'error',
+            'mess' => 'Invalid preferred 2fa!'
+        ]);
+    }
+    if (empty($user_info['active2step'])) {
+        nv_jsonOutput([
+            'status' => 'error',
+            'mess' => 'Please enable 2-step verification first!'
+        ]);
+    }
+    if ($pref_2fa == 2 and empty($array_data['publicKeys'])) {
+        nv_jsonOutput([
+            'status' => 'error',
+            'mess' => 'Please add a security key or passkey first!'
+        ]);
+    }
+    if ($pref_2fa != $user_info['pref_2fa']) {
+        $sql = 'UPDATE ' . $db_config['prefix'] . '_' . $site_mods[NV_BRIDGE_USER_MODULE]['module_data'] . ' SET
+            pref_2fa=' . $pref_2fa . ', last_update=' . NV_CURRENTTIME . '
+        WHERE userid=' . $user_info['userid'];
+        $db->query($sql);
+        nv_insert_logs(NV_LANG_DATA, $module_name, 'log_change_pref_2fa', $pref_2fa, $user_info['userid']);
+    }
+    nv_jsonOutput([
+        'status' => 'ok',
+        'mess' => 'OK'
+    ]);
+}
 
 /*
  * Tắt xác thực hai bước

@@ -16,9 +16,11 @@
     <div class="panel-body">
         <div class="h2 margin-bottom-sm"><strong>{LANG.preferred_2fa_method}</strong></div>
         <p>{LANG.preferred_2fa_method_help}</p>
-        <select class="form-control w-fix-content" name="preferred_2fa_method">
-            <option value="1">{LANG.tstep_key}</option>
-            <option value="0">{LANG.tstep_app}</option>
+        <select class="form-control w-fix-content" name="preferred_2fa_method" data-toggle="preferred_2fa_method" data-current="{DATA.pref_2fa}" data-checkss="{NV_CHECK_SESSION}">
+            <!-- BEGIN: pref_2fa_key -->
+            <option value="2"{PREF_2FA_2}>{LANG.tstep_key}</option>
+            <!-- END: pref_2fa_key -->
+            <option value="1"{PREF_2FA_1}>{LANG.tstep_app}</option>
         </select>
     </div>
 </div>

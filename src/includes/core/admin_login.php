@@ -170,7 +170,7 @@ if (!empty($admin_pre_data) and in_array(($opt = $nv_Request->get_title('auth', 
         }
 
         $sth = $db->prepare('INSERT INTO ' . NV_USERS_GLOBALTABLE . '_login (
-            userid, clid, logtime, mode, agent, ip, openid
+            userid, clid, logtime, mode, agent, ip, mode_extra
         ) VALUES (
             ' . $admin_pre_data['userid'] . ', :clid, ' . NV_CURRENTTIME . ', 0, :agent, :ip, \'\'
         )');

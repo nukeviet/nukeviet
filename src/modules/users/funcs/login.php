@@ -670,7 +670,7 @@ if (defined('NV_OPENID_ALLOWED') and $nv_Request->isset_request('server', 'get')
                 ]);
             }
 
-            validUserLog($row, 1, '');
+            validUserLog($row, 1);
         }
 
         $stmt = $db->prepare('INSERT INTO ' . NV_MOD_TABLE . '_openid VALUES (' . (int) $row['userid'] . ', :server, :opid, :id, :email )');

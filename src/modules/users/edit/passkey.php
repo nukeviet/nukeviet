@@ -364,6 +364,12 @@ if ($nv_Request->isset_request('del', 'post')) {
 
     nv_insert_logs(NV_LANG_DATA, $module_name, 'log_del_passkey', 'id: ' . $id . '. Type: ' . (empty($key_info['enable_login']) ? 'security key' : 'passkey'), $edit_userid);
 
+    // Xóa hết khóa thì set xác thực 2 bước ưu thích về 0 nếu nó là = 2
+    if (count($array_data['publicKeys']) == 1) {
+        $sql = 'UPDATE ' . NV_USERS_GLOBALTABLE . ' SET pref_2fa=0, last_update=' . NV_CURRENTTIME . ' WHERE userid=' . $edit_userid . ' AND pref_2fa=2';
+        $db->query($sql);
+    }
+
     if (!empty($key_info['enable_login'])) {
         // Thông báo về khóa đăng nhập
         $email_fields['passkey'] = $key_info['nickname'];

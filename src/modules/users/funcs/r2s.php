@@ -194,6 +194,7 @@ if ($nv_Request->isset_request('checkss', 'post')) {
             $info = $nv_Lang->getModule('remove_2step_send');
         } else {
             $db->query('DELETE FROM ' . NV_MOD_TABLE . '_backupcodes WHERE userid=' . $uid);
+            $db->query('DELETE FROM ' . NV_MOD_TABLE . '_passkey WHERE userid=' . $uid . ' AND enable_login=0');
             $db->query('UPDATE ' . NV_MOD_TABLE . " SET active2step=0, secretkey='', last_update=" . NV_CURRENTTIME . ' WHERE userid=' . $uid);
 
             $send_data = [[

@@ -1475,6 +1475,8 @@ function user_welcome($array_field_config, $custom_fields)
 
     if (isset($user_info['current_mode']) and $user_info['current_mode'] == 5) {
         $_user_info['current_mode'] = $nv_Lang->getModule('admin_login');
+    } elseif (isset($user_info['current_mode']) and $user_info['current_mode'] == 6) {
+        $_user_info['current_mode'] = $nv_Lang->getModule('mode_login_6') . (!empty($user_info['current_passkey']) ? (' &quot;' . $user_info['current_passkey'] . '&quot;') : '');
     } elseif (isset($user_info['current_mode']) and $nv_Lang->existsModule('mode_login_' . $user_info['current_mode'])) {
         $_user_info['current_mode'] = $nv_Lang->getModule('mode_login_' . $user_info['current_mode']) . ': ' . $user_info['openid_server'] . ' (' . (!empty($user_info['openid_email']) ? $user_info['openid_email'] : $user_info['openid_id']) . ')';
     } else {

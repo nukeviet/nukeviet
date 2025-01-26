@@ -529,22 +529,18 @@ class Database extends PDO
     /**
      * query()
      *
-     * @param string   $statement
+     * @param string   $query
      * @param int|null $fetchMode
      * @param array    $fetchModeArgs
      * @return false|PDOStatement
      */
     #[\ReturnTypeWillChange]
-    public function query($statement, $fetchMode = null, ...$fetchModeArgs)
+    public function query(string $query, ?int $fetchMode = null, ...$fetchModeArgs): PDOStatement|false // phpcs:ignore
     {
         if ($this->debug) {
-            $this->sqls[] = $statement;
+            $this->sqls[] = $query;
         }
-        if (version_compare(PHP_VERSION, '8.0.0', '>=')) {
-            return parent::query($statement, $fetchMode, ...$fetchModeArgs);
-        }
-
-        return parent::query($statement);
+        return parent::query($query, $fetchMode, ...$fetchModeArgs);
     }
 
     /**
@@ -554,7 +550,7 @@ class Database extends PDO
      * @return false|int
      */
     #[\ReturnTypeWillChange]
-    public function exec($statement)
+    public function exec(string $statement): false|int
     {
         if ($this->debug) {
             $this->sqls[] = $statement;
@@ -571,7 +567,7 @@ class Database extends PDO
      * @return false|PDOStatement
      */
     #[\ReturnTypeWillChange]
-    public function prepare($statement, $driver_options = [])
+    public function prepare(string $statement, array $driver_options = []): PDOStatement|false
     {
         //if ($this->debug) {
         //    $this->sqls[] = $statement;
@@ -689,7 +685,7 @@ class NukeVietPDOStatement extends PDOStatement
      * @throws PDOException
      */
     #[\ReturnTypeWillChange]
-    public function execute($args = null)
+    public function execute($args = null): bool
     {
         $result = parent::execute($args);
         if ($this->pdo->isDebug()) {

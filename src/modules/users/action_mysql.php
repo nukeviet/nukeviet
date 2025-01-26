@@ -132,6 +132,7 @@ $sql_create_module[] = 'CREATE TABLE IF NOT EXISTS ' . $db_config['prefix'] . '_
     last_ip varchar(45) DEFAULT '',
     last_agent varchar(255) DEFAULT '',
     last_openid varchar(255) DEFAULT '',
+    last_passkey varchar(100) NOT NULL DEFAULT '' COMMENT 'Nickname của passkey cuối cùng',
     last_update int(11) unsigned NOT NULL DEFAULT '0' COMMENT 'Thời điểm cập nhật thông tin lần cuối',
     idsite int(11) NOT NULL DEFAULT '0',
     safemode tinyint(1) unsigned NOT NULL DEFAULT '0',
@@ -328,7 +329,7 @@ $sql_create_module[] = 'CREATE TABLE IF NOT EXISTS ' . $db_config['prefix'] . '_
     mode TINYINT(1) UNSIGNED NOT NULL DEFAULT '0',
     agent VARCHAR(255) NOT NULL,
     ip CHAR(50) NOT NULL,
-    openid VARCHAR(255) NOT NULL DEFAULT '',
+    mode_extra VARCHAR(255) NOT NULL DEFAULT '',
     UNIQUE KEY userid (userid, clid)
 ) ENGINE=MyISAM";
 
