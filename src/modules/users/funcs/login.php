@@ -14,6 +14,15 @@ if (!defined('NV_IS_MOD_USER')) {
 }
 
 use NukeViet\Module\users\Shared\Emails;
+use NukeViet\Webauthn\RequestPasskey;
+use NukeViet\Webauthn\SerializerFactory;
+use Webauthn\AuthenticatorAssertionResponse;
+use Webauthn\AuthenticatorAssertionResponseValidator;
+use Webauthn\CeremonyStep\CeremonyStepManagerFactory;
+use Webauthn\PublicKeyCredentialDescriptor;
+use Webauthn\PublicKeyCredential;
+use Webauthn\PublicKeyCredentialRequestOptions;
+use Webauthn\PublicKeyCredentialSource;
 
 if (defined('NV_IS_USER') or !$global_config['allowuserlogin']) {
     nv_redirect_location(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
@@ -127,7 +136,6 @@ function create_username_from_email($email)
             $userid = $db->query($query)->fetchColumn();
             if (!$userid) {
                 return $username2;
-                break;
             }
         }
     }
@@ -834,19 +842,24 @@ if ($nv_Request->isset_request('_csrf, nv_login', 'post')) {
     $nv_totppin = $nv_Request->get_title('nv_totppin', 'post', '');
     $nv_backupcodepin = $nv_Request->get_title('nv_backupcodepin', 'post', '');
     $cant_do_2step = $nv_Request->get_bool('cant_do_2step', 'post', false);
+    $auth_assertion = $nv_Request->get_string('auth_assertion', 'post', '', false, false);
+    $create_challenge = (int) $nv_Request->get_bool('create_challenge', 'post', false);
 
-    if (defined('NV_IS_USER_FORUM') or defined('SSO_SERVER') or (empty($nv_totppin) and empty($nv_backupcodepin))) {
+    // Kiểm tra captcha nếu đăng nhập bằng mật khẩu hoặc chưa đăng nhập thành công
+    if (
+        empty($nv_username) or $nv_Request->get_title('users_dismiss_captcha', 'session', '') != md5($nv_username) or (
+        empty($nv_totppin) and empty($nv_backupcodepin) and empty($auth_assertion) and empty($create_challenge)
+        )
+    ) {
         unset($nv_seccode);
-        // Xác định giá trị của captcha nhập vào nếu sử dụng reCaptcha
         if ($module_captcha == 'recaptcha') {
+            // Xác định giá trị của captcha nhập vào nếu sử dụng reCaptcha
             $nv_seccode = $nv_Request->get_title('g-recaptcha-response', 'post', '');
-        }
-        // Xác định giá trị của captcha nhập vào nếu sử dụng captcha hình
-        elseif ($module_captcha == 'captcha') {
+        } elseif ($module_captcha == 'captcha') {
+            // Xác định giá trị của captcha nhập vào nếu sử dụng captcha hình
             $nv_seccode = $nv_Request->get_title('nv_seccode', 'post', '');
         }
 
-        $gfx_chk = ($gfx_chk and $nv_Request->get_title('users_dismiss_captcha', 'session', '') != md5($nv_username));
         // Kiểm tra tính hợp lệ của captcha nhập vào
         $check_seccode = ($gfx_chk and isset($nv_seccode)) ? nv_capcha_txt($nv_seccode, $module_captcha) : true;
 
@@ -902,7 +915,7 @@ if ($nv_Request->isset_request('_csrf, nv_login', 'post')) {
         ]);
     }
 
-    // đăng nhập qua hệ thống nukeviet
+    // Đăng nhập qua hệ thống nukeviet
     $row = false;
     $method = (preg_match('/^([^0-9]+[a-z0-9\_]+)$/', $global_config['login_name_type']) and module_file_exists('users/methods/' . $global_config['login_name_type'] . '.php')) ? $global_config['login_name_type'] : 'username';
     require NV_ROOTDIR . '/modules/users/methods/' . $method . '.php';
@@ -931,7 +944,8 @@ if ($nv_Request->isset_request('_csrf, nv_login', 'post')) {
 
     // Nếu cần đăng nhập 2 bước
     if (empty($row['active2step'])) {
-        if ((!empty($nv_totppin) or !empty($nv_backupcodepin))) {
+        // Hacking detected
+        if (!empty($nv_totppin) or !empty($nv_backupcodepin) or !empty($auth_assertion) or !empty($create_challenge) or $cant_do_2step) {
             signin_result([
                 'status' => 'error',
                 'input' => '',
@@ -940,7 +954,7 @@ if ($nv_Request->isset_request('_csrf, nv_login', 'post')) {
         }
     } else {
         // Nếu có xác nhận không thể xác thực 2 bước
-        if ($cant_do_2step) {
+        if ($cant_do_2step and !empty($global_config['remove_2step_allow'])) {
             $nv_Request->set_Session('cant_do_2step', $row['userid'] . '.' . NV_CURRENTTIME . '.0.');
             signin_result([
                 'status' => 'remove2step',
@@ -948,13 +962,40 @@ if ($nv_Request->isset_request('_csrf, nv_login', 'post')) {
                 'mess' => $nv_Lang->getGlobal('remove2step_info')
             ]);
         }
+
+        // Tạo thử thách xác thực 2 bước bằng khóa truy cập
+        if ($create_challenge and !empty($row['sec_keys'])) {
+            // Lấy các khóa được phép
+            $allowCredentials = [];
+            $sql = 'SELECT keyid, type FROM ' . NV_MOD_TABLE . '_passkey WHERE userid=' . $row['userid'];
+            $result = $db->query($sql);
+            while ($credential = $result->fetch()) {
+                $allowCredentials[] = PublicKeyCredentialDescriptor::create($credential['type'], base64_decode($credential['keyid']));
+            }
+            $result->closeCursor();
+
+            $jsonObject = RequestPasskey::create(false, $allowCredentials);
+            $nv_Request->set_Session($module_data . '_auth_challenge', json_encode([
+                'opts' => $jsonObject,
+                'time' => time(),
+            ]));
+            signin_result([
+                'status' => 'ok',
+                'requestOptions' => $jsonObject,
+            ]);
+        }
+
         // Nếu cả mã từ app và mã dự phòng không được xác định
-        if (empty($nv_totppin) and empty($nv_backupcodepin)) {
+        if (empty($nv_totppin) and empty($nv_backupcodepin) and empty($auth_assertion)) {
             $nv_Request->set_Session('users_dismiss_captcha', md5($nv_username));
             signin_result([
                 'status' => '2step',
                 'input' => '',
-                'mess' => ''
+                'mess' => '',
+                'method_code' => 1,
+                'method_key' => !empty($row['sec_keys']) ? 1 : 0,
+                'pref_method' => (!empty($row['sec_keys']) and in_array((int) $row['pref_2fa'], [2, 0])) ? 'key' : 'app',
+                'tfa_recovery' => !empty($global_config['remove_2step_allow']) ? 1 : 0
             ]);
         }
 
@@ -986,6 +1027,112 @@ if ($nv_Request->isset_request('_csrf, nv_login', 'post')) {
             // Nếu mã dự phòng khớp thì đánh dấu trong CSDL là mã này đã được sử dụng
             $code = $sth->fetchColumn();
             $db->query('UPDATE ' . NV_MOD_TABLE . '_backupcodes SET is_used=1, time_used=' . NV_CURRENTTIME . " WHERE code='" . $code . "' AND userid=" . $row['userid']);
+        }
+
+        // Kiểm tra passkey
+        if (!empty($auth_assertion)) {
+            $serializer = SerializerFactory::create();
+
+            $challenge = json_decode($nv_Request->get_string($module_data . '_auth_challenge', 'session', ''), true);
+            $nv_Request->unset_request($module_data . '_auth_challenge', 'session');
+            if (!is_array($challenge)) {
+                $challenge = [];
+            }
+            if (empty($challenge) or empty($challenge['opts']) or empty($challenge['time']) or time() - $challenge['time'] > 120) {
+                signin_result([
+                    'status' => 'error',
+                    'mess' => $nv_Lang->getGlobal('passkey_error_challenge'),
+                ]);
+            }
+
+            // Dịch ngược lại PublicKeyCredentialRequestOptions
+            try {
+                $requestOptions = $serializer->deserialize(
+                    $challenge['opts'],
+                    PublicKeyCredentialRequestOptions::class,
+                    'json'
+                );
+            } catch (Throwable $e) {
+                signin_result([
+                    'status' => 'error',
+                    'mess' => $nv_Lang->getGlobal('passkey_error_challenge1'),
+                ]);
+            }
+
+            try {
+                $publicKeyCredential = $serializer->deserialize(
+                    $auth_assertion,
+                    PublicKeyCredential::class,
+                    'json'
+                );
+            } catch (Throwable $e) {
+                signin_result([
+                    'status' => 'error',
+                    'mess' => $nv_Lang->getGlobal('passkey_error_credential1'),
+                ]);
+            }
+            if (!$publicKeyCredential->response instanceof AuthenticatorAssertionResponse) {
+                signin_result([
+                    'status' => 'error',
+                    'mess' => $nv_Lang->getGlobal('passkey_error_credential2'),
+                ]);
+            }
+
+            $keyid = base64_encode($publicKeyCredential->rawId);
+
+            $sql = 'SELECT * FROM ' . NV_MOD_TABLE . '_passkey WHERE keyid=' . $db->quote($keyid) . ' AND userid=' . $row['userid'];
+            $publickey = $db->query($sql)->fetch();
+            if (empty($publickey)) {
+                signin_result([
+                    'status' => 'error',
+                    'mess' => $nv_Lang->getGlobal('passkey_cannot_auth'),
+                ]);
+            }
+
+            // Kiểm tra an ninh khóa này
+            $publicKeyCredentialSource = PublicKeyCredentialSource::create(
+                base64_decode($publickey['keyid']),
+                $publickey['type'], [], 'none',
+                \Webauthn\TrustPath\EmptyTrustPath::create(),
+                \Symfony\Component\Uid\Uuid::fromString($publickey['aaguid']),
+                base64_decode($publickey['publickey']),
+                $publickey['userhandle'], $publickey['counter']
+            );
+
+            // Khởi tạo Validation
+            $csmFactory = new CeremonyStepManagerFactory();
+            $requestCSM = $csmFactory->requestCeremony();
+            $assertValidator = AuthenticatorAssertionResponseValidator::create($requestCSM);
+
+            try {
+                $publicKeyCheck = $assertValidator->check(
+                    $publicKeyCredentialSource,
+                    $publicKeyCredential->response,
+                    $requestOptions,
+                    NV_SERVER_NAME,
+                    userHandle: null
+                );
+            } catch (Throwable $e) {
+                signin_result([
+                    'status' => 'error',
+                    'mess' => $nv_Lang->getGlobal('passkey_error_validator'),
+                ]);
+            }
+
+            // Cập nhật lại passkey
+            $credential = [];
+            $credential['id'] = base64_encode($publicKeyCheck->publicKeyCredentialId);
+            $credential['publickey'] = base64_encode($publicKeyCheck->credentialPublicKey);
+            $credential['userHandle'] = $publicKeyCheck->userHandle;
+            $credential['counter'] = $publicKeyCheck->counter;
+
+            $sql = 'UPDATE ' . NV_MOD_TABLE . '_passkey SET
+                counter=:counter, last_used_at=' . NV_CURRENTTIME . '
+            WHERE id=' . $publickey['id'];
+            $stmt = $db->prepare($sql);
+            $stmt->bindParam(':counter', $credential['counter'], PDO::PARAM_INT);
+            $stmt->execute();
+            unset($credential, $publickey);
         }
     }
 

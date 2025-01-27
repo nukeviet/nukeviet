@@ -299,6 +299,13 @@ if ($nv_Request->isset_request('save_credential', 'post')) {
         $nickname = 'Security key ' . ($array_data['security_keys'] + 1);
     }
 
+    if (empty($credential['userhandle']) and $enable_login) {
+        nv_jsonOutput([
+            'status' => 'error',
+            'mess' => $nv_Lang->getModule('passkey_error_userhandle'),
+        ]);
+    }
+
     $sql = 'INSERT INTO ' . NV_MOD_TABLE . '_passkey (
         userid, keyid, publickey, userhandle, counter, aaguid, type, created_at, last_used_at, clid, enable_login, nickname
     ) VALUES (
@@ -317,6 +324,10 @@ if ($nv_Request->isset_request('save_credential', 'post')) {
     $stmt->bindParam(':type', $credential['type'], PDO::PARAM_STR);
     $stmt->bindParam(':nickname', $nickname, PDO::PARAM_STR);
     $stmt->execute();
+
+    // Cập nhật số lượng khóa
+    $sql = 'UPDATE ' . NV_MOD_TABLE . ' SET sec_keys=sec_keys+1, last_update=' . NV_CURRENTTIME . ' WHERE userid=' . $edit_userid;
+    $db->query($sql);
 
     if ($enable_login) {
         // Thông báo về khóa đăng nhập
@@ -364,9 +375,13 @@ if ($nv_Request->isset_request('del', 'post')) {
 
     nv_insert_logs(NV_LANG_DATA, $module_name, 'log_del_passkey', 'id: ' . $id . '. Type: ' . (empty($key_info['enable_login']) ? 'security key' : 'passkey'), $edit_userid);
 
+    // Cập nhật số lượng khóa
+    $sql = 'UPDATE ' . NV_MOD_TABLE . ' SET sec_keys=IF(sec_keys > 0, sec_keys - 1, 0), last_update=' . NV_CURRENTTIME . ' WHERE userid=' . $edit_userid;
+    $db->query($sql);
+
     // Xóa hết khóa thì set xác thực 2 bước ưu thích về 0 nếu nó là = 2
     if (count($array_data['publicKeys']) == 1) {
-        $sql = 'UPDATE ' . NV_USERS_GLOBALTABLE . ' SET pref_2fa=0, last_update=' . NV_CURRENTTIME . ' WHERE userid=' . $edit_userid . ' AND pref_2fa=2';
+        $sql = 'UPDATE ' . NV_MOD_TABLE . ' SET pref_2fa=0 WHERE userid=' . $edit_userid . ' AND pref_2fa=2';
         $db->query($sql);
     }
 

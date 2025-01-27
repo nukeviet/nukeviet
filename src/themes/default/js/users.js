@@ -265,18 +265,32 @@ function login_validForm(a) {
             } else if (d.status == "2step") {
                 $(a).removeAttr('data-captcha data-recaptcha2 data-recaptcha3');
                 $("input,button", a).prop("disabled", !1);
-                $('[data-toggle=validReset]', a).on('click', function(e) {
-                    e.preventDefault();
-                    location.reload()
-                });
-                $('[name=cant_do_2step]', a).on('change', function() {
-                    if ($(this).is(':checked')) {
-                        $('.loginstep2,.loginstep3', a).addClass('hidden');
-                    } else {
-                        $('.loginstep2', a).removeClass('hidden');
-                    }
-                });
-                $('.loginstep1, .loginstep2, .cant_do_2step, .loginCaptcha', a).toggleClass('hidden');
+
+                // Trình duyệt không hỗ trợ passkey
+                if (d.method_key && !nukeviet.WebAuthnSupported) {
+                    d.pref_method = 'app';
+                    d.method_key = 0;
+                }
+
+                $('.loginstep2-' + d.pref_method, a).removeClass('hidden');
+                $('.loginstep2-methods', a).data('is-key', d.method_key ? 1 : 0);
+                if (!d.tfa_recovery) {
+                    $('[data-toggle="2fa-choose-recovery"]', a).closest('.item').addClass('hidden');
+                } else {
+                    $('[data-toggle="2fa-choose-recovery"]', a).closest('.item').removeClass('hidden');
+                }
+                if (!d.method_key || d.pref_method == 'key') {
+                    $('[data-toggle="2fa-choose"][data-method="key"]', a).closest('.item').addClass('hidden');
+                } else {
+                    $('[data-toggle="2fa-choose"][data-method="key"]', a).closest('.item').removeClass('hidden');
+                }
+                if (d.pref_method == 'app') {
+                    $('[data-toggle="2fa-choose"][data-method="app"]', a).closest('.item').addClass('hidden');
+                } else {
+                    $('[data-toggle="2fa-choose"][data-method="app"]', a).closest('.item').removeClass('hidden');
+                }
+
+                $('.loginstep1, .loginstep2, .loginCaptcha', a).toggleClass('hidden');
             }
         }
     });
@@ -880,6 +894,39 @@ $(function() {
         return confirm_pass_validForm(this);
     });
 
+    $('[data-toggle="validReset2fa"]').on('click', function() {
+        location.reload();
+    });
+
+    // Chọn phương thức xác thực 2 bước khi đăng nhập
+    $('[data-toggle="2fa-choose"]').on('click', function(e) {
+        e.preventDefault();
+        const form = $(this).closest('form');
+        const methods = $('.loginstep2-methods', form);
+        $('[data-toggle="2fa-choose"]', methods).closest('.item').removeClass('hidden');
+        if (!methods.data('is-key')) {
+            $('[data-toggle="2fa-choose"][data-method="key"]', methods).closest('.item').addClass('hidden');
+        }
+        $(this).closest('.item').addClass('hidden');
+
+        const tstepCtn = $('.loginstep2', form);
+        $('[type="text"]', tstepCtn).val('').each(function() {
+            validErrorHidden(this);
+        });
+        $('[name="auth_assertion"]', form).val('');
+        $('[data-toggle="passkey-error"]', form).text('').addClass('hidden');
+        $('.loginstep2-item', tstepCtn).addClass('hidden');
+        $('.loginstep2-' + $(this).data('method'), tstepCtn).removeClass('hidden');
+    });
+
+    // Khôi phục 2FA khi không đăng nhập được
+    $('[data-toggle="2fa-choose-recovery"]').on('click', function(e) {
+        e.preventDefault();
+        const form = $(this).closest('form');
+        $('[name="cant_do_2step"]', form).val('1');
+        form.submit();
+    });
+
     // Xử lý passkey trên toàn bộ các form đăng nhập
     $('form[data-toggle="userLogin"]').each(function() {
         const form = $(this);
@@ -994,6 +1041,119 @@ $(function() {
                 error: function(xhr, status, error) {
                     console.error(xhr, status, error);
                     icon.removeClass('fa-spinner fa-pulse').addClass(icon.data('icon'));
+                    err.text(nukeviet.i18n.WebAuthnErrors.unknow).removeClass('hidden');
+                }
+            });
+        });
+    });
+
+    // Xử lý xác thực 2FA bằng WebAuthn trên tất cả các form đăng nhập
+    $('form[data-toggle="userLogin"]').each(function() {
+        const form = $(this);
+        if (form.data('passkey-verify-initialized') || !nukeviet.WebAuthnSupported) {
+            return;
+        }
+        form.data('passkey-verify-initialized', true);
+
+        const btn = $('[data-toggle="passkey-verify"]', form);
+        const err = $('[data-toggle="passkey-error"]', form);
+        const icon = $('i', btn);
+
+        btn.on('click', function(e) {
+            e.preventDefault();
+            if (icon.is('.fa-spinner')) {
+                return;
+            }
+            $('[name="auth_assertion"]', form).val('');
+            err.text('').addClass('hidden');
+            icon.removeClass(icon.data('icon')).addClass('fa-spinner fa-pulse');
+
+            const formData = new FormData(form[0]);
+            formData.append('create_challenge', 1);
+
+            $.ajax({
+                url: form.attr('action'),
+                type: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                dataType: 'json',
+                cache: false,
+                success: function(response) {
+                    if (response.status != 'ok') {
+                        icon.removeClass('fa-spinner fa-pulse').addClass(icon.data('icon'));
+                        err.text(response.mess || nukeviet.i18n.WebAuthnErrors.unknow).removeClass('hidden');
+                        return;
+                    }
+
+                    let requestOptions = JSON.parse(response.requestOptions);
+                    requestOptions.challenge = base64UrlToArrayBuffer(requestOptions.challenge);
+                    if (requestOptions.allowCredentials.length > 0) {
+                        requestOptions.allowCredentials = requestOptions.allowCredentials.map(credential => {
+                            credential.id = base64UrlToArrayBuffer(credential.id);
+                            return credential;
+                        });
+                    }
+
+                    try {
+                        navigator.credentials.get({
+                            publicKey: requestOptions
+                        }).then(assertion => {
+                            $('[name="auth_assertion"]', form).val(JSON.stringify({
+                                id: assertion.id,
+                                type: assertion.type,
+                                rawId: arrayBufferToBase64Url(assertion.rawId),
+                                response: {
+                                    clientDataJSON: arrayBufferToBase64Url(assertion.response.clientDataJSON),
+                                    authenticatorData: arrayBufferToBase64Url(assertion.response.authenticatorData),
+                                    signature: arrayBufferToBase64Url(assertion.response.signature),
+                                    userHandle: arrayBufferToBase64Url(assertion.response.userHandle),
+                                }
+                            }));
+                            const formData = new FormData(form[0]);
+                            $.ajax({
+                                url: form.attr('action'),
+                                type: 'POST',
+                                data: formData,
+                                processData: false,
+                                contentType: false,
+                                dataType: 'json',
+                                cache: false,
+                                success: function (response) {
+                                    if (response.status != 'ok') {
+                                        icon.removeClass('fa-spinner fa-pulse').addClass(icon.data('icon'));
+                                        err.text(response.mess).removeClass('hidden');
+                                        return;
+                                    }
+                                    $(".nv-info", form).html(response.mess + '<span class="load-bar"></span>').removeClass("error").addClass("success").show();
+                                    $(".form-detail", form).hide();
+                                    $("#other_form").hide();
+                                    setTimeout(function() {
+                                        if ("undefined" != typeof response.redirect && "" != response.redirect) {
+                                            window.location.href = response.redirect;
+                                        } else {
+                                            $('#sitemodal').modal('hide');
+                                            location.reload();
+                                        }
+                                    }, 3000);
+                                },
+                                error: function (xhr, status, error) {
+                                    console.log(xhr, status, error);
+                                    icon.removeClass('fa-spinner fa-pulse').addClass(icon.data('icon'));
+                                    err.text(nukeviet.i18n.WebAuthnErrors.get[error.name] || nukeviet.i18n.WebAuthnErrors.unknow).removeClass('hidden');
+                                }
+                            });
+                        }).catch(error => {
+                            icon.removeClass('fa-spinner fa-pulse').addClass(icon.data('icon'));
+                            err.text(nukeviet.i18n.WebAuthnErrors.get[error.name] || nukeviet.i18n.WebAuthnErrors.unknow).removeClass('hidden');
+                        });
+                    } catch (error) {
+                        icon.removeClass('fa-spinner fa-pulse').addClass(icon.data('icon'));
+                        err.text(nukeviet.i18n.WebAuthnErrors.get[error.name] || nukeviet.i18n.WebAuthnErrors.unknow).removeClass('hidden');
+                    }
+                },
+                error: function (xhr, text, err) {
+                    console.log(xhr, text, err);
                     err.text(nukeviet.i18n.WebAuthnErrors.unknow).removeClass('hidden');
                 }
             });

@@ -127,6 +127,7 @@ $sql_create_module[] = 'CREATE TABLE IF NOT EXISTS ' . $db_config['prefix'] . '_
     active2step tinyint(1) unsigned NOT NULL DEFAULT '0',
     secretkey varchar(20) DEFAULT '',
     pref_2fa tinyint(1) NOT NULL DEFAULT '0' COMMENT 'Xác thực 2 bước ưu tiên: 0 chưa chọn để hệ thống tự xác định, 1 mã ứng dụng, 2 khóa truy cập',
+    sec_keys smallint(4) unsigned NOT NULL DEFAULT '0' COMMENT 'Số khóa bảo mật hoặc passkey',
     checknum varchar(40) DEFAULT '',
     last_login int(11) unsigned NOT NULL DEFAULT '0',
     last_ip varchar(45) DEFAULT '',

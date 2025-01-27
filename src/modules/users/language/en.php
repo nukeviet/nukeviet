@@ -891,6 +891,7 @@ $lang_module['pass_confirm'] = 'Confirm password to continue';
 $lang_module['pass_confirm_info'] = 'To perform this feature, you need to confirm your password again. Please enter your password in the box below and click Confirm';
 $lang_module['error_no_password'] = 'You do not have a password, please create a password first';
 $lang_module['passkey_error_exist'] = 'This passkey already exists, please create another key';
+$lang_module['passkey_error_userhandle'] = 'This credential does not provide user information and cannot be used as a passkey';
 $lang_module['passkey_created'] = 'Passkey created';
 $lang_module['passkey_created_body'] = 'You can now use fingerprint, PIN, face, screen lock, or hardware security key to log in to your account without entering a username or password';
 $lang_module['passkey_login_create'] = 'Passwordless login with passkey';

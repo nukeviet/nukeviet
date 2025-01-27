@@ -891,6 +891,7 @@ $lang_module['pass_confirm'] = 'Confirmez le mot de passe pour continuer';
 $lang_module['pass_confirm_info'] = 'Pour effectuer cette fonctionnalité, vous devez confirmer à nouveau votre mot de passe. Veuillez entrer votre mot de passe dans la case ci-dessous et cliquer sur Confirmer';
 $lang_module['error_no_password'] = 'Vous n\'avez pas de mot de passe, veuillez d\'abord créer un mot de passe';
 $lang_module['passkey_error_exist'] = 'Cette clé de passe existe déjà, veuillez créer une autre clé';
+$lang_module['passkey_error_userhandle'] = 'Ce certificat ne fournit pas d\'informations sur l\'utilisateur, il ne peut donc pas être utilisé comme clé de connexion';
 $lang_module['passkey_created'] = 'Clé de passe créée';
 $lang_module['passkey_created_body'] = 'Vous pouvez maintenant utiliser une empreinte digitale, un code PIN, une reconnaissance faciale, un verrouillage d\'écran ou une clé de sécurité matérielle pour vous connecter à votre compte sans entrer de nom d\'utilisateur ou de mot de passe';
 $lang_module['passkey_login_create'] = 'Connexion sans mot de passe avec clé de passe';

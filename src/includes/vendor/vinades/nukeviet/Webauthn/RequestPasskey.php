@@ -14,6 +14,7 @@ namespace NukeViet\Webauthn;
 use Symfony\Component\Serializer\Encoder\JsonEncode;
 use Symfony\Component\Serializer\Normalizer\AbstractObjectNormalizer;
 use Webauthn\PublicKeyCredentialRequestOptions;
+use Webauthn\PublicKeyCredentialDescriptor;
 
 /**
  * NukeViet\Webauthn\RequestPasskey
@@ -28,16 +29,22 @@ use Webauthn\PublicKeyCredentialRequestOptions;
  */
 class RequestPasskey
 {
-    public static function create()
+    /**
+     * @param bool $userVerification
+     * @param PublicKeyCredentialDescriptor[] $allowCredentials
+     * @return string
+     */
+    public static function create(bool $userVerification = true, array $allowCredentials = []): string
     {
         $serializer = SerializerFactory::create();
 
         // preferred, required timeout từ 300 đến 600, discouraged timeout từ 30 đến 180
         $requestOptions = PublicKeyCredentialRequestOptions::create(
             random_bytes(32),
-            userVerification: PublicKeyCredentialRequestOptions::USER_VERIFICATION_REQUIREMENT_REQUIRED,
+            userVerification: $userVerification ? PublicKeyCredentialRequestOptions::USER_VERIFICATION_REQUIREMENT_REQUIRED : PublicKeyCredentialRequestOptions::USER_VERIFICATION_REQUIREMENT_DEFAULT,
             rpId: NV_SERVER_NAME,
-            timeout: 300
+            timeout: $userVerification ? 300 : 120,
+            allowCredentials: $allowCredentials
         );
         return $serializer->serialize(
             $requestOptions,

@@ -37,11 +37,6 @@
                 <a href="#" data-toggle="login2step_change">{GLANG.2teplogin_other_menthod}</a>
             </div>
         </div>
-        <!-- BEGIN: cant_do_2step -->
-        <div class="form-group text-center cant_do_2step hidden">
-            <label class="check-box small"><input type="checkbox" name="cant_do_2step" id="cant_do_2step" value="1" style="margin-top:0"> {GLANG.cant_do_2step}</label>
-        </div>
-        <!-- END: cant_do_2step -->
 
         <div class="text-center margin-bottom-lg">
             <!-- BEGIN: header --><input name="nv_header" value="{NV_HEADER}" type="hidden" /><!-- END: header -->

@@ -2238,6 +2238,11 @@ a.btn-default {
     top: 2px;
 }
 
+ul.list-default {
+    list-style: disc!important;
+    padding-left: 24px!important;
+}
+
 /* sub-list-icon */
 
 .sub-list-icon > li:first-child > *:before,

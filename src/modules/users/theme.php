@@ -478,11 +478,6 @@ function user_login($is_ajax = false)
         $xtpl->parse('main.openid');
     }
 
-    // Cho phép gửi yêu cầu tắt xác thực 2 bước
-    if (!empty($global_config['remove_2step_allow'])) {
-        $xtpl->parse('main.cant_do_2step');
-    }
-
     $_lis = $module_info['funcs'];
     $_alias = $module_info['alias'];
     foreach ($_lis as $_li) {
