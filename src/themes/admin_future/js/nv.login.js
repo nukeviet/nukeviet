@@ -231,4 +231,117 @@ $(function() {
     if ($('#nv_login').length) {
         $('#nv_login').focus();
     }
+
+    // Đăng nhập passkey ở bước 1
+    const preForm = $('[data-toggle="preForm"]');
+    if (preForm.length && nukeviet.WebAuthnSupported && !preForm.data('is-forum')) {
+        const btnCtn = $('[data-toggle="passkey-btn"]');
+        const linkCtn = $('[data-toggle="passkey-link"]');
+        const btn = $('button', btnCtn);
+        const link = $('a', linkCtn);
+        const err = $('[data-toggle="passkey-error"]');
+
+        if (nv_getCookie(nv_cookie_prefix + '_pkey') == 1) {
+            btnCtn.removeClass('d-none');
+        } else {
+            linkCtn.removeClass('d-none');
+        }
+
+        link.on('click', function(e) {
+            e.preventDefault();
+            linkCtn.addClass('d-none');
+            btnCtn.removeClass('d-none');
+            btn.trigger('click');
+        });
+
+        btn.on('click', function(e) {
+            e.preventDefault();
+            const icon = $('i', btn);
+            if (icon.is('.fa-spinner')) {
+                return;
+            }
+            icon.removeClass(icon.data('icon')).addClass('fa-spinner fa-spin-pulse');
+            err.text('').addClass('d-none');
+            $.ajax({
+                url: preForm.attr('action'),
+                type: 'post',
+                data: {
+                    create_challenge: 1,
+                    checkss: $('[name="checkss"]', preForm).val(),
+                },
+                dataType: 'json',
+                success: function(response) {
+                    if (response.status != 'ok') {
+                        icon.removeClass('fa-spinner fa-spin-pulse').addClass(icon.data('icon'));
+                        err.text(response.mess || nukeviet.i18n.WebAuthnErrors.unknow).removeClass('d-none');
+                        return;
+                    }
+
+                    let requestOptions = JSON.parse(response.requestOptions);
+                    requestOptions.challenge = base64UrlToArrayBuffer(requestOptions.challenge);
+
+                    try {
+                        navigator.credentials.get({
+                            publicKey: requestOptions
+                        }).then(assertion => {
+                            const data = {
+                                auth_assertion: 1,
+                                assertion: JSON.stringify({
+                                    id: assertion.id,
+                                    type: assertion.type,
+                                    rawId: arrayBufferToBase64Url(assertion.rawId),
+                                    response: {
+                                        clientDataJSON: arrayBufferToBase64Url(assertion.response.clientDataJSON),
+                                        authenticatorData: arrayBufferToBase64Url(assertion.response.authenticatorData),
+                                        signature: arrayBufferToBase64Url(assertion.response.signature),
+                                        userHandle: arrayBufferToBase64Url(assertion.response.userHandle),
+                                    }
+                                }),
+                            };
+                            $.ajax({
+                                url: preForm.attr('action'),
+                                type: 'POST',
+                                data: data,
+                                dataType: 'json',
+                                success: function (response) {
+                                    if (response.status != 'success') {
+                                        icon.removeClass('fa-spinner fa-spin-pulse').addClass(icon.data('icon'));
+                                        err.text(response.mess).removeClass('d-none');
+                                        return;
+                                    }
+                                    nv_setCookie(nv_cookie_prefix + '_pkey', 1, 3650, true, 'Strict');
+
+                                    // Đăng nhập passkey thành công
+                                    $('[data-toggle="form"]', preForm).addClass('d-none');
+                                    $('[data-toggle="message"]', preForm).html(response.mess).removeClass('border-danger text-danger mb-3').addClass('border-success text-success');
+                                    $('#langinterface').remove();
+                                    var hr = response.redirect != '' ? response.redirect : window.location.href;
+                                    $('#adm-redirect').attr('href', hr).toggleClass('d-none');
+                                    setTimeout(() => {
+                                        window.location.href = hr;
+                                    }, 3000);
+                                },
+                                error: function (xhr, status, error) {
+                                    console.log(xhr, status, error);
+                                    icon.removeClass('fa-spinner fa-spin-pulse').addClass(icon.data('icon'));
+                                    err.text(nukeviet.i18n.WebAuthnErrors.get[error.name] || nukeviet.i18n.WebAuthnErrors.unknow).removeClass('d-none');
+                                }
+                            });
+                        }).catch(error => {
+                            icon.removeClass('fa-spinner fa-spin-pulse').addClass(icon.data('icon'));
+                            err.text(nukeviet.i18n.WebAuthnErrors.get[error.name] || nukeviet.i18n.WebAuthnErrors.unknow).removeClass('d-none');
+                        });
+                    } catch (error) {
+                        icon.removeClass('fa-spinner fa-spin-pulse').addClass(icon.data('icon'));
+                        err.text(nukeviet.i18n.WebAuthnErrors.get[error.name] || nukeviet.i18n.WebAuthnErrors.unknow).removeClass('d-none');
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error(xhr, status, error);
+                    icon.removeClass('fa-spinner fa-spin-pulse').addClass(icon.data('icon'));
+                    err.text(nukeviet.i18n.WebAuthnErrors.unknow).removeClass('d-none');
+                }
+            });
+        });
+    }
 });

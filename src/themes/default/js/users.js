@@ -939,6 +939,7 @@ $(function() {
                         }).then(assertion => {
                             const data = {
                                 auth_assertion: 1,
+                                nv_redirect: $('[name="nv_redirect"]', form).val(),
                                 assertion: JSON.stringify({
                                     id: assertion.id,
                                     type: assertion.type,
@@ -963,7 +964,17 @@ $(function() {
                                         return;
                                     }
                                     nv_setCookie(nv_cookie_prefix + '_pkey', 1, 3650, true, 'Strict');
-                                    location.reload();
+                                    $(".nv-info", form).html(response.mess + '<span class="load-bar"></span>').removeClass("error").addClass("success").show();
+                                    $(".form-detail", form).hide();
+                                    $("#other_form").hide();
+                                    setTimeout(function() {
+                                        if ("undefined" != typeof response.redirect && "" != response.redirect) {
+                                            window.location.href = response.redirect;
+                                        } else {
+                                            $('#sitemodal').modal('hide');
+                                            location.reload();
+                                        }
+                                    }, 3000);
                                 },
                                 error: function (xhr, status, error) {
                                     console.log(xhr, status, error);

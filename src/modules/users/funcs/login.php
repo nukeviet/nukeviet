@@ -27,11 +27,6 @@ $rules = [
 ];
 $blocker->trackLogin($rules, $global_config['is_login_blocker']);
 
-// Xử lý phần đăng nhập qua passkey
-if (defined('NV_MOD_LOAD')) {
-    require NV_ROOTDIR . '/modules/' . $module_file . '/login/passkey.php';
-}
-
 $page_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op;
 
 // Dùng để bật giao diện login box
@@ -97,6 +92,11 @@ function signin_result($array)
 
     $array['redirect'] = nv_redirect_decrypt($nv_redirect);
     nv_jsonOutput($array);
+}
+
+// Xử lý đăng nhập qua passkey
+if (defined('NV_MOD_LOAD')) {
+    require NV_ROOTDIR . '/modules/' . $module_file . '/login/passkey.php';
 }
 
 /**

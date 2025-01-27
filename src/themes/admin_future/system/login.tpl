@@ -15,7 +15,7 @@
                         <div class="login-box">
                             {if empty($PRE_DATA)}
                             {* Form đăng nhập bằng tài khoản (bước 1) *}
-                            <form method="post" action="{$smarty.const.NV_BASE_ADMINURL}index.php" data-toggle="preForm">
+                            <form method="post" action="{$smarty.const.NV_BASE_ADMINURL}index.php" data-toggle="preForm" data-is-forum="{$smarty.const.NV_IS_USER_FORUM ? 1 : 0}">
                                 <div class="mb-3 border-3 border-start ps-2" data-toggle="message">{$LANG->getGlobal('adminlogininfo')}</div>
                                 <div data-toggle="form">
                                     <div class="mb-3">
@@ -81,6 +81,20 @@
                                     {/if}
                                     <div class="d-grid">
                                         <input class="btn btn-primary" type="submit" value="{$LANG->getGlobal('loginsubmit')}">
+                                    </div>
+                                    <div class="d-none" data-toggle="passkey-btn">
+                                        <div class="d-flex align-items-center my-2">
+                                            <div class="flex-grow-1 border-top"></div>
+                                            <span class="mx-3">{$LANG->getGlobal('or')}</span>
+                                            <div class="flex-grow-1 border-top"></div>
+                                        </div>
+                                        <div class="d-grid">
+                                            <button type="button" class="btn btn-secondary"><i class="fa-solid fa-user-shield" data-icon="fa-user-shield"></i> {$LANG->getGlobal('passkey_login')}</button>
+                                        </div>
+                                        <div class="text-danger mt-2 d-none" data-toggle="passkey-error"></div>
+                                    </div>
+                                    <div class="mt-2 text-center d-none" data-toggle="passkey-link">
+                                        <a href="#">{$LANG->getGlobal('passkey_login')}</a>
                                     </div>
                                 </div>
                                 <input type="hidden" name="checkss" value="{$smarty.const.NV_CHECK_SESSION}">

@@ -47,7 +47,7 @@ $page_title = $nv_Lang->getModule('config');
 $files = nv_scandir(NV_ROOTDIR . '/modules/users/methods/', '/(.*?)/');
 $login_name_types = [];
 foreach ($files as $file) {
-    if (preg_match('/^([^0-9]+[a-z0-9\_]{0,})\.php$/', $file, $m)) {
+    if (preg_match('/^(?!adm_)([^0-9]+[a-z0-9\_]{0,})\.php$/', $file, $m)) {
         $login_name_types[] = $m[1];
     }
 }

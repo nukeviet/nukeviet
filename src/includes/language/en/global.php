@@ -354,6 +354,7 @@ $lang_global['on'] = 'On';
 $lang_global['off'] = 'Off';
 $lang_global['close'] = 'Đóng';
 $lang_global['system'] = 'Hệ thống';
+$lang_global['or'] = 'Or';
 $lang_global['limit_user_number'] = 'Your site is limited to %s users. To add a new user, please contact your system administrator';
 $lang_global['limit_admin_number'] = 'Your site is limited to %s admins, to add a new admin, please contact your system administrator';
 $lang_global['2teplogin'] = 'Two-factor authentication';

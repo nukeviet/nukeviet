@@ -201,7 +201,7 @@ if ($nv_Request->isset_request('save_credential', 'post')) {
     if (empty($challenge) or empty($challenge['opts']) or empty($challenge['time']) or time() - $challenge['time'] > 300) {
         nv_jsonOutput([
             'status' => 'error',
-            'mess' => $nv_Lang->getModule('passkey_error_challenge'),
+            'mess' => $nv_Lang->getGlobal('passkey_error_challenge'),
         ]);
     }
 
@@ -215,7 +215,7 @@ if ($nv_Request->isset_request('save_credential', 'post')) {
     } catch (Throwable $e) {
         nv_jsonOutput([
             'status' => 'error',
-            'mess' => $nv_Lang->getModule('passkey_error_challenge1'),
+            'mess' => $nv_Lang->getGlobal('passkey_error_challenge1'),
         ]);
     }
 
@@ -223,7 +223,7 @@ if ($nv_Request->isset_request('save_credential', 'post')) {
     if (empty($credential)) {
         nv_jsonOutput([
             'status' => 'error',
-            'mess' => $nv_Lang->getModule('passkey_error_credential'),
+            'mess' => $nv_Lang->getGlobal('passkey_error_credential'),
         ]);
     }
 
@@ -236,13 +236,13 @@ if ($nv_Request->isset_request('save_credential', 'post')) {
     } catch (Throwable $e) {
         nv_jsonOutput([
             'status' => 'error',
-            'mess' => $nv_Lang->getModule('passkey_error_credential1'),
+            'mess' => $nv_Lang->getGlobal('passkey_error_credential1'),
         ]);
     }
     if (!$publicKeyCredential->response instanceof AuthenticatorAttestationResponse) {
         nv_jsonOutput([
             'status' => 'error',
-            'mess' => $nv_Lang->getModule('passkey_error_credential2'),
+            'mess' => $nv_Lang->getGlobal('passkey_error_credential2'),
         ]);
     }
 
@@ -272,7 +272,7 @@ if ($nv_Request->isset_request('save_credential', 'post')) {
         trigger_error($e);
         nv_jsonOutput([
             'status' => 'error',
-            'mess' => $nv_Lang->getModule('passkey_error_validator'),
+            'mess' => $nv_Lang->getGlobal('passkey_error_validator'),
         ]);
     }
 
