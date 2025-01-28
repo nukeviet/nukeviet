@@ -16,6 +16,7 @@ if (!defined('NV_MAINFILE')) {
 use NukeViet\Webauthn\RequestPasskey;
 use NukeViet\Webauthn\SerializerFactory;
 use Webauthn\CeremonyStep\CeremonyStepManagerFactory;
+use Webauthn\PublicKeyCredentialDescriptor;
 use Webauthn\PublicKeyCredential;
 use Webauthn\PublicKeyCredentialRequestOptions;
 use Webauthn\PublicKeyCredentialSource;
@@ -69,9 +70,10 @@ if ($captcha_type == 'recaptcha' and (empty($global_config['recaptcha_sitekey'])
     $captcha_type = 'captcha';
 }
 $admin_login_success = false;
+$passkey_allowed = (!defined('NV_IS_USER_FORUM') or !defined('SSO_SERVER'));
 
 // Tạo thử thách đăng nhập passkey
-if (!defined('NV_IS_USER_FORUM') and $nv_Request->isset_request('create_challenge', 'post')) {
+if ($passkey_allowed and $nv_Request->isset_request('create_challenge', 'post')) {
     $checkss = $nv_Request->get_title('checkss', 'post', '');
     if (NV_CHECK_SESSION !== $checkss) {
         nv_jsonOutput([
@@ -91,8 +93,38 @@ if (!defined('NV_IS_USER_FORUM') and $nv_Request->isset_request('create_challeng
     ]);
 }
 
+// Tạo thử thách xác thực passkey
+if ($passkey_allowed and $nv_Request->isset_request('create_auth_challenge', 'post') and !empty($admin_pre_data)) {
+    $checkss = $nv_Request->get_title('checkss', 'post', '');
+    if (NV_CHECK_SESSION !== $checkss) {
+        nv_jsonOutput([
+            'status' => 'error',
+            'mess' => 'Session error, please reload page!'
+        ]);
+    }
+
+    // Lấy các khóa được phép
+    $allowCredentials = [];
+    $sql = 'SELECT keyid, type FROM ' . NV_USERS_GLOBALTABLE . '_passkey WHERE userid=' . $admin_pre_data['userid'];
+    $result = $db->query($sql);
+    while ($credential = $result->fetch()) {
+        $allowCredentials[] = PublicKeyCredentialDescriptor::create($credential['type'], base64_decode($credential['keyid']));
+    }
+    $result->closeCursor();
+
+    $jsonObject = RequestPasskey::create(false, $allowCredentials);
+    $nv_Request->set_Session('admin_auth_challenge', json_encode([
+        'opts' => $jsonObject,
+        'time' => time(),
+    ]));
+    nv_jsonOutput([
+        'status' => 'ok',
+        'requestOptions' => $jsonObject,
+    ]);
+}
+
 // Đăng nhập bằng passkey
-if (!defined('NV_IS_USER_FORUM') and $nv_Request->isset_request('auth_assertion', 'post')) {
+if ($passkey_allowed and $nv_Request->isset_request('login_assertion', 'post')) {
     $challenge = json_decode($nv_Request->get_string('admin_login_challenge', 'session', ''), true);
     $nv_Request->unset_request('admin_login_challenge', 'session');
     if (!is_array($challenge)) {
@@ -265,11 +297,18 @@ $cfg_2step = [];
 if (!empty($admin_pre_data)) {
     $cfg_2step['opts'] = []; // Các hình thức xác thực được phép
     $cfg_2step['default'] = $global_config['admin_2step_default']; // Hình thức mặc định
+    $cfg_2step['active_key'] = false;
     $cfg_2step['active_code'] = (bool) ($admin_pre_data['active2step']); // Đã bật xác thực 2 bước bằng ứng dụng hay chưa
     $cfg_2step['active_facebook'] = false; // Đã login bằng Facebook hay chưa
     $cfg_2step['active_google'] = false; // Đã login bằng Google hay chưa
     $cfg_2step['active_zalo'] = false; // Đã login bằng Zalo hay chưa
     $_2step_opt = explode(',', $global_config['admin_2step_opt']);
+    if (in_array('key', $_2step_opt, true)) {
+        $cfg_2step['opts'][] = 'key';
+        if (!empty($admin_pre_data['sec_keys']) and !empty($admin_pre_data['active2step'])) {
+            $cfg_2step['active_key'] = true;
+        }
+    }
     if (in_array('code', $_2step_opt, true)) {
         $cfg_2step['opts'][] = 'code';
     }
@@ -297,6 +336,7 @@ if (!empty($admin_pre_data)) {
      * - Khi đã có rồi thì chỉ được sử dụng phương thức đó để xác thực (có thể 1 hoặc nhiều tùy cấu hình)
      */
     $cfg_2step['count_active'] = count(array_filter([
+        $cfg_2step['active_key'],
         $cfg_2step['active_code'],
         $cfg_2step['active_facebook'],
         $cfg_2step['active_google'],
@@ -308,10 +348,10 @@ if (!empty($admin_pre_data)) {
 /*
  * Chọn phương thức xác thực
  * - Có thể chưa kích hoạt: Điều kiện là chưa có phương thức xác thực nào
- * - Có thể đã kích hoạt rồi
+ * - Có thể đã kích hoạt rồi > các oauth
  */
 if (!empty($admin_pre_data) and in_array(($opt = $nv_Request->get_title('auth', 'get', '')), $cfg_2step['opts'], true) and ((!$cfg_2step['active_' . $opt] and $cfg_2step['count_active'] < 1) or $cfg_2step['active_' . $opt])) {
-    if ($opt == 'code') {
+    if ($opt == 'code' or $opt == 'key') {
         // Login bằng tài khoản user 1 step để chuyển sang trang kích hoạt
         $checknum = md5(nv_genpass(10));
         $user = [
@@ -452,6 +492,123 @@ if (!empty($admin_pre_data) and $nv_Request->isset_request('submit2scode', 'post
     }
 } else {
     $nv_totppin = $nv_backupcodepin = '';
+}
+
+// Login bước 2 bằng passkey
+if (!empty($admin_pre_data) and $nv_Request->isset_request('submit2spasskey', 'post') and $nv_Request->get_title('checkss', 'post') == NV_CHECK_SESSION and $cfg_2step['active_key'] and in_array('key', $cfg_2step['opts'], true)) {
+    $serializer = SerializerFactory::create();
+
+    $challenge = json_decode($nv_Request->get_string('admin_auth_challenge', 'session', ''), true);
+    $nv_Request->unset_request('admin_auth_challenge', 'session');
+    if (!is_array($challenge)) {
+        $challenge = [];
+    }
+    if (empty($challenge) or empty($challenge['opts']) or empty($challenge['time']) or time() - $challenge['time'] > 120) {
+        nv_jsonOutput([
+            'status' => 'error',
+            'mess' => $nv_Lang->getGlobal('passkey_error_challenge'),
+        ]);
+    }
+
+    // Dịch ngược lại PublicKeyCredentialRequestOptions
+    try {
+        $requestOptions = $serializer->deserialize(
+            $challenge['opts'],
+            PublicKeyCredentialRequestOptions::class,
+            'json'
+        );
+    } catch (Throwable $e) {
+        nv_jsonOutput([
+            'status' => 'error',
+            'mess' => $nv_Lang->getGlobal('passkey_error_challenge1'),
+        ]);
+    }
+
+    $assertion = $nv_Request->get_string('assertion', 'post', '', false, false);
+    if (empty($assertion)) {
+        nv_jsonOutput([
+            'status' => 'error',
+            'mess' => $nv_Lang->getGlobal('passkey_error_credential'),
+        ]);
+    }
+
+    try {
+        $publicKeyCredential = $serializer->deserialize(
+            $assertion,
+            PublicKeyCredential::class,
+            'json'
+        );
+    } catch (Throwable $e) {
+        nv_jsonOutput([
+            'status' => 'error',
+            'mess' => $nv_Lang->getGlobal('passkey_error_credential1'),
+        ]);
+    }
+    if (!$publicKeyCredential->response instanceof AuthenticatorAssertionResponse) {
+        nv_jsonOutput([
+            'status' => 'error',
+            'mess' => $nv_Lang->getGlobal('passkey_error_credential2'),
+        ]);
+    }
+
+    $keyid = base64_encode($publicKeyCredential->rawId);
+
+    $sql = 'SELECT * FROM ' . NV_USERS_GLOBALTABLE . '_passkey WHERE keyid=' . $db->quote($keyid) . ' AND userid=' . $admin_pre_data['userid'];
+    $publickey = $db->query($sql)->fetch();
+    if (empty($publickey)) {
+        nv_jsonOutput([
+            'status' => 'error',
+            'mess' => $nv_Lang->getGlobal('passkey_cannot_auth'),
+        ]);
+    }
+
+    // Kiểm tra an ninh khóa này
+    $publicKeyCredentialSource = PublicKeyCredentialSource::create(
+        base64_decode($publickey['keyid']),
+        $publickey['type'], [], 'none',
+        \Webauthn\TrustPath\EmptyTrustPath::create(),
+        \Symfony\Component\Uid\Uuid::fromString($publickey['aaguid']),
+        base64_decode($publickey['publickey']),
+        $publickey['userhandle'], $publickey['counter']
+    );
+
+    // Khởi tạo Validation
+    $csmFactory = new CeremonyStepManagerFactory();
+    $requestCSM = $csmFactory->requestCeremony();
+    $assertValidator = AuthenticatorAssertionResponseValidator::create($requestCSM);
+
+    try {
+        $publicKeyCheck = $assertValidator->check(
+            $publicKeyCredentialSource,
+            $publicKeyCredential->response,
+            $requestOptions,
+            NV_SERVER_NAME,
+            userHandle: null
+        );
+    } catch (Throwable $e) {
+        nv_jsonOutput([
+            'status' => 'error',
+            'mess' => $nv_Lang->getGlobal('passkey_error_validator'),
+        ]);
+    }
+
+    // Cập nhật lại passkey
+    $credential = [];
+    $credential['id'] = base64_encode($publicKeyCheck->publicKeyCredentialId);
+    $credential['publickey'] = base64_encode($publicKeyCheck->credentialPublicKey);
+    $credential['userHandle'] = $publicKeyCheck->userHandle;
+    $credential['counter'] = $publicKeyCheck->counter;
+
+    $sql = 'UPDATE ' . NV_USERS_GLOBALTABLE . '_passkey SET
+        counter=:counter, last_used_at=' . NV_CURRENTTIME . '
+    WHERE id=' . $publickey['id'];
+    $stmt = $db->prepare($sql);
+    $stmt->bindParam(':counter', $credential['counter'], PDO::PARAM_INT);
+    $stmt->execute();
+    unset($credential, $publickey);
+
+    $row = $admin_pre_data;
+    $admin_login_success = true;
 }
 
 // Login bước 1
@@ -669,7 +826,8 @@ if ($admin_login_success === true) {
     if (
         $nv_Request->isset_request('nv_login,nv_password', 'post') or
         $nv_Request->isset_request('submit2scode', 'post') or
-        $nv_Request->isset_request('auth_assertion', 'post')
+        $nv_Request->isset_request('submit2spasskey', 'post') or
+        $nv_Request->isset_request('login_assertion', 'post')
     ) {
         nv_jsonOutput([
             'status' => 'success',

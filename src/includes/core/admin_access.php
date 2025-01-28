@@ -226,7 +226,7 @@ function nv_admin_check_predata($adm_session_value)
         b.userid userid, b.group_id group_id,
         b.username username, b.email email, b.first_name first_name, b.last_name last_name, b.active2step active2step,
         b.last_agent user_last_agent, b.last_ip user_last_ip, b.last_login user_last_login, b.last_openid user_last_openid,
-        b.secretkey user_2s_secretkey, b.language, b.pref_2fa
+        b.secretkey user_2s_secretkey, b.language, b.pref_2fa, b.sec_keys
         FROM ' . NV_AUTHORS_GLOBALTABLE . ' a, ' . NV_USERS_GLOBALTABLE . ' b
         WHERE a.admin_id = ' . $array_admin['admin_id'] . '
         AND a.lev!=0

@@ -353,7 +353,18 @@ $(function() {
 
     // Xử lý đổi ngôn ngữ
     $('[name="gsitelanginterface"]').on('change', function() {
-        window.location = script_name + '?langinterface=' + $(this).val() + '&' + nv_lang_variable +  '=' + nv_lang_data;
+        $.ajax({
+            url: script_name + '?langinterface=' + $(this).val() + '&' + nv_lang_variable +  '=' + nv_lang_data,
+            type: 'POST',
+            cache: false,
+            success: function() {
+                location.reload();
+            },
+            error: function(xhr, text, err) {
+                nvToast(err, 'error');
+                console.log(xhr, text, err);
+            }
+        });
     });
     $('[name="gsitelangdata"]').on('change', function() {
         window.location = script_name + '?langinterface=' + nv_lang_interface + '&' + nv_lang_variable +  '=' + $(this).val();

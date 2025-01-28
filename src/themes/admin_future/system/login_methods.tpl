@@ -17,6 +17,10 @@
     <input type="hidden" name="checkss" value="{$smarty.const.NV_CHECK_SESSION}">
     <input type="hidden" name="submit2scode" value="1">
 </div>
+{elseif $OPT eq 'key'}
+<div data-toggle="auth-passkey" class="d-none">
+    <button type="button" class="btn btn-secondary w-100" data-toggle=""><i class="fa-solid fa-key" data-icon="fa-key"></i> {$LANG->getGlobal('admin_2step_opt_key')}</button>
+</div>
 {else}
 <a href="{$smarty.const.NV_BASE_ADMINURL}index.php?auth={$OPT}" class="btn btn-info btn-{$OPT}">{$LANG->getGlobal("admin_2step_opt_`$OPT`")}</a>
 {/if}

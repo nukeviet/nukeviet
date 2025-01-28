@@ -1608,4 +1608,33 @@ $(function() {
             }
         });
     });
+
+    // Cảnh báo chọn phương thức xác thực 2 bước
+    function checkRequire2Step() {
+        const req2step = parseInt($('[name="two_step_verification"]').val());
+        let levError = false;
+        let levWarning = false;
+
+        if (req2step == 1 || req2step == 3) {
+            levError = $('[name="admin_2step_opt[]"]:checked').length > 0 ? false : true;
+            levWarning = ($('[name="admin_2step_opt[]"]:checked').length == 1 && $('[name="admin_2step_opt[]"]:checked:first').val() == 'key') ? true : false;
+        }
+        if (levWarning) {
+            $('[data-toggle="2step-check-lev1"]').removeClass('d-none');
+        } else {
+            $('[data-toggle="2step-check-lev1"]').addClass('d-none');
+        }
+        if (levError) {
+            $('[data-toggle="2step-check-lev2"]').removeClass('d-none');
+        } else {
+            $('[data-toggle="2step-check-lev2"]').addClass('d-none');
+        }
+    }
+    $('[name="admin_2step_opt[]"]').on('change', function() {
+        checkRequire2Step();
+    });
+    $('[name="two_step_verification"]').on('change', function() {
+        checkRequire2Step();
+    });
+    checkRequire2Step();
 });

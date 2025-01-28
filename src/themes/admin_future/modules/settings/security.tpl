@@ -136,6 +136,8 @@
                                         </label>
                                     </div>
                                     {/foreach}
+                                    <div class="mt-1 d-none" role="alert" data-toggle="2step-check-lev2"><i class="text-danger fa-solid fa-triangle-exclamation"></i> {$LANG->getModule('admin_2step_error')}</div>
+                                    <div class="mt-1 d-none" role="alert" data-toggle="2step-check-lev1"><i class="text-warning fa-solid fa-circle-exclamation"></i> {$LANG->getModule('admin_2step_warning')}</div>
                                 </div>
                             </div>
                         </li>
@@ -146,7 +148,9 @@
                                 <div class="col-sm-7">
                                     <select name="admin_2step_default" id="admin_2step_default" class="form-select w-auto mw-100">
                                         {foreach from=$ADMIN_2STEP_PROVIDERS item=admin_2step}
+                                        {if $admin_2step neq 'key'}
                                         <option value="{$admin_2step}"{if $admin_2step eq $GDATA.admin_2step_default} selected{/if}>{$LANG->getGlobal("admin_2step_opt_`$admin_2step`")}</option>
+                                        {/if}
                                         {/foreach}
                                     </select>
                                 </div>

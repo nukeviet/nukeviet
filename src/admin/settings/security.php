@@ -33,7 +33,7 @@ $captcha_comm_list = [
 ];
 
 $recaptcha_type_list = ['image' => $nv_Lang->getModule('recaptcha_type_image'), 'audio' => $nv_Lang->getModule('recaptcha_type_audio')];
-$admin_2step_providers = ['code', 'facebook', 'google', 'zalo'];
+$admin_2step_providers = ['key', 'code', 'facebook', 'google', 'zalo'];
 $iptypes = [
     4 => 'IPv4',
     6 => 'IPv6'
@@ -184,6 +184,9 @@ if (defined('NV_IS_GODADMIN') and $nv_Request->isset_request('basicsave', 'post'
     }
     if (!in_array($post['admin_2step_default'], $post['admin_2step_opt'], true)) {
         $post['admin_2step_default'] = current($post['admin_2step_opt']);
+    }
+    if ($post['admin_2step_default'] == 'key') {
+        $post['admin_2step_default'] = 'code';
     }
     $post['admin_2step_opt'] = empty($post['admin_2step_opt']) ? '' : implode(',', $post['admin_2step_opt']);
 

@@ -23,7 +23,7 @@ $(function() {
             location.reload();
         }).fail(function(xhr, text, err) {
             btn.prop('disabled', false);
-            nvToast(err, 'error');
+            nvToast(nukeviet.i18n.errorSessExp, 'error');
             console.log(xhr, text, err);
         });
     });
@@ -152,7 +152,7 @@ $(function() {
             },
             error: function(xhr, text, err) {
                 btn.prop('disabled', false);
-                nvToast(err, 'error');
+                nvToast(nukeviet.i18n.errorSessExp, 'error');
                 console.log(xhr, text, err);
             }
         });
@@ -215,7 +215,7 @@ $(function() {
             },
             error: function(xhr, text, err) {
                 $('input,button', form).prop('disabled', false);
-                nvToast(err, 'error');
+                nvToast(nukeviet.i18n.errorSessExp, 'error');
                 console.log(xhr, text, err);
             }
         });
@@ -234,12 +234,12 @@ $(function() {
 
     // Đăng nhập passkey ở bước 1
     const preForm = $('[data-toggle="preForm"]');
-    if (preForm.length && nukeviet.WebAuthnSupported && !preForm.data('is-forum')) {
-        const btnCtn = $('[data-toggle="passkey-btn"]');
-        const linkCtn = $('[data-toggle="passkey-link"]');
+    if (preForm.length && nukeviet.WebAuthnSupported && preForm.data('passkey-allowed')) {
+        const btnCtn = $('[data-toggle="passkey-btn"]', preForm);
+        const linkCtn = $('[data-toggle="passkey-link"]', preForm);
         const btn = $('button', btnCtn);
         const link = $('a', linkCtn);
-        const err = $('[data-toggle="passkey-error"]');
+        const err = $('[data-toggle="passkey-error"]', preForm);
 
         if (nv_getCookie(nv_cookie_prefix + '_pkey') == 1) {
             btnCtn.removeClass('d-none');
@@ -285,7 +285,7 @@ $(function() {
                             publicKey: requestOptions
                         }).then(assertion => {
                             const data = {
-                                auth_assertion: 1,
+                                login_assertion: 1,
                                 assertion: JSON.stringify({
                                     id: assertion.id,
                                     type: assertion.type,
@@ -340,6 +340,112 @@ $(function() {
                     console.error(xhr, status, error);
                     icon.removeClass('fa-spinner fa-spin-pulse').addClass(icon.data('icon'));
                     err.text(nukeviet.i18n.WebAuthnErrors.unknow).removeClass('d-none');
+                }
+            });
+        });
+    }
+
+    // Xác thực passkey ở bước 2
+    const authPasskey = $('[data-toggle="auth-passkey"]');
+    const authForm = $('[data-toggle="step2Form"]');
+    if (authPasskey.length && authForm.data('passkey-allowed') && nukeviet.WebAuthnSupported) {
+        const btn = $('button', authPasskey);
+        const icon = $('i', btn);
+
+        authPasskey.removeClass('d-none');
+
+        btn.on('click', function(e) {
+            e.preventDefault();
+            if (icon.is('.fa-spinner')) {
+                return;
+            }
+            icon.removeClass(icon.data('icon')).addClass('fa-spinner fa-spin-pulse');
+            $.ajax({
+                url: authForm.attr('action'),
+                type: 'post',
+                data: {
+                    create_auth_challenge: 1,
+                    checkss: $('[name="checkss"]', authForm).val(),
+                },
+                dataType: 'json',
+                success: function(response) {
+                    if (response.status != 'ok') {
+                        icon.removeClass('fa-spinner fa-spin-pulse').addClass(icon.data('icon'));
+                        nvToast(response.mess || nukeviet.i18n.WebAuthnErrors.unknow, 'error');
+                        return;
+                    }
+
+                    let requestOptions = JSON.parse(response.requestOptions);
+                    requestOptions.challenge = base64UrlToArrayBuffer(requestOptions.challenge);
+                    if (requestOptions.allowCredentials.length > 0) {
+                        requestOptions.allowCredentials = requestOptions.allowCredentials.map(credential => {
+                            credential.id = base64UrlToArrayBuffer(credential.id);
+                            return credential;
+                        });
+                    }
+
+                    try {
+                        navigator.credentials.get({
+                            publicKey: requestOptions
+                        }).then(assertion => {
+                            const data = {
+                                submit2spasskey: 1,
+                                assertion: JSON.stringify({
+                                    id: assertion.id,
+                                    type: assertion.type,
+                                    rawId: arrayBufferToBase64Url(assertion.rawId),
+                                    response: {
+                                        clientDataJSON: arrayBufferToBase64Url(assertion.response.clientDataJSON),
+                                        authenticatorData: arrayBufferToBase64Url(assertion.response.authenticatorData),
+                                        signature: arrayBufferToBase64Url(assertion.response.signature),
+                                        userHandle: arrayBufferToBase64Url(assertion.response.userHandle),
+                                    }
+                                }),
+                                checkss: $('[name="checkss"]', authForm).val(),
+                            };
+                            $.ajax({
+                                url: authForm.attr('action'),
+                                type: 'POST',
+                                data: data,
+                                dataType: 'json',
+                                success: function (response) {
+                                    if (response.status != 'success') {
+                                        icon.removeClass('fa-spinner fa-spin-pulse').addClass(icon.data('icon'));
+                                        nvToast(response.mess, 'error');
+                                        return;
+                                    }
+
+                                    // Xác thực bằng passkey thành công
+                                    $('[data-toggle="form"]', authForm).addClass('d-none');
+                                    $('[data-toggle="message"]', authForm).html(response.mess).removeClass('border-danger text-danger mb-3').addClass('border-success text-success');
+                                    $('#langinterface').remove();
+                                    var hr = response.redirect != '' ? response.redirect : window.location.href;
+                                    $('#adm-redirect').attr('href', hr).toggleClass('d-none');
+                                    setTimeout(() => {
+                                        window.location.href = hr;
+                                    }, 3000);
+                                },
+                                error: function (xhr, status, error) {
+                                    console.log(xhr, status, error);
+                                    icon.removeClass('fa-spinner fa-spin-pulse').addClass(icon.data('icon'));
+                                    nvToast(nukeviet.i18n.WebAuthnErrors.get[error.name] || nukeviet.i18n.WebAuthnErrors.unknow, 'error');
+                                }
+                            });
+                        }).catch(error => {
+                            icon.removeClass('fa-spinner fa-spin-pulse').addClass(icon.data('icon'));
+                            nvToast(nukeviet.i18n.WebAuthnErrors.get[error.name] || nukeviet.i18n.WebAuthnErrors.unknow, 'error');
+                            console.log(error);
+                        });
+                    } catch (error) {
+                        icon.removeClass('fa-spinner fa-spin-pulse').addClass(icon.data('icon'));
+                        nvToast(nukeviet.i18n.WebAuthnErrors.get[error.name] || nukeviet.i18n.WebAuthnErrors.unknow, 'error');
+                        console.log(error);
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error(xhr, status, error);
+                    icon.removeClass('fa-spinner fa-spin-pulse').addClass(icon.data('icon'));
+                    nvToast(nukeviet.i18n.WebAuthnErrors.unknow, 'error');
                 }
             });
         });

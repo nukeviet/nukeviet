@@ -15,7 +15,7 @@
                         <div class="login-box">
                             {if empty($PRE_DATA)}
                             {* Form đăng nhập bằng tài khoản (bước 1) *}
-                            <form method="post" action="{$smarty.const.NV_BASE_ADMINURL}index.php" data-toggle="preForm" data-is-forum="{$smarty.const.NV_IS_USER_FORUM ? 1 : 0}">
+                            <form method="post" action="{$smarty.const.NV_BASE_ADMINURL}index.php" data-toggle="preForm" data-passkey-allowed="{$PASSKEY_ALLOWED ? 1 : 0}">
                                 <div class="mb-3 border-3 border-start ps-2" data-toggle="message">{$LANG->getGlobal('adminlogininfo')}</div>
                                 <div data-toggle="form">
                                     <div class="mb-3">
@@ -106,7 +106,7 @@
                             </form>
                             {else}
                             {* Step xác thực hai bước *}
-                            <form method="post" action="{$smarty.const.NV_BASE_ADMINURL}index.php" data-toggle="step2Form">
+                            <form method="post" action="{$smarty.const.NV_BASE_ADMINURL}index.php" data-toggle="step2Form" data-passkey-allowed="{$PASSKEY_ALLOWED ? 1 : 0}">
                                 {if empty($ERROR)}
                                 <div class="mb-3 border-3 border-start ps-2" data-toggle="message">{$LANG->getGlobal('admin_hello_2step', $PRE_DATA.full_name)}.</div>
                                 {else}
@@ -117,8 +117,21 @@
                                     {if $CFG_2STEP.count_active lt 1}
                                     <p class="text-danger">{$LANG->getGlobal('admin_mactive_2step')}. {$LANG->getGlobal($CFG_2STEP.count_opts gt 1 ? 'admin_mactive_2step_choose1' : 'admin_mactive_2step_choose0')}:</p>
                                     <div class="d-grid gap-2 mb-3">
+                                        {assign var="isRegularMethod" value=0 nocache}
                                         {foreach from=$CFG_2STEP.opts item=opt}
+                                        {if ($opt eq 'code' or $opt eq 'key')}
+                                        {if $isRegularMethod eq 0}
+                                        {assign var="isRegularMethod" value=($isRegularMethod + 1) nocache}
+                                        {if in_array('code', $CFG_2STEP.opts) and in_array('key', $CFG_2STEP.opts)}
+                                            {assign var="setupTitle" value=$LANG->getGlobal('admin_setup_2fa_keycode') nocache}
+                                        {else}
+                                            {assign var="setupTitle" value={$LANG->getGlobal("admin_2step_opt_`$opt`")} nocache}
+                                        {/if}
+                                        <a href="{$smarty.const.NV_BASE_ADMINURL}index.php?auth={$opt}" class="btn btn-secondary">{$setupTitle}</a>
+                                        {/if}
+                                        {else}
                                         <a href="{$smarty.const.NV_BASE_ADMINURL}index.php?auth={$opt}" class="btn btn-info btn-{$opt}">{$LANG->getGlobal("admin_2step_opt_`$opt`")}</a>
+                                        {/if}
                                         {/foreach}
                                     </div>
                                     {else}
