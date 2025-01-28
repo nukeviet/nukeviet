@@ -1729,6 +1729,11 @@ header.header-up {
     padding: 0;
 }
 
+ul.list-default {
+    list-style: disc!important;
+    padding-left: 24px!important;
+}
+
 /* sub-list-icon */
 
 .sub-list-icon > li:first-child > *:before,

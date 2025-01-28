@@ -350,3 +350,30 @@ fieldset[disabled] .openid-single-sign-on:focus {
 .type-file::before {
     content: "\f016";
 }
+
+.usr-flex-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+}
+
+.usr-flex {
+    display: flex;
+}
+
+.usr-justify-between {
+    justify-content: space-between;
+}
+
+.usr-align-center {
+    align-items: center;
+}
+
+.usr-gap-1 {
+    gap: 5px;
+}
+
+.usr-gap-2 {
+    gap: 10px;
+}

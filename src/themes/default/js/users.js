@@ -936,9 +936,9 @@ $(function() {
         form.data('passkey-initialized', true);
 
         const ctn = $('[data-toggle="passkey-ctn"]', form);
-        const link = $('[data-toggle="passkey-link"]', form);
-        const btn = $('[data-toggle="passkey-btn"]', form);
-        const err = $('[data-toggle="passkey-error"]', form);
+        const link = $('[data-toggle="passkey-link"]', ctn);
+        const btn = $('[data-toggle="passkey-btn"]', ctn);
+        const err = $('[data-toggle="passkey-error"]', ctn);
         const icon = $('i', btn);
 
         ctn.removeClass('hidden');
@@ -1055,8 +1055,9 @@ $(function() {
         }
         form.data('passkey-verify-initialized', true);
 
-        const btn = $('[data-toggle="passkey-verify"]', form);
-        const err = $('[data-toggle="passkey-error"]', form);
+        const ctn = $('.loginstep2-key', form);
+        const btn = $('[data-toggle="passkey-verify"]', ctn);
+        const err = $('[data-toggle="passkey-error"]', ctn);
         const icon = $('i', btn);
 
         btn.on('click', function(e) {
