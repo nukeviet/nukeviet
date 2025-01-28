@@ -28,7 +28,7 @@ use Symfony\Component\Serializer\SerializerInterface;
 /**
  * NukeViet\Webauthn\SerializerFactory
  *
- * Tạo tình dịch các đối tượng Webauthn ra json
+ * Tạo trình dịch các đối tượng Webauthn ra json
  *
  * @package NukeViet\Webauthn
  * @author VINADES.,JSC <contact@vinades.vn>
@@ -39,13 +39,12 @@ use Symfony\Component\Serializer\SerializerInterface;
 class SerializerFactory
 {
     /**
-     * @return SerializerInterface
+     * @return AttestationStatementSupportManager
      */
-    public static function create(): SerializerInterface
+    public static function getAttestationManager(): AttestationStatementSupportManager
     {
         $clock = new NativeClock();
 
-        // Trong website hoặc xác thực 2 bước chỉ cần Attestation None là đủ
         $attestMgr = AttestationStatementSupportManager::create();
         $attestMgr->add(NoneAttestationStatementSupport::create());
 
@@ -62,7 +61,15 @@ class SerializerFactory
 
         $attestMgr->add(PackedAttestationStatementSupport::create($coseAlgorithmManager));
 
-        $factory = new WebauthnSerializerFactory($attestMgr);
+        return $attestMgr;
+    }
+
+    /**
+     * @return SerializerInterface
+     */
+    public static function create(): SerializerInterface
+    {
+        $factory = new WebauthnSerializerFactory(self::getAttestationManager());
         return $factory->create();
     }
 }

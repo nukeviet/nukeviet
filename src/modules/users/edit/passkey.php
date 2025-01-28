@@ -13,29 +13,18 @@ if (!defined('NV_IS_MOD_USER')) {
     exit('Stop!!!');
 }
 
-use Cose\Algorithm\Manager;
-use Cose\Algorithm\Signature\ECDSA;
-use Cose\Algorithm\Signature\RSA;
 use Cose\Algorithms;
 use NukeViet\Module\users\Shared\Emails;
 use NukeViet\Webauthn\CertificateChainValidator;
 use NukeViet\Webauthn\MetadataStatementRepository;
+use NukeViet\Webauthn\SerializerFactory;
 use NukeViet\Webauthn\StatusReportRepository;
-use Symfony\Component\Clock\NativeClock;
 use Symfony\Component\Serializer\Encoder\JsonEncode;
 use Symfony\Component\Serializer\Normalizer\AbstractObjectNormalizer;
-use Webauthn\AttestationStatement\AndroidKeyAttestationStatementSupport;
-use Webauthn\AttestationStatement\AppleAttestationStatementSupport;
-use Webauthn\AttestationStatement\AttestationStatementSupportManager;
-use Webauthn\AttestationStatement\FidoU2FAttestationStatementSupport;
-use Webauthn\AttestationStatement\NoneAttestationStatementSupport;
-use Webauthn\AttestationStatement\PackedAttestationStatementSupport;
-use Webauthn\AttestationStatement\TPMAttestationStatementSupport;
 use Webauthn\AuthenticatorAttestationResponse;
 use Webauthn\AuthenticatorAttestationResponseValidator;
 use Webauthn\AuthenticatorSelectionCriteria;
 use Webauthn\CeremonyStep\CeremonyStepManagerFactory;
-use Webauthn\Denormalizer\WebauthnSerializerFactory;
 use Webauthn\PublicKeyCredential;
 use Webauthn\PublicKeyCredentialCreationOptions;
 use Webauthn\PublicKeyCredentialDescriptor;
@@ -43,30 +32,7 @@ use Webauthn\PublicKeyCredentialParameters;
 use Webauthn\PublicKeyCredentialRpEntity;
 use Webauthn\PublicKeyCredentialUserEntity;
 
-/**
- * Chuẩn bị input loading
- */
-$clock = new NativeClock();
-
-// Trong website hoặc xác thực 2 bước chỉ cần Attestation None là đủ
-$attestMgr = AttestationStatementSupportManager::create();
-$attestMgr->add(NoneAttestationStatementSupport::create());
-
-$attestMgr->add(FidoU2FAttestationStatementSupport::create());
-$attestMgr->add(AppleAttestationStatementSupport::create());
-
-$attestMgr->add(AndroidKeyAttestationStatementSupport::create());
-$attestMgr->add(TPMAttestationStatementSupport::create($clock));
-
-$coseAlgorithmManager = Manager::create();
-$coseAlgorithmManager->add(ECDSA\ES256K::create());
-$coseAlgorithmManager->add(ECDSA\ES256::create());
-$coseAlgorithmManager->add(RSA\RS256::create());
-
-$attestMgr->add(PackedAttestationStatementSupport::create($coseAlgorithmManager));
-
-$factory = new WebauthnSerializerFactory($attestMgr);
-$serializer = $factory->create();
+$serializer = SerializerFactory::create();
 
 // Dữ liệu chung của các email liên quan passkey
 $email_fields = [
@@ -252,7 +218,7 @@ if ($nv_Request->isset_request('save_credential', 'post')) {
     $certificateChainValidator = new CertificateChainValidator();
 
     $csmFactory = new CeremonyStepManagerFactory();
-    $csmFactory->setAttestationStatementSupportManager($attestMgr);
+    $csmFactory->setAttestationStatementSupportManager(SerializerFactory::getAttestationManager());
     $csmFactory->enableMetadataStatementSupport(
         $metadataStatementRepository,
         $statusReportRepository,
