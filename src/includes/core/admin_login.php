@@ -68,7 +68,10 @@ if (!empty($array_gfx_chk) and in_array('a', $array_gfx_chk, true)) {
 $captcha_type = (empty($global_config['captcha_type']) or in_array($global_config['captcha_type'], ['captcha', 'recaptcha'], true)) ? $global_config['captcha_type'] : 'captcha';
 if ($captcha_type == 'recaptcha' and (empty($global_config['recaptcha_sitekey']) or empty($global_config['recaptcha_secretkey']))) {
     $captcha_type = 'captcha';
+} elseif ($captcha_type == 'turntiles' and (empty($global_config['turntiles_sitekey']) or empty($global_config['turntiles_secretkey']))) {
+    $captcha_type = 'captcha';
 }
+
 $admin_login_success = false;
 $passkey_allowed = (!defined('NV_IS_USER_FORUM') or !defined('SSO_SERVER'));
 

@@ -22,7 +22,7 @@ $proxy_blocker_list = [
     2 => $nv_Lang->getModule('proxy_blocker_2'),
     3 => $nv_Lang->getModule('proxy_blocker_3')
 ];
-$captcha_opts = ['', 'captcha', 'recaptcha'];
+$captcha_opts = ['', 'captcha', 'recaptcha', 'turntiles'];
 $captcha_area_list = ['a', 'l', 'r', 'm', 'p'];
 $recaptcha_vers = [2, 3];
 $captcha_comm_list = [
@@ -519,6 +519,22 @@ if (defined('NV_IS_GODADMIN') and $nv_Request->isset_request('captchasave', 'pos
         $sth->execute();
     }
 
+    $post = [
+        'turntiles_sitekey' => $nv_Request->get_title('turntiles_sitekey', 'post'),
+        'turntiles_secretkey' => $nv_Request->get_title('turntiles_secretkey', 'post'),
+    ];
+
+    if (!empty($post['turntiles_secretkey'])) {
+        $post['turntiles_secretkey'] = $crypt->encrypt($post['turntiles_secretkey']);
+    }
+
+    $sth = $db->prepare('UPDATE ' . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = 'sys' AND module = 'global' AND config_name = :config_name");
+    foreach ($post as $config_name => $config_value) {
+        $sth->bindParam(':config_name', $config_name, PDO::PARAM_STR, 30);
+        $sth->bindParam(':config_value', $config_value, PDO::PARAM_STR);
+        $sth->execute();
+    }
+
     nv_save_file_config_global();
 
     nv_jsonOutput([
@@ -972,6 +988,8 @@ $tpl->assign('CAPTCHA_COMM_LIST', $captcha_comm_list);
 if (defined('NV_IS_GODADMIN')) {
     $tpl->assign('RECAPTCHA_SITEKEY', $captcha_config_list['recaptcha_sitekey']);
     $tpl->assign('RECAPTCHA_SECRETKEY', $captcha_config_list['recaptcha_secretkey'] ? $crypt->decrypt($captcha_config_list['recaptcha_secretkey']) : '');
+    $tpl->assign('TURNTILES_SITEKEY', $captcha_config_list['turntiles_sitekey']);
+    $tpl->assign('TURNTILES_SECRETKEY', $captcha_config_list['turntiles_secretkey'] ? $crypt->decrypt($captcha_config_list['turntiles_secretkey']) : '');
 }
 
 $tpl->assign('CORS', $cross_config_list);
