@@ -240,6 +240,8 @@ function loadCaptcha(obj) {
         reCaptcha2ApiLoad()
     } else if ($("[data-recaptcha3]", obj).length && "undefined" == typeof grecaptcha) {
         reCaptcha3ApiLoad()
+    } else if ($("[data-turntiles]", obj).length) {
+        turntilesApiLoad()
     }
 }
 
@@ -521,6 +523,15 @@ var reCaptcha3ApiLoad = function() {
         a.src = "//www.google.com/recaptcha/api.js?render=" + nv_recaptcha_sitekey;
         document.getElementsByTagName("head")[0].appendChild(a)
     }
+}
+
+var turntilesApiLoad = () => {
+    var a = document.createElement("script");
+    a.type = "text/javascript";
+    a.defer = true;
+    "undefined" !== typeof site_nonce && a.setAttribute('nonce', site_nonce);
+    a.src = "//cdn.turntiles.com/turntiles.js";
+    document.getElementsByTagName("head")[0].appendChild(a)
 }
 
 $(function() {

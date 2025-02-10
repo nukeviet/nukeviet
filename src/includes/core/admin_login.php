@@ -65,7 +65,7 @@ if (!empty($array_gfx_chk) and in_array('a', $array_gfx_chk, true)) {
 } else {
     $gfx_chk = 0;
 }
-$captcha_type = (empty($global_config['captcha_type']) or in_array($global_config['captcha_type'], ['captcha', 'recaptcha'], true)) ? $global_config['captcha_type'] : 'captcha';
+$captcha_type = (empty($global_config['captcha_type']) or in_array($global_config['captcha_type'], ['captcha', 'recaptcha', 'turntiles'], true)) ? $global_config['captcha_type'] : 'captcha';
 if ($captcha_type == 'recaptcha' and (empty($global_config['recaptcha_sitekey']) or empty($global_config['recaptcha_secretkey']))) {
     $captcha_type = 'captcha';
 } elseif ($captcha_type == 'turntiles' and (empty($global_config['turntiles_sitekey']) or empty($global_config['turntiles_secretkey']))) {
@@ -623,6 +623,10 @@ if (empty($admin_pre_data) and $nv_Request->isset_request('nv_login,nv_password'
     // Xác định giá trị của captcha nhập vào nếu sử dụng reCaptcha
     if ($captcha_type == 'recaptcha') {
         $nv_seccode = $nv_Request->get_title('g-recaptcha-response', 'post', '');
+    }
+    // Xác định giá trị của captcha nhập vào nếu sử dụng Turntiles
+    elseif ($captcha_type == 'turntiles') {
+        $nv_seccode = $nv_Request->get_title('cf-turnstile-response', 'post', '');
     }
     // Xác định giá trị của captcha nhập vào nếu sử dụng captcha hình
     elseif ($captcha_type == 'captcha') {

@@ -77,6 +77,28 @@
                                         });
                                     </script>
                                     {/if}
+                                    {elseif $CAPTCHA_TYPE eq 'turntiles'}
+                                    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit"></script>
+                                    <div class="mb-3">
+                                        <div id="cf-turnstile" class="cf-turnstile"></div>
+                                    </div>
+                                    <script>
+                                    turnstile.ready(function () {
+                                        $('[type=submit]').prop('disabled', true);
+                                        turnstile.render("#cf-turnstile", {
+                                            'sitekey': "{$GCONFIG.turntiles_sitekey}",
+                                            'callback': function(res) {
+                                                $('[type=submit]').prop('disabled', false);
+                                            },
+                                            'expired-callback': function() {
+                                                $('[type=submit]').prop('disabled', true);
+                                            },
+                                            'error-callback': function() {
+                                                $('[type=submit]').prop('disabled', true);
+                                            }
+                                        });
+                                    });
+                                    </script>                                    
                                     {/if}
                                     {/if}
                                     <div class="d-grid">

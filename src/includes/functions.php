@@ -566,6 +566,31 @@ function nv_capcha_txt($seccode, $type = 'captcha')
         }
 
         return false;
+    } elseif ($type == 'turntiles') {
+        if (!empty($global_config['turntiles_secretkey'])) {
+            $NV_Http = new NukeViet\Http\Http($global_config, NV_TEMP_DIR);
+            $request = [
+                'secret' => $crypt->decrypt($global_config['turntiles_secretkey']),
+                'response' => $seccode,
+                'remoteip' => $client_info['ip']
+            ];
+            $args = [
+                'headers' => [
+                    'Referer' => NV_MY_DOMAIN
+                ],
+                'body' => $request,
+                'httpversion' => '1.1'
+            ];
+            $array = $NV_Http->post('https://challenges.cloudflare.com/turnstile/v0/siteverify', $args);
+            if (is_array($array) and !empty($array['body'])) {
+                $jsonRes = (array) json_decode($array['body'], true);
+                if (isset($jsonRes['success']) and ((bool) $jsonRes['success']) === true) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }
 
     mt_srand(microtime(true) * 1000000);
