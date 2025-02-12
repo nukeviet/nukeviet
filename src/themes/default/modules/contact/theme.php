@@ -155,6 +155,8 @@ function contact_form_theme($array_content, $departments, $cats, $base_url, $che
         $captcha = 'recaptcha';
     } elseif ($module_captcha == 'captcha') {
         $captcha = 'captcha';
+    } elseif ($module_captcha == 'turnstile') {
+        $captcha = 'turnstile';
     }
 
     $categories = [];

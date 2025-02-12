@@ -49,6 +49,10 @@ if ($id > 0 and $catid > 0) {
                     if ($module_captcha == 'recaptcha') {
                         $nv_seccode = $nv_Request->get_title('g-recaptcha-response', 'post', '');
                     }
+                    // Xác định giá trị của captcha nhập vào nếu sử dụng Turnstile
+                    elseif ($module_captcha == 'turnstile') {
+                        $nv_seccode = $nv_Request->get_title('cf-turnstile-response', 'post', '');
+                    }
                     // Xác định giá trị của captcha nhập vào nếu sử dụng captcha hình
                     elseif ($module_captcha == 'captcha') {
                         $nv_seccode = $nv_Request->get_title('nv_seccode', 'post', '');
@@ -59,7 +63,7 @@ if ($id > 0 and $catid > 0) {
                         nv_jsonOutput([
                             'status' => 'error',
                             'input' => '',
-                            'mess' => $nv_Lang->getGlobal('securitycodeincorrect')
+                            'mess' => ($module_captcha == 'recaptcha') ? $nv_Lang->getGlobal('securitycodeincorrect1') : (($module_captcha == 'turnstile') ? $nv_Lang->getGlobal('securitycodeincorrect2') : $nv_Lang->getGlobal('securitycodeincorrect'))
                         ]);
                     }
 

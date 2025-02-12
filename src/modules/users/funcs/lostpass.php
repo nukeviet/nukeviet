@@ -103,6 +103,8 @@ if ($checkss == $data['checkss']) {
 
     if ($module_captcha == 'recaptcha') {
         $data['nv_seccode'] = $nv_Request->get_title('gcaptcha_session', 'post', '');
+    } elseif ($module_captcha == 'turnstile') {
+        $data['nv_seccode'] = $nv_Request->get_title('cf-turnstile-response', 'post', '');
     } elseif ($module_captcha == 'captcha') {
         $data['nv_seccode'] = $nv_Request->get_title('nv_seccode', 'post', '');
     }
@@ -118,7 +120,7 @@ if ($checkss == $data['checkss']) {
             'status' => 'error',
             'input' => '',
             'step' => 'step1',
-            'mess' => ($module_captcha == 'recaptcha') ? $nv_Lang->getGlobal('securitycodeincorrect1') : $nv_Lang->getGlobal('securitycodeincorrect')
+            'mess' => ($module_captcha == 'recaptcha') ? $nv_Lang->getGlobal('securitycodeincorrect1') : (($module_captcha == 'turnstile') ? $nv_Lang->getGlobal('securitycodeincorrect2') : $nv_Lang->getGlobal('securitycodeincorrect'))
         ]);
     }
 

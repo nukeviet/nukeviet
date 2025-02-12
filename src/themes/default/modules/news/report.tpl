@@ -36,7 +36,7 @@
         </div>
     </div>
 </div>
-<form method="post" action="{REPORT_URL}" class="hidden" data-toggle="error-report-form" <!-- BEGIN: captcha --> data-captcha="captcha"<!-- END: captcha --><!-- BEGIN: recaptcha --> data-recaptcha2="1"<!-- END: recaptcha --><!-- BEGIN: recaptcha3 --> data-recaptcha3="1"<!-- END: recaptcha3 -->>
+<form method="post" action="{REPORT_URL}" class="hidden" data-toggle="error-report-form" <!-- BEGIN: captcha --> data-captcha="captcha"<!-- END: captcha --><!-- BEGIN: recaptcha --> data-recaptcha2="1"<!-- END: recaptcha --><!-- BEGIN: recaptcha3 --> data-recaptcha3="1"<!-- END: recaptcha3 --><!-- BEGIN: turnstile --> data-turnstile="1"<!-- END: turnstile -->>
     <input type="hidden" name="report_content" value="">
     <input type="hidden" name="report_fix" value="">
     <input type="hidden" name="report_email" value="">

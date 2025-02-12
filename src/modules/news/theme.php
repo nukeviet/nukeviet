@@ -1143,6 +1143,10 @@ function theme_report($newsid, $newscheckss)
     elseif ($module_captcha == 'recaptcha' and $global_config['recaptcha_ver'] == 2) {
         $xtpl->parse('main.recaptcha');
     }
+    // Nếu dùng turnstile
+    elseif ($module_captcha == 'turnstile') {
+        $xtpl->parse('main.turnstile');
+    }
     // Nếu dùng captcha hình
     elseif ($module_captcha == 'captcha') {
         $xtpl->parse('main.captcha');
@@ -1356,6 +1360,10 @@ function sendmail_themme($sendmail)
         $xtpl->assign('RECAPTCHA_ELEMENT', 'recaptcha' . nv_genpass(8));
         $xtpl->assign('N_CAPTCHA', $nv_Lang->getGlobal('securitycode1'));
         $xtpl->parse('main.recaptcha');
+    } 
+    // Nếu dùng turnstile
+    elseif ($module_captcha == 'turnstile') {
+        $xtpl->parse('main.turnstile');
     } elseif ($module_captcha == 'captcha') {
         $xtpl->assign('N_CAPTCHA', $nv_Lang->getGlobal('securitycode'));
         $xtpl->parse('main.captcha');
@@ -1669,6 +1677,8 @@ function content_add($rowcontent, $htmlbodyhtml, $catidList, $topicList, $post_s
         $xtpl->assign('N_CAPTCHA', $nv_Lang->getGlobal('securitycode1'));
         $xtpl->assign('RECAPTCHA_ELEMENT', 'recaptcha' . nv_genpass(8));
         $xtpl->parse('main.recaptcha');
+    } elseif ($module_captcha == 'turnstile') {
+        $xtpl->parse('main.turnstile');
     } elseif ($module_captcha == 'captcha') {
         $xtpl->parse('main.captcha');
     }

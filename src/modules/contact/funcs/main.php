@@ -100,6 +100,10 @@ if ($nv_Request->isset_request('checkss', 'post')) {
     if ($module_captcha == 'recaptcha') {
         $fcaptcha = $nv_Request->get_title('g-recaptcha-response', 'post', '');
     }
+    // Xác định giá trị của captcha nhập vào nếu sử dụng Turnstile
+    elseif ($module_captcha == 'turnstile') {
+        $fcaptcha = $nv_Request->get_title('cf-turnstile-response', 'post', '');
+    }
     // Xác định giá trị của captcha nhập vào nếu sử dụng captcha hình
     elseif ($module_captcha == 'captcha') {
         $fcaptcha = $nv_Request->get_title('fcode', 'post', '');
@@ -110,7 +114,7 @@ if ($nv_Request->isset_request('checkss', 'post')) {
         nv_jsonOutput([
             'status' => 'error',
             'input' => '',
-            'mess' => ($module_captcha == 'recaptcha') ? $nv_Lang->getGlobal('securitycodeincorrect1') : $nv_Lang->getGlobal('securitycodeincorrect')
+            'mess' => ($module_captcha == 'recaptcha') ? $nv_Lang->getGlobal('securitycodeincorrect1') : (($module_captcha == 'turnstile') ? $nv_Lang->getGlobal('securitycodeincorrect2') : $nv_Lang->getGlobal('securitycodeincorrect'))
         ]);
     }
 

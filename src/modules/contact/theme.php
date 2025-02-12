@@ -264,7 +264,6 @@ function contact_main_theme($array_content, $is_specific, $departments, $cats, $
         }
         $xtpl->parse('main.supporter_block');
     }
-
     $form = contact_form_theme($array_content, $departments, $cats, $base_url, $checkss);
     $xtpl->assign('FORM', $form);
 
@@ -311,6 +310,8 @@ function contact_form_theme($array_content, $departments, $cats, $base_url, $che
         $xtpl->assign('RECAPTCHA_ELEMENT', 'recaptcha' . nv_genpass(8));
         $xtpl->assign('N_CAPTCHA', $nv_Lang->getGlobal('securitycode1'));
         $xtpl->parse('main.recaptcha');
+    } elseif ($module_captcha == 'turnstile') {
+        $xtpl->parse('main.turnstile');
     } elseif ($module_captcha == 'captcha') {
         $xtpl->parse('main.captcha');
     }

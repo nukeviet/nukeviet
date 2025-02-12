@@ -1375,8 +1375,8 @@ $(function() {
             val = $(this).val(),
             sitekey = $('[name=recaptcha_sitekey]', form).val(),
             secretkey = $('[name=recaptcha_secretkey]', form).val();
-            tt_sitekey = $('[name=turntiles_sitekey]', form).val(),
-            tt_secretkey = $('[name=turntiles_secretkey]', form).val();
+            tt_sitekey = $('[name=turnstile_sitekey]', form).val(),
+            tt_secretkey = $('[name=turnstile_secretkey]', form).val();
         if (val != 'recaptcha' || (val == 'recaptcha' && sitekey != '' && secretkey != '')) {
             $(this).next().slideUp(function() {
                 $(this).addClass('d-none');
@@ -1387,7 +1387,7 @@ $(function() {
                 it.hide().removeClass('d-none').slideDown();
             }
         }
-        if (val != 'turntiles' || (val == 'turntiles' && tt_sitekey != '' && tt_secretkey != '')) {
+        if (val != 'turnstile' || (val == 'turnstile' && tt_sitekey != '' && tt_secretkey != '')) {
             $(this).next().next().slideUp(function() {
                 $(this).addClass('d-none');
             });

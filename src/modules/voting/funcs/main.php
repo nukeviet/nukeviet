@@ -170,9 +170,8 @@ if (empty($vid)) {
         if ($checkss != md5($vid . NV_CHECK_SESSION)) {
             nv_redirect_location(nv_url_rewrite($page_url, true));
         }
-
-        if ($row['active_captcha'] and ($module_captcha == 'captcha' or $module_captcha == 'recaptcha') and !nv_capcha_txt($captcha, $module_captcha)) {
-            exit('ERROR|' . $nv_Lang->getGlobal('securitycodeincorrect'));
+        if ($row['active_captcha'] and ($module_captcha == 'captcha' or $module_captcha == 'recaptcha' or $module_captcha == 'turnstile') and !nv_capcha_txt($captcha, $module_captcha)) {
+            exit('ERROR|' . $nv_Lang->getGlobal('securitycodeincorrect1'));
         }
 
         $acceptcm = (int) $row['acceptcm'];

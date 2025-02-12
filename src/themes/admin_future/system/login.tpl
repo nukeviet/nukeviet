@@ -77,7 +77,7 @@
                                         });
                                     </script>
                                     {/if}
-                                    {elseif $CAPTCHA_TYPE eq 'turntiles'}
+                                    {elseif $CAPTCHA_TYPE eq 'turnstile'}
                                     <script src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit"></script>
                                     <div class="mb-3">
                                         <div id="cf-turnstile" class="cf-turnstile"></div>
@@ -86,7 +86,7 @@
                                     turnstile.ready(function () {
                                         $('[type=submit]').prop('disabled', true);
                                         turnstile.render("#cf-turnstile", {
-                                            'sitekey': "{$GCONFIG.turntiles_sitekey}",
+                                            'sitekey': "{$GCONFIG.turnstile_sitekey}",
                                             'callback': function(res) {
                                                 $('[type=submit]').prop('disabled', false);
                                             },
@@ -95,7 +95,8 @@
                                             },
                                             'error-callback': function() {
                                                 $('[type=submit]').prop('disabled', true);
-                                            }
+                                            },
+                                            'language': "{$smarty.const.NV_LANG_INTERFACE}"
                                         });
                                     });
                                     </script>                                    

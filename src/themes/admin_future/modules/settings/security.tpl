@@ -480,10 +480,10 @@
 
                                     <li class="list-group-item">
                                         <div class="row g-2">
-                                            <label for="turntiles_sitekey" class="col-sm-5 col-form-label text-sm-end py-only-sm-0"><strong>{$LANG->getModule('turntiles_sitekey')}</strong></label>
+                                            <label for="turnstile_sitekey" class="col-sm-5 col-form-label text-sm-end py-only-sm-0"><strong>{$LANG->getModule('turnstile_sitekey')}</strong></label>
                                             <div class="col-sm-7">
                                                 <div class="input-group">
-                                                    <input class="form-control" type="text" value="{$TURNTILES_SITEKEY}" name="turntiles_sitekey" id="turntiles_sitekey" maxlength="200">
+                                                    <input class="form-control" type="text" value="{$TURNSTILE_SITEKEY}" name="turnstile_sitekey" id="turnstile_sitekey" maxlength="200">
                                                     <a href="https://dash.cloudflare.com/" target="_blank" data-bs-toggle="tooltip" title="{$LANG->getModule('recaptcha_guide')}" aria-label="{$LANG->getModule('recaptcha_guide')}" class="btn btn-secondary" data-bs-trigger="hover"><i class="fa-solid fa-circle-question"></i></a>
                                                 </div>
                                             </div>
@@ -492,10 +492,10 @@
 
                                     <li class="list-group-item">
                                         <div class="row g-2">
-                                            <label for="turntiles_secretkey" class="col-sm-5 col-form-label text-sm-end py-only-sm-0"><strong>{$LANG->getModule('turntiles_secretkey')}</strong></label>
+                                            <label for="turnstile_secretkey" class="col-sm-5 col-form-label text-sm-end py-only-sm-0"><strong>{$LANG->getModule('turnstile_secretkey')}</strong></label>
                                             <div class="col-sm-7">
                                                 <div class="input-group">
-                                                    <input class="form-control" type="text" value="{$TURNTILES_SECRETKEY}" name="turntiles_secretkey" id="turntiles_secretkey" maxlength="200">
+                                                    <input class="form-control" type="text" value="{$TURNSTILE_SECRETKEY}" name="turnstile_secretkey" id="turnstile_secretkey" maxlength="200">
                                                     <a href="https://dash.cloudflare.com/" target="_blank" data-bs-toggle="tooltip" title="{$LANG->getModule('recaptcha_guide')}" aria-label="{$LANG->getModule('recaptcha_guide')}" class="btn btn-secondary" data-bs-trigger="hover"><i class="fa-solid fa-circle-question"></i></a>
                                                 </div>
                                             </div>
@@ -538,7 +538,7 @@
                                                     {/foreach}
                                                 </select>
                                                 <div class="form-text text-danger{if $captcha_type neq 'recaptcha' or ($captcha_type eq 'recaptcha' and not empty($DATA.recaptcha_sitekey) and not empty($DATA.recaptcha_secretkey))} d-none{/if}">{$LANG->getModule('captcha_type_recaptcha_note')}</div>
-                                                <div class="form-text text-danger{if $captcha_type neq 'turntiles' or ($captcha_type eq 'turntiles' and not empty($DATA.turntiles_sitekey) and not empty($DATA.turntiles_secretkey))} d-none{/if}">{$LANG->getModule('captcha_type_turntiles_note')}</div>
+                                                <div class="form-text text-danger{if $captcha_type neq 'turnstile' or ($captcha_type eq 'turnstile' and not empty($DATA.turnstile_sitekey) and not empty($DATA.turnstile_secretkey))} d-none{/if}">{$LANG->getModule('captcha_type_turnstile_note')}</div>
                                             </div>
                                         </div>
                                     </li>

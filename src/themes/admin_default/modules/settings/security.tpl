@@ -447,10 +447,10 @@
 
                                     <li class="list-group-item">
                                         <div class="form-group mb-0">
-                                            <label class="col-sm-10 control-label"><strong>{LANG.turntiles_sitekey}</strong></label>
+                                            <label class="col-sm-10 control-label"><strong>{LANG.turnstile_sitekey}</strong></label>
                                             <div class="col-sm-14">
                                                 <div class="input-group">
-                                                    <input class="form-control" type="text" value="{TURNTILES_SITEKEY}" name="turntiles_sitekey" maxlength="200" />
+                                                    <input class="form-control" type="text" value="{turnstile_SITEKEY}" name="turnstile_sitekey" maxlength="200" />
                                                     <span class="input-group-btn">
                                                         <a href="https://dash.cloudflare.com/" target="_blank" data-toggle="tooltip" title="{LANG.recaptcha_guide}" class="btn btn-default"><i class="fa fa-info-circle"></i></a>
                                                     </span>
@@ -464,7 +464,7 @@
                                             <label class="col-sm-10 control-label"><strong>{LANG.recaptcha_secretkey}</strong></label>
                                             <div class="col-sm-14">
                                                 <div class="input-group">
-                                                    <input class="form-control" type="text" value="{TURNTILES_SECRETKEY}" name="turntiles_secretkey" maxlength="200" />
+                                                    <input class="form-control" type="text" value="{TURNSTILE_SECRETKEY}" name="turnstile_secretkey" maxlength="200" />
                                                     <span class="input-group-btn">
                                                         <a href="https://dash.cloudflare.com/" target="_blank" data-toggle="tooltip" title="{LANG.recaptcha_guide}" class="btn btn-default"><i class="fa fa-info-circle"></i></a>
                                                     </span>
@@ -515,7 +515,7 @@
                                                     <!-- END: opt -->
                                                 </select>
                                                 <div class="small text-danger" style="margin-top:5px;<!-- BEGIN: dnone -->display:none<!-- END: dnone -->">{LANG.captcha_type_recaptcha_note}</div>
-                                                <div class="small text-danger" style="margin-top:5px;<!-- BEGIN: dnone_tt -->display:none<!-- END: dnone_tt -->">{LANG.captcha_type_turntiles_note}</div>
+                                                <div class="small text-danger" style="margin-top:5px;<!-- BEGIN: dnone_tt -->display:none<!-- END: dnone_tt -->">{LANG.captcha_type_turnstile_note}</div>
                                             </div>
                                         </div>
                                     </li>
@@ -526,7 +526,7 @@
                                         <button type="button" class="btn btn-xs btn-default" data-toggle="selAllAs" data-type="">{LANG.captcha_}</button>
                                         <button type="button" class="btn btn-xs btn-default" data-toggle="selAllAs" data-type="captcha">{LANG.captcha_captcha}</button>
                                         <button type="button" class="btn btn-xs btn-default" data-toggle="selAllAs" data-type="recaptcha">{LANG.captcha_recaptcha}</button>
-                                        <button type="button" class="btn btn-xs btn-default" data-toggle="selAllAs" data-type="turntiles">{LANG.captcha_turntiles}</button>
+                                        <button type="button" class="btn btn-xs btn-default" data-toggle="selAllAs" data-type="turnstile">{LANG.captcha_turnstile}</button>
                                     </li>
 
                                     <li class="list-group-item text-center">
