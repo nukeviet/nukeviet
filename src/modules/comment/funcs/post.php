@@ -90,7 +90,7 @@ elseif ($show_captcha and $captcha_type == 'captcha') {
 
 // Kiểm tra tính hợp lệ của captcha nhập vào, nếu không hợp lệ => thông báo lỗi
 if (isset($code) and !nv_capcha_txt($code, $captcha_type)) {
-    _loadContents('ERR_code_' . $code);
+    _loadContents('ERR_code_' . $nv_Lang->getGlobal('securitycodeincorrect'));
 }
 
 // Xác định và kiểm tra userid, name, email
