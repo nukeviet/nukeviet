@@ -63,12 +63,15 @@ function nv_get_rss_link($rss_contents, $type, $id = 0)
  */
 function nv_rss_main_theme($rsscontents)
 {
-    global $site_mods;
+    global $site_mods, $module_name;
 
     $rss_array = [];
-    foreach ($site_mods as $mod_name => $mod_info) {
-        if ($mod_info['rss'] == 1 and isset($mod_info['alias']['rss']) and module_file_exists($mod_info['module_file'] . '/funcs/rss.php')) {
-            $rss_array[$mod_name] = $mod_info;
+    $rss_array = nv_apply_hook($module_name, 'before_generate_rss', [$rsscontents], []);
+    if (empty($rss_array)) {
+        foreach ($site_mods as $mod_name => $mod_info) {
+            if ($mod_info['rss'] == 1 and isset($mod_info['alias']['rss']) and module_file_exists($mod_info['module_file'] . '/funcs/rss.php')) {
+                $rss_array[$mod_name] = $mod_info;
+            }
         }
     }
 

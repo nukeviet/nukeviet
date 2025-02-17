@@ -83,7 +83,7 @@ class Files extends Cache
             }
 
             while (($modname = readdir($dh)) !== false) {
-                if (preg_match('/^([a-z0-9\_\-]+)$/', $modname)) {
+                if (preg_match('/^([a-zA-Z0-9\_\-]+)$/', $modname)) {
                     $this->_Delete($modname, $pattern);
                 }
             }
@@ -118,11 +118,11 @@ class Files extends Cache
      */
     public function getItem($module_name, $filename, $ttl = 0)
     {
-        if (!preg_match('/^([a-z0-9\_\-]+)\.cache/', $filename)) {
+        if (!preg_match('/^([a-zA-Z0-9\_\-]+)\.cache/', $filename)) {
             return false;
         }
 
-        $fullname = $this->_CacheDir . '/' . $module_name . '/' . $filename;
+        $fullname = $this->_CacheDir . '/' . $module_name . '/' . strtolower($filename);
 
         if (!is_file($fullname)) {
             return false;
@@ -151,7 +151,7 @@ class Files extends Cache
      */
     public function setItem($module_name, $filename, $content)
     {
-        if (!preg_match('/^([a-z0-9\_\-]+)\.cache/', $filename)) {
+        if (!preg_match('/^([a-zA-Z0-9\_\-]+)\.cache/', $filename)) {
             return false;
         }
 
@@ -159,7 +159,7 @@ class Files extends Cache
             mkdir($this->_CacheDir . '/' . $module_name, 0777, true);
         }
 
-        return file_put_contents($this->_CacheDir . '/' . $module_name . '/' . $filename, $content);
+        return file_put_contents($this->_CacheDir . '/' . $module_name . '/' . strtolower($filename), $content);
     }
 
     /**
