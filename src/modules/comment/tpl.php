@@ -30,7 +30,7 @@ if (!defined('NV_MAINFILE')) {
 function nv_theme_comment_module($module, $area, $id, $allowed_comm, $checkss, $comment, $sortcomm, $form_login, $header = 1)
 {
     global $global_config, $module_data, $module_config, $admin_info, $user_info, $nv_Lang, $module_name;
-    $nv_Lang->loadModule('comment');
+    $nv_Lang->loadModule('comment', false, true);
     $template = get_tpl_dir($global_config['module_theme'], 'default', '/modules/comment/main.tpl');
     $templateCSS = get_tpl_dir($global_config['module_theme'], 'default', '/css/comment.css');
     $templateJS = get_tpl_dir($global_config['module_theme'], 'default', '/js/comment.js');
