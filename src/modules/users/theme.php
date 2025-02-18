@@ -422,7 +422,7 @@ function user_login($is_ajax = false)
             $xtpl->parse('main.recaptcha');
         } elseif ($module_captcha == 'turnstile') {
             $xtpl->parse('main.turnstile');
-        } if ($module_captcha == 'captcha') {
+        } elseif ($module_captcha == 'captcha') {
             $xtpl->assign('N_CAPTCHA', $nv_Lang->getGlobal('securitycode'));
             $xtpl->parse('main.captcha');
         }
