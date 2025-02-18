@@ -75,16 +75,15 @@ if ($captcha_type == 'turnstile' and (empty($global_config['turnstile_sitekey'])
 }
 
 unset($code);
-// Xác định giá trị của captcha nhập vào nếu sử dụng reCaptcha
+
 if ($show_captcha and $captcha_type == 'recaptcha') {
+    // Xác định giá trị của captcha nhập vào nếu sử dụng reCaptcha
     $code = $nv_Request->get_title('g-recaptcha-response', 'post', '');
-}
-// Xác định giá trị của captcha nhập vào nếu sử dụng Turnstile
-elseif ($show_captcha and $captcha_type == 'turnstile') {
+} elseif ($show_captcha and $captcha_type == 'turnstile') {
+    // Xác định giá trị của captcha nhập vào nếu sử dụng Turnstile
     $code = $nv_Request->get_title('cf-turnstile-response', 'post', '');
-}
-// Xác định giá trị của captcha nhập vào nếu sử dụng captcha hình
-elseif ($show_captcha and $captcha_type == 'captcha') {
+} elseif ($show_captcha and $captcha_type == 'captcha') {
+    // Xác định giá trị của captcha nhập vào nếu sử dụng captcha hình
     $code = $nv_Request->get_title('code', 'post', '');
 }
 

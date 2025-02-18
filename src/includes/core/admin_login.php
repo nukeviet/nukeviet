@@ -620,16 +620,15 @@ if (empty($admin_pre_data) and $nv_Request->isset_request('nv_login,nv_password'
     $nv_password = $nv_Request->get_title('nv_password', 'post', '');
 
     unset($nv_seccode);
-    // Xác định giá trị của captcha nhập vào nếu sử dụng reCaptcha
+    
     if ($captcha_type == 'recaptcha') {
+        // Xác định giá trị của captcha nhập vào nếu sử dụng reCaptcha
         $nv_seccode = $nv_Request->get_title('g-recaptcha-response', 'post', '');
-    }
-    // Xác định giá trị của captcha nhập vào nếu sử dụng Turnstile
-    elseif ($captcha_type == 'turnstile') {
+    } elseif ($captcha_type == 'turnstile') {
+        // Xác định giá trị của captcha nhập vào nếu sử dụng Turnstile
         $nv_seccode = $nv_Request->get_title('cf-turnstile-response', 'post', '');
-    }
-    // Xác định giá trị của captcha nhập vào nếu sử dụng captcha hình
-    elseif ($captcha_type == 'captcha') {
+    } elseif ($captcha_type == 'captcha') {
+        // Xác định giá trị của captcha nhập vào nếu sử dụng captcha hình
         $nv_seccode = $nv_Request->get_title('nv_seccode', 'post', '');
     }
 

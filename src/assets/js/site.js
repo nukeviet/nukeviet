@@ -242,7 +242,6 @@ function loadCaptcha(obj) {
     } else if ($("[data-recaptcha3]", obj).length && "undefined" == typeof grecaptcha) {
         reCaptcha3ApiLoad()
     } else if ($("[data-turnstile]", obj).length) {
-        console.log('1111')
         turnstileRecreate(obj);
         "undefined" != typeof turnstile ? turnstileOnLoad() : turnstileApiLoad();
     }

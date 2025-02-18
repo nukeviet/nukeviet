@@ -335,16 +335,14 @@ if ($nv_Request->isset_request('contentid,checkss', 'get')) {
         }
 
         unset($fcode);
-        // Xác định giá trị của captcha nhập vào nếu sử dụng reCaptcha
         if ($module_captcha == 'recaptcha') {
+            // Xác định giá trị của captcha nhập vào nếu sử dụng reCaptcha
             $fcode = $nv_Request->get_title('g-recaptcha-response', 'post', '');
-        }
-        // Xác định giá trị của captcha nhập vào nếu sử dụng Turnstile
-        elseif ($module_captcha == 'turnstile') {
+        } elseif ($module_captcha == 'turnstile') {
+            // Xác định giá trị của captcha nhập vào nếu sử dụng Turnstile
             $fcode = $nv_Request->get_title('cf-turnstile-response', 'post', '');
-        }
-        // Xác định giá trị của captcha nhập vào nếu sử dụng captcha hình
-        elseif ($module_captcha == 'captcha') {
+        } elseif ($module_captcha == 'captcha') {
+            // Xác định giá trị của captcha nhập vào nếu sử dụng captcha hình
             $fcode = $nv_Request->get_title('fcode', 'post', '');
         }
 
