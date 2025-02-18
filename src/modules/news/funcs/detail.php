@@ -111,9 +111,23 @@ if (!empty($news_contents['group_view'])) {
     }
 }
 
+// Cập nhật lượt xem
+$time_set = $nv_Request->get_int($module_data . '_' . $op . '_' . $id, 'session');
+if (empty($time_set) && $news_contents['status'] == 1) {
+    $nv_Request->set_Session($module_data . '_' . $op . '_' . $id, NV_CURRENTTIME);
+    $query = 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_rows SET hitstotal=hitstotal+1 WHERE id=' . $id;
+    $db->query($query);
+
+    $array_catid = explode(',', $news_contents['listcatid']);
+    foreach ($array_catid as $catid_i) {
+        $query = 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_' . $catid_i . ' SET hitstotal=hitstotal+1 WHERE id=' . $id;
+        $db->query($query);
+    }
+}
+
 // Mở bài viết sang nguồn tin chính thức
 if ($news_contents['external_link']) {
-    $news_contents = nv_apply_hook($module_name, 'before_redirect_external_link', [$news_contents], $news_contents);
+    nv_apply_hook($module_name, 'before_redirect_external_link', [$news_contents]);
     nv_redirect_location($news_contents['sourcetext'], 0, true);
 }
 
@@ -122,18 +136,6 @@ $page_title = empty($news_contents['titlesite']) ? $news_contents['title'] : $ne
 $show_no_image = $module_config[$module_name]['show_no_image'];
 
 if (defined('NV_IS_MODADMIN') or ($news_contents['status'] == 1 and $news_contents['publtime'] < NV_CURRENTTIME and ($news_contents['exptime'] == 0 or $news_contents['exptime'] > NV_CURRENTTIME))) {
-    $time_set = $nv_Request->get_int($module_data . '_' . $op . '_' . $id, 'session');
-    if (empty($time_set)) {
-        $nv_Request->set_Session($module_data . '_' . $op . '_' . $id, NV_CURRENTTIME);
-        $query = 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_rows SET hitstotal=hitstotal+1 WHERE id=' . $id;
-        $db->query($query);
-
-        $array_catid = explode(',', $news_contents['listcatid']);
-        foreach ($array_catid as $catid_i) {
-            $query = 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_' . $catid_i . ' SET hitstotal=hitstotal+1 WHERE id=' . $id;
-            $db->query($query);
-        }
-    }
     $news_contents['showhometext'] = $module_config[$module_name]['showhometext'];
     if (!empty($news_contents['homeimgfile'])) {
         $homeimgfile = $news_contents['homeimgfile'];
