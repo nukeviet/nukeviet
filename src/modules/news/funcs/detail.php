@@ -118,7 +118,7 @@ if (!(defined('NV_IS_MODADMIN') or ($news_contents['status'] == 1 and $news_cont
 
 // Cập nhật lượt xem
 $time_set = $nv_Request->get_int($module_data . '_' . $op . '_' . $id, 'session');
-if (empty($time_set) && $news_contents['status'] == 1) {
+if (empty($time_set)) {
     $nv_Request->set_Session($module_data . '_' . $op . '_' . $id, NV_CURRENTTIME);
     $query = 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_rows SET hitstotal=hitstotal+1 WHERE id=' . $id;
     $db->query($query);
