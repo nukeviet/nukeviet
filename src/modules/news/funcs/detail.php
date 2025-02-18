@@ -113,6 +113,7 @@ if (!empty($news_contents['group_view'])) {
 
 // Mở bài viết sang nguồn tin chính thức
 if ($news_contents['external_link']) {
+    $news_contents = nv_apply_hook($module_name, 'before_redirect_external_link', [$news_contents], $news_contents);
     nv_redirect_location($news_contents['sourcetext'], 0, true);
 }
 
