@@ -517,7 +517,7 @@ function nv_xmlSitemapIndex_generate()
             while ([$modname, $modfile] = $result->fetch(3)) {
                 $sitemaps = nv_scandir(NV_ROOTDIR . '/modules/' . $modfile . '/funcs', '/^sitemap(.*?)\.php$/');
                 [$modname, $sitemaps] = nv_apply_hook('', 'generating_sitemap_module', [$modname, $sitemaps], [$modname, $sitemaps]);
-                if (sizeof($sitemaps)) {
+                if (!empty($sitemaps)) {
                     foreach ($sitemaps as $filename) {
                         if (preg_match('/^sitemap(\.*)([a-zA-Z0-9\-]*)\.php$/', $filename, $m)) {
                             if ($m[0] == 'sitemap.php') {
@@ -539,7 +539,7 @@ function nv_xmlSitemapIndex_generate()
             if (isset($values['funcs']) and isset($values['funcs']['sitemap']) and !empty($values['sitemap'])) {
                 $sitemaps = nv_scandir(NV_ROOTDIR . '/modules/' . $values['module_file'] . '/funcs', '/^sitemap(.*?)\.php$/');
                 [$modname, $sitemaps] = nv_apply_hook('', 'generating_sitemap_module', [$modname, $sitemaps], [$modname, $sitemaps]);
-                if (sizeof($sitemaps)) {
+                if (!empty($sitemaps)) {
                     foreach ($sitemaps as $filename) {
                         if (preg_match('/^sitemap(\.*)([a-zA-Z0-9\-]*)\.php$/', $filename, $m)) {
                             if ($m[0] == 'sitemap.php') {
