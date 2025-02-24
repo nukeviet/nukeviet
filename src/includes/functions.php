@@ -541,11 +541,13 @@ function nv_capcha_txt($seccode, $type = 'captcha')
 {
     global $global_config, $nv_Request, $client_info, $crypt;
 
-    if ($type == 'recaptcha') {
-        if (!empty($global_config['recaptcha_secretkey'])) {
+    if ($type == 'recaptcha' || $type == 'turnstile') {
+        $seckey = $type == 'recaptcha' ? $global_config['recaptcha_secretkey'] : $global_config['turnstile_secretkey'];
+        $check_endpoint = $type == 'recaptcha' ? 'https://www.google.com/recaptcha/api/siteverify' : 'https://challenges.cloudflare.com/turnstile/v0/siteverify';
+        if (!empty($seckey)) {
             $NV_Http = new NukeViet\Http\Http($global_config, NV_TEMP_DIR);
             $request = [
-                'secret' => $crypt->decrypt($global_config['recaptcha_secretkey']),
+                'secret' => $crypt->decrypt($seckey),
                 'response' => $seccode,
                 'remoteip' => $client_info['ip']
             ];
@@ -556,7 +558,7 @@ function nv_capcha_txt($seccode, $type = 'captcha')
                 'body' => $request,
                 'httpversion' => '1.1'
             ];
-            $array = $NV_Http->post('https://www.google.com/recaptcha/api/siteverify', $args);
+            $array = $NV_Http->post($check_endpoint, $args);
             if (is_array($array) and !empty($array['body'])) {
                 $jsonRes = (array) json_decode($array['body'], true);
                 if (isset($jsonRes['success']) and ((bool) $jsonRes['success']) === true) {

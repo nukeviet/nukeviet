@@ -316,6 +316,8 @@ function user_register($gfx_chk, $checkss, $data_questions, $array_field_config,
             $xtpl->assign('RECAPTCHA_ELEMENT', 'recaptcha' . nv_genpass(8));
             $xtpl->assign('N_CAPTCHA', $nv_Lang->getGlobal('securitycode1'));
             $xtpl->parse('main.reg_recaptcha');
+        } elseif ($module_captcha == 'turnstile') {
+            $xtpl->parse('main.reg_turnstile');
         } elseif ($module_captcha == 'captcha') {
             $xtpl->assign('N_CAPTCHA', $nv_Lang->getGlobal('securitycode'));
             $xtpl->parse('main.reg_captcha');
@@ -418,6 +420,8 @@ function user_login($is_ajax = false)
             $xtpl->assign('RECAPTCHA_ELEMENT', 'recaptcha' . nv_genpass(8));
             $xtpl->parse('main.recaptcha.default');
             $xtpl->parse('main.recaptcha');
+        } elseif ($module_captcha == 'turnstile') {
+            $xtpl->parse('main.turnstile');
         } elseif ($module_captcha == 'captcha') {
             $xtpl->assign('N_CAPTCHA', $nv_Lang->getGlobal('securitycode'));
             $xtpl->parse('main.captcha');
@@ -626,6 +630,8 @@ function user_lostpass($data)
             $xtpl->assign('RECAPTCHA_ELEMENT', 'recaptcha' . nv_genpass(8));
             $xtpl->assign('N_CAPTCHA', $nv_Lang->getGlobal('securitycode1'));
             $xtpl->parse('main.recaptcha');
+        } elseif ($module_captcha == 'turnstile') {
+            $xtpl->parse('main.turnstile');
         } elseif ($module_captcha == 'captcha') {
             $xtpl->assign('N_CAPTCHA', $nv_Lang->getGlobal('securitycode'));
             $xtpl->parse('main.captcha');
@@ -698,6 +704,8 @@ function user_lostactivelink($data, $question)
                 $xtpl->assign('RECAPTCHA_ELEMENT', 'recaptcha' . nv_genpass(8));
                 $xtpl->assign('N_CAPTCHA', $nv_Lang->getGlobal('securitycode1'));
                 $xtpl->parse('main.step1.recaptcha');
+            } elseif ($module_captcha == 'turnstile') {
+                $xtpl->parse('main.step1.turnstile');
             } elseif ($module_captcha == 'captcha') {
                 $xtpl->assign('N_CAPTCHA', $nv_Lang->getGlobal('securitycode'));
                 $xtpl->parse('main.step1.captcha');
@@ -2040,6 +2048,9 @@ function user_confirm_pass()
     } elseif ($module_captcha == 'recaptcha' and $global_config['recaptcha_ver'] == 2) {
         // Nếu dùng reCaptcha v2
         $xtpl->parse('main.recaptcha');
+    } elseif ($module_captcha == 'turnstile') {
+        // Nếu dùng Turnstile
+        $xtpl->parse('main.turnstile');
     } elseif ($module_captcha == 'captcha') {
         // Captcha mặc định
         $xtpl->parse('main.captcha');

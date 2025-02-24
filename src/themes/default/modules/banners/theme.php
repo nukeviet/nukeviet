@@ -49,6 +49,8 @@ function nv_banner_theme_addads($global_array_uplans, $page_url)
         $captcha = 'recaptcha3';
     } elseif ($module_captcha == 'recaptcha' and $global_config['recaptcha_ver'] == 2) {
         $captcha = 'recaptcha';
+    } elseif ($module_captcha == 'turnstile') {
+        $captcha = 'turnstile';
     } elseif ($module_captcha == 'captcha') {
         $captcha = 'captcha';
     }

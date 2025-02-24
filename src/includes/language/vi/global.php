@@ -73,6 +73,7 @@ $lang_global['password_rule_limit'] = 'Mật khẩu không hợp lệ: %1$s và 
 $lang_global['password_rule_nolimit'] = 'Mật khẩu phải từ %1$d đến %2$d ký tự';
 $lang_global['securitycodeincorrect'] = 'Mã bảo mật không chính xác';
 $lang_global['securitycodeincorrect1'] = 'Chưa xác thực &laquo;Tôi không phải người máy&raquo;. Vui lòng xác thực lại';
+$lang_global['securitycodeincorrect2'] = 'Chưa xác thực &laquo;Xác minh bạn là con người&raquo;. Vui lòng xác thực lại';
 $lang_global['loginincorrect'] = 'Không tìm thấy tài khoản nào phù hợp với thông tin bạn đã nhập';
 $lang_global['admin_loginsuccessfully'] = 'Bạn đã đăng nhập thành công. Bây giờ hệ thống sẽ chuyển bạn đến khu vực quản trị của site';
 $lang_global['incorrect_password'] = 'Mật khẩu sai';

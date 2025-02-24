@@ -833,6 +833,7 @@ function nv_html_site_js($html = true, $other_js = [], $language_js = true, $glo
     $jsDef .= ',nv_recaptcha_ver=' . $global_config['recaptcha_ver'];
     $jsDef .= ',nv_recaptcha_sitekey="' . $global_config['recaptcha_sitekey'] . '"';
     $jsDef .= ',nv_recaptcha_type="' . $global_config['recaptcha_type'] . '"';
+    $jsDef .= ',nv_turnstile_sitekey="' . $global_config['turnstile_sitekey'] . '"';
 
     !isset($global_config['XSSsanitize']) && $global_config['XSSsanitize'] = 1;
     $jsDef .= ',XSSsanitize=' . ($global_config['XSSsanitize'] ? 1 : 0);

@@ -120,8 +120,11 @@ if (!nv_function_exists('nv_block_voting_select')) {
                 }
 
                 if ($voting_array['active_captcha']) {
-                    $captcha_type = (empty($module_config[$module]['captcha_type']) or in_array($module_config[$module]['captcha_type'], ['captcha', 'recaptcha'], true)) ? $module_config[$module]['captcha_type'] : 'captcha';
+                    $captcha_type = (empty($module_config[$module]['captcha_type']) or in_array($module_config[$module]['captcha_type'], ['captcha', 'recaptcha', 'turnstile'], true)) ? $module_config[$module]['captcha_type'] : 'captcha';
                     if ($captcha_type == 'recaptcha' and (empty($global_config['recaptcha_sitekey']) or empty($global_config['recaptcha_secretkey']))) {
+                        $captcha_type = 'captcha';
+                    }
+                    if ($captcha_type == 'turnstile' and (empty($global_config['turnstile_sitekey']) or empty($global_config['turnstile_secretkey']))) {
                         $captcha_type = 'captcha';
                     }
 
@@ -137,6 +140,8 @@ if (!nv_function_exists('nv_block_voting_select')) {
                             $xtpl->parse('main.has_captcha.basic');
                         }
                         $xtpl->parse('main.has_captcha');
+                    } elseif ($captcha_type == 'turnstile') {
+                        $xtpl->parse('main.turnstile');
                     }
                 }
 

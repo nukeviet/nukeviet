@@ -19,7 +19,8 @@ jQuery.event.special.touchstart = {
 
 var myTimerPage = "",
     myTimersecField = "",
-    reCapIDs = [];
+    reCapIDs = [],
+    turnstileIDs = [];
 
 // Load multiliple js,css files
 function getFiles(files, callback) {
@@ -244,6 +245,9 @@ function loadCaptcha(obj) {
         reCaptcha2ApiLoad()
     } else if ($("[data-recaptcha3]", obj).length && "undefined" == typeof grecaptcha) {
         reCaptcha3ApiLoad()
+    } else if ($("[data-turnstile]", obj).length) {
+        turnstileRecreate(obj);
+        "undefined" != typeof turnstile ? turnstileOnLoad() : turnstileApiLoad();
     }
 }
 
@@ -280,6 +284,25 @@ function reCaptcha2Recreate(obj) {
                 size = ($(this).data('size') && $(this).data('size') == 'compact') ? 'compact' : '',
                 id = "recaptcha" + (new Date().getTime()) + nv_randomPassword(8),
                 div = '<div id="' + id + '" data-toggle="recaptcha"';
+            callFunc && (div += ' data-callback="' + callFunc + '"');
+            pnum && (div += ' data-pnum="' + pnum + '"');
+            btnselector && (div += ' data-btnselector="' + btnselector + '"');
+            size && (div += ' data-size="' + size + '"');
+            div += '></div>';
+            $(this).replaceWith(div)
+        }
+    })
+}
+
+function turnstileRecreate(obj) {
+    $('[data-toggle=turnstile]', $(obj)).each(function() {
+        if (!$('#modal-' + $(this).attr('id')).length) {
+            var callFunc = $(this).data('callback'),
+                pnum = $(this).data('pnum'),
+                btnselector = $(this).data('btnselector'),
+                size = ($(this).data('size') && $(this).data('size') == 'compact') ? 'compact' : '',
+                id = "turnstile" + (new Date().getTime()) + nv_randomPassword(8),
+                div = '<div id="' + id + '" data-toggle="turnstile"';
             callFunc && (div += ' data-callback="' + callFunc + '"');
             pnum && (div += ' data-pnum="' + pnum + '"');
             btnselector && (div += ' data-btnselector="' + btnselector + '"');
@@ -329,6 +352,10 @@ function btnClickSubmit(event, form) {
         })
     } else if ($(form).attr('data-recaptcha2')) {
         reCaptcha2Execute(form, function() {
+            $(form).submit();
+        })
+    } else if ($(form).attr('data-turnstile')) {
+        turnstileExecute(form, function() {
             $(form).submit();
         })
     } else if ($(form).attr('data-captcha')) {
@@ -524,6 +551,121 @@ var reCaptcha3ApiLoad = function() {
         "undefined" !== typeof site_nonce && a.setAttribute('nonce', site_nonce);
         a.src = "//www.google.com/recaptcha/api.js?render=" + nv_recaptcha_sitekey;
         document.getElementsByTagName("head")[0].appendChild(a)
+    }
+}
+
+var turnstileApiLoad = () => {
+    var a = document.createElement("script");
+    a.type = "text/javascript";
+    a.defer = true;
+    "undefined" !== typeof site_nonce && a.setAttribute('nonce', site_nonce);
+    a.src = "//challenges.cloudflare.com/turnstile/v0/api.js?onload=turnstileOnLoad&render=explicit";
+    document.getElementsByTagName("head")[0].appendChild(a)
+}
+
+var turnstileOnLoad = function() {
+    $('[data-toggle=turnstile]').each(function() {
+        var id = $(this).attr('id'),
+            callFunc = $(this).data('callback'),
+            size = ($(this).data('size') && $(this).data('size') == 'compact') ? 'compact' : '';
+
+        if (typeof window[callFunc] === 'function') {
+            if (typeof turnstileIDs[id] === "undefined") {
+                turnstileIDs[id] = turnstile.render('#' + id, {
+                    'sitekey': nv_turnstile_sitekey,
+                    'size': size,
+                    'theme': 'light',
+                    'language': nv_lang_interface,
+                    'callback': callFunc
+                })
+            } else {
+                turnstile.reset(turnstileIDs[id])
+            }
+        } else {
+            if (typeof turnstileIDs[id] === "undefined") {
+                var pnum = parseInt($(this).data('pnum')),
+                    btnselector = $(this).data('btnselector'),
+                    btn = $('#' + id),
+                    k = 1;
+
+                for (k; k <= pnum; k++) {
+                    btn = btn.parent();
+                }
+                btn = $(btnselector, btn);
+                if (btn.length) {
+                    btn.prop('disabled', true);
+                }
+
+                turnstileIDs[id] = turnstile.render('#' + id, {
+                    'sitekey': nv_turnstile_sitekey,
+                    'size': size,
+                    'theme': 'light',
+                    'language': nv_lang_interface,
+                    'callback': function() {
+                        reCaptcha2Callback(id, false)
+                    },
+                    'expired-callback': function() {
+                        reCaptcha2Callback(id, true)
+                    },
+                    'error-callback': function() {
+                        reCaptcha2Callback(id, true)
+                    }
+                })
+            } else {
+                turnstile.reset(turnstileIDs[id])
+            }
+        }
+    })
+}
+
+// Turnstile Execute
+var turnstileExecute = function(obj, callFunc) {
+    if ("undefined" === typeof turnstile) {
+        turnstileApiLoad();
+        setTimeout(function() {
+            $('[type=submit]', obj).trigger('click')
+        }, 2E3);
+        return !1
+    }
+
+    var id = $(obj).attr('data-turnstile'),
+        res = $("[name=cf-turnstile-response]", obj).val(),
+        isExist = false;
+    if (id.length == 16 && typeof turnstileIDs[id] !== "undefined" && $('#' + turnstileIDs[id]).length && !!res) {
+        if (turnstile.getResponse(turnstileIDs[id]) == res) {
+            isExist = true
+        }
+    }
+    if (isExist) {
+        captchaCallFuncLoad(callFunc)
+    } else {
+        if (id.length != 16) {
+            id = 'tt' + nv_randomPassword(14);
+            $(obj).attr('data-turnstile', id);
+        }
+        if (!$("#modal-" + id).length) {
+            var header = $.fn.tooltip.Constructor.VERSION.substr(0, 1) == '3' ? '<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button><div class="modal-title">' + verify_not_robot + '</div>' : '<div class="modal-title">' + verify_not_robot + '</div><button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>';
+            $("body").append($('<div id="modal-' + id + '" class="modal fade" tabindex="-1" aria-hidden="true"><div class="modal-dialog"><div class="modal-content"><div class="modal-header">' + header + '</div><div class="modal-body"><div class="nv-recaptcha-default"><div id="' + id + '" data-toggle="turnstile"></div></div></div></div></div></div>'));
+        }
+        var md = $("#modal-" + id);
+        md.on('show.bs.modal', function() {
+            if (typeof turnstileIDs[id] === "undefined") {
+                turnstileIDs[id] = turnstile.render('#' + id, {
+                    'sitekey': nv_turnstile_sitekey,
+                    'theme': 'light',
+                    'language': nv_lang_interface,
+                    'callback': function(response) {
+                        md.modal('hide');
+                        $("[name=cf-turnstile-response]", obj).length ? $("[name=cf-turnstile-response]", obj).val(response) : (response = $('<input type="hidden" name="cf-turnstile-response" value="' + response + '"/>'), $(obj).append(response));
+                        setTimeout(function() {
+                            captchaCallFuncLoad(callFunc)
+                        }, 100);
+                    }
+                })
+            } else {
+                turnstile.reset(turnstileIDs[id])
+            }
+        }).modal('show')
     }
 }
 

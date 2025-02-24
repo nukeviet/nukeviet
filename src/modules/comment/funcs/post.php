@@ -65,18 +65,25 @@ if ($captcha == 0) {
     }
 }
 
-$captcha_type = (empty($module_config['comment']['captcha_type']) or in_array($module_config['comment']['captcha_type'], ['captcha', 'recaptcha'], true)) ? $module_config['comment']['captcha_type'] : 'captcha';
+$captcha_type = (empty($module_config['comment']['captcha_type']) or in_array($module_config['comment']['captcha_type'], ['captcha', 'recaptcha', 'turnstile'], true)) ? $module_config['comment']['captcha_type'] : 'captcha';
 if ($captcha_type == 'recaptcha' and (empty($global_config['recaptcha_sitekey']) or empty($global_config['recaptcha_secretkey']))) {
     $captcha_type = 'captcha';
 }
 
-unset($code);
-// Xác định giá trị của captcha nhập vào nếu sử dụng reCaptcha
-if ($show_captcha and $captcha_type == 'recaptcha') {
-    $code = $nv_Request->get_title('g-recaptcha-response', 'post', '');
+if ($captcha_type == 'turnstile' and (empty($global_config['turnstile_sitekey']) or empty($global_config['turnstile_secretkey']))) {
+    $captcha_type = 'captcha';
 }
-// Xác định giá trị của captcha nhập vào nếu sử dụng captcha hình
-elseif ($show_captcha and $captcha_type == 'captcha') {
+
+unset($code);
+
+if ($show_captcha and $captcha_type == 'recaptcha') {
+    // Xác định giá trị của captcha nhập vào nếu sử dụng reCaptcha
+    $code = $nv_Request->get_title('g-recaptcha-response', 'post', '');
+} elseif ($show_captcha and $captcha_type == 'turnstile') {
+    // Xác định giá trị của captcha nhập vào nếu sử dụng Turnstile
+    $code = $nv_Request->get_title('cf-turnstile-response', 'post', '');
+} elseif ($show_captcha and $captcha_type == 'captcha') {
+    // Xác định giá trị của captcha nhập vào nếu sử dụng captcha hình
     $code = $nv_Request->get_title('code', 'post', '');
 }
 

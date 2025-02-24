@@ -73,6 +73,7 @@ $lang_global['password_rule_limit'] = 'Invalid Password: %1$s and %2$d from to %
 $lang_global['password_rule_nolimit'] = 'Password must be between %1$d to %2$d characters';
 $lang_global['securitycodeincorrect'] = 'Security Code is invalid';
 $lang_global['securitycodeincorrect1'] = 'Unverified i\'m not a robot, please verify again!';
+$lang_global['securitycodeincorrect2'] = 'Unverified Verify you are human. Please verify again';
 $lang_global['loginincorrect'] = 'No account found matching the information you entered';
 $lang_global['admin_loginsuccessfully'] = 'You have successfully logged. The system will transfer you to the site administration area';
 $lang_global['incorrect_password'] = 'Password is incorrect';

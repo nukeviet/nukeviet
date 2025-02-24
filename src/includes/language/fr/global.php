@@ -73,6 +73,7 @@ $lang_global['password_rule_limit'] = 'Mot de passe invalide: %1$s et %2$d à %3
 $lang_global['password_rule_nolimit'] = 'Les mots de passe doivent être compris entre %1$d et %2$d caractères';
 $lang_global['securitycodeincorrect'] = 'Code de sécurité incorrect';
 $lang_global['securitycodeincorrect1'] = 'L\'authentification est pas encore Robot, s\'il vous plaît revalider';
+$lang_global['securitycodeincorrect2'] = 'Non vérifié &laquo;Vérifiez que vous n\'êtes pas un robot&raquo;. Veuillez vérifier à nouveau';
 $lang_global['loginincorrect'] = 'Aucun compte trouvé correspondant aux informations saisies';
 $lang_global['admin_loginsuccessfully'] = 'Vous avez réussi à vous identifier. Le système vous transférera à l\'Administration du site';
 $lang_global['incorrect_password'] = 'Mot de passe incorrect';

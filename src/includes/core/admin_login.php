@@ -65,10 +65,13 @@ if (!empty($array_gfx_chk) and in_array('a', $array_gfx_chk, true)) {
 } else {
     $gfx_chk = 0;
 }
-$captcha_type = (empty($global_config['captcha_type']) or in_array($global_config['captcha_type'], ['captcha', 'recaptcha'], true)) ? $global_config['captcha_type'] : 'captcha';
+$captcha_type = (empty($global_config['captcha_type']) or in_array($global_config['captcha_type'], ['captcha', 'recaptcha', 'turnstile'], true)) ? $global_config['captcha_type'] : 'captcha';
 if ($captcha_type == 'recaptcha' and (empty($global_config['recaptcha_sitekey']) or empty($global_config['recaptcha_secretkey']))) {
     $captcha_type = 'captcha';
+} elseif ($captcha_type == 'turnstile' and (empty($global_config['turnstile_sitekey']) or empty($global_config['turnstile_secretkey']))) {
+    $captcha_type = 'captcha';
 }
+
 $admin_login_success = false;
 $passkey_allowed = (!defined('NV_IS_USER_FORUM') or !defined('SSO_SERVER'));
 
@@ -617,12 +620,15 @@ if (empty($admin_pre_data) and $nv_Request->isset_request('nv_login,nv_password'
     $nv_password = $nv_Request->get_title('nv_password', 'post', '');
 
     unset($nv_seccode);
-    // Xác định giá trị của captcha nhập vào nếu sử dụng reCaptcha
+    
     if ($captcha_type == 'recaptcha') {
+        // Xác định giá trị của captcha nhập vào nếu sử dụng reCaptcha
         $nv_seccode = $nv_Request->get_title('g-recaptcha-response', 'post', '');
-    }
-    // Xác định giá trị của captcha nhập vào nếu sử dụng captcha hình
-    elseif ($captcha_type == 'captcha') {
+    } elseif ($captcha_type == 'turnstile') {
+        // Xác định giá trị của captcha nhập vào nếu sử dụng Turnstile
+        $nv_seccode = $nv_Request->get_title('cf-turnstile-response', 'post', '');
+    } elseif ($captcha_type == 'captcha') {
+        // Xác định giá trị của captcha nhập vào nếu sử dụng captcha hình
         $nv_seccode = $nv_Request->get_title('nv_seccode', 'post', '');
     }
 
@@ -655,7 +661,7 @@ if (empty($admin_pre_data) and $nv_Request->isset_request('nv_login,nv_password'
         nv_jsonOutput([
             'status' => 'error',
             'input' => ($captcha_type == 'recaptcha') ? '' : 'nv_seccode',
-            'mess' => ($captcha_type == 'recaptcha') ? $nv_Lang->getGlobal('securitycodeincorrect1') : $nv_Lang->getGlobal('securitycodeincorrect')
+            'mess' => ($module_captcha == 'recaptcha') ? $nv_Lang->getGlobal('securitycodeincorrect1') : (($module_captcha == 'turnstile') ? $nv_Lang->getGlobal('securitycodeincorrect2') : $nv_Lang->getGlobal('securitycodeincorrect'))
         ]);
     }
 

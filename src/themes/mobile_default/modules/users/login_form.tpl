@@ -1,4 +1,4 @@
-<form action="{USER_LOGIN}" method="post" data-toggle="userLogin" data-precheck="login_form_precheck" autocomplete="off" novalidate<!-- BEGIN: captcha --> data-captcha="nv_seccode"<!-- END: captcha --><!-- BEGIN: recaptcha --> data-recaptcha2="1"<!-- END: recaptcha --><!-- BEGIN: recaptcha3 --> data-recaptcha3="1"<!-- END: recaptcha3 -->>
+<form action="{USER_LOGIN}" method="post" data-toggle="userLogin" data-precheck="login_form_precheck" autocomplete="off" novalidate<!-- BEGIN: captcha --> data-captcha="nv_seccode"<!-- END: captcha --><!-- BEGIN: recaptcha --> data-recaptcha2="1"<!-- END: recaptcha --><!-- BEGIN: recaptcha3 --> data-recaptcha3="1"<!-- END: recaptcha3 --><!-- BEGIN: turnstile --> data-turnstile="1"<!-- END: turnstile -->>
     <input type="hidden" name="_csrf" value="{CSRF}">
     <input type="hidden" name="cant_do_2step" value="0">
     <!-- BEGIN: header --><input name="nv_header" value="{NV_HEADER}" type="hidden"><!-- END: header -->

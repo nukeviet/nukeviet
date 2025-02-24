@@ -480,6 +480,30 @@
 
                                     <li class="list-group-item">
                                         <div class="row g-2">
+                                            <label for="turnstile_sitekey" class="col-sm-5 col-form-label text-sm-end py-only-sm-0"><strong>{$LANG->getModule('turnstile_sitekey')}</strong></label>
+                                            <div class="col-sm-7">
+                                                <div class="input-group">
+                                                    <input class="form-control" type="text" value="{$TURNSTILE_SITEKEY}" name="turnstile_sitekey" id="turnstile_sitekey" maxlength="200">
+                                                    <a href="https://dash.cloudflare.com/" target="_blank" data-bs-toggle="tooltip" title="{$LANG->getModule('recaptcha_guide')}" aria-label="{$LANG->getModule('recaptcha_guide')}" class="btn btn-secondary" data-bs-trigger="hover"><i class="fa-solid fa-circle-question"></i></a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </li>
+
+                                    <li class="list-group-item">
+                                        <div class="row g-2">
+                                            <label for="turnstile_secretkey" class="col-sm-5 col-form-label text-sm-end py-only-sm-0"><strong>{$LANG->getModule('turnstile_secretkey')}</strong></label>
+                                            <div class="col-sm-7">
+                                                <div class="input-group">
+                                                    <input class="form-control" type="text" value="{$TURNSTILE_SECRETKEY}" name="turnstile_secretkey" id="turnstile_secretkey" maxlength="200">
+                                                    <a href="https://dash.cloudflare.com/" target="_blank" data-bs-toggle="tooltip" title="{$LANG->getModule('recaptcha_guide')}" aria-label="{$LANG->getModule('recaptcha_guide')}" class="btn btn-secondary" data-bs-trigger="hover"><i class="fa-solid fa-circle-question"></i></a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </li>
+
+                                    <li class="list-group-item">
+                                        <div class="row g-2">
                                             <div class="col-sm-7 offset-sm-5 text-center text-sm-start">
                                                 <input type="hidden" name="checkss" value="{$CHECKSS}">
                                                 <input type="hidden" name="selectedtab" value="{$SELECTEDTAB}">
@@ -514,6 +538,7 @@
                                                     {/foreach}
                                                 </select>
                                                 <div class="form-text text-danger{if $captcha_type neq 'recaptcha' or ($captcha_type eq 'recaptcha' and not empty($DATA.recaptcha_sitekey) and not empty($DATA.recaptcha_secretkey))} d-none{/if}">{$LANG->getModule('captcha_type_recaptcha_note')}</div>
+                                                <div class="form-text text-danger{if $captcha_type neq 'turnstile' or ($captcha_type eq 'turnstile' and not empty($DATA.turnstile_sitekey) and not empty($DATA.turnstile_secretkey))} d-none{/if}">{$LANG->getModule('captcha_type_turnstile_note')}</div>
                                             </div>
                                         </div>
                                     </li>
@@ -522,9 +547,9 @@
 
                                     <li class="list-group-item text-center">
                                         <div class="mb-2">{$LANG->getModule('select_all_as')}:</div>
-                                        <button type="button" class="btn btn-sm btn-secondary" data-toggle="selAllAs" data-type="">{$LANG->getModule('captcha_')}</button>
-                                        <button type="button" class="btn btn-sm btn-secondary" data-toggle="selAllAs" data-type="captcha">{$LANG->getModule('captcha_captcha')}</button>
-                                        <button type="button" class="btn btn-sm btn-secondary" data-toggle="selAllAs" data-type="recaptcha">{$LANG->getModule('captcha_recaptcha')}</button>
+                                        {foreach from=$CAPTCHA_OPTS item=value}
+                                        <button type="button" class="btn btn-sm btn-secondary" data-toggle="selAllAs" data-type="{$value}">{$LANG->getModule("captcha_`$value`")}</button>
+                                        {/foreach}
                                     </li>
 
                                     <li class="list-group-item text-center">
