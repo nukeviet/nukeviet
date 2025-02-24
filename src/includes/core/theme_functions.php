@@ -390,6 +390,8 @@ function nv_rss_generate($channel, $items, $atomlink = '', $timemode = '', $noin
     $channel['updated'] = !empty($channel['pubDate']) ? $channel['pubDate'] : NV_CURRENTTIME;
     $channel['updated'] = max($channel['updated'], $channel['modified']);
 
+    [$channel, $items, $xsl, $type, $timemode] = nv_apply_hook('', 'before_rss_output_xml', [$channel, $items, $xsl, $type, $timemode], [$channel, $items, $xsl, $type, $timemode]);
+
     if ($type == 'rss') {
         $output = NukeViet\Xml\Feed::rss_create($channel, $items, $xsl, $timemode);
     } else {
@@ -514,15 +516,18 @@ function nv_xmlSitemapIndex_generate()
             $result = $db->query($sql);
             while ([$modname, $modfile] = $result->fetch(3)) {
                 $sitemaps = nv_scandir(NV_ROOTDIR . '/modules/' . $modfile . '/funcs', '/^sitemap(.*?)\.php$/');
-                foreach ($sitemaps as $filename) {
-                    if (preg_match('/^sitemap(\.*)([a-zA-Z0-9\-]*)\.php$/', $filename, $m)) {
-                        if ($m[0] == 'sitemap.php') {
-                            $link = NV_MY_DOMAIN . NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . $lang . '&amp;' . NV_NAME_VARIABLE . '=' . $modname . '&amp;' . NV_OP_VARIABLE . '=sitemap';
-                        } elseif ($m[1] == '.' and $m[2] != '') {
-                            $link = NV_MY_DOMAIN . NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . $lang . '&amp;' . NV_NAME_VARIABLE . '=' . $modname . '&amp;' . NV_OP_VARIABLE . '=sitemap/' . $m[2];
+                [$modname, $sitemaps] = nv_apply_hook('', 'generating_sitemap_module', [$modname, $sitemaps], [$modname, $sitemaps]);
+                if (sizeof($sitemaps)) {
+                    foreach ($sitemaps as $filename) {
+                        if (preg_match('/^sitemap(\.*)([a-zA-Z0-9\-]*)\.php$/', $filename, $m)) {
+                            if ($m[0] == 'sitemap.php') {
+                                $link = NV_MY_DOMAIN . NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . $lang . '&amp;' . NV_NAME_VARIABLE . '=' . $modname . '&amp;' . NV_OP_VARIABLE . '=sitemap';
+                            } elseif ($m[1] == '.' and $m[2] != '') {
+                                $link = NV_MY_DOMAIN . NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . $lang . '&amp;' . NV_NAME_VARIABLE . '=' . $modname . '&amp;' . NV_OP_VARIABLE . '=sitemap/' . $m[2];
+                            }
+                            $row = $xml->addChild('sitemap');
+                            $row->addChild('loc', $link);
                         }
-                        $row = $xml->addChild('sitemap');
-                        $row->addChild('loc', $link);
                     }
                 }
             }
@@ -533,15 +538,18 @@ function nv_xmlSitemapIndex_generate()
         foreach ($site_mods as $modname => $values) {
             if (isset($values['funcs']) and isset($values['funcs']['sitemap']) and !empty($values['sitemap'])) {
                 $sitemaps = nv_scandir(NV_ROOTDIR . '/modules/' . $values['module_file'] . '/funcs', '/^sitemap(.*?)\.php$/');
-                foreach ($sitemaps as $filename) {
-                    if (preg_match('/^sitemap(\.*)([a-zA-Z0-9\-]*)\.php$/', $filename, $m)) {
-                        if ($m[0] == 'sitemap.php') {
-                            $link = NV_MY_DOMAIN . NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $modname . '&amp;' . NV_OP_VARIABLE . '=sitemap';
-                        } elseif ($m[1] == '.' and $m[2] != '') {
-                            $link = NV_MY_DOMAIN . NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $modname . '&amp;' . NV_OP_VARIABLE . '=sitemap/' . $m[2];
+                [$modname, $sitemaps] = nv_apply_hook('', 'generating_sitemap_module', [$modname, $sitemaps], [$modname, $sitemaps]);
+                if (sizeof($sitemaps)) {
+                    foreach ($sitemaps as $filename) {
+                        if (preg_match('/^sitemap(\.*)([a-zA-Z0-9\-]*)\.php$/', $filename, $m)) {
+                            if ($m[0] == 'sitemap.php') {
+                                $link = NV_MY_DOMAIN . NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $modname . '&amp;' . NV_OP_VARIABLE . '=sitemap';
+                            } elseif ($m[1] == '.' and $m[2] != '') {
+                                $link = NV_MY_DOMAIN . NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $modname . '&amp;' . NV_OP_VARIABLE . '=sitemap/' . $m[2];
+                            }
+                            $row = $xml->addChild('sitemap');
+                            $row->addChild('loc', $link);
                         }
-                        $row = $xml->addChild('sitemap');
-                        $row->addChild('loc', $link);
                     }
                 }
             }
