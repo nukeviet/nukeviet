@@ -37,17 +37,30 @@ if ($checkss == $nv_Request->get_string('checkss', 'post')) {
 
 $page_title = $nv_Lang->getModule('config');
 
-$xtpl = new XTemplate('config.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-$xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
-$xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
-$xtpl->assign('FORM_ACTION', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op);
-$xtpl->assign('CHECKSS', $checkss);
-$xtpl->assign('CHECKED_REMOTE_API_ACCESS', ($global_config['remote_api_access'] == 1) ? ' checked ' : '');
-$xtpl->assign('DATA', $global_config);
+$tpl = new \NukeViet\Template\NVSmarty();
+$tpl->setTemplateDir(get_module_tpl_dir('config.tpl'));
+$tpl->assign('LANG', $nv_Lang);
+$tpl->assign('FORM_ACTION', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op);
+$tpl->assign('CHECKSS', $checkss);
+$tpl->assign('CHECKED_REMOTE_API_ACCESS', ($global_config['remote_api_access'] == 1) ? ' checked ' : '');
+$tpl->assign('DATA', $global_config);
 
-$xtpl->parse('main');
-$contents = $xtpl->text('main');
+$contents = $tpl->fetch('config.tpl');
 
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_admin_theme($contents);
 include NV_ROOTDIR . '/includes/footer.php';
+// $xtpl = new XTemplate('config.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
+// $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
+// $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
+// $xtpl->assign('FORM_ACTION', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op);
+// $xtpl->assign('CHECKSS', $checkss);
+// $xtpl->assign('CHECKED_REMOTE_API_ACCESS', ($global_config['remote_api_access'] == 1) ? ' checked ' : '');
+// $xtpl->assign('DATA', $global_config);
+
+// $xtpl->parse('main');
+// $contents = $xtpl->text('main');
+
+// include NV_ROOTDIR . '/includes/header.php';
+// echo nv_admin_theme($contents);
+// include NV_ROOTDIR . '/includes/footer.php';
