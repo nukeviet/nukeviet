@@ -11,37 +11,35 @@
     <div class="card">
         <div class="card-body">
             <div class="row">
-                <div class="col-sm-6">
-                    <div class="row">
-                        <div class="col-sm-6">
-                            <div class="input-group w200">
-                                <span class="input-group-text">{$LANG->getModule('api_role_type')}</span>
-                                <select class="form-control role-type">
-                                    <option value="">{$LANG->getModule('all')}</option>
-                                    {foreach $TYPES as $TYPE}
-                                    <!-- BEGIN: role_type -->
-                                    <option value="{$TYPE}" {if $TYPE == $TYPE_API}selected="selected"{/if}>{$LANG->getModule("api_role_type_$TYPE")}</option>
-                                    <!-- END: role_type -->
-                                    {/foreach}
-                                </select>
-                            </div>
+                <div class="row col-sm-6">
+                    <div class="col">
+                        <div class="input-group">
+                            <span class="input-group-text">{$LANG->getModule('api_role_type')}</span>
+                            <select class="form-control role-type">
+                                <option value="">{$LANG->getModule('all')}</option>
+                                {foreach $TYPES as $TYPE}
+                                <!-- BEGIN: role_type -->
+                                <option value="{$TYPE}" {if $TYPE == $TYPE_API}selected="selected"{/if}>{$LANG->getModule("api_role_type_$TYPE")}</option>
+                                <!-- END: role_type -->
+                                {/foreach}
+                            </select>
                         </div>
-                        <div class="col-sm-6">
-                            <div class="input-group w200">
-                                <span class="input-group-text">{$LANG->getModule('api_role_object')}</span>
-                                <select class="form-control role-object">
-                                    <option value="">{$LANG->getModule('all')}</option>
-                                    {foreach $OBJECTS as $OBJECT}
-                                    <!-- BEGIN: role_object -->
-                                    <option value="{$OBJECT}" {if $OBJECT == $OBJECT_API}selected="selected"{/if}>{$LANG->getModule("api_role_object_$OBJECT")}</option>
-                                    <!-- END: role_object -->
-                                    {/foreach}
-                                </select>
-                            </div>
+                    </div>
+                    <div class="col">
+                        <div class="input-group">
+                            <span class="input-group-text">{$LANG->getModule('api_role_object')}</span>
+                            <select class="form-control role-object">
+                                <option value="">{$LANG->getModule('all')}</option>
+                                {foreach $OBJECTS as $OBJECT}
+                                <!-- BEGIN: role_object -->
+                                <option value="{$OBJECT}" {if $OBJECT == $OBJECT_API}selected="selected"{/if}>{$LANG->getModule("api_role_object_$OBJECT")}</option>
+                                <!-- END: role_object -->
+                                {/foreach}
+                            </select>
                         </div>
                     </div>
                 </div>
-                <div class="col-6 text-right">
+                <div class="col-6 text-end">
                     <a href="{$ADD_API_ROLE_URL}" class="btn btn-primary mb-3">{$LANG->getModule('add_role')}</a>
                 </div>
             </div>
@@ -135,7 +133,7 @@
                                                 {assign var='FORLANGS' value=[]}
                                                 {foreach $GCONFIG.setup_langs as $KEY_LANG => $_LG}
                                                     {if $_LG == $smarty.const.NV_LANG_DATA}
-                                                        {append var='FORLANGS' value=['active' => 'active', 'in' => ' in active', 'expanded' => 'true', 'langkey' => $_LG, 'langname' => $LANGUAGE_ARRAY[$_LG].name] index=$_LG}
+                                                        {append var='FORLANGS' value=['active' => 'active', 'in' => ' in active show', 'expanded' => 'true', 'langkey' => $_LG, 'langname' => $LANGUAGE_ARRAY[$_LG].name] index=$_LG}
                                                     {else}
                                                         {append var='FORLANGS' value=['active' => '', 'in' => '', 'expanded' => 'false', 'langkey' => $_LG, 'langname' => $LANGUAGE_ARRAY[$_LG].name] index=$_LG}
                                                     {/if}
@@ -213,5 +211,152 @@
     {/if}
 </div>
 <!-- END: main -->
-
+{elseif !empty($IS_ROLE)}
+<!-- BEGIN: role -->
+<form method="post" action="{$FORM_ACTION}" autocomplete="off" id="role">
+    <div class="table-responsive">
+        <table class="table table-bordered table-striped">
+            <tbody>
+                <tr>
+                    <td class="left-col">{$LANG->getModule('api_roles_title')} <span class="text-danger">*</span>:</td>
+                    <td><input type="text" id="role_title" name="role_title" value="{$DATA.role_title}" class="form-control w350" maxlength="250"></td>
+                </tr>
+                <tr>
+                    <td class="left-col">{$LANG->getModule('api_roles_description')}:</td>
+                    <td><textarea class="form-control w350" id="role_description" name="role_description" rows="2" maxlength="250">{$DATA.role_description}</textarea></td>
+                </tr>
+                <tr>
+                    <td class="left-col">{$LANG->getModule('api_role_type')}:</td>
+                    <td>
+                        <div class="role_type">
+                            <label><input type="radio" name="role_type" value="private" class="form-check-input"> {$LANG->getModule('api_role_type_private')}</label>
+                            <label><input type="radio" name="role_type" value="public" class="form-check-input" {$DATA.role_type_public_checked}> {$LANG->getModule('api_role_type_public')}</label>
+                        </div>
+                        <ul class="role_note note">
+                            <li>{$LANG->getModule('api_role_type_private_note')}</li>
+                            <li>{$LANG->getModule('api_role_type_public_note')}</li>
+                        </ul>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="left-col">{$LANG->getModule('api_role_object')}:</td>
+                    <td>
+                        <div class="role_type">
+                            <label><input type="radio" name="role_object" value="admin" class="form-check-input" {$DATA.role_object_admin_checked}> {$LANG->getModule('api_role_object_admin')}</label>
+                            <label><input type="radio" name="role_object" value="user" class="form-check-input" {$DATA.role_object_user_checked}> {$LANG->getModule('api_role_object_user')}</label>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="left-col">{$LANG->getModule('log_period')}:</td>
+                    <td>
+                        <div class="input-group" style="width: fit-content;">
+                            <input type="text" class="form-control w100 number" name="log_period" value="{$DATA.log_period}" maxlength="10">
+                            <span class="input-group-text" style="border-left: 0;">{$LANG->getModule('hours')}</span>
+                        </div>
+                        <div class="help-block mb-0">{$LANG->getModule('log_period_note')}</div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="left-col">{$LANG->getModule('flood_blocker')}:</td>
+                    <td class="items">
+                        <!-- empty($array_post['flood_rules']) && $array_post['flood_rules'] = ['' => '']; -->
+                        {if empty($DATA.flood_rules)}
+                            {append var='DATA' value=['' => ''] index='flood_rules'}
+                        {/if}
+                        {foreach $DATA.flood_rules as $INTERVAL => $LIMIT}
+                        <!-- BEGIN: flood_rule -->
+                        <div class="flood_rule item mb-2">
+                            <div class="input-group" style="width: fit-content;">
+                                <span class="input-group-text">{$LANG->getModule('flood_limit')}</span>
+                                <input type="text" class="form-control number" name="flood_rules_limit[]" value="{$LIMIT}" maxlength="15" style="width: 100px;">
+                                <span class="input-group-text" style="border-left: 0;">{$LANG->getModule('flood_interval')}</span>
+                                <input type="text" class="form-control number" style="border-left: 0; width: 100px;" name="flood_rules_interval[]" value="{if !empty($INTERVAL)}{math equation="round(x / y)" x=$INTERVAL y=60}{/if}" maxlength="10">
+                                <span class="input-group-text" style="border-left: 0;">{$LANG->getModule('minutes')}</span>
+                                <span class="input-group-btn">
+                                    <button class="btn btn-default del-rule" type="button"><em class="fa fa-minus"></em></button>
+                                    <button class="btn btn-default add-rule" type="button"><em class="fa fa-plus"></em></button>
+                                </span>
+                            </div>
+                        </div>
+                        <!-- END: flood_rule -->
+                        {/foreach}
+                        <div class="help-block mb-0">{$LANG->getModule('flood_blocker_note')}</div>
+                    </td>
+                </tr>
+            </tbody>
+            <tbody id="apicheck">{$APICHECK}</tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="2">
+                        <select name="save" class="form-control" style="display:inline-block;width:fit-content">
+                            {foreach $SAVEOPTS as $KEY => $NAME}
+                            <!-- BEGIN: saveopt -->
+                            <option value="{$KEY}">{$NAME}</option>
+                            <!-- END: saveopt -->
+                            {/foreach}
+                        </select>
+                        <button type="submit" class="btn btn-primary">{$LANG->getGlobal('submit')}</button>
+                    </td>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+</form>
+<!-- END: role -->
+{elseif !empty($IS_API)}
+<!-- BEGIN: apicheck -->
+<tr>
+    <td colspan="2">
+        {$LANG->getModule('api_roles_allowed')}: <span class="total-api-enabled api-count{$TOTAL_API_CHECKED}">{$TOTAL_API_ENABLED}</span>
+    </td>
+</tr>
+<tr>
+    <td class="root-api-actions left-col">
+        <ul class="nav nav-pills flex-column">
+            {foreach $API_TREES as $API_TREE}
+            <!-- BEGIN: api_tree -->
+            <li role="presentation" class="nav-item"><a role="tab" data-bs-toggle="tab" data-bs-cat="{$API_TREE.key}" href="#{$API_TREE.href}" aria-controls="{$API_TREE.href}" aria-expanded="{$API_TREE.expanded}" class="main nav-link{if !empty($API_TREE['active'])} active{/if}"><i class="fa fa-folder-open-o"></i> {$API_TREE.name}
+                {if !empty($API_TREE.total)}
+                <span class="api-count{$API_TREE.api_checked}"><span class="total_api">{$API_TREE.total_api}</span>/{$API_TREE.total}</span>
+                {/if}
+                </a></li>
+            {foreach $API_TREE.subs as $SUB}
+            <!-- BEGIN: sub -->
+            <li role="presentation" class="nav-item"><a role="tab" data-bs-toggle="tab" data-bs-cat="{$SUB.key}" href="#{$SUB.href}" aria-controls="api-child-{$SUB.key}" aria-expanded="{$SUB.expanded}" class="sub nav-link{if !empty($SUB['active'])} active{/if}">{$SUB.name}
+                    <!-- BEGIN: total_api --> <span class="api-count{$SUB.api_checked}"><span class="total_api">{$SUB.total_api}</span>/{$SUB.total}</span><!-- END: total_api -->
+                </a></li>
+            <!-- END: sub -->
+            {/foreach}
+            <!-- END: api_tree -->
+            {/foreach}
+        </ul>
+    </td>
+    <td class="tab-content child-apis">
+        {foreach $API_CONTENTS as $API_CONTENT}
+        <!-- BEGIN: api_content -->
+        <div role="tabpanel" class="tab-pane child-apis-item{if !empty($API_CONTENT.active)} active{/if}" id="{$API_CONTENT.id}">
+            <table class="table table-bordered">
+                <tbody>
+                    <tr class="apilist">
+                        <th style="width: 1%;"><input type="checkbox" class="form-check-input checkall" title="{$LANG->getModule('api_roles_checkall')}" {$API_CONTENT.checkall} /></th>
+                        <th>{$LANG->getModule('cat_api_list')}</th>
+                    </tr>
+                    {foreach $API_CONTENT.apis as $API}
+                    <!-- BEGIN: api -->
+                    <tr class="item">
+                        <td style="width: 1%;"><input type="checkbox" class="form-check-input checkitem" name="api_{$API_CONTENT.input_key}[]" id="api_{$API.cmd}" value="{$API.cmd}" {if !empty($API.checked)}checked="checked"{/if} /></td>
+                        <td><label for="api_{$API.cmd}" class="pointer mb-0">{$API.cmd} - {$API.name}</label></td>
+                    </tr>
+                    <!-- END: api -->
+                    {/foreach}
+                </tbody>
+            </table>
+        </div>
+        <!-- END: api_content -->
+        {/foreach}
+        <div role="tabpanel" class="tab-pane" id="empty-content"></div>
+    </td>
+</tr>
+<!-- END: apicheck -->
 {/if}

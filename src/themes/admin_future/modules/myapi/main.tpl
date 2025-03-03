@@ -155,7 +155,7 @@
                                                         {assign var='FORLANGS' value=[]}
                                                         {foreach $GCONFIG.setup_langs as $KEY_LANG => $_LG}
                                                             {if $_LG == $smarty.const.NV_LANG_DATA}
-                                                                {append var='FORLANGS' value=['active' => 'active', 'in' => ' in active', 'expanded' => 'true', 'langkey' => $_LG, 'langname' => $LANGUAGE_ARRAY[$_LG].name] index=$_LG}
+                                                                {append var='FORLANGS' value=['active' => 'active', 'in' => ' in active show', 'expanded' => 'true', 'langkey' => $_LG, 'langname' => $LANGUAGE_ARRAY[$_LG].name] index=$_LG}
                                                             {else}
                                                                 {append var='FORLANGS' value=['active' => '', 'in' => '', 'expanded' => 'false', 'langkey' => $_LG, 'langname' => $LANGUAGE_ARRAY[$_LG].name] index=$_LG}
                                                             {/if}

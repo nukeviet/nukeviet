@@ -9,52 +9,67 @@
 
 $(function() {
     // Thay đổi đối tượng
-    $('#role [name=role_object]').on('change', function() {
-        $.ajax({
-            type: "POST",
-            url: $('#role').attr('action'),
-            cache: !1,
-            data: 'getapitree=' + $(this).val()
-        }).done(function(a) {
-            $('#apicheck').html(a)
-        });
+    document.querySelectorAll('#role [name=role_object]').forEach(role_onject => {
+        role_onject.addEventListener('change', (event) => {
+            fetch(document.querySelector('#role').getAttribute('action'), {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                body: 'getapitree=' + event.target.value,
+                cache: 'no-cache'
+            })
+            .then(response => response.text())
+            .then(data => {
+                document.querySelector('#apicheck').innerHTML = data;
+            });
+        })
     });
 
     // Khi chọn/bỏ chọn API
-    $('#role').on('change', '.checkitem', function() {
-        var isChecked = $(this).is(':checked'),
-            totalApiEnabled = parseInt($('#role .total-api-enabled').text()),
-            childApisItem = $(this).parents('.child-apis-item'),
-            treeObj = $('#role .root-api-actions a[aria-controls=' + childApisItem.attr('id') + '] .api-count'),
-            treeTotalAPI = parseInt($('.total_api', treeObj).text()),
-            notCheckedLength = $('.checkitem:not(:checked)', childApisItem).length;
-        if (isChecked) {
-            $('#role .total-api-enabled').addClass('checked').text(++totalApiEnabled);
-            $('.total_api', treeObj).text(++treeTotalAPI);
-            treeObj.addClass('checked')
-        } else {
-            $('#role .total-api-enabled').text(--totalApiEnabled);
-            if (totalApiEnabled == 0) {
-                $('#role .total-api-enabled').removeClass('checked')
+    document.querySelector('#role').addEventListener('change', event => {
+        if (event.target.classList.contains('checkitem')) {
+            var isChecked = event.target.checked,
+                totalApiEnabled = parseInt(document.querySelector('#role .total-api-enabled').textContent),
+                childApisItem = event.target.closest('.child-apis-item'),
+                treeObj = document.querySelector('#role .root-api-actions a[aria-controls="' + childApisItem.id + '"] .api-count'),
+                treeTotalAPI = parseInt(treeObj.querySelector('.total_api').textContent),
+                notCheckedLength = childApisItem.querySelectorAll('.checkitem:not(:checked)').length;
+
+            if (isChecked) {
+                document.querySelector('#role .total-api-enabled').classList.add('checked');
+                document.querySelector('#role .total-api-enabled').textContent = ++totalApiEnabled;
+                treeObj.querySelector('.total_api').textContent = ++treeTotalAPI;
+                treeObj.classList.add('checked');
+            } else {
+                document.querySelector('#role .total-api-enabled').textContent = --totalApiEnabled;
+                if (totalApiEnabled === 0) {
+                    document.querySelector('#role .total-api-enabled').classList.remove('checked');
+                }
+                treeObj.querySelector('.total_api').textContent = --treeTotalAPI;
+                if (treeTotalAPI === 0) {
+                    treeObj.classList.remove('checked');
+                }
             }
-            $('.total_api', treeObj).text(--treeTotalAPI)
-            if (treeTotalAPI == 0) {
-                treeObj.removeClass('checked')
-            }
+            childApisItem.querySelector('.checkall').checked = !notCheckedLength;
         }
-        $('.checkall', childApisItem).prop('checked', !notCheckedLength)
     });
     // Khi tích vào nút Chọn tất cả
-    $('#role').on('change', '.checkall', function() {
-        var isChecked = $(this).is(':checked'),
-            childApisItem = $(this).parents('.child-apis-item');
-        $('.checkitem', childApisItem).each(function() {
-            $(this).prop('checked', isChecked).trigger('change')
-        })
+    document.querySelector('#role').addEventListener('change', event => {
+        if (event.target.classList.contains('checkall')) {
+            var isChecked = event.target.checked,
+                childApisItem = event.target.closest('.child-apis-item');
+            childApisItem.querySelectorAll('.checkitem').forEach(checkitem => {
+                if (checkitem.checked !== isChecked) {
+                    checkitem.checked = isChecked;
+                    checkitem.dispatchEvent(new Event('change', { bubbles: true }));
+                }
+            });
+        }
     });
     // Không cho xuống dòng ở textarea
-    $('#role_description').on('input', function() {
-        $(this).val($(this).val().replace(/[\r\n\v]+/g, ''));
+    document.getElementById('role_description').addEventListener('input', () => {
+        this.value = this.value.replace(/[\r\n\v]+/g, '');
     });
     // Thêm flood rule
     $('#role').on('click', '.add-rule', function() {
