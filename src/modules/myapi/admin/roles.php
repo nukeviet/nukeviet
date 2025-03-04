@@ -171,7 +171,8 @@ if ($nv_Request->isset_request('changeStatus', 'post')) {
     $status = !empty($array_post['status']) ? 0 : 1;
     $db->query('UPDATE ' . $db_config['prefix'] . '_api_role SET status=' . $status . ' WHERE role_id = ' . $id);
     nv_jsonOutput([
-        'status' => 'OK'
+        'status' => 'OK',
+        'mess' => $nv_Lang->getGlobal('save_success')
     ]);
 }
 

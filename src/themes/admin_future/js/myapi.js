@@ -8,252 +8,364 @@
  */
 
 $(function() {
-    // Thay đổi đối tượng
-    document.querySelectorAll('#role [name=role_object]').forEach(role_onject => {
-        role_onject.addEventListener('change', (event) => {
-            fetch(document.querySelector('#role').getAttribute('action'), {
+    if (document.getElementById('role')) {
+        // Thay đổi đối tượng
+        document.querySelectorAll('#role [name=role_object]').forEach(role_onject => {
+            role_onject.addEventListener('change', (event) => {
+                fetch(document.querySelector('#role').getAttribute('action'), {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded'
+                    },
+                    body: 'getapitree=' + event.target.value,
+                    cache: 'no-cache'
+                })
+                .then(response => response.text())
+                .then(data => {
+                    document.querySelector('#apicheck').innerHTML = data;
+                });
+            })
+        });
+
+        // Khi chọn/bỏ chọn API
+        document.querySelector('#role').addEventListener('change', event => {
+            if (event.target.classList.contains('checkitem')) {
+                var isChecked = event.target.checked,
+                    totalApiEnabled = parseInt(document.querySelector('#role .total-api-enabled').textContent),
+                    childApisItem = event.target.closest('.child-apis-item'),
+                    treeObj = document.querySelector('#role .root-api-actions a[aria-controls="' + childApisItem.id + '"] .api-count'),
+                    treeTotalAPI = parseInt(treeObj.querySelector('.total_api').textContent),
+                    notCheckedLength = childApisItem.querySelectorAll('.checkitem:not(:checked)').length;
+
+                if (isChecked) {
+                    document.querySelector('#role .total-api-enabled').classList.add('checked');
+                    document.querySelector('#role .total-api-enabled').textContent = ++totalApiEnabled;
+                    treeObj.querySelector('.total_api').textContent = ++treeTotalAPI;
+                    treeObj.classList.add('checked');
+                } else {
+                    document.querySelector('#role .total-api-enabled').textContent = --totalApiEnabled;
+                    if (totalApiEnabled === 0) {
+                        document.querySelector('#role .total-api-enabled').classList.remove('checked');
+                    }
+                    treeObj.querySelector('.total_api').textContent = --treeTotalAPI;
+                    if (treeTotalAPI === 0) {
+                        treeObj.classList.remove('checked');
+                    }
+                }
+                childApisItem.querySelector('.checkall').checked = !notCheckedLength;
+            }
+        });
+        // Khi tích vào nút Chọn tất cả
+        document.querySelector('#role').addEventListener('change', event => {
+            if (event.target.classList.contains('checkall')) {
+                var isChecked = event.target.checked,
+                    childApisItem = event.target.closest('.child-apis-item');
+                childApisItem.querySelectorAll('.checkitem').forEach(checkitem => {
+                    if (checkitem.checked !== isChecked) {
+                        checkitem.checked = isChecked;
+                        checkitem.dispatchEvent(new Event('change', { bubbles: true }));
+                    }
+                });
+            }
+        });
+        // Không cho xuống dòng ở textarea
+        document.getElementById('role_description').addEventListener('input', () => {
+            this.value = this.value.replace(/[\r\n\v]+/g, '');
+        });
+        // Thêm flood rule
+        document.getElementById('role').addEventListener('click', event => {
+            var addRuleElement = event.target.closest('.add-rule');
+            if (addRuleElement) {
+                var item = addRuleElement.closest('.item'),
+                    newitem = item.cloneNode(true);
+                newitem.querySelectorAll('[name^=flood_rules_limit], [name^=flood_rules_interval]').forEach(input => {
+                    input.value = '';
+                });
+                item.after(newitem);
+            }
+        });
+        // Xóa flood rule
+        document.getElementById('role').addEventListener('click', event => {
+            var delRuleElement = event.target.closest('.del-rule');
+            if (delRuleElement) {
+                var item = delRuleElement.closest('.item'),
+                    items = delRuleElement.closest('.items');
+                if (items.querySelectorAll('.item').length > 1) {
+                    item.remove();
+                } else {
+                    item.querySelectorAll('[name^=flood_rules_limit], [name^=flood_rules_interval]').forEach(input => {
+                        input.value = '';
+                    });
+                }
+            }
+        });
+        // Xử lý khi form thêm/sửa API-role được submit
+        document.getElementById('role').onsubmit = e => {
+            e.preventDefault();
+            var url = e.target.getAttribute('action'),
+                data = new URLSearchParams(new FormData(e.target)).toString();
+            fetch(url, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded'
                 },
-                body: 'getapitree=' + event.target.value,
+                body: data,
                 cache: 'no-cache'
             })
-            .then(response => response.text())
-            .then(data => {
-                document.querySelector('#apicheck').innerHTML = data;
-            });
-        })
-    });
-
-    // Khi chọn/bỏ chọn API
-    document.querySelector('#role').addEventListener('change', event => {
-        if (event.target.classList.contains('checkitem')) {
-            var isChecked = event.target.checked,
-                totalApiEnabled = parseInt(document.querySelector('#role .total-api-enabled').textContent),
-                childApisItem = event.target.closest('.child-apis-item'),
-                treeObj = document.querySelector('#role .root-api-actions a[aria-controls="' + childApisItem.id + '"] .api-count'),
-                treeTotalAPI = parseInt(treeObj.querySelector('.total_api').textContent),
-                notCheckedLength = childApisItem.querySelectorAll('.checkitem:not(:checked)').length;
-
-            if (isChecked) {
-                document.querySelector('#role .total-api-enabled').classList.add('checked');
-                document.querySelector('#role .total-api-enabled').textContent = ++totalApiEnabled;
-                treeObj.querySelector('.total_api').textContent = ++treeTotalAPI;
-                treeObj.classList.add('checked');
-            } else {
-                document.querySelector('#role .total-api-enabled').textContent = --totalApiEnabled;
-                if (totalApiEnabled === 0) {
-                    document.querySelector('#role .total-api-enabled').classList.remove('checked');
-                }
-                treeObj.querySelector('.total_api').textContent = --treeTotalAPI;
-                if (treeTotalAPI === 0) {
-                    treeObj.classList.remove('checked');
-                }
-            }
-            childApisItem.querySelector('.checkall').checked = !notCheckedLength;
-        }
-    });
-    // Khi tích vào nút Chọn tất cả
-    document.querySelector('#role').addEventListener('change', event => {
-        if (event.target.classList.contains('checkall')) {
-            var isChecked = event.target.checked,
-                childApisItem = event.target.closest('.child-apis-item');
-            childApisItem.querySelectorAll('.checkitem').forEach(checkitem => {
-                if (checkitem.checked !== isChecked) {
-                    checkitem.checked = isChecked;
-                    checkitem.dispatchEvent(new Event('change', { bubbles: true }));
+            .then(response => response.json())
+            .then(a => {
+                if (a.status === 'error') {
+                    nvAlert(a.mess);
+                } else if (a.status === 'OK') {
+                    window.location.href = a.redirect;
                 }
             });
-        }
-    });
-    // Không cho xuống dòng ở textarea
-    document.getElementById('role_description').addEventListener('input', () => {
-        this.value = this.value.replace(/[\r\n\v]+/g, '');
-    });
-    // Thêm flood rule
-    $('#role').on('click', '.add-rule', function() {
-        var item = $(this).parents('.item'),
-            newitem = item.clone();
-        $('[name^=flood_rules_limit], [name^=flood_rules_interval]', newitem).val('');
-        item.after(newitem)
-    });
-    // Xóa flood rule
-    $('#role').on('click', '.del-rule', function() {
-        var item = $(this).parents('.item'),
-            items = $(this).parents('.items');
-        if ($('.item', items).length > 1) {
-            item.remove()
-        } else {
-            $('[name^=flood_rules_limit], [name^=flood_rules_interval]', item).val('')
-        }
-    });
-    // Xử lý khi form thêm/sửa API-role được submit
-    $('#role').on('submit', function(e) {
-        e.preventDefault();
-        var url = $(this).attr('action'),
-            data = $(this).serialize();
-        $.ajax({
-            type: "POST",
-            url: url,
-            cache: !1,
-            data: data,
-            dataType: "json"
-        }).done(function(a) {
-            if ('error' == a.status) {
-                alert(a.mess)
-            } else if ('OK' == a.status) {
-                window.location.href = a.redirect
+        };
+    }
+    if (document.getElementById('rolelist')) {
+        // Lọc danh sách theo loại, đối tượng của role
+        document.querySelectorAll('#rolelist .role-type, #rolelist .role-object').forEach(element => {
+            element.addEventListener('change', function() {
+            var type = document.querySelector('#rolelist .role-type').value,
+                object = document.querySelector('#rolelist .role-object').value,
+                url = document.querySelector('#rolelist').dataset.pageUrl;
+            let params = [];
+            if (type != '') {
+                params.push('type=' + type);
             }
+            if (object != '') {
+                params.push('object=' + object);
+            }
+            if (params.length) {
+                url += (url.includes('?') ? '&' : '?') + params.join('&');
+            }
+            window.location.href = url;
+            });
         });
-    });
-    // Lọc danh sách theo loại, đối tượng của role
-    $('#rolelist .role-type, #rolelist .role-object').on('change', function() {
-        var type = $('#rolelist .role-type').val(),
-            object = $('#rolelist .role-object').val(),
-            url = $('#rolelist').data('page-url');
-        let params = [];
-        if (type != '') {
-            params.push('type=' + type);
-        }
-        if (object != '') {
-            params.push('object=' + object);
-        }
-        if (params.length) {
-            url += (url.includes('?') ? '&' : '?') + params.join('&');
-        }
-        window.location.href = url;
-    });
-    // Thay đổi trạng thái role
-    $('#rolelist .change-status').on('change', function(e) {
-        var that = $(this);
-        that.prop('disabled', true);
-        $.ajax({
-            type: "POST",
-            url: $('#rolelist').data('page-url'),
-            cache: !1,
-            data: 'changeStatus=' + that.parents('.item').data('id'),
-            dataType: "json"
-        }).done(function(a) {
-            setTimeout(function() {
-                that.prop('disabled', false)
-            }, 1000);
-            if ('error' == a.status) {
-                alert(a.mess);
-            }
-        })
-    });
-    // Xóa role
-    $('[data-toggle="apiroledel"]').on('click', function(e) {
-        e.preventDefault();
-        if (confirm(nv_is_del_confirm[0])) {
-            $.ajax({
-                type: "POST",
-                url: $('#rolelist').data('page-url'),
-                cache: !1,
-                data: 'roledel=' + $(this).parents('.item').data('id'),
-                dataType: "json"
-            }).done(function(a) {
-                if ('error' == a.status) {
-                    alert(nv_is_del_confirm[2]);
-                } else if ('OK' == a.status) {
-                    location.reload()
-                }
+        // Thay đổi trạng thái role
+        document.querySelectorAll('#rolelist .change-status').forEach(element => {
+            element.addEventListener('change', function(e) {
+            var that = e.target;
+            that.disabled = true;
+            fetch(document.querySelector('#rolelist').dataset.pageUrl, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                body: 'changeStatus=' + that.closest('.item').dataset.id,
+                cache: 'no-cache'
             })
-        }
-    });
-
-    if ($('#credentiallist').length) {
-        var credentiallist = $('#credentiallist'),
-            credential_page_url = credentiallist.data('page-url'); ;
+            .then(response => response.json())
+            .then(data => {
+                setTimeout(() => {
+                    that.disabled = false;
+                    nvToast(data.mess, 'success');
+                }, 1000);
+                if (data.status === 'error') {
+                    nvAlert(data.mess);
+                }
+            });
+            });
+        });
+        // Xóa role
+        document.querySelectorAll('[data-toggle="apiroledel"]').forEach(element => {
+            element.addEventListener('click', e => {
+                e.preventDefault();
+                nvConfirm(nv_is_del_confirm[0], () => {
+                    fetch(document.querySelector('#rolelist').dataset.pageUrl, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/x-www-form-urlencoded'
+                        },
+                        body: 'roledel=' + this.closest('.item').dataset.id,
+                        cache: 'no-cache'
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.status === 'error') {
+                            nvAlert(nv_is_del_confirm[2]);
+                        } else if (data.status === 'OK') {
+                            location.reload();
+                        }
+                    });
+                });
+            });
+        });
+    }
+    if (document.getElementById('credentiallist')) {
+        var credentiallist = document.getElementById('credentiallist'),
+            credential_page_url = credentiallist.getAttribute('data-page-url'); ;
         // Lọc quyền truy cập API-role
-        $('.role-id', credentiallist).on('change', function() {
-            var role_id = parseInt($(this).val());
+        credentiallist.querySelectorAll('.role-id')[0].addEventListener('change', e => {
+            var role_id = parseInt(e.target.value);
             window.location.href = credential_page_url + (credential_page_url.includes('?') ? '&' : '?') + 'role_id=' + role_id
-        }).select2();
+        });
+        $('.role-id', credentiallist).select2({
+            theme: "bootstrap-5",
+            width: $( this ).data( 'width' ) ? $( this ).data( 'width' ) : $( this ).hasClass( 'w-100' ) ? '100%' : 'style'
+        });
+
+        credentialSelInit = (e) => {
+            var get_user_url = e.data('get-user-url');
+            e.select2({
+                language: nv_lang_interface,
+                theme: "bootstrap-5",
+                width: $( this ).data( 'width' ) ? $( this ).data( 'width' ) : $( this ).hasClass( 'w-100' ) ? '100%' : 'style',
+                dropdownParent: $('#credential-add'),
+                ajax: {
+                    type: "POST",
+                    url: get_user_url,
+                    dataType: 'json',
+                    delay: 250,
+                    data: params => {
+                        return {
+                            q: params.term,
+                            page: params.page
+                        };
+                    },
+                    processResults: (data, params) => {
+                        params.page = params.page || 1;
+                        return {
+                            results: data.results,
+                            pagination: {
+                                more: (params.page * 30) < data.total_count
+                            }
+                        };
+                    },
+                    cache: true
+                },
+                escapeMarkup: function(markup) {
+                    return markup
+                },
+                minimumInputLength: 3,
+                templateResult: function(repo) {
+                    if (repo.loading) return repo.text;
+                    return repo.title
+                },
+                templateSelection: function(repo) {
+                    return repo.title || repo.text
+                }
+            });
+        }
+
+        credentialFlatInit = (e) => {
+            var fmt = nv_jsdate_post.replace(/dd/g, 'd').replace(/mm/g, 'm').replace(/yyyy/g, 'Y');
+            e.flatpickr({
+                enableTime: false,
+                dateFormat: fmt,
+                ariaDateFormat: fmt,
+                locale: nv_lang_interface,
+                appendTo: document.getElementById('credential-add'),
+                onOpen: function (selectedDates, dateStr, instance) {
+                    if (instance.input.value.length == 0) {
+                        instance.setDate(new Date());
+                    }
+                }
+            });
+        }
 
         // Thêm/sửa quyền truy cập API-role
-        $('[data-toggle=credential-add], [data-toggle=credential-edit]', credentiallist).on('click', function() {
-            var url = $('#credential-add form').attr('action'),
-                title = $(this).data('title');
-            if ($(this).is('[data-toggle=credential-edit]')) {
-                url += '&edit=1&userid=' + $(this).parents('.item').data('userid')
-            }
-            $.ajax({
-                type: "GET",
-                url: url,
-                cache: !1
-            }).done(function(a) {
-                $('#credential-add .credential-title').text(title);
-                $('#credential-add form').html(a);
-                $('#credential-add').modal('show')
-            })
+        document.querySelectorAll('[data-toggle=credential-add], [data-toggle=credential-edit]').forEach(element => {
+            element.addEventListener('click', e => {
+                var that = e.target.closest('[data-toggle=credential-add], [data-toggle=credential-edit]')
+                var url = document.querySelector('#credential-add form').getAttribute('action'),
+                    title = that.getAttribute('data-title');
+                if (that.getAttribute('data-toggle') === 'credential-edit') {
+                    url += '&edit=1&userid=' + that.closest('.item').getAttribute('data-userid');
+                }
+                fetch(url, {
+                    method: 'GET',
+                    cache: 'no-cache'
+                })
+                .then(response => response.text())
+                .then(data => {
+                    document.querySelector('#credential-add .credential-title').textContent = title;
+                    document.querySelector('#credential-add form').innerHTML = data;
+                    credentialSelInit($('#getUser'));
+                    credentialFlatInit($(".adddate, .enddate"));
+                    new bootstrap.Modal(document.getElementById('credential-add')).show();
+                });
+            });
         });
 
         // Tìm admin/user
-        if ($('#credential-add').length) {
-            //Form thêm quyền truy cập
-            $('#credential-add form').on('submit', function(e) {
+        if (document.getElementById('credential-add')) {
+            // Form thêm quyền truy cập
+            document.querySelector('#credential-add form').onsubmit = e => {
                 e.preventDefault();
-                var url = $(this).attr('action');
-                data = $(this).serialize();
-                $.ajax({
-                    type: "POST",
-                    url: $(this).attr('action'),
-                    cache: !1,
-                    data: $(this).serialize(),
-                    dataType: "json"
-                }).done(function(a) {
-                    if ('error' == a.status) {
-                        alert(a.mess);
-                    } else if ('OK' == a.status) {
-                        location.reload()
-                    }
+                var url = e.target.getAttribute('action');
+                var data = new URLSearchParams(new FormData(e.target)).toString();
+                fetch(url, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded'
+                    },
+                    body: data,
+                    cache: 'no-cache'
                 })
-            })
+                .then(response => response.json())
+                .then(a => {
+                    if (a.status === 'error') {
+                        nvAlert(a.mess);
+                    } else if (a.status === 'OK') {
+                        location.reload();
+                    }
+                });
+            }
         };
 
-        $('.change-status', credentiallist).on('change', function() {
-            var userid = parseInt($(this).parents('.item').data('userid')),
-                role_id = parseInt(credentiallist.data('role-id')),
-                that = $(this);
-            that.prop('disabled', true);
-            $.ajax({
-                type: "POST",
-                url: credential_page_url + '&role_id=' + role_id + '&action=changeStatus',
-                cache: !1,
-                data: 'userid=' + userid,
-                dataType: "json"
-            }).done(function(a) {
-                setTimeout(function() {
-                    that.prop('disabled', false)
-                }, 1000);
-                if ('error' == a.status) {
-                    alert(a.mess);
-                }
+        credentiallist.querySelectorAll('.change-status').forEach(element => {
+            element.addEventListener('change', e => {
+            var userid = parseInt(e.target.closest('.item').getAttribute('data-userid')),
+                role_id = parseInt(credentiallist.dataset.roleId),
+                that = e.target;
+            that.disabled = true;
+            fetch(credential_page_url + '&role_id=' + role_id + '&action=changeStatus', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                body: 'userid=' + userid,
+                cache: 'no-cache'
             })
+            .then(response => response.json())
+            .then(data => {
+                setTimeout(() => {
+                    that.disabled = false;
+                    nvToast(data.mess, 'success');
+                }, 1000);
+                if (data.status === 'error') {
+                    nvAlert(data.mess);
+                }
+            });
+            });
         });
 
-        $('[data-toggle=credentialDel]', credentiallist).on('click', function() {
-            if (confirm($(this).data('confirm'))) {
-                var userid = parseInt($(this).parents('.item').data('userid')),
-                    role_id = parseInt(credentiallist.data('role-id'));
-                $.ajax({
-                    type: "POST",
-                    url: credential_page_url + '&role_id=' + role_id + '&action=del',
-                    cache: !1,
-                    data: 'userid=' + userid,
-                    dataType: "json"
-                }).done(function(a) {
-                    if ('error' == a.status) {
-                        alert(a.mess);
-                    } else if ('OK' == a.status) {
-                        location.reload()
-                    }
-                })
-            }
+        document.querySelectorAll('[data-toggle=credentialDel]').forEach(element => {
+            element.addEventListener('click', e => {
+                var that = e.target.closest('[data-toggle=credentialDel]');
+                if (nvConfirm(that.getAttribute('data-confirm'), () => {
+                    var userid = parseInt(that.closest('.item').dataset.userid),
+                    role_id = parseInt(credentiallist.dataset.roleId);
+                    fetch(credential_page_url + '&role_id=' + role_id + '&action=del', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded'
+                    },
+                    body: 'userid=' + userid,
+                    cache: 'no-cache'
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.status === 'error') {
+                            nvAlert(data.mess);
+                        } else if (data.status === 'OK') {
+                            location.reload();
+                        }
+                    });
+                }));
+            });
         });
-
         $('[data-toggle=changeAuth]', credentiallist).on('click', function() {
             var userid = parseInt($(this).parents('.item').data('userid'));
             $.ajax({
@@ -268,81 +380,102 @@ $(function() {
                 } else if ('OK' == a.status) {
                     $('#changeAuth .modal-title').text(a.title);
                     $('#changeAuth .modal-body').html(a.body);
+                    changeAuthInit();
                     $('#changeAuth').modal('show')
                 }
             })
         });
 
-        if ($('#changeAuth').length) {
-            var changeAuth = $('#changeAuth');
+        changeAuthInit = () => {
+            var changeAuth = document.getElementById('changeAuth');
 
-            var clipboard = new ClipboardJS('[data-toggle=clipboard]');
-            clipboard.on('success', function(e) {
-                $(e.trigger).tooltip('show');
-                setTimeout(function() {
-                    $(e.trigger).tooltip('destroy');
-                }, 1000);
+            changeAuth.addEventListener('click', e => {
+                if (e.target.classList.contains('create_authentication')) {
+                    var method = e.target.dataset.method;
+                    fetch(credential_page_url, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/x-www-form-urlencoded'
+                        },
+                        body: 'save=1&method=' + method + '&changeAuth=' + e.target.dataset.userid,
+                        cache: 'no-cache'
+                    })
+                    .then(response => response.json())
+                    .then(a => {
+                        if (a.status === 'error') {
+                            nvAlert(a.mess);
+                        } else if (a.status === 'OK') {
+                            changeAuth.querySelector('[name=' + method + '_ident]').value = a.ident;
+                            changeAuth.querySelector('[name=' + method + '_secret]').value = a.secret;
+                            changeAuth.querySelector('[name=' + method + '_ips]').closest('.api_ips').style.display = 'block';
+                        }
+                    });
+                } else if (e.target.classList.contains('delete_authentication')) {
+                    var method = e.target.dataset.method;
+                    fetch(credential_page_url, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/x-www-form-urlencoded'
+                        },
+                        body: 'del=1&method=' + method + '&changeAuth=' + e.target.dataset.userid,
+                        cache: 'no-cache'
+                    })
+                    .then(response => response.json())
+                    .then(a => {
+                        if (a.status === 'OK') {
+                            changeAuth.querySelector('[name=' + method + '_ident]').value = '';
+                            changeAuth.querySelector('[name=' + method + '_secret]').value = '';
+                            changeAuth.querySelector('[name=' + method + '_ips]').value = '';
+                            changeAuth.querySelector('[name=' + method + '_ips]').closest('.api_ips').style.display = 'none';
+                        }
+                    });
+                } else if (e.target.classList.contains('api_ips_update')) {
+                    var method = e.target.dataset.method,
+                        ips = changeAuth.querySelector('[name=' + method + '_ips]').value;
+                    changeAuth.querySelectorAll('.ips, .api_ips_update').forEach(el => el.disabled = true);
+                    fetch(credential_page_url, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/x-www-form-urlencoded'
+                        },
+                        body: 'ips=' + ips + '&method=' + method + '&changeAuth=' + e.target.dataset.userid,
+                        cache: 'no-cache'
+                    })
+                    .then(response => response.json())
+                    .then(a => {
+                        if (a.status === 'error') {
+                            alert(a.mess);
+                            changeAuth.querySelectorAll('.ips, .api_ips_update').forEach(el => el.disabled = false);
+                        } else if (a.status === 'OK') {
+                            changeAuth.querySelector('[name=' + method + '_ips]').value = a.ips;
+                            setTimeout(() => {
+                                changeAuth.querySelectorAll('.ips, .api_ips_update').forEach(el => el.disabled = false);
+                                nvToast(a.mess, 'success');
+                            }, 1000);
+                        }
+                    });
+                }
             });
 
-            changeAuth.on('click', '.create_authentication', function(e) {
-                var method = $(this).data('method');
-                $.ajax({
-                    type: "POST",
-                    url: credential_page_url,
-                    cache: !1,
-                    data: 'save=1&method=' + method + '&changeAuth=' + $(this).data('userid'),
-                    dataType: "json"
-                }).done(function(a) {
-                    if ('error' == a.status) {
-                        alert(a.mess)
-                    } else if ('OK' == a.status) {
-                        $('[name=' + method + '_ident]', changeAuth).val(a.ident);
-                        $('[name=' + method + '_secret]', changeAuth).val(a.secret);
-                        $('[name=' + method + '_ips]', changeAuth).parents('.api_ips').slideDown()
-                    }
-                })
+            changeAuth.addEventListener('input', function(e) {
+                if (e.target.classList.contains('ips')) {
+                    e.target.value = e.target.value.replace(/[\r\n\v]+/g, '');
+                }
             });
-            changeAuth.on('click', '.delete_authentication', function(e) {
-                var method = $(this).data('method');
-                $.ajax({
-                    type: "POST",
-                    url: credential_page_url,
-                    cache: !1,
-                    data: 'del=1&method=' + method + '&changeAuth=' + $(this).data('userid'),
-                    dataType: "json"
-                }).done(function(a) {
-                    if ('OK' == a.status) {
-                        $('[name=' + method + '_ident]', changeAuth).val('');
-                        $('[name=' + method + '_secret]', changeAuth).val('');
-                        $('[name=' + method + '_ips]', changeAuth).val('').parents('.api_ips').slideUp()
+
+            changeAuth.querySelectorAll("[data-clipboard-target]").forEach(btn => {
+                var tooltip = new bootstrap.Tooltip(btn);
+    
+                btn.addEventListener("click", function () {
+                    var target = changeAuth.querySelector(this.getAttribute("data-clipboard-target"));
+                    if (target) {
+                        navigator.clipboard.writeText(target.value).then(() => {
+                            tooltip.show();
+                            setTimeout(() => tooltip.hide(), 1000);
+                        });
                     }
-                })
+                });
             });
-            changeAuth.on('input', '.ips', function() {
-                $(this).val($(this).val().replace(/[\r\n\v]+/g, ''));
-            });
-            changeAuth.on('click', '.api_ips_update', function() {
-                var method = $(this).data('method'),
-                    ips = $('[name=' + method + '_ips]', changeAuth).val();
-                $('.ips, .api_ips_update', changeAuth).prop('disabled', true);
-                $.ajax({
-                    type: "POST",
-                    url: credential_page_url,
-                    cache: !1,
-                    data: 'ips=' + ips + '&method=' + method + '&changeAuth=' + $(this).data('userid'),
-                    dataType: "json"
-                }).done(function(a) {
-                    if ('error' == a.status) {
-                        alert(a.mess);
-                        $('.ips, .api_ips_update', changeAuth).prop('disabled', false)
-                    } else if ('OK' == a.status) {
-                        $('[name=' + method + '_ips]', changeAuth).val(a.ips);
-                        setTimeout(function() {
-                            $('.ips, .api_ips_update', changeAuth).prop('disabled', false)
-                        }, 1000);
-                    }
-                })
-            })
         }
     };
     // Trang main
@@ -372,9 +505,7 @@ $(function() {
             });
         });
 
-        var clipboardButtons = document.querySelectorAll("[data-clipboard-target]");
-
-        clipboardButtons.forEach(btn => {
+        document.querySelectorAll("[data-clipboard-target]").forEach(btn => {
             var tooltip = new bootstrap.Tooltip(btn);
 
             btn.addEventListener("click", function () {
@@ -532,7 +663,9 @@ $(function() {
             }
         });
 
-        $('.role-id, .command', logs).select2();
+        $('.role-id, .command', logs).select2({
+            theme: "bootstrap-5"
+        });
 
         $('.userid', logs).select2({
             language: nv_lang_interface,

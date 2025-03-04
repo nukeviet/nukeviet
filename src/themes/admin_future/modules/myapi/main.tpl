@@ -135,7 +135,7 @@
                                             <div class="modal-body">
                                                 {if !empty($ROLE.apis[''])}
                                                 {foreach $ROLE.apis[''] as $CAT_DATA}
-                                                <div class="card">
+                                                <div class="card mb-3">
                                                     <div class="card-header"><strong><i class="fa fa-folder-open-o"></i> {$LANG->getModule('api_of_system')}: {$CAT_DATA.title}</strong></div>
                                                     <div class="card-body">
                                                         <div class="row">
@@ -170,7 +170,7 @@
                                                             {if !empty($ROLE.apis.$_LG)}
                                                             {foreach $ROLE.apis.$_LG as $MOD_TITLE => $MOD_DATA}
                                                             {foreach $MOD_DATA as $CAT_DATA}
-                                                            <div class="card">
+                                                            <div class="card mb-3">
                                                                 <div class="card-header"><strong><i class="fa fa-folder-open-o"></i> {$SITE_MOD.$MOD_TITLE.custom_title}
                                                                         {if !empty($CAT_DATA.title)}
                                                                          <i class="fa fa-angle-right"></i> {$CAT_DATA.title}

@@ -1,12 +1,10 @@
 {if !empty($IS_MAIN)}
-<!-- BEGIN: main -->
-<!-- BEGIN: remote_api_off -->
+
 {if empty($GCONFIG.remote_api_access)}
 <div class="alert alert-danger">
     {$REMOTE_API_OFF}
 </div>
 {/if}
-<!-- END: remote_api_off -->
 <div id="rolelist" data-page-url="{$PAGE_URL}">
     <div class="card">
         <div class="card-body">
@@ -18,9 +16,7 @@
                             <select class="form-control role-type">
                                 <option value="">{$LANG->getModule('all')}</option>
                                 {foreach $TYPES as $TYPE}
-                                <!-- BEGIN: role_type -->
                                 <option value="{$TYPE}" {if $TYPE == $TYPE_API}selected="selected"{/if}>{$LANG->getModule("api_role_type_$TYPE")}</option>
-                                <!-- END: role_type -->
                                 {/foreach}
                             </select>
                         </div>
@@ -31,9 +27,7 @@
                             <select class="form-control role-object">
                                 <option value="">{$LANG->getModule('all')}</option>
                                 {foreach $OBJECTS as $OBJECT}
-                                <!-- BEGIN: role_object -->
                                 <option value="{$OBJECT}" {if $OBJECT == $OBJECT_API}selected="selected"{/if}>{$LANG->getModule("api_role_object_$OBJECT")}</option>
-                                <!-- END: role_object -->
                                 {/foreach}
                             </select>
                         </div>
@@ -46,14 +40,11 @@
         </div>
         {if empty($ROLE_LIST)}
         <div class="card-body">
-            <!-- BEGIN: role_list_empty -->
             <div class="alert alert-info text-center">
                 {$LANG->getModule('api_roles_empty')}
             </div>
-            <!-- END: role_list_empty -->
         </div>
         {else}
-        <!-- BEGIN: role_list -->
     
         <div class="card-body">
             <div class="table-responsive table-card">
@@ -71,7 +62,6 @@
                     </thead>
                     <tbody>
                         {foreach $ROLE_LIST as $ROLE}
-                        <!-- BEGIN: loop -->
                         <tr class="item" data-id="{$ROLE.id}">
                             <td>{$ROLE.title}</td>
                             <td class="text-nowrap text-center" style="width: 1%;">{$ROLE.type}</td>
@@ -79,11 +69,9 @@
                             <td class="text-nowrap text-center" style="width: 1%;">{$ROLE.addtime}</td>
                             <td class="text-nowrap text-center" style="width: 1%;">{$ROLE.edittime}</td>
                             <td class="text-nowrap text-center" style="width: 1%;">
-                                <select class="form-control w100 change-status">
+                                <select class="form-control change-status" style="width: 100px;">
                                     {foreach [$LANG->getModule('inactive'), $LANG->getModule('active')] as $K_STATUS => $STATUS}
-                                    <!-- BEGIN: status -->
                                     <option value="{$K_STATUS}" {if $K_STATUS == $ROLE.status}selected="selected"{/if}>{$STATUS}</option>
-                                    <!-- END: status -->
                                     {/foreach}
                                 </select>
                             </td>
@@ -97,37 +85,21 @@
                                                 <div class="modal-title"><strong>{$LANG->getModule('api_roles_detail')}: {$ROLE.title}</strong></div>
                                                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="close"></button>
                                             </div>
-                                            <div class="modal-body">
-                                                <!-- if (!empty($role['apis'][''])) {
-        //         foreach ($role['apis'][''] as $cat_data) {
-        //             $xtpl->assign('CAT_DATA', $cat_data);
-        
-        //             foreach ($cat_data['apis'] as $api_data) {
-        //                 $xtpl->assign('API_DATA', $api_data);
-        //                 $xtpl->parse('main.role_list.loop.catsys.loop');
-        //             }
-        
-        //             $xtpl->parse('main.role_list.loop.catsys');
-        //         }
-        //     }-->                             
+                                            <div class="modal-body">                        
                                                 {if !empty($ROLE.apis[''])}
                                                 {foreach $ROLE.apis[''] as $CAT_DATA}
-                                                <!-- BEGIN: catsys -->
-                                                <div class="card">
+                                                <div class="card mb-3">
                                                     <div class="card-header"><strong><i class="fa fa-folder-open-o"></i> {$LANG->getModule('api_of_system')}: {$CAT_DATA.title}</strong></div>
                                                     <div class="card-body">
                                                         <div class="row">
                                                             {foreach $CAT_DATA.apis as $API_DATA}
-                                                            <!-- BEGIN: loop -->
                                                             <div class="col-sm-6">
                                                                 <div class="text-truncate mb-3"><i class="fa fa-caret-right"></i> {$API_DATA}</div>
                                                             </div>
-                                                            <!-- END: loop -->
                                                             {/foreach}
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <!-- END: catsys -->
                                                 {/foreach}
                                                 {/if}
                                                 {assign var='FORLANGS' value=[]}
@@ -141,46 +113,35 @@
                                                 <div>
                                                     <ul class="nav nav-tabs mb-3" role="tablist">
                                                         {foreach $FORLANGS as $FORLANG}
-                                                        <!-- BEGIN: forlang -->
                                                         <li role="presentation" class="nav-item"><a id="forlang-{$FORLANG.langkey}-{$ROLE.id}-tab" href="#forlang-{$FORLANG.langkey}-{$ROLE.id}" class="nav-link {$FORLANG.active}" aria-controls="forlang-{$FORLANG.langkey}-{$ROLE.id}" role="tab" data-bs-toggle="tab" aria-expanded="{$FORLANG.expanded}">{$FORLANG.langname}</a></li>
-                                                        <!-- END: forlang -->
                                                         {/foreach}
                                                     </ul>
                                                     <div class="tab-content">
                                                         {foreach $FORLANGS as $_LG => $FORLANG}
-                                                        <!-- BEGIN: tabcontent_forlang -->
                                                         <div role="tabpanel" class="tab-pane fade{$FORLANG.in}" id="forlang-{$FORLANG.langkey}-{$ROLE.id}" aria-labelledby="forlang-{$FORLANG.langkey}-{$ROLE.id}-tab">
                                                             {if !empty($ROLE.apis.$_LG)}
                                                             {foreach $ROLE.apis.$_LG as $MOD_TITLE => $MOD_DATA}
                                                             {foreach $MOD_DATA as $CAT_DATA}
-                                                            <!-- BEGIN: apimod -->
-                                                            <!-- BEGIN: mod -->
-                                                            <div class="card">
+                                                            <div class="card mb-3">
                                                                 <div class="card-header"><strong><i class="fa fa-folder-open-o"></i> {$SITE_MOD.$MOD_TITLE.custom_title}
                                                                         {if !empty($CAT_DATA.title)}
-                                                                        <!-- BEGIN: title --> <i class="fa fa-angle-right"></i> {$CAT_DATA.title}
-                                                                        <!-- END: title -->
+                                                                        <i class="fa fa-angle-right"></i> {$CAT_DATA.title}
                                                                         {/if}
                                                                     </strong></div>
                                                                 <div class="card-body">
                                                                     <div class="row">
                                                                         {foreach $CAT_DATA.apis as $API_DATA}
-                                                                        <!-- BEGIN: loop -->
                                                                         <div class="col-sm-6">
                                                                             <div class="text-truncate mb-3" title="{$API_DATA}"><i class="fa fa-caret-right"></i> {$API_DATA}</div>
                                                                         </div>
-                                                                        <!-- END: loop -->
                                                                         {/foreach}
                                                                     </div>
                                                                 </div>
                                                             </div>
-                                                            <!-- END: mod -->
-                                                            <!-- END: apimod -->
                                                             {/foreach}
                                                             {/foreach}
                                                             {/if}
                                                         </div>
-                                                        <!-- END: tabcontent_forlang -->
                                                         {/foreach}
                                                     </div>
                                                 </div>
@@ -193,7 +154,6 @@
                                 <button type="button" class="btn btn-secondary" data-toggle="apiroledel"><i class="fa fa-trash-o"></i> {$LANG->getGlobal('delete')}</button>
                             </td>
                         </tr>
-                        <!-- END: loop -->
                         {/foreach}
                     </tbody>
                 </table>
@@ -207,12 +167,9 @@
         </div>
         {/if}
     </div>
-    <!-- END: role_list -->
     {/if}
 </div>
-<!-- END: main -->
 {elseif !empty($IS_ROLE)}
-<!-- BEGIN: role -->
 <form method="post" action="{$FORM_ACTION}" autocomplete="off" id="role">
     <div class="table-responsive">
         <table class="table table-bordered table-striped">
@@ -260,12 +217,10 @@
                 <tr>
                     <td class="left-col">{$LANG->getModule('flood_blocker')}:</td>
                     <td class="items">
-                        <!-- empty($array_post['flood_rules']) && $array_post['flood_rules'] = ['' => '']; -->
                         {if empty($DATA.flood_rules)}
                             {append var='DATA' value=['' => ''] index='flood_rules'}
                         {/if}
                         {foreach $DATA.flood_rules as $INTERVAL => $LIMIT}
-                        <!-- BEGIN: flood_rule -->
                         <div class="flood_rule item mb-2">
                             <div class="input-group" style="width: fit-content;">
                                 <span class="input-group-text">{$LANG->getModule('flood_limit')}</span>
@@ -279,7 +234,6 @@
                                 </span>
                             </div>
                         </div>
-                        <!-- END: flood_rule -->
                         {/foreach}
                         <div class="help-block mb-0">{$LANG->getModule('flood_blocker_note')}</div>
                     </td>
@@ -291,9 +245,7 @@
                     <td colspan="2">
                         <select name="save" class="form-control" style="display:inline-block;width:fit-content">
                             {foreach $SAVEOPTS as $KEY => $NAME}
-                            <!-- BEGIN: saveopt -->
                             <option value="{$KEY}">{$NAME}</option>
-                            <!-- END: saveopt -->
                             {/foreach}
                         </select>
                         <button type="submit" class="btn btn-primary">{$LANG->getGlobal('submit')}</button>
@@ -303,9 +255,7 @@
         </table>
     </div>
 </form>
-<!-- END: role -->
 {elseif !empty($IS_API)}
-<!-- BEGIN: apicheck -->
 <tr>
     <td colspan="2">
         {$LANG->getModule('api_roles_allowed')}: <span class="total-api-enabled api-count{$TOTAL_API_CHECKED}">{$TOTAL_API_ENABLED}</span>
@@ -315,26 +265,21 @@
     <td class="root-api-actions left-col">
         <ul class="nav nav-pills flex-column">
             {foreach $API_TREES as $API_TREE}
-            <!-- BEGIN: api_tree -->
             <li role="presentation" class="nav-item"><a role="tab" data-bs-toggle="tab" data-bs-cat="{$API_TREE.key}" href="#{$API_TREE.href}" aria-controls="{$API_TREE.href}" aria-expanded="{$API_TREE.expanded}" class="main nav-link{if !empty($API_TREE['active'])} active{/if}"><i class="fa fa-folder-open-o"></i> {$API_TREE.name}
                 {if !empty($API_TREE.total)}
                 <span class="api-count{$API_TREE.api_checked}"><span class="total_api">{$API_TREE.total_api}</span>/{$API_TREE.total}</span>
                 {/if}
                 </a></li>
             {foreach $API_TREE.subs as $SUB}
-            <!-- BEGIN: sub -->
             <li role="presentation" class="nav-item"><a role="tab" data-bs-toggle="tab" data-bs-cat="{$SUB.key}" href="#{$SUB.href}" aria-controls="api-child-{$SUB.key}" aria-expanded="{$SUB.expanded}" class="sub nav-link{if !empty($SUB['active'])} active{/if}">{$SUB.name}
-                    <!-- BEGIN: total_api --> <span class="api-count{$SUB.api_checked}"><span class="total_api">{$SUB.total_api}</span>/{$SUB.total}</span><!-- END: total_api -->
+                    <span class="api-count{$SUB.api_checked}"><span class="total_api">{$SUB.total_api}</span>/{$SUB.total}</span>
                 </a></li>
-            <!-- END: sub -->
             {/foreach}
-            <!-- END: api_tree -->
             {/foreach}
         </ul>
     </td>
     <td class="tab-content child-apis">
         {foreach $API_CONTENTS as $API_CONTENT}
-        <!-- BEGIN: api_content -->
         <div role="tabpanel" class="tab-pane child-apis-item{if !empty($API_CONTENT.active)} active{/if}" id="{$API_CONTENT.id}">
             <table class="table table-bordered">
                 <tbody>
@@ -343,20 +288,16 @@
                         <th>{$LANG->getModule('cat_api_list')}</th>
                     </tr>
                     {foreach $API_CONTENT.apis as $API}
-                    <!-- BEGIN: api -->
                     <tr class="item">
                         <td style="width: 1%;"><input type="checkbox" class="form-check-input checkitem" name="api_{$API_CONTENT.input_key}[]" id="api_{$API.cmd}" value="{$API.cmd}" {if !empty($API.checked)}checked="checked"{/if} /></td>
                         <td><label for="api_{$API.cmd}" class="pointer mb-0">{$API.cmd} - {$API.name}</label></td>
                     </tr>
-                    <!-- END: api -->
                     {/foreach}
                 </tbody>
             </table>
         </div>
-        <!-- END: api_content -->
         {/foreach}
         <div role="tabpanel" class="tab-pane" id="empty-content"></div>
     </td>
 </tr>
-<!-- END: apicheck -->
 {/if}
