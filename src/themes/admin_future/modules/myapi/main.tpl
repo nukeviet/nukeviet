@@ -1,14 +1,16 @@
 <script type="text/javascript" src="{$smarty.const.ASSETS_STATIC_URL}/js/clipboard/clipboard.min.js"></script>
 <div id="my-role-api" data-page-url="{$PAGE_URL}">
-    <div class="tools">
-        <div class="mb-4">
+    <div class="tools row">
+        <div class="mb-4 col">
             <ul class="nav nav-pills">
                 <li class="nav-item"><a class="nav-link {$TYPE_PUBLIC.active}" href="{$TYPE_PUBLIC.url}">{$TYPE_PUBLIC.name}</a></li>
                 <li class="nav-item"><a class="nav-link {$TYPE_PRIVATE.active}" href="{$TYPE_PRIVATE.url}">{$TYPE_PRIVATE.name}</a></li>
             </ul>
         </div>
+        <div class="col text-end">
+            <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#credential_auth"><i class="fa fa-shield-halved fa-lg text-danger"></i> {$LANG->getModule('authentication')}</button>
+        </div>
         <div>
-            <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#credential_auth"><i class="fa fa-shield fa-lg text-danger"></i> {$LANG->getModule('authentication')}</button>
             <!-- START FORFOOTER -->
             <div id="credential_auth" tabindex="-1" role="dialog" class="modal fade" id="credential_auth">
                 <div class="modal-dialog" role="document">
@@ -135,8 +137,8 @@
                                             <div class="modal-body">
                                                 {if !empty($ROLE.apis[''])}
                                                 {foreach $ROLE.apis[''] as $CAT_DATA}
-                                                <div class="card mb-3">
-                                                    <div class="card-header"><strong><i class="fa fa-folder-open-o"></i> {$LANG->getModule('api_of_system')}: {$CAT_DATA.title}</strong></div>
+                                                <div class="card mb-3 border">
+                                                    <div class="card-header api-header"><strong><i class="fa fa-folder-open-o"></i> {$LANG->getModule('api_of_system')}: {$CAT_DATA.title}</strong></div>
                                                     <div class="card-body">
                                                         <div class="row">
                                                             {foreach $CAT_DATA.apis as $API_DATA}
@@ -170,8 +172,8 @@
                                                             {if !empty($ROLE.apis.$_LG)}
                                                             {foreach $ROLE.apis.$_LG as $MOD_TITLE => $MOD_DATA}
                                                             {foreach $MOD_DATA as $CAT_DATA}
-                                                            <div class="card mb-3">
-                                                                <div class="card-header"><strong><i class="fa fa-folder-open-o"></i> {$SITE_MOD.$MOD_TITLE.custom_title}
+                                                            <div class="card mb-3 border">
+                                                                <div class="card-header api-header"><strong><i class="fa fa-folder-open-o"></i> {$SITE_MOD.$MOD_TITLE.custom_title}
                                                                         {if !empty($CAT_DATA.title)}
                                                                          <i class="fa fa-angle-right"></i> {$CAT_DATA.title}
                                                                         {/if}

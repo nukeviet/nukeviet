@@ -201,17 +201,15 @@ $(function() {
             window.location.href = credential_page_url + (credential_page_url.includes('?') ? '&' : '?') + 'role_id=' + role_id
         });
         $('.role-id', credentiallist).select2({
-            theme: "bootstrap-5",
-            width: $( this ).data( 'width' ) ? $( this ).data( 'width' ) : $( this ).hasClass( 'w-100' ) ? '100%' : 'style'
+            theme: 'bootstrap5'
         });
 
         credentialSelInit = (e) => {
             var get_user_url = e.data('get-user-url');
             e.select2({
                 language: nv_lang_interface,
-                theme: "bootstrap-5",
-                width: $( this ).data( 'width' ) ? $( this ).data( 'width' ) : $( this ).hasClass( 'w-100' ) ? '100%' : 'style',
                 dropdownParent: $('#credential-add'),
+                theme: 'bootstrap5',
                 ajax: {
                     type: "POST",
                     url: get_user_url,
@@ -606,68 +604,90 @@ $(function() {
         });
     };
 
-    if ($('#logs').length) {
-        var logs = $('#logs'),
-            page_url = logs.data('page-url');
-        $('.log-del', logs).on('click', function() {
-            if (confirm($(this).parents('.list').data('delete-confirm'))) {
-                $.ajax({
-                    type: "POST",
-                    url: page_url,
-                    cache: !1,
-                    data: 'delLog=' + $(this).parents('.item').data('id')
-                }).done(function(a) {
-                    location.reload()
-                })
-            }
-        });
-
-        $('.checkall', logs).on('change', function() {
-            $('.checkall, .checkitem', logs).prop('checked', $(this).is(':checked'))
-        });
-
-        $('.checkitem', logs).on('change', function() {
-            var ls = $(this).parents('.list');
-            $('.checkall', logs).prop('checked', !$('.checkitem:not(:checked)', ls).length)
-        });
-
-        $('.log-multidel', logs).on('click', function() {
-            var list = [];
-            $('.checkitem:checked', logs).each(function() {
-                list.push($(this).parents('.item').data('id'))
+    if (document.getElementById('logs')) {
+        var logs = document.getElementById('logs'),
+            page_url = logs.getAttribute('data-page-url');
+        logs.querySelectorAll('.log-del').forEach(element => {
+            element.addEventListener('click', e => {
+                nvConfirm(e.target.closest('.list').dataset.deleteConfirm, () => {
+                    fetch(page_url, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/x-www-form-urlencoded'
+                        },
+                        body: 'delLog=' + e.target.closest('.item').dataset.id,
+                        cache: 'no-cache'
+                    }).then(response => response.text())
+                    .then(() => {
+                        location.reload();
+                    });
+                });
             });
-            if (list.length) {
-                if (confirm($('.list', logs).data('delete-confirm'))) {
-                    $.ajax({
-                        type: "POST",
-                        url: page_url,
-                        cache: !1,
-                        data: 'delLogs=' + list
-                    }).done(function(a) {
-                        location.reload()
+        });
+
+        logs.querySelectorAll('.checkall').forEach(element => {
+            element.addEventListener('change', e => {
+                var isChecked = e.target.checked;
+                logs.querySelectorAll('.checkall, .checkitem').forEach(checkbox => {
+                    checkbox.checked = isChecked;
+                });
+            });
+        })
+
+        logs.querySelectorAll('.checkitem').forEach(element => {
+            element.addEventListener('change', e => {
+                var ls = e.target.closest('.list');
+                logs.querySelectorAll('.checkall').forEach(checkall => {
+                    checkall.checked = !ls.querySelectorAll('.checkitem:not(:checked)').length;
+                });
+            });
+        });
+
+        logs.querySelectorAll('.log-multidel').forEach(element => {
+            element.addEventListener('click', () => {
+                var list = [];
+                logs.querySelectorAll('.checkitem:checked').forEach(item => {
+                    list.push(item.closest('.item').dataset.id);
+                });
+                if (list.length) {
+                    nvConfirm(logs.querySelector('.list').dataset.deleteConfirm, () => {
+                        fetch(page_url, {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/x-www-form-urlencoded'
+                            },
+                            body: 'delLogs=' + list.join(','),
+                            cache: 'no-cache'
+                        }).then(() => {
+                            location.reload();
+                        });
                     })
                 }
-            }
+            });
         });
 
-        $('.log-delall', logs).on('click', function() {
-            if (confirm($('.list', logs).data('delete-confirm'))) {
-                $.ajax({
-                    type: "POST",
-                    url: page_url,
-                    cache: !1,
-                    data: 'delAllLogs=1'
-                }).done(function(a) {
-                    location.reload()
-                })
-            }
+        logs.querySelectorAll('.log-delall').forEach(element => {
+            element.addEventListener('click', () => {
+                nvConfirm(logs.querySelector('.list').dataset.deleteConfirm, () => {
+                    fetch(page_url, {
+                        method: 'POST',
+                        headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded'
+                        },
+                        body: 'delAllLogs=1',
+                        cache: 'no-cache'
+                    }).then(() => {
+                        location.reload();
+                    });
+                });
+            });
         });
 
-        $('.role-id, .command', logs).select2({
+        $('.role-id, .command', $('#logs')).select2({
             theme: "bootstrap-5"
         });
 
-        $('.userid', logs).select2({
+        $('.userid', $('#logs')).select2({
             language: nv_lang_interface,
             allowClear: true,
             ajax: {
@@ -675,6 +695,7 @@ $(function() {
                 url: page_url,
                 dataType: 'json',
                 delay: 250,
+                theme: 'bootstrap5',
                 data: function(params) {
                     return {
                         getUser: 1,
@@ -705,11 +726,17 @@ $(function() {
                 return repo.title || repo.text
             }
         });
-
-        $('.fromdate,.todate', logs).datepicker({
-            dateFormat: nv_jsdate_get.replace('yyyy', 'yy'),
-            showOtherMonths: true,
-            showOn: 'focus'
+        var fmt = nv_jsdate_post.replace(/dd/g, 'd').replace(/mm/g, 'm').replace(/yyyy/g, 'Y').replace(/\//g, '-');
+        $('.fromdate,.todate', $('#logs')).flatpickr({
+            enableTime: false,
+            dateFormat: fmt,
+            ariaDateFormat: fmt,
+            locale: nv_lang_interface,
+            onOpen: function (selectedDates, dateStr, instance) {
+                if (instance.input.value.length == 0) {
+                    instance.setDate(new Date());
+                }
+            }
         });
     }
 });

@@ -1,4 +1,3 @@
-<script type="text/javascript" src="{$smarty.const.ASSETS_STATIC_URL}/js/clipboard/clipboard.min.js"></script>
 <script type="text/javascript" src="{$smarty.const.ASSETS_STATIC_URL}/js/select2/select2.min.js"></script>
 <script src="{$smarty.const.ASSETS_LANG_STATIC_URL}/js/select2/i18n/{$smarty.const.NV_LANG_INTERFACE}.js"></script>
 <script src="{$smarty.const.ASSETS_STATIC_URL}/js/flatpickr/flatpickr.min.js"></script>
@@ -16,92 +15,96 @@
 </div>
 {/if}
 <div id="credentiallist" data-page-url="{$PAGE_URL}" data-role-id="{$ROLE_ID}">
-    <div class="row mb-3">
-        <div class="col-sm-6">
-            <div class="input-group mb-3">
-                <span class="input-group-text">{$LANG->getModule('api_role')}</span>
-                <select class="form-select role-id w-100">
-                    <option value="-1">{$LANG->getModule('api_role_select')}</option>
-                    {foreach $ROLE_LIST as $ROLE}
-                    <option value="{$ROLE.role_id}" {if $ROLE.role_id == $ROLE_ID}selected="selected"{/if}>{$ROLE.role_title} ({$LANG->getModule('api_role_type')}: {$LANG->getModule('api_role_type_'|cat:$ROLE.role_type)}; {$LANG->getModule('api_role_object')}: {$LANG->getModule('api_role_object_'|cat:$ROLE.role_object)})</option>
-                    {/foreach}
-                </select>
+    <div class="card">
+        <div class="card-header">
+            <div class="row mb-3">
+                <div class="col-sm-6">
+                    <div class="input-group mb-3">
+                        <span class="input-group-text">{$LANG->getModule('api_role')}</span>
+                        <select class="form-select role-id w-100">
+                            <option value="-1">{$LANG->getModule('api_role_select')}</option>
+                            {foreach $ROLE_LIST as $ROLE}
+                            <option value="{$ROLE.role_id}" {if $ROLE.role_id == $ROLE_ID}selected="selected"{/if}>{$ROLE.role_title} ({$LANG->getModule('api_role_type')}: {$LANG->getModule('api_role_type_'|cat:$ROLE.role_type)}; {$LANG->getModule('api_role_object')}: {$LANG->getModule('api_role_object_'|cat:$ROLE.role_object)})</option>
+                            {/foreach}
+                        </select>
+                    </div>
+                </div>
+                {if !empty($ROLE_ID)}
+                <div class="col-sm-6 text-end">
+                    <button type="button" class="btn btn-primary mb-3" data-toggle="credential-add" data-title="{$LANG->getModule('api_role_credential_add')}">{$LANG->getModule('api_role_credential_add')}</a>
+                </div>
+                {/if}
             </div>
         </div>
-        {if !empty($ROLE_ID)}
-        <div class="col-sm-6 text-end">
-            <button type="button" class="btn btn-primary mb-3" data-toggle="credential-add" data-title="{$LANG->getModule('api_role_credential_add')}">{$LANG->getModule('api_role_credential_add')}</a>
+        <div class="card-body">
+            {if !empty($ROLE_ID)}
+            {if empty($CREDENTIAL_COUNT)}
+            <div class="alert alert-info text-center">
+                {$LANG->getModule('api_role_credential_empty')}
+            </div>
+            {else}
+            <div class="mb-4">{$LANG->getModule('api_role_credential_count')}: {$CREDENTIAL_COUNT}</div>
+            <div class="table-responsive table-card">
+                <table class="table table-bordered table-striped">
+                    <thead>
+                        <tr class="bg-primary">
+                            <th class="text-nowrap text-center" style="width: 1%;vertical-align:middle">{$LANG->getModule('api_role_credential_userid')}</th>
+                            <th style="vertical-align:middle">{$LANG->getModule('api_role_credential_username')}</th>
+                            <th style="vertical-align:middle">{$LANG->getModule('api_role_credential_fullname')}</th>
+                            <th class="text-nowrap text-center" style="width: 1%;vertical-align:middle">{$LANG->getModule('api_role_credential_addtime')}</th>
+                            <th class="text-nowrap text-center" style="width: 1%;vertical-align:middle">{$LANG->getModule('endtime')}</th>
+                            <th class="text-nowrap text-center" style="width: 1%;vertical-align:middle">{$LANG->getModule('quota')}</th>
+                            <th class="text-nowrap text-center" style="width: 1%;vertical-align:middle">{$LANG->getModule('api_role_credential_access_count')}</th>
+                            <th class="text-nowrap text-center" style="width: 1%;vertical-align:middle">{$LANG->getModule('api_role_credential_last_access')}</th>
+                            <th class="text-nowrap text-center" style="width: 1%;vertical-align:middle">{$LANG->getModule('status')}</th>
+                            <th class="text-nowrap text-center" style="width: 1%;vertical-align:middle"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {foreach $CREDENTIAL_LIST as $CREDENTIAL}                
+                        <tr class="item" data-userid="{$CREDENTIAL.userid}">
+                            <td class="text-nowrap text-center" style="width: 1%;">{$CREDENTIAL.userid}</td>
+                            <td>
+                                {if !empty($CREDENTIAL.level)}
+                                <img alt="Admin level" src="{$smarty.const.NV_BASE_SITEURL}themes/{$NV_ADMIN_THEME}/images/admin{$CREDENTIAL.level}.png" width="38" height="18" />
+                                {/if}
+                                {$CREDENTIAL.username}
+                            </td>
+                            <td>{$CREDENTIAL.fullname}</td>
+                            <td class="text-nowrap text-center" style="width: 1%;">{$CREDENTIAL.addtime}</td>
+                            <td class="text-nowrap text-center" style="width: 1%;">{$CREDENTIAL.endtime}</td>
+                            <td class="text-nowrap text-center" style="width: 1%;">{$CREDENTIAL.quota}</td>
+                            <td class="text-nowrap text-center" style="width: 1%;">{$CREDENTIAL.access_count}</td>
+                            <td class="text-nowrap text-center" style="width: 1%;">{$CREDENTIAL.last_access}</td>
+                            <td class="text-nowrap text-center" style="width: 1%;">
+                                <select class="form-control change-status" style="width: 100px;">
+                                    {assign var="STATUS_L" value=[$LANG->getModule('suspended'), $LANG->getModule('active')]}
+                                    {foreach $STATUS_L as $K => $STATUS}
+                                    <option value="{$K}" {if $K == $CREDENTIAL.status}selected="selected"{/if}>{$STATUS}</option>
+                                    {/foreach}
+                                </select>
+                            </td>
+                            <td class="text-nowrap text-center" style="width: 1%;">
+                                <button type="button" class="btn btn-secondary" data-toggle="credential-edit" data-title="{$LANG->getModule('api_role_credential_edit')}" title="{$LANG->getGlobal('edit')}"><i class="fa fa-pencil-square-o"></i></button>
+                                <button type="button" class="btn btn-secondary" data-toggle="changeAuth" title="{$LANG->getModule('authentication')}"><i class="fa fa-shield-halved"></i></button>
+                                <button type="button" class="btn btn-secondary" data-toggle="credentialDel" data-confirm="{$LANG->getModule('deprivation_confirm')}" title="{$LANG->getModule('deprivation')}"><i class="fa fa-ban"></i></button>
+                            </td>
+                        </tr>
+                        {/foreach}
+                    </tbody>
+                </table>
+            </div>
+            {/if}
+            {/if}
+        </div>
+        {if !empty($GENERATE_PAGE)}
+        <div class="card-footer">
+            <div class="d-flex flex-wrap justify-content-end align-items-center">
+                    {$GENERATE_PAGE}
+            </div>
         </div>
         {/if}
     </div>
-    {if !empty($ROLE_ID)}
-    {if empty($CREDENTIAL_COUNT)}
-    <div class="alert alert-info text-center">
-        {$LANG->getModule('api_role_credential_empty')}
-    </div>
-    {else}
-    <div class="mb-3">{$LANG->getModule('api_role_credential_count')}: {$CREDENTIAL_COUNT}</div>
-    <div class="table-responsive">
-        <table class="table table-bordered table-striped">
-            <thead>
-                <tr class="bg-primary">
-                    <th class="text-nowrap text-center" style="width: 1%;vertical-align:middle">{$LANG->getModule('api_role_credential_userid')}</th>
-                    <th style="vertical-align:middle">{$LANG->getModule('api_role_credential_username')}</th>
-                    <th style="vertical-align:middle">{$LANG->getModule('api_role_credential_fullname')}</th>
-                    <th class="text-nowrap text-center" style="width: 1%;vertical-align:middle">{$LANG->getModule('api_role_credential_addtime')}</th>
-                    <th class="text-nowrap text-center" style="width: 1%;vertical-align:middle">{$LANG->getModule('endtime')}</th>
-                    <th class="text-nowrap text-center" style="width: 1%;vertical-align:middle">{$LANG->getModule('quota')}</th>
-                    <th class="text-nowrap text-center" style="width: 1%;vertical-align:middle">{$LANG->getModule('api_role_credential_access_count')}</th>
-                    <th class="text-nowrap text-center" style="width: 1%;vertical-align:middle">{$LANG->getModule('api_role_credential_last_access')}</th>
-                    <th class="text-nowrap text-center" style="width: 1%;vertical-align:middle">{$LANG->getModule('status')}</th>
-                    <th class="text-nowrap text-center" style="width: 1%;vertical-align:middle"></th>
-                </tr>
-            </thead>
-            <tbody>
-                {foreach $CREDENTIAL_LIST as $CREDENTIAL}                
-                <tr class="item" data-userid="{$CREDENTIAL.userid}">
-                    <td class="text-nowrap text-center" style="width: 1%;">{$CREDENTIAL.userid}</td>
-                    <td>
-                        {if !empty($CREDENTIAL.level)}
-                        <img alt="Admin level" src="{$smarty.const.NV_BASE_SITEURL}themes/{$NV_ADMIN_THEME}/images/admin{$CREDENTIAL.level}.png" width="38" height="18" />
-                        {/if}
-                        {$CREDENTIAL.username}
-                    </td>
-                    <td>{$CREDENTIAL.fullname}</td>
-                    <td class="text-nowrap text-center" style="width: 1%;">{$CREDENTIAL.addtime}</td>
-                    <td class="text-nowrap text-center" style="width: 1%;">{$CREDENTIAL.endtime}</td>
-                    <td class="text-nowrap text-center" style="width: 1%;">{$CREDENTIAL.quota}</td>
-                    <td class="text-nowrap text-center" style="width: 1%;">{$CREDENTIAL.access_count}</td>
-                    <td class="text-nowrap text-center" style="width: 1%;">{$CREDENTIAL.last_access}</td>
-                    <td class="text-nowrap text-center" style="width: 1%;">
-                        <select class="form-control change-status" style="width: 100px;">
-                            {assign var="STATUS_L" value=[$LANG->getModule('suspended'), $LANG->getModule('active')]}
-                            {foreach $STATUS_L as $K => $STATUS}
-                            <option value="{$K}" {if $K == $CREDENTIAL.status}selected="selected"{/if}>{$STATUS}</option>
-                            {/foreach}
-                        </select>
-                    </td>
-                    <td class="text-nowrap text-center" style="width: 1%;">
-                        <button type="button" class="btn btn-secondary" data-toggle="credential-edit" data-title="{$LANG->getModule('api_role_credential_edit')}" title="{$LANG->getGlobal('edit')}"><i class="fa fa-pencil-square-o"></i></button>
-                        <button type="button" class="btn btn-secondary" data-toggle="changeAuth" title="{$LANG->getModule('authentication')}"><i class="fa fa-shield"></i></button>
-                        <button type="button" class="btn btn-secondary" data-toggle="credentialDel" data-confirm="{$LANG->getModule('deprivation_confirm')}" title="{$LANG->getModule('deprivation')}"><i class="fa fa-ban"></i></button>
-                    </td>
-                </tr>
-                {/foreach}
-            </tbody>
-            {if !empty($GENERATE_PAGE)}
-            <tfoot>
-                <tr>
-                    <td colspan="8" class="text-center">
-                        {$GENERATE_PAGE}
-                    </td>
-                </tr>
-            </tfoot>
-            {/if}
-        </table>
-    </div>
-    {/if}
-    {/if}
 </div>
 <!-- START FORFOOTER -->
 <div id="credential-add" role="dialog" class="modal fade">

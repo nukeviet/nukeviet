@@ -1,0 +1,60 @@
+/**
+ * NukeViet Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2025 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
+ */
+#role .api-count {
+  background-color: var(--bs-gray-200);
+  color: var(--bs-gray-700);
+  border: 1px solid var(--bs-gray-700);
+  display: inline-block;
+  font-size: 95%;
+  font-weight: bold;
+  padding: 1px 5px;
+  border-radius: 50%;
+  margin-right: auto;
+  min-width: 25px;
+  text-align: center;
+}
+#role .api-count .checked {
+  background-color: var(--bs-gray-700);
+  color: var(--bs-white);
+  border: 1px solid transparent;
+}
+#role .root-api-actions ul li a {
+  display: flex;
+  align-items: center;
+  padding: 8px;
+  text-decoration: none;
+  outline: 0;
+  border-radius: inherit;
+}
+#role .root-api-actions ul li a.main {
+  background-color: var(--bs-gray-300);
+}
+[data-bs-theme=dark] #role .root-api-actions ul li a.main {
+  background-color: var(--bs-gray-700);
+}
+#role .root-api-actions ul li a.main:not(.active):hover {
+  background-color: var(--bs-gray-400);
+}
+[data-bs-theme=dark] #role .root-api-actions ul li a.main:not(.active):hover {
+  background-color: var(--bs-gray-800);
+}
+#role .root-api-actions ul li a.sub:not(.active):hover {
+  background-color: var(--bs-gray-200);
+}
+[data-bs-theme=dark] #role .root-api-actions ul li a.sub:not(.active):hover {
+  background-color: var(--bs-gray-800);
+}
+
+.card-header.api-header {
+  background-color: var(--bs-gray-200);
+}
+[data-bs-theme=dark] .card-header.api-header {
+  background-color: var(--bs-gray-800);
+}
+/*# sourceMappingURL=myapi.rtl.css.map */

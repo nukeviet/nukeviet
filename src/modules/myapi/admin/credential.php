@@ -110,23 +110,9 @@ if ($nv_Request->isset_request('changeAuth', 'post')) {
         $method['key'] = $key;
         $method['name'] = $name;
         $methods[$key] = $method;
-        // $xtpl->assign('METHOD', $method);
-
-        // if ($key == 'password_verify') {
-        //     $xtpl->parse('changeAuth.method_tab.is_active');
-        //     $xtpl->parse('changeAuth.method_panel.is_active');
-        // }
-
-        // if (empty($api_user[$key])) {
-        //     $xtpl->parse('changeAuth.method_panel.not_access_authentication');
-        // }
-
-        // $xtpl->parse('changeAuth.method_tab');
-        // $xtpl->parse('changeAuth.method_panel');
     }
     $tpl->assign('METHODS', $methods);
 
-    // $xtpl->parse('changeAuth');
     $contents = $tpl->fetch('credential.tpl');
 
     nv_jsonOutput([

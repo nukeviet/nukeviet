@@ -6,7 +6,7 @@
                     <tbody>
                         <tr>
                             <td style="width: 25%;"><strong>{$LANG->getModule('remote_api_access')}</strong></td>
-                            <td style="width: 75%;"><label><input type="checkbox" name="remote_api_access" value="1" {$CHECKED_REMOTE_API_ACCESS} /> {$LANG->getModule('remote_api_access_help')}</label></td>
+                            <td style="width: 75%;"><label><input type="checkbox" name="remote_api_access" value="1" {$CHECKED_REMOTE_API_ACCESS} class="form-check-input"/> {$LANG->getModule('remote_api_access_help')}</label></td>
                         </tr>
                         <tr>
                             <td><strong>{$LANG->getModule('api_check_time')}</strong></td>

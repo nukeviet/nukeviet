@@ -16,7 +16,7 @@
                             <select class="form-control role-type">
                                 <option value="">{$LANG->getModule('all')}</option>
                                 {foreach $TYPES as $TYPE}
-                                <option value="{$TYPE}" {if $TYPE == $TYPE_API}selected="selected"{/if}>{$LANG->getModule("api_role_type_$TYPE")}</option>
+                                <option value="{$TYPE}" {if $TYPE == $TYPE_API}selected="selected"{/if}>{$LANG->getModule("api_role_type_"|cat:$TYPE)}</option>
                                 {/foreach}
                             </select>
                         </div>
@@ -27,7 +27,7 @@
                             <select class="form-control role-object">
                                 <option value="">{$LANG->getModule('all')}</option>
                                 {foreach $OBJECTS as $OBJECT}
-                                <option value="{$OBJECT}" {if $OBJECT == $OBJECT_API}selected="selected"{/if}>{$LANG->getModule("api_role_object_$OBJECT")}</option>
+                                <option value="{$OBJECT}" {if $OBJECT == $OBJECT_API}selected="selected"{/if}>{$LANG->getModule("api_role_object_"|cat:$OBJECT)}</option>
                                 {/foreach}
                             </select>
                         </div>
@@ -88,8 +88,8 @@
                                             <div class="modal-body">                        
                                                 {if !empty($ROLE.apis[''])}
                                                 {foreach $ROLE.apis[''] as $CAT_DATA}
-                                                <div class="card mb-3">
-                                                    <div class="card-header"><strong><i class="fa fa-folder-open-o"></i> {$LANG->getModule('api_of_system')}: {$CAT_DATA.title}</strong></div>
+                                                <div class="card mb-3 border">
+                                                    <div class="card-header api-header"><strong><i class="fa fa-folder-open-o"></i> {$LANG->getModule('api_of_system')}: {$CAT_DATA.title}</strong></div>
                                                     <div class="card-body">
                                                         <div class="row">
                                                             {foreach $CAT_DATA.apis as $API_DATA}
@@ -122,8 +122,8 @@
                                                             {if !empty($ROLE.apis.$_LG)}
                                                             {foreach $ROLE.apis.$_LG as $MOD_TITLE => $MOD_DATA}
                                                             {foreach $MOD_DATA as $CAT_DATA}
-                                                            <div class="card mb-3">
-                                                                <div class="card-header"><strong><i class="fa fa-folder-open-o"></i> {$SITE_MOD.$MOD_TITLE.custom_title}
+                                                            <div class="card mb-3 border">
+                                                                <div class="card-header api-header"><strong><i class="fa fa-folder-open-o"></i> {$SITE_MOD.$MOD_TITLE.custom_title}
                                                                         {if !empty($CAT_DATA.title)}
                                                                         <i class="fa fa-angle-right"></i> {$CAT_DATA.title}
                                                                         {/if}
@@ -186,7 +186,7 @@
                     <td class="left-col">{$LANG->getModule('api_role_type')}:</td>
                     <td>
                         <div class="role_type">
-                            <label><input type="radio" name="role_type" value="private" class="form-check-input"> {$LANG->getModule('api_role_type_private')}</label>
+                            <label><input type="radio" name="role_type" value="private" class="form-check-input" {$DATA.role_type_private_checked}> {$LANG->getModule('api_role_type_private')}</label>
                             <label><input type="radio" name="role_type" value="public" class="form-check-input" {$DATA.role_type_public_checked}> {$LANG->getModule('api_role_type_public')}</label>
                         </div>
                         <ul class="role_note note">
@@ -264,17 +264,19 @@
 <tr>
     <td class="root-api-actions left-col">
         <ul class="nav nav-pills flex-column">
+            {assign var='COUNT_API' value=0}
             {foreach $API_TREES as $API_TREE}
-            <li role="presentation" class="nav-item"><a role="tab" data-bs-toggle="tab" data-bs-cat="{$API_TREE.key}" href="#{$API_TREE.href}" aria-controls="{$API_TREE.href}" aria-expanded="{$API_TREE.expanded}" class="main nav-link{if !empty($API_TREE['active'])} active{/if}"><i class="fa fa-folder-open-o"></i> {$API_TREE.name}
+            <li role="presentation" class="nav-item"><a role="tab" data-bs-toggle="tab" data-bs-cat="{$API_TREE.key}" href="#{$API_TREE.href}" aria-controls="{$API_TREE.href}" aria-expanded="{$API_TREE.expanded}" class="main nav-link{if !empty($API_TREE['active'])} active{/if} border {if $COUNT_API > 0} border-top-0{/if}"><i class="fa fa-folder-open-o"></i>&nbsp;{$API_TREE.name}
                 {if !empty($API_TREE.total)}
                 <span class="api-count{$API_TREE.api_checked}"><span class="total_api">{$API_TREE.total_api}</span>/{$API_TREE.total}</span>
                 {/if}
                 </a></li>
             {foreach $API_TREE.subs as $SUB}
-            <li role="presentation" class="nav-item"><a role="tab" data-bs-toggle="tab" data-bs-cat="{$SUB.key}" href="#{$SUB.href}" aria-controls="api-child-{$SUB.key}" aria-expanded="{$SUB.expanded}" class="sub nav-link{if !empty($SUB['active'])} active{/if}">{$SUB.name}
+            <li role="presentation" class="nav-item"><a role="tab" data-bs-toggle="tab" data-bs-cat="{$SUB.key}" href="#{$SUB.href}" aria-controls="api-child-{$SUB.key}" aria-expanded="{$SUB.expanded}" class="sub nav-link{if !empty($SUB['active'])} active{/if} border border-top-0">{$SUB.name}
                     <span class="api-count{$SUB.api_checked}"><span class="total_api">{$SUB.total_api}</span>/{$SUB.total}</span>
                 </a></li>
             {/foreach}
+            {assign var='COUNT_API' value=$COUNT_API + 1}
             {/foreach}
         </ul>
     </td>

@@ -405,20 +405,6 @@ if ($action == 'role') {
     $tpl->assign('APICHECK', apicheck($array_post['role_object'], $array_post, $lg));
     $tpl->assign('FORM_ACTION', $page_url);
 
-    // $xtpl->assign('FORM_ACTION', $page_url);
-    // $xtpl->assign('DATA', $array_post);
-    // $xtpl->assign('APICHECK', apicheck($array_post['role_object'], $array_post, $lg));
-
-    // empty($array_post['flood_rules']) && $array_post['flood_rules'] = ['' => ''];
-    // foreach ($array_post['flood_rules'] as $interval => $limit) {
-    //     $interval = !empty($interval) ? round((int) $interval / 60) : '';
-    //     $xtpl->assign('RULE', [
-    //         'interval' => $interval,
-    //         'limit' => $limit
-    //     ]);
-    //     $xtpl->parse('role.flood_rule');
-    // }
-
     $saveopts = [
         '1' => $nv_Lang->getModule('saveopt1', $language_array[$lg]['name']),
         '2' => $nv_Lang->getModule('saveopt2')
@@ -431,16 +417,7 @@ if ($action == 'role') {
         }
     }
     $tpl->assign('SAVEOPTS', $saveopts);
-    // foreach ($saveopts as $key => $name) {
-    //     $xtpl->assign('SAVEOPT', [
-    //         'val' => $key,
-    //         'name' => $name
-    //     ]);
-    //     $xtpl->parse('role.saveopt');
-    // }
 
-    // $xtpl->parse('role');
-    // $contents = $xtpl->text('role');
     $contents = $tpl->fetch('roles.tpl');
     include NV_ROOTDIR . '/includes/header.php';
     echo nv_admin_theme($contents);
@@ -472,6 +449,7 @@ if (empty($global_config['remote_api_access'])) {
 
 $types = ['private', 'public'];
 $tpl->assign('TYPES', $types);
+$tpl->assign('TYPE_API', $type);
 $objects = ['admin', 'user'];
 $tpl->assign('OBJECTS', $objects);
 $tpl->assign('OBJECT_API', $object);
@@ -492,86 +470,7 @@ foreach ($rolelist as $role) {
 $tpl->assign('ROLE_LIST', $role_list);
 $tpl->assign('SITE_MOD', $site_mods);
 $tpl->assign('GENERATE_PAGE', $generate_page);
-// if (empty($rolelist)) {
-//     $xtpl->parse('main.role_list_empty');
-// } else {
-// foreach ($rolelist as $role) {
-//     $xtpl->assign('ROLE', [
-//         'title' => $role['role_title'],
-//         'type' => $nv_Lang->getModule('api_role_type_' . $role['role_type']),
-//         'object' => $nv_Lang->getModule('api_role_object_' . $role['role_object']),
-//         'addtime' => nv_datetime_format($role['addtime']),
-//         'edittime' => $role['edittime'] ? nv_datetime_format($role['edittime']) : '',
-//         'id' => $role['role_id']
-//     ]);
 
-//     // List API hệ thống
-//     if (!empty($role['apis'][''])) {
-//         foreach ($role['apis'][''] as $cat_data) {
-//             $xtpl->assign('CAT_DATA', $cat_data);
-
-//             foreach ($cat_data['apis'] as $api_data) {
-//                 $xtpl->assign('API_DATA', $api_data);
-//                 $xtpl->parse('main.role_list.loop.catsys.loop');
-//             }
-
-//             $xtpl->parse('main.role_list.loop.catsys');
-//         }
-//     }
-
-//     foreach ($global_config['setup_langs'] as $_lg) {
-//         $xtpl->assign('FORLANG', [
-//             'active' => $_lg == NV_LANG_DATA ? 'active' : '',
-//             'in' => $_lg == NV_LANG_DATA ? ' in active' : '',
-//             'expanded' => $_lg == NV_LANG_DATA ? 'true' : 'false',
-//             'langkey' => $_lg,
-//             'langname' => $language_array[$_lg]['name']
-//         ]);
-//         $xtpl->parse('main.role_list.loop.forlang');
-
-//         // List API theo ngôn ngữ
-//         if (!empty($role['apis'][$_lg])) {
-//             foreach ($role['apis'][$_lg] as $mod_title => $mod_data) {
-//                 $xtpl->assign('MOD_TITLE', $site_mods[$mod_title]['custom_title']);
-
-//                 foreach ($mod_data as $cat_data) {
-//                     $xtpl->assign('CAT_DATA', $cat_data);
-
-//                     foreach ($cat_data['apis'] as $api_data) {
-//                         $xtpl->assign('API_DATA', $api_data);
-//                         $xtpl->parse('main.role_list.loop.tabcontent_forlang.apimod.mod.loop');
-//                     }
-
-//                     if (!empty($cat_data['title'])) {
-//                         $xtpl->parse('main.role_list.loop.tabcontent_forlang.apimod.mod.title');
-//                     }
-
-//                     $xtpl->parse('main.role_list.loop.tabcontent_forlang.apimod.mod');
-//                 }
-
-//                 $xtpl->parse('main.role_list.loop.tabcontent_forlang.apimod');
-//             }
-//         }
-//         $xtpl->parse('main.role_list.loop.tabcontent_forlang');
-//     }
-
-//     $sts = [$nv_Lang->getModule('inactive'), $nv_Lang->getModule('active')];
-//     foreach ($sts as $k => $v) {
-//         $xtpl->assign('STATUS', [
-//             'val' => $k,
-//             'sel' => $k == $role['status'] ? ' selected="selected"' : '',
-//             'title' => $v
-//         ]);
-//         $xtpl->parse('main.role_list.loop.status');
-//     }
-
-//     $xtpl->parse('main.role_list.loop');
-// }
-
-// $xtpl->parse('main.role_list');
-
-// $xtpl->parse('main');
-// $contents = $xtpl->text('main');
 $contents = $tpl->fetch('roles.tpl');
 
 include NV_ROOTDIR . '/includes/header.php';
