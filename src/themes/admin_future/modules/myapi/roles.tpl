@@ -208,7 +208,7 @@
                     <td class="left-col">{$LANG->getModule('log_period')}:</td>
                     <td>
                         <div class="input-group" style="width: fit-content;">
-                            <input type="text" class="form-control w100 number" name="log_period" value="{$DATA.log_period}" maxlength="10">
+                            <input type="text" class="form-control number" name="log_period" value="{$DATA.log_period}" maxlength="10" style="width: 100px;">
                             <span class="input-group-text" style="border-left: 0;">{$LANG->getModule('hours')}</span>
                         </div>
                         <div class="help-block mb-0">{$LANG->getModule('log_period_note')}</div>

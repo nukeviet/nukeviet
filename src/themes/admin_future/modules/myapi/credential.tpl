@@ -241,7 +241,7 @@
 <div class="row mb-4">
     <label class="col-sm-3 col-form-label text-end">{$LANG->getModule('quota')}</label>
     <div class="col-sm-9">
-        <input type="text" class="form-control w100 number quota" name="quota" value="{$CREDENTIAL.quota}" maxlength="20" placeholder="{$LANG->getModule('quota')}" />
+        <input type="text" class="form-control number quota" name="quota" value="{$CREDENTIAL.quota}" maxlength="20" placeholder="{$LANG->getModule('quota')}" style="width: 100px;" />
         <div class="help-block mb-0">{$LANG->getModule('quota_note')}</div>
     </div>
 </div>
