@@ -152,6 +152,13 @@ function apicheck($role_object, $array_post, $lang)
 
 // Thay đổi trạng thái của role
 if ($nv_Request->isset_request('changeStatus', 'post')) {
+    $checkss = md5(NV_CHECK_SESSION . '_' . $module_name . '_' . $op . '_' . $admin_info['userid']);
+    if ($checkss != $nv_Request->get_title('checkss', 'post', '')) {
+        nv_jsonOutput([
+            'status' => 'error',
+            'mess' => $nv_Lang->getGlobal('error_code_11')
+        ]);
+    }
     $id = $nv_Request->get_int('changeStatus', 'post', 0);
     if (empty($id)) {
         nv_jsonOutput([
@@ -178,6 +185,13 @@ if ($nv_Request->isset_request('changeStatus', 'post')) {
 
 // Xóa role
 if ($nv_Request->isset_request('roledel', 'post')) {
+    $checkss = md5(NV_CHECK_SESSION . '_' . $module_name . '_' . $op . '_' . $admin_info['userid']);
+    if ($checkss != $nv_Request->get_title('checkss', 'post', '')) {
+        nv_jsonOutput([
+            'status' => 'error',
+            'mess' => $nv_Lang->getGlobal('error_code_11')
+        ]);
+    }
     $id = $nv_Request->get_int('roledel', 'post', 0);
     if (empty($id)) {
         nv_jsonOutput([
@@ -208,6 +222,7 @@ $tpl->assign('PAGE_URL', $page_url);
 $tpl->assign('ADD_API_ROLE_URL', $page_url . '&amp;action=role');
 $tpl->assign('GCONFIG', $global_config);
 $tpl->assign('LANGUAGE_ARRAY', $language_array);
+$tpl->assign('CHECKSS', md5(NV_CHECK_SESSION . '_' . $module_name . '_' . $op . '_' . $admin_info['userid']));
 
 $action = $nv_Request->get_title('action', 'get', '');
 
@@ -252,6 +267,13 @@ if ($action == 'role') {
     }
 
     if ($nv_Request->isset_request('save', 'post')) {
+        $checkss = md5(NV_CHECK_SESSION . '_' . $module_name . '_' . $op . '_' . $admin_info['userid']);
+        if ($checkss != $nv_Request->get_title('checkss', 'post', '')) {
+            nv_jsonOutput([
+                'status' => 'error',
+                'mess' => $nv_Lang->getGlobal('error_code_11')
+            ]);
+        }
         $save = $nv_Request->get_title('save', 'post', '');
         $data = [
             'role_title' => nv_substr($nv_Request->get_title('role_title', 'post', ''), 0, 250),
@@ -388,6 +410,7 @@ if ($action == 'role') {
         }
         nv_jsonOutput([
             'status' => 'OK',
+            'mess' => $nv_Lang->getGlobal('save_success'),
             'redirect' => $redirect
         ]);
     }

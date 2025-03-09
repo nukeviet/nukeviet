@@ -10,8 +10,8 @@
                 <input type="hidden" name="{$smarty.const.NV_LANG_VARIABLE}" value="{$smarty.const.NV_LANG_DATA}" />
                 <input type="hidden" name="{$smarty.const.NV_NAME_VARIABLE}" value="{$MODULE_NAME}" />
                 <input type="hidden" name="{$smarty.const.NV_OP_VARIABLE}" value="{$OP}" />
-                <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 row-cols-xl-6 g-2">
-                    <div class="col">
+                <div class="row row-cols-1 row-cols-md-2 row-cols-xl-3 row-cols-xxl-6 g-2 gx-xxl-3">
+                    <div class="col col-xxl-auto">
                         <div class="form-group mb-3">
                             <div class="input-group w-100">
                                 <span class="input-group-text" title="{$LANG->getModule('api_role')}"><i class="fa fa-object-group"></i></span>
@@ -24,7 +24,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col">
+                    <div class="col col-xxl-auto">
                         <div class="form-group mb-3">
                             <div class="input-group w-100">
                                 <span class="input-group-text" title="API"><i class="fa fa-terminal"></i></span>
@@ -37,7 +37,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col">
+                    <div class="col col-xxl-auto">
                         <div class="form-group mb-3">
                             <div class="input-group w-100">
                                 <span class="input-group-text" title="{$LANG->getModule('api_role_object')}"><i class="fa fa-user"></i></span>
@@ -49,7 +49,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col">
+                    <div class="col col-xxl-auto">
                         <div class="form-group mb-3">
                             <div class="input-group">
                                 <span class="input-group-text" title="{$LANG->getModule('fromdate')}"><i class="fa fa-calendar"></i></span>
@@ -57,7 +57,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col">
+                    <div class="col col-xxl-auto">
                         <div class="form-group mb-3">
                             <div class="input-group">
                                 <span class="input-group-text" title="{$LANG->getModule('todate')}"><i class="fa fa-calendar"></i></span>
@@ -65,7 +65,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col">
+                    <div class="col-xxl-auto">
                         <div class="form-group mb-3">
                             <button type="submit" class="btn btn-primary w-100 w-100">{$LANG->getModule('filter_logs')}</button>
                         </div>

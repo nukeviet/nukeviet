@@ -122,7 +122,7 @@ if ($nv_Request->isset_request('changeAuth', 'post')) {
     ]);
 }
 
-[$rolecount, $rolelist] = getRoleList('', '', 0, 0);
+[$rolecount, $rolelist] = [0, []];
 
 $page_title = $nv_Lang->getModule('api_role_credential');
 

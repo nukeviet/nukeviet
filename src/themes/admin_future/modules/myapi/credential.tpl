@@ -5,8 +5,10 @@
 {if $IS_MAIN and empty($ROLE_COUNT)}
 <meta http-equiv="refresh" content="5;{$ADD_API_ROLE_URL}">
 <div class="alert alert-info text-center">
+    <div class="spinner-border" role="status">
+        <span class="visually-hidden">Loading...</span>
+    </div><br/><br/>
     {$LANG->getModule('api_roles_empty2')}
-    <img src="{$NV_BASE_SITEURL}{$NV_ASSETS_DIR}/images/load_bar.gif" alt="Loading" />
 </div>
 {elseif $IS_MAIN}
 {if empty($REMOTE_API_ACCESS)}
@@ -77,7 +79,7 @@
                             <td class="text-nowrap text-center" style="width: 1%;">{$CREDENTIAL.access_count}</td>
                             <td class="text-nowrap text-center" style="width: 1%;">{$CREDENTIAL.last_access}</td>
                             <td class="text-nowrap text-center" style="width: 1%;">
-                                <select class="form-control change-status" style="width: 100px;">
+                                <select class="form-select change-status" style="width: 100px;">
                                     {assign var="STATUS_L" value=[$LANG->getModule('suspended'), $LANG->getModule('active')]}
                                     {foreach $STATUS_L as $K => $STATUS}
                                     <option value="{$K}" {if $K == $CREDENTIAL.status}selected="selected"{/if}>{$STATUS}</option>
@@ -192,7 +194,7 @@
 <div class="row mb-4">
     <label class="col-sm-3 col-form-label text-end">{$CREDENTIAL_ADD_LABEL}</label>
     <div class="col-sm-9">
-        <select class="form-control w-100" name="userid" id="getUser" data-get-user-url="{$GET_USER_URL}" data-placeholder="{$LANG->getModule('api_role_credential_search')}">
+        <select class="form-select w-100" name="userid" id="getUser" data-get-user-url="{$GET_USER_URL}" data-placeholder="{$LANG->getModule('api_role_credential_search')}">
         </select>
     </div>
 </div>
@@ -205,18 +207,18 @@
     <div class="col-sm-9">
         <div class="input-group" style="width:fit-content">
             <input type="text" class="form-control w-50 adddate" name="adddate" value="{$CREDENTIAL.adddate}" maxlength="10" placeholder="{$LANG->getModule('api_role_credential_addtime')}" />
-            <select name="addhour" class="form-control" style="width: fit-content">
+            <select name="addhour" class="form-select" style="width: fit-content">
                 {for $I = 0 to 23}
                 <option value="{$I}" {if $I == $CREDENTIAL.addhour}selected="selected"{/if}>{$I|string_format:"%'.02d"}</option>
                 {/for}
             </select>
-            <select name="addmin" class="form-control" style="width: fit-content">
+            <select name="addmin" class="form-select" style="width: fit-content">
                 {for $I = 0 to 59}
                 <option value="{$I}" {if $I == $CREDENTIAL.addmin}selected="selected"{/if}>{$I|string_format:"%'.02d"}</option>
                 {/for}
             </select>
         </div>
-        <div class="help-block mb-0">{$LANG->getModule('addtime_note')}</div>
+        <div class="form-text">{$LANG->getModule('addtime_note')}</div>
     </div>
 </div>
 <div class="row mb-4">
@@ -224,25 +226,25 @@
     <div class="col-sm-9">
         <div class="input-group" style="width:fit-content">
             <input type="text" class="form-control w-50 enddate" name="enddate" value="{$CREDENTIAL.enddate}" maxlength="10" placeholder="{$LANG->getModule('endtime')}" />
-            <select name="endhour" class="form-control" style="width: fit-content">
+            <select name="endhour" class="form-select" style="width: fit-content">
                 {for $I = 0 to 23}
                 <option value="{$I}" {if $I == $CREDENTIAL.endhour}selected="selected"{/if}>{$I|string_format:"%'.02d"}</option>
                 {/for}
             </select>
-            <select name="endmin" class="form-control" style="width: fit-content">
+            <select name="endmin" class="form-select" style="width: fit-content">
                 {for $I = 0 to 59}
                 <option value="{$I}" {if $I == $CREDENTIAL.endmin}selected="selected"{/if}>{$I|string_format:"%'.02d"}</option>
                 {/for}
             </select>
         </div>
-        <div class="help-block mb-0">{$LANG->getModule('endtime_note')}</div>
+        <div class="form-text">{$LANG->getModule('endtime_note')}</div>
     </div>
 </div>
 <div class="row mb-4">
     <label class="col-sm-3 col-form-label text-end">{$LANG->getModule('quota')}</label>
     <div class="col-sm-9">
         <input type="text" class="form-control number quota" name="quota" value="{$CREDENTIAL.quota}" maxlength="20" placeholder="{$LANG->getModule('quota')}" style="width: 100px;" />
-        <div class="help-block mb-0">{$LANG->getModule('quota_note')}</div>
+        <div class="form-text">{$LANG->getModule('quota_note')}</div>
     </div>
 </div>
 <div class="row">

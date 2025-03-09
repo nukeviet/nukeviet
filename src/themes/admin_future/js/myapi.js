@@ -75,6 +75,7 @@ $(function() {
         // Thêm flood rule
         document.getElementById('role').addEventListener('click', event => {
             var addRuleElement = event.target.closest('.add-rule');
+            var delRuleElement = event.target.closest('.del-rule');
             if (addRuleElement) {
                 var item = addRuleElement.closest('.item'),
                     newitem = item.cloneNode(true);
@@ -82,12 +83,7 @@ $(function() {
                     input.value = '';
                 });
                 item.after(newitem);
-            }
-        });
-        // Xóa flood rule
-        document.getElementById('role').addEventListener('click', event => {
-            var delRuleElement = event.target.closest('.del-rule');
-            if (delRuleElement) {
+            } else if (delRuleElement) {
                 var item = delRuleElement.closest('.item'),
                     items = delRuleElement.closest('.items');
                 if (items.querySelectorAll('.item').length > 1) {
@@ -99,30 +95,9 @@ $(function() {
                 }
             }
         });
-        // Xử lý khi form thêm/sửa API-role được submit
-        document.getElementById('role').onsubmit = e => {
-            e.preventDefault();
-            var url = e.target.getAttribute('action'),
-                data = new URLSearchParams(new FormData(e.target)).toString();
-            fetch(url, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded'
-                },
-                body: data,
-                cache: 'no-cache'
-            })
-            .then(response => response.json())
-            .then(a => {
-                if (a.status === 'error') {
-                    nvAlert(a.mess);
-                } else if (a.status === 'OK') {
-                    window.location.href = a.redirect;
-                }
-            });
-        };
     }
     if (document.getElementById('rolelist')) {
+        var rolelist = document.getElementById('rolelist');
         // Lọc danh sách theo loại, đối tượng của role
         document.querySelectorAll('#rolelist .role-type, #rolelist .role-object').forEach(element => {
             element.addEventListener('change', function() {
@@ -145,45 +120,48 @@ $(function() {
         // Thay đổi trạng thái role
         document.querySelectorAll('#rolelist .change-status').forEach(element => {
             element.addEventListener('change', function(e) {
-            var that = e.target;
-            that.disabled = true;
-            fetch(document.querySelector('#rolelist').dataset.pageUrl, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded'
-                },
-                body: 'changeStatus=' + that.closest('.item').dataset.id,
-                cache: 'no-cache'
-            })
-            .then(response => response.json())
-            .then(data => {
-                setTimeout(() => {
-                    that.disabled = false;
-                    nvToast(data.mess, 'success');
-                }, 1000);
-                if (data.status === 'error') {
-                    nvAlert(data.mess);
-                }
-            });
+                var that = e.target;
+                that.disabled = true;
+                fetch(rolelist.dataset.pageUrl, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded'
+                    },
+                    body: 'changeStatus=' + that.closest('.item').dataset.id + '&checkss=' + rolelist.dataset.checkss,
+                    cache: 'no-cache'
+                })
+                .then(response => response.json())
+                .then(data => {
+                    setTimeout(() => {
+                        that.disabled = false;
+                    }, 1000);
+                    if (data.status === 'OK') {
+                        nvToast(data.mess, 'success');
+                    } else if (data.status === 'error') {
+                        nvToast(data.mess, 'error');
+                    }
+                });
             });
         });
         // Xóa role
         document.querySelectorAll('[data-toggle="apiroledel"]').forEach(element => {
             element.addEventListener('click', e => {
                 e.preventDefault();
+                that = e.target;
                 nvConfirm(nv_is_del_confirm[0], () => {
-                    fetch(document.querySelector('#rolelist').dataset.pageUrl, {
+                    fetch(rolelist.dataset.pageUrl, {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/x-www-form-urlencoded'
                         },
-                        body: 'roledel=' + this.closest('.item').dataset.id,
+                        body: 'roledel=' + that.closest('.item').dataset.id + '&checkss=' + rolelist.dataset.checkss,
                         cache: 'no-cache'
                     })
                     .then(response => response.json())
                     .then(data => {
                         if (data.status === 'error') {
                             nvAlert(nv_is_del_confirm[2]);
+                            nvToast(nv_is_del_confirm[2], 'error');
                         } else if (data.status === 'OK') {
                             location.reload();
                         }
