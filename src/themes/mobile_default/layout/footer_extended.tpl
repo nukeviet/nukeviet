@@ -1,7 +1,7 @@
             </div>
         </section>
         <nav class="footerNav2">
-            
+
         </nav>
         <!-- Footer fixed -->
         <footer id="footer">
@@ -60,17 +60,4 @@
         <span class="input-group-btn"><button type="button" data-toggle="headerSearchSubmit" class="btn btn-info" data-url="{THEME_SEARCH_URL}" data-minlength="{NV_MIN_SEARCH_LENGTH}" data-click="y"><em class="fa fa-search fa-lg"></em></button></span>
     </div>
 </div>
-</div>
-<!-- SiteModal Required!!! -->
-<div id="sitemodal" class="modal fade" role="dialog">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-body">
-                <em class="fa fa-spinner fa-spin">&nbsp;</em>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-            </div>
-        </div>
-    </div>
 </div>

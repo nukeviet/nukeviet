@@ -36,7 +36,7 @@ class Sso
             trigger_error('Invalid return_url', E_USER_ERROR);
         }
         if (!str_starts_with($return_url, NV_MY_DOMAIN)) {
-            $return_url = NV_MY_DOMAIN . ltrim($return_url, '/');
+            $return_url = NV_MY_DOMAIN . $return_url;
         }
 
         // Reset token encrypted

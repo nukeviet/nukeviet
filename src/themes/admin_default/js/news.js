@@ -565,7 +565,7 @@ $(function() {
     // Cat
     $('a.viewinstantrss').click(function(e) {
         e.preventDefault();
-        modalShow($(this).data('modaltitle'), '<div><input type="text" class="form-control w500" value="' + $(this).attr('href') + '" data-toggle="selectall"/></div>');
+        modalShow($(this).data('modaltitle'), '<div><input type="text" class="form-control" value="' + $(this).attr('href') + '" data-toggle="selectall"/></div>');
     });
     var popOverALl = new Array();
     // Thay đổi thứ tự số chuyên mục: Thứ tự, số liên kết, ngày mới

@@ -81,25 +81,6 @@ const nvToast = (text, level, halign, valign) => {
     });
 }
 
-// Độ rộng thanh cuộn
-const nvGetScrollbarWidth = () => {
-    const outer = document.createElement('div');
-    outer.style.visibility = 'hidden';
-    outer.style.overflow = 'scroll';
-    outer.style.msOverflowStyle = 'scrollbar';
-    outer.style.position = 'fixed';
-    document.body.appendChild(outer);
-
-    const inner = document.createElement('div');
-    outer.appendChild(inner);
-
-    const scrollbarWidth = outer.offsetWidth - inner.offsetWidth;
-
-    outer.parentNode.removeChild(outer);
-
-    return scrollbarWidth;
-}
-
 // Thay thế cho alert
 const nvAlert = (message, callback) => {
     if (typeof callback == 'undefined') {
@@ -163,7 +144,7 @@ const nvConfirm = (message, cbConfirm, cbCancel, cancelBtn) => {
         backdrop.classList.add('show');
 
         body.style.overflow = 'hidden';
-        cVScroll && (body.style.paddingRight = nvGetScrollbarWidth() + 'px');
+        cVScroll && (body.style.paddingRight = nukeviet.getScrollbarWidth() + 'px');
         body.classList.add('alert-open');
     }, 10);
 
@@ -199,39 +180,6 @@ const nvConfirm = (message, cbConfirm, cbCancel, cancelBtn) => {
     document.getElementById(id + '-confirm').addEventListener('click', () => {
         close('confirm');
     });
-}
-
-// Site modal
-const siteMdEle = document.getElementById('site-modal');
-const siteMd = bootstrap.Modal.getOrCreateInstance('#site-modal');
-var siteMdCb = null;
-
-siteMdEle.addEventListener('hidden.bs.modal', () => {
-    $('.modal-body', siteMdEle).html('<div class="text-center"><i class="fa-solid fa-2x fa-spinner fa-spin-pulse"></i></div>');
-    if (siteMdCb !== null) {
-        siteMdEle.removeEventListener('shown.bs.modal', siteMdCb);
-        siteMdCb = null;
-    }
-});
-
-function modalShow(title, body, callback) {
-    if (siteMdEle.classList.contains('show')) {
-        return;
-    }
-    if (!title) {
-        title = '&nbsp;';
-    }
-    $('.modal-title', siteMdEle).html(title);
-    $('.modal-body', siteMdEle).html(body);
-
-    if (typeof callback === "function") {
-        siteMdEle.addEventListener('shown.bs.modal', callback);
-        siteMdCb = callback;
-    } else {
-        siteMdCb = null;
-    }
-
-    siteMd.show();
 }
 
 function locationReplace(url) {

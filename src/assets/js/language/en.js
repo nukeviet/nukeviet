@@ -113,3 +113,7 @@ nukeviet.i18n.WebAuthnErrors = {
     unknow: 'Unknown error, please reload the page and try again'
 };
 nukeviet.i18n.errorSessExp = 'Session has expired or there is another error, please reload the page and try again';
+nukeviet.i18n.close = 'Close';
+nukeviet.i18n.seccode1 = 'Verify &quot;I am not a robot&quot;';
+nukeviet.i18n.seccode = 'Security Code';
+nukeviet.i18n.captcharefresh = 'Refresh';

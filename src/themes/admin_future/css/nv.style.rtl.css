@@ -26528,7 +26528,7 @@ html:not([data-bs-theme=dark]) .btn-default {
   position: fixed;
   top: 0;
   right: 0;
-  z-index: 1060;
+  z-index: 1062;
   width: 100vw;
   height: 100vh;
   background-color: #000;
@@ -26538,7 +26538,7 @@ html:not([data-bs-theme=dark]) .btn-default {
 }
 
 .alert-box.modal {
-  --bs-modal-zindex: 1061;
+  --bs-modal-zindex: 1063;
 }
 
 .main-content .apexcharts-canvas text {
@@ -28213,7 +28213,7 @@ span.flatpickr-weekday {
   position: fixed;
   top: 0;
   right: 0;
-  z-index: 1056;
+  z-index: 1058;
   width: 100vw;
   height: 100vh;
   background-color: #000;
@@ -28224,7 +28224,7 @@ span.flatpickr-weekday {
 }
 
 .fmd-backdrop {
-  z-index: 1058;
+  z-index: 1060;
 }
 
 .fmm,
@@ -28232,7 +28232,7 @@ span.flatpickr-weekday {
   position: fixed;
   top: 0;
   right: 0;
-  z-index: 1057;
+  z-index: 1059;
   display: none;
   width: 100%;
   height: 100%;
@@ -28242,15 +28242,15 @@ span.flatpickr-weekday {
 }
 
 .fmd {
-  z-index: 1059;
+  z-index: 1061;
 }
 
 .fmd-open .select2-dropdown {
-  --bs-dropdown-zindex: 1059;
+  --bs-dropdown-zindex: 1061;
 }
 
 .fmm-open .dropdown-menu-fms {
-  --bs-dropdown-zindex: 1057;
+  --bs-dropdown-zindex: 1059;
 }
 
 .fmm-dialog,

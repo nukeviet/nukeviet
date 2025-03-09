@@ -90,20 +90,6 @@ function timeoutsessrun() {
     }, 1000);
 }
 
-// ModalShow
-function modalShow(a, b, callback) {
-    "" == a && (a = "&nbsp;");
-    $("#sitemodal").find(".modal-title").html(a);
-    $("#sitemodal").find(".modal-body").html(b);
-    $("#sitemodal").modal();
-    $('#sitemodal').on('shown.bs.modal', function(e) {
-        if (typeof callback === "function") {
-            callback(this);
-            $(e.currentTarget).unbind('shown');
-        };
-    });
-}
-
 function locationReplace(url) {
     var uri = window.location.href.substring(window.location.protocol.length + window.location.hostname.length + 2);
     if (url != uri && history.pushState) {

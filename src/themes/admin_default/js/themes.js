@@ -136,6 +136,8 @@ $(document).ready(function() {
             btn.mouseleave(function() {
                 $(this).tooltip('destroy');
             });
+        }, function() {
+            location.reload();
         });
     });
     $(document).delegate('.selectedfocus', 'focus', function(e) {
@@ -177,10 +179,6 @@ $(document).ready(function() {
                 $this.find('i').addClass('hidden');
             }
         });
-        $('#sitemodal').on('hidden.bs.modal', function(e) {
-            window.location.href = window.location.href.replace(/#(.*)/, "");
-        });
-
     });
 
     if ($('#blocklist').length) {

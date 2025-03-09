@@ -113,3 +113,7 @@ nukeviet.i18n.WebAuthnErrors = {
     unknow: 'Lỗi không xác định, xin vui lòng tải lại trang và thử lại'
 };
 nukeviet.i18n.errorSessExp = 'Phiên đã hết hạn hoặc có lỗi khác, vui lòng tải lại trang và thử lại';
+nukeviet.i18n.close = 'Đóng';
+nukeviet.i18n.seccode1 = 'Xác minh &quot;Tôi không phải người máy&quot;';
+nukeviet.i18n.seccode = 'Mã bảo mật';
+nukeviet.i18n.captcharefresh = 'Thay mới';

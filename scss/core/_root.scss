@@ -1,0 +1,59 @@
+:root {
+  --cr-md-zindex: #{$zindex-modal};
+  --cr-md-zindex-backdrop: #{$zindex-modal-backdrop};
+  --cr-md-backdrop-bg: #{$modal-backdrop-bg};
+  --cr-md-backdrop-opacity: #{$modal-backdrop-opacity};
+  --cr-md-md-width: #{$modal-md};
+  --cr-md-content-border-radius: #{$border-radius};
+  --cr-md-content-border-color: rgba(255, 255, 255, 0.15);
+  --cr-md-content-inner-border-radius: #{calc($border-radius - 1px)};
+  --cr-md-header-font-size: #{$h5-font-size};
+  --cr-md-header-font-weight: #{$font-weight-medium};
+
+  --cr-cap-zindex: #{$zindex-cap};
+  --cr-cap-zindex-backdrop: #{$zindex-cap-backdrop};
+  --cr-cap-backdrop-bg: #{$modal-backdrop-bg};
+  --cr-cap-backdrop-opacity: #{$modal-backdrop-opacity};
+  --cr-cap-md-width: #{$modal-md};
+  --cr-cap-content-border-radius: #{$border-radius};
+  --cr-cap-content-border-color: rgba(255, 255, 255, 0.15);
+  --cr-cap-content-inner-border-radius: #{calc($border-radius - 1px)};
+  --cr-cap-header-font-size: #{$h5-font-size};
+  --cr-cap-header-font-weight: #{$font-weight-medium};
+
+  --cr-btn-close-color: #{$btn-close-color};
+  --cr-btn-close-bg: #{ escape-svg($btn-close-bg) };
+  --cr-btn-close-opacity: #{$btn-close-opacity};
+  --cr-btn-close-hover-opacity: #{$btn-close-hover-opacity};
+  --cr-btn-close-focus-opacity: #{$btn-close-focus-opacity};
+  --cr-btn-close-disabled-opacity: #{$btn-close-disabled-opacity};
+  --cr-btn-close-white-filter: #{$btn-close-white-filter};
+
+  --cr-input-border-radius: #{$border-radius};
+  --cr-input-focus-border-color: #86b7fe;
+
+  --cr-btn-padding-y: #{$btn-padding-y};
+  --cr-btn-padding-x: #{$btn-padding-x};
+  --cr-btn-line-height: 1.5;
+  --cr-btn-border-radius: #{$border-radius};
+
+  --cr-danger: #{$red};
+}
+
+// Giao diện sáng
+:root, [data-bs-theme=light], [data-theme=light] {
+  --cr-md-content-bg: #{$body-bg};
+  --cr-cap-content-bg: #{$body-bg};
+  --cr-input-bg: #{$body-bg};
+  --cr-input-focus-bg: #{$body-bg};
+  --cr-border-color: #{$border-color};
+}
+
+// Giao diện tối
+[data-bs-theme=dark], [data-theme=dark] {
+  --cr-md-content-bg: #{$body-bg-dark};
+  --cr-cap-content-bg: #{$body-bg-dark};
+  --cr-input-bg: #{$body-bg-dark};
+  --cr-input-focus-bg: #{$body-bg-dark};
+  --cr-border-color: #{$border-color-dark};
+}

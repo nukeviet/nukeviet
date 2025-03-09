@@ -113,3 +113,7 @@ nukeviet.i18n.WebAuthnErrors = {
     unknow: 'Erreur inconnue, veuillez recharger la page et réessayer'
 };
 nukeviet.i18n.errorSessExp = 'La session a expiré ou une autre erreur s\'est produite, veuillez recharger la page et réessayer';
+nukeviet.i18n.close = 'Fermer';
+nukeviet.i18n.seccode1 = 'Vérification &quot;Je ne suis pas un robot&quot;';
+nukeviet.i18n.seccode = 'Code de sécurité';
+nukeviet.i18n.captcharefresh = 'Rafraîchir';

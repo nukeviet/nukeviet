@@ -87,7 +87,7 @@ function nv_setCookie(name, value, expiredays, secure, SameSite) {
     expiredays = expiredays ? ((a = new Date).setDate(a.getDate() + expiredays), "; expires=" + a.toGMTString()) : "";
     secure = void 0 !== secure && secure ? "; secure" : "";
     SameSite = void 0 !== SameSite && ("Lax" == SameSite || "Strict" == SameSite || "None" == SameSite && "" != secure) ? "; SameSite=" + SameSite : "";
-    document.cookie = name + "=" + escape(value) + expiredays + "; path=" + nv_base_siteurl + SameSite + secure
+    document.cookie = name + "=" + encodeURIComponent(value) + expiredays + "; path=" + nv_base_siteurl + SameSite + secure
 }
 
 function nv_getCookie(name) {
@@ -95,7 +95,7 @@ function nv_getCookie(name) {
         search = " " + name + "=",
         offset = 0,
         end = 0;
-    return 0 < cookie.length && (offset = cookie.indexOf(search), -1 != offset) ? (offset += search.length, end = cookie.indexOf(";", offset), -1 == end && (end = cookie.length), unescape(cookie.substring(offset, end))) : null
+    return 0 < cookie.length && (offset = cookie.indexOf(search), -1 != offset) ? (offset += search.length, end = cookie.indexOf(";", offset), -1 == end && (end = cookie.length), decodeURIComponent(cookie.substring(offset, end))) : null
 }
 
 function nv_check_timezone() {
@@ -481,6 +481,304 @@ function arrayBufferToBase64Url(buffer) {
         .replace(/=+$/, ""); // Loại bỏ padding
 }
 
+// Load multiliple js,css files
+function getFiles(files, callback) {
+    var progress = 0;
+    files.forEach(function(fileurl) {
+        var dtype = fileurl.substring(fileurl.lastIndexOf('.') + 1) == 'js' ? 'script' : 'text',
+            attrs = "undefined" !== typeof site_nonce ? {
+                'nonce': site_nonce
+            } : {};
+        $.ajax({
+            url: fileurl,
+            cache: true,
+            dataType: dtype,
+            scriptAttrs: attrs,
+            success: function() {
+                if (dtype == 'text') {
+                    $("<link/>", {
+                        rel: "stylesheet",
+                        href: fileurl
+                    }).appendTo("head")
+                }
+                if (++progress == files.length) {
+                    if ("function" === typeof callback) {
+                        callback()
+                    }
+                }
+            }
+        })
+    })
+}
+
 nv_check_timezone();
 
 nukeviet.WebAuthnSupported = 'PublicKeyCredential' in window && 'credentials' in navigator && 'create' in navigator.credentials && 'get' in navigator.credentials;
+nukeviet.getScrollbarWidth = () => {
+    const outer = document.createElement('div');
+    outer.style.visibility = 'hidden';
+    outer.style.overflow = 'scroll';
+    outer.style.msOverflowStyle = 'scrollbar';
+    outer.style.position = 'fixed';
+    document.body.appendChild(outer);
+
+    const inner = document.createElement('div');
+    outer.appendChild(inner);
+
+    const scrollbarWidth = outer.offsetWidth - inner.offsetWidth;
+
+    outer.parentNode.removeChild(outer);
+
+    return scrollbarWidth;
+};
+nukeviet.cr = {};
+nukeviet.turnstileIDs = [];
+nukeviet.reCapIDs = [];
+
+// Ap dung trinh nghe thu dong cho touchstart
+// https://web.dev/uses-passive-event-listeners/?utm_source=lighthouse&utm_medium=devtools
+jQuery.event.special.touchstart = {
+    setup: function(_, ns, handle) {
+        this.addEventListener('touchstart', handle, {
+            passive: !ns.includes('noPreventDefault')
+        });
+    }
+};
+
+/**
+ * Tìm modal Bootstrap đang hiển thị trên cùng
+ *
+ * @returns
+ */
+function _getTopBsModal() {
+    let modals = document.querySelectorAll('.modal');
+    let topModal = null;
+    let maxZIndex = 0;
+
+    modals.forEach(modal => {
+        if (window.getComputedStyle(modal).display === 'block') {
+            let zIndex = parseInt(window.getComputedStyle(modal).zIndex, 10);
+            if (zIndex > maxZIndex) {
+                maxZIndex = zIndex;
+                topModal = modal;
+            }
+        }
+    });
+
+    return topModal;
+}
+
+/**
+ * Tắt lệnh ép focus vào modal Bootstrap đang mở. Cho phép focus vào các phần tử khác
+ *
+ * @param {String} forwhat - Từ cái gì
+ * @returns
+ */
+function _offBsenforceFocus(forwhat) {
+    if (
+        (!window.jQuery || !$ || !$.fn || !($.fn.modal && $.fn.modal.Constructor && $.fn.modal.Constructor.VERSION)) ||
+        (forwhat === 'cap' && document.body.classList.contains('cr-md-open')) ||
+        (forwhat === 'md' && document.body.classList.contains('cr-cap-open'))
+    ) {
+        return;
+    }
+    let topModal = _getTopBsModal();
+    if (topModal) {
+        const bsVersion = parseInt($.fn.modal.Constructor.VERSION.substring(0, 1));
+        if (bsVersion > 4) {
+            const md = bootstrap.Modal.getInstance(topModal);
+            md._focustrap.deactivate();
+        } else {
+            $(document).off('focusin.bs.modal');
+        }
+    }
+}
+
+/**
+ * Bật lại lệnh ép focus vào modal Bootstrap đang mở
+ *
+ * @param {String} forwhat - Từ cái gì
+ * @returns
+ */
+function _onBsenforceFocus(forwhat) {
+    let topModal = _getTopBsModal();
+    if (
+        !topModal ||
+        (!window.jQuery || !$ || !$.fn || !($.fn.modal && $.fn.modal.Constructor && $.fn.modal.Constructor.VERSION)) ||
+        (forwhat === 'cap' && document.body.classList.contains('cr-md-open')) ||
+        (forwhat === 'md' && document.body.classList.contains('cr-cap-open'))
+    ) {
+        return;
+    }
+    const bsVersion = parseInt($.fn.modal.Constructor.VERSION.substring(0, 1));
+    if (bsVersion > 4) {
+        const md = bootstrap.Modal.getInstance(topModal);
+        md._focustrap.activate();
+    } else {
+        const md = $(topModal).data('bs.modal');
+        md.enforceFocus();
+    }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    // Core default modal
+    if (!document.getElementById('sitemodal')) {
+        const body = document.body;
+        const modal = document.createElement('div');
+        modal.id = 'sitemodal';
+        modal.classList.add('cr-md', 'cr-fade');
+        modal.setAttribute('tabindex', '-1');
+        modal.setAttribute('aria-labelledby', 'sitemodalLabel');
+        modal.setAttribute('aria-hidden', 'true');
+        modal.innerHTML = `<div class="cr-md-dialog">
+            <div class="cr-md-content">
+                <div class="cr-md-header">
+                    <div class="cr-md-title" id="sitemodalLabel">&nbsp;</div>
+                    <button type="button" class="cr-btn-close" data-cr-dismiss="modal" aria-label="${nukeviet.i18n.close}"></button>
+                </div>
+                <div class="cr-md-body"></div>
+            </div>
+        </div>`;
+        body.appendChild(modal);
+        nukeviet.cr.mdDb = {
+            overflow: null,
+            paddingRight: null,
+            scroll: null,
+            cb: null
+        };
+
+        // Đóng modal
+        modal.querySelector('[data-cr-dismiss="modal"]').addEventListener('click', (e) => {
+            e.preventDefault();
+
+            const body = document.body;
+            const modal = document.getElementById('sitemodal');
+            const backdrop = document.querySelector('.cr-md-backdrop');
+
+            body.classList.remove('cr-md-open');
+            body.style.overflow = nukeviet.cr.mdDb.overflow;
+            body.style.paddingRight = nukeviet.cr.mdDb.paddingRight;
+            if (body.getAttribute('style') === '') {
+                body.removeAttribute('style');
+            }
+            if (body.getAttribute('class') === '') {
+                body.removeAttribute('class');
+            }
+
+            modal.classList.remove('show');
+            backdrop.classList.remove('show');
+            setTimeout(() => {
+                modal.style.display = 'none';
+                modal.removeAttribute('aria-modal');
+                modal.setAttribute('aria-hidden', 'true');
+                modal.querySelector('.cr-md-title').innerHTML = '';
+                modal.querySelector('.cr-md-body').innerHTML = '';
+                body.removeChild(backdrop);
+                _onBsenforceFocus('md');
+                if (nukeviet.cr.mdDb.cb) {
+                    nukeviet.cr.mdDb.cb(modal);
+                }
+                nukeviet.cr.mdDb.cb = null;
+            }, 150);
+        });
+
+        // Click ngoài modal
+        modal.addEventListener('click', (event) => {
+            const content = modal.querySelector('.cr-md-content');
+            if (!modal.classList.contains('cr-md-static') && !content.contains(event.target) && !event.target.closest('.cr-md-content')) {
+                modal.classList.add('cr-md-static');
+                setTimeout(() => {
+                    modal.classList.remove('cr-md-static');
+                }, 310);
+            }
+        });
+
+        // ESC để đóng modal
+        document.addEventListener("keydown", function(event) {
+            if (event.key === "Escape" && document.body.classList.contains('cr-md-open')) {
+                const modal = document.getElementById('sitemodal');
+                modal.querySelector('[data-cr-dismiss="modal"]').click();
+            }
+        });
+
+        // Mở modal
+        window.modalShow = (title, content, callback, closeCallback) => {
+            const body = document.body;
+            const modal = document.getElementById('sitemodal');
+            if (body.classList.contains('cr-md-open')) {
+                return;
+            }
+
+            const backdrop = document.createElement('div');
+            backdrop.classList.add('cr-md-backdrop', 'cr-fade');
+            body.append(backdrop);
+
+            modal.querySelector('.cr-md-title').innerHTML = title;
+
+            const mdBody = modal.querySelector('.cr-md-body');
+            mdBody.innerHTML = content;
+            mdBody.querySelectorAll('script').forEach(oldScript => {
+                const newScript = document.createElement('script');
+                if (oldScript.src) {
+                    newScript.src = oldScript.src;
+                } else {
+                    newScript.textContent = oldScript.textContent;
+                }
+                oldScript.replaceWith(newScript);
+            });
+
+            modal.removeAttribute('aria-hidden');
+            modal.setAttribute('aria-modal', 'true');
+            modal.style.display = 'block';
+
+            nukeviet.cr.mdDb.overflow = body.style.overflow;
+            nukeviet.cr.mdDb.paddingRight = body.style.paddingRight;
+            nukeviet.cr.mdDb.scroll = document.documentElement.scrollHeight > window.innerHeight;
+
+            // Tạo độ trễ cho các transition
+            setTimeout(() => {
+                modal.classList.add('show');
+                backdrop.classList.add('show');
+
+                body.style.overflow = 'hidden';
+                nukeviet.cr.mdDb.scroll && (body.style.paddingRight = nukeviet.getScrollbarWidth() + 'px');
+                body.classList.add('cr-md-open');
+            }, 1);
+            setTimeout(() => {
+                _offBsenforceFocus('md');
+                if (typeof callback === 'function') {
+                    callback(modal);
+                }
+                if (typeof closeCallback === 'function') {
+                    nukeviet.cr.mdDb.cb = closeCallback;
+                } else if (callback === 'recaptchareset') {
+                    loadCaptcha(modal);
+                }
+            }, 160);
+        };
+
+        // Hàm đóng modal
+        window.modalHide = () => {
+            if (!document.body.classList.contains('cr-md-open')) {
+                return;
+            }
+            const modal = document.getElementById('sitemodal');
+            modal.querySelector('[data-cr-dismiss="modal"]').click();
+        };
+    }
+
+    if (typeof window.modalShowByObj === 'undefined') {
+        window.modalShowByObj = (obj, callback) => {
+            if (!(obj instanceof Element)) {
+                obj = document.querySelector(obj);
+            }
+            if (!obj) {
+                return;
+            }
+            modalShow(obj.getAttribute('title'), obj.innerHTML, callback);
+        };
+    }
+
+    // Alertbox + Confirm box
+    // Toast
+});
