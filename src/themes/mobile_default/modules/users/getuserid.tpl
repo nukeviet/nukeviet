@@ -105,8 +105,8 @@ $(function() {
             success: function(a) {
                 if (a == "OK") {
                     alert('{LANG.actived_users}');
-                    $('#sitemodal').modal('hide');
-                    window.location.href = window.location.href;
+                    modalHide();
+                    location.reload();
                 } else {
                     alert('{LANG.not_active}');
                 }

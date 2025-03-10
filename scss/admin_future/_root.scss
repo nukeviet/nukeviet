@@ -1,5 +1,11 @@
 :root,
 [data-bs-theme="light"] {
+    --cr-md-content-border-radius: #{$border-radius-lg};
+    --cr-md-content-inner-border-radius: #{calc($border-radius-lg - 1px)};
+    --cr-cap-content-border-radius: #{$border-radius-lg};
+    --cr-cap-content-inner-border-radius: #{calc($border-radius-lg - 1px)};
+    --cr-danger: #{$red};
+
     --nv-header-bg-color: #{$header-bg};
     --nv-header-active-bg-color: #{$header-active-bg};
     --nv-header-link-hover-color: #{$header-link-hover-color};

@@ -25221,6 +25221,11 @@ readers do not read off random characters that represent icons */
 
 :root,
 [data-bs-theme=light] {
+  --cr-md-content-border-radius: 0.5rem;
+  --cr-md-content-inner-border-radius: calc(0.5rem - 1px);
+  --cr-cap-content-border-radius: 0.5rem;
+  --cr-cap-content-inner-border-radius: calc(0.5rem - 1px);
+  --cr-danger: #ee3232;
   --nv-header-bg-color: #fff;
   --nv-header-active-bg-color: #e5e5e5;
   --nv-header-link-hover-color: #333333;
