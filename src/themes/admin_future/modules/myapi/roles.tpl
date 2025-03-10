@@ -192,7 +192,7 @@
                 </div>
                 <div class="row mb-3">
                     <label class="col-sm-3 col-form-label text-sm-end">{$LANG->getModule('api_role_type')}</label>
-                    <div class="col-sm-8 col-lg-6 col-xxl-5">
+                    <div class="col-sm-8 col-lg-6 col-xxl-5 pt-2">
                         <div class="form-check form-check-inline">
                             <input class="form-check-input" type="radio" value="private" name="role_type" id="role_type_private" {$DATA.role_type_private_checked}>
                             <label class="form-check-label" for="role_type_private"> {$LANG->getModule('api_role_type_private')}</label>
@@ -211,7 +211,7 @@
                 </div>
                 <div class="row mb-3">
                     <label class="col-sm-3 col-form-label text-sm-end">{$LANG->getModule('api_role_object')}</label>
-                    <div class="col-sm-8 col-lg-6 col-xxl-5">
+                    <div class="col-sm-8 col-lg-6 col-xxl-5 pt-2">
                         <div class="form-check form-check-inline">
                             <input class="form-check-input" type="radio" value="private" name="role_object" id="role_object_admin" {$DATA.role_object_admin_checked}>
                             <label class="form-check-label" for="role_object_admin"> {$LANG->getModule('api_role_object_admin')}</label>

@@ -10,8 +10,8 @@
 $(function() {
     if (document.getElementById('role')) {
         // Thay đổi đối tượng
-        document.querySelectorAll('#role [name=role_object]').forEach(role_onject => {
-            role_onject.addEventListener('change', (event) => {
+        document.querySelectorAll('#role [name=role_object]').forEach(role_object => {
+            role_object.addEventListener('change', (event) => {
                 fetch(document.querySelector('#role').getAttribute('action'), {
                     method: 'POST',
                     headers: {
