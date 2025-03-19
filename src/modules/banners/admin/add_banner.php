@@ -15,7 +15,7 @@ if (!defined('NV_IS_FILE_ADMIN')) {
 
 $page_title = $nv_Lang->getModule('admin_add_banner');
 
-$contents = [];
+$data = [];
 $data['upload_blocked'] = '';
 $data['file_allowed_ext'] = [];
 

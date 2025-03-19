@@ -1,4 +1,4 @@
-{if $data.upload_blocked}
+{if $data.upload_blocked != ""}
 <div class="alert alert-danger">{$data.upload_blocked}</div>
 {/if}
 <div class="alert alert-danger">{$data.info}</div>
