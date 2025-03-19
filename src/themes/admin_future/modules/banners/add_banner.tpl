@@ -45,7 +45,7 @@
                                     <div class="searchresultaj"></div>
                                 </div>
                                 <div class="pull-left margin-left">
-                                    <a href="javascript:void(0);" title="{$LANG->getModule(" assign_to_user_tip")}" data-bs-toggle="tooltip" class="form-info-circle"><i class="fa fa-info-circle"></i></a>
+                                    <a href="javascript:void(0);" title="{$LANG->getModule("assign_to_user_tip")}" data-bs-toggle="tooltip" class="form-info-circle"><i class="fa fa-info-circle"></i></a>
                                 </div>
                             </div>
                         </div>
