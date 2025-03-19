@@ -113,30 +113,52 @@ $is_error = (!empty($error)) ? 1 : 0;
 $allow_langs = array_flip($global_config['allow_sitelangs']);
 $allow_langs = array_intersect_key($language_array, $allow_langs);
 
-$contents = [];
-$contents['info'] = $info;
-$contents['is_error'] = $is_error;
-$contents['submit'] = $nv_Lang->getModule('add_plan');
-$contents['action'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=add_plan';
-$contents['title'] = [$nv_Lang->getModule('title'), 'title', $title, 255];
-$contents['blang'] = [$nv_Lang->getModule('blang'), 'blang', $nv_Lang->getModule('blang_all'), $allow_langs, $blang];
-$contents['form'] = [$nv_Lang->getModule('form'), 'form', $forms, $form];
-$contents['size'] = $nv_Lang->getModule('size');
-$contents['require_image'] = $require_image;
-$contents['width'] = [$nv_Lang->getModule('width'), 'width', $width, 4];
-$contents['height'] = [$nv_Lang->getModule('height'), 'height', $height, 4];
-$contents['description'] = [$nv_Lang->getModule('description'), 'description', $description, '99%', '300px', defined('NV_EDITOR') ? true : false];
-$contents['exp_time'] = $exp_time;
-$contents['exp_time_custom'] = $exp_time_custom ?: '';
-$contents['uploadgroup'] = $uploadgroup;
-$contents['uploadtype'] = $uploadtype;
+$data = [];
+$data['info'] = $info;
+$data['is_error'] = $is_error;
+$data['submit'] = $nv_Lang->getModule('add_plan');
+$data['action'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=add_plan';
+$data['title'] = [$nv_Lang->getModule('title'), 'title', $title, 255];
+$data['blang'] = [$nv_Lang->getModule('blang'), 'blang', $nv_Lang->getModule('blang_all'), $allow_langs, $blang];
+$data['form'] = [$nv_Lang->getModule('form'), 'form', $forms, $form];
+$data['size'] = $nv_Lang->getModule('size');
+$data['require_image'] = $require_image;
+$data['width'] = [$nv_Lang->getModule('width'), 'width', $width, 4];
+$data['height'] = [$nv_Lang->getModule('height'), 'height', $height, 4];
+$data['description'] = [$nv_Lang->getModule('description'), 'description', $description, '99%', '300px', defined('NV_EDITOR') ? true : false];
+$data['exp_time'] = $exp_time;
+$data['exp_time_custom'] = $exp_time_custom ?: '';
+$data['uploadgroup'] = $uploadgroup;
+$data['uploadtype'] = $uploadtype;
 
 if (defined('NV_EDITOR')) {
     require_once NV_ROOTDIR . '/' . NV_EDITORSDIR . '/' . NV_EDITOR . '/nv.php';
 }
 
-$contents = nv_add_plan_theme($contents, $array_uploadtype, $groups_list);
+$tpl = new \NukeViet\Template\NVSmarty();
+$tpl->setTemplateDir(get_module_tpl_dir('add_plan.tpl'));
+$tpl->assign('LANG', $nv_Lang);
+$tpl->assign('MODULE_NAME', $module_name);
+$tpl->assign('MODULE_DATA', $module_data);
+$tpl->assign('OP', $op);
 
+$data['uploadtype'] = explode(',', $data['uploadtype']);
+$tpl->assign('data', $data);
+
+if ($data['description'][5] and nv_function_exists('nv_aleditor')) {
+    $description = nv_aleditor($data['description'][1], $data['description'][3], $data['description'][4], $data['description'][2], '', NV_UPLOADS_DIR . '/' . $module_upload, NV_UPLOADS_DIR . '/' . $module_upload . '/files');
+} else {
+    $description = '<textarea name="' . $data['description'][1] . '" id="' . $data['description'][1] . '" style="width:' . $data['description'][3] . ';height:' . $data['description'][4] . '">' . $data['description'][2] . '</textarea>\n';
+}
+$tpl->assign('DESCRIPTION', $description);
+$tpl->assign('array_uploadtype', $array_uploadtype);
+$tpl->assign('groups_list', $groups_list);
+$tpl->assign('array_exp_time', $array_exp_time);
+
+$uploadgroup = array_map('intval', explode(',', $data['uploadgroup']));
+$tpl->assign('uploadgroup', $uploadgroup);
+
+$contents = $tpl->fetch('add_plan.tpl');
 $page_title = $nv_Lang->getModule('add_plan');
 
 include NV_ROOTDIR . '/includes/header.php';

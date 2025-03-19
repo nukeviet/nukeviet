@@ -16,19 +16,15 @@ if (!defined('NV_IS_FILE_ADMIN')) {
 $page_title = $nv_Lang->getModule('admin_add_banner');
 
 $contents = [];
-$contents['upload_blocked'] = '';
-$contents['file_allowed_ext'] = [];
+$data['upload_blocked'] = '';
+$data['file_allowed_ext'] = [];
 
 if (preg_match('/images/', NV_ALLOW_FILES_TYPE)) {
-    $contents['file_allowed_ext'][] = 'images';
+    $data['file_allowed_ext'][] = 'images';
 }
 
-if (empty($contents['file_allowed_ext'])) {
-    $contents['upload_blocked'] = $nv_Lang->getModule('admin_upload_blocked');
-
-    include NV_ROOTDIR . '/includes/header.php';
-    echo nv_admin_theme(nv_add_banner_theme($contents));
-    include NV_ROOTDIR . '/includes/footer.php';
+if (empty($data['file_allowed_ext'])) {
+    $data['upload_blocked'] = $nv_Lang->getModule('admin_upload_blocked');
 }
 
 $plans = $require_image = $plans_form = $plans_exp = [];
@@ -155,7 +151,7 @@ if ($nv_Request->get_int('save', 'post') == '1') {
 
         // Upload ảnh trên mobile
         if (isset($_FILES['imageforswf']) and is_uploaded_file($_FILES['imageforswf']['tmp_name'])) {
-            $upload = new NukeViet\Files\Upload($contents['file_allowed_ext'], $global_config['forbid_extensions'], $global_config['forbid_mimes'], NV_UPLOAD_MAX_FILESIZE, NV_MAX_WIDTH, NV_MAX_HEIGHT);
+            $upload = new NukeViet\Files\Upload($data['file_allowed_ext'], $global_config['forbid_extensions'], $global_config['forbid_mimes'], NV_UPLOAD_MAX_FILESIZE, NV_MAX_WIDTH, NV_MAX_HEIGHT);
             $upload->setLanguage(\NukeViet\Core\Language::$lang_global);
             $upload_info = $upload->save_file($_FILES['imageforswf'], NV_UPLOADS_REAL_DIR . '/' . NV_BANNER_DIR, false);
             @unlink($_FILES['imageforswf']['tmp_name']);
@@ -196,7 +192,7 @@ if ($nv_Request->get_int('save', 'post') == '1') {
                 $data_insert['bannerhtml'] = $bannerhtml;
                 $id = $db->insert_id($_sql, 'id', $data_insert);
             } else {
-                $upload = new NukeViet\Files\Upload($contents['file_allowed_ext'], $global_config['forbid_extensions'], $global_config['forbid_mimes'], NV_UPLOAD_MAX_FILESIZE, NV_MAX_WIDTH, NV_MAX_HEIGHT);
+                $upload = new NukeViet\Files\Upload($data['file_allowed_ext'], $global_config['forbid_extensions'], $global_config['forbid_mimes'], NV_UPLOAD_MAX_FILESIZE, NV_MAX_WIDTH, NV_MAX_HEIGHT);
                 $upload->setLanguage(\NukeViet\Core\Language::$lang_global);
                 $upload_info = $upload->save_file($_FILES['banner'], NV_UPLOADS_REAL_DIR . '/' . NV_BANNER_DIR, false);
                 @unlink($_FILES['banner']['tmp_name']);
@@ -261,18 +257,18 @@ if ($nv_Request->get_int('save', 'post') == '1') {
     }
 }
 
-$contents['info'] = (!empty($error)) ? $error : $nv_Lang->getModule('add_banner_info');
-$contents['is_error'] = (!empty($error)) ? 1 : 0;
-$contents['file_allowed_ext'] = implode(', ', $contents['file_allowed_ext']);
-$contents['submit'] = $nv_Lang->getModule('admin_add_banner');
-$contents['action'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=add_banner';
-$contents['title'] = [
+$data['info'] = (!empty($error)) ? $error : $nv_Lang->getModule('add_banner_info');
+$data['is_error'] = (!empty($error)) ? 1 : 0;
+$data['file_allowed_ext'] = implode(', ', $data['file_allowed_ext']);
+$data['submit'] = $nv_Lang->getModule('admin_add_banner');
+$data['action'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=add_banner';
+$data['title'] = [
     $nv_Lang->getModule('title'),
     'title',
     $title,
     255
 ];
-$contents['plan'] = [
+$data['plan'] = [
     $nv_Lang->getModule('in_plan'),
     'pid',
     $plans,
@@ -281,61 +277,73 @@ $contents['plan'] = [
     $require_image,
     $plans_exp
 ];
-$contents['upload'] = [
-    $nv_Lang->getModule('upload', $contents['file_allowed_ext']),
+$data['upload'] = [
+    $nv_Lang->getModule('upload', $data['file_allowed_ext']),
     'banner',
     $nv_Lang->getModule('imageforswf'),
     'imageforswf'
 ];
-$contents['file_alt'] = [
+$data['file_alt'] = [
     $nv_Lang->getModule('file_alt'),
     'file_alt',
     $file_alt,
     255
 ];
-$contents['click_url'] = [
+$data['click_url'] = [
     $nv_Lang->getModule('click_url'),
     'click_url',
     $click_url,
     255
 ];
-$contents['target'] = [
+$data['target'] = [
     $nv_Lang->getModule('target'),
     'target',
     $targets,
     $target
 ];
-$contents['publ_date'] = [
+$data['publ_date'] = [
     $nv_Lang->getModule('publ_date'),
     'publ_date',
     $publ_date,
     $publ_date_h,
     $publ_date_m
 ];
-$contents['exp_date'] = [
+$data['exp_date'] = [
     $nv_Lang->getModule('exp_date'),
     'exp_date',
     $exp_date,
     $exp_date_h,
     $exp_date_m
 ];
-$contents['bannerhtml'] = htmlspecialchars(nv_editor_br2nl($bannerhtml));
-$contents['assign_user'] = $assign_user;
+$data['bannerhtml'] = htmlspecialchars(nv_editor_br2nl($bannerhtml));
+$data['assign_user'] = $assign_user;
 
 if (defined('NV_EDITOR')) {
     require_once NV_ROOTDIR . '/' . NV_EDITORSDIR . '/' . NV_EDITOR . '/nv.php';
 }
 
 if (defined('NV_EDITOR') and nv_function_exists('nv_aleditor')) {
-    $contents['bannerhtml'] = nv_aleditor('bannerhtml', '100%', '300px', $contents['bannerhtml'], '', NV_UPLOADS_DIR . '/' . $module_upload, NV_UPLOADS_DIR . '/' . $module_upload . '/files');
+    $data['bannerhtml'] = nv_aleditor('bannerhtml', '100%', '300px', $data['bannerhtml'], '', NV_UPLOADS_DIR . '/' . $module_upload, NV_UPLOADS_DIR . '/' . $module_upload . '/files');
 } else {
-    $contents['bannerhtml'] = '<textarea style="width:100%;height:300px" name="bannerhtml">' . $contents['bannerhtml'] . '</textarea>';
+    $data['bannerhtml'] = '<textarea style="width:100%;height:300px" name="bannerhtml">' . $data['bannerhtml'] . '</textarea>';
 }
-$contents['bannerhtml'] = [
+$data['bannerhtml'] = [
     $nv_Lang->getModule('bannerhtml'),
-    $contents['bannerhtml']
+    $data['bannerhtml']
 ];
 
+$tpl = new \NukeViet\Template\NVSmarty();
+$tpl->setTemplateDir(get_module_tpl_dir('add_plan.tpl'));
+$tpl->assign('LANG', $nv_Lang);
+$tpl->assign('MODULE_NAME', $module_name);
+$tpl->assign('MODULE_DATA', $module_data);
+$tpl->assign('OP', $op);
+
+$tpl->assign('data', $data);
+$tpl->assign('plans', $plans);
+
+$contents = $tpl->fetch('add_banner.tpl');
+
 include NV_ROOTDIR . '/includes/header.php';
-echo nv_admin_theme(nv_add_banner_theme($contents));
+echo nv_admin_theme($contents);
 include NV_ROOTDIR . '/includes/footer.php';
