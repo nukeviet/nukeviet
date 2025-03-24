@@ -20,7 +20,7 @@ if ($nv_Request->isset_request('checkss', 'post')) {
             'remote_api_access' => (int) $nv_Request->get_bool('remote_api_access', 'post', false),
             'api_check_time' => $nv_Request->get_absint('api_check_time', 'post', 0)
         ];
-    
+
         // Cho phép sai lệch từ 1 giây - 1 ngày
         if ($array_config_global['api_check_time'] <= 0 or $array_config_global['api_check_time'] > 1440) {
             $array_config_global['api_check_time'] = 5;
@@ -54,7 +54,8 @@ $page_title = $nv_Lang->getModule('config');
 $tpl = new \NukeViet\Template\NVSmarty();
 $tpl->setTemplateDir(get_module_tpl_dir('config.tpl'));
 $tpl->assign('LANG', $nv_Lang);
-$tpl->assign('FORM_ACTION', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op);
+$tpl->assign('MODULE_NAME', $module_name);
+$tpl->assign('OP', $op);
 $tpl->assign('CHECKSS', $checkss);
 $tpl->assign('CHECKED_REMOTE_API_ACCESS', ($global_config['remote_api_access'] == 1) ? ' checked ' : '');
 $tpl->assign('DATA', $global_config);

@@ -16,9 +16,7 @@
 }
 .ext-thumbnail > div img,
 .ext-thumbnail > div svg {
-  -o-object-position: center;
   object-position: center;
-  -o-object-fit: cover;
   object-fit: cover;
   width: 100%;
   height: 100%;

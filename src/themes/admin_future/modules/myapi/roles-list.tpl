@@ -1,0 +1,168 @@
+{if empty($GCONFIG.remote_api_access)}
+<div class="alert alert-danger">
+    {$REMOTE_API_OFF}
+</div>
+{/if}
+<div id="rolelist" data-page-url="{$PAGE_URL}" data-checkss="{$CHECKSS}">
+    <div class="card">
+        <div class="card-body">
+            <div class="row">
+                <div class="row col-sm-6">
+                    <div class="col">
+                        <div class="input-group">
+                            <span class="input-group-text">{$LANG->getModule('api_role_type')}</span>
+                            <select class="form-select role-type">
+                                <option value="">{$LANG->getModule('all')}</option>
+                                {foreach $TYPES as $TYPE}
+                                <option value="{$TYPE}" {if $TYPE == $TYPE_API}selected="selected"{/if}>{$LANG->getModule("api_role_type_"|cat:$TYPE)}</option>
+                                {/foreach}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="input-group">
+                            <span class="input-group-text">{$LANG->getModule('api_role_object')}</span>
+                            <select class="form-select role-object">
+                                <option value="">{$LANG->getModule('all')}</option>
+                                {foreach $OBJECTS as $OBJECT}
+                                <option value="{$OBJECT}" {if $OBJECT == $OBJECT_API}selected="selected"{/if}>{$LANG->getModule("api_role_object_"|cat:$OBJECT)}</option>
+                                {/foreach}
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-6 text-end">
+                    <a href="{$ADD_API_ROLE_URL}" class="btn btn-primary mb-3">{$LANG->getModule('add_role')}</a>
+                </div>
+            </div>
+        </div>
+        {if empty($ROLE_LIST)}
+        <div class="card-body">
+            <div class="alert alert-info text-center">
+                {$LANG->getModule('api_roles_empty')}
+            </div>
+        </div>
+        {else}
+        <div class="card-body">
+            <div class="table-responsive table-card">
+                <table class="table table-bordered table-striped">
+                    <thead class="bg-primary">
+                        <tr>
+                            <th class="text-nowrap text-center">{$LANG->getModule('api_roles_title')}</th>
+                            <th class="text-nowrap text-center" style="width: 1%;">{$LANG->getModule('api_role_type')}</th>
+                            <th class="text-nowrap text-center" style="width: 1%;">{$LANG->getModule('api_role_object')}</th>
+                            <th class="text-nowrap text-center" style="width: 1%;">{$LANG->getModule('api_addtime')}</th>
+                            <th class="text-nowrap text-center" style="width: 1%;">{$LANG->getModule('api_edittime')}</th>
+                            <th class="text-nowrap text-center" style="width: 1%;">{$LANG->getModule('status')}</th>
+                            <th class="text-nowrap text-center" style="width: 1%"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {foreach $ROLE_LIST as $ROLE}
+                        <tr class="item" data-id="{$ROLE.role_id}">
+                            <td>{$ROLE.role_title}</td>
+                            <td class="text-nowrap text-center" style="width: 1%;">{$LANG->getModule('api_role_type_'|cat:$ROLE.role_type)}</td>
+                            <td class="text-nowrap text-center" style="width: 1%;">{$LANG->getModule('api_role_object_'|cat:$ROLE.role_object)}</td>
+                            <td class="text-nowrap text-center" style="width: 1%;">{$ROLE.addtime|ddatetime}</td>
+                            <td class="text-nowrap text-center" style="width: 1%;">{if $ROLE.edittime}{$ROLE.edittime|ddatetime}{/if}</td>
+                            <td class="text-nowrap text-center" style="width: 1%;">
+                                <select class="form-control change-status" style="width: 100px;">
+                                    {foreach [$LANG->getModule('inactive'), $LANG->getModule('active')] as $K_STATUS => $STATUS}
+                                    <option value="{$K_STATUS}" {if $K_STATUS == $ROLE.status}selected="selected"{/if}>{$STATUS}</option>
+                                    {/foreach}
+                                </select>
+                            </td>
+                            <td class="text-nowrap text-center" style="width: 1%">
+                                <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#apiroledetail{$ROLE.role_id}">{$LANG->getModule('api_roles_allowed')}</button>
+                                <!-- START FORFOOTER -->
+                                <div id="apiroledetail{$ROLE.role_id}" tabindex="-1" role="dialog" class="modal fade">
+                                    <div class="modal-dialog" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <div class="modal-title"><strong>{$LANG->getModule('api_roles_detail')}: {$ROLE.role_title}</strong></div>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="close"></button>
+                                            </div>
+                                            <div class="modal-body">                        
+                                                {if !empty($ROLE.apis[''])}
+                                                {foreach $ROLE.apis[''] as $CAT_DATA}
+                                                <div class="card mb-3 border">
+                                                    <div class="card-header api-header"><strong><i class="fa fa-folder-open-o"></i> {$LANG->getModule('api_of_system')}: {$CAT_DATA.title}</strong></div>
+                                                    <div class="card-body">
+                                                        <div class="row">
+                                                            {foreach $CAT_DATA.apis as $API_DATA}
+                                                            <div class="col-sm-6">
+                                                                <div class="text-truncate mb-3"><i class="fa fa-caret-right"></i> {$API_DATA}</div>
+                                                            </div>
+                                                            {/foreach}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                {/foreach}
+                                                {/if}
+                                                {assign var='FORLANGS' value=[]}
+                                                {foreach $GCONFIG.setup_langs as $KEY_LANG => $_LG}
+                                                    {if $_LG == $smarty.const.NV_LANG_DATA}
+                                                        {append var='FORLANGS' value=['active' => 'active', 'in' => ' in active show', 'expanded' => 'true', 'langkey' => $_LG, 'langname' => $LANGUAGE_ARRAY[$_LG].name] index=$_LG}
+                                                    {else}
+                                                        {append var='FORLANGS' value=['active' => '', 'in' => '', 'expanded' => 'false', 'langkey' => $_LG, 'langname' => $LANGUAGE_ARRAY[$_LG].name] index=$_LG}
+                                                    {/if}
+                                                {/foreach}
+                                                <div>
+                                                    <ul class="nav nav-tabs mb-3" role="tablist">
+                                                        {foreach $FORLANGS as $FORLANG}
+                                                        <li role="presentation" class="nav-item"><a id="forlang-{$FORLANG.langkey}-{$ROLE.role_id}-tab" href="#forlang-{$FORLANG.langkey}-{$ROLE.role_id}" class="nav-link {$FORLANG.active}" aria-controls="forlang-{$FORLANG.langkey}-{$ROLE.role_id}" role="tab" data-bs-toggle="tab" aria-expanded="{$FORLANG.expanded}">{$FORLANG.langname}</a></li>
+                                                        {/foreach}
+                                                    </ul>
+                                                    <div class="tab-content">
+                                                        {foreach $FORLANGS as $_LG => $FORLANG}
+                                                        <div role="tabpanel" class="tab-pane fade{$FORLANG.in}" id="forlang-{$FORLANG.langkey}-{$ROLE.role_id}" aria-labelledby="forlang-{$FORLANG.langkey}-{$ROLE.role_id}-tab">
+                                                            {if !empty($ROLE.apis.$_LG)}
+                                                            {foreach $ROLE.apis.$_LG as $MOD_TITLE => $MOD_DATA}
+                                                            {foreach $MOD_DATA as $CAT_DATA}
+                                                            <div class="card mb-3 border">
+                                                                <div class="card-header api-header"><strong><i class="fa fa-folder-open-o"></i> {$SITE_MOD.$MOD_TITLE.custom_title}
+                                                                        {if !empty($CAT_DATA.title)}
+                                                                        <i class="fa fa-angle-right"></i> {$CAT_DATA.title}
+                                                                        {/if}
+                                                                    </strong></div>
+                                                                <div class="card-body">
+                                                                    <div class="row">
+                                                                        {foreach $CAT_DATA.apis as $API_DATA}
+                                                                        <div class="col-sm-6">
+                                                                            <div class="text-truncate mb-3" title="{$API_DATA}"><i class="fa fa-caret-right"></i> {$API_DATA}</div>
+                                                                        </div>
+                                                                        {/foreach}
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            {/foreach}
+                                                            {/foreach}
+                                                            {/if}
+                                                        </div>
+                                                        {/foreach}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- END FORFOOTER -->
+                                <a href="{$ADD_API_ROLE_URL}&amp;id={$ROLE.role_id}" class="btn btn-secondary"><i class="fa fa-pencil"></i> {$LANG->getGlobal('edit')}</a>
+                                <button type="button" class="btn btn-secondary" data-toggle="apiroledel"><i class="fa fa-trash-o"></i> {$LANG->getGlobal('delete')}</button>
+                            </td>
+                        </tr>
+                        {/foreach}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        {if !empty($GENERATE_PAGE)}
+        <div class="card-footer border-top">
+            <div class="d-flex flex-wrap justify-content-end align-items-center">
+                {$GENERATE_PAGE}
+            </div>
+        </div>
+        {/if}
+    </div>
+    {/if}
+</div>

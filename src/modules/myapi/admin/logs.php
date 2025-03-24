@@ -168,9 +168,7 @@ $get_data['todate'] = nv_u2d_get($get_data['todate']);
 $tpl = new \NukeViet\Template\NVSmarty();
 $tpl->setTemplateDir(get_module_tpl_dir('logs.tpl'));
 $tpl->assign('LANG', $nv_Lang);
-$tpl->assign('PAGE_URL', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op);
 $tpl->assign('GET_DATA', $get_data);
-$tpl->assign('INDEX_PAGE', NV_BASE_ADMINURL . 'index.php');
 $tpl->assign('MODULE_NAME', $module_name);
 $tpl->assign('OP', $op);
 

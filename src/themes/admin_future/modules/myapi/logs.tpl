@@ -3,10 +3,10 @@
 <script src="{$smarty.const.ASSETS_STATIC_URL}/js/flatpickr/flatpickr.min.js"></script>
 <script src="{$smarty.const.ASSETS_STATIC_URL}/js/language/flatpickr-{$smarty.const.NV_LANG_INTERFACE}.js"></script>
 
-<div id="logs" data-page-url="{$PAGE_URL}">
+<div id="logs" data-page-url="{$smarty.const.NV_BASE_ADMINURL}index.php?{$smarty.const.NV_LANG_VARIABLE}={$smarty.const.NV_LANG_DATA}&amp;{$smarty.const.NV_NAME_VARIABLE}={$MODULE_NAME}&amp;{$smarty.const.NV_OP_VARIABLE}={$OP}">
     <div class="card">
         <div class="card-header">  
-            <form method="get" action="{$INDEX_PAGE}">     
+            <form method="get" action="{$smarty.const.NV_BASE_ADMINURL}index.php">     
                 <input type="hidden" name="{$smarty.const.NV_LANG_VARIABLE}" value="{$smarty.const.NV_LANG_DATA}" />
                 <input type="hidden" name="{$smarty.const.NV_NAME_VARIABLE}" value="{$MODULE_NAME}" />
                 <input type="hidden" name="{$smarty.const.NV_OP_VARIABLE}" value="{$OP}" />

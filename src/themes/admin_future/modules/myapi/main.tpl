@@ -1,10 +1,10 @@
 <script type="text/javascript" src="{$smarty.const.ASSETS_STATIC_URL}/js/clipboard/clipboard.min.js"></script>
-<div id="my-role-api" data-page-url="{$PAGE_URL}">
+<div id="my-role-api" data-page-url="{$smarty.const.NV_BASE_ADMINURL}index.php?{$smarty.const.NV_LANG_VARIABLE}={$smarty.const.NV_LANG_DATA}&amp;{$smarty.const.NV_NAME_VARIABLE}={$MODULE_NAME}">
     <div class="tools row">
         <div class="mb-4 col">
             <ul class="nav nav-pills">
-                <li class="nav-item"><a class="nav-link {$TYPE_PUBLIC.active}" href="{$TYPE_PUBLIC.url}">{$TYPE_PUBLIC.name}</a></li>
-                <li class="nav-item"><a class="nav-link {$TYPE_PRIVATE.active}" href="{$TYPE_PRIVATE.url}">{$TYPE_PRIVATE.name}</a></li>
+                <li class="nav-item"><a class="nav-link {if $TYPE == 'public'}active{/if}" href="{$smarty.const.NV_BASE_ADMINURL}index.php?{$smarty.const.NV_LANG_VARIABLE}={$smarty.const.NV_LANG_DATA}&amp;{$smarty.const.NV_NAME_VARIABLE}={$MODULE_NAME}">{$LANG->getModule('api_role_type_public2')}</a></li>
+                <li class="nav-item"><a class="nav-link {if $TYPE == 'private'}active{/if}"" href="{$smarty.const.NV_BASE_ADMINURL}index.php?{$smarty.const.NV_LANG_VARIABLE}={$smarty.const.NV_LANG_DATA}&amp;{$smarty.const.NV_NAME_VARIABLE}={$MODULE_NAME}&amp;type=private">{$LANG->getModule('api_role_type_public2')}</a></li>
             </ul>
         </div>
         <div class="col text-end">
@@ -109,21 +109,21 @@
                     </thead>
                     <tbody>
                         {foreach $ROLE_LIST as $ROLE}
-                        <tr class="item{if $ROLE.credential_status !== 1} text-muted{/if}" data-role-id="{$ROLE.role_id}">
+                        <tr class="item{if $ROLE.credential_status|intval !== 1} text-muted{/if}" data-role-id="{$ROLE.role_id}">
                             <td>
                                 <strong>{$ROLE.role_title}</strong>
                                 {if !empty($ROLE.role_description)}
                                 <p class="description">{$ROLE.role_description}</p>
                                 {/if}
                             </td>
-                            <td class="text-nowrap text-center" style="width: 1%;">{$ROLE.object}</td>
-                            <td class="text-nowrap text-center" style="width: 1%;">{$ROLE.status}</td>
-                            <td class="text-nowrap text-center" style="width: 1%;">{$ROLE.credential_status_format}</td>
-                            <td class="text-center" style="width: 1%;">{$ROLE.credential_addtime}</td>
-                            <td class="text-center" style="width: 1%;">{$ROLE.credential_endtime}</td>
-                            <td class="text-center" style="width: 1%;">{$ROLE.credential_quota}</td>
-                            <td class="text-nowrap text-center" style="width: 1%;">{$ROLE.credential_access_count}</td>
-                            <td class="text-nowrap text-center" style="width: 1%;">{$ROLE.credential_last_access}</td>
+                            <td class="text-nowrap text-center" style="width: 1%;">{$LANG->getModule('api_role_object_'|cat:$ROLE.role_object)}</td>
+                            <td class="text-nowrap text-center" style="width: 1%;">{if !empty($ROLE.status)}{$LANG->getModule('active')}{else}{$LANG->getModule('inactive')}{/if}</td>
+                            <td class="text-nowrap text-center" style="width: 1%;">{if $ROLE.credential_status|intval === 1}{$LANG->getModule('activated')}{elseif $ROLE.credential_status|intval === 0}{$LANG->getModule('suspended')}{else}{$LANG->getModule('not_activated')}{/if}</td>
+                            <td class="text-center" style="width: 1%;">{if $ROLE.credential_addtime > 0}{$ROLE.credential_addtime|ddatetime}{/if}</td>
+                            <td class="text-center" style="width: 1%;">{if $ROLE.credential_endtime > 0}{$ROLE.credential_endtime|ddatetime}{/if}</td>
+                            <td class="text-center" style="width: 1%;">{if $ROLE.credential_quota > 0}$ROLE.credential_quota|nnum_format{elseif $ROLE.credential_quota == 0}{$LANG->getModule('no_quota')}{/if}</td>
+                            <td class="text-nowrap text-center" style="width: 1%;">{if $ROLE.credential_access_count >= 0}{$ROLE.credential_access_count}{/if}</td>
+                            <td class="text-nowrap text-center" style="width: 1%;">{if $ROLE.credential_last_access > 0}{$ROLE.credential_last_access|ddatetime}{/if}</td>
                             <td class="text-nowrap text-center" style="width: 1%;">
                                 <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#apiroledetail{$ROLE.role_id}">{$LANG->getModule('api_roles_allowed')}</button>
                                 <!-- START FORFOOTER -->

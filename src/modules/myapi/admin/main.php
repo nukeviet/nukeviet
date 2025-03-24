@@ -136,16 +136,6 @@ $tpl->assign('ROLE_COUNT', $roleCount);
 $tpl->assign('GENERATE_PAGE', $generate_page);
 $tpl->assign('SITE_MOD', $site_mods);
 $tpl->assign('TYPE', $type);
-$tpl->assign('TYPE_PUBLIC', [
-    'active' => $type == 'public' ? 'active' : '',
-    'url' => $page_url,
-    'name' => $nv_Lang->getModule('api_role_type_public2')
-]);
-$tpl->assign('TYPE_PRIVATE', [
-    'active' => $type == 'private' ? 'active' : '',
-    'url' => $page_url . '&amp;type=private',
-    'name' => $nv_Lang->getModule('api_role_type_private2')
-]);
 $tpl->assign('GCONFIG', $global_config);
 $methods = [
     'password_verify' => $nv_Lang->getModule('admin_auth_method_password_verify'),
@@ -165,22 +155,11 @@ foreach ($methods as $key => $name) {
     $methods[$key] = $method;
 }
 $tpl->assign('METHODS', $methods);
-if (!empty($roleList)) {
-    foreach ($roleList as $key => $role) {
-        $role['object'] = $nv_Lang->getModule('api_role_object_' . $role['role_object']);
-        $role['status'] = !empty($role['status']) ? $nv_Lang->getModule('active') : $nv_Lang->getModule('inactive');
-        $role['credential_status'] = (int) $role['credential_status'];
-        $role['credential_status_format'] = $role['credential_status'] === 1 ? $nv_Lang->getModule('activated') : ($role['credential_status'] === 0 ? $nv_Lang->getModule('suspended') : $nv_Lang->getModule('not_activated'));
-        $role['credential_addtime'] = $role['credential_addtime'] > 0 ? nv_datetime_format($role['credential_addtime']) : '';
-        $role['credential_endtime'] = $role['credential_endtime'] > 0 ? nv_datetime_format($role['credential_endtime']) : ($role['credential_endtime'] == 0 ? $nv_Lang->getModule('indefinitely') : '');
-        $role['credential_quota'] = $role['credential_quota'] > 0 ? nv_number_format($role['credential_quota']) : ($role['credential_quota'] == 0 ? $nv_Lang->getModule('no_quota') : '');
-        $role['credential_access_count'] = $role['credential_access_count'] >= 0 ? $role['credential_access_count'] : '';
-        $role['credential_last_access'] = $role['credential_last_access'] > 0 ? nv_datetime_format($role['credential_last_access']) : '';
-        $roleList[$key] = $role;
-    }
-}
 $tpl->assign('ROLE_LIST', $roleList);
 $tpl->assign('LANGUAGE_ARRAY', $language_array);
+$tpl->registerPlugin('modifier', 'ddatetime', 'nv_datetime_format');
+$tpl->registerPlugin('modifier', 'nnum_format', 'nv_number_format');
+$tpl->registerPlugin('modifier', 'intval', 'intval');
 
 $contents = $tpl->fetch('main.tpl');
 

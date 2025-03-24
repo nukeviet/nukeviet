@@ -110,8 +110,7 @@ function apicheck($role_object, $array_post, $lang)
     [$array_api_trees, $array_api_contents, $total_api_enabled] = apiTrees($role_object, $array_post, $lang);
 
     $tpl = new \NukeViet\Template\NVSmarty();
-    $tpl->setTemplateDir(get_module_tpl_dir('roles.tpl'));
-    $tpl->assign('IS_API', true);
+    $tpl->setTemplateDir(get_module_tpl_dir('roles-contents.tpl'));
     $tpl->assign('LANG', $nv_Lang);
     $tpl->assign('TOTAL_API_ENABLED', $total_api_enabled);
     $tpl->assign('TOTAL_API_CHECKED', $total_api_enabled ? ' checked' : '');
@@ -147,7 +146,7 @@ function apicheck($role_object, $array_post, $lang)
         $array_api_contents[$k] = $api_content;
     }
     $tpl->assign('API_CONTENTS', $array_api_contents);
-    return $tpl->fetch('roles.tpl');
+    return $tpl->fetch('roles-contents.tpl');
 }
 
 // Thay đổi trạng thái của role
@@ -213,16 +212,6 @@ if ($nv_Request->isset_request('roledel', 'post')) {
         'status' => 'OK'
     ]);
 }
-
-$page_url = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op;
-$tpl = new \NukeViet\Template\NVSmarty();
-$tpl->setTemplateDir(get_module_tpl_dir('roles.tpl'));
-$tpl->assign('LANG', $nv_Lang);
-$tpl->assign('PAGE_URL', $page_url);
-$tpl->assign('ADD_API_ROLE_URL', $page_url . '&amp;action=role');
-$tpl->assign('GCONFIG', $global_config);
-$tpl->assign('LANGUAGE_ARRAY', $language_array);
-$tpl->assign('CHECKSS', md5(NV_CHECK_SESSION . '_' . $module_name . '_' . $op . '_' . $admin_info['userid']));
 
 $action = $nv_Request->get_title('action', 'get', '');
 
@@ -404,7 +393,7 @@ if ($action == 'role') {
         }
 
         if (in_array($save, $global_config['setup_langs'], true)) {
-            $redirect = str_replace('&amp;', '&', $page_url) . '&action=role&lg=' . $save;
+            $redirect = str_replace('&amp;', '&', $page_url) . '&amp;action=role&amp;lg=' . $save;
         } else {
             $redirect = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op;
         }
@@ -422,8 +411,12 @@ if ($action == 'role') {
     $array_post['log_period'] = !empty($array_post['log_period']) ? round($array_post['log_period'] / 3600) : '';
 
     $page_title = $isAdd ? $nv_Lang->getModule('add_role') : $nv_Lang->getModule('edit_role');
-    $page_url .= '&action=role&lg=' . $lg;
-    $tpl->assign('IS_ROLE', true);
+    $page_url .= '&amp;action=role&amp;lg=' . $lg;
+    $page_url = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op;
+    $tpl = new \NukeViet\Template\NVSmarty();
+    $tpl->setTemplateDir(get_module_tpl_dir('roles-add.tpl'));
+    $tpl->assign('LANG', $nv_Lang);
+    $tpl->assign('CHECKSS', md5(NV_CHECK_SESSION . '_' . $module_name . '_' . $op . '_' . $admin_info['userid']));
     $tpl->assign('DATA', $array_post);
     $tpl->assign('APICHECK', apicheck($array_post['role_object'], $array_post, $lg));
     $tpl->assign('FORM_ACTION', $page_url);
@@ -441,17 +434,25 @@ if ($action == 'role') {
     }
     $tpl->assign('SAVEOPTS', $saveopts);
 
-    $contents = $tpl->fetch('roles.tpl');
+    $contents = $tpl->fetch('roles-add.tpl');
     include NV_ROOTDIR . '/includes/header.php';
     echo nv_admin_theme($contents);
     include NV_ROOTDIR . '/includes/footer.php';
 }
 
-$tpl->assign('IS_MAIN', true);
-
 $base_url = $page_url;
 $page = $nv_Request->get_page('page', 'get', 1);
 $per_page = 30;
+
+$page_url = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op;
+$tpl = new \NukeViet\Template\NVSmarty();
+$tpl->setTemplateDir(get_module_tpl_dir('roles-list.tpl'));
+$tpl->assign('LANG', $nv_Lang);
+$tpl->assign('PAGE_URL', $page_url);
+$tpl->assign('ADD_API_ROLE_URL', $page_url . '&amp;action=role');
+$tpl->assign('GCONFIG', $global_config);
+$tpl->assign('LANGUAGE_ARRAY', $language_array);
+$tpl->assign('CHECKSS', md5(NV_CHECK_SESSION . '_' . $module_name . '_' . $op . '_' . $admin_info['userid']));
 
 $type = $nv_Request->get_title('type', 'get', '');
 (!empty($type) and !in_array($type, ['private', 'public'], true)) && $type = '';
@@ -478,23 +479,12 @@ $tpl->assign('OBJECTS', $objects);
 $tpl->assign('OBJECT_API', $object);
 
 $role_list = [];
-foreach ($rolelist as $role) {
-    $role_list[] = [
-        'title' => $role['role_title'],
-        'type' => $nv_Lang->getModule('api_role_type_' . $role['role_type']),
-        'object' => $nv_Lang->getModule('api_role_object_' . $role['role_object']),
-        'addtime' => nv_datetime_format($role['addtime']),
-        'edittime' => $role['edittime'] ? nv_datetime_format($role['edittime']) : '',
-        'id' => $role['role_id'],
-        'status' => $role['status'],
-        'apis' => $role['apis']
-    ];
-}
-$tpl->assign('ROLE_LIST', $role_list);
+$tpl->assign('ROLE_LIST', $rolelist);
 $tpl->assign('SITE_MOD', $site_mods);
 $tpl->assign('GENERATE_PAGE', $generate_page);
+$tpl->registerPlugin('modifier', 'ddatetime', 'nv_datetime_format');
 
-$contents = $tpl->fetch('roles.tpl');
+$contents = $tpl->fetch('roles-list.tpl');
 
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_admin_theme($contents);

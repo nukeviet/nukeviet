@@ -33,7 +33,7 @@ $(function() {
                 var isChecked = event.target.checked,
                     totalApiEnabled = parseInt(document.querySelector('#role .total-api-enabled').textContent),
                     childApisItem = event.target.closest('.child-apis-item'),
-                    treeObj = document.querySelector('#role .root-api-actions a[aria-controls="' + childApisItem.id + '"] .api-count'),
+                    treeObj = document.querySelector('#role .root-api-actions button[aria-controls="' + childApisItem.id + '"] .api-count'),
                     treeTotalAPI = parseInt(treeObj.querySelector('.total_api').textContent),
                     notCheckedLength = childApisItem.querySelectorAll('.checkitem:not(:checked)').length;
 

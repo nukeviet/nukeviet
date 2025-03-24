@@ -15,11 +15,6 @@ if (!defined('NV_IS_FILE_ADMIN')) {
 
 $page_url = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op;
 
-$tpl = new \NukeViet\Template\NVSmarty();
-$tpl->setTemplateDir(get_module_tpl_dir('credential.tpl'));
-$tpl->assign('LANG', $nv_Lang);
-$tpl->assign('REMOTE_API_ACCESS', $global_config['remote_api_access']);
-
 if ($nv_Request->isset_request('changeAuth', 'post')) {
     $userid = $nv_Request->get_int('changeAuth', 'post', 0);
     if (empty($userid)) {
@@ -94,10 +89,12 @@ if ($nv_Request->isset_request('changeAuth', 'post')) {
     }
 
     $api_user = get_api_user($userid);
-
-    $tpl->assign('PAGE_URL', $page_url);
+    $tpl = new \NukeViet\Template\NVSmarty();
+    $tpl->setTemplateDir(get_module_tpl_dir('credential-auth.tpl'));
+    $tpl->assign('LANG', $nv_Lang);
+    $tpl->assign('MODULE_NAME', $module_name);
+    $tpl->assign('OP', $op);
     $tpl->assign('USERID', $userid);
-    $tpl->assign('IS_AUTH', true);
     $tpl->assign('API_USER', $api_user);
 
     $methods = [
@@ -113,7 +110,7 @@ if ($nv_Request->isset_request('changeAuth', 'post')) {
     }
     $tpl->assign('METHODS', $methods);
 
-    $contents = $tpl->fetch('credential.tpl');
+    $contents = $tpl->fetch('credential-auth.tpl');
 
     nv_jsonOutput([
         'status' => 'OK',
@@ -122,7 +119,7 @@ if ($nv_Request->isset_request('changeAuth', 'post')) {
     ]);
 }
 
-[$rolecount, $rolelist] = [0, []];
+[$rolecount, $rolelist] = getRoleList('', '', 0, 0);
 
 $page_title = $nv_Lang->getModule('api_role_credential');
 
@@ -319,14 +316,17 @@ if ($action == 'credential') {
             }
         }
     }
-
+    $tpl = new \NukeViet\Template\NVSmarty();
+    $tpl->setTemplateDir(get_module_tpl_dir('credential-add.tpl'));
+    $tpl->assign('LANG', $nv_Lang);
+    $tpl->assign('MODULE_NAME', $module_name);
+    $tpl->assign('OP', $op);
     $tpl->assign('CREDENTIAL', $credential_data);
-    $tpl->assign('IS_ADD', true);
     if (!$credential_data['userid']) {
-        $tpl->assign('GET_USER_URL', $page_url . '&role_id=' . $role_id . '&action=getUser');
-        $tpl->assign('CREDENTIAL_ADD_LABEL', $nv_Lang->getModule('api_role_object_' . $rolelist[$role_id]['role_object']));
+        $tpl->assign('ROLE_ID', $role_id);
+        $tpl->assign('ROLE_OBJECT', $rolelist[$role_id]['role_object']);
     }
-    nv_htmlOutput($tpl->fetch('credential.tpl'));
+    nv_htmlOutput($tpl->fetch('credential-add.tpl'));
 }
 
 $base_url = $page_url;
@@ -343,40 +343,25 @@ if (!empty($role_id)) {
     $credentiallist = [];
     $generate_page = '';
 }
-
+$tpl = new \NukeViet\Template\NVSmarty();
+$tpl->setTemplateDir(get_module_tpl_dir('credential-list.tpl'));
+$tpl->assign('LANG', $nv_Lang);
+$tpl->assign('MODULE_NAME', $module_name);
+$tpl->assign('OP', $op);
 $tpl->assign('PAGE_URL', $page_url);
 $tpl->assign('ROLE_ID', $role_id);
-$tpl->assign('NV_ADMIN_THEME', $global_config['module_theme']);
+$tpl->assign('GCONFIG', $global_config);
 $tpl->assign('ADD_CREDENTIAL_URL', !empty($role_id) ? $base_url . '&action=credential' : '');
 $tpl->assign('ROLE_COUNT', $rolecount);
 $tpl->assign('IS_MAIN', true);
 $tpl->assign('ROLE_LIST', $rolelist);
 $tpl->assign('CREDENTIAL_COUNT', $credentialcount);
 $tpl->assign('GENERATE_PAGE', $generate_page);
-
-if (empty($rolecount)) {
-    $tpl->assign('ADD_API_ROLE_URL', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=roles&amp;action=role');
-}
-
-if (empty($global_config['remote_api_access'])) {
-    $tpl->assign('REMOTE_API_OFF', $nv_Lang->getModule('api_remote_off', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=config'));
-}
-
-if (!empty($role_id)) {
-
-    if ($credentialcount) {
-        foreach ($credentiallist as $k => $credential) {
-            $credential['last_access'] = !empty($credential['last_access']) ? nv_datetime_format($credential['last_access']) : '';
-            $credential['addtime'] = nv_datetime_format($credential['addtime']);
-            $credential['endtime'] = !empty($credential['endtime']) ? nv_datetime_format($credential['endtime']) : $nv_Lang->getModule('indefinitely');
-            $credential['quota'] = !empty($credential['quota']) ? nv_number_format($credential['quota']) : $nv_Lang->getModule('no_quota');
-            $credentiallist[$k] = $credential;
-        }
-    }
-}
 $tpl->assign('CREDENTIAL_LIST', $credentiallist);
+$tpl->registerPlugin('modifier', 'ddatetime', 'nv_datetime_format');
+$tpl->registerPlugin('modifier', 'nnum_format', 'nv_number_format');
 
-$contents = $tpl->fetch('credential.tpl');
+$contents = $tpl->fetch('credential-list.tpl');
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_admin_theme($contents);
 include NV_ROOTDIR . '/includes/footer.php';
