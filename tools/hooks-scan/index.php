@@ -233,6 +233,7 @@ if (isset($_GET['template']) and isset($_GET['f']) and isset($_GET['l'])) {
 
     echo '<h1 style="margin:0;padding:0;">====== ' . $hook_tag . " ======</h1>\n";
     echo "Xảy_ra_khi_nào.\n\n";
+    echo "Bổ sung từ phiên bản: **5.0.00**.\n\n";
     echo "<h3 style=\"margin:0;padding:0;\">==== Tham số ====</h3>\n";
     echo '^ STT ^ Tên biến' . $heading_pad . " ^ Kiểu dữ liệu    ^ Ghi chú                ^\n";
 
@@ -425,8 +426,8 @@ foreach ($allfiles as $filepath) {
     }
 }
 
-echo '<h1 style="margin:0;padding:0;">====== Danh sách các hook của NukeViet 4 ======</h1>
-> Khái niệm hook chỉ có từ NukeViet 4.6 trở đi
+echo '<h1 style="margin:0;padding:0;">====== Danh sách các hook của NukeViet ======</h1>
+> Khái niệm hook chỉ có từ NukeViet 5.0 trở đi
 
 <h2 style="margin:0;padding:0;">===== Hook của hệ thống =====</h2>
 ';

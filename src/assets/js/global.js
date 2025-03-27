@@ -87,7 +87,7 @@ function nv_setCookie(name, value, expiredays, secure, SameSite) {
     expiredays = expiredays ? ((a = new Date).setDate(a.getDate() + expiredays), "; expires=" + a.toGMTString()) : "";
     secure = void 0 !== secure && secure ? "; secure" : "";
     SameSite = void 0 !== SameSite && ("Lax" == SameSite || "Strict" == SameSite || "None" == SameSite && "" != secure) ? "; SameSite=" + SameSite : "";
-    document.cookie = name + "=" + escape(value) + expiredays + "; path=" + nv_base_siteurl + SameSite + secure
+    document.cookie = name + "=" + encodeURIComponent(value) + expiredays + "; path=" + nv_base_siteurl + SameSite + secure
 }
 
 function nv_getCookie(name) {
@@ -95,7 +95,7 @@ function nv_getCookie(name) {
         search = " " + name + "=",
         offset = 0,
         end = 0;
-    return 0 < cookie.length && (offset = cookie.indexOf(search), -1 != offset) ? (offset += search.length, end = cookie.indexOf(";", offset), -1 == end && (end = cookie.length), unescape(cookie.substring(offset, end))) : null
+    return 0 < cookie.length && (offset = cookie.indexOf(search), -1 != offset) ? (offset += search.length, end = cookie.indexOf(";", offset), -1 == end && (end = cookie.length), decodeURIComponent(cookie.substring(offset, end))) : null
 }
 
 function nv_check_timezone() {
@@ -481,6 +481,667 @@ function arrayBufferToBase64Url(buffer) {
         .replace(/=+$/, ""); // Loại bỏ padding
 }
 
+// Load multiliple js,css files
+function getFiles(files, callback) {
+    var progress = 0;
+    files.forEach(function(fileurl) {
+        var dtype = fileurl.substring(fileurl.lastIndexOf('.') + 1) == 'js' ? 'script' : 'text',
+            attrs = "undefined" !== typeof site_nonce ? {
+                'nonce': site_nonce
+            } : {};
+        $.ajax({
+            url: fileurl,
+            cache: true,
+            dataType: dtype,
+            scriptAttrs: attrs,
+            success: function() {
+                if (dtype == 'text') {
+                    $("<link/>", {
+                        rel: "stylesheet",
+                        href: fileurl
+                    }).appendTo("head")
+                }
+                if (++progress == files.length) {
+                    if ("function" === typeof callback) {
+                        callback()
+                    }
+                }
+            }
+        })
+    })
+}
+
+/**
+ * Tương đương html_entity_decode
+ *
+ * @param {String} html
+ * @returns {String}
+ */
+function htmlEntityDecode(html) {
+    const doc = new DOMParser().parseFromString(html, "text/html");
+    return doc.documentElement.textContent;
+}
+
 nv_check_timezone();
 
 nukeviet.WebAuthnSupported = 'PublicKeyCredential' in window && 'credentials' in navigator && 'create' in navigator.credentials && 'get' in navigator.credentials;
+nukeviet.getScrollbarWidth = () => {
+    const outer = document.createElement('div');
+    outer.style.visibility = 'hidden';
+    outer.style.overflow = 'scroll';
+    outer.style.msOverflowStyle = 'scrollbar';
+    outer.style.position = 'fixed';
+    document.body.appendChild(outer);
+
+    const inner = document.createElement('div');
+    outer.appendChild(inner);
+
+    const scrollbarWidth = outer.offsetWidth - inner.offsetWidth;
+
+    outer.parentNode.removeChild(outer);
+
+    return scrollbarWidth;
+};
+nukeviet.cr = {};
+nukeviet.turnstileIDs = [];
+nukeviet.reCapIDs = [];
+
+// Ap dung trinh nghe thu dong cho touchstart
+// https://web.dev/uses-passive-event-listeners/?utm_source=lighthouse&utm_medium=devtools
+jQuery.event.special.touchstart = {
+    setup: function(_, ns, handle) {
+        this.addEventListener('touchstart', handle, {
+            passive: !ns.includes('noPreventDefault')
+        });
+    }
+};
+
+/**
+ * Tìm modal Bootstrap đang hiển thị trên cùng
+ *
+ * @returns
+ */
+function _getTopBsModal() {
+    let modals = document.querySelectorAll('.modal');
+    let topModal = null;
+    let maxZIndex = 0;
+
+    modals.forEach(modal => {
+        if (window.getComputedStyle(modal).display === 'block') {
+            let zIndex = parseInt(window.getComputedStyle(modal).zIndex, 10);
+            if (zIndex > maxZIndex) {
+                maxZIndex = zIndex;
+                topModal = modal;
+            }
+        }
+    });
+
+    return topModal;
+}
+
+/**
+ * Tắt lệnh ép focus vào modal Bootstrap đang mở. Cho phép focus vào các phần tử khác
+ *
+ * @param {String} forwhat - Từ cái gì
+ * @returns
+ */
+function _offBsenforceFocus(forwhat) {
+    if (
+        (!window.jQuery || !$ || !$.fn || !($.fn.modal && $.fn.modal.Constructor && $.fn.modal.Constructor.VERSION)) ||
+        (forwhat === 'cap' && document.body.classList.contains('cr-md-open')) ||
+        (forwhat === 'md' && document.body.classList.contains('cr-cap-open'))
+    ) {
+        return;
+    }
+    let topModal = _getTopBsModal();
+    if (topModal) {
+        const bsVersion = parseInt($.fn.modal.Constructor.VERSION.substring(0, 1));
+        if (bsVersion > 4) {
+            const md = bootstrap.Modal.getInstance(topModal);
+            md._focustrap.deactivate();
+        } else {
+            $(document).off('focusin.bs.modal');
+        }
+    }
+}
+
+/**
+ * Bật lại lệnh ép focus vào modal Bootstrap đang mở
+ *
+ * @param {String} forwhat - Từ cái gì
+ * @returns
+ */
+function _onBsenforceFocus(forwhat) {
+    let topModal = _getTopBsModal();
+    if (
+        !topModal ||
+        (!window.jQuery || !$ || !$.fn || !($.fn.modal && $.fn.modal.Constructor && $.fn.modal.Constructor.VERSION)) ||
+        (forwhat === 'cap' && document.body.classList.contains('cr-md-open')) ||
+        (forwhat === 'md' && document.body.classList.contains('cr-cap-open'))
+    ) {
+        return;
+    }
+    const bsVersion = parseInt($.fn.modal.Constructor.VERSION.substring(0, 1));
+    if (bsVersion > 4) {
+        const md = bootstrap.Modal.getInstance(topModal);
+        md._focustrap.activate();
+    } else {
+        const md = $(topModal).data('bs.modal');
+        md.enforceFocus();
+    }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    // Core default modal
+    if (!document.getElementById('sitemodal')) {
+        const body = document.body;
+        const modal = document.createElement('div');
+        modal.id = 'sitemodal';
+        modal.classList.add('cr-md', 'cr-fade');
+        modal.setAttribute('tabindex', '-1');
+        modal.setAttribute('aria-labelledby', 'sitemodalLabel');
+        modal.setAttribute('aria-hidden', 'true');
+        modal.innerHTML = `<div class="cr-md-dialog">
+            <div class="cr-md-content">
+                <div class="cr-md-header">
+                    <div class="cr-md-title" id="sitemodalLabel">&nbsp;</div>
+                    <button type="button" class="cr-btn-close" data-cr-dismiss="modal" aria-label="${nukeviet.i18n.close}"></button>
+                </div>
+                <div class="cr-md-body"></div>
+            </div>
+        </div>`;
+        body.appendChild(modal);
+        nukeviet.cr.mdDb = {
+            overflow: null,
+            paddingRight: null,
+            scroll: null,
+            cb: null
+        };
+
+        // Đóng modal
+        modal.querySelector('[data-cr-dismiss="modal"]').addEventListener('click', (e) => {
+            e.preventDefault();
+
+            const body = document.body;
+            const modal = document.getElementById('sitemodal');
+            const backdrop = document.querySelector('.cr-md-backdrop');
+
+            body.classList.remove('cr-md-open');
+            body.style.overflow = nukeviet.cr.mdDb.overflow;
+            body.style.paddingRight = nukeviet.cr.mdDb.paddingRight;
+            if (body.getAttribute('style') === '') {
+                body.removeAttribute('style');
+            }
+            if (body.getAttribute('class') === '') {
+                body.removeAttribute('class');
+            }
+
+            modal.classList.remove('cr-show');
+            backdrop.classList.remove('cr-show');
+            setTimeout(() => {
+                modal.style.display = 'none';
+                modal.removeAttribute('aria-modal');
+                modal.setAttribute('aria-hidden', 'true');
+                modal.querySelector('.cr-md-title').innerHTML = '';
+                modal.querySelector('.cr-md-body').innerHTML = '';
+                body.removeChild(backdrop);
+                _onBsenforceFocus('md');
+                if (nukeviet.cr.mdDb.cb) {
+                    nukeviet.cr.mdDb.cb(modal);
+                }
+                nukeviet.cr.mdDb.cb = null;
+            }, 150);
+        });
+
+        // Click ngoài modal
+        modal.addEventListener('click', (event) => {
+            const content = modal.querySelector('.cr-md-content');
+            if (!modal.classList.contains('cr-md-static') && !content.contains(event.target) && !event.target.closest('.cr-md-content')) {
+                modal.classList.add('cr-md-static');
+                setTimeout(() => {
+                    modal.classList.remove('cr-md-static');
+                }, 310);
+            }
+        });
+
+        // ESC để đóng modal
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape' && document.body.classList.contains('cr-md-open')) {
+                const modal = document.getElementById('sitemodal');
+                modal.querySelector('[data-cr-dismiss="modal"]').click();
+            }
+        });
+
+        // Mở modal
+        window.modalShow = (title, content, callback, closeCallback) => {
+            const body = document.body;
+            const modal = document.getElementById('sitemodal');
+            if (body.classList.contains('cr-md-open')) {
+                return;
+            }
+
+            const backdrop = document.createElement('div');
+            backdrop.classList.add('cr-md-backdrop', 'cr-fade');
+            body.append(backdrop);
+
+            modal.querySelector('.cr-md-title').innerHTML = title;
+
+            const mdBody = modal.querySelector('.cr-md-body');
+            mdBody.innerHTML = content;
+            mdBody.querySelectorAll('script').forEach(oldScript => {
+                const newScript = document.createElement('script');
+                if (oldScript.src) {
+                    newScript.src = oldScript.src;
+                } else {
+                    newScript.textContent = oldScript.textContent;
+                }
+                oldScript.replaceWith(newScript);
+            });
+
+            modal.removeAttribute('aria-hidden');
+            modal.setAttribute('aria-modal', 'true');
+            modal.style.display = 'block';
+
+            nukeviet.cr.mdDb.overflow = body.style.overflow;
+            nukeviet.cr.mdDb.paddingRight = body.style.paddingRight;
+            nukeviet.cr.mdDb.scroll = document.documentElement.scrollHeight > window.innerHeight;
+
+            // Tạo độ trễ cho các transition
+            setTimeout(() => {
+                modal.classList.add('cr-show');
+                backdrop.classList.add('cr-show');
+
+                body.style.overflow = 'hidden';
+                nukeviet.cr.mdDb.scroll && (body.style.paddingRight = nukeviet.getScrollbarWidth() + 'px');
+                body.classList.add('cr-md-open');
+            }, 1);
+            setTimeout(() => {
+                _offBsenforceFocus('md');
+                if (typeof callback === 'function') {
+                    callback(modal);
+                }
+                if (typeof closeCallback === 'function') {
+                    nukeviet.cr.mdDb.cb = closeCallback;
+                } else if (callback === 'recaptchareset') {
+                    loadCaptcha(modal);
+                }
+            }, 160);
+        };
+
+        // Hàm đóng modal
+        window.modalHide = () => {
+            if (!document.body.classList.contains('cr-md-open')) {
+                return;
+            }
+            const modal = document.getElementById('sitemodal');
+            modal.querySelector('[data-cr-dismiss="modal"]').click();
+        };
+    }
+
+    if (typeof modalShowByObj === 'undefined') {
+        window.modalShowByObj = (obj, callback) => {
+            if (!(obj instanceof Element)) {
+                obj = document.querySelector(obj);
+            }
+            if (!obj) {
+                return;
+            }
+            modalShow(obj.getAttribute('title'), obj.innerHTML, callback);
+        };
+    }
+
+    // Alertbox + Confirm box
+    if (typeof nukeviet.confirm !== 'function') {
+        nukeviet.confirm = (message, cbConfirm, cbCancel, cancelBtn) => {
+            const body = document.body;
+            if (body.classList.contains('cr-alert-open')) {
+                return;
+            }
+            body.classList.add('cr-alert-open');
+            if (typeof cancelBtn == 'undefined') {
+                cancelBtn = true;
+            }
+            if (typeof cbConfirm == 'undefined') {
+                cbConfirm = () => {};
+            }
+            if (typeof cbCancel == 'undefined') {
+                cbCancel = () => {};
+            }
+
+            const id = 'alert-' + nv_randomPassword(8);
+
+            // Đối tượng box
+            const box = document.createElement('div');
+            box.id = id;
+            box.classList.add('cr-alert', 'cr-fade');
+            box.setAttribute('tabindex', '-1');
+            box.setAttribute('aria-labelledby', `${id}-body`);
+            box.setAttribute('aria-hidden', 'true');
+            box.innerHTML = `<div class="cr-alert-dialog cr-alert-dialog-scrollable">
+                <div class="cr-alert-content">
+                    <div class="cr-alert-body" id="${id}-body"></div>
+                    <div class="cr-alert-footer" id="${id}-footer">
+                        <button type="button" class="cr-btn cr-btn-icon cr-btn-primary" id="${id}-confirm">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="cr-svg-icon" viewBox="0 0 16 16">
+                                <path d="M10.97 4.97a.75.75 0 0 1 1.07 1.05l-3.99 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425z"/>
+                            </svg> ` + nv_confirm + `
+                        </button>
+                        ` + (cancelBtn ? `<button type="button" class="cr-btn cr-btn-icon cr-btn-secondary" id="${id}-close">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="cr-svg-icon" viewBox="0 0 16 16">
+                                <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708"/>
+                            </svg> ` + nv_close + `
+                        </button>` : '') + `
+                    </div>
+                </div>
+            </div>`;
+            const boxBody = box.querySelector('.cr-alert-body');
+            if (typeof message == 'object' && message.html) {
+                boxBody.innerHTML = message.message;
+            } else {
+                boxBody.textContent = htmlEntityDecode(message);
+            }
+            // Click ngoài alert box
+            box.addEventListener('click', (event) => {
+                const content = box.querySelector('.cr-alert-content');
+                if (!box.classList.contains('cr-alert-static') && !content.contains(event.target) && !event.target.closest('.cr-alert-content')) {
+                    box.classList.add('cr-alert-static');
+                    setTimeout(() => {
+                        box.classList.remove('cr-alert-static');
+                    }, 310);
+                }
+            });
+
+            // Đối tượng backdrop
+            const backdrop = document.createElement('div');
+            backdrop.classList.add('cr-alert-backdrop', 'cr-fade');
+
+            body.append(box, backdrop);
+
+            box.removeAttribute('aria-hidden');
+            box.setAttribute('aria-modal', 'true');
+            box.style.display = 'block';
+
+            const cOverflow = body.style.overflow;
+            const cPaddingRight = body.style.paddingRight;
+            const cVScroll = document.documentElement.scrollHeight > window.innerHeight;
+
+            setTimeout(() => {
+                box.classList.add('cr-show');
+                backdrop.classList.add('cr-show');
+
+                body.style.overflow = 'hidden';
+                cVScroll && (body.style.paddingRight = nukeviet.getScrollbarWidth() + 'px');
+            }, 1);
+
+            // Xử lý nút ấn
+            const close = (event) => {
+                ([...box.querySelectorAll('button')].map(ele => ele.setAttribute('disabled', 'disabled')));
+
+                body.style.overflow = cOverflow;
+                body.style.paddingRight = cPaddingRight;
+                if (body.getAttribute('style') === '') {
+                    body.removeAttribute('style');
+                }
+                if (body.getAttribute('class') === '') {
+                    body.removeAttribute('class');
+                }
+
+                box.classList.remove('cr-show');
+                backdrop.classList.remove('cr-show');
+                setTimeout(() => {
+                    box.style.display = 'none';
+                    body.removeChild(box);
+                    body.removeChild(backdrop);
+                    body.classList.remove('cr-alert-open');
+                    if (event == 'confirm') {
+                        cbConfirm();
+                    } else if (event == 'cancel') {
+                        cbCancel();
+                    }
+                }, 150);
+            }
+            if (cancelBtn) {
+                document.getElementById(id + '-close').addEventListener('click', () => {
+                    close('cancel');
+                });
+            }
+            document.getElementById(id + '-confirm').addEventListener('click', () => {
+                close('confirm');
+            });
+        };
+
+        // ESC để đóng alert box
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape' && document.body.classList.contains('cr-alert-open')) {
+                const al = document.querySelector('.cr-alert');
+                if (al) {
+                    const btnClose = al.querySelector('.cr-btn-secondary');
+                    if (btnClose) {
+                        btnClose.click();
+                        return;
+                    }
+                    const btnConfirm = al.querySelector('.cr-btn-primary');
+                    if (btnConfirm) {
+                        btnConfirm.click();
+                    }
+                }
+            }
+        });
+
+        // Enter để confirm
+        document.addEventListener('keyup', function(event) {
+            if (event.key === 'Enter' && document.body.classList.contains('cr-alert-open')) {
+                const btnConfirm = document.querySelector('.cr-alert .cr-btn-primary');
+                if (btnConfirm) {
+                    btnConfirm.click();
+                }
+            }
+        });
+    }
+
+    if (typeof nukeviet.alert !== 'function') {
+        nukeviet.alert = (message, callback) => {
+            if (typeof callback == 'undefined') {
+                callback = () => {};
+            }
+            nukeviet.confirm(message, callback, () => {}, false);
+        };
+    }
+
+    if (typeof nvConfirm !== 'function') {
+        window.nvConfirm = nukeviet.confirm;
+    }
+
+    if (typeof nvAlert !== 'function') {
+        window.nvAlert = nukeviet.alert;
+    }
+
+    // Toast
+    if (!document.getElementById('site-toasts')) {
+        nukeviet.cr.toast = {
+            hasKbInter: false,
+            hasMInter: false
+        };
+
+        /**
+         * Xử lý hành động hover và di chuột ra khỏi toast
+         *
+         * @param {HTMLElement} item
+         * @param {Event} event
+         */
+        const _ToastInteraction = (item, event) => {
+            const isInter = (event.type === 'mouseover' || event.type === 'focusin') ? true : false;
+            const toasts = document.getElementById('site-toasts');
+
+            switch (event.type) {
+                case 'mouseover':
+                case 'mouseout': {
+                    nukeviet.cr.toast.hasMInter = isInter
+                    break
+                }
+
+                case 'focusin':
+                case 'focusout': {
+                    nukeviet.cr.toast.hasKbInter = isInter
+                    break
+                }
+
+                default: {
+                    break
+                }
+            }
+
+            if (isInter) {
+                toasts.querySelectorAll('.cr-toast').forEach(item => {
+                    if (item.dataset._timeout) {
+                        clearTimeout(item.dataset._timeout);
+                    }
+                });
+                return
+            }
+
+            const nextElement = event.relatedTarget
+            if (item === nextElement || item.contains(nextElement)) {
+                return;
+            }
+
+            toasts.querySelectorAll('.cr-toast').forEach(item => {
+                item.dataset._timeout = setTimeout(() => {
+                    _ToastTimeout(item);
+                }, 5000);
+            });
+        };
+
+        /**
+         * Ẩn toast tự động
+         *
+         * @param {HTMLElement} item
+         */
+        const _ToastTimeout = (item) => {
+            _ToastHide(item);
+        };
+
+        const _ToastHide = (item) => {
+            item.classList.add('cr-showing');
+            setTimeout(() => {
+                item.remove();
+
+                let toasts = document.getElementById('site-toasts');
+                if (!toasts.querySelector('.cr-toast')) {
+                    toasts.classList.add('cr-d-none');
+                }
+            }, 151);
+        };
+
+        /**
+         *
+         * @param {String} text
+         * @param {'secondary' | 'error' | 'danger' | 'primary' | 'success' | 'info' | 'warning' | 'light' | 'dark'} level
+         * @param {'s' | 'c'} halign
+         * @param {'t' | 'm' | 'c'} valign
+         */
+        nukeviet.toast = (text, level, halign, valign) => {
+            let toasts = document.getElementById('site-toasts');
+            if (!toasts) {
+                toasts = document.createElement('div');
+                toasts.id = 'site-toasts';
+                toasts.classList.add('cr-toasts', 'cr-d-none');
+                toasts.innerHTML = `<div class="cr-toast-lists">
+                    <div class="cr-toast-items" aria-live="polite" aria-atomic="true"></div>
+                </div>`;
+                document.body.appendChild(toasts);
+            }
+            const items = toasts.querySelector('.cr-toast-items');
+            const toastsScroll = toasts.querySelector('.cr-toast-lists');
+
+            const id = nv_randomPassword(8);
+            const tLevel = {
+                'secondary': 'cr-toast-lev-secondary',
+                'error': 'cr-toast-lev-danger',
+                'danger': 'cr-toast-lev-danger',
+                'primary': 'cr-toast-lev-primary',
+                'success': 'cr-toast-lev-success',
+                'info': 'cr-toast-lev-info',
+                'warning': 'cr-toast-lev-warning',
+                'light': 'cr-toast-lev-light',
+                'dark': 'cr-toast-lev-dark',
+            };
+            const hAlign = {
+                's': ' cr-toast-start',
+                'c': ' cr-toast-center',
+            };
+            const vAlign = {
+                't': ' cr-toast-top',
+                'm': ' cr-toast-middle',
+                'c': ' cr-toast-middle',
+            };
+            level = tLevel[level] || ' ';
+            halign = hAlign[halign] || '';
+            valign = vAlign[valign] || '';
+
+            const align = halign + valign;
+            const allAlign = 'cr-toast-top cr-toast-start cr-toast-center cr-toast-middle';
+
+            const item = document.createElement('div');
+            item.setAttribute('data-id', id);
+            item.setAttribute('id', 'toast-' + id);
+            item.setAttribute('role', 'alert');
+            item.setAttribute('aria-live', 'assertive');
+            item.setAttribute('aria-atomic', 'true');
+            item.className = 'cr-toast cr-fade cr-showing ' + level;
+            item.dataset._timeout = null;
+
+            const itemBody = document.createElement('div');
+            itemBody.className = 'cr-toast-body';
+            itemBody.textContent = htmlEntityDecode(text);
+
+            const itemClose = document.createElement('div');
+            itemClose.className = 'cr-toast-close';
+
+            const btnClose = document.createElement('button');
+            btnClose.type = 'button';
+            btnClose.className = 'cr-btn-close';
+            btnClose.setAttribute('data-cr-dismiss', 'toast');
+            btnClose.setAttribute('aria-label', nv_close);
+            btnClose.addEventListener('click', (event) => {
+                event.preventDefault();
+                btnClose.disabled = true;
+                _ToastHide(item);
+            });
+
+            itemClose.appendChild(btnClose);
+
+            item.appendChild(itemBody);
+            item.appendChild(itemClose);
+
+            items.appendChild(item);
+
+            if (align != '') {
+                allAlign.split(' ').forEach(cls => {
+                    if (cls.trim()) toasts.classList.remove(cls);
+                });
+                align.split(' ').forEach(cls => {
+                    if (cls.trim()) toasts.classList.add(cls);
+                });
+            }
+            toasts.classList.remove('cr-d-none');
+
+            item.classList.add('cr-show');
+            toastsScroll.scrollTop = toastsScroll.scrollHeight;
+            setTimeout(() => {
+                item.classList.remove('cr-showing');
+                item.dataset._timeout = setTimeout(() => {
+                    _ToastTimeout(item);
+                }, 5000);
+                item.addEventListener('mouseover', (event) => {  _ToastInteraction(item, event); });
+                item.addEventListener('mouseout', (event) => {  _ToastInteraction(item, event); });
+                item.addEventListener('focusin', (event) => {  _ToastInteraction(item, event); });
+                item.addEventListener('focusout', (event) => {  _ToastInteraction(item, event); });
+            }, 151);
+        };
+
+        if (typeof nvToast !== 'function') {
+            window.nvToast = nukeviet.toast;
+        }
+    }
+});

@@ -7,52 +7,11 @@
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
-// Ap dung trinh nghe thu dong cho touchstart
-// https://web.dev/uses-passive-event-listeners/?utm_source=lighthouse&utm_medium=devtools
-jQuery.event.special.touchstart = {
-    setup: function(_, ns, handle) {
-        this.addEventListener('touchstart', handle, {
-            passive: !ns.includes('noPreventDefault')
-        });
-    }
-};
+var myTimerPage = '', myTimersecField = '';
 
-var myTimerPage = "",
-    myTimersecField = "",
-    reCapIDs = [],
-    turnstileIDs = [];
-
-// Load multiliple js,css files
-function getFiles(files, callback) {
-    var progress = 0;
-    files.forEach(function(fileurl) {
-        var dtype = fileurl.substring(fileurl.lastIndexOf('.') + 1) == 'js' ? 'script' : 'text',
-            attrs = "undefined" !== typeof site_nonce ? {
-                'nonce': site_nonce
-            } : {};
-        $.ajax({
-            url: fileurl,
-            cache: true,
-            dataType: dtype,
-            scriptAttrs: attrs,
-            success: function() {
-                if (dtype == 'text') {
-                    $("<link/>", {
-                        rel: "stylesheet",
-                        href: fileurl
-                    }).appendTo("head")
-                }
-                if (++progress == files.length) {
-                    if ("function" === typeof callback) {
-                        callback()
-                    }
-                }
-            }
-        })
-    })
-}
-
-// timeoutsesscancel
+/**
+ * Dừng bộ đếm thời gian không dùng site và chạy lại
+ */
 function timeoutsesscancel() {
     $("#timeoutsess").slideUp("slow", function() {
         clearInterval(myTimersecField);
@@ -62,7 +21,9 @@ function timeoutsesscancel() {
     })
 }
 
-// timeoutsessrun
+/**
+ * Chạy bộ đếm thời gian không dùng site
+ */
 function timeoutsessrun() {
     clearInterval(myTimerPage);
     $("#secField").text("60");
@@ -82,18 +43,30 @@ function timeoutsessrun() {
     }, 1E3);
 }
 
-// Hide Cookie Notice Popup
+/**
+ * Tắt thông báo thu thập cookie
+ */
 function cookie_notice_hide() {
     nv_setCookie(nv_cookie_prefix + '_cn', '1', 365);
     $(".cookie-notice").hide()
 }
 
-// enterToEvent
+/**
+ * Kích hoạt event khi ấn Enter
+ *
+ * @param {Event} e
+ * @param {HTMLElement} obj
+ * @param {String} objEvent
+ */
 function enterToEvent(e, obj, objEvent) {
     13 != e.which || e.shiftKey || (e.preventDefault(), $(obj).trigger(objEvent))
 }
 
-// checkAll
+/**
+ * Chọn tất cả
+ *
+ * @param {HTMLElement} a
+ */
 function checkAll(a) {
     $(".checkAll", a).is(":checked") ? ($(".checkSingle", a).not(":disabled").each(function() {
         $(this).prop("checked", !0)
@@ -102,7 +75,11 @@ function checkAll(a) {
     }), $(".checkBtn", a).length && $(".checkBtn", a).prop("disabled", !0))
 }
 
-// checkSingle
+/**
+ * Chọn từng dòng trong danh sách
+ *
+ * @param {HTMLElement} a
+ */
 function checkSingle(a) {
     var checked = 0,
         unchecked = 0;
@@ -113,7 +90,11 @@ function checkSingle(a) {
     $(".checkBtn", a).length && (checked ? $(".checkBtn", a).prop("disabled", !1) : $(".checkBtn", a).prop("disabled", !0))
 }
 
-// locationReplace
+/**
+ * Đổi URL trang web mà không làm load lại trang
+ *
+ * @param {String} url
+ */
 function locationReplace(url) {
     var uri = window.location.href.substring(window.location.protocol.length + window.location.hostname.length + 2);
     if (url != uri && history.pushState) {
@@ -121,57 +102,12 @@ function locationReplace(url) {
     }
 }
 
-// ModalShow
-function modalShow(title, content, callback) {
-    var md = $("#sitemodal");
-    if ('undefined' != typeof title && "" != title) {
-        $(".modal-content", md).prepend('<div class="modal-header"><div class="modal-title">' + title + '</div></div>')
-    }
-    $(".modal-body", md).html(content);
-    var scrollTop = false;
-    if ("undefined" != typeof callback) {
-        if (callback == "recaptchareset") {
-            scrollTop = $(window).scrollTop();
-            md.on('show.bs.modal', function() {
-                loadCaptcha(this)
-            })
-        } else if ("function" != typeof callback) {
-            callback()
-        }
-    }
-
-    md.on('hidden.bs.modal', function() {
-        $(this).find(".modal-header").remove()
-    });
-
-    if (scrollTop) {
-        md.on('hide.bs.modal', function() {
-            $("html,body").animate({
-                scrollTop: scrollTop
-            }, 200);
-        });
-        $("html,body").animate({
-            scrollTop: 0
-        }, 200);
-        md.modal({
-            backdrop: "static"
-        });
-    } else {
-        md.modal({
-            backdrop: "static"
-        });
-    }
-
-    md.modal('show')
-}
-
-function modalShowByObj(a, callback) {
-    var b = $(a).attr("title"),
-        c = $(a).html();
-    modalShow(b, c, callback)
-}
-
-//Form Ajax-login
+/**
+ * Mở form đăng nhập trong modal
+ *
+ * @param {String} redirect
+ * @returns {Boolean}
+ */
 function loginForm(redirect) {
     if (nv_is_user == 1) {
         return !1;
@@ -197,7 +133,11 @@ function loginForm(redirect) {
     return !1
 }
 
-// Google Identity
+/**
+ * Xử lý sau khi đăng nhập GSI
+ *
+ * @param {Object} response
+ */
 function GIDHandleCredentialResponse(response) {
     $.ajax({
         type: 'POST',
@@ -225,15 +165,19 @@ function GIDHandleCredentialResponse(response) {
             var content = $($('#g_id_confirm').html());
             $('a', content).on('click', function(e) {
                 e.preventDefault();
-                $('#sitemodal').modal('hide');
+                modalHide();
                 nv_open_browse(a.redirect, "NVOPID", 550, 500, "resizable=no,scrollbars=1,toolbar=no,location=no,titlebar=no,menubar=0,location=no,status=no");
             });
             modalShow('', content)
         }
     })
- }
+}
 
-// Load Captcha
+/**
+ * Build lại captcha khi ấn nút đổi captcha
+ *
+ * @param {HTMLElement | undefined} obj
+ */
 function loadCaptcha(obj) {
     if ("undefined" === typeof obj) {
         obj = $('body')
@@ -251,7 +195,12 @@ function loadCaptcha(obj) {
     }
 }
 
-// Change Captcha
+/**
+ * Đổi captcha - Hàm này dùng để gọi nếu muốn đổi captcha
+ *
+ * @param {HTMLElement | undefined} a
+ * @returns {boolean}
+ */
 function change_captcha(a) {
     loadCaptcha();
     if ($("img.captchaImg").length) {
@@ -261,20 +210,34 @@ function change_captcha(a) {
     return !1
 }
 
-// Form change captcha
+/**
+ * Thay mới captcha của form
+ *
+ * @param {HTMLElement} form
+ */
 function formChangeCaptcha(form) {
     var btn = $("[onclick*=change_captcha], [data-toggle=change_captcha]", form);
     btn.length && btn.trigger('click');
     if ($('[data-toggle=recaptcha]', form).length || $("[data-recaptcha2], [data-recaptcha3]", $(form).parent()).length) {
-        change_captcha()
+        change_captcha();
     }
 }
 
+/**
+ * Check xem các biến phục vụ Recaptcha đã đủ chưa
+ *
+ * @returns {Number}
+ */
 function isRecaptchaCheck() {
     if (nv_recaptcha_sitekey == '') return 0;
     return (nv_recaptcha_ver == 2 || nv_recaptcha_ver == 3) ? nv_recaptcha_ver : 0
 }
 
+/**
+ * Reset recaptcha V2 trên các thẻ có data-toggle=recaptcha (reset inline recaptcha V2)
+ *
+ * @param {HTMLElement} obj
+ */
 function reCaptcha2Recreate(obj) {
     $('[data-toggle=recaptcha]', $(obj)).each(function() {
         if (!$('#modal-' + $(this).attr('id')).length) {
@@ -294,6 +257,11 @@ function reCaptcha2Recreate(obj) {
     })
 }
 
+/**
+ * Reset turnstile trên các thẻ có data-toggle=turnstile (reset inline turnstile)
+ *
+ * @param {HTMLElement} obj
+ */
 function turnstileRecreate(obj) {
     $('[data-toggle=turnstile]', $(obj)).each(function() {
         if (!$('#modal-' + $(this).attr('id')).length) {
@@ -313,6 +281,11 @@ function turnstileRecreate(obj) {
     })
 }
 
+/**
+ * Làm sạch form chống XSS
+ *
+ * @param {HTMLElement} form
+ */
 function formXSSsanitize(form) {
     $(form).find("input, textarea").not(":submit, :reset, :image, :file, :disabled").not('[data-sanitize-ignore]').each(function() {
         let value;
@@ -325,6 +298,17 @@ function formXSSsanitize(form) {
     });
 }
 
+/**
+ * Xử lý khi ấn nút submit form:
+ * - Làm sạch chống XSS
+ * - Check lỗi trước khi submit
+ * - Gọi reCaptcha, turnstile, captcha nếu có
+ * - Submit form
+ *
+ * @param {Event} event
+ * @param {HTMLElement} form
+ * @returns
+ */
 function btnClickSubmit(event, form) {
     event.preventDefault();
 
@@ -367,6 +351,11 @@ function btnClickSubmit(event, form) {
     }
 }
 
+/**
+ * Kiểm tra chạy callback sau khi xác thực captcha
+ *
+ * @param {Function} callFunc
+ */
 function captchaCallFuncLoad(callFunc) {
     if ("function" === typeof callFunc) {
         callFunc()
@@ -375,25 +364,29 @@ function captchaCallFuncLoad(callFunc) {
     }
 }
 
+/**
+ * Xử lý sau khi gọi API reCaptcha v2 xong
+ */
 var reCaptcha2OnLoad = function() {
+    // Init captcha 2 trên các element có data-toggle=recaptcha (build inline recaptcha V2)
     $('[data-toggle=recaptcha]').each(function() {
         var id = $(this).attr('id'),
             callFunc = $(this).data('callback'),
             size = ($(this).data('size') && $(this).data('size') == 'compact') ? 'compact' : '';
 
         if (typeof window[callFunc] === 'function') {
-            if (typeof reCapIDs[id] === "undefined") {
-                reCapIDs[id] = grecaptcha.render(id, {
+            if (typeof nukeviet.reCapIDs[id] === "undefined") {
+                nukeviet.reCapIDs[id] = grecaptcha.render(id, {
                     'sitekey': nv_recaptcha_sitekey,
                     'type': nv_recaptcha_type,
                     'size': size,
                     'callback': callFunc
                 })
             } else {
-                grecaptcha.reset(reCapIDs[id])
+                grecaptcha.reset(nukeviet.reCapIDs[id])
             }
         } else {
-            if (typeof reCapIDs[id] === "undefined") {
+            if (typeof nukeviet.reCapIDs[id] === "undefined") {
                 var pnum = parseInt($(this).data('pnum')),
                     btnselector = $(this).data('btnselector'),
                     btn = $('#' + id),
@@ -407,7 +400,7 @@ var reCaptcha2OnLoad = function() {
                     btn.prop('disabled', true);
                 }
 
-                reCapIDs[id] = grecaptcha.render(id, {
+                nukeviet.reCapIDs[id] = grecaptcha.render(id, {
                     'sitekey': nv_recaptcha_sitekey,
                     'type': nv_recaptcha_type,
                     'size': size,
@@ -422,12 +415,19 @@ var reCaptcha2OnLoad = function() {
                     }
                 })
             } else {
-                grecaptcha.reset(reCapIDs[id])
+                grecaptcha.reset(nukeviet.reCapIDs[id])
             }
         }
     })
 }
 
+/**
+ * Hàm xử lý sau khi inline reCaptcha v2  hoặc turnstile được tạo xong, hết hạn, xác thực xong
+ * mặc định là disabled nút submit nếu tạo, hết hạn và enable nếu xác thực xong
+ *
+ * @param {String} id
+ * @param {Boolean} val
+ */
 var reCaptcha2Callback = function(id, val) {
     var btn = $('#' + id),
         pnum = parseInt(btn.data('pnum')),
@@ -442,35 +442,153 @@ var reCaptcha2Callback = function(id, val) {
     }
 }
 
-// Image-captcha Execute
-var captchaExecute = function(obj, callFunc) {
-    var name = $(obj).data('captcha'),
-        md = $("#modal-img-captcha");
-    $('.is-invalid, .has-error', md).removeClass("is-invalid has-error");
-    $('.invalid-feedback', md).text('');
-    change_captcha('#modal-captcha-value');
-    md.on('show.bs.modal', function() {
-        $('#modal-captcha-button').off('click').on('click', function(event) {
-            event.preventDefault();
-            var captcha_val = trim(strip_tags($('#modal-captcha-value').val()));
-            if (captcha_val.length < parseInt($('#modal-captcha-value').attr('maxlength'))) {
-                $('#modal-captcha-value').addClass('is-invalid').parent().addClass('has-error');
-                $('.invalid-feedback', md).text(nv_code);
-                $('#modal-captcha-value').focus()
-            } else {
-                md.modal('hide');
-                $('[name=' + name + ']', obj).length ? $('[name=' + name + ']', obj).val(captcha_val) : (captcha_val = $('<input type="hidden" name="' + name + '" value="' + captcha_val + '"/>'), $(obj).append(captcha_val));
-                setTimeout(function() {
-                    captchaCallFuncLoad(callFunc)
-                }, 100)
-            }
-        })
-    }).on('shown.bs.modal', function() {
-        $('#modal-captcha-value').focus()
-    }).modal('show')
+/**
+ * Mở modal captcha lên
+ *
+ * @param {HTMLElement} modal
+ * @param {Function | undefined | null} showCb
+ * @param {Function | undefined | null} shownCb
+ */
+function _showCaptchaModal(modal, showCb, shownCb) {
+    nukeviet.cr.mdCapDb = {
+        overflow: null,
+        paddingRight: null,
+        scroll: null
+    };
+
+    const body = document.body;
+    const backdrop = document.createElement('div');
+
+    backdrop.classList.add('cr-cap-backdrop', 'cr-fade');
+    body.append(backdrop);
+
+    modal.removeAttribute('aria-hidden');
+    modal.setAttribute('aria-modal', 'true');
+    modal.style.display = 'block';
+
+    nukeviet.cr.mdCapDb.overflow = body.style.overflow;
+    nukeviet.cr.mdCapDb.paddingRight = body.style.paddingRight;
+    nukeviet.cr.mdCapDb.scroll = document.documentElement.scrollHeight > window.innerHeight;
+
+    setTimeout(() => {
+        modal.classList.add('cr-show');
+        backdrop.classList.add('cr-show');
+
+        body.style.overflow = 'hidden';
+        nukeviet.cr.mdCapDb.scroll && (body.style.paddingRight = nukeviet.getScrollbarWidth() + 'px');
+        body.classList.add('cr-cap-open');
+    }, 1);
+    if (showCb) {
+        showCb();
+    }
+    setTimeout(() => {
+        _offBsenforceFocus('cap');
+        if (shownCb) {
+            shownCb();
+        }
+    }, 160);
 }
 
-// reCaptcha2 Execute
+/**
+ * Mở modal captcha hình lên để xác thực
+ *
+ * @param {HTMLElement} obj
+ * @param {Function} callFunc
+ */
+var captchaExecute = function(obj, callFunc) {
+    let mdCap = document.getElementById('modal-img-captcha');
+    const body = document.body;
+    if (!mdCap) {
+        mdCap = document.createElement('div');
+        mdCap.id = 'modal-img-captcha';
+        mdCap.classList.add('cr-cap', 'cr-fade');
+        mdCap.setAttribute('tabindex', '-1');
+        mdCap.setAttribute('aria-labelledby', 'modal-img-captcha-label');
+        mdCap.setAttribute('aria-hidden', 'true');
+        mdCap.innerHTML = `<div class="cr-cap-dialog">
+            <div class="cr-cap-content">
+                <div class="cr-cap-header">
+                    <div class="cr-cap-title" id="modal-img-captcha-label">${nukeviet.i18n.seccode1}</div>
+                    <button type="button" class="cr-btn-close" data-cr-dismiss="modal" aria-label="${nukeviet.i18n.close}"></button>
+                </div>
+                <div class="cr-cap-body cr-center">
+                    <div class="cr-cap-img">
+                        <img class="captchaImg" src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" width="${nv_gfx_width}" height="${nv_gfx_height}" alt="Captcha Image" title="${nukeviet.i18n.seccode}" aria-label="${nukeviet.i18n.seccode}">
+                        <span class="cr-pointer" data-toggle="change_captcha" data-obj="#modal-captcha-value" title="${nukeviet.i18n.captcharefresh}" aria-label="${nukeviet.i18n.captcharefresh}">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                                <path fill-rule="evenodd" d="M8 3a5 5 0 1 0 4.546 2.914.5.5 0 0 1 .908-.417A6 6 0 1 1 8 2z"/>
+                                <path d="M8 4.466V.534a.25.25 0 0 1 .41-.192l2.36 1.966c.12.1.12.284 0 .384L8.41 4.658A.25.25 0 0 1 8 4.466"/>
+                            </svg>
+                        </span>
+                    </div>
+                    <div class="cr-cap-input">
+                        <label for="modal-captcha-value">${nukeviet.i18n.seccode} <span class="cr-danger">(*)</span></label>
+                        <input type="text" id="modal-captcha-value" value="" class="cr-fcontrol" maxlength="${nv_gfx_num}" data-toggle="enterToEvent" data-obj="#modal-captcha-button" data-obj-event="click">
+                        <div class="cr-invalid-feedback"></div>
+                    </div>
+                    <button type="button" id="modal-captcha-button" class="cr-btn cr-btn-primary">${nv_confirm}</button>
+                </div>
+            </div>
+        </div>`;
+        body.appendChild(mdCap);
+    }
+
+    mdCap.querySelectorAll('.is-invalid').forEach(el => {
+        el.classList.remove('is-invalid');
+    });
+    mdCap.querySelectorAll('.invalid-feedback').forEach(el => {
+        el.textContent = '';
+    });
+    change_captcha('#modal-captcha-value');
+    _showCaptchaModal(mdCap, () => {
+        const btn = document.getElementById('modal-captcha-button');
+        btn.replaceWith(btn.cloneNode(true));
+        document.getElementById('modal-captcha-button').addEventListener('click', (event) => {
+            event.preventDefault();
+
+            const cIpt = document.getElementById('modal-captcha-value');
+            let captcha = trim(strip_tags(cIpt.value));
+
+            if (captcha.length < parseInt(cIpt.getAttribute('maxlength'))) {
+                cIpt.classList.add('is-invalid');
+                cIpt.nextElementSibling.textContent = nv_code;
+                cIpt.focus();
+            } else {
+                mdCap.querySelector('[data-cr-dismiss="modal"]').click();
+                if (obj instanceof jQuery) {
+                    obj = obj[0];
+                }
+
+                let name = obj.dataset.captcha;
+                let input = obj.querySelector('[name="' + name + '"]');
+
+                if (input) {
+                    input.value = captcha;
+                } else {
+                    input = document.createElement('input');
+                    input.type = 'hidden';
+                    input.name = name;
+                    input.value = captcha;
+                    obj.appendChild(input);
+                }
+
+                setTimeout(() => {
+                    captchaCallFuncLoad(callFunc);
+                }, 100);
+            }
+        });
+    }, () => {
+        document.getElementById('modal-captcha-value').focus();
+    });
+}
+
+/**
+ * Kích hoạt recaptcha 2 khi submit form có recaptcha2
+ *
+ * @param {HTMLElement} obj
+ * @param {Function} callFunc
+ * @returns {boolean}
+ */
 var reCaptcha2Execute = function(obj, callFunc) {
     if ("undefined" === typeof grecaptcha) {
         reCaptcha2ApiLoad();
@@ -483,44 +601,67 @@ var reCaptcha2Execute = function(obj, callFunc) {
     var id = $(obj).attr('data-recaptcha2'),
         res = $("[name=g-recaptcha-response]", obj).val(),
         isExist = false;
-    if (id.length == 16 && typeof reCapIDs[id] !== "undefined" && $('#' + reCapIDs[id]).length && !!res) {
-        if (grecaptcha.getResponse(reCapIDs[id]) == res) {
+    if (id.length == 16 && typeof nukeviet.reCapIDs[id] !== "undefined" && $('#' + nukeviet.reCapIDs[id]).length && !!res) {
+        if (grecaptcha.getResponse(nukeviet.reCapIDs[id]) == res) {
             isExist = true
         }
     }
     if (isExist) {
-        captchaCallFuncLoad(callFunc)
+        captchaCallFuncLoad(callFunc);
     } else {
+        // Tạo id ngẫu nhiên cho captcha
         if (id.length != 16) {
             id = nv_randomPassword(16);
             $(obj).attr('data-recaptcha2', id);
         }
-        if (!$("#modal-" + id).length) {
-            var header = $.fn.tooltip.Constructor.VERSION.substr(0, 1) == '3' ? '<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button><div class="modal-title">' + verify_not_robot + '</div>' : '<div class="modal-title">' + verify_not_robot + '</div><button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>';
-            $("body").append($('<div id="modal-' + id + '" class="modal fade" tabindex="-1" aria-hidden="true"><div class="modal-dialog"><div class="modal-content"><div class="modal-header">' + header + '</div><div class="modal-body"><div class="nv-recaptcha-default"><div id="' + id + '" data-toggle="recaptcha"></div></div></div></div></div></div>'));
+        // Thêm modal của captcha nếu chưa có
+        const mdId = `modal-${id}`;
+        let md = document.getElementById(mdId);
+        if (!md) {
+            md = document.createElement('div');
+            md.id = mdId;
+            md.classList.add('cr-cap', 'cr-fade');
+            md.setAttribute('tabindex', '-1');
+            md.setAttribute('aria-labelledby', `modal-${id}-label`);
+            md.setAttribute('aria-hidden', 'true');
+            md.innerHTML = `<div class="cr-cap-dialog">
+                <div class="cr-cap-content">
+                    <div class="cr-cap-header">
+                        <div class="cr-cap-title" id="${id}-label">${verify_not_robot}</div>
+                        <button type="button" class="cr-btn-close" data-cr-dismiss="modal" aria-label="${nukeviet.i18n.close}"></button>
+                    </div>
+                    <div class="cr-cap-body cr-center">
+                        <div class="nv-recaptcha-default">
+                            <div id="${id}" data-toggle="recaptcha"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>`;
+            document.body.appendChild(md);
         }
-        var md = $("#modal-" + id);
-        md.on('show.bs.modal', function() {
-            if (typeof reCapIDs[id] === "undefined") {
-                reCapIDs[id] = grecaptcha.render(id, {
+        _showCaptchaModal(md, () => {
+            if (typeof nukeviet.reCapIDs[id] === "undefined") {
+                nukeviet.reCapIDs[id] = grecaptcha.render(id, {
                     'sitekey': nv_recaptcha_sitekey,
                     'type': nv_recaptcha_type,
                     'callback': function(response) {
-                        md.modal('hide');
+                        md.querySelector('[data-cr-dismiss="modal"]').click();
                         $("[name=g-recaptcha-response]", obj).length ? $("[name=g-recaptcha-response]", obj).val(response) : (response = $('<input type="hidden" name="g-recaptcha-response" value="' + response + '"/>'), $(obj).append(response));
                         setTimeout(function() {
-                            captchaCallFuncLoad(callFunc)
+                            captchaCallFuncLoad(callFunc);
                         }, 100);
                     }
-                })
+                });
             } else {
-                grecaptcha.reset(reCapIDs[id])
+                grecaptcha.reset(nukeviet.reCapIDs[id]);
             }
-        }).modal('show')
+        });
     }
 }
 
-// reCaptcha v2 load
+/**
+ * Tải API reCaptcha v2
+ */
 var reCaptcha2ApiLoad = function() {
     if (isRecaptchaCheck() == 2) {
         var a = document.createElement("script");
@@ -532,7 +673,12 @@ var reCaptcha2ApiLoad = function() {
     }
 }
 
-// reCaptcha v3: reCaptcha Execute
+/**
+ * Thực thi reCaptcha v3
+ *
+ * @param {HTMLElement} obj
+ * @param {Function} callFunc
+ */
 var reCaptchaExecute = function(obj, callFunc) {
     grecaptcha.execute(nv_recaptcha_sitekey, {
         action: "formSubmit"
@@ -542,7 +688,9 @@ var reCaptchaExecute = function(obj, callFunc) {
     })
 }
 
-// reCaptcha v3 API load
+/**
+ * Tải API reCaptcha v3
+ */
 var reCaptcha3ApiLoad = function() {
     if (isRecaptchaCheck() == 3) {
         var a = document.createElement("script");
@@ -554,6 +702,9 @@ var reCaptcha3ApiLoad = function() {
     }
 }
 
+/**
+ * Tải API Turnstile
+ */
 var turnstileApiLoad = () => {
     var a = document.createElement("script");
     a.type = "text/javascript";
@@ -563,15 +714,19 @@ var turnstileApiLoad = () => {
     document.getElementsByTagName("head")[0].appendChild(a)
 }
 
+/**
+ * Xử lý sau khi gọi API turnstile xong
+ */
 var turnstileOnLoad = function() {
+    // Init turnstile trên các element có data-toggle=turnstile (build inline turnstile)
     $('[data-toggle=turnstile]').each(function() {
         var id = $(this).attr('id'),
             callFunc = $(this).data('callback'),
             size = ($(this).data('size') && $(this).data('size') == 'compact') ? 'compact' : '';
 
         if (typeof window[callFunc] === 'function') {
-            if (typeof turnstileIDs[id] === "undefined") {
-                turnstileIDs[id] = turnstile.render('#' + id, {
+            if (typeof nukeviet.turnstileIDs[id] === "undefined") {
+                nukeviet.turnstileIDs[id] = turnstile.render('#' + id, {
                     'sitekey': nv_turnstile_sitekey,
                     'size': size,
                     'theme': 'light',
@@ -579,10 +734,10 @@ var turnstileOnLoad = function() {
                     'callback': callFunc
                 })
             } else {
-                turnstile.reset(turnstileIDs[id])
+                turnstile.reset(nukeviet.turnstileIDs[id])
             }
         } else {
-            if (typeof turnstileIDs[id] === "undefined") {
+            if (typeof nukeviet.turnstileIDs[id] === "undefined") {
                 var pnum = parseInt($(this).data('pnum')),
                     btnselector = $(this).data('btnselector'),
                     btn = $('#' + id),
@@ -596,7 +751,7 @@ var turnstileOnLoad = function() {
                     btn.prop('disabled', true);
                 }
 
-                turnstileIDs[id] = turnstile.render('#' + id, {
+                nukeviet.turnstileIDs[id] = turnstile.render('#' + id, {
                     'sitekey': nv_turnstile_sitekey,
                     'size': size,
                     'theme': 'light',
@@ -612,13 +767,19 @@ var turnstileOnLoad = function() {
                     }
                 })
             } else {
-                turnstile.reset(turnstileIDs[id])
+                turnstile.reset(nukeviet.turnstileIDs[id])
             }
         }
     })
 }
 
-// Turnstile Execute
+/**
+ * Kích hoạt turnstile 2 khi submit form có turnstile
+ *
+ * @param {HTMLElement} obj
+ * @param {Function} callFunc
+ * @returns
+ */
 var turnstileExecute = function(obj, callFunc) {
     if ("undefined" === typeof turnstile) {
         turnstileApiLoad();
@@ -631,46 +792,104 @@ var turnstileExecute = function(obj, callFunc) {
     var id = $(obj).attr('data-turnstile'),
         res = $("[name=cf-turnstile-response]", obj).val(),
         isExist = false;
-    if (id.length == 16 && typeof turnstileIDs[id] !== "undefined" && $('#' + turnstileIDs[id]).length && !!res) {
-        if (turnstile.getResponse(turnstileIDs[id]) == res) {
+    if (id.length == 16 && typeof nukeviet.turnstileIDs[id] !== "undefined" && $('#' + nukeviet.turnstileIDs[id]).length && !!res) {
+        if (turnstile.getResponse(nukeviet.turnstileIDs[id]) == res) {
             isExist = true
         }
     }
     if (isExist) {
-        captchaCallFuncLoad(callFunc)
+        captchaCallFuncLoad(callFunc);
     } else {
+        // Tạo id ngẫu nhiên cho captcha
         if (id.length != 16) {
             id = 'tt' + nv_randomPassword(14);
             $(obj).attr('data-turnstile', id);
         }
-        if (!$("#modal-" + id).length) {
-            var header = $.fn.tooltip.Constructor.VERSION.substr(0, 1) == '3' ? '<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button><div class="modal-title">' + verify_not_robot + '</div>' : '<div class="modal-title">' + verify_not_robot + '</div><button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>';
-            $("body").append($('<div id="modal-' + id + '" class="modal fade" tabindex="-1" aria-hidden="true"><div class="modal-dialog"><div class="modal-content"><div class="modal-header">' + header + '</div><div class="modal-body"><div class="nv-recaptcha-default"><div id="' + id + '" data-toggle="turnstile"></div></div></div></div></div></div>'));
+        // Thêm modal của captcha nếu chưa có
+        const mdId = `modal-${id}`;
+        let md = document.getElementById(mdId);
+        if (!md) {
+            md = document.createElement('div');
+            md.id = mdId;
+            md.classList.add('cr-cap', 'cr-fade');
+            md.setAttribute('tabindex', '-1');
+            md.setAttribute('aria-labelledby', `modal-${id}-label`);
+            md.setAttribute('aria-hidden', 'true');
+            md.innerHTML = `<div class="cr-cap-dialog">
+                <div class="cr-cap-content">
+                    <div class="cr-cap-header">
+                        <div class="cr-cap-title" id="${id}-label">${verify_not_robot}</div>
+                        <button type="button" class="cr-btn-close" data-cr-dismiss="modal" aria-label="${nukeviet.i18n.close}"></button>
+                    </div>
+                    <div class="cr-cap-body cr-center">
+                        <div class="nv-recaptcha-default">
+                            <div id="${id}" data-toggle="turnstile"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>`;
+            document.body.appendChild(md);
         }
-        var md = $("#modal-" + id);
-        md.on('show.bs.modal', function() {
-            if (typeof turnstileIDs[id] === "undefined") {
-                turnstileIDs[id] = turnstile.render('#' + id, {
+        _showCaptchaModal(md, () => {
+            if (typeof nukeviet.turnstileIDs[id] === "undefined") {
+                nukeviet.turnstileIDs[id] = turnstile.render('#' + id, {
                     'sitekey': nv_turnstile_sitekey,
                     'theme': 'light',
                     'language': nv_lang_interface,
                     'callback': function(response) {
-                        md.modal('hide');
+                        md.querySelector('[data-cr-dismiss="modal"]').click();
                         $("[name=cf-turnstile-response]", obj).length ? $("[name=cf-turnstile-response]", obj).val(response) : (response = $('<input type="hidden" name="cf-turnstile-response" value="' + response + '"/>'), $(obj).append(response));
                         setTimeout(function() {
-                            captchaCallFuncLoad(callFunc)
+                            captchaCallFuncLoad(callFunc);
                         }, 100);
                     }
                 })
             } else {
-                turnstile.reset(turnstileIDs[id])
+                turnstile.reset(nukeviet.turnstileIDs[id]);
             }
-        }).modal('show')
+        });
     }
 }
 
-$(function() {
+document.addEventListener('DOMContentLoaded', () => {
+    // Đóng modal captcha nói chung: recaptcha, turnstile, captcha
+    document.addEventListener('click', (event) => {
+        if (
+            !event.target.matches('[data-cr-dismiss="modal"]') ||
+            !document.body.classList.contains('cr-cap-open')
+        ) {
+            return;
+        }
+        event.preventDefault();
 
+        const modal = event.target.closest('.cr-cap');
+        const body = document.body;
+
+        const backdrop = document.querySelector('.cr-cap-backdrop');
+
+        body.classList.remove('cr-cap-open');
+        body.style.overflow = nukeviet.cr.mdCapDb.overflow;
+        body.style.paddingRight = nukeviet.cr.mdCapDb.paddingRight;
+        if (body.getAttribute('style') === '') {
+            body.removeAttribute('style');
+        }
+        if (body.getAttribute('class') === '') {
+            body.removeAttribute('class');
+        }
+
+        modal.classList.remove('cr-show');
+        backdrop.classList.remove('cr-show');
+        setTimeout(() => {
+            modal.style.display = 'none';
+            modal.removeAttribute('aria-modal');
+            modal.setAttribute('aria-hidden', 'true');
+            body.removeChild(backdrop);
+            _onBsenforceFocus('cap');
+        }, 150);
+    });
+});
+
+$(function() {
     // Modify all empty link
     $('body').on("click", 'a[href="#"], a[href=""]', function(e) {
         e.preventDefault();
@@ -770,9 +989,9 @@ $(function() {
     // modalShowByObj
     $('body').on('click', '[data-toggle=modalShowByObj]', function(e) {
         e.preventDefault();
-        var obj = $(this).data('obj') ? $(this).data('obj') : $(this),
+        var obj = $(this).data('obj') ? $(this).data('obj') : this,
             callback = $(this).data('callback');
-        callback ? modalShowByObj(obj, callback) : modalShowByObj(obj)
+        callback ? modalShowByObj(obj, callback) : modalShowByObj(obj);
     });
 
     // maxLength for textarea
@@ -815,24 +1034,6 @@ $(function() {
     }());
 });
 
-// Fix bootstrap multiple modal
-$(document).on({
-    'show.bs.modal': function() {
-        var zIndex = 1040 + (10 * $('.modal:visible').length);
-        $(this).css('z-index', zIndex);
-        setTimeout(function() {
-            $('.modal-backdrop').not('.modal-stack').css('z-index', zIndex - 1).addClass('modal-stack');
-        }, 0);
-    },
-    'hidden.bs.modal': function() {
-        if ($('.modal:visible').length > 0) {
-            setTimeout(function() {
-                $(document.body).addClass('modal-open');
-            }, 0);
-        }
-    }
-}, '.modal');
-
 $(window).on('load', function() {
     (0 < $(".fb-like").length) && (1 > $("#fb-root").length && $("body").append('<div id="fb-root"></div>'), function(a, b, c) {
         var d = a.getElementsByTagName(b)[0];
@@ -857,9 +1058,14 @@ $(window).on('load', function() {
         b.parentNode.insertBefore(a, b);
     }();
 
+    // Nếu có recaptcha thì load API. Recaptcha 2 hoặc 3 chỉ hỗ trợ 1 trong 2
     if ($('[data-toggle=recaptcha]').length || $("[data-recaptcha2]").length) {
-        reCaptcha2ApiLoad()
+        reCaptcha2ApiLoad();
     } else if ($("[data-recaptcha3]").length) {
-        reCaptcha3ApiLoad()
+        reCaptcha3ApiLoad();
+    }
+    // Nếu có turnstile thì load API
+    if ($('[data-toggle=turnstile]').length || $("[data-turnstile]").length) {
+        turnstileApiLoad();
     }
 });

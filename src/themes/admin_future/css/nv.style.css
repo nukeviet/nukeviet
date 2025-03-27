@@ -4439,7 +4439,7 @@ textarea.form-control-lg {
   --bs-card-title-color: ;
   --bs-card-subtitle-color: ;
   --bs-card-border-width: 0;
-  --bs-card-border-color: var(--bs-border-color-translucent);
+  --bs-card-border-color: transparent;
   --bs-card-border-radius: var(--bs-border-radius);
   --bs-card-box-shadow: 0 0.0625rem 0.125rem rgba(0, 0, 0, 0.075);
   --bs-card-inner-border-radius: calc(var(--bs-border-radius) - 0);
@@ -25246,7 +25246,23 @@ readers do not read off random characters that represent icons */
 }
 
 :root,
-[data-bs-theme=light] {
+[data-bs-theme=light],
+[data-theme=light] {
+  --cr-md-content-border-radius: 0.5rem;
+  --cr-md-content-inner-border-radius: calc(0.5rem - 1px);
+  --cr-cap-content-border-radius: 0.5rem;
+  --cr-cap-content-inner-border-radius: calc(0.5rem - 1px);
+  --cr-danger: #ee3232;
+  --cr-toast-error-bg: #ee3232;
+  --cr-toast-danger-bg: #ee3232;
+  --cr-toast-primary-bg: #4285f4;
+  --cr-toast-success-bg: #27ad57;
+  --cr-toast-info-bg: #17a2b8;
+  --cr-toast-info-color: #fff;
+  --cr-toast-light-bg: #f9f9f9;
+  --cr-toast-dark-bg: #212529;
+  --cr-input-border-radius: 0.1875rem;
+  --cr-btn-border-radius: 0.1875rem;
   --nv-header-bg-color: #fff;
   --nv-header-active-bg-color: #e5e5e5;
   --nv-header-link-hover-color: #333333;
@@ -25271,7 +25287,8 @@ readers do not read off random characters that represent icons */
   --nv-form-check-input-disabled-border-color: #d5d5d5;
 }
 
-[data-bs-theme=dark] {
+[data-bs-theme=dark],
+[data-theme=dark] {
   --nv-header-bg-color: #343a40;
   --nv-header-active-bg-color: #212529;
   --nv-header-link-hover-color: #adb5bd;
@@ -25773,6 +25790,12 @@ readers do not read off random characters that represent icons */
   counter-increment: table-counter;
   content: counter(table-counter);
   display: inline-block;
+}
+
+[data-bs-theme=dark] .card,
+[data-theme=dark] .card {
+  --bs-card-border-color: var(--bs-border-color-translucent);
+  --bs-card-border-width: 1px;
 }
 
 .header-outer {
@@ -26505,41 +26528,6 @@ html:not([data-bs-theme=dark]) .btn-default {
   --bs-btn-disabled-border-color: #0067ff;
 }
 
-.site-toasts {
-  position: fixed;
-  z-index: 1090;
-  bottom: 0;
-  right: 0;
-}
-.site-toasts.toast-top {
-  bottom: unset;
-  top: 0;
-}
-.site-toasts.toast-start {
-  right: unset;
-  left: 0;
-}
-.site-toasts.toast-center {
-  right: unset;
-  left: 50%;
-  transform: translateX(-50%);
-}
-.site-toasts.toast-middle {
-  bottom: unset;
-  top: 50%;
-  transform: translateY(-50%);
-}
-.site-toasts.toast-center.toast-middle {
-  transform: translate(-50%, -50%);
-}
-.site-toasts .toast-lists {
-  overflow: hidden;
-  max-height: 100vh;
-}
-.site-toasts .toast-lists .toast-items > .toast:not(:last-child) {
-  margin-bottom: 1rem;
-}
-
 #developer-error {
   width: 2rem;
   height: 2rem;
@@ -26548,23 +26536,6 @@ html:not([data-bs-theme=dark]) .btn-default {
   line-height: 2rem;
   bottom: 1rem;
   opacity: 0.85;
-}
-
-.alert-backdrop {
-  position: fixed;
-  top: 0;
-  left: 0;
-  z-index: 1060;
-  width: 100vw;
-  height: 100vh;
-  background-color: #000;
-}
-.alert-backdrop.show {
-  opacity: 0.5;
-}
-
-.alert-box.modal {
-  --bs-modal-zindex: 1061;
 }
 
 .main-content .apexcharts-canvas text {
@@ -28233,7 +28204,7 @@ span.flatpickr-weekday {
   position: fixed;
   top: 0;
   left: 0;
-  z-index: 1056;
+  z-index: 1058;
   width: 100vw;
   height: 100vh;
   background-color: #000;
@@ -28244,7 +28215,7 @@ span.flatpickr-weekday {
 }
 
 .fmd-backdrop {
-  z-index: 1058;
+  z-index: 1060;
 }
 
 .fmm,
@@ -28252,7 +28223,7 @@ span.flatpickr-weekday {
   position: fixed;
   top: 0;
   left: 0;
-  z-index: 1057;
+  z-index: 1059;
   display: none;
   width: 100%;
   height: 100%;
@@ -28262,15 +28233,15 @@ span.flatpickr-weekday {
 }
 
 .fmd {
-  z-index: 1059;
+  z-index: 1061;
 }
 
 .fmd-open .select2-dropdown {
-  --bs-dropdown-zindex: 1059;
+  --bs-dropdown-zindex: 1061;
 }
 
 .fmm-open .dropdown-menu-fms {
-  --bs-dropdown-zindex: 1057;
+  --bs-dropdown-zindex: 1059;
 }
 
 .fmm-dialog,

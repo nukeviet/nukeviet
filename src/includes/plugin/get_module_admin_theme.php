@@ -31,6 +31,9 @@ nv_add_hook($module_name, 'get_module_admin_theme', $priority, function ($vars) 
     if (in_array($module_name, ['upload', 'themes', 'emailtemplates', 'settings', 'seotools', 'modules', 'extensions', 'webtools', 'language', 'siteinfo', 'authors', 'database'])) {
         return $new_theme;
     }
+    if (($module_info['module_file'] ?? '') == 'voting' and in_array($op, ['main'])) {
+        return $new_theme;
+    }
 
     return 'admin_default';
 });

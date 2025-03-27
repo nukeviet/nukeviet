@@ -143,11 +143,6 @@ $(function() {
         e.preventDefault();
         modalShowByObj($(this).attr('href'));
     });
-    // View backupcode
-    $('[data-toggle="viewcode"]').click(function(e) {
-        e.preventDefault();
-        modalShowByObj($(this).attr('href'));
-    });
 
     // Tắt xác thực 2 bước
     $('[data-toggle="turnoff2step"]').click(function(e) {

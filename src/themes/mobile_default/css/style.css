@@ -22,6 +22,35 @@
     --nv-font-size-md: 14px;
     --nv-font-size-lg: 16px;
     --nv-font-size-xxl: 22px;
+    --cr-danger: #d9534f;
+    --cr-input-border-radius: 4px;
+    --cr-input-focus-border-color: #66afe9;
+    --cr-btn-border-radius: 4px;
+    --cr-toast-error-bg: #d9534f;
+    --cr-toast-danger-bg: #d9534f;
+    --cr-toast-primary-bg: #337ab7;
+    --cr-toast-success-bg: #5cb85c;
+    --cr-toast-info-bg: #5bc0de;
+    --cr-toast-info-color: #fff;
+    --cr-toast-warning-bg: #f0ad4e;
+    --cr-toast-warning-color: #fff;
+}
+
+.cr-btn-primary {
+    --cr-btn-color: #fff;
+    --cr-btn-bg: #428bca;
+    --cr-btn-border-color: #428bca;
+    --cr-btn-hover-color: #fff;
+    --cr-btn-hover-bg: #3071a9;
+    --cr-btn-hover-border-color: #2a6597;
+    --cr-btn-active-color: #fff;
+    --cr-btn-active-bg: #2a6597;
+    --cr-btn-active-border-color: #265a87;
+    --cr-btn-active-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
+    --cr-btn-disabled-color: #fff;
+    --cr-btn-disabled-bg: #428bca;
+    --cr-btn-disabled-border-color: #428bca;
+    --cr-btn-disabled-opacity: 0.65;
 }
 
 @font-face {
@@ -946,6 +975,7 @@ p + .image-style-side {
 html {
     margin: 0;
     padding: 0;
+    font-size: 16px;
 }
 
 body {
@@ -1676,22 +1706,6 @@ header.header-up {
     vertical-align: middle;
 }
 
-.nv-recaptcha-default {
-    margin: 0 auto;
-    width: 304px;
-    height: 78px;
-}
-
-.nv-recaptcha-compact {
-    margin: 0 auto;
-    width: 164px;
-    height: 144px;
-}
-
-.grecaptcha-badge {
-    visibility: hidden;
-}
-
 /* List item */
 
 .nv-list-item {
@@ -1928,50 +1942,6 @@ button.close {
 
 .modal-body {
     padding: 15px;
-}
-
-#sitemodal .modal-dialog {
-    position: relative;
-    width: auto !important;
-    max-width: 600px;
-    text-align: center;
-    font-size: 0;
-}
-
-#sitemodal .modal-content {
-    width: auto;
-    display: inline-block;
-    font-size: 14px;
-    text-align: left;
-}
-
-#sitemodal .close {
-    position: absolute;
-    right: -10px;
-    bottom: -10px;
-    width: 24px;
-    height: 24px;
-    background: #000;
-    color: #fff;
-    font-size: 11px;
-    opacity: 0.8;
-    border: 2px solid #ccc;
-    border-radius: 12px;
-}
-
-#sitemodal .close:hover {
-    opacity: 1;
-}
-
-@media (max-width: 619px) {
-    #sitemodal .modal-dialog {
-        margin-left: 10px;
-        margin-right: 10px;
-    }
-
-    #sitemodal .modal-content {
-        display: block;
-    }
 }
 
 .sidebar-nav {

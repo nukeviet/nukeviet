@@ -5,6 +5,7 @@
   },
   "devDependencies": {
     "autoprefixer": "^10.4.19",
+    "clean-css-cli": "^5.6.3",
     "cross-env": "^7.0.3",
     "nodemon": "^3.1.0",
     "npm-run-all2": "^6.1.2",
@@ -21,6 +22,12 @@
     "admin-css-rtl": "cross-env NODE_ENV=RTL postcss --config build/postcss.config.mjs --dir \"src/themes/admin_future/css\" --ext \".rtl.css\" \"src/themes/admin_future/css/*.css\" \"!src/themes/admin_future/css/*.rtl*.css\" \"!src/themes/admin_future/css/*.min.css\"",
     "admin-compile": "sass --style expanded --source-map --embed-sources scss/admin_future/:src/themes/admin_future/css/",
     "watch-admin-css": "nodemon --watch scss/ --ext scss --exec \"npm-run-all admin-compile admin-css-prefix admin-css-rtl\"",
-    "watch-admin": "npm-run-all --parallel watch-admin-*"
+    "watch-admin": "npm-run-all --parallel watch-admin-*",
+    "core-css-prefix": "postcss --config build/postcss.config.mjs --replace \"src/assets/css/core.*.css\" \"!src/assets/css/*.rtl*.css\" \"!src/assets/css/*.min.css\"",
+    "core-css-rtl": "cross-env NODE_ENV=RTL postcss --config build/postcss.config.mjs --dir \"src/assets/css\" --ext \".rtl.css\" \"src/assets/css/core.*.css\" \"!src/assets/css/*.rtl*.css\" \"!src/assets/css/*.min.css\"",
+    "core-css-minify": "bash scripts/core-css-minify.sh",
+    "core-compile": "sass --style expanded --source-map --embed-sources scss/core/:src/assets/css/",
+    "watch-core-css": "nodemon --watch scss/ --ext scss --exec \"npm-run-all core-compile core-css-prefix core-css-rtl core-css-minify\"",
+    "watch-core": "npm-run-all --parallel watch-core-*"
   }
 }

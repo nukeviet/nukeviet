@@ -287,10 +287,22 @@ $(function() {
     }
 
     $(document).on('click', function(event) {
-        if (tip_active && !($(event.target).closest("[data-toggle=tip]", this).length || $(event.target).closest("#tip", this).length || $(event.target).closest(".modal").length)) {
-            tipHide()
-        } else if (ftip_active && !($(event.target).closest("[data-toggle=ftip]", this).length || $(event.target).closest("#ftip", this).length || $(event.target).closest(".modal").length)) {
-            ftipHide()
+        if (tip_active && !(
+            $(event.target).closest("[data-toggle=tip]", this).length ||
+            $(event.target).closest("#tip", this).length ||
+            $(event.target).closest(".modal").length ||
+            $(event.target).closest(".cr-md").length ||
+            $(event.target).closest(".cr-cap").length
+        )) {
+            tipHide();
+        } else if (ftip_active && !(
+            $(event.target).closest("[data-toggle=ftip]", this).length ||
+            $(event.target).closest("#ftip", this).length ||
+            $(event.target).closest(".modal").length ||
+            $(event.target).closest(".cr-md").length ||
+            $(event.target).closest(".cr-cap").length
+        )) {
+            ftipHide();
         }
     });
 
@@ -365,3 +377,21 @@ $(window).on("resize", function() {
 $(window).on('load', function() {
     nvbreadcrumbs();
 });
+
+// Fix bootstrap multiple modal
+$(document).on({
+    'show.bs.modal': function() {
+        var zIndex = 1040 + (10 * $('.modal:visible').length);
+        $(this).css('z-index', zIndex);
+        setTimeout(function() {
+            $('.modal-backdrop').not('.modal-stack').css('z-index', zIndex - 1).addClass('modal-stack');
+        }, 0);
+    },
+    'hidden.bs.modal': function() {
+        if ($('.modal:visible').length > 0) {
+            setTimeout(function() {
+                $(document.body).addClass('modal-open');
+            }, 0);
+        }
+    }
+}, '.modal');

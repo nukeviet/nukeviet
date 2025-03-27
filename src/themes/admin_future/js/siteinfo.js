@@ -8,6 +8,10 @@
  */
 
 $(function() {
+    function clearNotiCookie() {
+        nv_setCookie(nv_cookie_prefix + '_antf', '', -1);
+    }
+
     // Xóa gói cập nhật
     $('[data-toggle="deleteUpdPkg"]').on('click', function(e) {
         e.preventDefault();
@@ -523,6 +527,7 @@ $(function() {
                             nvToast(nv_is_del_confirm[2], 'error');
                             return;
                         }
+                        clearNotiCookie();
                         location.reload();
                     },
                     error: function(xhr, text, err) {
@@ -548,6 +553,7 @@ $(function() {
                         nvToast(nv_is_change_act_confirm[2], 'error');
                         return;
                     }
+                    clearNotiCookie();
                     location.reload();
                 },
                 error: function(xhr, text, err) {
@@ -572,6 +578,7 @@ $(function() {
                         nvToast(nv_is_change_act_confirm[2], 'error');
                         return;
                     }
+                    clearNotiCookie();
                     location.reload();
                 },
                 error: function(xhr, text, err) {
@@ -606,6 +613,7 @@ $(function() {
                         nvToast(nv_is_del_confirm[2], 'error');
                         return;
                     }
+                    clearNotiCookie();
                     location.reload();
                 },
                 error: function(xhr, text, err) {
@@ -640,6 +648,7 @@ $(function() {
                     nvToast(nv_is_change_act_confirm[2], 'error');
                     return;
                 }
+                clearNotiCookie();
                 location.reload();
             },
             error: function(xhr, text, err) {

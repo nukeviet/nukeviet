@@ -43,13 +43,13 @@
 <script>
     $(function() {
         <!-- BEGIN: complete -->
-        $(window).on("unload", function() {
+        $(window).on("beforeunload", function() {
             $("#avatar", opener.document).val('{FILENAME}')
         });
         window.close();
         <!-- END: complete -->
         <!-- BEGIN: complete2 -->
-        $(window).on("unload", function() {
+        $(window).on("beforeunload", function() {
             if ('{DATA.client}' != '') {
                 window.opener.postMessage('nv.reload', '{DATA.client}');
             } else {
@@ -59,7 +59,7 @@
         window.close();
         <!-- END: complete2 -->
         <!-- BEGIN: complete3 -->
-        $(window).on("unload", function() {
+        $(window).on("beforeunload", function() {
             $("#myavatar", opener.document).attr('src', '{FILENAME}');
             $("#delavatar", opener.document).prop("disabled",!1)
         });

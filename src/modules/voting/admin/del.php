@@ -19,7 +19,6 @@ if (!defined('NV_IS_AJAX')) {
 
 $checkss = $nv_Request->get_string('checkss', 'post');
 $vid = $nv_Request->get_int('vid', 'post', 0);
-$contents = '';
 
 if ($vid > 0 and $checkss == md5($vid . NV_CHECK_SESSION)) {
     nv_insert_logs(NV_LANG_DATA, $module_name, 'log_del_vote', 'votingid ' . $vid, $admin_info['userid']);
@@ -38,12 +37,13 @@ if ($vid > 0 and $checkss == md5($vid . NV_CHECK_SESSION)) {
             }
         }
 
-        $contents = 'OK_' . $vid;
-    } else {
-        $contents = 'ERR_' . $nv_Lang->getModule('voting_delete_unsuccess');
+        nv_jsonOutput([
+            'success' => 1
+        ]);
     }
 }
 
-include NV_ROOTDIR . '/includes/header.php';
-echo $contents;
-include NV_ROOTDIR . '/includes/footer.php';
+nv_jsonOutput([
+    'success' => 0,
+    'text' => $nv_Lang->getModule('voting_delete_unsuccess')
+]);

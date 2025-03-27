@@ -2443,7 +2443,7 @@ function nv_url_rewrite_callback($matches)
             unset($query_array[NV_OP_VARIABLE]);
         }
 
-        $rewrite_string = nv_apply_hook('', 'get_rewrite_domain', [], '') . ($is_acp ? NV_BASE_ADMINURL : NV_BASE_SITEURL) . ($global_config['check_rewrite_file'] ? '' : 'index.php/') . implode('/', $op_rewrite) . ($op_rewrite_count ? $rewrite_end : '');
+        $rewrite_string = nv_apply_hook('', 'get_rewrite_domain', [$op_rewrite_count, $op_rewrite, $rewrite_end, $query_array, $is_amp, $is_acp], '') . ($is_acp ? NV_BASE_ADMINURL : NV_BASE_SITEURL) . ($global_config['check_rewrite_file'] ? '' : 'index.php/') . implode('/', $op_rewrite) . ($op_rewrite_count ? $rewrite_end : '');
 
         if (!empty($query_array)) {
             $rewrite_string .= '?' . http_build_query($query_array, '', $is_amp ? '&amp;' : '&');

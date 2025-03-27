@@ -174,10 +174,7 @@ $module_info = $site_mods[$module_name];
 $module_file = $module_info['module_file'];
 $module_data = $module_info['module_data'];
 $module_upload = $module_info['module_upload'];
-$module_captcha = $module_name == 'users' ? $global_config['captcha_type'] : (!empty($module_config[$module_name]['captcha_type']) ? $module_config[$module_name]['captcha_type'] : '');
-if (!(empty($module_captcha) or in_array($module_captcha, ['captcha', 'recaptcha', 'turnstile'], true)) or ($module_captcha == 'recaptcha' and (empty($global_config['recaptcha_sitekey']) or empty($global_config['recaptcha_secretkey']))) or ($module_captcha == 'turnstile' and (empty($global_config['turnstile_sitekey']) or empty($global_config['turnstile_secretkey'])))) {
-    $module_captcha = 'captcha';
-}
+$module_captcha = nv_module_captcha($module_name);
 
 if (!preg_match('/^[a-z0-9\-\_\/\+]+$/i', $op)) {
     nv_redirect_location(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
