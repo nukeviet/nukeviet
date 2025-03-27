@@ -1080,7 +1080,7 @@ class Request
                         if (empty($value) or is_numeric($value)) {
                             return $value;
                         }
-                        $value = $this->_compound_unicode($value);
+                        $value = $this->compound_unicode($value);
                         return ($filter == true) ? $this->security_get($value) : $value;
                     }
                     break;
@@ -1090,7 +1090,7 @@ class Request
                         if (empty($value) or is_numeric($value)) {
                             return $value;
                         }
-                        $value = $this->_compound_unicode($value);
+                        $value = $this->compound_unicode($value);
                         return ($filter == true) ? $this->security_post($value) : $value;
                     }
                     break;
@@ -1125,7 +1125,7 @@ class Request
                         if (empty($value) or is_numeric($value)) {
                             return $value;
                         }
-                        $value = $this->_compound_unicode($value);
+                        $value = $this->compound_unicode($value);
                         return ($filter == true) ? $this->security_post($value) : $value;
                     }
                     if (array_key_exists($name, $_GET)) {
@@ -1133,7 +1133,7 @@ class Request
                         if (empty($value) or is_numeric($value)) {
                             return $value;
                         }
-                        $value = $this->_compound_unicode($value);
+                        $value = $this->compound_unicode($value);
                         return ($filter == true) ? $this->security_get($value) : $value;
                     }
                     break;
@@ -1715,7 +1715,7 @@ class Request
      * @param string $str
      * @return string
      */
-    private function _compound_unicode($str)
+    public function compound_unicode($str)
     {
         // Sử dụng Normalizer nếu extension intl được cài đặt
         if (class_exists('Normalizer')) {
