@@ -1080,7 +1080,7 @@ class Request
                         if (empty($value) or is_numeric($value)) {
                             return $value;
                         }
-
+                        $value = $this->_compound_unicode($value);
                         return ($filter == true) ? $this->security_get($value) : $value;
                     }
                     break;
@@ -1090,7 +1090,7 @@ class Request
                         if (empty($value) or is_numeric($value)) {
                             return $value;
                         }
-
+                        $value = $this->_compound_unicode($value);
                         return ($filter == true) ? $this->security_post($value) : $value;
                     }
                     break;
@@ -1125,7 +1125,7 @@ class Request
                         if (empty($value) or is_numeric($value)) {
                             return $value;
                         }
-
+                        $value = $this->_compound_unicode($value);
                         return ($filter == true) ? $this->security_post($value) : $value;
                     }
                     if (array_key_exists($name, $_GET)) {
@@ -1133,7 +1133,7 @@ class Request
                         if (empty($value) or is_numeric($value)) {
                             return $value;
                         }
-
+                        $value = $this->_compound_unicode($value);
                         return ($filter == true) ? $this->security_get($value) : $value;
                     }
                     break;
@@ -1708,5 +1708,54 @@ class Request
         session_start();
         $saveOldSession && $_SESSION = $old_session;
         $this->session_id = $new_sessid;
+    }
+
+    /**
+     * Hàm chuyển Unicode tổ hợp sang Unicode dựng sẵn
+     * @param string $str
+     * @return string
+     */
+    private function _compound_unicode($str)
+    {
+        // Sử dụng Normalizer nếu extension intl được cài đặt
+        if (class_exists('Normalizer')) {
+            return \Normalizer::normalize($str, \Normalizer::FORM_C);
+        }
+    
+        // Fallback cho trường hợp không có intl
+        $map = [
+            'ả' => 'ả','á' => 'á','à' => 'à','ạ' => 'ạ','ã' => 'ã',
+            'ẳ' => 'ẳ','ắ' => 'ắ','ằ' => 'ằ','ặ' => 'ặ','ẵ' => 'ẵ',
+            'ẩ' => 'ẩ','ấ' => 'ấ','ầ' => 'ầ','ậ' => 'ậ','ẫ' => 'ẫ',
+    
+            'Ả' => 'Ả','Á' => 'Á','À' => 'À','Ạ' => 'Ạ','Ã' => 'Ã',
+            'Ẳ' => 'Ẳ','Ắ' => 'Ắ','Ằ' => 'Ằ','Ặ' => 'Ặ','Ẵ' => 'Ẵ',
+            'Ẩ' => 'Ẩ','Ấ' => 'Ấ','Ầ' => 'Ầ','Ậ' => 'Ậ','Ẫ' => 'Ẫ',
+    
+            'ẻ' => 'ẻ','é' => 'é','è' => 'è','ẹ' => 'ẹ','ẽ' => 'ẽ',
+            'ể' => 'ể','ế' => 'ế','ề' => 'ề','ệ' => 'ệ','ễ' => 'ễ',
+            'Ẻ' => 'Ẻ','É' => 'É','È' => 'Ề','Ẹ' => 'Ẹ','Ẽ' => 'Ẽ',
+            'Ể' => 'Ể','Ế' => 'Ế','Ề' => 'Ề','Ệ' => 'Ệ','Ễ' => 'Ễ',
+    
+            'ỉ' => 'ỉ','í' => 'í','ì' => 'ì','ị' => 'ị','ĩ' => 'ĩ',
+            'Ỉ' => 'Ỉ','Í' => 'Í','Ì' => 'Ì','Ị' => 'Ị','Ĩ' => 'Ĩ',
+    
+            'ỏ' => 'ỏ','ó' => 'ó','ò' => 'ò','ọ' => 'ọ','õ' => 'õ',
+            'ở' => 'ở','ớ' => 'ớ','ờ' => 'ờ','ợ' => 'ợ','ỡ' => 'ỡ',
+            'ổ' => 'ổ','ố' => 'ố','ồ' => 'ồ','ộ' => 'ộ','ỗ' => 'ỗ',
+            'Ỏ' => 'Ò','Ó' => 'Ó','Ò' => 'Ồ','Ọ' => 'Ọ','Õ' => 'Õ',
+            'Ở' => 'Ở','Ớ' => 'Ớ','Ờ' => 'Ờ','Ợ' => 'Ợ','Ỡ' => 'Ỡ',
+            'Ổ' => 'Ổ','Ố' => 'Ố','Ồ' => 'Ồ','Ộ' => 'Ộ','Ỗ' => 'Ỗ',
+    
+            'ủ' => 'ủ','ú' => 'ú','ù' => 'ù','ụ' => 'ụ','ũ' => 'ũ',
+            'ử' => 'ử','ứ' => 'ứ','ừ' => 'ừ','ự' => 'ự','ữ' => 'ữ',
+            'Ủ' => 'Ủ','Ú' => 'Ú','Ù' => 'Ù','Ụ' => 'Ụ','Ũ' => 'Ũ',
+            'Ử' => 'Ủ','Ứ' => 'Ứ','Ừ' => 'Ừ','Ự' => 'Ự','Ữ' => 'Ữ',
+    
+            'ỷ' => 'ỷ','ý' => 'ý','ỳ' => 'ỳ','ỵ' => 'ỵ','ỹ' => 'ỹ',
+            'Ỷ' => 'Ỷ','Ý' => 'Ý','Ỳ' => 'Ỳ','Ỵ' => 'Ỵ','Ỹ' => 'Ỹ'
+        ];
+    
+        return strtr($str, $map);
     }
 }
