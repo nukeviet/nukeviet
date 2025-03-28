@@ -4239,4 +4239,3 @@ function nv_compound_unicode($str)
 
     return $nv_Request->compound_unicode($str);
 }
-
