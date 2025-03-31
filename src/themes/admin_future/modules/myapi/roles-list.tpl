@@ -86,12 +86,12 @@
                                                 {if !empty($ROLE.apis[''])}
                                                 {foreach $ROLE.apis[''] as $CAT_DATA}
                                                 <div class="card mb-3 border">
-                                                    <div class="card-header api-header"><strong><i class="fa fa-folder-open-o"></i> {$LANG->getModule('api_of_system')}: {$CAT_DATA.title}</strong></div>
+                                                    <div class="card-header api-header"><strong><i class="fa-solid fa-folder-open-o"></i> {$LANG->getModule('api_of_system')}: {$CAT_DATA.title}</strong></div>
                                                     <div class="card-body">
                                                         <div class="row">
                                                             {foreach $CAT_DATA.apis as $API_DATA}
                                                             <div class="col-sm-6">
-                                                                <div class="text-truncate mb-3"><i class="fa fa-caret-right"></i> {$API_DATA}</div>
+                                                                <div class="text-truncate mb-3"><i class="fa-solid fa-caret-right"></i> {$API_DATA}</div>
                                                             </div>
                                                             {/foreach}
                                                         </div>
@@ -120,16 +120,16 @@
                                                             {foreach $ROLE.apis.$_LG as $MOD_TITLE => $MOD_DATA}
                                                             {foreach $MOD_DATA as $CAT_DATA}
                                                             <div class="card mb-3 border">
-                                                                <div class="card-header api-header"><strong><i class="fa fa-folder-open-o"></i> {$SITE_MOD.$MOD_TITLE.custom_title}
+                                                                <div class="card-header api-header"><strong><i class="fa-solid fa-folder-open"></i> {$SITE_MOD.$MOD_TITLE.custom_title}
                                                                         {if !empty($CAT_DATA.title)}
-                                                                        <i class="fa fa-angle-right"></i> {$CAT_DATA.title}
+                                                                        <i class="fa-solid fa-angle-right"></i> {$CAT_DATA.title}
                                                                         {/if}
                                                                     </strong></div>
                                                                 <div class="card-body">
                                                                     <div class="row">
                                                                         {foreach $CAT_DATA.apis as $API_DATA}
                                                                         <div class="col-sm-6">
-                                                                            <div class="text-truncate mb-3" title="{$API_DATA}"><i class="fa fa-caret-right"></i> {$API_DATA}</div>
+                                                                            <div class="text-truncate mb-3" title="{$API_DATA}"><i class="fa-solid fa-caret-right"></i> {$API_DATA}</div>
                                                                         </div>
                                                                         {/foreach}
                                                                     </div>
@@ -147,8 +147,8 @@
                                     </div>
                                 </div>
                                 <!-- END FORFOOTER -->
-                                <a href="{$ADD_API_ROLE_URL}&amp;id={$ROLE.role_id}" class="btn btn-secondary"><i class="fa fa-pencil"></i> {$LANG->getGlobal('edit')}</a>
-                                <button type="button" class="btn btn-secondary" data-toggle="apiroledel"><i class="fa fa-trash-o"></i> {$LANG->getGlobal('delete')}</button>
+                                <a href="{$ADD_API_ROLE_URL}&amp;id={$ROLE.role_id}" class="btn btn-secondary"><i class="fa-solid fa-pencil"></i> {$LANG->getGlobal('edit')}</a>
+                                <button type="button" class="btn btn-secondary" data-toggle="apiroledel"><i class="fa-solid fa-trash-o"></i> {$LANG->getGlobal('delete')}</button>
                             </td>
                         </tr>
                         {/foreach}

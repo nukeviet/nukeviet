@@ -8,7 +8,7 @@
             </ul>
         </div>
         <div class="col text-end">
-            <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#credential_auth"><i class="fa fa-shield-halved fa-lg text-danger"></i> {$LANG->getModule('authentication')}</button>
+            <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#credential_auth"><i class="fa-solid fa-shield-halved fa-lg text-danger"></i> {$LANG->getModule('authentication')}</button>
         </div>
         <div>
             <!-- START FORFOOTER -->
@@ -34,14 +34,14 @@
                                         <label><strong>{$LANG->getModule('api_credential_ident')}</strong></label>
                                         <div class="input-group">
                                             <input type="text" name="{$METHOD.key}_ident" id="{$METHOD.key}-credential_ident" value="{$METHOD.ident ?? ''}" class="form-control" readonly="readonly">
-                                            <button class="btn btn-secondary active" type="button" data-clipboard-target="#{$METHOD.key}-credential_ident" data-bs-toggle="tooltip" title="{$LANG->getModule('value_copied')}" data-bs-placement="left" data-bs-container="body" data-bs-trigger="manual" data-bs-animation="false"><i class="fa fa-copy"></i></button>
+                                            <button class="btn btn-secondary active" type="button" data-clipboard-target="#{$METHOD.key}-credential_ident" data-bs-toggle="tooltip" title="{$LANG->getModule('value_copied')}" data-bs-placement="left" data-bs-container="body" data-bs-trigger="manual" data-bs-animation="false"><i class="fa-solid fa-copy"></i></button>
                                         </div>
                                     </div>
                                     <div class="form-group mb-3">
                                         <label><strong>{$LANG->getModule('api_credential_secret')}</strong></label>
                                         <div class="input-group">
                                             <input type="text" name="{$METHOD.key}_secret" id="{$METHOD.key}-credential_secret" value="" class="form-control" readonly="readonly">
-                                            <button class="btn btn-secondary active" type="button" data-clipboard-target="#{$METHOD.key}-credential_secret" data-bs-toggle="tooltip" title="{$LANG->getModule('value_copied')}" data-bs-placement="left" data-bs-container="body" data-bs-trigger="manual" data-bs-animation="false"><i class="fa fa-copy"></i></button>
+                                            <button class="btn btn-secondary active" type="button" data-clipboard-target="#{$METHOD.key}-credential_secret" data-bs-toggle="tooltip" title="{$LANG->getModule('value_copied')}" data-bs-placement="left" data-bs-container="body" data-bs-trigger="manual" data-bs-animation="false"><i class="fa-solid fa-copy"></i></button>
                                         </div>
                                     </div>
                                     {if !empty($smarty.const.NV_IS_SPADMIN or $KEY == 'password_verify' or $KEY == 'md5_verify')}
@@ -138,12 +138,12 @@
                                                 {if !empty($ROLE.apis[''])}
                                                 {foreach $ROLE.apis[''] as $CAT_DATA}
                                                 <div class="card mb-3 border">
-                                                    <div class="card-header api-header"><strong><i class="fa fa-folder-open-o"></i> {$LANG->getModule('api_of_system')}: {$CAT_DATA.title}</strong></div>
+                                                    <div class="card-header api-header"><strong><i class="fa-solid fa-folder-open"></i> {$LANG->getModule('api_of_system')}: {$CAT_DATA.title}</strong></div>
                                                     <div class="card-body">
                                                         <div class="row">
                                                             {foreach $CAT_DATA.apis as $API_DATA}
                                                             <div class="col-sm-6">
-                                                                <div class="text-truncate mb-3"><i class="fa fa-caret-right"></i> {$API_DATA}</div>
+                                                                <div class="text-truncate mb-3"><i class="fa-solid fa-caret-right"></i> {$API_DATA}</div>
                                                             </div>
                                                             {/foreach}
                                                         </div>
@@ -173,7 +173,7 @@
                                                             {foreach $ROLE.apis.$_LG as $MOD_TITLE => $MOD_DATA}
                                                             {foreach $MOD_DATA as $CAT_DATA}
                                                             <div class="card mb-3 border">
-                                                                <div class="card-header api-header"><strong><i class="fa fa-folder-open-o"></i> {$SITE_MOD.$MOD_TITLE.custom_title}
+                                                                <div class="card-header api-header"><strong><i class="fa-solid fa-folder-open"></i> {$SITE_MOD.$MOD_TITLE.custom_title}
                                                                         {if !empty($CAT_DATA.title)}
                                                                          <i class="fa fa-angle-right"></i> {$CAT_DATA.title}
                                                                         {/if}
@@ -182,7 +182,7 @@
                                                                     <div class="row">
                                                                         {foreach $CAT_DATA.apis as $API_DATA}
                                                                         <div class="col-sm-6">
-                                                                            <div class="text-truncate mb-3" title="{$API_DATA}"><i class="fa fa-caret-right"></i> {$API_DATA}</div>
+                                                                            <div class="text-truncate mb-3" title="{$API_DATA}"><i class="fa-solid fa-caret-right"></i> {$API_DATA}</div>
                                                                         </div>
                                                                         {/foreach}
                                                                     </div>

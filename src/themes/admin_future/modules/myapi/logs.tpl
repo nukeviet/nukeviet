@@ -14,7 +14,7 @@
                     <div class="col col-xxl-auto">
                         <div class="form-group mb-3">
                             <div class="input-group w-100">
-                                <span class="input-group-text" title="{$LANG->getModule('api_role')}"><i class="fa fa-object-group"></i></span>
+                                <span class="input-group-text" title="{$LANG->getModule('api_role')}"><i class="fa-solid fa-object-group"></i></span>
                                 <select class="form-select role-id" name="role_id">
                                     <option value="0">{$LANG->getModule('api_role_select')}</option>
                                     {foreach $ROLES as $ROLE_ID => $ROLE}
@@ -27,7 +27,7 @@
                     <div class="col col-xxl-auto">
                         <div class="form-group mb-3">
                             <div class="input-group w-100">
-                                <span class="input-group-text" title="API"><i class="fa fa-terminal"></i></span>
+                                <span class="input-group-text" title="API"><i class="fa-solid fa-terminal"></i></span>
                                 <select class="form-select command" name="command">
                                     <option value="">{$LANG->getModule('api_select')}</option>
                                     {foreach $APIS as $COMMAND}
@@ -40,7 +40,7 @@
                     <div class="col col-xxl-auto">
                         <div class="form-group mb-3">
                             <div class="input-group w-100">
-                                <span class="input-group-text" title="{$LANG->getModule('api_role_object')}"><i class="fa fa-user"></i></span>
+                                <span class="input-group-text" title="{$LANG->getModule('api_role_object')}"><i class="fa-solid fa-user"></i></span>
                                 <select class="form-select userid" name="userid" data-placeholder="{$LANG->getModule('api_role_object')}">
                                     {if !empty($GET_DATA.userid)}
                                     <option value="{$GET_DATA.userid}" selected="selected">{$GET_DATA.username}</option>
@@ -52,7 +52,7 @@
                     <div class="col col-xxl-auto">
                         <div class="form-group mb-3">
                             <div class="input-group">
-                                <span class="input-group-text" title="{$LANG->getModule('fromdate')}"><i class="fa fa-calendar"></i></span>
+                                <span class="input-group-text" title="{$LANG->getModule('fromdate')}"><i class="fa-solid fa-calendar"></i></span>
                                 <input type="text" class="form-control fromdate" name="fromdate" value="{$GET_DATA.fromdate}" maxlength="10" placeholder="{$LANG->getModule('fromdate')}" autocomplete="off">
                             </div>
                         </div>
@@ -60,7 +60,7 @@
                     <div class="col col-xxl-auto">
                         <div class="form-group mb-3">
                             <div class="input-group">
-                                <span class="input-group-text" title="{$LANG->getModule('todate')}"><i class="fa fa-calendar"></i></span>
+                                <span class="input-group-text" title="{$LANG->getModule('todate')}"><i class="fa-solid fa-calendar"></i></span>
                                 <input type="text" class="form-control todate" name="todate" value="{$GET_DATA.todate}" maxlength="10" placeholder="{$LANG->getModule('todate')}" autocomplete="off">
                             </div>
                         </div>
@@ -102,7 +102,7 @@
                             <td class="text-center text-nowrap" style="width: 1%;">{$LOG.username}</td>
                             <td class="text-center" style="width: 1%;">{$LOG.log_ip}</td>
                             {if !empty($smarty.const.MANUALL_DEL_API_LOG) and $smarty.const.MANUALL_DEL_API_LOG === true}
-                            <td><button type="button" class="btn btn-secondary log-del"><i class="fa fa-trash-o"></i> {$LANG->getGlobal('delete')}</button></td>
+                            <td><button type="button" class="btn btn-secondary log-del"><i class="fa-solid fa-trash-o"></i> {$LANG->getGlobal('delete')}</button></td>
                             {/if}
                         </tr>
                         {/foreach}
@@ -112,8 +112,8 @@
                         <tr>
                             <td style="width: 1%;"><input type="checkbox" class="form-check-input checkall" /></td>
                             <td colspan="6">
-                                <button type="button" class="btn btn-secondary log-multidel"><i class="fa fa-trash-o"></i> {$LANG->getModule('del_selected')}</button>
-                                <button type="button" class="btn btn-secondary log-delall"><i class="fa fa-trash-o"></i> {$LANG->getModule('del_all')}</button>
+                                <button type="button" class="btn btn-secondary log-multidel"><i class="fa-solid fa-trash-o"></i> {$LANG->getModule('del_selected')}</button>
+                                <button type="button" class="btn btn-secondary log-delall"><i class="fa-solid fa-trash-o"></i> {$LANG->getModule('del_all')}</button>
                             </td>
                         </tr>
                     </tfoot>

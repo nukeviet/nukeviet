@@ -8,7 +8,7 @@
         <div class="list-group nav nav-tabs root-api-actions" role="tablist">
             {foreach $API_TREES as $API_TREE}
             <button type="button" class="list-group-item list-group-item-action list-group-item-primary nav-item" role="tab" data-bs-toggle="tab" data-bs-target="#{$API_TREE.href}" aria-controls="{$API_TREE.href}" aria-selected="{$API_TREE.expanded}">
-                <i class="fa fa-folder-open-o"></i>&nbsp;{$API_TREE.name}
+                <i class="fa-solid fa-folder-open"></i>&nbsp;{$API_TREE.name}
                 {if !empty($API_TREE.total)}
                 <span class="api-count{$API_TREE.api_checked} badge bg-secondary rounded-pill fs-6"><span class="total_api">{$API_TREE.total_api}</span>/{$API_TREE.total}</span>
                 {/if}
@@ -34,7 +34,7 @@
                     {foreach $API_CONTENT.apis as $API}
                     <tr class="item">
                         <td style="width: 1%;"><input type="checkbox" class="form-check-input checkitem" name="api_{$API_CONTENT.input_key}[]" id="api_{$API.cmd}" value="{$API.cmd}" {if !empty($API.checked)}checked="checked"{/if} /></td>
-                        <td><label for="api_{$API.cmd}" class="pointer mb-0">{$API.cmd} - {$API.name}</label></td>
+                        <td><label for="api_{$API.cmd}" class="mb-0" role="button">{$API.cmd} - {$API.name}</label></td>
                     </tr>
                     {/foreach}
                 </tbody>

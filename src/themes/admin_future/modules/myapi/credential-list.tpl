@@ -87,9 +87,9 @@
                                 </select>
                             </td>
                             <td class="text-nowrap text-center" style="width: 1%;">
-                                <button type="button" class="btn btn-secondary" data-toggle="credential-edit" data-title="{$LANG->getModule('api_role_credential_edit')}" title="{$LANG->getGlobal('edit')}"><i class="fa fa-pencil-square-o"></i></button>
+                                <button type="button" class="btn btn-secondary" data-toggle="credential-edit" data-title="{$LANG->getModule('api_role_credential_edit')}" title="{$LANG->getGlobal('edit')}"><i class="fa-solid fa-pencil"></i></button>
                                 <button type="button" class="btn btn-secondary" data-toggle="changeAuth" title="{$LANG->getModule('authentication')}"><i class="fa fa-shield-halved"></i></button>
-                                <button type="button" class="btn btn-secondary" data-toggle="credentialDel" data-confirm="{$LANG->getModule('deprivation_confirm')}" title="{$LANG->getModule('deprivation')}"><i class="fa fa-ban"></i></button>
+                                <button type="button" class="btn btn-secondary" data-toggle="credentialDel" data-confirm="{$LANG->getModule('deprivation_confirm')}" title="{$LANG->getModule('deprivation')}"><i class="fa-solid fa-ban"></i></button>
                             </td>
                         </tr>
                         {/foreach}

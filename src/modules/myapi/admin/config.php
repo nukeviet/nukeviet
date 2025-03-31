@@ -57,7 +57,6 @@ $tpl->assign('LANG', $nv_Lang);
 $tpl->assign('MODULE_NAME', $module_name);
 $tpl->assign('OP', $op);
 $tpl->assign('CHECKSS', $checkss);
-$tpl->assign('CHECKED_REMOTE_API_ACCESS', ($global_config['remote_api_access'] == 1) ? ' checked ' : '');
 $tpl->assign('DATA', $global_config);
 
 $contents = $tpl->fetch('config.tpl');
