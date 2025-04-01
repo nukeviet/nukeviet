@@ -56,7 +56,8 @@ if (!empty($listcid)) {
         }
     }
 
-    echo $nv_Lang->getModule('update_success');
+    nv_htmlOutput('OK_' . $nv_Lang->getModule('update_success'));
 } else {
-    nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=comment');
+    nv_htmlOutput('ERR_' . $nv_Lang->getGlobal('error_code_11'));
+    // nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=comment');
 }
