@@ -1,7 +1,7 @@
 <!-- BEGIN: main -->
 <script src="{$smarty.const.ASSETS_STATIC_URL}/js/flatpickr/flatpickr.min.js"></script>
 <script src="{$smarty.const.ASSETS_STATIC_URL}/js/language/flatpickr-{$smarty.const.NV_LANG_INTERFACE}.js"></script>
-<div class="card">
+<div class="card" id="cmt-main">
     <div class="card-header">
         <form action="{$smarty.const.NV_BASE_ADMINURL}index.php" method="get">
             <input type="hidden" name="{$smarty.const.NV_NAME_VARIABLE}" value="{$MODULE_NAME}">
