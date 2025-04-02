@@ -15,6 +15,10 @@ if (!defined('NV_IS_FILE_ADMIN')) {
 
 $status = $nv_Request->get_int('active', 'post');
 $listcid = $nv_Request->get_string('list', 'post');
+$checkss = $nv_Request->get_string('checkss', 'post', '');
+if ($checkss == md5(NV_CHECK_SESSION . '_' . $module_name . '_' . $admin_info['userid'])) {
+    nv_htmlOutput('ERR_' . $nv_Lang->getGlobal('error_code_11'));
+}
 
 if (!empty($listcid)) {
     $status = ($status == 1) ? 1 : 0;

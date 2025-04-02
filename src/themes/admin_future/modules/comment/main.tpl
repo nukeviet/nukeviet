@@ -4,8 +4,8 @@
 <div class="card">
     <div class="card-header">
         <form action="{$smarty.const.NV_BASE_ADMINURL}index.php" method="get">
-            <input type="hidden" name="{$smarty.const.NV_NAME_VARIABLE}" value="{$MODULE_NAME}" />
-            <input type="hidden" name="{$smarty.const.NV_OP_VARIABLE}" value="{$OP}" />
+            <input type="hidden" name="{$smarty.const.NV_NAME_VARIABLE}" value="{$MODULE_NAME}">
+            <input type="hidden" name="{$smarty.const.NV_OP_VARIABLE}" value="{$OP}">
             <div class="row mb-3">
                 <div class="col-6 col-md-3">
                     <input type="text" value="{$FROM.q}" autofocus="autofocus" maxlength="64" name="q" class="form-control" placeholder="{$LANG->getModule('search_key')}" />
@@ -14,9 +14,7 @@
                     <select name="stype" class="form-select">
                         <option value="">{$LANG->getModule('search_type')}</option>
                         {foreach $ARRAY_SEARCH as $KEY => $VAL}
-                        <!-- BEGIN: search_type -->
                         <option value="$KEY" {if $KEY == $STYPE}selected="selected"{/if}>{$VAL}</option>
-                        <!-- END: search_type -->
                         {/foreach}
                     </select>
                 </div>
@@ -24,18 +22,14 @@
                     <select name="module" class="form-select">
                         <option value="" {if $MODULE == ''}selected="selected"{/if}>{$LANG->getModule('search_module_all')}</option>
                         {foreach $SITE_MOD_COMM as $KEY => $VAL}
-                        <!-- BEGIN: module -->
                         <option value="{$KEY}" {if $KEY == $MODULE}selected="selected"{/if} >{$VAL.admin_title ?: $VAL.custom_title}</option>
-                        <!-- END: module -->
                         {/foreach}
                     </select>
                 </div>
                 <div class="col-6 col-md-3">
                     <select name="sstatus" class="form-select" style="margin-bottom: 10px">
                         {foreach $ARRAY_STATUS_VIEW as $KEY => $VAL}
-                        <!-- BEGIN: search_status -->
                         <option value="{$KEY}" {if $KEY == $SSTATUS}selected="selected"{/if}>{$VAL}</option>
-                        <!-- END: search_status -->
                         {/foreach}
                     </select>
                 </div>
@@ -45,9 +39,7 @@
                         {assign var="I" value=15}
                         {while $I < 100}
                         {assign var="I" value=$I+5}
-                        <!-- BEGIN: per_page -->
                         <option value="{$I}" {if $I == $PER_PAGE}selected="selected"{/if}>{$I}</option>
-                        <!-- END: per_page -->
                         {/while}
                     </select>
                 </div>
@@ -99,7 +91,6 @@
                 </thead>
                 <tbody>
                     {foreach $ARRAY_ROW as $ROW}
-                    <!-- BEGIN: loop -->
                     <tr>
                         <td><input data-toggle="checkSingle" name="checkSingle[]" type="checkbox" value="{$ROW.cid}" class="form-check-input m-0 align-middle"/></td>
                         <td>{$ROW.module}</td>
@@ -110,38 +101,19 @@
                         </td>
                         <td class="text-right">
                             {if !empty($ROW.attach_link)}
-                            <!-- BEGIN: attach -->
                             <a href="{$ROW.attach_link}" class="btn btn-secondary btn-sm mt-1" title="{$LANG->getModule('attach_download')}"><i class="fa-solid fa-paperclip fa-fw" aria-hidden="true"></i><span class="d-none d-xl-inline">{$LANG->getModule('attach_download')}</span></a>
-                            <!-- END: attach -->
                             {/if}
                             <a href="{$ROW.linkedit}" class="btn btn-secondary btn-sm mt-1" title="{$LANG->getModule('edit')}"><i class="fa-solid fa-edit fa-fw" aria-hidden="true"></i><span class="d-none d-xl-inline">{$LANG->getModule('edit')}</span></a>
                             <a class="btn btn-danger btn-sm deleteone mt-1" href="{$ROW.linkdelete}" title="{$LANG->getModule('delete')}"><i class="fa-solid fa-trash fa-fw" aria-hidden="true"></i><span class="d-none d-xl-inline">{$LANG->getModule('delete')}</span></a>
                         </td>
                     </tr>
-                    <!-- END: loop -->
                     {/foreach}
                 </tbody>
-                <!-- <tfoot>
-                    <tr>
-                        <td colspan="6">
-                            <div class="row">
-                                <div class="col-md-6 col-md-offset-6">
-                                    <div class="text-md-end">
-                                        <i class="fa-solid fa-exclamation-circle fa-lg">&nbsp;</i>
-                                        <a class="disable" href="javascript:void(0);">{$LANG->getModule('disable')}</a>&nbsp;&nbsp;
-                                        <i class="fa-solid fa-external-link fa-lg">&nbsp;</i><a class="enable" href="javascript:void(0);">{$LANG->getModule('enable')}</a>&nbsp;&nbsp;
-                                        <i class="fa-solid fa-trash fa-lg">&nbsp;</i><a class="delete" href="javascript:void(0);">{$LANG->getModule('delete')}</a>
-                                    </div>
-                                    <div class="clear"></div>
-                                </div>
-                            </div>
-                        </td>
-                    </tr>
-                </tfoot> -->
             </table>
         </div>
     </div>
     <div class="card-footer border-top">
+        <input type="hidden" name="checkss" value="{$CHECKSS}">
         <div class="d-flex flex-wrap justify-content-between align-items-center">
             <div class="d-flex flex-wrap flex-sm-nowrap align-items-center">
                 <div class="me-2">
@@ -164,9 +136,3 @@
         </div>
     </div>
 </div>
-<script type="text/javascript">
-    var LANG = [];
-    LANG.nocheck = "{$LANG->getModule('nocheck')}";
-    LANG.delete_confirm = "{$LANG->getModule('delete_confirm')}";
-</script>
-<!-- END: main -->

@@ -43,6 +43,8 @@ if (!in_array($sstatus, array_keys($array_status_view), true)) {
     $sstatus = 2;
 }
 
+$checkss = md5(NV_CHECK_SESSION . '_' . $module_name . '_' . $admin_info['userid']);
+
 $tpl = new \NukeViet\Template\NVSmarty();
 $tpl->setTemplateDir(get_module_tpl_dir('main.tpl'));
 $tpl->assign('LANG', $nv_Lang);
@@ -56,58 +58,7 @@ $tpl->assign('SITE_MOD_COMM', $site_mod_comm);
 $tpl->assign('PER_PAGE', $per_page);
 $tpl->assign('ARRAY_SEARCH', $array_search);
 $tpl->assign('ARRAY_STATUS_VIEW', $array_status_view);
-
-
-// $xtpl = new XTemplate($op . '.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-// $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
-// $xtpl->assign('NV_BASE_ADMINURL', NV_BASE_ADMINURL);
-// $xtpl->assign('NV_NAME_VARIABLE', NV_NAME_VARIABLE);
-// $xtpl->assign('NV_OP_VARIABLE', NV_OP_VARIABLE);
-// $xtpl->assign('MODULE_NAME', $module_name);
-// $xtpl->assign('OP', $op);
-// $xtpl->assign('FROM', $from);
-
-// foreach ($array_search as $key => $val) {
-//     $xtpl->assign('OPTION', [
-//         'key' => $key,
-//         'title' => $val,
-//         'selected' => ($key == $stype) ? ' selected="selected"' : ''
-//     ]);
-//     $xtpl->parse('main.search_type');
-// }
-
-// foreach ($array_status_view as $key => $val) {
-//     $xtpl->assign('OPTION', [
-//         'key' => $key,
-//         'title' => $val,
-//         'selected' => ($key == $sstatus) ? ' selected="selected"' : ''
-//     ]);
-//     $xtpl->parse('main.search_status');
-// }
-
-// $xtpl->assign('OPTION', [
-//     'key' => '',
-//     'title' => $nv_Lang->getModule('search_module_all'),
-//     'selected' => ($module == '') ? ' selected="selected"' : ''
-// ]);
-// $xtpl->parse('main.module');
-
-// foreach ($site_mod_comm as $module_i => $row) {
-//     $custom_title = (!empty($row['admin_title'])) ? $row['admin_title'] : $row['custom_title'];
-//     $xtpl->assign('OPTION', [
-//         'key' => $module_i,
-//         'title' => $custom_title,
-//         'selected' => ($module_i == $module) ? ' selected="selected"' : ''
-//     ]);
-//     $xtpl->parse('main.module');
-// }
-
-// $i = 15;
-// while ($i < 100) {
-//     $i += 5;
-//     $xtpl->assign('OPTION', ['page' => $i, 'selected' => ($i == $per_page) ? ' selected="selected"' : '']);
-//     $xtpl->parse('main.per_page');
-// }
+$tpl->assign('CHECKSS', $checkss);
 
 $base_url = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;per_page=' . $per_page;
 
@@ -230,8 +181,6 @@ while ([$cid, $module, $area, $id, $content, $attach, $userid, $post_name, $emai
         'linkdelete' => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=del&amp;list=' . $cid
     ];
 
-    // $xtpl->assign('ROW', $row);
-
     if (!empty($attach)) {
         $row['attach_link'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;downloadfile=' . urlencode(NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $attach);
     }
@@ -241,7 +190,6 @@ while ([$cid, $module, $area, $id, $content, $attach, $userid, $post_name, $emai
 $tpl->assign('ARRAY_ROW', $array);
 $tpl->assign('GENERATE_PAGE', $generate_page);
 
-// $xtpl->parse('main');
 $contents = $tpl->fetch('main.tpl');
 
 include NV_ROOTDIR . '/includes/header.php';

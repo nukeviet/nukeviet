@@ -397,7 +397,7 @@ function nv_set_disable_false(sid) {
 function nv_settimeout_disable(sid, tm) {
     var sd = document.getElementById(sid);
     sd.disabled = true;
-    nv_timer = setTimeout('nv_set_disable_false("' + sid + '")', tm);
+    var nv_timer = setTimeout('nv_set_disable_false("' + sid + '")', tm);
     return nv_timer;
 }
 

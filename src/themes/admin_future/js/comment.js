@@ -23,7 +23,7 @@
             return;
         }
         let action = document.getElementById('element_action').value;
-
+        let checkss = document.getElementsByName('checkss')[0].value;
         if (action === 'delete') {
             nvConfirm(nv_is_del_confirm[0], () => {
                 btn.disabled = true;
@@ -31,7 +31,7 @@
                 fetch(script_name + "?" + nv_lang_variable + "=" + nv_lang_data + "&" + nv_name_variable + "=" + nv_module_name + "&" + nv_fc_variable + "=del&nocache=" + new Date().getTime(), {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                    body: 'list=' + listid.join(',')
+                    body: 'list=' + listid.join(',') + '&checkss=' + checkss
                 })
                 .then(response => response.text())
                 .then(res => {
@@ -59,7 +59,7 @@
             fetch(script_name + "?" + nv_lang_variable + "=" + nv_lang_data + "&" + nv_name_variable + "=" + nv_module_name + "&" + nv_fc_variable + "=active&nocache=" + new Date().getTime(), {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                body: 'list=' + listid.join(',') + '&active=' + (action === 'enable' ? 1 : 0)
+                body: 'list=' + listid.join(',') + '&active=' + (action === 'enable' ? 1 : 0) + '&checkss=' + checkss
             })
             .then(response => response.text())
             .then(res => {
@@ -84,71 +84,78 @@
             window.location.href = script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=' + action + '&listid=' + listid.join(',') + '&checkss=' + document.body.dataset.checksess;
         }
     });
+    document.addEventListener('DOMContentLoaded', () => {
+        var fmt = nv_jsdate_post.replace(/dd/g, 'd').replace(/mm/g, 'm').replace(/yyyy/g, 'Y');
+        $('#from_date,#to_date').flatpickr({
+            enableTime: false,
+            dateFormat: fmt,
+            ariaDateFormat: fmt,
+            locale: nv_lang_interface,
+            onOpen: function (selectedDates, dateStr, instance) {
+                if (instance.input.value.length == 0) {
+                    instance.setDate(new Date());
+                }
+            }
+        });
+        document.getElementById('to-btn').addEventListener('click', function() {
+            document.getElementById('to_date').click();
+        });
+        document.getElementById('from-btn').addEventListener('click', function() {
+            document.getElementById('from_date').click();
+        });
+    
+        document.querySelectorAll("a.deleteone").forEach(element => {
+            element.addEventListener("click", event => {
+                event.preventDefault();
+                let checkss = document.getElementsByName('checkss')[0].value;
+                nvConfirm(nv_is_del_confirm[0], () => {
+                    var url = event.target.closest("a").getAttribute("href");
+                    fetch(url, {
+                        method: "POST",
+                        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                        body: 'checkss=' + checkss
+                    })
+                    .then(response => response.text())
+                    .then(res => {
+                        let r_split = res.split('_');
+                        if (r_split[0] === 'OK') {
+                            location.reload();
+                        } else if (r_split[0] === 'ERR') {
+                            nvToast(r_split[1], 'error');
+                        } else {
+                            nvToast(nv_is_del_confirm[2], 'error');
+                        }
+                    });
+                });
+            });
+        });
+    });
 })();
 
-function nv_change_active(cid) {
-    var new_status = $('#change_active_' + cid).is(':checked') ? 1 : 0;
-    if (confirm(nv_is_change_act_confirm[0])) {
-        var nv_timer = nv_settimeout_disable('change_active_' + cid, 3000);
-        $.post(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=change_active&nocache=' + new Date().getTime(), 'change_active=1&cid=' + cid + '&new_status=' + new_status, function(res) {
-
-        });
-    } else {
-        $('#change_active_' + cid).prop('checked', new_status ? false : true);
-    }
-}
-
-$(document).ready(function() {
-    var fmt = nv_jsdate_post.replace(/dd/g, 'd').replace(/mm/g, 'm').replace(/yyyy/g, 'Y');
-    $('#from_date,#to_date').flatpickr({
-        enableTime: false,
-        dateFormat: fmt,
-        ariaDateFormat: fmt,
-        locale: nv_lang_interface,
-        onOpen: function (selectedDates, dateStr, instance) {
-            if (instance.input.value.length == 0) {
-                instance.setDate(new Date());
+nv_change_active = cid => {
+    var new_status = document.getElementById('change_active_' + cid).checked ? 1 : 0;
+    let checkss = document.getElementsByName('checkss')[0].value;
+    nvConfirm(nv_is_change_act_confirm[0], () => {
+        nv_settimeout_disable('change_active_' + cid, 3000);
+        fetch(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=change_active&nocache=' + new Date().getTime(), {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: 'change_active=1&cid=' + cid + '&new_status=' + new_status + '&checkss=' + checkss
+        })
+        .then(response => response.text())
+        .then(res => {
+            let r_split = res.split('_');
+            if (r_split[0] === 'OK') {
+                nvToast(r_split[1], 'success');
+            } else if (r_split[0] === 'ERR') {
+                nvToast(r_split[1], 'error');
+                document.getElementById('change_active_' + cid).checked = new_status ? false : true;
+            } else {
+                nvToast(nv_is_change_act_confirm[2], 'error');
+                document.getElementById('change_active_' + cid).checked = new_status ? false : true;
             }
-        }
+        })
+    }, () => {
+        document.getElementById('change_active_' + cid).checked = new_status ? false : true;
     });
-    // if ($.fn.datepicker) {
-    //     $("#from_date, #to_date").datepicker({
-    //         dateFormat: "dd/mm/yy",
-    //         changeMonth: true,
-    //         changeYear: true,
-    //         showOtherMonths: true,
-    //         showOn: 'focus'
-    //     });
-    // }
-    $('#to-btn').click(function() {
-        $("#to_date").trigger('click');
-    });
-    $('#from-btn').click(function() {
-        $("#from_date").trigger('click');
-    });
-    $("#checkall").click(function() {
-        $("input[name=commentid]:checkbox").each(function() {
-            $(this).prop("checked", true);
-        });
-    });
-    $("#uncheckall").click(function() {
-        $("input[name=commentid]:checkbox").each(function() {
-            $(this).prop("checked", false);
-        });
-    });
-    $("a.deleteone").click(function() {
-        if (confirm(LANG.delete_confirm)) {
-            var url = $(this).attr("href");
-            $.ajax({
-                type: "POST",
-                url: url,
-                data: "",
-                success: function(data) {
-                    alert(data);
-                    window.location = window.location.href;
-                }
-            });
-        }
-        return false;
-    });
-});
+}
