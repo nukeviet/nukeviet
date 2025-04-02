@@ -28,7 +28,7 @@ nv_add_hook($module_name, 'get_global_admin_theme', $priority, function ($vars) 
     if (($module_info['module_file'] ?? '') == 'users' and in_array($op, ['config'])) {
         return $new_theme;
     }
-    if (($module_info['module_file'] ?? '') == 'comment' and in_array($op, ['main'])) {
+    if (($module_info['module_file'] ?? '') == 'comment' and in_array($op, ['main', 'edit'])) {
         return $new_theme;
     }
     if (in_array($module_name, ['upload', 'themes', 'emailtemplates', 'settings', 'seotools', 'modules', 'extensions', 'webtools', 'language', 'siteinfo', 'authors', 'database'])) {

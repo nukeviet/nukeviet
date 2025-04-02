@@ -132,32 +132,68 @@
             });
         });
     }
-})();
-
-nv_change_active = cid => {
-    var new_status = document.getElementById('change_active_' + cid).checked ? 1 : 0;
-    let checkss = document.getElementsByName('checkss')[0].value;
-    nvConfirm(nv_is_change_act_confirm[0], () => {
-        nv_settimeout_disable('change_active_' + cid, 3000);
-        fetch(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=change_active&nocache=' + new Date().getTime(), {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-            body: 'change_active=1&cid=' + cid + '&new_status=' + new_status + '&checkss=' + checkss
-        })
-        .then(response => response.text())
-        .then(res => {
-            let r_split = res.split('_');
-            if (r_split[0] === 'OK') {
-                nvToast(r_split[1], 'success');
-            } else if (r_split[0] === 'ERR') {
-                nvToast(r_split[1], 'error');
-                document.getElementById('change_active_' + cid).checked = new_status ? false : true;
-            } else {
-                nvToast(nv_is_change_act_confirm[2], 'error');
-                document.getElementById('change_active_' + cid).checked = new_status ? false : true;
+    nv_change_active = cid => {
+        var new_status = document.getElementById('change_active_' + cid).checked ? 1 : 0;
+        let checkss = document.getElementsByName('checkss')[0].value;
+        nvConfirm(nv_is_change_act_confirm[0], () => {
+            nv_settimeout_disable('change_active_' + cid, 3000);
+            fetch(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=change_active&nocache=' + new Date().getTime(), {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: 'change_active=1&cid=' + cid + '&new_status=' + new_status + '&checkss=' + checkss
+            })
+            .then(response => response.text())
+            .then(res => {
+                let r_split = res.split('_');
+                if (r_split[0] === 'OK') {
+                    nvToast(r_split[1], 'success');
+                } else if (r_split[0] === 'ERR') {
+                    nvToast(r_split[1], 'error');
+                    document.getElementById('change_active_' + cid).checked = new_status ? false : true;
+                } else {
+                    nvToast(nv_is_change_act_confirm[2], 'error');
+                    document.getElementById('change_active_' + cid).checked = new_status ? false : true;
+                }
+            })
+        }, () => {
+            document.getElementById('change_active_' + cid).checked = new_status ? false : true;
+        });
+    }
+    if (document.getElementById('cmt-edit')) {
+        document.addEventListener('DOMContentLoaded', () => {
+            document.getElementById('post-file-remove').addEventListener('click', () => {
+                document.getElementById('post-file').value = '';
+            });
+            document.getElementById('post-file-download').addEventListener('click', () => {
+            var file = document.getElementById('post-file').value;
+            if (file !== '') {
+                window.location = script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&downloadfile=' + encodeURIComponent(file);
             }
-        })
-    }, () => {
-        document.getElementById('change_active_' + cid).checked = new_status ? false : true;
-    });
-}
+            });
+        });
+        document.getElementById('cmt-edit').onsubmit = e => {
+            e.preventDefault();
+            let btn = e.target.querySelector('button[type="submit"]');
+            if (btn.disabled) {
+                return;
+            }
+            btn.disabled = true;
+            fetch(e.target.action + '&nocache=' + new Date().getTime(), {
+                method: 'POST',
+                body: new FormData(e.target)
+            })
+            .then(response => response.text())
+            .then(res => {
+                btn.disabled = false;
+                let r_split = res.split('_');
+                if (r_split[0] === 'OK') {
+                    location.href = script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name;
+                } else if (r_split[0] === 'ERR') {
+                    nvToast(r_split[1], 'error');
+                } else {
+                    nvToast(nv_is_del_confirm[2], 'error');
+                }
+            })
+        }
+    }    
+})();
