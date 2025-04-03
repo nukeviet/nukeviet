@@ -33,7 +33,7 @@ if (!is_dir(NV_UPLOADS_REAL_DIR . '/' . $module_upload . '/' . $dir)) {
 
 if ($nv_Request->isset_request('save', 'post')) {
     if ($checkss != $nv_Request->get_title('checkss', 'post') or empty($row) or !isset($site_mod_comm[$row['module']])) {
-        nv_htmlOutput('ERR_' . $nv_Lang->getGlobal('error_code_11'));
+        nv_jsonOutput(['status' => 'error', 'mess' => $nv_Lang->getGlobal('error_code_11')]);
     }
     $delete = $nv_Request->get_int('delete', 'post', 0);
     if ($delete) {
@@ -73,11 +73,11 @@ if ($nv_Request->isset_request('save', 'post')) {
             }
         }
     }
-    nv_htmlOutput('OK_' . $nv_Lang->getModule('update_success'));
+    nv_jsonOutput(['status' => 'ok', 'mess' => $nv_Lang->getModule('update_success')]);
 }
 
 if (empty($row) or !isset($site_mod_comm[$row['module']])) {
-    nv_redirect_location('Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
+    nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
 }
 
 nv_status_notification(NV_LANG_DATA, $module_name, 'comment_queue', $cid);

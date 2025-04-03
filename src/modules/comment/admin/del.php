@@ -16,7 +16,7 @@ if (!defined('NV_IS_FILE_ADMIN')) {
 $listcid = $nv_Request->get_string('list', 'post,get');
 $checkss = $nv_Request->get_string('checkss', 'post', '');
 if ($checkss != md5(NV_CHECK_SESSION . '_' . $module_name . '_' . $admin_info['userid'])) {
-    nv_htmlOutput('ERR_' . $nv_Lang->getGlobal('error_code_11'));
+    nv_jsonOutput(['status' => 'error', 'mess' => $nv_Lang->getGlobal('error_code_11')]);
 }
 
 if (!empty($listcid)) {
@@ -74,8 +74,8 @@ if (!empty($listcid)) {
 
     nv_insert_logs(NV_LANG_DATA, $module_name, $nv_Lang->getModule('edit_delete'), 'listcid ' . $listcid, $admin_info['userid']);
 
-    nv_htmlOutput('OK_' . $nv_Lang->getModule('delete_success'));
+    nv_jsonOutput(['status' => 'ok', 'mess' => $nv_Lang->getModule('delete_success')]);
 } else {
-    nv_htmlOutput('ERR_' . $nv_Lang->getGlobal('error_code_11'));
+    nv_jsonOutput(['status' => 'error', 'mess' => $nv_Lang->getGlobal('error_code_11')]);
     // nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
 }

@@ -16,13 +16,13 @@ if (!defined('NV_IS_FILE_ADMIN')) {
 $cid = $nv_Request->get_int('cid', 'post', 0);
 $checkss = $nv_Request->get_string('checkss', 'post', '');
 if ($checkss != md5(NV_CHECK_SESSION . '_' . $module_name . '_' . $admin_info['userid'])) {
-    nv_htmlOutput('ERR_' . $nv_Lang->getGlobal('error_code_11'));
+    nv_jsonOutput(['status' => 'error', 'mess' => $nv_Lang->getGlobal('error_code_11')]);
 }
 $sql = 'SELECT id, module FROM ' . NV_PREFIXLANG . '_' . $module_data . ' WHERE cid=' . $cid;
 
 $row = $db->query($sql)->fetch();
 if (empty($row)) {
-    exit('ERR_' . $nv_Lang->getGlobal('error_code_11'));
+    nv_jsonOutput(['status' => 'error', 'mess' => $nv_Lang->getGlobal('error_code_11')]);
 }
 
 $new_status = $nv_Request->get_bool('new_status', 'post');
@@ -46,5 +46,5 @@ if ($new_status) {
 $nv_Cache->delMod($module_name);
 
 include NV_ROOTDIR . '/includes/header.php';
-echo 'OK_' . $nv_Lang->getModule('update_success');
+nv_jsonOutput(['status' => 'ok', 'mess' => $nv_Lang->getModule('update_success')]);
 include NV_ROOTDIR . '/includes/footer.php';
