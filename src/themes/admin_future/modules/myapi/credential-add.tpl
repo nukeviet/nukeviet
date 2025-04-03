@@ -1,5 +1,5 @@
 {if empty($CREDENTIAL.userid)}
-<input type="hidden" name="add" value="1" />
+<input type="hidden" name="add" value="1">
 <div class="row mb-4">
     <label class="col-sm-3 col-form-label text-end">{$LANG->getModule('api_role_object_'|cat:$ROLE_OBJECT)}</label>
     <div class="col-sm-9">
@@ -8,14 +8,14 @@
     </div>
 </div>
 {else}
-<input type="hidden" name="edit" value="1" />
-<input type="hidden" name="userid" value="{$CREDENTIAL.userid}" />
+<input type="hidden" name="edit" value="1">
+<input type="hidden" name="userid" value="{$CREDENTIAL.userid}">
 {/if}
 <div class="row mb-4">
     <label class="col-sm-3 col-form-label text-end">{$LANG->getModule('api_role_credential_addtime')}</label>
     <div class="col-sm-9">
         <div class="input-group" style="width:fit-content">
-            <input type="text" class="form-control w-50 adddate" name="adddate" value="{$CREDENTIAL.adddate}" maxlength="10" placeholder="{$LANG->getModule('api_role_credential_addtime')}" />
+            <input type="text" class="form-control w-50 adddate" name="adddate" value="{$CREDENTIAL.adddate}" maxlength="10" placeholder="{$LANG->getModule('api_role_credential_addtime')}">
             <select name="addhour" class="form-select" style="width: fit-content">
                 {for $I = 0 to 23}
                 <option value="{$I}" {if $I == $CREDENTIAL.addhour}selected="selected"{/if}>{$I|string_format:"%'.02d"}</option>
@@ -34,7 +34,7 @@
     <label class="col-sm-3 col-form-label text-end">{$LANG->getModule('endtime')}</label>
     <div class="col-sm-9">
         <div class="input-group" style="width:fit-content">
-            <input type="text" class="form-control w-50 enddate" name="enddate" value="{$CREDENTIAL.enddate}" maxlength="10" placeholder="{$LANG->getModule('endtime')}" />
+            <input type="text" class="form-control w-50 enddate" name="enddate" value="{$CREDENTIAL.enddate}" maxlength="10" placeholder="{$LANG->getModule('endtime')}">
             <select name="endhour" class="form-select" style="width: fit-content">
                 {for $I = 0 to 23}
                 <option value="{$I}" {if $I == $CREDENTIAL.endhour}selected="selected"{/if}>{$I|string_format:"%'.02d"}</option>
@@ -52,7 +52,7 @@
 <div class="row mb-4">
     <label class="col-sm-3 col-form-label text-end">{$LANG->getModule('quota')}</label>
     <div class="col-sm-9">
-        <input type="number" class="form-control quota" name="quota" value="{$CREDENTIAL.quota}" maxlength="20" placeholder="{$LANG->getModule('quota')}" style="width: 150px;" />
+        <input type="number" class="form-control quota" name="quota" value="{$CREDENTIAL.quota}" maxlength="20" placeholder="{$LANG->getModule('quota')}" style="width: 150px;">
         <div class="form-text">{$LANG->getModule('quota_note')}</div>
     </div>
 </div>

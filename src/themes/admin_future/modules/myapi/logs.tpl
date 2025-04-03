@@ -7,9 +7,9 @@
     <div class="card">
         <div class="card-header">  
             <form method="get" action="{$smarty.const.NV_BASE_ADMINURL}index.php">     
-                <input type="hidden" name="{$smarty.const.NV_LANG_VARIABLE}" value="{$smarty.const.NV_LANG_DATA}" />
-                <input type="hidden" name="{$smarty.const.NV_NAME_VARIABLE}" value="{$MODULE_NAME}" />
-                <input type="hidden" name="{$smarty.const.NV_OP_VARIABLE}" value="{$OP}" />
+                <input type="hidden" name="{$smarty.const.NV_LANG_VARIABLE}" value="{$smarty.const.NV_LANG_DATA}">
+                <input type="hidden" name="{$smarty.const.NV_NAME_VARIABLE}" value="{$MODULE_NAME}">
+                <input type="hidden" name="{$smarty.const.NV_OP_VARIABLE}" value="{$OP}">
                 <div class="row row-cols-1 row-cols-md-2 row-cols-xl-3 row-cols-xxl-6 g-2 gx-xxl-3">
                     <div class="col col-xxl-auto">
                         <div class="form-group mb-3">
@@ -79,7 +79,7 @@
                 <table class="table table-bordered table-striped list" data-delete-confirm="{$LANG->getModule('log_del_confirm')}">
                     <thead class="bg-primary">
                         {if !empty($smarty.const.MANUALL_DEL_API_LOG) and $smarty.const.MANUALL_DEL_API_LOG === true}
-                        <th style="width: 1%;"><input type="checkbox" class="form-check-input checkall" /></th>
+                        <th style="width: 1%;"><input type="checkbox" class="form-check-input checkall"></th>
                         {/if}
                         <th class="text-center text-nowrap" style="width: 1%;">{$LANG->getModule('log_time')}</th>
                         <th class="text-center text-nowrap">{$LANG->getModule('api_role')}</th>
@@ -94,7 +94,7 @@
                         {foreach $DATA as $LOG}
                         <tr class="item" data-id="{$LOG.id}">
                             {if !empty($smarty.const.MANUALL_DEL_API_LOG) and $smarty.const.MANUALL_DEL_API_LOG === true}
-                            <td style="width: 1%;"><input type="checkbox" class="form-check-input checkitem" /></td>
+                            <td style="width: 1%;"><input type="checkbox" class="form-check-input checkitem"></td>
                             {/if}
                             <td class="text-center" style="width: 1%;">{$LOG.log_time}</td>
                             <td>{$LOG.role_title} ({$LANG->getModule('api_role_type')}: {$LOG.role_type}, {$LANG->getModule('api_role_object')}: {$LOG.role_object})</td>
@@ -110,7 +110,7 @@
                     {if !empty($smarty.const.MANUALL_DEL_API_LOG) and $smarty.const.MANUALL_DEL_API_LOG === true}
                     <tfoot>
                         <tr>
-                            <td style="width: 1%;"><input type="checkbox" class="form-check-input checkall" /></td>
+                            <td style="width: 1%;"><input type="checkbox" class="form-check-input checkall"></td>
                             <td colspan="6">
                                 <button type="button" class="btn btn-secondary log-multidel"><i class="fa-solid fa-trash-o"></i> {$LANG->getModule('del_selected')}</button>
                                 <button type="button" class="btn btn-secondary log-delall"><i class="fa-solid fa-trash-o"></i> {$LANG->getModule('del_all')}</button>

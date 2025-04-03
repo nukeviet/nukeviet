@@ -8,7 +8,7 @@
                 <div class="row mb-3">
                     <label for="role_title" class="col-sm-3 col-form-label text-sm-end">{$LANG->getModule('api_roles_title')} <span class="text-danger">(*)</span></label>
                     <div class="col-sm-8 col-lg-4 col-xxl-3">
-                        <input type="text" id="role_title" name="role_title" value="{$DATA.role_title}" class="form-control" maxlength="250" required />
+                        <input type="text" id="role_title" name="role_title" value="{$DATA.role_title}" class="form-control" maxlength="250" required>
                     </div>
                 </div>
                 <div class="row mb-3">
@@ -71,7 +71,7 @@
                                 {append var='DATA' value=['' => ''] index='flood_rules'}
                             {/if}
                             {foreach $DATA.flood_rules as $INTERVAL => $LIMIT}
-                            <div class="flood_rule item mb-2 row gx-0">
+                            <div class="flood_rule item mb-2 row gx-0 gy-1">
                                 <div class="col-12 col-lg-6 col-xxl-4">
                                     <div class="input-group flex-nowrap">
                                         <span class="input-group-text">{$LANG->getModule('flood_limit')}</span>
