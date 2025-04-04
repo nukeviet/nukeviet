@@ -75,3 +75,4 @@ $lang_module['setting'] = 'Configuration du module';
 $lang_module['config_save'] = 'Enregistrer la configuration';
 $lang_module['difftimeout'] = 'Délai de re-vote';
 $lang_module['hours'] = 'heures';
+$lang_module['save_success'] = 'Enregistré avec succès !';

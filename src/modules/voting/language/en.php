@@ -75,3 +75,4 @@ $lang_module['setting'] = 'Module configuration';
 $lang_module['config_save'] = 'Save configuration';
 $lang_module['difftimeout'] = 'Timeout for re-voting';
 $lang_module['hours'] = 'hours';
+$lang_module['save_success'] = 'Saved successfully !';

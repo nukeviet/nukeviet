@@ -28,7 +28,7 @@ if ($nv_Request->isset_request('save', 'post')) {
     empty($array_config['difftimeout']) && $array_config['difftimeout'] = 1;
     $array_config['difftimeout'] *= 3600;
 
-    $sth = $db->prepare('UPDATE ' . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = '" . NV_LANG_DATA . "' AND module = '" . $module_name . "' AND config_name = :config_name");
+    $sth = $db->prepare('UPDATE ' . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = '" . NV_LANG_DATA . "' AND module = '" . $module_names . "' AND config_name = :config_name");
     foreach ($array_config as $config_name => $config_value) {
         $sth->bindParam(':config_name', $config_name, PDO::PARAM_STR, 30);
         $sth->bindParam(':config_value', $config_value, PDO::PARAM_STR);
@@ -37,6 +37,12 @@ if ($nv_Request->isset_request('save', 'post')) {
 
     nv_insert_logs(NV_LANG_DATA, $module_name, 'Change config module', '', $admin_info['userid']);
     $nv_Cache->delMod('settings');
+
+    nv_jsonOutput([
+        'status' => 'success',
+        'mess' => $nv_Lang->getModule('save_success')
+    ]);
+
     nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op);
 }
 

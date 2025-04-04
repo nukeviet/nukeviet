@@ -75,3 +75,4 @@ $lang_module['setting'] = 'Cấu hình module';
 $lang_module['config_save'] = 'Lưu cấu hình';
 $lang_module['difftimeout'] = 'Thời gian chờ để được bình chọn lại';
 $lang_module['hours'] = 'giờ';
+$lang_module['save_success'] = 'Đã lưu thành công !';
