@@ -4230,12 +4230,16 @@ function nv_uuid4()
 
 /**
  * Hàm chuyển Unicode tổ hợp sang Unicode dựng sẵn
- * @param string $str
- * @return string
+ * @param mixed $str
+ * @return mixed
  */
 function nv_compound_unicode($str)
 {
-    global $nv_Request;
+    global $nv_Request, $global_config;
+
+    if (empty($nv_Request)) {
+        $nv_Request = new NukeViet\Core\Request($global_config, null);
+    }
 
     return $nv_Request->compound_unicode($str);
 }
