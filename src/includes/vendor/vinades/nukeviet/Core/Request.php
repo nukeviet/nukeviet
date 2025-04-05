@@ -1080,7 +1080,7 @@ class Request
                         if (empty($value) or is_numeric($value)) {
                             return $value;
                         }
-                        $value = $this->compound_unicode($value);
+                        $value = self::compound_unicode($value);
                         return ($filter == true) ? $this->security_get($value) : $value;
                     }
                     break;
@@ -1090,7 +1090,7 @@ class Request
                         if (empty($value) or is_numeric($value)) {
                             return $value;
                         }
-                        $value = $this->compound_unicode($value);
+                        $value = self::compound_unicode($value);
                         return ($filter == true) ? $this->security_post($value) : $value;
                     }
                     break;
@@ -1125,7 +1125,7 @@ class Request
                         if (empty($value) or is_numeric($value)) {
                             return $value;
                         }
-                        $value = $this->compound_unicode($value);
+                        $value = self::compound_unicode($value);
                         return ($filter == true) ? $this->security_post($value) : $value;
                     }
                     if (array_key_exists($name, $_GET)) {
@@ -1133,7 +1133,7 @@ class Request
                         if (empty($value) or is_numeric($value)) {
                             return $value;
                         }
-                        $value = $this->compound_unicode($value);
+                        $value = self::compound_unicode($value);
                         return ($filter == true) ? $this->security_get($value) : $value;
                     }
                     break;
@@ -1715,12 +1715,12 @@ class Request
      * @param mixed $value
      * @return mixed
      */
-    public function compound_unicode($value)
+    public static function compound_unicode($value)
     {
         if (is_array($value)) {
             $keys = array_keys($value);
             foreach ($keys as $key) {
-                $value[$key] = $this->compound_unicode($value[$key]);
+                $value[$key] = self::compound_unicode($value[$key]);
             }
         } elseif (is_string($value)) {
             // Sử dụng Normalizer nếu extension intl được cài đặt

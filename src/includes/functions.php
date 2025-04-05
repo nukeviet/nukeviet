@@ -4235,11 +4235,5 @@ function nv_uuid4()
  */
 function nv_compound_unicode($value)
 {
-    global $nv_Request, $global_config;
-
-    if (empty($nv_Request)) {
-        $nv_Request = new NukeViet\Core\Request($global_config, null);
-    }
-
-    return $nv_Request->compound_unicode($value);
+    return NukeViet\Core\Request::compound_unicode($value);
 }
