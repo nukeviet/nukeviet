@@ -3,7 +3,7 @@
 <div class="row mb-4">
     <label class="col-sm-3 col-form-label text-end">{$LANG->getModule('api_role_object_'|cat:$ROLE_OBJECT)}</label>
     <div class="col-sm-9">
-        <select class="form-select w-100" name="userid" id="getUser" data-get-user-url="{$smarty.const.NV_BASE_ADMINURL}index.php{$smarty.const.NV_LANG_VARIABLE}={$smarty.const.NV_LANG_DATA}&amp;{$smarty.const.NV_NAME_VARIABLE}={$MODULE_NAME}&amp;{$smarty.const.NV_OP_VARIABLE}={$OP}&amp;role_id={$ROLE_ID}&amp;action=getUser" data-placeholder="{$LANG->getModule('api_role_credential_search')}">
+        <select class="form-select w-100" name="userid" id="getUser" data-get-user-url="{$smarty.const.NV_BASE_ADMINURL}index.php?{$smarty.const.NV_LANG_VARIABLE}={$smarty.const.NV_LANG_DATA}&amp;{$smarty.const.NV_NAME_VARIABLE}={$MODULE_NAME}&amp;{$smarty.const.NV_OP_VARIABLE}={$OP}&amp;role_id={$ROLE_ID}&amp;action=getUser" data-placeholder="{$LANG->getModule('api_role_credential_search')}">
         </select>
     </div>
 </div>

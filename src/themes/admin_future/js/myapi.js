@@ -8,225 +8,319 @@
  */
 
 $(function() {
-    if (document.getElementById('role')) {
-        // Thay đổi đối tượng
-        document.querySelectorAll('#role [name=role_object]').forEach(role_object => {
-            role_object.addEventListener('change', (event) => {
-                fetch(document.querySelector('#role').getAttribute('action'), {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/x-www-form-urlencoded'
-                    },
-                    body: 'getapitree=' + event.target.value,
-                    cache: 'no-cache'
-                })
-                .then(response => response.text())
-                .then(data => {
-                    document.querySelector('#apicheck').innerHTML = data;
-                });
+    // Thay đổi đối tượng
+    $('#role [name=role_object]').on('change', function() {
+        $.ajax({
+            type: "POST",
+            url: $('#role').attr('action'),
+            cache: !1,
+            data: 'getapitree=' + $(this).val()
+        }).done(function(a) {
+            $('#apicheck').html(a)
+        });
+    });
+    // Khi chọn/bỏ chọn API
+    $('#role').on('change', '.checkitem', function() {
+        var isChecked = $(this).is(':checked'),
+            totalApiEnabled = parseInt($('#role .total-api-enabled').text()),
+            childApisItem = $(this).parents('.child-apis-item'),
+            treeObj = $('#role .root-api-actions button[aria-controls=' + childApisItem.attr('id') + '] .api-count'),
+            treeTotalAPI = parseInt($('.total_api', treeObj).text()),
+            notCheckedLength = $('.checkitem:not(:checked)', childApisItem).length;
+        if (isChecked) {
+            $('#role .total-api-enabled').addClass('checked').text(++totalApiEnabled);
+            $('.total_api', treeObj).text(++treeTotalAPI);
+            treeObj.addClass('checked')
+        } else {
+            $('#role .total-api-enabled').text(--totalApiEnabled);
+            if (totalApiEnabled == 0) {
+                $('#role .total-api-enabled').removeClass('checked')
+            }
+            $('.total_api', treeObj).text(--treeTotalAPI)
+            if (treeTotalAPI == 0) {
+                treeObj.removeClass('checked')
+            }
+        }
+        $('.checkall', childApisItem).prop('checked', !notCheckedLength)
+    });
+    // Khi tích vào nút Chọn tất cả
+    $('#role').on('change', '.checkall', function() {
+        var isChecked = $(this).is(':checked'),
+            childApisItem = $(this).parents('.child-apis-item');
+        $('.checkitem', childApisItem).each(function() {
+            if ($(this).prop('checked') !== isChecked) {
+                $(this).prop('checked', isChecked).trigger('change');
+            }
+        })
+    });
+    // Không cho xuống dòng ở textarea
+    $('#role_description').on('input', function() {
+        $(this).val($(this).val().replace(/[\r\n\v]+/g, ''));
+    });
+    // Thêm flood rule
+    $('#role').on('click', '.add-rule', function() {
+        var item = $(this).parents('.item'),
+            newitem = item.clone();
+        $('[name^=flood_rules_limit], [name^=flood_rules_interval]', newitem).val('');
+        item.after(newitem)
+    });
+    // Xóa flood rule
+    $('#role').on('click', '.del-rule', function() {
+        var item = $(this).parents('.item'),
+            items = $(this).parents('.items');
+        if ($('.item', items).length > 1) {
+            item.remove()
+        } else {
+            $('[name^=flood_rules_limit], [name^=flood_rules_interval]', item).val('')
+        }
+    });
+
+    // Lọc danh sách theo loại, đối tượng của role
+    $('#rolelist .role-type, #rolelist .role-object').on('change', function() {
+        var type = $('#rolelist .role-type').val(),
+            object = $('#rolelist .role-object').val(),
+            url = $('#rolelist').data('page-url');
+        let params = [];
+        if (type != '') {
+            params.push('type=' + type);
+        }
+        if (object != '') {
+            params.push('object=' + object);
+        }
+        if (params.length) {
+            url += (url.includes('?') ? '&' : '?') + params.join('&');
+        }
+        window.location.href = url;
+    });
+    // Thay đổi trạng thái role
+    $('#rolelist .change-status').on('change', function(e) {
+        var that = $(this);
+        that.prop('disabled', true);
+        $.ajax({
+            type: "POST",
+            url: $('#rolelist').data('page-url'),
+            cache: !1,
+            data: 'changeStatus=' + that.parents('.item').data('id') + '&checkss=' + $('#rolelist').data('checkss'),
+            dataType: "json"
+        }).done(function(data) {
+            setTimeout(() => {
+                that.prop('disabled', false);
+            }, 1000);
+            if (data.status === 'OK') {
+                nvToast(data.mess, 'success');
+            } else if (data.status === 'error') {
+                nvToast(data.mess, 'error');
+            }
+        })
+    });
+    // Xóa role
+    $('[data-toggle="apiroledel"]').on('click', function(e) {
+        e.preventDefault();
+        if (confirm(nv_is_del_confirm[0])) {
+            $.ajax({
+                type: "POST",
+                url: $('#rolelist').data('page-url'),
+                cache: !1,
+                data: 'roledel=' + $(this).parents('.item').data('id') + '&checkss=' + $('#rolelist').data('checkss'),
+                dataType: "json"
+            }).done(function(data) {
+                if (data.status === 'error') {
+                    nvAlert(nv_is_del_confirm[2]);
+                    nvToast(nv_is_del_confirm[2], 'error');
+                } else if (data.status === 'OK') {
+                    location.reload();
+                }
             })
-        });
-
-        // Khi chọn/bỏ chọn API
-        document.querySelector('#role').addEventListener('change', event => {
-            if (event.target.classList.contains('checkitem')) {
-                var isChecked = event.target.checked,
-                    totalApiEnabled = parseInt(document.querySelector('#role .total-api-enabled').textContent),
-                    childApisItem = event.target.closest('.child-apis-item'),
-                    treeObj = document.querySelector('#role .root-api-actions button[aria-controls="' + childApisItem.id + '"] .api-count'),
-                    treeTotalAPI = parseInt(treeObj.querySelector('.total_api').textContent),
-                    notCheckedLength = childApisItem.querySelectorAll('.checkitem:not(:checked)').length;
-
-                if (isChecked) {
-                    document.querySelector('#role .total-api-enabled').classList.add('checked');
-                    document.querySelector('#role .total-api-enabled').textContent = ++totalApiEnabled;
-                    treeObj.querySelector('.total_api').textContent = ++treeTotalAPI;
-                    treeObj.classList.add('checked');
-                } else {
-                    document.querySelector('#role .total-api-enabled').textContent = --totalApiEnabled;
-                    if (totalApiEnabled === 0) {
-                        document.querySelector('#role .total-api-enabled').classList.remove('checked');
-                    }
-                    treeObj.querySelector('.total_api').textContent = --treeTotalAPI;
-                    if (treeTotalAPI === 0) {
-                        treeObj.classList.remove('checked');
-                    }
-                }
-                childApisItem.querySelector('.checkall').checked = !notCheckedLength;
-            }
-        });
-        // Khi tích vào nút Chọn tất cả
-        document.querySelector('#role').addEventListener('change', event => {
-            if (event.target.classList.contains('checkall')) {
-                var isChecked = event.target.checked,
-                    childApisItem = event.target.closest('.child-apis-item');
-                childApisItem.querySelectorAll('.checkitem').forEach(checkitem => {
-                    if (checkitem.checked !== isChecked) {
-                        checkitem.checked = isChecked;
-                        checkitem.dispatchEvent(new Event('change', { bubbles: true }));
-                    }
-                });
-            }
-        });
-        // Không cho xuống dòng ở textarea
-        document.getElementById('role_description').addEventListener('input', () => {
-            this.value = this.value.replace(/[\r\n\v]+/g, '');
-        });
-        // Thêm flood rule
-        document.getElementById('role').addEventListener('click', event => {
-            var addRuleElement = event.target.closest('.add-rule');
-            var delRuleElement = event.target.closest('.del-rule');
-            if (addRuleElement) {
-                var item = addRuleElement.closest('.item'),
-                    newitem = item.cloneNode(true);
-                newitem.querySelectorAll('[name^=flood_rules_limit], [name^=flood_rules_interval]').forEach(input => {
-                    input.value = '';
-                });
-                item.after(newitem);
-            } else if (delRuleElement) {
-                var item = delRuleElement.closest('.item'),
-                    items = delRuleElement.closest('.items');
-                if (items.querySelectorAll('.item').length > 1) {
-                    item.remove();
-                } else {
-                    item.querySelectorAll('[name^=flood_rules_limit], [name^=flood_rules_interval]').forEach(input => {
-                        input.value = '';
-                    });
-                }
-            }
-        });
-    }
-    if (document.getElementById('rolelist')) {
-        var rolelist = document.getElementById('rolelist');
-        // Lọc danh sách theo loại, đối tượng của role
-        document.querySelectorAll('#rolelist .role-type, #rolelist .role-object').forEach(element => {
-            element.addEventListener('change', function() {
-            var type = document.querySelector('#rolelist .role-type').value,
-                object = document.querySelector('#rolelist .role-object').value,
-                url = document.querySelector('#rolelist').dataset.pageUrl;
-            let params = [];
-            if (type != '') {
-                params.push('type=' + type);
-            }
-            if (object != '') {
-                params.push('object=' + object);
-            }
-            if (params.length) {
-                url += (url.includes('?') ? '&' : '?') + params.join('&');
-            }
-            window.location.href = url;
-            });
-        });
-        // Thay đổi trạng thái role
-        document.querySelectorAll('#rolelist .change-status').forEach(element => {
-            element.addEventListener('change', function(e) {
-                var that = e.target;
-                that.disabled = true;
-                fetch(rolelist.dataset.pageUrl, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/x-www-form-urlencoded'
-                    },
-                    body: 'changeStatus=' + that.closest('.item').dataset.id + '&checkss=' + rolelist.dataset.checkss,
-                    cache: 'no-cache'
-                })
-                .then(response => response.json())
-                .then(data => {
-                    setTimeout(() => {
-                        that.disabled = false;
-                    }, 1000);
-                    if (data.status === 'OK') {
-                        nvToast(data.mess, 'success');
-                    } else if (data.status === 'error') {
-                        nvToast(data.mess, 'error');
-                    }
-                });
-            });
-        });
-        // Xóa role
-        document.querySelectorAll('[data-toggle="apiroledel"]').forEach(element => {
-            element.addEventListener('click', e => {
-                e.preventDefault();
-                that = e.target;
-                nvConfirm(nv_is_del_confirm[0], () => {
-                    fetch(rolelist.dataset.pageUrl, {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/x-www-form-urlencoded'
-                        },
-                        body: 'roledel=' + that.closest('.item').dataset.id + '&checkss=' + rolelist.dataset.checkss,
-                        cache: 'no-cache'
-                    })
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data.status === 'error') {
-                            nvAlert(nv_is_del_confirm[2]);
-                            nvToast(nv_is_del_confirm[2], 'error');
-                        } else if (data.status === 'OK') {
-                            location.reload();
-                        }
-                    });
-                });
-            });
-        });
-    }
-    if (document.getElementById('credentiallist')) {
-        var credentiallist = document.getElementById('credentiallist'),
-            credential_page_url = credentiallist.getAttribute('data-page-url'); ;
+        }
+    });
+    if ($('#credentiallist').length) {
+        var credentiallist = $('#credentiallist'),
+            credential_page_url = credentiallist.data('page-url'); ;
         // Lọc quyền truy cập API-role
-        credentiallist.querySelectorAll('.role-id')[0].addEventListener('change', e => {
-            var role_id = parseInt(e.target.value);
+        $('.role-id', credentiallist).on('change', function() {
+            var role_id = parseInt($(this).val());
             window.location.href = credential_page_url + (credential_page_url.includes('?') ? '&' : '?') + 'role_id=' + role_id
-        });
-        $('.role-id', credentiallist).select2({
+        }).select2({
             theme: 'bootstrap5'
         });
 
-        credentialSelInit = (e) => {
-            var get_user_url = e.data('get-user-url');
-            e.select2({
-                language: nv_lang_interface,
-                dropdownParent: $('#credential-add'),
-                theme: 'bootstrap5',
-                ajax: {
+        // Thêm/sửa quyền truy cập API-role
+        $('[data-toggle=credential-add], [data-toggle=credential-edit]', credentiallist).on('click', function() {
+            var url = $('#credential-add form').attr('action'),
+                title = $(this).data('title');
+            if ($(this).is('[data-toggle=credential-edit]')) {
+                url += '&edit=1&userid=' + $(this).parents('.item').data('userid')
+            }
+            $.ajax({
+                type: "GET",
+                url: url,
+                cache: !1
+            }).done(function(a) {
+                $('#credential-add .credential-title').text(title);
+                $('#credential-add form').html(a);
+                credentialSelInit($('#getUser'));
+                $('#credential-add').modal('show')
+            })
+        });
+
+        // Tìm admin/user
+        if ($('#credential-add').length) {
+            //Form thêm quyền truy cập
+            $('#credential-add form').on('submit', function(e) {
+                e.preventDefault();
+                var url = $(this).attr('action');
+                data = $(this).serialize();
+                $.ajax({
                     type: "POST",
-                    url: get_user_url,
-                    dataType: 'json',
-                    delay: 250,
-                    data: params => {
-                        return {
-                            q: params.term,
-                            page: params.page
-                        };
-                    },
-                    processResults: (data, params) => {
-                        params.page = params.page || 1;
-                        return {
-                            results: data.results,
-                            pagination: {
-                                more: (params.page * 30) < data.total_count
-                            }
-                        };
-                    },
-                    cache: true
-                },
-                escapeMarkup: function(markup) {
-                    return markup
-                },
-                minimumInputLength: 3,
-                templateResult: function(repo) {
-                    if (repo.loading) return repo.text;
-                    return repo.title
-                },
-                templateSelection: function(repo) {
-                    return repo.title || repo.text
+                    url: $(this).attr('action'),
+                    cache: !1,
+                    data: $(this).serialize(),
+                    dataType: "json"
+                }).done(function(a) {
+                    if ('error' == a.status) {
+                        nvAlert(a.mess);
+                    } else if ('OK' == a.status) {
+                        location.reload()
+                    }
+                })
+            })
+        };
+
+        $('.change-status', credentiallist).on('change', function() {
+            var userid = parseInt($(this).parents('.item').data('userid')),
+                role_id = parseInt(credentiallist.data('role-id')),
+                that = $(this);
+            that.prop('disabled', true);
+            $.ajax({
+                type: "POST",
+                url: credential_page_url + '&role_id=' + role_id + '&action=changeStatus',
+                cache: !1,
+                data: 'userid=' + userid,
+                dataType: "json"
+            }).done(function(a) {
+                setTimeout(() => {
+                    that.disabled = false;
+                    nvToast(data.mess, 'success');
+                }, 1000);
+                if (data.status === 'error') {
+                    nvToast(data.mess, 'error');
+                }
+            })
+        });
+
+        $('[data-toggle=credentialDel]', credentiallist).on('click', function() {
+            if (confirm($(this).data('confirm'))) {
+                var userid = parseInt($(this).parents('.item').data('userid')),
+                    role_id = parseInt(credentiallist.data('role-id'));
+                $.ajax({
+                    type: "POST",
+                    url: credential_page_url + '&role_id=' + role_id + '&action=del',
+                    cache: !1,
+                    data: 'userid=' + userid,
+                    dataType: "json"
+                }).done(function(a) {
+                    if ('error' == a.status) {
+                        nvAlert(a.mess);
+                    } else if ('OK' == a.status) {
+                        location.reload()
+                    }
+                })
+            }
+        });
+
+        $('[data-toggle=changeAuth]', credentiallist).on('click', function() {
+            var userid = parseInt($(this).parents('.item').data('userid'));
+            $.ajax({
+                type: "POST",
+                url: credential_page_url,
+                cache: !1,
+                data: 'changeAuth=' + userid,
+                dataType: "json"
+            }).done(function(a) {
+                if ('error' == a.status) {
+                    nvAlert(a.mess);
+                } else if ('OK' == a.status) {
+                    $('#changeAuth .modal-title').text(a.title);
+                    $('#changeAuth .modal-body').html(a.body);
+                    $('#changeAuth').modal('show')
+                }
+            })
+        });
+
+        if ($('#changeAuth').length) {
+            var changeAuth = $('#changeAuth');
+            changeAuth.on("click", "[data-clipboard-target]", function() {
+                var tooltip = new bootstrap.Tooltip(this);
+                var target = $($(this).data("clipboard-target"));
+                if (target.length) {
+                    navigator.clipboard.writeText(target.val()).then(() => {
+                        tooltip.show();
+                        setTimeout(() => tooltip.hide(), 1000);
+                    });
                 }
             });
-        }
 
-        credentialFlatInit = (e) => {
+            changeAuth.on('click', '.create_authentication', function(e) {
+                var method = $(this).data('method');
+                $.ajax({
+                    type: "POST",
+                    url: credential_page_url,
+                    cache: !1,
+                    data: 'save=1&method=' + method + '&changeAuth=' + $(this).data('userid'),
+                    dataType: "json"
+                }).done(function(a) {
+                    if ('error' == a.status) {
+                        nvAlert(a.mess)
+                    } else if ('OK' == a.status) {
+                        $('[name=' + method + '_ident]', changeAuth).val(a.ident);
+                        $('[name=' + method + '_secret]', changeAuth).val(a.secret);
+                        $('[name=' + method + '_ips]', changeAuth).parents('.api_ips').slideDown()
+                    }
+                })
+            });
+            changeAuth.on('click', '.delete_authentication', function(e) {
+                var method = $(this).data('method');
+                $.ajax({
+                    type: "POST",
+                    url: credential_page_url,
+                    cache: !1,
+                    data: 'del=1&method=' + method + '&changeAuth=' + $(this).data('userid'),
+                    dataType: "json"
+                }).done(function(a) {
+                    if ('OK' == a.status) {
+                        $('[name=' + method + '_ident]', changeAuth).val('');
+                        $('[name=' + method + '_secret]', changeAuth).val('');
+                        $('[name=' + method + '_ips]', changeAuth).val('').parents('.api_ips').slideUp()
+                    }
+                })
+            });
+            changeAuth.on('input', '.ips', function() {
+                $(this).val($(this).val().replace(/[\r\n\v]+/g, ''));
+            });
+            changeAuth.on('click', '.api_ips_update', function() {
+                var method = $(this).data('method'),
+                    ips = $('[name=' + method + '_ips]', changeAuth).val();
+                $('.ips, .api_ips_update', changeAuth).prop('disabled', true);
+                $.ajax({
+                    type: "POST",
+                    url: credential_page_url,
+                    cache: !1,
+                    data: 'ips=' + ips + '&method=' + method + '&changeAuth=' + $(this).data('userid'),
+                    dataType: "json"
+                }).done(function(a) {
+                    if ('error' == a.status) {
+                        nvAlert(a.mess);
+                        $('.ips, .api_ips_update', changeAuth).prop('disabled', false)
+                    } else if ('OK' == a.status) {
+                        $('[name=' + method + '_ips]', changeAuth).val(a.ips);
+                        setTimeout(function() {
+                            $('.ips, .api_ips_update', changeAuth).prop('disabled', false)
+                        }, 1000);
+                    }
+                })
+            })
             var fmt = nv_jsdate_post.replace(/dd/g, 'd').replace(/mm/g, 'm').replace(/yyyy/g, 'Y');
-            e.flatpickr({
+            $(".adddate, .enddate").flatpickr({
                 enableTime: false,
                 dateFormat: fmt,
                 ariaDateFormat: fmt,
@@ -239,433 +333,205 @@ $(function() {
                 }
             });
         }
-
-        // Thêm/sửa quyền truy cập API-role
-        document.querySelectorAll('[data-toggle=credential-add], [data-toggle=credential-edit]').forEach(element => {
-            element.addEventListener('click', e => {
-                var that = e.target.closest('[data-toggle=credential-add], [data-toggle=credential-edit]')
-                var url = document.querySelector('#credential-add form').getAttribute('action'),
-                    title = that.getAttribute('data-title');
-                if (that.getAttribute('data-toggle') === 'credential-edit') {
-                    url += '&edit=1&userid=' + that.closest('.item').getAttribute('data-userid');
-                }
-                fetch(url, {
-                    method: 'GET',
-                    cache: 'no-cache'
-                })
-                .then(response => response.text())
-                .then(data => {
-                    document.querySelector('#credential-add .credential-title').textContent = title;
-                    document.querySelector('#credential-add form').innerHTML = data;
-                    credentialSelInit($('#getUser'));
-                    credentialFlatInit($(".adddate, .enddate"));
-                    new bootstrap.Modal(document.getElementById('credential-add')).show();
-                });
-            });
-        });
-
-        // Tìm admin/user
-        if (document.getElementById('credential-add')) {
-            // Form thêm quyền truy cập
-            document.querySelector('#credential-add form').onsubmit = e => {
-                e.preventDefault();
-                var url = e.target.getAttribute('action');
-                var data = new URLSearchParams(new FormData(e.target)).toString();
-                fetch(url, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/x-www-form-urlencoded'
-                    },
-                    body: data,
-                    cache: 'no-cache'
-                })
-                .then(response => response.json())
-                .then(a => {
-                    if (a.status === 'error') {
-                        nvAlert(a.mess);
-                    } else if (a.status === 'OK') {
-                        location.reload();
-                    }
-                });
-            }
-        };
-
-        credentiallist.querySelectorAll('.change-status').forEach(element => {
-            element.addEventListener('change', e => {
-            var userid = parseInt(e.target.closest('.item').getAttribute('data-userid')),
-                role_id = parseInt(credentiallist.dataset.roleId),
-                that = e.target;
-            that.disabled = true;
-            fetch(credential_page_url + '&role_id=' + role_id + '&action=changeStatus', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded'
+    };
+    function credentialSelInit(e) {
+        var get_user_url = e.data('get-user-url');
+        e.select2({
+            language: nv_lang_interface,
+            dropdownParent: $('#credential-add'),
+            theme: 'bootstrap5',
+            ajax: {
+                type: "POST",
+                url: get_user_url,
+                dataType: 'json',
+                delay: 250,
+                data: params => {
+                    return {
+                        q: params.term,
+                        page: params.page
+                    };
                 },
-                body: 'userid=' + userid,
-                cache: 'no-cache'
-            })
-            .then(response => response.json())
-            .then(data => {
-                setTimeout(() => {
-                    that.disabled = false;
-                    nvToast(data.mess, 'success');
-                }, 1000);
-                if (data.status === 'error') {
-                    nvAlert(data.mess);
-                }
-            });
-            });
-        });
-
-        document.querySelectorAll('[data-toggle=credentialDel]').forEach(element => {
-            element.addEventListener('click', e => {
-                var that = e.target.closest('[data-toggle=credentialDel]');
-                if (nvConfirm(that.getAttribute('data-confirm'), () => {
-                    var userid = parseInt(that.closest('.item').dataset.userid),
-                    role_id = parseInt(credentiallist.dataset.roleId);
-                    fetch(credential_page_url + '&role_id=' + role_id + '&action=del', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/x-www-form-urlencoded'
-                    },
-                    body: 'userid=' + userid,
-                    cache: 'no-cache'
-                    })
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data.status === 'error') {
-                            nvAlert(data.mess);
-                        } else if (data.status === 'OK') {
-                            location.reload();
+                processResults: (data, params) => {
+                    params.page = params.page || 1;
+                    return {
+                        results: data.results,
+                        pagination: {
+                            more: (params.page * 30) < data.total_count
                         }
-                    });
-                }));
-            });
+                    };
+                },
+                cache: true
+            },
+            escapeMarkup: function(markup) {
+                return markup
+            },
+            minimumInputLength: 3,
+            templateResult: function(repo) {
+                if (repo.loading) return repo.text;
+                return repo.title
+            },
+            templateSelection: function(repo) {
+                return repo.title || repo.text
+            }
         });
-        $('[data-toggle=changeAuth]', credentiallist).on('click', function() {
-            var userid = parseInt($(this).parents('.item').data('userid'));
+    }
+    
+    if ($('#my-role-api').length) {
+        var myroleapi = $('#my-role-api'),
+            myroleapi_url = myroleapi.data('page-url');
+
+        $('.credential-activate, .credential-deactivate', myroleapi).on('click', function() {
+            var role_id = $(this).parents('.item').data('role-id');
             $.ajax({
                 type: "POST",
-                url: credential_page_url,
+                url: myroleapi_url,
                 cache: !1,
-                data: 'changeAuth=' + userid,
+                data: 'changeActivate=' + role_id,
                 dataType: "json"
             }).done(function(a) {
                 if ('error' == a.status) {
-                    alert(a.mess);
+                    nvAlert(a.mess);
                 } else if ('OK' == a.status) {
-                    $('#changeAuth .modal-title').text(a.title);
-                    $('#changeAuth .modal-body').html(a.body);
-                    changeAuthInit();
-                    $('#changeAuth').modal('show')
+                    location.reload()
                 }
             })
         });
 
-        changeAuthInit = () => {
-            var changeAuth = document.getElementById('changeAuth');
+        var credential_auth = $('#credential_auth');
+        $("[data-clipboard-target]").each(function() {
+            var tooltip = new bootstrap.Tooltip(this);
 
-            changeAuth.addEventListener('click', e => {
-                if (e.target.classList.contains('create_authentication')) {
-                    var method = e.target.dataset.method;
-                    fetch(credential_page_url, {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/x-www-form-urlencoded'
-                        },
-                        body: 'save=1&method=' + method + '&changeAuth=' + e.target.dataset.userid,
-                        cache: 'no-cache'
-                    })
-                    .then(response => response.json())
-                    .then(a => {
-                        if (a.status === 'error') {
-                            nvAlert(a.mess);
-                        } else if (a.status === 'OK') {
-                            changeAuth.querySelector('[name=' + method + '_ident]').value = a.ident;
-                            changeAuth.querySelector('[name=' + method + '_secret]').value = a.secret;
-                            changeAuth.querySelector('[name=' + method + '_ips]').closest('.api_ips').style.display = 'block';
-                        }
-                    });
-                } else if (e.target.classList.contains('delete_authentication')) {
-                    var method = e.target.dataset.method;
-                    fetch(credential_page_url, {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/x-www-form-urlencoded'
-                        },
-                        body: 'del=1&method=' + method + '&changeAuth=' + e.target.dataset.userid,
-                        cache: 'no-cache'
-                    })
-                    .then(response => response.json())
-                    .then(a => {
-                        if (a.status === 'OK') {
-                            changeAuth.querySelector('[name=' + method + '_ident]').value = '';
-                            changeAuth.querySelector('[name=' + method + '_secret]').value = '';
-                            changeAuth.querySelector('[name=' + method + '_ips]').value = '';
-                            changeAuth.querySelector('[name=' + method + '_ips]').closest('.api_ips').style.display = 'none';
-                        }
-                    });
-                } else if (e.target.classList.contains('api_ips_update')) {
-                    var method = e.target.dataset.method,
-                        ips = changeAuth.querySelector('[name=' + method + '_ips]').value;
-                    changeAuth.querySelectorAll('.ips, .api_ips_update').forEach(el => el.disabled = true);
-                    fetch(credential_page_url, {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/x-www-form-urlencoded'
-                        },
-                        body: 'ips=' + ips + '&method=' + method + '&changeAuth=' + e.target.dataset.userid,
-                        cache: 'no-cache'
-                    })
-                    .then(response => response.json())
-                    .then(a => {
-                        if (a.status === 'error') {
-                            alert(a.mess);
-                            changeAuth.querySelectorAll('.ips, .api_ips_update').forEach(el => el.disabled = false);
-                        } else if (a.status === 'OK') {
-                            changeAuth.querySelector('[name=' + method + '_ips]').value = a.ips;
-                            setTimeout(() => {
-                                changeAuth.querySelectorAll('.ips, .api_ips_update').forEach(el => el.disabled = false);
-                                nvToast(a.mess, 'success');
-                            }, 1000);
-                        }
-                    });
-                }
-            });
-
-            changeAuth.addEventListener('input', function(e) {
-                if (e.target.classList.contains('ips')) {
-                    e.target.value = e.target.value.replace(/[\r\n\v]+/g, '');
-                }
-            });
-
-            changeAuth.querySelectorAll("[data-clipboard-target]").forEach(btn => {
-                var tooltip = new bootstrap.Tooltip(btn);
-    
-                btn.addEventListener("click", function () {
-                    var target = changeAuth.querySelector(this.getAttribute("data-clipboard-target"));
-                    if (target) {
-                        navigator.clipboard.writeText(target.value).then(() => {
-                            tooltip.show();
-                            setTimeout(() => tooltip.hide(), 1000);
-                        });
-                    }
-                });
-            });
-        }
-    };
-    // Trang main
-    if (document.getElementById('my-role-api')) {
-        var myroleapi = document.getElementById('my-role-api'),
-        myroleapi_url = myroleapi.getAttribute('data-page-url');
-
-        myroleapi.querySelectorAll('.credential-activate, .credential-deactivate').forEach(function(button) {
-            button.addEventListener('click', function() {
-                var role_id = this.closest('.item').dataset.roleId;
-                fetch(myroleapi_url, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/x-www-form-urlencoded'
-                    },
-                    body: 'changeActivate=' + role_id,
-                    cache: 'no-cache'
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.status === 'error') {
-                        nvAlert(data.mess);
-                    } else if (data.status === 'OK') {
-                        location.reload();
-                    }
-                });
-            });
-        });
-
-        document.querySelectorAll("[data-clipboard-target]").forEach(btn => {
-            var tooltip = new bootstrap.Tooltip(btn);
-
-            btn.addEventListener("click", function () {
-                var target = document.querySelector(this.getAttribute("data-clipboard-target"));
-                if (target) {
-                    navigator.clipboard.writeText(target.value).then(() => {
-                        tooltip.show();
-                        setTimeout(() => tooltip.hide(), 1000);
+            $(this).on("click", function() {
+                var target = $($(this).data("clipboard-target"));
+                if (target.length) {
+                    navigator.clipboard.writeText(target.val()).then(() => {
+                    tooltip.show();
+                    setTimeout(() => tooltip.hide(), 1000);
                     });
                 }
             });
         });
-
-        var credential_auth = document.getElementById('credential_auth');
-        credential_auth.querySelectorAll('.create_authentication').forEach(function(button) {
-            button.addEventListener('click', function() {
-                var method = this.dataset.method;
-                fetch(myroleapi_url, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/x-www-form-urlencoded'
-                    },
-                    body: 'createAuth=' + method,
-                    cache: 'no-cache'
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.status === 'error') {
-                        nvAlert(data.mess);
-                    } else if (data.status === 'OK') {
-                        credential_auth.querySelector('[name=' + method + '_ident]').value = data.ident;
-                        credential_auth.querySelector('[name=' + method + '_secret]').value = data.secret;
-                        credential_auth.querySelector('[name=' + method + '_ips]').closest('.api_ips').style.display = 'block';
-                    }
-                });
-            });
+        $('.create_authentication', credential_auth).on('click', function(e) {
+            var method = $(this).data('method');
+            $.ajax({
+                type: "POST",
+                url: myroleapi_url,
+                cache: !1,
+                data: 'createAuth=' + method,
+                dataType: "json"
+            }).done(function(a) {
+                if ('error' == a.status) {
+                    nvAlert(a.mess)
+                } else if ('OK' == a.status) {
+                    $('[name=' + method + '_ident]', credential_auth).val(a.ident);
+                    $('[name=' + method + '_secret]', credential_auth).val(a.secret);
+                    $('[name=' + method + '_ips]', credential_auth).parents('.api_ips').slideDown()
+                }
+            })
         });
-        credential_auth.querySelectorAll('.delete_authentication').forEach(function(button) {
-            button.addEventListener('click', function() {
-                var method = this.dataset.method;
-                fetch(myroleapi_url, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/x-www-form-urlencoded'
-                    },
-                    body: 'delAuth=' + method,
-                    cache: 'no-cache'
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.status === 'OK') {
-                        credential_auth.querySelector('[name=' + method + '_ident]').value = '';
-                        credential_auth.querySelector('[name=' + method + '_secret]').value = '';
-                        credential_auth.querySelector('[name=' + method + '_ips]').value = '';
-                        credential_auth.querySelector('[name=' + method + '_ips]').closest('.api_ips').style.display = 'none';
-                    }
-                });
-            });
+        $('.delete_authentication', credential_auth).on('click', function(e) {
+            var method = $(this).data('method');
+            $.ajax({
+                type: "POST",
+                url: myroleapi_url,
+                cache: !1,
+                data: 'delAuth=' + method,
+                dataType: "json"
+            }).done(function(a) {
+                if ('OK' == a.status) {
+                    $('[name=' + method + '_ident]', credential_auth).val('');
+                    $('[name=' + method + '_secret]', credential_auth).val('');
+                    $('[name=' + method + '_ips]', credential_auth).val('').parents('.api_ips').slideUp()
+                }
+            })
         });
-        credential_auth.querySelectorAll('.ips').forEach(function(input) {
-            input.addEventListener('input', function() {
-                this.value = this.value.replace(/[\r\n\v]+/g, '');
-            });
+        $('.ips', credential_auth).on('input', function() {
+            $(this).val($(this).val().replace(/[\r\n\v]+/g, ''));
         });
-
-        credential_auth.querySelectorAll('.api_ips_update').forEach(function(button) {
-            button.addEventListener('click', function() {
-                var method = this.dataset.method,
-                ips = credential_auth.querySelector('[name=' + method + '_ips]').value;
-                credential_auth.querySelectorAll('.ips, .api_ips_update').forEach(function(el) {
-                    el.disabled = true;
-                });
-                fetch(myroleapi_url, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/x-www-form-urlencoded'
-                    },
-                    body: 'ipsUpdate=' + ips + '&method=' + method,
-                    cache: 'no-cache'
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.status === 'error') {
-                        nvAlert(data.mess);
-                        credential_auth.querySelectorAll('.ips, .api_ips_update').forEach(function(el) {
-                            el.disabled = false;
-                        });
-                    } else if (data.status === 'OK') {
-                        credential_auth.querySelector('[name=' + method + '_ips]').value = data.ips;
-                        setTimeout(function() {
-                            credential_auth.querySelectorAll('.ips, .api_ips_update').forEach(function(el) {
-                                el.disabled = false;
-                            });
-                        }, 1000);
-                    }
-                });
-            });
-        });
-    };
-
-    if (document.getElementById('logs')) {
-        var logs = document.getElementById('logs'),
-            page_url = logs.getAttribute('data-page-url');
-        logs.querySelectorAll('.log-del').forEach(element => {
-            element.addEventListener('click', e => {
-                nvConfirm(e.target.closest('.list').dataset.deleteConfirm, () => {
-                    fetch(page_url, {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/x-www-form-urlencoded'
-                        },
-                        body: 'delLog=' + e.target.closest('.item').dataset.id,
-                        cache: 'no-cache'
-                    }).then(response => response.text())
-                    .then(() => {
-                        location.reload();
-                    });
-                });
-            });
-        });
-
-        logs.querySelectorAll('.checkall').forEach(element => {
-            element.addEventListener('change', e => {
-                var isChecked = e.target.checked;
-                logs.querySelectorAll('.checkall, .checkitem').forEach(checkbox => {
-                    checkbox.checked = isChecked;
-                });
-            });
+        $('.api_ips_update', credential_auth).on('click', function() {
+            var method = $(this).data('method'),
+                ips = $('[name=' + method + '_ips]', credential_auth).val();
+            $('.ips, .api_ips_update', credential_auth).prop('disabled', true);
+            $.ajax({
+                type: "POST",
+                url: myroleapi_url,
+                cache: !1,
+                data: 'ipsUpdate=' + ips + '&method=' + method,
+                dataType: "json"
+            }).done(function(a) {
+                if ('error' == a.status) {
+                    nvAlert(a.mess);
+                    $('.ips, .api_ips_update', credential_auth).prop('disabled', false)
+                } else if ('OK' == a.status) {
+                    $('[name=' + method + '_ips]', credential_auth).val(a.ips);
+                    setTimeout(function() {
+                        $('.ips, .api_ips_update', credential_auth).prop('disabled', false)
+                    }, 1000);
+                }
+            })
         })
-
-        logs.querySelectorAll('.checkitem').forEach(element => {
-            element.addEventListener('change', e => {
-                var ls = e.target.closest('.list');
-                logs.querySelectorAll('.checkall').forEach(checkall => {
-                    checkall.checked = !ls.querySelectorAll('.checkitem:not(:checked)').length;
-                });
-            });
+    };
+    
+    if ($('#logs').length) {
+        var logs = $('#logs'),
+            page_url = logs.data('page-url');
+        $('.log-del', logs).on('click', function() {
+            if (confirm($(this).parents('.list').data('delete-confirm'))) {
+                $.ajax({
+                    type: "POST",
+                    url: page_url,
+                    cache: !1,
+                    data: 'delLog=' + $(this).parents('.item').data('id')
+                }).done(function(a) {
+                    location.reload()
+                })
+            }
         });
 
-        logs.querySelectorAll('.log-multidel').forEach(element => {
-            element.addEventListener('click', () => {
-                var list = [];
-                logs.querySelectorAll('.checkitem:checked').forEach(item => {
-                    list.push(item.closest('.item').dataset.id);
-                });
-                if (list.length) {
-                    nvConfirm(logs.querySelector('.list').dataset.deleteConfirm, () => {
-                        fetch(page_url, {
-                            method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/x-www-form-urlencoded'
-                            },
-                            body: 'delLogs=' + list.join(','),
-                            cache: 'no-cache'
-                        }).then(() => {
-                            location.reload();
-                        });
+        $('.checkall', logs).on('change', function() {
+            $('.checkall, .checkitem', logs).prop('checked', $(this).is(':checked'))
+        });
+
+        $('.checkitem', logs).on('change', function() {
+            var ls = $(this).parents('.list');
+            $('.checkall', logs).prop('checked', !$('.checkitem:not(:checked)', ls).length)
+        });
+
+        $('.log-multidel', logs).on('click', function() {
+            var list = [];
+            $('.checkitem:checked', logs).each(function() {
+                list.push($(this).parents('.item').data('id'))
+            });
+            if (list.length) {
+                nvConfirm($('.list', logs).data('delete-confirm'), () => {
+                    $.ajax({
+                        type: "POST",
+                        url: page_url,
+                        cache: !1,
+                        data: 'delLogs=' + list
+                    }).done(function() {
+                        location.reload()
                     })
-                }
-            });
+                })
+            }
         });
 
-        logs.querySelectorAll('.log-delall').forEach(element => {
-            element.addEventListener('click', () => {
-                nvConfirm(logs.querySelector('.list').dataset.deleteConfirm, () => {
-                    fetch(page_url, {
-                        method: 'POST',
-                        headers: {
-                        'Content-Type': 'application/x-www-form-urlencoded'
-                        },
-                        body: 'delAllLogs=1',
-                        cache: 'no-cache'
-                    }).then(() => {
-                        location.reload();
-                    });
-                });
-            });
+        $('.log-delall', logs).on('click', function() {
+            if (confirm($('.list', logs).data('delete-confirm'))) {
+                $.ajax({
+                    type: "POST",
+                    url: page_url,
+                    cache: !1,
+                    data: 'delAllLogs=1'
+                }).done(function(a) {
+                    location.reload()
+                })
+            }
         });
 
-        $('.role-id, .command', $('#logs')).select2({
-            theme: "bootstrap-5"
-        });
+        $('.role-id, .command', logs).select2({theme: 'bootstrap5'});
 
-        $('.userid', $('#logs')).select2({
+        $('.userid', logs).select2({
             language: nv_lang_interface,
             allowClear: true,
             ajax: {
@@ -704,6 +570,7 @@ $(function() {
                 return repo.title || repo.text
             }
         });
+
         var fmt = nv_jsdate_post.replace(/dd/g, 'd').replace(/mm/g, 'm').replace(/yyyy/g, 'Y').replace(/\//g, '-');
         $('.fromdate,.todate', $('#logs')).flatpickr({
             enableTime: false,
