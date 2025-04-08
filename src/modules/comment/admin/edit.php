@@ -73,7 +73,7 @@ if ($nv_Request->isset_request('save', 'post')) {
             }
         }
     }
-    nv_jsonOutput(['status' => 'ok', 'mess' => $nv_Lang->getModule('update_success')]);
+    nv_jsonOutput(['status' => 'ok', 'mess' => $nv_Lang->getModule('update_success'), 'redirect' => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name]);
 }
 
 if (empty($row) or !isset($site_mod_comm[$row['module']])) {

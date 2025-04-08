@@ -7,76 +7,9 @@
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
-if (document.getElementById('cmt-main')) {
-    document.getElementById('element_action_btn').addEventListener('click', e => {
-        e.preventDefault();
-        let btn = e.target;
-        if (btn.disabled) {
-            return;
-        }
-        let ctn = document.querySelector(btn.dataset.ctn), listid = [];
-        ctn.querySelectorAll('[data-toggle="checkSingle"]:checked').forEach(el => {
-            listid.push(el.value);
-        });
-        if (listid.length < 1) {
-            nvAlert(nv_please_check);
-            return;
-        }
-        let action = document.getElementById('element_action').value;
-        let checkss = document.getElementsByName('checkss')[0].value;
-        if (action === 'delete') {
-            nvConfirm(nv_is_del_confirm[0], () => {
-                btn.disabled = true;
-                document.getElementById('element_action').disabled = true;
-                fetch(script_name + "?" + nv_lang_variable + "=" + nv_lang_data + "&" + nv_name_variable + "=" + nv_module_name + "&" + nv_fc_variable + "=del&nocache=" + new Date().getTime(), {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                    body: 'list=' + listid.join(',') + '&checkss=' + checkss
-                })
-                .then(response => response.json())
-                .then(res => {
-                    btn.disabled = false;
-                    document.getElementById('element_action').disabled = false;
-                    if (res.status === 'ok') {
-                        location.reload();
-                    } else if (res.status === 'error') {
-                        nvToast(res.mess, 'error');
-                    } else {
-                        nvToast(nv_is_del_confirm[2], 'error');
-                    }
-                })
-                .catch(err => {
-                    btn.disabled = false;
-                    document.getElementById('element_action').disabled = false;
-                    nvToast(err.message, 'error');
-                    console.error(err);
-                });
-            });
-        } else if (action === 'enable' || action === 'disable') {
-            btn.disabled = true;
-            document.getElementById('element_action').disabled = true;
-            fetch(script_name + "?" + nv_lang_variable + "=" + nv_lang_data + "&" + nv_name_variable + "=" + nv_module_name + "&" + nv_fc_variable + "=active&nocache=" + new Date().getTime(), {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                body: 'list=' + listid.join(',') + '&active=' + (action === 'enable' ? 1 : 0) + '&checkss=' + checkss
-            })
-            .then(response => response.json())
-            .then(res => {
-                btn.disabled = false;
-                document.getElementById('element_action').disabled = false;
-                if (res.status === 'ok') {
-                    location.reload();
-                } else if (res.status === 'error') {
-                    nvToast(res.mess, 'error');
-                } else {
-                    nvToast(nv_is_del_confirm[2], 'error');
-                }
-            })
-        } else {
-            window.location.href = script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=' + action + '&listid=' + listid.join(',') + '&checkss=' + document.body.dataset.checksess;
-        }
-    });
-    document.addEventListener('DOMContentLoaded', () => {
+$(function() {
+    if ($('#cmt-main').length) {
+        let checkss = $('[name=checkss]').val();
         var fmt = nv_jsdate_post.replace(/dd/g, 'd').replace(/mm/g, 'm').replace(/yyyy/g, 'Y');
         $('#from_date,#to_date').flatpickr({
             enableTime: false,
@@ -89,26 +22,21 @@ if (document.getElementById('cmt-main')) {
                 }
             }
         });
-        document.getElementById('to-btn').addEventListener('click', function() {
-            document.getElementById('to_date').click();
+        $('#to-btn').on('click', function() {
+            $('#to_date').click();
         });
-        document.getElementById('from-btn').addEventListener('click', function() {
-            document.getElementById('from_date').click();
+        $('#from-btn').on('click', function() {
+            $('#from_date').click();
         });
-    
-        document.querySelectorAll("a.deleteone").forEach(element => {
-            element.addEventListener("click", event => {
-                event.preventDefault();
-                let checkss = document.getElementsByName('checkss')[0].value;
-                nvConfirm(nv_is_del_confirm[0], () => {
-                    var url = event.target.closest("a").getAttribute("href");
-                    fetch(url, {
-                        method: "POST",
-                        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                        body: 'checkss=' + checkss
-                    })
-                    .then(response => response.json())
-                    .then(res => {
+        $("a.deleteone").click(function() {
+            that = $(this);
+            nvConfirm(nv_is_del_confirm[0], function() {
+                var url = that.attr("href");
+                $.ajax({
+                    type: "POST",
+                    url: url,
+                    data: 'checkss=' + checkss,
+                    success: function(res) {
                         if (res.status === 'ok') {
                             location.reload();
                         } else if (res.status === 'error') {
@@ -116,71 +44,118 @@ if (document.getElementById('cmt-main')) {
                         } else {
                             nvToast(nv_is_del_confirm[2], 'error');
                         }
+                    }
+                })
+            })
+            return false;
+        });
+        $('#element_action_btn').click(function(e) {
+            e.preventDefault();
+            let btn = $(this);
+            if (btn.prop('disabled')) {
+                return;
+            }
+            let ctn = $(btn.data('ctn')), listid = [];
+            ctn.find('[data-toggle="checkSingle"]:checked').each(function() {
+                listid.push($(this).val());
+            });
+            if (listid.length < 1) {
+                nvAlert(nv_please_check);
+                return;
+            }
+            let action = document.getElementById('element_action').value;
+            if (action === 'delete') {
+                nvConfirm(nv_is_del_confirm[0], function() {
+                    btn.prop('disabled', true);
+                    $('#element_action').prop('disabled', true);
+                    $.ajax({
+                        type: 'POST',
+                        url: script_name + "?" + nv_lang_variable + "=" + nv_lang_data + "&" + nv_name_variable + "=" + nv_module_name + "&" + nv_fc_variable + "=del&nocache=" + new Date().getTime(),
+                        data: {
+                            list: listid.join(','),
+                            checkss: checkss
+                        },
+                        success: function(res) {
+                            btn.prop('disabled', false);
+                            $('#element_action').prop('disabled', false);
+                            if (res.status === 'ok') {
+                                location.reload();
+                            } else if (res.status === 'error') {
+                                nvToast(res.mess, 'error');
+                            } else {
+                                nvToast(nv_is_del_confirm[2], 'error');
+                            }
+                        },
+                        error: function(err) {
+                            btn.prop('disabled', false);
+                            $('#element_action').prop('disabled', false);
+                            nvToast(err.responseText, 'error');
+                            console.error(err);
+                        }
                     });
                 });
-            });
+            } else if (action === 'enable' || action === 'disable') {
+                btn.prop('disabled', true);
+                $('#element_action').prop('disabled', true);
+                $.ajax({
+                    type: 'POST',
+                    url: script_name + "?" + nv_lang_variable + "=" + nv_lang_data + "&" + nv_name_variable + "=" + nv_module_name + "&" + nv_fc_variable + "=active&nocache=" + new Date().getTime(),
+                    data: {
+                        list: listid.join(','),
+                        active: (action === 'enable' ? 1 : 0),
+                        checkss: checkss
+                    },
+                    success: function(res) {
+                        btn.prop('disabled', false);
+                        $('#element_action').prop('disabled', false);
+                        if (res.status === 'ok') {
+                            location.reload();
+                        } else if (res.status === 'error') {
+                            nvToast(res.mess, 'error');
+                        } else {
+                            nvToast(nv_is_del_confirm[2], 'error');
+                        }
+                    },
+                    error: function(err) {
+                        btn.prop('disabled', false);
+                        $('#element_action').prop('disabled', false);
+                        nvToast(err.responseText, 'error');
+                        console.error(err);
+                    }
+                });
+            }
         });
-    });
-}
-nv_change_active = cid => {
-    var new_status = document.getElementById('change_active_' + cid).checked ? 1 : 0;
-    let checkss = document.getElementsByName('checkss')[0].value;
-    nvConfirm(nv_is_change_act_confirm[0], () => {
-        nv_settimeout_disable('change_active_' + cid, 3000);
-        fetch(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=change_active&nocache=' + new Date().getTime(), {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-            body: 'change_active=1&cid=' + cid + '&new_status=' + new_status + '&checkss=' + checkss
-        })
-        .then(response => response.json())
-        .then(res => {
+    }
+    if ($('#cmt-edit').length) {
+        $('#post-file-remove').on('click', function() {
+            $('#post-file').val('');
+        });
+        $('#post-file-download').on('click', function() {
+            var file = $('#post-file').val();
+            if (file !== '') {
+                window.location = script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&downloadfile=' + encodeURIComponent(file);
+            }
+        });
+    }
+});
+
+function nv_change_active(cid) {
+    var new_status = $('#change_active_' + cid).is(':checked') ? 1 : 0;
+    let checkss = $('[name=checkss]').val();
+    nvConfirm(nv_is_change_act_confirm[0], function() {
+        var nv_timer = nv_settimeout_disable('change_active_' + cid, 3000);
+        $.post(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=change_active&nocache=' + new Date().getTime(), 'change_active=1&cid=' + cid + '&new_status=' + new_status + '&checkss=' + checkss, function(res) {
             if (res.status === 'ok') {
                 nvToast(res.mess, 'success');
             } else if (res.status === 'error') {
                 nvToast(res.mess, 'error');
-                ocument.getElementById('change_active_' + cid).checked = new_status ? false : true;
+                $('#change_active_' + cid).checked = new_status ? false : true;
             } else {
                 nvToast(nv_is_del_confirm[2], 'error');
-                ocument.getElementById('change_active_' + cid).checked = new_status ? false : true;
+                $('#change_active_' + cid).checked = new_status ? false : true;
             }
-        })
-    }, () => {
-        document.getElementById('change_active_' + cid).checked = new_status ? false : true;
+        });
+    }, function() {
+        $('#change_active_' + cid).prop('checked', new_status ? false : true);
     });
 }
-if (document.getElementById('cmt-edit')) {
-    document.addEventListener('DOMContentLoaded', () => {
-        document.getElementById('post-file-remove').addEventListener('click', () => {
-            document.getElementById('post-file').value = '';
-        });
-        document.getElementById('post-file-download').addEventListener('click', () => {
-        var file = document.getElementById('post-file').value;
-        if (file !== '') {
-            window.location = script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&downloadfile=' + encodeURIComponent(file);
-        }
-        });
-    });
-    document.getElementById('cmt-edit').onsubmit = e => {
-        e.preventDefault();
-        let btn = e.target.querySelector('button[type="submit"]');
-        if (btn.disabled) {
-            return;
-        }
-        btn.disabled = true;
-        fetch(e.target.action + '&nocache=' + new Date().getTime(), {
-            method: 'POST',
-            body: new FormData(e.target)
-        })
-        .then(response => response.json())
-        .then(res => {
-            btn.disabled = false;
-            if (res.status === 'ok') {
-                location.href = script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name;
-            } else if (res.status === 'error') {
-                nvToast(res.mess, 'error');
-            } else {
-                nvToast(nv_is_del_confirm[2], 'error');
-            }
-        })
-    }
-}    
