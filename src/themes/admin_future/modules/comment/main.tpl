@@ -96,7 +96,7 @@
                         <td><input data-toggle="checkSingle" name="checkSingle[]" type="checkbox" value="{$ROW.cid}" class="form-check-input m-0 align-middle"/></td>
                         <td>{$ROW.module}</td>
                         <td><a target="_blank" href="{$smarty.const.NV_BASE_ADMINURL}index.php?{$smarty.const.NV_LANG_VARIABLE}={$smarty.const.NV_LANG_DATA}&amp;{$smarty.const.NV_NAME_VARIABLE}={$ROW.module}&amp;{$smarty.const.NV_OP_VARIABLE}=view&amp;area={$ROW.area}&amp;id={$ROW.id}">{$ROW.title}</a></td>
-                        <td>{if $ROW.userid > 0}<a href="{$smarty.const.NV_BASE_ADMINURL}index.php?{$smarty.const.NV_LANG_VARIABLE}={$smarty.const.NV_LANG_DATA}&amp;{$smarty.const.NV_NAME_VARIABLE}={$ROW.module}&amp;{$smarty.const.NV_OP_VARIABLE}=edit&amp;userid={$ROW.userid}">{$ROW.post_email}</a>{/if}</td>
+                        <td>{if $ROW.userid > 0}<a href="{$smarty.const.NV_BASE_ADMINURL}index.php?{$smarty.const.NV_LANG_VARIABLE}={$smarty.const.NV_LANG_DATA}&amp;{$smarty.const.NV_NAME_VARIABLE}=users&amp;{$smarty.const.NV_OP_VARIABLE}=edit&amp;userid={$ROW.userid}">{$ROW.post_email}</a>{/if}</td>
                         <td class="text-center">
                             <input type="checkbox" name="activecheckbox" id="change_active_{$ROW.cid}" onclick="nv_change_active('{$ROW.cid}')" class="form-check-input m-0 align-middle"{if $ROW.status} checked="checked"{/if}>
                         </td>
