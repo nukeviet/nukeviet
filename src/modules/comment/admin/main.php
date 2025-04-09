@@ -53,7 +53,7 @@ $tpl->assign('OP', $op);
 $tpl->assign('FROM', $from);
 $tpl->assign('STYPE', $stype);
 $tpl->assign('SSTATUS', $sstatus);
-$tpl->assign('MODULE', $module);
+$tpl->assign('MODULE_UPLOAD', $module_upload);
 $tpl->assign('SITE_MOD_COMM', $site_mod_comm);
 $tpl->assign('PER_PAGE', $per_page);
 $tpl->assign('ARRAY_SEARCH', $array_search);
@@ -162,31 +162,13 @@ if (str_contains($sql, ':post_email')) {
 }
 $sth->execute();
 $array = [];
-while ([$cid, $module, $area, $id, $content, $attach, $userid, $post_name, $email, $status] = $sth->fetch(3)) {
-    if ($userid > 0) {
-        $email = '<a href="' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=users&amp;' . NV_OP_VARIABLE . '=edit&amp;userid=' . $userid . '"> ' . $email . '</a>';
-    }
-    $content = nv_br2nl($content);
-    $row = [
-        'cid' => $cid,
-        'post_name' => $post_name,
-        'email' => $email,
-        'title' => nv_clean60(strip_tags($content), 255),
-        'content' => $content,
-        'module' => $module,
-        'link' => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module . '&amp;' . NV_OP_VARIABLE . '=view&amp;area=' . $area . '&amp;id=' . $id,
-        'active' => $status ? 'checked="checked"' : '',
-        'status' => ($status == 1) ? 'check' : 'circle-o',
-        'linkedit' => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=edit&amp;cid=' . $cid,
-        'linkdelete' => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=del&amp;list=' . $cid
-    ];
-
-    if (!empty($attach)) {
-        $row['attach_link'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;downloadfile=' . urlencode(NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $attach);
-    }
-    $array[] = $row;
+$array = $sth->fetchAll();
+if (empty($array)) {
+    $array = [];
 }
-
+$sth->closeCursor();
+$tpl->registerPlugin('modifier', 'nv_clean60', 'nv_clean60');
+$tpl->registerPlugin('modifier', 'urlencode', 'urlencode');
 $tpl->assign('ARRAY_ROW', $array);
 $tpl->assign('GENERATE_PAGE', $generate_page);
 
