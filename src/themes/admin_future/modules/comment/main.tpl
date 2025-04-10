@@ -6,9 +6,9 @@
         <form action="{$smarty.const.NV_BASE_ADMINURL}index.php" method="get">
             <input type="hidden" name="{$smarty.const.NV_NAME_VARIABLE}" value="{$MODULE_NAME}">
             <input type="hidden" name="{$smarty.const.NV_OP_VARIABLE}" value="{$OP}">
-            <div class="row mb-3">
+            <div class="row mb-3 g-2">
                 <div class="col-6 col-md-3">
-                    <input type="text" value="{$FROM.q}" autofocus="autofocus" maxlength="64" name="q" class="form-control" placeholder="{$LANG->getModule('search_key')}" />
+                    <input type="text" value="{$FROM.q}" maxlength="64" name="q" class="form-control" placeholder="{$LANG->getModule('search_key')}">
                 </div>
                 <div class="col-6 col-md-3">
                     <select name="stype" class="form-select">
@@ -27,7 +27,7 @@
                     </select>
                 </div>
                 <div class="col-6 col-md-3">
-                    <select name="sstatus" class="form-select" style="margin-bottom: 10px">
+                    <select name="sstatus" class="form-select">
                         {foreach $ARRAY_STATUS_VIEW as $KEY => $VAL}
                         <option value="{$KEY}" {if $KEY == $SSTATUS}selected="selected"{/if}>{$VAL}</option>
                         {/foreach}
@@ -46,23 +46,21 @@
                 <div class="col-6 col-md-3">
                     <div class="input-group">
                         <input type="text" class="form-control" name="from_date" id="from_date" value="{$FROM.from_date}" readonly="readonly" placeholder="{$LANG->getModule('from_date')}">
-                        <span class="input-group-btn">
-                            <button class="btn btn-secondary" type="button" id="from-btn">
-                                <i class="fa-solid fa-calendar">&nbsp;</i>
-                            </button> </span>
+                        <button class="btn btn-secondary" type="button" id="from-btn">
+                            <i class="fa-solid fa-calendar">&nbsp;</i>
+                        </button>
                     </div>
                 </div>
                 <div class="col-6 col-md-3">
                     <div class="input-group">
                         <input type="text" class="form-control" name="to_date" id="to_date" value="{$FROM.to_date}" readonly="readonly" placeholder="{$LANG->getModule('to_date')}">
-                        <span class="input-group-btn">
-                            <button class="btn btn-secondary" type="button" id="to-btn">
-                                <i class="fa-solid fa-calendar">&nbsp;</i>
-                            </button> </span>
+                        <button class="btn btn-secondary" type="button" id="to-btn">
+                            <i class="fa-solid fa-calendar">&nbsp;</i>
+                        </button>
                     </div>
                 </div>
                 <div class="col-6 col-md-3">
-                    <input type="submit" value="{$LANG->getModule('search')}" class="btn btn-info" />
+                    <button class="btn btn-info">{$LANG->getModule('search')}</button>
                 </div>
             </div>
             <span class="form-text">{$LANG->getModule('search_note')}</span>
@@ -72,16 +70,16 @@
         <div class="table-responsive-lg table-card" id="list-cmt-items">
             <table class="table table-striped align-middle table-sticky mb-0">
                 <colgroup>
-                    <col style="width: 50px;"/>
-                    <col class="text-center" />
-                    <col class="text-center" />
-                    <col style="width: 200px;" />
-                    <col style="width: 100px;" />
-                    <col style="width: 250px;" />
+                    <col style="width: 1%;">
+                    <col style="width: 10%;">
+                    <col style="width: 40%;">
+                    <col style="width: 25%;">
+                    <col style="width: 5%;">
+                    <col style="width: 20%;">
                 </colgroup>
                 <thead>
                     <tr>
-                        <th class="text-nowrap"><input data-toggle="checkAll" name="checkAll[]" type="checkbox" class="form-check-input"/></th>
+                        <th class="text-nowrap"><input data-toggle="checkAll" name="checkAll[]" type="checkbox" class="form-check-input"></th>
                         <th class="text-nowrap">{$LANG->getModule('mod_name')}</th>
                         <th class="text-nowrap">{$LANG->getModule('content')}</th>
                         <th class="text-nowrap">{$LANG->getModule('email')}</th>
@@ -93,7 +91,7 @@
                     {foreach $ARRAY_ROW as $ROW}
                     {append var="ROW" value=$ROW.content|strip_tags|nv_clean60:255 index="title"}
                     <tr>
-                        <td><input data-toggle="checkSingle" name="checkSingle[]" type="checkbox" value="{$ROW.cid}" class="form-check-input m-0 align-middle"/></td>
+                        <td><input data-toggle="checkSingle" name="checkSingle[]" type="checkbox" value="{$ROW.cid}" class="form-check-input m-0 align-middle"></td>
                         <td>{$ROW.module}</td>
                         <td><a target="_blank" href="{$smarty.const.NV_BASE_ADMINURL}index.php?{$smarty.const.NV_LANG_VARIABLE}={$smarty.const.NV_LANG_DATA}&amp;{$smarty.const.NV_NAME_VARIABLE}={$ROW.module}&amp;{$smarty.const.NV_OP_VARIABLE}=view&amp;area={$ROW.area}&amp;id={$ROW.id}">{$ROW.title}</a></td>
                         <td>{if $ROW.userid > 0}<a href="{$smarty.const.NV_BASE_ADMINURL}index.php?{$smarty.const.NV_LANG_VARIABLE}={$smarty.const.NV_LANG_DATA}&amp;{$smarty.const.NV_NAME_VARIABLE}=users&amp;{$smarty.const.NV_OP_VARIABLE}=edit&amp;userid={$ROW.userid}">{$ROW.post_email}</a>{/if}</td>

@@ -1,9 +1,6 @@
 <form id="cmt-edit" method="post" class="g-3 ajax-submit" action="{$smarty.const.NV_BASE_ADMINURL}index.php?{$smarty.const.NV_LANG_VARIABLE}={$smarty.const.NV_LANG_DATA}&amp;{$smarty.const.NV_NAME_VARIABLE}={$MODULE_NAME}&amp;{$smarty.const.NV_OP_VARIABLE}={$OP}">
     <input type="hidden" name="checkss" value="{$CHECKSS}">
     <div class="card border-primary border-3 border-bottom-0 border-start-0 border-end-0">
-        <div class="card-header py-2 gap-2">
-            &nbsp;
-        </div>
         <div class="card-body">
             <div class="row mb-3">
                 <div class="col-sm-2 col-form-label text-sm-end">{$LANG->getModule('content')}</div>
@@ -16,11 +13,9 @@
                 <div class="col-sm-9 col-lg-8 col-xxl-6">
                     <div class="input-group">
                     <input class="form-control" type="text" name="attach" id="post-file" value="{$ROW.attach}" readonly="readonly" />
-                    <span class="input-group-btn">
-                        <button type="button" data-toggle="selectfile" data-target="post-file" data-path="{$smarty.const.NV_UPLOADS_DIR}/{$MODULE_UPLOAD}" data-currentpath="{$smarty.const.NV_UPLOADS_DIR}/{$MODULE_UPLOAD}/{$DIR}" data-type="file" class="btn btn-info" title="{$LANG->getGlobal('browse_file')}"><i class="fa-solid fa-folder-open"></i></button>
-                        <button id="post-file-download" class="btn btn-secondary" type="button" title="{$LANG->getModule('attach_download')}"><i class="fa-solid fa-file-arrow-down"></i>&nbsp;<span class="d-none d-lg-inline">{$LANG->getModule('attach_download')}</span></button>
-                        <button id="post-file-remove" class="btn btn-danger" type="button" title="{$LANG->getGlobal('delete')}"><i class="fa-solid fa-trash"></i>&nbsp;<span class="d-none d-lg-inline">{$LANG->getGlobal('delete')}</span></button>
-                    </span>
+                    <button type="button" data-toggle="selectfile" data-target="post-file" data-path="{$smarty.const.NV_UPLOADS_DIR}/{$MODULE_UPLOAD}" data-currentpath="{$smarty.const.NV_UPLOADS_DIR}/{$MODULE_UPLOAD}/{$DIR}" data-type="file" class="btn btn-info" title="{$LANG->getGlobal('browse_file')}" aria-label="{$LANG->getGlobal('browse_file')}"><i class="fa-solid fa-folder-open"></i></button>
+                    <button id="post-file-download" class="btn btn-secondary" type="button" title="{$LANG->getModule('attach_download')}" aria-label="{$LANG->getModule('attach_download')}"><i class="fa-solid fa-file-arrow-down"></i>&nbsp;<span class="d-none d-lg-inline">{$LANG->getModule('attach_download')}</span></button>
+                    <button id="post-file-remove" class="btn btn-danger" type="button" title="{$LANG->getGlobal('delete')}"><i class="fa-solid fa-trash"></i>&nbsp;<span class="d-none d-lg-inline">{$LANG->getGlobal('delete')}</span></button>
                 </div>
                 </div>
             </div>

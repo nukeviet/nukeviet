@@ -21,8 +21,8 @@ $per_page = $nv_Request->get_page('per_page', 'get', 20);
 $stype = $nv_Request->get_string('stype', 'get', '');
 $sstatus = $nv_Request->get_title('sstatus', 'get', 2);
 $from['q'] = $nv_Request->get_title('q', 'get', '');
-$from['from_date'] = $nv_Request->get_title('from_date', 'get', '');
-$from['to_date'] = $nv_Request->get_title('to_date', 'get', '');
+$from['from_date'] = nv_d2u_get($nv_Request->get_title('from_date', 'get', '')) ?: '';
+$from['to_date'] = nv_d2u_get($nv_Request->get_title('to_date', 'get', '')) ?: '';
 
 $array_search = [
     'content' => $nv_Lang->getModule('search_content'),
@@ -82,15 +82,14 @@ if (!empty($module) and isset($site_mod_comm[$module])) {
         $array_where[] = '( ' . implode(' OR ', $mod_where) . ' )';
     }
 }
-
-if (preg_match('/^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})$/', $from['from_date'], $m)) {
-    $array_where[] = 'post_time > ' . mktime(0, 0, 0, $m[2], $m[1], $m[3]);
-    $base_url .= '&amp;from_date=' . $from['from_date'];
+if (!empty($from['from_date'])) {
+    $array_where[] = 'post_time > ' . $from['from_date'];
+    $base_url .= '&amp;from_date=' . nv_u2d_get($from['from_date']);
 }
 
-if (preg_match('/^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})$/', $from['to_date'], $m)) {
-    $array_where[] = 'post_time < ' . mktime(23, 59, 59, $m[2], $m[1], $m[3]);
-    $base_url .= '&amp;to_date=' . $from['to_date'];
+if (!empty($from['to_date'])) {
+    $array_where[] = 'post_time > ' . $from['to_date'];
+    $base_url .= '&amp;to_date=' . nv_u2d_get($from['to_date']);
 }
 
 if ($sstatus == 0 or $sstatus == 1) {

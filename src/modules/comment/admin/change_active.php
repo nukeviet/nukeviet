@@ -45,6 +45,4 @@ if ($new_status) {
 
 $nv_Cache->delMod($module_name);
 
-include NV_ROOTDIR . '/includes/header.php';
 nv_jsonOutput(['status' => 'ok', 'mess' => $nv_Lang->getModule('update_success')]);
-include NV_ROOTDIR . '/includes/footer.php';
