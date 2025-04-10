@@ -68,15 +68,14 @@ if ($nv_Request->isset_request('save', 'post') and isset($site_mod_comm[$mod_nam
     nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&rand=' . nv_genpass());
 }
 
-$xtpl = new XTemplate($op . '.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-$xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
-$xtpl->assign('NV_LANG_VARIABLE', NV_LANG_VARIABLE);
-$xtpl->assign('NV_LANG_DATA', NV_LANG_DATA);
-$xtpl->assign('NV_BASE_ADMINURL', NV_BASE_ADMINURL);
-$xtpl->assign('NV_NAME_VARIABLE', NV_NAME_VARIABLE);
-$xtpl->assign('NV_OP_VARIABLE', NV_OP_VARIABLE);
-$xtpl->assign('MODULE_NAME', $module_name);
-$xtpl->assign('OP', $op);
+$tpl = new \NukeViet\Template\NVSmarty();
+$tpl->setTemplateDir(get_module_tpl_dir('config.tpl'));
+$tpl->assign('LANG', $nv_Lang);
+$tpl->assign('MODULE_NAME', $module_name);
+$tpl->assign('OP', $op);
+$tpl->assign('SITE_MOD_COMM', $site_mod_comm);
+$tpl->assign('MODULE_CONFIG', $module_config);
+$tpl->assign('GROUPS', $groups_list);
 
 if (!empty($mod_name)) {
     $xtpl->assign('MOD_NAME', $mod_name);
@@ -167,48 +166,13 @@ if (!empty($mod_name)) {
     $page_title = $nv_Lang->getModule('config_mod_name', $site_mod_comm[$mod_name]['custom_title']);
 } else {
     $page_title = $nv_Lang->getModule('config');
-
-    $weight = 0;
-    foreach ($site_mod_comm as $mod_name => $row_mod) {
-        $admin_title = (!empty($row_mod['admin_title'])) ? $row_mod['admin_title'] : $row_mod['custom_title'];
-
-        $array_allowed_comm = (!empty($module_config[$mod_name]['allowed_comm'])) ? array_map('intval', explode(',', $module_config[$mod_name]['allowed_comm'])) : [];
-        $array_view_comm = (!empty($module_config[$mod_name]['view_comm'])) ? explode(',', $module_config[$mod_name]['view_comm']) : [];
-
-        if (in_array(-1, $array_allowed_comm, true)) {
-            $allowed_comm = $nv_Lang->getModule('allowed_comm_item');
-        } else {
-            $allowed_comm = [];
-            foreach ($array_allowed_comm as $_group_id) {
-                $allowed_comm[] = $groups_list[$_group_id];
-            }
-            $allowed_comm = implode('<br>', $allowed_comm);
-        }
-
-        $view_comm = [];
-        foreach ($array_view_comm as $_group_id) {
-            $view_comm[] = $groups_list[$_group_id];
-        }
-        $view_comm = implode('<br>', $view_comm);
-
-        $row = [];
-        $row['weight'] = ++$weight;
-        $row['mod_name'] = $mod_name;
-        $row['admin_title'] = $admin_title;
-        $row['allowed_comm'] = $allowed_comm;
-        $row['view_comm'] = $view_comm;
-        $row['auto_postcomm'] = $nv_Lang->getModule('auto_postcomm_' . $module_config[$mod_name]['auto_postcomm']);
-        $row['activecomm'] = $module_config[$mod_name]['activecomm'] ? 'check' : 'circle-o';
-        $row['emailcomm'] = $module_config[$mod_name]['emailcomm'] ? 'check' : 'circle-o';
-        $xtpl->assign('ROW', $row);
-        $xtpl->parse('main.list.loop');
-    }
-
-    $xtpl->parse('main.list');
+    $tpl->registerPlugin('modifier', 'intval', 'intval');
+    $tpl->registerPlugin('modifier', 'in_array', 'in_array');
 }
 
-$xtpl->parse('main');
-$contents = $xtpl->text('main');
+$contents = $tpl->fetch('config.tpl');
+// $xtpl->parse('main');
+// $contents = $xtpl->text('main');
 
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_admin_theme($contents);
