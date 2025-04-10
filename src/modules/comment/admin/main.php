@@ -21,8 +21,8 @@ $per_page = $nv_Request->get_page('per_page', 'get', 20);
 $stype = $nv_Request->get_string('stype', 'get', '');
 $sstatus = $nv_Request->get_title('sstatus', 'get', 2);
 $from['q'] = $nv_Request->get_title('q', 'get', '');
-$from['from_date'] = nv_d2u_get($nv_Request->get_title('from_date', 'get', '')) ?: '';
-$from['to_date'] = nv_d2u_get($nv_Request->get_title('to_date', 'get', '')) ?: '';
+$from['from_date'] = nv_d2u_get($nv_Request->get_title('from_date', 'get', ''));
+$from['to_date'] = nv_d2u_get($nv_Request->get_title('to_date', 'get', ''));
 
 $array_search = [
     'content' => $nv_Lang->getModule('search_content'),
@@ -42,23 +42,6 @@ if (!in_array($stype, array_keys($array_search), true)) {
 if (!in_array($sstatus, array_keys($array_status_view), true)) {
     $sstatus = 2;
 }
-
-$checkss = md5(NV_CHECK_SESSION . '_' . $module_name . '_' . $admin_info['userid']);
-
-$tpl = new \NukeViet\Template\NVSmarty();
-$tpl->setTemplateDir(get_module_tpl_dir('main.tpl'));
-$tpl->assign('LANG', $nv_Lang);
-$tpl->assign('MODULE_NAME', $module_name);
-$tpl->assign('OP', $op);
-$tpl->assign('FROM', $from);
-$tpl->assign('STYPE', $stype);
-$tpl->assign('SSTATUS', $sstatus);
-$tpl->assign('MODULE_UPLOAD', $module_upload);
-$tpl->assign('SITE_MOD_COMM', $site_mod_comm);
-$tpl->assign('PER_PAGE', $per_page);
-$tpl->assign('ARRAY_SEARCH', $array_search);
-$tpl->assign('ARRAY_STATUS_VIEW', $array_status_view);
-$tpl->assign('CHECKSS', $checkss);
 
 $base_url = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;per_page=' . $per_page;
 
@@ -166,10 +149,30 @@ if (empty($array)) {
     $array = [];
 }
 $sth->closeCursor();
-$tpl->registerPlugin('modifier', 'nv_clean60', 'nv_clean60');
-$tpl->registerPlugin('modifier', 'urlencode', 'urlencode');
+$checkss = md5(NV_CHECK_SESSION . '_' . $module_name . '_' . $admin_info['userid']);
+$from['from_date'] = nv_u2d_get($from['from_date']);
+$from['to_date'] = nv_u2d_get($from['to_date']);
+
+$tpl = new \NukeViet\Template\NVSmarty();
+$tpl->setTemplateDir(get_module_tpl_dir('main.tpl'));
+$tpl->assign('LANG', $nv_Lang);
+$tpl->assign('MODULE_NAME', $module_name);
+$tpl->assign('OP', $op);
+$tpl->assign('FROM', $from);
+$tpl->assign('STYPE', $stype);
+$tpl->assign('SSTATUS', $sstatus);
+$tpl->assign('MODULE_UPLOAD', $module_upload);
+$tpl->assign('SITE_MOD_COMM', $site_mod_comm);
+$tpl->assign('PER_PAGE', $per_page);
+$tpl->assign('ARRAY_SEARCH', $array_search);
+$tpl->assign('ARRAY_STATUS_VIEW', $array_status_view);
+$tpl->assign('CHECKSS', $checkss);
 $tpl->assign('ARRAY_ROW', $array);
 $tpl->assign('GENERATE_PAGE', $generate_page);
+
+$tpl->registerPlugin('modifier', 'nv_clean60', 'nv_clean60');
+$tpl->registerPlugin('modifier', 'urlencode', 'urlencode');
+
 
 $contents = $tpl->fetch('main.tpl');
 
