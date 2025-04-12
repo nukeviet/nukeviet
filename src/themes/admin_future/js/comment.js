@@ -10,7 +10,7 @@
 $(function() {
     if ($('#cmt-main').length) {
         let checkss = $('[name=checkss]').val();
-        var fmt = nv_jsdate_post.replace(/dd/g, 'd').replace(/mm/g, 'm').replace(/yyyy/g, 'Y');
+        var fmt = nv_jsdate_get.replace(/dd/g, 'd').replace(/mm/g, 'm').replace(/yyyy/g, 'Y');
         $('#from_date,#to_date').flatpickr({
             enableTime: false,
             dateFormat: fmt,

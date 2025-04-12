@@ -8,18 +8,18 @@
             <input type="hidden" name="{$smarty.const.NV_OP_VARIABLE}" value="{$OP}">
             <div class="row mb-3 g-2">
                 <div class="col-6 col-md-3">
-                    <input type="text" value="{$FROM.q}" maxlength="64" name="q" class="form-control" placeholder="{$LANG->getModule('search_key')}">
+                    <input type="text" value="{$FROM.q}" maxlength="64" name="q" class="form-control" placeholder="{$LANG->getModule('search_key')}" aria-label="{$LANG->getModule('search_key')}">
                 </div>
                 <div class="col-6 col-md-3">
-                    <select name="stype" class="form-select">
+                    <select name="stype" class="form-select" aria-label="{$LANG->getModule('search_type')}"
                         <option value="">{$LANG->getModule('search_type')}</option>
                         {foreach $ARRAY_SEARCH as $KEY => $VAL}
-                        <option value="$KEY" {if $KEY == $STYPE}selected="selected"{/if}>{$VAL}</option>
+                        <option value="{$KEY}" {if $KEY == $STYPE}selected="selected"{/if}>{$VAL}</option>
                         {/foreach}
                     </select>
                 </div>
                 <div class="col-6 col-md-3">
-                    <select name="module" class="form-select">
+                    <select name="module" class="form-select" aria-label="{$LANG->getModule('search_module')}">
                         <option value="" {if $MODULE == ''}selected="selected"{/if}>{$LANG->getModule('search_module_all')}</option>
                         {foreach $SITE_MOD_COMM as $KEY => $VAL}
                         <option value="{$KEY}" {if $KEY == $MODULE}selected="selected"{/if} >{$VAL.admin_title ?: $VAL.custom_title}</option>
@@ -27,14 +27,14 @@
                     </select>
                 </div>
                 <div class="col-6 col-md-3">
-                    <select name="sstatus" class="form-select">
+                    <select name="sstatus" class="form-select" aria-label="{$LANG->getModule('search_status')}">
                         {foreach $ARRAY_STATUS_VIEW as $KEY => $VAL}
                         <option value="{$KEY}" {if $KEY == $SSTATUS}selected="selected"{/if}>{$VAL}</option>
                         {/foreach}
                     </select>
                 </div>
                 <div class="col-6 col-md-3">
-                    <select name="per_page" class="form-select">
+                    <select name="per_page" class="form-select" aria-label="{$LANG->getModule('search_per_page')}">
                         <option value="">{$LANG->getModule('search_per_page')}</option>
                         {assign var="I" value=15}
                         {while $I < 100}
@@ -45,17 +45,17 @@
                 </div>
                 <div class="col-6 col-md-3">
                     <div class="input-group">
-                        <input type="text" class="form-control" name="from_date" id="from_date" value="{$FROM.from_date}" readonly="readonly" placeholder="{$LANG->getModule('from_date')}">
-                        <button class="btn btn-secondary" type="button" id="from-btn">
-                            <i class="fa-solid fa-calendar">&nbsp;</i>
+                        <input type="text" class="form-control" name="from_date" id="from_date" value="{$FROM.from_date}" readonly="readonly" placeholder="{$LANG->getModule('from_date')}" aria-label="{$LANG->getModule('from_date')}">
+                        <button class="btn btn-secondary" type="button" id="from-btn" aria-label="{$LANG->getModule('from_date')}" aria-describedby="button-addon2">
+                            <i class="fa-solid fa-calendar"></i>
                         </button>
                     </div>
                 </div>
                 <div class="col-6 col-md-3">
                     <div class="input-group">
-                        <input type="text" class="form-control" name="to_date" id="to_date" value="{$FROM.to_date}" readonly="readonly" placeholder="{$LANG->getModule('to_date')}">
-                        <button class="btn btn-secondary" type="button" id="to-btn">
-                            <i class="fa-solid fa-calendar">&nbsp;</i>
+                        <input type="text" class="form-control" name="to_date" id="to_date" value="{$FROM.to_date}" readonly="readonly" placeholder="{$LANG->getModule('to_date')}" aria-label="{$LANG->getModule('to_date')}">
+                        <button class="btn btn-secondary" type="button" id="to-btn" aria-label="{$LANG->getModule('to_date')}" aria-describedby="button-addon2">
+                            <i class="fa-solid fa-calendar"></i>
                         </button>
                     </div>
                 </div>

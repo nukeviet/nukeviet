@@ -23,7 +23,6 @@ $sstatus = $nv_Request->get_title('sstatus', 'get', 2);
 $from['q'] = $nv_Request->get_title('q', 'get', '');
 $from['from_date'] = nv_d2u_get($nv_Request->get_title('from_date', 'get', ''));
 $from['to_date'] = nv_d2u_get($nv_Request->get_title('to_date', 'get', ''));
-
 $array_search = [
     'content' => $nv_Lang->getModule('search_content'),
     'post_name' => $nv_Lang->getModule('search_post_name'),
@@ -39,7 +38,7 @@ if (!in_array($stype, array_keys($array_search), true)) {
     $stype = '';
 }
 
-if (!in_array($sstatus, array_keys($array_status_view), true)) {
+if (!in_array($sstatus, array_keys($array_status_view))) {
     $sstatus = 2;
 }
 
@@ -71,7 +70,7 @@ if (!empty($from['from_date'])) {
 }
 
 if (!empty($from['to_date'])) {
-    $array_where[] = 'post_time > ' . $from['to_date'];
+    $array_where[] = 'post_time < ' . $from['to_date'];
     $base_url .= '&amp;to_date=' . nv_u2d_get($from['to_date']);
 }
 
@@ -161,6 +160,7 @@ $tpl->assign('OP', $op);
 $tpl->assign('FROM', $from);
 $tpl->assign('STYPE', $stype);
 $tpl->assign('SSTATUS', $sstatus);
+$tpl->assign('MODULE', $module);
 $tpl->assign('MODULE_UPLOAD', $module_upload);
 $tpl->assign('SITE_MOD_COMM', $site_mod_comm);
 $tpl->assign('PER_PAGE', $per_page);
