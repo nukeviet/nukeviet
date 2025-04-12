@@ -22,13 +22,21 @@ $tpl->assign('MODULE_NAME', $module_name);
 $tpl->assign('OP', $op);
 
 $array_config = [];
-if ($nv_Request->isset_request('save', 'post')) {
+if ($nv_Request->isset_request('checkss', 'post')) {
+    if ($nv_Request->get_title('checkss', 'post', '') !== NV_CHECK_SESSION) {
+        nv_jsonOutput([
+            'status' => 'error',
+            'mess' => 'Error session!!!'
+        ]);
+    }
+
+    //Đoạn xử lý lưu cấu hình ở đây
     $array_config['difftimeout'] = $nv_Request->get_int('difftimeout', 'post', 0);
 
     empty($array_config['difftimeout']) && $array_config['difftimeout'] = 1;
     $array_config['difftimeout'] *= 3600;
 
-    $sth = $db->prepare('UPDATE ' . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = '" . NV_LANG_DATA . "' AND module = '" . $module_names . "' AND config_name = :config_name");
+    $sth = $db->prepare('UPDATE ' . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = '" . NV_LANG_DATA . "' AND module = '" . $module_name . "' AND config_name = :config_name");
     foreach ($array_config as $config_name => $config_value) {
         $sth->bindParam(':config_name', $config_name, PDO::PARAM_STR, 30);
         $sth->bindParam(':config_value', $config_value, PDO::PARAM_STR);
@@ -40,10 +48,8 @@ if ($nv_Request->isset_request('save', 'post')) {
 
     nv_jsonOutput([
         'status' => 'success',
-        'mess' => $nv_Lang->getModule('save_success')
+        'mess' => $nv_Lang->getGlobal('save_success')
     ]);
-
-    nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op);
 }
 
 $array_config = $module_config[$module_name];
