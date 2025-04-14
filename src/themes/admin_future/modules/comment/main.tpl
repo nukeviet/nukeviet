@@ -45,16 +45,16 @@
                 </div>
                 <div class="col-6 col-md-3">
                     <div class="input-group">
-                        <input type="text" class="form-control" name="from_date" id="from_date" value="{$FROM.from_date}" readonly="readonly" placeholder="{$LANG->getModule('from_date')}" aria-label="{$LANG->getModule('from_date')}">
-                        <button class="btn btn-secondary" type="button" id="from-btn" aria-label="{$LANG->getModule('from_date')}" aria-describedby="button-addon2">
+                        <input type="text" class="form-control" name="from_date" id="from_date" value="{$FROM.from_date}" readonly="readonly" placeholder="{$LANG->getModule('from_date')}" aria-label="{$LANG->getModule('from_date')}" aria-describedby="from-btn">
+                        <button class="btn btn-secondary" type="button" id="from-btn" aria-label="{$LANG->getModule('from_date')}">
                             <i class="fa-solid fa-calendar"></i>
                         </button>
                     </div>
                 </div>
                 <div class="col-6 col-md-3">
                     <div class="input-group">
-                        <input type="text" class="form-control" name="to_date" id="to_date" value="{$FROM.to_date}" readonly="readonly" placeholder="{$LANG->getModule('to_date')}" aria-label="{$LANG->getModule('to_date')}">
-                        <button class="btn btn-secondary" type="button" id="to-btn" aria-label="{$LANG->getModule('to_date')}" aria-describedby="button-addon2">
+                        <input type="text" class="form-control" name="to_date" id="to_date" value="{$FROM.to_date}" readonly="readonly" placeholder="{$LANG->getModule('to_date')}" aria-label="{$LANG->getModule('to_date')}" aria-describedby="to-btn">
+                        <button class="btn btn-secondary" type="button" id="to-btn" aria-label="{$LANG->getModule('to_date')}">
                             <i class="fa-solid fa-calendar"></i>
                         </button>
                     </div>
