@@ -137,6 +137,23 @@ $(function() {
             }
         });
     }
+    if ($('#cmt-config').length) {
+        $('[data-mod]').on('click', function() {
+            var mod = $(this).data('mod');
+            $.post(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=config&mod_name=' + mod, function(res) {
+                if (res.status === 'ok') {
+                    $('#config_comm_body').html(res.html);
+                    $('#config_comm_label').html(res.title);
+                    $('#config_comm_modal').modal('show');
+                } else {
+                    nvToast(nv_is_del_confirm[2], 'error');
+                }
+            });
+        });
+        $('#config_comm_submit').on('click', function() {
+            $('#comm-cf-form').submit();
+        });
+    }
 });
 
 function nv_change_active(cid) {
