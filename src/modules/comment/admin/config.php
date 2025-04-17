@@ -109,22 +109,23 @@ if (!empty($mod_name)) {
         'title' => $page_title,
         'html' => $contents
     ]);
-} else {
-    $tpl = new \NukeViet\Template\NVSmarty();
-    $tpl->setTemplateDir(get_module_tpl_dir('config.tpl'));
-    $tpl->assign('LANG', $nv_Lang);
-    $tpl->assign('MODULE_NAME', $module_name);
-    $tpl->assign('OP', $op);
-    $tpl->assign('SITE_MOD_COMM', $site_mod_comm);
-    $tpl->assign('MODULE_CONFIG', $module_config);
-    $tpl->assign('GROUPS', $groups_list);
-
-    $page_title = $nv_Lang->getModule('config');
-    $tpl->registerPlugin('modifier', 'in_array', 'in_array');
-    $tpl->registerPlugin('modifier', 'intval', 'intval');
-    $tpl->registerPlugin('modifier', 'array_map', 'array_map');
-    $contents = $tpl->fetch('config.tpl');
 }
+
+$tpl = new \NukeViet\Template\NVSmarty();
+$tpl->setTemplateDir(get_module_tpl_dir('config.tpl'));
+$tpl->assign('LANG', $nv_Lang);
+$tpl->assign('MODULE_NAME', $module_name);
+$tpl->assign('OP', $op);
+$tpl->assign('SITE_MOD_COMM', $site_mod_comm);
+$tpl->assign('MODULE_CONFIG', $module_config);
+$tpl->assign('GROUPS', $groups_list);
+
+$page_title = $nv_Lang->getModule('config');
+$tpl->registerPlugin('modifier', 'in_array', 'in_array');
+$tpl->registerPlugin('modifier', 'intval', 'intval');
+$tpl->registerPlugin('modifier', 'array_map', 'array_map');
+$contents = $tpl->fetch('config.tpl');
+
 
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_admin_theme($contents);

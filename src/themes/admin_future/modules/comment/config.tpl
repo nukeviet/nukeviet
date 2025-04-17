@@ -1,17 +1,16 @@
 <div class="card" id="cmt-config">
-    <div class="card-body">
-        <div class="table-responsive table-card">
-            <table class="table table-striped table-bordered table-hover">
+    <div class="card-body pt-4">
+        <div class="table-responsive-lg table-card">
+            <table class="table table-striped align-middle table-sticky mb-1">
                 <thead>
-                    <tr class="text-center">
-                        <th class="text-nowrap">{$LANG->getModule('weight')}</th>
-                        <th class="text-nowrap">{$LANG->getModule('mod_name')}</th>
-                        <th class="text-nowrap">{$LANG->getModule('activecomm')}</th>
-                        <th class="text-nowrap">{$LANG->getModule('allowed_comm')}</th>
-                        <th class="text-nowrap">{$LANG->getModule('view_comm')}</th>
-                        <th class="text-nowrap">{$LANG->getModule('auto_postcomm')}</th>
-                        <th class="text-nowrap">{$LANG->getModule('emailcomm')}</th>
-                        <th class="text-nowrap">{$LANG->getModule('funcs')}</th>
+                    <tr>
+                        <th class="text-nowrap text-center" style="width: 1%;">{$LANG->getModule('weight')}</th>
+                        <th class="text-nowrap" style="width: 20%;">{$LANG->getModule('mod_name')}</th>
+                        <th class="text-nowrap" style="width: 20%;">{$LANG->getModule('allowed_comm')}</th>
+                        <th class="text-nowrap" style="width: 20%;">{$LANG->getModule('view_comm')}</th>
+                        <th class="text-nowrap" style="width: 15%;">{$LANG->getModule('auto_postcomm_s')}</th>
+                        <th class="text-nowrap" style="width: 30%;">{$LANG->getModule('config')}</th>
+                        <th class="text-nowrap text-center" style="width: 4%;">{$LANG->getModule('funcs')}</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -48,12 +47,20 @@
                     <tr>
                         <td class="text-center">{$WEIGHT}</td>
                         <td>{$ROW.custom_title}</td>
-                        <td class="text-center"><i class="fa-solid fa-{if $MODULE_CONFIG.$MOD.activecomm}check{else}xmark{/if} fa-lg"></i></td>
                         <td>{$ROW.allowed_comm}</td>
                         <td>{$ROW.view_comm}</td>
                         <td>{$LANG->getModule('auto_postcomm_'|cat:$MODULE_CONFIG.$MOD.auto_postcomm)}</td>
-                        <td class="text-center"><i class="fa-solid fa-{if $MODULE_CONFIG.$MOD.emailcomm}check{else}xmark{/if} fa-lg"></i></td>
-                        <td class="text-center text-nowrap"><button class="btn btn-secondary" data-mod="{$MOD}"><i class="fa-solid fa-edit fa-lg"></i>&nbsp;{$LANG->getModule('edit')}</button></td>
+                        <td>
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" role="switch" id="activecomm_{$MOD}" disabled {if $MODULE_CONFIG.$MOD.activecomm}checked{/if}>
+                                <label class="form-check-label" for="activecomm_{$MOD}">{$LANG->getModule('activecomm')}</label>
+                            </div>
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" role="switch" id="emailcomm_{$MOD}" disabled {if $MODULE_CONFIG.$MOD.emailcomm}checked{/if}>
+                                <label class="form-check-label" for="emailcomm_{$MOD}">{$LANG->getModule('emailcomm')}</label>
+                            </div>
+                        </td>
+                        <td class="text-center text-nowrap"><button class="btn btn-secondary" data-mod="{$MOD}"><i class="fa-solid fa-pencil"></i>&nbsp;{$LANG->getModule('edit')}</button></td>
                     </tr>
                     {assign var="WEIGHT" value=$WEIGHT+1}
                     {/foreach}
@@ -69,9 +76,7 @@
                 <div class="modal-title h5" id="config_comm_label"></div>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="{$LANG->getGlobal('close')}"></button>
             </div>
-            <div class="modal-body">
-                <div class="container-fluid" id="config_comm_body"></div>
-            </div>
+            <div class="modal-body" id="config_comm_body"></div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{$LANG->getGlobal('close')}</button>
                 <button type="button" class="btn btn-primary" id="config_comm_submit">{$LANG->getGlobal('submit')}</button>
