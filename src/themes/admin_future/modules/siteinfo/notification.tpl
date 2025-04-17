@@ -9,7 +9,7 @@
             <input type="hidden" name="{$smarty.const.NV_LANG_VARIABLE}" value="{$smarty.const.NV_LANG_DATA}">
             <input type="hidden" name="{$smarty.const.NV_NAME_VARIABLE}" value="{$MODULE_NAME}">
             <input type="hidden" name="{$smarty.const.NV_OP_VARIABLE}" value="{$OP}">
-            <div class="row g-3 flex-nowrap">
+            <div class="row g-3 flex-nowrap align-items-end">
                 <div class="col-auto flex-fill flex-md-grow-0 flex-md-shrink-0">
                     <label class="form-label" for="element_v">{$LANG->getGlobal('status')}:</label>
                     <select class="form-select" id="element_v" name="v">
@@ -19,7 +19,6 @@
                     </select>
                 </div>
                 <div class="flex-grow-0 flex-shrink-1 w-auto">
-                    <label class="form-label d-block">&nbsp;</label>
                     <button type="submit" class="btn btn-primary text-nowrap"><i class="fa-solid fa-magnifying-glass"></i> {$LANG->getModule('log_view')}</button>
                 </div>
             </div>
@@ -41,8 +40,8 @@
                 </thead>
                 <tbody>
                     {foreach from=$DATA item=row}
-                    <tr class="notilist-items"{if not $row.view} title="{$LANG->getModule('notification_s1')}"{/if}>
-                        <td{if not $row.view} class="item-unread"{/if}>
+                    <tr class="notilist-items" data-viewed="{$row.view}" {if not $row.view} title="{$LANG->getModule('notification_s1')}"{/if}>
+                        <td{if not $row.view} class="item-unread"{/if} data-td="status">
                             <input class="form-check-input m-0 mt-2 align-middle" type="checkbox" data-toggle="checkSingle" name="idcheck[]" value="{$row.id}" aria-label="{$LANG->getGlobal('toggle_checksingle')}">
                         </td>
                         <td>
@@ -62,9 +61,13 @@
                                 </div>
                                 <div class="flex-fill">
                                     {$row.title}
+                                    {if not empty($row.link)}
+                                    <div class="mt-1">
+                                        <a href="{$row.link}" target="_blank" data-toggle="openNotiLink" data-id="{$row.id}"><i class="fa-solid fa-arrow-up-right-from-square" data-icon="fa-arrow-up-right-from-square"></i> {$LANG->getModule('open_link')}</a>
+                                    </div>
+                                    {/if}
                                 </div>
                             </div>
-
                         </td>
                         <td>
                             {$row.send_from}
@@ -90,7 +93,7 @@
         <div class="d-flex flex-wrap justify-content-between align-items-center">
             <div class="d-flex flex-wrap flex-sm-nowrap align-items-center">
                 <div class="me-2">
-                    <input type="checkbox" data-toggle="checkAll" class="form-check-input m-0 align-middle" aria-label="{$LANG->getGlobal('toggle_checkall')}">
+                    <input type="checkbox" data-toggle="checkAll" name="check_all[]" class="form-check-input m-0 align-middle" aria-label="{$LANG->getGlobal('toggle_checkall')}">
                 </div>
                 <div class="input-group me-1 my-1">
                     <div class="dropdown">

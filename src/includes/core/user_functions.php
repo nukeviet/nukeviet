@@ -964,7 +964,7 @@ function nv_admin_menu()
 
     $enable_drag = false;
     if (defined('NV_IS_SPADMIN')) {
-        $sql = 'SELECT COUNT(*) AS count FROM ' . $db_config['dbsystem'] . '.' . NV_AUTHORS_GLOBALTABLE . '_module WHERE act_' . $admin_info['level'] . ' = 1 AND module=\'themes\'';
+        $sql = 'SELECT COUNT(*) AS count FROM ' . NV_AUTHORS_GLOBALTABLE . '_module WHERE act_' . $admin_info['level'] . ' = 1 AND module=\'themes\'';
         $list = $nv_Cache->db($sql, '', 'authors');
         if (!empty($list[0]['count'])) {
             $enable_drag = true;

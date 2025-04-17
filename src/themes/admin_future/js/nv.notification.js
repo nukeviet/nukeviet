@@ -322,7 +322,11 @@ $(function() {
                         'cf': data.data.count_formatted,
                         't': new Date().getTime()
                     }), 365);
-                    window.location = $this.attr('href');
+                    // Chuyển hướng nếu link hợp lệ
+                    const href = $this.attr('href');
+                    if (href && href.trim() !== '' && href !== '#' && !href.startsWith('javascript:')) {
+                        window.location = href;
+                    }
                 },
                 error: function(xhr, text, err) {
                     $('.loader', ctn).addClass('d-none');
