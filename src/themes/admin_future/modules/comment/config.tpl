@@ -6,10 +6,10 @@
                     <tr>
                         <th class="text-nowrap text-center" style="width: 1%;">{$LANG->getModule('weight')}</th>
                         <th class="text-nowrap" style="width: 20%;">{$LANG->getModule('mod_name')}</th>
-                        <th class="text-nowrap" style="width: 20%;">{$LANG->getModule('allowed_comm')}</th>
-                        <th class="text-nowrap" style="width: 20%;">{$LANG->getModule('view_comm')}</th>
+                        <th class="text-nowrap" style="width: 25%;">{$LANG->getModule('allowed_comm')}</th>
+                        <th class="text-nowrap" style="width: 25%;">{$LANG->getModule('view_comm')}</th>
                         <th class="text-nowrap" style="width: 15%;">{$LANG->getModule('auto_postcomm_s')}</th>
-                        <th class="text-nowrap" style="width: 30%;">{$LANG->getModule('config')}</th>
+                        <th class="text-nowrap" style="width: 10%;">{$LANG->getModule('config')}</th>
                         <th class="text-nowrap text-center" style="width: 4%;">{$LANG->getModule('funcs')}</th>
                     </tr>
                 </thead>
@@ -50,15 +50,20 @@
                         <td>{$ROW.allowed_comm}</td>
                         <td>{$ROW.view_comm}</td>
                         <td>{$LANG->getModule('auto_postcomm_'|cat:$MODULE_CONFIG.$MOD.auto_postcomm)}</td>
-                        <td>
-                            <div class="form-check form-switch">
-                                <input class="form-check-input" type="checkbox" role="switch" id="activecomm_{$MOD}" disabled {if $MODULE_CONFIG.$MOD.activecomm}checked{/if}>
-                                <label class="form-check-label" for="activecomm_{$MOD}">{$LANG->getModule('activecomm')}</label>
-                            </div>
-                            <div class="form-check form-switch">
-                                <input class="form-check-input" type="checkbox" role="switch" id="emailcomm_{$MOD}" disabled {if $MODULE_CONFIG.$MOD.emailcomm}checked{/if}>
-                                <label class="form-check-label" for="emailcomm_{$MOD}">{$LANG->getModule('emailcomm')}</label>
-                            </div>
+                        <td class="text-nowrap">
+                            {if $MODULE_CONFIG.$MOD.activecomm}
+                                {assign var="TITLE_ACTIVECOMM" value=$LANG->getModule('activecomm')}
+                            {else}
+                                {assign var="TITLE_ACTIVECOMM" value=$LANG->getModule('activecomm_no')}
+                            {/if}
+                            {if $MODULE_CONFIG.$MOD.emailcomm}
+                                {assign var="TITLE_EMAILCOMM" value=$LANG->getModule('emailcomm')}
+                            {else}
+                                {assign var="TITLE_EMAILCOMM" value=$LANG->getModule('emailcomm_no')}
+                            {/if}
+                            <i class="fa-solid fa-comment{if !$MODULE_CONFIG.$MOD.activecomm}-slash{/if} fa-lg" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-offset="0,10" title="{$TITLE_ACTIVECOMM}" aria-label="{$TITLE_ACTIVECOMM}"></i>
+                            &nbsp;
+                            <i class="fa-solid fa-envelope{if $MODULE_CONFIG.$MOD.emailcomm}-circle-check{/if} fa-lg" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-offset="0,10" title="{$TITLE_EMAILCOMM}" aria-label="{$TITLE_EMAILCOMM}"></i>
                         </td>
                         <td class="text-center text-nowrap"><button class="btn btn-secondary" data-mod="{$MOD}"><i class="fa-solid fa-pencil"></i>&nbsp;{$LANG->getModule('edit')}</button></td>
                     </tr>
