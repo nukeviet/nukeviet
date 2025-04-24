@@ -3,12 +3,13 @@
     <div class="card-body pt-4">
         <form method="post" class="ajax-submit" action="{$smarty.const.NV_BASE_ADMINURL}index.php?{$smarty.const.NV_LANG_VARIABLE}={$smarty.const.NV_LANG_DATA}&amp;{$smarty.const.NV_NAME_VARIABLE}={$MODULE_NAME}&amp;{$smarty.const.NV_OP_VARIABLE}={$OP}" novalidate>
             <div class="row mb-3">
-                <div class="col-sm-5 col-lg-3 col-form-label text-sm-end">
+                <label for="difftimeout" class="col-sm-5 col-lg-3 col-form-label text-sm-end">
                     {$LANG->getModule('difftimeout')}
-                </div>
+                </label>
                 <div class="col-sm-3 col-lg-3 col-xxl-2">
                     <div class="input-group mb-3">
-                        <input type="number" class="form-control" name="difftimeout" value="{$DATA.difftimeout}"><span class="input-group-text">{$LANG->getModule('hours')}</span>
+                        <input type="number" class="form-control" id="difftimeout" aria-describedby="difftimeout-addon" name="difftimeout" value="{$DATA.difftimeout}">
+                        <span id="difftimeout-addon" class="input-group-text">{$LANG->getModule('hours')}</span>
                     </div>
                 </div>
             </div>
