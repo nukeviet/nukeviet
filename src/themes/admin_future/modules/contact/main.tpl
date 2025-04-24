@@ -70,12 +70,28 @@
                     <tr>
                         <td class="text-center" style="width:1%;"><input data-toggle="checkAll" name="checkAll[]" type="checkbox" class="form-check-input"></td>
                         <td colspan="7">
-                            <button type="button" class="btn btn-secondary feedback_del_sel"><i class="fa-solid fa-trash"></i> {$LANG->getModule('bt_del_row_title')}</button> &nbsp;
-                            {if !empty($smarty.const.NV_IS_SPADMIN)}<button type="button" class="btn btn-secondary feedback_del_all"><i class="fa-solid fa-trash"></i> {$LANG->getModule('delall')}</button> &nbsp;{/if}
-                            <button type="button" class="btn btn-secondary feedback_mark" data-mark="unread"><i class="fa-solid fa-bookmark"></i> {$LANG->getModule('mark_as_unread')}</button> &nbsp;
-                            <button type="button" class="btn btn-secondary feedback_mark" data-mark="read"><i class="fa-regular fa-bookmark"></i> {$LANG->getModule('mark_as_read')}</button>&nbsp;
-                            <button type="button" class="btn btn-secondary feedback_mark" data-mark="unprocess"><i class="fa-regular fa-circle"></i> {$LANG->getModule('mark_as_unprocess')}</button> &nbsp;
-                            <button type="button" class="btn btn-secondary feedback_mark" data-mark="processed"><i class="fa-regular fa-circle-check"></i> {$LANG->getModule('mark_as_processed')}</button> &nbsp;
+                            <div class="row row-cols-auto g-2">
+                                <div class="col">
+                                    <button type="button" class="btn btn-secondary feedback_del_sel"><i class="fa-solid fa-trash"></i> {$LANG->getModule('bt_del_row_title')}</button>
+                                </div>
+                                {if !empty($smarty.const.NV_IS_SPADMIN)}
+                                <div class="col">
+                                    <button type="button" class="btn btn-secondary feedback_del_all"><i class="fa-solid fa-trash"></i> {$LANG->getModule('delall')}</button>
+                                </div>
+                                {/if}
+                                <div class="col">
+                                    <button type="button" class="btn btn-secondary feedback_mark" data-mark="unread"><i class="fa-solid fa-bookmark"></i> {$LANG->getModule('mark_as_unread')}</button>
+                                </div>
+                                <div class="col">
+                                    <button type="button" class="btn btn-secondary feedback_mark" data-mark="read"><i class="fa-regular fa-bookmark"></i> {$LANG->getModule('mark_as_read')}</button>
+                                </div>
+                                <div class="col">
+                                    <button type="button" class="btn btn-secondary feedback_mark" data-mark="unprocess"><i class="fa-regular fa-circle"></i> {$LANG->getModule('mark_as_unprocess')}</button>
+                                </div>
+                                <div class="col">
+                                    <button type="button" class="btn btn-secondary feedback_mark" data-mark="processed"><i class="fa-regular fa-circle-check"></i> {$LANG->getModule('mark_as_processed')}</button>
+                                </div>
+                            </div>
                         </td>
                     </tr>
                 </tbody>

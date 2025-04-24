@@ -1,91 +1,97 @@
 <!-- BEGIN: main -->
 <div class="row page" data-url="{$smarty.const.NV_BASE_ADMINURL}index.php?{$smarty.const.NV_LANG_VARIABLE}={$smarty.const.NV_LANG_DATA}&amp;{$smarty.const.NV_NAME_VARIABLE}={$MODULE_NAME}" data-id="{$DATA.id}">
-    <div class="col-md-14">
-        <h2>
-            {if !$DATA.is_processed}
-            <!-- BEGIN: process --><span class="fa-solid fa-spinner fa-spin-pulse"></span><!-- END: process -->
-            {else}
-            <!-- BEGIN: processed --><span class="fa-solid fa-check"></span><!-- END: processed -->
-            {/if}
-            <strong>{$DATA.title}</strong>
-        </h2>
-        <div class="table-responsive">
-            <table class="table table-bordered">
-                <tbody>
-                    <tr>
-                        <td class="text-nowrap" style="vertical-align:top;width:1%"><strong>{$LANG->getModule('infor_user_send_title')}</strong></td>
-                        <td>
-                            <table style="width: fit-content;">
-                                <tbody>
-                                    <tr>
-                                        <td class="text-right">
-                                            {if !empty($DATA.sender_id)}
-                                            <!-- BEGIN: is_user --><a href="javascript:void(0)" class="view_user" data-userid="{$DATA.sender_id}">{$DATA.sender_name}</a><!-- END: is_user -->
-                                            {else}
-                                            <!-- BEGIN: is_guest --><span>{$DATA.sender_name}</span><!-- END: is_guest -->
+    <div class="col-lg-8 col-xxl-7">
+        <div class="card">
+            <div class="card-header .h2">
+                {if !$DATA.is_processed}
+                <!-- BEGIN: process --><span class="fa-solid fa-spinner fa-spin-pulse"></span><!-- END: process -->
+                {else}
+                <!-- BEGIN: processed --><span class="fa-solid fa-check"></span><!-- END: processed -->
+                {/if}
+                <strong>{$DATA.title}</strong>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive table-card m-1">
+                    <table class="table table-bordered">
+                        <tbody>
+                            <tr>
+                                <td class="text-nowrap" style="vertical-align:top;width:1%"><strong>{$LANG->getModule('infor_user_send_title')}</strong></td>
+                                <td>
+                                    <table style="width: fit-content;">
+                                        <tbody>
+                                            <tr>
+                                                <td class="text-right">
+                                                    {if !empty($DATA.sender_id)}
+                                                    <!-- BEGIN: is_user --><a href="javascript:void(0)" class="view_user" data-userid="{$DATA.sender_id}">{$DATA.sender_name}</a><!-- END: is_user -->
+                                                    {else}
+                                                    <!-- BEGIN: is_guest --><span>{$DATA.sender_name}</span><!-- END: is_guest -->
+                                                    {/if}
+                                                </td>
+                                                <td>&nbsp;&nbsp;&lt;{$DATA.sender_email}&gt;</td>
+                                            </tr>
+                                            <!-- BEGIN: sender_phone -->
+                                            {if !empty($DATA.sender_phone)}
+                                            <tr>
+                                                <td class="text-right">{$LANG->getGlobal('phonenumber')}:</td>
+                                                <td>&nbsp;&nbsp;{$DATA.sender_phone}</td>
+                                            </tr>
                                             {/if}
-                                        </td>
-                                        <td>&nbsp;&nbsp;&lt;{$DATA.sender_email}&gt;</td>
-                                    </tr>
-                                    <!-- BEGIN: sender_phone -->
-                                    {if !empty($DATA.sender_phone)}
-                                    <tr>
-                                        <td class="text-right">{$LANG->getGlobal('phonenumber')}:</td>
-                                        <td>&nbsp;&nbsp;{$DATA.sender_phone}</td>
-                                    </tr>
+                                            <!-- END: sender_phone -->
+                                            <!-- BEGIN: sender_address -->
+                                            {if !empty($DATA.sender_address)}
+                                            <tr>
+                                                <td class="text-right">{$LANG->getGlobal('address')}:</td>
+                                                <td>&nbsp;&nbsp;{$DATA.sender_address}</td>
+                                            </tr>
+                                            <!-- END: sender_address -->
+                                            {/if}
+                                            <tr>
+                                                <td class="text-right">IP:</td>
+                                                <td>&nbsp;&nbsp;{$DATA.sender_ip}</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="text-right">{$LANG->getModule('send_time')}:</td>
+                                                <td>&nbsp;&nbsp;{$DATA.send_time}</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="text-nowrap" style="width:1%"><strong>{$LANG->getModule('to_department')}</strong></td>
+                                <td>
+                                    {if !empty($DEPARTMENTS[$DATA.cid])}
+                                    <!-- BEGIN: department_url --><a href="javascript:void(0)" data-url="{$smarty.const.NV_BASE_ADMINURL}index.php?{$smarty.const.NV_LANG_VARIABLE}={$smarty.const.NV_LANG_DATA}&amp;{$smarty.const.NV_NAME_VARIABLE}={$MODULE_NAME}&amp;{$smarty.const.NV_OP_VARIABLE}=department&amp;id={$DATA.cid}" class="department-view">{$DEPARTMENTS[$DATA.cid].full_name}</a><!-- END: department_url -->
+                                    {else}
+                                    <!-- BEGIN: department --><span>{$LANG->getModule('department_empty')}</span><!-- END: department -->
                                     {/if}
-                                    <!-- END: sender_phone -->
-                                    <!-- BEGIN: sender_address -->
-                                    {if !empty($DATA.sender_address)}
-                                    <tr>
-                                        <td class="text-right">{$LANG->getGlobal('address')}:</td>
-                                        <td>&nbsp;&nbsp;{$DATA.sender_address}</td>
-                                    </tr>
-                                    <!-- END: sender_address -->
-                                    {/if}
-                                    <tr>
-                                        <td class="text-right">IP:</td>
-                                        <td>&nbsp;&nbsp;{$DATA.sender_ip}</td>
-                                    </tr>
-                                    <tr>
-                                        <td class="text-right">{$LANG->getModule('send_time')}:</td>
-                                        <td>&nbsp;&nbsp;{$DATA.send_time}</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="text-nowrap" style="width:1%"><strong>{$LANG->getModule('to_department')}</strong></td>
-                        <td>
-                            {if !empty($DEPARTMENTS[$DATA.cid])}
-                            <!-- BEGIN: department_url --><a href="javascript:void(0)" data-url="{$smarty.const.NV_BASE_ADMINURL}index.php?{$smarty.const.NV_LANG_VARIABLE}={$smarty.const.NV_LANG_DATA}&amp;{$smarty.const.NV_NAME_VARIABLE}={$MODULE_NAME}&amp;{$smarty.const.NV_OP_VARIABLE}=department&amp;id={$DATA.cid}" class="department-view">{$DEPARTMENTS[$DATA.cid].full_name}</a><!-- END: department_url -->
-                            {else}
-                            <!-- BEGIN: department --><span>{$LANG->getModule('department_empty')}</span><!-- END: department -->
-                            {/if}
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="text-nowrap" style="width:1%"><strong>{$LANG->getModule('cat')}</strong></td>
-                        <td>{$DATA.cat}</td>
-                    </tr>
-                    <tr class="active">
-                        <td colspan="2">
-                            <div class="panel panel-primary m-bottom-none">
-                                <div class="panel-body" style="white-space: normal !important;min-height:150px">
-                                    {$DATA.content}
-                                </div>
-                            </div>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="text-nowrap" style="width:1%"><strong>{$LANG->getModule('cat')}</strong></td>
+                                <td>{$DATA.cat}</td>
+                            </tr>
+                            <tr class="active">
+                                <td colspan="2">
+                                    <div class="panel panel-primary m-bottom-none">
+                                        <div class="panel-body" style="white-space: normal !important;min-height:150px">
+                                            {$DATA.content}
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
 
         {if !empty($DATA.auto_forward)}
-        <div class="panel panel-default">
-            <div class="panel-heading">
-                <p><strong>{$LANG->getModule('auto_forward_to')}:</strong></p>
+        <div class="card mt-3">
+            <div class="card-header">
+                <strong>{$LANG->getModule('auto_forward_to')}:</strong>
+            </div>
+            <div class="card-body">
                 {$DATA.auto_forward}
             </div>
         </div>
@@ -94,9 +100,11 @@
 
         <!-- BEGIN: read_admins -->
         {if !empty($smarty.const.NV_IS_SPADMIN)}
-        <div class="panel panel-default">
-            <div class="panel-heading">
-                <p><strong>{$LANG->getModule('has_been_read')}:</strong></p>
+        <div class="card mt-3">
+            <div class="card-header">
+                <strong>{$LANG->getModule('has_been_read')}:</strong>
+            </div>
+            <div class="card-body">
                 {$DATA.read_admins}
             </div>
         </div>
@@ -105,9 +113,11 @@
 
         <!-- BEGIN: is_processed -->
         {if $DATA.is_processed}
-        <div class="panel panel-success">
-            <div class="panel-heading">
-                <p class="alert-title"><strong>{$LANG->getModule('has_been_processed')}</strong></p>
+        <div class="card mt-3 bg-success text-white">
+            <div class="card-header">
+                <strong>{$LANG->getModule('has_been_processed')}</strong>
+            </div>
+            <div class="card-body">
                 <!-- BEGIN: processed_person -->
                 {if !empty($ADMINS[$DATA.processed_by])}
                 {$LANG->getModule('processed_by')}: <a href="{$smarty.const.NV_BASE_ADMINURL}index.php?{$smarty.const.NV_LANG_VARIABLE}={$smarty.const.NV_LANG_DATA}&amp;{$smarty.const.NV_NAME_VARIABLE}=authors&amp;id={$DATA.processed_by}">{$ADMINS[$DATA.processed_by]}</a>&nbsp;&nbsp;
@@ -119,32 +129,36 @@
         {/if}
         <!-- END: is_processed -->
 
-        <div class="table-responsive">
-            <table class="table table-bordered">
-                <tbody>
-                    <tr class="active">
-                        <td class="text-center">
-                            {if ($CONTACT_ALLOWED.reply[$DATA.cid])|isset}
-                            <!-- BEGIN: reply -->
-                            <button type="button" class="btn btn-default feedback-reply">{$LANG->getModule('send_title')}</button>&nbsp;
-                            <!-- END: reply -->
-                            {/if}
-                            {if ($CONTACT_ALLOWED.exec[$DATA.cid])|isset}
-                            <!-- BEGIN: exec -->
-                            <button type="button" class="btn btn-default feedback_del">{$LANG->getGlobal('delete')}</button>&nbsp;
-                            <button type="button" class="btn btn-default feedback_mark_single" data-mark="unread">{$LANG->getModule('mark_as_unread')}</button>&nbsp;
-                            <button type="button" class="btn btn-default feedback_mark_single" data-mark="{if $DATA.is_processed}unprocess{else}processed{/if}">{if $DATA.is_processed}{$LANG->getModule('mark_as_unprocess')}{else}{$LANG->getModule('mark_as_processed')}{/if}</button>&nbsp;
-                            <!-- END: exec -->
-                            {/if}
-                            {if ($CONTACT_ALLOWED.reply[$DATA.cid])|isset}
-                            <!-- BEGIN: forward -->
-                            <button type="button" class="btn btn-default feedback-forward"><em class="fa fa-share">&nbsp;</em> {$LANG->getModule('mark_as_forward')}</button>
-                            <!-- END: forward -->
-                            {/if}
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
+        <div class="card mt-3">
+            <div class="card-body text-center row row-cols-auto justify-content-center g-2">
+                {if ($CONTACT_ALLOWED.reply[$DATA.cid])|isset}
+                <!-- BEGIN: reply -->
+                <div class="col">
+                    <button type="button" class="btn btn-secondary feedback-reply"><i class="fa-solid fa-reply"></i> {$LANG->getModule('send_title')}</button>
+                </div>
+                <!-- END: reply -->
+                {/if}
+                {if ($CONTACT_ALLOWED.exec[$DATA.cid])|isset}
+                <div class="col">
+                    <button type="button" class="btn btn-secondary feedback_del"><i class="fa-solid fa-trash"></i> {$LANG->getGlobal('delete')}</button>
+                </div>
+                <div class="col">
+                    <button type="button" class="btn btn-secondary feedback_mark_single" data-mark="unread"><i class="fa-solid fa-bookmark"></i> {$LANG->getModule('mark_as_unread')}</button>
+                </div>
+                <div class="col">
+                    <button type="button" class="btn btn-secondary feedback_mark_single" data-mark="{if $DATA.is_processed}unprocess{else}processed{/if}">{if $DATA.is_processed}<i class="fa-regular fa-circle"></i> {$LANG->getModule('mark_as_unprocess')}{else}<i class="fa-regular fa-circle-check"></i> {$LANG->getModule('mark_as_processed')}{/if}</button>
+                </div>
+                <!-- BEGIN: exec -->
+                <!-- END: exec -->
+                {/if}
+                {if ($CONTACT_ALLOWED.reply[$DATA.cid])|isset}
+                <!-- BEGIN: forward -->
+                <div class="col">
+                    <button type="button" class="btn btn-secondary feedback-forward"><i class="fa-solid fa-share"></i> {$LANG->getModule('mark_as_forward')}</button>
+                </div>
+                <!-- END: forward -->
+                {/if}
+            </div>
         </div>
 
         <!-- BEGIN: data_reply -->
@@ -241,7 +255,7 @@
                                 <tr>
                                     <td class="text-center" colspan="2">
                                         <button type="submit" class="btn btn-primary">{$LANG->getModule('bt_send_row_title')}</button>
-                                        <button type="button" class="btn btn-default" data-dismiss="modal">{$LANG->getGlobal('close')}</button>
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">{$LANG->getGlobal('close')}</button>
                                     </td>
                                 </tr>
                             </tfoot>
@@ -282,7 +296,7 @@
                                 <tr>
                                     <td class="text-center" colspan="2">
                                         <button type="submit" class="btn btn-primary">{$LANG->getModule('bt_send_row_title')}</button>
-                                        <button type="button" class="btn btn-default" data-dismiss="modal">{$LANG->getGlobal('close')}</button>
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">{$LANG->getGlobal('close')}</button>
                                     </td>
                                 </tr>
                             </tfoot>
