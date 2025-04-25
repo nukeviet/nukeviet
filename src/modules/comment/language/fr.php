@@ -106,6 +106,7 @@ $lang_module['timeoutcomm'] = 'Temps (s) minimum entre chaque poste commentaire'
 $lang_module['timeoutcomm_note'] = 'Entrez 0 pour un nombre illimité. Remarque devrait permettre captcha si choisir cette valeur est 0, la valeur est pas applicable pour l\'administrateur';
 $lang_module['allowattachcomm'] = 'Active les pièces jointes';
 $lang_module['alloweditorcomm'] = 'Autorise l\'éditeur';
+$lang_module['adminscomm'] = 'Admin gère les commentaires';
 $lang_module['view_comm'] = 'Droit de voir les commentaires';
 $lang_module['allowed_comm'] = 'Droit de commenter';
 $lang_module['allowed_comm'] = 'Ceux qui ont le droit d\'écrire les commentaires';
