@@ -1,0 +1,80 @@
+.nv-recaptcha-default {
+  margin: 0 auto;
+  width: 304px;
+  height: 78px;
+}
+
+.nv-recaptcha-compact {
+  margin: 0 auto;
+  width: 164px;
+  height: 144px;
+}
+
+.grecaptcha-badge {
+  visibility: hidden;
+}
+
+.cr-fade {
+  transition: opacity .15s linear;
+
+  &:not(.cr-show) {
+    opacity: 0;
+  }
+}
+
+.cr-d-none {
+  display: none!important;
+}
+
+.cr-btn-close {
+  box-sizing: content-box;
+  width: $btn-close-width;
+  height: $btn-close-height;
+  padding: $btn-close-padding-y $btn-close-padding-x;
+  color: var(--cr-btn-close-color);
+  background: transparent var(--cr-btn-close-bg) center / $btn-close-width auto no-repeat;
+  border: 0;
+  opacity: var(--cr-btn-close-opacity);
+
+  &:hover {
+    color: var(--cr-btn-close-color);
+    text-decoration: none;
+    opacity: var(--cr-btn-close-hover-opacity);
+  }
+
+  &:focus {
+    outline: 0;
+    opacity: var(--cr-btn-close-focus-opacity);
+  }
+
+  &:disabled,
+  &.disabled {
+    pointer-events: none;
+    user-select: none;
+    opacity: var(--cr-btn-close-disabled-opacity);
+  }
+}
+
+[data-bs-theme=dark],
+[data-theme=dark] {
+  .cr-btn-close {
+    filter: var(--cr-btn-close-white-filter);
+  }
+}
+
+.cr-center {
+  text-align: center;
+}
+
+.cr-pointer {
+  cursor: pointer;
+}
+
+.cr-danger {
+  color: var(--cr-danger);
+}
+
+.cr-svg-icon {
+  width: 1em;
+  height: 1em;
+}

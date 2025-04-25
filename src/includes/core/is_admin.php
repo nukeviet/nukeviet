@@ -52,12 +52,7 @@ if (!empty($admin_cookie)) {
     //Admin thoat
     $_second = $nv_Request->get_string('second', 'get');
     if ($_second == 'admin_logout') {
-        if (defined('NV_IS_USER_FORUM')) {
-            define('NV_IS_MOD_USER', true);
-            require_once NV_ROOTDIR . '/' . $global_config['dir_forum'] . '/nukeviet/logout.php';
-        }
-
-        require_once NV_ROOTDIR . '/includes/core/admin_logout.php';
+        require NV_ROOTDIR . '/includes/core/admin_logout.php';
     }
 
     define('NV_IS_ADMIN', true);

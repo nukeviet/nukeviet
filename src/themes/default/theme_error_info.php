@@ -63,10 +63,6 @@ $errortype = [
         $nv_Lang->getGlobal('error_notice'),
         'comment.png'
     ],
-    E_STRICT => [
-        $nv_Lang->getGlobal('error_notice'),
-        'comment.png'
-    ],
     E_RECOVERABLE_ERROR => [
         $nv_Lang->getGlobal('error_error'),
         'bad.png'
@@ -80,6 +76,12 @@ $errortype = [
         'warning.png'
     ]
 ];
+if (version_compare(PHP_VERSION, '8.4.0', '<')) {
+    $errortype[E_STRICT] = [
+        $nv_Lang->getGlobal('error_notice'),
+        'comment.png'
+    ];
+}
 
 $tpl_dir = get_tpl_dir($php_dir, 'default', '/system/error_info.tpl');
 $image_path = NV_STATIC_URL . 'themes/' . $tpl_dir . '/images/icons/';

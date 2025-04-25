@@ -63,9 +63,19 @@
                 <label for="element_position" class="col-sm-3 col-form-label text-sm-end text-truncate fw-medium" title="{$LANG->getModule('block_pos')}">{$LANG->getModule('block_pos')}:</label>
                 <div class="col-9 col-sm-5">
                     <select class="form-select select2" id="element_position" name="position">
-                        {for $offset=0 to (count($POSITIONS) - 1)}
-                        <option value="{(string)$POSITIONS[$offset]->tag}"{if ((string)$POSITIONS[$offset]->tag) eq $ROW.position} selected{/if}>{(string)$POSITIONS[$offset]->name}</option>
-                        {/for}
+                        {foreach from=$POSITIONS item=position}
+                        <option value="{$position.tag}"{if $position.tag eq $ROW.position} selected{/if}>
+                            {if empty($position.module)}
+                                {$position.name}
+                            {else}
+                                {if isset($SITE_MODS[$position.module])}
+                                    {$SITE_MODS[$position.module].custom_title}: {$position.name}
+                                {else}
+                                    {$position.module}: {$position.name}
+                                {/if}
+                            {/if}
+                        </option>
+                        {/foreach}
                     </select>
                 </div>
             </div>

@@ -121,6 +121,9 @@ $sth = $db->prepare('DELETE FROM ' . NV_CONFIG_GLOBALTABLE . " WHERE lang='" . N
 $sth->bindParam(':module', $modname, PDO::PARAM_STR);
 $sth->execute();
 
+// Xóa vị trí block tùy chỉnh
+nv_purge_blocks($modname);
+
 $sql = 'SELECT lang FROM ' . $db_config['prefix'] . '_setup_language WHERE setup=1';
 $langs = $db->query($sql)->fetchAll(PDO::FETCH_COLUMN);
 

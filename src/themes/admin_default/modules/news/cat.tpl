@@ -75,12 +75,12 @@
                         <th class="text-right">
                         <br />
                         {LANG.viewcat_detail} </th>
-                        <td>
-                        <!-- BEGIN: groups_views -->
-                        <div class="row">
-                            <label><input name="groups_view[]" type="checkbox" value="{groups_views.value}" {groups_views.checked} />{groups_views.title}</label>
-                        </div>
-                        <!-- END: groups_views -->
+                        <td class="pb-0">
+                            <!-- BEGIN: groups_views -->
+                            <div class="checkbox mt-0">
+                                <label><input name="groups_view[]" type="checkbox" value="{groups_views.value}" {groups_views.checked} />{groups_views.title}</label>
+                            </div>
+                            <!-- END: groups_views -->
                         </td>
                     </tr>
                     <tr>
@@ -109,12 +109,15 @@
                     <!-- END: featured -->
                     <tr>
                         <th class="text-right">{LANG.ad_block_show}: </th>
-                        <td>
-                        <!-- BEGIN: ad_block_cats -->
-                        <div class="row">
-                            <label><input name="ad_block_cat[]" type="checkbox" value="{ad_block_cats.value}" {ad_block_cats.checked} />{ad_block_cats.title}</label>
-                        </div>
-                        <!-- END: ad_block_cats -->
+                        <td class="pb-0">
+                            <!-- BEGIN: ad_block_cats -->
+                            <div class="checkbox mt-0">
+                                <label><input name="ad_block_cat[]" type="checkbox" value="{ad_block_cats.value}" {ad_block_cats.checked} />{ad_block_cats.title}</label>
+                            </div>
+                            <!-- END: ad_block_cats -->
+                            <!-- BEGIN: ad_block_note -->
+                            <div class="help-block">{LANG.ad_block_note}</div>
+                            <!-- END: ad_block_note -->
                         </td>
                     </tr>
                     <tr>

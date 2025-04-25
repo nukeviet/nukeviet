@@ -40,19 +40,22 @@ if (!empty($module_config[$module_name]['report_active']) and (!empty($module_co
             ]);
         }
         unset($nv_seccode);
-        // Xác định giá trị của captcha nhập vào nếu sử dụng reCaptcha
+
         if ($module_captcha == 'recaptcha') {
+            // Xác định giá trị của captcha nhập vào nếu sử dụng reCaptcha
             $nv_seccode = $nv_Request->get_title('g-recaptcha-response', 'post', '');
-        }
-        // Xác định giá trị của captcha nhập vào nếu sử dụng captcha hình
-        elseif ($module_captcha == 'captcha') {
+        } elseif ($module_captcha == 'turnstile') {
+            // Xác định giá trị của captcha nhập vào nếu sử dụng Turnstile
+            $fcode = $nv_Request->get_title('cf-turnstile-response', 'post', '');
+        } elseif ($module_captcha == 'captcha') {
+            // Xác định giá trị của captcha nhập vào nếu sử dụng captcha hình
             $nv_seccode = $nv_Request->get_title('captcha', 'post', '');
         }
         // Kiểm tra tính hợp lệ của captcha nhập vào, nếu không hợp lệ => thông báo lỗi
         if (isset($nv_seccode) and !nv_capcha_txt($nv_seccode, $module_captcha)) {
             nv_jsonOutput([
                 'status' => 'error',
-                'mess' => ($module_captcha == 'recaptcha') ? $nv_Lang->getGlobal('securitycodeincorrect1') : $nv_Lang->getGlobal('securitycodeincorrect')
+                'mess' => ($module_captcha == 'recaptcha') ? $nv_Lang->getGlobal('securitycodeincorrect1') : (($module_captcha == 'turnstile') ? $nv_Lang->getGlobal('securitycodeincorrect2') : $nv_Lang->getGlobal('securitycodeincorrect'))
             ]);
         }
         $orig_content = $nv_Request->get_title('report_content', 'post', '');

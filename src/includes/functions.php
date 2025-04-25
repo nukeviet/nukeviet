@@ -541,11 +541,13 @@ function nv_capcha_txt($seccode, $type = 'captcha')
 {
     global $global_config, $nv_Request, $client_info, $crypt;
 
-    if ($type == 'recaptcha') {
-        if (!empty($global_config['recaptcha_secretkey'])) {
+    if ($type == 'recaptcha' || $type == 'turnstile') {
+        $seckey = $type == 'recaptcha' ? $global_config['recaptcha_secretkey'] : $global_config['turnstile_secretkey'];
+        $check_endpoint = $type == 'recaptcha' ? 'https://www.google.com/recaptcha/api/siteverify' : 'https://challenges.cloudflare.com/turnstile/v0/siteverify';
+        if (!empty($seckey)) {
             $NV_Http = new NukeViet\Http\Http($global_config, NV_TEMP_DIR);
             $request = [
-                'secret' => $crypt->decrypt($global_config['recaptcha_secretkey']),
+                'secret' => $crypt->decrypt($seckey),
                 'response' => $seccode,
                 'remoteip' => $client_info['ip']
             ];
@@ -556,7 +558,7 @@ function nv_capcha_txt($seccode, $type = 'captcha')
                 'body' => $request,
                 'httpversion' => '1.1'
             ];
-            $array = $NV_Http->post('https://www.google.com/recaptcha/api/siteverify', $args);
+            $array = $NV_Http->post($check_endpoint, $args);
             if (is_array($array) and !empty($array['body'])) {
                 $jsonRes = (array) json_decode($array['body'], true);
                 if (isset($jsonRes['success']) and ((bool) $jsonRes['success']) === true) {
@@ -2441,7 +2443,7 @@ function nv_url_rewrite_callback($matches)
             unset($query_array[NV_OP_VARIABLE]);
         }
 
-        $rewrite_string = nv_apply_hook('', 'get_rewrite_domain', [], '') . ($is_acp ? NV_BASE_ADMINURL : NV_BASE_SITEURL) . ($global_config['check_rewrite_file'] ? '' : 'index.php/') . implode('/', $op_rewrite) . ($op_rewrite_count ? $rewrite_end : '');
+        $rewrite_string = nv_apply_hook('', 'get_rewrite_domain', [$op_rewrite_count, $op_rewrite, $rewrite_end, $query_array, $is_amp, $is_acp], '') . ($is_acp ? NV_BASE_ADMINURL : NV_BASE_SITEURL) . ($global_config['check_rewrite_file'] ? '' : 'index.php/') . implode('/', $op_rewrite) . ($op_rewrite_count ? $rewrite_end : '');
 
         if (!empty($query_array)) {
             $rewrite_string .= '?' . http_build_query($query_array, '', $is_amp ? '&amp;' : '&');
@@ -4224,4 +4226,14 @@ function nv_uuid4()
     $data[9] = ($data[9] & 0x3f) | 0x80;
     $hex = array_map(fn($byte) => str_pad(dechex($byte), 2, '0', STR_PAD_LEFT), $data);
     return vsprintf('%s%s-%s-%s-%s-%s%s%s', str_split(implode('', $hex), 4));
+}
+
+/**
+ * Hàm chuyển Unicode tổ hợp sang Unicode dựng sẵn
+ * @param mixed $value
+ * @return mixed
+ */
+function nv_compound_unicode($value)
+{
+    return NukeViet\Core\Request::compound_unicode($value);
 }

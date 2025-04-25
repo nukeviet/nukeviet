@@ -43,6 +43,9 @@ $data['send'] = $nv_Request->get_bool('send', 'post', false);
 if ($module_captcha == 'recaptcha') {
     $data['nv_seccode'] = $nv_Request->get_title('g-recaptcha-response', 'post', '');
     $data['nv_seccode2'] = $nv_Request->get_title('nv_seccode', 'post', '');
+} elseif ($module_captcha == 'turnstile') {
+    $data['nv_seccode'] = $nv_Request->get_title('cf-turnstile-response', 'post', '');
+    $data['nv_seccode2'] = $nv_Request->get_title('nv_seccode', 'post', '');
 } elseif ($module_captcha == 'captcha') {
     $data['nv_seccode'] = $data['nv_seccode2'] = $nv_Request->get_title('nv_seccode', 'post', '');
 }

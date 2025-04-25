@@ -112,7 +112,7 @@ $(function() {
             e = $("[data-cs]", a);
         $(document).click(function(event) {
             if (b.is(".fs")) {
-                if (!($(event.target).closest("#contactButton").length || $(event.target).closest(".modal").length)) {
+                if (!($(event.target).closest("#contactButton").length || $(event.target).closest(".modal").length || $(event.target).closest(".cr-md").length || $(event.target).closest(".cr-cap").length)) {
                     c.hide();
                     b.removeClass("fs").show()
                 }

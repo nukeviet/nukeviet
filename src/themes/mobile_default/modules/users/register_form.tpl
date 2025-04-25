@@ -1,4 +1,4 @@
-<form class="user-reg-form" action="{USER_REGISTER}" method="post" data-toggle="reg_validForm" data-precheck="reg_form_precheck" autocomplete="off" novalidate<!-- BEGIN: reg_captcha --> data-captcha="nv_seccode"<!-- END: reg_captcha --><!-- BEGIN: reg_recaptcha --> data-recaptcha2="1"<!-- END: reg_recaptcha --><!-- BEGIN: reg_recaptcha3 --> data-recaptcha3="1"<!-- END: reg_recaptcha3 -->>
+<form class="user-reg-form" action="{USER_REGISTER}" method="post" data-toggle="reg_validForm" data-precheck="reg_form_precheck" autocomplete="off" novalidate<!-- BEGIN: reg_captcha --> data-captcha="nv_seccode"<!-- END: reg_captcha --><!-- BEGIN: reg_recaptcha --> data-recaptcha2="1"<!-- END: reg_recaptcha --><!-- BEGIN: reg_recaptcha3 --> data-recaptcha3="1"<!-- END: reg_recaptcha3 --><!-- BEGIN: reg_turnstile --> data-turnstile="1"<!-- END: reg_turnstile -->>
     <div class="nv-info margin-bottom" data-default="{LANG.info}">{LANG.info}</div>
 
     <div class="form-detail">

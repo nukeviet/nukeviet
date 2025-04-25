@@ -32,6 +32,8 @@ function votingSend(form) {
         alert(errmsg);
     } else if ($("[data-recaptcha2],[data-recaptcha3]", $(form).parent()).length) {
         votingSendSubmit(id, checkss, vals, $('[name=g-recaptcha-response]', form).val());
+    } else if ($("[data-turnstile]", $(form).parent()).length) {
+        votingSendSubmit(id, checkss, vals, $('[name=cf-turnstile-response]', form).val());
     } else if ($("[data-captcha]", $(form).parent()).length) {
         votingSendSubmit(id, checkss, vals, $('[name=' + $(form).data('captcha') + ']', form).val());
     } else {

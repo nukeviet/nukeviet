@@ -11,6 +11,8 @@
 
 namespace NukeViet\Core;
 
+use NukeViet\Template\Config;
+
 /**
  * NukeViet\Core\Optimizer
  *
@@ -39,6 +41,7 @@ class Optimizer
     private $resource_preload = 0;
     private $headerPreloadItems = [];
     private $blank_operation;
+    private $theme_type;
 
     /**
      * @var \DOMDocument
@@ -67,6 +70,7 @@ class Optimizer
             $this->resource_preload = 2;
         }
         $this->blank_operation = $config['blank_operation'] ?? true;
+        $this->theme_type = $config['current_theme_type'] ?? 'r';
     }
 
     /**
@@ -109,6 +113,11 @@ class Optimizer
             ($_isFullBuffer and $jquery) && $this->_jsMatches[] = '<script src="' . ASSETS_STATIC_URL . '/js/jquery/jquery.min.js"></script>';
         }
         $this->trackLogRegex('jquery');
+
+        // Core JS nếu giao diện không tự xử lý
+        if ($_isFullBuffer and Config::isLoadCoreCss()) {
+            $this->_cssLinks[] = '<link rel="stylesheet" href="' . ASSETS_STATIC_URL . '/css/core.' . ($this->theme_type == 'd' ? 'd' : 'r') . (Config::isRtl() ? '.rtl' : '') . '.min.css">';
+        }
 
         // Thay thế tạm thời HTML-conductions [if...]...[endif], noscript, js-inline
         $this->_content = preg_replace_callback([

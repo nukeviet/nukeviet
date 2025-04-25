@@ -440,7 +440,7 @@ function checkLoginName($type, $name)
         return false;
     }
 
-    if (strcmp($row[$type], $name) !== 0) {
+    if (strcasecmp($row[$type], $name) !== 0) {
         return false;
     }
 

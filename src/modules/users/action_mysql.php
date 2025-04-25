@@ -280,7 +280,8 @@ $sql_create_module[] = 'CREATE TABLE IF NOT EXISTS ' . $db_config['prefix'] . '_
     nickname varchar(100) NOT NULL DEFAULT '' COMMENT 'Đặt tên gợi nhớ',
     PRIMARY KEY (id),
     UNIQUE KEY uid (userid, keyid),
-    UNIQUE KEY userhandle (userhandle)
+    UNIQUE KEY ukeyid (userhandle(40), keyid(151)),
+    KEY userhandle (userhandle)
 ) ENGINE=MyISAM COMMENT 'Passkey của thành viên để đăng nhập/xác thực 2 bước'";
 
 $sql_create_module[] = 'CREATE TABLE IF NOT EXISTS ' . $db_config['prefix'] . '_' . $module_data . "_field (

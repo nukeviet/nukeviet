@@ -721,7 +721,10 @@ $(document).ready(function() {
             val = $(this).val(),
             sitekey = $('[name=recaptcha_sitekey]', form).val(),
             secretkey = $('[name=recaptcha_secretkey]', form).val();
-        if (val != 'recaptcha' || (val == 'recaptcha' && sitekey != '' && secretkey != '')) {
+            tt_sitekey = $('[name=turnstile_sitekey]', form).val(),
+            tt_secretkey = $('[name=turnstile_secretkey]', form).val();
+        if ((val != 'recaptcha' || (val == 'recaptcha' && sitekey != '' && secretkey != '')) && 
+            (val != 'turnstile' || (val == 'turnstile' && tt_sitekey != '' && tt_secretkey != ''))) {
             $(this).next().slideUp()
         } else {
             $(this).next().slideDown()

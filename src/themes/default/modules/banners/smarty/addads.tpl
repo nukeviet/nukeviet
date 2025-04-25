@@ -5,7 +5,7 @@
     <li><a href="{$MANAGEMENT.stats}">{$LANG->getModule('client_stats')}</a></li>
 </ul>
 {/if}
-<form id="frm" action="{$FORM_ACTION}" method="post" enctype="multipart/form-data" role="form" class="form-horizontal" data-toggle="afSubmit" data-precheck="afSubmit_precheck"{if $CAPTCHA == 'captcha'} data-captcha="captcha"{elseif $CAPTCHA == 'recaptcha'} data-recaptcha2="1"{elseif $CAPTCHA == 'recaptcha3'} data-recaptcha3="1"{/if}>
+<form id="frm" action="{$FORM_ACTION}" method="post" enctype="multipart/form-data" role="form" class="form-horizontal" data-toggle="afSubmit" data-precheck="afSubmit_precheck"{if $CAPTCHA == 'captcha'} data-captcha="captcha"{elseif $CAPTCHA == 'recaptcha'} data-recaptcha2="1"{elseif $CAPTCHA == 'recaptcha3'} data-recaptcha3="1"{elseif $CAPTCHA == 'turnstile'} data-turnstile="1"{/if}>
     <div class="form-group">
         <label for="block" class="col-sm-6 control-label">{$LANG->getModule('plan_title')}:</label>
         <div class="col-sm-18">

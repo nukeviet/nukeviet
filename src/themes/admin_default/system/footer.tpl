@@ -1,18 +1,3 @@
-<!-- SiteModal Required!!! -->
-<div id="sitemodal" class="modal fade" role="dialog">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h3 class="modal-title">&nbsp;</h3>
-            </div>
-            <div class="modal-body">
-                <em class="fa fa-spinner fa-spin">&nbsp;</em>
-            </div>
-        </div>
-    </div>
-</div>
-
 <!-- BEGIN: lt_ie9 --><p class="chromeframe">{LANG.chromeframe}</p><!-- END: lt_ie9 -->
 
 <script type="text/javascript" src="{NV_BASE_SITEURL}themes/default/js/bootstrap.min.js"></script>

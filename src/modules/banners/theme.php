@@ -109,6 +109,8 @@ function nv_banner_theme_addads($global_array_uplans, $page_url)
         $xtpl->assign('N_CAPTCHA', $nv_Lang->getGlobal('securitycode1'));
         $xtpl->assign('RECAPTCHA_ELEMENT', 'recaptcha' . nv_genpass(8));
         $xtpl->parse('main.recaptcha');
+    } elseif ($module_captcha == 'turnstile') {
+        $xtpl->parse('main.turnstile');
     } elseif ($module_captcha == 'captcha') {
         $xtpl->assign('N_CAPTCHA', $nv_Lang->getGlobal('securitycode'));
         $xtpl->parse('main.captcha');

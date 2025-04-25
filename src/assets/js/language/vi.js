@@ -32,7 +32,7 @@ var nv_aryDayName = "Chủ nhật;Thứ Hai;Thứ Ba;Thứ Tư;Thứ Năm;Thứ 
     nv_focusTitle = "Click để xem tiếp",
     nv_fullExpandTitle = "Mở rộng kích thước thực tế (f)",
     nv_restoreTitle = "Click để đóng hình ảnh, Click và kéo để di chuyển. Sử dụng phím mũi tên Tiếp theo và Quay lại.",
-    nv_error_login = "Lỗi: Bạn chưa khai báo bí danh hoặc khai báo không đúng. Bí danh phải bao gồm những ký tự có trong bảng chữ cái latin, số và dấu gạch dưới. Số ký tự tối đa là [max], tối thiểu là [min]",
+    nv_error_login = "Lỗi: Bạn chưa khai báo tên đăng nhập hoặc khai báo không đúng. Tên đăng nhập phải bao gồm những ký tự có trong bảng chữ cái latin, số và dấu gạch dưới. Số ký tự tối đa là [max], tối thiểu là [min]",
     nv_error_password = "Lỗi: Bạn chưa khai báo mật khẩu hoặc khai báo không đúng. Mật khẩu phải bao gồm những ký tự có trong bảng chữ cái latin, số và dấu gạch dưới. Số ký tự tối đa là [max], tối thiểu là [min]",
     nv_error_email = "Lỗi: Bạn chưa khai báo địa chỉ hộp thư điện tử hoặc khai báo không đúng quy định",
     nv_error_seccode = "Lỗi: Bạn chưa khai báo Mã bảo mật hoặc khai báo không đúng. Mã bảo mật phải là một dãy số có chiều dài là [num] ký tự được thể hiện trong hình bên",
@@ -113,3 +113,7 @@ nukeviet.i18n.WebAuthnErrors = {
     unknow: 'Lỗi không xác định, xin vui lòng tải lại trang và thử lại'
 };
 nukeviet.i18n.errorSessExp = 'Phiên đã hết hạn hoặc có lỗi khác, vui lòng tải lại trang và thử lại';
+nukeviet.i18n.close = 'Đóng';
+nukeviet.i18n.seccode1 = 'Xác minh &quot;Tôi không phải người máy&quot;';
+nukeviet.i18n.seccode = 'Mã bảo mật';
+nukeviet.i18n.captcharefresh = 'Thay mới';

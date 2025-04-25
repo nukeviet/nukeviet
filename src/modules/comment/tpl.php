@@ -30,7 +30,7 @@ if (!defined('NV_MAINFILE')) {
 function nv_theme_comment_module($module, $area, $id, $allowed_comm, $checkss, $comment, $sortcomm, $form_login, $header = 1)
 {
     global $global_config, $module_data, $module_config, $admin_info, $user_info, $nv_Lang, $module_name;
-
+    $nv_Lang->loadModule('comment', false, true);
     $template = get_tpl_dir($global_config['module_theme'], 'default', '/modules/comment/main.tpl');
     $templateCSS = get_tpl_dir($global_config['module_theme'], 'default', '/css/comment.css');
     $templateJS = get_tpl_dir($global_config['module_theme'], 'default', '/js/comment.js');
@@ -126,8 +126,11 @@ function nv_theme_comment_module($module, $area, $id, $allowed_comm, $checkss, $
             }
         }
 
-        $captcha_type = (empty($module_config['comment']['captcha_type']) or in_array($module_config['comment']['captcha_type'], ['captcha', 'recaptcha'], true)) ? $module_config['comment']['captcha_type'] : 'captcha';
+        $captcha_type = (empty($module_config['comment']['captcha_type']) or in_array($module_config['comment']['captcha_type'], ['captcha', 'recaptcha', 'turnstile'], true)) ? $module_config['comment']['captcha_type'] : 'captcha';
         if ($captcha_type == 'recaptcha' and (empty($global_config['recaptcha_sitekey']) or empty($global_config['recaptcha_secretkey']))) {
+            $captcha_type = 'captcha';
+        }
+        if ($captcha_type == 'turnstile' and (empty($global_config['turnstile_sitekey']) or empty($global_config['turnstile_secretkey']))) {
             $captcha_type = 'captcha';
         }
 
@@ -141,6 +144,8 @@ function nv_theme_comment_module($module, $area, $id, $allowed_comm, $checkss, $
             } elseif ($captcha_type == 'captcha') {
                 $xtpl->assign('N_CAPTCHA', $nv_Lang->getGlobal('securitycode'));
                 $xtpl->parse('main.allowed_comm.captcha');
+            } elseif ($captcha_type == 'turnstile') {
+                $xtpl->parse('main.allowed_comm.turnstile');
             } else {
                 $xtpl->assign('GFX_NUM', 0);
             }
@@ -176,6 +181,7 @@ function nv_theme_comment_module($module, $area, $id, $allowed_comm, $checkss, $
     }
 
     $xtpl->parse('main');
+    $nv_Lang->changeLang();
 
     return $xtpl->text('main');
 }

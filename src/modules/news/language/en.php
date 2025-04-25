@@ -494,6 +494,7 @@ $lang_module['notification_post_queue'] = 'Approve post <strong>%s</strong> by <
 $lang_module['ad_block_show'] = 'Displaying the sub block';
 $lang_module['ad_block_top'] = 'Block top category';
 $lang_module['ad_block_bot'] = 'Block bottom category';
+$lang_module['ad_block_note'] = 'Note: Disabling display here will delete all blocks that have been added to the corresponding position on the site';
 $lang_module['fbinsartmgs_100'] = 'Error: The article has HTML tags: <strong />% s  not supported by instant message. To select this article as an instant article, remove them, replace them with supported tags, or check the box to automatically convert your posts into instant posts. Note: at system conversion will automatically remove components that do not support or replace them with other appropriate components.';
 $lang_module['fbinsartmgs_101'] = 'Error: The article has no content';
 $lang_module['fbinsartmgs_102'] = 'Error: Your article has attributes for tags. To select this article as an instant article, remove them from the tab or tick the box to automatically convert your posts into instant posts. Note: at system conversion will automatically remove components that do not support or replace them with other appropriate components.';

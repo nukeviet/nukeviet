@@ -173,6 +173,9 @@ function nv_setup_data_module($lang, $module_name, $sample = 0)
     $sth->bindParam(':module', $module_name, PDO::PARAM_STR);
     $sth->execute();
 
+    // Xóa block tùy chỉnh
+    nv_purge_blocks($module_name);
+
     $nv_Cache->delAll();
 
     // Re-Creat all module table

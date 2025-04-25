@@ -65,12 +65,16 @@ if (!empty($array_gfx_chk) and in_array('a', $array_gfx_chk, true)) {
 } else {
     $gfx_chk = 0;
 }
-$captcha_type = (empty($global_config['captcha_type']) or in_array($global_config['captcha_type'], ['captcha', 'recaptcha'], true)) ? $global_config['captcha_type'] : 'captcha';
+$captcha_type = (empty($global_config['captcha_type']) or in_array($global_config['captcha_type'], ['captcha', 'recaptcha', 'turnstile'], true)) ? $global_config['captcha_type'] : 'captcha';
 if ($captcha_type == 'recaptcha' and (empty($global_config['recaptcha_sitekey']) or empty($global_config['recaptcha_secretkey']))) {
     $captcha_type = 'captcha';
+} elseif ($captcha_type == 'turnstile' and (empty($global_config['turnstile_sitekey']) or empty($global_config['turnstile_secretkey']))) {
+    $captcha_type = 'captcha';
 }
+
 $admin_login_success = false;
-$passkey_allowed = (!defined('NV_IS_USER_FORUM') or !defined('SSO_SERVER'));
+/** @disregard P1011 */
+$passkey_allowed = !(defined('SSO_SERVER') and (defined('NV_IS_USER_FORUM') or NV_MY_DOMAIN != SSO_REGISTER_DOMAIN));
 
 // Tạo thử thách đăng nhập passkey
 if ($passkey_allowed and $nv_Request->isset_request('create_challenge', 'post')) {
@@ -303,7 +307,7 @@ if (!empty($admin_pre_data)) {
     $cfg_2step['active_google'] = false; // Đã login bằng Google hay chưa
     $cfg_2step['active_zalo'] = false; // Đã login bằng Zalo hay chưa
     $_2step_opt = explode(',', $global_config['admin_2step_opt']);
-    if (in_array('key', $_2step_opt, true)) {
+    if ($passkey_allowed and in_array('key', $_2step_opt, true)) {
         $cfg_2step['opts'][] = 'key';
         if (!empty($admin_pre_data['sec_keys']) and !empty($admin_pre_data['active2step'])) {
             $cfg_2step['active_key'] = true;
@@ -617,12 +621,15 @@ if (empty($admin_pre_data) and $nv_Request->isset_request('nv_login,nv_password'
     $nv_password = $nv_Request->get_title('nv_password', 'post', '');
 
     unset($nv_seccode);
-    // Xác định giá trị của captcha nhập vào nếu sử dụng reCaptcha
+
     if ($captcha_type == 'recaptcha') {
+        // Xác định giá trị của captcha nhập vào nếu sử dụng reCaptcha
         $nv_seccode = $nv_Request->get_title('g-recaptcha-response', 'post', '');
-    }
-    // Xác định giá trị của captcha nhập vào nếu sử dụng captcha hình
-    elseif ($captcha_type == 'captcha') {
+    } elseif ($captcha_type == 'turnstile') {
+        // Xác định giá trị của captcha nhập vào nếu sử dụng Turnstile
+        $nv_seccode = $nv_Request->get_title('cf-turnstile-response', 'post', '');
+    } elseif ($captcha_type == 'captcha') {
+        // Xác định giá trị của captcha nhập vào nếu sử dụng captcha hình
         $nv_seccode = $nv_Request->get_title('nv_seccode', 'post', '');
     }
 
@@ -655,7 +662,7 @@ if (empty($admin_pre_data) and $nv_Request->isset_request('nv_login,nv_password'
         nv_jsonOutput([
             'status' => 'error',
             'input' => ($captcha_type == 'recaptcha') ? '' : 'nv_seccode',
-            'mess' => ($captcha_type == 'recaptcha') ? $nv_Lang->getGlobal('securitycodeincorrect1') : $nv_Lang->getGlobal('securitycodeincorrect')
+            'mess' => ($captcha_type == 'recaptcha') ? $nv_Lang->getGlobal('securitycodeincorrect1') : (($captcha_type == 'turnstile') ? $nv_Lang->getGlobal('securitycodeincorrect2') : $nv_Lang->getGlobal('securitycodeincorrect'))
         ]);
     }
 

@@ -5,7 +5,9 @@
         <!-- BEGIN: recaptcha --> data-recaptcha2="1"
         <!-- END: recaptcha -->
         <!-- BEGIN: recaptcha3 --> data-recaptcha3="1"
-        <!-- END: recaptcha3 -->>
+        <!-- END: recaptcha3 -->
+        <!-- BEGIN: turnstile --> data-turnstile="1"
+        <!-- END: turnstile -->>
         <div class="nv-info margin-bottom-lg" data-mess="{LANG.note}">{LANG.note}</div>
         <!-- BEGIN: cats -->
         <div class="form-group">

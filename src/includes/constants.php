@@ -186,7 +186,7 @@ define('NV_POST_ASYNC_TIMEOUT', 1);
 define('NV_DISPLAY_ERRORS_LIST', E_ALL);
 //Danh sach cac loi se hien thi
 //define( 'NV_DISPLAY_ERRORS_LIST', 0); //tat thong bao loi
-define('NV_LOG_ERRORS_LIST', E_ALL | E_STRICT);
+define('NV_LOG_ERRORS_LIST', version_compare(PHP_VERSION, '8.4.0', '<') ? (E_ALL | E_STRICT) : E_ALL);
 //Danh sach cac loi se ghi log
 define('NV_SEND_ERRORS_LIST', E_USER_ERROR);
 //Danh sach cac loi se gui den email

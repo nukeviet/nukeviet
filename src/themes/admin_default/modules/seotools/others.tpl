@@ -63,7 +63,7 @@
 <!-- BEGIN: complete -->
 <script>
     $(function() {
-        $(window).on("unload", function() {
+        $(window).on("beforeunload", function() {
             $('#organization_logo', opener.document).attr('src', '{FILENAME}');
             $('#organization_logo_del', opener.document).show()
         });

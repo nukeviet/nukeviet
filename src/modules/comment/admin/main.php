@@ -21,9 +21,8 @@ $per_page = $nv_Request->get_page('per_page', 'get', 20);
 $stype = $nv_Request->get_string('stype', 'get', '');
 $sstatus = $nv_Request->get_title('sstatus', 'get', 2);
 $from['q'] = $nv_Request->get_title('q', 'get', '');
-$from['from_date'] = $nv_Request->get_title('from_date', 'get', '');
-$from['to_date'] = $nv_Request->get_title('to_date', 'get', '');
-
+$from['from_date'] = nv_d2u_get($nv_Request->get_title('from_date', 'get', ''));
+$from['to_date'] = nv_d2u_get($nv_Request->get_title('to_date', 'get', ''));
 $array_search = [
     'content' => $nv_Lang->getModule('search_content'),
     'post_name' => $nv_Lang->getModule('search_post_name'),
@@ -39,59 +38,8 @@ if (!in_array($stype, array_keys($array_search), true)) {
     $stype = '';
 }
 
-if (!in_array($sstatus, array_keys($array_status_view), true)) {
+if (!in_array($sstatus, array_keys($array_status_view))) {
     $sstatus = 2;
-}
-
-$xtpl = new XTemplate($op . '.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-$xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
-$xtpl->assign('NV_BASE_ADMINURL', NV_BASE_ADMINURL);
-$xtpl->assign('NV_NAME_VARIABLE', NV_NAME_VARIABLE);
-$xtpl->assign('NV_OP_VARIABLE', NV_OP_VARIABLE);
-$xtpl->assign('MODULE_NAME', $module_name);
-$xtpl->assign('OP', $op);
-$xtpl->assign('FROM', $from);
-
-foreach ($array_search as $key => $val) {
-    $xtpl->assign('OPTION', [
-        'key' => $key,
-        'title' => $val,
-        'selected' => ($key == $stype) ? ' selected="selected"' : ''
-    ]);
-    $xtpl->parse('main.search_type');
-}
-
-foreach ($array_status_view as $key => $val) {
-    $xtpl->assign('OPTION', [
-        'key' => $key,
-        'title' => $val,
-        'selected' => ($key == $sstatus) ? ' selected="selected"' : ''
-    ]);
-    $xtpl->parse('main.search_status');
-}
-
-$xtpl->assign('OPTION', [
-    'key' => '',
-    'title' => $nv_Lang->getModule('search_module_all'),
-    'selected' => ($module == '') ? ' selected="selected"' : ''
-]);
-$xtpl->parse('main.module');
-
-foreach ($site_mod_comm as $module_i => $row) {
-    $custom_title = (!empty($row['admin_title'])) ? $row['admin_title'] : $row['custom_title'];
-    $xtpl->assign('OPTION', [
-        'key' => $module_i,
-        'title' => $custom_title,
-        'selected' => ($module_i == $module) ? ' selected="selected"' : ''
-    ]);
-    $xtpl->parse('main.module');
-}
-
-$i = 15;
-while ($i < 100) {
-    $i += 5;
-    $xtpl->assign('OPTION', ['page' => $i, 'selected' => ($i == $per_page) ? ' selected="selected"' : '']);
-    $xtpl->parse('main.per_page');
 }
 
 $base_url = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;per_page=' . $per_page;
@@ -116,15 +64,14 @@ if (!empty($module) and isset($site_mod_comm[$module])) {
         $array_where[] = '( ' . implode(' OR ', $mod_where) . ' )';
     }
 }
-
-if (preg_match('/^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})$/', $from['from_date'], $m)) {
-    $array_where[] = 'post_time > ' . mktime(0, 0, 0, $m[2], $m[1], $m[3]);
-    $base_url .= '&amp;from_date=' . $from['from_date'];
+if (!empty($from['from_date'])) {
+    $array_where[] = 'post_time > ' . $from['from_date'];
+    $base_url .= '&amp;from_date=' . nv_u2d_get($from['from_date']);
 }
 
-if (preg_match('/^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})$/', $from['to_date'], $m)) {
-    $array_where[] = 'post_time < ' . mktime(23, 59, 59, $m[2], $m[1], $m[3]);
-    $base_url .= '&amp;to_date=' . $from['to_date'];
+if (!empty($from['to_date'])) {
+    $array_where[] = 'post_time < ' . $from['to_date'];
+    $base_url .= '&amp;to_date=' . nv_u2d_get($from['to_date']);
 }
 
 if ($sstatus == 0 or $sstatus == 1) {
@@ -196,41 +143,38 @@ if (str_contains($sql, ':post_email')) {
 }
 $sth->execute();
 $array = [];
-while ([$cid, $module, $area, $id, $content, $attach, $userid, $post_name, $email, $status] = $sth->fetch(3)) {
-    if ($userid > 0) {
-        $email = '<a href="' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=users&amp;' . NV_OP_VARIABLE . '=edit&amp;userid=' . $userid . '"> ' . $email . '</a>';
-    }
-    $content = nv_br2nl($content);
-    $row = [
-        'cid' => $cid,
-        'post_name' => $post_name,
-        'email' => $email,
-        'title' => nv_clean60(strip_tags($content), 255),
-        'content' => $content,
-        'module' => $module,
-        'link' => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module . '&amp;' . NV_OP_VARIABLE . '=view&amp;area=' . $area . '&amp;id=' . $id,
-        'active' => $status ? 'checked="checked"' : '',
-        'status' => ($status == 1) ? 'check' : 'circle-o',
-        'linkedit' => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=edit&amp;cid=' . $cid,
-        'linkdelete' => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=del&amp;list=' . $cid
-    ];
-
-    $xtpl->assign('ROW', $row);
-
-    if (!empty($attach)) {
-        $xtpl->assign('ATTACH_LINK', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;downloadfile=' . urlencode(NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $attach));
-        $xtpl->parse('main.loop.attach');
-    }
-    $xtpl->parse('main.loop');
+$array = $sth->fetchAll();
+if (empty($array)) {
+    $array = [];
 }
+$sth->closeCursor();
+$checkss = md5(NV_CHECK_SESSION . '_' . $module_name . '_' . $admin_info['userid']);
+$from['from_date'] = nv_u2d_get($from['from_date']);
+$from['to_date'] = nv_u2d_get($from['to_date']);
 
-if (!empty($generate_page)) {
-    $xtpl->assign('GENERATE_PAGE', $generate_page);
-    $xtpl->parse('main.generate_page');
-}
+$tpl = new \NukeViet\Template\NVSmarty();
+$tpl->setTemplateDir(get_module_tpl_dir('main.tpl'));
+$tpl->assign('LANG', $nv_Lang);
+$tpl->assign('MODULE_NAME', $module_name);
+$tpl->assign('OP', $op);
+$tpl->assign('FROM', $from);
+$tpl->assign('STYPE', $stype);
+$tpl->assign('SSTATUS', $sstatus);
+$tpl->assign('MODULE', $module);
+$tpl->assign('MODULE_UPLOAD', $module_upload);
+$tpl->assign('SITE_MOD_COMM', $site_mod_comm);
+$tpl->assign('PER_PAGE', $per_page);
+$tpl->assign('ARRAY_SEARCH', $array_search);
+$tpl->assign('ARRAY_STATUS_VIEW', $array_status_view);
+$tpl->assign('CHECKSS', $checkss);
+$tpl->assign('ARRAY_ROW', $array);
+$tpl->assign('GENERATE_PAGE', $generate_page);
 
-$xtpl->parse('main');
-$contents = $xtpl->text('main');
+$tpl->registerPlugin('modifier', 'nv_clean60', 'nv_clean60');
+$tpl->registerPlugin('modifier', 'urlencode', 'urlencode');
+
+
+$contents = $tpl->fetch('main.tpl');
 
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_admin_theme($contents);

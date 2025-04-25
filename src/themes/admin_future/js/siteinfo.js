@@ -8,6 +8,10 @@
  */
 
 $(function() {
+    function clearNotiCookie() {
+        nv_setCookie(nv_cookie_prefix + '_antf', '', -1);
+    }
+
     // Xóa gói cập nhật
     $('[data-toggle="deleteUpdPkg"]').on('click', function(e) {
         e.preventDefault();
@@ -523,6 +527,7 @@ $(function() {
                             nvToast(nv_is_del_confirm[2], 'error');
                             return;
                         }
+                        clearNotiCookie();
                         location.reload();
                     },
                     error: function(xhr, text, err) {
@@ -548,6 +553,7 @@ $(function() {
                         nvToast(nv_is_change_act_confirm[2], 'error');
                         return;
                     }
+                    clearNotiCookie();
                     location.reload();
                 },
                 error: function(xhr, text, err) {
@@ -572,6 +578,7 @@ $(function() {
                         nvToast(nv_is_change_act_confirm[2], 'error');
                         return;
                     }
+                    clearNotiCookie();
                     location.reload();
                 },
                 error: function(xhr, text, err) {
@@ -606,6 +613,7 @@ $(function() {
                         nvToast(nv_is_del_confirm[2], 'error');
                         return;
                     }
+                    clearNotiCookie();
                     location.reload();
                 },
                 error: function(xhr, text, err) {
@@ -640,7 +648,63 @@ $(function() {
                     nvToast(nv_is_change_act_confirm[2], 'error');
                     return;
                 }
+                clearNotiCookie();
                 location.reload();
+            },
+            error: function(xhr, text, err) {
+                icon.removeClass('fa-spinner fa-spin-pulse').addClass(icon.data('icon'));
+                nvToast(text, 'error');
+                console.log(xhr, text, err);
+            }
+        });
+    });
+
+    // Ấn vào liên kết một thông báo chưa đọc, đánh dấu đã đọc và mở liên kết
+    $('[data-toggle="openNotiLink"]').on('click', function(e) {
+        const btn = $(this);
+        const icon = $('i', btn);
+        if (icon.is('.fa-spinner')) {
+            e.preventDefault();
+            return;
+        }
+        const item = btn.closest('.notilist-items');
+        if (item.data('viewed') || btn.data('clicked')) {
+            return;
+        }
+        e.preventDefault();
+        icon.removeClass(icon.data('icon')).addClass('fa-spinner fa-spin-pulse');
+        $.ajax({
+            type: 'POST',
+            url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=notification&nocache=' + new Date().getTime(),
+            data: {
+                toggle: 1,
+                direct_view: 1,
+                id: btn.data('id'),
+                checksess: $('body').data('checksess')
+            },
+            dataType: 'json',
+            success: function(data) {
+                icon.removeClass('fa-spinner fa-spin-pulse').addClass(icon.data('icon'));
+                if (data.error) {
+                    nvToast(nv_is_change_act_confirm[2], 'error');
+                    return;
+                }
+
+                nv_setCookie(nv_cookie_prefix + '_antf', JSON.stringify({
+                    'cn': data.data.count,
+                    'cf': data.data.count_formatted,
+                    't': new Date().getTime()
+                }), 365);
+
+                // Đánh dấu đã đọc
+                item.data('viewed', 1);
+                item.removeAttr('title');
+                $('[data-td="status"]', item).removeClass('item-unread');
+                $('[data-toggle="toggleNotification"] i', item).removeClass('fa-eye').addClass('fa-eye-slash').data('icon', 'fa-eye-slash');
+
+                // Click lại lần nữa mà không xử lý js
+                btn.data('clicked', 1);
+                btn[0].click();
             },
             error: function(xhr, text, err) {
                 icon.removeClass('fa-spinner fa-spin-pulse').addClass(icon.data('icon'));

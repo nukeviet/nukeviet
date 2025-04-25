@@ -28,7 +28,13 @@ nv_add_hook($module_name, 'get_module_admin_theme', $priority, function ($vars) 
     if (($module_info['module_file'] ?? '') == 'users' and in_array($op, ['config'])) {
         return $new_theme;
     }
-    if (in_array($module_name, ['upload', 'themes', 'emailtemplates', 'settings', 'seotools', 'modules', 'extensions', 'webtools', 'language', 'siteinfo', 'authors', 'database'])) {
+    if (in_array($module_name, ['upload', 'themes', 'emailtemplates', 'settings', 'seotools', 'modules', 'extensions', 'webtools', 'language', 'siteinfo', 'authors', 'database', 'comment'])) {
+        return $new_theme;
+    }
+    if (($module_info['module_file'] ?? '') == 'voting' and in_array($op, ['main', 'setting'])) {
+        return $new_theme;
+    }
+    if (($module_info['module_file'] ?? '') == 'contact' and in_array($op, ['main'])) {
         return $new_theme;
     }
 

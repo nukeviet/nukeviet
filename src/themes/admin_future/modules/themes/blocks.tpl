@@ -52,7 +52,7 @@
                         <tr>
                             <td colspan="8" class="bg-body-secondary">
                                 {assign var="md" value=$row.position nocache}
-                                {$LANG->getModule('block_pos')}: <strong>{$THEME_POS[$row.position] ?? $row.position}</strong>
+                                {$LANG->getModule('block_pos')}: <strong>{isset($THEME_POS[$row.position]) ? $THEME_POS[$row.position].title : $row.position}</strong>
                             </td>
                         </tr>
                         {/if}
@@ -116,7 +116,7 @@
                                             <div class="modal-body">
                                                 <select name="listpos" class="form-select" data-default="{$row.position}">
                                                     {foreach from=$THEME_POS key=key item=value}
-                                                    <option value="{$key}"{if $key eq $row.position} selected{/if}>{$value}</option>
+                                                    <option value="{$key}"{if $key eq $row.position} selected{/if}>{$value.title}</option>
                                                     {/foreach}
                                                 </select>
                                             </div>

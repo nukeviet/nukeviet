@@ -226,7 +226,7 @@ while ($data = $result->fetch()) {
                 $data['link'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $data['module'] . '&amp;' . NV_OP_VARIABLE . '=smtp';
             } elseif ($data['type'] == 'server_config_file_changed') {
                 $data['title'] = $nv_Lang->getModule('server_config_file_changed', $data['content']['file']);
-                $data['link'] = 'javascript:void(0)';
+                $data['link'] = '#';
             }
         }
 

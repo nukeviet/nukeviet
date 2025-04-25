@@ -1,0 +1,106 @@
+.cr-alert-backdrop {
+  @extend %reboot-all;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: var(--cr-alert-zindex-backdrop);
+  width: 100vw;
+  height: 100vh;
+  background-color: var(--cr-alert-backdrop-bg);
+
+  &.cr-show {
+    opacity: var(--cr-alert-backdrop-opacity);
+  }
+}
+
+.cr-alert {
+  @extend %reboot-all;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: var(--cr-alert-zindex);
+  display: none;
+  width: 100%;
+  height: 100%;
+  overflow-x: hidden;
+  overflow-y: auto;
+  outline: 0;
+}
+
+.cr-alert-dialog {
+  @extend %reboot-all;
+  position: relative;
+  width: auto;
+  pointer-events: none;
+  margin: .5rem;
+}
+
+@include media-breakpoint-up(sm) {
+  .cr-alert-dialog {
+    max-width: var(--cr-alert-md-width);
+    margin-right: auto;
+    margin-left: auto;
+    margin-top: 1.75rem;
+    margin-bottom: 1.75rem;
+  }
+}
+
+.cr-alert.cr-fade .cr-alert-dialog {
+  transition: transform .3s ease-out;
+  transform: translate(0, -50px);
+}
+
+.cr-alert.cr-show .cr-alert-dialog {
+  transform: none;
+}
+
+.cr-alert.cr-alert-static .cr-alert-dialog {
+  transform: scale(1.02);
+}
+
+.cr-alert-content {
+  @extend %reboot-all;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  pointer-events: auto;
+  background-color: var(--cr-alert-content-bg);
+  background-clip: padding-box;
+  border: 1px solid var(--cr-alert-content-border-color);
+  border-radius: var(--cr-alert-content-border-radius);
+  outline: 0;
+}
+
+.cr-alert-body {
+  @extend %reboot-all;
+  position: relative;
+  flex: 1 1 auto;
+  padding: 1rem;
+}
+
+.cr-alert-footer {
+  display: flex;
+  flex-shrink: 0;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--cr-alert-footer-gap);
+  padding: 0 1rem 1rem 1rem;
+}
+
+.cr-alert-dialog-scrollable {
+  height: calc(100% - .5rem * 2);
+  @include media-breakpoint-up(sm) {
+    height: calc(100% - 1.75rem * 2);
+  }
+
+  .cr-alert-content {
+    max-height: 100%;
+    overflow: hidden;
+  }
+
+  .cr-alert-body {
+    overflow-y: auto;
+  }
+}

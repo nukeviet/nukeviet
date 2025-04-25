@@ -493,6 +493,7 @@ $lang_module['notification_post_queue'] = 'Modéré <strong>%s</strong> par <str
 $lang_module['ad_block_show'] = 'Affichage du sous-bloc';
 $lang_module['ad_block_top'] = 'Catégories du parti blocs';
 $lang_module['ad_block_bot'] = 'Catégories de blocs ci-dessous';
+$lang_module['ad_block_note'] = 'Remarque : Désactiver l\'affichage ici supprimera tous les blocs ajoutés à la position correspondante sur le site';
 $lang_module['fbinsartmgs_100'] = 'Erreur: Les articles avec les balises HTML: <strong />%s  ne sont pas pris en charge par les postes immédiatement. Pour sélectionner cet article comme article s\'il vous plaît les enlever immédiatement, remplacé par le support de carte ou cocher la case convertit automatiquement des articles dans l\'article habituellement instantané. Remarque: lors de la conversion du système laissera automatiquement le composant ne prend pas en charge ou les remplacer par d\'autres ingrédients appropriés';
 $lang_module['fbinsartmgs_101'] = 'Erreur: L\'sans contenu';
 $lang_module['fbinsartmgs_102'] = 'Erreur: Votre article a des attributs pour les balises. Pour sélectionner cet article comme l\'article les retirer immédiatement de la carte ou cocher la case convertit automatiquement des articles dans l\'article habituellement instantané. Remarque: lors de la conversion du système laissera automatiquement le composant ne prend pas en charge ou les remplacer par d\'autres ingrédients appropriés';

@@ -24,33 +24,23 @@ if ($checkss !== md5(NV_CHECK_SESSION . '_' . $module_name . '_xcopyblock_' . $a
     ]);
 }
 
-$position1 = $position2 = [];
-
 if (preg_match($global_config['check_theme'], $theme1) and preg_match($global_config['check_theme'], $theme2) and $theme1 != $theme2 and file_exists(NV_ROOTDIR . '/themes/' . $theme1 . '/config.ini') and file_exists(NV_ROOTDIR . '/themes/' . $theme2 . '/config.ini')) {
-    $xml = @simplexml_load_file(NV_ROOTDIR . '/themes/' . $theme1 . '/config.ini') or nv_info_die($nv_Lang->getGlobal('error_404_title'), $nv_Lang->getModule('block_error_fileconfig_title'), $nv_Lang->getModule('block_error_fileconfig_content'), 404);
-    $content = $xml->xpath('positions');
-    $positions = $content[0]->position;
+    // Theme nguồn
+    $position1 = array_column(nv_get_blocks($theme1, false), 'tag');
 
-    for ($i = 0, $count = count($positions); $i < $count; ++$i) {
-        $position1[] = $positions[$i]->tag;
-    }
-
-    $xml = @simplexml_load_file(NV_ROOTDIR . '/themes/' . $theme2 . '/config.ini') or nv_info_die($nv_Lang->getGlobal('error_404_title'), $nv_Lang->getModule('block_error_fileconfig_title'), $nv_Lang->getModule('block_error_fileconfig_content'), 404);
-    $content = $xml->xpath('positions');
-    $positions = $content[0]->position;
-
-    for ($i = 0, $count = count($positions); $i < $count; ++$i) {
-        $position2[] = $positions[$i]->tag;
-    }
-
-    $diffarray = array_diff($position1, $position2);
-    $diffarray = array_diff($position1, $diffarray);
+    // Theme đích
+    $positions = nv_get_blocks($theme2, false);
+    $position2 = array_column($positions, 'tag');
 
     $array = [];
-    for ($i = 0, $count = count($diffarray); $i < $count; ++$i) {
+    $position_intersect = array_intersect($position1, $position2);
+    foreach ($positions as $position) {
+        if (!in_array($position['tag'], $position_intersect, true)) {
+            continue;
+        }
         $array[] = [
-            'tag' => (string) $positions[$i]->tag,
-            'name' => (string) $positions[$i]->name
+            'tag' => $position['tag'],
+            'name' => $position['name']
         ];
     }
 

@@ -183,3 +183,5 @@ $lang_module['widget_resize'] = 'Size adjustment';
 $lang_module['widget_choose'] = 'Select widget';
 $lang_module['widget_no'] = 'There are no more available widget';
 $lang_module['widget_swap_success'] = 'Changed position successfully';
+
+$lang_module['open_link'] = 'Open link';

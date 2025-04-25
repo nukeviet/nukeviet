@@ -13,6 +13,14 @@ if (!defined('NV_MAINFILE') or !defined('NV_SYSTEM')) {
     exit('Stop!!!');
 }
 
+if (
+    (isset($_GET[NV_LANG_VARIABLE]) and is_array($_GET[NV_LANG_VARIABLE])) or
+    (isset($_GET[NV_NAME_VARIABLE]) and is_array($_GET[NV_NAME_VARIABLE])) or
+    (isset($_GET[NV_OP_VARIABLE]) and is_array($_GET[NV_OP_VARIABLE]))
+) {
+    trigger_error('Request URI is not valid!', E_USER_ERROR);
+}
+
 // Fix rewrite IIS 7 with Unicode Permalinks
 if (isset($_SERVER['UNENCODED_URL'])) {
     $_SERVER['REQUEST_URI'] = $_SERVER['UNENCODED_URL'];

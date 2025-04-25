@@ -22,7 +22,7 @@ $proxy_blocker_list = [
     2 => $nv_Lang->getModule('proxy_blocker_2'),
     3 => $nv_Lang->getModule('proxy_blocker_3')
 ];
-$captcha_opts = ['', 'captcha', 'recaptcha'];
+$captcha_opts = ['', 'captcha', 'recaptcha', 'turnstile'];
 $captcha_area_list = ['a', 'l', 'r', 'm', 'p'];
 $recaptcha_vers = [2, 3];
 $captcha_comm_list = [
@@ -47,7 +47,7 @@ $ipv4_mask_list = [
 $banip_area_list = [$nv_Lang->getModule('area_select'), $nv_Lang->getModule('area_front'), $nv_Lang->getModule('area_admin'), $nv_Lang->getModule('area_both')];
 $csp_directives = [
     'default-src' => ['none' => 0, 'all' => 0, 'self' => 0, 'data' => 0, 'unsafe-inline' => 0, 'unsafe-eval' => 0, 'hosts' => []],
-    'script-src' => ['none' => 0, 'all' => 0, 'self' => 1, 'data' => 0, 'unsafe-inline' => 1, 'unsafe-eval' => 1, 'hosts' => ['*.google.com', '*.google-analytics.com', '*.googletagmanager.com', '*.gstatic.com', '*.facebook.com', '*.facebook.net', '*.twitter.com', '*.zalo.me', '*.zaloapp.com', '*.tawk.to', '*.cloudflareinsights.com']],
+    'script-src' => ['none' => 0, 'all' => 0, 'self' => 1, 'data' => 0, 'unsafe-inline' => 1, 'unsafe-eval' => 1, 'hosts' => ['*.google.com', '*.google-analytics.com', '*.googletagmanager.com', '*.gstatic.com', '*.facebook.com', '*.facebook.net', '*.twitter.com', '*.zalo.me', '*.zaloapp.com', '*.tawk.to', '*.cloudflareinsights.com', '*.cloudflare.com']],
     'style-src' => ['none' => 0, 'all' => 0, 'self' => 1, 'data' => 1, 'unsafe-inline' => 1, 'hosts' => ['*.google.com', '*.googleapis.com', '*.tawk.to']],
     'img-src' => ['none' => 0, 'all' => 0, 'self' => 1, 'data' => 1, 'hosts' => ['*.twitter.com', '*.google.com', '*.googleapis.com', '*.gstatic.com', '*.facebook.com', 'tawk.link', '*.tawk.to', 'static.nukeviet.vn']],
     'font-src' => ['none' => 0, 'all' => 0, 'self' => 1, 'data' => 1, 'hosts' => ['*.googleapis.com', '*.gstatic.com', '*.tawk.to']],
@@ -519,6 +519,22 @@ if (defined('NV_IS_GODADMIN') and $nv_Request->isset_request('captchasave', 'pos
         $sth->execute();
     }
 
+    $post = [
+        'turnstile_sitekey' => $nv_Request->get_title('turnstile_sitekey', 'post'),
+        'turnstile_secretkey' => $nv_Request->get_title('turnstile_secretkey', 'post'),
+    ];
+
+    if (!empty($post['turnstile_secretkey'])) {
+        $post['turnstile_secretkey'] = $crypt->encrypt($post['turnstile_secretkey']);
+    }
+
+    $sth = $db->prepare('UPDATE ' . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = 'sys' AND module = 'global' AND config_name = :config_name");
+    foreach ($post as $config_name => $config_value) {
+        $sth->bindParam(':config_name', $config_name, PDO::PARAM_STR, 30);
+        $sth->bindParam(':config_value', $config_value, PDO::PARAM_STR);
+        $sth->execute();
+    }
+
     nv_save_file_config_global();
 
     nv_jsonOutput([
@@ -972,6 +988,8 @@ $tpl->assign('CAPTCHA_COMM_LIST', $captcha_comm_list);
 if (defined('NV_IS_GODADMIN')) {
     $tpl->assign('RECAPTCHA_SITEKEY', $captcha_config_list['recaptcha_sitekey']);
     $tpl->assign('RECAPTCHA_SECRETKEY', $captcha_config_list['recaptcha_secretkey'] ? $crypt->decrypt($captcha_config_list['recaptcha_secretkey']) : '');
+    $tpl->assign('TURNSTILE_SITEKEY', $captcha_config_list['turnstile_sitekey']);
+    $tpl->assign('TURNSTILE_SECRETKEY', $captcha_config_list['turnstile_secretkey'] ? $crypt->decrypt($captcha_config_list['turnstile_secretkey']) : '');
 }
 
 $tpl->assign('CORS', $cross_config_list);

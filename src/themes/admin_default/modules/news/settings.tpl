@@ -67,7 +67,7 @@
                     <td>
                         <input type="checkbox" value="1" name="showtooltip"{SHOWTOOLTIP}/>
                         &nbsp;&nbsp;&nbsp;<span class="text-middle">{LANG.showtooltip_position}</span>
-                        <select name="tooltip_position w100" class="form-control">
+                        <select name="tooltip_position" class="form-control w100">
                             <!-- BEGIN: tooltip_position -->
                             <option value="{TOOLTIP_P.key}"{TOOLTIP_P.selected}>{TOOLTIP_P.title}</option>
                             <!-- END: tooltip_position -->

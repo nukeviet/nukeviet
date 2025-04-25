@@ -12,7 +12,7 @@
     border-top: 1px solid #205FA0;
     box-shadow:0 0 4px rgba(0,0,0,0.15);
     -webkit-box-shadow:0 0 4px rgba(0,0,0,0.15);
-    z-index: 10000;
+    z-index: 1055;
     opacity: 0.5;
 }
 #admintoolbar:hover{

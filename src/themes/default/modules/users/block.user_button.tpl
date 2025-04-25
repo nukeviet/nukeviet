@@ -84,5 +84,5 @@ function loginFormLoad() {
 <!-- END: signed -->
 
 <!-- BEGIN: sso -->
-<span><a title="{GLANG.signin} - {GLANG.register}" class="pa pointer button" href="{LINK_LOGIN}" rel="nofollow"><em class="fa fa-user fa-lg"></em><span class="hidden">{GLANG.signin}</span></a></span>
+<span><a title="{GLANG.signin}" class="pa pointer button" href="{LINK_LOGIN}" rel="nofollow"><em class="fa fa-user fa-lg"></em><span class="hidden">{GLANG.signin}</span></a></span>
 <!-- END: sso -->
