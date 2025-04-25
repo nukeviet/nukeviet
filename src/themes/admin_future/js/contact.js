@@ -60,11 +60,6 @@ $(function() {
         window.location.href = $(this).parents('.item').data('url')
     });
 
-    $('.view_user').on('click', function(e) {
-        e.preventDefault();
-        $('#view-user').modal('show')
-    });
-
     $('.department_view').on('click', function(e) {
         e.preventDefault();
         department_view($(this).parents('.list').data('url') + '&id=' + $(this).parents('.item').data('id'))
@@ -74,17 +69,9 @@ $(function() {
         department_view($(this).data('url'))
     });
 
-    $('.feedback-reply').on('click', function() {
-        $('#feedback-reply').modal('show')
-    });
-
-    $('.feedback-forward').on('click', function() {
-        $('#feedback-forward').modal('show')
-    });
-
     $('#feedback-reply form, #feedback-forward form').on('submit', function(e) {
         e.preventDefault();
-        var url = $(this).parents('.page').data('url'),
+        var url = $('.page').data('url'),
             data = $(this).serialize();
         $.ajax({
             type: "POST",
@@ -94,10 +81,15 @@ $(function() {
             dataType: "json"
         }).done(function(a) {
             if (a.status == 'error') {
-                alert(a.mess)
-            } else if (a.status == 'OK') {
-                alert(a.mess);
-                window.location.reload()
+                nvToast(a.mess, 'error')
+            } else if (a.status == 'ok') {
+                nvConfirm(a.mess, function() {;
+                    window.location.reload()
+                }, function() {;
+                    window.location.reload()
+                }, false);
+            } else {
+                nvToast(nv_is_del_confirm[2], 'error')
             }
         })
     });
@@ -135,8 +127,9 @@ $(function() {
     });
 
     $('.feedback_mark_single').on('click', function() {
-        var page = $(this).parents('.page'),
+        var page = $('.page'),
             url = page.data('url'),
+            checkss = page.data('checkss'),
             mark = $(this).data('mark');
         $.ajax({
             type: "POST",
@@ -144,29 +137,46 @@ $(function() {
             cache: !1,
             data: {
                 'mark': mark,
-                'send': page.data('id')
+                'send': page.data('id'),
+                'checkss': checkss
             }
         }).done(function(a) {
-            if (mark == 'unread') {
-                window.location.href = url
+            if (a.status == 'error') {
+                nvToast(a.mess, 'error')
+            } else if (a.status == 'ok') {
+                if (mark == 'unread') {
+                    window.location.href = url
+                } else {
+                    window.location.reload()
+                }
             } else {
-                window.location.reload()
+                nvToast(nv_is_del_confirm[2], 'error')
             }
         })
     });
 
     $('.feedback_del').on('click', function() {
-        var page = $(this).parents('.page');
-        if (confirm(nv_is_del_confirm[0])) {
+        var page = $('.page');
+        nvConfirm(nv_is_del_confirm[0], function() {
             $.ajax({
                 type: "POST",
                 url: page.data('url'),
-                cache: !1,
-                data: 'id=' + page.data('id') + '&delete=1'
+                cache: false,
+                data: {
+                    id: page.data('id'),
+                    delete: 1,
+                    checkss: page.data('checkss')
+                },
             }).done(function(a) {
-                window.location.href = page.data('url')
-            })
-        }
+                if (a.status == 'error') {
+                    nvToast(a.mess)
+                } else if (a.status == 'ok') {
+                    window.location.href = page.data('url');
+                } else {
+                    nvToast(nv_is_del_confirm[2])
+                }
+            });
+        })
     });
 
     $('.feedback_del_sel').on('click', function() {

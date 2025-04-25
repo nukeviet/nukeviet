@@ -23,10 +23,19 @@ if (!empty($contact_allowed['reply'])) {
     if ($nv_Request->isset_request('reply', 'post') or $nv_Request->isset_request('forward', 'post')) {
         $is_reply = $nv_Request->isset_request('reply', 'post');
         $id = $is_reply ? $nv_Request->get_int('reply', 'post', 0) : $nv_Request->get_int('forward', 'post', 0);
+
         if (empty($id)) {
             nv_jsonOutput([
                 'status' => 'error',
-                'mess' => 'Error'
+                'mess' => $nv_Lang->getGlobal('error_code_11')
+            ]);
+        }
+
+        $checkss = $nv_Request->get_title('checkss', 'post', '');
+        if ($checkss != md5(NV_CHECK_SESSION . '_' . $module_name . '_' . $admin_info['userid'])) {
+            nv_jsonOutput([
+                'status' => 'error',
+                'mess' => $nv_Lang->getGlobal('error_code_11')
             ]);
         }
 
@@ -34,7 +43,7 @@ if (!empty($contact_allowed['reply'])) {
         if (empty($row)) {
             nv_jsonOutput([
                 'status' => 'error',
-                'mess' => 'Error'
+                'mess' => $nv_Lang->getGlobal('error_code_11')
             ]);
         }
 
@@ -149,7 +158,7 @@ if (!empty($contact_allowed['reply'])) {
         $db->query('UPDATE ' . NV_MOD_TABLE . '_send SET is_reply=' . $mode . ' WHERE id=' . $id);
 
         nv_jsonOutput([
-            'status' => 'OK',
+            'status' => 'ok',
             'mess' => $mess
         ]);
     }
@@ -250,6 +259,11 @@ if (!empty($contact_allowed['exec'])) {
                 nv_delete_notification(NV_LANG_DATA, $module_name, 'contact_new', $id);
                 $db->query('DELETE FROM ' . NV_MOD_TABLE . '_send WHERE id = ' . $id);
                 $db->query('DELETE FROM ' . NV_MOD_TABLE . '_reply WHERE id = ' . $id);
+            } else {
+                nv_jsonOutput([
+                    'status' => 'error',
+                    'mess' => $nv_Lang->getModule('error_code_11')
+                ]);
             }
         }
 
@@ -346,7 +360,7 @@ if (!empty($contact_allowed['view'])) {
         if (!empty($row['sender_id'])) {
             $userinfo = $db->query('SELECT * FROM ' . NV_USERS_GLOBALTABLE . ' WHERE userid=' . $row['sender_id'])->fetch();
             $userinfo['full_name'] = nv_show_name_user($userinfo['first_name'], $userinfo['last_name'], $userinfo['username']);
-            $userinfo['gender'] = $nv_Lang->getModule('user_gender_' . $userinfo['gender']);
+            $userinfo['gender'] = $nv_Lang->getModule('user_gender_' . ($userinfo['gender'] ?: 'N'));
             $userinfo['birthday'] = !empty($userinfo['birthday']) ? nv_date_format(1, $userinfo['birthday']) : '';
             $userinfo['regdate'] = nv_datetime_format($userinfo['regdate']);
             $userinfo['last_login'] = nv_datetime_format($userinfo['last_login']);

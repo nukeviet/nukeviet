@@ -1,12 +1,11 @@
-<!-- BEGIN: main -->
-<div class="row page" data-url="{$smarty.const.NV_BASE_ADMINURL}index.php?{$smarty.const.NV_LANG_VARIABLE}={$smarty.const.NV_LANG_DATA}&amp;{$smarty.const.NV_NAME_VARIABLE}={$MODULE_NAME}" data-id="{$DATA.id}">
+<div class="row page" data-url="{$smarty.const.NV_BASE_ADMINURL}index.php?{$smarty.const.NV_LANG_VARIABLE}={$smarty.const.NV_LANG_DATA}&amp;{$smarty.const.NV_NAME_VARIABLE}={$MODULE_NAME}" data-id="{$DATA.id}" data-checkss="{$CHECKSS}">
     <div class="col-lg-8 col-xxl-7">
         <div class="card">
             <div class="card-header .h2">
                 {if !$DATA.is_processed}
-                <!-- BEGIN: process --><span class="fa-solid fa-spinner fa-spin-pulse"></span><!-- END: process -->
+                <span class="fa-solid fa-spinner fa-spin-pulse"></span>
                 {else}
-                <!-- BEGIN: processed --><span class="fa-solid fa-check"></span><!-- END: processed -->
+                <span class="fa-solid fa-check"></span>
                 {/if}
                 <strong>{$DATA.title}</strong>
             </div>
@@ -22,28 +21,24 @@
                                             <tr>
                                                 <td class="text-right">
                                                     {if !empty($DATA.sender_id)}
-                                                    <!-- BEGIN: is_user --><a href="javascript:void(0)" class="view_user" data-userid="{$DATA.sender_id}">{$DATA.sender_name}</a><!-- END: is_user -->
+                                                    <a href="javascript:void(0)" class="view_user" data-bs-toggle="modal" data-bs-target="#view-user" data-userid="{$DATA.sender_id}">{$DATA.sender_name}</a>
                                                     {else}
-                                                    <!-- BEGIN: is_guest --><span>{$DATA.sender_name}</span><!-- END: is_guest -->
+                                                    <span>{$DATA.sender_name}</span>
                                                     {/if}
                                                 </td>
                                                 <td>&nbsp;&nbsp;&lt;{$DATA.sender_email}&gt;</td>
                                             </tr>
-                                            <!-- BEGIN: sender_phone -->
                                             {if !empty($DATA.sender_phone)}
                                             <tr>
                                                 <td class="text-right">{$LANG->getGlobal('phonenumber')}:</td>
                                                 <td>&nbsp;&nbsp;{$DATA.sender_phone}</td>
                                             </tr>
                                             {/if}
-                                            <!-- END: sender_phone -->
-                                            <!-- BEGIN: sender_address -->
                                             {if !empty($DATA.sender_address)}
                                             <tr>
                                                 <td class="text-right">{$LANG->getGlobal('address')}:</td>
                                                 <td>&nbsp;&nbsp;{$DATA.sender_address}</td>
                                             </tr>
-                                            <!-- END: sender_address -->
                                             {/if}
                                             <tr>
                                                 <td class="text-right">IP:</td>
@@ -61,9 +56,9 @@
                                 <td class="text-nowrap" style="width:1%"><strong>{$LANG->getModule('to_department')}</strong></td>
                                 <td>
                                     {if !empty($DEPARTMENTS[$DATA.cid])}
-                                    <!-- BEGIN: department_url --><a href="javascript:void(0)" data-url="{$smarty.const.NV_BASE_ADMINURL}index.php?{$smarty.const.NV_LANG_VARIABLE}={$smarty.const.NV_LANG_DATA}&amp;{$smarty.const.NV_NAME_VARIABLE}={$MODULE_NAME}&amp;{$smarty.const.NV_OP_VARIABLE}=department&amp;id={$DATA.cid}" class="department-view">{$DEPARTMENTS[$DATA.cid].full_name}</a><!-- END: department_url -->
+                                    <a href="javascript:void(0)" data-url="{$smarty.const.NV_BASE_ADMINURL}index.php?{$smarty.const.NV_LANG_VARIABLE}={$smarty.const.NV_LANG_DATA}&amp;{$smarty.const.NV_NAME_VARIABLE}={$MODULE_NAME}&amp;{$smarty.const.NV_OP_VARIABLE}=department&amp;id={$DATA.cid}" class="department-view">{$DEPARTMENTS[$DATA.cid].full_name}</a>
                                     {else}
-                                    <!-- BEGIN: department --><span>{$LANG->getModule('department_empty')}</span><!-- END: department -->
+                                    <span>{$LANG->getModule('department_empty')}</span>
                                     {/if}
                                 </td>
                             </tr>
@@ -85,9 +80,10 @@
                 </div>
             </div>
         </div>
-
+    </div>
+    <div class="col-lg-4">
         {if !empty($DATA.auto_forward)}
-        <div class="card mt-3">
+        <div class="card mt-3 mt-lg-0">
             <div class="card-header">
                 <strong>{$LANG->getModule('auto_forward_to')}:</strong>
             </div>
@@ -96,9 +92,7 @@
             </div>
         </div>
         {/if}
-        <!-- END: auto_forward -->
 
-        <!-- BEGIN: read_admins -->
         {if !empty($smarty.const.NV_IS_SPADMIN)}
         <div class="card mt-3">
             <div class="card-header">
@@ -109,34 +103,30 @@
             </div>
         </div>
         {/if}
-        <!-- END: read_admins -->
 
-        <!-- BEGIN: is_processed -->
         {if $DATA.is_processed}
         <div class="card mt-3 bg-success text-white">
             <div class="card-header">
                 <strong>{$LANG->getModule('has_been_processed')}</strong>
             </div>
             <div class="card-body">
-                <!-- BEGIN: processed_person -->
                 {if !empty($ADMINS[$DATA.processed_by])}
                 {$LANG->getModule('processed_by')}: <a href="{$smarty.const.NV_BASE_ADMINURL}index.php?{$smarty.const.NV_LANG_VARIABLE}={$smarty.const.NV_LANG_DATA}&amp;{$smarty.const.NV_NAME_VARIABLE}=authors&amp;id={$DATA.processed_by}">{$ADMINS[$DATA.processed_by]}</a>&nbsp;&nbsp;
                 {/if}
-                <!-- END: processed_person -->
                 {$LANG->getModule('processed_time')}: {$DATA.processed_time|ddatetime:1}
             </div>
         </div>
         {/if}
-        <!-- END: is_processed -->
-
+    </div>
+</div>
+<div class="row">
+    <div class="col-lg-8 col-xxl-7">
         <div class="card mt-3">
             <div class="card-body text-center row row-cols-auto justify-content-center g-2">
                 {if ($CONTACT_ALLOWED.reply[$DATA.cid])|isset}
-                <!-- BEGIN: reply -->
                 <div class="col">
-                    <button type="button" class="btn btn-secondary feedback-reply"><i class="fa-solid fa-reply"></i> {$LANG->getModule('send_title')}</button>
+                    <button type="button" class="btn btn-secondary feedback-reply" data-bs-toggle="modal" data-bs-target="#feedback-reply"><i class="fa-solid fa-reply"></i> {$LANG->getModule('send_title')}</button>
                 </div>
-                <!-- END: reply -->
                 {/if}
                 {if ($CONTACT_ALLOWED.exec[$DATA.cid])|isset}
                 <div class="col">
@@ -148,198 +138,36 @@
                 <div class="col">
                     <button type="button" class="btn btn-secondary feedback_mark_single" data-mark="{if $DATA.is_processed}unprocess{else}processed{/if}">{if $DATA.is_processed}<i class="fa-regular fa-circle"></i> {$LANG->getModule('mark_as_unprocess')}{else}<i class="fa-regular fa-circle-check"></i> {$LANG->getModule('mark_as_processed')}{/if}</button>
                 </div>
-                <!-- BEGIN: exec -->
-                <!-- END: exec -->
                 {/if}
                 {if ($CONTACT_ALLOWED.reply[$DATA.cid])|isset}
-                <!-- BEGIN: forward -->
                 <div class="col">
-                    <button type="button" class="btn btn-secondary feedback-forward"><i class="fa-solid fa-share"></i> {$LANG->getModule('mark_as_forward')}</button>
+                    <button type="button" class="btn btn-secondary feedback-forward" data-bs-toggle="modal" data-bs-target="#feedback-forward"><i class="fa-solid fa-share"></i> {$LANG->getModule('mark_as_forward')}</button>
                 </div>
-                <!-- END: forward -->
                 {/if}
             </div>
         </div>
-
-        <!-- BEGIN: data_reply -->
-        {* <div class="table-responsive">
-            <table class="table table-striped table-bordered table-hover">
-                <caption><em class="fa fa-file-text-o">&nbsp;</em>Re: {$DATA.title}</caption>
-                <col class="w150" />
-                <col />
-                <tbody>
-                    <tr>
-                        <td style="vertical-align:top">{$LANG->getModule('infor_user_send_title')}</td>
-                        <td> {$REPLY.reply_name} &lt;{$REPLY.admin_email}&gt;
-                            <br />
-                            {$REPLY.time}
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>{$LANG->getModule('reply_user_send_title')}</td>
-                        <td>{$REPLY.reply_time}</td>
-                    </tr>
-                    <tr>
-                        <td colspan="2">{$REPLY.reply_content}</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div> *}
-        <!-- END: data_reply -->
-
-        <!-- BEGIN: is_user_modal -->
-        {if !empty($DATA.sender_id)}
-        <div class="modal fade" id="view-user" tabindex="-1" role="dialog">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                        <h4 class="modal-title">{$LANG->getModule('user_info')}</h4>
-                    </div>
-                    <div class="modal-body">
-                        <table class="table table-striped table-bordered">
-                            <tbody>
-                                <tr>
-                                    <td class="text-nowrap" style="width:1%">{$LANG->getModule('user_fullname')}</td>
-                                    <td>{$USER.full_name}</td>
-                                    <td rowspan="3" style="width:80px">
-                                        <img src="{$USER.photo}" style="width:80px;height:80px" alt="" />
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="text-nowrap" style="width:1%">{$LANG->getModule('user_username')}</td>
-                                    <td>{$USER.username}</td>
-                                </tr>
-                                <tr>
-                                    <td class="text-nowrap" style="width:1%">{$LANG->getModule('user_email')}</td>
-                                    <td>{$USER.email}</td>
-                                </tr>
-                                <tr>
-                                    <td class="text-nowrap" style="width:1%">{$LANG->getModule('user_gender')}</td>
-                                    <td colspan="2">{$USER.gender}</td>
-                                </tr>
-                                <tr>
-                                    <td class="text-nowrap" style="width:1%">{$LANG->getModule('user_birthday')}</td>
-                                    <td colspan="2">{$USER.birthday}</td>
-                                </tr>
-                                <tr>
-                                    <td class="text-nowrap" style="width:1%">{$LANG->getModule('user_regdate')}</td>
-                                    <td colspan="2">{$USER.regdate}</td>
-                                </tr>
-                                <tr>
-                                    <td class="text-nowrap" style="width:1%">{$LANG->getModule('user_last_login')}</td>
-                                    <td colspan="2">{$USER.last_login}</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-        </div>
-        {/if}
-        <!-- END: is_user_modal -->
-
-        <!-- BEGIN: reply_form -->
-        {if ($CONTACT_ALLOWED.reply[$DATA.cid])|isset}
-        <div class="modal fade" id="feedback-reply" data-backdrop="static" tabindex="-1" role="dialog">
-            <div class="modal-dialog modal-lg" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                        <h4 class="modal-title">{$LANG->getModule('send_title')}</h4>
-                    </div>
-                    <form method="post" class="modal-body">
-                        <input type="hidden" name="reply" value="{$DATA.id}" />
-                        <table class="table table-striped table-bordered">
-                            <tfoot>
-                                <tr>
-                                    <td class="text-center" colspan="2">
-                                        <button type="submit" class="btn btn-primary">{$LANG->getModule('bt_send_row_title')}</button>
-                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">{$LANG->getGlobal('close')}</button>
-                                    </td>
-                                </tr>
-                            </tfoot>
-                            <tbody>
-                                <tr>
-                                    <td>{$LANG->getModule('title_send_title')}</td>
-                                    <td class="text-center"><input name="title" type="text" value="Re:{$DATA.title}" class="form-control" disabled="true"></td>
-                                </tr>
-                                <tr>
-                                    <td>{$LANG->getGlobal('email')}</td>
-                                    <td class="text-center"><input name="email" type="email" value="{$DATA.sender_email}" class="form-control" disabled="true"></td>
-                                </tr>
-                                <tr>
-                                    <td colspan="2">{$MESS_CONTENT}</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </form>
-                </div>
-            </div>
-        </div>
-        {/if}
-        <!-- END: reply_form -->
-
-        <!-- BEGIN: forward_form -->
-        {if ($CONTACT_ALLOWED.reply[$DATA.cid])|isset}
-        <div class="modal fade" id="feedback-forward" data-backdrop="static" tabindex="-1" role="dialog">
-            <div class="modal-dialog modal-lg" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                        <h4 class="modal-title">{$LANG->getModule('mark_as_forward')}</h4>
-                    </div>
-                    <form method="post" class="modal-body">
-                        <input type="hidden" name="forward" value="{$DATA.id}" />
-                        <table class="table table-striped table-bordered">
-                            <tfoot>
-                                <tr>
-                                    <td class="text-center" colspan="2">
-                                        <button type="submit" class="btn btn-primary">{$LANG->getModule('bt_send_row_title')}</button>
-                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">{$LANG->getGlobal('close')}</button>
-                                    </td>
-                                </tr>
-                            </tfoot>
-                            <tbody>
-                                <tr>
-                                    <td>{$LANG->getModule('title_send_title')}</td>
-                                    <td class="text-center"><input name="title" type="text" value="Fwd:{$DATA.title}" class="form-control" disabled="true"></td>
-                                </tr>
-                                <tr>
-                                    <td>{$LANG->getGlobal('email')}</td>
-                                    <td class="text-center"><input name="email" type="email" value="" class="form-control" /></td>
-                                </tr>
-                                <tr>
-                                    <td colspan="2">{$FORWARD_CONTENT}</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </form>
-                </div>
-            </div>
-        </div>
-        {/if}
-        <!-- END: forward_form -->
     </div>
-
-    <div class="col-md-10">
-        <div class="panel-group" id="reply_list" role="tablist" aria-multiselectable="true">
-            {foreach $REPLYLIST as $REPLY}
-            <!-- BEGIN: reply_loop -->
-            <div class="panel panel-info">
-                <a class="panel-heading collapsed" style="display: flex" data-toggle="collapse" data-parent="#reply_list" href="#collapse-{$REPLY.rid}" aria-expanded="false" aria-controls="collapse-{$REPLY.rid}">
-                    <span style="flex-grow:1"><i class="fa {$REPLY.icon}" aria-hidden="true"></i> {$REPLY.type}</span>
-                    <span class="pull-right">{$REPLY.time}</span>
-                </a>
-                <div id="collapse-{$REPLY.rid}" class="panel-collapse collapse" role="tabpanel">
-                    <ul class="list-group">
+</div>
+<div class="row mt-3">
+    <div class="col-lg-8 col-xxl-7">
+    <div class="accordion" id="accordion-reply-list" role="tablist" aria-multiselectable="true">
+        {foreach $REPLYLIST as $REPLY}
+        <div class="accordion-item">
+            <div class="accordion-header">
+                <button type="button" role="tab" id="reply-list-heading{$REPLY.rid}" class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#reply-list-collapse{$REPLY.rid}" aria-expanded="false" aria-controls="reply-list-collapse{$REPLY.rid}">
+                    <span style="flex-grow:1"><i class="fa-solid {$REPLY.icon}" aria-hidden="true"></i> {$REPLY.type}</span>
+                    <span class="pull-right">{$REPLY.time}&nbsp;</span>
+                </button>
+            </div>
+            <div id="reply-list-collapse{$REPLY.rid}" class="accordion-collapse collapse" role="tabpanel" aria-labelledby="reply-list-heading{$REPLY.rid}" data-bs-parent="#accordion-reply-list">
+                <div class="card m-1">
+                    <ul class="list-group list-group-flush">
                         <li class="list-group-item">
                             {$LANG->getModule('sender')}: <a href="{$REPLY.sender_url}">{$REP_ADMINS[$REPLY.reply_aid]}</a>
                         </li>
                         <li class="list-group-item">
                             {$LANG->getModule('receiver')}: {$REPLY.reply_recipient}
                         </li>
-                        <!-- BEGIN: reply_cc -->
                         {if !empty($REPLY.reply_cc)}
                         <li class="list-group-item">
                             {$LANG->getModule('cc')}: {$REPLY.reply_cc}
@@ -353,20 +181,149 @@
                             {/foreach}
                         </li>
                         {/if}
-                        <!-- END: reply_cc -->
                     </ul>
-                    <div class="panel-footer">
-                        <div class="panel panel-primary m-bottom-none">
-                            <div class="panel-body" style="white-space: normal !important;">
+                    <div class="card-footer">
+                        <div class="card">
+                            <div class="card-body" style="white-space: normal !important;">
                                 {$REPLY.reply_content}
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <!-- END: reply_loop -->
-            {/foreach}
+        </div>
+        {/foreach}
+    </div>
+</div>
+
+{if !empty($DATA.sender_id)}
+<div class="modal fade" id="view-user" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">{$LANG->getModule('user_info')}</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <table class="table table-striped table-bordered">
+                    <tbody>
+                        <tr>
+                            <td class="text-nowrap" style="width:1%">{$LANG->getModule('user_fullname')}</td>
+                            <td>{$USER.full_name}</td>
+                            <td rowspan="3" style="width:80px">
+                                <img src="{$USER.photo}" style="width:80px;height:80px" alt="">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="text-nowrap" style="width:1%">{$LANG->getModule('user_username')}</td>
+                            <td>{$USER.username}</td>
+                        </tr>
+                        <tr>
+                            <td class="text-nowrap" style="width:1%">{$LANG->getModule('user_email')}</td>
+                            <td>{$USER.email}</td>
+                        </tr>
+                        <tr>
+                            <td class="text-nowrap" style="width:1%">{$LANG->getModule('user_gender')}</td>
+                            <td colspan="2">{$USER.gender}</td>
+                        </tr>
+                        <tr>
+                            <td class="text-nowrap" style="width:1%">{$LANG->getModule('user_birthday')}</td>
+                            <td colspan="2">{$USER.birthday}</td>
+                        </tr>
+                        <tr>
+                            <td class="text-nowrap" style="width:1%">{$LANG->getModule('user_regdate')}</td>
+                            <td colspan="2">{$USER.regdate}</td>
+                        </tr>
+                        <tr>
+                            <td class="text-nowrap" style="width:1%">{$LANG->getModule('user_last_login')}</td>
+                            <td colspan="2">{$USER.last_login}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 </div>
-<!-- END: main -->
+{/if}
+
+{if ($CONTACT_ALLOWED.reply[$DATA.cid])|isset}
+<div class="modal fade" id="feedback-reply" data-backdrop="static" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">{$LANG->getModule('send_title')}</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form method="post" class="modal-body">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="row mb-3">
+                                <div class="col-sm-2 col-form-label text-sm-end">{$LANG->getModule('title_send_title')}</div>
+                                <div class="col-sm-9">
+                                    <input name="title" type="text" value="Re:{$DATA.title}" class="form-control" disabled="true">
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-sm-2 col-form-label text-sm-end">{$LANG->getModule('email')}</div>
+                                <div class="col-sm-9">
+                                    <input name="email" type="email" value="{$DATA.sender_email}" class="form-control" disabled="true">
+                                </div>
+                            </div>
+                            <div class="row">
+                                {$MESS_CONTENT}
+                            </div>
+                        </div>
+                        <div class="card-footer text-center">
+                            <button type="submit" class="btn btn-primary">{$LANG->getModule('bt_send_row_title')}</button>
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{$LANG->getGlobal('close')}</button>
+                        </div>
+                    </div>
+                    <input type="hidden" name="reply" value="{$DATA.id}">
+                    <input type="hidden" name="checkss" value="{$CHECKSS}">
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="feedback-forward" data-backdrop="static" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">{$LANG->getModule('mark_as_forward')}</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form method="post" class="modal-body">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="row mb-3">
+                                <div class="col-sm-2 col-form-label text-sm-end">{$LANG->getModule('title_send_title')}</div>
+                                <div class="col-sm-9">
+                                    <input name="title" type="text" value="Fwd:{$DATA.title}" class="form-control" disabled="true">
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-sm-2 col-form-label text-sm-end">{$LANG->getModule('email')}</div>
+                                <div class="col-sm-9">
+                                    <input name="email" type="email" value="" class="form-control">
+                                </div>
+                            </div>
+                            <div class="row">
+                                {$FORWARD_CONTENT}
+                            </div>
+                        </div>
+                        <div class="card-footer text-center">
+                            <button type="submit" class="btn btn-primary">{$LANG->getModule('bt_send_row_title')}</button>
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{$LANG->getGlobal('close')}</button>
+                        </div>
+                    </div>
+                    <input type="hidden" name="forward" value="{$DATA.id}">
+                    <input type="hidden" name="checkss" value="{$CHECKSS}">
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{/if}
