@@ -72,15 +72,21 @@ $(function() {
     $('#feedback-reply form, #feedback-forward form').on('submit', function(e) {
         e.preventDefault();
         var url = $('.page').data('url'),
-            data = $(this).serialize();
+            data = $(this).serialize(),
+            icon = $('i', $(this));
+        if (icon.is('.fa-spinner')) {
+            return;
+        };
+        var originalClass = icon.attr("class");
+        icon.attr("class", "fa-solid fa-spinner fa-spin-pulse");
         $.ajax({
             type: "POST",
             url: url,
             cache: !1,
-            data: data,
-            dataType: "json"
+            data: data
         }).done(function(a) {
             if (a.status == 'error') {
+                icon.attr("class", originalClass);
                 nvToast(a.mess, 'error')
             } else if (a.status == 'ok') {
                 nvConfirm(a.mess, function() {;
@@ -89,6 +95,7 @@ $(function() {
                     window.location.reload()
                 }, false);
             } else {
+                icon.attr("class", originalClass);
                 nvToast(nv_is_del_confirm[2], 'error')
             }
         })
@@ -96,8 +103,14 @@ $(function() {
 
     $('.feedback_mark').on('click', function() {
         var form = $('#feedback_list'),
-            mark = $(this).data('mark');
+            mark = $(this).data('mark'),
+            icon = $('i', $(this));
+        if (icon.is('.fa-spinner')) {
+            return;
+        }
+        var originalClass = icon.attr("class");
         if ($('[name^=sends]:checked', form).length) {
+            icon.attr("class", "fa-solid fa-spinner fa-spin-pulse");
             var listsend = [];
                 $('[name^=sends]:checked', form).each(function() {
                     listsend.push($(this).val())
@@ -116,8 +129,10 @@ $(function() {
                 if (res.status === 'ok') {
                     location.reload();
                 } else if (res.status === 'error') {
+                    icon.attr("class", originalClass);
                     nvToast(res.mess, 'error');
                 } else {
+                    icon.attr("class", originalClass);
                     nvToast(nv_is_del_confirm[2], 'error');
                 }
             })
@@ -130,7 +145,13 @@ $(function() {
         var page = $('.page'),
             url = page.data('url'),
             checkss = page.data('checkss'),
-            mark = $(this).data('mark');
+            mark = $(this).data('mark'),
+            icon = $('i', $(this));
+        if (icon.is('.fa-spinner')) {
+            return;
+        };
+        var originalClass = icon.attr("class");
+        icon.attr("class", "fa-solid fa-spinner fa-spin-pulse");
         $.ajax({
             type: "POST",
             url: url,
@@ -142,6 +163,7 @@ $(function() {
             }
         }).done(function(a) {
             if (a.status == 'error') {
+                icon.attr("class", originalClass);
                 nvToast(a.mess, 'error')
             } else if (a.status == 'ok') {
                 if (mark == 'unread') {
@@ -150,13 +172,20 @@ $(function() {
                     window.location.reload()
                 }
             } else {
+                icon.attr("class", originalClass);
                 nvToast(nv_is_del_confirm[2], 'error')
             }
         })
     });
 
     $('.feedback_del').on('click', function() {
-        var page = $('.page');
+        var page = $('.page'),
+            icon = $('i', $(this));
+        if (icon.is('.fa-spinner')) {
+            return;
+        }
+        var originalClass = icon.attr("class");
+        icon.attr("class", "fa-solid fa-spinner fa-spin-pulse");
         nvConfirm(nv_is_del_confirm[0], function() {
             $.ajax({
                 type: "POST",
@@ -170,24 +199,34 @@ $(function() {
             }).done(function(a) {
                 if (a.status == 'error') {
                     nvToast(a.mess)
+                    icon.attr("class", originalClass);
                 } else if (a.status == 'ok') {
                     window.location.href = page.data('url');
                 } else {
                     nvToast(nv_is_del_confirm[2])
+                    icon.attr("class", originalClass);
                 }
             });
-        })
+        }, function() {
+            icon.attr("class", originalClass);
+        });
     });
 
     $('.feedback_del_sel').on('click', function() {
-        var form = $('#feedback_list')
+        var form = $('#feedback_list');
         if ($('[name^=sends]:checked', form).length) {
             var listsend = [];
                 $('[name^=sends]:checked', form).each(function() {
                     listsend.push($(this).val())
                 }
             );
-            var checkss = $('[name=checkss]', form).val();
+            var checkss = $('[name=checkss]', form).val(),
+                icon = $('i', $(this));
+            if (icon.is('.fa-spinner')) {
+                return;
+            }
+            var originalClass = icon.attr("class");
+            icon.attr("class", "fa-solid fa-spinner fa-spin-pulse");
             nvConfirm(nv_is_del_confirm[0], function() {
                 $.ajax({
                     type: "POST",
@@ -201,11 +240,15 @@ $(function() {
                     if (res.status === 'ok') {
                         location.reload();
                     } else if (res.status === 'error') {
+                        icon.attr("class", originalClass);
                         nvToast(res.mess, 'error');
                     } else {
+                        icon.attr("class", originalClass);
                         nvToast(nv_is_del_confirm[2], 'error');
                     }
                 })
+            }, function() {
+                icon.attr("class", originalClass);
             });
         } else {
             nvAlert(nv_please_check);
@@ -214,7 +257,13 @@ $(function() {
 
     $('.feedback_del_all').on('click', function() {
         var form = $('#feedback_list')
-        var checkss = $('[name=checkss]', form).val();
+        var checkss = $('[name=checkss]', form).val(),
+            icon = $('i', $(this));
+        if (icon.is('.fa-spinner')) {
+            return;
+        }
+        var originalClass = icon.attr("class");
+        icon.attr("class", "fa-solid fa-spinner fa-spin-pulse");
         nvConfirm(nv_is_del_confirm[0], function() {
             $.ajax({
                 type: "POST",
@@ -227,11 +276,15 @@ $(function() {
                 if (res.status === 'ok') {
                     location.reload();
                 } else if (res.status === 'error') {
+                    icon.attr("class", originalClass);
                     nvToast(res.mess, 'error');
                 } else {
+                    icon.attr("class", originalClass);
                     nvToast(nv_is_del_confirm[2], 'error');
                 }
             })
+        }, function() {
+            icon.attr("class", originalClass);
         });
     });
 

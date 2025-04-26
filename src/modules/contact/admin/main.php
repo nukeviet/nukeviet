@@ -423,7 +423,7 @@ if (!empty($contact_allowed['view'])) {
             if (!empty($admins)) {
                 $admins = array_unique($admins);
                 $admins = implode(',', $admins);
-                $result2 = $db->query('SELECT t1.admin_id, t2.username as admin_login, t2.first_name, t2.last_name FROM ' . NV_AUTHORS_GLOBALTABLE . ' t1 INNER JOIN ' . NV_USERS_GLOBALTABLE . ' t2 ON t1.admin_id = t2.userid WHERE t1.admin_id IN (' . $admins . ')');
+                $result2 = $db->query(query: 'SELECT t1.admin_id, t2.username as admin_login, t2.first_name, t2.last_name FROM ' . NV_AUTHORS_GLOBALTABLE . ' t1 INNER JOIN ' . NV_USERS_GLOBALTABLE . ' t2 ON t1.admin_id = t2.userid WHERE t1.admin_id IN (' . $admins . ')');
                 $admins = [];
                 while ($admin = $result2->fetch()) {
                     $admins[$admin['admin_id']] = nv_show_name_user($admin['first_name'], $admin['last_name'], $admin['admin_login']);
