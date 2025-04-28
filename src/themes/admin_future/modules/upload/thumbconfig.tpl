@@ -30,9 +30,9 @@
                             </td>
                             <td>
                                 <div class="hstack gap-1 align-items-center">
-                                    <input class="form-control text-center fw-75" type="number" min="1" max="999" value="{$dir.thumb_width}" name="thumb_width[{$dir.did}]">
+                                    <input class="form-control text-center fw-75" type="number" min="1" max="1000" value="{$dir.thumb_width}" name="thumb_width[{$dir.did}]">
                                     <div>x</div>
-                                    <input class="form-control text-center fw-75" type="number" min="1" max="999" value="{$dir.thumb_height}" name="thumb_height[{$dir.did}]">
+                                    <input class="form-control text-center fw-75" type="number" min="1" max="1000" value="{$dir.thumb_height}" name="thumb_height[{$dir.did}]">
                                 </div>
                             </td>
                             <td>
@@ -71,9 +71,9 @@
                             </td>
                             <td>
                                 <div class="hstack gap-1 align-items-center">
-                                    <input class="form-control text-center fw-75" type="number" min="1" max="999" type="number" value="100" name="other_thumb_width">
+                                    <input class="form-control text-center fw-75" type="number" min="1" max="1000" type="number" value="300" name="other_thumb_width">
                                     <div>x</div>
-                                    <input class="form-control text-center fw-75" type="number" min="1" max="999" type="number" value="120" name="other_thumb_height">
+                                    <input class="form-control text-center fw-75" type="number" min="1" max="1000" type="number" value="300" name="other_thumb_height">
                                 </div>
                             </td>
                             <td>

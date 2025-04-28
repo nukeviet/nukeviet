@@ -25,10 +25,18 @@
     --nv-primary: #337ab7;
     --nv-success: #5cb85c;
     --nv-white: #fff;
-    --cr-danger: #a94442;
+    --cr-danger: #d9534f;
     --cr-input-border-radius: 4px;
     --cr-input-focus-border-color: #66afe9;
     --cr-btn-border-radius: 4px;
+    --cr-toast-error-bg: #d9534f;
+    --cr-toast-danger-bg: #d9534f;
+    --cr-toast-primary-bg: #337ab7;
+    --cr-toast-success-bg: #5cb85c;
+    --cr-toast-info-bg: #5bc0de;
+    --cr-toast-info-color: #fff;
+    --cr-toast-warning-bg: #f0ad4e;
+    --cr-toast-warning-color: #fff;
 }
 
 .cr-btn-primary {
@@ -210,6 +218,11 @@
 
 .text-bold {
     font-weight: 700;
+}
+
+.text-break {
+    word-wrap: break-word;
+    word-break: break-word;
 }
 
 /* Fix bootstrap */

@@ -612,17 +612,13 @@ $result->closeCursor();
 $templ_list = nv_scandir(NV_ROOTDIR . '/themes/' . $selectthemes . '/layout', '/^block\.([a-zA-Z0-9\-\_]+)\.tpl$/');
 $templ_list = preg_replace('/^block\.([a-zA-Z0-9\-\_]+)\.tpl$/', '\\1', $templ_list);
 
-// Load position file
-$xml = @simplexml_load_file(NV_ROOTDIR . '/themes/' . $selectthemes . '/config.ini') or nv_info_die($nv_Lang->getGlobal('error_404_title'), $nv_Lang->getModule('block_error_fileconfig_title'), $nv_Lang->getModule('block_error_fileconfig_content'), 404);
-$xmlpositions = $xml->xpath('positions');
-$positions = $xmlpositions[0]->position;
-
-$tpl->assign('POSITIONS', $positions);
+$tpl->assign('POSITIONS', nv_get_blocks($selectthemes, false));
 $tpl->assign('LIST_TEMPLATES', $templ_list);
 $tpl->assign('LIST_MODULES', $list_modules);
 $tpl->assign('BLOCKLIST', loadblock($row['module'], $row['bid'], $selectthemes));
 $tpl->assign('DTIME_TYPES', $dtime_types);
 $tpl->assign('GROUPS_LIST', $groups_list);
+$tpl->assign('SITE_MODS', $site_mods);
 
 $dtime_details = get_dtime_details($row['dtime_type'], $row['dtime_details']);
 $tpl->assign('DTIME_DETAILS', $dtime_details);

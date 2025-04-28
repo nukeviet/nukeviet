@@ -40,9 +40,6 @@ if (!defined('NV_DEBUG')) {
  */
 class Error
 {
-    const DISPLAY_ERROR_LIST_DEFAULT = E_ALL;
-    const LOG_ERROR_LIST_DEFAULT = E_ALL | E_STRICT;
-    const SEND_ERROR_LIST_DEFAULT = E_USER_ERROR;
     const ERROR_LOG_PATH_DEFAULT = 'data/logs/error_logs';
     const LOG_FILE_NAME_DEFAULT = 'error_log'; //Tên file log lỗi
     const LOG_NOTICE_FILE_NAME_DEFAULT = 'notice_log'; //tên file log cảnh báo
@@ -57,6 +54,7 @@ class Error
     private $errline = false;
     private $errid = false;
     private static $errortype = [
+        2048 => 'Strict Notice', // Backward compatible with PHP versions below 8.4
         E_ERROR => 'Error',
         E_WARNING => 'Warning',
         E_PARSE => 'Parsing Error',
@@ -68,7 +66,6 @@ class Error
         E_USER_ERROR => 'User Error',
         E_USER_WARNING => 'User Warning',
         E_USER_NOTICE => 'User Notice',
-        E_STRICT => 'Strict Notice',
         E_RECOVERABLE_ERROR => 'Recoverable Error',
         E_DEPRECATED => 'Deprecated Notice',
         E_USER_DEPRECATED => 'User-deprecated Notice'
@@ -123,9 +120,9 @@ class Error
     public function __construct($config)
     {
         $this->cfg = [
-            'log_errors_list' => self::parse_error_num((int) ($config['log_errors_list'] ?? self::LOG_ERROR_LIST_DEFAULT)),
-            'display_errors_list' => self::parse_error_num((int) ($config['display_errors_list'] ?? self::DISPLAY_ERROR_LIST_DEFAULT)),
-            'send_errors_list' => self::parse_error_num((int) ($config['send_errors_list'] ?? self::SEND_ERROR_LIST_DEFAULT)),
+            'log_errors_list' => self::parse_error_num((int) ($config['log_errors_list'] ?? (version_compare(PHP_VERSION, '8.4.0', '<') ? (E_ALL | E_STRICT) : E_ALL))),
+            'display_errors_list' => self::parse_error_num((int) ($config['display_errors_list'] ?? E_ALL)),
+            'send_errors_list' => self::parse_error_num((int) ($config['send_errors_list'] ?? E_USER_ERROR)),
             'error_send_mail' => !empty($config['error_send_email']) ? (string) $config['error_send_email'] : '',
             'error_set_logs' => isset($config['error_set_logs']) ? (bool) $config['error_set_logs'] : true,
             'error_separate_file' => isset($config['error_separate_file']) ? (bool) $config['error_separate_file'] : false,
@@ -154,7 +151,7 @@ class Error
      * get_error_log_path()
      *
      * @param string $path
-     * @return string
+     * @return array
      */
     private static function get_error_log_path($path)
     {
@@ -203,8 +200,14 @@ class Error
      */
     private static function parse_error_num($num)
     {
-        if ($num > E_ALL + E_STRICT) {
-            $num = E_ALL + E_STRICT;
+        if (version_compare(PHP_VERSION, '8.4.0', '<')) {
+            if ($num > E_ALL + E_STRICT) {
+                $num = E_ALL + E_STRICT;
+            }
+        } else {
+            if ($num > E_ALL) {
+                $num = E_ALL;
+            }
         }
         if ($num < 0) {
             $num = 0;

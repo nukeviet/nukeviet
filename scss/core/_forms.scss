@@ -39,6 +39,13 @@
   background-color: var(--cr-btn-bg);
   transition: color .15s ease-in-out, background-color .15s ease-in-out, border-color .15s ease-in-out, box-shadow .15s ease-in-out;
 
+  &.cr-btn-icon {
+    padding-left: calc(var(--cr-btn-padding-x) - 0.25rem);
+    display: inline-flex;
+    align-items: center;
+    gap: .125rem;
+  }
+
   &:hover {
     color: var(--cr-btn-hover-color);
     background-color: var(--cr-btn-hover-bg);
@@ -71,21 +78,23 @@
   }
 }
 
-.cr-btn-primary {
-  --cr-btn-color: #{color-contrast($primary)};
-  --cr-btn-bg: #{$primary};
-  --cr-btn-border-color: #{$primary};
-  --cr-btn-hover-color: #{color-contrast(shade-color($primary, 15%))};
-  --cr-btn-hover-bg: #{shade-color($primary, 15%)};
-  --cr-btn-hover-border-color: #{shade-color($primary, 20%)};
-  --cr-btn-active-color: #{color-contrast(shade-color($primary, 20%))};
-  --cr-btn-active-bg: #{shade-color($primary, 20%)};
-  --cr-btn-active-border-color: #{shade-color($primary, 25%)};
-  --cr-btn-active-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
-  --cr-btn-disabled-color: #{color-contrast($primary)};
-  --cr-btn-disabled-bg: #{$primary};
-  --cr-btn-disabled-border-color: #{$primary};
-  --cr-btn-disabled-opacity: 0.65;
+@each $key, $value in $btn-colors {
+  .cr-btn-#{$key} {
+    --cr-btn-color: var(--cr-btn-#{$key}-color);
+    --cr-btn-bg: var(--cr-btn-#{$key}-bg);
+    --cr-btn-border-color: var(--cr-btn-#{$key}-border-color);
+    --cr-btn-hover-color: var(--cr-btn-#{$key}-hover-color);
+    --cr-btn-hover-bg: var(--cr-btn-#{$key}-hover-bg);
+    --cr-btn-hover-border-color: var(--cr-btn-#{$key}-hover-border-color);
+    --cr-btn-active-color: var(--cr-btn-#{$key}-active-color);
+    --cr-btn-active-bg: var(--cr-btn-#{$key}-active-bg);
+    --cr-btn-active-border-color: var(--cr-btn-#{$key}-active-border-color);
+    --cr-btn-active-shadow: var(--cr-btn-#{$key}-active-shadow);
+    --cr-btn-disabled-color: var(--cr-btn-#{$key}-disabled-color);
+    --cr-btn-disabled-bg: var(--cr-btn-#{$key}-disabled-bg);
+    --cr-btn-disabled-border-color: var(--cr-btn-#{$key}-disabled-border-color);
+    --cr-btn-disabled-opacity: var(--cr-btn-#{$key}-disabled-opacity);
+  }
 }
 
 .cr-invalid-feedback {

@@ -174,10 +174,7 @@ $module_info = $site_mods[$module_name];
 $module_file = $module_info['module_file'];
 $module_data = $module_info['module_data'];
 $module_upload = $module_info['module_upload'];
-$module_captcha = $module_name == 'users' ? $global_config['captcha_type'] : (!empty($module_config[$module_name]['captcha_type']) ? $module_config[$module_name]['captcha_type'] : '');
-if (!(empty($module_captcha) or in_array($module_captcha, ['captcha', 'recaptcha', 'turnstile'], true)) or ($module_captcha == 'recaptcha' and (empty($global_config['recaptcha_sitekey']) or empty($global_config['recaptcha_secretkey']))) or ($module_captcha == 'turnstile' and (empty($global_config['turnstile_sitekey']) or empty($global_config['turnstile_secretkey'])))) {
-    $module_captcha = 'captcha';
-}
+$module_captcha = nv_module_captcha($module_name);
 
 if (!preg_match('/^[a-z0-9\-\_\/\+]+$/i', $op)) {
     nv_redirect_location(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
@@ -272,33 +269,7 @@ if (($cache = $nv_Cache->getItem('modules', $cache_file)) != false) {
 }
 
 // Doc file cau hinh giao dien
-$cache_file = NV_LANG_DATA . '_' . $global_config['module_theme'] . '_configposition_' . NV_CACHE_PREFIX . '.cache';
-if (($cache = $nv_Cache->getItem('themes', $cache_file)) != false) {
-    $theme_config_positions = unserialize($cache);
-} else {
-    $_themeConfig = nv_object2array(simplexml_load_file(NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/config.ini'));
-    if (isset($_themeConfig['positions']['position']['name'])) {
-        $theme_config_positions = [
-            $_themeConfig['positions']['position']
-        ];
-    } elseif (isset($_themeConfig['positions']['position'])) {
-        $theme_config_positions = $_themeConfig['positions']['position'];
-    } else {
-        $theme_config_positions = [];
-        $_ini_file = file_get_contents(NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/config.ini');
-        if (preg_match_all('/<position>[\t\n\s]+<name>(.*?)<\/name>[\t\n\s]+<tag>(\[[a-zA-Z0-9_]+\])<\/tag>[\t\n\s]+<\/position>/s', $_ini_file, $_m)) {
-            foreach ($_m[1] as $_key => $value) {
-                $theme_config_positions[] = [
-                    'name' => $value,
-                    'tag' => $_m[2][$_key]
-                ];
-            }
-        }
-    }
-    if (!empty($theme_config_positions)) {
-        $nv_Cache->setItem('themes', $cache_file, serialize($theme_config_positions));
-    }
-}
+$theme_config_positions = nv_get_blocks($global_config['module_theme']);
 
 require NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/theme.php';
 

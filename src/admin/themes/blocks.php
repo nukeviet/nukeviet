@@ -92,11 +92,6 @@ if ($set_by_func) {
     }
 }
 
-// Danh sách các position của theme
-$xml = simplexml_load_file(NV_ROOTDIR . '/themes/' . $selectthemes . '/config.ini');
-$content = $xml->xpath('positions');
-$theme_positionlist = $content[0]->position;
-
 // Danh sách các block + Danh sách các position đã được sử dụng
 $blocklist = [];
 $positionlist = [];
@@ -161,12 +156,18 @@ $tpl->assign('SET_BY_FUNC', $set_by_func);
 $tpl->assign('FUNCLIST', $funclist);
 $tpl->assign('BLOCKLIST', $blocklist);
 
-$array_theme_pos = [];
-$count = count($theme_positionlist);
-for ($i = 0; $i < $count; ++$i) {
-    $array_theme_pos[(string) $theme_positionlist[$i]->tag] = (string) $theme_positionlist[$i]->name;
+// Lấy và tính toán các vị trí block của giao diện
+$_positions = nv_get_blocks($selectthemes, false);
+$positions = [];
+foreach ($_positions as $_pos) {
+    if (isset($positions[$_pos['tag']])) {
+        continue;
+    }
+    $_pos['title'] = (empty($_pos['module']) ? '' : ((isset($site_mods[$_pos['module']]) ? $site_mods[$_pos['module']]['custom_title'] : $_pos['module']) . ': ')) . $_pos['name'];
+    $positions[$_pos['tag']] = $_pos;
 }
-$tpl->assign('THEME_POS', $array_theme_pos);
+
+$tpl->assign('THEME_POS', $positions);
 $tpl->assign('POSITIONLIST', $positionlist);
 
 $contents = $tpl->fetch('blocks.tpl');

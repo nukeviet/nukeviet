@@ -38,12 +38,15 @@ $savecat = 0;
     '',
     ''
 ];
-
+$ad_block_cat_old = '';
 $groups_list = nv_groups_list();
 $parentid = $nv_Request->get_int('parentid', 'get,post', 0);
-$catid = $nv_Request->get_int('catid', 'get', 0);
+$catid = $nv_Request->get_int('catid', 'get,post', 0);
 
-if ($catid > 0 and isset($global_array_cat[$catid])) {
+if ($catid > 0) {
+    if (!isset($global_array_cat[$catid])) {
+        nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op);
+    }
     $parentid = $global_array_cat[$catid]['parentid'];
     $title = $global_array_cat[$catid]['title'];
     $titlesite = $global_array_cat[$catid]['titlesite'];
@@ -55,7 +58,7 @@ if ($catid > 0 and isset($global_array_cat[$catid])) {
     $keywords = $global_array_cat[$catid]['keywords'];
     $groups_view = $global_array_cat[$catid]['groups_view'];
     $featured = $global_array_cat[$catid]['featured'];
-    $ad_block_cat = $global_array_cat[$catid]['ad_block_cat'];
+    $ad_block_cat = $ad_block_cat_old = $global_array_cat[$catid]['ad_block_cat'];
     $layout_func = $global_array_cat[$catid]['layout_func'];
 
     if (!defined('NV_IS_ADMIN_MODULE')) {
@@ -109,10 +112,11 @@ if (!empty($savecat)) {
         $alias = $_alias;
     }
 
-    $_groups_post = $nv_Request->get_array('groups_view', 'post', []);
+    $_groups_post = $nv_Request->get_typed_array('groups_view', 'post', 'int', []);
     $groups_view = !empty($_groups_post) ? implode(',', nv_groups_post(array_intersect($_groups_post, array_keys($groups_list)))) : '';
 
-    $_ad_block_cat = $nv_Request->get_array('ad_block_cat', 'post', []);
+    $_ad_block_cat = $nv_Request->get_typed_array('ad_block_cat', 'post', 'int', []);
+    $_ad_block_cat = array_filter(array_unique($_ad_block_cat));
     $ad_block_cat = !empty($_ad_block_cat) ? implode(',', $_ad_block_cat) : '';
 
     $layout_func = $nv_Request->get_title('layout_func', 'post', '');
@@ -171,7 +175,6 @@ if (!empty($savecat)) {
 
         $newcatid = $db->insert_id($sql, 'catid', $data_insert);
         if ($newcatid > 0) {
-            $check_ad_block_cat = $_ad_block_cat;
             require_once NV_ROOTDIR . '/includes/action_' . $db->dbtype . '.php';
 
             nv_copy_structure_table(NV_PREFIXLANG . '_' . $module_data . '_' . $newcatid, NV_PREFIXLANG . '_' . $module_data . '_rows');
@@ -181,11 +184,9 @@ if (!empty($savecat)) {
                 $db->query('INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . '_admins (userid, catid, admin, add_content, pub_content, edit_content, del_content) VALUES (' . $admin_id . ', ' . $newcatid . ', 1, 1, 1, 1, 1)');
             }
 
-            if (in_array('1', $check_ad_block_cat, true)) {
-                $ini_edit = nv_add_block_topcat_news($newcatid);
-            }
-            if (in_array('2', $check_ad_block_cat, true)) {
-                $ini_edit2 = nv_add_block_botcat_news($newcatid);
+            // Đăng kí các khối block tùy chỉnh
+            foreach ($_ad_block_cat as $ad_block_id) {
+                nv_register_block(nv_get_blcat_tag($newcatid, $ad_block_id));
             }
 
             $nv_Cache->delMod($module_name);
@@ -218,10 +219,6 @@ if (!empty($savecat)) {
         $stmt->execute();
 
         if ($stmt->rowCount()) {
-            $check_ad_block_cat = explode(',', $ad_block_cat);
-
-            $_r_b = nv_remove_block_botcat_news($catid);
-            $_r_t = nv_remove_block_topcat_news($catid);
             if ($parentid != $parentid_old) {
                 $weight = $db->query('SELECT max(weight) FROM ' . NV_PREFIXLANG . '_' . $module_data . '_cat WHERE parentid=' . $parentid)->fetchColumn();
                 $weight = (int) $weight + 1;
@@ -233,11 +230,16 @@ if (!empty($savecat)) {
                 nv_insert_logs(NV_LANG_DATA, $module_name, $nv_Lang->getModule('edit_cat'), $title, $admin_info['userid']);
             }
 
-            if (in_array('1', $check_ad_block_cat, true)) {
-                $ini_edit = nv_add_block_topcat_news($catid);
+            // Kiểm tra đăng kí, hủy đăng kí các khối block tùy chỉnh
+            $ad_block_cat_old = array_filter(array_unique(array_map('intval', explode(',', $ad_block_cat_old))));
+            $diff_add = array_diff($_ad_block_cat, $ad_block_cat_old);
+            $diff_del = array_diff($ad_block_cat_old, $_ad_block_cat);
+
+            foreach ($diff_add as $ad_block_id) {
+                nv_register_block(nv_get_blcat_tag($catid, $ad_block_id));
             }
-            if (in_array('2', $check_ad_block_cat, true)) {
-                $ini_edit2 = nv_add_block_botcat_news($catid);
+            foreach ($diff_del as $ad_block_id) {
+                nv_unregister_block(nv_get_blcat_tag($catid, $ad_block_id));
             }
 
             $nv_Cache->delMod($module_name);
@@ -251,12 +253,8 @@ if (!empty($savecat)) {
 }
 
 $groups_view = array_map('intval', explode(',', $groups_view));
+$ad_block_cat = array_filter(array_unique(array_map('intval', explode(',', $ad_block_cat))));
 
-if (!empty($ad_block_cat)) {
-    $ad_block_cat = explode(',', $ad_block_cat);
-} else {
-    $ad_block_cat = [];
-}
 $array_cat_list = [];
 if (defined('NV_IS_ADMIN_MODULE')) {
     $array_cat_list[0] = $nv_Lang->getModule('cat_sub_sl');
@@ -306,7 +304,7 @@ if (!empty($array_cat_list)) {
     foreach ($ad_block_list as $ad_block_id => $ad_block_tl) {
         $ad_block_cats[] = [
             'value' => $ad_block_id,
-            'checked' => in_array((int) $ad_block_id, array_map('intval', $ad_block_cat), true) ? ' checked="checked"' : '',
+            'checked' => in_array((int) $ad_block_id, $ad_block_cat, true) ? ' checked="checked"' : '',
             'title' => $ad_block_tl
         ];
     }
@@ -397,6 +395,9 @@ if (!empty($array_cat_list)) {
     foreach ($ad_block_cats as $ads) {
         $xtpl->assign('ad_block_cats', $ads);
         $xtpl->parse('main.content.ad_block_cats');
+    }
+    if ($catid > 0 and !empty($ad_block_cat_old)) {
+        $xtpl->parse('main.content.ad_block_note');
     }
 
     $descriptionhtml = nv_htmlspecialchars(nv_editor_br2nl($descriptionhtml));

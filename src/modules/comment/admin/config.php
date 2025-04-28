@@ -16,8 +16,11 @@ if (!defined('NV_IS_FILE_ADMIN')) {
 $mod_name = $nv_Request->get_title('mod_name', 'post,get', '');
 
 $groups_list = nv_groups_list();
-
+$checkss = md5(NV_CHECK_SESSION . '_' . $module_name . '_' . $admin_info['userid']);
 if ($nv_Request->isset_request('save', 'post') and isset($site_mod_comm[$mod_name])) {
+    if ($nv_Request->get_title('checkss', 'post', '') != $checkss) {
+        nv_jsonOutput(['status' => 'error', 'mess' => $nv_Lang->getGlobal('error_code_11')]);
+    }
     $array_config = [];
     $array_config['emailcomm'] = $nv_Request->get_int('emailcomm', 'post', 0);
     $array_config['auto_postcomm'] = $nv_Request->get_int('auto_postcomm', 'post', 0);
@@ -25,8 +28,8 @@ if ($nv_Request->isset_request('save', 'post') and isset($site_mod_comm[$mod_nam
     $array_config['sortcomm'] = $nv_Request->get_int('sortcomm', 'post', 0);
     $array_config['perpagecomm'] = $nv_Request->get_int('perpagecomm', 'post', 0);
     $array_config['timeoutcomm'] = $nv_Request->get_int('timeoutcomm', 'post', 0);
-    $array_config['allowattachcomm'] = ($nv_Request->get_int('allowattachcomm', 'post', 0) == 1 ? 1 : 0);
-    $array_config['alloweditorcomm'] = ($nv_Request->get_int('alloweditorcomm', 'post', 0) == 1 ? 1 : 0);
+    $array_config['allowattachcomm'] = $nv_Request->get_int('allowattachcomm', 'post', 0) == 1 ? 1 : 0;
+    $array_config['alloweditorcomm'] = $nv_Request->get_int('alloweditorcomm', 'post', 0) == 1 ? 1 : 0;
 
     if ($array_config['perpagecomm'] < 1 or $array_config['perpagecomm'] > 1000) {
         $array_config['perpagecomm'] = 5;
@@ -65,150 +68,64 @@ if ($nv_Request->isset_request('save', 'post') and isset($site_mod_comm[$mod_nam
         $sth->execute();
     }
     $nv_Cache->delMod('settings');
-    nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&rand=' . nv_genpass());
+    nv_jsonOutput([
+        'status' => 'ok',
+        'mess' => $nv_Lang->getModule('update_success'),
+        'redirect' => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&rand=' . nv_genpass()
+    ]);
 }
 
-$xtpl = new XTemplate($op . '.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-$xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
-$xtpl->assign('NV_LANG_VARIABLE', NV_LANG_VARIABLE);
-$xtpl->assign('NV_LANG_DATA', NV_LANG_DATA);
-$xtpl->assign('NV_BASE_ADMINURL', NV_BASE_ADMINURL);
-$xtpl->assign('NV_NAME_VARIABLE', NV_NAME_VARIABLE);
-$xtpl->assign('NV_OP_VARIABLE', NV_OP_VARIABLE);
-$xtpl->assign('MODULE_NAME', $module_name);
-$xtpl->assign('OP', $op);
-
 if (!empty($mod_name)) {
-    $xtpl->assign('MOD_NAME', $mod_name);
-    $xtpl->assign('DATA', $module_config[$mod_name]);
-    $xtpl->assign('ACTIVECOMM', $module_config[$mod_name]['activecomm'] ? ' checked="checked"' : '');
-    $xtpl->assign('EMAILCOMM', $module_config[$mod_name]['emailcomm'] ? ' checked="checked"' : '');
-    $xtpl->assign('ALLOWATTACHCOMM', empty($module_config[$mod_name]['allowattachcomm']) ? '' : ' checked="checked"');
-    $xtpl->assign('ALLOWEDITORCOMM', empty($module_config[$mod_name]['alloweditorcomm']) ? '' : ' checked="checked"');
+    $tpl = new \NukeViet\Template\NVSmarty();
+    $tpl->setTemplateDir(get_module_tpl_dir('config-edit.tpl'));
+    $tpl->assign('LANG', $nv_Lang);
+    $tpl->assign('MODULE_NAME', $module_name);
+    $tpl->assign('OP', $op);
+    $tpl->assign('MOD_NAME', $mod_name);
+    $tpl->assign('DATA', $module_config[$mod_name]);
+    $tpl->assign('GROUPS', $groups_list);
+    $tpl->assign('CHECKSS', $checkss);
 
     $admins_mod_name = explode(',', $site_mod_comm[$mod_name]['admins']);
     $admins_module_name = explode(',', $site_mods[$module_name]['admins']);
     $admins_module_name = array_unique(array_merge($admins_mod_name, $admins_module_name));
     if (!empty($admins_module_name)) {
-        $adminscomm = array_map('intval', explode(',', $module_config[$mod_name]['adminscomm']));
-
         $admins_module_name = array_map('intval', $admins_module_name);
         $_sql = 'SELECT userid, username, first_name, last_name FROM ' . NV_USERS_GLOBALTABLE . ' WHERE userid IN (' . implode(',', $admins_module_name) . ')';
         $_query = $db->query($_sql);
-
-        while ($row = $_query->fetch()) {
-            if (!empty($row['first_name'])) {
-                $row['username'] .= ' (' . $row['first_name'] . ')';
-            }
-            $xtpl->assign('OPTION', [
-                'key' => $row['userid'],
-                'title' => $row['username'],
-                'checked' => (in_array((int) $row['userid'], $adminscomm, true)) ? ' checked="checked"' : ''
-            ]);
-            $xtpl->parse('main.config.adminscomm');
-        }
+        $_adminscom = $_query->fetchAll();
+        $_query->closeCursor();
+        $tpl->assign('ADMINSCOM', $_adminscom);
     }
-
-    for ($i = 0; $i <= 2; ++$i) {
-        $xtpl->assign('OPTION', [
-            'key' => $i,
-            'title' => $nv_Lang->getModule('auto_postcomm_' . $i),
-            'selected' => $i == $module_config[$mod_name]['auto_postcomm'] ? ' selected="selected"' : ''
-        ]);
-        $xtpl->parse('main.config.auto_postcomm');
-    }
-
-    $array_allowed_comm = array_map('intval', explode(',', $module_config[$mod_name]['allowed_comm']));
-    $array_view_comm = array_map('intval', explode(',', $module_config[$mod_name]['view_comm']));
-    $array_setcomm = array_map('intval', explode(',', $module_config[$mod_name]['setcomm']));
-
-    $xtpl->assign('OPTION', [
-        'value' => -1,
-        'checked' => in_array(-1, $array_allowed_comm, true) ? ' checked="checked"' : '',
-        'title' => $nv_Lang->getModule('allowed_comm_item')
-    ]);
-    $xtpl->parse('main.config.allowed_comm');
-
-    foreach ($groups_list as $_group_id => $_title) {
-        $xtpl->assign('OPTION', [
-            'value' => $_group_id,
-            'checked' => in_array((int) $_group_id, $array_allowed_comm, true) ? ' checked="checked"' : '',
-            'title' => $_title
-        ]);
-        $xtpl->parse('main.config.allowed_comm');
-
-        $xtpl->assign('OPTION', [
-            'value' => $_group_id,
-            'checked' => in_array((int) $_group_id, $array_view_comm, true) ? ' checked="checked"' : '',
-            'title' => $_title
-        ]);
-        $xtpl->parse('main.config.view_comm');
-
-        $xtpl->assign('OPTION', [
-            'value' => $_group_id,
-            'checked' => in_array((int) $_group_id, $array_setcomm, true) ? ' checked="checked"' : '',
-            'title' => $_title
-        ]);
-        $xtpl->parse('main.config.setcomm');
-    }
-
-    // Order by comm
-    for ($i = 0; $i <= 2; ++$i) {
-        $xtpl->assign('OPTION', [
-            'key' => $i,
-            'title' => $nv_Lang->getModule('sortcomm_' . $i),
-            'selected' => $i == $module_config[$mod_name]['sortcomm'] ? ' selected="selected"' : ''
-        ]);
-        $xtpl->parse('main.config.sortcomm');
-    }
-
-    $xtpl->parse('main.config');
 
     $page_title = $nv_Lang->getModule('config_mod_name', $site_mod_comm[$mod_name]['custom_title']);
-} else {
-    $page_title = $nv_Lang->getModule('config');
 
-    $weight = 0;
-    foreach ($site_mod_comm as $mod_name => $row_mod) {
-        $admin_title = (!empty($row_mod['admin_title'])) ? $row_mod['admin_title'] : $row_mod['custom_title'];
-
-        $array_allowed_comm = (!empty($module_config[$mod_name]['allowed_comm'])) ? array_map('intval', explode(',', $module_config[$mod_name]['allowed_comm'])) : [];
-        $array_view_comm = (!empty($module_config[$mod_name]['view_comm'])) ? explode(',', $module_config[$mod_name]['view_comm']) : [];
-
-        if (in_array(-1, $array_allowed_comm, true)) {
-            $allowed_comm = $nv_Lang->getModule('allowed_comm_item');
-        } else {
-            $allowed_comm = [];
-            foreach ($array_allowed_comm as $_group_id) {
-                $allowed_comm[] = $groups_list[$_group_id];
-            }
-            $allowed_comm = implode('<br>', $allowed_comm);
-        }
-
-        $view_comm = [];
-        foreach ($array_view_comm as $_group_id) {
-            $view_comm[] = $groups_list[$_group_id];
-        }
-        $view_comm = implode('<br>', $view_comm);
-
-        $row = [];
-        $row['weight'] = ++$weight;
-        $row['mod_name'] = $mod_name;
-        $row['admin_title'] = $admin_title;
-        $row['allowed_comm'] = $allowed_comm;
-        $row['view_comm'] = $view_comm;
-        $row['auto_postcomm'] = $nv_Lang->getModule('auto_postcomm_' . $module_config[$mod_name]['auto_postcomm']);
-        $row['activecomm'] = $module_config[$mod_name]['activecomm'] ? 'check' : 'circle-o';
-        $row['emailcomm'] = $module_config[$mod_name]['emailcomm'] ? 'check' : 'circle-o';
-        $xtpl->assign('ROW', $row);
-        $xtpl->parse('main.list.loop');
-    }
-
-    $xtpl->parse('main.list');
+    $tpl->registerPlugin('modifier', 'in_array', 'in_array');
+    $tpl->registerPlugin('modifier', 'intval', 'intval');
+    $tpl->registerPlugin('modifier', 'array_map', 'array_map');
+    $contents = $tpl->fetch('config-edit.tpl');
+    nv_jsonOutput([
+        'status' => 'ok',
+        'title' => $page_title,
+        'html' => $contents
+    ]);
 }
 
-$xtpl->parse('main');
-$contents = $xtpl->text('main');
+$tpl = new \NukeViet\Template\NVSmarty();
+$tpl->setTemplateDir(get_module_tpl_dir('config.tpl'));
+$tpl->assign('LANG', $nv_Lang);
+$tpl->assign('MODULE_NAME', $module_name);
+$tpl->assign('OP', $op);
+$tpl->assign('SITE_MOD_COMM', $site_mod_comm);
+$tpl->assign('MODULE_CONFIG', $module_config);
+$tpl->assign('GROUPS', $groups_list);
+
+$page_title = $nv_Lang->getModule('config');
+$tpl->registerPlugin('modifier', 'in_array', 'in_array');
+$tpl->registerPlugin('modifier', 'intval', 'intval');
+$tpl->registerPlugin('modifier', 'array_map', 'array_map');
+$contents = $tpl->fetch('config.tpl');
+
 
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_admin_theme($contents);

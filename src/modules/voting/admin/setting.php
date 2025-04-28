@@ -14,8 +14,23 @@ if (!defined('NV_IS_FILE_ADMIN')) {
 }
 
 $page_title = $nv_Lang->getModule('setting');
+
+$tpl = new \NukeViet\Template\NVSmarty();
+$tpl->setTemplateDir(get_module_tpl_dir('setting.tpl'));
+$tpl->assign('LANG', $nv_Lang);
+$tpl->assign('MODULE_NAME', $module_name);
+$tpl->assign('OP', $op);
+
 $array_config = [];
-if ($nv_Request->isset_request('save', 'post')) {
+if ($nv_Request->isset_request('checkss', 'post')) {
+    if ($nv_Request->get_title('checkss', 'post', '') !== NV_CHECK_SESSION) {
+        nv_jsonOutput([
+            'status' => 'error',
+            'mess' => 'Error session!!!'
+        ]);
+    }
+
+    //Đoạn xử lý lưu cấu hình ở đây
     $array_config['difftimeout'] = $nv_Request->get_int('difftimeout', 'post', 0);
 
     empty($array_config['difftimeout']) && $array_config['difftimeout'] = 1;
@@ -30,20 +45,19 @@ if ($nv_Request->isset_request('save', 'post')) {
 
     nv_insert_logs(NV_LANG_DATA, $module_name, 'Change config module', '', $admin_info['userid']);
     $nv_Cache->delMod('settings');
-    nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op);
+
+    nv_jsonOutput([
+        'status' => 'success',
+        'mess' => $nv_Lang->getGlobal('save_success')
+    ]);
 }
 
 $array_config = $module_config[$module_name];
 $array_config['difftimeout'] = round($array_config['difftimeout'] / 3600);
 
-$xtpl = new XTemplate('setting.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-$xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
-$xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
-$xtpl->assign('FORM_ACTION', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op);
-$xtpl->assign('DATA', $array_config);
+$tpl->assign('DATA', $array_config);
 
-$xtpl->parse('main');
-$contents = $xtpl->text('main');
+$contents = $tpl->fetch('setting.tpl');
 
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_admin_theme($contents);

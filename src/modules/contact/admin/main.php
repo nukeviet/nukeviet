@@ -157,9 +157,15 @@ if (!empty($contact_allowed['reply'])) {
 
 if (!empty($contact_allowed['exec'])) {
     $db_deps = 'cid IN (' . implode(',', array_keys($contact_allowed['exec'])) . ')';
-
+    $checkss = $nv_Request->get_title('checkss', 'post', '');
     // Đánh dấu phản hồi đã đọc/chưa đọc, đã xử lý/chưa xử lý
     if ($nv_Request->isset_request('mark', 'post')) {
+        if ($checkss != md5(string: NV_CHECK_SESSION . '_' . $module_name . '_' . $admin_info['userid'])) {
+            nv_jsonOutput(array_data: [
+                'status' => 'error',
+                'mess' => $nv_Lang->getGlobal('error_code_11')
+            ]);
+        }
         $mark = $nv_Request->get_title('mark', 'post', '');
         if (in_array($mark, ['read', 'unread', 'processed', 'unprocess'], true)) {
             $sends = $nv_Request->get_typed_array('sends', 'post', 'int', []);
@@ -196,6 +202,12 @@ if (!empty($contact_allowed['exec'])) {
 
     // Xóa phản hồi
     if ($nv_Request->isset_request('delete', 'post')) {
+        if ($checkss != md5(NV_CHECK_SESSION . '_' . $module_name . '_' . $admin_info['userid'])) {
+            nv_jsonOutput([
+                'status' => 'error',
+                'mess' => $nv_Lang->getGlobal('error_code_11')
+            ]);
+        }
         $type = $nv_Request->get_int('delete', 'post', 0);
         // Xóa toàn bộ các thư thuộc bộ phận được phép xem
         if ($type == 3) {
@@ -280,20 +292,20 @@ if (!empty($contact_allowed['view'])) {
         $row['send_time'] = nv_datetime_format($row['send_time'], 1);
 
         $departments = get_department_list();
-        if (isset($departments[$row['cid']])) {
-            $row['department'] = $departments[$row['cid']]['full_name'];
-            $row['department_url'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=department&id=' . $row['cid'];
-        } else {
-            $row['department'] = $nv_Lang->getModule('department_empty');
-        }
+        // if (isset($departments[$row['cid']])) {
+        //     $row['department'] = $departments[$row['cid']]['full_name'];
+        //     $row['department_url'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=department&id=' . $row['cid'];
+        // } else {
+        //     $row['department'] = $nv_Lang->getModule('department_empty');
+        // }
 
-        if ($row['is_processed']) {
-            $row['mark_process'] = 'unprocess';
-            $row['mark_process_title'] = $nv_Lang->getModule('mark_as_unprocess');
-        } else {
-            $row['mark_process'] = 'processed';
-            $row['mark_process_title'] = $nv_Lang->getModule('mark_as_processed');
-        }
+        // if ($row['is_processed']) {
+        //     $row['mark_process'] = 'unprocess';
+        //     $row['mark_process_title'] = $nv_Lang->getModule('mark_as_unprocess');
+        // } else {
+        //     $row['mark_process'] = 'processed';
+        //     $row['mark_process_title'] = $nv_Lang->getModule('mark_as_processed');
+        // }
 
         $row['auto_forward'] = !empty($row['auto_forward']) ? array_map('trim', explode(',', $row['auto_forward'])) : [];
         $auto_forward = [];
@@ -334,69 +346,79 @@ if (!empty($contact_allowed['view'])) {
             $row['read_admins'] = '';
         }
 
-        $xtpl = new XTemplate('view.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-        $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
-        $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
-        $xtpl->assign('PAGE_URL', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
-        $xtpl->assign('DATA', $row);
+        // $xtpl = new XTemplate('view.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
+        // $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
+        // $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
+        // $xtpl->assign('PAGE_URL', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
+        // $xtpl->assign('DATA', $row);
+        $tpl = new \NukeViet\Template\NVSmarty();
+        $tpl->setTemplateDir(get_module_tpl_dir('view.tpl'));
+        $tpl->assign('LANG', $nv_Lang);
+        $tpl->assign('MODULE_NAME', $module_name);
+        $tpl->assign('OP', $op);
+        $tpl->assign('CHECKSS', md5(NV_CHECK_SESSION . '_' . $module_name . '_' . $admin_info['userid']));
+        $tpl->assign('DATA', $row);
+        $tpl->assign('ADMINS', $admins);
+        $tpl->assign('DEPARTMENTS', $departments);
+        $tpl->assign('CONTACT_ALLOWED', $contact_allowed);
 
-        if (!empty($row['auto_forward'])) {
-            $xtpl->parse('main.auto_forward');
-        }
+        // if (!empty($row['auto_forward'])) {
+        //     $xtpl->parse('main.auto_forward');
+        // }
 
-        if (defined('NV_IS_SPADMIN')) {
-            $xtpl->parse('main.read_admins');
-        }
+        // if (defined('NV_IS_SPADMIN')) {
+        //     $xtpl->parse('main.read_admins');
+        // }
 
-        if ($row['is_processed']) {
-            $processed_by_name = $admins[$row['processed_by']] ?? '';
-            $xtpl->assign('PROCESSED', [
-                'name' => $processed_by_name,
-                'url' => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=authors&amp;id=' . $row['processed_by'],
-                'time' => nv_datetime_format($row['processed_time'], 1)
-            ]);
-            if (!empty($processed_by_name)) {
-                $xtpl->parse('main.is_processed.processed_person');
-            }
+        // if ($row['is_processed']) {
+        //     $processed_by_name = $admins[$row['processed_by']] ?? '';
+        //     $xtpl->assign('PROCESSED', [
+        //         'name' => $processed_by_name,
+        //         'url' => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=authors&amp;id=' . $row['processed_by'],
+        //         'time' => nv_datetime_format($row['processed_time'], 1)
+        //     ]);
+        //     if (!empty($processed_by_name)) {
+        //         $xtpl->parse('main.is_processed.processed_person');
+        //     }
 
-            $xtpl->parse('main.processed');
-            $xtpl->parse('main.is_processed');
-        } else {
-            $xtpl->parse('main.process');
-        }
+        //     $xtpl->parse('main.processed');
+        //     $xtpl->parse('main.is_processed');
+        // } else {
+        //     $xtpl->parse('main.process');
+        // }
 
         if (!empty($row['sender_id'])) {
             $userinfo = $db->query('SELECT * FROM ' . NV_USERS_GLOBALTABLE . ' WHERE userid=' . $row['sender_id'])->fetch();
             $userinfo['full_name'] = nv_show_name_user($userinfo['first_name'], $userinfo['last_name'], $userinfo['username']);
             $userinfo['gender'] = $nv_Lang->getModule('user_gender_' . $userinfo['gender']);
-            $userinfo['birthday'] = !empty($userinfo['birthday']) ? date('d/m/Y', $userinfo['birthday']) : '';
-            $userinfo['regdate'] = date('H:i d/m/Y', $userinfo['regdate']);
-            $userinfo['last_login'] = date('H:i d/m/Y', $userinfo['last_login']);
+            $userinfo['birthday'] = !empty($userinfo['birthday']) ? nv_date_format(1, $userinfo['birthday']) : '';
+            $userinfo['regdate'] = nv_datetime_format($userinfo['regdate']);
+            $userinfo['last_login'] = nv_datetime_format($userinfo['last_login']);
             if (!empty($userinfo['photo'])) {
                 $userinfo['photo'] = NV_STATIC_URL . $userinfo['photo'];
             } else {
                 $userinfo['photo'] = NV_STATIC_URL . 'themes/default/images/users/no_avatar.png';
             }
-            $xtpl->assign('USER', $userinfo);
-            $xtpl->parse('main.is_user');
-            $xtpl->parse('main.is_user_modal');
+            $tpl->assign('USER', $userinfo);
+            // $xtpl->parse('main.is_user');
+            // $xtpl->parse('main.is_user_modal');
         } else {
-            $xtpl->parse('main.is_guest');
+            // $xtpl->parse('main.is_guest');
         }
 
-        if (!empty($row['sender_phone'])) {
-            $xtpl->parse('main.sender_phone');
-        }
+        // if (!empty($row['sender_phone'])) {
+        //     $xtpl->parse('main.sender_phone');
+        // }
 
-        if (!empty($row['sender_address'])) {
-            $xtpl->parse('main.sender_address');
-        }
+        // if (!empty($row['sender_address'])) {
+        //     $xtpl->parse('main.sender_address');
+        // }
 
-        if (!empty($row['department_url'])) {
-            $xtpl->parse('main.department_url');
-        } else {
-            $xtpl->parse('main.department');
-        }
+        // if (!empty($row['department_url'])) {
+        //     $xtpl->parse('main.department_url');
+        // } else {
+        //     $xtpl->parse('main.department');
+        // }
 
         if (isset($contact_allowed['reply'][$row['cid']])) {
             if (defined('NV_EDITOR')) {
@@ -425,26 +447,19 @@ if (!empty($contact_allowed['view'])) {
                 $mess_content = '<textarea style="width:99%" name="mess_content" id="mess_content" cols="20" rows="8">' . $mess_content . '</textarea>';
                 $forward_content = '<textarea style="width:99%" name="forward_content" id="mess_content" cols="20" rows="8">' . $forward_content . '</textarea>';
             }
-            $xtpl->assign('POST', [
-                'title' => 'Re:' . $row['title'],
-                'sender_email' => $row['sender_email'],
-                'content' => $mess_content
-            ]);
+            $tpl->assign('MESS_CONTENT', $mess_content);
 
-            $xtpl->parse('main.reply');
-            $xtpl->parse('main.reply_form');
+            // $xtpl->parse('main.reply');
+            // $xtpl->parse('main.reply_form');
 
-            $xtpl->assign('FORWARD', [
-                'title' => 'Fwd:' . $row['title'],
-                'content' => $forward_content
-            ]);
-            $xtpl->parse('main.forward');
-            $xtpl->parse('main.forward_form');
+            $tpl->assign('FORWARD_CONTENT', $forward_content);
+            // $xtpl->parse('main.forward');
+            // $xtpl->parse('main.forward_form');
         }
 
-        if (isset($contact_allowed['exec'][$row['cid']])) {
-            $xtpl->parse('main.exec');
-        }
+        // if (isset($contact_allowed['exec'][$row['cid']])) {
+        //     $xtpl->parse('main.exec');
+        // }
 
         if (!empty($row['is_reply'])) {
             $result = $db->query('SELECT * FROM ' . NV_MOD_TABLE . '_reply WHERE id=' . $row['id'] . ' ORDER BY reply_time DESC');
@@ -453,7 +468,7 @@ if (!empty($contact_allowed['view'])) {
             $replylist = [];
             while ($reply = $result->fetch()) {
                 $reply['type'] = $reply['reply_recipient'] != $row['sender_email'] ? $nv_Lang->getModule('forwarding_mail') : $nv_Lang->getModule('reply_mail');
-                $reply['time'] = date('H:i d/m/Y', $reply['reply_time']);
+                $reply['time'] = nv_datetime_format( $reply['reply_time']);
                 $reply['sender_url'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=authors&amp;id=' . $reply['reply_aid'];
                 $reply['icon'] = $reply['reply_recipient'] != $row['sender_email'] ? 'fa-share' : 'fa-reply';
                 $reply['reply_cc'] = !empty($reply['reply_cc']) ? array_map('trim', explode(',', $reply['reply_cc'])) : [];
@@ -474,27 +489,28 @@ if (!empty($contact_allowed['view'])) {
                     $admins[$admin['admin_id']] = nv_show_name_user($admin['first_name'], $admin['last_name'], $admin['admin_login']);
                 }
             }
+            $tpl->assign('REPLYLIST', $replylist);
+            $tpl->assign('REP_ADMINS', $admins);
+            // if (!empty($replylist)) {
+            //     foreach ($replylist as $reply) {
+            //         $reply['sender'] = $admins[$reply['reply_aid']];
+            //         $reply['reply_cc'] = array_map(function ($aid) {
+            //             global $admins;
 
-            if (!empty($replylist)) {
-                foreach ($replylist as $reply) {
-                    $reply['sender'] = $admins[$reply['reply_aid']];
-                    $reply['reply_cc'] = array_map(function ($aid) {
-                        global $admins;
-
-                        return '<a href="' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=authors&amp;id=' . $aid . '">' . $admins[$aid] . '</a>';
-                    }, $reply['reply_cc']);
-                    $reply['reply_cc'] = implode(', ', $reply['reply_cc']);
-                    $xtpl->assign('REPLY', $reply);
-                    if (!empty($reply['reply_cc'])) {
-                        $xtpl->parse('main.reply_loop.reply_cc');
-                    }
-                    $xtpl->parse('main.reply_loop');
-                }
-            }
+            //             return '<a href="' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=authors&amp;id=' . $aid . '">' . $admins[$aid] . '</a>';
+            //         }, $reply['reply_cc']);
+            //         $reply['reply_cc'] = implode(', ', $reply['reply_cc']);
+            //         $xtpl->assign('REPLY', $reply);
+            //         if (!empty($reply['reply_cc'])) {
+            //             $xtpl->parse('main.reply_loop.reply_cc');
+            //         }
+            //         $xtpl->parse('main.reply_loop');
+            //     }
+            // }
         }
 
-        $xtpl->parse('main');
-        $contents = $xtpl->text('main');
+        $tpl->registerPlugin('modifier', 'ddatetime', 'nv_datetime_format');
+        $contents = $tpl->fetch('view.tpl');
 
         include NV_ROOTDIR . '/includes/header.php';
         echo nv_admin_theme($contents);
@@ -502,11 +518,12 @@ if (!empty($contact_allowed['view'])) {
     }
 }
 
-$xtpl = new XTemplate('main.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-$xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
-$xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
-$xtpl->assign('MODULE_NAME', $module_name);
-
+$tpl = new \NukeViet\Template\NVSmarty();
+$tpl->setTemplateDir(get_module_tpl_dir('main.tpl'));
+$tpl->assign('LANG', $nv_Lang);
+$tpl->assign('MODULE_NAME', $module_name);
+$tpl->assign('OP', $op);
+$tpl->assign('CHECKSS', md5(NV_CHECK_SESSION . '_' . $module_name . '_' . $admin_info['userid']));
 if (!empty($contact_allowed['view'])) {
     $in = implode(',', array_keys($contact_allowed['view']));
 
@@ -521,108 +538,124 @@ if (!empty($contact_allowed['view'])) {
 
     $num_items = $db->query($db->sql())
         ->fetchColumn();
-
     if ($num_items) {
-        $xtpl->assign('FORM_ACTION', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name);
-
-        if (defined('NV_IS_SPADMIN')) {
-            $xtpl->parse('main.data.for_spadmin');
-        }
-
-        $a = 0;
-        $currday = mktime(0, 0, 0, date('n'), date('j'), date('Y'));
-
         $db->select('*')
             ->order('id DESC')
             ->limit($per_page)
             ->offset(($page - 1) * $per_page);
 
         $result = $db->query($db->sql());
-
-        while ($row = $result->fetch()) {
-            if ($row['is_processed']) {
-                $status = $nv_Lang->getModule('tt3_row_title');
-            } else {
-                if ($row['is_read'] != 1) {
-                    $status = $nv_Lang->getModule('row_new');
-                } else {
-                    if ($row['is_reply']) {
-                        $status = $nv_Lang->getModule('tt2_row_title');
-                    } else {
-                        $status = $nv_Lang->getModule('tt1_row_title');
-                    }
-                }
-            }
-
-            $image = [
-                NV_STATIC_URL . NV_ASSETS_DIR . '/images/mail_new.gif',
-                12,
-                9
-            ];
-
-            if ($row['is_read'] == 1) {
-                if ($row['is_reply'] == 1) {
-                    $image = [
-                        NV_STATIC_URL . NV_ASSETS_DIR . '/images/mail_reply.gif',
-                        13,
-                        14
-                    ];
-                } elseif ($row['is_reply'] == 2) {
-                    $image = [
-                        NV_STATIC_URL . NV_ASSETS_DIR . '/images/mail_forward.gif',
-                        13,
-                        14
-                    ];
-                } else {
-                    $image = [
-                        NV_STATIC_URL . NV_ASSETS_DIR . '/images/mail_old.gif',
-                        12,
-                        11
-                    ];
-                }
-            }
-
-            $xtpl->assign('ROW', [
-                'id' => $row['id'],
-                'sender_name' => $row['sender_name'],
-                'path' => $contact_allowed['view'][$row['cid']],
-                'cat' => $row['cat'],
-                'title' => nv_clean60($row['title'], 60),
-                'time' => $row['send_time'] >= $currday ? nv_datetime_format($row['send_time'], 1) : nv_date_format(1, $row['send_time']),
-                'style' => !$row['is_read'] ? 'font-weight:bold;' : '',
-                'onclick' => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;id=' . $row['id'],
-                'status' => $status,
-                'image' => $image,
-                'disabled' => isset($contact_allowed['exec'][$row['cid']]) ? '' : ' disabled="disabled"'
-            ]);
-
-            if ($row['is_processed']) {
-                $xtpl->parse('main.data.row.is_processed');
-                $xtpl->parse('main.data.row.processed');
-            } else {
-                $xtpl->parse('main.data.row.process');
-            }
-
-            $xtpl->parse('main.data.row');
-        }
-
+        $array_row = $result->fetchAll();
+        $result->closeCursor();
         $generate_page = nv_generate_page($base_url, $num_items, $per_page, $page);
-
-        if (!empty($generate_page)) {
-            $xtpl->assign('GENERATE_PAGE', $generate_page);
-            $xtpl->parse('main.data.generate_page');
-        }
+        $tpl->assign('GENERATE_PAGE', $generate_page);
+        $tpl->assign('ARRAY_ROW', $array_row);
+        $tpl->assign('CONTACT_ALLOWED', $contact_allowed);
+        $tpl->assign('CURRDAY', mktime(0, 0, 0, ...explode('/', date('n/j/Y'))));
     }
+
+    // if ($num_items) {
+    //     $xtpl->assign('FORM_ACTION', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name);
+
+    //     if (defined('NV_IS_SPADMIN')) {
+    //         $xtpl->parse('main.data.for_spadmin');
+    //     }
+
+    //     $a = 0;
+    //     $currday = mktime(0, 0, 0, date('n'), date('j'), date('Y'));
+
+    //     $db->select('*')
+    //         ->order('id DESC')
+    //         ->limit($per_page)
+    //         ->offset(($page - 1) * $per_page);
+
+    //     $result = $db->query($db->sql());
+
+    //     while ($row = $result->fetch()) {
+    //         if ($row['is_processed']) {
+    //             $status = $nv_Lang->getModule('tt3_row_title');
+    //         } else {
+    //             if ($row['is_read'] != 1) {
+    //                 $status = $nv_Lang->getModule('row_new');
+    //             } else {
+    //                 if ($row['is_reply']) {
+    //                     $status = $nv_Lang->getModule('tt2_row_title');
+    //                 } else {
+    //                     $status = $nv_Lang->getModule('tt1_row_title');
+    //                 }
+    //             }
+    //         }
+
+    //         $image = [
+    //             NV_STATIC_URL . NV_ASSETS_DIR . '/images/mail_new.gif',
+    //             12,
+    //             9
+    //         ];
+
+    //         if ($row['is_read'] == 1) {
+    //             if ($row['is_reply'] == 1) {
+    //                 $image = [
+    //                     NV_STATIC_URL . NV_ASSETS_DIR . '/images/mail_reply.gif',
+    //                     13,
+    //                     14
+    //                 ];
+    //             } elseif ($row['is_reply'] == 2) {
+    //                 $image = [
+    //                     NV_STATIC_URL . NV_ASSETS_DIR . '/images/mail_forward.gif',
+    //                     13,
+    //                     14
+    //                 ];
+    //             } else {
+    //                 $image = [
+    //                     NV_STATIC_URL . NV_ASSETS_DIR . '/images/mail_old.gif',
+    //                     12,
+    //                     11
+    //                 ];
+    //             }
+    //         }
+
+    //         $xtpl->assign('ROW', [
+    //             'id' => $row['id'],
+    //             'sender_name' => $row['sender_name'],
+    //             'path' => $contact_allowed['view'][$row['cid']],
+    //             'cat' => $row['cat'],
+    //             'title' => nv_clean60($row['title'], 60),
+    //             'time' => $row['send_time'] >= $currday ? nv_datetime_format($row['send_time'], 1) : nv_date_format(1, $row['send_time']),
+    //             'style' => !$row['is_read'] ? 'font-weight:bold;' : '',
+    //             'onclick' => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;id=' . $row['id'],
+    //             'status' => $status,
+    //             'image' => $image,
+    //             'disabled' => isset($contact_allowed['exec'][$row['cid']]) ? '' : ' disabled="disabled"'
+    //         ]);
+
+    //         if ($row['is_processed']) {
+    //             $xtpl->parse('main.data.row.is_processed');
+    //             $xtpl->parse('main.data.row.processed');
+    //         } else {
+    //             $xtpl->parse('main.data.row.process');
+    //         }
+
+    //         $xtpl->parse('main.data.row');
+    //     }
+
+    //     $generate_page = nv_generate_page($base_url, $num_items, $per_page, $page);
+
+    //     if (!empty($generate_page)) {
+    //         $xtpl->assign('GENERATE_PAGE', $generate_page);
+    //         $xtpl->parse('main.data.generate_page');
+    //     }
+    // }
 }
 
-if (empty($num_items)) {
-    $xtpl->parse('main.empty');
-} else {
-    $xtpl->parse('main.data');
-}
-
-$xtpl->parse('main');
-$contents = $xtpl->text('main');
+// if (empty($num_items)) {
+//     $xtpl->parse('main.empty');
+// } else {
+//     $xtpl->parse('main.data');
+// }
+$tpl->registerPlugin('modifier', 'nv_clean60', 'nv_clean60');
+$tpl->registerPlugin('modifier', 'ddatetime', 'nv_datetime_format');
+$tpl->registerPlugin('modifier', 'ddate', 'nv_date_format');
+$contents = $tpl->fetch('main.tpl');
 
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_admin_theme($contents);

@@ -16,8 +16,8 @@
             </figure>
             <div>
                 <ul class="nv-list-item xsm">
-                    <li><em class="fa fa-angle-right">&nbsp;</em> {LANG.account2}: <strong>{USER.username}</strong> ({USER.email})</li>
-                    <li><em class="fa fa-angle-right">&nbsp;</em> {USER.current_mode}</li>
+                    <li><em class="fa fa-angle-right">&nbsp;</em> {LANG.account2}: <span class="text-break"><strong>{USER.username}</strong> ({USER.email})</span></li>
+                    <li><em class="fa fa-angle-right">&nbsp;</em> <span class="text-break">{USER.current_mode}</span></li>
                     <li><em class="fa fa-angle-right">&nbsp;</em> {LANG.current_login}: {USER.current_login}</li>
                     <li><em class="fa fa-angle-right">&nbsp;</em> {LANG.ip}: {USER.current_ip}</li>
                 </ul>

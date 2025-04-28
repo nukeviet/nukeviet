@@ -1,0 +1,7 @@
+[data-bs-theme="dark"],
+[data-theme="dark"] {
+  .card {
+    --#{$prefix}card-border-color: var(--#{$prefix}border-color-translucent);
+    --#{$prefix}card-border-width: 1px;
+  }
+}

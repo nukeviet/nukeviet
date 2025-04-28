@@ -174,7 +174,7 @@ function nv_comment_load($module, $checkss, $area, $id, $allowed, $page, $status
     // Kiểm tra module có được Sử dụng chức năng bình luận
     if (!empty($module) and isset($module_config[$module]['activecomm'])) {
         if (!empty($id) and $module_config[$module]['activecomm'] == 1 and $checkss == md5($module . '-' . $area . '-' . $id . '-' . $allowed . '-' . NV_CACHE_PREFIX)) {
-            $nv_Lang->loadModule('Comment', false, true);
+            $nv_Lang->loadModule('comment', false, true);
 
             $view_comm = nv_user_in_groups($module_config[$module]['view_comm']);
             if ($view_comm) {
@@ -237,7 +237,7 @@ function nv_comment_module($module, $checkss, $area, $id, $allowed, $page, $stat
             $per_page_comment = empty($module_config[$module]['perpagecomm']) ? 5 : $module_config[$module]['perpagecomm'];
             $base_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=comment&module=' . $module . '&area=' . $area . '&id=' . $id . '&allowed=' . $allowed . '&checkss=' . $checkss . '&comment_load=1&perpage=' . $per_page_comment;
 
-            $nv_Lang->loadModule('Comment', false, true);
+            $nv_Lang->loadModule('comment', false, true);
 
             // Kiểm tra quyền xem bình luận
             $form_login = [

@@ -8,7 +8,7 @@
   height: 100vh;
   background-color: var(--cr-md-backdrop-bg);
 
-  &.show {
+  &.cr-show {
     opacity: var(--cr-md-backdrop-opacity);
   }
 }
@@ -56,7 +56,7 @@
   transform: translate(0, -50px);
 }
 
-.cr-md.show .cr-md-dialog {
+.cr-md.cr-show .cr-md-dialog {
   transform: none;
 }
 

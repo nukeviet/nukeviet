@@ -964,7 +964,7 @@ function nv_admin_menu()
 
     $enable_drag = false;
     if (defined('NV_IS_SPADMIN')) {
-        $sql = 'SELECT COUNT(*) AS count FROM ' . $db_config['dbsystem'] . '.' . NV_AUTHORS_GLOBALTABLE . '_module WHERE act_' . $admin_info['level'] . ' = 1 AND module=\'themes\'';
+        $sql = 'SELECT COUNT(*) AS count FROM ' . NV_AUTHORS_GLOBALTABLE . '_module WHERE act_' . $admin_info['level'] . ' = 1 AND module=\'themes\'';
         $list = $nv_Cache->db($sql, '', 'authors');
         if (!empty($list[0]['count'])) {
             $enable_drag = true;
@@ -1033,7 +1033,6 @@ function fix_theme_configs($configs)
 }
 
 /**
- * set_theme_configs()
  * Xác định kiểu theme hiện tại, theme của module và theme của site
  *
  * @param mixed $global_config
@@ -1120,4 +1119,29 @@ function set_theme_configs(&$global_config, &$is_mobile, $module_info)
             $nv_Request->set_Cookie(CURRENT_THEMETYPE_COOKIE_NAME . NV_LANG_DATA, $theme_type, NV_LIVE_COOKIE_TIME);
         }
     }
+}
+
+/**
+ * Xác định loại captcha của module
+ *
+ * @param string $module_name
+ * @return string
+ */
+function nv_module_captcha(string $module_name): string
+{
+    global $global_config, $module_config;
+
+    $module_captcha = $module_name == 'users' ? $global_config['captcha_type'] : (
+        (isset($module_config[$module_name]) and !empty($module_config[$module_name]['captcha_type'])) ? $module_config[$module_name]['captcha_type'] : ''
+    );
+
+    if (
+        !(empty($module_captcha) or in_array($module_captcha, ['captcha', 'recaptcha', 'turnstile'], true)) or
+        ($module_captcha == 'recaptcha' and (empty($global_config['recaptcha_sitekey']) or empty($global_config['recaptcha_secretkey']))) or
+        ($module_captcha == 'turnstile' and (empty($global_config['turnstile_sitekey']) or empty($global_config['turnstile_secretkey'])))
+    ) {
+        $module_captcha = 'captcha';
+    }
+
+    return $module_captcha;
 }

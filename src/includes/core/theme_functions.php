@@ -233,6 +233,7 @@ function nv_xmlOutput($content, $lastModified)
             'indent-cdata' => true,
             'wrap' => 2000
         ];
+        // phpcs:ignore
         $tidy = new tidy();
         $tidy->parseString($content, $tidy_options, 'utf8');
         $tidy->cleanRepair();
@@ -664,4 +665,178 @@ function nv_disable_site()
     }
 
     nv_info_die($nv_Lang->getGlobal('disable_site_title'), $nv_Lang->getGlobal('disable_site_title'), $disable_site_content, $disable_site_code, '', '', '', '', $disable_site_headers);
+}
+
+/**
+ * Lấy ra position của giao diện từ tag tùy chỉnh
+ *
+ * @param string $tag
+ * @param string $module
+ * @return string
+ */
+function nv_tag2pos_block(string $tag, string $module = '')
+{
+    global $site_mods, $module_name;
+    return '[' . strtoupper('CUSTOM_' . $site_mods[$module ?: $module_name]['module_data'] . '_' . $tag) . ']';
+}
+
+/**
+ * Đăng kí vị trí block tùy chỉnh mới
+ *
+ * @param string $tag
+ * @param string $name
+ * @param string $module
+ * @return bool
+ */
+function nv_register_block(string $tag, string $name = '', string $module = '')
+{
+    global $module_name, $site_mods, $nv_Cache, $db;
+
+    $module = $module ?: $module_name;
+    if (!isset($site_mods[$module])) {
+        return false;
+    }
+    if (!preg_match('/^(?!_)[a-zA-Z0-9_]+(?<!_)$/', $tag)) {
+        trigger_error('nv_register_block: Invalid tag name ' . nv_htmlspecialchars($tag), E_USER_ERROR);
+    }
+    $name = nv_htmlspecialchars($name ?: $tag);
+    if (nv_strlen($name) > 100) {
+        trigger_error('nv_register_block: Block name too long, max 100 chars', E_USER_ERROR);
+    }
+
+    $ini_tag = nv_tag2pos_block($tag, $module);
+    $sql = "INSERT IGNORE INTO " . NV_PREFIXLANG . "_modblocks (
+        module_name, tag, ini_tag, title
+    ) VALUES (
+        :module_name, :tag, :ini_tag, :title
+    )";
+    $stmt = $db->prepare($sql);
+    $stmt->bindParam(':module_name', $module, PDO::PARAM_STR);
+    $stmt->bindParam(':tag', $tag, PDO::PARAM_STR);
+    $stmt->bindParam(':ini_tag', $ini_tag, PDO::PARAM_STR);
+    $stmt->bindParam(':title', $name, PDO::PARAM_STR);
+    $stmt->execute();
+    if ($stmt->rowCount() > 0) {
+        $nv_Cache->delMod('themes');
+        return true;
+    }
+    return false;
+}
+
+/**
+ * Hủy đăng kí vị trí block tùy chỉnh đã đăng kí
+ *
+ * @param string $tag
+ * @param string $module
+ * @param bool $all
+ * @return bool
+ */
+function nv_unregister_block(string $tag, string $module = '', bool $all = false)
+{
+    global $module_name, $site_mods, $nv_Cache, $db;
+
+    $module = $module ?: $module_name;
+    if (!isset($site_mods[$module])) {
+        return false;
+    }
+    if (empty($tag) and !$all) {
+        trigger_error('nv_unregister_block: Method call is not allowed!', E_USER_ERROR);
+    }
+
+    $sql = "SELECT tag, ini_tag FROM " . NV_PREFIXLANG . "_modblocks WHERE module_name=:module_name" . ($all ? '' : " AND tag=:tag");
+    $stmt = $db->prepare($sql);
+    $stmt->bindParam(':module_name', $module, PDO::PARAM_STR);
+    if (!$all) {
+        $stmt->bindParam(':tag', $tag, PDO::PARAM_STR);
+    }
+    $stmt->execute();
+    $tags = $stmt->fetchAll();
+    if (empty($tags)) {
+        return false;
+    }
+
+    foreach ($tags as $tag) {
+        $sql = "DELETE FROM " . NV_PREFIXLANG . "_modblocks WHERE module_name=:module_name AND tag=:tag";
+        $stmt = $db->prepare($sql);
+        $stmt->bindParam(':module_name', $module, PDO::PARAM_STR);
+        $stmt->bindParam(':tag', $tag['tag'], PDO::PARAM_STR);
+        $stmt->execute();
+        if (!$stmt->rowCount()) {
+            continue;
+        }
+
+        // Xóa toàn bộ block trong tag tên tất cả các giao diện
+        $sql = "DELETE tb1 FROM " . NV_BLOCKS_TABLE . "_weight tb1
+        INNER JOIN " . NV_BLOCKS_TABLE . "_groups tb2 ON tb1.bid=tb2.bid WHERE tb2.position=" . $db->quote($tag['ini_tag']);
+        $db->query($sql);
+
+        $sql = "DELETE FROM " . NV_BLOCKS_TABLE . "_groups WHERE position=" . $db->quote($tag['ini_tag']);
+        $db->query($sql);
+    }
+
+    $nv_Cache->delMod('themes');
+    return true;
+}
+
+/**
+ * Hủy toàn bộ vị trí block tùy chỉnh đã đăng kí theo module
+ *
+ * @param string $module
+ * @return bool
+ */
+function nv_purge_blocks(string $module = '')
+{
+    // Một cách gọi khác của nv_unregister_block tránh truyền vào tag rỗng dẫn đến xóa hết
+    return nv_unregister_block('', $module, true);
+}
+
+/**
+ * Lấy danh sách vị trí các block của giao diện
+ * trên cơ sở đọc từ ini và các vị trí tùy chỉnh
+ *
+ * @param string $theme
+ * @param bool $cache
+ * @return array
+ */
+function nv_get_blocks(string $theme, bool $cache = true)
+{
+    global $nv_Cache, $db;
+
+    $cache_file = NV_LANG_DATA . '_' . $theme . '_configposition_' . NV_CACHE_PREFIX . '.cache';
+    if ($cache and ($cache_data = $nv_Cache->getItem('themes', $cache_file)) != false) {
+        return unserialize($cache_data) ?: [];
+    }
+
+    $positions = [];
+
+    // Vị trí từ tệp ini
+    $_themeConfig = nv_object2array(simplexml_load_file(NV_ROOTDIR . '/themes/' . $theme . '/config.ini'));
+    if (isset($_themeConfig['positions']['position']['name'])) {
+        $positions = [
+            $_themeConfig['positions']['position']
+        ];
+    } elseif (isset($_themeConfig['positions']['position'])) {
+        $positions = $_themeConfig['positions']['position'];
+    } else {
+        $positions = [];
+        $_ini_file = file_get_contents(NV_ROOTDIR . '/themes/' . $theme . '/config.ini');
+        if (preg_match_all('/<position>[\t\n\s]+<name>(.*?)<\/name>[\t\n\s]+<tag>(\[[a-zA-Z0-9_]+\])<\/tag>[\t\n\s]+<\/position>/s', $_ini_file, $_m)) {
+            foreach ($_m[1] as $_key => $value) {
+                $positions[] = [
+                    'name' => $value,
+                    'tag' => $_m[2][$_key]
+                ];
+            }
+        }
+    }
+
+    // Vị trí tùy chỉnh
+    $sql = "SELECT title name, ini_tag tag, module_name module FROM " . NV_PREFIXLANG . "_modblocks";
+    $positions = array_merge($positions, $db->query($sql)->fetchAll());
+
+    if ($cache and !empty($positions)) {
+        $nv_Cache->setItem('themes', $cache_file, serialize($positions));
+    }
+
+    return $positions;
 }

@@ -516,7 +516,7 @@ if (!defined('ACCESS_EDITUS')) {
     $types[] = '2step';
     $types[] = 'passkey';
 }
-// Thành viên có quyền đổi bí danh
+// Thành viên có quyền đổi tên đăng nhập
 if ($array_data['allowloginchange'] and !defined('ACCESS_EDITUS')) {
     $types[] = 'username';
 }

@@ -19,7 +19,8 @@ $allow_func = [
     'main',
     'content',
     'del',
-    'setting'
+    'setting',
+    'change_act'
 ];
 
 define('NV_IS_FILE_ADMIN', true);

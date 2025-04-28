@@ -8,7 +8,7 @@
   height: 100vh;
   background-color: var(--cr-cap-backdrop-bg);
 
-  &.show {
+  &.cr-show {
     opacity: var(--cr-cap-backdrop-opacity);
   }
 }
@@ -50,7 +50,7 @@
   transform: translate(0, -50px);
 }
 
-.cr-cap.show .cr-cap-dialog {
+.cr-cap.cr-show .cr-cap-dialog {
   transform: none;
 }
 

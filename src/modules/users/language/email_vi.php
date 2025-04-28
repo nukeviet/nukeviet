@@ -62,7 +62,7 @@ $module_emails[Emails::NEW_INFO] = [
     'catid' => $catid,
     't' => 'Thông báo tài khoản đã được tạo khi thành viên đăng kí thành công tại form',
     's' => 'Tài khoản của bạn đã được tạo',
-    'c' => '{$greeting_user}<br /><br />Tài khoản của bạn tại website {$site_name} đã được kích hoạt. Dưới đây là thông tin tài khoản:<br /><br />Bí danh: {$username}<br />Email: {$email}<br /><br />Vui lòng bấm vào đường dẫn dưới đây để đăng nhập:<br />URL: <a href="{$link}">{$link}</a><br /><br />Đây là thư tự động được gửi đến email của bạn từ website {$site_name}. Nếu bạn không hiểu gì về nội dung bức thư này, đơn giản hãy xóa nó đi.'
+    'c' => '{$greeting_user}<br /><br />Tài khoản của bạn tại website {$site_name} đã được kích hoạt. Dưới đây là thông tin tài khoản:<br /><br />Tên đăng nhập: {$username}<br />Email: {$email}<br /><br />Vui lòng bấm vào đường dẫn dưới đây để đăng nhập:<br />URL: <a href="{$link}">{$link}</a><br /><br />Đây là thư tự động được gửi đến email của bạn từ website {$site_name}. Nếu bạn không hiểu gì về nội dung bức thư này, đơn giản hãy xóa nó đi.'
 ];
 $module_emails[Emails::NEW_INFO_OAUTH] = [
     'is_system' => $is_system,
@@ -80,7 +80,7 @@ $module_emails[Emails::ADDED_BY_LEADER] = [
     'catid' => $catid,
     't' => 'Thông báo tài khoản được trưởng nhóm khởi tạo',
     's' => 'Tài khoản của bạn đã được tạo',
-    'c' => '{$greeting_user}<br /><br />Tài khoản của bạn tại website {$site_name} đã được kích hoạt. Dưới đây là thông tin đăng nhập:<br /><br />URL: <a href="{$link}">{$link}</a><br />Bí danh: {$username}<br />Email: {$email}<br /><br />Đây là thư tự động được gửi đến email của bạn từ website {$site_name}. Nếu bạn không hiểu gì về nội dung bức thư này, đơn giản hãy xóa nó đi.'
+    'c' => '{$greeting_user}<br /><br />Tài khoản của bạn tại website {$site_name} đã được kích hoạt. Dưới đây là thông tin đăng nhập:<br /><br />URL: <a href="{$link}">{$link}</a><br />Tên đăng nhập: {$username}<br />Email: {$email}<br /><br />Đây là thư tự động được gửi đến email của bạn từ website {$site_name}. Nếu bạn không hiểu gì về nội dung bức thư này, đơn giản hãy xóa nó đi.'
 ];
 $module_emails[Emails::ADDED_BY_ADMIN] = [
     'is_system' => $is_system,
@@ -89,7 +89,7 @@ $module_emails[Emails::ADDED_BY_ADMIN] = [
     'catid' => $catid,
     't' => 'Thông báo tài khoản được quản trị khởi tạo',
     's' => 'Tài khoản của bạn đã được tạo',
-    'c' => '{$greeting_user}<br /><br />Tài khoản của bạn tại website {$site_name} đã được khởi tạo. Dưới đây là thông tin đăng nhập:<br /><br />URL: <a href="{$link}">{$link}</a><br />Bí danh: {$username}<br />Mật khẩu: {$password}<br />{if $pass_reset gt 0 or $email_reset gt 0}<br />Chú ý:<br />{if $pass_reset eq 2}- Chúng tôi khuyến cáo bạn nên thay đổi mật khẩu trước khi sử dụng tài khoản.<br />{elseif $pass_reset eq 1}- Bạn cần đổi mật khẩu trước khi sử dụng tài khoản.<br />{/if}{if $email_reset eq 2}- Chúng tôi khuyến cáo bạn nên thay đổi email trước khi sử dụng tài khoản.<br />{elseif $email_reset eq 1}- Bạn cần đổi email trước khi sử dụng tài khoản.<br />{/if}{/if}<br />Đây là thư tự động được gửi đến hòm thư điện tử của bạn từ website {$site_name}. Nếu bạn không hiểu gì về nội dung bức thư này, đơn giản hãy xóa nó đi.'
+    'c' => '{$greeting_user}<br /><br />Tài khoản của bạn tại website {$site_name} đã được khởi tạo. Dưới đây là thông tin đăng nhập:<br /><br />URL: <a href="{$link}">{$link}</a><br />Tên đăng nhập: {$username}<br />Mật khẩu: {$password}<br />{if $pass_reset gt 0 or $email_reset gt 0}<br />Chú ý:<br />{if $pass_reset eq 2}- Chúng tôi khuyến cáo bạn nên thay đổi mật khẩu trước khi sử dụng tài khoản.<br />{elseif $pass_reset eq 1}- Bạn cần đổi mật khẩu trước khi sử dụng tài khoản.<br />{/if}{if $email_reset eq 2}- Chúng tôi khuyến cáo bạn nên thay đổi email trước khi sử dụng tài khoản.<br />{elseif $email_reset eq 1}- Bạn cần đổi email trước khi sử dụng tài khoản.<br />{/if}{/if}<br />Đây là thư tự động được gửi đến hòm thư điện tử của bạn từ website {$site_name}. Nếu bạn không hiểu gì về nội dung bức thư này, đơn giản hãy xóa nó đi.'
 ];
 $module_emails[Emails::SAFE_KEY] = [
     'is_system' => $is_system,
@@ -116,7 +116,7 @@ $module_emails[Emails::EDIT_BY_ADMIN] = [
     'catid' => $catid,
     't' => 'Thông báo các thay đổi về tài khoản vừa được quản trị thực hiện',
     's' => 'Tài khoản của bạn đã được cập nhật',
-    'c' => '{$greeting_user}<br /><br />Tài khoản của bạn tại website {$site_name} đã được cập nhật. Dưới đây là thông tin đăng nhập:<br /><br />URL: <a href="{$link}">{$link}</a><br />Bí danh: {$username}<br />Email: {$email}{if not empty($password)}<br />Mật khẩu: {$password}{/if}<br />{if $pass_reset gt 0 or $email_reset gt 0}<br />Chú ý:<br />{if $pass_reset eq 2}- Chúng tôi khuyến cáo bạn nên thay đổi mật khẩu trước khi sử dụng tài khoản.<br />{elseif $pass_reset eq 1}- Bạn cần đổi mật khẩu trước khi sử dụng tài khoản.<br />{/if}{if $email_reset eq 2}- Chúng tôi khuyến cáo bạn nên thay đổi email trước khi sử dụng tài khoản.<br />{elseif $email_reset eq 1}- Bạn cần đổi email trước khi sử dụng tài khoản.<br />{/if}{/if}<br />Đây là thư tự động được gửi đến hòm thư điện tử của bạn từ website {$site_name}. Nếu bạn không hiểu gì về nội dung bức thư này, đơn giản hãy xóa nó đi.'
+    'c' => '{$greeting_user}<br /><br />Tài khoản của bạn tại website {$site_name} đã được cập nhật. Dưới đây là thông tin đăng nhập:<br /><br />URL: <a href="{$link}">{$link}</a><br />Tên đăng nhập: {$username}<br />Email: {$email}{if not empty($password)}<br />Mật khẩu: {$password}{/if}<br />{if $pass_reset gt 0 or $email_reset gt 0}<br />Chú ý:<br />{if $pass_reset eq 2}- Chúng tôi khuyến cáo bạn nên thay đổi mật khẩu trước khi sử dụng tài khoản.<br />{elseif $pass_reset eq 1}- Bạn cần đổi mật khẩu trước khi sử dụng tài khoản.<br />{/if}{if $email_reset eq 2}- Chúng tôi khuyến cáo bạn nên thay đổi email trước khi sử dụng tài khoản.<br />{elseif $email_reset eq 1}- Bạn cần đổi email trước khi sử dụng tài khoản.<br />{/if}{/if}<br />Đây là thư tự động được gửi đến hòm thư điện tử của bạn từ website {$site_name}. Nếu bạn không hiểu gì về nội dung bức thư này, đơn giản hãy xóa nó đi.'
 ];
 $module_emails[Emails::VERIFY_EMAIL] = [
     'is_system' => $is_system,
@@ -143,7 +143,7 @@ $module_emails[Emails::LOST_ACTIVE] = [
     'catid' => $catid,
     't' => 'Gửi lại thông tin kích hoạt tài khoản',
     's' => 'Thông tin kích hoạt tài khoản',
-    'c' => '{$greeting_user}<br /><br />Tài khoản của bạn tại website {$site_name} đang chờ kích hoạt. Để kích hoạt, bạn hãy click vào link dưới đây:<br /><br />URL: <a href="{$link}">{$link}</a><br />Các thông tin cần thiết:<br />Bí danh: {$username}<br />Email: {$email}<br />Mật khẩu: {$password}<br /><br />Việc kích hoạt tài khoản chỉ có hiệu lực đến {$active_deadline}<br /><br />Đây là thư tự động được gửi đến email của bạn từ website {$site_name}. Nếu bạn không hiểu gì về nội dung bức thư này, đơn giản hãy xóa nó đi.'
+    'c' => '{$greeting_user}<br /><br />Tài khoản của bạn tại website {$site_name} đang chờ kích hoạt. Để kích hoạt, bạn hãy click vào link dưới đây:<br /><br />URL: <a href="{$link}">{$link}</a><br />Các thông tin cần thiết:<br />Tên đăng nhập: {$username}<br />Email: {$email}<br />Mật khẩu: {$password}<br /><br />Việc kích hoạt tài khoản chỉ có hiệu lực đến {$active_deadline}<br /><br />Đây là thư tự động được gửi đến email của bạn từ website {$site_name}. Nếu bạn không hiểu gì về nội dung bức thư này, đơn giản hãy xóa nó đi.'
 ];
 $module_emails[Emails::LOST_PASS] = [
     'is_system' => $is_system,
@@ -224,7 +224,7 @@ $module_emails[Emails::ACTIVE_BY_ADMIN] = [
     'catid' => $catid,
     't' => 'Email thông báo cho người dùng khi quản trị kích hoạt tài khoản',
     's' => 'Tài khoản của bạn đã được tạo',
-    'c' => '{$greeting_user}<br /><br />Tài khoản của bạn tại website {$site_name} đã được kích hoạt. {if empty($oauth_name)}Dưới đây là thông tin đăng nhập:<br /><br />URL: <a href="{$link}">{$link}</a><br />Bí danh: {$username}<br />{if not empty($password)}Mật khẩu: {$password}{/if}{else}Để đăng nhập vui lòng truy cập vào trang: <a href="{$link}">{$link}</a> và click vào nút: <strong>Đăng nhập bằng {$oauth_name}</strong>.{if not empty($password)}<br /><br />Bạn cũng có thể đăng nhập theo cách thông thường với thông tin:<br />Bí danh: {$username}<br />Mật khẩu: {$password}{/if}{/if}{if $pass_reset gt 0 or $email_reset gt 0}<br />Chú ý:<br />{if $pass_reset eq 2}- Chúng tôi khuyến cáo bạn nên thay đổi mật khẩu trước khi sử dụng tài khoản.<br />{elseif $pass_reset eq 1}- Bạn cần đổi mật khẩu trước khi sử dụng tài khoản.<br />{/if}{if $email_reset eq 2}- Chúng tôi khuyến cáo bạn nên thay đổi email trước khi sử dụng tài khoản.<br />{elseif $email_reset eq 1}- Bạn cần đổi email trước khi sử dụng tài khoản.<br />{/if}{/if}<br />Đây là thư tự động được gửi đến hòm thư điện tử của bạn từ website {$site_name}. Nếu bạn không hiểu gì về nội dung bức thư này, đơn giản hãy xóa nó đi.'
+    'c' => '{$greeting_user}<br /><br />Tài khoản của bạn tại website {$site_name} đã được kích hoạt. {if empty($oauth_name)}Dưới đây là thông tin đăng nhập:<br /><br />URL: <a href="{$link}">{$link}</a><br />Tên đăng nhập: {$username}<br />{if not empty($password)}Mật khẩu: {$password}{/if}{else}Để đăng nhập vui lòng truy cập vào trang: <a href="{$link}">{$link}</a> và click vào nút: <strong>Đăng nhập bằng {$oauth_name}</strong>.{if not empty($password)}<br /><br />Bạn cũng có thể đăng nhập theo cách thông thường với thông tin:<br />Tên đăng nhập: {$username}<br />Mật khẩu: {$password}{/if}{/if}{if $pass_reset gt 0 or $email_reset gt 0}<br />Chú ý:<br />{if $pass_reset eq 2}- Chúng tôi khuyến cáo bạn nên thay đổi mật khẩu trước khi sử dụng tài khoản.<br />{elseif $pass_reset eq 1}- Bạn cần đổi mật khẩu trước khi sử dụng tài khoản.<br />{/if}{if $email_reset eq 2}- Chúng tôi khuyến cáo bạn nên thay đổi email trước khi sử dụng tài khoản.<br />{elseif $email_reset eq 1}- Bạn cần đổi email trước khi sử dụng tài khoản.<br />{/if}{/if}<br />Đây là thư tự động được gửi đến hòm thư điện tử của bạn từ website {$site_name}. Nếu bạn không hiểu gì về nội dung bức thư này, đơn giản hãy xóa nó đi.'
 ];
 $module_emails[Emails::REQUEST_RESET_PASS] = [
     'is_system' => $is_system,

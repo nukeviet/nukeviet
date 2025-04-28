@@ -183,3 +183,5 @@ $lang_module['widget_resize'] = 'Chỉnh kích thước';
 $lang_module['widget_choose'] = 'Chọn tiện ích';
 $lang_module['widget_no'] = 'Không còn tiện ích khả dụng nào';
 $lang_module['widget_swap_success'] = 'Đổi vị trí thành công';
+
+$lang_module['open_link'] = 'Mở liên kết';

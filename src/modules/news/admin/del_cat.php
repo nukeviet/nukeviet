@@ -16,9 +16,10 @@ if (!defined('NV_IS_FILE_ADMIN')) {
 $catid = $nv_Request->get_int('catid', 'post', 0);
 $contents = 'NO_' . $catid;
 
-[$catid, $parentid, $title] = $db->query('SELECT catid, parentid, title FROM ' . NV_PREFIXLANG . '_' . $module_data . '_cat WHERE catid=' . $catid)->fetch(3);
+[$catid, $parentid, $title, $ad_block_cat] = $db->query('SELECT catid, parentid, title, ad_block_cat FROM ' . NV_PREFIXLANG . '_' . $module_data . '_cat WHERE catid=' . $catid)->fetch(3);
 if ($catid > 0) {
     if ((defined('NV_IS_ADMIN_MODULE') or ($parentid > 0 and isset($array_cat_admin[$admin_id][$parentid]) and $array_cat_admin[$admin_id][$parentid]['admin'] == 1))) {
+        $ad_block_cat = array_filter(array_unique(array_map('intval', explode(',', $ad_block_cat))));
         $delallcheckss = $nv_Request->get_string('delallcheckss', 'post', '');
         $check_parentid = $db->query('SELECT COUNT(*) FROM ' . NV_PREFIXLANG . '_' . $module_data . '_cat WHERE parentid = ' . $catid)->fetchColumn();
         if ((int) $check_parentid > 0) {
@@ -101,6 +102,10 @@ if ($catid > 0) {
                         $db->query('DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_cat WHERE catid=' . $catid);
                         $db->query('DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_admins WHERE catid=' . $catid);
 
+                        foreach ($ad_block_cat as $ad_block_id) {
+                            nv_unregister_block(nv_get_blcat_tag($catid, $ad_block_id));
+                        }
+
                         nv_fix_weight_content($weight_min);
                         nv_fix_cat_order();
                         $nv_Cache->delMod($module_name);
@@ -160,6 +165,10 @@ if ($catid > 0) {
                             $db->query('DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_cat WHERE catid=' . $catid);
                             $db->query('DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_admins WHERE catid=' . $catid);
 
+                            foreach ($ad_block_cat as $ad_block_id) {
+                                nv_unregister_block(nv_get_blcat_tag($catid, $ad_block_id));
+                            }
+
                             nv_fix_cat_order();
                             $nv_Cache->delMod($module_name);
                             nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=cat&parentid=' . $parentid);
@@ -175,6 +184,11 @@ if ($catid > 0) {
                 $sql = 'DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_cat WHERE catid=' . $catid;
                 if ($db->exec($sql)) {
                     nv_insert_logs(NV_LANG_DATA, $module_name, $nv_Lang->getModule('delcatandrows'), $title, $admin_info['userid']);
+
+                    foreach ($ad_block_cat as $ad_block_id) {
+                        nv_unregister_block(nv_get_blcat_tag($catid, $ad_block_id));
+                    }
+
                     nv_fix_cat_order();
                     $db->query('DROP TABLE ' . NV_PREFIXLANG . '_' . $module_data . '_' . $catid);
                     $contents = 'OK_' . $parentid;

@@ -21,6 +21,7 @@ if ($js) {
     nv_insert_logs(NV_LANG_DATA, 'login', '[' . $admin_info['username'] . '] ' . $nv_Lang->getGlobal('admin_logout_title'), ' Client IP:' . NV_CLIENT_IP, $log_userid);
     nv_admin_logout();
     if (defined('NV_IS_USER_FORUM') or defined('SSO_SERVER')) {
+        !defined('NV_IS_MOD_USER') && define('NV_IS_MOD_USER', true);
         require_once NV_ROOTDIR . '/' . $global_config['dir_forum'] . '/nukeviet/logout.php';
     }
     exit('1');
@@ -33,6 +34,7 @@ if ($ok) {
     $info = $nv_Lang->getGlobal('admin_logout_ok');
     $info .= '<meta http-equiv="Refresh" content="5;URL=' . $global_config['site_url'] . '" />';
     if (defined('NV_IS_USER_FORUM') or defined('SSO_SERVER')) {
+        !defined('NV_IS_MOD_USER') && define('NV_IS_MOD_USER', true);
         require_once NV_ROOTDIR . '/' . $global_config['dir_forum'] . '/nukeviet/logout.php';
     }
 } else {

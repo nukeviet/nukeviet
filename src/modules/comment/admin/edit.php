@@ -18,10 +18,7 @@ $cid = $nv_Request->get_int('cid', 'get,post');
 $sql = 'SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . ' WHERE cid=' . $cid;
 $row = $db->query($sql)->fetch();
 
-if (empty($row) or !isset($site_mod_comm[$row['module']])) {
-    nv_redirect_location('Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
-}
-
+$checkss = md5(NV_CHECK_SESSION . '_' . $module_name . '_' . $admin_info['userid']);
 $dir = date('Y_m');
 if (!is_dir(NV_UPLOADS_REAL_DIR . '/' . $module_upload . '/' . $dir)) {
     $mk = nv_mkdir(NV_UPLOADS_REAL_DIR . '/' . $module_upload, $dir);
@@ -35,6 +32,9 @@ if (!is_dir(NV_UPLOADS_REAL_DIR . '/' . $module_upload . '/' . $dir)) {
 }
 
 if ($nv_Request->isset_request('save', 'post')) {
+    if ($checkss != $nv_Request->get_title('checkss', 'post') or empty($row) or !isset($site_mod_comm[$row['module']])) {
+        nv_jsonOutput(['status' => 'error', 'mess' => $nv_Lang->getGlobal('error_code_11')]);
+    }
     $delete = $nv_Request->get_int('delete', 'post', 0);
     if ($delete) {
         if (!empty($row['attach'])) {
@@ -73,8 +73,11 @@ if ($nv_Request->isset_request('save', 'post')) {
             }
         }
     }
-    header('Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
-    exit();
+    nv_jsonOutput(['status' => 'ok', 'mess' => $nv_Lang->getModule('update_success'), 'redirect' => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name]);
+}
+
+if (empty($row) or !isset($site_mod_comm[$row['module']])) {
+    nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
 }
 
 nv_status_notification(NV_LANG_DATA, $module_name, 'comment_queue', $cid);
@@ -91,27 +94,22 @@ if (defined('NV_EDITOR') and nv_function_exists('nv_aleditor')) {
     $row['content'] = '<textarea style="width:100%;height:250px" name="content">' . $row['content'] . '</textarea>';
 }
 
-$row['status'] = ($row['status']) ? 'checked="checked"' : '';
-
 if (!empty($row['attach'])) {
     $row['attach'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $row['attach'];
 }
 
-$xtpl = new XTemplate('edit.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-$xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
-$xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
-$xtpl->assign('NV_BASE_ADMINURL', NV_BASE_ADMINURL);
-$xtpl->assign('NV_NAME_VARIABLE', NV_NAME_VARIABLE);
-$xtpl->assign('MODULE_NAME', $module_name);
-$xtpl->assign('NV_OP_VARIABLE', NV_OP_VARIABLE);
-$xtpl->assign('OP', $op);
-$xtpl->assign('CID', $cid);
-$xtpl->assign('ROW', $row);
-$xtpl->assign('UPLOADS_DIR', NV_UPLOADS_DIR . '/' . $module_upload);
-$xtpl->assign('CURRENT_DIR', NV_UPLOADS_DIR . '/' . $module_upload . '/' . $dir);
+$tpl = new \NukeViet\Template\NVSmarty();
+$tpl->setTemplateDir(get_module_tpl_dir('edit.tpl'));
+$tpl->assign('LANG', $nv_Lang);
+$tpl->assign('MODULE_NAME', $module_name);
+$tpl->assign('OP', $op);
+$tpl->assign('CID', $cid);
+$tpl->assign('ROW', $row);
+$tpl->assign('MODULE_UPLOAD', $module_upload);
+$tpl->assign('DIR', $dir);
+$tpl->assign('CHECKSS', $checkss);
 
-$xtpl->parse('main');
-$contents = $xtpl->text('main');
+$contents = $tpl->fetch('edit.tpl');
 
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_admin_theme($contents);

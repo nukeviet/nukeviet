@@ -9,11 +9,12 @@
 
 // Giá trị này = 0 thì tạm dừng kiểm tra số thông báo
 var load_notification = 1;
+const cookieName = nv_cookie_prefix + '_antf';
 
 // Hàm lấy số thông báo chưa đọc
 function nv_get_notification() {
     if (load_notification) {
-        let antf = nv_getCookie(nv_cookie_prefix + '_antf');
+        let antf = nv_getCookie(cookieName);
         if (antf) {
             antf = JSON.parse(antf);
             if ((new Date().getTime() - antf.t) < 30000) {
@@ -43,7 +44,7 @@ function nv_get_notification() {
                 } else {
                     $('#notification').hide().html(0);
                 }
-                nv_setCookie(nv_cookie_prefix + '_antf', JSON.stringify({
+                nv_setCookie(cookieName, JSON.stringify({
                     'cn': data.count,
                     'cf': data.count_formatted,
                     't': new Date().getTime()
@@ -130,6 +131,11 @@ $(document).ready(function() {
                 }
                 eleBody.remove();
                 $('#notification').html(data.data.count_formatted);
+                nv_setCookie(cookieName, JSON.stringify({
+                    'cn': data.data.count,
+                    'cf': data.data.count_formatted,
+                    't': new Date().getTime()
+                }), 365);
                 if (data.data.count < 1) {
                     $('#notification').hide();
                 } else {
@@ -171,6 +177,11 @@ $(document).ready(function() {
                     eleBody.addClass('notification-unread');
                 }
                 $('#notification').html(data.data.count_formatted);
+                nv_setCookie(cookieName, JSON.stringify({
+                    'cn': data.data.count,
+                    'cf': data.data.count_formatted,
+                    't': new Date().getTime()
+                }), 365);
                 if (data.data.count < 1) {
                     $('#notification').hide();
                 } else {
@@ -216,6 +227,11 @@ $(document).ready(function() {
                 success: function() {
                     $('#notification-area>a').trigger('click');
                     $('#notification').hide();
+                    nv_setCookie(cookieName, JSON.stringify({
+                        'cn': 0,
+                        'cf': 0,
+                        't': new Date().getTime()
+                    }), 365);
                 }
             });
             return;

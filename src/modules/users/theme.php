@@ -914,7 +914,7 @@ function user_info($data, $array_field_config, $custom_fields, $types, $data_que
         $xtpl->parse('main.return_group_manage');
     }
 
-    // Tab đổi bí danh
+    // Tab đổi tên đăng nhập
     if (in_array('username', $types, true)) {
         if ($pass_empty) {
             $xtpl->parse('main.tab_edit_username.username_empty_pass');

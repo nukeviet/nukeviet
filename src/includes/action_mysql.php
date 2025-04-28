@@ -44,6 +44,7 @@ function nv_delete_table_sys($lang)
     $sql_drop_table[] = 'DROP TABLE IF EXISTS ' . $db_config['prefix'] . '_' . $lang . '_searchkeys';
     $sql_drop_table[] = 'DROP TABLE IF EXISTS ' . $db_config['prefix'] . '_' . $lang . '_referer_stats';
     $sql_drop_table[] = 'DROP TABLE IF EXISTS ' . $db_config['prefix'] . '_' . $lang . '_modthemes';
+    $sql_drop_table[] = 'DROP TABLE IF EXISTS ' . $db_config['prefix'] . '_' . $lang . '_modblocks';
     $sql_drop_table[] = 'ALTER TABLE ' . $db_config['prefix'] . '_cronjobs DROP ' . $lang . '_cron_name';
 
     // Xóa các trường theo ngôn ngữ email template
@@ -182,6 +183,16 @@ function nv_create_table_sys($lang, $init = [])
          theme varchar(100) DEFAULT NULL,
          UNIQUE KEY func_id (func_id,layout,theme)
      ) ENGINE=InnoDB COMMENT "Layout của giao diện theo từng khu vực"';
+
+    $sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_modblocks (
+      module_name varchar(50) NOT NULL COMMENT 'Tên module',
+      tag varchar(100) NOT NULL COMMENT 'Tag của khối block',
+      ini_tag varchar(160) NOT NULL COMMENT 'Tag tương đương trong config ini',
+      title varchar(250) NOT NULL DEFAULT '' COMMENT 'Tên gọi nếu có',
+      UNIQUE KEY modblock (module_name, tag),
+      KEY module_name (module_name),
+      KEY tag (tag)
+    ) ENGINE=InnoDB COMMENT 'Vị trí block tùy chỉnh theo từng module'";
 
     $sql_create_table[] = 'INSERT INTO ' . $db_config['prefix'] . '_' . $lang . "_modules (
         title, module_file, module_data, module_upload, module_theme, custom_title, admin_title, set_time, main_file, admin_file,

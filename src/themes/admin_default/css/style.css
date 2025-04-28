@@ -196,8 +196,16 @@ a.text-white {
     margin-left: 5px;
 }
 
+.mt-0 {
+    margin-top: 0!important;
+}
+
 .mt-2 {
     margin-top: 10px;
+}
+
+.mt-5 {
+    margin-top: 25px!important;
 }
 
 .my-1 {

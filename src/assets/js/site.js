@@ -162,13 +162,15 @@ function GIDHandleCredentialResponse(response) {
             }
             location.reload();
         } else if (a.status == 'OK') {
-            var content = $($('#g_id_confirm').html());
-            $('a', content).on('click', function(e) {
-                e.preventDefault();
-                modalHide();
-                nv_open_browse(a.redirect, "NVOPID", 550, 500, "resizable=no,scrollbars=1,toolbar=no,location=no,titlebar=no,menubar=0,location=no,status=no");
+            modalShow('', $('#g_id_confirm').html(), () => {
+                const modal = document.getElementById('sitemodal');
+                const mdBody = modal.querySelector('.cr-md-body');
+                $('a', mdBody).on('click', function(e) {
+                    e.preventDefault();
+                    modalHide();
+                    nv_open_browse(a.redirect, "NVOPID", 550, 500, "resizable=no,scrollbars=1,toolbar=no,location=no,titlebar=no,menubar=0,location=no,status=no");
+                });
             });
-            modalShow('', content)
         }
     })
 }
@@ -471,8 +473,8 @@ function _showCaptchaModal(modal, showCb, shownCb) {
     nukeviet.cr.mdCapDb.scroll = document.documentElement.scrollHeight > window.innerHeight;
 
     setTimeout(() => {
-        modal.classList.add('show');
-        backdrop.classList.add('show');
+        modal.classList.add('cr-show');
+        backdrop.classList.add('cr-show');
 
         body.style.overflow = 'hidden';
         nukeviet.cr.mdCapDb.scroll && (body.style.paddingRight = nukeviet.getScrollbarWidth() + 'px');
@@ -877,8 +879,8 @@ document.addEventListener('DOMContentLoaded', () => {
             body.removeAttribute('class');
         }
 
-        modal.classList.remove('show');
-        backdrop.classList.remove('show');
+        modal.classList.remove('cr-show');
+        backdrop.classList.remove('cr-show');
         setTimeout(() => {
             modal.style.display = 'none';
             modal.removeAttribute('aria-modal');

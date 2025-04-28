@@ -1,10 +1,23 @@
 :root,
-[data-bs-theme="light"] {
+[data-bs-theme="light"],
+[data-theme="light"] {
     --cr-md-content-border-radius: #{$border-radius-lg};
     --cr-md-content-inner-border-radius: #{calc($border-radius-lg - 1px)};
     --cr-cap-content-border-radius: #{$border-radius-lg};
     --cr-cap-content-inner-border-radius: #{calc($border-radius-lg - 1px)};
     --cr-danger: #{$red};
+
+    --cr-toast-error-bg: #{$red};
+    --cr-toast-danger-bg: #{$red};
+    --cr-toast-primary-bg: #{$blue};
+    --cr-toast-success-bg: #{$green};
+    --cr-toast-info-bg: #{$cyan};
+    --cr-toast-info-color: #{color-contrast($cyan)};
+    --cr-toast-light-bg: #{$gray-100};
+    --cr-toast-dark-bg: #{$gray-900};
+
+    --cr-input-border-radius: #{$border-radius};
+    --cr-btn-border-radius: #{$border-radius};
 
     --nv-header-bg-color: #{$header-bg};
     --nv-header-active-bg-color: #{$header-active-bg};
@@ -39,7 +52,8 @@
     --nv-form-check-input-disabled-border-color: #{$gray-300};
 }
 
-[data-bs-theme="dark"] {
+[data-bs-theme="dark"],
+[data-theme="dark"] {
     --nv-header-bg-color: #{$header-bg-dark};
     --nv-header-active-bg-color: #{$header-active-bg-dark};
     --nv-header-link-hover-color: #{$header-link-hover-color-dark};

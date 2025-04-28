@@ -74,11 +74,6 @@ $errortype = [
         'fa-solid fa-circle-exclamation',
         'info'
     ],
-    E_STRICT => [
-        $nv_Lang->getGlobal('error_notice'),
-        'fa-solid fa-circle-exclamation',
-        'info'
-    ],
     E_RECOVERABLE_ERROR => [
         $nv_Lang->getGlobal('error_error'),
         'fa-solid fa-ban',
@@ -95,6 +90,13 @@ $errortype = [
         'warning'
     ]
 ];
+if (version_compare(PHP_VERSION, '8.4.0', '<')) {
+    $errortype[E_STRICT] = [
+        $nv_Lang->getGlobal('error_notice'),
+        'fa-solid fa-circle-exclamation',
+        'info'
+    ];
+}
 
 $tpl_dir = get_tpl_dir($php_dir, NV_DEFAULT_SITE_THEME, '/system/error_info.tpl');
 
