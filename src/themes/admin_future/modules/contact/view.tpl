@@ -270,7 +270,7 @@
 {/if}
 
 {if ($CONTACT_ALLOWED.reply[$DATA.cid])|isset}
-<div class="modal fade" id="feedback-reply" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="replyModalTitle">
+<div class="modal fade" id="feedback-reply" data-bs-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="replyModalTitle">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -296,10 +296,10 @@
                     </div>
                     <div class="row row-cols-auto justify-content-center g-2">
                         <div class="col">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{$LANG->getGlobal('close')}</button>
+                            <button type="submit" class="btn btn-primary"><i class="fa-solid fa-paper-plane"></i> {$LANG->getModule('bt_send_row_title')}</button>
                         </div>
                         <div class="col">
-                            <button type="submit" class="btn btn-primary">{$LANG->getModule('bt_send_row_title')}</button>
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{$LANG->getGlobal('close')}</button>
                         </div>
                     </div>
                     <input type="hidden" name="reply" value="{$DATA.id}">
@@ -336,7 +336,7 @@
                     </div>
                     <div class="row row-cols-auto justify-content-center g-2">
                         <div class="col">
-                            <button type="submit" class="btn btn-primary">{$LANG->getModule('bt_send_row_title')}</button>
+                            <button type="submit" class="btn btn-primary"><i class="fa-solid fa-paper-plane"></i> {$LANG->getModule('bt_send_row_title')}</button>
                         </div>
                         <div class="col">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{$LANG->getGlobal('close')}</button>
