@@ -116,7 +116,11 @@ $(function() {
     // Xóa role
     $('[data-toggle="apiroledel"]').on('click', function(e) {
         e.preventDefault();
-        if (confirm(nv_is_del_confirm[0])) {
+        var icon = $(this).find('i'),
+            iconClass = icon.attr('class')
+
+        nvConfirm(nv_is_del_confirm[0], function() {
+            icon.removeClass(iconClass).addClass('fa-solid fa-spinner fa-spin-pulse');
             $.ajax({
                 type: "POST",
                 url: $('#rolelist').data('page-url'),
@@ -127,11 +131,12 @@ $(function() {
                 if (data.status === 'error') {
                     nvAlert(nv_is_del_confirm[2]);
                     nvToast(nv_is_del_confirm[2], 'error');
+                    icon.attr('class', iconClass);
                 } else if (data.status === 'OK') {
                     location.reload();
                 }
             })
-        }
+        })
     });
     if ($('#credentiallist').length) {
         var credentiallist = $('#credentiallist'),

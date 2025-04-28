@@ -1,98 +1,28 @@
-<script type="text/javascript" src="{$smarty.const.ASSETS_STATIC_URL}/js/clipboard/clipboard.min.js"></script>
 <div id="my-role-api" data-page-url="{$smarty.const.NV_BASE_ADMINURL}index.php?{$smarty.const.NV_LANG_VARIABLE}={$smarty.const.NV_LANG_DATA}&amp;{$smarty.const.NV_NAME_VARIABLE}={$MODULE_NAME}">
-    <div class="tools row">
-        <div class="mb-4 col">
-            <ul class="nav nav-pills">
+    <div class="text-end mb-3">
+        <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#credential_auth"><i class="fa-solid fa-shield-halved fa-lg text-danger"></i> {$LANG->getModule('authentication')}</button>
+    </div>
+    <div class="card">
+        <div class="card-header text-center">
+            <ul class="nav nav-tabs card-header-tabs">
                 <li class="nav-item"><a class="nav-link {if $TYPE == 'public'}active{/if}" href="{$smarty.const.NV_BASE_ADMINURL}index.php?{$smarty.const.NV_LANG_VARIABLE}={$smarty.const.NV_LANG_DATA}&amp;{$smarty.const.NV_NAME_VARIABLE}={$MODULE_NAME}">{$LANG->getModule('api_role_type_public2')}</a></li>
                 <li class="nav-item"><a class="nav-link {if $TYPE == 'private'}active{/if}"" href="{$smarty.const.NV_BASE_ADMINURL}index.php?{$smarty.const.NV_LANG_VARIABLE}={$smarty.const.NV_LANG_DATA}&amp;{$smarty.const.NV_NAME_VARIABLE}={$MODULE_NAME}&amp;type=private">{$LANG->getModule('api_role_type_public2')}</a></li>
             </ul>
         </div>
-        <div class="col text-end">
-            <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#credential_auth"><i class="fa-solid fa-shield-halved fa-lg text-danger"></i> {$LANG->getModule('authentication')}</button>
-        </div>
-        <div>
-            <!-- START FORFOOTER -->
-            <div id="credential_auth" tabindex="-1" role="dialog" class="modal fade" id="credential_auth">
-                <div class="modal-dialog" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <div class="modal-title"><strong>{$LANG->getModule('authentication')}</strong></div>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="close"></button>
-                        </div>
-                        <div class="modal-body">
-                            <div class="mb-3"><strong>{$LANG->getModule('auth_method')}</strong></div>
-                            <ul class="nav nav-tabs mb-3">
-                                {foreach $METHODS as $KEY => $METHOD}
-                                <li class="nav-item" role="presentation"><a href="#{$METHOD.key}-panel" class="nav-link {$METHOD.active}" data-bs-toggle="tab" data-bs-target="#{$METHOD.key}-panel" type="button" aria-controls="{$METHOD.key}-panel"  role="tab">{$METHOD.name}</a></li>
-                                {/foreach}
-                            </ul>
-
-                            <div class="tab-content">
-                                {foreach $METHODS as $KEY => $METHOD}
-                                <div role="tabpanel" class="tab-pane {$METHOD.active}" id="{$METHOD.key}-panel">
-                                    <div class="form-group">
-                                        <label><strong>{$LANG->getModule('api_credential_ident')}</strong></label>
-                                        <div class="input-group">
-                                            <input type="text" name="{$METHOD.key}_ident" id="{$METHOD.key}-credential_ident" value="{$METHOD.ident ?? ''}" class="form-control" readonly="readonly">
-                                            <button class="btn btn-secondary active" type="button" data-clipboard-target="#{$METHOD.key}-credential_ident" data-bs-toggle="tooltip" title="{$LANG->getModule('value_copied')}" data-bs-placement="left" data-bs-container="body" data-bs-trigger="manual" data-bs-animation="false"><i class="fa-solid fa-copy"></i></button>
-                                        </div>
-                                    </div>
-                                    <div class="form-group mb-3">
-                                        <label><strong>{$LANG->getModule('api_credential_secret')}</strong></label>
-                                        <div class="input-group">
-                                            <input type="text" name="{$METHOD.key}_secret" id="{$METHOD.key}-credential_secret" value="" class="form-control" readonly="readonly">
-                                            <button class="btn btn-secondary active" type="button" data-clipboard-target="#{$METHOD.key}-credential_secret" data-bs-toggle="tooltip" title="{$LANG->getModule('value_copied')}" data-bs-placement="left" data-bs-container="body" data-bs-trigger="manual" data-bs-animation="false"><i class="fa-solid fa-copy"></i></button>
-                                        </div>
-                                    </div>
-                                    {if !empty($smarty.const.NV_IS_SPADMIN or $KEY == 'password_verify' or $KEY == 'md5_verify')}
-                                    <div class="row mb-3">
-                                        <div class="col-6">
-                                            <button type="button" class="btn btn-primary w-100 create_authentication" data-method="{$METHOD.key}">{$LANG->getModule('create_access_authentication')}</button>
-                                        </div>
-                                        <div class="col-6">
-                                            <button type="button" class="btn btn-danger w-100 delete_authentication" data-method="{$METHOD.key}">{$LANG->getModule('delete_authentication')}</button>
-                                        </div>
-                                    </div>
-                                    {/if}
-
-                                    <div class="api_ips"{if $METHOD.not_access_authentication}style="display:none"{/if}>
-                                        <div class="form-group mb-3">
-                                            <label><strong>{$LANG->getModule('api_ips')}</strong></label>
-                                            <textarea class="form-control ips" name="{$METHOD.key}_ips">{$METHOD.ips ?? ''}</textarea>
-                                            <div class="help-block">{$LANG->getModule('api_ips_help')}</div>
-                                        </div>
-                                        {if !empty($smarty.const.NV_IS_SPADMIN or $KEY == 'password_verify' or $KEY == 'md5_verify')}
-                                        <div class="text-center">
-                                            <button type="button" class="btn btn-primary api_ips_update" data-method="{$METHOD.key}">{$LANG->getModule('api_ips_update')}</button>
-                                        </div>
-                                        {/if}
-                                    </div>
-                                </div>
-                                {/foreach}
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <!-- END FORFOOTER -->
-        </div>
-    </div>
-
-    {if empty($GCONFIG.remote_api_access)}
-    <div class="alert alert-danger">
-        {$LANG->getModule('api_remote_off2')}
-    </div>
-    {/if}
-
-    {if empty($ROLE_COUNT)}
-    <div class="alert alert-info text-center">
-        {$LANG->getModule('api_roles_empty')}
-    </div>
-    {else} 
-    <div class="card">
         <div class="card-body">
-            <div class="table-responsive table-card">
-                <table class="table table-striped align-middle table-sticky mb-0">
+            {if empty($GCONFIG.remote_api_access)}
+            <div class="alert alert-danger">
+                {$LANG->getModule('api_remote_off2')}
+            </div>
+            {/if}
+        
+            {if empty($ROLE_COUNT)}
+            <div class="alert alert-info text-center">
+                {$LANG->getModule('api_roles_empty')}
+            </div>
+            {else} 
+            <div class="table-responsive table-card mt-1">
+                <table class="table table-striped align-middle table-sticky mb-1">
                     <thead class="text-muted tableFloatingHeaderOriginal">
                         <tr>
                             <th class="text-nowrap text-center" style="vertical-align:middle">{$LANG->getModule('api_roles_list')}</th>
@@ -175,7 +105,7 @@
                                                             <div class="card mb-3 border">
                                                                 <div class="card-header api-header"><strong><i class="fa-solid fa-folder-open"></i> {$SITE_MOD.$MOD_TITLE.custom_title}
                                                                         {if !empty($CAT_DATA.title)}
-                                                                         <i class="fa fa-angle-right"></i> {$CAT_DATA.title}
+                                                                            <i class="fa fa-angle-right"></i> {$CAT_DATA.title}
                                                                         {/if}
                                                                     </strong></div>
                                                                 <div class="card-body">
@@ -217,7 +147,7 @@
         {if !empty($GENERATE_PAGE)}
         <div class="card-footer border-top">
             <div class="d-flex flex-wrap justify-content-end align-items-center">
-                {$GENERATE_PAGE}
+                <div class="pagination-wrap">{$GENERATE_PAGE}</div>
             </div>
         </div>
         {/if}
@@ -225,3 +155,67 @@
     {/if}
 </div>
 
+<!-- START FORFOOTER -->
+<div id="credential_auth" tabindex="-1" role="dialog" class="modal fade" id="credential_auth">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title"><strong>{$LANG->getModule('authentication')}</strong></div>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="mb-3"><strong>{$LANG->getModule('auth_method')}</strong></div>
+                <ul class="nav nav-tabs mb-3">
+                    {foreach $METHODS as $KEY => $METHOD}
+                    <li class="nav-item" role="presentation"><a href="#{$METHOD.key}-panel" class="nav-link {$METHOD.active}" data-bs-toggle="tab" data-bs-target="#{$METHOD.key}-panel" type="button" aria-controls="{$METHOD.key}-panel"  role="tab">{$METHOD.name}</a></li>
+                    {/foreach}
+                </ul>
+
+                <div class="tab-content">
+                    {foreach $METHODS as $KEY => $METHOD}
+                    <div role="tabpanel" class="tab-pane {$METHOD.active}" id="{$METHOD.key}-panel">
+                        <div class="form-group">
+                            <label><strong>{$LANG->getModule('api_credential_ident')}</strong></label>
+                            <div class="input-group">
+                                <input type="text" name="{$METHOD.key}_ident" id="{$METHOD.key}-credential_ident" value="{$METHOD.ident ?? ''}" class="form-control" readonly="readonly">
+                                <button class="btn btn-secondary active" type="button" data-clipboard-target="#{$METHOD.key}-credential_ident" data-bs-toggle="tooltip" title="{$LANG->getModule('value_copied')}" data-bs-placement="left" data-bs-container="body" data-bs-trigger="manual" data-bs-animation="false"><i class="fa-solid fa-copy"></i></button>
+                            </div>
+                        </div>
+                        <div class="form-group mb-3">
+                            <label><strong>{$LANG->getModule('api_credential_secret')}</strong></label>
+                            <div class="input-group">
+                                <input type="text" name="{$METHOD.key}_secret" id="{$METHOD.key}-credential_secret" value="" class="form-control" readonly="readonly">
+                                <button class="btn btn-secondary active" type="button" data-clipboard-target="#{$METHOD.key}-credential_secret" data-bs-toggle="tooltip" title="{$LANG->getModule('value_copied')}" data-bs-placement="left" data-bs-container="body" data-bs-trigger="manual" data-bs-animation="false"><i class="fa-solid fa-copy"></i></button>
+                            </div>
+                        </div>
+                        {if !empty($smarty.const.NV_IS_SPADMIN or $KEY == 'password_verify' or $KEY == 'md5_verify')}
+                        <div class="row mb-3">
+                            <div class="col-6">
+                                <button type="button" class="btn btn-primary w-100 create_authentication" data-method="{$METHOD.key}">{$LANG->getModule('create_access_authentication')}</button>
+                            </div>
+                            <div class="col-6">
+                                <button type="button" class="btn btn-danger w-100 delete_authentication" data-method="{$METHOD.key}">{$LANG->getModule('delete_authentication')}</button>
+                            </div>
+                        </div>
+                        {/if}
+
+                        <div class="api_ips"{if $METHOD.not_access_authentication}style="display:none"{/if}>
+                            <div class="form-group mb-3">
+                                <label><strong>{$LANG->getModule('api_ips')}</strong></label>
+                                <textarea class="form-control ips" name="{$METHOD.key}_ips">{$METHOD.ips ?? ''}</textarea>
+                                <div class="help-block">{$LANG->getModule('api_ips_help')}</div>
+                            </div>
+                            {if !empty($smarty.const.NV_IS_SPADMIN or $KEY == 'password_verify' or $KEY == 'md5_verify')}
+                            <div class="text-center">
+                                <button type="button" class="btn btn-primary api_ips_update" data-method="{$METHOD.key}">{$LANG->getModule('api_ips_update')}</button>
+                            </div>
+                            {/if}
+                        </div>
+                    </div>
+                    {/foreach}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- END FORFOOTER -->
