@@ -162,13 +162,15 @@ function GIDHandleCredentialResponse(response) {
             }
             location.reload();
         } else if (a.status == 'OK') {
-            var content = $($('#g_id_confirm').html());
-            $('a', content).on('click', function(e) {
-                e.preventDefault();
-                modalHide();
-                nv_open_browse(a.redirect, "NVOPID", 550, 500, "resizable=no,scrollbars=1,toolbar=no,location=no,titlebar=no,menubar=0,location=no,status=no");
+            modalShow('', $('#g_id_confirm').html(), () => {
+                const modal = document.getElementById('sitemodal');
+                const mdBody = modal.querySelector('.cr-md-body');
+                $('a', mdBody).on('click', function(e) {
+                    e.preventDefault();
+                    modalHide();
+                    nv_open_browse(a.redirect, "NVOPID", 550, 500, "resizable=no,scrollbars=1,toolbar=no,location=no,titlebar=no,menubar=0,location=no,status=no");
+                });
             });
-            modalShow('', content)
         }
     })
 }

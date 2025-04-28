@@ -173,7 +173,6 @@ $tpl->assign('GENERATE_PAGE', $generate_page);
 $tpl->registerPlugin('modifier', 'nv_clean60', 'nv_clean60');
 $tpl->registerPlugin('modifier', 'urlencode', 'urlencode');
 
-
 $contents = $tpl->fetch('main.tpl');
 
 include NV_ROOTDIR . '/includes/header.php';

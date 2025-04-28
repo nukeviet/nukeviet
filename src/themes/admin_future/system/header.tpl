@@ -39,7 +39,7 @@
         nv_safemode = {empty($ADMIN_INFO) ? 1 : $ADMIN_INFO.safemode},
         nv_area_admin = 1,
         XSSsanitize = {(int) $GCONFIG.admin_XSSsanitize},
-        nv_whitelisted_tags = [{if not empty($GCONFIG.allowed_html_tags)}'{join($GCONFIG.allowed_html_tags, ', ')}'{/if}],
+        nv_whitelisted_tags = [{if not empty($GCONFIG.allowed_html_tags)}'{join($GCONFIG.allowed_html_tags, "', '")}'{/if}],
         nv_whitelisted_attr = {$WHITELISTED_ATTR},
         nv_jsdate_get = '{$JSDATE_GET}',
         nv_jsdate_post = '{$JSDATE_POST}',
