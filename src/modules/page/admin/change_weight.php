@@ -14,37 +14,49 @@ if (!defined('NV_IS_FILE_ADMIN')) {
 }
 
 $id = $nv_Request->get_int('id', 'post', 0);
-
-$sql = 'SELECT id FROM ' . NV_PREFIXLANG . '_' . $module_data . ' WHERE id=' . $id;
-$id = $db->query($sql)->fetchColumn();
-if (empty($id)) {
-    exit('NO_' . $id);
-}
-
 $new_weight = $nv_Request->get_int('new_weight', 'post', 0);
-if (empty($new_weight)) {
-    exit('NO_' . $mod);
+
+if (empty($id) or empty($new_weight) or !preg_match($global_config['check_module'], $id)) {
+    nv_jsonOutput([
+        'success' => 0,
+        'text' => 'Wrong module!'
+    ]);
 }
 
-$sql = 'SELECT id FROM ' . NV_PREFIXLANG . '_' . $module_data . ' WHERE id!=' . $id . ' ORDER BY weight ASC';
-$result = $db->query($sql);
+$sth = $db->prepare('SELECT id FROM ' . NV_PREFIXLANG . '_' . $module_data . ' WHERE id= :id');
+$sth->bindParam(':id', $id, PDO::PARAM_STR);
+$sth->execute();
+$row = $sth->fetch();
+if (empty($row)) {
+    nv_jsonOutput([
+        'success' => 0,
+        'text' => 'Not exists!'
+    ]);
+}
+
+$sth = $db->prepare('SELECT id FROM ' . NV_PREFIXLANG . '_' . $module_data . ' WHERE id != :id ORDER BY weight ASC');
+$sth->bindParam(':id', $id, PDO::PARAM_STR);
+$sth->execute();
 
 $weight = 0;
-while ($row = $result->fetch()) {
+while ($row = $sth->fetch()) {
     ++$weight;
     if ($weight == $new_weight) {
         ++$weight;
     }
 
-    $sql = 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . ' SET weight=' . $weight . ' WHERE id=' . $row['id'];
-    $db->query($sql);
+    $sth2 = $db->prepare('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . ' SET weight=' . $weight . ' WHERE id= :id');
+    $sth2->bindParam(':id', $row['id'], PDO::PARAM_STR);
+    $sth2->execute();
 }
 
-$sql = 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . ' SET weight=' . $new_weight . ' WHERE id=' . $id;
-$db->query($sql);
+$sth2 = $db->prepare('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . ' SET weight=' . $new_weight . ' WHERE id= :id');
+$sth2->bindParam(':id', $id, PDO::PARAM_STR);
+$sth2->execute();
 
 $nv_Cache->delMod($module_name);
-
-include NV_ROOTDIR . '/includes/header.php';
-echo 'OK_' . $id;
-include NV_ROOTDIR . '/includes/footer.php';
+nv_insert_logs(NV_LANG_DATA, $module_name, $nv_Lang->getModule('weight') . ' module: ' . $id, $weight . ' -> ' . $new_weight, $admin_info['userid']);
+nv_jsonOutput([
+    'success' => 1,
+    'text' => 'Success!'
+]);

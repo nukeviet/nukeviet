@@ -13,21 +13,24 @@ if (!defined('NV_IS_FILE_ADMIN')) {
     exit('Stop!!!');
 }
 
+$checkss = $nv_Request->get_string('checkss', 'post');
 $id = $nv_Request->get_int('id', 'post', 0);
-
-$sql = 'SELECT id FROM ' . NV_PREFIXLANG . '_' . $module_data . ' WHERE id=' . $id;
-$id = $db->query($sql)->fetchColumn();
-if (empty($id)) {
-    exit('NO_' . $id);
+if ($id > 0 and $checkss == md5($id . NV_CHECK_SESSION)) {
+    $row = $db->query('SELECT status FROM ' . NV_PREFIXLANG . '_' . $module_data . ' WHERE id=' . $id)->fetch();
+    if (!empty($row)) {
+        $act_id = $row['status'] ? 0 : 1;
+        nv_insert_logs(NV_LANG_DATA, $module_name, 'log_change_status' , 'status ' . $act_id . ' pageid ' . $id, $admin_info['userid']);
+        $db->query('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . ' SET status=' . $act_id . ' WHERE id= ' . $id);
+        $nv_Cache->delMod('modules');
+        nv_jsonOutput([
+            'success' => 1,
+            'text' => 'Success!'
+        ]);
+    }
 }
 
-$new_status = $nv_Request->get_bool('new_status', 'post');
-$new_status = (int) $new_status;
+nv_jsonOutput([
+    'success' => 0,
+    'text' => 'Wrong data!'
+]);
 
-$sql = 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . ' SET status=' . $new_status . ' WHERE id=' . $id;
-$db->query($sql);
-$nv_Cache->delMod($module_name);
-
-include NV_ROOTDIR . '/includes/header.php';
-echo 'OK_' . $id;
-include NV_ROOTDIR . '/includes/footer.php';

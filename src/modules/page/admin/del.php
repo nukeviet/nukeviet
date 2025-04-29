@@ -13,18 +13,19 @@ if (!defined('NV_IS_FILE_ADMIN')) {
     exit('Stop!!!');
 }
 
+if (!defined('NV_IS_AJAX')) {
+    exit('Wrong URL');
+}
+
+$checkss = $nv_Request->get_string('checkss', 'post');
 $id = $nv_Request->get_int('id', 'post', 0);
-$checkss = $nv_Request->get_string('checkss', 'post', '');
 
-if (md5($id . NV_CHECK_SESSION) == $checkss) {
-    $content = 'NO_' . $id;
-
-    $sql = 'DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . ' WHERE id = ' . $id;
+if ($id > 0 and $checkss == md5($id . NV_CHECK_SESSION)) {
+    nv_insert_logs(NV_LANG_DATA, $module_name, 'log_del_page', 'pageid ' . $id, $admin_info['userid']);
+    $sql = 'DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . ' WHERE id=' . $id;
     if ($db->exec($sql)) {
         // Xóa bình luận
         $db->query('DELETE FROM ' . NV_PREFIXLANG . '_comment WHERE module=' . $db->quote($module_name) . ' AND id = ' . $id);
-
-        nv_insert_logs(NV_LANG_DATA, $module_name, 'Delete', 'ID: ' . $id, $admin_info['userid']);
 
         $sql = 'SELECT id FROM ' . NV_PREFIXLANG . '_' . $module_data . ' ORDER BY weight ASC';
         $result = $db->query($sql);
@@ -36,9 +37,13 @@ if (md5($id . NV_CHECK_SESSION) == $checkss) {
         }
         $nv_Cache->delMod($module_name);
 
-        $content = 'OK_' . $id;
+        nv_jsonOutput([
+            'success' => 1,
+        ]);
     }
-} else {
-    $content = 'ERR_' . $id;
 }
-exit($content);
+
+nv_jsonOutput([
+    'success' => 0,
+    'text' => $nv_Lang->getModule('page_delete_unsuccess')
+]);
