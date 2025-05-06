@@ -9,98 +9,96 @@
                 {/if}
                 <span class="fs-medium">{$DATA.title}</span>
             </div>
-            <div class="card-body">
-                <ul class="list-group list-group-flush">
-                    <li class="list-group-item">
-                        <div class="row g-3">
-                            <div class="col-5 col-sm-4 col-lg-3 col-xxl-2 text-end">
-                                <strong>{$LANG->getModule('infor_user_send_title')}:</strong>
-                            </div>
-                            <div class="col-7 col-sm-8 col-lg-9 col-xxl-10">
-                                {if !empty($DATA.sender_id)}
-                                <a href="javascript:void(0)" class="view_user" data-bs-toggle="modal" data-bs-target="#view-user" data-userid="{$DATA.sender_id}">{$DATA.sender_name}</a>
-                                {else}
-                                <span>{$DATA.sender_name}</span>
-                                {/if}
-                                <span>&nbsp;&nbsp;&lt;{$DATA.sender_email}&gt;</span>
-                            </div>
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item">
+                    <div class="row g-3">
+                        <div class="col-5 col-sm-4 col-lg-3 col-xxl-2 text-end">
+                            <strong>{$LANG->getModule('infor_user_send_title')}:</strong>
                         </div>
-                    </li>
-                    {if !empty($DATA.sender_phone)}
-                    <li class="list-group-item">
-                        <div class="row g-3">
-                            <div class="col-5 col-sm-4 col-lg-3 col-xxl-2 text-end">
-                                <strong>{$LANG->getGlobal('phonenumber')}:</strong>
-                            </div>
-                            <div class="col-7 col-sm-8 col-lg-9 col-xxl-10">
-                                {$DATA.sender_phone}                           
-                            </div>
+                        <div class="col-7 col-sm-8 col-lg-9 col-xxl-10">
+                            {if !empty($DATA.sender_id)}
+                            <a href="javascript:void(0)" class="view_user" data-bs-toggle="modal" data-bs-target="#view-user" data-userid="{$DATA.sender_id}">{$DATA.sender_name}</a>
+                            {else}
+                            <span>{$DATA.sender_name}</span>
+                            {/if}
+                            <span>&nbsp;&nbsp;&lt;{$DATA.sender_email}&gt;</span>
                         </div>
-                    </li>
-                    {/if}
-                    {if !empty($DATA.sender_address)}
-                    <li class="list-group-item">
-                        <div class="row g-3">
-                            <div class="col-5 col-sm-4 col-lg-3 col-xxl-2 text-end">
-                                <strong>{$LANG->getGlobal('address')}:</strong>
-                            </div>
-                            <div class="col-7 col-sm-8 col-lg-9 col-xxl-10">
-                                {$DATA.sender_address}                           
-                            </div>
+                    </div>
+                </li>
+                {if !empty($DATA.sender_phone)}
+                <li class="list-group-item">
+                    <div class="row g-3">
+                        <div class="col-5 col-sm-4 col-lg-3 col-xxl-2 text-end">
+                            <strong>{$LANG->getGlobal('phonenumber')}:</strong>
                         </div>
-                    </li>
-                    {/if}
-                    <li class="list-group-item">
-                        <div class="row g-3">
-                            <div class="col-5 col-sm-4 col-lg-3 col-xxl-2 text-end">
-                                <strong>IP:</strong>
-                            </div>
-                            <div class="col-7 col-sm-8 col-lg-9 col-xxl-10">
-                                {$DATA.sender_ip}                          
-                            </div>
+                        <div class="col-7 col-sm-8 col-lg-9 col-xxl-10">
+                            {$DATA.sender_phone}                           
                         </div>
-                    </li>
-                    <li class="list-group-item">
-                        <div class="row g-3">
-                            <div class="col-5 col-sm-4 col-lg-3 col-xxl-2 text-end">
-                                <strong>{$LANG->getModule('send_time')}:</strong>
-                            </div>
-                            <div class="col-7 col-sm-8 col-lg-9 col-xxl-10">
-                                {$DATA.send_time}                          
-                            </div>
+                    </div>
+                </li>
+                {/if}
+                {if !empty($DATA.sender_address)}
+                <li class="list-group-item">
+                    <div class="row g-3">
+                        <div class="col-5 col-sm-4 col-lg-3 col-xxl-2 text-end">
+                            <strong>{$LANG->getGlobal('address')}:</strong>
                         </div>
-                    </li>
-                    <li class="list-group-item">
-                        <div class="row g-3">
-                            <div class="col-5 col-sm-4 col-lg-3 col-xxl-2 text-end">
-                                <strong>{$LANG->getModule('to_department')}:</strong>
-                            </div>
-                            <div class="col-7 col-sm-8 col-lg-9 col-xxl-10">
-                                {if !empty($DEPARTMENTS[$DATA.cid])}
-                                <a href="javascript:void(0)" data-url="{$smarty.const.NV_BASE_ADMINURL}index.php?{$smarty.const.NV_LANG_VARIABLE}={$smarty.const.NV_LANG_DATA}&amp;{$smarty.const.NV_NAME_VARIABLE}={$MODULE_NAME}&amp;{$smarty.const.NV_OP_VARIABLE}=department&amp;id={$DATA.cid}" class="department-view">{$DEPARTMENTS[$DATA.cid].full_name}</a>
-                                {else}
-                                <span>{$LANG->getModule('department_empty')}</span>
-                                {/if}
-                            </div>
+                        <div class="col-7 col-sm-8 col-lg-9 col-xxl-10">
+                            {$DATA.sender_address}                           
                         </div>
-                    </li>
-                    <li class="list-group-item">
-                        <div class="row g-3">
-                            <div class="col-5 col-sm-4 col-lg-3 col-xxl-2 text-end">
-                                <strong>{$LANG->getModule('cat')}:</strong>
-                            </div>
-                            <div class="col-7 col-sm-8 col-lg-9 col-xxl-10">
-                                {$DATA.cat}                          
-                            </div>
+                    </div>
+                </li>
+                {/if}
+                <li class="list-group-item">
+                    <div class="row g-3">
+                        <div class="col-5 col-sm-4 col-lg-3 col-xxl-2 text-end">
+                            <strong>IP:</strong>
                         </div>
-                    </li>
-                    <li class="list-group-item">
-                        <div style="min-height:150px">
-                            {$DATA.content}
+                        <div class="col-7 col-sm-8 col-lg-9 col-xxl-10">
+                            {$DATA.sender_ip}                          
                         </div>
-                    </li>
-                </ul>
-            </div>
+                    </div>
+                </li>
+                <li class="list-group-item">
+                    <div class="row g-3">
+                        <div class="col-5 col-sm-4 col-lg-3 col-xxl-2 text-end">
+                            <strong>{$LANG->getModule('send_time')}:</strong>
+                        </div>
+                        <div class="col-7 col-sm-8 col-lg-9 col-xxl-10">
+                            {$DATA.send_time}                          
+                        </div>
+                    </div>
+                </li>
+                <li class="list-group-item">
+                    <div class="row g-3">
+                        <div class="col-5 col-sm-4 col-lg-3 col-xxl-2 text-end">
+                            <strong>{$LANG->getModule('to_department')}:</strong>
+                        </div>
+                        <div class="col-7 col-sm-8 col-lg-9 col-xxl-10">
+                            {if !empty($DEPARTMENTS[$DATA.cid])}
+                            <a href="javascript:void(0)" data-url="{$smarty.const.NV_BASE_ADMINURL}index.php?{$smarty.const.NV_LANG_VARIABLE}={$smarty.const.NV_LANG_DATA}&amp;{$smarty.const.NV_NAME_VARIABLE}={$MODULE_NAME}&amp;{$smarty.const.NV_OP_VARIABLE}=department&amp;id={$DATA.cid}" class="department-view">{$DEPARTMENTS[$DATA.cid].full_name}</a>
+                            {else}
+                            <span>{$LANG->getModule('department_empty')}</span>
+                            {/if}
+                        </div>
+                    </div>
+                </li>
+                <li class="list-group-item">
+                    <div class="row g-3">
+                        <div class="col-5 col-sm-4 col-lg-3 col-xxl-2 text-end">
+                            <strong>{$LANG->getModule('cat')}:</strong>
+                        </div>
+                        <div class="col-7 col-sm-8 col-lg-9 col-xxl-10">
+                            {$DATA.cat}                          
+                        </div>
+                    </div>
+                </li>
+                <li class="list-group-item">
+                    <div style="min-height:150px">
+                        {$DATA.content}
+                    </div>
+                </li>
+            </ul>
         </div>
     </div>
     <div class="col-lg-4">
@@ -179,37 +177,35 @@
             <div class="accordion-item">
                 <div class="accordion-header">
                     <button type="button" role="tab" id="reply-list-heading{$REPLY.rid}" class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#reply-list-collapse{$REPLY.rid}" aria-expanded="false" aria-controls="reply-list-collapse{$REPLY.rid}">
-                        <span style="flex-grow:1"><i class="fa-solid {$REPLY.icon}" aria-hidden="true"></i> {$REPLY.type}</span>
-                        <span class="pull-right">{$REPLY.time}&nbsp;</span>
+                        <span class="flex-grow-1"><i class="fa-solid {$REPLY.icon}" aria-hidden="true"></i> {$REPLY.type}</span>
+                        <span class="text-end">{$REPLY.time}&nbsp;</span>
                     </button>
                 </div>
                 <div id="reply-list-collapse{$REPLY.rid}" class="accordion-collapse collapse" role="tabpanel" aria-labelledby="reply-list-heading{$REPLY.rid}" data-bs-parent="#accordion-reply-list">
-                    <div class="accordion-body">
-                        <ul class="list-group list-group-flush">
-                            <li class="list-group-item">
-                                {$LANG->getModule('sender')}: <a href="{$REPLY.sender_url}">{$REP_ADMINS[$REPLY.reply_aid]}</a>
-                            </li>
-                            <li class="list-group-item">
-                                {$LANG->getModule('receiver')}: {$REPLY.reply_recipient}
-                            </li>
-                            {if !empty($REPLY.reply_cc)}
-                            <li class="list-group-item">
-                                {$LANG->getModule('cc')}: {$REPLY.reply_cc}
-                                {assign var='COUNT' value=0}
-                                {foreach $REPLY.reply_cc as $CC}
-                                {assign var='COUNT' value=$COUNT+1}
-                                <a href="{$smarty.const.NV_BASE_ADMINURL}index.php?{$smarty.const.NV_LANG_VARIABLE}={$smarty.const.NV_LANG_DATA}&amp;{$smarty.const.NV_NAME_VARIABLE}=authors&amp;id={$CC}">{$REP_ADMINS.$CC}</a>
-                                {if $COUNT < $REPLY.reply_cc|count}
-                                ,&nbsp;
-                                {/if}
-                                {/foreach}
-                            </li>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item">
+                            {$LANG->getModule('sender')}: <a href="{$REPLY.sender_url}">{$REP_ADMINS[$REPLY.reply_aid]}</a>
+                        </li>
+                        <li class="list-group-item">
+                            {$LANG->getModule('receiver')}: {$REPLY.reply_recipient}
+                        </li>
+                        {if !empty($REPLY.reply_cc)}
+                        <li class="list-group-item">
+                            {$LANG->getModule('cc')}: {$REPLY.reply_cc}
+                            {assign var='COUNT' value=0}
+                            {foreach $REPLY.reply_cc as $CC}
+                            {assign var='COUNT' value=$COUNT+1}
+                            <a href="{$smarty.const.NV_BASE_ADMINURL}index.php?{$smarty.const.NV_LANG_VARIABLE}={$smarty.const.NV_LANG_DATA}&amp;{$smarty.const.NV_NAME_VARIABLE}=authors&amp;id={$CC}">{$REP_ADMINS.$CC}</a>
+                            {if $COUNT < $REPLY.reply_cc|count}
+                            ,&nbsp;
                             {/if}
-                            <li class="list-group-item">
-                                {$REPLY.reply_content}
-                            </li>
-                        </ul>
-                    </div>
+                            {/foreach}
+                        </li>
+                        {/if}
+                        <li class="list-group-item">
+                            {$REPLY.reply_content}
+                        </li>
+                    </ul>
                 </div>
             </div>
             {/foreach}

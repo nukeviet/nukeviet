@@ -60,15 +60,12 @@ $(function() {
         window.location.href = $(this).parents('.item').data('url')
     });
 
-    $('.department_view').on('click', function(e) {
-        e.preventDefault();
-        department_view($(this).parents('.list').data('url') + '&id=' + $(this).parents('.item').data('id'))
-    });
     $('.department-view').on('click', function(e) {
         e.preventDefault();
         department_view($(this).data('url'))
     });
 
+    // Gởi phản hồi/Chuyển tiếp
     $('#feedback-reply form, #feedback-forward form').on('submit', function(e) {
         e.preventDefault();
         var url = $('.page').data('url'),
@@ -101,6 +98,7 @@ $(function() {
         })
     });
 
+    // Đánh dấu nhiều liên hệ
     $('.feedback_mark').on('click', function() {
         var form = $('#feedback_list'),
             mark = $(this).data('mark'),
@@ -141,6 +139,7 @@ $(function() {
         }
     });
 
+    // Đánh dấu 1 liên hệ từ trang chi tiết
     $('.feedback_mark_single').on('click', function() {
         var page = $('.page'),
             url = page.data('url'),
@@ -177,7 +176,7 @@ $(function() {
             }
         })
     });
-
+    // Xoá 1 liên hệ từ trang chi tiết
     $('.feedback_del').on('click', function() {
         var page = $('.page'),
             icon = $('i', $(this));
@@ -211,7 +210,7 @@ $(function() {
             icon.attr("class", originalClass);
         });
     });
-
+    // Xoá nhiều liên hệ
     $('.feedback_del_sel').on('click', function() {
         var form = $('#feedback_list');
         if ($('[name^=sends]:checked', form).length) {
@@ -254,7 +253,7 @@ $(function() {
             nvAlert(nv_please_check);
         }
     });
-
+    // Xoá tất cả liên hệ
     $('.feedback_del_all').on('click', function() {
         var form = $('#feedback_list')
         var checkss = $('[name=checkss]', form).val(),
@@ -287,266 +286,4 @@ $(function() {
             icon.attr("class", originalClass);
         });
     });
-
-    $('body').on('submit', '.department_content, .supporter_content', function(e) {
-        e.preventDefault();
-        var that = $(this),
-            url = that.attr('action'),
-            data = that.serialize();
-        $('input, button, textarea, select', that).prop('disabled', true);
-        $.ajax({
-            type: "POST",
-            url: url,
-            cache: !1,
-            data: data,
-            dataType: "json"
-        }).done(function(a) {
-            if (a.status == 'error') {
-                alert(a.mess);
-                $('input, button, textarea, select', that).prop('disabled', false)
-            } else if (a.status == 'OK') {
-                if (a.mess) {
-                    alert(a.mess)
-                }
-                window.location.reload()
-            }
-        })
-    });
-
-    $('.send-form').on('submit', function(e) {
-        e.preventDefault();
-        var that = $(this),
-            url = that.attr('action'),
-            data = that.serialize();
-        $('input, button, textarea', that).prop('disabled', true);
-        $.ajax({
-            type: "POST",
-            url: url,
-            cache: !1,
-            data: data,
-            dataType: "json"
-        }).done(function(a) {
-            $('input, button, textarea', that).prop('disabled', false);
-            if (a.status == 'error') {
-                alert(a.mess)
-            } else if (a.status == 'OK') {
-                var conf = confirm(a.mess);
-                if (conf) {
-                    window.location.reload();
-                    return !1
-                }
-            }
-        })
-    });
-
-    $('.department_add, .supporter_add').on('click', function() {
-        modal_content($(this).data('url'), 0)
-    });
-    if ($('.department_add.auto, .supporter_add.auto').length) {
-        $('.department_add.auto, .supporter_add.auto').trigger('click');
-    }
-
-    $('.department_edit, .supporter_edit').on('click', function() {
-        modal_content($(this).parents('.list').data('url'), $(this).parents('.item').data('id'))
-    });
-
-    $('body').on('change', '.department_content [name=full_name]', function() {
-        var txt = trim($(this).val()),
-            form = $(this).parents('form'),
-            alias = trim($('[name=alias]', form).val());
-        if (!txt.length || alias.length) {
-            return !1
-        }
-        department_change_alias(form)
-    });
-
-    $('body').on('click', '.department_alias', function() {
-        department_change_alias($(this).parents('form'))
-    })
-
-    $('.department_del').on('click', function() {
-        if (confirm(nv_is_del_confirm[0])) {
-            var that = $(this),
-                id = that.parents('.item').data('id'),
-                url = that.parents('.list').data('url');
-            $.ajax({
-                type: "POST",
-                url: url,
-                cache: !1,
-                data: {
-                    'fc': 'delete',
-                    'id': id
-                },
-                dataType: "json"
-            }).done(function(a) {
-                if (a.status == 'error') {
-                    alert(a.mess)
-                } else if (a.status == 'OK') {
-                    window.location.reload()
-                }
-            })
-        }
-    });
-
-    $('.department_cstatus').on('change', function() {
-        var that = $(this),
-            id = that.parents('.item').data('id'),
-            nstatus = that.val(),
-            url = that.parents('.list').data('url');
-        that.prop('disabled', true);
-        $.ajax({
-            type: "POST",
-            url: url,
-            cache: !1,
-            data: {
-                'fc': 'change_status',
-                'id': id,
-                'ns': nstatus
-            },
-            dataType: "json"
-        }).done(function(a) {
-            if (a.status == 'error') {
-                that.val(that.data('default'));
-                alert(a.mess)
-            } else if (a.status == 'OK') {
-                setTimeout(() => {
-                    that.prop('disabled', false);
-                }, 5000)
-            }
-        })
-    });
-
-    $('[name=is_default]').on('change', function() {
-        var that = $(this).parents('.list'),
-            item = $(this).parents('.item'),
-            id = $(this).val(),
-            url = that.data('url');
-        $('.is-default', that).removeClass('is-default');
-        $('.full_name', item).addClass('is-default');
-        $('[name=is_default]', that).prop('disabled', true);
-        $.ajax({
-            type: "POST",
-            url: url,
-            cache: !1,
-            data: {
-                'fc': 'set_default',
-                'id': id
-            },
-            dataType: "json"
-        }).done(function(a) {
-            if (a.status == 'error') {
-                alert(a.mess)
-            } else if (a.status == 'OK') {
-                setTimeout(() => {
-                    $('[name=is_default]', that).prop('disabled', false)
-                }, 5000)
-            }
-        })
-    });
-
-    $('.department_cweight, .supporter_cweight').on('change', function() {
-        var that = $(this),
-            id = that.parents('.item').data('id'),
-            nweight = that.val(),
-            url = that.parents('.list').data('url');
-        $.ajax({
-            type: "POST",
-            url: url,
-            cache: !1,
-            data: {
-                'fc': 'change_weight',
-                'id': id,
-                'nw': nweight
-            },
-            dataType: "json"
-        }).done(function(a) {
-            if (a.status == 'error') {
-                that.val(that.data('default'));
-                alert(a.mess)
-            } else if (a.status == 'OK') {
-                window.location.reload()
-            }
-        })
-    });
-
-    $('.supporter_del').on('click', function() {
-        if (confirm(nv_is_del_confirm[0])) {
-            $.ajax({
-                type: "POST",
-                url: $(this).parents('.list').data('url'),
-                cache: !1,
-                data: {
-                    'fc': 'delete',
-                    'id': $(this).parents('.item').data('id')
-                },
-                dataType: "json"
-            }).done(function(a) {
-                if (a.status == 'error') {
-                    alert(a.mess)
-                } else if (a.status == 'OK') {
-                    window.location.reload()
-                }
-            })
-        }
-    });
-
-    $('.supporter_act').on('change', function() {
-        var that = $(this),
-            is_checked = that.is(':checked'),
-            url = that.parents('.list').data('url'),
-            data = {
-                'fc': 'change_act',
-                'id': that.parents('.item').data('id')
-            };
-        that.prop('disabled', true);
-        $.ajax({
-            type: "POST",
-            url: url,
-            cache: !1,
-            data: data,
-            dataType: "json"
-        }).done(function(a) {
-            if (a.status == 'error') {
-                that.prop('disabled', false);
-                that.prop('checked', is_checked ? false : true);
-                alert(a.mess)
-            } else if (a.status == 'OK') {
-                setTimeout(() => {
-                    that.prop('disabled', false);
-                }, 5000);
-            }
-        })
-    })
-
-    $('body').on('click', '.help-show', function() {
-        var field = $(this).parents('.field'),
-            help_bl = $('.help-block', field);
-        if (help_bl.is(':visible')) {
-            help_bl.slideUp()
-        } else {
-            help_bl.slideDown()
-        }
-    });
-
-    $('body').on('click', '.str_add', function() {
-        var strs = $(this).parents('.strs'),
-            lg = $('.str', strs).length;
-        if (lg < 10) {
-            var str = $(this).parents('.str'),
-                new_str = str.clone();
-            $('input[type=text]', new_str).val('');
-            str.after(new_str)
-        }
-    });
-
-    $('body').on('click', '.str_del', function() {
-        var strs = $(this).parents('.strs'),
-            str = $(this).parents('.str'),
-            lg = $('.str', strs).length;
-        if (lg > 1) {
-            str.remove()
-        } else {
-            $('input[type=text]', str).val('');
-        }
-    })
 });
