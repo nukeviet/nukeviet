@@ -10,9 +10,9 @@
                 <input type="hidden" name="{$smarty.const.NV_LANG_VARIABLE}" value="{$smarty.const.NV_LANG_DATA}">
                 <input type="hidden" name="{$smarty.const.NV_NAME_VARIABLE}" value="{$MODULE_NAME}">
                 <input type="hidden" name="{$smarty.const.NV_OP_VARIABLE}" value="{$OP}">
-                <div class="row gx-3">
+                <div class="row g-3">
                     <div class="col-12 col-md-6 col-lg-4">
-                        <div class="form-group mb-3">
+                        <div class="form-group">
                             <div class="input-group w-100 flex-nowrap">
                                 <span class="input-group-text" title="{$LANG->getModule('api_role')}"><i class="fa-solid fa-object-group"></i></span>
                                 <select class="form-select role-id" name="role_id">
@@ -25,7 +25,7 @@
                         </div>
                     </div>
                     <div class="col-12 col-md-6 col-lg-4">
-                        <div class="form-group mb-3">
+                        <div class="form-group">
                             <div class="input-group w-100 flex-nowrap">
                                 <span class="input-group-text" title="API"><i class="fa-solid fa-terminal"></i></span>
                                 <select class="form-select command" name="command">
@@ -38,7 +38,7 @@
                         </div>
                     </div>
                     <div class="col-12 col-md-6 col-lg-4">
-                        <div class="form-group mb-3">
+                        <div class="form-group">
                             <div class="input-group w-100 flex-nowrap">
                                 <span class="input-group-text" title="{$LANG->getModule('api_role_object')}"><i class="fa-solid fa-user"></i></span>
                                 <select class="form-select userid" name="userid" data-placeholder="{$LANG->getModule('api_role_object')}">
@@ -50,7 +50,7 @@
                         </div>
                     </div>
                     <div class="col-12 col-md-6 col-lg-4">
-                        <div class="form-group mb-3">
+                        <div class="form-group">
                             <div class="input-group flex-nowrap">
                                 <span class="input-group-text" title="{$LANG->getModule('fromdate')}"><i class="fa-solid fa-calendar"></i></span>
                                 <input type="text" class="form-control fromdate" name="fromdate" value="{$GET_DATA.fromdate}" maxlength="10" placeholder="{$LANG->getModule('fromdate')}" autocomplete="off">
@@ -58,7 +58,7 @@
                         </div>
                     </div>
                     <div class="col-12 col-md-6 col-lg-4">
-                        <div class="form-group mb-3">
+                        <div class="form-group">
                             <div class="input-group flex-nowrap">
                                 <span class="input-group-text" title="{$LANG->getModule('todate')}"><i class="fa-solid fa-calendar"></i></span>
                                 <input type="text" class="form-control todate" name="todate" value="{$GET_DATA.todate}" maxlength="10" placeholder="{$LANG->getModule('todate')}" autocomplete="off">
@@ -66,7 +66,7 @@
                         </div>
                     </div>
                     <div class="col-auto">
-                        <div class="form-group mb-3">
+                        <div class="form-group">
                             <button type="submit" class="btn btn-primary w-100 w-100">{$LANG->getModule('filter_logs')}</button>
                         </div>
                     </div>
@@ -75,49 +75,47 @@
         </div>
         {if !empty($DATA)}
         <div class="card-body">
-            <div class="table-responsive m-bottom">
-                <table class="table table-bordered table-striped list" data-delete-confirm="{$LANG->getModule('log_del_confirm')}">
-                    <thead class="bg-primary">
+            <div class="table-responsive-lg table-card">
+                <table class="table table-striped list mb-1" data-delete-confirm="{$LANG->getModule('log_del_confirm')}">
+                    <thead>
                         {if !empty($smarty.const.MANUALL_DEL_API_LOG) and $smarty.const.MANUALL_DEL_API_LOG === true}
-                        <th style="width: 1%;"><input type="checkbox" class="form-check-input checkall"></th>
+                        <th style="width: 1%;"><input type="checkbox" class="form-check-input checkall" data-toggle="checkAll"></th>
                         {/if}
-                        <th class="text-center text-nowrap" style="width: 1%;">{$LANG->getModule('log_time')}</th>
-                        <th class="text-center text-nowrap">{$LANG->getModule('api_role')}</th>
-                        <th class="text-center text-nowrap">API</th>
-                        <th class="text-center text-nowrap" style="width: 1%;">{$LANG->getModule('api_role_object')}</th>
-                        <th class="text-center text-nowrap" style="width: 1%;">{$LANG->getModule('log_ip')}</th>
+                        <th class="text-center text-nowrap" style="width: 20%;">{$LANG->getModule('log_time')}</th>
+                        <th class="text-nowrap" style="width: 50%;">{$LANG->getModule('api_role')}</th>
+                        <th class="text-center text-nowrap" style="width: 15%;">API</th>
+                        <th class="text-center text-nowrap" style="width: 15%;">{$LANG->getModule('api_role_object')}</th>
+                        <th class="text-center text-nowrap" style="width: 5%;">{$LANG->getModule('log_ip')}</th>
                         {if !empty($smarty.const.MANUALL_DEL_API_LOG) and $smarty.const.MANUALL_DEL_API_LOG === true}
-                        <th style="width: 1%;"></th>
+                        <th style="width: 4%;"></th>
                         {/if}
                     </thead>
                     <tbody>
                         {foreach $DATA as $LOG}
                         <tr class="item" data-id="{$LOG.id}">
                             {if !empty($smarty.const.MANUALL_DEL_API_LOG) and $smarty.const.MANUALL_DEL_API_LOG === true}
-                            <td style="width: 1%;"><input type="checkbox" class="form-check-input checkitem"></td>
+                            <td><input type="checkbox" class="form-check-input checkitem" data-toggle="checkSingle"></td>
                             {/if}
-                            <td class="text-center" style="width: 1%;">{$LOG.log_time}</td>
-                            <td>{$LOG.role_title} ({$LANG->getModule('api_role_type')}: {$LOG.role_type}, {$LANG->getModule('api_role_object')}: {$LOG.role_object})</td>
-                            <td class="text-center text-nowrap" style="width: 1%;">{$LOG.command}</td>
-                            <td class="text-center text-nowrap" style="width: 1%;">{$LOG.username}</td>
-                            <td class="text-center" style="width: 1%;">{$LOG.log_ip}</td>
+                            <td class="text-center">{$LOG.log_time}</td>
+                            <td class="text-nowrap">{$LOG.role_title} ({$LANG->getModule('api_role_type')}: {$LOG.role_type}, {$LANG->getModule('api_role_object')}: {$LOG.role_object})</td>
+                            <td class="text-center text-nowrap">{$LOG.command}</td>
+                            <td class="text-center text-nowrap">{$LOG.username}</td>
+                            <td class="text-center">{$LOG.log_ip}</td>
                             {if !empty($smarty.const.MANUALL_DEL_API_LOG) and $smarty.const.MANUALL_DEL_API_LOG === true}
-                            <td><button type="button" class="btn btn-secondary log-del"><i class="fa-solid fa-trash-o"></i> {$LANG->getGlobal('delete')}</button></td>
+                            <td><button type="button" class="btn btn-secondary log-del text-nowrap"><i class="fa-solid fa-trash text-danger"></i> {$LANG->getGlobal('delete')}</button></td>
                             {/if}
                         </tr>
                         {/foreach}
-                    </tbody>
-                    {if !empty($smarty.const.MANUALL_DEL_API_LOG) and $smarty.const.MANUALL_DEL_API_LOG === true}
-                    <tfoot>
+                        {if !empty($smarty.const.MANUALL_DEL_API_LOG) and $smarty.const.MANUALL_DEL_API_LOG === true}
                         <tr>
-                            <td style="width: 1%;"><input type="checkbox" class="form-check-input checkall"></td>
+                            <td><input type="checkbox" class="form-check-input checkall" data-toggle="checkAll"></td>
                             <td colspan="6">
-                                <button type="button" class="btn btn-secondary log-multidel"><i class="fa-solid fa-trash-o"></i> {$LANG->getModule('del_selected')}</button>
-                                <button type="button" class="btn btn-secondary log-delall"><i class="fa-solid fa-trash-o"></i> {$LANG->getModule('del_all')}</button>
+                                <button type="button" class="btn btn-secondary log-multidel"><i class="fa-solid fa-trash text-danger"></i> {$LANG->getModule('del_selected')}</button>
+                                <button type="button" class="btn btn-secondary log-delall"><i class="fa-solid fa-trash text-danger"></i> {$LANG->getModule('del_all')}</button>
                             </td>
                         </tr>
-                    </tfoot>
-                    {/if}
+                        {/if}
+                    </tbody>
                 </table>
             </div>
         </div>
@@ -125,7 +123,9 @@
         {if !empty($GENERATE_PAGE)}
         <div class="card-footer">
             <div class="d-flex flex-wrap justify-content-end align-items-center">
-                {$GENERATE_PAGE}
+                <div class="pagination-wrap">
+                    {$GENERATE_PAGE}
+                </div>
             </div>
         </div>
         {/if}

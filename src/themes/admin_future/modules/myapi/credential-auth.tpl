@@ -1,4 +1,4 @@
-<div class="mb-3"><strong>{$LANG->getModule('auth_method')}</strong></div>
+<div class="form-label">{$LANG->getModule('auth_method')}</div>
 <ul class="nav nav-tabs mb-3" role="tablist">
     {foreach $METHODS as $METHOD}
     <li role="presentation" class="nav-item"><a class="nav-link {if $METHOD.key == 'password_verify'}active{/if}" href="#{$METHOD.key}-panel" aria-controls="{$METHOD.key}-panel" role="tab" data-bs-toggle="tab">{$METHOD.name}</a></li>
@@ -8,15 +8,15 @@
 <div class="tab-content">
     {foreach $METHODS as $METHOD}
     <div role="tabpanel" class="tab-pane{if $METHOD.key == 'password_verify'} active{/if}" id="{$METHOD.key}-panel">
-        <div>
-            <label><strong>{$LANG->getModule('api_credential_ident')}</strong></label>
+        <div class="mb-3">
+            <label class="form-label" for="{$METHOD.key}-credential_ident">{$LANG->getModule('api_credential_ident')}</label>
             <div class="input-group">
                 <input type="text" name="{$METHOD.key}_ident" id="{$METHOD.key}-credential_ident" value="{$METHOD.ident}" class="form-control" readonly="readonly">
                 <button class="btn btn-secondary active" type="button" data-clipboard-target="#{$METHOD.key}-credential_ident" data-bs-toggle="tooltip" title="{$LANG->getModule('value_copied')}" data-bs-placement="left" data-bs-container="body" data-bs-trigger="manual" data-bs-animation="false"><i class="fa-solid fa-copy"></i></button>
             </div>
         </div>
         <div class="mb-3">
-            <label><strong>{$LANG->getModule('api_credential_secret')}</strong></label>
+            <label class="form-label" for="{$METHOD.key}-credential_secret">{$LANG->getModule('api_credential_secret')}</label>
             <div class="input-group">
                 <input type="text" name="{$METHOD.key}_secret" id="{$METHOD.key}-credential_secret" value="" class="form-control" readonly="readonly">
                 <button class="btn btn-secondary active" type="button" data-clipboard-target="#{$METHOD.key}-credential_secret" data-bs-toggle="tooltip" title="{$LANG->getModule('value_copied')}" data-bs-placement="left" data-bs-container="body" data-bs-trigger="manual" data-bs-animation="false"><i class="fa-solid fa-copy"></i></button>
@@ -32,10 +32,10 @@
         </div>
 
     <div class="api_ips" {if empty($API_USER[$METHOD.key])}style="display:none"{/if}>
-            <div>
-                <label><strong>{$LANG->getModule('api_ips')}</strong></label>
-                <textarea class="form-control ips" name="{$METHOD.key}_ips">{$METHOD.ips}</textarea>
-                <div class="help-block">{$LANG->getModule('api_ips_help')}</div>
+            <div class="mb-3">
+                <label class="form-label" for="{$METHOD.key}_ips">{$LANG->getModule('api_ips')}</label>
+                <textarea class="form-control ips" name="{$METHOD.key}_ips" id="{$METHOD.key}_ips">{$METHOD.ips}</textarea>
+                <div class="form-text">{$LANG->getModule('api_ips_help')}</div>
             </div>
             <div class="text-center">
                 <button type="button" class="btn btn-primary api_ips_update" data-method="{$METHOD.key}" data-userid="{$USERID}">{$LANG->getModule('api_ips_update')}</button>

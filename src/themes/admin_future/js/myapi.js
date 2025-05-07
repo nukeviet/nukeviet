@@ -117,15 +117,15 @@ $(function() {
     $('[data-toggle="apiroledel"]').on('click', function(e) {
         e.preventDefault();
         var icon = $(this).find('i'),
-            iconClass = icon.attr('class')
-
+            iconClass = icon.attr('class'),
+            that = $(this);
         nvConfirm(nv_is_del_confirm[0], function() {
             icon.removeClass(iconClass).addClass('fa-solid fa-spinner fa-spin-pulse');
             $.ajax({
                 type: "POST",
                 url: $('#rolelist').data('page-url'),
                 cache: !1,
-                data: 'roledel=' + $(this).parents('.item').data('id') + '&checkss=' + $('#rolelist').data('checkss'),
+                data: 'roledel=' + that.parents('.item').data('id') + '&checkss=' + $('#rolelist').data('checkss'),
                 dataType: "json"
             }).done(function(data) {
                 if (data.status === 'error') {
@@ -161,7 +161,7 @@ $(function() {
                 url: url,
                 cache: !1
             }).done(function(a) {
-                $('#credential-add .credential-title').text(title);
+                $('#credential-add .credential-title-str').text(title);
                 $('#credential-add form').html(a);
                 credentialSelInit($('#getUser'));
                 $('#credential-add').modal('show')
@@ -491,15 +491,6 @@ $(function() {
                     location.reload()
                 })
             }
-        });
-
-        $('.checkall', logs).on('change', function() {
-            $('.checkall, .checkitem', logs).prop('checked', $(this).is(':checked'))
-        });
-
-        $('.checkitem', logs).on('change', function() {
-            var ls = $(this).parents('.list');
-            $('.checkall', logs).prop('checked', !$('.checkitem:not(:checked)', ls).length)
         });
 
         $('.log-multidel', logs).on('click', function() {

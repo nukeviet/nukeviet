@@ -7,7 +7,7 @@
     <div class="card">
         <div class="card-header">
             <div class="row g-2">
-                <div class="col-sm-7 col-lg-8 order-2 order-sm-1">
+                <div class="col-sm-7 col-lg-8 col-xl-6 order-2 order-sm-1">
                     <div class="row g-2">
                         <div class="col-lg-6">
                             <div class="input-group">
@@ -33,7 +33,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-sm-5 col-lg-4 text-end order-1 order-sm-2">
+                <div class="col-sm-5 col-lg-4 col-xl-6 text-end order-1 order-sm-2">
                     <button onclick="window.location.href='{$ADD_API_ROLE_URL}';" class="btn btn-primary"><i class="fa-solid fa-plus"></i> {$LANG->getModule('add_role')}</button>
                 </div>
             </div>
