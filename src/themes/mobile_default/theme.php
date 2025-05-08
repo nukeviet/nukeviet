@@ -207,6 +207,7 @@ function nv_site_theme($contents, $full = true)
     }
 
     foreach ($html_js as $js) {
+        $xtpl->assign('JS_TYPE', !empty($js['type']) ? (' type="' . $js['type'] . '"') : '');
         if ($js['ext']) {
             $xtpl->assign('JS_SRC', $js['content']);
             $xtpl->parse('main.js.ext');

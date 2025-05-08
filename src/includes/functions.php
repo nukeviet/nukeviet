@@ -390,7 +390,6 @@ function nv_check_valid_login($login, $max, $min)
             $_login = str_replace('@', '', $login);
 
             return $login != strip_punctuation($_login) ? $nv_Lang->getGlobal('unick_type_' . $type) : '';
-            break;
         default:
             return '';
     }
@@ -1054,8 +1053,8 @@ function nv_monthname($i)
 /**
  * nv_unhtmlspecialchars()
  *
- * @param string $string
- * @return string
+ * @param string|int|float|array $string
+ * @return string|int|float|array
  */
 function nv_unhtmlspecialchars($string)
 {
@@ -1069,7 +1068,7 @@ function nv_unhtmlspecialchars($string)
         foreach ($array_keys as $key) {
             $string[$key] = nv_unhtmlspecialchars($string[$key]);
         }
-    } else {
+    } elseif (is_string($string)) {
         $search = ['&amp;', '&#039;', '&quot;', '&lt;', '&gt;', '&#x005C;', '&#x002F;', '&#40;', '&#41;', '&#42;', '&#91;', '&#93;', '&#33;', '&#x3D;', '&#x23;', '&#x25;', '&#x5E;', '&#x3A;', '&#x7B;', '&#x7D;', '&#x60;', '&#x7E;'];
         $replace = ['&', '\'', '"', '<', '>', '\\', '/', '(', ')', '*', '[', ']', '!', '=', '#', '%', '^', ':', '{', '}', '`', '~'];
 
@@ -2203,7 +2202,7 @@ function nv_is_url($url, $isInternal = false)
  *
  * @param string $url
  * @param bool   $isArray
- * @return bool
+ * @return bool|array
  */
 function nv_check_url($url, $isArray = false)
 {
@@ -2570,6 +2569,7 @@ function nv_change_buffer($buffer)
             $_google_analytics .= "ga('create', '" . $global_config['googleAnalyticsID'] . "', '" . $global_config['cookie_domain'] . "');" . PHP_EOL;
         }
         if (defined('GOOGLE_ANALYTICS_SYSTEM')) {
+            /** @disregard P1011 */
             $_google_analytics .= "ga('create', '" . GOOGLE_ANALYTICS_SYSTEM . "', 'auto');" . PHP_EOL;
         }
         $_google_analytics .= "ga('send', 'pageview');" . PHP_EOL;
@@ -2887,7 +2887,7 @@ function nv_sys_mods($lang = '')
  * nv_site_mods()
  *
  * @param string $lang
- * @return array
+ * @return array|void
  */
 function nv_site_mods($lang = '')
 {
@@ -4097,7 +4097,7 @@ function nv_currency_format(float $num, string $lang = '')
 /**
  * @param string $key
  * @param string $lang
- * @return NULL|string|number
+ * @return null|string|number
  */
 function nv_region_config(string $key, string $lang = '')
 {

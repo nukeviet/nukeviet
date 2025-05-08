@@ -1,21 +1,8 @@
 <!-- BEGIN: main -->
 <link href="{ASSETS_STATIC_URL}/js/highlight/github.min.css" rel="stylesheet">
-<div class="news_column panel panel-default" itemtype="http://schema.org/NewsArticle" itemscope>
+<div class="news_column panel panel-default">
     <div class="panel-body">
-        <h1 itemprop="headline">{DETAIL.title}</h1>
-        <div class="hidden hide d-none" itemprop="author" itemtype="http://schema.org/Person" itemscope>
-            <span itemprop="name">{SCHEMA_AUTHOR}</span>
-        </div>
-        <span class="hidden hide d-none" itemprop="datePublished">{SCHEMA_DATEPUBLISHED}</span>
-        <span class="hidden hide d-none" itemprop="dateModified">{SCHEMA_DATEPUBLISHED}</span>
-        <span class="hidden hide d-none" itemprop="mainEntityOfPage">{SCHEMA_URL}</span>
-        <span class="hidden hide d-none" itemprop="image">{SCHEMA_IMAGE}</span>
-        <div class="hidden hide d-none" itemprop="publisher" itemtype="http://schema.org/Organization" itemscope>
-            <span itemprop="name">{SCHEMA_ORGNAME}</span>
-            <span itemprop="logo" itemtype="http://schema.org/ImageObject" itemscope>
-                <span itemprop="url">{SCHEMA_ORGLOGO}</span>
-            </span>
-        </div>
+        <h1>{DETAIL.title}</h1>
         <em class="time">{DETAIL.publtime}</em>
         <hr />
         <!-- BEGIN: no_public -->
@@ -78,7 +65,7 @@
                 <hr />
             </div>
             <!-- END: imgthumb -->
-            <div class="h2" itemprop="description">{DETAIL.hometext}</div>
+            <div class="h2">{DETAIL.hometext}</div>
         </div>
         <!-- BEGIN: imgfull -->
         <div style="max-width:{DETAIL.image.width}px;margin: 10px auto 10px auto">
@@ -222,7 +209,7 @@
                         <div id="stringrating">{STRINGRATING}</div>
                         <!-- BEGIN: data_rating -->
                         <div>
-                            <span itemscope itemtype="https://schema.org/AggregateRating"> <span class="hidden" itemprop="itemReviewed" itemscope itemtype="https://schema.org/CreativeWorkSeries"><span class="hidden" itemprop="name">{DETAIL.title}</span></span>{LANG.rating_average}: <span id="numberrating" itemprop="ratingValue">{DETAIL.numberrating}</span> / <span id="click_rating" itemprop="ratingCount">{DETAIL.click_rating}</span> {LANG.rating_count} <span class="hidden" itemprop="bestRating">5</span></span>
+                            {LANG.rating_average}: <span id="numberrating">{DETAIL.numberrating}</span> / <span id="click_rating">{DETAIL.click_rating}</span> {LANG.rating_count}
                         </div>
                         <!-- END: data_rating -->
                     </div>

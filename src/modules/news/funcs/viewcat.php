@@ -16,9 +16,8 @@ if (!defined('NV_IS_MOD_NEWS')) {
 $cache_file = '';
 $contents = '';
 $viewcat = $global_array_cat[$catid]['viewcat'];
-$set_view_page = ($page > 1 and substr($viewcat, 0, 13) == 'viewcat_main_') ? true : false;
+$set_view_page = ($page > 1 and (substr($viewcat, 0, 13) == 'viewcat_main_' or $viewcat == 'viewcat_two_column')) ? true : false;
 $page_url = $base_url = $global_array_cat[$catid]['link'];
-$no_generate = ['viewcat_two_column'];
 
 if (!defined('NV_IS_MODADMIN') and $page < 5) {
     if ($set_view_page) {
@@ -33,14 +32,6 @@ if (!defined('NV_IS_MODADMIN') and $page < 5) {
 
 if ($page > 1) {
     $page_url .= '/page-' . $page;
-
-    /*
-     * @link https://github.com/nukeviet/nukeviet/issues/2990
-     * Một số kiểu hiển thị không được đánh page
-     */
-    if (in_array($viewcat, $no_generate, true)) {
-        nv_redirect_location($base_url);
-    }
 }
 
 $canonicalUrl = getCanonicalUrl($page_url, true, true);
@@ -229,11 +220,21 @@ if (empty($contents)) {
             unset($array_catid);
         }
         $generate_page = nv_alias_page($page_title, $base_url, $num_items, $per_page, $page);
-        $contents = viewcat_top($array_catcontent, $generate_page);
-        $contents .= call_user_func('viewsubcat_main', $viewcat, $array_cat_other);
+        $contents = viewsubcat_main($viewcat, $array_cat_other, $array_catcontent, $generate_page);
     } elseif ($viewcat == 'viewcat_two_column') {
         // Cac bai viet phan dau
         $array_catcontent = [];
+
+        $db_slave->sqlreset()
+            ->select('COUNT(*)')
+            ->from(NV_PREFIXLANG . '_' . $module_data . '_' . $catid)
+            ->where('status=1');
+
+        $num_items = $db_slave->query($db_slave->sql())
+            ->fetchColumn();
+
+        // Không cho tùy ý đánh số page + xác định trang trước, trang sau
+        betweenURLs($page, ceil($num_items / $per_page), $base_url, '/page-', $prevPage, $nextPage);
 
         $db_slave->sqlreset()
             ->select('id, listcatid, topicid, admin_id, author, sourceid, addtime, edittime, publtime, title, alias, hometext, homeimgfile, homeimgalt, homeimgthumb, allowed_rating, external_link, hitstotal, hitscm, total_rating, click_rating')
@@ -323,7 +324,8 @@ if (empty($contents)) {
 
         unset($sql, $result);
         //Het cac bai viet cua cac chu de con
-        $contents = call_user_func($viewcat, $array_catcontent, $array_cat_other);
+        $generate_page = nv_alias_page($page_title, $base_url, $num_items, $per_page, $page);
+        $contents = viewcat_two_column($array_catcontent, $generate_page, $array_cat_other);
     } elseif ($viewcat == 'viewcat_grid_new' or $viewcat == 'viewcat_grid_old') {
         $order_by = ($viewcat == 'viewcat_grid_new') ? $order_articles_by . ' DESC, addtime DESC' : $order_articles_by . ' ASC, addtime ASC';
 

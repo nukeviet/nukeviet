@@ -73,6 +73,7 @@
 
 .card-header {
     --bs-card-border-width: var(--bs-border-width);
+    --#{$prefix}card-border-color: var(--#{$prefix}border-color-translucent);
 }
 
 .table-card {

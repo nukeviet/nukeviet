@@ -114,6 +114,11 @@ if (!empty($savesetting)) {
     }
     $array_config['socialbutton'] = !empty($array_config['socialbutton']) ? implode(',', $array_config['socialbutton']) : '';
 
+    $array_config['schema_type'] = $nv_Request->get_title('schema_type', 'post', '');
+    if (!array_key_exists($array_config['schema_type'], $schema_types)) {
+        $array_config['schema_type'] = 'newsarticle';
+    }
+
     if (empty($error)) {
         $sth = $db->prepare('UPDATE ' . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = '" . NV_LANG_DATA . "' AND module = :module_name AND config_name = :config_name");
         $sth->bindParam(':module_name', $module_name, PDO::PARAM_STR);
@@ -333,6 +338,16 @@ $xtpl->assign('COPYRIGHTHTML', $copyright);
 
 $xtpl->assign('PATH', defined('NV_IS_SPADMIN') ? '' : NV_UPLOADS_DIR . '/' . $module_upload);
 $xtpl->assign('CURRENTPATH', defined('NV_IS_SPADMIN') ? 'images' : NV_UPLOADS_DIR . '/' . $module_upload);
+
+// Cấu hình loại dữ liệu có cấu trúc
+foreach ($schema_types as $key => $val) {
+    $xtpl->assign('SCHEMA_TYPE', [
+        'key' => $key,
+        'title' => $val,
+        'selected' => $key == $module_config[$module_name]['schema_type'] ? ' selected' : ''
+    ]);
+    $xtpl->parse('main.schema_type');
+}
 
 if (defined('NV_IS_ADMIN_FULL_MODULE') or !in_array('admins', $allow_func, true)) {
     $groups_list = $groupslist;

@@ -30,7 +30,11 @@ if (empty($news_contents)) {
     nv_info_die($nv_Lang->getGlobal('error_404_title'), $nv_Lang->getGlobal('error_404_title'), $nv_Lang->getGlobal('error_404_content') . $redirect, 404);
 }
 
-$body_contents = $db_slave->query('SELECT titlesite, description, bodyhtml, voicedata, keywords, sourcetext, files, layout_func, imgposition, copyright, allowed_send, allowed_print, allowed_save, auto_nav, group_view, localization, related_ids, related_pos FROM ' . NV_PREFIXLANG . '_' . $module_data . '_detail where id=' . $news_contents['id'])->fetch();
+$body_contents = $db_slave->query('SELECT
+    titlesite, description, bodyhtml, voicedata, keywords, sourcetext, files, layout_func, imgposition,
+    copyright, allowed_send, allowed_print, allowed_save, auto_nav,
+    group_view, localization, related_ids, related_pos, schema_type
+FROM ' . NV_PREFIXLANG . '_' . $module_data . '_detail where id=' . $news_contents['id'])->fetch();
 $news_contents = array_merge($news_contents, $body_contents);
 unset($body_contents);
 
@@ -93,7 +97,7 @@ if (!empty($localversions)) {
  */
 if (!nv_user_in_groups($global_array_cat[$catid]['groups_view'])) {
     $nv_BotManager->setPrivate();
-    $contents = no_permission($global_array_cat[$catid]['groups_view']);
+    $contents = no_permission();
 
     include NV_ROOTDIR . '/includes/header.php';
     echo nv_site_theme($contents);
@@ -103,7 +107,7 @@ if (!nv_user_in_groups($global_array_cat[$catid]['groups_view'])) {
 if (!empty($news_contents['group_view'])) {
     if (!nv_user_in_groups($news_contents['group_view'])) {
         $nv_BotManager->setPrivate();
-        $contents = no_permission($news_contents['group_view']);
+        $contents = no_permission();
 
         include NV_ROOTDIR . '/includes/header.php';
         echo nv_site_theme($contents);
@@ -237,6 +241,9 @@ if (!empty($news_contents['files'])) {
     }
 }
 
+[$post_username, $post_first_name, $post_last_name] = $db_slave->query('SELECT username, first_name, last_name FROM ' . NV_USERS_GLOBALTABLE . ' WHERE userid = ' . $news_contents['admin_id'])->fetch(3);
+$news_contents['post_name'] = nv_show_name_user($post_first_name, $post_last_name, $post_username);
+
 $publtime = (int) ($news_contents['publtime']);
 $meta_property['og:type'] = 'article';
 $meta_property['article:published_time'] = date('Y-m-dTH:i:s', $publtime);
@@ -245,6 +252,38 @@ if ($news_contents['exptime']) {
     $meta_property['article:expiration_time'] = date('Y-m-dTH:i:s', $news_contents['exptime']);
 }
 $meta_property['article:section'] = $global_array_cat[$news_contents['catid']]['title'];
+
+// Dữ liệu có cấu trúc cho bài viết
+$schema_supported = [
+    'newsarticle' => 'NewsArticle',
+    'blogposting' => 'BlogPosting',
+    'article' => 'Article'
+];
+$schema = [
+    '@context' => 'https://schema.org',
+    '@type' => $schema_supported[$news_contents['schema_type']] ?? 'NewsArticle',
+    'headline' => $news_contents['title'],
+    'description' => strip_tags($news_contents['hometext']),
+    'mainEntityOfPage' => $news_contents['link']
+];
+if (!empty($meta_property['og:image'])) {
+    $schema['image'] = [
+        '@type' => 'ImageObject',
+        'url' => $meta_property['og:image']
+    ];
+}
+if ($news_contents['schema_type'] != 'BlogPosting') {
+    $schema['publisher'] = [
+        '@type' => 'Organization',
+        'name' => $global_config['site_name'],
+    ];
+    if (!empty($global_config['site_logo'])) {
+        $schema['publisher']['logo'] = [
+            '@type' => 'ImageObject',
+            'url' => NV_MY_DOMAIN . NV_BASE_SITEURL . $global_config['site_logo']
+        ];
+    }
+}
 
 if (defined('NV_IS_MODADMIN') and $news_contents['status'] != 1) {
     $alert = $nv_Lang->getModule('status_alert', $nv_Lang->getModule('status_' . $news_contents['status']));
@@ -274,29 +313,59 @@ if ($news_contents['sourceid']) {
     }
 }
 
-$authors = [];
-$schema_author = [];
+$authors = $schema_author = [];
+
+// Lấy tác giả thuộc quyền quản lí
 $db->sqlreset()
     ->select('l.alias,l.pseudonym')
     ->from(NV_PREFIXLANG . '_' . $module_data . '_authorlist l LEFT JOIN ' . NV_PREFIXLANG . '_' . $module_data . '_author a ON l.aid=a.id')
     ->where('l.id = ' . $id . ' AND a.active=1');
 $result = $db->query($db->sql());
 while ($row = $result->fetch()) {
+    $url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=author/' . $row['alias'];
     if (empty($module_config[$module_name]['hide_inauthor'])) {
-        $authors[] = '<a href="' . NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=author/' . $row['alias'] . '">' . $row['pseudonym'] . '</a>';
+        $authors[] = '<a href="' . $url . '">' . $row['pseudonym'] . '</a>';
     }
-    $schema_author[] = $row['pseudonym'];
+    $schema_author[] = [
+        '@type' => 'Person',
+        'name' => $row['pseudonym'],
+        'url' => urlRewriteWithDomain($url, NV_MAIN_DOMAIN)
+    ];
 }
+
+// Tác giả bên ngoài
+$url_aguest = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=author/guests';
 if (!empty($news_contents['author'])) {
     if (empty($module_config[$module_name]['hide_author'])) {
-        $authors[] = '<a href="' . NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=author/guests">' . $news_contents['author'] . '</a>';
+        $authors[] = '<a href="' . $url_aguest . '">' . $news_contents['author'] . '</a>';
     }
-    $schema_author[] = $news_contents['author'];
+    $schema_author[] = [
+        '@type' => 'Person',
+        'name' => $news_contents['author'],
+        'url' => urlRewriteWithDomain($url_aguest, NV_MAIN_DOMAIN)
+    ];
 }
 $news_contents['author'] = !empty($authors) ? implode(', ', $authors) : '';
-$news_contents['schema_author'] = !empty($schema_author) ? implode(', ', $schema_author) : '';
+
+// Không có tác giả lấy tên người đăng
+if (empty($schema_author)) {
+    $schema_author[] = [
+        '@type' => 'Person',
+        'name' => $news_contents['post_name'] ?: 'Unknow Author',
+        'url' => urlRewriteWithDomain($url_aguest, NV_MAIN_DOMAIN)
+    ];
+}
+$schema['author'] = array_values($schema_author);
+if (count($schema['author']) == 1) {
+    $schema['author'] = $schema['author'][0];
+}
 
 $news_contents['number_publtime'] = $news_contents['publtime'];
+$news_contents['number_edittime'] = (empty($news_contents['edittime']) or $news_contents['edittime'] < $news_contents['number_publtime']) ? $news_contents['number_publtime'] : $news_contents['edittime'];
+
+$schema['datePublished'] = date('c', $news_contents['number_publtime']);
+$schema['dateModified'] = date('c', $news_contents['number_edittime']);
+
 $news_contents['publtime'] = nv_date_format(0, $news_contents['publtime']) . ' ' . nv_time_format(1, $news_contents['publtime']);
 $news_contents['newscheckss'] = md5($news_contents['id'] . NV_CHECK_SESSION);
 
@@ -445,11 +514,17 @@ if ($news_contents['allowed_rating']) {
             'checked' => 5 == $news_contents['numberrating_star'] ? ' checked="checked"' : ''
         ]
     ];
-}
 
-[$post_username, $post_first_name, $post_last_name] = $db_slave->query('SELECT username, first_name, last_name FROM ' . NV_USERS_GLOBALTABLE . ' WHERE userid = ' . $news_contents['admin_id'])->fetch(3);
-$news_contents['post_name'] = nv_show_name_user($post_first_name, $post_last_name, $post_username);
-empty($news_contents['schema_author']) && $news_contents['schema_author'] = $news_contents['post_name'];
+    // Thêm đánh giá cho schema loại bài viết - Google đã không còn hỗ trợ
+    /*
+    if ($news_contents['numberrating'] >= $module_config[$module_name]['allowed_rating_point']) {
+        $schema['aggregateRating'] = [
+            '@type' => 'AggregateRating',
+            'ratingValue' => $news_contents['numberrating'],
+            'reviewCount' => $news_contents['click_rating']
+        ];
+    }*/
+}
 
 $array_keyword = [];
 $key_words = [];
@@ -524,7 +599,7 @@ if (!empty($news_contents['auto_nav']) and !empty($news_contents['bodyhtml'])) {
     $location = NV_MY_DOMAIN . $location . ((str_contains($location, '?') ? '&' : '?') . 'ml=');
 
     foreach ($matches as $match) {
-        $text = trim(preg_replace('/\s[\s]+/is', ' ', strip_tags(nv_br2nl($match[3], ' '))));
+        $text = trim(preg_replace('/\s[\s]+/is', ' ', strip_tags(nv_br2nl($match[3]))));
         $tag = strtolower($match[1]);
         if (empty($text)) {
             continue;
@@ -587,6 +662,7 @@ $contents = detail_theme($news_contents, $array_keyword, $related_new_array, $re
 
 $key_words = ($module_config[$module_name]['keywords_tag'] and empty($news_contents['keywords'])) ? implode(',', $key_words) : $news_contents['keywords'];
 $description = empty($news_contents['description']) ? $news_contents['hometext'] : $news_contents['description'];
+$nv_schemas[] = $schema;
 
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_site_theme($contents);

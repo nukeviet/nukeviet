@@ -296,7 +296,8 @@ $rowcontent = [
     'localversions' => [],
     'related_ids' => '',
     'related_pos' => 2,
-    'uuid' => ''
+    'uuid' => '',
+    'schema_type' => $module_config[$module_name]['schema_type']
 ];
 
 $page_title = $nv_Lang->getModule('content_add');
@@ -850,6 +851,12 @@ if ($is_submit_form) {
     }
     $rowcontent['related_ids'] = empty($related_ids) ? '' : implode(',', $related_ids);
 
+    // Loại dữ liệu có cấu trúc của bài viết
+    $rowcontent['schema_type'] = $nv_Request->get_title('schema_type', 'post', '');
+    if (!array_key_exists($rowcontent['schema_type'], $schema_types)) {
+        $rowcontent['schema_type'] = 'newsarticle';
+    }
+
     // Xử lý tự động lưu
     $uuid = $nv_Request->get_title('uuid', 'post', '');
     if ($is_auto_save) {
@@ -1107,7 +1114,7 @@ if ($is_submit_form) {
                     id, titlesite, description, bodyhtml, voicedata, keywords, sourcetext,
                     files, imgposition, layout_func, copyright,
                     allowed_send, allowed_print, allowed_save, auto_nav, group_view, localization,
-                    related_ids, related_pos
+                    related_ids, related_pos, schema_type
                 ) VALUES (
                     ' . $rowcontent['id'] . ',
                     :titlesite,
@@ -1127,7 +1134,8 @@ if ($is_submit_form) {
                     :group_view,
                     :localization,
                     ' . $db->quote($rowcontent['related_ids']) . ',
-                    ' . $rowcontent['related_pos'] . '
+                    ' . $rowcontent['related_pos'] . ',
+                    ' . $db->quote($rowcontent['schema_type']) . '
                 )');
 
                 $voicedata = empty($rowcontent['voicedata']) ? '' : json_encode($rowcontent['voicedata']);
@@ -1259,7 +1267,8 @@ if ($is_submit_form) {
                     group_view=:group_view,
                     localization=:localization,
                     related_ids=' . $db->quote($rowcontent['related_ids']) . ',
-                    related_pos=' . $rowcontent['related_pos'] . '
+                    related_pos=' . $rowcontent['related_pos'] . ',
+                    schema_type=' . $db->quote($rowcontent['schema_type']) . '
                 WHERE id =' . $rowcontent['id']);
 
                 $voicedata = empty($rowcontent['voicedata']) ? '' : json_encode($rowcontent['voicedata']);
@@ -1603,6 +1612,7 @@ $tpl->assign('IS_SUBMIT', $is_submit_form);
 $tpl->assign('TOTAL_NEWS_CURRENT', $total_news_current);
 $tpl->assign('REPORT_ID', $rid);
 $tpl->assign('REPORTLIST', $reportlist);
+$tpl->assign('SCHEMA_TYPES', $schema_types);
 
 // Xử lý bước đầu cho chuyên mục
 $list_cats = [];

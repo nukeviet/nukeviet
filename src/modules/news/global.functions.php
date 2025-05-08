@@ -21,6 +21,11 @@ $global_code_defined = [
     'row_locked_status' => 20,
     'edit_timeout' => 180
 ];
+$schema_types = [
+    'newsarticle' => 'NewsArticle',
+    'blogposting' => 'BlogPosting',
+    'article' => 'Article'
+];
 
 $order_articles = $module_config[$module_name]['order_articles'];
 $order_articles_by = ($order_articles) ? 'weight' : 'publtime';
@@ -413,6 +418,7 @@ function nv_save_history($post_old, $post_new)
         'allowed_save',
         'auto_nav',
         'group_view',
+        'schema_type',
     ];
     $key_textlist = [
         'listcatid',
@@ -473,7 +479,7 @@ function nv_save_history($post_old, $post_new)
             allowed_rating, external_link, instant_active, instant_template,
             instant_creatauto, titlesite, description, bodyhtml, voicedata, keywords, sourcetext,
             files, tags, internal_authors, imgposition, layout_func, copyright,
-            allowed_send, allowed_print, allowed_save, auto_nav, group_view, changed_fields
+            allowed_send, allowed_print, allowed_save, auto_nav, group_view, schema_type, changed_fields
         ) VALUES (
             :new_id, :historytime, :catid, :listcatid, :topicid, :admin_id,
             :author, :sourceid, :publtime, :exptime, :archive, :title, :alias,
@@ -481,7 +487,7 @@ function nv_save_history($post_old, $post_new)
             :allowed_rating, :external_link, :instant_active, :instant_template,
             :instant_creatauto, :titlesite, :description, :bodyhtml, :voicedata, :keywords, :sourcetext,
             :files, :tags, :internal_authors, :imgposition, :layout_func,
-            :copyright, :allowed_send, :allowed_print, :allowed_save, :auto_nav, :group_view, :changed_fields
+            :copyright, :allowed_send, :allowed_print, :allowed_save, :auto_nav, :group_view, :schema_type, :changed_fields
         )';
         $array_insert = [];
         $array_insert['new_id'] = $post_old['id'];
@@ -524,6 +530,7 @@ function nv_save_history($post_old, $post_new)
         $array_insert['allowed_save'] = $post_old['allowed_save'];
         $array_insert['auto_nav'] = $post_old['auto_nav'];
         $array_insert['group_view'] = $post_old['group_view'];
+        $array_insert['schema_type'] = $post_old['schema_type'];
         $array_insert['changed_fields'] = implode(',', $change_fields);
         $db->insert_id($sql, 'id', $array_insert);
     }

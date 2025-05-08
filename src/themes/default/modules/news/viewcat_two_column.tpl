@@ -2,60 +2,9 @@
 <!-- BEGIN: h1 -->
 <h1 class="hidden d-none">{PAGE_TITLE}</h1>
 <!-- END: h1 -->
-<!-- BEGIN: viewdescription -->
-<div class="news_column">
-    <div class="alert alert-info clearfix">
-        <h1 class="h3"><strong>{CONTENT.title}</strong></h1>
-        <!-- BEGIN: image -->
-        <img alt="{CONTENT.title}" src="{HOMEIMG1}" width="{IMGWIDTH1}" class="img-thumbnail pull-left imghome" />
-        <!-- END: image -->
-        <p class="text-justify">{CONTENT.description}</p>
-    </div>
-</div>
-<!-- END: viewdescription -->
-<div class="news_column">
-    <!-- BEGIN: catcontent -->
-    <!-- BEGIN: content -->
-    <div class="panel panel-default clearfix">
-        <div class="panel-body">
-            <!-- BEGIN: image -->
-            <a href="{NEWSTOP.link}" title="{NEWSTOP.title}" {NEWSTOP.target_blank}><img alt="{HOMEIMGALT0}" src="{HOMEIMG0}" width="{IMGWIDTH0}" class="img-thumbnail pull-left imghome" /></a>
-            <!-- END: image -->
-            <h2 class="h3">
-                <a href="{NEWSTOP.link}" title="{NEWSTOP.title}" {NEWSTOP.target_blank}><strong>{NEWSTOP.title}</strong></a>
-                <!-- BEGIN: newday -->
-                <span class="icon_new">&nbsp;</span>
-                <!-- END: newday -->
-            </h2>
-            <div class="text-muted">
-                <ul class="list-unstyled list-inline">
-                    <li><em class="fa fa-clock-o">&nbsp;</em> {NEWSTOP.publtime}</li>
-                    <li><em class="fa fa-eye">&nbsp;</em> {LANG.view}: {NEWSTOP.hitstotal}</li>
-                    <!-- BEGIN: comment -->
-                    <li><em class="fa fa-comment-o">&nbsp;</em> {LANG.total_comment}: {NEWSTOP.hitscm}</li>
-                    <!-- END: comment -->
-                </ul>
-            </div>
-            <div class="text-justify">
-                {NEWSTOP.hometext}
-            </div>
-            <!-- BEGIN: adminlink -->
-            <p class="text-right">
-                {ADMINLINK}
-            </p>
-            <!-- END: adminlink -->
-        </div>
-        <!-- END: content -->
-        <ul class="related list-items">
-            <!-- BEGIN: other -->
-            <li>
-                <a class="show h4" href="{NEWSTOP.link}" {NEWSTOP.target_blank} <!-- BEGIN: tooltip -->data-content="{NEWSTOP.hometext_clean}" data-img="{NEWSTOP.imghome}" data-placement="{TOOLTIP_POSITION}" data-rel="tooltip"<!-- END: tooltip --> title="{NEWSTOP.title}">{NEWSTOP.title}</a>
-            </li>
-            <!-- END: other -->
-        </ul>
-    </div>
-    <!-- END: catcontent -->
-</div>
+<!-- BEGIN: catcontent -->
+{CATCONTENT_HTML}
+<!-- END: catcontent -->
 <div class="row">
 <!-- BEGIN: loopcat -->
 <!-- BEGIN: block_topcat -->

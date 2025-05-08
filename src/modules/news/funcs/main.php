@@ -335,7 +335,7 @@ if (empty($contents)) {
         }
         unset($sql, $result);
         //Het cac bai viet cua cac chu de con
-        $contents = viewcat_two_column($array_content, $array_catpage);
+        $contents = viewcat_two_column($array_content, '', $array_catpage);
     } elseif ($viewcat == 'viewcat_grid_new' or $viewcat == 'viewcat_grid_old') {
         $order_by = ($viewcat == 'viewcat_grid_new') ? $order_articles_by . '  DESC' : $order_articles_by . '  ASC';
         $db_slave->sqlreset()

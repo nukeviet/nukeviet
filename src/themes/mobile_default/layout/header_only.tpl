@@ -9,9 +9,9 @@
         <link<!-- BEGIN: attr --> {LINKS.key}<!-- BEGIN: val -->="{LINKS.value}"<!-- END: val --><!-- END: attr -->>
         <!-- END: links -->
         <!-- BEGIN: js -->
-        <script<!-- BEGIN: ext --> src="{JS_SRC}"<!-- END: ext -->><!-- BEGIN: int -->{JS_CONTENT}<!-- END: int --></script>
+        <script{JS_TYPE}<!-- BEGIN: ext --> src="{JS_SRC}"<!-- END: ext -->><!-- BEGIN: int -->{JS_CONTENT}<!-- END: int --></script>
         <!-- END: js -->
-        <!-- Use passive listeners to improve scrolling performance 
+        <!-- Use passive listeners to improve scrolling performance
         https://web.dev/uses-passive-event-listeners/?utm_source=lighthouse&utm_medium=unknown -->
         <script>jQuery.event.special.touchstart={setup:function(c,a,b){this.addEventListener("touchstart",b,{passive:!a.includes("noPreventDefault")})}};jQuery.event.special.touchmove={setup:function(c,a,b){this.addEventListener("touchmove",b,{passive:!a.includes("noPreventDefault")})}};</script>
     </head>

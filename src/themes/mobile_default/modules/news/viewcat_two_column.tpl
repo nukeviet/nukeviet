@@ -1,56 +1,10 @@
 <!-- BEGIN: main -->
-<!-- BEGIN: viewdescription -->
-<div class="news_column">
-	<div class="alert alert-info clearfix">
-		<h3>{CONTENT.title}</h3>
-		<!-- BEGIN: image -->
-		<img alt="{CONTENT.title}" src="{HOMEIMG1}" width="{IMGWIDTH1}" class="img-thumbnail pull-left imghome" />
-		<!-- END: image -->
-		<p>{CONTENT.description}</p>
-	</div>
-</div>
-<!-- END: viewdescription -->
-<div class="news_column">
-	<!-- BEGIN: catcontent -->
-	<!-- BEGIN: content -->
-	<div class="panel panel-default clearfix">
-		<div class="panel-body">
-			<!-- BEGIN: image -->
-			<a href="{NEWSTOP.link}" title="{NEWSTOP.title}"><img alt="{HOMEIMGALT0}" src="{HOMEIMG0}" width="{IMGWIDTH0}" class="img-thumbnail pull-left imghome" /></a>
-			<!-- END: image -->
-			<h3>
-				<a href="{NEWSTOP.link}" title="{NEWSTOP.title}">{NEWSTOP.title}</a>
-				<!-- BEGIN: newday -->
-				<span class="icon_new">&nbsp;</span>
-				<!-- END: newday -->
-			</h3>
-			<div class="text-muted">
-				<ul class="list-unstyled list-inline">
-					<li><em class="fa fa-clock-o">&nbsp;</em> {NEWSTOP.publtime}</li>
-					<li><em class="fa fa-eye">&nbsp;</em> {LANG.view}: {NEWSTOP.hitstotal}</li>
-					<li><em class="fa fa-comment-o">&nbsp;</em> {LANG.total_comment}: {NEWSTOP.hitscm}</li>
-				</ul>
-			</div>
-			<div class="text-justify">
-				{NEWSTOP.hometext}
-			</div>
-			<!-- BEGIN: adminlink -->
-			<p class="text-right">
-				{ADMINLINK}
-			</p>
-			<!-- END: adminlink -->
-		</div>
-		<!-- END: content -->
-		<ul class="related">
-			<!-- BEGIN: other -->
-			<li>
-				<a class="show" href="{NEWSTOP.link}" title="{NEWSTOP.title}">{NEWSTOP.title}</a>
-			</li>
-			<!-- END: other -->
-		</ul>
-	</div>
-	<!-- END: catcontent -->
-</div>
+<!-- BEGIN: h1 -->
+<h1 class="hidden d-none">{PAGE_TITLE}</h1>
+<!-- END: h1 -->
+<!-- BEGIN: catcontent -->
+{CATCONTENT_HTML}
+<!-- END: catcontent -->
 <!-- BEGIN: loopcat -->
 <!-- BEGIN: block_topcat -->
 <div class="block-top clear">

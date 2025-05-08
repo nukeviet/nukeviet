@@ -2,6 +2,9 @@
 <!-- BEGIN: h1 -->
 <h1 class="hidden d-none">{PAGE_TITLE}</h1>
 <!-- END: h1 -->
+<!-- BEGIN: catcontent -->
+{CATCONTENT_HTML}
+<!-- END: catcontent -->
 <!-- BEGIN: listcat -->
 <div class="news_column">
     <div class="panel panel-default clearfix">

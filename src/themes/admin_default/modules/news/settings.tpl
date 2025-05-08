@@ -338,6 +338,17 @@
                         </div>
                     </td>
                 </tr>
+                <tr>
+                    <th>{LANG.setting_schema_type}</th>
+                    <td class="form-inline">
+                        <select class="form-control" name="schema_type">
+                            <!-- BEGIN: schema_type -->
+                            <option value="{SCHEMA_TYPE.key}"{SCHEMA_TYPE.selected}>{SCHEMA_TYPE.title}</option>
+                            <!-- END: schema_type -->
+                        </select>
+                        <div class="help-block mb-0">{LANG.setting_schema_type_help}</div>
+                    </td>
+                </tr>
             </tbody>
             <tfoot>
                 <tr>

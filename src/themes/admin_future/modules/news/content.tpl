@@ -475,6 +475,14 @@
                                 <textarea class="form-control" id="description" name="description">{$DATA.description}</textarea>
                                 <div class="form-text"> {$LANG->getGlobal('length_characters')}: <span id="descriptionlength" class="fw-bold text-danger">0</span>. {$LANG->getGlobal('description_suggest_max')}.</div>
                             </div>
+                            <div class="mb-3">
+                                <label for="schema_type" class="form-label">{$LANG->getModule('content_schema_type')} <a href="#" data-bs-toggle="tooltip" data-bs-title="{$LANG->getModule('setting_schema_type_help')}" data-bs-trigger="focus hover" aria-label="{$LANG->getModule('setting_schema_type_help')}"><i class="fa-solid fa-circle-info"></i></a>:</label>
+                                <select class="form-select" name="schema_type" id="schema_type">
+                                    {foreach from=$SCHEMA_TYPES key=key item=value}
+                                    <option value="{$key}"{if $key eq $DATA.schema_type} selected{/if}>{$value}</option>
+                                    {/foreach}
+                                </select>
+                            </div>
                         </div>
                         {if not empty($ARRAY_VOICES)}
                         <div class="col-lg-6 col-xl-4 col-xxl-3">

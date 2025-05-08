@@ -61,7 +61,7 @@ if (!empty($nv_Request) and $nv_Request->isset_request('store_theme_config', 'po
  */
 function nv_admin_theme(?string $contents, $head_site = 1)
 {
-    global $admin_info, $nv_Lang, $global_config, $module_info, $page_title, $module_file, $module_name, $op, $browser, $client_info, $site_mods, $admin_mods, $db, $array_lang_admin, $select_options, $admin_menu_mods, $submenu, $set_active_op, $array_url_instruction, $array_mod_title;
+    global $admin_info, $nv_Lang, $global_config, $module_info, $page_title, $module_file, $module_name, $op, $browser, $client_info, $site_mods, $admin_mods, $db, $array_lang_admin, $select_options, $admin_menu_mods, $submenu, $set_active_op, $array_url_instruction, $array_mod_title, $my_head, $my_footer;
 
     $file_name_tpl = $head_site == 1 ? 'main.tpl' : 'content.tpl';
     $tpl_dir = get_tpl_dir($admin_info['admin_theme'], NV_DEFAULT_ADMIN_THEME, '/system/' . $file_name_tpl);

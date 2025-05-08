@@ -224,6 +224,7 @@ $sql_create_module[] = 'CREATE TABLE ' . $db_config['prefix'] . '_' . $lang . '_
   allowed_save tinyint(1) NOT NULL default '0',
   auto_nav tinyint(1) NOT NULL default '0',
   group_view VARCHAR(255) NULL DEFAULT '',
+  schema_type varchar(20) NOT NULL DEFAULT 'newsarticle' COMMENT 'Loại dữ liệu có cấu trúc',
   changed_fields text NOT NULL COMMENT 'Các field thay đổi',
   PRIMARY KEY (id),
   KEY new_id (new_id),
@@ -251,6 +252,7 @@ $sql_create_module[] = 'CREATE TABLE IF NOT EXISTS ' . $db_config['prefix'] . '_
   localization text NULL DEFAULT NULL COMMENT 'Json url ngôn ngữ khác của bài viết',
   related_ids varchar(255) NOT NULL DEFAULT '' COMMENT 'ID bài đăng liên quan',
   related_pos tinyint(1) NOT NULL DEFAULT '2' COMMENT 'Vị trí bài liên quan: 0 tắt, 1 dưới mô tả ngắn gọn, 2 dưới cùng bài đăng',
+  schema_type varchar(20) NOT NULL DEFAULT 'newsarticle' COMMENT 'Loại dữ liệu có cấu trúc',
   PRIMARY KEY (id)
 ) ENGINE=MyISAM";
 
@@ -381,6 +383,7 @@ $sql_create_module[] = 'CREATE TABLE ' . $db_config['prefix'] . '_' . $lang . '_
 ) ENGINE=MyISAM";
 
 $sql_create_module[] = 'INSERT INTO ' . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES
+('" . $lang . "', '" . $module_name . "', 'schema_type', 'newsarticle'),
 ('" . $lang . "', '" . $module_name . "', 'auto_save', '0'),
 ('" . $lang . "', '" . $module_name . "', 'indexfile', 'viewcat_main_right'),
 ('" . $lang . "', '" . $module_name . "', 'mobile_indexfile', 'viewcat_page_new'),

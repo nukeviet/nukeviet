@@ -295,7 +295,7 @@ function viewcat_page_new($array_catpage, $array_cat_other, $generate_page)
  */
 function viewcat_top($array_catcontent, $generate_page)
 {
-    global $module_upload, $module_config, $module_info, $global_array_cat, $catid, $page;
+    global $module_upload, $module_config, $module_info, $global_array_cat, $catid, $page, $home;
 
     $xtpl = new XTemplate('viewcat_top.tpl', str_replace(DIRECTORY_SEPARATOR, '/', __DIR__));
     $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
@@ -307,6 +307,9 @@ function viewcat_top($array_catcontent, $generate_page)
             $xtpl->parse('main.viewdescription.image');
         }
         $xtpl->parse('main.viewdescription');
+    } elseif (!$home) {
+        $xtpl->assign('PAGE_TITLE', nv_html_page_title(false));
+        $xtpl->parse('main.h1');
     }
 
     // Cac bai viet phan dau
@@ -360,14 +363,23 @@ function viewcat_top($array_catcontent, $generate_page)
  *
  * @param string $viewcat
  * @param array  $array_cat
+ * @param array  $array_articles
+ * @param string  $generate_page
  * @return string
  */
-function viewsubcat_main($viewcat, $array_cat)
+function viewsubcat_main($viewcat, $array_cat, $array_articles = [], $generate_page = '')
 {
-    global $module_name, $global_array_cat, $module_info;
+    global $module_name, $global_array_cat, $module_info, $home;
 
     $xtpl = new XTemplate($viewcat . '.tpl', str_replace(DIRECTORY_SEPARATOR, '/', __DIR__));
     $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
+
+    if (!empty($array_articles)) {
+        $xtpl->assign('CATCONTENT_HTML', viewcat_top($array_articles, $generate_page));
+        $xtpl->parse('main.catcontent');
+    } elseif (!$home) {
+        $xtpl->parse('main.h1');
+    }
 
     // Hien thi cac chu de con
     foreach ($array_cat as $key => $array_row_i) {
@@ -449,59 +461,23 @@ function viewsubcat_main($viewcat, $array_cat)
  * viewcat_two_column()
  *
  * @param array $array_content
+ * @param string $generate_page
  * @param array $array_catpage
  * @return string
  */
-function viewcat_two_column($array_content, $array_catpage)
+function viewcat_two_column($array_content, $generate_page, $array_catpage)
 {
-    global $module_name, $module_upload, $module_upload, $module_config, $module_info, $global_array_cat, $catid, $page;
+    global $module_name, $module_config, $module_info, $home;
 
     $xtpl = new XTemplate('viewcat_two_column.tpl', str_replace(DIRECTORY_SEPARATOR, '/', __DIR__));
     $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
     $xtpl->assign('IMGWIDTH0', $module_config[$module_name]['homewidth']);
-    if ($catid > 0 and (($global_array_cat[$catid]['viewdescription'] and $page == 1) or $global_array_cat[$catid]['viewdescription'] == 2)) {
-        $xtpl->assign('CONTENT', $global_array_cat[$catid]);
-        if ($global_array_cat[$catid]['image']) {
-            $xtpl->assign('HOMEIMG1', NV_BASE_SITEURL . NV_FILES_DIR . '/' . $module_upload . '/' . $global_array_cat[$catid]['image']);
-            $xtpl->parse('main.viewdescription.image');
-        }
-        $xtpl->parse('main.viewdescription');
-    }
-    // Bai viet o phan dau
+
     if (!empty($array_content)) {
-        foreach ($array_content as $key => $array_content_i) {
-            $newday = $array_content_i['publtime'] + (86400 * $array_content_i['newday']);
-            $array_content_i['publtime'] = nv_datetime_format($array_content_i['publtime'], 0, 0);
-            $xtpl->assign('NEWSTOP', $array_content_i);
-
-            if ($key == 0) {
-                if ($array_content_i['imghome'] != '') {
-                    $xtpl->assign('HOMEIMG0', $array_content_i['imghome']);
-                    $xtpl->assign('HOMEIMGALT0', $array_content_i['homeimgalt']);
-                    $xtpl->parse('main.catcontent.content.image');
-                }
-
-                if (defined('NV_IS_MODADMIN')) {
-                    $adminlink = trim(nv_link_edit_page($array_content_i) . ' ' . nv_link_delete_page($array_content_i));
-                    if (!empty($adminlink)) {
-                        $xtpl->assign('ADMINLINK', $adminlink);
-                        $xtpl->parse('main.catcontent.content.adminlink');
-                    }
-                }
-
-                if ($newday >= NV_CURRENTTIME) {
-                    $xtpl->parse('main.catcontent.content.newday');
-                }
-                $xtpl->parse('main.catcontent.content');
-            } else {
-                if ($newday >= NV_CURRENTTIME) {
-                    $xtpl->parse('main.catcontent.other.newday');
-                }
-                $xtpl->parse('main.catcontent.other');
-            }
-        }
-
+        $xtpl->assign('CATCONTENT_HTML', viewcat_top($array_content, $generate_page));
         $xtpl->parse('main.catcontent');
+    } elseif (!$home) {
+        $xtpl->parse('main.h1');
     }
 
     // Theo chu de
@@ -602,24 +578,6 @@ function detail_theme($news_contents, $array_keyword, $related_new_array, $relat
     $xtpl->assign('LANG_GLOBAL', \NukeViet\Core\Language::$lang_global);
     $xtpl->assign('TEMPLATE', $global_config['module_theme']);
     $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
-
-    // Khai báo dữ liệu có cấu trúc
-    $news_contents['number_edittime'] = (empty($news_contents['edittime']) or $news_contents['edittime'] < $news_contents['number_publtime']) ? $news_contents['number_publtime'] : $news_contents['edittime'];
-
-    $xtpl->assign('SCHEMA_AUTHOR', empty($news_contents['author']) ? $news_contents['post_name'] : $news_contents['author']);
-    $xtpl->assign('SCHEMA_DATEPUBLISHED', date('c', $news_contents['number_publtime']));
-    $xtpl->assign('SCHEMA_DATEPUBLISHED', date('c', $news_contents['number_edittime']));
-    $xtpl->assign('SCHEMA_ORGLOGO', NV_MAIN_DOMAIN . NV_BASE_SITEURL . $global_config['site_logo']);
-    $xtpl->assign('SCHEMA_ORGNAME', $global_config['site_name']);
-    $xtpl->assign('SCHEMA_URL', $news_contents['link']);
-
-    if (preg_match('/^' . nv_preg_quote(NV_BASE_SITEURL) . '/i', $news_contents['homeimgfile'])) {
-        $xtpl->assign('SCHEMA_IMAGE', NV_MAIN_DOMAIN . $news_contents['homeimgfile']);
-    } elseif (nv_is_url($news_contents['homeimgfile'])) {
-        $xtpl->assign('SCHEMA_IMAGE', $news_contents['homeimgfile']);
-    } else {
-        $xtpl->assign('SCHEMA_IMAGE', NV_STATIC_URL . 'themes/' . $template . '/images/no_image.gif');
-    }
 
     $news_contents['addtime'] = nv_datetime_format($news_contents['addtime']);
     $news_contents['css_autoplay'] = $news_contents['autoplay'] ? ' checked' : '';

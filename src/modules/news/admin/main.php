@@ -1153,7 +1153,8 @@ if ($loadhistory) {
         'keywords' => $nv_Lang->getModule('keywords'),
         'tags' => $nv_Lang->getModule('tag'),
         'files' => $nv_Lang->getModule('fileattach'),
-        'internal_authors' => $nv_Lang->getModule('content_internal_author')
+        'internal_authors' => $nv_Lang->getModule('content_internal_author'),
+        'schema_type' => $nv_Lang->getModule('content_schema_type'),
     ];
 
     $array_userids = $array_users = [];
