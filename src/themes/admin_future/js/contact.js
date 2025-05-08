@@ -7,43 +7,6 @@
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
-function modal_content(url, id) {
-    var md = $('#content');
-    $.ajax({
-        type: "POST",
-        url: url,
-        cache: !1,
-        data: {
-            'fc': 'content',
-            'id': id
-        },
-        dataType: "json"
-    }).done(function(a) {
-        if (a.status == 'error') {
-            alert(a.mess)
-        } else if (a.status == 'OK') {
-            $('.modal-title', md).text(a.title);
-            $('.modal-body', md).html(a.content);
-            md.modal('show')
-        }
-    });
-}
-
-function department_change_alias(form) {
-    $.ajax({
-        type: "POST",
-        url: form.attr('action'),
-        cache: !1,
-        data: {
-            'fc': 'alias',
-            'id': $('[name=id]', form).val(),
-            'title': rawurldecode(trim($('[name=full_name]', form).val()))
-        }
-    }).done(function(a) {
-        $('[name=alias]', form).val(a)
-    })
-}
-
 function department_view(url) {
     $.ajax({
         type: "GET",
