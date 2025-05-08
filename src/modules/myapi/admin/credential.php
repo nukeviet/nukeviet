@@ -301,7 +301,8 @@ if ($action == 'credential') {
         }
 
         nv_jsonOutput([
-            'status' => 'OK'
+            'status' => 'OK',
+            'refresh' => 1
         ]);
     }
 

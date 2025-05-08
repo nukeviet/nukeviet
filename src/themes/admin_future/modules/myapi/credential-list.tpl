@@ -117,7 +117,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="{$LANG->getGlobal('close')}"></button>
             </div>
             <div class="modal-body">
-                <form method="post" action="{$ADD_CREDENTIAL_URL}" class="form-horizontal">
+                <form method="post" action="{$ADD_CREDENTIAL_URL}" class="form-horizontal ajax-submit">
                 </form>
             </div>
         </div>

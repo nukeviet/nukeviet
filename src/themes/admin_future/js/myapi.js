@@ -176,29 +176,6 @@ $(function() {
             })
         });
 
-        // Tìm admin/user
-        if ($('#credential-add').length) {
-            //Form thêm quyền truy cập
-            $('#credential-add form').on('submit', function(e) {
-                e.preventDefault();
-                var url = $(this).attr('action');
-                data = $(this).serialize();
-                $.ajax({
-                    type: "POST",
-                    url: $(this).attr('action'),
-                    cache: !1,
-                    data: $(this).serialize(),
-                    dataType: "json"
-                }).done(function(a) {
-                    if ('error' == a.status) {
-                        nvAlert(a.mess);
-                    } else if ('OK' == a.status) {
-                        location.reload()
-                    }
-                })
-            })
-        };
-
         $('.change-status', credentiallist).on('change', function() {
             var userid = parseInt($(this).parents('.item').data('userid')),
                 role_id = parseInt(credentiallist.data('role-id')),
