@@ -16,7 +16,11 @@ $(function() {
             cache: !1,
             data: 'getapitree=' + $(this).val()
         }).done(function(a) {
-            $('#apicheck').html(a)
+            if (a.status == 'error') {
+                nukeviet.toast(a.mess, 'error');
+            } else if (a.status == 'OK') {
+                $('#apicheck').html(a.html);
+            }
         });
     });
     // Khi chọn/bỏ chọn API
@@ -131,7 +135,7 @@ $(function() {
                 if (data.status === 'error') {
                     nvAlert(nv_is_del_confirm[2]);
                     nvToast(nv_is_del_confirm[2], 'error');
-                    icon.attr('class', iconClass);
+                    icon.removeClass('fa-solid fa-spinner fa-spin-pulse').addClass(iconClass);
                 } else if (data.status === 'OK') {
                     location.reload();
                 }
@@ -161,10 +165,14 @@ $(function() {
                 url: url,
                 cache: !1
             }).done(function(a) {
-                $('#credential-add .credential-title-str').text(title);
-                $('#credential-add form').html(a);
-                credentialSelInit($('#getUser'));
-                $('#credential-add').modal('show')
+                if (a.status == 'error') {
+                    nvToast(a.mess, 'error');
+                } else if (a.status == 'OK') {
+                    $('#credential-add .credential-title-str').text(title);
+                    $('#credential-add form').html(a.html);
+                    credentialSelInit($('#getUser'));
+                    $('#credential-add').modal('show')
+                }
             })
         });
 
@@ -194,52 +202,61 @@ $(function() {
         $('.change-status', credentiallist).on('change', function() {
             var userid = parseInt($(this).parents('.item').data('userid')),
                 role_id = parseInt(credentiallist.data('role-id')),
-                that = $(this);
+                that = $(this),
+                checkss = credentiallist.data('checkss');
             that.prop('disabled', true);
             $.ajax({
                 type: "POST",
                 url: credential_page_url + '&role_id=' + role_id + '&action=changeStatus',
                 cache: !1,
-                data: 'userid=' + userid,
+                data: 'userid=' + userid + '&checkss=' + checkss,
                 dataType: "json"
-            }).done(function(a) {
+            }).done(function(data) {
                 setTimeout(() => {
-                    that.disabled = false;
-                    nvToast(data.mess, 'success');
+                    that.prop('disabled', false);
                 }, 1000);
                 if (data.status === 'error') {
                     nvToast(data.mess, 'error');
+                } else if (data.status === 'OK') {
+                    nvToast(data.mess, 'success');
                 }
             })
         });
 
         $('[data-toggle=credentialDel]', credentiallist).on('click', function() {
-            if (confirm($(this).data('confirm'))) {
-                var userid = parseInt($(this).parents('.item').data('userid')),
+            var icon = $(this).find('i'),
+                iconClass = icon.attr('class'),
+                that = $(this),
+                checkss = credentiallist.data('checkss');
+            nvConfirm($(this).data('confirm'), function() {
+                var userid = parseInt(that.parents('.item').data('userid')),
                     role_id = parseInt(credentiallist.data('role-id'));
+                icon.removeClass(iconClass).addClass('fa-solid fa-spinner fa-spin-pulse');
                 $.ajax({
                     type: "POST",
                     url: credential_page_url + '&role_id=' + role_id + '&action=del',
                     cache: !1,
-                    data: 'userid=' + userid,
+                    data: 'userid=' + userid + '&checkss=' + checkss,
                     dataType: "json"
                 }).done(function(a) {
                     if ('error' == a.status) {
                         nvAlert(a.mess);
+                        icon.removeClass('fa-solid fa-spinner fa-spin-pulse').addClass(iconClass);
                     } else if ('OK' == a.status) {
                         location.reload()
                     }
                 })
-            }
+            });
         });
 
         $('[data-toggle=changeAuth]', credentiallist).on('click', function() {
-            var userid = parseInt($(this).parents('.item').data('userid'));
+            var userid = parseInt($(this).parents('.item').data('userid')),
+                checkss = credentiallist.data('checkss');
             $.ajax({
                 type: "POST",
                 url: credential_page_url,
                 cache: !1,
-                data: 'changeAuth=' + userid,
+                data: 'changeAuth=' + userid + '&checkss=' + checkss,
                 dataType: "json"
             }).done(function(a) {
                 if ('error' == a.status) {
@@ -266,14 +283,19 @@ $(function() {
             });
 
             changeAuth.on('click', '.create_authentication', function(e) {
-                var method = $(this).data('method');
+                var method = $(this).data('method'),
+                    checkss = credentiallist.data('checkss');
+                $('.create_authentication', changeAuth).prop('disabled', true);
                 $.ajax({
                     type: "POST",
                     url: credential_page_url,
                     cache: !1,
-                    data: 'save=1&method=' + method + '&changeAuth=' + $(this).data('userid'),
+                    data: 'save=1&method=' + method + '&changeAuth=' + $(this).data('userid') + '&checkss=' + checkss,
                     dataType: "json"
                 }).done(function(a) {
+                    setTimeout(function() {
+                        $('.create_authentication', changeAuth).prop('disabled', false);
+                    }, 1000);
                     if ('error' == a.status) {
                         nvAlert(a.mess)
                     } else if ('OK' == a.status) {
@@ -284,18 +306,25 @@ $(function() {
                 })
             });
             changeAuth.on('click', '.delete_authentication', function(e) {
-                var method = $(this).data('method');
+                var method = $(this).data('method'),
+                    checkss = credentiallist.data('checkss');
+                $('.delete_authentication', changeAuth).prop('disabled', true);
                 $.ajax({
                     type: "POST",
                     url: credential_page_url,
                     cache: !1,
-                    data: 'del=1&method=' + method + '&changeAuth=' + $(this).data('userid'),
+                    data: 'del=1&method=' + method + '&changeAuth=' + $(this).data('userid') + '&checkss=' + checkss,
                     dataType: "json"
                 }).done(function(a) {
+                    setTimeout(function() {
+                        $('.delete_authentication', changeAuth).prop('disabled', false);
+                    }, 1000);
                     if ('OK' == a.status) {
                         $('[name=' + method + '_ident]', changeAuth).val('');
                         $('[name=' + method + '_secret]', changeAuth).val('');
-                        $('[name=' + method + '_ips]', changeAuth).val('').parents('.api_ips').slideUp()
+                        $('[name=' + method + '_ips]', changeAuth).val('').parents('.api_ips').slideUp();
+                    } else if ('error' == a.status) {
+                        nvAlert(a.mess)
                     }
                 })
             });
@@ -304,13 +333,14 @@ $(function() {
             });
             changeAuth.on('click', '.api_ips_update', function() {
                 var method = $(this).data('method'),
-                    ips = $('[name=' + method + '_ips]', changeAuth).val();
+                    ips = $('[name=' + method + '_ips]', changeAuth).val(),
+                    checkss = credentiallist.data('checkss');
                 $('.ips, .api_ips_update', changeAuth).prop('disabled', true);
                 $.ajax({
                     type: "POST",
                     url: credential_page_url,
                     cache: !1,
-                    data: 'ips=' + ips + '&method=' + method + '&changeAuth=' + $(this).data('userid'),
+                    data: 'ips=' + ips + '&method=' + method + '&changeAuth=' + $(this).data('userid') + '&checkss=' + checkss,
                     dataType: "json"
                 }).done(function(a) {
                     if ('error' == a.status) {
@@ -418,6 +448,7 @@ $(function() {
         });
         $('.create_authentication', credential_auth).on('click', function(e) {
             var method = $(this).data('method');
+            $('.create_authentication', credential_auth).prop('disabled', true);
             $.ajax({
                 type: "POST",
                 url: myroleapi_url,
@@ -425,6 +456,9 @@ $(function() {
                 data: 'createAuth=' + method,
                 dataType: "json"
             }).done(function(a) {
+                setTimeout(function() {
+                    $('.create_authentication', credential_auth).prop('disabled', false);
+                }, 1000);
                 if ('error' == a.status) {
                     nvAlert(a.mess)
                 } else if ('OK' == a.status) {
@@ -443,7 +477,12 @@ $(function() {
                 data: 'delAuth=' + method,
                 dataType: "json"
             }).done(function(a) {
-                if ('OK' == a.status) {
+                setTimeout(function() {
+                    $('.create_authentication', credential_auth).prop('disabled', false);
+                }, 1000);
+                if ('error' == a.status) {
+                    nvAlert(a.mess)
+                } else if ('OK' == a.status) {
                     $('[name=' + method + '_ident]', credential_auth).val('');
                     $('[name=' + method + '_secret]', credential_auth).val('');
                     $('[name=' + method + '_ips]', credential_auth).val('').parents('.api_ips').slideUp()
@@ -479,50 +518,88 @@ $(function() {
     
     if ($('#logs').length) {
         var logs = $('#logs'),
-            page_url = logs.data('page-url');
+            page_url = logs.data('page-url'),
+            checkss = logs.data('checkss');
+
+        // Xoá 1 dòng log
         $('.log-del', logs).on('click', function() {
-            if (confirm($(this).parents('.list').data('delete-confirm'))) {
+            var that = $(this),
+                icon = $(this).find('i'),
+                iconClass = icon.attr('class');
+            nvConfirm(that.parents('.list').data('delete-confirm'), function() {
+                icon.removeClass(iconClass).addClass('fa-solid fa-spinner fa-spin-pulse');
                 $.ajax({
                     type: "POST",
                     url: page_url,
                     cache: !1,
-                    data: 'delLog=' + $(this).parents('.item').data('id')
+                    data: 'delLog=' + that.parents('.item').data('id') + '&checkss=' + checkss
                 }).done(function(a) {
-                    location.reload()
-                })
-            }
+                    if (a.status == 'error') {
+                        nvAlert(a.mess);
+                        icon.removeClass('fa-solid fa-spinner fa-spin-pulse').addClass(iconClass);
+                    } else if (a.status == 'OK') {
+                        location.reload();
+                    } else {
+                        nvAlert(nv_is_del_confirm[2]);
+                        icon.removeClass('fa-solid fa-spinner fa-spin-pulse').addClass(iconClass);
+                    }
+                });
+            });
         });
-
+        // Xoá nhiều dòng log
         $('.log-multidel', logs).on('click', function() {
-            var list = [];
+            var list = [],
+                icon = $(this).find('i'),
+                iconClass = icon.attr('class');
             $('.checkitem:checked', logs).each(function() {
                 list.push($(this).parents('.item').data('id'))
             });
             if (list.length) {
                 nvConfirm($('.list', logs).data('delete-confirm'), () => {
+                    icon.removeClass(iconClass).addClass('fa-solid fa-spinner fa-spin-pulse');
                     $.ajax({
                         type: "POST",
                         url: page_url,
                         cache: !1,
-                        data: 'delLogs=' + list
-                    }).done(function() {
-                        location.reload()
+                        data: 'delLogs=' + list + '&checkss=' + checkss
+                    }).done(function(a) {
+                        if (a.status == 'error') {
+                            nvAlert(a.mess);
+                            icon.removeClass('fa-solid fa-spinner fa-spin-pulse').addClass(iconClass);
+                        } else if (a.status == 'OK') {
+                            location.reload();
+                        } else {
+                            nvAlert(nv_is_del_confirm[2]);
+                            icon.removeClass('fa-solid fa-spinner fa-spin-pulse').addClass(iconClass);
+                        }
                     })
                 })
             }
         });
-
+        // Xoá tất cả log
         $('.log-delall', logs).on('click', function() {
-            if (confirm($('.list', logs).data('delete-confirm'))) {
+            var icon = $(this).find('i'),
+                iconClass = icon.attr('class');
+
+            nvConfirm($('.list', logs).data('delete-confirm'), function() {
+                icon.removeClass(iconClass).addClass('fa-solid fa-spinner fa-spin-pulse');
                 $.ajax({
                     type: "POST",
                     url: page_url,
                     cache: !1,
-                    data: 'delAllLogs=1'
+                    data: 'delAllLogs=1' + '&checkss=' + checkss
                 }).done(function(a) {
-                    location.reload()
-                })
-            }
+                    if (a.status == 'error') {
+                        nvAlert(a.mess);
+                        icon.removeClass('fa-solid fa-spinner fa-spin-pulse').addClass(iconClass);
+                    } else if (a.status == 'OK') {
+                        location.reload();
+                    } else {
+                        nvAlert(nv_is_del_confirm[2]);
+                        icon.removeClass('fa-solid fa-spinner fa-spin-pulse').addClass(iconClass);
+                    }
+                });
+            })
         });
 
         $('.role-id, .command', logs).select2({theme: 'bootstrap5'});

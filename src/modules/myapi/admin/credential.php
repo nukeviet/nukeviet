@@ -16,6 +16,13 @@ if (!defined('NV_IS_FILE_ADMIN')) {
 $page_url = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op;
 
 if ($nv_Request->isset_request('changeAuth', 'post')) {
+    $checkss = $nv_Request->get_title('checkss', 'post', '');
+    if ($checkss != md5(NV_CHECK_SESSION . '_' . $module_name . '_' . $op . '_' . $admin_info['userid'])) {
+        nv_jsonOutput([
+            'status' => 'error',
+            'mess' => $nv_Lang->getGlobal('error_code_11')
+        ]);
+    }
     $userid = $nv_Request->get_int('changeAuth', 'post', 0);
     if (empty($userid)) {
         nv_jsonOutput([
@@ -170,6 +177,13 @@ if ($action == 'getUser' and $nv_Request->isset_request('q', 'post')) {
 
 // Thay đổi trạng thái quyền truy cập API-role
 if ($action == 'changeStatus' and $nv_Request->isset_request('userid', 'post')) {
+    $checkss = $nv_Request->get_title('checkss', 'post', '');
+    if ($checkss != md5(NV_CHECK_SESSION . '_' . $module_name . '_' . $op . '_' . $admin_info['userid'])) {
+        nv_jsonOutput([
+            'status' => 'error',
+            'mess' => $nv_Lang->getGlobal('error_code_11')
+        ]);
+    }
     $userid = $nv_Request->get_int('userid', 'post', 0);
     if (empty($userid)) {
         nv_jsonOutput([
@@ -196,6 +210,13 @@ if ($action == 'changeStatus' and $nv_Request->isset_request('userid', 'post')) 
 
 // Xóa quyền truy cập
 if ($action == 'del' and $nv_Request->isset_request('userid', 'post')) {
+    $checkss = $nv_Request->get_title('checkss', 'post', '');
+    if ($checkss != md5(NV_CHECK_SESSION . '_' . $module_name . '_' . $op . '_' . $admin_info['userid'])) {
+        nv_jsonOutput([
+            'status' => 'error',
+            'mess' => $nv_Lang->getGlobal('error_code_11')
+        ]);
+    }
     $userid = $nv_Request->get_int('userid', 'post', 0);
     if (empty($userid)) {
         nv_jsonOutput([
@@ -257,7 +278,7 @@ if ($action == 'credential') {
         } elseif (!$isAdd and !$exists) {
             nv_jsonOutput([
                 'status' => 'error',
-                'mess' => '1' . $nv_Lang->getModule('api_role_credential_error')
+                'mess' => $nv_Lang->getModule('api_role_credential_error')
             ]);
         }
 
@@ -313,7 +334,17 @@ if ($action == 'credential') {
                 }
 
                 $credential_data['quota'] = !empty($row['quota']) ? (int) $row['quota'] : '';
+            } else {
+                nv_jsonOutput([
+                    'status' => 'error',
+                    'mess' => $nv_Lang->getModule('api_role_credential_error')
+                ]);
             }
+        } else {
+            nv_jsonOutput([
+                'status' => 'error',
+                'mess' => $nv_Lang->getModule('api_role_credential_error')
+            ]);
         }
     }
     $tpl = new \NukeViet\Template\NVSmarty();
@@ -326,7 +357,10 @@ if ($action == 'credential') {
         $tpl->assign('ROLE_ID', $role_id);
         $tpl->assign('ROLE_OBJECT', $rolelist[$role_id]['role_object']);
     }
-    nv_htmlOutput($tpl->fetch('credential-add.tpl'));
+    nv_jsonOutput([
+        'status' => 'OK',
+        'html' => $tpl->fetch('credential-add.tpl')
+    ]);
 }
 
 $base_url = $page_url;
@@ -358,6 +392,7 @@ $tpl->assign('ROLE_LIST', $rolelist);
 $tpl->assign('CREDENTIAL_COUNT', $credentialcount);
 $tpl->assign('GENERATE_PAGE', $generate_page);
 $tpl->assign('CREDENTIAL_LIST', $credentiallist);
+$tpl->assign('CHECKSS', md5(NV_CHECK_SESSION . '_' . $module_name . '_' . $op . '_' . $admin_info['userid']));
 $tpl->registerPlugin('modifier', 'ddatetime', 'nv_datetime_format');
 $tpl->registerPlugin('modifier', 'nnum_format', 'nv_number_format');
 

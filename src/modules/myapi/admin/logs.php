@@ -49,27 +49,67 @@ if ($nv_Request->isset_request('getUser, q', 'post')) {
 // Xóa log
 if (defined('MANUALL_DEL_API_LOG') and MANUALL_DEL_API_LOG === true) {
     if ($nv_Request->isset_request('delLog', 'post')) {
+        $checkss = $nv_Request->get_title('checkss', 'post', '');
+        if ($checkss != md5(NV_CHECK_SESSION . '_' . $module_name . '_' . $op . '_' . $admin_info['userid'])) {
+            nv_jsonOutput([
+                'status' => 'error',
+                'mess' => $nv_Lang->getGlobal('error_code_11')
+            ]);
+        }
         $id = $nv_Request->get_int('delLog', 'post', 0);
         if (!empty($id)) {
             $db->query('DELETE FROM ' . $db_config['prefix'] . '_api_role_logs WHERE id=' . $id);
+        } else {
+            nv_jsonOutput([
+                'status' => 'error',
+                'mess' => $nv_Lang->getGlobal('error_code_11')
+            ]);
         }
-        nv_htmlOutput('OK');
+        nv_jsonOutput([
+            'status' => 'OK',
+            'mess' => $nv_Lang->getGlobal('save_success')
+        ]);
     }
 
     // Xóa nhiều log
     if ($nv_Request->isset_request('delLogs', 'post')) {
+        $checkss = $nv_Request->get_title('checkss', 'post', '');
+        if ($checkss != md5(NV_CHECK_SESSION . '_' . $module_name . '_' . $op . '_' . $admin_info['userid'])) {
+            nv_jsonOutput([
+                'status' => 'error',
+                'mess' => $nv_Lang->getGlobal('error_code_11')
+            ]);
+        }
         $ids = $nv_Request->get_title('delLogs', 'post', '');
         if (!empty($ids)) {
             $ids = preg_replace('/[^0-9\,]+/', '', $ids);
             $db->query('DELETE FROM ' . $db_config['prefix'] . '_api_role_logs WHERE id IN (' . $ids . ')');
+        } else {
+            nv_jsonOutput([
+                'status' => 'error',
+                'mess' => $nv_Lang->getGlobal('error_code_11')
+            ]);
         }
-        nv_htmlOutput('OK');
+        nv_jsonOutput([
+            'status' => 'OK',
+            'mess' => $nv_Lang->getGlobal('save_success')
+        ]);
     }
 
     // Xóa tất cả log
     if ($nv_Request->isset_request('delAllLogs', 'post')) {
+        $checkss = $nv_Request->get_title('checkss', 'post', '');
+        if ($checkss != md5(NV_CHECK_SESSION . '_' . $module_name . '_' . $op . '_' . $admin_info['userid'])) {
+            nv_jsonOutput([
+                'status' => 'error',
+                'mess' => $nv_Lang->getGlobal('error_code_11')
+            ]);
+        }
         $db->query('TRUNCATE TABLE ' . $db_config['prefix'] . '_api_role_logs');
-        nv_htmlOutput('OK');
+        nv_jsonOutput([
+            'status' => 'OK',
+            'mess' => $nv_Lang->getGlobal('save_success')
+        ]);
     }
 }
 
@@ -171,6 +211,7 @@ $tpl->assign('LANG', $nv_Lang);
 $tpl->assign('GET_DATA', $get_data);
 $tpl->assign('MODULE_NAME', $module_name);
 $tpl->assign('OP', $op);
+$tpl->assign('CHECKSS', md5(NV_CHECK_SESSION . '_' . $module_name . '_' . $op . '_' . $admin_info['userid']));
 
 $tpl->assign('ROLES', $roles);
 $tpl->assign('APIS', $apis);

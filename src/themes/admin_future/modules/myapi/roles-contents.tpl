@@ -28,12 +28,12 @@
             <table class="table table-bordered">
                 <tbody>
                     <tr class="apilist">
-                        <th style="width: 1%;"><input type="checkbox" id="checkall_{$API_CONTENT.id}" class="form-check-input checkall" title="{$LANG->getModule('api_roles_checkall')}" {$API_CONTENT.checkall}></th>
+                        <th style="width: 1%;"><input type="checkbox" id="checkall_{$API_CONTENT.id}" class="form-check-input checkall" title="{$LANG->getModule('api_roles_checkall')}" {$API_CONTENT.checkall} aria-label="{$LANG->getGlobal('toggle_checkall')}"></th>
                         <th>{$LANG->getModule('cat_api_list')}</th>
                     </tr>
                     {foreach $API_CONTENT.apis as $API}
                     <tr class="item">
-                        <td style="width: 1%;"><input type="checkbox" class="form-check-input checkitem" name="api_{$API_CONTENT.input_key}[]" id="api_{$API.cmd}" value="{$API.cmd}" {if !empty($API.checked)}checked="checked"{/if}></td>
+                        <td style="width: 1%;"><input type="checkbox" class="form-check-input checkitem" name="api_{$API_CONTENT.input_key}[]" id="api_{$API.cmd}" value="{$API.cmd}" aria-label="{$LANG->getGlobal('toggle_checksingle')}" {if !empty($API.checked)}checked="checked"{/if}></td>
                         <td><label for="api_{$API.cmd}" class="mb-0" role="button">{$API.cmd} - {$API.name}</label></td>
                     </tr>
                     {/foreach}

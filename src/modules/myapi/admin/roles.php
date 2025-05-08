@@ -221,6 +221,7 @@ $action = $nv_Request->get_title('action', 'get', '');
 if ($action == 'role') {
     $id = $nv_Request->get_int('id', 'get', 0);
     $lg = $nv_Request->get_title('lg', 'get', NV_LANG_DATA);
+    $is_getapitree = $nv_Request->isset_request('getapitree', 'post');
     if (!in_array($lg, $global_config['setup_langs'], true)) {
         $lg = NV_LANG_DATA;
     }
@@ -229,6 +230,12 @@ if ($action == 'role') {
         $array_post = getRoleDetails($id, true);
         // Chuyển hướng về trang chủ nếu không có dữ liệu
         if (empty($array_post)) {
+            if ($is_getapitree) {
+                nv_jsonOutput([
+                    'status' => 'error',
+                    'mess' => $nv_Lang->getGlobal('error_code_11')
+                ]);
+            }
             nv_redirect_location($page_url);
         }
 
@@ -236,6 +243,11 @@ if ($action == 'role') {
         !isset($array_post['role_data'][$lg]) && $array_post['role_data'][$lg] = [];
         $isAdd = false;
         $page_url .= '&amp;id=' . $id;
+    } elseif ($is_getapitree) {
+        nv_jsonOutput([
+            'status' => 'error',
+            'mess' => $nv_Lang->getGlobal('error_code_11')
+        ]);
     } else {
         $array_post = [
             'role_type' => 'private',
@@ -252,9 +264,13 @@ if ($action == 'role') {
         $isAdd = true;
     }
 
-    if ($nv_Request->isset_request('getapitree', 'post')) {
+    if ($is_getapitree) {
         $role_object = $nv_Request->get_title('getapitree', 'post', 'admin');
-        nv_htmlOutput(apicheck($role_object, $array_post, $lg));
+        $html = apicheck($role_object, $array_post, $lg);
+        nv_jsonOutput([
+            'status' => 'OK',
+            'html' => $html
+        ]);
     }
 
     if ($nv_Request->isset_request('save', 'post')) {

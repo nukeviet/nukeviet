@@ -16,7 +16,7 @@
     {$LANG->getModule('api_remote_off', $smarty.const.NV_BASE_ADMINURL|cat:'index.php?':$smarty.const.NV_LANG_VARIABLE:'=':$smarty.const.NV_LANG_DATA:'&amp;':$smarty.const.NV_NAME_VARIABLE:'=':$MODULE_NAME:'&amp;':$smarty.const.NV_OP_VARIABLE:'=config')}
 </div>
 {/if}
-<div id="credentiallist" data-page-url="{$PAGE_URL}" data-role-id="{$ROLE_ID}">
+<div id="credentiallist" data-page-url="{$PAGE_URL}" data-role-id="{$ROLE_ID}" data-checkss="{$CHECKSS}">
     <div class="card">
         <div class="card-header">
             <div class="row">
@@ -47,7 +47,7 @@
             {else}
             <div class="mb-4">{$LANG->getModule('api_role_credential_count')}: {$CREDENTIAL_COUNT}</div>
             <div class="table-responsive table-card">
-                <table class="table table-striped">
+                <table class="table table-striped align-middle mb-1">
                     <thead>
                         <tr>
                             <th class="text-nowrap" style="width: 1%;vertical-align:middle">{$LANG->getModule('api_role_credential_userid')}</th>
@@ -87,9 +87,9 @@
                                 </select>
                             </td>
                             <td class="text-nowrap text-center">
-                                <button type="button" class="btn btn-secondary" data-toggle="credential-edit" data-title="{$LANG->getModule('api_role_credential_edit')}" title="{$LANG->getGlobal('edit')}"><i class="fa-solid fa-pencil"></i></button>
-                                <button type="button" class="btn btn-secondary" data-toggle="changeAuth" title="{$LANG->getModule('authentication')}"><i class="fa fa-shield-halved"></i></button>
-                                <button type="button" class="btn btn-secondary" data-toggle="credentialDel" data-confirm="{$LANG->getModule('deprivation_confirm')}" title="{$LANG->getModule('deprivation')}"><i class="fa-solid fa-ban"></i></button>
+                                <button type="button" class="btn btn-secondary" data-toggle="credential-edit" data-title="{$LANG->getModule('api_role_credential_edit')}: {$CREDENTIAL.username}" title="{$LANG->getGlobal('edit')}" aria-label="{$LANG->getGlobal('edit')}"><i class="fa-solid fa-pencil"></i></button>
+                                <button type="button" class="btn btn-secondary" data-toggle="changeAuth" title="{$LANG->getModule('authentication')}" aria-label="{$LANG->getModule('authentication')}"><i class="fa fa-shield-halved"></i></button>
+                                <button type="button" class="btn btn-secondary" data-toggle="credentialDel" data-confirm="{$LANG->getModule('deprivation_confirm')}" title="{$LANG->getModule('deprivation')}" aria-label="{$LANG->getModule('deprivation')}"><i class="fa-solid fa-ban"></i></button>
                             </td>
                         </tr>
                         {/foreach}
