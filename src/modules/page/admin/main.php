@@ -23,18 +23,11 @@ if ($num < 1) {
     nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=content');
 }
 
-$_query = $db->query("SELECT config_value  FROM " . NV_PREFIXLANG . "_" . $module_name . "_config WHERE config_name='copy_page'");
-while ($row = $_query->fetch()) {
-    $config_page = $row;
-}
-
 $tpl = new \NukeViet\Template\NVSmarty();
-$tpl->registerPlugin('modifier', 'nformat', 'nv_number_format');
-$tpl->registerPlugin('modifier', 'dformat', 'nv_datetime_format');
 $tpl->setTemplateDir(get_module_tpl_dir('main.tpl'));
 $tpl->assign('LANG', $nv_Lang);
 $tpl->assign('MODULE_NAME', $module_name);
-$tpl->assign('PAGE_CONFIG', $page_config);
+$tpl->assign('PCONFIG', $page_config);
 
 $array_row = [];
 $iw = 0;
@@ -63,8 +56,6 @@ foreach ($_rows as $row) {
         'edit_time' => nv_datetime_format($row['edit_time'], 1),
         'add_time' => nv_datetime_format($row['add_time'], 1)
     ];
-
-    $weight_list[] = $row['weight'];
 }
 
 if ($is_delCache) {
@@ -72,8 +63,6 @@ if ($is_delCache) {
 }
 
 $tpl->assign('DATA', $array_row);
-$tpl->assign('MCOFIG', $config_page);
-$tpl->assign('WEIGHT_LIST', $weight_list);
 
 $contents = $tpl->fetch('main.tpl');
 

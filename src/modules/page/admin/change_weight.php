@@ -16,7 +16,7 @@ if (!defined('NV_IS_FILE_ADMIN')) {
 $id = $nv_Request->get_int('id', 'post', 0);
 $new_weight = $nv_Request->get_int('new_weight', 'post', 0);
 
-if (empty($id) or empty($new_weight) or !preg_match($global_config['check_module'], $id)) {
+if (empty($id) or empty($new_weight)) {
     nv_jsonOutput([
         'success' => 0,
         'text' => 'Wrong module!'
@@ -24,7 +24,7 @@ if (empty($id) or empty($new_weight) or !preg_match($global_config['check_module
 }
 
 $sth = $db->prepare('SELECT id FROM ' . NV_PREFIXLANG . '_' . $module_data . ' WHERE id= :id');
-$sth->bindParam(':id', $id, PDO::PARAM_STR);
+$sth->bindParam(':id', $id, PDO::PARAM_INT);
 $sth->execute();
 $row = $sth->fetch();
 if (empty($row)) {
@@ -35,7 +35,7 @@ if (empty($row)) {
 }
 
 $sth = $db->prepare('SELECT id FROM ' . NV_PREFIXLANG . '_' . $module_data . ' WHERE id != :id ORDER BY weight ASC');
-$sth->bindParam(':id', $id, PDO::PARAM_STR);
+$sth->bindParam(':id', $id, PDO::PARAM_INT);
 $sth->execute();
 
 $weight = 0;
@@ -46,16 +46,16 @@ while ($row = $sth->fetch()) {
     }
 
     $sth2 = $db->prepare('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . ' SET weight=' . $weight . ' WHERE id= :id');
-    $sth2->bindParam(':id', $row['id'], PDO::PARAM_STR);
+    $sth2->bindParam(':id', $row['id'], PDO::PARAM_INT);
     $sth2->execute();
 }
 
 $sth2 = $db->prepare('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . ' SET weight=' . $new_weight . ' WHERE id= :id');
-$sth2->bindParam(':id', $id, PDO::PARAM_STR);
+$sth2->bindParam(':id', $id, PDO::PARAM_INT);
 $sth2->execute();
 
 $nv_Cache->delMod($module_name);
-nv_insert_logs(NV_LANG_DATA, $module_name, $nv_Lang->getModule('weight') . ' module: ' . $id, $weight . ' -> ' . $new_weight, $admin_info['userid']);
+nv_insert_logs(NV_LANG_DATA, $module_name, 'ID: ' . $row['id'] . ': ' . $row['title'], $weight . ' -> ' . $new_weight, $admin_info['userid']);
 nv_jsonOutput([
     'success' => 1,
     'text' => 'Success!'

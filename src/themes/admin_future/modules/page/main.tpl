@@ -17,9 +17,9 @@
                 <tr>
                     <td>
                         <select data-toggle="changeWeiPage" data-id="{$row.id}" name="change_weight_{$row.id}" id="change_weight_{$row.id}" class="form-select fw-75">
-                            {foreach from=$WEIGHT_LIST item=weight}
+                            {for $weight=1 to count($DATA)}
                             <option value="{$weight}"{if $weight eq $row.weight} selected{/if}>{$weight}</option>
-                            {/foreach}
+                            {/for}
                         </select>
                     </td>
                     <td>
@@ -37,13 +37,13 @@
                     <td class="text-center">{$row.hitstotal}</td>
                     <td>
                         <div class="hstack gap-1">
-                            {if not empty($MCOFIG.config_value)}
+                            {if not empty($PCONFIG.copy_page)}
                             <div class="text-nowrap">
                                 <a title="{$LANG->getModule('title_copy_page')}" href="{$smarty.const.NV_BASE_ADMINURL}index.php?{$smarty.const.NV_LANG_VARIABLE}={$smarty.const.NV_LANG_DATA}&amp;{$smarty.const.NV_NAME_VARIABLE}={$MODULE_NAME}&amp;{$smarty.const.NV_OP_VARIABLE}=content&amp;copy=1&amp;id={$row.id}" class="btn btn-success btn-sm"><i class="fa-solid fa-copy fa-fw text-center"></i></a>
                             </div>
                             {/if}
                             <div class="text-nowrap">
-                                <a href="{$row.url_edit}" class="btn btn-secondary btn-sm"><i class="fa-solid fa-pen"></i>{$LANG->getGlobal('edit')}</a>
+                                <a href="{$row.url_edit}" class="btn btn-secondary btn-sm"><i class="fa-solid fa-pen"></i> {$LANG->getGlobal('edit')}</a>
                             </div>
                             <div class="text-nowrap">
                                 <button type="button" class="btn btn-danger btn-sm" data-toggle="nv_del_page" data-checkss="{$row.checkss}" data-id="{$row.id}"><i class="fa-solid fa-trash" data-icon="fa-trash"></i> {$LANG->getGlobal('delete')}</button>
