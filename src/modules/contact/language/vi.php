@@ -192,4 +192,4 @@ $lang_module['admin_content'] = 'Nội dung thông báo';
 $lang_module['admin_error_content'] = 'Vui lòng nhập nội dung';
 $lang_module['admin_error_title'] = 'Vui lòng nhập tiêu đề';
 $lang_module['select_image'] = 'Chọn hình ảnh';
-$lang_module['help_show'] = 'Hiển thị hướng dẫn';
+$lang_module['help_show'] = 'Bật/tắt hướng dẫn';

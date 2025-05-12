@@ -192,4 +192,4 @@ $lang_module['admin_content'] = 'Informations';
 $lang_module['admin_error_content'] = 'Erreur: manque de contenu';
 $lang_module['admin_error_title'] = 'Erreur: manque de titre';
 $lang_module['select_image'] = 'Sélectionner une image';
-$lang_module['help_show'] = 'Afficher l\'aide';
+$lang_module['help_show'] = 'Afficher/masquer l\'aide';

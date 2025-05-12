@@ -192,4 +192,4 @@ $lang_module['admin_content'] = 'Content';
 $lang_module['admin_error_content'] = 'Error: Empty content';
 $lang_module['admin_error_title'] = 'Error: Empty title';
 $lang_module['select_image'] = 'Select image';
-$lang_module['help_show'] = 'Show help';
+$lang_module['help_show'] = 'Show/hide help';
