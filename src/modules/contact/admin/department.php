@@ -46,7 +46,15 @@ $page_url = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_D
 
 if (defined('NV_IS_SPADMIN')) {
     if ($nv_Request->isset_request('fc', 'post')) {
+
         $fc = $nv_Request->get_string('fc', 'post', '');
+        $checkss = $nv_Request->get_string('checkss', 'post', '');
+        if ($checkss != md5(NV_CHECK_SESSION . '_' . $module_name . '_' . $op . '_' . $admin_info['userid'])) {
+            nv_jsonOutput([
+                'status' => 'error',
+                'mess' => $nv_Lang->getGlobal('error_code_11')
+            ]);
+        }
         // Thêm/Sửa bộ phận
         if ($fc == 'content') {
             $id = $nv_Request->get_int('id', 'post', 0);
@@ -55,7 +63,7 @@ if (defined('NV_IS_SPADMIN')) {
                 if (!$department) {
                     nv_jsonOutput([
                         'status' => 'error',
-                        'mess' => 'Unspecified Department'
+                        'mess' => $nv_Lang->getModule('department_not_exist')
                     ]);
                 }
             } else {
@@ -201,12 +209,13 @@ if (defined('NV_IS_SPADMIN')) {
                         nv_insert_logs(NV_LANG_DATA, $module_name, (empty($id) ? 'log_add_row' : 'log_edit_row'), (empty($id) ? $post['full_name'] : 'id: ' . $id . ' ' . $post['full_name']), $admin_info['userid']);
                         $nv_Cache->delMod($module_name);
                         nv_jsonOutput([
-                            'status' => 'OK'
+                            'status' => 'OK',
+                            'refresh' => 1
                         ]);
                     } else {
                         nv_jsonOutput([
                             'status' => 'error',
-                            'mess' => 'An unknown error has occurred'
+                            'mess' => $nv_Lang->getGlobal('error_code_11')
                         ]);
                     }
                 } catch (PDOException $e) {
@@ -252,44 +261,19 @@ if (defined('NV_IS_SPADMIN')) {
                 } else {
                     $department['admins'] = [];
                 }
+                $tpl = new \NukeViet\Template\NVSmarty();
+                $tpl->setTemplateDir(get_module_tpl_dir('department-content.tpl'));
+                $tpl->assign('LANG', $nv_Lang);
+                $tpl->assign('MODULE_NAME', $module_name);
+                $tpl->assign('OP', $op);
+                $tpl->assign('CHECKSS', md5(NV_CHECK_SESSION . '_' . $module_name . '_' . $op . '_' . $admin_info['userid']));
+                $tpl->assign('DEPARTMENT', $department);
+                $tpl->assign('NV_ADMIN_THEME', $global_config['admin_theme']);
+                $tpl->assign('MOD_ADMINS', $mod_admins);
+                $tpl->registerPlugin('modifier', 'nv_show_name_user', 'nv_show_name_user');
+                $tpl->registerPlugin('modifier', 'in_array', 'in_array');
 
-                $xtpl = new XTemplate('department.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-                $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
-                $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
-                $xtpl->assign('FORM_ACTION', $page_url);
-                $xtpl->assign('DEPARTMENT', $department);
-                $xtpl->assign('MODULE_UPLOAD', NV_UPLOADS_DIR . '/' . $module_upload);
-                $xtpl->assign('NV_ADMIN_THEME', $global_config['admin_theme']);
-
-                foreach ($department['others'] as $name => $value) {
-                    $xtpl->assign('OTHER', [
-                        'name' => $name,
-                        'value' => $value
-                    ]);
-                    $xtpl->parse('content.other');
-                }
-
-                foreach ($department['cats'] as $cat) {
-                    $xtpl->assign('CAT', $cat);
-                    $xtpl->parse('content.cat');
-                }
-
-                foreach ($mod_admins as $admid => $admin_details) {
-                    $admin_details['admid'] = $admid;
-                    $admin_details['full_name'] = nv_show_name_user($admin_details['first_name'], $admin_details['last_name'], $admin_details['username']);
-                    $admin_details['suspend'] = $admin_details['is_suspend'] ? ' class="warning" title="' . $nv_Lang->getGlobal('admin_suspend') . '"' : '';
-                    $admin_details['level_txt'] = $nv_Lang->getGlobal('level' . $admin_details['level']);
-                    $admin_details['view_level'] = ($admin_details['level'] === 1 or (!empty($department['admins']['view_level']) and in_array($admid, $department['admins']['view_level'], true))) ? ' checked="checked"' : '';
-                    $admin_details['exec_level'] = ($admin_details['level'] === 1 or (!empty($department['admins']['exec_level']) and in_array($admid, $department['admins']['exec_level'], true))) ? ' checked="checked"' : '';
-                    $admin_details['reply_level'] = ($admin_details['level'] === 1 or (!empty($department['admins']['reply_level']) and in_array($admid, $department['admins']['reply_level'], true))) ? ' checked="checked"' : '';
-                    $admin_details['obt_level'] = (!empty($department['admins']['obt_level']) and in_array($admid, $department['admins']['obt_level'], true)) ? ' checked="checked"' : '';
-                    $admin_details['disabled'] = $admin_details['level'] === 1 ? ' disabled="disabled"' : '';
-                    $xtpl->assign('ADMIN', $admin_details);
-                    $xtpl->parse('content.admin');
-                }
-
-                $xtpl->parse('content');
-                $contents = $xtpl->text('content');
+                $contents = $tpl->fetch('department-content.tpl');
                 nv_jsonOutput([
                     'status' => 'OK',
                     'title' => $id ? $nv_Lang->getModule('department_edit') : $nv_Lang->getModule('department_add'),
@@ -303,7 +287,10 @@ if (defined('NV_IS_SPADMIN')) {
             $id = $nv_Request->get_int('id', 'post', 0);
             $title = $nv_Request->get_title('title', 'post', '');
             if (empty($title)) {
-                return '';
+                nv_jsonOutput([
+                    'status' => 'OK',
+                    'alias' => ''
+                ]);
             }
 
             $alias = change_alias($title);
@@ -313,7 +300,10 @@ if (defined('NV_IS_SPADMIN')) {
                 $alias .= '-' . $i;
             }
 
-            nv_htmlOutput($alias);
+            nv_jsonOutput([
+                'status' => 'OK',
+                'alias' => $alias
+            ]);
         }
 
         // Thay đổi thứ tự
@@ -325,7 +315,7 @@ if (defined('NV_IS_SPADMIN')) {
             if (!$department) {
                 nv_jsonOutput([
                     'status' => 'error',
-                    'mess' => 'Unspecified Department'
+                    'mess' => $nv_Lang->getModule('department_not_exist')
                 ]);
             }
 
@@ -346,21 +336,22 @@ if (defined('NV_IS_SPADMIN')) {
             if (!$department) {
                 nv_jsonOutput([
                     'status' => 'error',
-                    'mess' => 'Unspecified Department'
+                    'mess' => $nv_Lang->getModule('department_not_exist')
                 ]);
             }
 
             if (!in_array($new_status, [0, 1, 2], true)) {
                 nv_jsonOutput([
                     'status' => 'error',
-                    'mess' => 'Error status'
+                    'mess' => $nv_Lang->getGlobal('error_code_11')
                 ]);
             }
 
             $db->query('UPDATE ' . NV_MOD_TABLE . '_department SET act=' . $new_status . ' WHERE id=' . $id);
             $nv_Cache->delMod($module_name);
             nv_jsonOutput([
-                'status' => 'OK'
+                'status' => 'OK',
+                'mess' => $nv_Lang->getGlobal('save_success')
             ]);
         }
 
@@ -372,7 +363,7 @@ if (defined('NV_IS_SPADMIN')) {
             if (!$department) {
                 nv_jsonOutput([
                     'status' => 'error',
-                    'mess' => 'Unspecified Department'
+                    'mess' => $nv_Lang->getModule('department_not_exist')
                 ]);
             }
 
@@ -380,7 +371,8 @@ if (defined('NV_IS_SPADMIN')) {
             $db->query('UPDATE ' . NV_MOD_TABLE . '_department SET is_default=1 WHERE id=' . $id);
             $nv_Cache->delMod($module_name);
             nv_jsonOutput([
-                'status' => 'OK'
+                'status' => 'OK',
+                'mess' => $nv_Lang->getGlobal('save_success')
             ]);
         }
 
@@ -392,7 +384,7 @@ if (defined('NV_IS_SPADMIN')) {
             if (!$department) {
                 nv_jsonOutput([
                     'status' => 'error',
-                    'mess' => 'Unspecified Department'
+                    'mess' => $nv_Lang->getModule('department_not_exist')
                 ]);
             }
 
@@ -421,7 +413,7 @@ if (defined('NV_IS_SPADMIN')) {
 
             nv_jsonOutput([
                 'status' => 'error',
-                'mess' => 'An unknown error has occurred'
+                'mess' => $nv_Lang->getGlobal('error_code_11')
             ]);
         }
     }
@@ -430,11 +422,17 @@ if (defined('NV_IS_SPADMIN')) {
 if ($nv_Request->isset_request('id', 'get')) {
     $id = $nv_Request->get_int('id', 'get', 0);
     if (empty($id)) {
-        exit(0);
+        nv_jsonOutput([
+            'status' => 'error',
+            'mess' => $nv_Lang->getModule('error_required_departmentid')
+        ]);
     }
     $department = $db->query('SELECT * FROM ' . NV_MOD_TABLE . '_department WHERE id=' . $id)->fetch();
     if (empty($department)) {
-        exit(0);
+        nv_jsonOutput([
+            'status' => 'error',
+            'mess' => $nv_Lang->getModule('department_not_exist')
+        ]);
     }
 
     $department['image'] = !empty($department['image']) ? NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_info['module_upload'] . '/' . $department['image'] : '';
@@ -475,42 +473,46 @@ if ($nv_Request->isset_request('id', 'get')) {
         $department['your_authority'] = $nv_Lang->getModule('your_not_authority');
     }
 
-    $xtpl = new XTemplate('department.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-    $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
-    $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
-    $xtpl->assign('DEPARTMENT', $department);
+    $tpl = new \NukeViet\Template\NVSmarty();
+    $tpl->setTemplateDir(get_module_tpl_dir('department.tpl'));
+    $tpl->assign('LANG', $nv_Lang);
+    $tpl->assign('MODULE_NAME', $module_name);
+    $tpl->assign('OP', $op);
+    $tpl->assign('DEPARTMENT', $department);
+    $tpl->registerPlugin('modifier', 'ucfirst', 'ucfirst');
 
-    if (!empty($department['image'])) {
-        $xtpl->parse('view.image');
-    }
-    if (!empty($department['phone'])) {
-        $xtpl->parse('view.phone');
-    }
-    if (!empty($department['fax'])) {
-        $xtpl->parse('view.fax');
-    }
-    if (!empty($department['email'])) {
-        $xtpl->parse('view.email');
-    }
-    if (!empty($department['address'])) {
-        $xtpl->parse('view.address');
-    }
-    if (!empty($department['others'])) {
-        foreach ($department['others'] as $title => $value) {
-            $xtpl->assign('OTHER', [
-                'title' => ucfirst($title),
-                'value' => str_replace(',', '<br/>', $value)
-            ]);
-            $xtpl->parse('view.other');
-        }
-    }
-    if (!empty($department['cats'])) {
-        $xtpl->parse('view.cats');
-    }
+    // if (!empty($department['image'])) {
+    //     $xtpl->parse('view.image');
+    // }
+    // if (!empty($department['phone'])) {
+    //     $xtpl->parse('view.phone');
+    // }
+    // if (!empty($department['fax'])) {
+    //     $xtpl->parse('view.fax');
+    // }
+    // if (!empty($department['email'])) {
+    //     $xtpl->parse('view.email');
+    // }
+    // if (!empty($department['address'])) {
+    //     $xtpl->parse('view.address');
+    // }
+    // if (!empty($department['others'])) {
+    //     foreach ($department['others'] as $title => $value) {
+    //         $xtpl->assign('OTHER', [
+    //             'title' => ucfirst($title),
+    //             'value' => str_replace(',', '<br/>', $value)
+    //         ]);
+    //         $xtpl->parse('view.other');
+    //     }
+    // }
+    // if (!empty($department['cats'])) {
+    //     $xtpl->parse('view.cats');
+    // }
 
-    $xtpl->parse('view');
-    $contents = $xtpl->text('view');
+    // $xtpl->parse('view');
+    $contents = $tpl->fetch('department-view.tpl');
     nv_jsonOutput([
+        'status' => 'OK',
         'title' => $department['full_name'],
         'content' => $contents
     ]);
@@ -518,83 +520,90 @@ if ($nv_Request->isset_request('id', 'get')) {
 
 $departments = get_department_list();
 
-$xtpl = new XTemplate('department.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-$xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
-$xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
-$xtpl->assign('OP_URL', $page_url);
+$tpl = new \NukeViet\Template\NVSmarty();
+$tpl->setTemplateDir(get_module_tpl_dir('department.tpl'));
+$tpl->assign('LANG', $nv_Lang);
+$tpl->assign('MODULE_NAME', $module_name);
+$tpl->assign('OP', $op);
+$tpl->assign('CHECKSS', md5(NV_CHECK_SESSION . '_' . $module_name . '_' . $op . '_' . $admin_info['userid']));
+$tpl->assign('DEPARTMENTS', $departments);
 
-$count = count($departments);
-if (defined('NV_IS_SPADMIN')) {
-    $xtpl->parse('main.is_spadmin');
-}
+// $xtpl = new XTemplate('department.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
+// $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
+// $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
+// $xtpl->assign('OP_URL', $page_url);
 
-if (!empty($departments)) {
-    foreach ($departments as $row) {
-        $row['phone'] = preg_replace("/(\[|&#91;)[^\]]*(&#93;|\])$/", '', $row['phone']);
-        $row['is_default_checked'] = !empty($row['is_default']) ? ' checked="checked"' : '';
-        $xtpl->assign('ROW', $row);
+// $count = count($departments);
+// if (defined('NV_IS_SPADMIN')) {
+//     $xtpl->parse('main.is_spadmin');
+// }
 
-        if (defined('NV_IS_SPADMIN')) {
-            for ($i = 1; $i <= $count; ++$i) {
-                $xtpl->assign('WEIGHT', [
-                    'value' => $i,
-                    'selected' => $i == $row['weight'] ? ' selected="selected"' : ''
-                ]);
-                $xtpl->parse('main.row.is_spadmin1.option');
-            }
-            $xtpl->parse('main.row.is_spadmin1');
-        } else {
-            $xtpl->parse('main.row.is_modadmin1');
-        }
+// if (!empty($departments)) {
+//     foreach ($departments as $row) {
+//         $row['phone'] = preg_replace("/(\[|&#91;)[^\]]*(&#93;|\])$/", '', $row['phone']);
+//         $row['is_default_checked'] = !empty($row['is_default']) ? ' checked="checked"' : '';
+//         $xtpl->assign('ROW', $row);
 
-        if (!empty($row['is_default'])) {
-            $xtpl->parse('main.row.is_default');
-        }
+//         if (defined('NV_IS_SPADMIN')) {
+//             for ($i = 1; $i <= $count; ++$i) {
+//                 $xtpl->assign('WEIGHT', [
+//                     'value' => $i,
+//                     'selected' => $i == $row['weight'] ? ' selected="selected"' : ''
+//                 ]);
+//                 $xtpl->parse('main.row.is_spadmin1.option');
+//             }
+//             $xtpl->parse('main.row.is_spadmin1');
+//         } else {
+//             $xtpl->parse('main.row.is_modadmin1');
+//         }
 
-        $array = [$nv_Lang->getGlobal('disable'), $nv_Lang->getGlobal('active'), $nv_Lang->getModule('department_no_home')];
-        if (defined('NV_IS_SPADMIN')) {
-            foreach ($array as $key => $val) {
-                $xtpl->assign('STATUS', [
-                    'key' => $key,
-                    'selected' => $key == $row['act'] ? ' selected="selected"' : '',
-                    'title' => $val
-                ]);
+//         if (!empty($row['is_default'])) {
+//             $xtpl->parse('main.row.is_default');
+//         }
 
-                $xtpl->parse('main.row.is_spadmin2.status');
-            }
-            $xtpl->parse('main.row.is_spadmin2');
-        } else {
-            $xtpl->assign('STATUS', $array[$row['act']]);
-            $xtpl->parse('main.row.is_modadmin2');
-        }
+//         $array = [$nv_Lang->getGlobal('disable'), $nv_Lang->getGlobal('active'), $nv_Lang->getModule('department_no_home')];
+//         if (defined('NV_IS_SPADMIN')) {
+//             foreach ($array as $key => $val) {
+//                 $xtpl->assign('STATUS', [
+//                     'key' => $key,
+//                     'selected' => $key == $row['act'] ? ' selected="selected"' : '',
+//                     'title' => $val
+//                 ]);
 
-        if (defined('NV_IS_SPADMIN')) {
-            $xtpl->parse('main.row.is_spadmin3');
-        } else {
-            if (!empty($row['is_default'])) {
-                $xtpl->parse('main.row.is_modadmin3');
-            }
-        }
+//                 $xtpl->parse('main.row.is_spadmin2.status');
+//             }
+//             $xtpl->parse('main.row.is_spadmin2');
+//         } else {
+//             $xtpl->assign('STATUS', $array[$row['act']]);
+//             $xtpl->parse('main.row.is_modadmin2');
+//         }
 
-        if (defined('NV_IS_SPADMIN')) {
-            $xtpl->parse('main.row.is_spadmin4');
-        }
+//         if (defined('NV_IS_SPADMIN')) {
+//             $xtpl->parse('main.row.is_spadmin3');
+//         } else {
+//             if (!empty($row['is_default'])) {
+//                 $xtpl->parse('main.row.is_modadmin3');
+//             }
+//         }
 
-        $xtpl->parse('main.row');
-    }
-}
+//         if (defined('NV_IS_SPADMIN')) {
+//             $xtpl->parse('main.row.is_spadmin4');
+//         }
 
-if (defined('NV_IS_SPADMIN')) {
-    if (empty($departments)) {
-        $xtpl->parse('main.is_spadmin5.show_form');
-    }
+//         $xtpl->parse('main.row');
+//     }
+// }
 
-    $xtpl->parse('main.is_spadmin5');
-    $xtpl->parse('main.is_spadmin6');
-}
+// if (defined('NV_IS_SPADMIN')) {
+//     if (empty($departments)) {
+//         $xtpl->parse('main.is_spadmin5.show_form');
+//     }
 
-$xtpl->parse('main');
-$contents = $xtpl->text('main');
+//     $xtpl->parse('main.is_spadmin5');
+//     $xtpl->parse('main.is_spadmin6');
+// }
+
+$contents = $tpl->fetch('department.tpl');
 
 $page_title = $nv_Lang->getModule('departments');
 

@@ -34,7 +34,7 @@ nv_add_hook($module_name, 'get_module_admin_theme', $priority, function ($vars) 
     if (($module_info['module_file'] ?? '') == 'voting' and in_array($op, ['main', 'setting'])) {
         return $new_theme;
     }
-    if (($module_info['module_file'] ?? '') == 'contact' and in_array($op, ['main'])) {
+    if (($module_info['module_file'] ?? '') == 'contact' and in_array($op, ['main', 'department'])) {
         return $new_theme;
     }
 
