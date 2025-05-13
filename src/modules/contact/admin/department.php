@@ -481,35 +481,6 @@ if ($nv_Request->isset_request('id', 'get')) {
     $tpl->assign('DEPARTMENT', $department);
     $tpl->registerPlugin('modifier', 'ucfirst', 'ucfirst');
 
-    // if (!empty($department['image'])) {
-    //     $xtpl->parse('view.image');
-    // }
-    // if (!empty($department['phone'])) {
-    //     $xtpl->parse('view.phone');
-    // }
-    // if (!empty($department['fax'])) {
-    //     $xtpl->parse('view.fax');
-    // }
-    // if (!empty($department['email'])) {
-    //     $xtpl->parse('view.email');
-    // }
-    // if (!empty($department['address'])) {
-    //     $xtpl->parse('view.address');
-    // }
-    // if (!empty($department['others'])) {
-    //     foreach ($department['others'] as $title => $value) {
-    //         $xtpl->assign('OTHER', [
-    //             'title' => ucfirst($title),
-    //             'value' => str_replace(',', '<br/>', $value)
-    //         ]);
-    //         $xtpl->parse('view.other');
-    //     }
-    // }
-    // if (!empty($department['cats'])) {
-    //     $xtpl->parse('view.cats');
-    // }
-
-    // $xtpl->parse('view');
     $contents = $tpl->fetch('department-view.tpl');
     nv_jsonOutput([
         'status' => 'OK',
@@ -527,81 +498,6 @@ $tpl->assign('MODULE_NAME', $module_name);
 $tpl->assign('OP', $op);
 $tpl->assign('CHECKSS', md5(NV_CHECK_SESSION . '_' . $module_name . '_' . $op . '_' . $admin_info['userid']));
 $tpl->assign('DEPARTMENTS', $departments);
-
-// $xtpl = new XTemplate('department.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-// $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
-// $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
-// $xtpl->assign('OP_URL', $page_url);
-
-// $count = count($departments);
-// if (defined('NV_IS_SPADMIN')) {
-//     $xtpl->parse('main.is_spadmin');
-// }
-
-// if (!empty($departments)) {
-//     foreach ($departments as $row) {
-//         $row['phone'] = preg_replace("/(\[|&#91;)[^\]]*(&#93;|\])$/", '', $row['phone']);
-//         $row['is_default_checked'] = !empty($row['is_default']) ? ' checked="checked"' : '';
-//         $xtpl->assign('ROW', $row);
-
-//         if (defined('NV_IS_SPADMIN')) {
-//             for ($i = 1; $i <= $count; ++$i) {
-//                 $xtpl->assign('WEIGHT', [
-//                     'value' => $i,
-//                     'selected' => $i == $row['weight'] ? ' selected="selected"' : ''
-//                 ]);
-//                 $xtpl->parse('main.row.is_spadmin1.option');
-//             }
-//             $xtpl->parse('main.row.is_spadmin1');
-//         } else {
-//             $xtpl->parse('main.row.is_modadmin1');
-//         }
-
-//         if (!empty($row['is_default'])) {
-//             $xtpl->parse('main.row.is_default');
-//         }
-
-//         $array = [$nv_Lang->getGlobal('disable'), $nv_Lang->getGlobal('active'), $nv_Lang->getModule('department_no_home')];
-//         if (defined('NV_IS_SPADMIN')) {
-//             foreach ($array as $key => $val) {
-//                 $xtpl->assign('STATUS', [
-//                     'key' => $key,
-//                     'selected' => $key == $row['act'] ? ' selected="selected"' : '',
-//                     'title' => $val
-//                 ]);
-
-//                 $xtpl->parse('main.row.is_spadmin2.status');
-//             }
-//             $xtpl->parse('main.row.is_spadmin2');
-//         } else {
-//             $xtpl->assign('STATUS', $array[$row['act']]);
-//             $xtpl->parse('main.row.is_modadmin2');
-//         }
-
-//         if (defined('NV_IS_SPADMIN')) {
-//             $xtpl->parse('main.row.is_spadmin3');
-//         } else {
-//             if (!empty($row['is_default'])) {
-//                 $xtpl->parse('main.row.is_modadmin3');
-//             }
-//         }
-
-//         if (defined('NV_IS_SPADMIN')) {
-//             $xtpl->parse('main.row.is_spadmin4');
-//         }
-
-//         $xtpl->parse('main.row');
-//     }
-// }
-
-// if (defined('NV_IS_SPADMIN')) {
-//     if (empty($departments)) {
-//         $xtpl->parse('main.is_spadmin5.show_form');
-//     }
-
-//     $xtpl->parse('main.is_spadmin5');
-//     $xtpl->parse('main.is_spadmin6');
-// }
 
 $contents = $tpl->fetch('department.tpl');
 

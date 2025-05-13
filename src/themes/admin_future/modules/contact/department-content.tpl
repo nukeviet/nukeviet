@@ -1,4 +1,3 @@
-<!-- BEGIN: content -->
 <form action="{$smarty.const.NV_BASE_ADMINURL}index.php?{$smarty.const.NV_LANG_VARIABLE}={$smarty.const.NV_LANG_DATA}&amp;{$smarty.const.NV_NAME_VARIABLE}={$MODULE_NAME}&amp;{$smarty.const.NV_OP_VARIABLE}={$OP}" method="post" class="form-horizontal department_content ajax-submit">
     <div class="row mb-3">
         <label class="col-sm-4 col-md-3 col-form-label text-sm-end" for="department_full_name">{$LANG->getModule('part_row_title')}</label>
@@ -80,7 +79,6 @@
         <div class="col-sm-4 col-md-3 col-form-label text-sm-end">{$LANG->getModule('otherContacts')}</div>
         <div class="col-sm-8 col-md-9 strs">
             {foreach $DEPARTMENT.others as $NAME => $VALUE}
-            <!-- BEGIN: other -->
             <div class="str d-flex">
                 <div class="row g-2 flex-grow-1">
                     <div class="col-5">
@@ -99,7 +97,6 @@
                     </button>
                 </div>
             </div>
-            <!-- END: other -->
             {/foreach}
         </div>
     </div>
@@ -108,7 +105,6 @@
         <label class="col-sm-4 col-md-3 col-form-label text-sm-end">{$LANG->getModule('cats')}</label>
         <div class="col-sm-8 col-md-9 strs">
             {foreach $DEPARTMENT.cats as $CAT}
-            <!-- BEGIN: cat -->
             <div class="str" style="display:flex">
                 <div style="flex-grow:1">
                     <input type="text" class="form-control" name="cats[]" value="{$CAT}" aria-label="{$LANG->getModule('cats')}">
@@ -122,7 +118,6 @@
                     </button>
                 </div>
             </div>
-            <!-- END: cat -->
             {/foreach}
         </div>
     </div>
@@ -133,7 +128,6 @@
             <table class="table table-bordered">
                 <tbody>
                     {foreach $MOD_ADMINS as $ADMIN_ID => $ADMIN}
-                    <!-- BEGIN: admin -->
                     <tr{if $ADMIN.is_suspend} class="bg-warning" title="{$LANG->getGlobal('admin_suspend')}"{/if}>
                         <td>
                             <img style="vertical-align:middle;" alt="{$LANG->getGlobal('level'|cat:$ADMIN.level)}" src="{$smarty.const.NV_BASE_SITEURL}themes/{$NV_ADMIN_THEME}/images/admin{$ADMIN.level}.png" width="38" height="18">
@@ -158,7 +152,6 @@
                             </div>
                         </td>
                     </tr>
-                    <!-- END: admin -->
                     {/foreach}
                 </tbody>
             </table>
@@ -174,4 +167,3 @@
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{$LANG->getGlobal('close')}</button>
     </div>
 </form>
-<!-- END: content -->
