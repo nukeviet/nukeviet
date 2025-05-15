@@ -37,11 +37,14 @@ function modal_content(url, id, checkss, i = undefined, icon_class = '', replace
     });
 }
 
-function department_view(url, icon) {
+function department_view(url, icon, id = undefined) {
     $.ajax({
         type: "GET",
         url: url,
         cache: !1,
+        data: {
+            id: id
+        },
         dataType: "json"
     }).done(function(a) {
         if (a.status == 'error') {
@@ -89,7 +92,7 @@ $(function() {
                 icon.attr("class", originalClass);
                 nvToast(a.mess, 'error')
             } else if (a.status == 'ok') {
-                nvConfirm(a.mess, function() {;
+                nukeviet.confirm(a.mess, function() {;
                     window.location.reload()
                 }, function() {;
                     window.location.reload()
@@ -138,7 +141,7 @@ $(function() {
                 }
             })
         } else {
-            nvAlert(nv_please_check);
+            nukeviet.alert(nv_please_check);
         }
     });
 
@@ -187,8 +190,8 @@ $(function() {
             return;
         }
         var originalClass = icon.attr("class");
-        icon.attr("class", "fa-solid fa-spinner fa-spin-pulse");
-        nvConfirm(nv_is_del_confirm[0], function() {
+        nukeviet.confirm(nv_is_del_confirm[0], function() {
+            icon.attr("class", "fa-solid fa-spinner fa-spin-pulse");
             $.ajax({
                 type: "POST",
                 url: page.data('url'),
@@ -228,8 +231,8 @@ $(function() {
                 return;
             }
             var originalClass = icon.attr("class");
-            icon.attr("class", "fa-solid fa-spinner fa-spin-pulse");
-            nvConfirm(nv_is_del_confirm[0], function() {
+            nukeviet.confirm(nv_is_del_confirm[0], function() {
+                icon.attr("class", "fa-solid fa-spinner fa-spin-pulse");
                 $.ajax({
                     type: "POST",
                     url: script_name + "?" + nv_lang_variable + "=" + nv_lang_data + "&" + nv_name_variable + "=" + nv_module_name + "&nocache=" + new Date().getTime(),
@@ -266,7 +269,7 @@ $(function() {
         }
         var originalClass = icon.attr("class");
         icon.attr("class", "fa-solid fa-spinner fa-spin-pulse");
-        nvConfirm(nv_is_del_confirm[0], function() {
+        nukeviet.confirm(nv_is_del_confirm[0], function() {
             $.ajax({
                 type: "POST",
                 url: script_name + "?" + nv_lang_variable + "=" + nv_lang_data + "&" + nv_name_variable + "=" + nv_module_name + "&nocache=" + new Date().getTime(),
@@ -320,7 +323,7 @@ $(function() {
         }
         $(this).append('<i class="fa-solid fa-spinner fa-spin-pulse"></i>');
         var icon = $('i', $(this));
-        department_view($(this).parents('.list').data('url') + '&id=' + $(this).parents('.item').data('id'), icon)
+        department_view($(this).parents('.list').data('url'), icon, $(this).parents('.item').data('id'))
     });
 
     $('body').on('click', '.help-show', function() {
@@ -395,11 +398,10 @@ $(function() {
             return;
         }
         var originalClass = icon.attr("class");
-        icon.attr("class", "fa-solid fa-spinner fa-spin-pulse");
-
         nukeviet.confirm(nv_is_del_confirm[0], function() {
             var id = that.parents('.item').data('id'),
                 url = that.parents('.list').data('url');
+            icon.attr("class", "fa-solid fa-spinner fa-spin-pulse");
             $.ajax({
                 type: "POST",
                 url: url,

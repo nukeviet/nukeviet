@@ -490,6 +490,9 @@ if ($nv_Request->isset_request('id', 'get')) {
 }
 
 $departments = get_department_list();
+foreach ($departments as $key => $department) {
+    $departments[$key]['phone'] = preg_replace('/(\[|&#91;)[^\]]*(&#93;|\])$/', '', $department['phone']);
+}
 
 $tpl = new \NukeViet\Template\NVSmarty();
 $tpl->setTemplateDir(get_module_tpl_dir('department.tpl'));

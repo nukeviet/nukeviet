@@ -1,6 +1,6 @@
 <form action="{$smarty.const.NV_BASE_ADMINURL}index.php?{$smarty.const.NV_LANG_VARIABLE}={$smarty.const.NV_LANG_DATA}&amp;{$smarty.const.NV_NAME_VARIABLE}={$MODULE_NAME}&amp;{$smarty.const.NV_OP_VARIABLE}={$OP}" method="post" class="form-horizontal department_content ajax-submit">
     <div class="row mb-3">
-        <label class="col-sm-4 col-md-3 col-form-label text-sm-end" for="department_full_name">{$LANG->getModule('part_row_title')}</label>
+        <label class="col-sm-4 col-md-3 col-form-label text-sm-end" for="department_full_name">{$LANG->getModule('part_row_title')} <span class="text-danger">(*)</span></label>
         <div class="col-sm-8 col-md-9">
             <input class="form-control required" type="text" name="full_name" id="department_full_name" value="{$DEPARTMENT.full_name}">
         </div>
@@ -90,10 +90,10 @@
                 </div>
                 <div class="text-nowrap ms-2">
                     <button class="btn btn-secondary str_add" type="button" aria-label="{$LANG->getModule('add')}">
-                        <i class="fa-solid fa-plus fa-fix"></i>
+                        <i class="fa-solid fa-plus"></i>
                     </button>
                     <button class="btn btn-secondary str_del" type="button" aria-label="{$LANG->getModule('del')}">
-                        <i class="fa-solid fa-times fa-fix"></i>
+                        <i class="fa-solid fa-times"></i>
                     </button>
                 </div>
             </div>
@@ -105,16 +105,16 @@
         <label class="col-sm-4 col-md-3 col-form-label text-sm-end">{$LANG->getModule('cats')}</label>
         <div class="col-sm-8 col-md-9 strs">
             {foreach $DEPARTMENT.cats as $CAT}
-            <div class="str" style="display:flex">
-                <div style="flex-grow:1">
+            <div class="str d-flex">
+                <div class="flex-grow-1">
                     <input type="text" class="form-control" name="cats[]" value="{$CAT}" aria-label="{$LANG->getModule('cats')}">
                 </div>
                 <div class="text-nowrap" style="margin-left:10px">
                     <button class="btn btn-secondary str_add" type="button" aria-label="{$LANG->getModule('add')}">
-                        <i class="fa-solid fa-plus fa-fix"></i>
+                        <i class="fa-solid fa-plus"></i>
                     </button>
                     <button class="btn btn-secondary str_del" type="button" aria-label="{$LANG->getModule('del')}">
-                        <i class="fa-solid fa-times fa-fix"></i>
+                        <i class="fa-solid fa-times"></i>
                     </button>
                 </div>
             </div>
@@ -131,7 +131,7 @@
                     <tr{if $ADMIN.is_suspend} class="bg-warning" title="{$LANG->getGlobal('admin_suspend')}"{/if}>
                         <td>
                             <img style="vertical-align:middle;" alt="{$LANG->getGlobal('level'|cat:$ADMIN.level)}" src="{$smarty.const.NV_BASE_SITEURL}themes/{$NV_ADMIN_THEME}/images/admin{$ADMIN.level}.png" width="38" height="18">
-                            {$ADMIN.first_name|nv_show_name_user:$ADMIN.lastname:$ADMIN.username} ({$ADMIN.username}, {$ADMIN.email})
+                            {$ADMIN.first_name|nv_show_name_user:$ADMIN.last_name:$ADMIN.username} ({$ADMIN.username}, {$ADMIN.email})
                         </td>
                         <td class="align-middle text-center text-nowrap admin-level" style="width:1%">
                             <div class="form-check form-check-inline">
