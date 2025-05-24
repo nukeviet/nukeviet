@@ -109,7 +109,7 @@
                 <div class="flex-grow-1">
                     <input type="text" class="form-control" name="cats[]" value="{$CAT}" aria-label="{$LANG->getModule('cats')}">
                 </div>
-                <div class="text-nowrap" style="margin-left:10px">
+                <div class="text-nowrap ms-2">
                     <button class="btn btn-secondary str_add" type="button" aria-label="{$LANG->getModule('add')}">
                         <i class="fa-solid fa-plus"></i>
                     </button>
@@ -135,19 +135,19 @@
                         </td>
                         <td class="align-middle text-center text-nowrap admin-level" style="width:1%">
                             <div class="form-check form-check-inline">
-                                <input type="checkbox" name="view_level[]" class="form-check-input" id="view_level_{$ADMIN_ID}" value="{$ADMIN_ID}"{if $ADMIN.level === 1 or (!empty($DEPARTMENT.admins.view_level and $ADMIN_ID|in_array:$DEPARTMENT.admins.view_level:true))} checked{/if}{if $ADMIN.level === 1} disabled{/if}>
+                                <input type="checkbox" name="view_level[]" class="form-check-input" id="view_level_{$ADMIN_ID}" value="{$ADMIN_ID}"{if $ADMIN.level === 1 or (!empty($DEPARTMENT.admins.view_level) and $ADMIN_ID|in_array:$DEPARTMENT.admins.view_level:true)} checked{/if}{if $ADMIN.level === 1} disabled{/if}>
                                 <label class="form-check-label" for="view_level_{$ADMIN_ID}">{$LANG->getModule('admin_view_level')}</label>
                             </div>
                             <div class="form-check form-check-inline">
-                                <input type="checkbox" name="exec_level[]" class="form-check-input" id="exec_level_{$ADMIN_ID}" value="{$ADMIN_ID}"{$ADMIN.exec_level}{if $ADMIN.level === 1} disabled{/if}>
+                                <input type="checkbox" name="exec_level[]" class="form-check-input" id="exec_level_{$ADMIN_ID}" value="{$ADMIN_ID}"{if $ADMIN.level === 1 or (!empty($DEPARTMENT.admins.exec_level) and $ADMIN_ID|in_array:$DEPARTMENT.admins.exec_level:true)} checked{/if}{if $ADMIN.level === 1} disabled{/if}>
                                 <label class="form-check-label" for="exec_level_{$ADMIN_ID}">{$LANG->getModule('admin_exec_level')}</label>
                             </div>
                             <div class="form-check form-check-inline">
-                                <input type="checkbox" name="reply_level[]" class="form-check-input" id="reply_level_{$ADMIN_ID}" value="{$ADMIN_ID}"{$ADMIN.reply_level}{if $ADMIN.level === 1} disabled{/if}>
+                                <input type="checkbox" name="reply_level[]" class="form-check-input" id="reply_level_{$ADMIN_ID}" value="{$ADMIN_ID}"{if $ADMIN.level === 1 or (!empty($DEPARTMENT.admins.reply_level) and $ADMIN_ID|in_array:$DEPARTMENT.admins.reply_level:true)} checked{/if}{if $ADMIN.level === 1} disabled{/if}>
                                 <label class="form-check-label" for="reply_level_{$ADMIN_ID}">{$LANG->getModule('admin_reply_level')}</label>
                             </div>
                             <div class="form-check form-check-inline">
-                                <input type="checkbox" name="obt_level[]" class="form-check-input" id="obt_level_{$ADMIN_ID}" value="{$ADMIN_ID}"{$ADMIN.obt_level}>
+                                <input type="checkbox" name="obt_level[]" class="form-check-input" id="obt_level_{$ADMIN_ID}" value="{$ADMIN_ID}"{if !empty($DEPARTMENT.admins.obt_level) and $ADMIN_ID|in_array:$DEPARTMENT.admins.obt_level:true} checked{/if}>
                                 <label class="form-check-label" for="obt_level_{$ADMIN_ID}">{$LANG->getModule('admin_obt_level')}</label>
                             </div>
                         </td>

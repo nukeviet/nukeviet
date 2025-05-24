@@ -52,8 +52,8 @@
                 </td>
                 {if !empty($smarty.const.NV_IS_SPADMIN)}
                 <td class="text-center align-middle text-nowrap">
-                    <button type="button" title="{$LANG->getGlobal('edit')}" aria-label="{$LANG->getGlobal('edit')}" class="btn btn-secondary btn-sm department_edit"><i class="fa-solid fa-pencil"></i></button>
-                    <button type="button" title="{$LANG->getGlobal('delete')}" aria-label="{$LANG->getGlobal('delete')}" class="btn btn-secondary btn-sm department_del"><i class="fa-solid fa-trash text-danger"></i></button>
+                    <button type="button" title="{$LANG->getGlobal('edit')}" aria-label="{$LANG->getGlobal('edit')}" class="btn btn-secondary department_edit"><i class="fa-solid fa-pencil"></i></button>
+                    <button type="button" title="{$LANG->getGlobal('delete')}" aria-label="{$LANG->getGlobal('delete')}" class="btn btn-secondary department_del"><i class="fa-solid fa-trash text-danger"></i></button>
                 </td>
                 {/if}
             </tr>
