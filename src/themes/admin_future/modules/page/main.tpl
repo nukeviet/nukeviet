@@ -16,7 +16,7 @@
                 {foreach from=$DATA key=key item=row}
                 <tr>
                     <td>
-                        <select data-toggle="changeWeiPage" data-id="{$row.id}" name="change_weight_{$row.id}" id="change_weight_{$row.id}" class="form-select fw-75">
+                        <select aria-label="{$LANG->getModule('order')}" data-toggle="changeWeiPage" data-id="{$row.id}" name="change_weight_{$row.id}" id="change_weight_{$row.id}" class="form-select fw-75">
                             {for $weight=1 to count($DATA)}
                             <option value="{$weight}"{if $weight eq $row.weight} selected{/if}>{$weight}</option>
                             {/for}
@@ -25,8 +25,8 @@
                     <td>
                         <a title="{$row.title}" href="{$row.url_view}">{$row.title}</a>
                     </td>
-                    <td>{$row.add_time}</td>
-                    <td>{$row.edit_time}</td>
+                    <td>{$row.add_time|ddatetime:1}</td>
+                    <td>{$row.edit_time|ddatetime:1}</td>
                     <td class="text-center form-switch">
                         <div class="d-inline-flex">
                             <div class="form-check form-switch mb-0">
@@ -34,7 +34,7 @@
                             </div>
                         </div>
                     </td>
-                    <td class="text-center">{$row.hitstotal}</td>
+                    <td class="text-center">{$row.hitstotal|dnumber}</td>
                     <td>
                         <div class="hstack gap-1">
                             {if not empty($PCONFIG.copy_page)}
