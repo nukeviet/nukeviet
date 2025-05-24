@@ -24,6 +24,8 @@ if ($num < 1) {
 }
 
 $tpl = new \NukeViet\Template\NVSmarty();
+$tpl->registerPlugin('modifier', 'dnumber', 'nv_number_format');
+$tpl->registerPlugin('modifier', 'ddatetime', 'nv_datetime_format');
 $tpl->setTemplateDir(get_module_tpl_dir('main.tpl'));
 $tpl->assign('LANG', $nv_Lang);
 $tpl->assign('MODULE_NAME', $module_name);
@@ -44,18 +46,10 @@ foreach ($_rows as $row) {
         $is_delCache = true;
     }
 
-    $array_row[] = [
-        'id' => $row['id'],
-        'title' => $row['title'],
-        'weight' => $row['weight'],
-        'hitstotal' => nv_number_format($row['hitstotal']),
-        'checkss' => md5($row['id'] . NV_CHECK_SESSION),
-        'url_view' => NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $row['alias'] . $global_config['rewrite_exturl'],
-        'url_edit' => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=content&amp;id=' . $row['id'],
-        'status' => $row['status'],
-        'edit_time' => nv_datetime_format($row['edit_time'], 1),
-        'add_time' => nv_datetime_format($row['add_time'], 1)
-    ];
+    $row['checkss'] = md5($row['id'] . NV_CHECK_SESSION);
+    $row['url_view'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $row['alias'] . $global_config['rewrite_exturl'];
+    $row['url_edit'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=content&amp;id=' . $row['id'];
+    $array_row[] = $row;
 }
 
 if ($is_delCache) {

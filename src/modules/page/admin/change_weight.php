@@ -19,15 +19,15 @@ $new_weight = $nv_Request->get_int('new_weight', 'post', 0);
 if (empty($id) or empty($new_weight)) {
     nv_jsonOutput([
         'success' => 0,
-        'text' => 'Wrong module!'
+        'text' => 'Wrong data!'
     ]);
 }
 
 $sth = $db->prepare('SELECT id FROM ' . NV_PREFIXLANG . '_' . $module_data . ' WHERE id= :id');
 $sth->bindParam(':id', $id, PDO::PARAM_INT);
 $sth->execute();
-$row = $sth->fetch();
-if (empty($row)) {
+$row_id = $sth->fetch();
+if (empty($row_id)) {
     nv_jsonOutput([
         'success' => 0,
         'text' => 'Not exists!'
@@ -55,7 +55,7 @@ $sth2->bindParam(':id', $id, PDO::PARAM_INT);
 $sth2->execute();
 
 $nv_Cache->delMod($module_name);
-nv_insert_logs(NV_LANG_DATA, $module_name, 'ID: ' . $row['id'] . ': ' . $row['title'], $weight . ' -> ' . $new_weight, $admin_info['userid']);
+nv_insert_logs(NV_LANG_DATA, $module_name, 'Change weight ID: ' . $row['id'] . ': ' . $row['title'], $weight . ' -> ' . $new_weight, $admin_info['userid']);
 nv_jsonOutput([
     'success' => 1,
     'text' => 'Success!'
