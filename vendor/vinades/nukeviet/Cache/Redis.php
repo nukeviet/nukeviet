@@ -57,14 +57,17 @@ class Redis
             $connected = true;
         }
         if ($connected !== true) {
+            http_response_code(500); // Internal Server Error - Redis connection failed
             trigger_error('Can not connect to Redis server!', 256);
         }
 
         if (!empty($Password) and $redis->auth($Password) !== true) {
+            http_response_code(500); // Internal Server Error - Redis authentication failed
             trigger_error('Can not Authenticate Redis server!', 256);
         }
 
         if ($redis->select($DBnumber) !== true) {
+            http_response_code(500); // Internal Server Error - Redis DB connection failed
             trigger_error('Can not connect to Redis DB!', 256);
         }
 
@@ -74,6 +77,7 @@ class Redis
 
         foreach ($checkOptions as $opt) {
             if ($opt !== true) {
+                http_response_code(500); // Internal Server Error - Redis configuration failed
                 trigger_error('Can not set Redis option!', 256);
             }
         }

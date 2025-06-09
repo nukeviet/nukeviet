@@ -319,6 +319,7 @@ class Request
         }
 
         if ($ip2long == -1 or $ip2long === false) {
+            http_response_code(400); // Bad Request - Incorrect IP format
             trigger_error(Request::INCORRECT_IP, 256);
         }
         $this->ip_addr = $ip2long;
@@ -502,6 +503,7 @@ class Request
                 $this->isIpValid = true;
             }
             if (!(($this->isRefererValid and (empty($this->origin) or $this->isOriginValid)) or $this->isIpValid)) {
+                http_response_code(403); // Forbidden - Request blocked
                 trigger_error(Request::REQUEST_BLOCKED, 256);
             }
         }
@@ -545,6 +547,7 @@ class Request
                  * Nếu sai thì từ chối truy vấn
                  */
                 unset($_SERVER['HTTP_ORIGIN']);
+                http_response_code(403); // Forbidden - Incorrect origin
                 trigger_error(Request::INCORRECT_ORIGIN, 256);
             }
         } else {
@@ -636,6 +639,7 @@ class Request
     private function sessionStart($https_only)
     {
         if (headers_sent() or connection_status() != 0 or connection_aborted()) {
+            http_response_code(500); // Internal Server Error - Headers already sent
             trigger_error(Request::IS_HEADERS_SENT, 256);
         }
 

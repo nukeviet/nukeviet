@@ -45,6 +45,7 @@ if (!empty($modname) and preg_match($global_config['check_module'], $modname) an
                     try {
                         $db->query($sql);
                     } catch (PDOException $e) {
+                        http_response_code(500); // Internal Server Error - Database operation failed
                         trigger_error($e->getMessage());
                         exit('NO_' . $modname);
                     }

@@ -53,6 +53,7 @@ class Blocker
     public function __construct($logs_path, $ip = '')
     {
         if (!is_dir($logs_path)) {
+            http_response_code(500); // Internal Server Error - Configuration issue
             trigger_error(Blocker::INCORRECT_TEMPRORARY_DIRECTORY, E_USER_ERROR);
         }
         if (substr($logs_path, -1) != '/') {
@@ -76,6 +77,7 @@ class Blocker
             $ip2long = base_convert($r_ip, 2, 10);
         }
         if ($ip2long == -1 or $ip2long === false) {
+            http_response_code(400); // Bad Request - Incorrect IP address
             trigger_error(Blocker::INCORRECT_IP_ADDRESS, E_USER_ERROR);
         }
 

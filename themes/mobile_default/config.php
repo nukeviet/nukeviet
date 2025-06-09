@@ -212,6 +212,7 @@ if ($nv_Request->isset_request('save', 'post')) {
         try {
             $db->query('INSERT INTO ' . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('sys', 'site', 'sitetimestamp', '1')");
         } catch (PDOException $e) {
+            http_response_code(500); // Internal Server Error - Database operation failed
             trigger_error($e->getMessage());
         }
     }

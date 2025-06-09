@@ -72,6 +72,7 @@ if (!empty($setmodule) and preg_match($global_config['check_module'], $setmodule
                 $sth->bindParam(':custom_title', $custom_title, PDO::PARAM_STR);
                 $sth->execute();
             } catch (PDOException $e) {
+                http_response_code(500); // Internal Server Error - Database operation failed
                 trigger_error($e->getMessage());
             }
 

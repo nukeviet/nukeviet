@@ -58,12 +58,14 @@ if (md5(NV_CHECK_SESSION . '_' . $module_name . '_main') == $nv_Request->get_str
                 // Giảm thống kê số thành viên trong nhóm
                 $db->exec('UPDATE ' . NV_MOD_TABLE . '_groups SET numbers = numbers-1 WHERE group_id IN (SELECT group_id FROM ' . NV_MOD_TABLE . '_groups_users WHERE userid=' . $userid . ' AND approved = 1)');
             } catch (PDOException $e) {
+                http_response_code(500); // Internal Server Error - Database operation failed
                 trigger_error($e->getMessage());
             }
             try {
                 // Giảm thống kê số thành viên chính thức và số thành viên mới xuống
                 $db->query('UPDATE ' . NV_MOD_TABLE . '_groups SET numbers = numbers-1 WHERE group_id=' . (($group_id == 7 or in_array(7, $in_groups, true)) ? 7 : 4));
             } catch (PDOException $e) {
+                http_response_code(500); // Internal Server Error - Database operation failed
                 trigger_error($e->getMessage());
             }
             $db->query('DELETE FROM ' . NV_MOD_TABLE . '_groups_users WHERE userid=' . $userid);

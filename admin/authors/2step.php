@@ -44,6 +44,7 @@ if (empty($allowed)) {
 $sql = 'SELECT * FROM ' . NV_USERS_GLOBALTABLE . ' WHERE userid=' . $admin_id;
 $row_user = $db->query($sql)->fetch();
 if (empty($row_user)) {
+    http_response_code(500); // Internal Server Error - Data integrity issue
     trigger_error('Data error: No user for admin account!', 256);
 }
 $error = '';

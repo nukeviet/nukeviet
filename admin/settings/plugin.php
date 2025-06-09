@@ -44,6 +44,7 @@ if ($checkss == $nv_Request->get_string('checkss', 'post') and $nv_Request->isse
 
                 nv_save_file_config_global();
             } catch (PDOException $e) {
+                http_response_code(500); // Internal Server Error - Database operation failed
                 trigger_error($e->getMessage());
             }
         }
