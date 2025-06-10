@@ -170,6 +170,7 @@ if ($nv_Request->get_int('save', 'post') == '1') {
                 $error = $lang_module['errorsave'];
             }
         } catch (PDOException $e) {
+            http_response_code(500);
             trigger_error(print_r($e, true));
             $error = $lang_module['errorsave'];
         }

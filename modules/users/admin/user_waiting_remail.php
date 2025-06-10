@@ -80,6 +80,7 @@ if ($nv_Request->isset_request('ajax', 'post')) {
                 try {
                     $db->query('DELETE FROM ' . NV_MOD_TABLE . '_reg WHERE userid IN(' . $respon['useriddel'] . ')');
                 } catch (PDOException $e) {
+                    http_response_code(500);
                     trigger_error(print_r($e, true));
                 }
             }

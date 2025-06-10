@@ -924,10 +924,12 @@ class NvUpdate
     }
 
     /**
+     http_response_code(500);
      * NvUpdate::trigger_error()
      *
      * @param mixed $message
      */
+    http_response_code(500);
     public function trigger_error($message)
     {
         $_info = $this->call_error($message);
@@ -1798,6 +1800,7 @@ if ($nv_update_config['step'] == 1) {
             $version = nv_geVersion(0);
 
             if ($version === false or is_string($version)) {
+                http_response_code(500);
                 $NvUpdate->trigger_error($lang_module['update_error_check_version_sys']);
             }
 
@@ -1815,6 +1818,7 @@ if ($nv_update_config['step'] == 1) {
             $XML_exts = nv_getExtVersion(0);
 
             if ($XML_exts === false or is_string($XML_exts)) {
+                http_response_code(500);
                 $NvUpdate->trigger_error($lang_module['update_error_check_version_sys']);
             }
 
@@ -1863,6 +1867,7 @@ if ($nv_update_config['step'] == 1) {
             $XML_exts = nv_getExtVersion(0);
 
             if ($XML_exts === false or is_string($XML_exts)) {
+                http_response_code(500);
                 $NvUpdate->trigger_error($lang_module['update_error_check_version_ext']);
             }
 

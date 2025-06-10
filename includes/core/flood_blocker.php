@@ -92,6 +92,7 @@ if (!$ip_exclusion) {
             include NV_ROOTDIR . '/includes/footer.php';
             exit();
         }
+        http_response_code(500);
         trigger_error($lang_global['flood_info1'], 256);
     }
 

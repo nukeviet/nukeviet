@@ -42,11 +42,13 @@ if (!empty($row)) {
     try {
         $db->query('UPDATE ' . NV_MOD_TABLE . '_groups SET numbers = numbers-1 WHERE group_id=7');
     } catch (PDOException $e) {
+        http_response_code(500);
         trigger_error(print_r($e, true));
     }
     try {
         $db->query('UPDATE ' . NV_MOD_TABLE . '_groups SET numbers = numbers+1 WHERE group_id=4');
     } catch (PDOException $e) {
+        http_response_code(500);
         trigger_error(print_r($e, true));
     }
 

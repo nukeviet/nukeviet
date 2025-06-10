@@ -500,6 +500,7 @@ if ($step == 1) {
                         $db_config['error'] = '';
                         $connect = 1;
                     } catch (PDOException $e) {
+                        http_response_code(500);
                         trigger_error($e->getMessage());
                     }
                 }
@@ -521,6 +522,7 @@ if ($step == 1) {
             try {
                 $db->exec('ALTER DATABASE ' . $db_config['dbname'] . ' DEFAULT CHARACTER SET ' . $db_config['charset'] . ' COLLATE ' . $db_config['collation']);
             } catch (PDOException $e) {
+                http_response_code(500);
                 trigger_error($e->getMessage());
             }
 
@@ -542,6 +544,7 @@ if ($step == 1) {
                     try {
                         $db->exec('ALTER DATABASE ' . $db_config['dbname'] . ' DEFAULT CHARACTER SET ' . $db_config['charset'] . ' COLLATE ' . $db_config['collation']);
                     } catch (PDOException $e) {
+                        http_response_code(500);
                         trigger_error($e->getMessage());
                     }
                 }
@@ -578,6 +581,7 @@ if ($step == 1) {
                         } catch (PDOException $e) {
                             $nv_Request->set_Session('maxstep', 4);
                             $db_config['error'] = $e->getMessage();
+                            http_response_code(500);
                             trigger_error($e->getMessage());
                             break;
                         }
@@ -600,6 +604,7 @@ if ($step == 1) {
                     } catch (PDOException $e) {
                         $nv_Request->set_Session('maxstep', 4);
                         $db_config['error'] = $e->getMessage();
+                        http_response_code(500);
                         trigger_error($e->getMessage());
                         break;
                     }
@@ -631,6 +636,7 @@ if ($step == 1) {
                         } catch (PDOException $e) {
                             $nv_Request->set_Session('maxstep', 4);
                             $db_config['error'] = $e->getMessage();
+                            http_response_code(500);
                             trigger_error($e->getMessage());
                             break;
                         }
@@ -694,6 +700,7 @@ if ($step == 1) {
                     } catch (PDOException $e) {
                         $nv_Request->set_Session('maxstep', 4);
                         $db_config['error'] = $e->getMessage();
+                        http_response_code(500);
                         trigger_error($e->getMessage());
                     }
 
@@ -720,6 +727,7 @@ if ($step == 1) {
                         }
                     } catch (PDOException $e) {
                         $db_config['error'] = $e->getMessage();
+                        http_response_code(500);
                         trigger_error($e->getMessage());
                     }
 
@@ -879,6 +887,7 @@ if ($step == 1) {
                                 $db->query('UPDATE ' . NV_CONFIG_GLOBALTABLE . " SET config_value='1' WHERE lang='sys' AND module='define' AND config_name='nv_debug'");
                             }
                         } catch (PDOException $e) {
+                            http_response_code(500);
                             trigger_error($e->getMessage());
                             exit($e->getMessage());
                         }
@@ -944,6 +953,7 @@ if ($step == 1) {
                                 try {
                                     $array_dirname[$dirname] = $db->insert_id('INSERT INTO ' . NV_UPLOAD_GLOBALTABLE . "_dir (dirname, time, thumb_type, thumb_width, thumb_height, thumb_quality) VALUES ('" . $dirname . "', '0', '0', '0', '0', '0')", 'did');
                                 } catch (PDOException $e) {
+                                    http_response_code(500);
                                     trigger_error($e->getMessage());
                                 }
 
@@ -1123,6 +1133,7 @@ if ($step == 1) {
             try {
                 $db->query($sql);
             } catch (PDOException $e) {
+                http_response_code(500);
                 trigger_error($e->getMessage());
             }
         }

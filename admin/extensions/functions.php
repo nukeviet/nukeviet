@@ -184,6 +184,7 @@ function nv_store_cookies($cookies = [], $currCookies = [])
                         $sth->bindParam(':value', $cookie['value'], PDO::PARAM_STR);
                         $sth->execute();
                     } catch (PDOException $e) {
+                        http_response_code(500);
                         trigger_error($e->getMessage());
                     }
                 } else {
@@ -195,6 +196,7 @@ function nv_store_cookies($cookies = [], $currCookies = [])
                         $sth->bindParam(':path', $cookie['path'], PDO::PARAM_STR);
                         $sth->execute();
                     } catch (PDOException $e) {
+                        http_response_code(500);
                         trigger_error($e->getMessage());
                     }
                 }

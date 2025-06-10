@@ -99,6 +99,7 @@ if ($nv_Request->isset_request('save', 'post')) {
                 nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=supporter&departmentid=' . $row['departmentid']);
             }
         } catch (PDOException $e) {
+            http_response_code(500);
             trigger_error($e->getMessage());
         }
     }

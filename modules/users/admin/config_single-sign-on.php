@@ -58,6 +58,7 @@ if ($nv_Request->isset_request('save', 'post')) {
             $sth->bindParam(':config_value', $config_sso, PDO::PARAM_STR);
             $sth->execute();
         } catch (PDOException $e) {
+            http_response_code(500);
             trigger_error($e->getMessage());
         }
 

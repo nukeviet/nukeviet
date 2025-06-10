@@ -184,6 +184,7 @@ function nv_setup_data_module($lang, $module_name, $sample = 0)
             try {
                 $db->exec('ALTER DATABASE ' . $db_config['dbname'] . ' DEFAULT CHARACTER SET ' . $db_config['charset'] . ' COLLATE ' . $db_config['collation']);
             } catch (PDOException $e) {
+                http_response_code(500);
                 trigger_error($e->getMessage());
             }
 
@@ -194,6 +195,7 @@ function nv_setup_data_module($lang, $module_name, $sample = 0)
                     try {
                         $db->query($sql);
                     } catch (PDOException $e) {
+                        http_response_code(500);
                         trigger_error(print_r($e, true));
 
                         return $return;

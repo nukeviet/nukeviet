@@ -1276,7 +1276,9 @@ class XTemplate
     {
         // JRC: 3/1/2003 Made to append the error messages
         $this->_error .= '* ' . $str . " *\n";
+        http_response_code(500);
         // JRC: 3/1/2003 Removed trigger error, use this externally if you want it eg. trigger_error($xtpl->get_error())
+        http_response_code(500);
         //trigger_error($this->get_error());
     }
 

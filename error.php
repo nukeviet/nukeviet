@@ -44,6 +44,7 @@ if ((($client_info['is_mobile'] and (empty($global_config['current_theme_type'])
         $site_theme = 'default';
         $theme_type = $global_config['current_theme_type'];
     } else {
+        http_response_code(500);
         trigger_error('Error! Does not exist themes default', 256);
     }
 }

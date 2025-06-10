@@ -2604,6 +2604,7 @@ function nv_delete_notification($language, $module, $type, $obid)
             $sth->bindParam(':type', $type, PDO::PARAM_STR);
             $sth->execute();
         } catch (PDOException $e) {
+            http_response_code(500);
             trigger_error(print_r($e, true));
         }
     }
