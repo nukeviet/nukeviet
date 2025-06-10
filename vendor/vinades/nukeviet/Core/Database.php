@@ -74,7 +74,7 @@ class Database extends PDO
         } elseif ($config['dbtype'] == 'sqlite') {
             $dsn = 'sqlite:' . $config['dbname'];
         } else {
-            http_response_code(500); // Internal Server Error - Unsupported database type
+            http_response_code(500);
             trigger_error($config['dbtype'] . ' is not supported', 256);
         }
 
@@ -92,7 +92,7 @@ class Database extends PDO
             }
             $this->connect = 1;
         } catch (PDOException $e) {
-            http_response_code(500); // Internal Server Error - Database connection failed
+            http_response_code(500);
             trigger_error($e->getMessage());
         }
     }
@@ -129,7 +129,7 @@ class Database extends PDO
 
             return $this->lastInsertId();
         } catch (PDOException $e) {
-            http_response_code(500); // Internal Server Error - Database operation failed
+            http_response_code(500);
             trigger_error($e->getMessage());
         }
 
@@ -158,7 +158,7 @@ class Database extends PDO
 
             return $stmt->rowCount();
         } catch (PDOException $e) {
-            http_response_code(500); // Internal Server Error - Database operation failed
+            http_response_code(500);
             trigger_error($e->getMessage());
         }
 
@@ -590,7 +590,7 @@ class Database extends PDO
     public function enableDebug()
     {
         if (!$this->allowedDebug) {
-            http_response_code(500); // Internal Server Error - Configuration issue
+            http_response_code(500);
             trigger_error('Could not enable debugger because DB Persistent is on!', 256);
         }
         $this->debug = true;

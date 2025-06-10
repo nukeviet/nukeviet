@@ -105,7 +105,7 @@ if (file_exists(NV_UPLOADS_REAL_DIR . '/' . $currentpath)) {
                     try {
                         $db->query('INSERT INTO ' . NV_UPLOAD_GLOBALTABLE . "_dir (dirname, time) VALUES ('" . NV_UPLOADS_DIR . '/' . $cp . $p . "', 0)");
                     } catch (PDOException $e) {
-                        http_response_code(500); // Internal Server Error - Database operation failed
+                        http_response_code(500);
                         trigger_error($e->getMessage());
                     }
                 }

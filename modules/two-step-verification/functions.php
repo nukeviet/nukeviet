@@ -46,7 +46,7 @@ function nv_get_user_secretkey()
                     $secretkey = $_secretkey;
                     break;
                 }
-                http_response_code(500); // Internal Server Error - Failed to create secret key
+                http_response_code(500);
                 trigger_error('Error creat user secretkey!!!', 256);
             }
         }

@@ -77,7 +77,7 @@ if ($catid > 0) {
                         try {
                             $db->query('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_cat SET ' . $query_update_cat . ' WHERE catid=' . $_catid);
                         } catch (Exception $e) {
-                            http_response_code(500); // Internal Server Error - Database operation failed
+                            http_response_code(500);
                             trigger_error($e->getMessage());
                         }
                     }
@@ -91,7 +91,7 @@ if ($catid > 0) {
                         try {
                             $db->query('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_rows SET ' . $query_update_row . ' WHERE status<=' . $global_code_defined['row_locked_status'] . ' AND FIND_IN_SET(' . $_catid . ',listcatid)');
                         } catch (Exception $e) {
-                            http_response_code(500); // Internal Server Error - Database operation failed
+                            http_response_code(500);
                             trigger_error($e->getMessage());
                         }
                         // Khóa ở các bảng cat
@@ -99,7 +99,7 @@ if ($catid > 0) {
                             try {
                                 $db->query('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_' . $_catid_i . ' SET ' . $query_update_row . ' WHERE status<=' . $global_code_defined['row_locked_status'] . ' AND FIND_IN_SET(' . $_catid . ',listcatid)');
                             } catch (Exception $e) {
-                                http_response_code(500); // Internal Server Error - Database operation failed
+                                http_response_code(500);
                                 trigger_error($e->getMessage());
                             }
                         }
@@ -116,7 +116,7 @@ if ($catid > 0) {
                                 try {
                                     $db->query('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_rows SET ' . $query_update_row . ' WHERE id=' . $row['id']);
                                 } catch (Exception $e) {
-                                    http_response_code(500); // Internal Server Error - Database operation failed
+                                    http_response_code(500);
                                     trigger_error($e->getMessage());
                                 }
                                 // Mở khóa các bảng cat
@@ -124,7 +124,7 @@ if ($catid > 0) {
                                     try {
                                         $db->query('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_' . $_catid_i . ' SET ' . $query_update_row . ' WHERE id=' . $row['id']);
                                     } catch (Exception $e) {
-                                        http_response_code(500); // Internal Server Error - Database operation failed
+                                        http_response_code(500);
                                         trigger_error($e->getMessage());
                                     }
                                 }

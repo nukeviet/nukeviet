@@ -157,7 +157,7 @@ if (defined('NV_IS_GODADMIN') or ($global_config['idsite'] > 0 and defined('NV_I
             try {
                 $db->exec('ALTER DATABASE ' . $db_config['dbname'] . ' DEFAULT CHARACTER SET ' . $db_config['charset'] . ' COLLATE ' . $db_config['collation']);
             } catch (PDOException $e) {
-                http_response_code(500); // Internal Server Error - Database operation failed
+                http_response_code(500);
                 trigger_error($e->getMessage());
             }
             require_once NV_ROOTDIR . '/includes/action_' . $db->dbtype . '.php';
@@ -329,7 +329,7 @@ if (defined('NV_IS_GODADMIN') or ($global_config['idsite'] > 0 and defined('NV_I
                         try {
                             $db->query($sql);
                         } catch (PDOException $e) {
-                            http_response_code(500); // Internal Server Error - Database operation failed
+                            http_response_code(500);
                             trigger_error($e->getMessage());
                         }
                     }
@@ -347,7 +347,7 @@ if (defined('NV_IS_GODADMIN') or ($global_config['idsite'] > 0 and defined('NV_I
             try {
                 $db->query($sql);
             } catch (PDOException $e) {
-                http_response_code(500); // Internal Server Error - Database operation failed
+                http_response_code(500);
                 trigger_error($e->getMessage());
             }
         }

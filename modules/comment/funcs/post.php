@@ -148,7 +148,7 @@ if (!empty($module_config[$module]['allowattachcomm']) and isset($_FILES['fileat
             try {
                 $db->query('INSERT INTO ' . NV_UPLOAD_GLOBALTABLE . "_dir (dirname, time) VALUES ('" . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $dir . "', 0)");
             } catch (PDOException $e) {
-                http_response_code(500); // Internal Server Error - Database operation failed
+                http_response_code(500);
                 trigger_error($e->getMessage());
             }
         }

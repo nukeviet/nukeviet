@@ -44,7 +44,7 @@ if (empty($db_config['slave'])) {
 
     $db_slave = new NukeViet\Core\Database($db_config_slave);
     if (empty($db_slave->connect)) {
-        http_response_code(500); // Internal Server Error - Database slave connection failed
+        http_response_code(500);
         trigger_error('Sorry! Could not connect to data server slave ' . $db_config_slave['dbhost']);
         $db_slave = $db;
     }

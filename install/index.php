@@ -500,7 +500,7 @@ if ($step == 1) {
                         $db_config['error'] = '';
                         $connect = 1;
                     } catch (PDOException $e) {
-                        http_response_code(500); // Internal Server Error - Database operation failed
+                        http_response_code(500);
                         trigger_error($e->getMessage());
                     }
                 }
@@ -522,7 +522,7 @@ if ($step == 1) {
             try {
                 $db->exec('ALTER DATABASE ' . $db_config['dbname'] . ' DEFAULT CHARACTER SET ' . $db_config['charset'] . ' COLLATE ' . $db_config['collation']);
             } catch (PDOException $e) {
-                http_response_code(500); // Internal Server Error - Database operation failed
+                http_response_code(500);
                 trigger_error($e->getMessage());
             }
 
@@ -544,7 +544,7 @@ if ($step == 1) {
                     try {
                         $db->exec('ALTER DATABASE ' . $db_config['dbname'] . ' DEFAULT CHARACTER SET ' . $db_config['charset'] . ' COLLATE ' . $db_config['collation']);
                     } catch (PDOException $e) {
-                        http_response_code(500); // Internal Server Error - Database operation failed
+                        http_response_code(500);
                         trigger_error($e->getMessage());
                     }
                 }
@@ -581,7 +581,7 @@ if ($step == 1) {
                         } catch (PDOException $e) {
                             $nv_Request->set_Session('maxstep', 4);
                             $db_config['error'] = $e->getMessage();
-                            http_response_code(500); // Internal Server Error - Database operation failed
+                            http_response_code(500);
                             trigger_error($e->getMessage());
                             break;
                         }
@@ -604,7 +604,7 @@ if ($step == 1) {
                     } catch (PDOException $e) {
                         $nv_Request->set_Session('maxstep', 4);
                         $db_config['error'] = $e->getMessage();
-                        http_response_code(500); // Internal Server Error - Database operation failed
+                        http_response_code(500);
                         trigger_error($e->getMessage());
                         break;
                     }
@@ -636,7 +636,7 @@ if ($step == 1) {
                         } catch (PDOException $e) {
                             $nv_Request->set_Session('maxstep', 4);
                             $db_config['error'] = $e->getMessage();
-                            http_response_code(500); // Internal Server Error - Database operation failed
+                            http_response_code(500);
                             trigger_error($e->getMessage());
                             break;
                         }

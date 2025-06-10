@@ -681,7 +681,7 @@ if ($nv_Request->isset_request('dirListRefresh', 'get')) {
         try {
             $array_dirname[$dirname] = $db->insert_id('INSERT INTO ' . NV_UPLOAD_GLOBALTABLE . "_dir (dirname, time, thumb_type, thumb_width, thumb_height, thumb_quality) VALUES ('" . $dirname . "', '0', '0', '0', '0', '0')", 'did');
         } catch (PDOException $e) {
-            http_response_code(500); // Internal Server Error - Database operation failed
+            http_response_code(500);
             trigger_error($e->getMessage());
         }
     }

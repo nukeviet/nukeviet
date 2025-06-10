@@ -113,7 +113,7 @@ if ($nv_Request->get_title('checkss', 'post') == $checkss) {
             try {
                 $db->query('UPDATE ' . NV_GROUPS_GLOBALTABLE . ' SET numbers = numbers-1 WHERE group_id IN (SELECT group_id FROM ' . NV_GROUPS_GLOBALTABLE . '_users WHERE userid=' . $admin_id . ' AND approved = 1)');
             } catch (PDOException $e) {
-                http_response_code(500); // Internal Server Error - Database operation failed
+                http_response_code(500);
                 trigger_error(print_r($e, true));
             }
             $db->query('DELETE FROM ' . NV_GROUPS_GLOBALTABLE . '_users WHERE userid=' . $admin_id);

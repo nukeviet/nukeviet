@@ -14,7 +14,6 @@ if (!defined('NV_MAINFILE')) {
 }
 
 if (headers_sent() or connection_status() != 0 or connection_aborted()) {
-    http_response_code(500); // Internal Server Error - Headers already sent
     trigger_error('Warning: Headers already sent', E_USER_WARNING);
 }
 

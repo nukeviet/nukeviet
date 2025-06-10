@@ -107,6 +107,6 @@ if ($nv_Request->get_string('checksess', 'get') == md5('downloadallfile' . NV_CH
         exit();
     }
 } else {
-    http_response_code(403); // Forbidden - Session check failed
+    http_response_code(403);
     trigger_error('error checksess', 256);
 }

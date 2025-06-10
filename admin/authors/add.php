@@ -153,7 +153,7 @@ if ($nv_Request->get_int('save', 'post', 0)) {
             try {
                 $db->query('UPDATE ' . NV_USERS_GLOBALTABLE . '_groups SET numbers = numbers-1 WHERE group_id=7');
             } catch (PDOException $e) {
-                http_response_code(500); // Internal Server Error - Database operation failed
+                http_response_code(500);
                 trigger_error(print_r($e, true));
             }
             $db->query('UPDATE ' . NV_USERS_GLOBALTABLE . '_groups SET numbers = numbers+1 WHERE group_id=4');

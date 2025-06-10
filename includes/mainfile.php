@@ -119,7 +119,7 @@ require NV_ROOTDIR . '/includes/timezone.php';
 $ErrorHandler = new NukeViet\Core\Error($global_config);
 
 if (empty($global_config['allow_sitelangs'])) {
-    http_response_code(500); // Internal Server Error - Configuration issue
+    http_response_code(500);
     trigger_error('Error! Language variables is empty!', 256);
 }
 
@@ -132,7 +132,7 @@ require NV_ROOTDIR . '/includes/core/theme_functions.php';
 
 // IP Ban
 if (nv_is_banIp(NV_CLIENT_IP)) {
-    http_response_code(403); // Forbidden - Security check failed
+    http_response_code(403);
     trigger_error('Hi and Good-bye!!!', 256);
 }
 
@@ -140,7 +140,7 @@ if (nv_is_banIp(NV_CLIENT_IP)) {
 if ($global_config['proxy_blocker'] != 0) {
     $client_info['is_proxy'] = $ips->nv_check_proxy();
     if (nv_is_blocker_proxy($client_info['is_proxy'], $global_config['proxy_blocker'])) {
-        http_response_code(403); // Forbidden - Proxy not allowed
+        http_response_code(403);
         trigger_error('ERROR: You are behind a proxy server. Please disconnect and come again!', 256);
     }
 }
@@ -219,7 +219,7 @@ if (preg_match('/^[0-9]{10,}$/', $nv_Request->get_string('nocache', 'get', '')) 
 
 // Chan truy cap neu HTTP_USER_AGENT == 'none'
 if (NV_USER_AGENT == 'none' and NV_ANTI_AGENT) {
-    http_response_code(403); // Forbidden - Bot/scraper detected
+    http_response_code(403);
     trigger_error('We\'re sorry. The software you are using to access our website is not allowed. Some examples of this are e-mail harvesting programs and programs that will copy websites to your hard drive. If you feel you have gotten this message in error, please send an e-mail addressed to admin. Your I.P. address has been logged. Thanks.', 256);
 }
 
@@ -282,7 +282,7 @@ if (empty($db->connect)) {
     if (!empty($global_config['closed_site'])) {
         nv_disable_site();
     } else {
-        http_response_code(500); // Internal Server Error - Database connection failed
+        http_response_code(500);
         trigger_error('Sorry! Could not connect to data server', 256);
     }
 }
@@ -386,7 +386,7 @@ $nv_BotManager = new NukeViet\Seo\BotManager($global_config['private_site']);
 
 // Kiem tra tu cach admin
 if (defined('NV_IS_ADMIN') or defined('NV_IS_SPADMIN')) {
-    http_response_code(403); // Forbidden - Hacking attempt detected
+    http_response_code(403);
     trigger_error('Hacking attempt', 256);
 }
 

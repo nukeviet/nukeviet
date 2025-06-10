@@ -57,7 +57,7 @@ if ($nv_Request->isset_request('checkss,idcheck', 'post') and $nv_Request->get_s
             try {
                 $db->query('INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . '_block (bid, id, weight) VALUES (' . $bid . ', ' . $id . ', 0)');
             } catch (PDOException $e) {
-                http_response_code(500); // Internal Server Error - Database operation failed
+                http_response_code(500);
                 trigger_error($e->getMessage());
             }
         }

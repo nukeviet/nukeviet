@@ -142,7 +142,7 @@ if ($catid > 0) {
                                         $db->query('INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . '_' . $catidnews . ' SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE id=' . $row['id']);
                                         $arr_catid_news[] = $catidnews;
                                     } catch (PDOException $e) {
-                                        http_response_code(500); // Internal Server Error - Database operation failed
+                                        http_response_code(500);
                                         trigger_error($e->getMessage());
                                     }
                                 }

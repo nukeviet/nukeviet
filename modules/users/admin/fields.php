@@ -194,7 +194,7 @@ if ($nv_Request->isset_request('save', 'post')) {
     if ($dataform['fid']) {
         $dataform_old = $db->query('SELECT * FROM ' . NV_MOD_TABLE . '_field WHERE fid=' . $dataform['fid'])->fetch();
         if (empty($dataform_old)) {
-            http_response_code(400); // Bad Request - Data validation error
+            http_response_code(400);
             trigger_error('Data error!!!', 256);
         }
         $dataform['field_type'] = $dataform_old['field_type'];
@@ -457,7 +457,7 @@ if ($nv_Request->isset_request('save', 'post')) {
                     try {
                         $save = $db->exec('ALTER TABLE ' . NV_MOD_TABLE . '_info CHANGE ' . $dataform_old['field'] . ' ' . $dataform_old['field'] . ' ' . $type_date . ' COMMENT ' . $db->quote($dataform['title']));
                     } catch (PDOException $e) {
-                        http_response_code(500); // Internal Server Error - Database operation failed
+                        http_response_code(500);
                         trigger_error($e->getMessage());
                     }
                 }
