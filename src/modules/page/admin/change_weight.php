@@ -26,8 +26,8 @@ if (empty($id) or empty($new_weight)) {
 $sth = $db->prepare('SELECT id FROM ' . NV_PREFIXLANG . '_' . $module_data . ' WHERE id= :id');
 $sth->bindParam(':id', $id, PDO::PARAM_INT);
 $sth->execute();
-$row_id = $sth->fetch();
-if (empty($row_id)) {
+$row_data = $sth->fetch();
+if (empty($row_data)) {
     nv_jsonOutput([
         'success' => 0,
         'text' => 'Not exists!'
