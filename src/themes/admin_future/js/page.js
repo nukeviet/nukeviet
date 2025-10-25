@@ -9,16 +9,36 @@
 
 'use strict';
 
+function get_alias(id) {
+    var title = strip_tags(document.getElementById('idtitle').value);
+    if (title != '') {
+        $.post(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=alias&nocache=' + new Date().getTime(), 'title=' + encodeURIComponent(title) + '&id=' + id, function(res) {
+            if (res != "") {
+                document.getElementById('idalias').value = res;
+            } else {
+                document.getElementById('idalias').value = '';
+            }
+        });
+    }
+    return false;
+}
+
 $(function () {
     // Ẩn hiện schema about tuỳ thuộc vào schema type
     $('#schema_type').on('change', function () {
         var schemaType = $(this).val();
         if (schemaType === 'webpage') {
-            $('#schema_about_container').removeClass('d-none');
+            $('[data-toggle="content_schema_about"]').removeClass('d-none');
         } else {
-            $('#schema_about_container').addClass('d-none');
+            $('[data-toggle="content_schema_about"]').addClass('d-none');
         }
     });
+    
+    if ($('#idalias').length && $('#idalias').val() === '') {
+        $('#idtitle').on('change', function() {
+            get_alias(0);
+        });
+    }
 
     // Xóa 1 bài viết
     $('[data-toggle=nv_del_page]').on('click', function (e) {

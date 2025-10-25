@@ -84,7 +84,6 @@ if ($nv_Request->get_int('save', 'post') == '1') {
 
     $_groups_post = $nv_Request->get_array('activecomm', 'post', []);
     $row['activecomm'] = !empty($_groups_post) ? implode(',', nv_groups_post(array_intersect($_groups_post, array_keys($groups_list)))) : '';
-
     $row['schema_type'] = $nv_Request->get_title('schema_type', 'post', '');
     $row['schema_about'] = nv_substr($nv_Request->get_title('schema_about', 'post', ''), 0, 50);
     if (!array_key_exists($row['schema_type'], $schema_types)) {
@@ -159,7 +158,7 @@ if ($nv_Request->get_int('save', 'post') == '1') {
             $sth->bindParam(':bodytext', $row['bodytext'], PDO::PARAM_STR, strlen($row['bodytext']));
             $sth->bindParam(':keywords', $row['keywords'], PDO::PARAM_STR);
             $sth->bindParam(':socialbutton', $row['socialbutton'], PDO::PARAM_INT);
-            $sth->bindParam(':activecomm', $row['activecomm'], PDO::PARAM_INT);
+            $sth->bindParam(':activecomm', $row['activecomm'], PDO::PARAM_STR);
             $sth->bindParam(':layout_func', $row['layout_func'], PDO::PARAM_STR);
             $sth->bindParam(':hot_post', $row['hot_post'], PDO::PARAM_INT);
             $sth->bindParam(':schema_type', $row['schema_type'], PDO::PARAM_STR);
@@ -189,12 +188,15 @@ if ($nv_Request->get_int('save', 'post') == '1') {
         }
     }
 } elseif (empty($id)) {
+    $row['title'] = '';
+    $row['alias'] = '';
     $row['image'] = '';
     $row['imagealt'] = '';
     $row['imageposition'] = 0;
     $row['layout_func'] = '';
     $row['description'] = '';
     $row['bodytext'] = '';
+    $row['keywords'] = '';
     $row['activecomm'] = $module_config[$module_name]['setcomm'];
     $row['socialbutton'] = 1;
     $row['hot_post'] = 0;
@@ -220,72 +222,42 @@ if (!empty($row['image']) and is_file(NV_UPLOADS_REAL_DIR . '/' . $module_upload
 $nv_Lang->setGlobal('title_suggest_max', $nv_Lang->getGlobal('length_suggest_max', 65));
 $nv_Lang->setGlobal('description_suggest_max', $nv_Lang->getGlobal('length_suggest_max', 160));
 
-$xtpl = new XTemplate('content.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-$xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
-$xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
-$xtpl->assign('FORM_ACTION', $action);
-$xtpl->assign('UPLOADS_DIR_USER', NV_UPLOADS_DIR . '/' . $module_upload);
-$xtpl->assign('DATA', $row);
-$xtpl->assign('BODYTEXT', $row['bodytext']);
-$xtpl->assign('SOCIALBUTTON', ($row['socialbutton']) ? ' checked="checked"' : '');
-$xtpl->assign('HOST_POST', ($row['hot_post']) ? ' checked="checked"' : '');
-$xtpl->assign('ISCOPY', $copy);
-
-foreach ($layout_array as $value) {
-    $value = preg_replace($global_config['check_op_layout'], '\\1', $value);
-    $xtpl->assign('LAYOUT_FUNC', [
-        'key' => $value,
-        'selected' => ($row['layout_func'] == $value) ? ' selected="selected"' : ''
-    ]);
-    $xtpl->parse('main.layout_func');
-}
-
+// Xử lý activecomm_array trước khi assign DATA
 $activecomm = array_map('intval', explode(',', $row['activecomm']));
-foreach ($groups_list as $_group_id => $_title) {
-    $xtpl->assign('ACTIVECOMM', [
-        'value' => $_group_id,
-        'checked' => in_array((int) $_group_id, $activecomm, true) ? ' checked="checked"' : '',
-        'title' => $_title
-    ]);
-    $xtpl->parse('main.activecomm');
-}
+$row['activecomm_array'] = $activecomm;
 
-if (empty($row['alias'])) {
-    $xtpl->parse('main.get_alias');
-}
+$tpl = new \NukeViet\Template\NVSmarty();
+$tpl->setTemplateDir(get_module_tpl_dir('content.tpl'));
+$tpl->assign('LANG', $nv_Lang);
+$tpl->assign('FORM_ACTION', $action);
+$tpl->assign('UPLOADS_DIR_USER', NV_UPLOADS_DIR . '/' . $module_upload);
+$tpl->assign('DATA', $row);
+$tpl->assign('BODYTEXT', $row['bodytext']);
+$tpl->assign('ISCOPY', $copy);
+$tpl->assign('ERROR', $error);
 
-// position images
+// Sử dụng layout
+$layout_array_processed = [];
+foreach ($layout_array as $value) {
+    $layout_array_processed[] = preg_replace($global_config['check_op_layout'], '\\1', $value);
+}
+$tpl->assign('LAYOUT_ARRAY', $layout_array_processed);
+
+// Cho phép thảo luận
+$tpl->assign('ACTIVECOMM_LIST', $groups_list);
+
+// Vị trí ảnh minh họa:
 $array_imgposition = [
     0 => $nv_Lang->getModule('imgposition_0'),
     1 => $nv_Lang->getModule('imgposition_1'),
     2 => $nv_Lang->getModule('imgposition_2')
 ];
-foreach ($array_imgposition as $id_imgposition => $title_imgposition) {
-    $sl = ($id_imgposition == $row['imageposition']) ? ' selected="selected"' : '';
-    $xtpl->assign('id_imgposition', $id_imgposition);
-    $xtpl->assign('title_imgposition', $title_imgposition);
-    $xtpl->assign('posl', $sl);
-    $xtpl->parse('main.looppos');
-}
+$tpl->assign('ARRAY_IMGPOSITION', $array_imgposition);
 
 // Xuất loại dữ liệu có cấu trúc
-foreach ($schema_types as $key => $value) {
-    $xtpl->assign('SCHEMA_TYPE', [
-        'key' => $key,
-        'title' => $value,
-        'selected' => ($row['schema_type'] == $key) ? ' selected' : ''
-    ]);
-    $xtpl->parse('main.schema_type');
-}
-$xtpl->assign('SCHEMA_ABOUT', $row['schema_type'] == 'webpage' ? '' : ' hidden');
+$tpl->assign('SCHEMA_TYPES', $schema_types);
 
-if ($error) {
-    $xtpl->assign('ERROR', $error);
-    $xtpl->parse('main.error');
-}
-
-$xtpl->parse('main');
-$contents = $xtpl->text('main');
+$contents = $tpl->fetch('content.tpl');
 
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_admin_theme($contents);
