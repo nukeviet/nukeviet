@@ -914,6 +914,8 @@ $lang_module['note_webview1'] = 'Bạn đang mở trang này trong cửa sổ We
 $lang_module['note_webview2'] = 'Bạn đang mở trang này trong cửa sổ WebView. Tính năng đăng nhập bằng khóa truy cập có thể không hoạt động đúng. Nếu bạn muốn sử dụng chúng thay vì đăng nhập bằng mật khẩu, vui lòng mở trang này trong trình duyệt để tiếp tục.';
 $lang_module['note_webview3'] = 'Bạn đang mở trang này trong cửa sổ WebView. Tính năng đăng nhập qua bên thứ ba bên dưới có thể không hoạt động đúng. Nếu bạn muốn sử dụng chúng thay vì đăng nhập bằng mật khẩu, vui lòng mở trang này trong trình duyệt để tiếp tục.';
 
+$lang_module['datadeletion'] = 'Xóa dữ liệu cá nhân';
+
 $lang_module['merge_field_active_deadline'] = 'Hạn hiệu lực kích hoạt';
 $lang_module['merge_field_link'] = 'Liên kết';
 $lang_module['mf_send_newvalue'] = 'Gửi giá trị mới qua mail';

@@ -914,6 +914,8 @@ $lang_module['note_webview1'] = 'You are opening this page in a WebView window. 
 $lang_module['note_webview2'] = 'You are opening this page in a WebView window. The login feature using passkey may not work properly. If you want to use it instead of password login, please open this page in a browser to continue.';
 $lang_module['note_webview3'] = 'You are opening this page in a WebView window. The third-party login feature below may not work properly. If you want to use it instead of password login, please open this page in a browser to continue.';
 
+$lang_module['datadeletion'] = 'Personal data deletion';
+
 $lang_module['merge_field_active_deadline'] = 'Expired time for active';
 $lang_module['merge_field_link'] = 'Link';
 $lang_module['mf_send_newvalue'] = 'Send new value via email';

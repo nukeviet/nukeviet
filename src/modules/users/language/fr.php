@@ -914,6 +914,8 @@ $lang_module['note_webview1'] = 'Vous ouvrez cette page dans une fenêtre WebVie
 $lang_module['note_webview2'] = 'Vous ouvrez cette page dans une fenêtre WebView. La connexion avec une clé d\'accès peut ne pas fonctionner correctement. Si vous souhaitez utiliser cette méthode au lieu du mot de passe, veuillez ouvrir cette page dans un navigateur pour continuer.';
 $lang_module['note_webview3'] = 'Vous ouvrez cette page dans une fenêtre WebView. La connexion via un tiers ci-dessous peut ne pas fonctionner correctement. Si vous souhaitez utiliser cette méthode au lieu du mot de passe, veuillez ouvrir cette page dans un navigateur pour continuer.';
 
+$lang_module['datadeletion'] = 'Suppression des données personnelles';
+
 $lang_module['merge_field_active_deadline'] = 'Temps écoulé pour actif';
 $lang_module['merge_field_link'] = 'Lien';
 $lang_module['mf_send_newvalue'] = 'Envoyer une nouvelle valeur par e-mail';

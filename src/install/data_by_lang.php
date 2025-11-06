@@ -129,6 +129,7 @@ $installMods['users'] = [
     'sitemap' => 1,
     'funcs' => [
         'main' => [
+            'func_custom_name' => $install_lang['modfuncs']['users']['main'],
             'show_func' => 1,
             'theme_default' => 'left-main',
             'theme_mobile' => 'main'
@@ -194,6 +195,7 @@ $installMods['users'] = [
             'theme_mobile' => 'main'
         ],
         'avatar' => [
+            'func_custom_name' => $install_lang['modfuncs']['users']['avatar'],
             'show_func' => 1,
             'theme_default' => 'left-main'
         ],
@@ -204,7 +206,14 @@ $installMods['users'] = [
             'theme_default' => 'left-main',
             'theme_mobile' => 'main'
         ],
-        'oauth' => []
+        'oauth' => [],
+        'datadeletion' => [
+            'func_custom_name' => $install_lang['modfuncs']['users']['datadeletion'],
+            'show_func' => 1,
+            'in_submenu' => 0,
+            'theme_default' => 'left-main',
+            'theme_mobile' => 'main'
+        ]
     ],
     'icon' => 'fa-solid fa-users'
 ];

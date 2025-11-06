@@ -60,6 +60,9 @@ $install_lang['modfuncs']['users']['editinfo'] = 'Edit User Info';
 $install_lang['modfuncs']['users']['memberlist'] = 'Liste des membres';
 $install_lang['modfuncs']['users']['logout'] = 'Logout';
 $install_lang['modfuncs']['users']['groups'] = 'Groups';
+$install_lang['modfuncs']['users']['datadeletion'] = 'Supprimer les données personnelles';
+$install_lang['modfuncs']['users']['main'] = 'Page d\'accueil du compte';
+$install_lang['modfuncs']['users']['avatar'] = 'Changer l\'avatar';
 
 $install_lang['modfuncs']['statistics'] = [];
 $install_lang['modfuncs']['statistics']['allreferers'] = 'Par Site';

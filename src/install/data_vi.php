@@ -60,6 +60,9 @@ $install_lang['modfuncs']['users']['editinfo'] = 'Thiết lập tài khoản';
 $install_lang['modfuncs']['users']['memberlist'] = 'Danh sách người dùng';
 $install_lang['modfuncs']['users']['logout'] = 'Thoát';
 $install_lang['modfuncs']['users']['groups'] = 'Quản lý nhóm';
+$install_lang['modfuncs']['users']['datadeletion'] = 'Xóa dữ liệu cá nhân';
+$install_lang['modfuncs']['users']['main'] = 'Trang chủ tài khoản';
+$install_lang['modfuncs']['users']['avatar'] = 'Đổi ảnh đại diện';
 
 $install_lang['modfuncs']['statistics'] = [];
 $install_lang['modfuncs']['statistics']['allreferers'] = 'Theo đường dẫn đến site';
