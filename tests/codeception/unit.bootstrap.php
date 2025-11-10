@@ -22,7 +22,9 @@ $_SERVER['SERVER_SOFTWARE'] = 'Apache';
 require NV_ROOTDIR . '/includes/vendor/autoload.php';
 
 define('NV_ADMIN', true);
-define('NV_MAINFILE', true);
+if (!defined('NV_MAINFILE')) {
+    define('NV_MAINFILE', true);
+}
 define('NV_SITE_TIMEZONE_GMT_NAME', preg_replace('/^([\+|\-]{1}\d{2})(\d{2})$/', '$1:$2', date('O')));
 
 global $db, $db_slave, $global_config, $meta_property, $nv_parse_ini_timezone, $language_array, $nv_plugins, $db_config;

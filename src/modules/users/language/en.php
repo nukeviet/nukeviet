@@ -915,6 +915,12 @@ $lang_module['note_webview2'] = 'You are opening this page in a WebView window. 
 $lang_module['note_webview3'] = 'You are opening this page in a WebView window. The third-party login feature below may not work properly. If you want to use it instead of password login, please open this page in a browser to continue.';
 
 $lang_module['datadeletion'] = 'Personal data deletion';
+$lang_module['datadeletion_title'] = 'Data deletion request';
+$lang_module['datadeletion_text'] = 'Your request to delete personal data has been received and processed successfully';
+$lang_module['datadeletion_id'] = 'Request ID';
+$lang_module['datadeletion_success'] = 'Processed';
+$lang_module['hold_deleted_username'] = 'Refuse to re-register deleted usernames';
+$lang_module['hold_deleted_username_note'] = 'After users request personal data deletion, their usernames will be held and cannot be re-registered for this period of time, measured in days from 1-999. Enter 0 to allow immediate re-registration, enter 1000 to permanently prevent re-registration';
 
 $lang_module['merge_field_active_deadline'] = 'Expired time for active';
 $lang_module['merge_field_link'] = 'Link';

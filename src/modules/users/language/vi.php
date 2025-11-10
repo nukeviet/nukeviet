@@ -915,6 +915,12 @@ $lang_module['note_webview2'] = 'Bạn đang mở trang này trong cửa sổ We
 $lang_module['note_webview3'] = 'Bạn đang mở trang này trong cửa sổ WebView. Tính năng đăng nhập qua bên thứ ba bên dưới có thể không hoạt động đúng. Nếu bạn muốn sử dụng chúng thay vì đăng nhập bằng mật khẩu, vui lòng mở trang này trong trình duyệt để tiếp tục.';
 
 $lang_module['datadeletion'] = 'Xóa dữ liệu cá nhân';
+$lang_module['datadeletion_title'] = 'Yêu cầu xóa dữ liệu cá nhân';
+$lang_module['datadeletion_text'] = 'Yêu cầu của bạn để xóa dữ liệu cá nhân đã được tiếp nhận và xử lý thành công';
+$lang_module['datadeletion_id'] = 'Mã yêu cầu';
+$lang_module['datadeletion_success'] = 'Đã xử lý';
+$lang_module['hold_deleted_username'] = 'Từ chối đăng ký lại tên tài khoản đã xóa';
+$lang_module['hold_deleted_username_note'] = 'Sau khi người dùng yêu cầu xóa dữ liệu cá nhân, tên đăng nhập của họ sẽ được giữ lại và không thể đăng ký lại trong khoảng thời gian này, đơn vị là số ngày từ 1-999. Nhập 0 nếu muốn cho đăng ký lại ngay lập tức, nhập 1000 nếu không cho đăng ký lại vĩnh viễn';
 
 $lang_module['merge_field_active_deadline'] = 'Hạn hiệu lực kích hoạt';
 $lang_module['merge_field_link'] = 'Liên kết';

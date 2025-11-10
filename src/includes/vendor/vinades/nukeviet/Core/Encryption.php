@@ -61,11 +61,11 @@ class Encryption
             return $digest;
         }
 
-        $mhast = constant('MHASH_SHA1');
-        $salt = substr(sha1(microtime() . $this->_key), 0, 8);
-        $salt = mhash_keygen_s2k($mhast, $digest, substr(pack('h*', md5($salt)), 0, 8), 4);
-
-        return strtr(base64_encode(mhash($mhast, $digest . $salt) . $salt), '+/=', '-_,');
+        $salt = substr(sha1(microtime(true) . $this->_key . random_bytes(8)), 0, 8);
+        $derivedSalt = hash_pbkdf2('sha1', $digest, $salt, 4, 8, true);
+        $finalHash = hash('sha1', $digest . $derivedSalt, true);
+        $encoded = strtr(base64_encode($finalHash . $derivedSalt), '+/=', '-_,');
+        return $encoded;
     }
 
     /**

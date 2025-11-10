@@ -502,6 +502,13 @@
                             </div>
                         </div>
                     </div>
+                    <div class="row mb-3">
+                        <label for="element_hold_deleted_username" class="col-sm-3 col-xxl-4 col-form-label text-sm-end">{$LANG->getModule('hold_deleted_username')}</label>
+                        <div class="col-sm-8 col-lg-6 col-xxl-8">
+                            <input class="form-control w-auto mw-100" type="number" id="element_hold_deleted_username" name="hold_deleted_username" value="{$DATA.hold_deleted_username}" min="0" max="1000">
+                            <div class="form-text">{$LANG->getModule('hold_deleted_username_note')}</div>
+                        </div>
+                    </div>
                     <div class="row">
                         <div class="col-sm-8 offset-sm-3 offset-xxl-4">
                             <button type="submit" class="btn btn-primary">{$LANG->getGlobal('save')}</button>

@@ -2059,3 +2059,27 @@ function user_confirm_pass()
     $xtpl->parse('main');
     return $xtpl->text('main');
 }
+
+/**
+ * Giao diện xóa dữ liệu người dùng
+ *
+ * @param array $data
+ * @return string
+ */
+function user_data_deletion(array $data): string
+{
+    global $nv_Lang;
+
+    $xtpl = new XTemplate('data_deletion.tpl', get_module_tpl_dir('data_deletion.tpl'));
+    $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
+    $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
+
+    !isset($data['status_class']) && $data['status_class'] = 'success';
+    !isset($data['status_icon']) && $data['status_icon'] = 'check';
+    !isset($data['status_text']) && $data['status_text'] = $nv_Lang->getModule('datadeletion_success');
+
+    $xtpl->assign('DATA', $data);
+
+    $xtpl->parse('main');
+    return $xtpl->text('main');
+}
