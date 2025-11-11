@@ -60,6 +60,7 @@ class NewsAutoTagsCest
         //$I->checkOption('[name="catids[]"][value="1"]');
         $I->click('label[for="catid_1"]');
 
+        $I->wait(1);
         $I->executeJS("window.nveditor.news_bodyhtml.setData('" . $content . "');");
 
         //$I->click('[name="status1"]');
