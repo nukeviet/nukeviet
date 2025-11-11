@@ -451,6 +451,7 @@ $global_config['array_user_allowed_theme'] = empty($global_config['user_allowed_
 
 define('NV_MAIN_DOMAIN', (!empty($global_config['site_domain']) and in_array($global_config['site_domain'], $global_config['my_domains'], true)) ? str_replace(NV_SERVER_NAME, $global_config['site_domain'], NV_MY_DOMAIN) : NV_MY_DOMAIN);
 
+!empty($global_config['smtp_password']) && $global_config['smtp_password'] = $crypt->decrypt($global_config['smtp_password']);
 if ($sys_info['ini_set_support']) {
     ini_set('sendmail_from', $global_config['site_email']);
 }
