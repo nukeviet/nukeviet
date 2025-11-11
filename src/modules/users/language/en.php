@@ -921,6 +921,11 @@ $lang_module['datadeletion_id'] = 'Request ID';
 $lang_module['datadeletion_success'] = 'Processed';
 $lang_module['hold_deleted_username'] = 'Refuse to re-register deleted usernames';
 $lang_module['hold_deleted_username_note'] = 'After users request personal data deletion, their usernames will be held and cannot be re-registered for this period of time, measured in days from 1-999. Enter 0 to allow immediate re-registration, enter 1000 to permanently prevent re-registration';
+$lang_module['redirecturi_helper_title'] = 'App URL Configuration';
+$lang_module['redirecturi_helper_text'] = 'Copy the URLs below to paste into your app control panel on the corresponding service providers';
+$lang_module['redirecturi_helper_fb1'] = 'Redirect URI for Facebook App';
+$lang_module['redirecturi_helper_fb2'] = 'User data deletion callback URL for Facebook';
+$lang_module['redirecturi_helper_gg'] = 'Redirect URI for Google Oauth Client ID';
 
 $lang_module['merge_field_active_deadline'] = 'Expired time for active';
 $lang_module['merge_field_link'] = 'Link';

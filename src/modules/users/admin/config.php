@@ -379,6 +379,38 @@ foreach ($openid_files as $server) {
 }
 $tpl->assign('OPENID_SERVERS', $openid_servers);
 
+$facebook_redirecturi = [];
+foreach ($global_config['setup_langs'] as $lang) {
+    $facebook_redirecturi[] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . $lang . '&amp;' . NV_NAME_VARIABLE . '=users&amp;' . NV_OP_VARIABLE . '=oauth&amp;server=facebook';
+    $facebook_redirecturi[] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . $lang . '&amp;' . NV_NAME_VARIABLE . '=authors&amp;' . NV_OP_VARIABLE . '=2step&amp;auth=facebook';
+}
+$facebook_redirecturi[] = NV_BASE_ADMINURL . 'index.php?auth=facebook';
+foreach ($facebook_redirecturi as $key => $value) {
+    $facebook_redirecturi[$key] = urlRewriteWithDomain($value, NV_MY_DOMAIN);
+}
+
+$google_redirecturi = [];
+foreach ($global_config['setup_langs'] as $lang) {
+    $google_redirecturi[] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . $lang . '&amp;' . NV_NAME_VARIABLE . '=users&amp;' . NV_OP_VARIABLE . '=oauth&amp;server=google';
+    $google_redirecturi[] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . $lang . '&amp;' . NV_NAME_VARIABLE . '=authors&amp;' . NV_OP_VARIABLE . '=2step&amp;auth=google';
+}
+$google_redirecturi[] = NV_BASE_ADMINURL . 'index.php?auth=google';
+foreach ($google_redirecturi as $key => $value) {
+    $google_redirecturi[$key] = urlRewriteWithDomain($value, NV_MY_DOMAIN);
+}
+
+$facebook_datadeletionurl = [];
+foreach ($global_config['setup_langs'] as $lang) {
+    $facebook_datadeletionurl[] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . $lang . '&amp;' . NV_NAME_VARIABLE . '=users&amp;' . NV_OP_VARIABLE . '=' . $module_info['alias']['datadeletion'] . '/facebook';
+}
+foreach ($facebook_datadeletionurl as $key => $value) {
+    $facebook_datadeletionurl[$key] = urlRewriteWithDomain($value, NV_MY_DOMAIN);
+}
+
+$tpl->assign('FACEBOOK_REDIRECTURI', $facebook_redirecturi);
+$tpl->assign('FACEBOOK_DATADELETIONURL', $facebook_datadeletionurl);
+$tpl->assign('GOOGLE_REDIRECTURI', $google_redirecturi);
+
 $contents = $tpl->fetch('config.tpl');
 
 include NV_ROOTDIR . '/includes/header.php';

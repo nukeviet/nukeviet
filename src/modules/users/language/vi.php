@@ -921,6 +921,11 @@ $lang_module['datadeletion_id'] = 'Mã yêu cầu';
 $lang_module['datadeletion_success'] = 'Đã xử lý';
 $lang_module['hold_deleted_username'] = 'Từ chối đăng ký lại tên tài khoản đã xóa';
 $lang_module['hold_deleted_username_note'] = 'Sau khi người dùng yêu cầu xóa dữ liệu cá nhân, tên đăng nhập của họ sẽ được giữ lại và không thể đăng ký lại trong khoảng thời gian này, đơn vị là số ngày từ 1-999. Nhập 0 nếu muốn cho đăng ký lại ngay lập tức, nhập 1000 nếu không cho đăng ký lại vĩnh viễn';
+$lang_module['redirecturi_helper_title'] = 'Cấu hình URL ứng dụng';
+$lang_module['redirecturi_helper_text'] = 'Sao chép các URL bên dưới để dán vào bảng điều khiển ứng dụng của bạn trên các nhà cung cấp dịch vụ tương ứng';
+$lang_module['redirecturi_helper_fb1'] = 'URI chuyển hướng cho Facebook App';
+$lang_module['redirecturi_helper_fb2'] = 'URL gọi lại xóa dữ liệu người dùng cho Facebook';
+$lang_module['redirecturi_helper_gg'] = 'URI chuyển hướng cho Google Oauth Client ID';
 
 $lang_module['merge_field_active_deadline'] = 'Hạn hiệu lực kích hoạt';
 $lang_module['merge_field_link'] = 'Liên kết';

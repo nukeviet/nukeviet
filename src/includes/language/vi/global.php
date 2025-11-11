@@ -416,6 +416,7 @@ $lang_global['copied'] = 'Đã lưu!';
 $lang_global['complete'] = 'Hoàn tất';
 $lang_global['continue'] = 'Tiếp tục';
 $lang_global['verify'] = 'Xác minh';
+$lang_global['copy'] = 'Sao chép';
 $lang_global['greeting_for_user'] = 'Xin chào %1$s (tên đăng nhập: %2$s),';
 $lang_global['greeting_for_guest'] = 'Xin chào %s,';
 $lang_global['greeting_title'] = 'Ông/Bà %s';

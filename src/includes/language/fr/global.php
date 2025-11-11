@@ -416,6 +416,7 @@ $lang_global['copied'] = 'Copié!';
 $lang_global['complete'] = 'Terminé';
 $lang_global['continue'] = 'Continuer';
 $lang_global['verify'] = 'Vérifier';
+$lang_global['copy'] = 'Copier';
 $lang_global['greeting_for_user'] = '%1$s (Nom d\'utilisateur: %2$s),';
 $lang_global['greeting_for_guest'] = '%s,';
 $lang_global['greeting_title'] = 'Madame/Monsieur %s';
