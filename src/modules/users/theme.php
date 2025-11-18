@@ -918,7 +918,7 @@ function user_info($data, $array_field_config, $custom_fields, $types, $data_que
         'group' => 'group',
         'others' => 'edit_others',
         'safemode' => 'safe_mode',
-        'forcedrelogin' => 'forcedrelogin'
+        'securityprivacy' => 'security_privacy'
     ];
     $item_active['title'] = isset($titles[$data['type']]) ? $nv_Lang->getModule($titles[$data['type']]) : $nv_Lang->getModule('edit_basic');
     $xtpl->assign('ITEM_ACTIVE', $item_active);
@@ -1366,10 +1366,10 @@ function user_info($data, $array_field_config, $custom_fields, $types, $data_que
         $xtpl->parse('main.tab_edit_safemode');
     }
 
-    // Tab buộc đăng nhập lại
-    if (in_array('forcedrelogin', $types, true)) {
-        $xtpl->parse('main.edit_forcedrelogin');
-        $xtpl->parse('main.tab_edit_forcedrelogin');
+    // Tab bảo mật và quyền riêng tư
+    if (in_array('securityprivacy', $types, true)) {
+        $xtpl->assign('URL_SECURITY_PRIVACY', nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=security-privacy', true));
+        $xtpl->parse('main.securityprivacy');
     }
 
     // Xuất menu cuối form
@@ -2096,6 +2096,23 @@ function user_data_deletion(array $data): string
     !isset($data['status_text']) && $data['status_text'] = $nv_Lang->getModule('datadeletion_success');
 
     $xtpl->assign('DATA', $data);
+
+    $xtpl->parse('main');
+    return $xtpl->text('main');
+}
+
+function user_security_privacy(): string
+{
+    global $nv_Lang, $user_info, $client_info;
+
+    $xtpl = new XTemplate('security_privacy.tpl', get_module_tpl_dir('security_privacy.tpl'));
+    $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
+    $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
+
+    echo '<pre><code>';
+    echo htmlspecialchars(print_r($user_info, true));
+    echo htmlspecialchars(print_r($client_info, true));
+    die('</code></pre>');
 
     $xtpl->parse('main');
     return $xtpl->text('main');

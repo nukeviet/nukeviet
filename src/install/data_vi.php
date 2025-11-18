@@ -63,6 +63,7 @@ $install_lang['modfuncs']['users']['groups'] = 'Quản lý nhóm';
 $install_lang['modfuncs']['users']['datadeletion'] = 'Xóa dữ liệu cá nhân';
 $install_lang['modfuncs']['users']['main'] = 'Trang chủ tài khoản';
 $install_lang['modfuncs']['users']['avatar'] = 'Đổi ảnh đại diện';
+$install_lang['modfuncs']['users']['security-privacy'] = 'Bảo mật và Quyền riêng tư';
 
 $install_lang['modfuncs']['statistics'] = [];
 $install_lang['modfuncs']['statistics']['allreferers'] = 'Theo đường dẫn đến site';

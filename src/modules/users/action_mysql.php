@@ -327,6 +327,7 @@ $sql_create_module[] = 'CREATE TABLE IF NOT EXISTS ' . $db_config['prefix'] . '_
 ) ENGINE=MyISAM";
 
 $sql_create_module[] = 'CREATE TABLE IF NOT EXISTS ' . $db_config['prefix'] . '_' . $module_data . "_login (
+    id int(11) UNSIGNED NOT NULL AUTO_INCREMENT FIRST,
     userid mediumint(8) unsigned NOT NULL,
     clid char(32) NOT NULL,
     logtime int(11) unsigned NOT NULL,

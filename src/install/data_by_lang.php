@@ -213,6 +213,13 @@ $installMods['users'] = [
             'in_submenu' => 0,
             'theme_default' => 'left-main',
             'theme_mobile' => 'main'
+        ],
+        'security-privacy' => [
+            'func_custom_name' => $install_lang['modfuncs']['users']['security-privacy'],
+            'show_func' => 1,
+            'in_submenu' => 0,
+            'theme_default' => 'left-main',
+            'theme_mobile' => 'main'
         ]
     ],
     'icon' => 'fa-solid fa-users'

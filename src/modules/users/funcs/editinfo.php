@@ -549,9 +549,9 @@ if ($is_custom_field) {
     $types[] = 'others';
 }
 
-// Buộc thoát ở mọi nơi
-if (!empty($global_config['allowuserloginmulti'])) {
-    $types[] = 'forcedrelogin';
+// Bảo mật và quyền riêng tư
+if (!defined('ACCESS_EDITUS')) {
+    $types[] = 'securityprivacy';
 }
 
 // Trường hợp trưởng nhóm truy cập sửa thông tin member
@@ -1471,6 +1471,7 @@ if ($checkss == $array_data['checkss'] and $array_data['type'] == 'basic') {
         'mess' => $nv_Lang->getModule('safe_activate_ok')
     ]);
 } elseif ($checkss == $array_data['checkss'] and $array_data['type'] == 'forcedrelogin') {
+    // FIXME
     $nv_password = $nv_Request->get_title('nv_password', 'post', '');
     if (empty($nv_password) or !$crypt->validate_password($nv_password, $row['password'])) {
         nv_jsonOutput([

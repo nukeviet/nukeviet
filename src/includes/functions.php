@@ -2990,7 +2990,8 @@ function nv_site_mods($lang = '')
                     'logout',
                     'editinfo',
                     'avatar',
-                    'groups'
+                    'groups',
+                    'security-privacy'
                 ];
             } else {
                 $user_ops = [

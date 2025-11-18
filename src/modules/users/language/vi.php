@@ -929,6 +929,8 @@ $lang_module['redirecturi_helper_gg'] = 'URI chuyển hướng cho Google Oauth 
 $lang_module['account_waiting_activation'] = 'Tài khoản của bạn đang chờ kích hoạt, vui lòng kiểm tra email trong hộp thư đến (cả hộp thư rác) và kích hoạt tài khoản. Nếu bạn vẫn không tìm thấy email, hãy click vào đây để nhận lại email kích hoạt.';
 $lang_module['account_waiting_oldpass'] = 'Sử dụng mật khẩu trước đó đã đăng ký';
 $lang_module['lostactivelink_send_timeout'] = 'Bạn đã gửi yêu cầu lấy lại liên kết lúc %s. Vui lòng kiểm tra lại email hoặc thử lại sau thời điểm %s. Nếu không thấy thư, hãy kiểm tra trong mục Thư rác (Spam)';
+$lang_module['security_privacy'] = 'Bảo mật và Quyền riêng tư';
+$lang_module['security_privacy_des'] = 'Quản lý các phiên đăng nhập, tăng cường bảo mật tài khoản và quản lý quyền riêng tư';
 
 $lang_module['merge_field_active_deadline'] = 'Hạn hiệu lực kích hoạt';
 $lang_module['merge_field_link'] = 'Liên kết';

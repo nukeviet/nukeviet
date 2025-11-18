@@ -13,7 +13,6 @@ if (!defined('NV_IS_MOD_USER')) {
     exit('Stop!!!');
 }
 
-$nv_BotManager->setPrivate();
 $page_title = $nv_Lang->getModule('datadeletion');
 $description = $keywords = 'no';
 

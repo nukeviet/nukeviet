@@ -9,6 +9,7 @@
 
 :root {
     --nv-border-color: #dddddd;
+    --nv-border-color-light: rgb(229, 231, 235);
     --nv-image-style-spacing: 20px;
     --nv-inline-image-style-spacing: calc(var(--nv-image-style-spacing) / 2);
     --nv-highlight-marker-blue: hsl(201, 97%, 72%);
@@ -25,6 +26,7 @@
     --nv-primary: #337ab7;
     --nv-success: #5cb85c;
     --nv-white: #fff;
+    --nv-gray-light: rgba(249, 250, 251, 0.5);
     --cr-danger: #d9534f;
     --cr-input-border-radius: 4px;
     --cr-input-focus-border-color: #66afe9;
@@ -379,6 +381,10 @@
     background-color: #eee;
 }
 
+.bg-gray-light {
+    background-color: var(--nv-gray-light);
+}
+
 ul.list-items {
     padding-left: 0;
 }
@@ -528,6 +534,24 @@ ol {
 .box-shadow {
     box-shadow: 0 0 4px rgba(0, 0, 0, 0.15);
     -webkit-box-shadow: 0 0 4px rgba(0, 0, 0, 0.15);
+}
+
+.box-shadow-lg {
+    box-shadow: 0 0 #0000, 0 0 #0000, 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+}
+
+.border-box {
+    border: 1px solid var(--nv-border-color-light);
+    border-radius: 7px;
+    padding: 15px;
+}
+
+.border-box.primary {
+    border-color: var(--nv-primary);
+}
+
+.border-box.hover:hover {
+    background-color: var(--nv-gray-light);
 }
 
 .fix-box {
@@ -1133,6 +1157,14 @@ a.black {
 
 a.black:hover {
     color: #0e2132;
+}
+
+a.danger {
+    color: var(--cr-danger);
+}
+
+a.danger:hover {
+    opacity: 0.8;
 }
 
 h1,
@@ -2926,4 +2958,10 @@ button.close {
     height: 40px;
     border: 0;
     font-size: 24px;
+}
+
+.sm-container-box {
+    padding: 20px;
+    width: 98%;
+    max-width: 780px;
 }
