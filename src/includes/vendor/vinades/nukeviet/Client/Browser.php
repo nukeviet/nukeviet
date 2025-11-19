@@ -7,7 +7,7 @@
  * @version 1.9.6
  *
  * Copyright 2019 Chris Schuld
- * 
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a
  * copy of this software and associated documentation files (the "Software"),
  * to deal in the Software without restriction, including without
@@ -15,13 +15,13 @@
  * sublicense, and/or sell copies of the Software, and to permit persons to
  * whom the Software is furnished to do so, subject to the following
  * conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included
  * in all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
  * OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
- * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. 
+ * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
  * IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
  * CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
  * TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
@@ -55,6 +55,8 @@ class Browser
     private $_version = '';
 
     private $_platform = '';
+
+    private $_platform_family = '';
 
     private $_os = '';
 
@@ -440,6 +442,8 @@ class Browser
 
     const PLATFORM_WINDOWS = 'win';
 
+    const PLATFORM_WINDOWS_11 = 'win11';
+
     const PLATFORM_WINDOWS_10 = 'win10';
 
     const PLATFORM_WINDOWS_8 = 'win8';
@@ -535,6 +539,7 @@ class Browser
         $this->_browser_key = self::BROWSER_UNKNOWN;
         $this->_version = self::VERSION_UNKNOWN;
         $this->_platform = self::PLATFORM_UNKNOWN;
+        $this->_platform_family = self::PLATFORM_UNKNOWN;
         $this->_os = self::OPERATING_SYSTEM_UNKNOWN;
         $this->_is_aol = false;
         $this->_is_mobile = false;
@@ -600,7 +605,8 @@ class Browser
         $names = [
             'unknown' => 'Unknown',
             'win' => 'Windows',
-            'win10' => 'Windows 10',
+            'win10' => 'Windows 10/11',
+            'win11' => 'Windows 10/11',
             'win8' => 'Windows 8',
             'win7' => 'Windows 7',
             'win2003' => 'Windows 2003',
@@ -638,9 +644,20 @@ class Browser
         return isset($names[$this->_platform]) ? $names[$this->_platform] : $names['unknown'];
     }
 
+    /**
+     * @return string
+     */
     public function getPlatformKey()
     {
         return $this->_platform;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPlatformFamily()
+    {
+        return $this->_platform_family;
     }
 
     /**
@@ -652,6 +669,16 @@ class Browser
     public function setPlatform($platform)
     {
         $this->_platform = $platform;
+    }
+
+    /**
+     * @param string $platform_family
+     * @return Browser
+     */
+    public function setPlatformFamily(string $platform_family): Browser
+    {
+        $this->_platform_family = $platform_family;
+        return $this;
     }
 
     /**
@@ -901,17 +928,17 @@ class Browser
                   // before Safari
                   // (5) Netscape 9+ is based on Firefox so Netscape checks
                   // before FireFox are necessary
-        $this->checkBrowserWebTv() or $this->checkBrowserBrave() or $this->checkBrowserUCBrowser() or $this->checkBrowserEdge() or $this->checkBrowserInternetExplorer() or $this->checkBrowserOpera() or $this->checkBrowserGaleon() or $this->checkBrowserNetscapeNavigator9Plus() or $this->checkBrowserVivaldi() or $this->checkBrowserYandex() or $this->checkBrowserPalemoon() or $this->checkBrowserFirefox() or $this->checkBrowserChrome() or $this->checkBrowserOmniWeb() or 
+        $this->checkBrowserWebTv() or $this->checkBrowserBrave() or $this->checkBrowserUCBrowser() or $this->checkBrowserEdge() or $this->checkBrowserInternetExplorer() or $this->checkBrowserOpera() or $this->checkBrowserGaleon() or $this->checkBrowserNetscapeNavigator9Plus() or $this->checkBrowserVivaldi() or $this->checkBrowserYandex() or $this->checkBrowserPalemoon() or $this->checkBrowserFirefox() or $this->checkBrowserChrome() or $this->checkBrowserOmniWeb() or
         // common mobile
-        $this->checkBrowserAndroid() or $this->checkBrowseriPad() or $this->checkBrowseriPod() or $this->checkBrowseriPhone() or $this->checkBrowserBlackBerry() or $this->checkBrowserNokia() or 
+        $this->checkBrowserAndroid() or $this->checkBrowseriPad() or $this->checkBrowseriPod() or $this->checkBrowseriPhone() or $this->checkBrowserBlackBerry() or $this->checkBrowserNokia() or
         // common bots
-        $this->checkBrowserGoogleBot() or $this->checkBrowserMSNBot() or $this->checkBrowserBingBot() or $this->checkBrowserSlurp() or $this->checkBrowserCoccocBot() or 
+        $this->checkBrowserGoogleBot() or $this->checkBrowserMSNBot() or $this->checkBrowserBingBot() or $this->checkBrowserSlurp() or $this->checkBrowserCoccocBot() or
         // Yandex bots
-        $this->checkBrowserYandexBot() or $this->checkBrowserYandexImageResizerBot() or $this->checkBrowserYandexBlogsBot() or $this->checkBrowserYandexCatalogBot() or $this->checkBrowserYandexDirectBot() or $this->checkBrowserYandexFaviconsBot() or $this->checkBrowserYandexImagesBot() or $this->checkBrowserYandexMediaBot() or $this->checkBrowserYandexMetrikaBot() or $this->checkBrowserYandexNewsBot() or $this->checkBrowserYandexVideoBot() or $this->checkBrowserYandexWebmasterBot() or 
+        $this->checkBrowserYandexBot() or $this->checkBrowserYandexImageResizerBot() or $this->checkBrowserYandexBlogsBot() or $this->checkBrowserYandexCatalogBot() or $this->checkBrowserYandexDirectBot() or $this->checkBrowserYandexFaviconsBot() or $this->checkBrowserYandexImagesBot() or $this->checkBrowserYandexMediaBot() or $this->checkBrowserYandexMetrikaBot() or $this->checkBrowserYandexNewsBot() or $this->checkBrowserYandexVideoBot() or $this->checkBrowserYandexWebmasterBot() or
         // check for facebook external hit when loading URL
-        $this->checkFacebookExternalHit() or 
+        $this->checkFacebookExternalHit() or
         // WebKit base check (post mobile and others)
-        $this->checkBrowserSamsung() or $this->checkBrowserSilk() or $this->checkBrowserSafari() or 
+        $this->checkBrowserSamsung() or $this->checkBrowserSilk() or $this->checkBrowserSafari() or
         // everyone else
         $this->checkBrowserNetPositive() or $this->checkBrowserFirebird() or $this->checkBrowserKonqueror() or $this->checkBrowserIcab() or $this->checkBrowserPhoenix() or $this->checkBrowserAmaya() or $this->checkBrowserLynx() or $this->checkBrowserShiretoko() or $this->checkBrowserIceCat() or $this->checkBrowserIceweasel() or $this->checkBrowserW3CValidator() or $this->checkBrowserCurl() or $this->checkBrowserWget() or $this->checkBrowserPlayStation() or $this->checkBrowserIframely() or $this->checkBrowserCocoa() or $this->checkBrowserMozilla() /* Mozilla is such an open standard that you must check it last */);
     }
@@ -2308,6 +2335,7 @@ class Browser
     {
         if (stripos($this->_agent, 'win') !== false) {
             $this->_platform = self::PLATFORM_WINDOWS;
+            $this->_platform_family = self::PLATFORM_WINDOWS;
             if (preg_match("/wi(n|ndows)[ \-]?nt[ \/]?6\.(2|3)/i", $this->_agent)) {
                 $this->_platform = self::PLATFORM_WINDOWS_8;
             } elseif (preg_match("/wi(n|ndows)[ \-]?nt[ \/]?10\.0/i", $this->_agent)) {
@@ -2325,64 +2353,94 @@ class Browser
             }
         } elseif (stripos($this->_agent, 'iPad') !== false) {
             $this->_platform = self::PLATFORM_IPAD;
+            $this->_platform_family = self::PLATFORM_APPLE;
         } elseif (stripos($this->_agent, 'iPod') !== false) {
             $this->_platform = self::PLATFORM_IPOD;
+            $this->_platform_family = self::PLATFORM_APPLE;
         } elseif (stripos($this->_agent, 'iPhone') !== false) {
             $this->_platform = self::PLATFORM_IPHONE;
+            $this->_platform_family = self::PLATFORM_APPLE;
         } elseif (stripos($this->_agent, 'mac') !== false) {
             $this->_platform = self::PLATFORM_APPLE;
+            $this->_platform_family = self::PLATFORM_APPLE;
         } elseif (stripos($this->_agent, 'android') !== false) {
             $this->_platform = self::PLATFORM_ANDROID;
+            $this->_platform_family = self::PLATFORM_ANDROID;
         } elseif (stripos($this->_agent, 'Silk') !== false) {
             $this->_platform = self::PLATFORM_FIRE_OS;
+            $this->_platform_family = self::PLATFORM_ANDROID;
         } elseif (stripos($this->_agent, 'linux') !== false && stripos($this->_agent, 'SMART-TV') !== false) {
             $this->_platform = self::PLATFORM_SMART_TV;
+            $this->_platform_family = self::PLATFORM_LINUX;
         } elseif (stripos($this->_agent, 'linux') !== false or preg_match("/mdk for ([0-9.]{1,10})/i", $this->_agent)) {
             $this->_platform = self::PLATFORM_LINUX;
+            $this->_platform_family = self::PLATFORM_LINUX;
         } elseif (stripos($this->_agent, 'Nokia') !== false) {
             $this->_platform = self::PLATFORM_NOKIA;
+            $this->_platform_family = self::PLATFORM_NOKIA;
         } elseif (stripos($this->_agent, 'BlackBerry') !== false) {
             $this->_platform = self::PLATFORM_BLACKBERRY;
+            $this->_platform_family = self::PLATFORM_BLACKBERRY;
         } elseif (stripos($this->_agent, 'PlayBook') !== false) {
             $this->_platform = self::PLATFORM_BLACKBERRY;
+            $this->_platform_family = self::PLATFORM_BLACKBERRY;
         } elseif (stripos($this->_agent, 'BB10') !== false) {
             $this->_platform = self::PLATFORM_BLACKBERRY;
+            $this->_platform_family = self::PLATFORM_BLACKBERRY;
         } elseif (stripos($this->_agent, 'FreeBSD') !== false) {
             $this->_platform = self::PLATFORM_FREEBSD;
+            $this->_platform_family = self::PLATFORM_FREEBSD;
         } elseif (stripos($this->_agent, 'OpenBSD') !== false) {
             $this->_platform = self::PLATFORM_OPENBSD;
+            $this->_platform_family = self::PLATFORM_OPENBSD;
         } elseif (stripos($this->_agent, 'NetBSD') !== false) {
             $this->_platform = self::PLATFORM_NETBSD;
+            $this->_platform_family = self::PLATFORM_NETBSD;
         } elseif (stripos($this->_agent, 'OpenSolaris') !== false) {
             $this->_platform = self::PLATFORM_OPENSOLARIS;
+            $this->_platform_family = self::PLATFORM_OPENSOLARIS;
         } elseif (stripos($this->_agent, 'SunOS') !== false) {
             $this->_platform = self::PLATFORM_SUNOS;
+            $this->_platform_family = self::PLATFORM_SUNOS;
         } elseif (stripos($this->_agent, 'OS\/2') !== false or preg_match("/warp[ \/]?([0-9.]{1,10})/i", $this->_agent)) {
             $this->_platform = self::PLATFORM_OS2;
+            $this->_platform_family = self::PLATFORM_OS2;
         } elseif (stripos($this->_agent, 'BeOS') !== false) {
             $this->_platform = self::PLATFORM_BEOS;
+            $this->_platform_family = self::PLATFORM_BEOS;
         } elseif (stripos($this->_agent, 'irix') !== false) {
             $this->_platform = self::PLATFORM_IRIX;
+            $this->_platform_family = self::PLATFORM_IRIX;
         } elseif (stripos($this->_agent, 'Palm') !== false) {
             $this->_platform = self::PLATFORM_PALM;
+            $this->_platform_family = self::PLATFORM_PALM;
         } elseif (stripos($this->_agent, 'Playstation') !== false) {
             $this->_platform = self::PLATFORM_PLAYSTATION;
+            $this->_platform_family = self::PLATFORM_PLAYSTATION;
         } elseif (stripos($this->_agent, 'Roku') !== false) {
             $this->_platform = self::PLATFORM_ROKU;
+            $this->_platform_family = self::PLATFORM_ROKU;
         } elseif (stripos($this->_agent, 'iOS') !== false) {
             $this->_platform = self::PLATFORM_IPAD;
+            $this->_platform_family = self::PLATFORM_APPLE;
         } elseif (stripos($this->_agent, 'tvOS') !== false) {
             $this->_platform = self::PLATFORM_APPLE_TV;
+            $this->_platform_family = self::PLATFORM_APPLE;
         } elseif (stripos($this->_agent, 'curl') !== false) {
             $this->_platform = self::PLATFORM_TERMINAL;
+            $this->_platform_family = self::PLATFORM_TERMINAL;
         } elseif (stripos($this->_agent, 'CrOS') !== false) {
             $this->_platform = self::PLATFORM_CHROME_OS;
+            $this->_platform_family = self::PLATFORM_CHROME_OS;
         } elseif (stripos($this->_agent, 'okhttp') !== false) {
             $this->_platform = self::PLATFORM_JAVA_ANDROID;
+            $this->_platform_family = self::PLATFORM_ANDROID;
         } elseif (stripos($this->_agent, 'PostmanRuntime') !== false) {
             $this->_platform = self::PLATFORM_POSTMAN;
+            $this->_platform_family = self::PLATFORM_POSTMAN;
         } elseif (stripos($this->_agent, 'Iframely') !== false) {
             $this->_platform = self::PLATFORM_I_FRAME;
+            $this->_platform_family = self::PLATFORM_I_FRAME;
         }
     }
 }

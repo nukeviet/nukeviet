@@ -443,6 +443,7 @@ $lang_global['info_level'] = 'Information';
 $lang_global['danger_level'] = 'Erreur';
 $lang_global['warning_level'] = 'Précurseur';
 $lang_global['success_level'] = 'Succès';
+$lang_global['view_more'] = 'Voir plus';
 $lang_global['country_AD'] = 'Andorre';
 $lang_global['country_AE'] = 'Arabes Unis';
 $lang_global['country_AF'] = 'Afghanistan';

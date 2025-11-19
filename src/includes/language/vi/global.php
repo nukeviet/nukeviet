@@ -443,6 +443,7 @@ $lang_global['info_level'] = 'Thông báo';
 $lang_global['danger_level'] = 'Lỗi';
 $lang_global['warning_level'] = 'Cảnh báo';
 $lang_global['success_level'] = 'Thành công';
+$lang_global['view_more'] = 'Xem thêm';
 $lang_global['country_AD'] = 'Andorra';
 $lang_global['country_AE'] = 'Ả Rập Thống nhất';
 $lang_global['country_AF'] = 'Afghanistan';

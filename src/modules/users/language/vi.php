@@ -931,6 +931,16 @@ $lang_module['account_waiting_oldpass'] = 'Sử dụng mật khẩu trước đ�
 $lang_module['lostactivelink_send_timeout'] = 'Bạn đã gửi yêu cầu lấy lại liên kết lúc %s. Vui lòng kiểm tra lại email hoặc thử lại sau thời điểm %s. Nếu không thấy thư, hãy kiểm tra trong mục Thư rác (Spam)';
 $lang_module['security_privacy'] = 'Bảo mật và Quyền riêng tư';
 $lang_module['security_privacy_des'] = 'Quản lý các phiên đăng nhập, tăng cường bảo mật tài khoản và quản lý quyền riêng tư';
+$lang_module['login_session'] = 'Các phiên đang hoạt động';
+$lang_module['login_session_none'] = 'Hệ thống không tìm thấy phiên đăng nhập khả dụng nào';
+$lang_module['login_session_explain'] = 'Đây là danh sách các thiết bị đã đăng nhập vào tài khoản của bạn. Hãy đăng xuất khỏi bất kỳ phiên nào bạn không nhận ra';
+$lang_module['login_session_current'] = 'Phiên hiện tại';
+$lang_module['login_session_admin'] = 'Phiên quản trị';
+$lang_module['security_actions'] = 'Hành động bảo mật';
+$lang_module['security_actions_logout_all'] = 'Đăng xuất khỏi tất cả các phiên khác';
+$lang_module['security_actions_logout_all1'] = 'Thao tác này sẽ đăng xuất bạn khỏi mọi thiết bị khác ngoại trừ thiết bị này';
+$lang_module['security_actions_logout_all2'] = 'Đăng xuất tất cả';
+$lang_module['secacts_delaccount'] = 'Xóa tài khoản của bạn';
 
 $lang_module['merge_field_active_deadline'] = 'Hạn hiệu lực kích hoạt';
 $lang_module['merge_field_link'] = 'Liên kết';

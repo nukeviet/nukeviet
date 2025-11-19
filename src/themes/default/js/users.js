@@ -1204,4 +1204,47 @@ $(function() {
             });
         });
     });
+
+    /**
+     * Trang bảo mật và quyền riêng tư
+     */
+    const privacyForm = $('#security-privacy-page');
+    if (privacyForm.length) {
+        // Load thêm phiên đăng nhập
+        $('[data-toggle="login-more"]', privacyForm).on('click', function(e) {
+            e.preventDefault();
+            const btn = $(this);
+            btn.prop('disabled', true);
+            $.ajax({
+                url: nv_base_siteurl + 'index.php?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=' + nv_func_name + '&nocache=' + new Date().getTime(),
+                type: 'POST',
+                data: {
+                    checkss: privacyForm.data('checkss'),
+                    loadmorelogins: 1,
+                    login_offset: btn.data('next-offset')
+                },
+                dataType: 'json',
+                cache: false,
+                success: function (response) {
+                    btn.prop('disabled', false);
+                    if (response.status != 'ok') {
+                        nvToast(response.mess, 'error');
+                        return;
+                    }
+
+                    $('[data-toggle="logins-ctn"]', privacyForm).append(response.contents);
+                    if (response.more) {
+                        btn.data('next-offset', response.next_offset);
+                    } else {
+                        $('[data-toggle="login-more-ctn"]', privacyForm).remove();
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.log(xhr, status, error);
+                    nvToast(error, 'error');
+                    btn.prop('disabled', false);
+                }
+            });
+        });
+    }
 });

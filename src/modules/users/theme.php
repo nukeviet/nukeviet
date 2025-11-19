@@ -2101,18 +2101,81 @@ function user_data_deletion(array $data): string
     return $xtpl->text('main');
 }
 
-function user_security_privacy(): string
+function user_security_privacy(array $array, array $array_logins): string
 {
-    global $nv_Lang, $user_info, $client_info;
+    global $nv_Lang, $user_info, $checkss;
 
     $xtpl = new XTemplate('security_privacy.tpl', get_module_tpl_dir('security_privacy.tpl'));
     $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
     $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
+    $xtpl->assign('CHECKSS', $checkss);
 
-    echo '<pre><code>';
-    echo htmlspecialchars(print_r($user_info, true));
-    echo htmlspecialchars(print_r($client_info, true));
-    die('</code></pre>');
+    $browser_icons = [
+        'opera' => 'fa-opera',
+        'operamini' => 'fa-opera',
+        'explorer' => 'fa-internet-explorer',
+        'edge' => 'fa-edge',
+        'firefox' => 'fa-firefox',
+        'mozilla' => 'fa-firefox',
+        'safari' => 'fa-safari',
+        'iphone' => 'fa-safari',
+        'ipod' => 'fa-safari',
+        'ipad' => 'fa-safari',
+        'chrome' => 'fa-chrome',
+        'android' => 'fa-android'
+    ];
+    $os_icons = [
+        'win' => 'fa-windows',
+        'apple' => 'fa-apple',
+        'linux' => 'fa-linux',
+        'android' => 'fa-android'
+    ];
+
+    if (empty($array_logins)) {
+        $xtpl->parse('main.no_logins');
+    } else {
+        $stt = 0;
+        $next_id = 0;
+        foreach ($array_logins as $login) {
+            if (++$stt >= 6) {
+                $next_id = $login['id'];
+                break;
+            }
+
+            $login['icon_browser'] = $browser_icons[$login['browser_key']] ?? 'fa-globe';
+            $login['icon_os'] = $os_icons[$login['os_family']] ?? 'fa-server';
+
+            $xtpl->assign('LOGIN', $login);
+
+            if ($login['is_current']) {
+                $xtpl->parse('main.has_logins.ctn_loop.loop.current1');
+                $xtpl->parse('main.has_logins.ctn_loop.loop.current2');
+            } else {
+                $xtpl->parse('main.has_logins.ctn_loop.loop.logout');
+            }
+            if ($login['is_admin']) {
+                $xtpl->parse('main.has_logins.ctn_loop.loop.is_admin');
+            }
+
+            $xtpl->parse('main.has_logins.ctn_loop.loop');
+        }
+
+        $xtpl->parse('main.has_logins.ctn_loop');
+        if ($array['loadmorelogins']) {
+            return $xtpl->text('main.has_logins.ctn_loop');
+        }
+
+        $xtpl->assign('NEXT_OFFSET', $next_id);
+
+        if (count($array_logins) > 5) {
+            $xtpl->parse('main.has_logins.more');
+        }
+        if (count($array_logins) > 1) {
+            $xtpl->parse('main.has_logins.logout_all');
+        }
+
+        $xtpl->parse('main.has_logins');
+    }
 
     $xtpl->parse('main');
     return $xtpl->text('main');
