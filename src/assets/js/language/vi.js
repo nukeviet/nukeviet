@@ -117,3 +117,4 @@ nukeviet.i18n.close = 'Đóng';
 nukeviet.i18n.seccode1 = 'Xác minh &quot;Tôi không phải người máy&quot;';
 nukeviet.i18n.seccode = 'Mã bảo mật';
 nukeviet.i18n.captcharefresh = 'Thay mới';
+nukeviet.i18n.confirmAction = 'Bạn có xác nhận thực hiện không?';

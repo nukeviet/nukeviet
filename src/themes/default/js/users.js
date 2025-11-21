@@ -650,6 +650,61 @@ function confirm_pass_validForm(form) {
     return false;
 }
 
+// Form xác nhận mật khẩu để làm 1 việc nào quan trọng
+function verify_password_precheck(form) {
+    if (trim($('[name="password"]', form).val()) == '') {
+        $('[name="password"]', form).focus();
+        return false;
+    }
+    return true;
+}
+function verify_password_validForm(form) {
+    const data = {};
+    data.type = $(form).prop("method");
+    data.url = $(form).prop("action");
+    data.data = $(form).serialize();
+    formErrorHidden(form);
+
+    $(form).find("input,button,select,textarea").prop("disabled", true);
+
+    $.ajax({
+        type: data.type,
+        cache: false,
+        url: data.url,
+        data: data.data,
+        dataType: "json",
+        success: function(res) {
+            formChangeCaptcha(form);
+
+            if ("error" == res.status) {
+                $("input,button,select,textarea", form).prop("disabled", false);
+                $(".tooltip-current", form).removeClass("tooltip-current");
+
+                if (res.input && "" != res.input && $("[name='" + res.input + "']:visible", form).length) {
+                    $(form).find('[name="' + res.input + '"]:visible').each(function() {
+                        $(this).addClass("tooltip-current").attr("data-current-mess", res.mess);
+                        validErrorShow(this);
+                    });
+                    return;
+                }
+
+                $(".nv-info", form).html(res.mess).addClass("error").show();
+                $("html, body").animate({
+                    scrollTop: $(".nv-info", form).offset().top
+                }, 200);
+                return;
+            }
+            if (res.redirect) {
+                window.location.href = res.redirect;
+                return;
+            }
+            location.reload();
+        }
+    });
+
+    return false;
+}
+
 $(function() {
     // Delete user handler
     $('[data-toggle="admindeluser"]').click(function(e) {
@@ -1210,18 +1265,25 @@ $(function() {
      */
     const privacyForm = $('#security-privacy-page');
     if (privacyForm.length) {
+        const autoToast = privacyForm.data('auto-toast');
+        if (autoToast.length > 0) {
+            nvToast(autoToast, 'success');
+        }
+
         // Load thêm phiên đăng nhập
         $('[data-toggle="login-more"]', privacyForm).on('click', function(e) {
             e.preventDefault();
             const btn = $(this);
             btn.prop('disabled', true);
+            privacyForm.data('page', privacyForm.data('page') + 1);
             $.ajax({
                 url: nv_base_siteurl + 'index.php?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=' + nv_func_name + '&nocache=' + new Date().getTime(),
                 type: 'POST',
                 data: {
                     checkss: privacyForm.data('checkss'),
                     loadmorelogins: 1,
-                    login_offset: btn.data('next-offset')
+                    login_offset: privacyForm.data('next-offset'),
+                    page: privacyForm.data('page')
                 },
                 dataType: 'json',
                 cache: false,
@@ -1234,9 +1296,10 @@ $(function() {
 
                     $('[data-toggle="logins-ctn"]', privacyForm).append(response.contents);
                     if (response.more) {
-                        btn.data('next-offset', response.next_offset);
+                        privacyForm.data('next-offset', response.next_offset);
                     } else {
                         $('[data-toggle="login-more-ctn"]', privacyForm).remove();
+                        privacyForm.data('next-offset', 0);
                     }
                 },
                 error: function (xhr, status, error) {
@@ -1246,5 +1309,91 @@ $(function() {
                 }
             });
         });
+
+        // Xóa toàn bộ phiên đăng nhập
+        $('[data-toggle="login-remove-all"]', privacyForm).on('click', function(e) {
+            e.preventDefault();
+            const btn = $(this);
+            nukeviet.confirm(nukeviet.i18n.confirmAction, () => {
+                btn.prop('disabled', true);
+                $.ajax({
+                    url: nv_base_siteurl + 'index.php?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=' + nv_func_name + '&nocache=' + new Date().getTime(),
+                    type: 'POST',
+                    data: {
+                        checkss: privacyForm.data('checkss'),
+                        delloginall: 1
+                    },
+                    dataType: 'json',
+                    cache: false,
+                    success: function (response) {
+                        btn.prop('disabled', false);
+                        if (response.status == 'not_verified') {
+                            window.location.href = response.redirect;
+                            return;
+                        }
+                        if (response.status != 'ok') {
+                            nvToast(response.mess, 'error');
+                            return;
+                        }
+
+                        nvToast(response.mess, 'success');
+                        setTimeout(() => {
+                            location.reload();
+                        }, 2000);
+                    },
+                    error: function (xhr, status, error) {
+                        console.log(xhr, status, error);
+                        nvToast(error, 'error');
+                        btn.prop('disabled', false);
+                    }
+                });
+            });
+        });
+
+        // Xóa một phiên đăng nhập
+        $(privacyForm).on('click', '[data-toggle="login-remove"]', function(e) {
+            e.preventDefault();
+            const btn = $(this);
+            nukeviet.confirm(nukeviet.i18n.confirmAction, () => {
+                btn.prop('disabled', true);
+                $.ajax({
+                    url: nv_base_siteurl + 'index.php?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=' + nv_func_name + '&nocache=' + new Date().getTime(),
+                    type: 'POST',
+                    data: {
+                        checkss: privacyForm.data('checkss'),
+                        dellogin: 1,
+                        idlogin: btn.data('idlogin'),
+                        page: privacyForm.data('page')
+                    },
+                    dataType: 'json',
+                    cache: false,
+                    success: function (response) {
+                        btn.prop('disabled', false);
+                        if (response.status == 'not_verified') {
+                            window.location.href = response.redirect;
+                            return;
+                        }
+                        if (response.status != 'ok') {
+                            nvToast(response.mess, 'error');
+                            return;
+                        }
+
+                        nvToast(response.mess, 'success');
+                        setTimeout(() => {
+                            response.redirect ? window.location.href = response.redirect : location.reload();
+                        }, 2000);
+                    },
+                    error: function (xhr, status, error) {
+                        console.log(xhr, status, error);
+                        nvToast(error, 'error');
+                        btn.prop('disabled', false);
+                    }
+                });
+            });
+        });
     }
+
+    $('body').on('submit', '[data-toggle=verify_password_validForm]', function() {
+        return verify_password_validForm(this);
+    });
 });

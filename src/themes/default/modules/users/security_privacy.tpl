@@ -1,5 +1,5 @@
 <!-- BEGIN: main -->
-<div class="centered" id="security-privacy-page" data-checkss="{CHECKSS}">
+<div class="centered" id="security-privacy-page" data-checkss="{CHECKSS}" data-auto-toast="{DATA.auto_toast}" data-next-offset="{NEXT_OFFSET}" data-page="{DATA.page}">
     <div class="sm-container-box">
         <h1>{LANG.security_privacy}</h1>
         <p class="margin-bottom-lg">{LANG.security_privacy_des}.</p>
@@ -33,7 +33,7 @@
                         </div>
                         <!-- BEGIN: logout -->
                         <div class="usr-ml-auto">
-                            <button type="button" class="btn btn-danger btn-sm">{GLANG.logout}</button>
+                            <button type="button" class="btn btn-danger btn-sm" data-toggle="login-remove" data-idlogin="{LOGIN.id}">{GLANG.logout}</button>
                         </div>
                         <!-- END: logout -->
                     </div>
@@ -43,7 +43,7 @@
             </div>
             <!-- BEGIN: more -->
             <div class="text-center margin-top-lg" data-toggle="login-more-ctn">
-                <button type="button" class="btn btn-primary" data-toggle="login-more" data-next-offset="{NEXT_OFFSET}">{GLANG.view_more}</button>
+                <button type="button" class="btn btn-primary" data-toggle="login-more">{GLANG.view_more}</button>
             </div>
             <!-- END: more -->
             <!-- BEGIN: logout_all -->
@@ -56,7 +56,7 @@
                         <div>{LANG.security_actions_logout_all1}.</div>
                     </div>
                     <div>
-                        <button type="button" class="btn btn-danger">{LANG.security_actions_logout_all2}</button>
+                        <button type="button" class="btn btn-danger" data-toggle="login-remove-all">{LANG.security_actions_logout_all2}</button>
                     </div>
                 </div>
             </div>

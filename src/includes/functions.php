@@ -2991,7 +2991,8 @@ function nv_site_mods($lang = '')
                     'editinfo',
                     'avatar',
                     'groups',
-                    'security-privacy'
+                    'security-privacy',
+                    'verify-password'
                 ];
             } else {
                 $user_ops = [

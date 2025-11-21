@@ -64,6 +64,7 @@ $install_lang['modfuncs']['users']['datadeletion'] = 'Supprimer les données per
 $install_lang['modfuncs']['users']['main'] = 'Page d\'accueil du compte';
 $install_lang['modfuncs']['users']['avatar'] = 'Changer l\'avatar';
 $install_lang['modfuncs']['users']['security-privacy'] = 'Sécurité et Confidentialité';
+$install_lang['modfuncs']['users']['verify-password'] = 'Vérifier le mot de passe';
 
 $install_lang['modfuncs']['statistics'] = [];
 $install_lang['modfuncs']['statistics']['allreferers'] = 'Par Site';

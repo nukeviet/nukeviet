@@ -117,3 +117,4 @@ nukeviet.i18n.close = 'Fermer';
 nukeviet.i18n.seccode1 = 'Vérification &quot;Je ne suis pas un robot&quot;';
 nukeviet.i18n.seccode = 'Code de sécurité';
 nukeviet.i18n.captcharefresh = 'Rafraîchir';
+nukeviet.i18n.confirmAction = 'Êtes-vous sûr de vouloir continuer?';

@@ -2103,12 +2103,13 @@ function user_data_deletion(array $data): string
 
 function user_security_privacy(array $array, array $array_logins): string
 {
-    global $nv_Lang, $user_info, $checkss;
+    global $checkss, $limit;
 
     $xtpl = new XTemplate('security_privacy.tpl', get_module_tpl_dir('security_privacy.tpl'));
     $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
     $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
     $xtpl->assign('CHECKSS', $checkss);
+    $xtpl->assign('DATA', $array);
 
     $browser_icons = [
         'opera' => 'fa-opera',
@@ -2137,7 +2138,7 @@ function user_security_privacy(array $array, array $array_logins): string
         $stt = 0;
         $next_id = 0;
         foreach ($array_logins as $login) {
-            if (++$stt >= 6) {
+            if (++$stt >= $limit) {
                 $next_id = $login['id'];
                 break;
             }
@@ -2167,7 +2168,7 @@ function user_security_privacy(array $array, array $array_logins): string
 
         $xtpl->assign('NEXT_OFFSET', $next_id);
 
-        if (count($array_logins) > 5) {
+        if (count($array_logins) > ($limit - 1)) {
             $xtpl->parse('main.has_logins.more');
         }
         if (count($array_logins) > 1) {
@@ -2175,6 +2176,35 @@ function user_security_privacy(array $array, array $array_logins): string
         }
 
         $xtpl->parse('main.has_logins');
+    }
+
+    $xtpl->parse('main');
+    return $xtpl->text('main');
+}
+
+function user_verify_password(array $array): string
+{
+    global $module_captcha, $checkss, $global_config;
+
+    $xtpl = new XTemplate('verify_password.tpl', get_module_tpl_dir('verify_password.tpl'));
+    $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
+    $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
+    $xtpl->assign('CHECKSS', $checkss);
+
+    $xtpl->assign('DATA', $array);
+
+    if ($module_captcha == 'recaptcha' and $global_config['recaptcha_ver'] == 3) {
+        // Nếu dùng reCaptcha v3
+        $xtpl->parse('main.recaptcha3');
+    } elseif ($module_captcha == 'recaptcha' and $global_config['recaptcha_ver'] == 2) {
+        // Nếu dùng reCaptcha v2
+        $xtpl->parse('main.recaptcha');
+    } elseif ($module_captcha == 'turnstile') {
+        // Nếu dùng Turnstile
+        $xtpl->parse('main.turnstile');
+    } elseif ($module_captcha == 'captcha') {
+        // Captcha mặc định
+        $xtpl->parse('main.captcha');
     }
 
     $xtpl->parse('main');

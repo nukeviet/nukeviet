@@ -941,6 +941,8 @@ $lang_module['security_actions_logout_all'] = 'Đăng xuất khỏi tất cả c
 $lang_module['security_actions_logout_all1'] = 'Thao tác này sẽ đăng xuất bạn khỏi mọi thiết bị khác ngoại trừ thiết bị này';
 $lang_module['security_actions_logout_all2'] = 'Đăng xuất tất cả';
 $lang_module['secacts_delaccount'] = 'Xóa tài khoản của bạn';
+$lang_module['verify_password_title'] = 'Xác minh danh tính';
+$lang_module['verify_password_note'] = 'Để tiếp tục, trước tiên, hãy nhập mật khẩu để xác minh danh tính của bạn';
 
 $lang_module['merge_field_active_deadline'] = 'Hạn hiệu lực kích hoạt';
 $lang_module['merge_field_link'] = 'Liên kết';
