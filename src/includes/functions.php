@@ -3000,8 +3000,7 @@ function nv_site_mods($lang = '')
                     'login',
                     'register',
                     'lostpass',
-                    'r2s',
-                    'datadeletion'
+                    'r2s'
                 ];
                 if ($global_config['allowuserreg'] == 2 or $global_config['allowuserreg'] == 1) {
                     $user_ops[] = 'lostactivelink';
@@ -3014,6 +3013,7 @@ function nv_site_mods($lang = '')
             if (defined('NV_OPENID_ALLOWED')) {
                 $user_ops[] = 'oauth';
             }
+            $user_ops[] = 'datadeletion';
             $func_us = $site_mods['users']['funcs'];
             foreach ($func_us as $func => $row) {
                 if (!in_array($func, $user_ops, true)) {
@@ -3266,8 +3266,7 @@ function nv_redirect_location($url, $error_code = 301, $noreferrer = false)
 function nv_redirect_encrypt($url)
 {
     global $crypt;
-
-    return $crypt->encrypt($url, NV_CHECK_SESSION);
+    return $crypt->encrypt(str_replace('&amp;', '&', $url), NV_CHECK_SESSION);
 }
 
 /**

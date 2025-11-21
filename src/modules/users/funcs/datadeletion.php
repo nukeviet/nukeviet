@@ -178,23 +178,70 @@ if ($sender == 'facebook') {
 
 // Hiển thị trang trạng thái yêu cầu xóa dữ liệu cá nhân
 $code = $nv_Request->get_title('code', 'get', '');
-if (empty($code)) {
+if (!empty($code)) {
+    $page_url .= '&amp;code=' . urlencode($code);
+    $canonicalUrl = getCanonicalUrl($page_url);
+
+    // Giữ trang trạng thái này hoạt động ít nhất 7–30 ngày sau yêu cầu xóa
+    $sql = "SELECT * FROM " . NV_MOD_TABLE . "_deleted WHERE request_time>=" . $offset_time . " AND confirmation_code=" . $db->quote($code);
+    $data = $db->query($sql)->fetch();
+    if (empty($data)) {
+        nv_error404();
+    }
+
+    $data['link_home'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA;
+
+    $data = nv_apply_hook($module_name, 'prepare_user_data_deletion_show', [$data], $data);
+    $contents = user_data_deletion($data);
+
+    include NV_ROOTDIR . '/includes/header.php';
+    echo nv_site_theme($contents);
+    include NV_ROOTDIR . '/includes/footer.php';
+}
+
+$page_title = $nv_Lang->getModule('delaccount_title');
+
+if (!defined('NV_IS_USER')) {
     nv_error404();
 }
-$page_url .= '&amp;code=' . urlencode($code);
-$canonicalUrl = getCanonicalUrl($page_url);
 
-// Giữ trang trạng thái này hoạt động ít nhất 7–30 ngày sau yêu cầu xóa
-$sql = "SELECT * FROM " . NV_MOD_TABLE . "_deleted WHERE request_time>=" . $offset_time . " AND confirmation_code=" . $db->quote($code);
-$data = $db->query($sql)->fetch();
-if (empty($data)) {
-    nv_error404();
+$not_allowed = '';
+$sql = "SELECT COUNT(*) FROM " . NV_AUTHORS_GLOBALTABLE . " WHERE admin_id=" . $user_info['userid'];
+$sql2 = "SELECT COUNT(*) FROM " . NV_MOD_TABLE . "_groups_users WHERE group_id IN (1,2,3) AND userid=" . $user_info['userid'];
+if ($db->query($sql)->fetchColumn() or $db->query($sql2)->fetchColumn()) {
+    // Không thể xóa tài khoản quản trị
+    $not_allowed = nv_theme_alert($nv_Lang->getGlobal('admin_account'), $nv_Lang->getModule('delaccount_noadmin'), 'warning');
+} elseif (!empty($user_info['safemode'])) {
+    // Chế độ an toàn được bật thì không làm gì
+    $url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=editinfo/safeshow&amp;nv_redirect=' . nv_redirect_encrypt(nv_url_rewrite($page_url, true));
+    $not_allowed = nv_theme_alert($nv_Lang->getModule('safe_mode'), $nv_Lang->getModule('delaccount_nosafemode', $url));
 }
 
-$data['link_home'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA;
+if ($not_allowed) {
+    include NV_ROOTDIR . '/includes/header.php';
+    echo nv_site_theme($not_allowed);
+    include NV_ROOTDIR . '/includes/footer.php';
+}
 
-$data = nv_apply_hook($module_name, 'prepare_user_data_deletion_show', [$data], $data);
-$contents = user_data_deletion($data);
+$array = [];
+$array['link_back'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=security-privacy';
+
+// Kiểm tra đã xác nhận mật khẩu
+$confirm_pwd = $nv_Request->get_string($module_data . '_confirm_pwd', 'session', '');
+$confirm_pwd = $confirm_pwd ? json_decode($confirm_pwd, true) : [];
+if (!is_array($confirm_pwd) or !isset($confirm_pwd['time']) or (NV_CURRENTTIME - $confirm_pwd['time'] > 600) or !isset($confirm_pwd['area']) or $confirm_pwd['area'] !== 'datadeletion') {
+    $confirm_pwd = false;
+} else {
+    $confirm_pwd = true;
+}
+
+if (!$confirm_pwd) {
+    $nv_redirect = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=verify-password&area=datadeletion&nv_redirect=' . nv_redirect_encrypt(nv_url_rewrite($page_url, true));
+    $nv_redirect = nv_url_rewrite($nv_redirect, true);
+    nv_redirect_location($nv_redirect);
+}
+
+$contents = user_request_deletion($array);
 
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_site_theme($contents);

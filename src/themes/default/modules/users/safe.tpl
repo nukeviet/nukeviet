@@ -30,6 +30,7 @@
                             <div class="text-center margin-bottom-lg">
                                 <input type="hidden" name="checkss" value="{DATA.checkss}" />
                                 <input type="hidden" name="type" value="safe_deactivate" />
+                                <input type="hidden" name="nv_redirect" value="{NV_REDIRECT}">
                                 <button class="bsubmit btn btn-primary" type="submit">{LANG.editinfo_confirm}</button>
                                 <input type="button" value="{GLANG.reset}" class="btn btn-default" data-toggle="validReset" />
                             </div>

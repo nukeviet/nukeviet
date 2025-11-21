@@ -64,7 +64,7 @@
             <!-- END: has_logins -->
             <hr class="usr-hr-space">
             <div class="text-center">
-                <a class="danger small" href="#">{LANG.secacts_delaccount}</a>
+                <a class="danger small" href="{DATA.link_delete}">{LANG.secacts_delaccount}</a>
             </div>
         </div>
     </div>

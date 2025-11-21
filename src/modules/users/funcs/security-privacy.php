@@ -212,6 +212,8 @@ while ($row = $result->fetch()) {
     $array_logins[] = $row;
 }
 
+$array['link_delete'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=datadeletion';
+
 $contents = user_security_privacy($array, $array_logins);
 
 if ($array['loadmorelogins']) {

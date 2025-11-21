@@ -16,7 +16,7 @@ if (!defined('NV_IS_MOD_USER')) {
 $page_title = $nv_Lang->getModule('verify_password_title');
 $description = $keywords = 'no';
 $page_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op;
-$area_allowed = ['security_privacy'];
+$area_allowed = ['security_privacy', 'datadeletion'];
 $checkss = md5('verify_password.' . NV_CHECK_SESSION);
 
 $array = [];

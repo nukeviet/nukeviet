@@ -1217,6 +1217,7 @@ h6 {
     list-style-type: decimal !important;
 }
 
+ul.list-default,
 .bodytext ul,
 .inline-related-articles {
     list-style-type: disc !important;

@@ -292,6 +292,7 @@ $array_data['editcensor'] = $global_users_config['active_editinfo_censor'];
 $array_data['confirmed_pass'] = csrf_check($nv_Request->get_title($module_data . '_confirm_pass', 'session', ''), $module_data . '_confirm_pass');
 
 $checkss = $nv_Request->get_title('checkss', 'post', '');
+$nv_redirect = nv_get_redirect();
 
 // Xác nhận mật khẩu
 if ($nv_Request->isset_request('confirm_pass', 'post')) {
@@ -471,9 +472,12 @@ if ((int) $row['safemode'] > 0) {
         $stmt = $db->prepare('UPDATE ' . NV_MOD_TABLE . " SET safemode=0, safekey='', last_update=" . NV_CURRENTTIME . ' WHERE userid=' . $edit_userid);
         $stmt->execute();
 
+        $nv_redirect = nv_redirect_decrypt($nv_redirect);
+        empty($nv_redirect) && nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=editinfo', true);
+
         nv_jsonOutput([
             'status' => 'ok',
-            'input' => nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=editinfo', true),
+            'redirect' => $nv_redirect,
             'mess' => $nv_Lang->getModule('safe_deactivate_ok')
         ]);
     }
@@ -483,12 +487,12 @@ if ((int) $row['safemode'] > 0) {
     $contents = safe_deactivate($array_data);
 
     $page_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op;
+    $array_data['safeshow'] && $page_url .= '/safeshow';
     $canonicalUrl = getCanonicalUrl($page_url);
 
     include NV_ROOTDIR . '/includes/header.php';
     echo nv_site_theme($contents);
     include NV_ROOTDIR . '/includes/footer.php';
-    exit();
 }
 
 $array_data['allowmailchange'] = $global_config['allowmailchange'];

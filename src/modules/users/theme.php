@@ -1938,7 +1938,7 @@ function nv_avatar($array)
  */
 function safe_deactivate($data)
 {
-    global $module_info, $module_name, $nv_Lang, $global_config, $op;
+    global $module_info, $module_name, $nv_Lang, $global_config, $op, $nv_redirect;
 
     $xtpl = new XTemplate('safe.tpl', get_module_tpl_dir('safe.tpl'));
     $xtpl->assign('EDITINFO_FORM', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=editinfo');
@@ -1947,6 +1947,7 @@ function safe_deactivate($data)
     $xtpl->assign('PASS_MAXLENGTH', $global_config['nv_upassmax']);
     $xtpl->assign('PASS_MINLENGTH', $global_config['nv_upassmin']);
     $xtpl->assign('DATA', $data);
+    $xtpl->assign('NV_REDIRECT', $nv_redirect);
 
     if ($data['safeshow']) {
         $xtpl->assign('SHOW1', ' style="display:none"');
@@ -2078,7 +2079,7 @@ function user_confirm_pass()
 }
 
 /**
- * Giao diện xóa dữ liệu người dùng
+ * Giao diện xóa dữ liệu người dùng (xóa tài khoản)
  *
  * @param array $data
  * @return string
@@ -2101,6 +2102,13 @@ function user_data_deletion(array $data): string
     return $xtpl->text('main');
 }
 
+/**
+ * Giao diện trang bảo mật và quyền riêng tư
+ *
+ * @param array $array
+ * @param array $array_logins
+ * @return string
+ */
 function user_security_privacy(array $array, array $array_logins): string
 {
     global $checkss, $limit;
@@ -2182,6 +2190,12 @@ function user_security_privacy(array $array, array $array_logins): string
     return $xtpl->text('main');
 }
 
+/**
+ * Giao diện trang xác thực mật khẩu
+ *
+ * @param array $array
+ * @return string
+ */
 function user_verify_password(array $array): string
 {
     global $module_captcha, $checkss, $global_config;
@@ -2206,6 +2220,22 @@ function user_verify_password(array $array): string
         // Captcha mặc định
         $xtpl->parse('main.captcha');
     }
+
+    $xtpl->parse('main');
+    return $xtpl->text('main');
+}
+
+/**
+ * @param array $array
+ * @return string
+ */
+function user_request_deletion(array $array): string
+{
+    $xtpl = new XTemplate('data_deletion_request.tpl', get_module_tpl_dir('data_deletion_request.tpl'));
+    $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
+    $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
+
+    $xtpl->assign('DATA', $array);
 
     $xtpl->parse('main');
     return $xtpl->text('main');
