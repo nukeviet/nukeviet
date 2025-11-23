@@ -62,7 +62,7 @@ $array['auto_toast'] = '';
 // Kiểm tra đã xác nhận mật khẩu
 $confirm_pwd = $nv_Request->get_string($module_data . '_confirm_pwd', 'session', '');
 $confirm_pwd = $confirm_pwd ? json_decode($confirm_pwd, true) : [];
-if (!is_array($confirm_pwd) or !isset($confirm_pwd['time']) or (NV_CURRENTTIME - $confirm_pwd['time'] > 600) or !isset($confirm_pwd['area']) or $confirm_pwd['area'] !== 'security_privacy') {
+if (!is_array($confirm_pwd) or !isset($confirm_pwd['time']) or (NV_CURRENTTIME - $confirm_pwd['time'] > 1800) or !isset($confirm_pwd['area']) or $confirm_pwd['area'] !== 'security_privacy') {
     $confirm_pwd = false;
 } else {
     $confirm_pwd = true;
@@ -74,7 +74,7 @@ $pending_action = $pending_action ? json_decode($pending_action, true) : [];
 if (
     $confirm_pwd and is_array($pending_action) and ($pending_action['module'] ?? '') == $module_name and
     ($pending_action['area'] ?? '') == 'security_privacy' and isset($pending_action['time']) and
-    (NV_CURRENTTIME - $pending_action['time'] < 600) and hash_equals($checkss, $pending_action['checkss'] ?? '')
+    (NV_CURRENTTIME - $pending_action['time'] < 1800) and hash_equals($checkss, $pending_action['checkss'] ?? '')
 ) {
     if (!empty($pending_action['delloginall'])) {
         $array['delloginall'] = 1;

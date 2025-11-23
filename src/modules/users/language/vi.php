@@ -962,6 +962,15 @@ $lang_module['delaccount_explain9'] = 'Bạn sẽ không thể đăng ký lại 
 $lang_module['delaccount_confirm1'] = 'Tôi xác nhận';
 $lang_module['delaccount_confirm2'] = 'Tôi đã đọc và hiểu các hậu quả. Tôi muốn xóa tài khoản của mình';
 $lang_module['delaccount_confirm3'] = 'Xóa vĩnh viễn tài khoản của tôi';
+$lang_module['delaccount_veremail_title'] = 'Xác nhận xóa tài khoản';
+$lang_module['delaccount_veremail_note'] = 'Đây là bước cuối cùng để đảm bảo an toàn cho tài khoản của bạn';
+$lang_module['delaccount_veremail_checkmail'] = 'Kiểm tra email của bạn';
+$lang_module['delaccount_veremail_checkinfo'] = 'Chúng tôi đã gửi một mã xác nhận gồm 10 ký tự đến địa chỉ <strong>%s</strong> của bạn. Vui lòng nhập mã đó bên dưới để tiếp tục';
+$lang_module['not_received_code'] = 'Không nhận được mã?';
+$lang_module['try_received_code'] = 'Thử lại sau';
+$lang_module['send_received_code'] = 'Gửi lại mã';
+$lang_module['send_success_code'] = 'Mã xác nhận đã được gửi lại đến email của bạn!';
+$lang_module['session_expired'] = 'Phiên của bạn đã hết hạn do thao tác quá lâu. Vui lòng tải lại trang để thử lại';
 
 $lang_module['merge_field_active_deadline'] = 'Hạn hiệu lực kích hoạt';
 $lang_module['merge_field_link'] = 'Liên kết';

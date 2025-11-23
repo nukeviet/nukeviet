@@ -441,3 +441,8 @@ fieldset[disabled] .openid-single-sign-on:focus {
     border-radius: 7px;
     padding: 20px;
 }
+
+.user-delete-account .input-confirm-code {
+    max-width: 250px;
+    margin: 0 auto;
+}

@@ -972,6 +972,10 @@ $(function() {
         location.reload();
     });
 
+    $('body').on('submit', '[data-toggle=verify_password_validForm]', function() {
+        return verify_password_validForm(this);
+    });
+
     // Xử lý cảnh báo của sổ WebView trên tất cả các form đăng nhập
     if (isInAppBrowser()) {
         $('form[data-toggle="userLogin"]').each(function() {
@@ -1393,7 +1397,83 @@ $(function() {
         });
     }
 
-    $('body').on('submit', '[data-toggle=verify_password_validForm]', function() {
-        return verify_password_validForm(this);
-    });
+    // Trang yêu cầu xóa dữ liệu cá nhân
+    const dataDeletionForm = $('#user-request-deletion-page');
+    if (dataDeletionForm.length) {
+        // Xác nhận đã đọc kỹ các thông tin
+        $('[name="i_confirmed"]', dataDeletionForm).on('change', function() {
+            const btn = $('[type="submit"]', dataDeletionForm);
+            if ($(this).is(':checked')) {
+                btn.prop('disabled', false);
+            } else {
+                btn.prop('disabled', true);
+            }
+        });
+
+        // Đếm ngược đồng hồ, gửi lại mã xác nhận
+        const countdownEle = $('[data-toggle="timer-code"]', dataDeletionForm);
+        const countdownVal = $('[data-toggle="time-code-remain"]', dataDeletionForm);
+        const resendEle = $('[data-toggle="request-new-code"]', dataDeletionForm);
+
+        function updateCountdown() {
+            let timeRemain = parseInt(countdownVal.text());
+            if (timeRemain > 0) {
+                --timeRemain;
+                countdownVal.text(timeRemain);
+                setTimeout(updateCountdown, 1000);
+            } else {
+                countdownEle.hide();
+                resendEle.show();
+            }
+        }
+        if (countdownEle.length && countdownEle.is(':visible')) {
+            updateCountdown();
+        }
+        resendEle.on('click', function(e) {
+            e.preventDefault();
+            $(this).hide();
+            $('[data-toggle="recode-loader"]', dataDeletionForm).show();
+            $.ajax({
+                url: nv_base_siteurl + 'index.php?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=' + nv_func_name + '&nocache=' + new Date().getTime(),
+                type: 'POST',
+                data: {
+                    checkss: dataDeletionForm.data('checkss'),
+                    resend_code: 1
+                },
+                dataType: 'json',
+                cache: false,
+                success: function (response) {
+                    $('[data-toggle="recode-loader"]', dataDeletionForm).hide();
+
+                    if (response.status != 'ok') {
+                        nvToast(response.mess, 'error');
+                        resendEle.show();
+                        return;
+                    }
+
+                    nvToast(response.mess, 'success');
+                    setTimeout(() => {
+                        countdownVal.text('120');
+                        countdownEle.show();
+                        updateCountdown();
+                    }, 500);
+                },
+                error: function (xhr, status, error) {
+                    console.log(xhr, status, error);
+                    nvToast(error, 'error');
+                    btn.prop('disabled', false);
+                }
+            });
+        });
+
+        // Nhập đủ mã mới cho phép submit
+        $('[name="verification_code"]', dataDeletionForm).on('input', function() {
+            const btn = $('[type="submit"]', dataDeletionForm);
+            if ($(this).val().length >= 10) {
+                btn.prop('disabled', false);
+            } else {
+                btn.prop('disabled', true);
+            }
+        });
+    }
 });

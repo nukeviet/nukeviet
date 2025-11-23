@@ -2231,11 +2231,32 @@ function user_verify_password(array $array): string
  */
 function user_request_deletion(array $array): string
 {
+    global $checkss;
+
     $xtpl = new XTemplate('data_deletion_request.tpl', get_module_tpl_dir('data_deletion_request.tpl'));
     $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
     $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
 
     $xtpl->assign('DATA', $array);
+    $xtpl->assign('CHECKSS', $checkss);
+
+    if (!$array['i_confirmed']) {
+        $xtpl->parse('main.not_confirmed');
+    } elseif (!$array['delete_accepted']) {
+        if ($array['time_code_remaining'] > 0) {
+            $xtpl->parse('main.verification_page.timing_code');
+        } else {
+            $xtpl->parse('main.verification_page.request_new_code');
+        }
+
+        if (!empty($array['error'])) {
+            $xtpl->parse('main.verification_page.error');
+        }
+
+        $xtpl->parse('main.verification_page');
+    } else {
+        //
+    }
 
     $xtpl->parse('main');
     return $xtpl->text('main');

@@ -225,21 +225,98 @@ if ($not_allowed) {
 
 $array = [];
 $array['link_back'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=security-privacy';
+$array['form_action'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op;
 
 // Kiểm tra đã xác nhận mật khẩu
 $confirm_pwd = $nv_Request->get_string($module_data . '_confirm_pwd', 'session', '');
 $confirm_pwd = $confirm_pwd ? json_decode($confirm_pwd, true) : [];
-if (!is_array($confirm_pwd) or !isset($confirm_pwd['time']) or (NV_CURRENTTIME - $confirm_pwd['time'] > 600) or !isset($confirm_pwd['area']) or $confirm_pwd['area'] !== 'datadeletion') {
+if (!is_array($confirm_pwd) or !isset($confirm_pwd['time']) or (NV_CURRENTTIME - $confirm_pwd['time'] > 1800) or !isset($confirm_pwd['area']) or $confirm_pwd['area'] !== 'datadeletion') {
     $confirm_pwd = false;
 } else {
     $confirm_pwd = true;
 }
 
 if (!$confirm_pwd) {
+    if ($nv_Request->isset_request('resend_code', 'post')) {
+        nv_jsonOutput([
+            'status' => 'error',
+            'mess' => $nv_Lang->getModule('session_expired')
+        ]);
+    }
+
     $nv_redirect = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=verify-password&area=datadeletion&nv_redirect=' . nv_redirect_encrypt(nv_url_rewrite($page_url, true));
     $nv_redirect = nv_url_rewrite($nv_redirect, true);
     nv_redirect_location($nv_redirect);
 }
+
+$checkss = md5('datadeletion.' . NV_CHECK_SESSION);
+
+$sql = "SELECT * FROM " . NV_MOD_TABLE . "_info WHERE userid=" . $user_info['userid'];
+$user_more_info = $db->query($sql)->fetch();
+if (empty($user_more_info)) {
+    http_response_code(500);
+    trigger_error('User more info not found', E_USER_ERROR);
+    exit(1);
+}
+$user_more_info['deletion_checkcode'] = empty($user_more_info['deletion_checkcode']) ? [] : explode('|', $user_more_info['deletion_checkcode']);
+$array['current_code'] = $user_more_info['deletion_checkcode'][0] ?? '';
+$array['time_code'] = intval($user_more_info['deletion_checkcode'][1] ?? 0);
+$array['checkss'] = $nv_Request->get_title('checkss', 'post', '');
+
+$array['submit_confirmed'] = (int) $nv_Request->get_bool('submit_confirmed', 'post', false);
+$array['i_confirmed'] = (int) $nv_Request->get_bool('i_confirmed', 'post', false);
+$array['verification_code'] = $nv_Request->get_title('verification_code', 'post', '');
+$array['delete_accepted'] = false;
+$array['error'] = '';
+
+// Gửi lại mã
+if (
+    ($array['submit_confirmed'] or $nv_Request->isset_request('resend_code', 'post')) and
+    (empty($array['current_code']) or (NV_CURRENTTIME - $array['time_code'] >= 120))
+) {
+    if (!$array['submit_confirmed'] and !hash_equals($checkss, $array['checkss'])) {
+        nv_jsonOutput([
+            'status' => 'error',
+            'mess' => 'Wrong session!!!'
+        ]);
+    }
+
+    // Tạo mã xác nhận mới
+    $new_code = strtoupper(nv_genpass(10));
+    $user_more_info['deletion_checkcode'] = $new_code . '|' . NV_CURRENTTIME;
+
+    $sql = "UPDATE " . NV_MOD_TABLE . "_info SET deletion_checkcode=" . $db->quote($user_more_info['deletion_checkcode']) . " WHERE userid=" . $user_info['userid'];
+    $db->query($sql);
+
+    // Gửi email chứa mã xác nhận
+
+    if (!$array['submit_confirmed']) {
+        nv_jsonOutput([
+            'status' => 'ok',
+            'mess' => $nv_Lang->getModule('send_success_code')
+        ]);
+    }
+
+    $array['time_code'] = NV_CURRENTTIME;
+}
+
+// Submit xác nhận xóa
+if (!empty($array['verification_code'])) {
+    if (!hash_equals($checkss, $array['checkss'])) {
+        $array['error'] = 'Wrong session!!!';
+    } elseif ($array['verification_code'] !== $array['current_code']) {
+        $array['error'] = $nv_Lang->getModule('lostpass_active_error');
+    } else {
+        // Xác nhận xóa thành công
+        $array['delete_accepted'] = true;
+    }
+}
+
+$array['time_code_remain'] = 120 - (NV_CURRENTTIME - $array['time_code']);
+$array['time_code_remain'] < 0 && $array['time_code_remain'] = 0;
+
+$email_hint = substr($user_info['email'], 0, 3) . '***' . substr($user_info['email'], -6);
+$array['message_checkmail'] = $nv_Lang->getModule('delaccount_veremail_checkinfo', $email_hint);
 
 $contents = user_request_deletion($array);
 

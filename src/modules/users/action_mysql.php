@@ -315,6 +315,7 @@ $sql_create_module[] = 'CREATE TABLE IF NOT EXISTS ' . $db_config['prefix'] . '_
 $sql_create_module[] = 'CREATE TABLE IF NOT EXISTS ' . $db_config['prefix'] . '_' . $module_data . "_info (
     userid mediumint(8) unsigned NOT NULL,
     inform CHAR(30) NOT NULL DEFAULT '',
+    deletion_checkcode varchar(25) NOT NULL DEFAULT '' COMMENT 'Mã xác nhận yêu cầu xóa dữ liệu cá nhân',
     PRIMARY KEY (userid)
 ) ENGINE=MyISAM";
 
