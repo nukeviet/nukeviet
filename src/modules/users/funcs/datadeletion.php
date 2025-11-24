@@ -13,6 +13,8 @@ if (!defined('NV_IS_MOD_USER')) {
     exit('Stop!!!');
 }
 
+use NukeViet\Module\users\Shared\Emails;
+
 $page_title = $nv_Lang->getModule('datadeletion');
 $description = $keywords = 'no';
 
@@ -44,6 +46,11 @@ if (defined('SSO_CLIENT_DOMAIN')) {
         }
         $nv_Request->set_Session('sso_client_' . $module_data, $sso_client);
     }
+}
+
+if (defined('NV_IS_USER_FORUM')) {
+    require_once NV_ROOTDIR . '/' . $global_config['dir_forum'] . '/nukeviet/datadeletion.php';
+    exit();
 }
 
 // Xử lý cho trường hợp gửi yêu cầu xóa dữ liệu cá nhân
@@ -94,7 +101,7 @@ if ($sender == 'facebook') {
 
     // Xác định xem đã xóa chưa, đã xóa thì báo thành công và kết thúc. Trạng thái check trong 7 ngày, sau đó vô hiệu
     $sql = "SELECT * FROM " . NV_MOD_TABLE . "_deleted WHERE request_time>=" . $offset_time . " AND
-    request_source='facebook' AND opid=" . $db->quote($opid);
+    request_source='facebook' AND opid=" . $db->quote($opid) . " LIMIT 1";
     $deleted = $db->query($sql)->fetch();
     if (!empty($deleted)) {
         nv_jsonOutput([
@@ -127,48 +134,19 @@ if ($sender == 'facebook') {
         ]);
     }
 
+    // Kiểm tra tài khoản này có mật khẩu hay không
+    $sql = "SELECT password FROM " . NV_MOD_TABLE . " WHERE userid=" . $row['userid'];
+    $has_password = $db->query($sql)->fetchColumn() ? true : false;
+
+    // Kiểm tra tài khoản này có Oauth khác Oauth đang yêu cầu xóa không
+    $sql = "SELECT COUNT(*) FROM " . NV_MOD_TABLE . "_openid WHERE userid=" . $row['userid'] . " AND NOT (openid='facebook' AND opid=" . $db->quote($opid) . ")";
+    $has_other_oauth = $db->query($sql)->fetchColumn() ? true : false;
+
+    // Xác định chế độ xóa
+    $delete_mode = ($has_password or $has_other_oauth) ? 'oauth_only' : 'fully_account';
+
     $db->beginTransaction();
     try {
-        $new_data = [];
-        $new_data['username'] = 'deleteduser.' . nv_genpass(8);
-        $new_data['first_name'] = 'User';
-        $new_data['last_name'] = 'Deleted';
-        $new_data['email'] = $new_data['username'] . '@' . NV_SERVER_NAME;
-
-        // Xóa các dữ liệu liên quan
-        $sql = "DELETE FROM " . NV_MOD_TABLE . "_info WHERE userid=" . $row['userid'];
-        $db->query($sql);
-
-        $sql = "INSERT INTO " . NV_MOD_TABLE . "_info (userid) VALUES (" . $row['userid'] . ")";
-        $db->query($sql);
-
-        $sql = "DELETE FROM " . NV_MOD_TABLE . "_openid WHERE userid=" . $row['userid'];
-        $db->query($sql);
-
-        $sql = "DELETE FROM " . NV_MOD_TABLE . "_backupcodes WHERE userid=" . $row['userid'];
-        $db->query($sql);
-
-        $sql = "DELETE FROM " . NV_MOD_TABLE . "_edit WHERE userid=" . $row['userid'];
-        $db->query($sql);
-
-        $sql = "DELETE FROM " . NV_MOD_TABLE . "_login WHERE userid=" . $row['userid'];
-        $db->query($sql);
-
-        $sql = "DELETE FROM " . NV_MOD_TABLE . "_passkey WHERE userid=" . $row['userid'];
-        $db->query($sql);
-
-        // Hủy thông tin cá nhân
-        $sql = "UPDATE " . NV_MOD_TABLE . " SET
-            username=" . $db->quote($new_data['username']) . ",
-            md5username=" . $db->quote(nv_md5safe($new_data['username'])) . ",
-            email=" . $db->quote($new_data['email']) . ",
-            first_name=" . $db->quote($new_data['first_name']) . ",
-            last_name=" . $db->quote($new_data['last_name']) . ",
-            gender='N', birthday=0, sig='', question='', answer='',
-            photo='', active=0, checknum=''
-        WHERE userid=" . $row['userid'];
-        $db->query($sql);
-
         // Lưu ghi nhận đã xóa
         $sql = "INSERT INTO " . NV_MOD_TABLE . "_deleted (
             userid, md5username, md5email, request_source, opid, confirmation_code, request_time, issued_at
@@ -188,11 +166,6 @@ if ($sender == 'facebook') {
             'error' => 'server_error',
             'message' => $e->getMessage()
         ]);
-    }
-
-    // Xóa ảnh đại diện
-    if (!empty($row['photo'])) {
-        nv_deletefile(NV_ROOTDIR . '/' . $row['photo']);
     }
 
     nv_jsonOutput([
@@ -235,11 +208,13 @@ $checkss = md5('datadeletion.' . NV_CHECK_SESSION);
 
 $array = [];
 $array['link_back'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=security-privacy';
+$array['link_login'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=login';
 $array['link_logout'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=logout';
 $array['link_home'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA;
 $array['form_action'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op;
 $array['checkss'] = $nv_Request->get_title('checkss', 'post', '');
 $array['error'] = '';
+$array = nv_apply_hook($module_name, 'prepare_user_data_deletion', [$array], $array);
 
 // Trường hợp tài khoản đang chờ xóa
 if (!empty($user_info['delete_at'])) {
@@ -247,6 +222,11 @@ if (!empty($user_info['delete_at'])) {
     $array['estimated_time_show'] = nv_datetime_format($array['estimated_time'], 1);
     $array['is_cancel'] = false;
 
+    if (!empty($nv_redirect)) {
+        $array['link_logout'] .= '&amp;nv_redirect=' . urlencode($nv_redirect);
+    }
+
+    // Hủy yêu cầu xóa
     if ($nv_Request->isset_request('checkss', 'post')) {
         if (!hash_equals($checkss, $array['checkss'])) {
             $array['error'] = 'Wrong session!!!';
@@ -280,6 +260,22 @@ if (!empty($user_info['delete_at'])) {
             $array['link_change_pass'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=editinfo/password';
             $array['link_security'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=security-privacy';
             $array['protect_account_message'] = $nv_Lang->getModule('delacc_cancel_success_after2', $array['link_change_pass'], $array['link_security']);
+
+            // Gửi email thông báo hủy yêu cầu xóa
+            $send_data = [[
+                'to' => $user_info['email'],
+                'data' => [
+                    'first_name' => $user_info['first_name'],
+                    'last_name' => $user_info['last_name'],
+                    'username' => $user_info['username'],
+                    'email' => $user_info['email'],
+                    'gender' => $user_info['gender'],
+                    'pass_link' => urlRewriteWithDomain($array['link_change_pass'], NV_MY_DOMAIN),
+                    'link' => urlRewriteWithDomain($array['link_security'], NV_MY_DOMAIN),
+                    'lang' => NV_LANG_INTERFACE
+                ]
+            ]];
+            nv_sendmail_template_async([$module_name, Emails::DELETE_ACCOUNT_CANCEL], $send_data, NV_LANG_INTERFACE);
         }
     }
 
@@ -372,6 +368,19 @@ if (
     $db->query($sql);
 
     // Gửi email chứa mã xác nhận
+    $send_data = [[
+        'to' => $user_info['email'],
+        'data' => [
+            'first_name' => $user_info['first_name'],
+            'last_name' => $user_info['last_name'],
+            'username' => $user_info['username'],
+            'email' => $user_info['email'],
+            'gender' => $user_info['gender'],
+            'code' => $new_code,
+            'lang' => NV_LANG_INTERFACE
+        ]
+    ]];
+    nv_sendmail_template_async([$module_name, Emails::DELETE_ACCOUNT_SECCODE], $send_data, NV_LANG_INTERFACE);
 
     if (!$array['submit_confirmed']) {
         nv_jsonOutput([
@@ -415,6 +424,21 @@ if (!empty($array['verification_code'])) {
                 include NV_ROOTDIR . '/modules/users/login/cas-' . $user_info['openid_server'] . '.php';
             }
         }
+
+        $send_data = [[
+            'to' => $user_info['email'],
+            'data' => [
+                'first_name' => $user_info['first_name'],
+                'last_name' => $user_info['last_name'],
+                'username' => $user_info['username'],
+                'email' => $user_info['email'],
+                'gender' => $user_info['gender'],
+                'action_time' => $array['estimated_time'],
+                'link' => urlRewriteWithDomain($array['link_login'], NV_MY_DOMAIN),
+                'lang' => NV_LANG_INTERFACE
+            ]
+        ]];
+        nv_sendmail_template_async([$module_name, Emails::DELETE_ACCOUNT_PENDING], $send_data, NV_LANG_INTERFACE);
 
         $nv_Request->unset_request($module_data . '_confirm_pwd', 'session');
         $contents = user_success_deletion($array);

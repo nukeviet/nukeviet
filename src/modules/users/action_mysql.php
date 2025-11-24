@@ -342,17 +342,17 @@ $sql_create_module[] = 'CREATE TABLE IF NOT EXISTS ' . $db_config['prefix'] . '_
 ) ENGINE=MyISAM";
 
 $sql_create_module[] = 'CREATE TABLE IF NOT EXISTS ' . $db_config['prefix'] . '_' . $module_data . "_deleted (
+    id int(11) unsigned NOT NULL AUTO_INCREMENT,
     userid mediumint(8) unsigned NOT NULL,
-    md5username varchar(32) NOT NULL DEFAULT '',
-    md5email varchar(32) NOT NULL DEFAULT '',
-    request_source varchar(50) NOT NULL DEFAULT '' COMMENT 'Nguồn yêu cầu ví dụ facebook',
-    opid char(50) NOT NULL DEFAULT '',
-    confirmation_code varchar(36) NOT NULL DEFAULT '',
     request_time int(11) unsigned NOT NULL COMMENT 'Thời điểm nhận yêu cầu',
+    md5username varchar(32) NOT NULL DEFAULT '' COMMENT 'MD5 của username tại thời điểm xóa',
+    md5email varchar(32) NOT NULL DEFAULT '' COMMENT 'MD5 của email tại thời điểm xóa',
+    request_source varchar(50) NOT NULL DEFAULT '' COMMENT 'Nguồn yêu cầu ví dụ facebook, rỗng là thành viên tự yêu cầu',
+    opid char(50) NOT NULL DEFAULT '' COMMENT 'ID bên nguồn yêu cầu',
+    confirmation_code varchar(36) NOT NULL DEFAULT '' COMMENT 'Mã xác nhận yêu cầu xóa dữ liệu cá nhân, UUIDv4 application tự sinh',
     issued_at int(11) unsigned NOT NULL COMMENT 'Thời điểm yêu cầu bên nguồn',
-    PRIMARY KEY (userid),
-    UNIQUE KEY openid (request_source, opid),
-    UNIQUE KEY confirmation_code (confirmation_code),
+    PRIMARY KEY (id),
+    KEY userid (userid),
     KEY request_time (request_time),
     KEY md5username (md5username)
 ) ENGINE=MyISAM COMMENT 'Lưu trữ thông tin thành viên đã yêu cầu xóa dữ liệu cá nhân'";

@@ -1474,23 +1474,6 @@ if ($checkss == $array_data['checkss'] and $array_data['type'] == 'basic') {
         'input' => nv_url_rewrite($page_url, true),
         'mess' => $nv_Lang->getModule('safe_activate_ok')
     ]);
-} elseif ($checkss == $array_data['checkss'] and $array_data['type'] == 'forcedrelogin') {
-    // FIXME
-    $nv_password = $nv_Request->get_title('nv_password', 'post', '');
-    if (empty($nv_password) or !$crypt->validate_password($nv_password, $row['password'])) {
-        nv_jsonOutput([
-            'status' => 'error',
-            'input' => 'nv_password',
-            'mess' => $nv_Lang->getGlobal('incorrect_password')
-        ]);
-    }
-
-    forcedrelogin($edit_userid);
-    nv_jsonOutput([
-        'status' => 'ok',
-        'input' => '',
-        'mess' => $nv_Lang->getModule('forcedrelogin_note')
-    ]);
 }
 
 $page_title = $nv_Lang->getModule('editinfo_pagetitle');

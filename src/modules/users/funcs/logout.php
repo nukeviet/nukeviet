@@ -27,7 +27,47 @@ if (defined('NV_IS_ADMIN')) {
     nv_insert_logs(NV_LANG_DATA, $module_name, '[' . $user_info['username'] . '] ' . $nv_Lang->getModule('userlogout'), ' Client IP:' . NV_CLIENT_IP, $log_userid);
 }
 
-$url_redirect = !empty($client_info['referer']) ? $client_info['referer'] : ($_SERVER['SCRIPT_URI'] ?? NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA);
+$nv_redirect = '';
+if ($nv_Request->isset_request('nv_redirect', 'post,get')) {
+    $nv_redirect = nv_get_redirect();
+    if ($nv_Request->isset_request('nv_redirect', 'get') and !empty($nv_redirect)) {
+        $nv_Request->set_Session('nv_redirect_' . $module_data, $nv_redirect);
+    }
+} elseif ($nv_Request->isset_request('sso_redirect', 'get')) {
+    $sso_redirect = $nv_Request->get_title('sso_redirect', 'get', '');
+    if (!empty($sso_redirect)) {
+        $nv_Request->set_Session('sso_redirect_' . $module_data, $sso_redirect);
+    }
+}
+if (defined('SSO_CLIENT_DOMAIN')) {
+    /** @disregard PHP0415 */
+    $allowed_client_origin = explode(',', SSO_CLIENT_DOMAIN);
+    $sso_client = $nv_Request->get_title('client', 'get', '');
+    if (!empty($sso_client)) {
+        if (!in_array($sso_client, $allowed_client_origin, true)) {
+            // 406 Not Acceptable
+            nv_info_die($nv_Lang->getGlobal('error_404_title'), $nv_Lang->getGlobal('error_404_title'), $nv_Lang->getGlobal('error_404_content'), 406);
+        }
+        $nv_Request->set_Session('sso_client_' . $module_data, $sso_client);
+    }
+}
+
+$url_redirect = nv_redirect_decrypt($nv_redirect);
+if (defined('SSO_REGISTER_SECRET')) {
+    $sso_client = $nv_Request->get_title('sso_client_' . $module_data, 'session', '');
+    $sso_redirect = $nv_Request->get_title('sso_redirect_' . $module_data, 'session', '');
+    $sso_redirect = NukeViet\Client\Sso::decrypt($sso_redirect);
+
+    if (!empty($sso_redirect) and !empty($sso_client) and str_starts_with($sso_redirect, $sso_client)) {
+        $url_redirect = $sso_redirect;
+    }
+
+    $nv_Request->unset_request('sso_client_' . $module_data, 'session');
+    $nv_Request->unset_request('sso_redirect_' . $module_data, 'session');
+}
+
+empty($url_redirect) && ($url_redirect = !empty($client_info['referer']) ? $client_info['referer'] : ($_SERVER['SCRIPT_URI'] ?? NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA));
+
 if (defined('NV_IS_USER_FORUM') or defined('SSO_SERVER')) {
     require_once NV_ROOTDIR . '/' . $global_config['dir_forum'] . '/nukeviet/logout.php';
 } else {
