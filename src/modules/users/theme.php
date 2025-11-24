@@ -2231,7 +2231,7 @@ function user_verify_password(array $array): string
  */
 function user_request_deletion(array $array): string
 {
-    global $checkss;
+    global $checkss, $global_users_config, $nv_Lang;
 
     $xtpl = new XTemplate('data_deletion_request.tpl', get_module_tpl_dir('data_deletion_request.tpl'));
     $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
@@ -2241,9 +2241,22 @@ function user_request_deletion(array $array): string
     $xtpl->assign('CHECKSS', $checkss);
 
     if (!$array['i_confirmed']) {
+        if (empty($global_users_config['hold_deleted_username'])) {
+            $hold_message = $nv_Lang->getModule('delaccount_explain12');
+        } elseif ($global_users_config['hold_deleted_username'] > 999) {
+            $hold_message = $nv_Lang->getModule('delaccount_explain11');
+        } else {
+            // Nếu số ngày giữ là bội số năm
+            if ($global_users_config['hold_deleted_username'] % 365 == 0) {
+                $hold_message = $nv_Lang->getModule('delaccount_explain9', $global_users_config['hold_deleted_username'] / 365);
+            } else {
+                $hold_message = $nv_Lang->getModule('delaccount_explain10', $global_users_config['hold_deleted_username']);
+            }
+        }
+        $xtpl->assign('HOLD_MESSAGE', $hold_message);
         $xtpl->parse('main.not_confirmed');
-    } elseif (!$array['delete_accepted']) {
-        if ($array['time_code_remaining'] > 0) {
+    } else {
+        if ($array['time_code_remain'] > 0) {
             $xtpl->parse('main.verification_page.timing_code');
         } else {
             $xtpl->parse('main.verification_page.request_new_code');
@@ -2254,8 +2267,52 @@ function user_request_deletion(array $array): string
         }
 
         $xtpl->parse('main.verification_page');
-    } else {
-        //
+    }
+
+    $xtpl->parse('main');
+    return $xtpl->text('main');
+}
+
+/**
+ * @param array $array
+ * @return string
+ */
+function user_success_deletion(array $array): string
+{
+    $xtpl = new XTemplate('data_deletion_request_success.tpl', get_module_tpl_dir('data_deletion_request_success.tpl'));
+    $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
+    $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
+
+    $xtpl->assign('DATA', $array);
+
+    $xtpl->parse('main');
+    return $xtpl->text('main');
+}
+
+/**
+ * @param array $array
+ * @return string
+ */
+function user_pending_deletion(array $array): string
+{
+    global $nv_redirect, $checkss;
+
+    $xtpl = new XTemplate('data_deletion_request_pending.tpl', get_module_tpl_dir('data_deletion_request_pending.tpl'));
+    $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
+    $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
+
+    $xtpl->assign('DATA', $array);
+    $xtpl->assign('CHECKSS', $checkss);
+    $xtpl->assign('NV_REDIRECT', $nv_redirect);
+
+    // Thông báo đã hủy
+    if ($array['is_cancel']) {
+        $xtpl->parse('cancel');
+        return $xtpl->text('cancel');
+    }
+
+    if (!empty($array['error'])) {
+        $xtpl->parse('main.error');
     }
 
     $xtpl->parse('main');

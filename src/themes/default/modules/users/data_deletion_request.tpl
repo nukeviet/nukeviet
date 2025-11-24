@@ -26,7 +26,7 @@
                 <ul class="list-default">
                     <li>{LANG.delaccount_explain7}</li>
                     <li>{LANG.delaccount_explain8}</li>
-                    <li>{LANG.delaccount_explain9}</li>
+                    <li>{HOLD_MESSAGE}</li>
                 </ul>
                 <hr>
                 <div class="usr-flex usr-gap-1 margin-bottom-lg">
