@@ -20,8 +20,7 @@ $description = $keywords = 'no';
 
 $confirmation_code = nv_uuid4();
 $page_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $module_info['alias']['datadeletion'];
-$url = urlRewriteWithDomain(str_replace('&amp;', '&', $page_url . '&amp;code=' . $confirmation_code), NV_MY_DOMAIN);
-$offset_time = NV_CURRENTTIME - (7 * 86400);
+$offset_time = NV_CURRENTTIME - (10 * 86400);
 
 $nv_redirect = '';
 if ($nv_Request->isset_request('nv_redirect', 'post,get')) {
@@ -53,9 +52,61 @@ if (defined('NV_IS_USER_FORUM')) {
     exit();
 }
 
+/**
+ * Đặt lệnh chờ xóa tài khoản
+ *
+ * @param array $row
+ * @return void
+ */
+function setPendingDeletion(array $row): void
+{
+    global $db, $module_name;
+
+    $link_login = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=login';
+    $row['estimated_time'] = $row['estimated_time'] ?? (NV_CURRENTTIME + (7 * 86400));
+
+    // Đánh dấu yêu cầu xóa vào database
+    $sql = "UPDATE " . NV_MOD_TABLE . " SET delete_at=" . $row['estimated_time'] . ", checknum='' WHERE userid=" . $row['userid'];
+    $db->query($sql);
+
+    $sql = "UPDATE " . NV_MOD_TABLE . "_info SET deletion_checkcode='' WHERE userid=" . $row['userid'];
+    $db->query($sql);
+
+    $send_data = [[
+        'to' => $row['email'],
+        'data' => [
+            'first_name' => $row['first_name'],
+            'last_name' => $row['last_name'],
+            'username' => $row['username'],
+            'email' => $row['email'],
+            'gender' => $row['gender'],
+            'action_time' => $row['estimated_time'],
+            'link' => urlRewriteWithDomain($link_login, NV_MY_DOMAIN),
+            'lang' => NV_LANG_INTERFACE
+        ]
+    ]];
+    nv_sendmail_template_async([$module_name, Emails::DELETE_ACCOUNT_PENDING], $send_data, NV_LANG_INTERFACE);
+}
+
 // Xử lý cho trường hợp gửi yêu cầu xóa dữ liệu cá nhân
 $sender = $array_op[1] ?? '';
 if ($sender == 'facebook') {
+    /**
+     * @param mixed $code
+     * @return never
+     */
+    function jsonConfirmSuccess($code)
+    {
+        global $module_name, $module_info;
+
+        $url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $module_info['alias']['datadeletion'];
+        $url = urlRewriteWithDomain(str_replace('&amp;', '&', $url . '&amp;code=' . $code), NV_MY_DOMAIN);
+        nv_jsonOutput([
+            'url' => $url,
+            'confirmation_code' => $code
+        ]);
+    }
+
     $page_url .= '/facebook';
     $signed_request = $nv_Request->get_string('signed_request', 'post', '', false, false);
     $signed_request = explode('.', $signed_request);
@@ -99,23 +150,15 @@ if ($sender == 'facebook') {
 
     $opid = $crypt->hash($data['user_id']);
 
-    // Xác định xem đã xóa chưa, đã xóa thì báo thành công và kết thúc. Trạng thái check trong 7 ngày, sau đó vô hiệu
-    $sql = "SELECT * FROM " . NV_MOD_TABLE . "_deleted WHERE request_time>=" . $offset_time . " AND
-    request_source='facebook' AND opid=" . $db->quote($opid) . " LIMIT 1";
-    $deleted = $db->query($sql)->fetch();
-    if (!empty($deleted)) {
-        nv_jsonOutput([
-            'url' => $url,
-            'confirmation_code' => $confirmation_code
-        ]);
-    }
-
     // Tìm tài khoản gắn với ID này
-    $sql = "SELECT tb1.userid, tb2.md5username, tb2.email, tb2.active, tb2.photo, tb2.idsite FROM " . NV_MOD_TABLE . "_openid tb1
+    $sql = "SELECT
+        tb1.userid, tb2.username, tb2.md5username, tb2.email, tb2.active, tb2.photo,
+        tb2.idsite, tb2.delete_at, tb2.first_name, tb2.last_name, tb2.gender
+    FROM " . NV_MOD_TABLE . "_openid tb1
     INNER JOIN " . NV_MOD_TABLE . " tb2 ON tb1.userid=tb2.userid
     WHERE tb1.openid='facebook' AND tb1.opid=" . $db->quote($opid);
     $row = $db->query($sql)->fetch();
-    if (empty($row) or empty($row['active']) or ($global_config['idsite'] > 0 and $row['idsite'] != $global_config['idsite'])) {
+    if (empty($row) or ($global_config['idsite'] > 0 and $row['idsite'] != $global_config['idsite'])) {
         http_response_code(400);
         nv_jsonOutput([
             'error' => 'invalid_data',
@@ -123,15 +166,32 @@ if ($sender == 'facebook') {
         ]);
     }
 
-    // Tài khoản admin không thể xóa
-    $sql = "SELECT COUNT(*) FROM " . NV_AUTHORS_GLOBALTABLE . " WHERE admin_id=" . $row['userid'];
-    $sql2 = "SELECT COUNT(*) FROM " . NV_MOD_TABLE . "_groups_users WHERE group_id IN (1,2,3) AND userid=" . $row['userid'];
-    if ($db->query($sql)->fetchColumn() or $db->query($sql2)->fetchColumn()) {
-        http_response_code(400);
-        nv_jsonOutput([
-            'error' => 'invalid_data',
-            'message' => 'Admin account cannot be deleted'
-        ]);
+    // Xác định xem đã xóa chưa, đã xóa thì báo thành công và kết thúc. Trạng thái check trong 10 ngày, sau đó vô hiệu
+    $sql = "SELECT * FROM " . NV_MOD_TABLE . "_deleted WHERE request_time>=" . $offset_time . " AND
+    request_source='facebook' AND opid=" . $db->quote($opid) . " LIMIT 1";
+    $deleted = $db->query($sql)->fetch();
+    if (!empty($deleted)) {
+        jsonConfirmSuccess($deleted['confirmation_code']);
+    }
+
+    // Liên kết nếu đã xóa thủ công
+    if (!empty($row['delete_at'])) {
+        // Tìm yêu cầu xóa thủ công nếu có
+        $sql = "SELECT * FROM " . NV_MOD_TABLE . "_deleted WHERE userid=" . $row['userid'] . " AND request_source='' LIMIT 1";
+        $deleted = $db->query($sql)->fetch();
+
+        // Gắn code này cho yêu cầu nếu chưa có
+        if (!empty($deleted)) {
+            if (empty($deleted['confirmation_code'])) {
+                $sql = "UPDATE " . NV_MOD_TABLE . "_deleted SET confirmation_code=" . $db->quote($confirmation_code) . " WHERE id=" . $deleted['id'];
+                $db->query($sql);
+            } else {
+                // Lấy lại code cũ nếu đã có
+                $confirmation_code = $deleted['confirmation_code'];
+            }
+        }
+
+        jsonConfirmSuccess($confirmation_code);
     }
 
     // Kiểm tra tài khoản này có mật khẩu hay không
@@ -145,33 +205,60 @@ if ($sender == 'facebook') {
     // Xác định chế độ xóa
     $delete_mode = ($has_password or $has_other_oauth) ? 'oauth_only' : 'fully_account';
 
-    $db->beginTransaction();
-    try {
-        // Lưu ghi nhận đã xóa
-        $sql = "INSERT INTO " . NV_MOD_TABLE . "_deleted (
-            userid, md5username, md5email, request_source, opid, confirmation_code, request_time, issued_at
-        ) VALUES (
-            " . $row['userid'] . ", " . $db->quote($row['md5username']) . ", " . $db->quote(nv_md5safe($row['email'])) . ",
-            'facebook', " . $db->quote($opid) . ", " . $db->quote($confirmation_code) . ",
-            " . NV_CURRENTTIME . ", " . intval($data['issued_at']) . "
-        )";
-        $db->query($sql);
-
-        $db->commit();
-    } catch (Throwable $e) {
-        $db->rollBack();
-        trigger_error(print_r($e, true));
-        http_response_code(500);
-        nv_jsonOutput([
-            'error' => 'server_error',
-            'message' => $e->getMessage()
-        ]);
+    if ($delete_mode == 'fully_account') {
+        // Tài khoản admin không thể xóa
+        $sql = "SELECT COUNT(*) FROM " . NV_AUTHORS_GLOBALTABLE . " WHERE admin_id=" . $row['userid'];
+        $sql2 = "SELECT COUNT(*) FROM " . NV_MOD_TABLE . "_groups_users WHERE group_id IN (1,2,3) AND userid=" . $row['userid'];
+        if ($db->query($sql)->fetchColumn() or $db->query($sql2)->fetchColumn()) {
+            http_response_code(400);
+            nv_jsonOutput([
+                'error' => 'invalid_data',
+                'message' => 'Admin account cannot be deleted'
+            ]);
+        }
     }
 
-    nv_jsonOutput([
-        'url' => $url,
-        'confirmation_code' => $confirmation_code
-    ]);
+    if ($delete_mode == 'oauth_only') {
+        // Xử lý xóa chỉ Oauth
+        $db->beginTransaction();
+        try {
+            // Xóa liên kết Oauth
+            $sql = "DELETE FROM " . NV_MOD_TABLE . "_openid WHERE openid='facebook' AND opid=" . $db->quote($opid) . " AND userid=" . $row['userid'];
+            $db->query($sql);
+
+            $sql = "DELETE FROM " . NV_AUTHORS_GLOBALTABLE . "_oauth WHERE oauth_server='facebook' AND oauth_uid=" . $db->quote($opid) . " AND admin_id=" . $row['userid'];
+            $db->query($sql);
+
+            $db->commit();
+        } catch (Throwable $e) {
+            $db->rollBack();
+            trigger_error(print_r($e, true));
+            http_response_code(500);
+            nv_jsonOutput([
+                'error' => 'server_error',
+                'message' => 'Error duing to unlink OAuth account'
+            ]);
+        }
+
+        nv_insert_logs(NV_LANG_DATA, $module_name, 'unlink_oauth_account', ' Client IP:' . NV_CLIENT_IP, $row['userid']);
+    } else {
+        // Xóa toàn bộ tài khoản
+        setPendingDeletion($row);
+    }
+
+    // Lưu ghi nhận đã xóa
+    $sql = "INSERT INTO " . NV_MOD_TABLE . "_deleted (
+        userid, request_source, request_time, md5username, md5email, opid, confirmation_code, issued_at
+    ) VALUES (
+        " . $row['userid'] . ", 'facebook', " . NV_CURRENTTIME . ",
+        " . $db->quote($delete_mode == 'fully_account' ? $row['md5username'] : '') . ",
+        " . $db->quote($delete_mode == 'fully_account' ? nv_md5safe($row['email']) : '') . ",
+        " . $db->quote($opid) . ", " . $db->quote($confirmation_code) . ",
+        " . intval($data['issued_at']) . "
+    )";
+    $db->query($sql);
+
+    jsonConfirmSuccess($confirmation_code);
 }
 
 // Hiển thị trang trạng thái yêu cầu xóa dữ liệu cá nhân
@@ -186,6 +273,9 @@ if (!empty($code)) {
     if (empty($data)) {
         nv_error404();
     }
+
+    $sql = "SELECT delete_at FROM " . NV_MOD_TABLE . " WHERE userid=" . $data['userid'];
+    $data['delete_at'] = $db->query($sql)->fetchColumn() ?: 0;
 
     $data['link_home'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA;
 
@@ -214,6 +304,12 @@ $array['link_home'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . 
 $array['form_action'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op;
 $array['checkss'] = $nv_Request->get_title('checkss', 'post', '');
 $array['error'] = '';
+$array['userid'] = $user_info['userid'];
+$array['username'] = $user_info['username'];
+$array['email'] = $user_info['email'];
+$array['first_name'] = $user_info['first_name'];
+$array['last_name'] = $user_info['last_name'];
+$array['gender'] = $user_info['gender'];
 $array = nv_apply_hook($module_name, 'prepare_user_data_deletion', [$array], $array);
 
 // Trường hợp tài khoản đang chờ xóa
@@ -237,6 +333,9 @@ if (!empty($user_info['delete_at'])) {
             $db->query($sql);
 
             $sql = "UPDATE " . NV_MOD_TABLE . "_info SET deletion_checkcode='' WHERE userid=" . $user_info['userid'];
+            $db->query($sql);
+
+            $sql = "DELETE FROM " . NV_MOD_TABLE . "_deleted WHERE userid=" . $user_info['userid'] . " AND request_source=''";
             $db->query($sql);
 
             $redirect = nv_redirect_decrypt($nv_redirect);
@@ -401,16 +500,20 @@ if (!empty($array['verification_code'])) {
     } else {
         // Xác nhận xóa thành công
         $array['delete_accepted'] = true;
-        $array['estimated_time'] = NV_CURRENTTIME + (7 * 86400);
+        $array['estimated_time'] = NV_CURRENTTIME + (10 * 86400);
         $array['estimated_time_show'] = nv_datetime_format($array['estimated_time'], 1);
 
         nv_insert_logs(NV_LANG_DATA, $module_name, 'manual_request_deletion', ' Client IP:' . NV_CLIENT_IP, $user_info['userid']);
+        setPendingDeletion($array);
 
-        // Đánh dấu yêu cầu xóa vào database
-        $sql = "UPDATE " . NV_MOD_TABLE . " SET delete_at=" . $array['estimated_time'] . ", checknum='' WHERE userid=" . $user_info['userid'];
-        $db->query($sql);
-
-        $sql = "UPDATE " . NV_MOD_TABLE . "_info SET deletion_checkcode='' WHERE userid=" . $user_info['userid'];
+        $sql = "INSERT INTO " . NV_MOD_TABLE . "_deleted (
+            userid, request_source, request_time, md5username, md5email, opid, confirmation_code, issued_at
+        ) VALUES (
+            " . $array['userid'] . ", '', " . NV_CURRENTTIME . ",
+            " . $db->quote(nv_md5safe($array['username'])) . ",
+            " . $db->quote(nv_md5safe($array['email'])) . ",
+            '', '', 0
+        )";
         $db->query($sql);
 
         // Logout toàn bộ ra khỏi hệ thống
@@ -424,21 +527,6 @@ if (!empty($array['verification_code'])) {
                 include NV_ROOTDIR . '/modules/users/login/cas-' . $user_info['openid_server'] . '.php';
             }
         }
-
-        $send_data = [[
-            'to' => $user_info['email'],
-            'data' => [
-                'first_name' => $user_info['first_name'],
-                'last_name' => $user_info['last_name'],
-                'username' => $user_info['username'],
-                'email' => $user_info['email'],
-                'gender' => $user_info['gender'],
-                'action_time' => $array['estimated_time'],
-                'link' => urlRewriteWithDomain($array['link_login'], NV_MY_DOMAIN),
-                'lang' => NV_LANG_INTERFACE
-            ]
-        ]];
-        nv_sendmail_template_async([$module_name, Emails::DELETE_ACCOUNT_PENDING], $send_data, NV_LANG_INTERFACE);
 
         $nv_Request->unset_request($module_data . '_confirm_pwd', 'session');
         $contents = user_success_deletion($array);

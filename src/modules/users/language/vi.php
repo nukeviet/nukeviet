@@ -915,10 +915,13 @@ $lang_module['note_webview2'] = 'Bạn đang mở trang này trong cửa sổ We
 $lang_module['note_webview3'] = 'Bạn đang mở trang này trong cửa sổ WebView. Tính năng đăng nhập qua bên thứ ba bên dưới có thể không hoạt động đúng. Nếu bạn muốn sử dụng chúng thay vì đăng nhập bằng mật khẩu, vui lòng mở trang này trong trình duyệt để tiếp tục.';
 
 $lang_module['datadeletion'] = 'Xóa dữ liệu cá nhân';
-$lang_module['datadeletion_title'] = 'Yêu cầu xóa dữ liệu cá nhân';
-$lang_module['datadeletion_text'] = 'Yêu cầu của bạn để xóa dữ liệu cá nhân đã được tiếp nhận và xử lý thành công';
+$lang_module['datadeletion_title'] = 'Yêu cầu xóa dữ liệu được liên kết';
+$lang_module['datadeletion_text'] = 'Trạng thái xử lý yêu cầu xóa dữ liệu của bạn từ';
 $lang_module['datadeletion_id'] = 'Mã yêu cầu';
-$lang_module['datadeletion_success'] = 'Đã xử lý';
+$lang_module['datadeletion_success'] = 'Yêu cầu đã được xử lý';
+$lang_module['datadeletion_success1'] = 'Chúng tôi đã xử lý yêu cầu xóa dữ liệu của bạn';
+$lang_module['datadeletion_data_info1'] = 'Dữ liệu liên quan đến tài khoản';
+$lang_module['datadeletion_data_info2'] = 'của bạn đã được đánh dấu để xóa khỏi hệ thống của chúng tôi theo chính sách bảo mật. Cảm ơn bạn đã sử dụng dịch vụ của chúng tôi';
 $lang_module['hold_deleted_username'] = 'Từ chối đăng ký lại tên tài khoản đã xóa';
 $lang_module['hold_deleted_username_note'] = 'Sau khi người dùng yêu cầu xóa dữ liệu cá nhân, tên đăng nhập của họ sẽ được giữ lại và không thể đăng ký lại trong khoảng thời gian này, đơn vị là số ngày từ 1-999. Nhập 0 nếu muốn cho đăng ký lại ngay lập tức, nhập 1000 nếu không cho đăng ký lại vĩnh viễn';
 $lang_module['redirecturi_helper_title'] = 'Cấu hình URL ứng dụng';
@@ -993,6 +996,11 @@ $lang_module['delacc_cancel_success_info2'] = 'Tài khoản của bạn đã đ�
 $lang_module['delacc_cancel_success_after1'] = 'Bảo vệ tài khoản của bạn';
 $lang_module['delacc_cancel_success_after2'] = 'Nếu bạn không phải là người yêu cầu xóa, chúng tôi khuyên bạn nên <strong><a href="%s">thay đổi mật khẩu</a></strong> và kiểm tra lại <strong><a href="%s">các phiên đăng nhập</a></strong> gần đây';
 $lang_module['delacc_cancel_success_back'] = 'Quay lại trang ban đầu';
+$lang_module['datadeletion_pedding_title'] = 'Trạng thái yêu cầu xóa dữ liệu';
+$lang_module['datadeletion_pedding_sub'] = 'Trạng thái yêu cầu xóa dữ liệu của bạn được gửi từ';
+$lang_module['datadeletion_pedding_body'] = 'Chúng tôi đã tiếp nhận yêu cầu xóa dữ liệu của bạn và đang lên lịch xử lý';
+$lang_module['datadeletion_pedding_time'] = 'Dữ liệu của bạn dự kiến sẽ được xóa vào khoảng';
+$lang_module['datadeletion_pedding_info'] = 'của bạn sẽ được xóa khỏi hệ thống của chúng tôi theo lịch trình. Bạn sẽ nhận được thông báo khi quá trình hoàn tất';
 
 $lang_module['merge_field_active_deadline'] = 'Hạn hiệu lực kích hoạt';
 $lang_module['merge_field_link'] = 'Liên kết';

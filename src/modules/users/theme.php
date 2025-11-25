@@ -2079,7 +2079,7 @@ function user_confirm_pass()
 }
 
 /**
- * Giao diện xóa dữ liệu người dùng (xóa tài khoản)
+ * Giao diện xóa dữ liệu người dùng (xóa tài khoản) từ bên thứ ba
  *
  * @param array $data
  * @return string
@@ -2092,11 +2092,18 @@ function user_data_deletion(array $data): string
     $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
     $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
 
-    !isset($data['status_class']) && $data['status_class'] = 'success';
-    !isset($data['status_icon']) && $data['status_icon'] = 'check';
-    !isset($data['status_text']) && $data['status_text'] = $nv_Lang->getModule('datadeletion_success');
+    $data['request_source'] = nv_ucfirst(nv_htmlspecialchars($data['request_source']));
+    $data['deletion_time'] = $data['delete_at'] ? nv_datetime_format($data['delete_at']) : '';
 
     $xtpl->assign('DATA', $data);
+
+    if (empty($data['delete_at']) or $data['delete_at'] <= NV_CURRENTTIME) {
+        // Gỡ liên kết
+        $xtpl->parse('main.unlink_account');
+    } else {
+        // Xóa tài khoản
+        $xtpl->parse('main.delete_account');
+    }
 
     $xtpl->parse('main');
     return $xtpl->text('main');
