@@ -117,11 +117,13 @@ if ($nv_Request->get_int('save', 'post', 0)) {
     $userid = $nv_Request->get_title('userid', 'post', 0);
     $md5username = nv_md5safe($userid);
     if (preg_match('/^([0-9]+)$/', $userid)) {
-        $sql = 'SELECT userid, username, active, group_id, in_groups FROM ' . NV_USERS_GLOBALTABLE . ' WHERE userid=' . (int) $userid . ' OR md5username=' . $db->quote($md5username);
+        $sql = 'SELECT userid, username, active, group_id, in_groups, delete_at
+        FROM ' . NV_USERS_GLOBALTABLE . ' WHERE userid=' . (int) $userid . ' OR md5username=' . $db->quote($md5username);
     } else {
-        $sql = 'SELECT userid, username, active, group_id, in_groups FROM ' . NV_USERS_GLOBALTABLE . ' WHERE md5username=' . $db->quote($md5username);
+        $sql = 'SELECT userid, username, active, group_id, in_groups, delete_at
+        FROM ' . NV_USERS_GLOBALTABLE . ' WHERE md5username=' . $db->quote($md5username);
     }
-    [$userid, $username, $active, $_group_id, $_in_groups] = $db->query($sql)->fetch(3);
+    [$userid, $username, $active, $_group_id, $_in_groups, $delete_at] = $db->query($sql)->fetch(3);
     if (empty($userid)) {
         $respon['input'] = 'userid';
         $respon['mess'] = $nv_Lang->getModule('add_error_choose');
@@ -145,6 +147,12 @@ if ($nv_Request->get_int('save', 'post', 0)) {
     if (empty($active)) {
         $respon['input'] = 'userid';
         $respon['mess'] = $nv_Lang->getModule('username_noactive', $username);
+        nv_jsonOutput($respon);
+    }
+
+    if (!empty($delete_at)) {
+        $respon['input'] = 'userid';
+        $respon['mess'] = $nv_Lang->getModule('add_error_deleted');
         nv_jsonOutput($respon);
     }
 

@@ -112,6 +112,7 @@ $install_lang['cron']['cron_notification_autodel'] = 'Delete old notification';
 $install_lang['cron']['cron_remove_expired_inform'] = 'Remove expired notifications';
 $install_lang['cron']['cron_apilogs_autodel'] = 'Remove expired API-logs';
 $install_lang['cron']['cron_expadmin_handling'] = 'Handling expired admins';
+$install_lang['cron']['cron_user_datadeletion_handling'] = 'Handling scheduled user data deletion';
 
 $install_lang['groups']['NukeViet-Fans'] = 'NukeViet-Fans';
 $install_lang['groups']['NukeViet-Admins'] = 'NukeViet-Admins';

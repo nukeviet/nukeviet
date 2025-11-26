@@ -139,6 +139,7 @@ $lang_module['add_error_choose'] = 'Lỗi: Bạn chưa chọn người dùng đ�
 $lang_module['add_error_exist'] = 'Lỗi: Người dùng này đã là quản trị';
 $lang_module['add_error_notexist'] = 'Lỗi: Người dùng này không tồn tại';
 $lang_module['add_error_diff'] = 'Xảy ra lỗi không xác định';
+$lang_module['add_error_deleted'] = 'Tài khoản này đang trong trạng thái chờ xóa hoặc đã bị xóa nên không thể chọn làm quản trị';
 $lang_module['action_account'] = 'Tài khoản người dùng';
 $lang_module['action_account_nochange'] = 'Giữ nguyên tài khoản người dùng';
 $lang_module['action_account_suspend'] = 'Khóa tài khoản người dùng';

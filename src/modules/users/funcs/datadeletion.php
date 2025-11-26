@@ -248,13 +248,14 @@ if ($sender == 'facebook') {
 
     // Lưu ghi nhận đã xóa
     $sql = "INSERT INTO " . NV_MOD_TABLE . "_deleted (
-        userid, request_source, request_time, md5username, md5email, opid, confirmation_code, issued_at
+        userid, request_source, request_time, md5username, md5email, opid, confirmation_code, issued_at, status
     ) VALUES (
         " . $row['userid'] . ", 'facebook', " . NV_CURRENTTIME . ",
         " . $db->quote($delete_mode == 'fully_account' ? $row['md5username'] : '') . ",
         " . $db->quote($delete_mode == 'fully_account' ? nv_md5safe($row['email']) : '') . ",
         " . $db->quote($opid) . ", " . $db->quote($confirmation_code) . ",
-        " . intval($data['issued_at']) . "
+        " . intval($data['issued_at']) . ",
+        " . ($delete_mode == 'fully_account' ? 0 : NV_CURRENTTIME) . "
     )";
     $db->query($sql);
 

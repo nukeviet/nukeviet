@@ -988,6 +988,7 @@ $lang_module['delacc_pending_info'] = 'Tài khoản của bạn đã được l�
 $lang_module['delacc_pending_info1'] = 'Quá trình xóa sẽ tự động diễn ra vào khoảng';
 $lang_module['delacc_pending_info2'] = 'Bạn có thể hủy yêu cầu này bất kỳ lúc nào trước khi hết thời hạn';
 $lang_module['delacc_cancel'] = 'Hủy yêu cầu xóa';
+$lang_module['delacc_cancel_adm'] = 'Hủy yêu cầu xóa tài khoản của người dùng';
 $lang_module['delacc_continue'] = 'Vẫn tiếp tục xóa (Đăng xuất)';
 $lang_module['delacc_cancel_success'] = 'Yêu cầu xóa đã được hủy';
 $lang_module['delacc_cancel_success_info'] = 'Tài khoản của bạn đã được khôi phục và an toàn';
@@ -1001,6 +1002,7 @@ $lang_module['datadeletion_pedding_sub'] = 'Trạng thái yêu cầu xóa dữ l
 $lang_module['datadeletion_pedding_body'] = 'Chúng tôi đã tiếp nhận yêu cầu xóa dữ liệu của bạn và đang lên lịch xử lý';
 $lang_module['datadeletion_pedding_time'] = 'Dữ liệu của bạn dự kiến sẽ được xóa vào khoảng';
 $lang_module['datadeletion_pedding_info'] = 'của bạn sẽ được xóa khỏi hệ thống của chúng tôi theo lịch trình. Bạn sẽ nhận được thông báo khi quá trình hoàn tất';
+$lang_module['datadeletion_pedding_adm'] = 'Tài khoản này đang thiết lập lệnh xóa vĩnh viễn. Thời gian dự kiến xóa lúc %s';
 
 $lang_module['merge_field_active_deadline'] = 'Hạn hiệu lực kích hoạt';
 $lang_module['merge_field_link'] = 'Liên kết';

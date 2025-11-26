@@ -230,7 +230,8 @@ while ($row = $result2->fetch()) {
         'info_verify' => $info_verify,
         'active_obj' => $row['active_obj'],
         'is_newuser' => ($row['group_id'] == 7 or in_array(7, $row['in_groups'], true)),
-        'link' => nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=memberlist/' . change_alias($row['username']) . '-' . $row['md5username'], true)
+        'link' => nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=memberlist/' . change_alias($row['username']) . '-' . $row['md5username'], true),
+        'delete_at' => $row['delete_at']
     ];
     if ($global_config['idsite'] > 0 and $row['idsite'] != $global_config['idsite']) {
         $users_list[$row['userid']]['is_edit'] = false;
@@ -401,6 +402,13 @@ foreach ($users_list as $u) {
         $xtpl->parse('main.xusers.is_admin');
     }
 
+    $pending_deletion = false;
+    if (!empty($u['delete_at']) and $u['delete_at'] > NV_CURRENTTIME) {
+        $pending_deletion = true;
+        $xtpl->assign('DELETE_AT', $nv_Lang->getModule('datadeletion_pedding_adm', nv_datetime_format($u['delete_at'], 1)));
+        $xtpl->parse('main.xusers.datadeletion_pending');
+    }
+
     if ($view_user_allowed) {
         $xtpl->parse('main.xusers.view');
     } else {
@@ -413,6 +421,11 @@ foreach ($users_list as $u) {
             $xtpl->assign('EDIT_2STEP_URL', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=edit_2step&amp;userid=' . $u['userid']);
             $xtpl->assign('EDIT_OAUTH_URL', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=edit_oauth&amp;userid=' . $u['userid']);
             $xtpl->parse('main.xusers.edit');
+
+            if ($pending_deletion) {
+                $xtpl->parse('main.xusers.edit2.cancel_deletion');
+            }
+
             $xtpl->parse('main.xusers.edit2');
         }
         if ($u['is_delete']) {

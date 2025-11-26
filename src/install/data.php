@@ -250,7 +250,8 @@ $sql_create_table[] = 'INSERT INTO ' . NV_CRONJOBS_GLOBALTABLE . ' (start_time, 
 (' . NV_CURRENTTIME . ', 1440, "notification_autodel.php", "cron_notification_autodel", "", 0, 1, 1, 0, 0),
 (' . NV_CURRENTTIME . ', 1440, "remove_expired_inform.php", "cron_remove_expired_inform", "", 0, 1, 1, 0, 0),
 (' . NV_CURRENTTIME . ', 60, "apilogs_autodel.php", "cron_apilogs_autodel", "", 0, 1, 1, 0, 0),
-(' . NV_CURRENTTIME . ', 60, "expadmin_handling.php", "cron_expadmin_handling", "", 0, 1, 1, 0, 0)';
+(' . NV_CURRENTTIME . ', 60, "expadmin_handling.php", "cron_expadmin_handling", "", 0, 1, 1, 0, 0),
+(' . NV_CURRENTTIME . ', 360, "user_datadeletion_handling.php", "cron_user_datadeletion_handling", "", 0, 1, 1, 0, 0)';
 
 $sql_create_table[] = 'INSERT INTO ' . $db_config['prefix'] . "_setup_extensions (id, type, title, is_sys, is_virtual, basename, table_prefix, version, addtime, author, note) VALUES
 (0, 'module', 'about', 0, 0, 'page', 'about', '" . $global_config['version'] . " " . $global_config['version_time'] . "', " . NV_CURRENTTIME . ", 'VINADES.,JSC <contact@vinades.vn>', ''),

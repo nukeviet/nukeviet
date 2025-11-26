@@ -239,3 +239,13 @@
 .type-file::before {
     content: "\f016";
 }
+
+.user-icon-inline {
+    width: 18px;
+    height: 18px;
+    border-radius: 9999px;
+}
+
+.user-icon-inline > i {
+    font-size: 10px;
+}

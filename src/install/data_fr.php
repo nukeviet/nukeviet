@@ -112,6 +112,7 @@ $install_lang['cron']['cron_notification_autodel'] = 'Supprimer vieille notifica
 $install_lang['cron']['cron_remove_expired_inform'] = 'Supprimer les notifications expirées';
 $install_lang['cron']['cron_apilogs_autodel'] = 'Supprimer les journaux d’API expirés';
 $install_lang['cron']['cron_expadmin_handling'] = 'Gestion des administrateurs expirés';
+$install_lang['cron']['cron_user_datadeletion_handling'] = 'Gestion de la suppression des données utilisateur programmée';
 
 $install_lang['groups']['NukeViet-Fans'] = 'Fans de NukeViet';
 $install_lang['groups']['NukeViet-Admins'] = 'Admins de NukeViet';

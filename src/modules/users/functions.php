@@ -371,6 +371,7 @@ function nv_del_user($userid)
     $db->query('DELETE FROM ' . NV_MOD_TABLE . '_openid WHERE userid=' . $userid);
     $db->query('DELETE FROM ' . NV_MOD_TABLE . '_info WHERE userid=' . $userid);
     $db->query('DELETE FROM ' . NV_MOD_TABLE . '_passkey WHERE userid=' . $userid);
+    $db->query('DELETE FROM ' . NV_MOD_TABLE . '_deleted WHERE userid=' . $userid);
 
     nv_insert_logs(NV_LANG_DATA, $module_name, 'log_del_user', 'userid ' . $userid, $user_info['userid']);
 

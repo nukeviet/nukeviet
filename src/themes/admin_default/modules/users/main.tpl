@@ -113,6 +113,11 @@
                             <!-- BEGIN: is_admin -->
                             <img style="vertical-align:middle;" alt="{CONTENT_TD.level}" src="{NV_BASE_SITEURL}themes/{NV_ADMIN_THEME}/images/{CONTENT_TD.img}.png" width="38" height="18" />
                             <!-- END: is_admin -->
+                            <!-- BEGIN: datadeletion_pending -->
+                            <span class="d-inline-flex align-items-center justify-content-center bg-danger user-icon-inline text-danger" data-toggle="tooltip" title="{DELETE_AT}">
+                                <i class="fa fa-user-times" aria-hidden="true"></i>
+                            </span>
+                            <!-- END: datadeletion_pending -->
                             <!-- BEGIN: view --><a href="javascript:void(0);" onclick="viewUser('{CONTENT_TD.link}')">{CONTENT_TD.username}</a><!-- END: view -->
                             <!-- BEGIN: show -->{CONTENT_TD.username}
                             <!-- END: show -->
@@ -149,6 +154,7 @@
                                     <li><a href="javascript:void(0);" onclick="passResetRequest({CONTENT_TD.userid});">{LANG.pass_reset_request}</a></li>
                                     <li><a href="javascript:void(0);" onclick="emailResetRequest({CONTENT_TD.userid});">{LANG.email_reset_request}</a></li>
                                     <li><a href="javascript:void(0);" onclick="forcedReLogin({CONTENT_TD.userid});">{LANG.forcedrelogin}</a></li>
+                                    <!-- BEGIN: cancel_deletion --><li><a href="javascript:void(0);" onclick="cancelDeletion({CONTENT_TD.userid});">{LANG.delacc_cancel_adm}</a></li><!-- END: cancel_deletion -->
                                 </ul>
                                 <!-- END: edit2 -->
                             </div>
