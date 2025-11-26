@@ -16,7 +16,6 @@ if (!defined('NV_IS_MOD_USER')) {
 $page_title = $nv_Lang->getModule('verify_password_title');
 $description = $keywords = 'no';
 $page_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op;
-$area_allowed = ['security_privacy', 'datadeletion'];
 $checkss = md5('verify_password.' . NV_CHECK_SESSION);
 
 $array = [];
@@ -24,7 +23,7 @@ $array['redirect'] = nv_get_redirect();
 $array['nv_redirect'] = nv_redirect_decrypt($array['redirect']);
 $array['area'] = $nv_Request->get_title('area', 'get,post', '');
 
-if (empty($array['area']) or !in_array($array['area'], $area_allowed, true) or empty($array['nv_redirect'])) {
+if (empty($array['area']) or empty($array['area']) or empty($array['nv_redirect'])) {
     nv_error404();
 }
 $array['form_action'] = $page_url;
@@ -94,12 +93,7 @@ if ($nv_Request->isset_request('_csrf', 'post')) {
 
     if ($crypt->validate_password($nv_password, $db_password)) {
         $blocker->reset_trackLogin($user_info['username']);
-
-        $nv_Request->set_Session($module_data . '_confirm_pwd', json_encode([
-            'time' => NV_CURRENTTIME,
-            'area' => $array['area']
-        ]));
-
+        set_verified_password($array['area']);
         nv_jsonOutput([
             'status' => 'ok',
             'redirect' => $array['nv_redirect']
@@ -123,4 +117,3 @@ $contents = user_verify_password($array);
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_site_theme($contents);
 include NV_ROOTDIR . '/includes/footer.php';
-

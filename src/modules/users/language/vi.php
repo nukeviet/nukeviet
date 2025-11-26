@@ -888,7 +888,6 @@ $lang_module['active2step_status1'] = 'Đã kích hoạt xác thực 2 bước';
 $lang_module['active2step_status2'] = 'Đã gửi yêu cầu tắt xác thực 2 bước';
 $lang_module['config_deny'] = 'Cấu hình các từ giới hạn';
 $lang_module['pass_confirm'] = 'Xác nhận mật khẩu để tiếp tục';
-$lang_module['pass_confirm_info'] = 'Để thực hiện tính năng này, bạn cần xác nhận lại mật khẩu. Vui lòng điền mật khẩu vào ô bên dưới và nhấp Xác nhận';
 $lang_module['error_no_password'] = 'Bạn chưa có mật khẩu, vui lòng tạo mật khẩu trước';
 $lang_module['passkey_error_exist'] = 'Khóa đăng nhập này đã tồn tại, vui lòng tạo một khóa khác';
 $lang_module['passkey_error_userhandle'] = 'Chứng chỉ này không cung cấp thông tin người dùng nên không thể sử dụng làm khóa đăng nhập';

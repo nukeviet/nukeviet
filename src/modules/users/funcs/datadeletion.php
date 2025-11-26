@@ -408,14 +408,7 @@ if ($not_allowed) {
 }
 
 // Kiểm tra đã xác nhận mật khẩu
-$confirm_pwd = $nv_Request->get_string($module_data . '_confirm_pwd', 'session', '');
-$confirm_pwd = $confirm_pwd ? json_decode($confirm_pwd, true) : [];
-if (!is_array($confirm_pwd) or !isset($confirm_pwd['time']) or (NV_CURRENTTIME - $confirm_pwd['time'] > 1800) or !isset($confirm_pwd['area']) or $confirm_pwd['area'] !== 'datadeletion') {
-    $confirm_pwd = false;
-} else {
-    $confirm_pwd = true;
-}
-
+$confirm_pwd = is_verified_password('datadeletion');
 if (!$confirm_pwd) {
     if ($nv_Request->isset_request('resend_code', 'post')) {
         nv_jsonOutput([
@@ -427,9 +420,7 @@ if (!$confirm_pwd) {
     if (!empty($nv_redirect)) {
         $page_url .= '&amp;nv_redirect=' . urlencode($nv_redirect);
     }
-    $redirect = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=verify-password&area=datadeletion&nv_redirect=' . nv_redirect_encrypt(nv_url_rewrite($page_url, true));
-    $redirect = nv_url_rewrite($redirect, true);
-    nv_redirect_location($redirect);
+    go_verified_password('datadeletion', $page_url);
 }
 
 $sql = "SELECT * FROM " . NV_MOD_TABLE . "_info WHERE userid=" . $user_info['userid'];
@@ -529,7 +520,7 @@ if (!empty($array['verification_code'])) {
             }
         }
 
-        $nv_Request->unset_request($module_data . '_confirm_pwd', 'session');
+        clear_verified_password();
         $contents = user_success_deletion($array);
         $canonicalUrl = getCanonicalUrl($page_url);
 

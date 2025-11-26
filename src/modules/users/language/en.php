@@ -888,7 +888,6 @@ $lang_module['active2step_status1'] = '2-step verification enabled';
 $lang_module['active2step_status2'] = 'Request to disable 2-step verification';
 $lang_module['config_deny'] = 'Config deny words';
 $lang_module['pass_confirm'] = 'Confirm password to continue';
-$lang_module['pass_confirm_info'] = 'To perform this feature, you need to confirm your password again. Please enter your password in the box below and click Confirm';
 $lang_module['error_no_password'] = 'You do not have a password, please create a password first';
 $lang_module['passkey_error_exist'] = 'This passkey already exists, please create another key';
 $lang_module['passkey_error_userhandle'] = 'This credential does not provide user information and cannot be used as a passkey';

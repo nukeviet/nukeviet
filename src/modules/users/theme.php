@@ -966,8 +966,8 @@ function user_info($data, $array_field_config, $custom_fields, $types, $data_que
     // Tab passkey
     if (in_array('passkey', $types, true)) {
         if (!$data['confirmed_pass']) {
-            $xtpl->assign('HTML', user_confirm_pass());
-            $xtpl->parse('main.tab_edit_passkey.pass_not_confirmed');
+            $xtpl->assign('URL_CONFIRM_PASS_PASSKEY', $data['confirm_pass_url']);
+            $xtpl->parse('main.edit_passkey_linked');
         } else {
             if (empty($data['login_keys'])) {
                 $xtpl->parse('main.tab_edit_passkey.pass_confirmed.no_loginkey');
@@ -992,10 +992,10 @@ function user_info($data, $array_field_config, $custom_fields, $types, $data_que
                 $xtpl->parse('main.tab_edit_passkey.pass_confirmed.loginkeys');
             }
 
+            $xtpl->parse('main.edit_passkey_tab');
             $xtpl->parse('main.tab_edit_passkey.pass_confirmed');
         }
 
-        $xtpl->parse('main.edit_passkey');
         $xtpl->parse('main.tab_edit_passkey');
     }
 
@@ -2046,39 +2046,6 @@ function user_r2s($data, $page_url)
 }
 
 /**
- * Form xác nhận mật khẩu cho phiên
- *
- * @return string
- * @throws Error
- */
-function user_confirm_pass()
-{
-    global $module_name, $module_captcha, $global_config;
-
-    $xtpl = new XTemplate('confirm_pass.tpl', get_module_tpl_dir('confirm_pass.tpl'));
-    $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
-    $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
-    $xtpl->assign('FORM_ACTION', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=editinfo');
-
-    if ($module_captcha == 'recaptcha' and $global_config['recaptcha_ver'] == 3) {
-        // Nếu dùng reCaptcha v3
-        $xtpl->parse('main.recaptcha3');
-    } elseif ($module_captcha == 'recaptcha' and $global_config['recaptcha_ver'] == 2) {
-        // Nếu dùng reCaptcha v2
-        $xtpl->parse('main.recaptcha');
-    } elseif ($module_captcha == 'turnstile') {
-        // Nếu dùng Turnstile
-        $xtpl->parse('main.turnstile');
-    } elseif ($module_captcha == 'captcha') {
-        // Captcha mặc định
-        $xtpl->parse('main.captcha');
-    }
-
-    $xtpl->parse('main');
-    return $xtpl->text('main');
-}
-
-/**
  * Giao diện xóa dữ liệu người dùng (xóa tài khoản) từ bên thứ ba
  *
  * @param array $data
@@ -2233,6 +2200,8 @@ function user_verify_password(array $array): string
 }
 
 /**
+ * Giao diện yêu cầu xóa dữ liệu người dùng
+ *
  * @param array $array
  * @return string
  */
@@ -2281,6 +2250,8 @@ function user_request_deletion(array $array): string
 }
 
 /**
+ * Giao diện thành công yêu cầu xóa dữ liệu
+ *
  * @param array $array
  * @return string
  */
@@ -2297,6 +2268,8 @@ function user_success_deletion(array $array): string
 }
 
 /**
+ * Giao diện chờ xử lý yêu cầu xóa dữ liệu
+ *
  * @param array $array
  * @return string
  */

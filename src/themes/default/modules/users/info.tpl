@@ -32,9 +32,12 @@
                 <!-- BEGIN: edit_password -->
                 <li class="{PASSWORD_ACTIVE}"><a data-toggle="tab" data-location="{EDITINFO_FORM}/password" href="#edit_password">{LANG.edit_password}</a></li>
                 <!-- END: edit_password -->
-                <!-- BEGIN: edit_passkey -->
+                <!-- BEGIN: edit_passkey_tab -->
                 <li class="{PASSKEY_ACTIVE}"><a data-toggle="tab" data-location="{EDITINFO_FORM}/passkey" href="#edit_passkey">{LANG.edit_passkey}</a></li>
-                <!-- END: edit_passkey -->
+                <!-- END: edit_passkey_tab -->
+                <!-- BEGIN: edit_passkey_linked -->
+                <li><a href="{URL_CONFIRM_PASS_PASSKEY}">{LANG.edit_passkey}</a></li>
+                <!-- END: edit_passkey_linked -->
                 <!-- BEGIN: edit_langinterface -->
                 <li class="{LANGINTERFACE_ACTIVE}"><a data-toggle="tab" data-location="{EDITINFO_FORM}/langinterface" href="#edit_langinterface">{GLANG.langinterface}</a></li>
                 <!-- END: edit_langinterface -->
@@ -338,9 +341,6 @@
         <!-- END: tab_edit_password -->
         <!-- BEGIN: tab_edit_passkey -->
         <div id="edit_passkey" class="well-lg tab-pane fade {TAB_PASSKEY_ACTIVE}">
-            <!-- BEGIN: pass_not_confirmed -->
-            {HTML}
-            <!-- END: pass_not_confirmed -->
             <!-- BEGIN: pass_confirmed -->
             <form action="{EDITINFO_FORM}/passkey" id="passkey-form" method="post" autocomplete="off" novalidate>
                 <input type="hidden" name="checkss" value="{DATA.checkss}">

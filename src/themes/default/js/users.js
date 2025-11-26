@@ -599,58 +599,6 @@ function edit_group_submit(obj, old) {
 }
 
 // Form xác nhận mật khẩu để làm 1 việc nào quan trọng
-function confirm_pass_precheck(form) {
-    if (trim($('[name="password"]', form).val()) == '') {
-        $('[name="password"]', form).focus();
-        return false;
-    }
-    return true;
-}
-function confirm_pass_validForm(form) {
-    const data = {};
-    data.type = $(form).prop("method");
-    data.url = $(form).prop("action");
-    data.data = $(form).serialize();
-    formErrorHidden(form);
-
-    $(form).find("input,button,select,textarea").prop("disabled", true);
-
-    $.ajax({
-        type: data.type,
-        cache: false,
-        url: data.url,
-        data: data.data,
-        dataType: "json",
-        success: function(res) {
-            formChangeCaptcha(form);
-
-            if ("error" == res.status) {
-                $("input,button,select,textarea", form).prop("disabled", false);
-                $(".tooltip-current", form).removeClass("tooltip-current");
-
-                if (res.input && "" != res.input && $("[name='" + res.input + "']:visible", form).length) {
-                    $(form).find('[name="' + res.input + '"]:visible').each(function() {
-                        $(this).addClass("tooltip-current").attr("data-current-mess", res.mess);
-                        validErrorShow(this);
-                    });
-                    return;
-                }
-
-                $(".nv-info", form).html(res.mess).addClass("error").show();
-                $("html, body").animate({
-                    scrollTop: $(".nv-info", form).offset().top
-                }, 200);
-                return;
-            }
-
-            location.reload();
-        }
-    });
-
-    return false;
-}
-
-// Form xác nhận mật khẩu để làm 1 việc nào quan trọng
 function verify_password_precheck(form) {
     if (trim($('[name="password"]', form).val()) == '') {
         $('[name="password"]', form).focus();
@@ -962,10 +910,6 @@ $(function() {
             window.location.href = url;
         }
         return !1;
-    });
-
-    $('body').on('submit', '[data-toggle=confirm_pass_validForm]', function() {
-        return confirm_pass_validForm(this);
     });
 
     $('[data-toggle="validReset2fa"]').on('click', function() {

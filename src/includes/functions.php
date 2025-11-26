@@ -3878,6 +3878,99 @@ function csrf_check($csrf, $key)
 }
 
 /**
+ * Kiểm tra xem mật khẩu đã được xác thực cho khu vực area hay chưa
+ *
+ * @param string $area
+ * @param string $module
+ * @return bool
+ */
+function is_verified_password(string $area, string $module = ''): bool
+{
+    global $module_name, $nv_Request, $site_mods;
+
+    empty($module) && $module = $module_name;
+    if (!isset($site_mods[$module])) {
+        return false;
+    }
+
+    $confirm_pwd = $nv_Request->get_string($site_mods[$module]['module_data'] . '_confirm_pwd', 'session', '');
+    if (empty($confirm_pwd)) {
+        return false;
+    }
+
+    $confirm_pwd = json_decode($confirm_pwd, true);
+    if (
+        !is_array($confirm_pwd) or !isset($confirm_pwd['time']) or
+        (NV_CURRENTTIME - $confirm_pwd['time'] > 3600) or !isset($confirm_pwd['area']) or $confirm_pwd['area'] !== $area
+        or !isset($confirm_pwd['csrf']) or !csrf_check($confirm_pwd['csrf'], $site_mods[$module]['module_data'] . '_confirm_pwd')
+    ) {
+        return false;
+    }
+
+    return true;
+}
+
+/**
+ * Đặt trạng thái đã xác thực mật khẩu cho khu vực area
+ *
+ * @param string $area
+ * @param string $module
+ * @return void
+ */
+function set_verified_password(string $area, string $module = ''): void
+{
+    global $module_name, $nv_Request, $site_mods;
+
+    empty($module) && $module = $module_name;
+    if (!isset($site_mods[$module])) {
+        return;
+    }
+
+    $nv_Request->set_Session($site_mods[$module]['module_data'] . '_confirm_pwd', json_encode([
+        'time' => NV_CURRENTTIME,
+        'area' => $area,
+        'csrf' => csrf_create($site_mods[$module]['module_data'] . '_confirm_pwd')
+    ]));
+}
+
+/**
+ * Xóa trạng thái đã xác thực mật khẩu. Một hành động bảo mật
+ * không được phép thực hiện đồng thời nhiều khu vực do đó khi xóa
+ * thì xóa hết tất cả các khu vực theo module
+ *
+ * @param string $module
+ * @return void
+ */
+function clear_verified_password(string $module = ''): void
+{
+    global $module_name, $nv_Request, $site_mods;
+
+    empty($module) && $module = $module_name;
+    if (!isset($site_mods[$module])) {
+        return;
+    }
+    $nv_Request->unset_request($site_mods[$module]['module_data'] . '_confirm_pwd', 'session');
+}
+
+/**
+ * Chuyển hướng đến trang xác thực mật khẩu
+ *
+ * @param string $area         Khu vực cần xác thực mật khẩu
+ * @param string $redirect_url Url trở về sau khi xác thực thành công
+ * @param bool   $go_direct    true: chuyển hướng ngay, false: trả về URL để chuyển hướng
+ * @return string
+ * @throws Exception
+ */
+function go_verified_password(string $area, string $redirect_url, bool $go_direct = true): string
+{
+    $url = nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=users&' . NV_OP_VARIABLE . '=verify-password&area=' . urlencode($area) . '&nv_redirect=' . nv_redirect_encrypt(nv_url_rewrite($redirect_url, true)), true);
+    if ($go_direct) {
+        nv_redirect_location($url);
+    }
+    return $url;
+}
+
+/**
  * parse_phone()
  *
  * @param mixed $phone

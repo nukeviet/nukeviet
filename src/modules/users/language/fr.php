@@ -888,7 +888,6 @@ $lang_module['active2step_status1'] = 'Vérification en deux étapes activée';
 $lang_module['active2step_status2'] = 'Demande de désactivation de la vérification en deux étapes';
 $lang_module['config_deny'] = 'Configurer les mots de refus';
 $lang_module['pass_confirm'] = 'Confirmez le mot de passe pour continuer';
-$lang_module['pass_confirm_info'] = 'Pour effectuer cette fonctionnalité, vous devez confirmer à nouveau votre mot de passe. Veuillez entrer votre mot de passe dans la case ci-dessous et cliquer sur Confirmer';
 $lang_module['error_no_password'] = 'Vous n\'avez pas de mot de passe, veuillez d\'abord créer un mot de passe';
 $lang_module['passkey_error_exist'] = 'Cette clé de passe existe déjà, veuillez créer une autre clé';
 $lang_module['passkey_error_userhandle'] = 'Ce certificat ne fournit pas d\'informations sur l\'utilisateur, il ne peut donc pas être utilisé comme clé de connexion';

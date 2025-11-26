@@ -60,13 +60,7 @@ $array['checkss_auto'] = false;
 $array['auto_toast'] = '';
 
 // Kiểm tra đã xác nhận mật khẩu
-$confirm_pwd = $nv_Request->get_string($module_data . '_confirm_pwd', 'session', '');
-$confirm_pwd = $confirm_pwd ? json_decode($confirm_pwd, true) : [];
-if (!is_array($confirm_pwd) or !isset($confirm_pwd['time']) or (NV_CURRENTTIME - $confirm_pwd['time'] > 1800) or !isset($confirm_pwd['area']) or $confirm_pwd['area'] !== 'security_privacy') {
-    $confirm_pwd = false;
-} else {
-    $confirm_pwd = true;
-}
+$confirm_pwd = is_verified_password('security_privacy');
 
 // Lấy peding_action nếu không post và đã xác nhận mật khẩu
 $pending_action = $nv_Request->get_string('pending_action', 'session', '');
@@ -111,13 +105,9 @@ if (($array['dellogin'] or $array['delloginall']) and !$confirm_pwd) {
         'page' => $array['page']
     ];
     $nv_Request->set_Session('pending_action', json_encode($pending_action));
-
-    $nv_redirect = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=verify-password&area=security_privacy&nv_redirect=' . nv_redirect_encrypt(nv_url_rewrite($page_url, true));
-    $nv_redirect = nv_url_rewrite($nv_redirect, true);
-
     nv_jsonOutput([
         'status' => 'not_verified',
-        'redirect' => $nv_redirect
+        'redirect' => go_verified_password('security_privacy', $page_url, false)
     ]);
 }
 
