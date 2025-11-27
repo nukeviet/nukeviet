@@ -20,7 +20,7 @@ if (!defined('NV_MAINFILE')) {
  */
 class Emails
 {
-        /**
+    /**
      * @var integer Gửi thông tin kích hoạt khi đăng kí hoặc quản trị gửi lại
      */
     public const REGISTER_ACTIVE = 1;
