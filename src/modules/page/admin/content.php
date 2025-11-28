@@ -208,11 +208,6 @@ if (defined('NV_EDITOR')) {
 
 $row['description'] = nv_htmlspecialchars(nv_br2nl($row['description']));
 $row['bodytext'] = htmlspecialchars(nv_editor_br2nl($row['bodytext']));
-if (defined('NV_EDITOR') and nv_function_exists('nv_aleditor')) {
-    $row['bodytext'] = nv_aleditor('bodytext', '100%', '500px', $row['bodytext']);
-} else {
-    $row['bodytext'] = '<textarea style="width:100%;height:300px" name="bodytext">' . $row['bodytext'] . '</textarea>';
-}
 
 if (!empty($row['image']) and is_file(NV_UPLOADS_REAL_DIR . '/' . $module_upload . '/' . $row['image'])) {
     $row['image'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $row['image'];
@@ -220,72 +215,46 @@ if (!empty($row['image']) and is_file(NV_UPLOADS_REAL_DIR . '/' . $module_upload
 $nv_Lang->setGlobal('title_suggest_max', $nv_Lang->getGlobal('length_suggest_max', 65));
 $nv_Lang->setGlobal('description_suggest_max', $nv_Lang->getGlobal('length_suggest_max', 160));
 
-$xtpl = new XTemplate('content.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-$xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
-$xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
-$xtpl->assign('FORM_ACTION', $action);
-$xtpl->assign('UPLOADS_DIR_USER', NV_UPLOADS_DIR . '/' . $module_upload);
-$xtpl->assign('DATA', $row);
-$xtpl->assign('BODYTEXT', $row['bodytext']);
-$xtpl->assign('SOCIALBUTTON', ($row['socialbutton']) ? ' checked="checked"' : '');
-$xtpl->assign('HOST_POST', ($row['hot_post']) ? ' checked="checked"' : '');
-$xtpl->assign('ISCOPY', $copy);
-
+// Prepare layout array
+$layout_list = [];
 foreach ($layout_array as $value) {
-    $value = preg_replace($global_config['check_op_layout'], '\\1', $value);
-    $xtpl->assign('LAYOUT_FUNC', [
-        'key' => $value,
-        'selected' => ($row['layout_func'] == $value) ? ' selected="selected"' : ''
-    ]);
-    $xtpl->parse('main.layout_func');
+    $layout_list[] = preg_replace($global_config['check_op_layout'], '\\1', $value);
 }
 
+// Prepare activecomm array
 $activecomm = array_map('intval', explode(',', $row['activecomm']));
-foreach ($groups_list as $_group_id => $_title) {
-    $xtpl->assign('ACTIVECOMM', [
-        'value' => $_group_id,
-        'checked' => in_array((int) $_group_id, $activecomm, true) ? ' checked="checked"' : '',
-        'title' => $_title
-    ]);
-    $xtpl->parse('main.activecomm');
-}
 
-if (empty($row['alias'])) {
-    $xtpl->parse('main.get_alias');
-}
-
-// position images
+// Prepare image position array
 $array_imgposition = [
     0 => $nv_Lang->getModule('imgposition_0'),
     1 => $nv_Lang->getModule('imgposition_1'),
     2 => $nv_Lang->getModule('imgposition_2')
 ];
-foreach ($array_imgposition as $id_imgposition => $title_imgposition) {
-    $sl = ($id_imgposition == $row['imageposition']) ? ' selected="selected"' : '';
-    $xtpl->assign('id_imgposition', $id_imgposition);
-    $xtpl->assign('title_imgposition', $title_imgposition);
-    $xtpl->assign('posl', $sl);
-    $xtpl->parse('main.looppos');
+
+$tpl = new \NukeViet\Template\NVSmarty();
+$tpl->setTemplateDir(get_module_tpl_dir('content.tpl'));
+$tpl->assign('LANG', $nv_Lang);
+$tpl->assign('MODULE_NAME', $module_name);
+$tpl->assign('FORM_ACTION', $action);
+$tpl->assign('UPLOADS_DIR_USER', NV_UPLOADS_DIR . '/' . $module_upload);
+$tpl->assign('UPLOAD_CURRENT', NV_UPLOADS_DIR . '/' . $module_upload);
+$tpl->assign('DATA', $row);
+$tpl->assign('ISCOPY', $copy);
+$tpl->assign('LAYOUT_ARRAY', $layout_list);
+$tpl->assign('GROUPS_LIST', $groups_list);
+$tpl->assign('ACTIVECOMM', $activecomm);
+$tpl->assign('ARRAY_IMGPOSITION', $array_imgposition);
+$tpl->assign('SCHEMA_TYPES', $schema_types);
+$tpl->assign('ERROR', $error);
+
+if (defined('NV_EDITOR') and nv_function_exists('nv_aleditor')) {
+    $tpl->registerPlugin('modifier', 'editor', 'nv_aleditor');
+    $tpl->assign('HAS_EDITOR', true);
+} else {
+    $tpl->assign('HAS_EDITOR', false);
 }
 
-// Xuất loại dữ liệu có cấu trúc
-foreach ($schema_types as $key => $value) {
-    $xtpl->assign('SCHEMA_TYPE', [
-        'key' => $key,
-        'title' => $value,
-        'selected' => ($row['schema_type'] == $key) ? ' selected' : ''
-    ]);
-    $xtpl->parse('main.schema_type');
-}
-$xtpl->assign('SCHEMA_ABOUT', $row['schema_type'] == 'webpage' ? '' : ' hidden');
-
-if ($error) {
-    $xtpl->assign('ERROR', $error);
-    $xtpl->parse('main.error');
-}
-
-$xtpl->parse('main');
-$contents = $xtpl->text('main');
+$contents = $tpl->fetch('content.tpl');
 
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_admin_theme($contents);
