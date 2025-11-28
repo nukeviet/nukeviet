@@ -1,6 +1,3 @@
-{if not empty($ERROR)}
-<div class="alert alert-danger" role="alert">{$ERROR}</div>
-{/if}
 <form id="form-page-content" method="post" action="{$smarty.const.NV_BASE_ADMINURL}index.php?{$smarty.const.NV_LANG_VARIABLE}={$smarty.const.NV_LANG_DATA}&amp;{$smarty.const.NV_NAME_VARIABLE}={$MODULE_NAME}&amp;{$smarty.const.NV_OP_VARIABLE}={$OP}{if not empty($ID)}&amp;id={$ID}{/if}" novalidate class="ajax-submit">
     <div class="row g-3">
         <div class="col-lg-8 col-xxl-9">
@@ -55,11 +52,7 @@
                         <label for="{$MODULE_NAME}_bodytext" class="form-label">{$LANG->getModule('bodytext')} <span class="text-danger">(*)</span>:</label>
                         <div class="position-relative">
                             <div data-toggle="container-bodytext">
-                                {if $HAS_EDITOR}
-                                {editor('bodytext', '100%', '400px', $DATA.bodytext, '', $UPLOADS_DIR_USER, $UPLOAD_CURRENT)}
-                                {else}
-                                <textarea class="form-control required" id="{$MODULE_NAME}_bodytext" name="bodytext" rows="15">{$DATA.bodytext}</textarea>
-                                {/if}
+                                {$DATA.bodytext}
                             </div>
                             <div class="invalid-tooltip">{$LANG->getModule('empty_bodytext')}</div>
                         </div>

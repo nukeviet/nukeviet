@@ -48,10 +48,15 @@ if (!empty($global_config['over_capacity']) and !defined('NV_IS_GODADMIN')) {
 
 $selectthemes = (!empty($site_mods[$module_name]['theme'])) ? $site_mods[$module_name]['theme'] : $global_config['site_theme'];
 $layout_array = nv_scandir(NV_ROOTDIR . '/themes/' . $selectthemes . '/layout', $global_config['check_op_layout']);
-$error = '';
 $groups_list = nv_groups_list();
+$checkss = md5(NV_CHECK_SESSION . '-' . $module_name . '-' . $op . '-' . $id);
 
-if ($nv_Request->get_int('save', 'post') == '1') {
+// Xử lý khi lưu (AJAX)
+if ($checkss == $nv_Request->get_string('checkss', 'post')) {
+    $respon = [
+        'status' => 'error',
+        'mess' => '',
+    ];
     $row['title'] = nv_substr($nv_Request->get_title('title', 'post', ''), 0, 250);
     $row['alias'] = $nv_Request->get_title('alias', 'post', '');
     $row['alias'] = empty($row['alias']) ? change_alias($row['title']) : change_alias($row['alias']);
@@ -102,91 +107,105 @@ if ($nv_Request->get_int('save', 'post') == '1') {
     $is_exists = $db->query($sql)->fetchColumn();
 
     if (empty($row['title'])) {
-        $error = $nv_Lang->getModule('empty_title');
-    } elseif ($is_exists) {
-        $error = $nv_Lang->getModule('erroralias');
-    } elseif (trim($row['bodytext']) == '') {
-        $error = $nv_Lang->getModule('empty_bodytext');
-    } else {
+        $respon['input'] = 'title';
+        $respon['mess'] = $nv_Lang->getModule('empty_title');
+        nv_jsonOutput($respon);
+    }
+    if ($is_exists) {
+        $respon['input'] = 'alias';
+        $respon['mess'] = $nv_Lang->getModule('erroralias');
+        nv_jsonOutput($respon);
+    }
+    if (trim($row['bodytext']) == '') {
+        $respon['input'] = 'bodytext';
+        $respon['mess'] = $nv_Lang->getModule('empty_bodytext');
+        nv_jsonOutput($respon);
+    }
+
+    if (empty($row['keywords'])) {
+        $row['keywords'] = nv_get_keywords($row['title']);
         if (empty($row['keywords'])) {
-            $row['keywords'] = nv_get_keywords($row['title']);
-            if (empty($row['keywords'])) {
-                $row['keywords'] = nv_unhtmlspecialchars($row['keywords']);
-                $row['keywords'] = strip_punctuation($row['keywords']);
-                $row['keywords'] = trim($row['keywords']);
-                $row['keywords'] = nv_strtolower($row['keywords']);
-                $row['keywords'] = preg_replace('/[ ]+/', ',', $row['keywords']);
-            }
+            $row['keywords'] = nv_unhtmlspecialchars($row['keywords']);
+            $row['keywords'] = strip_punctuation($row['keywords']);
+            $row['keywords'] = trim($row['keywords']);
+            $row['keywords'] = nv_strtolower($row['keywords']);
+            $row['keywords'] = preg_replace('/[ ]+/', ',', $row['keywords']);
         }
+    }
 
-        if ($id and !$copy) {
-            $_sql = 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . ' SET
-                title = :title, alias = :alias, image = :image, imagealt = :imagealt,
-                imageposition = :imageposition, description = :description,
-                bodytext = :bodytext, keywords = :keywords, socialbutton = :socialbutton,
-                activecomm = :activecomm, layout_func = :layout_func,
-                edit_time = ' . NV_CURRENTTIME . ', hot_post = :hot_post, schema_type=:schema_type,
-                schema_about=:schema_about
-            WHERE id =' . $id;
+    if ($id and !$copy) {
+        $_sql = 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . ' SET
+            title = :title, alias = :alias, image = :image, imagealt = :imagealt,
+            imageposition = :imageposition, description = :description,
+            bodytext = :bodytext, keywords = :keywords, socialbutton = :socialbutton,
+            activecomm = :activecomm, layout_func = :layout_func,
+            edit_time = ' . NV_CURRENTTIME . ', hot_post = :hot_post, schema_type=:schema_type,
+            schema_about=:schema_about
+        WHERE id =' . $id;
+    } else {
+        if ($page_config['news_first']) {
+            $weight = 1;
         } else {
-            if ($page_config['news_first']) {
-                $weight = 1;
-            } else {
-                $weight = $db->query('SELECT MAX(weight) FROM ' . NV_PREFIXLANG . '_' . $module_data)->fetchColumn();
-                $weight = (int) $weight + 1;
-            }
-
-            $_sql = 'INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . ' (
-                title, alias, image, imagealt, imageposition, description, bodytext, keywords,
-                socialbutton, activecomm, layout_func, weight,admin_id, add_time, edit_time, status, hot_post,
-                schema_type, schema_about
-            ) VALUES (
-                :title, :alias, :image, :imagealt, :imageposition, :description, :bodytext,
-                :keywords, :socialbutton, :activecomm, :layout_func, ' . $weight . ',
-                ' . $admin_info['admin_id'] . ', ' . NV_CURRENTTIME . ', ' . NV_CURRENTTIME . ', 1, :hot_post,
-                :schema_type, :schema_about
-            )';
+            $weight = $db->query('SELECT MAX(weight) FROM ' . NV_PREFIXLANG . '_' . $module_data)->fetchColumn();
+            $weight = (int) $weight + 1;
         }
 
-        try {
-            $sth = $db->prepare($_sql);
-            $sth->bindParam(':title', $row['title'], PDO::PARAM_STR);
-            $sth->bindParam(':alias', $row['alias'], PDO::PARAM_STR);
-            $sth->bindParam(':image', $row['image'], PDO::PARAM_STR);
-            $sth->bindParam(':imagealt', $row['imagealt'], PDO::PARAM_STR);
-            $sth->bindParam(':imageposition', $row['imageposition'], PDO::PARAM_INT);
-            $sth->bindParam(':description', $row['description'], PDO::PARAM_STR);
-            $sth->bindParam(':bodytext', $row['bodytext'], PDO::PARAM_STR, strlen($row['bodytext']));
-            $sth->bindParam(':keywords', $row['keywords'], PDO::PARAM_STR);
-            $sth->bindParam(':socialbutton', $row['socialbutton'], PDO::PARAM_INT);
-            $sth->bindParam(':activecomm', $row['activecomm'], PDO::PARAM_INT);
-            $sth->bindParam(':layout_func', $row['layout_func'], PDO::PARAM_STR);
-            $sth->bindParam(':hot_post', $row['hot_post'], PDO::PARAM_INT);
-            $sth->bindParam(':schema_type', $row['schema_type'], PDO::PARAM_STR);
-            $sth->bindParam(':schema_about', $row['schema_about'], PDO::PARAM_STR);
-            $sth->execute();
+        $_sql = 'INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . ' (
+            title, alias, image, imagealt, imageposition, description, bodytext, keywords,
+            socialbutton, activecomm, layout_func, weight,admin_id, add_time, edit_time, status, hot_post,
+            schema_type, schema_about
+        ) VALUES (
+            :title, :alias, :image, :imagealt, :imageposition, :description, :bodytext,
+            :keywords, :socialbutton, :activecomm, :layout_func, ' . $weight . ',
+            ' . $admin_info['admin_id'] . ', ' . NV_CURRENTTIME . ', ' . NV_CURRENTTIME . ', 1, :hot_post,
+            :schema_type, :schema_about
+        )';
+    }
 
-            if ($sth->rowCount()) {
-                if ($id and !$copy) {
-                    nv_insert_logs(NV_LANG_DATA, $module_name, 'Edit', 'ID: ' . $id, $admin_info['userid']);
-                } else {
-                    if ($page_config['news_first']) {
-                        $id = $db->lastInsertId();
-                        $db->query('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . ' SET weight=weight+1 WHERE id!=' . $id);
-                    }
+    try {
+        $sth = $db->prepare($_sql);
+        $sth->bindParam(':title', $row['title'], PDO::PARAM_STR);
+        $sth->bindParam(':alias', $row['alias'], PDO::PARAM_STR);
+        $sth->bindParam(':image', $row['image'], PDO::PARAM_STR);
+        $sth->bindParam(':imagealt', $row['imagealt'], PDO::PARAM_STR);
+        $sth->bindParam(':imageposition', $row['imageposition'], PDO::PARAM_INT);
+        $sth->bindParam(':description', $row['description'], PDO::PARAM_STR);
+        $sth->bindParam(':bodytext', $row['bodytext'], PDO::PARAM_STR, strlen($row['bodytext']));
+        $sth->bindParam(':keywords', $row['keywords'], PDO::PARAM_STR);
+        $sth->bindParam(':socialbutton', $row['socialbutton'], PDO::PARAM_INT);
+        $sth->bindParam(':activecomm', $row['activecomm'], PDO::PARAM_INT);
+        $sth->bindParam(':layout_func', $row['layout_func'], PDO::PARAM_STR);
+        $sth->bindParam(':hot_post', $row['hot_post'], PDO::PARAM_INT);
+        $sth->bindParam(':schema_type', $row['schema_type'], PDO::PARAM_STR);
+        $sth->bindParam(':schema_about', $row['schema_about'], PDO::PARAM_STR);
+        $sth->execute();
 
-                    nv_insert_logs(NV_LANG_DATA, $module_name, 'Add', ' ', $admin_info['userid']);
+        if ($sth->rowCount()) {
+            if ($id and !$copy) {
+                nv_insert_logs(NV_LANG_DATA, $module_name, 'Edit', 'ID: ' . $id, $admin_info['userid']);
+            } else {
+                if ($page_config['news_first']) {
+                    $id = $db->lastInsertId();
+                    $db->query('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . ' SET weight=weight+1 WHERE id!=' . $id);
                 }
 
-                $nv_Cache->delMod($module_name);
-                nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
-            } else {
-                $error = $nv_Lang->getModule('errorsave');
+                nv_insert_logs(NV_LANG_DATA, $module_name, 'Add', ' ', $admin_info['userid']);
             }
-        } catch (PDOException $e) {
-            trigger_error(print_r($e, true));
-            $error = $nv_Lang->getModule('errorsave');
+
+            $nv_Cache->delMod($module_name);
+
+            $respon['status'] = 'success';
+            $respon['mess'] = $nv_Lang->getGlobal('save_success');
+            $respon['redirect'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name;
+            nv_jsonOutput($respon);
+        } else {
+            $respon['mess'] = $nv_Lang->getModule('errorsave');
+            nv_jsonOutput($respon);
         }
+    } catch (PDOException $e) {
+        trigger_error(print_r($e, true));
+        $respon['mess'] = $nv_Lang->getModule('errorsave');
+        nv_jsonOutput($respon);
     }
 } elseif (empty($id)) {
     $row['image'] = '';
@@ -208,6 +227,11 @@ if (defined('NV_EDITOR')) {
 
 $row['description'] = nv_htmlspecialchars(nv_br2nl($row['description']));
 $row['bodytext'] = htmlspecialchars(nv_editor_br2nl($row['bodytext']));
+if (defined('NV_EDITOR') and nv_function_exists('nv_aleditor')) {
+    $row['bodytext'] = nv_aleditor('bodytext', '100%', '400px', $row['bodytext'], '', NV_UPLOADS_DIR . '/' . $module_upload, NV_UPLOADS_DIR . '/' . $module_upload);
+} else {
+    $row['bodytext'] = '<textarea class="form-control" name="bodytext" id="bodytext" rows="15">' . $row['bodytext'] . '</textarea>';
+}
 
 if (!empty($row['image']) and is_file(NV_UPLOADS_REAL_DIR . '/' . $module_upload . '/' . $row['image'])) {
     $row['image'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $row['image'];
@@ -246,15 +270,7 @@ $tpl->assign('GROUPS_LIST', $groups_list);
 $tpl->assign('ACTIVECOMM', $activecomm);
 $tpl->assign('ARRAY_IMGPOSITION', $array_imgposition);
 $tpl->assign('SCHEMA_TYPES', $schema_types);
-$tpl->assign('ERROR', $error);
-$tpl->assign('CHECKSS', md5(NV_CHECK_SESSION . '-' . $module_name . '-' . $op . '-' . $id));
-
-if (defined('NV_EDITOR') and nv_function_exists('nv_aleditor')) {
-    $tpl->registerPlugin('modifier', 'editor', 'nv_aleditor');
-    $tpl->assign('HAS_EDITOR', true);
-} else {
-    $tpl->assign('HAS_EDITOR', false);
-}
+$tpl->assign('CHECKSS', $checkss);
 
 $contents = $tpl->fetch('content.tpl');
 
