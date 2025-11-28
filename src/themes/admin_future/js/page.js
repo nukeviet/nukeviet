@@ -20,6 +20,52 @@ $(function () {
         }
     });
 
+    // Content page: Character count for title
+    if ($('#form-page-content').length) {
+        $("#titlelength").html($("#idtitle").val().length);
+        $("#idtitle").on('keyup paste', function() {
+            $("#titlelength").html($(this).val().length);
+        });
+
+        // Character count for description
+        $("#descriptionlength").html($("#description").val().length);
+        $("#description").on('keyup paste', function() {
+            $("#descriptionlength").html($(this).val().length);
+        });
+
+        // Auto get alias when title changes (if alias is empty)
+        if ($('[data-toggle="getaliaspage"]').data('auto-alias')) {
+            $('#idtitle').change(function() {
+                $('[data-toggle="getaliaspage"]').trigger('click');
+            });
+        }
+
+        // Toggle schema_about visibility based on schema_type selection
+        $('#content_schema_type').on('change', function() {
+            if ($(this).val() === 'webpage') {
+                $('#schema_about_container').removeClass('d-none');
+            } else {
+                $('#schema_about_container').addClass('d-none');
+            }
+        });
+    }
+
+    // Get alias button click handler
+    $('[data-toggle="getaliaspage"]').on('click', function() {
+        var title = $('#idtitle').val();
+        if (title.length > 0) {
+            $.post(
+                script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=alias',
+                'title=' + encodeURIComponent(title) + '&type=page',
+                function(res) {
+                    if (res) {
+                        $('#idalias').val(res);
+                    }
+                }
+            );
+        }
+    });
+
     // Xóa 1 bài viết
     $('[data-toggle=nv_del_page]').on('click', function (e) {
         e.preventDefault();

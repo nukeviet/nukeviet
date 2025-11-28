@@ -235,7 +235,8 @@ $tpl = new \NukeViet\Template\NVSmarty();
 $tpl->setTemplateDir(get_module_tpl_dir('content.tpl'));
 $tpl->assign('LANG', $nv_Lang);
 $tpl->assign('MODULE_NAME', $module_name);
-$tpl->assign('FORM_ACTION', $action);
+$tpl->assign('OP', $op);
+$tpl->assign('ID', $id);
 $tpl->assign('UPLOADS_DIR_USER', NV_UPLOADS_DIR . '/' . $module_upload);
 $tpl->assign('UPLOAD_CURRENT', NV_UPLOADS_DIR . '/' . $module_upload);
 $tpl->assign('DATA', $row);
@@ -246,6 +247,7 @@ $tpl->assign('ACTIVECOMM', $activecomm);
 $tpl->assign('ARRAY_IMGPOSITION', $array_imgposition);
 $tpl->assign('SCHEMA_TYPES', $schema_types);
 $tpl->assign('ERROR', $error);
+$tpl->assign('CHECKSS', md5(NV_CHECK_SESSION . '-' . $module_name . '-' . $op . '-' . $id));
 
 if (defined('NV_EDITOR') and nv_function_exists('nv_aleditor')) {
     $tpl->registerPlugin('modifier', 'editor', 'nv_aleditor');

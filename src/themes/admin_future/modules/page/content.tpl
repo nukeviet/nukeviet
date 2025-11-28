@@ -1,7 +1,7 @@
 {if not empty($ERROR)}
 <div class="alert alert-danger" role="alert">{$ERROR}</div>
 {/if}
-<form id="form-page-content" method="post" action="{$FORM_ACTION}" novalidate class="confirm-reload">
+<form id="form-page-content" method="post" action="{$smarty.const.NV_BASE_ADMINURL}index.php?{$smarty.const.NV_LANG_VARIABLE}={$smarty.const.NV_LANG_DATA}&amp;{$smarty.const.NV_NAME_VARIABLE}={$MODULE_NAME}&amp;{$smarty.const.NV_OP_VARIABLE}={$OP}{if not empty($ID)}&amp;id={$ID}{/if}" novalidate class="ajax-submit">
     <div class="row g-3">
         <div class="col-lg-8 col-xxl-9">
             <div class="card mb-3">
@@ -148,54 +148,8 @@
     </div>
     <input type="hidden" value="1" name="save">
     <input type="hidden" value="{$ISCOPY}" name="copy">
+    <input type="hidden" name="checkss" value="{$CHECKSS}">
     <div class="hstack gap-2 flex-wrap justify-content-center mt-3">
         <button class="btn btn-primary" type="submit">{$LANG->getModule('save')}</button>
     </div>
 </form>
-<script type="text/javascript">
-$(function() {
-    // Character count for title
-    $("#titlelength").html($("#idtitle").val().length);
-    $("#idtitle").on('keyup paste', function() {
-        $("#titlelength").html($(this).val().length);
-    });
-
-    // Character count for description
-    $("#descriptionlength").html($("#description").val().length);
-    $("#description").on('keyup paste', function() {
-        $("#descriptionlength").html($(this).val().length);
-    });
-
-    // Auto get alias when title changes (if alias is empty)
-    {if empty($DATA.alias)}
-    $('#idtitle').change(function() {
-        $('[data-toggle="getaliaspage"]').trigger('click');
-    });
-    {/if}
-
-    // Get alias button click handler
-    $('[data-toggle="getaliaspage"]').on('click', function() {
-        var title = $('#idtitle').val();
-        if (title.length > 0) {
-            $.post(
-                script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '={$MODULE_NAME}&' + nv_fc_variable + '=alias',
-                'title=' + encodeURIComponent(title) + '&type=page',
-                function(res) {
-                    if (res) {
-                        $('#idalias').val(res);
-                    }
-                }
-            );
-        }
-    });
-
-    // Toggle schema_about visibility based on schema_type selection
-    $('#content_schema_type').on('change', function() {
-        if ($(this).val() === 'webpage') {
-            $('#schema_about_container').removeClass('d-none');
-        } else {
-            $('#schema_about_container').addClass('d-none');
-        }
-    });
-});
-</script>
