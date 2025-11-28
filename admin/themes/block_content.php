@@ -299,6 +299,7 @@ if ($checkss == $nv_Request->get_string('checkss', 'post')) {
                 $data['groups_view'] = $row['groups_view'];
                 $data['config'] = $row['config'];
                 $row['bid'] = $db->insert_id($_sql, 'bid', $data);
+                $nv_Cache->delMod('themes');
 
                 nv_insert_logs(NV_LANG_DATA, $module_name, $lang_module['block_add'], 'Name : ' . $row['title'], $admin_info['userid']);
             } else {
@@ -333,6 +334,7 @@ if ($checkss == $nv_Request->get_string('checkss', 'post')) {
                 if (isset($site_mods[$module])) {
                     $nv_Cache->delMod($module);
                 }
+                $nv_Cache->delMod('themes');
 
                 nv_insert_logs(NV_LANG_DATA, $module_name, $lang_module['block_edit'], 'Name : ' . $row['title'], $admin_info['userid']);
             }
