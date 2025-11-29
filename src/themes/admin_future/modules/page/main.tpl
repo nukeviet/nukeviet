@@ -16,7 +16,7 @@
                 {foreach from=$DATA key=key item=row}
                 <tr>
                     <td>
-                        <select aria-label="{$LANG->getModule('order')}" data-toggle="changeWeiPage" data-id="{$row.id}" name="change_weight_{$row.id}" id="change_weight_{$row.id}" class="form-select form-select-sm fw-75">
+                        <select aria-label="{$LANG->getModule('order')}" data-toggle="changeWeiPage" data-checkss="{$row.checkss}" data-id="{$row.id}" name="change_weight_{$row.id}" id="change_weight_{$row.id}" class="form-select form-select-sm fw-75">
                             {for $weight=1 to count($DATA)}
                             <option value="{$weight}"{if $weight eq $row.weight} selected{/if}>{$weight}</option>
                             {/for}

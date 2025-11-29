@@ -158,6 +158,7 @@ $(function () {
             type: 'POST',
             url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=change_weight&nocache=' + new Date().getTime(),
             data: {
+                checkss: btn.data('checkss'),
                 id: btn.data('id'),
                 new_weight: btn.val()
             },
