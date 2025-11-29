@@ -208,12 +208,15 @@ if ($checkss == $nv_Request->get_string('checkss', 'post')) {
         nv_jsonOutput($respon);
     }
 } elseif (empty($id)) {
+    $row['title'] = '';
+    $row['alias'] = '';
     $row['image'] = '';
     $row['imagealt'] = '';
     $row['imageposition'] = 0;
     $row['layout_func'] = '';
     $row['description'] = '';
     $row['bodytext'] = '';
+    $row['keywords'] = '';
     $row['activecomm'] = $module_config[$module_name]['setcomm'];
     $row['socialbutton'] = 1;
     $row['hot_post'] = 0;

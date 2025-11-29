@@ -20,27 +20,27 @@ $(function () {
         }
     });
 
-    // Content page: Character count for title
+    // Trang nội dung: Đếm ký tự tiêu đề
     if ($('#form-page-content').length) {
         $("#titlelength").html($("#idtitle").val().length);
         $("#idtitle").on('keyup paste', function() {
             $("#titlelength").html($(this).val().length);
         });
 
-        // Character count for description
+        // Đếm ký tự mô tả
         $("#descriptionlength").html($("#description").val().length);
         $("#description").on('keyup paste', function() {
             $("#descriptionlength").html($(this).val().length);
         });
 
-        // Auto get alias when title changes (if alias is empty)
+        // Tự động lấy alias khi thay đổi tiêu đề (nếu alias rỗng)
         if ($('[data-toggle="getaliaspage"]').data('auto-alias')) {
             $('#idtitle').change(function() {
                 $('[data-toggle="getaliaspage"]').trigger('click');
             });
         }
 
-        // Toggle schema_about visibility based on schema_type selection
+        // Ẩn hiện schema_about tuỳ thuộc vào schema_type
         $('#content_schema_type').on('change', function() {
             if ($(this).val() === 'webpage') {
                 $('#schema_about_container').removeClass('d-none');
@@ -50,19 +50,36 @@ $(function () {
         });
     }
 
-    // Get alias button click handler
+    // Xử lý nút lấy alias
     $('[data-toggle="getaliaspage"]').on('click', function() {
+        var btn = $(this);
+        var icon = $('i', btn);
         var title = $('#idtitle').val();
+        if (icon.is('.fa-spin')) {
+            return;
+        }
         if (title.length > 0) {
-            $.post(
-                script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=alias',
-                'title=' + encodeURIComponent(title) + '&type=page',
-                function(res) {
+            icon.addClass('fa-spin');
+            $.ajax({
+                type: 'POST',
+                url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=alias&nocache=' + new Date().getTime(),
+                data: {
+                    title: title,
+                    type: 'page'
+                },
+                cache: false,
+                success: function(res) {
+                    icon.removeClass('fa-spin');
                     if (res) {
                         $('#idalias').val(res);
                     }
+                },
+                error: function(xhr, text, err) {
+                    icon.removeClass('fa-spin');
+                    nvToast(err, 'error');
+                    console.log(xhr, text, err);
                 }
-            );
+            });
         }
     });
 
