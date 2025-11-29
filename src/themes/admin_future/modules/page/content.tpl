@@ -15,7 +15,7 @@
                         <label for="idalias" class="form-label">{$LANG->getModule('alias')}:</label>
                         <div class="input-group">
                             <input type="text" class="form-control" id="idalias" name="alias" value="{$DATA.alias}" maxlength="250">
-                            <button class="btn btn-secondary" type="button" aria-label="{$LANG->getModule('alias')}" data-toggle="getaliaspage" data-auto-alias="{empty($DATA.alias) ? '1' : '0'}" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-title="{$LANG->getModule('alias')}"><i class="fa-solid fa-rotate"></i></button>
+                            <button class="btn btn-secondary" type="button" aria-label="{$LANG->getModule('alias')}" data-toggle="getaliaspage" data-auto-alias="{empty($DATA.alias) ? '1' : '0'}" data-checkss="{$CHECKSS}" data-id="{$ID}" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-title="{$LANG->getModule('alias')}"><i class="fa-solid fa-rotate"></i></button>
                         </div>
                     </div>
                     <div class="row g-3">

@@ -65,7 +65,8 @@ $(function () {
                 url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=alias&nocache=' + new Date().getTime(),
                 data: {
                     title: title,
-                    type: 'page'
+                    checkss: btn.data('checkss'),
+                    id: btn.data('id')
                 },
                 cache: false,
                 success: function(res) {

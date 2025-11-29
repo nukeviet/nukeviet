@@ -33,10 +33,8 @@ if ($id) {
     }
 
     $page_title = $nv_Lang->getModule('edit');
-    $action = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;id=' . $id;
 } else {
     $page_title = $nv_Lang->getModule('add');
-    $action = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op;
 }
 
 if (!empty($global_config['over_capacity']) and !defined('NV_IS_GODADMIN')) {
@@ -242,16 +240,16 @@ if (!empty($row['image']) and is_file(NV_UPLOADS_REAL_DIR . '/' . $module_upload
 $nv_Lang->setGlobal('title_suggest_max', $nv_Lang->getGlobal('length_suggest_max', 65));
 $nv_Lang->setGlobal('description_suggest_max', $nv_Lang->getGlobal('length_suggest_max', 160));
 
-// Prepare layout array
+// Chuẩn bị mảng layout
 $layout_list = [];
 foreach ($layout_array as $value) {
     $layout_list[] = preg_replace($global_config['check_op_layout'], '\\1', $value);
 }
 
-// Prepare activecomm array
+// Chuẩn bị mảng activecomm
 $activecomm = array_map('intval', explode(',', $row['activecomm']));
 
-// Prepare image position array
+// Chuẩn bị mảng vị trí ảnh
 $array_imgposition = [
     0 => $nv_Lang->getModule('imgposition_0'),
     1 => $nv_Lang->getModule('imgposition_1'),
