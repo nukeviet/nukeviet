@@ -13,7 +13,7 @@ if (!defined('NV_IS_FILE_ADMIN')) {
     exit('Stop!!!');
 }
 
-$checkss = $nv_Request->get_string('checkss', 'post');
+$checkss = $nv_Request->get_title('checkss', 'post', '');
 $id = $nv_Request->get_int('id', 'post', 0);
 $new_weight = $nv_Request->get_int('new_weight', 'post', 0);
 
