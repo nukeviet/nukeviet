@@ -86,4 +86,27 @@ class ZaloApp implements \Serializable
 
         $this->__construct($id, $secret);
     }
+
+    /**
+     * Serializes the ZaloApp entity as an array (PHP 7.4+).
+     *
+     * @return array
+     */
+    public function __serialize(): array
+    {
+        return [
+            'id' => $this->id,
+            'secret' => $this->secret,
+        ];
+    }
+
+    /**
+     * Unserializes an array as a ZaloApp entity (PHP 7.4+).
+     *
+     * @param array $data
+     */
+    public function __unserialize(array $data): void
+    {
+        $this->__construct($data['id'], $data['secret']);
+    }
 }
