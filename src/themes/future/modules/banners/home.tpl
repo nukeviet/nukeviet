@@ -13,19 +13,25 @@
 {/if}
 
 {if not empty($CONTENT) }
-<div class="mb-3">{$CONTENT.info}</div>
-{foreach from=$CONTENT.rows item=row}
+<div class="mb-3">{$LANG->getModule('main_page_info')}</div>
+{foreach from=$CONTENT item=row}
 <div class="card border-primary mb-3">
     <div class="card-header text-bg-primary">
-        {$LANG->getModule('plan_title')}: <strong>{$row.title[0]}</strong>
+        {$LANG->getModule('plan_title')}: <strong>{$row.title}</strong>
     </div>
     <ul class="list-group list-group-flush">
-        <li class="list-group-item">{$row.blang[0]}: {$row.blang[1]}</li>
-        <li class="list-group-item">{$row.size[0]}: {$row.blang[1]}</li>
-        <li class="list-group-item">{$row.size[0]}: {$row.size[1]}</li>
+        <li class="list-group-item">{$LANG->getModule('blang')}: {not empty($row.blang) ? $LANGUAGE_ARRAY[$row.blang].name : $LANG->getModule('blang_all')}</li>
+        <li class="list-group-item">{$LANG->getModule('size')}: {$row.width} x {$row.height} px</li>
+        {assign var="form_key" value="form_"|cat:$row.form}
+        {if $LANG->existsModule($form_key)}
+            {assign var="labelVar" value=$LANG->getModule($form_key)}
+        {else}
+            {assign var="labelVar" value=$row.form}
+        {/if}
+        <li class="list-group-item">{$LANG->getModule('form')}: {$labelVar}</li>
         <li class="list-group-item">{$LANG->getModule('plan_allowed')}: {not empty($row.allowed) ? $LANG->getModule('plan_allowed_yes') : $LANG->getModule('plan_allowed_no')}</li>
-        {if not empty($row.description[1])}
-        <li class="list-group-item">{$row.description[1]}</li>
+        {if not empty($row.description)}
+        <li class="list-group-item">{$row.description}</li>
         {/if}
     </ul>
 </div>

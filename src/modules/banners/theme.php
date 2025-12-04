@@ -22,12 +22,14 @@ if (!defined('NV_SYSTEM')) {
  */
 function nv_banner_theme_main($contents)
 {
-    global $nv_Lang, $manament;
+    global $nv_Lang, $manament, $language_array;
+
     $tpl = new \NukeViet\Template\NVSmarty();
     $tpl->setTemplateDir(get_module_tpl_dir('home.tpl'));
     $tpl->assign('LANG', $nv_Lang);
     $tpl->assign('MANAGEMENT', $manament);
     $tpl->assign('CONTENT', $contents);
+    $tpl->assign('LANGUAGE_ARRAY', $language_array);
 
     return $tpl->fetch('home.tpl');
 }
