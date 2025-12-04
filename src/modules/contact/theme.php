@@ -209,23 +209,39 @@ function contact_sendcontact($feedback, $departments, $sendinfo = true)
 {
     global $global_config, $client_info;
 
-    $feedback['filter_content'] = nv_htmlspecialchars($feedback['filter_content']);
+    $xtpl = new XTemplate('sendcontact.tpl', get_module_tpl_dir('sendcontact.tpl'));
+    $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
+    $xtpl->assign('SITE_NAME', $global_config['site_name']);
+    $xtpl->assign('SITE_URL', $global_config['site_url']);
+    $xtpl->assign('FULLNAME', $feedback['sender_name']);
+    $xtpl->assign('EMAIL', $feedback['sender_email']);
+    $xtpl->assign('PART', $departments[$feedback['department']]['full_name']);
+    $xtpl->assign('IP', $client_info['ip']);
+    $xtpl->assign('TITLE', $feedback['filter_title']);
+    $xtpl->assign('CONTENT', nv_htmlspecialchars($feedback['filter_content']));
 
-    $dir = get_module_tpl_dir('sendcontact.tpl');
-    $tpl = new \NukeViet\Template\NVSmarty();
-    if (file_exists($dir . '/smarty/sendcontact.tpl')) {
-        $tpl->setTemplateDir($dir . '/smarty');
+    if ($sendinfo) {
+        if (!empty($feedback['category'])) {
+            $xtpl->assign('CAT', $feedback['category']);
+            $xtpl->parse('main.sendinfo.cat');
+        }
+        if (!empty($feedback['filter_sender_phone'])) {
+            $xtpl->assign('PHONE', $feedback['filter_sender_phone']);
+            $xtpl->parse('main.sendinfo.phone');
+        }
+        $xtpl->parse('main.sendinfo');
     } else {
-        $tpl->setTemplateDir($dir);
+        if (!empty($feedback['category'])) {
+            $xtpl->assign('CAT', $feedback['category']);
+            $xtpl->parse('main.mysendinfo.cat');
+        }
+        if (!empty($feedback['filter_sender_phone'])) {
+            $xtpl->assign('PHONE', $feedback['filter_sender_phone']);
+            $xtpl->parse('main.mysendinfo.phone');
+        }
+        $xtpl->parse('main.mysendinfo');
     }
 
-    $tpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
-    $tpl->assign('SITE_NAME', $global_config['site_name']);
-    $tpl->assign('SITE_URL', $global_config['site_url']);
-    $tpl->assign('FEEDBACK', $feedback);
-    $tpl->assign('PART', $departments[$feedback['department']]['full_name']);
-    $tpl->assign('SENDINFO', $sendinfo);
-    $tpl->assign('IP', $client_info['ip']);
-
-    return $tpl->fetch('sendcontact.tpl');
+    $xtpl->parse('main');
+    return $xtpl->text('main');
 }
