@@ -155,7 +155,7 @@ function contact_form_theme($array_content, $departments, $cats, $base_url, $che
     global $nv_Lang, $global_config, $module_name, $module_config;
 
     $tpl = new \NukeViet\Template\NVSmarty();
-    $tpl->setTemplateDir(get_module_tpl_dir('block.contact_form.tpl'));
+    $tpl->setTemplateDir(get_module_tpl_dir('form.tpl'));
     $tpl->assign('LANG', $nv_Lang);
     $tpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
     $tpl->assign('CONFIG', ['module' => $module_name]);
@@ -194,7 +194,7 @@ function contact_form_theme($array_content, $departments, $cats, $base_url, $che
         'mess' => !empty($global_config['antispam_warning_content']) ? $global_config['antispam_warning_content'] : $nv_Lang->getGlobal('antispam_warning_content')
     ]);
 
-    return $tpl->fetch('block.contact_form.tpl');
+    return $tpl->fetch('form.tpl');
 }
 
 /**
@@ -209,39 +209,23 @@ function contact_sendcontact($feedback, $departments, $sendinfo = true)
 {
     global $global_config, $client_info;
 
-    $xtpl = new XTemplate('sendcontact.tpl', get_module_tpl_dir('sendcontact.tpl'));
-    $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
-    $xtpl->assign('SITE_NAME', $global_config['site_name']);
-    $xtpl->assign('SITE_URL', $global_config['site_url']);
-    $xtpl->assign('FULLNAME', $feedback['sender_name']);
-    $xtpl->assign('EMAIL', $feedback['sender_email']);
-    $xtpl->assign('PART', $departments[$feedback['department']]['full_name']);
-    $xtpl->assign('IP', $client_info['ip']);
-    $xtpl->assign('TITLE', $feedback['filter_title']);
-    $xtpl->assign('CONTENT', nv_htmlspecialchars($feedback['filter_content']));
+    $feedback['filter_content'] = nv_htmlspecialchars($feedback['filter_content']);
 
-    if ($sendinfo) {
-        if (!empty($feedback['category'])) {
-            $xtpl->assign('CAT', $feedback['category']);
-            $xtpl->parse('main.sendinfo.cat');
-        }
-        if (!empty($feedback['filter_sender_phone'])) {
-            $xtpl->assign('PHONE', $feedback['filter_sender_phone']);
-            $xtpl->parse('main.sendinfo.phone');
-        }
-        $xtpl->parse('main.sendinfo');
+    $dir = get_module_tpl_dir('sendcontact.tpl');
+    $tpl = new \NukeViet\Template\NVSmarty();
+    if (file_exists($dir . '/smarty/sendcontact.tpl')) {
+        $tpl->setTemplateDir($dir . '/smarty');
     } else {
-        if (!empty($feedback['category'])) {
-            $xtpl->assign('CAT', $feedback['category']);
-            $xtpl->parse('main.mysendinfo.cat');
-        }
-        if (!empty($feedback['filter_sender_phone'])) {
-            $xtpl->assign('PHONE', $feedback['filter_sender_phone']);
-            $xtpl->parse('main.mysendinfo.phone');
-        }
-        $xtpl->parse('main.mysendinfo');
+        $tpl->setTemplateDir($dir);
     }
 
-    $xtpl->parse('main');
-    return $xtpl->text('main');
+    $tpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
+    $tpl->assign('SITE_NAME', $global_config['site_name']);
+    $tpl->assign('SITE_URL', $global_config['site_url']);
+    $tpl->assign('FEEDBACK', $feedback);
+    $tpl->assign('PART', $departments[$feedback['department']]['full_name']);
+    $tpl->assign('SENDINFO', $sendinfo);
+    $tpl->assign('IP', $client_info['ip']);
+
+    return $tpl->fetch('sendcontact.tpl');
 }
