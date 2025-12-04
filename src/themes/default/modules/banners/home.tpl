@@ -14,9 +14,9 @@
 <div class="panel panel-primary">
     <div class="panel-heading">{LANG.plan_title}: <strong>{PLAN_TITLE}</strong></div>
     <ul class="list-group">
-        <li class="list-group-item">{PLAN_LANG_TITLE}: {PLAN_LANG_NAME}</li>
-        <li class="list-group-item">{PLAN_SIZE_TITLE}: {PLAN_SIZE_NAME}</li>
-        <li class="list-group-item">{PLAN_FORM_TITLE}: {PLAN_FORM_NAME}</li>
+        <li class="list-group-item">{LANG.blang}: {PLAN_LANG_NAME}</li>
+        <li class="list-group-item">{LANG.size}: {PLAN_SIZE_NAME}</li>
+        <li class="list-group-item">{LANG.form}: {PLAN_FORM_NAME}</li>
         <li class="list-group-item">{LANG.plan_allowed}: <!-- BEGIN: allowed -->{LANG.plan_allowed_yes}<!-- END: allowed --><!-- BEGIN: notallowed -->{LANG.plan_allowed_no}<!-- END: notallowed --></li>
         <!-- BEGIN: desc --><li class="list-group-item">{PLAN_DESCRIPTION_NAME}</li><!-- END: desc -->
     </ul>
