@@ -22,35 +22,31 @@ if (!defined('NV_SYSTEM')) {
  */
 function nv_banner_theme_main($contents)
 {
-    global $module_info, $manament;
+    global $module_info, $manament, $nv_Lang, $global_array_uplans, $language_array;
 
     $xtpl = new XTemplate('home.tpl', get_module_tpl_dir('home.tpl'));
     $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
     $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
 
-    if (!empty($contents['rows'])) {
-        $xtpl->assign('MAIN_PAGE_INFO', $contents['info']);
+    if (!empty($contents)) {
+        $xtpl->assign('MAIN_PAGE_INFO', $nv_Lang->getModule('main_page_info'));
         $xtpl->parse('main.if_banner_plan.info');
 
-        foreach ($contents['rows'] as $row) {
+        foreach ($contents as $row) {
             $xtpl->clear_autoreset();
-            $xtpl->assign('PLAN_TITLE', $row['title'][0]);
-            $xtpl->assign('PLAN_LANG_TITLE', $row['blang'][0]);
-            $xtpl->assign('PLAN_LANG_NAME', $row['blang'][1]);
-            $xtpl->assign('PLAN_SIZE_TITLE', $row['size'][0]);
-            $xtpl->assign('PLAN_SIZE_NAME', $row['size'][1]);
-            $xtpl->assign('PLAN_FORM_TITLE', $row['form'][0]);
-            $xtpl->assign('PLAN_FORM_NAME', $row['form'][1]);
-            $xtpl->assign('PLAN_DESCRIPTION_TITLE', $row['description'][0]);
-            $xtpl->assign('PLAN_DESCRIPTION_NAME', $row['description'][1]);
-            $xtpl->assign('PLAN_DETAIL', $contents['detail']);
+            $xtpl->assign('PLAN_TITLE', $row['title']);
+            $xtpl->assign('PLAN_LANG_NAME', ((!empty($row['blang'])) ? $language_array[$row['blang']]['name'] : $nv_Lang->getModule('blang_all')));
+            $xtpl->assign('PLAN_SIZE_NAME', $row['width'] . ' x ' . $row['height'] . 'px');
+            $xtpl->assign('PLAN_FORM_NAME', ($nv_Lang->existsModule('form_' . $row['form']) ? $nv_Lang->getModule('form_' . $row['form']) : $row['form']));
+            $xtpl->assign('PLAN_DESCRIPTION_NAME', $row['description']);
+            $xtpl->assign('PLAN_DETAIL', $nv_Lang->getGlobal('detail'));
             $xtpl->set_autoreset();
-            if ($row['allowed']) {
+            if (isset($global_array_uplans[$row['id']])) {
                 $xtpl->parse('main.if_banner_plan.banner_plan.allowed');
             } else {
                 $xtpl->parse('main.if_banner_plan.banner_plan.notallowed');
             }
-            if (!empty($row['description'][1])) {
+            if (!empty($row['description'])) {
                 $xtpl->parse('main.if_banner_plan.banner_plan.desc');
             }
             $xtpl->parse('main.if_banner_plan.banner_plan');
