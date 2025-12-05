@@ -1,8 +1,4 @@
-<form method="post" action="{$ACTION_FILE}" data-toggle="ajax-form" data-precheck="nv_precheck_form" novalidate
-    {if $MODULE_CAPTCHA eq 'recaptcha' and $GCONFIG.recaptcha_ver eq 3} data-recaptcha3="1"
-    {elseif $MODULE_CAPTCHA eq 'recaptcha' and $GCONFIG.recaptcha_ver eq 2} data-recaptcha2="1"
-    {elseif $MODULE_CAPTCHA eq 'turnstile'} data-turnstile="1"
-    {elseif $MODULE_CAPTCHA eq 'captcha'} data-captcha="fcode"{/if}>
+<form method="post" action="{$ACTION_FILE}" data-toggle="ajax-form" data-precheck="nv_precheck_form" novalidate{if $MODULE_CAPTCHA eq 'recaptcha' and $GCONFIG.recaptcha_ver eq 3} data-recaptcha3="1"{elseif $MODULE_CAPTCHA eq 'recaptcha' and $GCONFIG.recaptcha_ver eq 2} data-recaptcha2="1"{elseif $MODULE_CAPTCHA eq 'turnstile'} data-turnstile="1"{elseif $MODULE_CAPTCHA eq 'captcha'} data-captcha="fcode"{/if}>
     {if !empty($CATS)}
     {$count=count($CATS)}
     <div class="mb-3">
