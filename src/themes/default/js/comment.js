@@ -162,10 +162,10 @@ $(function() {
             });
         }
 
-        // Comment form reset button
+        // Thiết lập lại form comment
         $('[data-toggle=commReset]', commentform).on('click', function(e) {
             e.preventDefault();
-            commReset($(this).parents('form'))
+            commReset($(this).closest('form'));
         });
     }
 

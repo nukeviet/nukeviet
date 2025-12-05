@@ -1,10 +1,17 @@
-<div class="mt-3 comment-form-container border-top pt-4 pt-xl-5" id="idcomment">
+<div class="mt-3 comment-form-container border-top pt-4 pt-xl-5" id="idcomment"
+    data-module="{$MODULE_COMM}"
+    data-content="{$MODULE_DATA}_commentcontent"
+    data-area="{$AREA_COMM}"
+    data-id="{$ID_COMM}"
+    data-allowed="{$ALLOWED_COMM}"
+    data-checkss="{$CHECKSS_COMM}"
+>
     <div class="d-flex align-items-center gap-3 justify-content-between mb-3 border-bottom pb-2">
         <div class="h3 mb-0">
             <i class="fa-regular fa-message me-1"></i> {$LANG->getModule('comment')}
         </div>
         <div class="d-flex align-items-center gap-2">
-            <button class="btn btn-sm btn-outline-input" aria-label="">
+            <button class="btn btn-sm btn-outline-input" data-toggle="commListShow" data-obj="#showcomment" title="{$LANG->getModule('comment_hide_show')}" aria-label="{$LANG->getModule('comment_hide_show')}">
                 <i class="fa-regular fa-eye"></i>
             </button>
             <select class="form-select form-select-sm flex-shrink-0 fw-125" data-toggle="nv_comment_sort_change" name="nv_comment_sort_change">
@@ -38,10 +45,10 @@
             {assign var="DISABLED" value=($smarty.const.NV_IS_USER ? ' disabled' : '')}
             <div class="mb-3 row g-3">
                 <div class="col-lg-6">
-                    <input type="text" name="name" value="{$NAME}"{$DISABLED} class="form-control" placeholder="{$LANG->getModule('comment_name')}">
+                    <input type="text" name="name" value="{$NAME}"{$DISABLED} class="form-control" placeholder="{$LANG->getModule('comment_name')}" autocomplete="name">
                 </div>
                 <div class="col-lg-6">
-                    <input type="email" name="email" value="{$EMAIL}"{$DISABLED} class="form-control" placeholder="{$LANG->getModule('comment_email')}">
+                    <input type="email" name="email" value="{$EMAIL}"{$DISABLED} class="form-control" placeholder="{$LANG->getModule('comment_email')}" autocomplete="email">
                 </div>
             </div>
             <div class="mb-3">
@@ -109,7 +116,8 @@
                             shouldNotGroupWhenFull: false
                         },
                         nukeviet: {
-                            editorId: 'commentcontent'
+                            editorId: 'commentcontent',
+                            initCallback: 'cmtEditorCallback'
                         }
                     }).then(editor => {
                         editor.editing.view.document.on('keydown', (event, data) => {
@@ -124,35 +132,36 @@
                 </script>
                 {/if}
             </div>
+
             {if not empty($MCONFIG.allowattachcomm)}
-            <div class="form-group">
-                <div class="row">
-                    <label class="col-sm-8 col-md-6 control-label">{$LANG->getModule('attach')}</label>
-                    <div class="col-sm-16 col-md-18">
-                        <input type="file" name="fileattach" />
-                    </div>
-                </div>
+            <div class="mb-3">
+                <label for="commentFileAttach" class="form-label">{$LANG->getModule('attach')}:</label>
+                <input class="form-control" type="file" name="fileattach" id="commentFileAttach">
             </div>
             {/if}
 
             {if not empty($GCONFIG.data_warning) or not empty($GCONFIG.antispam_warning)}
-            <div class="alert alert-info confirm" style="padding:0 10px;display:none">
-                {if not empty($GCONFIG.data_warning)}
-                <div class="checkbox">
-                    <label>
-                        <input type="checkbox" class="form-control" style="margin-top:2px" name="data_permission_confirm" value="1" data-error="{$LANG->getGlobal('data_warning_error')}">
-                        <small>{$GCONFIG.data_warning_content ?: $LANG->getGlobal('data_warning_content')}</small>
-                    </label>
+            <div class="collapse" id="commentWarnings">
+                <div class="pb-3">
+                    <div class="alert alert-info mb-0 vstack gap-3">
+                        {if not empty($GCONFIG.data_warning)}
+                        <div class="d-flex gap-2">
+                            <input type="checkbox" class="form-check-input mt-2" id="data_permission_confirm" name="data_permission_confirm" value="1" data-error="{$LANG->getGlobal('data_warning_error')}">
+                            <label for="data_permission_confirm">
+                                <small>{$GCONFIG.data_warning_content ?: $LANG->getGlobal('data_warning_content')}</small>
+                            </label>
+                        </div>
+                        {/if}
+                        {if not empty($GCONFIG.antispam_warning)}
+                        <div class="d-flex gap-2">
+                            <input type="checkbox" class="form-check-input mt-2" id="antispam_confirm" name="antispam_confirm" value="1" data-error="{$LANG->getGlobal('antispam_warning_error')}">
+                            <label for="antispam_confirm">
+                                <small>{$GCONFIG.antispam_warning_content ?: $LANG->getGlobal('antispam_warning_content')}</small>
+                            </label>
+                        </div>
+                        {/if}
+                    </div>
                 </div>
-                {/if}
-                {if not empty($GCONFIG.antispam_warning)}
-                <div class="checkbox">
-                    <label>
-                        <input type="checkbox" class="form-control" style="margin-top:2px" name="antispam_confirm" value="1" data-error="{$LANG->getGlobal('antispam_warning_error')}">
-                        <small>{$GCONFIG.antispam_warning_content ?: $LANG->getGlobal('antispam_warning_content')}</small>
-                    </label>
-                </div>
-                {/if}
             </div>
             {/if}
 
@@ -176,31 +185,3 @@
         {/if}
     </div>
 </div>
-{if {$smarty.const.NV_COMM_ID}}
-<script type="text/javascript" src="{$smarty.const.NV_STATIC_URL}themes/{$TEMPLATE_JS}/js/comment.js"></script>
-<link rel="StyleSheet" href="{$smarty.const.NV_STATIC_URL}themes/{$TEMPLATE_CSS}/css/comment.css" type="text/css">
-{/if}
-
-{*
-<!-- BEGIN: main -->
-<div id="idcomment" class="nv-fullbg" data-module="{MODULE_COMM}" data-content="{MODULE_DATA}_commentcontent" data-area="{AREA_COMM}" data-id="{ID_COMM}" data-allowed="{ALLOWED_COMM}" data-checkss="{CHECKSS_COMM}">
-    <div class="row clearfix margin-bottom-lg">
-        <div class="col-xs-12 text-left">
-            <button type="button" class="btn btn-default btn-sm pull-right" data-toggle="commListShow" data-obj="#showcomment" title="{LANG.comment_hide_show}">
-                <em class="fa fa-eye-slash"></em>
-            </button>
-            <p class="comment-title">
-                <em class="fa fa-comments">&nbsp;</em> {LANG.comment}
-            </p>
-        </div>
-        <div class="col-xs-12 text-right">
-            <select class="form-control" data-toggle="nv_comment_sort_change">
-                <!-- BEGIN: sortcomm -->
-                <option value="{OPTION.key}" {OPTION.selected}>{OPTION.title}</option>
-                <!-- END: sortcomm -->
-            </select>
-        </div>
-    </div>
-</div>
-<!-- END: main -->
-*}
