@@ -29,27 +29,15 @@ function contact_main_theme($array_content, $is_specific, $departments, $cats, $
 {
     global $nv_Lang, $module_name, $page_title;
 
-    addition_module_assets($module_name, 'both');
-
     $tpl = new \NukeViet\Template\NVSmarty();
     $tpl->setTemplateDir(get_module_tpl_dir('main.tpl'));
     $tpl->assign('LANG', $nv_Lang);
-    $tpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
     $tpl->assign('PAGE_TITLE', $page_title);
-    $tpl->assign('THEME_PAGE_TITLE', nv_html_page_title(false));
-    $tpl->assign('IS_HOME', !$is_specific);
-
     $tpl->assign('BODYTEXT', $array_content['bodytext'] ?? '');
 
     $deps = [];
     foreach ($departments as $dep) {
-        if (!$is_specific && ($dep['act'] ?? 1) == 2) {
-            continue;
-        }
-
         $item = $dep;
-        $item['url'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $dep['alias'];
-
         $cd = [];
         if (!empty($dep['phone'])) {
             if (is_array($dep['phone'])) {
@@ -71,7 +59,7 @@ function contact_main_theme($array_content, $is_specific, $departments, $cats, $
             $emailVal = is_array($dep['email']) ? implode(', ', $dep['email']) : $dep['email'];
             $cd[] = ['type' => 'email', 'value' => $emailVal];
         }
-        if ($is_specific && !empty($dep['others'])) {
+        if (!empty($dep['others'])) {
             foreach ($dep['others'] as $key => $value) {
                 if (empty($value)) {
                     continue;
@@ -152,15 +140,14 @@ function contact_main_theme($array_content, $is_specific, $departments, $cats, $
  */
 function contact_form_theme($array_content, $departments, $cats, $base_url, $checkss)
 {
-    global $nv_Lang, $global_config, $module_name, $module_config;
+    global $nv_Lang, $global_config, $module_name, $module_config, $module_captcha;
 
     $tpl = new \NukeViet\Template\NVSmarty();
     $tpl->setTemplateDir(get_module_tpl_dir('form.tpl'));
     $tpl->assign('LANG', $nv_Lang);
-    $tpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
-    $tpl->assign('CONFIG', ['module' => $module_name]);
+    $tpl->assign('MCONFIG', $module_config[$module_name]);
     $tpl->assign('REQUEST_FORM', md5($module_name . '_request_form_' . NV_CHECK_SESSION));
-    $tpl->assign('MODULE_CAPTCHA', nv_module_captcha($module_name));
+    $tpl->assign('MODULE_CAPTCHA', $module_captcha);
     $tpl->assign('GCONFIG', $global_config);
     $tpl->assign('ACTION_FILE', $base_url);
     $tpl->assign('CHECKSS', $checkss);
@@ -183,16 +170,7 @@ function contact_form_theme($array_content, $departments, $cats, $base_url, $che
         $tpl->assign('CATS', $smCats);
     }
 
-    $tpl->assign('FEEDBACK_PHONE', !empty($module_config[$module_name]['feedback_phone']));
-    $tpl->assign('FEEDBACK_ADDRESS', !empty($module_config[$module_name]['feedback_address']));
-    $tpl->assign('DATA_WARNING', [
-        'active' => !empty($global_config['data_warning']),
-        'mess' => !empty($global_config['data_warning_content']) ? $global_config['data_warning_content'] : $nv_Lang->getGlobal('data_warning_content')
-    ]);
-    $tpl->assign('ANTISPAM_WARNING', [
-        'active' => !empty($global_config['antispam_warning']),
-        'mess' => !empty($global_config['antispam_warning_content']) ? $global_config['antispam_warning_content'] : $nv_Lang->getGlobal('antispam_warning_content')
-    ]);
+    $tpl->assign('MCONFIG', $module_config[$module_name]);
 
     return $tpl->fetch('form.tpl');
 }
