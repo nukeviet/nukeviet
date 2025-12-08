@@ -50,6 +50,9 @@ $page_url = $base_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' 
 if ($page > 1) {
     $page_url .= '/page-' . $page;
     $page_title .= NV_TITLEBAR_DEFIS . $nv_Lang->getGlobal('page') . ' ' . $page;
+    if (isset($description)) {
+        $description .= NV_TITLEBAR_DEFIS . $nv_Lang->getGlobal('page') . ' ' . $page;
+    }
 }
 
 $canonicalUrl = getCanonicalUrl($page_url);
