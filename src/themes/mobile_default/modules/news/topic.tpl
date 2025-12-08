@@ -1,4 +1,21 @@
 <!-- BEGIN: main -->
+<!-- BEGIN: h1 -->
+<h1 class="hidden d-none">{PAGE_TITLE}</h1>
+<!-- END: h1 -->
+
+<!-- BEGIN: author_heading -->
+<div class="news_column">
+	<div class="alert alert-info clearfix">
+		<h1>{TOPPIC_TITLE}</h1>
+		<!-- BEGIN: image -->
+		<img alt="{TOPPIC_TITLE}" src="{HOMEIMG1}" width="{IMGWIDTH1}" class="img-thumbnail pull-left imghome" />
+		<!-- END: image -->
+		<!-- BEGIN: description -->
+		<p>{TOPPIC_DESCRIPTION}</p>
+		<!-- END: description -->
+	</div>
+</div>
+<!-- END: author_heading -->
 <!-- BEGIN: topicdescription -->
 <div class="news_column">
 	<div class="alert alert-info clearfix">
@@ -10,6 +27,9 @@
 	</div>
 </div>
 <!-- END: topicdescription -->
+<!-- BEGIN: author_articles_heading -->
+<h2 class="author-articles-title">{AUTHOR_ARTICLES_TITLE}</h2>
+<!-- END: author_articles_heading -->
 
 <!-- BEGIN: topic -->
 <div class="news_column panel panel-default">
