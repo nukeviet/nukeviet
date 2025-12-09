@@ -16,22 +16,23 @@
 {else}
     {$form_captcha_data = ''}
 {/if}
-
-<form id="frm" action="{$FORM_ACTION}" method="post" enctype="multipart/form-data" role="form" class="form-horizontal" data-toggle="ajax-form" data-precheck="nv_precheck_form" {$form_captcha_data}>
+<form id="frm" action="{$FORM_ACTION}" method="post" enctype="multipart/form-data" role="form" class="form-horizontal needs-validation" data-toggle="ajax-form" data-precheck="nv_precheck_form">
     <div class="mb-3 row">
         <label for="banner_plan" class="col-md-3 col-form-label">{$LANG->getModule('plan_title')}:</label>
-        <div class="col-md-9">
-            <select name="block" id="banner_plan" class="form-select">
+        <div class="col-md-9 position-relative">
+            <select name="block" id="banner_plan" class="form-select" required>
                 {foreach from=$PLANS item=blockitem}
                 <option value="{$blockitem.id}" data-image="{$blockitem.typeimage}" data-uploadtype="{$blockitem.uploadtype}">{$blockitem.title}</option>
                 {/foreach}
             </select>
+            <div class="invalid-feedback">{$LANG->getModule('plan_wrong_selected')}</div>
         </div>
     </div>
     <div class="mb-3 row">
         <label for="title" class="col-md-3 col-form-label">{$LANG->getModule('addads_title')} <span class="text-danger">*</span>:</label>
-        <div class="col-md-9">
-            <input class="required form-control" type="text" name="title" id="title" value="" maxlength="10" data-pattern="{literal}/^(.){3,}$/{/literal}" data-toggle="errorHidden" data-event="keypress" data-mess="{$LANG->getModule('title_empty')}" />
+        <div class="col-md-9 position-relative">
+            <input class="form-control" type="text" name="title" id="title" value="" minlength="3" maxlength="20" data-valid data-error-type="feedback" data-allowed-empty="0" data-mess="{$LANG->getModule('title_empty')}" data-mess-min="Tiêu đề phải có ít nhất 3 ký tự." data-mess-max="Tiêu đề không được vượt quá 255 ký tự." required />
+            <div class="invalid-feedback">{$LANG->getModule('title_empty')}</div>
         </div>
     </div>
     <div id="banner_uploadimage" style="display: none;">
@@ -51,8 +52,9 @@
     </div>
     <div class="mb-3 row">
         <label for="url" class="col-md-3 col-form-label">{$LANG->getModule('addads_url')} <span class="text-danger">*</span>:</label>
-        <div class="col-md-9">
-            <input class="url form-control" type="text" name="url" id="url" value="" maxlength="240" data-toggle="errorHidden" data-event="keypress" data-pattern="{literal}/^(.){3,}$/{/literal}" data-mess="{$LANG->getModule('click_url_invalid')}" />
+        <div class="col-md-9 position-relative">
+            <input class="url form-control" type="text" name="url" id="url" value="" minlength="10" maxlength="240" data-valid data-error-type="feedback" data-allowed-empty="0" data-mess="{$LANG->getModule('click_url_empty')}" data-mess-url="{$LANG->getModule('click_url_invalid')}" data-mess-min="{$LANG->getModule('click_url_min')}" required/>
+            <div class="invalid-feedback">{$LANG->getModule('click_url_empty')}</div>
         </div>
     </div>
     <div class="mb-3 row">

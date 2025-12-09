@@ -171,3 +171,5 @@ $lang_module['publ_time_info'] = 'Nếu bạn không chọn thời gian bắt đ
 $lang_module['enter_keyword'] = 'Nhập từ khóa';
 $lang_module['all_plan'] = 'Tất cả các khối';
 $lang_module['admin_add_banner'] = 'Thêm banner';
+$lang_module['click_url_min'] = 'Đường dẫn quá ngắn, cần tối thiểu 10 ký tự';
+$lang_module['click_url_empty'] = 'Liên kết đích không được bỏ trống.';

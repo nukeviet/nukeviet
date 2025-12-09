@@ -171,3 +171,5 @@ $lang_module['publ_time_info'] = 'Si vous ne sélectionnez pas l\'heure de débu
 $lang_module['enter_keyword'] = 'Entrez des mots clés';
 $lang_module['all_plan'] = 'Tous les plans';
 $lang_module['admin_add_banner'] = 'Ajouter une bannière';
+$lang_module['click_url_min'] = 'Chemin trop court, nécessite au moins 10 caractères';
+$lang_module['click_url_empty'] = 'Le lien cible ne peut pas être vide.';
