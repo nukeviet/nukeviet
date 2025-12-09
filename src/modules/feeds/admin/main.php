@@ -17,6 +17,13 @@ $page_title = $nv_Lang->getModule('feeds_config');
 $feed_configs_file = NV_ROOTDIR . '/' . NV_DATADIR . '/' . $module_data . '_' . NV_LANG_DATA . '.json';
 
 if ($nv_Request->isset_request('save', 'post')) {
+    if ($nv_Request->get_title('checkss', 'post', '') !== NV_CHECK_SESSION) {
+        nv_jsonOutput([
+            'status' => 'error',
+            'mess' => 'Error session!!!'
+        ]);
+    }
+
     $new_configs = [
         'rss_logo' => $nv_Request->get_title('rss_logo', 'post', ''),
         'atom_logo' => $nv_Request->get_title('atom_logo', 'post', ''),
@@ -128,21 +135,24 @@ if (!empty($feed_configs['atom_logo'])) {
     $feed_configs['atom_logo'] = NV_BASE_SITEURL . $feed_configs['atom_logo'];
 }
 
-$feed_configs['contents'] = !empty($feed_configs['contents']) ? htmlspecialchars(nv_editor_br2nl($feed_configs['contents'])) : '';
+// Xử lý editor
+$contents_value = !empty($feed_configs['contents']) ? htmlspecialchars(nv_editor_br2nl($feed_configs['contents'])) : '';
 if (defined('NV_EDITOR') and nv_function_exists('nv_aleditor')) {
-    $feed_configs['contents'] = nv_aleditor('contents', '100%', '300px', $feed_configs['contents']);
+    $editor = nv_aleditor('contents', '100%', '300px', $contents_value);
 } else {
-    $feed_configs['contents'] = '<textarea style="width:100%;height:300px" name="contents">' . $feed_configs['contents'] . '</textarea>';
+    $editor = '<textarea style="width:100%;height:300px" name="contents">' . $contents_value . '</textarea>';
 }
 
-$xtpl = new XTemplate('main.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-$xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
-$xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
-$xtpl->assign('UPLOADS_DIR_USER', NV_UPLOADS_DIR . '/' . $module_upload);
-$xtpl->assign('DATA', $feed_configs);
+$tpl = new \NukeViet\Template\NVSmarty();
+$tpl->setTemplateDir(get_module_tpl_dir('main.tpl'));
+$tpl->assign('LANG', $nv_Lang);
+$tpl->assign('MODULE_NAME', $module_name);
+$tpl->assign('OP', $op);
+$tpl->assign('UPLOADS_DIR_USER', NV_UPLOADS_DIR . '/' . $module_upload);
+$tpl->assign('DATA', $feed_configs);
+$tpl->assign('EDITOR', $editor);
 
-$xtpl->parse('main');
-$contents = $xtpl->text('main');
+$contents = $tpl->fetch('main.tpl');
 
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_admin_theme($contents);
