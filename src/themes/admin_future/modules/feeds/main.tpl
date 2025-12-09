@@ -22,15 +22,15 @@
                 </div>
             </div>
             <div class="row mb-3">
-                <label for="element_contents" class="col-sm-3 col-form-label text-sm-end">{$LANG->getModule('content')}</label>
-                <div class="col-sm-8 col-lg-6 col-xxl-5">
-                    {$EDITOR}
+                <label for="feeds_contents" class="col-sm-3 col-form-label text-sm-end">{$LANG->getModule('content')}</label>
+                <div class="col-sm-9">
+                    {$DATA.contents}
                 </div>
             </div>
             <div class="row">
-                <div class="col-sm-8 col-lg-6 col-xxl-5 offset-sm-3">
+                <div class="col-sm-9 offset-sm-3">
                     <input type="hidden" name="save" value="1">
-                    <input type="hidden" name="checkss" value="{$CHECKSS}">
+                    <input type="hidden" name="checkss" value="{$smarty.const.NV_CHECK_SESSION}">
                     <button type="submit" class="btn btn-primary">{$LANG->getModule('save')}</button>
                 </div>
             </div>

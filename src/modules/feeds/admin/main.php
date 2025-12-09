@@ -122,9 +122,15 @@ if (defined('NV_EDITOR')) {
     require_once NV_ROOTDIR . '/' . NV_EDITORSDIR . '/' . NV_EDITOR . '/nv.php';
 }
 
-$feed_configs = [];
+// Khởi tạo giá trị mặc định
+$feed_configs = [
+    'rss_logo' => '',
+    'atom_logo' => '',
+    'contents' => ''
+];
+
 if (file_exists($feed_configs_file)) {
-    $feed_configs = json_decode(file_get_contents($feed_configs_file), true);
+    $feed_configs = array_merge($feed_configs, json_decode(file_get_contents($feed_configs_file), true));
 }
 
 if (!empty($feed_configs['rss_logo'])) {
@@ -136,11 +142,11 @@ if (!empty($feed_configs['atom_logo'])) {
 }
 
 // Xử lý editor
-$contents_value = !empty($feed_configs['contents']) ? htmlspecialchars(nv_editor_br2nl($feed_configs['contents'])) : '';
+$feed_configs['contents'] = !empty($feed_configs['contents']) ? htmlspecialchars(nv_editor_br2nl($feed_configs['contents'])) : '';
 if (defined('NV_EDITOR') and nv_function_exists('nv_aleditor')) {
-    $editor = nv_aleditor('contents', '100%', '300px', $contents_value);
+    $feed_configs['contents'] = nv_aleditor('contents', '100%', '300px', $feed_configs['contents']);
 } else {
-    $editor = '<textarea style="width:100%;height:300px" name="contents">' . $contents_value . '</textarea>';
+    $feed_configs['contents'] = '<textarea class="form-control" style="width:100%;height:300px" name="contents" id="feeds_contents">' . $feed_configs['contents'] . '</textarea>';
 }
 
 $tpl = new \NukeViet\Template\NVSmarty();
@@ -150,8 +156,6 @@ $tpl->assign('MODULE_NAME', $module_name);
 $tpl->assign('OP', $op);
 $tpl->assign('UPLOADS_DIR_USER', NV_UPLOADS_DIR . '/' . $module_upload);
 $tpl->assign('DATA', $feed_configs);
-$tpl->assign('EDITOR', $editor);
-$tpl->assign('CHECKSS', NV_CHECK_SESSION);
 
 $contents = $tpl->fetch('main.tpl');
 
