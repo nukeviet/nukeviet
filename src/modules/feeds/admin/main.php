@@ -114,7 +114,9 @@ if ($nv_Request->isset_request('save', 'post')) {
     }
 
     nv_jsonOutput([
-        'status' => 'OK'
+        'status' => 'success',
+        'mess' => $nv_Lang->getGlobal('save_success'),
+        'refresh' => 1
     ]);
 }
 
