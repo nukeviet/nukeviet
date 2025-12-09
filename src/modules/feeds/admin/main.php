@@ -151,6 +151,7 @@ $tpl->assign('OP', $op);
 $tpl->assign('UPLOADS_DIR_USER', NV_UPLOADS_DIR . '/' . $module_upload);
 $tpl->assign('DATA', $feed_configs);
 $tpl->assign('EDITOR', $editor);
+$tpl->assign('CHECKSS', NV_CHECK_SESSION);
 
 $contents = $tpl->fetch('main.tpl');
 
