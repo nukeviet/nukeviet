@@ -37,6 +37,7 @@
 /src/data/logs/ref_logs/
 /src/data/logs/voting_logs/
 /src/data/tmp/*
+/src/data/config/feeds_*.json
 /src/uploads/logo_*
 /src/assets/logo_*
 /src/install/default.php

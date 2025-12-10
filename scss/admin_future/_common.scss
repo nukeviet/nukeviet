@@ -249,3 +249,11 @@ $sm-breakpoint: map-get($grid-breakpoints, sm) - 0.02px;
         display: inline-block;
     }
 }
+
+.border-transparent {
+    border-color: transparent !important;
+}
+
+.border-solid {
+    border-style: solid !important;
+}
