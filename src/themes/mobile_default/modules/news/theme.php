@@ -970,31 +970,35 @@ function author_theme($author_info, $topic_array, $topic_other_array, $generate_
     $xtpl = new XTemplate('topic.tpl', str_replace(DIRECTORY_SEPARATOR, '/', __DIR__));
     $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
 
-    if (!empty($author_info['is_guest'])) {
-        $xtpl->assign('TOPPIC_TITLE', $page_title);
-    } else {
-        $xtpl->assign('TOPPIC_TITLE', sprintf($nv_Lang->getModule('author_intro'), $author_info['pseudonym']));
-        $xtpl->assign('AUTHOR_ARTICLES_TITLE', sprintf($nv_Lang->getModule('author_articles_list'), $author_info['pseudonym']));
-    }
     $xtpl->assign('IMGWIDTH1', $module_config[$module_name]['homewidth']);
 
-    if (empty($author_info['is_guest'])) {
-        if (!empty($author_info['image'])) {
-            $xtpl->assign('HOMEIMG1', $author_info['image']);
-            $xtpl->parse('main.author_heading.image');
-        }
-        if (!empty($author_info['description'])) {
-            $xtpl->assign('TOPPIC_DESCRIPTION', $author_info['description']);
-            $xtpl->parse('main.author_heading.description');
-        }
-        $xtpl->parse('main.author_heading');
-
-        if (!empty($topic_array)) {
-            $xtpl->parse('main.author_articles_heading');
-        }
-    } else {
+    if (!empty($author_info['is_guest'])) {
         $xtpl->assign('PAGE_TITLE', $page_title);
         $xtpl->parse('main.h1');
+    } else {
+        $hasAuthorContent = !empty($author_info['image']) || !empty($author_info['description']);
+
+        if ($hasAuthorContent) {
+            $xtpl->assign('TOPPIC_TITLE', sprintf($nv_Lang->getModule('author_intro'), $author_info['pseudonym']));
+
+            if (!empty($author_info['image'])) {
+                $xtpl->assign('HOMEIMG1', $author_info['image']);
+                $xtpl->parse('main.topicdescription.image');
+            }
+            if (!empty($author_info['description'])) {
+                $xtpl->assign('TOPPIC_DESCRIPTION', $author_info['description']);
+                $xtpl->parse('main.topicdescription.description');
+            }
+            $xtpl->parse('main.topicdescription');
+
+            if (!empty($topic_array)) {
+                $xtpl->assign('AUTHOR_ARTICLES_TITLE', sprintf($nv_Lang->getModule('author_articles_list'), $author_info['pseudonym']));
+                $xtpl->parse('main.author_articles_heading');
+            }
+        } else {
+            $xtpl->assign('PAGE_TITLE', sprintf($nv_Lang->getModule('author_articles_list'), $author_info['pseudonym']));
+            $xtpl->parse('main.h1');
+        }
     }
     if (!empty($topic_array)) {
         foreach ($topic_array as $topic_array_i) {

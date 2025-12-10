@@ -37,12 +37,11 @@ if (!$author_info['is_guest']) {
 
     $page_title = sprintf($nv_Lang->getModule('author_intro'), $author_info['pseudonym']);
 
-    $description = !empty($author_info['description'])
-        ? strip_tags($author_info['description'])
-        : sprintf($nv_Lang->getModule('author_articles_list'), $author_info['pseudonym']);
+    $description = !empty($author_info['description']) ? strip_tags($author_info['description']) : sprintf($nv_Lang->getModule('author_articles_list'), $author_info['pseudonym']);
     $where = 'status=1 AND id IN (SELECT id FROM ' . NV_PREFIXLANG . '_' . $module_data . '_authorlist WHERE aid=' . $author_info['id'] . ')';
 } else {
     $page_title = $nv_Lang->getModule('articles_by_other_authors');
+    $description = $module_info['funcs'][$op]['description'];
     $where = "status=1 AND author!=''";
 }
 
@@ -50,7 +49,7 @@ $page_url = $base_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' 
 if ($page > 1) {
     $page_url .= '/page-' . $page;
     $page_title .= NV_TITLEBAR_DEFIS . $nv_Lang->getGlobal('page') . ' ' . $page;
-    if (isset($description)) {
+    if (!empty($description)) {
         $description .= NV_TITLEBAR_DEFIS . $nv_Lang->getGlobal('page') . ' ' . $page;
     }
 }

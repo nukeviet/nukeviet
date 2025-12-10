@@ -2,8 +2,7 @@
 <!-- BEGIN: h1 -->
 <h1 class="hidden d-none">{PAGE_TITLE}</h1>
 <!-- END: h1 -->
-
-<!-- BEGIN: author_heading -->
+<!-- BEGIN: topicdescription -->
 <div class="news_column">
 	<div class="alert alert-info clearfix">
 		<h1>{TOPPIC_TITLE}</h1>
@@ -13,17 +12,6 @@
 		<!-- BEGIN: description -->
 		<p>{TOPPIC_DESCRIPTION}</p>
 		<!-- END: description -->
-	</div>
-</div>
-<!-- END: author_heading -->
-<!-- BEGIN: topicdescription -->
-<div class="news_column">
-	<div class="alert alert-info clearfix">
-		<h1>{TOPPIC_TITLE}</h1>
-		<!-- BEGIN: image -->
-		<img alt="{TOPPIC_TITLE}" src="{HOMEIMG1}" width="{IMGWIDTH1}" class="img-thumbnail pull-left imghome" />
-		<!-- END: image -->
-		<p>{TOPPIC_DESCRIPTION}</p>
 	</div>
 </div>
 <!-- END: topicdescription -->
