@@ -112,6 +112,19 @@ function _check_invalid(ipt, customMess) {
     if (valid.type == 'email' && !nv_mailfilter.test(trim(ipt.val()))) {
         return _make_check_invalid(ipt, valid, valid.errMess || nv_email);
     }
+    if ((valid.type == 'phone' || valid.type == 'tel')) {
+        const v = trim(ipt.val());
+        if (!valid.allowedEmpty && v.length === 0) {
+            return _make_check_invalid(ipt, valid, valid.errMess || nv_required);
+        }
+        if (v.length > 0) {
+            const cleaned = v.replace(/\s+/g, '');
+            const ok = /^(?:0|\+84)\d{9}$/.test(cleaned) || /^\d{10,11}$/.test(cleaned);
+            if (!ok) {
+                return _make_check_invalid(ipt, valid, nv_phone);
+            }
+        }
+    }
 }
 
 /**
