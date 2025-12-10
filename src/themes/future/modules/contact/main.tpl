@@ -11,15 +11,12 @@
         {foreach from=$DEPARTMENTS item=DEP}
         <div class="card mb-3">
             <div class="card-header d-flex align-items-center">
-                <div class="p-2 bg-primary bg-opacity-10 text-primary rounded-3 me-1">
-                    <i class="fa-solid fa-users text-primary" aria-hidden="true"></i>
-                </div>
                 {if !$IS_SPECIFIC}
                 <h2 class="card-title flex-grow-1 mb-0">
-                    <a href="{$DEP.url}" class="text-decoration-none text-body fs-5">{$DEP.full_name}</a>
+                    <a href="{$DEP.url}" class="text-decoration-none text-body fs-5">{$DEP.full_name} <i class="fa-solid fa-arrow-right fa-fw ms-1 text-primary" aria-hidden="true"></i><span class="visually-hidden">{$LANG->getModule('details')}</span></a>
                 </h2>
                 {else}
-                <div class="card-title flex-grow-1 mb-0 fs-5">{$LANG->getModule('contact_info')}</div>
+                <div class="card-title flex-grow-1 mb-0 fs-5 fw-medium">{$LANG->getModule('contact_info')}</div>
                 {/if}
             </div>
             {if $DEP.image ne ''}
@@ -93,13 +90,10 @@
             </ul>
         </div>
         {/foreach}
-    </div>
-
-    <div class="col-md-7">
         {if !empty($SUPPORTERS)}
         <div class="card mb-3">
             <div class="card-header">
-                <div class="card-title mb-0 fs-5 p-2 fw-medium">{$LANG->getModule('supporters')}</div>
+                <div class="card-title mb-0 fs-5 fw-medium">{$LANG->getModule('supporters')}</div>
             </div>
             <ul class="list-group list-group-flush">
                 {foreach from=$SUPPORTERS item=SUP}
@@ -136,9 +130,12 @@
             </ul>
         </div>
         {/if}
+    </div>
+
+    <div class="col-md-7">
         <div class="card mb-3">
             <div class="card-header">
-                <div class="card-title mb-0 fs-5 p-2 fw-medium">{$LANG->getModule('feedback_form')|default:$LANG->getGlobal('feedback')}</div>
+                <div class="card-title mb-0 fs-5 fw-medium">{$LANG->getModule('feedback_form')|default:$LANG->getGlobal('feedback')}</div>
             </div>
             <div class="card-body">
                 <p class="mb-4">{$LANG->getModule('feedback_form_note')}</p>
