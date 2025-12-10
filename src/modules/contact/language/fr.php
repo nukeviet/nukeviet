@@ -35,6 +35,7 @@ $lang_module['error_email'] = 'S\'il vous plaît entrer votre e-mail';
 $lang_module['error_captcha'] = 'Code de sécurité incorrect';
 $lang_module['error_title'] = 'Manque d\'Objet';
 $lang_module['error_content'] = 'Veuillez saisir votre message';
+$lang_module['minlength3'] = 'au moins 3 caractères';
 $lang_module['sendcontactok'] = 'Merci de votre message! Nous allons étudier et vous répondre au plus tôt.';
 $lang_module['hello'] = 'Bonjour';
 $lang_module['sendinfo'] = 'Ce message a été envoyé par l\'outil Contact du site';
