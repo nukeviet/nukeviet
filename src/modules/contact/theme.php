@@ -27,17 +27,19 @@ if (!defined('NV_IS_MOD_CONTACT')) {
  */
 function contact_main_theme($array_content, $is_specific, $departments, $cats, $supporters, $base_url, $checkss)
 {
-    global $nv_Lang, $module_name, $page_title;
+    global $nv_Lang, $page_title;
 
     $tpl = new \NukeViet\Template\NVSmarty();
     $tpl->setTemplateDir(get_module_tpl_dir('main.tpl'));
     $tpl->assign('LANG', $nv_Lang);
     $tpl->assign('PAGE_TITLE', $page_title);
-    $tpl->assign('BODYTEXT', $array_content['bodytext'] ?? '');
+    $tpl->assign('DATA', $array_content);
+    $tpl->assign('IS_SPECIFIC', $is_specific);
 
     $deps = [];
     foreach ($departments as $dep) {
         $item = $dep;
+        $item['url'] = $is_specific ? $base_url : ($base_url . '&amp;' . NV_OP_VARIABLE . '=' . $dep['alias']);
         $cd = [];
         if (!empty($dep['phone'])) {
             if (is_array($dep['phone'])) {
