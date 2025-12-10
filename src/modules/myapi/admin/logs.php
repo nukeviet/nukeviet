@@ -49,27 +49,67 @@ if ($nv_Request->isset_request('getUser, q', 'post')) {
 // Xóa log
 if (defined('MANUALL_DEL_API_LOG') and MANUALL_DEL_API_LOG === true) {
     if ($nv_Request->isset_request('delLog', 'post')) {
+        $checkss = $nv_Request->get_title('checkss', 'post', '');
+        if ($checkss != md5(NV_CHECK_SESSION . '_' . $module_name . '_' . $op . '_' . $admin_info['userid'])) {
+            nv_jsonOutput([
+                'status' => 'error',
+                'mess' => $nv_Lang->getGlobal('error_code_11')
+            ]);
+        }
         $id = $nv_Request->get_int('delLog', 'post', 0);
         if (!empty($id)) {
             $db->query('DELETE FROM ' . $db_config['prefix'] . '_api_role_logs WHERE id=' . $id);
+        } else {
+            nv_jsonOutput([
+                'status' => 'error',
+                'mess' => $nv_Lang->getGlobal('error_code_11')
+            ]);
         }
-        nv_htmlOutput('OK');
+        nv_jsonOutput([
+            'status' => 'OK',
+            'mess' => $nv_Lang->getGlobal('save_success')
+        ]);
     }
 
     // Xóa nhiều log
     if ($nv_Request->isset_request('delLogs', 'post')) {
+        $checkss = $nv_Request->get_title('checkss', 'post', '');
+        if ($checkss != md5(NV_CHECK_SESSION . '_' . $module_name . '_' . $op . '_' . $admin_info['userid'])) {
+            nv_jsonOutput([
+                'status' => 'error',
+                'mess' => $nv_Lang->getGlobal('error_code_11')
+            ]);
+        }
         $ids = $nv_Request->get_title('delLogs', 'post', '');
         if (!empty($ids)) {
             $ids = preg_replace('/[^0-9\,]+/', '', $ids);
             $db->query('DELETE FROM ' . $db_config['prefix'] . '_api_role_logs WHERE id IN (' . $ids . ')');
+        } else {
+            nv_jsonOutput([
+                'status' => 'error',
+                'mess' => $nv_Lang->getGlobal('error_code_11')
+            ]);
         }
-        nv_htmlOutput('OK');
+        nv_jsonOutput([
+            'status' => 'OK',
+            'mess' => $nv_Lang->getGlobal('save_success')
+        ]);
     }
 
     // Xóa tất cả log
     if ($nv_Request->isset_request('delAllLogs', 'post')) {
+        $checkss = $nv_Request->get_title('checkss', 'post', '');
+        if ($checkss != md5(NV_CHECK_SESSION . '_' . $module_name . '_' . $op . '_' . $admin_info['userid'])) {
+            nv_jsonOutput([
+                'status' => 'error',
+                'mess' => $nv_Lang->getGlobal('error_code_11')
+            ]);
+        }
         $db->query('TRUNCATE TABLE ' . $db_config['prefix'] . '_api_role_logs');
-        nv_htmlOutput('OK');
+        nv_jsonOutput([
+            'status' => 'OK',
+            'mess' => $nv_Lang->getGlobal('save_success')
+        ]);
     }
 }
 
@@ -165,67 +205,20 @@ if ($all_pages) {
 $page_title = $nv_Lang->getModule('logs');
 $get_data['fromdate'] = nv_u2d_get($get_data['fromdate']);
 $get_data['todate'] = nv_u2d_get($get_data['todate']);
+$tpl = new \NukeViet\Template\NVSmarty();
+$tpl->setTemplateDir(get_module_tpl_dir('logs.tpl'));
+$tpl->assign('LANG', $nv_Lang);
+$tpl->assign('GET_DATA', $get_data);
+$tpl->assign('MODULE_NAME', $module_name);
+$tpl->assign('OP', $op);
+$tpl->assign('CHECKSS', md5(NV_CHECK_SESSION . '_' . $module_name . '_' . $op . '_' . $admin_info['userid']));
 
-$xtpl = new XTemplate('logs.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-$xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
-$xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
-$xtpl->assign('PAGE_URL', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op);
-$xtpl->assign('GET_DATA', $get_data);
-$xtpl->assign('INDEX_PAGE', NV_BASE_ADMINURL . 'index.php');
-$xtpl->assign('MODULE_NAME', $module_name);
-$xtpl->assign('OP', $op);
+$tpl->assign('ROLES', $roles);
+$tpl->assign('APIS', $apis);
+$tpl->assign('DATA', $data);
+$tpl->assign('GENERATE_PAGE', $generate_page);
 
-if (!empty($roles)) {
-    foreach ($roles as $role_id => $role_title) {
-        $xtpl->assign('ROLE', [
-            'role_id' => $role_id,
-            'role_title' => $role_title,
-            'sel' => $role_id == $get_data['role_id'] ? ' selected="selected"' : ''
-        ]);
-        $xtpl->parse('main.api_role');
-    }
-}
-
-if (!empty($apis)) {
-    foreach ($apis as $command) {
-        $xtpl->assign('COMMAND', [
-            'val' => $command,
-            'sel' => $command == $get_data['command'] ? ' selected="selected"' : ''
-        ]);
-        $xtpl->parse('main.command');
-    }
-}
-
-if (!empty($get_data['userid'])) {
-    $xtpl->parse('main.userid');
-}
-
-if (!empty($data)) {
-    if (defined('MANUALL_DEL_API_LOG') and MANUALL_DEL_API_LOG === true) {
-        $xtpl->parse('main.loglist.manuall_del_log1');
-        $xtpl->parse('main.loglist.manuall_del_log2');
-        $xtpl->parse('main.loglist.manuall_del_log5');
-    }
-
-    foreach ($data as $log) {
-        $xtpl->assign('LOG', $log);
-
-        if (defined('MANUALL_DEL_API_LOG') and MANUALL_DEL_API_LOG === true) {
-            $xtpl->parse('main.loglist.log.manuall_del_log3');
-            $xtpl->parse('main.loglist.log.manuall_del_log4');
-        }
-        $xtpl->parse('main.loglist.log');
-    }
-
-    if (!empty($generate_page)) {
-        $xtpl->assign('GENERATE_PAGE', $generate_page);
-        $xtpl->parse('main.loglist.generate_page');
-    }
-
-    $xtpl->parse('main.loglist');
-}
-$xtpl->parse('main');
-$contents = $xtpl->text('main');
+$contents = $tpl->fetch('logs.tpl');
 
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_admin_theme($contents);

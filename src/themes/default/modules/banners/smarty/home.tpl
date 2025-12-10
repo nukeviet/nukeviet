@@ -11,9 +11,9 @@
 <div class="panel panel-primary">
     <div class="panel-heading">{$LANG->getModule('plan_title')}: <strong>{$row.title[0]}</strong></div>
     <ul class="list-group">
-        <li class="list-group-item">{$row.blang[0]}: {$row.blang[1]}</li>
-        <li class="list-group-item">{$row.size[0]}: {$row.size[1]}</li>
-        <li class="list-group-item">{$row.form[0]}: {$row.form[1]}</li>
+        <li class="list-group-item">{$LANG->getModule('blang')}: {$row.blang[1]}</li>
+        <li class="list-group-item">{$LANG->getModule('size')}: {$row.size[1]}</li>
+        <li class="list-group-item">{$LANG->getModule('form')}: {$row.form[1]}</li>
         <li class="list-group-item">{$LANG->getModule('plan_allowed')}: {if $row.allowed}{$LANG->getModule('plan_allowed_yes')}{else}{$LANG->getModule('plan_allowed_no')}{/if}</li>
 {if !empty($row.description[1])}
         <li class="list-group-item">{$row.description[1]}</li>

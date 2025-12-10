@@ -16,6 +16,13 @@ if (!defined('NV_IS_FILE_ADMIN')) {
 $page_url = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op;
 
 if ($nv_Request->isset_request('changeAuth', 'post')) {
+    $checkss = $nv_Request->get_title('checkss', 'post', '');
+    if ($checkss != md5(NV_CHECK_SESSION . '_' . $module_name . '_' . $op . '_' . $admin_info['userid'])) {
+        nv_jsonOutput([
+            'status' => 'error',
+            'mess' => $nv_Lang->getGlobal('error_code_11')
+        ]);
+    }
     $userid = $nv_Request->get_int('changeAuth', 'post', 0);
     if (empty($userid)) {
         nv_jsonOutput([
@@ -83,17 +90,19 @@ if ($nv_Request->isset_request('changeAuth', 'post')) {
         ipsUpdate($iplist, $method, $userid);
         nv_jsonOutput([
             'status' => 'OK',
-            'ips' => implode(', ', $api_ips)
+            'ips' => implode(', ', $api_ips),
+            'mess' => $nv_Lang->getGlobal('save_success')
         ]);
     }
 
     $api_user = get_api_user($userid);
-
-    $xtpl = new XTemplate('credential.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-    $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
-    $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
-    $xtpl->assign('PAGE_URL', $page_url);
-    $xtpl->assign('USERID', $userid);
+    $tpl = new \NukeViet\Template\NVSmarty();
+    $tpl->setTemplateDir(get_module_tpl_dir('credential-auth.tpl'));
+    $tpl->assign('LANG', $nv_Lang);
+    $tpl->assign('MODULE_NAME', $module_name);
+    $tpl->assign('OP', $op);
+    $tpl->assign('USERID', $userid);
+    $tpl->assign('API_USER', $api_user);
 
     $methods = [
         'password_verify' => $nv_Lang->getModule('admin_auth_method_password_verify'),
@@ -104,23 +113,11 @@ if ($nv_Request->isset_request('changeAuth', 'post')) {
         $method = $api_user[$key] ?? [];
         $method['key'] = $key;
         $method['name'] = $name;
-        $xtpl->assign('METHOD', $method);
-
-        if ($key == 'password_verify') {
-            $xtpl->parse('changeAuth.method_tab.is_active');
-            $xtpl->parse('changeAuth.method_panel.is_active');
-        }
-
-        if (empty($api_user[$key])) {
-            $xtpl->parse('changeAuth.method_panel.not_access_authentication');
-        }
-
-        $xtpl->parse('changeAuth.method_tab');
-        $xtpl->parse('changeAuth.method_panel');
+        $methods[$key] = $method;
     }
+    $tpl->assign('METHODS', $methods);
 
-    $xtpl->parse('changeAuth');
-    $contents = $xtpl->text('changeAuth');
+    $contents = $tpl->fetch('credential-auth.tpl');
 
     nv_jsonOutput([
         'status' => 'OK',
@@ -180,6 +177,13 @@ if ($action == 'getUser' and $nv_Request->isset_request('q', 'post')) {
 
 // Thay đổi trạng thái quyền truy cập API-role
 if ($action == 'changeStatus' and $nv_Request->isset_request('userid', 'post')) {
+    $checkss = $nv_Request->get_title('checkss', 'post', '');
+    if ($checkss != md5(NV_CHECK_SESSION . '_' . $module_name . '_' . $op . '_' . $admin_info['userid'])) {
+        nv_jsonOutput([
+            'status' => 'error',
+            'mess' => $nv_Lang->getGlobal('error_code_11')
+        ]);
+    }
     $userid = $nv_Request->get_int('userid', 'post', 0);
     if (empty($userid)) {
         nv_jsonOutput([
@@ -199,12 +203,20 @@ if ($action == 'changeStatus' and $nv_Request->isset_request('userid', 'post')) 
     $status = $status ? 0 : 1;
     $db->query('UPDATE ' . $db_config['prefix'] . '_api_role_credential SET status=' . $status . ' WHERE userid=' . $userid . ' AND role_id = ' . $role_id);
     nv_jsonOutput([
-        'status' => 'OK'
+        'status' => 'OK',
+        'mess' => $nv_Lang->getGlobal('save_success')
     ]);
 }
 
 // Xóa quyền truy cập
 if ($action == 'del' and $nv_Request->isset_request('userid', 'post')) {
+    $checkss = $nv_Request->get_title('checkss', 'post', '');
+    if ($checkss != md5(NV_CHECK_SESSION . '_' . $module_name . '_' . $op . '_' . $admin_info['userid'])) {
+        nv_jsonOutput([
+            'status' => 'error',
+            'mess' => $nv_Lang->getGlobal('error_code_11')
+        ]);
+    }
     $userid = $nv_Request->get_int('userid', 'post', 0);
     if (empty($userid)) {
         nv_jsonOutput([
@@ -266,7 +278,7 @@ if ($action == 'credential') {
         } elseif (!$isAdd and !$exists) {
             nv_jsonOutput([
                 'status' => 'error',
-                'mess' => '1' . $nv_Lang->getModule('api_role_credential_error')
+                'mess' => $nv_Lang->getModule('api_role_credential_error')
             ]);
         }
 
@@ -289,7 +301,8 @@ if ($action == 'credential') {
         }
 
         nv_jsonOutput([
-            'status' => 'OK'
+            'status' => 'OK',
+            'refresh' => 1
         ]);
     }
 
@@ -322,59 +335,33 @@ if ($action == 'credential') {
                 }
 
                 $credential_data['quota'] = !empty($row['quota']) ? (int) $row['quota'] : '';
+            } else {
+                nv_jsonOutput([
+                    'status' => 'error',
+                    'mess' => $nv_Lang->getModule('api_role_credential_error')
+                ]);
             }
+        } else {
+            nv_jsonOutput([
+                'status' => 'error',
+                'mess' => $nv_Lang->getModule('api_role_credential_error')
+            ]);
         }
     }
-
-    $xtpl = new XTemplate('credential.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-    $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
-    $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
-    $xtpl->assign('CREDENTIAL', $credential_data);
-
+    $tpl = new \NukeViet\Template\NVSmarty();
+    $tpl->setTemplateDir(get_module_tpl_dir('credential-add.tpl'));
+    $tpl->assign('LANG', $nv_Lang);
+    $tpl->assign('MODULE_NAME', $module_name);
+    $tpl->assign('OP', $op);
+    $tpl->assign('CREDENTIAL', $credential_data);
     if (!$credential_data['userid']) {
-        $xtpl->assign('GET_USER_URL', $page_url . '&role_id=' . $role_id . '&action=getUser');
-        $xtpl->assign('CREDENTIAL_ADD_LABEL', $nv_Lang->getModule('api_role_object_' . $rolelist[$role_id]['role_object']));
-        $xtpl->parse('add_credential.is_add');
-    } else {
-        $xtpl->parse('add_credential.is_edit');
+        $tpl->assign('ROLE_ID', $role_id);
+        $tpl->assign('ROLE_OBJECT', $rolelist[$role_id]['role_object']);
     }
-
-    for ($i = 0; $i < 24; ++$i) {
-        $val = str_pad($i, 2, '0', STR_PAD_LEFT);
-        $xtpl->assign('ADDHOUR', [
-            'key' => $i,
-            'sel' => $i == $credential_data['addhour'] ? ' selected="selected"' : '',
-            'val' => $val
-        ]);
-        $xtpl->parse('add_credential.addhour');
-
-        $xtpl->assign('ENDHOUR', [
-            'key' => $i,
-            'sel' => $i == $credential_data['endhour'] ? ' selected="selected"' : '',
-            'val' => $val
-        ]);
-        $xtpl->parse('add_credential.endhour');
-    }
-
-    for ($i = 0; $i < 60; ++$i) {
-        $val = str_pad($i, 2, '0', STR_PAD_LEFT);
-        $xtpl->assign('ADDMIN', [
-            'key' => $i,
-            'sel' => $i == $credential_data['addmin'] ? ' selected="selected"' : '',
-            'val' => $val
-        ]);
-        $xtpl->parse('add_credential.addmin');
-
-        $xtpl->assign('ENDMIN', [
-            'key' => $i,
-            'sel' => $i == $credential_data['endmin'] ? ' selected="selected"' : '',
-            'val' => $val
-        ]);
-        $xtpl->parse('add_credential.endmin');
-    }
-
-    $xtpl->parse('add_credential');
-    nv_htmlOutput($xtpl->text('add_credential'));
+    nv_jsonOutput([
+        'status' => 'OK',
+        'html' => $tpl->fetch('credential-add.tpl')
+    ]);
 }
 
 $base_url = $page_url;
@@ -391,81 +378,26 @@ if (!empty($role_id)) {
     $credentiallist = [];
     $generate_page = '';
 }
+$tpl = new \NukeViet\Template\NVSmarty();
+$tpl->setTemplateDir(get_module_tpl_dir('credential-list.tpl'));
+$tpl->assign('LANG', $nv_Lang);
+$tpl->assign('MODULE_NAME', $module_name);
+$tpl->assign('OP', $op);
+$tpl->assign('PAGE_URL', $page_url);
+$tpl->assign('ROLE_ID', $role_id);
+$tpl->assign('GCONFIG', $global_config);
+$tpl->assign('ADD_CREDENTIAL_URL', !empty($role_id) ? $base_url . '&action=credential' : '');
+$tpl->assign('ROLE_COUNT', $rolecount);
+$tpl->assign('IS_MAIN', true);
+$tpl->assign('ROLE_LIST', $rolelist);
+$tpl->assign('CREDENTIAL_COUNT', $credentialcount);
+$tpl->assign('GENERATE_PAGE', $generate_page);
+$tpl->assign('CREDENTIAL_LIST', $credentiallist);
+$tpl->assign('CHECKSS', md5(NV_CHECK_SESSION . '_' . $module_name . '_' . $op . '_' . $admin_info['userid']));
+$tpl->registerPlugin('modifier', 'ddatetime', 'nv_datetime_format');
+$tpl->registerPlugin('modifier', 'nnum_format', 'nv_number_format');
 
-$xtpl = new XTemplate('credential.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-$xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
-$xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
-$xtpl->assign('PAGE_URL', $page_url);
-$xtpl->assign('NV_ADMIN_THEME', $global_config['module_theme']);
-$xtpl->assign('ADD_CREDENTIAL_URL', !empty($role_id) ? $base_url . '&action=credential' : '');
-$xtpl->assign('ROLE_ID', $role_id);
-
-if (empty($rolecount)) {
-    $xtpl->assign('ADD_API_ROLE_URL', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=roles&amp;action=role');
-    $xtpl->parse('role_empty');
-    $contents = $xtpl->text('role_empty');
-
-    include NV_ROOTDIR . '/includes/header.php';
-    echo nv_admin_theme($contents);
-    include NV_ROOTDIR . '/includes/footer.php';
-}
-
-if (empty($global_config['remote_api_access'])) {
-    $xtpl->assign('REMOTE_API_OFF', $nv_Lang->getModule('api_remote_off', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=config'));
-    $xtpl->parse('main.remote_api_off');
-}
-
-foreach ($rolelist as $role) {
-    $xtpl->assign('ROLE', [
-        'role_id' => $role['role_id'],
-        'sel' => $role['role_id'] == $role_id ? ' selected="selected"' : '',
-        'title' => $role['role_title'] . ' (' . $nv_Lang->getModule('api_role_type') . ': ' . $nv_Lang->getModule('api_role_type_' . $role['role_type']) . '; ' . $nv_Lang->getModule('api_role_object') . ': ' . $nv_Lang->getModule('api_role_object_' . $role['role_object']) . ')'
-    ]);
-    $xtpl->parse('main.api_role');
-}
-
-if (!empty($role_id)) {
-    $xtpl->parse('main.add_credential_button');
-
-    if (!$credentialcount) {
-        $xtpl->parse('main.is_role.credential_empty');
-    } else {
-        $xtpl->assign('CREDENTIAL_COUNT', $credentialcount);
-
-        foreach ($credentiallist as $credential) {
-            $credential['last_access'] = !empty($credential['last_access']) ? nv_datetime_format($credential['last_access']) : '';
-            $credential['addtime'] = nv_datetime_format($credential['addtime']);
-            $credential['endtime'] = !empty($credential['endtime']) ? nv_datetime_format($credential['endtime']) : $nv_Lang->getModule('indefinitely');
-            $credential['quota'] = !empty($credential['quota']) ? nv_number_format($credential['quota']) : $nv_Lang->getModule('no_quota');
-            $xtpl->assign('CREDENTIAL', $credential);
-
-            $sts = [$nv_Lang->getModule('suspended'), $nv_Lang->getModule('active')];
-            foreach ($sts as $k => $v) {
-                $xtpl->assign('STATUS', [
-                    'val' => $k,
-                    'sel' => $k == $credential['status'] ? ' selected="selected"' : '',
-                    'title' => $v
-                ]);
-                $xtpl->parse('main.is_role.credentials.loop.status');
-            }
-
-            if (!empty($credential['level'])) {
-                $xtpl->parse('main.is_role.credentials.loop.is_admin');
-            }
-            $xtpl->parse('main.is_role.credentials.loop');
-        }
-        if (!empty($generate_page)) {
-            $xtpl->assign('GENERATE_PAGE', $generate_page);
-            $xtpl->parse('main.is_role.credentials.generate_page');
-        }
-        $xtpl->parse('main.is_role.credentials');
-    }
-    $xtpl->parse('main.is_role');
-}
-
-$xtpl->parse('main');
-$contents = $xtpl->text('main');
-
+$contents = $tpl->fetch('credential-list.tpl');
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_admin_theme($contents);
 include NV_ROOTDIR . '/includes/footer.php';

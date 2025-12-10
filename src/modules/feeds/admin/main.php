@@ -17,6 +17,13 @@ $page_title = $nv_Lang->getModule('feeds_config');
 $feed_configs_file = NV_ROOTDIR . '/' . NV_DATADIR . '/' . $module_data . '_' . NV_LANG_DATA . '.json';
 
 if ($nv_Request->isset_request('save', 'post')) {
+    if ($nv_Request->get_title('checkss', 'post', '') !== NV_CHECK_SESSION) {
+        nv_jsonOutput([
+            'status' => 'error',
+            'mess' => 'Error session!!!'
+        ]);
+    }
+
     $new_configs = [
         'rss_logo' => $nv_Request->get_title('rss_logo', 'post', ''),
         'atom_logo' => $nv_Request->get_title('atom_logo', 'post', ''),
@@ -107,7 +114,9 @@ if ($nv_Request->isset_request('save', 'post')) {
     }
 
     nv_jsonOutput([
-        'status' => 'OK'
+        'status' => 'success',
+        'mess' => $nv_Lang->getGlobal('save_success'),
+        'refresh' => 1
     ]);
 }
 
@@ -115,9 +124,15 @@ if (defined('NV_EDITOR')) {
     require_once NV_ROOTDIR . '/' . NV_EDITORSDIR . '/' . NV_EDITOR . '/nv.php';
 }
 
-$feed_configs = [];
+// Khởi tạo giá trị mặc định
+$feed_configs = [
+    'rss_logo' => '',
+    'atom_logo' => '',
+    'contents' => ''
+];
+
 if (file_exists($feed_configs_file)) {
-    $feed_configs = json_decode(file_get_contents($feed_configs_file), true);
+    $feed_configs = array_merge($feed_configs, json_decode(file_get_contents($feed_configs_file), true));
 }
 
 if (!empty($feed_configs['rss_logo'])) {
@@ -128,21 +143,23 @@ if (!empty($feed_configs['atom_logo'])) {
     $feed_configs['atom_logo'] = NV_BASE_SITEURL . $feed_configs['atom_logo'];
 }
 
+// Xử lý editor
 $feed_configs['contents'] = !empty($feed_configs['contents']) ? htmlspecialchars(nv_editor_br2nl($feed_configs['contents'])) : '';
 if (defined('NV_EDITOR') and nv_function_exists('nv_aleditor')) {
     $feed_configs['contents'] = nv_aleditor('contents', '100%', '300px', $feed_configs['contents']);
 } else {
-    $feed_configs['contents'] = '<textarea style="width:100%;height:300px" name="contents">' . $feed_configs['contents'] . '</textarea>';
+    $feed_configs['contents'] = '<textarea class="form-control" style="width:100%;height:300px" name="contents" id="feeds_contents">' . $feed_configs['contents'] . '</textarea>';
 }
 
-$xtpl = new XTemplate('main.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-$xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
-$xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
-$xtpl->assign('UPLOADS_DIR_USER', NV_UPLOADS_DIR . '/' . $module_upload);
-$xtpl->assign('DATA', $feed_configs);
+$tpl = new \NukeViet\Template\NVSmarty();
+$tpl->setTemplateDir(get_module_tpl_dir('main.tpl'));
+$tpl->assign('LANG', $nv_Lang);
+$tpl->assign('MODULE_NAME', $module_name);
+$tpl->assign('OP', $op);
+$tpl->assign('UPLOADS_DIR_USER', NV_UPLOADS_DIR . '/' . $module_upload);
+$tpl->assign('DATA', $feed_configs);
 
-$xtpl->parse('main');
-$contents = $xtpl->text('main');
+$contents = $tpl->fetch('main.tpl');
 
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_admin_theme($contents);

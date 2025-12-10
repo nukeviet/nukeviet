@@ -25774,6 +25774,14 @@ readers do not read off random characters that represent icons */
   display: inline-block;
 }
 
+.border-transparent {
+  border-color: transparent !important;
+}
+
+.border-solid {
+  border-style: solid !important;
+}
+
 [data-bs-theme=dark] .card,
 [data-theme=dark] .card {
   --bs-card-border-color: var(--bs-border-color-translucent);
@@ -27090,6 +27098,23 @@ p + .image-style-side {
 .select2:focus-visible,
 .select2 *:focus-visible {
   outline: none;
+}
+
+.input-group > .select2-container,
+.input-group > .select2-container--bootstrap5,
+.input-group > .select2-container--default {
+  width: auto !important;
+  flex: 1 1 auto !important;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.input-group > .select2-container .select2-selection--single,
+.input-group > .select2-container--bootstrap5 .select2-selection--single,
+.input-group > .select2-container--default .select2-selection--single {
+  height: 100% !important;
+  line-height: inherit !important;
 }
 
 [data-bs-theme=light] .ui-widget.ui-widget-content,

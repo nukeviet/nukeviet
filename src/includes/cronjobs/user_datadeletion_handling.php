@@ -24,6 +24,11 @@ function cron_user_datadeletion_handling()
 {
     global $db, $nv_Lang;
 
+    $skiped = nv_apply_hook('', 'cron_user_datadeletion_handling');
+    if (!is_null($skiped)) {
+        return true;
+    }
+
     $offset_time = NV_CURRENTTIME - (7 * 86400);
     $min_time = NV_CURRENTTIME - (90 * 86400);
     $uniqid = uniqid('', true);
@@ -164,6 +169,7 @@ function cron_user_datadeletion_handling()
             ]
         ]];
         nv_sendmail_template_async(['users', Emails::DELETE_ACCOUNT_COMPLETED], $send_data, $lang);
+        nv_apply_hook('', 'cron_user_datadeletion_handling_row', [$row, $user_info]);
     }
 
     $nv_Lang->changeLang(NV_LANG_INTERFACE);
