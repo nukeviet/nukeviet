@@ -41,6 +41,7 @@ var nv_aryDayName = "Chủ nhật;Thứ Hai;Thứ Ba;Thứ Tư;Thứ Năm;Thứ 
     nv_required = "Trường này là bắt buộc.",
     nv_remote = "Xin vui lòng sửa chữa trường này.",
     nv_email = "Xin vui lòng nhập địa chỉ email hợp lệ.",
+    nv_phone = "Xin vui lòng nhập số điện thoại hợp lệ.",
     nv_url = "Xin vui lòng nhập URL hợp lệ.",
     nv_date = "Xin vui lòng nhập ngày hợp lệ.",
     nv_dateISO = "Xin vui lòng nhập ngày hợp lệ (ISO).",

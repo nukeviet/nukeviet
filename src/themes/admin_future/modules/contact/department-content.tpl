@@ -30,7 +30,7 @@
         <div class="col-sm-8 col-md-9">
             <div class="input-group">
                 <input class="form-control" type="text" name="image" value="{$DEPARTMENT.image}" id="selectfile" aria-describedby="dpt-img-btn">
-                <button type="button" id="dpt-img-btn" data-toggle="selectfile" data-target="selectfile" data-path="{$MODULE_UPLOAD}" data-type="image" class="btn btn-info" title="{$LANG->getGlobal('browse_image')}" aria-label="{$LANG->getModule('select_image')}"><i class="fa-solid fa-folder-open"></i></button>
+                <button type="button" id="dpt-img-btn" data-toggle="selectfile" data-target="selectfile" data-path="{$smarty.const.NV_UPLOADS_DIR}/{$MODULE_UPLOAD}" data-currentpath="{$smarty.const.NV_UPLOADS_DIR}/{$MODULE_UPLOAD}" data-type="image" class="btn btn-info" title="{$LANG->getGlobal('browse_image')}" aria-label="{$LANG->getModule('select_image')}"><i class="fa-solid fa-folder-open"></i></button>
             </div>
         </div>
     </div>
