@@ -1173,6 +1173,10 @@ function author_theme($author_info, $topic_array, $topic_other_array, $generate_
     if (!empty($author_info['is_guest'])) {
         $xtpl->assign('PAGE_TITLE', $page_title);
         $xtpl->parse('main.h1');
+        if (!empty($topic_array)) {
+            $xtpl->assign('AUTHOR_ARTICLES_TITLE', $page_title);
+            $xtpl->parse('main.author_articles_heading');
+        }
     } else {
         $hasAuthorContent = !empty($author_info['image']) || !empty($author_info['description']);
 
@@ -1196,6 +1200,10 @@ function author_theme($author_info, $topic_array, $topic_other_array, $generate_
         } else {
             $xtpl->assign('PAGE_TITLE', sprintf($nv_Lang->getModule('author_articles_list'), $author_info['pseudonym']));
             $xtpl->parse('main.h1');
+            if (!empty($topic_array)) {
+                $xtpl->assign('AUTHOR_ARTICLES_TITLE', sprintf($nv_Lang->getModule('author_articles_list'), $author_info['pseudonym']));
+                $xtpl->parse('main.author_articles_heading');
+            }
         }
     }
     if (!empty($topic_array)) {
