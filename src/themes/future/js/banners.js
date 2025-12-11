@@ -22,8 +22,8 @@ function validateInput($inputElement, $feedbackDiv, type) {
     const $this = $inputElement;
     const value = $this.val();
     const valueLength = value.length;
-    const minLength = parseInt($this.attr('minlength'));
-    const maxLength = parseInt($this.attr('maxlength'));
+    const minLength = parseInt($this.data('minlength'));
+    const maxLength = parseInt($this.data('maxlength'));
     let errorMessage = '';
 
     if (valueLength === 0) {

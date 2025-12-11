@@ -16,7 +16,7 @@
 {else}
     {$form_captcha_data = ''}
 {/if}
-<form id="frm" action="{$FORM_ACTION}" method="post" enctype="multipart/form-data" role="form" class="form-horizontal needs-validation" data-toggle="ajax-form" data-precheck="nv_precheck_form">
+<form id="frm" action="{$FORM_ACTION}" method="post" enctype="multipart/form-data" role="form" class="form-horizontal needs-validation" data-toggle="ajax-form" data-precheck="nv_precheck_form" {$form_captcha_data}>
     <div class="mb-3 row">
         <label for="banner_plan" class="col-md-3 col-form-label">{$LANG->getModule('plan_title')}:</label>
         <div class="col-md-9 position-relative">
@@ -31,7 +31,7 @@
     <div class="mb-3 row">
         <label for="title" class="col-md-3 col-form-label">{$LANG->getModule('addads_title')} <span class="text-danger">*</span>:</label>
         <div class="col-md-9 position-relative">
-            <input class="form-control" type="text" name="title" id="title" value="" minlength="3" maxlength="20" data-valid data-error-type="feedback" data-allowed-empty="0" data-mess="{$LANG->getModule('title_empty')}" data-mess-min="Tiêu đề phải có ít nhất 3 ký tự." data-mess-max="Tiêu đề không được vượt quá 255 ký tự." required />
+            <input class="form-control" type="text" name="title" id="title" value="" data-minlength="3" data-maxlength="20" data-valid data-error-type="feedback" data-allowed-empty data-mess="{$LANG->getModule('title_empty')}" data-mess-min="Tiêu đề phải có ít nhất 3 ký tự." data-mess-max="Tiêu đề không được vượt quá 255 ký tự." required />
             <div class="invalid-feedback">{$LANG->getModule('title_empty')}</div>
         </div>
     </div>
@@ -53,7 +53,7 @@
     <div class="mb-3 row">
         <label for="url" class="col-md-3 col-form-label">{$LANG->getModule('addads_url')} <span class="text-danger">*</span>:</label>
         <div class="col-md-9 position-relative">
-            <input class="url form-control" type="text" name="url" id="url" value="" minlength="10" maxlength="240" data-valid data-error-type="feedback" data-allowed-empty="0" data-mess="{$LANG->getModule('click_url_empty')}" data-mess-url="{$LANG->getModule('click_url_invalid')}" data-mess-min="{$LANG->getModule('click_url_min')}" required/>
+            <input class="url form-control" type="text" name="url" id="url" value="" minlength="10" maxlength="240" data-valid data-error-type="feedback" data-allowed-empty data-mess="{$LANG->getModule('click_url_empty')}" data-mess-url="{$LANG->getModule('click_url_invalid')}" data-mess-min="{$LANG->getModule('click_url_min')}" required/>
             <div class="invalid-feedback">{$LANG->getModule('click_url_empty')}</div>
         </div>
     </div>
