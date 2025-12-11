@@ -286,8 +286,9 @@ function contact_form_theme($array_content, $departments, $cats, $base_url, $che
 {
     global $nv_Lang, $module_info, $global_config, $module_config, $module_name, $module_captcha;
 
-    $array_content['phone_required'] = $array_content['sender_phone_required'] ? ' required' : '';
-    $array_content['address_required'] = $array_content['sender_address_required'] ? ' required' : '';
+    $array_content['phone_required'] = !empty($array_content['sender_phone_required']) ? ' required' : '';
+    $array_content['address_required'] = !empty($array_content['sender_address_required']) ? ' required' : '';
+
     [$template, $dir] = get_module_tpl_dir('form.tpl', true);
     $xtpl = new XTemplate('form.tpl', $dir);
     $xtpl->assign('CONTENT', $array_content);

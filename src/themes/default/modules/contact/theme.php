@@ -147,6 +147,9 @@ function contact_main_theme($array_content, $is_specific, $departments, $cats, $
 function contact_form_theme($array_content, $departments, $cats, $base_url, $checkss)
 {
     global $nv_Lang, $global_config, $module_config, $module_name, $module_captcha;
+    
+    $array_content['phone_required'] = !empty($array_content['sender_phone_required']) ? ' required' : '';
+    $array_content['address_required'] = !empty($array_content['sender_address_required']) ? ' required' : '';
 
     $captcha = '';
     if ($module_captcha == 'recaptcha' and $global_config['recaptcha_ver'] == 3) {
