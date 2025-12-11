@@ -1178,7 +1178,7 @@ function author_theme($author_info, $topic_array, $topic_other_array, $generate_
             $xtpl->parse('main.author_articles_heading');
         }
     } else {
-        $hasAuthorContent = !empty($author_info['image']) || !empty($author_info['description']);
+        $hasAuthorContent = !empty($author_info['description']);
 
         if ($hasAuthorContent) {
             $xtpl->assign('TOPPIC_TITLE', sprintf($nv_Lang->getModule('author_intro'), $author_info['pseudonym']));
