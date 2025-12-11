@@ -13,7 +13,7 @@
             <div class="card-header d-flex align-items-center">
                 {if !$IS_SPECIFIC}
                 <h2 class="card-title flex-grow-1 mb-0">
-                    <a href="{$DEP.url}" class="text-decoration-none text-body fs-5">{$DEP.full_name} <i class="fa-solid fa-arrow-right fa-fw ms-1 text-primary" aria-hidden="true"></i><span class="visually-hidden">{$LANG->getModule('details')}</span></a>
+                    <a href="{$DEP.url}" class="text-decoration-none text-body fs-5 d-flex justify-content-between align-items-center w-100">{$DEP.full_name} <i class="fa-solid fa-arrow-right fa-fw ms-1 text-primary" aria-hidden="true"></i><span class="visually-hidden">{$LANG->getModule('details')}</span></a>
                 </h2>
                 {else}
                 <div class="card-title flex-grow-1 mb-0 fs-5 fw-medium">{$LANG->getModule('contact_info')}</div>
