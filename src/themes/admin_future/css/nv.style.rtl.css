@@ -25778,6 +25778,14 @@ readers do not read off random characters that represent icons */
   display: inline-block;
 }
 
+.border-transparent {
+  border-color: transparent !important;
+}
+
+.border-solid {
+  border-style: solid !important;
+}
+
 [data-bs-theme=dark] .card,
 [data-theme=dark] .card {
   --bs-card-border-color: var(--bs-border-color-translucent);
@@ -26626,7 +26634,8 @@ figure.image.image_resized > figcaption {
 }
 
 figure.image {
-  display: table !important; /* Important để không xung đột khi copy từ Google Docs */
+  display: table !important;
+  /* Important để không xung đột khi copy từ Google Docs */
   clear: both;
   text-align: center;
   margin: 5px auto 10px auto;
@@ -26776,6 +26785,66 @@ p + .image-style-side {
 
 .is-invalid {
   --ck-color-base-border: #ee3232;
+}
+
+/* NV Iframe */
+.nvck-iframe {
+  position: relative;
+  width: 100%;
+  margin-bottom: 10px;
+}
+
+.nvck-iframe > .nvck-iframe-inner > .nvck-iframe-element {
+  border: none;
+  margin: 0 auto;
+  display: block;
+}
+
+.nvck-iframe.nvck-iframe-responsive {
+  height: 0;
+}
+
+.nvck-iframe.nvck-iframe-responsive > .nvck-iframe-inner {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.nvck-iframe.nvck-iframe-responsive > .nvck-iframe-inner > .nvck-iframe-element {
+  width: 100%;
+  height: 100%;
+}
+
+/* NV Docs */
+.nvck-docs {
+  position: relative;
+  width: 100%;
+  margin-bottom: 10px;
+}
+
+.nvck-docs > .nvck-docs-inner > .nvck-docs-element {
+  border: none;
+  margin: 0 auto;
+  display: block;
+}
+
+.nvck-docs.nvck-docs-responsive {
+  height: 0;
+}
+
+.nvck-docs.nvck-docs-responsive > .nvck-docs-inner {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.nvck-docs.nvck-docs-responsive > .nvck-docs-inner > .nvck-docs-element {
+  width: 100%;
+  height: 100%;
 }
 
 .select2-container {
@@ -27068,6 +27137,23 @@ p + .image-style-side {
 .select2:focus-visible,
 .select2 *:focus-visible {
   outline: none;
+}
+
+.input-group > .select2-container,
+.input-group > .select2-container--bootstrap5,
+.input-group > .select2-container--default {
+  width: auto !important;
+  flex: 1 1 auto !important;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.input-group > .select2-container .select2-selection--single,
+.input-group > .select2-container--bootstrap5 .select2-selection--single,
+.input-group > .select2-container--default .select2-selection--single {
+  height: 100% !important;
+  line-height: inherit !important;
 }
 
 [data-bs-theme=light] .ui-widget.ui-widget-content,

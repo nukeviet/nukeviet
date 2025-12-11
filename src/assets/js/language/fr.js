@@ -41,6 +41,7 @@ var nv_aryDayName = "Dimanche Lundi Mardi Mercredi Jeudi Vendredi Samedi".split(
     nv_required = "Ce champ est obligatoire.",
     nv_remote = "Merci de corriger ce champ.",
     nv_email = "Merci d'entrer un e-mail valide.",
+    nv_phone = "Veuillez saisir un numéro de téléphone valide.",
     nv_url = "Merci de donner un lien valide.",
     nv_date = "Merci de donner une date valide.",
     nv_dateISO = "Merci de donner une date valide (ISO).",

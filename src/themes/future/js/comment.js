@@ -75,4 +75,20 @@ $(function() {
             commReset($(this).parents('form'))
         });
     }
+
+    // Sắp xếp comments
+    $('[data-toggle=nv_comment_sort_change]').on('change', function(e) {
+        e.preventDefault();
+        const data = $('#idcomment').data();
+        $.post(nv_base_siteurl + 'index.php?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=comment&module=' + data.module + '&area=' + data.area + '&id=' + data.id + '&allowed=' + data.allowed + '&checkss=' + data.checkss + '&comment_load=1' + '&nocache=' + new Date().getTime(), 'sortcomm=' + $(sel).val(), function(res) {
+            $('#showcomment').html(res);
+        });
+    });
+
+    // Hiển thị/giấu danh sách comments
+    $('[data-toggle=commListShow][data-obj]').on('click', function(e) {
+        e.preventDefault();
+        $('[class*=fa-]', this).toggleClass('fa-eye fa-eye-slash');
+        $($(this).data('obj')).toggleClass('d-none');
+    });
 });

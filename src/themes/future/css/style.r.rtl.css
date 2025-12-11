@@ -25805,6 +25805,10 @@ readers do not read off random characters that represent icons */
   transform: translateY(calc(var(--bs-body-line-height) * 1rem / 4));
 }
 
+.richtext-container > p:last-child {
+  margin-bottom: 0;
+}
+
 .site-user-inform .inform-toggle, .topbar .socal-icons a, .topbar .contact-icons a:not(.dropdown-item), .topbar .topbar-search .search-icon, .site-header-mobile .toggle-main-nav {
   color: var(--nv-header-link-color);
   transition: color 0.15s ease-in-out;

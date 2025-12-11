@@ -269,6 +269,7 @@ if (defined('NV_IS_SPADMIN')) {
                 $tpl->assign('CHECKSS', md5(NV_CHECK_SESSION . '_' . $module_name . '_' . $op . '_' . $admin_info['userid']));
                 $tpl->assign('DEPARTMENT', $department);
                 $tpl->assign('NV_ADMIN_THEME', $global_config['admin_theme']);
+                $tpl->assign('MODULE_UPLOAD', $module_upload);
                 $tpl->assign('MOD_ADMINS', $mod_admins);
                 $tpl->registerPlugin('modifier', 'nv_show_name_user', 'nv_show_name_user');
                 $tpl->registerPlugin('modifier', 'in_array', 'in_array');
