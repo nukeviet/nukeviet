@@ -40,7 +40,7 @@
         <div class="col-md-6">
             <div class="mb-3">
                 <label class="form-label" for="femail">{$LANG->getModule('email')} <span class="text-danger">*</span></label>
-                <input class="form-control" {if $smarty.const.NV_IS_USER}disabled{/if} type="email" name="femail" id="femail" value="{$CONTENT.femail|default:''}" data-valid data-error-type="feedback" maxlength="60" placeholder="{$LANG->getModule('email')}">
+                <input class="form-control" {if $smarty.const.NV_IS_USER}disabled{/if} type="email" name="femail" id="femail" value="{$CONTENT.femail|default:''}" data-valid="email" data-error-type="feedback" maxlength="60" placeholder="{$LANG->getModule('email')}">
                 <div class="invalid-feedback">{$LANG->getModule('error_email')}</div>
             </div>
         </div>
@@ -59,7 +59,7 @@
             <div class="mb-3">
                 <label class="form-label" for="faddress">{$LANG->getModule('address')}{if $CONTENT.sender_address_required} <span class="text-danger">*</span>{/if}</label>
                 <input class="form-control" type="text" name="faddress" id="faddress" value="{$CONTENT.faddress|default:''}" data-valid data-error-type="feedback" data-allowed-empty="{if $CONTENT.sender_address_required}0{else}1{/if}" minlength="3" maxlength="60" placeholder="{$LANG->getModule('address')}">
-                <div class="invalid-feedback">{$LANG->getModule('address_error')}</div>
+                <div class="invalid-feedback">{$LANG->getModule('address_error')} {$LANG->getModule('minlength3')}</div>
             </div>
         </div>
     </div>
@@ -82,7 +82,7 @@
     {/if}
 
     <div class="mb-3">
-            <label class="form-label" for="fcon">{$LANG->getModule('content')} <span class="text-danger">*</span></label>
+        <label class="form-label" for="fcon">{$LANG->getModule('content')} <span class="text-danger">*</span></label>
         <textarea class="form-control" name="fcon" id="fcon" data-valid data-error-type="feedback" data-allowed-empty="0" minlength="3" maxlength="1000" placeholder="{$LANG->getModule('content')}" style="height:130px"></textarea>
         <div class="invalid-feedback">{$LANG->getModule('error_content')} {$LANG->getModule('minlength3')}</div>
     </div>
