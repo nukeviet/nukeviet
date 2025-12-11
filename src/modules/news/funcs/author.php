@@ -37,7 +37,7 @@ if (!$author_info['is_guest']) {
 
     $page_title = sprintf($nv_Lang->getModule('author_intro'), $author_info['pseudonym']);
 
-    $description = !empty($author_info['description']) ? strip_tags($author_info['description']) : sprintf($nv_Lang->getModule('author_articles_list'), $author_info['pseudonym']);
+    $description = !empty($author_info['description']) ? strip_tags($author_info['description']) : $nv_Lang->getModule('author_articles_list', $author_info['pseudonym']);
     $where = 'status=1 AND id IN (SELECT id FROM ' . NV_PREFIXLANG . '_' . $module_data . '_authorlist WHERE aid=' . $author_info['id'] . ')';
 } else {
     $page_title = $nv_Lang->getModule('articles_by_other_authors');
