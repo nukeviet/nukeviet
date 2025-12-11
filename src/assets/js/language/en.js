@@ -41,6 +41,7 @@ var nv_aryDayName = "Sunday Monday Tuesday Wednesday Thursday Friday Saturday".s
     nv_required = "This field is required.",
     nv_remote = "Please fix this field.",
     nv_email = "Please enter a valid email address.",
+    nv_phone = "Please enter a valid phone number.",
     nv_url = "Please enter a valid URL.",
     nv_date = "Please enter a valid date.",
     nv_dateISO = "Please enter a valid date (ISO).",

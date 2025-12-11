@@ -27,7 +27,7 @@
         {* Form bình luận *}
         <form method="post" role="form" target="submitcommentarea"
             action="{$smarty.const.NV_BASE_SITEURL}index.php?{$smarty.const.NV_LANG_VARIABLE}={$smarty.const.NV_LANG_DATA}&amp;{$smarty.const.NV_NAME_VARIABLE}=comment&amp;{$smarty.const.NV_OP_VARIABLE}=post"
-            data-precheck="commFormSubmit" autocomplete="off" novalidate
+            data-precheck="nv_precheck_form" autocomplete="off" novalidate
             data-gfxnum="{GFX_NUM}"
             data-editor="{(empty($MCONFIG.alloweditorcomm) or not $HEADER) ? 0 : 1}"
             {if not empty($MCONFIG.allowattachcomm)} enctype="multipart/form-data"{/if}
@@ -44,15 +44,19 @@
             <input type="hidden" name="checkss" value="{$CHECKSS_COMM}">
             {assign var="DISABLED" value=($smarty.const.NV_IS_USER ? ' disabled' : '')}
             <div class="mb-3 row g-3">
-                <div class="col-lg-6">
-                    <input type="text" name="name" value="{$NAME}"{$DISABLED} class="form-control" placeholder="{$LANG->getModule('comment_name')}" autocomplete="name">
+                <div class="col-lg-6 position-relative">
+                    <input type="text" data-valid name="name" value="{$NAME}"{$DISABLED} class="form-control" placeholder="{$LANG->getModule('comment_name')}" autocomplete="name">
                 </div>
-                <div class="col-lg-6">
-                    <input type="email" name="email" value="{$EMAIL}"{$DISABLED} class="form-control" placeholder="{$LANG->getModule('comment_email')}" autocomplete="email">
+                <div class="col-lg-6 position-relative">
+                    <input type="email" data-valid name="email" value="{$EMAIL}"{$DISABLED} class="form-control" placeholder="{$LANG->getModule('comment_email')}" autocomplete="email">
                 </div>
             </div>
             <div class="mb-3">
-                <textarea class="form-control" name="content" id="commentcontent" rows="5"></textarea>
+                <div class="position-relative" data-valid="editor">
+                    <div class="nv-ckeditor5classic" id="outer_commentcontent">
+                        <textarea class="form-control" name="content" id="commentcontent" rows="5"></textarea>
+                    </div>
+                </div>
                 {if not empty($MCONFIG.alloweditorcomm) and $HEADER}
                 <link rel="stylesheet" href="{$smarty.const.NV_STATIC_URL}{$smarty.const.NV_EDITORSDIR}/ckeditor5-classic/ckeditor.css?t={$GCONFIG.timestamp}">
                 <script type="text/javascript" src="{$smarty.const.NV_STATIC_URL}{$smarty.const.NV_EDITORSDIR}/ckeditor5-classic/ckeditor.js?t={$GCONFIG.timestamp}"></script>

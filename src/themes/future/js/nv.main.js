@@ -135,6 +135,9 @@ function _check_invalid(ipt, customMess) {
  */
 function _get_input_name(ipt) {
     const name = ipt.attr('name');
+
+    console.log(name);
+
     const matches = name.match(/\[/g);
     const groupCount = matches ? matches.length : 0;
 
@@ -187,6 +190,7 @@ function nv_precheck_form(form) {
     $('.invalid-tooltip, .valid-feedback', form).text('');
 
     const processedNames = new Set();
+    // Input thông thường theo bootstrap
     $('[data-valid][name]', form).each(function() {
         const ipt = $(this);
         const sName = _get_input_name(ipt);
@@ -196,6 +200,7 @@ function nv_precheck_form(form) {
         processedNames.add(sName);
         _check_invalid($(sName, form).last());
     });
+    // Các cấu trúc đặc biệt như trình soạn thảo
 
     return _focus_error(form);
 }
