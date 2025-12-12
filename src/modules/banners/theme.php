@@ -90,27 +90,13 @@ function nv_banner_theme_addads($global_array_uplans, $page_url)
  */
 function nv_banner_theme_stats($ads)
 {
-    global $module_info, $manament;
+    global $nv_Lang, $manament;
 
-    $xtpl = new XTemplate('stats.tpl', get_module_tpl_dir('stats.tpl'));
-    $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
-    $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
-    $xtpl->assign('MANAGEMENT', $manament);
-    $xtpl->parse('main.management');
+    $tpl = new \NukeViet\Template\NVSmarty();
+    $tpl->setTemplateDir(get_module_tpl_dir('stats.tpl'));
+    $tpl->assign('LANG', $nv_Lang);
+    $tpl->assign('MANAGEMENT', $manament);
+    $tpl->assign('ADS', $ads);
 
-    if (!empty($ads)) {
-        foreach ($ads as $row) {
-            $xtpl->assign('ads', $row);
-            $xtpl->parse('main.ads');
-        }
-    }
-
-    for ($i = 1; $i <= 12; ++$i) {
-        $xtpl->assign('month', $i);
-        $xtpl->parse('main.month');
-    }
-
-    $xtpl->parse('main');
-
-    return $xtpl->text('main');
+    return $tpl->fetch('stats.tpl');
 }
