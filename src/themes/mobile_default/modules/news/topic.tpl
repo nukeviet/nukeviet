@@ -25,7 +25,12 @@
 		<!-- BEGIN: homethumb -->
 		<a href="{TOPIC.link}" title="{TOPIC.title}"><img alt="{TOPIC.alt}" src="{TOPIC.src}" width="{TOPIC.width}" class="img-thumbnail pull-left imghome" /></a>
 		<!-- END: homethumb -->
+		<!-- BEGIN: topic_title_h2 -->
+		<h2><a href="{TOPIC.link}" title="{TOPIC.title}">{TOPIC.title}</a></h2>
+		<!-- END: topic_title_h2 -->
+		<!-- BEGIN: topic_title_h3 -->
 		<h3><a href="{TOPIC.link}" title="{TOPIC.title}">{TOPIC.title}</a></h3>
+		<!-- END: topic_title_h3 -->
 		<p>
 			<em class="fa fa-clock-o">&nbsp;</em><em>{TIME} {DATE}</em>
 		</p>

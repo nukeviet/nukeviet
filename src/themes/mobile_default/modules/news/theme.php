@@ -899,14 +899,26 @@ function topic_theme($topic_array, $topic_other_array, $generate_page, $page_tit
     $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
     $xtpl->assign('TOPPIC_TITLE', $page_title);
     $xtpl->assign('IMGWIDTH1', $module_config[$module_name]['homewidth']);
+
+    // Nếu có description (có H1 trong topicdescription) -> dùng H3 cho bài viết
+    // Nếu không có description (chỉ có H1 hidden) -> dùng H2 cho bài viết để không bị missing H2
+    $use_h2_for_topics = true;
+
     if (!empty($description)) {
         $xtpl->assign('TOPPIC_DESCRIPTION', $description);
         if (!empty($topic_image)) {
             $xtpl->assign('HOMEIMG1', $topic_image);
             $xtpl->parse('main.topicdescription.image');
         }
+        $xtpl->parse('main.topicdescription.description');
         $xtpl->parse('main.topicdescription');
+        $use_h2_for_topics = false; 
+    } else {
+        $xtpl->assign('PAGE_TITLE', $page_title);
+        $xtpl->parse('main.h1');
+        $use_h2_for_topics = true; 
     }
+
     if (!empty($topic_array)) {
         foreach ($topic_array as $topic_array_i) {
             if (!empty($topic_array_i['external_link'])) {
@@ -919,6 +931,12 @@ function topic_theme($topic_array, $topic_other_array, $generate_page, $page_tit
 
             if (!empty($topic_array_i['src'])) {
                 $xtpl->parse('main.topic.homethumb');
+            }
+
+            if ($use_h2_for_topics) {
+                $xtpl->parse('main.topic.topic_title_h2');
+            } else {
+                $xtpl->parse('main.topic.topic_title_h3');
             }
 
             if ($topicid and defined('NV_IS_MODADMIN')) {
@@ -972,17 +990,24 @@ function author_theme($author_info, $topic_array, $topic_other_array, $generate_
 
     $xtpl->assign('IMGWIDTH1', $module_config[$module_name]['homewidth']);
 
+    // Nếu có H2 (author_articles_heading) -> dùng H3 cho bài viết
+    // Nếu không có H2 -> dùng H2 cho bài viết để không bị missing heading level
+    $use_h2_for_topics = true;
+
     if (!empty($author_info['is_guest'])) {
+        // Chỉ có H1 hidden, không hiển thị H2 trùng nội dung
+        // -> Dùng H2 cho tiêu đề bài viết
         $xtpl->assign('PAGE_TITLE', $page_title);
         $xtpl->parse('main.h1');
-        if (!empty($topic_array)) {
-            $xtpl->assign('AUTHOR_ARTICLES_TITLE', $page_title);
-            $xtpl->parse('main.author_articles_heading');
-        }
+        $use_h2_for_topics = true;
     } else {
         $hasAuthorContent = !empty($author_info['description']);
 
         if ($hasAuthorContent) {
+            // Tác giả CÓ mô tả
+            // H1: Giới thiệu tác giả (trong topicdescription)
+            // H2: Danh sách bài viết (author_articles_heading)
+            // -> Dùng H3 cho tiêu đề bài viết
             $xtpl->assign('TOPPIC_TITLE', sprintf($nv_Lang->getModule('author_intro'), $author_info['pseudonym']));
 
             if (!empty($author_info['image'])) {
@@ -999,13 +1024,14 @@ function author_theme($author_info, $topic_array, $topic_other_array, $generate_
                 $xtpl->assign('AUTHOR_ARTICLES_TITLE', sprintf($nv_Lang->getModule('author_articles_list'), $author_info['pseudonym']));
                 $xtpl->parse('main.author_articles_heading');
             }
+            $use_h2_for_topics = false;
         } else {
+            // Tác giả KHÔNG có mô tả
+            // Chỉ có H1 hidden, không hiển thị H2 trùng nội dung
+            // -> Dùng H2 cho tiêu đề bài viết
             $xtpl->assign('PAGE_TITLE', sprintf($nv_Lang->getModule('author_articles_list'), $author_info['pseudonym']));
             $xtpl->parse('main.h1');
-            if (!empty($topic_array)) {
-                $xtpl->assign('AUTHOR_ARTICLES_TITLE', sprintf($nv_Lang->getModule('author_articles_list'), $author_info['pseudonym']));
-                $xtpl->parse('main.author_articles_heading');
-            }
+            $use_h2_for_topics = true;
         }
     }
     if (!empty($topic_array)) {
@@ -1020,6 +1046,12 @@ function author_theme($author_info, $topic_array, $topic_other_array, $generate_
 
             if (!empty($topic_array_i['src'])) {
                 $xtpl->parse('main.topic.homethumb');
+            }
+
+            if ($use_h2_for_topics) {
+                $xtpl->parse('main.topic.topic_title_h2');
+            } else {
+                $xtpl->parse('main.topic.topic_title_h3');
             }
 
             if ($topicid and defined('NV_IS_MODADMIN')) {
