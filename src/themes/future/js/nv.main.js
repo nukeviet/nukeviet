@@ -544,12 +544,11 @@ $(function() {
         $.ajax(ajOptions);
     });
 
-    $(document).on('change keyup', '[data-valid]', function(e) {
-        if (e.type === "keyup" && e.which === 13) {
-            return;
-        }
-
-        const ipt = $(this);
+    /**
+     * @param { JQuery<HTMLElement> } ipt
+     * @returns
+     */
+    const _resetInputValid = (ipt) => {
         const form = ipt.closest('form');
         if (form.length < 1 || (!form.is('[data-toggle="ajax-form"]') && !form.is('[data-precheck="nv_precheck_form"]'))) {
             return;
@@ -569,6 +568,42 @@ $(function() {
             let prAlso = ipt.parent().is('.input-group');
             ipt.removeClass('is-invalid is-valid');
             if (prAlso) pr.removeClass('is-invalid is-valid');
+        }
+    };
+
+    $(document).on('change keyup', '[data-valid]', function(e) {
+        if (e.type === "keyup" && e.which === 13) {
+            return;
+        }
+        _resetInputValid($(this));
+    });
+
+    // Nút reset form
+    $(document).on('click', '[data-toggle="nv-reset-form"]', function(e) {
+        e.preventDefault();
+        const form = $(this).closest('form');
+        if (form.length < 1) {
+            return;
+        }
+        form[0].reset();
+        formChangeCaptcha(form);
+
+        // Reset trình soạn thảo
+        $('textarea[id]', form).each(function() {
+            if (window.nveditor && window.nveditor[this.id]) {
+                window.nveditor[this.id].setData('');
+            }
+        });
+
+        // Reset trạng thái validate
+        $('[data-valid]', form).each(function() {
+            _resetInputValid($(this));
+        });
+
+        // Hàm reset riêng nếu có
+        const resetExtend = form.data('reset-extend');
+        if (resetExtend && typeof window[resetExtend] === 'function') {
+            window[resetExtend](form);
         }
     });
 

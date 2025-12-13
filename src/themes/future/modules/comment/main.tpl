@@ -35,6 +35,7 @@
             {if $CAPTCHA_VALUE eq 'recaptcha2'} data-recaptcha2="1"{/if}
             {if $CAPTCHA_VALUE eq 'recaptcha3'} data-recaptcha3="1"{/if}
             {if $CAPTCHA_VALUE eq 'turnstile'} data-turnstile="1"{/if}
+            data-reset-extend="commReset"
         >
             <input type="hidden" name="module" value="{$MODULE_COMM}">
             <input type="hidden" name="area" value="{$AREA_COMM}">
@@ -172,8 +173,8 @@
             {/if}
 
             <div class="hstack gap-2 justify-content-center">
-                <input type="submit" value="{$LANG->getModule('comment_submit')}" class="btn btn-primary">
-                <input type="button" value="{$LANG->getGlobal('reset')}" class="btn btn-outline-secondary" data-toggle="commReset">
+                <button type="submit" class="btn btn-primary">{$LANG->getModule('comment_submit')}</button>
+                <button type="button" class="btn btn-outline-secondary" data-toggle="nv-reset-form">{$LANG->getGlobal('reset')}</button>
             </div>
         </form>
         <iframe class="d-none" id="submitcommentarea" name="submitcommentarea"></iframe>

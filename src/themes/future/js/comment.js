@@ -16,6 +16,9 @@ var cmtEditorCallback = (editor) => {
             eventInited = true;
             return;
         }
+        if (window.nveditor['commentcontent'].getData().trim().length === 0) {
+            return;
+        }
         const eleWarnings = document.getElementById('commentWarnings');
         if (!eleWarnings) return;
         const collapse = bootstrap.Collapse.getOrCreateInstance(eleWarnings, {
@@ -27,10 +30,7 @@ var cmtEditorCallback = (editor) => {
 
 // Hàm thiết lập lại form comment
 function commReset(form) {
-    formChangeCaptcha(form);
-    $('.has-error', form).removeClass('has-error');
     $("[name=pid]", form).val(0);
-    $(form)[0].reset();
 
     const eleWarnings = document.getElementById('commentWarnings');
     if (eleWarnings) {
@@ -39,11 +39,6 @@ function commReset(form) {
         });
         collapse.hide();
     }
-
-    if ($(form).data('editor')) {
-        window.nveditor['commentcontent'].setData('');
-    }
-    $('#commentcontent').val('');
 }
 
 $(function() {
@@ -68,12 +63,6 @@ $(function() {
                 }
             });
         }
-
-        // Comment form reset button
-        $('[data-toggle=commReset]', commentform).on('click', function(e) {
-            e.preventDefault();
-            commReset($(this).parents('form'))
-        });
     }
 
     // Sắp xếp comments
