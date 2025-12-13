@@ -1195,9 +1195,7 @@ function author_theme($author_info, $topic_array, $topic_other_array, $generate_
         $xtpl->parse('main.h1');
         $use_h2_for_topics = true;
     } else {
-        $hasAuthorContent = !empty($author_info['description']);
-
-        if ($hasAuthorContent) {
+        if (!empty($author_info['description'])) {
             // Tác giả CÓ mô tả
             // H1: Giới thiệu tác giả (trong topicdescription)
             // H2: Danh sách bài viết (author_articles_heading)
