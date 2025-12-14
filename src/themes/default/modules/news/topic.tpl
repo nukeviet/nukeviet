@@ -15,9 +15,9 @@
     </div>
 </div>
 <!-- END: topicdescription -->
-<!-- BEGIN: author_articles_heading -->
-<h2 class="author-articles-title">{AUTHOR_ARTICLES_TITLE}</h2>
-<!-- END: author_articles_heading -->
+<!-- BEGIN: articles_heading -->
+<h2 class="articles-title">{ARTICLES_TITLE}</h2>
+<!-- END: articles_heading -->
 
 <!-- BEGIN: topic -->
 <div class="news_column panel panel-default">

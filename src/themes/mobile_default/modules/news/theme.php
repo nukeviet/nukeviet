@@ -893,30 +893,39 @@ function no_permission()
  */
 function topic_theme($topic_array, $topic_other_array, $generate_page, $page_title, $description, $topic_image)
 {
-    global $module_info, $module_name, $module_config, $topicid;
+    global $module_info, $module_name, $module_config, $topicid, $nv_Lang;
 
     $xtpl = new XTemplate('topic.tpl', str_replace(DIRECTORY_SEPARATOR, '/', __DIR__));
     $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
     $xtpl->assign('TOPPIC_TITLE', $page_title);
     $xtpl->assign('IMGWIDTH1', $module_config[$module_name]['homewidth']);
 
-    // Nếu có description (có H1 trong topicdescription) -> dùng H3 cho bài viết
-    // Nếu không có description (chỉ có H1 hidden) -> dùng H2 cho bài viết để không bị missing H2
+    $articles_heading = '';
+    // Nếu có H2 (articles_heading) -> dùng H3 cho bài viết
+    // Nếu không có H2 -> dùng H2 cho bài viết để không bị missing heading level
     $use_h2_for_topics = true;
 
     if (!empty($description)) {
-        $xtpl->assign('TOPPIC_DESCRIPTION', $description);
         if (!empty($topic_image)) {
             $xtpl->assign('HOMEIMG1', $topic_image);
             $xtpl->parse('main.topicdescription.image');
         }
+        $xtpl->assign('TOPPIC_DESCRIPTION', $description);
         $xtpl->parse('main.topicdescription.description');
         $xtpl->parse('main.topicdescription');
-        $use_h2_for_topics = false; 
+
+        if (!empty($topic_array)) {
+            $articles_heading = $nv_Lang->getModule('topic_articles_list');
+        }
+        $use_h2_for_topics = false;
     } else {
         $xtpl->assign('PAGE_TITLE', $page_title);
         $xtpl->parse('main.h1');
-        $use_h2_for_topics = true; 
+    }
+
+    if (!empty($articles_heading)) {
+        $xtpl->assign('ARTICLES_TITLE', $articles_heading);
+        $xtpl->parse('main.articles_heading');
     }
 
     if (!empty($topic_array)) {
@@ -990,8 +999,9 @@ function author_theme($author_info, $topic_array, $topic_other_array, $generate_
 
     $xtpl->assign('IMGWIDTH1', $module_config[$module_name]['homewidth']);
 
-    $author_articles_heading = '';
-    // Nếu có H2 (author_articles_heading) -> dùng H3 cho bài viết
+    // Biến để gán articles_heading một lần ở cuối
+    $articles_heading = '';
+    // Nếu có H2 (articles_heading) -> dùng H3 cho bài viết
     // Nếu không có H2 -> dùng H2 cho bài viết để không bị missing heading level
     $use_h2_for_topics = true;
 
@@ -1003,7 +1013,7 @@ function author_theme($author_info, $topic_array, $topic_other_array, $generate_
     } elseif (!empty($author_info['description'])) {
         // Tác giả CÓ mô tả
         // H1: Giới thiệu tác giả (trong topicdescription)
-        // H2: Danh sách bài viết (author_articles_heading)
+        // H2: Danh sách bài viết (articles_heading)
         // -> Dùng H3 cho tiêu đề bài viết
         $xtpl->assign('TOPPIC_TITLE', sprintf($nv_Lang->getModule('author_intro'), $author_info['pseudonym']));
 
@@ -1016,7 +1026,7 @@ function author_theme($author_info, $topic_array, $topic_other_array, $generate_
         $xtpl->parse('main.topicdescription');
 
         if (!empty($topic_array)) {
-            $author_articles_heading = sprintf($nv_Lang->getModule('author_articles_list'), $author_info['pseudonym']);
+            $articles_heading = sprintf($nv_Lang->getModule('author_articles_list'), $author_info['pseudonym']);
         }
         $use_h2_for_topics = false;
     } else {
@@ -1027,9 +1037,9 @@ function author_theme($author_info, $topic_array, $topic_other_array, $generate_
         $xtpl->parse('main.h1');
     }
 
-    if (!empty($author_articles_heading)) {
-        $xtpl->assign('AUTHOR_ARTICLES_TITLE', $author_articles_heading);
-        $xtpl->parse('main.author_articles_heading');
+    if (!empty($articles_heading)) {
+        $xtpl->assign('ARTICLES_TITLE', $articles_heading);
+        $xtpl->parse('main.articles_heading');
     }
 
     if (!empty($topic_array)) {
