@@ -7,9 +7,10 @@
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 .contact-icons svg {
-  width: 1rem;
-  height: 1rem;
+  width: 1.25em;
+  height: 1em;
   display: inline-block;
+  vertical-align: -0.125em;
 }
 
 /*# sourceMappingURL=contact.r.css.map */

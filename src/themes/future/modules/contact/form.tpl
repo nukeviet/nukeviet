@@ -28,46 +28,38 @@
         <div class="invalid-feedback">{$LANG->getModule('error_title')} {$LANG->getModule('minlength3')}</div>
     </div>
 
-    <div class="row g-3">
+    <div class="row g-3 mb-3">
         <div class="col-md-6">
-            <div class="mb-3">
-                <label class="form-label" for="fname">{$LANG->getModule('fullname')} <span class="text-danger">*</span></label>
-                {if !$smarty.const.NV_IS_USER}<small class="ms-2"><span class="pointer" title="{$LANG->getGlobal('loginsubmit')}" data-toggle="loginForm"><i class="fa-solid fa-right-to-bracket"></i></span></small>{/if}
-                <input class="form-control" {if $smarty.const.NV_IS_USER}disabled{/if} type="text" name="fname" id="fname" value="{$CONTENT.fname|default:''}" data-valid data-error-type="feedback" minlength="3" maxlength="100" placeholder="{$LANG->getModule('fullname')}">
-                <div class="invalid-feedback">{$LANG->getModule('error_fullname')} {$LANG->getModule('minlength3')}</div>
-            </div>
+            <label class="form-label" for="fname">{$LANG->getModule('fullname')} <span class="text-danger">*</span></label>
+            {if !$smarty.const.NV_IS_USER}<small class="ms-2"><span class="pointer" title="{$LANG->getGlobal('loginsubmit')}" data-toggle="loginForm"><i class="fa-solid fa-right-to-bracket"></i></span></small>{/if}
+            <input class="form-control" {if $smarty.const.NV_IS_USER}disabled{/if} type="text" name="fname" id="fname" value="{$CONTENT.fname|default:''}" data-valid data-error-type="feedback" minlength="3" maxlength="100" placeholder="{$LANG->getModule('fullname')}">
+            <div class="invalid-feedback">{$LANG->getModule('error_fullname')} {$LANG->getModule('minlength3')}</div>
         </div>
         <div class="col-md-6">
-            <div class="mb-3">
-                <label class="form-label" for="femail">{$LANG->getModule('email')} <span class="text-danger">*</span></label>
-                <input class="form-control" {if $smarty.const.NV_IS_USER}disabled{/if} type="email" name="femail" id="femail" value="{$CONTENT.femail|default:''}" data-valid="email" data-error-type="feedback" maxlength="60" placeholder="{$LANG->getModule('email')}">
-                <div class="invalid-feedback">{$LANG->getModule('error_email')}</div>
-            </div>
+            <label class="form-label" for="femail">{$LANG->getModule('email')} <span class="text-danger">*</span></label>
+            <input class="form-control" {if $smarty.const.NV_IS_USER}disabled{/if} type="email" name="femail" id="femail" value="{$CONTENT.femail|default:''}" data-valid="email" data-error-type="feedback" maxlength="60" placeholder="{$LANG->getModule('email')}">
+            <div class="invalid-feedback">{$LANG->getModule('error_email')}</div>
         </div>
     </div>
 
     {if not empty($MCONFIG.feedback_phone) and not empty($MCONFIG.feedback_address)}
-    <div class="row g-3">
+    <div class="row g-3 mb-3">
         <div class="col-md-6">
-            <div class="mb-3">
-                <label class="form-label" for="fphone">{$LANG->getModule('phone')}{if $CONTENT.sender_phone_required} <span class="text-danger">*</span>{/if}</label>
-                <input class="form-control" type="tel" name="fphone" id="fphone" value="{$CONTENT.fphone|default:''}" data-valid="phone" data-error-type="feedback" data-allowed-empty="{if $CONTENT.sender_phone_required}0{else}1{/if}" minlength="3" maxlength="60" placeholder="{$LANG->getModule('phone')}">
-                <div class="invalid-feedback">{$LANG->getModule('phone_error')}</div>
-            </div>
+            <label class="form-label" for="fphone">{$LANG->getModule('phone')}{if $CONTENT.sender_phone_required} <span class="text-danger">*</span>{/if}</label>
+            <input class="form-control" type="tel" name="fphone" id="fphone" value="{$CONTENT.fphone|default:''}" data-valid="phone" data-error-type="feedback" data-allowed-empty="{if $CONTENT.sender_phone_required}0{else}1{/if}" minlength="3" maxlength="20" placeholder="{$LANG->getModule('phone')}">
+            <div class="invalid-feedback">{$LANG->getModule('phone_error')}</div>
         </div>
         <div class="col-md-6">
-            <div class="mb-3">
-                <label class="form-label" for="faddress">{$LANG->getModule('address')}{if $CONTENT.sender_address_required} <span class="text-danger">*</span>{/if}</label>
-                <input class="form-control" type="text" name="faddress" id="faddress" value="{$CONTENT.faddress|default:''}" data-valid data-error-type="feedback" data-allowed-empty="{if $CONTENT.sender_address_required}0{else}1{/if}" minlength="3" maxlength="60" placeholder="{$LANG->getModule('address')}">
-                <div class="invalid-feedback">{$LANG->getModule('address_error')} {$LANG->getModule('minlength3')}</div>
-            </div>
+            <label class="form-label" for="faddress">{$LANG->getModule('address')}{if $CONTENT.sender_address_required} <span class="text-danger">*</span>{/if}</label>
+            <input class="form-control" type="text" name="faddress" id="faddress" value="{$CONTENT.faddress|default:''}" data-valid data-error-type="feedback" data-allowed-empty="{if $CONTENT.sender_address_required}0{else}1{/if}" minlength="3" maxlength="60" placeholder="{$LANG->getModule('address')}">
+            <div class="invalid-feedback">{$LANG->getModule('address_error')} {$LANG->getModule('minlength3')}</div>
         </div>
     </div>
     {else}
         {if not empty($MCONFIG.feedback_phone)}
         <div class="mb-3">
             <label class="form-label" for="fphone">{$LANG->getModule('phone')}{if $CONTENT.sender_phone_required} <span class="text-danger">*</span>{/if}</label>
-            <input class="form-control" type="tel" name="fphone" id="fphone" value="{$CONTENT.fphone|default:''}" data-valid="phone" data-error-type="feedback" data-allowed-empty="{if $CONTENT.sender_phone_required}0{else}1{/if}" minlength="3" maxlength="60" placeholder="{$LANG->getModule('phone')}">
+            <input class="form-control" type="tel" name="fphone" id="fphone" value="{$CONTENT.fphone|default:''}" data-valid="phone" data-error-type="feedback" data-allowed-empty="{if $CONTENT.sender_phone_required}0{else}1{/if}" minlength="3" maxlength="20" placeholder="{$LANG->getModule('phone')}">
             <div class="invalid-feedback">{$LANG->getModule('phone_error')}</div>
         </div>
         {/if}
@@ -75,7 +67,7 @@
         {if not empty($MCONFIG.feedback_address)}
         <div class="mb-3">
             <label class="form-label">{$LANG->getModule('address')}{if $CONTENT.sender_address_required} <span class="text-danger">*</span>{/if}</label>
-            <input class="form-control" type="text" name="faddress" value="{$CONTENT.faddress|default:''}" data-valid data-error-type="feedback" data-allowed-empty="{if $CONTENT.sender_address_required}0{else}1{/if}" minlength="3" maxlength="60" placeholder="{$LANG->getModule('address')}">
+            <input class="form-control" type="text" name="faddress" value="{$CONTENT.faddress|default:''}" data-valid data-error-type="feedback" data-allowed-empty="{if $CONTENT.sender_address_required}0{else}1{/if}" minlength="3" maxlength="250" placeholder="{$LANG->getModule('address')}">
             <div class="invalid-feedback">{$LANG->getModule('address_error')}</div>
         </div>
         {/if}
@@ -83,7 +75,7 @@
 
     <div class="mb-3">
         <label class="form-label" for="fcon">{$LANG->getModule('content')} <span class="text-danger">*</span></label>
-        <textarea class="form-control" name="fcon" id="fcon" data-valid data-error-type="feedback" data-allowed-empty="0" minlength="3" maxlength="1000" placeholder="{$LANG->getModule('content')}" style="height:130px"></textarea>
+        <textarea class="form-control" name="fcon" id="fcon" data-valid data-error-type="feedback" data-allowed-empty="0" minlength="3" maxlength="65535" placeholder="{$LANG->getModule('content')}" rows="5"></textarea>
         <div class="invalid-feedback">{$LANG->getModule('error_content')} {$LANG->getModule('minlength3')}</div>
     </div>
 
@@ -114,7 +106,7 @@
     {/if}
 
     <div class="mt-4">
-        <input type="hidden" name="checkss" value="{if isset($CHECKSS)}{$CHECKSS}{else}{$smarty.const.NV_CHECK_SESSION}{/if}">
+        <input type="hidden" name="checkss" value="{$CHECKSS}">
         <input type="hidden" name="request_form" value="{$REQUEST_FORM}">
         <div class="row g-2">
             <div class="col-6">

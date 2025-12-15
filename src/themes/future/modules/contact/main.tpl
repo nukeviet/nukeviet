@@ -3,28 +3,31 @@
 </div>
 
 {if not empty($DATA.bodytext)}
-<div class="alert alert-primary mb-4">{$DATA.bodytext}</div>
+<div class="alert alert-primary mb-4 richtext-container">{$DATA.bodytext}</div>
 {/if}
 
 <div class="row g-4">
-    <div class="col-md-5">
+    <div class="col-md-5 vstack gap-3">
         {foreach from=$DEPARTMENTS item=DEP}
-        <div class="card mb-3">
+        <div class="card">
             <div class="card-header d-flex align-items-center">
                 {if !$IS_SPECIFIC}
-                <h2 class="card-title flex-grow-1 mb-0">
-                    <a href="{$DEP.url}" class="text-decoration-none text-body fs-5 d-flex justify-content-between align-items-center w-100">{$DEP.full_name} <i class="fa-solid fa-arrow-right fa-fw ms-1 text-primary" aria-hidden="true"></i><span class="visually-hidden">{$LANG->getModule('details')}</span></a>
+                <h2 class="card-title flex-grow-1 mb-0 fs-5">
+                    <a href="{$DEP.url}" class="text-decoration-none text-body">{$DEP.full_name}</a>
                 </h2>
+                <a href="{$DEP.url}" class="text-primary ms-2" aria-label="{$LANG->getModule('details')}">
+                    <i class="fa-solid fa-arrow-right fa-fw" aria-hidden="true"></i>
+                </a>
                 {else}
-                <div class="card-title flex-grow-1 mb-0 fs-5 fw-medium">{$LANG->getModule('contact_info')}</div>
+                <h2 class="card-title flex-grow-1 mb-0 fs-5 fw-medium">{$LANG->getModule('contact_info')}</h2>
                 {/if}
             </div>
             {if $DEP.image ne ''}
-            <img src="{$DEP.image}" class="card-img-top" alt="{$DEP.full_name}">
+            <img src="{$DEP.image}" class="card-img-top rounded-top-0" alt="{$DEP.full_name}">
             {/if}
             <ul class="list-group list-group-flush">
                 {if $DEP.note ne ''}
-                <li class="list-group-item">{$DEP.note}</li>
+                <li class="list-group-item richtext-container">{$DEP.note}</li>
                 {/if}
                 {if $DEP.address ne ''}
                 <li class="list-group-item">
@@ -91,9 +94,13 @@
         </div>
         {/foreach}
         {if !empty($SUPPORTERS)}
-        <div class="card mb-3">
+        <div class="card">
             <div class="card-header">
+                {if $IS_SPECIFIC}
+                <h2 class="card-title mb-0 fs-5 fw-medium">{$LANG->getModule('supporters')}</h2>
+                {else}
                 <div class="card-title mb-0 fs-5 fw-medium">{$LANG->getModule('supporters')}</div>
+                {/if}
             </div>
             <ul class="list-group list-group-flush">
                 {foreach from=$SUPPORTERS item=SUP}
@@ -135,7 +142,7 @@
     <div class="col-md-7">
         <div class="card mb-3">
             <div class="card-header">
-                <div class="card-title mb-0 fs-5 fw-medium">{$LANG->getModule('feedback_form')|default:$LANG->getGlobal('feedback')}</div>
+                <h2 class="card-title mb-0 fs-5 fw-medium">{$LANG->getModule('feedback_form')|default:$LANG->getGlobal('feedback')}</h2>
             </div>
             <div class="card-body">
                 <p class="mb-4">{$LANG->getModule('feedback_form_note')}</p>
