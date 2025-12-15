@@ -41,6 +41,54 @@ function commReset(form) {
     }
 }
 
+/**
+ * Hàm xử lý sau khi post form comment
+ *
+ * @param {Object} res Json status+mess+input
+ */
+function nv_commment_reload(res) {
+    formChangeCaptcha($("#formcomment form"));
+
+    if (res.status === 'OK') {
+        const data = $('#idcomment').data();
+        data.status_comment = res.mess;
+        data.comment_load = 1;
+
+        $.ajax({
+            type: 'POST',
+            cache: false,
+            url: nv_base_siteurl + 'index.php?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=comment&nocache=' + new Date().getTime(),
+            data: data,
+            dataType: 'html',
+            success: function(res) {
+                $('#showcomment').html(res);
+                $('html, body').animate({
+                    scrollTop: $("#idcomment").offset().top
+                }, 800);
+            },
+            error: function(xhr, text, err) {
+                nukeviet.toast(err || text, 'error');
+                console.log(xhr, text, err);
+            }
+        });
+        return;
+    }
+
+    if (res.status == 'ERR') {
+        if (res.input) {
+            const form = $("#formcomment form");
+            const ipt = $("[name=" + res.input + "]", form);
+            if (ipt.length && ipt.is(':visible')) {
+                ipt.focus();
+            }
+        }
+        nukeviet.toast(res.mess, 'error');
+        return;
+    }
+
+    nukeviet.alert(nv_content_failed);
+}
+
 $(function() {
     const commentform = $('#formcomment form');
     const eleWarnings = document.getElementById('commentWarnings');
@@ -68,9 +116,27 @@ $(function() {
     // Sắp xếp comments
     $('[data-toggle=nv_comment_sort_change]').on('change', function(e) {
         e.preventDefault();
+        const btn = $(this);
         const data = $('#idcomment').data();
-        $.post(nv_base_siteurl + 'index.php?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=comment&module=' + data.module + '&area=' + data.area + '&id=' + data.id + '&allowed=' + data.allowed + '&checkss=' + data.checkss + '&comment_load=1' + '&nocache=' + new Date().getTime(), 'sortcomm=' + $(sel).val(), function(res) {
-            $('#showcomment').html(res);
+        data.comment_load = 1;
+        data.sortcomm = btn.val();
+        btn.prop('disabled', true);
+
+        $.ajax({
+            type: 'POST',
+            cache: false,
+            url: nv_base_siteurl + 'index.php?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=comment&nocache=' + new Date().getTime(),
+            data: data,
+            dataType: 'html',
+            success: function(res) {
+                btn.prop('disabled', false);
+                $('#showcomment').html(res);
+            },
+            error: function(xhr, text, err) {
+                btn.prop('disabled', false);
+                nukeviet.toast(err || text, 'error');
+                console.log(xhr, text, err);
+            }
         });
     });
 

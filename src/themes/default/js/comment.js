@@ -66,24 +66,29 @@ function commentDelete(cid, checkss) {
     }
 }
 
+/**
+ * Hàm xử lý sau khi post form comment
+ *
+ * @param {Object} res Json status+mess+input
+ */
 function nv_commment_reload(res) {
-    var rs = res.split('_');
-    var data = $('#idcomment').data();
-    if (rs[0] == 'OK') {
-        $("#showcomment").load(nv_base_siteurl + 'index.php?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=comment&module=' + data.module + '&area=' + data.area + '&id=' + data.id + '&allowed=' + data.allowed + '&status_comment=' + rs[1] + '&checkss=' + data.checkss + '&comment_load=1&nocache=' + new Date().getTime(), function() {
+    const data = $('#idcomment').data();
+    if (res.status === 'OK') {
+        $("#showcomment").load(nv_base_siteurl + 'index.php?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=comment&module=' + data.module + '&area=' + data.area + '&id=' + data.id + '&allowed=' + data.allowed + '&status_comment=' + res.mess + '&checkss=' + data.checkss + '&comment_load=1&nocache=' + new Date().getTime(), function() {
             $("#formcomment form .reset").trigger("click")
         });
         $('html, body').animate({
             scrollTop: $("#idcomment").offset().top
         }, 800);
+        return;
+    }
+
+    formChangeCaptcha($("#formcomment form"));
+    if (res.status == 'ERR') {
+        alert(res.mess);
+        res.input && $("#formcomment form [name=" + res.input + "]:visible").length && $("#formcomment form [name=" + res.input + "]").focus()
     } else {
-        formChangeCaptcha($("#formcomment form"));
-        if (rs[0] == 'ERR') {
-            alert(rs[2]);
-            "" != rs[1] && $("#formcomment form [name=" + rs[1] + "]:visible").length && $("#formcomment form [name=" + rs[1] + "]").focus()
-        } else {
-            alert(nv_content_failed);
-        }
+        alert(nv_content_failed);
     }
 }
 
