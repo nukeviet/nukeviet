@@ -954,7 +954,7 @@ $(function() {
 
     //XSSsanitize + Captcha
     $('body').on('click', '[type=submit]:not([name])', function(e) {
-        // Kiểm tra xem nút có nằm trong CKEditor UI hay không
+        // Check if button is inside CKEditor UI
         if ($(this).closest('[class^="ck-"], [class*=" ck-"]').length) {
             return;
         }

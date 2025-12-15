@@ -228,7 +228,7 @@ $(document).ready(function() {
 
     // XSSsanitize
     $('body').on('click', '[type=submit]:not([name],.ck-button-save)', function(e) {
-        // Kiểm tra xem nút có nằm trong CKEditor UI hay không
+        // Check if button is inside CKEditor UI
         if ($(this).closest('[class^="ck-"], [class*=" ck-"]').length) {
             return;
         }
