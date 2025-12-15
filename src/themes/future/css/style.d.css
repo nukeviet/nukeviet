@@ -27635,4 +27635,50 @@ p + .image-style-side {
   height: 100%;
 }
 
+.ck {
+  --ck-content-font-family: var(--bs-font-sans-serif);
+  --ck-content-font-size: var(--bs-body-font-size);
+  --ck-content-font-color: var(--bs-body-color);
+  --ck-content-line-height: var(--bs-body-line-height);
+  --ck-color-base-foreground: var(--nv-body-bg);
+  --ck-color-base-background: var(--bs-body-bg);
+  --ck-color-base-border: var(--bs-border-color);
+  --ck-color-focus-border: #8abbe6;
+  --ck-focus-ring: 1px solid #8abbe6;
+  --ck-color-text: var(--bs-body-color);
+  --ck-color-button-default-hover-background: var(--bs-tertiary-bg);
+  --ck-color-button-default-active-background: var(--bs-secondary-bg);
+  --ck-color-button-default-active-shadow: var(--bs-secondary-bg-subtle);
+  --ck-color-button-on-background: var(--bs-secondary-bg);
+  --ck-color-button-on-hover-background: var(--bs-secondary-bg-subtle);
+  --ck-color-button-on-active-background: var(--bs-secondary-bg-subtle);
+  --ck-color-button-on-active-shadow: var(--bs-secondary-bg);
+  --ck-color-button-on-disabled-background: var(--nv-body-bg);
+  --ck-color-dropdown-panel-border: var(--nv-body-bg);
+  --ck-color-dropdown-panel-background: var(--ck-color-base-background);
+  --ck-color-panel-background: var(--ck-color-base-background);
+  --ck-color-panel-border: var(--ck-color-base-border);
+  --ck-color-dialog-form-header-border: var(--bs-border-color);
+  --ck-color-dialog-background: var(--ck-color-base-background);
+  --ck-color-split-button-hover-background: var(--ck-color-button-default-hover-background);
+  --ck-color-split-button-hover-border: var(--nv-body-bg);
+  --ck-color-toolbar-border: var(--ck-color-base-border);
+  --ck-color-toolbar-background: var(--ck-color-base-background);
+  --ck-color-focus-outer-shadow: var(--bs-focus-ring-color);
+  --ck-focus-outer-shadow-geometry: 0 0 0 3px;
+  --ck-focus-outer-shadow: var(--ck-focus-outer-shadow-geometry) var(--ck-color-focus-outer-shadow);
+  --ck-color-list-background: var(--ck-color-base-background);
+  --ck-color-list-button-hover-background: var(--ck-color-button-default-hover-background);
+  --ck-color-input-background: var(--ck-color-base-background);
+  --ck-color-input-border: var(--ck-color-base-border);
+  --ck-color-input-text: var(--ck-color-text);
+  --ck-color-labeled-field-label-background: var(--ck-color-base-background);
+  --ck-color-link-default: var(--bs-link-color);
+}
+
+[data-bs-theme=dark] .ck-fullscreen__main-wrapper .ck-fullscreen__editable .ck.ck-editor__editable:not(.ck-editor__nested-editable),
+[data-theme=dark] .ck-fullscreen__main-wrapper .ck-fullscreen__editable .ck.ck-editor__editable:not(.ck-editor__nested-editable) {
+  background-color: var(--bs-body-bg);
+}
+
 /*# sourceMappingURL=style.d.css.map */
