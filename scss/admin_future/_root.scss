@@ -86,10 +86,3 @@
   --nv-form-check-input-disabled-bg: #{$gray-700};
   --nv-form-check-input-disabled-border-color: #{$gray-600};
 }
-
-.ck {
-  --ck-content-font-family: var(--#{$prefix}font-sans-serif);
-  --ck-content-font-size: var(--#{$prefix}body-font-size);
-  --ck-content-font-color: var(--#{$prefix}body-color);
-  --ck-content-line-height: var(--#{$prefix}body-line-height);
-}

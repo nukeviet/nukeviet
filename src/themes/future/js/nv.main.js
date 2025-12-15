@@ -28,7 +28,12 @@ function _make_check_invalid(ipt, data, message) {
         element = $(`<div class="invalid-${data.errType}"></div>`).insertAfter(ipt.next().is('label') ? ipt.next() : ipt);
     }
     element.text(message);
-    $(_get_input_name(ipt), form).addClass('is-invalid');
+    if (data.type === 'editor') {
+        ipt.addClass('is-invalid');
+    } else {
+        $(_get_input_name(ipt), form).addClass('is-invalid');
+    }
+
     return element;
 }
 
@@ -37,9 +42,17 @@ function _make_check_invalid(ipt, data, message) {
  *
  * @param {JQuery} ipt
  * @param {String | undefined | null} customMess Thông báo tùy chỉnh hay mặc định
+ * @param {"editor" | undefined | null} specialType Kiểu đăc biệt ví dụ như trình soạn thảo
  * @returns {JQuery | null}
  */
-function _check_invalid(ipt, customMess) {
+function _check_invalid(ipt, customMess, specialType) {
+    let baseIpt = ipt;
+    if (typeof specialType === 'string') {
+        if (specialType === 'editor') {
+            ipt = ipt.closest('[data-valid]');
+        }
+    }
+
     if (ipt.is('.is-invalid')) {
         return;
     }
@@ -73,6 +86,10 @@ function _check_invalid(ipt, customMess) {
         errMess: errMess.length > 0 ? errMess : null,
         errType: $(ipt).data('error-type') || 'tooltip'
     };
+    if (valid.type === 'editor') {
+        valid.editorId = baseIpt.attr('id');
+        valid.editorTextarea = baseIpt;
+    }
     const form = ipt.closest('form');
     if (customMess && customMess.length > 0) {
         return _make_check_invalid(ipt, valid, customMess);
@@ -112,7 +129,19 @@ function _check_invalid(ipt, customMess) {
     if (valid.type == 'email' && !nv_mailfilter.test(trim(ipt.val()))) {
         return _make_check_invalid(ipt, valid, valid.errMess || nv_email);
     }
-    // Phone/tel: xử lý như text theo quy tắc chung
+    // Check editor
+    if (valid.type == 'editor') {
+        if (window.nveditor && window.nveditor[valid.editorId]) {
+            // Trường hợp có trình soạn thảo được render ra
+            const editor = window.nveditor[valid.editorId];
+            if (editor.getData().trim().length < 1) {
+                return _make_check_invalid(ipt, valid, valid.errMess || nv_required);
+            }
+        } else if (trim(valid.editorTextarea.val()).length < 1) {
+            // Trường hợp không có quyền sử dụng trình soạn thảo, chỉ có textarea
+            return _make_check_invalid(ipt, valid, valid.errMess || nv_required);
+        }
+    }
 }
 
 /**
@@ -123,9 +152,6 @@ function _check_invalid(ipt, customMess) {
  */
 function _get_input_name(ipt) {
     const name = ipt.attr('name');
-
-    console.log(name);
-
     const matches = name.match(/\[/g);
     const groupCount = matches ? matches.length : 0;
 
@@ -189,6 +215,15 @@ function nv_precheck_form(form) {
         _check_invalid($(sName, form).last());
     });
     // Các cấu trúc đặc biệt như trình soạn thảo
+    $('[data-valid][data-name]', form).each(function() {
+        const ipt = $(this);
+        const sName = `[name="${ipt.data('name')}"]`;
+        if (processedNames.has(sName)) {
+            return;
+        }
+        processedNames.add(sName);
+        _check_invalid($(sName, form).last(), null, ipt.data('valid'));
+    });
 
     return _focus_error(form);
 }
@@ -509,12 +544,11 @@ $(function() {
         $.ajax(ajOptions);
     });
 
-    $(document).on('change keyup', '[data-valid]', function(e) {
-        if (e.type === "keyup" && e.which === 13) {
-            return;
-        }
-
-        const ipt = $(this);
+    /**
+     * @param { JQuery<HTMLElement> } ipt
+     * @returns
+     */
+    const _resetInputValid = (ipt) => {
         const form = ipt.closest('form');
         if (form.length < 1 || (!form.is('[data-toggle="ajax-form"]') && !form.is('[data-precheck="nv_precheck_form"]'))) {
             return;
@@ -534,6 +568,42 @@ $(function() {
             let prAlso = ipt.parent().is('.input-group');
             ipt.removeClass('is-invalid is-valid');
             if (prAlso) pr.removeClass('is-invalid is-valid');
+        }
+    };
+
+    $(document).on('change keyup', '[data-valid]', function(e) {
+        if (e.type === "keyup" && e.which === 13) {
+            return;
+        }
+        _resetInputValid($(this));
+    });
+
+    // Nút reset form
+    $(document).on('click', '[data-toggle="nv-reset-form"]', function(e) {
+        e.preventDefault();
+        const form = $(this).closest('form');
+        if (form.length < 1) {
+            return;
+        }
+        form[0].reset();
+        formChangeCaptcha(form);
+
+        // Reset trình soạn thảo
+        $('textarea[id]', form).each(function() {
+            if (window.nveditor && window.nveditor[this.id]) {
+                window.nveditor[this.id].setData('');
+            }
+        });
+
+        // Reset trạng thái validate
+        $('[data-valid]', form).each(function() {
+            _resetInputValid($(this));
+        });
+
+        // Hàm reset riêng nếu có
+        const resetExtend = form.data('reset-extend');
+        if (resetExtend && typeof window[resetExtend] === 'function') {
+            window[resetExtend](form);
         }
     });
 

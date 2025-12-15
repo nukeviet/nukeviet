@@ -102,3 +102,9 @@
 .align-baseline {
   transform: translateY(calc(var(--#{$prefix}body-line-height) * 1rem / 4));
 }
+
+.richtext-container {
+  >p:last-child {
+    margin-bottom: 0;
+  }
+}

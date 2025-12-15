@@ -22,10 +22,10 @@ $theme_config = [
         'ul_class' => 'pagination',
         // Nếu dùng bootstrap 3: '',
         // Nếu dùng bootstrap 4/5: 'page-item'
-        'li_class' => '',
+        'li_class' => 'page-item',
         // Nếu dùng bootstrap 3: '',
         // Nếu dùng bootstrap 4/5: 'page-link'
-        'a_class' => ''
+        'a_class' => 'page-link'
     ]
 ];
 

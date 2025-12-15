@@ -2674,7 +2674,7 @@ textarea.form-control-lg {
 .form-floating > .form-control-plaintext::placeholder {
   color: transparent;
 }
-.form-floating > .form-control:not(:-moz-placeholder-shown), .form-floating > .form-control-plaintext:not(:-moz-placeholder-shown) {
+.form-floating > .form-control:not(:-moz-placeholder), .form-floating > .form-control-plaintext:not(:-moz-placeholder) {
   padding-top: 1.625rem;
   padding-bottom: 0.625rem;
 }
@@ -2693,7 +2693,7 @@ textarea.form-control-lg {
   padding-top: 1.625rem;
   padding-bottom: 0.625rem;
 }
-.form-floating > .form-control:not(:-moz-placeholder-shown) ~ label {
+.form-floating > .form-control:not(:-moz-placeholder) ~ label {
   color: rgba(var(--bs-body-color-rgb), 0.65);
   transform: scale(0.85) translateY(-0.5rem) translateX(-0.15rem);
 }
@@ -2704,7 +2704,7 @@ textarea.form-control-lg {
   color: rgba(var(--bs-body-color-rgb), 0.65);
   transform: scale(0.85) translateY(-0.5rem) translateX(-0.15rem);
 }
-.form-floating > .form-control:not(:-moz-placeholder-shown) ~ label::after {
+.form-floating > .form-control:not(:-moz-placeholder) ~ label::after {
   position: absolute;
   inset: 1rem 0.375rem;
   z-index: -1;
@@ -25287,13 +25287,6 @@ readers do not read off random characters that represent icons */
   --nv-form-check-input-disabled-border-color: #666;
 }
 
-.ck {
-  --ck-content-font-family: var(--bs-font-sans-serif);
-  --ck-content-font-size: var(--bs-body-font-size);
-  --ck-content-font-color: var(--bs-body-color);
-  --ck-content-line-height: var(--bs-body-line-height);
-}
-
 [data-bs-theme=dark] .ps .ps__rail-x:hover,
 [data-bs-theme=dark] .ps .ps__rail-y:hover,
 [data-bs-theme=dark] .ps .ps__rail-x:focus,
@@ -26845,6 +26838,52 @@ p + .image-style-side {
 .nvck-docs.nvck-docs-responsive > .nvck-docs-inner > .nvck-docs-element {
   width: 100%;
   height: 100%;
+}
+
+.ck {
+  --ck-content-font-family: var(--bs-font-sans-serif);
+  --ck-content-font-size: var(--bs-body-font-size);
+  --ck-content-font-color: var(--bs-body-color);
+  --ck-content-line-height: var(--bs-body-line-height);
+  --ck-color-base-foreground: var(--nv-body-bg);
+  --ck-color-base-background: var(--bs-body-bg);
+  --ck-color-base-border: var(--bs-border-color);
+  --ck-color-focus-border: #a1c2fa;
+  --ck-focus-ring: 1px solid #a1c2fa;
+  --ck-color-text: var(--bs-body-color);
+  --ck-color-button-default-hover-background: var(--bs-tertiary-bg);
+  --ck-color-button-default-active-background: var(--bs-secondary-bg);
+  --ck-color-button-default-active-shadow: var(--bs-secondary-bg-subtle);
+  --ck-color-button-on-background: var(--bs-secondary-bg);
+  --ck-color-button-on-hover-background: var(--bs-secondary-bg-subtle);
+  --ck-color-button-on-active-background: var(--bs-secondary-bg-subtle);
+  --ck-color-button-on-active-shadow: var(--bs-secondary-bg);
+  --ck-color-button-on-disabled-background: var(--nv-body-bg);
+  --ck-color-dropdown-panel-border: var(--nv-body-bg);
+  --ck-color-dropdown-panel-background: var(--ck-color-base-background);
+  --ck-color-panel-background: var(--ck-color-base-background);
+  --ck-color-panel-border: var(--ck-color-base-border);
+  --ck-color-dialog-form-header-border: var(--bs-border-color);
+  --ck-color-dialog-background: var(--ck-color-base-background);
+  --ck-color-split-button-hover-background: var(--ck-color-button-default-hover-background);
+  --ck-color-split-button-hover-border: var(--nv-body-bg);
+  --ck-color-toolbar-border: var(--ck-color-base-border);
+  --ck-color-toolbar-background: var(--ck-color-base-background);
+  --ck-color-focus-outer-shadow: var(--bs-focus-ring-color);
+  --ck-focus-outer-shadow-geometry: 0 0 0 3px;
+  --ck-focus-outer-shadow: var(--ck-focus-outer-shadow-geometry) var(--ck-color-focus-outer-shadow);
+  --ck-color-list-background: var(--ck-color-base-background);
+  --ck-color-list-button-hover-background: var(--ck-color-button-default-hover-background);
+  --ck-color-input-background: var(--ck-color-base-background);
+  --ck-color-input-border: var(--ck-color-base-border);
+  --ck-color-input-text: var(--ck-color-text);
+  --ck-color-labeled-field-label-background: var(--ck-color-base-background);
+  --ck-color-link-default: var(--bs-link-color);
+}
+
+[data-bs-theme=dark] .ck-fullscreen__main-wrapper .ck-fullscreen__editable .ck.ck-editor__editable:not(.ck-editor__nested-editable),
+[data-theme=dark] .ck-fullscreen__main-wrapper .ck-fullscreen__editable .ck.ck-editor__editable:not(.ck-editor__nested-editable) {
+  background-color: var(--bs-body-bg);
 }
 
 .select2-container {
