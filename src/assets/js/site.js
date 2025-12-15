@@ -954,6 +954,11 @@ $(function() {
 
     //XSSsanitize + Captcha
     $('body').on('click', '[type=submit]:not([name])', function(e) {
+        // Kiểm tra xem nút có nằm trong CKEditor UI hay không
+        if ($(this).closest('[class^="ck-"], [class*=" ck-"]').length) {
+            return;
+        }
+        
         var form = $(this).parents('form');
         if (!$('[name=submit]', form).length) {
             btnClickSubmit(e, form)

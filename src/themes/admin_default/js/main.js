@@ -228,6 +228,11 @@ $(document).ready(function() {
 
     // XSSsanitize
     $('body').on('click', '[type=submit]:not([name],.ck-button-save)', function(e) {
+        // Kiểm tra xem nút có nằm trong CKEditor UI hay không
+        if ($(this).closest('[class^="ck-"], [class*=" ck-"]').length) {
+            return;
+        }
+        
         var form = $(this).parents('form');
         if (XSSsanitize && !$('[name=submit]', form).length) {
             // Khi không xử lý XSS thì trình submit mặc định sẽ thực hiện
