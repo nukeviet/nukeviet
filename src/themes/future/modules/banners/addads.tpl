@@ -29,29 +29,32 @@
         </div>
     </div>
     <div class="mb-3 row">
-        <label for="title" class="col-md-3 col-form-label">{$LANG->getModule('addads_title')} <span class="text-danger">*</span>:</label>
+        <label for="title" class="col-md-3 col-form-label">{$LANG->getModule('addads_title')}<span class="text-danger">*</span>:</label>
         <div class="col-md-9 position-relative">
-            <input class="form-control" type="text" name="title" id="title" value="" data-minlength="3" data-maxlength="20" data-valid data-error-type="feedback" data-allowed-empty data-mess="{$LANG->getModule('title_empty')}" data-mess-min="Tiêu đề phải có ít nhất 3 ký tự." data-mess-max="Tiêu đề không được vượt quá 255 ký tự." required />
+            <input class="form-control" type="text" name="title" id="title" value="" data-minlength="3" data-maxlength="240" data-valid data-error-type="feedback" data-allowed-empty data-mess="{$LANG->getModule('title_empty')}" data-mess-min="Tiêu đề phải có ít nhất 3 ký tự." data-mess-max="Tiêu đề không được vượt quá 255 ký tự." required />
             <div class="invalid-feedback">{$LANG->getModule('title_empty')}</div>
         </div>
     </div>
     <div id="banner_uploadimage" style="display: none;">
         <div class="mb-3 row">
-            <label for="image" class="col-md-3 col-form-label">{$LANG->getModule('addads_adsdata')} <span class="text-danger">*</span>: </label>
+            <label for="image" class="col-md-3 col-form-label">{$LANG->getModule('addads_adsdata')}<span class="text-danger required-file-asterisk"> *</span>:</label>
             <div class="col-md-9">
-                <input type="file" name="image" id="image" value="" class="form-control" data-toggle="errorHidden" data-event="change" data-mess="{$LANG->getModule('file_upload_empty')}" />
+                <input type="file" name="image" id="image" value="" class="form-control file" data-valid data-error-type="feedback" data-allowed-empty data-mess="{$LANG->getModule('file_upload_empty')}"/>
+                <div class="invalid-feedback">{$LANG->getModule('file_upload_empty')}</div>
                 <div id="banner_uploadtype" class="form-text"></div>
             </div>
         </div>
+
         <div class="mb-3 row">
-            <label for="description" class="col-md-3 col-form-label">{$LANG->getModule('addads_description')} <span class="text-danger">*</span>:</label>
+            <label for="description" class="col-md-3 col-form-label">{$LANG->getModule('addads_description')}:</label>
             <div class="col-md-9">
                 <input type="text" name="description" id="description" value="" class="form-control" maxlength="240" />
+                <div class="invalid-feedback description-error-placeholder"></div>
             </div>
         </div>
     </div>
     <div class="mb-3 row">
-        <label for="url" class="col-md-3 col-form-label">{$LANG->getModule('addads_url')} <span class="text-danger">*</span>:</label>
+        <label for="url" class="col-md-3 col-form-label">{$LANG->getModule('addads_url')}<span class="text-danger">*</span>:</label>
         <div class="col-md-9 position-relative">
             <input class="url form-control" type="text" name="url" id="url" value="" minlength="10" maxlength="240" data-valid data-error-type="feedback" data-allowed-empty data-mess="{$LANG->getModule('click_url_empty')}" data-mess-url="{$LANG->getModule('click_url_invalid')}" data-mess-min="{$LANG->getModule('click_url_min')}" required/>
             <div class="invalid-feedback">{$LANG->getModule('click_url_empty')}</div>
