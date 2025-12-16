@@ -142,6 +142,15 @@ function _check_invalid(ipt, customMess, specialType) {
             return _make_check_invalid(ipt, valid, valid.errMess || nv_required);
         }
     }
+    // Check file
+    if (valid.type == 'file') {
+        const fileInput = $(ipt)[0];
+
+        // Kiểm tra xem có file nào được chọn không
+        if (!fileInput.files || fileInput.files.length === 0) {
+            return _make_check_invalid(ipt, valid, valid.errMess || nv_required);
+        }
+    }
 }
 
 /**

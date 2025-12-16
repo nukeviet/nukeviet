@@ -171,5 +171,3 @@ $lang_module['publ_time_info'] = 'If you do not select the start time for displa
 $lang_module['enter_keyword'] = 'Enter keywords';
 $lang_module['all_plan'] = 'All plans';
 $lang_module['admin_add_banner'] = 'Add banner';
-$lang_module['click_url_min'] = 'Path too short, requires at least 10 characters';
-$lang_module['click_url_empty'] = 'The target link cannot be empty.';

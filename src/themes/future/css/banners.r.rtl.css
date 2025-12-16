@@ -6,13 +6,4 @@
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
-#banner_urlrequired,
-#banner_uploadimage,
-#banner_imagealt {
-  display: none;
-}
-
-.min-w100 {
-  min-width: 100px;
-}
 /*# sourceMappingURL=banners.r.rtl.css.map */
