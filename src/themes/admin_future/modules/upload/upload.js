@@ -3460,9 +3460,9 @@ var nukeviet = nukeviet || {};
             }
             // Trả về input của opener
             if (self.settings.area != '') {
-                $('#' + self.settings.area, opener.document).val(file.data('path'));
+                $('#' + self.settings.area, opener.document).val(file.data('path')).trigger('change');
                 if (self.settings.alt != '') {
-                    $('#' + self.settings.alt, opener.document).val(file.data('alt'));
+                    $('#' + self.settings.alt, opener.document).val(file.data('alt')).trigger('change');
                 }
                 window.close();
                 return;
@@ -3472,10 +3472,10 @@ var nukeviet = nukeviet || {};
 
         // Dạng trong trang mới
         if (self.settings.area != '') {
-            $('#' + self.settings.area).val(file.data('path'));
+            $('#' + self.settings.area).val(file.data('path')).trigger('change');
         }
         if (self.settings.alt != '') {
-            $('#' + self.settings.alt).val(file.data('alt'));
+            $('#' + self.settings.alt).val(file.data('alt')).trigger('change');
         }
         self.hideModal();
     }
