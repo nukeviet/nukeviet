@@ -120,6 +120,8 @@ if (!nv_function_exists('nv_block_voting')) {
         $tpl->assign('MODULE', $module);
         $tpl->assign('UNIQUEID', $block_config['bid']);
         $tpl->assign('GCONFIG', $global_config);
+        $tpl->assign('CAPTCHA_ATTRS', nv_captcha_form_attrs('fcode'));
+
 
         $voting_array = [
             'checkss' => md5($current_voting['vid'] . NV_CHECK_SESSION),
