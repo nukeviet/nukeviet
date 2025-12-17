@@ -14,10 +14,8 @@ if (!defined('NV_SYSTEM')) {
 }
 
 /**
- * nv_banner_theme_main()
- *
+ * Giao diện chính của module Banner
  * @param array $contents
- * @param mixed $manament
  * @return string
  */
 function nv_banner_theme_main($contents)
@@ -35,15 +33,14 @@ function nv_banner_theme_main($contents)
 }
 
 /**
- * nv_banner_theme_addads()
- *
- * @param array  $global_array_uplans
+ * Giao diện trang thêm banners
+ * @param array $global_array_uplans
  * @param string $page_url
  * @return string
  */
 function nv_banner_theme_addads($global_array_uplans, $page_url)
 {
-    global $module_captcha, $nv_Lang, $lang_array, $manament;
+    global $nv_Lang, $lang_array, $manament;
 
     $plans = [];
     foreach ($global_array_uplans as $row) {
@@ -65,8 +62,7 @@ function nv_banner_theme_addads($global_array_uplans, $page_url)
 }
 
 /**
- * nv_banner_theme_stats()
- *
+ * Giao diện trang xem thống kê
  * @param array $ads
  * @return string
  */

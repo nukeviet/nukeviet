@@ -5,7 +5,7 @@
     <li class="nav-item"><a class="nav-link" href="{$MANAGEMENT.stats}">{$LANG->getModule('client_stats')}</a></li>
 </ul>
 {/if}
-<form id="frm" action="{$FORM_ACTION}" method="post" enctype="multipart/form-data" role="form" class="form-horizontal needs-validation" data-toggle="ajax-form" data-precheck="nv_precheck_form" {$CAPTCHA_ATTRS}>
+<form id="frm" action="{$FORM_ACTION}" method="post" enctype="multipart/form-data" role="form" class="form-horizontal needs-validation" data-toggle="ajax-form" data-precheck="nv_precheck_form"{$CAPTCHA_ATTRS}>
     <div class="mb-3 row">
         <label for="banner_plan" class="col-md-3 col-form-label">{$LANG->getModule('plan_title')}:</label>
         <div class="col-md-9 position-relative">
@@ -49,8 +49,8 @@
     </div>
     <div class="mb-3 row">
         <div class="col-md-9 offset-md-3">
-            <input type="hidden" name="confirm" value="1" />
-            <input type="submit" value="{$LANG->getModule('add_banner')}" class="btn btn-primary"/>
+            <input type="hidden" name="confirm" value="1">
+            <button type="submit" class="btn btn-primary">{$LANG->getModule('add_banner')}</button>
         </div>
     </div>
 </form>
