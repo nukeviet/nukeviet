@@ -5,18 +5,7 @@
     <li class="nav-item"><a class="nav-link" href="{$MANAGEMENT.stats}">{$LANG->getModule('client_stats')}</a></li>
 </ul>
 {/if}
-{if $CAPTCHA == 'captcha'}
-    {$form_captcha_data = ' data-captcha="captcha"'}
-{elseif $CAPTCHA == 'recaptcha'}
-    {$form_captcha_data = ' data-recaptcha2="1"'}
-{elseif $CAPTCHA == 'recaptcha3'}
-    {$form_captcha_data = ' data-recaptcha3="1"'}
-{elseif $CAPTCHA == 'turnstile'}
-    {$form_captcha_data = ' data-turnstile="1"'}
-{else}
-    {$form_captcha_data = ''}
-{/if}
-<form id="frm" action="{$FORM_ACTION}" method="post" enctype="multipart/form-data" role="form" class="form-horizontal needs-validation" data-toggle="ajax-form" data-precheck="nv_precheck_form" {$form_captcha_data}>
+<form id="frm" action="{$FORM_ACTION}" method="post" enctype="multipart/form-data" role="form" class="form-horizontal needs-validation" data-toggle="ajax-form" data-precheck="nv_precheck_form" {$CAPTCHA_ATTRS}>
     <div class="mb-3 row">
         <label for="banner_plan" class="col-md-3 col-form-label">{$LANG->getModule('plan_title')}:</label>
         <div class="col-md-9 position-relative">

@@ -43,18 +43,7 @@ function nv_banner_theme_main($contents)
  */
 function nv_banner_theme_addads($global_array_uplans, $page_url)
 {
-    global $global_config, $module_info, $module_captcha, $nv_Lang, $lang_array, $manament;
-
-    $captcha = '';
-    if ($module_captcha == 'recaptcha' and $global_config['recaptcha_ver'] == 3) {
-        $captcha = 'recaptcha3';
-    } elseif ($module_captcha == 'recaptcha' and $global_config['recaptcha_ver'] == 2) {
-        $captcha = 'recaptcha';
-    } elseif ($module_captcha == 'turnstile') {
-        $captcha = 'turnstile';
-    } elseif ($module_captcha == 'captcha') {
-        $captcha = 'captcha';
-    }
+    global $module_captcha, $nv_Lang, $lang_array, $manament;
 
     $plans = [];
     foreach ($global_array_uplans as $row) {
@@ -69,7 +58,7 @@ function nv_banner_theme_addads($global_array_uplans, $page_url)
     $tpl->assign('LANG', $nv_Lang);
     $tpl->assign('MANAGEMENT', $manament);
     $tpl->assign('FORM_ACTION', $page_url);
-    $tpl->assign('CAPTCHA', $captcha);
+    $tpl->assign('CAPTCHA_ATTRS', nv_captcha_form_attrs('captcha'));
     $tpl->assign('PLANS', $plans);
 
     return $tpl->fetch('addads.tpl');
