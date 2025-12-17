@@ -13,8 +13,6 @@ if (!defined('NV_IS_MOD_COMMENT')) {
     exit('Stop!!!');
 }
 
-$contents = 'ERR_' . $nv_Lang->getModule('comment_unsuccess');
-
 $cid = $nv_Request->get_int('cid', 'post');
 $checkss = $nv_Request->get_string('checkss', 'post');
 
@@ -52,10 +50,16 @@ if ($cid > 0 and $checkss == md5($cid . '_' . NV_CHECK_SESSION)) {
                 include NV_ROOTDIR . '/modules/' . $mod_info['module_file'] . '/comment.php';
             }
 
-            $contents = 'OK_' . $cid;
+            nv_jsonOutput([
+                'status' => 'success',
+                'mess' => '',
+                'cid' => $cid
+            ]);
         }
     }
 }
-include NV_ROOTDIR . '/includes/header.php';
-echo $contents;
-include NV_ROOTDIR . '/includes/footer.php';
+
+nv_jsonOutput([
+    'status' => 'error',
+    'mess' => $nv_Lang->getModule('comment_unsuccess')
+]);

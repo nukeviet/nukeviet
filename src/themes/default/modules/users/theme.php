@@ -481,28 +481,23 @@ function user_login($is_ajax = false)
         $xtpl->parse('main.openid');
     }
 
-    $_lis = $module_info['funcs'];
+    $_lis = \NukeViet\Module\users\Shared\Navs::getNavs($module_info['funcs']);
     $_alias = $module_info['alias'];
     foreach ($_lis as $_li) {
-        if ($_li['show_func'] and $_li['in_submenu'] and $_li['func_name'] != 'main') {
-            if ($_li['func_name'] == $op or $_li['func_name'] == 'avatar' or $_li['func_name'] == 'groups') {
-                continue;
-            }
-            if ($_li['func_name'] == 'register' and !$global_config['allowuserreg']) {
-                continue;
-            }
-
-            $href = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $_alias[$_li['func_name']];
-            if (!empty($nv_redirect)) {
-                $href .= '&nv_redirect=' . $nv_redirect;
-            }
-            $li = [
-                'href' => $href,
-                'title' => $_li['func_name'] == 'main' ? $module_info['custom_title'] : $_li['func_custom_name']
-            ];
-            $xtpl->assign('NAVBAR', $li);
-            $xtpl->parse('main.navbar');
+        if ($_li['func_name'] == $op) {
+            continue;
         }
+
+        $href = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $_alias[$_li['func_name']];
+        if (!empty($nv_redirect)) {
+            $href .= '&nv_redirect=' . $nv_redirect;
+        }
+        $li = [
+            'href' => $href,
+            'title' => $_li['func_name'] == 'main' ? $module_info['custom_title'] : $_li['func_custom_name']
+        ];
+        $xtpl->assign('NAVBAR', $li);
+        $xtpl->parse('main.navbar');
     }
 
     $xtpl->parse('main');

@@ -58,6 +58,30 @@
   .maxh-#{$i * 25} {
     max-height: #{$i * 25}px !important;
   }
+
+  .fw-#{$i * 20} {
+    width: #{$i * 20}px !important;
+  }
+
+  .fh-#{$i * 20} {
+    height: #{$i * 20}px !important;
+  }
+
+  .maxw-#{$i * 20} {
+    max-width: #{$i * 20}px !important;
+  }
+
+  .maxh-#{$i * 20} {
+    max-height: #{$i * 20}px !important;
+  }
+}
+
+.ps-with-fw-icon {
+  padding-left: calc(1.25em + 1rem - 2px);
+}
+
+.ps-with-icon {
+  padding-left: calc(1em + 1rem - 2px);
 }
 
 // Block ellipsis: Chú ý class này chỉ dùng khi không thiết lập font-size, line-height mà dùng mặc định của body
@@ -101,6 +125,10 @@
 
 .align-baseline {
   transform: translateY(calc(var(--#{$prefix}body-line-height) * 1rem / 4));
+}
+
+.align-baseline-xs {
+  transform: translateY(calc(var(--#{$prefix}body-line-height) * 1rem / 18));
 }
 
 .richtext-container {

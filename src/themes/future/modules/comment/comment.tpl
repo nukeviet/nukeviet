@@ -34,13 +34,11 @@
                 </div>
                 <div class="richtext-container">{$comment.content}</div>
             </div>
-
-
             <div class="comment-tool mt-2 small">
                 <ul class="list-inline">
                     {if not empty($ALLOWED_DELETE)}
                     <li class="list-inline-item">
-                        <i class="fa-solid fa-trash text-danger"></i>
+                        <i class="fa-solid fa-trash text-danger" data-icon="fa-trash"></i>
                         <a href="#" data-toggle="commDelete" data-cid="{$comment.cid}" data-checkss="{$comment.check_like}">{$LANG->getModule('delete')}</a>
                     </li>
                     {/if}
@@ -51,14 +49,14 @@
                     </li>
                     {/if}
                     <li class="list-inline-item">
-                        <i class="fa-solid fa-thumbs-up"></i>
+                        <i class="fa-solid fa-thumbs-up" data-icon="fa-thumbs-up"></i>
                         <a href="#" data-toggle="commLike" data-cid="{$comment.cid}" data-checkss="{$comment.check_like}" data-like="1">{$LANG->getModule('like')}</a>
-                        <span id="like{$comment.cid}">{$comment.likes}</span>
+                        <span id="count-comment{$comment.cid}-like">{$comment.likes}</span>
                     </li>
                     <li class="list-inline-item">
-                        <i class="fa-solid fa-thumbs-down"></i>
+                        <i class="fa-solid fa-thumbs-down" data-icon="fa-thumbs-down"></i>
                         <a href="#" data-toggle="commLike" data-cid="{$comment.cid}" data-checkss="{$comment.check_like}" data-like="-1">{$LANG->getModule('dislike')}</a>
-                        <span id="dislike{$comment.cid}">{$comment.dislikes}</span>
+                        <span id="count-comment{$comment.cid}-dislike">{$comment.dislikes}</span>
                     </li>
                     {if not empty($comment.attach)}
                     <li class="list-inline-item">

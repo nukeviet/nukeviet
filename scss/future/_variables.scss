@@ -143,6 +143,21 @@ $zindex-timeoutsess: 1200;
 $zindex-alert-backdrop: 9902;
 $zindex-alert: 9903;
 
+$zindex-levels: (
+  n1: -1,
+  0: 0,
+  1: 1,
+  2: 2,
+  3: 3,
+  4: 4,
+  5: 5,
+  6: 6,
+  7: 7,
+  8: 8,
+  9: 9,
+  10: 10
+);
+
 // Buttons + Form
 $input-btn-focus-box-shadow: 0 0;
 $form-check-input-border-color: $gray-500;
