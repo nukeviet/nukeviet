@@ -674,14 +674,20 @@ function nv_disable_site()
  *
  * @param string $module Biến $module_name
  * @param "js"|"css"|"both" $type
- * @return void
+ * @param bool $direct Nếu là true thì đưa vào luôn $my_head và $my_footer.
+ * @return array
  */
-function addition_module_assets(string $module, string $type): void
+function addition_module_assets(string $module, string $type, $direct = true): array
 {
     global $global_config, $site_mods, $my_head, $my_footer, $module_name;
 
-    if (!isset($site_mods[$module]) or $module_name == $module) {
-        return;
+    $return = [
+        'css' => '',
+        'js' => ''
+    ];
+
+    if (!isset($site_mods[$module]) or ($module_name == $module and $direct)) {
+        return $return;
     }
 
     // Thứ tự load các giao diện của mỗi file
@@ -727,7 +733,9 @@ function addition_module_assets(string $module, string $type): void
             // Lặp các giao diện
             foreach ($dir_allowed as $dir) {
                 if (theme_file_exists('/' . $dir . '/js/' . $fileLoad)) {
-                    $my_footer .= '<script src="' . NV_STATIC_URL . 'themes/' . $dir . '/js/' . $fileLoad . '"></script>' . PHP_EOL;
+                    $src = NV_STATIC_URL . 'themes/' . $dir . '/js/' . $fileLoad;
+                    $direct && $my_footer .= '<script src="' . $src . '"></script>' . PHP_EOL;
+                    $return['js'] = $src;
                     break 2;
                 }
                 if (theme_file_exists('/' . $dir . '/js/' . $fileIgnore)) {
@@ -765,13 +773,17 @@ function addition_module_assets(string $module, string $type): void
                 // Lặp các tệp css
                 foreach ($files as $file) {
                     if (theme_file_exists('/' . $dir . '/css/' . $file)) {
-                        $my_head .= '<link rel="stylesheet" type="text/css" href="' . NV_STATIC_URL . 'themes/' . $dir . '/css/' . $file . '" />' . PHP_EOL;
+                        $href = NV_STATIC_URL . 'themes/' . $dir . '/css/' . $file;
+                        $direct && $my_head .= '<link rel="stylesheet" type="text/css" href="' . $href . '">' . PHP_EOL;
+                        $return['css'] .= $href;
                         break 3;
                     }
                 }
             }
         }
     }
+
+    return $return;
 }
 
 /**
@@ -949,4 +961,34 @@ function nv_get_blocks(string $theme, bool $cache = true)
     }
 
     return $positions;
+}
+
+/**
+ * Lấy thuộc tính định nghĩa captcha cho form HTML
+ *
+ * @param string $code_ipt Name của ô input captcha hình truyền thống
+ * @param string $captcha Để trống thì lấy $module_captcha
+ * @return string Có dạng data-recaptcha3="1" data-recaptcha2="1" data-turnstile="1" data-captcha="secode"
+ */
+function nv_captcha_form_attrs(string $code_ipt, string $captcha = ''): string
+{
+    global $module_captcha, $global_config;
+    empty($captcha) && $captcha = $module_captcha;
+
+    $attrs = [];
+    if ($captcha == 'recaptcha' and $global_config['recaptcha_ver'] == 3) {
+        // Nếu dùng reCaptcha v3
+        $attrs[] = ' data-recaptcha3="1"';
+    } elseif ($captcha == 'recaptcha' and $global_config['recaptcha_ver'] == 2) {
+        // Nếu dùng reCaptcha v2
+        $attrs[] = ' data-recaptcha2="1"';
+    } elseif ($captcha == 'turnstile') {
+        // Nếu dùng Cloudflare Turnstile
+        $attrs[] = ' data-turnstile="1"';
+    } elseif ($captcha == 'captcha') {
+        // Nếu dùng Captcha hình truyền thống
+        $attrs[] = ' data-captcha="' . $code_ipt . '"';
+    }
+
+    return implode(' ', $attrs);
 }
