@@ -536,7 +536,13 @@ $(function() {
     });
 
     // XSSsanitize
-    $('body').on('click', '[type=submit]:not([name],.ck-button-save)', function(e) {
+    $('body').on('click', '[type=submit]:not([name])', function(e) {
+        // Check if button is inside CKEditor UI
+        // Selector matches elements with class starting with 'ck-' or containing ' ck-'
+        // This covers all CKEditor 5 UI elements (dialogs, dropdowns, toolbars, etc.)
+        if ($(this).closest('[class^="ck-"], [class*=" ck-"]').length) {
+            return;
+        }
         var form = $(this).parents('form');
         if (XSSsanitize && !$('[name=submit]', form).length) {
             // Khi không xử lý XSS thì trình submit mặc định sẽ thực hiện

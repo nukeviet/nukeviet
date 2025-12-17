@@ -43,47 +43,49 @@ function commFeedback(cid, post_name) {
 
 function commLike(cid, checkss, like) {
     $.post(nv_base_siteurl + 'index.php?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=comment&' + nv_fc_variable + '=like&nocache=' + new Date().getTime(), 'cid=' + cid + '&like=' + like + '&checkss=' + checkss, function(res) {
-        var rs = res.split('_');
-        if (rs[0] == 'OK') {
-            $("#" + rs[1]).text(rs[2]);
-        } else if (rs[0] == 'ERR') {
-            alert(rs[1]);
+        if (res.status != 'success') {
+            return nukeviet.toast(res.mess, 'error');
         }
+        $("#" + res.mode + res.cid).text(res.count);
     });
 }
 
 function commentDelete(cid, checkss) {
-    if (confirm(nv_is_del_confirm[0])) {
-        $.post(nv_base_siteurl + 'index.php?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=comment&' + nv_fc_variable + '=delete&nocache=' + new Date().getTime(), 'cid=' + cid + '&checkss=' + checkss, function(res) {
-            var rs = res.split('_');
-            if (rs[0] == 'OK') {
-                var data = $('#idcomment').data();
-                $("#showcomment").load(nv_base_siteurl + 'index.php?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=comment&module=' + data.module + '&area=' + data.area + '&id=' + data.id + '&allowed=' + data.allowed + '&checkss=' + data.checkss + '&comment_load=1&nocache=' + new Date().getTime());
-            } else if (rs[0] == 'ERR') {
-                alert(rs[1]);
-            }
-        });
+    if (!confirm(nv_is_del_confirm[0])) {
+        return;
     }
+    $.post(nv_base_siteurl + 'index.php?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=comment&' + nv_fc_variable + '=delete&nocache=' + new Date().getTime(), 'cid=' + cid + '&checkss=' + checkss, function(res) {
+        if (res.status != 'success') {
+            return nukeviet.toast(res.mess, 'error');
+        }
+        const data = $('#idcomment').data();
+        $("#showcomment").load(nv_base_siteurl + 'index.php?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=comment&module=' + data.module + '&area=' + data.area + '&id=' + data.id + '&allowed=' + data.allowed + '&checkss=' + data.checkss + '&comment_load=1&nocache=' + new Date().getTime());
+    });
 }
 
+/**
+ * Hàm xử lý sau khi post form comment
+ *
+ * @param {Object} res Json status+mess+input
+ */
 function nv_commment_reload(res) {
-    var rs = res.split('_');
-    var data = $('#idcomment').data();
-    if (rs[0] == 'OK') {
-        $("#showcomment").load(nv_base_siteurl + 'index.php?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=comment&module=' + data.module + '&area=' + data.area + '&id=' + data.id + '&allowed=' + data.allowed + '&status_comment=' + rs[1] + '&checkss=' + data.checkss + '&comment_load=1&nocache=' + new Date().getTime(), function() {
+    const data = $('#idcomment').data();
+    if (res.status === 'OK') {
+        $("#showcomment").load(nv_base_siteurl + 'index.php?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=comment&module=' + data.module + '&area=' + data.area + '&id=' + data.id + '&allowed=' + data.allowed + '&status_comment=' + res.mess + '&checkss=' + data.checkss + '&comment_load=1&nocache=' + new Date().getTime(), function() {
             $("#formcomment form .reset").trigger("click")
         });
         $('html, body').animate({
             scrollTop: $("#idcomment").offset().top
         }, 800);
+        return;
+    }
+
+    formChangeCaptcha($("#formcomment form"));
+    if (res.status == 'ERR') {
+        alert(res.mess);
+        res.input && $("#formcomment form [name=" + res.input + "]:visible").length && $("#formcomment form [name=" + res.input + "]").focus()
     } else {
-        formChangeCaptcha($("#formcomment form"));
-        if (rs[0] == 'ERR') {
-            alert(rs[2]);
-            "" != rs[1] && $("#formcomment form [name=" + rs[1] + "]:visible").length && $("#formcomment form [name=" + rs[1] + "]").focus()
-        } else {
-            alert(nv_content_failed);
-        }
+        alert(nv_content_failed);
     }
 }
 
