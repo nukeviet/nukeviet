@@ -44,6 +44,7 @@ $(function() {
     if ($('#banner_plan').length) {
         $('#banner_plan').on('change', function () {
             const typeimage = $('option:selected', this).data('image');
+            const uploadtype = $('option:selected', this).data('uploadtype');
             const $uploadBox = $('#banner_uploadimage');
             const $imageInput = $('#image');
             const $feedback = $imageInput.next('.invalid-feedback');
@@ -51,7 +52,7 @@ $(function() {
 
             if (typeimage) {
                 $uploadBox.removeClass('d-none');
-
+                $('#banner_uploadtype').text(' (' + uploadtype + ')').show();
                 $imageInput
                     .prop('required', true)
                     .attr('data-valid', 'file')
