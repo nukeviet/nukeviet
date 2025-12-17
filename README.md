@@ -112,6 +112,19 @@ The groups below require the website to be installed:
 - `off-mail` disable email sending.
 - `all` test everything.
 
+**CSS Compilation**
+
+- To compile CSS in admin run `npm run watch-admin`
+- To compile core CSS run `npm run watch-core`
+
+If your CSS compilation has changes even though you haven't modified any scss files, check the library versions with the `npm list` command and ensure the following libraries match:
+
+```
+├── postcss-cli@11.0.1
+├── postcss@8.5.6
+├── rtlcss@4.3.0
+```
+
 **Next step:**
 
 Please see the [technical manual](https://wiki.nukeviet.vn/technical_manual5) for more information.

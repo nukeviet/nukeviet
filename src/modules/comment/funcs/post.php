@@ -13,19 +13,23 @@ if (!defined('NV_IS_MOD_COMMENT')) {
     exit('Stop!!!');
 }
 
-function _loadContents($contents)
+/**
+ * Trả về json kết quả post form
+ *
+ * @param array $json
+ * @return void
+ */
+function _loadContents(array $json): void
 {
     include NV_ROOTDIR . '/includes/header.php';
-    echo '<script' . (defined('NV_SCRIPT_NONCE') ? ' nonce="' . NV_SCRIPT_NONCE . '"' : '') . '>parent.nv_commment_reload("' . str_replace('"', '\"', $contents) . '");</script>';
+    echo '<script' . (defined('NV_SCRIPT_NONCE') ? ' nonce="' . NV_SCRIPT_NONCE . '"' : '') . '>parent.nv_commment_reload(' . json_encode($json) . ');</script>';
     include NV_ROOTDIR . '/includes/footer.php';
-    exit(0);
 }
 
-$contents = 'ERR__' . $nv_Lang->getModule('comment_unsuccess');
 $module = $nv_Request->get_string('module', 'post');
 
 if (empty($module) or !isset($module_config[$module]['activecomm']) or !isset($site_mods[$module])) {
-    _loadContents('ERR__' . $nv_Lang->getModule('comment_unsuccess'));
+    _loadContents(['status' => 'ERR', 'mess' => $nv_Lang->getModule('comment_unsuccess')]);
 }
 
 // Kiểm tra module có được Sử dụng chức năng bình luận
@@ -34,7 +38,7 @@ $id = $nv_Request->get_title('id', 'post', '');
 $allowed_comm = $nv_Request->get_title('allowed', 'post');
 $checkss = $nv_Request->get_title('checkss', 'post');
 if (empty($id) or $module_config[$module]['activecomm'] != 1 or $checkss != md5($module . '-' . $area . '-' . $id . '-' . $allowed_comm . '-' . NV_CACHE_PREFIX)) {
-    _loadContents('ERR__' . $nv_Lang->getModule('comment_unsuccess'));
+    _loadContents(['status' => 'ERR', 'mess' => $nv_Lang->getModule('comment_unsuccess')]);
 }
 
 // Kiểm tra quyền đăng bình luận
@@ -44,7 +48,7 @@ if ($allowed == '-1') {
     $allowed = $allowed_comm;
 }
 if (!nv_user_in_groups($allowed)) {
-    _loadContents('ERR__' . $nv_Lang->getModule('comment_unsuccess'));
+    _loadContents(['status' => 'ERR', 'mess' => $nv_Lang->getModule('comment_unsuccess')]);
 }
 
 // kiểm tra captcha
@@ -89,7 +93,7 @@ if ($show_captcha and $captcha_type == 'recaptcha') {
 
 // Kiểm tra tính hợp lệ của captcha nhập vào, nếu không hợp lệ => thông báo lỗi
 if (isset($code) and !nv_capcha_txt($code, $captcha_type)) {
-    _loadContents('ERR_code_' . $nv_Lang->getGlobal('securitycodeincorrect'));
+    _loadContents(['status' => 'ERR', 'mess' => $nv_Lang->getGlobal('securitycodeincorrect')]);
 }
 
 // Xác định và kiểm tra userid, name, email
@@ -103,14 +107,22 @@ if (defined('NV_IS_USER')) {
     $email = $nv_Request->get_title('email', 'post', '');
 
     if (empty($name)) {
-        _loadContents('ERR_name_' . $nv_Lang->getModule('comment_name_error'));
+        _loadContents([
+            'status' => 'ERR',
+            'mess' => $nv_Lang->getModule('comment_name_error'),
+            'input' => 'name'
+        ]);
     }
 
     $check_valid_email = nv_check_valid_email($email, true);
     $email = $check_valid_email[1];
 
     if ($check_valid_email[0] != '') {
-        _loadContents('ERR_email_' . $check_valid_email[0]);
+        _loadContents([
+            'status' => 'ERR',
+            'mess' => $check_valid_email[0],
+            'input' => 'email'
+        ]);
     }
 }
 
@@ -122,7 +134,7 @@ if (!empty($module_config[$module]['alloweditorcomm'])) {
     $content = nv_nl2br($content);
 }
 if (empty($content)) {
-    _loadContents('ERR_content_' . $nv_Lang->getModule('comment_content_error'));
+    _loadContents(['status' => 'ERR', 'mess' => $nv_Lang->getModule('comment_content_error')]);
 }
 
 $status = $module_config[$module]['auto_postcomm'];
@@ -140,16 +152,24 @@ if (defined('NV_IS_ADMIN')) {
 if (!($timeout == 0 or NV_CURRENTTIME - $timeout > $difftimeout)) {
     $timeout = nv_convertfromSec($difftimeout - NV_CURRENTTIME + $timeout);
     $timeoutmsg = $nv_Lang->getModule('comment_timeout', $timeout);
-    _loadContents('ERR__' . $timeoutmsg);
+    _loadContents(['status' => 'ERR', 'mess' => $timeoutmsg]);
 }
 
 $data_permission_confirm = !empty($global_config['data_warning']) ? (int) $nv_Request->get_bool('data_permission_confirm', 'post', false) : -1;
 $antispam_confirm = !empty($global_config['antispam_warning']) ? (int) $nv_Request->get_bool('antispam_confirm', 'post', false) : -1;
 if ($data_permission_confirm === 0) {
-    _loadContents('ERR__' . $nv_Lang->getGlobal('data_warning_error'));
+    _loadContents([
+        'status' => 'ERR',
+        'mess' => $nv_Lang->getGlobal('data_warning_error'),
+        'input' => 'data_permission_confirm'
+    ]);
 }
 if ($antispam_confirm === 0) {
-    _loadContents('ERR__' . $nv_Lang->getGlobal('antispam_warning_error'));
+    _loadContents([
+        'status' => 'ERR',
+        'mess' => $nv_Lang->getGlobal('antispam_warning_error'),
+        'input' => 'antispam_confirm'
+    ]);
 }
 
 $pid = $nv_Request->get_int('pid', 'post', 0);
@@ -175,7 +195,11 @@ if (!empty($module_config[$module]['allowattachcomm']) and isset($_FILES['fileat
     @unlink($_FILES['fileattach']['tmp_name']);
 
     if (!empty($upload_info['error'])) {
-        _loadContents('ERR__' . $upload_info['error']);
+        _loadContents([
+            'status' => 'ERR',
+            'mess' => $upload_info['error'],
+            'input' => 'fileattach'
+        ]);
     }
 
     mt_srand(microtime(true) * 1000000);
@@ -198,7 +222,7 @@ if (!empty($module_config[$module]['allowattachcomm']) and isset($_FILES['fileat
 }
 
 try {
-    $_sql = 'INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . ' (module, area, id, pid, content, attach, post_time, userid, post_name, post_email, post_ip, status) VALUES 
+    $_sql = 'INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . ' (module, area, id, pid, content, attach, post_time, userid, post_name, post_email, post_ip, status) VALUES
             (:module, :area, :id, ' . $pid . ', :content, :attach, ' . NV_CURRENTTIME . ', ' . $userid . ', :post_name, :post_email, :post_ip, ' . $status . ')';
     $data_insert = [];
     $data_insert['module'] = $module;
@@ -236,8 +260,8 @@ try {
         } else {
             $comment_success = $nv_Lang->getModule('comment_success');
         }
-        _loadContents('OK_' . nv_base64_encode($comment_success));
+        _loadContents(['status' => 'OK', 'mess' => nv_base64_encode($comment_success)]);
     }
-} catch (PDOException $e) {
-    _loadContents('ERR__' . $e->getMessage());
+} catch (Throwable $e) {
+    _loadContents(['status' => 'ERR', 'mess' => $e->getMessage()]);
 }
