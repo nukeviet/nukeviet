@@ -42,35 +42,23 @@
         </div>
     </div>
 
-    {if not empty($MCONFIG.feedback_phone) and not empty($MCONFIG.feedback_address)}
+    {if !empty($MCONFIG.feedback_phone) or !empty($MCONFIG.feedback_address)}
     <div class="row g-3 mb-3">
-        <div class="col-md-6">
+        {if !empty($MCONFIG.feedback_phone)}
+        <div class="{if !empty($MCONFIG.feedback_address)}col-md-6{else}col-12{/if}">
             <label class="form-label" for="fphone">{$LANG->getModule('phone')}{if $CONTENT.sender_phone_required} <span class="text-danger">*</span>{/if}</label>
             <input class="form-control" type="tel" name="fphone" id="fphone" value="{$CONTENT.fphone|default:''}" data-valid="phone" data-error-type="feedback" data-allowed-empty="{if $CONTENT.sender_phone_required}0{else}1{/if}" minlength="3" maxlength="20" placeholder="{$LANG->getModule('phone')}">
             <div class="invalid-feedback">{$LANG->getModule('phone_error')}</div>
         </div>
-        <div class="col-md-6">
+        {/if}
+        {if !empty($MCONFIG.feedback_address)}
+        <div class="{if !empty($MCONFIG.feedback_phone)}col-md-6{else}col-12{/if}">
             <label class="form-label" for="faddress">{$LANG->getModule('address')}{if $CONTENT.sender_address_required} <span class="text-danger">*</span>{/if}</label>
-            <input class="form-control" type="text" name="faddress" id="faddress" value="{$CONTENT.faddress|default:''}" data-valid data-error-type="feedback" data-allowed-empty="{if $CONTENT.sender_address_required}0{else}1{/if}" minlength="3" maxlength="60" placeholder="{$LANG->getModule('address')}">
+            <input class="form-control" type="text" name="faddress" id="faddress" value="{$CONTENT.faddress|default:''}" data-valid data-error-type="feedback" data-allowed-empty="{if $CONTENT.sender_address_required}0{else}1{/if}" minlength="3" maxlength="100" placeholder="{$LANG->getModule('address')}">
             <div class="invalid-feedback">{$LANG->getModule('address_error')} {$LANG->getModule('minlength3')}</div>
         </div>
+        {/if}
     </div>
-    {else}
-        {if not empty($MCONFIG.feedback_phone)}
-        <div class="mb-3">
-            <label class="form-label" for="fphone">{$LANG->getModule('phone')}{if $CONTENT.sender_phone_required} <span class="text-danger">*</span>{/if}</label>
-            <input class="form-control" type="tel" name="fphone" id="fphone" value="{$CONTENT.fphone|default:''}" data-valid="phone" data-error-type="feedback" data-allowed-empty="{if $CONTENT.sender_phone_required}0{else}1{/if}" minlength="3" maxlength="20" placeholder="{$LANG->getModule('phone')}">
-            <div class="invalid-feedback">{$LANG->getModule('phone_error')}</div>
-        </div>
-        {/if}
-
-        {if not empty($MCONFIG.feedback_address)}
-        <div class="mb-3">
-            <label class="form-label">{$LANG->getModule('address')}{if $CONTENT.sender_address_required} <span class="text-danger">*</span>{/if}</label>
-            <input class="form-control" type="text" name="faddress" value="{$CONTENT.faddress|default:''}" data-valid data-error-type="feedback" data-allowed-empty="{if $CONTENT.sender_address_required}0{else}1{/if}" minlength="3" maxlength="250" placeholder="{$LANG->getModule('address')}">
-            <div class="invalid-feedback">{$LANG->getModule('address_error')}</div>
-        </div>
-        {/if}
     {/if}
 
     <div class="mb-3">
