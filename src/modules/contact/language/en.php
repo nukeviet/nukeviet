@@ -201,5 +201,4 @@ $lang_module['requestform_help'] = 'If you need support, please leave your conta
 $lang_module['requestform_ftitle'] = 'Request a callback';
 $lang_module['select_image'] = 'Select image';
 $lang_module['help_show'] = 'Show/hide help';
-$lang_module['data_warning_confirm_required'] = 'Please confirm data processing consent';
-$lang_module['antispam_confirm_required'] = 'Please confirm the antispam notice';
+

@@ -1,5 +1,5 @@
 <div class="mb-3 d-flex align-items-center gap-2">
-  <h1 class="mb-0"><strong>{$PAGE_TITLE}</strong></h1>
+    <h1 class="mb-0"><strong>{$PAGE_TITLE}</strong></h1>
 </div>
 
 {if not empty($DATA.bodytext)}

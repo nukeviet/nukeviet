@@ -201,5 +201,4 @@ $lang_module['requestform_help'] = 'Si vous avez besoin d\'aide, veuillez laisse
 $lang_module['requestform_ftitle'] = 'Demande de contact';
 $lang_module['select_image'] = 'Sélectionner une image';
 $lang_module['help_show'] = 'Afficher/masquer l\'aide';
-$lang_module['data_warning_confirm_required'] = 'Veuillez confirmer le traitement des données';
-$lang_module['antispam_confirm_required'] = "Veuillez confirmer l'avertissement anti-spam";
+

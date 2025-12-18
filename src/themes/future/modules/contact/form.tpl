@@ -80,14 +80,14 @@
         <div class="form-check">
             <input class="form-check-input" type="checkbox" name="data_permission_confirm" value="1" id="data_permission_confirm" data-valid="checkbox" data-min="1" data-max="1" data-error-type="feedback">
             <label class="form-check-label" for="data_permission_confirm"><small>{$GCONFIG.data_warning_content|default:$LANG->getGlobal('data_warning_content')}</small></label>
-            <div class="invalid-feedback">{$LANG->getModule('data_warning_confirm_required')}</div>
+            <div class="invalid-feedback">{$LANG->getGlobal('data_warning_error')}</div>
         </div>
         {/if}
         {if !empty($GCONFIG.antispam_warning)}
         <div class="form-check">
             <input class="form-check-input" type="checkbox" name="antispam_confirm" value="1" id="antispam_confirm" data-valid="checkbox" data-min="1" data-max="1" data-error-type="feedback">
             <label class="form-check-label" for="antispam_confirm"><small>{$GCONFIG.antispam_warning_content|default:$LANG->getGlobal('antispam_warning_content')}</small></label>
-            <div class="invalid-feedback">{$LANG->getModule('antispam_confirm_required')}</div>
+            <div class="invalid-feedback">{$LANG->getGlobal('antispam_warning_error')}</div>
         </div>
         {/if}
     </div>

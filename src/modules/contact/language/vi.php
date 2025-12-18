@@ -201,5 +201,4 @@ $lang_module['requestform_help'] = 'Nếu bạn cần hỗ trợ hãy để lạ
 $lang_module['requestform_ftitle'] = 'Yêu cầu liên hệ lại';
 $lang_module['select_image'] = 'Chọn hình ảnh';
 $lang_module['help_show'] = 'Bật/tắt hướng dẫn';
-$lang_module['data_warning_confirm_required'] = 'Vui lòng xác nhận xử lý dữ liệu cá nhân';
-$lang_module['antispam_confirm_required'] = 'Vui lòng xác nhận cảnh báo chống spam';
+
