@@ -12,14 +12,14 @@
         <div class="card">
             <div class="card-header d-flex align-items-center">
                 {if !$IS_SPECIFIC}
-                <h2 class="card-title flex-grow-1 mb-0 fs-5">
-                    <a href="{$DEP.url}" class="text-decoration-none text-body">{$DEP.full_name}</a>
+                <h2 class="card-title flex-grow-1 mb-0 fs-5 text-truncate">
+                    <a href="{$DEP.url}" class="text-decoration-none text-body" title="{$DEP.full_name}">{$DEP.full_name}</a>
                 </h2>
                 <a href="{$DEP.url}" class="text-primary ms-2" aria-label="{$LANG->getModule('details')}">
                     <i class="fa-solid fa-arrow-right fa-fw" aria-hidden="true"></i>
                 </a>
                 {else}
-                <h2 class="card-title flex-grow-1 mb-0 fs-5 fw-medium">{$LANG->getModule('contact_info')}</h2>
+                <h2 class="card-title flex-grow-1 mb-0 fs-5 fw-medium text-truncate" title="{$LANG->getModule('contact_info')}">{$LANG->getModule('contact_info')}</h2>
                 {/if}
             </div>
             {if $DEP.image ne ''}
