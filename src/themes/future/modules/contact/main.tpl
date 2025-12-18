@@ -140,7 +140,7 @@
     </div>
 
     <div class="col-md-7">
-        <div class="card bg-body-tertiary mb-3">
+        <div class="card mb-3">
             <div class="card-header">
                 <h2 class="card-title mb-0 fs-5 fw-medium">{$LANG->getModule('feedback_form')|default:$LANG->getGlobal('feedback')}</h2>
             </div>
