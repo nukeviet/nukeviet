@@ -201,4 +201,3 @@ $lang_module['requestform_help'] = 'Nếu bạn cần hỗ trợ hãy để lạ
 $lang_module['requestform_ftitle'] = 'Yêu cầu liên hệ lại';
 $lang_module['select_image'] = 'Chọn hình ảnh';
 $lang_module['help_show'] = 'Bật/tắt hướng dẫn';
-

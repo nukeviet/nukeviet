@@ -31,7 +31,7 @@
     <div class="row g-3 mb-3">
         <div class="col-md-6">
             <label class="form-label" for="fname">{$LANG->getModule('fullname')} <span class="text-danger">(*)</span></label>
-            {if !$smarty.const.NV_IS_USER}<small class="ms-2"><span class="pointer" title="{$LANG->getGlobal('loginsubmit')}" data-toggle="loginForm"><i class="fa-solid fa-right-to-bracket"></i></span></small>{/if}
+            {if !$smarty.const.NV_IS_USER}<small class="ms-2"><a href="#" role="button" title="{$LANG->getGlobal('loginsubmit')}" data-toggle="loginForm" aria-label="{$LANG->getGlobal('loginsubmit')}"><i class="fa-solid fa-right-to-bracket"></i></a></small>{/if}
             <input class="form-control" {if $smarty.const.NV_IS_USER}disabled{/if} type="text" name="fname" id="fname" value="{$CONTENT.fname|default:''}" data-valid data-error-type="feedback" minlength="3" maxlength="100" placeholder="{$LANG->getModule('fullname')}">
             <div class="invalid-feedback">{$LANG->getModule('error_fullname')} {$LANG->getModule('minlength3')}</div>
         </div>
