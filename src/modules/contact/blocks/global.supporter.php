@@ -113,137 +113,164 @@ if (!nv_function_exists('nv_contact_supporter')) {
             return '';
         }
 
-        $block_theme = get_tpl_dir([$global_config['module_theme'], $global_config['site_theme']], 'default', '/modules/' . $site_mods[$module]['module_file'] . '/block.supporter.tpl');
-        $xtpl = new XTemplate('block.supporter.tpl', NV_ROOTDIR . '/themes/' . $block_theme . '/modules/' . $site_mods[$module]['module_file']);
-        $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_global);
-        $xtpl->assign('TEMPLATE', $block_theme);
-        $xtpl->assign('MODULE', $module);
+        [$block_theme, $dir] = get_block_tpl_dir('block.supporter.tpl', $module, true);
+        if (empty($dir)) {
+            return '';
+        }
+
+        $tpl = new \NukeViet\Template\NVSmarty();
+        $tpl->setTemplateDir($dir);
+        $tpl->assign('LANG', $nv_Lang);
+        $tpl->assign('TEMPLATE', $block_theme);
+
+        $deps = [];
         $active = false;
         foreach ($supporters as $depid => $sps) {
-            if ($depid == 0) {
-                $dep = [
-                    'id' => 0,
-                    'sel' => !$active ? ' selected="selected"' : '',
-                    'full_name' => $nv_Lang->getGlobal('general_support')
-                ];
-            } else {
-                $dep = $departments[$depid];
-                $dep['sel'] = !$active ? ' selected="selected"' : '';
-            }
-            $xtpl->assign('DEP', $dep);
-            $xtpl->parse('main.deps_tab.option');
+            $deps[] = [
+                'id' => $depid,
+                'full_name' => $depid == 0 ? $nv_Lang->getGlobal('general_support') : $departments[$depid]['full_name'],
+                'active' => !$active
+            ];
+            $active = true;
+        }
+        $tpl->assign('DEPARTMENTS', $deps);
 
-            if (!$active) {
-                $xtpl->parse('main.deps_content.active');
-            }
-
+        $SUPPORTERS = [];
+        $iconClass = function ($icon) {
+            return strncmp($icon, 'fa-', 3) === 0 ? 'fa-solid ' . $icon : $icon;
+        };
+        foreach ($supporters as $depid => $sps) {
+            $SUPPORTERS[$depid] = [];
             $sp_count = count($sps) - 1;
             $i = 0;
             foreach ($sps as $supporter) {
-                $xtpl->assign('SUPPORTER', $supporter);
-
                 $items = [];
+                $callHref = '';
                 foreach ($supporter['phone'] as $num) {
                     if (count($num) == 2) {
                         $items[] = '<a href="tel:' . $num[1] . '">' . $num[0] . '</a>';
+                        if ($callHref === '') {
+                            $callHref = 'tel:' . $num[1];
+                        }
                     } else {
                         $items[] = $num[0];
+                        if ($callHref === '') {
+                            $digits = preg_replace('/[^0-9+]/', '', $num[0]);
+                            if (!empty($digits)) {
+                                $callHref = 'tel:' . $digits;
+                            }
+                        }
                     }
                 }
-                $xtpl->assign('CD', [
-                    'icon' => 'fa-phone',
-                    'name' => $nv_Lang->getGlobal('phonenumber'),
-                    'value' => implode(', ', $items)
-                ]);
-                $xtpl->parse('main.deps_content.supporter.cd');
+                if (!empty($items)) {
+                    $SUPPORTERS[$depid][] = [
+                        'full_name' => $supporter['full_name'],
+                        'image' => $supporter['image'],
+                        'items' => [
+                            [
+                                'icon' => 'fa-phone',
+                                'icon_class' => $iconClass('fa-phone'),
+                                'value' => implode(', ', $items)
+                            ]
+                        ],
+                        'has_separator' => false,
+                        'call_href' => $callHref,
+                        'has_call' => !empty($callHref),
+                        'email_href' => '',
+                        'has_email' => false
+                    ];
+                } else {
+                    $SUPPORTERS[$depid][] = [
+                        'full_name' => $supporter['full_name'],
+                        'image' => $supporter['image'],
+                        'items' => [],
+                        'has_separator' => false,
+                        'call_href' => $callHref,
+                        'has_call' => !empty($callHref),
+                        'email_href' => '',
+                        'has_email' => false
+                    ];
+                }
+
+                $idx = count($SUPPORTERS[$depid]) - 1;
 
                 if (!empty($supporter['email'])) {
-                    $xtpl->assign('CD', [
+                    $email = trim($supporter['email']);
+                    $SUPPORTERS[$depid][$idx]['items'][] = [
                         'icon' => 'fa-envelope',
-                        'name' => $nv_Lang->getGlobal('email'),
-                        'value' => '<a href="' . $supporter['email'] . '">' . $supporter['email'] . '</a>'
-                    ]);
-                    $xtpl->parse('main.deps_content.supporter.cd');
+                        'icon_class' => $iconClass('fa-envelope'),
+                        'value' => '<a href="mailto:' . $email . '">' . $email . '</a>'
+                    ];
+                    $SUPPORTERS[$depid][$idx]['email_href'] = 'mailto:' . $email;
+                    $SUPPORTERS[$depid][$idx]['has_email'] = true;
                 }
 
                 if (!empty($supporter['others'])) {
                     foreach ($supporter['others'] as $key => $value) {
                         if (!empty($value)) {
-                            if (strtolower($key) == 'skype') {
+                            $k = strtolower($key);
+                            if ($k == 'skype') {
                                 $items = array_map(function ($item) {
                                     $item = trim($item);
-
                                     return '<a href="skype:' . $item . '?call">' . $item . '</a>';
                                 }, explode(',', $value));
-                                $xtpl->assign('CD', [
+                                $SUPPORTERS[$depid][$idx]['items'][] = [
                                     'icon' => 'fa-skype',
-                                    'name' => 'Skype',
+                                    'icon_class' => $iconClass('fa-skype'),
                                     'value' => implode(', ', $items)
-                                ]);
-                            } elseif (strtolower($key) == 'viber') {
+                                ];
+                            } elseif ($k == 'viber') {
                                 $items = array_map(function ($item) {
                                     $item = trim($item);
-
                                     return '<a href="viber://pa?chatURI=' . $item . '">' . $item . '</a>';
                                 }, explode(',', $value));
-                                $xtpl->assign('CD', [
+                                $SUPPORTERS[$depid][$idx]['items'][] = [
                                     'icon' => 'icon-viber',
-                                    'name' => 'Viber',
+                                    'icon_class' => $iconClass('icon-viber'),
                                     'value' => implode(', ', $items)
-                                ]);
-                            } elseif (strtolower($key) == 'whatsapp') {
+                                ];
+                            } elseif ($k == 'whatsapp') {
                                 $items = array_map(function ($item) {
                                     $item = trim($item);
-
                                     return '<a href="https://wa.me/' . $item . '">' . $item . '</a>';
                                 }, explode(',', $value));
-                                $xtpl->assign('CD', [
+                                $SUPPORTERS[$depid][$idx]['items'][] = [
                                     'icon' => 'fa-whatsapp',
-                                    'name' => 'WhatsApp',
+                                    'icon_class' => $iconClass('fa-whatsapp'),
                                     'value' => implode(', ', $items)
-                                ]);
-                            } elseif (strtolower($key) == 'zalo') {
+                                ];
+                            } elseif ($k == 'zalo') {
                                 $items = array_map(function ($item) {
                                     $item = trim($item);
-
                                     return '<a href="https://zalo.me/' . $item . '">' . $item . '</a>';
                                 }, explode(',', $value));
-                                $xtpl->assign('CD', [
+                                $SUPPORTERS[$depid][$idx]['items'][] = [
                                     'icon' => 'icon-zalo',
-                                    'name' => 'Zalo',
+                                    'icon_class' => $iconClass('icon-zalo'),
                                     'value' => implode(', ', $items)
-                                ]);
+                                ];
                             } else {
-                                $xtpl->assign('CD', [
+                                $SUPPORTERS[$depid][$idx]['items'][] = [
                                     'icon' => '',
-                                    'name' => ucfirst($key),
+                                    'icon_class' => '',
                                     'value' => nv_is_url($value) ? '<a href="' . $value . '">' . $value . '</a>' : $value
-                                ]);
+                                ];
                             }
-                            $xtpl->parse('main.deps_content.supporter.cd');
                         }
                     }
                 }
 
                 if ($i < $sp_count) {
-                    $xtpl->parse('main.deps_content.supporter.hr');
+                    $SUPPORTERS[$depid][$idx]['has_separator'] = true;
                 }
 
-                $xtpl->parse('main.deps_content.supporter');
                 ++$i;
             }
-
-            $xtpl->parse('main.deps_content');
-            $active = true;
         }
 
-        $dep_count = count($supporters);
-        if ($dep_count > 1) {
-            $xtpl->parse('main.deps_tab');
-        }
-        $xtpl->parse('main');
+        $tpl->assign('SUPPORTERS', $SUPPORTERS);
 
-        return $xtpl->text('main');
+        return $tpl->fetch('block.supporter.tpl');
     }
 }
 
