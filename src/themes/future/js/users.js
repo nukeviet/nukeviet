@@ -10,6 +10,7 @@
 'use strict';
 
 (function () {
+    // User js có thể bị loại nhiều lần do cơ chế global nên xử lý để chạy code trong này chỉ một lần
     if (window.__userJsLoaded) {
         return;
     }
@@ -92,6 +93,185 @@
             if (!nv_safemode) {
                 nv_open_browse($(this).data('url'), 'ChangeAvatar', 650, 430, 'resizable=no,scrollbars=1,toolbar=no,location=no,status=no');
             }
+        });
+    });
+
+    window.userLoginRun = () => {
+        // Xử lý passkey trên toàn bộ các form đăng nhập
+        $('form[data-toggle="userLogin"]').each(function() {
+            const form = $(this);
+            if (form.data('passkey-initialized') || !nukeviet.WebAuthnSupported) {
+                return;
+            }
+            form.data('passkey-initialized', true);
+
+            const ctn = $('[data-area="passkey-ctn"]', form);
+            const link = $('[data-toggle="passkey-link"]', ctn);
+            const btn = $('[data-toggle="passkey-btn"]', ctn);
+            const err = $('[data-area="passkey-error"]', ctn);
+            const icon = $('i', btn);
+
+            ctn.removeClass('d-none');
+
+            if (nv_getCookie(nv_cookie_prefix + '_pkey') == 1) {
+                btn.removeClass('d-none');
+            } else {
+                link.removeClass('d-none');
+            }
+
+            link.on('click', function(e) {
+                e.preventDefault();
+                link.addClass('d-none');
+                btn.removeClass('d-none').trigger('click');
+            });
+
+            // Đăng nhập bằng passkey
+            btn.on('click', function(e) {
+                e.preventDefault();
+                if (icon.is('.fa-spinner')) {
+                    return;
+                }
+                err.text('').addClass('d-none');
+                icon.removeClass(icon.data('icon')).addClass('fa-spinner fa-pulse');
+                $.ajax({
+                    url: form.attr('action'),
+                    type: 'post',
+                    data: {
+                        login_with_passkey: 1,
+                        checkss: $('[name="_csrf"]', form).val(),
+                        create_challenge: 1,
+                    },
+                    dataType: 'json',
+                    success: function(response) {
+                        if (response.status != 'ok') {
+                            icon.removeClass('fa-spinner fa-pulse').addClass(icon.data('icon'));
+                            err.text(response.mess || nukeviet.i18n.WebAuthnErrors.unknow).removeClass('d-none');
+                            return;
+                        }
+
+                        let requestOptions = JSON.parse(response.requestOptions);
+                        requestOptions.challenge = base64UrlToArrayBuffer(requestOptions.challenge);
+
+                        try {
+                            navigator.credentials.get({
+                                publicKey: requestOptions
+                            }).then(assertion => {
+                                const data = {
+                                    login_with_passkey: 1,
+                                    checkss: $('[name="_csrf"]', form).val(),
+                                    auth_assertion: 1,
+                                    nv_redirect: $('[name="nv_redirect"]', form).val(),
+                                    assertion: JSON.stringify({
+                                        id: assertion.id,
+                                        type: assertion.type,
+                                        rawId: arrayBufferToBase64Url(assertion.rawId),
+                                        response: {
+                                            clientDataJSON: arrayBufferToBase64Url(assertion.response.clientDataJSON),
+                                            authenticatorData: arrayBufferToBase64Url(assertion.response.authenticatorData),
+                                            signature: arrayBufferToBase64Url(assertion.response.signature),
+                                            userHandle: arrayBufferToBase64Url(assertion.response.userHandle),
+                                        }
+                                    }),
+                                };
+                                $.ajax({
+                                    url: form.attr('action'),
+                                    type: 'POST',
+                                    data: data,
+                                    dataType: 'json',
+                                    success: function (response) {
+                                        if (response.status != 'ok') {
+                                            icon.removeClass('fa-spinner fa-pulse').addClass(icon.data('icon'));
+                                            err.text(response.mess).removeClass('d-none');
+                                            return;
+                                        }
+                                        nv_setCookie(nv_cookie_prefix + '_pkey', 1, 3650, true, 'Strict');
+                                        $('[data-area="info"]', form).html(`
+                                            ${response.mess}
+                                            <div class="spinner-border text-success spinner-border-sm" role="status"></div>
+                                        `).addClass('alert alert-success');
+                                        $('[data-area="form"]', form).hide();
+                                        $('[data-area="other-form"]', form).hide();
+                                        setTimeout(() => {
+                                            if ("undefined" != typeof response.redirect && "" != response.redirect) {
+                                                window.location.href = response.redirect;
+                                            } else {
+                                                location.reload();
+                                            }
+                                        }, 3000);
+                                    },
+                                    error: function (xhr, status, error) {
+                                        console.log(xhr, status, error);
+                                        icon.removeClass('fa-spinner fa-pulse').addClass(icon.data('icon'));
+                                        err.text(nukeviet.i18n.WebAuthnErrors.get[error.name] || nukeviet.i18n.WebAuthnErrors.unknow).removeClass('d-none');
+                                    }
+                                });
+                            }).catch(error => {
+                                icon.removeClass('fa-spinner fa-pulse').addClass(icon.data('icon'));
+                                err.text(nukeviet.i18n.WebAuthnErrors.get[error.name] || nukeviet.i18n.WebAuthnErrors.unknow).removeClass('d-none');
+                            });
+                        } catch (error) {
+                            icon.removeClass('fa-spinner fa-pulse').addClass(icon.data('icon'));
+                            err.text(nukeviet.i18n.WebAuthnErrors.get[error.name] || nukeviet.i18n.WebAuthnErrors.unknow).removeClass('d-none');
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        console.error(xhr, status, error);
+                        icon.removeClass('fa-spinner fa-pulse').addClass(icon.data('icon'));
+                        err.text(nukeviet.i18n.WebAuthnErrors.unknow).removeClass('d-none');
+                    }
+                });
+            });
+        });
+    };
+
+    $(document).ready(function() {
+        // Xử lý các form đăng nhập
+        window.userLoginRun();
+
+        // Xử lý submit form đăng nhập
+        $('body').on('submit', '[data-toggle=userLogin]', function(e) {
+            e.preventDefault();
+            const form = $(this);
+            const data = form.serialize();
+            const selTor = 'input,button,select,textarea';
+            $(selTor, form).prop('disabled', true);
+
+            $.ajax({
+                url: form.attr('action'),
+                type: 'POST',
+                data: data,
+                dataType: 'json',
+                success: function (response) {
+                    formChangeCaptcha(form);
+                    if (response.status == 'error') {
+                        $(selTor, form).not('[type=submit]').prop('disabled', false);
+                        $('[nv_resetInputValid]', form).each(function() {
+                            nv_resetInputValid($(this));
+                        });
+                    }
+                    if (response.status == 'ok') {
+
+                    }
+                    if (response.status == '2steprequire') {
+
+                    }
+                    if (response.status == 'remove2step') {
+
+                    }
+                    if (response.status == '2step') {
+
+                    }
+                    if (response.status == 'activation') {
+
+                    }
+                    nukeviet.toast('Unknown error!', 'error');
+                },
+                error: function (xhr, status, error) {
+                    console.log(xhr, status, error);
+                    form.find('input,button,select,textarea').prop('disabled', false);
+                    nukeviet.toast(error || status, 'error');
+                }
+            });
         });
     });
 })();

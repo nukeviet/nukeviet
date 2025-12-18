@@ -18,8 +18,8 @@
         <h1 class="h2 text-center mb-3">{$LANG->getModule('login')}</h1>
         {include file='login_form.tpl'}
         {if not empty($NAVS)}
-        <div class="d-flex justify-content-center mt-4">
-            <ul class="list-inline mb-0" data-area="other-form">
+        <div class="d-flex justify-content-center mt-4" data-area="other-form">
+            <ul class="list-inline mb-0">
                 {foreach from=$NAVS item=nav}
                 <li class="list-inline-item">
                     <a href="{$nav.href}">

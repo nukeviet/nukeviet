@@ -46,7 +46,7 @@
                 </div>
             </div>
             <div class="mb-3 d-flex gap-2">
-                <button type="button" class="btn btn-outline-secondary" data-bs-toggle="tooltip" data-bs-title="{$LANG->getGlobal('reset')}" title="{$LANG->getGlobal('reset')}" data-toggle="nv-reset-form">
+                <button type="button" class="btn btn-outline-secondary" data-bs-toggle="tooltip" data-bs-title="{$LANG->getGlobal('reset')}" data-bs-trigger="hover" title="{$LANG->getGlobal('reset')}" data-toggle="nv-reset-form">
                     <i class="fa-solid fa-rotate-left"></i><span class="visually-hidden-focusable">{$LANG->getGlobal('reset')}</span>
                 </button>
                 <button type="submit" class="btn btn-primary flex-fill">
@@ -54,7 +54,7 @@
                 </button>
             </div>
             <div class="text-center mb-3 d-none" data-area="passkey-ctn">
-                <button class="btn btn-outline-secondary w-100 d-none" type="button" data-toggle="passkey-btn">
+                <button class="btn btn-outline-primary w-100 d-none" type="button" data-toggle="passkey-btn">
                     <i class="fa-solid fa-key" data-icon="fa-key"></i> {$LANG->getGlobal('passkey_login')}
                 </button>
                 <a class="d-none" href="#" data-toggle="passkey-link">{$LANG->getGlobal('passkey_login')}</a>
