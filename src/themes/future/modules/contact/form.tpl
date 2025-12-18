@@ -54,7 +54,7 @@
         {if !empty($MCONFIG.feedback_address)}
         <div class="{if !empty($MCONFIG.feedback_phone)}col-md-6{else}col-12{/if}">
             <label class="form-label" for="faddress">{$LANG->getModule('address')}{if $CONTENT.sender_address_required} <span class="text-danger">*</span>{/if}</label>
-            <input class="form-control" type="text" name="faddress" id="faddress" value="{$CONTENT.faddress|default:''}" data-valid data-error-type="feedback" data-allowed-empty="{if $CONTENT.sender_address_required}0{else}1{/if}" minlength="3" maxlength="100" placeholder="{$LANG->getModule('address')}">
+            <input class="form-control" type="text" name="faddress" id="faddress" value="{$CONTENT.faddress|default:''}" data-valid data-error-type="feedback" data-allowed-empty="{if $CONTENT.sender_address_required}0{else}1{/if}" minlength="3" maxlength="250" placeholder="{$LANG->getModule('address')}">
             <div class="invalid-feedback">{$LANG->getModule('address_error')} {$LANG->getModule('minlength3')}</div>
         </div>
         {/if}
@@ -95,7 +95,6 @@
 
     <div class="mt-4">
         <input type="hidden" name="checkss" value="{$CHECKSS}">
-        <input type="hidden" name="request_form" value="{$REQUEST_FORM}">
         <div class="row g-2">
             <div class="col-6">
                 <button type="reset" class="btn btn-outline-secondary w-100"><i class="fa-solid fa-rotate-left me-2"></i>{$LANG->getModule('reset')}</button>

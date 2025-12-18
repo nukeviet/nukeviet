@@ -148,7 +148,6 @@ function contact_form_theme($array_content, $departments, $cats, $base_url, $che
     $tpl->setTemplateDir(get_module_tpl_dir('form.tpl'));
     $tpl->assign('LANG', $nv_Lang);
     $tpl->assign('MCONFIG', $module_config[$module_name]);
-    $tpl->assign('REQUEST_FORM', md5($module_name . '_request_form_' . NV_CHECK_SESSION));
     $tpl->assign('MODULE_CAPTCHA', $module_captcha);
     $tpl->assign('GCONFIG', $global_config);
     $tpl->assign('CAPTCHA_ATTRS', nv_captcha_form_attrs('fcode'));

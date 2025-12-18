@@ -162,7 +162,7 @@ if ($nv_Request->isset_request('checkss', 'post')) {
         ]);
     }
 
-    $feedback['sender_address'] = nv_substr($nv_Request->get_title('faddress', 'post', '', 1), 0, 100);
+    $feedback['sender_address'] = nv_substr($nv_Request->get_title('faddress', 'post', '', 1), 0, 250);
     if ($feedback['sender_address_required'] and empty($feedback['sender_address']) and !$is_reqform) {
         nv_jsonOutput([
             'status' => 'error',
