@@ -5,10 +5,10 @@
     <li class="nav-item"><a class="nav-link" href="{$MANAGEMENT.stats}">{$LANG->getModule('client_stats')}</a></li>
 </ul>
 {/if}
-<form id="frm" action="{$FORM_ACTION}" method="post" enctype="multipart/form-data" role="form" class="form-horizontal needs-validation" data-toggle="ajax-form" data-precheck="nv_precheck_form"{$CAPTCHA_ATTRS}>
+<form id="frm" action="{$FORM_ACTION}" method="post" enctype="multipart/form-data" role="form" data-toggle="ajax-form" data-precheck="nv_precheck_form"{$CAPTCHA_ATTRS}>
     <div class="mb-3 row">
-        <label for="banner_plan" class="col-md-3 col-form-label">{$LANG->getModule('plan_title')}:</label>
-        <div class="col-md-9 position-relative">
+        <label for="banner_plan" class="col-md-3 col-form-label text-sm-start">{$LANG->getModule('plan_title')} <span class="text-danger">(*)</span>:</label>
+        <div class="col-md-9">
             <select name="block" id="banner_plan" class="form-select" required>
                 {foreach from=$PLANS item=blockitem}
                 <option value="{$blockitem.id}" data-image="{$blockitem.typeimage}" data-uploadtype="{$blockitem.uploadtype}">{$blockitem.title}</option>
@@ -18,33 +18,34 @@
         </div>
     </div>
     <div class="mb-3 row">
-        <label for="title" class="col-md-3 col-form-label">{$LANG->getModule('addads_title')}<span class="text-danger">*</span>:</label>
+        <label for="title" class="col-md-3 col-form-label text-sm-start">{$LANG->getModule('addads_title')} <span class="text-danger">(*)</span>:</label>
         <div class="col-md-9 position-relative">
-            <input class="form-control" type="text" name="title" id="title" value="" minlength="3" maxlength="240" data-valid data-error-type="feedback" data-allowed-empty data-mess="{$LANG->getModule('title_empty')}" required />
+            <input class="form-control" type="text" name="title" id="title" value="" minlength="3" maxlength="240" data-valid data-error-type="feedback" required>
             <div class="invalid-feedback">{$LANG->getModule('title_empty')}</div>
         </div>
     </div>
     <div id="banner_uploadimage" class="d-none">
         <div class="mb-3 row">
-            <label for="image" class="col-md-3 col-form-label">{$LANG->getModule('addads_adsdata')}<span class="text-danger required-file-asterisk"> *</span>:</label>
+            <label for="image" class="col-md-3 col-form-label text-sm-start">{$LANG->getModule('addads_adsdata')} <span class="text-danger required-file-asterisk">(*)</span>:</label>
             <div class="col-md-9">
-                <input type="file" name="image" id="image" value="" class="form-control file" data-valid data-error-type="feedback" data-mess="{$LANG->getModule('file_upload_empty')}"/>
+                <input type="file" name="image" id="image" value="" class="form-control file" data-valid data-error-type="feedback">
                 <div class="invalid-feedback">{$LANG->getModule('file_upload_empty')}</div>
-                <div id="banner_uploadtype" class="form-text"></div>
+                <div id="banner_uploadtype" class="form-text">{$LANG->getModule('banner_uploadtype')}</div>
             </div>
         </div>
 
         <div class="mb-3 row">
-            <label for="description" class="col-md-3 col-form-label">{$LANG->getModule('addads_description')}:</label>
+            <label for="description" class="col-md-3 col-form-label text-sm-start">{$LANG->getModule('addads_description')}:</label>
             <div class="col-md-9">
-                <input type="text" name="description" id="description" value="" class="form-control" maxlength="240" />
+                <input type="text" name="description" id="description" value="" class="form-control" maxlength="240">
             </div>
         </div>
     </div>
     <div class="mb-3 row">
-        <label for="url" class="col-md-3 col-form-label">{$LANG->getModule('addads_url')}:</label>
+        <label for="url" class="col-md-3 col-form-label text-sm-start">{$LANG->getModule('addads_url')}<span class="text-danger required-url-asterisk">(*)</span>:</label>
         <div class="col-md-9 position-relative">
-            <input class="url form-control" type="text" name="url" id="url" value="" minlength="10" maxlength="240" data-mess="{$LANG->getModule('click_url_invalid')}"/>
+            <input class="url form-control" type="text" name="url" id="url" value="" minlength="10" maxlength="240">
+            <div class="invalid-feedback">{$LANG->getModule('click_url_invalid')}</div>
         </div>
     </div>
     <div class="mb-3 row">
