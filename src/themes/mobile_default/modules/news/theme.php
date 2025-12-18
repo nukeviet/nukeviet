@@ -915,7 +915,7 @@ function topic_theme($topic_array, $topic_other_array, $generate_page, $page_tit
         $xtpl->parse('main.topicdescription');
 
         if (!empty($topic_array)) {
-            $articles_heading = $nv_Lang->getModule('topic_articles_list');
+            $articles_heading = $nv_Lang->getModule('content_list');
         }
         $use_h2_for_topics = false;
     } else {

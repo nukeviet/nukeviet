@@ -186,7 +186,6 @@ $lang_module['author_unspecified_error'] = 'Đã xảy ra lỗi không xác đ�
 $lang_module['author_page'] = 'Trang tác giả';
 $lang_module['author_intro'] = 'Giới thiệu tác giả %s';
 $lang_module['author_articles_list'] = 'Danh sách bài viết của tác giả %s';
-$lang_module['topic_articles_list'] = 'Danh sách bài viết';
 $lang_module['edit_author_info'] = 'Sửa thông tin tác giả';
 $lang_module['article_not_found'] = 'Không tìm thấy bài viết';
 $lang_module['report_content_empty'] = 'Vui lòng xác định đoạn văn bản lỗi';

@@ -186,7 +186,6 @@ $lang_module['author_unspecified_error'] = 'An unspecified error has occurred. P
 $lang_module['author_page'] = 'Author page';
 $lang_module['author_intro'] = 'About author %s';
 $lang_module['author_articles_list'] = 'Articles by author %s';
-$lang_module['topic_articles_list'] = 'List of articles';
 $lang_module['edit_author_info'] = 'Edit author information';
 $lang_module['article_not_found'] = 'Article not found';
 $lang_module['report_content_empty'] = 'Please identify the error text';
