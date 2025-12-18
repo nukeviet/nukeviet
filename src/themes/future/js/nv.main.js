@@ -107,7 +107,7 @@ function _check_invalid(ipt, customMess, specialType) {
         return _make_check_invalid(ipt, valid, customMess);
     }
     // Check bắt buộc dạng nhập
-    if (!valid.allowedEmpty && (valid.type == 'email' || valid.type == 'text' || valid.type == 'password') && (
+    if (!valid.allowedEmpty && (valid.type == 'email' || valid.type == 'text' || valid.type == 'password' || valid.type == 'phone' || valid.type == 'tel') && (
         trim(ipt.val()) == valid.empty ||
         (valid.minLen >= 0 && trim(ipt.val()).length < valid.minLen) ||
         (valid.maxLen >= 0 && trim(ipt.val()).length > valid.maxLen)

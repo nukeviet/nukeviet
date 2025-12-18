@@ -1,9 +1,4 @@
-<form method="post" action="{$smarty.const.NV_BASE_SITEURL}index.php?{$smarty.const.NV_LANG_VARIABLE}={$smarty.const.NV_LANG_DATA}&amp;{$smarty.const.NV_NAME_VARIABLE}={$CONFIG.module}" data-toggle="ajax-form" data-precheck="nv_precheck_form" novalidate
-    {if $MODULE_CAPTCHA eq 'recaptcha' and $GCONFIG.recaptcha_ver eq 3} data-recaptcha3="1"
-    {elseif $MODULE_CAPTCHA eq 'recaptcha' and $GCONFIG.recaptcha_ver eq 2} data-recaptcha2="1"
-    {elseif $MODULE_CAPTCHA eq 'turnstile'} data-turnstile="1"
-    {elseif $MODULE_CAPTCHA eq 'captcha'} data-captcha="fcode"{/if}
->
+<form method="post" action="{$smarty.const.NV_BASE_SITEURL}index.php?{$smarty.const.NV_LANG_VARIABLE}={$smarty.const.NV_LANG_DATA}&amp;{$smarty.const.NV_NAME_VARIABLE}={$CONFIG.module}" data-toggle="ajax-form" data-precheck="nv_precheck_form" novalidate{$CAPTCHA_ATTRS}>
     <div class="card bg-body-tertiary">
         <div class="card-body">
             <div class="fs-5 fw-medium mb-2">{$LANG->getModule('requestform_title')}</div>

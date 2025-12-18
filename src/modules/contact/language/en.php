@@ -35,6 +35,7 @@ $lang_module['error_email'] = 'Please enter your email';
 $lang_module['error_captcha'] = 'Error: Security code incorrect';
 $lang_module['error_title'] = 'Please enter the subject';
 $lang_module['error_content'] = 'Please enter the message';
+$lang_module['minlength3'] = 'at least 3 characters';
 $lang_module['sendcontactok'] = 'Thank you! We will reply as soon as possible.';
 $lang_module['hello'] = 'Hi';
 $lang_module['sendinfo'] = 'This email sent by contact utility on the website';
