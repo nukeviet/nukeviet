@@ -19,13 +19,24 @@
  */
 function _make_check_invalid(ipt, data, message) {
     const form = ipt.closest('form');
+    const iptGroup = ipt.parent();
+    const hasInputGroup = iptGroup.length && iptGroup.is('.input-group');
     let element = ipt.next();
     if (element.is('label')) {
         // Dạng form-check
         element = element.next();
+    } else if (hasInputGroup) {
+        element = iptGroup.next();
     }
+
+    // Thẻ sẽ tạo báo lỗi sau đó
+    let eleBeforeInvalid = ipt.next().is('label') ? ipt.next() : ipt;
+    if (hasInputGroup) {
+        eleBeforeInvalid = iptGroup;
+    }
+
     if (!element.length || (!element.is('.invalid-feedback') && !element.is('.invalid-tooltip'))) {
-        element = $(`<div class="invalid-${data.errType}"></div>`).insertAfter(ipt.next().is('label') ? ipt.next() : ipt);
+        element = $(`<div class="invalid-${data.errType}"></div>`).insertAfter(eleBeforeInvalid);
     }
     element.text(message);
     if (data.type === 'editor') {
@@ -33,6 +44,7 @@ function _make_check_invalid(ipt, data, message) {
     } else {
         $(_get_input_name(ipt), form).addClass('is-invalid');
     }
+    hasInputGroup && iptGroup.addClass('is-invalid');
 
     return element;
 }
@@ -95,7 +107,7 @@ function _check_invalid(ipt, customMess, specialType) {
         return _make_check_invalid(ipt, valid, customMess);
     }
     // Check bắt buộc dạng nhập
-    if (!valid.allowedEmpty && (valid.type == 'email' || valid.type == 'text') && (
+    if (!valid.allowedEmpty && (valid.type == 'email' || valid.type == 'text' || valid.type == 'password' || valid.type == 'phone' || valid.type == 'tel') && (
         trim(ipt.val()) == valid.empty ||
         (valid.minLen >= 0 && trim(ipt.val()).length < valid.minLen) ||
         (valid.maxLen >= 0 && trim(ipt.val()).length > valid.maxLen)
@@ -196,6 +208,33 @@ function _focus_error(form, ipt) {
     }
     return false;
 }
+
+/**
+ * @param { JQuery<HTMLElement> } ipt
+ * @returns
+ */
+var nv_resetInputValid = (ipt) => {
+    const form = ipt.closest('form');
+    if (form.length < 1 || (!form.is('[data-toggle="ajax-form"]') && !form.is('[data-precheck="nv_precheck_form"]'))) {
+        return;
+    }
+    const type = (ipt.attr('type') || 'text').toLowerCase();
+
+    if (type === 'radio' || type === 'checkbox') {
+        $(_get_input_name(ipt), form).removeClass('is-invalid is-valid');
+        return;
+    } else if (ipt.is('select')) {
+        ipt.removeClass('is-invalid is-valid');
+        if (ipt.parent().is('.input-group')) {
+            ipt.parent().removeClass('is-invalid is-valid');
+        }
+    } else {
+        let pr = ipt.parent();
+        let prAlso = ipt.parent().is('.input-group');
+        ipt.removeClass('is-invalid is-valid');
+        if (prAlso) pr.removeClass('is-invalid is-valid');
+    }
+};
 
 /**
  * Hàm kiểm tra validate form trước khi submit mặc định
@@ -553,38 +592,11 @@ $(function() {
         $.ajax(ajOptions);
     });
 
-    /**
-     * @param { JQuery<HTMLElement> } ipt
-     * @returns
-     */
-    const _resetInputValid = (ipt) => {
-        const form = ipt.closest('form');
-        if (form.length < 1 || (!form.is('[data-toggle="ajax-form"]') && !form.is('[data-precheck="nv_precheck_form"]'))) {
-            return;
-        }
-        const type = (ipt.attr('type') || 'text').toLowerCase();
-
-        if (type === 'radio' || type === 'checkbox') {
-            $(_get_input_name(ipt), form).removeClass('is-invalid is-valid');
-            return;
-        } else if (ipt.is('select')) {
-            ipt.removeClass('is-invalid is-valid');
-            if (ipt.parent().is('.input-group')) {
-                ipt.parent().removeClass('is-invalid is-valid');
-            }
-        } else {
-            let pr = ipt.parent();
-            let prAlso = ipt.parent().is('.input-group');
-            ipt.removeClass('is-invalid is-valid');
-            if (prAlso) pr.removeClass('is-invalid is-valid');
-        }
-    };
-
     $(document).on('change keyup', '[data-valid]', function(e) {
         if (e.type === "keyup" && e.which === 13) {
             return;
         }
-        _resetInputValid($(this));
+        nv_resetInputValid($(this));
     });
 
     // Nút reset form
@@ -606,7 +618,7 @@ $(function() {
 
         // Reset trạng thái validate
         $('[data-valid]', form).each(function() {
-            _resetInputValid($(this));
+            nv_resetInputValid($(this));
         });
 
         // Hàm reset riêng nếu có

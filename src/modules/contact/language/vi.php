@@ -35,6 +35,7 @@ $lang_module['error_email'] = 'Vui lòng nhập email khả dụng';
 $lang_module['error_captcha'] = 'Vui lòng nhập đúng mã bảo mật mà bạn thấy trong hình';
 $lang_module['error_title'] = 'Vui lòng nhập tiêu đề';
 $lang_module['error_content'] = 'Vui lòng nhập nội dung';
+$lang_module['minlength3'] = 'tối thiểu 3 ký tự';
 $lang_module['sendcontactok'] = 'Cảm ơn bạn đã quan tâm! Chúng tôi sẽ trả lời thư của bạn trong thời gian sớm nhất.';
 $lang_module['hello'] = 'Xin chào';
 $lang_module['sendinfo'] = 'Thư này được gửi thông qua tiện ích Liên hệ tại website';

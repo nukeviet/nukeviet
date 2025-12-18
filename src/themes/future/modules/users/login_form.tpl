@@ -6,7 +6,7 @@
 <link rel="stylesheet" type="text/css" href="{$CSS_JS.css}?t={$GCONFIG.timestamp}">
 
 <form action="{$smarty.const.NV_BASE_SITEURL}index.php?{$smarty.const.NV_LANG_VARIABLE}={$smarty.const.NV_LANG_DATA}&amp;{$smarty.const.NV_NAME_VARIABLE}={$MODULE_NAME}&amp;{$smarty.const.NV_OP_VARIABLE}=login" method="post" class="fw-300"
-    data-toggle="userLogin" data-precheck="login_form_precheck"
+    data-toggle="userLogin" data-precheck="nv_precheck_form"
     autocomplete="off" novalidate {$CAPTCHA_ATTRS}
     data-note-webview1="{$LANG->getModule('note_webview1')}"
     data-note-webview2="{$LANG->getModule('note_webview2')}"
@@ -28,8 +28,8 @@
                 <div class="position-relative">
                     <input type="text" autocomplete="username" class="form-control ps-with-fw-icon" id="nv_login" name="nv_login" maxlength="100" value=""
                         placeholder="{$LANG->getGlobal('username_email')}"
-                        {literal}data-pattern="/^(.){1,}$/"{/literal}
-                        data-mess="{$LANG->getGlobal('username_empty')}"
+                        data-error-mess="{$LANG->getGlobal('username_empty')}"
+                        data-valid data-error-type="tooltip"
                     >
                     <i class="z-10 text-center fa-fw fa-solid fa-user position-absolute top-50 start-0 ms-2 translate-middle-y"></i>
                 </div>
@@ -39,19 +39,26 @@
                 <div class="position-relative">
                     <input type="password" autocomplete="current-password" class="form-control ps-with-fw-icon" id="nv_password" name="nv_password" maxlength="100" value=""
                         placeholder="{$LANG->getGlobal('password')}"
-                        {literal}data-pattern="/^(.){3,}$/"{/literal}
-                        data-mess="{$LANG->getGlobal('password_empty')}"
+                        data-error-mess="{$LANG->getGlobal('password_empty')}"
+                        data-valid data-error-type="tooltip"
                     >
                     <i class="z-10 text-center fa-fw fa-solid fa-lock position-absolute top-50 start-0 ms-2 translate-middle-y"></i>
                 </div>
             </div>
             <div class="mb-3 d-flex gap-2">
-                <button type="button" class="btn btn-outline-secondary" data-bs-toggle="tooltip" data-bs-title="{$LANG->getGlobal('reset')}" title="{$LANG->getGlobal('reset')}">
+                <button type="button" class="btn btn-outline-secondary" data-bs-toggle="tooltip" data-bs-title="{$LANG->getGlobal('reset')}" data-bs-trigger="hover" title="{$LANG->getGlobal('reset')}" data-toggle="nv-reset-form">
                     <i class="fa-solid fa-rotate-left"></i><span class="visually-hidden-focusable">{$LANG->getGlobal('reset')}</span>
                 </button>
                 <button type="submit" class="btn btn-primary flex-fill">
                     {$LANG->getGlobal('loginsubmit')} <i class="fa-solid fa-arrow-right-long align-baseline-xs ms-1"></i>
                 </button>
+            </div>
+            <div class="text-center mb-3 d-none" data-area="passkey-ctn">
+                <button class="btn btn-outline-primary w-100 d-none" type="button" data-toggle="passkey-btn">
+                    <i class="fa-solid fa-key" data-icon="fa-key"></i> {$LANG->getGlobal('passkey_login')}
+                </button>
+                <a class="d-none" href="#" data-toggle="passkey-link">{$LANG->getGlobal('passkey_login')}</a>
+                <div class="text-danger mt-1 d-none" data-area="passkey-error"></div>
             </div>
         </div>
         <div data-area="step2">
@@ -62,29 +69,6 @@
 
 {*
     <div class="form-detail">
-        <div class="loginstep1">
-            <div class="form-group">
-                <div class="input-group">
-                    <span class="input-group-addon"><em class="fa fa-user fa-lg"></em></span>
-                    <input type="text" class="required form-control" placeholder="{GLANG.username_email}" value="" name="nv_login" maxlength="100" data-pattern="/^(.){1,}$/" data-toggle="validErrorHidden" data-event="keypress" data-mess="{GLANG.username_empty}">
-                </div>
-            </div>
-            <div class="form-group">
-                <div class="input-group">
-                    <span class="input-group-addon"><em class="fa fa-key fa-lg fa-fix"></em></span>
-                    <input type="password" autocomplete="off" class="required form-control" placeholder="{GLANG.password}" value="" name="nv_password" maxlength="100" data-pattern="/^(.){3,}$/" data-toggle="validErrorHidden" data-event="keypress" data-mess="{GLANG.password_empty}">
-                </div>
-            </div>
-            <div class="text-center margin-bottom-lg">
-                <input type="button" value="{GLANG.reset}" class="btn btn-default" data-toggle="validReset" />
-                <button class="bsubmit btn btn-primary" type="submit">{GLANG.loginsubmit}</button>
-            </div>
-            <div class="text-center margin-bottom-lg hidden" data-toggle="passkey-ctn">
-                <button class="btn btn-default btn-block hidden" type="button" data-toggle="passkey-btn"><i class="fa fa-key" data-icon="fa-key" aria-hidden="true"></i> {GLANG.passkey_login}</button>
-                <a class="hidden" href="#" data-toggle="passkey-link">{GLANG.passkey_login}</a>
-                <div class="text-danger margin-top-sm hidden" data-toggle="passkey-error"></div>
-            </div>
-        </div>
         <div class="loginstep2 hidden">
             <div class="loginstep2-item loginstep2-app hidden">
                 <div class="form-group">
