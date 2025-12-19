@@ -13,4 +13,138 @@
   vertical-align: -0.125em;
 }
 
+@keyframes pulse {
+  0% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.5;
+    transform: scale(1.3);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+.block-supporter .nav-pills .nav-link {
+  color: #b6bbbf;
+  background: transparent;
+  transition: all 0.2s;
+  font-size: 0.85rem;
+}
+.block-supporter .nav-pills .nav-link:hover {
+  background-color: #f4f5f5;
+  color: #4e5a63;
+}
+.block-supporter .nav-pills .nav-link.active {
+  font-weight: 600;
+  background-color: #0d6efd;
+  color: #fff;
+}
+.block-supporter .nav-pills .nav-link.active .dot-active {
+  display: block;
+  color: #fff;
+  animation: pulse 1.5s ease-in-out infinite;
+}
+.block-supporter .nav-pills .nav-link .dot-active {
+  display: none;
+  font-size: 6px;
+}
+.block-supporter .supporter-card {
+  transition: transform 0.2s;
+}
+.block-supporter .supporter-card:hover {
+  transform: translateY(-2px);
+}
+.block-supporter .status-dot-sm {
+  animation: pulse 1.5s ease-in-out infinite;
+}
+.block-supporter .section-title {
+  letter-spacing: 0.5px;
+  font-size: 0.75rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.block-supporter .section-marker {
+  width: 6px;
+  height: 1rem;
+  border-radius: 9999px;
+  background-color: #0d6efd;
+  display: inline-block;
+}
+.block-supporter .dep-icon {
+  width: 16px;
+}
+.block-supporter .status-dot-sm {
+  font-size: 8px;
+  line-height: 1;
+  display: inline-block;
+  vertical-align: middle;
+}
+.block-supporter .avatar-img {
+  width: 56px;
+  height: 56px;
+  -o-object-fit: cover;
+  object-fit: cover;
+}
+.block-supporter .status-indicator {
+  width: 14px;
+  height: 14px;
+}
+.block-supporter .role-text {
+  font-size: 0.7rem;
+}
+.block-supporter .supporter-name {
+  font-size: 0.95rem;
+  line-height: 1.25;
+}
+.block-supporter .action-label {
+  font-size: 0.7rem;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  opacity: 0.9;
+}
+.block-supporter .action-value {
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+.block-supporter .btn-light .action-label {
+  color: #b6bbbf;
+}
+.block-supporter .btn-light .action-value {
+  color: #4e5a63;
+}
+.block-supporter .social-btn.zalo {
+  background-color: #f3f8fc;
+}
+.block-supporter .social-btn.zalo .social-icon {
+  font-family: sans-serif;
+}
+.block-supporter .social-btn.zalo .social-icon, .block-supporter .social-btn.zalo .social-text {
+  color: #1477cc;
+}
+.block-supporter .social-btn.whatsapp {
+  background-color: #f6f9f6;
+}
+.block-supporter .social-btn.whatsapp .social-icon, .block-supporter .social-btn.whatsapp .social-text {
+  color: #508250;
+}
+.block-supporter .social-btn.viber {
+  background-color: #f9f5fb;
+}
+.block-supporter .social-btn.viber .social-icon, .block-supporter .social-btn.viber .social-text {
+  color: #8a3fa6;
+}
+.block-supporter .social-btn.skype {
+  background-color: #f7fafb;
+}
+.block-supporter .social-btn.skype .social-icon, .block-supporter .social-btn.skype .social-text {
+  color: #5a9ab2;
+}
+.block-supporter .social-text {
+  font-size: 0.6rem;
+}
+
 /*# sourceMappingURL=contact.d.css.map */

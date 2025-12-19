@@ -126,10 +126,19 @@ if (!nv_function_exists('nv_contact_supporter')) {
         $deps = [];
         $active = false;
         foreach ($supporters as $depid => $sps) {
+            $fullName = $depid == 0 ? $nv_Lang->getGlobal('general_support') : $departments[$depid]['full_name'];
+            $icon = 'fa-circle-info';
+            if (mb_stripos($fullName, 'Kỹ thuật') !== false) {
+                $icon = 'fa-screwdriver-wrench';
+            } elseif (mb_stripos($fullName, 'Chăm sóc') !== false) {
+                $icon = 'fa-comments';
+            }
+
             $deps[] = [
                 'id' => $depid,
-                'full_name' => $depid == 0 ? $nv_Lang->getGlobal('general_support') : $departments[$depid]['full_name'],
-                'active' => !$active
+                'full_name' => $fullName,
+                'active' => !$active,
+                'icon' => $icon
             ];
             $active = true;
         }
@@ -146,11 +155,15 @@ if (!nv_function_exists('nv_contact_supporter')) {
             foreach ($sps as $supporter) {
                 $items = [];
                 $callHref = '';
+                $phoneText = '';
                 foreach ($supporter['phone'] as $num) {
                     if (count($num) == 2) {
                         $items[] = '<a href="tel:' . $num[1] . '">' . $num[0] . '</a>';
                         if ($callHref === '') {
                             $callHref = 'tel:' . $num[1];
+                        }
+                        if ($phoneText === '') {
+                            $phoneText = $num[0];
                         }
                     } else {
                         $items[] = $num[0];
@@ -159,6 +172,9 @@ if (!nv_function_exists('nv_contact_supporter')) {
                             if (!empty($digits)) {
                                 $callHref = 'tel:' . $digits;
                             }
+                        }
+                        if ($phoneText === '') {
+                            $phoneText = $num[0];
                         }
                     }
                 }
@@ -176,6 +192,7 @@ if (!nv_function_exists('nv_contact_supporter')) {
                         'has_separator' => false,
                         'call_href' => $callHref,
                         'has_call' => !empty($callHref),
+                        'phone_text' => $phoneText,
                         'email_href' => '',
                         'has_email' => false
                     ];
@@ -187,12 +204,23 @@ if (!nv_function_exists('nv_contact_supporter')) {
                         'has_separator' => false,
                         'call_href' => $callHref,
                         'has_call' => !empty($callHref),
+                        'phone_text' => $phoneText,
                         'email_href' => '',
                         'has_email' => false
                     ];
                 }
 
                 $idx = count($SUPPORTERS[$depid]) - 1;
+
+                $others_processed = [];
+                if (!empty($supporter['others']) && is_array($supporter['others'])) {
+                    foreach ($supporter['others'] as $k => $v) {
+                        if ($v) {
+                            $others_processed[strtolower($k)] = $v;
+                        }
+                    }
+                }
+                $SUPPORTERS[$depid][$idx]['others'] = $others_processed;
 
                 if (!empty($supporter['email'])) {
                     $email = trim($supporter['email']);
@@ -202,7 +230,8 @@ if (!nv_function_exists('nv_contact_supporter')) {
                         'value' => '<a href="mailto:' . $email . '">' . $email . '</a>'
                     ];
                     $SUPPORTERS[$depid][$idx]['email_href'] = 'mailto:' . $email;
-                    $SUPPORTERS[$depid][$idx]['has_email'] = true;
+                     $SUPPORTERS[$depid][$idx]['email_text'] = $email;
+                     $SUPPORTERS[$depid][$idx]['has_email'] = true;
                 }
 
                 if (!empty($supporter['others'])) {
