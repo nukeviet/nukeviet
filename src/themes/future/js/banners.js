@@ -7,43 +7,33 @@
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
+'use strict';
+
 $(function() {
-    if ($('#banner_plan').length) {
-        $('#banner_plan').on('change', function () {
-            const typeimage = $('option:selected', this).data('image');
-            const $uploadBox = $('#banner_uploadimage');
-            const $imageInput = $('#image');
-            const $urlInput = $('#url');
-            const $asterisk = $('.required-file-asterisk');
-            const $asteriskUrl = $('.required-url-asterisk');
+    const $ctn = $('#frm');
+    if (!$ctn.length) return;
 
-            if (typeimage) {
-                $uploadBox.removeClass('d-none');
-                $imageInput
-                    .prop('required', true)
-                    .attr('data-valid', 'file');
-                $asterisk.removeClass('d-none');
+    $ctn.on('change', '#banner_plan', function() {
+        const isImage = !!$(this).find('option:selected').data('image');
 
-                $urlInput
-                    .prop('required', false)
-                    .removeAttr('data-valid')
-                    .removeClass('is-invalid is-valid');
-                $asteriskUrl.addClass('d-none');
-            } else {
-                $uploadBox.addClass('d-none');
-                $imageInput
-                    .prop('required', false)
-                    .removeAttr('data-valid')
-                    .removeClass('is-invalid is-valid');
-                $asterisk.addClass('d-none');
+        // Cache nhanh các phần tử dựa trên data-area
+        const $imgArea = $ctn.find('[data-area="banner-upload-box"], [data-area="required-file"]');
+        const $urlAst  = $ctn.find('[data-area="required-url"]');
+        const $imgInput = $ctn.find('[data-area="image-input"]');
+        const $urlInput = $ctn.find('[data-area="url-input"]');
 
-                $urlInput
-                    .prop('required', true)
-                    .attr('data-valid', 'text')
-                    .removeClass('is-invalid is-valid');
-                $asteriskUrl.removeClass('d-none');
-            }
-        });
-        $('#banner_plan').trigger('change');
-    }
+        // Xử lý hiển thị (Toggle class)
+        $imgArea.toggleClass('d-none', !isImage);
+        $urlAst.toggleClass('d-none', isImage);
+
+        // Xử lý Validation (Gộp logic dùng ternary operator)
+        $imgInput.prop('required', isImage).attr('data-valid', isImage ? 'file' : null);
+        $urlInput.prop('required', !isImage).attr('data-valid', !isImage ? 'text' : null);
+
+        // Xóa dấu vết validate cũ
+        $imgInput.add($urlInput).removeClass('is-invalid is-valid').filter(function() {
+            return !$(this).attr('data-valid');
+        }).removeAttr('data-valid');
+
+    }).find('#banner_plan').trigger('change');
 });
