@@ -11,7 +11,7 @@
         <div class="col-md-9">
             <select name="block" id="banner_plan" class="form-select" required>
                 {foreach from=$PLANS item=blockitem}
-                <option value="{$blockitem.id}" data-image="{$blockitem.typeimage}" data-uploadtype="{$blockitem.uploadtype}">{$blockitem.title}</option>
+                <option value="{$blockitem.id}" data-image="{$blockitem.typeimage}" data-uploadtype="{$blockitem.uploadtype}"{if $CURRENT_PLAN.id == $blockitem.id} selected{/if}>{$blockitem.title}</option>
                 {/foreach}
             </select>
             <div class="invalid-feedback">{$LANG->getModule('plan_wrong_selected')}</div>
@@ -24,11 +24,11 @@
             <div class="invalid-feedback">{$LANG->getModule('title_empty')}</div>
         </div>
     </div>
-    <div id="banner_uploadimage" data-area="banner-upload-box"{if empty($current_plan) or not $current_plan.typeimage} class="d-none"{/if}>
+    <div id="banner_uploadimage" data-area="banner-upload-box"{if empty($CURRENT_PLAN.typeimage)}class="d-none"{/if}>
         <div class="mb-3 row">
-            <label for="image" class="col-md-3 col-form-label">{$LANG->getModule('addads_adsdata')} <span class="text-danger" data-area="required-file">(*)</span>:</label>
+            <label for="image" class="col-md-3 col-form-label">{$LANG->getModule('addads_adsdata')}{if not empty($CURRENT_PLAN.typeimage)} <span class="text-danger" data-area="required-file">(*)</span>{/if}:</label>
             <div class="col-md-9">
-                <input type="file" name="image" id="image" value="" class="form-control file" data-valid data-error-type="feedback" data-area="image-input">
+                <input type="file" name="image" id="image" value="" class="form-control file" data-valid data-error-type="feedback" data-area="image-input"{if $CURRENT_PLAN.typeimage} required{/if}>
                 <div class="invalid-feedback">{$LANG->getModule('file_upload_empty')}</div>
                 <div id="banner_uploadtype" class="form-text">{$LANG->getModule('banner_uploadtype', {$smarty.const.NV_MAX_HEIGHT})}</div>
             </div>
@@ -42,9 +42,9 @@
         </div>
     </div>
     <div class="mb-3 row">
-        <label for="url" class="col-md-3 col-form-label">{$LANG->getModule('addads_url')}<span class="text-danger" data-area="required-url"> (*)</span>:</label>
+        <label for="url" class="col-md-3 col-form-label">{$LANG->getModule('addads_url')}{if not empty($CURRENT_PLAN.typeimage)}<span class="text-danger" data-area="required-url"> (*)</span>{/if}:</label>
         <div class="col-md-9 position-relative">
-            <input class="url form-control" type="text" name="url" id="url" value="" data-area="url-input" minlength="10" maxlength="240">
+            <input class="url form-control" type="text" name="url" id="url" value="" data-area="url-input" minlength="10" maxlength="240"{if not empty($CURRENT_PLAN.typeimage)} required{/if}>
             <div class="invalid-feedback">{$LANG->getModule('click_url_invalid')}</div>
         </div>
     </div>

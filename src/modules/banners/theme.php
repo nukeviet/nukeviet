@@ -57,6 +57,8 @@ function nv_banner_theme_addads($global_array_uplans, $page_url)
     $tpl->assign('FORM_ACTION', $page_url);
     $tpl->assign('CAPTCHA_ATTRS', nv_captcha_form_attrs('captcha'));
     $tpl->assign('PLANS', $plans);
+    $current_plan = !empty($plans) ? reset($plans) : null;
+    $tpl->assign('CURRENT_PLAN', $current_plan);
 
     return $tpl->fetch('addads.tpl');
 }

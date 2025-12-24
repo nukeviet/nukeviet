@@ -9,31 +9,27 @@
 
 'use strict';
 
-$(function() {
+$(function () {
     const $ctn = $('#frm');
     if (!$ctn.length) return;
 
-    $ctn.on('change', '#banner_plan', function() {
+    $ctn.on('change', '#banner_plan', function () {
         const isImage = !!$(this).find('option:selected').data('image');
 
-        // Cache nhanh các phần tử dựa trên data-area
-        const $imgArea = $ctn.find('[data-area="banner-upload-box"], [data-area="required-file"]');
-        const $urlAst  = $ctn.find('[data-area="required-url"]');
+        const $imgBox   = $ctn.find('[data-area="banner-upload-box"]');
+        const $fileAst  = $ctn.find('[data-area="required-file"]');
+        const $urlAst   = $ctn.find('[data-area="required-url"]');
         const $imgInput = $ctn.find('[data-area="image-input"]');
         const $urlInput = $ctn.find('[data-area="url-input"]');
 
-        // Xử lý hiển thị (Toggle class)
-        $imgArea.toggleClass('d-none', !isImage);
+        /* Hiển thị */
+        $imgBox.toggleClass('d-none', !isImage);
+        $fileAst.toggleClass('d-none', !isImage);
         $urlAst.toggleClass('d-none', isImage);
 
-        // Xử lý Validation (Gộp logic dùng ternary operator)
-        $imgInput.prop('required', isImage).attr('data-valid', isImage ? 'file' : null);
-        $urlInput.prop('required', !isImage).attr('data-valid', !isImage ? 'text' : null);
-
-        // Xóa dấu vết validate cũ
-        $imgInput.add($urlInput).removeClass('is-invalid is-valid').filter(function() {
-            return !$(this).attr('data-valid');
-        }).removeAttr('data-valid');
-
-    }).find('#banner_plan').trigger('change');
+        /* Validate */
+        $imgInput.prop('required', isImage).prop('disabled', !isImage).removeClass('is-valid is-invalid');
+        $urlInput.prop('required', !isImage).prop('disabled', isImage).removeClass('is-valid is-invalid');
+    });
+    $ctn.find('#banner_plan').trigger('change');
 });
