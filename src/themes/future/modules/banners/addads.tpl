@@ -7,7 +7,7 @@
 {/if}
 <form id="frm" action="{$FORM_ACTION}" method="post" enctype="multipart/form-data" role="form" data-toggle="ajax-form" data-precheck="nv_precheck_form"{$CAPTCHA_ATTRS}>
     <div class="mb-3 row">
-        <label for="banner_plan" class="col-md-3 col-form-label text-sm-start">{$LANG->getModule('plan_title')} <span class="text-danger">(*)</span>:</label>
+        <label for="banner_plan" class="col-md-3 col-form-label text-md-end">{$LANG->getModule('plan_title')} <span class="text-danger">(*)</span>:</label>
         <div class="col-md-9">
             <select name="block" id="banner_plan" class="form-select" required>
                 {foreach from=$PLANS item=blockitem}
@@ -18,33 +18,32 @@
         </div>
     </div>
     <div class="mb-3 row">
-        <label for="title" class="col-md-3 col-form-label">{$LANG->getModule('addads_title')} <span class="text-danger">(*)</span>:</label>
+        <label for="title" class="col-md-3 col-form-label text-md-end">{$LANG->getModule('addads_title')} <span class="text-danger">(*)</span>:</label>
         <div class="col-md-9 position-relative">
             <input class="form-control" type="text" name="title" id="title" value="" minlength="3" maxlength="240" data-valid data-error-type="feedback" required>
             <div class="invalid-feedback">{$LANG->getModule('title_empty')}</div>
         </div>
     </div>
-    <div id="banner_uploadimage" data-area="banner-upload-box"{if empty($CURRENT_PLAN.typeimage)}class="d-none"{/if}>
+    <div id="banner_uploadimage" data-area="banner-upload-box"{if !$CURRENT_PLAN.typeimage} class="d-none"{/if}>
         <div class="mb-3 row">
-            <label for="image" class="col-md-3 col-form-label">{$LANG->getModule('addads_adsdata')}{if not empty($CURRENT_PLAN.typeimage)} <span class="text-danger" data-area="required-file">(*)</span>{/if}:</label>
+            <label for="image" class="col-md-3 col-form-label text-md-end">{$LANG->getModule('addads_adsdata')}<span class="text-danger{if !$CURRENT_PLAN.typeimage} d-none{/if}" data-area="required-file"> (*)</span>:</label>
             <div class="col-md-9">
-                <input type="file" name="image" id="image" value="" class="form-control file" data-valid data-error-type="feedback" data-area="image-input"{if $CURRENT_PLAN.typeimage} required{/if}>
+                <input type="file" name="image" id="image" class="form-control file" data-area="image-input"{if !$CURRENT_PLAN.typeimage}required data-valid data-error-type="feedback"{/if}>
                 <div class="invalid-feedback">{$LANG->getModule('file_upload_empty')}</div>
                 <div id="banner_uploadtype" class="form-text">{$LANG->getModule('banner_uploadtype', {$smarty.const.NV_MAX_HEIGHT})}</div>
             </div>
         </div>
-
         <div class="mb-3 row">
-            <label for="description" class="col-md-3 col-form-label">{$LANG->getModule('addads_description')}:</label>
+            <label for="description" class="col-md-3 col-form-label text-md-end">{$LANG->getModule('addads_description')}:</label>
             <div class="col-md-9">
-                <input type="text" name="description" id="description" value="" class="form-control" maxlength="240">
+                <input type="text" name="description" id="description" class="form-control" maxlength="240">
             </div>
         </div>
     </div>
     <div class="mb-3 row">
-        <label for="url" class="col-md-3 col-form-label">{$LANG->getModule('addads_url')}{if not empty($CURRENT_PLAN.typeimage)}<span class="text-danger" data-area="required-url"> (*)</span>{/if}:</label>
+        <label for="url" class="col-md-3 col-form-label text-md-end">{$LANG->getModule('addads_url')}<span class="text-danger {if $CURRENT_PLAN.typeimage} d-none{/if}" data-area="required-url"> (*)</span>:</label>
         <div class="col-md-9 position-relative">
-            <input class="url form-control" type="text" name="url" id="url" value="" data-area="url-input" minlength="10" maxlength="240"{if not empty($CURRENT_PLAN.typeimage)} required{/if}>
+            <input class="url form-control" type="text" name="url" id="url" value="" data-area="url-input" minlength="10" maxlength="240"{if $CURRENT_PLAN.typeimage} required data-valid{/if}>
             <div class="invalid-feedback">{$LANG->getModule('click_url_invalid')}</div>
         </div>
     </div>

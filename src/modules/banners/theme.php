@@ -18,7 +18,7 @@ if (!defined('NV_SYSTEM')) {
  * @param array $contents
  * @return string
  */
-function nv_banner_theme_main($contents)
+function nv_banner_theme_main(array $contents): string
 {
     global $nv_Lang, $manament, $language_array;
 
@@ -38,14 +38,14 @@ function nv_banner_theme_main($contents)
  * @param string $page_url
  * @return string
  */
-function nv_banner_theme_addads($global_array_uplans, $page_url)
+function nv_banner_theme_addads(array $global_array_uplans, string $page_url): string
 {
     global $nv_Lang, $lang_array, $manament;
 
     $plans = [];
     foreach ($global_array_uplans as $row) {
         $row['title'] .= ' (' . (empty($row['blang']) ? $nv_Lang->getModule('addads_block_lang_all') : $lang_array[$row['blang']]) . ')';
-        $row['typeimage'] = $row['require_image'] ? 'true' : 'false';
+        $row['typeimage'] = $row['require_image'] ? 1 : 0;
         $row['uploadtype'] = str_replace(',', ', ', $row['uploadtype']);
         $plans[] = $row;
     }

@@ -10,26 +10,40 @@
 'use strict';
 
 $(function () {
-    const $ctn = $('#frm');
-    if (!$ctn.length) return;
+    const ctn = $('#frm');
 
-    $ctn.on('change', '#banner_plan', function () {
-        const isImage = !!$(this).find('option:selected').data('image');
+    const planSelect = ctn.find('#banner_plan');
+    const imgBox     = ctn.find('[data-area="banner-upload-box"]');
+    const fileAst    = ctn.find('[data-area="required-file"]');
+    const urlAst     = ctn.find('[data-area="required-url"]');
+    const imgInput   = ctn.find('[data-area="image-input"]');
+    const urlInput   = ctn.find('[data-area="url-input"]');
 
-        const $imgBox   = $ctn.find('[data-area="banner-upload-box"]');
-        const $fileAst  = $ctn.find('[data-area="required-file"]');
-        const $urlAst   = $ctn.find('[data-area="required-url"]');
-        const $imgInput = $ctn.find('[data-area="image-input"]');
-        const $urlInput = $ctn.find('[data-area="url-input"]');
+    // --- Khởi tạo giao diện theo plan hiện tại ---
+    let isImage = !!planSelect.find(':selected').data('image');
 
-        /* Hiển thị */
-        $imgBox.toggleClass('d-none', !isImage);
-        $fileAst.toggleClass('d-none', !isImage);
-        $urlAst.toggleClass('d-none', isImage);
+    if (isImage) {
+        imgInput.attr({ required: true, 'data-valid': '' });
+        urlInput.removeAttr('required data-valid');
+    } else {
+        urlInput.attr({ required: true, 'data-valid': '' });
+        imgInput.removeAttr('required data-valid').val('');
+    }
 
-        /* Validate */
-        $imgInput.prop('required', isImage).prop('disabled', !isImage).removeClass('is-valid is-invalid');
-        $urlInput.prop('required', !isImage).prop('disabled', isImage).removeClass('is-valid is-invalid');
+    // --- Cập nhật giao diện theo plan ---
+    planSelect.on('change', function () {
+        isImage = !!$(this).find(':selected').data('image');
+
+        imgBox.toggleClass('d-none', !isImage);
+        fileAst.toggleClass('d-none', !isImage);
+        urlAst.toggleClass('d-none', isImage);
+
+        if (isImage) {
+            imgInput.attr({ required: true, 'data-valid': '' });
+            urlInput.removeAttr('required data-valid').removeClass('is-valid is-invalid');
+        } else {
+            urlInput.attr({ required: true, 'data-valid': '' });
+            imgInput.removeAttr('required data-valid').val('').removeClass('is-valid is-invalid');
+        }
     });
-    $ctn.find('#banner_plan').trigger('change');
 });
