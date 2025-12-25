@@ -47,10 +47,16 @@ function nv_page_main(array $row, array $ab_links, string $content_comment): str
  */
 function nv_page_main_list($array_data, $generate_page)
 {
-    global $module_upload, $module_info, $module_name;
+    global $module_upload, $module_info, $module_name, $nv_Lang;
 
     $xtpl = new XTemplate('main_list.tpl', get_module_tpl_dir('main_list.tpl'));
-    $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
+    $xtpl->assign('LANG', $nv_Lang);
+
+    $xtpl->assign('GENERATE_PAGE', $generate_page);
+    $tpl = new \NukeViet\Template\NVSmarty();
+    $tpl->setTemplateDir(get_module_tpl_dir('detail.tpl'));
+    $tpl->assign('LANG', $nv_Lang);
+    return $tpl->fetch('detail.tpl');
 
     if (!empty($array_data)) {
         foreach ($array_data as $row) {
