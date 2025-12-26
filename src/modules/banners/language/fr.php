@@ -171,4 +171,4 @@ $lang_module['publ_time_info'] = 'Si vous ne sélectionnez pas l\'heure de débu
 $lang_module['enter_keyword'] = 'Entrez des mots clés';
 $lang_module['all_plan'] = 'Tous les plans';
 $lang_module['admin_add_banner'] = 'Ajouter une bannière';
-$lang_module['banner_uploadtype'] = 'Remarque : Le fichier doit être au format image avec une hauteur maximale de %s pixels';
+$lang_module['banner_uploadtype'] = 'Remarque : Le fichier doit être au format image avec une hauteur maximale de %s x %s pixels';
