@@ -1,7 +1,7 @@
 <div class="page my-4">
     {if not empty($DATA)}
     {foreach from=$DATA item=row}
-    <div class="card mb-3 shadow-sm">
+    <div class="card mb-3 shadow-sm card-hover">
         <div class="card-body">
             <div class="d-flex align-items-start">
                 {if not empty($row.image)}
