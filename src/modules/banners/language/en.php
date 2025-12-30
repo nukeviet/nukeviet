@@ -171,4 +171,4 @@ $lang_module['publ_time_info'] = 'If you do not select the start time for displa
 $lang_module['enter_keyword'] = 'Enter keywords';
 $lang_module['all_plan'] = 'All plans';
 $lang_module['admin_add_banner'] = 'Add banner';
-$lang_module['banner_uploadtype'] = 'Note: Uploaded files must be images with a maximum height of %s x %s pixels';
+$lang_module['banner_uploadtype'] = 'Note: Uploaded files must be in image format, with a maximum size of %s x %s pixels';

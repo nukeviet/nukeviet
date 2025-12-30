@@ -171,4 +171,4 @@ $lang_module['publ_time_info'] = 'Nếu bạn không chọn thời gian bắt đ
 $lang_module['enter_keyword'] = 'Nhập từ khóa';
 $lang_module['all_plan'] = 'Tất cả các khối';
 $lang_module['admin_add_banner'] = 'Thêm banner';
-$lang_module['banner_uploadtype'] = 'Lưu ý: File tải lên có định dạng hình ảnh, chiều cao tối đa là %s x %s pixels';
+$lang_module['banner_uploadtype'] = 'Lưu ý: File tải lên có định dạng hình ảnh, kích thước tối đa là %s x %s pixels';
