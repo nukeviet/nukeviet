@@ -39,7 +39,7 @@ function nv_page_main(array $row, array $ab_links, string $content_comment): str
 }
 
 /**
- * Giao dien danh sách bài giới thiệu
+ * Giao diện danh sách bài giới thiệu
  *
  * @param array  $array_data
  * @param string $generate_page
