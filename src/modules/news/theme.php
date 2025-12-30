@@ -1091,8 +1091,8 @@ function topic_theme($topic_array, $topic_other_array, $generate_page, $page_tit
     $xtpl->assign('IMGWIDTH1', $module_config[$module_name]['homewidth']);
 
     $articles_heading = '';
-    // Nếu có H2 (articles_heading) thì dùng H3 cho bài viết, ngược lại dùng H2 để tránh missing heading level
-    $use_h2_for_topics = true;
+    // Luôn dùng H3 cho bài viết để đảm bảo cấu trúc heading đúng (H1 -> H2 -> H3)
+    $use_h2_for_topics = false;
 
     if (!empty($description)) {
         $xtpl->assign('TOPPIC_DESCRIPTION', $description);
@@ -1105,10 +1105,14 @@ function topic_theme($topic_array, $topic_other_array, $generate_page, $page_tit
         if (!empty($topic_array)) {
             $articles_heading = $nv_Lang->getModule('content_list');
         }
-        $use_h2_for_topics = false;
     } elseif (!$home) {
         $xtpl->assign('PAGE_TITLE', nv_html_page_title(false));
         $xtpl->parse('main.h1');
+
+        // Luôn có H2 để tránh missing heading level
+        if (!empty($topic_array)) {
+            $articles_heading = $nv_Lang->getModule('content_list');
+        }
     }
 
     if (!empty($articles_heading)) {
@@ -1192,16 +1196,22 @@ function author_theme($author_info, $topic_array, $topic_other_array, $generate_
     $xtpl->assign('IMGWIDTH1', $module_config[$module_name]['homewidth']);
 
     $articles_heading = '';
-    // Nếu có H2 (articles_heading) thì dùng H3 cho bài viết, ngược lại dùng H2 để tránh missing heading level
-    $use_h2_for_topics = true;
+    // Luôn dùng H3 cho bài viết để đảm bảo cấu trúc heading đúng (H1 -> H2 -> H3)
+    $use_h2_for_topics = false;
 
     if (!empty($author_info['is_guest'])) {
         /*
-         * Chỉ có H1 hidden, không hiển thị H2 trùng nội dung
-         * -> Dùng H2 cho tiêu đề bài viết
+         * Tác giả khách (chưa đăng ký)
+         * H1: Tiêu đề trang (hidden)
+         * H2: Danh sách bài viết (articles_heading)
+         * -> Dùng H3 cho tiêu đề bài viết
          */
         $xtpl->assign('PAGE_TITLE', $page_title);
         $xtpl->parse('main.h1');
+
+        if (!empty($topic_array)) {
+            $articles_heading = $page_title;
+        }
     } elseif (!empty($author_info['description'])) {
         /*
          * Tác giả CÓ mô tả
@@ -1220,15 +1230,19 @@ function author_theme($author_info, $topic_array, $topic_other_array, $generate_
         if (!empty($topic_array)) {
             $articles_heading = sprintf($nv_Lang->getModule('author_articles_list'), $author_info['pseudonym']);
         }
-        $use_h2_for_topics = false;
     } else {
         /*
          * Tác giả KHÔNG có mô tả
-         * Chỉ có H1 hidden, không hiển thị H2 trùng nội dung
-         * -> Dùng H2 cho tiêu đề bài viết
+         * H1: Tiêu đề trang (hidden)
+         * H2: Danh sách bài viết (articles_heading)
+         * -> Dùng H3 cho tiêu đề bài viết
          */
         $xtpl->assign('PAGE_TITLE', sprintf($nv_Lang->getModule('author_articles_list'), $author_info['pseudonym']));
         $xtpl->parse('main.h1');
+
+        if (!empty($topic_array)) {
+            $articles_heading = sprintf($nv_Lang->getModule('author_articles_list'), $author_info['pseudonym']);
+        }
     }
 
     if (!empty($articles_heading)) {
