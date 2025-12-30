@@ -1091,19 +1091,15 @@ function topic_theme($topic_array, $topic_other_array, $generate_page, $page_tit
     $xtpl->assign('IMGWIDTH1', $module_config[$module_name]['homewidth']);
 
     $articles_heading = '';
-    /*
-     * Nếu có H2 (articles_heading) -> dùng H3 cho bài viết
-     * Nếu không có H2 -> dùng H2 cho bài viết để không bị missing heading level
-     */
+    // Nếu có H2 (articles_heading) thì dùng H3 cho bài viết, ngược lại dùng H2 để tránh missing heading level
     $use_h2_for_topics = true;
 
     if (!empty($description)) {
+        $xtpl->assign('TOPPIC_DESCRIPTION', $description);
         if (!empty($topic_image)) {
             $xtpl->assign('HOMEIMG1', $topic_image);
             $xtpl->parse('main.topicdescription.image');
         }
-        $xtpl->assign('TOPPIC_DESCRIPTION', $description);
-        $xtpl->parse('main.topicdescription.description');
         $xtpl->parse('main.topicdescription');
 
         if (!empty($topic_array)) {
@@ -1196,10 +1192,7 @@ function author_theme($author_info, $topic_array, $topic_other_array, $generate_
     $xtpl->assign('IMGWIDTH1', $module_config[$module_name]['homewidth']);
 
     $articles_heading = '';
-    /*
-     * Nếu có H2 (articles_heading) -> dùng H3 cho bài viết
-     * Nếu không có H2 -> dùng H2 cho bài viết để không bị missing heading level
-     */
+    // Nếu có H2 (articles_heading) thì dùng H3 cho bài viết, ngược lại dùng H2 để tránh missing heading level
     $use_h2_for_topics = true;
 
     if (!empty($author_info['is_guest'])) {
@@ -1217,13 +1210,11 @@ function author_theme($author_info, $topic_array, $topic_other_array, $generate_
          * -> Dùng H3 cho tiêu đề bài viết
          */
         $xtpl->assign('TOPPIC_TITLE', sprintf($nv_Lang->getModule('author_intro'), $author_info['pseudonym']));
-
+        $xtpl->assign('TOPPIC_DESCRIPTION', $author_info['description']);
         if (!empty($author_info['image'])) {
             $xtpl->assign('HOMEIMG1', $author_info['image']);
             $xtpl->parse('main.topicdescription.image');
         }
-        $xtpl->assign('TOPPIC_DESCRIPTION', $author_info['description']);
-        $xtpl->parse('main.topicdescription.description');
         $xtpl->parse('main.topicdescription');
 
         if (!empty($topic_array)) {
