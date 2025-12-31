@@ -1090,8 +1090,6 @@ function topic_theme($topic_array, $topic_other_array, $generate_page, $page_tit
     $xtpl->assign('TOPPIC_TITLE', $page_title);
     $xtpl->assign('IMGWIDTH1', $module_config[$module_name]['homewidth']);
 
-    $articles_heading = '';
-
     if (!empty($description)) {
         $xtpl->assign('TOPPIC_DESCRIPTION', $description);
         if (!empty($topic_image)) {
@@ -1099,26 +1097,16 @@ function topic_theme($topic_array, $topic_other_array, $generate_page, $page_tit
             $xtpl->parse('main.topicdescription.image');
         }
         $xtpl->parse('main.topicdescription');
-
-        if (!empty($topic_array)) {
-            $articles_heading = $nv_Lang->getModule('content_list');
-        }
-    } elseif (!$home) {
+    } else {
         $xtpl->assign('PAGE_TITLE', nv_html_page_title(false));
         $xtpl->parse('main.h1');
-
-        // Luôn có H2 để tránh missing heading level
-        if (!empty($topic_array)) {
-            $articles_heading = $nv_Lang->getModule('content_list');
-        }
-    }
-
-    if (!empty($articles_heading)) {
-        $xtpl->assign('ARTICLES_TITLE', $articles_heading);
-        $xtpl->parse('main.articles_heading');
     }
 
     if (!empty($topic_array)) {
+        // Luôn có H2 để tránh missing heading level (H1 -> H2 -> H3)
+        $xtpl->assign('ARTICLES_TITLE', $nv_Lang->getModule('content_list'));
+        $xtpl->parse('main.articles_heading');
+
         foreach ($topic_array as $topic_array_i) {
             if (!empty($topic_array_i['external_link'])) {
                 $topic_array_i['target_blank'] = 'target="_blank"';
@@ -1190,28 +1178,16 @@ function author_theme($author_info, $topic_array, $topic_other_array, $generate_
 
     $xtpl->assign('IMGWIDTH1', $module_config[$module_name]['homewidth']);
 
+    // Xác định tiêu đề H2 cho danh sách bài viết
     $articles_heading = '';
 
     if (!empty($author_info['is_guest'])) {
-        /*
-         * Tác giả khách (chưa đăng ký)
-         * H1: Tiêu đề trang (hidden)
-         * H2: Danh sách bài viết (articles_heading)
-         * -> Dùng H3 cho tiêu đề bài viết
-         */
+        // Tác giả khách: H1 hidden, H2 là tiêu đề trang
         $xtpl->assign('PAGE_TITLE', $page_title);
         $xtpl->parse('main.h1');
-
-        if (!empty($topic_array)) {
-            $articles_heading = $page_title;
-        }
+        $articles_heading = $page_title;
     } elseif (!empty($author_info['description'])) {
-        /*
-         * Tác giả CÓ mô tả
-         * H1: Giới thiệu tác giả (trong topicdescription)
-         * H2: Danh sách bài viết (articles_heading)
-         * -> Dùng H3 cho tiêu đề bài viết
-         */
+        // Tác giả có mô tả: H1 trong topicdescription
         $xtpl->assign('TOPPIC_TITLE', sprintf($nv_Lang->getModule('author_intro'), $author_info['pseudonym']));
         $xtpl->assign('TOPPIC_DESCRIPTION', $author_info['description']);
         if (!empty($author_info['image'])) {
@@ -1219,30 +1195,19 @@ function author_theme($author_info, $topic_array, $topic_other_array, $generate_
             $xtpl->parse('main.topicdescription.image');
         }
         $xtpl->parse('main.topicdescription');
-
-        if (!empty($topic_array)) {
-            $articles_heading = sprintf($nv_Lang->getModule('author_articles_list'), $author_info['pseudonym']);
-        }
+        $articles_heading = sprintf($nv_Lang->getModule('author_articles_list'), $author_info['pseudonym']);
     } else {
-        /*
-         * Tác giả KHÔNG có mô tả
-         * H1: Tiêu đề trang (hidden)
-         * H2: Danh sách bài viết (articles_heading)
-         * -> Dùng H3 cho tiêu đề bài viết
-         */
-        $xtpl->assign('PAGE_TITLE', sprintf($nv_Lang->getModule('author_articles_list'), $author_info['pseudonym']));
+        // Tác giả không có mô tả: H1 hidden
+        $articles_heading = sprintf($nv_Lang->getModule('author_articles_list'), $author_info['pseudonym']);
+        $xtpl->assign('PAGE_TITLE', $articles_heading);
         $xtpl->parse('main.h1');
-
-        if (!empty($topic_array)) {
-            $articles_heading = sprintf($nv_Lang->getModule('author_articles_list'), $author_info['pseudonym']);
-        }
     }
 
-    if (!empty($articles_heading)) {
+    if (!empty($topic_array)) {
+        // Luôn có H2 để tránh missing heading level (H1 -> H2 -> H3)
         $xtpl->assign('ARTICLES_TITLE', $articles_heading);
         $xtpl->parse('main.articles_heading');
-    }
-    if (!empty($topic_array)) {
+
         foreach ($topic_array as $topic_array_i) {
             if (!empty($topic_array_i['external_link'])) {
                 $topic_array_i['target_blank'] = 'target="_blank"';
