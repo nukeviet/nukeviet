@@ -30,7 +30,7 @@
             <div class="col-md-9">
                 <input type="file" name="image" id="image" class="form-control file" data-area="image-input"{if $CURRENT_PLAN.typeimage} data-valid{/if}>
                 <div class="invalid-feedback">{$LANG->getModule('file_upload_empty')}</div>
-                <div id="banner_uploadtype" class="form-text">{$LANG->getModule('banner_uploadtype', {$smarty.const.NV_MAX_HEIGHT}, {$smarty.const.NV_MAX_HEIGHT})}</div>
+                <div id="banner_uploadtype" class="form-text">{$LANG->getModule('banner_uploadtype', {$smarty.const.NV_MAX_HEIGHT}, {$smarty.const.NV_MAX_WIDTH})}</div>
             </div>
         </div>
         <div class="mb-3 row">
