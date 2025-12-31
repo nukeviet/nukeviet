@@ -3,7 +3,6 @@
     {foreach from=$DATA item=row}
     <div class="py-3 border-bottom">
         <div class="d-flex align-items-center">
-
             {if not empty($row.image)}
             <div class="flex-shrink-0 me-3">
                 <a href="{$row.link}" title="{$row.title}">
@@ -11,9 +10,9 @@
                 </a>
             </div>
             {/if}
-            <div class="fs-5 fw-medium mb-1">
-                <h3 class="fs-5 d-inline mb-0">
-                    <a href="{$row.link}" class="text-decoration-none text-primary fw-semibold">{$row.title}</a>
+            <div class="mb-1">
+                <h2 class="fs-5 fw-medium mb-0">
+                    <a href="{$row.link}" class="text-primary fw-semibold">{$row.title}</a>
                     {if $smarty.const.NV_IS_MODADMIN}
                     <span class="dropdown">
                         <a class="link-secondary" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -25,8 +24,8 @@
                         </ul>
                     </span>
                     {/if}
-                </h3>
-                <p class="small text-muted mb-0">{$row.description}</p>
+                </h2>
+                <p class="mb-0">{$row.description}</p>
             </div>
         </div>
     </div>

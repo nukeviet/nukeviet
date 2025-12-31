@@ -67,11 +67,11 @@ function nv_page_main_list(array $array_data, string $generate_page) : string
     }
 
     $tpl = new \NukeViet\Template\NVSmarty();
-    $tpl->setTemplateDir(get_module_tpl_dir('main_list.tpl'));
+    $tpl->setTemplateDir(get_module_tpl_dir('main.tpl'));
     $tpl->assign('LANG', $nv_Lang);
     $tpl->assign('MODULE_NAME', $module_name);
     $tpl->assign('DATA', $array_data);
     $tpl->assign('GENERATE_PAGE', $generate_page);
 
-    return $tpl->fetch('main_list.tpl');
+    return $tpl->fetch('main.tpl');
 }
