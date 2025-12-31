@@ -252,40 +252,40 @@ function loadStat() {
     $('#stat-loading').show();
     $('#stat-summary, #stat-charts').hide();
 
-    var baseUrl = nv_base_siteurl + 'index.php?' + nv_lang_variable + '=' + nv_lang_data +
+    var url = nv_base_siteurl + 'index.php?' + nv_lang_variable + '=' + nv_lang_data +
         '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=viewmap' +
-        '&ads=' + ads + '&month=' + month;
+        '&ads=' + ads + '&month=' + month + '&type=all';
 
-    var types = ['date', 'country', 'browser', 'os'];
-    var completedRequests = 0;
-    var totalClicks = 0;
+    $.ajax({
+        url: url,
+        dataType: 'json',
+        success: function(data) {
+            if (data.status === 'success') {
+                $('#total-clicks').text(formatNumber(data.total_clicks));
 
-    $.each(types, function(i, type) {
-        $.ajax({
-            url: baseUrl + '&type=' + type,
-            dataType: 'json',
-            success: function(data) {
-                if (data.status === 'success') {
-                    renderBannerChart(type, data);
-                    if (data.total_clicks && totalClicks === 0) {
-                        totalClicks = data.total_clicks;
-                        $('#total-clicks').text(formatNumber(totalClicks));
+                var types = ['date', 'country', 'browser', 'os'];
+                $.each(types, function(index, type) {
+                    if (data.charts[type] && data.charts[type].labels.length > 0) {
+                        renderBannerChart(type, {
+                            chart_labels: data.charts[type].labels,
+                            chart_series: data.charts[type].series
+                        });
+                    } else {
+                        $('#chart-' + type).html('<div class="text-muted text-center">No data</div>');
                     }
-                } else {
-                    $('#chart-' + type).html('<div class="text-muted text-center">No data</div>');
-                }
-            },
-            error: function() {
-                $('#chart-' + type).html('<div class="text-danger text-center">Error loading data</div>');
-            },
-            complete: function() {
-                completedRequests++;
-                if (completedRequests === types.length) {
-                    $('#stat-loading').hide();
-                    $('#stat-summary, #stat-charts').show();
-                }
+                });
+
+                $('#stat-loading').hide();
+                $('#stat-summary, #stat-charts').show();
+            } else {
+                $('#stat-loading').hide();
+                alert('Error loading statistics');
             }
-        });
+        },
+        error: function() {
+            $('#stat-loading').hide();
+            alert('Error loading statistics');
+        }
     });
 }
 

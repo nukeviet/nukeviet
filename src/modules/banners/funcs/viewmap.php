@@ -14,7 +14,7 @@ if (!defined('NV_IS_MOD_BANNERS')) {
 }
 
 if (defined('NV_IS_BANNER_CLIENT')) {
-    $type = $nv_Request->get_title('type', 'post,get', 'country', 1);
+    $type = $nv_Request->get_title('type', 'post,get', 'all', 1);
     $month = $nv_Request->get_int('month', 'post,get');
     $ads = $nv_Request->get_int('ads', 'post,get');
     $year = (int) date('Y');
@@ -34,6 +34,75 @@ if (defined('NV_IS_BANNER_CLIENT')) {
     $month_array[2] = (($year % 100 == 0) and ($year % 400 == 0)) ? 29 : 28;
     $firstdate = mktime(0, 0, 0, $month, 1, $year);
     $enddate = mktime(23, 59, 59, $month, $month_array[$month], $year);
+
+    header('Content-Type: application/json; charset=utf-8');
+
+    if ($type === 'all') {
+        $types_map = [
+            'date' => 'click_time',
+            'country' => 'click_country',
+            'browser' => 'click_browse_name',
+            'os' => 'click_os_name'
+        ];
+
+        $response = [
+            'status' => 'success',
+            'total_clicks' => 0,
+            'charts' => []
+        ];
+
+        foreach ($types_map as $chart_type => $db_field) {
+            $data = [];
+            $title = '';
+
+            $result = $db->query('SELECT a.' . $db_field . ', b.title FROM ' . NV_BANNERS_GLOBALTABLE . '_click a INNER JOIN ' . NV_BANNERS_GLOBALTABLE . '_rows b ON a.bid=b.id WHERE b.clid= ' . $user_info['userid'] . ' AND a.click_time <= ' . $enddate . ' AND a.click_time >= ' . $firstdate . ' AND a.bid=' . $ads . ' ORDER BY click_time ASC');
+
+            while ($row = $result->fetch()) {
+                if ($chart_type == 'date') {
+                    $data[] = date('d/m', $row[$db_field]);
+                } else {
+                    $data[] = $row[$db_field];
+                }
+                $title = $row['title'];
+            }
+
+            if (count($data) > 0) {
+                $statics = array_count_values($data);
+                $total = array_sum($statics);
+
+                if ($response['total_clicks'] === 0) {
+                    $response['total_clicks'] = $total;
+                }
+
+                $chart_labels = [];
+                $chart_series = [];
+
+                foreach ($statics as $label => $quantity) {
+                    if ($chart_type == 'date') {
+                        $chart_labels[] = $label;
+                        $chart_series[] = (int) $quantity;
+                    } else {
+                        $chart_labels[] = ucfirst($label);
+                        $chart_series[] = (int) $quantity;
+                    }
+                }
+
+                $response['charts'][$chart_type] = [
+                    'labels' => $chart_labels,
+                    'series' => $chart_series
+                ];
+            } else {
+                $response['charts'][$chart_type] = [
+                    'labels' => [],
+                    'series' => []
+                ];
+            }
+        }
+
+        echo json_encode($response);
+        exit();
+    }
+
     $onetype = '';
 
     switch ($type) {
@@ -64,8 +133,6 @@ if (defined('NV_IS_BANNER_CLIENT')) {
         }
         $title = $row['title'];
     }
-
-    header('Content-Type: application/json; charset=utf-8');
 
     if (count($data) > 0) {
         $statics = array_count_values($data);
