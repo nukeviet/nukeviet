@@ -1,0 +1,243 @@
+{
+  "runSettings": {
+    "temperature": 1.0,
+    "model": "models/gemini-3-pro-preview",
+    "topP": 0.95,
+    "topK": 64,
+    "maxOutputTokens": 65536,
+    "safetySettings": [{
+      "category": "HARM_CATEGORY_HARASSMENT",
+      "threshold": "OFF"
+    }, {
+      "category": "HARM_CATEGORY_HATE_SPEECH",
+      "threshold": "OFF"
+    }, {
+      "category": "HARM_CATEGORY_SEXUALLY_EXPLICIT",
+      "threshold": "OFF"
+    }, {
+      "category": "HARM_CATEGORY_DANGEROUS_CONTENT",
+      "threshold": "OFF"
+    }],
+    "enableCodeExecution": false,
+    "enableSearchAsATool": true,
+    "enableBrowseAsATool": false,
+    "enableAutoFunctionResponse": false,
+    "googleSearch": {
+    },
+    "outputResolution": "1K",
+    "thinkingLevel": "THINKING_HIGH"
+  },
+  "systemInstruction": {
+  },
+  "chunkedPrompt": {
+    "chunks": [{
+      "text": "Tôi cần bạn thiết kế CÁC TRƯỜNG HỢP THỐNG KÊ (Use Cases) cho trang \"Xem thống kê quảng cáo Banner\".\n\n## BỐI CẢNH\n- Người dùng: Khách hàng đặt banner quảng cáo\n- Mục đích: Xem số lượt click vào banner của họ\n- Thời gian: Thống kê theo từng tháng\n\n## CÁC LOẠI THỐNG KÊ CẦN THIẾT KẾ\n\nCó 4 loại thống kê:\n\n1. **Theo quốc gia (country)**: Người click đến từ quốc gia nào?\n2. **Theo trình duyệt (browser)**: Người click dùng Chrome, Firefox, Safari...?\n3. **Theo hệ điều hành (os)**: Người click dùng Windows, macOS, Android, iOS...?\n4. **Theo ngày (date)**: Mỗi ngày trong tháng có bao nhiêu click?\n\n## YÊU CẦU\n\nVới MỖI loại thống kê, hãy mô tả:\n\n1. **Mục đích**: Người dùng cần biết gì từ thống kê này?\n2. **Dữ liệu hiển thị**: Hiển thị những thông tin gì? (tên, số lượng, tỷ lệ %)\n3. **Cách trình bày phù hợp**: Nên dùng biểu đồ gì? (Pie, Bar, Line...) - Giải thích lý do\n4. **Ví dụ dữ liệu**: Đưa ra ví dụ dữ liệu mẫu thực tế\n5. **Trường hợp đặc biệt**: \n   - Không có dữ liệu (tháng không có click nào)\n   - Dữ liệu \"Unknown\" (không xác định được quốc gia/browser/os)\n\n## OUTPUT\n\nTrình bày dưới dạng bảng hoặc danh sách dễ đọc, có thể copy vào tài liệu Word/Google Docs để gửi duyệt.\n\nKHÔNG cần code JavaScript hay cấu hình kỹ thuật. Chỉ cần mô tả ý tưởng thiết kế.",
+      "role": "user",
+      "tokenCount": 402
+    }, {
+      "text": "**Initiating the Analysis**\n\nI\u0027m starting the thought process by carefully dissecting the initial request. It\u0027s an Advertising Banner Statistics page for a client, aimed at viewing monthly click data. The context and user type are clear, and I\u0027m using this as a foundation to design a use case.\n\n\n**Developing the Visuals**\n\nI\u0027ve moved on to fleshing out each statistic type. For the country data, I\u0027ve decided to prioritize a horizontal bar chart for the primary visual to ensure easy readability despite varying country name lengths. The list will supplement this, providing granular data. Next, I\u0027ll elaborate on how to handle things when there is no data or unknown data. I\u0027m thinking of what to do in terms of the browser statistics.\n\n\n**Elaborating on Visuals**\n\nI\u0027m now focusing on specific visual representations. For browser statistics, I\u0027ve settled on a donut or pie chart, as the market share is best depicted as part of a whole. I\u0027m also considering potential \"unknown\" entries due to spoofed or unrecognizable user agents. Similarly, for operating systems, a donut/pie chart seems fitting for the mobile versus desktop split. This also allows targeting specific device users.\n\n\n**Refining Data Presentation**\n\nI\u0027m now considering the daily trend data. A line or area chart seems the best fit to visualize performance over time and identify trends. Days with zero clicks will be explicitly plotted to maintain accuracy. I\u0027m also starting to think about the most effective way to present this information to the user in a visually appealing and easy-to-understand way. Finally, I need to choose between a structured list and a table format to present the information clearly.\n\n\n**Revising Chart Recommendations**\n\nI\u0027ve revised the country visualization. While a map is tempting, the bar chart remains the most practical for direct data comparison. I\u0027ll recommend a horizontal bar chart for the top performers and a table for the remainder. For the date statistics, I\u0027m ensuring the X-axis (time) and Y-axis (clicks) are explicitly defined. Also, I\u0027m standardizing how unknown or \"other\" data is handled. Small values will be grouped; significant data will be shown separately.\n\n\\n\\n\n\n**Finalizing the Document Structure**\n\nI\u0027ve decided on the final structure for the response. It will begin with a brief introduction outlining the scope. The main body will be divided into four sections: country stats, browser stats, OS stats, and daily stats. I\u0027ll conclude with general notes covering UI/UX considerations like the date picker and export options. Finally, I\u0027ve started the translation process and will use Vietnamese to draft the final response. I\u0027ve double-checked my Vietnamese translations for the chart types.\n\n\n**Verifying Final Details**\n\nThe structure is set, and I\u0027m polishing the final details. I confirmed the Vietnamese translations are accurate, ensuring the \"donut chart\" is correctly rendered as \"biểu đồ vành khuyên\". I\u0027m meticulously checking against the initial requirements: context, inclusion of all four stat types with corresponding descriptors, and the overall document format. Lastly, I\u0027m clarifying the critical distinction between \"no data\" and \"unknown\" values in the data.\n\n\n",
+      "role": "model",
+      "isThought": true,
+      "parts": [{
+        "text": "**Initiating the Analysis**\n\nI\u0027m starting the thought process by carefully dissecting the initial request. It\u0027s an Advertising Banner Statistics page for a client, aimed at viewing monthly click data. The context and user type are clear, and I\u0027m using this as a foundation to design a use case.\n\n\n",
+        "thought": true
+      }, {
+        "text": "**Developing the Visuals**\n\nI\u0027ve moved on to fleshing out each statistic type. For the country data, I\u0027ve decided to prioritize a horizontal bar chart for the primary visual to ensure easy readability despite varying country name lengths. The list will supplement this, providing granular data. Next, I\u0027ll elaborate on how to handle things when there is no data or unknown data. I\u0027m thinking of what to do in terms of the browser statistics.\n\n\n",
+        "thought": true
+      }, {
+        "text": "**Elaborating on Visuals**\n\nI\u0027m now focusing on specific visual representations. For browser statistics, I\u0027ve settled on a donut or pie chart, as the market share is best depicted as part of a whole. I\u0027m also considering potential \"unknown\" entries due to spoofed or unrecognizable user agents. Similarly, for operating systems, a donut/pie chart seems fitting for the mobile versus desktop split. This also allows targeting specific device users.\n\n\n",
+        "thought": true
+      }, {
+        "text": "**Refining Data Presentation**\n\nI\u0027m now considering the daily trend data. A line or area chart seems the best fit to visualize performance over time and identify trends. Days with zero clicks will be explicitly plotted to maintain accuracy. I\u0027m also starting to think about the most effective way to present this information to the user in a visually appealing and easy-to-understand way. Finally, I need to choose between a structured list and a table format to present the information clearly.\n\n\n",
+        "thought": true
+      }, {
+        "text": "**Revising Chart Recommendations**\n\nI\u0027ve revised the country visualization. While a map is tempting, the bar chart remains the most practical for direct data comparison. I\u0027ll recommend a horizontal bar chart for the top performers and a table for the remainder. For the date statistics, I\u0027m ensuring the X-axis (time) and Y-axis (clicks) are explicitly defined. Also, I\u0027m standardizing how unknown or \"other\" data is handled. Small values will be grouped; significant data will be shown separately.\n\n\\n\\n\n\n**Finalizing the Document Structure**\n\nI\u0027ve decided on the final structure for the response. It will begin with a brief introduction outlining the scope. The main body will be divided into four sections: country stats, browser stats, OS stats, and daily stats. I\u0027ll conclude with general notes covering UI/UX considerations like the date picker and export options. Finally, I\u0027ve started the translation process and will use Vietnamese to draft the final response. I\u0027ve double-checked my Vietnamese translations for the chart types.\n\n\n",
+        "thought": true
+      }, {
+        "text": "**Verifying Final Details**\n\nThe structure is set, and I\u0027m polishing the final details. I confirmed the Vietnamese translations are accurate, ensuring the \"donut chart\" is correctly rendered as \"biểu đồ vành khuyên\". I\u0027m meticulously checking against the initial requirements: context, inclusion of all four stat types with corresponding descriptors, and the overall document format. Lastly, I\u0027m clarifying the critical distinction between \"no data\" and \"unknown\" values in the data.\n\n\n",
+        "thought": true
+      }]
+    }, {
+      "text": "Dưới đây là bản thiết kế chi tiết các Use Cases (Trường hợp sử dụng) cho tính năng Thống kê Quảng cáo Banner, được trình bày dưới dạng tài liệu đặc tả chức năng. Bạn có thể sao chép trực tiếp nội dung này vào file Word hoặc Google Docs.\n\n---\n\n# TÀI LIỆU ĐẶC TẢ USE CASES: THỐNG KÊ QUẢNG CÁO BANNER\n\n**Dự án:** Hệ thống Quảng cáo Banner\n**Module:** Báo cáo \u0026 Thống kê (Reporting)\n**Đối tượng sử dụng:** Khách hàng (Advertiser)\n**Phạm vi thời gian:** Dữ liệu được lọc theo tháng (Ví dụ: Tháng 10/2023)\n\n---\n\n## 1. THỐNG KÊ THEO QUỐC GIA (Location/Country Statistics)\n\n### 1.1. Mục đích\nGiúp khách hàng biết được quảng cáo của họ đang tiếp cận người dùng ở khu vực địa lý nào. Từ đó đánh giá xem traffic có đúng thị trường mục tiêu hay không (Ví dụ: Banner tiếng Việt nhưng traffic toàn từ Mỹ là bất thường hoặc không hiệu quả).\n\n### 1.2. Dữ liệu hiển thị\n*   **Tên quốc gia** (Ví dụ: Vietnam, United States, Japan).\n*   **Số lượng click** (Absolute count).\n*   **Tỷ lệ phần trăm** (%) so với tổng số click trong tháng.\n\n### 1.3. Cách trình bày phù hợp\n*   **Biểu đồ khuyên dùng:** **Biểu đồ thanh ngang (Horizontal Bar Chart)**.\n*   **Lý do:** Tên các quốc gia có độ dài ngắn khác nhau. Biểu đồ thanh ngang giúp hiển thị rõ tên quốc gia mà không bị chồng chéo chữ như biểu đồ cột đứng. Đồng thời dễ dàng so sánh độ lớn giữa các nước top đầu.\n*   *Tùy chọn bổ sung:* Có thể hiển thị kèm một bảng (Table) bên dưới nếu danh sách quá dài.\n\n### 1.4. Ví dụ dữ liệu\n| Quốc gia | Số click | Tỷ lệ |\n| :--- | :--- | :--- |\n| Vietnam | 1,500 | 75% |\n| United States | 300 | 15% |\n| Japan | 100 | 5% |\n| Others | 100 | 5% |\n\n### 1.5. Trường hợp đặc biệt\n*   **Không có dữ liệu:** Hiển thị thông báo *\"Chưa có lượt click nào từ các khu vực trong tháng này\"* và hình ảnh minh họa (Empty state).\n*   **Dữ liệu \"Unknown\":** Nếu hệ thống không lấy được IP hoặc IP bị ẩn, gom nhóm lại thành mục **\"Unknown\" (Không xác định)** và xếp xuống cuối danh sách hoặc tô màu xám nhạt trên biểu đồ.\n\n---\n\n## 2. THỐNG KÊ THEO TRÌNH DUYỆT (Browser Statistics)\n\n### 2.1. Mục đích\nGiúp khách hàng và đội ngũ kỹ thuật biết người dùng sử dụng công nghệ gì để truy cập. Điều này quan trọng để tối ưu hóa trang đích (Landing Page). Ví dụ: Nếu 80% dùng Mobile Safari, trang đích phải cực kỳ mượt trên iPhone.\n\n### 2.2. Dữ liệu hiển thị\n*   **Tên trình duyệt** (Chrome, Safari, Firefox, Edge...).\n*   **Số lượng click.**\n*   **Tỷ lệ phần trăm (%).**\n\n### 2.3. Cách trình bày phù hợp\n*   **Biểu đồ khuyên dùng:** **Biểu đồ tròn (Pie Chart)** hoặc **Biểu đồ vành khuyên (Donut Chart)**.\n*   **Lý do:** Thị phần trình duyệt thường chỉ gói gọn trong 4-5 cái tên lớn (Chrome, Safari, Firefox, Edge). Biểu đồ tròn thể hiện rất tốt khái niệm \"cơ cấu\" hoặc \"thị phần\" của một tổng thể (Part-to-whole relationship).\n\n### 2.4. Ví dụ dữ liệu\n*   **Chrome:** 850 clicks (60%)\n*   **Safari:** 425 clicks (30%)\n*   **Firefox:** 70 clicks (5%)\n*   **Edge:** 70 clicks (5%)\n\n### 2.5. Trường hợp đặc biệt\n*   **Không có dữ liệu:** Hiển thị biểu đồ tròn màu xám nhạt (placeholder) và dòng chữ *\"Không có dữ liệu trình duyệt\"*.\n*   **Dữ liệu \"Unknown\":** Các User-agent lạ hoặc Bot sẽ được gộp vào nhóm **\"Others\" (Khác)**. Nếu nhóm này nhỏ (\u003c5%) thì gộp, nếu lớn thì hiển thị riêng để cảnh báo khách hàng (có thể là click ảo).\n\n---\n\n## 3. THỐNG KÊ THEO HỆ ĐIỀU HÀNH (OS Statistics)\n\n### 3.1. Mục đích\nPhân loại người dùng theo thiết bị (Desktop vs Mobile) hoặc hệ sinh thái (iOS vs Android). Rất quan trọng cho các quảng cáo cài đặt ứng dụng (App Install) để biết nên đẩy mạnh link AppStore hay Google Play.\n\n### 3.2. Dữ liệu hiển thị\n*   **Tên hệ điều hành** (Windows, macOS, Android, iOS, Linux...).\n*   **Số lượng click.**\n*   **Tỷ lệ phần trăm (%).**\n\n### 3.3. Cách trình bày phù hợp\n*   **Biểu đồ khuyên dùng:** **Biểu đồ vành khuyên (Donut Chart)** có hiển thị tổng số ở giữa.\n*   **Lý do:** Tương tự như trình duyệt, số lượng hệ điều hành phổ biến rất ít. Biểu đồ Donut nhìn hiện đại hơn Pie Chart và tận dụng được khoảng trống ở giữa để hiển thị tổng số click, giúp người xem nắm bắt nhanh quy mô.\n\n### 3.4. Ví dụ dữ liệu\n*   **Android:** 2,000 clicks (50%)\n*   **iOS:** 1,200 clicks (30%)\n*   **Windows:** 600 clicks (15%)\n*   **macOS:** 200 clicks (5%)\n\n### 3.5. Trường hợp đặc biệt\n*   **Không có dữ liệu:** Ẩn biểu đồ, hiển thị text thông báo.\n*   **Dữ liệu \"Unknown\":** Thường xảy ra với các máy chủ Linux hoặc Bot. Nhóm thành **\"Unknown OS\"**.\n\n---\n\n## 4. THỐNG KÊ THEO NGÀY (Daily Statistics)\n\n### 4.1. Mục đích\nTheo dõi hiệu suất theo thời gian thực (Time series). Giúp khách hàng phát hiện xu hướng (Trend), các ngày cao điểm (Spike) hoặc các ngày tụt giảm bất thường để điều chỉnh chiến dịch kịp thời.\n\n### 4.2. Dữ liệu hiển thị\n*   **Trục hoành (X-axis):** Các ngày trong tháng (Từ ngày 1 đến 30/31).\n*   **Trục tung (Y-axis):** Số lượng click.\n*   **Tooltip (Khi rê chuột vào):** Hiển thị chi tiết (Ngày: Số click).\n\n### 4.3. Cách trình bày phù hợp\n*   **Biểu đồ khuyên dùng:** **Biểu đồ đường (Line Chart)** hoặc **Biểu đồ vùng (Area Chart)**.\n*   **Lý do:** Đây là chuẩn mực để hiển thị sự thay đổi của dữ liệu theo thời gian. Biểu đồ đường giúp mắt người xem dễ dàng nối các điểm dữ liệu để nhận ra xu hướng tăng hay giảm.\n\n### 4.4. Ví dụ dữ liệu\n*   01/10: 50 clicks\n*   02/10: 65 clicks\n*   03/10: 120 clicks (Cao điểm do chạy event)\n*   04/10: 90 clicks\n*   ...\n\n### 4.5. Trường hợp đặc biệt\n*   **Không có dữ liệu (Cả tháng):** Hiển thị khung lưới biểu đồ trống, trục Y \u003d 0, thông báo *\"Chưa có dữ liệu cho tháng này\"*.\n*   **Ngày có 0 click:** **BẮT BUỘC** phải hiển thị điểm đó trên biểu đồ tại vị trí 0 (sát trục hoành), không được bỏ qua ngày đó (làm đứt đoạn đường nối).\n*   **Tháng chưa kết thúc:** Ví dụ đang là ngày 15, biểu đồ chỉ vẽ đến ngày 15. Các ngày từ 16-30 có thể để trống hoặc hiển thị mờ.\n\n---\n\n## TỔNG HỢP GHI CHÚ CHUNG CHO UI/UX\n\n1.  **Bộ lọc thời gian (Date Picker):** Luôn có dropdown chọn \"Tháng/Năm\" ở góc trên cùng. Mặc định chọn tháng hiện tại.\n2.  **Tổng quan (Summary Cards):** Trước khi vào biểu đồ chi tiết, cần có 1 dòng hiển thị con số tổng: *Tổng số click trong tháng*, *Trung bình click/ngày*.\n3.  **Tương tác:** Các biểu đồ nên có tính năng Tooltip (rê chuột vào để xem số cụ thể).\n4.  **Màu sắc:** Sử dụng màu sắc tương phản rõ ràng cho các phần tử trong biểu đồ Tròn/Donut. Màu của biểu đồ Đường nên là màu chủ đạo của thương hiệu (Brand color).",
+      "role": "model",
+      "finishReason": "STOP",
+      "tokenCount": 2105,
+      "parts": [{
+        "text": "Dưới đây là bản thiết kế chi tiết các Use Cases (Trường hợp sử dụng) cho tính năng Thống kê"
+      }, {
+        "text": " Quảng cáo Banner, được trình bày dưới dạng tài liệu đặc tả chức năng. Bạn có thể sao chép trực tiếp nội dung này"
+      }, {
+        "text": " vào file Word hoặc Google Docs.\n\n---\n\n# TÀI LIỆU ĐẶC TẢ USE CASES"
+      }, {
+        "text": ": THỐNG KÊ QUẢNG CÁO BANNER\n\n**Dự án:** Hệ thống Quảng cáo Banner\n**"
+      }, {
+        "text": "Module:** Báo cáo \u0026 Thống kê (Reporting)\n**Đối tượng sử dụng:** Khách hàng (Advertiser"
+      }, {
+        "text": ")\n**Phạm vi thời gian:** Dữ liệu được lọc theo tháng (Ví dụ: Tháng 10/2"
+      }, {
+        "text": "023)\n\n---\n\n## 1. THỐNG KÊ THEO QUỐC GIA ("
+      }, {
+        "text": "Location/Country Statistics)\n\n### 1.1. Mục đích\nGiúp khách hàng biết được quảng cáo của họ đang"
+      }, {
+        "text": " tiếp cận người dùng ở khu vực địa lý nào. Từ đó đánh giá xem traffic có đúng thị trường mục tiêu hay"
+      }, {
+        "text": " không (Ví dụ: Banner tiếng Việt nhưng traffic toàn từ Mỹ là bất thường hoặc không hiệu quả).\n\n### 1"
+      }, {
+        "text": ".2. Dữ liệu hiển thị\n*   **Tên quốc gia** (Ví dụ: Vietnam, United"
+      }, {
+        "text": " States, Japan).\n*   **Số lượng click** (Absolute count).\n*   **Tỷ lệ phần"
+      }, {
+        "text": " trăm** (%) so với tổng số click trong tháng.\n\n### 1.3. Cách trình bày phù hợp\n*"
+      }, {
+        "text": "   **Biểu đồ khuyên dùng:** **Biểu đồ thanh ngang (Horizontal Bar Chart)**.\n*   "
+      }, {
+        "text": "**Lý do:** Tên các quốc gia có độ dài ngắn khác nhau. Biểu đồ thanh ngang giúp hiển"
+      }, {
+        "text": " thị rõ tên quốc gia mà không bị chồng chéo chữ như biểu đồ cột đứng. Đồng thời dễ dàng so sánh độ"
+      }, {
+        "text": " lớn giữa các nước top đầu.\n*   *Tùy chọn bổ sung:* Có thể hiển thị kèm một"
+      }, {
+        "text": " bảng (Table) bên dưới nếu danh sách quá dài.\n\n### 1.4. Ví dụ dữ liệu\n|"
+      }, {
+        "text": " Quốc gia | Số click | Tỷ lệ |\n| :--- | :--- | :--- |\n| Vietnam | "
+      }, {
+        "text": "1,500 | 75% |\n| United States | 300 | 15% |"
+      }, {
+        "text": "\n| Japan | 100 | 5% |\n| Others | 100 | 5"
+      }, {
+        "text": "% |\n\n### 1.5. Trường hợp đặc biệt\n*   **Không có dữ liệu:** Hiển"
+      }, {
+        "text": " thị thông báo *\"Chưa có lượt click nào từ các khu vực trong tháng này\"* và hình ảnh minh họa ("
+      }, {
+        "text": "Empty state).\n*   **Dữ liệu \"Unknown\":** Nếu hệ thống không lấy được IP hoặc IP bị"
+      }, {
+        "text": " ẩn, gom nhóm lại thành mục **\"Unknown\" (Không xác định)** và xếp xuống cuối danh sách hoặc tô"
+      }, {
+        "text": " màu xám nhạt trên biểu đồ.\n\n---\n\n## 2. THỐNG KÊ THEO TRÌ"
+      }, {
+        "text": "NH DUYỆT (Browser Statistics)\n\n### 2.1. Mục đích\nGiúp khách hàng và"
+      }, {
+        "text": " đội ngũ kỹ thuật biết người dùng sử dụng công nghệ gì để truy cập. Điều này quan trọng để tối ưu hóa"
+      }, {
+        "text": " trang đích (Landing Page). Ví dụ: Nếu 80% dùng Mobile Safari, trang đích phải cực kỳ mượt trên"
+      }, {
+        "text": " iPhone.\n\n### 2.2. Dữ liệu hiển thị\n*   **Tên trình duyệt** ("
+      }, {
+        "text": "Chrome, Safari, Firefox, Edge...).\n*   **Số lượng click.**\n*   **Tỷ lệ phần"
+      }, {
+        "text": " trăm (%).**\n\n### 2.3. Cách trình bày phù hợp\n*   **Biểu đồ khuyên dùng"
+      }, {
+        "text": ":** **Biểu đồ tròn (Pie Chart)** hoặc **Biểu đồ vành khuyên (Donut Chart)**.\n"
+      }, {
+        "text": "*   **Lý do:** Thị phần trình duyệt thường chỉ gói gọn trong 4-5 cái tên lớn (Chrome, Safari"
+      }, {
+        "text": ", Firefox, Edge). Biểu đồ tròn thể hiện rất tốt khái niệm \"cơ cấu\" hoặc \"thị phần\" của"
+      }, {
+        "text": " một tổng thể (Part-to-whole relationship).\n\n### 2.4. Ví dụ dữ liệu\n*   "
+      }, {
+        "text": "**Chrome:** 850 clicks (60%)\n*   **Safari:** 425 clicks ("
+      }, {
+        "text": "30%)\n*   **Firefox:** 70 clicks (5%)\n*   **Edge:** 70 clicks ("
+      }, {
+        "text": "5%)\n\n### 2.5. Trường hợp đặc biệt\n*   **Không có dữ liệu:** Hiển"
+      }, {
+        "text": " thị biểu đồ tròn màu xám nhạt (placeholder) và dòng chữ *\"Không có dữ liệu trình duyệt\"*.\n*   "
+      }, {
+        "text": "**Dữ liệu \"Unknown\":** Các User-agent lạ hoặc Bot sẽ được gộp vào nhóm **\"Others"
+      }, {
+        "text": "\" (Khác)**. Nếu nhóm này nhỏ (\u003c5%) thì gộp, nếu lớn thì hiển thị riêng để"
+      }, {
+        "text": " cảnh báo khách hàng (có thể là click ảo).\n\n---\n\n## 3. THỐNG KÊ THEO"
+      }, {
+        "text": " HỆ ĐIỀU HÀNH (OS Statistics)\n\n### 3.1. Mục đích\nPh"
+      }, {
+        "text": "ân loại người dùng theo thiết bị (Desktop vs Mobile) hoặc hệ sinh thái (iOS vs Android). Rất quan trọng cho"
+      }, {
+        "text": " các quảng cáo cài đặt ứng dụng (App Install) để biết nên đẩy mạnh link AppStore hay Google Play.\n\n### 3"
+      }, {
+        "text": ".2. Dữ liệu hiển thị\n*   **Tên hệ điều hành** (Windows, macOS, Android"
+      }, {
+        "text": ", iOS, Linux...).\n*   **Số lượng click.**\n*   **Tỷ lệ phần trăm (%)."
+      }, {
+        "text": "**\n\n### 3.3. Cách trình bày phù hợp\n*   **Biểu đồ khuyên dùng:**"
+      }, {
+        "text": " **Biểu đồ vành khuyên (Donut Chart)** có hiển thị tổng số ở giữa.\n*   **Lý"
+      }, {
+        "text": " do:** Tương tự như trình duyệt, số lượng hệ điều hành phổ biến rất ít. Biểu đồ Donut nhìn"
+      }, {
+        "text": " hiện đại hơn Pie Chart và tận dụng được khoảng trống ở giữa để hiển thị tổng số click, giúp người xem nắm bắt"
+      }, {
+        "text": " nhanh quy mô.\n\n### 3.4. Ví dụ dữ liệu\n*   **Android:** 2,000"
+      }, {
+        "text": " clicks (50%)\n*   **iOS:** 1,200 clicks (30%)\n*   **Windows"
+      }, {
+        "text": ":** 600 clicks (15%)\n*   **macOS:** 200 clicks (5%)\n\n###"
+      }, {
+        "text": " 3.5. Trường hợp đặc biệt\n*   **Không có dữ liệu:** Ẩn biểu đồ, hiển thị text"
+      }, {
+        "text": " thông báo.\n*   **Dữ liệu \"Unknown\":** Thường xảy ra với các máy chủ Linux hoặc Bot."
+      }, {
+        "text": " Nhóm thành **\"Unknown OS\"**.\n\n---\n\n## 4. THỐNG KÊ THEO NGÀY"
+      }, {
+        "text": " (Daily Statistics)\n\n### 4.1. Mục đích\nTheo dõi hiệu suất theo thời gian thực (Time series"
+      }, {
+        "text": "). Giúp khách hàng phát hiện xu hướng (Trend), các ngày cao điểm (Spike) hoặc các ngày tụ"
+      }, {
+        "text": "t giảm bất thường để điều chỉnh chiến dịch kịp thời.\n\n### 4.2. Dữ liệu hiển thị\n*"
+      }, {
+        "text": "   **Trục hoành (X-axis):** Các ngày trong tháng (Từ ngày 1 đến 30/3"
+      }, {
+        "text": "1).\n*   **Trục tung (Y-axis):** Số lượng click.\n*   **Tooltip"
+      }, {
+        "text": " (Khi rê chuột vào):** Hiển thị chi tiết (Ngày: Số click).\n\n### 4.3"
+      }, {
+        "text": ". Cách trình bày phù hợp\n*   **Biểu đồ khuyên dùng:** **Biểu đồ đường (Line"
+      }, {
+        "text": " Chart)** hoặc **Biểu đồ vùng (Area Chart)**.\n*   **Lý do:** Đây là chuẩn"
+      }, {
+        "text": " mực để hiển thị sự thay đổi của dữ liệu theo thời gian. Biểu đồ đường giúp mắt người xem dễ dàng nối"
+      }, {
+        "text": " các điểm dữ liệu để nhận ra xu hướng tăng hay giảm.\n\n### 4.4. Ví dụ dữ liệu\n*   "
+      }, {
+        "text": "01/10: 50 clicks\n*   02/10: 65 clicks\n*   "
+      }, {
+        "text": "03/10: 120 clicks (Cao điểm do chạy event)\n*   04/1"
+      }, {
+        "text": "0: 90 clicks\n*   ...\n\n### 4.5. Trường hợp đặc biệt\n*   **Không có"
+      }, {
+        "text": " dữ liệu (Cả tháng):** Hiển thị khung lưới biểu đồ trống, trục Y \u003d 0, thông"
+      }, {
+        "text": " báo *\"Chưa có dữ liệu cho tháng này\"*.\n*   **Ngày có 0 click:** **BẮT BU"
+      }, {
+        "text": "ỘC** phải hiển thị điểm đó trên biểu đồ tại vị trí 0 (sát trục hoành), không được"
+      }, {
+        "text": " bỏ qua ngày đó (làm đứt đoạn đường nối).\n*   **Tháng chưa kết thúc:** Ví"
+      }, {
+        "text": " dụ đang là ngày 15, biểu đồ chỉ vẽ đến ngày 15. Các ngày từ 16"
+      }, {
+        "text": "-30 có thể để trống hoặc hiển thị mờ.\n\n---\n\n## TỔNG HỢP G"
+      }, {
+        "text": "HI CHÚ CHUNG CHO UI/UX\n\n1.  **Bộ lọc thời gian (Date Picker):** Lu"
+      }, {
+        "text": "ôn có dropdown chọn \"Tháng/Năm\" ở góc trên cùng. Mặc định chọn tháng hiện tại."
+      }, {
+        "text": "\n2.  **Tổng quan (Summary Cards):** Trước khi vào biểu đồ chi tiết, cần có 1"
+      }, {
+        "text": " dòng hiển thị con số tổng: *Tổng số click trong tháng*, *Trung bình click/ngày*.\n3.  **"
+      }, {
+        "text": "Tương tác:** Các biểu đồ nên có tính năng Tooltip (rê chuột vào để xem số cụ thể).\n4"
+      }, {
+        "text": ".  **Màu sắc:** Sử dụng màu sắc tương phản rõ ràng cho các phần tử trong biểu đồ Tròn/Don"
+      }, {
+        "text": "ut. Màu của biểu đồ Đường nên là màu chủ đạo của thương hiệu (Brand color)."
+      }, {
+        "text": "",
+        "thoughtSignature": "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"
+      }]
+    }],
+    "pendingInputs": [{
+      "text": "",
+      "role": "user"
+    }]
+  }
+}
