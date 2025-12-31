@@ -1091,8 +1091,6 @@ function topic_theme($topic_array, $topic_other_array, $generate_page, $page_tit
     $xtpl->assign('IMGWIDTH1', $module_config[$module_name]['homewidth']);
 
     $articles_heading = '';
-    // Luôn dùng H3 cho bài viết để đảm bảo cấu trúc heading đúng (H1 -> H2 -> H3)
-    $use_h2_for_topics = false;
 
     if (!empty($description)) {
         $xtpl->assign('TOPPIC_DESCRIPTION', $description);
@@ -1134,11 +1132,8 @@ function topic_theme($topic_array, $topic_other_array, $generate_page, $page_tit
                 $xtpl->parse('main.topic.homethumb');
             }
 
-            if ($use_h2_for_topics) {
-                $xtpl->parse('main.topic.topic_title_h2');
-            } else {
-                $xtpl->parse('main.topic.topic_title_h3');
-            }
+            // Luôn dùng H3 cho bài viết để đảm bảo cấu trúc heading đúng (H1 -> H2 -> H3)
+            $xtpl->parse('main.topic.topic_title_h3');
 
             if ($topicid and defined('NV_IS_MODADMIN')) {
                 $adminlink = trim(nv_link_edit_page($topic_array_i) . ' ' . nv_link_delete_page($topic_array_i));
@@ -1196,8 +1191,6 @@ function author_theme($author_info, $topic_array, $topic_other_array, $generate_
     $xtpl->assign('IMGWIDTH1', $module_config[$module_name]['homewidth']);
 
     $articles_heading = '';
-    // Luôn dùng H3 cho bài viết để đảm bảo cấu trúc heading đúng (H1 -> H2 -> H3)
-    $use_h2_for_topics = false;
 
     if (!empty($author_info['is_guest'])) {
         /*
@@ -1263,11 +1256,8 @@ function author_theme($author_info, $topic_array, $topic_other_array, $generate_
                 $xtpl->parse('main.topic.homethumb');
             }
 
-            if ($use_h2_for_topics) {
-                $xtpl->parse('main.topic.topic_title_h2');
-            } else {
-                $xtpl->parse('main.topic.topic_title_h3');
-            }
+            // Luôn dùng H3 cho bài viết để đảm bảo cấu trúc heading đúng (H1 -> H2 -> H3)
+            $xtpl->parse('main.topic.topic_title_h3');
 
             if (defined('NV_IS_MODADMIN')) {
                 $adminlink = trim(nv_link_edit_page($topic_array_i) . ' ' . nv_link_delete_page($topic_array_i));
