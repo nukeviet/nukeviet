@@ -75,13 +75,6 @@ var bannerCharts = {
     browser: null
 };
 
-function formatNumber(value) {
-    if (typeof nv_lang_interface !== 'undefined' && nv_lang_interface === 'vi') {
-        return new Intl.NumberFormat('vi-VN').format(value);
-    }
-    return new Intl.NumberFormat('en-US').format(value);
-}
-
 function renderBannerChart(type, data) {
     var chartId = 'chart-' + type;
     var chartEl = document.getElementById(chartId);
@@ -261,7 +254,7 @@ function loadStat() {
         dataType: 'json',
         success: function(data) {
             if (data.status === 'success') {
-                $('#total-clicks').text(formatNumber(data.total_clicks));
+                $('#total-clicks').text(data.total_clicks_formatted);
 
                 var types = ['date', 'country', 'browser', 'os'];
                 $.each(types, function(index, type) {

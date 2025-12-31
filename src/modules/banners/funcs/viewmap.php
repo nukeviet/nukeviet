@@ -48,6 +48,7 @@ if (defined('NV_IS_BANNER_CLIENT')) {
         $response = [
             'status' => 'success',
             'total_clicks' => 0,
+            'total_clicks_formatted' => '0',
             'charts' => []
         ];
 
@@ -72,6 +73,7 @@ if (defined('NV_IS_BANNER_CLIENT')) {
 
                 if ($response['total_clicks'] === 0) {
                     $response['total_clicks'] = $total;
+                    $response['total_clicks_formatted'] = nv_number_format($total);
                 }
 
                 $chart_labels = [];
