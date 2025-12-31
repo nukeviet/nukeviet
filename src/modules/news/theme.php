@@ -1103,10 +1103,6 @@ function topic_theme($topic_array, $topic_other_array, $generate_page, $page_tit
     }
 
     if (!empty($topic_array)) {
-        // Luôn có H2 để tránh missing heading level (H1 -> H2 -> H3)
-        $xtpl->assign('ARTICLES_TITLE', $nv_Lang->getModule('content_list'));
-        $xtpl->parse('main.articles_heading');
-
         foreach ($topic_array as $topic_array_i) {
             if (!empty($topic_array_i['external_link'])) {
                 $topic_array_i['target_blank'] = 'target="_blank"';
@@ -1120,8 +1116,8 @@ function topic_theme($topic_array, $topic_other_array, $generate_page, $page_tit
                 $xtpl->parse('main.topic.homethumb');
             }
 
-            // Luôn dùng H3 cho bài viết để đảm bảo cấu trúc heading đúng (H1 -> H2 -> H3)
-            $xtpl->parse('main.topic.topic_title_h3');
+            // Topic không có articles_heading (H2), nên dùng H2 cho tiêu đề bài viết
+            $xtpl->parse('main.topic.topic_title_h2');
 
             if ($topicid and defined('NV_IS_MODADMIN')) {
                 $adminlink = trim(nv_link_edit_page($topic_array_i) . ' ' . nv_link_delete_page($topic_array_i));
