@@ -139,6 +139,14 @@
                             </div>
                         </div>
                     </div>
+                    <div class="row mb-3 switch_mobi_des-wrap">
+                        <div class="col-sm-8 offset-sm-3 offset-xxl-4">
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" name="switch_allow_bot" value="1"{if $DATA.switch_allow_bot} checked{/if} role="switch" id="element_switch_allow_bot">
+                                <label class="form-check-label" for="element_switch_allow_bot">{$LANG->getModule('allow_bot_des')}</label>
+                            </div>
+                        </div>
+                    </div>
                     <div class="row">
                         <div class="col-sm-8 offset-sm-3 offset-xxl-4">
                             <button type="submit" class="btn btn-primary">{$LANG->getModule('submit')}</button>

@@ -653,3 +653,4 @@ $lang_module['cache_prefix'] = 'Préfixe de clé de cache';
 $lang_module['cache_prefix_note'] = 'Entrez le préfixe si vous utilisez Memcached ou Redis et que plusieurs sites Web utilisent le même serveur de cache pour éviter les conflits de clés de cache entre les sites Web. Le préfixe comprend les lettres a-z, les chiffres 0-9 et le trait de soulignement (_), et doit commencer par une lettre. Le cache de fichiers n\'utilise pas ce préfixe.';
 $lang_module['cache_prefix_invalid'] = 'Préfixe invalide. Accepte uniquement les lettres a-z, les chiffres 0-9 et le trait de soulignement (_) et doit commencer par une lettre.';
 $lang_module['cache_test_error'] = 'Erreur de connexion au serveur de cache. Veuillez vérifier les paramètres de configuration. Détails de l\'erreur: %s';
+$lang_module['allow_bot_des'] = 'Autoriser la visibilité pour les robots d’indexation';

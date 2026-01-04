@@ -373,22 +373,25 @@ function nv_site_theme($contents, $full = true)
                 'd' => 'desktop',
                 'm' => 'mobile'
             ];
-            $current_theme_type = (isset($global_config['current_theme_type']) and !empty($global_config['current_theme_type']) and in_array($global_config['current_theme_type'], array_keys($icons), true)) ? $global_config['current_theme_type'] : 'd';
-            foreach ($array_theme_type as $theme_type) {
-                $xtpl->assign('STHEME_TYPE', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;nv' . NV_LANG_DATA . 'themever=' . $theme_type . '&amp;nv_redirect=' . nv_redirect_encrypt($client_info['selfurl']));
-                $xtpl->assign('STHEME_TITLE', $nv_Lang->getGlobal('theme_type_' . $theme_type));
-                $xtpl->assign('STHEME_INFO', $nv_Lang->getGlobal('theme_type_chose', $nv_Lang->getGlobal('theme_type_' . $theme_type)));
-                $xtpl->assign('STHEME_ICON', $icons[$theme_type]);
+            $is_bot_blocked = !$global_config['switch_allow_bot'] and $client_info['is_bot'];
+            if (!$is_bot_blocked) {
+                $current_theme_type = (isset($global_config['current_theme_type']) and !empty($global_config['current_theme_type']) and in_array($global_config['current_theme_type'], array_keys($icons), true)) ? $global_config['current_theme_type'] : 'd';
+                foreach ($array_theme_type as $theme_type) {
+                    $xtpl->assign('STHEME_TYPE', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;nv' . NV_LANG_DATA . 'themever=' . $theme_type . '&amp;nv_redirect=' . nv_redirect_encrypt($client_info['selfurl']));
+                    $xtpl->assign('STHEME_TITLE', $nv_Lang->getGlobal('theme_type_' . $theme_type));
+                    $xtpl->assign('STHEME_INFO', $nv_Lang->getGlobal('theme_type_chose', $nv_Lang->getGlobal('theme_type_' . $theme_type)));
+                    $xtpl->assign('STHEME_ICON', $icons[$theme_type]);
 
-                if ($theme_type == $current_theme_type) {
-                    $xtpl->parse('main.theme_type.loop.current');
-                } else {
-                    $xtpl->parse('main.theme_type.loop.other');
+                    if ($theme_type == $current_theme_type) {
+                        $xtpl->parse('main.theme_type.loop.current');
+                    } else {
+                        $xtpl->parse('main.theme_type.loop.other');
+                    }
+
+                    $xtpl->parse('main.theme_type.loop');
                 }
-
-                $xtpl->parse('main.theme_type.loop');
+                $xtpl->parse('main.theme_type');
             }
-            $xtpl->parse('main.theme_type');
         }
     }
 
