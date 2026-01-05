@@ -68,23 +68,218 @@ function afSubmit(form) {
     })
 }
 
-function loadStat() {
-    var type = $('#adsstat-type').val(),
-        month = $('#adsstat-month').val(),
-        ads = $('#adsstat-ads').val(),
-        charturl = nv_base_siteurl + 'index.php?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=viewmap';
-    if (!!type && !!month && !!ads) {
-        $('#chartdata').html('<span class="load-bar"></span>').show();
-        var width = Math.floor($('#chartdata').width()) > 500 ? 700 : 500;
-        charturl += '&type=' + type + '&month=' + month + '&ads=' + ads + '&width=' + width;
-        var img = new Image();
-        $(img).on('load', function() {
-            $('#chartdata').html('<img src="' + img.src + '" style="width:100%"/>');
-        });
-        img.src = charturl;
-    } else {
-        $('#chartdata').hide()
+var bannerCharts = {
+    date: null,
+    country: null,
+    os: null,
+    browser: null
+};
+
+function renderBannerChart(type, data) {
+    var chartId = 'chart-' + type;
+    var chartEl = document.getElementById(chartId);
+
+    if (!chartEl) return;
+
+    if (bannerCharts[type]) {
+        bannerCharts[type].destroy();
+        bannerCharts[type] = null;
     }
+
+    if (!data.chart_series || data.chart_series.length === 0) {
+        chartEl.innerHTML = '<div class="text-muted text-center">No data</div>';
+        return;
+    }
+
+    var options = {};
+    var colors = ['#4285f4', '#34a853', '#fbbc05', '#ea4335', '#9b59b6', '#1abc9c', '#e74c3c', '#3498db'];
+
+    if (type === 'date') {
+        options = {
+            chart: {
+                type: 'area',
+                height: 280,
+                toolbar: { show: false },
+                fontFamily: 'inherit'
+            },
+            series: [{
+                name: 'Clicks',
+                data: data.chart_series
+            }],
+            xaxis: {
+                categories: data.chart_labels,
+                labels: {
+                    rotate: -45,
+                    style: { fontSize: '11px' }
+                }
+            },
+            yaxis: {
+                labels: {
+                    formatter: function(val) {
+                        return formatNumber(val);
+                    }
+                }
+            },
+            colors: ['#4285f4'],
+            stroke: { curve: 'smooth', width: 2 },
+            fill: {
+                type: 'gradient',
+                gradient: {
+                    shadeIntensity: 1,
+                    opacityFrom: 0.4,
+                    opacityTo: 0.1
+                }
+            },
+            dataLabels: { enabled: false },
+            tooltip: {
+                y: {
+                    formatter: function(val) {
+                        return formatNumber(val) + ' clicks';
+                    }
+                }
+            },
+            grid: { strokeDashArray: 3 }
+        };
+    } else if (type === 'country') {
+        options = {
+            chart: {
+                type: 'bar',
+                height: 280,
+                toolbar: { show: false },
+                fontFamily: 'inherit'
+            },
+            series: [{
+                name: 'Clicks',
+                data: data.chart_series
+            }],
+            xaxis: {
+                categories: data.chart_labels
+            },
+            yaxis: {
+                labels: {
+                    formatter: function(val) {
+                        return formatNumber(val);
+                    }
+                }
+            },
+            plotOptions: {
+                bar: {
+                    horizontal: true,
+                    borderRadius: 4,
+                    barHeight: '60%'
+                }
+            },
+            colors: ['#4285f4'],
+            dataLabels: { enabled: false },
+            tooltip: {
+                y: {
+                    formatter: function(val) {
+                        return formatNumber(val) + ' clicks';
+                    }
+                }
+            },
+            grid: { strokeDashArray: 3 }
+        };
+    } else {
+        options = {
+            chart: {
+                type: 'donut',
+                height: 320,
+                fontFamily: 'inherit'
+            },
+            series: data.chart_series,
+            labels: data.chart_labels,
+            colors: colors,
+            legend: {
+                position: 'bottom',
+                fontSize: '13px'
+            },
+            plotOptions: {
+                pie: {
+                    donut: {
+                        size: '55%',
+                        labels: {
+                            show: true,
+                            total: {
+                                show: true,
+                                label: 'Total',
+                                formatter: function(w) {
+                                    return formatNumber(w.globals.seriesTotals.reduce(function(a, b) {
+                                        return a + b;
+                                    }, 0));
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            dataLabels: {
+                enabled: true,
+                formatter: function(val) {
+                    return Math.round(val) + '%';
+                }
+            },
+            tooltip: {
+                y: {
+                    formatter: function(val) {
+                        return formatNumber(val) + ' clicks';
+                    }
+                }
+            }
+        };
+    }
+
+    bannerCharts[type] = new ApexCharts(chartEl, options);
+    bannerCharts[type].render();
+}
+
+function loadStat() {
+    var ads = $('#adsstat-ads').val(),
+        month = $('#adsstat-month').val();
+
+    if (!ads || !month) {
+        $('#stat-summary, #stat-charts').hide();
+        return;
+    }
+
+    $('#stat-loading').show();
+    $('#stat-summary, #stat-charts').hide();
+
+    var url = nv_base_siteurl + 'index.php?' + nv_lang_variable + '=' + nv_lang_data +
+        '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=viewmap' +
+        '&ads=' + ads + '&month=' + month + '&type=all';
+
+    $.ajax({
+        url: url,
+        dataType: 'json',
+        success: function(data) {
+            if (data.status === 'success') {
+                $('#total-clicks').text(data.total_clicks_formatted);
+
+                var types = ['date', 'country', 'browser', 'os'];
+                $.each(types, function(index, type) {
+                    if (data.charts[type] && data.charts[type].labels.length > 0) {
+                        renderBannerChart(type, {
+                            chart_labels: data.charts[type].labels,
+                            chart_series: data.charts[type].series
+                        });
+                    } else {
+                        $('#chart-' + type).html('<div class="text-muted text-center">No data</div>');
+                    }
+                });
+
+                $('#stat-loading').hide();
+                $('#stat-summary, #stat-charts').show();
+            } else {
+                $('#stat-loading').hide();
+                alert('Error loading statistics');
+            }
+        },
+        error: function() {
+            $('#stat-loading').hide();
+            alert('Error loading statistics');
+        }
+    });
 }
 
 $(function() {
