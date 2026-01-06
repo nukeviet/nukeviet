@@ -60,6 +60,7 @@ $row = [
     'dtime_type' => 'regular',
     'dtime_details' => [],
     'active' => 1,
+    'switch_allow_bot' => 1,
     'act' => 1,
     'groups_view' => '6',
     'all_func' => 1,
@@ -298,6 +299,8 @@ if ($checkss == $nv_Request->get_string('checkss', 'post')) {
     } else {
         $row['active'] = implode(',', $row['active_device']);
     }
+
+    $row['switch_allow_bot'] = $nv_Request->get_int('switch_allow_bot', 'post', 0);
 
     $groups_view = $nv_Request->get_array('groups_view', 'post', []);
     $row['groups_view'] = !empty($groups_view) ? implode(',', nv_groups_post(array_intersect($groups_view, array_keys($groups_list)))) : '';

@@ -141,8 +141,6 @@ if ($nv_Request->get_string('checkss', 'post') == $checkss) {
         $array_config['antispam_warning_content'] = nv_nl2br($array_config['antispam_warning_content']);
     }
 
-    $array_config['switch_allow_bot'] = $nv_Request->get_int('switch_allow_bot', 'post', 0);
-
     $sth = $db->prepare('UPDATE ' . NV_CONFIG_GLOBALTABLE . " SET config_value= :config_value WHERE config_name = :config_name AND lang = '" . NV_LANG_DATA . "' AND module='global'");
     foreach ($array_config as $config_name => $config_value) {
         $sth->bindParam(':config_name', $config_name, PDO::PARAM_STR, 30);
@@ -185,7 +183,6 @@ $value_setting = [
     'site_keywords' => $global_config['site_keywords'],
     'description' => $global_config['site_description'],
     'switch_mobi_des' => $global_config['switch_mobi_des'],
-    'switch_allow_bot' => $global_config['switch_allow_bot'],
     'data_warning_content' => !empty($global_config['data_warning_content']) ? nv_br2nl($global_config['data_warning_content']) : '',
     'antispam_warning_content' => !empty($global_config['antispam_warning_content']) ? nv_br2nl($global_config['antispam_warning_content']) : ''
 ];

@@ -653,4 +653,3 @@ $lang_module['cache_prefix'] = 'Cache prefix';
 $lang_module['cache_prefix_note'] = 'Enter a prefix if you use Memcached or Redis and have multiple websites sharing the same cache server to avoid cache key conflicts between websites. The prefix consists of letters a-z, numbers 0-9 and underscore (_), must start with a letter. File cache does not use this prefix.';
 $lang_module['cache_prefix_invalid'] = 'Invalid prefix. Only accepts letters a-z, numbers 0-9 and underscore (_) and must start with a letter.';
 $lang_module['cache_test_error'] = 'Error connecting to cache server. Please check the configuration parameters. Error details: %s';
-$lang_module['allow_bot_des'] = 'Allow visibility for search engine bots';
