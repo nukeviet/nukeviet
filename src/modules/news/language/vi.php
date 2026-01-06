@@ -650,3 +650,5 @@ $lang_module['queue_public'] = 'Bạn có <strong>%s</strong> bài viết đang 
 $lang_module['reject_reason'] = 'Nguyên nhân từ chối';
 $lang_module['reject_reason_error'] = 'Xin mời nhập nguyên nhân từ chối';
 $lang_module['reject_reason_view'] = 'Nhấp để xem nguyên nhân từ chối của bài viết này';
+$lang_module['introduce_author'] = 'Giới thiệu tác giả %s';
+$lang_module['list_articles_by_author'] = 'Danh sách bài viết của tác giả %s';

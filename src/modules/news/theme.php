@@ -1169,6 +1169,11 @@ function author_theme($author_info, $topic_array, $topic_other_array, $generate_
     $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
     $xtpl->assign('TOPPIC_TITLE', $page_title);
     $xtpl->assign('IMGWIDTH1', $module_config[$module_name]['homewidth']);
+    // Chỉ dùng cho trang tác giả
+    if (!empty($author_info['is_author_page'])) {
+        $xtpl->assign('IS_AUTHOR_PAGE', true);
+        $xtpl->assign('AUTHOR_LIST_TITLE', sprintf(\NukeViet\Core\Language::$lang_module['list_articles_by_author'], $author_info['pseudonym']));
+    }
     if (!empty($author_info['description'])) {
         $xtpl->assign('TOPPIC_DESCRIPTION', $author_info['description']);
         if (!empty($author_info['image'])) {
@@ -1222,7 +1227,11 @@ function author_theme($author_info, $topic_array, $topic_other_array, $generate_
         $xtpl->assign('GENERATE_PAGE', $generate_page);
         $xtpl->parse('main.generate_page');
     }
-
+    if (!empty($author_info['is_author_page'])) {
+        $xtpl->parse('main.is_author');
+    } else {
+        $xtpl->parse('main.is_topic');
+    }
     $xtpl->parse('main');
 
     return $xtpl->text('main');
