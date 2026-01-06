@@ -13,32 +13,18 @@
     </div>
 </div>
 <!-- END: topicdescription -->
-<!-- BEGIN: is_author -->
+<!-- BEGIN: author_list_title -->
 <h2 class="author-article-title">
     {AUTHOR_LIST_TITLE}
 </h2>
-<!-- END: is_author -->
+<!-- END: author_list_title -->
 <!-- BEGIN: topic -->
 <div class="news_column panel panel-default">
     <div class="panel-body">
         <!-- BEGIN: homethumb -->
         <a href="{TOPIC.link}" title="{TOPIC.title}" {TOPIC.target_blank}><img alt="{TOPIC.alt}" src="{TOPIC.src}" width="{TOPIC.width}" class="img-thumbnail pull-left imghome" /></a>
         <!-- END: homethumb -->
-        <!-- BEGIN: is_author -->
-        <h3>
-            <a href="{TOPIC.link}" title="{TOPIC.title}" {TOPIC.target_blank}>
-                {TOPIC.title}
-            </a>
-        </h3>
-        <!-- END: is_author -->
-
-        <!-- BEGIN: is_topic -->
-        <h2 class="h3">
-            <a href="{TOPIC.link}" title="{TOPIC.title}" {TOPIC.target_blank}>
-                {TOPIC.title}
-            </a>
-        </h2>
-        <!-- END: is_topic -->
+        <h3><a href="{TOPIC.link}" title="{TOPIC.title}" {TOPIC.target_blank}>{TOPIC.title}</a></h3>
         <p>
             <em class="fa fa-clock-o">&nbsp;</em><em>{TIME} {DATE}</em>
         </p>
