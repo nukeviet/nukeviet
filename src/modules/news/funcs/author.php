@@ -35,13 +35,13 @@ if (!$author_info['is_guest']) {
     }
     $author_info['add_time_format'] = nv_date_format(1, $author_info['add_time']);
 
-    $page_title = sprintf($nv_Lang->getModule('introduce_author'), $author_info['pseudonym']);
+    $page_title = $nv_Lang->getModule('introduce_author', $author_info['pseudonym']);
     // Meta description cho trang tác giả
     if (!empty($author_info['description'])) {
         // Lấy từ phần "Giới thiệu tác giả" (quản trị nội dung tự sửa)
         $description = nv_clean60(strip_tags($author_info['description']), 300);
     } else {
-        $description = sprintf($nv_Lang->getModule('list_articles_by_author'), $author_info['pseudonym']);
+        $description = $nv_Lang->getModule('list_articles_by_author', $author_info['pseudonym']);
     }
     $where = 'status=1 AND id IN (SELECT id FROM ' . NV_PREFIXLANG . '_' . $module_data . '_authorlist WHERE aid=' . $author_info['id'] . ')';
 } else {

@@ -24,7 +24,12 @@
         <!-- BEGIN: homethumb -->
         <a href="{TOPIC.link}" title="{TOPIC.title}" {TOPIC.target_blank}><img alt="{TOPIC.alt}" src="{TOPIC.src}" width="{TOPIC.width}" class="img-thumbnail pull-left imghome" /></a>
         <!-- END: homethumb -->
+        <!-- BEGIN: h2 -->
+        <h2 class="h3"><a href="{TOPIC.link}" title="{TOPIC.title}" {TOPIC.target_blank}>{TOPIC.title}</a></h2>
+        <!-- END: h2 -->
+        <!-- BEGIN: h3 -->
         <h3><a href="{TOPIC.link}" title="{TOPIC.title}" {TOPIC.target_blank}>{TOPIC.title}</a></h3>
+        <!-- END: h3 -->
         <p>
             <em class="fa fa-clock-o">&nbsp;</em><em>{TIME} {DATE}</em>
         </p>
