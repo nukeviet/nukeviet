@@ -102,12 +102,12 @@
                 </div>
             </div>
             <div class="row mb-3 align-items-center">
-                <label for="switch_allow_bot" class="col-sm-3 col-form-label text-sm-end text-truncate fw-medium" title="{$LANG->getModule('dtime_allow_bot')}">
+                <label for="bot_visible" class="col-sm-3 col-form-label text-sm-end text-truncate fw-medium" title="{$LANG->getModule('dtime_allow_bot')}">
                     {$LANG->getModule('dtime_allow_bot')}:
                 </label>
                 <div class="col-9 col-sm-5 d-flex align-items-center">
                     <div class="form-check form-switch mb-0">
-                        <input class="form-check-input" type="checkbox" name="switch_allow_bot" id="switch_allow_bot" value="1" role="switch"{if $ROW.switch_allow_bot} checked{/if}>
+                        <input class="form-check-input" type="checkbox" name="bot_visible" id="bot_visible" value="1" role="switch"{if $ROW.bot_visible} checked{/if}>
                     </div>
                 </div>
             </div>

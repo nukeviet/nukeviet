@@ -60,7 +60,7 @@ $row = [
     'dtime_type' => 'regular',
     'dtime_details' => [],
     'active' => 1,
-    'switch_allow_bot' => 1,
+    'bot_visible' => 1,
     'act' => 1,
     'groups_view' => '6',
     'all_func' => 1,
@@ -300,7 +300,7 @@ if ($checkss == $nv_Request->get_string('checkss', 'post')) {
         $row['active'] = implode(',', $row['active_device']);
     }
 
-    $row['switch_allow_bot'] = $nv_Request->get_int('switch_allow_bot', 'post', 0);
+    $row['bot_visible'] = $nv_Request->get_int('bot_visible', 'post', 0);
 
     $groups_view = $nv_Request->get_array('groups_view', 'post', []);
     $row['groups_view'] = !empty($groups_view) ? implode(',', nv_groups_post(array_intersect($groups_view, array_keys($groups_list)))) : '';
@@ -479,10 +479,10 @@ if ($checkss == $nv_Request->get_string('checkss', 'post')) {
 
             $_sql = 'INSERT INTO ' . NV_BLOCKS_TABLE . '_groups (
                 theme, module, file_name, title, link, template, heading, position, dtime_type,
-                dtime_details, active, act, groups_view, all_func, weight, config
+                dtime_details, active, bot_visible, act, groups_view, all_func, weight, config
             ) VALUES (
                 :selectthemes, :module, :file_name, :title, :link, :template, :heading, :position,
-                :dtime_type, :dtime_details, :active, ' . $row['act'] . ', :groups_view,
+                :dtime_type, :dtime_details, :active, ' . $row['bot_visible'] . ', ' . $row['act'] . ', :groups_view,
                 ' . $row['all_func'] . ', ' . $row['weight'] . ', :config
             )';
             $data = [];
@@ -514,6 +514,7 @@ if ($checkss == $nv_Request->get_string('checkss', 'post')) {
                     dtime_type=:dtime_type,
                     dtime_details=:dtime_details,
                     active=:active,
+                    bot_visible=' . $row['bot_visible'] . ',
                     act=' . $row['act'] . ',
                     groups_view=:groups_view,
                     all_func=' . $row['all_func'] . ',
