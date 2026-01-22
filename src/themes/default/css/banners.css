@@ -25,3 +25,7 @@
 .min-w100 {
     min-width: 100px;
 }
+
+.apexcharts-svg {
+    overflow: scroll!important;
+}

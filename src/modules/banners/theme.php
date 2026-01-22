@@ -91,6 +91,5 @@ function nv_banner_theme_stats($ads)
     }
 
     $xtpl->parse('main');
-
     return $xtpl->text('main');
 }

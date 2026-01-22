@@ -172,3 +172,6 @@ $lang_module['enter_keyword'] = 'Enter keywords';
 $lang_module['all_plan'] = 'All plans';
 $lang_module['admin_add_banner'] = 'Add banner';
 $lang_module['banner_uploadtype'] = 'Note: Uploaded files must be in image format, with a maximum size of %s x %s pixels';
+$lang_module['chart_data_empty'] = 'No clicks available';
+$lang_module['chart_lbl_clicks'] = 'Clicks';
+$lang_module['chart_lbl_total'] = 'Total';

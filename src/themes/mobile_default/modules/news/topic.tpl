@@ -10,14 +10,23 @@
 	</div>
 </div>
 <!-- END: topicdescription -->
-
+<!-- BEGIN: author_list_title -->
+<h2 class="author-article-title">
+    {AUTHOR_LIST_TITLE}
+</h2>
+<!-- END: author_list_title -->
 <!-- BEGIN: topic -->
 <div class="news_column panel panel-default">
 	<div class="panel-body">
 		<!-- BEGIN: homethumb -->
 		<a href="{TOPIC.link}" title="{TOPIC.title}"><img alt="{TOPIC.alt}" src="{TOPIC.src}" width="{TOPIC.width}" class="img-thumbnail pull-left imghome" /></a>
 		<!-- END: homethumb -->
-		<h3><a href="{TOPIC.link}" title="{TOPIC.title}">{TOPIC.title}</a></h3>
+		<!-- BEGIN: h2 -->
+        <h2 class="h3"><a href="{TOPIC.link}" title="{TOPIC.title}">{TOPIC.title}</a></h2>
+        <!-- END: h2 -->
+        <!-- BEGIN: h3 -->
+        <h3><a href="{TOPIC.link}" title="{TOPIC.title}">{TOPIC.title}</a></h3>
+        <!-- END: h3 -->
 		<p>
 			<em class="fa fa-clock-o">&nbsp;</em><em>{TIME} {DATE}</em>
 		</p>

@@ -172,3 +172,6 @@ $lang_module['enter_keyword'] = 'Nhập từ khóa';
 $lang_module['all_plan'] = 'Tất cả các khối';
 $lang_module['admin_add_banner'] = 'Thêm banner';
 $lang_module['banner_uploadtype'] = 'Lưu ý: File tải lên có định dạng hình ảnh, kích thước tối đa là %s x %s pixels';
+$lang_module['chart_data_empty'] = 'Không có lượt click nào';
+$lang_module['chart_lbl_clicks'] = 'Lượt nhấp';
+$lang_module['chart_lbl_total'] = 'Tổng';
