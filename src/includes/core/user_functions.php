@@ -135,6 +135,7 @@ function nv_blocks_content($sitecontent)
                 'act' => $_row['act'],
                 'groups_view' => $_row['groups_view'],
                 'all_func' => $_row['all_func'],
+                'bot_visible' => $_row['bot_visible'],
                 'block_config' => $block_config
             ];
         }
