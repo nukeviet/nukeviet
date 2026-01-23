@@ -57,12 +57,12 @@ if (!nv_function_exists('nv_page_list')) {
     }
 
     /**
-     * nv_page_list()
+     * Danh sách bài viết
      *
      * @param array $block_config
      * @return string
      */
-    function nv_page_list($block_config)
+    function nv_page_list(array $block_config): string
     {
         global $nv_Cache, $global_config, $site_mods, $db;
         $module = $block_config['module'];
@@ -71,24 +71,29 @@ if (!nv_function_exists('nv_page_list')) {
             return '';
         }
 
-        $db->sqlreset()->select('id, title, alias, description')->from(NV_PREFIXLANG . '_' . $site_mods[$module]['module_data'])->where('status = 1')->order('weight ASC')->limit($block_config['numrow']);
+        $db->sqlreset()
+        ->select('id, title, alias, description')
+        ->from(NV_PREFIXLANG . '_' . $site_mods[$module]['module_data'])
+        ->where('status = 1')
+        ->order('weight ASC')
+        ->limit($block_config['numrow']);
 
         $list = $nv_Cache->db($db->sql(), 'id', $module);
 
         if (!empty($list)) {
-            $block_theme = get_tpl_dir([$global_config['module_theme'], $global_config['site_theme']], 'default', '/modules/page/block.page_list.tpl');
-            $xtpl = new XTemplate('block.page_list.tpl', NV_ROOTDIR . '/themes/' . $block_theme . '/modules/page');
-
-            foreach ($list as $l) {
+            foreach ($list as &$l) {
                 $l['title_clean60'] = nv_clean60($l['title'], $block_config['title_length']);
                 $l['link'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module . '&amp;' . NV_OP_VARIABLE . '=' . $l['alias'] . $global_config['rewrite_exturl'];
-                $xtpl->assign('ROW', $l);
-                $xtpl->parse('main.loop');
             }
+            unset($l);
 
-            $xtpl->parse('main');
+            [$block_theme, $dir] = get_block_tpl_dir('block.page_list.tpl', $module, true);
+            $tpl = new \NukeViet\Template\NVSmarty();
+            $tpl->setTemplateDir($dir);
+            $tpl->assign('TEMPLATE', $block_theme);
+            $tpl->assign('DATA', $list);
 
-            return $xtpl->text('main');
+            return $tpl->fetch('block.page_list.tpl');
         }
 
         return '';
