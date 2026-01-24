@@ -80,23 +80,21 @@ if (!nv_function_exists('nv_page_list')) {
 
         $list = $nv_Cache->db($db->sql(), 'id', $module);
 
-        if (!empty($list)) {
-            foreach ($list as &$l) {
-                $l['title_clean60'] = nv_clean60($l['title'], $block_config['title_length']);
-                $l['link'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module . '&amp;' . NV_OP_VARIABLE . '=' . $l['alias'] . $global_config['rewrite_exturl'];
-            }
-            unset($l);
+        if (empty($list)) return '';
 
-            [$block_theme, $dir] = get_block_tpl_dir('block.page_list.tpl', $module, true);
-            $tpl = new \NukeViet\Template\NVSmarty();
-            $tpl->setTemplateDir($dir);
-            $tpl->assign('TEMPLATE', $block_theme);
-            $tpl->assign('DATA', $list);
-
-            return $tpl->fetch('block.page_list.tpl');
+        foreach ($list as &$l) {
+            $l['title_clean60'] = nv_clean60($l['title'], $block_config['title_length']);
+            $l['link'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module . '&amp;' . NV_OP_VARIABLE . '=' . $l['alias'] . $global_config['rewrite_exturl'];
         }
+        unset($l);
 
-        return '';
+        [$block_theme, $dir] = get_block_tpl_dir('block.page_list.tpl', $module, true);
+        $tpl = new \NukeViet\Template\NVSmarty();
+        $tpl->setTemplateDir($dir);
+        $tpl->assign('TEMPLATE', $block_theme);
+        $tpl->assign('DATA', $list);
+
+        return $tpl->fetch('block.page_list.tpl');
     }
 }
 
