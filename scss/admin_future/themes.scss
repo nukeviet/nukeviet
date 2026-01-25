@@ -1,0 +1,73 @@
+/**
+ * NukeViet Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2025 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
+ */
+
+// Define variable
+@import "../functions";
+@import "variables";
+@import "variables-dark";
+@import "../../node_modules/bootstrap/scss/functions";
+@import "../../node_modules/bootstrap/scss/variables";
+
+.fw-hm {
+    width: 4.0625rem;
+}
+
+.show-list-ugroup {
+    max-height: 15.625rem;
+    overflow-y: hidden;
+    position: relative;
+}
+
+.themelist-thumb {
+    position: relative;
+    height: 0;
+    padding-bottom: 62.5%;
+
+    .themelist {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+
+        img {
+            object-position: center;
+            object-fit: cover;
+            width: 100%;
+            height: 100%;
+            border-top-left-radius: calc(#{$card-border-radius} + 1px);
+            border-top-right-radius: calc(#{$card-border-radius} + 1px);
+        }
+    }
+
+    .theme-btns {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        align-content: center;
+        gap: calc(#{$spacer} * .5);
+        padding: calc(#{$spacer} * .5) #{$spacer};
+        background-color: rgba(var(--bs-secondary-bg-rgb), .8);
+        transition: opacity .2s ease-in-out;
+        opacity: 0;
+    }
+}
+
+.theme-item:hover {
+    .themelist-thumb {
+        .theme-btns {
+            opacity: 1;
+        }
+    }
+}

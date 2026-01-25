@@ -1,0 +1,20 @@
+/**
+ * NukeViet Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2025 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
+ */
+.counter {
+  list-style-type: none;
+  counter-reset: css-counter 0;
+}
+.counter > tr {
+  counter-increment: css-counter 1;
+}
+.counter > tr td:first-child::before {
+  content: counter(css-counter);
+}
+
+/*# sourceMappingURL=language.css.map */

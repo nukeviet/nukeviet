@@ -1,0 +1,62 @@
+/**
+ * NukeViet Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2025 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
+ */
+.fw-hm {
+  width: 4.0625rem;
+}
+
+.show-list-ugroup {
+  max-height: 15.625rem;
+  overflow-y: hidden;
+  position: relative;
+}
+
+.themelist-thumb {
+  position: relative;
+  height: 0;
+  padding-bottom: 62.5%;
+}
+.themelist-thumb .themelist {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+.themelist-thumb .themelist img {
+  -o-object-position: center;
+  object-position: center;
+  -o-object-fit: cover;
+  object-fit: cover;
+  width: 100%;
+  height: 100%;
+  border-top-left-radius: calc(var(--bs-border-radius) + 1px);
+  border-top-right-radius: calc(var(--bs-border-radius) + 1px);
+}
+.themelist-thumb .theme-btns {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  align-content: center;
+  gap: calc(1rem * 0.5);
+  padding: calc(1rem * 0.5) 1rem;
+  background-color: rgba(var(--bs-secondary-bg-rgb), 0.8);
+  transition: opacity 0.2s ease-in-out;
+  opacity: 0;
+}
+
+.theme-item:hover .themelist-thumb .theme-btns {
+  opacity: 1;
+}
+
+/*# sourceMappingURL=themes.css.map */

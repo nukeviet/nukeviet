@@ -1,0 +1,45 @@
+.right-sidebar {
+    width: $right-sidebar-width;
+    background-color: var(--nv-right-sidebar-bg);
+    position: fixed;
+    right: 0;
+    top: $header-height;
+    height: calc(100vh - $header-height);
+    box-shadow: $box-shadow-sm;
+    z-index: $zindex-right-sidebar;
+    transform: translateX(calc($right-sidebar-width + .75rem));
+    transition: transform .2s ease-in-out;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+
+    .right-sidebar-inner {
+        position: relative;
+        overflow: hidden;
+        width: 100%;
+        max-height: calc(100vh - $header-height - 2rem);
+    }
+
+    .color-mode {
+        a {
+            &:not(:hover) {
+                color: var(--bs-body-color);
+            }
+
+            &.active {
+                i {
+                    color: var(--bs-primary);
+                }
+            }
+        }
+    }
+}
+
+.open-right-sidebar {
+    .right-sidebar {
+        transform: translateX(0);
+    }
+
+    .header-right .main-icons>ul>li>a[data-toggle=right-sidebar] {
+        color: var(--bs-primary);
+    }
+}

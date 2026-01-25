@@ -1,0 +1,198 @@
+/**
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
+ */
+
+body {
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    padding-top: 50px;
+    color: #777;
+    background-color: #f8f8f8;
+}
+
+.wrapper {
+    width: 343px;
+}
+
+@media (max-width: 350px) {
+    body {
+        padding-top: 10px;
+    }
+
+    .wrapper {
+        width: 100%;
+        padding: 0 10px;
+    }
+
+    #reCaptcha {
+        transform: scale(0.85);
+        transform-origin: 0 0;
+    }
+}
+
+/* Content
+ -----------------------------------------------------------------------------*/
+.login-content {
+    background-color: #fff;
+    border: 1px solid #dedede;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.13);
+    border-radius: 4px;
+}
+
+.login-header {
+    padding: 15px 20px;
+    background-color: #428bca;
+    color: #fff;
+    font-size: 16px;
+    text-align: center;
+    border-bottom: 1px solid #3979b1;
+    border-top-left-radius: 4px;
+    border-top-right-radius: 4px;
+}
+
+.login-body {
+    padding: 20px 20px 10px;
+}
+
+.login-footer {
+    padding: 10px 20px;
+    background-color: #f5f5f5;
+    border-top: 1px solid #dedede;
+    border-bottom-left-radius: 4px;
+    border-bottom-right-radius: 4px;
+}
+
+.login-content .form-label {
+    text-align: right;
+    margin-bottom: 0;
+    padding-top: 7px;
+}
+
+.login-content img {
+    height: auto;
+    width: 100% !important;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.login-content .fa-refresh {
+    position: absolute;
+    top: 4px;
+    right: 4px;
+    cursor: pointer;
+    color: rgba(0, 0, 0, 0.30);
+}
+
+.login-content .muti-lang {
+    width: auto !important;
+    display: inline-block !important;
+}
+
+.login-content .lostpass {
+    text-align: right;
+}
+
+.login-2step-others {
+    margin-top: 20px;
+}
+
+.btn-facebook {
+    background-color: #4267b2;
+    border-color: #4267b2;
+    color: #fff;
+}
+
+.btn-facebook:hover,
+.btn-facebook:active,
+.btn-facebook:focus {
+    background-color: #5180e0 !important;
+    border-color: #5180e0 !important;
+}
+
+.btn-google {
+    background-color: #ea4335;
+    border-color: #ea4335;
+    color: #fff;
+}
+
+.btn-google:hover,
+.btn-google:active,
+.btn-google:focus {
+    background-color: #f2574b !important;
+    border-color: #f2574b !important;
+}
+
+.btn-zalo {
+    background-color: #0067ff;
+    border-color: #0067ff;
+    color: #fff;
+}
+
+.btn-zalo:hover,
+.btn-zalo:active,
+.btn-zalo:focus {
+    background-color: #035adb !important;
+    border-color: #035adb !important;
+}
+
+.btn-facebook:active,
+.btn-facebook:focus,
+.btn-facebook:active:focus,
+.btn-facebook:hover,
+.btn-google:active,
+.btn-google:focus,
+.btn-google:active:focus,
+.btn-google:hover,
+.btn-zalo:active,
+.btn-zalo:focus,
+.btn-zalo:active:focus,
+.btn-zalo:hover {
+    color: #fff !important;
+}
+
+.grecaptcha-badge {
+    visibility: hidden;
+}
+
+/* Footer
+ -----------------------------------------------------------------------------*/
+.copyright {
+    text-align: right;
+    font-size: 11px;
+    color: #999;
+    margin-top: 10px;
+}
+
+.copyright a {
+    color: #999;
+    text-decoration: underline;
+}
+
+/* Message
+ -----------------------------------------------------------------------------*/
+.inner-message {
+    padding-left: 10px;
+    margin-bottom: 16px;
+}
+
+.inner-message.normal {
+    border-left: 4px #e7e7e7 solid;
+}
+
+.inner-message.error {
+    padding-left: 10px;
+    border-left: 4px #d54e21 solid;
+    color: #d54e21;
+}
+
+.inner-message.success {
+    padding-left: 10px;
+    border-left: 4px #198754 solid;
+    color: #198754;
+}

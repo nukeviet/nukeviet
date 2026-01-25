@@ -1,0 +1,27 @@
+/**
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
+ */
+
+#frm label.error {
+    font-weight: normal;
+    display: block;
+    margin-top: 5px;
+    margin-bottom: 0;
+    font-style: italic;
+    color: #a94442;
+}
+
+#banner_urlrequired,
+#banner_uploadimage,
+#banner_imagealt {
+    display: none;
+}
+
+.min-w100 {
+    min-width: 100px;
+}

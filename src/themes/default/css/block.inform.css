@@ -1,0 +1,278 @@
+/* inform-notification */
+.inform-notification {
+    display: table-cell;
+    vertical-align: middle;
+    position: static!important;
+}
+
+.inform-notification a.dropdown-toggle {
+    display: block;
+    position: relative;
+    width: 34px;
+    height: 34px;
+    text-align: center;
+    background-color: transparent;
+    color: #dcdcdc;
+}
+
+.inform-notification a.dropdown-toggle:hover,
+.inform-notification.open a.dropdown-toggle {
+    color: #fff;
+}
+
+.inform-notification a.dropdown-toggle .fa {
+    font-size: 24px;
+    line-height: 34px;
+}
+
+.inform-notification .new-count {
+    position: absolute;
+    top: 0;
+    right: 0;
+    background-color: #ff0040;
+    min-width: 10px;
+    padding: 3px 6px;
+    font-size: 10px;
+    font-weight: 700;
+    line-height: 1;
+    color: #fff;
+    text-align: center;
+    white-space: nowrap;
+    border-radius: 10px;
+    z-index: 1;
+}
+
+.inform-notification .inform-box {
+    position: absolute;
+    top: 100%;
+    margin: 0;
+    right: 0;
+    left: auto;
+    background: #fff;
+    border: 0;
+    color: #555;
+    width: 360px;
+    padding: 0;
+    z-index: 1001;
+}
+
+.inform-notification .btn-close {
+    padding: 0;
+    width: 32px;
+    height: 32px;
+    font-size: 20px;
+    font-weight: 700;
+    line-height: 32px;
+    text-align: center;
+    cursor: pointer;
+    background: 0 0;
+    border: 0;
+    border-radius: 50%;
+    -webkit-appearance: none;
+    float: right;
+    color: #000;
+    opacity: 0.2;
+    outline-width: 0;
+    outline-style: none;
+}
+
+.inform-notification .filter-box .btn {
+    color: #666;
+    background-color: #fff;
+    border-color: #ccc;
+    font-weight: 700;
+}
+
+.inform-notification .btn-close:hover,
+.inform-notification .btn-close:active,
+.inform-notification .filter-box .btn:active,
+.inform-notification .filter-box .btn.active {
+    color: #fff;
+    background-color: #428bca;
+    border-color: #2f74b1;
+}
+
+.inform-notification .inform-header,
+.inform-notification .inform-footer {
+    padding: 10px;
+    background-color: #f5f5f5;
+    color: #666;
+}
+
+.inform-notification .inform-header {
+    border-bottom: 1px solid #ccc;
+}
+
+.inform-notification .inform-footer {
+    border-top: 1px solid #ccc;
+}
+
+.inform-notification .inform-footer {
+    text-align: center;
+}
+
+.inform-notification .inform-footer a {
+    color: #666;
+    font-weight: 700;
+    display: inline-block;
+    padding: 3px 8px;
+    background-color: transparent;
+    border: 1px solid transparent;
+    border-radius: 4px;
+}
+
+.inform-notification .inform-footer a:hover {
+    color: #555;
+    background-color: #fff;
+    border-color: #ccc;
+}
+
+.inform-notification .inform-footer a + a {
+    margin-left: 15px;
+}
+
+.inform-notification .inform-content {
+    position: relative;
+    color: #555;
+    background-color: #fff;
+    max-height: calc(100vh - 150px);
+    min-height: 100px;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+.inform-notification .inform-content a,
+.inform-notification .inform-content a:link,
+.inform-notification .inform-content a:active,
+.inform-notification .inform-content a:visited {
+    color: #1a3f5e;
+}
+
+.inform-notification .inform-content a:hover,
+.inform-notification .inform-content a:focus {
+    text-decoration: none;
+    color: #0e2132;
+}
+
+.inform-notification ul {
+    margin-bottom: 0;
+}
+
+.inform-notification .item {
+    position: relative;
+    display: block;
+    padding: 15px 18px;
+    background-color: #fff;
+}
+
+.inform-notification .item + .item {
+    border-top: 1px solid #eee;
+}
+
+.inform-notification .more {
+    white-space: nowrap;
+}
+
+.inform-notification .more u {
+    cursor: pointer;
+}
+
+.inform-notification .avatar {
+    float: left;
+    width: 50px;
+    height: 50px;
+    margin-right: 5px;
+    margin-top: -4px;
+    background-color: #428bca;
+    color: #fff;
+    font-size: 26px;
+    line-height: 1;
+    padding: 12px;
+    text-align: center;
+    border-radius: 50%;
+}
+
+.inform-notification .item .title {
+    font-size: 14px;
+    font-weight: 600;
+    display: block;
+    margin-bottom: 6px;
+}
+
+.inform-notification .item .message {
+    font-size: 14px;
+    line-height: 1.6;
+    margin-bottom: 15px;
+}
+
+.inform-notification .item .message::after {
+    display: block;
+    content: "";
+    clear: both;
+}
+
+.inform-notification .details {
+    margin-top: 10px;
+}
+
+.inform-notification .details a {
+    display: inline-block;
+    margin-left: 5px;
+    white-space: nowrap;
+    font-size: 85%;
+    line-height: 1;
+    padding: 5px 8px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+}
+
+.inform-notification .item .foot {
+    font-size: 12px;
+    color: #8f8f8f;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.inform-notification .item .foot button {
+    text-align: center;
+    background-color: transparent;
+    color: #8f8f8f;
+    border-color: #ececec;
+    height: 28px;
+    width: 28px;
+    line-height: 1;
+    padding: 0;
+    text-align: center;
+    border-radius: 50%;
+    outline-width: 0;
+    outline-style: none;
+}
+
+.inform-notification .item .foot button:hover {
+    background-color: #f5f5f5;
+}
+
+.inform-notification .item .foot button + button {
+    margin-left: 8px;
+}
+
+.inform-notification .viewed-0:not(.hidden-1) .btn-viewed,
+.inform-notification .details a,
+.inform-notification .item:not(.favorite-0):not(.hidden-1) .btn-favorite {
+    background-color: #666 !important;
+    color: #fff !important;
+    border-color: transparent !important;
+}
+
+.inform-notification .notify-empty {
+    padding: 15px;
+    color: #666;
+    text-align: center;
+}
+
+@media (max-width: 374.98px) {
+    .inform-notification .inform-box {
+        width: calc(100vw - 15px);
+    }
+}

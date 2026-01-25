@@ -1,0 +1,23 @@
+Tiêu đề:
+[NukeViet 5.0] Phát triển giao diện admin_future cho khu vực thêm bài mới module page
+
+Mô tả:
+Các bước làm:
+
+- Sửa plugin src\includes\plugin\get_global_admin_theme.php và src\includes\plugin\get_module_admin_theme.php để nhận giao diện admin_future khu vực content của page
+- Sửa src\modules\page\admin\content.php và sinh ra giao diện tương ứng
+
+Chuẩn smarty và bootstrap 5.0, làm tương tự như những khu vực khác ví dụ /admin/vi/news/content/
+
+Lưu ý:
+- Js nội tuyến trong file tpl cần chuyển về js của module trong themes/admin_future/js/ten-module.js
+- Xóa các class không còn sử dụng như .confirm-reload trong file .tpl
+- Nếu có form, action của form dùng cách ghép biến smarty ví dụ `{$smarty.const.NV_BASE_ADMINURL}index.php?{$smarty.const.NV_LANG_VARIABLE}={$smarty.const.NV_LANG_DATA}&amp;{$smarty.const.NV_NAME_VARIABLE}={$MODULE_NAME}&amp;{$smarty.const.NV_OP_VARIABLE}={$OP}{if not empty($ID)}&amp;id={$ID}{/if}` thay vì xuất ra toàn bộ bằng assign từ php.
+- Nếu có form và có thể hãy chuyển sang dạng ajax-submit giống như src\themes\admin_future\modules\modules\edit.tpl. Đồng thời json trả về trong php cần phải kiểm tra đủ các mess, status để js trong nv.core.js chỗ .ajax-submit xử lý và toast/alert/invalid-feedback/invalid-tooltip cho đúng
+- Các hàm phức tạp và có nhiều tham số ví dụ nv_aleditor hãy xử lý dữ liệu ở php trước khi assign, thay vì tạo modifier để dùng trong tpl. Ngoại trừ các hàm dùng để định dạng hiển thị như nv_datetime_format, nv_number_format, nv_date_format...
+- Comment nếu có trong code hãy sử dụng tiếng Việt
+- Mọi request post đều cần có cơ chế kiểm tra theo $checkss
+- Các biến sử dụng trong tpl cần kiểm tra cẩn thận đảm bảo nó được tạo sẵn giá trị mặc định trong file php. Tránh trường hợp sinh lỗi cảnh báo Undefined array key "....." in file ...
+- Đối với các hằng dùng trong tpl, ưu tiên dùng $smarty.const.CONSTANT_NAME thay vì assign hằng đó ra trong php
+- Chú ý thẻ label đối với các field là trình soạn thảo cần kiểm tra đồng bộ đúng thuộc tính for.
+- Xem xét lại cách trình bày form nếu có form một cách cân đối.

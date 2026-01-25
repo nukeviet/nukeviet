@@ -1,0 +1,39 @@
+{
+    "info": {
+        "name": "Config Menu",
+        "author": "VINADES.,JSC",
+        "website": "https://vinades.vn",
+        "description": ""
+    },
+    "config": {
+        "module_in_menu": ""
+    },
+    "datafunction": "nv_menu_theme_default_footer_config",
+    "submitfunction": "nv_menu_theme_default_footer_submit",
+    "i18n": {
+        "vi": {
+            "language": {
+                "module_in_menu": "Các module hiển thị"
+            },
+            "info": {
+                "name": "Menu cuối trang"
+            }
+        },
+        "en": {
+            "language": {
+                "module_in_menu": "Choose module"
+            },
+            "info": {
+                "name": "Footer menu"
+            }
+        },
+        "fr": {
+            "language": {
+                "module_in_menu": "Choisissez le module"
+            },
+            "info": {
+                "name": "Menu de pied de page"
+            }
+        }
+    }
+}

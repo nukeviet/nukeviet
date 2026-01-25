@@ -1,0 +1,25 @@
+{
+    "info": {
+        "name": "Block_language",
+        "author": "VINADES.,JSC",
+        "website": "https://vinades.vn",
+        "description": ""
+    },
+    "i18n": {
+        "en": {
+            "info": {
+                "name": "Change language"
+            }
+        },
+        "fr": {
+            "info": {
+                "name": "Changer la langue"
+            }
+        },
+        "vi": {
+            "info": {
+                "name": "Chuyển đổi ngôn ngữ trang"
+            }
+        }
+    }
+}

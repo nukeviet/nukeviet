@@ -1,0 +1,18 @@
+/* eye btn */
+.btn-eye {
+    padding-left: 8px !important;
+    padding-right: 8px !important;
+}
+.btn-eye::before {
+    display: inline-block;
+    content: "";
+    height: 11px;
+    width: 16px;
+    vertical-align: middle;
+    line-height: 11px;
+    background-image: url(data:image/webp;base64,UklGRnABAABXRUJQVlA4TGMBAAAvD0AFEA+iqJGkqHa5MYBM/D8INhQ1khTVLjcGkIn/B0FRI0lR7XJjAJn4fxAcR7atRNgTXHckoBFQpA7BuOv4rALCOQf23sqck2utWEoxIoLhRMQLM3I40IHwYcNGCIgIAoFBACAQiBIf3DgxoH7v7ffeqtaKmSn33sWIiCLiiAiAHxGPiACYCP7/fwTQQLCB8CPihzc2FEAo0GCDgACoyAAxkm3T1rp6xrVt+9n5h/W+fwIR/Z8AfHsXfy3fHR7FV/JHh+7Z+R/57bMDwvJy39dFUQ/3Sxkhe1Qo+tP1eh4yVI/y2CC4JEhSvC4hmiOA9uZjN8K/tvgwyYHDAUjTj/4jOXUXM+KzGauppqGr9vyNtGWRowBGEpQVQPEspcxp1iY8juFYgt+AEbDdmEtCA2FuWZNkRGxY3iU10IJDWMJEnpHrJVzTkx0AS0WWZoCnSpKHd2ot6JKsc0sCn5MMQ+JDAA==);
+    background-repeat: no-repeat;
+}
+[data-nv-type=password] + .input-group-btn > .btn-eye::before {
+    background-position: 0 -12px;
+}

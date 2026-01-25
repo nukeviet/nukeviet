@@ -1,0 +1,127 @@
+/**
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
+ */
+
+/* Login-box */
+.login-box {
+    width: 400px;
+}
+
+.mb-0 {
+    margin-bottom: 0!important;
+}
+
+.mt-2 {
+    margin-top: 10px!important;
+}
+
+@media (max-width: 399px) {
+    .login-box {
+        width: 100%;
+    }
+}
+
+.twostep-qrimg {
+    max-width: 100%;
+}
+
+.recovery-code {
+    padding: 7px 0;
+    letter-spacing: 5px;
+}
+
+.recovery-code span {
+    font-family: 'Courier New';
+}
+
+.print-codes {
+    padding: 60px 30px 20px 30px;
+}
+
+.tstep-flex {
+    display: flex;
+}
+
+.tstep-align-center {
+    align-items: center;
+}
+
+.tstep-justify-center {
+    justify-content: center;
+}
+
+.tstep-justify-between {
+    justify-content: space-between;
+}
+
+.tstep-gap-1 {
+    gap: 5px;
+}
+
+.tstep-gap-2 {
+    gap: 10px;
+}
+
+.tstep-grow {
+    flex-grow: 1;
+}
+
+.tstep-shrink {
+    flex-shrink: 1;
+}
+
+.step-bar {
+    display: flex;
+    justify-content: space-between;
+    margin: 20px auto;
+    max-width: 600px;
+}
+
+.step-bar .step {
+    text-align: center;
+    position: relative;
+    flex: 1;
+}
+
+.step-bar .step::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    right: 0;
+    transform: translateY(-50%);
+    width: 100%;
+    height: 2px;
+    background-color: var(--nv-border-color);
+    z-index: 1;
+}
+
+.step-bar .step .circle {
+    display: inline-block;
+    width: 40px;
+    height: 40px;
+    line-height: 40px;
+    border-radius: 50%;
+    background-color: var(--nv-border-color);
+    color: var(--nv-white);
+    font-weight: bold;
+    z-index: 2;
+    position: relative;
+}
+
+.step-bar .step.active .circle {
+    background-color: var(--nv-primary);
+}
+
+.step-bar .step.completed .circle {
+    background-color: var(--nv-success);
+}
+
+.w-fix-content {
+    width: fit-content;
+    max-width: 100%;
+}

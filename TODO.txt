@@ -1,0 +1,1 @@
+- Sau khi dev xong giao diện admin_future tìm trong thư mục src các đoạn FIXME để xóa hoặc thay đổi

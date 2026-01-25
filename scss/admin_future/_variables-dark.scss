@@ -1,0 +1,23 @@
+$header-bg-dark: $gray-800;
+$header-active-bg-dark: $gray-900;
+$header-link-hover-color-dark: $gray-500;
+
+$main-bg-dark: shade($gray-900, 20%);
+
+$breadcrumb-bg-dark: $gray-800;
+
+$left-sidebar-bg-dark: $gray-800;
+$left-sidebar-divider-color-dark: $gray-600;
+$left-sidebar-link-hover-color-dark: $gray-900;
+$left-sidebar-link-child-hover-color-dark: $gray-900;
+$left-sidebar-toggle-color-dark: $gray-400;
+$left-sidebar-child-bg-dark: shade($gray-800, 20%);
+$left-sidebar-child-border-color-dark: $gray-800;
+
+$right-sidebar-bg-dark: $gray-800;
+
+$footer-bg-dark: shade($header-bg-dark, 5%);
+
+$notification-btn-bg-dark: $gray-800;
+$notification-btn-bg-hover-dark: shade($gray-800, 20%);
+$notification-unread-border-color-dark: shade($info, 70%);

@@ -1,0 +1,18 @@
+{
+    "sourceFile": "src/modules/library/funcs/main.php",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 0,
+            "patches": [
+                {
+                    "date": 1769247400174,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                }
+            ],
+            "date": 1769247400174,
+            "name": "Commit-0",
+            "content": "<?php\n\n/**\n * NukeViet Content Management System\n * @version 5.x\n * @author VINADES.,JSC <contact@vinades.vn>\n * @copyright (C) 2009-2025 VINADES.,JSC. All rights reserved\n * @license GNU/GPL version 2 or any later version\n * @see https://github.com/nukeviet The NukeViet CMS GitHub project\n */\n\nif (!defined('NV_IS_MOD_LIBRABY')) {\n    exit('Stop!!!');\n}\n$page_title = $module_info['site_title'];\n$array_data = [];\n$per_page = 1;\n$page = $nv_Request->get_page('page', 'post, get', 1);\n$offset = ($page - 1) * $per_page;\n$sql = \"SELECT * FROM \" . NV_PREFIXLANG . '_' . $module_data . \"_rows LIMIT \" . $offset . \", \" . $per_page;\n$result = $db->query($sql);\nwhile ($row = $result->fetch()) {\n    $array_data[] = $row;\n}\n\n$num_items = $db->query(\"SELECT COUNT(*) FROM \" . NV_PREFIXLANG . '_' . $module_data . \"_rows\")->fetchColumn();\n$page_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op;\n$generate_page = nv_generate_page($page_url, $num_items, $per_page, $page);\n$contents = nv_theme_list($array_data, $generate_page);\n\ninclude NV_ROOTDIR . '/includes/header.php';\necho nv_site_theme($contents);\ninclude NV_ROOTDIR . '/includes/footer.php';\n"
+        }
+    ]
+}

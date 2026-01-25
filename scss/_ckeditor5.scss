@@ -1,0 +1,337 @@
+:root {
+  --nv-image-style-spacing: 1.25rem;
+  --nv-inline-image-style-spacing: calc(var(--nv-image-style-spacing) / 2);
+  --nv-highlight-marker-blue: #{$cyan};
+  --nv-highlight-marker-green: #{$teal};
+  --nv-highlight-marker-pink: #{$pink};
+  --nv-highlight-marker-yellow: #{$yellow};
+  --nv-highlight-pen-green: #{$green};
+  --nv-highlight-pen-red: #{$red};
+  --nv-font-size-xs: calc(#{$font-size-base} - .125rem);
+  --nv-font-size-sm: calc(#{$font-size-base} - .0625rem);
+  --nv-font-size-md: #{$font-size-base};
+  --nv-font-size-lg: calc(#{$font-size-base} * 1.25);
+  --nv-font-size-xxl: calc(#{$font-size-base} * 1.625);
+}
+
+/* Table */
+figure.table .ck-table-resized {
+  table-layout: fixed;
+}
+
+figure.table table {
+  overflow: hidden;
+}
+
+figure.table td,
+figure.table th {
+  overflow-wrap: break-word;
+  position: relative;
+}
+
+figure.table {
+  margin: 5px auto 10px auto;
+  display: table;
+}
+
+figure.table table {
+  border-collapse: collapse;
+  border-spacing: 0;
+  width: 100%;
+  height: 100%;
+  border: 1px double var(--#{$prefix}border-color);
+}
+
+figure.table table td,
+figure.table table th {
+  min-width: 5px;
+  padding: 7px;
+  border: 1px solid var(--#{$prefix}border-color);
+}
+
+figure.table table th {
+  font-weight: bold;
+  border-bottom-width: 2px;
+}
+
+figure.table>figcaption {
+  display: table-caption;
+  caption-side: top;
+  word-break: break-word;
+  text-align: center;
+  outline-offset: -1px;
+  margin-top: 0;
+}
+
+/* Media */
+figure.media {
+  clear: both;
+  margin: 5px 0 10px 0;
+  display: block;
+  min-width: 10px;
+}
+
+/* NV-Media */
+figure.nv-media {
+  clear: both;
+  margin: 5px 0 10px 0;
+  display: block;
+  min-width: 10px;
+}
+
+figure.nv-media video,
+figure.nv-media audio {
+  max-width: 100%;
+  margin: 0 auto;
+  display: block;
+}
+
+/* Image */
+img.image_resized {
+  height: auto;
+}
+
+figure.image.image_resized {
+  max-width: 100%;
+  display: block;
+  box-sizing: border-box;
+}
+
+figure.image.image_resized img {
+  width: 100%;
+}
+
+figure.image.image_resized>figcaption {
+  display: block;
+}
+
+figure.image {
+  display: table !important;
+  /* Important để không xung đột khi copy từ Google Docs */
+  clear: both;
+  text-align: center;
+  margin: 5px auto 10px auto;
+  min-width: 10px;
+}
+
+figure.image img {
+  display: block;
+  margin: 0 auto;
+  max-width: 100%;
+  min-width: 100%;
+  height: auto;
+}
+
+figure.image-inline {
+  display: inline-flex;
+  max-width: 100%;
+  align-items: flex-start;
+}
+
+figure.image-inline picture {
+  display: flex;
+}
+
+figure.image-inline picture,
+figure.image-inline img {
+  flex-grow: 1;
+  flex-shrink: 1;
+  max-width: 100%;
+}
+
+figure.image>figcaption {
+  display: table-caption;
+  caption-side: bottom;
+  word-break: break-word;
+  padding: 7px 7px 0 7px;
+  font-size: 13px;
+  outline-offset: -1px;
+  margin-top: 0;
+}
+
+/* Image Style */
+.image-style-block-align-left,
+.image-style-block-align-right {
+  max-width: calc(100% - var(--nv-image-style-spacing));
+}
+
+.image-style-align-left,
+.image-style-align-right {
+  clear: none;
+}
+
+.image-style-side {
+  float: right;
+  margin-left: var(--nv-image-style-spacing);
+  max-width: 50%;
+}
+
+.image-style-align-left {
+  float: left;
+  margin-right: var(--nv-image-style-spacing);
+}
+
+.image-style-align-center {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.image-style-align-right {
+  float: right;
+  margin-left: var(--nv-image-style-spacing);
+}
+
+.image-style-block-align-right {
+  margin-right: 0;
+  margin-left: auto;
+}
+
+.image-style-block-align-left {
+  margin-left: 0;
+  margin-right: auto;
+}
+
+p+.image-style-align-left,
+p+.image-style-align-right,
+p+.image-style-side {
+  margin-top: 0;
+}
+
+.image-inline.image-style-align-left,
+.image-inline.image-style-align-right {
+  margin-top: var(--nv-inline-image-style-spacing);
+  margin-bottom: var(--nv-inline-image-style-spacing);
+}
+
+.image-inline.image-style-align-left {
+  margin-right: var(--nv-inline-image-style-spacing);
+}
+
+.image-inline.image-style-align-right {
+  margin-left: var(--nv-inline-image-style-spacing);
+}
+
+/* Highlight */
+.marker-yellow {
+  background-color: var(--nv-highlight-marker-yellow);
+}
+
+.marker-green {
+  background-color: var(--nv-highlight-marker-green);
+}
+
+.marker-pink {
+  background-color: var(--nv-highlight-marker-pink);
+}
+
+.marker-blue {
+  background-color: var(--nv-highlight-marker-blue);
+}
+
+.pen-red {
+  color: var(--nv-highlight-pen-red);
+  background-color: transparent;
+}
+
+.pen-green {
+  color: var(--nv-highlight-pen-green);
+  background-color: transparent;
+}
+
+/* Font size */
+.text-tiny {
+  font-size: var(--nv-font-size-xs);
+}
+
+.text-small {
+  font-size: var(--nv-font-size-sm);
+}
+
+.text-big {
+  font-size: var(--nv-font-size-lg);
+}
+
+.text-huge {
+  font-size: var(--nv-font-size-xxl);
+}
+
+.is-invalid {
+  --ck-color-base-border: #{$danger};
+}
+
+// CKEditor5 Content Styles
+.ck {
+  --ck-content-font-family: var(--#{$prefix}font-sans-serif);
+  --ck-content-font-size: var(--#{$prefix}body-font-size);
+  --ck-content-font-color: var(--#{$prefix}body-color);
+  --ck-content-line-height: var(--#{$prefix}body-line-height);
+
+  --ck-color-base-foreground: var(--nv-body-bg); // Màu nền window ở chế độ fullscreen
+  --ck-color-base-background: var(--#{$prefix}body-bg); // Nền ở chế độ thường
+  --ck-color-base-border: var(--#{$prefix}border-color); // Viền cơ bản ví dụ toàn bộ khung viền của trình soạn thảo
+  --ck-color-focus-border: #{$input-focus-border-color}; // Viền khi focus
+  --ck-focus-ring: 1px solid #{$input-focus-border-color}; // Viền khi focus
+  --ck-color-text: var(--#{$prefix}body-color); // Màu chữ
+
+  // Nút single
+  --ck-color-button-default-hover-background: var(--#{$prefix}tertiary-bg);
+	--ck-color-button-default-active-background: var(--#{$prefix}secondary-bg);
+	--ck-color-button-default-active-shadow: var(--#{$prefix}secondary-bg-subtle);
+
+  // Nút single được active
+	--ck-color-button-on-background: var(--#{$prefix}secondary-bg);
+	--ck-color-button-on-hover-background: var(--#{$prefix}secondary-bg-subtle);
+	--ck-color-button-on-active-background: var(--#{$prefix}secondary-bg-subtle);
+	--ck-color-button-on-active-shadow: var(--#{$prefix}secondary-bg);
+	--ck-color-button-on-disabled-background: var(--nv-body-bg);
+
+  // Menu dropdown
+  --ck-color-dropdown-panel-border: var(--nv-body-bg);
+  --ck-color-dropdown-panel-background: var(--ck-color-base-background);
+
+  // Panel - Công cụ inline vùng soạn thảo
+  --ck-color-panel-background: var(--ck-color-base-background);
+  --ck-color-panel-border: var(--ck-color-base-border);
+
+  // Dialog
+  --ck-color-dialog-form-header-border: var(--#{$prefix}border-color);
+  --ck-color-dialog-background: var(--ck-color-base-background);
+
+  // Thuộc tính nút split button
+  --ck-color-split-button-hover-background: var(--ck-color-button-default-hover-background);
+	--ck-color-split-button-hover-border: var(--nv-body-bg);
+
+  // Thanh công cụ
+  --ck-color-toolbar-border: var(--ck-color-base-border);
+  --ck-color-toolbar-background: var(--ck-color-base-background);
+
+  --ck-color-focus-outer-shadow: var(--#{$prefix}focus-ring-color);
+  --ck-focus-outer-shadow-geometry: 0 0 0 3px;
+  --ck-focus-outer-shadow: var(--ck-focus-outer-shadow-geometry) var(--ck-color-focus-outer-shadow);
+
+  // List menu full screen
+  --ck-color-list-background: var(--ck-color-base-background);
+  --ck-color-list-button-hover-background: var(--ck-color-button-default-hover-background);
+
+  // Input fields
+  --ck-color-input-background: var(--ck-color-base-background);
+  --ck-color-input-border: var(--ck-color-base-border);
+  --ck-color-input-text: var(--ck-color-text);
+  --ck-color-labeled-field-label-background: var(--ck-color-base-background);
+
+  // Link
+  --ck-color-link-default: var(--#{$prefix}link-color);
+}
+
+// Dark mode
+[data-#{$prefix}theme="dark"],
+[data-theme="dark"] {
+  // CKEditor5 chưa có chỗ nào định nghĩa biến này trên v47.0.0
+  .ck-fullscreen__main-wrapper {
+    .ck-fullscreen__editable {
+      .ck.ck-editor__editable:not(.ck-editor__nested-editable) {
+        background-color: var(--#{$prefix}body-bg);
+      }
+    }
+  }
+}

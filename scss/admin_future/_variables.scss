@@ -1,0 +1,172 @@
+$blue: #4285f4;
+$green: #27ad57;
+$red: #ee3232;
+$cyan: #17a2b8;
+$white: #fff;
+$black: #000;
+
+$gray-100: #f9f9f9;
+$gray-200: #e5e5e5;
+$gray-300: #d5d5d5;
+$gray-400: #ced4da;
+$gray-500: #adb5bd;
+$gray-600: #666;
+$gray-700: #495057;
+$gray-800: #343a40;
+$gray-900: #212529;
+
+$brand-colors: (
+  "facebook": #4267b2,
+  "google": #ea4335,
+  "zalo": #0067ff
+);
+
+$info: $cyan;
+
+$font-size-base: 0.8125rem; // 13px
+$font-family-sans-serif: Roboto, system-ui, -apple-system, "Segoe UI", "Helvetica Neue", "Noto Sans", "Liberation Sans", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji" !default;
+
+$h1-font-size: $font-size-base * 1.625; // 28px
+$h2-font-size: $font-size-base * 1.5; // 24px
+$h3-font-size: $font-size-base * 1.375; // 22px
+$h4-font-size: $font-size-base * 1.25; // 20px
+$h5-font-size: $font-size-base * 1.125; // 18px
+$h6-font-size: $font-size-base; // 16px
+
+$border-width: 1px;
+$border-color: $gray-200;
+$border-color-translucent: rgba($black, .1);
+$body-color: $gray-600;
+$link-decoration: none;
+$main-bg: #eee;
+$min-contrast-ratio: 2;
+$theme-breakpoint: 767.98px;
+$spacer: 1rem;
+
+// Shadow một số và tắt một số
+$enable-shadows: true;
+$btn-box-shadow: none;
+$focus-ring-box-shadow: 0 0 0 0 transparent;
+$focus-ring-width: 0;
+
+// Border radius
+$border-radius: .1875rem; // 3px
+$border-radius-sm: .125rem; // 2px
+
+// Z-Index
+$zindex-header: 980;
+$zindex-fms-tree: 981;
+
+$zindex-sticky: 930;
+$zindex-left-sidebar: 940;
+$zindex-developer-error: 950;
+$zindex-right-sidebar: 960;
+$zindex-header-dropdown-toggle: 1001;
+$zindex-nv-offcanvas: 1046;
+$zindex-picker: 1049;
+$zindex-fmm-backdrop: 1058;
+$zindex-fmm: 1059;
+$zindex-fmd-backdrop: 1060;
+$zindex-fmd: 1061;
+
+// Phần header
+$header-height: 3.75rem; // 60px
+$header-border-height: $border-width;
+$header-bg: $white;
+$header-bg-invert: $blue;
+$logo-height: 3.125rem; // 50px
+$header-active-bg: $gray-200;
+$header-link-hover-color: shade($body-color, 50%);
+$header-avatar-size: 2.5rem;
+$admin-info-width: 16rem;
+$header-menu-icon-width: (
+  xs: 2.5rem,
+  sm: 3.125rem
+);
+
+// Menu trái
+$left-sidebar-width: 14rem; // 224px
+$left-sidebar-width-sm: 3.75rem; // 60px
+$left-sidebar-sub-width: 13.75rem; // 220px
+$left-sidebar-border-width: $border-width;
+$left-sidebar-bg: $white;
+$left-sidebar-lev1-height: 2.375rem;
+$left-sidebar-toggle-height: 2.5rem; // 40px
+$left-sidebar-divider-color: $gray-500;
+$left-sidebar-link-hover-color: $gray-100;
+$left-sidebar-link-child-hover-color: $gray-200;
+$left-sidebar-toggle-color: $gray-400;
+$left-sidebar-child-bg: tint($gray-200, 50%);
+$left-sidebar-child-border-color: $gray-200;
+
+// Menu phải
+$right-sidebar-width: 14rem; // 224px
+$right-sidebar-border-width: $border-width;
+$right-sidebar-bg: $white;
+
+// Menu sys
+$sysmenu-padding: 1rem;
+$sysmenu-spacer: .5rem;
+$sysmenu-width: (
+  xs: 18.5rem,
+  sm: 32rem,
+  md: 45rem,
+  lg: 50rem
+);
+
+// Thông báo
+$notification-width: 18.75rem; // 300px
+$notification-height: 18.75rem; // 300px
+$notification-image-size: 2.375rem;
+$notification-date-font-size: 0.6923rem;
+$notification-unread-bg: var(--bs-info-bg-subtle);
+$notification-unread-border-color: tint($info, 70%);
+$notification-btn-bg: $gray-100;
+$notification-btn-bg-hover: shade($gray-100, 5%);
+
+// Footer
+$footer-bg: $gray-100;
+$footer-height: 3.75rem; // 60px
+$footer-border-height: $border-width;
+
+// Breadcrumb
+$breadcrumb-height: 3.125rem;
+$breadcrumb-bg: $white;
+
+// Toasts
+$toast-spacing: 1rem;
+
+// Card
+$card-box-shadow: 0 0.0625rem 0.125rem rgba($black, .075);
+$card-cap-bg: transparent;
+$card-cap-padding-y: $spacer * .625;
+$card-border-color: transparent;
+$card-border-width: 0;
+
+// Dropdown
+$dropdown-border-color: var(--bs-body-bg);
+$dropdown-divider-bg: var(--nv-border-color-translucent);
+
+// Popovers
+$popover-border-color: var(--bs-body-bg);
+$popover-font-size: $font-size-base;
+
+// Nav
+$nav-link-font-weight: 500;
+
+// Table
+$table-color: var(--bs-body-color);
+
+// Offcanvas
+$offcanvas-border-color: transparent;
+
+// Accordion
+$accordion-button-focus-box-shadow: 0;
+$accordion-button-active-bg: var(--bs-primary);
+$accordion-button-active-color: $gray-100;
+$accordion-button-padding-y: .75rem;
+$accordion-icon-active-color: $gray-100;
+
+// Form
+$form-text-font-size: 0.75rem; // 12px
+$form-label-font-weight: 500;

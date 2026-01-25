@@ -1,0 +1,36 @@
+// Tùy chỉnh lại các thành phần của bootstrap mà không thể can thiệp bằng biến scss
+// Chỉ giao diện light, dark lấy của bootstrap
+html:not([data-bs-theme="dark"]) {
+    .btn-secondary,
+    .btn-default {
+        --bs-btn-color: #{$body-color};
+        --bs-btn-bg: #{$light};
+
+        --bs-btn-border-color: #{$gray-300};
+        --bs-btn-hover-color: #{$body-color};
+        --bs-btn-hover-bg: #{$gray-200};
+        --bs-btn-hover-border-color: #{$gray-300};
+
+        --bs-btn-active-color: #{$body-color};
+        --bs-btn-active-bg: #{$gray-300};
+        --bs-btn-active-border-color: #{$gray-400};
+
+        --bs-btn-active-shadow: inset 0 1px 3px #{rgba($black, .06)};
+
+        --bs-btn-disabled-color: #{$gray-700};
+        --bs-btn-disabled-bg: #{$gray-300};
+        --bs-btn-disabled-border-color: #{$gray-400};
+    }
+}
+
+.form-check-input:not(:checked):disabled {
+    background-color: var(--nv-form-check-input-disabled-bg);
+    border-color: var(--nv-form-check-input-disabled-border-color);
+}
+
+// Các nút màu sắc thương hiệu
+@each $color, $value in $brand-colors {
+    .btn-#{$color} {
+        @include button-variant($value, $value);
+    }
+}

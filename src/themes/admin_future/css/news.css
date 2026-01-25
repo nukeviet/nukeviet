@@ -1,0 +1,64 @@
+/**
+ * NukeViet Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2025 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
+ */
+#list-news-items {
+  --indicator-start-width: 0.125rem;
+}
+#list-news-items tr > td:first-child {
+  position: relative;
+}
+#list-news-items tr > td:first-child:before {
+  content: "";
+  display: block;
+  width: var(--indicator-start-width);
+  height: 100%;
+  position: absolute;
+  left: 0;
+  top: 0;
+}
+#list-news-items tr > td:first-child.indicator-deactive:before {
+  background-color: var(--bs-tertiary-color);
+}
+#list-news-items tr > td:first-child.indicator-draft:before {
+  background-color: var(--bs-secondary-color);
+}
+#list-news-items tr > td:first-child.indicator-expired:before {
+  background-color: var(--bs-emphasis-color);
+}
+#list-news-items tr > td:first-child.indicator-locking:before {
+  background-color: var(--bs-warning-bg-subtle);
+}
+#list-news-items tr > td:first-child.indicator-publish:before {
+  background-color: var(--bs-success);
+}
+#list-news-items tr > td:first-child.indicator-publish-checking:before {
+  background-color: var(--bs-success-bg-subtle);
+}
+#list-news-items tr > td:first-child.indicator-publish-reject:before {
+  background-color: var(--bs-warning-bg-subtle);
+}
+#list-news-items tr > td:first-child.indicator-publish-transfer:before {
+  background-color: var(--bs-info-bg-subtle);
+}
+#list-news-items tr > td:first-child.indicator-review-reject:before {
+  background-color: var(--bs-warning);
+}
+#list-news-items tr > td:first-child.indicator-review-transfer:before {
+  background-color: var(--bs-info);
+}
+#list-news-items tr > td:first-child.indicator-reviewing:before {
+  background-color: var(--bs-primary);
+}
+#list-news-items tr > td:first-child.indicator-waiting:before {
+  background-color: var(--bs-primary-bg-subtle);
+}
+#list-news-items tr > td:first-child.indicator-publish:before {
+  display: none;
+}
+
+/*# sourceMappingURL=news.css.map */

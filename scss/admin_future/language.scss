@@ -1,0 +1,28 @@
+/**
+ * NukeViet Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2025 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
+ */
+
+// Define variable
+@import "../functions";
+@import "variables";
+@import "variables-dark";
+@import "../../node_modules/bootstrap/scss/functions";
+@import "../../node_modules/bootstrap/scss/variables";
+
+.counter {
+    list-style-type: none;
+    counter-reset: css-counter 0;
+
+    > tr {
+        counter-increment: css-counter 1;
+
+            td:first-child::before {
+            content: counter(css-counter);
+        }
+    }
+}

@@ -1,0 +1,181 @@
+#nukeviet
+
+##################################################################################
+#NUKEVIET_CONFIG_START //Please do not change the contents of the following lines
+##################################################################################
+
+AddDefaultCharset UTF-8
+DirectoryIndex index.php index.html
+ServerSignature Off
+FileETag None
+
+<IfModule mod_rewrite.c>
+  <IfModule mod_env.c>
+    SetEnv HTTP_SUPPORT_REWRITE on
+  </IfModule>
+
+  RewriteEngine On
+  RewriteBase /
+  RewriteCond %{REQUEST_FILENAME} /(\.(.*)|composer\.json|default\.(htaccess\.txt|web\.config\.txt|php)|mainfile\.php|web\.config|config\.php)$ [NC]
+  RewriteRule ^.* - [L,R=404]
+  RewriteCond %{REQUEST_URI} ^/(data/ip6?|includes|install/tpl|vendor|assets/tpl|data/cache|data/certs|data/logs)/.* [NC]
+  RewriteRule ^.* - [L,R=404]
+  RewriteCond %{REQUEST_URI} ^/(admin)/.*/.*$ [NC]
+  RewriteRule ^.* - [L,R=404]
+  RewriteCond %{REQUEST_URI} ^/(install/(css|images)|modules|themes|assets|data/config|data/tmp|uploads)/.*\.((j|a)spx?|(p|s)html|cgi|inc|ini|php|pl|py|sh|sql\.gz|tpl|xml)($|\?|\/) [NC]
+  RewriteRule ^.* - [L,R=404]
+</IfModule>
+
+ErrorDocument 400 /error.php?code=400
+ErrorDocument 403 /error.php?code=403
+ErrorDocument 404 /error.php?code=404
+ErrorDocument 405 /error.php?code=405
+ErrorDocument 408 /error.php?code=408
+ErrorDocument 500 /error.php?code=500
+ErrorDocument 502 /error.php?code=502
+ErrorDocument 503 /error.php?code=503
+ErrorDocument 504 /error.php?code=504
+
+<IfModule mod_mime.c>
+  AddType application/json .json
+  AddType application/manifest+json .webmanifest
+  AddType application/rss+xml .rss
+  AddType application/xml .xml
+  AddType font/eot .eot
+  AddType font/otf .otf
+  AddType font/ttf .ttf
+  AddType font/woff .woff
+  AddType font/woff2 .woff2
+  AddType image/bmp .bmp
+  AddType image/gif .gif
+  AddType image/jpeg .jpeg .jpg
+  AddType image/png .png
+  AddType image/svg+xml .svg
+  AddType image/tiff .tif .tiff
+  AddType image/vnd.microsoft.icon .ico
+  AddType image/webp .webp
+  AddType text/css .css
+  AddType text/html .htm .html
+  AddType text/javascript .js .mjs
+  AddType text/plain .txt
+  AddType text/xsl .xsl
+
+  AddCharset UTF-8 .css .htm .html .js .json .mjs .rss .svg .webmanifest .xml .xsl
+</IfModule>
+
+<IfModule mod_autoindex.c>
+  Options -Indexes
+</IfModule>
+
+<IfModule mod_headers.c>
+  Header unset X-Powered-By
+  Header always unset X-Powered-By
+  Header unset ETag
+  Header set Strict-Transport-Security "max-age=2592000; includeSubDomains; preload" env=HTTPS
+  Header set X-Content-Type-Options "nosniff"
+  Header set X-Frame-Options "SAMEORIGIN"
+  Header set X-XSS-Protection "1; mode=block"
+  Header set Referrer-Policy "no-referrer-when-downgrade, strict-origin-when-cross-origin"
+</IfModule>
+
+<IfModule mod_expires.c>
+  ExpiresActive on
+</IfModule>
+
+<FilesMatch "\.(css|htm|html|js|json|mjs|otf|rss|svg|ttf|txt|webmanifest|xml|xsl)($|\?)">
+  <IfModule mod_brotli.c>
+    SetOutputFilter BROTLI_COMPRESS;DEFLATE
+  </IfModule>
+
+  <IfModule !mod_brotli.c>
+    <IfModule mod_deflate.c>
+      SetOutputFilter DEFLATE
+    </IfModule>
+  </IfModule>
+
+  <IfModule mod_headers.c>
+    Header append Vary Accept-Encoding
+  </IfModule>
+</FilesMatch>
+
+<FilesMatch "\.(css|js|mjs|xsl)($|\?)">
+  <IfModule mod_headers.c>
+    Header set Cache-Control "max-age=2592000, public"
+  </IfModule>
+  <IfModule mod_expires.c>
+    ExpiresDefault "access plus 1 month"
+  </IfModule>
+</FilesMatch>
+
+<FilesMatch "\.(bmp|gif|ico|jpeg|jpg|png|svg|tif|tiff|webp)($|\?)">
+  <IfModule mod_headers.c>
+    Header set Cache-Control "max-age=31536000, public, no-transform"
+  </IfModule>
+  <IfModule mod_expires.c>
+    ExpiresDefault "access plus 1 year"
+  </IfModule>
+</FilesMatch>
+
+<FilesMatch "\.(eot|otf|ttf|woff|woff2)($|\?)">
+  <IfModule mod_headers.c>
+    Header set Cache-Control "max-age=15552000, public"
+  </IfModule>
+  <IfModule mod_expires.c>
+    ExpiresDefault "access plus 6 months"
+  </IfModule>
+</FilesMatch>
+
+<FilesMatch "\.(doc|pdf|swf)$">
+  <IfModule mod_headers.c>
+    Header set X-Robots-Tag "noarchive, nosnippet"
+  </IfModule>
+</FilesMatch>
+
+#NUKEVIET_CONFIG_END
+##################################################################################
+
+##################################################################################
+#NUKEVIET_REWRITE_START //Please do not change the contents of the following lines
+##################################################################################
+
+<IfModule mod_negotiation.c>
+  Options -MultiViews
+</IfModule>
+
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteBase /
+
+  RewriteCond %{REQUEST_FILENAME} /api.php$ [NC]
+  RewriteCond %{REQUEST_METHOD} !^(POST) [NC]
+  RewriteRule ^.* - [F]
+
+  RewriteCond %{REQUEST_FILENAME} /robots.txt$ [NC]
+  RewriteRule ^.* robots.php [L]
+
+  RewriteRule ^(.*?)sitemap\.xml$ index.php?nv=SitemapIndex [L]
+  RewriteRule ^(.*?)sitemap\-([a-z]{2})\.xml$ index.php?language=$2&nv=SitemapIndex [L]
+  RewriteRule ^(.*?)sitemap\-([a-z]{2})\.([a-zA-Z0-9\-]+)\.xml$ index.php?language=$2&nv=$3&op=sitemap [L]
+  RewriteRule ^(.*?)sitemap\-([a-z]{2})\.([a-zA-Z0-9\-]+)\.([a-zA-Z0-9\-]+)\.xml$ index.php?language=$2&nv=$3&op=sitemap/$4 [L]
+  RewriteRule ^(.*?)api\/(en|fr|vi)\/([a-zA-Z0-9]+)\/([a-zA-Z0-9]+)\/?$ api.php?language=$2&module=$3&action=$4 [L]
+  RewriteRule ^(.*?)api\/(en|fr|vi)\/([a-zA-Z0-9]+)\/?$ api.php?language=$2&action=$3 [L]
+  RewriteRule ^(.*?)api\/([a-zA-Z0-9]+)\/([a-zA-Z0-9]+)\/?$ api.php?module=$2&action=$3 [L]
+  RewriteRule ^(.*?)api\/([a-zA-Z0-9]+)\/?$ api.php?action=$2 [L]
+
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteCond %{REQUEST_FILENAME} !-d
+  RewriteRule (.*)(/|\.html)$ index.php [L]
+
+  RewriteRule (.*)tag\/([^?]+)$ index.php [L]
+  RewriteRule ^([a-zA-Z0-9\-\/]+)\/([a-zA-Z0-9\-]+)$ /$1/$2/ [L,R=301]
+  RewriteRule ^([a-zA-Z0-9\-]+)$ /$1/ [L,R=301]
+</IfModule>
+
+#NUKEVIET_REWRITE_END
+##################################################################################
+
+<FilesMatch "\.(swf|pdf|flv|mp3|mp4)(\?t=[0-9]{9,11})?$">
+  <IfModule mod_headers.c>
+    Header set Cache-Control "max-age=2592000, public"
+  </IfModule>
+</FilesMatch>

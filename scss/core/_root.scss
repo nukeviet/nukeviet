@@ -1,0 +1,131 @@
+:root {
+  --cr-md-zindex: #{$zindex-modal};
+  --cr-md-zindex-backdrop: #{$zindex-modal-backdrop};
+  --cr-md-backdrop-bg: #{$modal-backdrop-bg};
+  --cr-md-backdrop-opacity: #{$modal-backdrop-opacity};
+  --cr-md-md-width: #{$modal-md};
+  --cr-md-content-border-radius: #{$border-radius};
+  --cr-md-content-border-color: rgba(255, 255, 255, 0.15);
+  --cr-md-content-inner-border-radius: #{calc($border-radius - 1px)};
+  --cr-md-header-font-size: #{$h5-font-size};
+  --cr-md-header-font-weight: #{$font-weight-medium};
+
+  --cr-cap-zindex: #{$zindex-cap};
+  --cr-cap-zindex-backdrop: #{$zindex-cap-backdrop};
+  --cr-cap-backdrop-bg: #{$modal-backdrop-bg};
+  --cr-cap-backdrop-opacity: #{$modal-backdrop-opacity};
+  --cr-cap-md-width: #{$modal-md};
+  --cr-cap-content-border-radius: #{$border-radius};
+  --cr-cap-content-border-color: rgba(255, 255, 255, 0.15);
+  --cr-cap-content-inner-border-radius: #{calc($border-radius - 1px)};
+  --cr-cap-header-font-size: #{$h5-font-size};
+  --cr-cap-header-font-weight: #{$font-weight-medium};
+
+  --cr-btn-close-color: #{$btn-close-color};
+  --cr-btn-close-bg: #{ escape-svg($btn-close-bg) };
+  --cr-btn-close-opacity: #{$btn-close-opacity};
+  --cr-btn-close-hover-opacity: #{$btn-close-hover-opacity};
+  --cr-btn-close-focus-opacity: #{$btn-close-focus-opacity};
+  --cr-btn-close-disabled-opacity: #{$btn-close-disabled-opacity};
+  --cr-btn-close-white-filter: #{$btn-close-white-filter};
+
+  --cr-border-radius: #{$border-radius};
+
+  --cr-input-border-radius: #{$border-radius};
+  --cr-input-focus-border-color: #86b7fe;
+
+  --cr-btn-padding-y: #{$btn-padding-y};
+  --cr-btn-padding-x: #{$btn-padding-x};
+  --cr-btn-line-height: 1.5;
+  --cr-btn-border-radius: #{$border-radius};
+
+  --cr-danger: #{$red};
+
+  --cr-toast-zindex: #{$zindex-toast};
+  --cr-toast-width: 350px;
+  --cr-toast-border-radius: var(--cr-border-radius);
+  --cr-toast-spacing: 0.75rem;
+  --cr-toast-padding: 0.75rem;
+  @each $key, $value in $toast-levels {
+    --cr-toast-#{$key}-bg: #{$value};
+    --cr-toast-#{$key}-color: #{color-contrast($value)};
+  }
+
+  --cr-alert-zindex: #{$zindex-alert};
+  --cr-alert-zindex-backdrop: #{$zindex-alert-backdrop};
+  --cr-alert-backdrop-bg: #{$modal-backdrop-bg};
+  --cr-alert-backdrop-opacity: #{$modal-backdrop-opacity};
+  --cr-alert-md-width: #{$modal-md};
+  --cr-alert-content-border-radius: #{$border-radius};
+  --cr-alert-content-border-color: rgba(255, 255, 255, 0.15);
+  --cr-alert-footer-gap: #{$modal-footer-margin-between};
+
+  --ck-z-default: $zindex-ck5-default;
+  --ck-z-panel: $zindex-ck5-panel;
+}
+
+// Giao diện sáng
+:root, [data-bs-theme=light], [data-theme=light] {
+  --cr-md-content-bg: #{$body-bg};
+
+  --cr-cap-content-bg: #{$body-bg};
+
+  --cr-input-bg: #{$body-bg};
+  --cr-input-focus-bg: #{$body-bg};
+
+  --cr-border-color: #{$border-color};
+
+  --cr-toast-border-color: transparent;
+
+  --cr-alert-content-bg: #{$body-bg};
+
+  @each $key, $value in $btn-colors {
+    --cr-btn-#{$key}-color: #{color-contrast($value)};
+    --cr-btn-#{$key}-bg: #{$value};
+    --cr-btn-#{$key}-border-color: #{map-get($btn-border-colors, $key)};
+    --cr-btn-#{$key}-hover-color: #{color-contrast(shade-color($value, 15%))};
+    --cr-btn-#{$key}-hover-bg: #{shade-color($value, 15%)};
+    --cr-btn-#{$key}-hover-border-color: #{shade-color(map-get($btn-border-colors, $key), 20%)};
+    --cr-btn-#{$key}-active-color: #{color-contrast(shade-color($value, 20%))};
+    --cr-btn-#{$key}-active-bg: #{shade-color($value, 20%)};
+    --cr-btn-#{$key}-active-border-color: #{shade-color(map-get($btn-border-colors, $key), 25%)};
+    --cr-btn-#{$key}-active-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
+    --cr-btn-#{$key}-disabled-color: #{color-contrast($value)};
+    --cr-btn-#{$key}-disabled-bg: #{$value};
+    --cr-btn-#{$key}-disabled-border-color: #{map-get($btn-border-colors, $key)};
+    --cr-btn-#{$key}-disabled-opacity: 0.65;
+  }
+}
+
+// Giao diện tối
+[data-bs-theme=dark], [data-theme=dark] {
+  --cr-md-content-bg: #{$body-bg-dark};
+
+  --cr-cap-content-bg: #{$body-bg-dark};
+
+  --cr-input-bg: #{$body-bg-dark};
+  --cr-input-focus-bg: #{$body-bg-dark};
+
+  --cr-border-color: #{$border-color-dark};
+
+  --cr-toast-border-color: var(--cr-border-color);
+
+  --cr-alert-content-bg: #{$body-bg-dark};
+
+  @each $key, $value in $btn-colors-dark {
+    --cr-btn-#{$key}-color: #{color-contrast($value)};
+    --cr-btn-#{$key}-bg: #{$value};
+    --cr-btn-#{$key}-border-color: #{map-get($btn-border-colors-dark, $key)};
+    --cr-btn-#{$key}-hover-color: #{color-contrast(shade-color($value, 15%))};
+    --cr-btn-#{$key}-hover-bg: #{shade-color($value, 15%)};
+    --cr-btn-#{$key}-hover-border-color: #{shade-color(map-get($btn-border-colors-dark, $key), 20%)};
+    --cr-btn-#{$key}-active-color: #{color-contrast(shade-color($value, 20%))};
+    --cr-btn-#{$key}-active-bg: #{shade-color($value, 20%)};
+    --cr-btn-#{$key}-active-border-color: #{shade-color(map-get($btn-border-colors-dark, $key), 25%)};
+    --cr-btn-#{$key}-active-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
+    --cr-btn-#{$key}-disabled-color: #{color-contrast($value)};
+    --cr-btn-#{$key}-disabled-bg: #{$value};
+    --cr-btn-#{$key}-disabled-border-color: #{map-get($btn-border-colors-dark, $key)};
+    --cr-btn-#{$key}-disabled-opacity: 0.65;
+  }
+}

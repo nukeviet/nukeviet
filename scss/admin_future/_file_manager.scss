@@ -1,0 +1,983 @@
+// Trình quản lí tệp tin
+:root {
+    --fmm-zindex-backdrop: #{$zindex-fmm-backdrop};
+    --fmm-zindex: #{$zindex-fmm};
+    --fmd-zindex-backdrop: #{$zindex-fmd-backdrop};
+    --fmd-zindex: #{$zindex-fmd};
+}
+
+.fmm-backdrop,
+.fmd-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: var(--fmm-zindex-backdrop);
+    width: 100vw;
+    height: 100vh;
+    background-color: $modal-backdrop-bg;
+
+    &.show {
+        opacity: $modal-backdrop-opacity;
+    }
+}
+
+.fmd-backdrop {
+    z-index: var(--fmd-zindex-backdrop);
+}
+
+.fmm,
+.fmd {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: var(--fmm-zindex);
+    display: none;
+    width: 100%;
+    height: 100%;
+    overflow-x: hidden;
+    overflow-y: auto;
+    outline: 0;
+}
+
+.fmd {
+    z-index: var(--fmd-zindex);
+}
+
+.fmd-open {
+    .select2-dropdown {
+        --bs-dropdown-zindex: var(--fmd-zindex);
+    }
+}
+
+.fmm-open {
+    .dropdown-menu-fms {
+        --bs-dropdown-zindex: var(--fmm-zindex);
+    }
+}
+
+.fmm-dialog,
+.fmd-dialog {
+    position: relative;
+    width: auto;
+    pointer-events: none;
+    margin: .5rem;
+}
+
+@include media-breakpoint-up(sm) {
+   .fmd-dialog {
+        max-width: $modal-md;
+        margin-right: auto;
+        margin-left: auto;
+        margin-top: 1.75rem;
+        margin-bottom: 1.75rem;
+    }
+
+    .fmm-dialog {
+        margin: 1rem;
+    }
+}
+
+@include media-breakpoint-up(lg) {
+    .fmd-lg,
+    .fmd-xl {
+        max-width: $modal-lg;
+    }
+}
+
+@include media-breakpoint-up(xl) {
+    .fmd-xl {
+        max-width: $modal-xl;
+    }
+}
+
+.fmm.fade .fmm-dialog,
+.fmd.fade .fmd-dialog {
+    transition: transform .3s ease-out;
+    transform: translate(0, -50px);
+}
+
+.fmm.show .fmm-dialog,
+.fmd.show .fmd-dialog {
+    transform: none;
+}
+
+.fmm-content,
+.fmd-content {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    pointer-events: auto;
+    background-color: $modal-content-bg;
+    background-clip: padding-box;
+    border: 1px solid transparent;
+    border-radius: $modal-content-border-radius;
+    outline: 0;
+}
+
+.fmm-header,
+.fmd-header {
+    display: flex;
+    flex-shrink: 0;
+    align-items: center;
+    padding: .5rem 1rem;
+    border-bottom: 1px solid var(--bs-border-color);
+    border-top-left-radius: $modal-content-inner-border-radius;
+    border-top-right-radius: $modal-content-inner-border-radius;
+
+    .btn-close {
+        padding: .5rem;
+        margin-left: auto;
+    }
+}
+
+.fmm-body,
+.fmd-body {
+    position: relative;
+    flex: 1 1 auto;
+}
+
+.fmd-body {
+    padding: 1rem;
+}
+
+.fms-ctn-page {
+    height: calc(100vh - $header-height - $breadcrumb-height - 2 * map-get($spacers, 4) - $footer-height);
+
+    @include media-breakpoint-down(md) {
+        height: calc(100vh - $header-height - 2.5rem - 2 * map-get($spacers, 4) - $footer-height);
+    }
+}
+
+.fms-ctn-fullscreen {
+    height: 100vh;
+}
+
+.fms-ctn-fmm {
+    height: calc(100vh - #{$line-height-base} * #{$font-size-base} - 3rem);
+}
+
+@include media-breakpoint-up(sm) {
+    .fms-ctn-fmm {
+        height: calc(100vh - #{$line-height-base} * #{$font-size-base} - 4rem);
+    }
+}
+
+.fms-ctn {
+    width: 100%;
+    height: 100%;
+    display: flex;
+
+    @include media-breakpoint-down(md) {
+        display: block;
+    }
+
+    .btn-toggle-tree {
+        display: none;
+
+        @include media-breakpoint-down(md) {
+            display: block;
+        }
+    }
+
+    .filter-mobile {
+        display: none;
+
+        @include media-breakpoint-down(xl) {
+            display: block;
+        }
+    }
+
+    @include media-breakpoint-down(xl) {
+        .filter-desktop {
+            display: none;
+        }
+    }
+}
+
+.fms-wraper {
+    height: 100%;
+    position: relative;
+
+    .dropzone-area {
+        position: absolute;
+        z-index: 4;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        right: 0;
+        background-color: rgba(var(--bs-secondary-bg-rgb), .95);
+        border: 2px dashed var(--bs-secondary);
+        border-radius: $card-border-radius;
+        display: none;
+        color: var(--bs-secondary-color);
+
+        i {
+            font-size: 4rem;
+        }
+
+        &.dragging {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            &.dragover {
+                color: var(--bs-success);
+                border-color: var(--bs-success);
+            }
+        }
+    }
+}
+
+.fms-loader {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    align-items: center;
+    justify-content: center;
+    border-radius: $card-border-radius;
+    background-color: rgba(var(--bs-secondary-rgb), .5);
+    color: var(--bs-primary);
+    z-index: 10;
+    display: none;
+
+    &.show {
+        display: flex;
+    }
+}
+
+.fmm {
+    .fms-loader {
+        border-top-left-radius: 0;
+        border-top-right-radius: 0;
+    }
+}
+
+.fms-tree {
+    flex: 0 0 15rem;
+    max-width: 15rem;
+    border-right: 1px solid var(--bs-border-color);
+    padding-top: .5rem;
+    padding-bottom: .5rem;
+
+    @include media-breakpoint-down(md) {
+        position: fixed;
+        z-index: $zindex-fms-tree;
+        background-color: var(--bs-body-bg);
+        left: 0;
+        top: 0;
+        bottom: 0;
+        transform: translateX(calc(-100% - 10px));
+        transition: transform 0.15s ease-in-out;
+
+        &.show {
+            transform: translateX(0px);
+        }
+    }
+
+    .fms-tree-scroller {
+        height: 100%;
+        position: relative;
+        overflow: hidden;
+    }
+
+    ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    li.active {
+        >.tree-item {
+            background-color: $primary;
+
+            >.tree-name,
+            >.tree-menu,
+            >.tree-name>.tree-size,
+            >.tree-collapse>.tree-icon {
+                color: color-contrast($primary);
+            }
+        }
+    }
+
+    a {
+        color: var(--bs-body-color);
+    }
+
+    .tree-name {
+        font-weight: 500;
+        padding: .5rem 0;
+
+        &:hover {
+            color: var(--bs-link-color);
+        }
+
+        .tree-size {
+            font-weight: 400;
+            color: var(--bs-secondary-color);
+        }
+    }
+
+    .tree-item {
+        display: flex;
+        align-items: center;
+        padding: 0 .5rem 0 1rem;
+        line-height: 1;
+    }
+
+    .tree-collapse {
+        padding: .5rem;
+    }
+
+    .tree-menu {
+        padding: .5rem;
+
+        @include media-breakpoint-up(md) {
+            display: none;
+        }
+    }
+}
+
+// Hỗ trợ 20 cấp thư mục con
+@mixin tree-padding($level: 0, $max-level: 19) {
+    >.tree-item {
+        padding-left: calc(#{$level} * .75rem);
+    }
+    @if $level < $max-level {
+        >.sub-tree {
+            >ul>li {
+                @include tree-padding($level + 1, $max-level);
+            }
+        }
+    }
+}
+
+.fms-tree-scroller {
+    >ul>li {
+        @include tree-padding();
+    }
+}
+
+.fms-section {
+    flex: 1;
+    height: 100%;
+}
+
+.fms-contents {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    padding: .5rem 1rem;
+}
+
+.fms-files-ctn {
+    flex: 1;
+    margin-left: -.875rem;
+    margin-right: -.875rem;
+    min-height: 4rem;
+}
+
+.fms-files {
+    overflow: hidden;
+    position: relative;
+    height: 100%;
+
+    &.disabled-select {
+        user-select: none;
+
+        * {
+            user-select: none;
+        }
+    }
+
+    .selection-box {
+        position: absolute;
+        border: 1px dashed var(--bs-success);
+        background: rgba(var(--bs-success-rgb), 0.2);
+        pointer-events: none;
+    }
+}
+
+.fms-actions-bar {
+    padding-bottom: 1rem;
+}
+
+.fms-files-page {
+    display: flex;
+    justify-content: center;
+    padding-top: .5rem;
+
+    .pagination {
+        --bs-pagination-padding-x: 0.5rem;
+        --bs-pagination-padding-y: 0.25rem;
+        --bs-pagination-font-size: 0.875rem;
+        --bs-pagination-border-radius: var(--bs-border-radius-sm);
+    }
+}
+
+.fms-files-wraper {
+    padding-left: .875rem;
+    padding-right: .875rem;
+
+    >ul {
+        list-style: none;
+        padding: 0;
+        margin: 0 -.5rem;
+        display: flex;
+        flex-wrap: wrap;
+    }
+
+    .file {
+        position: relative;
+
+        .name {
+            font-weight: 500;
+        }
+
+        .btn-menu {
+            transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+        }
+    }
+}
+
+// Hiển thị tệp dạng lưới
+.view-grid>.fms-files-wraper {
+    margin-top: -1rem;
+    padding-bottom: 2px;
+
+    >ul {
+        >li {
+            margin-top: 1rem;
+            flex: 0 0 50%;
+            max-width: 50%;
+            padding: 0 .5rem;
+
+            @include media-breakpoint-up(sm) {
+                flex: 0 0 33.333333333%;
+                max-width: 33.333333333%;
+            }
+
+            @include media-breakpoint-up(md) {
+                flex: 0 0 33.333333333%;
+                max-width: 33.333333333%;
+            }
+
+            @media (min-width: #{map-get($grid-breakpoints, md)}) and (max-width: 930px) {
+                flex: 0 0 50%;
+                max-width: 50%;
+            }
+
+            @include media-breakpoint-up(lg) {
+                flex: 0 0 25%;
+                max-width: 25%;
+            }
+
+            @include media-breakpoint-up(xl) {
+                flex: 0 0 20%;
+                max-width: 20%;
+            }
+
+            @media (min-width: 1920px) {
+                flex: 0 0 12.5%;
+                max-width: 12.5%;
+            }
+        }
+    }
+
+    .file {
+        border: 1px solid var(--bs-border-color);
+        border-radius: $border-radius;
+
+        &.selected {
+            border-color: $primary;
+        }
+
+        .thumb {
+            height: 0;
+            padding-bottom: 75%;
+            position: relative;
+            overflow: hidden;
+            border-top-left-radius: subtract($border-radius, 1px);
+            border-top-right-radius: subtract($border-radius, 1px);
+
+            img {
+                position: absolute;
+                left: 50%;
+                top: 50%;
+                transform: translate3d(-50%, -50%, 0);
+
+                max-width: 100%;
+                height: auto;
+            }
+
+            &.thumb-v {
+                img {
+                    max-height: 100%;
+                    width: auto;
+                }
+            }
+        }
+
+        .thumb-bg,
+        .thumb-blur {
+            position: absolute;
+            z-index: 0;
+            width: 100%;
+            height: 100%;
+            left: 0;
+            top: 0;
+        }
+
+        .thumb-bg {
+            background-color: $black;
+            opacity: .1;
+        }
+
+        .thumb-blur {
+            filter: blur(.5rem);
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: cover;
+        }
+
+        .name {
+            text-align: center;
+            padding: .25rem;
+
+            .name-real {
+                display: none;
+            }
+        }
+
+        .info {
+            text-align: center;
+            padding: 0 .25rem .25rem .25rem;
+        }
+
+        .sel {
+            position: absolute;
+            top: .5rem;
+            left: .5rem;
+            z-index: 1;
+
+            @include media-breakpoint-up(md) {
+                display: none;
+            }
+
+            input {
+                margin-top: 0;
+            }
+        }
+
+        .btn-menu {
+            position: absolute;
+            top: .5rem;
+            right: .5rem;
+            border: 0;
+
+            --bs-btn-padding-y: 0;
+            --bs-btn-padding-x: 1px;
+        }
+
+        @include media-breakpoint-up(md) {
+            .menu {
+                display: none;
+            }
+        }
+    }
+}
+
+// Responsive cho popup và dạng fullscreen
+.fmm,
+.fms-ctn-fullscreen {
+    @include media-breakpoint-between(md, lg) {
+        .fms-tree {
+            flex: 0 0 11.25rem;
+            max-width: 11.25rem;
+        }
+    }
+
+    .view-grid>.fms-files-wraper {
+        >ul {
+            >li {
+                @include media-breakpoint-up(sm) {
+                    flex: 0 0 33.333333333%;
+                    max-width: 33.333333333%;
+                }
+
+                @include media-breakpoint-up(md) {
+                    flex: 0 0 25%;
+                    max-width: 25%;
+                }
+
+                @include media-breakpoint-up(lg) {
+                    flex: 0 0 20%;
+                    max-width: 20%;
+                }
+
+                @include media-breakpoint-up(xl) {
+                    flex: 0 0 16.666666666%;
+                    max-width: 16.666666666%;
+                }
+
+                @media (min-width: 1920px) {
+                    flex: 0 0 10%;
+                    max-width: 10%;
+                }
+            }
+        }
+    }
+}
+
+// Thiết bị chỉ có touch thì hiển thị nút menu với mọi kích thước
+@include media-breakpoint-up(md) {
+    .fms-wraper.touch-only {
+        .view-grid>.fms-files-wraper {
+            .file {
+                .sel,
+                .menu {
+                    display: block;
+                }
+            }
+        }
+    }
+}
+
+// Thiết bị chỉ có touch thì các nút công cụ cho to lên
+.fms-wraper.touch-only {
+    .fms-files-wraper {
+        .sel .form-check-input {
+            width: 1.25rem;
+            height: 1.25rem;
+        }
+
+        .btn-menu {
+            --bs-btn-padding-y: 2px;
+            --bs-btn-padding-x: 3px;
+        }
+    }
+
+    .view-list > .fms-files-wraper .file .sel {
+        flex-basis: 1.5rem;
+        max-width: 1.5rem;
+    }
+}
+
+@include media-breakpoint-down(sm) {
+    .view-list > .fms-files-wraper .file .sel {
+        flex-basis: 1.5rem;
+        max-width: 1.5rem;
+    }
+
+    .fms-files-wraper {
+        .sel .form-check-input {
+            width: 1.25rem;
+            height: 1.25rem;
+        }
+
+        .btn-menu {
+            --bs-btn-padding-y: 2px;
+            --bs-btn-padding-x: 3px;
+        }
+    }
+}
+
+// Hiển thị tệp dạng danh sách
+.view-list>.fms-files-wraper {
+    padding-bottom: 1px;
+
+    >ul {
+        >li {
+            flex: 0 0 100%;
+            max-width: 100%;
+            padding: .5rem .5rem 0 .5rem;
+        }
+    }
+
+    .file {
+        border-bottom: 1px solid var(--bs-border-color);
+        display: flex;
+        line-height: 1.3;
+        padding-bottom: .5rem;
+        align-items: center;
+
+        .thumb {
+            display: none;
+        }
+
+        .name {
+            flex: 0 0 calc(100% - 7.5rem - 1.25rem - 1.875rem);
+            max-width: calc(100% - 7.5rem - 1.25rem - 1.875rem);
+
+            .name-cut {
+                display: none;
+            }
+        }
+
+        .info {
+            flex: 0 0 7.5rem;
+            max-width: 7.5rem;
+        }
+
+        &.selected {
+            .name {
+                color: $primary;
+            }
+        }
+
+        .sel {
+            flex: 0 0 1.25rem;
+            max-width: 1.25rem;
+
+            input {
+                margin-top: 0;
+                display: block;
+            }
+        }
+
+        .menu {
+            flex: 0 0 1.875rem;
+            max-width: 1.875rem;
+            text-align: right;
+
+            .btn-menu {
+                --bs-btn-padding-y: 0.125rem;
+                --bs-btn-padding-x: 0.25rem;
+            }
+        }
+    }
+}
+
+.fms-upqueue-outer {
+    display: block;
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: var(--bs-body-bg);
+    border-radius: var(--bs-border-radius);
+    z-index: 3;
+}
+
+.fms-upqueue {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+
+    .queue-files {
+        flex: 1;
+        overflow: hidden;
+        position: relative;
+    }
+
+    .queue-tools {
+        padding: 1rem 1rem 0 1rem;
+        margin-bottom: .5rem;
+
+        .tool-progress {
+            flex: 1;
+        }
+    }
+
+    .queue-opts {
+        padding-left: 1rem;
+        padding-right: 1rem;
+    }
+
+    .queue-head,
+    .queue-files-item {
+        display: flex;
+        align-items: center;
+    }
+
+    .queue-head {
+        border-bottom: 2px solid var(--bs-border-color);
+        font-weight: 500;
+    }
+
+    .queue-files-item {
+        border-bottom: 1px solid var(--bs-border-color);
+
+        &:last-child {
+            border-bottom: 0;
+        }
+    }
+
+    .queue-col-name,
+    .queue-col-alt,
+    .queue-col-size,
+    .queue-col-status,
+    .queue-col-tool {
+        padding: .5rem;
+        flex-grow: 0;
+        flex-shrink: 0;
+    }
+
+    .queue-col-name {
+        padding-left: 1rem;
+    }
+
+    .queue-col-tool {
+        padding-right: 0;
+    }
+
+    .queue-col-tool {
+        flex-basis: 2.5rem;
+        max-width: 2.5rem;
+    }
+
+    .queue-col-status,
+    .queue-col-size {
+        flex-basis: 5.625rem;
+        max-width: 5.625rem;
+    }
+
+    .queue-col-name,
+    .queue-col-alt {
+        flex-basis: calc((100% - 5.625rem * 2 - 2.5rem) / 2);
+        max-width: calc((100% - 5.625rem * 2 - 2.5rem) / 2);
+    }
+
+    .form-control-required {
+        position: relative;
+
+        input {
+            padding-right: 1.5rem;
+        }
+
+        &::after {
+            content: '*';
+            display: block;
+            width: 1rem;
+            height: 1rem;
+            line-height: 1.3rem;
+            text-align: center;
+            position: absolute;
+            right: 0.125rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--bs-danger);
+            overflow: hidden;
+        }
+    }
+}
+
+.dropdown-menu-fms {
+    max-width: 12.5rem;
+}
+
+.fms-iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    opacity: 0;
+    visibility: hidden;
+    width: 1px;
+    height: 1px;
+    z-index: 0;
+    overflow: hidden;
+}
+
+.fmd-preview {
+    .img-thumb-outer {
+        display: inline-block;
+    }
+
+    .img-thumb {
+        position: relative;
+        z-index: 1;
+
+        &.is-img {
+            cursor: zoom-in;
+        }
+    }
+
+    .zoom-img {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        transition: background-color 0.15s ease-in-out, transform 0.15s ease-in-out;
+        z-index: 0;
+
+        .orig-img {
+            max-width: 100%;
+            height: auto;
+        }
+
+        &.show {
+            z-index: 999999999;
+            background-color: rgba(var(--bs-dark-rgb), .9);
+            transform: scale(1);
+            position: fixed;
+            width: 100vw;
+            height: 100vh;
+
+            .orig-img {
+                max-width: calc(100vw - 20px);
+                height: auto;
+                position: absolute;
+                left: 50%;
+                top: 50%;
+                transform: translate(-50%, -50%);
+
+                &.orig-img-v {
+                    max-width: none;
+                    max-height: calc(100vh - 20px);
+                    width: auto;
+                }
+            }
+        }
+    }
+
+    .zoom-out {
+        position: absolute;
+        top: 0;
+        right: 0;
+        z-index: 2;
+        display: block;
+    }
+}
+
+.fmd-addlogo {
+    .inner {
+        margin: 0 auto;
+
+        img {
+            width: 100%;
+            height: 100%;
+        }
+    }
+}
+
+.fmd-addlogo-ipt {
+    width: 3.75rem;
+}
+
+.fmd-imgcreate-img {
+    height: 0;
+    position: relative;
+    padding-bottom: 100%;
+
+    .inner {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background-color: var(--bs-secondary-bg);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        img {
+            object-fit: contain;
+            max-width: 100%;
+            max-height: 100%;
+        }
+    }
+}

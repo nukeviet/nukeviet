@@ -1,0 +1,85 @@
+{
+    "info": {
+        "name": "Block RSS",
+        "author": "VINADES.,JSC",
+        "website": "https://vinades.vn",
+        "description": ""
+    },
+    "config": {
+        "url": "",
+        "number": "10",
+        "isdescription": "1",
+        "ishtml": "1",
+        "title_length": "0",
+        "ispubdate": "1",
+        "istarget": "1"
+    },
+    "datafunction": "nv_block_data_config_rss",
+    "submitfunction": "nv_block_data_config_rss_submit",
+    "i18n": {
+        "en": {
+            "language": {
+                "url": "Url rss",
+                "number": "Number of items to display",
+                "isdescription": "Display description",
+                "ishtml": "Description Using HTML",
+                "title_length": "Number of cat title characters",
+                "ispubdate": "Display the date pubdate",
+                "istarget": "Open link in new window",
+                "error_url": "Rss path you put in wrong",
+                "error_template": "You need to select a template for the block"
+            },
+            "info": {
+                "name": "Display items in the RSS feed"
+            }
+        },
+        "vi": {
+            "language": {
+                "url": "Đường dẫn tới file rss",
+                "number": "Số mục muốn hiển thị",
+                "isdescription": "Hiện thị miêu tả",
+                "ishtml": "Sử dụng HTML miêu tả",
+                "title_length": "Số ký tự của tiêu đề",
+                "ispubdate": "Hiện ngày gửi",
+                "istarget": "Mở liên kết bằng cửa sổ mới",
+                "error_url": "Đường dẫn Rss bạn đưa vào không đúng",
+                "error_template": "Bạn cần chọn template cho block"
+            },
+            "info": {
+                "name": "Hiển thị tin trong nguồn cấp RSS"
+            }
+        },
+        "cz": {
+            "language": {
+                "url": "Cesta Rss",
+                "number": "Počet položek pro zobrazení",
+                "isdescription": "Zobrazit popisek",
+                "ishtml": "Použití HTML popisek",
+                "title_length": "Počet znaků názvu",
+                "ispubdate": "zjevit se datum poslano",
+                "istarget": "Otevřít odkaz v novém okně",
+                "error_url": "RSS cestu kterou  špatně",
+                "error_template": "Musíte vybrat šablonu pro blok"
+            },
+            "info": {
+                "name": "Afficher les éléments dans le flux RSS"
+            }
+        },
+        "fr": {
+            "language": {
+                "url": "Chemin d'accès au fichier RSS",
+                "number": "Nombre d'éléments à afficher",
+                "isdescription": "Afficher la description",
+                "ishtml": "Utiliser HTML pour la description",
+                "title_length": "Nombre de caractères du titre",
+                "ispubdate": "Afficher la date de publication",
+                "istarget": "Ouvrir le lien dans une nouvelle fenêtre",
+                "error_url": "L'URL RSS que vous avez fournie est incorrecte",
+                "error_template": "Vous devez choisir un modèle pour le bloc"
+            },
+            "info": {
+                "name": "Afficher les articles dans le flux RSS"
+            }
+        }
+    }
+}

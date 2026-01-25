@@ -1,0 +1,18 @@
+{
+    "sourceFile": "whoami.php",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 0,
+            "patches": [
+                {
+                    "date": 1768917993608,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                }
+            ],
+            "date": 1768917993608,
+            "name": "Commit-0",
+            "content": "<?php\r\necho \"PHP SAPI: \" . php_sapi_name() . \"<br>\";\r\necho \"PHP VERSION: \" . PHP_VERSION . \"<br>\";\r\necho \"INI: \" . php_ini_loaded_file() . \"<br>\";\r\necho \"EXT DIR: \" . ini_get('extension_dir') . \"<br>\";\r\necho \"gd loaded: \" . (extension_loaded('gd') ? \"YES\" : \"NO\") . \"<br>\";\r\n"
+        }
+    ]
+}

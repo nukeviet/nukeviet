@@ -1,0 +1,71 @@
+/**
+ * NukeViet Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2025 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
+ */
+.ext-thumbnail {
+  flex: 0 0 5.375rem;
+}
+.ext-thumbnail > div {
+  width: 5.375rem;
+  height: 5.375rem;
+  overflow: hidden;
+}
+.ext-thumbnail > div img,
+.ext-thumbnail > div svg {
+  -o-object-position: center;
+  object-position: center;
+  -o-object-fit: cover;
+  object-fit: cover;
+  width: 100%;
+  height: 100%;
+}
+
+.ext-detail-container {
+  margin-left: calc(-1 * var(--bs-modal-padding));
+  margin-right: calc(-1 * var(--bs-modal-padding));
+}
+.ext-detail-container img {
+  max-width: 100%;
+  height: auto;
+}
+.ext-detail-container .tab-header {
+  border-bottom: var(--bs-border-width) solid var(--bs-border-color);
+}
+.ext-detail-container .tab-header > .nav {
+  margin-bottom: calc(-1 * var(--bs-nav-tabs-border-width));
+}
+
+.stepper {
+  counter-reset: countSteper;
+}
+.stepper .line {
+  width: 2px;
+}
+.stepper .indicate {
+  width: 2.5rem;
+  height: 2.5rem;
+  flex-basis: 2.5rem;
+  flex-grow: 0;
+  flex-shrink: 0;
+}
+.stepper .indicate span::before {
+  content: counter(countSteper);
+}
+.stepper .slead {
+  margin-bottom: 1.5rem;
+}
+.stepper > div {
+  counter-increment: countSteper;
+}
+.stepper > div:last-child .line {
+  display: none;
+}
+.stepper > div:last-child .slead {
+  margin-bottom: 0;
+}
+
+/*# sourceMappingURL=extensions.css.map */

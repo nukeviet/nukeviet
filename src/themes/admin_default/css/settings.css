@@ -1,0 +1,107 @@
+/**
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
+ */
+
+.setting-tabcontent {
+    margin: 0 0 15px 0;
+}
+
+.setting-tabcontenttop {
+    margin-top: 15px;
+}
+
+.setting-tabnav > li.active > a,
+.setting-tabnav > li.active > a:hover,
+.setting-tabnav > li.active > a:focus {
+    background-color: #f9f9f9 !important;
+}
+
+.setting-tabcontent .table-first,
+.setting-tabcontent .table-first tbody tr:first-child td,
+.setting-tabcontent .table-first tbody tr:first-child th {
+    border-top: 0 !important;
+}
+
+.form-text {
+    display: block;
+    margin-top: 5px;
+}
+
+.cron_code {
+    background-color: #f5f5f5;
+    color:crimson;
+    border: 1px solid #ccc;
+    display: block;
+    padding: 5px 8px;
+    overflow-x: auto;
+}
+
+.dropdown-menu-checkbox {
+    max-height: 200px;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+.dropdown-menu-checkbox .checkall {
+    padding:4px 15px;
+}
+
+.dropdown-menu-checkbox label {
+    display:block;
+    cursor:pointer;
+    margin-bottom: 0;
+    padding:4px 15px;
+}
+
+.dropdown-menu-checkbox label:hover {
+    background-color: #f5f5f5;
+}
+
+.cronlist .cron-heading {
+    display: block;
+}
+
+.cronlist .cron-heading {
+    background-color: #428bca;
+    color: #fff;
+    text-decoration: none;
+}
+
+.cronlist .cron-heading.collapsed {
+    background-color: #f5f5f5;
+    color: #333;
+}
+
+.cronlist .cron-heading.collapsed.text-muted {
+    color: #999;
+}
+
+.cronlist .cron-heading::before {
+    display: inline-block;
+    font-family: "FontAwesome";
+    content: "\f077";
+    margin-right: 6px;
+}
+
+.cronlist .cron-heading.collapsed::before {
+    content: "\f078";
+}
+
+.cronlist .cron-heading .title {
+    font-weight: 700;
+}
+
+.cronlist .cron-heading.collapsed .title {
+    font-weight: 400;
+}
+
+.c-selected{
+    background-color: #6c757d !important;
+    color: #fff !important;
+    font-weight: 700;
+}

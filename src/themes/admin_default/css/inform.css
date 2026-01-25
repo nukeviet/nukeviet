@@ -1,0 +1,110 @@
+/**
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
+ */
+
+.inform .filter {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.inform .filter > *:first-child {
+    flex-grow: 1;
+}
+
+.inform .filter .select > * {
+    display: inline-block;
+    width: auto;
+}
+
+.inform .filter .select > * + * {
+    margin-left: 5px;
+}
+
+.inform .is_empty {
+    background-color: #f5f5f5;
+    border: 1px solid #e6e6e6;
+    border-radius: 8px;
+    padding: 15px;
+    text-align: center;
+}
+
+.inform .more {
+    white-space: nowrap;
+}
+
+.inform .more u {
+    cursor: pointer;
+}
+
+.inform .inform-link {
+    margin-top: 8px;
+}
+
+.inform .inform-link a {
+    display: inline-block;
+    padding: 3px 6px;
+    border: 1px solid transparent;
+    background-color: #666;
+    color: #fff;
+    border-radius: 4px;
+}
+
+.inform .status-waiting {
+    color: #757575 !important;
+    background-color: #fff2f4;
+}
+
+.inform .status-expired {
+    color: #b9b9b9 !important;
+    background-color: #f5f5f5;
+}
+
+.inform .status-waiting .inform-link a,
+.inform .status-expired .inform-link a {
+    background-color: #a8a8a8;
+}
+
+.inform-action-form .field + .field {
+    margin-top: 15px;
+}
+
+.inform-action-form.role-system .sender_group,
+.inform-action-form.role-system .sender_admin,
+.inform-action-form.role-group .sender_admin,
+.inform-action-form.role-admin .sender_group,
+.inform-action-form.role-group .receiver_grs,
+.inform-action-form.receiver-grs-1 .receiver_ids,
+.inform-action-form.receiver-grs-0 .receiver_grs {
+    display: none;
+}
+
+.inform-action-form .message {
+    min-height: 150px;
+}
+
+.inform-action-form .time select {
+    width: 70px;
+    display: inline-block !important;
+}
+
+.inform-action-form .time input[type=text] {
+    width: 100px;
+    display: inline-block !important;
+}
+
+.field-invalid {
+    margin-top: 5px;
+    font-size: 12px;
+    color: #a94442;
+    display: none;
+}
+
+.has-error .field-invalid {
+    display: block;
+}

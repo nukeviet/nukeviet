@@ -1,0 +1,32 @@
+/*!
+ * NukeViet Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2025 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
+ */
+
+$enable-responsive: false;
+
+// Tắt responsive font chữ
+$enable-rfs: false;
+
+@import "reboot";
+@import "../../node_modules/bootstrap/scss/functions";
+@import "../../node_modules/bootstrap/scss/variables";
+@import "../../node_modules/bootstrap/scss/variables-dark";
+@import "../../node_modules/bootstrap/scss/maps";
+@import "../../node_modules/bootstrap/scss/mixins";
+
+// Non-responsive
+@import "nrfs";
+
+@import "variables";
+@import "root";
+@import "common";
+@import "forms";
+@import "modal";
+@import "captcha";
+@import "toasts";
+@import "alert";

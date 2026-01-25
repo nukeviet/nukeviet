@@ -1,0 +1,35 @@
+{
+    "info": {
+        "name": "Block Top Hit",
+        "author": "VINADES.,JSC",
+        "website": "https://vinades.vn",
+        "description": ""
+    },
+    "config": {
+        "number_day": "365",
+        "numrow": "10",
+        "showtooltip": "1",
+        "tooltip_position": "bottom",
+        "tooltip_length": "0",
+        "nocatid": ""
+    },
+    "datafunction": "nv_block_config_tophits_blocks",
+    "submitfunction": "nv_block_config_tophits_blocks_submit",
+    "i18n": {
+        "en": {
+            "info": {
+                "name": "Most viewed articles"
+            }
+        },
+        "fr": {
+            "info": {
+                "name": "Nouvelles les plus vues"
+            }
+        },
+        "vi": {
+            "info": {
+                "name": "Tin được xem nhiều nhất"
+            }
+        }
+    }
+}

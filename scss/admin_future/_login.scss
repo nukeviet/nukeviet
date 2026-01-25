@@ -1,0 +1,30 @@
+$box-size: 304px;
+$captcha-h: 78px;
+
+.login-page {
+    .login-header {
+        padding-top: .75rem;
+        padding-bottom: .75rem;
+        //padding-bottom: calc(.75rem - ($line-height-base - 1)/2*1rem);
+        border-top-left-radius: $card-border-radius;
+        border-top-right-radius: $card-border-radius;
+    }
+
+    .login-footer {
+        border-bottom-left-radius: $card-border-radius;
+        border-bottom-right-radius: $card-border-radius;
+    }
+
+    .card-login {
+        box-shadow: $box-shadow-lg;
+    }
+}
+
+.login-box {
+    width: $box-size;
+    max-width: calc(100vw - 2*$card-spacer-x);
+}
+
+.recaptcha-holder {
+    height: $captcha-h;
+}

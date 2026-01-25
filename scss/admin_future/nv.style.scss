@@ -1,0 +1,45 @@
+/**
+ * NukeViet Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2025 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
+ */
+
+// Define variable
+@import "../functions";
+@import "fonts";
+@import "variables";
+@import "variables-dark";
+
+// Bootstrap all
+@import "../../node_modules/bootstrap/scss/bootstrap";
+
+// Fontawesome all
+@import "../../node_modules/@fortawesome/fontawesome-free/scss/fontawesome";
+@import "../../node_modules/@fortawesome/fontawesome-free/scss/brands";
+@import "../../node_modules/@fortawesome/fontawesome-free/scss/regular";
+@import "../../node_modules/@fortawesome/fontawesome-free/scss/solid";
+@import "../../node_modules/@fortawesome/fontawesome-free/scss/v4-shims";
+
+@import "root";
+@import "perfect_scrollbar";
+@import "common";
+@import "card";
+@import "header";
+@import "footer";
+@import "left_sidebar";
+@import "right_sidebar";
+@import "breadcrumb";
+@import "notifications";
+@import "input_btn";
+@import "../error_info";
+@import "apexcharts";
+@import "../ckeditor5";
+@import "../select2";
+@import "../uidatepicker";
+@import "../uiautocomplete";
+@import "../flatpickr";
+@import "file_manager";
+@import "login";

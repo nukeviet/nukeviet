@@ -1,0 +1,78 @@
+/**
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
+ */
+
+.btn-facebook {
+    background-color: #4267b2;
+    border-color: #4267b2;
+    color: #fff;
+}
+
+.btn-facebook:hover,
+.btn-facebook:active,
+.btn-facebook:focus {
+    background-color: #5180e0 !important;
+    border-color: #5180e0 !important;
+}
+
+.btn-google {
+    background-color: #ea4335;
+    border-color: #ea4335;
+    color: #fff;
+}
+
+.btn-google:hover,
+.btn-google:active,
+.btn-google:focus {
+    background-color: #f2574b !important;
+    border-color: #f2574b !important;
+}
+
+.btn-zalo {
+    background-color: #0067ff;
+    border-color: #0067ff;
+    color: #fff;
+}
+
+.btn-zalo:hover,
+.btn-zalo:active,
+.btn-zalo:focus {
+    background-color: #035adb !important;
+    border-color: #035adb !important;
+}
+
+.btn-facebook:active,
+.btn-facebook:focus,
+.btn-facebook:active:focus,
+.btn-facebook:hover,
+.btn-google:active,
+.btn-google:focus,
+.btn-google:active:focus,
+.btn-google:hover,
+.btn-zalo:active,
+.btn-zalo:focus,
+.btn-zalo:active:focus,
+.btn-zalo:hover {
+    color: #fff !important;
+}
+
+.fa-zalo::before {
+    font: normal normal bold 15px/1 Arial;
+    content: "Z";
+}
+
+.left-col {
+    width: 25%;
+    min-width: 200px;
+}
+
+.inactive td,
+.inactive td a {
+    color: #666;
+    text-decoration: line-through;
+}

@@ -1,0 +1,110 @@
+.cr-fcontrol {
+  display: block;
+  width: 100%;
+  padding: $input-padding-y $input-padding-x;
+  line-height: $input-line-height;
+  appearance: none;
+  background-color: var(--cr-input-bg);
+  background-clip: padding-box;
+  border: 1px solid var(--cr-border-color);
+  border-radius: var(--cr-input-border-radius);
+
+  @include box-shadow($input-box-shadow);
+  @include transition($input-transition);
+
+  &:focus {
+    background-color: var(--cr-input-focus-bg);
+    border-color: var(--cr-input-focus-border-color);
+    outline: 0;
+  }
+
+  &.is-invalid {
+    border-color: var(--cr-danger);
+  }
+}
+
+.cr-btn {
+  display: inline-block;
+  padding: var(--cr-btn-padding-y) var(--cr-btn-padding-x);
+  line-height: var(--cr-btn-line-height);
+  color: var(--cr-btn-color);
+  text-align: center;
+  text-decoration: none;
+  white-space: nowrap;
+  vertical-align: middle;
+  cursor: pointer;
+  user-select: none;
+  border: 1px solid var(--cr-btn-border-color);
+  border-radius: var(--cr-btn-border-radius);
+  background-color: var(--cr-btn-bg);
+  transition: color .15s ease-in-out, background-color .15s ease-in-out, border-color .15s ease-in-out, box-shadow .15s ease-in-out;
+
+  &.cr-btn-icon {
+    padding-left: calc(var(--cr-btn-padding-x) - 0.25rem);
+    display: inline-flex;
+    align-items: center;
+    gap: .125rem;
+  }
+
+  &:hover {
+    color: var(--cr-btn-hover-color);
+    background-color: var(--cr-btn-hover-bg);
+    border-color: var(--cr-btn-hover-border-color);
+  }
+
+  &:focus-visible {
+    color: var(--cr-btn-hover-color);
+    border-color: var(--cr-btn-hover-border-color);
+    outline: 0;
+  }
+
+  &:active,
+  &.active {
+    color: var(--cr-btn-active-color);
+    background-color: var(--cr-btn-active-bg);
+    border-color: var(--cr-btn-active-border-color);
+    @include box-shadow(var(--cr-btn-active-shadow));
+  }
+
+  &:disabled,
+  &.disabled {
+    color: var(--cr-btn-disabled-color);
+    pointer-events: none;
+    background-color: var(--cr-btn-disabled-bg);
+    background-image: if($enable-gradients, none, null);
+    border-color: var(--cr-btn-disabled-border-color);
+    opacity: var(--cr-btn-disabled-opacity);
+    @include box-shadow(none);
+  }
+}
+
+@each $key, $value in $btn-colors {
+  .cr-btn-#{$key} {
+    --cr-btn-color: var(--cr-btn-#{$key}-color);
+    --cr-btn-bg: var(--cr-btn-#{$key}-bg);
+    --cr-btn-border-color: var(--cr-btn-#{$key}-border-color);
+    --cr-btn-hover-color: var(--cr-btn-#{$key}-hover-color);
+    --cr-btn-hover-bg: var(--cr-btn-#{$key}-hover-bg);
+    --cr-btn-hover-border-color: var(--cr-btn-#{$key}-hover-border-color);
+    --cr-btn-active-color: var(--cr-btn-#{$key}-active-color);
+    --cr-btn-active-bg: var(--cr-btn-#{$key}-active-bg);
+    --cr-btn-active-border-color: var(--cr-btn-#{$key}-active-border-color);
+    --cr-btn-active-shadow: var(--cr-btn-#{$key}-active-shadow);
+    --cr-btn-disabled-color: var(--cr-btn-#{$key}-disabled-color);
+    --cr-btn-disabled-bg: var(--cr-btn-#{$key}-disabled-bg);
+    --cr-btn-disabled-border-color: var(--cr-btn-#{$key}-disabled-border-color);
+    --cr-btn-disabled-opacity: var(--cr-btn-#{$key}-disabled-opacity);
+  }
+}
+
+.cr-invalid-feedback {
+  display: none;
+  width: 100%;
+  margin-top: .25rem;
+  font-size: .875em;
+  color: var(--cr-danger);
+}
+
+.is-invalid~.cr-invalid-feedback {
+  display: block;
+}

@@ -1,0 +1,311 @@
+@use "sass:map";
+
+.left-sidebar {
+    width: $left-sidebar-width;
+    background-color: var(--nv-left-sidebar-bg);
+    position: fixed;
+    left: 0;
+    top: $header-height;
+    height: calc(100vh - $header-height);
+    box-shadow: $box-shadow-sm;
+    z-index: $zindex-left-sidebar;
+    transition: transform .2s ease-in-out;
+
+    @media (max-width: #{$theme-breakpoint}) {
+        position: static;
+        --bs-border-width: 0;
+        width: 100%;
+        height: auto;
+    }
+
+    .sidebar-elements {
+        margin: 0;
+        padding: 0;
+        list-style: none;
+
+        .divider {
+            padding: 1.25rem 1.25rem 0;
+            color: var(--nv-left-sidebar-divider-color);
+            line-height: 1.875rem;
+            font-weight: $font-weight-semibold;
+            text-transform: uppercase;
+            font-size: .8462rem;
+        }
+
+        // Menu cấp 1
+        >li{
+            >a {
+                display: block;
+                padding: 0 1.875rem 0 1.25rem;
+                color: var(--bs-body-color);
+                line-height: $left-sidebar-lev1-height;
+                text-overflow: ellipsis;
+                overflow: hidden;
+                white-space: nowrap;
+                position: relative;
+
+                &:hover {
+                    background-color: var(--nv-left-sidebar-link-hover-color);
+                }
+
+                .icon {
+                    line-height: 1.125rem;
+                    font-size: 1rem;
+                    min-width: 1.1875rem;
+                    margin-right: .5rem;
+                    text-align: center;
+                    vertical-align: middle;
+                }
+            }
+
+            &.active{
+                >a {
+                    font-weight: $font-weight-medium;
+                }
+            }
+        }
+
+        li.parent {
+            >a>.toggle {
+                position: absolute;
+                width: $left-sidebar-lev1-height;
+                height: $left-sidebar-lev1-height;
+                line-height: $left-sidebar-lev1-height;
+                right: .625rem;
+                top: 0;
+                color: var(--nv-left-sidebar-toggle-color);
+                cursor: pointer;
+                padding-left: 1.25rem;
+
+                .fas:before {
+                    content: "\f0d7";
+                }
+            }
+
+            &.open>a>.toggle .fas:before {
+                content: "\f0d8";
+            }
+        }
+
+        // Menu cấp 2
+        >li ul {
+            display: none;
+            background-color: var(--nv-left-sidebar-child-bg);
+            padding: .625rem 0;
+            list-style: none;
+            line-height: 1.25rem;
+
+            .title {
+                display: none;
+            }
+        }
+
+        // Cấp 3
+        >li ul li>ul {
+            padding: .3125rem 0;
+        }
+
+        >li>ul {
+            border-top: $border-width solid var(--nv-left-sidebar-child-border-color);
+            border-bottom: $border-width solid var(--nv-left-sidebar-child-border-color);
+
+            li.f-link {
+                display: none;
+            }
+
+            .nav-items .content>ul {
+                display: block;
+            }
+        }
+
+        li {
+            >a {
+                transition: $nav-link-transition;
+            }
+
+            &.active>a {
+                color: var(--bs-primary);
+            }
+        }
+
+        // Cấp 2 và 3 nói chung
+        >li ul li>a {
+            padding: .5rem .9375rem .5rem 1.875rem;
+            color: var(--bs-body-color);
+            display: block;
+            text-overflow: ellipsis;
+            overflow: hidden;
+            white-space: nowrap;
+            position: relative;
+
+            &:hover {
+                background-color: var(--nv-left-sidebar-link-child-hover-color);
+            }
+        }
+
+        // Canh trái thẻ menu cấp 3
+        >li ul li>ul>li>a {
+            padding-left: 2.625rem;
+            position: relative;
+        }
+
+        li.open>ul {
+            display: block;
+        }
+    }
+
+    .left-sidebar-in-sm {
+        display: none;
+        background-color: var(--nv-left-sidebar-bg);
+        --bs-border-width: #{$border-width};
+
+        a {
+            color: var(--bs-body-color);
+            transition: $nav-link-transition;
+
+            &:hover {
+                color: var(--bs-primary);
+            }
+        }
+
+        >div {
+            height: calc($left-sidebar-toggle-height - $border-width);
+        }
+
+        @media (max-width: #{$theme-breakpoint}) {
+            display: block;
+        }
+    }
+
+    .left-sidebar-scroll {
+        position: relative;
+        height: calc(100vh - $header-height);
+        width: 100%;
+        overflow: hidden;
+
+        @media (max-width: #{$theme-breakpoint}) {
+            height: auto;
+            overflow: visible;
+        }
+    }
+
+    @media (max-width: #{$theme-breakpoint}) {
+        .left-sidebar-spacer {
+            display: none;
+
+            &.open {
+                display: block;
+            }
+        }
+    }
+}
+
+.collapsed-left-sidebar {
+    .left-sidebar {
+        transform: translateX(calc(($left-sidebar-width - $left-sidebar-width-sm) * -1));
+
+        @media (max-width: #{$theme-breakpoint}) {
+            transform: translateX(0);
+        }
+
+        .nv-left-sidebar-scroller {
+            position: relative;
+        }
+
+        // Kiểu menu trái đơn giản chỉ tồn tại khi màn hình lớn
+        @media (min-width: #{map.get($grid-breakpoints, "md")}) {
+            .sidebar-elements {
+                .divider {
+                    padding: 2.5rem 0 0;
+                    height: 0;
+                    overflow: hidden;
+                    text-indent: -9999px;
+
+                    :first-child {
+                        display: none;
+                    }
+                }
+
+                > li {
+                    > a {
+                        text-overflow: clip;
+
+                        span {
+                            display: none;
+                        }
+                    }
+
+                    > ul {
+                        li.f-link {
+                            display: block;
+                        }
+                    }
+
+                    ul.visible {
+                        position: fixed;
+                        table-layout: fixed;
+                        left: $left-sidebar-width;
+                        top: 0;
+                        height: 100%;
+                        z-index: 1;
+                        width: $left-sidebar-sub-width;
+                        border-right: $border-width $border-style var(--bs-border-color);
+
+                        .title {
+                            font-size: $h3-font-size;
+                            display: block;
+                            padding: 1.5625rem 1.5625rem 0 1.5625rem;
+                        }
+
+                        .nav-items {
+                            display: table-row;
+                            height: 100%;
+
+                            .nv-left-sidebar-scroller {
+                                display: table-cell;
+                                height: 100%;
+                                overflow: hidden;
+
+                                >.content {
+                                    position: absolute;
+                                    top: 0;
+                                    bottom: 0;
+                                    width: 100%;
+                                    height: 100%;
+
+                                     >ul>li {
+                                         >a {
+                                             padding-left: 1.5625rem;
+                                         }
+
+                                         >ul>li>a {
+                                             padding-left: 2.8125rem;
+                                         }
+                                     }
+                                }
+                            }
+                        }
+                    }
+                }
+
+                // Menu đơn giản thì open nó ở desktop nó cũng không open ở mobile
+                li.open>ul {
+                    display: none;
+
+                    &.visible {
+                        display: table;
+                    }
+
+                    li.open>ul {
+                        display: block;
+                    }
+                }
+            }
+
+            .left-sidebar-wrapper {
+                width: $left-sidebar-width-sm;
+                margin-left: calc($left-sidebar-width - $left-sidebar-width-sm - $left-sidebar-border-width);
+            }
+        }
+    }
+}

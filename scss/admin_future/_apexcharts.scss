@@ -1,0 +1,27 @@
+.main-content {
+    .apexcharts-canvas {
+        text {
+            fill: var(--bs-body-color);
+            font-family: var(--bs-font-sans-serif);
+        }
+
+        .apexcharts-gridline {
+            opacity: var(--nv-chart-grid-border-opacity);
+        }
+    }
+
+    .apexcharts-tooltip {
+        box-shadow: var(--bs-box-shadow);
+        border-radius: var(--bs-border-radius);
+    }
+
+    .apexcharts-tooltip.apexcharts-theme-light {
+        border-width: 0;
+        background-color: var(--bs-body-bg);
+
+        .apexcharts-tooltip-title {
+            background-color: var(--bs-card-cap-bg);
+            border-bottom-color: var(--bs-border-color);
+        }
+    }
+}

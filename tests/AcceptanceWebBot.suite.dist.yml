@@ -1,0 +1,22 @@
+actor: AcceptanceWebBot
+suite_namespace: Tests\AcceptanceWebBot
+modules:
+    enabled:
+        - WebDriver:
+            url: 'about:blank'
+            browser: chrome # 'chrome' or 'firefox'
+            window_size: 1366x768
+            capabilities:
+                goog:chromeOptions:
+                    args:
+                        - "--user-agent=Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)"
+                        - "--headless"
+                        - "--disable-gpu"
+                        - "--no-sandbox"
+
+step_decorators:
+    - Codeception\Step\ConditionalAssertion
+    - Codeception\Step\TryTo
+    - Codeception\Step\Retry
+
+bootstrap: ../codeception/acceptance.bootstrap.php

@@ -1,0 +1,32 @@
+/**
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
+ */
+
+.counter {
+    list-style-type: none;
+    counter-reset: css-counter 0;
+}
+
+.counter > tr {
+    counter-increment: css-counter 1;
+}
+
+.counter > tr > td:first-child::before {
+    content: counter(css-counter);
+}
+
+.invalid-feedback {
+    color:#a94442;
+    font-size: 13px;
+    margin-top: 5px;
+    display: none;
+}
+
+.has-error .invalid-feedback {
+    display: block;
+}

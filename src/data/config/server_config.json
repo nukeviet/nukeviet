@@ -1,0 +1,208 @@
+{
+    "site_mimetypes": {
+        "application/manifest+json": [
+            "webmanifest"
+        ],
+        "application/json": [
+            "json"
+        ],
+        "application/xml": [
+            "xml"
+        ],
+        "application/rss+xml": [
+            "rss"
+        ],
+        "font/eot": [
+            "eot"
+        ],
+        "font/otf": [
+            "otf"
+        ],
+        "font/ttf": [
+            "ttf"
+        ],
+        "font/woff": [
+            "woff"
+        ],
+        "font/woff2": [
+            "woff2"
+        ],
+        "image/bmp": [
+            "bmp"
+        ],
+        "image/gif": [
+            "gif"
+        ],
+        "image/jpeg": [
+            "jpeg",
+            "jpg"
+        ],
+        "image/png": [
+            "png"
+        ],
+        "image/svg+xml": [
+            "svg"
+        ],
+        "image/tiff": [
+            "tif",
+            "tiff"
+        ],
+        "image/vnd.microsoft.icon": [
+            "ico"
+        ],
+        "image/webp": [
+            "webp"
+        ],
+        "text/css": [
+            "css"
+        ],
+        "text/html": [
+            "htm",
+            "html"
+        ],
+        "text/javascript": [
+            "js",
+            "mjs"
+        ],
+        "text/plain": [
+            "txt"
+        ],
+        "text/xsl": [
+            "xsl"
+        ]
+    },
+    "compress_file_exts": [
+        "application/json",
+        "application/manifest+json",
+        "application/rss+xml",
+        "application/xml",
+        "font/otf",
+        "font/ttf",
+        "image/svg+xml",
+        "text/css",
+        "text/html",
+        "text/javascript",
+        "text/plain",
+        "text/xsl"
+    ],
+    "charset_types": [
+        "application/json",
+        "application/manifest+json",
+        "application/rss+xml",
+        "application/xml",
+        "image/svg+xml",
+        "text/css",
+        "text/html",
+        "text/javascript",
+        "text/xsl"
+    ],
+    "cors_origins": [],
+    "compress_types": {
+        "gzip": "%Windir%\\system32\\inetsrv\\gzip.dll",
+        "br": "%Windir%\\system32\\inetsrv\\br.dll"
+    },
+    "remove_x_powered_by": true,
+    "disable_server_signature": true,
+    "remove_etag": true,
+    "not_cache_and_snippet": true,
+    "strict_transport_security": "max-age=2592000; includeSubDomains; preload",
+    "x_content_type_options": "nosniff",
+    "x_frame_options": "SAMEORIGIN",
+    "x_xss_protection": "1; mode=block",
+    "referrer_policy": "no-referrer-when-downgrade, strict-origin-when-cross-origin",
+    "deny_access": {
+        "file": [
+            "[\\.(.*)]",
+            "[composer\\.json]",
+            "[default\\.(htaccess\\.txt|web\\.config\\.txt|php)]",
+            "[mainfile\\.php]",
+            "[modules/[^/]+/blocks/[^/]+\\.json]",
+            "[themes/[^/]+/blocks/[^/]+\\.json]",
+            "[web\\.config]",
+            "{NV_CONFIG_FILENAME}"
+        ],
+        "dir": [
+            "[{NV_IP_DIR}6?]",
+            "includes",
+            "install/tpl",
+            "vendor",
+            "{NV_ASSETS_DIR}/tpl",
+            "{NV_CACHEDIR}",
+            "{NV_CERTS_DIR}",
+            "{NV_LOGS_DIR}"
+        ],
+        "include_dirs": [
+            "{NV_ADMINDIR}"
+        ],
+        "include_exec_files": [
+            "[install/(css|images)]",
+            "modules",
+            "themes",
+            "{NV_ASSETS_DIR}",
+            "{NV_DATADIR}",
+            "{NV_TEMP_DIR}",
+            "{NV_UPLOADS_DIR}"
+        ]
+    },
+    "exec_files": [
+        "[(j|a)spx?]",
+        "[(p|s)html]",
+        "cgi",
+        "inc",
+        "ini",
+        "php",
+        "pl",
+        "py",
+        "sh",
+        "sql.gz",
+        "tpl",
+        "xml"
+    ],
+    "deny_access_code": 404,
+    "error_document": {
+        "400": "error.php?code=400",
+        "403": "error.php?code=403",
+        "404": "error.php?code=404",
+        "405": "error.php?code=405",
+        "408": "error.php?code=408",
+        "500": "error.php?code=500",
+        "502": "error.php?code=502",
+        "503": "error.php?code=503",
+        "504": "error.php?code=504"
+    },
+    "js_css_files": {
+        "mime_types": [
+            "text/css",
+            "text/javascript",
+            "text/xsl"
+        ],
+        "cache_control": "public",
+        "expires": "1M"
+    },
+    "image_files": {
+        "mime_types": [
+            "image/bmp",
+            "image/gif",
+            "image/jpeg",
+            "image/png",
+            "image/svg+xml",
+            "image/tiff",
+            "image/vnd.microsoft.icon",
+            "image/webp"
+        ],
+        "cache_control": "public, no-transform",
+        "expires": "1y",
+        "prevent_image_hot_linking": false
+    },
+    "font_files": {
+        "mime_types": [
+            "font/eot",
+            "font/otf",
+            "font/ttf",
+            "font/woff",
+            "font/woff2"
+        ],
+        "cache_control": "public",
+        "expires": "6M"
+    }
+}

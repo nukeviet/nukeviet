@@ -1,0 +1,18 @@
+{
+    "sourceFile": "gd_test.php",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 0,
+            "patches": [
+                {
+                    "date": 1768917862460,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                }
+            ],
+            "date": 1768917862460,
+            "name": "Commit-0",
+            "content": "<?php\r\necho \"GD loaded: \" . (extension_loaded('gd') ? \"YES\" : \"NO\") . \"<br>\";\r\necho \"imagecreatetruecolor exists: \" . (function_exists('imagecreatetruecolor') ? \"YES\" : \"NO\") . \"<br>\";\r\necho \"GD info:<pre>\";\r\nprint_r(gd_info());\r\necho \"</pre>\";\r\n"
+        }
+    ]
+}

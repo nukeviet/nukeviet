@@ -1,0 +1,42 @@
+/**
+ * NukeViet Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2025 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
+ */
+
+// Define variable
+@import "../functions";
+@import "variables";
+@import "variables-dark";
+@import "../../node_modules/bootstrap/scss/functions";
+@import "../../node_modules/bootstrap/scss/variables";
+
+#organlogo-picker {
+    position: relative;
+    width: 100%;
+    height: 0;
+    padding-bottom: 100%;
+
+    .inner-picker {
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+
+        a {
+            display: block;
+            width: 5rem;
+            height: 5rem;
+        }
+    }
+}
+
+#metatags-manage {
+    .dropdown-menu {
+        max-height: 17.5rem;
+        overflow-y: auto;
+    }
+}

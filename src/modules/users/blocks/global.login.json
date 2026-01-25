@@ -1,0 +1,25 @@
+{
+    "info": {
+        "name": "Login",
+        "author": "VINADES.,JSC",
+        "website": "https://vinades.vn",
+        "description": ""
+    },
+    "i18n": {
+        "en": {
+            "info": {
+                "name": "Login form"
+            }
+        },
+        "fr": {
+            "info": {
+                "name": "Formulaire de connexion"
+            }
+        },
+        "vi": {
+            "info": {
+                "name": "Form đăng nhập"
+            }
+        }
+    }
+}

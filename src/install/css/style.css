@@ -1,0 +1,539 @@
+/**
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
+ */
+
+body {
+    font-family: Segoe UI, Tahoma, sans-serif;
+    font-size: 12px;
+    line-height: 1.5;
+    position: relative
+}
+
+a {
+    text-decoration: none;
+    color: #1b7fa9
+}
+
+blockquote {
+    margin: 0 0 18px 4px;
+    padding: 0 16px;
+    font-style: italic;
+    border-left: 5px solid #a50000;
+    color: #808080
+}
+
+.fl {
+    float: left
+}
+
+.fr {
+    float: right
+}
+
+.middle {
+    vertical-align: middle
+}
+
+.clear {
+    clear: both
+}
+
+hr {
+    width: 100%;
+    height: 1px;
+    border-bottom: 0;
+    color: #e6e6e6;
+    margin-bottom: 20px
+}
+
+.hide {
+    display: none
+}
+
+#header {
+    height: 73px;
+    background: url(../images/top_bg.png) bottom repeat-x;
+    padding: 0 20px
+}
+
+h1#install_title {
+    line-height: 73px;
+    background: transparent url(../images/logo.png) left center no-repeat;
+    padding-left: 200px;
+    font-size: 18px;
+    color: #fff;
+    text-transform: uppercase;
+    text-shadow: 1px 1px 0 #62a4a9;
+    display: inline-block
+}
+
+#language {
+    margin-top: 30px;
+    height: 16px;
+    font-size: 12px;
+    position: relative;
+    text-align: right;
+    color: #fff
+}
+
+.language_head {
+    font-weight: 700;
+    cursor: pointer;
+    color: #fff;
+    padding: 2px 0;
+    border: 1px solid #ccc
+}
+
+.language_head img {
+    vertical-align: middle
+}
+
+.language_body {
+    z-index: 10000;
+    position: absolute;
+    top: 20px;
+    right: 0;
+    display: none;
+    width: 180px;
+    border-top: 0
+}
+
+.language_body li {
+    position: relative;
+    z-index: 10001;
+    background: #ffffff;
+    border-bottom: 1px solid #fff;
+    height: 20px;
+    line-height: 20px;
+    text-align: left
+}
+
+.language_body li.alt {
+    background: #362f2d
+}
+
+.language_body li a {
+    z-index: 10002;
+    color: #000;
+    text-decoration: none;
+    padding-left: 10px
+}
+
+.language_body li a:hover {
+    color: #ff0000
+}
+
+.language_body img {
+    border: none;
+    position: absolute;
+    top: 2px;
+    right: 10px
+}
+
+.version {
+    text-transform: lowercase
+}
+
+#install_area {
+    background: url(../images/left_bg.png) left top repeat-y;
+    padding: 20px 0;
+    border-bottom: 1px solid #e6e6e6;
+    width: 100%
+}
+
+#step_bar {
+    width: 228px;
+    margin-left: -100%
+}
+
+#step_bar li {
+    line-height: 32px;
+    padding-right: 22px;
+    margin-left: 20px;
+    background: url(../images/blank_step_icon.png) right center no-repeat;
+    font-size: 13px;
+    font-family: Segoe UI, Tahoma, sans-serif
+}
+
+#step_bar li .number {
+    color: #999;
+    margin-right: 10px;
+    font-weight: normal !important;
+    font-size: 13px
+}
+
+#step_bar li.passed_step {
+    font-weight: bold;
+    background: url(../images/pass_step_icon.png) right center no-repeat
+}
+
+#step_bar li.current_step {
+    font-weight: bold;
+    background: url(../images/current_step_icon.png) right center no-repeat;
+    color: #f58e32
+}
+
+#step_content_wrapper {
+    width: 100%;
+    z-index: 1
+}
+
+#step_content {
+    z-index: 2;
+    margin: 0 20px;
+    border: 1px solid #e6e6e6;
+    padding: 3px 10px 5px;
+    margin-left: 250px
+}
+
+div.step_content_title {
+    z-index: 3;
+    font-size: 16px;
+    line-height: 2.4;
+    font-weight: 700;
+    text-transform: uppercase;
+    border-bottom: 1px solid #e6e6e6;
+    margin-bottom: 20px;
+    color: #3a9705
+}
+
+.control_t li {
+    height: 27px;
+    background: url(../images/button_left_corner.png) left center no-repeat;
+    padding-left: 15px;
+    margin: 0 3px;
+    float: left
+}
+
+.control_t li span {
+    height: 27px;
+    background: url(../images/button_right_corner.png) right center no-repeat;
+    display: block;
+    float: left;
+    padding-right: 11px
+}
+
+.control_t li span.back_step {
+    background: url(../images/button_right_back_corner.png) right center no-repeat;
+    padding-right: 26px
+}
+
+.control_t li span.next_step {
+    background: url(../images/button_right_next_corner.png) right center no-repeat;
+    padding-right: 26px
+}
+
+.control_t li span.okay {
+    background: url(../images/button_right_okay_corner.png) right center no-repeat;
+    padding-right: 26px
+}
+
+.control_t li span.home {
+    background: url(../images/button_right_home_corner.png) right center no-repeat;
+    padding-right: 26px
+}
+
+.control_t li span a {
+    height: 27px;
+    line-height: 27px;
+    background: url(../images/button_center_bg.png) left center repeat-x;
+    display: block;
+    float: left;
+    color: #333;
+    text-decoration: none
+}
+
+.control_t li span a:hover {
+    color: #000
+}
+
+.block {
+    width: 100%
+}
+
+.content {
+    font-family: Tahoma, sans-serif
+}
+
+.content p {
+    font-family: Tahoma, sans-serif;
+    margin-bottom: 10px
+}
+
+.content h3 {
+    font-size: 14px;
+    font-family: Tahoma, sans-serif;
+    margin-bottom: 10px
+}
+
+#footer {
+    font-family: Tahoma, sans-serif;
+    padding: 10px 20px;
+    color: #666;
+    background: url(../images/vinades.png) 20px 12px no-repeat
+}
+
+#footer p {
+    margin-left: 40px
+}
+
+.txt,
+.button,
+.area,
+.select {
+    border: 1px solid #e6e6e6
+}
+
+.button {
+    background: url('../images/button_center_bg.png') repeat-x left center;
+    cursor: pointer;
+    padding: 2px 5px
+}
+
+.checkbox {
+    vertical-align: middle;
+    margin-top: 0;
+    margin-bottom: 0;
+    position: relative;
+    top: -1px;
+}
+
+.select {
+    padding: 1px
+}
+
+.highlight_green {
+    color: #449a05
+}
+
+.highlight_red {
+    color: #a50000
+}
+
+.highlight {
+    background: #fdf6e9;
+    border: 1px solid #ffd6aa;
+    padding: 3px 10px;
+    margin-bottom: 10px
+}
+
+.install_succesfull {
+    font-size: 18px;
+    color: #a50000
+}
+
+ul.lc li {
+    margin-left: 30px
+}
+
+ul.lc li li {
+    margin-left: 20px
+}
+
+ul.lc li .nb {
+    margin-left: -20px;
+    width: 20px;
+    display: inline-block;
+    font-weight: bold
+}
+
+.test {
+    border: 1px solid #ccc;
+    cursor: pointer
+}
+
+.selectbox-wrapper {
+    border: 1px solid red;
+    cursor: pointer
+}
+
+.text_normal {
+    text-transform: none;
+    font-weight: normal !important;
+    letter-spacing: normal;
+    font-size: 12px !important
+}
+
+.error,
+.error a {
+    color: #a50000
+}
+
+.center {
+    text-align: center
+}
+
+/* INFO BOX */
+div.infook,
+div.infoerror,
+div.infoalert {
+    padding: 10px;
+    margin: 5px 0;
+    line-height: 1.5em;
+    text-align: center
+}
+
+div.infook {
+    border-top: 1px solid #6C6;
+    border-bottom: 1px solid #6C6;
+    background-color: #CFC
+}
+
+div.infoerror {
+    border-top: 1px solid #C33;
+    border-bottom: 1px solid #C33;
+    background-color: #F66;
+    color: white
+}
+
+div.infoalert {
+    border-top: 1px solid #9CF;
+    border-bottom: 1px solid #9CF;
+    background-color: #C5DEFA
+}
+
+div.infook a,
+div.inerror a,
+div.infoalert a {
+    text-decoration: underline;
+}
+
+div.infoerror a {
+    color: #fff;
+    text-decoration: underline;
+}
+
+.all-work {
+    height: 370px;
+    overflow: auto
+}
+
+.current-work {
+    height: 370px;
+    overflow: auto
+}
+
+.current-work .data {
+    padding: 0 10px;
+    text-align: center
+}
+
+.workitem {
+    padding: 5px;
+    display: block;
+    border-bottom: 1px solid #C1DAD7;
+    padding-left: 25px;
+    background: url('../images/pending.png') no-repeat 5px center;
+    font-size: 11px
+}
+
+.ierror {
+    background: url('../images/error.png') no-repeat 5px center
+}
+
+.iok {
+    background: url('../images/outgroup.png') no-repeat 5px center
+}
+
+.iwarn {
+    background: url('../images/warning.png') no-repeat 5px center
+}
+
+.iload {
+    background: url('../images/load.gif') no-repeat 5px center
+}
+
+.w120 {
+    width: 120px;
+}
+
+.w150 {
+    width: 150px;
+}
+
+.w200 {
+    width: 200px;
+}
+
+.nv-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    padding: 0;
+    margin: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: none;
+    opacity: 0;
+}
+
+.nv-modal > .nv-modal-wrap {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+.nv-modal > .nv-modal-wrap > .nv-modal-content {
+    width: 480px;
+    padding: 20px;
+    border-radius: 5px;
+    background: #fff;
+    position: absolute;
+    left: 50%;
+    top: 20px;
+    margin-left: -250px;
+}
+
+.nv-modal-content ul {
+    list-style: circle !important;
+    padding: 5px 0 5px 30px;
+}
+
+#thanks {
+    margin-top: 20px;
+    border-top: 1px solid #e6e6e6;
+}
+
+#thanks a {
+    color: #1b7fa9;
+}
+
+#thanks .administrator h1 {
+    z-index: 3;
+    font-size: 16px;
+    line-height: 2.4;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: #3a9705;
+    font-family: Segoe UI, Tahoma, sans-serif;
+}
+
+#thanks .list-member {
+    max-height: 220px;
+    overflow-y: auto;
+}
+
+#thanks .list-member h4 {
+    font-family: Segoe UI, Tahoma, sans-serif;
+    font-size: 14px;
+    color: #ff3300;
+}
+
+#thanks .list-member h5 {
+    color: #333;
+}
+
+#thanks .list-member .list-member-all {
+    padding-bottom: 20px
+}
+
+#thanks .list-member .list-member-other-version .version {
+    padding: 10px 0px;
+    text-transform: inherit;
+}

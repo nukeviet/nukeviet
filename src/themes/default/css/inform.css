@@ -1,0 +1,154 @@
+/**
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
+ */
+
+.inform .filter-select {
+    padding-left: 18px;
+    padding-right: 18px;
+}
+
+.inform .filter-select > * {
+    display: inline-block !important;
+}
+
+.inform .filter-select > * + * {
+    margin-left: 10px;
+}
+
+.inform .filter-select label {
+    margin-bottom: 0;
+}
+
+.inform .filter-select select {
+    width: auto;
+}
+
+.inform > ul {
+    margin-bottom: 0;
+}
+
+.inform .item {
+    position: relative;
+    display: block;
+    background-color: #fff;
+    padding: 15px 18px;
+}
+
+.inform .item:hover {
+    background-color: rgba(0,0,0,0.02);
+}
+
+.inform .item + .item {
+    border-top: 1px solid #eee;
+}
+
+.inform .item .title {
+    font-size: 16px;
+    font-weight: 600;
+    display: block;
+    margin-bottom: 6px;
+}
+
+.inform .item .message {
+    font-size: 14px;
+    line-height: 1.6;
+    margin-bottom: 15px;
+}
+
+.inform .item .message::after {
+    display: block;
+    content: "";
+    clear: both;
+}
+
+.inform .hidden-1 .message {
+    color: #8f8f8f;
+}
+
+.inform .more {
+    white-space: nowrap;
+}
+
+.inform .more u {
+    cursor: pointer;
+}
+
+.inform .avatar {
+    float: left;
+    width: 50px;
+    height: 50px;
+    margin-right: 5px;
+    margin-top: -4px;
+    background-color: #428bca;
+    color: #fff;
+    font-size: 26px;
+    line-height: 1;
+    padding: 12px;
+    text-align: center;
+    border-radius: 50%;
+}
+
+.inform .details {
+    margin-top: 10px;
+}
+
+.inform .details a {
+    display: inline-block;
+    margin-left: 5px;
+    white-space: nowrap;
+    font-size: 85%;
+    line-height: 1;
+    padding: 5px 8px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+}
+
+.inform .item .foot {
+    font-size: 12px;
+    color: #8f8f8f;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.inform .item .foot button {
+    text-align: center;
+    background-color: transparent;
+    color: #8f8f8f !important;
+    border-color: #ececec;
+    height: 28px;
+    width: 28px;
+    line-height: 1;
+    padding: 0;
+    text-align: center;
+    border-radius: 50%;
+    outline-width: 0;
+    outline-style: none;
+}
+
+.inform .item .foot button:hover {
+    background-color: #f5f5f5;
+}
+
+.inform .item .foot button + button {
+    margin-left: 8px;
+}
+
+.inform .viewed-0:not(.hidden-1) .btn-viewed,
+.inform .details a,
+.inform .item:not(.favorite-0):not(.hidden-1) .btn-favorite {
+    background-color: #666 !important;
+    color: #fff !important;
+    border-color: transparent !important;
+}
+
+.inform .notify-empty {
+    padding: 15px;
+    color: #666;
+    text-align: center;
+}

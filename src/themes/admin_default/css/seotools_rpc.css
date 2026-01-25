@@ -1,0 +1,153 @@
+/**
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
+ */
+
+#rpc .borderRed {
+    border: 1px solid #ff0000 !important;
+}
+
+#rpc .end {
+    margin-left: 162px;
+    margin-top: 20px;
+    text-align: left;
+}
+
+#rpc .form {
+    -moz-border-radius: 0.5em;
+    -moz-box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.4);
+    -webkit-border-radius: 0.5em;
+    -webkit-box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.4);
+    background: #dadada;
+    border: 1px solid #ccc;
+    border-radius: 0.5em;
+    box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.4);
+    margin-bottom: 20px;
+    padding: 20px;
+    position: relative;
+}
+
+#rpc .form .submit {
+    -moz-border-radius: 0.5em;
+    -moz-box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.4);
+    -webkit-border-radius: 0.5em;
+    -webkit-box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.4);
+    background: #fff url(../images/seotools/bg.jpg) repeat-x 50% 50%;
+    border: 1px solid #ccc;
+    border-radius: 0.5em;
+    box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.4);
+    cursor: pointer;
+    font-weight: bold;
+    outline: none;
+    padding: 8px;
+    vertical-align: middle;
+    width: 100px;
+}
+
+#rpc .form .txt {
+    -moz-border-radius: 0.5em;
+    -webkit-border-radius: 0.5em;
+    border: 1px solid #ccc;
+    border-radius: 0.5em;
+    outline: none;
+    padding: 8px;
+    vertical-align: middle;
+    width: 300px;
+}
+
+#rpc .form label {
+    display: inline-block;
+    margin-right: 10px;
+    text-align: right;
+    vertical-align: middle;
+    width: 150px;
+}
+
+#rpc .form label span {
+    color: #f00;
+}
+
+#rpc .head {
+    background: #dfdfdf;
+    border-bottom: 1px solid #ccc;
+    font-weight: bold;
+    position: relative;
+}
+
+#rpc .list {
+    -moz-border-radius: 0.5em;
+    -moz-box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.4);
+    -webkit-border-radius: 0.5em;
+    -webkit-box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.4);
+    background: #fff;
+    border: 1px solid #ccc;
+    border-radius: 0.5em;
+    box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.4);
+    position: relative;
+}
+
+#rpc .list .col1 {
+    border-right: 1px solid #ccc;
+    float: left;
+    padding: 10px;
+    width: 200px;
+}
+
+#rpc .list .col1 span {
+    display: inline-block;
+    vertical-align: middle;
+}
+
+#rpc .list .col2 {
+    border-right: 1px solid #ccc;
+    float: left;
+    padding: 10px;
+    width: 100px;
+}
+
+#rpc .list .col3,
+#rpc .list .col3a {
+    cursor: pointer;
+    float: left;
+    padding: 10px;
+}
+
+#rpc .list .error {
+    background: transparent url(../images/seotools/error.png) no-repeat center center;
+}
+
+#rpc .list .load {
+    background: transparent url(../images/seotools/load.gif) no-repeat center center;
+}
+
+#rpc .list .ok {
+    background: transparent url(../images/seotools/ok.png) no-repeat center center;
+}
+
+#rpc .list img {
+    height: 16px;
+    margin-right: 10px;
+    text-align: center;
+    vertical-align: middle;
+    width: 16px;
+}
+
+#rpc .row {
+    margin: 0 auto 10px auto;
+    position: relative;
+    width: 500px;
+}
+
+#rpc .service {
+    border-bottom: 1px solid #ccc;
+    position: relative;
+}
+
+#rpc h3 {
+    font: bold 13px Arial;
+    margin-bottom: 20px;
+}

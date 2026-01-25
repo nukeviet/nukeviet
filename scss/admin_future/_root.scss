@@ -1,0 +1,88 @@
+:root,
+[data-bs-theme="light"],
+[data-theme="light"] {
+  --cr-md-content-border-radius: #{$border-radius-lg};
+  --cr-md-content-inner-border-radius: #{calc($border-radius-lg - 1px)};
+  --cr-cap-content-border-radius: #{$border-radius-lg};
+  --cr-cap-content-inner-border-radius: #{calc($border-radius-lg - 1px)};
+  --cr-danger: #{$red};
+
+  --cr-toast-error-bg: #{$red};
+  --cr-toast-danger-bg: #{$red};
+  --cr-toast-primary-bg: #{$blue};
+  --cr-toast-success-bg: #{$green};
+  --cr-toast-info-bg: #{$cyan};
+  --cr-toast-info-color: #{color-contrast($cyan)};
+  --cr-toast-light-bg: #{$gray-100};
+  --cr-toast-dark-bg: #{$gray-900};
+
+  --cr-input-border-radius: #{$border-radius};
+  --cr-btn-border-radius: #{$border-radius};
+
+  --nv-header-bg-color: #{$header-bg};
+  --nv-header-active-bg-color: #{$header-active-bg};
+  --nv-header-link-hover-color: #{$header-link-hover-color};
+
+  --nv-body-bg: #{$main-bg};
+
+  --nv-breadcrumb-bg: #{$breadcrumb-bg};
+
+  --nv-left-sidebar-bg: #{$left-sidebar-bg};
+  --nv-left-sidebar-divider-color: #{$left-sidebar-divider-color};
+  --nv-left-sidebar-link-hover-color: #{$left-sidebar-link-hover-color};
+  --nv-left-sidebar-link-child-hover-color: #{$left-sidebar-link-child-hover-color};
+  --nv-left-sidebar-toggle-color: #{$left-sidebar-toggle-color};
+  --nv-left-sidebar-child-bg: #{$left-sidebar-child-bg};
+  --nv-left-sidebar-child-border-color: #{$left-sidebar-child-border-color};
+
+  --nv-right-sidebar-bg: #{$right-sidebar-bg};
+
+  --nv-footer-bg: #{$footer-bg};
+
+  --nv-notification-btn-bg: #{$notification-btn-bg};
+  --nv-notification-btn-bg-hover: #{$notification-btn-bg-hover};
+  --nv-notification-unread-border-color: #{$notification-unread-border-color};
+
+  --nv-chart-grid-border-opacity: 1;
+
+  --nv-border-color-translucent: #{$gray-200};
+
+  --nv-table-thead-bg: #{$gray-100};
+  --nv-form-check-input-disabled-bg: #{$gray-200};
+  --nv-form-check-input-disabled-border-color: #{$gray-300};
+}
+
+[data-bs-theme="dark"],
+[data-theme="dark"] {
+  --nv-header-bg-color: #{$header-bg-dark};
+  --nv-header-active-bg-color: #{$header-active-bg-dark};
+  --nv-header-link-hover-color: #{$header-link-hover-color-dark};
+
+  --nv-body-bg: #{$main-bg-dark};
+
+  --nv-breadcrumb-bg: #{$breadcrumb-bg-dark};
+
+  --nv-left-sidebar-bg: #{$left-sidebar-bg-dark};
+  --nv-left-sidebar-divider-color: #{$left-sidebar-divider-color-dark};
+  --nv-left-sidebar-link-hover-color: #{$left-sidebar-link-hover-color-dark};
+  --nv-left-sidebar-link-child-hover-color: #{$left-sidebar-link-child-hover-color-dark};
+  --nv-left-sidebar-toggle-color: #{$left-sidebar-toggle-color-dark};
+  --nv-left-sidebar-child-bg: #{$left-sidebar-child-bg-dark};
+  --nv-left-sidebar-child-border-color: #{$left-sidebar-child-border-color-dark};
+
+  --nv-right-sidebar-bg: #{$right-sidebar-bg-dark};
+
+  --nv-footer-bg: #{$footer-bg-dark};
+
+  --nv-notification-btn-bg: #{$notification-btn-bg-dark};
+  --nv-notification-btn-bg-hover: #{$notification-btn-bg-hover-dark};
+  --nv-notification-unread-border-color: #{$notification-unread-border-color-dark};
+
+  --nv-chart-grid-border-opacity: .2;
+
+  --nv-border-color-translucent: #{$gray-800};
+
+  --nv-table-thead-bg: #{$gray-800};
+  --nv-form-check-input-disabled-bg: #{$gray-700};
+  --nv-form-check-input-disabled-border-color: #{$gray-600};
+}

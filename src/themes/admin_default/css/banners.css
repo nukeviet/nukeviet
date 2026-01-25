@@ -1,0 +1,106 @@
+/**
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
+ */
+
+.w70 {
+    width: 70px;
+}
+
+#accordion table {
+    margin-bottom: 0;
+}
+
+.grouppost-area {
+    max-height: 200px;
+    overflow: auto;
+}
+
+.display-inline-block {
+    display: inline-block;
+}
+
+.help-block-bottom {
+    margin-bottom: 0 !important;
+}
+
+.margin-top {
+    margin-top: 10px;
+}
+
+.margin-top-lg {
+    margin-top: 17px;
+}
+
+.margin-left {
+    margin-left: 10px;
+}
+
+.margin-right {
+    margin-right: 10px;
+}
+
+.form-info-circle {
+    margin-left: 10px;
+    margin-top: 7px;
+    display: inline-block;
+}
+
+.img-banner-preview {
+    max-width: 100%;
+    height: auto;
+}
+
+/* Auto complete */
+.autosearchpersion {
+    position: relative;
+}
+
+.autosearchpersion .searchloading {
+    position: absolute;
+    right: 10px;
+    top: 7px;
+}
+
+.autosearchpersion .form-control {
+    padding-right: 40px;
+}
+
+.autosearchpersion .searchresultaj {
+    border: 1px #dadada solid;
+    background-color: aliceblue;
+    z-index: 9999;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    display: none;
+}
+
+.autosearchpersion .searchresultaj ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.autosearchpersion .searchresultaj ul li {
+    padding: 4px;
+    border-bottom: 1px #dadada solid;
+    cursor: pointer;
+}
+
+.autosearchpersion .searchresultaj ul li img {
+    margin-right: 5px;
+}
+
+.autosearchpersion .searchresultaj ul li:hover {
+    background-color: #d6eafb;
+}
+
+.autosearchpersion .searchresultaj ul li:last-child {
+    border: 0;
+}

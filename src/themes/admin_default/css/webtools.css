@@ -1,0 +1,42 @@
+/**
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
+ */
+
+.invalid {
+    color: #f00;
+    font: 800 11px Tahoma, Arial, Verdana, sans-serif;
+}
+
+.newVesionInfo {
+    color: #ef3805;
+    font: 800 12px Tahoma, Arial, Verdana, sans-serif;
+}
+
+.newVesionMess {
+    margin: 10px 0;
+}
+
+.ninfo {
+    cursor: pointer;
+}
+
+.wttooltip {
+    cursor: pointer;
+    display: none;
+}
+
+.error {
+    color: #ef3805;
+    font: 800 12px Tahoma, Arial, Verdana, sans-serif;
+}
+
+.myLink,
+.myLink span {
+    color: #ff0000;
+    text-decoration: none;
+}

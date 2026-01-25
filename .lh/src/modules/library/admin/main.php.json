@@ -1,0 +1,18 @@
+{
+    "sourceFile": "src/modules/library/admin/main.php",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 0,
+            "patches": [
+                {
+                    "date": 1769247406285,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                }
+            ],
+            "date": 1769247406285,
+            "name": "Commit-0",
+            "content": "<?php\n\n/**\n * NukeViet Content Management System\n * @version 5.x\n * @author VINADES.,JSC <contact@vinades.vn>\n * @copyright (C) 2009-2025 VINADES.,JSC. All rights reserved\n * @license GNU/GPL version 2 or any later version\n * @see https://github.com/nukeviet The NukeViet CMS GitHub project\n */\n\nif (!defined('NV_IS_FILE_ADMIN')) {\n    exit('Stop!!!');\n}\n\n$page_title = $nv_Lang->getModule('menu_manager');\n$contents = \"454356\";\ninclude NV_ROOTDIR . '/includes/header.php';\necho nv_admin_theme($contents);\ninclude NV_ROOTDIR . '/includes/footer.php';\n"
+        }
+    ]
+}

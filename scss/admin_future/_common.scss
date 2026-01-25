@@ -1,0 +1,255 @@
+.body {
+    background-color: var(--nv-body-bg);
+}
+
+.pre-wrap {
+    white-space: pre-wrap!important;
+}
+
+.main-content {
+    margin-left: calc($left-sidebar-width);
+    min-height: calc(100vh - $header-height - $footer-height);
+    transition: margin-left .2s ease-in-out;
+
+    @media (max-width: #{$theme-breakpoint}) {
+        margin-top: 0;
+        margin-left: 0;
+        min-height: calc(100vh - $header-height - $footer-height - $left-sidebar-toggle-height);
+    }
+}
+
+.collapsed-left-sidebar {
+    .main-content {
+        margin-left: calc($left-sidebar-width-sm);
+
+        @media (max-width: #{$theme-breakpoint}) {
+            margin-left: 0;
+        }
+    }
+}
+
+.ico-vc {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+// Offcanvas admin session
+.nv-offcanvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: $zindex-nv-offcanvas;
+    transition: transform .2s ease-in-out;
+    transform: translate(0, -101%);
+
+    &.show {
+        transform: translate(0, 0);
+    }
+}
+
+// Sửa vị trí cuộn của sticky
+@each $breakpoint in map-keys($grid-breakpoints) {
+    @include media-breakpoint-up($breakpoint) {
+        $infix: breakpoint-infix($breakpoint, $grid-breakpoints);
+
+        .sticky#{$infix}-top {
+            top: $header-height;
+        }
+    }
+}
+
+// Card
+.card {
+    > .list-group:last-child {
+        > .list-group-item:last-child {
+            border-bottom-right-radius: var(--bs-border-radius);
+            border-bottom-left-radius: var(--bs-border-radius);
+        }
+    }
+}
+
+.card-header {
+    --bs-card-border-width: var(--bs-border-width);
+    --#{$prefix}card-border-color: var(--#{$prefix}border-color-translucent);
+}
+
+.table-card {
+    margin: calc(-1 * $card-spacer-y) calc(-1 * $card-spacer-x);
+
+    td, th {
+        &:first-child {
+            padding-left: $card-spacer-x;
+        }
+    }
+
+    td, th {
+        &:last-child {
+            padding-right: $card-spacer-x;
+        }
+    }
+
+    tbody, tfoot, thead {
+        &:last-child {
+            tr:last-child {
+                td, th {
+                    border-bottom-width: 0;
+                }
+            }
+        }
+    }
+}
+
+.table-accordion {
+    margin: calc(-1 * $accordion-padding-y) calc(-1 * $accordion-padding-x);
+
+    td, th {
+        &:first-child {
+            padding-left: $accordion-padding-x;
+        }
+    }
+
+    td, th {
+        &:last-child {
+            padding-right: $accordion-padding-x;
+        }
+    }
+
+    tbody, tfoot, thead {
+        &:last-child {
+            tr:last-child {
+                td, th {
+                    border-bottom-width: 0;
+                }
+            }
+        }
+    }
+}
+
+.table {
+    thead {
+        --bs-table-bg: var(--nv-table-thead-bg);
+    }
+}
+
+.bg-table-head {
+    background-color: var(--nv-table-thead-bg);
+}
+
+.card-header-tabs {
+    margin-right: calc(-1 * var(--bs-card-cap-padding-x));
+    margin-left: calc(-1 * var(--bs-card-cap-padding-x));
+    margin-top: calc(-.5 * var(--bs-card-cap-padding-y));
+
+    .nav-tabs {
+        padding-left: calc(0.5 * var(--bs-card-cap-padding-x));
+        padding-right: calc(0.5 * var(--bs-card-cap-padding-x));
+    }
+}
+
+// Pagination
+.pagination-wrap {
+    .pagination {
+        margin-bottom: 0;
+    }
+}
+
+// Width in px
+@for $i from 1 through 20 {
+    .fw-#{$i * 25} {
+        width: #{$i * 25}px!important;
+    }
+
+    .maxw-#{$i * 25} {
+        max-width: #{$i * 25}px!important;
+    }
+
+    .maxh-#{$i * 25} {
+        max-height: #{$i * 25}px!important;
+    }
+}
+
+// Block ellipsis: Chú ý class này chỉ dùng khi không thiết lập font-size, line-height mà dùng mặc định của body
+@for $i from 2 through 4 {
+    .text-truncate-#{$i} {
+        max-height: calc($font-size-base * $line-height-base * $i);
+        -webkit-line-clamp: #{$i};
+        line-clamp: #{$i};
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+    }
+}
+
+.form-text > ul {
+    margin-bottom: 0;
+}
+
+.collapse-button::after {
+    width: $accordion-icon-width;
+    height: $accordion-icon-width;
+    content: "";
+    background-image: #{escape-svg($accordion-button-active-icon)};
+    background-repeat: no-repeat;
+    background-size: $accordion-icon-width;
+    transition: $accordion-icon-transition;
+    display: block;
+}
+
+.collapsed>.collapse-button::after,
+.collapsed>div>.collapse-button::after {
+    background-image: #{escape-svg($accordion-button-icon)};
+    transform: $accordion-icon-transform;
+}
+
+.list-group-accordion {
+    >.list-group-item {
+        padding-left: $accordion-padding-x;
+        padding-right: $accordion-padding-x;
+    }
+}
+
+.list-group-striped {
+    >.list-group-item:nth-of-type(odd) {
+        background-color: var(--bs-tertiary-bg);
+    }
+}
+
+$sm-breakpoint: map-get($grid-breakpoints, sm) - 0.02px;
+@media (max-width: #{$sm-breakpoint}) {
+    .py-only-sm-0 {
+        padding-top: 0;
+        padding-bottom: 0;
+    }
+}
+
+.captcha-img {
+    width: auto;
+    height: calc($input-line-height*$input-font-size + 2*$input-padding-y + 2*$input-border-width);
+}
+
+.grecaptcha-badge {
+    display: none;
+}
+
+// Table counter
+.table-counter {
+    counter-reset: table-counter;
+
+    .counter-cell::before {
+        counter-increment: table-counter;
+        content: counter(table-counter);
+        display: inline-block;
+    }
+}
+
+.border-transparent {
+    border-color: transparent !important;
+}
+
+.border-solid {
+    border-style: solid !important;
+}

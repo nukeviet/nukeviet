@@ -1,0 +1,39 @@
+{
+    "info": {
+        "name": "Block News Center",
+        "author": "VINADES.,JSC",
+        "website": "https://vinades.vn",
+        "description": ""
+    },
+    "config": {
+        "numrow": "5",
+        "width": "400",
+        "height": "0",
+        "length_title": "0",
+        "length_hometext": "0",
+        "length_othertitle": "0",
+        "showtooltip": "1",
+        "tooltip_position": "bottom",
+        "tooltip_length": "0",
+        "nocatid": ""
+    },
+    "datafunction": "nv_block_config_news_newscenter",
+    "submitfunction": "nv_block_config_news_newscenter_submit",
+    "i18n": {
+        "en": {
+            "info": {
+                "name": "Display as news center"
+            }
+        },
+        "fr": {
+            "info": {
+                "name": "Afficher comme centre de nouvelles"
+            }
+        },
+        "vi": {
+            "info": {
+                "name": "Hiển thị dạng newscenter"
+            }
+        }
+    }
+}

@@ -1,0 +1,41 @@
+// Z-Index
+$zindex-modal-backdrop: 1056;
+$zindex-modal: 1057;
+$zindex-alert-backdrop: 1061;
+$zindex-alert: 1062;
+$zindex-cap-backdrop: 9900;
+$zindex-cap: 9901;
+
+$zindex-ck5-default: 100;
+$zindex-ck5-panel: $zindex-modal;
+
+// Toasts
+$toast-levels: (
+  "secondary": $secondary,
+  "error": $danger,
+  "danger": $danger,
+  "primary": $primary,
+  "success": $success,
+  "info": $info,
+  "warning": $warning,
+  "light": $light,
+  "dark": $dark
+);
+
+// Buttons
+$btn-colors: (
+  "primary": $primary,
+  "secondary": $light,
+);
+$btn-colors-dark: (
+  "primary": $primary,
+  "secondary": $secondary,
+);
+$btn-border-colors: (
+  "primary": $primary,
+  "secondary": $gray-300,
+);
+$btn-border-colors-dark: (
+  "primary": $primary,
+  "secondary": $secondary,
+);

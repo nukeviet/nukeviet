@@ -1,0 +1,132 @@
+.cr-cap-backdrop {
+  @extend %reboot-all;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: var(--cr-cap-zindex-backdrop);
+  width: 100vw;
+  height: 100vh;
+  background-color: var(--cr-cap-backdrop-bg);
+
+  &.cr-show {
+    opacity: var(--cr-cap-backdrop-opacity);
+  }
+}
+
+.cr-cap {
+  @extend %reboot-all;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: var(--cr-cap-zindex);
+  display: none;
+  width: 100%;
+  height: 100%;
+  overflow-x: hidden;
+  overflow-y: auto;
+  outline: 0;
+}
+
+.cr-cap-dialog {
+  @extend %reboot-all;
+  position: relative;
+  width: auto;
+  pointer-events: none;
+  margin: .5rem;
+}
+
+@include media-breakpoint-up(sm) {
+  .cr-cap-dialog {
+    max-width: var(--cr-cap-md-width);
+    margin-right: auto;
+    margin-left: auto;
+    margin-top: 1.75rem;
+    margin-bottom: 1.75rem;
+  }
+}
+
+.cr-cap.cr-fade .cr-cap-dialog {
+  transition: transform .3s ease-out;
+  transform: translate(0, -50px);
+}
+
+.cr-cap.cr-show .cr-cap-dialog {
+  transform: none;
+}
+
+.cr-cap.cr-cap-static .cr-cap-dialog {
+  transform: scale(1.02);
+}
+
+.cr-cap-content {
+  @extend %reboot-all;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  pointer-events: auto;
+  background-color: var(--cr-cap-content-bg);
+  background-clip: padding-box;
+  border: 1px solid var(--cr-cap-content-border-color);
+  border-radius: var(--cr-cap-content-border-radius);
+  outline: 0;
+}
+
+.cr-cap-header {
+  @extend %reboot-all;
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  padding: .5rem 1rem;
+  border-bottom: 1px solid var(--cr-border-color);
+  border-top-left-radius: var(--cr-cap-content-inner-border-radius);
+  border-top-right-radius: var(--cr-cap-content-inner-border-radius);
+
+  .cr-btn-close {
+    padding: .5rem;
+    margin-left: auto;
+  }
+}
+
+.cr-cap-title {
+  font-size: var(--cr-cap-header-font-size);
+  font-weight: var(--cr-cap-header-font-weight);
+}
+
+.cr-cap-body {
+  @extend %reboot-all;
+  position: relative;
+  flex: 1 1 auto;
+  padding: 1rem;
+}
+
+.cr-cap-img {
+  margin-bottom: 1rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: .5rem;
+
+  .cr-pointer {
+    padding: .5rem;
+    display: block;
+
+    svg {
+      display: block;
+    }
+  }
+}
+
+.cr-cap-input {
+  margin-bottom: 1rem;
+
+  label {
+    display: block;
+    margin-bottom: .25rem;
+  }
+
+  .cr-fcontrol {
+    width: 12.5rem;
+    display: inline-block;
+  }
+}

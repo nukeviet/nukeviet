@@ -1,0 +1,34 @@
+{
+    "info": {
+        "name": "Config Copyright Info",
+        "author": "VINADES.,JSC",
+        "website": "https://vinades.vn",
+        "description": ""
+    },
+    "config": {
+        "copyright_by": "",
+        "copyright_url": "",
+        "design_by": "VINADES.,JSC",
+        "design_url": "https://vinades.vn/",
+        "siteterms_url": "/index.php?language=vi&nv=siteterms"
+    },
+    "datafunction": "nv_copyright_info_config",
+    "submitfunction": "nv_copyright_info_submit",
+    "i18n": {
+        "en": {
+            "info": {
+                "name": "Copyright Information"
+            }
+        },
+        "fr": {
+            "info": {
+                "name": "Informations sur le droit d'auteur"
+            }
+        },
+        "vi": {
+            "info": {
+                "name": "Thông tin bản quyền"
+            }
+        }
+    }
+}

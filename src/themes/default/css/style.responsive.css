@@ -1,0 +1,404 @@
+/**
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
+ */
+
+.wraper {
+    width: 100%;
+}
+
+.site-banner {
+    height: 0;
+    padding-bottom: 22%;
+}
+
+@media (max-width: 1119.98px) {
+    .section-header-bar .header-nav {
+        padding-left: 10px;
+        padding-right: 10px;
+    }
+
+    #tip {
+        right: 10px;
+    }
+
+    #header .logo {
+        padding-left: 10px;
+    }
+}
+
+@media (max-width: 991.98px) {
+    .container {
+        width: 100%;
+    }
+
+    #menu-site-default .navbar-right {
+        display: none;
+    }
+
+    .column-margin-left {
+        margin-left: 0 !important;
+    }
+
+    .qr-code-wraper {
+        padding-left: 10px;
+        padding-right: 10px;
+    }
+
+    .copyright {
+        margin: 10px 10px 0 10px;
+    }
+
+    #ftip {
+        left: 15px;
+    }
+}
+
+@media (max-width: 767.98px) {
+    .box-shadow {
+        box-shadow: none;
+        -webkit-box-shadow: none;
+    }
+
+    .site-banner {
+        height: 300px;
+        max-height: 100%;
+        padding-bottom: 0;
+    }
+
+    .header-nav-inner {
+        -ms-flex-pack: end;
+        justify-content: flex-end;
+    }
+
+    .contactDefault {
+        -ms-flex-positive: 0;
+        flex-grow: 0;
+        -ms-flex-negative: 0;
+        flex-shrink: 0;
+    }
+
+    .personalArea,
+    .social-icons {
+        padding-left: 10px;
+    }
+
+    .social-icons .content,
+    .contactDefault .content {
+        display: none;
+    }
+
+    .contactList li {
+        display: block;
+    }
+
+    .contactList li .fa,
+    .contactList li [class^='icon-'],
+    .contactList li [class*=' icon-'] {
+        width: 20px !important;
+    }
+
+    .breadcrumbs-wrap {
+        display: none;
+    }
+
+    .hidden-ss-block,
+    .hidden-ss-inline,
+    .hidden-ss-inline-block {
+        display: none !important;
+    }
+
+    #header {
+        -ms-flex-wrap: wrap;
+        flex-wrap: wrap;
+    }
+
+    #header .right-ads,
+    #header .logo {
+        -ms-flex: 0 0 100%;
+        flex: 0 0 100%;
+        width: 100%;
+    }
+
+    #header .logo {
+        text-align: center;
+        padding-top: 10px;
+        padding-bottom: 10px;
+    }
+
+    #header .right-ads {
+        padding-top: 0;
+    }
+
+    #header .logo img {
+        max-height: 100px;
+    }
+
+    .section-nav > .wraper {
+        position: inherit;
+    }
+
+    .second-nav {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+    }
+
+    .third-nav .bg {
+        padding: 10px 5px;
+    }
+
+    .third-nav .current-time {
+        display: none;
+    }
+
+    #menusite .navbar-default {
+        background-color: #428bca;
+        border-color: #428bca;
+        border-radius: 0;
+        min-height: 0;
+    }
+
+    #menusite .navbar-default:before,
+    #menusite .navbar-default:after,
+    #menusite .navbar-header:before,
+    #menusite .navbar-header:after {
+        display: none;
+    }
+
+    #menusite .navbar-default .navbar-nav > li {
+        margin-left: 0;
+    }
+
+    #menusite .navbar-default .navbar-nav > li:first-child {
+        margin-left: 0;
+    }
+
+    #menusite .navbar-default .navbar-nav > li:last-child {
+        margin-right: 0;
+    }
+
+    #menusite .navbar-default .navbar-nav > li > a {
+        background-color: #428bca;
+        color: #fff;
+        padding-right: 35px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    #menusite .navbar-default .navbar-nav > li > a:hover,
+    #menusite .navbar-default .navbar-nav > li > a:focus,
+    #menusite .navbar-default .navbar-nav > .open > a,
+    #menusite .navbar-default .navbar-nav > .open > a:hover,
+    #menusite .navbar-default .navbar-nav > .open > a:focus {
+        background: linear-gradient(to bottom,
+                #357ebd 0%,
+                #2f70a7 100%) !important;
+        color: #ffffff !important;
+    }
+
+    #menusite .navbar-default .navbar-nav > .active > a,
+    #menusite .navbar-default .navbar-nav > .active > a:hover,
+    #menusite .navbar-default .navbar-nav > .active > a:focus {
+        background: #4247ca !important;
+        color: #ffffff !important;
+    }
+
+    #menusite .navbar-default .navbar-nav > li > a > .caret {
+        position: absolute;
+        width: 30px;
+        height: 30px;
+        border: 0;
+        right: 4px;
+        top: 4px;
+        margin-left: 0;
+        line-height: 1;
+    }
+
+    #menusite .navbar-default .navbar-nav > li > a > .caret:before {
+        font-family: 'FontAwesome';
+        content: '\f0d7';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate3d(-50%, -50%, 0px);
+    }
+
+    #menusite .navbar-nav {
+        margin: 0 0 10px 0;
+    }
+
+    #menusite .navbar-collapse {
+        position: absolute;
+        padding: 0;
+        border: 0;
+        top: 50px;
+        width: 100%;
+    }
+
+    #menusite .navbar-toggle {
+        margin-left: 0;
+        margin-right: -55px;
+        color: #dcdcdc;
+        border-color: #428bca;
+        background-color: #428bca;
+        position: absolute;
+        left: 10px;
+    }
+
+    #menusite .navbar-toggle:hover,
+    #menusite .navbar-toggle:focus {
+        color: #fff;
+        background-color: #245682;
+        border-color: #245682;
+    }
+
+    #menusite .navbar-nav .dropdown-mobile {
+        border-top-width: 1px !important;
+        border-top-style: solid !important;
+        border-top-color: #82b2dc !important;
+    }
+
+    #menusite .dropdown-submenu {
+        margin: 0;
+        padding: 0;
+    }
+
+    #menusite .dropdown-submenu li > ul > li {
+        margin-left: 30px;
+    }
+
+    #menusite .dropdown-submenu a {
+        line-height: 33px;
+        background-color: #82b2dc;
+        border-top-width: 1px !important;
+        border-top-style: solid !important;
+        border-top-color: #a6c8e6 !important;
+        padding-left: 15px !important;
+        padding-right: 15px !important;
+    }
+
+    #menusite .dropdown-submenu li a {
+        color: #333333 !important;
+    }
+
+    #menusite .dropdown-submenu > a:after {
+        display: none;
+    }
+}
+
+@media (max-width: 499.98px) {
+    .nv-infodie {
+        width: 100%;
+    }
+
+    .cookie-notice {
+        left: 0;
+        width: 100%;
+    }
+
+    .visible-ss-block {
+        display: block !important;
+    }
+
+    .visible-ss-inline {
+        display: inline !important;
+    }
+
+    .visible-ss-inline-block {
+        display: inline-block !important;
+    }
+
+    .hidden-ss-block,
+    .hidden-ss-inline,
+    .hidden-ss-inline-block {
+        display: none !important;
+    }
+
+    #tip,
+    #footer-tip {
+        max-width: 100%;
+        margin-right: 0 !important;
+    }
+
+    #header .logo img {
+        max-height: 60px;
+    }
+}
+
+@media (min-width: 500px) and (max-width: 991.98px) {
+    #footer .menu li {
+        width: 32%;
+    }
+
+    #footer .menu li:nth-child(3n + 2) {
+        padding-right: 8px;
+        padding-left: 7px;
+    }
+
+    #footer .menu li:nth-child(3n),
+    #footer .menu li:nth-child(3n + 1) {
+        padding-left: 0;
+        padding-right: 0;
+    }
+}
+
+@media (min-width: 500px) {
+    .nv-infodie {
+        width: 500px;
+        left: 50%;
+        margin-left: -250px;
+    }
+}
+
+@media (min-height: 500px) {
+    .container {
+        width: 100%;
+    }
+
+    .nv-infodie {
+        height: 500px;
+        top: 50%;
+        margin-top: -250px;
+    }
+}
+
+@media (min-width: 768px) {
+    .wraper {
+        width: 100%;
+    }
+
+    .hidden-ss-block {
+        display: block !important;
+    }
+
+    .hidden-ss-inline {
+        display: inline !important;
+    }
+
+    .hidden-ss-inline-block {
+        display: inline-block !important;
+    }
+}
+
+@media (min-width: 992px) {
+    .container {
+        width: 100%;
+    }
+
+    .wraper {
+        width: 100%;
+        max-width: 1080px;
+    }
+}
+
+@media (min-width: 1200px) {
+    .wraper {
+        width: 1080px;
+    }
+}

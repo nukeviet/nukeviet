@@ -1,0 +1,85 @@
+/**
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
+ */
+
+.icon-step {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background: #ccc;
+    color: #fff;
+    text-align: center;
+    display: inline-block;
+    line-height: 80px;
+    font-size: 60px;
+    font-weight: 700;
+    margin-bottom: 20px;
+    position: relative;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.text-step {
+    font-size: 150%;
+}
+
+.per-loading {
+    display: inline-block;
+    margin-right: 10px;
+}
+
+.content-image {
+    margin-right: 10px;
+}
+
+.content-title {
+    margin: 0 0 10px 0;
+}
+
+.ct-status0,
+.ct-status0:hover,
+.ct-status0:focus {
+    color: #ccc;
+}
+
+.ct-status1,
+.ct-status1:hover,
+.ct-status1:focus {
+    color: #2e8b57;
+}
+
+.ct-status2,
+.ct-status2:hover,
+.ct-status2:focus {
+    color: #ffc1c1;
+}
+
+.ct-status-disabled,
+.ct-status-disabled:hover,
+.ct-status-disabled:focus,
+.ct-status-disabled:active {
+    color: #ededed;
+}
+
+#outer-content-description .ck-editor__editable_inline {
+    height: 300px;
+    overflow-y: auto;
+}
+
+#outer-content-description .ck-source-editing-area {
+    height: 300px;
+}
+
+#outer-content-description .ck-source-editing-area textarea {
+    height: 100%;
+    overflow-y: auto;
+}
