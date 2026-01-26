@@ -101,13 +101,11 @@
                     {/for}
                 </div>
             </div>
-            <div class="row mb-3 align-items-center">
-                <label for="bot_visible" class="col-sm-3 col-form-label text-sm-end text-truncate fw-medium" title="{$LANG->getModule('dtime_allow_bot')}">
-                    {$LANG->getModule('dtime_allow_bot')}:
-                </label>
-                <div class="col-9 col-sm-5 d-flex align-items-center">
-                    <div class="form-check form-switch mb-0">
-                        <input class="form-check-input" type="checkbox" name="bot_visible" id="bot_visible" value="1" role="switch"{if $ROW.bot_visible} checked{/if}>
+            <div class="row mb-3">
+                <div class="col-sm-9 offset-sm-3">
+                    <div class="form-check form-switch">
+                        <input class="form-check-input" type="checkbox" id="switch_bot_visible" name="bot_visible" value="1" role="switch"{if $ROW.bot_visible} checked{/if}>
+                        <label class="form-check-label" for="switch_bot_visible">{$LANG->getModule('dtime_allow_bot')}</label>
                     </div>
                 </div>
             </div>

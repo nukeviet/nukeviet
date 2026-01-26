@@ -221,6 +221,7 @@ if (md5('package_' . $request['type'] . '_' . $request['title'] . '_' . NV_CHECK
                             $config_ini .= "\n\t\t\t<template>" . $_row['template'] . '</template>';
                             $config_ini .= "\n\t\t\t<position>" . $_row['position'] . '</position>';
                             $config_ini .= "\n\t\t\t<all_func>" . $_row['all_func'] . '</all_func>';
+                            $config_ini .= "\n\t\t\t<bot_visible>" . $_row['bot_visible'] . '</bot_visible>';
                             $config_ini .= "\n\t\t\t<config>" . $_row['config'] . '</config>';
 
                             if (empty($_row['all_func'])) {

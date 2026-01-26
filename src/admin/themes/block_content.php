@@ -300,7 +300,7 @@ if ($checkss == $nv_Request->get_string('checkss', 'post')) {
         $row['active'] = implode(',', $row['active_device']);
     }
 
-    $row['bot_visible'] = $nv_Request->get_int('bot_visible', 'post', 0);
+    $row['bot_visible'] = (int) $nv_Request->get_bool('bot_visible', 'post', false);
 
     $groups_view = $nv_Request->get_array('groups_view', 'post', []);
     $row['groups_view'] = !empty($groups_view) ? implode(',', nv_groups_post(array_intersect($groups_view, array_keys($groups_list)))) : '';
