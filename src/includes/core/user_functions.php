@@ -250,6 +250,11 @@ function nv_blocks_content($sitecontent)
                 }
             }
 
+            // Kiem tra hien thi voi bot
+            if ($client_info['is_bot'] and empty($_row['bot_visible'])) {
+                $_active = false;
+            }
+
             // Kiem tra quyen xem block
             if ($_active and in_array($_row['position'], $array_position, true) and nv_user_in_groups($_row['groups_view'])) {
                 $block_config = $_row['block_config'];
