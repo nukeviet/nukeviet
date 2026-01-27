@@ -14,7 +14,7 @@ if (!defined('NV_IS_API_MOD')) {
 }
 
 /**
- * main_theme()
+ * Trang chính giao diện API
  *
  * @return string
  * @param mixed $type
@@ -23,31 +23,41 @@ if (!defined('NV_IS_API_MOD')) {
  * @param mixed $api_user
  * @param mixed $generate_page
  */
-function main_theme($type, $roleCount, $roleList, $api_user, $generate_page)
+function main_theme($type, $roleCount, $roleList, $api_user, $generate_page): string
 {
-    global $nv_Lang, $module_info, $module_name, $site_mods, $global_config, $language_array;
+    global $nv_Lang, $module_name, $site_mods, $global_config, $language_array;
 
     $page_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name;
-
-    $xtpl = new XTemplate('main.tpl', get_module_tpl_dir('main.tpl'));
-    $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
-    $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
-    $xtpl->assign('PAGE_URL', $page_url);
-    $xtpl->assign('TYPE_PUBLIC', [
-        'active' => $type == 'public' ? 'active' : '',
-        'url' => $page_url,
-        'name' => $nv_Lang->getModule('api_role_type_public2')
-    ]);
-    $xtpl->assign('TYPE_PRIVATE', [
-        'active' => $type == 'private' ? 'active' : '',
-        'url' => $page_url . '&amp;type=private',
-        'name' => $nv_Lang->getModule('api_role_type_private2')
-    ]);
 
     $methods = [
         'password_verify' => $nv_Lang->getModule('auth_method_password_verify'),
         'md5_verify' => $nv_Lang->getModule('auth_method_md5_verify')
     ];
+
+    $tpl = new \NukeViet\Template\NVSmarty();
+    $tpl->setTemplateDir(get_module_tpl_dir('main.tpl'));
+    $tpl->assign('LANG', $nv_Lang);
+    $tpl->assign('LANGUAGE_ARRAY', $language_array);
+    $tpl->assign('PAGE_URL', $page_url);
+    $tpl->assign('TYPE_PUBLIC', [
+        'active' => $type == 'public' ? 'active' : '',
+        'url' => $page_url,
+        'name' => $nv_Lang->getModule('api_role_type_public2')
+    ]);
+    $tpl->assign('TYPE_PRIVATE', [
+        'active' => $type == 'private' ? 'active' : '',
+        'url' => $page_url . '&amp;type=private',
+        'name' => $nv_Lang->getModule('api_role_type_private2')
+    ]);
+    $tpl->assign('METHODS', $methods);
+    $tpl->assign('TYPE', $type);
+    $tpl->assign('ROLELIST', $roleList);
+    $tpl->assign('GENERATE_PAGE', $generate_page);
+
+    return $tpl->fetch('main.tpl');
+
+
+    $xtpl = new XTemplate('main.tpl', get_module_tpl_dir('main.tpl'));
 
     foreach ($methods as $key => $name) {
         $method = $api_user[$key] ?? [];
