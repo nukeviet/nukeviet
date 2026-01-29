@@ -34,6 +34,51 @@ function main_theme($type, $roleCount, $roleList, $api_user, $generate_page): st
         'md5_verify' => $nv_Lang->getModule('auth_method_md5_verify')
     ];
 
+    foreach ($methods as $key => $name) {
+        $method = $api_user[$key] ?? [];
+        $method['key'] = $key;
+        $method['name'] = $name;
+        $method['not_access_authentication'] = empty($api_user[$key]) ? true : false;
+        $methods[$key] = $method;
+    }
+
+    foreach ($roleList as &$role) {
+        $role['status'] = !empty($role['status']) ? $nv_Lang->getModule('active') : $nv_Lang->getModule('inactive');
+        $role['credential_status'] = (int) $role['credential_status'];
+        $role['credential_status_format'] = $role['credential_status'] === 1 ? $nv_Lang->getModule('activated') : ($role['credential_status'] === 0 ? $nv_Lang->getModule('suspended') : $nv_Lang->getModule('not_activated'));
+        $role['credential_addtime'] = $role['credential_addtime'] > 0 ? nv_datetime_format($role['credential_addtime']) : '';
+        $role['credential_endtime'] = $role['credential_endtime'] > 0 ? nv_datetime_format($role['credential_endtime']) : ($role['credential_endtime'] == 0 ? $nv_Lang->getModule('indefinitely') : '');
+        $role['credential_quota'] = $role['credential_quota'] > 0 ? nv_number_format($role['credential_quota']) : ($role['credential_quota'] == 0 ? $nv_Lang->getModule('no_quota') : '');
+        $role['credential_access_count'] = $role['credential_access_count'] >= 0 ? $role['credential_access_count'] : '';
+        $role['credential_last_access'] = $role['credential_last_access'] > 0 ? nv_datetime_format($role['credential_last_access']) : '';
+        $role['cat_api_system'] = $role['apis'][''];
+
+        // Xử lý API theo ngôn ngữ
+        $role['langs'] = [];
+        foreach ($global_config['setup_langs'] as $_lg) {
+            $lang_item = [
+                'langkey'   => $_lg,
+                'langname'  => $language_array[$_lg]['name'],
+                'is_active' => $_lg === NV_LANG_DATA,
+                'modules'   => []
+            ];
+            if (!empty($role['apis'][$_lg])) {
+                foreach ($role['apis'][$_lg] as $mod_title => $mod_data) {
+                    $module = [
+                        'title' => $site_mods[$mod_title]['custom_title'] ?? $mod_title,
+                        'cats'  => []
+                    ];
+                    foreach ($mod_data as $cat_data) {
+                        $module['cats'][] = $cat_data;
+                    }
+                    $lang_item['modules'][] = $module;
+                }
+            }
+            $role['langs'][] = $lang_item;
+        }
+    }
+    unset($role);
+
     $tpl = new \NukeViet\Template\NVSmarty();
     $tpl->setTemplateDir(get_module_tpl_dir('main.tpl'));
     $tpl->assign('LANG', $nv_Lang);
@@ -55,121 +100,4 @@ function main_theme($type, $roleCount, $roleList, $api_user, $generate_page): st
     $tpl->assign('GENERATE_PAGE', $generate_page);
 
     return $tpl->fetch('main.tpl');
-
-
-    $xtpl = new XTemplate('main.tpl', get_module_tpl_dir('main.tpl'));
-
-    foreach ($methods as $key => $name) {
-        $method = $api_user[$key] ?? [];
-        $method['key'] = $key;
-        $method['name'] = $name;
-        $xtpl->assign('METHOD', $method);
-
-        if ($key == 'password_verify') {
-            $xtpl->parse('main.method_tab.is_active');
-            $xtpl->parse('main.method_panel.is_active');
-        }
-
-        if (empty($api_user[$key])) {
-            $xtpl->parse('main.method_panel.not_access_authentication');
-        }
-
-        $xtpl->parse('main.method_tab');
-        $xtpl->parse('main.method_panel');
-    }
-
-    if (empty($roleCount)) {
-        $xtpl->parse('main.role_empty');
-    } else {
-        foreach ($roleList as $role) {
-            $role['status'] = !empty($role['status']) ? $nv_Lang->getModule('active') : $nv_Lang->getModule('inactive');
-            $role['credential_status'] = (int) $role['credential_status'];
-            $role['credential_status_format'] = $role['credential_status'] === 1 ? $nv_Lang->getModule('activated') : ($role['credential_status'] === 0 ? $nv_Lang->getModule('suspended') : $nv_Lang->getModule('not_activated'));
-            $role['credential_addtime'] = $role['credential_addtime'] > 0 ? nv_datetime_format($role['credential_addtime']) : '';
-            $role['credential_endtime'] = $role['credential_endtime'] > 0 ? nv_datetime_format($role['credential_endtime']) : ($role['credential_endtime'] == 0 ? $nv_Lang->getModule('indefinitely') : '');
-            $role['credential_quota'] = $role['credential_quota'] > 0 ? nv_number_format($role['credential_quota']) : ($role['credential_quota'] == 0 ? $nv_Lang->getModule('no_quota') : '');
-            $role['credential_access_count'] = $role['credential_access_count'] >= 0 ? $role['credential_access_count'] : '';
-            $role['credential_last_access'] = $role['credential_last_access'] > 0 ? nv_datetime_format($role['credential_last_access']) : '';
-            $xtpl->assign('ROLE', $role);
-
-            if ($role['credential_status'] !== 1) {
-                $xtpl->parse('main.rolelist.role.credential_status_not_activated');
-            }
-
-            if (!empty($role['role_description'])) {
-                $xtpl->parse('main.rolelist.role.description');
-            }
-
-            // List API hệ thống
-            if (!empty($role['apis'][''])) {
-                foreach ($role['apis'][''] as $cat_data) {
-                    $xtpl->assign('CAT_DATA', $cat_data);
-
-                    foreach ($cat_data['apis'] as $api_data) {
-                        $xtpl->assign('API_DATA', $api_data);
-                        $xtpl->parse('main.rolelist.role.catsys.loop');
-                    }
-
-                    $xtpl->parse('main.rolelist.role.catsys');
-                }
-            }
-
-            foreach ($global_config['setup_langs'] as $_lg) {
-                $xtpl->assign('FORLANG', [
-                    'active' => $_lg == NV_LANG_DATA ? 'active' : '',
-                    'in' => $_lg == NV_LANG_DATA ? ' in active' : '',
-                    'expanded' => $_lg == NV_LANG_DATA ? 'true' : 'false',
-                    'langkey' => $_lg,
-                    'langname' => $language_array[$_lg]['name']
-                ]);
-                $xtpl->parse('main.rolelist.role.forlang');
-
-                // List API theo ngôn ngữ
-                if (!empty($role['apis'][$_lg])) {
-                    foreach ($role['apis'][$_lg] as $mod_title => $mod_data) {
-                        $xtpl->assign('MOD_TITLE', $site_mods[$mod_title]['custom_title']);
-
-                        foreach ($mod_data as $cat_data) {
-                            $xtpl->assign('CAT_DATA', $cat_data);
-
-                            foreach ($cat_data['apis'] as $api_data) {
-                                $xtpl->assign('API_DATA', $api_data);
-                                $xtpl->parse('main.rolelist.role.tabcontent_forlang.apimod.mod.loop');
-                            }
-
-                            if (!empty($cat_data['title'])) {
-                                $xtpl->parse('main.rolelist.role.tabcontent_forlang.apimod.mod.title');
-                            }
-
-                            $xtpl->parse('main.rolelist.role.tabcontent_forlang.apimod.mod');
-                        }
-
-                        $xtpl->parse('main.rolelist.role.tabcontent_forlang.apimod');
-                    }
-                }
-                $xtpl->parse('main.rolelist.role.tabcontent_forlang');
-            }
-
-            if ($type == 'public') {
-                if ($role['credential_status'] === 1) {
-                    $xtpl->parse('main.rolelist.role.is_public.deactivate');
-                } elseif ($role['credential_status'] === -1) {
-                    $xtpl->parse('main.rolelist.role.is_public.activate');
-                }
-                $xtpl->parse('main.rolelist.role.is_public');
-            }
-
-            $xtpl->parse('main.rolelist.role');
-        }
-
-        if (!empty($generate_page)) {
-            $xtpl->assign('GENERATE_PAGE', $generate_page);
-            $xtpl->parse('main.rolelist.generate_page');
-        }
-        $xtpl->parse('main.rolelist');
-    }
-
-    $xtpl->parse('main');
-
-    return $xtpl->text('main');
 }
