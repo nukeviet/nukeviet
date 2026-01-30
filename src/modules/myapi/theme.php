@@ -25,7 +25,7 @@ if (!defined('NV_IS_API_MOD')) {
  */
 function main_theme($type, $roleCount, $roleList, $api_user, $generate_page): string
 {
-    global $nv_Lang, $module_name, $site_mods, $global_config, $language_array;
+    global $nv_Lang, $module_name, $language_array;
 
     $page_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name;
 
@@ -51,31 +51,6 @@ function main_theme($type, $roleCount, $roleList, $api_user, $generate_page): st
         $role['credential_quota'] = $role['credential_quota'] > 0 ? nv_number_format($role['credential_quota']) : ($role['credential_quota'] == 0 ? $nv_Lang->getModule('no_quota') : '');
         $role['credential_access_count'] = $role['credential_access_count'] >= 0 ? $role['credential_access_count'] : '';
         $role['credential_last_access'] = $role['credential_last_access'] > 0 ? nv_datetime_format($role['credential_last_access']) : '';
-        $role['cat_api_system'] = $role['apis'][''];
-
-        // Xử lý API theo ngôn ngữ
-        $role['langs'] = [];
-        foreach ($global_config['setup_langs'] as $_lg) {
-            $lang_item = [
-                'langkey'   => $_lg,
-                'langname'  => $language_array[$_lg]['name'],
-                'is_active' => $_lg === NV_LANG_DATA,
-                'modules'   => []
-            ];
-            if (!empty($role['apis'][$_lg])) {
-                foreach ($role['apis'][$_lg] as $mod_title => $mod_data) {
-                    $module = [
-                        'title' => $site_mods[$mod_title]['custom_title'] ?? $mod_title,
-                        'cats'  => []
-                    ];
-                    foreach ($mod_data as $cat_data) {
-                        $module['cats'][] = $cat_data;
-                    }
-                    $lang_item['modules'][] = $module;
-                }
-            }
-            $role['langs'][] = $lang_item;
-        }
     }
     unset($role);
 

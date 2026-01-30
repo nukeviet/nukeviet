@@ -107,6 +107,23 @@ if ($nv_Request->isset_request('changeActivate', 'post')) {
     ]);
 }
 
+if ($nv_Request->isset_request('getRole', 'post')) {
+    $role_id = $nv_Request->get_int('role_id', 'post', 0);
+
+    if ($role_id <= 0) {
+        die('<div class="alert alert-danger">Role không hợp lệ</div>');
+    }
+
+    // Lấy dữ liệu theo role_id
+    $role = getRoleDetails($role_id); // hàm của bạn
+
+    nv_jsonOutput([
+        'status' => 'OK',
+        'data'   => $role
+    ]);
+}
+
+
 $page_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name;
 $type = $nv_Request->get_title('type', 'get', 'public');
 $type != 'private' && $type = 'public';

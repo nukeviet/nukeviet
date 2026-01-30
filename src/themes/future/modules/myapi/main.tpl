@@ -1,7 +1,7 @@
 <script type="text/javascript" src="{$smarty.const.ASSETS_STATIC_URL}/js/clipboard/clipboard.min.js"></script>
 <div id="my-role-api" data-page-url="{$PAGE_URL}">
     <div class="tools">
-            <div class="mb-3">
+        <div class="mb-2">
             <ul class="nav nav-pills" role="tablist">
                 <li class="nav-item" role="presentation">
                     <a class="nav-link {$TYPE_PUBLIC.active}" href="{$TYPE_PUBLIC.url}">
@@ -16,7 +16,7 @@
             </ul>
         </div>
         <div>
-            <button type="button" class="btn btn-outline-secondary mb-3" data-bs-toggle="modal" data-bs-target="#credential_auth">
+            <button type="button" class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#credential_auth">
                 <i class="fa fa-shield fa-lg text-danger"></i> {$LANG->getModule('authentication')}
             </button>
             <div id="credential_auth" tabindex="-1" aria-labelledby="credentialAuthLabel" aria-hidden="true" class="modal fade">
@@ -48,9 +48,6 @@
                             <div class="tab-content" id="authTabContent">
                                 {foreach from=$METHODS key=key item=method}
                                 <div class="tab-pane fade {if $method@first}show active{/if}" id="{$key}-panel" role="tabpanel" aria-labelledby="{$key}-tab">
-
-                                    <p class="p-3">Nội dung của phương thức: {$method.name}</p>
-
                                     <div class="mb-3">
                                         <label class="form-label"><strong>{$LANG->getModule('api_credential_ident')}</strong></label>
                                         <div class="input-group">
@@ -147,81 +144,28 @@
                         <td class="text-nowrap text-center" style="width:1%;">{$role.credential_access_count}</td>
                         <td class="text-nowrap text-center" style="width:1%;">{$role.credential_last_access}</td>
                         <td class="text-nowrap text-center" style="width:1%;">
-                            <!-- Button trigger modal -->
-                            <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#apiroledetail{$role.role_id}">
-                                {$LANG->getModule('api_roles_detail')}: {$role.role_title}
-                            </button>
+                            <div class="action-column">
+                                <button
+                                    type="button"
+                                    class="btn btn-secondary open-api-modal"
+                                    data-role-id="{$role.role_id}"
+                                    data-role-title="{$role.role_title}"
+                                    data-page-url="{$PAGE_URL}"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#apiRoleModal">
+                                    {$LANG->getModule('api_roles_detail')}
+                                </button>
 
-                            <!-- Modal -->
-                            <div class="modal fade" id="apiroledetail{$role.role_id}" tabindex="-1" aria-hidden="true">
-                                <div class="modal-dialog">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h5 class="modal-title">
-                                                {$LANG->getModule('api_roles_detail')}: {$role.role_title}
-                                            </h5>
-                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                        </div>
-                                        <div class="modal-body">
-                                            {if not empty($role.cat_api_system)}
-                                            {foreach from=$role.cat_api_system item=cat}
-                                            <div class="panel panel-default">
-                                                <div class="panel-heading">
-                                                    <strong><i class="fa fa-folder-open-o"></i> {$LANG->getModule('api_of_system')}: {$cat.title}</strong>
-                                                </div>
-                                            </div>
-                                            {/foreach}
-                                            {/if}
-                                            <div>
-                                                <ul class="nav nav-tabs m-bottom" role="tablist">
-                                                    {foreach from=$role.langs item=lang}
-                                                        <li role="presentation" class="{if $lang.is_active}active{/if}">
-                                                            <a id="forlang-{$lang.langkey}-{$role.role_id}-tab" href="#forlang-{$lang.langkey}-{$role.role_id}" aria-controls="forlang-{$lang.langkey}-{$role.role_id}" role="tab" data-toggle="tab" aria-expanded="{if $lang.is_active}true{else}false{/if}">
-                                                                {$lang.langname}
-                                                            </a>
-                                                        </li>
-                                                    {/foreach}
-                                                </ul>
-                                                <div class="tab-content">
-                                                    {foreach from=$role.langs item=lang}
-                                                    <div class="tab-pane fade{if $lang.is_active} show active{/if}" id="forlang-{$lang.langkey}-{$role.role_id}" aria-labelledby="forlang-{$lang.langkey}-{$role.role_id}-tab">
-                                                        {foreach from=$lang.modules item=mod}
-                                                        {foreach from=$mod.cats item=cat}
-                                                        <div class="card mb-3">
-                                                            <div class="card-header">
-                                                                <strong><i class="fa fa-folder-open-o"></i> {$mod.title}{if !empty($cat.title)}<i class="fa fa-angle-right"></i> {$cat.title}{/if}</strong>
-                                                            </div>
-                                                            <div class="card-body">
-                                                                <div class="row">
-                                                                    {foreach from=$cat.apis item=api}
-                                                                    <div class="col-12 text-truncate mb-2" title="{$api|escape}">
-                                                                        <i class="fa fa-caret-right"></i> {$api}
-                                                                    </div>
-                                                                    {/foreach}
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        {/foreach}
-                                                        {/foreach}
-                                                    </div>
-                                                    {/foreach}
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+                                {if $TYPE == 'public' and $role.credential_status == 1}
+                                <button type="button" class="btn btn-secondary credential-activate">
+                                    {$LANG->getModule('activate')}
+                                </button>
+                                {elseif $TYPE == 'public' and $role.credential_status == -1}
+                                <button type="button" class="btn btn-secondary credential-deactivate">
+                                    {$LANG->getModule('deactivate')}
+                                </button>
+                                {/if}
                             </div>
-                            {if $TYPE == 'public'}
-                            {if $role.credential_status == 1}
-                            <button type="button" class="btn btn-secondary credential-activate">
-                                {$LANG->getModule('activate')}
-                            </button>
-                            {elseif $role.credential_status == -1}
-                            <button type="button" class="btn btn-secondary credential-deactivate">
-                                {$LANG->getModule('deactivate')}
-                            </button>
-                            {/if}
-                            {/if}
                         </td>
                     </tr>
                     {/foreach}
@@ -235,4 +179,21 @@
             {$GENERATE_PAGE}
         </div>
     {/if}
+</div>
+
+<div class="modal fade" id="apiRoleModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title"></h5>
+                <button class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div class="text-center py-4" id="apiRoleLoading">
+                    <div class="spinner-border"></div>
+                </div>
+                <div id="apiRoleContent" class="d-none"></div>
+            </div>
+        </div>
+    </div>
 </div>
