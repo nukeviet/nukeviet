@@ -9,7 +9,6 @@
 
 $(function() {
     if ($('#my-role-api').length) {
-        console.log(111);
         var myroleapi = $('#my-role-api'),
             myroleapi_url = myroleapi.data('page-url');
 
@@ -149,23 +148,56 @@ $(function() {
         function renderApiRole(apis) {
             var html = '';
 
+            // 1. XỬ LÝ RIÊNG CHO HỆ THỐNG (Sử dụng card giống bên dưới)
+            if (apis['']) {
+                html += '<div class="mb-4">';
+                html += '  <h5 class="fw-bold text-success mb-3">'; // Màu xanh lá để phân biệt với ngôn ngữ
+                html += '    <i class="fa fa-folder-open"></i> API của hệ thống';
+                html += '  </h5>';
+
+                for (var catKey in apis['']) {
+                    var catData = apis[''][catKey];
+
+                    html += '<div class="card mb-3">';
+                    html += '  <div class="card-header fw-bold bg-light">';
+                    html += '    <i class="fa fa-folder-open-o"></i> ' + catData.title;
+                    html += '  </div>';
+                    html += '  <div class="card-body">';
+
+                    for (var apiKey in catData.apis) {
+                        html += '<div class="text-truncate mb-2">';
+                        html += '  <i class="fa fa-caret-right text-muted"></i> ' + catData.apis[apiKey];
+                        html += '</div>';
+                    }
+
+                    html += '  </div>';
+                    html += '</div>';
+                }
+                html += '</div><hr>'; // Thêm gạch ngang phân cách nếu cần
+            }
+
+            // 2. XỬ LÝ THEO NGÔN NGỮ (Bỏ qua key rỗng)
             for (var lang in apis) {
+                if (lang === '' || !apis.hasOwnProperty(lang)) continue;
+
+                html += '<div class="mb-4">';
+                html += '  <h5 class="fw-bold text-primary mb-3">';
+                html += '    <i class="fa fa-cogs"></i> Ngôn ngữ: ' + lang;
+                html += '  </h5>';
+
                 for (var module in apis[lang]) {
                     for (var cat in apis[lang][module]) {
-
                         var catData = apis[lang][module][cat];
 
                         html += '<div class="card mb-3">';
                         html += '  <div class="card-header fw-bold">';
-                        html += '    <i class="fa fa-folder-open-o"></i> ';
-                        html +=      catData.title;
+                        html += '    <i class="fa fa-folder-open-o"></i> ' + catData.title;
                         html += '  </div>';
                         html += '  <div class="card-body">';
 
                         for (var apiKey in catData.apis) {
                             html += '<div class="text-truncate mb-2">';
-                            html += '  <i class="fa fa-caret-right"></i> ';
-                            html +=      catData.apis[apiKey];
+                            html += '  <i class="fa fa-caret-right text-muted"></i> ' + catData.apis[apiKey];
                             html += '</div>';
                         }
 
@@ -173,6 +205,7 @@ $(function() {
                         html += '</div>';
                     }
                 }
+                html += '</div>';
             }
 
             return html || '<div class="alert alert-warning">Không có dữ liệu</div>';
