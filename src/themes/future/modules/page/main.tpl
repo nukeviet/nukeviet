@@ -6,7 +6,7 @@
             {if not empty($row.image)}
             <div class="col-4">
                 <a href="{$row.link}" class="page-img-wrap">
-                    <img src="{$row.image}" alt="{$row.imagealt}" >
+                    <img src="{$row.image}" alt="{$row.imagealt}">
                 </a>
             </div>
             {/if}
