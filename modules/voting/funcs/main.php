@@ -251,9 +251,7 @@ if (empty($vid)) {
 
     $is_ajax = $nv_Request->get_int('nv_ajax_voting', 'post');
     if ($is_ajax) {
-        include NV_ROOTDIR . '/includes/header.php';
         echo $contents;
-        include NV_ROOTDIR . '/includes/footer.php';
         exit();
     }
 
