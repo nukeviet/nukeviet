@@ -249,6 +249,14 @@ if (empty($vid)) {
 
     $contents = voting_result($voting);
 
+    $is_ajax = $nv_Request->get_int('nv_ajax_voting', 'post');
+    if ($is_ajax) {
+        include NV_ROOTDIR . '/includes/header.php';
+        echo $contents;
+        include NV_ROOTDIR . '/includes/footer.php';
+        exit();
+    }
+
     $page_title = $row['question'];
     $page_url .= '&amp;vid=' . $vid . '&amp;checkss=' . $checkss . '&amp;lid=' . $lid;
     if ($row['active_captcha'] and ($module_captcha == 'captcha' or $module_captcha == 'recaptcha')) {
@@ -257,11 +265,6 @@ if (empty($vid)) {
     $canonicalUrl = getCanonicalUrl($page_url);
 
     include NV_ROOTDIR . '/includes/header.php';
-    $is_ajax = $nv_Request->get_int('nv_ajax_voting', 'post');
-    if ($is_ajax) {
-        echo $contents;
-    } else {
-        echo nv_site_theme($contents, true);
-    }
+    echo nv_site_theme($contents, true);
     include NV_ROOTDIR . '/includes/footer.php';
 }
