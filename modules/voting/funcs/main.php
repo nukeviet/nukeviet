@@ -254,14 +254,10 @@ if (empty($vid)) {
     if ($row['active_captcha'] and ($module_captcha == 'captcha' or $module_captcha == 'recaptcha')) {
         $page_url .= 'captcha=' . $captcha;
     }
-    $canonicalUrl = getCanonicalUrl($page_url);
+    $is_ajax = $nv_Request->get_int('nv_ajax_voting', 'post');
+    !$is_ajax && $canonicalUrl = getCanonicalUrl($page_url);
 
     include NV_ROOTDIR . '/includes/header.php';
-    $is_ajax = $nv_Request->get_int('nv_ajax_voting', 'post');
-    if ($is_ajax) {
-        echo $contents;
-    } else {
-        echo nv_site_theme($contents, true);
-    }
+    echo $is_ajax ? $contents : nv_site_theme($contents, true);
     include NV_ROOTDIR . '/includes/footer.php';
 }
