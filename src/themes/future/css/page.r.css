@@ -10,4 +10,38 @@
   width: 100px;
 }
 
+.page-desc-clamp {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+@media (max-width: 576px) {
+  .page-desc-clamp {
+    -webkit-line-clamp: 3;
+    line-height: 1.4;
+  }
+}
+
+.page-img-wrap {
+  display: block;
+  overflow: hidden;
+  position: relative;
+  padding-top: 60%;
+}
+.page-img-wrap img {
+  -o-object-fit: cover;
+  object-fit: cover;
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+@media (max-width: 576px) {
+  .page-img-wrap {
+    padding-top: 75%;
+  }
+}
+
 /*# sourceMappingURL=page.r.css.map */

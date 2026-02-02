@@ -2,15 +2,15 @@
     {if not empty($DATA)}
     {foreach from=$DATA item=row}
     <div class="py-3 border-bottom">
-        <article class="row">
+        <article class="row g-3 align-items-start">
             {if not empty($row.image)}
-            <div class="col-4 col-lg-4">
-                <a href="{$row.link}" class="thumbnail-lg">
-                    <span><img src="{$row.image}" alt="{$row.imagealt}"></span>
+            <div class="col-4">
+                <a href="{$row.link}" class="page-img-wrap">
+                    <img src="{$row.image}" alt="{$row.imagealt}" >
                 </a>
             </div>
             {/if}
-            <div class="col-8{if not empty($row.image)} col-lg-8{/if}">
+            <div class="{if not empty($row.image)} col-8{else} col-12{/if}">
                 <h2 class="fs-5 fw-medium mb-0">
                     <a href="{$row.link}" class="text-primary fw-semibold">{$row.title}</a>
                     {if $smarty.const.NV_IS_MODADMIN}
@@ -25,7 +25,7 @@
                     </span>
                     {/if}
                 </h2>
-                <p class="mb-0">{$row.description}</p>
+                <p class="mb-0 page-desc-clamp">{$row.description}</p>
             </div>
         </article>
     </div>
