@@ -136,6 +136,7 @@ function nv_blocks_content($sitecontent)
                 'act' => $_row['act'],
                 'groups_view' => $_row['groups_view'],
                 'all_func' => $_row['all_func'],
+                'bot_visible' => $_row['bot_visible'],
                 'block_config' => $block_config
             ];
         }
@@ -248,6 +249,11 @@ function nv_blocks_content($sitecontent)
                 } elseif (!$client_info['is_mobile'] and !$client_info['is_tablet'] and in_array(4, $_row['show_device'], true)) {
                     $_active = true;
                 }
+            }
+
+            // Kiem tra hien thi voi bot
+            if ($client_info['is_bot'] and empty($_row['bot_visible'])) {
+                $_active = false;
             }
 
             // Kiem tra quyen xem block

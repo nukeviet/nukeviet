@@ -711,7 +711,7 @@ blockquote {
 }
 
 /* CKEditor 4 contents css */
-figure {
+figure:not(.table):not(.media):not(.nv-media) {
     background: #7a7a7a;
     padding: 10px;
     display: block;
@@ -927,13 +927,13 @@ figure.image > figcaption {
 }
 
 .image-style-block-align-right {
-    margin-right: 0;
-    margin-left: auto;
+    margin-right: 0 !important;
+    margin-left: auto !important;
 }
 
 .image-style-block-align-left {
-    margin-left: 0;
-    margin-right: auto;
+    margin-left: 0 !important;
+    margin-right: auto !important;
 }
 
 p + .image-style-align-left,

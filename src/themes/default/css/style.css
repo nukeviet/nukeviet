@@ -711,9 +711,9 @@ div.check-box label [type='radio'] {
 }
 
 /* CKEditor 4 contents css */
-figure {
+figure:not(.table):not(.media):not(.nv-media) {
     position: relative;
-    margin: 5px 0 10px 0;
+    margin: 5px auto 10px auto;
     text-align: center;
 }
 
@@ -976,13 +976,13 @@ figure.image > figcaption {
 }
 
 .image-style-block-align-right {
-    margin-right: 0;
-    margin-left: auto;
+    margin-right: 0 !important;
+    margin-left: auto !important;
 }
 
 .image-style-block-align-left {
-    margin-left: 0;
-    margin-right: auto;
+    margin-left: 0 !important;
+    margin-right: auto !important;
 }
 
 p + .image-style-align-left,

@@ -188,3 +188,4 @@ $lang_module['day_of_week_4'] = 'Jeu';
 $lang_module['day_of_week_5'] = 'Ven';
 $lang_module['day_of_week_6'] = 'Sam';
 $lang_module['day_of_week_7'] = 'Dim';
+$lang_module['dtime_allow_bot'] = 'Afficher pour các robots d’indexation';

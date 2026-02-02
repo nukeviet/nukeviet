@@ -124,16 +124,17 @@ if (preg_match($global_config['check_theme'], $selectthemes) and $sth->fetchColu
             $row['dtime_type'] = 'regular';
             $row['dtime_details'] = '[]';
             $row['active'] = 1;
+            $row['bot_visible'] = 1;
             $row['groups_view'] = '6';
 
             $all_func = ($row['all_func'] == 1 and preg_match('/^global\.([a-zA-Z0-9\-\_\.]+)\.php$/', $file_name)) ? 1 : 0;
 
             $_sql = 'INSERT INTO ' . NV_BLOCKS_TABLE . "_groups (
                 theme, module, file_name, title, link, template, heading, position,
-                dtime_type, dtime_details, active, groups_view, all_func, weight, config
+                dtime_type, dtime_details, active, bot_visible, groups_view, all_func, weight, config
             ) VALUES (
                 :selectthemes, :module, :file_name, :title, :link, :template, :heading, :position,
-                :dtime_type, :dtime_details, '" . $row['active'] . "', :groups_view,
+                :dtime_type, :dtime_details, '" . $row['active'] . "', '" . $row['bot_visible'] . "', :groups_view,
                 '" . $all_func . "', '" . $row['weight'] . "', :config
             )";
             $data = [];

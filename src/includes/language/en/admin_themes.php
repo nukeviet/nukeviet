@@ -188,3 +188,4 @@ $lang_module['day_of_week_4'] = 'THU';
 $lang_module['day_of_week_5'] = 'FRI';
 $lang_module['day_of_week_6'] = 'SAT';
 $lang_module['day_of_week_7'] = 'SUN';
+$lang_module['dtime_allow_bot'] = 'Show to search engine bots';

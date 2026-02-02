@@ -29,10 +29,10 @@ if ($func_id > 0 and isset($row['bid']) and md5(NV_CHECK_SESSION . '_' . $bid) =
     try {
         $_sql = 'INSERT INTO ' . NV_BLOCKS_TABLE . '_groups (
             theme, module, file_name, title, link, template, heading, position,
-            dtime_type, dtime_details, active, groups_view, all_func, weight, config
+            dtime_type, dtime_details, active, bot_visible, groups_view, all_func, weight, config
         ) VALUES (
             :theme, :module, :file_name, :title, :link, :template, :heading, :position,
-            :dtime_type, :dtime_details, :active, :groups_view, 0, ' . $row['weight'] . ', :config
+            :dtime_type, :dtime_details, :active, :bot_visible, :groups_view, 0, ' . $row['weight'] . ', :config
         )';
 
         $data = [];
@@ -47,6 +47,7 @@ if ($func_id > 0 and isset($row['bid']) and md5(NV_CHECK_SESSION . '_' . $bid) =
         $data['dtime_type'] = $row['dtime_type'];
         $data['dtime_details'] = $row['dtime_details'];
         $data['active'] = $row['active'];
+        $data['bot_visible'] = $row['bot_visible'];
         $data['groups_view'] = $row['groups_view'];
         $data['config'] = $row['config'];
 
