@@ -25,17 +25,14 @@ if (!nv_function_exists('nv_page_list')) {
     {
         global $nv_Lang;
 
-        $html = '';
-        $html .= '<div class="row mb-3">';
-        $html .= '	<label class="col-sm-3 col-form-label text-sm-end text-truncate fw-medium">' . $nv_Lang->getModule('title_length') . ':</label>';
-        $html .= '	<div class="col-sm-5"><input type="text" class="form-control" name="config_title_length" value="' . $data_block['title_length'] . '"/></div>';
-        $html .= '</div>';
-        $html .= '<div class="row mb-3">';
-        $html .= '	<label class="col-sm-3 col-form-label text-sm-end text-truncate fw-medium">' . $nv_Lang->getModule('numrow') . ':</label>';
-        $html .= '	<div class="col-sm-5"><input type="text" name="config_numrow" class="form-control" value="' . $data_block['numrow'] . '"/></div>';
-        $html .= '</div>';
+        [$block_theme, $dir] = get_block_tpl_dir('block.config.page_list.tpl', $module, true);
+        $tpl = new \NukeViet\Template\NVSmarty();
+        $tpl->setTemplateDir($dir);
+        $tpl->assign('TEMPLATE', $block_theme);
+        $tpl->assign('LANG', $nv_Lang);
+        $tpl->assign('DATA', $data_block);
 
-        return $html;
+        return $tpl->fetch('block.config.page_list.tpl');
     }
 
     /**
