@@ -80,11 +80,13 @@ if (!nv_function_exists('nv_page_list')) {
 
         $list = $nv_Cache->db($db->sql(), 'id', $module);
 
-        if (empty($list)) return '';
+        if (empty($list)) {
+            return '';
+        }
 
-        foreach ($list as &$l) {
-            $l['title_clean60'] = nv_clean60($l['title'], $block_config['title_length']);
-            $l['link'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module . '&amp;' . NV_OP_VARIABLE . '=' . $l['alias'] . $global_config['rewrite_exturl'];
+        foreach ($list as $key => $l) {
+            $list[$key]['title_clean60'] = nv_clean60($l['title'], $block_config['title_length']);
+            $list[$key]['link'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module . '&amp;' . NV_OP_VARIABLE . '=' . $l['alias'] . $global_config['rewrite_exturl'];
         }
         unset($l);
 
