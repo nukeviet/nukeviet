@@ -215,6 +215,28 @@ if (!empty($upload_info['complete'])) {
 
     if (isset($array_dirname[$path])) {
         $did = $array_dirname[$path];
+        
+        // Kiểm tra và đảm bảo tên file không trùng trong database
+        // Điều này ngăn lỗi duplicate key khi có nhiều request song song
+        $final_basename = $upload_info['basename'];
+        $check_title = $db->query('SELECT COUNT(*) FROM ' . NV_UPLOAD_GLOBALTABLE . '_file WHERE did = ' . $did . ' AND title = ' . $db->quote($final_basename))->fetchColumn();
+        
+        if ($check_title > 0) {
+            // Nếu tên đã tồn tại trong database, tạo tên mới với hậu tố _N
+            $i = 1;
+            $original_basename = $final_basename;
+            do {
+                $final_basename = preg_replace('/(.*)(\.[a-zA-Z0-9]+)$/', '\1_' . $i . '\2', $original_basename);
+                $check_title = $db->query('SELECT COUNT(*) FROM ' . NV_UPLOAD_GLOBALTABLE . '_file WHERE did = ' . $did . ' AND title = ' . $db->quote($final_basename))->fetchColumn();
+                ++$i;
+            } while ($check_title > 0);
+            
+            // Đổi tên file vật lý để khớp với tên trong database
+            if (@rename(NV_ROOTDIR . '/' . $path . '/' . $upload_info['basename'], NV_ROOTDIR . '/' . $path . '/' . $final_basename)) {
+                $upload_info['basename'] = $final_basename;
+            }
+        }
+        
         $info = nv_getFileInfo($path, $upload_info['basename']);
         $info['userid'] = $admin_info['userid'];
 
