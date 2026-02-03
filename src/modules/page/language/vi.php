@@ -82,3 +82,5 @@ $lang_module['config_dpost'] = 'Cấu hình đăng bài mặc định';
 $lang_module['schema_type'] = 'Loại dữ liệu có cấu trúc';
 $lang_module['schema_about'] = 'Viết về';
 $lang_module['other_articles'] = 'Bài viết khác';
+$lang_module['add_new'] = 'Thêm mới';
+$lang_module['del'] = 'Xóa';

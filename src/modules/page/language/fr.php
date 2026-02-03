@@ -82,3 +82,5 @@ $lang_module['config_dpost'] = 'Configuration de publication par défaut';
 $lang_module['schema_type'] = 'Type de données structurées';
 $lang_module['schema_about'] = 'À propos';
 $lang_module['other_articles'] = 'Autres articles';
+$lang_module['add_new'] = 'Ajouter nouveau';
+$lang_module['del'] = 'Supprimer';

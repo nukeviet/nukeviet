@@ -82,3 +82,5 @@ $lang_module['config_dpost'] = 'Default post configurations';
 $lang_module['schema_type'] = 'Structured data type';
 $lang_module['schema_about'] = 'Write about';
 $lang_module['other_articles'] = 'Other articles';
+$lang_module['add_new'] = 'Add new';
+$lang_module['del'] = 'Delete';

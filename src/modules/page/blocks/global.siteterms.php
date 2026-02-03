@@ -14,69 +14,45 @@ if (!defined('NV_MAINFILE')) {
 }
 
 if (!nv_function_exists('site_terms')) {
-    function site_terms_config($module, $data_block)
+    /**
+     * @param string $module
+     * @param array  $data_block
+     * @return string
+     */
+    function site_terms_config(string $module, array $data_block): string
     {
         global $nv_Cache, $global_config, $site_mods, $db, $nv_Lang;
 
         $db->sqlreset()->select('id, title, alias, description')->from(NV_PREFIXLANG . '_' . $site_mods[$module]['module_data'])->where('status = 1')->order('weight ASC');
         $list = $nv_Cache->db($db->sql(), 'id', $module);
 
+        foreach ($list as $key => $item) {
+            $item['title'] = nv_clean60($item['title'], 60);
+            $item['url'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module . '&amp;' . NV_OP_VARIABLE . '=' . $item['alias'] . $global_config['rewrite_exturl'];
+            $list[$key] = $item;
+        }
+        unset($item);
+
         $term_names = !empty($data_block['term_names']) ? array_map('trim', explode('|', $data_block['term_names'])) : [''];
         $term_queries = !empty($data_block['term_queries']) ? array_map('trim', explode('|', $data_block['term_queries'])) : [''];
 
-        $html = '<div class="row mb-2">';
-        $html .= '<label class="col-sm-3 col-form-label text-sm-end text-truncate fw-medium">' . $nv_Lang->getModule('links') . ':</label>';
-        $html .= '<div class="col-sm-9 list">';
+        $term_data = [];
         foreach ($term_names as $key => $term_name) {
-            empty($term_queries[$key]) && $term_queries[$key] = '';
-            $html .= '<div class="input-group mb-2 item">';
-            if (!empty($list)) {
-                $html .= '<button type="button" class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></button>';
-                $html .= '<ul class="dropdown-menu">';
-                foreach ($list as $item) {
-                    $html .= '<li><a class="dropdown-item" href="#" data-url="' . NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module . '&amp;' . NV_OP_VARIABLE . '=' . $item['alias'] . $global_config['rewrite_exturl'] . '" data-toggle="sample_term">' . nv_clean60($item['title'], 60) . '</a></li>';
-                }
-                $html .= '</ul>';
-            }
-            $html .= '<input type="text" name="term_names[]" value="' . $term_name . '" placeholder="' . $nv_Lang->getModule('term_name') . '" class="form-control">';
-            $html .= '<input type="text" name="term_queries[]" value="' . $term_queries[$key] . '" placeholder="' . $nv_Lang->getModule('term_query') . '" class="form-control">';
-            $html .= '<button class="btn btn-default" type="button" data-toggle="del_term">x</button><button class="btn btn-default" type="button" data-toggle="add_term">+</button>';
-            $html .= '</div>';
+            $term_data[] = [
+                'name' => $term_name,
+                'query' => isset($term_queries[$key]) ? $term_queries[$key] : ''
+            ];
         }
-        $html .= '</div>';
-        $html .= '</div>';
-        $html .= "<script>
-$(function() {
-    $('body').on('click', '[data-toggle=del_term]', function() {
-        var item = $(this).parents('.item'),
-            list = $(this).parents('.list');
-        if ($('.item', list).length > 1) {
-            item.remove()
-        } else {
-            $('input', item).val('')
-        }
-    });
 
-    $('body').on('click', '[data-toggle=add_term]', function() {
-        var item = $(this).parents('.item'),
-            newitem = item.clone();
-        $('input', newitem).val('');
-        item.after(newitem)
-    });
+        [$block_theme, $dir] = get_block_tpl_dir('global.siteterms.config.tpl', $module, true);
+        $tpl = new \NukeViet\Template\NVSmarty();
+        $tpl->setTemplateDir($dir);
+        $tpl->assign('TEMPLATE', $block_theme);
+        $tpl->assign('LANG', $nv_Lang);
+        $tpl->assign('LIST', $list);
+        $tpl->assign('TERM_DATA', $term_data);
 
-    $('body').on('click', '[data-toggle=sample_term]', function() {
-        var item = $(this).parents('.item'),
-            name = $(this).text(),
-            url = $(this).data('url');
-        if ($('[name^=term_names]', item).val() == '') {
-            $('[name^=term_names]', item).val(name)
-        }
-        $('[name^=term_queries]', item).val(url)
-    })
-})
-</script>";
-
-        return $html;
+        return $tpl->fetch('global.siteterms.config.tpl');
     }
 
     function site_terms_submit($module)
@@ -92,32 +68,34 @@ $(function() {
 
         return $return;
     }
-
-    function site_terms($block_config)
+    /**
+     * @param array $block_config
+     * @return string
+     */
+    function site_terms($block_config): string
     {
-        global $global_config;
-
         $term_names = !empty($block_config['term_names']) ? array_map('trim', explode('|', $block_config['term_names'])) : [''];
         $term_queries = !empty($block_config['term_queries']) ? array_map('trim', explode('|', $block_config['term_queries'])) : [''];
 
-        if (!empty($term_names)) {
-            $block_theme = get_tpl_dir([$global_config['module_theme'], $global_config['site_theme']], 'default', '/modules/page/block.siteterms.tpl');
-            $xtpl = new XTemplate('block.siteterms.tpl', NV_ROOTDIR . '/themes/' . $block_theme . '/modules/page');
-
-            foreach ($term_names as $key => $name) {
-                empty($term_queries[$key]) && $term_queries[$key] = '';
-                $row = [
-                    'name' => $name,
-                    'url' => $term_queries[$key]
-                ];
-                $xtpl->assign('ROW', $row);
-                $xtpl->parse('main.loop');
-            }
-
-            $xtpl->parse('main');
-
-            return $xtpl->text('main');
+        if (empty($term_names)) {
+            return '';
         }
+
+        $row = [];
+        foreach ($term_names as $key => $name) {
+            $row[] = [
+                'title' => $name,
+                'url' => isset($term_queries[$key]) ? $term_queries[$key] : ''
+            ];
+        }
+
+        [$block_theme, $dir] = get_block_tpl_dir('global.siteterms.tpl', $block_config['module'], true);
+        $tpl = new \NukeViet\Template\NVSmarty();
+        $tpl->setTemplateDir(template_dir: $dir);
+        $tpl->assign('TEMPLATE', $block_theme);
+        $tpl->assign('ROW', $row);
+
+        return $tpl->fetch('global.siteterms.tpl');
     }
 }
 
