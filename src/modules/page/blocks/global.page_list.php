@@ -25,14 +25,14 @@ if (!nv_function_exists('nv_page_list')) {
     {
         global $nv_Lang;
 
-        [$block_theme, $dir] = get_block_tpl_dir('block.config.page_list.tpl', $module, true);
+        [$block_theme, $dir] = get_block_tpl_dir('global.page_list.config.tpl', $module, true);
         $tpl = new \NukeViet\Template\NVSmarty();
         $tpl->setTemplateDir($dir);
         $tpl->assign('TEMPLATE', $block_theme);
         $tpl->assign('LANG', $nv_Lang);
         $tpl->assign('DATA', $data_block);
 
-        return $tpl->fetch('block.config.page_list.tpl');
+        return $tpl->fetch('global.page_list.config.tpl');
     }
 
     /**
