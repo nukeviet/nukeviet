@@ -13,6 +13,8 @@ if (!defined('NV_MAINFILE') or !defined('NV_SYS_LOAD')) {
     exit('Stop!!!');
 }
 
+session_write_close();
+
 $count = 0;
 $userid = $nv_Request->get_int('__userid', 'post', 0);
 $groups = $nv_Request->get_title('__groups', 'post', '');
@@ -39,7 +41,7 @@ if ($userid and hash_equals($checkss, $csrf)) {
         } else {
             $where .= " AND (mtb.sender_role != 'group')";
         }
-    
+
         $where .= ' AND mtb.id NOT IN (SELECT exc.pid FROM ' . NV_INFORM_STATUS_GLOBALTABLE . ' AS exc WHERE (exc.pid = mtb.id AND exc.userid = ' . $userid . ') AND (exc.shown_time != 0 OR exc.hidden_time != 0))';
         $sql = 'SELECT COUNT(mtb.id) FROM ' . NV_INFORM_GLOBALTABLE . ' AS mtb WHERE ' . $where;
         $count = (int) $db->query($sql)->fetchColumn();

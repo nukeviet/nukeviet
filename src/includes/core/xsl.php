@@ -13,6 +13,8 @@ if (!defined('NV_MAINFILE') or !defined('NV_SYS_LOAD')) {
     exit('Stop!!!');
 }
 
+session_write_close();
+
 $type = $nv_Request->get_string('xsl', 'get') == 'rss' ? 'rss' : 'atom';
 
 $contents = '';
