@@ -219,21 +219,31 @@ if (!empty($upload_info['complete'])) {
         // Kiểm tra và đảm bảo tên file không trùng trong database
         // Điều này ngăn lỗi duplicate key khi có nhiều request song song
         $final_basename = $upload_info['basename'];
-        $check_title = $db->query('SELECT COUNT(*) FROM ' . NV_UPLOAD_GLOBALTABLE . '_file WHERE did = ' . $did . ' AND title = ' . $db->quote($final_basename))->fetchColumn();
+        $sth_check = $db->prepare('SELECT COUNT(*) FROM ' . NV_UPLOAD_GLOBALTABLE . '_file WHERE did = :did AND title = :title');
+        $sth_check->bindParam(':did', $did, PDO::PARAM_INT);
+        $sth_check->bindValue(':title', $final_basename, PDO::PARAM_STR);
+        $sth_check->execute();
+        $check_title = $sth_check->fetchColumn();
         
         if ($check_title > 0) {
             // Nếu tên đã tồn tại trong database, tạo tên mới với hậu tố _N
             $i = 1;
             $original_basename = $final_basename;
+            $max_attempts = 100; // Giới hạn số lần thử để tránh vòng lặp vô hạn
             do {
                 $final_basename = preg_replace('/(.*)(\.[a-zA-Z0-9]+)$/', '\1_' . $i . '\2', $original_basename);
-                $check_title = $db->query('SELECT COUNT(*) FROM ' . NV_UPLOAD_GLOBALTABLE . '_file WHERE did = ' . $did . ' AND title = ' . $db->quote($final_basename))->fetchColumn();
+                $sth_check->bindValue(':title', $final_basename, PDO::PARAM_STR);
+                $sth_check->execute();
+                $check_title = $sth_check->fetchColumn();
                 ++$i;
-            } while ($check_title > 0);
+            } while ($check_title > 0 && $i <= $max_attempts);
             
             // Đổi tên file vật lý để khớp với tên trong database
-            if (@rename(NV_ROOTDIR . '/' . $path . '/' . $upload_info['basename'], NV_ROOTDIR . '/' . $path . '/' . $final_basename)) {
+            if (rename(NV_ROOTDIR . '/' . $path . '/' . $upload_info['basename'], NV_ROOTDIR . '/' . $path . '/' . $final_basename)) {
                 $upload_info['basename'] = $final_basename;
+            } else {
+                // Nếu không thể đổi tên file, ghi log lỗi
+                trigger_error('Failed to rename uploaded file from ' . $upload_info['basename'] . ' to ' . $final_basename, E_USER_WARNING);
             }
         }
         
