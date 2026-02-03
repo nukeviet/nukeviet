@@ -1152,7 +1152,7 @@ function nv_module_captcha(string $module_name): string
 {
     global $global_config, $module_config;
 
-    $module_captcha = $module_name == 'users' ? $global_config['captcha_type'] : (
+    $module_captcha = $module_name == 'users' ? ($global_config['captcha_type'] ?? '') : (
         (isset($module_config[$module_name]) and !empty($module_config[$module_name]['captcha_type'])) ? $module_config[$module_name]['captcha_type'] : ''
     );
 
