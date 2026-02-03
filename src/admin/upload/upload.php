@@ -215,38 +215,6 @@ if (!empty($upload_info['complete'])) {
 
     if (isset($array_dirname[$path])) {
         $did = $array_dirname[$path];
-        
-        // Kiểm tra và đảm bảo tên file không trùng trong database
-        // Điều này ngăn lỗi duplicate key khi có nhiều request song song
-        $final_basename = $upload_info['basename'];
-        $sth_check = $db->prepare('SELECT COUNT(*) FROM ' . NV_UPLOAD_GLOBALTABLE . '_file WHERE did = :did AND title = :title');
-        $sth_check->bindParam(':did', $did, PDO::PARAM_INT);
-        $sth_check->bindValue(':title', $final_basename, PDO::PARAM_STR);
-        $sth_check->execute();
-        $check_title = $sth_check->fetchColumn();
-        
-        if ($check_title > 0) {
-            // Nếu tên đã tồn tại trong database, tạo tên mới với hậu tố _N
-            $i = 1;
-            $original_basename = $final_basename;
-            $max_attempts = 100; // Giới hạn số lần thử để tránh vòng lặp vô hạn
-            do {
-                $final_basename = preg_replace('/(.*)(\.[a-zA-Z0-9]+)$/', '\1_' . $i . '\2', $original_basename);
-                $sth_check->bindValue(':title', $final_basename, PDO::PARAM_STR);
-                $sth_check->execute();
-                $check_title = $sth_check->fetchColumn();
-                ++$i;
-            } while ($check_title > 0 && $i <= $max_attempts);
-            
-            // Đổi tên file vật lý để khớp với tên trong database
-            if (rename(NV_ROOTDIR . '/' . $path . '/' . $upload_info['basename'], NV_ROOTDIR . '/' . $path . '/' . $final_basename)) {
-                $upload_info['basename'] = $final_basename;
-            } else {
-                // Nếu không thể đổi tên file, ghi log lỗi
-                trigger_error('Failed to rename uploaded file from ' . $upload_info['basename'] . ' to ' . $final_basename, E_USER_WARNING);
-            }
-        }
-        
         $info = nv_getFileInfo($path, $upload_info['basename']);
         $info['userid'] = $admin_info['userid'];
 
@@ -257,16 +225,59 @@ if (!empty($upload_info['complete'])) {
             $newalt = str_replace('-', ' ', change_alias($newalt));
         }
 
-        $sth = $db->prepare('INSERT INTO ' . NV_UPLOAD_GLOBALTABLE . "_file (
-            name, ext, type, filesize, src, srcwidth, srcheight, sizes, userid, mtime, did, title, alt
-        ) VALUES (
-            '" . $info['name'] . "', '" . $info['ext'] . "', '" . $info['type'] . "', " . $info['filesize'] . ",
-            '" . $info['src'] . "', " . $info['srcwidth'] . ', ' . $info['srcheight'] . ", '" . $info['size'] . "',
-            " . $info['userid'] . ', ' . $info['mtime'] . ', ' . $did . ", '" . $upload_info['basename'] . "', :newalt
-        )");
+        // Xử lý trùng lặp do race condition khi nhiều request song song
+        // Thử INSERT, nếu trùng key thì tìm tên file mới và thử lại
+        $max_attempts = 10;
+        $attempt = 0;
+        $inserted = false;
+        $current_basename = $upload_info['basename'];
+        $original_basename = $upload_info['basename'];
+        
+        while (!$inserted && $attempt < $max_attempts) {
+            try {
+                $info = nv_getFileInfo($path, $current_basename);
+                $info['userid'] = $admin_info['userid'];
+                
+                $sth = $db->prepare('INSERT INTO ' . NV_UPLOAD_GLOBALTABLE . "_file (
+                    name, ext, type, filesize, src, srcwidth, srcheight, sizes, userid, mtime, did, title, alt
+                ) VALUES (
+                    '" . $info['name'] . "', '" . $info['ext'] . "', '" . $info['type'] . "', " . $info['filesize'] . ",
+                    '" . $info['src'] . "', " . $info['srcwidth'] . ', ' . $info['srcheight'] . ", '" . $info['size'] . "',
+                    " . $info['userid'] . ', ' . $info['mtime'] . ', ' . $did . ", :title, :newalt
+                )");
 
-        $sth->bindParam(':newalt', $newalt, PDO::PARAM_STR);
-        $sth->execute();
+                $sth->bindValue(':title', $current_basename, PDO::PARAM_STR);
+                $sth->bindParam(':newalt', $newalt, PDO::PARAM_STR);
+                $sth->execute();
+                
+                $inserted = true;
+                $upload_info['basename'] = $current_basename;
+            } catch (PDOException $e) {
+                // Kiểm tra nếu là lỗi duplicate key
+                if ($e->getCode() == 23000 && strpos($e->getMessage(), 'Duplicate entry') !== false) {
+                    $attempt++;
+                    $previous_basename = $current_basename;
+                    // Tạo tên file mới với hậu tố _N
+                    $current_basename = preg_replace('/(.*)(\.[a-zA-Z0-9]+)$/', '\1_' . $attempt . '\2', $original_basename);
+                    
+                    // Đổi tên file vật lý nếu cần
+                    if (file_exists(NV_ROOTDIR . '/' . $path . '/' . $previous_basename)) {
+                        if (!rename(NV_ROOTDIR . '/' . $path . '/' . $previous_basename, NV_ROOTDIR . '/' . $path . '/' . $current_basename)) {
+                            // Không thể đổi tên, có thể file đã bị ghi đè hoặc xóa, thử tiếp
+                            trigger_error('Could not rename file during duplicate handling: ' . $previous_basename . ' to ' . $current_basename, E_USER_WARNING);
+                        }
+                    } else if (!file_exists(NV_ROOTDIR . '/' . $path . '/' . $current_basename)) {
+                        // File gốc không tồn tại và file đích cũng không tồn tại
+                        // Có thể đã bị ghi đè, không thể tiếp tục
+                        trigger_error('Original uploaded file not found, may have been overwritten: ' . $previous_basename, E_USER_WARNING);
+                        break;
+                    }
+                } else {
+                    // Lỗi khác, throw lại
+                    throw $e;
+                }
+            }
+        }
 
         nv_dirListRefreshSize();
     }
