@@ -146,7 +146,7 @@ class UrlGetContents
             curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
 
             $response = curl_exec($curl);
-            curl_close($curl);
+            unset($curl);
 
             if ($response === false) {
                 return false;
@@ -267,8 +267,7 @@ class UrlGetContents
         }
 
         if (curl_errno($curlHandle)) {
-            curl_close($curlHandle);
-
+            unset($curlHandle);
             return false;
         }
 
@@ -297,12 +296,9 @@ class UrlGetContents
         }
 
         if (($response['http_code'] < 200) or (300 <= $response['http_code'])) {
-            curl_close($curlHandle);
-
+            unset($curlHandle);
             return false;
         }
-
-        curl_close($curlHandle);
 
         if (preg_match('/(<meta http-equiv=)(.*?)(refresh)(.*?)(url=)([^\'\"]+)[\'|"]\s*[\/]*>/is', $result, $matches) and $this->redirectCount <= 5) {
             ++$this->redirectCount;
@@ -320,6 +316,7 @@ class UrlGetContents
             return $this->curl_Get();
         }
 
+        unset($curlHandle);
         return $result;
     }
 

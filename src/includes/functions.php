@@ -3447,7 +3447,7 @@ function post_async($url, $params = [], $headers = [])
     $ch = curl_init($server_domain . $url);
     curl_setopt_array($ch, $options);
     curl_exec($ch);
-    curl_close($ch);
+    unset($ch);
 }
 
 /**

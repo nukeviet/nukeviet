@@ -176,7 +176,7 @@ function nv_get_mime_type($filename, $magic_path = '', $default_mime = 'applicat
 
         if ($finfo !== false) {
             $mime = finfo_file($finfo, realpath($filename));
-            finfo_close($finfo);
+            unset($finfo);
             $mime = preg_replace('/^([\.\-\w]+)\/([\.\-\w]+)(.*)$/i', '$1/$2', trim($mime));
         }
     }
@@ -186,7 +186,7 @@ function nv_get_mime_type($filename, $magic_path = '', $default_mime = 'applicat
             $finfo = new finfo(FILEINFO_MIME);
             if ($finfo) {
                 $mime = $finfo->file(realpath($filename));
-                $mime = preg_replace('/^([\.-\w]+)\/([\.-\w]+)(.*)$/i', '$1/$2', trim($mime));
+                $mime = preg_replace('/^([\.\-\w]+)\/([\.\-\w]+)(.*)$/i', '$1/$2', trim($mime));
             }
         }
     }
@@ -199,13 +199,13 @@ function nv_get_mime_type($filename, $magic_path = '', $default_mime = 'applicat
                 $m = ob_get_clean();
                 $m = trim($m);
                 if (!empty($m)) {
-                    $mime = preg_replace('/^([\.-\w]+)\/([\.-\w]+)(.*)$/i', '$1/$2', $m);
+                    $mime = preg_replace('/^([\.\-\w]+)\/([\.\-\w]+)(.*)$/i', '$1/$2', $m);
                 }
             } elseif (nv_function_exists('exec')) {
                 $m = @exec('file -bi ' . escapeshellarg($filename));
                 $m = trim($m);
                 if (!empty($m)) {
-                    $mime = preg_replace('/^([\.-\w]+)\/([\.-\w]+)(.*)$/i', '$1/$2', $m);
+                    $mime = preg_replace('/^([\.\-\w]+)\/([\.\-\w]+)(.*)$/i', '$1/$2', $m);
                 }
             }
         }
@@ -214,7 +214,7 @@ function nv_get_mime_type($filename, $magic_path = '', $default_mime = 'applicat
     if (empty($mime) or $mime == 'application/octet-stream') {
         if (nv_function_exists('mime_content_type')) {
             $mime = mime_content_type($filename);
-            $mime = preg_replace('/^([\.-\w]+)\/([\.-\w]+)(.*)$/i', '$1/$2', trim($mime));
+            $mime = preg_replace('/^([\.\-\w]+)\/([\.\-\w]+)(.*)$/i', '$1/$2', trim($mime));
         }
     }
 
@@ -224,7 +224,7 @@ function nv_get_mime_type($filename, $magic_path = '', $default_mime = 'applicat
             if (($img_info = @getimagesize($filename)) !== false) {
                 if (isset($img_info['mime']) and !empty($img_info['mime'])) {
                     $mime = trim($img_info['mime']);
-                    $mime = preg_replace('/^([\.-\w]+)\/([\.-\w]+)(.*)$/i', '$1/$2', $mime);
+                    $mime = preg_replace('/^([\.\-\w]+)\/([\.\-\w]+)(.*)$/i', '$1/$2', $mime);
                 }
 
                 if (empty($mime) and isset($img_info[2])) {
