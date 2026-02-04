@@ -54,7 +54,7 @@ class Error
     private $errline = false;
     private $errid = false;
     private static $errortype = [
-        2048 => 'Strict Notice', // Backward compatible with PHP versions below 8.4
+        2048 => 'Strict Notice', // Backward compatible with PHP versions below 8.4 (E_STRICT removed in PHP 8.4)
         E_ERROR => 'Error',
         E_WARNING => 'Warning',
         E_PARSE => 'Parsing Error',
