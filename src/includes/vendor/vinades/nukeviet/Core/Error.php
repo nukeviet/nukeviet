@@ -290,7 +290,7 @@ class Error
             $strEncodedEmail = '';
             $strlen = strlen($this->cfg['error_send_mail']);
             for ($i = 0; $i < $strlen; ++$i) {
-                $strEncodedEmail .= '&#' . ord(substr($this->cfg['error_send_mail'], $i)) . ';';
+                $strEncodedEmail .= '&#' . ord($this->cfg['error_send_mail'][$i]) . ';';
             }
             $email = '<a href="mailto:' . $strEncodedEmail . '">contact</a>';
         } else {
@@ -478,10 +478,10 @@ class Error
             $this->displayErrorPage();
         }
     }
-    
+
     /**
      * exception_handler()
-     * 
+     *
      * Xử lý các exception chưa được bắt, đặc biệt là HttpException để giữ lại HTTP status code
      *
      * @param \Throwable $exception
@@ -496,18 +496,18 @@ class Error
             http_response_code(500);
             $this->errno = E_ERROR;
         }
-        
+
         $this->errstr = self::format_str($exception->getMessage());
         $this->errfile = self::format_str($exception->getFile());
         $this->errline = $exception->getLine();
         $this->errid = md5(($this->errfile ?: '') . ($this->errline ?: '') . $this->errno);
 
         $this->log_control();
-        
+
         if ($this->errno == 256) {
             $this->info_die();
         }
-        
+
         if (NV_DEBUG) {
             exit('An error occurred while loading the page:<br /><pre><code>' . print_r([
                 'type' => get_class($exception),
@@ -517,13 +517,13 @@ class Error
                 'trace' => self::format_str($exception->getTraceAsString())
             ], true) . '</code></pre>');
         }
-        
+
         $this->displayErrorPage();
     }
-    
+
     /**
      * displayErrorPage()
-     * 
+     *
      * Hiển thị trang lỗi với thông tin liên hệ
      */
     private function displayErrorPage()
@@ -532,13 +532,13 @@ class Error
             $strEncodedEmail = '';
             $strlen = strlen($this->cfg['error_send_mail']);
             for ($i = 0; $i < $strlen; ++$i) {
-                $strEncodedEmail .= '&#' . ord(substr($this->cfg['error_send_mail'], $i)) . ';';
+                $strEncodedEmail .= '&#' . ord($this->cfg['error_send_mail'][$i]) . ';';
             }
             $email = '<a href="mailto:' . $strEncodedEmail . '">let us know</a>';
         } else {
             $email = 'let us know';
         }
-        
+
         if (isset(self::$errortype[$this->errno])) {
             exit('An error occurred while loading the page: ' . self::$errortype[$this->errno] . '(' . $this->errno . ').<br/>Please ' . $email . ' about this!');
         } else {
