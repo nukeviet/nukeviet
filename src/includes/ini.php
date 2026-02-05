@@ -406,50 +406,42 @@ if ($iniSaveTime + 86400 < NV_CURRENTTIME) {
 
 //Neu he thong khong ho tro php se bao loi
 if (version_compare(PHP_VERSION, '5.6.0') < 0) {
-    http_response_code(500);
-    throw new RuntimeException('You are running an unsupported PHP version. Please upgrade to PHP 5.6 or higher before trying to install Nukeviet Portal');
+    throw new \NukeViet\Core\HttpException('You are running an unsupported PHP version. Please upgrade to PHP 5.6 or higher before trying to install Nukeviet Portal', 500);
 }
 
 //Neu he thong khong ho tro curl se bao loi
 if (!(extension_loaded('curl') and (empty($sys_info['disable_functions']) or (!empty($sys_info['disable_functions']) and !preg_grep('/^curl\_/', $sys_info['disable_functions']))))) {
-    http_response_code(500);
-    throw new RuntimeException('The cURL library is not installed or its underlying functions are blocked');
+    throw new \NukeViet\Core\HttpException('The cURL library is not installed or its underlying functions are blocked', 500);
 }
 
 //Neu he thong khong ho tro opendir se bao loi
 if (!(function_exists('opendir') and !in_array('opendir', $sys_info['disable_functions'], true))) {
-    http_response_code(500);
-    throw new RuntimeException('Opendir function is not supported');
+    throw new \NukeViet\Core\HttpException('Opendir function is not supported', 500);
 }
 
 //Neu he thong khong ho tro GD se bao loi
 if (!(extension_loaded('gd'))) {
-    http_response_code(500);
-    throw new RuntimeException('GD not installed');
+    throw new \NukeViet\Core\HttpException('GD not installed', 500);
 }
 
 //Neu he thong khong ho tro json se bao loi
 if (!extension_loaded('json')) {
-    http_response_code(500);
-    throw new RuntimeException('Json object not supported');
+    throw new \NukeViet\Core\HttpException('Json object not supported', 500);
 }
 
 //Neu he thong khong ho tro xml se bao loi
 if (!extension_loaded('xml')) {
-    http_response_code(500);
-    throw new RuntimeException('Xml library not supported');
+    throw new \NukeViet\Core\HttpException('Xml library not supported', 500);
 }
 
 //Neu he thong khong ho tro openssl encrypt se bao loi
 if (!function_exists('openssl_encrypt')) {
-    http_response_code(500);
-    throw new RuntimeException('Openssl library not available');
+    throw new \NukeViet\Core\HttpException('Openssl library not available', 500);
 }
 
 //Neu he thong khong ho tro session se bao loi
 $session_save_handler = ini_get('session.save_handler');
 $session_save_path = ini_get('session.save_path');
 if (!extension_loaded('session') or empty($session_save_handler) or ($session_save_handler != 'files' and empty($session_save_path))) {
-    http_response_code(500);
-    throw new RuntimeException('Session object not supported');
+    throw new \NukeViet\Core\HttpException('Session object not supported', 500);
 }

@@ -623,8 +623,7 @@ class Request
     private function sessionStart($https_only)
     {
         if (headers_sent() or connection_status() != 0 or connection_aborted()) {
-            http_response_code(500);
-            throw new RuntimeException(Request::IS_HEADERS_SENT);
+            throw new HttpException(Request::IS_HEADERS_SENT, 500);
         }
 
         $_secure = ($this->server_protocol == 'https' and $https_only) ? 1 : 0;
