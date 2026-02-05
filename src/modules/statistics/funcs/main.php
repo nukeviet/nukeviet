@@ -31,7 +31,9 @@ $current_month_str = $monthlist[((int) $current_month_num - 1)];
 $total = 0;
 $year_list = [];
 $result = $db->query('SELECT c_val,c_count FROM ' . NV_COUNTER_GLOBALTABLE . " WHERE c_type='year' ORDER BY c_val");
-while ([$year, $count] = $result->fetch(3)) {
+while ($_scratch = $result->fetch(3)) {
+    [$year, $count] = $_scratch;
+    unset($_scratch);
     $year_list[$year] = $current_year < $year ? null : $count;
     $total += $count;
 }
@@ -64,7 +66,9 @@ $month_list2 = "'" . implode("','", array_keys($month_list2)) . "'";
 $total = 0;
 $sql = 'SELECT c_val,c_count FROM ' . NV_COUNTER_GLOBALTABLE . " WHERE c_type='month' AND c_val IN (" . $month_list2 . ')';
 $result = $db->query($sql);
-while ([$month, $count] = $result->fetch(3)) {
+while ($_scratch = $result->fetch(3)) {
+    [$month, $count] = $_scratch;
+    unset($_scratch);
     $month_list[$month]['count'] = $count;
     $total += $count;
 }
@@ -87,7 +91,9 @@ $total = 0;
 $day_list = [];
 $sql = 'SELECT c_val,c_count FROM ' . NV_COUNTER_GLOBALTABLE . " WHERE c_type='day' AND c_val <= " . $current_number_of_days . ' ORDER BY c_val';
 $result = $db->query($sql);
-while ([$day, $count] = $result->fetch(3)) {
+while ($_scratch = $result->fetch(3)) {
+    [$day, $count] = $_scratch;
+    unset($_scratch);
     $day_list[$day] = $day <= $current_day ? $count : null;
     $total += $count;
 }
@@ -112,7 +118,9 @@ $dayofweek_list2 = "'" . implode("','", array_keys($dayofweek_list)) . "'";
 $sql = 'SELECT c_val,c_count FROM ' . NV_COUNTER_GLOBALTABLE . " WHERE c_type='dayofweek' AND c_val IN (" . $dayofweek_list2 . ')';
 $result = $db->query($sql);
 $total = 0;
-while ([$dayofweek, $count] = $result->fetch(3)) {
+while ($_scratch = $result->fetch(3)) {
+    [$dayofweek, $count] = $_scratch;
+    unset($_scratch);
     $dayofweek_list[$dayofweek]['count'] = $count;
     $total += $count;
 }
@@ -136,7 +144,9 @@ $hour_list = [];
 
 $sql = 'SELECT c_val,c_count FROM ' . NV_COUNTER_GLOBALTABLE . " WHERE c_type='hour' ORDER BY c_val";
 $result = $db->query($sql);
-while ([$hour, $count] = $result->fetch(3)) {
+while ($_scratch = $result->fetch(3)) {
+    [$hour, $count] = $_scratch;
+    unset($_scratch);
     $hour_list[$hour] = $hour > $current_hour ? null : $count;
     $total += $count;
 }
@@ -153,7 +163,9 @@ $result = $db->query($db->sql());
 
 $total = 0;
 $countries_list = [];
-while ([$country, $count, $last_visit] = $result->fetch(3)) {
+while ($_scratch = $result->fetch(3)) {
+    [$country, $count, $last_visit] = $_scratch;
+    unset($_scratch);
     $countries_list[] = [
         'key' => $country,
         'name' => ($country != 'ZZ' and isset($countries[$country])) ? ($nv_Lang->existsGlobal('country_' . $country) ? $nv_Lang->getGlobal('country_' . $country) : $countries[$country][1]) : $nv_Lang->getGlobal('unknown'),
@@ -181,7 +193,9 @@ $result = $db->query($db->sql());
 
 $total = 0;
 $browsers_list = [];
-while ([$br, $count, $last_visit] = $result->fetch(3)) {
+while ($_scratch = $result->fetch(3)) {
+    [$br, $count, $last_visit] = $_scratch;
+    unset($_scratch);
     $const = 'BROWSER_' . strtoupper($br);
     $name = $br != 'Unknown' ? (defined($const) ? constant($const) : ucfirst($br)) : $nv_Lang->getGlobal('unknown');
     $browsers_list[] = [
@@ -211,7 +225,9 @@ $result = $db->query($db->sql());
 $total = 0;
 $os_list = [];
 
-while ([$os, $count, $last_visit] = $result->fetch(3)) {
+while ($_scratch = $result->fetch(3)) {
+    [$os, $count, $last_visit] = $_scratch;
+    unset($_scratch);
     $const = 'PLATFORM_' . strtoupper($os);
     $name = $os != 'unknown' ? (defined($const) ? constant($const) : ucfirst($os)) : $nv_Lang->getGlobal('unknown');
 

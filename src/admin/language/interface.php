@@ -60,7 +60,9 @@ $sql = 'SELECT idfile, module, admin_file, langtype, author_' . $dirlang . ' FRO
 $result = $db->query($sql);
 
 $array = [];
-while ([$idfile, $module, $admin_file, $langtype, $author_lang] = $result->fetch(3)) {
+while ($_scratch = $result->fetch(3)) {
+    [$idfile, $module, $admin_file, $langtype, $author_lang] = $_scratch;
+    unset($_scratch);
     switch ($admin_file) {
         case '1':
             $langsitename = $nv_Lang->getModule('nv_lang_admin');

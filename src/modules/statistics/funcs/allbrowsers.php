@@ -44,7 +44,9 @@ if ($num_items) {
     $result = $db->query($db->sql());
 
     $browsers_list = [];
-    while ([$br, $count, $last_visit] = $result->fetch(3)) {
+    while ($_scratch = $result->fetch(3)) {
+        [$br, $count, $last_visit] = $_scratch;
+        unset($_scratch);
         $const = 'BROWSER_' . strtoupper($br);
         $name = $br != 'Unknown' ? (defined($const) ? constant($const) : ucfirst($br)) : $nv_Lang->getGlobal('unknown');
         $browsers_list[] = [

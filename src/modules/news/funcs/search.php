@@ -27,7 +27,9 @@ function GetSourceNews($sourceid)
         $sql = 'SELECT title FROM ' . NV_PREFIXLANG . '_' . $module_data . '_sources WHERE sourceid = ' . $sourceid;
         $re = $db_slave->query($sql);
 
-        if ([$title] = $re->fetch(3)) {
+        if ($_scratch = $re->fetch(3)) {
+            [$title] = $_scratch;
+            unset($_scratch);
             return $title;
         }
     }
@@ -509,7 +511,9 @@ if (empty($key) and ($catid == 0) and empty($from_date) and empty($to_date)) {
         $array_content = [];
         $show_no_image = $module_config[$module_name]['show_no_image'];
 
-        while ([$id, $title, $alias, $catid, $hometext, $bodyhtml, $author, $publtime, $homeimgfile, $homeimgthumb, $sourceid, $external_link] = $result->fetch(3)) {
+        while ($_scratch = $result->fetch(3)) {
+            [$id, $title, $alias, $catid, $hometext, $bodyhtml, $author, $publtime, $homeimgfile, $homeimgthumb, $sourceid, $external_link] = $_scratch;
+            unset($_scratch);
             if ($homeimgthumb == 1) {
                 // image thumb
                 $img_src = NV_BASE_SITEURL . NV_FILES_DIR . '/' . $module_upload . '/' . $homeimgfile;

@@ -28,7 +28,9 @@ function getPostLevel()
     $post_config = [];
     $sql = 'SELECT group_id, addcontent, postcontent, editcontent, delcontent FROM ' . NV_PREFIXLANG . '_' . $module_data . '_config_post';
     $result = $db->query($sql);
-    while ([$group_id, $addcontent, $postcontent, $editcontent, $delcontent] = $result->fetch(3)) {
+    while ($_scratch = $result->fetch(3)) {
+        [$group_id, $addcontent, $postcontent, $editcontent, $delcontent] = $_scratch;
+        unset($_scratch);
         $post_config[$group_id] = [
             'addcontent' => $addcontent,
             'postcontent' => $postcontent,
@@ -306,7 +308,9 @@ if ($nv_Request->isset_request('contentid,checkss', 'get')) {
     $catidList = [];
     $sql = 'SELECT catid, title, lev FROM ' . NV_PREFIXLANG . '_' . $module_data . '_cat WHERE status IN (' . implode(',', $global_code_defined['cat_visible_status']) . ') ORDER BY sort ASC';
     $result_cat = $db->query($sql);
-    while ([$catid_i, $title_i, $lev_i] = $result_cat->fetch(3)) {
+    while ($_scratch = $result_cat->fetch(3)) {
+        [$catid_i, $title_i, $lev_i] = $_scratch;
+        unset($_scratch);
         $catidList[] = [
             'catid' => (int) $catid_i,
             'title' => $title_i,
@@ -319,7 +323,9 @@ if ($nv_Request->isset_request('contentid,checkss', 'get')) {
     $result = $db->query($sql);
     $topicList[0] = $nv_Lang->getModule('topic_sl');
 
-    while ([$topicid_i, $title_i] = $result->fetch(3)) {
+    while ($_scratch = $result->fetch(3)) {
+        [$topicid_i, $title_i] = $_scratch;
+        unset($_scratch);
         $topicList[$topicid_i] = $title_i;
     }
 
