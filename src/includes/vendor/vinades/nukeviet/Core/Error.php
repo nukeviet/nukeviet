@@ -456,19 +456,6 @@ class Error
     public function shutdown()
     {
         $error = error_get_last();
-        
-        // Check for uncaught HttpException
-        $exception = error_get_last();
-        if ($exception && isset($exception['type']) && $exception['type'] === E_ERROR) {
-            // Try to detect if this is an uncaught exception
-            if (preg_match('/^Uncaught (\S+): (.+)/', $exception['message'], $matches)) {
-                $exceptionClass = $matches[1];
-                if ($exceptionClass === 'NukeViet\\Core\\HttpException' || strpos($exceptionClass, 'HttpException') !== false) {
-                    // This is likely our HttpException, but we can't access it directly from shutdown
-                    // We'll rely on the exception handler set up in __construct
-                }
-            }
-        }
 
         if (!empty($error) and $error['type'] === E_ERROR | E_PARSE) {
             http_response_code(500);
@@ -505,16 +492,16 @@ class Error
     /**
      * exception_handler()
      * 
-     * Handle uncaught exceptions, especially HttpException to preserve HTTP status codes
+     * Xử lý các exception chưa được bắt, đặc biệt là HttpException để giữ lại HTTP status code
      *
      * @param \Throwable $exception
      */
     public function exception_handler($exception)
     {
-        // Set HTTP status code based on exception type
+        // Thiết lập mã HTTP status dựa trên loại exception
         if ($exception instanceof HttpException) {
             http_response_code($exception->getHttpCode());
-            $this->errno = 256; // Use 256 to trigger info_die() behavior
+            $this->errno = 256; // Sử dụng 256 để kích hoạt hành vi info_die()
         } else {
             http_response_code(500);
             $this->errno = E_ERROR;

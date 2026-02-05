@@ -14,8 +14,8 @@ namespace NukeViet\Core;
 /**
  * HttpException
  * 
- * Custom exception that carries an HTTP status code.
- * Used to replace deprecated trigger_error(..., E_USER_ERROR) while preserving HTTP response codes.
+ * Exception tùy chỉnh mang theo mã HTTP status code.
+ * Được sử dụng để thay thế trigger_error(..., E_USER_ERROR) đã bị deprecated và giữ lại HTTP response code.
  *
  * @package NukeViet\Core
  * @author VINADES.,JSC <contact@vinades.vn>
@@ -26,15 +26,15 @@ namespace NukeViet\Core;
 class HttpException extends \RuntimeException
 {
     /**
-     * @var int HTTP status code
+     * @var int Mã HTTP status code
      */
     private $httpCode;
 
     /**
      * Constructor
      *
-     * @param string $message Error message
-     * @param int $httpCode HTTP status code (default: 500)
+     * @param string $message Thông báo lỗi
+     * @param int $httpCode Mã HTTP status code (mặc định: 500)
      */
     public function __construct($message = '', $httpCode = 500)
     {
@@ -43,7 +43,7 @@ class HttpException extends \RuntimeException
     }
 
     /**
-     * Get HTTP status code
+     * Lấy mã HTTP status code
      *
      * @return int
      */
