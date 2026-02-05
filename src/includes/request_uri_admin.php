@@ -18,8 +18,7 @@ if (
     (isset($_GET[NV_NAME_VARIABLE]) and is_array($_GET[NV_NAME_VARIABLE])) or
     (isset($_GET[NV_OP_VARIABLE]) and is_array($_GET[NV_OP_VARIABLE]))
 ) {
-    http_response_code(403);
-    trigger_error('Request URI is not valid!', E_USER_ERROR);
+    throw new \NukeViet\Core\HttpException('Request URI is not valid!', 403);
 }
 
 // Fix rewrite IIS 7 with Unicode Permalinks
