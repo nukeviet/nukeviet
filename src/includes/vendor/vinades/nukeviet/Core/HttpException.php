@@ -12,8 +12,6 @@
 namespace NukeViet\Core;
 
 /**
- * HttpException
- * 
  * Exception tùy chỉnh mang theo mã HTTP status code.
  * Được sử dụng để thay thế trigger_error(..., E_USER_ERROR) đã bị deprecated và giữ lại HTTP response code.
  *

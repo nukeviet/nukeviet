@@ -11,6 +11,8 @@
 
 namespace NukeViet\Client;
 
+use NukeViet\Core\HttpException;
+
 /**
  * NukeViet\Client\Sso
  *

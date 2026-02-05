@@ -427,7 +427,6 @@ $sql = "SELECT * FROM " . NV_MOD_TABLE . "_info WHERE userid=" . $user_info['use
 $user_more_info = $db->query($sql)->fetch();
 if (empty($user_more_info)) {
     throw new \NukeViet\Core\HttpException('User more info not found', 500);
-    exit(1);
 }
 $user_more_info['deletion_checkcode'] = empty($user_more_info['deletion_checkcode']) ? [] : explode('|', $user_more_info['deletion_checkcode']);
 $array['current_code'] = $user_more_info['deletion_checkcode'][0] ?? '';
