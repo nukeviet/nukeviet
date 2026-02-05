@@ -150,6 +150,7 @@ class Php85CompatibilityTest extends \Codeception\Test\Unit
 
     /**
      * Test kiểm tra PDO fetch có thể trả về false
+     * Test này mô phỏng hành vi của PHP 8.5+ để đảm bảo code của chúng ta tương thích
      *
      * @group php85
      * @group pdo
@@ -166,17 +167,19 @@ class Php85CompatibilityTest extends \Codeception\Test\Unit
         $row = $result->fetch(3);
         $this->assertFalse($row, "PDO fetch() phải trả về false khi không có kết quả");
 
-        // Kiểm tra rằng không thể sử dụng array destructuring với false
-        // Trong PHP 8.5, điều này sẽ gây TypeError
-        try {
-            // Đoạn code này sẽ fail trong PHP 8.5+
-            if (PHP_VERSION_ID >= 80500) {
-                [$test] = $result->fetch(3);
-                $this->fail("Không nên đến được đây - array destructuring với false phải throw TypeError");
-            }
-        } catch (\TypeError $e) {
-            // Đây là hành vi mong đợi trong PHP 8.5+
-            $this->assertTrue(true);
-        }
+        // Kiểm tra rằng pattern mới của chúng ta xử lý đúng false
+        // Pattern cũ: [$test] = $result->fetch(3) sẽ gây TypeError trong PHP 8.5+
+        // Pattern mới: [$test] = $result->fetch(3) ?: [null] hoạt động trong mọi version
+        
+        // Test pattern mới hoạt động đúng
+        $result = $db->query($sql);
+        [$test] = $result->fetch(3) ?: [null];
+        $this->assertNull($test, "Pattern mới phải xử lý được fetch() trả về false");
+        
+        // Test với dữ liệu thật
+        $sql = "SELECT 'test_value' as value";
+        $result = $db->query($sql);
+        [$value] = $result->fetch(3) ?: [null];
+        $this->assertEquals('test_value', $value, "Pattern mới phải giữ được giá trị khi có dữ liệu");
     }
 }
