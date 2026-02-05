@@ -282,9 +282,7 @@ final class NodeTraverser
 		}
 
 		if (count($doNodes) > 0) {
-			while ($_scratch = array_pop($doNodes)) {
-			    [$i, $replace] = $_scratch;
-			    unset($_scratch);
+			while ([$i, $replace] = array_pop($doNodes)) {
 				array_splice($nodes, $i, 1, $replace);
 			}
 		}

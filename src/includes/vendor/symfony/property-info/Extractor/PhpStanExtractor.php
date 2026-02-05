@@ -287,17 +287,11 @@ final class PhpStanExtractor implements PropertyTypeExtractorInterface, Construc
 
         $ucFirstProperty = ucfirst($property);
 
-        if ($_scratch = $this->getDocBlockFromProperty($class, $property)) {
-            [$docBlock, $source, $declaringClass] = $_scratch;
-            unset($_scratch);
+        if ([$docBlock, $source, $declaringClass] = $this->getDocBlockFromProperty($class, $property)) {
             $data = [$docBlock, $source, null, $declaringClass];
-        } else if ($_scratch = $this->getDocBlockFromMethod($class, $ucFirstProperty, self::ACCESSOR)) {
-            [$docBlock, $_, $declaringClass] = $_scratch;
-            unset($_scratch);
+        } elseif ([$docBlock, $_, $declaringClass] = $this->getDocBlockFromMethod($class, $ucFirstProperty, self::ACCESSOR)) {
             $data = [$docBlock, self::ACCESSOR, null, $declaringClass];
-        } else if ($_scratch = $this->getDocBlockFromMethod($class, $ucFirstProperty, self::MUTATOR)) {
-            [$docBlock, $prefix, $declaringClass] = $_scratch;
-            unset($_scratch);
+        } elseif ([$docBlock, $prefix, $declaringClass] = $this->getDocBlockFromMethod($class, $ucFirstProperty, self::MUTATOR)) {
             $data = [$docBlock, self::MUTATOR, $prefix, $declaringClass];
         } else {
             $data = [null, null, null, null];
