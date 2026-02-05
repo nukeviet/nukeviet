@@ -45,7 +45,7 @@ $sql = 'SELECT * FROM ' . NV_USERS_GLOBALTABLE . ' WHERE userid=' . $admin_id;
 $row_user = $db->query($sql)->fetch();
 if (empty($row_user)) {
     http_response_code(500);
-    trigger_error('Data error: No user for admin account!', 256);
+    throw new RuntimeException('Data error: No user for admin account!');
 }
 $error = '';
 

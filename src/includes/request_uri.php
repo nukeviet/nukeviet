@@ -19,7 +19,7 @@ if (
     (isset($_GET[NV_OP_VARIABLE]) and is_array($_GET[NV_OP_VARIABLE]))
 ) {
     http_response_code(403);
-    trigger_error('Request URI is not valid!', E_USER_ERROR);
+    throw new InvalidArgumentException('Request URI is not valid!');
 }
 
 // Fix rewrite IIS 7 with Unicode Permalinks

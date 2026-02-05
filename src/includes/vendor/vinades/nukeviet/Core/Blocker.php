@@ -52,7 +52,7 @@ class Blocker
     {
         if (!is_dir($logs_path)) {
             http_response_code(500);
-            trigger_error(Blocker::INCORRECT_TEMPRORARY_DIRECTORY, E_USER_ERROR);
+            throw new RuntimeException(Blocker::INCORRECT_TEMPRORARY_DIRECTORY);
         }
         if (substr($logs_path, -1) != '/') {
             $logs_path .= '/';

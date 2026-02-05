@@ -407,43 +407,43 @@ if ($iniSaveTime + 86400 < NV_CURRENTTIME) {
 //Neu he thong khong ho tro php se bao loi
 if (version_compare(PHP_VERSION, '5.6.0') < 0) {
     http_response_code(500);
-    trigger_error('You are running an unsupported PHP version. Please upgrade to PHP 5.6 or higher before trying to install Nukeviet Portal', 256);
+    throw new RuntimeException('You are running an unsupported PHP version. Please upgrade to PHP 5.6 or higher before trying to install Nukeviet Portal');
 }
 
 //Neu he thong khong ho tro curl se bao loi
 if (!(extension_loaded('curl') and (empty($sys_info['disable_functions']) or (!empty($sys_info['disable_functions']) and !preg_grep('/^curl\_/', $sys_info['disable_functions']))))) {
     http_response_code(500);
-    trigger_error('The cURL library is not installed or its underlying functions are blocked', 256);
+    throw new RuntimeException('The cURL library is not installed or its underlying functions are blocked');
 }
 
 //Neu he thong khong ho tro opendir se bao loi
 if (!(function_exists('opendir') and !in_array('opendir', $sys_info['disable_functions'], true))) {
     http_response_code(500);
-    trigger_error('Opendir function is not supported', 256);
+    throw new RuntimeException('Opendir function is not supported');
 }
 
 //Neu he thong khong ho tro GD se bao loi
 if (!(extension_loaded('gd'))) {
     http_response_code(500);
-    trigger_error('GD not installed', 256);
+    throw new RuntimeException('GD not installed');
 }
 
 //Neu he thong khong ho tro json se bao loi
 if (!extension_loaded('json')) {
     http_response_code(500);
-    trigger_error('Json object not supported', 256);
+    throw new RuntimeException('Json object not supported');
 }
 
 //Neu he thong khong ho tro xml se bao loi
 if (!extension_loaded('xml')) {
     http_response_code(500);
-    trigger_error('Xml library not supported', 256);
+    throw new RuntimeException('Xml library not supported');
 }
 
 //Neu he thong khong ho tro openssl encrypt se bao loi
 if (!function_exists('openssl_encrypt')) {
     http_response_code(500);
-    trigger_error('Openssl library not available', 256);
+    throw new RuntimeException('Openssl library not available');
 }
 
 //Neu he thong khong ho tro session se bao loi
@@ -451,5 +451,5 @@ $session_save_handler = ini_get('session.save_handler');
 $session_save_path = ini_get('session.save_path');
 if (!extension_loaded('session') or empty($session_save_handler) or ($session_save_handler != 'files' and empty($session_save_path))) {
     http_response_code(500);
-    trigger_error('Session object not supported', 256);
+    throw new RuntimeException('Session object not supported');
 }

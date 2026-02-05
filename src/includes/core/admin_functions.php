@@ -927,7 +927,7 @@ function nv_update_robots($robots_config, bool $save = false, array $config = []
     // Kiểm tra các config cần thiết
     if (!isset($real_config['allow_sitelangs'], $real_config['rewrite_enable'], $real_config['check_rewrite_file'])) {
         http_response_code(500);
-        trigger_error('Error: Missing config for updating robots', E_USER_ERROR);
+        throw new RuntimeException('Error: Missing config for updating robots');
     }
     if ($force_gconfig) {
         $global_config = $real_config;

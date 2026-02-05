@@ -1129,7 +1129,7 @@ function set_theme_configs(&$global_config, &$is_mobile, $module_info)
                 $global_config['module_theme'] = 'default';
             } else {
                 http_response_code(500);
-                trigger_error('Error! Does not exist themes default', 256);
+                throw new RuntimeException('Error! Does not exist themes default');
             }
             $theme_type = $global_config['current_theme_type'];
         }

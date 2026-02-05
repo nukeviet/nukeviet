@@ -75,7 +75,7 @@ class Database extends PDO
             $dsn = 'sqlite:' . $config['dbname'];
         } else {
             http_response_code(500);
-            trigger_error($config['dbtype'] . ' is not supported', 256);
+            throw new RuntimeException($config['dbtype'] . ' is not supported');
         }
 
         $this->server = $config['dbhost'];
@@ -584,7 +584,7 @@ class Database extends PDO
     {
         if (!$this->allowedDebug) {
             http_response_code(500);
-            trigger_error('Could not enable debugger because DB Persistent is on!', 256);
+            throw new RuntimeException('Could not enable debugger because DB Persistent is on!');
         }
         $this->debug = true;
         $this->sqls = [];

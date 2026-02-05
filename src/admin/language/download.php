@@ -88,5 +88,5 @@ if ($nv_Request->get_string('checksess', 'get') == md5('downloadallfile' . NV_CH
     }
 } else {
     http_response_code(403);
-    trigger_error('error checksess', 256);
+    throw new RuntimeException('error checksess');
 }

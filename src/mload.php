@@ -58,7 +58,7 @@ if (!module_file_exists($full_op_file)) {
 if ($nv_Request->isset_request('checkuser', 'post,get')) {
     if (defined('NV_IS_USER')) {
         http_response_code(403);
-        trigger_error('Hacking attempt', 256);
+        throw new RuntimeException('Hacking attempt');
     }
     require NV_ROOTDIR . '/includes/core/is_user.php';
 }

@@ -182,7 +182,7 @@ if ($checkss == NV_CHECK_SESSION) {
     } catch (Throwable $e) {
         trigger_error(print_r($e, true));
         http_response_code(500);
-        trigger_error('Error active 2-step Auth!!!', E_USER_ERROR);
+        throw new RuntimeException('Error active 2-step Auth!!!');
     }
 
     nv_creat_backupcodes();

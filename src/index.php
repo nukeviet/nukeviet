@@ -38,7 +38,7 @@ if ($nv_Request->isset_request(NV_NAME_VARIABLE, 'get') and $nv_Request->get_str
 // Check user
 if (defined('NV_IS_USER')) {
     http_response_code(403);
-    trigger_error('Hacking attempt', 256);
+    throw new RuntimeException('Hacking attempt');
 }
 require NV_ROOTDIR . '/includes/core/is_user.php';
 

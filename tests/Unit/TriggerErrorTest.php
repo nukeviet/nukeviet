@@ -23,7 +23,8 @@ class TriggerErrorTest extends \Codeception\Test\Unit
     }
 
     /**
-     * Tìm kiếm chỗ nào có trigger_error() với kiểu 256 mà không có http response code trước đó thì là lỗi
+     * Tìm kiếm chỗ nào có throw new RuntimeException() hoặc InvalidArgumentException() mà không có http response code trước đó thì là lỗi
+     * (Thay thế cho trigger_error với E_USER_ERROR/256 đã bị deprecated trong PHP 8.5)
      *
      * @link https://github.com/nukeviet/nukeviet/issues/3855
      *
@@ -40,7 +41,9 @@ class TriggerErrorTest extends \Codeception\Test\Unit
 
             $lines = file(NV_ROOTDIR . '/' . $file);
             foreach ($lines as $i => $line) {
-                if (preg_match('/\btrigger_error\s*\(.*,\s*(256|E_USER_ERROR)\s*\)/', $line)) {
+                // Kiểm tra cả trigger_error cũ và throw RuntimeException/InvalidArgumentException mới
+                if (preg_match('/\btrigger_error\s*\(.*,\s*(256|E_USER_ERROR)\s*\)/', $line) ||
+                    preg_match('/\bthrow\s+new\s+(RuntimeException|InvalidArgumentException)\s*\(/', $line)) {
                     $foundValidHttpCode = false;
 
                     // Kiểm tra tối đa 3 dòng trước (kể cả xuống dòng, space, tab)
@@ -53,7 +56,7 @@ class TriggerErrorTest extends \Codeception\Test\Unit
 
                     $this->assertFalse(
                         !$foundValidHttpCode,
-                        "trigger_error at {$file} on line " . ($i + 1) . " without http_response_code(403|500) before"
+                        "Exception/trigger_error at {$file} on line " . ($i + 1) . " without http_response_code(403|500) before"
                     );
                 }
             }

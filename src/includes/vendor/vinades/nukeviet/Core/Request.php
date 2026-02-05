@@ -312,7 +312,7 @@ class Request
         $this->remote_ip = !empty($ip) ? $ip : Ips::$remote_ip;
         if (Ips::ip2long($this->remote_ip) === false) {
             http_response_code(403);
-            trigger_error(Ips::INCORRECT_IP, 256);
+            throw new InvalidArgumentException(Ips::INCORRECT_IP);
         }
 
         $this->cookie_key = md5($this->cookie_key);
@@ -490,7 +490,7 @@ class Request
 
                 if (!$crossAllowedVariables) {
                     http_response_code(403);
-                    trigger_error(Request::REQUEST_BLOCKED, 256);
+                    throw new RuntimeException(Request::REQUEST_BLOCKED);
                 }
             }
         }
@@ -535,7 +535,7 @@ class Request
                  */
                 unset($_SERVER['HTTP_ORIGIN']);
                 http_response_code(403);
-                trigger_error(Request::INCORRECT_ORIGIN, 256);
+                throw new RuntimeException(Request::INCORRECT_ORIGIN);
             }
         } else {
             $this->origin_key = 2;
@@ -627,7 +627,7 @@ class Request
     {
         if (headers_sent() or connection_status() != 0 or connection_aborted()) {
             http_response_code(500);
-            trigger_error(Request::IS_HEADERS_SENT, 256);
+            throw new RuntimeException(Request::IS_HEADERS_SENT);
         }
 
         $_secure = ($this->server_protocol == 'https' and $https_only) ? 1 : 0;

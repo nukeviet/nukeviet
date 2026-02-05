@@ -427,7 +427,7 @@ $sql = "SELECT * FROM " . NV_MOD_TABLE . "_info WHERE userid=" . $user_info['use
 $user_more_info = $db->query($sql)->fetch();
 if (empty($user_more_info)) {
     http_response_code(500);
-    trigger_error('User more info not found', E_USER_ERROR);
+    throw new RuntimeException('User more info not found');
     exit(1);
 }
 $user_more_info['deletion_checkcode'] = empty($user_more_info['deletion_checkcode']) ? [] : explode('|', $user_more_info['deletion_checkcode']);
