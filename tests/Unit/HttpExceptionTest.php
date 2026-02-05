@@ -35,8 +35,11 @@ class HttpExceptionTest extends \Codeception\Test\Unit
     {
         $files = $this->tester->listFile(NV_ROOTDIR);
         foreach ($files as $file) {
-            if (str_starts_with($file, 'includes/vendor/guzzlehttp')) {
-                continue; // Bỏ qua các file của thư viện Guzzle
+            // Bỏ qua các file trong includes/vendor ngoại trừ includes/vendor/vinades
+            if (str_starts_with($file, 'includes/vendor/')) {
+                if (!str_starts_with($file, 'includes/vendor/vinades/')) {
+                    continue; // Bỏ qua các thư viện bên ngoài ngoại trừ vinades
+                }
             }
 
             $lines = file(NV_ROOTDIR . '/' . $file);
