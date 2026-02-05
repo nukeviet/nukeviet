@@ -634,7 +634,7 @@ function nv_EncodeEmail($strEmail, $strDisplay = '', $blnCreateLink = true)
     $strlen = strlen($strEmail);
 
     for ($i = 0; $i < $strlen; ++$i) {
-        $strEncodedEmail .= '&#' . ord(substr($strEmail, $i)) . ';';
+        $strEncodedEmail .= '&#' . ord($strEmail[$i]) . ';';
     }
 
     $strDisplay = trim($strDisplay);
@@ -2904,8 +2904,8 @@ function nv_sys_mods($lang = '')
         $result = $db->query('SELECT m.*, f.func_id, f.func_name, f.alias, f.func_custom_name, f.func_site_title, f.description AS func_description, f.in_submenu, f.show_func FROM ' . $db_config['prefix'] . '_' . $lang . '_modules m LEFT JOIN ' . $db_config['prefix'] . '_' . $lang . '_modfuncs f ON m.title=f.in_module WHERE m.act = 1 ORDER BY m.weight, f.subweight');
         while ($row = $result->fetch()) {
             $m_title = $row['title'];
-            $f_name = $row['func_name'];
-            $f_alias = $row['alias'];
+            $f_name = $row['func_name'] ?? '';
+            $f_alias = $row['alias'] ?? '';
             if (!isset($sys_mods[$m_title])) {
                 $sys_mods[$m_title] = [
                     'module_file' => $row['module_file'],
