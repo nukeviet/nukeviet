@@ -26,10 +26,9 @@ function GetSourceNews($sourceid)
     if ($sourceid > 0) {
         $sql = 'SELECT title FROM ' . NV_PREFIXLANG . '_' . $module_data . '_sources WHERE sourceid = ' . $sourceid;
         $re = $db_slave->query($sql);
-        $row = $re->fetch(3);
+        [$title] = $re->fetch(3) ?: [null];
 
-        if ($row !== false) {
-            [$title] = $row;
+        if ($title !== null) {
             return $title;
         }
     }
