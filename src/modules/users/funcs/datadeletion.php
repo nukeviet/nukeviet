@@ -426,8 +426,7 @@ if (!$confirm_pwd) {
 $sql = "SELECT * FROM " . NV_MOD_TABLE . "_info WHERE userid=" . $user_info['userid'];
 $user_more_info = $db->query($sql)->fetch();
 if (empty($user_more_info)) {
-    http_response_code(500);
-    throw new RuntimeException('User more info not found');
+    throw new \NukeViet\Core\HttpException('User more info not found', 500);
     exit(1);
 }
 $user_more_info['deletion_checkcode'] = empty($user_more_info['deletion_checkcode']) ? [] : explode('|', $user_more_info['deletion_checkcode']);

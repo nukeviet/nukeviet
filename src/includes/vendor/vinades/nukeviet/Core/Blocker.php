@@ -51,8 +51,7 @@ class Blocker
     public function __construct($logs_path, $ip = '')
     {
         if (!is_dir($logs_path)) {
-            http_response_code(500);
-            throw new RuntimeException(Blocker::INCORRECT_TEMPRORARY_DIRECTORY);
+            throw new HttpException(Blocker::INCORRECT_TEMPRORARY_DIRECTORY, 500);
         }
         if (substr($logs_path, -1) != '/') {
             $logs_path .= '/';

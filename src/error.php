@@ -44,8 +44,7 @@ if ((($client_info['is_mobile'] and (empty($global_config['current_theme_type'])
         $site_theme = 'default';
         $theme_type = $global_config['current_theme_type'];
     } else {
-        http_response_code(500);
-        throw new RuntimeException('Error! Does not exist themes default');
+        throw new \NukeViet\Core\HttpException('Error! Does not exist themes default', 500);
     }
 }
 
