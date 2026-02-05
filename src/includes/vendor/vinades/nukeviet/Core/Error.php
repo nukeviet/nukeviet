@@ -475,17 +475,7 @@ class Error
                 exit('An error occurred while loading the page:<br /><pre><code>' . print_r($error, true) . '</code></pre>');
             }
 
-            if (!empty($this->cfg['error_send_mail'])) {
-                $strEncodedEmail = '';
-                $strlen = strlen($this->cfg['error_send_mail']);
-                for ($i = 0; $i < $strlen; ++$i) {
-                    $strEncodedEmail .= '&#' . ord(substr($this->cfg['error_send_mail'], $i)) . ';';
-                }
-                $email = '<a href="mailto:' . $strEncodedEmail . '">let us know</a>';
-            } else {
-                $email = 'let us know';
-            }
-            exit('An error occurred while loading the page: ' . self::$errortype[$this->errno] . '(' . $this->errno . ').<br/>Please ' . $email . ' about this!');
+            $this->displayErrorPage();
         }
     }
     
@@ -521,13 +511,23 @@ class Error
         if (NV_DEBUG) {
             exit('An error occurred while loading the page:<br /><pre><code>' . print_r([
                 'type' => get_class($exception),
-                'message' => $exception->getMessage(),
-                'file' => $exception->getFile(),
+                'message' => self::format_str($exception->getMessage()),
+                'file' => self::format_str($exception->getFile()),
                 'line' => $exception->getLine(),
-                'trace' => $exception->getTraceAsString()
+                'trace' => self::format_str($exception->getTraceAsString())
             ], true) . '</code></pre>');
         }
         
+        $this->displayErrorPage();
+    }
+    
+    /**
+     * displayErrorPage()
+     * 
+     * Hiển thị trang lỗi với thông tin liên hệ
+     */
+    private function displayErrorPage()
+    {
         if (!empty($this->cfg['error_send_mail'])) {
             $strEncodedEmail = '';
             $strlen = strlen($this->cfg['error_send_mail']);
@@ -538,6 +538,11 @@ class Error
         } else {
             $email = 'let us know';
         }
-        exit('An error occurred while loading the page.<br/>Please ' . $email . ' about this!');
+        
+        if (isset(self::$errortype[$this->errno])) {
+            exit('An error occurred while loading the page: ' . self::$errortype[$this->errno] . '(' . $this->errno . ').<br/>Please ' . $email . ' about this!');
+        } else {
+            exit('An error occurred while loading the page.<br/>Please ' . $email . ' about this!');
+        }
     }
 }
