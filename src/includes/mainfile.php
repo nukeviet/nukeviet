@@ -106,7 +106,7 @@ define('NUKEVIET_USER_AGENT', 'NUKEVIET CMS ' . $global_config['version'] . '. D
 // Neu khong co IP
 if (NV_CLIENT_IP == 'none') {
     http_response_code(403);
-    throw new RuntimeException('Error! Your IP address is not correct!');
+    throw new InvalidArgumentException('Error! Your IP address is not correct!');
 }
 
 // Xac dinh IP của Zalo-webhook
@@ -162,7 +162,7 @@ require NV_ROOTDIR . '/includes/core/theme_functions.php';
 // IP Ban
 if (nv_is_banIp(NV_CLIENT_IP)) {
     http_response_code(403);
-    throw new RuntimeException('Hi and Good-bye!!!');
+    throw new InvalidArgumentException('Hi and Good-bye!!!');
 }
 
 // Chan proxy
@@ -170,7 +170,7 @@ if ($global_config['proxy_blocker'] != 0) {
     $client_info['is_proxy'] = $ips::nv_check_proxy();
     if (nv_is_blocker_proxy($client_info['is_proxy'], $global_config['proxy_blocker'])) {
         http_response_code(403);
-        throw new RuntimeException('ERROR: You are behind a proxy server. Please disconnect and come again!');
+        throw new InvalidArgumentException('ERROR: You are behind a proxy server. Please disconnect and come again!');
     }
 }
 
@@ -289,7 +289,7 @@ if (preg_match('/^[0-9]{10,}$/', $nv_Request->get_string('nocache', 'get', '')) 
 // Chan truy cap neu HTTP_USER_AGENT == 'none'
 if (NV_USER_AGENT == 'none' and NV_ANTI_AGENT) {
     http_response_code(403);
-    throw new RuntimeException('We\'re sorry. The software you are using to access our website is not allowed. Some examples of this are e-mail harvesting programs and programs that will copy websites to your hard drive. If you feel you have gotten this message in error, please send an e-mail addressed to admin. Your I.P. address has been logged. Thanks.');
+    throw new InvalidArgumentException('We\'re sorry. The software you are using to access our website is not allowed. Some examples of this are e-mail harvesting programs and programs that will copy websites to your hard drive. If you feel you have gotten this message in error, please send an e-mail addressed to admin. Your I.P. address has been logged. Thanks.');
 }
 
 // xac dinh co phai User_Agent cua NukeViet hay khong
@@ -520,7 +520,7 @@ $nv_BotManager = new NukeViet\Seo\BotManager($global_config['private_site']);
 // Kiem tra tu cach admin
 if (defined('NV_IS_ADMIN') or defined('NV_IS_SPADMIN')) {
     http_response_code(403);
-    throw new RuntimeException('Hacking attempt');
+    throw new InvalidArgumentException('Hacking attempt');
 }
 
 // Kiem tra ton tai goi cap nhat va tu cach admin
