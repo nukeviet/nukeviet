@@ -27,8 +27,9 @@ In PHP 8.5+, using array destructuring with non-array values (such as `false` re
 
 ### Files Changed
 ```
-46 source files modified
+46 source files modified (actual code changes)
 5 new tool/test files created
+Total: 51 files changed
 862 lines added
 56 lines removed
 ```
@@ -164,7 +165,9 @@ The codebase is now fully compatible with PHP 8.5+ while maintaining support for
 
 ---
 
-**Commits:** 6  
-**Files Changed:** 51  
+**Commits:** 7  
+**Source Files Changed:** 46  
+**New Tools/Tests:** 5  
+**Total Files:** 51  
 **Lines Changed:** +862 / -56  
 **Status:** ✅ Ready for merge

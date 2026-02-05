@@ -31,13 +31,11 @@ function mockFetchFalse() {
 }
 
 // Cách cũ (sẽ fail trong PHP 8.5+)
-echo "Cách cũ (có thể fail trong PHP 8.5+):\n";
-try {
-    // [$var1, $var2] = mockFetchFalse(); // Sẽ gây TypeError trong PHP 8.5
-    echo "  Không thể test trực tiếp vì PHP hiện tại không phải 8.5\n";
-} catch (TypeError $e) {
-    echo "  ✗ TypeError: " . $e->getMessage() . "\n";
-}
+echo "Cách cũ (sẽ fail trong PHP 8.5+):\n";
+// NOTE: Không thể test trực tiếp vì PHP hiện tại là 8.3.6, không phải 8.5
+// Đoạn code bên dưới sẽ gây TypeError trong PHP 8.5+ khi mockFetchFalse() trả về false:
+//   [$var1, $var2] = mockFetchFalse(); // TypeError: Cannot use bool as array
+echo "  (Code này sẽ fail trong PHP 8.5+ - không test được ở PHP 8.3)\n";
 
 // Cách mới (an toàn)
 echo "Cách mới (với null coalescing):\n";
