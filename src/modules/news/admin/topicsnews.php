@@ -27,7 +27,9 @@ $global_array_cat = [];
 
 $sql = 'SELECT catid, alias FROM ' . NV_PREFIXLANG . '_' . $module_data . '_cat ORDER BY sort ASC';
 $result = $db_slave->query($sql);
-while ([$catid_i, $alias_i] = $result->fetch(3)) {
+while ($_scratch = $result->fetch(3)) {
+    [$catid_i, $alias_i] = $_scratch;
+    unset($_scratch);
     $global_array_cat[$catid_i] = [
         'alias' => $alias_i
     ];

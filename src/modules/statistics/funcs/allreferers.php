@@ -44,7 +44,9 @@ if ($num_items) {
     $result = $db->query($db->sql());
 
     $host_list = [];
-    while ([$host, $count, $last_visit] = $result->fetch(3)) {
+    while ($_scratch = $result->fetch(3)) {
+        [$host, $count, $last_visit] = $_scratch;
+        unset($_scratch);
         $host_list[] = [
             'key' => $host,
             'count' => $count,

@@ -23,7 +23,9 @@ if (($cache = $nv_Cache->getItem($module_name, $cacheFile, ttl: $cacheTTL)) != f
     $sql = 'SELECT alias,add_time FROM ' . NV_PREFIXLANG . '_' . $module_data . ' WHERE status=1';
     $result = $db_slave->query($sql);
 
-    while ([$alias, $publtime] = $result->fetch(3)) {
+    while ($_scratch = $result->fetch(3)) {
+        [$alias, $publtime] = $_scratch;
+        unset($_scratch);
         $url[] = [
             'link' => NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $alias . $global_config['rewrite_exturl'],
             'publtime' => $publtime

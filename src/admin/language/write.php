@@ -49,7 +49,9 @@ if ($nv_Request->isset_request('checksess', 'get') and $nv_Request->get_string('
         $array_filename = [];
 
         $result = $db->query('SELECT idfile, author_' . $dirlang . ' FROM ' . NV_LANGUAGE_GLOBALTABLE . '_file ORDER BY idfile ASC');
-        while ([$idfile, $author_lang] = $result->fetch(3)) {
+        while ($_scratch = $result->fetch(3)) {
+            [$idfile, $author_lang] = $_scratch;
+            unset($_scratch);
             $content = nv_admin_write_lang($dirlang, $idfile);
 
             if (!empty($content)) {

@@ -40,7 +40,9 @@ if ($nv_Request->isset_request('get_user_json', 'post')) {
     $sth->execute();
 
     $data = [];
-    while ([$userid, $username, $email, $first_name, $last_name] = $sth->fetch(3)) {
+    while ($_scratch = $sth->fetch(3)) {
+        [$userid, $username, $email, $first_name, $last_name] = $_scratch;
+        unset($_scratch);
         $full_name = $global_config['name_show'] ? [$first_name, $last_name] : [$last_name, $first_name];
         $full_name = array_filter($full_name);
         $data[] = [

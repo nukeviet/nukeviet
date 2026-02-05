@@ -26,7 +26,9 @@ if ($num_items) {
         ->limit($limit)
         ->offset(($page - 1) * $limit);
     $result = $db_slave->query($db_slave->sql());
-    while ([$id, $tilterow, $alias, $description, $content] = $result->fetch(3)) {
+    while ($_scratch = $result->fetch(3)) {
+        [$id, $tilterow, $alias, $description, $content] = $_scratch;
+        unset($_scratch);
         $result_array[] = [
             'link' => $link . $alias . $global_config['rewrite_exturl'],
             'title' => BoldKeywordInStr($tilterow, $key, $logic),

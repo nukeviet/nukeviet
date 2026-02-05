@@ -105,7 +105,9 @@ $sql = 'SELECT title FROM ' . $db_config['prefix'] . '_setup_extensions WHERE is
 $result = $db->query($sql);
 
 $modfile = [];
-while ([$modfile_i] = $result->fetch(3)) {
+while ($_scratch = $result->fetch(3)) {
+    [$modfile_i] = $_scratch;
+    unset($_scratch);
     if (in_array($modfile_i, $modules_site, true)) {
         if (!empty($array_site_cat_module) and !in_array($modfile_i, $array_site_cat_module, true)) {
             continue;

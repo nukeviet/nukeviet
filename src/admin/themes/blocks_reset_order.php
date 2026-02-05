@@ -34,7 +34,9 @@ $sth = $db->prepare('SELECT bid, position FROM ' . NV_BLOCKS_TABLE . '_groups WH
 $sth->bindParam(':theme', $theme, PDO::PARAM_STR);
 $sth->execute();
 
-while ([$bid, $position] = $sth->fetch(3)) {
+while ($_scratch = $sth->fetch(3)) {
+    [$bid, $position] = $_scratch;
+    unset($_scratch);
     if (in_array($position, $array_pos, true)) {
         $array_bid[$bid] = $position;
     } else {
@@ -47,7 +49,9 @@ while ([$bid, $position] = $sth->fetch(3)) {
 $array_funcid = [];
 // Danh sach ID tat ca cac function co block trong he thong
 $result = $db->query('SELECT func_id FROM ' . NV_MODFUNCS_TABLE . ' WHERE show_func = 1 ORDER BY in_module ASC, subweight ASC');
-while ([$func_id_i] = $result->fetch(3)) {
+while ($_scratch = $result->fetch(3)) {
+    [$func_id_i] = $_scratch;
+    unset($_scratch);
     $array_funcid[] = $func_id_i;
 }
 
@@ -55,7 +59,9 @@ foreach ($array_bid as $bid => $position) {
     $func_list = [];
     // Cac fuction da them block
     $result = $db->query('SELECT func_id FROM ' . NV_BLOCKS_TABLE . '_weight WHERE bid=' . $bid);
-    while ([$func_inlist] = $result->fetch(3)) {
+    while ($_scratch = $result->fetch(3)) {
+        [$func_inlist] = $_scratch;
+        unset($_scratch);
         $func_list[] = (int) $func_inlist;
     }
 
@@ -87,7 +93,9 @@ $sth = $db->prepare('SELECT bid, position, weight FROM ' . NV_BLOCKS_TABLE . '_g
 $sth->bindParam(':theme', $theme, PDO::PARAM_STR);
 $sth->execute();
 
-while ([$bid_i, $position, $weight] = $sth->fetch(3)) {
+while ($_scratch = $sth->fetch(3)) {
+    [$bid_i, $position, $weight] = $_scratch;
+    unset($_scratch);
     $array_position[] = $position;
     $db->query('UPDATE ' . NV_BLOCKS_TABLE . '_weight SET weight=' . $weight . ' WHERE bid=' . $bid_i);
 }
@@ -106,7 +114,9 @@ foreach ($array_position as $position) {
     $sth->bindParam(':theme', $theme, PDO::PARAM_STR);
     $sth->bindParam(':position', $position, PDO::PARAM_STR);
     $sth->execute();
-    while ([$bid_i, $func_id_i] = $sth->fetch(3)) {
+    while ($_scratch = $sth->fetch(3)) {
+        [$bid_i, $func_id_i] = $_scratch;
+        unset($_scratch);
         if ($func_id_i == $func_id_old) {
             ++$weight;
         } else {

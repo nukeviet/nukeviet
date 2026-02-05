@@ -59,7 +59,9 @@ function nv_get_users_field_config()
             }
             $result = $db->query($query);
             $weight = 0;
-            while ([$key, $val] = $result->fetch(3)) {
+            while ($_scratch = $result->fetch(3)) {
+                [$key, $val] = $_scratch;
+                unset($_scratch);
                 $row_field['field_choices'][$key] = $val;
             }
         }

@@ -58,7 +58,9 @@ $xtpl = new XTemplate('addtotopics.tpl', NV_ROOTDIR . '/themes/' . $global_confi
 $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
 $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
 
-while ([$id, $title] = $result->fetch(3)) {
+while ($_scratch = $result->fetch(3)) {
+    [$id, $title] = $_scratch;
+    unset($_scratch);
     $xtpl->assign('ROW', [
         'id' => $id,
         'title' => $title,
