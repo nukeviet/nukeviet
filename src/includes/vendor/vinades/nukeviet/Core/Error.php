@@ -132,6 +132,7 @@ class Error
         ];
 
         set_error_handler([&$this, 'error_handler']);
+        set_exception_handler([&$this, 'exception_handler']);
         register_shutdown_function([&$this, 'shutdown']);
     }
 
@@ -455,6 +456,19 @@ class Error
     public function shutdown()
     {
         $error = error_get_last();
+        
+        // Check for uncaught HttpException
+        $exception = error_get_last();
+        if ($exception && isset($exception['type']) && $exception['type'] === E_ERROR) {
+            // Try to detect if this is an uncaught exception
+            if (preg_match('/^Uncaught (\S+): (.+)/', $exception['message'], $matches)) {
+                $exceptionClass = $matches[1];
+                if ($exceptionClass === 'NukeViet\\Core\\HttpException' || strpos($exceptionClass, 'HttpException') !== false) {
+                    // This is likely our HttpException, but we can't access it directly from shutdown
+                    // We'll rely on the exception handler set up in __construct
+                }
+            }
+        }
 
         if (!empty($error) and $error['type'] === E_ERROR | E_PARSE) {
             http_response_code(500);
@@ -486,5 +500,57 @@ class Error
             }
             exit('An error occurred while loading the page: ' . self::$errortype[$this->errno] . '(' . $this->errno . ').<br/>Please ' . $email . ' about this!');
         }
+    }
+    
+    /**
+     * exception_handler()
+     * 
+     * Handle uncaught exceptions, especially HttpException to preserve HTTP status codes
+     *
+     * @param \Throwable $exception
+     */
+    public function exception_handler($exception)
+    {
+        // Set HTTP status code based on exception type
+        if ($exception instanceof HttpException) {
+            http_response_code($exception->getHttpCode());
+            $this->errno = 256; // Use 256 to trigger info_die() behavior
+        } else {
+            http_response_code(500);
+            $this->errno = E_ERROR;
+        }
+        
+        $this->errstr = self::format_str($exception->getMessage());
+        $this->errfile = self::format_str($exception->getFile());
+        $this->errline = $exception->getLine();
+        $this->errid = md5(($this->errfile ?: '') . ($this->errline ?: '') . $this->errno);
+
+        $this->log_control();
+        
+        if ($this->errno == 256) {
+            $this->info_die();
+        }
+        
+        if (NV_DEBUG) {
+            exit('An error occurred while loading the page:<br /><pre><code>' . print_r([
+                'type' => get_class($exception),
+                'message' => $exception->getMessage(),
+                'file' => $exception->getFile(),
+                'line' => $exception->getLine(),
+                'trace' => $exception->getTraceAsString()
+            ], true) . '</code></pre>');
+        }
+        
+        if (!empty($this->cfg['error_send_mail'])) {
+            $strEncodedEmail = '';
+            $strlen = strlen($this->cfg['error_send_mail']);
+            for ($i = 0; $i < $strlen; ++$i) {
+                $strEncodedEmail .= '&#' . ord(substr($this->cfg['error_send_mail'], $i)) . ';';
+            }
+            $email = '<a href="mailto:' . $strEncodedEmail . '">let us know</a>';
+        } else {
+            $email = 'let us know';
+        }
+        exit('An error occurred while loading the page.<br/>Please ' . $email . ' about this!');
     }
 }
