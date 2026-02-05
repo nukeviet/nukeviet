@@ -31,7 +31,7 @@ if ($bid > 0) {
         nv_news_fix_block($bid);
         $content = 'OK_' . $bid;
     } elseif ($id > 0) {
-        [$bid, $id] = $db->query('SELECT bid, id FROM ' . NV_PREFIXLANG . '_' . $module_data . '_block WHERE bid=' . (int) $bid . ' AND id=' . (int) $id)->fetch(3);
+        [$bid, $id] = $db->query('SELECT bid, id FROM ' . NV_PREFIXLANG . '_' . $module_data . '_block WHERE bid=' . (int) $bid . ' AND id=' . (int) $id)->fetch(3) ?: [null, null];
         if ($bid > 0 and $id > 0) {
             if ($mod == 'weight' and $new_vid > 0) {
                 $query = 'SELECT id FROM ' . NV_PREFIXLANG . '_' . $module_data . '_block WHERE bid=' . $bid . ' AND id!=' . $id . ' ORDER BY weight ASC';

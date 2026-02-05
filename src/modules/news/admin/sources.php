@@ -87,7 +87,7 @@ if (!empty($savecat)) {
 
 $sourceid = $nv_Request->get_int('sourceid', 'get', 0);
 if ($sourceid > 0) {
-    [$sourceid, $title, $link, $logo] = $db->query('SELECT sourceid, title, link, logo FROM ' . NV_PREFIXLANG . '_' . $module_data . '_sources where sourceid=' . $sourceid)->fetch(3);
+    [$sourceid, $title, $link, $logo] = $db->query('SELECT sourceid, title, link, logo FROM ' . NV_PREFIXLANG . '_' . $module_data . '_sources where sourceid=' . $sourceid)->fetch(3) ?: [null, null, null, null];
     $nv_Lang->setModule('add_topic', $nv_Lang->getModule('edit_topic'));
 }
 

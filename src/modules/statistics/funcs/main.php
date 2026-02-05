@@ -166,7 +166,7 @@ while ([$country, $count, $last_visit] = $result->fetch(3)) {
 }
 
 $result = $db->query('SELECT SUM(c_count), MAX(c_count) FROM ' . NV_COUNTER_GLOBALTABLE . " WHERE c_type='country'");
-[$all, $max] = $result->fetch(3);
+[$all, $max] = $result->fetch(3) ?: [null, null];
 $others = $all - $total;
 
 $ctsc = [];
@@ -195,7 +195,7 @@ while ([$br, $count, $last_visit] = $result->fetch(3)) {
 }
 
 $result = $db->query('SELECT SUM(c_count), MAX(c_count) FROM ' . NV_COUNTER_GLOBALTABLE . " WHERE c_type='browser'");
-[$all, $max] = $result->fetch(3);
+[$all, $max] = $result->fetch(3) ?: [null, null];
 $others = $all - $total;
 
 $ctsb = [];
@@ -226,7 +226,7 @@ while ([$os, $count, $last_visit] = $result->fetch(3)) {
 }
 
 $result = $db->query('SELECT SUM(c_count), MAX(c_count) FROM ' . NV_COUNTER_GLOBALTABLE . " WHERE c_type='os'");
-[$all, $max] = $result->fetch(3);
+[$all, $max] = $result->fetch(3) ?: [null, null];
 $others = $all - $total;
 
 $ctso = [];

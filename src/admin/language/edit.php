@@ -23,7 +23,7 @@ if (empty($dirlang) or !isset($language_array[$dirlang])) {
 $idfile = $nv_Request->get_int('idfile', 'get', 0);
 $module = '';
 if (!empty($idfile)) {
-    [$idfile, $module, $admin_file, $langtype, $author_lang] = $db->query('SELECT idfile, module, admin_file, langtype, author_' . $dirlang . ' FROM ' . NV_LANGUAGE_GLOBALTABLE . '_file WHERE idfile =' . $idfile)->fetch(3);
+    [$idfile, $module, $admin_file, $langtype, $author_lang] = $db->query('SELECT idfile, module, admin_file, langtype, author_' . $dirlang . ' FROM ' . NV_LANGUAGE_GLOBALTABLE . '_file WHERE idfile =' . $idfile)->fetch(3) ?: [null, null, null, null, null];
 }
 if (empty($idfile) or empty($module)) {
     nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=interface');

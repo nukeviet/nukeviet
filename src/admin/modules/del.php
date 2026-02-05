@@ -24,7 +24,7 @@ if (empty($modname) or !preg_match($global_config['check_module'], $modname) or 
 $sth = $db->prepare('SELECT is_sys, basename FROM ' . $db_config['prefix'] . '_setup_extensions WHERE title= :title AND type=\'module\'');
 $sth->bindParam(':title', $modname, PDO::PARAM_STR);
 $sth->execute();
-[$is_sys, $module_file] = $sth->fetch(3);
+[$is_sys, $module_file] = $sth->fetch(3) ?: [null, null];
 if ((int) $is_sys == 1) {
     nv_jsonOutput([
         'success' => 0,

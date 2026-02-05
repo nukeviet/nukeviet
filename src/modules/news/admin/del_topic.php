@@ -18,7 +18,7 @@ $checkss = $nv_Request->get_string('checkss', 'post');
 
 $contents = 'NO_' . $topicid;
 
-[$topicid, $image] = $db->query('SELECT topicid, image FROM ' . NV_PREFIXLANG . '_' . $module_data . '_topics WHERE topicid=' . (int) $topicid)->fetch(3);
+[$topicid, $image] = $db->query('SELECT topicid, image FROM ' . NV_PREFIXLANG . '_' . $module_data . '_topics WHERE topicid=' . (int) $topicid)->fetch(3) ?: [null, null];
 if ($topicid > 0) {
     nv_insert_logs(NV_LANG_DATA, $module_name, 'log_del_topic', 'topicid ' . $topicid, $admin_info['userid']);
     $check_del_topicid = false;

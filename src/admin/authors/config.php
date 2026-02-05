@@ -266,7 +266,7 @@ if ($nv_Request->isset_request('submitip', 'post')) {
     }
 } else {
     if (!empty($cid)) {
-        [$id, $keyname, $mask, $begintime, $endtime, $notice] = $db->query('SELECT id, keyname, mask, begintime, endtime, notice FROM ' . NV_AUTHORS_GLOBALTABLE . "_config WHERE mask != '-1' AND id=" . $cid)->fetch(3);
+        [$id, $keyname, $mask, $begintime, $endtime, $notice] = $db->query('SELECT id, keyname, mask, begintime, endtime, notice FROM ' . NV_AUTHORS_GLOBALTABLE . "_config WHERE mask != '-1' AND id=" . $cid)->fetch(3) ?: [null, null, null, null, null, null];
         $nv_Lang->setModule('adminip_add', $nv_Lang->getModule('adminip_edit'));
         if ($ips->isIp4($keyname)) {
             $ip_version = 4;
@@ -314,7 +314,7 @@ $result->closeCursor();
 $tpl->assign('FIREWALLS', $firewalls);
 
 if (!empty($uid)) {
-    [$username, $begintime1, $endtime1] = $db->query('SELECT keyname, begintime, endtime FROM ' . NV_AUTHORS_GLOBALTABLE . "_config WHERE mask = '-1' AND id=" . $uid)->fetch(3);
+    [$username, $begintime1, $endtime1] = $db->query('SELECT keyname, begintime, endtime FROM ' . NV_AUTHORS_GLOBALTABLE . "_config WHERE mask = '-1' AND id=" . $uid)->fetch(3) ?: [null, null, null];
 
     $nv_Lang->setModule('username_add', $nv_Lang->getModule('username_edit'));
     $password2 = $password = '';

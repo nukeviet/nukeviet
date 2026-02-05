@@ -29,7 +29,7 @@ foreach ($global_array_cat as $catid_i => $array_cat_i) {
 if ($id > 0 and $catid > 0) {
     $sql = 'SELECT id, title, alias, hometext FROM ' . NV_PREFIXLANG . '_' . $module_data . '_' . $catid . ' WHERE id =' . $id . ' AND status=1';
     $result = $db_slave->query($sql);
-    [$id, $title, $alias, $hometext] = $result->fetch(3);
+    [$id, $title, $alias, $hometext] = $result->fetch(3) ?: [null, null, null, null];
     if ($id > 0) {
         $checkss = $nv_Request->get_string('checkss', 'post', '');
         if ($checkss == md5($id . NV_CHECK_SESSION)) {

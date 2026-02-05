@@ -20,7 +20,7 @@ $contents = '';
 
 $sql = 'SELECT COUNT(*), SUM(total), MAX(total) FROM ' . NV_REFSTAT_TABLE;
 $result = $db->query($sql);
-[$num_items, $total, $max] = $result->fetch(3);
+[$num_items, $total, $max] = $result->fetch(3) ?: [null, null, null];
 
 if ($num_items) {
     $base_url = $page_url;

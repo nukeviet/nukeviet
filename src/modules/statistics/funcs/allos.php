@@ -20,7 +20,7 @@ $contents = '';
 
 $sql = 'SELECT COUNT(*), MAX(c_count) FROM ' . NV_COUNTER_GLOBALTABLE . " WHERE c_type='os' AND c_count!=0";
 $result = $db->query($sql);
-[$num_items, $max] = $result->fetch(3);
+[$num_items, $max] = $result->fetch(3) ?: [null, null];
 
 if ($num_items) {
     $base_url = $page_url;

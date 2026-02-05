@@ -129,7 +129,7 @@ function nv_admin_write_lang($dirlang, $idfile)
 {
     global $db, $language_array, $global_config, $include_lang, $nv_Lang;
 
-    [$module, $admin_file, $langtype, $author_lang] = $db->query('SELECT module, admin_file, langtype, author_' . $dirlang . ' FROM ' . NV_LANGUAGE_GLOBALTABLE . '_file WHERE idfile =' . (int) $idfile)->fetch(3);
+    [$module, $admin_file, $langtype, $author_lang] = $db->query('SELECT module, admin_file, langtype, author_' . $dirlang . ' FROM ' . NV_LANGUAGE_GLOBALTABLE . '_file WHERE idfile =' . (int) $idfile)->fetch(3) ?: [null, null, null, null];
 
     if (empty($dirlang) or empty($module)) {
         return $nv_Lang->getModule('nv_error_exit_module') . ' : ' . $module;

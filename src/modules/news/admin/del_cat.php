@@ -16,7 +16,7 @@ if (!defined('NV_IS_FILE_ADMIN')) {
 $catid = $nv_Request->get_int('catid', 'post', 0);
 $contents = 'NO_' . $catid;
 
-[$catid, $parentid, $title, $ad_block_cat] = $db->query('SELECT catid, parentid, title, ad_block_cat FROM ' . NV_PREFIXLANG . '_' . $module_data . '_cat WHERE catid=' . $catid)->fetch(3);
+[$catid, $parentid, $title, $ad_block_cat] = $db->query('SELECT catid, parentid, title, ad_block_cat FROM ' . NV_PREFIXLANG . '_' . $module_data . '_cat WHERE catid=' . $catid)->fetch(3) ?: [null, null, null, null];
 if ($catid > 0) {
     if ((defined('NV_IS_ADMIN_MODULE') or ($parentid > 0 and isset($array_cat_admin[$admin_id][$parentid]) and $array_cat_admin[$admin_id][$parentid]['admin'] == 1))) {
         $ad_block_cat = array_filter(array_unique(array_map('intval', explode(',', $ad_block_cat))));
@@ -117,7 +117,7 @@ if ($catid > 0) {
                          * vẫn đang bị đình chỉ, do đó phải kiểm tra sau khi di chuyển có còn ở trong
                          * chuyên mục bị đình chỉ không nếu không mới trả lại status ban đầu
                          */
-                        [$catidnews, $newstitle] = $db->query('SELECT catid, title FROM ' . NV_PREFIXLANG . '_' . $module_data . '_cat WHERE status IN(' . implode(',', $global_code_defined['cat_visible_status']) . ') AND catid =' . $catidnews)->fetch(3);
+                        [$catidnews, $newstitle] = $db->query('SELECT catid, title FROM ' . NV_PREFIXLANG . '_' . $module_data . '_cat WHERE status IN(' . implode(',', $global_code_defined['cat_visible_status']) . ') AND catid =' . $catidnews)->fetch(3) ?: [null, null];
                         if ($catidnews > 0) {
                             nv_insert_logs(NV_LANG_DATA, $module_name, $nv_Lang->getModule('move'), $title . ' --> ' . $newstitle, $admin_info['userid']);
 

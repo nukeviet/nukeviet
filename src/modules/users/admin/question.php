@@ -105,7 +105,7 @@ if ($nv_Request->isset_request('del', 'post')) {
 
     $qid = $nv_Request->get_int('qid', 'post', 0);
 
-    [$qid, $title] = $db->query('SELECT qid, title FROM ' . NV_MOD_TABLE . '_question WHERE qid=' . $qid)->fetch(3);
+    [$qid, $title] = $db->query('SELECT qid, title FROM ' . NV_MOD_TABLE . '_question WHERE qid=' . $qid)->fetch(3) ?: [null, null];
 
     if ($qid) {
         $sql = 'DELETE FROM ' . NV_MOD_TABLE . '_question WHERE qid=' . $qid;

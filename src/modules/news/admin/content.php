@@ -1397,7 +1397,7 @@ if ($is_submit_form) {
                         $sth->bindParam(':keyword', $_tag, PDO::PARAM_STR);
                         $sth->execute();
 
-                        [$tid, $alias, $tag_i] = $sth->fetch(3);
+                        [$tid, $alias, $tag_i] = $sth->fetch(3) ?: [null, null, null];
                         if (empty($tid)) {
                             $array_insert = [];
                             $array_insert['alias'] = $alias_i;

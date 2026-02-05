@@ -19,7 +19,7 @@ $page_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DA
 $contents = '';
 
 $result = $db->query('SELECT COUNT(*), MAX(c_count) FROM ' . NV_COUNTER_GLOBALTABLE . " WHERE c_type='bot' AND c_count!=0");
-[$num_items, $max] = $result->fetch(3);
+[$num_items, $max] = $result->fetch(3) ?: [null, null];
 
 if ($num_items) {
     $base_url = $page_url;

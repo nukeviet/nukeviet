@@ -112,7 +112,7 @@ function nv_del_content_module($id)
     global $db, $module_name, $module_data, $title, $nv_Lang, $module_config;
     $content_del = 'NO_' . $id;
     $title = '';
-    [$id, $listcatid, $title] = $db->query('SELECT id, listcatid, title FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE id=' . (int) $id)->fetch(3);
+    [$id, $listcatid, $title] = $db->query('SELECT id, listcatid, title FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE id=' . (int) $id)->fetch(3) ?: [null, null, null];
     if ($id > 0) {
         $number_no_del = 0;
         $array_catid = explode(',', $listcatid);

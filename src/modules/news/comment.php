@@ -14,7 +14,7 @@ if (!defined('NV_MAINFILE')) {
 }
 
 $sql = 'SELECT listcatid FROM ' . NV_PREFIXLANG . '_' . $mod_info['module_data'] . '_rows WHERE id=' . $row['id'];
-[$listcatid] = $db->query($sql)->fetch(3);
+[$listcatid] = $db->query($sql)->fetch(3) ?: [null];
 
 // Cap nhat lai so luong comment duoc kich hoat
 $array_catid = explode(',', $listcatid);

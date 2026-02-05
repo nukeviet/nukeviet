@@ -261,7 +261,7 @@ if ($nv_Request->isset_request('tagLinks', 'post')) {
     }
 
     $tid = $nv_Request->get_int('tid', 'post', 0);
-    [$tid, $keywords] = $db_slave->query('SELECT tid, keywords FROM ' . NV_PREFIXLANG . '_' . $module_data . '_tags where tid=' . $tid)->fetch(3);
+    [$tid, $keywords] = $db_slave->query('SELECT tid, keywords FROM ' . NV_PREFIXLANG . '_' . $module_data . '_tags where tid=' . $tid)->fetch(3) ?: [null, null];
     if (empty($tid)) {
         $respon['text'] = 'Tag not exists!!!';
         nv_jsonOutput($respon);
@@ -307,7 +307,7 @@ if ($nv_Request->isset_request('loadEditTag', 'post')) {
     }
 
     $tid = $nv_Request->get_int('tid', 'post', 0);
-    [$tid, $title, $description, $image, $keywords] = $db_slave->query('SELECT tid, title, description, image, keywords FROM ' . NV_PREFIXLANG . '_' . $module_data . '_tags where tid=' . $tid)->fetch(3);
+    [$tid, $title, $description, $image, $keywords] = $db_slave->query('SELECT tid, title, description, image, keywords FROM ' . NV_PREFIXLANG . '_' . $module_data . '_tags where tid=' . $tid)->fetch(3) ?: [null, null, null, null, null];
     if (empty($tid)) {
         $respon['text'] = 'Tag not exists!!!';
         nv_jsonOutput($respon);

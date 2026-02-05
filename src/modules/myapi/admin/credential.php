@@ -192,7 +192,7 @@ if ($action == 'changeStatus' and $nv_Request->isset_request('userid', 'post')) 
         ]);
     }
 
-    [$userid, $status] = $db->query('SELECT userid, status FROM ' . $db_config['prefix'] . '_api_role_credential WHERE userid = ' . $userid . ' AND role_id = ' . $role_id)->fetch(3);
+    [$userid, $status] = $db->query('SELECT userid, status FROM ' . $db_config['prefix'] . '_api_role_credential WHERE userid = ' . $userid . ' AND role_id = ' . $role_id)->fetch(3) ?: [null, null];
     if (empty($userid)) {
         nv_jsonOutput([
             'status' => 'error',

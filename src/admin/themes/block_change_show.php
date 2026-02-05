@@ -37,7 +37,7 @@ if ($nv_Request->isset_request('multi, list, checkss', 'post')) {
 
 $bid = $nv_Request->get_int('bid', 'post');
 
-[$bid, $act] = $db->query('SELECT bid, act FROM ' . NV_BLOCKS_TABLE . '_groups WHERE bid=' . $bid)->fetch(3);
+[$bid, $act] = $db->query('SELECT bid, act FROM ' . NV_BLOCKS_TABLE . '_groups WHERE bid=' . $bid)->fetch(3) ?: [null, null];
 
 if ((int) $bid > 0 and md5(NV_CHECK_SESSION . '_' . $bid) == $nv_Request->get_string('checkss', 'post')) {
     $act = $act ? 0 : 1;

@@ -61,7 +61,7 @@ function nv_admin_read_lang($dirlang, $module, $admin_file = 1)
         $sth->bindParam(':module', $module, PDO::PARAM_STR);
         $sth->bindParam(':admin_file', $admin_file, PDO::PARAM_STR);
         $sth->execute();
-        [$idfile, $langtype] = $sth->fetch(3);
+        [$idfile, $langtype] = $sth->fetch(3) ?: [null, null];
 
         if (empty($idfile)) {
             // Tạo file mới trong CSDL

@@ -91,7 +91,7 @@ if ($nv_Request->isset_request('credential', 'post')) {
             $stmt->bindParam(':openid', $server, PDO::PARAM_STR);
             $stmt->bindParam(':opid', $opid, PDO::PARAM_STR);
             $stmt->execute();
-            [$user_id, $op_email, $user_active, $safemode] = $stmt->fetch(3);
+            [$user_id, $op_email, $user_active, $safemode] = $stmt->fetch(3) ?: [null, null, null, null];
         } else {
             [$user_id, $op_email, $user_active, $safemode] = $custom_method;
         }

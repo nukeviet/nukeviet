@@ -28,7 +28,7 @@ if ($nv_Request->isset_request('topicsid', 'post')) {
         $db->query('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_rows SET topicid=' . $topicsid . ' WHERE id=' . $_id);
 
         $result = $db->query('SELECT listcatid FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE id=' . $_id);
-        [$listcatid] = $result->fetch(3);
+        [$listcatid] = $result->fetch(3) ?: [null];
         $listcatid = explode(',', $listcatid);
 
         foreach ($listcatid as $catid) {

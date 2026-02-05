@@ -37,7 +37,7 @@ if ($nv_Request->isset_request('reload', 'post')) {
         foreach ($rows['subitem'] as $subid) {
             $sql = 'SELECT parentid FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE id=' . $subid;
 
-            [$parentid] = $db->query($sql)->fetch(3);
+            [$parentid] = $db->query($sql)->fetch(3) ?: [null];
             nv_menu_del_sub($subid, $parentid);
         }
     }
@@ -45,7 +45,7 @@ if ($nv_Request->isset_request('reload', 'post')) {
     if (file_exists(NV_ROOTDIR . '/modules/' . $site_mods[$rows['module_name']]['module_file'] . '/menu.php')) {
         include NV_ROOTDIR . '/modules/' . $site_mods[$rows['module_name']]['module_file'] . '/menu.php';
 
-        [$sort, $weight] = $db->query('SELECT MAX(weight), MAX(sort) FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE parentid=' . $rows['parentid'])->fetch(3);
+        [$sort, $weight] = $db->query('SELECT MAX(weight), MAX(sort) FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE parentid=' . $rows['parentid'])->fetch(3) ?: [null, null];
 
         // Nap lai menu moi
         foreach ($array_item as $key => $item) {
@@ -356,7 +356,7 @@ if ($nv_Request->get_title('action', 'post') == 'link_module' and $nv_Request->i
     $stmt = $db->prepare('SELECT title, module_file, module_data FROM ' . NV_MODULES_TABLE . ' WHERE title= :module');
     $stmt->bindParam(':module', $mod_name, PDO::PARAM_STR);
     $stmt->execute();
-    [$mod_name, $mod_file, $mod_data] = $stmt->fetch(3);
+    [$mod_name, $mod_file, $mod_data] = $stmt->fetch(3) ?: [null, null, null];
     if (empty($mod_name)) {
         exit($nv_Lang->getModule('add_error_module'));
     }

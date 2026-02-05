@@ -567,7 +567,7 @@ if ($nv_Request->isset_request('del', 'post')) {
 
     $fid = $nv_Request->get_int('fid', 'post', 0);
 
-    [$fid, $field, $weight, $system] = $db->query('SELECT fid, field, weight, is_system FROM ' . NV_MOD_TABLE . '_field WHERE fid=' . $fid)->fetch(3);
+    [$fid, $field, $weight, $system] = $db->query('SELECT fid, field, weight, is_system FROM ' . NV_MOD_TABLE . '_field WHERE fid=' . $fid)->fetch(3) ?: [null, null, null, null];
 
     if ($fid and !empty($field) and empty($system)) {
         $query1 = 'DELETE FROM ' . NV_MOD_TABLE . '_field WHERE fid=' . $fid;

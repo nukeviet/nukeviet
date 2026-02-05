@@ -129,7 +129,7 @@ function nv_menu_del_sub($id, $parentid)
         foreach ($subitem as $id) {
             $sql = 'SELECT parentid FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE id=' . $id;
 
-            [$parentid] = $db->query($sql)->fetch(3);
+            [$parentid] = $db->query($sql)->fetch(3) ?: [null];
             nv_menu_del_sub($id, $parentid);
             nv_insert_logs(NV_LANG_DATA, $module_name, 'Delete menu item', 'Item ID ' . $id, $admin_info['userid']);
         }

@@ -153,7 +153,7 @@ function nv_setup_data_module($lang, $module_name, $sample = 0)
     $sth->bindParam(':title', $module_name, PDO::PARAM_STR);
     $sth->execute();
 
-    [$module_file, $module_data, $module_upload, $module_theme] = $sth->fetch(3);
+    [$module_file, $module_data, $module_upload, $module_theme] = $sth->fetch(3) ?: [null, null, null, null];
 
     if (empty($module_file)) {
         return $return;

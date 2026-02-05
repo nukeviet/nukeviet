@@ -15,7 +15,7 @@ if (!defined('NV_IS_FILE_THEMES')) {
 
 $bid = $nv_Request->get_int('bid', 'post');
 $checkss = $nv_Request->get_string('checkss', 'post');
-[$bid, $theme, $position] = $db->query('SELECT bid, theme, position FROM ' . NV_BLOCKS_TABLE . '_groups WHERE bid=' . $bid)->fetch(3);
+[$bid, $theme, $position] = $db->query('SELECT bid, theme, position FROM ' . NV_BLOCKS_TABLE . '_groups WHERE bid=' . $bid)->fetch(3) ?: [null, null, null];
 
 if (!($bid > 0 and (md5($theme . NV_CHECK_SESSION) == $checkss or md5(NV_CHECK_SESSION . '_' . $bid) == $checkss))) {
     nv_jsonOutput([

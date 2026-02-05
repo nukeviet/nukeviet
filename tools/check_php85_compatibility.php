@@ -26,6 +26,7 @@ echo "=============================================================\n\n";
 
 $srcDir = NV_ROOTDIR . '/src';
 $problematic_files = [];
+$safe_while_loops = [];
 
 // Tìm tất cả các file PHP
 $iterator = new RecursiveIteratorIterator(
@@ -42,26 +43,60 @@ foreach ($iterator as $file) {
         $lines = explode("\n", $content);
 
         foreach ($lines as $lineNum => $line) {
+            // Kiểm tra nếu là while loop - đây là safe pattern
+            $isWhileLoop = preg_match('/^\s*while\s*\(/', $line);
+            
             // Tìm pattern: [$var, ...] = ...->fetch(
             if (preg_match('/\[\s*\$[^\]]+\]\s*=.*->\s*fetch\s*\(/', $line)) {
+                // Bỏ qua template fetch (không phải PDO fetch)
+                if (preg_match('/\$tpl\s*->\s*fetch|template\s*->\s*fetch/i', $line)) {
+                    continue;
+                }
+                
                 $relativePath = str_replace(NV_ROOTDIR . '/', '', $filepath);
-                $problematic_files[] = [
-                    'file' => $relativePath,
-                    'line' => $lineNum + 1,
-                    'code' => trim($line),
-                    'type' => 'array_destructuring'
-                ];
+                
+                if ($isWhileLoop) {
+                    $safe_while_loops[] = [
+                        'file' => $relativePath,
+                        'line' => $lineNum + 1,
+                        'code' => trim($line),
+                        'type' => 'array_destructuring_in_while'
+                    ];
+                } else {
+                    // Kiểm tra nếu đã có ?: operator (đã được fix)
+                    if (!preg_match('/\?\s*:\s*\[/', $line)) {
+                        $problematic_files[] = [
+                            'file' => $relativePath,
+                            'line' => $lineNum + 1,
+                            'code' => trim($line),
+                            'type' => 'array_destructuring'
+                        ];
+                    }
+                }
             }
 
             // Tìm pattern: list($var, ...) = ...->fetch(
             if (preg_match('/list\s*\([^)]+\)\s*=.*->\s*fetch\s*\(/', $line)) {
                 $relativePath = str_replace(NV_ROOTDIR . '/', '', $filepath);
-                $problematic_files[] = [
-                    'file' => $relativePath,
-                    'line' => $lineNum + 1,
-                    'code' => trim($line),
-                    'type' => 'list_destructuring'
-                ];
+                
+                if ($isWhileLoop) {
+                    $safe_while_loops[] = [
+                        'file' => $relativePath,
+                        'line' => $lineNum + 1,
+                        'code' => trim($line),
+                        'type' => 'list_destructuring_in_while'
+                    ];
+                } else {
+                    // Kiểm tra nếu đã có ?: operator (đã được fix)
+                    if (!preg_match('/\?\s*:\s*\[/', $line)) {
+                        $problematic_files[] = [
+                            'file' => $relativePath,
+                            'line' => $lineNum + 1,
+                            'code' => trim($line),
+                            'type' => 'list_destructuring'
+                        ];
+                    }
+                }
             }
         }
     }
@@ -70,12 +105,19 @@ foreach ($iterator as $file) {
 echo "Kết quả quét:\n";
 echo "=============================================================\n\n";
 
+echo "✓ Tìm thấy " . count($safe_while_loops) . " trường hợp an toàn (while loops)\n";
+echo "✗ Tìm thấy " . count($problematic_files) . " trường hợp CẦN SỬA (direct assignments)\n\n";
+
 if (empty($problematic_files)) {
-    echo "✓ Không tìm thấy vấn đề nào!\n";
-    echo "Tất cả code đã tương thích với PHP 8.5\n";
+    echo "✓ Tất cả các trường hợp không an toàn đã được sửa!\n";
+    echo "Code đã tương thích với PHP 8.5\n\n";
+    
+    echo "LƯU Ý: Có " . count($safe_while_loops) . " trường hợp sử dụng array destructuring trong while loops.\n";
+    echo "Những trường hợp này an toàn vì vòng lặp sẽ dừng khi fetch() trả về false.\n";
     exit(0);
 } else {
-    echo "✗ Tìm thấy " . count($problematic_files) . " trường hợp có thể gây lỗi trong PHP 8.5\n\n";
+    echo "CẦN SỬA:\n";
+    echo "=============================================================\n\n";
     
     // Nhóm theo file
     $groupedByFile = [];

@@ -241,7 +241,7 @@ if (!empty($news_contents['files'])) {
     }
 }
 
-[$post_username, $post_first_name, $post_last_name] = $db_slave->query('SELECT username, first_name, last_name FROM ' . NV_USERS_GLOBALTABLE . ' WHERE userid = ' . $news_contents['admin_id'])->fetch(3);
+[$post_username, $post_first_name, $post_last_name] = $db_slave->query('SELECT username, first_name, last_name FROM ' . NV_USERS_GLOBALTABLE . ' WHERE userid = ' . $news_contents['admin_id'])->fetch(3) ?: [null, null, null];
 $news_contents['post_name'] = nv_show_name_user($post_first_name, $post_last_name, $post_username);
 
 $publtime = (int) ($news_contents['publtime']);
@@ -300,7 +300,7 @@ $news_contents['source'] = '';
 if ($news_contents['sourceid']) {
     $sql = 'SELECT title, link, logo FROM ' . NV_PREFIXLANG . '_' . $module_data . '_sources WHERE sourceid = ' . $news_contents['sourceid'];
     $result = $db_slave->query($sql);
-    [$sourcetext, $source_link, $source_logo] = $result->fetch(3);
+    [$sourcetext, $source_link, $source_logo] = $result->fetch(3) ?: [null, null, null];
     unset($sql, $result);
     if ($module_config[$module_name]['config_source'] == 0) {
         $news_contents['source'] = $sourcetext; // Hiển thị tiêu đề nguồn tin
@@ -429,7 +429,7 @@ if ($st_links > 0) {
 
 $topic_array = [];
 if ($news_contents['topicid'] > 0 & $st_links > 0) {
-    [$topic_title, $topic_alias] = $db_slave->query('SELECT title, alias FROM ' . NV_PREFIXLANG . '_' . $module_data . '_topics WHERE topicid = ' . $news_contents['topicid'])->fetch(3);
+    [$topic_title, $topic_alias] = $db_slave->query('SELECT title, alias FROM ' . NV_PREFIXLANG . '_' . $module_data . '_topics WHERE topicid = ' . $news_contents['topicid'])->fetch(3) ?: [null, null];
 
     $topiclink = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $module_info['alias']['topic'] . '/' . $topic_alias;
 

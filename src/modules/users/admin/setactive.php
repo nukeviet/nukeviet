@@ -33,7 +33,7 @@ if ($is_setactive and md5(NV_CHECK_SESSION . '_' . $module_name . '_main') == $n
         if (empty($row)) {
             $level = 0;
             $sql = 'SELECT username, active, idsite FROM ' . NV_MOD_TABLE . ' WHERE userid=' . $userid;
-            [$username, $active, $idsite] = $db->query($sql)->fetch(3);
+            [$username, $active, $idsite] = $db->query($sql)->fetch(3) ?: [null, null, null];
         } else {
             [$level, $username, $active, $idsite] = $row;
             $level = (int) $level;

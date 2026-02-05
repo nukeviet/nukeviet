@@ -74,7 +74,7 @@ if ($nv_Request->get_int('save', 'post') == '1') {
             $description = defined('NV_EDITOR') ? nv_nl2br($description, '') : nv_nl2br(nv_htmlspecialchars($description), '<br />');
         }
 
-        [$blang_old, $form_old] = $db->query('SELECT blang, form FROM ' . NV_BANNERS_GLOBALTABLE . '_plans WHERE id=' . (int) $id)->fetch(3);
+        [$blang_old, $form_old] = $db->query('SELECT blang, form FROM ' . NV_BANNERS_GLOBALTABLE . '_plans WHERE id=' . (int) $id)->fetch(3) ?: [null, null];
 
         $stmt = $db->prepare('UPDATE ' . NV_BANNERS_GLOBALTABLE . '_plans SET
             blang= :blang, title= :title, description= :description, form= :form, require_image= :require_image, width=' . $width . ', height=' . $height . ',

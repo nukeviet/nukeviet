@@ -88,7 +88,7 @@ if (!empty($savecat)) {
 
 $bid = $nv_Request->get_int('bid', 'get', 0);
 if ($bid > 0) {
-    [$bid, $title, $alias, $description, $image, $keywords] = $db->query('SELECT bid, title, alias, description, image, keywords FROM ' . NV_PREFIXLANG . '_' . $module_data . '_block_cat where bid=' . $bid)->fetch(3);
+    [$bid, $title, $alias, $description, $image, $keywords] = $db->query('SELECT bid, title, alias, description, image, keywords FROM ' . NV_PREFIXLANG . '_' . $module_data . '_block_cat where bid=' . $bid)->fetch(3) ?: [null, null, null, null, null, null];
     $nv_Lang->getModule('add_block_cat', $nv_Lang->getModule('edit_block_cat'));
 }
 
