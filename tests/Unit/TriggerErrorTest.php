@@ -24,7 +24,7 @@ class TriggerErrorTest extends \Codeception\Test\Unit
 
     /**
      * Tìm kiếm chỗ nào có throw new RuntimeException() hoặc InvalidArgumentException() mà không có http response code trước đó thì là lỗi
-     * (Thay thế cho trigger_error với E_USER_ERROR/256 đã bị deprecated trong PHP 8.5)
+     * (Thay thế cho trigger_error với E_USER_ERROR/256 đã bị deprecated trong PHP 8.4)
      *
      * @link https://github.com/nukeviet/nukeviet/issues/3855
      *
