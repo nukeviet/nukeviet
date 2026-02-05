@@ -28,8 +28,8 @@ class Php85CompatibilityTest extends \Codeception\Test\Unit
     /**
      * Quét tìm các trường hợp sử dụng array destructuring với PDO fetch
      * Các pattern cần tìm:
-     * - [$var, ...] = ...->fetch(...)
-     * - list($var, ...) = ...->fetch(...)
+     * - [$var, ...] = ...->fetch(...) (không có ?: operator)
+     * - list($var, ...) = ...->fetch(...) (không có ?: operator)
      *
      * @group php85
      * @group compatibility
@@ -38,6 +38,7 @@ class Php85CompatibilityTest extends \Codeception\Test\Unit
     {
         $srcDir = NV_ROOTDIR . '/src';
         $problematic_files = [];
+        $safe_while_loops = [];
 
         // Tìm tất cả các file PHP
         $iterator = new \RecursiveIteratorIterator(
@@ -52,51 +53,93 @@ class Php85CompatibilityTest extends \Codeception\Test\Unit
                 $lines = explode("\n", $content);
 
                 foreach ($lines as $lineNum => $line) {
+                    // Kiểm tra nếu là while loop - đây là safe pattern
+                    $isWhileLoop = preg_match('/^\s*while\s*\(/', $line);
+                    
                     // Tìm pattern: [$var, ...] = ...->fetch(
                     if (preg_match('/\[\s*\$[^\]]+\]\s*=.*->\s*fetch\s*\(/', $line)) {
-                        // Kiểm tra xem có xử lý giá trị trả về hay không
-                        // Nếu không có kiểm tra, đây là lỗi tiềm ẩn
+                        // Bỏ qua template fetch
+                        if (preg_match('/\$tpl\s*->\s*fetch|template\s*->\s*fetch/i', $line)) {
+                            continue;
+                        }
+                        
                         $relativePath = str_replace(NV_ROOTDIR . '/', '', $filepath);
-                        $problematic_files[] = [
-                            'file' => $relativePath,
-                            'line' => $lineNum + 1,
-                            'code' => trim($line)
-                        ];
+                        
+                        if ($isWhileLoop) {
+                            $safe_while_loops[] = [
+                                'file' => $relativePath,
+                                'line' => $lineNum + 1,
+                                'code' => trim($line)
+                            ];
+                        } else {
+                            // Kiểm tra nếu đã có ?: operator (đã được fix)
+                            if (!preg_match('/\?\s*:\s*\[/', $line)) {
+                                $problematic_files[] = [
+                                    'file' => $relativePath,
+                                    'line' => $lineNum + 1,
+                                    'code' => trim($line)
+                                ];
+                            }
+                        }
                     }
 
                     // Tìm pattern: list($var, ...) = ...->fetch(
                     if (preg_match('/list\s*\([^)]+\)\s*=.*->\s*fetch\s*\(/', $line)) {
                         $relativePath = str_replace(NV_ROOTDIR . '/', '', $filepath);
-                        $problematic_files[] = [
-                            'file' => $relativePath,
-                            'line' => $lineNum + 1,
-                            'code' => trim($line)
-                        ];
+                        
+                        if ($isWhileLoop) {
+                            $safe_while_loops[] = [
+                                'file' => $relativePath,
+                                'line' => $lineNum + 1,
+                                'code' => trim($line)
+                            ];
+                        } else {
+                            // Kiểm tra nếu đã có ?: operator (đã được fix)
+                            if (!preg_match('/\?\s*:\s*\[/', $line)) {
+                                $problematic_files[] = [
+                                    'file' => $relativePath,
+                                    'line' => $lineNum + 1,
+                                    'code' => trim($line)
+                                ];
+                            }
+                        }
                     }
                 }
             }
         }
 
         // Ghi log ra file để dễ kiểm tra
-        if (!empty($problematic_files)) {
-            $logFile = NV_ROOTDIR . '/tests/_output/php85_compatibility_issues.log';
-            $logContent = "PHP 8.5 Compatibility Issues - Array Destructuring with PDO fetch\n";
-            $logContent .= "===================================================================\n\n";
-            $logContent .= "Tìm thấy " . count($problematic_files) . " trường hợp có thể gây lỗi trong PHP 8.5\n\n";
+        $logDir = NV_ROOTDIR . '/tests/_output';
+        if (!is_dir($logDir)) {
+            mkdir($logDir, 0755, true);
+        }
+        
+        $logFile = $logDir . '/php85_compatibility_issues.log';
+        $logContent = "PHP 8.5 Compatibility Test Results\n";
+        $logContent .= "===================================================================\n\n";
+        $logContent .= "Tìm thấy " . count($safe_while_loops) . " trường hợp an toàn (while loops)\n";
+        $logContent .= "Tìm thấy " . count($problematic_files) . " trường hợp CẦN SỬA (direct assignments)\n\n";
 
+        if (!empty($problematic_files)) {
+            $logContent .= "CÁC TRƯỜNG HỢP CẦN SỬA:\n";
+            $logContent .= str_repeat('=', 80) . "\n\n";
+            
             foreach ($problematic_files as $issue) {
                 $logContent .= "File: {$issue['file']}\n";
                 $logContent .= "Line: {$issue['line']}\n";
                 $logContent .= "Code: {$issue['code']}\n";
                 $logContent .= str_repeat('-', 80) . "\n";
             }
-
-            file_put_contents($logFile, $logContent);
-            codecept_debug("Đã ghi log các vấn đề vào: tests/_output/php85_compatibility_issues.log");
+        } else {
+            $logContent .= "✓ Tất cả các trường hợp không an toàn đã được sửa!\n";
         }
 
-        // Test sẽ fail nếu phát hiện các pattern này
-        // Điều này đảm bảo không có code mới nào vi phạm quy tắc
+        file_put_contents($logFile, $logContent);
+        codecept_debug("Đã ghi log kết quả kiểm tra vào: tests/_output/php85_compatibility_issues.log");
+        codecept_debug("Số while loops an toàn: " . count($safe_while_loops));
+        codecept_debug("Số trường hợp cần sửa: " . count($problematic_files));
+
+        // Test sẽ fail nếu phát hiện các pattern chưa được fix
         $this->assertEmpty(
             $problematic_files,
             "Phát hiện " . count($problematic_files) . " trường hợp sử dụng array destructuring với PDO fetch không an toàn. " .
