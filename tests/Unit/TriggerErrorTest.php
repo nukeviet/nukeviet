@@ -23,16 +23,16 @@ class TriggerErrorTest extends \Codeception\Test\Unit
     }
 
     /**
-     * Kiểm tra các exception được sử dụng đúng cách
-     * - HttpException: Thay thế trigger_error(256) và tự động xử lý HTTP status code
-     * - RuntimeException/InvalidArgumentException: Các lỗi hệ thống/validation không cần HTTP code tùy chỉnh
+     * Kiểm tra không còn sử dụng trigger_error với E_USER_ERROR hoặc 256
+     * trigger_error(..., E_USER_ERROR) và trigger_error(..., 256) đã deprecated trong PHP 8.4
+     * Cần thay thế bằng HttpException
      *
      * @link https://github.com/nukeviet/nukeviet/issues/3855
      *
      * @group install
      * @group all
      */
-    public function testTriggerErrorMustHaveHttpResponseCodeBefore()
+    public function testNoDeprecatedTriggerError()
     {
         $files = $this->tester->listFile(NV_ROOTDIR);
         foreach ($files as $file) {
@@ -42,32 +42,12 @@ class TriggerErrorTest extends \Codeception\Test\Unit
 
             $lines = file(NV_ROOTDIR . '/' . $file);
             foreach ($lines as $i => $line) {
-                // Kiểm tra trigger_error cũ và RuntimeException/InvalidArgumentException (không nên dùng với HTTP code)
+                // Kiểm tra trigger_error với 256 hoặc E_USER_ERROR (đã deprecated)
                 if (preg_match('/\btrigger_error\s*\(.*,\s*(256|E_USER_ERROR)\s*\)/', $line)) {
-                    // trigger_error(256) đã deprecated, không nên tồn tại
                     $this->assertTrue(
                         false,
-                        "Deprecated trigger_error(256) found at {$file} on line " . ($i + 1) . ". Use HttpException instead."
+                        "Deprecated trigger_error with E_USER_ERROR or 256 found at {$file} on line " . ($i + 1) . ". Use HttpException instead."
                     );
-                }
-                
-                // RuntimeException/InvalidArgumentException không nên có http_response_code trước đó
-                // (vì giờ nên dùng HttpException)
-                if (preg_match('/\bthrow\s+new\s+(RuntimeException|InvalidArgumentException)\s*\(/', $line)) {
-                    $foundHttpCode = false;
-                    for ($j = $i - 1; $j >= max(0, $i - 3); $j--) {
-                        if (preg_match('/\bhttp_response_code\s*\(/', $lines[$j])) {
-                            $foundHttpCode = true;
-                            break;
-                        }
-                    }
-                    
-                    if ($foundHttpCode) {
-                        $this->assertTrue(
-                            false,
-                            "RuntimeException/InvalidArgumentException at {$file} on line " . ($i + 1) . " has http_response_code before it. Use HttpException instead."
-                        );
-                    }
                 }
             }
         }
