@@ -26,7 +26,9 @@ function nv_save_file_admin_config()
 
     $sql = 'SELECT keyname, mask, begintime, endtime, notice FROM ' . NV_AUTHORS_GLOBALTABLE . '_config';
     $result = $db->query($sql);
-    while (list($keyname, $dbmask, $dbbegintime, $dbendtime, $dbnotice) = $result->fetch(3)) {
+    while ($_scratch = $result->fetch(3)) {
+    list($keyname, $dbmask, $dbbegintime, $dbendtime, $dbnotice) = $_scratch;
+    unset($_scratch);
         $dbendtime = (int) $dbendtime;
         if ($dbendtime == 0 or $dbendtime > NV_CURRENTTIME) {
             if ($dbmask == -1) {
@@ -292,7 +294,9 @@ if (!empty($error)) {
 $sql = 'SELECT id, keyname, begintime, endtime FROM ' . NV_AUTHORS_GLOBALTABLE . "_config WHERE mask = '-1' ORDER BY keyname DESC";
 $result = $db->query($sql);
 $i = 0;
-while (list($dbid, $dbkeyname, $dbbegintime, $dbendtime) = $result->fetch(3)) {
+while ($_scratch = $result->fetch(3)) {
+    list($dbid, $dbkeyname, $dbbegintime, $dbendtime) = $_scratch;
+    unset($_scratch);
     ++$i;
     $xtpl->assign('ROW', [
         'keyname' => $dbkeyname,
@@ -338,7 +342,9 @@ $sql = 'SELECT id, keyname, mask, begintime, endtime FROM ' . NV_AUTHORS_GLOBALT
 $result = $db->query($sql);
 
 $i = 0;
-while (list($dbid, $dbkeyname, $dbmask, $dbbegintime, $dbendtime) = $result->fetch(3)) {
+while ($_scratch = $result->fetch(3)) {
+    list($dbid, $dbkeyname, $dbmask, $dbbegintime, $dbendtime) = $_scratch;
+    unset($_scratch);
     ++$i;
     $xtpl->assign('ROW', [
         'keyname' => $dbkeyname,

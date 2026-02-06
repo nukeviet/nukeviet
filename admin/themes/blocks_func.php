@@ -71,7 +71,9 @@ $xtpl->assign('OP', $op);
 
 $sql = 'SELECT title, custom_title FROM ' . NV_MODULES_TABLE . ' ORDER BY weight ASC';
 $result = $db->query($sql);
-while (list($m_title, $m_custom_title) = $result->fetch(3)) {
+while ($_scratch = $result->fetch(3)) {
+    list($m_title, $m_custom_title) = $_scratch;
+    unset($_scratch);
     $xtpl->assign('MODULE', [
         'key' => $m_title,
         'selected' => ($selectedmodule == $m_title) ? ' selected="selected"' : '',
@@ -88,7 +90,9 @@ $sth = $db->prepare('SELECT func_id, func_custom_name
 $sth->bindParam(':module', $selectedmodule, PDO::PARAM_STR);
 $sth->execute();
 
-while (list($f_id, $f_custom_title) = $sth->fetch(3)) {
+while ($_scratch = $sth->fetch(3)) {
+    list($f_id, $f_custom_title) = $_scratch;
+    unset($_scratch);
     $array_func_id[$f_id] = $f_custom_title;
 
     $xtpl->assign('FUNCTION', [
@@ -109,7 +113,9 @@ $sth = $db->prepare('SELECT t1.position, COUNT(*)
 $sth->bindParam(':theme', $selectthemes, PDO::PARAM_STR);
 $sth->execute();
 
-while (list($position, $numposition) = $sth->fetch(3)) {
+while ($_scratch = $sth->fetch(3)) {
+    list($position, $numposition) = $_scratch;
+    unset($_scratch);
     $blocks_positions[$position] = $numposition;
 }
 

@@ -190,7 +190,9 @@ if (str_contains($sql, ':post_email')) {
 }
 $sth->execute();
 $array = [];
-while (list($cid, $module, $area, $id, $content, $attach, $userid, $post_name, $email, $status) = $sth->fetch(3)) {
+while ($_scratch = $sth->fetch(3)) {
+    list($cid, $module, $area, $id, $content, $attach, $userid, $post_name, $email, $status) = $_scratch;
+    unset($_scratch);
     if ($userid > 0) {
         $email = '<a href="' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=users&amp;' . NV_OP_VARIABLE . '=edit&amp;userid=' . $userid . '"> ' . $email . '</a>';
     }

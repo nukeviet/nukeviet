@@ -39,7 +39,9 @@ $errorconfig = [];
 $array_site_theme = [];
 $array_site_cat_theme = [];
 $result = $db->query('SELECT DISTINCT theme FROM ' . NV_PREFIXLANG . '_modthemes WHERE func_id=0');
-while (list($theme) = $result->fetch(3)) {
+while ($_scratch = $result->fetch(3)) {
+    list($theme) = $_scratch;
+    unset($_scratch);
     $array_site_theme[] = $theme;
 }
 if ($global_config['idsite']) {

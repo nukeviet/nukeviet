@@ -118,7 +118,9 @@ if ($checkss == $nv_Request->get_string('checkss', 'post')) {
         $sql = 'SELECT module, config_name, config_value FROM ' . NV_CONFIG_GLOBALTABLE . " WHERE lang='sys' OR lang='" . NV_LANG_DATA . "' ORDER BY module ASC";
         $result = $db->query($sql);
 
-        while (list($c_module, $c_config_name, $c_config_value) = $result->fetch(3)) {
+        while ($_scratch = $result->fetch(3)) {
+    list($c_module, $c_config_name, $c_config_value) = $_scratch;
+    unset($_scratch);
             if ($c_module == 'global') {
                 $global_config[$c_config_name] = $c_config_value;
             } else {
@@ -136,7 +138,9 @@ $mobile_theme_array_file = nv_scandir(NV_ROOTDIR . '/themes', $global_config['ch
 
 $sql = 'SELECT DISTINCT theme FROM ' . NV_PREFIXLANG . '_modthemes WHERE func_id=0';
 $result = $db->query($sql);
-while (list($theme) = $result->fetch(3)) {
+while ($_scratch = $result->fetch(3)) {
+    list($theme) = $_scratch;
+    unset($_scratch);
     if (in_array($theme, $theme_array_file, true)) {
         $theme_array[] = $theme;
     } elseif (in_array($theme, $mobile_theme_array_file, true)) {

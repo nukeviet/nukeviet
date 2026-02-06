@@ -19,7 +19,9 @@ $sql = 'SELECT bid, title FROM ' . NV_PREFIXLANG . '_' . $module_data . '_block_
 $result = $db_slave->query($sql);
 
 $array_block = [];
-while (list($bid_i, $title_i) = $result->fetch(3)) {
+while ($_scratch = $result->fetch(3)) {
+    list($bid_i, $title_i) = $_scratch;
+    unset($_scratch);
     $bid_i = (int) $bid_i;
     $array_block[$bid_i] = $title_i;
 }
@@ -47,7 +49,9 @@ if ($nv_Request->isset_request('checkss,idcheck', 'post') and $nv_Request->get_s
     $sql = 'SELECT id FROM ' . NV_PREFIXLANG . '_' . $module_data . '_block WHERE bid=' . $bid;
     $result = $db_slave->query($sql);
     $_id_array_exit = [];
-    while (list($_id) = $result->fetch(3)) {
+    while ($_scratch = $result->fetch(3)) {
+    list($_id) = $_scratch;
+    unset($_scratch);
         $_id_array_exit[] = (int) $_id;
     }
 
@@ -108,7 +112,9 @@ if ($listid == '' and $bid) {
 
     $result = $db_slave->query($db_slave->sql());
 
-    while (list($id, $title) = $result->fetch(3)) {
+    while ($_scratch = $result->fetch(3)) {
+    list($id, $title) = $_scratch;
+    unset($_scratch);
         $xtpl->assign('ROW', [
             'checked' => in_array((int) $id, $id_array, true) ? ' checked="checked"' : '',
             'title' => $title,

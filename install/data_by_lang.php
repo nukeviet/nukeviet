@@ -1062,7 +1062,9 @@ $db->query('UPDATE ' . $db_config['prefix'] . '_config SET config_value = ' . $d
 file_put_contents(NV_ROOTDIR . '/' . NV_DATADIR . '/disable_site_content.' . $lang_data . '.txt', $install_lang['disable_site_content'], LOCK_EX);
 
 $result = $db->query('SELECT id, run_func FROM ' . $db_config['prefix'] . '_cronjobs ORDER BY id ASC');
-while (list($id, $run_func) = $result->fetch(3)) {
+while ($_scratch = $result->fetch(3)) {
+    list($id, $run_func) = $_scratch;
+    unset($_scratch);
     $cron_name = (isset($install_lang['cron'][$run_func])) ? $install_lang['cron'][$run_func] : $run_func;
     $db->query('UPDATE ' . $db_config['prefix'] . '_cronjobs SET ' . $lang_data . '_cron_name = ' . $db->quote($cron_name) . ' WHERE id=' . $id);
 }

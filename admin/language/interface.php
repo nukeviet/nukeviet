@@ -59,7 +59,9 @@ $a = 0;
 
 $sql = 'SELECT idfile, module, admin_file, langtype, author_' . $dirlang . ' FROM ' . NV_LANGUAGE_GLOBALTABLE . '_file ORDER BY idfile ASC';
 $result = $db->query($sql);
-while (list($idfile, $module, $admin_file, $langtype, $author_lang) = $result->fetch(3)) {
+while ($_scratch = $result->fetch(3)) {
+    list($idfile, $module, $admin_file, $langtype, $author_lang) = $_scratch;
+    unset($_scratch);
     switch ($admin_file) {
         case '1':
             $langsitename = $lang_module['nv_lang_admin'];

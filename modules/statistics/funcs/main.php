@@ -31,7 +31,9 @@ $max = 0;
 $total = 0;
 $year_list = [];
 $result = $db->query('SELECT c_val,c_count FROM ' . NV_COUNTER_GLOBALTABLE . " WHERE c_type='year' ORDER BY c_val");
-while (list($year, $count) = $result->fetch(3)) {
+while ($_scratch = $result->fetch(3)) {
+    list($year, $count) = $_scratch;
+    unset($_scratch);
     $year_list[$year] = $current_year < $year ? null : $count;
     if ($count > $max) {
         $max = $count;
@@ -70,7 +72,9 @@ $total = 0;
 
 $sql = 'SELECT c_val,c_count FROM ' . NV_COUNTER_GLOBALTABLE . " WHERE c_type='month' AND c_val IN (" . $month_list2 . ')';
 $result = $db->query($sql);
-while (list($month, $count) = $result->fetch(3)) {
+while ($_scratch = $result->fetch(3)) {
+    list($month, $count) = $_scratch;
+    unset($_scratch);
     $month_list[$month]['count'] = $count;
     if ($count > $max) {
         $max = $count;
@@ -92,7 +96,9 @@ $day_list = [];
 
 $sql = 'SELECT c_val,c_count FROM ' . NV_COUNTER_GLOBALTABLE . " WHERE c_type='day' AND c_val <= " . $current_number_of_days . ' ORDER BY c_val';
 $result = $db->query($sql);
-while (list($day, $count) = $result->fetch(3)) {
+while ($_scratch = $result->fetch(3)) {
+    list($day, $count) = $_scratch;
+    unset($_scratch);
     $day_list[$day] = $day <= $current_day ? $count : null;
     if ($count > $max) {
         $max = $count;
@@ -126,7 +132,9 @@ $result = $db->query($sql);
 $max = 0;
 $total = 0;
 
-while (list($dayofweek, $count) = $result->fetch(3)) {
+while ($_scratch = $result->fetch(3)) {
+    list($dayofweek, $count) = $_scratch;
+    unset($_scratch);
     $dayofweek_list[$dayofweek]['count'] = $count;
     if ($count > $max) {
         $max = $count;
@@ -148,7 +156,9 @@ $hour_list = [];
 
 $sql = 'SELECT c_val,c_count FROM ' . NV_COUNTER_GLOBALTABLE . " WHERE c_type='hour' ORDER BY c_val";
 $result = $db->query($sql);
-while (list($hour, $count) = $result->fetch(3)) {
+while ($_scratch = $result->fetch(3)) {
+    list($hour, $count) = $_scratch;
+    unset($_scratch);
     $hour_list[$hour] = $hour > $current_hour ? null : $count;
     if ($count > $max) {
         $max = $count;
@@ -169,7 +179,9 @@ $result = $db->query($db->sql());
 
 $total = 0;
 $countries_list = [];
-while (list($country, $count, $last_visit) = $result->fetch(3)) {
+while ($_scratch = $result->fetch(3)) {
+    list($country, $count, $last_visit) = $_scratch;
+    unset($_scratch);
     $fullname = isset($countries[$country]) ? $countries[$country][1] : $lang_global['unknown'];
     $last_visit = !empty($last_visit) ? nv_date('l, d F Y H:i', $last_visit) : '';
     $countries_list[$country] = [
@@ -207,7 +219,9 @@ $result = $db->query($db->sql());
 $total = 0;
 $browsers_list = [];
 
-while (list($br, $count, $last_visit) = $result->fetch(3)) {
+while ($_scratch = $result->fetch(3)) {
+    list($br, $count, $last_visit) = $_scratch;
+    unset($_scratch);
     $last_visit = !empty($last_visit) ? nv_date('l, d F Y H:i', $last_visit) : '';
     $browsers_list[$br] = [$count, $last_visit];
 
@@ -240,7 +254,9 @@ $result = $db->query($db->sql());
 $total = 0;
 $os_list = [];
 
-while (list($os, $count, $last_visit) = $result->fetch(3)) {
+while ($_scratch = $result->fetch(3)) {
+    list($os, $count, $last_visit) = $_scratch;
+    unset($_scratch);
     $last_visit = !empty($last_visit) ? nv_date('l, d F Y H:i', $last_visit) : '';
     $os_list[$os] = [$count, $last_visit];
 

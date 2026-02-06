@@ -31,7 +31,9 @@ $sth->bindValue(':keywords', '%' . $q . '%', PDO::PARAM_STR);
 $sth->execute();
 
 $array_data = [];
-while (list($title) = $sth->fetch(3)) {
+while ($_scratch = $sth->fetch(3)) {
+    list($title) = $_scratch;
+    unset($_scratch);
     $array_data[] = $title;
 }
 
