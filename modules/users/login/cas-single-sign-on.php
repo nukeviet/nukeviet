@@ -91,7 +91,11 @@ if (!empty($username)) {
                 unset($attribs['gender']);
             }
         }
-        version_compare(PHP_VERSION, '8.1.0', '<') ? ldap_close($ldapconn) : unset($ldapconn);
+        if (version_compare(PHP_VERSION, '8.1.0', '<')) {
+            ldap_close($ldapconn);
+        } else {
+            unset($ldapconn);
+        }
     }
 } else {
     $attribs = [

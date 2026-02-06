@@ -155,7 +155,11 @@ if ($nv_Request->get_title('checksess', 'get', '') == md5('unzip' . $version . $
             }
 
             if ($ftp_check_login > 0) {
-                version_compare(PHP_VERSION, '8.1.0', '<') ? ftp_close($conn_id) : unset($conn_id);
+                if (version_compare(PHP_VERSION, '8.1.0', '<')) {
+                    ftp_close($conn_id);
+                } else {
+                    unset($conn_id);
+                }
             }
         }
 
