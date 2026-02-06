@@ -592,7 +592,7 @@ class Ftp
             return false;
         }
 
-        ftp_close($this->conn_id);
+        version_compare(PHP_VERSION, '8.1.0', '<') ? ftp_close($this->conn_id) : unset($this->conn_id);
     }
 
     /**

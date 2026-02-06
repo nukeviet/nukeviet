@@ -127,7 +127,7 @@ class UrlGetContents
             curl_setopt($curl, CURLOPT_USERAGENT, $agent);
 
             $response = curl_exec($curl);
-            curl_close($curl);
+            version_compare(PHP_VERSION, '8.0.0', '<') ? curl_close($curl) : unset($curl);
 
             if ($response === false) {
                 return false;
@@ -248,7 +248,7 @@ class UrlGetContents
         }
 
         if (curl_errno($curlHandle)) {
-            curl_close($curlHandle);
+            version_compare(PHP_VERSION, '8.0.0', '<') ? curl_close($curlHandle) : unset($curlHandle);
 
             return false;
         }
@@ -278,12 +278,12 @@ class UrlGetContents
         }
 
         if (($response['http_code'] < 200) or (300 <= $response['http_code'])) {
-            curl_close($curlHandle);
+            version_compare(PHP_VERSION, '8.0.0', '<') ? curl_close($curlHandle) : unset($curlHandle);
 
             return false;
         }
 
-        curl_close($curlHandle);
+        version_compare(PHP_VERSION, '8.0.0', '<') ? curl_close($curlHandle) : unset($curlHandle);
 
         if (preg_match('/(<meta http-equiv=)(.*?)(refresh)(.*?)(url=)([^\'\"]+)[\'|"]\s*[\/]*>/is', $result, $matches) and $this->redirectCount <= 5) {
             ++$this->redirectCount;

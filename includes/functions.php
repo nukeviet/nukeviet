@@ -2222,7 +2222,7 @@ function nv_check_url($url, $isTriggerError = true, $is_200 = 0)
         curl_setopt($curl, CURLOPT_USERAGENT, $agent);
 
         $response = curl_exec($curl);
-        curl_close($curl);
+        version_compare(PHP_VERSION, '8.0.0', '<') ? curl_close($curl) : unset($curl);
 
         if ($response === false) {
             if ($isTriggerError) {

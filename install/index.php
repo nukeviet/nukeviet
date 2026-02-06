@@ -278,7 +278,7 @@ if ($step == 1) {
     }
 
     if ($ftp_check_login > 0) {
-        ftp_close($conn_id);
+        version_compare(PHP_VERSION, '8.1.0', '<') ? ftp_close($conn_id) : unset($conn_id);
     }
 
     if ($step < 3 and $nextstep == 1) {
@@ -1238,7 +1238,7 @@ if ($step == 1) {
             ftp_rename($conn_id, NV_TEMP_DIR . '/' . NV_CONFIG_FILENAME, NV_CONFIG_FILENAME);
             nv_chmod_dir($conn_id, NV_UPLOADS_DIR, true);
             ftp_chmod($conn_id, 0644, NV_CONFIG_FILENAME);
-            ftp_close($conn_id);
+            version_compare(PHP_VERSION, '8.1.0', '<') ? ftp_close($conn_id) : unset($conn_id);
         } else {
             @rename(NV_ROOTDIR . '/' . NV_TEMP_DIR . '/' . NV_CONFIG_FILENAME, NV_ROOTDIR . '/' . NV_CONFIG_FILENAME);
         }
