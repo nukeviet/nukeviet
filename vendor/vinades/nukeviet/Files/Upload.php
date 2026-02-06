@@ -360,7 +360,11 @@ class Upload
 
             if (!empty($finfo)) {
                 $mime = finfo_file($finfo, realpath($userfile['tmp_name']));
-                finfo_close($finfo);
+                if (version_compare(PHP_VERSION, '8.1.0', '<')) {
+                    finfo_close($finfo);
+                } else {
+                    unset($finfo);
+                }
                 $mime = preg_replace('/^([\.\-\w]+)\/([\.\-\w]+)(.*)$/i', '$1/$2', trim($mime));
             }
         }
@@ -1214,7 +1218,11 @@ class Upload
             curl_setopt($curl, CURLOPT_USERAGENT, $agent);
 
             $response = curl_exec($curl);
-            curl_close($curl);
+            if (version_compare(PHP_VERSION, '8.0.0', '<')) {
+                curl_close($curl);
+            } else {
+                unset($curl);
+            }
 
             if ($response === false) {
                 return false;
@@ -1371,7 +1379,11 @@ class Upload
         curl_setopt($curlHandle, CURLOPT_URL, $this->url_info['uri']);
         curl_setopt_array($curlHandle, $options);
         if (($fp = fopen($this->temp_file, 'wb')) === false) {
-            curl_close($curlHandle);
+            if (version_compare(PHP_VERSION, '8.0.0', '<')) {
+                curl_close($curlHandle);
+            } else {
+                unset($curlHandle);
+            }
 
             return false;
         }
@@ -1386,12 +1398,20 @@ class Upload
 
         if (curl_exec($curlHandle) === false) {
             fclose($fp);
-            curl_close($curlHandle);
+            if (version_compare(PHP_VERSION, '8.0.0', '<')) {
+                curl_close($curlHandle);
+            } else {
+                unset($curlHandle);
+            }
 
             return false;
         }
         fclose($fp);
-        curl_close($curlHandle);
+        if (version_compare(PHP_VERSION, '8.0.0', '<')) {
+            curl_close($curlHandle);
+        } else {
+            unset($curlHandle);
+        }
 
         return true;
     }

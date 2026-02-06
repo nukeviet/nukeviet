@@ -234,7 +234,11 @@ class Curl
             curl_exec($handle);
 
             if ($curl_error = curl_error($handle)) {
-                curl_close($handle);
+                if (version_compare(PHP_VERSION, '8.0.0', '<')) {
+                    curl_close($handle);
+                } else {
+                    unset($handle);
+                }
 
                 Http::set_error(11);
 
@@ -242,14 +246,22 @@ class Curl
             }
 
             if (in_array((int) curl_getinfo($handle, CURLINFO_HTTP_CODE), [301, 302], true)) {
-                curl_close($handle);
+                if (version_compare(PHP_VERSION, '8.0.0', '<')) {
+                    curl_close($handle);
+                } else {
+                    unset($handle);
+                }
 
                 Http::set_error(5);
 
                 return $this;
             }
 
-            curl_close($handle);
+            if (version_compare(PHP_VERSION, '8.0.0', '<')) {
+                curl_close($handle);
+            } else {
+                unset($handle);
+            }
 
             return ['headers' => [], 'body' => '', 'response' => ['code' => false, 'message' => false], 'cookies' => []];
         }
@@ -274,7 +286,11 @@ class Curl
             }
 
             if ($curl_error = curl_error($handle)) {
-                curl_close($handle);
+                if (version_compare(PHP_VERSION, '8.0.0', '<')) {
+                    curl_close($handle);
+                } else {
+                    unset($handle);
+                }
 
                 Http::set_error(11);
 
@@ -282,7 +298,11 @@ class Curl
             }
 
             if (in_array((int) curl_getinfo($handle, CURLINFO_HTTP_CODE), [301, 302], true)) {
-                curl_close($handle);
+                if (version_compare(PHP_VERSION, '8.0.0', '<')) {
+                    curl_close($handle);
+                } else {
+                    unset($handle);
+                }
 
                 Http::set_error(5);
 
@@ -294,7 +314,11 @@ class Curl
         $response['code'] = curl_getinfo($handle, CURLINFO_HTTP_CODE);
         $response['message'] = $response['code'];
 
-        curl_close($handle);
+        if (version_compare(PHP_VERSION, '8.0.0', '<')) {
+            curl_close($handle);
+        } else {
+            unset($handle);
+        }
 
         if (!empty($args['stream'])) {
             fclose($this->stream_handle);

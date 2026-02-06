@@ -71,7 +71,11 @@ function server_info_update($config_ini_file)
             }
         }
     }
-    curl_close($ch);
+    if (version_compare(PHP_VERSION, '8.0.0', '<')) {
+        curl_close($ch);
+    } else {
+        unset($ch);
+    }
 
     $server_headers = !empty($server_headers) ? implode(',', $server_headers) : '';
 
@@ -93,7 +97,11 @@ function server_info_update($config_ini_file)
     } else {
         $http_only = (!empty($response) and !curl_errno($ch) and (strripos($response, 'x-is-https:') !== false)) ? false : true;
     }
-    curl_close($ch);
+    if (version_compare(PHP_VERSION, '8.0.0', '<')) {
+        curl_close($ch);
+    } else {
+        unset($ch);
+    }
 
     $contents = file_get_contents($config_ini_file);
     if (!empty($contents)) {
@@ -380,7 +388,11 @@ function set_ini_file(&$sys_info)
             curl_setopt($ch, CURLOPT_NOSIGNAL, 1);
             curl_setopt($ch, CURLOPT_HTTPHEADER, ['Referer: ' . NV_MY_DOMAIN]);
             curl_exec($ch);
-            curl_close($ch);
+            if (version_compare(PHP_VERSION, '8.0.0', '<')) {
+                curl_close($ch);
+            } else {
+                unset($ch);
+            }
         }
     }
 }

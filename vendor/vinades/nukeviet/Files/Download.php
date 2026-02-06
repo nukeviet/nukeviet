@@ -204,7 +204,11 @@ class Download
 
             if ($finfo !== false) {
                 $mime = finfo_file($finfo, realpath($path));
-                finfo_close($finfo);
+                if (version_compare(PHP_VERSION, '8.1.0', '<')) {
+                    finfo_close($finfo);
+                } else {
+                    unset($finfo);
+                }
                 $mime = preg_replace('/^([\.\-\w]+)\/([\.\-\w]+)(.*)$/i', '$1/$2', trim($mime));
             }
         }

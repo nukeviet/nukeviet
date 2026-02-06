@@ -155,7 +155,11 @@ function nv_get_mime_type($filename, $magic_path = '', $default_mime = 'applicat
 
         if ($finfo !== false) {
             $mime = finfo_file($finfo, realpath($filename));
-            finfo_close($finfo);
+            if (version_compare(PHP_VERSION, '8.1.0', '<')) {
+                finfo_close($finfo);
+            } else {
+                unset($finfo);
+            }
             $mime = preg_replace('/^([\.\-\w]+)\/([\.\-\w]+)(.*)$/i', '$1/$2', trim($mime));
         }
     }
@@ -416,7 +420,11 @@ function nv_mkdir($path, $dir_name)
         if (substr($sys_info['os'], 0, 3) != 'WIN') {
             ftp_chmod($conn_id, 0777, $dir);
         }
-        ftp_close($conn_id);
+        if (version_compare(PHP_VERSION, '8.1.0', '<')) {
+            ftp_close($conn_id);
+        } else {
+            unset($conn_id);
+        }
     }
     if (!is_dir($path . $dir_name)) {
         if (!is_writable($path)) {

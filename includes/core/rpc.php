@@ -164,7 +164,11 @@ function nv_getRPC($url, $data)
 
     $result['XML'] = curl_exec($ch);
     $result['ERR'] = trim(curl_error($ch));
-    curl_close($ch);
+    if (version_compare(PHP_VERSION, '8.0.0', '<')) {
+        curl_close($ch);
+    } else {
+        unset($ch);
+    }
 
     unset($matches1, $matches2);
     if (preg_match("/\<member\>[\s\n\t\r]*\<name\>[\s\n\t\r]*flerror[\s\n\t\r]*\<\/name\>[\s\n\t\r]*\<value\>[\s\n\t\r]*(\<boolean\>)?[\s\n\t\r]*([0|1]{1})[\s\n\t\r]*(\<\/boolean\>)?[\s\n\t\r]*\<\/value\>[\s\n\t\r]*\<\/member\>/is", $result['XML'], $matches1) and preg_match("/\<member\>[\s\n\t\r]*\<name\>[\s\n\t\r]*message[\s\n\t\r]*\<\/name\>[\s\n\t\r]*\<value\>[\s\n\t\r]*(\<string\>)?[\s\n\t\r]*([^\<]*)[\s\n\t\r]*(\<\/string\>)?[\s\n\t\r]*\<\/value\>[\s\n\t\r]*\<\/member\>/is", $result['XML'], $matches2)) {
