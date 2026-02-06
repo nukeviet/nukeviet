@@ -301,7 +301,7 @@ function nv_clean60($string, $num = 60, $specialchars = true)
         if (strpos($string, ' ') === false) {
             $string = nv_substr($string, 0, $num);
         } else {
-            while (ord(nv_substr($string, $num, 1)) != 32) {
+            while (nv_substr($string, $num, 1) !== ' ') {
                 --$num;
             }
             $string = nv_substr($string, 0, $num) . '...';

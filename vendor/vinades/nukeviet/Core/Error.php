@@ -373,7 +373,7 @@ class Error
         $strEncodedEmail = '';
         $strlen = strlen($this->error_send_mail);
         for ($i = 0; $i < $strlen; ++$i) {
-            $strEncodedEmail .= '&#' . ord(substr($this->error_send_mail, $i)) . ';';
+            $strEncodedEmail .= '&#' . ord($this->error_send_mail[$i]) . ';';
         }
 
         header('Content-Type: text/html; charset=utf-8');

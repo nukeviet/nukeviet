@@ -662,7 +662,7 @@ function nv_EncodeEmail($strEmail, $strDisplay = '', $blnCreateLink = true)
     $strlen = strlen($strEmail);
 
     for ($i = 0; $i < $strlen; ++$i) {
-        $strEncodedEmail .= '&#' . ord(substr($strEmail, $i)) . ';';
+        $strEncodedEmail .= '&#' . ord($strEmail[$i]) . ';';
     }
 
     $strDisplay = trim($strDisplay);

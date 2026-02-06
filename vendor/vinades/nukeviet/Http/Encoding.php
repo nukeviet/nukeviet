@@ -80,7 +80,7 @@ class Encoding
         // Compressed data might contain a full header, if so strip it for gzinflate()
         if (substr($gzData, 0, 3) == "\x1f\x8b\x08") {
             $i = 10;
-            $flg = ord(substr($gzData, 3, 1));
+            $flg = ord($gzData[3]);
             if ($flg > 0) {
                 if ($flg & 4) {
                     list($xlen) = unpack('v', substr($gzData, $i, 2));

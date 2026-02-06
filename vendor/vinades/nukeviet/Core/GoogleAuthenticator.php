@@ -99,7 +99,7 @@ class GoogleAuthenticator
         $secretkey = $this->decode($secret);
         $time = chr(0) . chr(0) . chr(0) . chr(0) . pack('N*', $timeSlice);
         $hm = hash_hmac('SHA1', $time, $secretkey, true);
-        $offset = ord(substr($hm, -1)) & 0x0F;
+        $offset = ord($hm[strlen($hm) - 1]) & 0x0F;
         $hashpart = substr($hm, $offset, 4);
         $value = unpack('N', $hashpart);
         $value = $value[1];
