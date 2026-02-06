@@ -11,6 +11,8 @@
 
 namespace NukeViet\Client;
 
+use NukeViet\Core\HttpException;
+
 /**
  * NukeViet\Client\Sso
  *
@@ -33,8 +35,7 @@ class Sso
     {
         $return_url = nv_url_rewrite($return_url, true);
         if (!str_starts_with($return_url, NV_MY_DOMAIN) and preg_match('/^(https?:\/\/|\/\/)/i', $return_url)) {
-            http_response_code(500);
-            trigger_error('Invalid return_url', E_USER_ERROR);
+            throw new HttpException('Invalid return_url', 500);
         }
         if (!str_starts_with($return_url, NV_MY_DOMAIN)) {
             $return_url = NV_MY_DOMAIN . $return_url;

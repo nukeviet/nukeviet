@@ -48,7 +48,9 @@ $sth->bindValue(':keywords', '%' . $q . '%', PDO::PARAM_STR);
 $sth->execute();
 
 $array_data = [];
-while ([$keywords] = $sth->fetch(3)) {
+while ($_scratch = $sth->fetch(3)) {
+    [$keywords] = $_scratch;
+    unset($_scratch);
     $keywords = explode(',', $keywords);
     foreach ($keywords as $_keyword) {
         $array_data[] = nv_unhtmlspecialchars(str_replace('-', ' ', $_keyword));

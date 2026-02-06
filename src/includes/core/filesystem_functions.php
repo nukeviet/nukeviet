@@ -176,7 +176,7 @@ function nv_get_mime_type($filename, $magic_path = '', $default_mime = 'applicat
 
         if ($finfo !== false) {
             $mime = finfo_file($finfo, realpath($filename));
-            finfo_close($finfo);
+            unset($finfo);
             $mime = preg_replace('/^([\.\-\w]+)\/([\.\-\w]+)(.*)$/i', '$1/$2', trim($mime));
         }
     }
@@ -1237,8 +1237,7 @@ function get_module_tpl_dir($filename, $array = false)
     }
 
     trigger_error('Template file not found: ' . $filename . ', module: ' . $module_theme);
-    http_response_code(500);
-    trigger_error('Template file not found!', E_USER_ERROR);
+    throw new \NukeViet\Core\HttpException('Template file not found!', 500);
 }
 
 /**

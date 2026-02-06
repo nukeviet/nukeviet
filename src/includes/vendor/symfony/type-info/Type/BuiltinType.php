@@ -41,15 +41,7 @@ final class BuiltinType extends Type
     public function isIdentifiedBy(TypeIdentifier|string ...$identifiers): bool
     {
         foreach ($identifiers as $identifier) {
-            if (\is_string($identifier)) {
-                try {
-                    $identifier = TypeIdentifier::from($identifier);
-                } catch (\ValueError) {
-                    continue;
-                }
-            }
-
-            if ($identifier === $this->typeIdentifier) {
+            if ($identifier === $this->typeIdentifier || $identifier === $this->typeIdentifier->value) {
                 return true;
             }
         }
@@ -59,7 +51,27 @@ final class BuiltinType extends Type
 
     public function isNullable(): bool
     {
-        return \in_array($this->typeIdentifier, [TypeIdentifier::NULL, TypeIdentifier::MIXED]);
+        return \in_array($this->typeIdentifier, [TypeIdentifier::NULL, TypeIdentifier::MIXED], true);
+    }
+
+    public function accepts(mixed $value): bool
+    {
+        return match ($this->typeIdentifier) {
+            TypeIdentifier::ARRAY => \is_array($value),
+            TypeIdentifier::BOOL => \is_bool($value),
+            TypeIdentifier::CALLABLE => \is_callable($value),
+            TypeIdentifier::FALSE => false === $value,
+            TypeIdentifier::FLOAT => \is_float($value),
+            TypeIdentifier::INT => \is_int($value),
+            TypeIdentifier::ITERABLE => is_iterable($value),
+            TypeIdentifier::MIXED => true,
+            TypeIdentifier::NULL => null === $value,
+            TypeIdentifier::OBJECT => \is_object($value),
+            TypeIdentifier::RESOURCE => \is_resource($value),
+            TypeIdentifier::STRING => \is_string($value),
+            TypeIdentifier::TRUE => true === $value,
+            default => false,
+        };
     }
 
     public function __toString(): string

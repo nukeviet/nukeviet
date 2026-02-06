@@ -7,8 +7,8 @@
  * @category  Library
  * @package   Color
  * @author    Nicola Asuni <info@tecnick.com>
- * @copyright 2015-2024 Nicola Asuni - Tecnick.com LTD
- * @license   http://www.gnu.org/copyleft/lesser.html GNU-LGPL v3 (see LICENSE.TXT)
+ * @copyright 2015-2026 Nicola Asuni - Tecnick.com LTD
+ * @license   https://www.gnu.org/copyleft/lesser.html GNU-LGPL v3 (see LICENSE.TXT)
  * @link      https://github.com/tecnickcom/tc-lib-color
  *
  * This file is part of tc-lib-color software library.
@@ -28,8 +28,8 @@ use Com\Tecnick\Color\Model\Cmyk;
  * @category  Library
  * @package   Color
  * @author    Nicola Asuni <info@tecnick.com>
- * @copyright 2015-2024 Nicola Asuni - Tecnick.com LTD
- * @license   http://www.gnu.org/copyleft/lesser.html GNU-LGPL v3 (see LICENSE.TXT)
+ * @copyright 2015-2026 Nicola Asuni - Tecnick.com LTD
+ * @license   https://www.gnu.org/copyleft/lesser.html GNU-LGPL v3 (see LICENSE.TXT)
  * @link      https://github.com/tecnickcom/tc-lib-color
  *
  * @phpstan-type TSpotColor array{
@@ -193,7 +193,7 @@ class Spot extends \Com\Tecnick\Color\Web
      */
     public function normalizeSpotColorName(string $name): string
     {
-        $ret = preg_replace('/[^a-z0-9]*+/', '', strtolower($name));
+        $ret = \preg_replace('/[^a-z0-9]*+/', '', \strtolower($name));
         return $ret ?? '';
     }
 
@@ -245,7 +245,7 @@ class Spot extends \Com\Tecnick\Color\Web
     public function addSpotColor(string $name, Cmyk $cmyk): string
     {
         $key = $this->normalizeSpotColorName($name);
-        $num = isset($this->spot_colors[$key]) ? $this->spot_colors[$key]['i'] : (count($this->spot_colors) + 1);
+        $num = isset($this->spot_colors[$key]) ? $this->spot_colors[$key]['i'] : (\count($this->spot_colors) + 1);
 
         $this->spot_colors[$key] = [
             'i' => $num, // color index
@@ -270,7 +270,7 @@ class Spot extends \Com\Tecnick\Color\Web
         foreach ($this->spot_colors as $name => $color) {
             $out .= (++$pon) . ' 0 obj' . "\n";
             $this->spot_colors[$name]['n'] = $pon;
-            $out .= '[/Separation /' . str_replace(' ', '#20', $name)
+            $out .= '[/Separation /' . \str_replace(' ', '#20', $name)
                 . ' /DeviceCMYK <<'
                 . '/Range [0 1 0 1 0 1 0 1]'
                 . ' /C0 [0 0 0 0]'

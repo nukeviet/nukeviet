@@ -7,8 +7,8 @@
  * @category  Library
  * @package   Color
  * @author    Nicola Asuni <info@tecnick.com>
- * @copyright 2015-2024 Nicola Asuni - Tecnick.com LTD
- * @license   http://www.gnu.org/copyleft/lesser.html GNU-LGPL v3 (see LICENSE.TXT)
+ * @copyright 2015-2026 Nicola Asuni - Tecnick.com LTD
+ * @license   https://www.gnu.org/copyleft/lesser.html GNU-LGPL v3 (see LICENSE.TXT)
  * @link      https://github.com/tecnickcom/tc-lib-color
  *
  * This file is part of tc-lib-color software library.
@@ -27,8 +27,8 @@ use Com\Tecnick\Color\Exception as ColorException;
  * @category  Library
  * @package   Color
  * @author    Nicola Asuni <info@tecnick.com>
- * @copyright 2015-2024 Nicola Asuni - Tecnick.com LTD
- * @license   http://www.gnu.org/copyleft/lesser.html GNU-LGPL v3 (see LICENSE.TXT)
+ * @copyright 2015-2026 Nicola Asuni - Tecnick.com LTD
+ * @license   https://www.gnu.org/copyleft/lesser.html GNU-LGPL v3 (see LICENSE.TXT)
  * @link      https://github.com/tecnickcom/tc-lib-color
  */
 class Web extends \Com\Tecnick\Color\Css
@@ -199,10 +199,10 @@ class Web extends \Com\Tecnick\Color\Css
      */
     public function getHexFromName(string $name): string
     {
-        $name = strtolower($name);
-        if (($dotpos = strpos($name, '.')) !== false) {
+        $name = \strtolower($name);
+        if (($dotpos = \strpos($name, '.')) !== false) {
             // remove parent name (i.e.: color.green)
-            $name = substr($name, ($dotpos + 1));
+            $name = \substr($name, ($dotpos + 1));
         }
 
         if (empty(self::WEBHEX[$name])) {
@@ -223,7 +223,7 @@ class Web extends \Com\Tecnick\Color\Css
      */
     public function getNameFromHex(string $hex): string
     {
-        $name = array_search($this->extractHexCode($hex), self::WEBHEX, true);
+        $name = \array_search($this->extractHexCode($hex), self::WEBHEX, true);
         if ($name === false) {
             throw new ColorException('unable to find the color name for the hex code: ' . $hex);
         }
@@ -242,12 +242,12 @@ class Web extends \Com\Tecnick\Color\Css
      */
     public function extractHexCode(string $hex): string
     {
-        if (preg_match('/^[#]?([0-9a-f]{3,8})$/', strtolower($hex), $match) !== 1) {
+        if (\preg_match('/^[#]?([0-9a-f]{3,8})$/', \strtolower($hex), $match) !== 1) {
             throw new ColorException('unable to extract the color hash: ' . $hex);
         }
 
         $hex = $match[1];
-        switch (strlen($hex)) {
+        switch (\strlen($hex)) {
             case 3:
                 return $hex[0] . $hex[0] . $hex[1] . $hex[1] . $hex[2] . $hex[2] . 'ff';
             case 4:
@@ -303,10 +303,10 @@ class Web extends \Com\Tecnick\Color\Css
     private function getHexArray(string $hex): array
     {
         return [
-            'red' => (hexdec(substr($hex, 0, 2)) / 255),
-            'green' => (hexdec(substr($hex, 2, 2)) / 255),
-            'blue' => (hexdec(substr($hex, 4, 2)) / 255),
-            'alpha' => (hexdec(substr($hex, 6, 2)) / 255),
+            'red' => (\hexdec(\substr($hex, 0, 2)) / 255),
+            'green' => (\hexdec(\substr($hex, 2, 2)) / 255),
+            'blue' => (\hexdec(\substr($hex, 4, 2)) / 255),
+            'alpha' => (\hexdec(\substr($hex, 6, 2)) / 255),
         ];
     }
 
@@ -320,11 +320,11 @@ class Web extends \Com\Tecnick\Color\Css
      */
     public function normalizeValue(mixed $value, int $max): float
     {
-        if (is_string($value) && (strpos($value, '%') !== false)) {
-            return max(0, min(1, ((float) $value / 100)));
+        if (\is_string($value) && (\strpos($value, '%') !== false)) {
+            return \max(0, \min(1, ((float) $value / 100)));
         }
 
-        return max(0, min(1, ((float) $value / $max)));
+        return \max(0, \min(1, ((float) $value / $max)));
     }
 
     /**
@@ -336,8 +336,8 @@ class Web extends \Com\Tecnick\Color\Css
      */
     public function getColorObj(string $color): ?\Com\Tecnick\Color\Model
     {
-        $color = preg_replace('/[\s]*+/', '', strtolower($color));
-        if (empty($color) || (strpos($color, 'transparent') !== false)) {
+        $color = \preg_replace('/[\s]*+/', '', \strtolower($color));
+        if (empty($color) || (\strpos($color, 'transparent') !== false)) {
             return null;
         }
 
@@ -350,7 +350,7 @@ class Web extends \Com\Tecnick\Color\Css
         }
 
         $rex = '/^(t|g|rgba|rgb|hsla|hsl|cmyka|cmyk)[\(]/';
-        if (preg_match($rex, $color, $col) === 1) {
+        if (\preg_match($rex, $color, $col) === 1) {
             return $this->getColorObjFromCss($col[1], $color);
         }
 

@@ -93,7 +93,8 @@ $csp = [
             '*.tawk.to',
             'wss://*.tawk.to',
             '*.ckeditor.com',
-            '*.google.com'
+            '*.google.com',
+            'cdn.plyr.io'
         ]
     ],
     'media-src' => [

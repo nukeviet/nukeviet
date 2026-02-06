@@ -152,7 +152,9 @@ if (!nv_function_exists('nv_news_block_tophits')) {
             }
 
             $result = $db_slave->query($db_slave->sql());
-            while ([$id, $catid, $publtime, $title, $alias, $homeimgthumb, $homeimgfile, $hometext, $external_link] = $result->fetch(3)) {
+            while ($_scratch = $result->fetch(3)) {
+                [$id, $catid, $publtime, $title, $alias, $homeimgthumb, $homeimgfile, $hometext, $external_link] = $_scratch;
+                unset($_scratch);
                 if ($homeimgthumb == 1) {
                     // image thumb
                     $imgurl = NV_BASE_SITEURL . NV_FILES_DIR . '/' . $site_mods[$module]['module_upload'] . '/' . $homeimgfile;

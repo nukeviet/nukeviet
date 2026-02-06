@@ -7,8 +7,8 @@
  * @category    Library
  * @package     Barcode
  * @author      Nicola Asuni <info@tecnick.com>
- * @copyright   2010-2024 Nicola Asuni - Tecnick.com LTD
- * @license     http://www.gnu.org/copyleft/lesser.html GNU-LGPL v3 (see LICENSE.TXT)
+ * @copyright   2010-2026 Nicola Asuni - Tecnick.com LTD
+ * @license     https://www.gnu.org/copyleft/lesser.html GNU-LGPL v3 (see LICENSE.TXT)
  * @link        https://github.com/tecnickcom/tc-lib-barcode
  *
  * This file is part of tc-lib-barcode software library.
@@ -28,8 +28,8 @@ use Com\Tecnick\Barcode\Exception as BarcodeException;
  * @category    Library
  * @package     Barcode
  * @author      Nicola Asuni <info@tecnick.com>
- * @copyright   2010-2024 Nicola Asuni - Tecnick.com LTD
- * @license     http://www.gnu.org/copyleft/lesser.html GNU-LGPL v3 (see LICENSE.TXT)
+ * @copyright   2010-2026 Nicola Asuni - Tecnick.com LTD
+ * @license     https://www.gnu.org/copyleft/lesser.html GNU-LGPL v3 (see LICENSE.TXT)
  * @link        https://github.com/tecnickcom/tc-lib-barcode
  */
 class StandardTwoOfFiveCheck extends \Com\Tecnick\Barcode\Type\Linear
@@ -68,7 +68,7 @@ class StandardTwoOfFiveCheck extends \Com\Tecnick\Barcode\Type\Linear
      */
     protected function getChecksum(string $code): int
     {
-        $clen = strlen($code);
+        $clen = \strlen($code);
         $sum = 0;
         for ($idx = 0; $idx < $clen; $idx += 2) {
             $sum += (int) $code[$idx];
@@ -103,17 +103,17 @@ class StandardTwoOfFiveCheck extends \Com\Tecnick\Barcode\Type\Linear
     protected function setBars(): void
     {
         $this->formatCode();
-        if (strlen($this->extcode) % 2 != 0) {
+        if (\strlen($this->extcode) % 2 != 0) {
             // add leading zero if code-length is odd
             $this->extcode = '0' . $this->extcode;
         }
 
         $seq = '1110111010';
-        $clen = strlen($this->extcode);
+        $clen = \strlen($this->extcode);
         for ($idx = 0; $idx < $clen; ++$idx) {
             $digit = $this->extcode[$idx];
             if (! isset($this::CHBAR[$digit])) {
-                throw new BarcodeException('Invalid character: chr(' . ord($digit) . ')');
+                throw new BarcodeException('Invalid character: \chr(' . \ord($digit) . ')');
             }
 
             $seq .= $this::CHBAR[$digit];

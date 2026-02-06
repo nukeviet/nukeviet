@@ -180,7 +180,9 @@ function get_field_config()
                 $query .= ' ORDER BY ' . $row_field['sql_choices'][4] . ' ' . $row_field['sql_choices'][5];
             }
             $result = $db->query($query);
-            while ([$key, $val] = $result->fetch(3)) {
+            while ($_scratch = $result->fetch(3)) {
+                [$key, $val] = $_scratch;
+                unset($_scratch);
                 $row_field['field_choices'][$key] = $val;
             }
         }
@@ -1195,7 +1197,9 @@ if ($checkss == $array_data['checkss'] and $array_data['type'] == 'basic') {
                     $send_data = [];
                     $url_group = urlRewriteWithDomain(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=groups/' . $gid, NV_MY_DOMAIN);
                     $result = $db->query('SELECT t2.email FROM ' . NV_MOD_TABLE . '_groups_users t1 INNER JOIN ' . NV_MOD_TABLE . ' t2 ON t1.userid=t2.userid WHERE t1.is_leader=1 AND t1.group_id=' . $gid);
-                    while ([$email] = $result->fetch(3)) {
+                    while ($_scratch = $result->fetch(3)) {
+                        [$email] = $_scratch;
+                        unset($_scratch);
                         $send_data[] = [
                             'to' => $email,
                             'data' => [

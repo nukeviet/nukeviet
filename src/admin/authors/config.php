@@ -28,7 +28,9 @@ function nv_save_file_admin_config()
 
     $sql = 'SELECT keyname, mask, begintime, endtime, notice FROM ' . NV_AUTHORS_GLOBALTABLE . '_config';
     $result = $db->query($sql);
-    while ([$keyname, $dbmask, $dbbegintime, $dbendtime, $dbnotice] = $result->fetch(3)) {
+    while ($_scratch = $result->fetch(3)) {
+        [$keyname, $dbmask, $dbbegintime, $dbendtime, $dbnotice] = $_scratch;
+        unset($_scratch);
         $dbendtime = (int) $dbendtime;
         if ($dbendtime == 0 or $dbendtime > NV_CURRENTTIME) {
             if ($dbmask == -1) {
@@ -300,7 +302,9 @@ $firewalls = [];
 $sql = 'SELECT id, keyname, begintime, endtime FROM ' . NV_AUTHORS_GLOBALTABLE . "_config WHERE mask = '-1' ORDER BY keyname DESC";
 $result = $db->query($sql);
 
-while ([$dbid, $dbkeyname, $dbbegintime, $dbendtime] = $result->fetch(3)) {
+while ($_scratch = $result->fetch(3)) {
+    [$dbid, $dbkeyname, $dbbegintime, $dbendtime] = $_scratch;
+    unset($_scratch);
     $firewalls[] = [
         'uid' => $dbid,
         'keyname' => $dbkeyname,
@@ -340,7 +344,9 @@ $sql = 'SELECT id, keyname, mask, begintime, endtime FROM ' . NV_AUTHORS_GLOBALT
 $result = $db->query($sql);
 
 $ipaccess = [];
-while ([$dbid, $dbkeyname, $dbmask, $dbbegintime, $dbendtime] = $result->fetch(3)) {
+while ($_scratch = $result->fetch(3)) {
+    [$dbid, $dbkeyname, $dbmask, $dbbegintime, $dbendtime] = $_scratch;
+    unset($_scratch);
     $ipaccess[] = [
         'id' => $dbid,
         'keyname' => $dbkeyname,

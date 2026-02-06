@@ -7,8 +7,8 @@
  * @category    Library
  * @package     Barcode
  * @author      Nicola Asuni <info@tecnick.com>
- * @copyright   2023-2024 Nicola Asuni - Tecnick.com LTD
- * @license     http://www.gnu.org/copyleft/lesser.html GNU-LGPL v3 (see LICENSE.TXT)
+ * @copyright   2023-2026 Nicola Asuni - Tecnick.com LTD
+ * @license     https://www.gnu.org/copyleft/lesser.html GNU-LGPL v3 (see LICENSE.TXT)
  * @link        https://github.com/tecnickcom/tc-lib-barcode
  *
  * This file is part of tc-lib-barcode software library.
@@ -27,8 +27,8 @@ use Com\Tecnick\Barcode\Exception as BarcodeException;
  * @category    Library
  * @package     Barcode
  * @author      Nicola Asuni <info@tecnick.com>
- * @copyright   2023-2024 Nicola Asuni - Tecnick.com LTD
- * @license     http://www.gnu.org/copyleft/lesser.html GNU-LGPL v3 (see LICENSE.TXT)
+ * @copyright   2023-2026 Nicola Asuni - Tecnick.com LTD
+ * @license     https://www.gnu.org/copyleft/lesser.html GNU-LGPL v3 (see LICENSE.TXT)
  * @link        https://github.com/tecnickcom/tc-lib-barcode
  */
 class Encode extends \Com\Tecnick\Barcode\Type\Square\Aztec\Bitstream
@@ -101,7 +101,7 @@ class Encode extends \Com\Tecnick\Barcode\Type\Square\Aztec\Bitstream
         int $wsize
     ): int {
         $cdw = $this->bitstreamToWords($bitstream, $totbits, $wsize);
-        $numcdw = count($cdw);
+        $numcdw = \count($cdw);
         $totwords = (int) ($nbits / $wsize);
         $eccwords = ($totwords - $numcdw);
         $errorCorrection = new ErrorCorrection($wsize);
@@ -121,8 +121,8 @@ class Encode extends \Com\Tecnick\Barcode\Type\Square\Aztec\Bitstream
     {
         // initialize grid
         $size = $this->layer[0];
-        $row = array_fill(0, $size, 0);
-        $this->grid = array_fill(0, $size, $row);
+        $row = \array_fill(0, $size, 0);
+        $this->grid = \array_fill(0, $size, $row);
         // draw center
         $center = (int) (($size - 1) / 2);
         $this->gridcenter = $center;

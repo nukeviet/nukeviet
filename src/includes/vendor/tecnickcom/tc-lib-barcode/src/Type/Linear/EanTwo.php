@@ -7,8 +7,8 @@
  * @category    Library
  * @package     Barcode
  * @author      Nicola Asuni <info@tecnick.com>
- * @copyright   2010-2024 Nicola Asuni - Tecnick.com LTD
- * @license     http://www.gnu.org/copyleft/lesser.html GNU-LGPL v3 (see LICENSE.TXT)
+ * @copyright   2010-2026 Nicola Asuni - Tecnick.com LTD
+ * @license     https://www.gnu.org/copyleft/lesser.html GNU-LGPL v3 (see LICENSE.TXT)
  * @link        https://github.com/tecnickcom/tc-lib-barcode
  *
  * This file is part of tc-lib-barcode software library.
@@ -28,8 +28,8 @@ use Com\Tecnick\Barcode\Exception as BarcodeException;
  * @category    Library
  * @package     Barcode
  * @author      Nicola Asuni <info@tecnick.com>
- * @copyright   2010-2024 Nicola Asuni - Tecnick.com LTD
- * @license     http://www.gnu.org/copyleft/lesser.html GNU-LGPL v3 (see LICENSE.TXT)
+ * @copyright   2010-2026 Nicola Asuni - Tecnick.com LTD
+ * @license     https://www.gnu.org/copyleft/lesser.html GNU-LGPL v3 (see LICENSE.TXT)
  * @link        https://github.com/tecnickcom/tc-lib-barcode
  */
 class EanTwo extends \Com\Tecnick\Barcode\Type\Linear
@@ -109,7 +109,7 @@ class EanTwo extends \Com\Tecnick\Barcode\Type\Linear
      */
     protected function formatCode(): void
     {
-        $this->extcode = str_pad($this->code, $this->code_length, '0', STR_PAD_LEFT);
+        $this->extcode = \str_pad($this->code, $this->code_length, '0', STR_PAD_LEFT);
     }
 
     /**
@@ -124,7 +124,7 @@ class EanTwo extends \Com\Tecnick\Barcode\Type\Linear
         $parity = $this::PARITIES[$chk];
         $seq = '1011'; // left guard bar
         $seq .= $this::CHBAR[$parity[0]][$this->extcode[0]];
-        $len = strlen($this->extcode);
+        $len = \strlen($this->extcode);
         for ($pos = 1; $pos < $len; ++$pos) {
             $seq .= '01'; // separator
             $seq .= $this::CHBAR[$parity[$pos]][$this->extcode[$pos]];

@@ -247,7 +247,7 @@ class Curl
             curl_exec($handle);
 
             if ($curl_error = curl_error($handle)) {
-                curl_close($handle);
+                unset($handle);
 
                 Http::set_error(11);
 
@@ -255,14 +255,14 @@ class Curl
             }
 
             if (in_array((int) curl_getinfo($handle, CURLINFO_HTTP_CODE), [301, 302], true)) {
-                curl_close($handle);
+                unset($handle);
 
                 Http::set_error(5);
 
                 return $this;
             }
 
-            curl_close($handle);
+            unset($handle);
 
             $response_return = [
                 'origin_url' => $args['origin_url'],
@@ -306,7 +306,7 @@ class Curl
             }
 
             if ($curl_error) {
-                curl_close($handle);
+                unset($handle);
 
                 Http::set_error(11);
 
@@ -314,7 +314,7 @@ class Curl
             }
 
             if (in_array((int) curl_getinfo($handle, CURLINFO_HTTP_CODE), [301, 302], true)) {
-                curl_close($handle);
+                unset($handle);
 
                 Http::set_error(5);
 
@@ -329,7 +329,7 @@ class Curl
         $response['code'] = curl_getinfo($handle, CURLINFO_HTTP_CODE);
         $response['message'] = Http::$http_response_status_codes[$response['code']] ?? $response['code'];
 
-        curl_close($handle);
+        unset($handle);
 
         if (!empty($args['stream'])) {
             fclose($this->stream_handle);

@@ -815,7 +815,9 @@ if (!empty($module_config[$module_name]['elas_use'])) {
     $result = $db_slave->query($db_slave->sql());
 
     $data = $array_ids = $array_userid = [];
-    while ([$id, $catid_i, $listcatid, $post_id, $title, $alias, $status, $weight, $addtime, $edittime, $publtime, $exptime, $hitstotal, $hitscm, $_userid, $author] = $result->fetch(3)) {
+    while ($_scratch = $result->fetch(3)) {
+        [$id, $catid_i, $listcatid, $post_id, $title, $alias, $status, $weight, $addtime, $edittime, $publtime, $exptime, $hitstotal, $hitscm, $_userid, $author] = $_scratch;
+        unset($_scratch);
         $publtime = nv_datetime_format($publtime, 1);
 
         if ($array_search['catid'] > 0) {
@@ -926,7 +928,9 @@ if (!empty($array_ids)) {
     ->where('id IN( ' . implode(',', $array_ids) . ' )')
     ->group('id');
     $result = $db_slave->query($db_slave->sql());
-    while ([$numtags, $id] = $result->fetch(3)) {
+    while ($_scratch = $result->fetch(3)) {
+        [$numtags, $id] = $_scratch;
+        unset($_scratch);
         $data[$id]['numtags'] = nv_number_format($numtags);
     }
 
@@ -974,7 +978,9 @@ if (!empty($array_userid)) {
     ->where('tb1.userid IN( ' . implode(',', $array_userid) . ' )');
     $array_userid = [];
     $result = $db_slave->query($db_slave->sql());
-    while ([$_userid, $_username, $admin_lev] = $result->fetch(3)) {
+    while ($_scratch = $result->fetch(3)) {
+        [$_userid, $_username, $admin_lev] = $_scratch;
+        unset($_scratch);
         $array_userid[$_userid] = [
             'username' => $_username,
             'admin_lev' => $admin_lev

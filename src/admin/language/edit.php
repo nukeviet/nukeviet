@@ -157,7 +157,9 @@ $sql = 'SELECT id, lang_key, lang_' . $dirlang . ' FROM ' . NV_LANGUAGE_GLOBALTA
 $result = $db->query($sql);
 
 $array = [];
-while ([$id, $lang_key, $lang_value] = $result->fetch(3)) {
+while ($_scratch = $result->fetch(3)) {
+    [$id, $lang_key, $lang_value] = $_scratch;
+    unset($_scratch);
     $array[] = [
         'lang_key' => $lang_key,
         'value' => !empty($lang_value) ? str_replace(['&lt;', '&gt;', '&quot;', '<', '>', '"', "'"], ['&amp;lt;', '&amp;gt;', '&amp;quot;', '&lt;', '&gt;', '&quot;', '&#039;'], $lang_value) : '',

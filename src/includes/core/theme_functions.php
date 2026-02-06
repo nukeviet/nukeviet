@@ -516,7 +516,9 @@ function nv_xmlSitemapIndex_generate()
         foreach ($global_config['allow_sitelangs'] as $lang) {
             $sql = 'SELECT m.title, m.module_file FROM ' . $db_config['prefix'] . '_' . $lang . '_modules m LEFT JOIN ' . $db_config['prefix'] . '_' . $lang . "_modfuncs f ON m.title=f.in_module WHERE m.act = 1 AND m.groups_view='6' AND m.sitemap=1 AND f.func_name = 'sitemap' ORDER BY m.weight, f.subweight";
             $result = $db->query($sql);
-            while ([$modname, $modfile] = $result->fetch(3)) {
+            while ($_scratch = $result->fetch(3)) {
+                [$modname, $modfile] = $_scratch;
+                unset($_scratch);
                 $sitemaps = nv_scandir(NV_ROOTDIR . '/modules/' . $modfile . '/funcs', '/^sitemap(.*?)\.php$/');
                 [$modname, $sitemaps] = nv_apply_hook('', 'generating_sitemap_module', [$modname, $sitemaps], [$modname, $sitemaps]);
                 if (!empty($sitemaps)) {
@@ -816,13 +818,11 @@ function nv_register_block(string $tag, string $name = '', string $module = '')
         return false;
     }
     if (!preg_match('/^(?!_)[a-zA-Z0-9_]+(?<!_)$/', $tag)) {
-        http_response_code(500);
-        trigger_error('nv_register_block: Invalid tag name ' . nv_htmlspecialchars($tag), E_USER_ERROR);
+        throw new \NukeViet\Core\HttpException('nv_register_block: Invalid tag name ' . nv_htmlspecialchars($tag), 500);
     }
     $name = nv_htmlspecialchars($name ?: $tag);
     if (nv_strlen($name) > 100) {
-        http_response_code(500);
-        trigger_error('nv_register_block: Block name too long, max 100 chars', E_USER_ERROR);
+        throw new \NukeViet\Core\HttpException('nv_register_block: Block name too long, max 100 chars', 500);
     }
 
     $ini_tag = nv_tag2pos_block($tag, $module);
@@ -861,8 +861,7 @@ function nv_unregister_block(string $tag, string $module = '', bool $all = false
         return false;
     }
     if (empty($tag) and !$all) {
-        http_response_code(500);
-        trigger_error('nv_unregister_block: Method call is not allowed!', E_USER_ERROR);
+        throw new \NukeViet\Core\HttpException('nv_unregister_block: Method call is not allowed!', 500);
     }
 
     $sql = "SELECT tag, ini_tag FROM " . NV_PREFIXLANG . "_modblocks WHERE module_name=:module_name" . ($all ? '' : " AND tag=:tag");
