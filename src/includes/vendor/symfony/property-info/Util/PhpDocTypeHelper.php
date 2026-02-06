@@ -21,6 +21,7 @@ use phpDocumentor\Reflection\Types\Compound;
 use phpDocumentor\Reflection\Types\Integer;
 use phpDocumentor\Reflection\Types\Null_;
 use phpDocumentor\Reflection\Types\Nullable;
+use phpDocumentor\Reflection\Types\Scalar;
 use phpDocumentor\Reflection\Types\String_;
 use Symfony\Component\PropertyInfo\Type as LegacyType;
 use Symfony\Component\TypeInfo\Type;
@@ -41,10 +42,14 @@ final class PhpDocTypeHelper
     /**
      * Creates a {@see LegacyType} from a PHPDoc type.
      *
+     * @deprecated since Symfony 7.3, use "getType" instead
+     *
      * @return LegacyType[]
      */
     public function getTypes(DocType $varType): array
     {
+        trigger_deprecation('symfony/property-info', '7.3', 'The "%s()" method is deprecated, use "%s::getType()" instead.', __METHOD__, self::class);
+
         if ($varType instanceof ConstExpression) {
             // It's safer to fall back to other extractors here, as resolving const types correctly is not easy at the moment
             return [];
@@ -56,6 +61,15 @@ final class PhpDocTypeHelper
         if ($varType instanceof Nullable) {
             $nullable = true;
             $varType = $varType->getActualType();
+        }
+
+        if ($varType instanceof Scalar) {
+            return [
+                new LegacyType(LegacyType::BUILTIN_TYPE_BOOL),
+                new LegacyType(LegacyType::BUILTIN_TYPE_FLOAT),
+                new LegacyType(LegacyType::BUILTIN_TYPE_INT),
+                new LegacyType(LegacyType::BUILTIN_TYPE_STRING),
+            ];
         }
 
         if (!$varType instanceof Compound) {
@@ -161,6 +175,10 @@ final class PhpDocTypeHelper
             }
         }
 
+        if (!$unionTypes) {
+            return null;
+        }
+
         $type = 1 === \count($unionTypes) ? $unionTypes[0] : Type::union(...$unionTypes);
 
         return $nullable ? Type::nullable($type) : $type;
@@ -172,6 +190,10 @@ final class PhpDocTypeHelper
     private function createLegacyType(DocType $type, bool $nullable): ?LegacyType
     {
         $docType = (string) $type;
+
+        if ('mixed[]' === $docType) {
+            $docType = 'array';
+        }
 
         if ($type instanceof Collection) {
             $fqsen = $type->getFqsen();
@@ -241,6 +263,10 @@ final class PhpDocTypeHelper
     {
         $docTypeString = (string) $docType;
 
+        if ('mixed[]' === $docTypeString) {
+            $docTypeString = 'array';
+        }
+
         if ($docType instanceof Collection) {
             $fqsen = $docType->getFqsen();
             if ($fqsen && 'list' === $fqsen->getName() && !class_exists(List_::class, false) && !class_exists((string) $fqsen)) {
@@ -288,14 +314,6 @@ final class PhpDocTypeHelper
             return Type::array($collectionValueType, $collectionKeyType);
         }
 
-        if ($docType instanceof PseudoType) {
-            if ($docType->underlyingType() instanceof Integer) {
-                return Type::int();
-            } elseif ($docType->underlyingType() instanceof String_) {
-                return Type::string();
-            }
-        }
-
         $docTypeString = match ($docTypeString) {
             'integer' => 'int',
             'boolean' => 'bool',
@@ -312,7 +330,22 @@ final class PhpDocTypeHelper
             return Type::array();
         }
 
-        return null !== $class ? Type::object($class) : Type::builtin($phpType);
+        if (null === $class) {
+            return Type::builtin($phpType);
+        }
+
+        if ($docType instanceof PseudoType) {
+            if ($docType->underlyingType() instanceof Integer) {
+                return Type::int();
+            } elseif ($docType->underlyingType() instanceof String_) {
+                return Type::string();
+            } else {
+                // It's safer to fall back to other extractors here, as resolving pseudo types correctly is not easy at the moment
+                return null;
+            }
+        }
+
+        return Type::object($class);
     }
 
     private function normalizeType(string $docType): string

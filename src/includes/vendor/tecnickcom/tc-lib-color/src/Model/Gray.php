@@ -7,8 +7,8 @@
  * @category  Library
  * @package   Color
  * @author    Nicola Asuni <info@tecnick.com>
- * @copyright 2015-2024 Nicola Asuni - Tecnick.com LTD
- * @license   http://www.gnu.org/copyleft/lesser.html GNU-LGPL v3 (see LICENSE.TXT)
+ * @copyright 2015-2026 Nicola Asuni - Tecnick.com LTD
+ * @license   https://www.gnu.org/copyleft/lesser.html GNU-LGPL v3 (see LICENSE.TXT)
  * @link      https://github.com/tecnickcom/tc-lib-color
  *
  * This file is part of tc-lib-color software library.
@@ -25,8 +25,8 @@ namespace Com\Tecnick\Color\Model;
  * @category  Library
  * @package   Color
  * @author    Nicola Asuni <info@tecnick.com>
- * @copyright 2015-2024 Nicola Asuni - Tecnick.com LTD
- * @license   http://www.gnu.org/copyleft/lesser.html GNU-LGPL v3 (see LICENSE.TXT)
+ * @copyright 2015-2026 Nicola Asuni - Tecnick.com LTD
+ * @license   https://www.gnu.org/copyleft/lesser.html GNU-LGPL v3 (see LICENSE.TXT)
  * @link      https://github.com/tecnickcom/tc-lib-color
  */
 class Gray extends \Com\Tecnick\Color\Model
@@ -46,7 +46,7 @@ class Gray extends \Com\Tecnick\Color\Model
     protected $cmp_gray = 0.0;
 
     /**
-     * Get an array with all color components
+     * Get an array with all color components.
      *
      * @return array<string, float> with keys ('G', 'A')
      */
@@ -55,6 +55,24 @@ class Gray extends \Com\Tecnick\Color\Model
         return [
             'G' => $this->cmp_gray,
             'A' => $this->cmp_alpha,
+        ];
+    }
+
+    /**
+     * Get an array with all color components for
+     * the PDF appearance characteristics dictionary.
+     *
+     * The numbers that shall be in the range 0.0 to 1.0.
+     * The number of array elements determines the colour space
+     * in which the colour shall be defined:
+     * 1 = DeviceGray
+     *
+     * @return array<float> DeviceGray color component ('G')
+     */
+    public function getPDFacArray(): array
+    {
+        return [
+            $this->cmp_gray,
         ];
     }
 
@@ -99,7 +117,7 @@ class Gray extends \Com\Tecnick\Color\Model
             return '["T"]'; // transparent color
         }
 
-        return sprintf('["G",%F]', $this->cmp_gray);
+        return \sprintf('["G",%F]', $this->cmp_gray);
     }
 
     /**
@@ -107,7 +125,7 @@ class Gray extends \Com\Tecnick\Color\Model
      */
     public function getComponentsString(): string
     {
-        return sprintf('%F', $this->cmp_gray);
+        return \sprintf('%F', $this->cmp_gray);
     }
 
     /**
@@ -120,7 +138,7 @@ class Gray extends \Com\Tecnick\Color\Model
     {
         $mode = 'g';
         if ($stroke) {
-            $mode = strtoupper($mode);
+            $mode = \strtoupper($mode);
         }
 
         return $this->getComponentsString() . ' ' . $mode . "\n";

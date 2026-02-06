@@ -7,8 +7,8 @@
  * @category    Library
  * @package     Barcode
  * @author      Nicola Asuni <info@tecnick.com>
- * @copyright   2010-2024 Nicola Asuni - Tecnick.com LTD
- * @license     http://www.gnu.org/copyleft/lesser.html GNU-LGPL v3 (see LICENSE.TXT)
+ * @copyright   2010-2026 Nicola Asuni - Tecnick.com LTD
+ * @license     https://www.gnu.org/copyleft/lesser.html GNU-LGPL v3 (see LICENSE.TXT)
  * @link        https://github.com/tecnickcom/tc-lib-barcode
  *
  * This file is part of tc-lib-barcode software library.
@@ -23,8 +23,8 @@ namespace Com\Tecnick\Barcode\Type\Square\QrCode;
  * @category    Library
  * @package     Barcode
  * @author      Nicola Asuni <info@tecnick.com>
- * @copyright   2010-2024 Nicola Asuni - Tecnick.com LTD
- * @license     http://www.gnu.org/copyleft/lesser.html GNU-LGPL v3 (see LICENSE.TXT)
+ * @copyright   2010-2026 Nicola Asuni - Tecnick.com LTD
+ * @license     https://www.gnu.org/copyleft/lesser.html GNU-LGPL v3 (see LICENSE.TXT)
  * @link        https://github.com/tecnickcom/tc-lib-barcode
  */
 abstract class Mask extends \Com\Tecnick\Barcode\Type\Square\QrCode\MaskNum
@@ -91,21 +91,21 @@ abstract class Mask extends \Com\Tecnick\Barcode\Type\Square\QrCode\MaskNum
         if ($this->qr_find_from_random >= 0) {
             $howManuOut = (8 - ($this->qr_find_from_random % 9));
             for ($idx = 0; $idx < $howManuOut; ++$idx) {
-                $maxpos = (count($checked_masks) - 1);
-                $remPos = ($maxpos > 0) ? random_int(0, $maxpos) : 0;
+                $maxpos = (\count($checked_masks) - 1);
+                $remPos = ($maxpos > 0) ? \random_int(0, $maxpos) : 0;
                 unset($checked_masks[$remPos]);
-                $checked_masks = array_values($checked_masks);
+                $checked_masks = \array_values($checked_masks);
             }
         }
 
         $bestMask = $frame;
         foreach ($checked_masks as $checked_mask) {
-            $mask = array_fill(0, $width, str_repeat("\0", $width));
+            $mask = \array_fill(0, $width, \str_repeat("\0", $width));
             $demerit = 0;
             $blacks = $this->makeMaskNo($checked_mask, $width, $frame, $mask);
             $blacks += $this->writeFormatInformation($width, $mask, $checked_mask, $level);
             $blacks = (int) (100 * $blacks / ($width * $width));
-            $demerit = (int) (abs($blacks - 50) / 5) * Data::N4;
+            $demerit = (int) (\abs($blacks - 50) / 5) * Data::N4;
             $demerit += $this->evaluateSymbol($width, $mask);
             if ($demerit < $minDemerit) {
                 $minDemerit = $demerit;
@@ -164,12 +164,26 @@ abstract class Mask extends \Com\Tecnick\Barcode\Type\Square\QrCode\MaskNum
             } else {
                 $val = 0x84;
             }
-
-            $frame[8][($width - 1 - $idx)] = chr($val);
+            $frame[8] = \substr_replace(
+                $frame[8],
+                \chr($val),
+                ($width - 1 - $idx),
+                1,
+            );
             if ($idx < 6) {
-                $frame[$idx][8] = chr($val);
+                $frame[$idx] = \substr_replace(
+                    $frame[$idx],
+                    \chr($val),
+                    8,
+                    1,
+                );
             } else {
-                $frame[($idx + 1)][8] = chr($val);
+                $frame[($idx + 1)] = \substr_replace(
+                    $frame[($idx + 1)],
+                    \chr($val),
+                    8,
+                    1,
+                );
             }
 
             $format >>= 1;
@@ -182,12 +196,26 @@ abstract class Mask extends \Com\Tecnick\Barcode\Type\Square\QrCode\MaskNum
             } else {
                 $val = 0x84;
             }
-
-            $frame[($width - 7 + $idx)][8] = chr($val);
+            $frame[($width - 7 + $idx)] = \substr_replace(
+                $frame[($width - 7 + $idx)],
+                \chr($val),
+                8,
+                1,
+            );
             if ($idx == 0) {
-                $frame[8][7] = chr($val);
+                $frame[8] = \substr_replace(
+                    $frame[8],
+                    \chr($val),
+                    7,
+                    1,
+                );
             } else {
-                $frame[8][(6 - $idx)] = chr($val);
+                $frame[8] = \substr_replace(
+                    $frame[8],
+                    \chr($val),
+                    (6 - $idx),
+                    1,
+                );
             }
 
             $format >>= 1;
@@ -216,12 +244,12 @@ abstract class Mask extends \Com\Tecnick\Barcode\Type\Square\QrCode\MaskNum
             $head = 0;
             $this->runLength[0] = 1;
             for ($ypos = 0; $ypos < $width; ++$ypos) {
-                if (($ypos == 0) && (ord($frame[$ypos][$xpos]) & 1)) {
+                if (($ypos == 0) && (\ord($frame[$ypos][$xpos]) & 1)) {
                     $this->runLength[0] = -1;
                     $head = 1;
                     $this->runLength[$head] = 1;
                 } elseif ($ypos > 0) {
-                    if (((ord($frame[$ypos][$xpos]) ^ ord($frame[($ypos - 1)][$xpos])) & 1) !== 0) {
+                    if (((\ord($frame[$ypos][$xpos]) ^ \ord($frame[($ypos - 1)][$xpos])) & 1) !== 0) {
                         ++$head;
                         $this->runLength[$head] = 1;
                     } else {
@@ -255,25 +283,25 @@ abstract class Mask extends \Com\Tecnick\Barcode\Type\Square\QrCode\MaskNum
         $this->runLength[0] = 1;
         for ($xpos = 0; $xpos < $width; ++$xpos) {
             if (($xpos > 0) && ($ypos > 0)) {
-                $b22 = ord($frameY[$xpos])
-                    & ord($frameY[($xpos - 1)])
-                    & ord($frameYM[$xpos])
-                    & ord($frameYM[($xpos - 1)]);
-                $w22 = ord($frameY[$xpos])
-                    | ord($frameY[($xpos - 1)])
-                    | ord($frameYM[$xpos])
-                    | ord($frameYM[($xpos - 1)]);
+                $b22 = \ord($frameY[$xpos])
+                    & \ord($frameY[($xpos - 1)])
+                    & \ord($frameYM[$xpos])
+                    & \ord($frameYM[($xpos - 1)]);
+                $w22 = \ord($frameY[$xpos])
+                    | \ord($frameY[($xpos - 1)])
+                    | \ord($frameYM[$xpos])
+                    | \ord($frameYM[($xpos - 1)]);
                 if ((($b22 | ($w22 ^ 1)) & 1) !== 0) {
                     $demerit += Data::N2;
                 }
             }
 
-            if (($xpos == 0) && (ord($frameY[$xpos]) & 1)) {
+            if (($xpos == 0) && (\ord($frameY[$xpos]) & 1)) {
                 $this->runLength[0] = -1;
                 $head = 1;
                 $this->runLength[$head] = 1;
             } elseif ($xpos > 0) {
-                if (((ord($frameY[$xpos]) ^ ord($frameY[($xpos - 1)])) & 1) !== 0) {
+                if (((\ord($frameY[$xpos]) ^ \ord($frameY[($xpos - 1)])) & 1) !== 0) {
                     ++$head;
                     $this->runLength[$head] = 1;
                 } else {

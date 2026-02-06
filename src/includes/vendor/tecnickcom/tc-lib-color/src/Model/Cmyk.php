@@ -7,8 +7,8 @@
  * @category  Library
  * @package   Color
  * @author    Nicola Asuni <info@tecnick.com>
- * @copyright 2015-2024 Nicola Asuni - Tecnick.com LTD
- * @license   http://www.gnu.org/copyleft/lesser.html GNU-LGPL v3 (see LICENSE.TXT)
+ * @copyright 2015-2026 Nicola Asuni - Tecnick.com LTD
+ * @license   https://www.gnu.org/copyleft/lesser.html GNU-LGPL v3 (see LICENSE.TXT)
  * @link      https://github.com/tecnickcom/tc-lib-color
  *
  * This file is part of tc-lib-color software library.
@@ -25,8 +25,8 @@ namespace Com\Tecnick\Color\Model;
  * @category  Library
  * @package   Color
  * @author    Nicola Asuni <info@tecnick.com>
- * @copyright 2015-2024 Nicola Asuni - Tecnick.com LTD
- * @license   http://www.gnu.org/copyleft/lesser.html GNU-LGPL v3 (see LICENSE.TXT)
+ * @copyright 2015-2026 Nicola Asuni - Tecnick.com LTD
+ * @license   https://www.gnu.org/copyleft/lesser.html GNU-LGPL v3 (see LICENSE.TXT)
  * @link      https://github.com/tecnickcom/tc-lib-color
  */
 class Cmyk extends \Com\Tecnick\Color\Model
@@ -67,7 +67,7 @@ class Cmyk extends \Com\Tecnick\Color\Model
     protected $cmp_key = 0.0;
 
     /**
-     * Get an array with all color components
+     * Get an array with all color components.
      *
      * @return array<string, float> with keys ('C', 'M', 'Y', 'K', 'A')
      */
@@ -79,6 +79,27 @@ class Cmyk extends \Com\Tecnick\Color\Model
             'Y' => $this->cmp_yellow,
             'K' => $this->cmp_key,
             'A' => $this->cmp_alpha,
+        ];
+    }
+
+    /**
+     * Get an array with all color components for
+     * the PDF appearance characteristics dictionary.
+     *
+     * The numbers that shall be in the range 0.0 to 1.0.
+     * The number of array elements determines the colour space
+     * in which the colour shall be defined:
+     * 4 = DeviceCMYK
+     *
+     * @return array<float> DeviceCMYK color components ('C', 'M', 'Y', 'K')
+     */
+    public function getPDFacArray(): array
+    {
+        return [
+            $this->cmp_cyan,
+            $this->cmp_magenta,
+            $this->cmp_yellow,
+            $this->cmp_key,
         ];
     }
 
@@ -127,7 +148,7 @@ class Cmyk extends \Com\Tecnick\Color\Model
             return '["T"]'; // transparent color
         }
 
-        return sprintf('["CMYK",%F,%F,%F,%F]', $this->cmp_cyan, $this->cmp_magenta, $this->cmp_yellow, $this->cmp_key);
+        return \sprintf('["CMYK",%F,%F,%F,%F]', $this->cmp_cyan, $this->cmp_magenta, $this->cmp_yellow, $this->cmp_key);
     }
 
     /**
@@ -135,7 +156,7 @@ class Cmyk extends \Com\Tecnick\Color\Model
      */
     public function getComponentsString(): string
     {
-        return sprintf('%F %F %F %F', $this->cmp_cyan, $this->cmp_magenta, $this->cmp_yellow, $this->cmp_key);
+        return \sprintf('%F %F %F %F', $this->cmp_cyan, $this->cmp_magenta, $this->cmp_yellow, $this->cmp_key);
     }
 
     /**
@@ -148,7 +169,7 @@ class Cmyk extends \Com\Tecnick\Color\Model
     {
         $mode = 'k';
         if ($stroke) {
-            $mode = strtoupper($mode);
+            $mode = \strtoupper($mode);
         }
 
         return $this->getComponentsString() . ' ' . $mode . "\n";
@@ -175,9 +196,9 @@ class Cmyk extends \Com\Tecnick\Color\Model
     public function toRgbArray(): array
     {
         return [
-            'red' => max(0, min(1, (1 - (($this->cmp_cyan * (1 - $this->cmp_key)) + $this->cmp_key)))),
-            'green' => max(0, min(1, (1 - (($this->cmp_magenta * (1 - $this->cmp_key)) + $this->cmp_key)))),
-            'blue' => max(0, min(1, (1 - (($this->cmp_yellow * (1 - $this->cmp_key)) + $this->cmp_key)))),
+            'red' => \max(0, \min(1, (1 - (($this->cmp_cyan * (1 - $this->cmp_key)) + $this->cmp_key)))),
+            'green' => \max(0, \min(1, (1 - (($this->cmp_magenta * (1 - $this->cmp_key)) + $this->cmp_key)))),
+            'blue' => \max(0, \min(1, (1 - (($this->cmp_yellow * (1 - $this->cmp_key)) + $this->cmp_key)))),
             'alpha' => $this->cmp_alpha,
         ];
     }

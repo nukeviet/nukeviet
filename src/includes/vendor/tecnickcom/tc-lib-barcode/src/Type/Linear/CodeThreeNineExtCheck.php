@@ -7,8 +7,8 @@
  * @category    Library
  * @package     Barcode
  * @author      Nicola Asuni <info@tecnick.com>
- * @copyright   2010-2024 Nicola Asuni - Tecnick.com LTD
- * @license     http://www.gnu.org/copyleft/lesser.html GNU-LGPL v3 (see LICENSE.TXT)
+ * @copyright   2010-2026 Nicola Asuni - Tecnick.com LTD
+ * @license     https://www.gnu.org/copyleft/lesser.html GNU-LGPL v3 (see LICENSE.TXT)
  * @link        https://github.com/tecnickcom/tc-lib-barcode
  *
  * This file is part of tc-lib-barcode software library.
@@ -28,8 +28,8 @@ use Com\Tecnick\Barcode\Exception as BarcodeException;
  * @category    Library
  * @package     Barcode
  * @author      Nicola Asuni <info@tecnick.com>
- * @copyright   2010-2024 Nicola Asuni - Tecnick.com LTD
- * @license     http://www.gnu.org/copyleft/lesser.html GNU-LGPL v3 (see LICENSE.TXT)
+ * @copyright   2010-2026 Nicola Asuni - Tecnick.com LTD
+ * @license     https://www.gnu.org/copyleft/lesser.html GNU-LGPL v3 (see LICENSE.TXT)
  * @link        https://github.com/tecnickcom/tc-lib-barcode
  */
 class CodeThreeNineExtCheck extends \Com\Tecnick\Barcode\Type\Linear
@@ -290,11 +290,11 @@ class CodeThreeNineExtCheck extends \Com\Tecnick\Barcode\Type\Linear
     protected function getExtendCode(string $code): string
     {
         $ext = '';
-        $clen = strlen($code);
+        $clen = \strlen($code);
         for ($chr = 0; $chr < $clen; ++$chr) {
-            $item = ord($code[$chr]);
+            $item = \ord($code[$chr]);
             if ($item > 127) {
-                throw new BarcodeException('Invalid character: chr(' . $item . ')');
+                throw new BarcodeException('Invalid character: \chr(' . $item . ')');
             }
 
             $ext .= $this::EXTCODES[$item];
@@ -313,9 +313,9 @@ class CodeThreeNineExtCheck extends \Com\Tecnick\Barcode\Type\Linear
     protected function getChecksum(string $code): string
     {
         $sum = 0;
-        $clen = strlen($code);
+        $clen = \strlen($code);
         for ($chr = 0; $chr < $clen; ++$chr) {
-            $key = array_keys($this::CHKSUM, $code[$chr]);
+            $key = \array_keys($this::CHKSUM, $code[$chr]);
             $sum += $key[0];
         }
 
@@ -328,7 +328,7 @@ class CodeThreeNineExtCheck extends \Com\Tecnick\Barcode\Type\Linear
      */
     protected function formatCode(): void
     {
-        $code = $this->getExtendCode(strtoupper($this->code));
+        $code = $this->getExtendCode(\strtoupper($this->code));
         $this->extcode = '*' . $code . $this->getChecksum($code) . '*';
     }
 
@@ -343,11 +343,11 @@ class CodeThreeNineExtCheck extends \Com\Tecnick\Barcode\Type\Linear
         $this->nrows = 1;
         $this->bars = [];
         $this->formatCode();
-        $clen = strlen($this->extcode);
+        $clen = \strlen($this->extcode);
         for ($chr = 0; $chr < $clen; ++$chr) {
             $char = $this->extcode[$chr];
             if (! isset($this::CHBAR[$char])) {
-                throw new BarcodeException('Invalid character: chr(' . ord($char) . ')');
+                throw new BarcodeException('Invalid character: \chr(' . \ord($char) . ')');
             }
 
             for ($pos = 0; $pos < 9; ++$pos) {
