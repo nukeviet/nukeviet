@@ -119,8 +119,8 @@ if ($checkss == $nv_Request->get_string('checkss', 'post')) {
         $result = $db->query($sql);
 
         while ($_scratch = $result->fetch(3)) {
-    list($c_module, $c_config_name, $c_config_value) = $_scratch;
-    unset($_scratch);
+            list($c_module, $c_config_name, $c_config_value) = $_scratch;
+            unset($_scratch);
             if ($c_module == 'global') {
                 $global_config[$c_config_name] = $c_config_value;
             } else {

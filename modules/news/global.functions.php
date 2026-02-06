@@ -52,8 +52,8 @@ function nv_set_status_module()
     // Dang cai bai cho kich hoat theo thoi gian
     $query = $db->query('SELECT id, listcatid FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE status=2 AND publtime < ' . NV_CURRENTTIME . ' ORDER BY publtime ASC');
     while ($_scratch = $query->fetch(3)) {
-    list($id, $listcatid) = $_scratch;
-    unset($_scratch);
+        list($id, $listcatid) = $_scratch;
+        unset($_scratch);
         $array_catid = explode(',', $listcatid);
         foreach ($array_catid as $catid_i) {
             $catid_i = (int) $catid_i;
@@ -68,8 +68,8 @@ function nv_set_status_module()
     $weight_min = 0;
     $query = $db->query('SELECT id, listcatid, archive, weight FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE status=1 AND exptime > 0 AND exptime <= ' . NV_CURRENTTIME . ' ORDER BY weight DESC, exptime ASC');
     while ($_scratch = $query->fetch(3)) {
-    list($id, $listcatid, $archive, $weight) = $_scratch;
-    unset($_scratch);
+        list($id, $listcatid, $archive, $weight) = $_scratch;
+        unset($_scratch);
         if ((int) $archive == 0) {
             nv_del_content_module($id);
             $weight_min = $weight;

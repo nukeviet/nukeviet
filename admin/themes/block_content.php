@@ -265,8 +265,8 @@ if ($checkss == $nv_Request->get_string('checkss', 'post')) {
                 $sth->bindParam(':position', $row_old['position'], PDO::PARAM_STR);
                 $sth->execute();
                 while ($_scratch = $sth->fetch(3)) {
-    list($bid_i, $func_id_i) = $_scratch;
-    unset($_scratch);
+                    list($bid_i, $func_id_i) = $_scratch;
+                    unset($_scratch);
                     if ($func_id_i == $func_id_old) {
                         ++$weight;
                     } else {
@@ -344,8 +344,8 @@ if ($checkss == $nv_Request->get_string('checkss', 'post')) {
                 $result_func = $db->query('SELECT func_id FROM ' . NV_BLOCKS_TABLE . '_weight WHERE bid=' . $row['bid']);
 
                 while ($_scratch = $result_func->fetch(3)) {
-    list($func_inlist) = $_scratch;
-    unset($_scratch);
+                    list($func_inlist) = $_scratch;
+                    unset($_scratch);
                     $func_list[] = $func_inlist;
                 }
 
@@ -505,8 +505,8 @@ $func_list = [];
 if ($row['bid']) {
     $result_func = $db->query('SELECT func_id FROM ' . NV_BLOCKS_TABLE . '_weight WHERE bid=' . $row['bid']);
     while ($_scratch = $result_func->fetch(3)) {
-    list($func_inlist) = $_scratch;
-    unset($_scratch);
+        list($func_inlist) = $_scratch;
+        unset($_scratch);
         $func_list[] = $func_inlist;
     }
 }

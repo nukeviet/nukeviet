@@ -373,8 +373,8 @@ if (defined('NV_IS_ADMIN_FULL_MODULE') or !in_array('admins', $allow_func, true)
     $sql = 'SELECT group_id, addcontent, postcontent, editcontent, delcontent FROM ' . NV_PREFIXLANG . '_' . $module_data . '_config_post ORDER BY group_id ASC';
     $result = $db->query($sql);
     while ($_scratch = $result->fetch(3)) {
-    list($group_id, $addcontent, $postcontent, $editcontent, $delcontent) = $_scratch;
-    unset($_scratch);
+        list($group_id, $addcontent, $postcontent, $editcontent, $delcontent) = $_scratch;
+        unset($_scratch);
         if (isset($groups_list[$group_id])) {
             $array_post_data[$group_id] = [
                 'group_id' => $group_id,

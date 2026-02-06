@@ -43,8 +43,8 @@ if ($nv_Request->isset_request('idcheck', 'post')) {
 
         $result = $db->query('SELECT id, listcatid, status FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE id IN (' . implode(',', $id_array) . ')');
         while ($_scratch = $result->fetch(3)) {
-    list($id, $listcatid_old, $status) = $_scratch;
-    unset($_scratch);
+            list($id, $listcatid_old, $status) = $_scratch;
+            unset($_scratch);
             // Xóa hết các chuyên mục cũ đi
             $array_catid_old = explode(',', $listcatid_old);
             foreach ($array_catid_old as $catid_i) {

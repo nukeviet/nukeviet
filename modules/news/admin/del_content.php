@@ -32,8 +32,8 @@ if (!empty($del_array)) {
     $del_array = $no_del_array = [];
     $artitle = [];
     while ($_scratch = $result->fetch(3)) {
-    list($id, $listcatid, $post_id, $title, $alias, $status, $weight) = $_scratch;
-    unset($_scratch);
+        list($id, $listcatid, $post_id, $title, $alias, $status, $weight) = $_scratch;
+        unset($_scratch);
         $check_permission = false;
         if (defined('NV_IS_ADMIN_MODULE')) {
             $check_permission = true;

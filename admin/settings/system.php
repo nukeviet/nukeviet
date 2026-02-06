@@ -282,8 +282,8 @@ for ($i = 0; $i <= 2; ++$i) {
 if (defined('NV_IS_GODADMIN')) {
     $result = $db->query('SELECT config_name, config_value FROM ' . NV_CONFIG_GLOBALTABLE . " WHERE lang='sys' AND module='global'");
     while ($_scratch = $result->fetch(3)) {
-    list($c_config_name, $c_config_value) = $_scratch;
-    unset($_scratch);
+        list($c_config_name, $c_config_value) = $_scratch;
+        unset($_scratch);
         $array_config_global[$c_config_name] = $c_config_value;
     }
 

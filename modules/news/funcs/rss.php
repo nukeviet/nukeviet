@@ -51,8 +51,8 @@ if (!empty($catid)) {
 if ($module_info['rss']) {
     $result = $db_slave->query($db_slave->sql());
     while ($_scratch = $result->fetch(3)) {
-    list($id, $catid_i, $publtime, $title, $alias, $hometext, $homeimgthumb, $homeimgfile) = $_scratch;
-    unset($_scratch);
+        list($id, $catid_i, $publtime, $title, $alias, $hometext, $homeimgthumb, $homeimgfile) = $_scratch;
+        unset($_scratch);
         $catalias = $global_array_cat[$catid_i]['alias'];
 
         if ($homeimgthumb == 1) {

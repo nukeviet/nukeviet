@@ -191,8 +191,8 @@ if ($nv_Request->isset_request('save', 'post')) {
         $result = $db->query($sql);
 
         while ($_scratch = $result->fetch(3)) {
-    list($id, $title, $url) = $_scratch;
-    unset($_scratch);
+            list($id, $title, $url) = $_scratch;
+            unset($_scratch);
             $array_answervote[$id] = $title;
             $array_urlvote[$id] = $url;
             ++$maxoption;

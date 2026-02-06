@@ -39,8 +39,8 @@ if (!nv_function_exists('nv_block_counter')) {
         $sql = 'SELECT c_type, c_count FROM ' . NV_COUNTER_GLOBALTABLE . " WHERE (c_type='day' AND c_val='" . date('d', NV_CURRENTTIME) . "') OR (c_type='month' AND c_val='" . date('M', NV_CURRENTTIME) . "') OR (c_type='total' AND c_val='hits')";
         $query = $db->query($sql);
         while ($_scratch = $query->fetch(3)) {
-    list($c_type, $c_count) = $_scratch;
-    unset($_scratch);
+            list($c_type, $c_count) = $_scratch;
+            unset($_scratch);
             if ($c_type == 'day') {
                 $xtpl->assign('COUNT_DAY', number_format($c_count));
             } elseif ($c_type == 'month') {

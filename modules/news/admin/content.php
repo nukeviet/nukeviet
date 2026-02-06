@@ -32,8 +32,8 @@ if ($nv_Request->isset_request('get_topic_json', 'post, get')) {
 
     $array_data = [];
     while ($_scratch = $sth->fetch(3)) {
-    list($topicid, $title) = $_scratch;
-    unset($_scratch);
+        list($topicid, $title) = $_scratch;
+        unset($_scratch);
         $array_data[] = [
             'id' => $topicid,
             'title' => $title
@@ -352,8 +352,8 @@ if ($rowcontent['id'] == 0) {
     $sql = 'SELECT bid FROM ' . NV_PREFIXLANG . '_' . $module_data . '_block WHERE id=' . $rowcontent['id'];
     $result = $db->query($sql);
     while ($_scratch = $result->fetch(3)) {
-    list($bid_i) = $_scratch;
-    unset($_scratch);
+        list($bid_i) = $_scratch;
+        unset($_scratch);
         $id_block_content[] = $bid_i;
     }
 
@@ -1308,8 +1308,8 @@ if (!empty($rowcontent['topicid'])) {
     $result = $db->query($db->sql());
 
     while ($_scratch = $result->fetch(3)) {
-    list($topicid_i, $title_i) = $_scratch;
-    unset($_scratch);
+        list($topicid_i, $title_i) = $_scratch;
+        unset($_scratch);
         $array_topic_module[$topicid_i] = $title_i;
     }
 }

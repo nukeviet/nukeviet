@@ -165,8 +165,8 @@ if ($submit > 0 and in_array($sourcelang, $array_lang_exit, true) and in_array($
     $array_lang_data = [];
 
     while ($_scratch = $result->fetch(3)) {
-    list($id, $idfile_i, $lang_key, $datalang, $datasourcelang) = $_scratch;
-    unset($_scratch);
+        list($id, $idfile_i, $lang_key, $datalang, $datasourcelang) = $_scratch;
+        unset($_scratch);
         $array_lang_data[$idfile_i][$id] = [
             'lang_key' => $lang_key,
             'datalang' => $datalang,

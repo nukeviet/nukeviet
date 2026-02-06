@@ -50,8 +50,8 @@ if ($nv_Request->isset_request('checkss,idcheck', 'post') and $nv_Request->get_s
     $result = $db_slave->query($sql);
     $_id_array_exit = [];
     while ($_scratch = $result->fetch(3)) {
-    list($_id) = $_scratch;
-    unset($_scratch);
+        list($_id) = $_scratch;
+        unset($_scratch);
         $_id_array_exit[] = (int) $_id;
     }
 
@@ -113,8 +113,8 @@ if ($listid == '' and $bid) {
     $result = $db_slave->query($db_slave->sql());
 
     while ($_scratch = $result->fetch(3)) {
-    list($id, $title) = $_scratch;
-    unset($_scratch);
+        list($id, $title) = $_scratch;
+        unset($_scratch);
         $xtpl->assign('ROW', [
             'checked' => in_array((int) $id, $id_array, true) ? ' checked="checked"' : '',
             'title' => $title,

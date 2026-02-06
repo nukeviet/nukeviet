@@ -184,8 +184,8 @@ if (md5('package_' . $request['type'] . '_' . $request['title'] . '_' . NV_CHECK
                     $array_layout_other = [];
                     $result = $db->query('SELECT layout, in_module, func_name FROM ' . NV_PREFIXLANG . '_modthemes t1, ' . NV_MODFUNCS_TABLE . ' t2 WHERE t1.theme=' . $db->quote($row['basename']) . ' AND t1.func_id=t2.func_id AND t1.layout!=' . $db->quote($layoutdefault));
                     while ($_scratch = $result->fetch(3)) {
-    list($layout, $in_module, $func_name) = $_scratch;
-    unset($_scratch);
+                        list($layout, $in_module, $func_name) = $_scratch;
+                        unset($_scratch);
                         $array_layout_other[$layout][$in_module][] = $func_name;
                     }
                     if (!empty($array_layout_other)) {
@@ -216,8 +216,8 @@ if (md5('package_' . $request['type'] . '_' . $request['title'] . '_' . NV_CHECK
                         if (!empty($array_not_all_func)) {
                             $result = $db->query('SELECT bid, func_name, in_module FROM ' . NV_BLOCKS_TABLE . '_weight t1, ' . NV_MODFUNCS_TABLE . ' t2 WHERE t1.bid IN (' . implode(',', $array_not_all_func) . ') AND t1.func_id=t2.func_id');
                             while ($_scratch = $result->fetch(3)) {
-    list($bid, $func_name, $in_module) = $_scratch;
-    unset($_scratch);
+                                list($bid, $func_name, $in_module) = $_scratch;
+                                unset($_scratch);
                                 $array_block_func[$bid][$in_module][] = $func_name;
                             }
                         }
@@ -351,8 +351,8 @@ if (md5('delete_' . $request['type'] . '_' . $request['title'] . '_' . NV_CHECK_
 
             $result = $db->query('SELECT lang FROM ' . $db_config['prefix'] . '_setup_language WHERE setup=1');
             while ($_scratch = $result->fetch(3)) {
-    list($lang_i) = $_scratch;
-    unset($_scratch);
+                list($lang_i) = $_scratch;
+                unset($_scratch);
                 $sth = $db->prepare('SELECT COUNT(*) FROM ' . $db_config['prefix'] . '_' . $lang_i . '_modules WHERE module_file= :module_file');
                 $sth->bindParam(':module_file', $request['title'], PDO::PARAM_STR);
                 $sth->execute();
@@ -379,8 +379,8 @@ if (md5('delete_' . $request['type'] . '_' . $request['title'] . '_' . NV_CHECK_
                     try {
                         $result2 = $db->query('SELECT lang FROM ' . $row['dbsite'] . '.' . $db_config['prefix'] . '_setup_language WHERE setup=1');
                         while ($_scratch = $result2->fetch(3)) {
-    list($lang_i) = $_scratch;
-    unset($_scratch);
+                            list($lang_i) = $_scratch;
+                            unset($_scratch);
                             $sth = $db->prepare('SELECT COUNT(*) FROM ' . $row['dbsite'] . '.' . $db_config['prefix'] . '_' . $lang_i . '_modules WHERE module_file= :module_file');
                             $sth->bindParam(':module_file', $request['title'], PDO::PARAM_STR);
                             $sth->execute();
@@ -432,8 +432,8 @@ if (md5('delete_' . $request['type'] . '_' . $request['title'] . '_' . NV_CHECK_
 
             $result = $db->query('SELECT lang FROM ' . $db_config['prefix'] . '_setup_language where setup = 1');
             while ($_scratch = $result->fetch(3)) {
-    list($lang_i) = $_scratch;
-    unset($_scratch);
+                list($lang_i) = $_scratch;
+                unset($_scratch);
                 $module_array = [];
 
                 $sth = $db->prepare('SELECT title, custom_title
@@ -443,8 +443,8 @@ if (md5('delete_' . $request['type'] . '_' . $request['title'] . '_' . NV_CHECK_
                 $sth->bindParam(':theme', $request['title'], PDO::PARAM_STR);
                 $sth->execute();
                 while ($_scratch = $sth->fetch(3)) {
-    list($title, $custom_title) = $_scratch;
-    unset($_scratch);
+                    list($title, $custom_title) = $_scratch;
+                    unset($_scratch);
                     $module_array[] = $custom_title;
                 }
 
@@ -462,8 +462,8 @@ if (md5('delete_' . $request['type'] . '_' . $request['title'] . '_' . NV_CHECK_
             if (!file_exists(NV_ROOTDIR . '/themes/' . $request['title'])) {
                 $result = $db->query('SELECT lang FROM ' . $db_config['prefix'] . '_setup_language WHERE setup=1');
                 while ($_scratch = $result->fetch(3)) {
-    list($_lang) = $_scratch;
-    unset($_scratch);
+                    list($_lang) = $_scratch;
+                    unset($_scratch);
                     $sth = $db->prepare('DELETE FROM ' . $db_config['prefix'] . '_' . $_lang . '_modthemes WHERE theme = :theme');
                     $sth->bindParam(':theme', $request['title'], PDO::PARAM_STR);
                     $sth->execute();

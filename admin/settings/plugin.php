@@ -59,8 +59,8 @@ if ($nv_Request->isset_request('dpid', 'get')) {
             $weight = (int) ($row['weight']);
             $_query = $db->query('SELECT pid FROM ' . $db_config['prefix'] . '_plugin WHERE plugin_area=' . $row['plugin_area'] . ' AND weight > ' . $weight . ' ORDER BY weight ASC');
             while ($_scratch = $_query->fetch(3)) {
-    list($pid) = $_scratch;
-    unset($_scratch);
+                list($pid) = $_scratch;
+                unset($_scratch);
                 $db->query('UPDATE ' . $db_config['prefix'] . '_plugin SET weight = ' . $weight++ . ' WHERE pid=' . $pid);
             }
 
@@ -77,8 +77,8 @@ if ($nv_Request->isset_request('dpid', 'get')) {
         $weight = 0;
         $_query = $db->query('SELECT pid FROM ' . $db_config['prefix'] . '_plugin WHERE plugin_area=' . $row['plugin_area'] . ' AND pid != ' . $pid . ' ORDER BY weight ASC');
         while ($_scratch = $_query->fetch(3)) {
-    list($pid_i) = $_scratch;
-    unset($_scratch);
+            list($pid_i) = $_scratch;
+            unset($_scratch);
             ++$weight;
             if ($weight == $new) {
                 ++$weight;

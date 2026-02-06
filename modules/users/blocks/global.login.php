@@ -314,8 +314,8 @@ if (!nv_function_exists('nv_block_login')) {
                                 }
                                 $result = $db->query($query);
                                 while ($_scratch = $result->fetch(3)) {
-    list($key, $val) = $_scratch;
-    unset($_scratch);
+                                    list($key, $val) = $_scratch;
+                                    unset($_scratch);
                                     $row_field['field_choices'][$key] = $val;
                                 }
                             }

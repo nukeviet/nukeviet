@@ -99,8 +99,8 @@ function nv_admin_write_lang($dirlang, $idfile)
         $current_langtype = '';
         $result = $db->query('SELECT langtype, lang_key, lang_' . $dirlang . ' FROM ' . NV_LANGUAGE_GLOBALTABLE . ' WHERE idfile=' . $idfile . ' ORDER BY langtype ASC, id ASC');
         while ($_scratch = $result->fetch(3)) {
-    list($langtype_row, $lang_key, $lang_value) = $_scratch;
-    unset($_scratch);
+            list($langtype_row, $lang_key, $lang_value) = $_scratch;
+            unset($_scratch);
             ++$numrows;
             $lang_value = nv_unhtmlspecialchars($lang_value);
             $lang_value = str_replace("\'", "'", $lang_value);
@@ -174,8 +174,8 @@ if ($nv_Request->isset_request('idfile,checksess', 'get') and $nv_Request->get_s
 
         $result = $db->query('SELECT idfile, author_' . $dirlang . ' FROM ' . NV_LANGUAGE_GLOBALTABLE . '_file ORDER BY idfile ASC');
         while ($_scratch = $result->fetch(3)) {
-    list($idfile, $author_lang) = $_scratch;
-    unset($_scratch);
+            list($idfile, $author_lang) = $_scratch;
+            unset($_scratch);
             $content = nv_admin_write_lang($dirlang, $idfile);
 
             if (!empty($content)) {

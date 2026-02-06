@@ -46,8 +46,8 @@ if ($num_items) {
 
     $bot_list = [];
     while ($_scratch = $result->fetch(3)) {
-    list($bot, $count, $last_visit) = $_scratch;
-    unset($_scratch);
+        list($bot, $count, $last_visit) = $_scratch;
+        unset($_scratch);
         $last_visit = !empty($last_visit) ? nv_date('l, d F Y H:i', $last_visit) : '';
         $bot_list[$bot] = [$count, $last_visit];
     }

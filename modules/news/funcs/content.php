@@ -310,8 +310,8 @@ if ($nv_Request->isset_request('contentid', 'get,post') and $fcheckss == $checks
     $result_cat = $db->query($sql);
 
     while ($_scratch = $result_cat->fetch(3)) {
-    list($catid_i, $title_i, $lev_i) = $_scratch;
-    unset($_scratch);
+        list($catid_i, $title_i, $lev_i) = $_scratch;
+        unset($_scratch);
         $array_catid_module[] = [
             'catid' => $catid_i,
             'title' => $title_i,
@@ -325,8 +325,8 @@ if ($nv_Request->isset_request('contentid', 'get,post') and $fcheckss == $checks
     $array_topic_module[0] = $lang_module['topic_sl'];
 
     while ($_scratch = $result->fetch(3)) {
-    list($topicid_i, $title_i) = $_scratch;
-    unset($_scratch);
+        list($topicid_i, $title_i) = $_scratch;
+        unset($_scratch);
         $array_topic_module[$topicid_i] = $title_i;
     }
 

@@ -135,8 +135,8 @@ if ($checkss == $nv_Request->get_string('checkss', 'post')) {
                 $sth->bindParam(':theme', $selectthemes, PDO::PARAM_STR);
                 $sth->execute();
                 while ($_scratch = $sth->fetch(3)) {
-    list($func_id) = $_scratch;
-    unset($_scratch);
+                    list($func_id) = $_scratch;
+                    unset($_scratch);
                     $array_func_id[] = $func_id;
                 }
 
@@ -144,8 +144,8 @@ if ($checkss == $nv_Request->get_string('checkss', 'post')) {
                 $sth->bindParam(':in_module', $mod, PDO::PARAM_STR);
                 $sth->execute();
                 while ($_scratch = $sth->fetch(3)) {
-    list($func_id) = $_scratch;
-    unset($_scratch);
+                    list($func_id) = $_scratch;
+                    unset($_scratch);
                     if (!in_array((int) $func_id, array_map('intval', $array_func_id), true)) {
                         $sth2 = $db->prepare('INSERT INTO ' . NV_PREFIXLANG . '_modthemes (func_id, layout, theme) VALUES (' . $func_id . ', :layout, :theme)');
                         $sth2->bindParam(':layout', $layoutdefault, PDO::PARAM_STR);

@@ -24,8 +24,8 @@ if (($cache = $nv_Cache->getItem($module_name, $cacheFile, $cacheTTL)) != false)
     $result = $db_slave->query($sql);
 
     while ($_scratch = $result->fetch(3)) {
-    list($alias, $publtime) = $_scratch;
-    unset($_scratch);
+        list($alias, $publtime) = $_scratch;
+        unset($_scratch);
         $url[] = [
             'link' => NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $alias . $global_config['rewrite_exturl'],
             'publtime' => $publtime

@@ -102,8 +102,8 @@ if (!empty($modname) and preg_match($global_config['check_module'], $modname) an
 
         $result = $db->query('SELECT lang FROM ' . $db_config['prefix'] . '_setup_language where setup=1');
         while ($_scratch = $result->fetch(3)) {
-    list($lang_i) = $_scratch;
-    unset($_scratch);
+            list($lang_i) = $_scratch;
+            unset($_scratch);
             $sth = $db->prepare('SELECT COUNT(*) FROM ' . $db_config['prefix'] . '_' . $lang_i . '_modules WHERE title= :module');
             $sth->bindParam(':module', $modname, PDO::PARAM_STR);
             $sth->execute();
@@ -131,8 +131,8 @@ if (!empty($modname) and preg_match($global_config['check_module'], $modname) an
             $sth->bindValue(':dirnamelike', NV_UPLOADS_DIR . '/' . $modname . '/%', PDO::PARAM_STR);
             $sth->execute();
             while ($_scratch = $sth->fetch(3)) {
-    list($did) = $_scratch;
-    unset($_scratch);
+                list($did) = $_scratch;
+                unset($_scratch);
                 $db->query('DELETE FROM ' . NV_UPLOAD_GLOBALTABLE . '_file WHERE did = ' . $did);
                 $db->query('DELETE FROM ' . NV_UPLOAD_GLOBALTABLE . '_dir WHERE did = ' . $did);
             }

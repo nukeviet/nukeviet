@@ -27,8 +27,8 @@ function nv_save_file_admin_config()
     $sql = 'SELECT keyname, mask, begintime, endtime, notice FROM ' . NV_AUTHORS_GLOBALTABLE . '_config';
     $result = $db->query($sql);
     while ($_scratch = $result->fetch(3)) {
-    list($keyname, $dbmask, $dbbegintime, $dbendtime, $dbnotice) = $_scratch;
-    unset($_scratch);
+        list($keyname, $dbmask, $dbbegintime, $dbendtime, $dbnotice) = $_scratch;
+        unset($_scratch);
         $dbendtime = (int) $dbendtime;
         if ($dbendtime == 0 or $dbendtime > NV_CURRENTTIME) {
             if ($dbmask == -1) {

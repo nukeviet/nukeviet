@@ -110,8 +110,8 @@ function nv_setup_block_module($mod, $func_id = 0)
     $sth->bindParam(':module', $mod, PDO::PARAM_STR);
     $sth->execute();
     while ($_scratch = $sth->fetch(3)) {
-    list($func_id_i) = $_scratch;
-    unset($_scratch);
+        list($func_id_i) = $_scratch;
+        unset($_scratch);
         if ($func_id == 0 or $func_id == $func_id_i) {
             $array_funcid[] = $func_id_i;
         }

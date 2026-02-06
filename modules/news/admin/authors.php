@@ -42,8 +42,8 @@ if ($nv_Request->isset_request('searchAjax', 'get')) {
 
     $array_data = [];
     while ($_scratch = $sth->fetch(3)) {
-    list($id, $pseudonym) = $_scratch;
-    unset($_scratch);
+        list($id, $pseudonym) = $_scratch;
+        unset($_scratch);
         $array_data[$id] = $pseudonym;
     }
 
@@ -99,8 +99,8 @@ if ($nv_Request->isset_request('get_account_json', 'post, get')) {
     $result = $db->query($db->sql());
     $array_data['results'] = [];
     while ($_scratch = $result->fetch(3)) {
-    list($userid, $username) = $_scratch;
-    unset($_scratch);
+        list($userid, $username) = $_scratch;
+        unset($_scratch);
         $array_data['results'][] = [
             'id' => $userid,
             'title' => $username
@@ -261,8 +261,8 @@ if (!empty($uids)) {
     $result = $db_slave->query($db_slave->sql());
     $uids = [];
     while ($_scratch = $result->fetch(3)) {
-    list($userid, $username, $email, $md5username) = $_scratch;
-    unset($_scratch);
+        list($userid, $username, $email, $md5username) = $_scratch;
+        unset($_scratch);
         $uids[$userid] = [
             'username' => $username,
             'email' => $email,

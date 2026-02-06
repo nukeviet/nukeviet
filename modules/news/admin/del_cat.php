@@ -37,8 +37,8 @@ if ($catid > 0) {
                         $array_cat_list = [];
                         $array_cat_list[0] = '&nbsp;';
                         while ($_scratch = $result->fetch(3)) {
-    list($catid_i, $title_i, $lev_i) = $_scratch;
-    unset($_scratch);
+                            list($catid_i, $title_i, $lev_i) = $_scratch;
+                            unset($_scratch);
                             $xtitle_i = '';
                             if ($lev_i > 0) {
                                 $xtitle_i .= '&nbsp;&nbsp;&nbsp;|';

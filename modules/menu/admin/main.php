@@ -61,8 +61,8 @@ while ($row = $query2->fetch()) {
     $sql = 'SELECT title FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE mid = ' . $row['id'] . ' ORDER BY sort ASC';
     $result = $db->query($sql);
     while ($_scratch = $result->fetch(3)) {
-    list($title_i) = $_scratch;
-    unset($_scratch);
+        list($title_i) = $_scratch;
+        unset($_scratch);
         $arr_items[] = $title_i;
     }
 
