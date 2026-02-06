@@ -66,100 +66,145 @@ if (!nv_function_exists('nv_department_info')) {
      */
     function nv_department_info($block_config)
     {
-        global $site_mods, $nv_Cache, $module_name, $nv_Lang;
+        global $global_config, $site_mods, $nv_Cache, $module_name, $nv_Lang;
 
         $module = $block_config['module'];
-        if ($module == $module_name) {
+        $module_data = $site_mods[$module]['module_data'];
+        $module_file = $site_mods[$module]['module_file'];
+
+        $block_theme = get_tpl_dir([$global_config['module_theme'], $global_config['site_theme']], 'default', '/modules/' . $module_file . '/block.department.tpl');
+
+        //Danh sach cac bo phan
+        $departments = $nv_Cache->db('SELECT * FROM ' . NV_PREFIXLANG . '_' . $site_mods[$module]['module_data'] . '_department ORDER BY weight', 'id', $module);
+        if (!isset($departments[$block_config['departmentid']]) or !$departments[$block_config['departmentid']]['act']) {
+            return '';
+        }
+        $row = $departments[$block_config['departmentid']];
+        if (empty($row)) {
             return '';
         }
 
-        $cache_file = 'departments_block' . NV_CACHE_PREFIX . '.cache';
-        if (($cache = $nv_Cache->getItem($module, $cache_file)) != false) {
-            $departments = json_decode($cache, true);
-        } else {
-            $departments = $nv_Cache->db('SELECT * FROM ' . NV_PREFIXLANG . '_' . $site_mods[$module]['module_data'] . '_department ORDER BY weight', 'id', $module);
-            if (!empty($departments)) {
-                $keys = array_keys($departments);
-                foreach ($keys as $key) {
-                    if (!$departments[$key]['act']) {
-                        unset($departments[$key]);
-                        continue;
-                    }
+        $xtpl = new XTemplate('block.department.tpl', NV_ROOTDIR . '/themes/' . $block_theme . '/modules/' . $module_file);
+        $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_global);
 
-                    $departments[$key]['url'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=contact&amp;' . NV_OP_VARIABLE . '=' . $departments[$key]['alias'];
+        $row['url'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=contact&amp;' . NV_OP_VARIABLE . '=' . $row['alias'];
 
-                    if (!empty($departments[$key]['image'])) {
-                        if (file_exists(NV_ROOTDIR . '/' . NV_MOBILE_FILES_DIR . '/' . $site_mods[$module]['module_upload'] . '/' . $departments[$key]['image'])) {
-                            $sizes = getimagesize(NV_ROOTDIR . '/' . NV_MOBILE_FILES_DIR . '/' . $site_mods[$module]['module_upload'] . '/' . $departments[$key]['image']);
-                            $departments[$key]['image'] = NV_BASE_SITEURL . NV_MOBILE_FILES_DIR . '/' . $site_mods[$module]['module_upload'] . '/' . $departments[$key]['image'];
-                        } else {
-                            $sizes = getimagesize(NV_UPLOADS_REAL_DIR . '/' . $site_mods[$module]['module_upload'] . '/' . $departments[$key]['image']);
-                            $departments[$key]['image'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $site_mods[$module]['module_upload'] . '/' . $departments[$key]['image'];
-                        }
-                        $departments[$key]['imagewidth'] = $sizes[0];
-                        $departments[$key]['imageheight'] = $sizes[1];
-                    }
+        $xtpl->assign('DEPARTMENT', $row);
 
-                    $departments[$key]['cd'] = [];
-                    if (!empty($departments[$key]['phone'])) {
-                        $departments[$key]['cd'][] = [
-                            'type' => 'phone',
-                            'value' => nv_parse_phone($departments[$key]['phone'])
-                        ];
-                    }
+        if (!empty($row['note'])) {
+            $xtpl->parse('main.note');
+        }
 
-                    if (!empty($departments[$key]['email'])) {
-                        $departments[$key]['cd'][] = [
-                            'type' => 'email',
-                            'value' => array_map('trim', explode(',', $departments[$key]['email']))
-                        ];
-                    }
+        if (!empty($row['address'])) {
+            $xtpl->parse('main.address');
+        }
 
-                    if (!empty($departments[$key]['others'])) {
-                        $others = json_decode($departments[$key]['others'], true);
-                        if (!empty($others)) {
-                            foreach ($others as $k => $value) {
-                                if (!empty($value)) {
-                                    $_k = strtolower($k);
-                                    if (in_array($_k, ['skype', 'viber', 'whatsapp', 'zalo'], true)) {
-                                        $departments[$key]['cd'][] = [
-                                            'type' => $_k,
-                                            'value' => array_map('trim', explode(',', $value))
-                                        ];
-                                    } else {
-                                        $departments[$key]['cd'][] = [
-                                            'type' => ucfirst($k),
-                                            'value' => ['is_url' => nv_is_url($value), 'content' => $value]
-                                        ];
-                                    }
-                                }
+        if (!empty($row['phone'])) {
+            $row['phone'] = nv_parse_phone($row['phone']);
+            $items = [];
+            foreach ($row['phone'] as $num) {
+                if (count($num) == 2) {
+                    $items[] = '<a href="tel:' . $num[1] . '">' . $num[0] . '</a>';
+                } else {
+                    $items[] = $num[0];
+                }
+            }
+            $xtpl->assign('CD', [
+                'name' => $nv_Lang->getGlobal('phonenumber'),
+                'value' => implode(', ', $items)
+            ]);
+            $xtpl->parse('main.cd');
+        }
+
+        if (!empty($row['fax'])) {
+            $xtpl->assign('CD', [
+                'name' => 'Fax',
+                'value' => $row['fax']
+            ]);
+            $xtpl->parse('main.cd');
+        }
+
+        if (!empty($row['email'])) {
+            $emails = array_map('trim', explode(',', $row['email']));
+            $items = [];
+            foreach ($emails as $email) {
+                $items[] = '<a href="' . NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=contact&amp;' . NV_OP_VARIABLE . '=' . $row['alias'] . '">' . $email . '</a>';
+            }
+            $xtpl->assign('CD', [
+                'name' => $nv_Lang->getGlobal('email'),
+                'value' => implode(', ', $items)
+            ]);
+
+            $xtpl->parse('main.cd');
+        }
+
+        if (!empty($row['others'])) {
+            $others = json_decode($row['others'], true);
+
+            if (!empty($others)) {
+                foreach ($others as $key => $value) {
+                    if (!empty($value)) {
+                        if (strtolower($key) == 'skype') {
+                            $ss = array_map('trim', explode(',', $value));
+                            $items = [];
+                            foreach ($ss as $s) {
+                                $items[] = '<a href="skype:' . $s . '?call">' . $s . '</a>';
                             }
+                            $xtpl->assign('CD', [
+                                'name' => 'Skype',
+                                'value' => implode(', ', $items)
+                            ]);
+                        } elseif (strtolower($key) == 'viber') {
+                            $ss = array_map('trim', explode(',', $value));
+                            $items = [];
+                            foreach ($ss as $s) {
+                                $items[] = '<a href="viber://pa?chatURI=' . $s . '">' . $s . '</a>';
+                            }
+                            $xtpl->assign('CD', [
+                                'name' => 'Viber',
+                                'value' => implode(', ', $items)
+                            ]);
+                        } elseif (strtolower($key) == 'whatsapp') {
+                            $ss = array_map('trim', explode(',', $value));
+                            $items = [];
+                            foreach ($ss as $s) {
+                                $items[] = '<a href="https://wa.me/' . $s . '">' . $s . '</a>';
+                            }
+                            $xtpl->assign('CD', [
+                                'name' => 'WhatsApp',
+                                'value' => implode(', ', $items)
+                            ]);
+                        } elseif (strtolower($key) == 'zalo') {
+                            $ss = array_map('trim', explode(',', $value));
+                            $items = [];
+                            foreach ($ss as $s) {
+                                $items[] = '<a href="https://zalo.me/' . $s . '">' . $s . '</a>';
+                            }
+                            $xtpl->assign('CD', [
+                                'name' => 'Zalo',
+                                'value' => implode(', ', $items)
+                            ]);
+                        } else {
+                            $xtpl->assign('CD', [
+                                'name' => ucfirst($key),
+                                'value' => $value
+                            ]);
                         }
+                        $xtpl->parse('main.cd');
                     }
                 }
             }
-
-            empty($departments) && $departments = [];
-            $cache = json_encode($departments);
-            $nv_Cache->setItem($module, $cache_file, $cache);
         }
+        $xtpl->parse('main');
 
-        if (empty($departments[$block_config['departmentid']])) {
-            return '';
-        }
-
-        $stpl = new \NukeViet\Template\NVSmarty();
-        $stpl->setTemplateDir($block_config['real_path'] . '/smarty');
-        $stpl->assign('LANG', $nv_Lang);
-        $stpl->assign('DEPARTMENT', $departments[$block_config['departmentid']]);
-
-        return $stpl->fetch('block.department.tpl');
+        return $xtpl->text('main');
     }
 }
 
 if (defined('NV_SYSTEM')) {
     global $site_mods, $module_name, $global_array_cat, $module_array_cat;
-    if (isset($site_mods[$block_config['module']])) {
+    $module = $block_config['module'];
+    if (isset($site_mods[$module])) {
         $content = nv_department_info($block_config);
     }
 }
