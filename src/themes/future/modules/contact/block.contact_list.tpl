@@ -3,7 +3,7 @@
     <div class="card-body">
         {if $DEPARTMENT.image}
         <div class="text-center mb-3">
-            <img src="{$DEPARTMENT.image}" class="img-thumbnail" alt="{$DEPARTMENT.full_name}" style="max-width: 150px;">
+            <img src="{$DEPARTMENT.image}" class="img-thumbnail" alt="{$DEPARTMENT.full_name}">
         </div>
         {/if}
         <h5 class="card-title text-center mb-3">
