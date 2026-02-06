@@ -46,7 +46,9 @@ if ($num_items) {
     $result = $db->query($db->sql());
 
     $os_list = [];
-    while (list($os, $count, $last_visit) = $result->fetch(3)) {
+    while ($_scratch = $result->fetch(3)) {
+        list($os, $count, $last_visit) = $_scratch;
+        unset($_scratch);
         $last_visit = !empty($last_visit) ? nv_date('l, d F Y H:i', $last_visit) : '';
         $os_list[$os] = [$count, $last_visit];
     }

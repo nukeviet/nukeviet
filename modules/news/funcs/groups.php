@@ -127,7 +127,9 @@ if (isset($array_op[1])) {
 
     $query_cat = $db_slave->query('SELECT bid, numbers, title, alias FROM ' . NV_PREFIXLANG . '_' . $module_data . '_block_cat ORDER BY weight ASC');
 
-    while (list($bid, $numberlink, $btitle, $balias) = $query_cat->fetch(3)) {
+    while ($_scratch = $query_cat->fetch(3)) {
+        list($bid, $numberlink, $btitle, $balias) = $_scratch;
+        unset($_scratch);
         $array_cat[$key] = [
             'catid' => $bid,
             'alias' => '',

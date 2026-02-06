@@ -20,7 +20,9 @@ if ($global_config['idsite']) {
     if (!empty($theme)) {
         $array_site_cat_theme = explode(',', $theme);
         $result = $db->query('SELECT DISTINCT theme FROM ' . NV_PREFIXLANG . '_modthemes WHERE func_id=0');
-        while (list($theme) = $result->fetch(3)) {
+        while ($_scratch = $result->fetch(3)) {
+            list($theme) = $_scratch;
+            unset($_scratch);
             $array_site_cat_theme[] = $theme;
         }
         $theme_array = array_intersect($theme_array, $array_site_cat_theme);
@@ -69,7 +71,9 @@ if (file_exists(NV_ROOTDIR . '/themes/' . $selectthemes . '/config.ini')) {
     $xtpl->assign('LANG_DBLOCK', $lang_drag_block);
 
     $result = $db->query('SELECT title, custom_title FROM ' . NV_MODULES_TABLE . ' ORDER BY weight ASC');
-    while (list($m_title, $m_custom_title) = $result->fetch(3)) {
+    while ($_scratch = $result->fetch(3)) {
+        list($m_title, $m_custom_title) = $_scratch;
+        unset($_scratch);
         $xtpl->assign('MODULE', ['key' => $m_title, 'title' => $m_custom_title]);
         $xtpl->parse('main.module');
     }
@@ -82,7 +86,9 @@ if (file_exists(NV_ROOTDIR . '/themes/' . $selectthemes . '/config.ini')) {
     $sth = $db->prepare('SELECT position, COUNT(*) FROM ' . NV_BLOCKS_TABLE . '_groups WHERE theme = :theme GROUP BY position');
     $sth->bindParam(':theme', $selectthemes, PDO::PARAM_STR);
     $sth->execute();
-    while (list($position, $numposition) = $sth->fetch(3)) {
+    while ($_scratch = $sth->fetch(3)) {
+        list($position, $numposition) = $_scratch;
+        unset($_scratch);
         $blocks_positions[$position] = $numposition;
     }
 
@@ -118,7 +124,9 @@ if (file_exists(NV_ROOTDIR . '/themes/' . $selectthemes . '/config.ini')) {
             $xtpl->parse('main.loop.all_func');
         } else {
             $result_func = $db->query('SELECT a.func_id, a.in_module, a.func_custom_name FROM ' . NV_MODFUNCS_TABLE . ' a INNER JOIN ' . NV_BLOCKS_TABLE . '_weight b ON a.func_id=b.func_id WHERE b.bid=' . $row['bid']);
-            while (list($funcid_inlist, $func_inmodule, $funcname_inlist) = $result_func->fetch(3)) {
+            while ($_scratch = $result_func->fetch(3)) {
+                list($funcid_inlist, $func_inmodule, $funcname_inlist) = $_scratch;
+                unset($_scratch);
                 $xtpl->assign('FUNCID_INLIST', $funcid_inlist);
                 $xtpl->assign('FUNC_INMODULE', $func_inmodule);
                 $xtpl->assign('FUNCNAME_INLIST', $funcname_inlist);

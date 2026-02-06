@@ -105,7 +105,9 @@ foreach ($language_array_source as $key) {
 
 $sql = 'SELECT idfile, module, admin_file FROM ' . NV_LANGUAGE_GLOBALTABLE . '_file ORDER BY idfile ASC';
 $result = $db->query($sql);
-while (list($idfile_i, $module, $admin_file) = $result->fetch(3)) {
+while ($_scratch = $result->fetch(3)) {
+    list($idfile_i, $module, $admin_file) = $_scratch;
+    unset($_scratch);
     $module = preg_replace('/^theme\_(.*?)$/', 'Theme: \\1', $module);
     switch ($admin_file) {
         case '1':
@@ -162,7 +164,9 @@ if ($submit > 0 and in_array($sourcelang, $array_lang_exit, true) and in_array($
 
     $array_lang_data = [];
 
-    while (list($id, $idfile_i, $lang_key, $datalang, $datasourcelang) = $result->fetch(3)) {
+    while ($_scratch = $result->fetch(3)) {
+        list($id, $idfile_i, $lang_key, $datalang, $datasourcelang) = $_scratch;
+        unset($_scratch);
         $array_lang_data[$idfile_i][$id] = [
             'lang_key' => $lang_key,
             'datalang' => $datalang,

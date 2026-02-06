@@ -33,7 +33,9 @@ if ($d[0]) {
     }
 
     $result = $db->query('SELECT did FROM ' . NV_UPLOAD_GLOBALTABLE . "_dir WHERE dirname='" . $path . "' OR dirname LIKE '" . $path . "/%'");
-    while (list($did) = $result->fetch(3)) {
+    while ($_scratch = $result->fetch(3)) {
+        list($did) = $_scratch;
+        unset($_scratch);
         $db->query('DELETE FROM ' . NV_UPLOAD_GLOBALTABLE . '_file WHERE did = ' . $did);
         $db->query('DELETE FROM ' . NV_UPLOAD_GLOBALTABLE . '_dir WHERE did = ' . $did);
     }

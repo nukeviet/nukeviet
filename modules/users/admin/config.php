@@ -222,7 +222,9 @@ if (preg_match('/^([a-z0-9\-\_]+)$/', $oauth_config, $m) and file_exists(NV_ROOT
         config='auto_assign_oauthuser' OR config='admin_email'
     ";
     $result = $db->query($sql);
-    while (list($config, $content) = $result->fetch(3)) {
+    while ($_scratch = $result->fetch(3)) {
+        list($config, $content) = $_scratch;
+        unset($_scratch);
         $content = array_map('trim', explode('|', $content));
         $array_config[$config] = implode(', ', $content);
     }

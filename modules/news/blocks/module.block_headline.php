@@ -106,7 +106,9 @@ if (!nv_function_exists('nv_block_headline')) {
             $db_slave->sqlreset()->select('bid, title, numbers')->from(NV_PREFIXLANG . '_' . $module_data . '_block_cat')->order('weight ASC')->limit(2);
             $result = $db_slave->query($db_slave->sql());
 
-            while (list($bid, $titlebid, $numberbid) = $result->fetch(3)) {
+            while ($_scratch = $result->fetch(3)) {
+                list($bid, $titlebid, $numberbid) = $_scratch;
+                unset($_scratch);
                 ++$id;
                 $array_bid_content[$id] = [
                     'id' => $id,
@@ -121,7 +123,9 @@ if (!nv_function_exists('nv_block_headline')) {
 
                 $result = $db_slave->query($db_slave->sql());
                 $array_content = [];
-                while (list($id, $catid_i, $title, $alias, $homeimgfile, $homeimgalt, $hometext, $external_link) = $result->fetch(3)) {
+                while ($_scratch = $result->fetch(3)) {
+                    list($id, $catid_i, $title, $alias, $homeimgfile, $homeimgalt, $hometext, $external_link) = $_scratch;
+                    unset($_scratch);
                     $link = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $global_array_cat[$catid_i]['alias'] . '/' . $alias . '-' . $id . $global_config['rewrite_exturl'];
                     $array_content[] = [
                         'title' => $title,

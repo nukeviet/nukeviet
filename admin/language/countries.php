@@ -20,7 +20,9 @@ $array_lang_setup[] = ['', $lang_module['site_lang']];
 
 $sql = 'SELECT lang FROM ' . $db_config['prefix'] . '_setup_language WHERE setup=1';
 $result = $db->query($sql);
-while (list($lang_i) = $result->fetch(3)) {
+while ($_scratch = $result->fetch(3)) {
+    list($lang_i) = $_scratch;
+    unset($_scratch);
     if (in_array($lang_i, $global_config['allow_sitelangs'], true)) {
         $array_lang_setup[$lang_i] = [$lang_i, $language_array[$lang_i]['name']];
     }

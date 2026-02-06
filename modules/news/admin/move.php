@@ -42,7 +42,9 @@ if ($nv_Request->isset_request('idcheck', 'post')) {
         }
 
         $result = $db->query('SELECT id, listcatid, status FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE id IN (' . implode(',', $id_array) . ')');
-        while (list($id, $listcatid_old, $status) = $result->fetch(3)) {
+        while ($_scratch = $result->fetch(3)) {
+            list($id, $listcatid_old, $status) = $_scratch;
+            unset($_scratch);
             // Xóa hết các chuyên mục cũ đi
             $array_catid_old = explode(',', $listcatid_old);
             foreach ($array_catid_old as $catid_i) {
@@ -87,7 +89,9 @@ $xtpl->assign('NV_NAME_VARIABLE', NV_NAME_VARIABLE);
 $xtpl->assign('MODULE_NAME', $module_name);
 $xtpl->assign('OP', $op);
 
-while (list($id, $title) = $result->fetch(3)) {
+while ($_scratch = $result->fetch(3)) {
+    list($id, $title) = $_scratch;
+    unset($_scratch);
     $xtpl->assign('ROW', [
         'id' => $id,
         'title' => $title,

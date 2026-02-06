@@ -27,7 +27,9 @@ if ($bid > 0 and (md5($theme . NV_CHECK_SESSION) == $checkss or md5(NV_CHECK_SES
     $sth->bindParam(':theme', $theme, PDO::PARAM_STR);
     $sth->bindParam(':position', $position, PDO::PARAM_STR);
     $sth->execute();
-    while (list($bid_i) = $sth->fetch(3)) {
+    while ($_scratch = $sth->fetch(3)) {
+        list($bid_i) = $_scratch;
+        unset($_scratch);
         ++$weight;
         $db->query('UPDATE ' . NV_BLOCKS_TABLE . '_groups SET weight=' . $weight . ' WHERE bid=' . $bid_i);
     }
@@ -39,7 +41,9 @@ if ($bid > 0 and (md5($theme . NV_CHECK_SESSION) == $checkss or md5(NV_CHECK_SES
     $sth->bindParam(':theme', $theme, PDO::PARAM_STR);
     $sth->bindParam(':position', $position, PDO::PARAM_STR);
     $sth->execute();
-    while (list($bid_i, $func_id_i) = $sth->fetch(3)) {
+    while ($_scratch = $sth->fetch(3)) {
+        list($bid_i, $func_id_i) = $_scratch;
+        unset($_scratch);
         if ($func_id_i == $func_id_old) {
             ++$weight;
         } else {

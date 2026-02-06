@@ -45,7 +45,9 @@ if ($num_items) {
     $result = $db->query($db->sql());
 
     $countries_list = [];
-    while (list($country, $count, $last_visit) = $result->fetch(3)) {
+    while ($_scratch = $result->fetch(3)) {
+        list($country, $count, $last_visit) = $_scratch;
+        unset($_scratch);
         $fullname = isset($countries[$country]) ? $countries[$country][1] : $lang_module['unknown'];
         $last_visit = !empty($last_visit) ? nv_date('l, d F Y H:i', $last_visit) : '';
         $countries_list[$country] = [$fullname, $count, $last_visit];

@@ -52,10 +52,14 @@ if (rename(NV_ROOTDIR . '/' . $path, NV_ROOTDIR . '/' . $newpath)) {
     }
 
     $result = $db->query('SELECT did, dirname FROM ' . NV_UPLOAD_GLOBALTABLE . "_dir WHERE dirname='" . $path . "' OR dirname LIKE '" . $path . "/%'");
-    while (list($did, $dirname) = $result->fetch(3)) {
+    while ($_scratch = $result->fetch(3)) {
+        list($did, $dirname) = $_scratch;
+        unset($_scratch);
         $dirname2 = str_replace(NV_ROOTDIR . '/' . $path, $newpath, NV_ROOTDIR . '/' . $dirname);
         $result_file = $db->query('SELECT src, title FROM ' . NV_UPLOAD_GLOBALTABLE . '_file WHERE did=' . $did . " AND type = 'image'");
-        while (list($src, $title) = $result_file->fetch(3)) {
+        while ($_scratch = $result_file->fetch(3)) {
+            list($src, $title) = $_scratch;
+            unset($_scratch);
             if ($action) {
                 $src2 = preg_replace('/^' . nv_preg_quote($dir_replace1) . '/', $dir_replace2, $src);
             } else {

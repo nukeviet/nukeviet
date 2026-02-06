@@ -33,7 +33,9 @@ $xtpl->assign('OP', $op);
 $theme_list = nv_scandir(NV_ROOTDIR . '/themes/', $global_config['check_theme']);
 
 $result = $db->query('SELECT DISTINCT theme FROM ' . NV_PREFIXLANG . '_modthemes WHERE func_id=0');
-while (list($theme) = $result->fetch(3)) {
+while ($_scratch = $result->fetch(3)) {
+    list($theme) = $_scratch;
+    unset($_scratch);
     if (in_array($theme, $theme_list, true)) {
         $xtpl->assign('THEME_FROM', $theme);
         $xtpl->parse('main.theme_from');

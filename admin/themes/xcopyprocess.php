@@ -58,7 +58,9 @@ if (md5(NV_CHECK_SESSION . '_' . $module_name . '_xcopyblock_' . $admin_info['us
             $bid = $db->insert_id($_sql, 'bid', $data);
 
             $result_weight = $db->query('SELECT func_id, weight FROM ' . NV_BLOCKS_TABLE . '_weight WHERE bid = ' . $row['bid']);
-            while (list($func_id, $weight) = $result_weight->fetch(3)) {
+            while ($_scratch = $result_weight->fetch(3)) {
+                list($func_id, $weight) = $_scratch;
+                unset($_scratch);
                 $db->query('INSERT INTO ' . NV_BLOCKS_TABLE . '_weight (bid, func_id, weight) VALUES (' . $bid . ', ' . $func_id . ', ' . $weight . ')');
             }
         }

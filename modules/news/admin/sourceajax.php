@@ -31,7 +31,9 @@ $sth->bindValue(':link', '%' . $q . '%', PDO::PARAM_STR);
 $sth->execute();
 
 $array_data = [];
-while (list($title, $link) = $sth->fetch(3)) {
+while ($_scratch = $sth->fetch(3)) {
+    list($title, $link) = $_scratch;
+    unset($_scratch);
     if (empty($link)) {
         $array_data[] = ['label' => $title, 'value' => $title];
     } else {

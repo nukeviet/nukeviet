@@ -19,7 +19,9 @@ nv_insert_logs(NV_LANG_DATA, $module_name, 'log_del', 'id ' . $t, $admin_info['u
 
 if ($t == 3) {
     $result = $db->query('SELECT id FROM ' . NV_PREFIXLANG . '_' . $module_data . '_send');
-    while (list($id) = $result->fetch(3)) {
+    while ($_scratch = $result->fetch(3)) {
+        list($id) = $_scratch;
+        unset($_scratch);
         nv_delete_notification(NV_LANG_DATA, $module_name, 'contact_new', $id);
     }
     $db->query('TRUNCATE TABLE ' . NV_PREFIXLANG . '_' . $module_data . '_send');

@@ -65,7 +65,9 @@ if ($nv_Request->isset_request('gid, get_user_json ', 'post, get')) {
     $sth->execute();
 
     $array_data = [];
-    while (list($userid, $username, $email, $first_name, $last_name) = $sth->fetch(3)) {
+    while ($_scratch = $sth->fetch(3)) {
+        list($userid, $username, $email, $first_name, $last_name) = $_scratch;
+        unset($_scratch);
         $array_data[] = [
             'id' => $userid,
             'username' => $username,

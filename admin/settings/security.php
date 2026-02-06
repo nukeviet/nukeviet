@@ -734,7 +734,9 @@ for ($i = 1; $i <= 128; ++$i) {
 $sql = 'SELECT id, ip, mask, area, begintime, endtime FROM ' . $db_config['prefix'] . '_ips WHERE type=0 ORDER BY ip DESC';
 $result = $db->query($sql);
 $i = 0;
-while (list($dbid, $dbip, $dbmask, $dbarea, $dbbegintime, $dbendtime) = $result->fetch(3)) {
+while ($_scratch = $result->fetch(3)) {
+    list($dbid, $dbip, $dbmask, $dbarea, $dbbegintime, $dbendtime) = $_scratch;
+    unset($_scratch);
     ++$i;
     $xtpl->assign('ROW', [
         'dbip' => $dbip,
@@ -771,7 +773,9 @@ $xtpl->assign('DATA', [
 $sql = 'SELECT id, ip, mask, area, begintime, endtime FROM ' . $db_config['prefix'] . '_ips WHERE type=1 ORDER BY ip DESC';
 $result = $db->query($sql);
 $i = 0;
-while (list($dbid, $dbip, $dbmask, $dbarea, $dbbegintime, $dbendtime) = $result->fetch(3)) {
+while ($_scratch = $result->fetch(3)) {
+    list($dbid, $dbip, $dbmask, $dbarea, $dbbegintime, $dbendtime) = $_scratch;
+    unset($_scratch);
     ++$i;
     $xtpl->assign('ROW', [
         'dbip' => $dbip,

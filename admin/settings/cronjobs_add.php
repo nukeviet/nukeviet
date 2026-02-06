@@ -78,7 +78,9 @@ if ($checkss == $nv_Request->get_string('checkss', 'post')) {
 
                 $sql = 'SELECT lang FROM ' . $db_config['prefix'] . "_setup_language where lang!='" . NV_LANG_INTERFACE . "'";
                 $result = $db->query($sql);
-                while (list($lang_i) = $result->fetch(3)) {
+                while ($_scratch = $result->fetch(3)) {
+                    list($lang_i) = $_scratch;
+                    unset($_scratch);
                     $sth = $db->prepare('UPDATE ' . NV_CRONJOBS_GLOBALTABLE . ' SET ' . $lang_i . '_cron_name= :run_func WHERE id=' . $id);
                     $sth->bindParam(':run_func', $run_func, PDO::PARAM_STR);
                     $sth->execute();

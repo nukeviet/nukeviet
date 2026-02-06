@@ -506,7 +506,9 @@ if (empty($key) and ($catid == 0) and empty($from_date) and empty($to_date)) {
         $array_content = [];
         $show_no_image = $module_config[$module_name]['show_no_image'];
 
-        while (list($id, $title, $alias, $catid, $hometext, $bodyhtml, $author, $publtime, $homeimgfile, $homeimgthumb, $sourceid, $external_link) = $result->fetch(3)) {
+        while ($_scratch = $result->fetch(3)) {
+            list($id, $title, $alias, $catid, $hometext, $bodyhtml, $author, $publtime, $homeimgfile, $homeimgthumb, $sourceid, $external_link) = $_scratch;
+            unset($_scratch);
             if ($homeimgthumb == 1) {
                 // image thumb
                 $img_src = NV_BASE_SITEURL . NV_FILES_DIR . '/' . $module_upload . '/' . $homeimgfile;

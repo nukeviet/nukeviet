@@ -146,7 +146,9 @@ if ($nv_Request->isset_request('idfile,checksess', 'get') and $nv_Request->get_s
 
         $sql = 'SELECT id, lang_key, lang_' . $dirlang . ' FROM ' . NV_LANGUAGE_GLOBALTABLE . ' WHERE idfile=' . $idfile . ' ORDER BY id ASC';
         $result = $db->query($sql);
-        while (list($id, $lang_key, $lang_value) = $result->fetch(3)) {
+        while ($_scratch = $result->fetch(3)) {
+            list($id, $lang_key, $lang_value) = $_scratch;
+            unset($_scratch);
             $xtpl->assign('ARRAY_DATA', [
                 'key' => $a++,
                 'lang_key' => $lang_key,

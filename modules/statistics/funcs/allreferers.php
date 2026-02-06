@@ -45,7 +45,9 @@ if ($num_items) {
     $result = $db->query($db->sql());
 
     $host_list = [];
-    while (list($host, $count, $last_visit) = $result->fetch(3)) {
+    while ($_scratch = $result->fetch(3)) {
+        list($host, $count, $last_visit) = $_scratch;
+        unset($_scratch);
         $last_visit = !empty($last_visit) ? nv_date('l, d F Y H:i', $last_visit) : '';
         $bymonth = '<a href="' . NV_BASE_MOD_URL . '&amp;' . NV_OP_VARIABLE . '=' . $module_info['alias']['referer'] . '&amp;host=' . $host . '">' . $lang_module['statbymoth2'] . '</a>';
         $host_list[$host] = [$count, $last_visit, $bymonth];

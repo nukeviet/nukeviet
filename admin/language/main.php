@@ -254,13 +254,17 @@ if (defined('NV_IS_GODADMIN') or ($global_config['idsite'] > 0 and defined('NV_I
                     $result = $db->query('SELECT COUNT(*) FROM ' . $db_config['prefix'] . '_' . $lang_data . "_modules WHERE title='news'");
                     if ($result->fetchColumn()) {
                         $result = $db->query('SELECT catid FROM ' . $db_config['prefix'] . '_' . $lang_data . '_news_cat ORDER BY sort ASC');
-                        while (list($catid_i) = $result->fetch(3)) {
+                        while ($_scratch = $result->fetch(3)) {
+                            list($catid_i) = $_scratch;
+                            unset($_scratch);
                             nv_copy_structure_table($db_config['prefix'] . '_' . $lang_data . '_news_' . $catid_i, $db_config['prefix'] . '_' . $lang_data . '_news_rows');
                         }
                         $result->closeCursor();
 
                         $result = $db->query('SELECT id, listcatid FROM ' . $db_config['prefix'] . '_' . $lang_data . '_news_rows ORDER BY id ASC');
-                        while (list($id, $listcatid) = $result->fetch(3)) {
+                        while ($_scratch = $result->fetch(3)) {
+                            list($id, $listcatid) = $_scratch;
+                            unset($_scratch);
                             $arr_catid = explode(',', $listcatid);
                             foreach ($arr_catid as $catid) {
                                 $db->query('INSERT INTO ' . $db_config['prefix'] . '_' . $lang_data . '_news_' . $catid . ' SELECT * FROM ' . $db_config['prefix'] . '_' . $lang_data . '_news_rows WHERE id=' . $id);
@@ -320,7 +324,9 @@ if (defined('NV_IS_GODADMIN') or ($global_config['idsite'] > 0 and defined('NV_I
         $sql = 'SELECT title, module_file, module_data FROM ' . $db_config['prefix'] . '_' . $lang . '_modules ORDER BY weight ASC';
         $result_del_module = $db->query($sql);
 
-        while (list($title, $module_file, $module_data) = $result_del_module->fetch(3)) {
+        while ($_scratch = $result_del_module->fetch(3)) {
+            list($title, $module_file, $module_data) = $_scratch;
+            unset($_scratch);
             if (file_exists(NV_ROOTDIR . '/modules/' . $module_file . '/action_' . $db->dbtype . '.php')) {
                 $sql_drop_module = [];
 

@@ -122,7 +122,9 @@ if (!nv_function_exists('nv_news_block_news')) {
                 ->limit($numrow);
             $result = $db_slave->query($db_slave->sql());
 
-            while (list($id, $catid, $publtime, $exptime, $title, $alias, $homeimgthumb, $homeimgfile, $hometext, $external_link) = $result->fetch(3)) {
+            while ($_scratch = $result->fetch(3)) {
+                list($id, $catid, $publtime, $exptime, $title, $alias, $homeimgthumb, $homeimgfile, $hometext, $external_link) = $_scratch;
+                unset($_scratch);
                 $link = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module . '&amp;' . NV_OP_VARIABLE . '=' . $module_array_cat[$catid]['alias'] . '/' . $alias . '-' . $id . $global_config['rewrite_exturl'];
                 if ($homeimgthumb == 1) {
                     //image thumb

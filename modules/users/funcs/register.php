@@ -173,7 +173,9 @@ while ($row_field = $result_field->fetch()) {
             $query .= ' ORDER BY ' . $row_field['sql_choices'][4] . ' ' . $row_field['sql_choices'][5];
         }
         $result = $db->query($query);
-        while (list($key, $val) = $result->fetch(3)) {
+        while ($_scratch = $result->fetch(3)) {
+            list($key, $val) = $_scratch;
+            unset($_scratch);
             $row_field['field_choices'][$key] = $val;
         }
     }

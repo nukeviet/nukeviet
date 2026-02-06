@@ -80,7 +80,9 @@ if ($nv_Request->isset_request('delete_id', 'get') and $nv_Request->isset_reques
         if ($weight > 0) {
             $sql = 'SELECT id, weight FROM ' . NV_PREFIXLANG . '_' . $module_data . '_supporter WHERE weight >' . $weight . ' AND departmentid=' . $departmentid;
             $result = $db->query($sql);
-            while (list($id, $weight) = $result->fetch(3)) {
+            while ($_scratch = $result->fetch(3)) {
+                list($id, $weight) = $_scratch;
+                unset($_scratch);
                 --$weight;
                 $db->query('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_supporter SET weight=' . $weight . ' WHERE id=' . $id . ' AND departmentid=' . $departmentid);
             }

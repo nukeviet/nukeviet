@@ -118,7 +118,9 @@ function nv_save_file_config_global()
     $sql = 'SELECT module, config_name, config_value FROM ' . NV_CONFIG_GLOBALTABLE . " WHERE lang='sys' AND (module='global' OR module='define') ORDER BY config_name ASC";
     $result = $db->query($sql);
 
-    while (list($c_module, $c_config_name, $c_config_value) = $result->fetch(3)) {
+    while ($_scratch = $result->fetch(3)) {
+        list($c_module, $c_config_name, $c_config_value) = $_scratch;
+        unset($_scratch);
         if ($c_module == 'define') {
             if (preg_match('/^\d+$/', $c_config_value)) {
                 $content_config .= "define('" . strtoupper($c_config_name) . "', " . $c_config_value . ");\n";
@@ -894,7 +896,9 @@ function nv_save_file_ips($type = 0)
     }
 
     $result = $db->query('SELECT ip, mask, area, begintime, endtime FROM ' . $db_config['prefix'] . '_ips WHERE type=' . $type);
-    while (list($dbip, $dbmask, $dbarea, $dbbegintime, $dbendtime) = $result->fetch(3)) {
+    while ($_scratch = $result->fetch(3)) {
+        list($dbip, $dbmask, $dbarea, $dbbegintime, $dbendtime) = $_scratch;
+        unset($_scratch);
         $dbendtime = (int) $dbendtime;
         $dbarea = (int) $dbarea;
 
