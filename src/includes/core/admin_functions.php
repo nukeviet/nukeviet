@@ -930,7 +930,7 @@ function nv_update_robots($robots_config, bool $save = false, array $config = []
     }
     // Kiểm tra các config cần thiết
     if (!isset($real_config['allow_sitelangs'], $real_config['rewrite_enable'], $real_config['check_rewrite_file'])) {
-        throw new \NukeViet\Core\HttpException('Error: Missing config for updating robots', 500);
+        throw new \NukeViet\Http\HttpException('Error: Missing config for updating robots', 500);
     }
     if ($force_gconfig) {
         $global_config = $real_config;
