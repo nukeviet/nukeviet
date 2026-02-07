@@ -87,13 +87,13 @@ if (!nv_function_exists('nv_page_list')) {
         }
         unset($l);
 
-        [$block_theme, $dir] = get_block_tpl_dir('block.page_list.tpl', $module, true);
+        [$block_theme, $dir] = get_block_tpl_dir('global.page_list.tpl', $module, true);
         $tpl = new \NukeViet\Template\NVSmarty();
         $tpl->setTemplateDir($dir);
         $tpl->assign('TEMPLATE', $block_theme);
         $tpl->assign('DATA', $list);
 
-        return $tpl->fetch('block.page_list.tpl');
+        return $tpl->fetch('global.page_list.tpl');
     }
 }
 
