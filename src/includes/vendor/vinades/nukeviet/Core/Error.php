@@ -11,6 +11,7 @@
 
 namespace NukeViet\Core;
 
+use NukeViet\Http\HttpException;
 use NukeViet\Site;
 
 if (!defined('E_STRICT')) {

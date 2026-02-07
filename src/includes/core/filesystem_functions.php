@@ -1237,5 +1237,5 @@ function get_module_tpl_dir($filename, $array = false)
     }
 
     trigger_error('Template file not found: ' . $filename . ', module: ' . $module_theme);
-    throw new \NukeViet\Core\HttpException('Template file not found!', 500);
+    throw new \NukeViet\Http\HttpException('Template file not found!', 500);
 }
