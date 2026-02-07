@@ -1,35 +1,10 @@
-.page-img-thumbnail {
-    width: 100px;
-}
-
-.page-desc-clamp {
-    display: -webkit-box;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-
-    @media (max-width: 576px) {
-        -webkit-line-clamp: 3;
-        line-height: 1.4;
-    }
-}
-
 .page-img-wrap {
     display: block;
     overflow: hidden;
     position: relative;
-    padding-top: 54%;
+    --bs-aspect-ratio: 75%;
 
-    img {
-        object-fit: cover;
-        display: block;
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-    }
-
-    @media (max-width: 576px) {
-        padding-top: 75%;
+    @include media-breakpoint-up(md) {
+        --bs-aspect-ratio: 66.67%;
     }
 }

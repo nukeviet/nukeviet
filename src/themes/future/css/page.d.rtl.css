@@ -6,41 +6,11 @@
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
-.page-img-thumbnail {
-  width: 100px;
-}
-
-.page-desc-clamp {
-  display: -webkit-box;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-}
-@media (max-width: 576px) {
-  .page-desc-clamp {
-    -webkit-line-clamp: 3;
-    line-height: 1.4;
-  }
-}
-
 .page-img-wrap {
   display: block;
   overflow: hidden;
   position: relative;
-  padding-top: 54%;
-}
-.page-img-wrap img {
-  -o-object-fit: cover;
-  object-fit: cover;
-  display: block;
-  position: absolute;
-  top: 0;
-  right: 0;
-  width: 100%;
-  height: 100%;
-}
-@media (max-width: 576px) {
-  .page-img-wrap {
-    padding-top: 75%;
-  }
+  --bs-aspect-ratio: 75%;
+  --bs-aspect-ratio: 66.67%;
 }
 /*# sourceMappingURL=page.d.rtl.css.map */

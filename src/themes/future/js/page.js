@@ -28,7 +28,7 @@ $(function() {
                 url: btn.data('adminurl') + 'index.php?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=del&nocache=' + new Date().getTime(),
                 data: {
                     id: btn.data('id'),
-                    checkss: btn.data('ss')
+                    checkss: btn.data('checkss')
                 },
                 dataType: 'json',
                 success: function(response) {
