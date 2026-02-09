@@ -46,8 +46,7 @@ function nv_get_user_secretkey()
                     $secretkey = $_secretkey;
                     break;
                 }
-                http_response_code(500);
-                trigger_error('Error creat user secretkey!!!', 256);
+                throw new \NukeViet\Http\HttpException('Error creat user secretkey!!!', 500);
             }
         }
     }

@@ -319,8 +319,7 @@ class Request
         }
 
         if ($ip2long == -1 or $ip2long === false) {
-            http_response_code(403);
-            trigger_error(Request::INCORRECT_IP, 256);
+            throw new \NukeViet\Http\HttpException(Request::INCORRECT_IP, 403);
         }
         $this->ip_addr = $ip2long;
 
@@ -503,8 +502,7 @@ class Request
                 $this->isIpValid = true;
             }
             if (!(($this->isRefererValid and (empty($this->origin) or $this->isOriginValid)) or $this->isIpValid)) {
-                http_response_code(403);
-                trigger_error(Request::REQUEST_BLOCKED, 256);
+                throw new \NukeViet\Http\HttpException(Request::REQUEST_BLOCKED, 403);
             }
         }
     }
@@ -547,8 +545,7 @@ class Request
                  * Nếu sai thì từ chối truy vấn
                  */
                 unset($_SERVER['HTTP_ORIGIN']);
-                http_response_code(403);
-                trigger_error(Request::INCORRECT_ORIGIN, 256);
+                throw new \NukeViet\Http\HttpException(Request::INCORRECT_ORIGIN, 403);
             }
         } else {
             $this->origin_key = 2;
@@ -639,8 +636,7 @@ class Request
     private function sessionStart($https_only)
     {
         if (headers_sent() or connection_status() != 0 or connection_aborted()) {
-            http_response_code(500);
-            trigger_error(Request::IS_HEADERS_SENT, 256);
+            throw new \NukeViet\Http\HttpException(Request::IS_HEADERS_SENT, 500);
         }
 
         $_secure = ($this->server_protocol == 'https' and $https_only) ? 1 : 0;
