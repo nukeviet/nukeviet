@@ -157,8 +157,7 @@ $global_config['sitekey'] = md5($_SERVER['SERVER_NAME'] . NV_ROOTDIR . $client_i
 
 // Chan truy cap neu HTTP_USER_AGENT == 'none'
 if (NV_USER_AGENT == 'none') {
-    http_response_code(403);
-    trigger_error('We\'re sorry. The software you are using to access our website is not allowed. Some examples of this are e-mail harvesting programs and programs that will copy websites to your hard drive. If you feel you have gotten this message in error, please send an e-mail addressed to admin. Your I.P. address has been logged. Thanks.', 256);
+    throw new \NukeViet\Http\HttpException('We\'re sorry. The software you are using to access our website is not allowed. Some examples of this are e-mail harvesting programs and programs that will copy websites to your hard drive. If you feel you have gotten this message in error, please send an e-mail addressed to admin. Your I.P. address has been logged. Thanks.', 403);
 }
 
 // Captcha
