@@ -57,18 +57,15 @@ class Redis
             $connected = true;
         }
         if ($connected !== true) {
-            http_response_code(500);
-            trigger_error('Can not connect to Redis server!', 256);
+            throw new \NukeViet\Http\HttpException('Can not connect to Redis server!', 500);
         }
 
         if (!empty($Password) and $redis->auth($Password) !== true) {
-            http_response_code(500);
-            trigger_error('Can not Authenticate Redis server!', 256);
+            throw new \NukeViet\Http\HttpException('Can not Authenticate Redis server!', 500);
         }
 
         if ($redis->select($DBnumber) !== true) {
-            http_response_code(500);
-            trigger_error('Can not connect to Redis DB!', 256);
+            throw new \NukeViet\Http\HttpException('Can not connect to Redis DB!', 500);
         }
 
         $checkOptions = [];
@@ -77,8 +74,7 @@ class Redis
 
         foreach ($checkOptions as $opt) {
             if ($opt !== true) {
-                http_response_code(500);
-                trigger_error('Can not set Redis option!', 256);
+                throw new \NukeViet\Http\HttpException('Can not set Redis option!', 500);
             }
         }
 

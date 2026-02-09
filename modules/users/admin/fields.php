@@ -194,8 +194,7 @@ if ($nv_Request->isset_request('save', 'post')) {
     if ($dataform['fid']) {
         $dataform_old = $db->query('SELECT * FROM ' . NV_MOD_TABLE . '_field WHERE fid=' . $dataform['fid'])->fetch();
         if (empty($dataform_old)) {
-            http_response_code(500);
-            trigger_error('Data error!!!', 256);
+            throw new \NukeViet\Http\HttpException('Data error!!!', 500);
         }
         $dataform['field_type'] = $dataform_old['field_type'];
         if (!empty($dataform_old['language'])) {

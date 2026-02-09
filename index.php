@@ -34,8 +34,7 @@ if ($nv_Request->isset_request(NV_NAME_VARIABLE, 'get') and $nv_Request->get_str
 
 // Check user
 if (defined('NV_IS_USER')) {
-    http_response_code(403);
-    trigger_error('Hacking attempt', 256);
+    throw new \NukeViet\Http\HttpException('Hacking attempt', 403);
 }
 require NV_ROOTDIR . '/includes/core/is_user.php';
 
@@ -264,8 +263,7 @@ if (preg_match($global_config['check_module'], $module_name)) {
                     } elseif (file_exists(NV_ROOTDIR . '/themes/default/theme.php')) {
                         $global_config['module_theme'] = 'default';
                     } else {
-                        http_response_code(500);
-                        trigger_error('Error! Does not exist themes default', 256);
+                        throw new \NukeViet\Http\HttpException('Error! Does not exist themes default', 500);
                     }
                     $theme_type = $global_config['current_theme_type'];
                     unset($_theme, $_u_theme);

@@ -53,8 +53,7 @@ class Blocker
     public function __construct($logs_path, $ip = '')
     {
         if (!is_dir($logs_path)) {
-            http_response_code(500);
-            trigger_error(Blocker::INCORRECT_TEMPRORARY_DIRECTORY, E_USER_ERROR);
+            throw new \NukeViet\Http\HttpException(Blocker::INCORRECT_TEMPRORARY_DIRECTORY, 500);
         }
         if (substr($logs_path, -1) != '/') {
             $logs_path .= '/';
@@ -77,8 +76,7 @@ class Blocker
             $ip2long = base_convert($r_ip, 2, 10);
         }
         if ($ip2long == -1 or $ip2long === false) {
-            http_response_code(403);
-            trigger_error(Blocker::INCORRECT_IP_ADDRESS, E_USER_ERROR);
+            throw new \NukeViet\Http\HttpException(Blocker::INCORRECT_IP_ADDRESS, 403);
         }
 
         $this->logs_path = $logs_path;

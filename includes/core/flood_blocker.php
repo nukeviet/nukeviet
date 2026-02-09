@@ -92,8 +92,7 @@ if (!$ip_exclusion) {
             include NV_ROOTDIR . '/includes/footer.php';
             exit();
         }
-        http_response_code(403);
-        trigger_error($lang_global['flood_info1'], 256);
+        throw new \NukeViet\Http\HttpException($lang_global['flood_info1'], 403);
     }
 
     unset($rules, $flb);
