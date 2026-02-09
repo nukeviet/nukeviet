@@ -288,12 +288,10 @@ class Http extends Server
     }
 
     /**
-     * parse_str()
-     *
      * @param mixed $str
      * @return array
      */
-    private function parse_str($str)
+    public static function parse_str($str)
     {
         $r = [];
         parse_str($str, $r);
@@ -423,7 +421,7 @@ class Http extends Server
 
         // Don't redirect if we've run out of redirects
         if ($args['redirection']-- <= 0) {
-            $this->set_error(5);
+            self::set_error(5);
 
             return false;
         }
@@ -583,7 +581,7 @@ class Http extends Server
         if (is_object($args)) {
             $args = get_object_vars($args);
         } elseif (!is_array($args)) {
-            $args = $this->parse_str($args);
+            $args = self::parse_str($args);
         }
 
         return array_merge($defaults, $args);

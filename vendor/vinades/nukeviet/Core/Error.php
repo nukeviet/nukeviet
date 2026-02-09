@@ -11,6 +11,8 @@
 
 namespace NukeViet\Core;
 
+use NukeViet\Http\HttpException;
+
 if (!defined('E_STRICT')) {
     define('E_STRICT', 2048); //khong sua
 }
@@ -173,6 +175,7 @@ class Error
         }
 
         set_error_handler([&$this, 'error_handler']);
+        set_exception_handler([&$this, 'exception_handler']);
         register_shutdown_function([&$this, 'shutdown']);
     }
 
@@ -569,6 +572,47 @@ class Error
                 exit(chr(0));
             }
         }
+    }
+
+    /**
+     * exception_handler()
+     *
+     * Xử lý các exception chưa được bắt, đặc biệt là HttpException để giữ lại HTTP status code
+     *
+     * @param \Exception $exception
+     */
+    public function exception_handler($exception)
+    {
+        // Thiết lập mã HTTP status dựa trên loại exception
+        if ($exception instanceof HttpException) {
+            http_response_code($exception->getHttpCode());
+            $this->errno = 256; // Sử dụng 256 để kích hoạt hành vi info_die()
+        } else {
+            http_response_code(500);
+            $this->errno = E_ERROR;
+        }
+
+        $this->errstr = $exception->getMessage();
+        $this->errfile = str_replace(NV_ROOTDIR, '', str_replace('\\', '/', $exception->getFile()));
+        $this->errline = $exception->getLine();
+
+        $this->log_control();
+
+        if ($this->errno == 256) {
+            $this->info_die();
+        }
+
+        if (NV_DEBUG) {
+            exit('An error occurred while loading the page:<br /><pre><code>' . htmlspecialchars(print_r([
+                'type' => get_class($exception),
+                'message' => $exception->getMessage(),
+                'file' => $exception->getFile(),
+                'line' => $exception->getLine(),
+                'trace' => $exception->getTraceAsString()
+            ], true)) . '</code></pre>');
+        }
+
+        exit(chr(0));
     }
 
     /**

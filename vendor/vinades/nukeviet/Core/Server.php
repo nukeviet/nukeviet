@@ -168,7 +168,7 @@ class Server
     /**
      * getEnv()
      *
-     * @param string $key
+     * @param string|array $key
      * @return string
      */
     protected function getEnv($key)
