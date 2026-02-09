@@ -1,12 +1,12 @@
-<div class="page vstact gap-3 ">
+<div class="page vstack gap-3">
     {if not empty($DATA)}
     {foreach from=$DATA item=row}
     <div class="pb-3">
         <article class="row g-3 align-items-start">
             {if not empty($row.image)}
             <div class="col-5 col-md-4">
-                <a href="{$row.link}" class="ratio d-block page-img-wrap">
-                    <img class="object-fit-cover align-baseline" src="{$row.image}" alt="{$row.imagealt}" loading="lazy">
+                <a href="{$row.link}" class="ratio d-block page-img-wrap align-baseline">
+                    <img class="object-fit-cover" src="{$row.image}" alt="{$row.imagealt}" loading="lazy">
                 </a>
             </div>
             {/if}
