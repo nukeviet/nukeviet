@@ -139,7 +139,6 @@ $lang_module['forward'] = 'Chuyển tiếp tới: %s';
 $lang_module['forwarded'] = 'Thư đã chuyển tiếp';
 $lang_module['error_mail_empty'] = 'Vui lòng nhập email';
 $lang_module['config'] = 'Cấu hình module';
-$lang_module['config_save_success'] = 'Cấu hình đã được lưu thành công!';
 $lang_module['config_sendcopymode'] = 'Quyền gửi bản sao tới email';
 $lang_module['config_sendcopymode0'] = 'Người dùng đã xác thực email';
 $lang_module['config_sendcopymode1'] = 'Tất cả người dùng';

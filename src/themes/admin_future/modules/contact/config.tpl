@@ -7,9 +7,9 @@
                 <label for="element_feedback_phone" class="col-sm-3 col-xxl-4 col-form-label text-sm-end">{$LANG->getModule('feedback_phone')}</label>
                 <div class="col-sm-4 col-lg-6 col-xxl-8">
                     <select class="form-select w-auto mw-100" id="element_feedback_phone" name="feedback_phone">
-                        {foreach from=$FEEDBACK_PHONE_OPTIONS item=option}
-                        <option value="{$option.val}"{$option.sel}>{$option.title}</option>
-                        {/foreach}
+                        {for $i=0 to 2}
+                        <option value="{$i}"{if $i eq $DATA.feedback_phone} selected="selected"{/if}>{$LANG->getModule("option_`$i`")}</option>
+                        {/for}
                     </select>
                 </div>
             </div>
@@ -17,9 +17,9 @@
                 <label for="element_feedback_address" class="col-sm-3 col-xxl-4 col-form-label text-sm-end">{$LANG->getModule('feedback_address')}</label>
                 <div class="col-sm-4 col-lg-6 col-xxl-8">
                     <select class="form-select w-auto mw-100" id="element_feedback_address" name="feedback_address">
-                        {foreach from=$FEEDBACK_ADDRESS_OPTIONS item=option}
-                        <option value="{$option.val}"{$option.sel}>{$option.title}</option>
-                        {/foreach}
+                        {for $i=0 to 2}
+                        <option value="{$i}"{if $i eq $DATA.feedback_address} selected="selected"{/if}>{$LANG->getModule("option_`$i`")}</option>
+                        {/for}
                     </select>
                 </div>
             </div>
@@ -27,9 +27,9 @@
                 <label for="element_sendcopymode" class="col-sm-3 col-xxl-4 col-form-label text-sm-end">{$LANG->getModule('config_sendcopymode')}</label>
                 <div class="col-sm-4 col-lg-6 col-xxl-8">
                     <select class="form-select w-auto mw-100" id="element_sendcopymode" name="sendcopymode">
-                        {foreach from=$SENDCOPYMODE_OPTIONS item=option}
-                        <option value="{$option.key}"{$option.selected}>{$option.title}</option>
-                        {/foreach}
+                        {for $i=0 to 1}
+                        <option value="{$i}"{if $i eq $DATA.sendcopymode} selected="selected"{/if}>{$LANG->getModule("config_sendcopymode`$i`")}</option>
+                        {/for}
                     </select>
                 </div>
             </div>
