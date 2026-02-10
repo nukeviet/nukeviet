@@ -118,7 +118,7 @@ $mess_content_default = htmlspecialchars(nv_editor_br2nl($sign_content));
 if (defined('NV_EDITOR') and nv_function_exists('nv_aleditor')) {
     $mess_content = nv_aleditor('mess_content', '100%', '300px', $mess_content_default, 'Basic');
 } else {
-    $mess_content = '<textarea style="width:100%" name="mess_content" id="mess_content" cols="20" rows="8" class="form-control">' . $mess_content_default . '</textarea>';
+    $mess_content = '<textarea name="mess_content" id="mess_content" cols="20" rows="8" class="form-control">' . $mess_content_default . '</textarea>';
 }
 
 // Chuẩn bị dữ liệu cho Smarty
