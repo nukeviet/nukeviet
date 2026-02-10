@@ -19,14 +19,14 @@
             <div class="row mb-3">
                 <label for="element_title" class="col-sm-3 col-form-label text-sm-end">{$LANG->getModule('title_send_title')} <span class="text-danger">*</span></label>
                 <div class="col-sm-8 col-lg-6 col-xxl-5">
-                    <input type="text" name="title" id="element_title" class="form-control" required>
+                    <input type="text" name="title" id="element_title" class="form-control" autocomplete="off" required>
                     <div class="invalid-feedback"></div>
                 </div>
             </div>
             <div class="row mb-3">
                 <label for="element_email" class="col-sm-3 col-form-label text-sm-end">{$LANG->getGlobal('email')} <span class="text-danger">*</span></label>
                 <div class="col-sm-8 col-lg-6 col-xxl-5">
-                    <input type="text" name="email" id="element_email" class="form-control" required>
+                    <input type="text" name="email" id="element_email" class="form-control" autocomplete="email" required>
                     <div class="form-text">{$LANG->getModule('to_note')}</div>
                     <div class="invalid-feedback"></div>
                 </div>
