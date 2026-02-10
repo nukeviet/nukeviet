@@ -35,10 +35,11 @@ Mục tiêu là phát triển và chuẩn hóa giao diện admin_future cho các
 - Nếu form submit → ưu tiên ajax-submit
 - Tuân theo cơ chế `.ajax-submit` trong nv.core.js
 - JSON trả về phải có:
-  - status
-  - mess
+  - status: Thống nhất success / error nếu thành công / lỗi
+  - mess: Nếu status = error thì bắt buộc là thông báo lỗi, nếu status = success thì có thể là thông báo thành công hoặc chuỗi rỗng, khi là chuỗi rỗng thì bắt buộc phải định ra redirect hoặc refresh
   - input (nếu lỗi field)
-  - redirect (nếu cần)
+  - redirect (nếu cần). Nếu có redirect thì phải rewrite URL bằng nv_url_rewrite(..., true)
+  - refresh: Có thể có hoặc không, nếu có thì giá trị là true khi cần refresh trang hiện tại.
 
 Đảm bảo js xử lý:
 - toast
@@ -84,10 +85,12 @@ Trong tpl:
 - Ngắn gọn
 - Rõ mục đích
 
-## 8. Plugin và module cần sửa khi tạo giao diện mới
-Phải kiểm tra và sửa:
-- src/includes/plugin/get_global_admin_theme.php
-- src/includes/plugin/get_module_admin_theme.php
+## 8. Ngôn ngữ module và ngôn ngữ global
+- Trước khi sinh thêm langkey vào ngôn ngữ module (src/modules/--/language/--.php) phải kiểm tra nếu đã có langkey gần tương đương ngũ nghĩa trong ngôn ngữ global (src/includes/language/../global.php) thì sử dụng thay vì sinh mới.
+
+## 9. Tác động tới giao diện cũ admin_default
+- Không giữ backward cho giao diện admin_default cũ nữa.
+- Mọi thay đổi chỉ tập trung cho giao diện admin_future.
 
 # Quy trình làm việc
 
@@ -97,14 +100,21 @@ Phải kiểm tra và sửa:
 - Xác định tpl trong src/themes/admin_future/modules/... cần tạo
 
 ## Bước 2: Backend PHP
+- Cần chuyển đổi toàn bộ code liên quan giao diện sử dụng Xtemplate sang Smarty.
 - Default value cho mọi biến tpl
 - Kiểm tra checkss
-- Chuẩn JSON nếu ajax
+- Chuẩn JSON nếu ajax.
+- Không tạo chuỗi cho các attribute checked, selected kiểu như ` checked="checked"` trong PHP. Chuyển logic này sang Smarty xử lý.
+- Không dùng thuộc tính đầy đủ dạng ` checked="checked"` hoặc ` selected="selected"` trong tpl. Chỉ dùng `checked` hoặc `selected` là đủ.
+- Tối ưu code cho giao diện mới, không cần giữ backward cho giao diện admin_default cũ nữa.
+- Kiểm tra các thao tác thêm, sửa, xóa, sắp xếp thứ tự, kích hoạt, đình chỉ ... có thao tác thay đổi CSDL mà chưa ghi log bằng hàm nv_insert_logs() thì bổ sung thêm để đảm bảo tính đầy đủ của log hệ thống.
 
 ## Bước 3: Tpl
 - Chuẩn Smarty
 - Bootstrap 5
 - Không js inline
+- Thẻ label và input đồng bộ for. Trường hợp thẻ label không có input ví dụ như một trình soạn thảo thay vì một ô text thì đổi nó thành thẻ div
+- Nếu trong tpl có cấu trúc một form, bên trong là các thành phần sắp xếp theo dạng row → col label + col input. Thì sắp xếp độ rộng cột thứ nhất là `col-sm-3` nếu nó quá bé so với text thì tăng lên `col-sm-4`. Cột input tương ứng là `col-sm-8 col-lg-6 col-xxl-5`. Không đặt cột input có độ rộng trên màn hình xxl là 12 - độ rộng cột label. Vì như vậy giao diện sẽ bị quá rộng, không cân đối. Mặc khác đối với các row chứa trình soạn thảo thì đăng độ rộng cột input lên gần tối đa có thể để các công cụ soạn thảo hiển thị tốt hơn.
 
 ## Bước 4: JS module
 - Tạo file js module
@@ -116,6 +126,7 @@ Phải kiểm tra và sửa:
 - Không class thừa
 - Không js inline
 - Giao diện cân đối
+- Đảm bảo src/includes/plugin/get_module_admin_theme.php và src/includes/plugin/get_global_admin_theme.php đã được cập nhật. Vì đây là nơi xác định giao diện admin_future cho từng module và toàn hệ thống trong quản trị. Chắc chắn bắt buộc phải cập nhật thì giao diện mới được nhận diện đủ.
 
 # Nguyên tắc chỉnh sửa
 - Không rewrite toàn bộ module nếu không cần
