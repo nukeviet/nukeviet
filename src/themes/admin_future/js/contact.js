@@ -481,7 +481,8 @@ $(function() {
             }
         })
     });
-});
+
+    // Đặt bộ phận làm mặc định
     $('[name=is_default]').on('change', function() {
         var that = $(this).parents('.list'),
             item = $(this).parents('.item'),

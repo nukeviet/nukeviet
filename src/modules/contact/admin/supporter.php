@@ -235,8 +235,7 @@ if ($nv_Request->isset_request('fc', 'post')) {
 
             $tpl = new \NukeViet\Template\NVSmarty();
             $tpl->setTemplateDir(NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-            $tpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
-            $tpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
+            $tpl->assign('LANG', $nv_Lang);
             $tpl->assign('FORM_ACTION', $page_url);
             $tpl->assign('SUPPORTER', $supporter);
             $tpl->assign('MODULE_UPLOAD', NV_UPLOADS_DIR . '/' . $module_upload);
@@ -355,8 +354,7 @@ foreach ($list as $department_id => $supporters_in_dept) {
 
 $tpl = new \NukeViet\Template\NVSmarty();
 $tpl->setTemplateDir(NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-$tpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
-$tpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
+$tpl->assign('LANG', $nv_Lang);
 $tpl->assign('OP_URL', $page_url);
 $tpl->assign('DEPARTMENT_LIST', $department_list);
 $tpl->assign('SHOW_FORM', empty($supporters));
