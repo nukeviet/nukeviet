@@ -35,11 +35,12 @@ Mục tiêu là phát triển và chuẩn hóa giao diện admin_future cho các
 - Nếu form submit → ưu tiên ajax-submit
 - Tuân theo cơ chế `.ajax-submit` trong nv.core.js
 - JSON trả về phải có:
-  - status: Thống nhất success / error nếu thành công / lỗi
+  - status (bắt buộc): Thống nhất success / error nếu thành công / lỗi
   - mess: Nếu status = error thì bắt buộc là thông báo lỗi, nếu status = success thì có thể là thông báo thành công hoặc chuỗi rỗng, khi là chuỗi rỗng thì bắt buộc phải định ra redirect hoặc refresh
   - input (nếu lỗi field)
   - redirect (nếu cần). Nếu có redirect thì phải rewrite URL bằng nv_url_rewrite(..., true)
   - refresh: Có thể có hoặc không, nếu có thì giá trị là true khi cần refresh trang hiện tại.
+  mess, redirect, refresh bắt buộc phải có một trong 3, không được để cả 3 cùng rỗng hoặc không có.
 
 Đảm bảo js xử lý:
 - toast
@@ -112,6 +113,16 @@ Trong tpl:
 - Nếu có thao tác thay đổi CSDL mà chưa có checkss thì bổ sung checkss để đảm bảo an toàn cho hệ thống. Theo nguyên tắc `$checkss = $nv_Request->get_title('checkss', 'post', '');` sau đó kiểm tra `if (!hash_equals(NV_CHECK_SESSION, $checkss)) { .. thì dừng code và trả json lỗi`.
 - Nếu trong code có kiểm tra checkss mà sử dụng so sánh trực tiếp `$checkss != NV_CHECK_SESSION` thì đổi sang dùng `!hash_equals(NV_CHECK_SESSION, $checkss)` để tăng cường bảo mật chống timing attack.
 - Nếu cần dùng NV_CHECK_SESSION ở tpl dưới tên `$CHECKSS` thì dùng thẳng `{$smarty.const.NV_CHECK_SESSION}` thay vì assign từ PHP sang tpl.
+- Không sử dụng cách xuất biến ngôn ngữ cũ kiểu
+```php
+$tpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
+$tpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
+```
+Mà phải xuất biến
+```php
+$tpl->assign('LANG', $nv_Lang);
+```
+- Nếu có dùng PDOException thì sửa thành Throwable
 
 ## Bước 3: Tpl
 - Chuẩn Smarty
@@ -120,11 +131,13 @@ Trong tpl:
 - Thẻ label và input đồng bộ for. Trường hợp thẻ label không có input ví dụ như một trình soạn thảo thay vì một ô text thì đổi nó thành thẻ div
 - Nếu trong tpl có cấu trúc một form, bên trong là các thành phần sắp xếp theo dạng row → col label + col input. Thì sắp xếp độ rộng cột thứ nhất là `col-sm-3` nếu nó quá bé so với text thì tăng lên `col-sm-4`. Cột input tương ứng là `col-sm-8 col-lg-6 col-xxl-5`. Không đặt cột input có độ rộng trên màn hình xxl là 12 - độ rộng cột label. Vì như vậy giao diện sẽ bị quá rộng, không cân đối. Mặc khác đối với các row chứa trình soạn thảo thì đăng độ rộng cột input lên gần tối đa có thể để các công cụ soạn thảo hiển thị tốt hơn.
 - Các input có các attribute name phổ thông có ý nghĩa như name="email", name="username", name="password", name="url", name="phone", name="tel", name="fax", name="mobile", name="zipcode", name="postcode", name="money", name="amount", name="price", ... thì thêm attribute: autocomplete thích hợp nếu chưa có. Trong trường hợp không rõ ràng thì để autocomplete="off".
+- Ngôn ngữ không dùng kiểu cũ `{$GLANG.edit}` hay `{$LANG.edit}` là mà phải viết dạng `{$LANG->getModule('xxxx')}` nếu là lang module, `{$LANG->getGlobal('xxx')}` nếu là lang global
 
 ## Bước 4: JS module
 - Js nếu có trong tpl ở giao diện admin_default thì chuyển hết vào themes/admin_future/js/ten-module.js
 - Nếu không chỉnh sửa gì js thì bỏ qua, không cần comment thêm vào file js.
 - Ajax submit nếu có form
+- Chuyển js vào thì phải kiểm tra đúng cú pháp chứ không copy-paste nguyên xi từ tpl vào. Vì trong tpl có thể có các thẻ html không hợp lệ trong js hoặc sai thẻ đóng mở dẫn tới lỗi js.
 
 ## Bước 5: Rà soát
 - Undefined biến
