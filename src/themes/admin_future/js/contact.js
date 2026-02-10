@@ -538,8 +538,4 @@ $(function() {
             }
         })
     });
-
-    // Xử lý form gửi thư (send)
-    // Form sử dụng ajax-submit từ nv.core.js
-    // Không cần xử lý thêm vì đã có sẵn trong nv.core.js
 });
