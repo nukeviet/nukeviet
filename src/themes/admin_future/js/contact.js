@@ -358,7 +358,130 @@ $(function() {
         }
     })
 
-    // Đặt bộ phận làm mặc định
+    // Thêm nhân viên hỗ trợ
+    $('.supporter_add').on('click', function() {
+        if ($('i.fa-spinner', $(this)).length) {
+            return;
+        }
+        $(this).prepend('<i class="fa-solid fa-spinner fa-spin-pulse"></i>');
+        var icon = $('i', $(this));
+        modal_content($(this).data('url'), 0, $('.list').data('checkss'), icon)
+    });
+
+    if ($('.supporter_add.auto').length) {
+        $('.supporter_add.auto').trigger('click');
+    }
+
+    // Sửa nhân viên hỗ trợ
+    $('.supporter_edit').on('click', function() {
+        var icon = $('i', $(this));
+        if (icon.is('.fa-spinner')) {
+            return;
+        }
+        var originalClass = icon.attr("class");
+        icon.attr("class", "fa-solid fa-spinner fa-spin-pulse");
+        modal_content($(this).parents('.list').data('url'), $(this).parents('.item').data('id'), $(this).parents('.list').data('checkss'), icon, originalClass, true)
+    });
+
+    // Xóa nhân viên hỗ trợ
+    $('.supporter_del').on('click', function() {
+        var that = $(this),
+            icon = $('i', that);
+        if (icon.is('.fa-spinner')) {
+            return;
+        }
+        var originalClass = icon.attr("class");
+        nukeviet.confirm(nv_is_del_confirm[0], function() {
+            var id = that.parents('.item').data('id'),
+                url = that.parents('.list').data('url');
+            icon.attr("class", "fa-solid fa-spinner fa-spin-pulse");
+            $.ajax({
+                type: "POST",
+                url: url,
+                cache: !1,
+                data: {
+                    'fc': 'delete',
+                    'id': id,
+                    'checkss': that.parents('.list').data('checkss')
+                },
+                dataType: "json"
+            }).done(function(a) {
+                if (a.status == 'error') {
+                    nukeviet.alert(a.mess)
+                    icon.removeClass('fa-solid fa-spinner fa-spin-pulse').addClass(originalClass);
+                } else if (a.status == 'OK') {
+                    window.location.reload()
+                }
+            })
+        }, function() {
+            icon.removeClass('fa-solid fa-spinner fa-spin-pulse').addClass(originalClass);
+        })
+    });
+
+    // Cập nhật thứ tự nhân viên hỗ trợ
+    $('.supporter_cweight').on('change', function() {
+        var that = $(this),
+            id = that.parents('.item').data('id'),
+            nweight = that.val(),
+            url = that.parents('.list').data('url'),
+            checkss = that.parents('.list').data('checkss');
+        that.prop('disabled', true);
+        $.ajax({
+            type: "POST",
+            url: url,
+            cache: !1,
+            data: {
+                'fc': 'change_weight',
+                'id': id,
+                'nw': nweight,
+                'checkss': checkss
+            },
+            dataType: "json"
+        }).done(function(a) {
+            if (a.status == 'error') {
+                that.val(that.data('default'));
+                nukeviet.toast(a.mess, 'error');
+                setTimeout(() => {
+                    that.prop('disabled', false);
+                }
+                , 2000);
+            } else if (a.status == 'OK') {
+                window.location.reload()
+            }
+        })
+    });
+
+    // Thay đổi trạng thái nhân viên hỗ trợ
+    $('.supporter_act').on('change', function() {
+        var that = $(this),
+            is_checked = that.is(':checked'),
+            url = that.parents('.list').data('url'),
+            checkss = that.parents('.list').data('checkss'),
+            data = {
+                'fc': 'change_act',
+                'id': that.parents('.item').data('id'),
+                'checkss': checkss
+            };
+        that.prop('disabled', true);
+        $.ajax({
+            type: "POST",
+            url: url,
+            cache: !1,
+            data: data,
+            dataType: "json"
+        }).done(function(a) {
+            if (a.status == 'error') {
+                that.prop('disabled', false);
+                that.prop('checked', is_checked ? false : true);
+                nukeviet.alert(a.mess)
+            } else if (a.status == 'OK') {
+                setTimeout(() => {
+                    that.prop('disabled', false);
+                }, 2000);
+            }
+        })
+    });
+});
     $('[name=is_default]').on('change', function() {
         var that = $(this).parents('.list'),
             item = $(this).parents('.item'),
