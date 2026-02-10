@@ -19,7 +19,7 @@ if (defined('NV_EDITOR')) {
 
 if ($nv_Request->isset_request('save', 'post')) {
     $checkss = $nv_Request->get_title('checkss', 'post', '');
-    if ($checkss != NV_CHECK_SESSION) {
+    if (!hash_equals(NV_CHECK_SESSION, $checkss)) {
         nv_jsonOutput([
             'status' => 'error',
             'mess' => $nv_Lang->getGlobal('error_invalid_request')
@@ -127,7 +127,6 @@ if (count($global_config['setup_langs']) > 1) {
     foreach ($global_config['setup_langs'] as $langkey) {
         $mail_langs[] = [
             'key' => $langkey,
-            'selected' => $langkey == NV_LANG_DATA,
             'name' => $language_array[$langkey]['name']
         ];
     }
@@ -136,7 +135,6 @@ if (count($global_config['setup_langs']) > 1) {
 $tpl = new \NukeViet\Template\NVSmarty();
 $tpl->setTemplateDir(get_module_tpl_dir('send.tpl'));
 $tpl->assign('LANG', $nv_Lang);
-$tpl->assign('CHECKSS', NV_CHECK_SESSION);
 $tpl->assign('OP', $op);
 $tpl->assign('MODULE_NAME', $module_name);
 $tpl->assign('MESS_CONTENT', $mess_content);
