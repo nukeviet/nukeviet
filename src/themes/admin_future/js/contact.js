@@ -22,7 +22,7 @@ function modal_content(url, id, checkss, i = undefined, icon_class = '', replace
     }).done(function(a) {
         if (a.status == 'error') {
             nukeviet.alert(a.mess)
-        } else if (a.status == 'OK') {
+        } else if (a.status == 'success' || a.status == 'OK') {
             $('.modal-title', md).text(a.title);
             $('.modal-body', md).html(a.content);
             md.modal('show')
@@ -409,7 +409,7 @@ $(function() {
                 if (a.status == 'error') {
                     nukeviet.alert(a.mess);
                     icon.attr("class", originalClass);
-                } else if (a.status == 'OK') {
+                } else if (a.status == 'success') {
                     window.location.reload()
                 }
             })
@@ -445,7 +445,7 @@ $(function() {
                     that.prop('disabled', false);
                 }
                 , 2000);
-            } else if (a.status == 'OK') {
+            } else if (a.status == 'success') {
                 window.location.reload()
             }
         })
@@ -474,7 +474,7 @@ $(function() {
                 that.prop('disabled', false);
                 that.prop('checked', is_checked ? false : true);
                 nukeviet.alert(a.mess)
-            } else if (a.status == 'OK') {
+            } else if (a.status == 'success') {
                 setTimeout(() => {
                     that.prop('disabled', false);
                 }, 2000);

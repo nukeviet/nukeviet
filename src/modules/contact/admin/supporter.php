@@ -70,7 +70,8 @@ if ($nv_Request->isset_request('fc', 'post')) {
         $db->query('UPDATE ' . NV_MOD_TABLE . '_supporter SET weight=' . $new_weight . ' WHERE id=' . $id);
         $nv_Cache->delMod($module_name);
         nv_jsonOutput([
-            'status' => 'OK'
+            'status' => 'success',
+            'refresh' => true
         ]);
     }
 
@@ -122,21 +123,24 @@ if ($nv_Request->isset_request('fc', 'post')) {
             if (!empty($post['departmentid']) and !isset($departments[$post['departmentid']])) {
                 nv_jsonOutput([
                     'status' => 'error',
-                    'mess' => $nv_Lang->getModule('error_required_departmentid')
+                    'mess' => $nv_Lang->getModule('error_required_departmentid'),
+                    'input' => 'departmentid'
                 ]);
             }
 
             if (nv_strlen($post['full_name']) < 3) {
                 nv_jsonOutput([
                     'status' => 'error',
-                    'mess' => $nv_Lang->getModule('error_required_full_name')
+                    'mess' => $nv_Lang->getModule('error_required_full_name'),
+                    'input' => 'full_name'
                 ]);
             }
 
             if (nv_strlen($post['phone']) < 6) {
                 nv_jsonOutput([
                     'status' => 'error',
-                    'mess' => $nv_Lang->getModule('error_required_phone')
+                    'mess' => $nv_Lang->getModule('error_required_phone'),
+                    'input' => 'phone'
                 ]);
             }
 
@@ -145,7 +149,8 @@ if ($nv_Request->isset_request('fc', 'post')) {
             if (!empty($post['email']) and $check_email[0] != '') {
                 nv_jsonOutput([
                     'status' => 'error',
-                    'mess' => $check_email[0]
+                    'mess' => $check_email[0],
+                    'input' => 'email'
                 ]);
             }
 
@@ -154,7 +159,8 @@ if ($nv_Request->isset_request('fc', 'post')) {
                 if (empty($size[0]) or $size[0] < 100 or $size[0] > 300 or $size[0] != $size[1]) {
                     nv_jsonOutput([
                         'status' => 'error',
-                        'mess' => $nv_Lang->getModule('supporter_avatar_note')
+                        'mess' => $nv_Lang->getModule('supporter_avatar_note'),
+                        'input' => 'image'
                     ]);
                 }
                 $post['image'] = substr($post['image'], strlen(NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/'));
@@ -205,7 +211,8 @@ if ($nv_Request->isset_request('fc', 'post')) {
 
                     $nv_Cache->delMod($module_name);
                     nv_jsonOutput([
-                        'status' => 'OK'
+                        'status' => 'success',
+                        'refresh' => true
                     ]);
                 } else {
                     nv_jsonOutput([
@@ -243,7 +250,7 @@ if ($nv_Request->isset_request('fc', 'post')) {
 
             $contents = $tpl->fetch('supporter-content.tpl');
             nv_jsonOutput([
-                'status' => 'OK',
+                'status' => 'success',
                 'title' => $id ? $nv_Lang->getModule('supporter_edit') : $nv_Lang->getModule('supporter_add'),
                 'content' => $contents
             ]);
@@ -276,7 +283,8 @@ if ($nv_Request->isset_request('fc', 'post')) {
         supporter_fix_weight($supporter['departmentid']);
         $nv_Cache->delMod($module_name);
         nv_jsonOutput([
-            'status' => 'OK'
+            'status' => 'success',
+            'refresh' => true
         ]);
     }
 
@@ -307,7 +315,7 @@ if ($nv_Request->isset_request('fc', 'post')) {
         $db->query('UPDATE ' . NV_MOD_TABLE . '_supporter SET act=' . $new_status . ' WHERE id=' . $id);
         $nv_Cache->delMod($module_name);
         nv_jsonOutput([
-            'status' => 'OK'
+            'status' => 'success'
         ]);
     }
 }
