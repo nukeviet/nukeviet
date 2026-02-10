@@ -33,7 +33,7 @@
             </div>
             <div class="row mb-3">
                 <div class="col-sm-3 col-form-label text-sm-end">{$LANG->getModule('content')} <span class="text-danger">*</span></div>
-                <div class="col-sm-8 col-lg-10 col-xxl-9">
+                <div class="col-12">
                     {$MESS_CONTENT}
                 </div>
             </div>

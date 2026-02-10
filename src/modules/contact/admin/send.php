@@ -84,7 +84,7 @@ if ($nv_Request->isset_request('save', 'post')) {
         $maillang = NV_LANG_DATA;
     }
 
-    foreach ($post['email'] as $emails) {
+    foreach ((array) $post['email'] as $emails) {
         if ($s) {
             sleep(2);
         }
