@@ -133,13 +133,16 @@ if (count($global_config['setup_langs']) > 1) {
     }
 }
 
-$smarty->assign('CHECKSS', NV_CHECK_SESSION);
-$smarty->assign('OP', $op);
-$smarty->assign('MODULE_NAME', $module_name);
-$smarty->assign('MESS_CONTENT', $mess_content);
-$smarty->assign('MAIL_LANGS', $mail_langs);
+$tpl = new \NukeViet\Template\NVSmarty();
+$tpl->setTemplateDir(get_module_tpl_dir('send.tpl'));
+$tpl->assign('LANG', $nv_Lang);
+$tpl->assign('CHECKSS', NV_CHECK_SESSION);
+$tpl->assign('OP', $op);
+$tpl->assign('MODULE_NAME', $module_name);
+$tpl->assign('MESS_CONTENT', $mess_content);
+$tpl->assign('MAIL_LANGS', $mail_langs);
 
-$contents = $smarty->fetch('send.tpl');
+$contents = $tpl->fetch('send.tpl');
 
 $page_title = $module_info['site_title'];
 
