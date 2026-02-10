@@ -43,7 +43,7 @@
                 </div>
             </div>
             <div class="row mb-3">
-                <label for="bodytext" class="col-sm-3 col-xxl-4 col-form-label text-sm-end">{$LANG->getModule('admin_content')}</label>
+                <div class="col-sm-3 col-xxl-4 col-form-label text-sm-end">{$LANG->getModule('admin_content')}</div>
                 <div class="col-sm-8 col-lg-6 col-xxl-8">
                     {$DATA.bodytext}
                 </div>
