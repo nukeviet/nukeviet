@@ -18,6 +18,14 @@ if (defined('NV_EDITOR')) {
 }
 
 if ($nv_Request->isset_request('save', 'post')) {
+    $checkss = $nv_Request->get_title('checkss', 'post', '');
+    if (!hash_equals(NV_CHECK_SESSION, $checkss)) {
+        nv_jsonOutput([
+            'status' => 'error',
+            'mess' => $nv_Lang->getGlobal('error_invalid_request')
+        ]);
+    }
+
     $post = [
         'mail_lang' => $nv_Request->get_title('mail_lang', 'post', ''),
         'title' => $nv_Request->get_title('title', 'post', ''),
@@ -28,7 +36,8 @@ if ($nv_Request->isset_request('save', 'post')) {
     if (nv_strlen($post['title']) < 3) {
         nv_jsonOutput([
             'status' => 'error',
-            'mess' => $nv_Lang->getModule('admin_error_title')
+            'mess' => $nv_Lang->getModule('admin_error_title'),
+            'input' => 'title'
         ]);
     }
 
@@ -51,7 +60,8 @@ if ($nv_Request->isset_request('save', 'post')) {
     if (empty($post['email'])) {
         nv_jsonOutput([
             'status' => 'error',
-            'mess' => $nv_Lang->getModule('error_mail_empty')
+            'mess' => $nv_Lang->getModule('error_mail_empty'),
+            'input' => 'email'
         ]);
     }
 
@@ -89,43 +99,48 @@ if ($nv_Request->isset_request('save', 'post')) {
         }
     }
 
+    // Ghi log gửi thư
+    nv_insert_logs(NV_LANG_DATA, $module_name, $nv_Lang->getModule('bt_send_row_title'), $post['title'], $admin_info['userid']);
+
     nv_jsonOutput([
-        'status' => 'OK',
-        'mess' => $nv_Lang->getModule('send_suc_send_title') . ' ' . $nv_Lang->getModule('send_new_mail')
+        'status' => 'success',
+        'mess' => $nv_Lang->getModule('send_suc_send_title'),
+        'refresh' => true
     ]);
 }
 
+// Lấy nội dung chữ ký mặc định
 $sign_content = '';
 require_once NV_ROOTDIR . '/modules/contact/sign.php';
-$mess_content = htmlspecialchars(nv_editor_br2nl($sign_content));
+$mess_content_default = htmlspecialchars(nv_editor_br2nl($sign_content));
 
+// Khởi tạo editor
 if (defined('NV_EDITOR') and nv_function_exists('nv_aleditor')) {
-    $mess_content = nv_aleditor('mess_content', '100%', '300px', $mess_content, 'Basic');
+    $mess_content = nv_aleditor('mess_content', '100%', '300px', $mess_content_default, 'Basic');
 } else {
-    $mess_content = '<textarea style="width:99%" name="mess_content" id="mess_content" cols="20" rows="8">' . $mess_content . '</textarea>';
+    $mess_content = '<textarea name="mess_content" id="mess_content" cols="20" rows="8" class="form-control">' . $mess_content_default . '</textarea>';
 }
 
-$xtpl = new XTemplate($op . '.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-$xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
-$xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
-
-$xtpl->assign('FORM_ACTION', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op);
-$xtpl->assign('MESS_CONTENT', $mess_content);
-
+// Chuẩn bị dữ liệu cho Smarty
+$mail_langs = [];
 if (count($global_config['setup_langs']) > 1) {
     foreach ($global_config['setup_langs'] as $langkey) {
-        $xtpl->assign('MAIL_LANG', [
+        $mail_langs[] = [
             'key' => $langkey,
-            'sel' => $langkey == NV_LANG_DATA ? ' selected="selected"' : '',
             'name' => $language_array[$langkey]['name']
-        ]);
-        $xtpl->parse('main.mail_lang.loop');
+        ];
     }
-    $xtpl->parse('main.mail_lang');
 }
 
-$xtpl->parse('main');
-$contents = $xtpl->text('main');
+$tpl = new \NukeViet\Template\NVSmarty();
+$tpl->setTemplateDir(get_module_tpl_dir('send.tpl'));
+$tpl->assign('LANG', $nv_Lang);
+$tpl->assign('OP', $op);
+$tpl->assign('MODULE_NAME', $module_name);
+$tpl->assign('MESS_CONTENT', $mess_content);
+$tpl->assign('MAIL_LANGS', $mail_langs);
+
+$contents = $tpl->fetch('send.tpl');
 
 $page_title = $module_info['site_title'];
 
