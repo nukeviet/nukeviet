@@ -41,7 +41,7 @@
                 <tr>
                     <td class="text-nowrap" style="width:1%">{LANG.silent_mode}</td>
                     <td>
-                        <input type="checkbox" name="silent_mode" value="1" {DATA.silent_mode_checked} />
+                        <input type="checkbox" name="silent_mode" value="1" {DATA.silent_mode} />
                         <span>{LANG.silent_mode_note}</span>
                     </td>
                 </tr>
