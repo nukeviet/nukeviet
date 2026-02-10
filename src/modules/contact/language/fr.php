@@ -139,6 +139,7 @@ $lang_module['forward'] = 'Transmis à l\'adresse: %s';
 $lang_module['forwarded'] = 'Transmis';
 $lang_module['error_mail_empty'] = 'Erreur: E-mail vide';
 $lang_module['config'] = 'Module config';
+$lang_module['config_save_success'] = 'Configuration enregistrée avec succès!';
 $lang_module['config_sendcopymode'] = 'Who can send a copy to email';
 $lang_module['config_sendcopymode0'] = 'Users have authenticated email';
 $lang_module['config_sendcopymode1'] = 'All users';
