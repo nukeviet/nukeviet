@@ -98,9 +98,10 @@ Trong tpl:
 - Xác định module
 - Xác định file php cần sửa
 - Xác định tpl trong src/themes/admin_future/modules/... cần tạo
+- Chỉnh sửa src/includes/plugin/get_module_admin_theme.php và src/includes/plugin/get_global_admin_theme.php để hệ thống nhận diện giao diện admin_future cho khu vực đang cần chuyển đổi giao diện.
 
 ## Bước 2: Backend PHP
-- Cần chuyển đổi toàn bộ code liên quan giao diện sử dụng Xtemplate sang Smarty.
+- Cần chuyển đổi toàn bộ code liên quan giao diện sử dụng Xtemplate sang Smarty. Tức là từ `$xtpl` → `$tpl`, `new XTemplate` sang `new \NukeViet\Template\NVSmarty`. Các cú pháp Smarty khác tìm tài liệu cũng như tham khảo ở src/admin/modules/edit.php
 - Default value cho mọi biến tpl
 - Kiểm tra checkss
 - Chuẩn JSON nếu ajax.
@@ -108,6 +109,9 @@ Trong tpl:
 - Không dùng thuộc tính đầy đủ dạng ` checked="checked"` hoặc ` selected="selected"` trong tpl. Chỉ dùng `checked` hoặc `selected` là đủ.
 - Tối ưu code cho giao diện mới, không cần giữ backward cho giao diện admin_default cũ nữa.
 - Kiểm tra các thao tác thêm, sửa, xóa, sắp xếp thứ tự, kích hoạt, đình chỉ ... có thao tác thay đổi CSDL mà chưa ghi log bằng hàm nv_insert_logs() thì bổ sung thêm để đảm bảo tính đầy đủ của log hệ thống.
+- Nếu có thao tác thay đổi CSDL mà chưa có checkss thì bổ sung checkss để đảm bảo an toàn cho hệ thống. Theo nguyên tắc `$checkss = $nv_Request->get_title('checkss', 'post', '');` sau đó kiểm tra `if (!hash_equals(NV_CHECK_SESSION, $checkss)) { .. thì dừng code và trả json lỗi`.
+- Nếu trong code có kiểm tra checkss mà sử dụng so sánh trực tiếp `$checkss != NV_CHECK_SESSION` thì đổi sang dùng `!hash_equals(NV_CHECK_SESSION, $checkss)` để tăng cường bảo mật chống timing attack.
+- Nếu cần dùng NV_CHECK_SESSION ở tpl dưới tên `$CHECKSS` thì dùng thẳng `{$smarty.const.NV_CHECK_SESSION}` thay vì assign từ PHP sang tpl.
 
 ## Bước 3: Tpl
 - Chuẩn Smarty
@@ -115,9 +119,11 @@ Trong tpl:
 - Không js inline
 - Thẻ label và input đồng bộ for. Trường hợp thẻ label không có input ví dụ như một trình soạn thảo thay vì một ô text thì đổi nó thành thẻ div
 - Nếu trong tpl có cấu trúc một form, bên trong là các thành phần sắp xếp theo dạng row → col label + col input. Thì sắp xếp độ rộng cột thứ nhất là `col-sm-3` nếu nó quá bé so với text thì tăng lên `col-sm-4`. Cột input tương ứng là `col-sm-8 col-lg-6 col-xxl-5`. Không đặt cột input có độ rộng trên màn hình xxl là 12 - độ rộng cột label. Vì như vậy giao diện sẽ bị quá rộng, không cân đối. Mặc khác đối với các row chứa trình soạn thảo thì đăng độ rộng cột input lên gần tối đa có thể để các công cụ soạn thảo hiển thị tốt hơn.
+- Các input có các attribute name phổ thông có ý nghĩa như name="email", name="username", name="password", name="url", name="phone", name="tel", name="fax", name="mobile", name="zipcode", name="postcode", name="money", name="amount", name="price", ... thì thêm attribute: autocomplete thích hợp nếu chưa có. Trong trường hợp không rõ ràng thì để autocomplete="off".
 
 ## Bước 4: JS module
-- Tạo file js module
+- Js nếu có trong tpl ở giao diện admin_default thì chuyển hết vào themes/admin_future/js/ten-module.js
+- Nếu không chỉnh sửa gì js thì bỏ qua, không cần comment thêm vào file js.
 - Ajax submit nếu có form
 
 ## Bước 5: Rà soát
