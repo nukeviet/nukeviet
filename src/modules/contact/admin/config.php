@@ -63,7 +63,8 @@ if (defined('NV_EDITOR') and nv_function_exists('nv_aleditor')) {
     $array['bodytext'] = '<textarea style="width: 100%" name="bodytext" id="bodytext" cols="20" rows="8" class="form-control">' . $array['bodytext'] . '</textarea>';
 }
 $array['silent_mode'] = !empty($module_config[$module_name]['silent_mode']) ? true : false;
-$array['silent_mode_checked'] = !empty($module_config[$module_name]['silent_mode']) ? ' checked="checked"' : '';
+// Biến cho template admin_default sử dụng chuỗi checked
+$array['silent_mode_checked'] = $array['silent_mode'] ? ' checked="checked"' : '';
 $array['feedback_phone'] = !empty($module_config[$module_name]['feedback_phone']) ? (int) $module_config[$module_name]['feedback_phone'] : 0;
 $array['feedback_address'] = !empty($module_config[$module_name]['feedback_address']) ? (int) $module_config[$module_name]['feedback_address'] : 0;
 
