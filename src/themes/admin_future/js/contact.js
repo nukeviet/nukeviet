@@ -407,14 +407,14 @@ $(function() {
                 dataType: "json"
             }).done(function(a) {
                 if (a.status == 'error') {
-                    nukeviet.alert(a.mess)
-                    icon.removeClass('fa-solid fa-spinner fa-spin-pulse').addClass(originalClass);
+                    nukeviet.alert(a.mess);
+                    icon.attr("class", originalClass);
                 } else if (a.status == 'OK') {
                     window.location.reload()
                 }
             })
         }, function() {
-            icon.removeClass('fa-solid fa-spinner fa-spin-pulse').addClass(originalClass);
+            icon.attr("class", originalClass);
         })
     });
 
