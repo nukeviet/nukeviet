@@ -36,7 +36,7 @@
             <div class="row mb-3">
                 <div class="col-sm-8 col-lg-6 col-xxl-8 offset-sm-3 offset-xxl-4">
                     <div class="form-check form-switch">
-                        <input class="form-check-input" type="checkbox" name="silent_mode" value="1"{if $DATA.silent_mode} checked{/if} role="switch" id="element_silent_mode">
+                        <input class="form-check-input" type="checkbox" name="silent_mode" value="1"{if $DATA.silent_mode} checked="checked"{/if} role="switch" id="element_silent_mode">
                         <label class="form-check-label" for="element_silent_mode">{$LANG->getModule('silent_mode')}</label>
                     </div>
                     <div class="form-text">{$LANG->getModule('silent_mode_note')}</div>
