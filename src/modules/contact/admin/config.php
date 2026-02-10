@@ -34,6 +34,16 @@ if ($nv_Request->isset_request('save', 'post')) {
 
     nv_insert_logs(NV_LANG_DATA, $module_name, 'Change config module', '', $admin_info['userid']);
     $nv_Cache->delMod('settings');
+    
+    // Xử lý AJAX submit cho admin_future
+    if ($nv_Request->isset_request('ajax_submit', 'post')) {
+        nv_jsonOutput([
+            'status' => 'OK',
+            'mess' => $nv_Lang->getModule('config_save_success'),
+            'redirect' => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op
+        ]);
+    }
+    
     nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op);
 }
 
@@ -52,12 +62,47 @@ if (defined('NV_EDITOR') and nv_function_exists('nv_aleditor')) {
 } else {
     $array['bodytext'] = '<textarea style="width: 100%" name="bodytext" id="bodytext" cols="20" rows="8" class="form-control">' . $array['bodytext'] . '</textarea>';
 }
-$array['silent_mode'] = !empty($module_config[$module_name]['silent_mode']) ? ' checked="checked"' : '';
+$array['silent_mode'] = !empty($module_config[$module_name]['silent_mode']) ? true : false;
+$array['silent_mode_checked'] = !empty($module_config[$module_name]['silent_mode']) ? ' checked="checked"' : '';
 $array['feedback_phone'] = !empty($module_config[$module_name]['feedback_phone']) ? (int) $module_config[$module_name]['feedback_phone'] : 0;
 $array['feedback_address'] = !empty($module_config[$module_name]['feedback_address']) ? (int) $module_config[$module_name]['feedback_address'] : 0;
 
 $xtpl->assign('DATA', $array);
 
+// Chuẩn bị dữ liệu cho sendcopymode
+$sendcopymode_options = [];
+for ($i = 0; $i <= 1; ++$i) {
+    $sendcopymode_options[] = [
+        'key' => $i,
+        'title' => $nv_Lang->getModule('config_sendcopymode' . $i),
+        'selected' => $i == $array['sendcopymode'] ? ' selected="selected"' : ''
+    ];
+}
+$xtpl->assign('SENDCOPYMODE_OPTIONS', $sendcopymode_options);
+
+// Chuẩn bị dữ liệu cho feedback_phone
+$feedback_phone_options = [];
+for ($i = 0; $i <= 2; ++$i) {
+    $feedback_phone_options[] = [
+        'val' => $i,
+        'sel' => $i == $array['feedback_phone'] ? ' selected="selected"' : '',
+        'title' => $nv_Lang->getModule('option_' . $i)
+    ];
+}
+$xtpl->assign('FEEDBACK_PHONE_OPTIONS', $feedback_phone_options);
+
+// Chuẩn bị dữ liệu cho feedback_address
+$feedback_address_options = [];
+for ($i = 0; $i <= 2; ++$i) {
+    $feedback_address_options[] = [
+        'val' => $i,
+        'sel' => $i == $array['feedback_address'] ? ' selected="selected"' : '',
+        'title' => $nv_Lang->getModule('option_' . $i)
+    ];
+}
+$xtpl->assign('FEEDBACK_ADDRESS_OPTIONS', $feedback_address_options);
+
+// Vẫn giữ loop cho template admin_default
 for ($i = 0; $i <= 1; ++$i) {
     $sendcopymode = [
         'key' => $i,
