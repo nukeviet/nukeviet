@@ -235,6 +235,8 @@ if ($nv_Request->isset_request('save', 'post')) {
     $description = $nv_Request->get_string('description', 'post', '');
     $description = nv_nl2br(nv_htmlspecialchars(strip_tags($description)), '<br />');
 
+    $redirect_url = nv_url_rewrite(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op, true);
+
     if ($aid == 0) {
         $sql = 'INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . '_author (uid, alias, pseudonym, image, description, add_time) VALUES ( ' . $uid . ', :alias, :pseudonym, :image, :description, ' . NV_CURRENTTIME . ')';
         $data_insert = [];
@@ -248,7 +250,7 @@ if ($nv_Request->isset_request('save', 'post')) {
             nv_jsonOutput([
                 'status' => 'success',
                 'mess' => '',
-                'redirect' => nv_url_rewrite(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op, true)
+                'redirect' => $redirect_url
             ]);
         } else {
             nv_jsonOutput([
@@ -273,7 +275,7 @@ if ($nv_Request->isset_request('save', 'post')) {
             nv_jsonOutput([
                 'status' => 'success',
                 'mess' => '',
-                'redirect' => nv_url_rewrite(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op, true)
+                'redirect' => $redirect_url
             ]);
         } else {
             nv_jsonOutput([
@@ -369,7 +371,7 @@ if (!empty($authors)) {
         $row['account'] = $uids[$row['uid']]['username'];
         $row['email'] = $uids[$row['uid']]['email'];
         $row['account_link'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=users&amp;' . NV_OP_VARIABLE . '=memberlist/' . change_alias($uids[$row['uid']]['username']) . '-' . $uids[$row['uid']]['md5username'];
-        $row['add_time_format'] = nv_date('d/m/Y H:i', $row['add_time']);
+        $row['add_time_format'] = nv_date('d/m/Y', $row['add_time']);
         $row['url_edit'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;aid=' . $row['id'];
         $row['can_delete'] = $row['id'] != $my_author_detail['id'];
         $authors_list[] = $row;

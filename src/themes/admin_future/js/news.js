@@ -1525,12 +1525,17 @@ $(window).on('load', function() {
 
     // Xử lý trang authors
     if (nv_func_name === 'authors') {
+        // Hàm tạo URL API cho authors
+        const getAuthorsApiUrl = (action) => {
+            return script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=authors' + (action ? '&' + action : '') + '&nocache=' + new Date().getTime();
+        };
+
         // Select2 cho tìm kiếm tài khoản người dùng
         if ($('#element_uid').length) {
             $('#element_uid').select2({
                 language: nv_lang_interface,
                 ajax: {
-                    url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=authors&get_account_json=1',
+                    url: getAuthorsApiUrl('get_account_json=1'),
                     dataType: 'json',
                     delay: 250,
                     data: function(params) {
@@ -1577,7 +1582,7 @@ $(window).on('load', function() {
                 icon.removeClass(icon.data('icon') || 'fa-trash').addClass('fa-spinner fa-spin-pulse');
                 $.ajax({
                     type: 'POST',
-                    url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=authors&nocache=' + new Date().getTime(),
+                    url: getAuthorsApiUrl(),
                     data: {
                         authordel: 1,
                         aid: btn.data('id'),
@@ -1614,7 +1619,7 @@ $(window).on('load', function() {
             sel.prop('disabled', true);
             $.ajax({
                 type: 'POST',
-                url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=authors&nocache=' + new Date().getTime(),
+                url: getAuthorsApiUrl(),
                 data: {
                     changeStatus: 1,
                     aid: sel.data('id'),
