@@ -326,7 +326,7 @@
                         {foreach from=$FIELD_CHOICES_LIST item=fc}
                         <tr class="text-center">
                             <td>{$fc.number}</td>
-                            <td><input class="form-control" type="text" value="{$fc.key}" name="field_choice[{$fc.number}]" placeholder="{$LANG->getModule('field_match_type_alphanumeric')}"{if $fc.readonly} readonly{/if}></td>
+                            <td><input class="form-control" type="text" value="{$fc.key}" name="field_choice[{$fc.number}]" placeholder="{$LANG->getModule('field_match_type_alphanumeric')}"{if $fc.readonly} readonly{/if} data-field-choice></td>
                             <td><input class="form-control" type="text" value="{$fc.value}" name="field_choice_text[{$fc.number}]"{if $fc.readonly} readonly{/if}></td>
                             <td><input class="form-check-input" type="radio" name="default_value_choice" value="{$fc.number}"{if $fc.checked} checked{/if}></td>
                         </tr>
@@ -445,9 +445,5 @@
 </form>
 
 {if $LOAD_SQLCHOICE}
-<script>
-    nv_load_sqlchoice('module', '{$SQL_DATA_CHOICE[0]}');
-    nv_load_sqlchoice('table', '{$SQL_DATA_CHOICE[1]}');
-    nv_load_sqlchoice('column', '{$SQL_DATA_CHOICE[2]}|{$SQL_DATA_CHOICE[3]}|{$SQL_DATA_CHOICE[4]}|{$SQL_DATA_CHOICE[5]}');
-</script>
+<input type="hidden" id="sql_data_choice" data-module="{$SQL_DATA_CHOICE[0]}" data-table="{$SQL_DATA_CHOICE[1]}" data-column-key="{$SQL_DATA_CHOICE[2]}" data-column-val="{$SQL_DATA_CHOICE[3]}" data-column-order="{$SQL_DATA_CHOICE[4]}" data-column-sort="{$SQL_DATA_CHOICE[5]}">
 {/if}

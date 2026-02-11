@@ -695,7 +695,8 @@ if ($nv_Request->isset_request('qlist', 'get')) {
     if (!isset($dataform)) {
         if ($fid) {
             $dataform = $db->query('SELECT * FROM ' . NV_MOD_TABLE . '_field WHERE fid=' . $fid)->fetch();
-
+            
+            $dataform['fid'] = $fid;
             if ($dataform['field_type'] == 'editor') {
                 $array_tmp = explode('@', $dataform['class']);
                 $dataform['editor_width'] = $array_tmp[0];
