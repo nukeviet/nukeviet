@@ -26,7 +26,7 @@ function modal_content(url, id, checkss, i = undefined, icon_class = '', replace
             $('.modal-title', md).text(a.title);
             $('.modal-body', md).html(a.content);
             // Khởi tạo lại keyboard events cho form ajax-submit trong modal
-            var formAj = $('.ajax-submit', md);
+            const formAj = $('.ajax-submit', md);
             if (formAj.length) {
                 initFormAjKeyboard(formAj);
             }
