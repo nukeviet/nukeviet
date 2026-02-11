@@ -33,11 +33,11 @@
                 <div class="col-sm-8 col-lg-6 col-xxl-5">
                     <div class="row g-2">
                         <div class="col-auto">
-                            <input class="form-control text-end" style="width:100px" type="number" value="{$DATA.homewidth}" name="homewidth" id="element_homewidth" min="0">
+                            <input class="form-control text-end" style="width:100px" type="number" value="{$DATA.homewidth}" name="homewidth" id="element_homewidth" min="0" aria-label="{$LANG->getModule('setting_homesite')} - {$LANG->getGlobal('width')}">
                         </div>
                         <div class="col-auto d-flex align-items-center">×</div>
                         <div class="col-auto">
-                            <input class="form-control text-end" style="width:100px" type="number" value="{$DATA.homeheight}" name="homeheight" min="0">
+                            <input class="form-control text-end" style="width:100px" type="number" value="{$DATA.homeheight}" name="homeheight" id="element_homeheight" min="0" aria-label="{$LANG->getModule('setting_homesite')} - {$LANG->getGlobal('height')}">
                         </div>
                     </div>
                 </div>
@@ -47,11 +47,11 @@
                 <div class="col-sm-8 col-lg-6 col-xxl-5">
                     <div class="row g-2">
                         <div class="col-auto">
-                            <input class="form-control text-end" style="width:100px" type="number" value="{$DATA.blockwidth}" name="blockwidth" id="element_blockwidth" min="0">
+                            <input class="form-control text-end" style="width:100px" type="number" value="{$DATA.blockwidth}" name="blockwidth" id="element_blockwidth" min="0" aria-label="{$LANG->getModule('setting_thumbblock')} - {$LANG->getGlobal('width')}">
                         </div>
                         <div class="col-auto d-flex align-items-center">×</div>
                         <div class="col-auto">
-                            <input class="form-control text-end" style="width:100px" type="number" value="{$DATA.blockheight}" name="blockheight" min="0">
+                            <input class="form-control text-end" style="width:100px" type="number" value="{$DATA.blockheight}" name="blockheight" id="element_blockheight" min="0" aria-label="{$LANG->getModule('setting_thumbblock')} - {$LANG->getGlobal('height')}">
                         </div>
                     </div>
                 </div>
@@ -93,17 +93,17 @@
                             </div>
                         </div>
                         <div class="col-auto">
-                            <select name="tooltip_position" class="form-select" style="width:150px">
+                            <select name="tooltip_position" class="form-select" style="width:150px" id="element_tooltip_position" aria-label="{$LANG->getModule('showtooltip_position')}">
                                 {foreach from=$TOOLTIP_POSITION key=key item=title}
                                 <option value="{$key}"{if $key eq $DATA.tooltip_position} selected{/if}>{$title}</option>
                                 {/foreach}
                             </select>
                         </div>
                         <div class="col-auto">
-                            <label class="form-label mb-0">{$LANG->getModule('showtooltip_length')}</label>
+                            <label class="form-label mb-0" for="element_tooltip_length">{$LANG->getModule('showtooltip_length')}</label>
                         </div>
                         <div class="col-auto">
-                            <input type="number" name="tooltip_length" class="form-control text-end" value="{$DATA.tooltip_length}" style="width:100px" min="0">
+                            <input type="number" name="tooltip_length" class="form-control text-end" value="{$DATA.tooltip_length}" style="width:100px" min="0" id="element_tooltip_length">
                         </div>
                     </div>
                 </div>
