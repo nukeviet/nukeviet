@@ -49,6 +49,24 @@ $(function () {
         $('input', $(this).parent()).focus();
     });
 
+    // Show/hide password
+    $('.showhidepass').on('click', function(e) {
+        e.preventDefault();
+        var tg = $($(this).data('target'));
+        if (tg.prop('type') == 'text') {
+            tg.prop('type', 'password');
+        } else {
+            tg.prop('type', 'text');
+        }
+    });
+
+    // Generate random password
+    $('.genrandpass').on('click', function(e) {
+        e.preventDefault();
+        $($(this).data('target')).prop('type', 'text');
+        $($(this).data('target')).val(nv_randomPassword(10));
+    });
+
     // Mở rộng thu gọn tìm kiếm tin tức
     const postAdvBtn = document.getElementById('search-adv');
     if (postAdvBtn) {
