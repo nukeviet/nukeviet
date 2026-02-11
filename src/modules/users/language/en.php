@@ -1008,3 +1008,8 @@ $lang_module['merge_field_link'] = 'Link';
 $lang_module['mf_send_newvalue'] = 'Send new value via email';
 $lang_module['mf_label'] = 'Label';
 $lang_module['mf_deadline'] = 'Expiration time';
+
+$lang_module['LOG_FIELD_ADD'] = 'Add custom field';
+$lang_module['LOG_FIELD_EDIT'] = 'Edit custom field';
+$lang_module['LOG_FIELD_DELETE'] = 'Delete custom field';
+$lang_module['LOG_FIELD_WEIGHT'] = 'Change custom field order';

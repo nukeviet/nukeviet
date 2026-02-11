@@ -1008,3 +1008,8 @@ $lang_module['merge_field_link'] = 'Liên kết';
 $lang_module['mf_send_newvalue'] = 'Gửi giá trị mới qua mail';
 $lang_module['mf_label'] = 'Nhãn';
 $lang_module['mf_deadline'] = 'Thời điểm hết hạn';
+
+$lang_module['LOG_FIELD_ADD'] = 'Thêm trường tùy biến';
+$lang_module['LOG_FIELD_EDIT'] = 'Sửa trường tùy biến';
+$lang_module['LOG_FIELD_DELETE'] = 'Xóa trường tùy biến';
+$lang_module['LOG_FIELD_WEIGHT'] = 'Thay đổi thứ tự trường tùy biến';
