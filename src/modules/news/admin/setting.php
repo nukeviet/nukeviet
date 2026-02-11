@@ -100,13 +100,14 @@ if (!empty($savesetting)) {
     }
 
     if ($array_config['elas_use']) {
-        $fp = @fsockopen($array_config['elas_host'], $array_config['elas_port'], $errno, $errstr, 30);
+        $fp = fsockopen($array_config['elas_host'], $array_config['elas_port'], $errno, $errstr, 30);
         if (!$fp) {
             nv_jsonOutput([
                 'status' => 'error',
-                'mess' => $nv_Lang->getModule('error_elas_host_connect')
+                'mess' => $nv_Lang->getModule('error_elas_host_connect') . (!empty($errstr) ? ': ' . $errstr : '')
             ]);
         }
+        fclose($fp);
     }
 
     if (!nv_is_url($array_config['show_no_image']) and nv_is_file($array_config['show_no_image'])) {
@@ -247,7 +248,7 @@ if (defined('NV_EDITOR') and nv_function_exists('nv_aleditor')) {
     $_uploads_dir = NV_UPLOADS_DIR . '/' . $module_upload;
     $copyright = nv_aleditor('copyright', '100%', '100px', $copyright, 'Basic', $_uploads_dir, $_uploads_dir);
 } else {
-    $copyright = '<textarea style="width: 100%" name="copyright" id="copyright" cols="20" rows="15" class="form-control">' . $copyright . '</textarea>';
+    $copyright = '<textarea name="copyright" id="copyright" cols="20" rows="15" class="form-control w-100">' . $copyright . '</textarea>';
 }
 $tpl->assign('COPYRIGHTHTML', $copyright);
 

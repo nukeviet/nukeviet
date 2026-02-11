@@ -426,7 +426,7 @@
             <div class="row mb-3">
                 <label for="element_instant_articles_url" class="col-sm-4 col-form-label text-sm-end">{$LANG->getModule('setting_instant_articles_defaulturl')}</label>
                 <div class="col-sm-8 col-lg-6 col-xxl-5">
-                    <input type="text" class="form-control mb-2" value="{$INSTANT_ARTICLES_URL_DEFAULT}" data-toggle="selectall" id="element_instant_articles_url" readonly>
+                    <input type="text" class="form-control mb-2" value="{$INSTANT_ARTICLES_URL_DEFAULT}" data-toggle="selectall" id="element_instant_articles_url" readonly aria-label="{$LANG->getModule('setting_instant_articles_defaulturl')}">
                     <div class="form-text">{$LANG->getModule('setting_instant_articles_defaulturl1')}</div>
                 </div>
             </div>
