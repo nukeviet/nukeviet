@@ -13,16 +13,17 @@
         <div class="col-12">
             <label for="full_name" class="form-label">{$LANG->getModule('full_name')} <span class="text-danger">(*)</span></label>
             <input type="text" class="form-control" name="full_name" id="full_name" value="{$SUPPORTER.full_name}" maxlength="250" required autocomplete="name" />
+            <div class="invalid-feedback"></div>
         </div>
 
         <div class="col-12">
             <label for="image" class="form-label">{$LANG->getModule('supporter_avatar')}</label>
             <div class="input-group">
                 <input class="form-control" type="text" name="image" value="{$SUPPORTER.image}" id="image" autocomplete="off" />
-                <button class="btn btn-secondary" data-toggle="selectfile" data-target="image" data-path="{$MODULE_UPLOAD}" data-type="image" type="button">
+                <button class="btn btn-secondary" data-toggle="selectfile" data-target="image" data-path="{$MODULE_UPLOAD}" data-type="image" type="button" aria-label="{$LANG->getGlobal('select_file')}">
                     <i class="fa-regular fa-folder-open"></i>
                 </button>
-                <button class="btn btn-secondary help-show" type="button">
+                <button class="btn btn-secondary help-show" type="button" aria-label="{$LANG->getGlobal('help')}">
                     <i class="fa-regular fa-circle-question"></i>
                 </button>
             </div>
@@ -33,10 +34,11 @@
             <label for="phone" class="form-label">{$LANG->getGlobal('phonenumber')} <span class="text-danger">(*)</span></label>
             <div class="input-group">
                 <input type="text" class="form-control" name="phone" id="phone" value="{$SUPPORTER.phone}" maxlength="250" required autocomplete="tel" />
-                <button class="btn btn-secondary help-show" type="button">
+                <button class="btn btn-secondary help-show" type="button" aria-label="{$LANG->getGlobal('help')}">
                     <i class="fa-regular fa-circle-question"></i>
                 </button>
             </div>
+            <div class="invalid-feedback"></div>
             <div class="help-block text-muted small mt-1" style="display: none;">{$LANG->getGlobal('phone_note_content')}</div>
         </div>
 
@@ -59,10 +61,10 @@
                         </div>
                     </div>
                     <div class="ms-2">
-                        <button class="btn btn-secondary str_add" type="button" title="{$LANG->getGlobal('add')}">
+                        <button class="btn btn-secondary str_add" type="button" title="{$LANG->getGlobal('add')}" aria-label="{$LANG->getGlobal('add')}">
                             <i class="fa-solid fa-plus"></i>
                         </button>
-                        <button class="btn btn-secondary str_del" type="button" title="{$LANG->getGlobal('delete')}">
+                        <button class="btn btn-secondary str_del" type="button" title="{$LANG->getGlobal('delete')}" aria-label="{$LANG->getGlobal('delete')}">
                             <i class="fa-solid fa-xmark"></i>
                         </button>
                     </div>

@@ -40,8 +40,8 @@
                     </div>
                 </td>
                 <td class="text-nowrap text-center align-middle" style="width: 1%;">
-                    <button type="button" class="btn btn-sm btn-default supporter_edit" title="{$LANG->getGlobal('edit')}"><i class="fa-regular fa-pen-to-square fa-lg"></i></button>
-                    <button type="button" class="btn btn-sm btn-default supporter_del" title="{$LANG->getGlobal('delete')}"><i class="fa-regular fa-trash-can fa-lg"></i></button>
+                    <button type="button" class="btn btn-sm btn-secondary supporter_edit" title="{$LANG->getGlobal('edit')}" aria-label="{$LANG->getGlobal('edit')}"><i class="fa-regular fa-pen-to-square"></i></button>
+                    <button type="button" class="btn btn-sm btn-danger supporter_del" title="{$LANG->getGlobal('delete')}" aria-label="{$LANG->getGlobal('delete')}"><i class="fa-regular fa-trash-can"></i></button>
                 </td>
             </tr>
             {/foreach}
