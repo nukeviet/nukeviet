@@ -5,9 +5,10 @@
             <table class="table table-striped align-middle table-sticky mb-0 list" data-url="{$OP_URL}" data-checkss="{$smarty.const.NV_CHECK_SESSION}">
                 <thead>
                     <tr>
-                        <th colspan="2" class="text-center">{$LANG->getModule('full_name')}</th>
-                        <th class="text-nowrap text-center" style="width: 1%;">{$LANG->getGlobal('phonenumber')}</th>
-                        <th class="text-nowrap text-center" style="width: 1%;">{$LANG->getGlobal('email')}</th>
+                        <th class="text-center"></th>
+                        <th class="text-nowrap">{$LANG->getModule('full_name')}</th>
+                        <th class="text-nowrap" style="width: 1%;">{$LANG->getGlobal('phonenumber')}</th>
+                        <th class="text-nowrap" style="width: 1%;">{$LANG->getGlobal('email')}</th>
                         <th class="text-nowrap text-center" style="width: 1%;">{$LANG->getModule('active')}</th>
                         <th class="text-nowrap text-center" style="width: 1%;">{$LANG->getGlobal('actions')}</th>
                     </tr>
