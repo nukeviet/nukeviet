@@ -1522,4 +1522,117 @@ $(window).on('load', function() {
             }
         }, 2000);
     }
+
+    // Xử lý trang authors
+    if (nv_func_name === 'authors') {
+        // Select2 cho tìm kiếm tài khoản người dùng
+        if ($('#element_uid').length) {
+            $('#element_uid').select2({
+                language: nv_lang_interface,
+                ajax: {
+                    url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=authors&get_account_json=1',
+                    dataType: 'json',
+                    delay: 250,
+                    data: function(params) {
+                        return {
+                            q: params.term,
+                            page: params.page
+                        };
+                    },
+                    processResults: function(data, params) {
+                        params.page = params.page || 1;
+                        return {
+                            results: data.results,
+                            pagination: {
+                                more: (params.page * 30) < data.total_count
+                            }
+                        };
+                    },
+                    cache: true
+                },
+                escapeMarkup: function(markup) {
+                    return markup;
+                },
+                minimumInputLength: 3,
+                placeholder: $('#element_uid').data('placeholder'),
+                templateResult: function(repo) {
+                    if (repo.loading) return repo.text;
+                    return repo.title;
+                },
+                templateSelection: function(repo) {
+                    return repo.title || repo.text;
+                }
+            });
+        }
+
+        // Xóa tác giả
+        $('[data-toggle="delAuthor"]').on('click', function(e) {
+            e.preventDefault();
+            let btn = $(this);
+            let icon = $('i', btn);
+            if (icon.is('.fa-spinner')) {
+                return;
+            }
+            nvConfirm(nv_is_del_confirm[0], () => {
+                icon.removeClass(icon.data('icon') || 'fa-trash').addClass('fa-spinner fa-spin-pulse');
+                $.ajax({
+                    type: 'POST',
+                    url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=authors&nocache=' + new Date().getTime(),
+                    data: {
+                        authordel: 1,
+                        aid: btn.data('id'),
+                        checkss: $('body').data('checksess')
+                    },
+                    dataType: 'json',
+                    success: function(data) {
+                        icon.removeClass('fa-spinner fa-spin-pulse').addClass(icon.data('icon') || 'fa-trash');
+                        if (data.status === 'error') {
+                            nvToast(data.mess, 'error');
+                            return;
+                        }
+                        if (data.refresh) {
+                            location.reload();
+                        } else if (data.redirect) {
+                            location.href = data.redirect;
+                        }
+                    },
+                    error: function(xhr, text, err) {
+                        icon.removeClass('fa-spinner fa-spin-pulse').addClass(icon.data('icon') || 'fa-trash');
+                        nvToast(text, 'error');
+                        console.log(xhr, text, err);
+                    }
+                });
+            });
+        });
+
+        // Thay đổi trạng thái tác giả
+        $('[data-toggle="changeStatus"]').on('change', function() {
+            let sel = $(this);
+            if (sel.is(':disabled')) {
+                return;
+            }
+            sel.prop('disabled', true);
+            $.ajax({
+                type: 'POST',
+                url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=authors&nocache=' + new Date().getTime(),
+                data: {
+                    changeStatus: 1,
+                    aid: sel.data('id'),
+                    checkss: $('body').data('checksess')
+                },
+                dataType: 'json',
+                success: function(data) {
+                    sel.prop('disabled', false);
+                    if (data.status === 'error') {
+                        nvToast(data.mess, 'error');
+                    }
+                },
+                error: function(xhr, text, err) {
+                    sel.prop('disabled', false);
+                    nvToast(text, 'error');
+                    console.log(xhr, text, err);
+                }
+            });
+        });
+    }
 });
