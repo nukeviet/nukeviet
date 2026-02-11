@@ -361,7 +361,8 @@ if ($nv_Request->isset_request('aid', 'get')) {
 }
 
 $tpl = new \NukeViet\Template\NVSmarty();
-$tpl->setTemplateDir(NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
+$tpl->registerPlugin('modifier', 'nformat', 'nv_number_format');
+$tpl->setTemplateDir(get_module_tpl_dir('authors.tpl'));
 $tpl->assign('LANG', $nv_Lang);
 $tpl->assign('MODULE_NAME', $module_name);
 $tpl->assign('MODULE_UPLOAD', $module_upload);
