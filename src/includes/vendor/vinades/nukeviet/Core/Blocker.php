@@ -11,6 +11,8 @@
 
 namespace NukeViet\Core;
 
+use NukeViet\Http\HttpException;
+
 /**
  * NukeViet\Core\Blocker
  *

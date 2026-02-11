@@ -37,7 +37,7 @@ if ($nv_Request->isset_request(NV_NAME_VARIABLE, 'get') and $nv_Request->get_str
 
 // Check user
 if (defined('NV_IS_USER')) {
-    throw new \NukeViet\Core\HttpException('Hacking attempt', 403);
+    throw new \NukeViet\Http\HttpException('Hacking attempt', 403);
 }
 require NV_ROOTDIR . '/includes/core/is_user.php';
 

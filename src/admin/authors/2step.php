@@ -44,7 +44,7 @@ if (empty($allowed)) {
 $sql = 'SELECT * FROM ' . NV_USERS_GLOBALTABLE . ' WHERE userid=' . $admin_id;
 $row_user = $db->query($sql)->fetch();
 if (empty($row_user)) {
-    throw new \NukeViet\Core\HttpException('Data error: No user for admin account!', 500);
+    throw new \NukeViet\Http\HttpException('Data error: No user for admin account!', 500);
 }
 $error = '';
 

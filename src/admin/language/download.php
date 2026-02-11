@@ -87,5 +87,5 @@ if ($nv_Request->get_string('checksess', 'get') == md5('downloadallfile' . NV_CH
         exit();
     }
 } else {
-    throw new \NukeViet\Core\HttpException('error checksess', 403);
+    throw new \NukeViet\Http\HttpException('error checksess', 403);
 }

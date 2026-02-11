@@ -9,13 +9,13 @@
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
-namespace NukeViet\Core;
+namespace NukeViet\Http;
 
 /**
  * Exception tùy chỉnh mang theo mã HTTP status code.
  * Được sử dụng để thay thế trigger_error(..., E_USER_ERROR) đã bị deprecated và giữ lại HTTP response code.
  *
- * @package NukeViet\Core
+ * @package NukeViet\Http
  * @author VINADES.,JSC <contact@vinades.vn>
  * @copyright (C) 2009-2025 VINADES.,JSC. All rights reserved
  * @version 5.x
