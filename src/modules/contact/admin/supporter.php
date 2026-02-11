@@ -46,6 +46,14 @@ if ($nv_Request->isset_request('fc', 'post')) {
     $fc = $nv_Request->get_string('fc', 'post', '');
     // Thay đổi thứ tự
     if ($fc == 'change_weight') {
+        $checkss = $nv_Request->get_title('checkss', 'post', '');
+        if (!hash_equals(NV_CHECK_SESSION, $checkss)) {
+            nv_jsonOutput([
+                'status' => 'error',
+                'mess' => 'Session error'
+            ]);
+        }
+
         $id = $nv_Request->get_int('id', 'post', 0);
         $new_weight = $nv_Request->get_int('nw', 'post', 0);
 
@@ -62,7 +70,8 @@ if ($nv_Request->isset_request('fc', 'post')) {
         $db->query('UPDATE ' . NV_MOD_TABLE . '_supporter SET weight=' . $new_weight . ' WHERE id=' . $id);
         $nv_Cache->delMod($module_name);
         nv_jsonOutput([
-            'status' => 'OK'
+            'status' => 'success',
+            'refresh' => true
         ]);
     }
 
@@ -94,6 +103,14 @@ if ($nv_Request->isset_request('fc', 'post')) {
         $departments = get_department_list();
 
         if ($nv_Request->isset_request('save', 'post')) {
+            $checkss = $nv_Request->get_title('checkss', 'post', '');
+            if (!hash_equals(NV_CHECK_SESSION, $checkss)) {
+                nv_jsonOutput([
+                    'status' => 'error',
+                    'mess' => 'Session error'
+                ]);
+            }
+
             $post = [
                 'departmentid' => $nv_Request->get_int('departmentid', 'post', 0),
                 'full_name' => $nv_Request->get_title('full_name', 'post', ''),
@@ -106,21 +123,24 @@ if ($nv_Request->isset_request('fc', 'post')) {
             if (!empty($post['departmentid']) and !isset($departments[$post['departmentid']])) {
                 nv_jsonOutput([
                     'status' => 'error',
-                    'mess' => $nv_Lang->getModule('error_required_departmentid')
+                    'mess' => $nv_Lang->getModule('error_required_departmentid'),
+                    'input' => 'departmentid'
                 ]);
             }
 
             if (nv_strlen($post['full_name']) < 3) {
                 nv_jsonOutput([
                     'status' => 'error',
-                    'mess' => $nv_Lang->getModule('error_required_full_name')
+                    'mess' => $nv_Lang->getModule('error_required_full_name'),
+                    'input' => 'full_name'
                 ]);
             }
 
             if (nv_strlen($post['phone']) < 6) {
                 nv_jsonOutput([
                     'status' => 'error',
-                    'mess' => $nv_Lang->getModule('error_required_phone')
+                    'mess' => $nv_Lang->getModule('error_required_phone'),
+                    'input' => 'phone'
                 ]);
             }
 
@@ -129,7 +149,8 @@ if ($nv_Request->isset_request('fc', 'post')) {
             if (!empty($post['email']) and $check_email[0] != '') {
                 nv_jsonOutput([
                     'status' => 'error',
-                    'mess' => $check_email[0]
+                    'mess' => $check_email[0],
+                    'input' => 'email'
                 ]);
             }
 
@@ -138,7 +159,8 @@ if ($nv_Request->isset_request('fc', 'post')) {
                 if (empty($size[0]) or $size[0] < 100 or $size[0] > 300 or $size[0] != $size[1]) {
                     nv_jsonOutput([
                         'status' => 'error',
-                        'mess' => $nv_Lang->getModule('supporter_avatar_note')
+                        'mess' => $nv_Lang->getModule('supporter_avatar_note'),
+                        'input' => 'image'
                     ]);
                 }
                 $post['image'] = substr($post['image'], strlen(NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/'));
@@ -189,7 +211,8 @@ if ($nv_Request->isset_request('fc', 'post')) {
 
                     $nv_Cache->delMod($module_name);
                     nv_jsonOutput([
-                        'status' => 'OK'
+                        'status' => 'success',
+                        'refresh' => true
                     ]);
                 } else {
                     nv_jsonOutput([
@@ -217,33 +240,17 @@ if ($nv_Request->isset_request('fc', 'post')) {
                 $supporter['others'] = ['' => ''];
             }
 
-            $xtpl = new XTemplate('supporter.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-            $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
-            $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
-            $xtpl->assign('FORM_ACTION', $page_url);
-            $xtpl->assign('SUPPORTER', $supporter);
-            $xtpl->assign('MODULE_UPLOAD', NV_UPLOADS_DIR . '/' . $module_upload);
+            $tpl = new \NukeViet\Template\NVSmarty();
+            $tpl->setTemplateDir(NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
+            $tpl->assign('LANG', $nv_Lang);
+            $tpl->assign('FORM_ACTION', $page_url);
+            $tpl->assign('SUPPORTER', $supporter);
+            $tpl->assign('MODULE_UPLOAD', NV_UPLOADS_DIR . '/' . $module_upload);
+            $tpl->assign('DEPARTMENTS', $departments);
 
-            if (!empty($departments)) {
-                foreach ($departments as $department) {
-                    $department['sel'] = $supporter['departmentid'] == $department['id'] ? ' selected="selected"' : '';
-                    $xtpl->assign('DEPARTMENT', $department);
-                    $xtpl->parse('content.department');
-                }
-            }
-
-            foreach ($supporter['others'] as $name => $value) {
-                $xtpl->assign('OTHER', [
-                    'name' => $name,
-                    'value' => $value
-                ]);
-                $xtpl->parse('content.other');
-            }
-
-            $xtpl->parse('content');
-            $contents = $xtpl->text('content');
+            $contents = $tpl->fetch('supporter-content.tpl');
             nv_jsonOutput([
-                'status' => 'OK',
+                'status' => 'success',
                 'title' => $id ? $nv_Lang->getModule('supporter_edit') : $nv_Lang->getModule('supporter_add'),
                 'content' => $contents
             ]);
@@ -252,6 +259,14 @@ if ($nv_Request->isset_request('fc', 'post')) {
 
     // Xóa nhân viên hỗ trợ
     if ($fc == 'delete') {
+        $checkss = $nv_Request->get_title('checkss', 'post', '');
+        if (!hash_equals(NV_CHECK_SESSION, $checkss)) {
+            nv_jsonOutput([
+                'status' => 'error',
+                'mess' => 'Session error'
+            ]);
+        }
+
         $id = $nv_Request->get_int('id', 'post', 0);
 
         $supporter = $db->query('SELECT * FROM ' . NV_MOD_TABLE . '_supporter WHERE id=' . $id)->fetch();
@@ -268,12 +283,21 @@ if ($nv_Request->isset_request('fc', 'post')) {
         supporter_fix_weight($supporter['departmentid']);
         $nv_Cache->delMod($module_name);
         nv_jsonOutput([
-            'status' => 'OK'
+            'status' => 'success',
+            'refresh' => true
         ]);
     }
 
     // Thay đổi trạng thái
     if ($fc == 'change_act') {
+        $checkss = $nv_Request->get_title('checkss', 'post', '');
+        if (!hash_equals(NV_CHECK_SESSION, $checkss)) {
+            nv_jsonOutput([
+                'status' => 'error',
+                'mess' => 'Session error'
+            ]);
+        }
+
         $id = $nv_Request->get_int('id', 'post', 0);
 
         $supporter = $db->query('SELECT * FROM ' . NV_MOD_TABLE . '_supporter WHERE id=' . $id)->fetch();
@@ -291,7 +315,7 @@ if ($nv_Request->isset_request('fc', 'post')) {
         $db->query('UPDATE ' . NV_MOD_TABLE . '_supporter SET act=' . $new_status . ' WHERE id=' . $id);
         $nv_Cache->delMod($module_name);
         nv_jsonOutput([
-            'status' => 'OK'
+            'status' => 'success'
         ]);
     }
 }
@@ -310,52 +334,40 @@ if (!empty($supporters)) {
     foreach ($supporters as $supporter) {
         empty($list[$supporter['departmentid']]) && $list[$supporter['departmentid']] = [];
         empty($departments[$supporter['departmentid']]['supporters']) && $departments[$supporter['departmentid']]['supporters'] = 0;
+        // Đánh dấu trạng thái active
+        $supporter['is_active'] = !empty($supporter['act']);
         $list[$supporter['departmentid']][] = $supporter;
         ++$departments[$supporter['departmentid']]['supporters'];
     }
 }
 
-$xtpl = new XTemplate($op . '.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-$xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
-$xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
-$xtpl->assign('OP_URL', $page_url);
-
-if (!empty($list)) {
-    foreach ($list as $department => $supporters) {
-        $xtpl->assign('DEPARTMENT', [
-            'href' => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=row&id=' . $department,
-            'full_name' => $departments[$department]['full_name']
-        ]);
-        if (!empty($department)) {
-            $xtpl->parse('main.list.department.href');
-            $xtpl->parse('main.list.department.href2');
-        }
-
-        foreach ($supporters as $supporter) {
-            $supporter['act_checked'] = !empty($supporter['act']) ? ' checked="checked"' : '';
-            $xtpl->assign('SUPPORTER', $supporter);
-
-            for ($i = 1; $i <= $departments[$department]['supporters']; ++$i) {
-                $xtpl->assign('WEIGHT', [
-                    'key' => $i,
-                    'sel' => $supporter['weight'] == $i ? ' selected="selected"' : '',
-                    'title' => str_pad($i, 2, '0', STR_PAD_LEFT)
-                ]);
-                $xtpl->parse('main.list.department.loop.weight');
-            }
-            $xtpl->parse('main.list.department.loop');
-        }
-        $xtpl->parse('main.list.department');
+// Chuẩn bị danh sách departments với supporters
+$department_list = [];
+foreach ($list as $department_id => $supporters_in_dept) {
+    $dept_info = [
+        'id' => $department_id,
+        'full_name' => $departments[$department_id]['full_name'],
+        'href' => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=row&id=' . $department_id,
+        'has_link' => !empty($department_id),
+        'supporters' => [],
+        'max_weight' => $departments[$department_id]['supporters']
+    ];
+    
+    foreach ($supporters_in_dept as $supporter) {
+        $dept_info['supporters'][] = $supporter;
     }
-    $xtpl->parse('main.list');
+    
+    $department_list[] = $dept_info;
 }
 
-if (empty($supporters)) {
-    $xtpl->parse('main.show_form');
-}
+$tpl = new \NukeViet\Template\NVSmarty();
+$tpl->setTemplateDir(NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
+$tpl->assign('LANG', $nv_Lang);
+$tpl->assign('OP_URL', $page_url);
+$tpl->assign('DEPARTMENT_LIST', $department_list);
+$tpl->assign('SHOW_FORM', empty($supporters));
 
-$xtpl->parse('main');
-$contents = $xtpl->text('main');
+$contents = $tpl->fetch($op . '.tpl');
 
 $page_title = $nv_Lang->getModule('supporter');
 

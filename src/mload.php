@@ -57,7 +57,7 @@ if (!module_file_exists($full_op_file)) {
 // Xác định có là user hay không
 if ($nv_Request->isset_request('checkuser', 'post,get')) {
     if (defined('NV_IS_USER')) {
-        throw new \NukeViet\Core\HttpException('Hacking attempt', 403);
+        throw new \NukeViet\Http\HttpException('Hacking attempt', 403);
     }
     require NV_ROOTDIR . '/includes/core/is_user.php';
 }

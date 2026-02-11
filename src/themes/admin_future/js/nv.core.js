@@ -22,6 +22,29 @@ function formXSSsanitize(form) {
     });
 }
 
+function initFormAjKeyboard(formAj) {
+    $('select', formAj).on('change keyup', function() {
+        $(this).removeClass('is-invalid is-valid');
+        if ($(this).parent().is('.input-group')) {
+            $(this).parent().removeClass('is-invalid is-valid');
+        }
+    });
+    $('[type="text"], [type="password"], [type="number"], [type="email"], textarea', formAj).on('change keyup', function(e) {
+        if (e.type == "keyup" && e.which == 13) {
+            return;
+        }
+        let pr = $(this).parent();
+        let prAlso = $(this).parent().is('.input-group');
+        if (trim($(this).val()) == '' && $(this).is('.required')) {
+            $(this).addClass('is-invalid');
+            (prAlso && pr.addClass('is-invalid'));
+        } else {
+            $(this).removeClass('is-invalid is-valid');
+            (prAlso && pr.removeClass('is-invalid is-valid'));
+        }
+    });
+}
+
 $(function() {
     // Hàm lưu config tùy chỉnh của giao diện
     function storeThemeConfig(configName, configValue, callbackSuccess, callbackError) {
@@ -656,26 +679,7 @@ $(function() {
     // redirect (redirect URL if status is OK), refresh (Reload page if status is OK)
     const formAj = $('.ajax-submit');
     if (formAj.length > 0) {
-        $('select', formAj).on('change keyup', function() {
-            $(this).removeClass('is-invalid is-valid');
-            if ($(this).parent().is('.input-group')) {
-                $(this).parent().removeClass('is-invalid is-valid');
-            }
-        });
-        $('[type="text"], [type="password"], [type="number"], [type="email"], textarea', formAj).on('change keyup', function(e) {
-            if (e.type == "keyup" && e.which == 13) {
-                return;
-            }
-            let pr = $(this).parent();
-            let prAlso = $(this).parent().is('.input-group');
-            if (trim($(this).val()) == '' && $(this).is('.required')) {
-                $(this).addClass('is-invalid');
-                (prAlso && pr.addClass('is-invalid'));
-            } else {
-                $(this).removeClass('is-invalid is-valid');
-                (prAlso && pr.removeClass('is-invalid is-valid'));
-            }
-        });
+        initFormAjKeyboard(formAj);
     }
 
     $('body').on('submit', '.ajax-submit', function(e) {
