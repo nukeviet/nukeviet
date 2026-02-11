@@ -165,7 +165,7 @@
                 <div class="col-sm-8 col-lg-6 col-xxl-5">
                     <div class="input-group" style="width:200px">
                         <input type="number" class="form-control text-end" value="{$DATA.report_limit}" name="report_limit" id="element_report_limit" maxlength="4" min="1">
-                        <span class="input-group-text">{$LANG->getGlobal('minute')}</span>
+                        <span class="input-group-text">{$LANG->getGlobal('min')}</span>
                     </div>
                 </div>
             </div>
