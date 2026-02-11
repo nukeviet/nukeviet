@@ -30,7 +30,7 @@ function modal_content(url, id, checkss, i = undefined, icon_class = '', replace
             if (formAj.length) {
                 initFormAjKeyboard(formAj);
             }
-            md.modal('show')
+            md.modal('show');
         }
         if (i !== undefined) {
             if (replace_icon) {
