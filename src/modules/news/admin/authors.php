@@ -85,7 +85,8 @@ if ($nv_Request->isset_request('authordel', 'post')) {
         $db->query('DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_author WHERE id=' . $aid);
         $db->query('OPTIMIZE TABLE ' . NV_PREFIXLANG . '_' . $module_data . '_authorlist');
         $db->query('OPTIMIZE TABLE ' . NV_PREFIXLANG . '_' . $module_data . '_author');
-        nv_insert_logs(NV_LANG_DATA, $module_name, 'log_del_author', 'id ' . $aid, $admin_info['userid']);
+        $log_desc = 'id: ' . $aid;
+        nv_insert_logs(NV_LANG_DATA, $module_name, 'log_del_author', $log_desc, $admin_info['userid']);
         nv_jsonOutput([
             'status' => 'success',
             'mess' => '',
@@ -112,7 +113,8 @@ if ($nv_Request->isset_request('changeStatus', 'post')) {
     $status = $db->query('SELECT active FROM ' . NV_PREFIXLANG . '_' . $module_data . '_author WHERE id =' . $aid)->fetchColumn();
     $status = $status ? 0 : 1;
     $db->query('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_author SET active=' . $status . ', edit_time=' . NV_CURRENTTIME . ' WHERE id=' . $aid);
-    nv_insert_logs(NV_LANG_DATA, $module_name, 'log_change_status_author', 'id ' . $aid . ' status ' . $status, $admin_info['userid']);
+    $log_desc = 'id: ' . $aid . ', status: ' . $status;
+    nv_insert_logs(NV_LANG_DATA, $module_name, 'log_change_status_author', $log_desc, $admin_info['userid']);
     nv_jsonOutput([
         'status' => 'success',
         'mess' => ''
@@ -246,7 +248,8 @@ if ($nv_Request->isset_request('save', 'post')) {
         $data_insert['description'] = $description;
 
         if ($db->insert_id($sql, 'id', $data_insert)) {
-            nv_insert_logs(NV_LANG_DATA, $module_name, 'log_add_author', ' ', $admin_info['userid']);
+            $log_desc = 'pseudonym: ' . $pseudonym;
+            nv_insert_logs(NV_LANG_DATA, $module_name, 'log_add_author', $log_desc, $admin_info['userid']);
             nv_jsonOutput([
                 'status' => 'success',
                 'mess' => '',
@@ -271,7 +274,8 @@ if ($nv_Request->isset_request('save', 'post')) {
             $stmt->bindParam(':pseudonym', $pseudonym, PDO::PARAM_STR);
             $stmt->execute();
 
-            nv_insert_logs(NV_LANG_DATA, $module_name, 'log_edit_author', 'id ' . $aid, $admin_info['userid']);
+            $log_desc = 'id: ' . $aid . ', pseudonym: ' . $pseudonym;
+            nv_insert_logs(NV_LANG_DATA, $module_name, 'log_edit_author', $log_desc, $admin_info['userid']);
             nv_jsonOutput([
                 'status' => 'success',
                 'mess' => '',

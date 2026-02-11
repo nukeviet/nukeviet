@@ -1530,6 +1530,10 @@ $(window).on('load', function() {
             return script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=authors' + (action ? '&' + action : '') + '&nocache=' + new Date().getTime();
         };
 
+        // Constant cho icon
+        const ICON_TRASH = 'fa-trash';
+        const ICON_SPINNER = 'fa-spinner fa-spin-pulse';
+
         // Select2 cho tìm kiếm tài khoản người dùng
         if ($('#element_uid').length) {
             $('#element_uid').select2({
@@ -1578,8 +1582,9 @@ $(window).on('load', function() {
             if (icon.is('.fa-spinner')) {
                 return;
             }
+            const iconClass = icon.data('icon') || ICON_TRASH;
             nvConfirm(nv_is_del_confirm[0], () => {
-                icon.removeClass(icon.data('icon') || 'fa-trash').addClass('fa-spinner fa-spin-pulse');
+                icon.removeClass(iconClass).addClass(ICON_SPINNER);
                 $.ajax({
                     type: 'POST',
                     url: getAuthorsApiUrl(),
@@ -1590,7 +1595,7 @@ $(window).on('load', function() {
                     },
                     dataType: 'json',
                     success: function(data) {
-                        icon.removeClass('fa-spinner fa-spin-pulse').addClass(icon.data('icon') || 'fa-trash');
+                        icon.removeClass(ICON_SPINNER).addClass(iconClass);
                         if (data.status === 'error') {
                             nvToast(data.mess, 'error');
                             return;
@@ -1602,7 +1607,7 @@ $(window).on('load', function() {
                         }
                     },
                     error: function(xhr, text, err) {
-                        icon.removeClass('fa-spinner fa-spin-pulse').addClass(icon.data('icon') || 'fa-trash');
+                        icon.removeClass(ICON_SPINNER).addClass(iconClass);
                         nvToast(text, 'error');
                         console.log(xhr, text, err);
                     }

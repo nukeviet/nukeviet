@@ -32,7 +32,7 @@
                         <td class="text-center">{$row.add_time_format}</td>
                         <td class="text-center">{$row.numnews|nv_number_format}</td>
                         <td class="text-center">
-                            <select class="form-select form-select-sm" style="width:auto" data-toggle="changeStatus" data-id="{$row.id}" name="status_{$row.id}">
+                            <select class="form-select form-select-sm w-auto" data-toggle="changeStatus" data-id="{$row.id}" name="status_{$row.id}">
                                 <option value="0"{if not $row.active} selected{/if}>{$LANG->getModule('author_status_0')}</option>
                                 <option value="1"{if $row.active} selected{/if}>{$LANG->getModule('author_status_1')}</option>
                             </select>
