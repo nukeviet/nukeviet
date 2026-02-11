@@ -41,6 +41,7 @@ Mục tiêu là phát triển và chuẩn hóa giao diện admin_future cho các
   - redirect (nếu cần). Nếu có redirect thì phải rewrite URL bằng nv_url_rewrite(..., true)
   - refresh: Có thể có hoặc không, nếu có thì giá trị là true khi cần refresh trang hiện tại.
   mess, redirect, refresh bắt buộc phải có một trong 3, không được để cả 3 cùng rỗng hoặc không có.
+- Khi ajax và trả về html để đưa vào DOM thì cần kiểm tra xem html đó có chứa element `$('.ajax-submit.')` không, nếu có cần gọi hàm `initFormAjKeyboard()` để khởi tạo lại dự kiện xử lý thao tác bàn phím cho phần validate các input trong form.
 
 Đảm bảo js xử lý:
 - toast
@@ -69,6 +70,36 @@ Mọi request POST:
 Ưu tiên dùng:
 {$smarty.const.CONSTANT_NAME}
 thay vì assign constant từ PHP.
+- Tại các dòng chứa input, select, textarea ... mà có label có đánh dấu (*) thì cần phải bổ sung thẻ validate theo cấu trúc của bootstrap 5 `<div class="invalid-feedback"></div>` với nội dung rỗng để hiển thị lỗi validate nếu có từ javascript nv.core.js điều khiển
+- Các button mà không có text cụ thể hoặc chỉ có mỗi icon fontawesome, svg, img cần có thuộc tính `aria-label` để hỗ trợ truy cập cho người dùng khuyết tật.
+- Bootstrap 5 không còn class `btn-default` do đó nếu gặp trong tpl thì thay thế bằng `btn-secondary`
+- Icon `fa-*` trong button hoặc thẻ a không sử dụng class fa-lg để tránh nó quá to, nếu gặp cần xóa class fa-lg đi.
+- Các button dùng để xóa một nội dung gần đặt class `btn-danger`. Không dùng các class khác như btn-warning, btn-secondary, btn-info cho button xóa.
+- Các select, input, checkbox, radio,... nếu không có cũng cần bổ sung thuộc tính `name` để trình duyệt không cảnh báo lỗi `A form field element should have an id or name attribute`
+- Trong cấu trúc bảng dạng danh sách các item, hãy luôn sử dụng cấu trúc sau:
+```html
+<div class="card">
+    <div class="card-body">
+        <div class="table-responsive-lg table-card pb-1">
+            <table class="table table-striped align-middle table-sticky mb-0">
+                .....
+            </table>
+        </div>
+    </div>
+    // Nếu có phân trang hoặc công cụ
+    <div class="card-footer border-top">
+        <div class="d-flex flex-wrap justify-content-between align-items-center">
+            <div class="d-flex flex-wrap flex-sm-nowrap align-items-center">
+                // Công cụ nếu có
+            </div>
+            <div class="pagination-wrap">
+               // Phân trang nếu có
+            </div>
+        </div>
+    </div>
+</div>
+```
+- Trong cấu trúc bảng dạng danh sách các item nếu cột tương ứng ở phần tbody không dùng text-center thì phần thead cũng không dùng text-center để tránh lệch lạc giao diện. Các cột ở thead luôn luôn phải có class `text-nowrap` để tránh bị co dãn không mong muốn khi có nhiều cột.
 
 ## 5. Biến và dữ liệu tpl
 Mọi biến dùng trong tpl:
