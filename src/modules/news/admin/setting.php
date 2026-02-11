@@ -130,31 +130,24 @@ if (!empty($savesetting)) {
         $array_config['schema_type'] = 'newsarticle';
     }
 
-    try {
-        $sth = $db->prepare('UPDATE ' . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = '" . NV_LANG_DATA . "' AND module = :module_name AND config_name = :config_name");
-        $sth->bindParam(':module_name', $module_name, PDO::PARAM_STR);
-        foreach ($array_config as $config_name => $config_value) {
-            $sth->bindParam(':config_name', $config_name, PDO::PARAM_STR);
-            $sth->bindParam(':config_value', $config_value, PDO::PARAM_STR);
-            $sth->execute();
-        }
-
-        $nv_Cache->delMod('settings');
-        $nv_Cache->delMod($module_name);
-        
-        nv_insert_logs(NV_LANG_DATA, $module_name, $nv_Lang->getModule('setting'), '', $admin_info['userid']);
-        
-        nv_jsonOutput([
-            'status' => 'success',
-            'mess' => $nv_Lang->getGlobal('save_success'),
-            'redirect' => nv_url_rewrite(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&rand=' . nv_genpass(), true)
-        ]);
-    } catch (Throwable $e) {
-        nv_jsonOutput([
-            'status' => 'error',
-            'mess' => $e->getMessage()
-        ]);
+    $sth = $db->prepare('UPDATE ' . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = '" . NV_LANG_DATA . "' AND module = :module_name AND config_name = :config_name");
+    $sth->bindParam(':module_name', $module_name, PDO::PARAM_STR);
+    foreach ($array_config as $config_name => $config_value) {
+        $sth->bindParam(':config_name', $config_name, PDO::PARAM_STR);
+        $sth->bindParam(':config_value', $config_value, PDO::PARAM_STR);
+        $sth->execute();
     }
+
+    $nv_Cache->delMod('settings');
+    $nv_Cache->delMod($module_name);
+    
+    nv_insert_logs(NV_LANG_DATA, $module_name, $nv_Lang->getModule('setting'), '', $admin_info['userid']);
+    
+    nv_jsonOutput([
+        'status' => 'success',
+        'mess' => $nv_Lang->getGlobal('save_success'),
+        'redirect' => nv_url_rewrite(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&rand=' . nv_genpass(), true)
+    ]);
 }
 
 $tpl = new \NukeViet\Template\NVSmarty();
@@ -285,46 +278,39 @@ if (defined('NV_IS_ADMIN_FULL_MODULE') or !in_array('admins', $allow_func, true)
         $array_config['report_group'] = $nv_Request->get_typed_array('report_group', 'post', 'int', []);
         $array_config['report_group'] = !empty($array_config['report_group']) ? implode(',', nv_groups_post(array_intersect($array_config['report_group'], array_keys($groupslist)))) : '';
 
-        try {
-            $sth = $db->prepare('UPDATE ' . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = '" . NV_LANG_DATA . "' AND module = :module_name AND config_name = :config_name");
-            $sth->bindParam(':module_name', $module_name, PDO::PARAM_STR);
-            foreach ($array_config as $config_name => $config_value) {
-                $sth->bindParam(':config_name', $config_name, PDO::PARAM_STR);
-                $sth->bindParam(':config_value', $config_value, PDO::PARAM_STR);
-                $sth->execute();
-            }
-
-            foreach ($array_group_id as $group_id) {
-                if (isset($groups_list[$group_id])) {
-                    $addcontent = (isset($array_addcontent[$group_id]) and (int) ($array_addcontent[$group_id]) == 1) ? 1 : 0;
-                    $postcontent = (isset($array_postcontent[$group_id]) and (int) ($array_postcontent[$group_id]) == 1) ? 1 : 0;
-                    $editcontent = (isset($array_editcontent[$group_id]) and (int) ($array_editcontent[$group_id]) == 1) ? 1 : 0;
-                    $delcontent = (isset($array_delcontent[$group_id]) and (int) ($array_delcontent[$group_id]) == 1) ? 1 : 0;
-                    $addcontent = ($postcontent == 1) ? 1 : $addcontent;
-                    if ($group_id == 5) {
-                        $editcontent = 0;
-                        $delcontent = 0;
-                    }
-                    $db->query('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . "_config_post SET addcontent = '" . $addcontent . "', postcontent = '" . $postcontent . "', editcontent = '" . $editcontent . "', delcontent = '" . $delcontent . "' WHERE group_id =" . $group_id);
-                }
-            }
-
-            $nv_Cache->delMod('settings');
-            $nv_Cache->delMod($module_name);
-            
-            nv_insert_logs(NV_LANG_DATA, $module_name, $nv_Lang->getModule('group_content'), '', $admin_info['userid']);
-            
-            nv_jsonOutput([
-                'status' => 'success',
-                'mess' => $nv_Lang->getGlobal('save_success'),
-                'redirect' => nv_url_rewrite(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&rand=' . nv_genpass(), true)
-            ]);
-        } catch (Throwable $e) {
-            nv_jsonOutput([
-                'status' => 'error',
-                'mess' => $e->getMessage()
-            ]);
+        $sth = $db->prepare('UPDATE ' . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = '" . NV_LANG_DATA . "' AND module = :module_name AND config_name = :config_name");
+        $sth->bindParam(':module_name', $module_name, PDO::PARAM_STR);
+        foreach ($array_config as $config_name => $config_value) {
+            $sth->bindParam(':config_name', $config_name, PDO::PARAM_STR);
+            $sth->bindParam(':config_value', $config_value, PDO::PARAM_STR);
+            $sth->execute();
         }
+
+        foreach ($array_group_id as $group_id) {
+            if (isset($groups_list[$group_id])) {
+                $addcontent = (isset($array_addcontent[$group_id]) and (int) ($array_addcontent[$group_id]) == 1) ? 1 : 0;
+                $postcontent = (isset($array_postcontent[$group_id]) and (int) ($array_postcontent[$group_id]) == 1) ? 1 : 0;
+                $editcontent = (isset($array_editcontent[$group_id]) and (int) ($array_editcontent[$group_id]) == 1) ? 1 : 0;
+                $delcontent = (isset($array_delcontent[$group_id]) and (int) ($array_delcontent[$group_id]) == 1) ? 1 : 0;
+                $addcontent = ($postcontent == 1) ? 1 : $addcontent;
+                if ($group_id == 5) {
+                    $editcontent = 0;
+                    $delcontent = 0;
+                }
+                $db->query('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . "_config_post SET addcontent = '" . $addcontent . "', postcontent = '" . $postcontent . "', editcontent = '" . $editcontent . "', delcontent = '" . $delcontent . "' WHERE group_id =" . $group_id);
+            }
+        }
+
+        $nv_Cache->delMod('settings');
+        $nv_Cache->delMod($module_name);
+        
+        nv_insert_logs(NV_LANG_DATA, $module_name, $nv_Lang->getModule('group_content'), '', $admin_info['userid']);
+        
+        nv_jsonOutput([
+            'status' => 'success',
+            'mess' => $nv_Lang->getGlobal('save_success'),
+            'redirect' => nv_url_rewrite(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&rand=' . nv_genpass(), true)
+        ]);
     }
 
     $array_post_data = [];
