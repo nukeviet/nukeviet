@@ -1,4 +1,3 @@
-<link rel="stylesheet" href="{$smarty.const.ASSETS_STATIC_URL}/js/select2/select2.min.css">
 <form method="post" class="ajax-submit" action="{$smarty.const.NV_BASE_ADMINURL}index.php?{$smarty.const.NV_LANG_VARIABLE}={$smarty.const.NV_LANG_DATA}&amp;{$smarty.const.NV_NAME_VARIABLE}={$MODULE_NAME}&amp;{$smarty.const.NV_OP_VARIABLE}={$OP}" novalidate autocomplete="off">
     <input type="hidden" name="savesetting" value="1">
     <input type="hidden" name="checkss" value="{$smarty.const.NV_CHECK_SESSION}">
@@ -125,7 +124,7 @@
                 </div>
             </div>
             <div class="row mb-3">
-                <label class="col-sm-4 col-form-label text-sm-end">{$LANG->getModule('socialbutton')}</label>
+                <div class="col-sm-4 col-form-label text-sm-end">{$LANG->getModule('socialbutton')}</div>
                 <div class="col-sm-8 col-lg-6 col-xxl-5">
                     {foreach from=$SOCIALBUTTONS item=sb}
                     <div class="form-check">
@@ -399,7 +398,7 @@
                 <label for="element_instant_articles_password" class="col-sm-4 col-form-label text-sm-end">{$LANG->getModule('setting_instant_articles_password')}</label>
                 <div class="col-sm-8 col-lg-6 col-xxl-5">
                     <div class="input-group">
-                        <input type="password" value="{$INSTANT_ARTICLES_PASSWORD}" name="instant_articles_password" class="form-control" id="element_instant_articles_password" autocomplete="new-password">
+                        <input type="password" value="{$INSTANT_ARTICLES_PASSWORD}" name="instant_articles_password" class="form-control btn-eye-added" id="element_instant_articles_password" autocomplete="new-password">
                         <button type="button" class="btn btn-secondary showhidepass" data-target="#element_instant_articles_password" data-bs-toggle="tooltip" title="{$LANG->getModule('show_hide_pass')}" aria-label="{$LANG->getModule('show_hide_pass')}"><i class="fa fa-key"></i></button>
                         <button type="button" class="btn btn-secondary genrandpass" data-target="#element_instant_articles_password" data-bs-toggle="tooltip" title="{$LANG->getModule('gen_rand_pass')}" aria-label="{$LANG->getModule('gen_rand_pass')}"><i class="fa fa-refresh"></i></button>
                     </div>
@@ -563,7 +562,7 @@
         </div>
         <div class="card-body pt-4">
             <div class="row mb-3">
-                <label class="col-sm-4 col-form-label text-sm-end">{$LANG->getModule('report_group')}</label>
+                <div class="col-sm-4 col-form-label text-sm-end">{$LANG->getModule('report_group')}</div>
                 <div class="col-sm-8 col-lg-6 col-xxl-5">
                     {foreach from=$REPORT_GROUPS item=option}
                     <div class="form-check">
