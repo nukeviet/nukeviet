@@ -13,7 +13,7 @@
         {foreach from=$DEPARTMENT_LIST item=department}
         <tbody>
             <tr>
-                <td colspan="6" class="table-secondary">
+                <td colspan="6" class="table-primary">
                     <i class="fa-regular fa-folder-open"></i>
                     {if $department.has_link}
                     <a href="{$department.href}"><strong>{$department.full_name}</strong></a>
@@ -25,7 +25,7 @@
             {foreach from=$department.supporters item=supporter}
             <tr class="item" data-id="{$supporter.id}">
                 <td class="text-nowrap align-middle" style="width: 80px;">
-                    <select class="form-select form-select-sm supporter_cweight" data-default="{$supporter.weight}">
+                    <select name="weight_{$supporter.id}" class="form-select form-select-sm supporter_cweight" data-default="{$supporter.weight}">
                         {for $i=1 to $department.max_weight}
                         <option value="{$i}"{if $supporter.weight == $i} selected{/if}>{$i|string_format:"%02d"}</option>
                         {/for}
@@ -36,7 +36,7 @@
                 <td class="text-nowrap align-middle" style="width: 1%;">{$supporter.email}</td>
                 <td class="text-nowrap text-center align-middle" style="width: 1%;">
                     <div class="form-check form-switch d-inline-block">
-                        <input type="checkbox" class="form-check-input supporter_act" value="1"{if $supporter.is_active} checked{/if} />
+                        <input type="checkbox" name="act_{$supporter.id}" class="form-check-input supporter_act" value="1"{if $supporter.is_active} checked{/if} />
                     </div>
                 </td>
                 <td class="text-nowrap text-center align-middle" style="width: 1%;">
