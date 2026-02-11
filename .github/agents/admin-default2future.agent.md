@@ -100,6 +100,8 @@ thay vì assign constant từ PHP.
 </div>
 ```
 - Trong cấu trúc bảng dạng danh sách các item nếu cột tương ứng ở phần tbody không dùng text-center thì phần thead cũng không dùng text-center để tránh lệch lạc giao diện. Các cột ở thead luôn luôn phải có class `text-nowrap` để tránh bị co dãn không mong muốn khi có nhiều cột.
+- Giao diện admin_future đã có sẵn css của select2 nên nếu có select2.min.css thì xóa đi trong tpl
+- Đối với các ô input type=password nằm trong input-group nếu group đã có button xử lý ẩn hiện mật khẩu thì type=password đó phải thêm class `btn-eye-added`
 
 ## 5. Biến và dữ liệu tpl
 Mọi biến dùng trong tpl:
@@ -153,7 +155,7 @@ Mà phải xuất biến
 ```php
 $tpl->assign('LANG', $nv_Lang);
 ```
-- Nếu có dùng PDOException thì sửa thành Throwable
+- Nếu có dùng PDOException thì sửa thành Throwable. Chú ý không tự thêm try catch vào code nếu trước đó nó không có.
 
 ## Bước 3: Tpl
 - Chuẩn Smarty
