@@ -52,7 +52,7 @@
                                         <label class="form-label"><strong>{$LANG->getModule('api_credential_ident')}</strong></label>
                                         <div class="input-group">
                                             <input type="text" name="{$key}_ident" id="{$key}-credential_ident" value="{$method.ident|default:''}" class="form-control bg-white" readonly>
-                                            <button class="btn btn-outline-secondary" type="button" data-bs-toggle="clipboard" data-bs-target="#{$key}-credential_ident" data-bs-title="{$LANG->getModule('value_copied')}" data-bs-placement="left" data-bs-container="body" data-bs-trigger="manual shadow-none">
+                                            <button class="btn btn-outline-secondary" type="button" data-bs-toggle="clipboard" data-bs-target="#{$key}-credential_ident" data-bs-title="{$LANG->getModule('value_copied')}" data-bs-placement="left" data-bs-container="body" data-bs-trigger="manual">
                                                 <i class="fa fa-copy"></i>
                                             </button>
                                         </div>
@@ -62,7 +62,7 @@
                                         <label class="form-label"><strong>{$LANG->getModule('api_credential_secret')}</strong></label>
                                         <div class="input-group">
                                             <input type="text" name="{$key}_secret" id="{$key}-credential_secret" value="{$method.secret|default:''}" class="form-control bg-white" readonly>
-                                            <button class="btn btn-outline-secondary" type="button" data-bs-toggle="clipboard" data-bs-target="#{$key}-credential_secret" data-bs-title="{$LANG->getModule('value_copied')}" data-bs-placement="left" data-bs-container="body" data-bs-trigger="manual shadow-none">
+                                            <button class="btn btn-outline-secondary" type="button" data-bs-toggle="clipboard" data-bs-target="#{$key}-credential_secret" data-bs-title="{$LANG->getModule('value_copied')}" data-bs-placement="left" data-bs-container="body" data-bs-trigger="manual">
                                                 <i class="fa fa-copy"></i>
                                             </button>
                                         </div>
@@ -112,7 +112,6 @@
     {/if}
     {if not empty($ROLELIST)}
     <div class="table-responsive">
-        <div class="table-responsive">
             <table class="table table-bordered table-striped align-middle">
                 <thead class="table-primary small">
                     <tr>
@@ -171,7 +170,6 @@
                     {/foreach}
                 </tbody>
             </table>
-        </div>
     </div>
     {/if}
     {if not empty($GENERATE_PAGE)}

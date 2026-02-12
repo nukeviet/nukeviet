@@ -7,109 +7,136 @@
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
+'use strict';
+
 $(function() {
     if ($('#my-role-api').length) {
-        var myroleapi = $('#my-role-api'),
+        const myroleapi = $('#my-role-api'),
             myroleapi_url = myroleapi.data('page-url');
 
-        $('.credential-activate, .credential-deactivate', myroleapi).on('click', function() {
-            var role_id = $(this).parents('.item').data('role-id');
+        $('.credential-activate, .credential-deactivate', myroleapi).on('click', function(e) {
+            e.preventDefault();
+            const role_id = $(this).closest('.item').data('role-id');
             $.ajax({
-                type: "POST",
+                type: 'POST',
                 url: myroleapi_url,
-                cache: !1,
-                data: 'changeActivate=' + role_id,
-                dataType: "json"
-            }).done(function(a) {
-                if ('error' == a.status) {
-                    alert(a.mess);
-                } else if ('OK' == a.status) {
-                    location.reload()
+                cache: false,
+                data: {
+                    changeActivate: role_id
+                },
+                dataType: 'json',
+                success: function(res) {
+                    if (res.status == 'error') {
+                        nukeviet.alert(res.mess);
+                    } else if (res.status == 'OK') {
+                        location.reload();
+                    }
                 }
-            })
+            });
         });
 
-        var credential_auth = $('#credential_auth');
-        var clipboard = new ClipboardJS('[data-toggle=clipboard]');
+        const credential_auth = $('#credential_auth');
+        const clipboard = new ClipboardJS('[data-bs-toggle="clipboard"]', {
+            target: function (trigger) {
+                return document.querySelector(trigger.getAttribute('data-bs-target'));
+            }
+        });
         clipboard.on('success', function(e) {
-            $(e.trigger).tooltip('show');
+            const tooltip = bootstrap.Tooltip.getOrCreateInstance(e.trigger);
+            tooltip.show();
             setTimeout(function() {
-                $(e.trigger).tooltip('destroy');
+                tooltip.hide();
             }, 1000);
         });
 
         $('.create_authentication', credential_auth).on('click', function(e) {
-            var method = $(this).data('method');
+            e.preventDefault();
+            const method = $(this).data('method');
             $.ajax({
-                type: "POST",
+                type: 'POST',
                 url: myroleapi_url,
-                cache: !1,
-                data: 'createAuth=' + method,
-                dataType: "json"
-            }).done(function(a) {
-                if ('error' == a.status) {
-                    alert(e.mess)
-                } else if ('OK' == a.status) {
-                    $('[name=' + method + '_ident]', credential_auth).val(a.ident);
-                    $('[name=' + method + '_secret]', credential_auth).val(a.secret);
-                    $('[name=' + method + '_ips]', credential_auth).parents('.api_ips').slideDown()
+                cache: false,
+                data: {
+                    createAuth: method
+                },
+                dataType: 'json',
+                success: function(res) {
+                    if (res.status == 'error') {
+                        nukeviet.alert(res.mess);
+                    } else if (res.status == 'OK') {
+                        $('[name=' + method + '_ident]', credential_auth).val(res.ident);
+                        $('[name=' + method + '_secret]', credential_auth).val(res.secret);
+                        $('[name=' + method + '_ips]', credential_auth).closest('.api_ips').slideDown();
+                    }
                 }
-            })
+            });
         });
 
         $('.delete_authentication', credential_auth).on('click', function(e) {
-            var method = $(this).data('method');
-            $.ajax({
-                type: "POST",
-                url: myroleapi_url,
-                cache: !1,
-                data: 'delAuth=' + method,
-                dataType: "json"
-            }).done(function(a) {
-                if ('OK' == a.status) {
-                    $('[name=' + method + '_ident]', credential_auth).val('');
-                    $('[name=' + method + '_secret]', credential_auth).val('');
-                    $('[name=' + method + '_ips]', credential_auth).val('').parents('.api_ips').slideUp()
-                }
-            })
+            e.preventDefault();
+            const method = $(this).data('method');
+            nukeviet.confirm(nv_is_del_confirm[0], () => {
+                $.ajax({
+                    type: 'POST',
+                    url: myroleapi_url,
+                    cache: false,
+                    data: {
+                        delAuth: method
+                    },
+                    dataType: 'json',
+                    success: function(res) {
+                        if (res.status == 'OK') {
+                            $('[name=' + method + '_ident]', credential_auth).val('');
+                            $('[name=' + method + '_secret]', credential_auth).val('');
+                            $('[name=' + method + '_ips]', credential_auth).val('').closest('.api_ips').slideUp();
+                        }
+                    }
+                });
+            });
         });
 
         credential_auth.on('input', '.ips', function() {
             $(this).val($(this).val().replace(/[\r\n\v]+/g, ''));
         });
-        credential_auth.on('click', '.api_ips_update', function() {
-            var method = $(this).data('method'),
+        credential_auth.on('click', '.api_ips_update', function(e) {
+            e.preventDefault();
+            const method = $(this).data('method'),
                 ips = $('[name=' + method + '_ips]', credential_auth).val();
             $('.ips, .api_ips_update', credential_auth).prop('disabled', true);
             $.ajax({
-                type: "POST",
+                type: 'POST',
                 url: myroleapi_url,
-                cache: !1,
-                data: 'ipsUpdate=' + ips + '&method=' + method,
-                dataType: "json"
-            }).done(function(a) {
-                if ('error' == a.status) {
-                    alert(a.mess);
-                    $('.ips, .api_ips_update', credential_auth).prop('disabled', false)
-                } else if ('OK' == a.status) {
-                    $('[name=' + method + '_ips]', credential_auth).val(a.ips);
-                    setTimeout(function() {
-                        $('.ips, .api_ips_update', credential_auth).prop('disabled', false)
-                    }, 1000);
+                cache: false,
+                data: {
+                    ipsUpdate: ips,
+                    method: method
+                },
+                dataType: 'json',
+                success: function(res) {
+                    if (res.status == 'error') {
+                        nukeviet.alert(res.mess);
+                        $('.ips, .api_ips_update', credential_auth).prop('disabled', false);
+                    } else if (res.status == 'OK') {
+                        $('[name=' + method + '_ips]', credential_auth).val(res.ips);
+                        nukeviet.toast(res.mess || 'OK', 'success');
+                        setTimeout(function() {
+                            $('.ips, .api_ips_update', credential_auth).prop('disabled', false);
+                        }, 1000);
+                    }
                 }
-            })
+            });
         });
 
-        $(document).on('click', '.open-api-modal', function () {
+        $(document).on('click', '.open-api-modal', function(e) {
+            e.preventDefault();
+            const btn = $(this);
+            const roleId = btn.data('role-id');
+            const title = btn.data('role-title');
 
-            var btn     = $(this);
-            var roleId  = btn.data('role-id');
-            var title   = btn.data('role-title');
-
-            var modal       = $('#apiRoleModal');
-            var modalTitle  = modal.find('.modal-title');
-            var contentBox  = $('#apiRoleContent');
-            var loadingBox  = $('#apiRoleLoading');
+            const modal = $('#apiRoleModal');
+            const modalTitle = modal.find('.modal-title');
+            const contentBox = $('#apiRoleContent');
+            const loadingBox = $('#apiRoleLoading');
 
             modalTitle.text(title);
             contentBox.empty().addClass('d-none');
@@ -122,31 +149,31 @@ $(function() {
                 data: {
                     getRole: 1,
                     role_id: roleId
-                }
-            }).done(function (res) {
+                },
+                success: function(res) {
+                    loadingBox.addClass('d-none');
+                    contentBox.removeClass('d-none');
 
-                loadingBox.addClass('d-none');
-                contentBox.removeClass('d-none');
+                    if (res.status !== 'OK') {
+                        contentBox.html(
+                            '<div class="alert alert-danger">' + res.message + '</div>'
+                        );
+                        return;
+                    }
 
-                if (res.status !== 'OK') {
-                    contentBox.html(
-                        '<div class="alert alert-danger">' + res.message + '</div>'
+                    contentBox.html(renderApiRole(res.data.apis));
+                },
+                error: function() {
+                    loadingBox.addClass('d-none');
+                    contentBox.removeClass('d-none').html(
+                        '<div class="alert alert-danger">Lỗi kết nối</div>'
                     );
-                    return;
                 }
-
-                contentBox.html(renderApiRole(res.data.apis));
-
-            }).fail(function () {
-                loadingBox.addClass('d-none');
-                contentBox.removeClass('d-none').html(
-                    '<div class="alert alert-danger">Lỗi kết nối</div>'
-                );
             });
         });
 
         function renderApiRole(apis) {
-            var html = '';
+            let html = '';
 
             // 1. XỬ LÝ RIÊNG CHO HỆ THỐNG (Sử dụng card giống bên dưới)
             if (apis['']) {
@@ -155,8 +182,8 @@ $(function() {
                 html += '    <i class="fa fa-folder-open"></i> API của hệ thống';
                 html += '  </h5>';
 
-                for (var catKey in apis['']) {
-                    var catData = apis[''][catKey];
+                for (const catKey in apis['']) {
+                    const catData = apis[''][catKey];
 
                     html += '<div class="card mb-3">';
                     html += '  <div class="card-header fw-bold bg-light">';
@@ -164,7 +191,7 @@ $(function() {
                     html += '  </div>';
                     html += '  <div class="card-body">';
 
-                    for (var apiKey in catData.apis) {
+                    for (const apiKey in catData.apis) {
                         html += '<div class="text-truncate mb-2">';
                         html += '  <i class="fa fa-caret-right text-muted"></i> ' + catData.apis[apiKey];
                         html += '</div>';
@@ -177,7 +204,7 @@ $(function() {
             }
 
             // 2. XỬ LÝ THEO NGÔN NGỮ (Bỏ qua key rỗng)
-            for (var lang in apis) {
+            for (const lang in apis) {
                 if (lang === '' || !apis.hasOwnProperty(lang)) continue;
 
                 html += '<div class="mb-4">';
@@ -185,9 +212,9 @@ $(function() {
                 html += '    <i class="fa fa-cogs"></i> Ngôn ngữ: ' + lang;
                 html += '  </h5>';
 
-                for (var module in apis[lang]) {
-                    for (var cat in apis[lang][module]) {
-                        var catData = apis[lang][module][cat];
+                for (const module in apis[lang]) {
+                    for (const cat in apis[lang][module]) {
+                        const catData = apis[lang][module][cat];
 
                         html += '<div class="card mb-3">';
                         html += '  <div class="card-header fw-bold">';
@@ -195,7 +222,7 @@ $(function() {
                         html += '  </div>';
                         html += '  <div class="card-body">';
 
-                        for (var apiKey in catData.apis) {
+                        for (const apiKey in catData.apis) {
                             html += '<div class="text-truncate mb-2">';
                             html += '  <i class="fa fa-caret-right text-muted"></i> ' + catData.apis[apiKey];
                             html += '</div>';
