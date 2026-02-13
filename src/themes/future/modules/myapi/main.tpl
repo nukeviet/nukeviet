@@ -112,64 +112,56 @@
     {/if}
     {if not empty($ROLELIST)}
     <div class="table-responsive">
-            <table class="table table-bordered table-striped align-middle">
-                <thead class="table-primary small">
-                    <tr>
-                        <th class="text-nowrap text-center">{$LANG->getModule('api_roles_list')}</th>
-                        <th class="text-nowrap text-center" style="width: 1%;">{$LANG->getModule('api_role_status')}</th>
-                        <th class="text-nowrap text-center" style="width: 1%;">{$LANG->getModule('api_role_credential_status')}</th>
-                        <th class="text-nowrap text-center" style="width: 1%;">{$LANG->getModule('api_role_credential_addtime')}</th>
-                        <th class="text-nowrap text-center" style="width: 1%;">{$LANG->getModule('endtime')}</th>
-                        <th class="text-nowrap text-center" style="width: 1%;">{$LANG->getModule('quota')}</th>
-                        <th class="text-nowrap text-center" style="width: 1%;">{$LANG->getModule('api_role_credential_access_count')}</th>
-                        <th class="text-nowrap text-center" style="width: 1%;">{$LANG->getModule('api_role_credential_last_access')}</th>
-                        <th class="text-nowrap text-center" style="width: 1%;"></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {foreach from=$ROLELIST item=role}
-                    <tr class="item{if $role.credential_status !== 1} text-muted{/if}" data-role-id="{$role.role_id}">
-                        <td>
-                            <strong>{$role.role_title}</strong>
-                            {if not empty($role.role_description)}
-                            <p class="description">{$role.role_description}</p>
+        <table class="table table-bordered table-striped align-middle">
+            <thead class="table-primary small">
+                <tr>
+                    <th class="text-nowrap text-center">{$LANG->getModule('api_roles_list')}</th>
+                    <th class="text-nowrap text-center" style="width: 1%;">{$LANG->getModule('api_role_status')}</th>
+                    <th class="text-nowrap text-center" style="width: 1%;">{$LANG->getModule('api_role_credential_status')}</th>
+                    <th class="text-nowrap text-center" style="width: 1%;">{$LANG->getModule('api_role_credential_addtime')}</th>
+                    <th class="text-nowrap text-center" style="width: 1%;">{$LANG->getModule('endtime')}</th>
+                    <th class="text-nowrap text-center" style="width: 1%;">{$LANG->getModule('quota')}</th>
+                    <th class="text-nowrap text-center" style="width: 1%;">{$LANG->getModule('api_role_credential_access_count')}</th>
+                    <th class="text-nowrap text-center" style="width: 1%;">{$LANG->getModule('api_role_credential_last_access')}</th>
+                    <th class="text-nowrap text-center" style="width: 1%;"></th>
+                </tr>
+            </thead>
+            <tbody>
+                {foreach from=$ROLELIST item=role}
+                <tr class="item{if $role.credential_status !== 1} text-muted{/if}" data-role-id="{$role.role_id}">
+                    <td>
+                        <strong>{$role.role_title}</strong>
+                        {if not empty($role.role_description)}
+                        <p class="description">{$role.role_description}</p>
+                        {/if}
+                    </td>
+                    <td class="text-nowrap text-center" style="width:1%;">{$role.status}</td>
+                    <td class="text-nowrap text-center" style="width:1%;">{$role.credential_status_format}</td>
+                    <td class="text-center" style="width:1%;">{$role.credential_addtime}</td>
+                    <td class="text-center" style="width:1%;">{$role.credential_endtime}</td>
+                    <td class="text-center" style="width:1%;">{$role.credential_quota}</td>
+                    <td class="text-nowrap text-center" style="width:1%;">{$role.credential_access_count}</td>
+                    <td class="text-nowrap text-center" style="width:1%;">{$role.credential_last_access}</td>
+                    <td class="text-nowrap text-center" style="width:1%;">
+                        <div class="action-column">
+                            <button type="button" class="btn btn-secondary open-api-modal" data-role-id="{$role.role_id}" data-role-title="{$role.role_title}" data-page-url="{$PAGE_URL}" data-bs-toggle="modal" data-bs-target="#apiRoleModal">
+                                {$LANG->getModule('apis_list')}
+                            </button>
+                            {if $TYPE == 'public' and $role.credential_status == 1}
+                            <button type="button" class="btn btn-secondary credential-activate">
+                                {$LANG->getModule('activate')}
+                            </button>
+                            {elseif $TYPE == 'public' and $role.credential_status == -1}
+                            <button type="button" class="btn btn-secondary credential-deactivate">
+                                {$LANG->getModule('deactivate')}
+                            </button>
                             {/if}
-                        </td>
-                        <td class="text-nowrap text-center" style="width:1%;">{$role.status}</td>
-                        <td class="text-nowrap text-center" style="width:1%;">{$role.credential_status_format}</td>
-                        <td class="text-center" style="width:1%;">{$role.credential_addtime}</td>
-                        <td class="text-center" style="width:1%;">{$role.credential_endtime}</td>
-                        <td class="text-center" style="width:1%;">{$role.credential_quota}</td>
-                        <td class="text-nowrap text-center" style="width:1%;">{$role.credential_access_count}</td>
-                        <td class="text-nowrap text-center" style="width:1%;">{$role.credential_last_access}</td>
-                        <td class="text-nowrap text-center" style="width:1%;">
-                            <div class="action-column">
-                                <button
-                                    type="button"
-                                    class="btn btn-secondary open-api-modal"
-                                    data-role-id="{$role.role_id}"
-                                    data-role-title="{$role.role_title}"
-                                    data-page-url="{$PAGE_URL}"
-                                    data-bs-toggle="modal"
-                                    data-bs-target="#apiRoleModal">
-                                    {$LANG->getModule('api_roles_detail')}
-                                </button>
-
-                                {if $TYPE == 'public' and $role.credential_status == 1}
-                                <button type="button" class="btn btn-secondary credential-activate">
-                                    {$LANG->getModule('activate')}
-                                </button>
-                                {elseif $TYPE == 'public' and $role.credential_status == -1}
-                                <button type="button" class="btn btn-secondary credential-deactivate">
-                                    {$LANG->getModule('deactivate')}
-                                </button>
-                                {/if}
-                            </div>
-                        </td>
-                    </tr>
-                    {/foreach}
-                </tbody>
-            </table>
+                        </div>
+                    </td>
+                </tr>
+                {/foreach}
+            </tbody>
+        </table>
     </div>
     {/if}
     {if not empty($GENERATE_PAGE)}
