@@ -1534,6 +1534,14 @@ $(window).on('load', function() {
         const ICON_TRASH = 'fa-trash';
         const ICON_SPINNER = 'fa-spinner fa-spin-pulse';
 
+        // Cuộn trang đến element khi cần
+        let autoScroll = $('[data-toggle="autoScroll"]');
+        if (autoScroll.length == 1) {
+            $('html, body').animate({
+                scrollTop: autoScroll.offset().top - 10
+            }, 150);
+        }
+
         // Select2 cho tìm kiếm tài khoản người dùng
         if ($('#element_uid').length) {
             $('#element_uid').select2({

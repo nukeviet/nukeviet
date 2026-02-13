@@ -376,7 +376,7 @@ if (!empty($authors)) {
         $row['account'] = $uids[$row['uid']]['username'];
         $row['email'] = $uids[$row['uid']]['email'];
         $row['account_link'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=users&amp;' . NV_OP_VARIABLE . '=memberlist/' . change_alias($uids[$row['uid']]['username']) . '-' . $uids[$row['uid']]['md5username'];
-        $row['add_time_format'] = nv_date_format($row['add_time'], 1);
+        $row['add_time_format'] = nv_date_format(1, $row['add_time']);
         $row['url_edit'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;aid=' . $row['id'];
         $row['can_delete'] = $row['id'] != $my_author_detail['id'];
         $authors_list[] = $row;
