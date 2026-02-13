@@ -35,7 +35,10 @@ if ($nv_Request->isset_request('changeweight', 'post')) {
 
     $weightsystem = $db->query('SELECT max(weight) FROM ' . NV_MOD_TABLE . '_field WHERE is_system=1')->fetchColumn();
     if ($numrows != 1 or $new_vid <= $weightsystem) {
-        exit('NO');
+        nv_jsonOutput([
+            'status' => 'error',
+            'mess' => $nv_Lang->getGlobal('error_save')
+        ]);
     }
 
     $query = 'SELECT fid FROM ' . NV_MOD_TABLE . '_field WHERE fid!=' . $fid . ' ORDER BY weight ASC';
@@ -55,7 +58,10 @@ if ($nv_Request->isset_request('changeweight', 'post')) {
     // Ghi log
     nv_insert_logs(NV_LANG_DATA, $module_name, 'Change field weight', 'fid: ' . $fid . ', weight: ' . $new_vid, $admin_info['userid']);
     
-    exit('OK');
+    nv_jsonOutput([
+        'status' => 'success',
+        'mess' => $nv_Lang->getGlobal('save_success')
+    ]);
 }
 
 $array_sqlchoice_order = [
@@ -167,6 +173,7 @@ if ($nv_Request->isset_request('choicesql', 'post')) {
 //Add, Edit
 $text_fields = $number_fields = $date_fields = $choice_fields = $file_fields = $choice_type_sql = $choice_type_text = 0;
 $error = '';
+$error_input = '';
 $field_choices = [];
 if ($nv_Request->isset_request('save', 'post')) {
     $checkss = $nv_Request->get_title('checkss', 'post', '');
@@ -234,8 +241,10 @@ if ($nv_Request->isset_request('save', 'post')) {
 
         if (in_array($dataform['field'], $field_not_allow, true)) {
             $error = $nv_Lang->getModule('field_error_not_allow');
+            $error_input = 'field';
         } elseif (empty($dataform['field'])) {
             $error = $nv_Lang->getModule('field_error_empty');
+            $error_input = 'field';
         } else {
             // Kiểm tra trùng trường dữ liệu
             $stmt = $db->prepare('SELECT * FROM ' . NV_MOD_TABLE . '_field WHERE field= :field');
@@ -243,6 +252,7 @@ if ($nv_Request->isset_request('save', 'post')) {
             $stmt->execute();
             if ($stmt->fetchColumn()) {
                 $error = $nv_Lang->getModule('field_error');
+                $error_input = 'field';
             }
         }
     }
@@ -575,14 +585,30 @@ if ($nv_Request->isset_request('save', 'post')) {
         if ($save) {
             $log_action = $dataform['fid'] ? 'Edit' : 'Add';
             nv_insert_logs(NV_LANG_DATA, $module_name, $log_action . ' field', 'field: ' . $dataform['field'], $admin_info['userid']);
-            nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&rand=' . nv_genpass());
+            
+            $redirect_url = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&rand=' . nv_genpass();
+            nv_jsonOutput([
+                'status' => 'success',
+                'mess' => $nv_Lang->getGlobal('save_success'),
+                'redirect' => nv_url_rewrite($redirect_url, true)
+            ]);
+        } else {
+            // Trường hợp không lưu được (có lỗi database hoặc validation)
+            nv_jsonOutput([
+                'status' => 'error',
+                'mess' => !empty($error) ? $error : $nv_Lang->getGlobal('error_save')
+            ]);
         }
     } else {
         // Trả về lỗi dạng JSON cho AJAX request
-        nv_jsonOutput([
+        $json_data = [
             'status' => 'error',
             'mess' => $error
-        ]);
+        ];
+        if (!empty($error_input)) {
+            $json_data['input'] = $error_input;
+        }
+        nv_jsonOutput($json_data);
     }
 }
 
@@ -618,10 +644,17 @@ if ($nv_Request->isset_request('del', 'post')) {
             // Ghi log
             nv_insert_logs(NV_LANG_DATA, $module_name, 'Delete field', 'field: ' . $field, $admin_info['userid']);
             
-            exit('OK');
+            nv_jsonOutput([
+                'status' => 'success',
+                'mess' => $nv_Lang->getGlobal('delete_success')
+            ]);
         }
     }
-    exit('NO');
+    
+    nv_jsonOutput([
+        'status' => 'error',
+        'mess' => $nv_Lang->getGlobal('error_delete')
+    ]);
 }
 
 $array_field_type = [

@@ -56,12 +56,19 @@
                 type: 'POST',
                 url: script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=fields',
                 data: 'changeweight=1&fid=' + fid + '&new_vid=' + new_vid + '&checkss=' + nv_check_session,
-                success: function(data) {
-                    if (data == 'OK') {
+                dataType: 'json',
+                success: function(res) {
+                    if (res.status === 'success') {
                         window.nv_show_list_field();
+                        if (res.mess) {
+                            nvToast(res.mess, 'success');
+                        }
                     } else {
-                        nvToast(nv_Lang.error_save, 'error');
+                        nvToast(res.mess || nv_Lang.error_save, 'error');
                     }
+                },
+                error: function() {
+                    nvToast(nv_Lang.error_save, 'error');
                 }
             });
         } else {
@@ -81,12 +88,19 @@
                 type: 'POST',
                 url: script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=fields',
                 data: 'del=1&fid=' + fid + '&checkss=' + nv_check_session,
-                success: function(data) {
-                    if (data == 'OK') {
+                dataType: 'json',
+                success: function(res) {
+                    if (res.status === 'success') {
                         window.nv_show_list_field();
+                        if (res.mess) {
+                            nvToast(res.mess, 'success');
+                        }
                     } else {
-                        nvToast(nv_Lang.error_delete, 'error');
+                        nvToast(res.mess || nv_Lang.error_delete, 'error');
                     }
+                },
+                error: function() {
+                    nvToast(nv_Lang.error_delete, 'error');
                 }
             });
         }
