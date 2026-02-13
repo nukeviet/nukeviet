@@ -22,7 +22,7 @@
         <div class="card-header fs-5 fw-medium">{$CAPTIONFORM}</div>
         <div class="card-body">
             {if $DATAFORM.fid eq 0}
-            <div class="row mb-3">
+            <div class="row mb-3" id="row_field_id">
                 <label for="field_id" class="col-sm-4 col-lg-3 col-form-label text-sm-end">{$LANG->getModule('field_id')} <span class="text-danger">(*)</span></label>
                 <div class="col-sm-8 col-lg-6 col-xxl-5">
                     <input class="form-control" type="text" value="{$DATAFORM.field}" name="field" id="field_id" maxlength="50" required autocomplete="off">
@@ -32,7 +32,7 @@
             </div>
             {/if}
             
-            <div class="row mb-3">
+            <div class="row mb-3" id="row_field_title">
                 <label for="field_title" class="col-sm-4 col-lg-3 col-form-label text-sm-end">{$LANG->getModule('field_title')} <span class="text-danger">(*)</span></label>
                 <div class="col-sm-8 col-lg-6 col-xxl-5">
                     <input class="form-control" type="text" value="{$DATAFORM.title}" name="title" id="field_title" required autocomplete="off">

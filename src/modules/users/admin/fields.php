@@ -241,10 +241,10 @@ if ($nv_Request->isset_request('save', 'post')) {
 
         if (in_array($dataform['field'], $field_not_allow, true)) {
             $error = $nv_Lang->getModule('field_error_not_allow');
-            $error_input = 'field';
+            $error_input = 'row_field_id';
         } elseif (empty($dataform['field'])) {
             $error = $nv_Lang->getModule('field_error_empty');
-            $error_input = 'field';
+            $error_input = 'row_field_id';
         } else {
             // Kiểm tra trùng trường dữ liệu
             $stmt = $db->prepare('SELECT * FROM ' . NV_MOD_TABLE . '_field WHERE field= :field');
@@ -252,7 +252,7 @@ if ($nv_Request->isset_request('save', 'post')) {
             $stmt->execute();
             if ($stmt->fetchColumn()) {
                 $error = $nv_Lang->getModule('field_error');
-                $error_input = 'field';
+                $error_input = 'row_field_id';
             }
         }
     }
@@ -606,7 +606,7 @@ if ($nv_Request->isset_request('save', 'post')) {
             'mess' => $error
         ];
         if (!empty($error_input)) {
-            $json_data['input'] = $error_input;
+            $json_data['input_parent'] = $error_input;
         }
         nv_jsonOutput($json_data);
     }
