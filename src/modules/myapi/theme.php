@@ -17,11 +17,11 @@ if (!defined('NV_IS_API_MOD')) {
  * Trang chính giao diện API
  *
  * @return string
- * @param mixed $type
- * @param mixed $roleCount
- * @param mixed $roleList
- * @param mixed $api_user
- * @param mixed $generate_page
+ * @param string $type
+ * @param int $roleCount
+ * @param array $roleList
+ * @param array $api_user
+ * @param string $generate_page
  */
 function main_theme($type, $roleCount, $roleList, $api_user, $generate_page): string
 {
@@ -42,17 +42,22 @@ function main_theme($type, $roleCount, $roleList, $api_user, $generate_page): st
         $methods[$key] = $method;
     }
 
-    foreach ($roleList as &$role) {
-        $role['status'] = !empty($role['status']) ? $nv_Lang->getModule('active') : $nv_Lang->getModule('inactive');
-        $role['credential_status'] = (int) $role['credential_status'];
-        $role['credential_status_format'] = $role['credential_status'] === 1 ? $nv_Lang->getModule('activated') : ($role['credential_status'] === 0 ? $nv_Lang->getModule('suspended') : $nv_Lang->getModule('not_activated'));
-        $role['credential_addtime'] = $role['credential_addtime'] > 0 ? nv_datetime_format($role['credential_addtime']) : '';
-        $role['credential_endtime'] = $role['credential_endtime'] > 0 ? nv_datetime_format($role['credential_endtime']) : ($role['credential_endtime'] == 0 ? $nv_Lang->getModule('indefinitely') : '');
-        $role['credential_quota'] = $role['credential_quota'] > 0 ? nv_number_format($role['credential_quota']) : ($role['credential_quota'] == 0 ? $nv_Lang->getModule('no_quota') : '');
-        $role['credential_access_count'] = $role['credential_access_count'] >= 0 ? $role['credential_access_count'] : '';
-        $role['credential_last_access'] = $role['credential_last_access'] > 0 ? nv_datetime_format($role['credential_last_access']) : '';
+    foreach ($roleList as $key => $role) {
+        $roleList[$key]['status'] = !empty($role['status']) ? $nv_Lang->getModule('active') : $nv_Lang->getModule('inactive');
+        $roleList[$key]['credential_status'] = (int) $role['credential_status'];
+        $roleList[$key]['credential_status_format'] = ($roleList[$key]['credential_status'] === 1)
+            ? $nv_Lang->getModule('activated')
+            : ($roleList[$key]['credential_status'] === 0 ? $nv_Lang->getModule('suspended') : $nv_Lang->getModule('not_activated'));
+        $roleList[$key]['credential_addtime'] = $role['credential_addtime'] > 0 ? nv_datetime_format($role['credential_addtime']) : '';
+        $roleList[$key]['credential_endtime'] = $role['credential_endtime'] > 0
+            ? nv_datetime_format($role['credential_endtime'])
+            : ($role['credential_endtime'] == 0 ? $nv_Lang->getModule('indefinitely') : '');
+        $roleList[$key]['credential_quota'] = $role['credential_quota'] > 0
+            ? nv_number_format($role['credential_quota'])
+            : ($role['credential_quota'] == 0 ? $nv_Lang->getModule('no_quota') : '');
+        $roleList[$key]['credential_access_count'] = $role['credential_access_count'] >= 0 ? $role['credential_access_count'] : '';
+        $roleList[$key]['credential_last_access'] = $role['credential_last_access'] > 0 ? nv_datetime_format($role['credential_last_access']) : '';
     }
-    unset($role);
 
     $tpl = new \NukeViet\Template\NVSmarty();
     $tpl->setTemplateDir(get_module_tpl_dir('main.tpl'));
@@ -73,6 +78,7 @@ function main_theme($type, $roleCount, $roleList, $api_user, $generate_page): st
     $tpl->assign('TYPE', $type);
     $tpl->assign('ROLELIST', $roleList);
     $tpl->assign('GENERATE_PAGE', $generate_page);
+    $tpl->assign('ROLECOUNT', $roleCount);
 
     return $tpl->fetch('main.tpl');
 }

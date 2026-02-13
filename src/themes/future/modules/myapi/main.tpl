@@ -102,7 +102,7 @@
             </div>
         </div>
     </div>
-    {if empty($ROLELIST)}
+    {if empty($ROLECOUNT)}
     <div class="alert alert-info d-flex align-items-center justify-content-center mb-3" role="alert">
         <i class="fa fa-info-circle me-2"></i>
         <div>
