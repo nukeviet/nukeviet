@@ -53,7 +53,7 @@ if ($nv_Request->isset_request('changeweight', 'post')) {
     $db->query($sql);
     
     // Ghi log
-    nv_insert_logs(NV_LANG_DATA, $module_name, 'LOG_FIELD_WEIGHT', 'fid: ' . $fid . ', weight: ' . $new_vid, $admin_info['userid']);
+    nv_insert_logs(NV_LANG_DATA, $module_name, 'Change field weight', 'fid: ' . $fid . ', weight: ' . $new_vid, $admin_info['userid']);
     
     exit('OK');
 }
@@ -573,10 +573,16 @@ if ($nv_Request->isset_request('save', 'post')) {
             }
         }
         if ($save) {
-            $log_action = $dataform['fid'] ? 'LOG_FIELD_EDIT' : 'LOG_FIELD_ADD';
-            nv_insert_logs(NV_LANG_DATA, $module_name, $log_action, 'field: ' . $dataform['field'], $admin_info['userid']);
+            $log_action = $dataform['fid'] ? 'Edit' : 'Add';
+            nv_insert_logs(NV_LANG_DATA, $module_name, $log_action . ' field', 'field: ' . $dataform['field'], $admin_info['userid']);
             nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&rand=' . nv_genpass());
         }
+    } else {
+        // Trả về lỗi dạng JSON cho AJAX request
+        nv_jsonOutput([
+            'status' => 'error',
+            'mess' => $error
+        ]);
     }
 }
 
@@ -610,7 +616,7 @@ if ($nv_Request->isset_request('del', 'post')) {
             }
             
             // Ghi log
-            nv_insert_logs(NV_LANG_DATA, $module_name, 'LOG_FIELD_DELETE', 'field: ' . $field, $admin_info['userid']);
+            nv_insert_logs(NV_LANG_DATA, $module_name, 'Delete field', 'field: ' . $field, $admin_info['userid']);
             
             exit('OK');
         }
