@@ -1522,4 +1522,135 @@ $(window).on('load', function() {
             }
         }, 2000);
     }
+
+    // Xử lý trang authors
+    if (nv_func_name === 'authors') {
+        // Hàm tạo URL API cho authors
+        const getAuthorsApiUrl = (action) => {
+            return script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=authors' + (action ? '&' + action : '') + '&nocache=' + new Date().getTime();
+        };
+
+        // Constant cho icon
+        const ICON_TRASH = 'fa-trash';
+        const ICON_SPINNER = 'fa-spinner fa-spin-pulse';
+
+        // Cuộn trang đến element khi cần
+        let autoScroll = $('[data-toggle="autoScroll"]');
+        if (autoScroll.length == 1) {
+            $('html, body').animate({
+                scrollTop: autoScroll.offset().top - 10
+            }, 150);
+        }
+
+        // Select2 cho tìm kiếm tài khoản người dùng
+        if ($('#element_uid').length) {
+            $('#element_uid').select2({
+                language: nv_lang_interface,
+                ajax: {
+                    url: getAuthorsApiUrl('get_account_json=1'),
+                    dataType: 'json',
+                    delay: 250,
+                    data: function(params) {
+                        return {
+                            q: params.term,
+                            page: params.page
+                        };
+                    },
+                    processResults: function(data, params) {
+                        params.page = params.page || 1;
+                        return {
+                            results: data.results,
+                            pagination: {
+                                more: (params.page * 30) < data.total_count
+                            }
+                        };
+                    },
+                    cache: true
+                },
+                escapeMarkup: function(markup) {
+                    return markup;
+                },
+                minimumInputLength: 3,
+                placeholder: $('#element_uid').data('placeholder'),
+                templateResult: function(repo) {
+                    if (repo.loading) return repo.text;
+                    return repo.title;
+                },
+                templateSelection: function(repo) {
+                    return repo.title || repo.text;
+                }
+            });
+        }
+
+        // Xóa tác giả
+        $('[data-toggle="delAuthor"]').on('click', function(e) {
+            e.preventDefault();
+            let btn = $(this);
+            let icon = $('i', btn);
+            if (icon.is('.fa-spinner')) {
+                return;
+            }
+            const iconClass = icon.data('icon') || ICON_TRASH;
+            nvConfirm(nv_is_del_confirm[0], () => {
+                icon.removeClass(iconClass).addClass(ICON_SPINNER);
+                $.ajax({
+                    type: 'POST',
+                    url: getAuthorsApiUrl(),
+                    data: {
+                        authordel: 1,
+                        aid: btn.data('id'),
+                        checkss: $('body').data('checksess')
+                    },
+                    dataType: 'json',
+                    success: function(data) {
+                        icon.removeClass(ICON_SPINNER).addClass(iconClass);
+                        if (data.status === 'error') {
+                            nvToast(data.mess, 'error');
+                            return;
+                        }
+                        if (data.refresh) {
+                            location.reload();
+                        } else if (data.redirect) {
+                            location.href = data.redirect;
+                        }
+                    },
+                    error: function(xhr, text, err) {
+                        icon.removeClass(ICON_SPINNER).addClass(iconClass);
+                        nvToast(text, 'error');
+                        console.log(xhr, text, err);
+                    }
+                });
+            });
+        });
+
+        // Thay đổi trạng thái tác giả
+        $('[data-toggle="changeStatus"]').on('change', function() {
+            let sel = $(this);
+            if (sel.is(':disabled')) {
+                return;
+            }
+            sel.prop('disabled', true);
+            $.ajax({
+                type: 'POST',
+                url: getAuthorsApiUrl(),
+                data: {
+                    changeStatus: 1,
+                    aid: sel.data('id'),
+                    checkss: $('body').data('checksess')
+                },
+                dataType: 'json',
+                success: function(data) {
+                    sel.prop('disabled', false);
+                    if (data.status === 'error') {
+                        nvToast(data.mess, 'error');
+                    }
+                },
+                error: function(xhr, text, err) {
+                    sel.prop('disabled', false);
+                    nvToast(text, 'error');
+                    console.log(xhr, text, err);
+                }
+            });
+        });
+    }
 });

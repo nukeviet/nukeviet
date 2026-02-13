@@ -16,7 +16,14 @@ if (!defined('NV_IS_FILE_ADMIN')) {
 $my_author_detail = my_author_detail($admin_info['userid']);
 
 // Tìm tác giả thuộc quyền quản lý qua ajax
-if ($nv_Request->isset_request('searchAjax', 'post') and $nv_Request->get_title('checkss', 'post', '') === NV_CHECK_SESSION) {
+if ($nv_Request->isset_request('searchAjax', 'post')) {
+    $checkss = $nv_Request->get_title('checkss', 'post', '');
+    if (!hash_equals(NV_CHECK_SESSION, $checkss)) {
+        nv_jsonOutput([
+            'status' => 'error',
+            'mess' => $nv_Lang->getGlobal('error_incorrect_info')
+        ]);
+    }
     $respon = [
         'results' => [],
         'pagination' => [
@@ -64,25 +71,54 @@ if ($nv_Request->isset_request('searchAjax', 'post') and $nv_Request->get_title(
 
 // Xoa tac gia
 if ($nv_Request->isset_request('authordel', 'post')) {
+    $checkss = $nv_Request->get_title('checkss', 'post', '');
+    if (!hash_equals(NV_CHECK_SESSION, $checkss)) {
+        nv_jsonOutput([
+            'status' => 'error',
+            'mess' => $nv_Lang->getGlobal('error_incorrect_info')
+        ]);
+    }
+
     $aid = $nv_Request->get_int('aid', 'post', 0);
-    if ($aid != $my_author_detail['id']) {
+    if ($aid and $aid != $my_author_detail['id']) {
         $db->query('DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_authorlist WHERE aid=' . $aid);
         $db->query('DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_author WHERE id=' . $aid);
         $db->query('OPTIMIZE TABLE ' . NV_PREFIXLANG . '_' . $module_data . '_authorlist');
         $db->query('OPTIMIZE TABLE ' . NV_PREFIXLANG . '_' . $module_data . '_author');
+        $log_desc = 'id: ' . $aid;
+        nv_insert_logs(NV_LANG_DATA, $module_name, 'log_del_author', $log_desc, $admin_info['userid']);
+        nv_jsonOutput([
+            'status' => 'success',
+            'mess' => '',
+            'refresh' => true
+        ]);
     }
-    echo 'OK';
-    exit(0);
+    nv_jsonOutput([
+        'status' => 'error',
+        'mess' => $nv_Lang->getGlobal('error_delete_content')
+    ]);
 }
 
 // Vo hieu/Kich hoat tac gia
 if ($nv_Request->isset_request('changeStatus', 'post')) {
+    $checkss = $nv_Request->get_title('checkss', 'post', '');
+    if (!hash_equals(NV_CHECK_SESSION, $checkss)) {
+        nv_jsonOutput([
+            'status' => 'error',
+            'mess' => $nv_Lang->getGlobal('error_incorrect_info')
+        ]);
+    }
+
     $aid = $nv_Request->get_int('aid', 'post', 0);
     $status = $db->query('SELECT active FROM ' . NV_PREFIXLANG . '_' . $module_data . '_author WHERE id =' . $aid)->fetchColumn();
     $status = $status ? 0 : 1;
     $db->query('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_author SET active=' . $status . ', edit_time=' . NV_CURRENTTIME . ' WHERE id=' . $aid);
-    echo 'OK';
-    exit(0);
+    $log_desc = 'id: ' . $aid . ', status: ' . $status;
+    nv_insert_logs(NV_LANG_DATA, $module_name, 'log_change_status_author', $log_desc, $admin_info['userid']);
+    nv_jsonOutput([
+        'status' => 'success',
+        'mess' => ''
+    ]);
 }
 
 // Xuất ajax tim kiem thanh vien
@@ -124,6 +160,14 @@ if ($nv_Request->isset_request('get_account_json', 'post, get')) {
 
 // Them/Sua tac gia
 if ($nv_Request->isset_request('save', 'post')) {
+    $checkss = $nv_Request->get_title('checkss', 'post', '');
+    if (!hash_equals(NV_CHECK_SESSION, $checkss)) {
+        nv_jsonOutput([
+            'status' => 'error',
+            'mess' => $nv_Lang->getGlobal('error_incorrect_info')
+        ]);
+    }
+
     $aid = $nv_Request->get_int('aid', 'post', 0);
     $pseudonym = $nv_Request->get_title('pseudonym', 'post', '', 1);
     $uid = $nv_Request->get_int('uid', 'post', 0);
@@ -171,7 +215,9 @@ if ($nv_Request->isset_request('save', 'post')) {
     if (!nv_is_url($image) and nv_is_file($image, NV_UPLOADS_DIR . '/' . $module_upload . '/authors')) {
         $lu = strlen(NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/authors/');
         $image = substr($image, $lu);
-    } elseif (!nv_is_url($image) and file_exists(NV_UPLOADS_REAL_DIR . '/' . $module_upload . '/authors/' . $image_old)) {
+    } elseif (empty($image)) {
+        $image = '';
+    } elseif (!nv_is_url($image) and !empty($image_old) and file_exists(NV_UPLOADS_REAL_DIR . '/' . $module_upload . '/authors/' . $image_old)) {
         $image = $image_old;
     } else {
         $image = '';
@@ -193,6 +239,8 @@ if ($nv_Request->isset_request('save', 'post')) {
     $description = $nv_Request->get_string('description', 'post', '');
     $description = nv_nl2br(nv_htmlspecialchars(strip_tags($description)), '<br />');
 
+    $redirect_url = nv_url_rewrite(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op, true);
+
     if ($aid == 0) {
         $sql = 'INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . '_author (uid, alias, pseudonym, image, description, add_time) VALUES ( ' . $uid . ', :alias, :pseudonym, :image, :description, ' . NV_CURRENTTIME . ')';
         $data_insert = [];
@@ -202,11 +250,12 @@ if ($nv_Request->isset_request('save', 'post')) {
         $data_insert['description'] = $description;
 
         if ($db->insert_id($sql, 'id', $data_insert)) {
-            nv_insert_logs(NV_LANG_DATA, $module_name, 'log_add_author', ' ', $admin_info['userid']);
+            $log_desc = 'pseudonym: ' . $pseudonym;
+            nv_insert_logs(NV_LANG_DATA, $module_name, 'log_add_author', $log_desc, $admin_info['userid']);
             nv_jsonOutput([
-                'status' => 'OK',
-                'input' => '',
-                'mess' => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op
+                'status' => 'success',
+                'mess' => '',
+                'redirect' => $redirect_url
             ]);
         } else {
             nv_jsonOutput([
@@ -227,11 +276,12 @@ if ($nv_Request->isset_request('save', 'post')) {
             $stmt->bindParam(':pseudonym', $pseudonym, PDO::PARAM_STR);
             $stmt->execute();
 
-            nv_insert_logs(NV_LANG_DATA, $module_name, 'log_edit_author', 'id ' . $aid, $admin_info['userid']);
+            $log_desc = 'id: ' . $aid . ', pseudonym: ' . $pseudonym;
+            nv_insert_logs(NV_LANG_DATA, $module_name, 'log_edit_author', $log_desc, $admin_info['userid']);
             nv_jsonOutput([
-                'status' => 'OK',
-                'input' => '',
-                'mess' => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op
+                'status' => 'success',
+                'mess' => '',
+                'redirect' => $redirect_url
             ]);
         } else {
             nv_jsonOutput([
@@ -312,16 +362,16 @@ if ($nv_Request->isset_request('aid', 'get')) {
     }
 }
 
-$xtpl = new XTemplate('authors.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-$xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
-$xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
-$xtpl->assign('NV_BASE_ADMINURL', NV_BASE_ADMINURL);
-$xtpl->assign('NV_NAME_VARIABLE', NV_NAME_VARIABLE);
-$xtpl->assign('MODULE_NAME', $module_name);
-$xtpl->assign('MODULE_UPLOAD', $module_upload);
-$xtpl->assign('OP', $op);
-$xtpl->assign('DATA', $data);
+$tpl = new \NukeViet\Template\NVSmarty();
+$tpl->registerPlugin('modifier', 'nformat', 'nv_number_format');
+$tpl->setTemplateDir(get_module_tpl_dir('authors.tpl'));
+$tpl->assign('LANG', $nv_Lang);
+$tpl->assign('MODULE_NAME', $module_name);
+$tpl->assign('MODULE_UPLOAD', $module_upload);
+$tpl->assign('OP', $op);
+$tpl->assign('DATA', $data);
 
+$authors_list = [];
 if (!empty($authors)) {
     foreach ($authors as $row) {
         $row['newslist_link'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;q=' . urlencode($row['alias']) . '&amp;stype=author&amp;checkss=' . NV_CHECK_SESSION;
@@ -329,51 +379,22 @@ if (!empty($authors)) {
         $row['email'] = $uids[$row['uid']]['email'];
         $row['account_link'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=users&amp;' . NV_OP_VARIABLE . '=memberlist/' . change_alias($uids[$row['uid']]['username']) . '-' . $uids[$row['uid']]['md5username'];
         $row['add_time_format'] = nv_date_format(1, $row['add_time']);
-        $row['status_sel'] = $row['active'] ? ' selected="selected"' : '';
         $row['url_edit'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;aid=' . $row['id'];
-        $xtpl->assign('ROW', $row);
-
-        if ($row['numnews']) {
-            $xtpl->parse('main.authorlist.loop.newslist_link');
-        } else {
-            $xtpl->parse('main.authorlist.loop.newslist');
-        }
-
-        if ($row['id'] != $my_author_detail['id']) {
-            $xtpl->parse('main.authorlist.loop.del_author');
-        }
-        $xtpl->parse('main.authorlist.loop');
+        $row['can_delete'] = $row['id'] != $my_author_detail['id'];
+        $authors_list[] = $row;
     }
+    $tpl->assign('AUTHORS_LIST', $authors_list);
 
     $generate_page = nv_generate_page($base_url, $num_items, $per_page, $page);
     if (!empty($generate_page)) {
-        $xtpl->assign('GENERATE_PAGE', $generate_page);
-        $xtpl->parse('main.authorlist.generate_page');
+        $tpl->assign('PAGINATION', $generate_page);
     }
-
-    $xtpl->parse('main.authorlist');
 }
 
-if ($data['aid'] == $my_author_detail['id']) {
-    $xtpl->parse('main.not_change_uid');
-} else {
-    if (!empty($data['uid'])) {
-        $xtpl->parse('main.change_uid.uid');
-    }
-    $xtpl->parse('main.change_uid');
-}
+$tpl->assign('IS_MY_AUTHOR', $data['aid'] == $my_author_detail['id']);
+$tpl->assign('SCROLL_TO_EDIT', !empty($data['aid']));
 
-if (!empty($data['image'])) {
-    $xtpl->parse('main.image');
-}
-
-if (!empty($data['aid'])) {
-    $xtpl->parse('main.scroll');
-}
-
-$xtpl->parse('main');
-$contents = $xtpl->text('main');
-
+$contents = $tpl->fetch('authors.tpl');
 $page_title = $nv_Lang->getModule('author_manage');
 
 include NV_ROOTDIR . '/includes/header.php';
