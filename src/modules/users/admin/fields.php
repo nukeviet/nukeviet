@@ -743,6 +743,9 @@ if ($nv_Request->isset_request('qlist', 'get')) {
             $dataform['max_number'] = 1000;
             $dataform['number_type'] = 1;
             $dataform['current_date'] = 0;
+            $dataform['default_date'] = '';
+            $dataform['min_date'] = '';
+            $dataform['max_date'] = '';
             $dataform['system'] = 0;
         }
     }
