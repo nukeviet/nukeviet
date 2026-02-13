@@ -258,6 +258,12 @@ if ($nv_Request->isset_request('save', 'post')) {
             }
         }
     }
+    
+    // Kiểm tra tiêu đề
+    if (empty($error) && empty($dataform['title'])) {
+        $error = $nv_Lang->getModule('field_title') . ': ' . $nv_Lang->getGlobal('required_invalid');
+        $error_input = 'row_field_title';
+    }
 
     $language[NV_LANG_DATA] = [
         $dataform['title'],
