@@ -215,7 +215,9 @@ if ($nv_Request->isset_request('save', 'post')) {
     if (!nv_is_url($image) and nv_is_file($image, NV_UPLOADS_DIR . '/' . $module_upload . '/authors')) {
         $lu = strlen(NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/authors/');
         $image = substr($image, $lu);
-    } elseif (!nv_is_url($image) and file_exists(NV_UPLOADS_REAL_DIR . '/' . $module_upload . '/authors/' . $image_old)) {
+    } elseif (empty($image)) {
+        $image = '';
+    } elseif (!nv_is_url($image) and !empty($image_old) and file_exists(NV_UPLOADS_REAL_DIR . '/' . $module_upload . '/authors/' . $image_old)) {
         $image = $image_old;
     } else {
         $image = '';
