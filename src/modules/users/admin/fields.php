@@ -54,10 +54,10 @@ if ($nv_Request->isset_request('changeweight', 'post')) {
     }
     $sql = 'UPDATE ' . NV_MOD_TABLE . '_field SET weight=' . $new_vid . ' WHERE fid=' . $fid;
     $db->query($sql);
-    
+
     // Ghi log
     nv_insert_logs(NV_LANG_DATA, $module_name, 'Change field weight', 'fid: ' . $fid . ', weight: ' . $new_vid, $admin_info['userid']);
-    
+
     nv_jsonOutput([
         'status' => 'success',
         'mess' => $nv_Lang->getGlobal('save_success')
@@ -138,7 +138,7 @@ if ($nv_Request->isset_request('choicesql', 'post')) {
         $tpl->assign('choicesql_name', 'choicesql_' . $choice);
         $tpl->assign('choicesql_next', $array_choicesql[$choice]);
         $choice_seltected = explode('|', $choice_seltected);
-        
+
         $sql_list = [];
         if ($num_table > 0) {
             foreach ($_items as $item) {
@@ -172,19 +172,18 @@ if ($nv_Request->isset_request('choicesql', 'post')) {
 
 //Add, Edit
 $text_fields = $number_fields = $date_fields = $choice_fields = $file_fields = $choice_type_sql = $choice_type_text = 0;
-$error = '';
-$error_input = '';
+$error = $error_input = $error_input_parent = '';
 $field_choices = [];
 if ($nv_Request->isset_request('save', 'post')) {
     $checkss = $nv_Request->get_title('checkss', 'post', '');
-    
+
     if (!hash_equals(NV_CHECK_SESSION, $checkss)) {
         nv_jsonOutput([
             'status' => 'error',
             'mess' => $nv_Lang->getGlobal('error_session')
         ]);
     }
-    
+
     $validatefield = [
         'pattern' => '/[^a-zA-Z0-9\_]/',
         'replacement' => ''
@@ -239,12 +238,14 @@ if ($nv_Request->isset_request('save', 'post')) {
 
         require_once NV_ROOTDIR . '/includes/field_not_allow.php';
 
-        if (in_array($dataform['field'], $field_not_allow, true)) {
+        if (in_array($dataform['field'], (array) $field_not_allow, true)) {
             $error = $nv_Lang->getModule('field_error_not_allow');
-            $error_input = 'row_field_id';
+            $error_input = 'field';
+            $error_input_parent = 'row_field_id';
         } elseif (empty($dataform['field'])) {
             $error = $nv_Lang->getModule('field_error_empty');
-            $error_input = 'row_field_id';
+            $error_input = 'field';
+            $error_input_parent = 'row_field_id';
         } else {
             // Kiểm tra trùng trường dữ liệu
             $stmt = $db->prepare('SELECT * FROM ' . NV_MOD_TABLE . '_field WHERE field= :field');
@@ -252,7 +253,8 @@ if ($nv_Request->isset_request('save', 'post')) {
             $stmt->execute();
             if ($stmt->fetchColumn()) {
                 $error = $nv_Lang->getModule('field_error');
-                $error_input = 'row_field_id';
+                $error_input = 'field';
+                $error_input_parent = 'row_field_id';
             }
         }
     }
@@ -585,7 +587,7 @@ if ($nv_Request->isset_request('save', 'post')) {
         if ($save) {
             $log_action = $dataform['fid'] ? 'Edit' : 'Add';
             nv_insert_logs(NV_LANG_DATA, $module_name, $log_action . ' field', 'field: ' . $dataform['field'], $admin_info['userid']);
-            
+
             $redirect_url = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&rand=' . nv_genpass();
             nv_jsonOutput([
                 'status' => 'success',
@@ -606,7 +608,10 @@ if ($nv_Request->isset_request('save', 'post')) {
             'mess' => $error
         ];
         if (!empty($error_input)) {
-            $json_data['input_parent'] = $error_input;
+            $json_data['input'] = $error_input;
+        }
+        if (!empty($error_input_parent)) {
+            $json_data['input_parent'] = '#' . $error_input_parent;
         }
         nv_jsonOutput($json_data);
     }
@@ -640,17 +645,17 @@ if ($nv_Request->isset_request('del', 'post')) {
                 $db->query('UPDATE ' . NV_MOD_TABLE . '_field SET weight=' . $weight . ' WHERE fid=' . $row['fid']);
                 ++$weight;
             }
-            
+
             // Ghi log
             nv_insert_logs(NV_LANG_DATA, $module_name, 'Delete field', 'field: ' . $field, $admin_info['userid']);
-            
+
             nv_jsonOutput([
                 'status' => 'success',
                 'mess' => $nv_Lang->getGlobal('delete_success')
             ]);
         }
     }
-    
+
     nv_jsonOutput([
         'status' => 'error',
         'mess' => $nv_Lang->getGlobal('error_delete')
@@ -734,7 +739,7 @@ if ($nv_Request->isset_request('qlist', 'get')) {
     if (!isset($dataform)) {
         if ($fid) {
             $dataform = $db->query('SELECT * FROM ' . NV_MOD_TABLE . '_field WHERE fid=' . $fid)->fetch();
-            
+
             $dataform['fid'] = $fid;
             if ($dataform['field_type'] == 'editor') {
                 $array_tmp = explode('@', $dataform['class']);
@@ -848,7 +853,7 @@ if ($nv_Request->isset_request('qlist', 'get')) {
             $choice_type_text = 1;
         }
     }
-    
+
     // Chuẩn bị danh sách field choices
     $field_choices_list = [];
     if ($fid == 0 or $text_fields == 0) {
@@ -879,7 +884,7 @@ if ($nv_Request->isset_request('qlist', 'get')) {
         $tpl->assign('ADD_FIELD_CHOICE', !$disable_edit_choose);
     }
     $tpl->assign('FIELD_CHOICES_LIST', $field_choices_list);
-    
+
     // Xác định các section hiển thị
     $dataform['display_textfields'] = (bool) $text_fields;
     $dataform['display_numberfields'] = (bool) $number_fields;
@@ -900,7 +905,7 @@ if ($nv_Request->isset_request('qlist', 'get')) {
     $captionform = ($fid) ? $nv_Lang->getModule('captionform_edit') . ': ' . $dataform['fieldid'] : $nv_Lang->getModule('captionform_add');
     $tpl->assign('CAPTIONFORM', $captionform);
     $tpl->assign('DATAFORM', $dataform);
-    
+
     // Danh sách field types
     $field_type_list = [];
     foreach ($array_field_type as $key => $value) {
@@ -912,7 +917,7 @@ if ($nv_Request->isset_request('qlist', 'get')) {
     }
     $tpl->assign('FIELD_TYPE_LIST', $field_type_list);
     $tpl->assign('SHOW_FIELD_TYPE_SELECT', empty($fid));
-    
+
     // Danh sách choice types
     if (empty($fid)) {
         $choice_type_list = [];
@@ -935,7 +940,7 @@ if ($nv_Request->isset_request('qlist', 'get')) {
         }
         $tpl->assign('SHOW_CHOICE_TYPES_SELECT', false);
     }
-    
+
     // Danh sách match types
     $array_match_type = [];
     $array_match_type['none'] = $nv_Lang->getModule('field_match_type_none');
@@ -947,7 +952,7 @@ if ($nv_Request->isset_request('qlist', 'get')) {
     }
     $array_match_type['regex'] = $nv_Lang->getModule('field_match_type_regex');
     $array_match_type['callback'] = $nv_Lang->getModule('field_match_type_callback');
-    
+
     $match_type_list = [];
     foreach ($array_match_type as $key => $value) {
         $match_type_list[] = [
