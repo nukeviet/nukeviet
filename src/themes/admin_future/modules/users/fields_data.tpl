@@ -1,4 +1,4 @@
-<div class="card">
+<div class="card mb-3">
     <div class="card-body">
         <div class="table-responsive-lg table-card pb-1">
             <table class="table table-striped align-middle table-sticky mb-0">

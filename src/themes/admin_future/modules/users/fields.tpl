@@ -2,14 +2,7 @@
 <script type="text/javascript" src="{$smarty.const.ASSETS_STATIC_URL}/js/jquery-ui/jquery-ui.min.js"></script>
 <script type="text/javascript" src="{$smarty.const.ASSETS_LANG_STATIC_URL}/js/language/jquery.ui.datepicker-{$smarty.const.NV_LANG_INTERFACE}.js"></script>
 
-<div id="module_show_list">&nbsp;</div>
-
-{if not empty($ERROR)}
-<div class="alert alert-danger alert-dismissible fade show" role="alert">
-    {$ERROR}
-    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="{$LANG->getGlobal('close')}"></button>
-</div>
-{/if}
+<div id="module_show_list"></div>
 
 <form class="ajax-submit" method="post" action="{$smarty.const.NV_BASE_ADMINURL}index.php?{$smarty.const.NV_LANG_VARIABLE}={$smarty.const.NV_LANG_DATA}&amp;{$smarty.const.NV_NAME_VARIABLE}={$MODULE_NAME}&amp;{$smarty.const.NV_OP_VARIABLE}={$OP}" autocomplete="off" novalidate>
     <input type="hidden" name="save" value="1">
@@ -31,7 +24,7 @@
                 </div>
             </div>
             {/if}
-            
+
             <div class="row mb-3" id="row_field_title">
                 <label for="field_title" class="col-sm-4 col-lg-3 col-form-label text-sm-end">{$LANG->getModule('field_title')} <span class="text-danger">(*)</span></label>
                 <div class="col-sm-8 col-lg-6 col-xxl-5">
@@ -39,14 +32,14 @@
                     <div class="invalid-feedback"></div>
                 </div>
             </div>
-            
+
             <div class="row mb-3">
                 <label for="field_description" class="col-sm-4 col-lg-3 col-form-label text-sm-end">{$LANG->getModule('field_description')}</label>
                 <div class="col-sm-8 col-lg-6 col-xxl-5">
                     <textarea cols="60" rows="3" name="description" id="field_description" class="form-control" autocomplete="off">{$DATAFORM.description}</textarea>
                 </div>
             </div>
-            
+
             <div class="row mb-3">
                 <div class="col-sm-4 col-lg-3 text-sm-end fw-medium">{$LANG->getModule('for_admin')}</div>
                 <div class="col-sm-8 col-lg-6 col-xxl-5">
@@ -55,7 +48,7 @@
                     </div>
                 </div>
             </div>
-            
+
             <div class="row mb-3{if $IS_HIDDEN} d-none{/if}" id="row_required">
                 <div class="col-sm-4 col-lg-3 text-sm-end fw-medium">{$LANG->getModule('field_required')}</div>
                 <div class="col-sm-8 col-lg-6 col-xxl-5">
@@ -65,7 +58,7 @@
                     <div class="form-text">{$LANG->getModule('field_required_note')}</div>
                 </div>
             </div>
-            
+
             <div class="row mb-3{if $IS_HIDDEN} d-none{/if}" id="row_show_register">
                 <div class="col-sm-4 col-lg-3 text-sm-end fw-medium">{$LANG->getModule('field_show_register')}</div>
                 <div class="col-sm-8 col-lg-6 col-xxl-5">
@@ -74,7 +67,7 @@
                     </div>
                 </div>
             </div>
-            
+
             <div class="row mb-3{if $IS_HIDDEN} d-none{/if}" id="row_user_editable">
                 <div class="col-sm-4 col-lg-3 text-sm-end fw-medium">{$LANG->getModule('field_user_editable')}</div>
                 <div class="col-sm-8 col-lg-6 col-xxl-5">
@@ -83,7 +76,7 @@
                     </div>
                 </div>
             </div>
-            
+
             <div class="row mb-3{if $IS_HIDDEN} d-none{/if}" id="row_show_profile">
                 <div class="col-sm-4 col-lg-3 text-sm-end fw-medium">{$LANG->getModule('field_show_profile')}</div>
                 <div class="col-sm-8 col-lg-6 col-xxl-5">
@@ -92,7 +85,7 @@
                     </div>
                 </div>
             </div>
-            
+
             <div class="row mb-3">
                 <div class="col-sm-4 col-lg-3 text-sm-end fw-medium">{$LANG->getModule('field_type')}</div>
                 <div class="col-sm-8 col-lg-6 col-xxl-5">
@@ -111,14 +104,14 @@
                     {/if}
                 </div>
             </div>
-            
+
             <div class="row mb-3{if $DATAFORM.classdisabled} d-none{/if}" id="classfields">
                 <label for="field_class" class="col-sm-4 col-lg-3 col-form-label text-sm-end">{$LANG->getModule('field_class')}</label>
                 <div class="col-sm-8 col-lg-6 col-xxl-5">
                     <input class="form-control" type="text" value="{$DATAFORM.class}" name="class" id="field_class" maxlength="50" autocomplete="off">
                 </div>
             </div>
-            
+
             <div class="row mb-3{if $DATAFORM.editordisabled} d-none{/if}" id="editorfields">
                 <label for="editor_width" class="col-sm-4 col-lg-3 col-form-label text-sm-end">{$LANG->getModule('field_size')}</label>
                 <div class="col-sm-8 col-lg-6 col-xxl-5">
@@ -127,13 +120,13 @@
                             <label for="editor_width" class="col-form-label">Width:</label>
                         </div>
                         <div class="col-auto">
-                            <input class="form-control" style="width: 100px;" type="text" value="{$DATAFORM.editor_width}" name="editor_width" id="editor_width" maxlength="5" autocomplete="off">
+                            <input class="form-control" style="width: 100px;" type="text" value="{$DATAFORM.editor_width ?? '100%'}" name="editor_width" id="editor_width" maxlength="5" autocomplete="off">
                         </div>
                         <div class="col-auto">
                             <label for="editor_height" class="col-form-label">Height:</label>
                         </div>
                         <div class="col-auto">
-                            <input class="form-control" style="width: 100px;" type="text" value="{$DATAFORM.editor_height}" name="editor_height" id="editor_height" maxlength="5" autocomplete="off">
+                            <input class="form-control" style="width: 100px;" type="text" value="{$DATAFORM.editor_height ?? '100px'}" name="editor_height" id="editor_height" maxlength="5" autocomplete="off">
                         </div>
                     </div>
                 </div>
@@ -159,14 +152,14 @@
                     {/foreach}
                 </div>
             </div>
-            
+
             <div class="row mb-3">
                 <label for="default_value" class="col-sm-4 col-lg-3 col-form-label text-sm-end">{$LANG->getModule('field_default_value')}</label>
                 <div class="col-sm-8 col-lg-6 col-xxl-5">
                     <input class="form-control" maxlength="255" type="text" value="{$DATAFORM.default_value}" name="default_value" id="default_value" autocomplete="off">
                 </div>
             </div>
-            
+
             <div class="row mb-3" id="max_length">
                 <label for="min_length" class="col-sm-4 col-lg-3 col-form-label text-sm-end">{$LANG->getModule('field_min_length')}</label>
                 <div class="col-sm-8 col-lg-6 col-xxl-5">
@@ -194,16 +187,16 @@
                 <div class="col-sm-4 col-lg-3 text-sm-end fw-medium">{$LANG->getModule('field_number_type')}</div>
                 <div class="col-sm-8 col-lg-6 col-xxl-5">
                     <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="radio" name="number_type" value="1" id="number_type_1"{if $DATAFORM.number_type eq 1} checked{/if}>
+                        <input class="form-check-input" type="radio" name="number_type" value="1" id="number_type_1"{if ($DATAFORM.number_type ?? 1) eq 1} checked{/if}>
                         <label class="form-check-label" for="number_type_1">{$LANG->getModule('field_integer')}</label>
                     </div>
                     <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="radio" name="number_type" value="2" id="number_type_2"{if $DATAFORM.number_type eq 2} checked{/if}>
+                        <input class="form-check-input" type="radio" name="number_type" value="2" id="number_type_2"{if ($DATAFORM.number_type ?? 1) eq 2} checked{/if}>
                         <label class="form-check-label" for="number_type_2">{$LANG->getModule('field_real')}</label>
                     </div>
                 </div>
             </div>
-            
+
             <div class="row mb-3">
                 <label for="default_value_number" class="col-sm-4 col-lg-3 col-form-label text-sm-end">{$LANG->getModule('field_default_value')}</label>
                 <div class="col-sm-8 col-lg-6 col-xxl-5">
@@ -211,19 +204,19 @@
                     <div class="invalid-feedback"></div>
                 </div>
             </div>
-            
+
             <div class="row mb-3">
                 <label for="min_number_length" class="col-sm-4 col-lg-3 col-form-label text-sm-end">{$LANG->getModule('field_min_value')}</label>
                 <div class="col-sm-8 col-lg-6 col-xxl-5">
                     <div class="row g-2">
                         <div class="col-auto">
-                            <input class="form-control" style="width: 120px;" type="text" value="{$DATAFORM.min_number}" name="min_number_length" id="min_number_length" maxlength="11" required autocomplete="off">
+                            <input class="form-control" style="width: 120px;" type="text" value="{$DATAFORM.min_number ?? '0'}" name="min_number_length" id="min_number_length" maxlength="11" required autocomplete="off">
                         </div>
                         <div class="col-auto">
                             <label for="max_number_length" class="col-form-label">{$LANG->getModule('field_max_value')}</label>
                         </div>
                         <div class="col-auto">
-                            <input class="form-control" style="width: 120px;" type="text" value="{$DATAFORM.max_number}" name="max_number_length" id="max_number_length" maxlength="11" required autocomplete="off">
+                            <input class="form-control" style="width: 120px;" type="text" value="{$DATAFORM.max_number ?? '1000'}" name="max_number_length" id="max_number_length" maxlength="11" required autocomplete="off">
                         </div>
                     </div>
                     <div class="invalid-feedback"></div>
@@ -240,29 +233,29 @@
                 <div class="col-sm-4 col-lg-3 text-sm-end fw-medium">{$LANG->getModule('field_default_value')}</div>
                 <div class="col-sm-8 col-lg-6 col-xxl-5">
                     <div class="form-check">
-                        <input class="form-check-input" type="radio" name="current_date" value="1" id="current_date_1"{if $DATAFORM.current_date eq 1} checked{/if}>
+                        <input class="form-check-input" type="radio" name="current_date" value="1" id="current_date_1"{if ($DATAFORM.current_date ?? 0) eq 1} checked{/if}>
                         <label class="form-check-label" for="current_date_1">{$LANG->getModule('field_current_date')}</label>
                     </div>
                     <div class="form-check">
-                        <input class="form-check-input" type="radio" name="current_date" value="0" id="current_date_0"{if $DATAFORM.current_date eq 0} checked{/if}>
+                        <input class="form-check-input" type="radio" name="current_date" value="0" id="current_date_0"{if ($DATAFORM.current_date ?? 0) eq 0} checked{/if}>
                         <label class="form-check-label" for="current_date_0">{$LANG->getModule('field_default_date')}</label>
-                        <input class="form-control mt-1 datepicker" style="width:120px" type="text" value="{$DATAFORM.default_date}" name="default_date" autocomplete="off">
+                        <input class="form-control mt-1 datepicker" style="width:120px" type="text" value="{$DATAFORM.default_date ?? ''}" name="default_date" autocomplete="off">
                     </div>
                 </div>
             </div>
-            
+
             <div class="row mb-3">
                 <label for="min_date" class="col-sm-4 col-lg-3 col-form-label text-sm-end">{$LANG->getModule('field_min_date')}</label>
                 <div class="col-sm-8 col-lg-6 col-xxl-5">
                     <div class="row g-2">
                         <div class="col-auto">
-                            <input class="form-control datepicker" style="width:120px" type="text" value="{$DATAFORM.min_date}" name="min_date" id="min_date" maxlength="10" autocomplete="off">
+                            <input class="form-control datepicker" style="width:120px" type="text" value="{$DATAFORM.min_date ?? ''}" name="min_date" id="min_date" maxlength="10" autocomplete="off">
                         </div>
                         <div class="col-auto">
                             <label for="max_date" class="col-form-label">{$LANG->getModule('field_max_date')}</label>
                         </div>
                         <div class="col-auto">
-                            <input class="form-control datepicker" style="width:120px" type="text" value="{$DATAFORM.max_date}" name="max_date" id="max_date" maxlength="10" autocomplete="off">
+                            <input class="form-control datepicker" style="width:120px" type="text" value="{$DATAFORM.max_date ?? ''}" name="max_date" id="max_date" maxlength="10" autocomplete="off">
                         </div>
                     </div>
                 </div>
@@ -375,7 +368,7 @@
                     </div>
                 </div>
             </div>
-            
+
             <div class="row mb-3">
                 <label for="file_max_size" class="col-sm-4 col-lg-3 col-form-label text-sm-end">{$LANG->getModule('field_file_max_size')}</label>
                 <div class="col-sm-8 col-lg-6 col-xxl-5">
@@ -386,7 +379,7 @@
                     </select>
                 </div>
             </div>
-            
+
             <div class="row mb-3">
                 <label for="maxnum" class="col-sm-4 col-lg-3 col-form-label text-sm-end">{$LANG->getModule('field_file_maxnum')}</label>
                 <div class="col-sm-8 col-lg-6 col-xxl-5">
@@ -397,7 +390,7 @@
                     </select>
                 </div>
             </div>
-            
+
             <div class="row mb-3 photo_max_size{if not in_array('images', $DATAFILE.filetype)} d-none{/if}">
                 <div class="col-sm-4 col-lg-3 text-sm-end fw-medium">{$LANG->getModule('field_photo_max_size')}</div>
                 <div class="col-sm-8 col-lg-6 col-xxl-8">

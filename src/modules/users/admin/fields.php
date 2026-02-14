@@ -16,7 +16,10 @@ if (!defined('NV_IS_FILE_ADMIN')) {
 // Chỉnh thứ tự các trường tùy chỉnh. Không cho phép chỉnh các trường mặc định
 if ($nv_Request->isset_request('changeweight', 'post')) {
     if (!defined('NV_IS_AJAX')) {
-        exit('Wrong URL');
+        nv_jsonOutput([
+            'status' => 'error',
+            'mess' => 'Wrong URL'
+        ]);
     }
 
     $fid = $nv_Request->get_int('fid', 'post', 0);
@@ -224,9 +227,10 @@ if ($nv_Request->isset_request('save', 'post')) {
     $save = 0;
     $language = [];
     if ($dataform['fid']) {
+        // Trường hợp sửa field
         $dataform_old = $db->query('SELECT * FROM ' . NV_MOD_TABLE . '_field WHERE fid=' . $dataform['fid'])->fetch();
         if (empty($dataform_old)) {
-            throw new \NukeViet\Http\HttpException('Data error!!!', 500);
+            throw new \NukeViet\Http\HttpException('Data error!!!', 403);
         }
         $dataform['field_type'] = $dataform_old['field_type'];
         if (!empty($dataform_old['language'])) {
@@ -234,6 +238,7 @@ if ($nv_Request->isset_request('save', 'post')) {
         }
         $dataform['field'] = $dataform['fieldid'] = $dataform_old['field'];
     } else {
+        // Thêm mới field
         $dataform['field'] = $dataform['fieldid'] = nv_strtolower(nv_substr($nv_Request->get_title('field', 'post', '', 0, $validatefield), 0, 50));
 
         require_once NV_ROOTDIR . '/includes/field_not_allow.php';
@@ -258,11 +263,12 @@ if ($nv_Request->isset_request('save', 'post')) {
             }
         }
     }
-    
+
     // Kiểm tra tiêu đề
     if (empty($error) && empty($dataform['title'])) {
         $error = $nv_Lang->getModule('field_title') . ': ' . $nv_Lang->getGlobal('required_invalid');
-        $error_input = 'row_field_title';
+        $error_input = 'title';
+        $error_input_parent = 'row_field_title';
     }
 
     $language[NV_LANG_DATA] = [
@@ -313,7 +319,7 @@ if ($nv_Request->isset_request('save', 'post')) {
         $dataform['default_value'] = json_encode($default_value, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
 
         if ($dataform['min_length'] >= $dataform['max_length']) {
-            $error = $nv_Lang->getModule('field_number_error');
+            !$error && $error = $nv_Lang->getModule('field_number_error');
         } else {
             $dataform['field_choices'] = '';
         }
@@ -334,7 +340,7 @@ if ($nv_Request->isset_request('save', 'post')) {
         $dataform['default_value'] = $dataform['default_value_number'];
 
         if ($dataform['min_length'] >= $dataform['max_length']) {
-            $error = $nv_Lang->getModule('field_number_error');
+            !$error && $error = $nv_Lang->getModule('field_number_error');
         } else {
             $dataform['field_choices'] = serialize(['number_type' => $dataform['number_type']]);
         }
@@ -353,7 +359,7 @@ if ($nv_Request->isset_request('save', 'post')) {
         $dataform['match_regex'] = $dataform['func_callback'] = '';
         $field_choices['current_date'] = $dataform['current_date'];
         if ($dataform['min_length'] >= $dataform['max_length'] and $dataform['min_length'] != 0) {
-            $error = $nv_Lang->getModule('field_date_error');
+            !$error && $error = $nv_Lang->getModule('field_date_error');
         } else {
             $dataform['field_choices'] = serialize(['current_date' => $dataform['current_date']]);
         }
@@ -371,7 +377,7 @@ if ($nv_Request->isset_request('save', 'post')) {
             'heightlimit' => $nv_Request->get_typed_array('heightlimit', 'post', 'int', [])
         ];
         if (empty($datafile['filetype'])) {
-            $error = $nv_Lang->getModule('field_file_exts_error');
+            !$error && $error = $nv_Lang->getModule('field_file_exts_error');
         } else {
             if (!empty($datafile['filetype']) and in_array('images', $datafile['filetype'], true)) {
                 if ($datafile['widthlimit']['equal'] > 0) {
@@ -439,7 +445,7 @@ if ($nv_Request->isset_request('save', 'post')) {
                 $field_choice_value = $nv_Request->get_typed_array('field_choice', 'post', 'title', []);
                 $field_choice_text = $nv_Request->get_typed_array('field_choice_text', 'post', 'title', []);
                 if (!count($field_choice_value)) {
-                    $error = $nv_Lang->getModule('field_choices_empty');
+                    !$error && $error = $nv_Lang->getModule('field_choices_empty');
                 } else {
                     $field_choices = [];
                     foreach ($field_choice_value as $k => $val) {
@@ -449,7 +455,7 @@ if ($nv_Request->isset_request('save', 'post')) {
                         }
                     }
                     if (empty($field_choices)) {
-                        $error = $nv_Lang->getModule('field_choices_empty');
+                        !$error && $error = $nv_Lang->getModule('field_choices_empty');
                     } else {
                         $dataform['field_choices'] = serialize($field_choices);
                     }
@@ -476,139 +482,12 @@ if ($nv_Request->isset_request('save', 'post')) {
                 $dataform['sql_choices'] = $choicesql_module . '|' . $choicesql_table . '|' . $choicesql_column_key . '|' . $choicesql_column_val . '|' . $choicesql_column_order . '|' . $choicesql_sort_type;
                 $dataform['field_choices'] = '';
             } else {
-                $error = $nv_Lang->getModule('field_sql_choices_empty');
+                !$error && $error = $nv_Lang->getModule('field_sql_choices_empty');
             }
         }
     }
-    if (empty($error)) {
-        if (empty($dataform['fid'])) {
-            $_columns_array = $db->columns_array(NV_MOD_TABLE);
 
-            if ($dataform['max_length'] <= 4294967296 and !empty($dataform['field']) and !empty($dataform['title']) and !isset($_columns_array[$dataform['field']])) {
-                $weight = $db->query('SELECT MAX(weight) FROM ' . NV_MOD_TABLE . '_field')->fetchColumn();
-                $weight = (int) $weight + 1;
-
-                $sql = 'INSERT INTO ' . NV_MOD_TABLE . "_field (
-                    field, weight, field_type, field_choices, sql_choices, match_type,
-                    match_regex, func_callback, min_length, max_length, limited_values,
-                    for_admin, required, show_register, user_editable,
-                    show_profile, class, language, default_value
-                ) VALUES (
-                    '" . $dataform['field'] . "', " . $weight . ", '" . $dataform['field_type'] . "', '" . $dataform['field_choices'] . "', " . $db->quote($dataform['sql_choices']) . ", '" . $dataform['match_type'] . "',
-                    :match_regex, :func_callback,
-                    " . $dataform['min_length'] . ', ' . $dataform['max_length'] . ', :limited_values,
-                    ' . $dataform['for_admin'] . ', ' . $dataform['required'] . ', ' . $dataform['show_register'] . ", '" . $dataform['user_editable'] . "',
-                    " . $dataform['show_profile'] . ", :class, '" . serialize($language) . "', :default_value
-                )";
-
-                $data_insert = [];
-                $data_insert['limited_values'] = $dataform['limited_values'];
-                $data_insert['match_regex'] = nv_unhtmlspecialchars($dataform['match_regex']);
-                $data_insert['func_callback'] = nv_unhtmlspecialchars($dataform['func_callback']);
-                $data_insert['class'] = $dataform['class'];
-                $data_insert['default_value'] = $dataform['default_value'];
-                $dataform['fid'] = $db->insert_id($sql, 'fid', $data_insert);
-                if ($dataform['fid']) {
-                    $type_date = '';
-                    if ($dataform['field_type'] == 'number' or $dataform['field_type'] == 'date') {
-                        $type_date = "DOUBLE NOT NULL DEFAULT '" . $dataform['default_value'] . "'";
-                    } elseif ($dataform['field_type'] == 'file') {
-                        $type_date = 'TEXT NOT NULL';
-                    } elseif ($dataform['max_length'] <= 255) {
-                        $type_date = 'VARCHAR( ' . $dataform['max_length'] . " ) NOT NULL DEFAULT ''";
-                    } elseif ($dataform['max_length'] <= 65536) {
-                        //2^16 TEXT
-                        $type_date = 'TEXT NOT NULL';
-                    } elseif ($dataform['max_length'] <= 16777216) {
-                        //2^24 MEDIUMTEXT
-                        $type_date = 'MEDIUMTEXT NOT NULL';
-                    } elseif ($dataform['max_length'] <= 4294967296) {
-                        //2^32 LONGTEXT
-                        $type_date = 'LONGTEXT NOT NULL';
-                    }
-                    $save = $db->exec('ALTER TABLE ' . NV_MOD_TABLE . '_info ADD ' . $dataform['field'] . ' ' . $type_date . ' COMMENT ' . $db->quote($dataform['title']));
-                }
-            }
-        } elseif ($dataform['max_length'] <= 4294967296) {
-            $query = 'UPDATE ' . NV_MOD_TABLE . '_field SET';
-            if ($text_fields == 1) {
-                $query .= " match_type='" . $dataform['match_type'] . "',
-                match_regex=:match_regex, func_callback=:func_callback, ";
-            }
-            $query .= ' max_length=' . $dataform['max_length'] . ', min_length=' . $dataform['min_length'] . ',
-                limited_values = :limited_values,
-                for_admin = ' . $dataform['for_admin'] . ',
-                required = ' . $dataform['required'] . ",
-                field_choices='" . $dataform['field_choices'] . "',
-                sql_choices = '" . $dataform['sql_choices'] . "',
-                show_register = " . $dataform['show_register'] . ',
-                user_editable = ' . $dataform['user_editable'] . ',
-                show_profile = ' . $dataform['show_profile'] . ",
-                class = :class,
-                language='" . serialize($language) . "',
-                default_value= :default_value
-                WHERE fid = " . $dataform['fid'];
-
-            $stmt = $db->prepare($query);
-            if ($text_fields == 1) {
-                $dataform['match_regex'] = nv_unhtmlspecialchars($dataform['match_regex']);
-                $dataform['func_callback'] = nv_unhtmlspecialchars($dataform['func_callback']);
-                $stmt->bindParam(':match_regex', $dataform['match_regex'], PDO::PARAM_STR);
-                $stmt->bindParam(':func_callback', $dataform['func_callback'], PDO::PARAM_STR);
-            }
-            $stmt->bindParam(':limited_values', $dataform['limited_values'], PDO::PARAM_STR);
-            $stmt->bindParam(':class', $dataform['class'], PDO::PARAM_STR);
-            $stmt->bindParam(':default_value', $dataform['default_value'], PDO::PARAM_STR, strlen($dataform['default_value']));
-            $save = $stmt->execute();
-
-            if (empty($dataform['system'])) {
-                if ($save and $dataform['max_length'] != $dataform_old['max_length']) {
-                    $type_date = '';
-                    if ($dataform['field_type'] == 'number' or $dataform['field_type'] == 'date') {
-                        $type_date = "DOUBLE NOT NULL DEFAULT '" . $dataform['default_value'] . "'";
-                    } elseif ($dataform['field_type'] == 'file') {
-                        $type_date = 'TEXT NOT NULL';
-                    } elseif ($dataform['max_length'] <= 255) {
-                        $type_date = 'VARCHAR( ' . $dataform['max_length'] . " ) NOT NULL DEFAULT ''";
-                    } elseif ($dataform['max_length'] <= 65536) {
-                        //2^16 TEXT
-                        $type_date = 'TEXT NOT NULL';
-                    } elseif ($dataform['max_length'] <= 16777216) {
-                        //2^24 MEDIUMTEXT
-                        $type_date = 'MEDIUMTEXT NOT NULL';
-                    } elseif ($dataform['max_length'] <= 4294967296) {
-                        //2^32 LONGTEXT
-                        $type_date = 'LONGTEXT NOT NULL';
-                    }
-                    try {
-                        $db->query('ALTER TABLE ' . NV_MOD_TABLE . '_info CHANGE ' . $dataform_old['field'] . ' ' . $dataform_old['field'] . ' ' . $type_date . ' COMMENT ' . $db->quote($dataform['title']));
-                        $save = true;
-                    } catch (Throwable $e) {
-                        $save = false;
-                        trigger_error(print_r($e, true));
-                    }
-                }
-            }
-        }
-        if ($save) {
-            $log_action = $dataform['fid'] ? 'Edit' : 'Add';
-            nv_insert_logs(NV_LANG_DATA, $module_name, $log_action . ' field', 'field: ' . $dataform['field'], $admin_info['userid']);
-
-            $redirect_url = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&rand=' . nv_genpass();
-            nv_jsonOutput([
-                'status' => 'success',
-                'mess' => $nv_Lang->getGlobal('save_success'),
-                'redirect' => nv_url_rewrite($redirect_url, true)
-            ]);
-        } else {
-            // Trường hợp không lưu được (có lỗi database hoặc validation)
-            nv_jsonOutput([
-                'status' => 'error',
-                'mess' => !empty($error) ? $error : $nv_Lang->getGlobal('error_save')
-            ]);
-        }
-    } else {
-        // Trả về lỗi dạng JSON cho AJAX request
+    if (!empty($error)) {
         $json_data = [
             'status' => 'error',
             'mess' => $error
@@ -621,6 +500,135 @@ if ($nv_Request->isset_request('save', 'post')) {
         }
         nv_jsonOutput($json_data);
     }
+
+    if (empty($dataform['fid'])) {
+        // Cập nhật sửa field
+        $_columns_array = $db->columns_array(NV_MOD_TABLE);
+
+        if ($dataform['max_length'] <= 4294967296 and !empty($dataform['field']) and !empty($dataform['title']) and !isset($_columns_array[$dataform['field']])) {
+            $weight = $db->query('SELECT MAX(weight) FROM ' . NV_MOD_TABLE . '_field')->fetchColumn();
+            $weight = (int) $weight + 1;
+
+            $sql = 'INSERT INTO ' . NV_MOD_TABLE . "_field (
+                field, weight, field_type, field_choices, sql_choices, match_type,
+                match_regex, func_callback, min_length, max_length, limited_values,
+                for_admin, required, show_register, user_editable,
+                show_profile, class, language, default_value
+            ) VALUES (
+                '" . $dataform['field'] . "', " . $weight . ", '" . $dataform['field_type'] . "', '" . $dataform['field_choices'] . "', " . $db->quote($dataform['sql_choices']) . ", '" . $dataform['match_type'] . "',
+                :match_regex, :func_callback,
+                " . $dataform['min_length'] . ', ' . $dataform['max_length'] . ', :limited_values,
+                ' . $dataform['for_admin'] . ', ' . $dataform['required'] . ', ' . $dataform['show_register'] . ", '" . $dataform['user_editable'] . "',
+                " . $dataform['show_profile'] . ", :class, '" . serialize($language) . "', :default_value
+            )";
+
+            $data_insert = [];
+            $data_insert['limited_values'] = $dataform['limited_values'];
+            $data_insert['match_regex'] = nv_unhtmlspecialchars($dataform['match_regex']);
+            $data_insert['func_callback'] = nv_unhtmlspecialchars($dataform['func_callback']);
+            $data_insert['class'] = $dataform['class'];
+            $data_insert['default_value'] = $dataform['default_value'];
+            $dataform['fid'] = $db->insert_id($sql, 'fid', $data_insert);
+            if ($dataform['fid']) {
+                $type_date = '';
+                if ($dataform['field_type'] == 'number' or $dataform['field_type'] == 'date') {
+                    $type_date = "DOUBLE NOT NULL DEFAULT '" . $dataform['default_value'] . "'";
+                } elseif ($dataform['field_type'] == 'file') {
+                    $type_date = 'TEXT NOT NULL';
+                } elseif ($dataform['max_length'] <= 255) {
+                    $type_date = 'VARCHAR( ' . $dataform['max_length'] . " ) NOT NULL DEFAULT ''";
+                } elseif ($dataform['max_length'] <= 65536) {
+                    //2^16 TEXT
+                    $type_date = 'TEXT NOT NULL';
+                } elseif ($dataform['max_length'] <= 16777216) {
+                    //2^24 MEDIUMTEXT
+                    $type_date = 'MEDIUMTEXT NOT NULL';
+                } elseif ($dataform['max_length'] <= 4294967296) {
+                    //2^32 LONGTEXT
+                    $type_date = 'LONGTEXT NOT NULL';
+                }
+                $save = $db->exec('ALTER TABLE ' . NV_MOD_TABLE . '_info ADD ' . $dataform['field'] . ' ' . $type_date . ' COMMENT ' . $db->quote($dataform['title']));
+            }
+        }
+    } elseif ($dataform['max_length'] <= 4294967296) {
+        // Thêm field
+        $query = 'UPDATE ' . NV_MOD_TABLE . '_field SET';
+        if ($text_fields == 1) {
+            $query .= " match_type='" . $dataform['match_type'] . "',
+            match_regex=:match_regex, func_callback=:func_callback, ";
+        }
+        $query .= ' max_length=' . $dataform['max_length'] . ', min_length=' . $dataform['min_length'] . ',
+            limited_values = :limited_values,
+            for_admin = ' . $dataform['for_admin'] . ',
+            required = ' . $dataform['required'] . ",
+            field_choices='" . $dataform['field_choices'] . "',
+            sql_choices = '" . $dataform['sql_choices'] . "',
+            show_register = " . $dataform['show_register'] . ',
+            user_editable = ' . $dataform['user_editable'] . ',
+            show_profile = ' . $dataform['show_profile'] . ",
+            class = :class,
+            language='" . serialize($language) . "',
+            default_value= :default_value
+            WHERE fid = " . $dataform['fid'];
+
+        $stmt = $db->prepare($query);
+        if ($text_fields == 1) {
+            $dataform['match_regex'] = nv_unhtmlspecialchars($dataform['match_regex']);
+            $dataform['func_callback'] = nv_unhtmlspecialchars($dataform['func_callback']);
+            $stmt->bindParam(':match_regex', $dataform['match_regex'], PDO::PARAM_STR);
+            $stmt->bindParam(':func_callback', $dataform['func_callback'], PDO::PARAM_STR);
+        }
+        $stmt->bindParam(':limited_values', $dataform['limited_values'], PDO::PARAM_STR);
+        $stmt->bindParam(':class', $dataform['class'], PDO::PARAM_STR);
+        $stmt->bindParam(':default_value', $dataform['default_value'], PDO::PARAM_STR, strlen($dataform['default_value']));
+        $save = $stmt->execute();
+
+        if (empty($dataform['system'])) {
+            if ($save and $dataform['max_length'] != $dataform_old['max_length']) {
+                $type_date = '';
+                if ($dataform['field_type'] == 'number' or $dataform['field_type'] == 'date') {
+                    $type_date = "DOUBLE NOT NULL DEFAULT '" . $dataform['default_value'] . "'";
+                } elseif ($dataform['field_type'] == 'file') {
+                    $type_date = 'TEXT NOT NULL';
+                } elseif ($dataform['max_length'] <= 255) {
+                    $type_date = 'VARCHAR( ' . $dataform['max_length'] . " ) NOT NULL DEFAULT ''";
+                } elseif ($dataform['max_length'] <= 65536) {
+                    //2^16 TEXT
+                    $type_date = 'TEXT NOT NULL';
+                } elseif ($dataform['max_length'] <= 16777216) {
+                    //2^24 MEDIUMTEXT
+                    $type_date = 'MEDIUMTEXT NOT NULL';
+                } elseif ($dataform['max_length'] <= 4294967296) {
+                    //2^32 LONGTEXT
+                    $type_date = 'LONGTEXT NOT NULL';
+                }
+                try {
+                    $db->query('ALTER TABLE ' . NV_MOD_TABLE . '_info CHANGE ' . $dataform_old['field'] . ' ' . $dataform_old['field'] . ' ' . $type_date . ' COMMENT ' . $db->quote($dataform['title']));
+                    $save = true;
+                } catch (Throwable $e) {
+                    $save = false;
+                    trigger_error(print_r($e, true));
+                }
+            }
+        }
+    }
+
+    if ($save) {
+        $log_action = $dataform['fid'] ? 'Edit' : 'Add';
+        nv_insert_logs(NV_LANG_DATA, $module_name, $log_action . ' field', 'field: ' . $dataform['field'], $admin_info['userid']);
+
+        $redirect_url = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&rand=' . nv_genpass();
+        nv_jsonOutput([
+            'status' => 'success',
+            'mess' => $nv_Lang->getGlobal('save_success'),
+            'redirect' => nv_url_rewrite($redirect_url, true)
+        ]);
+    }
+
+    nv_jsonOutput([
+        'status' => 'error',
+        'mess' => !empty($error) ? $error : $nv_Lang->getGlobal('error_save')
+    ]);
 }
 
 // Xóa trường
