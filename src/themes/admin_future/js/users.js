@@ -333,9 +333,6 @@ $(function () {
                 data: 'qlist=1',
                 success: function(data) {
                     $('#module_show_list').html(data);
-                },
-                error: function() {
-                    nukeviet.toast('Error loading list', 'error');
                 }
             });
         }
@@ -488,9 +485,6 @@ $(function () {
                     if (res.mess) {
                         nukeviet.toast(res.mess, res.status === 'success' ? 'success' : 'error');
                     }
-                },
-                error: function() {
-                    nukeviet.toast('Error response', 'error');
                 }
             });
         });

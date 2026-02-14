@@ -9,7 +9,7 @@
                 <input type="text" class="form-control" name="new_title" id="new_title" maxlength="255" autocomplete="off">
             </div>
             <div class="col-sm-3 col-lg-4">
-                <button type="button" class="btn btn-primary" id="btn_add_question" data-icon="fa-solid fa-plus">
+                <button type="button" class="btn btn-primary" id="btn_add_question">
                     <i class="fa-solid fa-plus" data-icon="fa-solid fa-plus"></i> {$LANG->getModule('addquestion')}
                 </button>
             </div>

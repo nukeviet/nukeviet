@@ -24,13 +24,13 @@
                             <input type="hidden" name="hidden_{$row.qid}" id="hidden_{$row.qid}" value="{$row.title}">
                             <div class="input-group input-group-sm">
                                 <input type="text" class="form-control" name="title_{$row.qid}" id="title_{$row.qid}" value="{$row.title}" maxlength="240" autocomplete="off">
-                                <button type="button" class="btn btn-primary" data-qid="{$row.qid}" data-action="save" data-icon="fa-solid fa-floppy-disk" aria-label="{$LANG->getGlobal('save')}">
+                                <button type="button" class="btn btn-primary" data-qid="{$row.qid}" data-action="save" aria-label="{$LANG->getGlobal('save')}">
                                     <i class="fa-solid fa-floppy-disk" data-icon="fa-solid fa-floppy-disk"></i> {$LANG->getGlobal('save')}
                                 </button>
                             </div>
                         </td>
                         <td class="text-center">
-                            <button type="button" class="btn btn-sm btn-danger" data-qid="{$row.qid}" data-action="delete" data-icon="fa-solid fa-trash" aria-label="{$LANG->getGlobal('delete')}">
+                            <button type="button" class="btn btn-sm btn-danger" data-qid="{$row.qid}" data-action="delete" aria-label="{$LANG->getGlobal('delete')}">
                                 <i class="fa-solid fa-trash" data-icon="fa-solid fa-trash"></i>
                             </button>
                         </td>
