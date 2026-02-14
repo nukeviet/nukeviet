@@ -491,3 +491,306 @@ $(function () {
         });
     }
 });
+
+// Groups management
+$(document).ready(function() {
+    // Get alias
+    $('#get_alias_btn').on('click', function() {
+        get_alias();
+        return false;
+    });
+
+    $('#addCat [name=title]').on('change', function() {
+        const alias = strip_tags(trim($('#addCat [name=alias]').val()));
+        if (alias == '') {
+            get_alias();
+        }
+    });
+
+    function get_alias() {
+        const title = strip_tags(trim($('#addCat [name=title]').val()));
+        if (title != '') {
+            const btn = $('#get_alias_btn');
+            const icon = $('i', btn);
+            if (icon.is('.fa-spinner')) {
+                return;
+            }
+            icon.removeClass(icon.data('icon')).addClass('fa-spinner fa-spin-pulse');
+            
+            const id = $('input[name="save"]').closest('form').find('input[name="checkss"]').data('id') || 0;
+            $.post(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=groups&nocache=' + new Date().getTime(), 'getAlias=1&id=' + id + '&title=' + encodeURIComponent(title), function(res) {
+                $('#addCat [name=alias]').val(res);
+                icon.removeClass('fa-spinner fa-spin-pulse').addClass(icon.data('icon'));
+            });
+        }
+    }
+
+    // Datepicker for exp_time
+    if ($('[name="exp_time"]').length) {
+        $('[name="exp_time"]').datepicker({
+            showOn: "both",
+            dateFormat: nv_jsdate_post.replace('yyyy', 'yy'),
+            changeMonth: true,
+            changeYear: true,
+            showOtherMonths: true,
+            buttonImage: null,
+            buttonImageOnly: true,
+            buttonText: null
+        });
+    }
+
+    // Color picker
+    if ($('[name="group_color"]').length && typeof $().colpick !== 'undefined') {
+        $('[name="group_color"]').colpick({
+            layout: 'hex',
+            submit: 0,
+            colorScheme: 'dark',
+            onChange: function(hsb, hex, rgb, el, bySetColor) {
+                $('[name="group_color_demo"]').css('background-color', '#' + hex);
+                if (!bySetColor) $(el).val('#' + hex);
+            }
+        }).keyup(function() {
+            $(this).colpickSetColor(this.value);
+        });
+    }
+
+    // Xử lý xóa nhóm
+    $(document).on('click', 'a.delGroup', function(e) {
+        e.preventDefault();
+        const btn = $(this);
+        const icon = $('i', btn);
+        if (icon.is('.fa-spinner')) {
+            return;
+        }
+        
+        if (confirm(nv_is_del_confirm[0])) {
+            icon.removeClass('fa-trash').addClass('fa-spinner fa-spin-pulse');
+            
+            $.ajax({
+                type: 'POST',
+                url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=groups',
+                data: 'del=' + btn.data('id') + '&tokend=' + btn.data('tokend'),
+                success: function(res) {
+                    if (res == 'OK') {
+                        location.reload();
+                    } else {
+                        icon.removeClass('fa-spinner fa-spin-pulse').addClass('fa-trash');
+                        nukeviet.toast(res, 'error');
+                    }
+                },
+                error: function(xhr, text, err) {
+                    icon.removeClass('fa-spinner fa-spin-pulse').addClass('fa-trash');
+                    nukeviet.toast(text, 'error');
+                    console.log(xhr, text, err);
+                }
+            });
+        }
+    });
+
+    // Xử lý thay đổi trạng thái kích hoạt
+    $(document).on('change', 'input.actGroup', function() {
+        const $this = $(this);
+        $this.prop('disabled', true);
+        
+        $.ajax({
+            type: 'POST',
+            url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=groups',
+            data: 'act=' + $this.data('id') + '&tokend=' + $this.data('tokend') + '&rand=' + nv_randomPassword(10),
+            success: function(res) {
+                const parts = res.split('|');
+                $this.prop('disabled', false);
+                if (parts[0] == 'ERROR') {
+                    $this.prop('checked', parts[1] == '1');
+                }
+            }
+        });
+    });
+
+    // Xử lý xóa các nhóm không kích hoạt
+    $(document).on('click', '[data-toggle="delInactiveGroup"]', function(e) {
+        e.preventDefault();
+        const btn = $(this);
+        
+        if (confirm(btn.data('msgconfirm'))) {
+            const icon = $('i', btn);
+            if (icon.is('.fa-spinner')) {
+                return;
+            }
+            icon.removeClass('fa-trash').addClass('fa-spinner fa-spin-pulse');
+            
+            $.ajax({
+                type: 'POST',
+                url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=groups',
+                data: 'deleteinactive=1&tokend=' + btn.data('tokend'),
+                success: function(res) {
+                    icon.removeClass('fa-spinner fa-spin-pulse').addClass('fa-trash');
+                    nukeviet.toast(res, 'success');
+                    setTimeout(function() {
+                        location.reload();
+                    }, 1000);
+                },
+                error: function(xhr, text, err) {
+                    icon.removeClass('fa-spinner fa-spin-pulse').addClass('fa-trash');
+                    nukeviet.toast(text, 'error');
+                    console.log(xhr, text, err);
+                }
+            });
+        }
+    });
+
+    // Quản lý thành viên - userlist
+    const urlParams = new URLSearchParams(window.location.search);
+    const gid = urlParams.get('userlist');
+    
+    if (gid && $('#pageContent').length && typeof nv_randomPassword !== 'undefined') {
+        $('div#pageContent').load(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=groups&listUsers=' + gid + '&random=' + nv_randomPassword(10));
+
+        // Tìm kiếm người dùng
+        $(document).on('click', 'input[name=searchUser]', function() {
+            const filtersql = $('#filtersql_val').val() || '';
+            nv_open_browse(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=getuserid&area=uid&filtersql=' + filtersql, 'NVImg', 850, 420, 'resizable=no,scrollbars=no,toolbar=no,location=no,status=no');
+            return false;
+        });
+
+        // Thêm người dùng vào nhóm
+        $(document).on('click', 'input[name=addUser]', function() {
+            let uid = $('#ablist input[name=uid]').val();
+            uid = intval(uid);
+            if (uid == 0) {
+                uid = '';
+            }
+            $('#ablist input[name=uid]').val(uid);
+            if (uid == '') {
+                alert(nv_is_add_user_confirm[1]);
+                $('#ablist input[name=uid]').focus();
+                return false;
+            }
+            
+            $('#pageContent input, #pageContent select').attr('disabled', 'disabled');
+            $.ajax({
+                type: 'POST',
+                url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=groups',
+                data: 'gid=' + gid + '&uid=' + uid + '&rand=' + nv_randomPassword(10),
+                success: function(res) {
+                    if (res == 'OK') {
+                        $('#ablist input[name=uid]').val('');
+                        $('div#pageContent').load(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=groups&listUsers=' + gid + '&random=' + nv_randomPassword(10));
+                    } else {
+                        nukeviet.toast(res, 'error');
+                    }
+                }
+            });
+            return false;
+        });
+
+        // Duyệt thành viên
+        $(document).on('click', 'a.approved', function() {
+            if (confirm(nv_is_add_user_confirm[0])) {
+                $.ajax({
+                    type: 'POST',
+                    url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=groups',
+                    data: 'gid=' + gid + '&approved=' + $(this).data('id'),
+                    success: function(res) {
+                        if (res == 'OK') {
+                            $('div#pageContent').load(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=groups&listUsers=' + gid + '&random=' + nv_randomPassword(10));
+                        } else {
+                            nukeviet.toast(res, 'error');
+                        }
+                    }
+                });
+            }
+            return false;
+        });
+
+        // Từ chối thành viên
+        $(document).on('click', 'a.denied', function() {
+            if (confirm(nv_is_exclude_user_confirm[0])) {
+                $.ajax({
+                    type: 'POST',
+                    url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=groups',
+                    data: 'gid=' + gid + '&denied=' + $(this).data('id'),
+                    success: function(res) {
+                        if (res == 'OK') {
+                            $('div#pageContent').load(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=groups&listUsers=' + gid + '&random=' + nv_randomPassword(10));
+                        } else {
+                            nukeviet.toast(res, 'error');
+                        }
+                    }
+                });
+            }
+            return false;
+        });
+
+        // Xóa leader
+        $(document).on('click', 'a.deleteleader', function() {
+            if (confirm(nv_is_del_confirm[0])) {
+                $.ajax({
+                    type: 'POST',
+                    url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=groups',
+                    data: 'gid=' + gid + '&exclude=' + $(this).attr('title'),
+                    success: function(res) {
+                        if (res == 'OK') {
+                            $('div#pageContent').load(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=groups&listUsers=' + gid + '&random=' + nv_randomPassword(10));
+                        } else {
+                            nukeviet.toast(res, 'error');
+                        }
+                    }
+                });
+            }
+            return false;
+        });
+
+        // Giáng cấp
+        $(document).on('click', 'a.demote', function() {
+            $.ajax({
+                type: 'POST',
+                url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=groups',
+                data: 'gid=' + gid + '&demote=' + $(this).data('id'),
+                success: function(res) {
+                    if (res == 'OK') {
+                        $('div#pageContent').load(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=groups&listUsers=' + gid + '&random=' + nv_randomPassword(10));
+                    } else {
+                        nukeviet.toast(res, 'error');
+                    }
+                }
+            });
+            return false;
+        });
+
+        // Xóa member
+        $(document).on('click', 'a.deletemember', function() {
+            if (confirm(nv_is_del_confirm[0])) {
+                $.ajax({
+                    type: 'POST',
+                    url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=groups',
+                    data: 'gid=' + gid + '&exclude=' + $(this).attr('title'),
+                    success: function(res) {
+                        if (res == 'OK') {
+                            $('div#pageContent').load(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=groups&listUsers=' + gid + '&random=' + nv_randomPassword(10));
+                        } else {
+                            nukeviet.toast(res, 'error');
+                        }
+                    }
+                });
+            }
+            return false;
+        });
+
+        // Thăng cấp
+        $(document).on('click', 'a.promote', function() {
+            $.ajax({
+                type: 'POST',
+                url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=groups',
+                data: 'gid=' + gid + '&promote=' + $(this).data('id'),
+                success: function(res) {
+                    if (res == 'OK') {
+                        $('div#pageContent').load(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=groups&listUsers=' + gid + '&random=' + nv_randomPassword(10));
+                    } else {
+                        nukeviet.toast(res, 'error');
+                    }
+                }
+            });
+            return false;
+        });
+    }
+});
