@@ -451,3 +451,7 @@
 {if $LOAD_SQLCHOICE}
 <input type="hidden" id="sql_data_choice" data-module="{$SQL_DATA_CHOICE[0]}" data-table="{$SQL_DATA_CHOICE[1]}" data-column-key="{$SQL_DATA_CHOICE[2]}" data-column-val="{$SQL_DATA_CHOICE[3]}" data-column-order="{$SQL_DATA_CHOICE[4]}" data-column-sort="{$SQL_DATA_CHOICE[5]}">
 {/if}
+
+<script>
+var nv_check_session = '{$smarty.const.NV_CHECK_SESSION}';
+</script>
