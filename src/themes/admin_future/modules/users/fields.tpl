@@ -358,7 +358,7 @@
                             <p class="fw-bold">{$ft.key}</p>
                             <div class="d-flex flex-wrap gap-1">
                                 {foreach from=$ft.mimes item=mime}
-                                <label class="btn btn-sm btn-outline-secondary filemime">
+                                <label class="d-inline-flex gap-1 align-items-center btn btn-sm btn-outline-secondary filemime">
                                     <input type="checkbox" data-toggle="mimecheck" name="mime[]" value="{$mime.key}"{if $mime.checked} checked{/if}> {$mime.key}
                                 </label>
                                 {/foreach}
@@ -395,7 +395,7 @@
                 <div class="col-sm-4 col-lg-3 text-sm-end fw-medium">{$LANG->getModule('field_photo_max_size')}</div>
                 <div class="col-sm-8 col-lg-6 col-xxl-8">
                     <div class="mb-3">
-                        <label class="form-label fw-medium">{$LANG->getModule('field_photo_width')}</label>
+                        <div class="form-label fw-medium">{$LANG->getModule('field_photo_width')}</div>
                         <div class="d-flex flex-wrap gap-2 align-items-center">
                             <div class="input-group" style="width: 120px;">
                                 <span class="input-group-text">=</span>
@@ -413,7 +413,7 @@
                         </div>
                     </div>
                     <div class="mb-3">
-                        <label class="form-label fw-medium">{$LANG->getModule('field_photo_height')}</label>
+                        <div class="form-label fw-medium">{$LANG->getModule('field_photo_height')}</div>
                         <div class="d-flex flex-wrap gap-2 align-items-center">
                             <div class="input-group" style="width: 120px;">
                                 <span class="input-group-text">=</span>
