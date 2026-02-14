@@ -106,7 +106,10 @@ thay vì assign constant từ PHP.
     </div>
 </div>
 ```
-- Trong cấu trúc bảng dạng danh sách các item nếu cột tương ứng ở phần tbody không dùng text-center thì phần thead cũng không dùng text-center để tránh lệch lạc giao diện. Các cột ở thead luôn luôn phải có class `text-nowrap` để tránh bị co dãn không mong muốn khi có nhiều cột.
+- Trong cấu trúc bảng dạng danh sách các item:
+  - Nếu cột tương ứng ở phần tbody không dùng text-center thì phần thead cũng không dùng text-center để tránh lệch lạc giao diện. Các cột ở thead luôn luôn phải có class `text-nowrap` để tránh bị co dãn không mong muốn khi có nhiều cột.
+  - Độ rộng cột trong thead dùng style witdh % thay vì cố định px.
+  - Select thay đổi thứ tự nếu có ở tbody thì dùng class `fw-75` để cố định kích thước tránh bị che mất nội dung text trong nó.
 - Giao diện admin_future đã có sẵn css của select2 nên nếu có select2.min.css thì xóa đi trong tpl
 - Đối với các ô input type=password nằm trong input-group nếu group đã có button xử lý ẩn hiện mật khẩu thì type=password đó phải thêm class `btn-eye-added`
 
@@ -183,7 +186,7 @@ $tpl->assign('LANG', $nv_Lang);
 - Chuyển js vào thì phải kiểm tra đúng cú pháp chứ không copy-paste nguyên xi từ tpl vào. Vì trong tpl có thể có các thẻ html không hợp lệ trong js hoặc sai thẻ đóng mở dẫn tới lỗi js.
 - Các biến trong js nếu không bắt buộc phải khai báo bằng var thì dùng let hoặc const để khai báo.
 - Thao tác xử lý ajax từ các event click phải tuân theo nguyên tắc:
-  Đối tượng được click cần có một icon fontawesome, có `data-icon` tương ứng với icon ban đầu. JS xử lý:
+  Đối tượng được click cần có một icon fontawesome, có `data-icon` tương ứng với icon ban đầu, lưu ý không chứa `fa-solid` trong data-icon. JS xử lý:
   ```js
   const btn = $(this);
   const icon = $('i', btn);
