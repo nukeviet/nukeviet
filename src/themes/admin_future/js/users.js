@@ -530,6 +530,96 @@ $(document).ready(function() {
         }
     }
 
+    // Popover management for weight change
+    let popOverALl = [];
+    
+    function destroyAllPop() {
+        $.each(popOverALl, function(k, v) {
+            $(v).popover('dispose');
+            $(v).data('havepop', false);
+        });
+        popOverALl = [];
+    }
+
+    function getPopoverContent(e) {
+        const keyID = '#tmpgroup_' + $(e).data('mod');
+        let tmpgroup = $(keyID);
+        if (tmpgroup.length && tmpgroup.data('num') != $(e).data('num')) {
+            tmpgroup.remove();
+            tmpgroup = $(keyID);
+        }
+        if (!tmpgroup.length) {
+            $('body').append('<ul id="tmpgroup_' + $(e).data('mod') + '" class="hidden" data-num="' + $(e).data('num') + '"></ul>');
+            tmpgroup = $(keyID);
+            for (let i = $(e).data('min'); i <= $(e).data('num'); i++) {
+                tmpgroup.append('<li><a href="#" data-value="' + i + '">' + i + '</a></li>');
+            }
+        }
+        return '<div class="dropdown-tool-ctn"><ul class="dropdown-tool" data-mod="' + $(e).data('mod') + '" data-id="' + $(e).data('id') + '">' + tmpgroup.html() + '</ul></div>';
+    }
+
+    // Handle change weight button click
+    $(document).on('click', '[data-toggle="changegroupweight"]', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        const $this = $(this);
+        popOverALl.push(this);
+        if (!$this.data('havepop')) {
+            $this.data('havepop', true);
+            $this.popover({
+                container: 'body',
+                html: true,
+                placement: 'bottom',
+                content: getPopoverContent(this),
+                trigger: 'manual',
+                sanitize: false
+            });
+            $this.popover('show');
+            $this.on('shown.bs.popover', function() {
+                const ctn = $('#' + $this.attr('aria-describedby'));
+                const wrapArea = ctn.find('.dropdown-tool-ctn');
+                const wrapContent = ctn.find('.dropdown-tool');
+                wrapContent.find('[data-value="' + $this.data('current') + '"]').addClass('active');
+                if (wrapArea.height() < wrapContent.height()) {
+                    const item = wrapContent.find('li:first');
+                    const scrollTop = ($this.data('current') - $this.data('min')) * item.height();
+                    wrapArea.scrollTop(scrollTop);
+                }
+            });
+        }
+    });
+
+    // Handle weight selection from popover
+    $(document).on('click', '.dropdown-tool a', function(e) {
+        e.preventDefault();
+        destroyAllPop();
+        const $this = $(this);
+        const ctn = $this.parent().parent();
+        const btn = $('#group_' + ctn.data('mod') + '_' + ctn.data('id'));
+        btn.find('span.text').html('<i class="fa-solid fa-spinner fa-spin"></i>' + $this.html());
+        btn.prop('disabled', true);
+        $.post(
+            script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=groups&nocache=' + new Date().getTime(),
+            'id=' + ctn.data('id') + '&cWeight=' + $this.data('value') + '&tokend=' + btn.data('tokend'),
+            function(res) {
+                if (res != 'OK') {
+                    nukeviet.toast(btn.data('msgerror'), 'error');
+                }
+                location.reload();
+            }
+        );
+    });
+
+    // Handle popover click (prevent close)
+    $(document).on('click', 'div.popover', function(e) {
+        e.stopPropagation();
+    });
+
+    // Close popover when clicking outside
+    $(document).on('click', function() {
+        destroyAllPop();
+    });
+
     // Datepicker for exp_time
     if ($('[name="exp_time"]').length) {
         $('[name="exp_time"]').datepicker({
