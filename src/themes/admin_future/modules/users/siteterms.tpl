@@ -1,5 +1,6 @@
 <form method="post" class="ajax-submit" action="{$smarty.const.NV_BASE_ADMINURL}index.php?{$smarty.const.NV_LANG_VARIABLE}={$smarty.const.NV_LANG_DATA}&amp;{$smarty.const.NV_NAME_VARIABLE}={$MODULE_NAME}&amp;{$smarty.const.NV_OP_VARIABLE}={$OP}" novalidate>
     <input type="hidden" name="save" value="1">
+    <input type="hidden" name="checkss" value="{$CHECKSS}">
     <div class="card">
         <div class="card-header fs-5 fw-medium">{$LANG->getModule('siteterms')}</div>
         <div class="card-body">
