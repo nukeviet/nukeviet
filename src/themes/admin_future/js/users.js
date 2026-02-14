@@ -347,7 +347,6 @@ $(function () {
             const title = $('#new_title').val().trim();
 
             if (!title) {
-                nukeviet.toast('Vui lòng nhập câu hỏi', 'error');
                 $('#new_title').focus();
                 return;
             }
@@ -398,13 +397,11 @@ $(function () {
             const oldTitle = $('#hidden_' + qid).val();
 
             if (!title) {
-                nukeviet.toast('Vui lòng nhập câu hỏi', 'error');
                 $('#title_' + qid).focus();
                 return;
             }
 
             if (title === oldTitle) {
-                nukeviet.toast('Không có thay đổi', 'info');
                 return;
             }
 

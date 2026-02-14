@@ -25,7 +25,7 @@ if ($nv_Request->isset_request('edit', 'post')) {
     if (!hash_equals(NV_CHECK_SESSION, $checkss)) {
         nv_jsonOutput([
             'status' => 'error',
-            'mess' => 'Invalid session'
+            'mess' => 'Wrong URL'
         ]);
     }
 
@@ -72,7 +72,7 @@ if ($nv_Request->isset_request('add', 'post')) {
     if (!hash_equals(NV_CHECK_SESSION, $checkss)) {
         nv_jsonOutput([
             'status' => 'error',
-            'mess' => 'Invalid session'
+            'mess' => 'Wrong URL'
         ]);
     }
 
@@ -121,7 +121,7 @@ if ($nv_Request->isset_request('changeweight', 'post')) {
     if (!hash_equals(NV_CHECK_SESSION, $checkss)) {
         nv_jsonOutput([
             'status' => 'error',
-            'mess' => 'Invalid session'
+            'mess' => 'Wrong URL'
         ]);
     }
 
@@ -177,7 +177,7 @@ if ($nv_Request->isset_request('del', 'post')) {
     if (!hash_equals(NV_CHECK_SESSION, $checkss)) {
         nv_jsonOutput([
             'status' => 'error',
-            'mess' => 'Invalid session'
+            'mess' => 'Wrong URL'
         ]);
     }
 
