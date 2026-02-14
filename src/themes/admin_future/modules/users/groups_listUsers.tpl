@@ -67,7 +67,7 @@
                             <td class="text-center">
                             {if $row.show_tools}
                             <i class="fa-solid fa-star-half"></i> <a class="demote" href="javascript:void(0);" data-id="{$row.userid}">{$LANG->getModule('demote')}</a>
-                            <i class="fa-solid fa-trash"></i> <a class="deleteleader" href="javascript:void(0);" title="{$row.userid}">{$LANG->getModule('exclude_user2')}</a>
+                            <i class="fa-solid fa-trash"></i> <a class="deleteleader" href="javascript:void(0);" data-userid="{$row.userid}">{$LANG->getModule('exclude_user2')}</a>
                             {/if}
                             </td>
                         </tr>
@@ -108,8 +108,8 @@
                             <td><a href="mailto:{$row.email}">{$row.email}</a></td>
                             <td class="text-center">
                             {if $row.show_tools}
-                            <i class="fa-solid fa-star"></i> <a class="promote" href="javascript:void(0);" data-id="{$row.userid}">{$LANG->getModule('promote')}</a> -
-                            <i class="fa-solid fa-trash"></i> <a class="deletemember" href="javascript:void(0);" title="{$row.userid}">{$LANG->getModule('exclude_user2')}</a>
+                            <i class="fa-solid fa-star"></i> <a class="promote" href="javascript:void(0);" data-id="{$row.userid}">{$LANG->getModule('promote')}</a>
+                            <i class="fa-solid fa-trash"></i> <a class="deletemember" href="javascript:void(0);" data-userid="{$row.userid}">{$LANG->getModule('exclude_user2')}</a>
                             {/if}
                             </td>
                         </tr>

@@ -500,15 +500,15 @@ $(document).ready(function() {
         return false;
     });
 
-    $('#addCat [name=title]').on('change', function() {
-        const alias = strip_tags(trim($('#addCat [name=alias]').val()));
+    $('#groupForm [name=title]').on('change', function() {
+        const alias = strip_tags(trim($('#groupForm [name=alias]').val()));
         if (alias == '') {
             get_alias();
         }
     });
 
     function get_alias() {
-        const title = strip_tags(trim($('#addCat [name=title]').val()));
+        const title = strip_tags(trim($('#groupForm [name=title]').val()));
         if (title != '') {
             const btn = $('#get_alias_btn');
             const icon = $('i', btn);
@@ -517,9 +517,11 @@ $(document).ready(function() {
             }
             icon.removeClass(icon.data('icon')).addClass('fa-spinner fa-spin-pulse');
             
-            const id = $('input[name="save"]').closest('form').find('input[name="checkss"]').data('id') || 0;
+            // Lấy ID từ URL nếu đang edit
+            const urlParams = new URLSearchParams(window.location.search);
+            const id = urlParams.get('id') || 0;
             $.post(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=groups&nocache=' + new Date().getTime(), 'getAlias=1&id=' + id + '&title=' + encodeURIComponent(title), function(res) {
-                $('#addCat [name=alias]').val(res);
+                $('#groupForm [name=alias]').val(res);
                 icon.removeClass('fa-spinner fa-spin-pulse').addClass(icon.data('icon'));
             });
         }
@@ -727,7 +729,7 @@ $(document).ready(function() {
                 $.ajax({
                     type: 'POST',
                     url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=groups',
-                    data: 'gid=' + gid + '&exclude=' + $(this).attr('title'),
+                    data: 'gid=' + gid + '&exclude=' + $(this).data('userid'),
                     success: function(res) {
                         if (res == 'OK') {
                             $('div#pageContent').load(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=groups&listUsers=' + gid + '&random=' + nv_randomPassword(10));
@@ -763,7 +765,7 @@ $(document).ready(function() {
                 $.ajax({
                     type: 'POST',
                     url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=groups',
-                    data: 'gid=' + gid + '&exclude=' + $(this).attr('title'),
+                    data: 'gid=' + gid + '&exclude=' + $(this).data('userid'),
                     success: function(res) {
                         if (res == 'OK') {
                             $('div#pageContent').load(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=groups&listUsers=' + gid + '&random=' + nv_randomPassword(10));

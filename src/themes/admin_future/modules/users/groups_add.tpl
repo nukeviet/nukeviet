@@ -5,7 +5,7 @@
 <script type="text/javascript" src="{$smarty.const.ASSETS_LANG_STATIC_URL}/js/language/jquery.ui.datepicker-{$smarty.const.NV_LANG_INTERFACE}.js"></script>
 <script src="{$smarty.const.NV_BASE_SITEURL}themes/admin_future/js/colpick.js"></script>
 
-<form id="addCat" class="ajax-submit" method="post" action="{$smarty.const.NV_BASE_ADMINURL}index.php?{$smarty.const.NV_LANG_VARIABLE}={$smarty.const.NV_LANG_DATA}&amp;{$smarty.const.NV_NAME_VARIABLE}={$MODULE_NAME}&amp;{$smarty.const.NV_OP_VARIABLE}={$OP}{if !empty($DATA.id)}&amp;edit&amp;id={$DATA.id}{else}&amp;add{/if}" autocomplete="off" novalidate>
+<form id="groupForm" class="ajax-submit" method="post" action="{$smarty.const.NV_BASE_ADMINURL}index.php?{$smarty.const.NV_LANG_VARIABLE}={$smarty.const.NV_LANG_DATA}&amp;{$smarty.const.NV_NAME_VARIABLE}={$MODULE_NAME}&amp;{$smarty.const.NV_OP_VARIABLE}={$OP}{if !empty($DATA.id)}&amp;edit&amp;id={$DATA.id}{else}&amp;add{/if}" autocomplete="off" novalidate>
     <div class="card border-primary border-3 border-bottom-0 border-start-0 border-end-0 mb-4">
         <div class="card-header fs-5 fw-medium">{$PAGE_TITLE}</div>
         <div class="card-body">
