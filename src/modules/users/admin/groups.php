@@ -790,13 +790,10 @@ if ($nv_Request->isset_request('add', 'get') or $nv_Request->isset_request('edit
         }
 
         $post['content'] = htmlspecialchars(nv_editor_br2nl($post['content']));
-        $post['content'] = htmlspecialchars(nv_editor_br2nl($post['content']));
 
         if (!empty($post['group_avatar']) and is_file(NV_UPLOADS_REAL_DIR . '/' . $module_upload . '/' . $post['group_avatar'])) {
             $post['group_avatar'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $post['group_avatar'];
         }
-        $post['checkss'] = $checkss;
-
         $post['checkss'] = $checkss;
         
         // Chuẩn bị dữ liệu cho template
