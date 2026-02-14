@@ -48,7 +48,8 @@ if ($nv_Request->isset_request('edit', 'post')) {
         nv_insert_logs(NV_LANG_DATA, $module_name, $nv_Lang->getModule('savequestion'), 'id: ' . $qid . '; ' . $title);
         nv_jsonOutput([
             'status' => 'success',
-            'mess' => $nv_Lang->getGlobal('save_success')
+            'mess' => $nv_Lang->getGlobal('save_success'),
+            'refresh' => true
         ]);
     }
 
@@ -93,7 +94,8 @@ if ($nv_Request->isset_request('add', 'post')) {
         nv_insert_logs(NV_LANG_DATA, $module_name, $nv_Lang->getModule('addquestion'), $title);
         nv_jsonOutput([
             'status' => 'success',
-            'mess' => $nv_Lang->getGlobal('add_success')
+            'mess' => $nv_Lang->getGlobal('add_success'),
+            'refresh' => true
         ]);
     }
 
@@ -146,7 +148,8 @@ if ($nv_Request->isset_request('changeweight', 'post')) {
     nv_insert_logs(NV_LANG_DATA, $module_name, $nv_Lang->getGlobal('changeweight'), 'qid: ' . $qid);
     nv_jsonOutput([
         'status' => 'success',
-        'mess' => ''
+        'mess' => '',
+        'refresh' => true
     ]);
 }
 
@@ -186,7 +189,8 @@ if ($nv_Request->isset_request('del', 'post')) {
 
             nv_jsonOutput([
                 'status' => 'success',
-                'mess' => $nv_Lang->getGlobal('delete_success')
+                'mess' => $nv_Lang->getGlobal('delete_success'),
+                'refresh' => true
             ]);
         }
     }
@@ -201,41 +205,33 @@ $tpl = new \NukeViet\Template\NVSmarty();
 $tpl->setTemplateDir(get_module_tpl_dir('question.tpl'));
 $tpl->assign('LANG', $nv_Lang);
 
-// Danh sach cau hoi
-if ($nv_Request->isset_request('qlist', 'post')) {
-    if (!defined('NV_IS_AJAX')) {
-        exit('Wrong URL');
-    }
+// Load danh sách câu hỏi
+$sql = 'SELECT * FROM ' . NV_MOD_TABLE . "_question WHERE lang='" . NV_LANG_DATA . "' ORDER BY weight ASC";
+$_rows = $db->query($sql)->fetchAll();
+$num = count($_rows);
 
-    $sql = 'SELECT * FROM ' . NV_MOD_TABLE . "_question WHERE lang='" . NV_LANG_DATA . "' ORDER BY weight ASC";
-    $_rows = $db->query($sql)->fetchAll();
-    $num = count($_rows);
-    
-    $array_questions = [];
-    if ($num) {
-        foreach ($_rows as $row) {
-            $weights = [];
-            for ($i = 1; $i <= $num; ++$i) {
-                $weights[] = [
-                    'key' => $i,
-                    'title' => $i,
-                    'selected' => $i == $row['weight']
-                ];
-            }
-            
-            $array_questions[] = [
-                'qid' => $row['qid'],
-                'title' => $row['title'],
-                'weights' => $weights
+$array_questions = [];
+if ($num) {
+    foreach ($_rows as $row) {
+        $weights = [];
+        for ($i = 1; $i <= $num; ++$i) {
+            $weights[] = [
+                'key' => $i,
+                'title' => $i,
+                'selected' => $i == $row['weight']
             ];
         }
+        
+        $array_questions[] = [
+            'qid' => $row['qid'],
+            'title' => $row['title'],
+            'weights' => $weights
+        ];
     }
-
-    $tpl->assign('DATA', $array_questions);
-    nv_htmlOutput($tpl->fetch('question.tpl'));
 }
 
-$contents = $tpl->fetch('question_load.tpl');
+$tpl->assign('DATA', $array_questions);
+$contents = $tpl->fetch('question.tpl');
 
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_admin_theme($contents);

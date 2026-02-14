@@ -325,23 +325,12 @@ $(function () {
 
     // Trang câu hỏi bảo mật
     if (nv_func_name == 'question') {
-        // Load danh sách câu hỏi
-        function loadQuestionList() {
-            $.ajax({
-                type: 'POST',
-                url: script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=question&nocache=' + new Date().getTime(),
-                data: 'qlist=1',
-                success: function(data) {
-                    $('#module_show_list').html(data);
-                }
-            });
-        }
-
         // Thêm câu hỏi mới
         $('#btn_add_question').on('click', function() {
             const btn = $(this);
             const icon = $('i', btn);
             const title = $('#new_title').val().trim();
+            const checkss = btn.data('checkss');
 
             if (!title) {
                 $('#new_title').focus();
@@ -357,13 +346,15 @@ $(function () {
             $.ajax({
                 type: 'POST',
                 url: script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=question&nocache=' + new Date().getTime(),
-                data: 'add=1&title=' + encodeURIComponent(title) + '&checkss=' + nv_check_session,
+                data: 'add=1&title=' + encodeURIComponent(title) + '&checkss=' + checkss,
                 dataType: 'json',
                 success: function(res) {
-                    icon.removeClass('fa-spinner fa-spin-pulse').addClass(icon.data('icon'));
                     if (res.status === 'success') {
-                        $('#new_title').val('');
-                        loadQuestionList();
+                        if (res.refresh) {
+                            window.location.reload();
+                        }
+                    } else {
+                        icon.removeClass('fa-spinner fa-spin-pulse').addClass(icon.data('icon'));
                     }
                     if (res.mess) {
                         nukeviet.toast(res.mess, res.status === 'success' ? 'success' : 'error');
@@ -386,12 +377,13 @@ $(function () {
         });
 
         // Sửa câu hỏi
-        $('#module_show_list').on('click', '[data-action="save"]', function() {
+        $('[data-action="save"]').on('click', function() {
             const btn = $(this);
             const icon = $('i', btn);
             const qid = btn.data('qid');
             const title = $('#title_' + qid).val().trim();
             const oldTitle = $('#hidden_' + qid).val();
+            const checkss = btn.data('checkss');
 
             if (!title) {
                 $('#title_' + qid).focus();
@@ -411,13 +403,15 @@ $(function () {
             $.ajax({
                 type: 'POST',
                 url: script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=question&nocache=' + new Date().getTime(),
-                data: 'edit=1&qid=' + qid + '&title=' + encodeURIComponent(title) + '&checkss=' + nv_check_session,
+                data: 'edit=1&qid=' + qid + '&title=' + encodeURIComponent(title) + '&checkss=' + checkss,
                 dataType: 'json',
                 success: function(res) {
-                    icon.removeClass('fa-spinner fa-spin-pulse').addClass(icon.data('icon'));
                     if (res.status === 'success') {
-                        $('#hidden_' + qid).val(title);
-                        loadQuestionList();
+                        if (res.refresh) {
+                            window.location.reload();
+                        }
+                    } else {
+                        icon.removeClass('fa-spinner fa-spin-pulse').addClass(icon.data('icon'));
                     }
                     if (res.mess) {
                         nukeviet.toast(res.mess, res.status === 'success' ? 'success' : 'error');
@@ -432,10 +426,11 @@ $(function () {
         });
 
         // Xóa câu hỏi
-        $('#module_show_list').on('click', '[data-action="delete"]', function() {
+        $('[data-action="delete"]').on('click', function() {
             const btn = $(this);
             const icon = $('i', btn);
             const qid = btn.data('qid');
+            const checkss = btn.data('checkss');
 
             nukeviet.confirm(nv_is_del_confirm[0], () => {
                 if (icon.is('.fa-spinner')) {
@@ -447,12 +442,15 @@ $(function () {
                 $.ajax({
                     type: 'POST',
                     url: script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=question&nocache=' + new Date().getTime(),
-                    data: 'del=1&qid=' + qid + '&checkss=' + nv_check_session,
+                    data: 'del=1&qid=' + qid + '&checkss=' + checkss,
                     dataType: 'json',
                     success: function(res) {
-                        icon.removeClass('fa-spinner fa-spin-pulse').addClass(icon.data('icon'));
                         if (res.status === 'success') {
-                            loadQuestionList();
+                            if (res.refresh) {
+                                window.location.reload();
+                            }
+                        } else {
+                            icon.removeClass('fa-spinner fa-spin-pulse').addClass(icon.data('icon'));
                         }
                         if (res.mess) {
                             nukeviet.toast(res.mess, res.status === 'success' ? 'success' : 'error');
@@ -468,19 +466,22 @@ $(function () {
         });
 
         // Thay đổi thứ tự
-        $('#module_show_list').on('change', '[data-action="changeweight"]', function() {
+        $('[data-action="changeweight"]').on('change', function() {
             const select = $(this);
             const qid = select.data('qid');
             const new_vid = select.val();
+            const checkss = select.data('checkss');
 
             $.ajax({
                 type: 'POST',
                 url: script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=question&nocache=' + new Date().getTime(),
-                data: 'changeweight=1&qid=' + qid + '&new_vid=' + new_vid + '&checkss=' + nv_check_session,
+                data: 'changeweight=1&qid=' + qid + '&new_vid=' + new_vid + '&checkss=' + checkss,
                 dataType: 'json',
                 success: function(res) {
                     if (res.status === 'success') {
-                        loadQuestionList();
+                        if (res.refresh) {
+                            window.location.reload();
+                        }
                     }
                     if (res.mess) {
                         nukeviet.toast(res.mess, res.status === 'success' ? 'success' : 'error');
@@ -488,8 +489,5 @@ $(function () {
                 }
             });
         });
-
-        // Load danh sách câu hỏi khi trang được tải
-        loadQuestionList();
     }
 });
