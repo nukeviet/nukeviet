@@ -66,6 +66,13 @@ Mọi request POST:
   - nv_datetime_format
   - nv_number_format
   - nv_date_format
+  Lưu ý các modifier này không có sẵn, cần dùng modifier nào thì xuất ra trong php tương ứng ví dụ:
+  ```php
+  $tpl->registerPlugin('modifier', 'dnumber', 'nv_number_format');
+  $tpl->registerPlugin('modifier', 'ddatetime', 'nv_datetime_format');
+  $tpl->registerPlugin('modifier', 'ddate', 'nv_date_format');
+  ```
+  Các modifier khác có thể cân nhắc bổ sung từ hàm, tuy nhiên ưu tiên xử lý ở PHP hơn và tuân theo nguyên tắc chỉ sử dụng hàm định dạng, không dùng hàm logic tính toán, logic kiểm tra.
 
 Ưu tiên dùng:
 {$smarty.const.CONSTANT_NAME}
@@ -104,9 +111,10 @@ thay vì assign constant từ PHP.
 - Đối với các ô input type=password nằm trong input-group nếu group đã có button xử lý ẩn hiện mật khẩu thì type=password đó phải thêm class `btn-eye-added`
 
 ## 5. Biến và dữ liệu tpl
-Mọi biến dùng trong tpl:
-- Phải có giá trị mặc định từ PHP
-- Tránh lỗi Undefined array key
+- Mọi biến dùng trong tpl:
+  - Phải có giá trị mặc định từ PHP
+  - Tránh lỗi Undefined array key
+- Trong tpl nếu có fontawesome cũ v4 cần đổi sang v6 tương ứng. Ví dụ `fa fa-edit` → `fa-solid fa-edit`, `fa fa-trash` → `fa-solid fa-trash`, `fa fa-plus` → `fa-solid fa-plus`, ...
 
 ## 6. Dọn dẹp code
 Trong tpl:
@@ -121,6 +129,7 @@ Trong tpl:
 
 ## 8. Ngôn ngữ module và ngôn ngữ global
 - Trước khi sinh thêm langkey vào ngôn ngữ module (src/modules/--/language/--.php) phải kiểm tra nếu đã có langkey gần tương đương ngũ nghĩa trong ngôn ngữ global (src/includes/language/../global.php) thì sử dụng thay vì sinh mới.
+- Nếu có bổ sung langkey mới thì phải bổ sung đầy đủ vào các ngôn ngữ của hệ thống tương ứng. Ví dụ thêm tiếng Việt thì phải thêm tiếng Anh, Pháp.
 
 ## 9. Tác động tới giao diện cũ admin_default
 - Không giữ backward cho giao diện admin_default cũ nữa.
@@ -156,6 +165,7 @@ Mà phải xuất biến
 $tpl->assign('LANG', $nv_Lang);
 ```
 - Nếu có dùng PDOException thì sửa thành Throwable. Chú ý không tự thêm try catch vào code nếu trước đó nó không có.
+- Không dùng hàm `nv_date()` nữa, nếu có hãy đổi thành hàm `nv_datetime_format()` nếu cần định dạng có giờ, nếu không có giờ dùng `nv_date_format()`
 
 ## Bước 3: Tpl
 - Chuẩn Smarty
@@ -171,6 +181,30 @@ $tpl->assign('LANG', $nv_Lang);
 - Nếu không chỉnh sửa gì js thì bỏ qua, không cần comment thêm vào file js.
 - Ajax submit nếu có form
 - Chuyển js vào thì phải kiểm tra đúng cú pháp chứ không copy-paste nguyên xi từ tpl vào. Vì trong tpl có thể có các thẻ html không hợp lệ trong js hoặc sai thẻ đóng mở dẫn tới lỗi js.
+- Các biến trong js nếu không bắt buộc phải khai báo bằng var thì dùng let hoặc const để khai báo.
+- Thao tác xử lý ajax từ các event click phải tuân theo nguyên tắc:
+  Đối tượng được click cần có một icon fontawesome, có `data-icon` tương ứng với icon ban đầu. JS xử lý:
+  ```js
+  const btn = $(this);
+  const icon = $('i', btn);
+  if (icon.is('.fa-spinner')) {
+    return;
+  }
+  icon.removeClass(icon.data('icon')).addClass('fa-spinner fa-spin-pulse');
+  $.ajax({
+    //....
+    success: function (res) {
+        //...
+        icon.removeClass('fa-spinner fa-spin-pulse').addClass(icon.data('icon'));
+        //...
+    },
+    error: function (xhr, text, err) {
+        icon.removeClass('fa-spinner fa-spin-pulse').addClass(icon.data('icon'));
+        nukeviet.toast(text, 'error');
+        console.log(xhr, text, err);
+    }
+  });
+  ```
 
 ## Bước 5: Rà soát
 - Undefined biến
