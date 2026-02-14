@@ -591,14 +591,22 @@ if ($nv_Request->isset_request('add', 'get') or $nv_Request->isset_request('edit
         }
 
         if ($nv_Request->isset_request('save', 'post')) {
-            if ($checkss != $nv_Request->get_string('checkss', 'post')) {
-                exit('Error Session, Please close the browser and try again');
+            $checkss = $nv_Request->get_string('checkss', 'post', '');
+            if (!hash_equals($checkss, md5(NV_CHECK_SESSION . '_' . $module_name . '_' . $op . '_' . $post['id']))) {
+                nv_jsonOutput([
+                    'status' => 'error',
+                    'mess' => $nv_Lang->getGlobal('error_invalid_session')
+                ]);
             }
             // Sửa / Thêm full thông tin
             if (empty($post['id']) or $post['id'] > 9) {
                 $post['title'] = $nv_Request->get_title('title', 'post', '', 1);
                 if (empty($post['title'])) {
-                    exit($nv_Lang->getModule('title_empty'));
+                    nv_jsonOutput([
+                        'status' => 'error',
+                        'mess' => $nv_Lang->getModule('title_empty'),
+                        'input' => 'title'
+                    ]);
                 }
 
                 $post['alias'] = $nv_Request->get_title('alias', 'post', '');
@@ -609,7 +617,11 @@ if ($nv_Request->isset_request('add', 'get') or $nv_Request->isset_request('edit
                 $stmt->bindParam(':alias', $post['alias'], PDO::PARAM_STR);
                 $stmt->execute();
                 if ($stmt->fetchColumn()) {
-                    exit($nv_Lang->getModule('error_alias_exists', $post['alias']));
+                    nv_jsonOutput([
+                        'status' => 'error',
+                        'mess' => $nv_Lang->getModule('error_alias_exists', $post['alias']),
+                        'input' => 'alias'
+                    ]);
                 }
 
                 $post['description'] = $nv_Request->get_title('description', 'post', '', 1);
@@ -636,7 +648,11 @@ if ($nv_Request->isset_request('add', 'get') or $nv_Request->isset_request('edit
                 $post['email'] = $nv_Request->get_title('email', 'post', '', 1);
                 $check_email = nv_check_valid_email($post['email'], true);
                 if (!empty($post['email']) and $check_email[0] != '') {
-                    exit($check_email[0]);
+                    nv_jsonOutput([
+                        'status' => 'error',
+                        'mess' => $check_email[0],
+                        'input' => 'email'
+                    ]);
                 }
                 $post['email'] = $check_email[1];
             } else {
@@ -761,9 +777,15 @@ if ($nv_Request->isset_request('add', 'get') or $nv_Request->isset_request('edit
             if ($ok) {
                 $nv_Cache->delMod($module_name);
                 nv_insert_logs(NV_LANG_DATA, $module_name, $log_title, 'Id: ' . $post['id'], $admin_info['userid']);
-                exit('OK');
+                nv_jsonOutput([
+                    'status' => 'success',
+                    'redirect' => nv_url_rewrite(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op, true)
+                ]);
             }
-            exit($nv_Lang->getModule('errorsave'));
+            nv_jsonOutput([
+                'status' => 'error',
+                'mess' => $nv_Lang->getModule('errorsave')
+            ]);
         }
 
         if ($nv_Request->isset_request('edit', 'get')) {

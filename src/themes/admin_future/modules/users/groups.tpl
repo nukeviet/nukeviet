@@ -24,7 +24,7 @@
                     <tr>
                         <td>
                             {if $row.show_weight}
-                            <button id="group_weight_{$row.group_id}" data-toggle="changegroupweight" data-mod="weight" data-min="{$START_WEIGHT}" data-num="{$MAX_WEIGHT}" data-id="{$row.group_id}" data-current="{$row.weight}" data-tokend="{$smarty.const.NV_CHECK_SESSION}" data-msgerror="{$LANG->getModule('errorChangeWeight')}" type="button" class="btn btn-secondary btn-sm btn-block btn-dropdown-tool"><span class="caret"></span><span class="text">{$row.weight}</span></button>
+                            <button id="group_weight_{$row.group_id}" data-toggle="changegroupweight" data-mod="weight" data-min="{$START_WEIGHT}" data-num="{$MAX_WEIGHT}" data-id="{$row.group_id}" data-current="{$row.weight}" data-tokend="{$smarty.const.NV_CHECK_SESSION}" data-msgerror="{$LANG->getModule('errorChangeWeight')}" type="button" class="btn btn-secondary btn-sm btn-block btn-dropdown-tool fw-75"><span class="caret"></span><span class="text">{$row.weight}</span></button>
                             {else}
                             {$row.weight_text}
                             {/if}
@@ -33,11 +33,11 @@
                         <td>{$row.add_time}</td>
                         <td>{$row.exp_time}</td>
                         <td><strong class="text-danger">{$row.number}</strong></td>
-                        <td class="text-center"><input data-id="{$row.group_id}" data-tokend="{$smarty.const.NV_CHECK_SESSION}" type="checkbox" class="actGroup" name="act_{$row.group_id}" value="1"{if $row.act} checked{/if}{if $row.disabled} disabled{/if}></td>
+                        <td class="text-center"><input data-id="{$row.group_id}" data-tokend="{$smarty.const.NV_CHECK_SESSION}" type="checkbox" class="actGroup form-check-input" name="act_{$row.group_id}" value="1"{if $row.act} checked{/if}{if $row.disabled} disabled{/if}></td>
                         <td class="text-center">
                             {if $row.show_action}
                             <a href="{$smarty.const.NV_BASE_ADMINURL}index.php?{$smarty.const.NV_LANG_VARIABLE}={$smarty.const.NV_LANG_DATA}&amp;{$smarty.const.NV_NAME_VARIABLE}={$MODULE_NAME}&amp;{$smarty.const.NV_OP_VARIABLE}={$OP}&amp;edit&amp;id={$row.group_id}" class="btn btn-secondary btn-sm" aria-label="{$LANG->getGlobal('edit')}"><i class="fa-solid fa-edit"></i> {$LANG->getGlobal('edit')}</a>
-                            {if $row.can_delete}<a class="delGroup btn btn-danger btn-sm" href="#" data-id="{$row.group_id}" data-tokend="{$smarty.const.NV_CHECK_SESSION}" aria-label="{$LANG->getGlobal('delete')}"><i class="fa-solid fa-trash"></i> {$LANG->getGlobal('delete')}</a>{/if}
+                            {if $row.can_delete}<a class="delGroup btn btn-danger btn-sm" href="#" data-id="{$row.group_id}" data-tokend="{$smarty.const.NV_CHECK_SESSION}" aria-label="{$LANG->getGlobal('delete')}"><i class="fa-solid fa-trash" data-icon="fa-trash"></i> {$LANG->getGlobal('delete')}</a>{/if}
                             {/if}
                         </td>
                     </tr>
