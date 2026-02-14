@@ -6,7 +6,7 @@
             <div class="row">
                 <div class="col-12">
                     <div class="mb-3">
-                        <label for="content" class="form-label fw-medium">{$LANG->getModule('content')} <span class="text-danger">(*)</span></label>
+                        <div class="form-label fw-medium">{$LANG->getModule('content')} <span class="text-danger">(*)</span></div>
                         {$EDITOR}
                         <div class="invalid-feedback"></div>
                     </div>
