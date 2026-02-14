@@ -108,7 +108,7 @@
                             <input class="form-control" type="text" name="group_color" id="group_color" value="{$DATA.group_color}" maxlength="10" style="width:200px" autocomplete="off">
                         </div>
                         <div class="col-auto">
-                            <input name="group_color_demo" class="form-control" style="width:50px{if !empty($DATA.group_color)};background-color:{$DATA.group_color}{/if}" readonly>
+                            <input name="group_color_demo" class="form-control" style="width:50px;{if !empty($DATA.group_color)}background-color:{$DATA.group_color};{/if}" readonly>
                         </div>
                     </div>
                 </div>

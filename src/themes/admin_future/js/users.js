@@ -494,6 +494,10 @@ $(function () {
 
 // Groups management
 $(document).ready(function() {
+    // Parse URL params once
+    const urlParams = new URLSearchParams(window.location.search);
+    const gid = urlParams.get('userlist');
+    
     // Get alias
     $('#get_alias_btn').on('click', function() {
         get_alias();
@@ -518,7 +522,6 @@ $(document).ready(function() {
             icon.removeClass(icon.data('icon')).addClass('fa-spinner fa-spin-pulse');
             
             // Lấy ID từ URL nếu đang edit
-            const urlParams = new URLSearchParams(window.location.search);
             const id = urlParams.get('id') || 0;
             $.post(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=groups&nocache=' + new Date().getTime(), 'getAlias=1&id=' + id + '&title=' + encodeURIComponent(title), function(res) {
                 $('#groupForm [name=alias]').val(res);
@@ -641,9 +644,6 @@ $(document).ready(function() {
     });
 
     // Quản lý thành viên - userlist
-    const urlParams = new URLSearchParams(window.location.search);
-    const gid = urlParams.get('userlist');
-    
     if (gid && $('#pageContent').length && typeof nv_randomPassword !== 'undefined') {
         $('div#pageContent').load(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=groups&listUsers=' + gid + '&random=' + nv_randomPassword(10));
 

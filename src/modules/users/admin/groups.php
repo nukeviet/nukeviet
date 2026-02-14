@@ -779,9 +779,18 @@ if ($nv_Request->isset_request('add', 'get') or $nv_Request->isset_request('edit
                 $post['config'] = unserialize($post['config']);
             }
         } else {
-            $post['title'] = $post['email'] = $post['description'] = $post['content'] = $post['exp_time'] = $post['alias'] = '';
+            $post['title'] = '';
+            $post['email'] = '';
+            $post['description'] = '';
+            $post['content'] = '';
+            $post['exp_time'] = '';
+            $post['alias'] = '';
             $post['group_type'] = 0;
-            $post['id'] = $post['is_default'] = $post['require_2step_admin'] = $post['require_2step_site'] = $post['siteus'] = 0;
+            $post['id'] = 0;
+            $post['is_default'] = 0;
+            $post['require_2step_admin'] = 0;
+            $post['require_2step_site'] = 0;
+            $post['siteus'] = 0;
             $post['group_color'] = '';
             $post['group_avatar'] = '';
 
