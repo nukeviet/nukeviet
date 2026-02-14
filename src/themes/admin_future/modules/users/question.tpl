@@ -27,16 +27,16 @@
             <table class="table table-striped align-middle table-sticky mb-0">
                 <thead>
                     <tr>
-                        <th class="text-nowrap" style="width: 120px;">{$LANG->getModule('weight')}</th>
+                        <th class="text-nowrap" style="width: 15%;">{$LANG->getModule('weight')}</th>
                         <th class="text-nowrap">{$LANG->getModule('question')}</th>
-                        <th class="text-nowrap text-center" style="width: 150px;">{$LANG->getGlobal('actions')}</th>
+                        <th class="text-nowrap text-center" style="width: 18%;">{$LANG->getGlobal('actions')}</th>
                     </tr>
                 </thead>
                 <tbody>
                     {foreach from=$DATA item=row}
                     <tr data-qid="{$row.qid}">
                         <td>
-                            <select class="form-select form-select-sm" name="weight_{$row.qid}" id="weight_{$row.qid}" data-qid="{$row.qid}" data-action="changeweight" data-checkss="{$smarty.const.NV_CHECK_SESSION}">
+                            <select class="form-select form-select-sm fw-75" name="weight_{$row.qid}" id="weight_{$row.qid}" data-qid="{$row.qid}" data-action="changeweight" data-checkss="{$smarty.const.NV_CHECK_SESSION}">
                                 {foreach from=$row.weights item=weight}
                                 <option value="{$weight.key}"{if $weight.selected} selected{/if}>{$weight.title}</option>
                                 {/foreach}
