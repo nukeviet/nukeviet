@@ -121,14 +121,23 @@ $(function () {
         // Xóa field
         $('#module_show_list').on('click', '[data-action="delete"]', function(e) {
             e.preventDefault();
-            let fid = $(this).data('fid');
+            const btn = $(this);
+            const icon = $('i', btn);
+            const fid = btn.data('fid');
+            
             nukeviet.confirm(nv_is_del_confirm[0], () => {
+                if (icon.is('.fa-spinner')) {
+                    return;
+                }
+                icon.removeClass(icon.data('icon')).addClass('fa-spinner fa-spin-pulse');
+                
                 $.ajax({
                     type: 'POST',
                     url: script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=fields&nocache=' + new Date().getTime(),
                     data: 'del=1&fid=' + fid + '&checkss=' + nv_check_session,
                     dataType: 'json',
                     success: function(res) {
+                        icon.removeClass('fa-spinner fa-spin-pulse').addClass(icon.data('icon'));
                         if (res.status === 'success') {
                             window.nv_show_list_field();
                         }
@@ -136,8 +145,10 @@ $(function () {
                             nvToast(res.mess, res.status === 'success' ? 'success' : 'error');
                         }
                     },
-                    error: function() {
-                        nvToast('Error response', 'error');
+                    error: function(xhr, text, err) {
+                        icon.removeClass('fa-spinner fa-spin-pulse').addClass(icon.data('icon'));
+                        nukeviet.toast(text, 'error');
+                        console.log(xhr, text, err);
                     }
                 });
             });
@@ -238,21 +249,21 @@ $(function () {
 
         // Match type radio change
         $('input[name="match_type"]').on('change', function() {
-            var match_type = $(this).val();
-            $('input[name^="match_"]').prop('disabled', true);
+            const match_type = $(this).val();
+            $('input[name="match_regex"], input[name="match_callback"]').prop('disabled', true);
             $('input[name="match_' + match_type + '"]').prop('disabled', false);
         });
 
         // Add field choice button
         $('#add_field_choice').on('click', function() {
-            var placeholder = $('[data-field-choice]').first().attr('placeholder') || '';
+            const placeholder = $('[data-field-choice]').first().attr('placeholder') || '';
             nv_choice_fields_additem(placeholder);
         });
 
         // File type checkbox change
         $('input[name="filetype[]"]').on('change', function() {
-            var filetype = $(this).val();
-            var checked = $(this).is(':checked');
+            const filetype = $(this).val();
+            const checked = $(this).is(':checked');
             $(this).closest('.filetype').find('input[type="checkbox"][data-toggle="mimecheck"]').prop('checked', checked);
 
             // Show/hide photo size options
@@ -260,7 +271,7 @@ $(function () {
                 if (checked) {
                     $('.photo_max_size').removeClass('d-none');
                 } else {
-                    var hasImages = false;
+                    let hasImages = false;
                     $('input[name="filetype[]"]').each(function() {
                         if ($(this).val() == 'images' && $(this).is(':checked')) {
                             hasImages = true;
@@ -275,8 +286,8 @@ $(function () {
 
         // MIME checkbox change
         $('input[data-toggle="mimecheck"]').on('change', function() {
-            var allChecked = true;
-            var anyChecked = false;
+            let allChecked = true;
+            let anyChecked = false;
             $(this).closest('.filetype').find('input[data-toggle="mimecheck"]').each(function() {
                 if ($(this).is(':checked')) {
                     anyChecked = true;
@@ -285,7 +296,7 @@ $(function () {
                 }
             });
 
-            var filetypeCheckbox = $(this).closest('.filetype').find('input[name="filetype[]"]');
+            const filetypeCheckbox = $(this).closest('.filetype').find('input[name="filetype[]"]');
             filetypeCheckbox.prop('checked', anyChecked);
 
             // Trigger filetype change event
@@ -296,7 +307,7 @@ $(function () {
 
         // Uncheck radio in choice items
         $('.uncheckRadio').on('click', 'input[type="radio"]', function() {
-            var $radio = $(this);
+            const $radio = $(this);
             if ($radio.data('waschecked') == true) {
                 $radio.prop('checked', false);
                 $radio.data('waschecked', false);
