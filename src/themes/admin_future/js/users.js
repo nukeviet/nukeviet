@@ -264,7 +264,12 @@ $(function () {
         $('input[name="filetype[]"]').on('change', function() {
             const filetype = $(this).val();
             const checked = $(this).is(':checked');
-            $(this).closest('.filetype').find('input[type="checkbox"][data-toggle="mimecheck"]').prop('checked', checked);
+            
+            // Chỉ xử lý khi bỏ check filetype thì uncheck tất cả mime của nó
+            // Khi check filetype thì không tự động check mime, để user tự chọn
+            if (!checked) {
+                $(this).closest('.filetype').find('input[type="checkbox"][data-toggle="mimecheck"]').prop('checked', false);
+            }
 
             // Show/hide photo size options
             if (filetype == 'images') {
