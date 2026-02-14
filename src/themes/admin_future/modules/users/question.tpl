@@ -10,7 +10,7 @@
             </div>
             <div class="col-sm-3 col-lg-4">
                 <button type="button" class="btn btn-primary" id="btn_add_question" data-checkss="{$smarty.const.NV_CHECK_SESSION}">
-                    <i class="fa-solid fa-plus" data-icon="fa-solid fa-plus"></i> {$LANG->getModule('addquestion')}
+                    <i class="fa-solid fa-plus" data-icon="fa-plus"></i> {$LANG->getModule('addquestion')}
                 </button>
             </div>
         </div>
@@ -47,13 +47,13 @@
                             <div class="input-group input-group-sm">
                                 <input type="text" class="form-control" name="title_{$row.qid}" id="title_{$row.qid}" value="{$row.title}" maxlength="240" autocomplete="off">
                                 <button type="button" class="btn btn-primary" data-qid="{$row.qid}" data-action="save" data-checkss="{$smarty.const.NV_CHECK_SESSION}" aria-label="{$LANG->getGlobal('save')}">
-                                    <i class="fa-solid fa-floppy-disk" data-icon="fa-solid fa-floppy-disk"></i> {$LANG->getGlobal('save')}
+                                    <i class="fa-solid fa-floppy-disk" data-icon="fa-floppy-disk"></i> {$LANG->getGlobal('save')}
                                 </button>
                             </div>
                         </td>
                         <td class="text-center">
                             <button type="button" class="btn btn-sm btn-danger" data-qid="{$row.qid}" data-action="delete" data-checkss="{$smarty.const.NV_CHECK_SESSION}" aria-label="{$LANG->getGlobal('delete')}">
-                                <i class="fa-solid fa-trash" data-icon="fa-solid fa-trash"></i>
+                                <i class="fa-solid fa-trash" data-icon="fa-trash"></i>
                             </button>
                         </td>
                     </tr>
