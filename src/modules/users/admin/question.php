@@ -257,7 +257,6 @@ if ($nv_Request->isset_request('qlist', 'post')) {
     exit();
 }
 
-$tpl->display('question_load.tpl');
 $contents = $tpl->fetch('question_load.tpl');
 
 include NV_ROOTDIR . '/includes/header.php';
