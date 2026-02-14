@@ -19,7 +19,7 @@
                     {foreach from=$DATA_ROWS item=row}
                     <tr>
                         <td class="text-center">
-                            <select class="form-select form-select-sm" id="id_weight_{$row.fid}" data-fid="{$row.fid}"{if $row.disabled_weight} disabled{/if}>
+                            <select class="form-select form-select-sm fw-75" id="id_weight_{$row.fid}" data-fid="{$row.fid}"{if $row.disabled_weight} disabled{/if}>
                                 {foreach from=$row.weights item=weight}
                                 <option value="{$weight.key}"{if $weight.selected} selected{/if}>{$weight.title}</option>
                                 {/foreach}
