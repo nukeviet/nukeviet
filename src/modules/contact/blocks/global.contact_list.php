@@ -22,15 +22,12 @@ if (!nv_function_exists('nv_contact_list_info')) {
      */
     function nv_contact_list_info($module)
     {
-        global $nv_Cache, $site_mods, $global_config, $nv_Lang;
+        global $nv_Cache, $site_mods, $nv_Lang;
         
         $module_data = $site_mods[$module]['module_data'];
-        $module_file = $site_mods[$module]['module_file'];
-
-        $block_theme = get_tpl_dir([$global_config['module_theme'], $global_config['site_theme']], 'default', '/modules/' . $module_file . '/block.contact_list.tpl');
 
         $tpl = new \NukeViet\Template\NVSmarty();
-        $tpl->setTemplateDir(dirname(NV_ROOTDIR . '/themes/' . $block_theme . '/modules/' . $module_file . '/block.contact_list.tpl'));
+        $tpl->setTemplateDir(get_block_tpl_dir('block.contact_list.tpl', $module));
         $tpl->assign('LANG', $nv_Lang);
 
         $departments = $nv_Cache->db('SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_department ORDER BY weight', 'id', $module);

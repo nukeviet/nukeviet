@@ -1,14 +1,14 @@
-{foreach from=$DEPARTMENTS item=DEPARTMENT}
-<div class="card mb-3">
+{foreach from=$DEPARTMENTS item=DEPARTMENT name=list}
+<div class="card{if !$smarty.foreach.list.last} mb-3{/if}">
     <div class="card-body">
         {if $DEPARTMENT.image}
         <div class="text-center mb-3">
             <img src="{$DEPARTMENT.image}" class="img-thumbnail" alt="{$DEPARTMENT.full_name}">
         </div>
         {/if}
-        <h5 class="card-title text-center mb-3">
-            <a href="{$DEPARTMENT.url}" class="text-decoration-none text-body">{$DEPARTMENT.full_name}</a>
-        </h5>
+        <div class="card-title text-center mb-3">
+            <a href="{$DEPARTMENT.url}" class="link-body-emphasis">{$DEPARTMENT.full_name}</a>
+        </div>
         <ul class="list-group list-group-flush">
             {foreach from=$DEPARTMENT.cd item=CD}
             <li class="list-group-item">
