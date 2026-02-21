@@ -96,7 +96,7 @@ if (!nv_function_exists('nv_contact_supporter')) {
      */
     function nv_contact_supporter($module)
     {
-        global $nv_Cache, $site_mods, $global_config, $nv_Lang, $module_name;
+        global $nv_Cache, $site_mods, $nv_Lang, $module_name;
 
         if (!isset($site_mods[$module])) {
             return '';
@@ -106,22 +106,16 @@ if (!nv_function_exists('nv_contact_supporter')) {
             return '';
         }
 
-        $mod_table = NV_PREFIXLANG . '_' . $site_mods[$module]['module_data'];
-        $departments = $nv_Cache->db('SELECT * FROM ' . $mod_table . '_department ORDER BY weight', 'id', $module);
+        $module_data = $site_mods[$module]['module_data'];
+        $departments = $nv_Cache->db('SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_department ORDER BY weight', 'id', $module);
         $supporters = block_supporter_get_list($module, $departments);
         if (empty($supporters)) {
             return '';
         }
 
-        [$block_theme, $dir] = get_block_tpl_dir('block.supporter.tpl', $module, true);
-        if (empty($dir)) {
-            return '';
-        }
-
         $tpl = new \NukeViet\Template\NVSmarty();
-        $tpl->setTemplateDir($dir);
+        $tpl->setTemplateDir(get_block_tpl_dir('block.supporter.tpl', $module));
         $tpl->assign('LANG', $nv_Lang);
-        $tpl->assign('TEMPLATE', $block_theme);
 
         $deps = [];
         $active = false;
