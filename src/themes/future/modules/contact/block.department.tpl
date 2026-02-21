@@ -1,8 +1,8 @@
-<div class="card mb-3">
+<div class="card">
     <div class="card-header">
-        <h3 class="card-title mb-0 fs-5 fw-medium">
-            <a href="{$DEPARTMENT.url}" class="text-decoration-none text-body">{$DEPARTMENT.full_name}</a>
-        </h3>
+        <div class="card-title mb-0 fs-5 fw-medium">
+            <a href="{$DEPARTMENT.url}" class="link-body-emphasis">{$DEPARTMENT.full_name}</a>
+        </div>
     </div>
     <ul class="list-group list-group-flush">
         {if $DEPARTMENT.note}

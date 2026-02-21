@@ -25,20 +25,16 @@ if (!nv_function_exists('nv_department_info')) {
     {
         global $site_mods, $nv_Cache, $nv_Lang;
 
-        $html = '';
-        $html .= '<div class="row mb-3">';
-        $html .= '<label class="col-sm-3 col-form-label text-sm-end text-truncate fw-medium">' . $nv_Lang->getModule('departmentid') . ':</label>';
-        $html .= '<div class="col-sm-5"><select name="config_departmentid" class="form-select">';
-        $departments = $nv_Cache->db('SELECT * FROM ' . NV_PREFIXLANG . '_' . $site_mods[$module]['module_data'] . '_department ORDER BY weight', 'id', $module);
-        foreach ($departments as $l) {
-            if ($l['act']) {
-                $html .= '<option value="' . $l['id'] . '" ' . (($data_block['departmentid'] == $l['id']) ? ' selected="selected"' : '') . '>' . $l['full_name'] . '</option>';
-            }
-        }
-        $html .= '</select></div>';
-        $html .= '</div>';
+        $module_data = $site_mods[$module]['module_data'];
+        $tpl = new \NukeViet\Template\NVSmarty();
+        $tpl->setTemplateDir(get_block_tpl_dir('block.department.config.tpl', $module));
+        $tpl->assign('LANG', $nv_Lang);
+        $tpl->assign('CONFIG', $data_block);
 
-        return $html;
+        $departments = $nv_Cache->db('SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_department ORDER BY weight', 'id', $module);
+        $tpl->assign('DEPARTMENTS', $departments);
+
+        return $tpl->fetch('block.department.config.tpl');
     }
 
     /**
@@ -66,20 +62,17 @@ if (!nv_function_exists('nv_department_info')) {
      */
     function nv_department_info($block_config)
     {
-        global $global_config, $site_mods, $nv_Cache, $module_name, $nv_Lang;
+        global $site_mods, $nv_Cache, $nv_Lang;
 
         $module = $block_config['module'];
         $module_data = $site_mods[$module]['module_data'];
-        $module_file = $site_mods[$module]['module_file'];
-
-        $block_theme = get_tpl_dir([$global_config['module_theme'], $global_config['site_theme']], 'default', '/modules/' . $module_file . '/block.department.tpl');
 
         $tpl = new \NukeViet\Template\NVSmarty();
-        $tpl->setTemplateDir(dirname(NV_ROOTDIR . '/themes/' . $block_theme . '/modules/' . $module_file . '/block.department.tpl'));
+        $tpl->setTemplateDir(get_block_tpl_dir('block.department.tpl', $module));
         $tpl->assign('LANG', $nv_Lang);
 
         //Danh sach cac bo phan
-        $departments = $nv_Cache->db('SELECT * FROM ' . NV_PREFIXLANG . '_' . $site_mods[$module]['module_data'] . '_department ORDER BY weight', 'id', $module);
+        $departments = $nv_Cache->db('SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_department ORDER BY weight', 'id', $module);
         if (!isset($departments[$block_config['departmentid']]) or !$departments[$block_config['departmentid']]['act']) {
             return '';
         }
@@ -136,7 +129,7 @@ if (!nv_function_exists('nv_department_info')) {
 }
 
 if (defined('NV_SYSTEM')) {
-    global $site_mods, $module_name, $global_array_cat, $module_array_cat;
+    global $site_mods;
     $module = $block_config['module'];
     if (isset($site_mods[$module])) {
         $content = nv_department_info($block_config);
