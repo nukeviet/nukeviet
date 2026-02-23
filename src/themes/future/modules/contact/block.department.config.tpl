@@ -9,8 +9,5 @@
             {/foreach}
         </select>
     </div>
-    <div class="col-sm-4"></div>
-    <div class="col-sm-9 offset-sm-3 form-text">{$LANG->getModule('pick_department')}</div>
-    <div class="col-sm-3"></div>
 </div>
 
