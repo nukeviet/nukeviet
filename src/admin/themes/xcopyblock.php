@@ -30,7 +30,9 @@ $theme_list = nv_scandir(NV_ROOTDIR . '/themes/', $global_config['check_theme'])
 
 $result = $db->query('SELECT DISTINCT theme FROM ' . NV_PREFIXLANG . '_modthemes WHERE func_id=0');
 $array_themes = [];
-while ([$theme] = $result->fetch(3)) {
+while ($_scratch = $result->fetch(3)) {
+    [$theme] = $_scratch;
+    unset($_scratch);
     if (in_array($theme, $theme_list, true)) {
         $array_themes[] = $theme;
     }

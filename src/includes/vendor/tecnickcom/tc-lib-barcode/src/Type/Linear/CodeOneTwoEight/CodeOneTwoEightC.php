@@ -7,8 +7,8 @@
  * @category    Library
  * @package     Barcode
  * @author      Nicola Asuni <info@tecnick.com>
- * @copyright   2010-2024 Nicola Asuni - Tecnick.com LTD
- * @license     http://www.gnu.org/copyleft/lesser.html GNU-LGPL v3 (see LICENSE.TXT)
+ * @copyright   2010-2026 Nicola Asuni - Tecnick.com LTD
+ * @license     https://www.gnu.org/copyleft/lesser.html GNU-LGPL v3 (see LICENSE.TXT)
  * @link        https://github.com/tecnickcom/tc-lib-barcode
  *
  * This file is part of tc-lib-barcode software library.
@@ -28,8 +28,8 @@ use Com\Tecnick\Barcode\Exception as BarcodeException;
  * @category    Library
  * @package     Barcode
  * @author      Nicola Asuni <info@tecnick.com>
- * @copyright   2010-2024 Nicola Asuni - Tecnick.com LTD
- * @license     http://www.gnu.org/copyleft/lesser.html GNU-LGPL v3 (see LICENSE.TXT)
+ * @copyright   2010-2026 Nicola Asuni - Tecnick.com LTD
+ * @license     https://www.gnu.org/copyleft/lesser.html GNU-LGPL v3 (see LICENSE.TXT)
  * @link        https://github.com/tecnickcom/tc-lib-barcode
  */
 class CodeOneTwoEightC extends \Com\Tecnick\Barcode\Type\Linear\CodeOneTwoEight
@@ -52,9 +52,9 @@ class CodeOneTwoEightC extends \Com\Tecnick\Barcode\Type\Linear\CodeOneTwoEight
     {
         $code = $this->code;
         $code_data = [];
-        if (ord($code[0]) == 241) {
+        if (\ord($code[0]) == 241) {
             $code_data[] = 102;
-            $code = substr($code, 1);
+            $code = \substr($code, 1);
         }
 
         $this->getCodeDataC($code_data, $code);

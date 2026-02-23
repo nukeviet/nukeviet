@@ -109,7 +109,9 @@ $theme_list = $theme_mobile_list = $array_theme = [];
 
 // Chi nhung giao dien da duoc thiet lap layout moi duoc them
 $result = $db->query('SELECT DISTINCT theme FROM ' . NV_PREFIXLANG . '_modthemes WHERE func_id=0');
-while ([$theme] = $result->fetch(3)) {
+while ($_scratch = $result->fetch(3)) {
+    [$theme] = $_scratch;
+    unset($_scratch);
     if (in_array($theme, $theme_site_array, true)) {
         $array_theme[] = $theme;
         $theme_list[] = $theme;
@@ -201,14 +203,18 @@ if ($checkss == $nv_Request->get_string('checkss', 'post')) {
         $sth = $db->prepare('SELECT func_id FROM ' . NV_PREFIXLANG . '_modthemes WHERE theme= :theme');
         $sth->bindParam(':theme', $selectthemes, PDO::PARAM_STR);
         $sth->execute();
-        while ([$func_id] = $sth->fetch(3)) {
+        while ($_scratch = $sth->fetch(3)) {
+            [$func_id] = $_scratch;
+            unset($_scratch);
             $array_func_id[] = $func_id;
         }
 
         $sth = $db->prepare('SELECT func_id FROM ' . NV_MODFUNCS_TABLE . ' WHERE in_module= :in_module AND show_func=1 ORDER BY subweight ASC');
         $sth->bindParam(':in_module', $mod, PDO::PARAM_STR);
         $sth->execute();
-        while ([$func_id] = $sth->fetch(3)) {
+        while ($_scratch = $sth->fetch(3)) {
+            [$func_id] = $_scratch;
+            unset($_scratch);
             if (!in_array((int) $func_id, array_map('intval', $array_func_id), true)) {
                 $sth2 = $db->prepare('INSERT INTO ' . NV_PREFIXLANG . '_modthemes (func_id, layout, theme) VALUES (' . $func_id . ', :layout, :theme)');
                 $sth2->bindParam(':layout', $layoutdefault, PDO::PARAM_STR);

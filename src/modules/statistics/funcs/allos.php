@@ -45,7 +45,9 @@ if ($num_items) {
     $result = $db->query($db->sql());
 
     $os_list = [];
-    while ([$os, $count, $last_visit] = $result->fetch(3)) {
+    while ($_scratch = $result->fetch(3)) {
+        [$os, $count, $last_visit] = $_scratch;
+        unset($_scratch);
         $const = 'PLATFORM_' . strtoupper($os);
         $name = $os != 'unknown' ? (defined($const) ? constant($const) : ucfirst($os)) : $nv_Lang->getGlobal('unknown');
 

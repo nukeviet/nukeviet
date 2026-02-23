@@ -56,7 +56,9 @@ if ($nv_Request->isset_request('get_topic_json', 'post')) {
             'text' => $nv_Lang->getModule('admin_topic_slnone')
         ];
     }
-    while ([$topicid, $title] = $sth->fetch(3)) {
+    while ($_scratch = $sth->fetch(3)) {
+        [$topicid, $title] = $_scratch;
+        unset($_scratch);
         $respon['results'][] = [
             'id' => $topicid,
             'text' => nv_unhtmlspecialchars($title)
@@ -102,7 +104,9 @@ if ($nv_Request->isset_request('get_article_json', 'post')) {
     $sth->bindValue(':q_title', '%' . $q . '%', PDO::PARAM_STR);
     $sth->execute();
 
-    while ([$id, $title] = $sth->fetch(3)) {
+    while ($_scratch = $sth->fetch(3)) {
+        [$id, $title] = $_scratch;
+        unset($_scratch);
         $respon['results'][] = [
             'id' => $id,
             'text' => nv_unhtmlspecialchars($title)
@@ -220,7 +224,9 @@ $array_block_cat_module = [];
 $id_block_content = [];
 $sql = 'SELECT bid, adddefault, title FROM ' . NV_PREFIXLANG . '_' . $module_data . '_block_cat ORDER BY weight ASC';
 $result = $db->query($sql);
-while ([$bid_i, $adddefault_i, $title_i] = $result->fetch(3)) {
+while ($_scratch = $result->fetch(3)) {
+    [$bid_i, $adddefault_i, $title_i] = $_scratch;
+    unset($_scratch);
     $array_block_cat_module[$bid_i] = $title_i;
     if ($adddefault_i) {
         $id_block_content[] = $bid_i;
@@ -452,7 +458,9 @@ if ($rowcontent['id'] == 0) {
     $id_block_content = [];
     $sql = 'SELECT bid FROM ' . NV_PREFIXLANG . '_' . $module_data . '_block WHERE id=' . $rowcontent['id'];
     $result = $db->query($sql);
-    while ([$bid_i] = $result->fetch(3)) {
+    while ($_scratch = $result->fetch(3)) {
+        [$bid_i] = $_scratch;
+        unset($_scratch);
         $id_block_content[] = $bid_i;
     }
 
@@ -1539,7 +1547,9 @@ if (!empty($rowcontent['topicid'])) {
         ->where('topicid=' . $rowcontent['topicid']);
     $result = $db->query($db->sql());
 
-    while ([$topicid_i, $title_i] = $result->fetch(3)) {
+    while ($_scratch = $result->fetch(3)) {
+        [$topicid_i, $title_i] = $_scratch;
+        unset($_scratch);
         $array_topic_module[$topicid_i] = $title_i;
     }
 }
@@ -1548,7 +1558,9 @@ $sql = 'SELECT sourceid, title FROM ' . NV_PREFIXLANG . '_' . $module_data . '_s
 $result = $db->query($sql);
 $array_source_module = [];
 $array_source_module[0] = $nv_Lang->getModule('sources_sl');
-while ([$sourceid_i, $title_i] = $result->fetch(3)) {
+while ($_scratch = $result->fetch(3)) {
+    [$sourceid_i, $title_i] = $_scratch;
+    unset($_scratch);
     $array_source_module[$sourceid_i] = $title_i;
 }
 

@@ -23,7 +23,9 @@ if ($global_config['idsite']) {
         $array_site_cat_theme = explode(',', $theme);
 
         $result = $db->query('SELECT DISTINCT theme FROM ' . NV_PREFIXLANG . '_modthemes WHERE func_id=0');
-        while ([$theme] = $result->fetch(3)) {
+        while ($_scratch = $result->fetch(3)) {
+            [$theme] = $_scratch;
+            unset($_scratch);
             $array_site_cat_theme[] = $theme;
         }
         $theme_array = array_intersect($theme_array, $array_site_cat_theme);
@@ -160,7 +162,9 @@ $array_layout_func_data = [];
 $sth = $db->prepare('SELECT func_id, layout FROM ' . NV_PREFIXLANG . '_modthemes WHERE theme= :theme');
 $sth->bindParam(':theme', $selectthemes, PDO::PARAM_STR);
 $sth->execute();
-while ([$func_id, $layout] = $sth->fetch(3)) {
+while ($_scratch = $sth->fetch(3)) {
+    [$func_id, $layout] = $_scratch;
+    unset($_scratch);
     $array_layout_func_data[$func_id] = $layout;
 }
 
@@ -184,7 +188,9 @@ if (!isset($array_layout_func_data[0])) {
 
 $array_layout_func = [];
 $fnresult = $db->query('SELECT func_id, func_name, func_custom_name, in_module FROM ' . NV_MODFUNCS_TABLE . ' WHERE show_func=1 ORDER BY subweight ASC');
-while ([$func_id, $func_name, $func_custom_name, $in_module] = $fnresult->fetch(3)) {
+while ($_scratch = $fnresult->fetch(3)) {
+    [$func_id, $func_name, $func_custom_name, $in_module] = $_scratch;
+    unset($_scratch);
     if (isset($array_layout_func_data[$func_id]) and !empty($array_layout_func_data[$func_id])) {
         $layout_name = $array_layout_func_data[$func_id];
 

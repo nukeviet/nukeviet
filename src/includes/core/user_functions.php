@@ -1152,8 +1152,7 @@ function set_theme_configs(&$global_config, &$is_mobile, $module_info)
             } elseif (theme_file_exists('default/theme.php')) {
                 $global_config['module_theme'] = 'default';
             } else {
-                http_response_code(500);
-                trigger_error('Error! Does not exist themes default', 256);
+                throw new \NukeViet\Http\HttpException('Error! Does not exist themes default', 500);
             }
             $theme_type = $global_config['current_theme_type'];
         }
@@ -1176,7 +1175,7 @@ function nv_module_captcha(string $module_name): string
 {
     global $global_config, $module_config;
 
-    $module_captcha = $module_name == 'users' ? $global_config['captcha_type'] : (
+    $module_captcha = $module_name == 'users' ? ($global_config['captcha_type'] ?? '') : (
         (isset($module_config[$module_name]) and !empty($module_config[$module_name]['captcha_type'])) ? $module_config[$module_name]['captcha_type'] : ''
     );
 

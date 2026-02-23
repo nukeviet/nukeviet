@@ -165,7 +165,9 @@ if ($action == 'getUser' and $nv_Request->isset_request('q', 'post')) {
         ->offset(($page - 1) * 30);
     $result = $db->query($db->sql());
     $array_data['results'] = [];
-    while ([$userid, $username] = $result->fetch(3)) {
+    while ($_scratch = $result->fetch(3)) {
+        [$userid, $username] = $_scratch;
+        unset($_scratch);
         $array_data['results'][] = [
             'id' => $userid,
             'title' => $username

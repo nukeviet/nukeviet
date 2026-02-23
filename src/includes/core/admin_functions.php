@@ -118,7 +118,9 @@ function nv_save_file_config_global()
     $sql = 'SELECT module, config_name, config_value FROM ' . NV_CONFIG_GLOBALTABLE . " WHERE lang='sys' AND (module='global' OR module='define') ORDER BY config_name ASC";
     $result = $db->query($sql);
 
-    while ([$c_module, $c_config_name, $c_config_value] = $result->fetch(3)) {
+    while ($_scratch = $result->fetch(3)) {
+        [$c_module, $c_config_name, $c_config_value] = $_scratch;
+        unset($_scratch);
         if ($c_module == 'define') {
             if (preg_match('/^\d+$/', $c_config_value)) {
                 $content_config .= "define('" . strtoupper($c_config_name) . "', " . $c_config_value . ");\n";
@@ -714,7 +716,9 @@ function nv_save_file_ips($type = 0)
     }
 
     $result = $db->query('SELECT ip, mask, area, begintime, endtime FROM ' . $db_config['prefix'] . '_ips WHERE type=' . $type);
-    while ([$dbip, $dbmask, $dbarea, $dbbegintime, $dbendtime] = $result->fetch(3)) {
+    while ($_scratch = $result->fetch(3)) {
+        [$dbip, $dbmask, $dbarea, $dbbegintime, $dbendtime] = $_scratch;
+        unset($_scratch);
         $dbendtime = (int) $dbendtime;
         $dbarea = (int) $dbarea;
 
@@ -926,8 +930,7 @@ function nv_update_robots($robots_config, bool $save = false, array $config = []
     }
     // Kiểm tra các config cần thiết
     if (!isset($real_config['allow_sitelangs'], $real_config['rewrite_enable'], $real_config['check_rewrite_file'])) {
-        http_response_code(500);
-        trigger_error('Error: Missing config for updating robots', E_USER_ERROR);
+        throw new \NukeViet\Http\HttpException('Error: Missing config for updating robots', 500);
     }
     if ($force_gconfig) {
         $global_config = $real_config;

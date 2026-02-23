@@ -25,7 +25,9 @@ if ($order > 0 and $bid > 0 and md5($theme . NV_CHECK_SESSION) == $nv_Request->g
     $sth->bindParam(':theme', $theme, PDO::PARAM_STR);
     $sth->bindParam(':position', $position, PDO::PARAM_STR);
     $sth->execute();
-    while ([$bid_i] = $sth->fetch(3)) {
+    while ($_scratch = $sth->fetch(3)) {
+        [$bid_i] = $_scratch;
+        unset($_scratch);
         ++$weight;
         if ($weight == $order) {
             ++$weight;

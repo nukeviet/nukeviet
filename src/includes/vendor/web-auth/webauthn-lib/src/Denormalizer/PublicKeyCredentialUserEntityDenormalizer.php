@@ -14,23 +14,22 @@ use function assert;
 
 final class PublicKeyCredentialUserEntityDenormalizer implements DenormalizerInterface, NormalizerInterface
 {
-    public function denormalize(mixed $data, string $type, string $format = null, array $context = []): mixed
+    public function denormalize(mixed $data, string $type, ?string $format = null, array $context = []): mixed
     {
         if (! array_key_exists('id', $data)) {
             return $data;
         }
         $data['id'] = Base64::decode($data['id']);
 
-        return PublicKeyCredentialUserEntity::create(
-            $data['name'],
-            $data['id'],
-            $data['displayName'],
-            $data['icon'] ?? null
-        );
+        return PublicKeyCredentialUserEntity::create($data['name'], $data['id'], $data['displayName']);
     }
 
-    public function supportsDenormalization(mixed $data, string $type, string $format = null, array $context = []): bool
-    {
+    public function supportsDenormalization(
+        mixed $data,
+        string $type,
+        ?string $format = null,
+        array $context = []
+    ): bool {
         return $type === PublicKeyCredentialUserEntity::class;
     }
 
@@ -47,17 +46,14 @@ final class PublicKeyCredentialUserEntityDenormalizer implements DenormalizerInt
     /**
      * @return array<string, mixed>
      */
-    public function normalize(mixed $data, ?string $format = null, array $context = []): array
+    public function normalize(mixed $object, ?string $format = null, array $context = []): array
     {
-        assert($data instanceof PublicKeyCredentialUserEntity);
-        $normalized = [
-            'id' => Base64UrlSafe::encodeUnpadded($data->id),
-            'name' => $data->name,
-            'displayName' => $data->displayName,
-            'icon' => $data->icon,
+        assert($object instanceof PublicKeyCredentialUserEntity);
+        return [
+            'id' => Base64UrlSafe::encodeUnpadded($object->id),
+            'name' => $object->name,
+            'displayName' => $object->displayName,
         ];
-
-        return array_filter($normalized, static fn ($value): bool => $value !== null);
     }
 
     public function supportsNormalization(mixed $data, ?string $format = null, array $context = []): bool

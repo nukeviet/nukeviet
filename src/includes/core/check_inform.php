@@ -13,6 +13,8 @@ if (!defined('NV_MAINFILE') or !defined('NV_SYS_LOAD')) {
     exit('Stop!!!');
 }
 
+session_write_close();
+
 $count = 0;
 $userid = $nv_Request->get_int('__userid', 'post', 0);
 $groups = $nv_Request->get_title('__groups', 'post', '');

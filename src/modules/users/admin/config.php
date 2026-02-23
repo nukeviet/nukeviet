@@ -267,7 +267,9 @@ $sql = 'SELECT config, content FROM ' . NV_MOD_TABLE . "_config WHERE
     config='hold_deleted_username'
 ";
 $result = $db->query($sql);
-while ([$config, $content] = $result->fetch(3)) {
+while ($_scratch = $result->fetch(3)) {
+    [$config, $content] = $_scratch;
+    unset($_scratch);
     $content = array_map('trim', explode('|', $content));
     $array_config[$config] = implode(', ', $content);
 }
