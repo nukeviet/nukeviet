@@ -1,16 +1,16 @@
 <div class="page vstack gap-3">
     {if not empty($DATA)}
     {foreach from=$DATA item=row}
-    <div class="pb-3">
+    <div class="pb-3 border-bottom">
         <article class="row g-3 align-items-start">
             {if not empty($row.image)}
-            <div class="col-5 col-md-4">
-                <a href="{$row.link}" class="ratio d-block page-img-wrap align-baseline">
+            <div class="col-4 col-md-3">
+                <a href="{$row.link}" class="ratio d-block page-img-wrap align-baseline-xs">
                     <img class="object-fit-cover" src="{$row.image}" alt="{$row.imagealt}" loading="lazy">
                 </a>
             </div>
             {/if}
-            <div class="{if not empty($row.image)}col-7 col-md-8{else}col-12{/if}">
+            <div class="{if not empty($row.image)}col-8 col-md-9{else}col-12{/if}">
                 <h2 class="fs-5 fw-medium mb-0">
                     <a href="{$row.link}" class="text-primary fw-semibold">{$row.title}</a>
                     {if $smarty.const.NV_IS_MODADMIN}
