@@ -24,7 +24,9 @@
                     <tr>
                         <td>
                             {if $row.show_weight}
-                            <button id="group_weight_{$row.group_id}" data-toggle="changegroupweight" data-mod="weight" data-min="{$START_WEIGHT}" data-num="{$MAX_WEIGHT}" data-id="{$row.group_id}" data-current="{$row.weight}" data-tokend="{$smarty.const.NV_CHECK_SESSION}" data-msgerror="{$LANG->getModule('errorChangeWeight')}" type="button" class="btn btn-secondary btn-sm btn-block btn-dropdown-tool fw-75"><span class="caret"></span><span class="text">{$row.weight}</span></button>
+                            <button id="group_weight_{$row.group_id}" data-toggle="changegroupweight" data-mod="weight" data-min="{$START_WEIGHT}" data-num="{$MAX_WEIGHT}" data-id="{$row.group_id}" data-current="{$row.weight}" data-tokend="{$smarty.const.NV_CHECK_SESSION}" data-msgerror="{$LANG->getModule('errorChangeWeight')}" type="button" class="btn btn-secondary btn-sm d-flex align-items-center gap-1 justify-content-between btn-dropdown-tool fw-75">
+                                <span class="text">{$row.weight}</span><i class="fa-solid fa-caret-down"></i>
+                            </button>
                             {else}
                             {$row.weight_text}
                             {/if}
