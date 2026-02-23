@@ -243,11 +243,6 @@ if ($action == 'role') {
         !isset($array_post['role_data'][$lg]) && $array_post['role_data'][$lg] = [];
         $isAdd = false;
         $page_url .= '&amp;id=' . $id;
-    } elseif ($is_getapitree) {
-        nv_jsonOutput([
-            'status' => 'error',
-            'mess' => $nv_Lang->getGlobal('error_code_11')
-        ]);
     } else {
         $array_post = [
             'role_type' => 'private',

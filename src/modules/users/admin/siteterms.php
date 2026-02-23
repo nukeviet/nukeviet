@@ -19,7 +19,7 @@ if (defined('NV_EDITOR')) {
 
 $page_title = $nv_Lang->getModule('siteterms');
 
-$error = $content = '';
+$content = '';
 
 $sql = 'SELECT content FROM ' . NV_MOD_TABLE . "_config WHERE config='siteterms_" . NV_LANG_DATA . "'";
 $row = $db->query($sql)->fetch();
@@ -32,57 +32,67 @@ if (empty($row)) {
 
 $checkss = md5(NV_CHECK_SESSION . '_' . $module_name . '_' . $op . '_' . NV_LANG_DATA);
 if ($nv_Request->get_int('save', 'post') == 1) {
+    $respon = [
+        'status' => 'error',
+        'mess' => ''
+    ];
+
+    $post_checkss = $nv_Request->get_title('checkss', 'post', '');
+    if (!hash_equals($checkss, $post_checkss)) {
+        $respon['mess'] = 'Wrong session';
+        nv_jsonOutput($respon);
+    }
+
     $content = $nv_Request->get_editor('content', '', NV_ALLOWED_HTML_TAGS);
 
     if (empty($content)) {
-        $error = $nv_Lang->getModule('error_content');
-    } elseif ($checkss == $nv_Request->get_string('checkss', 'post')) {
+        $respon['mess'] = $nv_Lang->getModule('error_content');
+        $respon['input'] = 'content';
+        nv_jsonOutput($respon);
+    }
+
+    try {
         if ($mode == 'edit') {
             $stmt = $db->prepare('UPDATE ' . NV_MOD_TABLE . "_config SET
-				content= :content,
-				edit_time='" . NV_CURRENTTIME . "'
-				WHERE config ='siteterms_" . NV_LANG_DATA . "'");
-
-            $stmt->bindParam(':content', $content, PDO::PARAM_STR, strlen($content));
-            $stmt->execute();
+                content = :content,
+                edit_time = " . NV_CURRENTTIME . "
+                WHERE config = 'siteterms_" . NV_LANG_DATA . "'");
         } else {
             $stmt = $db->prepare('INSERT INTO ' . NV_MOD_TABLE . "_config VALUES (
-				'siteterms_" . NV_LANG_DATA . "', :content, " . NV_CURRENTTIME . ')');
+                'siteterms_" . NV_LANG_DATA . "', :content, " . NV_CURRENTTIME . ')');
         }
 
         $stmt->bindParam(':content', $content, PDO::PARAM_STR, strlen($content));
-        if ($stmt->execute()) {
-            $error = $nv_Lang->getModule('saveok');
-        } else {
-            $error = $nv_Lang->getModule('errorsave');
-        }
+        $stmt->execute();
+
+        nv_insert_logs(NV_LANG_DATA, $module_name, $nv_Lang->getModule('siteterms'), '', $admin_info['userid']);
+
+        $respon['status'] = 'success';
+        $respon['mess'] = $nv_Lang->getModule('saveok');
+        nv_jsonOutput($respon);
+    } catch (Throwable $e) {
+        $respon['mess'] = $nv_Lang->getModule('errorsave');
+        nv_jsonOutput($respon);
     }
 }
 
 $content = htmlspecialchars(nv_editor_br2nl($content));
 
-$xtpl = new XTemplate('siteterms.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-$xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
-$xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
-$xtpl->assign('CHECKSS', $checkss);
-
-$xtpl->assign('FORM_ACTION', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op);
-
-if (!empty($error)) {
-    $xtpl->assign('ERROR', $error);
-    $xtpl->parse('main.error');
-}
-
 if (defined('NV_EDITOR') and nv_function_exists('nv_aleditor')) {
-    $data = nv_aleditor('content', '100%', '300px', $content);
+    $editor = nv_aleditor('content', '100%', '300px', $content);
 } else {
-    $data = '<textarea style="width: 100%" name="content" id="content" cols="20" rows="8">' . $content . '</textarea>';
+    $editor = '<textarea style="width: 100%" name="content" id="content" cols="20" rows="8">' . $content . '</textarea>';
 }
 
-$xtpl->assign('DATA', $data);
+$tpl = new \NukeViet\Template\NVSmarty();
+$tpl->setTemplateDir(get_module_tpl_dir('siteterms.tpl'));
+$tpl->assign('LANG', $nv_Lang);
+$tpl->assign('MODULE_NAME', $module_name);
+$tpl->assign('OP', $op);
+$tpl->assign('CHECKSS', $checkss);
+$tpl->assign('EDITOR', $editor);
 
-$xtpl->parse('main');
-$contents = $xtpl->text('main');
+$contents = $tpl->fetch('siteterms.tpl');
 
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_admin_theme($contents);
