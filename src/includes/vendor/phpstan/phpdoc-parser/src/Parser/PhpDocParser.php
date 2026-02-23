@@ -49,7 +49,6 @@ class PhpDocParser
 		$this->doctrineConstantExprParser = $constantExprParser->toDoctrine();
 	}
 
-
 	public function parse(TokenIterator $tokens): Ast\PhpDoc\PhpDocNode
 	{
 		$tokens->consumeTokenType(Lexer::TOKEN_OPEN_PHPDOC);
@@ -116,12 +115,21 @@ class PhpDocParser
 
 			$tokens->forwardToTheEnd();
 
+			$comments = $tokens->flushComments();
+			if ($comments !== []) {
+				throw new LogicException('Comments should already be flushed');
+			}
+
 			return $this->enrichWithAttributes($tokens, new Ast\PhpDoc\PhpDocNode([$this->enrichWithAttributes($tokens, $tag, $startLine, $startIndex)]), 1, 0);
+		}
+
+		$comments = $tokens->flushComments();
+		if ($comments !== []) {
+			throw new LogicException('Comments should already be flushed');
 		}
 
 		return $this->enrichWithAttributes($tokens, new Ast\PhpDoc\PhpDocNode($children), 1, 0);
 	}
-
 
 	/** @phpstan-impure */
 	private function parseChild(TokenIterator $tokens): Ast\PhpDoc\PhpDocChildNode
@@ -179,7 +187,6 @@ class PhpDocParser
 		return $tag;
 	}
 
-
 	private function parseText(TokenIterator $tokens): Ast\PhpDoc\PhpDocTextNode
 	{
 		$text = '';
@@ -229,7 +236,6 @@ class PhpDocParser
 
 		return new Ast\PhpDoc\PhpDocTextNode(trim($text, " \t"));
 	}
-
 
 	private function parseOptionalDescriptionAfterDoctrineTag(TokenIterator $tokens): string
 	{
@@ -311,7 +317,6 @@ class PhpDocParser
 		return trim($text, " \t");
 	}
 
-
 	public function parseTag(TokenIterator $tokens): Ast\PhpDoc\PhpDocTagNode
 	{
 		$tag = $tokens->currentTokenValue();
@@ -320,7 +325,6 @@ class PhpDocParser
 
 		return new Ast\PhpDoc\PhpDocTagNode($tag, $value);
 	}
-
 
 	public function parseTagValue(TokenIterator $tokens, string $tag): Ast\PhpDoc\PhpDocTagValueNode
 	{
@@ -391,6 +395,11 @@ class PhpDocParser
 				case '@psalm-require-implements':
 				case '@phpstan-require-implements':
 					$tagValue = $this->parseRequireImplementsTagValue($tokens);
+					break;
+
+				case '@psalm-inheritors':
+				case '@phpstan-sealed':
+					$tagValue = $this->parseSealedTagValue($tokens);
 					break;
 
 				case '@deprecated':
@@ -510,7 +519,6 @@ class PhpDocParser
 		return $this->enrichWithAttributes($tokens, $tagValue, $startLine, $startIndex);
 	}
 
-
 	private function parseDoctrineTagValue(TokenIterator $tokens, string $tag): Ast\PhpDoc\PhpDocTagValueNode
 	{
 		$startLine = $tokens->currentTokenLine();
@@ -526,7 +534,6 @@ class PhpDocParser
 			$this->parseOptionalDescriptionAfterDoctrineTag($tokens),
 		);
 	}
-
 
 	/**
 	 * @return list<Doctrine\DoctrineArgument>
@@ -562,7 +569,6 @@ class PhpDocParser
 
 		return $arguments;
 	}
-
 
 	private function parseDoctrineArgument(TokenIterator $tokens): Doctrine\DoctrineArgument
 	{
@@ -615,7 +621,6 @@ class PhpDocParser
 			);
 		}
 	}
-
 
 	/**
 	 * @return DoctrineValueType
@@ -706,7 +711,6 @@ class PhpDocParser
 		}
 	}
 
-
 	private function parseDoctrineArrayItem(TokenIterator $tokens): Doctrine\DoctrineArrayItem
 	{
 		$startLine = $tokens->currentTokenLine();
@@ -743,7 +747,6 @@ class PhpDocParser
 			);
 		}
 	}
-
 
 	/**
 	 * @return ConstExprIntegerNode|ConstExprStringNode|IdentifierTypeNode|ConstFetchNode
@@ -816,7 +819,6 @@ class PhpDocParser
 		return $this->enrichWithAttributes($tokens, $key, $startLine, $startIndex);
 	}
 
-
 	/**
 	 * @return Ast\PhpDoc\ParamTagValueNode|Ast\PhpDoc\TypelessParamTagValueNode
 	 */
@@ -842,7 +844,6 @@ class PhpDocParser
 		return new Ast\PhpDoc\TypelessParamTagValueNode($isVariadic, $parameterName, $description, $isReference);
 	}
 
-
 	private function parseParamImmediatelyInvokedCallableTagValue(TokenIterator $tokens): Ast\PhpDoc\ParamImmediatelyInvokedCallableTagValueNode
 	{
 		$parameterName = $this->parseRequiredVariableName($tokens);
@@ -851,7 +852,6 @@ class PhpDocParser
 		return new Ast\PhpDoc\ParamImmediatelyInvokedCallableTagValueNode($parameterName, $description);
 	}
 
-
 	private function parseParamLaterInvokedCallableTagValue(TokenIterator $tokens): Ast\PhpDoc\ParamLaterInvokedCallableTagValueNode
 	{
 		$parameterName = $this->parseRequiredVariableName($tokens);
@@ -859,7 +859,6 @@ class PhpDocParser
 
 		return new Ast\PhpDoc\ParamLaterInvokedCallableTagValueNode($parameterName, $description);
 	}
-
 
 	private function parseParamClosureThisTagValue(TokenIterator $tokens): Ast\PhpDoc\ParamClosureThisTagValueNode
 	{
@@ -886,14 +885,12 @@ class PhpDocParser
 		return new Ast\PhpDoc\VarTagValueNode($type, $variableName, $description);
 	}
 
-
 	private function parseReturnTagValue(TokenIterator $tokens): Ast\PhpDoc\ReturnTagValueNode
 	{
 		$type = $this->typeParser->parse($tokens);
 		$description = $this->parseOptionalDescription($tokens, true);
 		return new Ast\PhpDoc\ReturnTagValueNode($type, $description);
 	}
-
 
 	private function parseThrowsTagValue(TokenIterator $tokens): Ast\PhpDoc\ThrowsTagValueNode
 	{
@@ -923,12 +920,18 @@ class PhpDocParser
 		return new Ast\PhpDoc\RequireImplementsTagValueNode($type, $description);
 	}
 
+	private function parseSealedTagValue(TokenIterator $tokens): Ast\PhpDoc\SealedTagValueNode
+	{
+		$type = $this->typeParser->parse($tokens);
+		$description = $this->parseOptionalDescription($tokens, true);
+		return new Ast\PhpDoc\SealedTagValueNode($type, $description);
+	}
+
 	private function parseDeprecatedTagValue(TokenIterator $tokens): Ast\PhpDoc\DeprecatedTagValueNode
 	{
 		$description = $this->parseOptionalDescription($tokens, false);
 		return new Ast\PhpDoc\DeprecatedTagValueNode($description);
 	}
-
 
 	private function parsePropertyTagValue(TokenIterator $tokens): Ast\PhpDoc\PropertyTagValueNode
 	{
@@ -937,7 +940,6 @@ class PhpDocParser
 		$description = $this->parseOptionalDescription($tokens, false);
 		return new Ast\PhpDoc\PropertyTagValueNode($type, $parameterName, $description);
 	}
-
 
 	private function parseMethodTagValue(TokenIterator $tokens): Ast\PhpDoc\MethodTagValueNode
 	{
@@ -1205,7 +1207,6 @@ class PhpDocParser
 
 		return $parameterName;
 	}
-
 
 	private function parseRequiredVariableName(TokenIterator $tokens): string
 	{

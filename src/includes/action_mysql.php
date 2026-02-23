@@ -112,6 +112,7 @@ function nv_create_table_sys($lang, $init = [])
          dtime_type CHAR(50) NOT NULL DEFAULT 'regular',
          dtime_details TEXT NULL DEFAULT NULL,
          active varchar(10) DEFAULT '1',
+         bot_visible tinyint(1) NOT NULL DEFAULT '1' COMMENT 'Hiển thị với bot',
          act tinyint(1) unsigned NOT NULL DEFAULT '1',
          groups_view varchar(255) DEFAULT '',
          all_func tinyint(4) NOT NULL DEFAULT '0',

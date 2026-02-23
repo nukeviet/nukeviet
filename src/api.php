@@ -17,6 +17,9 @@ define('NV_ROOTDIR', pathinfo(str_replace(DIRECTORY_SEPARATOR, '/', __FILE__), P
 
 require NV_ROOTDIR . '/includes/mainfile.php';
 
+// Remote API không cần session
+session_write_close();
+
 use NukeViet\Api\Api;
 use NukeViet\Api\ApiResult;
 use NukeViet\Uapi\Uapi;

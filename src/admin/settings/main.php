@@ -22,7 +22,9 @@ $mobile_theme_array_file = nv_scandir(NV_ROOTDIR . '/themes', $global_config['ch
 
 $sql = 'SELECT DISTINCT theme FROM ' . NV_PREFIXLANG . '_modthemes WHERE func_id=0';
 $result = $db->query($sql);
-while ([$theme] = $result->fetch(3)) {
+while ($_scratch = $result->fetch(3)) {
+    [$theme] = $_scratch;
+    unset($_scratch);
     if (in_array($theme, $theme_array_file, true)) {
         $theme_array[] = $theme;
     } elseif (in_array($theme, $mobile_theme_array_file, true)) {

@@ -70,7 +70,9 @@ if (preg_match($global_config['check_theme'], $selectthemes) and $sth->fetchColu
         $sth->execute();
 
         $fnresult = $db->query('SELECT func_id, func_name, func_custom_name, in_module FROM ' . NV_MODFUNCS_TABLE . ' WHERE show_func=1 ORDER BY subweight ASC');
-        while ([$func_id, $func_name, $func_custom_name, $in_module] = $fnresult->fetch(3)) {
+        while ($_scratch = $fnresult->fetch(3)) {
+            [$func_id, $func_name, $func_custom_name, $in_module] = $_scratch;
+            unset($_scratch);
             $layout_name = (isset($array_layout_func_default[$in_module][$func_name])) ? $array_layout_func_default[$in_module][$func_name] : $layoutdefault;
             $sth->bindParam(':func_id', $func_id, PDO::PARAM_INT);
             $sth->bindParam(':layout', $layout_name, PDO::PARAM_STR);
@@ -81,7 +83,9 @@ if (preg_match($global_config['check_theme'], $selectthemes) and $sth->fetchColu
         // Thiết lập Block
         $array_all_funcid = [];
         $func_result = $db->query('SELECT func_id FROM ' . NV_MODFUNCS_TABLE . ' WHERE show_func = 1 ORDER BY in_module ASC, subweight ASC');
-        while ([$func_id_i] = $func_result->fetch(3)) {
+        while ($_scratch = $func_result->fetch(3)) {
+            [$func_id_i] = $_scratch;
+            unset($_scratch);
             $array_all_funcid[] = $func_id_i;
         }
 
@@ -124,16 +128,17 @@ if (preg_match($global_config['check_theme'], $selectthemes) and $sth->fetchColu
             $row['dtime_type'] = 'regular';
             $row['dtime_details'] = '[]';
             $row['active'] = 1;
+            $row['bot_visible'] = 1;
             $row['groups_view'] = '6';
 
             $all_func = ($row['all_func'] == 1 and preg_match('/^global\.([a-zA-Z0-9\-\_\.]+)\.php$/', $file_name)) ? 1 : 0;
 
             $_sql = 'INSERT INTO ' . NV_BLOCKS_TABLE . "_groups (
                 theme, module, file_name, title, link, template, heading, position,
-                dtime_type, dtime_details, active, groups_view, all_func, weight, config
+                dtime_type, dtime_details, active, bot_visible, groups_view, all_func, weight, config
             ) VALUES (
                 :selectthemes, :module, :file_name, :title, :link, :template, :heading, :position,
-                :dtime_type, :dtime_details, '" . $row['active'] . "', :groups_view,
+                :dtime_type, :dtime_details, '" . $row['active'] . "', '" . $row['bot_visible'] . "', :groups_view,
                 '" . $all_func . "', '" . $row['weight'] . "', :config
             )";
             $data = [];

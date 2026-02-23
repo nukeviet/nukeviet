@@ -18,7 +18,9 @@ $page_title = $nv_Lang->getModule('settings');
 // Lấy tất cả các giao diện (không phải mobile) đã được thiết lập
 $array_site_cat_theme = $array_site_theme = [];
 $result = $db->query('SELECT DISTINCT theme FROM ' . NV_PREFIXLANG . '_modthemes WHERE func_id=0 ORDER BY theme ASC');
-while ([$theme] = $result->fetch(3)) {
+while ($_scratch = $result->fetch(3)) {
+    [$theme] = $_scratch;
+    unset($_scratch);
     if (preg_match($global_config['check_theme'], $theme)) {
         $array_site_theme[] = $theme;
     }

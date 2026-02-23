@@ -21,7 +21,9 @@ if ($global_config['idsite']) {
     if (!empty($theme)) {
         $array_site_cat_theme = explode(',', $theme);
         $result = $db->query('SELECT DISTINCT theme FROM ' . NV_PREFIXLANG . '_modthemes WHERE func_id=0');
-        while ([$theme] = $result->fetch(3)) {
+        while ($_scratch = $result->fetch(3)) {
+            [$theme] = $_scratch;
+            unset($_scratch);
             $array_site_cat_theme[] = $theme;
         }
         $theme_array = array_intersect($theme_array, $array_site_cat_theme);

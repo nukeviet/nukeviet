@@ -30,7 +30,9 @@ $result = $db->query($sql);
 
 $is_delCache = false;
 $act2 = [];
-while ([$m, $mod_file, $is_sys, $version] = $result->fetch(3)) {
+while ($_scratch = $result->fetch(3)) {
+    [$m, $mod_file, $is_sys, $version] = $_scratch;
+    unset($_scratch);
     $new_modules[$m] = [
         'module_file' => $mod_file,
         'is_sys' => $is_sys,

@@ -7,8 +7,8 @@
  * @category    Library
  * @package     Barcode
  * @author      Nicola Asuni <info@tecnick.com>
- * @copyright   2015-2024 Nicola Asuni - Tecnick.com LTD
- * @license     http://www.gnu.org/copyleft/lesser.html GNU-LGPL v3 (see LICENSE.TXT)
+ * @copyright   2015-2026 Nicola Asuni - Tecnick.com LTD
+ * @license     https://www.gnu.org/copyleft/lesser.html GNU-LGPL v3 (see LICENSE.TXT)
  * @link        https://github.com/tecnickcom/tc-lib-barcode
  *
  * This file is part of tc-lib-barcode software library.
@@ -31,8 +31,8 @@ use Com\Tecnick\Barcode\Type\Square\QrCode\Split;
  * @category    Library
  * @package     Barcode
  * @author      Nicola Asuni <info@tecnick.com>
- * @copyright   2015-2024 Nicola Asuni - Tecnick.com LTD
- * @license     http://www.gnu.org/copyleft/lesser.html GNU-LGPL v3 (see LICENSE.TXT)
+ * @copyright   2015-2026 Nicola Asuni - Tecnick.com LTD
+ * @license     https://www.gnu.org/copyleft/lesser.html GNU-LGPL v3 (see LICENSE.TXT)
  * @link        https://github.com/tecnickcom/tc-lib-barcode
  */
 class QrCode extends \Com\Tecnick\Barcode\Type\Square
@@ -110,22 +110,22 @@ class QrCode extends \Com\Tecnick\Barcode\Type\Square
         // level
         if (
             ! isset($this->params[0])
-            || ! isset(Data::ECC_LEVELS[$this->params[0]])
+            || ! isset(Data::ECC_LEVELS[\strval($this->params[0])])
         ) {
             $this->params[0] = 'L';
         }
 
-        $this->level = Data::ECC_LEVELS[$this->params[0]];
+        $this->level = Data::ECC_LEVELS[\strval($this->params[0])];
 
         // hint
         if (
             ! isset($this->params[1])
-            || ! isset(Data::ENC_MODES[$this->params[1]])
+            || ! isset(Data::ENC_MODES[\strval($this->params[1])])
         ) {
             $this->params[1] = '8B';
         }
 
-        $this->hint = Data::ENC_MODES[$this->params[1]];
+        $this->hint = Data::ENC_MODES[\strval($this->params[1])];
 
         // version
         if (
@@ -172,7 +172,7 @@ class QrCode extends \Com\Tecnick\Barcode\Type\Square
      */
     protected function setBars(): void
     {
-        if (strlen((string) $this->code) == 0) {
+        if (\strlen((string) $this->code) == 0) {
             throw new BarcodeException('Empty input');
         }
 
@@ -194,11 +194,11 @@ class QrCode extends \Com\Tecnick\Barcode\Type\Square
      */
     protected function binarize(array $frame): array
     {
-        $len = count($frame);
+        $len = \count($frame);
         // the frame is square (width = height)
         foreach ($frame as &$frameLine) {
             for ($idx = 0; $idx < $len; ++$idx) {
-                $frameLine[$idx] = ((ord($frameLine[$idx]) & 1) !== 0) ? '1' : '0';
+                $frameLine[$idx] = ((\ord($frameLine[$idx]) & 1) !== 0) ? '1' : '0';
             }
         }
 
@@ -238,7 +238,7 @@ class QrCode extends \Com\Tecnick\Barcode\Type\Square
      */
     protected function toUpper(string $data): string
     {
-        $len = strlen($data);
+        $len = \strlen($data);
         $pos = 0;
 
         while ($pos < $len) {
@@ -246,8 +246,8 @@ class QrCode extends \Com\Tecnick\Barcode\Type\Square
             if ($mode == Data::ENC_MODES['KJ']) {
                 $pos += 2;
             } else {
-                if ((ord($data[$pos]) >= ord('a')) && (ord($data[$pos]) <= ord('z'))) {
-                    $data[$pos] = chr(ord($data[$pos]) - 32);
+                if ((\ord($data[$pos]) >= \ord('a')) && (\ord($data[$pos]) <= \ord('z'))) {
+                    $data[$pos] = \chr(\ord($data[$pos]) - 32);
                 }
 
                 ++$pos;

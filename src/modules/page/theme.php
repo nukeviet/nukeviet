@@ -39,21 +39,18 @@ function nv_page_main(array $row, array $ab_links, string $content_comment): str
 }
 
 /**
- * nv_page_main_list()
+ * Giao diện danh sách bài giới thiệu
  *
  * @param array  $array_data
  * @param string $generate_page
  * @return string
  */
-function nv_page_main_list($array_data, $generate_page)
+function nv_page_main_list(array $array_data, string $generate_page) : string
 {
-    global $module_upload, $module_info, $module_name;
-
-    $xtpl = new XTemplate('main_list.tpl', get_module_tpl_dir('main_list.tpl'));
-    $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
+    global $module_upload, $module_name, $nv_Lang;
 
     if (!empty($array_data)) {
-        foreach ($array_data as $row) {
+        foreach ($array_data as &$row) {
             if (!empty($row['image'])) {
                 if (file_exists(NV_ROOTDIR . '/' . NV_ASSETS_DIR . '/' . $module_upload . '/' . $row['image'])) {
                     $row['image'] = NV_BASE_SITEURL . NV_ASSETS_DIR . '/' . $module_upload . '/' . $row['image'];
@@ -62,27 +59,19 @@ function nv_page_main_list($array_data, $generate_page)
                 } else {
                     $row['image'] = '';
                 }
-                $row['imagealt'] = !empty($row['imagealt']) ? $row['imagealt'] : $row['title'];
+                $row['imagealt'] = !empty($row['imagealt']) ? $row['imagealt']: $row['title'];
             }
-
-            $xtpl->assign('DATA', $row);
-
-            if (!empty($row['image'])) {
-                $xtpl->parse('main.loop.image');
-            }
-            if (defined('NV_IS_MODADMIN')) {
-                $xtpl->assign('ADMIN_CHECKSS', md5($row['id'] . NV_CHECK_SESSION));
-                $xtpl->assign('ADMIN_EDIT', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=content&amp;id=' . $row['id']);
-                $xtpl->parse('main.loop.adminlink');
-            }
-            $xtpl->parse('main.loop');
+            $row['admin_checkss'] = defined('NV_IS_MODADMIN') ? md5($row['id'] . NV_CHECK_SESSION) : '';
         }
-        if ($generate_page != '') {
-            $xtpl->assign('GENERATE_PAGE', $generate_page);
-        }
+        unset($row);
     }
 
-    $xtpl->parse('main');
+    $tpl = new \NukeViet\Template\NVSmarty();
+    $tpl->setTemplateDir(get_module_tpl_dir('main.tpl'));
+    $tpl->assign('LANG', $nv_Lang);
+    $tpl->assign('MODULE_NAME', $module_name);
+    $tpl->assign('DATA', $array_data);
+    $tpl->assign('GENERATE_PAGE', $generate_page);
 
-    return $xtpl->text('main');
+    return $tpl->fetch('main.tpl');
 }

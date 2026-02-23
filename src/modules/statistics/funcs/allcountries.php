@@ -44,7 +44,9 @@ if ($num_items) {
     $result = $db->query($db->sql());
 
     $countries_list = [];
-    while ([$country, $count, $last_visit] = $result->fetch(3)) {
+    while ($_scratch = $result->fetch(3)) {
+        [$country, $count, $last_visit] = $_scratch;
+        unset($_scratch);
         $countries_list[] = [
             'key' => $country,
             'name' => ($country != 'ZZ' and isset($countries[$country])) ? ($nv_Lang->existsGlobal('country_' . $country) ? $nv_Lang->getGlobal('country_' . $country) : $countries[$country][1]) : $nv_Lang->getGlobal('unknown'),

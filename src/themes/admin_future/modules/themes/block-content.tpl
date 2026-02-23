@@ -102,6 +102,14 @@
                 </div>
             </div>
             <div class="row mb-3">
+                <div class="col-sm-9 offset-sm-3">
+                    <div class="form-check form-switch">
+                        <input class="form-check-input" type="checkbox" id="switch_bot_visible" name="bot_visible" value="1" role="switch"{if $ROW.bot_visible} checked{/if}>
+                        <label class="form-check-label" for="switch_bot_visible">{$LANG->getModule('dtime_allow_bot')}</label>
+                    </div>
+                </div>
+            </div>
+            <div class="row mb-3">
                 <div class="col-sm-3 col-form-label text-sm-end text-truncate fw-medium" title="{$LANG->getGlobal('groups_view')}">{$LANG->getGlobal('groups_view')}:</div>
                 <div class="col-9 col-sm-5">
                     <div data-nv-toggle="scroll" class="show-list-ugroup">

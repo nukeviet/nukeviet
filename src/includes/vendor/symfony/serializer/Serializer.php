@@ -75,10 +75,12 @@ class Serializer implements SerializerInterface, NormalizerInterface, Denormaliz
     /**
      * @param array<NormalizerInterface|DenormalizerInterface> $normalizers
      * @param array<EncoderInterface|DecoderInterface>         $encoders
+     * @param array<string, mixed>                             $defaultContext
      */
     public function __construct(
         private array $normalizers = [],
         array $encoders = [],
+        private array $defaultContext = [],
     ) {
         foreach ($normalizers as $normalizer) {
             if ($normalizer instanceof SerializerAwareInterface) {
@@ -154,12 +156,12 @@ class Serializer implements SerializerInterface, NormalizerInterface, Denormaliz
             return $data;
         }
 
-        if (\is_array($data) && !$data && ($context[self::EMPTY_ARRAY_AS_OBJECT] ?? false)) {
+        if (\is_array($data) && !$data && ($context[self::EMPTY_ARRAY_AS_OBJECT] ?? $this->defaultContext[self::EMPTY_ARRAY_AS_OBJECT] ?? false)) {
             return new \ArrayObject();
         }
 
         if (is_iterable($data)) {
-            if ($data instanceof \Countable && ($context[AbstractObjectNormalizer::PRESERVE_EMPTY_OBJECTS] ?? false) && !\count($data)) {
+            if ($data instanceof \Countable && ($context[AbstractObjectNormalizer::PRESERVE_EMPTY_OBJECTS] ?? $this->defaultContext[AbstractObjectNormalizer::PRESERVE_EMPTY_OBJECTS] ?? false) && !\count($data)) {
                 return new \ArrayObject();
             }
 
@@ -211,7 +213,7 @@ class Serializer implements SerializerInterface, NormalizerInterface, Denormaliz
             throw new NotNormalizableValueException(\sprintf('Could not denormalize object of type "%s", no supporting normalizer found.', $type));
         }
 
-        if (isset($context[DenormalizerInterface::COLLECT_DENORMALIZATION_ERRORS])) {
+        if ((isset($context[DenormalizerInterface::COLLECT_DENORMALIZATION_ERRORS]) || isset($this->defaultContext[DenormalizerInterface::COLLECT_DENORMALIZATION_ERRORS])) && !isset($context['not_normalizable_value_exceptions'])) {
             unset($context[DenormalizerInterface::COLLECT_DENORMALIZATION_ERRORS]);
             $context['not_normalizable_value_exceptions'] = [];
             $errors = &$context['not_normalizable_value_exceptions'];
@@ -226,7 +228,7 @@ class Serializer implements SerializerInterface, NormalizerInterface, Denormaliz
                         continue;
                     }
 
-                    $uniqueErrors[$error->getPath()] = $uniqueErrors[$error->getPath()] ?? $error;
+                    $uniqueErrors[$error->getPath()] ??= $error;
                 }
 
                 throw new PartialDenormalizationException($denormalized, array_values($uniqueErrors));
@@ -270,8 +272,8 @@ class Serializer implements SerializerInterface, NormalizerInterface, Denormaliz
             $genericType = '*';
         }
 
-        if (!isset($this->normalizerCache[$format][$type])) {
-            $this->normalizerCache[$format][$type] = [];
+        if (!isset($this->normalizerCache[$format ?? ''][$type])) {
+            $this->normalizerCache[$format ?? ''][$type] = [];
 
             foreach ($this->normalizers as $k => $normalizer) {
                 if (!$normalizer instanceof NormalizerInterface) {
@@ -289,7 +291,7 @@ class Serializer implements SerializerInterface, NormalizerInterface, Denormaliz
 
                     if (null === $isCacheable) {
                         unset($supportedTypes['*'], $supportedTypes['object']);
-                    } elseif ($this->normalizerCache[$format][$type][$k] = $isCacheable && $normalizer->supportsNormalization($data, $format, $context)) {
+                    } elseif ($this->normalizerCache[$format ?? ''][$type][$k] = $isCacheable && $normalizer->supportsNormalization($data, $format, $context)) {
                         break 2;
                     }
 
@@ -300,13 +302,13 @@ class Serializer implements SerializerInterface, NormalizerInterface, Denormaliz
                     continue;
                 }
 
-                if ($this->normalizerCache[$format][$type][$k] ??= $isCacheable && $normalizer->supportsNormalization($data, $format, $context)) {
+                if ($this->normalizerCache[$format ?? ''][$type][$k] ??= $isCacheable && $normalizer->supportsNormalization($data, $format, $context)) {
                     break;
                 }
             }
         }
 
-        foreach ($this->normalizerCache[$format][$type] as $k => $cached) {
+        foreach ($this->normalizerCache[$format ?? ''][$type] as $k => $cached) {
             $normalizer = $this->normalizers[$k];
             if ($cached || $normalizer->supportsNormalization($data, $format, $context)) {
                 return $normalizer;
@@ -326,8 +328,8 @@ class Serializer implements SerializerInterface, NormalizerInterface, Denormaliz
      */
     private function getDenormalizer(mixed $data, string $class, ?string $format, array $context): ?DenormalizerInterface
     {
-        if (!isset($this->denormalizerCache[$format][$class])) {
-            $this->denormalizerCache[$format][$class] = [];
+        if (!isset($this->denormalizerCache[$format ?? ''][$class])) {
+            $this->denormalizerCache[$format ?? ''][$class] = [];
             $genericType = class_exists($class) || interface_exists($class, false) ? 'object' : '*';
 
             foreach ($this->normalizers as $k => $normalizer) {
@@ -349,7 +351,7 @@ class Serializer implements SerializerInterface, NormalizerInterface, Denormaliz
 
                     if (null === $isCacheable) {
                         unset($supportedTypes['*'], $supportedTypes['object']);
-                    } elseif ($this->denormalizerCache[$format][$class][$k] = $isCacheable && $normalizer->supportsDenormalization(null, $class, $format, $context)) {
+                    } elseif ($this->denormalizerCache[$format ?? ''][$class][$k] = $isCacheable && $normalizer->supportsDenormalization(null, $class, $format, $context)) {
                         break 2;
                     }
 
@@ -360,13 +362,13 @@ class Serializer implements SerializerInterface, NormalizerInterface, Denormaliz
                     continue;
                 }
 
-                if ($this->denormalizerCache[$format][$class][$k] ??= $isCacheable && $normalizer->supportsDenormalization(null, $class, $format, $context)) {
+                if ($this->denormalizerCache[$format ?? ''][$class][$k] ??= $isCacheable && $normalizer->supportsDenormalization(null, $class, $format, $context)) {
                     break;
                 }
             }
         }
 
-        foreach ($this->denormalizerCache[$format][$class] as $k => $cached) {
+        foreach ($this->denormalizerCache[$format ?? ''][$class] as $k => $cached) {
             $normalizer = $this->normalizers[$k];
             if ($cached || $normalizer->supportsDenormalization($data, $class, $format, $context)) {
                 return $normalizer;

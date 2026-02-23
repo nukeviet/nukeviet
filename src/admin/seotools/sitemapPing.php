@@ -57,7 +57,7 @@ function nv_sitemapPing($module, $link)
             $result = true;
         }
     }
-    curl_close($c);
+    unset($c);
 
     if (!$result and nv_function_exists('fsockopen')) {
         $url_parts = parse_url($link);

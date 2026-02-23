@@ -15,7 +15,7 @@ final class ByteStringObject extends AbstractCBORObject implements Normalizable
 
     private string $value;
 
-    private ?string $length = null;
+    private ?string $length;
 
     public function __construct(string $data)
     {
@@ -29,9 +29,7 @@ final class ByteStringObject extends AbstractCBORObject implements Normalizable
     public function __toString(): string
     {
         $result = parent::__toString();
-        if ($this->length !== null) {
-            $result .= $this->length;
-        }
+        $result .= $this->length ?? '';
 
         return $result . $this->value;
     }
