@@ -15,6 +15,8 @@ if (!defined('NV_MAINFILE')) {
 
 if (!nv_function_exists('site_terms')) {
     /**
+     * site_terms_config()
+     *
      * @param string $module
      * @param array  $data_block
      * @return string
@@ -55,7 +57,13 @@ if (!nv_function_exists('site_terms')) {
         return $tpl->fetch('global.siteterms.config.tpl');
     }
 
-    function site_terms_submit($module)
+    /**
+     * site_terms_submit()
+     *
+     * @param string $module
+     * @return array
+     */
+    function site_terms_submit(string $module): array
     {
         global $nv_Request;
 
@@ -68,11 +76,14 @@ if (!nv_function_exists('site_terms')) {
 
         return $return;
     }
+
     /**
+     * site_terms()
+     *
      * @param array $block_config
      * @return string
      */
-    function site_terms($block_config): string
+    function site_terms(array $block_config): string
     {
         $term_names = !empty($block_config['term_names']) ? array_map('trim', explode('|', $block_config['term_names'])) : [''];
         $term_queries = !empty($block_config['term_queries']) ? array_map('trim', explode('|', $block_config['term_queries'])) : [''];

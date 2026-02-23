@@ -16,10 +16,10 @@
 
             <input type="text" name="term_names[]" value="{$term.name}"placeholder="{$LANG->getModule('term_name')}" class="form-control">
             <input type="text" name="term_queries[]" value="{$term.query}" placeholder="{$LANG->getModule('term_query')}" class="form-control w-25">
-            <button class="btn btn-danger ms-1" type="button" data-bs-toggle="del_term" title="{$LANG->getModule('del')}">
+            <button class="btn btn-danger ms-1" type="button" data-bs-toggle="del_term" title="{$LANG->getGlobal('delete')}">
                 <i class="bi bi-trash">&times;</i>
             </button>
-            <button class="btn btn-primary ms-1" type="button" data-bs-toggle="add_term" title="{$LANG->getModule('add_new')}">
+            <button class="btn btn-primary ms-1" type="button" data-bs-toggle="add_term" title="{$LANG->getGlobal('add')}">
                 <span>+</span>
             </button>
         </div>
