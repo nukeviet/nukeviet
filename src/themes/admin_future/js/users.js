@@ -124,13 +124,13 @@ $(function () {
             const btn = $(this);
             const icon = $('i', btn);
             const fid = btn.data('fid');
-            
+
             nukeviet.confirm(nv_is_del_confirm[0], () => {
                 if (icon.is('.fa-spinner')) {
                     return;
                 }
                 icon.removeClass(icon.data('icon')).addClass('fa-spinner fa-spin-pulse');
-                
+
                 $.ajax({
                     type: 'POST',
                     url: script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=fields&nocache=' + new Date().getTime(),
@@ -264,7 +264,7 @@ $(function () {
         $('input[name="filetype[]"]').on('change', function() {
             const filetype = $(this).val();
             const checked = $(this).is(':checked');
-            
+
             // Chỉ xử lý khi bỏ check filetype thì uncheck tất cả mime của nó
             // Khi check filetype thì không tự động check mime, để user tự chọn
             if (!checked) {
@@ -497,7 +497,7 @@ $(document).ready(function() {
     // Parse URL params once
     const urlParams = new URLSearchParams(window.location.search);
     const gid = urlParams.get('userlist');
-    
+
     // Get alias
     $('#get_alias_btn').on('click', function() {
         get_alias();
@@ -520,7 +520,7 @@ $(document).ready(function() {
                 return;
             }
             icon.removeClass(icon.data('icon')).addClass('fa-spinner fa-spin-pulse');
-            
+
             // Lấy ID từ URL nếu đang edit
             const id = urlParams.get('id') || 0;
             $.post(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=groups&nocache=' + new Date().getTime(), 'getAlias=1&id=' + id + '&title=' + encodeURIComponent(title), function(res) {
@@ -530,13 +530,15 @@ $(document).ready(function() {
         }
     }
 
-    // Popover management for weight change
+    /**
+     * Quản lý các Popover cho chức năng thay đổi thứ tự
+     */
     let popOverALl = [];
-    
+
     function destroyAllPop() {
-        $.each(popOverALl, function(k, v) {
-            $(v).popover('dispose');
-            $(v).data('havepop', false);
+        popOverALl.forEach(function(pop) {
+            $(pop._element).data('havepop', false);
+            pop.dispose();
         });
         popOverALl = [];
     }
@@ -549,7 +551,7 @@ $(document).ready(function() {
             tmpgroup = $(keyID);
         }
         if (!tmpgroup.length) {
-            $('body').append('<ul id="tmpgroup_' + $(e).data('mod') + '" class="hidden" data-num="' + $(e).data('num') + '"></ul>');
+            $('body').append('<ul id="tmpgroup_' + $(e).data('mod') + '" class="d-none" data-num="' + $(e).data('num') + '"></ul>');
             tmpgroup = $(keyID);
             for (let i = $(e).data('min'); i <= $(e).data('num'); i++) {
                 tmpgroup.append('<li><a href="#" data-value="' + i + '">' + i + '</a></li>');
@@ -558,38 +560,44 @@ $(document).ready(function() {
         return '<div class="dropdown-tool-ctn"><ul class="dropdown-tool" data-mod="' + $(e).data('mod') + '" data-id="' + $(e).data('id') + '">' + tmpgroup.html() + '</ul></div>';
     }
 
-    // Handle change weight button click
-    $(document).on('click', '[data-toggle="changegroupweight"]', function(e) {
-        e.preventDefault();
-        e.stopPropagation();
-        const $this = $(this);
-        popOverALl.push(this);
-        if (!$this.data('havepop')) {
-            $this.data('havepop', true);
-            $this.popover({
-                container: 'body',
-                html: true,
-                placement: 'bottom',
-                content: getPopoverContent(this),
-                trigger: 'manual',
-                sanitize: false
-            });
-            $this.popover('show');
-            $this.on('shown.bs.popover', function() {
-                const ctn = $('#' + $this.attr('aria-describedby'));
-                const wrapArea = ctn.find('.dropdown-tool-ctn');
-                const wrapContent = ctn.find('.dropdown-tool');
-                wrapContent.find('[data-value="' + $this.data('current') + '"]').addClass('active');
-                if (wrapArea.height() < wrapContent.height()) {
-                    const item = wrapContent.find('li:first');
-                    const scrollTop = ($this.data('current') - $this.data('min')) * item.height();
-                    wrapArea.scrollTop(scrollTop);
-                }
-            });
+    // Xử lý sự kiện mở popover, active current item và cuộn tới nó
+    $(document).on('shown.bs.popover', '[data-toggle="changegroupweight"]', function() {
+        const ctn = $('#' + $(this).attr('aria-describedby'));
+        const wrapArea = ctn.find('.dropdown-tool-ctn');
+        const wrapContent = ctn.find('.dropdown-tool');
+        wrapContent.find('[data-value="' + $(this).data('current') + '"]').addClass('active');
+        if (wrapArea.height() < wrapContent.height()) {
+            const item = wrapContent.find('li:first');
+            const scrollTop = ($(this).data('current') - $(this).data('min')) * item.height();
+            wrapArea.scrollTop(scrollTop);
         }
     });
 
-    // Handle weight selection from popover
+    // Xử lý khi click nút thay đổi thứ tự
+    $(document).on('click', '[data-toggle="changegroupweight"]', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        const btn = $(this);
+        if (btn.data('havepop')) {
+            return;
+        }
+        destroyAllPop();
+        btn.data('havepop', true);
+        btn.attr('data-bs-toggle', 'popover');
+        btn.attr('data-bs-trigger', 'manual');
+        btn.attr('data-bs-content', '');
+
+        const popover = new bootstrap.Popover(btn[0], {
+            content: getPopoverContent(this),
+            html: true,
+            sanitize: false,
+            placement: 'bottom'
+        });
+        popover.show();
+        popOverALl.push(popover);
+    });
+
+    // Xử lý khi click vào item trong popover để thay đổi thứ tự
     $(document).on('click', '.dropdown-tool a', function(e) {
         e.preventDefault();
         destroyAllPop();
@@ -598,26 +606,40 @@ $(document).ready(function() {
         const btn = $('#group_' + ctn.data('mod') + '_' + ctn.data('id'));
         btn.find('span.text').html('<i class="fa-solid fa-spinner fa-spin"></i>' + $this.html());
         btn.prop('disabled', true);
-        $.post(
-            script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=groups&nocache=' + new Date().getTime(),
-            'id=' + ctn.data('id') + '&cWeight=' + $this.data('value') + '&tokend=' + btn.data('tokend'),
-            function(res) {
-                if (res != 'OK') {
-                    nukeviet.toast(btn.data('msgerror'), 'error');
+
+        $.ajax({
+            type: 'POST',
+            url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=groups&nocache=' + new Date().getTime(),
+            data: {
+                id: ctn.data('id'),
+                cWeight: $this.data('value'),
+                tokend: btn.data('tokend')
+            },
+            dataType: 'json',
+            cache: false,
+            success: function (res) {
+                if (res.status === 'success') {
+                    location.reload();
+                    return;
                 }
-                location.reload();
+                btn.find('span.text').html(btn.data('current'));
+                btn.prop('disabled', false);
+                nukeviet.toast(res.mess || 'Error response', 'error');
+            },
+            error: function (xhr, text, err) {
+                nukeviet.toast(text, 'error');
+                console.log(xhr, text, err);
+                btn.find('span.text').html(btn.data('current'));
+                btn.prop('disabled', false);
             }
-        );
+        });
     });
 
-    // Handle popover click (prevent close)
-    $(document).on('click', 'div.popover', function(e) {
-        e.stopPropagation();
-    });
-
-    // Close popover when clicking outside
-    $(document).on('click', function() {
-        destroyAllPop();
+    // Tắt hết popover khi click ra ngoài
+    $(document).on('click', function(e) {
+        if (!$(e.target).closest('.popover').length) {
+            destroyAllPop();
+        }
     });
 
     // Datepicker for exp_time
@@ -657,10 +679,10 @@ $(document).ready(function() {
         if (icon.is('.fa-spinner')) {
             return;
         }
-        
+
         if (confirm(nv_is_del_confirm[0])) {
             icon.removeClass('fa-trash').addClass('fa-spinner fa-spin-pulse');
-            
+
             $.ajax({
                 type: 'POST',
                 url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=groups',
@@ -686,7 +708,7 @@ $(document).ready(function() {
     $(document).on('change', 'input.actGroup', function() {
         const $this = $(this);
         $this.prop('disabled', true);
-        
+
         $.ajax({
             type: 'POST',
             url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=groups',
@@ -705,14 +727,14 @@ $(document).ready(function() {
     $(document).on('click', '[data-toggle="delInactiveGroup"]', function(e) {
         e.preventDefault();
         const btn = $(this);
-        
+
         if (confirm(btn.data('msgconfirm'))) {
             const icon = $('i', btn);
             if (icon.is('.fa-spinner')) {
                 return;
             }
             icon.removeClass('fa-trash').addClass('fa-spinner fa-spin-pulse');
-            
+
             $.ajax({
                 type: 'POST',
                 url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=groups',
@@ -757,7 +779,7 @@ $(document).ready(function() {
                 $('#ablist input[name=uid]').focus();
                 return false;
             }
-            
+
             $('#pageContent input, #pageContent select').attr('disabled', 'disabled');
             $.ajax({
                 type: 'POST',

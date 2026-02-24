@@ -14,7 +14,7 @@
                         <th class="text-nowrap" style="width: 20%;">{$LANG->getModule('title')}</th>
                         <th class="text-nowrap" style="width: 15%;">{$LANG->getModule('add_time')}</th>
                         <th class="text-nowrap" style="width: 15%;">{$LANG->getModule('exp_time')}</th>
-                        <th class="text-nowrap" style="width: 10%;">{$LANG->getModule('users')}</th>
+                        <th class="text-nowrap text-center" style="width: 10%;">{$LANG->getModule('users')}</th>
                         <th class="text-nowrap text-center" style="width: 10%;">{$LANG->getGlobal('active')}</th>
                         <th class="text-nowrap text-center" style="width: 20%;">{$LANG->getGlobal('actions')}</th>
                     </tr>
@@ -34,7 +34,7 @@
                         <td class="text-start"><a title="{$LANG->getModule('users')}" href="{$row.link_userlist}">{$row.title}</a></td>
                         <td>{$row.add_time}</td>
                         <td>{$row.exp_time}</td>
-                        <td><strong class="text-danger">{$row.number}</strong></td>
+                        <td class="text-danger text-center"><strong>{$row.number}</strong></td>
                         <td class="text-center"><input data-id="{$row.group_id}" data-tokend="{$smarty.const.NV_CHECK_SESSION}" type="checkbox" class="actGroup form-check-input" name="act_{$row.group_id}" value="1"{if $row.act} checked{/if}{if $row.disabled} disabled{/if}></td>
                         <td class="text-center">
                             {if $row.show_action}

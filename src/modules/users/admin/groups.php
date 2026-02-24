@@ -100,12 +100,15 @@ if (!$checkEmptyGroup and !$nv_Request->isset_request('add', 'get')) {
 $request_tokend = $nv_Request->get_title('tokend', 'post', '');
 
 // Thay đổi thứ tự nhóm
-if ($nv_Request->isset_request('cWeight, id', 'post') and $request_tokend === NV_CHECK_SESSION) {
+if ($nv_Request->isset_request('cWeight, id', 'post') and hash_equals(NV_CHECK_SESSION, $request_tokend)) {
     $group_id = $nv_Request->get_int('id', 'post');
     $cWeight = $nv_Request->get_int('cWeight', 'post');
 
     if (!isset($groupsList[$group_id]) or !defined('NV_IS_SPADMIN') or $groupsList[$group_id]['idsite'] != $global_config['idsite'] or ($global_config['idsite'] > 0 and $group_id < 10)) {
-        nv_htmlOutput('ERROR');
+        nv_jsonOutput([
+            'status' => 'error',
+            'mess' => 'Group not found!!!'
+        ]);
     }
 
     $cWeight = min($cWeight, count($groupsList));
@@ -133,7 +136,10 @@ if ($nv_Request->isset_request('cWeight, id', 'post') and $request_tokend === NV
 
     $nv_Cache->delMod($module_name);
     nv_insert_logs(NV_LANG_DATA, $module_name, $nv_Lang->getModule('changeGroupWeight'), 'group_id: ' . $group_id, $admin_info['userid']);
-    nv_htmlOutput('OK');
+    nv_jsonOutput([
+        'status' => 'success',
+        'mess' => 'success'
+    ]);
 }
 
 // Thay doi tinh trang hien thi cua nhom
@@ -509,7 +515,7 @@ if ($nv_Request->isset_request('listUsers', 'get')) {
                 'loop' => [],
                 'page' => ''
             ];
-            
+
             foreach ($arr_userids as $_userid) {
                 $row = $array_userid[$_userid];
                 $row['full_name'] = nv_show_name_user($row['first_name'], $row['last_name'], $row['username']);
@@ -523,7 +529,7 @@ if ($nv_Request->isset_request('listUsers', 'get')) {
             }
             $listUsers_data[$_type] = $type_data;
         }
-        
+
         $tpl->assign('LIST_USERS', $listUsers_data);
 
         if (empty($type) or $type == 'leaders') {
@@ -826,7 +832,7 @@ if ($nv_Request->isset_request('add', 'get') or $nv_Request->isset_request('edit
             $post['group_avatar'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $post['group_avatar'];
         }
         $post['checkss'] = $checkss;
-        
+
         // Chuẩn bị dữ liệu cho template
         $tpl->assign('PAGE_TITLE', $page_title);
         $tpl->assign('DATA', $post);
@@ -903,7 +909,7 @@ foreach ($groupsList as $group_id => $values) {
         $loop['show_weight'] = true;
         $loop['weight'] = $_bg + $values['weight'] - 1;
         $loop['show_action'] = true;
-        
+
         if ($group_id > 9) {
             $loop['can_delete'] = true;
         }
