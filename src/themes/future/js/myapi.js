@@ -14,6 +14,7 @@ $(function() {
         const myroleapi = $('#my-role-api'),
             myroleapi_url = myroleapi.data('page-url');
 
+        // Kích hoạt / hủy kích hoạt quyền
         $('.credential-activate, .credential-deactivate', myroleapi).on('click', function(e) {
             e.preventDefault();
             const role_id = $(this).closest('.item').data('role-id');
@@ -49,6 +50,7 @@ $(function() {
             }, 1000);
         });
 
+        // Tạo mới thông tin xác thực
         $('.create_authentication', credential_auth).on('click', function(e) {
             e.preventDefault();
             const method = $(this).data('method');
@@ -72,6 +74,7 @@ $(function() {
             });
         });
 
+        // Xóa thông tin xác thực
         $('.delete_authentication', credential_auth).on('click', function(e) {
             e.preventDefault();
             const method = $(this).data('method');
@@ -95,6 +98,7 @@ $(function() {
             });
         });
 
+        // Cập nhật IPs
         credential_auth.on('input', '.ips', function() {
             $(this).val($(this).val().replace(/[\r\n\v]+/g, ''));
         });
@@ -127,6 +131,7 @@ $(function() {
             });
         });
 
+        // Lấy danh sách các API theo role
         $(document).on('click', '.open-api-modal', function(e) {
             e.preventDefault();
             const btn = $(this);

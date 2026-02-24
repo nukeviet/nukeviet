@@ -33,16 +33,4 @@
 #credential_auth .bg-white {
   background-color: white;
 }
-
-.action-column {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-  align-items: stretch;
-}
-.action-column .btn {
-  width: 100%;
-  white-space: nowrap;
-  font-size: 13px;
-}
 /*# sourceMappingURL=myapi.d.rtl.css.map */

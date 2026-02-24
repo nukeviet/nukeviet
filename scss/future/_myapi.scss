@@ -31,16 +31,3 @@
     background-color: white;
   }
 }
-
-.action-column {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-    align-items: stretch;
-
-    .btn {
-        width: 100%;
-        white-space: nowrap;
-        font-size: 13px;
-    }
-}

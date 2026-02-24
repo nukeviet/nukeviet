@@ -17,7 +17,7 @@
         </div>
         <div>
             <button type="button" class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#credential_auth">
-                <i class="fa fa-shield fa-lg text-danger"></i> {$LANG->getModule('authentication')}
+                <i class="fa-solid fa-shield-halved fa-lg text-danger"></i> {$LANG->getModule('authentication')}
             </button>
             <div id="credential_auth" tabindex="-1" aria-labelledby="credentialAuthLabel" aria-hidden="true" class="modal fade">
                 <div class="modal-dialog">
@@ -49,21 +49,21 @@
                                 {foreach from=$METHODS key=key item=method}
                                 <div class="tab-pane fade {if $method@first}show active{/if}" id="{$key}-panel" role="tabpanel" aria-labelledby="{$key}-tab">
                                     <div class="mb-3">
-                                        <label class="form-label"><strong>{$LANG->getModule('api_credential_ident')}</strong></label>
+                                        <label class="form-label" for="{$key}-credential_ident"><strong>{$LANG->getModule('api_credential_ident')}</strong></label>
                                         <div class="input-group">
                                             <input type="text" name="{$key}_ident" id="{$key}-credential_ident" value="{$method.ident|default:''}" class="form-control bg-white" readonly>
                                             <button class="btn btn-outline-secondary" type="button" data-bs-toggle="clipboard" data-bs-target="#{$key}-credential_ident" data-bs-title="{$LANG->getModule('value_copied')}" data-bs-placement="left" data-bs-container="body" data-bs-trigger="manual">
-                                                <i class="fa fa-copy"></i>
+                                                <i class="fa-solid fa-copy"></i>
                                             </button>
                                         </div>
                                     </div>
 
                                     <div class="mb-3">
-                                        <label class="form-label"><strong>{$LANG->getModule('api_credential_secret')}</strong></label>
+                                        <label class="form-label" for="{$key}-credential_secret"><strong>{$LANG->getModule('api_credential_secret')}</strong></label>
                                         <div class="input-group">
                                             <input type="text" name="{$key}_secret" id="{$key}-credential_secret" value="{$method.secret|default:''}" class="form-control bg-white" readonly>
                                             <button class="btn btn-outline-secondary" type="button" data-bs-toggle="clipboard" data-bs-target="#{$key}-credential_secret" data-bs-title="{$LANG->getModule('value_copied')}" data-bs-placement="left" data-bs-container="body" data-bs-trigger="manual">
-                                                <i class="fa fa-copy"></i>
+                                                <i class="fa-solid fa-copy"></i>
                                             </button>
                                         </div>
                                     </div>
@@ -83,8 +83,8 @@
 
                                     <div class="row mb-3 api_ips"{if $method.not_access_authentication} style="display:none"{/if}>
                                         <div class="col-12 mb-3">
-                                            <label class="form-label"><strong>{$LANG->getModule('api_ips')}</strong></label>
-                                            <textarea class="form-control ips" name="{$key}_ips">{$method.ips|default:''}</textarea>
+                                            <label class="form-label" for="{$key}-api_ips"><strong>{$LANG->getModule('api_ips')}</strong></label>
+                                            <textarea class="form-control ips" name="{$key}_ips" id="{$key}-api_ips">{$method.ips|default:''}</textarea>
                                             <div class="form-text">{$LANG->getModule('api_ips_help')}</div>
                                         </div>
                                         <div class="text-center">
@@ -104,14 +104,14 @@
     </div>
     {if empty($ROLECOUNT)}
     <div class="alert alert-info d-flex align-items-center justify-content-center mb-3" role="alert">
-        <i class="fa fa-info-circle me-2"></i>
+        <i class="fa-solid fa-info-circle me-2"></i>
         <div>
             {$LANG->getModule('api_roles_empty')}
         </div>
     </div>
     {/if}
     {if not empty($ROLELIST)}
-    <div class="table-responsive">
+    <div class="table-responsive d-none d-lg-block">
         <table class="table table-bordered table-striped align-middle">
             <thead class="table-primary small">
                 <tr>
@@ -143,7 +143,7 @@
                     <td class="text-nowrap text-center" style="width:1%;">{$role.credential_access_count}</td>
                     <td class="text-nowrap text-center" style="width:1%;">{$role.credential_last_access}</td>
                     <td class="text-nowrap text-center" style="width:1%;">
-                        <div class="action-column">
+                        <div>
                             <button type="button" class="btn btn-secondary open-api-modal" data-role-id="{$role.role_id}" data-role-title="{$role.role_title}" data-page-url="{$PAGE_URL}" data-bs-toggle="modal" data-bs-target="#apiRoleModal">
                                 {$LANG->getModule('apis_list')}
                             </button>
@@ -162,6 +162,64 @@
                 {/foreach}
             </tbody>
         </table>
+    </div>
+    <div class="d-lg-none">
+        {foreach from=$ROLELIST item=role}
+        <div class="card mb-3 item{if $role.credential_status !== 1} text-muted{/if}" data-role-id="{$role.role_id}">
+            <div class="card-body">
+                <div class="d-flex justify-content-between mb-2">
+                    <div>
+                        <h6 class="card-title mb-0"><strong>{$role.role_title}</strong></h6>
+                        {if not empty($role.role_description)}
+                        <small class="text-muted">{$role.role_description}</small>
+                        {/if}
+                    </div>
+                    <div>{$role.status}</div>
+                </div>
+                <hr class="my-2">
+                <div class="row g-2 small">
+                    <div class="col-6">
+                        <span class="text-muted">{$LANG->getModule('api_role_credential_status')}:</span>
+                        <div class="fw-bold">{$role.credential_status_format}</div>
+                    </div>
+                    <div class="col-6">
+                        <span class="text-muted">{$LANG->getModule('api_role_credential_addtime')}:</span>
+                        <div class="fw-bold">{$role.credential_addtime}</div>
+                    </div>
+                    <div class="col-6">
+                        <span class="text-muted">{$LANG->getModule('endtime')}:</span>
+                        <div class="fw-bold">{$role.credential_endtime}</div>
+                    </div>
+                    <div class="col-6">
+                        <span class="text-muted">{$LANG->getModule('quota')}:</span>
+                        <div class="fw-bold">{$role.credential_quota}</div>
+                    </div>
+                    <div class="col-6">
+                        <span class="text-muted">{$LANG->getModule('api_role_credential_access_count')}:</span>
+                        <div class="fw-bold">{$role.credential_access_count}</div>
+                    </div>
+                    <div class="col-6">
+                        <span class="text-muted">{$LANG->getModule('api_role_credential_last_access')}:</span>
+                        <div class="fw-bold">{$role.credential_last_access}</div>
+                    </div>
+                </div>
+                <div class="mt-3 text-end">
+                    <button type="button" class="btn btn-sm btn-secondary open-api-modal" data-role-id="{$role.role_id}" data-role-title="{$role.role_title}" data-page-url="{$PAGE_URL}" data-bs-toggle="modal" data-bs-target="#apiRoleModal">
+                        {$LANG->getModule('apis_list')}
+                    </button>
+                    {if $TYPE == 'public' and $role.credential_status == 1}
+                    <button type="button" class="btn btn-sm btn-secondary credential-activate">
+                        {$LANG->getModule('activate')}
+                    </button>
+                    {elseif $TYPE == 'public' and $role.credential_status == -1}
+                    <button type="button" class="btn btn-sm btn-secondary credential-deactivate">
+                        {$LANG->getModule('deactivate')}
+                    </button>
+                    {/if}
+                </div>
+            </div>
+        </div>
+        {/foreach}
     </div>
     {/if}
     {if not empty($GENERATE_PAGE)}
