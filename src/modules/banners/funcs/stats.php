@@ -17,7 +17,8 @@ if (!defined('NV_IS_BANNER_CLIENT')) {
     nv_redirect_location(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
 }
 
-$sql = 'SELECT id,title FROM ' . NV_BANNERS_GLOBALTABLE . "_rows WHERE act='1' AND clid=" . $user_info['userid'] . ' ORDER BY id ASC';
+// Các quảng cáo của khách hàng
+$sql = 'SELECT id, title FROM ' . NV_BANNERS_GLOBALTABLE . "_rows WHERE act=1 AND clid=" . $user_info['userid'] . ' ORDER BY id ASC';
 $result = $db->query($sql);
 
 $ads = [];

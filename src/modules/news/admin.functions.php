@@ -818,7 +818,9 @@ function nv_get_mod_tags($content)
 
     $result = $db->query($db->sql());
     $ts = [];
-    while ([$keyword] = $result->fetch(3)) {
+    while ($_scratch = $result->fetch(3)) {
+        [$keyword] = $_scratch;
+        unset($_scratch);
         $keyword = array_map('trim', explode(',', $keyword));
         $keyword = array_map('nv_preg_quote', $keyword);
         $ts = array_merge($ts, $keyword);

@@ -119,7 +119,7 @@ if (!nv_function_exists('nv_block_voting')) {
         $tpl->assign('LANG', $nv_Lang);
         $tpl->assign('MODULE', $module);
         $tpl->assign('UNIQUEID', $block_config['bid']);
-        $tpl->assign('GCONFIG', $global_config);
+        $tpl->assign('CAPTCHA_ATTRS', nv_captcha_form_attrs('fcode', nv_module_captcha($module)));
 
         $voting_array = [
             'checkss' => md5($current_voting['vid'] . NV_CHECK_SESSION),
@@ -131,7 +131,6 @@ if (!nv_function_exists('nv_block_voting')) {
             'items' => $list,
         ];
         $tpl->assign('VOTING', $voting_array);
-        $tpl->assign('MODULE_CAPTCHA', nv_module_captcha($module));
 
         $content = $tpl->fetch('global.voting.tpl');
         $nv_Lang->changeLang();

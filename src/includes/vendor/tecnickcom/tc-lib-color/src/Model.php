@@ -7,8 +7,8 @@
  * @category  Library
  * @package   Color
  * @author    Nicola Asuni <info@tecnick.com>
- * @copyright 2015-2024 Nicola Asuni - Tecnick.com LTD
- * @license   http://www.gnu.org/copyleft/lesser.html GNU-LGPL v3 (see LICENSE.TXT)
+ * @copyright 2015-2026 Nicola Asuni - Tecnick.com LTD
+ * @license   https://www.gnu.org/copyleft/lesser.html GNU-LGPL v3 (see LICENSE.TXT)
  * @link      https://github.com/tecnickcom/tc-lib-color
  *
  * This file is part of tc-lib-color software library.
@@ -25,8 +25,8 @@ namespace Com\Tecnick\Color;
  * @category  Library
  * @package   Color
  * @author    Nicola Asuni <info@tecnick.com>
- * @copyright 2015-2024 Nicola Asuni - Tecnick.com LTD
- * @license   http://www.gnu.org/copyleft/lesser.html GNU-LGPL v3 (see LICENSE.TXT)
+ * @copyright 2015-2026 Nicola Asuni - Tecnick.com LTD
+ * @license   https://www.gnu.org/copyleft/lesser.html GNU-LGPL v3 (see LICENSE.TXT)
  * @link      https://github.com/tecnickcom/tc-lib-color
  */
 abstract class Model implements \Com\Tecnick\Color\Model\Template
@@ -55,8 +55,8 @@ abstract class Model implements \Com\Tecnick\Color\Model\Template
     {
         foreach ($components as $color => $value) {
             $property = 'cmp_' . $color;
-            if (property_exists($this, $property)) {
-                $this->$property = (max(0, min(1, (float) $value)));
+            if (\property_exists($this, $property)) {
+                $this->$property = (\max(0, \min(1, (float) $value)));
             }
         }
     }
@@ -81,7 +81,7 @@ abstract class Model implements \Com\Tecnick\Color\Model\Template
     {
         // NOTE: The last round has been added for backward compatibility because of:
         // https://github.com/php/php-src/issues/14332
-        return round(max(0, min($max, ($max * round($value, 14)))));
+        return \round(\max(0, \min($max, ($max * \round($value, 14)))));
     }
 
     /**
@@ -92,7 +92,7 @@ abstract class Model implements \Com\Tecnick\Color\Model\Template
      */
     public function getHexValue(float $value, int $max): string
     {
-        return sprintf('%02x', $this->getNormalizedValue($value, $max));
+        return \sprintf('%02x', $this->getNormalizedValue($value, $max));
     }
 
     /**

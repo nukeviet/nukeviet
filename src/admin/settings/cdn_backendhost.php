@@ -217,7 +217,9 @@ if ($checkss == $nv_Request->get_string('checkss', 'post')) {
 
 $array_config_global = [];
 $result = $db->query('SELECT config_name, config_value FROM ' . NV_CONFIG_GLOBALTABLE . " WHERE lang='sys' AND module='global'");
-while ([$c_config_name, $c_config_value] = $result->fetch(3)) {
+while ($_scratch = $result->fetch(3)) {
+    [$c_config_name, $c_config_value] = $_scratch;
+    unset($_scratch);
     $array_config_global[$c_config_name] = $c_config_value;
 }
 

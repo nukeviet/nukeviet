@@ -8,3 +8,10 @@
     height: 80px;
   }
 }
+
+// Các nút Oauth
+@each $color, $value in $oauth-branches {
+  .btn-#{$color} {
+    @include button-variant($value, $value);
+  }
+}

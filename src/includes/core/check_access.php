@@ -13,6 +13,8 @@ if (!(defined('NV_MAINFILE') and (defined('NV_SYS_LOAD') or defined('NV_MOD_LOAD
     exit('Stop!!!');
 }
 
+session_write_close();
+
 if (empty($global_config['load_files_seccode'])) {
     exit('NO_PERMISSION');
 }

@@ -27,7 +27,7 @@ $menu_top = [
 $allow_func = ['main', 'newest', 'popular', 'featured', 'downloaded', 'favorites', 'detail', 'login', 'update', 'manage'];
 
 // Cho phep upload ung dung
-if (!empty($global_config['extension_setup'])) {
+if (!empty($global_config['extension_setup']) and in_array(NV_CLIENT_IP, ($global_config['extension_setup_ips'] ?? []), true)) {
     $allow_func[] = 'upload';
 }
 

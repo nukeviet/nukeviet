@@ -14,13 +14,11 @@ if (!defined('NV_SYSTEM')) {
 }
 
 /**
- * nv_banner_theme_main()
- *
+ * Giao diện chính của module Banner
  * @param array $contents
- * @param mixed $manament
  * @return string
  */
-function nv_banner_theme_main($contents)
+function nv_banner_theme_main(array $contents): string
 {
     global $nv_Lang, $manament, $language_array;
 
@@ -35,56 +33,38 @@ function nv_banner_theme_main($contents)
 }
 
 /**
- * nv_banner_theme_addads()
- *
- * @param array  $global_array_uplans
+ * Giao diện trang thêm banners
+ * @param array $global_array_uplans
  * @param string $page_url
  * @return string
  */
-function nv_banner_theme_addads($global_array_uplans, $page_url)
+function nv_banner_theme_addads(array $global_array_uplans, string $page_url): string
 {
-    global $global_config, $module_info, $module_captcha, $nv_Lang, $lang_array, $manament;
+    global $nv_Lang, $lang_array, $manament;
 
-    $xtpl = new XTemplate('addads.tpl', get_module_tpl_dir('addads.tpl'));
-    $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
-    $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
-    $xtpl->assign('FORM_ACTION', $page_url);
-
-    $xtpl->assign('MANAGEMENT', $manament);
-    $xtpl->parse('main.management');
-
+    $plans = [];
     foreach ($global_array_uplans as $row) {
         $row['title'] .= ' (' . (empty($row['blang']) ? $nv_Lang->getModule('addads_block_lang_all') : $lang_array[$row['blang']]) . ')';
-        $row['typeimage'] = $row['require_image'] ? 'true' : 'false';
+        $row['typeimage'] = $row['require_image'] ? 1 : 0;
         $row['uploadtype'] = str_replace(',', ', ', $row['uploadtype']);
-        $xtpl->assign('blockitem', $row);
-        $xtpl->parse('main.blockitem');
+        $plans[] = $row;
     }
 
-    // Nếu dùng reCaptcha v3
-    if ($module_captcha == 'recaptcha' and $global_config['recaptcha_ver'] == 3) {
-        $xtpl->parse('main.recaptcha3');
-    }
-    // Nếu dùng reCaptcha v2
-    elseif ($module_captcha == 'recaptcha' and $global_config['recaptcha_ver'] == 2) {
-        $xtpl->assign('N_CAPTCHA', $nv_Lang->getGlobal('securitycode1'));
-        $xtpl->assign('RECAPTCHA_ELEMENT', 'recaptcha' . nv_genpass(8));
-        $xtpl->parse('main.recaptcha');
-    } elseif ($module_captcha == 'turnstile') {
-        $xtpl->parse('main.turnstile');
-    } elseif ($module_captcha == 'captcha') {
-        $xtpl->assign('N_CAPTCHA', $nv_Lang->getGlobal('securitycode'));
-        $xtpl->parse('main.captcha');
-    }
+    $tpl = new \NukeViet\Template\NVSmarty();
+    $tpl->setTemplateDir(get_module_tpl_dir('addads.tpl'));
+    $tpl->assign('LANG', $nv_Lang);
+    $tpl->assign('MANAGEMENT', $manament);
+    $tpl->assign('FORM_ACTION', $page_url);
+    $tpl->assign('CAPTCHA_ATTRS', nv_captcha_form_attrs('captcha'));
+    $tpl->assign('PLANS', $plans);
+    $current_plan = !empty($plans) ? reset($plans) : null;
+    $tpl->assign('CURRENT_PLAN', $current_plan);
 
-    $xtpl->parse('main');
-
-    return $xtpl->text('main');
+    return $tpl->fetch('addads.tpl');
 }
 
 /**
- * nv_banner_theme_stats()
- *
+ * Giao diện trang xem thống kê
  * @param array $ads
  * @return string
  */
@@ -111,6 +91,5 @@ function nv_banner_theme_stats($ads)
     }
 
     $xtpl->parse('main');
-
     return $xtpl->text('main');
 }

@@ -44,7 +44,9 @@ if (($cache = $nv_Cache->getItem($module_name, $cacheFile, ttl: $cacheTTL)) != f
 
     $url = [];
 
-    while ([$id, $catid_i, $publtime, $alias] = $result->fetch(3)) {
+    while ($_scratch = $result->fetch(3)) {
+        [$id, $catid_i, $publtime, $alias] = $_scratch;
+        unset($_scratch);
         $catalias = $global_array_cat[$catid_i]['alias'];
         $url[] = [
             'link' => NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $catalias . '/' . $alias . '-' . $id . $global_config['rewrite_exturl'],

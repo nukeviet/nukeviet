@@ -1,5 +1,7 @@
 all
 cache
+db
+db-users
 install
 install-only
 off-mail
@@ -7,4 +9,5 @@ sendmail
 smtp
 stat
 user-datadeletion
+user-datadeletion-only
 users

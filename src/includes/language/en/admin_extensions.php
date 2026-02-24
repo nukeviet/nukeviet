@@ -128,6 +128,7 @@ $lang_module['install_package_alert'] = 'Warning: Installing an application pack
 $lang_module['install_submit'] = 'Upload';
 $lang_module['install_error_filetype'] = 'Error: The installation file is zip or gz file format';
 $lang_module['install_error_nofile'] = 'Error: Selected file upload';
+$lang_module['install_ips'] = 'For security reasons, you need to add your IP address to the list of allowed IPs for uploading extension packages in the system configuration file by opening the config.php file (or equivalent if you have configured to rename it) and adding your IP address (%1$s) to the <code>extension_setup_ips</code> array. For example <code>$global_config[\'extension_setup_ips\'] = [\'%1$s\'];</code>. Then save the file and reload this page to continue';
 $lang_module['autoinstall_install'] = 'Install applications';
 $lang_module['autoinstall_nomethod'] = 'Anonymous methods implemented';
 $lang_module['autoinstall_uploadedfile'] = 'Application info is upload';

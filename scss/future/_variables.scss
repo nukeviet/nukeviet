@@ -230,3 +230,11 @@ $core-btn-border-colors: (
 
 // Form
 $form-label-font-weight: 500;
+
+// Oauth branches
+$oauth-branches: (
+  single-sign-on: #343A40,
+  google: #C62828,
+  facebook: #0D5BD7,
+  zalo: #0068FF
+);

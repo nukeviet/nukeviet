@@ -13,7 +13,7 @@
  * Tạo thẻ báo lỗi cho các trường dữ liệu trong form khi valid
  *
  * @param {JQuery} ipt
- * @param {Object} data
+ * @param {Object} data Bắt buộc có các thuộc tính: errType
  * @param {String} message
  * @returns {JQuery}
  */
@@ -154,6 +154,15 @@ function _check_invalid(ipt, customMess, specialType) {
             return _make_check_invalid(ipt, valid, valid.errMess || nv_required);
         }
     }
+    // Check file
+    if (valid.type == 'file') {
+        const fileInput = $(ipt)[0];
+
+        // Kiểm tra xem có file nào được chọn không
+        if (!fileInput.files || fileInput.files.length === 0) {
+            return _make_check_invalid(ipt, valid, valid.errMess || nv_required);
+        }
+    }
 }
 
 /**
@@ -201,10 +210,12 @@ function _focus_error(form, ipt) {
 }
 
 /**
+ * Reset trạng thái validate của input, trả về trạng thái không có lỗi hoặc success
+ *
  * @param { JQuery<HTMLElement> } ipt
  * @returns
  */
-var nv_resetInputValid = (ipt) => {
+function nv_validate_reset(ipt) {
     const form = ipt.closest('form');
     if (form.length < 1 || (!form.is('[data-toggle="ajax-form"]') && !form.is('[data-precheck="nv_precheck_form"]'))) {
         return;
@@ -225,7 +236,17 @@ var nv_resetInputValid = (ipt) => {
         ipt.removeClass('is-invalid is-valid');
         if (prAlso) pr.removeClass('is-invalid is-valid');
     }
-};
+}
+
+/**
+ * Hiển thị trạng thái lỗi validate của input
+ *
+ * @param { JQuery<HTMLElement> } ipt
+ * @returns
+ */
+function nv_validate_show(ipt, mess, type) {
+    return _make_check_invalid(ipt, {errType: (type || 'feedback')}, mess);
+}
 
 /**
  * Hàm kiểm tra validate form trước khi submit mặc định
@@ -244,7 +265,7 @@ function nv_precheck_form(form) {
 
     const processedNames = new Set();
     // Input thông thường theo bootstrap
-    $('[data-valid][name]', form).each(function() {
+    $('[data-valid][name]:visible', form).each(function() {
         const ipt = $(this);
         const sName = _get_input_name(ipt);
         if (processedNames.has(sName)) {
@@ -254,7 +275,7 @@ function nv_precheck_form(form) {
         _check_invalid($(sName, form).last());
     });
     // Các cấu trúc đặc biệt như trình soạn thảo
-    $('[data-valid][data-name]', form).each(function() {
+    $('[data-valid][data-name]:visible', form).each(function() {
         const ipt = $(this);
         const sName = `[name="${ipt.data('name')}"]`;
         if (processedNames.has(sName)) {
@@ -587,7 +608,7 @@ $(function() {
         if (e.type === "keyup" && e.which === 13) {
             return;
         }
-        nv_resetInputValid($(this));
+        nv_validate_reset($(this));
     });
 
     // Nút reset form
@@ -609,7 +630,7 @@ $(function() {
 
         // Reset trạng thái validate
         $('[data-valid]', form).each(function() {
-            nv_resetInputValid($(this));
+            nv_validate_reset($(this));
         });
 
         // Hàm reset riêng nếu có

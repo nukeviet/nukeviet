@@ -28,7 +28,6 @@ if ($module_name != $block_config['module'] and defined('NV_SYSTEM') and isset($
     $tpl->assign('TEMPLATE', $block_theme);
     $tpl->assign('CONFIG', $block_config);
     $tpl->assign('REQUEST_FORM', md5($block_config['module'] . '_request_form_' . NV_CHECK_SESSION));
-    $tpl->assign('GCONFIG', $global_config);
     $tpl->assign('CAPTCHA_ATTRS', nv_captcha_form_attrs('fcode', nv_module_captcha($block_config['module'])));
 
     $content = $tpl->fetch('block.contact_form.tpl');

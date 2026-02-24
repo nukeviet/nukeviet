@@ -22,10 +22,15 @@ function modal_content(url, id, checkss, i = undefined, icon_class = '', replace
     }).done(function(a) {
         if (a.status == 'error') {
             nukeviet.alert(a.mess)
-        } else if (a.status == 'OK') {
+        } else if (a.status == 'success' || a.status == 'OK') {
             $('.modal-title', md).text(a.title);
             $('.modal-body', md).html(a.content);
-            md.modal('show')
+            // Khởi tạo lại keyboard events cho form ajax-submit trong modal
+            const formAj = $('.ajax-submit', md);
+            if (formAj.length) {
+                initFormAjKeyboard(formAj);
+            }
+            md.modal('show');
         }
         if (i !== undefined) {
             if (replace_icon) {
@@ -357,6 +362,130 @@ $(function() {
             $('input[type=text]', str).val('');
         }
     })
+
+    // Thêm nhân viên hỗ trợ
+    $('.supporter_add').on('click', function() {
+        if ($('i.fa-spinner', $(this)).length) {
+            return;
+        }
+        $(this).prepend('<i class="fa-solid fa-spinner fa-spin-pulse"></i>');
+        var icon = $('i', $(this));
+        modal_content($(this).data('url'), 0, $('.list').data('checkss'), icon)
+    });
+
+    if ($('.supporter_add.auto').length) {
+        $('.supporter_add.auto').trigger('click');
+    }
+
+    // Sửa nhân viên hỗ trợ
+    $('.supporter_edit').on('click', function() {
+        var icon = $('i', $(this));
+        if (icon.is('.fa-spinner')) {
+            return;
+        }
+        var originalClass = icon.attr("class");
+        icon.attr("class", "fa-solid fa-spinner fa-spin-pulse");
+        modal_content($(this).parents('.list').data('url'), $(this).parents('.item').data('id'), $(this).parents('.list').data('checkss'), icon, originalClass, true)
+    });
+
+    // Xóa nhân viên hỗ trợ
+    $('.supporter_del').on('click', function() {
+        var that = $(this),
+            icon = $('i', that);
+        if (icon.is('.fa-spinner')) {
+            return;
+        }
+        var originalClass = icon.attr("class");
+        nukeviet.confirm(nv_is_del_confirm[0], function() {
+            var id = that.parents('.item').data('id'),
+                url = that.parents('.list').data('url');
+            icon.attr("class", "fa-solid fa-spinner fa-spin-pulse");
+            $.ajax({
+                type: "POST",
+                url: url,
+                cache: !1,
+                data: {
+                    'fc': 'delete',
+                    'id': id,
+                    'checkss': that.parents('.list').data('checkss')
+                },
+                dataType: "json"
+            }).done(function(a) {
+                if (a.status == 'error') {
+                    nukeviet.alert(a.mess);
+                    icon.attr("class", originalClass);
+                } else if (a.status == 'success') {
+                    window.location.reload()
+                }
+            })
+        }, function() {
+            icon.attr("class", originalClass);
+        })
+    });
+
+    // Cập nhật thứ tự nhân viên hỗ trợ
+    $('.supporter_cweight').on('change', function() {
+        var that = $(this),
+            id = that.parents('.item').data('id'),
+            nweight = that.val(),
+            url = that.parents('.list').data('url'),
+            checkss = that.parents('.list').data('checkss');
+        that.prop('disabled', true);
+        $.ajax({
+            type: "POST",
+            url: url,
+            cache: !1,
+            data: {
+                'fc': 'change_weight',
+                'id': id,
+                'nw': nweight,
+                'checkss': checkss
+            },
+            dataType: "json"
+        }).done(function(a) {
+            if (a.status == 'error') {
+                that.val(that.data('default'));
+                nukeviet.toast(a.mess, 'error');
+                setTimeout(() => {
+                    that.prop('disabled', false);
+                }
+                , 2000);
+            } else if (a.status == 'success') {
+                window.location.reload()
+            }
+        })
+    });
+
+    // Thay đổi trạng thái nhân viên hỗ trợ
+    $('.supporter_act').on('change', function() {
+        var that = $(this),
+            is_checked = that.is(':checked'),
+            url = that.parents('.list').data('url'),
+            checkss = that.parents('.list').data('checkss'),
+            data = {
+                'fc': 'change_act',
+                'id': that.parents('.item').data('id'),
+                'checkss': checkss
+            };
+        that.prop('disabled', true);
+        $.ajax({
+            type: "POST",
+            url: url,
+            cache: !1,
+            data: data,
+            dataType: "json"
+        }).done(function(a) {
+            if (a.status == 'error') {
+                that.prop('disabled', false);
+                that.prop('checked', is_checked ? false : true);
+                nukeviet.alert(a.mess)
+            } else if (a.status == 'success') {
+                setTimeout(() => {
+                    that.prop('disabled', false);
+                }, 2000);
+            }
+        })
+    });
 
     // Đặt bộ phận làm mặc định
     $('[name=is_default]').on('change', function() {

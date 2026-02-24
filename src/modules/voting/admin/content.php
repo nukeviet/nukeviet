@@ -189,7 +189,9 @@ if ($nv_Request->isset_request('save', 'post')) {
         $sql = 'SELECT id, title, url FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE vid=' . $vid . ' ORDER BY id ASC';
         $result = $db->query($sql);
 
-        while ([$id, $title, $url] = $result->fetch(3)) {
+        while ($_scratch = $result->fetch(3)) {
+            [$id, $title, $url] = $_scratch;
+            unset($_scratch);
             $array_answervote[$id] = $title;
             $array_urlvote[$id] = $url;
             ++$maxoption;

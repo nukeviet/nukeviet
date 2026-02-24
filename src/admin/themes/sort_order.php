@@ -41,7 +41,9 @@ if (md5(NV_CHECK_SESSION . '_' . $position) == $nv_Request->get_string('checkss'
             $sth->execute();
 
             $weight = 0;
-            while ([$bid_i] = $sth->fetch(3)) {
+            while ($_scratch = $sth->fetch(3)) {
+                [$bid_i] = $_scratch;
+                unset($_scratch);
                 ++$weight;
                 $db->query('UPDATE ' . NV_BLOCKS_TABLE . '_groups SET weight=' . $weight . ' WHERE bid=' . $bid_i);
             }
@@ -55,7 +57,9 @@ if (md5(NV_CHECK_SESSION . '_' . $position) == $nv_Request->get_string('checkss'
                 $sth->bindParam(':theme', $theme, PDO::PARAM_STR);
                 $sth->bindParam(':position', $pos_old, PDO::PARAM_STR);
                 $sth->execute();
-                while ([$bid_i, $func_id_i] = $sth->fetch(3)) {
+                while ($_scratch = $sth->fetch(3)) {
+                    [$bid_i, $func_id_i] = $_scratch;
+                    unset($_scratch);
                     if ($func_id_i == $func_id_old) {
                         ++$weight;
                     } else {
@@ -75,7 +79,9 @@ if (md5(NV_CHECK_SESSION . '_' . $position) == $nv_Request->get_string('checkss'
             $sth->execute();
 
             $weight = 0;
-            while ([$bid_i] = $sth->fetch(3)) {
+            while ($_scratch = $sth->fetch(3)) {
+                [$bid_i] = $_scratch;
+                unset($_scratch);
                 ++$weight;
                 $db->query('UPDATE ' . NV_BLOCKS_TABLE . '_groups SET weight=' . $weight . ' WHERE bid=' . $bid_i);
             }
@@ -88,7 +94,9 @@ if (md5(NV_CHECK_SESSION . '_' . $position) == $nv_Request->get_string('checkss'
             $sth->bindParam(':theme', $theme, PDO::PARAM_STR);
             $sth->bindParam(':position', $pos_new, PDO::PARAM_STR);
             $sth->execute();
-            while ([$bid_i, $func_id_i] = $sth->fetch(3)) {
+            while ($_scratch = $sth->fetch(3)) {
+                [$bid_i, $func_id_i] = $_scratch;
+                unset($_scratch);
                 if ($func_id_i == $func_id_old) {
                     ++$weight;
                 } else {

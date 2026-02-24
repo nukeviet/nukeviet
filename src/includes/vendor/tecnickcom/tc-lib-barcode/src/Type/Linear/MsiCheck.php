@@ -7,8 +7,8 @@
  * @category    Library
  * @package     Barcode
  * @author      Nicola Asuni <info@tecnick.com>
- * @copyright   2010-2024 Nicola Asuni - Tecnick.com LTD
- * @license     http://www.gnu.org/copyleft/lesser.html GNU-LGPL v3 (see LICENSE.TXT)
+ * @copyright   2010-2026 Nicola Asuni - Tecnick.com LTD
+ * @license     https://www.gnu.org/copyleft/lesser.html GNU-LGPL v3 (see LICENSE.TXT)
  * @link        https://github.com/tecnickcom/tc-lib-barcode
  *
  * This file is part of tc-lib-barcode software library.
@@ -28,8 +28,8 @@ use Com\Tecnick\Barcode\Exception as BarcodeException;
  * @category    Library
  * @package     Barcode
  * @author      Nicola Asuni <info@tecnick.com>
- * @copyright   2010-2024 Nicola Asuni - Tecnick.com LTD
- * @license     http://www.gnu.org/copyleft/lesser.html GNU-LGPL v3 (see LICENSE.TXT)
+ * @copyright   2010-2026 Nicola Asuni - Tecnick.com LTD
+ * @license     https://www.gnu.org/copyleft/lesser.html GNU-LGPL v3 (see LICENSE.TXT)
  * @link        https://github.com/tecnickcom/tc-lib-barcode
  */
 class MsiCheck extends \Com\Tecnick\Barcode\Type\Linear
@@ -74,16 +74,16 @@ class MsiCheck extends \Com\Tecnick\Barcode\Type\Linear
      */
     protected function getChecksum(string $code): int
     {
-        $clen = strlen($code);
+        $clen = \strlen($code);
         $pix = 2;
         $check = 0;
         for ($pos = ($clen - 1); $pos >= 0; --$pos) {
             $hex = $code[$pos];
-            if (! ctype_xdigit($hex)) {
+            if (! \ctype_xdigit($hex)) {
                 continue;
             }
 
-            $check += (hexdec($hex) * $pix);
+            $check += (\hexdec($hex) * $pix);
             ++$pix;
             if ($pix > 7) {
                 $pix = 2;
@@ -115,11 +115,11 @@ class MsiCheck extends \Com\Tecnick\Barcode\Type\Linear
     {
         $this->formatCode();
         $seq = '110'; // left guard
-        $clen = strlen($this->extcode);
+        $clen = \strlen($this->extcode);
         for ($pos = 0; $pos < $clen; ++$pos) {
             $digit = $this->extcode[$pos];
             if (! isset($this::CHBAR[$digit])) {
-                throw new BarcodeException('Invalid character: chr(' . ord($digit) . ')');
+                throw new BarcodeException('Invalid character: \chr(' . \ord($digit) . ')');
             }
 
             $seq .= $this::CHBAR[$digit];

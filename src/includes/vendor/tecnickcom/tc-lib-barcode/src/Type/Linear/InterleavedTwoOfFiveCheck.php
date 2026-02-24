@@ -7,8 +7,8 @@
  * @category    Library
  * @package     Barcode
  * @author      Nicola Asuni <info@tecnick.com>
- * @copyright   2010-2024 Nicola Asuni - Tecnick.com LTD
- * @license     http://www.gnu.org/copyleft/lesser.html GNU-LGPL v3 (see LICENSE.TXT)
+ * @copyright   2010-2026 Nicola Asuni - Tecnick.com LTD
+ * @license     https://www.gnu.org/copyleft/lesser.html GNU-LGPL v3 (see LICENSE.TXT)
  * @link        https://github.com/tecnickcom/tc-lib-barcode
  *
  * This file is part of tc-lib-barcode software library.
@@ -28,8 +28,8 @@ use Com\Tecnick\Barcode\Exception as BarcodeException;
  * @category    Library
  * @package     Barcode
  * @author      Nicola Asuni <info@tecnick.com>
- * @copyright   2010-2024 Nicola Asuni - Tecnick.com LTD
- * @license     http://www.gnu.org/copyleft/lesser.html GNU-LGPL v3 (see LICENSE.TXT)
+ * @copyright   2010-2026 Nicola Asuni - Tecnick.com LTD
+ * @license     https://www.gnu.org/copyleft/lesser.html GNU-LGPL v3 (see LICENSE.TXT)
  * @link        https://github.com/tecnickcom/tc-lib-barcode
  */
 class InterleavedTwoOfFiveCheck extends \Com\Tecnick\Barcode\Type\Linear\StandardTwoOfFiveCheck
@@ -77,17 +77,17 @@ class InterleavedTwoOfFiveCheck extends \Com\Tecnick\Barcode\Type\Linear\Standar
     protected function setBars(): void
     {
         $this->formatCode();
-        if (strlen($this->extcode) % 2 != 0) {
+        if (\strlen($this->extcode) % 2 != 0) {
             // add leading zero if code-length is odd
             $this->extcode = '0' . $this->extcode;
         }
 
         // add start and stop codes
-        $this->extcode = 'AA' . strtolower($this->extcode) . 'ZA';
+        $this->extcode = 'AA' . \strtolower($this->extcode) . 'ZA';
         $this->ncols = 0;
         $this->nrows = 1;
         $this->bars = [];
-        $clen = strlen($this->extcode);
+        $clen = \strlen($this->extcode);
         for ($idx = 0; $idx < $clen; $idx += 2) {
             $char_bar = $this->extcode[$idx];
             $char_space = $this->extcode[($idx + 1)];
@@ -97,12 +97,12 @@ class InterleavedTwoOfFiveCheck extends \Com\Tecnick\Barcode\Type\Linear\Standar
 
             // create a bar-space sequence
             $seq = '';
-            $chrlen = strlen($this::CHBAR[$char_bar]);
+            $chrlen = \strlen($this::CHBAR[$char_bar]);
             for ($pos = 0; $pos < $chrlen; ++$pos) {
                 $seq .= $this::CHBAR[$char_bar][$pos] . $this::CHBAR[$char_space][$pos];
             }
 
-            $seqlen = strlen($seq);
+            $seqlen = \strlen($seq);
             for ($pos = 0; $pos < $seqlen; ++$pos) {
                 $bar_width = (int) $seq[$pos];
                 if ((($pos % 2) == 0) && ($bar_width > 0)) {

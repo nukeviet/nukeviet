@@ -7,8 +7,8 @@
  * @category    Library
  * @package     Barcode
  * @author      Nicola Asuni <info@tecnick.com>
- * @copyright   2010-2024 Nicola Asuni - Tecnick.com LTD
- * @license     http://www.gnu.org/copyleft/lesser.html GNU-LGPL v3 (see LICENSE.TXT)
+ * @copyright   2010-2026 Nicola Asuni - Tecnick.com LTD
+ * @license     https://www.gnu.org/copyleft/lesser.html GNU-LGPL v3 (see LICENSE.TXT)
  * @link        https://github.com/tecnickcom/tc-lib-barcode
  *
  * This file is part of tc-lib-barcode software library.
@@ -25,8 +25,8 @@ use Com\Tecnick\Barcode\Exception as BarcodeException;
  * @category    Library
  * @package     Barcode
  * @author      Nicola Asuni <info@tecnick.com>
- * @copyright   2010-2024 Nicola Asuni - Tecnick.com LTD
- * @license     http://www.gnu.org/copyleft/lesser.html GNU-LGPL v3 (see LICENSE.TXT)
+ * @copyright   2010-2026 Nicola Asuni - Tecnick.com LTD
+ * @license     https://www.gnu.org/copyleft/lesser.html GNU-LGPL v3 (see LICENSE.TXT)
  * @link        https://github.com/tecnickcom/tc-lib-barcode
  */
 class Encoder extends \Com\Tecnick\Barcode\Type\Square\QrCode\Init
@@ -47,7 +47,7 @@ class Encoder extends \Com\Tecnick\Barcode\Type\Square\QrCode\Init
         $this->bv1 = $this->spc->rsBlockNum1($spec);
         $this->dataLength = $this->spc->rsDataLength($spec);
         $this->eccLength = $this->spc->rsEccLength($spec);
-        $this->ecccode = array_fill(0, $this->eccLength, 0);
+        $this->ecccode = \array_fill(0, $this->eccLength, 0);
         $this->blocks = $this->spc->rsBlockNum($spec);
         $this->init($spec);
         $this->count = 0;
@@ -77,7 +77,7 @@ class Encoder extends \Com\Tecnick\Barcode\Type\Square\QrCode\Init
         }
 
         // masking
-        $this->runLength = array_fill(0, (Data::QRSPEC_WIDTH_MAX + 1), 0);
+        $this->runLength = \array_fill(0, (Data::QRSPEC_WIDTH_MAX + 1), 0);
         if ($maskNo < 0) {
             if ($this->qr_find_best_mask) {
                 $mask = $this->mask($this->width, $this->frame, $this->level);
@@ -104,7 +104,7 @@ class Encoder extends \Com\Tecnick\Barcode\Type\Square\QrCode\Init
     {
         if ($this->count < $this->dataLength) {
             $row = ($this->count % $this->blocks);
-            $col = floor($this->count / $this->blocks);
+            $col = (int) \floor($this->count / $this->blocks);
             if ($col >= $this->rsblocks[0]['dataLength']) {
                 $row += $this->bv1;
             }
@@ -112,7 +112,7 @@ class Encoder extends \Com\Tecnick\Barcode\Type\Square\QrCode\Init
             $ret = $this->rsblocks[$row]['data'][$col];
         } elseif ($this->count < ($this->dataLength + $this->eccLength)) {
             $row = (($this->count - $this->dataLength) % $this->blocks);
-            $col = floor(($this->count - $this->dataLength) / $this->blocks);
+            $col = (int) \floor(($this->count - $this->dataLength) / $this->blocks);
             $ret = $this->rsblocks[$row]['ecc'][$col];
         } else {
             return 0;
@@ -130,7 +130,7 @@ class Encoder extends \Com\Tecnick\Barcode\Type\Square\QrCode\Init
      */
     protected function setFrameAt(array $pos, int $val): void
     {
-        $this->frame[$pos['y']][$pos['x']] = chr($val);
+        $this->frame[$pos['y']][$pos['x']] = \chr($val);
     }
 
     /**
@@ -159,7 +159,7 @@ class Encoder extends \Com\Tecnick\Barcode\Type\Square\QrCode\Init
 
             $this->xpos = $xpos;
             $this->ypos = $ypos;
-        } while (ord($this->frame[$ypos][$xpos]) & 0x80);
+        } while (\ord($this->frame[$ypos][$xpos]) & 0x80);
 
         return [
             'x' => $xpos,

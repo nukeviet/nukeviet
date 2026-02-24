@@ -7,8 +7,8 @@
  * @category  Library
  * @package   Color
  * @author    Nicola Asuni <info@tecnick.com>
- * @copyright 2015-2024 Nicola Asuni - Tecnick.com LTD
- * @license   http://www.gnu.org/copyleft/lesser.html GNU-LGPL v3 (see LICENSE.TXT)
+ * @copyright 2015-2026 Nicola Asuni - Tecnick.com LTD
+ * @license   https://www.gnu.org/copyleft/lesser.html GNU-LGPL v3 (see LICENSE.TXT)
  * @link      https://github.com/tecnickcom/tc-lib-color
  *
  * This file is part of tc-lib-color software library.
@@ -25,8 +25,8 @@ namespace Com\Tecnick\Color\Model;
  * @category  Library
  * @package   Color
  * @author    Nicola Asuni <info@tecnick.com>
- * @copyright 2015-2024 Nicola Asuni - Tecnick.com LTD
- * @license   http://www.gnu.org/copyleft/lesser.html GNU-LGPL v3 (see LICENSE.TXT)
+ * @copyright 2015-2026 Nicola Asuni - Tecnick.com LTD
+ * @license   https://www.gnu.org/copyleft/lesser.html GNU-LGPL v3 (see LICENSE.TXT)
  * @link      https://github.com/tecnickcom/tc-lib-color
  */
 class Rgb extends \Com\Tecnick\Color\Model
@@ -60,9 +60,9 @@ class Rgb extends \Com\Tecnick\Color\Model
     protected $cmp_blue = 0.0;
 
     /**
-     * Get an array with all color components
+     * Get an array with all color components.
      *
-     * @return array<string, float> with keys ('R', 'G', 'B', 'A')
+     * @return array<float> with keys ('R', 'G', 'B', 'A')
      */
     public function getArray(): array
     {
@@ -71,6 +71,26 @@ class Rgb extends \Com\Tecnick\Color\Model
             'G' => $this->cmp_green,
             'B' => $this->cmp_blue,
             'A' => $this->cmp_alpha,
+        ];
+    }
+
+    /**
+     * Get an array with all color components for
+     * the PDF appearance characteristics dictionary.
+     *
+     * The numbers that shall be in the range 0.0 to 1.0.
+     * The number of array elements determines the colour space
+     * in which the colour shall be defined:
+     * 3 = DeviceRGB
+     *
+     * @return array<float> DeviceRGB color components('R', 'G', 'B')
+     */
+    public function getPDFacArray(): array
+    {
+        return [
+            $this->cmp_red,
+            $this->cmp_green,
+            $this->cmp_blue,
         ];
     }
 
@@ -117,7 +137,7 @@ class Rgb extends \Com\Tecnick\Color\Model
             return '["T"]'; // transparent color
         }
 
-        return sprintf('["RGB",%F,%F,%F]', $this->cmp_red, $this->cmp_green, $this->cmp_blue);
+        return \sprintf('["RGB",%F,%F,%F]', $this->cmp_red, $this->cmp_green, $this->cmp_blue);
     }
 
     /**
@@ -125,7 +145,7 @@ class Rgb extends \Com\Tecnick\Color\Model
      */
     public function getComponentsString(): string
     {
-        return sprintf('%F %F %F', $this->cmp_red, $this->cmp_green, $this->cmp_blue);
+        return \sprintf('%F %F %F', $this->cmp_red, $this->cmp_green, $this->cmp_blue);
     }
 
     /**
@@ -138,7 +158,7 @@ class Rgb extends \Com\Tecnick\Color\Model
     {
         $mode = 'rg';
         if ($stroke) {
-            $mode = strtoupper($mode);
+            $mode = \strtoupper($mode);
         }
 
         return $this->getComponentsString() . ' ' . $mode . "\n";
@@ -153,9 +173,9 @@ class Rgb extends \Com\Tecnick\Color\Model
     {
         // convert using the SMPTE 295M-1997 standard conversion constants
         return [
-            'gray' => (max(
+            'gray' => (\max(
                 0,
-                min(
+                \min(
                     1,
                     ((0.2126 * $this->cmp_red) + (0.7152 * $this->cmp_green) + (0.0722 * $this->cmp_blue))
                 )
@@ -186,8 +206,8 @@ class Rgb extends \Com\Tecnick\Color\Model
      */
     public function toHslArray(): array
     {
-        $min = min($this->cmp_red, $this->cmp_green, $this->cmp_blue);
-        $max = max($this->cmp_red, $this->cmp_green, $this->cmp_blue);
+        $min = \min($this->cmp_red, $this->cmp_green, $this->cmp_blue);
+        $max = \max($this->cmp_red, $this->cmp_green, $this->cmp_blue);
         $lightness = (($min + $max) / 2);
         $saturation = 0;
         $hue = 0;
@@ -212,9 +232,9 @@ class Rgb extends \Com\Tecnick\Color\Model
         }
 
         return [
-            'hue' => max(0, min(1, $hue)),
-            'saturation' => max(0, min(1, $saturation)),
-            'lightness' => max(0, min(1, $lightness)),
+            'hue' => \max(0, \min(1, $hue)),
+            'saturation' => \max(0, \min(1, $saturation)),
+            'lightness' => \max(0, \min(1, $lightness)),
             'alpha' => $this->cmp_alpha,
         ];
     }
@@ -254,10 +274,10 @@ class Rgb extends \Com\Tecnick\Color\Model
         }
 
         return [
-            'cyan' => max(0, min(1, $cyan)),
-            'magenta' => max(0, min(1, $magenta)),
-            'yellow' => max(0, min(1, $yellow)),
-            'key' => max(0, min(1, $key)),
+            'cyan' => \max(0, \min(1, $cyan)),
+            'magenta' => \max(0, \min(1, $magenta)),
+            'yellow' => \max(0, \min(1, $yellow)),
+            'key' => \max(0, \min(1, $key)),
             'alpha' => $this->cmp_alpha,
         ];
     }

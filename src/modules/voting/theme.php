@@ -29,8 +29,7 @@ function voting_main(array $votings): string
     $tpl->assign('ITEMS', $votings);
     $tpl->assign('UNIQUEID', 'main');
     $tpl->assign('MODULE', $module_name);
-    $tpl->assign('MODULE_CAPTCHA', $module_captcha);
-    $tpl->assign('GCONFIG', $global_config);
+    $tpl->assign('CAPTCHA_ATTRS', nv_captcha_form_attrs('fcode'));
 
     return $tpl->fetch('main.tpl');
 }

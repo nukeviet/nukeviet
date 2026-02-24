@@ -7,8 +7,8 @@
  * @category  Library
  * @package   Color
  * @author    Nicola Asuni <info@tecnick.com>
- * @copyright 2015-2024 Nicola Asuni - Tecnick.com LTD
- * @license   http://www.gnu.org/copyleft/lesser.html GNU-LGPL v3 (see LICENSE.TXT)
+ * @copyright 2015-2026 Nicola Asuni - Tecnick.com LTD
+ * @license   https://www.gnu.org/copyleft/lesser.html GNU-LGPL v3 (see LICENSE.TXT)
  * @link      https://github.com/tecnickcom/tc-lib-color
  *
  * This file is part of tc-lib-color software library.
@@ -27,8 +27,8 @@ use Com\Tecnick\Color\Exception as ColorException;
  * @category  Library
  * @package   Color
  * @author    Nicola Asuni <info@tecnick.com>
- * @copyright 2015-2024 Nicola Asuni - Tecnick.com LTD
- * @license   http://www.gnu.org/copyleft/lesser.html GNU-LGPL v3 (see LICENSE.TXT)
+ * @copyright 2015-2026 Nicola Asuni - Tecnick.com LTD
+ * @license   https://www.gnu.org/copyleft/lesser.html GNU-LGPL v3 (see LICENSE.TXT)
  * @link      https://github.com/tecnickcom/tc-lib-color
  */
 abstract class Css
@@ -44,14 +44,14 @@ abstract class Css
      */
     protected function getColorObjFromJs(string $color): ?\Com\Tecnick\Color\Model
     {
-        if (! isset($color[2]) || (strpos('tgrc', $color[2]) === false)) {
+        if (! isset($color[2]) || (\strpos('tgrc', $color[2]) === false)) {
             throw new ColorException('invalid javascript color: ' . $color);
         }
 
         switch ($color[2]) {
             case 'g':
                 $rex = '/[\[][\"\']g[\"\'][\,]([0-9\.]+)[\]]/';
-                if (preg_match($rex, $color, $col) !== 1) {
+                if (\preg_match($rex, $color, $col) !== 1) {
                     throw new ColorException('invalid javascript color: ' . $color);
                 }
 
@@ -61,7 +61,7 @@ abstract class Css
                 ]);
             case 'r':
                 $rex = '/[\[][\"\']rgb[\"\'][\,]([0-9\.]+)[\,]([0-9\.]+)[\,]([0-9\.]+)[\]]/';
-                if (preg_match($rex, $color, $col) !== 1) {
+                if (\preg_match($rex, $color, $col) !== 1) {
                     throw new ColorException('invalid javascript color: ' . $color);
                 }
 
@@ -75,7 +75,7 @@ abstract class Css
                 );
             case 'c':
                 $rex = '/[\[][\"\']cmyk[\"\'][\,]([0-9\.]+)[\,]([0-9\.]+)[\,]([0-9\.]+)[\,]([0-9\.]+)[\]]/';
-                if (preg_match($rex, $color, $col) !== 1) {
+                if (\preg_match($rex, $color, $col) !== 1) {
                     throw new ColorException('invalid javascript color: ' . $color);
                 }
 
@@ -132,7 +132,7 @@ abstract class Css
     private function getColorObjFromCssGray(string $color): \Com\Tecnick\Color\Model\Gray
     {
         $rex = '/[\(]([0-9\%]+)[\)]/';
-        if (preg_match($rex, $color, $col) !== 1) {
+        if (\preg_match($rex, $color, $col) !== 1) {
             throw new ColorException('invalid css color: ' . $color);
         }
 
@@ -154,7 +154,7 @@ abstract class Css
     private function getColorObjFromCssRgb(string $color): \Com\Tecnick\Color\Model\Rgb
     {
         $rex = '/[\(]([0-9\%]+)[\,]([0-9\%]+)[\,]([0-9\%]+)[\,]?([0-9\.]*)[\)]/';
-        if (preg_match($rex, $color, $col) !== 1) {
+        if (\preg_match($rex, $color, $col) !== 1) {
             throw new ColorException('invalid css color: ' . $color);
         }
 
@@ -178,7 +178,7 @@ abstract class Css
     private function getColorObjFromCssHsl(string $color): \Com\Tecnick\Color\Model\Hsl
     {
         $rex = '/[\(]([0-9\%]+)[\,]([0-9\%]+)[\,]([0-9\%]+)[\,]?([0-9\.]*)[\)]/';
-        if (preg_match($rex, $color, $col) !== 1) {
+        if (\preg_match($rex, $color, $col) !== 1) {
             throw new ColorException('invalid css color: ' . $color);
         }
 
@@ -202,7 +202,7 @@ abstract class Css
     private function getColorObjFromCssCmyk(string $color): \Com\Tecnick\Color\Model\Cmyk
     {
         $rex = '/[\(]([0-9\%]+)[\,]([0-9\%]+)[\,]([0-9\%]+)[\,]([0-9\%]+)[\,]?([0-9\.]*)[\)]/';
-        if (preg_match($rex, $color, $col) !== 1) {
+        if (\preg_match($rex, $color, $col) !== 1) {
             throw new ColorException('invalid css color: ' . $color);
         }
 

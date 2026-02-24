@@ -26,9 +26,8 @@ final readonly class CheckSignature implements CeremonyStep
 {
     private Manager $algorithmManager;
 
-    public function __construct(
-        null|Manager $algorithmManager = null,
-    ) {
+    public function __construct(null|Manager $algorithmManager = null)
+    {
         $this->algorithmManager = $algorithmManager ?? Manager::create()->add(ES256::create(), RS256::create());
     }
 
@@ -43,7 +42,7 @@ final readonly class CheckSignature implements CeremonyStep
             return;
         }
         $credentialPublicKey = $publicKeyCredentialSource->getAttestedCredentialData()
-->credentialPublicKey;
+            ->credentialPublicKey;
         $credentialPublicKey !== null || throw AuthenticatorResponseVerificationException::create(
             'No public key available.'
         );
