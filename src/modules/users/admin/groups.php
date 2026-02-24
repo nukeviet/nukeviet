@@ -539,7 +539,7 @@ if ($nv_Request->isset_request('listUsers', 'get')) {
                 $type_data['loop'][] = $row;
             }
 
-            $generate_page = nv_generate_page($base_url . '&type=' . $_type, $array_number[$_type], $per_page, $page, 'true', 'false', 'nv_urldecode_ajax', 'id_' . $_type);
+            $generate_page = nv_generate_page($base_url . '&type=' . $_type, $array_number[$_type], $per_page, $page, true, false, 'nv_urldecode_ajax', 'id_' . $_type);
             if (!empty($generate_page)) {
                 $type_data['page'] = $generate_page;
             }
@@ -588,7 +588,7 @@ if ($nv_Request->isset_request('userlist', 'get')) {
     include NV_ROOTDIR . '/includes/footer.php';
 }
 
-// Them + sua nhom
+// Thêm, sửa nhóm
 if ($nv_Request->isset_request('add', 'get') or $nv_Request->isset_request('edit, id', 'get')) {
     if (defined('NV_IS_SPADMIN')) {
         $post = [];
