@@ -28,7 +28,7 @@
             <div class="d-flex justify-content-between align-items-center mb-3 px-3">
                 <div class="text-uppercase text-secondary fw-bold mb-0 small section-title d-inline-flex align-items-center gap-2">
                     <span class="section-marker"></span>
-                    {$SUPPORTERS[$dep.id]|@count} nhân viên trực
+                    {$SUPPORTERS[$dep.id]|@count} {$LANG->getModule('supporters')}
                 </div>
                 <span class="text-success d-inline-flex align-items-center"><i class="fa-solid fa-circle status-dot-sm"></i></span>
             </div>
@@ -44,7 +44,7 @@
                         <div class="ms-3">
                             <div class="mb-1 fw-bold text-dark supporter-name">{$supporter.full_name}</div>
                             <div class="small text-uppercase text-secondary fw-semibold role-text">
-                                Hỗ trợ trực tuyến
+                                {$LANG->getModule('supporters')}
                             </div>
                         </div>
                     </div>

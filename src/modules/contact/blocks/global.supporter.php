@@ -113,6 +113,8 @@ if (!nv_function_exists('nv_contact_supporter')) {
             return '';
         }
 
+        $module_file = $site_mods[$module]['module_file'];
+        $nv_Lang->loadModule($module_file, false, true);
         $tpl = new \NukeViet\Template\NVSmarty();
         $tpl->setTemplateDir(get_block_tpl_dir('block.supporter.tpl', $module));
         $tpl->assign('LANG', $nv_Lang);
@@ -292,8 +294,9 @@ if (!nv_function_exists('nv_contact_supporter')) {
         }
 
         $tpl->assign('SUPPORTERS', $SUPPORTERS);
-
-        return $tpl->fetch('block.supporter.tpl');
+        $content = $tpl->fetch('block.supporter.tpl');
+        $nv_Lang->changeLang();
+        return $content;
     }
 }
 
