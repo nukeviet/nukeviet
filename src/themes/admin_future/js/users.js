@@ -492,7 +492,7 @@ $(function () {
     }
 });
 
-// Groups management
+// Js phần quản lý nhóm
 $(document).ready(function() {
     // Parse URL params once
     const urlParams = new URLSearchParams(window.location.search);
@@ -680,45 +680,62 @@ $(document).ready(function() {
             return;
         }
 
-        if (confirm(nv_is_del_confirm[0])) {
+        nukeviet.confirm(nv_is_del_confirm[0], () => {
             icon.removeClass('fa-trash').addClass('fa-spinner fa-spin-pulse');
 
             $.ajax({
                 type: 'POST',
-                url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=groups',
-                data: 'del=' + btn.data('id') + '&tokend=' + btn.data('tokend'),
-                success: function(res) {
-                    if (res == 'OK') {
-                        location.reload();
-                    } else {
-                        icon.removeClass('fa-spinner fa-spin-pulse').addClass('fa-trash');
-                        nukeviet.toast(res, 'error');
-                    }
+                url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=groups&nocache=' + new Date().getTime(),
+                data: {
+                    del: btn.data('id'),
+                    tokend: btn.data('tokend')
                 },
-                error: function(xhr, text, err) {
+                dataType: 'json',
+                cache: false,
+                success: function (res) {
                     icon.removeClass('fa-spinner fa-spin-pulse').addClass('fa-trash');
+                    if (res.status == 'error') {
+                        return nukeviet.toast(res.mess, 'error');
+                    }
+                    location.reload();
+                },
+                error: function (xhr, text, err) {
                     nukeviet.toast(text, 'error');
                     console.log(xhr, text, err);
+                    icon.removeClass('fa-spinner fa-spin-pulse').addClass('fa-trash');
                 }
             });
-        }
+        });
     });
 
     // Xử lý thay đổi trạng thái kích hoạt
     $(document).on('change', 'input.actGroup', function() {
-        const $this = $(this);
-        $this.prop('disabled', true);
+        const btn = $(this);
+        btn.prop('disabled', true);
 
         $.ajax({
             type: 'POST',
-            url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=groups',
-            data: 'act=' + $this.data('id') + '&tokend=' + $this.data('tokend') + '&rand=' + nv_randomPassword(10),
-            success: function(res) {
-                const parts = res.split('|');
-                $this.prop('disabled', false);
-                if (parts[0] == 'ERROR') {
-                    $this.prop('checked', parts[1] == '1');
+            url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=groups&nocache=' + new Date().getTime(),
+            data: {
+                act: btn.data('id'),
+                tokend: btn.data('tokend')
+            },
+            dataType: 'json',
+            cache: false,
+            success: function (res) {
+                btn.prop('disabled', false);
+                if (res.status === 'success') {
+                    btn.prop('checked', res.new_status);
+                    return;
                 }
+                btn.prop('checked', btn.is(':checked') ? false : true);
+                nukeviet.toast(res.mess || 'Error response', 'error');
+            },
+            error: function (xhr, text, err) {
+                nukeviet.toast(text, 'error');
+                console.log(xhr, text, err);
+                btn.prop('checked', btn.is(':checked') ? false : true);
+                btn.prop('disabled', false);
             }
         });
     });
@@ -727,32 +744,37 @@ $(document).ready(function() {
     $(document).on('click', '[data-toggle="delInactiveGroup"]', function(e) {
         e.preventDefault();
         const btn = $(this);
+        const icon = $('i', btn);
+        if (icon.is('.fa-spinner')) {
+            return;
+        }
 
-        if (confirm(btn.data('msgconfirm'))) {
-            const icon = $('i', btn);
-            if (icon.is('.fa-spinner')) {
-                return;
-            }
+        nukeviet.confirm(btn.data('msgconfirm'), () => {
             icon.removeClass('fa-trash').addClass('fa-spinner fa-spin-pulse');
 
             $.ajax({
                 type: 'POST',
-                url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=groups',
-                data: 'deleteinactive=1&tokend=' + btn.data('tokend'),
-                success: function(res) {
+                url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=groups&nocache=' + new Date().getTime(),
+                data: {
+                    deleteinactive: 1,
+                    tokend: btn.data('tokend')
+                },
+                dataType: 'json',
+                cache: false,
+                success: function (res) {
                     icon.removeClass('fa-spinner fa-spin-pulse').addClass('fa-trash');
-                    nukeviet.toast(res, 'success');
+                    nukeviet.toast(res.mess, 'success');
                     setTimeout(function() {
                         location.reload();
                     }, 1000);
                 },
-                error: function(xhr, text, err) {
+                error: function (xhr, text, err) {
                     icon.removeClass('fa-spinner fa-spin-pulse').addClass('fa-trash');
                     nukeviet.toast(text, 'error');
                     console.log(xhr, text, err);
                 }
             });
-        }
+        });
     });
 
     // Quản lý thành viên - userlist

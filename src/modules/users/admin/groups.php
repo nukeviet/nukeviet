@@ -107,7 +107,7 @@ if ($nv_Request->isset_request('cWeight, id', 'post') and hash_equals(NV_CHECK_S
     if (!isset($groupsList[$group_id]) or !defined('NV_IS_SPADMIN') or $groupsList[$group_id]['idsite'] != $global_config['idsite'] or ($global_config['idsite'] > 0 and $group_id < 10)) {
         nv_jsonOutput([
             'status' => 'error',
-            'mess' => 'Group not found!!!'
+            'mess' => $nv_Lang->getModule('error_group_not_found')
         ]);
     }
 
@@ -142,11 +142,14 @@ if ($nv_Request->isset_request('cWeight, id', 'post') and hash_equals(NV_CHECK_S
     ]);
 }
 
-// Thay doi tinh trang hien thi cua nhom
-if ($nv_Request->isset_request('act', 'post') and $request_tokend === NV_CHECK_SESSION) {
+// Kích hoạt/ Đình chỉ nhóm
+if ($nv_Request->isset_request('act', 'post') and hash_equals(NV_CHECK_SESSION, $request_tokend)) {
     $group_id = $nv_Request->get_int('act', 'post');
     if (!isset($groupsList[$group_id]) or !defined('NV_IS_SPADMIN') or $group_id < 10 or $groupsList[$group_id]['idsite'] != $global_config['idsite']) {
-        nv_htmlOutput('ERROR|' . $groupsList[$group_id]['act']);
+        nv_jsonOutput([
+            'status' => 'error',
+            'mess' => $nv_Lang->getModule('error_group_not_found')
+        ]);
     }
 
     $act = $groupsList[$group_id]['act'] ? 0 : 1;
@@ -155,15 +158,22 @@ if ($nv_Request->isset_request('act', 'post') and $request_tokend === NV_CHECK_S
 
     $nv_Cache->delMod($module_name);
     nv_insert_logs(NV_LANG_DATA, $module_name, $nv_Lang->getModule('ChangeGroupAct'), 'group_id: ' . $group_id, $admin_info['userid']);
-    nv_htmlOutput('OK|' . $act);
+    nv_jsonOutput([
+        'status' => 'success',
+        'mess' => 'success',
+        'new_status' => $act
+    ]);
 }
 
 // Xóa nhóm
-if ($nv_Request->isset_request('del', 'post') and $request_tokend === NV_CHECK_SESSION) {
+if ($nv_Request->isset_request('del', 'post') and hash_equals(NV_CHECK_SESSION, $request_tokend)) {
     $group_id = $nv_Request->get_int('del', 'post', 0);
 
     if (!isset($groupsList[$group_id]) or !defined('NV_IS_SPADMIN') or $group_id < 10 or $groupsList[$group_id]['idsite'] != $global_config['idsite']) {
-        nv_htmlOutput($nv_Lang->getModule('error_group_not_found'));
+        nv_jsonOutput([
+            'status' => 'error',
+            'mess' => $nv_Lang->getModule('error_group_not_found')
+        ]);
     }
 
     $array_groups = [];
@@ -199,11 +209,14 @@ if ($nv_Request->isset_request('del', 'post') and $request_tokend === NV_CHECK_S
 
     $nv_Cache->delMod($module_name);
     nv_insert_logs(NV_LANG_DATA, $module_name, $nv_Lang->getModule('delGroup'), 'group_id: ' . $group_id, $admin_info['userid']);
-    nv_htmlOutput('OK');
+    nv_jsonOutput([
+        'status' => 'success',
+        'mess' => 'success'
+    ]);
 }
 
 // Xóa các nhóm đang ngưng kích hoạt
-if ($nv_Request->isset_request('deleteinactive', 'post') and $request_tokend === NV_CHECK_SESSION and defined('NV_IS_SPADMIN')) {
+if ($nv_Request->isset_request('deleteinactive', 'post') and hash_equals(NV_CHECK_SESSION, $request_tokend) and defined('NV_IS_SPADMIN')) {
     $num_deleted = 0;
 
     foreach ($groupsList as $group_id => $group_row) {
@@ -244,7 +257,10 @@ if ($nv_Request->isset_request('deleteinactive', 'post') and $request_tokend ===
 
     $nv_Cache->delMod($module_name);
     nv_insert_logs(NV_LANG_DATA, $module_name, $nv_Lang->getModule('group_del_inactive'), 'Num: ' . $num_deleted, $admin_info['userid']);
-    nv_htmlOutput($nv_Lang->getModule('delete_success'));
+    nv_jsonOutput([
+        'status' => 'success',
+        'mess' => $nv_Lang->getModule('delete_success')
+    ]);
 }
 
 // Them thanh vien vao nhom
@@ -412,7 +428,7 @@ if ($nv_Request->isset_request('gid,denied', 'post')) {
 $nv_Lang->setModule('nametitle', $global_config['name_show'] == 0 ? $nv_Lang->getModule('lastname_firstname') : $nv_Lang->getModule('firstname_lastname'));
 
 $tpl = new \NukeViet\Template\NVSmarty();
-$tpl->setTemplateDir(NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
+$tpl->setTemplateDir(get_module_tpl_dir('groups.tpl'));
 $tpl->assign('LANG', $nv_Lang);
 $tpl->assign('MODULE_NAME', $module_name);
 $tpl->assign('MODULE_FILE', $module_file);
@@ -547,8 +563,7 @@ if ($nv_Request->isset_request('listUsers', 'get')) {
         }
     }
 
-    $tpl->display('groups_listUsers.tpl');
-    exit();
+    nv_htmlOutput($tpl->fetch('groups_listusers.tpl'));
 }
 
 // Danh sach thanh vien
