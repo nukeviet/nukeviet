@@ -71,12 +71,12 @@
                                     <div class="row g-2 mb-3">
                                         <div class="col-12">
                                             <button type="button" class="btn btn-primary w-100 create_authentication" data-method="{$key}">
-                                                {$LANG->getModule('create_access_authentication')}
+                                                <i class="fa-solid fa-plus me-1"></i> {$LANG->getModule('create_access_authentication')}
                                             </button>
                                         </div>
                                         <div class="col-12">
                                             <button type="button" class="btn btn-danger w-100 delete_authentication" data-method="{$key}">
-                                                {$LANG->getModule('delete_authentication')}
+                                                <i class="fa-solid fa-trash me-1"></i> {$LANG->getModule('delete_authentication')}
                                             </button>
                                         </div>
                                     </div>
@@ -89,7 +89,7 @@
                                         </div>
                                         <div class="text-center">
                                             <button type="button" class="btn btn-primary api_ips_update" data-method="{$key}">
-                                                {$LANG->getModule('api_ips_update')}
+                                                <i class="fa-solid fa-save me-1"></i> {$LANG->getModule('api_ips_update')}
                                             </button>
                                         </div>
                                     </div>
@@ -145,15 +145,15 @@
                     <td class="text-nowrap text-center" style="width:1%;">
                         <div>
                             <button type="button" class="btn btn-secondary open-api-modal" data-role-id="{$role.role_id}" data-role-title="{$role.role_title}" data-page-url="{$PAGE_URL}" data-bs-toggle="modal" data-bs-target="#apiRoleModal">
-                                {$LANG->getModule('apis_list')}
+                                <i class="fa-solid fa-list me-1"></i> {$LANG->getModule('apis_list')}
                             </button>
                             {if $TYPE == 'public' and $role.credential_status == 1}
                             <button type="button" class="btn btn-secondary credential-activate">
-                                {$LANG->getModule('activate')}
+                                <i class="fa-solid fa-power-off me-1"></i> {$LANG->getModule('activate')}
                             </button>
                             {elseif $TYPE == 'public' and $role.credential_status == -1}
                             <button type="button" class="btn btn-secondary credential-deactivate">
-                                {$LANG->getModule('deactivate')}
+                                <i class="fa-solid fa-power-off me-1"></i> {$LANG->getModule('deactivate')}
                             </button>
                             {/if}
                         </div>
@@ -205,15 +205,15 @@
                 </div>
                 <div class="mt-3 text-end">
                     <button type="button" class="btn btn-sm btn-secondary open-api-modal" data-role-id="{$role.role_id}" data-role-title="{$role.role_title}" data-page-url="{$PAGE_URL}" data-bs-toggle="modal" data-bs-target="#apiRoleModal">
-                        {$LANG->getModule('apis_list')}
+                        <i class="fa-solid fa-list me-1"></i> {$LANG->getModule('apis_list')}
                     </button>
                     {if $TYPE == 'public' and $role.credential_status == 1}
                     <button type="button" class="btn btn-sm btn-secondary credential-activate">
-                        {$LANG->getModule('activate')}
+                        <i class="fa-solid fa-power-off me-1"></i> {$LANG->getModule('activate')}
                     </button>
                     {elseif $TYPE == 'public' and $role.credential_status == -1}
                     <button type="button" class="btn btn-sm btn-secondary credential-deactivate">
-                        {$LANG->getModule('deactivate')}
+                        <i class="fa-solid fa-power-off me-1"></i> {$LANG->getModule('deactivate')}
                     </button>
                     {/if}
                 </div>

@@ -17,7 +17,18 @@ $(function() {
         // Kích hoạt / hủy kích hoạt quyền
         $('.credential-activate, .credential-deactivate', myroleapi).on('click', function(e) {
             e.preventDefault();
-            const role_id = $(this).closest('.item').data('role-id');
+            const btn = $(this);
+            const icon = $('i', btn);
+            if (icon.is('.fa-spinner')) {
+                return;
+            }
+
+            if (!icon.data('icon')) {
+                icon.data('icon', icon.attr('class'));
+            }
+            icon.removeClass(icon.data('icon')).addClass('fa-solid fa-spinner fa-spin-pulse me-1');
+
+            const role_id = btn.closest('.item').data('role-id');
             $.ajax({
                 type: 'POST',
                 url: myroleapi_url,
@@ -29,9 +40,13 @@ $(function() {
                 success: function(res) {
                     if (res.status == 'error') {
                         nukeviet.alert(res.mess);
+                        icon.removeClass('fa-solid fa-spinner fa-spin-pulse me-1').addClass(icon.data('icon'));
                     } else if (res.status == 'OK') {
                         location.reload();
                     }
+                },
+                error: function() {
+                    icon.removeClass('fa-solid fa-spinner fa-spin-pulse me-1').addClass(icon.data('icon'));
                 }
             });
         });
@@ -53,7 +68,18 @@ $(function() {
         // Tạo mới thông tin xác thực
         $('.create_authentication', credential_auth).on('click', function(e) {
             e.preventDefault();
-            const method = $(this).data('method');
+            const btn = $(this);
+            const icon = $('i', btn);
+            if (icon.is('.fa-spinner')) {
+                return;
+            }
+
+            if (!icon.data('icon')) {
+                icon.data('icon', icon.attr('class'));
+            }
+            icon.removeClass(icon.data('icon')).addClass('fa-solid fa-spinner fa-spin-pulse me-1');
+
+            const method = btn.data('method');
             $.ajax({
                 type: 'POST',
                 url: myroleapi_url,
@@ -63,6 +89,7 @@ $(function() {
                 },
                 dataType: 'json',
                 success: function(res) {
+                    icon.removeClass('fa-solid fa-spinner fa-spin-pulse me-1').addClass(icon.data('icon'));
                     if (res.status == 'error') {
                         nukeviet.alert(res.mess);
                     } else if (res.status == 'OK') {
@@ -70,6 +97,9 @@ $(function() {
                         $('[name=' + method + '_secret]', credential_auth).val(res.secret);
                         $('[name=' + method + '_ips]', credential_auth).closest('.api_ips').slideDown();
                     }
+                },
+                error: function() {
+                    icon.removeClass('fa-solid fa-spinner fa-spin-pulse me-1').addClass(icon.data('icon'));
                 }
             });
         });
@@ -77,8 +107,19 @@ $(function() {
         // Xóa thông tin xác thực
         $('.delete_authentication', credential_auth).on('click', function(e) {
             e.preventDefault();
-            const method = $(this).data('method');
+            const btn = $(this);
+            const icon = $('i', btn);
+            if (icon.is('.fa-spinner')) {
+                return;
+            }
+
+            const method = btn.data('method');
             nukeviet.confirm(nv_is_del_confirm[0], () => {
+                if (!icon.data('icon')) {
+                    icon.data('icon', icon.attr('class'));
+                }
+                icon.removeClass(icon.data('icon')).addClass('fa-solid fa-spinner fa-spin-pulse me-1');
+
                 $.ajax({
                     type: 'POST',
                     url: myroleapi_url,
@@ -88,11 +129,15 @@ $(function() {
                     },
                     dataType: 'json',
                     success: function(res) {
+                        icon.removeClass('fa-solid fa-spinner fa-spin-pulse me-1').addClass(icon.data('icon'));
                         if (res.status == 'OK') {
                             $('[name=' + method + '_ident]', credential_auth).val('');
                             $('[name=' + method + '_secret]', credential_auth).val('');
                             $('[name=' + method + '_ips]', credential_auth).val('').closest('.api_ips').slideUp();
                         }
+                    },
+                    error: function() {
+                        icon.removeClass('fa-solid fa-spinner fa-spin-pulse me-1').addClass(icon.data('icon'));
                     }
                 });
             });
@@ -104,7 +149,18 @@ $(function() {
         });
         credential_auth.on('click', '.api_ips_update', function(e) {
             e.preventDefault();
-            const method = $(this).data('method'),
+            const btn = $(this);
+            const icon = $('i', btn);
+            if (icon.is('.fa-spinner')) {
+                return;
+            }
+
+            if (!icon.data('icon')) {
+                icon.data('icon', icon.attr('class'));
+            }
+            icon.removeClass(icon.data('icon')).addClass('fa-solid fa-spinner fa-spin-pulse me-1');
+
+            const method = btn.data('method'),
                 ips = $('[name=' + method + '_ips]', credential_auth).val();
             $('.ips, .api_ips_update', credential_auth).prop('disabled', true);
             $.ajax({
@@ -117,6 +173,7 @@ $(function() {
                 },
                 dataType: 'json',
                 success: function(res) {
+                    icon.removeClass('fa-solid fa-spinner fa-spin-pulse me-1').addClass(icon.data('icon'));
                     if (res.status == 'error') {
                         nukeviet.alert(res.mess);
                         $('.ips, .api_ips_update', credential_auth).prop('disabled', false);
@@ -127,6 +184,10 @@ $(function() {
                             $('.ips, .api_ips_update', credential_auth).prop('disabled', false);
                         }, 1000);
                     }
+                },
+                error: function() {
+                    icon.removeClass('fa-solid fa-spinner fa-spin-pulse me-1').addClass(icon.data('icon'));
+                    $('.ips, .api_ips_update', credential_auth).prop('disabled', false);
                 }
             });
         });
@@ -135,6 +196,16 @@ $(function() {
         $(document).on('click', '.open-api-modal', function(e) {
             e.preventDefault();
             const btn = $(this);
+            const icon = $('i', btn);
+            if (icon.is('.fa-spinner')) {
+                return;
+            }
+
+            if (!icon.data('icon')) {
+                icon.data('icon', icon.attr('class'));
+            }
+            icon.removeClass(icon.data('icon')).addClass('fa-solid fa-spinner fa-spin-pulse me-1');
+
             const roleId = btn.data('role-id');
             const title = btn.data('role-title');
 
@@ -156,6 +227,7 @@ $(function() {
                     role_id: roleId
                 },
                 success: function(res) {
+                    icon.removeClass('fa-solid fa-spinner fa-spin-pulse me-1').addClass(icon.data('icon'));
                     loadingBox.addClass('d-none');
                     contentBox.removeClass('d-none');
 
@@ -169,6 +241,7 @@ $(function() {
                     contentBox.html(renderApiRole(res.data.apis));
                 },
                 error: function() {
+                    icon.removeClass('fa-solid fa-spinner fa-spin-pulse me-1').addClass(icon.data('icon'));
                     loadingBox.addClass('d-none');
                     contentBox.removeClass('d-none').html(
                         '<div class="alert alert-danger">Lỗi kết nối</div>'
