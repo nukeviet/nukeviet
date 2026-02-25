@@ -89,7 +89,7 @@
                                         </div>
                                         <div class="text-center">
                                             <button type="button" class="btn btn-primary api_ips_update" data-method="{$key}">
-                                                <i class="fa-solid fa-save me-1"></i> {$LANG->getModule('api_ips_update')}
+                                                <i class="fa-solid fa-floppy-disk me-1"></i> {$LANG->getModule('api_ips_update')}
                                             </button>
                                         </div>
                                     </div>
@@ -104,7 +104,7 @@
     </div>
     {if empty($ROLECOUNT)}
     <div class="alert alert-info d-flex align-items-center justify-content-center mb-3" role="alert">
-        <i class="fa-solid fa-info-circle me-2"></i>
+        <i class="fa-solid fa-circle-info me-2"></i>
         <div>
             {$LANG->getModule('api_roles_empty')}
         </div>
@@ -112,47 +112,47 @@
     {/if}
     {if not empty($ROLELIST)}
     <div class="table-responsive d-none d-lg-block">
-        <table class="table table-bordered table-striped align-middle">
+        <table class="table table-bordered table-striped table-hover align-middle">
             <thead class="table-primary small">
                 <tr>
                     <th class="text-nowrap text-center">{$LANG->getModule('api_roles_list')}</th>
-                    <th class="text-nowrap text-center" style="width: 1%;">{$LANG->getModule('api_role_status')}</th>
-                    <th class="text-nowrap text-center" style="width: 1%;">{$LANG->getModule('api_role_credential_status')}</th>
-                    <th class="text-nowrap text-center" style="width: 1%;">{$LANG->getModule('api_role_credential_addtime')}</th>
-                    <th class="text-nowrap text-center" style="width: 1%;">{$LANG->getModule('endtime')}</th>
-                    <th class="text-nowrap text-center" style="width: 1%;">{$LANG->getModule('quota')}</th>
-                    <th class="text-nowrap text-center" style="width: 1%;">{$LANG->getModule('api_role_credential_access_count')}</th>
-                    <th class="text-nowrap text-center" style="width: 1%;">{$LANG->getModule('api_role_credential_last_access')}</th>
-                    <th class="text-nowrap text-center" style="width: 1%;"></th>
+                    <th class="text-nowrap text-center w-auto">{$LANG->getModule('api_role_status')}</th>
+                    <th class="text-nowrap text-center w-auto">{$LANG->getModule('api_role_credential_status')}</th>
+                    <th class="text-nowrap text-center w-auto">{$LANG->getModule('api_role_credential_addtime')}</th>
+                    <th class="text-nowrap text-center w-auto">{$LANG->getModule('endtime')}</th>
+                    <th class="text-nowrap text-center w-auto">{$LANG->getModule('quota')}</th>
+                    <th class="text-nowrap text-center w-auto">{$LANG->getModule('api_role_credential_access_count')}</th>
+                    <th class="text-nowrap text-center w-auto">{$LANG->getModule('api_role_credential_last_access')}</th>
+                    <th class="text-nowrap text-center w-auto"></th>
                 </tr>
             </thead>
             <tbody>
                 {foreach from=$ROLELIST item=role}
                 <tr class="item{if $role.credential_status !== 1} text-muted{/if}" data-role-id="{$role.role_id}">
                     <td>
-                        <strong>{$role.role_title}</strong>
+                        <div class="fw-bold">{$role.role_title}</div>
                         {if not empty($role.role_description)}
-                        <p class="description">{$role.role_description}</p>
+                        <div class="small text-muted">{$role.role_description}</div>
                         {/if}
                     </td>
-                    <td class="text-nowrap text-center" style="width:1%;">{$role.status}</td>
-                    <td class="text-nowrap text-center" style="width:1%;">{$role.credential_status_format}</td>
-                    <td class="text-center" style="width:1%;">{$role.credential_addtime}</td>
-                    <td class="text-center" style="width:1%;">{$role.credential_endtime}</td>
-                    <td class="text-center" style="width:1%;">{$role.credential_quota}</td>
-                    <td class="text-nowrap text-center" style="width:1%;">{$role.credential_access_count}</td>
-                    <td class="text-nowrap text-center" style="width:1%;">{$role.credential_last_access}</td>
-                    <td class="text-nowrap text-center" style="width:1%;">
-                        <div>
-                            <button type="button" class="btn btn-secondary open-api-modal" data-role-id="{$role.role_id}" data-role-title="{$role.role_title}" data-page-url="{$PAGE_URL}" data-bs-toggle="modal" data-bs-target="#apiRoleModal">
+                    <td class="text-nowrap text-center">{$role.status}</td>
+                    <td class="text-nowrap text-center">{$role.credential_status_format}</td>
+                    <td class="text-center text-nowrap">{$role.credential_addtime}</td>
+                    <td class="text-center text-nowrap">{$role.credential_endtime}</td>
+                    <td class="text-center text-nowrap">{$role.credential_quota}</td>
+                    <td class="text-nowrap text-center">{$role.credential_access_count}</td>
+                    <td class="text-nowrap text-center">{$role.credential_last_access}</td>
+                    <td class="text-nowrap text-center">
+                        <div class="d-flex gap-1 justify-content-center flex-lg-column align-items-center">
+                            <button type="button" class="btn btn-sm btn-outline-secondary open-api-modal" data-role-id="{$role.role_id}" data-role-title="{$role.role_title}" data-page-url="{$PAGE_URL}" data-bs-toggle="modal" data-bs-target="#apiRoleModal">
                                 <i class="fa-solid fa-list me-1"></i> {$LANG->getModule('apis_list')}
                             </button>
                             {if $TYPE == 'public' and $role.credential_status == 1}
-                            <button type="button" class="btn btn-secondary credential-activate">
+                            <button type="button" class="btn btn-sm btn-outline-secondary credential-activate">
                                 <i class="fa-solid fa-power-off me-1"></i> {$LANG->getModule('activate')}
                             </button>
                             {elseif $TYPE == 'public' and $role.credential_status == -1}
-                            <button type="button" class="btn btn-secondary credential-deactivate">
+                            <button type="button" class="btn btn-sm btn-outline-secondary credential-deactivate">
                                 <i class="fa-solid fa-power-off me-1"></i> {$LANG->getModule('deactivate')}
                             </button>
                             {/if}
@@ -229,12 +229,12 @@
     {/if}
 </div>
 
-<div class="modal fade" id="apiRoleModal" tabindex="-1" aria-hidden="true">
+<div class="modal fade" id="apiRoleModal" tabindex="-1" aria-labelledby="apiRoleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-xl modal-dialog-scrollable">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title"></h5>
-                <button class="btn-close" data-bs-dismiss="modal"></button>
+                <h5 class="modal-title" id="apiRoleModalLabel"></h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="{$LANG->getGlobal('close')}"></button>
             </div>
             <div class="modal-body">
                 <div class="text-center py-4" id="apiRoleLoading">
