@@ -308,31 +308,46 @@ if ($nv_Request->isset_request('gid,uid', 'post') and hash_equals(NV_CHECK_SESSI
 }
 
 // Loai thanh vien khoi nhom
-if ($nv_Request->isset_request('gid,exclude', 'post')) {
+if ($nv_Request->isset_request('gid,exclude', 'post') and hash_equals(NV_CHECK_SESSION, $request_tokend)) {
     $gid = $nv_Request->get_int('gid', 'post', 0);
     $uid = $nv_Request->get_int('exclude', 'post', 0);
     if (!isset($groupsList[$gid]) or $gid < 10) {
-        exit($nv_Lang->getModule('error_group_not_found'));
+        nv_jsonOutput([
+            'status' => 'error',
+            'mess' => $nv_Lang->getModule('error_group_not_found')
+        ]);
     }
 
     if ($groupsList[$gid]['idsite'] != $global_config['idsite'] and $groupsList[$gid]['idsite'] == 0) {
         $row = $db->query('SELECT idsite FROM ' . NV_MOD_TABLE . ' WHERE userid=' . $uid)->fetch();
         if (!empty($row)) {
             if ($row['idsite'] != $global_config['idsite']) {
-                exit($nv_Lang->getModule('error_group_in_site'));
+                nv_jsonOutput([
+                    'status' => 'error',
+                    'mess' => $nv_Lang->getModule('error_group_in_site')
+                ]);
             }
         } else {
-            exit($nv_Lang->getModule('search_not_result'));
+            nv_jsonOutput([
+                'status' => 'error',
+                'mess' => $nv_Lang->getModule('search_not_result')
+            ]);
         }
     }
 
     if (!nv_groups_del_user($gid, $uid, $module_data)) {
-        exit($nv_Lang->getModule('admin_UserNotInGroup'));
+        nv_jsonOutput([
+            'status' => 'error',
+            'mess' => $nv_Lang->getModule('admin_UserNotInGroup')
+        ]);
     }
 
     $nv_Cache->delMod($module_name);
     nv_insert_logs(NV_LANG_DATA, $module_name, $nv_Lang->getModule('exclude_user2'), 'Member Id: ' . $uid . ' group ID: ' . $gid, $admin_info['userid']);
-    exit('OK');
+    nv_jsonOutput([
+        'status' => 'success',
+        'mess' => 'OK'
+    ]);
 }
 
 // Thăng cấp thành viên
@@ -374,21 +389,30 @@ if ($nv_Request->isset_request('gid,promote', 'post') and hash_equals(NV_CHECK_S
 }
 
 // Giang cap quan tri
-if ($nv_Request->isset_request('gid,demote', 'post')) {
+if ($nv_Request->isset_request('gid,demote', 'post') and hash_equals(NV_CHECK_SESSION, $request_tokend)) {
     $gid = $nv_Request->get_int('gid', 'post', 0);
     $uid = $nv_Request->get_int('demote', 'post', 0);
     if (!isset($groupsList[$gid]) or $gid < 10) {
-        exit($nv_Lang->getModule('error_group_not_found'));
+        nv_jsonOutput([
+            'status' => 'error',
+            'mess' => $nv_Lang->getModule('error_group_not_found')
+        ]);
     }
 
     if ($groupsList[$gid]['idsite'] != $global_config['idsite'] and $groupsList[$gid]['idsite'] == 0) {
         $row = $db->query('SELECT idsite FROM ' . NV_MOD_TABLE . ' WHERE userid=' . $uid)->fetch();
         if (!empty($row)) {
             if ($row['idsite'] != $global_config['idsite']) {
-                exit($nv_Lang->getModule('error_group_in_site'));
+                nv_jsonOutput([
+                    'status' => 'error',
+                    'mess' => $nv_Lang->getModule('error_group_in_site')
+                ]);
             }
         } else {
-            exit($nv_Lang->getModule('search_not_result'));
+            nv_jsonOutput([
+                'status' => 'error',
+                'mess' => $nv_Lang->getModule('search_not_result')
+            ]);
         }
     }
 
@@ -396,25 +420,37 @@ if ($nv_Request->isset_request('gid,demote', 'post')) {
 
     $nv_Cache->delMod($module_name);
     nv_insert_logs(NV_LANG_DATA, $module_name, $nv_Lang->getModule('demote'), 'Member Id: ' . $uid . ' group ID: ' . $gid, $admin_info['userid']);
-    exit('OK');
+    nv_jsonOutput([
+        'status' => 'success',
+        'mess' => 'OK'
+    ]);
 }
 
 // Duyet vao nhom
-if ($nv_Request->isset_request('gid,approved', 'post')) {
+if ($nv_Request->isset_request('gid,approved', 'post') and hash_equals(NV_CHECK_SESSION, $request_tokend)) {
     $gid = $nv_Request->get_int('gid', 'post', 0);
     $uid = $nv_Request->get_int('approved', 'post', 0);
     if (!isset($groupsList[$gid]) or $gid < 10) {
-        exit($nv_Lang->getModule('error_group_not_found'));
+        nv_jsonOutput([
+            'status' => 'error',
+            'mess' => $nv_Lang->getModule('error_group_not_found')
+        ]);
     }
 
     if ($groupsList[$gid]['idsite'] != $global_config['idsite'] and $groupsList[$gid]['idsite'] == 0) {
         $row = $db->query('SELECT idsite FROM ' . NV_MOD_TABLE . ' WHERE userid=' . $uid)->fetch();
         if (!empty($row)) {
             if ($row['idsite'] != $global_config['idsite']) {
-                exit($nv_Lang->getModule('error_group_in_site'));
+                nv_jsonOutput([
+                    'status' => 'error',
+                    'mess' => $nv_Lang->getModule('error_group_in_site')
+                ]);
             }
         } else {
-            exit($nv_Lang->getModule('search_not_result'));
+            nv_jsonOutput([
+                'status' => 'error',
+                'mess' => $nv_Lang->getModule('search_not_result')
+            ]);
         }
     }
 
@@ -423,25 +459,37 @@ if ($nv_Request->isset_request('gid,approved', 'post')) {
 
     $nv_Cache->delMod($module_name);
     nv_insert_logs(NV_LANG_DATA, $module_name, $nv_Lang->getModule('approved'), 'Member Id: ' . $uid . ' group ID: ' . $gid, $admin_info['userid']);
-    exit('OK');
+    nv_jsonOutput([
+        'status' => 'success',
+        'mess' => 'OK'
+    ]);
 }
 
 // Tu choi gia nhap nhom
-if ($nv_Request->isset_request('gid,denied', 'post')) {
+if ($nv_Request->isset_request('gid,denied', 'post') and hash_equals(NV_CHECK_SESSION, $request_tokend)) {
     $gid = $nv_Request->get_int('gid', 'post', 0);
     $uid = $nv_Request->get_int('denied', 'post', 0);
     if (!isset($groupsList[$gid]) or $gid < 10) {
-        exit($nv_Lang->getModule('error_group_not_found'));
+        nv_jsonOutput([
+            'status' => 'error',
+            'mess' => $nv_Lang->getModule('error_group_not_found')
+        ]);
     }
 
     if ($groupsList[$gid]['idsite'] != $global_config['idsite'] and $groupsList[$gid]['idsite'] == 0) {
         $row = $db->query('SELECT idsite FROM ' . NV_MOD_TABLE . ' WHERE userid=' . $uid)->fetch();
         if (!empty($row)) {
             if ($row['idsite'] != $global_config['idsite']) {
-                exit($nv_Lang->getModule('error_group_in_site'));
+                nv_jsonOutput([
+                    'status' => 'error',
+                    'mess' => $nv_Lang->getModule('error_group_in_site')
+                ]);
             }
         } else {
-            exit($nv_Lang->getModule('search_not_result'));
+            nv_jsonOutput([
+                'status' => 'error',
+                'mess' => $nv_Lang->getModule('search_not_result')
+            ]);
         }
     }
 
@@ -449,7 +497,10 @@ if ($nv_Request->isset_request('gid,denied', 'post')) {
 
     $nv_Cache->delMod($module_name);
     nv_insert_logs(NV_LANG_DATA, $module_name, $nv_Lang->getModule('denied'), 'Member Id: ' . $uid . ' group ID: ' . $gid, $admin_info['userid']);
-    exit('OK');
+    nv_jsonOutput([
+        'status' => 'success',
+        'mess' => 'OK'
+    ]);
 }
 
 $nv_Lang->setModule('nametitle', $global_config['name_show'] == 0 ? $nv_Lang->getModule('lastname_firstname') : $nv_Lang->getModule('firstname_lastname'));

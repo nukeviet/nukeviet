@@ -838,96 +838,209 @@ $(function () {
             });
 
             // Duyệt thành viên
-            $(document).on('click', 'a.approved', function() {
-                if (confirm(nv_is_add_user_confirm[0])) {
-                    $.ajax({
-                        type: 'POST',
-                        url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=groups',
-                        data: 'gid=' + gid + '&approved=' + $(this).data('id'),
-                        success: function(res) {
-                            if (res == 'OK') {
-                                $('div#pageContent').load(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=groups&listUsers=' + gid + '&random=' + nv_randomPassword(10));
-                            } else {
-                                nukeviet.toast(res, 'error');
-                            }
-                        }
-                    });
+            $(document).on('click', 'button.approved', function(e) {
+                e.preventDefault();
+                const btn = $(this);
+                const icon = $('i', btn);
+                if (icon.is('.fa-spinner')) {
+                    return;
                 }
-                return false;
+                
+                if (!confirm(nv_is_add_user_confirm[0])) {
+                    return;
+                }
+                
+                icon.removeClass(icon.data('icon')).addClass('fa-spinner fa-spin-pulse');
+                
+                $.ajax({
+                    type: 'POST',
+                    url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=groups&nocache=' + new Date().getTime(),
+                    data: {
+                        gid: gid,
+                        approved: btn.data('id'),
+                        tokend: $('body').data('checksess')
+                    },
+                    dataType: 'json',
+                    cache: false,
+                    success: function (res) {
+                        icon.removeClass('fa-spinner fa-spin-pulse').addClass(icon.data('icon'));
+                        if (res.status === 'error') {
+                            return nukeviet.toast(res.mess, 'error');
+                        }
+
+                        $('div#pageContent').html('<div class="text-center"><div class="spinner-border text-primary" role="status"><span class="visually-hidden">' + nv_loadingText + '</span></div></div>');
+                        $('div#pageContent').load(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=groups&listUsers=' + gid + '&random=' + nv_randomPassword(10));
+                    },
+                    error: function (xhr, text, err) {
+                        icon.removeClass('fa-spinner fa-spin-pulse').addClass(icon.data('icon'));
+                        nukeviet.toast(text, 'error');
+                        console.log(xhr, text, err);
+                    }
+                });
             });
 
             // Từ chối thành viên
-            $(document).on('click', 'a.denied', function() {
-                if (confirm(nv_is_exclude_user_confirm[0])) {
-                    $.ajax({
-                        type: 'POST',
-                        url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=groups',
-                        data: 'gid=' + gid + '&denied=' + $(this).data('id'),
-                        success: function(res) {
-                            if (res == 'OK') {
-                                $('div#pageContent').load(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=groups&listUsers=' + gid + '&random=' + nv_randomPassword(10));
-                            } else {
-                                nukeviet.toast(res, 'error');
-                            }
-                        }
-                    });
+            $(document).on('click', 'button.denied', function(e) {
+                e.preventDefault();
+                const btn = $(this);
+                const icon = $('i', btn);
+                if (icon.is('.fa-spinner')) {
+                    return;
                 }
-                return false;
+                
+                if (!confirm(nv_is_exclude_user_confirm[0])) {
+                    return;
+                }
+                
+                icon.removeClass(icon.data('icon')).addClass('fa-spinner fa-spin-pulse');
+                
+                $.ajax({
+                    type: 'POST',
+                    url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=groups&nocache=' + new Date().getTime(),
+                    data: {
+                        gid: gid,
+                        denied: btn.data('id'),
+                        tokend: $('body').data('checksess')
+                    },
+                    dataType: 'json',
+                    cache: false,
+                    success: function (res) {
+                        icon.removeClass('fa-spinner fa-spin-pulse').addClass(icon.data('icon'));
+                        if (res.status === 'error') {
+                            return nukeviet.toast(res.mess, 'error');
+                        }
+
+                        $('div#pageContent').html('<div class="text-center"><div class="spinner-border text-primary" role="status"><span class="visually-hidden">' + nv_loadingText + '</span></div></div>');
+                        $('div#pageContent').load(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=groups&listUsers=' + gid + '&random=' + nv_randomPassword(10));
+                    },
+                    error: function (xhr, text, err) {
+                        icon.removeClass('fa-spinner fa-spin-pulse').addClass(icon.data('icon'));
+                        nukeviet.toast(text, 'error');
+                        console.log(xhr, text, err);
+                    }
+                });
             });
 
             // Xóa leader
-            $(document).on('click', 'a.deleteleader', function() {
-                if (confirm(nv_is_del_confirm[0])) {
-                    $.ajax({
-                        type: 'POST',
-                        url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=groups',
-                        data: 'gid=' + gid + '&exclude=' + $(this).data('userid'),
-                        success: function(res) {
-                            if (res == 'OK') {
-                                $('div#pageContent').load(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=groups&listUsers=' + gid + '&random=' + nv_randomPassword(10));
-                            } else {
-                                nukeviet.toast(res, 'error');
-                            }
-                        }
-                    });
+            $(document).on('click', 'button.deleteleader', function(e) {
+                e.preventDefault();
+                const btn = $(this);
+                const icon = $('i', btn);
+                if (icon.is('.fa-spinner')) {
+                    return;
                 }
-                return false;
+                
+                if (!confirm(nv_is_del_confirm[0])) {
+                    return;
+                }
+                
+                icon.removeClass(icon.data('icon')).addClass('fa-spinner fa-spin-pulse');
+                
+                $.ajax({
+                    type: 'POST',
+                    url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=groups&nocache=' + new Date().getTime(),
+                    data: {
+                        gid: gid,
+                        exclude: btn.data('id'),
+                        tokend: $('body').data('checksess')
+                    },
+                    dataType: 'json',
+                    cache: false,
+                    success: function (res) {
+                        icon.removeClass('fa-spinner fa-spin-pulse').addClass(icon.data('icon'));
+                        if (res.status === 'error') {
+                            return nukeviet.toast(res.mess, 'error');
+                        }
+
+                        $('div#pageContent').html('<div class="text-center"><div class="spinner-border text-primary" role="status"><span class="visually-hidden">' + nv_loadingText + '</span></div></div>');
+                        $('div#pageContent').load(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=groups&listUsers=' + gid + '&random=' + nv_randomPassword(10));
+                    },
+                    error: function (xhr, text, err) {
+                        icon.removeClass('fa-spinner fa-spin-pulse').addClass(icon.data('icon'));
+                        nukeviet.toast(text, 'error');
+                        console.log(xhr, text, err);
+                    }
+                });
             });
 
             // Giáng cấp
-            $(document).on('click', 'a.demote', function() {
+            $(document).on('click', 'button.demote', function(e) {
+                e.preventDefault();
+                const btn = $(this);
+                const icon = $('i', btn);
+                if (icon.is('.fa-spinner')) {
+                    return;
+                }
+                
+                icon.removeClass(icon.data('icon')).addClass('fa-spinner fa-spin-pulse');
+                
                 $.ajax({
                     type: 'POST',
-                    url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=groups',
-                    data: 'gid=' + gid + '&demote=' + $(this).data('id'),
-                    success: function(res) {
-                        if (res == 'OK') {
-                            $('div#pageContent').load(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=groups&listUsers=' + gid + '&random=' + nv_randomPassword(10));
-                        } else {
-                            nukeviet.toast(res, 'error');
+                    url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=groups&nocache=' + new Date().getTime(),
+                    data: {
+                        gid: gid,
+                        demote: btn.data('id'),
+                        tokend: $('body').data('checksess')
+                    },
+                    dataType: 'json',
+                    cache: false,
+                    success: function (res) {
+                        icon.removeClass('fa-spinner fa-spin-pulse').addClass(icon.data('icon'));
+                        if (res.status === 'error') {
+                            return nukeviet.toast(res.mess, 'error');
                         }
+
+                        $('div#pageContent').html('<div class="text-center"><div class="spinner-border text-primary" role="status"><span class="visually-hidden">' + nv_loadingText + '</span></div></div>');
+                        $('div#pageContent').load(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=groups&listUsers=' + gid + '&random=' + nv_randomPassword(10));
+                    },
+                    error: function (xhr, text, err) {
+                        icon.removeClass('fa-spinner fa-spin-pulse').addClass(icon.data('icon'));
+                        nukeviet.toast(text, 'error');
+                        console.log(xhr, text, err);
                     }
                 });
-                return false;
             });
 
             // Xóa member
-            $(document).on('click', 'a.deletemember', function() {
-                if (confirm(nv_is_del_confirm[0])) {
-                    $.ajax({
-                        type: 'POST',
-                        url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=groups',
-                        data: 'gid=' + gid + '&exclude=' + $(this).data('userid'),
-                        success: function(res) {
-                            if (res == 'OK') {
-                                $('div#pageContent').load(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=groups&listUsers=' + gid + '&random=' + nv_randomPassword(10));
-                            } else {
-                                nukeviet.toast(res, 'error');
-                            }
-                        }
-                    });
+            $(document).on('click', 'button.deletemember', function(e) {
+                e.preventDefault();
+                const btn = $(this);
+                const icon = $('i', btn);
+                if (icon.is('.fa-spinner')) {
+                    return;
                 }
-                return false;
+                
+                if (!confirm(nv_is_del_confirm[0])) {
+                    return;
+                }
+                
+                icon.removeClass(icon.data('icon')).addClass('fa-spinner fa-spin-pulse');
+                
+                $.ajax({
+                    type: 'POST',
+                    url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=groups&nocache=' + new Date().getTime(),
+                    data: {
+                        gid: gid,
+                        exclude: btn.data('id'),
+                        tokend: $('body').data('checksess')
+                    },
+                    dataType: 'json',
+                    cache: false,
+                    success: function (res) {
+                        icon.removeClass('fa-spinner fa-spin-pulse').addClass(icon.data('icon'));
+                        if (res.status === 'error') {
+                            return nukeviet.toast(res.mess, 'error');
+                        }
+
+                        $('div#pageContent').html('<div class="text-center"><div class="spinner-border text-primary" role="status"><span class="visually-hidden">' + nv_loadingText + '</span></div></div>');
+                        $('div#pageContent').load(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=groups&listUsers=' + gid + '&random=' + nv_randomPassword(10));
+                    },
+                    error: function (xhr, text, err) {
+                        icon.removeClass('fa-spinner fa-spin-pulse').addClass(icon.data('icon'));
+                        nukeviet.toast(text, 'error');
+                        console.log(xhr, text, err);
+                    }
+                });
             });
 
             // Thăng cấp
