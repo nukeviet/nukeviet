@@ -36,7 +36,7 @@
         </div>
         {if !empty($list_data.page)}
         <div class="card-footer border-top">
-            <div class="text-center">{$list_data.page}</div>
+            <div class="text-center pagination-wrap">{$list_data.page}</div>
         </div>
         {/if}
     </div>
@@ -78,7 +78,7 @@
         </div>
         {if !empty($list_data.page)}
         <div class="card-footer border-top">
-            <div class="text-center">{$list_data.page}</div>
+            <div class="text-center pagination-wrap">{$list_data.page}</div>
         </div>
         {/if}
     </div>
@@ -106,11 +106,15 @@
                             <td><a title="{$LANG->getModule('detail')}" href="{$smarty.const.NV_BASE_ADMINURL}index.php?{$smarty.const.NV_LANG_VARIABLE}={$smarty.const.NV_LANG_DATA}&amp;{$smarty.const.NV_NAME_VARIABLE}={$MODULE_NAME}&amp;{$smarty.const.NV_OP_VARIABLE}=edit&amp;userid={$row.userid}">{$row.username}</a></td>
                             <td>{$row.full_name}</td>
                             <td><a href="mailto:{$row.email}">{$row.email}</a></td>
-                            <td class="text-center">
-                            {if $row.show_tools}
-                            <i class="fa-solid fa-star"></i> <a class="promote" href="javascript:void(0);" data-id="{$row.userid}">{$LANG->getModule('promote')}</a>
-                            <i class="fa-solid fa-trash"></i> <a class="deletemember" href="javascript:void(0);" data-userid="{$row.userid}">{$LANG->getModule('exclude_user2')}</a>
-                            {/if}
+                            <td class="text-center text-nowrap">
+                                {if $row.show_tools}
+                                <button class="text-nowrap btn btn-sm btn-secondary promote" data-id="{$row.userid}">
+                                    <i class="fa-solid fa-star text-warning" data-icon="fa-star"></i> {$LANG->getModule('promote')}
+                                </button>
+                                <button class="text-nowrap btn btn-sm btn-secondary deletemember" data-id="{$row.userid}">
+                                    <i class="fa-solid fa-trash text-danger" data-icon="fa-trash"></i> {$LANG->getModule('exclude_user2')}
+                                </button>
+                                {/if}
                             </td>
                         </tr>
                         {/foreach}
@@ -120,7 +124,7 @@
         </div>
         {if !empty($list_data.page)}
         <div class="card-footer border-top">
-            <div class="text-center">{$list_data.page}</div>
+            <div class="text-center pagination-wrap">{$list_data.page}</div>
         </div>
         {/if}
     </div>

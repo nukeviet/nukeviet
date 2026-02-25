@@ -41,8 +41,8 @@
                     <div class="row g-2">
                         <div class="col-auto">
                             <div class="input-group">
-                                <input type="text" name="exp_time" id="exp_time" class="form-control" value="{$DATA.exp_time}" maxlength="10" style="width:150px" autocomplete="off">
-                                <button type="button" class="btn btn-secondary" data-toggle="opendatepicker" aria-label="{$LANG->getModule('select_date')}"><i class="fa-solid fa-calendar"></i></button>
+                                <input type="text" name="exp_time" id="exp_time" class="form-control fw-150" value="{$DATA.exp_time}" maxlength="10" autocomplete="off">
+                                <button type="button" class="btn btn-secondary" data-toggle="focusDate" aria-label="{$LANG->getModule('select_date')}"><i class="fa-solid fa-calendar"></i></button>
                             </div>
                         </div>
                         <div class="col-auto align-self-center">
