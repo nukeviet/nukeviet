@@ -114,6 +114,7 @@ if (!nv_function_exists('nv_contact_supporter')) {
         }
 
         $module_file = $site_mods[$module]['module_file'];
+        addition_module_assets($module, 'css');
         $nv_Lang->loadModule($module_file, false, true);
         $tpl = new \NukeViet\Template\NVSmarty();
         $tpl->setTemplateDir(get_block_tpl_dir('block.supporter.tpl', $module));
