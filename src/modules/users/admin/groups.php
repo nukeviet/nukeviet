@@ -14,7 +14,7 @@ if (!defined('NV_IS_FILE_ADMIN')) {
 }
 
 /**
- * getAlias()
+ * Lấy liên kết tĩnh của nhóm
  *
  * @param string $alias
  * @param int    $id
@@ -39,6 +39,7 @@ function getAlias($alias, $id, $num = 0)
     return $_alias;
 }
 
+// Lấy alias nhóm
 if ($nv_Request->isset_request('getAlias, id, title', 'post')) {
     $id = $nv_Request->get_title('id', 'post', 0);
     $title = $nv_Request->get_title('title', 'post', '', 1);
@@ -47,8 +48,7 @@ if ($nv_Request->isset_request('getAlias, id, title', 'post')) {
     if (!empty($title)) {
         $alias = getAlias(change_alias($title), $id);
     }
-    echo $alias;
-    exit(0);
+    nv_htmlOutput($alias);
 }
 
 $page_title = $nv_Lang->getGlobal('mod_groups');
@@ -72,6 +72,7 @@ while ($row = $result->fetch()) {
     }
     $groupsList[$row['group_id']] = $row;
 }
+
 // Thống kê thành viên
 if (!empty($global_config['idsite'])) {
     // Thành viên mới của site
@@ -92,7 +93,7 @@ if (!empty($global_config['idsite'])) {
 $groupsList[5]['numbers'] = '-';
 $groupsList[6]['numbers'] = '-';
 
-// Neu khong co nhom => chuyen den trang tao nhom
+// Chuyển sang trang tạo nhóm nếu chưa có nhóm nào
 if (!$checkEmptyGroup and !$nv_Request->isset_request('add', 'get')) {
     nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&add');
 }
@@ -307,7 +308,7 @@ if ($nv_Request->isset_request('gid,uid', 'post') and hash_equals(NV_CHECK_SESSI
     ]);
 }
 
-// Loai thanh vien khoi nhom
+// Loại thành viên khỏi nhóm
 if ($nv_Request->isset_request('gid,exclude', 'post') and hash_equals(NV_CHECK_SESSION, $request_tokend)) {
     $gid = $nv_Request->get_int('gid', 'post', 0);
     $uid = $nv_Request->get_int('exclude', 'post', 0);
@@ -388,7 +389,7 @@ if ($nv_Request->isset_request('gid,promote', 'post') and hash_equals(NV_CHECK_S
     ]);
 }
 
-// Giang cap quan tri
+// Giáng cấp quản trị
 if ($nv_Request->isset_request('gid,demote', 'post') and hash_equals(NV_CHECK_SESSION, $request_tokend)) {
     $gid = $nv_Request->get_int('gid', 'post', 0);
     $uid = $nv_Request->get_int('demote', 'post', 0);
@@ -426,7 +427,7 @@ if ($nv_Request->isset_request('gid,demote', 'post') and hash_equals(NV_CHECK_SE
     ]);
 }
 
-// Duyet vao nhom
+// Duyệt vào nhóm
 if ($nv_Request->isset_request('gid,approved', 'post') and hash_equals(NV_CHECK_SESSION, $request_tokend)) {
     $gid = $nv_Request->get_int('gid', 'post', 0);
     $uid = $nv_Request->get_int('approved', 'post', 0);
@@ -465,7 +466,7 @@ if ($nv_Request->isset_request('gid,approved', 'post') and hash_equals(NV_CHECK_
     ]);
 }
 
-// Tu choi gia nhap nhom
+// Từ chối gia nhập nhóm
 if ($nv_Request->isset_request('gid,denied', 'post') and hash_equals(NV_CHECK_SESSION, $request_tokend)) {
     $gid = $nv_Request->get_int('gid', 'post', 0);
     $uid = $nv_Request->get_int('denied', 'post', 0);
@@ -512,7 +513,7 @@ $tpl->assign('MODULE_NAME', $module_name);
 $tpl->assign('MODULE_FILE', $module_file);
 $tpl->assign('OP', $op);
 
-// Danh sach thanh vien (AJAX)
+// Danh sách thành viên của nhóm (AJAX)
 if ($nv_Request->isset_request('listUsers', 'get')) {
     $group_id = $nv_Request->get_int('listUsers', 'get', 0);
     $page = $nv_Request->get_page('page', 'get', 1);
@@ -521,7 +522,7 @@ if ($nv_Request->isset_request('listUsers', 'get')) {
     $base_url = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=groups&listUsers=' . $group_id;
 
     if (!isset($groupsList[$group_id])) {
-        exit($nv_Lang->getModule('error_group_not_found'));
+        nv_htmlOutput($nv_Lang->getModule('error_group_not_found'));
     }
     $tpl->assign('GID', $group_id);
     $title = ($group_id < 10) ? $nv_Lang->getGlobal('level' . $group_id) : $groupsList[$group_id]['title'];
@@ -530,7 +531,7 @@ if ($nv_Request->isset_request('listUsers', 'get')) {
     $array_number = [];
     $group_users = [];
 
-    //Danh sách xin gia nhập nhóm
+    // Danh sách xin gia nhập nhóm
     if (empty($type) or $type == 'pending') {
         $db->sqlreset()
             ->select('COUNT(*)')
@@ -551,7 +552,7 @@ if ($nv_Request->isset_request('listUsers', 'get')) {
         }
     }
 
-    //Danh sách quản trị nhóm
+    // Danh sách quản trị nhóm
     if (empty($type) or $type == 'leaders') {
         $db->sqlreset()
             ->select('COUNT(*)')
@@ -572,7 +573,7 @@ if ($nv_Request->isset_request('listUsers', 'get')) {
         }
     }
 
-    //Danh sách thành viên của nhóm
+    // Danh sách thành viên của nhóm
     if (empty($type) or $type == 'members') {
         $db->sqlreset()
             ->select('COUNT(*)')
@@ -617,7 +618,7 @@ if ($nv_Request->isset_request('listUsers', 'get')) {
                 $type_data['loop'][] = $row;
             }
 
-            $generate_page = nv_generate_page($base_url . '&type=' . $_type, $array_number[$_type], $per_page, $page, true, false, 'nv_urldecode_ajax', 'id_' . $_type);
+            $generate_page = nv_generate_page($base_url . '&type=' . $_type, $array_number[$_type], $per_page, $page, true, true, 'nv_urldecode_ajax', 'id_' . $_type);
             if (!empty($generate_page)) {
                 $type_data['page'] = $generate_page;
             }
@@ -644,7 +645,7 @@ if ($nv_Request->isset_request('listUsers', 'get')) {
     nv_htmlOutput($tpl->fetch('groups_listusers.tpl'));
 }
 
-// Danh sach thanh vien
+// Danh sách thành viên (Page HTML)
 if ($nv_Request->isset_request('userlist', 'get')) {
     $group_id = $nv_Request->get_int('userlist', 'get', 0);
     if (!isset($groupsList[$group_id]) or !($group_id < 4 or $group_id > 9)) {

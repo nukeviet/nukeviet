@@ -845,37 +845,35 @@ $(function () {
                 if (icon.is('.fa-spinner')) {
                     return;
                 }
-                
-                if (!confirm(nv_is_add_user_confirm[0])) {
-                    return;
-                }
-                
-                icon.removeClass(icon.data('icon')).addClass('fa-spinner fa-spin-pulse');
-                
-                $.ajax({
-                    type: 'POST',
-                    url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=groups&nocache=' + new Date().getTime(),
-                    data: {
-                        gid: gid,
-                        approved: btn.data('id'),
-                        tokend: $('body').data('checksess')
-                    },
-                    dataType: 'json',
-                    cache: false,
-                    success: function (res) {
-                        icon.removeClass('fa-spinner fa-spin-pulse').addClass(icon.data('icon'));
-                        if (res.status === 'error') {
-                            return nukeviet.toast(res.mess, 'error');
-                        }
 
-                        $('div#pageContent').html('<div class="text-center"><div class="spinner-border text-primary" role="status"><span class="visually-hidden">' + nv_loadingText + '</span></div></div>');
-                        $('div#pageContent').load(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=groups&listUsers=' + gid + '&random=' + nv_randomPassword(10));
-                    },
-                    error: function (xhr, text, err) {
-                        icon.removeClass('fa-spinner fa-spin-pulse').addClass(icon.data('icon'));
-                        nukeviet.toast(text, 'error');
-                        console.log(xhr, text, err);
-                    }
+                nukeviet.confirm(nv_is_add_user_confirm[0], () => {
+                    icon.removeClass(icon.data('icon')).addClass('fa-spinner fa-spin-pulse');
+
+                    $.ajax({
+                        type: 'POST',
+                        url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=groups&nocache=' + new Date().getTime(),
+                        data: {
+                            gid: gid,
+                            approved: btn.data('id'),
+                            tokend: $('body').data('checksess')
+                        },
+                        dataType: 'json',
+                        cache: false,
+                        success: function (res) {
+                            icon.removeClass('fa-spinner fa-spin-pulse').addClass(icon.data('icon'));
+                            if (res.status === 'error') {
+                                return nukeviet.toast(res.mess, 'error');
+                            }
+
+                            $('div#pageContent').html('<div class="text-center"><div class="spinner-border text-primary" role="status"><span class="visually-hidden">' + nv_loadingText + '</span></div></div>');
+                            $('div#pageContent').load(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=groups&listUsers=' + gid + '&random=' + nv_randomPassword(10));
+                        },
+                        error: function (xhr, text, err) {
+                            icon.removeClass('fa-spinner fa-spin-pulse').addClass(icon.data('icon'));
+                            nukeviet.toast(text, 'error');
+                            console.log(xhr, text, err);
+                        }
+                    });
                 });
             });
 
@@ -887,37 +885,35 @@ $(function () {
                 if (icon.is('.fa-spinner')) {
                     return;
                 }
-                
-                if (!confirm(nv_is_exclude_user_confirm[0])) {
-                    return;
-                }
-                
-                icon.removeClass(icon.data('icon')).addClass('fa-spinner fa-spin-pulse');
-                
-                $.ajax({
-                    type: 'POST',
-                    url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=groups&nocache=' + new Date().getTime(),
-                    data: {
-                        gid: gid,
-                        denied: btn.data('id'),
-                        tokend: $('body').data('checksess')
-                    },
-                    dataType: 'json',
-                    cache: false,
-                    success: function (res) {
-                        icon.removeClass('fa-spinner fa-spin-pulse').addClass(icon.data('icon'));
-                        if (res.status === 'error') {
-                            return nukeviet.toast(res.mess, 'error');
-                        }
 
-                        $('div#pageContent').html('<div class="text-center"><div class="spinner-border text-primary" role="status"><span class="visually-hidden">' + nv_loadingText + '</span></div></div>');
-                        $('div#pageContent').load(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=groups&listUsers=' + gid + '&random=' + nv_randomPassword(10));
-                    },
-                    error: function (xhr, text, err) {
-                        icon.removeClass('fa-spinner fa-spin-pulse').addClass(icon.data('icon'));
-                        nukeviet.toast(text, 'error');
-                        console.log(xhr, text, err);
-                    }
+                nukeviet.confirm(nv_is_exclude_user_confirm[0], () => {
+                    icon.removeClass(icon.data('icon')).addClass('fa-spinner fa-spin-pulse');
+
+                    $.ajax({
+                        type: 'POST',
+                        url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=groups&nocache=' + new Date().getTime(),
+                        data: {
+                            gid: gid,
+                            denied: btn.data('id'),
+                            tokend: $('body').data('checksess')
+                        },
+                        dataType: 'json',
+                        cache: false,
+                        success: function (res) {
+                            icon.removeClass('fa-spinner fa-spin-pulse').addClass(icon.data('icon'));
+                            if (res.status === 'error') {
+                                return nukeviet.toast(res.mess, 'error');
+                            }
+
+                            $('div#pageContent').html('<div class="text-center"><div class="spinner-border text-primary" role="status"><span class="visually-hidden">' + nv_loadingText + '</span></div></div>');
+                            $('div#pageContent').load(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=groups&listUsers=' + gid + '&random=' + nv_randomPassword(10));
+                        },
+                        error: function (xhr, text, err) {
+                            icon.removeClass('fa-spinner fa-spin-pulse').addClass(icon.data('icon'));
+                            nukeviet.toast(text, 'error');
+                            console.log(xhr, text, err);
+                        }
+                    });
                 });
             });
 
@@ -929,37 +925,35 @@ $(function () {
                 if (icon.is('.fa-spinner')) {
                     return;
                 }
-                
-                if (!confirm(nv_is_del_confirm[0])) {
-                    return;
-                }
-                
-                icon.removeClass(icon.data('icon')).addClass('fa-spinner fa-spin-pulse');
-                
-                $.ajax({
-                    type: 'POST',
-                    url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=groups&nocache=' + new Date().getTime(),
-                    data: {
-                        gid: gid,
-                        exclude: btn.data('id'),
-                        tokend: $('body').data('checksess')
-                    },
-                    dataType: 'json',
-                    cache: false,
-                    success: function (res) {
-                        icon.removeClass('fa-spinner fa-spin-pulse').addClass(icon.data('icon'));
-                        if (res.status === 'error') {
-                            return nukeviet.toast(res.mess, 'error');
-                        }
 
-                        $('div#pageContent').html('<div class="text-center"><div class="spinner-border text-primary" role="status"><span class="visually-hidden">' + nv_loadingText + '</span></div></div>');
-                        $('div#pageContent').load(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=groups&listUsers=' + gid + '&random=' + nv_randomPassword(10));
-                    },
-                    error: function (xhr, text, err) {
-                        icon.removeClass('fa-spinner fa-spin-pulse').addClass(icon.data('icon'));
-                        nukeviet.toast(text, 'error');
-                        console.log(xhr, text, err);
-                    }
+                nukeviet.confirm(nv_is_exclude_user_confirm[0], () => {
+                    icon.removeClass(icon.data('icon')).addClass('fa-spinner fa-spin-pulse');
+
+                    $.ajax({
+                        type: 'POST',
+                        url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=groups&nocache=' + new Date().getTime(),
+                        data: {
+                            gid: gid,
+                            exclude: btn.data('id'),
+                            tokend: $('body').data('checksess')
+                        },
+                        dataType: 'json',
+                        cache: false,
+                        success: function (res) {
+                            icon.removeClass('fa-spinner fa-spin-pulse').addClass(icon.data('icon'));
+                            if (res.status === 'error') {
+                                return nukeviet.toast(res.mess, 'error');
+                            }
+
+                            $('div#pageContent').html('<div class="text-center"><div class="spinner-border text-primary" role="status"><span class="visually-hidden">' + nv_loadingText + '</span></div></div>');
+                            $('div#pageContent').load(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=groups&listUsers=' + gid + '&random=' + nv_randomPassword(10));
+                        },
+                        error: function (xhr, text, err) {
+                            icon.removeClass('fa-spinner fa-spin-pulse').addClass(icon.data('icon'));
+                            nukeviet.toast(text, 'error');
+                            console.log(xhr, text, err);
+                        }
+                    });
                 });
             });
 
@@ -971,9 +965,9 @@ $(function () {
                 if (icon.is('.fa-spinner')) {
                     return;
                 }
-                
+
                 icon.removeClass(icon.data('icon')).addClass('fa-spinner fa-spin-pulse');
-                
+
                 $.ajax({
                     type: 'POST',
                     url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=groups&nocache=' + new Date().getTime(),
@@ -1009,37 +1003,35 @@ $(function () {
                 if (icon.is('.fa-spinner')) {
                     return;
                 }
-                
-                if (!confirm(nv_is_del_confirm[0])) {
-                    return;
-                }
-                
-                icon.removeClass(icon.data('icon')).addClass('fa-spinner fa-spin-pulse');
-                
-                $.ajax({
-                    type: 'POST',
-                    url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=groups&nocache=' + new Date().getTime(),
-                    data: {
-                        gid: gid,
-                        exclude: btn.data('id'),
-                        tokend: $('body').data('checksess')
-                    },
-                    dataType: 'json',
-                    cache: false,
-                    success: function (res) {
-                        icon.removeClass('fa-spinner fa-spin-pulse').addClass(icon.data('icon'));
-                        if (res.status === 'error') {
-                            return nukeviet.toast(res.mess, 'error');
-                        }
 
-                        $('div#pageContent').html('<div class="text-center"><div class="spinner-border text-primary" role="status"><span class="visually-hidden">' + nv_loadingText + '</span></div></div>');
-                        $('div#pageContent').load(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=groups&listUsers=' + gid + '&random=' + nv_randomPassword(10));
-                    },
-                    error: function (xhr, text, err) {
-                        icon.removeClass('fa-spinner fa-spin-pulse').addClass(icon.data('icon'));
-                        nukeviet.toast(text, 'error');
-                        console.log(xhr, text, err);
-                    }
+                nukeviet.confirm(nv_is_exclude_user_confirm[0], () => {
+                    icon.removeClass(icon.data('icon')).addClass('fa-spinner fa-spin-pulse');
+
+                    $.ajax({
+                        type: 'POST',
+                        url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=groups&nocache=' + new Date().getTime(),
+                        data: {
+                            gid: gid,
+                            exclude: btn.data('id'),
+                            tokend: $('body').data('checksess')
+                        },
+                        dataType: 'json',
+                        cache: false,
+                        success: function (res) {
+                            icon.removeClass('fa-spinner fa-spin-pulse').addClass(icon.data('icon'));
+                            if (res.status === 'error') {
+                                return nukeviet.toast(res.mess, 'error');
+                            }
+
+                            $('div#pageContent').html('<div class="text-center"><div class="spinner-border text-primary" role="status"><span class="visually-hidden">' + nv_loadingText + '</span></div></div>');
+                            $('div#pageContent').load(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=groups&listUsers=' + gid + '&random=' + nv_randomPassword(10));
+                        },
+                        error: function (xhr, text, err) {
+                            icon.removeClass('fa-spinner fa-spin-pulse').addClass(icon.data('icon'));
+                            nukeviet.toast(text, 'error');
+                            console.log(xhr, text, err);
+                        }
+                    });
                 });
             });
 
