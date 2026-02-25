@@ -10,7 +10,7 @@
     </div>
     <ul class="list-group list-group-flush">
         {foreach from=$department.cd item=cd}
-        <li class="list-group-item contact-icons">
+        <li class="list-group-item">
             {if $cd.type eq 'phone'}
             <i class="fa-solid fa-phone fa-fw text-center me-2 text-primary"></i>{$LANG->getGlobal('phonenumber')}: <span>{$cd.value}</span>
             {elseif $cd.type eq 'fax'}
@@ -28,7 +28,7 @@
             <i class="fa-brands fa-whatsapp fa-fw text-center me-2 text-primary"></i>WhatsApp:
             <span>{foreach from=$cd.value item=WA name=wa}{$WA}{if !$smarty.foreach.wa.last}, {/if}{/foreach}</span>
             {elseif $cd.type eq 'zalo'}
-            <i class="icon-zalo1 h4-font-size me-2 text-primary"></i>Zalo:
+            <i class="icon-zalo-contact me-2 text-primary"></i>Zalo:
             <span>{foreach from=$cd.value item=ZA name=za}{$ZA}{if !$smarty.foreach.za.last}, {/if}{/foreach}</span>
             {else}
             <i class="fa-solid fa-circle-info fa-fw text-center me-2 text-primary"></i>{$cd.type}:

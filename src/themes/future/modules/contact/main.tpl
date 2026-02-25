@@ -110,7 +110,7 @@
                         <div class="flex-grow-1">
                             <div class="fw-medium mb-1">{$SUP.full_name}</div>
                             {foreach from=$SUP.cd item=CD}
-                            <div class="contact-icons mb-1">
+                            <div class="mb-1">
                                 {if $CD.type eq 'phone'}
                                 <i class="fa-solid fa-phone fa-fw text-center me-2 text-primary"></i>{$LANG->getModule('phone')}: <span>{$CD.value}</span>
                                 {elseif $CD.type eq 'fax'}
@@ -124,7 +124,7 @@
                                 {elseif $CD.type eq 'whatsapp'}
                                 <i class="fa-brands fa-whatsapp fa-fw text-center me-2 text-primary"></i>WhatsApp: <span>{foreach from=$CD.value item=WA name=wa}{$WA}{if !$smarty.foreach.wa.last}, {/if}{/foreach}</span>
                                 {elseif $CD.type eq 'zalo'}
-                                <i class="icon-zalo1 h4-font-size me-2 text-primary"></i>Zalo: {foreach from=$CD.value item=ZA name=za}{$ZA}{if !$smarty.foreach.za.last}, {/if}{/foreach}</span>
+                                <i class="icon-zalo-contact me-2 text-primary"></i>Zalo: {foreach from=$CD.value item=ZA name=za}{$ZA}{if !$smarty.foreach.za.last}, {/if}{/foreach}</span>
                                 {else}
                                 <i class="fa-solid fa-circle-info fa-fw text-center me-2 text-primary"></i>{$CD.type}: {if $CD.value.is_url}<a href="{$CD.value.content}">{$CD.value.content}</a>{else}<span>{$CD.value.content}</span>{/if}
                                 {/if}

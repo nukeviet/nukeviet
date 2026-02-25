@@ -75,8 +75,8 @@
                         {foreach from=$supporter.others key=k item=v}
                             {if $k == 'zalo'}
                             <div class="col-3">
-                                <a href="https://zalo.me/{$v}" target="_blank" class="btn btn-light w-100 p-2 rounded-3 d-flex flex-column align-items-center justify-content-center border-0 social-btn contact-icons">
-                                    <i class="icon-zalo1 fs-4 mb-1 h4-font-size"></i>
+                                <a href="https://zalo.me/{$v}" target="_blank" class="btn btn-light w-100 p-2 rounded-3 d-flex flex-column align-items-center justify-content-center border-0 social-btn">
+                                    <i class="icon-zalo-contact fs-4 mb-1"></i>
                                 </a>
                             </div>
                             {elseif $k == 'whatsapp'}
