@@ -33,14 +33,14 @@ class Image
     public $error = '';
 
     /**
-     * @var GdImage|false
+     * @var GdImage|false|null
      */
     public $createImage;
 
     public $create_Image_info = [];
 
     /**
-     * @var GdImage|false
+     * @var GdImage|false|null
      */
     public $logoimg;
 
@@ -1090,14 +1090,8 @@ class Image
      */
     private function Destroy()
     {
-        if (version_compare(PHP_VERSION, '8.0.0', '<')) {
-            if (is_resource($this->logoimg)) {
-                @imagedestroy($this->logoimg);
-            }
-            if (is_resource($this->createImage)) {
-                @imagedestroy($this->createImage);
-            }
-        }
+        $this->logoimg = null;
+        $this->createImage = null;
 
         $this->is_destroy = true;
     }

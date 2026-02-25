@@ -992,13 +992,17 @@ $copyright = 'Chú ý: Việc đăng lại bài viết trên ở website hoặc 
 $db->query('UPDATE ' . $db_config['prefix'] . '_config SET config_value = ' . $db->quote($copyright) . ' WHERE module = ' . $db->quote($module_name) . " AND config_name = 'copyright' AND lang=" . $db->quote($lang));
 
 $result = $db->query('SELECT catid FROM ' . $db_config['prefix'] . '_' . $lang . '_' . $module_data . '_cat ORDER BY sort ASC');
-while (list($catid_i) = $result->fetch(3)) {
+while ($_scratch = $result->fetch(3)) {
+    [$catid_i] = $_scratch;
+    unset($_scratch);
     $db->exec('CREATE TABLE ' . $db_config['prefix'] . '_' . $lang . '_' . $module_data . '_' . $catid_i . ' LIKE ' . $db_config['prefix'] . '_' . $lang . '_' . $module_data . '_rows');
 }
 
 $weight = 0;
 $result = $db->query('SELECT id, listcatid FROM ' . $db_config['prefix'] . '_' . $lang . '_' . $module_data . '_rows ORDER BY publtime ASC, id ASC');
-while (list($id, $listcatid) = $result->fetch(3)) {
+while ($_scratch = $result->fetch(3)) {
+    [$id, $listcatid] = $_scratch;
+    unset($_scratch);
     ++$weight;
     $db->query('UPDATE ' . $db_config['prefix'] . '_' . $lang . '_' . $module_data . '_rows SET weight=' . $weight . ' WHERE id=' . $id);
     $arr_catid = explode(',', $listcatid);

@@ -128,6 +128,7 @@ $lang_module['install_package_alert'] = 'Cảnh báo: Việc cài đặt gói �
 $lang_module['install_submit'] = 'Tải lên';
 $lang_module['install_error_filetype'] = 'Lỗi: File cài đặt phải có định dạng zip hoặc gz';
 $lang_module['install_error_nofile'] = 'Lỗi: Chưa chọn file tải lên';
+$lang_module['install_ips'] = 'Vì lý do bảo mật, bạn cần thêm địa chỉ IP của bạn vào danh sách cho phép tải lên gói mở rộng trong tập tin cấu hình hệ thống bằng cách mở tệp config.php (hoặc tương đương nếu bạn đã cấu hình đổi tên nó) và thêm địa chỉ IP <strong>%1$s</strong> vào mảng <code>extension_setup_ips</code>. Ví dụ <code>$global_config[\'extension_setup_ips\'] = [\'%1$s\'];</code>. Sau đó lưu lại tệp và tải lại trang này để tiếp tục thao tác';
 $lang_module['autoinstall_install'] = 'Cài đặt ứng dụng';
 $lang_module['autoinstall_nomethod'] = 'Chưa xác định phương thức thực hiện';
 $lang_module['autoinstall_uploadedfile'] = 'Thông tin ứng dụng được tải lên';

@@ -128,6 +128,7 @@ $lang_module['install_package_alert'] = 'Attention : L\'installation d\'un packa
 $lang_module['install_submit'] = 'Mettre en ligne';
 $lang_module['install_error_filetype'] = 'Erreur: Fichier d\'installation doit avoir le type zip ou gz';
 $lang_module['install_error_nofile'] = 'Erreur: Fichier à mettre en ligne n\'est pas encore choisi';
+$lang_module['install_ips'] = 'Pour des raisons de sécurité, vous devez ajouter votre adresse IP à la liste des IP autorisées pour le téléchargement des packages d\'extension dans le fichier de configuration système en ouvrant le fichier config.php (ou équivalent si vous avez configuré pour le renommer) et en ajoutant votre adresse IP (%1$s) au tableau <code>extension_setup_ips</code>. Par exemple <code>$global_config[\'extension_setup_ips\'] = [\'%1$s\'];</code>. Ensuite, enregistrez le fichier et rechargez cette page pour continuer';
 $lang_module['autoinstall_install'] = 'Installer l\'application';
 $lang_module['autoinstall_nomethod'] = 'Pas encore détermine la méthode de réaliser';
 $lang_module['autoinstall_uploadedfile'] = 'Info de l\'application de mettre  ligne';

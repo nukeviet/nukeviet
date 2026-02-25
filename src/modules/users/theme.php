@@ -398,7 +398,9 @@ function user_login(bool $is_ajax = false): string
 
     $tpl->assign('CAPTCHA_ATTRS', $gfx_chk ? nv_captcha_form_attrs('nv_seccode') : '');
     $tpl->assign('NV_REDIRECT', $nv_redirect);
+    $tpl->assign('DEFAULT_REDIRECT', nv_redirect_encrypt(empty($page_url) ? NV_MY_DOMAIN : urlRewriteWithDomain($page_url, NV_MY_DOMAIN)));
     $tpl->assign('NV_HEADER', $nv_header);
+    $tpl->assign('OAUTH_CHECKSS', csrf_create($module_name . '_oauth'));
 
     // Xử lý giao diện nav cuối form
     $_lis = \NukeViet\Module\users\Shared\Navs::getNavs($module_info['funcs']);
@@ -421,59 +423,6 @@ function user_login(bool $is_ajax = false): string
     $tpl->assign('NAVS', $navs);
 
     return $tpl->fetch($tpl_file);
-
-
-
-
-    $xtpl->assign('USER_LOSTPASS', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=lostpass');
-
-
-    $xtpl->assign('REDIRECT', $nv_redirect);
-    if (!empty($nv_redirect)) {
-        $xtpl->parse('main.redirect');
-    } else {
-        $xtpl->parse('main.not_redirect');
-    }
-
-    if (defined('NV_OPENID_ALLOWED')) {
-        if (in_array('google-identity', $global_config['openid_servers'], true)) {
-            $xtpl->assign('GOOGLE_CLIENT_ID', $global_config['google_client_id']);
-            $xtpl->assign('GOOGLE_IDENTITY_URL', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=oauth&amp;server=google-identity');
-            $xtpl->assign('CHECKSS', csrf_create($module_name . '_oauth'));
-            $xtpl->parse('main.openid.google_identity_onload');
-        }
-        $assigns = [];
-        $icons = [
-            'single-sign-on' => 'lock',
-            'google' => 'google-plus',
-            'facebook' => 'facebook',
-            'zalo' => 'zalo'
-        ];
-        $default_redirect = nv_redirect_encrypt(empty($page_url) ? NV_MY_DOMAIN : urlRewriteWithDomain($page_url, NV_MY_DOMAIN));
-        foreach ($global_config['openid_servers'] as $server) {
-            if ($server != 'google-identity') {
-                $assigns['href'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=oauth&amp;server=' . $server;
-                if (!empty($nv_redirect)) {
-                    $assigns['href'] .= '&nv_redirect=' . $nv_redirect;
-                } else {
-                    $assigns['href'] .= '&nv_redirect=' . $default_redirect;
-                }
-                $assigns['server'] = $server;
-                $assigns['title'] = ucfirst($server);
-                $assigns['icon'] = $icons[$server];
-
-                $xtpl->assign('OPENID', $assigns);
-                $xtpl->parse('main.openid.server');
-            }
-        }
-
-        $xtpl->parse('main.openid');
-    }
-
-
-
-    $xtpl->parse('main');
-    return $xtpl->text('main');
 }
 
 /**

@@ -15,4 +15,72 @@
   width: 80px;
   height: 80px;
 }
+
+.btn-single-sign-on {
+  --bs-btn-color: #fff;
+  --bs-btn-bg: #343A40;
+  --bs-btn-border-color: #343A40;
+  --bs-btn-hover-color: #fff;
+  --bs-btn-hover-bg: #2c3136;
+  --bs-btn-hover-border-color: #2a2e33;
+  --bs-btn-focus-shadow-rgb: 82, 88, 93;
+  --bs-btn-active-color: #fff;
+  --bs-btn-active-bg: #2a2e33;
+  --bs-btn-active-border-color: #272c30;
+  --bs-btn-active-shadow: 0 0;
+  --bs-btn-disabled-color: #fff;
+  --bs-btn-disabled-bg: #343A40;
+  --bs-btn-disabled-border-color: #343A40;
+}
+
+.btn-google {
+  --bs-btn-color: #fff;
+  --bs-btn-bg: #C62828;
+  --bs-btn-border-color: #C62828;
+  --bs-btn-hover-color: #fff;
+  --bs-btn-hover-bg: #a82222;
+  --bs-btn-hover-border-color: #9e2020;
+  --bs-btn-focus-shadow-rgb: 207, 72, 72;
+  --bs-btn-active-color: #fff;
+  --bs-btn-active-bg: #9e2020;
+  --bs-btn-active-border-color: #951e1e;
+  --bs-btn-active-shadow: 0 0;
+  --bs-btn-disabled-color: #fff;
+  --bs-btn-disabled-bg: #C62828;
+  --bs-btn-disabled-border-color: #C62828;
+}
+
+.btn-facebook {
+  --bs-btn-color: #fff;
+  --bs-btn-bg: #0D5BD7;
+  --bs-btn-border-color: #0D5BD7;
+  --bs-btn-hover-color: #fff;
+  --bs-btn-hover-bg: #0b4db7;
+  --bs-btn-hover-border-color: #0a49ac;
+  --bs-btn-focus-shadow-rgb: 49, 116, 221;
+  --bs-btn-active-color: #fff;
+  --bs-btn-active-bg: #0a49ac;
+  --bs-btn-active-border-color: #0a44a1;
+  --bs-btn-active-shadow: 0 0;
+  --bs-btn-disabled-color: #fff;
+  --bs-btn-disabled-bg: #0D5BD7;
+  --bs-btn-disabled-border-color: #0D5BD7;
+}
+
+.btn-zalo {
+  --bs-btn-color: #fff;
+  --bs-btn-bg: #0068FF;
+  --bs-btn-border-color: #0068FF;
+  --bs-btn-hover-color: #fff;
+  --bs-btn-hover-bg: #0058d9;
+  --bs-btn-hover-border-color: #0053cc;
+  --bs-btn-focus-shadow-rgb: 38, 127, 255;
+  --bs-btn-active-color: #fff;
+  --bs-btn-active-bg: #0053cc;
+  --bs-btn-active-border-color: #004ebf;
+  --bs-btn-active-shadow: 0 0;
+  --bs-btn-disabled-color: #fff;
+  --bs-btn-disabled-bg: #0068FF;
+  --bs-btn-disabled-border-color: #0068FF;
+}
 /*# sourceMappingURL=users.r.rtl.css.map */

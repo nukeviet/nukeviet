@@ -1,12 +1,5 @@
 <form id="bVoting{$UNIQUEID}-v{$VOTING.vid}" method="post" action="{$smarty.const.NV_BASE_SITEURL}index.php?{$smarty.const.NV_LANG_VARIABLE}={$smarty.const.NV_LANG_DATA}&amp;{$smarty.const.NV_NAME_VARIABLE}={$MODULE}" data-toggle="ajax-form" data-precheck="nv_precheck_form" novalidate
-    data-callback="votingProcessResult"
-    {if $VOTING.active_captcha}
-    {if $MODULE_CAPTCHA eq 'recaptcha' and $GCONFIG.recaptcha_ver eq 3} data-recaptcha3="1"
-    {elseif $MODULE_CAPTCHA eq 'recaptcha' and $GCONFIG.recaptcha_ver eq 2} data-recaptcha2="1"
-    {elseif $MODULE_CAPTCHA eq 'turnstile'} data-turnstile="1"
-    {elseif $MODULE_CAPTCHA eq 'captcha'} data-captcha="fcode"{/if}
-    {/if}
-    data-result-title="{$LANG->getModule('voting_result')}"
+    data-callback="votingProcessResult"{if $VOTING.active_captcha}{$CAPTCHA_ATTRS}{/if} data-result-title="{$LANG->getModule('voting_result')}"
 >
     <div class="fw-medium mb-2">
         {$VOTING.question}

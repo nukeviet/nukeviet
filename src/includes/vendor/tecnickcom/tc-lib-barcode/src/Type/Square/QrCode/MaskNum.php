@@ -7,8 +7,8 @@
  * @category    Library
  * @package     Barcode
  * @author      Nicola Asuni <info@tecnick.com>
- * @copyright   2010-2024 Nicola Asuni - Tecnick.com LTD
- * @license     http://www.gnu.org/copyleft/lesser.html GNU-LGPL v3 (see LICENSE.TXT)
+ * @copyright   2010-2026 Nicola Asuni - Tecnick.com LTD
+ * @license     https://www.gnu.org/copyleft/lesser.html GNU-LGPL v3 (see LICENSE.TXT)
  * @link        https://github.com/tecnickcom/tc-lib-barcode
  *
  * This file is part of tc-lib-barcode software library.
@@ -23,8 +23,8 @@ namespace Com\Tecnick\Barcode\Type\Square\QrCode;
  * @category    Library
  * @package     Barcode
  * @author      Nicola Asuni <info@tecnick.com>
- * @copyright   2010-2024 Nicola Asuni - Tecnick.com LTD
- * @license     http://www.gnu.org/copyleft/lesser.html GNU-LGPL v3 (see LICENSE.TXT)
+ * @copyright   2010-2026 Nicola Asuni - Tecnick.com LTD
+ * @license     https://www.gnu.org/copyleft/lesser.html GNU-LGPL v3 (see LICENSE.TXT)
  * @link        https://github.com/tecnickcom/tc-lib-barcode
  */
 abstract class MaskNum
@@ -51,10 +51,15 @@ abstract class MaskNum
         for ($ypos = 0; $ypos < $width; ++$ypos) {
             for ($xpos = 0; $xpos < $width; ++$xpos) {
                 if ($bitMask[$ypos][$xpos] == 1) {
-                    $mask[$ypos][$xpos] = chr(ord($frame[$ypos][$xpos]) ^ ((int) ($bitMask[$ypos][$xpos])));
+                    $mask[$ypos] = \substr_replace(
+                        $mask[$ypos],
+                        \chr(\ord($frame[$ypos][$xpos]) ^ ((int) ($bitMask[$ypos][$xpos]))),
+                        $xpos,
+                        1
+                    );
                 }
 
-                $bnum += ord($mask[$ypos][$xpos]) & 1;
+                $bnum += \ord($mask[$ypos][$xpos]) & 1;
             }
         }
 
@@ -75,10 +80,10 @@ abstract class MaskNum
         int $width,
         array $frame
     ): array {
-        $bitMask = array_fill(0, $width, array_fill(0, $width, 0));
+        $bitMask = \array_fill(0, $width, \array_fill(0, $width, 0));
         for ($ypos = 0; $ypos < $width; ++$ypos) {
             for ($xpos = 0; $xpos < $width; ++$xpos) {
-                if ((ord($frame[$ypos][$xpos]) & 0x80) !== 0) {
+                if ((\ord($frame[$ypos][$xpos]) & 0x80) !== 0) {
                     $bitMask[$ypos][$xpos] = 0;
                     continue;
                 }

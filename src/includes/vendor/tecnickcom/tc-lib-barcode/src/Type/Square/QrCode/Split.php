@@ -7,8 +7,8 @@
  * @category    Library
  * @package     Barcode
  * @author      Nicola Asuni <info@tecnick.com>
- * @copyright   2010-2024 Nicola Asuni - Tecnick.com LTD
- * @license     http://www.gnu.org/copyleft/lesser.html GNU-LGPL v3 (see LICENSE.TXT)
+ * @copyright   2010-2026 Nicola Asuni - Tecnick.com LTD
+ * @license     https://www.gnu.org/copyleft/lesser.html GNU-LGPL v3 (see LICENSE.TXT)
  * @link        https://github.com/tecnickcom/tc-lib-barcode
  *
  * This file is part of tc-lib-barcode software library.
@@ -25,8 +25,8 @@ use Com\Tecnick\Barcode\Exception as BarcodeException;
  * @category    Library
  * @package     Barcode
  * @author      Nicola Asuni <info@tecnick.com>
- * @copyright   2010-2024 Nicola Asuni - Tecnick.com LTD
- * @license     http://www.gnu.org/copyleft/lesser.html GNU-LGPL v3 (see LICENSE.TXT)
+ * @copyright   2010-2026 Nicola Asuni - Tecnick.com LTD
+ * @license     https://www.gnu.org/copyleft/lesser.html GNU-LGPL v3 (see LICENSE.TXT)
  * @link        https://github.com/tecnickcom/tc-lib-barcode
  *
  * @phpstan-import-type Item from \Com\Tecnick\Barcode\Type\Square\QrCode\Estimate
@@ -75,7 +75,7 @@ class Split
      */
     public function getSplittedString(string $data): array
     {
-        while (strlen($data) > 0) {
+        while (\strlen($data) > 0) {
             $mode = $this->encodingMode->getEncodingMode($data, 0);
             switch ($mode) {
                 case Data::ENC_MODES['NM']:
@@ -105,7 +105,7 @@ class Split
                 throw new BarcodeException('Error while splitting the input data');
             }
 
-            $data = substr($data, $length);
+            $data = \substr($data, $length);
         }
 
         return $this->items;
@@ -149,7 +149,7 @@ class Split
             $this->items,
             Data::ENC_MODES['NM'],
             $pos,
-            str_split($data)
+            \str_split($data)
         );
         return $pos;
     }
@@ -199,7 +199,7 @@ class Split
             $this->items,
             Data::ENC_MODES['AN'],
             $pos,
-            str_split($data)
+            \str_split($data)
         );
         return $pos;
     }
@@ -222,7 +222,7 @@ class Split
             $this->items,
             Data::ENC_MODES['KJ'],
             $pos,
-            str_split($data)
+            \str_split($data)
         );
         return $pos;
     }
@@ -239,7 +239,7 @@ class Split
         $lag = $this->encodingMode->getLengthIndicator(Data::ENC_MODES['AN'], $this->version);
         $lng = $this->encodingMode->getLengthIndicator(Data::ENC_MODES['NM'], $this->version);
         $pos = 1;
-        $dataStrLen = strlen($data);
+        $dataStrLen = \strlen($data);
         while ($pos < $dataStrLen) {
             $mode = $this->encodingMode->getEncodingMode($data, $pos);
             if ($mode == Data::ENC_MODES['KJ']) {
@@ -283,7 +283,7 @@ class Split
             $this->items,
             Data::ENC_MODES['8B'],
             $pos,
-            str_split($data)
+            \str_split($data)
         );
         return $pos;
     }

@@ -96,7 +96,9 @@ if ($nv_Request->isset_request('del', 'post')) {
     AND hook_module=' . $db->quote($row['hook_module']) . '
     AND weight > ' . $weight . ' ORDER BY weight ASC');
 
-    while ([$pid] = $_query->fetch(3)) {
+    while ($_scratch = $_query->fetch(3)) {
+        [$pid] = $_scratch;
+        unset($_scratch);
         $db->query('UPDATE ' . $db_config['prefix'] . '_plugins SET weight = ' . $weight . ' WHERE pid=' . $pid);
         ++$weight;
     }

@@ -25,7 +25,9 @@ if (!nv_function_exists('nv_block_counter')) {
         $sql = 'SELECT c_type, c_count FROM ' . NV_COUNTER_GLOBALTABLE . " WHERE (c_type='day' AND c_val='" . date('d', NV_CURRENTTIME) . "') OR (c_type='month' AND c_val='" . date('M', NV_CURRENTTIME) . "') OR (c_type='total' AND c_val='hits')";
         $query = $db->query($sql);
         $count_data = [];
-        while ([$c_type, $c_count] = $query->fetch(3)) {
+        while ($_scratch = $query->fetch(3)) {
+            [$c_type, $c_count] = $_scratch;
+            unset($_scratch);
             $c_type == 'total' && $c_type = 'all';
             $count_data[$c_type] = $c_count;
         }

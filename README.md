@@ -17,7 +17,7 @@ Detailed information about Nukeviet at Wikipedia Encyclopedia: http://vi.wikiped
 
 **Requirements:**  
 - OS: Unix (Linux, Ubuntu, Fedora ...) or Windows
-- PHP: From PHP 8.2 to PHP 8.4
+- PHP: From PHP 8.2 to PHP 8.5
 - MySQL: MySQL 5.5 or newer
 
 **Installation:**

@@ -188,3 +188,4 @@ $lang_module['day_of_week_4'] = 'T5';
 $lang_module['day_of_week_5'] = 'T6';
 $lang_module['day_of_week_6'] = 'T7';
 $lang_module['day_of_week_7'] = 'CN';
+$lang_module['dtime_allow_bot'] = 'Hiển thị với máy chủ tìm kiếm';

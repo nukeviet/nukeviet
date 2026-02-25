@@ -33,7 +33,9 @@ $sth = $db->prepare('SELECT bid FROM ' . NV_BLOCKS_TABLE . '_groups WHERE theme=
 $sth->bindParam(':theme', $theme, PDO::PARAM_STR);
 $sth->bindParam(':position', $position, PDO::PARAM_STR);
 $sth->execute();
-while ([$bid_i] = $sth->fetch(3)) {
+while ($_scratch = $sth->fetch(3)) {
+    [$bid_i] = $_scratch;
+    unset($_scratch);
     ++$weight;
     $db->query('UPDATE ' . NV_BLOCKS_TABLE . '_groups SET weight=' . $weight . ' WHERE bid=' . $bid_i);
 }
@@ -45,7 +47,9 @@ $sth = $db->prepare('SELECT t1.bid, t1.func_id FROM ' . NV_BLOCKS_TABLE . '_weig
 $sth->bindParam(':theme', $theme, PDO::PARAM_STR);
 $sth->bindParam(':position', $position, PDO::PARAM_STR);
 $sth->execute();
-while ([$bid_i, $func_id_i] = $sth->fetch(3)) {
+while ($_scratch = $sth->fetch(3)) {
+    [$bid_i, $func_id_i] = $_scratch;
+    unset($_scratch);
     if ($func_id_i == $func_id_old) {
         ++$weight;
     } else {

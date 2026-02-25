@@ -13,6 +13,8 @@ if (!defined('NV_MAINFILE') or !defined('NV_SYS_LOAD')) {
     exit('Stop!!!');
 }
 
+session_write_close();
+
 $file = $nv_Request->get_title('__sendmail', 'post', '');
 if (preg_match('/^[a-zA-Z0-9]{8}$/', $file)) {
     $md5file = md5($global_config['sitekey'] . $file);
