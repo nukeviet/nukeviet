@@ -21,6 +21,8 @@ Mục tiêu là phát triển và chuẩn hóa giao diện admin_future cho các
 
 # Quy tắc bắt buộc khi viết code
 
+- Các comment trong code một dòng bằng // thì sau // phải có một dấu cách, chữ cái đầu tiên viết hoa. Ví dụ: `// Kiểm tra dữ liệu đầu vào`. Không dùng các ký tự === kiểu như `//==== Kiểm tra dữ liệu đầu vào ====`
+
 ## 1. Chuẩn giao diện
 - Tuân thủ chuẩn Smarty của NukeViet
 - Sử dụng Bootstrap 5
@@ -43,11 +45,11 @@ Mục tiêu là phát triển và chuẩn hóa giao diện admin_future cho các
   mess, redirect, refresh bắt buộc phải có một trong 3, không được để cả 3 cùng rỗng hoặc không có.
 - Khi ajax và trả về html để đưa vào DOM thì cần kiểm tra xem html đó có chứa element `$('.ajax-submit.')` không, nếu có cần gọi hàm `initFormAjKeyboard()` để khởi tạo lại dự kiện xử lý thao tác bàn phím cho phần validate các input trong form.
 
-Đảm bảo js xử lý:
-- toast
-- alert
-- invalid-feedback
-- invalid-tooltip
+  Đảm bảo js xử lý:
+  - toast
+  - alert
+  - invalid-feedback
+  - invalid-tooltip
 
 ## 3. Form và submit
 Action form phải viết trực tiếp trong tpl bằng Smarty.
