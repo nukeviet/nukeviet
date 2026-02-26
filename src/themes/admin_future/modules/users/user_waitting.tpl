@@ -95,10 +95,8 @@
 <script type="text/javascript" src="{$smarty.const.ASSETS_STATIC_URL}/js/jquery-ui/jquery-ui.min.js"></script>
 <script type="text/javascript" src="{$smarty.const.ASSETS_LANG_STATIC_URL}/js/language/jquery.ui.datepicker-{$smarty.const.NV_LANG_INTERFACE}.js"></script>
 <form class="ajax-submit" id="user_details_form" action="{$FORM_ACTION}" method="post" novalidate>
-<div class="card">
-    <div class="card-body">
-    <div class="row">
-        <div class="col-lg-10 col-xl-9">
+    <div class="card">
+        <div class="card-body">
             {* Username *}
             <div class="row mb-3">
                 <label for="username_field" class="col-sm-3 col-form-label">{$LANG->getGlobal('username')} <span class="text-danger">(*)</span></label>
@@ -552,10 +550,7 @@
                     </button>
                 </div>
             </div>
-
         </div>
     </div>
-    </div>
-</div>
 </form>
 {/if}
