@@ -690,6 +690,7 @@ if ($nv_Request->isset_request('userid', 'get')) {
     $tpl->assign('GROUP_EXISTS', $group_exists);
     $tpl->assign('PASS_RESET_OPTIONS', $pass_reset_options);
     $tpl->assign('EMAIL_RESET_OPTIONS', $email_reset_options);
+    $tpl->assign('AVATAR_UPLOAD_PATH', NV_UPLOADS_DIR . '/' . $module_upload);
     $contents = $tpl->fetch('user_waitting.tpl');
 
     include NV_ROOTDIR . '/includes/header.php';

@@ -95,6 +95,8 @@
 <script type="text/javascript" src="{$smarty.const.ASSETS_STATIC_URL}/js/jquery-ui/jquery-ui.min.js"></script>
 <script type="text/javascript" src="{$smarty.const.ASSETS_LANG_STATIC_URL}/js/language/jquery.ui.datepicker-{$smarty.const.NV_LANG_INTERFACE}.js"></script>
 <form class="ajax-submit" id="user_details_form" action="{$FORM_ACTION}" method="post" novalidate>
+<div class="card">
+    <div class="card-body">
     <div class="row">
         <div class="col-lg-10 col-xl-9">
             {* Username *}
@@ -350,7 +352,14 @@
                 <div class="col-sm-8 col-lg-6 col-xxl-5">
                     <div class="input-group">
                         <input type="text" class="form-control" id="avatar_field" name="photo" value="" readonly autocomplete="off">
-                        <button class="btn btn-outline-secondary" type="button" id="btn_upload" aria-label="{$LANG->getModule('avatar')}">
+                        <button class="btn btn-outline-secondary" type="button"
+                            data-toggle="selectfile"
+                            data-target="avatar_field"
+                            data-path="{$AVATAR_UPLOAD_PATH}"
+                            data-currentpath="{$AVATAR_UPLOAD_PATH}"
+                            data-type="image"
+                            aria-label="{$LANG->getModule('avatar')}"
+                            title="{$LANG->getModule('avatar')}">
                             <i class="fa-solid fa-folder-open"></i>
                         </button>
                     </div>
@@ -422,7 +431,7 @@
             <h6 class="mb-3"><i class="fa-solid fa-list"></i> {$LANG->getModule('fields')}</h6>
             {foreach from=$CUSTOM_FIELDS item=cf}
             <div class="row mb-3">
-                <label {if $cf.field_type != 'editor'}for="cf_{$cf.field}"{/if} class="col-sm-3 col-form-label">
+                <label {if $cf.field_type != 'editor' && $cf.field_type != 'file' && $cf.field_type != 'radio' && $cf.field_type != 'checkbox'}for="cf_{$cf.field}"{/if} class="col-sm-3 col-form-label">
                     {$cf.title}{if $cf.required} <span class="text-danger">(*)</span>{/if}
                 </label>
                 <div class="col-sm-8 col-lg-6{if $cf.field_type == 'editor'} col-xxl-11{else} col-xxl-5{/if}">
@@ -546,5 +555,7 @@
 
         </div>
     </div>
+    </div>
+</div>
 </form>
 {/if}
