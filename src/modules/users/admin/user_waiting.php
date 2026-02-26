@@ -24,11 +24,11 @@ if (defined('NV_EDITOR')) {
     require_once NV_ROOTDIR . '/' . NV_EDITORSDIR . '/' . NV_EDITOR . '/nv.php';
 }
 
-//Xoa thanh vien
+// Xóa tài khoản chờ kích hoạt
 if ($nv_Request->isset_request('del', 'post')) {
     $userid = $nv_Request->get_absint('userid', 'post', 0);
     $checkss = md5(NV_CHECK_SESSION . '_' . $module_name . '_' . $op . '_' . $userid);
-    if ($checkss == $nv_Request->get_string('checkss', 'post')) {
+    if (hash_equals($checkss, $nv_Request->get_string('checkss', 'post', ''))) {
         $sql = 'SELECT users_info FROM ' . NV_MOD_TABLE . '_reg WHERE userid=' . $userid;
         if ($global_config['idsite'] > 0) {
             $sql .= ' AND idsite=' . $global_config['idsite'];
@@ -57,13 +57,14 @@ if ($nv_Request->isset_request('del', 'post')) {
         }
         if ($db->exec($sql)) {
             nv_delete_notification(NV_LANG_DATA, $module_name, 'send_active_link_fail', $userid);
-            exit('OK');
+            nv_insert_logs(NV_LANG_DATA, $module_name, $nv_Lang->getModule('delete'), 'userid_reg: ' . $userid, $admin_info['userid']);
+            nv_jsonOutput(['status' => 'success', 'mess' => '', 'refresh' => true]);
         }
     }
-    exit('NO');
+    nv_jsonOutput(['status' => 'error', 'mess' => 'NO']);
 }
 
-//Kich hoat thanh vien
+// Kích hoạt tài khoản
 if ($nv_Request->isset_request('userid', 'get')) {
     if ($global_config['max_user_number']) {
         $sql = 'SELECT count(*) FROM ' . NV_MOD_TABLE;
@@ -94,8 +95,9 @@ if ($nv_Request->isset_request('userid', 'get')) {
 
     $groups_list = nv_groups_list($module_data);
     $checkss = md5(NV_CHECK_SESSION . '_' . $module_name . '_' . $op . '_' . $userid);
-    // Nếu chấp nhận
-    if ($checkss == $nv_Request->get_string('checkss', 'post')) {
+
+    // Nếu chấp nhận kích hoạt
+    if (hash_equals($checkss, $nv_Request->get_string('checkss', 'post', ''))) {
         $post = [
             'username' => $nv_Request->get_title('username', 'post', '', 1),
             'email' => nv_strtolower(nv_substr($nv_Request->get_title('email', 'post', '', 1), 0, 100)),
@@ -147,7 +149,7 @@ if ($nv_Request->isset_request('userid', 'get')) {
             ]);
         }
 
-        // Thực hiện câu truy vấn để kiểm tra username đã tồn tại chưa.
+        // Kiểm tra username đã tồn tại chưa
         $stmt = $db->prepare('SELECT userid FROM ' . NV_MOD_TABLE . ' WHERE username LIKE :username OR md5username= :md5username');
         $stmt->bindParam(':username', $post['username'], PDO::PARAM_STR);
         $stmt->bindParam(':md5username', $post['md5username'], PDO::PARAM_STR);
@@ -184,7 +186,7 @@ if ($nv_Request->isset_request('userid', 'get')) {
         }
         $post['email'] = $error_xemail[1];
 
-        // Thực hiện câu truy vấn để kiểm tra email đã tồn tại chưa.
+        // Kiểm tra email đã tồn tại chưa
         $stmt = $db->prepare('SELECT userid FROM ' . NV_MOD_TABLE . ' WHERE email= :email');
         $stmt->bindParam(':email', $post['email'], PDO::PARAM_STR);
         $stmt->execute();
@@ -197,7 +199,7 @@ if ($nv_Request->isset_request('userid', 'get')) {
             ]);
         }
 
-        // Thực hiện câu truy vấn để kiểm tra email đã tồn tại trong users_reg  chưa.
+        // Kiểm tra email đã tồn tại trong users_reg chưa
         $stmt = $db->prepare('SELECT userid FROM ' . NV_MOD_TABLE . '_reg WHERE userid != ' . $userid . ' AND email= :email');
         $stmt->bindParam(':email', $post['email'], PDO::PARAM_STR);
         $stmt->execute();
@@ -210,7 +212,7 @@ if ($nv_Request->isset_request('userid', 'get')) {
             ]);
         }
 
-        // Thực hiện câu truy vấn để kiểm tra email đã tồn tại trong users_openid chưa.
+        // Kiểm tra email đã tồn tại trong users_openid chưa
         $stmt = $db->prepare('SELECT userid FROM ' . NV_MOD_TABLE . '_openid WHERE email= :email');
         $stmt->bindParam(':email', $post['email'], PDO::PARAM_STR);
         $stmt->execute();
@@ -249,7 +251,7 @@ if ($nv_Request->isset_request('userid', 'get')) {
             $post['pass_creation_time'] = !empty($post['password']) ? $userdata['regdate'] : 0;
         }
         if (empty($post['is_official'])) {
-            // Khi là thành viên mới thì chỉ có nhóm = 7, không có các nhóm khác
+            // Khi là thành viên mới thì chỉ có nhóm = 7
             $post['in_groups'] = [7];
             $post['group_id'] = 7;
         } else {
@@ -263,7 +265,7 @@ if ($nv_Request->isset_request('userid', 'get')) {
             $post['in_groups'] = array_intersect($in_groups, array_keys($groups_list));
             $post['in_groups'] = array_map('intval', $post['in_groups']);
 
-            // Kiểm tra nhóm thành viên mặc định phải thuộc các nhóm đã chọn
+            // Kiểm tra nhóm mặc định phải thuộc các nhóm đã chọn
             !in_array($post['group_id'], $post['in_groups'], true) && $post['group_id'] = 4;
 
             $post['in_groups'][] = 4;
@@ -288,7 +290,7 @@ if ($nv_Request->isset_request('userid', 'get')) {
             }
         }
 
-        // Check photo
+        // Kiểm tra ảnh đại diện
         if (!empty($post['photo'])) {
             $tmp_photo = NV_BASE_SITEURL . NV_TEMP_DIR . '/' . $post['photo'];
 
@@ -380,7 +382,7 @@ if ($nv_Request->isset_request('userid', 'get')) {
                 'mess' => 'DB-error1'
             ]);
         }
-        // Luu vao bang OpenID
+        // Lưu vào bảng OpenID
         if (!empty($reg_attribs)) {
             $stmt = $db->prepare('INSERT INTO ' . NV_MOD_TABLE . '_openid VALUES (' . $user_id . ', :server, :opid , :id, :email)');
             $stmt->bindParam(':server', $reg_attribs['server'], PDO::PARAM_STR);
@@ -464,14 +466,13 @@ if ($nv_Request->isset_request('userid', 'get')) {
             nv_sendmail_template_async([$module_name, Emails::ACTIVE_BY_ADMIN], $send_data, $maillang);
         }
         nv_jsonOutput([
-            'status' => 'OK',
-            'redirect' => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name
+            'status' => 'success',
+            'mess' => '',
+            'redirect' => nv_url_rewrite(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=user_waiting', true)
         ]);
     }
 
-    $userdata['checkss'] = $checkss;
-
-    // Cau hoi lay lai mat khau
+    // Danh sách câu hỏi bảo mật
     $data_questions = [];
     $sql = 'SELECT qid, title FROM ' . NV_MOD_TABLE . "_question WHERE lang='" . NV_LANG_DATA . "' ORDER BY weight ASC";
     $result = $db->query($sql);
@@ -479,57 +480,13 @@ if ($nv_Request->isset_request('userid', 'get')) {
         $data_questions[$row['qid']] = $row['title'];
     }
 
-    // Xuất HTML
-    $xtpl = new XTemplate('user_waitting.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-    $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
-    $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
-    $xtpl->assign('FORM_ACTION', $base_url . '&amp;userid=' . $userid);
-    $xtpl->assign('NV_UNICKMIN', $global_config['nv_unickmin']);
-    $xtpl->assign('NV_UNICKMAX', $global_config['nv_unickmax']);
-    $xtpl->assign('NV_UPASSMAX', $global_config['nv_upassmax']);
-    $xtpl->assign('NV_UPASSMIN', $global_config['nv_upassmin']);
-    $xtpl->assign('DATA', $userdata);
-
-    for ($i = 0; $i <= 2; ++$i) {
-        $xtpl->assign('PASSRESET', [
-            'num' => $i,
-            'title' => $nv_Lang->getModule('pass_reset_request' . $i)
-        ]);
-        $xtpl->parse('user_details.pass_reset_request');
-    }
-
-    for ($i = 0; $i <= 2; ++$i) {
-        $xtpl->assign('EMAILRESET', [
-            'num' => $i,
-            'title' => $nv_Lang->getModule('email_reset_request' . $i)
-        ]);
-        $xtpl->parse('user_details.email_reset_request');
-    }
-
-    $group_exists = false;
-    if (!empty($groups_list)) {
-        foreach ($groups_list as $group_id => $grtl) {
-            if ($group_id > 9) {
-                $xtpl->assign('GROUP', [
-                    'id' => $group_id,
-                    'title' => $grtl,
-                    'checked' => ''
-                ]);
-                $xtpl->parse('user_details.group.list');
-                $group_exists = true;
-            }
-        }
-    }
-    if ($group_exists) {
-        $xtpl->parse('user_details.group');
-    }
-
-    $have_custom_fields = false;
+    // Chuẩn bị các trường hệ thống cho Smarty
+    $system_fields = [];
     $have_name_field = false;
     foreach ($array_field_config as $row) {
-        if ($row['show_register']) {
-            $data = !empty($row['system']) ? $userdata : $userdata['users_info'];
-            // Value luôn là giá trị mặc định
+        if ($row['show_register'] && !empty($row['system'])) {
+            $data = $userdata;
+            // Tính value từ dữ liệu
             if (!empty($row['field_choices'])) {
                 if ($row['field_type'] == 'date') {
                     $row['value'] = $data[$row['field']] ?? (($row['field_choices']['current_date']) ? NV_CURRENTTIME : $row['default_value']);
@@ -544,162 +501,196 @@ if ($nv_Request->isset_request('userid', 'get')) {
                 $row['value'] = $data[$row['field']] ?? get_value_by_lang($row['default_value']);
             }
 
-            $row['required'] = ($row['required']) ? 'required' : '';
-            $xtpl->assign('FIELD', $row);
+            // Xử lý đặc biệt cho một số trường
+            if ($row['field'] == 'birthday') {
+                $row['value'] = nv_u2d_post($row['value']);
+            } elseif ($row['field'] == 'sig') {
+                $row['value'] = nv_htmlspecialchars(nv_br2nl($row['value']));
+            }
 
-            // Các trường hệ thống xuất độc lập
-            if (!empty($row['system'])) {
-                if ($row['field'] == 'birthday') {
-                    $row['value'] = nv_u2d_post($row['value']);
-                } elseif ($row['field'] == 'sig') {
-                    $row['value'] = nv_htmlspecialchars(nv_br2nl($row['value']));
+            $row['required'] = (bool) $row['required'];
+
+            // Chuẩn bị dữ liệu gender
+            if ($row['field'] == 'gender') {
+                $gender_options = [];
+                foreach ($global_array_genders as $g) {
+                    $g['selected'] = ($row['value'] == $g['key']);
+                    $gender_options[] = $g;
                 }
-                $xtpl->assign('FIELD', $row);
-                if ($row['field'] == 'first_name' or $row['field'] == 'last_name') {
-                    $show_key = 'name_show_' . $global_config['name_show'] . '.show_' . $row['field'];
-                    $have_name_field = true;
+                $row['gender_options'] = $gender_options;
+            }
+
+            // Chuẩn bị danh sách câu hỏi bảo mật
+            if ($row['field'] == 'question') {
+                $row['questions'] = array_values($data_questions);
+            }
+
+            if ($row['field'] == 'first_name' || $row['field'] == 'last_name') {
+                $have_name_field = true;
+            }
+
+            $system_fields[$row['field']] = $row;
+        }
+    }
+
+    // Chuẩn bị các trường tùy biến cho Smarty
+    $custom_fields_data = [];
+    $have_custom_fields = false;
+    foreach ($array_field_config as $row) {
+        if ($row['show_register'] && empty($row['system'])) {
+            $data = $userdata['users_info'] ?? [];
+            // Tính value từ dữ liệu tùy biến
+            if (!empty($row['field_choices'])) {
+                if ($row['field_type'] == 'date') {
+                    $row['value'] = $data[$row['field']] ?? (($row['field_choices']['current_date']) ? NV_CURRENTTIME : $row['default_value']);
+                } elseif ($row['field_type'] == 'number') {
+                    $row['value'] = $data[$row['field']] ?? $row['default_value'];
                 } else {
-                    $show_key = 'show_' . $row['field'];
+                    $temp = array_map('strval', array_keys($row['field_choices']));
+                    $tempkey = $data[$row['field']] ?? get_value_by_lang($row['default_value']);
+                    $row['value'] = in_array($tempkey, $temp, true) ? $tempkey : '';
                 }
-                if ($row['required']) {
-                    $xtpl->parse('user_details.' . $show_key . '.required');
-                }
-                if ($row['field'] == 'gender') {
-                    foreach ($global_array_genders as $gender) {
-                        $gender['selected'] = $row['value'] == $gender['key'] ? ' selected="selected"' : '';
-                        $xtpl->assign('GENDER', $gender);
-                        $xtpl->parse('user_details.' . $show_key . '.gender');
-                    }
-                }
-                if ($row['field'] == 'question') {
-                    foreach ($data_questions as $question) {
-                        $xtpl->assign('QUESTION', $question);
-                        $xtpl->parse('user_details.' . $show_key . '.question');
-                    }
-                }
-                if ($row['description']) {
-                    $xtpl->parse('user_details.' . $show_key . '.description');
-                }
-                $xtpl->parse('user_details.' . $show_key);
             } else {
-                if ($row['required']) {
-                    $xtpl->parse('user_details.field.loop.required');
-                }
-                if ($row['description']) {
-                    $xtpl->parse('user_details.field.loop.description');
-                }
-                if ($row['field_type'] == 'textbox' or $row['field_type'] == 'number') {
-                    $xtpl->parse('user_details.field.loop.textbox');
-                } elseif ($row['field_type'] == 'date') {
-                    $row['value'] = nv_u2d_post($row['value']);
-                    $xtpl->assign('FIELD', $row);
-                    $xtpl->parse('user_details.field.loop.date');
-                } elseif ($row['field_type'] == 'textarea') {
-                    $row['value'] = nv_htmlspecialchars(nv_br2nl($row['value']));
-                    $xtpl->assign('FIELD', $row);
-                    $xtpl->parse('user_details.field.loop.textarea');
-                } elseif ($row['field_type'] == 'editor') {
-                    $row['value'] = htmlspecialchars(nv_editor_br2nl($row['value']));
-                    if (defined('NV_EDITOR') and nv_function_exists('nv_aleditor')) {
-                        $array_tmp = explode('@', $row['class']);
-                        $edits = nv_aleditor('custom_fields[' . $row['field'] . ']', $array_tmp[0], $array_tmp[1], $row['value']);
-                        $xtpl->assign('EDITOR', $edits);
-                        $xtpl->parse('user_details.field.loop.editor');
-                    } else {
-                        $row['class'] = '';
-                        $xtpl->assign('FIELD', $row);
-                        $xtpl->parse('user_details.field.loop.textarea');
-                    }
-                } elseif ($row['field_type'] == 'select') {
+                $row['value'] = $data[$row['field']] ?? get_value_by_lang($row['default_value']);
+            }
+
+            $row['required'] = (bool) $row['required'];
+
+            // Chuẩn bị choices với trạng thái selected/checked
+            if (!empty($row['field_choices'])) {
+                $choices_prepared = [];
+                if ($row['field_type'] == 'checkbox') {
+                    $valuecheckbox = (!empty($row['value'])) ? explode(',', $row['value']) : [];
+                    $number = 0;
                     foreach ($row['field_choices'] as $key => $value) {
-                        $xtpl->assign('FIELD_CHOICES', [
+                        $choices_prepared[] = [
+                            'id' => $row['fid'] . '_' . $number++,
                             'key' => $key,
-                            'selected' => ($key == $row['value']) ? ' selected="selected"' : '',
+                            'selected' => in_array((string) $key, $valuecheckbox, true),
                             'value' => get_value_by_lang2($key, $value)
-                        ]);
-                        $xtpl->parse('user_details.field.loop.select.loop');
+                        ];
                     }
-                    $xtpl->parse('user_details.field.loop.select');
                 } elseif ($row['field_type'] == 'radio') {
                     $number = 0;
                     foreach ($row['field_choices'] as $key => $value) {
-                        $xtpl->assign('FIELD_CHOICES', [
+                        $choices_prepared[] = [
                             'id' => $row['fid'] . '_' . $number++,
                             'key' => $key,
-                            'checked' => ($key == $row['value']) ? ' checked="checked"' : '',
+                            'selected' => ($key == $row['value']),
                             'value' => get_value_by_lang2($key, $value)
-                        ]);
-                        $xtpl->parse('user_details.field.loop.radio');
+                        ];
                     }
-                } elseif ($row['field_type'] == 'checkbox') {
-                    $number = 0;
-                    $valuecheckbox = (!empty($row['value'])) ? explode(',', $row['value']) : [];
+                } else {
                     foreach ($row['field_choices'] as $key => $value) {
-                        $xtpl->assign('FIELD_CHOICES', [
-                            'id' => $row['fid'] . '_' . $number++,
+                        $choices_prepared[] = [
                             'key' => $key,
-                            'checked' => (in_array((string) $key, $valuecheckbox, true)) ? ' checked="checked"' : '',
+                            'selected' => ($key == $row['value']),
                             'value' => get_value_by_lang2($key, $value)
-                        ]);
-                        $xtpl->parse('user_details.field.loop.checkbox');
+                        ];
                     }
-                } elseif ($row['field_type'] == 'multiselect') {
-                    foreach ($row['field_choices'] as $key => $value) {
-                        $xtpl->assign('FIELD_CHOICES', [
-                            'key' => $key,
-                            'selected' => ($key == $row['value']) ? ' selected="selected"' : '',
-                            'value' => get_value_by_lang2($key, $value)
-                        ]);
-                        $xtpl->parse('user_details.field.loop.multiselect.loop');
-                    }
-                    $xtpl->parse('user_details.field.loop.multiselect');
-                } elseif ($row['field_type'] == 'file') {
-                    $filelist = !empty($row['value']) ? explode(',', $row['value']) : [];
-                    if (!empty($filelist)) {
-                        foreach ($filelist as $file_item) {
-                            $assign = file_type_name($file_item);
-                            $assign['url'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;userfile=' . $file_item;
-                            $xtpl->assign('FILE_ITEM', $assign);
-                            $xtpl->parse('user_details.field.loop.file.loop');
-                        }
-                    }
-                    $row['limited_values'] = !empty($row['limited_values']) ? json_decode($row['limited_values'], true) : [];
-                    $xtpl->assign('FILEACCEPT', !empty($row['limited_values']['mime']) ? '.' . implode(',.', $row['limited_values']['mime']) : '');
-                    $xtpl->assign('FILEMAXSIZE', $row['limited_values']['file_max_size']);
-                    $xtpl->assign('FILEMAXSIZE_FORMAT', nv_convertfromBytes($row['limited_values']['file_max_size']));
-                    $xtpl->assign('FILEMAXNUM', $row['limited_values']['maxnum']);
-                    $xtpl->assign('CSRF', md5(NV_CHECK_SESSION . '_' . $module_name . $row['field']));
-                    $xtpl->assign('URL_MODULE', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name);
-                    $widthlimit = image_size_info($row['limited_values']['widthlimit'], 'width');
-                    $heightlimit = image_size_info($row['limited_values']['heightlimit'], 'height');
-                    if (!empty($widthlimit)) {
-                        $xtpl->assign('WIDTHLIMIT', $widthlimit);
-                        $xtpl->parse('user_details.field.loop.file.widthlimit');
-                    }
-                    if (!empty($heightlimit)) {
-                        $xtpl->assign('HEIGHTLIMIT', $heightlimit);
-                        $xtpl->parse('user_details.field.loop.file.heightlimit');
-                    }
-                    if (!(empty($row['limited_values']['maxnum']) or (count($filelist) < $row['limited_values']['maxnum']))) {
-                        $xtpl->parse('user_details.field.loop.file.addfile');
-                    }
-                    $xtpl->parse('user_details.field.loop.file');
                 }
-                $xtpl->parse('user_details.field.loop');
-                $have_custom_fields = true;
+                $row['choices_prepared'] = $choices_prepared;
+            }
+
+            // Xử lý theo field_type
+            if ($row['field_type'] == 'date') {
+                $row['value'] = nv_u2d_post($row['value']);
+            } elseif ($row['field_type'] == 'textarea') {
+                $row['value'] = nv_htmlspecialchars(nv_br2nl($row['value']));
+            } elseif ($row['field_type'] == 'editor') {
+                $row['value'] = htmlspecialchars(nv_editor_br2nl($row['value']));
+                if (defined('NV_EDITOR') && nv_function_exists('nv_aleditor')) {
+                    $array_tmp = explode('@', $row['class']);
+                    $row['editor_html'] = nv_aleditor('custom_fields[' . $row['field'] . ']', $array_tmp[0], $array_tmp[1], $row['value']);
+                    $row['field_type_render'] = 'editor';
+                } else {
+                    $row['class'] = '';
+                    $row['field_type_render'] = 'textarea';
+                }
+            } elseif ($row['field_type'] == 'file') {
+                $filelist = !empty($row['value']) ? explode(',', $row['value']) : [];
+                $file_items = [];
+                foreach ($filelist as $file_item) {
+                    $assign = file_type_name($file_item);
+                    $assign['url'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;userfile=' . $file_item;
+                    $file_items[] = $assign;
+                }
+                $row['file_items'] = $file_items;
+                $row['limited_values'] = !empty($row['limited_values']) ? json_decode($row['limited_values'], true) : [];
+                $row['fileaccept'] = !empty($row['limited_values']['mime']) ? '.' . implode(',.', $row['limited_values']['mime']) : '';
+                $row['filemaxsize'] = $row['limited_values']['file_max_size'] ?? 0;
+                $row['filemaxsize_format'] = nv_convertfromBytes($row['limited_values']['file_max_size'] ?? 0);
+                $row['filemaxnum'] = $row['limited_values']['maxnum'] ?? 0;
+                $row['csrf'] = md5(NV_CHECK_SESSION . '_' . $module_name . $row['field']);
+                $row['url_module'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name;
+                $row['widthlimit'] = image_size_info($row['limited_values']['widthlimit'] ?? '', 'width');
+                $row['heightlimit'] = image_size_info($row['limited_values']['heightlimit'] ?? '', 'height');
+                $row['addfile_disabled'] = !(empty($row['limited_values']['maxnum']) or (count($filelist) < $row['limited_values']['maxnum']));
+            }
+
+            if (!isset($row['field_type_render'])) {
+                $row['field_type_render'] = $row['field_type'];
+            }
+
+            $custom_fields_data[] = $row;
+            $have_custom_fields = true;
+        }
+    }
+
+    // Chuẩn bị danh sách nhóm
+    $groups_for_tpl = [];
+    $group_exists = false;
+    if (!empty($groups_list)) {
+        foreach ($groups_list as $group_id => $grtl) {
+            if ($group_id > 9) {
+                $groups_for_tpl[] = ['id' => $group_id, 'title' => $grtl];
+                $group_exists = true;
             }
         }
     }
 
-    if ($have_name_field) {
-        $xtpl->parse('user_details.name_show_' . $global_config['name_show']);
-    }
-    if ($have_custom_fields) {
-        $xtpl->parse('user_details.field');
+    // Chuẩn bị options cho pass_reset_request
+    $pass_reset_options = [];
+    for ($i = 0; $i <= 2; ++$i) {
+        $pass_reset_options[] = [
+            'num' => $i,
+            'title' => $nv_Lang->getModule('pass_reset_request' . $i),
+            'selected' => ($userdata['pass_reset_request'] ?? 0) == $i
+        ];
     }
 
-    $xtpl->parse('user_details');
-    $contents = $xtpl->text('user_details');
+    // Chuẩn bị options cho email_reset_request
+    $email_reset_options = [];
+    for ($i = 0; $i <= 2; ++$i) {
+        $email_reset_options[] = [
+            'num' => $i,
+            'title' => $nv_Lang->getModule('email_reset_request' . $i),
+            'selected' => ($userdata['email_reset_request'] ?? 0) == $i
+        ];
+    }
+
+    // Xuất giao diện form kích hoạt
+    $tpl = new \NukeViet\Template\NVSmarty();
+    $tpl->setTemplateDir(get_module_tpl_dir('user_waitting.tpl'));
+    $tpl->assign('LANG', $nv_Lang);
+    $tpl->assign('VIEW', 'detail');
+    $tpl->assign('FORM_ACTION', $base_url . '&amp;userid=' . $userid);
+    $tpl->assign('NV_UNICKMIN', $global_config['nv_unickmin']);
+    $tpl->assign('NV_UNICKMAX', $global_config['nv_unickmax']);
+    $tpl->assign('NV_UPASSMAX', $global_config['nv_upassmax']);
+    $tpl->assign('NV_UPASSMIN', $global_config['nv_upassmin']);
+    $tpl->assign('DATA', $userdata);
+    $tpl->assign('CHECKSS', $checkss);
+    $tpl->assign('SYSTEM_FIELDS', $system_fields);
+    $tpl->assign('CUSTOM_FIELDS', $custom_fields_data);
+    $tpl->assign('HAVE_CUSTOM_FIELDS', $have_custom_fields);
+    $tpl->assign('HAVE_NAME_FIELD', $have_name_field);
+    $tpl->assign('NAME_SHOW', (int) $global_config['name_show']);
+    $tpl->assign('GROUPS_FOR_TPL', $groups_for_tpl);
+    $tpl->assign('GROUP_EXISTS', $group_exists);
+    $tpl->assign('PASS_RESET_OPTIONS', $pass_reset_options);
+    $tpl->assign('EMAIL_RESET_OPTIONS', $email_reset_options);
+    $contents = $tpl->fetch('user_waitting.tpl');
 
     include NV_ROOTDIR . '/includes/header.php';
     echo nv_admin_theme($contents);
@@ -708,30 +699,31 @@ if ($nv_Request->isset_request('userid', 'get')) {
 
 delOldRegAccount();
 
+// Các phương thức tìm kiếm
 $methods = [
     'userid' => [
         'key' => 'userid',
         'sql' => 'userid',
         'value' => $nv_Lang->getModule('search_id'),
-        'selected' => ''
+        'selected' => false
     ],
     'username' => [
         'key' => 'username',
         'sql' => 'username',
         'value' => $nv_Lang->getModule('search_account'),
-        'selected' => ''
+        'selected' => false
     ],
     'full_name' => [
         'key' => 'full_name',
         'sql' => $global_config['name_show'] == 0 ? "concat(last_name,' ',first_name)" : "concat(first_name,' ',last_name)",
         'value' => $nv_Lang->getModule('search_name'),
-        'selected' => ''
+        'selected' => false
     ],
     'email' => [
         'key' => 'email',
         'sql' => 'email',
         'value' => $nv_Lang->getModule('search_mail'),
-        'selected' => ''
+        'selected' => false
     ]
 ];
 $method = $nv_Request->isset_request('method', 'post') ? $nv_Request->get_string('method', 'post', '') : ($nv_Request->isset_request('method', 'get') ? urldecode($nv_Request->get_string('method', 'get', '')) : '');
@@ -760,7 +752,7 @@ $db->sqlreset()
 
 if (!empty($method) and isset($methods[$method]) and !empty($methodvalue)) {
     $base_url .= '&amp;method=' . urlencode($method) . '&amp;value=' . urlencode($methodvalue);
-    $methods[$method]['selected'] = ' selected="selected"';
+    $methods[$method]['selected'] = true;
     $table_caption = $nv_Lang->getModule('search_page_title');
     $ar_where[] = $methods[$method]['sql'] . " LIKE '%" . $db->dblikeescape($methodvalue) . "%'";
 }
@@ -786,19 +778,23 @@ if (!empty($orderby) and in_array($orderby, $orders, true)) {
 
 $result = $db->query($db->sql());
 
-$users_list = [];
+// Chuẩn bị danh sách user cho Smarty
+$users_list_for_tpl = [];
 while ($row = $result->fetch()) {
-    $users_list[$row['userid']] = [
+    $users_list_for_tpl[] = [
         'userid' => $row['userid'],
         'username' => $row['username'],
         'full_name' => nv_show_name_user($row['first_name'], $row['last_name'], $row['username']),
         'email' => $row['email'],
-        'regdate' => nv_datetime_format($row['regdate'])
+        'regdate' => nv_datetime_format($row['regdate']),
+        'checkss' => md5(NV_CHECK_SESSION . '_' . $module_name . '_' . $op . '_' . $row['userid']),
+        'activate_url' => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=user_waiting&amp;userid=' . $row['userid']
     ];
 }
 
 $generate_page = nv_generate_page($base_url, $num_items, $per_page, $page);
 
+// Chuẩn bị tiêu đề cột bảng với link sắp xếp
 $head_tds = [];
 $head_tds['userid']['title'] = $nv_Lang->getModule('userid');
 $head_tds['userid']['href'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=user_waiting&amp;sortby=userid&amp;sorttype=ASC';
@@ -821,6 +817,8 @@ foreach ($orders as $order) {
     }
 }
 
+// Chuẩn bị cảnh báo và thời gian kích hoạt
+$register_active_time = 0;
 if (defined('NV_IS_USER_FORUM')) {
     $nv_Lang->setModule('warning', $nv_Lang->getModule('modforum'));
 } else {
@@ -828,48 +826,25 @@ if (defined('NV_IS_USER_FORUM')) {
     $nv_Lang->setModule('warning', $nv_Lang->getModule('userwait_note', $register_active_time));
 }
 
-$xtpl = new XTemplate('user_waitting.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-$xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
-$xtpl->assign('FORM_ACTION', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=user_waiting');
-$xtpl->assign('SORTURL', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
-$xtpl->assign('SEARCH_VALUE', nv_htmlspecialchars($methodvalue));
-$xtpl->assign('TABLE_CAPTION', $table_caption);
+// URL gửi lại email
+$resend_url = ($num_items > 0) ? NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=user_waiting_remail' : '';
 
-foreach ($methods as $m) {
-    $xtpl->assign('METHODS', $m);
-    $xtpl->parse('main.method');
-}
-
-if ($num_items > 0) {
-    $xtpl->assign('RESEND_URL', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=user_waiting_remail');
-    $xtpl->parse('main.resend_email');
-
-    if ($register_active_time) {
-        $xtpl->parse('main.userlist.warning');
-    }
-
-    foreach ($head_tds as $head_td) {
-        $xtpl->assign('HEAD_TD', $head_td);
-        $xtpl->parse('main.userlist.head_td');
-    }
-
-    foreach ($users_list as $u) {
-        $u['checkss'] = md5(NV_CHECK_SESSION . '_' . $module_name . '_' . $op . '_' . $u['userid']);
-        $xtpl->assign('CONTENT_TD', $u);
-        $xtpl->assign('ACTIVATE_URL', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=user_waiting&amp;userid=' . $u['userid']);
-        $xtpl->parse('main.userlist.xusers');
-    }
-
-    if (!empty($generate_page)) {
-        $xtpl->assign('GENERATE_PAGE', $generate_page);
-        $xtpl->parse('main.userlist.generate_page');
-    }
-
-    $xtpl->parse('main.userlist');
-}
-
-$xtpl->parse('main');
-$contents = $xtpl->text('main');
+// Xuất giao diện danh sách
+$tpl = new \NukeViet\Template\NVSmarty();
+$tpl->setTemplateDir(get_module_tpl_dir('user_waitting.tpl'));
+$tpl->assign('LANG', $nv_Lang);
+$tpl->assign('VIEW', 'list');
+$tpl->assign('FORM_ACTION', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=user_waiting');
+$tpl->assign('SEARCH_VALUE', nv_htmlspecialchars($methodvalue));
+$tpl->assign('TABLE_CAPTION', $table_caption);
+$tpl->assign('METHODS', $methods);
+$tpl->assign('NUM_ITEMS', (int) $num_items);
+$tpl->assign('RESEND_URL', $resend_url);
+$tpl->assign('REGISTER_ACTIVE_TIME', $register_active_time);
+$tpl->assign('HEAD_TDS', $head_tds);
+$tpl->assign('USERS_LIST', $users_list_for_tpl);
+$tpl->assign('GENERATE_PAGE', $generate_page);
+$contents = $tpl->fetch('user_waitting.tpl');
 
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_admin_theme($contents);
