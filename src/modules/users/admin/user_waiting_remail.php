@@ -18,6 +18,7 @@ use NukeViet\Module\users\Shared\Emails;
 $page_title = $nv_Lang->getModule('userwait_resend_email');
 $set_active_op = 'user_waiting';
 $checkss = md5(NV_CHECK_SESSION . '_' . $module_name . '_' . $op . '_' . $set_active_op);
+
 if ($nv_Request->isset_request('ajax', 'post')) {
     $per_email = $nv_Request->get_int('per_email', 'post', 0);
     $offset = $nv_Request->get_int('offset', 'post', 0);

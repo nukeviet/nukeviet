@@ -4,7 +4,7 @@
  *}
 
 {if $VIEW == 'list'}
-{* ===== VIEW DANH SÁCH ===== *}
+{* Xem danh sách *}
 <div class="mb-3 d-flex flex-wrap gap-2 align-items-center justify-content-between">
     <form class="d-flex flex-wrap gap-2 align-items-center" action="{$FORM_ACTION}" method="post" role="search">
         <select class="form-select" style="width: auto;" name="method" id="f_method" aria-label="{$LANG->getModule('search_type')}">
@@ -90,14 +90,13 @@
 {/if}
 
 {elseif $VIEW == 'detail'}
-{* ===== VIEW CHI TIẾT / KÍCH HOẠT ===== *}
+{* Xem chi tiết và kích hoạt tài khoản *}
 <link type="text/css" href="{$smarty.const.ASSETS_STATIC_URL}/js/jquery-ui/jquery-ui.min.css" rel="stylesheet">
 <script type="text/javascript" src="{$smarty.const.ASSETS_STATIC_URL}/js/jquery-ui/jquery-ui.min.js"></script>
 <script type="text/javascript" src="{$smarty.const.ASSETS_LANG_STATIC_URL}/js/language/jquery.ui.datepicker-{$smarty.const.NV_LANG_INTERFACE}.js"></script>
 <form class="ajax-submit" id="user_details_form" action="{$FORM_ACTION}" method="post" novalidate>
     <div class="row">
         <div class="col-lg-10 col-xl-9">
-
             {* Username *}
             <div class="row mb-3">
                 <label for="username_field" class="col-sm-3 col-form-label">{$LANG->getGlobal('username')} <span class="text-danger">(*)</span></label>
@@ -142,7 +141,7 @@
                             maxlength="{$NV_UPASSMAX}"
                             autocomplete="new-password">
                         <button class="btn btn-outline-secondary btn-eye" type="button" data-field="#password1" aria-label="{$LANG->getModule('show_password')}"><i class="fa-solid fa-eye"></i></button>
-                        <button class="btn btn-outline-secondary" type="button" data-toggle="genpass" data-field1="#password1" data-field2="#password2" aria-label="{$LANG->getModule('random_password')}"><i class="fa-solid fa-rotate"></i></button>
+                        <button class="btn btn-outline-secondary" type="button" data-toggle="genpass" data-field1="#password1" data-field2="#password2" aria-label="{$LANG->getModule('random_password')}"><i class="fa-solid fa-rotate" data-icon="fa-rotate"></i></button>
                     </div>
                     <div class="form-text">{$LANG->getModule('leave_blank_note')}</div>
                     <div class="invalid-feedback"></div>

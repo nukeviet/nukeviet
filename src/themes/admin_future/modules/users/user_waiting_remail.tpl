@@ -2,7 +2,6 @@
  * Giao diện admin_future cho khu vực Gửi lại email kích hoạt
  * Module: users - NukeViet 5.0
  *}
-
 <div class="card">
     <div class="card-body">
         <form action="#" method="post" id="resend-email-form" novalidate>
@@ -50,6 +49,6 @@
     data-lang-complete="{$LANG->getModule('userwait_resend_complete')}"></p>
 
 {* Khu vực hiển thị kết quả chi tiết *}
-<pre class="d-none mt-2" id="resend-result"
+<pre class="d-none mt-2 border p-3 rounded bg-body-tertiary" id="resend-result"
     data-lang-start="{$LANG->getModule('userwait_resend_start')}"
     data-lang-end="{$LANG->getModule('userwait_resend_end')}"><code></code></pre>

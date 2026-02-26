@@ -1074,7 +1074,7 @@ $(function () {
         }
     }
 
-    // ===== Trang Tài khoản đợi kích hoạt =====
+    // Trang Tài khoản đợi kích hoạt
     if (nv_func_name === 'user_waiting') {
         // Xóa tài khoản chờ kích hoạt
         $(document).on('click', '.btn-del-waiting', function (e) {
@@ -1159,22 +1159,45 @@ $(function () {
         // Tạo mật khẩu ngẫu nhiên
         $(document).on('click', '[data-toggle="genpass"]', function (e) {
             e.preventDefault();
-            const field1 = $($(this).data('field1'));
-            const field2 = $($(this).data('field2'));
-            $.post(
-                script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=user_add&nocache=' + new Date().getTime(),
-                'nv_genpass=1',
-                function (res) {
-                    field1.val(res);
-                    if (field2.length) {
-                        field2.val(res);
+            const btn = $(this);
+            const icon = $('i', btn);
+            if (icon.is('.fa-spinner')) {
+                return;
+            }
+
+            const field1 = $(btn.data('field1'));
+            const field2 = $(btn.data('field2'));
+
+            icon.removeClass(icon.data('icon')).addClass('fa-spinner fa-spin-pulse');
+            $.ajax({
+                type: 'POST',
+                url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=user_add&nocache=' + new Date().getTime(),
+                data: {
+                    nv_genpass: 1,
+                    checkss: $('body').data('checksess')
+                },
+                dataType: 'json',
+                cache: false,
+                success: function (res) {
+                    icon.removeClass('fa-spinner fa-spin-pulse').addClass(icon.data('icon'));
+                    if (res.status === 'error') {
+                        return nukeviet.toast(res.mess, 'error');
                     }
+                    field1.val(res.value);
+                    if (field2.length) {
+                        field2.val(res.value);
+                    }
+                },
+                error: function (xhr, text, err) {
+                    icon.removeClass('fa-spinner fa-spin-pulse').addClass(icon.data('icon'));
+                    nukeviet.toast(text, 'error');
+                    console.log(xhr, text, err);
                 }
-            );
+            });
         });
     }
 
-    // ===== Trang Gửi lại email kích hoạt =====
+    // Trang Gửi lại email kích hoạt
     if (nv_func_name === 'user_waiting_remail') {
         let resendOffset = 0;
         let emailOffset = 0;
@@ -1259,7 +1282,7 @@ $(function () {
             }
 
             // Hiển thị đếm ngược
-            $('#resend-perload').html(langResendCounter + ' <strong>' + resendOffset + '</strong>. ' + langResendNote);
+            $('#resend-perload').html(langResendCounter + ' <strong>' + resendOffset + '</strong>s. ' + langResendNote);
         }
 
         // Xử lý khi submit form gửi lại email
