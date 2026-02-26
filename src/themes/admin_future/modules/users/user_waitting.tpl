@@ -99,7 +99,7 @@
         <div class="card-body">
             {* Username *}
             <div class="row mb-3">
-                <label for="username_field" class="col-sm-3 col-form-label">{$LANG->getGlobal('username')} <span class="text-danger">(*)</span></label>
+                <label for="username_field" class="col-sm-3 col-form-label text-sm-end">{$LANG->getGlobal('username')} <span class="text-danger">(*)</span></label>
                 <div class="col-sm-8 col-lg-6 col-xxl-5">
                     <input type="text"
                         class="form-control"
@@ -115,7 +115,7 @@
 
             {* Email *}
             <div class="row mb-3">
-                <label for="email_field" class="col-sm-3 col-form-label">{$LANG->getModule('email')} <span class="text-danger">(*)</span></label>
+                <label for="email_field" class="col-sm-3 col-form-label text-sm-end">{$LANG->getModule('email')} <span class="text-danger">(*)</span></label>
                 <div class="col-sm-8 col-lg-6 col-xxl-5">
                     <input type="email"
                         class="form-control"
@@ -130,7 +130,7 @@
 
             {* Mật khẩu *}
             <div class="row mb-3">
-                <label for="password1" class="col-sm-3 col-form-label">{$LANG->getModule('password')}</label>
+                <label for="password1" class="col-sm-3 col-form-label text-sm-end">{$LANG->getModule('password')}</label>
                 <div class="col-sm-8 col-lg-6 col-xxl-5">
                     <div class="input-group">
                         <input type="password"
@@ -150,7 +150,7 @@
 
             {* Nhập lại mật khẩu *}
             <div class="row mb-3">
-                <label for="password2" class="col-sm-3 col-form-label">{$LANG->getModule('repassword')}</label>
+                <label for="password2" class="col-sm-3 col-form-label text-sm-end">{$LANG->getModule('repassword')}</label>
                 <div class="col-sm-8 col-lg-6 col-xxl-5">
                     <div class="input-group">
                         <input type="password"
@@ -167,7 +167,7 @@
 
             {* Yêu cầu thay đổi mật khẩu *}
             <div class="row mb-3">
-                <label for="pass_reset_request" class="col-sm-3 col-form-label">{$LANG->getModule('pass_reset_request')}</label>
+                <label for="pass_reset_request" class="col-sm-3 col-form-label text-sm-end">{$LANG->getModule('pass_reset_request')}</label>
                 <div class="col-sm-8 col-lg-6 col-xxl-5">
                     <select class="form-select" id="pass_reset_request" name="pass_reset_request">
                         {foreach from=$PASS_RESET_OPTIONS item=opt}
@@ -179,7 +179,7 @@
 
             {* Yêu cầu thay đổi email *}
             <div class="row mb-3">
-                <label for="email_reset_request" class="col-sm-3 col-form-label">{$LANG->getModule('email_reset_request')}</label>
+                <label for="email_reset_request" class="col-sm-3 col-form-label text-sm-end">{$LANG->getModule('email_reset_request')}</label>
                 <div class="col-sm-8 col-lg-6 col-xxl-5">
                     <select class="form-select" id="email_reset_request" name="email_reset_request">
                         {foreach from=$EMAIL_RESET_OPTIONS item=opt}
@@ -196,7 +196,7 @@
                     {if isset($SYSTEM_FIELDS.last_name)}
                     {assign var="sf" value=$SYSTEM_FIELDS.last_name}
                     <div class="row mb-3">
-                        <label for="last_name_field" class="col-sm-3 col-form-label">
+                        <label for="last_name_field" class="col-sm-3 col-form-label text-sm-end">
                             {$sf.title}{if $sf.required} <span class="text-danger">(*)</span>{/if}
                         </label>
                         <div class="col-sm-8 col-lg-6 col-xxl-5">
@@ -209,7 +209,7 @@
                     {if isset($SYSTEM_FIELDS.first_name)}
                     {assign var="sf" value=$SYSTEM_FIELDS.first_name}
                     <div class="row mb-3">
-                        <label for="first_name_field" class="col-sm-3 col-form-label">
+                        <label for="first_name_field" class="col-sm-3 col-form-label text-sm-end">
                             {$sf.title}{if $sf.required} <span class="text-danger">(*)</span>{/if}
                         </label>
                         <div class="col-sm-8 col-lg-6 col-xxl-5">
@@ -224,7 +224,7 @@
                     {if isset($SYSTEM_FIELDS.first_name)}
                     {assign var="sf" value=$SYSTEM_FIELDS.first_name}
                     <div class="row mb-3">
-                        <label for="first_name_field" class="col-sm-3 col-form-label">
+                        <label for="first_name_field" class="col-sm-3 col-form-label text-sm-end">
                             {$sf.title}{if $sf.required} <span class="text-danger">(*)</span>{/if}
                         </label>
                         <div class="col-sm-8 col-lg-6 col-xxl-5">
@@ -237,7 +237,7 @@
                     {if isset($SYSTEM_FIELDS.last_name)}
                     {assign var="sf" value=$SYSTEM_FIELDS.last_name}
                     <div class="row mb-3">
-                        <label for="last_name_field" class="col-sm-3 col-form-label">
+                        <label for="last_name_field" class="col-sm-3 col-form-label text-sm-end">
                             {$sf.title}{if $sf.required} <span class="text-danger">(*)</span>{/if}
                         </label>
                         <div class="col-sm-8 col-lg-6 col-xxl-5">
@@ -254,7 +254,7 @@
             {if isset($SYSTEM_FIELDS.gender)}
             {assign var="sf" value=$SYSTEM_FIELDS.gender}
             <div class="row mb-3">
-                <label for="gender_field" class="col-sm-3 col-form-label">
+                <label for="gender_field" class="col-sm-3 col-form-label text-sm-end">
                     {$sf.title}{if $sf.required} <span class="text-danger">(*)</span>{/if}
                 </label>
                 <div class="col-sm-8 col-lg-6 col-xxl-5">
@@ -273,7 +273,7 @@
             {if isset($SYSTEM_FIELDS.birthday)}
             {assign var="sf" value=$SYSTEM_FIELDS.birthday}
             <div class="row mb-3">
-                <label for="birthday_field" class="col-sm-3 col-form-label">
+                <label for="birthday_field" class="col-sm-3 col-form-label text-sm-end">
                     {$sf.title}{if $sf.required} <span class="text-danger">(*)</span>{/if}
                 </label>
                 <div class="col-sm-8 col-lg-6 col-xxl-5">
@@ -291,7 +291,7 @@
             {if isset($SYSTEM_FIELDS.sig)}
             {assign var="sf" value=$SYSTEM_FIELDS.sig}
             <div class="row mb-3">
-                <div class="col-sm-3 col-form-label">
+                <div class="col-sm-3 col-form-label text-sm-end">
                     {$sf.title}{if $sf.required} <span class="text-danger">(*)</span>{/if}
                 </div>
                 <div class="col-sm-8 col-lg-6 col-xxl-5">
@@ -306,7 +306,7 @@
             {if isset($SYSTEM_FIELDS.question)}
             {assign var="sf" value=$SYSTEM_FIELDS.question}
             <div class="row mb-3">
-                <label for="question_field" class="col-sm-3 col-form-label">
+                <label for="question_field" class="col-sm-3 col-form-label text-sm-end">
                     {$sf.title}{if $sf.required} <span class="text-danger">(*)</span>{/if}
                 </label>
                 <div class="col-sm-8 col-lg-6 col-xxl-5">
@@ -332,7 +332,7 @@
             {if isset($SYSTEM_FIELDS.answer)}
             {assign var="sf" value=$SYSTEM_FIELDS.answer}
             <div class="row mb-3">
-                <label for="answer_field" class="col-sm-3 col-form-label">
+                <label for="answer_field" class="col-sm-3 col-form-label text-sm-end">
                     {$sf.title}{if $sf.required} <span class="text-danger">(*)</span>{/if}
                 </label>
                 <div class="col-sm-8 col-lg-6 col-xxl-5">
@@ -346,7 +346,7 @@
 
             {* Hình đại diện *}
             <div class="row mb-3">
-                <label for="avatar_field" class="col-sm-3 col-form-label">{$LANG->getModule('avatar')}</label>
+                <label for="avatar_field" class="col-sm-3 col-form-label text-sm-end">{$LANG->getModule('avatar')}</label>
                 <div class="col-sm-8 col-lg-6 col-xxl-5">
                     <div class="input-group">
                         <input type="text" class="form-control" id="avatar_field" name="photo" value="" readonly autocomplete="off">
@@ -366,7 +366,7 @@
 
             {* Hiển thị email *}
             <div class="row mb-3">
-                <div class="col-sm-3 col-form-label">{$LANG->getModule('show_email')}</div>
+                <div class="col-sm-3 col-form-label text-sm-end">{$LANG->getModule('show_email')}</div>
                 <div class="col-sm-8 col-lg-6 col-xxl-5">
                     <div class="form-check form-switch mt-1">
                         <input class="form-check-input" type="checkbox" id="view_mail_field" name="view_mail" value="1">
@@ -377,7 +377,7 @@
 
             {* Là người dùng chính thức *}
             <div class="row mb-3">
-                <div class="col-sm-3 col-form-label">{$LANG->getModule('is_official')}</div>
+                <div class="col-sm-3 col-form-label text-sm-end">{$LANG->getModule('is_official')}</div>
                 <div class="col-sm-8 col-lg-6 col-xxl-5">
                     <div class="form-check form-switch mt-1">
                         <input class="form-check-input" type="checkbox" id="is_official_field" name="is_official" value="1" checked>
@@ -389,7 +389,7 @@
             {* Danh sách nhóm - ẩn khi is_official = false *}
             {if $GROUP_EXISTS}
             <div class="row mb-3" id="ctn-list-groups">
-                <div class="col-sm-3 col-form-label">{$LANG->getModule('in_group')}</div>
+                <div class="col-sm-3 col-form-label text-sm-end">{$LANG->getModule('in_group')}</div>
                 <div class="col-sm-8 col-lg-6 col-xxl-5">
                     {foreach from=$GROUPS_FOR_TPL item=grp}
                     <div class="d-flex align-items-center gap-3 mb-1">
@@ -414,7 +414,7 @@
 
             {* Email không cần xác minh *}
             <div class="row mb-3">
-                <div class="col-sm-3 col-form-label">{$LANG->getModule('is_email_verified')}</div>
+                <div class="col-sm-3 col-form-label text-sm-end">{$LANG->getModule('is_email_verified')}</div>
                 <div class="col-sm-8 col-lg-6 col-xxl-5">
                     <div class="form-check form-switch mt-1">
                         <input class="form-check-input" type="checkbox" id="is_email_verified_field" name="is_email_verified" value="1" checked>
@@ -429,7 +429,7 @@
             <h6 class="mb-3"><i class="fa-solid fa-list"></i> {$LANG->getModule('fields')}</h6>
             {foreach from=$CUSTOM_FIELDS item=cf}
             <div class="row mb-3">
-                <label {if $cf.field_type != 'editor' && $cf.field_type != 'file' && $cf.field_type != 'radio' && $cf.field_type != 'checkbox'}for="cf_{$cf.field}"{/if} class="col-sm-3 col-form-label">
+                <label {if $cf.field_type != 'editor' && $cf.field_type != 'file' && $cf.field_type != 'radio' && $cf.field_type != 'checkbox'}for="cf_{$cf.field}"{/if} class="col-sm-3 col-form-label text-sm-end">
                     {$cf.title}{if $cf.required} <span class="text-danger">(*)</span>{/if}
                 </label>
                 <div class="col-sm-8 col-lg-6{if $cf.field_type == 'editor'} col-xxl-11{else} col-xxl-5{/if}">
