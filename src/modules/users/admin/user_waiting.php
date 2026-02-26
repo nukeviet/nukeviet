@@ -435,6 +435,8 @@ if ($nv_Request->isset_request('userid', 'get')) {
 
         // Callback sau khi đăng ký
         if (nv_function_exists('nv_user_register_callback')) {
+            /** @disregard P1010 */
+            // phpcs:ignore
             nv_user_register_callback($user_id);
         }
         // Xóa thông báo hệ thống

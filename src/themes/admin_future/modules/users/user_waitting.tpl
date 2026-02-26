@@ -278,7 +278,7 @@
                 </label>
                 <div class="col-sm-8 col-lg-6 col-xxl-5">
                     <div class="input-group" style="max-width: 180px;">
-                        <input type="text" class="form-control datepicker" id="birthday_field" name="birthday" value="{$sf.value}" maxlength="10" autocomplete="bday">
+                        <input type="text" class="form-control datepicker" id="birthday_field" name="birthday" value="{$sf.value}" maxlength="10">
                         <button type="button" class="btn btn-outline-secondary" data-toggle="focusDate" aria-label="{$sf.title}"><i class="fa-solid fa-calendar-days"></i></button>
                     </div>
                     {if $sf.required}<div class="invalid-feedback"></div>{/if}
@@ -429,9 +429,15 @@
             <h6 class="mb-3"><i class="fa-solid fa-list"></i> {$LANG->getModule('fields')}</h6>
             {foreach from=$CUSTOM_FIELDS item=cf}
             <div class="row mb-3">
-                <label {if $cf.field_type != 'editor' && $cf.field_type != 'file' && $cf.field_type != 'radio' && $cf.field_type != 'checkbox'}for="cf_{$cf.field}"{/if} class="col-sm-3 col-form-label text-sm-end">
+                {if $cf.field_type != 'editor' && $cf.field_type != 'file' && $cf.field_type != 'radio' && $cf.field_type != 'checkbox'}
+                <label for="cf_{$cf.field}" class="col-sm-3 col-form-label text-sm-end">
                     {$cf.title}{if $cf.required} <span class="text-danger">(*)</span>{/if}
                 </label>
+                {else}
+                <div class="col-sm-3 col-form-label text-sm-end">
+                    {$cf.title}{if $cf.required} <span class="text-danger">(*)</span>{/if}
+                </div>
+                {/if}
                 <div class="col-sm-8 col-lg-6{if $cf.field_type == 'editor'} col-xxl-11{else} col-xxl-5{/if}">
                     {if $cf.field_type_render == 'textbox' || $cf.field_type == 'number'}
                     <input class="form-control" type="{if $cf.field_type == 'number'}number{else}text{/if}" id="cf_{$cf.field}" name="custom_fields[{$cf.field}]" value="{$cf.value}" autocomplete="off">
