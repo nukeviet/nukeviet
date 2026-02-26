@@ -526,6 +526,7 @@
                                         </ul>
                                     </div>
                                     <div class="modal-footer">
+                                        <button type="button" class="btn btn-primary btn-do-upload" disabled>{$LANG->getGlobal('submit')}</button>
                                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{$LANG->getGlobal('close')}</button>
                                     </div>
                                 </div>
