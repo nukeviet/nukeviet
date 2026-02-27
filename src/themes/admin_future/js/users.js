@@ -190,7 +190,7 @@ $(function () {
         // Datepicker initialization
         if ($('.datepicker').length > 0) {
             $('.datepicker').datepicker({
-                dateFormat: 'dd/mm/yy',
+                dateFormat: nv_jsdate_post.replace('yyyy', 'yy'),
                 changeMonth: true,
                 changeYear: true,
                 showButtonPanel: true
@@ -1220,8 +1220,6 @@ $(function () {
             const modalObj = $('#' + btn.data('modal'));
             const fileAccept = modalObj.data('accept') || '';
             const maxsize = parseInt(modalObj.data('maxsize')) || 0;
-            const uploadBtn = $('.btn-do-upload', modalObj);
-            let pendingFile = null;
 
             const setAddFileBtn = function (num) {
                 if (maxnum && num >= maxnum) {
@@ -1232,8 +1230,6 @@ $(function () {
             };
 
             const updateFileInput = function () {
-                pendingFile = null;
-                uploadBtn.prop('disabled', true);
                 const input = $('<input type="file"/>');
                 if (fileAccept !== '') {
                     input.attr('accept', fileAccept);
@@ -1266,53 +1262,43 @@ $(function () {
                             nukeviet.toast(modalObj.data('size-error') + ' (' + sizeKB + ' KB) ' + modalObj.data('size-error2') + ' (' + maxsizeKB + ' KB)', 'error');
                             return;
                         }
-                        // Lưu file và kích hoạt nút tải lên
+                        // Upload file
                         if (typeof this.files !== 'undefined' && this.files.length > 0) {
-                            pendingFile = this.files[0];
-                            uploadBtn.prop('disabled', false);
+                            const data = new FormData();
+                            data.append('file', this.files[0]);
+                            data.append('field', modalObj.data('field'));
+                            data.append('_csrf', modalObj.data('csrf'));
+                            data.append('field_fileupload', 1);
+                            $.ajax({
+                                type: 'POST',
+                                url: modalObj.data('url'),
+                                enctype: 'multipart/form-data',
+                                data: data,
+                                cache: false,
+                                processData: false,
+                                contentType: false,
+                                dataType: 'json'
+                            }).done(function (a) {
+                                if (a.status === 'error') {
+                                    updateFileInput();
+                                    return nukeviet.toast(a.mess, 'error');
+                                }
+                                if (a.status === 'success' || a.status === 'OK') {
+                                    const newfile = $('<li class="d-flex align-items-center gap-1 mb-1"></li>');
+                                    newfile.append('<input type="checkbox" class="form-check-input ' + filelist.data('oclass') + '" name="custom_fields[' + filelist.data('field') + '][]" value="' + a.file_key + '" checked>');
+                                    newfile.append('<button type="button" class="btn btn-success btn-sm btn-file type-' + (a.file_type || 'other') + '" data-url="' + a.file_url + '">' + a.file_value + '</button>');
+                                    newfile.append('<button type="button" class="btn btn-link btn-sm" data-toggle="thisfile_del">' + modalObj.data('delete') + '</button>');
+                                    $('.items', filelist).append(newfile);
+                                    modalObj.modal('hide');
+                                    filenum++;
+                                    setAddFileBtn(filenum);
+                                }
+                            });
                         }
                     }
                 });
                 $('.fileinput', modalObj).html(input);
             };
-
-            // Gắn sự kiện nút tải lên
-            uploadBtn.off('click.addfile').on('click.addfile', function () {
-                if (!pendingFile) {
-                    return;
-                }
-                const data = new FormData();
-                data.append('file', pendingFile);
-                data.append('field', modalObj.data('field'));
-                data.append('_csrf', modalObj.data('csrf'));
-                data.append('field_fileupload', 1);
-                $.ajax({
-                    type: 'POST',
-                    url: modalObj.data('url'),
-                    enctype: 'multipart/form-data',
-                    data: data,
-                    cache: false,
-                    processData: false,
-                    contentType: false,
-                    dataType: 'json'
-                }).done(function (a) {
-                    if (a.status === 'error') {
-                        updateFileInput();
-                        nukeviet.toast(a.mess, 'error');
-                        return;
-                    }
-                    if (a.status === 'success') {
-                        const newfile = $('<li class="d-flex align-items-center gap-1 mb-1"></li>');
-                        newfile.append('<input type="checkbox" class="form-check-input ' + filelist.data('oclass') + '" name="custom_fields[' + filelist.data('field') + '][]" value="' + a.file_key + '" checked>');
-                        newfile.append('<button type="button" class="btn btn-success btn-sm btn-file type-' + (a.file_type || 'other') + '" data-url="' + a.file_url + '">' + a.file_value + '</button>');
-                        newfile.append('<button type="button" class="btn btn-link btn-sm" data-toggle="thisfile_del">' + modalObj.data('delete') + '</button>');
-                        $('.items', filelist).append(newfile);
-                        modalObj.modal('hide');
-                        filenum++;
-                        setAddFileBtn(filenum);
-                    }
-                });
-            });
 
             updateFileInput();
             modalObj.modal('show');

@@ -366,23 +366,22 @@
 
             {* Hiển thị email *}
             <div class="row mb-3">
-                <div class="col-sm-3 col-form-label text-sm-end">{$LANG->getModule('show_email')}</div>
-                <div class="col-sm-8 col-lg-6 col-xxl-5">
+                <div class="col-sm-8 col-lg-6 col-xxl-5 offset-sm-3">
                     <div class="form-check form-switch mt-1">
                         <input class="form-check-input" type="checkbox" id="view_mail_field" name="view_mail" value="1">
-                        <label class="form-check-label" for="view_mail_field"></label>
+                        <label class="form-check-label" for="view_mail_field">{$LANG->getModule('show_email')}</label>
                     </div>
                 </div>
             </div>
 
             {* Là người dùng chính thức *}
             <div class="row mb-3">
-                <div class="col-sm-3 col-form-label text-sm-end">{$LANG->getModule('is_official')}</div>
-                <div class="col-sm-8 col-lg-6 col-xxl-5">
+                <div class="col-sm-8 col-lg-6 col-xxl-5 offset-sm-3">
                     <div class="form-check form-switch mt-1">
                         <input class="form-check-input" type="checkbox" id="is_official_field" name="is_official" value="1" checked>
-                        <label class="form-check-label small" for="is_official_field">{$LANG->getModule('is_official_note')}</label>
+                        <label class="form-check-label small" for="is_official_field">{$LANG->getModule('is_official')}</label>
                     </div>
+                    <div class="form-text">{$LANG->getModule('is_official_note')}</div>
                 </div>
             </div>
 
@@ -414,12 +413,12 @@
 
             {* Email không cần xác minh *}
             <div class="row mb-3">
-                <div class="col-sm-3 col-form-label text-sm-end">{$LANG->getModule('is_email_verified')}</div>
-                <div class="col-sm-8 col-lg-6 col-xxl-5">
+                <div class="col-sm-8 col-lg-6 col-xxl-5 offset-sm-3">
                     <div class="form-check form-switch mt-1">
                         <input class="form-check-input" type="checkbox" id="is_email_verified_field" name="is_email_verified" value="1" checked>
-                        <label class="form-check-label small" for="is_email_verified_field">{$LANG->getModule('is_email_verified1')}</label>
+                        <label class="form-check-label small" for="is_email_verified_field">{$LANG->getModule('is_email_verified')}</label>
                     </div>
+                    <div class="form-text">{$LANG->getModule('is_email_verified1')}</div>
                 </div>
             </div>
 
@@ -526,7 +525,6 @@
                                         </ul>
                                     </div>
                                     <div class="modal-footer">
-                                        <button type="button" class="btn btn-primary btn-do-upload" disabled>{$LANG->getGlobal('submit')}</button>
                                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{$LANG->getGlobal('close')}</button>
                                     </div>
                                 </div>
