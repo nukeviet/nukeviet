@@ -1074,8 +1074,8 @@ $(function () {
         }
     }
 
-    // Trang Tài khoản đợi kích hoạt
-    if (nv_func_name === 'user_waiting') {
+    // Trang Tài khoản đợi kích hoạt và Thêm tài khoản mới
+    if (nv_func_name === 'user_waiting' || nv_func_name === 'user_add') {
         // Ẩn/hiện mật khẩu
         $(document).on('click', '.btn-eye', function (e) {
             e.preventDefault();
