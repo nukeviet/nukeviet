@@ -107,31 +107,6 @@ if ($nv_Request->isset_request('changeActivate', 'post')) {
     ]);
 }
 
-// Lấy danh sách các API theo role_id
-if ($nv_Request->isset_request('getRole', 'post')) {
-    $role_id = $nv_Request->get_int('role_id', 'post', 0);
-
-    if ($role_id <= 0) {
-        nv_jsonOutput([
-            'status' => 'error',
-            'mess' => $nv_Lang->getModule('api_role_select')
-        ]);
-    }
-
-    $role = getRoleDetails($role_id);
-    if (empty($role)) {
-        nv_jsonOutput([
-            'status' => 'error',
-            'mess' => $nv_Lang->getModule('api_role_select')
-        ]);
-    }
-
-    nv_jsonOutput([
-        'status' => 'OK',
-        'data'   => $role
-    ]);
-}
-
 $page_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name;
 $type = $nv_Request->get_title('type', 'get', 'public');
 $type != 'private' && $type = 'public';

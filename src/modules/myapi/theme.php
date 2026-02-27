@@ -25,7 +25,7 @@ if (!defined('NV_IS_API_MOD')) {
  */
 function main_theme($type, $roleCount, $roleList, $api_user, $generate_page): string
 {
-    global $nv_Lang, $module_name, $language_array;
+    global $nv_Lang, $module_name, $language_array, $site_mods;
 
     $page_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name;
 
@@ -63,6 +63,7 @@ function main_theme($type, $roleCount, $roleList, $api_user, $generate_page): st
     $tpl->setTemplateDir(get_module_tpl_dir('main.tpl'));
     $tpl->assign('LANG', $nv_Lang);
     $tpl->assign('LANGUAGE_ARRAY', $language_array);
+    $tpl->assign('SITE_MODS', $site_mods);
     $tpl->assign('PAGE_URL', $page_url);
     $tpl->assign('TYPE_PUBLIC', [
         'active' => $type == 'public' ? 'active' : '',

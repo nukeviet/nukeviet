@@ -1,4 +1,98 @@
 <script type="text/javascript" src="{$smarty.const.ASSETS_STATIC_URL}/js/clipboard/clipboard.min.js"></script>
+
+{function name=renderApiRoleModal role=[] suffix=''}
+<div class="modal fade" id="apiRoleModal_{$suffix}_{$role.role_id}" tabindex="-1" aria-labelledby="apiRoleModalLabel_{$suffix}_{$role.role_id}" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-fullscreen-md-down modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="apiRoleModalLabel_{$suffix}_{$role.role_id}">{$role.role_title}</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="{$LANG->getGlobal('close')}"></button>
+            </div>
+            <div class="modal-body text-start">
+                {if empty($role.apis)}
+                <div class="alert alert-warning">{$LANG->getModule('api_roles_empty')}</div>
+                {else}
+                <ul class="nav nav-tabs mb-3" role="tablist">
+                    {assign var="active_tab_set" value=false}
+                    {if !empty($role.apis[''])}
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link active" id="tab-sys-{$suffix}-{$role.role_id}" data-bs-toggle="tab" data-bs-target="#content-sys-{$suffix}-{$role.role_id}" type="button" role="tab" aria-selected="true">
+                            <i class="fa-solid fa-server"></i> API hệ thống
+                        </button>
+                    </li>
+                    {assign var="active_tab_set" value=true}
+                    {/if}
+                    {foreach from=$role.apis key=lang item=modules}
+                    {if $lang neq ''}
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link {if !$active_tab_set}active{/if}" id="tab-{$lang}-{$suffix}-{$role.role_id}" data-bs-toggle="tab" data-bs-target="#content-{$lang}-{$suffix}-{$role.role_id}" type="button" role="tab" aria-selected="{if !$active_tab_set}true{else}false{/if}">
+                            <i class="fa-solid fa-language"></i> {$LANGUAGE_ARRAY[$lang]['name']}
+                        </button>
+                    </li>
+                    {assign var="active_tab_set" value=true}
+                    {/if}
+                    {/foreach}
+                </ul>
+                <div class="tab-content">
+                    {assign var="active_pane_set" value=false}
+                    {if !empty($role.apis[''])}
+                    <div class="tab-pane fade show active" id="content-sys-{$suffix}-{$role.role_id}" role="tabpanel" aria-labelledby="tab-sys-{$suffix}-{$role.role_id}">
+                        <div class="list-group list-group-flush mb-4">
+                            {foreach from=$role.apis[''] item=catData}
+                            <div class="list-group-item">
+                                <div class="mb-2 fw-bold text-success">
+                                    <i class="fa-regular fa-folder-open me-1"></i> {$catData.title}
+                                </div>
+                                <div class="ms-3">
+                                    {foreach from=$catData.apis item=apiName}
+                                    <div class="d-flex align-items-start mb-1 text-break">
+                                        <i class="fa-solid fa-caret-right text-muted mt-1 me-2"></i>
+                                        <span>{$apiName}</span>
+                                    </div>
+                                    {/foreach}
+                                </div>
+                            </div>
+                            {/foreach}
+                        </div>
+                    </div>
+                    {assign var="active_pane_set" value=true}
+                    {/if}
+
+                    {foreach from=$role.apis key=lang item=modules}
+                    {if $lang neq ''}
+                    <div class="tab-pane fade {if !$active_pane_set}show active{/if}" id="content-{$lang}-{$suffix}-{$role.role_id}" role="tabpanel" aria-labelledby="tab-{$lang}-{$suffix}-{$role.role_id}">
+                        <div class="list-group list-group-flush mb-4">
+                            {foreach from=$modules key=mod_title item=cats}
+                            <div class="list-group-item bg-light">
+                                <strong class="text-uppercase"><i class="fa-solid fa-cube me-1"></i> {$SITE_MODS[$mod_title].custom_title}</strong>
+                            </div>
+                            {foreach from=$cats item=catData}
+                            <div class="list-group-item">
+                                <div class="mb-2 fw-bold text-primary"><i class="fa-regular fa-folder-open me-1"></i> {$catData.title}</div>
+                                <div class="ms-3">
+                                    {foreach from=$catData.apis item=apiName}
+                                        <div class="d-flex align-items-start mb-1 text-break">
+                                            <i class="fa-solid fa-caret-right text-muted mt-1 me-2"></i>
+                                            <span>{$apiName}</span>
+                                        </div>
+                                    {/foreach}
+                                </div>
+                            </div>
+                            {/foreach}
+                            {/foreach}
+                        </div>
+                    </div>
+                    {assign var="active_pane_set" value=true}
+                    {/if}
+                    {/foreach}
+                </div>
+                {/if}
+            </div>
+        </div>
+    </div>
+</div>
+{/function}
+
 <div id="my-role-api" data-page-url="{$PAGE_URL}">
     <div class="tools">
         <div class="mb-2">
@@ -17,7 +111,7 @@
         </div>
         <div>
             <button type="button" class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#credential_auth">
-                <i class="fa-solid fa-shield-halved fa-lg text-danger"></i> {$LANG->getModule('authentication')}
+                <i class="fa-solid fa-shield-halved text-danger"></i> {$LANG->getModule('authentication')}
             </button>
             <div id="credential_auth" tabindex="-1" aria-labelledby="credentialAuthLabel" aria-hidden="true" class="modal fade">
                 <div class="modal-dialog">
@@ -144,9 +238,10 @@
                     <td class="text-nowrap text-center">{$role.credential_last_access}</td>
                     <td class="text-nowrap text-center">
                         <div class="d-flex gap-1 justify-content-center flex-lg-column align-items-center">
-                            <button type="button" class="btn btn-sm btn-outline-secondary open-api-modal" data-role-id="{$role.role_id}" data-role-title="{$role.role_title}" data-page-url="{$PAGE_URL}" data-bs-toggle="modal" data-bs-target="#apiRoleModal">
+                            <button type="button" class="btn btn-sm btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#apiRoleModal_pc_{$role.role_id}">
                                 <i class="fa-solid fa-list me-1"></i> {$LANG->getModule('apis_list')}
                             </button>
+                            {call name=renderApiRoleModal role=$role suffix='pc'}
                             {if $TYPE == 'public' and $role.credential_status == 1}
                             <button type="button" class="btn btn-sm btn-outline-secondary credential-activate">
                                 <i class="fa-solid fa-power-off me-1"></i> {$LANG->getModule('activate')}
@@ -204,9 +299,10 @@
                     </div>
                 </div>
                 <div class="mt-3 text-end">
-                    <button type="button" class="btn btn-sm btn-secondary open-api-modal" data-role-id="{$role.role_id}" data-role-title="{$role.role_title}" data-page-url="{$PAGE_URL}" data-bs-toggle="modal" data-bs-target="#apiRoleModal">
+                    <button type="button" class="btn btn-sm btn-secondary" data-bs-toggle="modal" data-bs-target="#apiRoleModal_mobile_{$role.role_id}">
                         <i class="fa-solid fa-list me-1"></i> {$LANG->getModule('apis_list')}
                     </button>
+                    {call name=renderApiRoleModal role=$role suffix='mobile'}
                     {if $TYPE == 'public' and $role.credential_status == 1}
                     <button type="button" class="btn btn-sm btn-secondary credential-activate">
                         <i class="fa-solid fa-power-off me-1"></i> {$LANG->getModule('activate')}
@@ -223,25 +319,8 @@
     </div>
     {/if}
     {if not empty($GENERATE_PAGE)}
-        <div class="text-center">
-            {$GENERATE_PAGE}
-        </div>
-    {/if}
-</div>
-
-<div class="modal fade" id="apiRoleModal" tabindex="-1" aria-labelledby="apiRoleModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-xl modal-dialog-scrollable">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="apiRoleModalLabel"></h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="{$LANG->getGlobal('close')}"></button>
-            </div>
-            <div class="modal-body">
-                <div class="text-center py-4" id="apiRoleLoading">
-                    <div class="spinner-border"></div>
-                </div>
-                <div id="apiRoleContent" class="d-none"></div>
-            </div>
-        </div>
+    <div class="text-center">
+        {$GENERATE_PAGE}
     </div>
+    {/if}
 </div>
