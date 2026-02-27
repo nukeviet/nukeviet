@@ -190,7 +190,7 @@ $(function () {
         // Datepicker initialization
         if ($('.datepicker').length > 0) {
             $('.datepicker').datepicker({
-                dateFormat: 'dd/mm/yy',
+                dateFormat: nv_jsdate_post.replace('yyyy', 'yy'),
                 changeMonth: true,
                 changeYear: true,
                 showButtonPanel: true
@@ -1072,5 +1072,377 @@ $(function () {
                 });
             });
         }
+    }
+
+    // Trang Tài khoản đợi kích hoạt
+    if (nv_func_name === 'user_waiting') {
+        // Ẩn/hiện mật khẩu
+        $(document).on('click', '.btn-eye', function (e) {
+            e.preventDefault();
+            const fieldId = $(this).data('field');
+            const field = $(fieldId);
+            const icon = $('i', this);
+            if (field.attr('type') === 'password') {
+                field.attr('type', 'text');
+                icon.removeClass('fa-eye').addClass('fa-eye-slash');
+            } else {
+                field.attr('type', 'password');
+                icon.removeClass('fa-eye-slash').addClass('fa-eye');
+            }
+        });
+
+        // Xóa tài khoản chờ kích hoạt
+        $(document).on('click', '.btn-del-waiting', function (e) {
+            e.preventDefault();
+            const btn = $(this);
+            const icon = $('i', btn);
+            if (icon.is('.fa-spinner')) {
+                return;
+            }
+
+            nukeviet.confirm(nv_is_del_confirm[0], () => {
+                icon.removeClass(icon.data('icon')).addClass('fa-spinner fa-spin-pulse');
+                $.ajax({
+                    type: 'POST',
+                    url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=user_waiting&nocache=' + new Date().getTime(),
+                    data: {
+                        del: 1,
+                        userid: btn.data('userid'),
+                        checkss: btn.data('tokend')
+                    },
+                    dataType: 'json',
+                    cache: false,
+                    success: function (res) {
+                        icon.removeClass('fa-spinner fa-spin-pulse').addClass(icon.data('icon'));
+                        if (res.status === 'error') {
+                            return nukeviet.toast(res.mess, 'error');
+                        }
+                        location.reload();
+                    },
+                    error: function (xhr, text, err) {
+                        icon.removeClass('fa-spinner fa-spin-pulse').addClass(icon.data('icon'));
+                        nukeviet.toast(text, 'error');
+                        console.log(xhr, text, err);
+                    }
+                });
+            });
+        });
+
+        // Toggle danh sách nhóm khi thay đổi trạng thái is_official
+        $('[name="is_official"]').on('change', function () {
+            const ctngroups = $('#ctn-list-groups');
+            if (!ctngroups.length) {
+                return;
+            }
+            if ($(this).is(':checked')) {
+                ctngroups.removeClass('d-none');
+            } else {
+                ctngroups.addClass('d-none');
+                $('[name="group[]"]').prop('checked', false);
+                $('[name="group_default"]').prop('checked', false);
+            }
+        });
+
+        // Xóa nhóm mặc định
+        $(document).on('click', '[data-toggle="cleargdefault"]', function (e) {
+            e.preventDefault();
+            $('[name="group_default"]').prop('checked', false);
+        });
+
+        // Chọn câu hỏi bảo mật từ dropdown
+        $(document).on('click', 'a.question', function (e) {
+            e.preventDefault();
+            $('[name="question"]').val($(this).text());
+        });
+
+        // Khởi tạo datepicker cho các trường ngày tháng
+        if ($('.datepicker').length > 0) {
+            $('.datepicker').datepicker({
+                showOn: 'focus',
+                dateFormat: nv_jsdate_post.replace('yyyy', 'yy'),
+                changeMonth: true,
+                changeYear: true,
+                showOtherMonths: true,
+                beforeShow: function () {
+                    setTimeout(function () {
+                        $('.ui-datepicker').css('z-index', 999999999);
+                    }, 0);
+                }
+            });
+        }
+
+        // Tạo mật khẩu ngẫu nhiên
+        $(document).on('click', '[data-toggle="genpass"]', function (e) {
+            e.preventDefault();
+            const btn = $(this);
+            const icon = $('i', btn);
+            if (icon.is('.fa-spinner')) {
+                return;
+            }
+
+            const field1 = $(btn.data('field1'));
+            const field2 = $(btn.data('field2'));
+
+            icon.removeClass(icon.data('icon')).addClass('fa-spinner fa-spin-pulse');
+            $.ajax({
+                type: 'POST',
+                url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=user_add&nocache=' + new Date().getTime(),
+                data: {
+                    nv_genpass: 1,
+                    checkss: $('body').data('checksess')
+                },
+                dataType: 'json',
+                cache: false,
+                success: function (res) {
+                    icon.removeClass('fa-spinner fa-spin-pulse').addClass(icon.data('icon'));
+                    if (res.status === 'error') {
+                        return nukeviet.toast(res.mess, 'error');
+                    }
+                    field1.val(res.value);
+                    if (field2.length) {
+                        field2.val(res.value);
+                    }
+                },
+                error: function (xhr, text, err) {
+                    icon.removeClass('fa-spinner fa-spin-pulse').addClass(icon.data('icon'));
+                    nukeviet.toast(text, 'error');
+                    console.log(xhr, text, err);
+                }
+            });
+        });
+
+        // Xử lý nút "Thêm file" trong trường tùy biến kiểu file
+        $(document).on('click', '[data-toggle="addfilebtn"]', function () {
+            const btn = $(this);
+            const filelist = btn.parents('.filelist');
+            let filenum = $('[name^=custom_fields]', filelist).length;
+            const maxnum = parseInt(filelist.data('maxnum')) || 0;
+            const modalObj = $('#' + btn.data('modal'));
+            const fileAccept = modalObj.data('accept') || '';
+            const maxsize = parseInt(modalObj.data('maxsize')) || 0;
+
+            const setAddFileBtn = function (num) {
+                if (maxnum && num >= maxnum) {
+                    btn.hide();
+                } else {
+                    btn.show();
+                }
+            };
+
+            const updateFileInput = function () {
+                const input = $('<input type="file"/>');
+                if (fileAccept !== '') {
+                    input.attr('accept', fileAccept);
+                }
+                input.on('change', function () {
+                    const sFileName = $(this).val();
+                    if (sFileName.length > 0) {
+                        // Kiểm tra phần mở rộng
+                        if (fileAccept !== '') {
+                            const fileAcceptArr = fileAccept.split(',');
+                            let blnValid = false;
+                            for (let j = 0; j < fileAcceptArr.length; j++) {
+                                const sCurExtension = fileAcceptArr[j];
+                                if (sFileName.toLowerCase().endsWith(sCurExtension.toLowerCase())) {
+                                    blnValid = true;
+                                    break;
+                                }
+                            }
+                            if (!blnValid) {
+                                updateFileInput();
+                                nukeviet.toast(modalObj.data('ext-error') + ' ' + fileAcceptArr.join(', '), 'error');
+                                return;
+                            }
+                        }
+                        // Kiểm tra dung lượng
+                        if (typeof this.files !== 'undefined' && this.files.length > 0 && this.files[0].size > maxsize) {
+                            const maxsizeKB = parseFloat(maxsize / 1024).toFixed(2);
+                            const sizeKB = parseFloat(this.files[0].size / 1024).toFixed(2);
+                            updateFileInput();
+                            nukeviet.toast(modalObj.data('size-error') + ' (' + sizeKB + ' KB) ' + modalObj.data('size-error2') + ' (' + maxsizeKB + ' KB)', 'error');
+                            return;
+                        }
+                        // Upload file
+                        if (typeof this.files !== 'undefined' && this.files.length > 0) {
+                            const data = new FormData();
+                            data.append('file', this.files[0]);
+                            data.append('field', modalObj.data('field'));
+                            data.append('_csrf', modalObj.data('csrf'));
+                            data.append('field_fileupload', 1);
+                            $.ajax({
+                                type: 'POST',
+                                url: modalObj.data('url'),
+                                enctype: 'multipart/form-data',
+                                data: data,
+                                cache: false,
+                                processData: false,
+                                contentType: false,
+                                dataType: 'json'
+                            }).done(function (a) {
+                                if (a.status === 'error') {
+                                    updateFileInput();
+                                    return nukeviet.toast(a.mess, 'error');
+                                }
+                                if (a.status === 'success' || a.status === 'OK') {
+                                    const newfile = $('<li class="d-flex align-items-center gap-1 mb-1"></li>');
+                                    newfile.append('<input type="checkbox" class="form-check-input ' + filelist.data('oclass') + '" name="custom_fields[' + filelist.data('field') + '][]" value="' + a.file_key + '" checked>');
+                                    newfile.append('<button type="button" class="btn btn-success btn-sm btn-file type-' + (a.file_type || 'other') + '" data-url="' + a.file_url + '">' + a.file_value + '</button>');
+                                    newfile.append('<button type="button" class="btn btn-link btn-sm" data-toggle="thisfile_del">' + modalObj.data('delete') + '</button>');
+                                    $('.items', filelist).append(newfile);
+                                    modalObj.modal('hide');
+                                    filenum++;
+                                    setAddFileBtn(filenum);
+                                }
+                            });
+                        }
+                    }
+                });
+                $('.fileinput', modalObj).html(input);
+            };
+
+            updateFileInput();
+            modalObj.modal('show');
+        });
+
+        // Xóa file đã chọn trong trường tùy biến kiểu file
+        $(document).on('click', '[data-toggle="thisfile_del"]', function () {
+            const filelist = $(this).parents('.filelist');
+            $(this).parents('li').remove();
+            const addBtn = $('[data-toggle="addfilebtn"]', filelist);
+            if (addBtn.length) {
+                const maxnum = parseInt(filelist.data('maxnum')) || 0;
+                if (maxnum && $('[name^=custom_fields]', filelist).length >= maxnum) {
+                    addBtn.hide();
+                } else {
+                    addBtn.show();
+                }
+            }
+        });
+
+        // Xem file đã tải lên
+        $(document).on('click', '.btn-file', function (e) {
+            e.preventDefault();
+            const url = $(this).data('url');
+            if ($(this).is('.type-image, .type-pdf')) {
+                window.open(url, 'NVFile', 'width=650,height=430,resizable=no,scrollbars=1,toolbar=no,location=no,status=no');
+            } else {
+                window.location.href = url;
+            }
+        });
+    }
+
+    // Trang Gửi lại email kích hoạt
+    if (nv_func_name === 'user_waiting_remail') {
+        let resendOffset = 0;
+        let emailOffset = 0;
+        let emailDelete = '';
+        let runInterval;
+        let per_email, pause_time;
+
+        // Lấy chuỗi ngôn ngữ đã nhúng trong tpl qua data attribute
+        const langResendRun = $('#resend-perload').data('lang-run') || '';
+        const langResendNote = $('#resend-perload').data('lang-note') || '';
+        const langResendCounter = $('#resend-perload').data('lang-counter') || '';
+        const langResendStart = $('#resend-result').data('lang-start') || '';
+        const langResendEnd = $('#resend-result').data('lang-end') || '';
+        const langResendComplete = $('#resend-perload').data('lang-complete') || '';
+
+        // Lấy giờ hiện tại dạng hh:mm:ss
+        function getDisplayTime() {
+            const time = new Date();
+            let hh = time.getHours();
+            let mm = time.getMinutes();
+            let ss = time.getSeconds();
+            if (hh < 10) hh = '0' + hh;
+            if (mm < 10) mm = '0' + mm;
+            if (ss < 10) ss = '0' + ss;
+            return hh + ':' + mm + ':' + ss;
+        }
+
+        // Hàm gửi email theo batch
+        function resendEmailRun() {
+            resendOffset--;
+            if (resendOffset <= 0) {
+                // Hiển thị trạng thái đang gửi
+                $('#resend-perload').html(langResendRun + '. ' + langResendNote);
+
+                if (runInterval) {
+                    clearInterval(runInterval);
+                }
+
+                const tokend = $('#resend_tokend').val();
+
+                $.ajax({
+                    type: 'POST',
+                    url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=user_waiting_remail&nocache=' + new Date().getTime(),
+                    data: {
+                        ajax: 1,
+                        per_email: per_email,
+                        offset: emailOffset,
+                        useriddel: emailDelete,
+                        tokend: tokend
+                    },
+                    dataType: 'json',
+                    cache: false,
+                    success: function (data) {
+                        if (data.messages && data.messages.length > 0) {
+                            $('#resend-result').prepend(data.messages.join('<br />') + '<br />');
+                        }
+                        if (!data.continue) {
+                            // Hoàn tất tất cả
+                            $('#resend-result').prepend(langResendEnd + ' ' + getDisplayTime() + '<br />');
+                            $('#resend-perload').html(langResendComplete);
+
+                            const form = $('#resend-email-form');
+                            form.data('busy', false);
+                            $('.load', form).addClass('d-none');
+                            $('select', form).prop('disabled', false);
+                            return;
+                        }
+                        emailDelete = data.useriddel || '';
+                        resendOffset = pause_time;
+                        emailOffset += per_email;
+
+                        // Đếm ngược đến lần gửi tiếp theo
+                        runInterval = setInterval(function () {
+                            resendEmailRun();
+                        }, 1000);
+                    },
+                    error: function (xhr, text) {
+                        $('#resend-result').prepend('Error Request: ' + text + '<br />');
+                    }
+                });
+                return;
+            }
+
+            // Hiển thị đếm ngược
+            $('#resend-perload').html(langResendCounter + ' <strong>' + resendOffset + '</strong>s. ' + langResendNote);
+        }
+
+        // Xử lý khi submit form gửi lại email
+        $('#resend-email-form').on('submit', function (e) {
+            const $this = $(this);
+            e.preventDefault();
+            if ($this.data('busy')) {
+                return;
+            }
+
+            per_email = parseInt($('[name="per_email"]', $this).val());
+            pause_time = parseInt($('[name="pause_time"]', $this).val());
+
+            $this.data('busy', true);
+            $('.load', $this).removeClass('d-none');
+            $('select', $this).prop('disabled', true);
+
+            $('#resend-perload').removeClass('d-none');
+            $('#resend-result').removeClass('d-none');
+
+            $('#resend-result').html(langResendStart + ' ' + getDisplayTime() + '<br />');
+
+            resendOffset = 0;
+            emailOffset = 0;
+            emailDelete = '';
+            resendEmailRun();
+        });
     }
 });

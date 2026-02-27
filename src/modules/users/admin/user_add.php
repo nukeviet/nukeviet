@@ -15,10 +15,23 @@ if (!defined('NV_IS_FILE_ADMIN')) {
 
 use NukeViet\Module\users\Shared\Emails;
 
+// Tạo mật khẩu ngẫu nhiên
 if ($nv_Request->isset_request('nv_genpass', 'post')) {
+    $checkss = $nv_Request->get_title('checkss', 'post', '');
+    if (!hash_equals(NV_CHECK_SESSION, $checkss)) {
+        nv_jsonOutput([
+            'status' => 'error',
+            'mess' => 'Session error!!!'
+        ]);
+    }
+
     $_len = round(($global_config['nv_upassmin'] + $global_config['nv_upassmax']) / 2);
-    echo nv_genpass($_len, $global_config['nv_upass_type']);
-    exit();
+
+    nv_jsonOutput([
+        'status' => 'success',
+        'mess' => 'success',
+        'value' => nv_genpass($_len, $global_config['nv_upass_type'])
+    ]);
 }
 
 $showheader = $nv_Request->get_int('showheader', 'post,get', 1);
