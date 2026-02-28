@@ -10,6 +10,7 @@
  */
 
 use NukeViet\Api\Exception;
+use Symfony\Polyfill\Intl\Idn\Idn;
 
 if (!defined('NV_MAINFILE')) {
     exit('Stop!!!');
@@ -1990,12 +1991,7 @@ function nv_check_domain($domain)
         if (function_exists('idn_to_ascii')) {
             $domain = idn_to_ascii($domain, IDNA_DEFAULT, INTL_IDNA_VARIANT_UTS46);
         } else {
-            $Punycode = new TrueBV\Punycode();
-            try {
-                $domain = $Punycode->encode($domain);
-            } catch (\Exception $e) {
-                $domain = '';
-            }
+            $domain = Idn::idn_to_ascii($domain, Idn::IDNA_DEFAULT, Idn::INTL_IDNA_VARIANT_UTS46);
         }
 
         if (preg_match('/^xn\-\-([a-z0-9\-\.]+)\.([a-z0-9\-]+)$/', $domain)) {

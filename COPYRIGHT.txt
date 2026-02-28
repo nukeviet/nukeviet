@@ -27,7 +27,7 @@ gregwar/image            2.0.20         MIT                A PHP library to hand
 and/oauth                dev-master     MIT                Support for authenticating users using OAuth                     https://github.com/logical-and/php-oauth
 endroid/qrcode           1.6.5          MIT                QR Code Generator                                                https://github.com/endroid/QrCode
 kriswallsmith/buzz       0.15           MIT                PHP's lightweight HTTP client                                    https://github.com/kriswallsmith/Buzz
-true/punycode            2.0.2          MIT                Encoding of Unicode for IDNA                                     https://github.com/true/php-punycode
+league/oauth2-client     2.7.0          MIT                Encoding of Unicode for IDNA                                     https://github.com/thephpleague/oauth2-client
 IP databases             2              CC BY-SA 4.0       IP geolocation databases                                         https://dev.maxmind.com/geoip/geoip2/geolite2/
 Plupload                 2.3.6          AGPL-3.0           Multi-runtime File-Uploader                                      https://www.plupload.com/
 .. see copyright information at the header of source code file.

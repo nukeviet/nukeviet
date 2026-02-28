@@ -7,28 +7,31 @@ namespace Composer\Autoload;
 class ComposerStaticInit261687c3e3cd870899aff0ad8589f210
 {
     public static $files = array (
+        '5255c38a0faeba867671b61dfda6d864' => __DIR__ . '/..' . '/paragonie/random_compat/lib/random.php',
         '7b11c4dc42b3b3023073cb14e519683c' => __DIR__ . '/..' . '/ralouphie/getallheaders/src/getallheaders.php',
-        '0e6d7bf4a5811bfa5cf40c5ccd6fae6a' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/bootstrap.php',
+        'e69f7f6ee287b969198c3c9d6777bd38' => __DIR__ . '/..' . '/symfony/polyfill-intl-normalizer/bootstrap.php',
+        '023d27dca8066ef29e6739335ea73bad' => __DIR__ . '/..' . '/symfony/polyfill-php70/bootstrap.php',
+        '25072dd6e2470089de65ae7bf11d3109' => __DIR__ . '/..' . '/symfony/polyfill-php72/bootstrap.php',
+        'c964ee0ededf28c96ebd9db5099ef910' => __DIR__ . '/..' . '/guzzlehttp/promises/src/functions_include.php',
         'a0edc8309cc5e1d60e3047b5df6b7052' => __DIR__ . '/..' . '/guzzlehttp/psr7/src/functions_include.php',
+        'f598d06aa772fa33d905e87be6398fb1' => __DIR__ . '/..' . '/symfony/polyfill-intl-idn/bootstrap.php',
+        '37a3dc5111fe8f707ab4c132ef1dbc62' => __DIR__ . '/..' . '/guzzlehttp/guzzle/src/functions_include.php',
+        '0e6d7bf4a5811bfa5cf40c5ccd6fae6a' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/bootstrap.php',
     );
 
     public static $prefixLengthsPsr4 = array (
-        'T' => 
-        array (
-            'TrueBV\\' => 7,
-        ),
         'S' => 
         array (
+            'Symfony\\Polyfill\\Php72\\' => 23,
+            'Symfony\\Polyfill\\Php70\\' => 23,
             'Symfony\\Polyfill\\Mbstring\\' => 26,
+            'Symfony\\Polyfill\\Intl\\Normalizer\\' => 33,
+            'Symfony\\Polyfill\\Intl\\Idn\\' => 26,
         ),
         'P' => 
         array (
             'Psr\\Http\\Message\\' => 17,
             'PHPMailer\\PHPMailer\\' => 20,
-        ),
-        'O' => 
-        array (
-            'OAuth\\' => 6,
         ),
         'N' => 
         array (
@@ -38,31 +41,41 @@ class ComposerStaticInit261687c3e3cd870899aff0ad8589f210
         ),
         'L' => 
         array (
-            'League\\Url\\' => 11,
+            'League\\OAuth2\\Client\\' => 21,
         ),
         'G' => 
         array (
             'GuzzleHttp\\Psr7\\' => 16,
+            'GuzzleHttp\\Promise\\' => 19,
+            'GuzzleHttp\\' => 11,
         ),
         'C' => 
         array (
             'Com\\Tecnick\\Color\\' => 18,
             'Com\\Tecnick\\Barcode\\' => 20,
         ),
-        'B' => 
-        array (
-            'Buzz\\' => 5,
-        ),
     );
 
     public static $prefixDirsPsr4 = array (
-        'TrueBV\\' => 
+        'Symfony\\Polyfill\\Php72\\' => 
         array (
-            0 => __DIR__ . '/..' . '/true/punycode/src',
+            0 => __DIR__ . '/..' . '/symfony/polyfill-php72',
+        ),
+        'Symfony\\Polyfill\\Php70\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/symfony/polyfill-php70',
         ),
         'Symfony\\Polyfill\\Mbstring\\' => 
         array (
             0 => __DIR__ . '/..' . '/symfony/polyfill-mbstring',
+        ),
+        'Symfony\\Polyfill\\Intl\\Normalizer\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/symfony/polyfill-intl-normalizer',
+        ),
+        'Symfony\\Polyfill\\Intl\\Idn\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/symfony/polyfill-intl-idn',
         ),
         'Psr\\Http\\Message\\' => 
         array (
@@ -71,10 +84,6 @@ class ComposerStaticInit261687c3e3cd870899aff0ad8589f210
         'PHPMailer\\PHPMailer\\' => 
         array (
             0 => __DIR__ . '/..' . '/phpmailer/phpmailer/src',
-        ),
-        'OAuth\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/and/oauth/src',
         ),
         'NukeViet\\Module\\' => 
         array (
@@ -88,13 +97,21 @@ class ComposerStaticInit261687c3e3cd870899aff0ad8589f210
         array (
             0 => __DIR__ . '/..' . '/vinades/nukeviet',
         ),
-        'League\\Url\\' => 
+        'League\\OAuth2\\Client\\' => 
         array (
-            0 => __DIR__ . '/..' . '/league/url/src',
+            0 => __DIR__ . '/..' . '/league/oauth2-client/src',
         ),
         'GuzzleHttp\\Psr7\\' => 
         array (
             0 => __DIR__ . '/..' . '/guzzlehttp/psr7/src',
+        ),
+        'GuzzleHttp\\Promise\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/guzzlehttp/promises/src',
+        ),
+        'GuzzleHttp\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/guzzlehttp/guzzle/src',
         ),
         'Com\\Tecnick\\Color\\' => 
         array (
@@ -104,29 +121,19 @@ class ComposerStaticInit261687c3e3cd870899aff0ad8589f210
         array (
             0 => __DIR__ . '/..' . '/tecnickcom/tc-lib-barcode/src',
         ),
-        'Buzz\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/kriswallsmith/buzz/lib/Buzz',
-        ),
-    );
-
-    public static $prefixesPsr0 = array (
-        'G' => 
-        array (
-            'Gregwar\\Image' => 
-            array (
-                0 => __DIR__ . '/..' . '/gregwar/image',
-            ),
-            'Gregwar\\Cache' => 
-            array (
-                0 => __DIR__ . '/..' . '/gregwar/cache',
-            ),
-        ),
     );
 
     public static $classMap = array (
+        'ArithmeticError' => __DIR__ . '/..' . '/symfony/polyfill-php70/Resources/stubs/ArithmeticError.php',
+        'AssertionError' => __DIR__ . '/..' . '/symfony/polyfill-php70/Resources/stubs/AssertionError.php',
         'Composer\\InstalledVersions' => __DIR__ . '/..' . '/composer/InstalledVersions.php',
+        'DivisionByZeroError' => __DIR__ . '/..' . '/symfony/polyfill-php70/Resources/stubs/DivisionByZeroError.php',
+        'Error' => __DIR__ . '/..' . '/symfony/polyfill-php70/Resources/stubs/Error.php',
+        'Normalizer' => __DIR__ . '/..' . '/symfony/polyfill-intl-normalizer/Resources/stubs/Normalizer.php',
+        'ParseError' => __DIR__ . '/..' . '/symfony/polyfill-php70/Resources/stubs/ParseError.php',
         'PclZip' => __DIR__ . '/..' . '/vinades/pclzip/pclzip.lib.php',
+        'SessionUpdateTimestampHandlerInterface' => __DIR__ . '/..' . '/symfony/polyfill-php70/Resources/stubs/SessionUpdateTimestampHandlerInterface.php',
+        'TypeError' => __DIR__ . '/..' . '/symfony/polyfill-php70/Resources/stubs/TypeError.php',
     );
 
     public static function getInitializer(ClassLoader $loader)
@@ -134,7 +141,6 @@ class ComposerStaticInit261687c3e3cd870899aff0ad8589f210
         return \Closure::bind(function () use ($loader) {
             $loader->prefixLengthsPsr4 = ComposerStaticInit261687c3e3cd870899aff0ad8589f210::$prefixLengthsPsr4;
             $loader->prefixDirsPsr4 = ComposerStaticInit261687c3e3cd870899aff0ad8589f210::$prefixDirsPsr4;
-            $loader->prefixesPsr0 = ComposerStaticInit261687c3e3cd870899aff0ad8589f210::$prefixesPsr0;
             $loader->classMap = ComposerStaticInit261687c3e3cd870899aff0ad8589f210::$classMap;
 
         }, null, ClassLoader::class);

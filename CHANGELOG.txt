@@ -1,5 +1,9 @@
 CHANGE LOG: NUKEVIET CMS
 http://nukeviet.vn
+NUKEVIET 4.5.08
+- Remove abandoned package true/punycode
+- Remove the and/oauth package, which has long been unmaintained, and replace it with league/oauth2-client
+
 NUKEVIET 4.5.07
 - CKEditor 5 v47.0.0 and remove CKEditor 4
 - PDF.js 3.11.174
