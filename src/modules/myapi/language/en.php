@@ -135,3 +135,4 @@ $lang_module['admin_auth_method_password_verify'] = 'password_verify';
 $lang_module['general_settings'] = 'Main settings';
 $lang_module['api_role_properties'] = 'API-role properties';
 $lang_module['apis_list'] = 'List of APIs';
+$lang_module['api_system'] = 'System API';

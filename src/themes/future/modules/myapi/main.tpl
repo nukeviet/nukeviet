@@ -5,7 +5,7 @@
     <div class="modal-dialog modal-xl modal-fullscreen-md-down modal-dialog-scrollable">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="apiRoleModalLabel_{$suffix}_{$role.role_id}">{$role.role_title}</h5>
+                <h2 class="modal-title h5" id="apiRoleModalLabel_{$suffix}_{$role.role_id}">{$role.role_title}</h2>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="{$LANG->getGlobal('close')}"></button>
             </div>
             <div class="modal-body text-start">
@@ -17,7 +17,7 @@
                     {if !empty($role.apis[''])}
                     <li class="nav-item" role="presentation">
                         <button class="nav-link active" id="tab-sys-{$suffix}-{$role.role_id}" data-bs-toggle="tab" data-bs-target="#content-sys-{$suffix}-{$role.role_id}" type="button" role="tab" aria-selected="true">
-                            <i class="fa-solid fa-server"></i> API hệ thống
+                            <i class="fa-solid fa-server"></i> {$LANG->getModule('api_system')}
                         </button>
                     </li>
                     {assign var="active_tab_set" value=true}
@@ -98,12 +98,12 @@
         <div class="mb-2">
             <ul class="nav nav-pills" role="tablist">
                 <li class="nav-item" role="presentation">
-                    <a class="nav-link {$TYPE_PUBLIC.active}" href="{$TYPE_PUBLIC.url}">
+                    <a class="nav-link {$TYPE_PUBLIC.active}" href="{$TYPE_PUBLIC.url}" title="{$TYPE_PUBLIC.name}">
                         {$TYPE_PUBLIC.name}
                     </a>
                 </li>
                 <li class="nav-item" role="presentation">
-                    <a class="nav-link {$TYPE_PRIVATE.active}" href="{$TYPE_PRIVATE.url}">
+                    <a class="nav-link {$TYPE_PRIVATE.active}" href="{$TYPE_PRIVATE.url}" title="{$TYPE_PRIVATE.name}">
                         {$TYPE_PRIVATE.name}
                     </a>
                 </li>
@@ -117,10 +117,10 @@
                 <div class="modal-dialog">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title" id="credentialAuthLabel">
+                            <h2 class="modal-title h5" id="credentialAuthLabel">
                                 <strong>{$LANG->getModule('authentication')}</strong>
-                            </h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </h2>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="{$LANG->getGlobal('close')}"></button>
                         </div>
                         <div class="modal-body">
                             <div class="mb-3"><strong>{$LANG->getModule('auth_method')}</strong></div>
@@ -146,7 +146,7 @@
                                         <label class="form-label" for="{$key}-credential_ident"><strong>{$LANG->getModule('api_credential_ident')}</strong></label>
                                         <div class="input-group">
                                             <input type="text" name="{$key}_ident" id="{$key}-credential_ident" value="{$method.ident|default:''}" class="form-control bg-white" readonly>
-                                            <button class="btn btn-outline-secondary" type="button" data-bs-toggle="clipboard" data-bs-target="#{$key}-credential_ident" data-bs-title="{$LANG->getModule('value_copied')}" data-bs-placement="left" data-bs-container="body" data-bs-trigger="manual">
+                                            <button class="btn btn-outline-secondary" type="button" data-bs-toggle="clipboard" data-bs-target="#{$key}-credential_ident" data-bs-title="{$LANG->getModule('value_copied')}" data-bs-placement="left" data-bs-container="body" data-bs-trigger="manual" aria-label="{$LANG->getGlobal('copy')}">
                                                 <i class="fa-solid fa-copy"></i>
                                             </button>
                                         </div>
@@ -156,7 +156,7 @@
                                         <label class="form-label" for="{$key}-credential_secret"><strong>{$LANG->getModule('api_credential_secret')}</strong></label>
                                         <div class="input-group">
                                             <input type="text" name="{$key}_secret" id="{$key}-credential_secret" value="{$method.secret|default:''}" class="form-control bg-white" readonly>
-                                            <button class="btn btn-outline-secondary" type="button" data-bs-toggle="clipboard" data-bs-target="#{$key}-credential_secret" data-bs-title="{$LANG->getModule('value_copied')}" data-bs-placement="left" data-bs-container="body" data-bs-trigger="manual">
+                                            <button class="btn btn-outline-secondary" type="button" data-bs-toggle="clipboard" data-bs-target="#{$key}-credential_secret" data-bs-title="{$LANG->getModule('value_copied')}" data-bs-placement="left" data-bs-container="body" data-bs-trigger="manual" aria-label="{$LANG->getGlobal('copy')}">
                                                 <i class="fa-solid fa-copy"></i>
                                             </button>
                                         </div>
@@ -181,7 +181,7 @@
                                             <textarea class="form-control ips" name="{$key}_ips" id="{$key}-api_ips">{$method.ips|default:''}</textarea>
                                             <div class="form-text">{$LANG->getModule('api_ips_help')}</div>
                                         </div>
-                                        <div class="text-center">
+                                        <div class="col-12 text-center">
                                             <button type="button" class="btn btn-primary api_ips_update" data-method="{$key}">
                                                 <i class="fa-solid fa-floppy-disk me-1"></i> {$LANG->getModule('api_ips_update')}
                                             </button>
@@ -264,7 +264,7 @@
             <div class="card-body">
                 <div class="d-flex justify-content-between mb-2">
                     <div>
-                        <h6 class="card-title mb-0"><strong>{$role.role_title}</strong></h6>
+                        <h3 class="card-title h6 mb-0"><strong>{$role.role_title}</strong></h3>
                         {if not empty($role.role_description)}
                         <small class="text-muted">{$role.role_description}</small>
                         {/if}

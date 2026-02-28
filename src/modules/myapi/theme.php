@@ -23,7 +23,7 @@ if (!defined('NV_IS_API_MOD')) {
  * @param array $api_user
  * @param string $generate_page
  */
-function main_theme($type, $roleCount, $roleList, $api_user, $generate_page): string
+function main_theme(string $type, int $roleCount, array $roleList, array $api_user, string $generate_page): string
 {
     global $nv_Lang, $module_name, $language_array, $site_mods;
 

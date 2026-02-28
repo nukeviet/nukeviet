@@ -135,3 +135,4 @@ $lang_module['admin_auth_method_password_verify'] = 'password_verify';
 $lang_module['general_settings'] = 'Các thiết lập chính';
 $lang_module['api_role_properties'] = 'Thuộc tính API-role';
 $lang_module['apis_list'] = 'Danh sách các API';
+$lang_module['api_system'] = 'API hệ thống';

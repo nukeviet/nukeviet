@@ -51,18 +51,47 @@ $(function() {
             });
         });
 
+        // Sao chép thông tin xác thực vào clipboard
         const credential_auth = $('#credential_auth');
+        credential_auth.on('click', '[data-bs-toggle="clipboard"]', function() {
+            const btn = $(this);
+            const icon = $('i', btn);
+            if (icon.is('.fa-spinner')) {
+                return;
+            }
+
+            if (!icon.data('icon')) {
+                icon.data('icon', icon.attr('class'));
+            }
+            icon.removeClass(icon.data('icon')).addClass('fa-solid fa-spinner fa-spin-pulse');
+        });
+
         const clipboard = new ClipboardJS('[data-bs-toggle="clipboard"]', {
+            container: credential_auth.length ? credential_auth[0] : document.body,
             target: function (trigger) {
                 return document.querySelector(trigger.getAttribute('data-bs-target'));
             }
         });
         clipboard.on('success', function(e) {
+            const btn = $(e.trigger);
+            const icon = $('i', btn);
+            if (icon.data('icon')) {
+                icon.removeClass('fa-solid fa-spinner fa-spin-pulse').addClass(icon.data('icon'));
+            }
+
             const tooltip = bootstrap.Tooltip.getOrCreateInstance(e.trigger);
             tooltip.show();
             setTimeout(function() {
                 tooltip.hide();
             }, 1000);
+            e.clearSelection();
+        });
+        clipboard.on('error', function(e) {
+            const btn = $(e.trigger);
+            const icon = $('i', btn);
+            if (icon.data('icon')) {
+                icon.removeClass('fa-solid fa-spinner fa-spin-pulse').addClass(icon.data('icon'));
+            }
         });
 
         // Tạo mới thông tin xác thực
@@ -145,7 +174,14 @@ $(function() {
 
         // Cập nhật IPs
         credential_auth.on('input', '.ips', function() {
-            $(this).val($(this).val().replace(/[\r\n\v]+/g, ''));
+            const $this = $(this);
+            clearTimeout($this.data('timer'));
+            $this.data('timer', setTimeout(() => {
+                const val = $this.val();
+                if (/[\r\n\v]/.test(val)) {
+                    $this.val(val.replace(/[\r\n\v]+/g, ''));
+                }
+            }, 300));
         });
         credential_auth.on('click', '.api_ips_update', function(e) {
             e.preventDefault();
@@ -161,7 +197,7 @@ $(function() {
             icon.removeClass(icon.data('icon')).addClass('fa-solid fa-spinner fa-spin-pulse me-1');
 
             const method = btn.data('method'),
-                ips = $('[name=' + method + '_ips]', credential_auth).val();
+                ips = $('[name=' + method + '_ips]', credential_auth).val().replace(/[\r\n\v]+/g, '');
             $('.ips, .api_ips_update', credential_auth).prop('disabled', true);
             $.ajax({
                 type: 'POST',
