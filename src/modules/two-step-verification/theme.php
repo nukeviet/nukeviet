@@ -178,23 +178,18 @@ function nv_theme_confirm_password($is_pass_valid)
 {
     global $nv_Lang, $op, $module_name;
 
-    $xtpl = new XTemplate('confirm_password.tpl', get_module_tpl_dir('confirm_password.tpl'));
-    $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
-    $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
-
+    $tpl = new \NukeViet\Template\NVSmarty();
+    $tpl->setTemplateDir(get_module_tpl_dir('confirm_password.tpl'));
+    $tpl->assign('LANG', $nv_Lang);
+    $tpl->assign('IS_VALID', $is_pass_valid);
     if ($is_pass_valid) {
-        $xtpl->assign('NV_CHECK_SESSION', NV_CHECK_SESSION);
-
-        $xtpl->assign('FORM_ACTION', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op);
-
-        $xtpl->parse('main');
-
-        return $xtpl->text('main');
+        $tpl->assign('NV_CHECK_SESSION', NV_CHECK_SESSION);
+        $tpl->assign('FORM_ACTION', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op);
+    } else {
+        $tpl->assign('CHANGE_2STEP_NOTVALID', $nv_Lang->getModule('change_2step_notvalid', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=users&amp;' . NV_OP_VARIABLE . '=editinfo/password'));
     }
-    $xtpl->assign('CHANGE_2STEP_NOTVALID', $nv_Lang->getModule('change_2step_notvalid', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=users&amp;' . NV_OP_VARIABLE . '=editinfo/password'));
-    $xtpl->parse('pass_empty');
 
-    return $xtpl->text('pass_empty');
+    return $tpl->fetch('confirm_password.tpl');
 }
 
 /**
