@@ -1,7 +1,6 @@
 
 <div class="block-supporter">
     <div class="mb-3">
-        <div class="text-uppercase text-secondary fw-bold mb-2 small">Phòng ban</div>
         <div class="nav flex-column nav-pills gap-2" role="tablist">
             {foreach from=$DEPARTMENTS item=dep}
             <button class="nav-link btn btn-outline-primary text-start w-100 rounded-3 py-2 px-3 {if $dep.active}active{/if}" 
@@ -12,6 +11,9 @@
                     role="tab" 
                     aria-controls="dep-{$dep.id}" 
                     aria-selected="{if $dep.active}true{else}false{/if}">
+                {if !empty($dep.icon)}
+                <i class="fa-solid {$dep.icon} me-2" aria-hidden="true"></i>
+                {/if}
                 <span>{$dep.full_name}</span>
             </button>
             {/foreach}
@@ -47,50 +49,48 @@
                         </a>
                         {/if}
                         {if $supporter.has_email}
-                        <a href="{$supporter.email_href}" class="btn btn-light w-100 rounded-3 py-2 px-3 d-flex align-items-center">
-                            <i class="fa-solid fa-envelope me-3 flex-shrink-0"></i>
-                            <span class="fw-semibold flex-grow-1 text-truncate" title="{$supporter.email_text}">{$supporter.email_text|truncate:18.5:"..."}</span>
+                        <a href="{$supporter.email_href}" class="btn btn-light  flex-grow-1 text-truncate rounded-3 py-2 px-3 d-flex align-items-center">
+                            <i class="fa-solid fa-envelope me-3 flex-shrink-0"></i><span class="fw-semibold" title="{$supporter.email_text}">{$supporter.email_text}</span>
                         </a>
                         {/if}
                     </div>
 
                     {if isset($supporter.others) && $supporter.others}
-                    <div class="mt-3">
-                        <div class="text-secondary small fw-bold text-uppercase mb-2">Social</div>
-                        <div class="row g-2">
+                    {capture name=social_html}
                         {foreach from=$supporter.others key=k item=v}
                             {if $k == 'zalo'}
                             <div class="col-3">
-                                <a href="https://zalo.me/{$v}" target="_blank" class="btn btn-light w-100 p-2 rounded-3 d-flex flex-column align-items-center justify-content-center">
+                                <a href="https://zalo.me/{$v}" target="_blank" aria-label="zalo" class="btn btn-light w-100 p-2 rounded-3 d-flex flex-column align-items-center justify-content-center">
                                     <i class="icon-zalo-contact fs-4 mb-1"></i>
-                                    <span class="small social-label">Zalo</span>
                                 </a>
                             </div>
                             {elseif $k == 'whatsapp'}
                             <div class="col-3">
-                                <a href="https://wa.me/{$v}" target="_blank" class="btn btn-light w-100 p-2 rounded-3 d-flex flex-column align-items-center justify-content-center">
+                                <a href="https://wa.me/{$v}" target="_blank" aria-label="whatsapp" class="btn btn-light w-100 p-2 rounded-3 d-flex flex-column align-items-center justify-content-center">
                                     <i class="fa-brands fa-whatsapp text-success fs-4 mb-1"></i>
-                                    <span class="small social-label">WhatsApp</span>
                                 </a>
                             </div>
                             {elseif $k == 'viber'}
                             <div class="col-3">
-                                <a href="viber://chat?number={$v}" class="btn btn-light w-100 p-2 rounded-3 d-flex flex-column align-items-center justify-content-center">
+                                <a href="viber://chat?number={$v}" aria-label="viber" class="btn btn-light w-100 p-2 rounded-3 d-flex flex-column align-items-center justify-content-center">
                                     <i class="fa-brands fa-viber text-primary fs-4 mb-1"></i>
-                                    <span class="small social-label">Viber</span>
                                 </a>
                             </div>
                             {elseif $k == 'skype'}
                             <div class="col-3">
-                                <a href="skype:{$v}?chat" class="btn btn-light w-100 p-2 rounded-3 d-flex flex-column align-items-center justify-content-center">
+                                <a href="skype:{$v}?chat" aria-label="skype" class="btn btn-light w-100 p-2 rounded-3 d-flex flex-column align-items-center justify-content-center">
                                     <i class="fa-brands fa-skype text-info fs-4 mb-1"></i>
-                                    <span class="small social-label">Skype</span>
                                 </a>
                             </div>
                             {/if}
                         {/foreach}
-                        </div>
+                    {/capture}
+                    {if $smarty.capture.social_html ne ''}
+                    <div class="mt-3">
+                        <div class="text-secondary small fw-bold text-uppercase mb-2">{$LANG->getModule('otherContacts')}</div>
+                        <div class="row g-2">{$smarty.capture.social_html}</div>
                     </div>
+                    {/if}
                     {/if}
                 </div>
             </div>

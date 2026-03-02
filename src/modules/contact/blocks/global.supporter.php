@@ -124,11 +124,13 @@ if (!nv_function_exists('nv_contact_supporter')) {
         $active = false;
         foreach ($supporters as $depid => $sps) {
             $fullName = $depid == 0 ? $nv_Lang->getGlobal('general_support') : $departments[$depid]['full_name'];
+            // Icon cấu hình qua 'others' của bộ phận (key: icon). Mặc định trung tính.
             $icon = 'fa-circle-info';
-            if (mb_stripos($fullName, 'Kỹ thuật') !== false) {
-                $icon = 'fa-screwdriver-wrench';
-            } elseif (mb_stripos($fullName, 'Chăm sóc') !== false) {
-                $icon = 'fa-comments';
+            if ($depid != 0 && !empty($departments[$depid]['others'])) {
+                $depOthers = block_supporter_parse_others($departments[$depid]['others']);
+                if (!empty($depOthers['icon'])) {
+                    $icon = preg_replace('/[^a-zA-Z0-9\\-\\s_]/', '', $depOthers['icon']);
+                }
             }
 
             $deps[] = [
@@ -142,9 +144,6 @@ if (!nv_function_exists('nv_contact_supporter')) {
         $tpl->assign('DEPARTMENTS', $deps);
 
         $SUPPORTERS = [];
-        $iconClass = function ($icon) {
-            return strncmp($icon, 'fa-', 3) === 0 ? 'fa-solid ' . $icon : $icon;
-        };
         foreach ($supporters as $depid => $sps) {
             $SUPPORTERS[$depid] = [];
             $sp_count = count($sps) - 1;
@@ -182,7 +181,6 @@ if (!nv_function_exists('nv_contact_supporter')) {
                         'items' => [
                             [
                                 'icon' => 'fa-phone',
-                                'icon_class' => $iconClass('fa-phone'),
                                 'value' => implode(', ', $items)
                             ]
                         ],
@@ -223,7 +221,6 @@ if (!nv_function_exists('nv_contact_supporter')) {
                     $email = trim($supporter['email']);
                     $SUPPORTERS[$depid][$idx]['items'][] = [
                         'icon' => 'fa-envelope',
-                        'icon_class' => $iconClass('fa-envelope'),
                         'value' => '<a href="mailto:' . $email . '">' . $email . '</a>'
                     ];
                     $SUPPORTERS[$depid][$idx]['email_href'] = 'mailto:' . $email;
@@ -242,7 +239,6 @@ if (!nv_function_exists('nv_contact_supporter')) {
                                 }, explode(',', $value));
                                 $SUPPORTERS[$depid][$idx]['items'][] = [
                                     'icon' => 'fa-skype',
-                                    'icon_class' => $iconClass('fa-skype'),
                                     'value' => implode(', ', $items)
                                 ];
                             } elseif ($k == 'viber') {
@@ -252,7 +248,6 @@ if (!nv_function_exists('nv_contact_supporter')) {
                                 }, explode(',', $value));
                                 $SUPPORTERS[$depid][$idx]['items'][] = [
                                     'icon' => 'icon-viber',
-                                    'icon_class' => $iconClass('icon-viber'),
                                     'value' => implode(', ', $items)
                                 ];
                             } elseif ($k == 'whatsapp') {
@@ -262,7 +257,6 @@ if (!nv_function_exists('nv_contact_supporter')) {
                                 }, explode(',', $value));
                                 $SUPPORTERS[$depid][$idx]['items'][] = [
                                     'icon' => 'fa-whatsapp',
-                                    'icon_class' => $iconClass('fa-whatsapp'),
                                     'value' => implode(', ', $items)
                                 ];
                             } elseif ($k == 'zalo') {
@@ -272,13 +266,11 @@ if (!nv_function_exists('nv_contact_supporter')) {
                                 }, explode(',', $value));
                                 $SUPPORTERS[$depid][$idx]['items'][] = [
                                     'icon' => 'icon-zalo',
-                                    'icon_class' => $iconClass('icon-zalo'),
                                     'value' => implode(', ', $items)
                                 ];
                             } else {
                                 $SUPPORTERS[$depid][$idx]['items'][] = [
                                     'icon' => '',
-                                    'icon_class' => '',
                                     'value' => nv_is_url($value) ? '<a href="' . $value . '">' . $value . '</a>' : $value
                                 ];
                             }
