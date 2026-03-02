@@ -13,7 +13,7 @@
 
 <div class="vstack gap-4">
     <div class="card">
-        <div class="card-body p-4 p-lg-5 shadow-sm">
+        <div class="card-body p-4 shadow-sm">
             <div class="h2 mb-2"><strong>{$LANG->getModule('preferred_2fa_method')}</strong></div>
             <p class="text-muted">{$LANG->getModule('preferred_2fa_method_help')}</p>
             <div class="input-group tstep-select shadow-sm rounded-3">
@@ -29,7 +29,7 @@
     </div>
 
     <div class="card">
-        <div class="card-header bg-primary text-white py-4">
+        <div class="card-header bg-primary text-white py-2">
             <div class="d-flex justify-content-between align-items-center">
                 <div class="h5 mb-0">{$LANG->getModule('title_2step')}</div>
                 <div class="dropdown">
@@ -42,13 +42,13 @@
                 </div>
             </div>
         </div>
-        <div class="card-body p-4 p-lg-5 shadow-sm">
-            <div class="vstack gap-4">
+        <div class="card-body p-4 shadow-sm">
+            <div class="vstack">
                 <div class="d-flex gap-3 align-items-start" id="container-edit-app" {if $SCROLL_APP}data-autoscroll="1"{/if}>
-                    <div class="rounded-3 bg-body-secondary p-3 d-inline-flex align-items-center justify-content-center flex-shrink-0">
-                        <i class="fa fa-mobile fa-2x" aria-hidden="true"></i>
+                    <div class="rounded-3 tstep-iconbox bg-body-secondary p-3 d-inline-flex align-items-center justify-content-center flex-shrink-0">
+                        <i class="fa fa-mobile fa-1x" aria-hidden="true"></i>
                     </div>
-                    <div class="flex-grow-1 rounded-3">
+                    <div class="flex-grow-1">
                         <div class="d-flex align-items-center gap-3">
                             <div class="h5 mb-0">{$LANG->getModule('tstep_app')}</div>
                             <span class="badge bg-success">{$LANG->getModule('configured')}</span>
@@ -94,17 +94,15 @@
                         </div>
                         {/if}
                     </div>
-                    <div class="tstep-action">
-                        <a href="{$DATA.page_url}&amp;type=app" class="btn btn-outline-secondary btn-sm w-100 d-inline-flex align-items-center justify-content-center gap-2"><i class="fa fa-pencil" aria-hidden="true"></i><span>{$LANG->getGlobal('edit')}</span></a>
-                    </div>
+                    <a href="{$DATA.page_url}&amp;type=app" class="tstep-action btn btn-outline-secondary btn-sm d-inline-flex align-items-center justify-content-center gap-2"><i class="fa fa-pencil" aria-hidden="true"></i><span>{$LANG->getGlobal('edit')}</span></a>
                 </div>
                 <hr class="my-4">
 
                 <div class="d-flex gap-3 align-items-start" data-toggle="ctn">
-                    <div class="rounded-3 bg-body-secondary p-3 d-inline-flex align-items-center justify-content-center flex-shrink-0">
-                        <i class="fa fa-key fa-2x" aria-hidden="true"></i>
+                    <div class="rounded-3 tstep-iconbox bg-body-secondary p-3 d-inline-flex align-items-center justify-content-center flex-shrink-0">
+                        <i class="fa fa-key fa-1x" aria-hidden="true"></i>
                     </div>
-                    <div class="flex-grow-1 rounded-3">
+                    <div class="flex-grow-1">
                         <form method="post" action="{$DATA.form_url}" id="passkey-form">
                             <input type="hidden" name="checkss" value="{$DATA.checkss}">
                             <div class="d-flex align-items-start gap-2">
@@ -150,22 +148,20 @@
                             {/if}
                         </form>
                     </div>
-                    <div class="tstep-action">
-                        <button type="button" class="btn btn-outline-secondary btn-sm w-100 d-inline-flex align-items-center justify-content-center gap-2" data-toggle="collapse" data-target="#security-keys" aria-expanded="{if $SHOW_KEYS}true{else}false{/if}" aria-controls="security-keys"><i class="fa fa-eye" aria-hidden="true"></i><span>{$LANG->getGlobal('view')}</span></button>
-                    </div>
+                    <button type="button" class="tstep-action btn btn-outline-secondary btn-sm d-inline-flex align-items-center justify-content-center gap-2" data-toggle="collapse" data-target="#security-keys" aria-expanded="{if $SHOW_KEYS}true{else}false{/if}" aria-controls="security-keys"><i class="fa fa-eye" aria-hidden="true"></i><span>{$LANG->getGlobal('view')}</span></button>
                 </div>
             </div>
         </div>
     </div>
 
     <div class="card">
-        <div class="card-header bg-primary text-white py-4">
+        <div class="card-header bg-primary text-white py-2">
             <div class="h5 mb-0">{$LANG->getModule('backup_methods')}</div>
         </div>
-        <div class="card-body p-4 p-lg-5 shadow-sm">
+        <div class="card-body p-4 shadow-sm">
             <div class="d-flex gap-3 align-items-start">
-                <div class="rounded-3 bg-body-secondary p-3 d-inline-flex align-items-center justify-content-center flex-shrink-0">
-                    <i class="fa fa-terminal fa-2x" aria-hidden="true"></i>
+                <div class="rounded-3 tstep-iconbox bg-body-secondary p-3 d-inline-flex align-items-center justify-content-center flex-shrink-0">
+                    <i class="fa fa-terminal fa-1x" aria-hidden="true"></i>
                 </div>
                 <div class="flex-grow-1">
                     <div class="d-flex align-items-center gap-3">
@@ -178,7 +174,7 @@
                     {elseif $LACK_CODE}
                     <div class="alert alert-warning mb-0 mt-2" role="alert">{$LANG->getModule('lack_code')}</div>
                     {/if}
-                    <div class="collapse {if $SHOW_CODES}show{/if} rounded-3 p-3 p-lg-4" id="recovery-codes" data-show-codes-url="{$DATA.page_url}&amp;type=code" data-page-url="{$DATA.page_url}">
+                    <div class="collapse {if $SHOW_CODES}show{/if} p-3 p-lg-4" id="recovery-codes" data-show-codes-url="{$DATA.page_url}&amp;type=code" data-page-url="{$DATA.page_url}">
                         <div class="row">
                             {foreach from=$DATA.backupcodes item=CODE}
                             <div class="col-12 text-center">
@@ -199,9 +195,7 @@
                         <button type="button" class="btn btn-outline-secondary" data-toggle="changecode2step" data-tokend="{$NV_CHECK_SESSION}"><i class="fa fa-refresh" aria-hidden="true"></i> {$LANG->getModule('creat_other_code')}</button>
                     </div>
                 </div>
-                <div class="tstep-action">
-                    <button type="button" class="btn btn-outline-secondary btn-sm w-100 d-inline-flex align-items-center justify-content-center gap-2" data-toggle="collapse" data-target="#recovery-codes" aria-expanded="{if $SHOW_CODES}true{else}false{/if}" aria-controls="recovery-codes"><i class="fa fa-eye"></i><span>{$LANG->getGlobal('view')}</span></button>
-                </div>
+                <button type="button" class="tstep-action btn btn-outline-secondary btn-sm d-inline-flex align-items-center justify-content-center gap-2" data-toggle="collapse" data-target="#recovery-codes" aria-expanded="{if $SHOW_CODES}true{else}false{/if}" aria-controls="recovery-codes"><i class="fa fa-eye"></i><span>{$LANG->getGlobal('view')}</span></button>
             </div>
         </div>
     </div>

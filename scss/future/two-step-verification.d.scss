@@ -1,0 +1,21 @@
+/**
+ * NukeViet Content Management System
+ * @version 5.x
+ * Two-step verification module styles (Future theme)
+ */
+
+$enable-responsive: false;
+
+@import "../../node_modules/bootstrap/scss/functions";
+@import "../../node_modules/bootstrap/scss/variables";
+@import "../../node_modules/bootstrap/scss/variables-dark";
+@import "../../node_modules/bootstrap/scss/maps";
+@import "../../node_modules/bootstrap/scss/mixins";
+
+// Non-responsive helpers
+@import "nrfs";
+
+@import "style_header";
+
+// Partials for two-step verification
+@import "two-step-verification";
