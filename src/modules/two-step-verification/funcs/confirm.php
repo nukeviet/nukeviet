@@ -95,7 +95,6 @@ if ($tokend_confirm_password != $tokend) {
 
 $canonicalUrl = getCanonicalUrl($page_url);
 
-// Render bằng NVSmarty + Bootstrap 5
 $tpl = new \NukeViet\Template\NVSmarty();
 $tpl->setTemplateDir(get_module_tpl_dir('confirm_password.tpl'));
 $tpl->assign('LANG', $nv_Lang);
