@@ -53,17 +53,8 @@ $(function() {
 
         // Sao chép thông tin xác thực vào clipboard
         const credential_auth = $('#credential_auth');
-        credential_auth.on('click', '[data-bs-toggle="clipboard"]', function() {
-            const btn = $(this);
-            const icon = $('i', btn);
-            if (icon.is('.fa-spinner')) {
-                return;
-            }
-
-            if (!icon.data('icon')) {
-                icon.data('icon', icon.attr('class'));
-            }
-            icon.removeClass(icon.data('icon')).addClass('fa-solid fa-spinner fa-spin-pulse');
+        credential_auth.on('click', '[data-bs-toggle="clipboard"]', function(e) {
+            e.preventDefault();
         });
 
         const clipboard = new ClipboardJS('[data-bs-toggle="clipboard"]', {
@@ -73,25 +64,12 @@ $(function() {
             }
         });
         clipboard.on('success', function(e) {
-            const btn = $(e.trigger);
-            const icon = $('i', btn);
-            if (icon.data('icon')) {
-                icon.removeClass('fa-solid fa-spinner fa-spin-pulse').addClass(icon.data('icon'));
-            }
-
             const tooltip = bootstrap.Tooltip.getOrCreateInstance(e.trigger);
             tooltip.show();
             setTimeout(function() {
                 tooltip.hide();
             }, 1000);
             e.clearSelection();
-        });
-        clipboard.on('error', function(e) {
-            const btn = $(e.trigger);
-            const icon = $('i', btn);
-            if (icon.data('icon')) {
-                icon.removeClass('fa-solid fa-spinner fa-spin-pulse').addClass(icon.data('icon'));
-            }
         });
 
         // Tạo mới thông tin xác thực

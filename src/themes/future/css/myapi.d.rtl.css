@@ -6,12 +6,4 @@
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
-#my-role-api .tools {
-  display: flex;
-  align-items: flex-end;
-}
-#my-role-api .tools > *:last-child {
-  margin-right: auto;
-  margin-bottom: 10px;
-}
 /*# sourceMappingURL=myapi.d.rtl.css.map */
