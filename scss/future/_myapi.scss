@@ -1,11 +1,4 @@
 #my-role-api {
-  .description {
-    margin-top: 5px;
-    margin-bottom: 0;
-    color: #555;
-    font-size: 12px;
-  }
-
   .tools {
     display: flex;
     align-items: flex-end;
@@ -14,20 +7,5 @@
       margin-left: auto;
       margin-bottom: 10px;
     }
-  }
-}
-
-#credential_auth {
-  .dropdown-menu {
-    min-width: 280px;
-    padding: 15px;
-
-    @media (min-width: 350px) {
-      min-width: 350px;
-    }
-  }
-
-  .bg-white {
-    background-color: white;
   }
 }
