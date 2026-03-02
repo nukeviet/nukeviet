@@ -1,19 +1,19 @@
 {if not $ACTIVE_2STEP}
-<div class="alert alert-info" role="alert">
-    <div class="text-center">
-        <i class="fa-solid fa-lock fa-3x" aria-hidden="true"></i>
-        <h1 class="mb-4">{$LANG->getModule('title_2step_off')}</h1>
-        <p>{$LANG->getModule('title_2step_off_note')}</p>
-        <a class="btn btn-primary" href="{$LINK_TURNON}">{$LANG->getModule('title_2step_turnon')}</a>
+<div class="card bg-light border-0 rounded-3 shadow-sm">
+    <div class="card-body p-4 p-lg-5 text-center">
+        <i class="fa-solid fa-lock fa-3x mb-3" aria-hidden="true"></i>
+        <h2 class="h3 fw-semibold mb-3">{$LANG->getModule('title_2step_off')}</h2>
+        <p class="text-muted mb-4">{$LANG->getModule('title_2step_off_note')}</p>
+        <a class="btn btn-primary btn-lg rounded-pill px-4" href="{$LINK_TURNON}">{$LANG->getModule('title_2step_turnon')}</a>
     </div>
-    </div>
+</div>
 {else}
 <script src="{$smarty.const.NV_STATIC_URL}themes/{$TEMPLATE_JS}/js/users.passkey.js"></script>
 <script src="{$smarty.const.ASSETS_STATIC_URL}/js/clipboard/clipboard.min.js"></script>
 
-<div class="vstack gap-3">
+<div class="vstack gap-4">
     <div class="card">
-        <div class="card-body shadow-sm">
+        <div class="card-body p-4 p-lg-5 shadow-sm">
             <div class="h2 mb-2"><strong>{$LANG->getModule('preferred_2fa_method')}</strong></div>
             <p class="text-muted">{$LANG->getModule('preferred_2fa_method_help')}</p>
             <div class="input-group tstep-select shadow-sm rounded-3">
@@ -29,7 +29,7 @@
     </div>
 
     <div class="card">
-        <div class="card-header bg-primary text-white py-3">
+        <div class="card-header bg-primary text-white py-4">
             <div class="d-flex justify-content-between align-items-center">
                 <div class="h5 mb-0">{$LANG->getModule('title_2step')}</div>
                 <div class="dropdown">
@@ -42,8 +42,8 @@
                 </div>
             </div>
         </div>
-        <div class="card-body shadow-sm">
-            <div class="vstack gap-3">
+        <div class="card-body p-4 p-lg-5 shadow-sm">
+            <div class="vstack gap-4">
                 <div class="d-flex gap-3 align-items-start" id="container-edit-app" {if $SCROLL_APP}data-autoscroll="1"{/if}>
                     <div class="rounded-3 bg-body-secondary p-3 d-inline-flex align-items-center justify-content-center flex-shrink-0">
                         <i class="fa fa-mobile fa-2x" aria-hidden="true"></i>
@@ -98,7 +98,7 @@
                         <a href="{$DATA.page_url}&amp;type=app" class="btn btn-outline-secondary btn-sm w-100 d-inline-flex align-items-center justify-content-center gap-2"><i class="fa fa-pencil" aria-hidden="true"></i><span>{$LANG->getGlobal('edit')}</span></a>
                     </div>
                 </div>
-                <hr class="my-3">
+                <hr class="my-4">
 
                 <div class="d-flex gap-3 align-items-start" data-toggle="ctn">
                     <div class="rounded-3 bg-body-secondary p-3 d-inline-flex align-items-center justify-content-center flex-shrink-0">
@@ -159,10 +159,10 @@
     </div>
 
     <div class="card">
-        <div class="card-header bg-primary text-white py-3">
+        <div class="card-header bg-primary text-white py-4">
             <div class="h5 mb-0">{$LANG->getModule('backup_methods')}</div>
         </div>
-        <div class="card-body shadow-sm">
+        <div class="card-body p-4 p-lg-5 shadow-sm">
             <div class="d-flex gap-3 align-items-start">
                 <div class="rounded-3 bg-body-secondary p-3 d-inline-flex align-items-center justify-content-center flex-shrink-0">
                     <i class="fa fa-terminal fa-2x" aria-hidden="true"></i>
@@ -178,7 +178,7 @@
                     {elseif $LACK_CODE}
                     <div class="alert alert-warning mb-0 mt-2" role="alert">{$LANG->getModule('lack_code')}</div>
                     {/if}
-                    <div class="collapse {if $SHOW_CODES}show{/if} rounded-3" id="recovery-codes" data-show-codes-url="{$DATA.page_url}&amp;type=code" data-page-url="{$DATA.page_url}">
+                    <div class="collapse {if $SHOW_CODES}show{/if} rounded-3 p-3 p-lg-4" id="recovery-codes" data-show-codes-url="{$DATA.page_url}&amp;type=code" data-page-url="{$DATA.page_url}">
                         <div class="row">
                             {foreach from=$DATA.backupcodes item=CODE}
                             <div class="col-12 text-center">
@@ -189,12 +189,12 @@
                             </div>
                             {/foreach}
                         </div>
-                        <div class="text-center mt-3">
+                        <div class="text-center mt-4">
                             <a class="btn btn-primary confirmed-codes" href="{$DATA.download_code_url}"><i class="fa fa-download" aria-hidden="true"></i> {$LANG->getGlobal('download')}</a>
                             <a class="btn btn-primary confirmed-codes" href="{$DATA.print_code_url}" data-toggle="print-codes"><i class="fa fa-print" aria-hidden="true"></i> {$LANG->getGlobal('print')}</a>
                             <button class="btn btn-primary confirmed-codes" type="button" data-toggle="copy-codes" data-clipboard-text="{$DATA.text_codes}" data-copied="{$LANG->getGlobal('copied')}"><i class="fa fa-clipboard" aria-hidden="true"></i> <span>{$LANG->getGlobal('copy_to_clipboard')}</span></button>
                         </div>
-                        <hr>
+                        <hr class="my-4">
                         <p class="text-muted">{$LANG->getModule('creat_other_note')}</p>
                         <button type="button" class="btn btn-outline-secondary" data-toggle="changecode2step" data-tokend="{$NV_CHECK_SESSION}"><i class="fa fa-refresh" aria-hidden="true"></i> {$LANG->getModule('creat_other_code')}</button>
                     </div>
