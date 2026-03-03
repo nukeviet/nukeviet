@@ -49,7 +49,7 @@ $(function() {
                 dataType: "json"
             }).done(function(a) {
                 if ('error' == a.status) {
-                    alert(e.mess)
+                    alert(a.mess)
                 } else if ('OK' == a.status) {
                     $('[name=' + method + '_ident]', credential_auth).val(a.ident);
                     $('[name=' + method + '_secret]', credential_auth).val(a.secret);
@@ -71,6 +71,8 @@ $(function() {
                     $('[name=' + method + '_ident]', credential_auth).val('');
                     $('[name=' + method + '_secret]', credential_auth).val('');
                     $('[name=' + method + '_ips]', credential_auth).val('').parents('.api_ips').slideUp()
+                } else {
+                    alert(a.mess)
                 }
             })
         });
