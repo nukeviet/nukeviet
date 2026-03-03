@@ -95,16 +95,6 @@ if ($tokend_confirm_password != $tokend) {
 
 $canonicalUrl = getCanonicalUrl($page_url);
 
-$tpl = new \NukeViet\Template\NVSmarty();
-$tpl->setTemplateDir(get_module_tpl_dir('confirm_password.tpl'));
-$tpl->assign('LANG', $nv_Lang);
-$tpl->assign('FORM_ACTION', $page_url);
-$tpl->assign('NV_CHECK_SESSION', NV_CHECK_SESSION);
-$tpl->assign('IS_VALID', $is_pass_valid);
-$tpl->assign('CHANGE_2STEP_NOTVALID', $nv_Lang->getModule('change_2step_notvalid', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=users&amp;' . NV_OP_VARIABLE . '=editinfo/password'));
-
-$contents = $tpl->fetch('confirm_password.tpl');
-
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_site_theme($contents);
 include NV_ROOTDIR . '/includes/footer.php';
