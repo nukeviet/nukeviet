@@ -18,14 +18,13 @@ if (!defined('NV_IS_API_MOD')) {
  *
  * @return string
  * @param mixed $type
- * @param mixed $roleCount
  * @param mixed $roleList
  * @param mixed $api_user
  * @param mixed $generate_page
  */
-function main_theme($type, $roleCount, $roleList, $api_user, $generate_page)
+function main_theme($type, $roleList, $api_user, $generate_page)
 {
-    global $nv_Lang, $module_info, $module_name, $site_mods, $global_config, $language_array;
+    global $nv_Lang, $module_name, $site_mods, $global_config, $language_array;
 
     $page_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name;
 
@@ -71,7 +70,7 @@ function main_theme($type, $roleCount, $roleList, $api_user, $generate_page)
         $xtpl->parse('main.method_panel');
     }
 
-    if (empty($roleCount)) {
+    if (empty($roleList)) {
         $xtpl->parse('main.role_empty');
     } else {
         foreach ($roleList as $role) {
