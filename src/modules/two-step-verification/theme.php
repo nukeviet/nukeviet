@@ -21,125 +21,83 @@ function nv_theme_info_2step(array $data)
 {
     global $nv_Lang, $user_info, $module_name, $global_config, $client_info;
 
-    $xtpl = new XTemplate('main.tpl', get_module_tpl_dir('main.tpl'));
-    $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
-    $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
-    $xtpl->assign('DATA', $data);
+    $template_js = get_tpl_dir([$global_config['module_theme'], $global_config['site_theme']], NV_DEFAULT_SITE_THEME, 'js/users.passkey.js');
+    $link_turnon = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=setup';
 
-    // Thông báo bật xác thực 2 bước để tiếp tục
-    if (empty($user_info['active2step'])) {
-        $xtpl->assign('LINK_TURNON', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=setup');
-        $xtpl->parse('off');
-        return $xtpl->text('off');
+    $showKeys = ($data['show_type'] == 'key');
+    $showCodes = ($data['show_type'] == 'code');
+    $messageLoginKeys = '';
+    if (!empty($data['login_keys'])) {
+        $messageLoginKeys = $nv_Lang->getModule('rcode_note', nv_number_format($data['login_keys']));
     }
 
-    $template_js = get_tpl_dir([$global_config['module_theme'], $global_config['site_theme']], 'default', 'js/users.passkey.js');
-    $xtpl->assign('TEMPLATE_JS', $template_js);
-
-    // Ghi chú khóa đăng nhập làm xác thực 2 bước
-    if ($data['login_keys'] > 0) {
-        $xtpl->assign('MESSAGE', $nv_Lang->getModule('rcode_note', nv_number_format($data['login_keys'])));
-        $xtpl->parse('main.note_login_keys');
-    }
-
-    // Nút thêm nếu chưa có khóa bảo mật
-    if ($data['security_keys'] == 0) {
-        $xtpl->parse('main.btn_add_key');
-    } else {
-        // Collapse danh sách khóa
-        if ($data['show_type'] == 'key') {
-            $xtpl->assign('CSS_SHOW_KEYS1', ' in');
-            $xtpl->assign('CSS_SHOW_KEYS2', 'true');
-        } else {
-            $xtpl->assign('CSS_SHOW_KEYS1', '');
-            $xtpl->assign('CSS_SHOW_KEYS2', 'false');
-        }
-
-        // Hiển thị danh sách khóa bảo mật
+    // Security keys list (exclude login keys)
+    $secKeys = [];
+    if (!empty($data['publicKeys'])) {
         foreach ($data['publicKeys'] as $seckey) {
             if (!empty($seckey['enable_login'])) {
                 continue;
             }
-
-            $seckey['created_at'] = nv_datetime_format($seckey['created_at'], 1);
-            $seckey['last_used_at'] = nv_datetime_format($seckey['last_used_at'], 1);
-
-            $xtpl->assign('SECKEY', $seckey);
-
-            if ($seckey['clid'] == $client_info['clid']) {
-                $xtpl->parse('main.seckeys.loop.this_client');
-            }
-
-            $xtpl->parse('main.seckeys.loop');
+            $secKeys[] = [
+                'id' => $seckey['id'],
+                'nickname' => $seckey['nickname'],
+                'created_at' => nv_datetime_format($seckey['created_at'], 1),
+                'last_used_at' => nv_datetime_format($seckey['last_used_at'], 1),
+                'this_client' => ($seckey['clid'] == ($client_info['clid'] ?? ''))
+            ];
         }
-
-        $xtpl->assign('NUMBER_KEYS', $nv_Lang->getModule('number_keys', nv_number_format($data['security_keys'])));
-
-        $xtpl->parse('main.btn_show_key');
-        $xtpl->parse('main.configured_key');
-        $xtpl->parse('main.seckeys');
     }
+    $numberKeysText = $nv_Lang->getModule('number_keys', nv_number_format($data['security_keys'] ?? 0));
 
-    // Mã dự phòng
-    $code_unused = 0;
-    foreach ($data['backupcodes'] as $code) {
-        $code_unused += !$code['is_used'];
-        $xtpl->assign('CODE', $code);
-
-        if ($code['is_used']) {
-            $xtpl->parse('main.code.used');
-        } else {
-            $xtpl->parse('main.code.unuse');
+    // Recovery codes info
+    $codeUnused = 0;
+    if (!empty($data['backupcodes'])) {
+        foreach ($data['backupcodes'] as $code) {
+            $codeUnused += empty($code['is_used']) ? 1 : 0;
         }
-
-        $xtpl->parse('main.code');
     }
-    $xtpl->assign('REMAIN_CODE', $nv_Lang->getModule('remain_code', nv_number_format($code_unused)));
+    $remainCodeText = $nv_Lang->getModule('remain_code', nv_number_format($codeUnused));
+    $usedupCode = ($codeUnused < 1);
+    $lackCode = (!$usedupCode && $codeUnused < 3);
 
-    // Thông báo còn ít mã dự phòng hoặc hết
-    if ($code_unused < 1) {
-        $xtpl->parse('main.usedup_code');
-    } elseif ($code_unused < 3) {
-        $xtpl->parse('main.lack_code');
-    }
-
-    // Collapse danh sách mã dự phòng
-    if ($data['show_type'] == 'code') {
-        $xtpl->assign('CSS_SHOW_CODES1', ' in');
-        $xtpl->assign('CSS_SHOW_CODES2', 'true');
-    } else {
-        $xtpl->assign('CSS_SHOW_CODES1', '');
-        $xtpl->assign('CSS_SHOW_CODES2', 'false');
-    }
-
-    // Thiết lập tự cuộn trang xuống phần app
+    // App flow data
+    $qrSrc = '';
+    $formAction = '';
+    $nvRedirect = '';
+    $secretkeyLower = '';
+    $scrollApp = false;
     if ($data['show_type'] == 'app') {
-        $xtpl->assign('QR_SRC', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=qrimg&amp;t=' . nv_genpass());
-        $xtpl->assign('FORM_ACTION', $data['page_url'] . '&amp;type=app');
-        $xtpl->assign('NV_REDIRECT', '');
-        $xtpl->assign('SECRETKEY', strtolower($data['secretkey']));
-
-        $xtpl->parse('main.scroll_app');
-        $xtpl->parse('main.edit_app');
+        $qrSrc = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=qrimg&amp;t=' . nv_genpass();
+        $formAction = ($data['page_url'] ?? '') . '&amp;type=app';
+        $nvRedirect = '';
+        $secretkeyLower = isset($data['secretkey']) ? strtolower($data['secretkey']) : '';
+        $scrollApp = true;
     }
 
-    // Xác thực 2 bước ưa thích
-    if ($data['pref_2fa'] == 2) {
-        $xtpl->assign('PREF_2FA_1', '');
-        $xtpl->assign('PREF_2FA_2', ' selected');
-    } elseif ($data['pref_2fa'] == 1) {
-        $xtpl->assign('PREF_2FA_1', ' selected');
-        $xtpl->assign('PREF_2FA_2', '');
-    } else {
-        $xtpl->assign('PREF_2FA_1', '');
-        $xtpl->assign('PREF_2FA_2', '');
-    }
-    if (!empty($data['publicKeys'])) {
-        $xtpl->parse('main.pref_2fa_key');
-    }
+    $tpl = new \NukeViet\Template\NVSmarty();
+    $tpl->setTemplateDir(get_module_tpl_dir('main.tpl'));
+    $tpl->assign('LANG', $nv_Lang);
+    $tpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
+    $tpl->assign('NV_CHECK_SESSION', NV_CHECK_SESSION);
+    $tpl->assign('ACTIVE_2STEP', !empty($user_info['active2step']));
+    $tpl->assign('LINK_TURNON', $link_turnon);
+    $tpl->assign('TEMPLATE_JS', $template_js);
+    $tpl->assign('DATA', $data);
+    $tpl->assign('MESSAGE', $messageLoginKeys);
+    $tpl->assign('SHOW_KEYS', $showKeys);
+    $tpl->assign('SHOW_CODES', $showCodes);
+    $tpl->assign('SECKEYS', $secKeys);
+    $tpl->assign('NUMBER_KEYS_TEXT', $numberKeysText);
+    $tpl->assign('REMAIN_CODE_TEXT', $remainCodeText);
+    $tpl->assign('USEDUP_CODE', $usedupCode);
+    $tpl->assign('LACK_CODE', $lackCode);
+    $tpl->assign('QR_SRC', $qrSrc);
+    $tpl->assign('FORM_ACTION', $formAction);
+    $tpl->assign('NV_REDIRECT', $nvRedirect);
+    $tpl->assign('SECRETKEY', $secretkeyLower);
+    $tpl->assign('SCROLL_APP', $scrollApp);
 
-    $xtpl->parse('main');
-    return $xtpl->text('main');
+    return $tpl->fetch('main.tpl');
 }
 
 /**
