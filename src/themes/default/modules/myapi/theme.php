@@ -61,10 +61,13 @@ function main_theme($type, $roleCount, $roleList, $api_user, $generate_page)
         $methods['md5_verify']['not_access_authentication'] = false;
     }
 
+    $checkss = md5(NV_CHECK_SESSION . '_' . $module_name);
+
     $stpl = new \NukeViet\Template\NVSmarty();
     $stpl->setTemplateDir(str_replace(DIRECTORY_SEPARATOR, '/', __DIR__) . '/smarty');
     $stpl->assign('LANG', $nv_Lang);
     $stpl->assign('PAGE_URL', $page_url);
+    $stpl->assign('CHECKSS', $checkss);
     $stpl->assign('METHODS', $methods);
     $stpl->assign('TYPE', $type);
     $stpl->assign('ROLECOUNT', $roleCount);

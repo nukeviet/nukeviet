@@ -49,6 +49,9 @@ function main_theme($type, $roleCount, $roleList, $api_user, $generate_page)
         'md5_verify' => $nv_Lang->getModule('auth_method_md5_verify')
     ];
 
+    $checkss = md5(NV_CHECK_SESSION . '_' . $module_name);
+    $xtpl->assign('CHECKSS', $checkss);
+
     foreach ($methods as $key => $name) {
         $method = $api_user[$key] ?? [];
         $method['key'] = $key;

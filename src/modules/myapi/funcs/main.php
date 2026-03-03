@@ -13,8 +13,18 @@ if (!defined('NV_IS_API_MOD')) {
     exit('Stop!!!');
 }
 
+$checkss = md5(NV_CHECK_SESSION . '_' . $module_name);
+
 // Xóa xác thực
 if ($nv_Request->isset_request('delAuth', 'post')) {
+    $_checkss = $nv_Request->get_title('checkss', 'post', '');
+    if (!hash_equals($_checkss, $checkss)) {
+        nv_jsonOutput([
+            'status' => 'error',
+            'mess' => 'Error session!!!'
+        ]);
+    }
+
     $method = $nv_Request->get_title('delAuth', 'post', '');
     if (empty($method) or !in_array($method, $methods, true)) {
         nv_jsonOutput([
@@ -30,6 +40,14 @@ if ($nv_Request->isset_request('delAuth', 'post')) {
 
 // Tạo xác thực
 if ($nv_Request->isset_request('createAuth', 'post')) {
+    $_checkss = $nv_Request->get_title('checkss', 'post', '');
+    if (!hash_equals($_checkss, $checkss)) {
+        nv_jsonOutput([
+            'status' => 'error',
+            'mess' => 'Error session!!!'
+        ]);
+    }
+
     $method = $nv_Request->get_title('createAuth', 'post', '');
     if (empty($method) or !in_array($method, $methods, true)) {
         nv_jsonOutput([
@@ -48,6 +66,14 @@ if ($nv_Request->isset_request('createAuth', 'post')) {
 
 // Lưu IP được phép truy cập
 if ($nv_Request->isset_request('ipsUpdate', 'post')) {
+    $_checkss = $nv_Request->get_title('checkss', 'post', '');
+    if (!hash_equals($_checkss, $checkss)) {
+        nv_jsonOutput([
+            'status' => 'error',
+            'mess' => 'Error session!!!'
+        ]);
+    }
+
     $method = $nv_Request->get_title('method', 'post', '');
     if (empty($method) or !in_array($method, $methods, true)) {
         nv_jsonOutput([
@@ -73,6 +99,14 @@ if ($nv_Request->isset_request('ipsUpdate', 'post')) {
 
 // Kích hoạt/hủy kích hoạt quyền truy cập
 if ($nv_Request->isset_request('changeActivate', 'post')) {
+    $_checkss = $nv_Request->get_title('checkss', 'post', '');
+    if (!hash_equals($_checkss, $checkss)) {
+        nv_jsonOutput([
+            'status' => 'error',
+            'mess' => 'Error session!!!'
+        ]);
+    }
+
     $role_id = $nv_Request->get_int('changeActivate', 'post', 0);
     if (empty($role_id)) {
         nv_jsonOutput([

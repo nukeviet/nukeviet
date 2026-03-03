@@ -1,5 +1,5 @@
 <script type="text/javascript" src="{$smarty.const.ASSETS_STATIC_URL}/js/clipboard/clipboard.min.js"></script>
-<div id="my-role-api" data-page-url="{$PAGE_URL}">
+<div id="my-role-api" data-page-url="{$PAGE_URL}" data-checkss="{$CHECKSS}">
     <div class="tools">
         <div>
             <ul class="nav nav-pills m-bottom">
