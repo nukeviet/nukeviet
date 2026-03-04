@@ -692,7 +692,7 @@ if ($nv_Request->isset_request('add', 'get') or $nv_Request->isset_request('edit
 
         if ($nv_Request->isset_request('save', 'post')) {
             $checkss = $nv_Request->get_string('checkss', 'post', '');
-            if (!hash_equals($checkss, md5(NV_CHECK_SESSION . '_' . $module_name . '_' . $op . '_' . $post['id']))) {
+            if (!hash_equals(md5(NV_CHECK_SESSION . '_' . $module_name . '_' . $op . '_' . $post['id']), $checkss)) {
                 nv_jsonOutput([
                     'status' => 'error',
                     'mess' => $nv_Lang->getGlobal('error_invalid_session')
