@@ -49,43 +49,50 @@
                         </a>
                         {/if}
                         {if $supporter.has_email}
-                        <a href="{$supporter.email_href}" class="btn btn-light  flex-grow-1 text-truncate rounded-3 py-2 px-3 d-flex align-items-center">
-                            <i class="fa-solid fa-envelope me-3 flex-shrink-0"></i><span class="fw-semibold" title="{$supporter.email_text}">{$supporter.email_text}</span>
+                        <a href="{$supporter.email_href}" class="btn btn-light text-truncate rounded-3 py-2 px-3 d-flex align-items-center">
+                            <i class="fa-solid fa-envelope me-3 flex-shrink-0"></i><span class="fw-semibold text-truncate flex-grow-1" title="{$supporter.email_text}">{$supporter.email_text}</span>
                         </a>
                         {/if}
                     </div>
 
                     {if isset($supporter.others) && $supporter.others}
+                    {assign var=social_count value=0}
                     {capture name=social_html}
                         {foreach from=$supporter.others key=k item=v}
-                            {if $k == 'zalo'}
-                            <div class="col-3">
-                                <a href="https://zalo.me/{$v}" target="_blank" aria-label="zalo" class="btn btn-light w-100 p-2 rounded-3 d-flex flex-column align-items-center justify-content-center">
-                                    <i class="icon-zalo-contact fs-4 mb-1"></i>
-                                </a>
-                            </div>
-                            {elseif $k == 'whatsapp'}
-                            <div class="col-3">
-                                <a href="https://wa.me/{$v}" target="_blank" aria-label="whatsapp" class="btn btn-light w-100 p-2 rounded-3 d-flex flex-column align-items-center justify-content-center">
-                                    <i class="fa-brands fa-whatsapp text-success fs-4 mb-1"></i>
-                                </a>
-                            </div>
-                            {elseif $k == 'viber'}
-                            <div class="col-3">
-                                <a href="viber://chat?number={$v}" aria-label="viber" class="btn btn-light w-100 p-2 rounded-3 d-flex flex-column align-items-center justify-content-center">
-                                    <i class="fa-brands fa-viber text-primary fs-4 mb-1"></i>
-                                </a>
-                            </div>
-                            {elseif $k == 'skype'}
-                            <div class="col-3">
-                                <a href="skype:{$v}?chat" aria-label="skype" class="btn btn-light w-100 p-2 rounded-3 d-flex flex-column align-items-center justify-content-center">
-                                    <i class="fa-brands fa-skype text-info fs-4 mb-1"></i>
-                                </a>
-                            </div>
+                            {if !empty($v)}
+                                {if $k == 'zalo'}
+                                <div class="col-3">
+                                    <a href="https://zalo.me/{$v}" target="_blank" aria-label="zalo" class="btn btn-light w-100 p-2 rounded-3 d-flex flex-column align-items-center justify-content-center">
+                                        <i class="icon-zalo-contact fs-4"></i>
+                                    </a>
+                                </div>
+                                {assign var=social_count value=$social_count+1}
+                                {elseif $k == 'whatsapp'}
+                                <div class="col-3">
+                                    <a href="https://wa.me/{$v}" target="_blank" aria-label="whatsapp" class="btn btn-light w-100 p-2 rounded-3 d-flex flex-column align-items-center justify-content-center">
+                                        <i class="fa-brands fa-whatsapp text-success fs-4"></i>
+                                    </a>
+                                </div>
+                                {assign var=social_count value=$social_count+1}
+                                {elseif $k == 'viber'}
+                                <div class="col-3">
+                                    <a href="viber://chat?number={$v}" aria-label="viber" class="btn btn-light w-100 p-2 rounded-3 d-flex flex-column align-items-center justify-content-center">
+                                        <i class="fa-brands fa-viber text-primary fs-4"></i>
+                                    </a>
+                                </div>
+                                {assign var=social_count value=$social_count+1}
+                                {elseif $k == 'skype'}
+                                <div class="col-3">
+                                    <a href="skype:{$v}?chat" aria-label="skype" class="btn btn-light w-100 p-2 rounded-3 d-flex flex-column align-items-center justify-content-center">
+                                        <i class="fa-brands fa-skype text-info fs-4"></i>
+                                    </a>
+                                </div>
+                                {assign var=social_count value=$social_count+1}
+                                {/if}
                             {/if}
                         {/foreach}
                     {/capture}
-                    {if $smarty.capture.social_html ne ''}
+                    {if $social_count gt 0}
                     <div class="mt-3">
                         <div class="text-secondary small fw-bold text-uppercase mb-2">{$LANG->getModule('otherContacts')}</div>
                         <div class="row g-2">{$smarty.capture.social_html}</div>
