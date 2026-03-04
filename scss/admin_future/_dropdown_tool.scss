@@ -1,0 +1,26 @@
+.dropdown-tool-ctn {
+  max-height: 15.625rem;
+  overflow-y: auto;
+  min-width: 5rem;
+  margin: 0 calc(-1 * var(--#{$prefix}popover-body-padding-x));
+
+  .dropdown-tool {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+
+    a {
+      display: block;
+      padding: 0.25rem 1rem;
+      color: var(--#{$prefix}body-color);
+
+      &.active {
+        color: var(--#{$prefix}primary);
+      }
+
+      &:hover {
+        background-color: var(--#{$prefix}tertiary-bg);
+      }
+    }
+  }
+}

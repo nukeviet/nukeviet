@@ -30,7 +30,7 @@ $array['form_action'] = $page_url;
 
 if ($nv_Request->isset_request('_csrf', 'post')) {
     $_csrf = $nv_Request->get_title('_csrf', 'post', '');
-    if (!hash_equals($_csrf, $checkss)) {
+    if (!hash_equals($checkss, $_csrf)) {
         nv_jsonOutput([
             'status' => 'error',
             'mess' => 'Error session!!!'

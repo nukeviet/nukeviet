@@ -1,5 +1,5 @@
 <script type="text/javascript" src="{$smarty.const.ASSETS_STATIC_URL}/js/clipboard/clipboard.min.js"></script>
-<div id="my-role-api" data-page-url="{$PAGE_URL}">
+<div id="my-role-api" data-page-url="{$PAGE_URL}" data-checkss="{$CHECKSS}">
     <div class="tools">
         <div>
             <ul class="nav nav-pills m-bottom">
@@ -20,12 +20,12 @@
                         <div class="modal-body">
                             <div class="m-bottom"><strong>{$LANG->getModule('auth_method')}</strong></div>
                             <ul class="nav nav-tabs m-bottom" role="tablist">
-{foreach $METHODS as $method}
+                                {foreach $METHODS as $method}
                                 <li role="presentation"{if $method.key == 'password_verify'} class="active"{/if}><a href="#{$method.key}-panel" aria-controls="{$method.key}-panel" role="tab" data-toggle="tab">{$method.name}</a></li>
-{/foreach}
+                                {/foreach}
                             </ul>
                             <div class="tab-content">
-{foreach $METHODS as $method}
+                                {foreach $METHODS as $method}
                                 <div role="tabpanel" class="tab-pane{if $method.key == 'password_verify'} active{/if}" id="{$method.key}-panel">
                                     <div class="form-group">
                                         <label><strong>{$LANG->getModule('api_credential_ident')}</strong></label>
@@ -65,7 +65,7 @@
                                         </div>
                                     </div>
                                 </div>
-{/foreach}
+                                {/foreach}
                             </div>
                         </div>
                     </div>
@@ -75,11 +75,11 @@
         </div>
     </div>
 
-{if empty($ROLECOUNT)}
+    {if empty($ROLECOUNT)}
     <div class="alert alert-info text-center">
         {$LANG->getModule('api_roles_empty')}
     </div>
-{else}
+    {else}
     <div class="table-responsive">
         <table class="table table-bordered table-striped">
             <thead class="bg-primary small">
@@ -96,14 +96,14 @@
                 </tr>
             </thead>
             <tbody>
-{foreach $ROLELIST as $role}
-{$role.credential_status = (int) $role.credential_status}
+                {foreach $ROLELIST as $role}
+                {$role.credential_status = (int) $role.credential_status}
                 <tr class="item{if $role.credential_status !== 1} text-muted{/if}" data-role-id="{$role.role_id}">
                     <td>
                         <strong>{$role.role_title}</strong>
-{if !empty($role.role_description)}
+                        {if !empty($role.role_description)}
                         <p class="description">{$role.role_description}</p>
-{/if}
+                        {/if}
                     </td>
                     <td class="text-nowrap text-center" style="width: 1%;">{if !empty($role.status)}{$LANG->getModule('active')}{else}{$LANG->getModule('inactive')}{/if}</td>
                     <td class="text-nowrap text-center" style="width: 1%;">{if $role.credential_status === 1}{$LANG->getModule('activated')}{elseif $role.credential_status === 0}{$LANG->getModule('suspended')}{else}{$LANG->getModule('not_activated')}{/if}</td>
@@ -123,51 +123,51 @@
                                         <div class="modal-title"><strong>{$LANG->getModule('api_roles_detail')}: {$role.role_title}</strong></div>
                                     </div>
                                     <div class="modal-body">
-{if !empty($role.apis[''])}
-{foreach $role.apis[''] as $cat_data}
+                                        {if !empty($role.apis[''])}
+                                        {foreach $role.apis[''] as $cat_data}
                                         <div class="panel panel-default">
                                             <div class="panel-heading"><strong><i class="fa fa-folder-open-o"></i> {$LANG->getModule('api_of_system')}: {$cat_data.title}</strong></div>
                                             <div class="panel-body">
                                                 <div class="row">
-{foreach $cat_data.apis as $api_data}
+                                                    {foreach $cat_data.apis as $api_data}
                                                     <div class="col-sm-12">
                                                         <div class="text-truncate m-bottom"><i class="fa fa-caret-right"></i> {$api_data}</div>
                                                     </div>
-{/foreach}
+                                                    {/foreach}
                                                 </div>
                                             </div>
                                         </div>
-{/foreach}
-{/if}
+                                        {/foreach}
+                                        {/if}
                                         <div>
                                             <ul class="nav nav-tabs m-bottom" role="tablist">
-{foreach $SETUP_LANGS as $forlang}
+                                                {foreach $SETUP_LANGS as $forlang}
                                                 <li role="presentation"{if $forlang == $NV_LANG_DATA} class="active"{/if}"><a id="forlang-{$forlang}-{$role.role_id}-tab" href="#forlang-{$forlang}-{$role.role_id}" aria-controls="forlang-{$forlang}-{$role.role_id}" role="tab" data-toggle="tab" aria-expanded="{if $forlang == $NV_LANG_DATA}true{else}false{/if}">{$LANGUAGE_ARRAY.$forlang.name}</a></li>
-{/foreach}
+                                                {/foreach}
                                             </ul>
                                             <div class="tab-content">
-{foreach $SETUP_LANGS as $forlang}
+                                                {foreach $SETUP_LANGS as $forlang}
                                                 <div role="tabpanel" class="tab-pane fade{if $forlang == $NV_LANG_DATA} in active{/if}" id="forlang-{$forlang}-{$role.role_id}" aria-labelledby="forlang-{$forlang}-{$role.role_id}-tab">
-{if !empty($role.apis.$forlang)}
-{foreach $role.apis.$forlang as $mod_title => $mod_data}
-{foreach $mod_data as $cat_data}
+                                                    {if !empty($role.apis.$forlang)}
+                                                    {foreach $role.apis.$forlang as $mod_title => $mod_data}
+                                                    {foreach $mod_data as $cat_data}
                                                     <div class="panel panel-default">
                                                         <div class="panel-heading"><strong><i class="fa fa-folder-open-o"></i> {$SITE_MODS.$mod_title.custom_title}{if !empty($cat_data.title)} <i class="fa fa-angle-right"></i> {$cat_data.title}{/if}</strong></div>
                                                         <div class="panel-body">
                                                             <div class="row">
-{foreach $cat_data['apis'] as $api_data}
+                                                                {foreach $cat_data['apis'] as $api_data}
                                                                 <div class="col-sm-12">
                                                                     <div class="text-truncate m-bottom" title="{$api_data}"><i class="fa fa-caret-right"></i> {$api_data}</div>
                                                                 </div>
-{/foreach}
+                                                                {/foreach}
                                                             </div>
                                                         </div>
                                                     </div>
-{/foreach}
-{/foreach}
-{/if}
+                                                    {/foreach}
+                                                    {/foreach}
+                                                    {/if}
                                                 </div>
-{/foreach}
+                                                {/foreach}
                                             </div>
                                         </div>
                                     </div>
@@ -175,23 +175,23 @@
                             </div>
                         </div>
                         <!-- END FORFOOTER -->
-{if $TYPE=='public'}
-{if $role.credential_status === -1}
+                        {if $TYPE=='public'}
+                        {if $role.credential_status === -1}
                         <button type="button" class="btn btn-default credential-activate">{$LANG->getModule('activate')}</button>
-{elseif $role.credential_status === -1}
+                        {elseif $role.credential_status === 1}
                         <button type="button" class="btn btn-default credential-deactivate">{$LANG->getModule('deactivate')}</button>
-{/if}
-{/if}
+                        {/if}
+                        {/if}
                     </td>
                 </tr>
-{/foreach}
+                {/foreach}
             </tbody>
         </table>
-{if !empty($GENERATE_PAGE)}
+        {if !empty($GENERATE_PAGE)}
         <div class="text-center">
             {$GENERATE_PAGE}
         </div>
-{/if}
+        {/if}
     </div>
-{/if}
+    {/if}
 </div>

@@ -329,14 +329,6 @@ function nv_group_exclude_user(group_id, userid) {
     return;
 }
 
-function nv_genpass() {
-    $.post(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=user_add&nocache=' + new Date().getTime(), 'nv_genpass=1', function(res) {
-        $("input[name='password1']").val(res);
-        $("input[name='password2']").val(res);
-    });
-    return;
-}
-
 function nv_check_form(OForm) {
     var f_method = $("#f_method").val();
     var f_value = $("#f_value").val();
@@ -945,9 +937,9 @@ $(document).ready(function() {
         e.preventDefault();
         var field1 = $($(this).data('field1')),
             field2 = $($(this).data('field2'));
-        $.post(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=user_add&nocache=' + new Date().getTime(), 'nv_genpass=1', function(res) {
-            field1.val(res);
-            field2.val(res);
+        $.post(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=user_add&nocache=' + new Date().getTime(), 'nv_genpass=1&checkss=' + $(this).data('checkss'), function(res) {
+            field1.val(res.value);
+            field2.val(res.value);
         })
     });
 

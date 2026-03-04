@@ -18,6 +18,7 @@ use NukeViet\Module\users\Shared\Emails;
 $page_title = $nv_Lang->getModule('userwait_resend_email');
 $set_active_op = 'user_waiting';
 $checkss = md5(NV_CHECK_SESSION . '_' . $module_name . '_' . $op . '_' . $set_active_op);
+
 if ($nv_Request->isset_request('ajax', 'post')) {
     $per_email = $nv_Request->get_int('per_email', 'post', 0);
     $offset = $nv_Request->get_int('offset', 'post', 0);
@@ -31,7 +32,7 @@ if ($nv_Request->isset_request('ajax', 'post')) {
         'useriddel' => '',
     ];
 
-    if ($tokend == $checkss and $per_email > 0 and $offset >= 0) {
+    if (hash_equals($checkss, $tokend) and $per_email > 0 and $offset >= 0) {
         delOldRegAccount();
         $sql = 'SELECT * FROM ' . NV_MOD_TABLE . '_reg';
         if ($global_config['idsite'] > 0) {
@@ -97,7 +98,7 @@ if ($nv_Request->isset_request('ajax', 'post')) {
             if (!empty($respon['useriddel'])) {
                 try {
                     $db->query('DELETE FROM ' . NV_MOD_TABLE . '_reg WHERE userid IN(' . $respon['useriddel'] . ')');
-                } catch (PDOException $e) {
+                } catch (Throwable $e) {
                     trigger_error(print_r($e, true));
                 }
             }
@@ -109,13 +110,11 @@ if ($nv_Request->isset_request('ajax', 'post')) {
     nv_jsonOutput($respon);
 }
 
-$xtpl = new XTemplate('user_waiting_remail.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-$xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
-$xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
-$xtpl->assign('TOKEND', $checkss);
-
-$xtpl->parse('main');
-$contents = $xtpl->text('main');
+$tpl = new \NukeViet\Template\NVSmarty();
+$tpl->setTemplateDir(get_module_tpl_dir('user_waiting_remail.tpl'));
+$tpl->assign('LANG', $nv_Lang);
+$tpl->assign('TOKEND', $checkss);
+$contents = $tpl->fetch('user_waiting_remail.tpl');
 
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_admin_theme($contents);

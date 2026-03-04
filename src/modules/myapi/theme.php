@@ -25,7 +25,7 @@ if (!defined('NV_IS_API_MOD')) {
  */
 function main_theme(string $type, int $roleCount, array $roleList, array $api_user, string $generate_page): string
 {
-    global $nv_Lang, $module_name, $language_array, $site_mods;
+    global $nv_Lang, $module_name, $site_mods, $language_array, $checkss;
 
     $page_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name;
 
@@ -80,6 +80,7 @@ function main_theme(string $type, int $roleCount, array $roleList, array $api_us
     $tpl->assign('ROLELIST', $roleList);
     $tpl->assign('GENERATE_PAGE', $generate_page);
     $tpl->assign('ROLECOUNT', $roleCount);
+    $tpl->assign('CHECKSS', $checkss);
 
     return $tpl->fetch('main.tpl');
 }
