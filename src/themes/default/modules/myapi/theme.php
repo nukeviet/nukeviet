@@ -25,7 +25,7 @@ if (!defined('NV_IS_API_MOD')) {
  */
 function main_theme($type, $roleCount, $roleList, $api_user, $generate_page)
 {
-    global $nv_Lang, $module_name, $site_mods, $global_config, $language_array;
+    global $nv_Lang, $module_name, $site_mods, $global_config, $language_array, $checkss;
 
     $page_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name;
 
@@ -60,8 +60,6 @@ function main_theme($type, $roleCount, $roleList, $api_user, $generate_page)
         $methods['md5_verify'] = array_merge($methods['md5_verify'], $api_user['md5_verify']);
         $methods['md5_verify']['not_access_authentication'] = false;
     }
-
-    $checkss = md5(NV_CHECK_SESSION . '_' . $module_name);
 
     $stpl = new \NukeViet\Template\NVSmarty();
     $stpl->setTemplateDir(str_replace(DIRECTORY_SEPARATOR, '/', __DIR__) . '/smarty');

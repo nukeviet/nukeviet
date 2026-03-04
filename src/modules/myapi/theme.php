@@ -25,7 +25,7 @@ if (!defined('NV_IS_API_MOD')) {
  */
 function main_theme($type, $roleCount, $roleList, $api_user, $generate_page)
 {
-    global $nv_Lang, $module_name, $site_mods, $global_config, $language_array;
+    global $nv_Lang, $module_name, $site_mods, $global_config, $language_array, $checkss;
 
     $page_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name;
 
@@ -49,7 +49,6 @@ function main_theme($type, $roleCount, $roleList, $api_user, $generate_page)
         'md5_verify' => $nv_Lang->getModule('auth_method_md5_verify')
     ];
 
-    $checkss = md5(NV_CHECK_SESSION . '_' . $module_name);
     $xtpl->assign('CHECKSS', $checkss);
 
     foreach ($methods as $key => $name) {
