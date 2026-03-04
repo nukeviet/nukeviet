@@ -26,6 +26,7 @@ if (!nv_function_exists('nv_contact_list_info')) {
         
         $module_data = $site_mods[$module]['module_data'];
 
+        addition_module_assets($module, 'css');
         $tpl = new \NukeViet\Template\NVSmarty();
         $tpl->setTemplateDir(get_block_tpl_dir('block.contact_list.tpl', $module));
         $tpl->assign('LANG', $nv_Lang);

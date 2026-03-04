@@ -22,4 +22,17 @@
   content: " ";
 }
 
+.block-supporter .nav-pills .btn-outline-primary:hover, .block-supporter .nav-pills .btn-outline-primary.active {
+  color: #fff;
+}
+.block-supporter .social-label {
+  font-size: 0.675em;
+}
+.block-supporter .avatar-img {
+  width: 56px;
+  height: 56px;
+  -o-object-fit: cover;
+  object-fit: cover;
+}
+
 /*# sourceMappingURL=contact.d.css.map */

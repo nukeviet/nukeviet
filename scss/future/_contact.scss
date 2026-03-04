@@ -12,3 +12,24 @@
     content: "\00a0";
   }
 }
+
+.block-supporter {
+  .nav-pills {
+    .btn-outline-primary {
+      &:hover,
+      &.active {
+        color: $white;
+      }
+    }
+  }
+  
+  .social-label {
+    font-size: .675em;
+  }
+  
+  .avatar-img {
+    width: 56px;
+    height: 56px;
+    object-fit: cover;
+  }
+}
