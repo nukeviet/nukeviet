@@ -124,7 +124,7 @@ if (!nv_function_exists('nv_contact_supporter')) {
         $active = false;
         foreach ($supporters as $depid => $sps) {
             $fullName = $depid == 0 ? $nv_Lang->getGlobal('general_support') : $departments[$depid]['full_name'];
-            // Icon cấu hình qua 'others' của bộ phận (key: icon). Mặc định trung tính.
+            // Icon cấu hình qua 'others' của bộ phận (key: icon). ví dụ {"icon": "fa-headset"} hoặc {"icon": "fa-briefcase"}
             $icon = 'fa-circle-info';
             if ($depid != 0 && !empty($departments[$depid]['others'])) {
                 $depOthers = block_supporter_parse_others($departments[$depid]['others']);
