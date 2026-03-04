@@ -75,7 +75,7 @@
         </div>
     </div>
 
-    {if empty($ROLELIST)}
+    {if empty($ROLECOUNT)}
     <div class="alert alert-info text-center">
         {$LANG->getModule('api_roles_empty')}
     </div>

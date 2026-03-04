@@ -166,7 +166,7 @@ $key_words = $module_info['keywords'];
 
 $canonicalUrl = getCanonicalUrl($page_url);
 
-$contents = main_theme($type, $roleList, $api_user, $generate_page);
+$contents = main_theme($type, $roleCount, $roleList, $api_user, $generate_page);
 
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_site_theme($contents);

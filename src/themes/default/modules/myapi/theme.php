@@ -23,7 +23,7 @@ if (!defined('NV_IS_API_MOD')) {
  * @param mixed $api_user
  * @param mixed $generate_page
  */
-function main_theme($type, $roleList, $api_user, $generate_page)
+function main_theme($type, $roleCount, $roleList, $api_user, $generate_page)
 {
     global $nv_Lang, $module_name, $site_mods, $global_config, $language_array;
 
@@ -70,6 +70,7 @@ function main_theme($type, $roleList, $api_user, $generate_page)
     $stpl->assign('CHECKSS', $checkss);
     $stpl->assign('METHODS', $methods);
     $stpl->assign('TYPE', $type);
+    $stpl->assign('ROLECOUNT', $roleCount);
     $stpl->assign('ROLELIST', $roleList);
     $stpl->assign('SETUP_LANGS', $global_config['setup_langs']);
     $stpl->assign('LANGUAGE_ARRAY', $language_array);
