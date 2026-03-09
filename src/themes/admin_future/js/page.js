@@ -20,6 +20,70 @@ $(function () {
         }
     });
 
+    // Trang nội dung: Đếm ký tự tiêu đề
+    if ($('#form-page-content').length) {
+        $("#titlelength").html($("#idtitle").val().length);
+        $("#idtitle").on('keyup paste', function() {
+            $("#titlelength").html($(this).val().length);
+        });
+
+        // Đếm ký tự mô tả
+        $("#descriptionlength").html($("#description").val().length);
+        $("#description").on('keyup paste', function() {
+            $("#descriptionlength").html($(this).val().length);
+        });
+
+        // Tự động lấy alias khi thay đổi tiêu đề (nếu alias rỗng)
+        if ($('[data-toggle="getaliaspage"]').data('auto-alias')) {
+            $('#idtitle').change(function() {
+                $('[data-toggle="getaliaspage"]').trigger('click');
+            });
+        }
+
+        // Ẩn hiện schema_about tuỳ thuộc vào schema_type
+        $('#content_schema_type').on('change', function() {
+            if ($(this).val() === 'webpage') {
+                $('#schema_about_container').removeClass('d-none');
+            } else {
+                $('#schema_about_container').addClass('d-none');
+            }
+        });
+    }
+
+    // Xử lý nút lấy alias
+    $('[data-toggle="getaliaspage"]').on('click', function() {
+        var btn = $(this);
+        var icon = $('i', btn);
+        var title = $('#idtitle').val();
+        if (icon.is('.fa-spin')) {
+            return;
+        }
+        if (title.length > 0) {
+            icon.addClass('fa-spin');
+            $.ajax({
+                type: 'POST',
+                url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=alias&nocache=' + new Date().getTime(),
+                data: {
+                    title: title,
+                    checkss: btn.data('checkss'),
+                    id: btn.data('id')
+                },
+                cache: false,
+                success: function(res) {
+                    icon.removeClass('fa-spin');
+                    if (res) {
+                        $('#idalias').val(res);
+                    }
+                },
+                error: function(xhr, text, err) {
+                    icon.removeClass('fa-spin');
+                    nvToast(err, 'error');
+                    console.log(xhr, text, err);
+                }
+            });
+        }
+    });
+
     // Xóa 1 bài viết
     $('[data-toggle=nv_del_page]').on('click', function (e) {
         e.preventDefault();
@@ -94,6 +158,7 @@ $(function () {
             type: 'POST',
             url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=change_weight&nocache=' + new Date().getTime(),
             data: {
+                checkss: btn.data('checkss'),
                 id: btn.data('id'),
                 new_weight: btn.val()
             },

@@ -28,12 +28,12 @@ $widget_info = [
         $cacheFile = 'widget_cmttotal_' . NV_CACHE_PREFIX . '.cache';
         $cacheTTL = 1800;
 
-        if (($cache = $nv_Cache->getItem($module_name, $cacheFile, $cacheTTL)) != false) {
+        if (($cache = $nv_Cache->getItem($module_name, $cacheFile, ttl: $cacheTTL)) != false) {
             $_arr_siteinfo = unserialize($cache);
         } else {
             $_arr_siteinfo['total_comments'] = $db->query('SELECT COUNT(*) FROM ' . NV_PREFIXLANG . '_' . $module_data)->fetchColumn();
 
-            $nv_Cache->setItem($module_name, $cacheFile, serialize($_arr_siteinfo), $cacheTTL);
+            $nv_Cache->setItem($module_name, $cacheFile, serialize($_arr_siteinfo), ttl: $cacheTTL);
         }
 
         $tpl->assign('NUM', nv_number_format($_arr_siteinfo['total_comments']));

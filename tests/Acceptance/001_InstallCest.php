@@ -110,6 +110,8 @@ class InstallCest
         $I->fillField(['name' => 'dbname'], $_ENV['DB_NAME']);
 
         $I->click('[type="submit"]');
+        $I->waitForElement('body', 5);
+        $I->wait(0.3);
 
         // Db đã có thì xóa nó rồi click next
         if ($I->tryToSeeElement('#db_detete')) {

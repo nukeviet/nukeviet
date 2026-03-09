@@ -11,6 +11,8 @@
 
 namespace NukeViet\Client;
 
+use NukeViet\Http\HttpException;
+
 /**
  * NukeViet\Client\Sso
  *
@@ -33,8 +35,7 @@ class Sso
     {
         $return_url = nv_url_rewrite($return_url, true);
         if (!str_starts_with($return_url, NV_MY_DOMAIN) and preg_match('/^(https?:\/\/|\/\/)/i', $return_url)) {
-            http_response_code(500);
-            trigger_error('Invalid return_url', E_USER_ERROR);
+            throw new HttpException('Invalid return_url', 500);
         }
         if (!str_starts_with($return_url, NV_MY_DOMAIN)) {
             $return_url = NV_MY_DOMAIN . $return_url;
@@ -45,7 +46,7 @@ class Sso
         $sso_reset = self::encrypt(urlRewriteWithDomain($sso_reset, NV_MY_DOMAIN));
 
         /** @disregard P1011 */
-        return SSO_REGISTER_DOMAIN . (!defined('SSO_REGISTER_LANGSINGLE') ? '/' . NV_LANG_DATA : '') . '/users/login/?sso_redirect=' . self::encrypt($return_url) . '&sso_reset=' . $sso_reset . '&client=' . urlencode(NV_MY_DOMAIN);
+        return SSO_REGISTER_DOMAIN . (!defined('SSO_REGISTER_LANGSINGLE') ? '/' . NV_LANG_DATA : '') . '/users/login/?sso_redirect=' . self::encrypt(str_replace('&amp;', '&', $return_url)) . '&sso_reset=' . $sso_reset . '&client=' . urlencode(NV_MY_DOMAIN);
     }
 
     /**

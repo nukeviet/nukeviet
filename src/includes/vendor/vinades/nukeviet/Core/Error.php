@@ -11,6 +11,7 @@
 
 namespace NukeViet\Core;
 
+use NukeViet\Http\HttpException;
 use NukeViet\Site;
 
 if (!defined('E_STRICT')) {
@@ -54,7 +55,7 @@ class Error
     private $errline = false;
     private $errid = false;
     private static $errortype = [
-        2048 => 'Strict Notice', // Backward compatible with PHP versions below 8.4
+        2048 => 'Strict Notice', // Backward compatible with PHP versions below 8.4 (E_STRICT removed in PHP 8.4)
         E_ERROR => 'Error',
         E_WARNING => 'Warning',
         E_PARSE => 'Parsing Error',
@@ -69,18 +70,6 @@ class Error
         E_RECOVERABLE_ERROR => 'Recoverable Error',
         E_DEPRECATED => 'Deprecated Notice',
         E_USER_DEPRECATED => 'User-deprecated Notice'
-    ];
-
-    /**
-     * @var array Thông báo một số lỗi dễ nhận biết hơn
-     */
-    private $track_fatal_error = [
-        '/includes/vendor/vinades/nukeviet/Cache/Redis.php' => [
-            ['/[\'|"]Redis[\'|"] not found/i', 'PHP Redis Extension does not exists!']
-        ],
-        '/includes/vendor/vinades/nukeviet/Cache/Memcached.php' => [
-            ['/[\'|"]Memcached[\'|"] not found/i', 'PHP Memcached Extension does not exists!']
-        ]
     ];
 
     /**
@@ -144,6 +133,7 @@ class Error
         ];
 
         set_error_handler([&$this, 'error_handler']);
+        set_exception_handler([&$this, 'exception_handler']);
         register_shutdown_function([&$this, 'shutdown']);
     }
 
@@ -301,7 +291,7 @@ class Error
             $strEncodedEmail = '';
             $strlen = strlen($this->cfg['error_send_mail']);
             for ($i = 0; $i < $strlen; ++$i) {
-                $strEncodedEmail .= '&#' . ord(substr($this->cfg['error_send_mail'], $i)) . ';';
+                $strEncodedEmail .= '&#' . ord($this->cfg['error_send_mail'][$i]) . ';';
             }
             $email = '<a href="mailto:' . $strEncodedEmail . '">contact</a>';
         } else {
@@ -469,8 +459,7 @@ class Error
         $error = error_get_last();
 
         if (!empty($error) and $error['type'] === E_ERROR | E_PARSE) {
-            $file = substr(str_replace('\\', '/', preg_replace(['/\\\\/', "/\/{2,}/"], '/', $error['file'])), strlen(NV_ROOTDIR . '/'));
-            $finded_track = false;
+            http_response_code(500);
 
             $this->errno = $error['type'];
             $error['type'] .= ' (' . self::$errortype[$error['type']] . ')';
@@ -481,39 +470,80 @@ class Error
             $this->errline = $error['line'];
             $this->errid = md5(($this->errfile ?: '') . ($this->errline ?: '') . $this->errno);
 
-            // Một số lỗi đặc biệt, hiển thị lên để dễ nhận biết
-            if (isset($this->track_fatal_error[$error['file']])) {
-                foreach ($this->track_fatal_error[$error['file']] as $patterns) {
-                    if (preg_match($patterns[0], $error['message'])) {
-                        $finded_track = true;
-                        $this->errstr = $patterns[1];
-                        break;
-                    }
-                }
-            }
-
             $this->log_control();
 
-            // Only display some track fatal error!
-            if ($finded_track) {
-                $this->info_die();
-            } else {
-                if (NV_DEBUG) {
-                    exit('An error occurred while loading the page:<br /><pre><code>' . print_r($error, true) . '</code></pre>');
-                }
-
-                if (!empty($this->cfg['error_send_mail'])) {
-                    $strEncodedEmail = '';
-                    $strlen = strlen($this->cfg['error_send_mail']);
-                    for ($i = 0; $i < $strlen; ++$i) {
-                        $strEncodedEmail .= '&#' . ord(substr($this->cfg['error_send_mail'], $i)) . ';';
-                    }
-                    $email = '<a href="mailto:' . $strEncodedEmail . '">let us know</a>';
-                } else {
-                    $email = 'let us know';
-                }
-                exit('An error occurred while loading the page: ' . self::$errortype[$this->errno] . '(' . $this->errno . ').<br/>Please ' . $email . ' about this!');
+            if (NV_DEBUG) {
+                exit('An error occurred while loading the page:<br /><pre><code>' . print_r($error, true) . '</code></pre>');
             }
+
+            $this->displayErrorPage();
+        }
+    }
+
+    /**
+     * exception_handler()
+     *
+     * Xử lý các exception chưa được bắt, đặc biệt là HttpException để giữ lại HTTP status code
+     *
+     * @param \Throwable $exception
+     */
+    public function exception_handler($exception)
+    {
+        // Thiết lập mã HTTP status dựa trên loại exception
+        if ($exception instanceof HttpException) {
+            http_response_code($exception->getHttpCode());
+            $this->errno = 256; // Sử dụng 256 để kích hoạt hành vi info_die()
+        } else {
+            http_response_code(500);
+            $this->errno = E_ERROR;
+        }
+
+        $this->errstr = self::format_str($exception->getMessage());
+        $this->errfile = self::format_str($exception->getFile());
+        $this->errline = $exception->getLine();
+        $this->errid = md5(($this->errfile ?: '') . ($this->errline ?: '') . $this->errno);
+
+        $this->log_control();
+
+        if ($this->errno == 256) {
+            $this->info_die();
+        }
+
+        if (NV_DEBUG) {
+            exit('An error occurred while loading the page:<br /><pre><code>' . print_r([
+                'type' => get_class($exception),
+                'message' => self::format_str($exception->getMessage()),
+                'file' => self::format_str($exception->getFile()),
+                'line' => $exception->getLine(),
+                'trace' => self::format_str($exception->getTraceAsString())
+            ], true) . '</code></pre>');
+        }
+
+        $this->displayErrorPage();
+    }
+
+    /**
+     * displayErrorPage()
+     *
+     * Hiển thị trang lỗi với thông tin liên hệ
+     */
+    private function displayErrorPage()
+    {
+        if (!empty($this->cfg['error_send_mail'])) {
+            $strEncodedEmail = '';
+            $strlen = strlen($this->cfg['error_send_mail']);
+            for ($i = 0; $i < $strlen; ++$i) {
+                $strEncodedEmail .= '&#' . ord($this->cfg['error_send_mail'][$i]) . ';';
+            }
+            $email = '<a href="mailto:' . $strEncodedEmail . '">let us know</a>';
+        } else {
+            $email = 'let us know';
+        }
+
+        if (isset(self::$errortype[$this->errno])) {
+            exit('An error occurred while loading the page: ' . self::$errortype[$this->errno] . '(' . $this->errno . ').<br/>Please ' . $email . ' about this!');
+        } else {
+            exit('An error occurred while loading the page.<br/>Please ' . $email . ' about this!');
         }
     }
 }

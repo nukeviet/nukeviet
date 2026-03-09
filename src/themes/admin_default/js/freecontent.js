@@ -253,6 +253,9 @@ $(document).ready(function() {
                             'sourceEditing'
                         ],
                         shouldNotGroupWhenFull: false
+                    },
+                    nukeviet: {
+                        editorId: cfg.ctEditor
                     }
                 })
                 .then(editor => {

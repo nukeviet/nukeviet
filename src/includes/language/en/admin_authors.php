@@ -139,6 +139,7 @@ $lang_module['add_error_choose'] = 'Error: You did not appoint a member to the a
 $lang_module['add_error_exist'] = 'Error: This user is an administrator';
 $lang_module['add_error_notexist'] = 'Error: This member does not exist';
 $lang_module['add_error_diff'] = 'An undefined error occurred';
+$lang_module['add_error_deleted'] = 'This account is pending deletion or has been deleted and cannot be selected as an administrator';
 $lang_module['action_account'] = 'Members account';
 $lang_module['action_account_nochange'] = 'Keep members account';
 $lang_module['action_account_suspend'] = 'Lock member account';

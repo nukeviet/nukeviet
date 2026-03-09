@@ -22,6 +22,29 @@ function formXSSsanitize(form) {
     });
 }
 
+function initFormAjKeyboard(formAj) {
+    $('select', formAj).on('change keyup', function() {
+        $(this).removeClass('is-invalid is-valid');
+        if ($(this).parent().is('.input-group')) {
+            $(this).parent().removeClass('is-invalid is-valid');
+        }
+    });
+    $('[type="text"], [type="password"], [type="number"], [type="email"], textarea', formAj).on('change keyup', function(e) {
+        if (e.type == "keyup" && e.which == 13) {
+            return;
+        }
+        let pr = $(this).parent();
+        let prAlso = $(this).parent().is('.input-group');
+        if (trim($(this).val()) == '' && $(this).is('.required')) {
+            $(this).addClass('is-invalid');
+            (prAlso && pr.addClass('is-invalid'));
+        } else {
+            $(this).removeClass('is-invalid is-valid');
+            (prAlso && pr.removeClass('is-invalid is-valid'));
+        }
+    });
+}
+
 $(function() {
     // Hàm lưu config tùy chỉnh của giao diện
     function storeThemeConfig(configName, configValue, callbackSuccess, callbackError) {
@@ -536,7 +559,13 @@ $(function() {
     });
 
     // XSSsanitize
-    $('body').on('click', '[type=submit]:not([name],.ck-button-save)', function(e) {
+    $('body').on('click', '[type=submit]:not([name])', function(e) {
+        // Check if button is inside CKEditor UI
+        // Selector matches elements with class starting with 'ck-' or containing ' ck-'
+        // This covers all CKEditor 5 UI elements (dialogs, dropdowns, toolbars, etc.)
+        if ($(this).closest('[class^="ck-"], [class*=" ck-"]').length) {
+            return;
+        }
         var form = $(this).parents('form');
         if (XSSsanitize && !$('[name=submit]', form).length) {
             // Khi không xử lý XSS thì trình submit mặc định sẽ thực hiện
@@ -586,7 +615,6 @@ $(function() {
     /**
      * Đoạn xử lý các nút mở trình quản lý file
      */
-    let initPicker = false;
     function showPicker(btn) {
         let options = {};
         options.path = btn.data('path') ? btn.data('path') : '';
@@ -612,7 +640,7 @@ $(function() {
         script.src = script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&langinterface=' + nv_lang_interface + '&' + nv_name_variable + '=upload&' + nv_fc_variable + '=js&t=' + nv_cache_timestamp;
         script.async = true;
         document.body.appendChild(script);
-        initPicker = true;
+        window.nvPickerLoad = true;
     }
 
     // Tải trước uploader nếu có nút selectfile
@@ -626,7 +654,7 @@ $(function() {
         const btn = $(this);
 
         // Load thư viện nếu chưa có
-        if (!initPicker && (typeof nukeviet == 'undefined' || !nukeviet.Picker)) {
+        if (!window.nvPickerLoad && (typeof nukeviet == 'undefined' || !nukeviet.Picker)) {
             loadPicker();
         }
         // Xử lý trong trường hợp uploader chưa được tải sẵn (các DOM động)
@@ -651,26 +679,7 @@ $(function() {
     // redirect (redirect URL if status is OK), refresh (Reload page if status is OK)
     const formAj = $('.ajax-submit');
     if (formAj.length > 0) {
-        $('select', formAj).on('change keyup', function() {
-            $(this).removeClass('is-invalid is-valid');
-            if ($(this).parent().is('.input-group')) {
-                $(this).parent().removeClass('is-invalid is-valid');
-            }
-        });
-        $('[type="text"], [type="password"], [type="number"], [type="email"], textarea', formAj).on('change keyup', function(e) {
-            if (e.type == "keyup" && e.which == 13) {
-                return;
-            }
-            let pr = $(this).parent();
-            let prAlso = $(this).parent().is('.input-group');
-            if (trim($(this).val()) == '' && $(this).is('.required')) {
-                $(this).addClass('is-invalid');
-                (prAlso && pr.addClass('is-invalid'));
-            } else {
-                $(this).removeClass('is-invalid is-valid');
-                (prAlso && pr.removeClass('is-invalid is-valid'));
-            }
-        });
+        initFormAjKeyboard(formAj);
     }
 
     $('body').on('submit', '.ajax-submit', function(e) {
@@ -728,6 +737,8 @@ $(function() {
                             }
                             if ($('.invalid-feedback', pr).length) {
                                 $('.invalid-feedback', pr).html(a.mess);
+                            } else if ($('.invalid-tooltip', pr).length) {
+                                $('.invalid-tooltip', pr).html(a.mess);
                             } else {
                                 nvToast(a.mess, 'error');
                             }

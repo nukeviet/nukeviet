@@ -44,8 +44,9 @@
             <div class="form-group clearfix">
                 <textarea class="form-control" style="width: 100%" name="content" id="commentcontent" cols="20" rows="5"></textarea>
                 <!-- BEGIN: editor -->
-                <script type="text/javascript" src="{NV_BASE_SITEURL}{NV_EDITORSDIR}/ckeditor5-classic/ckeditor.js?t={TIMESTAMP}"></script>
-                <script type="text/javascript" src="{NV_BASE_SITEURL}{NV_EDITORSDIR}/ckeditor5-classic/language/{NV_LANG_INTERFACE}.js?t={TIMESTAMP}"></script>
+                <link rel="stylesheet" href="{NV_STATIC_URL}{NV_EDITORSDIR}/ckeditor5-classic/ckeditor.css?t={TIMESTAMP}">
+                <script type="text/javascript" src="{NV_STATIC_URL}{NV_EDITORSDIR}/ckeditor5-classic/ckeditor.js?t={TIMESTAMP}"></script>
+                <script type="text/javascript" src="{NV_STATIC_URL}{NV_EDITORSDIR}/ckeditor5-classic/language/{NV_LANG_INTERFACE}.js?t={TIMESTAMP}"></script>
                 <script type="text/javascript">
                 (async () => {
                     await ClassicEditor
@@ -61,9 +62,12 @@
                                 'selectAll',
                                 '|',
                                 'link',
+                                'bookmark',
                                 'imageInsert',
                                 'nvmediaInsert',
                                 'insertTable',
+                                'nviframeInsert',
+                                'nvdocsInsert',
                                 'code',
                                 'codeBlock',
                                 'horizontalLine',
@@ -89,29 +93,28 @@
                                 'bold',
                                 'italic',
                                 'underline',
+                                'emoji',
                                 'strikethrough',
                                 'subscript',
                                 'superscript',
                                 '|',
                                 'sourceEditing',
-                                'restrictedEditingException',
-                                'removeFormat'
+                                'nvtools',
+                                'removeFormat',
+                                'fullscreen'
                             ],
                             shouldNotGroupWhenFull: false
+                        },
+                        nukeviet: {
+                            editorId: 'commentcontent'
                         }
-                    })
-                    .then(editor => {
-                        window.nveditor = window.nveditor || [];
-                        window.nveditor["commentcontent"] = editor;
-                        if (editor.sourceElement && editor.sourceElement instanceof HTMLTextAreaElement && editor.sourceElement.form) {
-                            editor.sourceElement.dataset.editorname = "commentcontent";
-                            editor.sourceElement.form.addEventListener("submit", event => {
-                                // Xử lý khi submit form thông thường
-                                editor.sourceElement.value = editor.getData();
-                            });
-                        }
-                    })
-                    .catch(error => {
+                    }).then(editor => {
+                        editor.editing.view.document.on('keydown', (event, data) => {
+                            if (data.ctrlKey && data.keyCode == 13) {
+                                $('#formcomment form').submit();
+                            }
+                        });
+                    }).catch(error => {
                         console.error(error);
                     });
                 })();

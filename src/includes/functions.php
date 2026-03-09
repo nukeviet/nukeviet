@@ -634,7 +634,7 @@ function nv_EncodeEmail($strEmail, $strDisplay = '', $blnCreateLink = true)
     $strlen = strlen($strEmail);
 
     for ($i = 0; $i < $strlen; ++$i) {
-        $strEncodedEmail .= '&#' . ord(substr($strEmail, $i)) . ';';
+        $strEncodedEmail .= '&#' . ord($strEmail[$i]) . ';';
     }
 
     $strDisplay = trim($strDisplay);
@@ -739,7 +739,7 @@ function nv_user_in_groups($groups_view)
 }
 
 /**
- * nv_groups_add_user()
+ * Thêm thành viên vào nhóm
  *
  * @param int    $group_id
  * @param int    $userid
@@ -756,37 +756,58 @@ function nv_groups_add_user($group_id, $userid, $approved = 1, $mod_data = 'user
 
     $_mod_table = ($mod_data == 'users') ? NV_USERS_GLOBALTABLE : $db_config['prefix'] . '_' . $mod_data;
     $query = $db->query('SELECT COUNT(*) FROM ' . $_mod_table . ' WHERE userid=' . $userid);
-    if ($query->fetchColumn()) {
-        try {
-            $db->query('INSERT INTO ' . $_mod_table . '_groups_users (
-                group_id, userid, approved, data, time_requested, time_approved
-            ) VALUES (
-                ' . $group_id . ', ' . $userid . ', ' . $approved . ", '" . $global_config['idsite'] . "',
-                " . NV_CURRENTTIME . ', ' . ($approved ? NV_CURRENTTIME : 0) . '
-            )');
-            if ($approved) {
-                $db->query('UPDATE ' . $_mod_table . '_groups SET numbers = numbers+1 WHERE group_id=' . $group_id);
-            }
-
-            return true;
-        } catch (PDOException $e) {
-            if ($group_id <= 3) {
-                $data = $db->query('SELECT data FROM ' . $_mod_table . '_groups_users WHERE group_id=' . $group_id . ' AND userid=' . $userid)->fetchColumn();
-                $data = ($data != '') ? explode(',', $data) : [];
-                $data[] = $global_config['idsite'];
-                $data = implode(',', array_unique(array_map('intval', $data)));
-                $db->query('UPDATE ' . $_mod_table . "_groups_users SET data = '" . $data . "' WHERE group_id=" . $group_id . ' AND userid=' . $userid);
-
-                return true;
-            }
-        }
+    if (!$query->fetchColumn()) {
+        return false;
     }
 
-    return false;
+    try {
+        $db->query('INSERT INTO ' . $_mod_table . '_groups_users (
+            group_id, userid, approved, data, time_requested, time_approved
+        ) VALUES (
+            ' . $group_id . ', ' . $userid . ', ' . $approved . ", '" . $global_config['idsite'] . "',
+            " . NV_CURRENTTIME . ', ' . ($approved ? NV_CURRENTTIME : 0) . '
+        )');
+        if ($approved) {
+            $db->query('UPDATE ' . $_mod_table . '_groups SET numbers = numbers+1 WHERE group_id=' . $group_id);
+        }
+    } catch (Throwable $e) {
+        if ($group_id > 3) {
+            return false;
+        }
+
+        $data = $db->query('SELECT data FROM ' . $_mod_table . '_groups_users WHERE group_id=' . $group_id . ' AND userid=' . $userid)->fetchColumn();
+        $data = ($data != '') ? explode(',', $data) : [];
+        $data[] = $global_config['idsite'];
+        $data = implode(',', array_unique(array_map('intval', $data)));
+        $db->query('UPDATE ' . $_mod_table . "_groups_users SET data = '" . $data . "' WHERE group_id=" . $group_id . ' AND userid=' . $userid);
+    }
+
+    // Cập nhật lại danh sách nhóm cho user
+    if ($approved) {
+        $sql = "SELECT group_id FROM " . $_mod_table . "_groups_users WHERE userid=" . $userid . " AND approved=1";
+        $in_groups = $db->query($sql)->fetchAll(PDO::FETCH_COLUMN);
+        $in_groups = array_map('intval', $in_groups);
+
+        // Loại bỏ nhóm mới nếu thêm quản trị hoặc thành viên chính thức
+        if (in_array($group_id, [1, 2, 3, 4])) {
+            $in_groups = array_diff($in_groups, [7]);
+        }
+        // Luôn luôn bổ sung nhóm thành viên chính thức nếu không phải thành viên mới
+        if (!in_array(7, $in_groups)) {
+            $in_groups[] = 4;
+        }
+
+        $in_groups = array_unique($in_groups);
+        $in_groups = empty($in_groups) ? '' : implode(',', $in_groups);
+
+        $db->query('UPDATE ' . $_mod_table . ' SET in_groups = ' . $db->quote($in_groups) . ' WHERE userid=' . $userid);
+    }
+
+    return true;
 }
 
 /**
- * nv_groups_del_user()
+ * Loại bỏ thành viên khỏi nhóm
  *
  * @param int    $group_id
  * @param int    $userid
@@ -802,32 +823,67 @@ function nv_groups_del_user($group_id, $userid, $mod_data = 'users')
 
     $_mod_table = ($mod_data == 'users') ? NV_USERS_GLOBALTABLE : $db_config['prefix'] . '_' . $mod_data;
     $row = $db->query('SELECT data, approved FROM ' . $_mod_table . '_groups_users WHERE group_id=' . $group_id . ' AND userid=' . $userid)->fetch();
-    if (!empty($row)) {
-        $set_number = false;
-        if ($group_id > 3) {
-            $set_number = true;
-        } else {
-            $data = str_replace(',' . $global_config['idsite'] . ',', '', ',' . $row['data'] . ',');
-            $data = trim($data, ',');
-            if ($data == '') {
-                $set_number = true;
-            } else {
-                $db->query('UPDATE ' . $_mod_table . "_groups_users SET data = '" . $data . "' WHERE group_id=" . $group_id . ' AND userid=' . $userid);
-            }
-        }
-
-        if ($set_number) {
-            $db->query('DELETE FROM ' . $_mod_table . '_groups_users WHERE group_id = ' . $group_id . ' AND userid = ' . $userid);
-
-            if ($row['approved']) {
-                $db->query('UPDATE ' . $_mod_table . '_groups SET numbers = numbers-1 WHERE group_id=' . $group_id);
-            }
-        }
-
-        return true;
+    if (empty($row)) {
+        return false;
     }
 
-    return false;
+    $sql = 'SELECT userid, group_id FROM ' . $_mod_table . ' WHERE userid=' . $userid;
+    $user = $db->query($sql)->fetch();
+    if (empty($user)) {
+        return false;
+    }
+
+    $set_number = false;
+    if ($group_id > 3) {
+        $set_number = true;
+    } else {
+        $data = str_replace(',' . $global_config['idsite'] . ',', '', ',' . $row['data'] . ',');
+        $data = trim($data, ',');
+        if ($data == '') {
+            $set_number = true;
+        } else {
+            $db->query('UPDATE ' . $_mod_table . "_groups_users SET data = '" . $data . "' WHERE group_id=" . $group_id . ' AND userid=' . $userid);
+        }
+    }
+
+    if ($set_number) {
+        $db->query('DELETE FROM ' . $_mod_table . '_groups_users WHERE group_id = ' . $group_id . ' AND userid = ' . $userid);
+
+        if ($row['approved']) {
+            $db->query('UPDATE ' . $_mod_table . '_groups SET numbers = numbers-1 WHERE group_id=' . $group_id);
+        }
+    }
+
+    // Cập nhật lại danh sách nhóm cho user
+    $sql = "SELECT group_id FROM " . $_mod_table . "_groups_users WHERE userid=" . $userid . " AND approved=1";
+    $in_groups = $db->query($sql)->fetchAll(PDO::FETCH_COLUMN);
+    $in_groups = array_map('intval', $in_groups);
+
+    // Xử lý lại nhóm chính nếu xóa khỏi nhóm này
+    $new_group_id = $user['group_id'];
+    if ($new_group_id == $group_id) {
+        $new_group_id = 4;
+
+        // Tìm nhóm chính theo luật ưu tiên thành viên mới => quản trị cấp tăng dần, mặc định thành viên chính thức
+        $groups = [7, 3, 2, 1];
+        foreach ($groups as $g) {
+            if (in_array($g, $in_groups, true)) {
+                $new_group_id = $g;
+            }
+        }
+    }
+
+    // Luôn luôn bổ sung nhóm thành viên chính thức nếu không phải thành viên mới
+    if (!in_array(7, $in_groups)) {
+        $in_groups[] = 4;
+    }
+
+    $in_groups = array_unique($in_groups);
+    $in_groups = empty($in_groups) ? '' : implode(',', $in_groups);
+
+    $db->query('UPDATE ' . $_mod_table . ' SET in_groups = ' . $db->quote($in_groups) . ', group_id=' . $new_group_id . ' WHERE userid=' . $userid);
+
+    return true;
 }
 
 /**
@@ -1825,7 +1881,7 @@ function nv_generate_page($base_url, $num_items, $per_page, $on_page, $add_prevn
         for ($i = 1; $i <= $init_page_max; ++$i) {
             $href = ($i > 1) ? $base_url . $amp . $i : $base_url;
             $href = !$onclick ? 'href="' . $href . '"' : 'href="#" data-toggle="gen-page-js" data-func="' . $js_func_name . '" data-href="' . $href . '" data-obj="' . $containerid . '"';
-            $page_string .= '<li' . ($i == $on_page ? $li_active_class : $li_class) . '><a' . $a_class . ($i == $on_page ? ' href="#"' : ' ' . $href) . '>' . $i . '</a></li>';
+            $page_string .= '<li' . ($i == $on_page ? $li_active_class : $li_class) . '><a' . $a_class . ($i == $on_page ? ' href="#"' : ' ' . $href) . '>' . nv_number_format($i) . '</a></li>';
         }
 
         if ($total_pages > 3) {
@@ -1840,7 +1896,7 @@ function nv_generate_page($base_url, $num_items, $per_page, $on_page, $add_prevn
                 for ($i = $init_page_min - 1; $i < $init_page_max + 2; ++$i) {
                     $href = ($i > 1) ? $base_url . $amp . $i : $base_url;
                     $href = !$onclick ? 'href="' . $href . '"' : 'href="#" data-toggle="gen-page-js" data-func="' . $js_func_name . '" data-href="' . $href . '" data-obj="' . $containerid . '"';
-                    $page_string .= '<li' . ($i == $on_page ? $li_active_class : $li_class) . '><a' . $a_class . ($i == $on_page ? ' href="#"' : ' ' . $href) . '>' . $i . '</a></li>';
+                    $page_string .= '<li' . ($i == $on_page ? $li_active_class : $li_class) . '><a' . $a_class . ($i == $on_page ? ' href="#"' : ' ' . $href) . '>' . nv_number_format($i) . '</a></li>';
                 }
 
                 if ($on_page < $total_pages - 4) {
@@ -1853,14 +1909,14 @@ function nv_generate_page($base_url, $num_items, $per_page, $on_page, $add_prevn
             for ($i = $total_pages - 2; $i < $total_pages + 1; ++$i) {
                 $href = ($i > 1) ? $base_url . $amp . $i : $base_url;
                 $href = !$onclick ? 'href="' . $href . '"' : 'href="#" data-toggle="gen-page-js" data-func="' . $js_func_name . '" data-href="' . $href . '" data-obj="' . $containerid . '"';
-                $page_string .= '<li' . ($i == $on_page ? $li_active_class : $li_class) . '><a' . $a_class . ($i == $on_page ? ' href="#"' : ' ' . $href) . '>' . $i . '</a></li>';
+                $page_string .= '<li' . ($i == $on_page ? $li_active_class : $li_class) . '><a' . $a_class . ($i == $on_page ? ' href="#"' : ' ' . $href) . '>' . nv_number_format($i) . '</a></li>';
             }
         }
     } else {
         for ($i = 1; $i < $total_pages + 1; ++$i) {
             $href = ($i > 1) ? $base_url . $amp . $i : $base_url;
             $href = !$onclick ? 'href="' . $href . '"' : 'href="#" data-toggle="gen-page-js" data-func="' . $js_func_name . '" data-href="' . $href . '" data-obj="' . $containerid . '"';
-            $page_string .= '<li' . ($i == $on_page ? $li_active_class : $li_class) . '><a' . $a_class . ($i == $on_page ? ' href="#"' : ' ' . $href) . '>' . $i . '</a></li>';
+            $page_string .= '<li' . ($i == $on_page ? $li_active_class : $li_class) . '><a' . $a_class . ($i == $on_page ? ' href="#"' : ' ' . $href) . '>' . nv_number_format($i) . '</a></li>';
         }
     }
 
@@ -1929,10 +1985,10 @@ function nv_alias_page($title, $base_url, $num_items, $per_page, $on_page, $add_
             $init_page_max = ($total_pages > 2) ? 2 : $total_pages;
             for ($i = 2; $i <= $init_page_max; ++$i) {
                 if ($i == $on_page) {
-                    $page_string .= '<li' . $li_active_class . '><a' . $a_class . ' href="#">' . $i . '</a></li>';
+                    $page_string .= '<li' . $li_active_class . '><a' . $a_class . ' href="#">' . nv_number_format($i) . '</a></li>';
                 } else {
                     $rel = ($i > $on_page) ? 'next' : 'prev';
-                    $page_string .= '<li' . $li_class . '><a' . $a_class . ' rel="' . $rel . '" title="' . $title . ' ' . $i . '" href="' . $base_url . '/page-' . $i . '">' . $i . '</a></li>';
+                    $page_string .= '<li' . $li_class . '><a' . $a_class . ' rel="' . $rel . '" title="' . $title . ' ' . $i . '" href="' . $base_url . '/page-' . $i . '">' . nv_number_format($i) . '</a></li>';
                 }
             }
         }
@@ -1947,10 +2003,10 @@ function nv_alias_page($title, $base_url, $num_items, $per_page, $on_page, $add_
 
             for ($i = $init_page_min - 1; $i < $init_page_max + 2; ++$i) {
                 if ($i == $on_page) {
-                    $page_string .= '<li' . $li_active_class . '><a' . $a_class . ' href="#">' . $i . '</a></li>';
+                    $page_string .= '<li' . $li_active_class . '><a' . $a_class . ' href="#">' . nv_number_format($i) . '</a></li>';
                 } else {
                     $rel = ($i > $on_page) ? 'next' : 'prev';
-                    $page_string .= '<li' . $li_class . '><a' . $a_class . ' rel="' . $rel . '" title="' . $title . ' ' . $i . '" href="' . $base_url . '/page-' . $i . '">' . $i . '</a></li>';
+                    $page_string .= '<li' . $li_class . '><a' . $a_class . ' rel="' . $rel . '" title="' . $title . ' ' . $i . '" href="' . $base_url . '/page-' . $i . '">' . nv_number_format($i) . '</a></li>';
                 }
             }
 
@@ -1964,19 +2020,19 @@ function nv_alias_page($title, $base_url, $num_items, $per_page, $on_page, $add_
         $init_page_min = ($total_pages - $on_page > 3) ? $total_pages : $total_pages - 1;
         for ($i = $init_page_min; $i <= $total_pages; ++$i) {
             if ($i == $on_page) {
-                $page_string .= '<li' . $li_active_class . '><a' . $a_class . ' href="#">' . $i . '</a></li>';
+                $page_string .= '<li' . $li_active_class . '><a' . $a_class . ' href="#">' . nv_number_format($i) . '</a></li>';
             } else {
                 $rel = ($i > $on_page) ? 'next' : 'prev';
-                $page_string .= '<li' . $li_class . '><a' . $a_class . ' rel="' . $rel . '" title="' . $title . ' ' . $i . '" href="' . $base_url . '/page-' . $i . '">' . $i . '</a></li>';
+                $page_string .= '<li' . $li_class . '><a' . $a_class . ' rel="' . $rel . '" title="' . $title . ' ' . $i . '" href="' . $base_url . '/page-' . $i . '">' . nv_number_format($i) . '</a></li>';
             }
         }
     } else {
         for ($i = 2; $i < $total_pages + 1; ++$i) {
             if ($i == $on_page) {
-                $page_string .= '<li' . $li_active_class . '><a' . $a_class . ' href="#">' . $i . '</a><li>';
+                $page_string .= '<li' . $li_active_class . '><a' . $a_class . ' href="#">' . nv_number_format($i) . '</a><li>';
             } else {
                 $rel = ($i > $on_page) ? 'next' : 'prev';
-                $page_string .= '<li' . $li_class . '><a' . $a_class . ' rel="' . $rel . '" title="' . $title . ' ' . $i . '" href="' . $base_url . '/page-' . $i . '">' . $i . '</a></li>';
+                $page_string .= '<li' . $li_class . '><a' . $a_class . ' rel="' . $rel . '" title="' . $title . ' ' . $i . '" href="' . $base_url . '/page-' . $i . '">' . nv_number_format($i) . '</a></li>';
             }
         }
     }
@@ -2482,10 +2538,14 @@ function urlRewriteWithDomain($url, $domain)
         return $url;
     }
 
-    str_starts_with($url, NV_MY_DOMAIN) && $url = substr($url, strlen(NV_MY_DOMAIN));
-    if (NV_MAIN_DOMAIN != NV_MY_DOMAIN and str_starts_with($url, NV_MAIN_DOMAIN)) {
-        $url = substr($url, strlen(NV_MAIN_DOMAIN));
+    $url_info = parse_url($url);
+    if (isset($url_info['scheme'], $url_info['host']) and defined('CUSTOM_REWRITE_DOMAIN')) {
+        return $url;
     }
+    $url = '';
+    !empty($url_info['path']) && $url .= $url_info['path'];
+    !empty($url_info['query']) && $url .= '?' . $url_info['query'];
+    !empty($url_info['fragment']) && $url .= '#' . $url_info['fragment'];
 
     return $domain . $url;
 }
@@ -2834,8 +2894,8 @@ function nv_sys_mods($lang = '')
 
     empty($lang) && $lang = NV_LANG_DATA;
 
-    $cache_file = $lang . '_smods_' . NV_CACHE_PREFIX . '.cache';
-    if (($cache = $nv_Cache->getItem('modules', $cache_file)) != false) {
+    $cache_file = 'smods_' . NV_CACHE_PREFIX . '.cache';
+    if (($cache = $nv_Cache->getItem('modules', $cache_file, $lang)) != false) {
         return unserialize($cache);
     }
 
@@ -2844,8 +2904,8 @@ function nv_sys_mods($lang = '')
         $result = $db->query('SELECT m.*, f.func_id, f.func_name, f.alias, f.func_custom_name, f.func_site_title, f.description AS func_description, f.in_submenu, f.show_func FROM ' . $db_config['prefix'] . '_' . $lang . '_modules m LEFT JOIN ' . $db_config['prefix'] . '_' . $lang . '_modfuncs f ON m.title=f.in_module WHERE m.act = 1 ORDER BY m.weight, f.subweight');
         while ($row = $result->fetch()) {
             $m_title = $row['title'];
-            $f_name = $row['func_name'];
-            $f_alias = $row['alias'];
+            $f_name = $row['func_name'] ?? '';
+            $f_alias = $row['alias'] ?? '';
             if (!isset($sys_mods[$m_title])) {
                 $sys_mods[$m_title] = [
                     'module_file' => $row['module_file'],
@@ -2883,7 +2943,7 @@ function nv_sys_mods($lang = '')
             $sys_mods[$m_title]['alias'][$f_name] = $f_alias;
         }
         $cache = serialize($sys_mods);
-        $nv_Cache->setItem('modules', $cache_file, $cache);
+        $nv_Cache->setItem('modules', $cache_file, $cache, $lang);
         unset($cache, $result);
     } catch (PDOException $e) {
         // trigger_error( $e->getMessage() );
@@ -2930,7 +2990,9 @@ function nv_site_mods($lang = '')
                     'logout',
                     'editinfo',
                     'avatar',
-                    'groups'
+                    'groups',
+                    'security-privacy',
+                    'verify-password'
                 ];
             } else {
                 $user_ops = [
@@ -2951,6 +3013,7 @@ function nv_site_mods($lang = '')
             if (defined('NV_OPENID_ALLOWED')) {
                 $user_ops[] = 'oauth';
             }
+            $user_ops[] = 'datadeletion';
             $func_us = $site_mods['users']['funcs'];
             foreach ($func_us as $func => $row) {
                 if (!in_array($func, $user_ops, true)) {
@@ -3189,6 +3252,7 @@ function nv_redirect_location($url, $error_code = 301, $noreferrer = false)
     if ($noreferrer) {
         header('Referrer-Policy: no-referrer');
     }
+    $url = nv_apply_hook('', 'nv_redirect_location', [$url, $error_code, $noreferrer], $url);
     header('Location: ' . str_replace('&amp;', '&', nv_url_rewrite($url, true)));
     exit(0);
 }
@@ -3202,8 +3266,7 @@ function nv_redirect_location($url, $error_code = 301, $noreferrer = false)
 function nv_redirect_encrypt($url)
 {
     global $crypt;
-
-    return $crypt->encrypt($url, NV_CHECK_SESSION);
+    return $crypt->encrypt(str_replace('&amp;', '&', $url), NV_CHECK_SESSION);
 }
 
 /**
@@ -3384,7 +3447,7 @@ function post_async($url, $params = [], $headers = [])
     $ch = curl_init($server_domain . $url);
     curl_setopt_array($ch, $options);
     curl_exec($ch);
-    curl_close($ch);
+    unset($ch);
 }
 
 /**
@@ -3815,6 +3878,99 @@ function csrf_check($csrf, $key)
 }
 
 /**
+ * Kiểm tra xem mật khẩu đã được xác thực cho khu vực area hay chưa
+ *
+ * @param string $area
+ * @param string $module
+ * @return bool
+ */
+function is_verified_password(string $area, string $module = ''): bool
+{
+    global $module_name, $nv_Request, $site_mods;
+
+    empty($module) && $module = $module_name;
+    if (!isset($site_mods[$module])) {
+        return false;
+    }
+
+    $confirm_pwd = $nv_Request->get_string($site_mods[$module]['module_data'] . '_confirm_pwd', 'session', '');
+    if (empty($confirm_pwd)) {
+        return false;
+    }
+
+    $confirm_pwd = json_decode($confirm_pwd, true);
+    if (
+        !is_array($confirm_pwd) or !isset($confirm_pwd['time']) or
+        (NV_CURRENTTIME - $confirm_pwd['time'] > 3600) or !isset($confirm_pwd['area']) or $confirm_pwd['area'] !== $area
+        or !isset($confirm_pwd['csrf']) or !csrf_check($confirm_pwd['csrf'], $site_mods[$module]['module_data'] . '_confirm_pwd')
+    ) {
+        return false;
+    }
+
+    return true;
+}
+
+/**
+ * Đặt trạng thái đã xác thực mật khẩu cho khu vực area
+ *
+ * @param string $area
+ * @param string $module
+ * @return void
+ */
+function set_verified_password(string $area, string $module = ''): void
+{
+    global $module_name, $nv_Request, $site_mods;
+
+    empty($module) && $module = $module_name;
+    if (!isset($site_mods[$module])) {
+        return;
+    }
+
+    $nv_Request->set_Session($site_mods[$module]['module_data'] . '_confirm_pwd', json_encode([
+        'time' => NV_CURRENTTIME,
+        'area' => $area,
+        'csrf' => csrf_create($site_mods[$module]['module_data'] . '_confirm_pwd')
+    ]));
+}
+
+/**
+ * Xóa trạng thái đã xác thực mật khẩu. Một hành động bảo mật
+ * không được phép thực hiện đồng thời nhiều khu vực do đó khi xóa
+ * thì xóa hết tất cả các khu vực theo module
+ *
+ * @param string $module
+ * @return void
+ */
+function clear_verified_password(string $module = ''): void
+{
+    global $module_name, $nv_Request, $site_mods;
+
+    empty($module) && $module = $module_name;
+    if (!isset($site_mods[$module])) {
+        return;
+    }
+    $nv_Request->unset_request($site_mods[$module]['module_data'] . '_confirm_pwd', 'session');
+}
+
+/**
+ * Chuyển hướng đến trang xác thực mật khẩu
+ *
+ * @param string $area         Khu vực cần xác thực mật khẩu
+ * @param string $redirect_url Url trở về sau khi xác thực thành công
+ * @param bool   $go_direct    true: chuyển hướng ngay, false: trả về URL để chuyển hướng
+ * @return string
+ * @throws Exception
+ */
+function go_verified_password(string $area, string $redirect_url, bool $go_direct = true): string
+{
+    $url = nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=users&' . NV_OP_VARIABLE . '=verify-password&area=' . urlencode($area) . '&nv_redirect=' . nv_redirect_encrypt(nv_url_rewrite($redirect_url, true)), true);
+    if ($go_direct) {
+        nv_redirect_location($url);
+    }
+    return $url;
+}
+
+/**
  * parse_phone()
  *
  * @param mixed $phone
@@ -4184,7 +4340,7 @@ function nv_d2u_get(string $str, ?int $hh = null, ?int $mm = null, ?int $ss = nu
  * @param int $mm
  * @param int $ss
  * @param string $lang
- * @return number
+ * @return int
  */
 function nv_d2u_post(string $str, ?int $hh = null, ?int $mm = null, ?int $ss = null, string $lang = '')
 {

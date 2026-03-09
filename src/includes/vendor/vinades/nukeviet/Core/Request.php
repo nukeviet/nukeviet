@@ -11,6 +11,7 @@
 
 namespace NukeViet\Core;
 
+use NukeViet\Http\HttpException;
 use NukeViet\Site;
 
 /**
@@ -311,8 +312,7 @@ class Request
 
         $this->remote_ip = !empty($ip) ? $ip : Ips::$remote_ip;
         if (Ips::ip2long($this->remote_ip) === false) {
-            http_response_code(403);
-            trigger_error(Ips::INCORRECT_IP, 256);
+            throw new HttpException(Ips::INCORRECT_IP, 403);
         }
 
         $this->cookie_key = md5($this->cookie_key);
@@ -489,8 +489,7 @@ class Request
                 }
 
                 if (!$crossAllowedVariables) {
-                    http_response_code(403);
-                    trigger_error(Request::REQUEST_BLOCKED, 256);
+                    throw new HttpException(Request::REQUEST_BLOCKED, 403);
                 }
             }
         }
@@ -534,8 +533,7 @@ class Request
                  * Nếu sai thì từ chối truy vấn
                  */
                 unset($_SERVER['HTTP_ORIGIN']);
-                http_response_code(403);
-                trigger_error(Request::INCORRECT_ORIGIN, 256);
+                throw new HttpException(Request::INCORRECT_ORIGIN, 403);
             }
         } else {
             $this->origin_key = 2;
@@ -626,8 +624,7 @@ class Request
     private function sessionStart($https_only)
     {
         if (headers_sent() or connection_status() != 0 or connection_aborted()) {
-            http_response_code(500);
-            trigger_error(Request::IS_HEADERS_SENT, 256);
+            throw new HttpException(Request::IS_HEADERS_SENT, 500);
         }
 
         $_secure = ($this->server_protocol == 'https' and $https_only) ? 1 : 0;
@@ -1739,11 +1736,13 @@ class Request
                     'Ả' => 'Ả', 'Á' => 'Á', 'À' => 'À', 'Ạ' => 'Ạ', 'Ã' => 'Ã',
                     'Ẳ' => 'Ẳ', 'Ắ' => 'Ắ', 'Ằ' => 'Ằ', 'Ặ' => 'Ặ', 'Ẵ' => 'Ẵ',
                     'Ẩ' => 'Ẩ', 'Ấ' => 'Ấ', 'Ầ' => 'Ầ', 'Ậ' => 'Ậ', 'Ẫ' => 'Ẫ',
+                    'ậ' => 'ậ', 'â' => 'â',
 
                     'ẻ' => 'ẻ', 'é' => 'é', 'è' => 'è', 'ẹ' => 'ẹ', 'ẽ' => 'ẽ',
                     'ể' => 'ể', 'ế' => 'ế', 'ề' => 'ề', 'ệ' => 'ệ', 'ễ' => 'ễ',
                     'Ẻ' => 'Ẻ', 'É' => 'É', 'È' => 'Ề', 'Ẹ' => 'Ẹ', 'Ẽ' => 'Ẽ',
                     'Ể' => 'Ể', 'Ế' => 'Ế', 'Ề' => 'Ề', 'Ệ' => 'Ệ', 'Ễ' => 'Ễ',
+                    'ệ' => 'ệ',
 
                     'ỉ' => 'ỉ', 'í' => 'í', 'ì' => 'ì', 'ị' => 'ị', 'ĩ' => 'ĩ',
                     'Ỉ' => 'Ỉ', 'Í' => 'Í', 'Ì' => 'Ì', 'Ị' => 'Ị', 'Ĩ' => 'Ĩ',
@@ -1754,6 +1753,7 @@ class Request
                     'Ỏ' => 'Ò', 'Ó' => 'Ó', 'Ò' => 'Ồ', 'Ọ' => 'Ọ', 'Õ' => 'Õ',
                     'Ở' => 'Ở', 'Ớ' => 'Ớ', 'Ờ' => 'Ờ', 'Ợ' => 'Ợ', 'Ỡ' => 'Ỡ',
                     'Ổ' => 'Ổ', 'Ố' => 'Ố', 'Ồ' => 'Ồ', 'Ộ' => 'Ộ', 'Ỗ' => 'Ỗ',
+                    'ô' => 'ô',
 
                     'ủ' => 'ủ', 'ú' => 'ú', 'ù' => 'ù', 'ụ' => 'ụ', 'ũ' => 'ũ',
                     'ử' => 'ử', 'ứ' => 'ứ', 'ừ' => 'ừ', 'ự' => 'ự', 'ữ' => 'ữ',

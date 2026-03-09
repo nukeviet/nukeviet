@@ -633,3 +633,23 @@ $lang_module['pp_source_all'] = 'Equivalent * - Allows all sources to be used';
 $lang_module['pp_source_self'] = 'self - Allow from this domain, excluding subdomains';
 
 $lang_module['fp_act'] = 'Active FP';
+
+$lang_module['cache_settings'] = 'Cache settings';
+$lang_module['cache_use'] = 'Use cache';
+$lang_module['files_cached'] = 'Files';
+$lang_module['memcached_host'] = 'Memcached host';
+$lang_module['memcached_port'] = 'Memcached connection port';
+$lang_module['memcached_config_needed'] = 'Please enter all parameters to connect to the Memcached server';
+$lang_module['redis_host'] = 'Redis host';
+$lang_module['redis_port'] = 'Redis connection port';
+$lang_module['redis_password'] = 'Redis connection password';
+$lang_module['redis_db_index'] = 'Redis database index';
+$lang_module['redis_timeout'] = 'Redis connection timeout';
+$lang_module['redis_timeout_unit'] = 'seconds';
+$lang_module['redis_config_needed'] = 'Please enter all parameters to connect to the Redis server';
+$lang_module['cached_extension_needed'] = 'The system does not have the %s extension installed. Therefore, the %s cache cannot be used.';
+$lang_module['redis_pass_note'] = 'The default password is left blank, but if set, it will be sent in plain text over the network. Please ensure that the connection to the Redis server is secure.';
+$lang_module['cache_prefix'] = 'Cache prefix';
+$lang_module['cache_prefix_note'] = 'Enter a prefix if you use Memcached or Redis and have multiple websites sharing the same cache server to avoid cache key conflicts between websites. The prefix consists of letters a-z, numbers 0-9 and underscore (_), must start with a letter. File cache does not use this prefix.';
+$lang_module['cache_prefix_invalid'] = 'Invalid prefix. Only accepts letters a-z, numbers 0-9 and underscore (_) and must start with a letter.';
+$lang_module['cache_test_error'] = 'Error connecting to cache server. Please check the configuration parameters. Error details: %s';

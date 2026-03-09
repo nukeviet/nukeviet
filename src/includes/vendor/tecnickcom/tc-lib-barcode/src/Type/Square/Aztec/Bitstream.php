@@ -7,8 +7,8 @@
  * @category    Library
  * @package     Barcode
  * @author      Nicola Asuni <info@tecnick.com>
- * @copyright   2023-2024 Nicola Asuni - Tecnick.com LTD
- * @license     http://www.gnu.org/copyleft/lesser.html GNU-LGPL v3 (see LICENSE.TXT)
+ * @copyright   2023-2026 Nicola Asuni - Tecnick.com LTD
+ * @license     https://www.gnu.org/copyleft/lesser.html GNU-LGPL v3 (see LICENSE.TXT)
  * @link        https://github.com/tecnickcom/tc-lib-barcode
  *
  * This file is part of tc-lib-barcode software library.
@@ -27,8 +27,8 @@ use Com\Tecnick\Barcode\Exception as BarcodeException;
  * @category    Library
  * @package     Barcode
  * @author      Nicola Asuni <info@tecnick.com>
- * @copyright   2023-2024 Nicola Asuni - Tecnick.com LTD
- * @license     http://www.gnu.org/copyleft/lesser.html GNU-LGPL v3 (see LICENSE.TXT)
+ * @copyright   2023-2026 Nicola Asuni - Tecnick.com LTD
+ * @license     https://www.gnu.org/copyleft/lesser.html GNU-LGPL v3 (see LICENSE.TXT)
  * @link        https://github.com/tecnickcom/tc-lib-barcode
  *
  * @SuppressWarnings("PHPMD.ExcessiveClassComplexity")
@@ -48,13 +48,13 @@ abstract class Bitstream extends \Com\Tecnick\Barcode\Type\Square\Aztec\Layers
         string $hint = 'A'
     ): void {
         $this->addFLG($eci);
-        $chrarr = unpack('C*', $code);
+        $chrarr = \unpack('C*', $code);
         if ($chrarr === false) {
             throw new BarcodeException('Unable to unpack the code');
         }
 
-        $chars = array_values($chrarr);
-        $chrlen = count($chars);
+        $chars = \array_values($chrarr);
+        $chrlen = \count($chars);
         if ($hint == 'B') {
             $this->binaryEncode($chars, $chrlen); // @phpstan-ignore argument.type
             return;
@@ -67,7 +67,7 @@ abstract class Bitstream extends \Com\Tecnick\Barcode\Type\Square\Aztec\Layers
      * Forced binary encoding for the given characters.
      *
      * @param array<int> $chars  Integer ASCII values of the characters to encode.
-     * @param int   $chrlen Lenght of the $chars array.
+     * @param int   $chrlen Length of the $chars array.
      */
     protected function binaryEncode(array $chars, int $chrlen): void
     {
@@ -108,7 +108,7 @@ abstract class Bitstream extends \Com\Tecnick\Barcode\Type\Square\Aztec\Layers
      * Automatic encoding for the given characters.
      *
      * @param array<int> $chars  Integer ASCII values of the characters to encode.
-     * @param int   $chrlen Lenght of the $chars array.
+     * @param int   $chrlen Length of the $chars array.
      */
     protected function autoEncode(array $chars, int $chrlen): void
     {
@@ -311,7 +311,7 @@ abstract class Bitstream extends \Com\Tecnick\Barcode\Type\Square\Aztec\Layers
                 break;
             case Data::MODE_DIGIT:
                 $common = $this->countPunctAndDigitChars($chars, $idx, $chrlen);
-                $clen = count($common);
+                $clen = \count($common);
                 if (($clen > 0) && ($clen < 6)) {
                     $this->tmpCdws = $common;
                     $this->mergeTmpCwdRaw();

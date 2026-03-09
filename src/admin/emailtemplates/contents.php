@@ -536,10 +536,10 @@ if (!empty($array['default_content'])) {
 $array['content'] = array_map('nv_htmlspecialchars', $array['content']);
 
 if (defined('NV_EDITOR') and nv_function_exists('nv_aleditor')) {
-    $array['default_content'] = nv_aleditor('default_content', '100%', '300px', $array['default_content'], '', NV_UPLOADS_DIR . '/' . $module_upload, NV_UPLOADS_DIR . '/' . $module_upload);
+    $array['default_content'] = nv_aleditor('default_content', '100%', '300px', $array['default_content'], '', NV_UPLOADS_DIR . '/' . $module_upload, NV_UPLOADS_DIR . '/' . $module_upload, 'setEditorReady');
 
     foreach ($array['content'] as $lang => $content) {
-        $array['content'][$lang] = nv_aleditor('lang_content_' . $lang, '100%', '300px', $content, '', NV_UPLOADS_DIR . '/' . $module_upload, NV_UPLOADS_DIR . '/' . $module_upload);
+        $array['content'][$lang] = nv_aleditor('lang_content_' . $lang, '100%', '300px', $content, '', NV_UPLOADS_DIR . '/' . $module_upload, NV_UPLOADS_DIR . '/' . $module_upload, 'setEditorReady');
     }
 } else {
     $array['default_content'] = '<textarea class="form-control" data-toggle="textareaemailcontent" style="width:100%;height:500px" name="default_content" id="emailtemplates_default_content">' . $array['default_content'] . '</textarea>';

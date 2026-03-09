@@ -60,6 +60,11 @@ $install_lang['modfuncs']['users']['editinfo'] = 'Thiết lập tài khoản';
 $install_lang['modfuncs']['users']['memberlist'] = 'Danh sách người dùng';
 $install_lang['modfuncs']['users']['logout'] = 'Thoát';
 $install_lang['modfuncs']['users']['groups'] = 'Quản lý nhóm';
+$install_lang['modfuncs']['users']['datadeletion'] = 'Xóa dữ liệu cá nhân';
+$install_lang['modfuncs']['users']['main'] = 'Trang chủ tài khoản';
+$install_lang['modfuncs']['users']['avatar'] = 'Đổi ảnh đại diện';
+$install_lang['modfuncs']['users']['security-privacy'] = 'Bảo mật và Quyền riêng tư';
+$install_lang['modfuncs']['users']['verify-password'] = 'Xác minh mật khẩu';
 
 $install_lang['modfuncs']['statistics'] = [];
 $install_lang['modfuncs']['statistics']['allreferers'] = 'Theo đường dẫn đến site';
@@ -107,6 +112,7 @@ $install_lang['cron']['cron_notification_autodel'] = 'Xóa thông báo cũ';
 $install_lang['cron']['cron_remove_expired_inform'] = 'Xóa thông báo quá hạn';
 $install_lang['cron']['cron_apilogs_autodel'] = 'Xóa các API-log hết hạn';
 $install_lang['cron']['cron_expadmin_handling'] = 'Xử lý admin quá hạn';
+$install_lang['cron']['cron_user_datadeletion_handling'] = 'Xóa dữ liệu người dùng đã lên lịch';
 
 $install_lang['groups']['NukeViet-Fans'] = 'Người hâm mộ';
 $install_lang['groups']['NukeViet-Admins'] = 'Người quản lý';
@@ -117,7 +123,7 @@ $install_lang['groups']['NukeViet-Admins-desc'] = 'Nhóm những người quản
 $install_lang['groups']['NukeViet-Programmers-desc'] = 'Nhóm Lập trình viên hệ thống NukeViet';
 
 $install_lang['vinades_fullname'] = 'Công ty cổ phần phát triển nguồn mở Việt Nam';
-$install_lang['vinades_address'] = 'Tầng 6, tòa nhà Sông Đà, 131 Trần Phú, Văn Quán, Hà Đông, Hà Nội';
+$install_lang['vinades_address'] = 'Tầng 6, tòa nhà Sông Đà, Số 131 Trần Phú, Phường Hà Đông, Thành phố Hà Nội';
 $install_lang['nukeviet_description'] = 'Chia sẻ thành công, kết nối đam mê';
 $install_lang['disable_site_content'] = 'Vì lý do kỹ thuật website tạm ngưng hoạt động. Thành thật xin lỗi các bạn vì sự bất tiện này!';
 

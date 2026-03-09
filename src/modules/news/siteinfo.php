@@ -14,7 +14,7 @@ if (!defined('NV_IS_FILE_SITEINFO')) {
 }
 
 $_arr_siteinfo = [];
-$cacheFile = NV_LANG_DATA . '_siteinfo_' . NV_CACHE_PREFIX . '.cache';
+$cacheFile = 'siteinfo_' . NV_CACHE_PREFIX . '.cache';
 if (($cache = $nv_Cache->getItem($mod, $cacheFile)) != false) {
     $_arr_siteinfo = unserialize($cache);
 } else {

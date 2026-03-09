@@ -139,6 +139,7 @@ $lang_module['add_error_choose'] = 'Erreur: Vous n\'avez pas désigné un utilis
 $lang_module['add_error_exist'] = 'Erreur: cet utilisateur est un administrateur';
 $lang_module['add_error_notexist'] = 'Erreur: cet utilisateur n\'existe pas';
 $lang_module['add_error_diff'] = 'Une erreur indéfinie est survenue';
+$lang_module['add_error_deleted'] = 'Ce compte est en attente de suppression ou a été supprimé et ne peut pas être sélectionné comme administrateur';
 $lang_module['action_account'] = 'Compte d\'utilisateur';
 $lang_module['action_account_nochange'] = 'Réserver compte d\'utilisateur';
 $lang_module['action_account_suspend'] = 'Suspendre compte d\'utilisateur';

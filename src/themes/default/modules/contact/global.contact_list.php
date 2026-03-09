@@ -30,7 +30,7 @@ if (!nv_function_exists('nv_contact_list_info')) {
             return '';
         }
 
-        $cache_file = NV_LANG_DATA . '_departments_block' . NV_CACHE_PREFIX . '.cache';
+        $cache_file = 'departments_block' . NV_CACHE_PREFIX . '.cache';
         if (($cache = $nv_Cache->getItem($module, $cache_file)) != false) {
             $departments = json_decode($cache, true);
         } else {

@@ -71,7 +71,7 @@ function server_info_update($config_ini_file)
             }
         }
     }
-    curl_close($ch);
+    unset($ch);
 
     $server_headers = !empty($server_headers) ? implode(',', $server_headers) : '';
 
@@ -93,7 +93,7 @@ function server_info_update($config_ini_file)
     } else {
         $http_only = (!empty($response) and !curl_errno($ch) and (strripos($response, 'x-is-https:') !== false)) ? false : true;
     }
-    curl_close($ch);
+    unset($ch);
 
     $contents = file_get_contents($config_ini_file);
     if (!empty($contents)) {
@@ -285,28 +285,28 @@ function set_ini_file(&$sys_info)
         $session_save_handler = ini_get('session.save_handler');
         $session_save_path = ini_get('session.save_path');
         if (strcasecmp($global_config['session_handler'], $session_save_handler) != 0) {
-            if ($global_config['session_handler'] == 'memcached' and in_array('memcached', $sys_info['support_cache'], true) and defined('NV_MEMCACHED_HOST') and defined('NV_MEMCACHED_PORT') and NV_MEMCACHED_HOST != '' and NV_MEMCACHED_PORT != '') {
+            if ($global_config['session_handler'] == 'memcached' and in_array('memcached', $sys_info['support_cache'], true) and !empty($global_config['memcached_host']) and !empty($global_config['memcached_port']) ) {
                 ini_set('session.save_handler', 'memcached');
-                $session_save_path != NV_MEMCACHED_HOST . ':' . NV_MEMCACHED_PORT && ini_set('session.save_path', NV_MEMCACHED_HOST . ':' . NV_MEMCACHED_PORT);
+                $session_save_path != $global_config['memcached_host'] . ':' . $global_config['memcached_port'] && ini_set('session.save_path', $global_config['memcached_host'] . ':' . $global_config['memcached_port']);
                 $new_session_save_handler = ini_get('session.save_handler');
                 $new_session_save_path = ini_get('session.save_path');
-                if ($new_session_save_handler == 'memcached' and $new_session_save_path == NV_MEMCACHED_HOST . ':' . NV_MEMCACHED_PORT) {
+                if ($new_session_save_handler == 'memcached' and $new_session_save_path == $global_config['memcached_host'] . ':' . $global_config['memcached_port']) {
                     $ini_set['session.save_handler'] = 'memcached';
-                    $new_session_save_path != $session_save_path && $ini_set['session.save_path'] = NV_MEMCACHED_HOST . ':' . NV_MEMCACHED_PORT;
+                    $new_session_save_path != $session_save_path && $ini_set['session.save_path'] = $global_config['memcached_host'] . ':' . $global_config['memcached_port'];
                     $session_save_handler = $new_session_save_handler;
                     $session_save_path = $new_session_save_path;
                 } else {
                     ini_set('session.save_handler', $session_save_handler);
                     $new_session_save_path != $session_save_path && ini_set('session.save_path', $session_save_path);
                 }
-            } elseif ($global_config['session_handler'] == 'redis' and in_array('redis', $sys_info['support_cache'], true) and defined('NV_REDIS_HOST') and defined('NV_REDIS_PORT') and NV_REDIS_HOST != '' and NV_REDIS_PORT != '') {
+            } elseif ($global_config['session_handler'] == 'redis' and in_array('redis', $sys_info['support_cache'], true) and !empty($global_config['redis_host']) and !empty($global_config['redis_port'])) {
                 ini_set('session.save_handler', 'redis');
-                $session_save_path != NV_REDIS_HOST . ':' . NV_REDIS_PORT && ini_set('session.save_path', NV_REDIS_HOST . ':' . NV_REDIS_PORT);
+                $session_save_path != $global_config['redis_host'] . ':' . $global_config['redis_port'] && ini_set('session.save_path', $global_config['redis_host'] . ':' . $global_config['redis_port']);
                 $new_session_save_handler = ini_get('session.save_handler');
                 $new_session_save_path = ini_get('session.save_path');
-                if ($new_session_save_handler == 'redis' and $new_session_save_path == NV_REDIS_HOST . ':' . NV_REDIS_PORT) {
+                if ($new_session_save_handler == 'redis' and $new_session_save_path == $global_config['redis_host'] . ':' . $global_config['redis_port']) {
                     $ini_set['session.save_handler'] = 'redis';
-                    $new_session_save_path != $session_save_path && $ini_set['session.save_path'] = NV_REDIS_HOST . ':' . NV_REDIS_PORT;
+                    $new_session_save_path != $session_save_path && $ini_set['session.save_path'] = $global_config['redis_host'] . ':' . $global_config['redis_port'];
                     $session_save_handler = $new_session_save_handler;
                     $session_save_path = $new_session_save_path;
                 } else {
@@ -380,7 +380,7 @@ function set_ini_file(&$sys_info)
             curl_setopt($ch, CURLOPT_NOSIGNAL, 1);
             curl_setopt($ch, CURLOPT_HTTPHEADER, ['Referer: ' . NV_MY_DOMAIN]);
             curl_exec($ch);
-            curl_close($ch);
+            unset($ch);
         }
     }
 }
@@ -406,50 +406,42 @@ if ($iniSaveTime + 86400 < NV_CURRENTTIME) {
 
 //Neu he thong khong ho tro php se bao loi
 if (version_compare(PHP_VERSION, '5.6.0') < 0) {
-    http_response_code(500);
-    trigger_error('You are running an unsupported PHP version. Please upgrade to PHP 5.6 or higher before trying to install Nukeviet Portal', 256);
+    throw new \NukeViet\Http\HttpException('You are running an unsupported PHP version. Please upgrade to PHP 5.6 or higher before trying to install Nukeviet Portal', 500);
 }
 
 //Neu he thong khong ho tro curl se bao loi
 if (!(extension_loaded('curl') and (empty($sys_info['disable_functions']) or (!empty($sys_info['disable_functions']) and !preg_grep('/^curl\_/', $sys_info['disable_functions']))))) {
-    http_response_code(500);
-    trigger_error('The cURL library is not installed or its underlying functions are blocked', 256);
+    throw new \NukeViet\Http\HttpException('The cURL library is not installed or its underlying functions are blocked', 500);
 }
 
 //Neu he thong khong ho tro opendir se bao loi
 if (!(function_exists('opendir') and !in_array('opendir', $sys_info['disable_functions'], true))) {
-    http_response_code(500);
-    trigger_error('Opendir function is not supported', 256);
+    throw new \NukeViet\Http\HttpException('Opendir function is not supported', 500);
 }
 
 //Neu he thong khong ho tro GD se bao loi
 if (!(extension_loaded('gd'))) {
-    http_response_code(500);
-    trigger_error('GD not installed', 256);
+    throw new \NukeViet\Http\HttpException('GD not installed', 500);
 }
 
 //Neu he thong khong ho tro json se bao loi
 if (!extension_loaded('json')) {
-    http_response_code(500);
-    trigger_error('Json object not supported', 256);
+    throw new \NukeViet\Http\HttpException('Json object not supported', 500);
 }
 
 //Neu he thong khong ho tro xml se bao loi
 if (!extension_loaded('xml')) {
-    http_response_code(500);
-    trigger_error('Xml library not supported', 256);
+    throw new \NukeViet\Http\HttpException('Xml library not supported', 500);
 }
 
 //Neu he thong khong ho tro openssl encrypt se bao loi
 if (!function_exists('openssl_encrypt')) {
-    http_response_code(500);
-    trigger_error('Openssl library not available', 256);
+    throw new \NukeViet\Http\HttpException('Openssl library not available', 500);
 }
 
 //Neu he thong khong ho tro session se bao loi
 $session_save_handler = ini_get('session.save_handler');
 $session_save_path = ini_get('session.save_path');
 if (!extension_loaded('session') or empty($session_save_handler) or ($session_save_handler != 'files' and empty($session_save_path))) {
-    http_response_code(500);
-    trigger_error('Session object not supported', 256);
+    throw new \NukeViet\Http\HttpException('Session object not supported', 500);
 }

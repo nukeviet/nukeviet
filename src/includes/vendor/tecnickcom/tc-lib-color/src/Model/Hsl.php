@@ -7,8 +7,8 @@
  * @category  Library
  * @package   Color
  * @author    Nicola Asuni <info@tecnick.com>
- * @copyright 2015-2024 Nicola Asuni - Tecnick.com LTD
- * @license   http://www.gnu.org/copyleft/lesser.html GNU-LGPL v3 (see LICENSE.TXT)
+ * @copyright 2015-2026 Nicola Asuni - Tecnick.com LTD
+ * @license   https://www.gnu.org/copyleft/lesser.html GNU-LGPL v3 (see LICENSE.TXT)
  * @link      https://github.com/tecnickcom/tc-lib-color
  *
  * This file is part of tc-lib-color software library.
@@ -25,8 +25,8 @@ namespace Com\Tecnick\Color\Model;
  * @category  Library
  * @package   Color
  * @author    Nicola Asuni <info@tecnick.com>
- * @copyright 2015-2024 Nicola Asuni - Tecnick.com LTD
- * @license   http://www.gnu.org/copyleft/lesser.html GNU-LGPL v3 (see LICENSE.TXT)
+ * @copyright 2015-2026 Nicola Asuni - Tecnick.com LTD
+ * @license   https://www.gnu.org/copyleft/lesser.html GNU-LGPL v3 (see LICENSE.TXT)
  * @link      https://github.com/tecnickcom/tc-lib-color
  */
 class Hsl extends \Com\Tecnick\Color\Model
@@ -60,7 +60,7 @@ class Hsl extends \Com\Tecnick\Color\Model
     protected $cmp_lightness = 0.0;
 
     /**
-     * Get an array with all color components
+     * Get an array with all color components.
      *
      * @return array<string, float> with keys ('H', 'S', 'L', 'A')
      */
@@ -71,6 +71,27 @@ class Hsl extends \Com\Tecnick\Color\Model
             'S' => $this->cmp_saturation,
             'L' => $this->cmp_lightness,
             'A' => $this->cmp_alpha,
+        ];
+    }
+
+    /**
+     * Get an array with all color components for
+     * the PDF appearance characteristics dictionary.
+     *
+     * The numbers that shall be in the range 0.0 to 1.0.
+     * The number of array elements determines the colour space
+     * in which the colour shall be defined:
+     * 3 = DeviceRGB
+     *
+     * @return array<float> DeviceRGB color components('R', 'G', 'B')
+     */
+    public function getPDFacArray(): array
+    {
+        $rgb = $this->toRgbArray();
+        return [
+            $rgb['red'],
+            $rgb['green'],
+            $rgb['blue'],
         ];
     }
 
@@ -119,7 +140,7 @@ class Hsl extends \Com\Tecnick\Color\Model
             return '["T"]'; // transparent color
         }
 
-        return sprintf('["RGB",%F,%F,%F]', $rgb['red'], $rgb['green'], $rgb['blue']);
+        return \sprintf('["RGB",%F,%F,%F]', $rgb['red'], $rgb['green'], $rgb['blue']);
     }
 
     /**
@@ -128,7 +149,7 @@ class Hsl extends \Com\Tecnick\Color\Model
     public function getComponentsString(): string
     {
         $rgb = $this->toRgbArray();
-        return sprintf('%F %F %F', $rgb['red'], $rgb['green'], $rgb['blue']);
+        return \sprintf('%F %F %F', $rgb['red'], $rgb['green'], $rgb['blue']);
     }
 
     /**
@@ -141,7 +162,7 @@ class Hsl extends \Com\Tecnick\Color\Model
     {
         $mode = 'rg';
         if ($stroke) {
-            $mode = strtoupper($mode);
+            $mode = \strtoupper($mode);
         }
 
         return $this->getComponentsString() . ' ' . $mode . "\n";
@@ -209,18 +230,18 @@ class Hsl extends \Com\Tecnick\Color\Model
         }
 
         if ((6 * $hue) < 1) {
-            return max(0, min(1, ($vala + (($valb - $vala) * 6 * $hue))));
+            return \max(0, \min(1, ($vala + (($valb - $vala) * 6 * $hue))));
         }
 
         if ((2 * $hue) < 1) {
-            return max(0, min(1, $valb));
+            return \max(0, \min(1, $valb));
         }
 
         if ((3 * $hue) < 2) {
-            return max(0, min(1, ($vala + (($valb - $vala) * ((2 / 3) - $hue) * 6))));
+            return \max(0, \min(1, ($vala + (($valb - $vala) * ((2 / 3) - $hue) * 6))));
         }
 
-        return max(0, min(1, $vala));
+        return \max(0, \min(1, $vala));
     }
 
     /**

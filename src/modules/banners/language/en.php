@@ -171,3 +171,6 @@ $lang_module['publ_time_info'] = 'If you do not select the start time for displa
 $lang_module['enter_keyword'] = 'Enter keywords';
 $lang_module['all_plan'] = 'All plans';
 $lang_module['admin_add_banner'] = 'Add banner';
+$lang_module['chart_data_empty'] = 'No clicks available';
+$lang_module['chart_lbl_clicks'] = 'Clicks';
+$lang_module['chart_lbl_total'] = 'Total';

@@ -87,7 +87,7 @@
         </div>
     </div>
     {/if}
-    <div class="row g-4">
+    <div class="row g-4 mb-4">
         <div class="col-xxl-6">
             <div class="card border-primary border-3 border-bottom-0 border-start-0 border-end-0">
                 <div class="card-header fs-5 fw-medium">{$LANG->getModule('access_register')}</div>
@@ -502,6 +502,13 @@
                             </div>
                         </div>
                     </div>
+                    <div class="row mb-3">
+                        <label for="element_hold_deleted_username" class="col-sm-3 col-xxl-4 col-form-label text-sm-end">{$LANG->getModule('hold_deleted_username')}</label>
+                        <div class="col-sm-8 col-lg-6 col-xxl-8">
+                            <input class="form-control w-auto mw-100" type="number" id="element_hold_deleted_username" name="hold_deleted_username" value="{$DATA.hold_deleted_username}" min="0" max="1000">
+                            <div class="form-text">{$LANG->getModule('hold_deleted_username_note')}</div>
+                        </div>
+                    </div>
                     <div class="row">
                         <div class="col-sm-8 offset-sm-3 offset-xxl-4">
                             <button type="submit" class="btn btn-primary">{$LANG->getGlobal('save')}</button>
@@ -514,3 +521,49 @@
     <input type="hidden" name="checkss" value="{$DATA.checkss}">
     <input type="hidden" name="save" value="1">
 </form>
+<script type="text/javascript" src="{$smarty.const.ASSETS_STATIC_URL}/js/clipboard/clipboard.min.js"></script>
+<div class="card">
+    <div class="card-header bg-primary text-white rounded-top-2 fs-5 fw-medium">
+        {$LANG->getModule('redirecturi_helper_title')}
+    </div>
+    <div class="card-body">
+        <p>
+            {$LANG->getModule('redirecturi_helper_text')}.
+        </p>
+        <h6>{$LANG->getModule('redirecturi_helper_fb1')}</h6>
+        <div class="row g-3 mb-3">
+            {foreach from=$FACEBOOK_REDIRECTURI key=key item=uri}
+            <div class="col-12 col-xxl-6">
+                <div class="input-group">
+                    <input type="text" class="form-control" value="{$uri}" readonly aria-label="{$LANG->getModule('redirecturi_helper_fb1')}" id="fb_redirecturi_{$key}">
+                    <button class="btn btn-secondary copy-btn" type="button" data-success="{$LANG->getGlobal('copy_to_clipboard')}" data-clipboard-target="#fb_redirecturi_{$key}"><i class="fa-solid fa-copy"></i> {$LANG->getGlobal('copy')}</button>
+                </div>
+            </div>
+            {/foreach}
+        </div>
+        <hr>
+        <h6>{$LANG->getModule('redirecturi_helper_gg')}</h6>
+        <div class="row g-3 mb-3">
+            {foreach from=$GOOGLE_REDIRECTURI key=key item=uri}
+            <div class="col-12 col-xxl-6">
+                <div class="input-group">
+                    <input type="text" class="form-control" value="{$uri}" readonly aria-label="{$LANG->getModule('redirecturi_helper_gg')}" id="gg_redirecturi_{$key}">
+                    <button class="btn btn-secondary copy-btn" type="button" data-success="{$LANG->getGlobal('copy_to_clipboard')}" data-clipboard-target="#gg_redirecturi_{$key}"><i class="fa-solid fa-copy"></i> {$LANG->getGlobal('copy')}</button>
+                </div>
+            </div>
+            {/foreach}
+        </div>
+        <hr>
+        <h6>{$LANG->getModule('redirecturi_helper_fb2')}</h6>
+        <div class="row g-3">
+            {foreach from=$FACEBOOK_DATADELETIONURL key=key item=uri}
+            <div class="col-12 col-xxl-6">
+                <div class="input-group">
+                    <input type="text" class="form-control" value="{$uri}" readonly aria-label="{$LANG->getModule('redirecturi_helper_fb2')}" id="fb_datadeletionurl_{$key}">
+                    <button class="btn btn-secondary copy-btn" type="button" data-success="{$LANG->getGlobal('copy_to_clipboard')}" data-clipboard-target="#fb_datadeletionurl_{$key}"><i class="fa-solid fa-copy"></i> {$LANG->getGlobal('copy')}</button>
+                </div>
+            </div>
+            {/foreach}
+        </div>
+    </div>
+</div>

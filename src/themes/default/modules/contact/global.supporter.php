@@ -48,7 +48,7 @@ if (!function_exists('block_supporter_get_list')) {
         global $db, $nv_Cache, $site_mods;
 
         $mod_table = NV_PREFIXLANG . '_' . $site_mods[$module]['module_data'];
-        $cache_file = NV_LANG_DATA . '_supporterlist' . NV_CACHE_PREFIX . '.cache';
+        $cache_file = 'supporterlist' . NV_CACHE_PREFIX . '.cache';
         if (($cache = $nv_Cache->getItem($module, $cache_file)) != false) {
             return unserialize($cache);
         }

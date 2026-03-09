@@ -44,6 +44,7 @@
  - Add more style left menu admin css
  - Notification
  - Site Modal
+ - Editor
  ========================================================================== */
 
 :root {
@@ -1379,4 +1380,13 @@ div.radio [type='radio'] {
 select.form-control > optgroup {
     background-color: #666;
     color: #fff;
+}
+
+/** Editor
+ -----------------------------------------------------------------------------*/
+.ck {
+    --ck-content-font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+    --ck-content-font-size: 13px;
+    --ck-content-font-color: #333;
+    --ck-content-line-height: 1.42857143;
 }

@@ -35,6 +35,7 @@ $allow_editor = (defined('NV_EDITOR') and nv_function_exists('nv_aleditor')) ? t
 
 if (!defined('CKEDITOR5_CLASSIC') and $allow_editor) {
     define('CKEDITOR5_CLASSIC', true);
+    $my_head .= '<link rel="stylesheet" href="' . NV_STATIC_URL . NV_EDITORSDIR . '/ckeditor5-classic/ckeditor.css?t=' . $global_config['timestamp'] . '">';
     $my_head .= '<script type="text/javascript" src="' . NV_STATIC_URL . NV_EDITORSDIR . '/ckeditor5-classic/ckeditor.js?t=' . $global_config['timestamp'] . '"></script>';
     $my_head .= '<script type="text/javascript" src="' . NV_STATIC_URL . NV_EDITORSDIR . '/ckeditor5-classic/language/' . NV_LANG_INTERFACE . '.js?t=' . $global_config['timestamp'] . '"></script>';
 }

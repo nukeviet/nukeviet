@@ -20,7 +20,7 @@ if (!defined('NV_MAINFILE')) {
  */
 class Emails
 {
-        /**
+    /**
      * @var integer Gửi thông tin kích hoạt khi đăng kí hoặc quản trị gửi lại
      */
     public const REGISTER_ACTIVE = 1;
@@ -174,4 +174,24 @@ class Emails
      * @var integer Thông báo khóa đăng nhập bị xóa
      */
     public const PASSKEY_DEL = 31;
+
+    /**
+     * @var integer Gửi mã xác minh khi người dùng yêu cầu xóa tài khoản
+     */
+    public const DELETE_ACCOUNT_SECCODE = 32;
+
+    /**
+     * @var integer Gửi thông báo khi yêu cầu xóa tài khoản đang chờ xử lý
+     */
+    public const DELETE_ACCOUNT_PENDING = 33;
+
+    /**
+     * @var integer Gửi thông báo khi yêu cầu xóa tài khoản bị hủy
+     */
+    public const DELETE_ACCOUNT_CANCEL = 34;
+
+    /**
+     * @var integer Gửi thông báo khi yêu cầu xóa tài khoản đã hoàn thành
+     */
+    public const DELETE_ACCOUNT_COMPLETED = 35;
 }

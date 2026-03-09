@@ -156,7 +156,9 @@ if (!$check_exit_mod) {
     $sth->bindValue(':dirname', NV_UPLOADS_DIR . '/' . $modname, PDO::PARAM_STR);
     $sth->bindValue(':dirnamelike', NV_UPLOADS_DIR . '/' . $modname . '/%', PDO::PARAM_STR);
     $sth->execute();
-    while ([$did] = $sth->fetch(3)) {
+    while ($_scratch = $sth->fetch(3)) {
+        [$did] = $_scratch;
+        unset($_scratch);
         $db->query('DELETE FROM ' . NV_UPLOAD_GLOBALTABLE . '_file WHERE did = ' . $did);
         $db->query('DELETE FROM ' . NV_UPLOAD_GLOBALTABLE . '_dir WHERE did = ' . $did);
     }

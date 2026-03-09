@@ -27,6 +27,7 @@ if ($nv_Request->isset_request('nv_redirect', 'post,get')) {
 }
 
 if (defined('SSO_CLIENT_DOMAIN')) {
+    /** @disregard P1011 */
     $allowed_client_origin = explode(',', SSO_CLIENT_DOMAIN);
     $sso_client = $nv_Request->get_title('client', 'get', '');
     if (!empty($sso_client)) {

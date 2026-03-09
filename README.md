@@ -17,7 +17,7 @@ Detailed information about Nukeviet at Wikipedia Encyclopedia: http://vi.wikiped
 
 **Requirements:**  
 - OS: Unix (Linux, Ubuntu, Fedora ...) or Windows
-- PHP: From PHP 8.2 to PHP 8.4
+- PHP: From PHP 8.2 to PHP 8.5
 - MySQL: MySQL 5.5 or newer
 
 **Installation:**
@@ -112,6 +112,19 @@ The groups below require the website to be installed:
 - `off-mail` disable email sending.
 - `all` test everything.
 
+**CSS Compilation**
+
+- To compile CSS in admin run `npm run watch-admin`
+- To compile core CSS run `npm run watch-core`
+
+If your CSS compilation has changes even though you haven't modified any scss files, check the library versions with the `npm list` command and ensure the following libraries match:
+
+```
+├── postcss-cli@11.0.1
+├── postcss@8.5.6
+├── rtlcss@4.3.0
+```
+
 **Next step:**
 
 Please see the [technical manual](https://wiki.nukeviet.vn/technical_manual5) for more information.
@@ -147,5 +160,5 @@ VIETNAM OPEN SOURCE DEVELOPMENT JOINT STOCK COMPANY (VINADES.,JSC)
 Website: http://vinades.vn | http://nukeviet.vn | http://nukeviet.com
 
 Head Office:
-  - 6th floor, Song Da building, No. 131 Tran Phu street, Van Quan ward, Ha Dong district, Hanoi city, Vietnam.
+  - 6th floor, Song Da building, No. 131 Tran Phu Street, Ha Dong Ward, Hanoi City, Vietnam.
   - Phone: +84-24-85872007, Fax: +84-24-35500914, Email: contact (at) vinades.vn

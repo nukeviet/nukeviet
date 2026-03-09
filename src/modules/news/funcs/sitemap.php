@@ -28,10 +28,10 @@ if (!defined('NV_IS_MOD_NEWS')) {
  */
 
 $url = [];
-$cacheFile = NV_LANG_DATA . '_sitemap_' . NV_CACHE_PREFIX . '.cache';
+$cacheFile = 'sitemap_' . NV_CACHE_PREFIX . '.cache';
 $cacheTTL = 7200;
 
-if (($cache = $nv_Cache->getItem($module_name, $cacheFile, $cacheTTL)) != false) {
+if (($cache = $nv_Cache->getItem($module_name, $cacheFile, ttl: $cacheTTL)) != false) {
     $url = unserialize($cache);
 } else {
     $db_slave->sqlreset()
@@ -44,7 +44,9 @@ if (($cache = $nv_Cache->getItem($module_name, $cacheFile, $cacheTTL)) != false)
 
     $url = [];
 
-    while ([$id, $catid_i, $publtime, $alias] = $result->fetch(3)) {
+    while ($_scratch = $result->fetch(3)) {
+        [$id, $catid_i, $publtime, $alias] = $_scratch;
+        unset($_scratch);
         $catalias = $global_array_cat[$catid_i]['alias'];
         $url[] = [
             'link' => NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $catalias . '/' . $alias . '-' . $id . $global_config['rewrite_exturl'],
@@ -55,7 +57,7 @@ if (($cache = $nv_Cache->getItem($module_name, $cacheFile, $cacheTTL)) != false)
     }
 
     $cache = serialize($url);
-    $nv_Cache->setItem($module_name, $cacheFile, $cache, $cacheTTL);
+    $nv_Cache->setItem($module_name, $cacheFile, $cache, ttl: $cacheTTL);
 }
 
 nv_xmlSitemap_generate($url);

@@ -153,11 +153,6 @@ function ctbtLoad(a) {
     })
 }
 
-function openID_load(a) {
-    nv_open_browse($(a).attr("href"), "NVOPID", 550, 500, "resizable=no,scrollbars=1,toolbar=no,location=no,titlebar=no,menubar=0,location=no,status=no");
-    return !1
-}
-
 function openID_result() {
     var a = $("#openidResult");
     a.fadeIn();
@@ -328,12 +323,6 @@ $(function() {
     $("#openidBt").on("click", function() {
         openID_result();
         return !1
-    });
-
-    //Đăng nhập bằng OpenID
-    $('body').on('click', '[data-toggle=openID_load]', function(e) {
-        e.preventDefault();
-        openID_load(this)
     });
 
     // Google map

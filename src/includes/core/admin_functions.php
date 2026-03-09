@@ -22,7 +22,7 @@ if (!defined('NV_ADMIN') or !defined('NV_MAINFILE')) {
 function nv_groups_list($mod_data = 'users')
 {
     global $nv_Cache;
-    $cache_file = NV_LANG_DATA . '_groups_list_' . NV_CACHE_PREFIX . '.cache';
+    $cache_file = 'groups_list_' . NV_CACHE_PREFIX . '.cache';
     if (($cache = $nv_Cache->getItem($mod_data, $cache_file)) != false) {
         return unserialize($cache);
     }
@@ -103,7 +103,7 @@ function nv_var_export($var_array, $isInt = false)
  */
 function nv_save_file_config_global()
 {
-    global $nv_Cache, $db, $global_config, $db_config;
+    global $nv_Cache, $db, $global_config, $db_config, $crypt;
 
     if ($global_config['idsite']) {
         return false;
@@ -118,7 +118,9 @@ function nv_save_file_config_global()
     $sql = 'SELECT module, config_name, config_value FROM ' . NV_CONFIG_GLOBALTABLE . " WHERE lang='sys' AND (module='global' OR module='define') ORDER BY config_name ASC";
     $result = $db->query($sql);
 
-    while ([$c_module, $c_config_name, $c_config_value] = $result->fetch(3)) {
+    while ($_scratch = $result->fetch(3)) {
+        [$c_module, $c_config_name, $c_config_value] = $_scratch;
+        unset($_scratch);
         if ($c_module == 'define') {
             if (preg_match('/^\d+$/', $c_config_value)) {
                 $content_config .= "define('" . strtoupper($c_config_name) . "', " . $c_config_value . ");\n";
@@ -157,6 +159,7 @@ function nv_save_file_config_global()
 
     $config_name_array = ['file_allowed_ext', 'forbid_extensions', 'forbid_mimes', 'allow_sitelangs', 'allow_request_mods', 'config_sso'];
     $config_name_json = ['crosssite_valid_domains', 'crosssite_valid_ips', 'crosssite_allowed_variables', 'crossadmin_valid_domains', 'crossadmin_valid_ips', 'domains_whitelist', 'ip_allow_null_origin', 'zaloWebhookIPs', 'end_url_variables', 'cdn_url', 'region'];
+    $config_name_encrypted = ['redis_password', 'fpt_user_pass', 'smtp_password'];
 
     foreach ($config_variable as $c_config_name => $c_config_value) {
         if (in_array($c_config_name, $config_name_array, true)) {
@@ -194,6 +197,8 @@ function nv_save_file_config_global()
             } else {
                 $content_config .= "\$global_config['" . $c_config_name . "'] = " . nv_var_export($value) . ";\n";
             }
+        } elseif (in_array($c_config_name, $config_name_encrypted, true) and !empty($c_config_value)) {
+            $content_config .= "\$global_config['" . $c_config_name . "'] = '" . ($crypt->decrypt($c_config_value) ?? '') . "';\n";
         } else {
             if (preg_match('/^(0|[1-9][0-9]*)$/', $c_config_value) and $c_config_name != 'facebook_client_id') {
                 $content_config .= "\$global_config['" . $c_config_name . "'] = " . $c_config_value . ";\n";
@@ -711,7 +716,9 @@ function nv_save_file_ips($type = 0)
     }
 
     $result = $db->query('SELECT ip, mask, area, begintime, endtime FROM ' . $db_config['prefix'] . '_ips WHERE type=' . $type);
-    while ([$dbip, $dbmask, $dbarea, $dbbegintime, $dbendtime] = $result->fetch(3)) {
+    while ($_scratch = $result->fetch(3)) {
+        [$dbip, $dbmask, $dbarea, $dbbegintime, $dbendtime] = $_scratch;
+        unset($_scratch);
         $dbendtime = (int) $dbendtime;
         $dbarea = (int) $dbarea;
 
@@ -923,8 +930,7 @@ function nv_update_robots($robots_config, bool $save = false, array $config = []
     }
     // Kiểm tra các config cần thiết
     if (!isset($real_config['allow_sitelangs'], $real_config['rewrite_enable'], $real_config['check_rewrite_file'])) {
-        http_response_code(500);
-        trigger_error('Error: Missing config for updating robots', E_USER_ERROR);
+        throw new \NukeViet\Http\HttpException('Error: Missing config for updating robots', 500);
     }
     if ($force_gconfig) {
         $global_config = $real_config;

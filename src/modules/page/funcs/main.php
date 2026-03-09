@@ -26,6 +26,11 @@ if ($page_config['viewtype'] == 2) {
     $page_url .= '&amp;' . NV_OP_VARIABLE . '=' . $rowdetail['alias'] . $global_config['rewrite_exturl'];
     $canonicalUrl = getCanonicalUrl($page_url);
 
+    // Bài viết đình chỉ chỉ quản trị mới xem được
+    if (empty($rowdetail['status']) and !defined('NV_IS_MODADMIN')) {
+        nv_error404();
+    }
+
     $rowdetail['number_add_time'] = $rowdetail['add_time'];
     $rowdetail['number_edit_time'] = $rowdetail['edit_time'] ?: $rowdetail['add_time'];
 

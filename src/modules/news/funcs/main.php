@@ -144,8 +144,8 @@ if ($page > 1) {
 $canonicalUrl = getCanonicalUrl($page_url);
 
 if (!defined('NV_IS_MODADMIN') and $page < 5) {
-    $cache_file = NV_LANG_DATA . '_' . $module_info['template'] . '-' . $op . '-' . $viewcat . '-' . $page . '-' . NV_CACHE_PREFIX . '.cache';
-    if (($cache = $nv_Cache->getItem($module_name, $cache_file, 3600)) != false) {
+    $cache_file = $module_info['template'] . '-' . $op . '-' . $viewcat . '-' . $page . '-' . NV_CACHE_PREFIX . '.cache';
+    if (($cache = $nv_Cache->getItem($module_name, $cache_file, ttl: 3600)) != false) {
         $cache = json_decode($cache, true);
         $contents = $cache['html'];
         $schemas = $cache['schemas'];
@@ -455,7 +455,7 @@ if (empty($contents)) {
             'schemas' => $schemas,
             'description' => $desc,
             'keyword' => $kw
-        ]));
+        ]), ttl: 3600);
     }
 }
 

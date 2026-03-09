@@ -75,6 +75,45 @@ if ($nv_Request->isset_request('forcedrelogin', 'post')) {
     ]);
 }
 
+// Hủy yêu cầu xóa dữ liệu
+if ($nv_Request->isset_request('canceldeletion', 'post')) {
+    nv_insert_logs(NV_LANG_DATA, $module_name, 'admin_cancel_request_deletion', 'User ID:' . $userid, $admin_info['admin_id']);
+
+    $sql = "UPDATE " . NV_MOD_TABLE . " SET delete_at=0 WHERE userid=" . $userid;
+    $db->query($sql);
+
+    $sql = "UPDATE " . NV_MOD_TABLE . "_info SET deletion_checkcode='' WHERE userid=" . $userid;
+    $db->query($sql);
+
+    $sql = "DELETE FROM " . NV_MOD_TABLE . "_deleted WHERE userid=" . $userid . " AND request_source=''";
+    $db->query($sql);
+
+    // Gửi email thông báo hủy yêu cầu xóa tài khoản
+    $lang = $row['language'] ?: NV_LANG_INTERFACE;
+    $link_change_pass = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . $lang . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=editinfo/password';
+    $link_security = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . $lang . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=security-privacy';
+
+    $send_data = [[
+        'to' => $row['email'],
+        'data' => [
+            'first_name' => $row['first_name'],
+            'last_name' => $row['last_name'],
+            'username' => $row['username'],
+            'email' => $row['email'],
+            'gender' => $row['gender'],
+            'pass_link' => urlRewriteWithDomain($link_change_pass, NV_MY_DOMAIN),
+            'link' => urlRewriteWithDomain($link_security, NV_MY_DOMAIN),
+            'lang' => $lang
+        ]
+    ]];
+    nv_sendmail_template_async([$module_name, Emails::DELETE_ACCOUNT_CANCEL], $send_data, $lang);
+
+    nv_jsonOutput([
+        'status' => 'OK',
+        'mess' => $nv_Lang->getModule('delacc_cancel_success')
+    ]);
+}
+
 // Yêu cầu thay đổi mật khẩu
 if ($nv_Request->isset_request('psr', 'post')) {
     if ($nv_Request->isset_request('type', 'post')) {

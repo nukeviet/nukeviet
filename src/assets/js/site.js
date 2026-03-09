@@ -952,8 +952,15 @@ $(function() {
         $(this).data('redirect') ? loginForm($(this).data('redirect')) : loginForm()
     });
 
-    //XSSsanitize + Captcha
+    // XSSsanitize + Captcha
     $('body').on('click', '[type=submit]:not([name])', function(e) {
+        // Check if button is inside CKEditor UI
+        // Selector matches elements with class starting with 'ck-' or containing ' ck-'
+        // This covers all CKEditor 5 UI elements (dialogs, dropdowns, toolbars, etc.)
+        if ($(this).closest('[class^="ck-"], [class*=" ck-"]').length) {
+            return;
+        }
+
         var form = $(this).parents('form');
         if (!$('[name=submit]', form).length) {
             btnClickSubmit(e, form)
@@ -1034,6 +1041,16 @@ $(function() {
             c = "click" == i.type ? !c || (this.checked = !1) : this.checked
         }
     }());
+
+    // Đăng nhập bằng OpenID
+    $('body').on('click', '[data-toggle=openID_load]', function(e) {
+        e.preventDefault();
+        if (isInAppBrowser() || isAppleDevice()) {
+            window.location.href = $(this).attr('href');
+            return;
+        }
+        nv_open_browse($(this).attr('href'), "NVOPID", 550, 500, "resizable=no,scrollbars=1,toolbar=no,location=no,titlebar=no,menubar=0,location=no,status=no");
+    });
 });
 
 $(window).on('load', function() {

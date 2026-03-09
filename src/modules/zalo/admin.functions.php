@@ -25,7 +25,7 @@ $menu_top = [
 $allow_func = [
     'main'
 ];
-if (defined('NV_IS_GODADMIN')) {
+if (defined('NV_IS_GODADMIN') or (!empty($global_config['idsite']) and defined('NV_IS_SPADMIN'))) {
     $allow_func[] = 'oa_info';
     $allow_func[] = 'followers';
     $allow_func[] = 'unfollowers';

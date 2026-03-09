@@ -167,6 +167,17 @@ if ($nv_Request->isset_request('save', 'post')) {
         $stmt->bindParam(':content', $array_config['min_old_user'], PDO::PARAM_STR);
         $stmt->execute();
 
+        // Chặn đăng ký lại username đã xóa
+        $array_config['hold_deleted_username'] = $nv_Request->get_int('hold_deleted_username', 'post', 0);
+        if ($array_config['hold_deleted_username'] < 0) {
+            $array_config['hold_deleted_username'] = 0;
+        } elseif ($array_config['hold_deleted_username'] > 1000) {
+            $array_config['hold_deleted_username'] = 1000;
+        }
+        $stmt = $db->prepare('UPDATE ' . NV_MOD_TABLE . '_config SET content= :content, edit_time=' . NV_CURRENTTIME . " WHERE config='hold_deleted_username'");
+        $stmt->bindParam(':content', $array_config['hold_deleted_username'], PDO::PARAM_STR);
+        $stmt->execute();
+
         // Cấu hình số tuổi nhỏ nhất để thành viên có thể tham gia
         $array_config['avatar_height'] = $nv_Request->get_int('avatar_height', 'post', 16);
         $stmt = $db->prepare('UPDATE ' . NV_MOD_TABLE . '_config SET content= :content, edit_time=' . NV_CURRENTTIME . " WHERE config='avatar_height'");
@@ -252,10 +263,13 @@ $sql = 'SELECT config, content FROM ' . NV_MOD_TABLE . "_config WHERE
     config='deny_email' OR config='deny_name' OR config='password_simple' OR
     config='avatar_width' OR config='avatar_height' OR config='active_group_newusers' OR
     config='active_editinfo_censor' OR config='active_user_logs' OR config='min_old_user' OR
-    config='auto_assign_oauthuser' OR config='admin_email' OR config='register_active_time'
+    config='auto_assign_oauthuser' OR config='admin_email' OR config='register_active_time' OR
+    config='hold_deleted_username'
 ";
 $result = $db->query($sql);
-while ([$config, $content] = $result->fetch(3)) {
+while ($_scratch = $result->fetch(3)) {
+    [$config, $content] = $_scratch;
+    unset($_scratch);
     $content = array_map('trim', explode('|', $content));
     $array_config[$config] = implode(', ', $content);
 }
@@ -366,6 +380,38 @@ foreach ($openid_files as $server) {
     }
 }
 $tpl->assign('OPENID_SERVERS', $openid_servers);
+
+$facebook_redirecturi = [];
+foreach ($global_config['setup_langs'] as $lang) {
+    $facebook_redirecturi[] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . $lang . '&amp;' . NV_NAME_VARIABLE . '=users&amp;' . NV_OP_VARIABLE . '=oauth&amp;server=facebook';
+    $facebook_redirecturi[] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . $lang . '&amp;' . NV_NAME_VARIABLE . '=authors&amp;' . NV_OP_VARIABLE . '=2step&amp;auth=facebook';
+}
+$facebook_redirecturi[] = NV_BASE_ADMINURL . 'index.php?auth=facebook';
+foreach ($facebook_redirecturi as $key => $value) {
+    $facebook_redirecturi[$key] = urlRewriteWithDomain($value, NV_MY_DOMAIN);
+}
+
+$google_redirecturi = [];
+foreach ($global_config['setup_langs'] as $lang) {
+    $google_redirecturi[] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . $lang . '&amp;' . NV_NAME_VARIABLE . '=users&amp;' . NV_OP_VARIABLE . '=oauth&amp;server=google';
+    $google_redirecturi[] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . $lang . '&amp;' . NV_NAME_VARIABLE . '=authors&amp;' . NV_OP_VARIABLE . '=2step&amp;auth=google';
+}
+$google_redirecturi[] = NV_BASE_ADMINURL . 'index.php?auth=google';
+foreach ($google_redirecturi as $key => $value) {
+    $google_redirecturi[$key] = urlRewriteWithDomain($value, NV_MY_DOMAIN);
+}
+
+$facebook_datadeletionurl = [];
+foreach ($global_config['setup_langs'] as $lang) {
+    $facebook_datadeletionurl[] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . $lang . '&amp;' . NV_NAME_VARIABLE . '=users&amp;' . NV_OP_VARIABLE . '=' . $module_info['alias']['datadeletion'] . '/facebook';
+}
+foreach ($facebook_datadeletionurl as $key => $value) {
+    $facebook_datadeletionurl[$key] = urlRewriteWithDomain($value, NV_MY_DOMAIN);
+}
+
+$tpl->assign('FACEBOOK_REDIRECTURI', $facebook_redirecturi);
+$tpl->assign('FACEBOOK_DATADELETIONURL', $facebook_datadeletionurl);
+$tpl->assign('GOOGLE_REDIRECTURI', $google_redirecturi);
 
 $contents = $tpl->fetch('config.tpl');
 

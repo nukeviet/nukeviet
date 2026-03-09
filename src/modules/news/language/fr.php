@@ -650,3 +650,5 @@ $lang_module['queue_public'] = 'Vous avez <strong>%s</strong> articles en attent
 $lang_module['reject_reason'] = 'Raison du refus';
 $lang_module['reject_reason_error'] = 'Veuillez saisir la raison du refus';
 $lang_module['reject_reason_view'] = 'Cliquez pour voir la raison du refus de cet article';
+$lang_module['introduce_author'] = 'Présentation de l\'auteur %s';
+$lang_module['list_articles_by_author'] = 'Liste des articles de l\'auteur %s';

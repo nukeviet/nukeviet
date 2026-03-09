@@ -6,6 +6,9 @@ $zindex-alert: 1062;
 $zindex-cap-backdrop: 9900;
 $zindex-cap: 9901;
 
+$zindex-ck5-default: 100;
+$zindex-ck5-panel: $zindex-modal;
+
 // Toasts
 $toast-levels: (
   "secondary": $secondary,

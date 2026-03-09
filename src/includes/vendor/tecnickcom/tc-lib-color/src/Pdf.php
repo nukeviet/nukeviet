@@ -7,8 +7,8 @@
  * @category  Library
  * @package   Color
  * @author    Nicola Asuni <info@tecnick.com>
- * @copyright 2015-2024 Nicola Asuni - Tecnick.com LTD
- * @license   http://www.gnu.org/copyleft/lesser.html GNU-LGPL v3 (see LICENSE.TXT)
+ * @copyright 2015-2026 Nicola Asuni - Tecnick.com LTD
+ * @license   https://www.gnu.org/copyleft/lesser.html GNU-LGPL v3 (see LICENSE.TXT)
  * @link      https://github.com/tecnickcom/tc-lib-color
  *
  * This file is part of tc-lib-color software library.
@@ -27,8 +27,8 @@ use Com\Tecnick\Color\Exception as ColorException;
  * @category  Library
  * @package   Color
  * @author    Nicola Asuni <info@tecnick.com>
- * @copyright 2015-2024 Nicola Asuni - Tecnick.com LTD
- * @license   http://www.gnu.org/copyleft/lesser.html GNU-LGPL v3 (see LICENSE.TXT)
+ * @copyright 2015-2026 Nicola Asuni - Tecnick.com LTD
+ * @license   https://www.gnu.org/copyleft/lesser.html GNU-LGPL v3 (see LICENSE.TXT)
  * @link      https://github.com/tecnickcom/tc-lib-color
  */
 class Pdf extends \Com\Tecnick\Color\Spot
@@ -58,7 +58,7 @@ class Pdf extends \Com\Tecnick\Color\Spot
      */
     public function getJsColorString(string $color): string
     {
-        if (in_array($color, self::JSCOLOR)) {
+        if (\in_array($color, self::JSCOLOR)) {
             return 'color.' . $color;
         }
 
@@ -67,7 +67,7 @@ class Pdf extends \Com\Tecnick\Color\Spot
                 return $colobj->getJsPdfColor();
             }
         } catch (ColorException $colorException) {
-            // assert(true); // noop
+            // \assert(true); // noop
         }
 
         // default transparent color
@@ -84,13 +84,13 @@ class Pdf extends \Com\Tecnick\Color\Spot
         try {
             return $this->getSpotColorObj($color);
         } catch (ColorException $colorException) {
-            // assert(true); // noop
+            // \assert(true); // noop
         }
 
         try {
             return $this->getColorObj($color);
         } catch (ColorException $colorException) {
-            // assert(true); // noop
+            // \assert(true); // noop
         }
 
         return null;
@@ -108,14 +108,14 @@ class Pdf extends \Com\Tecnick\Color\Spot
     {
         try {
             $col = $this->getSpotColor($color);
-            $tint = sprintf('cs %F scn', (max(0, min(1, $tint))));
+            $tint = \sprintf('cs %F scn', (\max(0, \min(1, $tint))));
             if ($stroke) {
-                $tint = strtoupper($tint);
+                $tint = \strtoupper($tint);
             }
 
-            return sprintf('/CS%d %s' . "\n", $col['i'], $tint);
+            return \sprintf('/CS%d %s' . "\n", $col['i'], $tint);
         } catch (ColorException $colorException) {
-            // assert(true); // noop
+            // \assert(true); // noop
         }
 
         try {
@@ -124,7 +124,7 @@ class Pdf extends \Com\Tecnick\Color\Spot
                 return $col->getPdfColor($stroke);
             }
         } catch (ColorException $colorException) {
-            // assert(true); // noop
+            // \assert(true); // noop
         }
 
         return '';
@@ -143,6 +143,6 @@ class Pdf extends \Com\Tecnick\Color\Spot
         }
 
         $cmp = $model->toRgbArray();
-        return sprintf('%F %F %F', $cmp['red'], $cmp['green'], $cmp['blue']);
+        return \sprintf('%F %F %F', $cmp['red'], $cmp['green'], $cmp['blue']);
     }
 }

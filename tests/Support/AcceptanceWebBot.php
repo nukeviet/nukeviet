@@ -21,6 +21,7 @@ namespace Tests\Support;
 */
 class AcceptanceWebBot extends \Codeception\Actor
 {
+    // phpcs:disable
     use _generated\AcceptanceWebBotActions;
 
     /**

@@ -58,7 +58,8 @@ $sql_create_table[] = 'CREATE TABLE ' . $db_config['prefix'] . "_api_role_logs (
   command CHAR(100) NOT NULL DEFAULT '',
   log_time INT(11) NOT NULL DEFAULT '0',
   log_ip CHAR(50) NOT NULL DEFAULT '',
-  PRIMARY KEY (id)
+  PRIMARY KEY (id),
+  KEY idx_log_time_userid (log_time, userid)
 ) ENGINE=InnoDB COMMENT 'Lịch sử gọi API'";
 
 $sql_create_table[] = 'CREATE TABLE ' . $db_config['prefix'] . "_api_user (

@@ -180,7 +180,9 @@ function get_field_config()
                 $query .= ' ORDER BY ' . $row_field['sql_choices'][4] . ' ' . $row_field['sql_choices'][5];
             }
             $result = $db->query($query);
-            while ([$key, $val] = $result->fetch(3)) {
+            while ($_scratch = $result->fetch(3)) {
+                [$key, $val] = $_scratch;
+                unset($_scratch);
                 $row_field['field_choices'][$key] = $val;
             }
         }
@@ -205,7 +207,7 @@ function get_field_config()
  */
 function opidr($openid_info)
 {
-    global $nv_Lang;
+    global $nv_Lang, $module_name;
 
     if ($openid_info == 1) {
         $openid_info = [
@@ -243,6 +245,7 @@ function opidr($openid_info)
             'mess' => $nv_Lang->getModule('openid_added')
         ];
     }
+    $openid_info['redirect'] = nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=editinfo/openid', true);
     $contents = openid_callback($openid_info);
 
     include NV_ROOTDIR . '/includes/header.php';
@@ -288,94 +291,10 @@ $array_data = [];
 $array_data['checkss'] = md5(NV_CHECK_SESSION . '_' . $module_name . '_' . $op . '_' . $user_info['userid']);
 $array_data['awaitinginfo'] = [];
 $array_data['editcensor'] = $global_users_config['active_editinfo_censor'];
-$array_data['confirmed_pass'] = csrf_check($nv_Request->get_title($module_data . '_confirm_pass', 'session', ''), $module_data . '_confirm_pass');
+$array_data['confirmed_pass'] = is_verified_password('passkey');
 
 $checkss = $nv_Request->get_title('checkss', 'post', '');
-
-// Xác nhận mật khẩu
-if ($nv_Request->isset_request('confirm_pass', 'post')) {
-    if ($checkss !== NV_CHECK_SESSION) {
-        nv_jsonOutput([
-            'status' => 'error',
-            'input' => '',
-            'mess' => 'Session error!!!'
-        ]);
-    }
-
-    // Kiểm tra mã xác nhận
-    unset($nv_seccode);
-    if ($module_captcha == 'recaptcha') {
-        // Xác định giá trị của captcha nhập vào nếu sử dụng reCaptcha
-        $nv_seccode = $nv_Request->get_title('g-recaptcha-response', 'post', '');
-    } elseif ($module_captcha == 'turnstile') {
-        // Xác định giá trị của captcha nhập vào nếu sử dụng Turnstile
-        $nv_seccode = $nv_Request->get_title('cf-turnstile-response', 'post', '');
-    } elseif ($module_captcha == 'captcha') {
-        // Xác định giá trị của captcha nhập vào nếu sử dụng captcha hình
-        $nv_seccode = $nv_Request->get_title('nv_seccode', 'post', '');
-    }
-    $check_seccode = isset($nv_seccode) ? nv_capcha_txt($nv_seccode, $module_captcha) : true;
-    if (!$check_seccode) {
-        nv_jsonOutput([
-            'status' => 'error',
-            'input' => 'nv_seccode',
-            'mess' => ($module_captcha == 'recaptcha') ? $nv_Lang->getGlobal('securitycodeincorrect1') : (($module_captcha == 'turnstile') ? $nv_Lang->getGlobal('securitycodeincorrect2') : $nv_Lang->getGlobal('securitycodeincorrect'))
-        ]);
-    }
-
-    $nv_password = $nv_Request->get_title('password', 'post', '');
-    if (empty($nv_password)) {
-        nv_jsonOutput([
-            'status' => 'error',
-            'input' => 'password',
-            'mess' => $nv_Lang->getGlobal('password_empty')
-        ]);
-    }
-    $db_password = $db->query('SELECT password FROM ' . NV_MOD_TABLE . ' WHERE userid=' . $user_info['userid'])->fetchColumn();
-    if (empty($db_password)) {
-        nv_jsonOutput([
-            'status' => 'error',
-            'input' => 'password',
-            'mess' => $nv_Lang->getModule('error_no_password')
-        ]);
-    }
-
-    $blocker = new NukeViet\Core\Blocker(NV_ROOTDIR . '/' . NV_LOGS_DIR . '/ip_logs', NV_CLIENT_IP);
-    $rules = [
-        $global_config['login_number_tracking'],
-        $global_config['login_time_tracking'],
-        $global_config['login_time_ban']
-    ];
-    $blocker->trackLogin($rules, $global_config['is_login_blocker']);
-
-    if ($global_config['login_number_tracking'] and $blocker->is_blocklogin($user_info['username'])) {
-        nv_jsonOutput([
-            'status' => 'error',
-            'input' => '',
-            'mess' => $nv_Lang->getGlobal('userlogin_blocked', $global_config['login_number_tracking'], nv_datetime_format($blocker->login_block_end, 1))
-        ]);
-    }
-
-    if ($crypt->validate_password($nv_password, $db_password)) {
-        $blocker->reset_trackLogin($user_info['username']);
-        $nv_Request->set_Session($module_data . '_confirm_pass', csrf_create($module_data . '_confirm_pass'));
-        nv_jsonOutput([
-            'status' => 'ok',
-            'input' => '',
-            'mess' => ''
-        ]);
-    }
-
-    if ($global_config['login_number_tracking'] and !empty($nv_password)) {
-        $blocker->set_loginFailed($user_info['username'], NV_CURRENTTIME);
-    }
-
-    nv_jsonOutput([
-        'status' => 'error',
-        'input' => 'password',
-        'mess' => $nv_Lang->getGlobal('incorrect_password')
-    ]);
-}
+$nv_redirect = nv_get_redirect();
 
 if (isset($array_op[2]) and !defined('ACCESS_EDITUS')) {
     if (empty($_POST)) {
@@ -470,9 +389,12 @@ if ((int) $row['safemode'] > 0) {
         $stmt = $db->prepare('UPDATE ' . NV_MOD_TABLE . " SET safemode=0, safekey='', last_update=" . NV_CURRENTTIME . ' WHERE userid=' . $edit_userid);
         $stmt->execute();
 
+        $nv_redirect = nv_redirect_decrypt($nv_redirect);
+        empty($nv_redirect) && nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=editinfo', true);
+
         nv_jsonOutput([
             'status' => 'ok',
-            'input' => nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=editinfo', true),
+            'redirect' => $nv_redirect,
             'mess' => $nv_Lang->getModule('safe_deactivate_ok')
         ]);
     }
@@ -482,12 +404,12 @@ if ((int) $row['safemode'] > 0) {
     $contents = safe_deactivate($array_data);
 
     $page_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op;
+    $array_data['safeshow'] && $page_url .= '/safeshow';
     $canonicalUrl = getCanonicalUrl($page_url);
 
     include NV_ROOTDIR . '/includes/header.php';
     echo nv_site_theme($contents);
     include NV_ROOTDIR . '/includes/footer.php';
-    exit();
 }
 
 $array_data['allowmailchange'] = $global_config['allowmailchange'];
@@ -515,6 +437,9 @@ if (!defined('ACCESS_EDITUS') or (defined('ACCESS_EDITUS') and defined('ACCESS_P
 if (!defined('ACCESS_EDITUS')) {
     $types[] = '2step';
     $types[] = 'passkey';
+
+    $redirect_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=editinfo/passkey';
+    $array_data['confirm_pass_url'] = go_verified_password('passkey', $redirect_url, false);
 }
 // Thành viên có quyền đổi tên đăng nhập
 if ($array_data['allowloginchange'] and !defined('ACCESS_EDITUS')) {
@@ -548,9 +473,9 @@ if ($is_custom_field) {
     $types[] = 'others';
 }
 
-// Buộc thoát ở mọi nơi
-if (!empty($global_config['allowuserloginmulti'])) {
-    $types[] = 'forcedrelogin';
+// Bảo mật và quyền riêng tư
+if (!defined('ACCESS_EDITUS')) {
+    $types[] = 'securityprivacy';
 }
 
 // Trường hợp trưởng nhóm truy cập sửa thông tin member
@@ -680,7 +605,7 @@ if (in_array('openid', $types, true) and $nv_Request->isset_request('server', 'g
 }
 
 // Lấy các khóa truy cập nếu có quyền
-if (in_array('passkey', $types, true)) {
+if (in_array('passkey', $types, true) and $array_data['confirmed_pass']) {
     $array_data['publicKeys'] = [];
     $array_data['login_keys'] = 0;
     $array_data['security_keys'] = 0;
@@ -1119,7 +1044,7 @@ if ($checkss == $array_data['checkss'] and $array_data['type'] == 'basic') {
         'input' => nv_url_rewrite($page_url . '/basic', true),
         'mess' => $mess
     ]);
-} elseif ($checkss == $array_data['checkss'] and $array_data['type'] == 'passkey') {
+} elseif ($checkss == $array_data['checkss'] and $array_data['type'] == 'passkey' and $array_data['confirmed_pass']) {
     require NV_ROOTDIR . '/modules/' . $module_file . '/edit/passkey.php';
 } elseif ($checkss == $array_data['checkss'] and $array_data['type'] == 'question') {
     // Question
@@ -1272,7 +1197,9 @@ if ($checkss == $array_data['checkss'] and $array_data['type'] == 'basic') {
                     $send_data = [];
                     $url_group = urlRewriteWithDomain(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=groups/' . $gid, NV_MY_DOMAIN);
                     $result = $db->query('SELECT t2.email FROM ' . NV_MOD_TABLE . '_groups_users t1 INNER JOIN ' . NV_MOD_TABLE . ' t2 ON t1.userid=t2.userid WHERE t1.is_leader=1 AND t1.group_id=' . $gid);
-                    while ([$email] = $result->fetch(3)) {
+                    while ($_scratch = $result->fetch(3)) {
+                        [$email] = $_scratch;
+                        unset($_scratch);
                         $send_data[] = [
                             'to' => $email,
                             'data' => [
@@ -1468,22 +1395,6 @@ if ($checkss == $array_data['checkss'] and $array_data['type'] == 'basic') {
         'status' => 'ok',
         'input' => nv_url_rewrite($page_url, true),
         'mess' => $nv_Lang->getModule('safe_activate_ok')
-    ]);
-} elseif ($checkss == $array_data['checkss'] and $array_data['type'] == 'forcedrelogin') {
-    $nv_password = $nv_Request->get_title('nv_password', 'post', '');
-    if (empty($nv_password) or !$crypt->validate_password($nv_password, $row['password'])) {
-        nv_jsonOutput([
-            'status' => 'error',
-            'input' => 'nv_password',
-            'mess' => $nv_Lang->getGlobal('incorrect_password')
-        ]);
-    }
-
-    forcedrelogin($edit_userid);
-    nv_jsonOutput([
-        'status' => 'ok',
-        'input' => '',
-        'mess' => $nv_Lang->getModule('forcedrelogin_note')
     ]);
 }
 

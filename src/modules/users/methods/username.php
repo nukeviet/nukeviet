@@ -17,11 +17,12 @@ if (!defined('NV_IS_MOD_USER') and !defined('NV_ADMIN')) {
  * check_user_login()
  *
  * @param string $username
+ * @param bool $reg
  * @return mixed
  */
-function check_user_login($username)
+function check_user_login($username, bool $reg = false)
 {
-    return checkLoginName('username', $username);
+    return checkLoginName('username', $username, $reg);
 }
 
 /**

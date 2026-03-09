@@ -106,7 +106,7 @@ if (!nv_function_exists('nv_news_block_news')) {
 
         $numrow = (isset($block_config['numrow'])) ? $block_config['numrow'] : 20;
 
-        $cache_file = NV_LANG_DATA . '__block_news_' . $numrow . '_' . NV_CACHE_PREFIX . '.cache';
+        $cache_file = 'block_news_' . $numrow . '_' . NV_CACHE_PREFIX . '.cache';
         if (($cache = $nv_Cache->getItem($module, $cache_file)) != false) {
             $array_block_news = unserialize($cache);
         } else {
@@ -120,7 +120,9 @@ if (!nv_function_exists('nv_news_block_news')) {
                 ->limit($numrow);
             $result = $db_slave->query($db_slave->sql());
 
-            while ([$id, $catid, $publtime, $exptime, $title, $alias, $homeimgthumb, $homeimgfile, $hometext, $external_link] = $result->fetch(3)) {
+            while ($_scratch = $result->fetch(3)) {
+                [$id, $catid, $publtime, $exptime, $title, $alias, $homeimgthumb, $homeimgfile, $hometext, $external_link] = $_scratch;
+                unset($_scratch);
                 $link = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module . '&amp;' . NV_OP_VARIABLE . '=' . $module_array_cat[$catid]['alias'] . '/' . $alias . '-' . $id . $global_config['rewrite_exturl'];
                 if ($homeimgthumb == 1) {
                     //image thumb

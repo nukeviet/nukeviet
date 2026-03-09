@@ -560,6 +560,27 @@ function isInAppBrowser() {
     return matchesKnownApp || isAndroidWebView || isIOSWebView || blocksWindowOpen;
 }
 
+/**
+ * Kiểm tra xem thiết bị có phải là Apple hay không
+ * @returns {Boolean}
+ */
+function isAppleDevice() {
+    try {
+        const ua = typeof navigator !== 'undefined' ? (navigator.userAgent || '') : '';
+        if (/iPhone|iPad|iPod/.test(ua)) return true;
+
+        if (/Macintosh/.test(ua) && typeof navigator !== 'undefined' && navigator.maxTouchPoints > 1) {
+            return true;
+        }
+
+        if (/Macintosh/.test(ua)) return true;
+
+        return false;
+    } catch (e) {
+        return false;
+    }
+}
+
 nv_check_timezone();
 
 nukeviet.WebAuthnSupported = 'PublicKeyCredential' in window && 'credentials' in navigator && 'create' in navigator.credentials && 'get' in navigator.credentials;
@@ -1073,7 +1094,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         /**
          *
-         * @param {String} text
+         * @param {String | Object} text
          * @param {'secondary' | 'error' | 'danger' | 'primary' | 'success' | 'info' | 'warning' | 'light' | 'dark'} level
          * @param {'s' | 'c'} halign
          * @param {'t' | 'm' | 'c'} valign
@@ -1131,7 +1152,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const itemBody = document.createElement('div');
             itemBody.className = 'cr-toast-body';
-            itemBody.textContent = htmlEntityDecode(text);
+            if (typeof text === 'object') {
+                itemBody.innerHTML = text.message;
+            } else {
+                itemBody.textContent = htmlEntityDecode(text);
+            }
 
             const itemClose = document.createElement('div');
             itemClose.className = 'cr-toast-close';

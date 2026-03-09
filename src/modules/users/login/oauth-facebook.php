@@ -23,18 +23,24 @@ $provider = new Facebook([
 ]);
 
 // Chuyển hướng đến trang đăng nhập Facebook
-if (!$nv_Request->isset_request('code', 'get')) {
+if (!$nv_Request->isset_request('code', 'get') and !$nv_Request->isset_request('error', 'get')) {
     $authorizationUrl = $provider->getAuthorizationUrl();
     $nv_Request->set_Session('oauth2state', $provider->getState());
     nv_redirect_location($authorizationUrl);
 }
 
-// Kiểm tra CSRF
+$attribs = ['server' => $server];
+
 if ($nv_Request->get_title('state', 'get', '') !== $nv_Request->get_title('oauth2state', 'session', '')) {
+    // Kiểm tra CSRF
     $nv_Request->unset_request('oauth2state', 'session');
     $nv_Request->unset_request('openid_attribs', 'session');
-    $attribs = ['result' => 'notlogin'];
+    $attribs['result'] = 'notlogin';
+} elseif ($nv_Request->isset_request('error', 'get')) {
+    // Khi người dùng từ chối cấp quyền
+    $attribs['result'] = 'cancel';
 } else {
+    // Thực hiện lấy thông tin người dùng
     try {
         $token = $provider->getAccessToken('authorization_code', [
             'code' => $nv_Request->get_title('code', 'get', '')
@@ -59,7 +65,7 @@ if ($nv_Request->get_title('state', 'get', '') !== $nv_Request->get_title('oauth
             'current_mode' => 3
         ];
     } catch (Exception $e) {
-        $attribs = ['result' => 'notlogin'];
+        $attribs['result'] = 'notlogin';
         trigger_error($e->getMessage());
     }
 }

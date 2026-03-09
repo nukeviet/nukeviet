@@ -59,6 +59,9 @@
   --cr-alert-content-border-radius: #{$border-radius};
   --cr-alert-content-border-color: rgba(255, 255, 255, 0.15);
   --cr-alert-footer-gap: #{$modal-footer-margin-between};
+
+  --ck-z-default: $zindex-ck5-default;
+  --ck-z-panel: $zindex-ck5-panel;
 }
 
 // Giao diện sáng

@@ -7,8 +7,8 @@
  * @category    Library
  * @package     Barcode
  * @author      Nicola Asuni <info@tecnick.com>
- * @copyright   2010-2024 Nicola Asuni - Tecnick.com LTD
- * @license     http://www.gnu.org/copyleft/lesser.html GNU-LGPL v3 (see LICENSE.TXT)
+ * @copyright   2010-2026 Nicola Asuni - Tecnick.com LTD
+ * @license     https://www.gnu.org/copyleft/lesser.html GNU-LGPL v3 (see LICENSE.TXT)
  * @link        https://github.com/tecnickcom/tc-lib-barcode
  *
  * This file is part of tc-lib-barcode software library.
@@ -28,8 +28,8 @@ use Com\Tecnick\Barcode\Exception as BarcodeException;
  * @category    Library
  * @package     Barcode
  * @author      Nicola Asuni <info@tecnick.com>
- * @copyright   2010-2024 Nicola Asuni - Tecnick.com LTD
- * @license     http://www.gnu.org/copyleft/lesser.html GNU-LGPL v3 (see LICENSE.TXT)
+ * @copyright   2010-2026 Nicola Asuni - Tecnick.com LTD
+ * @license     https://www.gnu.org/copyleft/lesser.html GNU-LGPL v3 (see LICENSE.TXT)
  * @link        https://github.com/tecnickcom/tc-lib-barcode
  */
 class EncodeTxt extends \Com\Tecnick\Barcode\Type\Square\Datamatrix\Steps
@@ -51,21 +51,29 @@ class EncodeTxt extends \Com\Tecnick\Barcode\Type\Square\Datamatrix\Steps
         if (isset(Data::CHSET['SH1'][$chr])) {
             $temp_cw[] = 0; // shift 1
             $shiftset = Data::CHSET['SH1'];
+            $ptr++;
         } elseif (isset(Data::CHSET['SH2'][$chr])) {
             $temp_cw[] = 1; // shift 2
             $shiftset = Data::CHSET['SH2'];
+            $ptr++;
         } elseif (($enc == Data::ENC_C40) && isset(Data::CHSET['S3C'][$chr])) {
             $temp_cw[] = 2; // shift 3
             $shiftset = Data::CHSET['S3C'];
+            $ptr++;
         } elseif (($enc == Data::ENC_TXT) && isset(Data::CHSET['S3T'][$chr])) {
             $temp_cw[] = 2; // shift 3
             $shiftset = Data::CHSET['S3T'];
+            $ptr++;
         } else {
             throw new BarcodeException('Error');
         }
 
+        if (!isset($shiftset[$chr])) {
+            throw new BarcodeException('TXTC40 Shift Error');
+        }
+
         $temp_cw[] = $shiftset[$chr];
-        $ptr += 2;
+        $ptr++;
     }
 
     /**
@@ -89,7 +97,7 @@ class EncodeTxt extends \Com\Tecnick\Barcode\Type\Square\Datamatrix\Steps
         array &$charset
     ): int {
         // 2. process the next character in C40 encodation.
-        $chr = ord($data[$epos]);
+        $chr = \ord($data[$epos]);
         ++$epos;
         // check for extended character
         if (($chr & 0x80) !== 0) {
@@ -154,8 +162,8 @@ class EncodeTxt extends \Com\Tecnick\Barcode\Type\Square\Datamatrix\Steps
             $this->last_enc = $enc;
         } elseif (($cdwr == 2) && ($ptr == 2)) {
             // b. If two symbol characters remain and two C40 values remain to be encoded
-            $ch1 = array_shift($temp_cw);
-            $ch2 = array_shift($temp_cw);
+            $ch1 = \array_shift($temp_cw);
+            $ch2 = \array_shift($temp_cw);
             $ptr -= 2;
             $tmp = ((1600 * $ch1) + (40 * $ch2) + 1);
             $cdw[] = ($tmp >> 8);
@@ -201,9 +209,9 @@ class EncodeTxt extends \Com\Tecnick\Barcode\Type\Square\Datamatrix\Steps
         do {
             $chr = $this->encodeTXTC40($data, $enc, $temp_cw, $ptr, $epos, $charset);
             if ($ptr >= 3) {
-                $ch1 = array_shift($temp_cw);
-                $ch2 = array_shift($temp_cw);
-                $ch3 = array_shift($temp_cw);
+                $ch1 = \array_shift($temp_cw);
+                $ch2 = \array_shift($temp_cw);
+                $ch3 = \array_shift($temp_cw);
                 $ptr -= 3;
                 $tmp = ((1600 * $ch1) + (40 * $ch2) + $ch3 + 1);
                 $cdw[] = ($tmp >> 8);

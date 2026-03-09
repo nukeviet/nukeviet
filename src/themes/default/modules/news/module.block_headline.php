@@ -25,7 +25,7 @@ if (!nv_function_exists('nv_block_headline')) {
         global $nv_Cache, $module_name, $module_data, $db_slave, $module_upload, $global_array_cat, $global_config, $custom_preloads;
 
         $block_contents = [];
-        $cache_file = NV_LANG_DATA . '_' . preg_replace('/[^a-z0-9\_\-]+/', '_', $block_config['block_name']) . '_' . NV_CACHE_PREFIX . '.cache';
+        $cache_file = preg_replace('/[^a-z0-9\_\-]+/', '_', $block_config['block_name']) . '_' . NV_CACHE_PREFIX . '.cache';
         if (($cache = $nv_Cache->getItem($module_name, $cache_file)) != false) {
             $block_contents = json_decode($cache, true);
 
@@ -49,7 +49,9 @@ if (!nv_function_exists('nv_block_headline')) {
 
             $blockslist = [];
             $bids = [];
-            while ([$bid, $titlebid, $numberbid] = $result->fetch(3)) {
+            while ($_scratch = $result->fetch(3)) {
+                [$bid, $titlebid, $numberbid] = $_scratch;
+                unset($_scratch);
                 $blockslist[$bid] = [
                     'bid' => $bid,
                     'title' => $titlebid,
@@ -69,7 +71,9 @@ if (!nv_function_exists('nv_block_headline')) {
                     ];
                     $db_slave->sqlreset()->select('t1.id, t1.catid, t1.publtime, t1.title, t1.alias, t1.homeimgthumb, t1.homeimgfile, t1.homeimgalt, t1.hometext, t1.external_link')->from(NV_PREFIXLANG . '_' . $module_data . '_rows t1')->join('INNER JOIN ' . NV_PREFIXLANG . '_' . $module_data . '_block t2 ON t1.id = t2.id')->where('t1.status= 1 AND t2.bid=' . $bid)->order('t2.weight ASC')->limit($blockslist[$bid]['number']);
                     $result = $db_slave->query($db_slave->sql());
-                    while ([$id, $catid_i, $publtime, $title, $alias, $homeimgthumb, $homeimgfile, $homeimgalt, $hometext, $external_link] = $result->fetch(3)) {
+                    while ($_scratch = $result->fetch(3)) {
+                        [$id, $catid_i, $publtime, $title, $alias, $homeimgthumb, $homeimgfile, $homeimgalt, $hometext, $external_link] = $_scratch;
+                        unset($_scratch);
                         $link = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $global_array_cat[$catid_i]['alias'] . '/' . $alias . '-' . $id . $global_config['rewrite_exturl'];
                         $thumb = '';
                         if (!empty($homeimgfile)) {

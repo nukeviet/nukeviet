@@ -633,3 +633,23 @@ $lang_module['pp_source_all'] = 'Tương đương * - Cho phép tất cả các 
 $lang_module['pp_source_self'] = 'self - Cho phép từ tên miền này, không bao gồm miền phụ';
 
 $lang_module['fp_act'] = 'Kích hoạt FP';
+
+$lang_module['cache_settings'] = 'Các thiết lập cache';
+$lang_module['cache_use'] = 'Loại cache';
+$lang_module['files_cached'] = 'Files';
+$lang_module['memcached_host'] = 'Máy chủ Memcached';
+$lang_module['memcached_port'] = 'Cổng kết nối Memcached';
+$lang_module['memcached_config_needed'] = 'Hãy nhập đủ các thông số để có thể kết nối đến máy chủ Memcached';
+$lang_module['redis_host'] = 'Máy chủ Redis';
+$lang_module['redis_port'] = 'Cổng kết nối Redis';
+$lang_module['redis_password'] = 'Mật khẩu kết nối Redis';
+$lang_module['redis_db_index'] = 'Chỉ mục cơ sở dữ liệu Redis';
+$lang_module['redis_timeout'] = 'Thời gian chờ kết nối Redis';
+$lang_module['redis_timeout_unit'] = 'giây';
+$lang_module['redis_config_needed'] = 'Hãy nhập đủ các thông số để có thể kết nối đến máy chủ Redis';
+$lang_module['cached_extension_needed'] = 'Hệ thống chưa được cài đặt extension %s. Do đó không thể sử dụng cache %s.';
+$lang_module['redis_pass_note'] = 'Mật khẩu mặc định được để trống, nhưng nếu có, nó sẽ được gửi dưới dạng văn bản không mã hóa qua mạng. Hãy đảm bảo rằng kết nối đến máy chủ Redis được bảo mật.';
+$lang_module['cache_prefix'] = 'Tiền tố cache';
+$lang_module['cache_prefix_note'] = 'Nhập tiền tố nếu bạn sử dụng Memcached hoặc Redis và có nhiều website sử dụng chung máy chủ cache để tránh xung đột khóa cache giữa các website. Tiền tố gồm chữ cái a-z, số 0-9 và dấu gạch dưới (_), phải bắt đầu bằng chữ cái. File cache không sử dụng tiền tố này.';
+$lang_module['cache_prefix_invalid'] = 'Tiền tố cache không hợp lệ. Chỉ chấp nhận chữ cái a-z, số 0-9 và dấu gạch dưới (_) và phải bắt đầu bằng chữ cái.';
+$lang_module['cache_test_error'] = 'Lỗi kết nối đến máy chủ cache. Vui lòng kiểm tra lại các thông số cấu hình. Chi tiết lỗi: %s';

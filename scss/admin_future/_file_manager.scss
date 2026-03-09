@@ -1,11 +1,17 @@
 // Trình quản lí tệp tin
+:root {
+    --fmm-zindex-backdrop: #{$zindex-fmm-backdrop};
+    --fmm-zindex: #{$zindex-fmm};
+    --fmd-zindex-backdrop: #{$zindex-fmd-backdrop};
+    --fmd-zindex: #{$zindex-fmd};
+}
 
 .fmm-backdrop,
 .fmd-backdrop {
     position: fixed;
     top: 0;
     left: 0;
-    z-index: $zindex-fmm-backdrop;
+    z-index: var(--fmm-zindex-backdrop);
     width: 100vw;
     height: 100vh;
     background-color: $modal-backdrop-bg;
@@ -16,7 +22,7 @@
 }
 
 .fmd-backdrop {
-    z-index: $zindex-fmd-backdrop;
+    z-index: var(--fmd-zindex-backdrop);
 }
 
 .fmm,
@@ -24,7 +30,7 @@
     position: fixed;
     top: 0;
     left: 0;
-    z-index: $zindex-fmm;
+    z-index: var(--fmm-zindex);
     display: none;
     width: 100%;
     height: 100%;
@@ -34,18 +40,18 @@
 }
 
 .fmd {
-    z-index: $zindex-fmd;
+    z-index: var(--fmd-zindex);
 }
 
 .fmd-open {
     .select2-dropdown {
-        --bs-dropdown-zindex: #{$zindex-fmd};
+        --bs-dropdown-zindex: var(--fmd-zindex);
     }
 }
 
 .fmm-open {
     .dropdown-menu-fms {
-        --bs-dropdown-zindex: #{$zindex-fmm};
+        --bs-dropdown-zindex: var(--fmm-zindex);
     }
 }
 

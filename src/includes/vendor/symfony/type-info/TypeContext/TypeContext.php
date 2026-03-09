@@ -33,6 +33,7 @@ final class TypeContext
     /**
      * @param array<string, string> $uses
      * @param array<string, Type>   $templates
+     * @param array<string, Type>   $typeAliases
      */
     public function __construct(
         public readonly string $calledClassName,
@@ -40,6 +41,7 @@ final class TypeContext
         public readonly ?string $namespace = null,
         public readonly array $uses = [],
         public readonly array $templates = [],
+        public readonly array $typeAliases = [],
     ) {
     }
 
@@ -75,7 +77,7 @@ final class TypeContext
      */
     public function getDeclaringClass(): string
     {
-        return $this->normalize($this->declaringClassName);
+        return $this->declaringClassName;
     }
 
     /**
@@ -83,7 +85,7 @@ final class TypeContext
      */
     public function getCalledClass(): string
     {
-        return $this->normalize($this->calledClassName);
+        return $this->calledClassName;
     }
 
     /**

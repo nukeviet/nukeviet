@@ -299,21 +299,10 @@ define('PLATFORM_JAVA_ANDROID', 'Java/Android');
 define('PLATFORM_POSTMAN', 'Postman');
 define('PLATFORM_I_FRAME', 'Iframely');
 
-// Memcached
-define('NV_MEMCACHED_HOST', '127.0.0.1');
-define('NV_MEMCACHED_PORT', '11211');
-
-// Redis
-define('NV_REDIS_HOST', '127.0.0.1');
-define('NV_REDIS_PORT', 6379);
-define('NV_REDIS_PASSWORD', ''); // Warning: password default is empty, but if using the password is sent in plain-text over the network
-define('NV_REDIS_DBINDEX', 0);
-define('NV_REDIS_TIMEOUT', 2.5);
-
 // API
 define('MANUALL_DEL_API_LOG', false); // Allow the super-admins to delete logs
 
-// Cokies names
+// Cookies names
 define('CURRENT_THEMETYPE_COOKIE_NAME', 'tm'); // Tên cookie chứa thông tin kiểu theme hiện tại
 define('DATA_LANG_COOKIE_NAME', 'dlng'); // Tên cookie chứa thông tin ngôn ngữ data
 define('INT_LANG_COOKIE_NAME', 'ilng'); // Tên cookie chứa thông tin ngôn ngữ hiển thị

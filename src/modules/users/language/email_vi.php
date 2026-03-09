@@ -333,3 +333,39 @@ $module_emails[Emails::PASSKEY_DEL] = [
 </ul>
 Chúng tôi gửi thông báo bắt buộc này đến email của bạn để đảm bảo chính bạn là người thực hiện. Trong trường hợp không phải là bạn, vui lòng khẩn trương truy cập <a href="{$passkey_link}">trang quản lí khóa đăng nhập</a> để xem lại các khóa đăng nhập. Đồng thời thực hiện <a href="{$pass_link}">đổi mật khẩu ngay</a> để đảm bảo an toàn.'
 ];
+$module_emails[Emails::DELETE_ACCOUNT_SECCODE] = [
+    'is_system' => $is_system,
+    'pids' => $pids,
+    'pfile' => $pfile,
+    'catid' => $catid,
+    't' => 'Email mã xác nhận xóa tài khoản',
+    's' => 'Mã xác nhận yêu cầu xóa tài khoản của bạn',
+    'c' => '<p>{$greeting_user}</p> <p>Chúng tôi đã nhận được yêu cầu xóa tài khoản của bạn. Để tiếp tục, vui lòng sử dụng mã xác nhận dưới đây.</p> <div style="text-align: center; margin: 32px 0;"> <p style="font-size: 14px; color: #4b5563; margin-bottom: 8px;">Mã xác nhận của bạn là:</p> <div style="display: inline-block; background-color: #f3f4f6; border: 1px solid #d1d5db; border-radius: 6px; padding: 12px 24px;"> <span style="font-size: 24px; font-weight: bold; letter-spacing: 0.2em; color: #111827; font-family: monospace;">{$code}</span> </div> </div> <p>Mã này có hiệu lực trong 10 phút. Vui lòng không chia sẻ mã này với bất kỳ ai.</p> <p>Nếu bạn không yêu cầu hành động này, vui lòng bỏ qua email này và liên hệ với bộ phận hỗ trợ của chúng tôi ngay lập tức để bảo vệ tài khoản của bạn.</p> <p style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #e5e7eb; font-size: 14px; color: #6b7280; font-style: italic; margin-bottom: 0px;"> Đây là thông báo bắt buộc liên quan đến hoạt động trên tài khoản của bạn. Vui lòng không trả lời và hãy bỏ qua email nếu bạn không hiểu nội dung. </p>'
+];
+$module_emails[Emails::DELETE_ACCOUNT_PENDING] = [
+    'is_system' => $is_system,
+    'pids' => $pids,
+    'pfile' => $pfile,
+    'catid' => $catid,
+    't' => 'Email thông báo đã lên lịch xóa tài khoản',
+    's' => 'Tài khoản của bạn đã được lên lịch để xóa',
+    'c' => '<p>{$greeting_user}</p> <p>Yêu cầu xóa tài khoản của bạn đã được xác nhận. Tài khoản của bạn sẽ bị xóa vĩnh viễn vào khoảng <strong style="color: #111827;">{$action_time}</strong>.</p> <p>Sau khi xóa, toàn bộ dữ liệu và dịch vụ liên quan sẽ không thể khôi phục.</p> <div style="text-align: center; margin: 32px 0;"> <p style="color: #4b5563; margin-bottom: 16px;">Nếu bạn đổi ý, bạn có thể hủy yêu cầu này bất kỳ lúc nào trước thời hạn trên bằng cách nhấp vào nút bên dưới và đăng nhập lại.</p> <a href="{$link}" style="display: inline-block; padding: 12px 32px; font-weight: bold; color: white; background-color: #2563eb; text-decoration: none; border-radius: 6px;">Hủy yêu cầu xóa tài khoản</a> </div> <p>Nếu bạn không thực hiện yêu cầu này, vui lòng nhấp vào liên kết bên trên để hủy yêu cầu hoặc liên hệ với bộ phận hỗ trợ của chúng tôi ngay lập tức.</p> <p style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #e5e7eb; font-size: 14px; color: #6b7280; font-style: italic; margin-bottom: 0px;"> Đây là thông báo bắt buộc liên quan đến hoạt động trên tài khoản của bạn. Vui lòng không trả lời và hãy bỏ qua email nếu bạn không hiểu nội dung. </p>'
+];
+$module_emails[Emails::DELETE_ACCOUNT_CANCEL] = [
+    'is_system' => $is_system,
+    'pids' => $pids,
+    'pfile' => $pfile,
+    'catid' => $catid,
+    't' => 'Email hủy yêu cầu xóa tài khoản',
+    's' => 'Yêu cầu xóa tài khoản của bạn đã được hủy',
+    'c' => '<p>{$greeting_user}</p> <p>Chúng tôi xác nhận rằng yêu cầu xóa tài khoản của bạn đã được hủy thành công theo yêu cầu của bạn.</p> <p>Tài khoản của bạn vẫn <strong>an toàn</strong> và hoạt động bình thường. Bạn có thể tiếp tục sử dụng tất cả các dịch vụ của chúng tôi mà không bị gián đoạn.</p> <p>Nếu bạn không phải là người thực hiện hành động này, vui lòng <a href="{$pass_link}" style="color: #2563eb; font-weight: 600; text-decoration: none;">thay đổi mật khẩu</a> ngay lập tức và xem lại <a href="{$link}" style="color: #2563eb; font-weight: 600; text-decoration: none;">các phiên đăng nhập gần đây</a> để bảo vệ tài khoản của bạn.</p> <p style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #e5e7eb; font-size: 14px; color: #6b7280; font-style: italic; margin-bottom: 0px;"> Đây là thông báo bắt buộc liên quan đến hoạt động trên tài khoản của bạn. Vui lòng không trả lời và hãy bỏ qua email nếu bạn không hiểu nội dung. </p>'
+];
+$module_emails[Emails::DELETE_ACCOUNT_COMPLETED] = [
+    'is_system' => $is_system,
+    'pids' => $pids,
+    'pfile' => $pfile,
+    'catid' => $catid,
+    't' => 'Email đã xóa tài khoản thành công',
+    's' => 'Tài khoản của bạn đã được xóa vĩnh viễn',
+    'c' => '<p>{$greeting_user}</p> <p>Như đã yêu cầu, tài khoản của bạn đã được <strong>xóa vĩnh viễn</strong> khỏi hệ thống của chúng tôi. Hành động này không thể được hoàn tác.</p> <p>Toàn bộ dữ liệu cá nhân, lịch sử hoạt động và các dịch vụ liên quan đến tài khoản này đã bị xóa không thể khôi phục.</p> <p>{$newvalue}.</p> <p>Chúng tôi rất tiếc khi phải chia tay bạn và hy vọng sẽ có cơ hội phục vụ bạn trong tương lai.</p> <p style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #e5e7eb; font-size: 14px; color: #6b7280; font-style: italic; margin-bottom: 0px;"> Đây là thông báo bắt buộc liên quan đến hoạt động trên tài khoản của bạn. Vui lòng không trả lời và hãy bỏ qua email nếu bạn không hiểu nội dung. </p>'
+];

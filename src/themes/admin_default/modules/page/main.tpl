@@ -21,7 +21,7 @@
             <!-- BEGIN: row -->
             <tr>
                 <td class="text-center">
-                    <select id="change_weight_{ROW.id}" onchange="nv_chang_weight('{ROW.id}');" class="form-control input-sm">
+                    <select id="change_weight_{ROW.id}" onchange="nv_chang_weight('{ROW.id}', '{ROW.checkss}');" class="form-control input-sm">
                         <!-- BEGIN: weight -->
                         <option value="{WEIGHT.w}"{WEIGHT.selected}>{WEIGHT.w}</option>
                         <!-- END: weight -->

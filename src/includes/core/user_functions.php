@@ -83,7 +83,7 @@ function nv_blocks_content($sitecontent)
 
     $_posReal = array_combine($_posReal[0], $_posReal[3]);
 
-    $cache_file = NV_LANG_DATA . '_' . $global_config['module_theme'] . '_' . $module_name . '_' . NV_CACHE_PREFIX . '.cache';
+    $cache_file = $global_config['module_theme'] . '_' . $module_name . '_' . NV_CACHE_PREFIX . '.cache';
     $blocks = [];
 
     $cacheValid = false;
@@ -135,6 +135,7 @@ function nv_blocks_content($sitecontent)
                 'act' => $_row['act'],
                 'groups_view' => $_row['groups_view'],
                 'all_func' => $_row['all_func'],
+                'bot_visible' => $_row['bot_visible'],
                 'block_config' => $block_config
             ];
         }
@@ -247,6 +248,11 @@ function nv_blocks_content($sitecontent)
                 } elseif (!$client_info['is_mobile'] and !$client_info['is_tablet'] and in_array(4, $_row['show_device'], true)) {
                     $_active = true;
                 }
+            }
+
+            // Kiem tra hien thi voi bot
+            if ($client_info['is_bot'] and empty($_row['bot_visible'])) {
+                $_active = false;
             }
 
             // Kiem tra quyen xem block
@@ -842,6 +848,7 @@ function nv_html_site_js($html = true, $other_js = [], $language_js = true, $glo
     $jsDef .= ',nv_gfx_width="' . NV_GFX_WIDTH . '"';
     $jsDef .= ',nv_gfx_height="' . NV_GFX_HEIGHT . '"';
     $jsDef .= ',nv_gfx_num="' . NV_GFX_NUM . '"';
+    $jsDef .= ',nv_cache_timestamp=' . intval($global_config['timestamp']);
 
     $jsDef .= ';';
 
@@ -1121,8 +1128,7 @@ function set_theme_configs(&$global_config, &$is_mobile, $module_info)
             } elseif (theme_file_exists('default/theme.php')) {
                 $global_config['module_theme'] = 'default';
             } else {
-                http_response_code(500);
-                trigger_error('Error! Does not exist themes default', 256);
+                throw new \NukeViet\Http\HttpException('Error! Does not exist themes default', 500);
             }
             $theme_type = $global_config['current_theme_type'];
         }
@@ -1145,7 +1151,7 @@ function nv_module_captcha(string $module_name): string
 {
     global $global_config, $module_config;
 
-    $module_captcha = $module_name == 'users' ? $global_config['captcha_type'] : (
+    $module_captcha = $module_name == 'users' ? ($global_config['captcha_type'] ?? '') : (
         (isset($module_config[$module_name]) and !empty($module_config[$module_name]['captcha_type'])) ? $module_config[$module_name]['captcha_type'] : ''
     );
 

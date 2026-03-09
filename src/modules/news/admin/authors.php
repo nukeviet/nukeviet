@@ -50,7 +50,9 @@ if ($nv_Request->isset_request('searchAjax', 'post') and $nv_Request->get_title(
     $sth->bindValue(':pseudonym', '%' . $q . '%', PDO::PARAM_STR);
     $sth->execute();
 
-    while ([$id, $pseudonym] = $sth->fetch(3)) {
+    while ($_scratch = $sth->fetch(3)) {
+        [$id, $pseudonym] = $_scratch;
+        unset($_scratch);
         $respon['results'][] = [
             'id' => $id,
             'text' => $pseudonym
@@ -108,7 +110,9 @@ if ($nv_Request->isset_request('get_account_json', 'post, get')) {
         ->offset(($page - 1) * 30);
     $result = $db->query($db->sql());
     $array_data['results'] = [];
-    while ([$userid, $username] = $result->fetch(3)) {
+    while ($_scratch = $result->fetch(3)) {
+        [$userid, $username] = $_scratch;
+        unset($_scratch);
         $array_data['results'][] = [
             'id' => $userid,
             'title' => $username
@@ -268,7 +272,9 @@ if (!empty($uids)) {
         ->where('userid IN (' . $uids . ')');
     $result = $db_slave->query($db_slave->sql());
     $uids = [];
-    while ([$userid, $username, $email, $md5username] = $result->fetch(3)) {
+    while ($_scratch = $result->fetch(3)) {
+        [$userid, $username, $email, $md5username] = $_scratch;
+        unset($_scratch);
         $uids[$userid] = [
             'username' => $username,
             'email' => $email,

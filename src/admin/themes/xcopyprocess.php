@@ -40,10 +40,10 @@ if (md5(NV_CHECK_SESSION . '_' . $module_name . '_xcopyblock_' . $admin_info['us
         while ($row = $sth->fetch()) {
             $_sql = 'INSERT INTO ' . NV_BLOCKS_TABLE . '_groups (
                 theme, module, file_name, title, link, template, heading, position,
-                dtime_type, dtime_details, active, groups_view, all_func, weight, config
+                dtime_type, dtime_details, active, bot_visible, groups_view, all_func, weight, config
             ) VALUES (
                 :theme, :module, :file_name, :title, :link, :template, :heading, :position,
-                :dtime_type, :dtime_details, :active, :groups_view, :all_func, :weight, :config
+                :dtime_type, :dtime_details, :active, :bot_visible, :groups_view, :all_func, :weight, :config
             )';
 
             $data = [];
@@ -58,6 +58,7 @@ if (md5(NV_CHECK_SESSION . '_' . $module_name . '_xcopyblock_' . $admin_info['us
             $data['dtime_type'] = $row['dtime_type'];
             $data['dtime_details'] = $row['dtime_details'];
             $data['active'] = $row['active'];
+            $data['bot_visible'] = $row['bot_visible'];
             $data['groups_view'] = $row['groups_view'];
             $data['all_func'] = $row['all_func'];
             $data['weight'] = $row['weight'];
@@ -65,7 +66,9 @@ if (md5(NV_CHECK_SESSION . '_' . $module_name . '_xcopyblock_' . $admin_info['us
             $bid = $db->insert_id($_sql, 'bid', $data);
 
             $result_weight = $db->query('SELECT func_id, weight FROM ' . NV_BLOCKS_TABLE . '_weight WHERE bid = ' . $row['bid']);
-            while ([$func_id, $weight] = $result_weight->fetch(3)) {
+            while ($_scratch = $result_weight->fetch(3)) {
+                [$func_id, $weight] = $_scratch;
+                unset($_scratch);
                 $db->query('INSERT INTO ' . NV_BLOCKS_TABLE . '_weight (bid, func_id, weight) VALUES (' . $bid . ', ' . $func_id . ', ' . $weight . ')');
             }
         }

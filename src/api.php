@@ -17,6 +17,9 @@ define('NV_ROOTDIR', pathinfo(str_replace(DIRECTORY_SEPARATOR, '/', __FILE__), P
 
 require NV_ROOTDIR . '/includes/mainfile.php';
 
+// Remote API không cần session
+session_write_close();
+
 use NukeViet\Api\Api;
 use NukeViet\Api\ApiResult;
 use NukeViet\Uapi\Uapi;
@@ -306,16 +309,17 @@ if (!empty($my_flood_rules)) {
         [$flood_rules, $flood_role_id] = $dt;
         $flood_rules = json_decode($flood_rules, true);
 
-        $select = [];
+        $countlist = [];
         foreach (array_keys($flood_rules) as $interval) {
-            $select[] = 'COUNT(CASE WHEN log_time >= ' . (NV_CURRENTTIME - $interval) . ' THEN 1 END) AS count' . $interval;
+            $sql = 'SELECT COUNT(id) FROM ' . $db_config['prefix'] . '_api_role_logs
+            WHERE log_time>=' . (NV_CURRENTTIME - $interval) . ' AND userid = ' . $credential_data['userid'] . ' AND role_id = ' . $flood_role_id;
+            $countlist['count' . $interval] = intval($db->query($sql)->fetchColumn() ?: 0);
         }
-        $sql = 'SELECT ' . implode(', ', $select) . ' FROM ' . $db_config['prefix'] . '_api_role_logs WHERE role_id = ' . $flood_role_id . ' AND userid = ' . $credential_data['userid'];
-        $countlist = $db->query($sql)->fetch();
+
         if (!empty($countlist)) {
             foreach ($flood_rules as $interval => $limit) {
                 if (!empty($countlist['count' . $interval])) {
-                    if ((int) $countlist['count' . $interval] >= $limit) {
+                    if ($countlist['count' . $interval] >= $limit) {
                         $apiresults->setCode(ApiResult::CODE_REQUEST_LIMIT_EXCEEDED)
                             ->setMessage('Request limit exceeded!!!')
                             ->returnResult();

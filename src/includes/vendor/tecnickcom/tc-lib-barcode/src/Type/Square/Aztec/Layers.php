@@ -7,8 +7,8 @@
  * @category    Library
  * @package     Barcode
  * @author      Nicola Asuni <info@tecnick.com>
- * @copyright   2023-2024 Nicola Asuni - Tecnick.com LTD
- * @license     http://www.gnu.org/copyleft/lesser.html GNU-LGPL v3 (see LICENSE.TXT)
+ * @copyright   2023-2026 Nicola Asuni - Tecnick.com LTD
+ * @license     https://www.gnu.org/copyleft/lesser.html GNU-LGPL v3 (see LICENSE.TXT)
  * @link        https://github.com/tecnickcom/tc-lib-barcode
  *
  * This file is part of tc-lib-barcode software library.
@@ -25,8 +25,8 @@ namespace Com\Tecnick\Barcode\Type\Square\Aztec;
  * @category    Library
  * @package     Barcode
  * @author      Nicola Asuni <info@tecnick.com>
- * @copyright   2023-2024 Nicola Asuni - Tecnick.com LTD
- * @license     http://www.gnu.org/copyleft/lesser.html GNU-LGPL v3 (see LICENSE.TXT)
+ * @copyright   2023-2026 Nicola Asuni - Tecnick.com LTD
+ * @license     https://www.gnu.org/copyleft/lesser.html GNU-LGPL v3 (see LICENSE.TXT)
  * @link        https://github.com/tecnickcom/tc-lib-barcode
  */
 abstract class Layers extends \Com\Tecnick\Barcode\Type\Square\Aztec\Codeword
@@ -57,7 +57,7 @@ abstract class Layers extends \Com\Tecnick\Barcode\Type\Square\Aztec\Codeword
      */
     protected function getMinLayers(array $data, int $numbits): int
     {
-        if ($numbits <= $data[count($data)][3]) {
+        if ($numbits <= $data[\count($data)][3]) {
             foreach ($data as $numlayers => $size) {
                 if ($numbits <= $size[3]) {
                     return $numlayers;
@@ -93,7 +93,18 @@ abstract class Layers extends \Com\Tecnick\Barcode\Type\Square\Aztec\Codeword
             return false;
         }
 
-        $this->layer = $this->compact ? Data::SIZE_COMPACT[$this->numlayers] : Data::SIZE_FULL[$this->numlayers];
+        if ($this->compact) {
+            if (empty(Data::SIZE_COMPACT[$this->numlayers])) {
+                return false;
+            }
+            $this->layer = Data::SIZE_COMPACT[$this->numlayers];
+            return true;
+        }
+
+        if (empty(Data::SIZE_FULL[$this->numlayers])) {
+            return false;
+        }
+        $this->layer = Data::SIZE_FULL[$this->numlayers];
         return true;
     }
 

@@ -7,8 +7,8 @@
  * @category    Library
  * @package     Barcode
  * @author      Nicola Asuni <info@tecnick.com>
- * @copyright   2010-2024 Nicola Asuni - Tecnick.com LTD
- * @license     http://www.gnu.org/copyleft/lesser.html GNU-LGPL v3 (see LICENSE.TXT)
+ * @copyright   2010-2026 Nicola Asuni - Tecnick.com LTD
+ * @license     https://www.gnu.org/copyleft/lesser.html GNU-LGPL v3 (see LICENSE.TXT)
  * @link        https://github.com/tecnickcom/tc-lib-barcode
  *
  * This file is part of tc-lib-barcode software library.
@@ -32,8 +32,8 @@ use Com\Tecnick\Barcode\Exception as BarcodeException;
  * @category    Library
  * @package     Barcode
  * @author      Nicola Asuni <info@tecnick.com>
- * @copyright   2010-2024 Nicola Asuni - Tecnick.com LTD
- * @license     http://www.gnu.org/copyleft/lesser.html GNU-LGPL v3 (see LICENSE.TXT)
+ * @copyright   2010-2026 Nicola Asuni - Tecnick.com LTD
+ * @license     https://www.gnu.org/copyleft/lesser.html GNU-LGPL v3 (see LICENSE.TXT)
  * @link        https://github.com/tecnickcom/tc-lib-barcode
  */
 class UpcE extends \Com\Tecnick\Barcode\Type\Linear\UpcA
@@ -111,26 +111,26 @@ class UpcE extends \Com\Tecnick\Barcode\Type\Linear\UpcA
      */
     protected function convertUpcaToUpce(string $code): string
     {
-        $tmp = substr($code, 4, 3);
+        $tmp = \substr($code, 4, 3);
         if (($tmp == '000') || ($tmp == '100') || ($tmp == '200')) {
             // manufacturer code ends in 000, 100, or 200
-            return substr($code, 2, 2) . substr($code, 9, 3) . substr($code, 4, 1);
+            return \substr($code, 2, 2) . \substr($code, 9, 3) . \substr($code, 4, 1);
         }
 
-        $tmp = substr($code, 5, 2);
+        $tmp = \substr($code, 5, 2);
         if ($tmp == '00') {
             // manufacturer code ends in 00
-            return substr($code, 2, 3) . substr($code, 10, 2) . '3';
+            return \substr($code, 2, 3) . \substr($code, 10, 2) . '3';
         }
 
-        $tmp = substr($code, 6, 1);
+        $tmp = \substr($code, 6, 1);
         if ($tmp == '0') {
             // manufacturer code ends in 0
-            return substr($code, 2, 4) . substr($code, 11, 1) . '4';
+            return \substr($code, 2, 4) . \substr($code, 11, 1) . '4';
         }
 
         // manufacturer code does not end in zero
-        return substr($code, 2, 5) . substr($code, 11, 1);
+        return \substr($code, 2, 5) . \substr($code, 11, 1);
     }
 
     /**
@@ -139,11 +139,11 @@ class UpcE extends \Com\Tecnick\Barcode\Type\Linear\UpcA
     protected function formatCode(): void
     {
         $code = $this->code;
-        if (strlen($code) == 6) {
+        if (\strlen($code) == 6) {
             $code = $this->convertUpceToUpca($code);
         }
 
-        $code = str_pad($code, ($this->code_length - 1), '0', STR_PAD_LEFT);
+        $code = \str_pad($code, ($this->code_length - 1), '0', STR_PAD_LEFT);
         $code .= $this->getChecksum($code);
         ++$this->code_length;
         $this->extcode = '0' . $code;

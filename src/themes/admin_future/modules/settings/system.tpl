@@ -392,6 +392,91 @@
             </div>
         </div>
     </div>
+    {if $smarty.const.NV_IS_GODADMIN}
+    <div class="col-12">
+        <div class="card border-primary border-3 border-bottom-0 border-start-0 border-end-0">
+            <div class="card-header py-2" role="button" data-bs-toggle="collapse" data-bs-target="#collapse-cache" aria-expanded="true" aria-controls="collapse-cache">
+                <div class="hstack gap-2 align-items-center justify-content-between">
+                    <div class="fw-medium fs-5">{$LANG->getModule('cache_settings')}</div>
+                    <div class="collapse-button"></div>
+                </div>
+            </div>
+            <div class="collapse show" id="collapse-cache">
+                <div class="card card-body">
+                    <div class="row pb-3">
+                        <label for="element_cache_system" class="col-sm-3 col-form-label text-sm-end">{$LANG->getModule('cache_use')}</label>
+                        <div class="col-sm-8 col-lg-6 col-xxl-5">
+                            <select id="element_cache_system" name="cached" class="form-select">
+                                {assign var="CACHE_OPTIONS" value=['files'=>$LANG->getModule('files_cached'),'memcached'=>'Memcached','redis'=>'Redis']}
+                                {foreach $CACHE_OPTIONS as $k_cache => $item}
+                                <option value="{$k_cache}"{if $k_cache eq $DATA.cached} selected{/if}>{$item}</option>
+                                {/foreach}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row mb-3 memcached-settings">
+                        <label for="element_memcached_host" class="col-sm-3 col-form-label text-sm-end">{$LANG->getModule('memcached_host')}</label>
+                        <div class="col-sm-8 col-lg-6 col-xxl-5">
+                            <input type="text" class="form-control" id="element_memcached_host" name="memcached_host" value="{$DATA.memcached_host}">
+                        </div>
+                    </div>
+                    <div class="row mb-3 memcached-settings">
+                        <label for="element_memcached_port" class="col-sm-3 col-form-label text-sm-end">{$LANG->getModule('memcached_port')}</label>
+                        <div class="col-sm-8 col-lg-6 col-xxl-5">
+                            <input type="number" class="form-control" id="element_memcached_port" name="memcached_port" value="{$DATA.memcached_port}">
+                        </div>
+                    </div>
+                    <div class="row mb-3 redis-settings">
+                        <label for="element_redis_host" class="col-sm-3 col-form-label text-sm-end">{$LANG->getModule('redis_host')}</label>
+                        <div class="col-sm-8 col-lg-6 col-xxl-5">
+                            <input type="text" class="form-control" id="element_redis_host" name="redis_host" value="{$DATA.redis_host}">
+                        </div>
+                    </div>
+                    <div class="row mb-3 redis-settings">
+                        <label for="element_redis_port" class="col-sm-3 col-form-label text-sm-end">{$LANG->getModule('redis_port')}</label>
+                        <div class="col-sm-8 col-lg-6 col-xxl-5">
+                            <input type="number" class="form-control" id="element_redis_port" name="redis_port" value="{$DATA.redis_port}">
+                        </div>
+                    </div>
+                    <div class="row mb-3 redis-settings">
+                        <label for="element_redis_password" class="col-sm-3 col-form-label text-sm-end">{$LANG->getModule('redis_password')}</label>
+                        <div class="col-sm-8 col-lg-6 col-xxl-5">
+                            <input type="password" class="form-control" id="element_redis_password" name="redis_password" value="{$DATA.redis_password}">
+                            <div class="form-text">{$LANG->getModule('redis_pass_note')}</div>
+                        </div>
+                    </div>
+                    <div class="row mb-3 redis-settings">
+                        <label for="element_redis_db_index" class="col-sm-3 col-form-label text-sm-end">{$LANG->getModule('redis_db_index')}</label>
+                        <div class="col-sm-8 col-lg-6 col-xxl-5">
+                            <input type="number" class="form-control" id="element_redis_db_index" name="redis_db_index" value="{$DATA.redis_db_index}">
+                        </div>
+                    </div>
+                    <div class="row mb-3 redis-settings">
+                        <label for="element_redis_timeout" class="col-sm-3 col-form-label text-sm-end">{$LANG->getModule('redis_timeout')}</label>
+                        <div class="col-sm-8 col-lg-6 col-xxl-5">
+                            <div class="input-group">
+                                <input type="number" class="form-control" id="element_redis_timeout" name="redis_timeout" value="{$DATA.redis_timeout}">
+                                <span class="input-group-text" id="element_redis_timeout_lbl">{$LANG->getModule('redis_timeout_unit')}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <label for="element_cache_prefix" class="col-sm-3 col-form-label text-sm-end">{$LANG->getModule('cache_prefix')}</label>
+                        <div class="col-sm-8 col-lg-6 col-xxl-5">
+                            <input type="text" class="form-control" id="element_cache_prefix" name="cache_prefix" value="{$DATA.cache_prefix}">
+                            <div class="form-text">{$LANG->getModule('cache_prefix_note')}</div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-8 offset-sm-3">
+                            <button type="submit" class="btn btn-primary">{$LANG->getModule('submit')}</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {/if}
 </form>
 <div class="modal fade" id="mdPhoneNote" tabindex="-1" aria-labelledby="mdPhoneNoteLabel" aria-hidden="true">
     <div class="modal-dialog">

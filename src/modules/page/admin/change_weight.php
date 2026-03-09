@@ -13,17 +13,18 @@ if (!defined('NV_IS_FILE_ADMIN')) {
     exit('Stop!!!');
 }
 
+$checkss = $nv_Request->get_title('checkss', 'post', '');
 $id = $nv_Request->get_int('id', 'post', 0);
 $new_weight = $nv_Request->get_int('new_weight', 'post', 0);
 
-if (empty($id) or empty($new_weight)) {
+if (empty($id) or empty($new_weight) or $checkss != md5($id . NV_CHECK_SESSION)) {
     nv_jsonOutput([
         'success' => 0,
         'text' => 'Wrong data!'
     ]);
 }
 
-$sth = $db->prepare('SELECT id FROM ' . NV_PREFIXLANG . '_' . $module_data . ' WHERE id= :id');
+$sth = $db->prepare('SELECT id, title FROM ' . NV_PREFIXLANG . '_' . $module_data . ' WHERE id= :id');
 $sth->bindParam(':id', $id, PDO::PARAM_INT);
 $sth->execute();
 $row_data = $sth->fetch();
@@ -55,7 +56,7 @@ $sth2->bindParam(':id', $id, PDO::PARAM_INT);
 $sth2->execute();
 
 $nv_Cache->delMod($module_name);
-nv_insert_logs(NV_LANG_DATA, $module_name, 'Change weight ID: ' . $row['id'] . ': ' . $row['title'], $weight . ' -> ' . $new_weight, $admin_info['userid']);
+nv_insert_logs(NV_LANG_DATA, $module_name, 'Change weight ID: ' . $row_data['id'] . ': ' . $row_data['title'], $weight . ' -> ' . $new_weight, $admin_info['userid']);
 nv_jsonOutput([
     'success' => 1,
     'text' => 'Success!'

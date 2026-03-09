@@ -2,6 +2,9 @@ namespace: Tests
 
 support_namespace: Support
 
+params:
+    - .env
+
 paths:
     tests: tests
     output: tests/_output

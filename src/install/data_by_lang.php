@@ -129,6 +129,7 @@ $installMods['users'] = [
     'sitemap' => 1,
     'funcs' => [
         'main' => [
+            'func_custom_name' => $install_lang['modfuncs']['users']['main'],
             'show_func' => 1,
             'theme_default' => 'left-main',
             'theme_mobile' => 'main'
@@ -194,6 +195,7 @@ $installMods['users'] = [
             'theme_mobile' => 'main'
         ],
         'avatar' => [
+            'func_custom_name' => $install_lang['modfuncs']['users']['avatar'],
             'show_func' => 1,
             'theme_default' => 'left-main'
         ],
@@ -204,7 +206,28 @@ $installMods['users'] = [
             'theme_default' => 'left-main',
             'theme_mobile' => 'main'
         ],
-        'oauth' => []
+        'oauth' => [],
+        'datadeletion' => [
+            'func_custom_name' => $install_lang['modfuncs']['users']['datadeletion'],
+            'show_func' => 1,
+            'in_submenu' => 0,
+            'theme_default' => 'left-main',
+            'theme_mobile' => 'main'
+        ],
+        'security-privacy' => [
+            'func_custom_name' => $install_lang['modfuncs']['users']['security-privacy'],
+            'show_func' => 1,
+            'in_submenu' => 0,
+            'theme_default' => 'left-main',
+            'theme_mobile' => 'main'
+        ],
+        'verify-password' => [
+            'func_custom_name' => $install_lang['modfuncs']['users']['verify-password'],
+            'show_func' => 1,
+            'in_submenu' => 0,
+            'theme_default' => 'left-main',
+            'theme_mobile' => 'main'
+        ]
     ],
     'icon' => 'fa-solid fa-users'
 ];
@@ -584,6 +607,7 @@ $blockGroups = [
                 'title' => $install_lang['blocks_groups']['news']['module.block_newscenter'],
                 'template' => 'no_title',
                 'active' => '1',
+                'bot_visible' => '1',
                 'groups_view' => '6',
                 'config' => 'a:10:{s:6:"numrow";i:6;s:11:"showtooltip";i:1;s:16:"tooltip_position";s:6:"bottom";s:14:"tooltip_length";s:3:"150";s:12:"length_title";i:0;s:15:"length_hometext";i:0;s:17:"length_othertitle";i:60;s:5:"width";i:500;s:6:"height";i:0;s:7:"nocatid";a:0:{}}',
                 'funcs' => [
@@ -598,6 +622,7 @@ $blockGroups = [
                 'title' => $install_lang['blocks_groups']['banners']['global.banners1'],
                 'template' => 'no_title',
                 'active' => '1',
+                'bot_visible' => '1',
                 'groups_view' => '6',
                 'config' => 'a:1:{s:12:"idplanbanner";i:1;}',
                 'funcs' => [
@@ -614,6 +639,7 @@ $blockGroups = [
                 'title' => $install_lang['blocks_groups']['news']['global.block_category'],
                 'template' => 'no_title',
                 'active' => '1',
+                'bot_visible' => '1',
                 'groups_view' => '6',
                 'config' => 'a:2:{s:5:"catid";i:0;s:12:"title_length";i:0;}',
                 'funcs' => [
@@ -636,6 +662,7 @@ $blockGroups = [
                 'title' => 'Module Menu',
                 'template' => 'no_title',
                 'active' => '1',
+                'bot_visible' => '1',
                 'groups_view' => '6',
                 'funcs' => [
                     'users' => [
@@ -669,6 +696,7 @@ $blockGroups = [
                 'title' => $install_lang['blocks_groups']['banners']['global.banners2'],
                 'template' => 'no_title',
                 'active' => '1',
+                'bot_visible' => '1',
                 'groups_view' => '6',
                 'all_func' => 1,
                 'config' => 'a:1:{s:12:"idplanbanner";i:2;}'
@@ -679,6 +707,7 @@ $blockGroups = [
                 'title' => $install_lang['blocks_groups']['statistics']['global.counter'],
                 'template' => 'primary',
                 'active' => '1',
+                'bot_visible' => '1',
                 'groups_view' => '6',
                 'all_func' => 1
             ]
@@ -690,6 +719,7 @@ $blockGroups = [
                 'title' => $install_lang['blocks_groups']['about']['global.about'],
                 'template' => 'border',
                 'active' => '1',
+                'bot_visible' => '1',
                 'groups_view' => '6',
                 'all_func' => 1
             ],
@@ -699,6 +729,7 @@ $blockGroups = [
                 'title' => $install_lang['blocks_groups']['banners']['global.banners3'],
                 'template' => 'no_title',
                 'active' => '1',
+                'bot_visible' => '1',
                 'groups_view' => '6',
                 'all_func' => 1,
                 'config' => 'a:1:{s:12:"idplanbanner";i:3;}'
@@ -709,6 +740,7 @@ $blockGroups = [
                 'title' => $install_lang['blocks_groups']['voting']['global.voting_random'],
                 'template' => 'primary',
                 'active' => '1',
+                'bot_visible' => '1',
                 'groups_view' => '6',
                 'all_func' => 1
             ],
@@ -718,6 +750,7 @@ $blockGroups = [
                 'title' => $install_lang['blocks_groups']['news']['global.block_tophits'],
                 'template' => 'primary',
                 'active' => '1',
+                'bot_visible' => '1',
                 'groups_view' => '6',
                 'all_func' => 1,
                 'config' => 'a:6:{s:10:"number_day";i:3650;s:6:"numrow";i:10;s:11:"showtooltip";i:1;s:16:"tooltip_position";s:6:"bottom";s:14:"tooltip_length";s:3:"150";s:7:"nocatid";a:2:{i:0;i:10;i:1;i:11;}}'
@@ -730,6 +763,7 @@ $blockGroups = [
                 'title' => 'Copyright',
                 'template' => 'no_title',
                 'active' => '1',
+                'bot_visible' => '1',
                 'groups_view' => '6',
                 'all_func' => 1,
                 'config' => $copyright
@@ -740,6 +774,7 @@ $blockGroups = [
                 'title' => 'Feedback',
                 'template' => 'no_title',
                 'active' => '1',
+                'bot_visible' => '1',
                 'groups_view' => '6',
                 'all_func' => 1
             ]
@@ -751,6 +786,7 @@ $blockGroups = [
                 'title' => 'QR code',
                 'template' => 'no_title',
                 'active' => '1',
+                'bot_visible' => '1',
                 'groups_view' => '6',
                 'all_func' => 1
             ],
@@ -760,6 +796,7 @@ $blockGroups = [
                 'title' => 'Online button',
                 'template' => 'no_title',
                 'active' => '1',
+                'bot_visible' => '1',
                 'groups_view' => '6',
                 'all_func' => 1
             ]
@@ -771,6 +808,7 @@ $blockGroups = [
                 'title' => $install_lang['blocks_groups']['inform']['global.inform'],
                 'template' => 'no_title',
                 'active' => '1',
+                'bot_visible' => '1',
                 'groups_view' => '6',
                 'all_func' => 1
             ],
@@ -780,6 +818,7 @@ $blockGroups = [
                 'title' => $install_lang['blocks_groups']['users']['global.user_button'],
                 'template' => 'no_title',
                 'active' => '1',
+                'bot_visible' => '1',
                 'groups_view' => '6',
                 'all_func' => 1
             ]
@@ -791,6 +830,7 @@ $blockGroups = [
                 'title' => $install_lang['blocks_groups']['theme']['global.company_info'],
                 'template' => 'simple',
                 'active' => '1',
+                'bot_visible' => '1',
                 'groups_view' => '6',
                 'all_func' => 1,
                 'config' => $company
@@ -803,6 +843,7 @@ $blockGroups = [
                 'title' => 'Menu Site',
                 'template' => 'no_title',
                 'active' => '1',
+                'bot_visible' => '1',
                 'groups_view' => '6',
                 'all_func' => 1,
                 'config' => 'a:2:{s:6:"menuid";i:1;s:12:"title_length";i:0;}'
@@ -815,6 +856,7 @@ $blockGroups = [
                 'title' => 'Contact Default',
                 'template' => 'no_title',
                 'active' => '1',
+                'bot_visible' => '1',
                 'groups_view' => '6',
                 'all_func' => 1
             ]
@@ -826,6 +868,7 @@ $blockGroups = [
                 'title' => 'Social icon',
                 'template' => 'no_title',
                 'active' => '1',
+                'bot_visible' => '1',
                 'groups_view' => '6',
                 'all_func' => 1,
                 'config' => $social
@@ -838,6 +881,7 @@ $blockGroups = [
                 'title' => $install_lang['blocks_groups']['theme']['global.menu_footer'],
                 'template' => 'simple',
                 'active' => '1',
+                'bot_visible' => '1',
                 'groups_view' => '6',
                 'all_func' => 1,
                 'config' => 'a:1:{s:14:"module_in_menu";a:8:{i:0;s:5:"about";i:1;s:4:"news";i:2;s:5:"users";i:3;s:7:"contact";i:4;s:6:"voting";i:5;s:7:"banners";i:6;s:4:"seek";i:7;s:5:"feeds";}}'
@@ -850,6 +894,7 @@ $blockGroups = [
                 'title' => $install_lang['blocks_groups']['freecontent']['global.free_content'],
                 'template' => 'no_title',
                 'active' => '1',
+                'bot_visible' => '1',
                 'groups_view' => '6',
                 'all_func' => 1,
                 'config' => 'a:2:{s:7:"blockid";i:1;s:7:"numrows";i:2;}'
@@ -864,6 +909,7 @@ $blockGroups = [
                 'title' => 'Menu Site',
                 'template' => 'no_title',
                 'active' => '1',
+                'bot_visible' => '1',
                 'groups_view' => '6',
                 'all_func' => 1,
                 'config' => 'a:2:{s:6:"menuid";i:1;s:12:"title_length";i:0;}'
@@ -874,6 +920,7 @@ $blockGroups = [
                 'title' => $install_lang['blocks_groups']['inform']['global.inform'],
                 'template' => 'no_title',
                 'active' => '1',
+                'bot_visible' => '1',
                 'groups_view' => '6',
                 'all_func' => 1
             ],
@@ -883,6 +930,7 @@ $blockGroups = [
                 'title' => 'Sign In',
                 'template' => 'no_title',
                 'active' => '1',
+                'bot_visible' => '1',
                 'groups_view' => '6',
                 'all_func' => 1
             ]
@@ -894,6 +942,7 @@ $blockGroups = [
                 'title' => 'Contact Default',
                 'template' => 'no_title',
                 'active' => '1',
+                'bot_visible' => '1',
                 'groups_view' => '6',
                 'all_func' => 1
             ],
@@ -903,6 +952,7 @@ $blockGroups = [
                 'title' => 'Feedback',
                 'template' => 'no_title',
                 'active' => '1',
+                'bot_visible' => '1',
                 'groups_view' => '6',
                 'all_func' => 1
             ],
@@ -912,6 +962,7 @@ $blockGroups = [
                 'title' => 'Social icon',
                 'template' => 'no_title',
                 'active' => '1',
+                'bot_visible' => '1',
                 'groups_view' => '6',
                 'all_func' => 1,
                 'config' => $social
@@ -922,6 +973,7 @@ $blockGroups = [
                 'title' => 'QR code',
                 'template' => 'no_title',
                 'active' => '1',
+                'bot_visible' => '1',
                 'groups_view' => '6',
                 'all_func' => 1
             ]
@@ -933,6 +985,7 @@ $blockGroups = [
                 'title' => 'Copyright',
                 'template' => 'no_title',
                 'active' => '1',
+                'bot_visible' => '1',
                 'groups_view' => '6',
                 'all_func' => 1,
                 'config' => $copyright
@@ -945,6 +998,7 @@ $blockGroups = [
                 'title' => $install_lang['blocks_groups']['theme']['global.menu_footer'],
                 'template' => 'primary',
                 'active' => '1',
+                'bot_visible' => '1',
                 'groups_view' => '6',
                 'all_func' => 1,
                 'config' => 'a:1:{s:14:"module_in_menu";a:9:{i:0;s:5:"about";i:1;s:4:"news";i:2;s:5:"users";i:3;s:7:"contact";i:4;s:6:"voting";i:5;s:7:"banners";i:6;s:4:"seek";i:7;s:5:"feeds";i:8;s:9:"siteterms";}}'
@@ -957,6 +1011,7 @@ $blockGroups = [
                 'title' => $install_lang['blocks_groups']['theme']['global.company_info'],
                 'template' => 'primary',
                 'active' => '1',
+                'bot_visible' => '1',
                 'groups_view' => '6',
                 'all_func' => 1,
                 'config' => $company
@@ -1075,7 +1130,7 @@ if (!empty($theme_mobile)) {
  * Nhap du lieu cho table: nv4_vi_blocks_groups
  */
 $db->query('TRUNCATE TABLE ' . $db_config['prefix'] . '_' . $lang_data . '_blocks_groups');
-$sth = $db->prepare('INSERT INTO ' . $db_config['prefix'] . '_' . $lang_data . '_blocks_groups (bid, theme, module, file_name, title, link, template, position, dtime_details, active, groups_view, all_func, weight, config) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)');
+$sth = $db->prepare('INSERT INTO ' . $db_config['prefix'] . '_' . $lang_data . '_blocks_groups (bid, theme, module, file_name, title, link, template, position, dtime_details, active, bot_visible, groups_view, all_func, weight, config) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)');
 
 $_bid = 0;
 $array_weight_block = [];
@@ -1098,6 +1153,7 @@ foreach ($blockGroups as $theme => $vals) {
                     '[' . $pos . ']',
                     '[]',
                     $bl['active'],
+                    $bl['bot_visible'] ?? 1,
                     $bl['groups_view'],
                     !empty($bl['all_func']) ? 1 : 0,
                     $weight,
@@ -1152,7 +1208,9 @@ $db->query('UPDATE ' . $db_config['prefix'] . '_config SET config_value = ' . $d
 file_put_contents(NV_ROOTDIR . '/' . NV_DATADIR . '/disable_site_content.' . $lang_data . '.txt', $install_lang['disable_site_content'], LOCK_EX);
 
 $result = $db->query('SELECT id, run_func FROM ' . $db_config['prefix'] . '_cronjobs ORDER BY id ASC');
-while ([$id, $run_func] = $result->fetch(3)) {
+while ($_scratch = $result->fetch(3)) {
+    [$id, $run_func] = $_scratch;
+    unset($_scratch);
     $cron_name = (isset($install_lang['cron'][$run_func])) ? $install_lang['cron'][$run_func] : $run_func;
     $db->query('UPDATE ' . $db_config['prefix'] . '_cronjobs SET ' . $lang_data . '_cron_name = ' . $db->quote($cron_name) . ' WHERE id=' . $id);
 }

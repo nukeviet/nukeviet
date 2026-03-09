@@ -31,9 +31,19 @@ class Image
     public $gmaxX = 0;
     public $gmaxY = 0;
     public $error = '';
+
+    /**
+     * @var GdImage|false|null
+     */
     public $createImage;
+
     public $create_Image_info = [];
+
+    /**
+     * @var GdImage|false|null
+     */
     public $logoimg;
+
     public $is_destroy = false;
     public $is_createWorkingImage = false;
 
@@ -523,8 +533,9 @@ class Image
                     self::set_memory_limit($this->fileinfo);
 
                     $transparent_index = imagecolortransparent($this->createImage);
-                    if ($transparent_index >= 0) {
-                        $t_c = imagecolorsforindex($this->createImage, $transparent_index);
+                    $color_count = imagecolorstotal($this->createImage);
+                    if ($transparent_index >= 0 and $color_count > 0) {
+                        $t_c = imagecolorsforindex($this->createImage, min($transparent_index, $color_count - 1));
                         $transparent_index = imagecolorallocate($workingImage, $t_c['red'], $t_c['green'], $t_c['blue']);
                         if (false !== $transparent_index and imagefill($workingImage, 0, 0, $transparent_index)) {
                             imagecolortransparent($workingImage, $transparent_index);
@@ -1079,14 +1090,8 @@ class Image
      */
     private function Destroy()
     {
-        if (version_compare(PHP_VERSION, '8.0.0', '<')) {
-            if (is_resource($this->logoimg)) {
-                @imagedestroy($this->logoimg);
-            }
-            if (is_resource($this->createImage)) {
-                @imagedestroy($this->createImage);
-            }
-        }
+        $this->logoimg = null;
+        $this->createImage = null;
 
         $this->is_destroy = true;
     }

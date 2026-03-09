@@ -350,6 +350,7 @@ if ($checkss == $data['checkss']) {
 $mailer_mode = strtolower($global_config['mailer_mode']);
 if ($mailer_mode != 'smtp' and defined('NV_REGISTER_DOMAIN') and $global_config['idsite'] > 0) {
     // Chức năng quyên mật khẩu cần điều hướng về site chính, do các site con không có smtp để gửi mail
+    /** @disregard P1011 */
     nv_redirect_location(NV_REGISTER_DOMAIN . NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&nv_redirect=' . nv_redirect_encrypt($client_info['selfurl']));
 }
 

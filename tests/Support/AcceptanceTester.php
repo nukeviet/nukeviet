@@ -22,7 +22,26 @@ namespace Tests\Support;
  */
 class AcceptanceTester extends \Codeception\Actor
 {
+    // phpcs:disable
     use _generated\AcceptanceTesterActions;
+
+    /**
+     * @return string
+     */
+    public function getSiteKey(): string
+    {
+        require NV_ROOTDIR . '/config.php';
+        return $global_config['sitekey'];
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getDbConfig(string $key = ''): mixed
+    {
+        require NV_ROOTDIR . '/config.php';
+        return $key ? ($db_config[$key] ?? null) : $db_config;
+    }
 
     /**
      * @param string $username

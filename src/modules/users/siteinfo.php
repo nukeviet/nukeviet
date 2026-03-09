@@ -20,7 +20,7 @@ $_arr_siteinfo = [];
 $cacheFile = 'siteinfo_' . NV_CACHE_PREFIX . '.cache';
 $cacheTTL = 1800;
 
-if (($cache = $nv_Cache->getItem($mod, $cacheFile, $cacheTTL)) != false) {
+if (($cache = $nv_Cache->getItem($mod, $cacheFile, ttl: $cacheTTL)) != false) {
     $_arr_siteinfo = unserialize($cache);
     $access_admin = $_arr_siteinfo['access_admin'];
 } else {
@@ -40,7 +40,7 @@ if (($cache = $nv_Cache->getItem($mod, $cacheFile, $cacheTTL)) != false) {
     $access_admin = unserialize($access_admin);
     $_arr_siteinfo['access_admin'] = $access_admin;
 
-    $nv_Cache->setItem($mod, $cacheFile, serialize($_arr_siteinfo), $cacheTTL);
+    $nv_Cache->setItem($mod, $cacheFile, serialize($_arr_siteinfo), ttl: $cacheTTL);
 }
 
 // Số thành viên

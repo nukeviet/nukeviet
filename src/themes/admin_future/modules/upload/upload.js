@@ -182,6 +182,7 @@ var nukeviet = nukeviet || {};
             imgfile: '', // Select tệp này
             CKEditorFuncNum: 0, // >0 là mở cho CKEditor4
             editorId: '', // Khác rỗng là mở cho CKEditor5
+            trigger: 'auto', // auto|manual auto là tự động gắn sự kiện click vào element, manual là gọi hàm show() để mở
             area: '', // ID thẻ đổ src về khi pick.
             alt: '', // ID thẻ đổ alt về khi pick.
             onSelect: null // Hàm trả về khi select
@@ -265,7 +266,7 @@ var nukeviet = nukeviet || {};
             return;
         }
 
-        this.$element.on('click', function(e) {
+        cfg.trigger === 'auto' && this.$element.on('click', function(e) {
             e.preventDefault();
             self.showModal();
         });
@@ -3420,6 +3421,7 @@ var nukeviet = nukeviet || {};
                 height: file.data('height'),
                 size: file.data('filesize')
             }, self);
+            self.hideModal();
             return;
         }
 
@@ -3458,9 +3460,9 @@ var nukeviet = nukeviet || {};
             }
             // Trả về input của opener
             if (self.settings.area != '') {
-                $('#' + self.settings.area, opener.document).val(file.data('path'));
+                $('#' + self.settings.area, opener.document).val(file.data('path')).trigger('change');
                 if (self.settings.alt != '') {
-                    $('#' + self.settings.alt, opener.document).val(file.data('alt'));
+                    $('#' + self.settings.alt, opener.document).val(file.data('alt')).trigger('change');
                 }
                 window.close();
                 return;
@@ -3470,10 +3472,10 @@ var nukeviet = nukeviet || {};
 
         // Dạng trong trang mới
         if (self.settings.area != '') {
-            $('#' + self.settings.area).val(file.data('path'));
+            $('#' + self.settings.area).val(file.data('path')).trigger('change');
         }
         if (self.settings.alt != '') {
-            $('#' + self.settings.alt).val(file.data('alt'));
+            $('#' + self.settings.alt).val(file.data('alt')).trigger('change');
         }
         self.hideModal();
     }

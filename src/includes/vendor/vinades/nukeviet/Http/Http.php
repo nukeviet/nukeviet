@@ -853,7 +853,8 @@ class Http extends Server
             return false;
         }
 
-        if (isset($parts['query']) and !preg_match('/^[0-9a-z\+\-\_\/\?\&\=\#\.\,\;\%\\s\!]*$/i', $parts['query'])) {
+        // @since 15/10/2025 Chấp nhận * trong query ví dụ https://domain.com/?_gl=1*jliqjs*_gcl_au*MzI1MjU1Mjg1Lj GA4
+        if (isset($parts['query']) and !preg_match('/^[0-9a-z\+\-\_\/\?\&\=\#\.\,\;\%\\s\!\*]*$/i', $parts['query'])) {
             return false;
         }
 

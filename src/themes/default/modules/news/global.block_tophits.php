@@ -31,7 +31,7 @@ if (!nv_function_exists('nv_news_block_tophits')) {
         $publtime = NV_CURRENTTIME - $block_config['number_day'] * 86400;
         $numrow = $block_config['numrow'] ?? 20;
 
-        $cache_file = NV_LANG_DATA . '_' . preg_replace('/[^a-z0-9\_\-]+/', '_', $block_config['block_name']) . '_' . $numrow . '_' . NV_CACHE_PREFIX . '.cache';
+        $cache_file = preg_replace('/[^a-z0-9\_\-]+/', '_', $block_config['block_name']) . '_' . $numrow . '_' . NV_CACHE_PREFIX . '.cache';
         if (($cache = $nv_Cache->getItem($module, $cache_file)) != false) {
             $array_block_news = json_decode($cache, true);
         } else {
@@ -48,7 +48,9 @@ if (!nv_function_exists('nv_news_block_tophits')) {
             }
 
             $result = $db_slave->query($db_slave->sql());
-            while ([$id, $catid, $publtime, $title, $alias, $homeimgthumb, $homeimgfile, $hometext, $external_link] = $result->fetch(3)) {
+            while ($_scratch = $result->fetch(3)) {
+                [$id, $catid, $publtime, $title, $alias, $homeimgthumb, $homeimgfile, $hometext, $external_link] = $_scratch;
+                unset($_scratch);
                 if ($homeimgthumb == 1) {
                     // image thumb
                     $imgurl = NV_BASE_SITEURL . NV_FILES_DIR . '/' . $site_mods[$module]['module_upload'] . '/' . $homeimgfile;

@@ -16,16 +16,17 @@ if (!defined('NV_MAINFILE')) {
 /**
  * nv_aleditor()
  *
- * @param string $textareaname
- * @param string $width
- * @param string $height
- * @param string $val
- * @param string $customtoolbar
- * @param string $path
- * @param string $currentpath
+ * @param string $textareaname Tên của thẻ textarea
+ * @param string $width Chiều rộng của trình soạn thảo, ví dụ '100%'
+ * @param string $height Chiều cao của trình soạn thảo, ví dụ '450px'
+ * @param string $val Nội dung khởi tạo ban đầu
+ * @param string $customtoolbar Chuỗi json_encode cấu hình toolbar, hoặc 'responsive' để tự động co dãn thanh toolbar
+ * @param string $path Thư mục upload file, bắt đầu từ NV_UPLOADS_DIR
+ * @param string $currentpath Thư mục hiện tại khi mở trình duyệt file, bắt đầu từ NV_UPLOADS_DIR, bỏ trống để lấy theo $path
+ * @param string $init_callback Tên hàm hoặc code js chạy sau khi khởi tạo editor xong nếu có
  * @return string
  */
-function nv_aleditor($textareaname, $width = '100%', $height = '450px', $val = '', $customtoolbar = '', $path = '', $currentpath = '')
+function nv_aleditor($textareaname, $width = '100%', $height = '450px', string $val = '', string $customtoolbar = '', string $path = '', string $currentpath = '', string $init_callback = ''): string
 {
     global $global_config, $module_upload, $module_data, $admin_info;
 
@@ -36,12 +37,21 @@ function nv_aleditor($textareaname, $width = '100%', $height = '450px', $val = '
 
     if (!defined('CKEDITOR5_CLASSIC')) {
         define('CKEDITOR5_CLASSIC', true);
-        $return .= '<script type="text/javascript" src="' . NV_STATIC_URL . NV_EDITORSDIR . '/ckeditor5-classic/ckeditor.js?t=' . $global_config['timestamp'] . '"></script>';
+        $return .= '<link rel="stylesheet" href="' . NV_STATIC_URL . NV_EDITORSDIR . '/ckeditor5-classic/ckeditor.css?t=' . $global_config['timestamp'] . '">';
         $return .= '<script type="text/javascript" src="' . NV_STATIC_URL . NV_EDITORSDIR . '/ckeditor5-classic/language/' . NV_LANG_INTERFACE . '.js?t=' . $global_config['timestamp'] . '"></script>';
+        $return .= '<script type="text/javascript" src="' . NV_STATIC_URL . NV_EDITORSDIR . '/ckeditor5-classic/ckeditor.js?t=' . $global_config['timestamp'] . '"></script>';
     }
 
     $create = [];
     $create[] = 'language: "' . NV_LANG_INTERFACE . '"';
+
+    $nukeviet_config = [];
+    $nukeviet_config[] = 'editorId: "' . $editor_id . '"';
+    $nukeviet_config[] = 'height: "' . $height . '"';
+    if (!empty($init_callback)) {
+        $nukeviet_config[] = 'initCallback: ' . $init_callback;
+    }
+    $create[] = 'nukeviet: {' . implode(', ', $nukeviet_config) . '}';
 
     $custom_toolbar = false;
     $responsive_editor = $customtoolbar == 'responsive' ? true : false;
@@ -52,6 +62,54 @@ function nv_aleditor($textareaname, $width = '100%', $height = '450px', $val = '
             $create[] = "toolbar : " . json_encode($customtoolbar);
         }
     }
+    $toolbars = [
+        'undo',
+        'redo',
+        'selectAll',
+        '|',
+        'link',
+        'bookmark',
+        'imageInsert',
+        'nvmediaInsert',
+        'nvbox',
+        'insertTable',
+        'nviframeInsert',
+        'nvdocsInsert',
+        'code',
+        'codeBlock',
+        'horizontalLine',
+        'specialCharacters',
+        'pageBreak',
+        '|',
+        'findAndReplace',
+        'showBlocks',
+        '|',
+        'bulletedList',
+        'numberedList',
+        'outdent',
+        'indent',
+        'blockQuote',
+        'heading',
+        'fontSize',
+        'fontFamily',
+        'fontColor',
+        'fontBackgroundColor',
+        'highlight',
+        'alignment',
+        '|',
+        'bold',
+        'italic',
+        'underline',
+        'emoji',
+        'strikethrough',
+        'subscript',
+        'superscript',
+        '|',
+        'sourceEditing',
+        'nvtools',
+        'removeFormat',
+        'fullscreen'
+    ];
 
     // Thiết lập nvbox, nvmedia và simpleUpload
     if (defined('NV_IS_ADMIN')) {
@@ -67,154 +125,69 @@ function nv_aleditor($textareaname, $width = '100%', $height = '450px', $val = '
             }
         }
 
-        $create[] = 'simpleUpload: {
-            uploadUrl: "' . (NV_BASE_SITEURL . NV_ADMINDIR . '/index.php?' . NV_NAME_VARIABLE . '=upload&' . NV_OP_VARIABLE . '=upload&editor=ckeditor5-classic&path=' . $currentpath) . '",
-            withCredentials: true
-        }';
+        if (!empty($admin_info['allow_files_type'])) {
+            $create[] = 'simpleUpload: {
+                uploadUrl: "' . (NV_BASE_SITEURL . NV_ADMINDIR . '/index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=upload&' . NV_OP_VARIABLE . '=upload&editor=ckeditor5-classic&path=' . $currentpath) . '",
+                withCredentials: true
+            }';
+        }
         $create[] = 'nvbox: {
-            browseUrl: "' . (NV_BASE_SITEURL . NV_ADMINDIR . '/index.php?' . NV_NAME_VARIABLE . '=upload&popup=1&editor_id=' . $editor_id . '&path=' . $path . '&currentpath=' . $currentpath) . '",
+            browseUrl: "' . (NV_BASE_SITEURL . NV_ADMINDIR . '/index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=upload&popup=1&editor_id=' . $editor_id . '&path=' . $path . '&currentpath=' . $currentpath) . '",
+            pickerUrl: "' . (NV_BASE_SITEURL . NV_ADMINDIR . '/index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=upload&' . NV_OP_VARIABLE . '=js&t=' . $global_config['timestamp']) . '",
             options: {
                 noCache: false
             }
         }';
-        if (!$custom_toolbar) {
-            $create[] = "toolbar: {
-                items: [
-                    'undo',
-                    'redo',
-                    'selectAll',
-                    '|',
-                    'link',
-                    'imageInsert',
-                    'nvmediaInsert',
-                    'nvbox',
-                    'insertTable',
-                    'code',
-                    'codeBlock',
-                    'horizontalLine',
-                    'specialCharacters',
-                    'pageBreak',
-                    '|',
-                    'findAndReplace',
-                    'showBlocks',
-                    '|',
-                    'bulletedList',
-                    'numberedList',
-                    'outdent',
-                    'indent',
-                    'blockQuote',
-                    'heading',
-                    'fontSize',
-                    'fontFamily',
-                    'fontColor',
-                    'fontBackgroundColor',
-                    'highlight',
-                    'alignment',
-                    '|',
-                    'bold',
-                    'italic',
-                    'underline',
-                    'strikethrough',
-                    'subscript',
-                    'superscript',
-                    '|',
-                    'sourceEditing',
-                    'restrictedEditingException',
-                    'removeFormat'
-                ],
-                shouldNotGroupWhenFull: " . ($responsive_editor ? 'false' : 'true') . "
-            }";
-        }
     } else {
         // Không có quyền upload thì bỏ duyệt file và nút upload ảnh, media
         $create[] = 'removePlugins: ["NVBox"]';
         $create[] = 'image: {insert: {integrations: ["url"]}}';
         $create[] = 'nvmedia: {insert: {integrations: ["url"]}}';
-        if (!$custom_toolbar) {
-            $create[] = "toolbar: {
-                items: [
-                    'undo',
-                    'redo',
-                    'selectAll',
-                    '|',
-                    'link',
-                    'imageInsert',
-                    'nvmediaInsert',
-                    'insertTable',
-                    'code',
-                    'codeBlock',
-                    'horizontalLine',
-                    'specialCharacters',
-                    'pageBreak',
-                    '|',
-                    'findAndReplace',
-                    'showBlocks',
-                    '|',
-                    'bulletedList',
-                    'numberedList',
-                    'outdent',
-                    'indent',
-                    'blockQuote',
-                    'heading',
-                    'fontSize',
-                    'fontFamily',
-                    'fontColor',
-                    'fontBackgroundColor',
-                    'highlight',
-                    'alignment',
-                    '|',
-                    'bold',
-                    'italic',
-                    'underline',
-                    'strikethrough',
-                    'subscript',
-                    'superscript',
-                    '|',
-                    'sourceEditing',
-                    'restrictedEditingException',
-                    'removeFormat'
-                ],
-                shouldNotGroupWhenFull: " . ($responsive_editor ? 'false' : 'true') . "
-            }";
-        }
+        $toolbars = array_diff($toolbars, ['nvbox']);
     }
+    if (!$custom_toolbar) {
+        $create[] = "toolbar: {
+            items: ['" . implode("', '", $toolbars) . "'],
+            shouldNotGroupWhenFull: " . ($responsive_editor ? 'false' : 'true') . "
+        }";
+    }
+    $create[] = "htmlSupport: {
+		disallow: [{
+			name: /.*/,
+			attributes: [ /^on.*/ ]
+		}, {
+			name: 'script',
+			attributes: [
+				'action',
+				'background',
+				'codebase',
+				'dynsrc',
+				'lowsrc',
+				'allownetworking',
+				'allowscriptaccess',
+				'fscommand',
+				'seeksegmenttime'
+			]
+		}, {
+			name: /^(script|style|link)$/
+		}],
+		allow: [{
+			name: /" . (!empty($global_config['allowed_html_tags']) ? ('^(' . implode('|', $global_config['allowed_html_tags']) . ')$') : '.*') . "/,
+			attributes: true,
+			classes: true,
+			styles: true
+		}]
+	}";
 
     $return .= '<script>
         (async () => {
             const editorId = "' . $editor_id . '";
             await ClassicEditor
-            .create(document.getElementById("' . $editor_id . '"), {' . implode(', ', $create) . '})
-            .then(editor => {
-                window.nveditor = window.nveditor || [];
-                window.nveditor[editorId] = editor;
-                if (editor.sourceElement && editor.sourceElement instanceof HTMLTextAreaElement && editor.sourceElement.form) {
-                    editor.sourceElement.dataset.editorname = editorId;
-                    editor.sourceElement.form.addEventListener("submit", event => {
-                        // Xử lý khi submit form thông thường
-                        editor.sourceElement.value = editor.getData();
-                    });
-                }
-            })
-            .catch(error => {
+            .create(document.getElementById("' . $editor_id . '"), {' . implode(', ', $create) . '}).catch(error => {
                 console.error(error);
             });
         })();
     </script>';
-    if (!empty($height)) {
-        $return .= '<style>
-            #outer_' . $editor_id . ' .ck-editor__editable_inline {
-                height: ' . $height . ';
-                overflow-y: auto;
-            }
-            #outer_' . $editor_id . ' .ck-source-editing-area {
-                height: ' . $height . ';
-            }
-            #outer_' . $editor_id . ' .ck-source-editing-area textarea {
-                height: 100%;
-                overflow-y: auto;
-            }
-        </style>';
-    }
 
     return $return;
 }

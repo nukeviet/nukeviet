@@ -13,8 +13,14 @@ if (!defined('NV_IS_FILE_ADMIN')) {
     exit('Stop!!!');
 }
 
-$title = $nv_Request->get_title('title', 'post', '');
 $id = $nv_Request->get_int('id', 'post', 0);
+$checkss = md5(NV_CHECK_SESSION . '-' . $module_name . '-content-' . $id);
+
+if ($checkss != $nv_Request->get_string('checkss', 'post', '')) {
+    exit('Stop!!!');
+}
+
+$title = $nv_Request->get_title('title', 'post', '');
 
 $alias = change_alias($title);
 $alias = $page_config['alias_lower'] ? strtolower($alias) : $alias;

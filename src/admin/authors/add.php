@@ -117,11 +117,13 @@ if ($nv_Request->get_int('save', 'post', 0)) {
     $userid = $nv_Request->get_title('userid', 'post', 0);
     $md5username = nv_md5safe($userid);
     if (preg_match('/^([0-9]+)$/', $userid)) {
-        $sql = 'SELECT userid, username, active, group_id, in_groups FROM ' . NV_USERS_GLOBALTABLE . ' WHERE userid=' . (int) $userid . ' OR md5username=' . $db->quote($md5username);
+        $sql = 'SELECT userid, username, active, group_id, in_groups, delete_at
+        FROM ' . NV_USERS_GLOBALTABLE . ' WHERE userid=' . (int) $userid . ' OR md5username=' . $db->quote($md5username);
     } else {
-        $sql = 'SELECT userid, username, active, group_id, in_groups FROM ' . NV_USERS_GLOBALTABLE . ' WHERE md5username=' . $db->quote($md5username);
+        $sql = 'SELECT userid, username, active, group_id, in_groups, delete_at
+        FROM ' . NV_USERS_GLOBALTABLE . ' WHERE md5username=' . $db->quote($md5username);
     }
-    [$userid, $username, $active, $_group_id, $_in_groups] = $db->query($sql)->fetch(3);
+    [$userid, $username, $active, $_group_id, $_in_groups, $delete_at] = $db->query($sql)->fetch(3);
     if (empty($userid)) {
         $respon['input'] = 'userid';
         $respon['mess'] = $nv_Lang->getModule('add_error_choose');
@@ -145,6 +147,12 @@ if ($nv_Request->get_int('save', 'post', 0)) {
     if (empty($active)) {
         $respon['input'] = 'userid';
         $respon['mess'] = $nv_Lang->getModule('username_noactive', $username);
+        nv_jsonOutput($respon);
+    }
+
+    if (!empty($delete_at)) {
+        $respon['input'] = 'userid';
+        $respon['mess'] = $nv_Lang->getModule('add_error_deleted');
         nv_jsonOutput($respon);
     }
 
@@ -258,34 +266,9 @@ if ($nv_Request->get_int('save', 'post', 0)) {
     if ($sth->execute()) {
         nv_groups_add_user($lev, $userid);
 
-        // Nếu là thành viên mới, thì xóa khỏi nhóm thành viên mới
-        if ($_group_id == 7 or in_array(7, array_map('intval', explode(',', $_in_groups)), true)) {
-            $_group_id = $lev;
-            $_in_groups = array_diff($_in_groups, [
-                7
-            ]);
-            $_in_groups[] = 4;
-            $_in_groups[] = $lev;
-            $_in_groups = array_filter(array_unique(array_map('trim', $_in_groups)));
-            $_in_groups = empty($_in_groups) ? '' : implode(',', $_in_groups);
-
-            $db->query('UPDATE ' . NV_USERS_GLOBALTABLE . ' SET group_id = ' . $_group_id . ", in_groups='" . $_in_groups . "' WHERE userid = " . $userid);
-            try {
-                $db->query('UPDATE ' . NV_USERS_GLOBALTABLE . '_groups SET numbers = numbers-1 WHERE group_id=7');
-            } catch (PDOException $e) {
-                trigger_error(print_r($e, true));
-            }
-            $db->query('UPDATE ' . NV_USERS_GLOBALTABLE . '_groups SET numbers = numbers+1 WHERE group_id=4');
-        } else {
-            // Thêm vào nhóm và set nhóm mặc định là quản trị
-            $_in_groups = explode(',', $_in_groups);
-            $_in_groups[] = $lev;
-            $_in_groups = array_filter(array_unique(array_map('trim', $_in_groups)));
-            $_in_groups = empty($_in_groups) ? '' : implode(',', $_in_groups);
-
-            $sql = 'UPDATE ' . NV_USERS_GLOBALTABLE . ' SET group_id=' . $lev . ', in_groups=' . $db->quote($_in_groups) . ' WHERE userid=' . $userid;
-            $db->query($sql);
-        }
+        // Đặt nhóm mặc định là nhóm quản trị
+        $sql = 'UPDATE ' . NV_USERS_GLOBALTABLE . ' SET group_id=' . $lev . ' WHERE userid=' . $userid;
+        $db->query($sql);
 
         $session_files = json_encode([
             'admin_id' => $userid,

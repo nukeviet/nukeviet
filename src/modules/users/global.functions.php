@@ -59,7 +59,9 @@ function nv_get_users_field_config()
             }
             $result = $db->query($query);
             $weight = 0;
-            while ([$key, $val] = $result->fetch(3)) {
+            while ($_scratch = $result->fetch(3)) {
+                [$key, $val] = $_scratch;
+                unset($_scratch);
                 $row_field['field_choices'][$key] = $val;
             }
         }
@@ -642,9 +644,9 @@ function get_value_by_lang2($key, $value)
 
 // Xác định cấu hình module
 $global_users_config = [];
-$cacheFile = NV_LANG_DATA . '_' . $module_data . '_config_' . NV_CACHE_PREFIX . '.cache';
+$cacheFile = 'config_' . NV_CACHE_PREFIX . '.cache';
 $cacheTTL = 3600;
-if (($cache = $nv_Cache->getItem($module_name, $cacheFile, $cacheTTL)) != false) {
+if (($cache = $nv_Cache->getItem($module_name, $cacheFile, ttl: $cacheTTL)) != false) {
     $global_users_config = unserialize($cache);
 } else {
     $sql = 'SELECT config, content FROM ' . NV_MOD_TABLE . '_config';
@@ -653,5 +655,5 @@ if (($cache = $nv_Cache->getItem($module_name, $cacheFile, $cacheTTL)) != false)
         $global_users_config[$row['config']] = $row['content'];
     }
     $cache = serialize($global_users_config);
-    $nv_Cache->setItem($module_name, $cacheFile, $cache, $cacheTTL);
+    $nv_Cache->setItem($module_name, $cacheFile, $cache, ttl: $cacheTTL);
 }

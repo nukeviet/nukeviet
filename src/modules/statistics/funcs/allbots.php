@@ -44,7 +44,9 @@ if ($num_items) {
     $result = $db->query($db->sql());
 
     $bot_list = [];
-    while ([$bot, $count, $last_visit] = $result->fetch(3)) {
+    while ($_scratch = $result->fetch(3)) {
+        [$bot, $count, $last_visit] = $_scratch;
+        unset($_scratch);
         $bot_list[] = [
             'name' => $bot,
             'count' => $count,

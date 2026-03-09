@@ -68,12 +68,12 @@ if (!empty($catid)) {
 }
 
 // Lấy RSS từ cache
-$cacheFile = NV_LANG_DATA . '_instantrss' . $catid . '_' . NV_CACHE_PREFIX . '.cache';
+$cacheFile = 'instantrss' . $catid . '_' . NV_CACHE_PREFIX . '.cache';
 $cacheTTL = 60 * (int) ($module_config[$module_file]['instant_articles_livetime']);
 
 $FBIA = new \NukeViet\Facebook\InstantArticles(\NukeViet\Core\Language::$lang_module);
 
-if (!defined('NV_IS_MODADMIN') and ($cache = $nv_Cache->getItem($module_name, $cacheFile, $cacheTTL)) != false) {
+if (!defined('NV_IS_MODADMIN') and ($cache = $nv_Cache->getItem($module_name, $cacheFile, ttl: $cacheTTL)) != false) {
     $items = unserialize($cache);
 } else {
     $result = $db_slave->query($db_slave->sql());
@@ -131,7 +131,7 @@ if (!defined('NV_IS_MODADMIN') and ($cache = $nv_Cache->getItem($module_name, $c
 
     if (!defined('NV_IS_MODADMIN')) {
         $cache = serialize($items);
-        $nv_Cache->setItem($module_name, $cacheFile, $cache, $cacheTTL);
+        $nv_Cache->setItem($module_name, $cacheFile, $cache, ttl: $cacheTTL);
     }
 }
 

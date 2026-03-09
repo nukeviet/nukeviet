@@ -67,7 +67,9 @@ if ($nv_Request->isset_request('gid, get_user_json ', 'post, get')) {
     $sth->execute();
 
     $array_data = [];
-    while ([$userid, $username, $email, $first_name, $last_name] = $sth->fetch(3)) {
+    while ($_scratch = $sth->fetch(3)) {
+        [$userid, $username, $email, $first_name, $last_name] = $_scratch;
+        unset($_scratch);
         $array_data[] = [
             'id' => $userid,
             'username' => $username,
@@ -380,13 +382,7 @@ if ($nv_Request->isset_request('gid,uid', 'post')) {
         exit($nv_Lang->getModule('search_not_result'));
     }
 
-    // Update for table users
-    $in_groups = [];
-    $result_gru = $db->query('SELECT group_id FROM ' . NV_MOD_TABLE . '_groups_users WHERE userid=' . $uid);
-    while ($row_gru = $result_gru->fetch()) {
-        $in_groups[] = $row_gru['group_id'];
-    }
-    $db->exec('UPDATE ' . NV_MOD_TABLE . " SET in_groups='" . implode(',', $in_groups) . "', last_update=" . NV_CURRENTTIME . ' WHERE userid=' . $uid);
+    $db->exec('UPDATE ' . NV_MOD_TABLE . " SET last_update=" . NV_CURRENTTIME . ' WHERE userid=' . $uid);
 
     $nv_Cache->delMod($module_name);
     nv_insert_logs(NV_LANG_DATA, $module_name, $nv_Lang->getModule('addMemberToGroup'), 'Member Id: ' . $uid . ' group ID: ' . $gid, $user_info['userid']);
@@ -436,13 +432,7 @@ if ($nv_Request->isset_request('gid,exclude', 'post')) {
         exit($nv_Lang->getModule('UserNotInGroup'));
     }
 
-    // Update for table users
-    $in_groups = [];
-    $result_gru = $db->query('SELECT group_id FROM ' . NV_MOD_TABLE . '_groups_users WHERE userid=' . $uid);
-    while ($row_gru = $result_gru->fetch()) {
-        $in_groups[] = $row_gru['group_id'];
-    }
-    $db->query('UPDATE ' . NV_MOD_TABLE . " SET in_groups='" . implode(',', $in_groups) . "', last_update=" . NV_CURRENTTIME . ' WHERE userid=' . $uid);
+    $db->query('UPDATE ' . NV_MOD_TABLE . " SET last_update=" . NV_CURRENTTIME . ' WHERE userid=' . $uid);
 
     $nv_Cache->delMod($module_name);
     nv_insert_logs(NV_LANG_DATA, $module_name, $nv_Lang->getModule('exclude_user2'), 'Member Id: ' . $uid . ' group ID: ' . $gid, $user_info['userid']);

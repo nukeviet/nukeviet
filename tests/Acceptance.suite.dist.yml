@@ -6,6 +6,15 @@ modules:
             url: 'about:blank'
             browser: chrome # 'chrome' or 'firefox'
             window_size: 1366x768
+        - REST:
+            depends: PhpBrowser
+            url: 'https://%HTTP_HOST%'
+        - Db:
+            dsn: 'mysql:host=127.0.0.1;dbname=%DB_NAME%'
+            user: '%DB_UNAME%'
+            password: '%DB_UPASS%'
+            populate: false   # Không reset DB trước mỗi test
+            cleanup: false    # Không reset DB sau mỗi test
 
 step_decorators:
     - Codeception\Step\ConditionalAssertion

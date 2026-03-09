@@ -294,14 +294,14 @@ function change_alias_tags($alias)
  */
 function nv_clean60($string, $num = 60, $specialchars = true)
 {
-    $string = nv_unhtmlspecialchars($string);
+    $string = nv_unhtmlspecialchars(str_replace('&nbsp;', ' ', $string));
 
     $len = nv_strlen($string);
     if ($num and $num < $len) {
         if (!str_contains($string, ' ')) {
             $string = nv_substr($string, 0, $num);
         } else {
-            while (ord(nv_substr($string, $num, 1)) != 32) {
+            while (nv_substr($string, $num, 1) !== ' ') {
                 --$num;
             }
             $string = nv_substr($string, 0, $num) . '...';

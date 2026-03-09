@@ -29,7 +29,7 @@ $widget_info = [
         $cacheFile = 'widget_usrtotal_' . NV_CACHE_PREFIX . '.cache';
         $cacheTTL = 1800;
 
-        if (($cache = $nv_Cache->getItem($module_name, $cacheFile, $cacheTTL)) != false) {
+        if (($cache = $nv_Cache->getItem($module_name, $cacheFile, ttl: $cacheTTL)) != false) {
             $_arr_siteinfo = unserialize($cache);
         } else {
             if ($global_config['idsite'] > 0) {
@@ -39,7 +39,7 @@ $widget_info = [
             }
             $_arr_siteinfo['number_user'] = $db->query('SELECT COUNT(*) FROM ' . $_mod_table . $site_condition)->fetchColumn();
 
-            $nv_Cache->setItem($module_name, $cacheFile, serialize($_arr_siteinfo), $cacheTTL);
+            $nv_Cache->setItem($module_name, $cacheFile, serialize($_arr_siteinfo), ttl: $cacheTTL);
         }
 
         $tpl->assign('NUM', nv_number_format($_arr_siteinfo['number_user']));

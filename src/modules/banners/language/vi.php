@@ -171,3 +171,6 @@ $lang_module['publ_time_info'] = 'Nếu bạn không chọn thời gian bắt đ
 $lang_module['enter_keyword'] = 'Nhập từ khóa';
 $lang_module['all_plan'] = 'Tất cả các khối';
 $lang_module['admin_add_banner'] = 'Thêm banner';
+$lang_module['chart_data_empty'] = 'Không có lượt click nào';
+$lang_module['chart_lbl_clicks'] = 'Lượt nhấp';
+$lang_module['chart_lbl_total'] = 'Tổng';

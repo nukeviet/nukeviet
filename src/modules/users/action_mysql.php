@@ -99,6 +99,7 @@ if (in_array($lang, $array_lang_module_setup, true) and $num_module_exists > 1) 
     $sql_drop_module[] = 'DROP TABLE IF EXISTS ' . $db_config['prefix'] . '_' . $module_data . '_reg';
     $sql_drop_module[] = 'DROP TABLE IF EXISTS ' . $db_config['prefix'] . '_' . $module_data . '_edit';
     $sql_drop_module[] = 'DROP TABLE IF EXISTS ' . $db_config['prefix'] . '_' . $module_data . '_login';
+    $sql_drop_module[] = 'DROP TABLE IF EXISTS ' . $db_config['prefix'] . '_' . $module_data . '_deleted';
 }
 
 $sql_create_module = $sql_drop_module;
@@ -145,6 +146,7 @@ $sql_create_module[] = 'CREATE TABLE IF NOT EXISTS ' . $db_config['prefix'] . '_
     email_verification_time INT(11) NOT NULL DEFAULT '-1' COMMENT '-3: Tài khoản sys, -2: Admin kích hoạt, -1 không cần kích hoạt, 0: Chưa xác minh, > 0 thời gian xác minh',
     active_obj varchar(50) NOT NULL DEFAULT 'SYSTEM' COMMENT 'SYSTEM, EMAIL, OAUTH:xxxx, quản trị kích hoạt thì lưu userid',
     language char(2) NOT NULL DEFAULT '' COMMENT 'Ngôn ngữ giao diện',
+    delete_at int(11) unsigned NOT NULL DEFAULT '0' COMMENT 'Thời điểm xóa tài khoản đã lên lịch',
     PRIMARY KEY (userid),
     UNIQUE KEY username (username),
     UNIQUE KEY md5username (md5username),
@@ -247,6 +249,7 @@ $sql_create_module[] = 'CREATE TABLE IF NOT EXISTS ' . $db_config['prefix'] . '_
     users_info text,
     openid_info text,
     idsite mediumint(8) unsigned NOT NULL DEFAULT '0',
+    lostactivelink int(11) unsigned NOT NULL DEFAULT '0' COMMENT 'Thời điểm gửi email kích hoạt lại tài khoản lần trước',
     PRIMARY KEY (userid),
     UNIQUE KEY login (username),
     UNIQUE KEY md5username (md5username),
@@ -313,6 +316,7 @@ $sql_create_module[] = 'CREATE TABLE IF NOT EXISTS ' . $db_config['prefix'] . '_
 $sql_create_module[] = 'CREATE TABLE IF NOT EXISTS ' . $db_config['prefix'] . '_' . $module_data . "_info (
     userid mediumint(8) unsigned NOT NULL,
     inform CHAR(30) NOT NULL DEFAULT '',
+    deletion_checkcode varchar(25) NOT NULL DEFAULT '' COMMENT 'Mã xác nhận yêu cầu xóa dữ liệu cá nhân',
     PRIMARY KEY (userid)
 ) ENGINE=MyISAM";
 
@@ -325,15 +329,36 @@ $sql_create_module[] = 'CREATE TABLE IF NOT EXISTS ' . $db_config['prefix'] . '_
 ) ENGINE=MyISAM";
 
 $sql_create_module[] = 'CREATE TABLE IF NOT EXISTS ' . $db_config['prefix'] . '_' . $module_data . "_login (
-    userid MEDIUMINT(8) UNSIGNED NOT NULL,
-    clid CHAR(32) NOT NULL,
-    logtime INT(11) UNSIGNED NOT NULL,
-    mode TINYINT(1) UNSIGNED NOT NULL DEFAULT '0',
-    agent VARCHAR(255) NOT NULL,
-    ip CHAR(50) NOT NULL,
-    mode_extra VARCHAR(255) NOT NULL DEFAULT '',
+    id int(11) unsigned NOT NULL AUTO_INCREMENT,
+    userid mediumint(8) unsigned NOT NULL,
+    clid char(32) NOT NULL,
+    logtime int(11) unsigned NOT NULL,
+    mode tinyint(1) unsigned NOT NULL DEFAULT '0',
+    agent varchar(255) NOT NULL,
+    ip char(50) NOT NULL,
+    mode_extra varchar(255) NOT NULL DEFAULT '',
+    PRIMARY KEY (id),
     UNIQUE KEY userid (userid, clid)
 ) ENGINE=MyISAM";
+
+$sql_create_module[] = 'CREATE TABLE IF NOT EXISTS ' . $db_config['prefix'] . '_' . $module_data . "_deleted (
+    id int(11) unsigned NOT NULL AUTO_INCREMENT,
+    userid mediumint(8) unsigned NOT NULL,
+    request_source varchar(50) NOT NULL DEFAULT '' COMMENT 'Nguồn yêu cầu ví dụ facebook, rỗng là thành viên tự yêu cầu',
+    request_time int(11) unsigned NOT NULL COMMENT 'Thời điểm nhận yêu cầu',
+    uniqid varchar(25) NOT NULL DEFAULT '' COMMENT 'Mã phục vụ xử lý',
+    md5username varchar(32) NOT NULL DEFAULT '' COMMENT 'MD5 của username tại thời điểm xóa nếu xóa cả tài khoản',
+    md5email varchar(32) NOT NULL DEFAULT '' COMMENT 'MD5 của email tại thời điểm xóa nếu xóa cả tài khoản',
+    opid char(50) NOT NULL DEFAULT '' COMMENT 'ID bên nguồn yêu cầu',
+    confirmation_code varchar(36) NOT NULL DEFAULT '' COMMENT 'Mã xác nhận yêu cầu xóa dữ liệu cá nhân, UUIDv4 application tự sinh',
+    issued_at int(11) unsigned NOT NULL COMMENT 'Thời điểm yêu cầu bên nguồn',
+    status int(11) NOT NULL DEFAULT '0' COMMENT 'Trạng thái xử lý: 0: Chưa xử lý, 1: Đang xử lý, -time: lỗi, +time: thời gian hoàn thành',
+    PRIMARY KEY (id),
+    KEY idx_userid_request_source (userid, request_source),
+    KEY request_time (request_time),
+    KEY uniqid (uniqid),
+    KEY md5username (md5username)
+) ENGINE=MyISAM COMMENT 'Lưu trữ thông tin thành viên đã yêu cầu xóa dữ liệu cá nhân'";
 
 $sql_create_module[] = 'INSERT IGNORE INTO ' . $db_config['prefix'] . '_' . $module_data . "_config (config, content, edit_time) VALUES
 ('access_admin', 'a:8:{s:15:\"access_viewlist\";a:3:{i:1;b:1;i:2;b:1;i:3;b:1;}s:12:\"access_addus\";a:3:{i:1;b:1;i:2;b:1;i:3;b:1;}s:14:\"access_waiting\";a:3:{i:1;b:1;i:2;b:1;i:3;b:1;}s:17:\"access_editcensor\";a:3:{i:1;b:1;i:2;b:1;i:3;b:1;}s:13:\"access_editus\";a:3:{i:1;b:1;i:2;b:1;i:3;b:1;}s:12:\"access_delus\";a:3:{i:1;b:1;i:2;b:1;i:3;b:1;}s:13:\"access_passus\";a:3:{i:1;b:1;i:2;b:1;i:3;b:1;}s:13:\"access_groups\";a:3:{i:1;b:1;i:2;b:1;i:3;b:1;}}', " . NV_CURRENTTIME . "),
@@ -346,6 +371,7 @@ $sql_create_module[] = 'INSERT IGNORE INTO ' . $db_config['prefix'] . '_' . $mod
 ('active_editinfo_censor', '0', " . NV_CURRENTTIME . "),
 ('active_user_logs', '1', " . NV_CURRENTTIME . "),
 ('min_old_user', '16', " . NV_CURRENTTIME . "),
+('hold_deleted_username', '365', " . NV_CURRENTTIME . "),
 ('register_active_time', '86400', " . NV_CURRENTTIME . "),
 ('auto_assign_oauthuser', '0', " . NV_CURRENTTIME . "),
 ('admin_email', '0', " . NV_CURRENTTIME . ")";

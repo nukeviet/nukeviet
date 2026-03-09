@@ -333,3 +333,39 @@ $module_emails[Emails::PASSKEY_DEL] = [
 </ul>
 <p>Nous envoyons cette notification obligatoire à votre email pour nous assurer que c\'est bien vous qui avez effectué cette action. Si ce n\'est pas le cas, veuillez rapidement accéder à <a href="{$passkey_link}">la page de gestion des clés de passe</a> pour vérifier les clés de passe. En même temps, veuillez <a href="{$pass_link}">changer immédiatement votre mot de passe</a> pour garantir la sécurité.</p>'
 ];
+$module_emails[Emails::DELETE_ACCOUNT_SECCODE] = [
+    'is_system' => $is_system,
+    'pids' => $pids,
+    'pfile' => $pfile,
+    'catid' => $catid,
+    't' => 'Code de confirmation pour supprimer le compte',
+    's' => 'Code de confirmation pour votre demande de suppression de compte',
+    'c' => '<p>{$greeting_user}</p> <p>Nous avons reçu votre demande de suppression de compte. Pour continuer, veuillez utiliser le code de confirmation ci-dessous.</p> <div style="text-align: center; margin: 32px 0;"> <p style="font-size: 14px; color: #4b5563; margin-bottom: 8px;">Votre code de confirmation est :</p> <div style="display: inline-block; background-color: #f3f4f6; border: 1px solid #d1d5db; border-radius: 6px; padding: 12px 24px;"> <span style="font-size: 24px; font-weight: bold; letter-spacing: 0.2em; color: #111827; font-family: monospace;">{$code}</span> </div> </div> <p>Ce code est valide pendant 10 minutes. Veuillez ne pas partager ce code avec qui que ce soit.</p> <p>Si vous n\'avez pas demandé cette action, veuillez ignorer cet e-mail et contacter immédiatement notre équipe de support pour protéger votre compte.</p> <p style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #e5e7eb; font-size: 14px; color: #6b7280; font-style: italic; margin-bottom: 0px;"> Il s\'agit d\'une notification obligatoire concernant l\'activité de votre compte. Veuillez ne pas répondre et ignorer cet e-mail si vous ne comprenez pas le contenu. </p>'
+];
+$module_emails[Emails::DELETE_ACCOUNT_PENDING] = [
+    'is_system' => $is_system,
+    'pids' => $pids,
+    'pfile' => $pfile,
+    'catid' => $catid,
+    't' => 'Notification de planification de suppression de compte',
+    's' => 'Votre compte a été programmé pour suppression',
+    'c' => '<p>{$greeting_user}</p> <p>Votre demande de suppression de compte a été confirmée. Votre compte sera supprimé définitivement vers <strong style="color: #111827;">{$action_time}</strong>.</p> <p>Après suppression, toutes les données et services associés ne pourront pas être récupérés.</p> <div style="text-align: center; margin: 32px 0;"> <p style="color: #4b5563; margin-bottom: 16px;">Si vous changez d\'avis, vous pouvez annuler cette demande à tout moment avant l\'échéance en cliquant sur le bouton ci-dessous et en vous reconnectant.</p> <a href="{$link}" style="display: inline-block; padding: 12px 32px; font-weight: bold; color: white; background-color: #2563eb; text-decoration: none; border-radius: 6px;">Annuler la demande de suppression</a> </div> <p>Si vous n\'avez pas fait cette demande, veuillez cliquer sur le lien ci-dessus pour annuler la demande ou contacter immédiatement notre équipe de support.</p> <p style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #e5e7eb; font-size: 14px; color: #6b7280; font-style: italic; margin-bottom: 0px;"> Il s\'agit d\'une notification obligatoire concernant l\'activité de votre compte. Veuillez ne pas répondre et ignorer cet e-mail si vous ne comprenez pas le contenu. </p>'
+];
+$module_emails[Emails::DELETE_ACCOUNT_CANCEL] = [
+    'is_system' => $is_system,
+    'pids' => $pids,
+    'pfile' => $pfile,
+    'catid' => $catid,
+    't' => 'Annulation de demande de suppression de compte',
+    's' => 'Votre demande de suppression de compte a été annulée',
+    'c' => '<p>{$greeting_user}</p> <p>Nous confirmons que votre demande de suppression de compte a été annulée avec succès selon votre demande.</p> <p>Votre compte reste <strong>sécurisé</strong> et fonctionne normalement. Vous pouvez continuer à utiliser tous nos services sans interruption.</p> <p>Si vous n\'êtes pas la personne qui a effectué cette action, veuillez <a href="{$pass_link}" style="color: #2563eb; font-weight: 600; text-decoration: none;">changer immédiatement votre mot de passe</a> et consulter <a href="{$link}" style="color: #2563eb; font-weight: 600; text-decoration: none;">les sessions de connexion récentes</a> pour protéger votre compte.</p> <p style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #e5e7eb; font-size: 14px; color: #6b7280; font-style: italic; margin-bottom: 0px;"> Il s\'agit d\'une notification obligatoire concernant l\'activité de votre compte. Veuillez ne pas répondre et ignorer cet e-mail si vous ne comprenez pas le contenu. </p>'
+];
+$module_emails[Emails::DELETE_ACCOUNT_COMPLETED] = [
+    'is_system' => $is_system,
+    'pids' => $pids,
+    'pfile' => $pfile,
+    'catid' => $catid,
+    't' => 'Suppression de compte terminée avec succès',
+    's' => 'Votre compte a été supprimé définitivement',
+    'c' => '<p>{$greeting_user}</p> <p>Comme demandé, votre compte a été <strong>supprimé définitivement</strong> de notre système. Cette action ne peut pas être annulée.</p> <p>Toutes les données personnelles, l\'historique des activités et les services liés à ce compte ont été supprimés de manière irrécupérable.</p> <p>{$newvalue}.</p> <p>Nous regrettons de devoir vous dire au revoir et espérons avoir l\'occasion de vous servir à nouveau dans le futur.</p> <p style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #e5e7eb; font-size: 14px; color: #6b7280; font-style: italic; margin-bottom: 0px;"> Il s\'agit d\'une notification obligatoire concernant l\'activité de votre compte. Veuillez ne pas répondre et ignorer cet e-mail si vous ne comprenez pas le contenu. </p>'
+];

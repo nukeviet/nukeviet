@@ -280,6 +280,7 @@ function nv_check_username_reg($login)
 {
     global $db, $nv_Lang, $global_users_config, $global_config;
 
+    // Tên đăng nhập hợp lệ
     $error = nv_check_valid_login($login, $global_config['nv_unickmax'], $global_config['nv_unickmin']);
     if ($error != '') {
         return preg_replace('/\&(l|r)dquo\;/', '', strip_tags($error));
@@ -288,10 +289,12 @@ function nv_check_username_reg($login)
         return $nv_Lang->getModule('account_deny_name', $login);
     }
 
+    // Tên đăng nhập bị cấm
     if (!empty($global_users_config['deny_name']) and preg_match('/' . $global_users_config['deny_name'] . '/i', $login)) {
         return $nv_Lang->getModule('account_deny_name', $login);
     }
 
+    // Kiểm tra tên đăng nhập trong tài khoản đã kích hoạt
     $stmt = $db->prepare('SELECT userid FROM ' . NV_MOD_TABLE . ' WHERE username LIKE :username OR md5username= :md5username');
     $stmt->bindValue(':username', $login, PDO::PARAM_STR);
     $stmt->bindValue(':md5username', nv_md5safe($login), PDO::PARAM_STR);
@@ -300,12 +303,27 @@ function nv_check_username_reg($login)
         return $nv_Lang->getModule('account_registered_name', $login);
     }
 
+    // Kiểm tra tên đăng nhập trong tài khoản đợi kích hoạt
     $stmt = $db->prepare('SELECT userid FROM ' . NV_MOD_TABLE . '_reg WHERE username LIKE :username OR md5username= :md5username');
     $stmt->bindValue(':username', $login, PDO::PARAM_STR);
     $stmt->bindValue(':md5username', nv_md5safe($login), PDO::PARAM_STR);
     $stmt->execute();
     if ($stmt->fetchColumn()) {
         return $nv_Lang->getModule('account_registered_name', $login);
+    }
+
+    // Kiểm tra tên đăng nhập trong tài khoản đã xóa
+    if ($global_users_config['hold_deleted_username'] > 0) {
+        $sql = 'SELECT userid FROM ' . NV_MOD_TABLE . '_deleted WHERE md5username=:md5username';
+        if ($global_users_config['hold_deleted_username'] < 1000) {
+            $sql .= ' AND request_time>' . (NV_CURRENTTIME - $global_users_config['hold_deleted_username'] * 86400);
+        }
+        $stmt = $db->prepare($sql);
+        $stmt->bindValue(':md5username', nv_md5safe($login), PDO::PARAM_STR);
+        $stmt->execute();
+        if ($stmt->fetchColumn()) {
+            return $nv_Lang->getModule('account_registered_name', $login);
+        }
     }
 
     return '';
@@ -353,6 +371,7 @@ function nv_del_user($userid)
     $db->query('DELETE FROM ' . NV_MOD_TABLE . '_openid WHERE userid=' . $userid);
     $db->query('DELETE FROM ' . NV_MOD_TABLE . '_info WHERE userid=' . $userid);
     $db->query('DELETE FROM ' . NV_MOD_TABLE . '_passkey WHERE userid=' . $userid);
+    $db->query('DELETE FROM ' . NV_MOD_TABLE . '_deleted WHERE userid=' . $userid);
 
     nv_insert_logs(NV_LANG_DATA, $module_name, 'log_del_user', 'userid ' . $userid, $user_info['userid']);
 
@@ -422,9 +441,10 @@ function opidr_login($openid_info)
  *
  * @param string $type
  * @param string $name
- * @return mixed
+ * @param bool $reg
+ * @return false|array
  */
-function checkLoginName($type, $name)
+function checkLoginName($type, $name, $reg = false): false|array
 {
     global $db;
 
@@ -435,7 +455,8 @@ function checkLoginName($type, $name)
         $where = 'md5username =' . $db->quote(nv_md5safe($name));
     }
 
-    $row = $db->query('SELECT * FROM ' . NV_MOD_TABLE . ' WHERE ' . $where)->fetch();
+    $table = $reg ? (NV_MOD_TABLE . '_reg') : NV_MOD_TABLE;
+    $row = $db->query('SELECT * FROM ' . $table . ' WHERE ' . $where)->fetch();
     if (empty($row[$type])) {
         return false;
     }

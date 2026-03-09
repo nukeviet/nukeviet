@@ -21,11 +21,11 @@ $page_url = $base_url = $global_array_cat[$catid]['link'];
 
 if (!defined('NV_IS_MODADMIN') and $page < 5) {
     if ($set_view_page) {
-        $cache_file = NV_LANG_DATA . '_' . $module_info['template'] . '_' . $op . '_' . $catid . '_page_' . $page . '_' . NV_CACHE_PREFIX . '.cache';
+        $cache_file = $module_info['template'] . '_' . $op . '_' . $catid . '_page_' . $page . '_' . NV_CACHE_PREFIX . '.cache';
     } else {
-        $cache_file = NV_LANG_DATA . '_' . $module_info['template'] . '_' . $op . '_' . $catid . '_' . $page . '_' . NV_CACHE_PREFIX . '.cache';
+        $cache_file = $module_info['template'] . '_' . $op . '_' . $catid . '_' . $page . '_' . NV_CACHE_PREFIX . '.cache';
     }
-    if (($cache = $nv_Cache->getItem($module_name, $cache_file, 3600)) != false) {
+    if (($cache = $nv_Cache->getItem($module_name, $cache_file, ttl: 3600)) != false) {
         $cache = json_decode($cache, true);
         $contents = $cache['html'];
         $schemas = $cache['schemas'];
@@ -445,7 +445,7 @@ if (empty($contents)) {
         $nv_Cache->setItem($module_name, $cache_file, json_encode([
             'html' => $contents,
             'schemas' => $schemas,
-        ]));
+        ]), ttl: 3600);
     }
 }
 

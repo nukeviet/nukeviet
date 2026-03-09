@@ -9,7 +9,7 @@
                 </div>
             </div>
         </div>
-        
+
         <div class="step2" style="display:none">
             <div class="form-group">
                 <div class="input-group">
@@ -18,7 +18,7 @@
                 </div>
             </div>
         </div>
-        
+
         <div class="step3" style="display:none">
             <div class="form-group">
                 <div class="input-group">
@@ -27,23 +27,23 @@
                 </div>
             </div>
         </div>
-        
+
         <div class="step4" style="display:none">
             <div class="form-group">
                 <div class="input-group">
                     <span class="input-group-addon"><em class="fa fa-key fa-lg fa-fix"></em></span>
-                    <input type="password" autocomplete="off" class="form-control" placeholder="{LANG.pass_new}" value="" name="new_password" maxlength="100" data-pattern="/^(.){3,}$/" data-toggle="validErrorHidden" data-event="keypress" data-mess="{GLANG.password_empty}">
+                    <input type="password" autocomplete="off" class="form-control" placeholder="{LANG.pass_new}" value="" name="new_password" maxlength="{PASS_MAXLENGTH}" data-pattern="{PASSWORD_PATTERN}" data-toggle="validErrorHidden" data-event="keypress" data-mess="{PASSWORD_RULE}">
                 </div>
             </div>
-            
+
             <div class="form-group">
                 <div class="input-group">
                     <span class="input-group-addon"><em class="fa fa-key fa-lg fa-fix"></em></span>
-                    <input type="password" autocomplete="off" class="form-control" placeholder="{LANG.pass_new_re}" value="" name="re_password" maxlength="100" data-pattern="/^(.){3,}$/" data-toggle="validErrorHidden" data-event="keypress" data-mess="{GLANG.passwordsincorrect}">
+                    <input type="password" autocomplete="off" class="form-control" placeholder="{LANG.pass_new_re}" value="" name="re_password" maxlength="{PASS_MAXLENGTH}" data-pattern="/^(.){1,}$/" data-toggle="validErrorHidden" data-event="keypress" data-mess="{GLANG.re_password_empty}">
                 </div>
             </div>
         </div>
-        
+
         <div class="text-center margin-bottom-lg">
              <input type="hidden" name="step" value="step1" />
              <input type="hidden" name="checkss" value="{DATA.checkss}" />

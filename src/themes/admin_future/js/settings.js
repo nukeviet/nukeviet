@@ -1649,4 +1649,19 @@ $(function() {
         checkRequire2Step();
     });
     checkRequire2Step();
+
+    // Hiển thị cài đặt cache theo memcached hoặc redis
+    $('#element_cache_system').on('change', function() {
+        let val = $(this).val();
+        if (val == 'memcached') {
+            $('.memcached-settings').removeClass('d-none');
+            $('.redis-settings').addClass('d-none');
+        } else if (val == 'redis') {
+            $('.memcached-settings').addClass('d-none');
+            $('.redis-settings').removeClass('d-none');
+        } else {
+            $('.memcached-settings').addClass('d-none');
+            $('.redis-settings').addClass('d-none');
+        }
+    }).trigger('change');
 });

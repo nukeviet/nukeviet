@@ -7,8 +7,8 @@
  * @category    Library
  * @package     Barcode
  * @author      Nicola Asuni <info@tecnick.com>
- * @copyright   2015-2024 Nicola Asuni - Tecnick.com LTD
- * @license     http://www.gnu.org/copyleft/lesser.html GNU-LGPL v3 (see LICENSE.TXT)
+ * @copyright   2015-2026 Nicola Asuni - Tecnick.com LTD
+ * @license     https://www.gnu.org/copyleft/lesser.html GNU-LGPL v3 (see LICENSE.TXT)
  * @link        https://github.com/tecnickcom/tc-lib-barcode
  *
  * This file is part of tc-lib-barcode software library.
@@ -26,8 +26,8 @@ namespace Com\Tecnick\Barcode\Type\Square\Datamatrix;
  * @category    Library
  * @package     Barcode
  * @author      Nicola Asuni <info@tecnick.com>
- * @copyright   2015-2024 Nicola Asuni - Tecnick.com LTD
- * @license     http://www.gnu.org/copyleft/lesser.html GNU-LGPL v3 (see LICENSE.TXT)
+ * @copyright   2015-2026 Nicola Asuni - Tecnick.com LTD
+ * @license     https://www.gnu.org/copyleft/lesser.html GNU-LGPL v3 (see LICENSE.TXT)
  * @link        https://github.com/tecnickcom/tc-lib-barcode
  */
 class Encode extends \Com\Tecnick\Barcode\Type\Square\Datamatrix\EncodeTxt
@@ -64,13 +64,13 @@ class Encode extends \Com\Tecnick\Barcode\Type\Square\Datamatrix\EncodeTxt
             ($data_length > 1)
             && ($pos < ($data_length - 1))
             && (
-                $this->isCharMode(ord($data[$pos]), Data::ENC_ASCII_NUM)
-                && $this->isCharMode(ord($data[$pos + 1]), Data::ENC_ASCII_NUM)
+                $this->isCharMode(\ord($data[$pos]), Data::ENC_ASCII_NUM)
+                && $this->isCharMode(\ord($data[$pos + 1]), Data::ENC_ASCII_NUM)
             )
         ) {
             // 1. If the next data sequence is at least 2 consecutive digits,
             // encode the next two digits as a double digit in ASCII mode.
-            $cdw[] = ((int) substr($data, $pos, 2) + 130);
+            $cdw[] = ((int) \substr($data, $pos, 2) + 130);
             ++$cdw_num;
             $pos += 2;
         } else {
@@ -83,7 +83,7 @@ class Encode extends \Com\Tecnick\Barcode\Type\Square\Datamatrix\EncodeTxt
                 ++$cdw_num;
             } else {
                 // get new byte
-                $chr = ord($data[$pos]);
+                $chr = \ord($data[$pos]);
                 ++$pos;
                 if ($this->isCharMode($chr, Data::ENC_ASCII_EXT)) {
                     // 3. If the next data character is extended ASCII (greater than 127)
@@ -201,7 +201,7 @@ class Encode extends \Com\Tecnick\Barcode\Type\Square\Datamatrix\EncodeTxt
         $field_length = 0;
         do {
             // 2. process the next character in EDIFACT encodation.
-            $chr = ord($data[$epos]);
+            $chr = \ord($data[$epos]);
             if ($this->isCharMode($chr, Data::ENC_EDF)) {
                 ++$epos;
                 $temp_cw[] = $chr;
@@ -260,7 +260,7 @@ class Encode extends \Com\Tecnick\Barcode\Type\Square\Datamatrix\EncodeTxt
                 break; // exit from B256 mode
             } else {
                 // 2. Otherwise, process the next character in Base 256 encodation.
-                $chr = ord($data[$pos]);
+                $chr = \ord($data[$pos]);
                 ++$pos;
                 $temp_cw[] = $chr;
                 ++$field_length;
@@ -272,7 +272,7 @@ class Encode extends \Com\Tecnick\Barcode\Type\Square\Datamatrix\EncodeTxt
             $cdw[] = $this->get255StateCodeword($field_length, ($cdw_num + 1));
             ++$cdw_num;
         } else {
-            $cdw[] = $this->get255StateCodeword(((int) floor($field_length / 250) + 249), ($cdw_num + 1));
+            $cdw[] = $this->get255StateCodeword(((int) \floor($field_length / 250) + 249), ($cdw_num + 1));
             $cdw[] = $this->get255StateCodeword(($field_length % 250), ($cdw_num + 2));
             $cdw_num += 2;
         }

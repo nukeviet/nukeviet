@@ -136,6 +136,7 @@ if ($nv_Request->get_title('checkss', 'post') == $checkss) {
         $db->query('DELETE FROM ' . NV_USERS_GLOBALTABLE . '_openid WHERE userid=' . $admin_id);
         $db->query('DELETE FROM ' . NV_USERS_GLOBALTABLE . '_info WHERE userid=' . $admin_id);
         $db->query('DELETE FROM ' . NV_USERS_GLOBALTABLE . '_passkey WHERE userid=' . $admin_id);
+        $db->query('DELETE FROM ' . NV_USERS_GLOBALTABLE . '_deleted WHERE userid=' . $admin_id);
         $db->query('DELETE FROM ' . NV_USERS_GLOBALTABLE . ' WHERE userid=' . $admin_id);
         if (!empty($row_user['photo']) and is_file(NV_ROOTDIR . '/' . $row_user['photo'])) {
             @nv_deletefile(NV_ROOTDIR . '/' . $row_user['photo']);

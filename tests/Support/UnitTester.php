@@ -70,10 +70,12 @@ class UnitTester extends \Codeception\Actor
      *
      * @param string $dir
      * @param string $base_dir
+     * @param string $ext
      * @return string[]
      */
-    public function listPhpFile($dir = '', $base_dir = '')
+    public function listFile($dir = '', $base_dir = '', string $ext = 'php')
     {
+        $ext = ltrim($ext, '.');
         $file_list = [];
 
         if (is_dir($dir)) {
@@ -85,11 +87,11 @@ class UnitTester extends \Codeception\Actor
                 }
 
                 if (is_dir($dir . '/' . $v)) {
-                    foreach ($this->listPhpFile($dir . '/' . $v, $base_dir . '/' . $v) as $file) {
+                    foreach ($this->listFile($dir . '/' . $v, $base_dir . '/' . $v, $ext) as $file) {
                         $file_list[] = $file;
                     }
                 } else {
-                    if (preg_match('/\.php$/', $v)) {
+                    if (preg_match('/\.' . $ext . '$/', $v)) {
                         $file_list[] = preg_replace('/^\//', '', $base_dir . '/' . $v);
                     }
                 }

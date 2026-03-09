@@ -225,7 +225,7 @@
 </form>
 <div class="card mt-3">
     <div class="card-header fw-medium fs-5 py-2">
-        {$LANG->get('merge_field')} <a href="#" data-toggle="tooltip" title="{$LANG->get('merge_field_help')}"><i class="fa fa-info-circle"></i></a>
+        {$LANG->get('merge_field')} <span class="text-primary" data-bs-toggle="tooltip" data-bs-title="{$LANG->get('merge_field_help')}" title="{$LANG->get('merge_field_help')}"><i class="fa-solid fa-circle-info"></i></span>
     </div>
     <div class="card-body">
         <div class="row">

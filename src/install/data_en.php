@@ -60,6 +60,11 @@ $install_lang['modfuncs']['users']['editinfo'] = 'Account Settings';
 $install_lang['modfuncs']['users']['memberlist'] = 'Members list';
 $install_lang['modfuncs']['users']['logout'] = 'Logout';
 $install_lang['modfuncs']['users']['groups'] = 'Group management';
+$install_lang['modfuncs']['users']['datadeletion'] = 'Personal data deletion';
+$install_lang['modfuncs']['users']['main'] = 'Account homepage';
+$install_lang['modfuncs']['users']['avatar'] = 'Change avatar';
+$install_lang['modfuncs']['users']['security-privacy'] = 'Security and Privacy';
+$install_lang['modfuncs']['users']['verify-password'] = 'Verify Password';
 
 $install_lang['modfuncs']['statistics'] = [];
 $install_lang['modfuncs']['statistics']['allreferers'] = 'By referrers';
@@ -107,6 +112,7 @@ $install_lang['cron']['cron_notification_autodel'] = 'Delete old notification';
 $install_lang['cron']['cron_remove_expired_inform'] = 'Remove expired notifications';
 $install_lang['cron']['cron_apilogs_autodel'] = 'Remove expired API-logs';
 $install_lang['cron']['cron_expadmin_handling'] = 'Handling expired admins';
+$install_lang['cron']['cron_user_datadeletion_handling'] = 'Handling scheduled user data deletion';
 
 $install_lang['groups']['NukeViet-Fans'] = 'NukeViet-Fans';
 $install_lang['groups']['NukeViet-Admins'] = 'NukeViet-Admins';
@@ -117,7 +123,7 @@ $install_lang['groups']['NukeViet-Admins-desc'] = 'Group of administrators for s
 $install_lang['groups']['NukeViet-Programmers-desc'] = 'NukeViet System Programmers Group';
 
 $install_lang['vinades_fullname'] = 'Vietnam Open Source Development Joint Stock Company';
-$install_lang['vinades_address'] = '6th floor, Song Da building, No. 131 Tran Phu street, Van Quan ward, Ha Dong district, Hanoi city, Vietnam';
+$install_lang['vinades_address'] = '6th floor, Song Da building, No. 131 Tran Phu Street, Ha Dong Ward, Hanoi City, Vietnam';
 $install_lang['nukeviet_description'] = 'Sharing success, connect passions';
 $install_lang['disable_site_content'] = 'For technical reasons Web site temporary not available. we are very sorry for that inconvenience!';
 

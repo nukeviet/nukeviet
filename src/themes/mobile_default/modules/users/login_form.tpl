@@ -1,4 +1,4 @@
-<form action="{USER_LOGIN}" method="post" data-toggle="userLogin" data-precheck="login_form_precheck" autocomplete="off" novalidate<!-- BEGIN: captcha --> data-captcha="nv_seccode"<!-- END: captcha --><!-- BEGIN: recaptcha --> data-recaptcha2="1"<!-- END: recaptcha --><!-- BEGIN: recaptcha3 --> data-recaptcha3="1"<!-- END: recaptcha3 --><!-- BEGIN: turnstile --> data-turnstile="1"<!-- END: turnstile -->>
+<form action="{USER_LOGIN}" method="post" data-toggle="userLogin" data-precheck="login_form_precheck" autocomplete="off" novalidate<!-- BEGIN: captcha --> data-captcha="nv_seccode"<!-- END: captcha --><!-- BEGIN: recaptcha --> data-recaptcha2="1"<!-- END: recaptcha --><!-- BEGIN: recaptcha3 --> data-recaptcha3="1"<!-- END: recaptcha3 --><!-- BEGIN: turnstile --> data-turnstile="1"<!-- END: turnstile --> data-note-webview1="{LANG.note_webview1}" data-note-webview2="{LANG.note_webview2}" data-note-webview3="{LANG.note_webview3}">
     <input type="hidden" name="_csrf" value="{CSRF}">
     <input type="hidden" name="cant_do_2step" value="0">
     <!-- BEGIN: header --><input name="nv_header" value="{NV_HEADER}" type="hidden"><!-- END: header -->
@@ -91,6 +91,8 @@
             </div>
         </div>
         <!-- END: allowuserreg_linkform -->
+
+        <div class="alert alert-warning hidden" data-toggle="webview-warning"></div>
 
         <!-- BEGIN: openid -->
         <!-- BEGIN: google_identity_onload -->

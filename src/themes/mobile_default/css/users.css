@@ -377,3 +377,38 @@ fieldset[disabled] .openid-single-sign-on:focus {
 .usr-gap-2 {
     gap: 10px;
 }
+
+.usr-ml-auto {
+    margin-left: auto;
+}
+
+.usr-hr-space {
+    margin-top: 40px;
+    margin-bottom: 40px;
+}
+
+.usr-login-platform {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: var(--nv-border-color-light);
+    border: 1px solid var(--nv-white);
+}
+
+.usr-login-platform.browser {
+    margin-left: -8px;
+}
+
+.box-security {
+    border: 1px solid rgb(229, 231, 235);
+    border-radius: 7px;
+    padding: 20px;
+}
+
+.user-delete-account .input-confirm-code {
+    max-width: 250px;
+    margin: 0 auto;
+}

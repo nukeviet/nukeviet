@@ -815,7 +815,9 @@ if (!empty($module_config[$module_name]['elas_use'])) {
     $result = $db_slave->query($db_slave->sql());
 
     $data = $array_ids = $array_userid = [];
-    while ([$id, $catid_i, $listcatid, $post_id, $title, $alias, $status, $weight, $addtime, $edittime, $publtime, $exptime, $hitstotal, $hitscm, $_userid, $author] = $result->fetch(3)) {
+    while ($_scratch = $result->fetch(3)) {
+        [$id, $catid_i, $listcatid, $post_id, $title, $alias, $status, $weight, $addtime, $edittime, $publtime, $exptime, $hitstotal, $hitscm, $_userid, $author] = $_scratch;
+        unset($_scratch);
         $publtime = nv_datetime_format($publtime, 1);
 
         if ($array_search['catid'] > 0) {
@@ -926,7 +928,9 @@ if (!empty($array_ids)) {
     ->where('id IN( ' . implode(',', $array_ids) . ' )')
     ->group('id');
     $result = $db_slave->query($db_slave->sql());
-    while ([$numtags, $id] = $result->fetch(3)) {
+    while ($_scratch = $result->fetch(3)) {
+        [$numtags, $id] = $_scratch;
+        unset($_scratch);
         $data[$id]['numtags'] = nv_number_format($numtags);
     }
 
@@ -974,7 +978,9 @@ if (!empty($array_userid)) {
     ->where('tb1.userid IN( ' . implode(',', $array_userid) . ' )');
     $array_userid = [];
     $result = $db_slave->query($db_slave->sql());
-    while ([$_userid, $_username, $admin_lev] = $result->fetch(3)) {
+    while ($_scratch = $result->fetch(3)) {
+        [$_userid, $_username, $admin_lev] = $_scratch;
+        unset($_scratch);
         $array_userid[$_userid] = [
             'username' => $_username,
             'admin_lev' => $admin_lev
@@ -1347,13 +1353,13 @@ if (!$is_search) {
 
     // Cache các số đếm, sẽ theo admin
     if (!defined('NV_IS_ADMIN_MODULE')) {
-        $cache_file = NV_LANG_DATA . '_admmainothers_' . $admin_info['admin_id'] . '_' . NV_CACHE_PREFIX . '.cache';
+        $cache_file = 'admmainothers_' . $admin_info['admin_id'] . '_' . NV_CACHE_PREFIX . '.cache';
     } else {
-        $cache_file = NV_LANG_DATA . '_admmainothers_' . NV_CACHE_PREFIX . '.cache';
+        $cache_file = 'admmainothers_' . NV_CACHE_PREFIX . '.cache';
     }
     $cacheTTL = 86400 * 7;
 
-    if (($cache = $nv_Cache->getItem($module_name, $cache_file, $cacheTTL)) != false) {
+    if (($cache = $nv_Cache->getItem($module_name, $cache_file, ttl: $cacheTTL)) != false) {
         [$array_others, $array_others_count] = json_decode($cache, true);
     } else {
         // Đếm số bài lưu nháp do tôi đăng và còn quyền xem
@@ -1432,7 +1438,7 @@ if (!$is_search) {
             ];
             $array_others_count += $number;
         }
-        $nv_Cache->setItem($module_name, $cache_file, json_encode([$array_others, $array_others_count]), $cacheTTL);
+        $nv_Cache->setItem($module_name, $cache_file, json_encode([$array_others, $array_others_count]), ttl: $cacheTTL);
     }
 }
 $tpl->assign('DRAFTS', $array_drafts);

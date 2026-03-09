@@ -7,6 +7,14 @@
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
+// Callback sau khi khởi tạo trình soạn thảo, chỉ định tại contents.php
+let focusEditor = 'emailtemplates_default_content';
+function setEditorReady(editor) {
+    editor.editing.view.document.on('change:isFocused', () => {
+        focusEditor = editor.config.get('nukeviet').editorId;
+    });
+}
+
 $(function() {
     // Thay đổi thứ tự danh mục
     $('[data-toggle="weightcat"]').on('change', function() {
@@ -158,21 +166,14 @@ $(function() {
         });
         $('[name="pids[]"]').trigger('change');
 
-        var focusEditor = 'emailtemplates_default_content';
         if (typeof CKEDITOR != 'undefined') {
             for (const [key, value] of Object.entries(CKEDITOR.instances)) {
                 value.on('focus', function() {
                     focusEditor = key;
                 });
             }
-        } else if (window.nveditor != "undefined") {
-            for (const [key, value] of Object.entries(window.nveditor)) {
-                value.editing.view.document.on('change:isFocused', () => {
-                    focusEditor = key;
-                });
-            }
         } else {
-            $('[data-toggle="textareaemailcontent"]').on('focus', function() {
+            $('[data-toggle="textareaemailcontent"]').filter(':visible').on('focus', function() {
                 focusEditor = $(this).attr('id');
             });
         }
@@ -181,10 +182,18 @@ $(function() {
             if (typeof CKEDITOR != 'undefined') {
                 CKEDITOR.instances[focusEditor].insertHtml(' {' + $(this).data('value') + '}');
             } else if (window.nveditor != "undefined") {
-                window.nveditor[focusEditor].model.change(() => {
-                    window.nveditor[focusEditor].model.insertContent(window.nveditor[focusEditor].data.toModel(window.nveditor[focusEditor].data.processor.toView(' {' + $(this).data('value') + '}')), window.nveditor[focusEditor].model.document.selection);
+                const editor = window.nveditor[focusEditor];
+
+                editor.model.change(() => {
+                    editor.model.insertContent(editor.data.toModel(editor.data.processor.toView(' {' + $(this).data('value') + '}')), editor.model.document.selection);
                 });
-                window.nveditor[focusEditor].editing.view.focus();
+
+                const editorElement = editor.ui.getEditableElement();
+                const rect = editorElement.getBoundingClientRect();
+                const absoluteTop = rect.top + window.pageYOffset;
+                $('html, body').animate({ scrollTop: absoluteTop - 100 }, 200);
+
+                editor.editing.view.focus();
             } else {
                 $('#' + focusEditor).val($('#' + focusEditor).val() + ' {' + $(this).data('value') + '}');
             }

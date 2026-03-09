@@ -333,3 +333,39 @@ $module_emails[Emails::PASSKEY_DEL] = [
 </ul>
 We send this mandatory notification to your email to ensure that it was you who performed the action. If it was not you, please urgently visit the <a href="{$passkey_link}">passkey management page</a> to review the passkeys. Also, <a href="{$pass_link}">change your password immediately</a> to ensure safety.'
 ];
+$module_emails[Emails::DELETE_ACCOUNT_SECCODE] = [
+    'is_system' => $is_system,
+    'pids' => $pids,
+    'pfile' => $pfile,
+    'catid' => $catid,
+    't' => 'Account deletion confirmation code email',
+    's' => 'Confirmation code for your account deletion request',
+    'c' => '<p>{$greeting_user}</p> <p>We have received your request to delete your account. To proceed, please use the confirmation code below.</p> <div style="text-align: center; margin: 32px 0;"> <p style="font-size: 14px; color: #4b5563; margin-bottom: 8px;">Your confirmation code is:</p> <div style="display: inline-block; background-color: #f3f4f6; border: 1px solid #d1d5db; border-radius: 6px; padding: 12px 24px;"> <span style="font-size: 24px; font-weight: bold; letter-spacing: 0.2em; color: #111827; font-family: monospace;">{$code}</span> </div> </div> <p>This code is valid for 10 minutes. Please do not share this code with anyone.</p> <p>If you did not request this action, please ignore this email and contact our support team immediately to protect your account.</p> <p style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #e5e7eb; font-size: 14px; color: #6b7280; font-style: italic; margin-bottom: 0px;"> This is a mandatory notification related to activity on your account. Please do not reply and ignore this email if you do not understand the content. </p>'
+];
+$module_emails[Emails::DELETE_ACCOUNT_PENDING] = [
+    'is_system' => $is_system,
+    'pids' => $pids,
+    'pfile' => $pfile,
+    'catid' => $catid,
+    't' => 'Account scheduled for deletion notification email',
+    's' => 'Your account has been scheduled for deletion',
+    'c' => '<p>{$greeting_user}</p> <p>Your account deletion request has been confirmed. Your account will be permanently deleted around <strong style="color: #111827;">{$action_time}</strong>.</p> <p>After deletion, all data and related services will be irreversible.</p> <div style="text-align: center; margin: 32px 0;"> <p style="color: #4b5563; margin-bottom: 16px;">If you change your mind, you can cancel this request at any time before the deadline above by clicking the button below and logging in again.</p> <a href="{$link}" style="display: inline-block; padding: 12px 32px; font-weight: bold; color: white; background-color: #2563eb; text-decoration: none; border-radius: 6px;">Cancel account deletion request</a> </div> <p>If you did not make this request, please click the link above to cancel the request or contact our support team immediately.</p> <p style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #e5e7eb; font-size: 14px; color: #6b7280; font-style: italic; margin-bottom: 0px;"> This is a mandatory notification related to activity on your account. Please do not reply and ignore this email if you do not understand the content. </p>'
+];
+$module_emails[Emails::DELETE_ACCOUNT_CANCEL] = [
+    'is_system' => $is_system,
+    'pids' => $pids,
+    'pfile' => $pfile,
+    'catid' => $catid,
+    't' => 'Account deletion request cancellation email',
+    's' => 'Your account deletion request has been cancelled',
+    'c' => '<p>{$greeting_user}</p> <p>We confirm that your account deletion request has been successfully cancelled as per your request.</p> <p>Your account remains <strong>safe</strong> and operates normally. You can continue to use all our services without interruption.</p> <p>If you were not the one who performed this action, please <a href="{$pass_link}" style="color: #2563eb; font-weight: 600; text-decoration: none;">change your password</a> immediately and review <a href="{$link}" style="color: #2563eb; font-weight: 600; text-decoration: none;">recent login sessions</a> to protect your account.</p> <p style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #e5e7eb; font-size: 14px; color: #6b7280; font-style: italic; margin-bottom: 0px;"> This is a mandatory notification related to activity on your account. Please do not reply and ignore this email if you do not understand the content. </p>'
+];
+$module_emails[Emails::DELETE_ACCOUNT_COMPLETED] = [
+    'is_system' => $is_system,
+    'pids' => $pids,
+    'pfile' => $pfile,
+    'catid' => $catid,
+    't' => 'Account successfully deleted email',
+    's' => 'Your account has been permanently deleted',
+    'c' => '<p>{$greeting_user}</p> <p>As requested, your account has been <strong>permanently deleted</strong> from our system. This action cannot be undone.</p> <p>All personal data, activity history, and services related to this account have been irreversibly deleted.</p> <p>{$newvalue}.</p> <p>We are sorry to part ways with you and hope to have the opportunity to serve you in the future.</p> <p style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #e5e7eb; font-size: 14px; color: #6b7280; font-style: italic; margin-bottom: 0px;"> This is a mandatory notification related to activity on your account. Please do not reply and ignore this email if you do not understand the content. </p>'
+];

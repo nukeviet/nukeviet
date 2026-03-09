@@ -10,7 +10,8 @@
 $(function() {
     if ($('#my-role-api').length) {
         var myroleapi = $('#my-role-api'),
-            myroleapi_url = myroleapi.data('page-url');
+            myroleapi_url = myroleapi.data('page-url'),
+            checkss = myroleapi.data('checkss');
 
         $('.credential-activate, .credential-deactivate', myroleapi).on('click', function() {
             var role_id = $(this).parents('.item').data('role-id');
@@ -18,7 +19,7 @@ $(function() {
                 type: "POST",
                 url: myroleapi_url,
                 cache: !1,
-                data: 'changeActivate=' + role_id,
+                data: 'changeActivate=' + role_id + '&checkss=' + checkss,
                 dataType: "json"
             }).done(function(a) {
                 if ('error' == a.status) {
@@ -44,11 +45,11 @@ $(function() {
                 type: "POST",
                 url: myroleapi_url,
                 cache: !1,
-                data: 'createAuth=' + method,
+                data: 'createAuth=' + method + '&checkss=' + checkss,
                 dataType: "json"
             }).done(function(a) {
                 if ('error' == a.status) {
-                    alert(e.mess)
+                    alert(a.mess)
                 } else if ('OK' == a.status) {
                     $('[name=' + method + '_ident]', credential_auth).val(a.ident);
                     $('[name=' + method + '_secret]', credential_auth).val(a.secret);
@@ -63,13 +64,15 @@ $(function() {
                 type: "POST",
                 url: myroleapi_url,
                 cache: !1,
-                data: 'delAuth=' + method,
+                data: 'delAuth=' + method + '&checkss=' + checkss,
                 dataType: "json"
             }).done(function(a) {
                 if ('OK' == a.status) {
                     $('[name=' + method + '_ident]', credential_auth).val('');
                     $('[name=' + method + '_secret]', credential_auth).val('');
                     $('[name=' + method + '_ips]', credential_auth).val('').parents('.api_ips').slideUp()
+                } else {
+                    alert(a.mess)
                 }
             })
         });
@@ -85,7 +88,7 @@ $(function() {
                 type: "POST",
                 url: myroleapi_url,
                 cache: !1,
-                data: 'ipsUpdate=' + ips + '&method=' + method,
+                data: 'ipsUpdate=' + ips + '&method=' + method + '&checkss=' + checkss,
                 dataType: "json"
             }).done(function(a) {
                 if ('error' == a.status) {

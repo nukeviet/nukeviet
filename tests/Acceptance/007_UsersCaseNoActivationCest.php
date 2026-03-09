@@ -95,6 +95,13 @@ class UsersCaseNoActivationCest
         $I->wantTo('Disable captcha when users register an account');
         $I->login();
         $I->amOnUrl($I->getDomain() . '/admin/vi/settings/security/?selectedtab=2');
+
+        // Cuộn đến heading captcha
+        $I->seeElementInDOM('#settingCaptcha-headingThree');
+        $I->scrollTo('#settingCaptcha-headingThree');
+        $I->wait(1);
+        $I->waitForElementVisible('#settingCaptcha-headingThree', 5);
+
         $I->seeElement('#settingCaptcha-headingThree');
         $I->click('#settingCaptcha-headingThree');
         $I->waitForElementVisible('#captcha_area_r', 5);

@@ -171,3 +171,6 @@ $lang_module['publ_time_info'] = 'Si vous ne sélectionnez pas l\'heure de débu
 $lang_module['enter_keyword'] = 'Entrez des mots clés';
 $lang_module['all_plan'] = 'Tous les plans';
 $lang_module['admin_add_banner'] = 'Ajouter une bannière';
+$lang_module['chart_data_empty'] = 'Aucun clic';
+$lang_module['chart_lbl_clicks'] = 'Nombre de clics';
+$lang_module['chart_lbl_total'] = 'Total';

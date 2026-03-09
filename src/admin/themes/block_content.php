@@ -60,6 +60,7 @@ $row = [
     'dtime_type' => 'regular',
     'dtime_details' => [],
     'active' => 1,
+    'bot_visible' => 1,
     'act' => 1,
     'groups_view' => '6',
     'all_func' => 1,
@@ -299,6 +300,8 @@ if ($checkss == $nv_Request->get_string('checkss', 'post')) {
         $row['active'] = implode(',', $row['active_device']);
     }
 
+    $row['bot_visible'] = (int) $nv_Request->get_bool('bot_visible', 'post', false);
+
     $groups_view = $nv_Request->get_array('groups_view', 'post', []);
     $row['groups_view'] = !empty($groups_view) ? implode(',', nv_groups_post(array_intersect($groups_view, array_keys($groups_list)))) : '';
 
@@ -450,7 +453,9 @@ if ($checkss == $nv_Request->get_string('checkss', 'post')) {
             $sth->bindParam(':theme', $row_old['theme'], PDO::PARAM_STR);
             $sth->bindParam(':position', $row_old['position'], PDO::PARAM_STR);
             $sth->execute();
-            while ([$bid_i, $func_id_i] = $sth->fetch(3)) {
+            while ($_scratch = $sth->fetch(3)) {
+                [$bid_i, $func_id_i] = $_scratch;
+                unset($_scratch);
                 if ($func_id_i == $func_id_old) {
                     ++$weight;
                 } else {
@@ -476,10 +481,10 @@ if ($checkss == $nv_Request->get_string('checkss', 'post')) {
 
             $_sql = 'INSERT INTO ' . NV_BLOCKS_TABLE . '_groups (
                 theme, module, file_name, title, link, template, heading, position, dtime_type,
-                dtime_details, active, act, groups_view, all_func, weight, config
+                dtime_details, active, bot_visible, act, groups_view, all_func, weight, config
             ) VALUES (
                 :selectthemes, :module, :file_name, :title, :link, :template, :heading, :position,
-                :dtime_type, :dtime_details, :active, ' . $row['act'] . ', :groups_view,
+                :dtime_type, :dtime_details, :active, ' . $row['bot_visible'] . ', ' . $row['act'] . ', :groups_view,
                 ' . $row['all_func'] . ', ' . $row['weight'] . ', :config
             )';
             $data = [];
@@ -511,6 +516,7 @@ if ($checkss == $nv_Request->get_string('checkss', 'post')) {
                     dtime_type=:dtime_type,
                     dtime_details=:dtime_details,
                     active=:active,
+                    bot_visible=' . $row['bot_visible'] . ',
                     act=' . $row['act'] . ',
                     groups_view=:groups_view,
                     all_func=' . $row['all_func'] . ',
@@ -542,7 +548,9 @@ if ($checkss == $nv_Request->get_string('checkss', 'post')) {
             $func_list = [];
             $result_func = $db->query('SELECT func_id FROM ' . NV_BLOCKS_TABLE . '_weight WHERE bid=' . $row['bid']);
 
-            while ([$func_inlist] = $result_func->fetch(3)) {
+            while ($_scratch = $result_func->fetch(3)) {
+                [$func_inlist] = $_scratch;
+                unset($_scratch);
                 $func_list[] = $func_inlist;
             }
 
@@ -631,7 +639,9 @@ if (!empty($row['bid'])) {
 $sql = 'SELECT func_id, func_custom_name, in_module FROM ' . NV_MODFUNCS_TABLE . ' WHERE show_func=1 ORDER BY in_module ASC, subweight ASC';
 $func_result = $db->query($sql);
 $aray_mod_func = [];
-while ([$id_i, $func_custom_name_i, $in_module_i] = $func_result->fetch(3)) {
+while ($_scratch = $func_result->fetch(3)) {
+    [$id_i, $func_custom_name_i, $in_module_i] = $_scratch;
+    unset($_scratch);
     $aray_mod_func[$in_module_i][] = [
         'id' => $id_i,
         'func_custom_name' => $func_custom_name_i
@@ -641,7 +651,9 @@ while ([$id_i, $func_custom_name_i, $in_module_i] = $func_result->fetch(3)) {
 $func_list = [];
 if ($row['bid']) {
     $result_func = $db->query('SELECT func_id FROM ' . NV_BLOCKS_TABLE . '_weight WHERE bid=' . $row['bid']);
-    while ([$func_inlist] = $result_func->fetch(3)) {
+    while ($_scratch = $result_func->fetch(3)) {
+        [$func_inlist] = $_scratch;
+        unset($_scratch);
         $func_list[] = $func_inlist;
     }
 }
@@ -650,7 +662,9 @@ $sql = 'SELECT title, custom_title FROM ' . NV_MODULES_TABLE . (!NV_DEBUG ? ' WH
 $result = $db->query($sql);
 
 $mod_funcs = [];
-while ([$m_title, $m_custom_title] = $result->fetch(3)) {
+while ($_scratch = $result->fetch(3)) {
+    [$m_title, $m_custom_title] = $_scratch;
+    unset($_scratch);
     if (isset($aray_mod_func[$m_title]) and count($aray_mod_func[$m_title]) > 0) {
         if (!isset($mod_funcs[$m_title])) {
             $mod_funcs[$m_title] = [

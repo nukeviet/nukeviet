@@ -7,10 +7,10 @@
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
-function nv_chang_weight(vid) {
+function nv_chang_weight(vid, checkss) {
     var nv_timer = nv_settimeout_disable('change_weight_' + vid, 5000);
     var new_weight = $('#change_weight_' + vid).val();
-    $.post(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=change_weight&nocache=' + new Date().getTime(), 'id=' + vid + '&new_weight=' + new_weight, function(res) {
+    $.post(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=change_weight&nocache=' + new Date().getTime(), 'id=' + vid + '&new_weight=' + new_weight + '&checkss=' + checkss, function(res) {
         nv_chang_weight_res(res);
     });
     return;

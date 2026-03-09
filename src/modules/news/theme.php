@@ -1122,7 +1122,7 @@ function topic_theme($topic_array, $topic_other_array, $generate_page, $page_tit
                     $xtpl->parse('main.topic.adminlink');
                 }
             }
-
+            $xtpl->parse('main.topic.h2');
             $xtpl->parse('main.topic');
         }
     }
@@ -1163,12 +1163,14 @@ function topic_theme($topic_array, $topic_other_array, $generate_page, $page_tit
  */
 function author_theme($author_info, $topic_array, $topic_other_array, $generate_page)
 {
-    global $module_info, $module_name, $module_config, $page_title;
+    global $module_info, $module_name, $module_config, $page_title, $nv_Lang;
 
     $xtpl = new XTemplate('topic.tpl', get_module_tpl_dir('topic.tpl'));
     $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
     $xtpl->assign('TOPPIC_TITLE', $page_title);
     $xtpl->assign('IMGWIDTH1', $module_config[$module_name]['homewidth']);
+    $xtpl->assign('AUTHOR_LIST_TITLE', $nv_Lang->getModule('list_articles_by_author', $author_info['pseudonym']));
+    $xtpl->parse('main.author_list_title');
     if (!empty($author_info['description'])) {
         $xtpl->assign('TOPPIC_DESCRIPTION', $author_info['description']);
         if (!empty($author_info['image'])) {
@@ -1198,7 +1200,7 @@ function author_theme($author_info, $topic_array, $topic_other_array, $generate_
                     $xtpl->parse('main.topic.adminlink');
                 }
             }
-
+            $xtpl->parse('main.topic.h3');
             $xtpl->parse('main.topic');
         }
     }

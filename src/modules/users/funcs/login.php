@@ -965,6 +965,21 @@ if ($nv_Request->isset_request('_csrf, nv_login', 'post')) {
     $method = (preg_match('/^([^0-9]+[a-z0-9\_]+)$/', $global_config['login_name_type']) and module_file_exists('users/methods/' . $global_config['login_name_type'] . '.php')) ? $global_config['login_name_type'] : 'username';
     require NV_ROOTDIR . '/modules/users/methods/' . $method . '.php';
     $row = check_user_login($nv_username);
+    $row_reg = empty($row) ? check_user_login($nv_username, true) : false;
+
+    // Nếu tài khoản đang chờ kích hoạt
+    if (!empty($row_reg) and $crypt->validate_password($nv_password, $row_reg['password'])) {
+        $nv_Request->set_Session($module_data . '_preactivation_verified', json_encode([
+            'username' => $row_reg['username'],
+            'email' => $row_reg['email'],
+            'time' => NV_CURRENTTIME,
+        ]));
+        signin_result([
+            'status' => 'activation',
+            'input' => nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=lostactivelink&autosubmit=1' . (!empty($nv_redirect) ? '&nv_redirect=' . $nv_redirect : ''), true),
+            'mess' => $nv_Lang->getModule('account_waiting_activation')
+        ]);
+    }
 
     // Nếu không tìm thấy tài khoản hoặc mật khẩu không khớp
     if (empty($row) or !$crypt->validate_password($nv_password, $row['password'])) {

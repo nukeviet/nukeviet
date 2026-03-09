@@ -38,7 +38,8 @@ if (defined('NV_IS_ADMIN')) {
                 if ($user_cookie['checkhash'] === md5($user_cookie['userid'] . $user_cookie['checknum'] . $global_config['sitekey'] . $client_info['clid'])) {
                     $_sql = 'SELECT a.userid, a.group_id, a.username, a.email, a.first_name, a.last_name, a.gender, a.photo, a.birthday, a.regdate,
                         a.view_mail, a.remember, a.in_groups, a.active2step, a.pref_2fa, a.checknum, a.password, a.question, a.answer, a.safemode, a.pass_creation_time,
-                        a.pass_reset_request, a.email_creation_time, a.email_reset_request, a.email_verification_time, a.last_agent, a.last_ip, a.last_login, a.last_openid, a.language,
+                        a.pass_reset_request, a.email_creation_time, a.email_reset_request, a.email_verification_time, a.last_agent, a.last_ip,
+                        a.last_login, a.last_openid, a.language, a.delete_at,
                         b.mode current_mode, b.agent AS current_agent, b.ip AS current_ip, b.logtime AS current_login, b.mode_extra AS current_mode_extra
                         FROM ' . NV_USERS_GLOBALTABLE . ' AS a INNER JOIN ' . NV_USERS_GLOBALTABLE . '_login AS b ON a.userid=b.userid
                         WHERE a.userid = ' . $user_cookie['userid'] . ' AND b.clid=' . $db->quote($client_info['clid']) . ' AND a.active=1';
@@ -125,4 +126,16 @@ if (defined('NV_IS_ADMIN')) {
     }
 
     unset($_sql);
+}
+
+// Tài khoản chờ xóa luôn chuyển hướng đến trang thông báo xóa tài khoản
+if (!empty($user_info) and !empty($user_info['delete_at'])) {
+    $module_name = $nv_Request->get_title(NV_NAME_VARIABLE, 'get', '');
+    $op  = $nv_Request->get_title(NV_OP_VARIABLE, 'get', '');
+    $allow_ops = ['datadeletion', 'logout', 'verify-password'];
+
+    if ($module_name !== 'users' or !in_array($op, $allow_ops, true)) {
+        $url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=users&' . NV_OP_VARIABLE . '=datadeletion&nv_redirect=' . nv_redirect_encrypt($client_info['selfurl']);
+        nv_redirect_location($url);
+    }
 }

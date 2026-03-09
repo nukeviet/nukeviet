@@ -30,6 +30,101 @@ $sql_create_table[] = 'INSERT INTO ' . NV_AUTHORS_GLOBALTABLE . "_module (mid, m
 $sql_create_table[] = 'INSERT INTO ' . $db_config['prefix'] . "_upload_dir (did, dirname, time, thumb_type, thumb_width, thumb_height, thumb_quality) VALUES ('-1', '', 0, 3, 300, 300, 90)";
 $sql_create_table[] = 'UPDATE ' . $db_config['prefix'] . "_upload_dir SET did = '0' WHERE did = '-1'";
 
+$csp = [
+    'default-src' => ['self' => 1],
+    'script-src' => [
+        'self' => 1,
+        'unsafe-inline' => 1,
+        'unsafe-eval' => 1,
+        'hosts' => [
+            '*.google.com',
+            '*.google-analytics.com',
+            '*.googletagmanager.com',
+            '*.gstatic.com',
+            '*.facebook.com',
+            '*.facebook.net',
+            '*.twitter.com',
+            '*.zalo.me',
+            '*.zaloapp.com',
+            '*.tawk.to',
+            '*.cloudflareinsights.com',
+            '*.cloudflare.com'
+        ]
+    ],
+    'style-src' => [
+        'self' => 1,
+        'data' => 1,
+        'unsafe-inline' => 1,
+        'hosts' => [
+            '*.google.com',
+            '*.googleapis.com',
+            '*.tawk.to'
+        ]
+    ],
+    'img-src' => [
+        'self' => 1,
+        'data' => 1,
+        'hosts' => [
+            '*.twitter.com',
+            '*.google.com',
+            '*.googleapis.com',
+            '*.google-analytics.com',
+            '*.gstatic.com',
+            '*.facebook.com',
+            'tawk.link',
+            '*.tawk.to',
+            'static.nukeviet.vn'
+        ]
+    ],
+    'font-src' => [
+        'self' => 1,
+        'data' => 1,
+        'hosts' => [
+            '*.googleapis.com',
+            '*.gstatic.com',
+            '*.tawk.to'
+        ]
+    ],
+    'connect-src' => [
+        'self' => 1,
+        'hosts' => [
+            '*.google-analytics.com',
+            '*.zalo.me',
+            '*.tawk.to',
+            'wss://*.tawk.to',
+            '*.ckeditor.com',
+            '*.google.com',
+            'cdn.plyr.io'
+        ]
+    ],
+    'media-src' => [
+        'self' => 1,
+        'hosts' => [
+            '*.tawk.to'
+        ]
+    ],
+    'frame-src' => [
+        'self' => 1,
+        'hosts' => [
+            '*.google.com',
+            '*.youtube.com',
+            '*.facebook.com',
+            '*.facebook.net',
+            '*.twitter.com',
+            '*.zalo.me',
+            '*.live.com',
+            '*.cloudflare.com'
+        ]
+    ],
+    'form-action' => [
+        'self' => 1,
+        'hosts' => [
+            '*.google.com'
+        ]
+    ]
+];
+$csp = json_encode($csp, JSON_UNESCAPED_SLASHES);
+
 $sql_create_table[] = 'INSERT INTO ' . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES
 ('sys', 'site', 'admin_theme', 'admin_default'),
 ('sys', 'site', 'online_upd', '1'),
@@ -84,7 +179,7 @@ $sql_create_table[] = 'INSERT INTO ' . NV_CONFIG_GLOBALTABLE . " (lang, module, 
 ('sys', 'site', 'max_user_number', 0),
 ('sys', 'site', 'captcha_area', 'r,m,p'),
 ('sys', 'site', 'captcha_type', 'captcha'),
-('sys', 'site', 'nv_csp', '{\"default-src\":{\"self\":1},\"script-src\":{\"self\":1,\"unsafe-inline\":1,\"unsafe-eval\":1,\"hosts\":[\"*.google.com\",\"*.google-analytics.com\",\"*.googletagmanager.com\",\"*.gstatic.com\",\"*.facebook.com\",\"*.facebook.net\",\"*.twitter.com\",\"*.zalo.me\",\"*.zaloapp.com\",\"*.tawk.to\",\"*.cloudflareinsights.com\",\"*.cloudflare.com\"]},\"style-src\":{\"self\":1,\"data\":1,\"unsafe-inline\":1,\"hosts\":[\"*.google.com\",\"*.googleapis.com\",\"*.tawk.to\"]},\"img-src\":{\"self\":1,\"data\":1,\"hosts\":[\"*.twitter.com\",\"*.google.com\",\"*.googleapis.com\",\"*.google-analytics.com\",\"*.gstatic.com\",\"*.facebook.com\",\"tawk.link\",\"*.tawk.to\",\"static.nukeviet.vn\"]},\"font-src\":{\"self\":1,\"data\":1,\"hosts\":[\"*.googleapis.com\",\"*.gstatic.com\",\"*.tawk.to\"]},\"connect-src\":{\"self\":1,\"hosts\":[\"*.google-analytics.com\",\"*.zalo.me\",\"*.tawk.to\",\"wss:\\/\\/*.tawk.to\"]},\"media-src\":{\"self\":1,\"hosts\":[\"*.tawk.to\"]},\"frame-src\":{\"self\":1,\"hosts\":[\"*.google.com\",\"*.youtube.com\",\"*.facebook.com\",\"*.facebook.net\",\"*.twitter.com\",\"*.zalo.me\",\"*.live.com\",\"*.cloudflare.com\"]},\"form-action\":{\"self\":1,\"hosts\":[\"*.google.com\"]}}'),
+('sys', 'site', 'nv_csp', '" . addslashes($csp) . "'),
 ('sys', 'site', 'nv_csp_act', '1'),
 ('sys', 'site', 'nv_csp_script_nonce', '0'),
 ('sys', 'site', 'nv_rp', 'no-referrer-when-downgrade, strict-origin-when-cross-origin'),
@@ -210,12 +305,21 @@ $sql_create_table[] = 'INSERT INTO ' . NV_CONFIG_GLOBALTABLE . " (lang, module, 
 ('sys', 'global', 'request_uri_check', 'page'),
 ('sys', 'global', 'XSSsanitize', '1'),
 ('sys', 'global', 'admin_XSSsanitize', '1'),
-('sys', 'global', 'unsign_vietwords', '1'),
+('sys', 'global', 'unsign_vietwords', '0'),
 ('sys', 'global', 'passshow_button', '0'),
 ('sys', 'global', 'auto_acao', '1'),
 ('sys', 'global', 'load_files_seccode', ''),
 ('sys', 'global', 'error_separate_file', '0'),
 ('sys', 'global', 'region', ''),
+('sys', 'global', 'cached', 'files'),
+('sys', 'global', 'memcached_host', '127.0.0.1'),
+('sys', 'global', 'memcached_port', '11211'),
+('sys', 'global', 'redis_host', '127.0.0.1'),
+('sys', 'global', 'redis_port', '6379'),
+('sys', 'global', 'redis_password', ''),
+('sys', 'global', 'redis_db_index', '0'),
+('sys', 'global', 'redis_timeout', '2.5'),
+('sys', 'global', 'cache_prefix', ''),
 
 ('sys', 'define', 'nv_gfx_width', '150'),
 ('sys', 'define', 'nv_gfx_height', '40'),
@@ -241,7 +345,8 @@ $sql_create_table[] = 'INSERT INTO ' . NV_CRONJOBS_GLOBALTABLE . ' (start_time, 
 (' . NV_CURRENTTIME . ', 1440, "notification_autodel.php", "cron_notification_autodel", "", 0, 1, 1, 0, 0),
 (' . NV_CURRENTTIME . ', 1440, "remove_expired_inform.php", "cron_remove_expired_inform", "", 0, 1, 1, 0, 0),
 (' . NV_CURRENTTIME . ', 60, "apilogs_autodel.php", "cron_apilogs_autodel", "", 0, 1, 1, 0, 0),
-(' . NV_CURRENTTIME . ', 60, "expadmin_handling.php", "cron_expadmin_handling", "", 0, 1, 1, 0, 0)';
+(' . NV_CURRENTTIME . ', 60, "expadmin_handling.php", "cron_expadmin_handling", "", 0, 1, 1, 0, 0),
+(' . NV_CURRENTTIME . ', 360, "user_datadeletion_handling.php", "cron_user_datadeletion_handling", "", 0, 1, 1, 0, 0)';
 
 $sql_create_table[] = 'INSERT INTO ' . $db_config['prefix'] . "_setup_extensions (id, type, title, is_sys, is_virtual, basename, table_prefix, version, addtime, author, note) VALUES
 (0, 'module', 'about', 0, 0, 'page', 'about', '" . $global_config['version'] . " " . $global_config['version_time'] . "', " . NV_CURRENTTIME . ", 'VINADES.,JSC <contact@vinades.vn>', ''),

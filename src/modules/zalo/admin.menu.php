@@ -13,7 +13,7 @@ if (!defined('NV_ADMIN')) {
     exit('Stop!!!');
 }
 
-if (defined('NV_IS_GODADMIN')) {
+if (defined('NV_IS_GODADMIN') or (!empty($global_config['idsite']) and defined('NV_IS_SPADMIN'))) {
     $submenu['oa_info'] = $nv_Lang->getModule('oa_info');
     $submenu['followers'] = $nv_Lang->getModule('followers');
     $submenu['article'] = $nv_Lang->getModule('article');
@@ -23,5 +23,4 @@ if (defined('NV_IS_GODADMIN')) {
     $submenu['upload'] = $nv_Lang->getModule('upload');
     $submenu['video'] = $nv_Lang->getModule('video');
     $submenu['settings'] = $nv_Lang->getModule('settings');
-} elseif (defined('NV_IS_SPADMIN') and $global_config['idsite']) {
 }

@@ -39,7 +39,7 @@ function get_department_list()
 {
     global $nv_Cache, $module_name, $module_info;
 
-    $cache_file = NV_LANG_DATA . '_departmentlist' . NV_CACHE_PREFIX . '.cache';
+    $cache_file = 'departmentlist' . NV_CACHE_PREFIX . '.cache';
     if (($cache = $nv_Cache->getItem($module_name, $cache_file)) != false) {
         return unserialize($cache);
     }
@@ -97,7 +97,7 @@ function get_supporter_list($departments)
 {
     global $db, $nv_Cache, $module_name, $module_info;
 
-    $cache_file = NV_LANG_DATA . '_supporterlist' . NV_CACHE_PREFIX . '.cache';
+    $cache_file = 'supporterlist' . NV_CACHE_PREFIX . '.cache';
     if (($cache = $nv_Cache->getItem($module_name, $cache_file)) != false) {
         return unserialize($cache);
     }

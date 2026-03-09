@@ -68,7 +68,7 @@ if (!nv_function_exists('nv_block_global_rss')) {
             'md5contents' => '',
             'contents' => []
         ];
-        $cache_file = NV_LANG_DATA . '_' . md5($url . 'avatar') . '_' . NV_CACHE_PREFIX . '.cache';
+        $cache_file = md5($url . 'avatar') . '_' . NV_CACHE_PREFIX . '.cache';
         if (($cache = $nv_Cache->getItem('rss', $cache_file)) != false) {
             $data = json_decode($cache, true);
             empty($data['updatetime']) && $data['updatetime'] = 0;
