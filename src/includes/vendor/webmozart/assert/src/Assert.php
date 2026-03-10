@@ -472,13 +472,13 @@ class Assert
     /**
      * @psalm-pure
      *
-     * @template ExpectedType of object
+     * @template T of object
      *
-     * @psalm-assert ExpectedType $value
+     * @psalm-assert T $value
      *
-     * @param class-string<ExpectedType> $class
+     * @psalm-param class-string<T> $class
      *
-     * @return ExpectedType
+     * @return T
      *
      * @throws InvalidArgumentException
      */
@@ -498,24 +498,20 @@ class Assert
     }
 
     /**
-     * @psalm-pure
+     * @template T of object
      *
-     * @template ExpectedType of object
+     * @psalm-assert object $value
+     * @psalm-param class-string<T> $class
      *
-     * @psalm-assert !ExpectedType $value
-     *
-     * @param class-string<ExpectedType> $class
-     *
-     * @return !ExpectedType
+     * @return !T
      *
      * @throws InvalidArgumentException
      */
     public static function notInstanceOf(mixed $value, mixed $class, string $message = ''): object
     {
-        static::object($value);
         static::string($class, 'Expected class as a string. Got: %s');
 
-        if ($value instanceof $class) {
+        if (!\is_object($value) || $value instanceof $class) {
             static::reportInvalidArgument(\sprintf(
                 $message ?: 'Expected an instance other than %2$s. Got: %s',
                 static::typeToString($value),
@@ -527,19 +523,23 @@ class Assert
     }
 
     /**
-     * @psalm-pure
+     * @template T of object
      *
-     * @param array<object|string> $classes
-     * @psalm-param array<class-string> $classes
+     * @psalm-assert T $value
+     *
+     * @param T $value
+     *
+     * @return T
      *
      * @throws InvalidArgumentException
      */
     public static function isInstanceOfAny(mixed $value, mixed $classes, string $message = ''): object
     {
-        static::object($value);
         static::isIterable($classes);
 
         foreach ($classes as $class) {
+            static::string($class, 'Expected class as a string. Got: %s');
+
             if ($value instanceof $class) {
                 return $value;
             }
@@ -548,21 +548,18 @@ class Assert
         static::reportInvalidArgument(\sprintf(
             $message ?: 'Expected an instance of any of %2$s. Got: %s',
             static::typeToString($value),
-            \implode(', ', \array_map([static::class, 'valueToString'], \iterator_to_array($classes)))
+            \implode(', ', \array_map(static::valueToString(...), \iterator_to_array($classes)))
         ));
     }
 
     /**
      * @psalm-pure
      *
-     * @template ExpectedType of object
+     * @template T of object
      *
-     * @psalm-assert ExpectedType|class-string<ExpectedType> $value
+     * @psalm-assert T|class-string<T> $value
      *
-     * @param ExpectedType|class-string<ExpectedType> $value
-     * @param class-string<ExpectedType> $class
-     *
-     * @return ExpectedType|class-string<ExpectedType>
+     * @return T
      *
      * @throws InvalidArgumentException
      */
@@ -571,7 +568,7 @@ class Assert
         static::string($class, 'Expected class as a string. Got: %s');
 
         if (!\is_a($value, $class, \is_string($value))) {
-            static::reportInvalidArgument(sprintf(
+            static::reportInvalidArgument(\sprintf(
                 $message ?: 'Expected an instance of this class or to this class among its parents "%2$s". Got: %s',
                 static::valueToString($value),
                 $class
@@ -584,22 +581,23 @@ class Assert
     /**
      * @psalm-pure
      *
-     * @template UnexpectedType of object
+     * @template T
      *
-     * @param object|string $value
-     * @param class-string<UnexpectedType> $class
+     * @psalm-assert object|class-string $value
      *
-     * @psalm-return !UnexpectedType
+     * @param T $value
+     *
+     * @return T
      *
      * @throws InvalidArgumentException
      */
     public static function isNotA(mixed $value, mixed $class, string $message = ''): object|string
     {
-        static::objectish($value);
+        static::objectish($value, $message);
         static::string($class, 'Expected class as a string. Got: %s');
 
         if (\is_a($value, $class, \is_string($value))) {
-            static::reportInvalidArgument(sprintf(
+            static::reportInvalidArgument(\sprintf(
                 $message ?: 'Expected an instance of this class or to this class among its parents other than "%2$s". Got: %s',
                 static::valueToString($value),
                 $class
@@ -620,10 +618,10 @@ class Assert
      */
     public static function isAnyOf(mixed $value, mixed $classes, string $message = ''): object|string
     {
+        static::objectish($value, $message);
         static::isIterable($classes);
 
         foreach ($classes as $class) {
-            static::objectish($value);
             static::string($class, 'Expected class as a string. Got: %s');
 
             if (\is_a($value, $class, \is_string($value))) {
@@ -631,7 +629,7 @@ class Assert
             }
         }
 
-        static::reportInvalidArgument(sprintf(
+        static::reportInvalidArgument(\sprintf(
             $message ?: 'Expected an instance of any of this classes or any of those classes among their parents "%2$s". Got: %s',
             static::valueToString($value),
             \implode(', ', \iterator_to_array($classes))
@@ -1072,7 +1070,7 @@ class Assert
             static::reportInvalidArgument(\sprintf(
                 $message ?: 'Expected one of: %2$s. Got: %s',
                 static::valueToString($value),
-                \implode(', ', \array_map([static::class, 'valueToString'], $values))
+                \implode(', ', \array_map(static::valueToString(...), $values))
             ));
         }
 
@@ -1111,7 +1109,7 @@ class Assert
             static::reportInvalidArgument(\sprintf(
                 $message ?: '%2$s was not expected to contain a value. Got: %s',
                 static::valueToString($value),
-                \implode(', ', \array_map(['static', 'valueToString'], $values))
+                \implode(', ', \array_map(static::valueToString(...), $values))
             ));
         }
 
@@ -1740,7 +1738,11 @@ class Assert
     {
         static::objectish($value);
 
-        if (!\in_array($interface, \class_implements($value), true)) {
+        $implements = \class_implements($value);
+
+        static::isArray($implements);
+
+        if (!\in_array($interface, $implements, true)) {
             static::reportInvalidArgument(\sprintf(
                 $message ?: 'Expected an implementation of %2$s. Got: %s',
                 static::valueToString($value),
@@ -1984,9 +1986,9 @@ class Assert
     /**
      * @psalm-pure
      *
-     * @psalm-assert list $array
+     * @psalm-assert list<mixed> $array
      *
-     * @psalm-return list
+     * @psalm-return list<mixed>
      *
      * @throws InvalidArgumentException
      */
@@ -2004,9 +2006,9 @@ class Assert
     /**
      * @psalm-pure
      *
-     * @psalm-assert non-empty-list $array
+     * @psalm-assert non-empty-list<mixed> $array
      *
-     * @psalm-return non-empty-list
+     * @psalm-return non-empty-list<mixed>
      *
      * @throws InvalidArgumentException
      */
