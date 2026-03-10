@@ -105,9 +105,8 @@ final readonly class BigRational extends BigNumber
      * @param BigNumber|int|float|string $numerator   The numerator. Must be convertible to a BigInteger.
      * @param BigNumber|int|float|string $denominator The denominator. Must be convertible to a BigInteger.
      *
-     * @throws NumberFormatException      If an argument does not represent a valid number.
-     * @throws RoundingNecessaryException If an argument represents a non-integer number.
-     * @throws DivisionByZeroException    If the denominator is zero.
+     * @throws MathException           If an argument is not valid, or is not convertible to a BigInteger.
+     * @throws DivisionByZeroException If the denominator is zero.
      *
      * @pure
      */
@@ -314,7 +313,7 @@ final readonly class BigRational extends BigNumber
      *
      * @param BigNumber|int|float|string $that The multiplier.
      *
-     * @throws MathException If the multiplier is not a valid number.
+     * @throws MathException If the multiplier is not valid.
      *
      * @pure
      */
@@ -333,7 +332,8 @@ final readonly class BigRational extends BigNumber
      *
      * @param BigNumber|int|float|string $that The divisor.
      *
-     * @throws MathException If the divisor is not a valid number, or is zero.
+     * @throws MathException           If the divisor is not valid.
+     * @throws DivisionByZeroException If the divisor is zero.
      *
      * @pure
      */
@@ -361,9 +361,7 @@ final readonly class BigRational extends BigNumber
     public function power(int $exponent): BigRational
     {
         if ($exponent === 0) {
-            $one = BigInteger::one();
-
-            return new BigRational($one, $one, false);
+            return BigRational::one();
         }
 
         if ($exponent === 1) {
@@ -375,39 +373,6 @@ final readonly class BigRational extends BigNumber
             $this->denominator->power($exponent),
             false,
         );
-    }
-
-    /**
-     * Limits (clamps) this number between the given minimum and maximum values.
-     *
-     * If the number is lower than $min, returns a copy of $min.
-     * If the number is greater than $max, returns a copy of $max.
-     * Otherwise, returns this number unchanged.
-     *
-     * @param BigNumber|int|float|string $min The minimum. Must be convertible to a BigRational.
-     * @param BigNumber|int|float|string $max The maximum. Must be convertible to a BigRational.
-     *
-     * @throws MathException            If min/max are not convertible to a BigRational.
-     * @throws InvalidArgumentException If min is greater than max.
-     *
-     * @pure
-     */
-    public function clamp(BigNumber|int|float|string $min, BigNumber|int|float|string $max): BigRational
-    {
-        $min = BigRational::of($min);
-        $max = BigRational::of($max);
-
-        if ($min->isGreaterThan($max)) {
-            throw new InvalidArgumentException('Minimum value must be less than or equal to maximum value.');
-        }
-
-        if ($this->isLessThan($min)) {
-            return $min;
-        } elseif ($this->isGreaterThan($max)) {
-            return $max;
-        }
-
-        return $this;
     }
 
     /**
@@ -424,6 +389,7 @@ final readonly class BigRational extends BigNumber
         return new BigRational($this->denominator, $this->numerator, true);
     }
 
+    #[Override]
     public function negated(): static
     {
         return new BigRational($this->numerator->negated(), $this->denominator, false);
@@ -447,7 +413,15 @@ final readonly class BigRational extends BigNumber
     #[Override]
     public function compareTo(BigNumber|int|float|string $that): int
     {
-        return $this->minus($that)->getSign();
+        $that = BigRational::of($that);
+
+        if ($this->denominator->isEqualTo($that->denominator)) {
+            return $this->numerator->compareTo($that->numerator);
+        }
+
+        return $this->numerator
+            ->multipliedBy($that->denominator)
+            ->compareTo($that->numerator->multipliedBy($this->denominator));
     }
 
     #[Override]
@@ -508,7 +482,7 @@ final readonly class BigRational extends BigNumber
         // decimal places (not significant digits), we subtract the estimated order of magnitude so that large results
         // use fewer decimal places and small results use more (to look past leading zeros). Clamped to [0, 350] as
         // doubles range from e-324 to e308 (350 ≈ 324 + 20 significant digits + margin).
-        $magnitude = strlen((string) $simplified->numerator->abs()) - strlen((string) $simplified->denominator);
+        $magnitude = strlen($simplified->numerator->abs()->toString()) - strlen($simplified->denominator->toString());
         $scale = min(350, max(0, 20 - $magnitude));
 
         return $simplified->numerator
@@ -517,18 +491,32 @@ final readonly class BigRational extends BigNumber
             ->toFloat();
     }
 
+    #[Override]
+    public function toString(): string
+    {
+        $numerator = $this->numerator->toString();
+        $denominator = $this->denominator->toString();
+
+        if ($denominator === '1') {
+            return $numerator;
+        }
+
+        return $numerator . '/' . $denominator;
+    }
+
     /**
      * Returns the decimal representation of this rational number, with repeating decimals in parentheses.
+     *
+     * WARNING: This method is unbounded.
+     *          The length of the repeating decimal period can be as large as `denominator - 1`.
+     *          For fractions with large denominators, this method can use excessive memory and CPU time.
+     *          For example, `1/100019` has a repeating period of 100,018 digits.
      *
      * Examples:
      *
      * - `10/3` returns `3.(3)`
      * - `171/70` returns `2.4(428571)`
      * - `1/2` returns `0.5`
-     *
-     * Warning: the length of the repeating decimal period can be as large as `denominator - 1`.
-     * For fractions with large denominators, this method may use excessive memory and time.
-     * For example, `1/100019` has a repeating period of 100,018 digits.
      *
      * @pure
      */
@@ -545,7 +533,7 @@ final readonly class BigRational extends BigNumber
         $integral = $numerator->quotient($denominator);
         $remainder = $numerator->remainder($denominator);
 
-        $integralString = (string) $integral;
+        $integralString = $integral->toString();
 
         if ($remainder->isZero()) {
             return $sign . $integralString;
@@ -556,7 +544,7 @@ final readonly class BigRational extends BigNumber
         $index = 0;
 
         while (! $remainder->isZero()) {
-            $remainderString = (string) $remainder;
+            $remainderString = $remainder->toString();
 
             if (isset($remainderPositions[$remainderString])) {
                 $repeatIndex = $remainderPositions[$remainderString];
@@ -569,25 +557,12 @@ final readonly class BigRational extends BigNumber
             $remainderPositions[$remainderString] = $index;
             $remainder = $remainder->multipliedBy(10);
 
-            $digits .= (string) $remainder->quotient($denominator);
+            $digits .= $remainder->quotient($denominator)->toString();
             $remainder = $remainder->remainder($denominator);
             $index++;
         }
 
         return $sign . $integralString . '.' . $digits;
-    }
-
-    #[Override]
-    public function __toString(): string
-    {
-        $numerator = (string) $this->numerator;
-        $denominator = (string) $this->denominator;
-
-        if ($denominator === '1') {
-            return $numerator;
-        }
-
-        return $numerator . '/' . $denominator;
     }
 
     /**
