@@ -1,12 +1,19 @@
 ---
 name: nukeviet-api
-description: Tạo và làm việc với NukeViet Remote API. Load khi nhắc đến API, tạo endpoint, kết nối từ xa.
+description: Tạo và làm việc với NukeViet API (Remote API và Local API). Load khi nhắc đến API, tạo endpoint, kết nối từ xa hoặc gọi API nội bộ.
 allowed-tools: Read, Write, Bash
 ---
 
-# Hướng Dẫn NukeViet Remote API (NukeViet 5.x)
+# Hướng Dẫn NukeViet API (NukeViet 5.x)
 
-NukeViet 5 được tích hợp sẵn hệ thống **Remote API** chạy thông qua file `api.php` ở thư mục gốc. Hệ thống này được chia làm 2 phân vùng quyền rõ rệt:
+NukeViet 5 được tích hợp sẵn hệ thống **API** với 2 cơ chế gọi:
+
+- **Remote API**: Gọi qua HTTP thông qua file `api.php` (từ bên ngoài, Mobile App, hệ thống khác).
+- **Local API**: Gọi trực tiếp trong PHP qua hàm `nv_local_api()` (nội bộ, cùng tiến trình, không qua HTTP).
+
+Cả 2 cơ chế **dùng chung API class**, nghĩa là viết 1 class API → gọi được cả Remote lẫn Local.
+
+Hệ thống Remote API được chia làm 2 phân vùng quyền rõ rệt:
 
 1. **Admin API (`\NukeViet\Api\IApi`)**: Dành cho quản trị viên, đòi hỏi xác thực chặt chẽ (IP, Lev, Quota). Các file được lưu trong `src/modules/[moduleName]/Api/[Action].php`.
 2. **User API (`\NukeViet\Uapi\UiApi`)**: Dành cho public hoặc User bình thường, vẫn kiểm soát Quota nhưng bảo mật lỏng hơn (Ví dụ: Ứng dụng mobile cho khách hàng). Các file được lưu trong `src/modules/[moduleName]/Uapi/[Action].php`.
@@ -259,3 +266,98 @@ public function execute()
 ```
 
 > **Lưu ý:** Theo `api.php`, khi `!empty($api_request['module'])`, hệ thống đã tự gọi `$nv_Lang->loadModule()` nên DEV không phải load lại. Chỉ cần tự load khi viết API hệ thống (`apidir = 'Uapi'`, không có module).
+
+---
+
+## 6. Local API (`nv_local_api`)
+
+### 6.1. Local API là gì?
+
+Local API cho phép **gọi cùng class API** (Admin API `IApi`) trực tiếp trong PHP mà **không qua HTTP**. Hệ thống sẽ:
+1. Resolve class API từ namespace
+2. Kiểm tra quyền admin (theo admin đang đăng nhập hoặc theo `$adminidentity` truyền vào)
+3. Inject `$params` vào `$_POST` → chạy `$api->execute()` → khôi phục `$_POST`
+4. Trả về chuỗi JSON kết quả
+
+### 6.2. Signature
+
+```php
+function nv_local_api($cmd, $params, $adminidentity = '', $module = '')
+```
+
+| Tham số | Kiểu | Mô tả |
+|---|---|---|
+| `$cmd` | string | Tên class API (PascalCase). Ví dụ: `'GetList'`, `'CreateItem'` |
+| `$params` | array | Mảng dữ liệu truyền vào API (sẽ được inject vào `$_POST`) |
+| `$adminidentity` | string | Username hoặc userid admin. Rỗng = dùng admin đang đăng nhập |
+| `$module` | string | Tên module. Rỗng = gọi API hệ thống (`NukeViet\Api\{$cmd}`) |
+
+**Trả về:** Chuỗi JSON (cần `json_decode` để xử lý).
+
+### 6.3. So sánh Remote vs Local API
+
+| Tiêu chí | Remote API | Local API |
+|---|---|---|
+| **Cơ chế** | HTTP request qua `api.php` | Gọi trực tiếp trong PHP |
+| **Class API** | Dùng chung | Dùng chung |
+| **Xác thực** | API Key + Secret + IP | Admin session hoặc `$adminidentity` |
+| **Hiệu suất** | Chậm hơn (qua HTTP) | Nhanh (in-process) |
+| **Khi nào dùng** | Mobile App, hệ thống ngoài, SPA | Module gọi chéo, admin function, tái sử dụng logic |
+
+### 6.4. Template gọi Local API trong Admin Function
+
+Ví dụ gọi API `GetList` của module `news` trong một admin function:
+
+```php
+// Chuẩn bị tham số
+$params = [
+    'limit' => 10,
+    'page'  => 1,
+    'catid' => $nv_Request->get_int('catid', 'post,get', 0)
+];
+
+// Gọi Local API
+$json_result = nv_local_api('GetList', $params, $admin_info['username'], $module_name);
+
+// Xử lý kết quả
+$result = json_decode($json_result, true);
+
+if ($result['code'] == '0000') {
+    // Thành công - dùng $result['data']
+    $items = $result['data']['items'];
+    $total = $result['data']['total'];
+} else {
+    // Lỗi
+    $error = $result['message'];
+}
+```
+
+### 6.5. Các pattern sử dụng phổ biến
+
+**a) Tái sử dụng logic giữa các function admin:**
+```php
+// Trong funcs/edit.php - lấy chi tiết bản ghi bằng API đã có
+$detail = nv_local_api('GetDetail', ['id' => $id], $admin_info['username'], $module_name);
+$detail = json_decode($detail, true);
+```
+
+**b) Module gọi API của module khác:**
+```php
+// Module "order" gọi API của module "products" để lấy sản phẩm
+$product = nv_local_api('GetProduct', ['product_id' => $pid], $admin_info['username'], 'products');
+$product = json_decode($product, true);
+```
+
+**c) Gọi API hệ thống (không thuộc module nào):**
+```php
+// $module rỗng → resolve class NukeViet\Api\{$cmd}
+$sys_result = nv_local_api('SystemInfo', [], $admin_info['username']);
+```
+
+### 6.6. Lưu ý quan trọng
+
+- `nv_local_api()` chỉ hỗ trợ class **Admin API** (`IApi`). Không hỗ trợ gọi Uapi.
+- Kết quả trả về là **chuỗi JSON**, luôn cần `json_decode($result, true)` trước khi sử dụng.
+- Kiểm tra `$result['code'] == '0000'` để biết thành công hay thất bại.
+- Hàm tự động backup/restore `$_POST`, nên an toàn khi gọi giữa chừng trong function.
+
