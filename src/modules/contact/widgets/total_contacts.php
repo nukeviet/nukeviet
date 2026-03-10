@@ -29,7 +29,7 @@ $widget_info = [
         $cacheTTL = 1800;
 
         if (($cache = $nv_Cache->getItem($module_name, $cacheFile, ttl: $cacheTTL)) != false) {
-            $_arr_siteinfo = unserialize($cache);
+            $_arr_siteinfo = unserialize($cache, ['allowed_classes' => false]);
         } else {
             $_arr_siteinfo['total_contacts'] = $db->query('SELECT COUNT(*) FROM ' . NV_PREFIXLANG . '_' . $module_data . '_send')->fetchColumn();
 

@@ -42,14 +42,14 @@ function department_fix_weight($skip_id = 0, $skip_weight = 0)
     }
 }
 
-$page_url = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op;
+$checkss_expected = hash_hmac('sha256', NV_CHECK_SESSION . '_' . $module_name . '_' . $op . '_' . $admin_info['userid'], NV_CACHE_PREFIX);
+$page_url = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op;
 
 if (defined('NV_IS_SPADMIN')) {
     if ($nv_Request->isset_request('fc', 'post')) {
-
         $fc = $nv_Request->get_string('fc', 'post', '');
         $checkss = $nv_Request->get_string('checkss', 'post', '');
-        if ($checkss != md5(NV_CHECK_SESSION . '_' . $module_name . '_' . $op . '_' . $admin_info['userid'])) {
+        if (!hash_equals($checkss_expected, $checkss)) {
             nv_jsonOutput([
                 'status' => 'error',
                 'mess' => $nv_Lang->getGlobal('error_code_11')
@@ -133,7 +133,7 @@ if (defined('NV_IS_SPADMIN')) {
                     $post['email'] = implode(', ', $email);
                 }
 
-                if (is_file(NV_DOCUMENT_ROOT . $post['image'])) {
+                if (nv_is_file($post['image'], NV_UPLOADS_DIR . '/' . $module_upload)) {
                     $post['image'] = substr($post['image'], strlen(NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/'));
                 } else {
                     $post['image'] = '';
@@ -222,7 +222,7 @@ if (defined('NV_IS_SPADMIN')) {
                     trigger_error($e->getMessage());
                 }
             } else {
-                if (!empty($department['image']) and is_file(NV_UPLOADS_REAL_DIR . '/' . $module_upload . '/' . $department['image'])) {
+                if (!empty($department['image']) and nv_is_file($department['image'], NV_UPLOADS_DIR . '/' . $module_upload)) {
                     $department['image'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $department['image'];
                 } else {
                     $department['image'] = '';
@@ -231,7 +231,7 @@ if (defined('NV_IS_SPADMIN')) {
                 if (!empty($department['others'])) {
                     $others = json_decode($department['others'], true);
                     if (json_last_error() !== JSON_ERROR_NONE) {
-                        $others = unserialize($department['others']);
+                        $others = unserialize($department['others'], ['allowed_classes' => false]);
                     }
                     $department['others'] = $others;
                 }
@@ -266,7 +266,8 @@ if (defined('NV_IS_SPADMIN')) {
                 $tpl->assign('LANG', $nv_Lang);
                 $tpl->assign('MODULE_NAME', $module_name);
                 $tpl->assign('OP', $op);
-                $tpl->assign('CHECKSS', md5(NV_CHECK_SESSION . '_' . $module_name . '_' . $op . '_' . $admin_info['userid']));
+                $tpl->assign('CHECKSS', $checkss_expected);
+                $tpl->assign('FORM_ACTION', $page_url);
                 $tpl->assign('DEPARTMENT', $department);
                 $tpl->assign('NV_ADMIN_THEME', $global_config['admin_theme']);
                 $tpl->assign('MODULE_UPLOAD', $module_upload);
@@ -442,7 +443,7 @@ if ($nv_Request->isset_request('id', 'get')) {
     if (!empty($department['others'])) {
         $_others = json_decode($department['others'], true);
         if (json_last_error() !== JSON_ERROR_NONE) {
-            $_others = unserialize($department['others']);
+            $_others = unserialize($department['others'], ['allowed_classes' => false]);
         }
 
         $department['others'] = $_others;
@@ -500,7 +501,8 @@ $tpl->setTemplateDir(get_module_tpl_dir('department.tpl'));
 $tpl->assign('LANG', $nv_Lang);
 $tpl->assign('MODULE_NAME', $module_name);
 $tpl->assign('OP', $op);
-$tpl->assign('CHECKSS', md5(NV_CHECK_SESSION . '_' . $module_name . '_' . $op . '_' . $admin_info['userid']));
+$tpl->assign('CHECKSS', $checkss_expected);
+$tpl->assign('OP_URL', $page_url);
 $tpl->assign('DEPARTMENTS', $departments);
 
 $contents = $tpl->fetch('department.tpl');

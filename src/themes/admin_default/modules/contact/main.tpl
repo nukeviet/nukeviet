@@ -31,9 +31,9 @@
             </tfoot>
             <tbody>
                 <!-- BEGIN: row -->
-                <tr class="item" title="{ROW.status}" data-url="{ROW.onclick}"<!-- BEGIN: is_processed --> style="color:#aaa"<!-- END: is_processed -->>
+                <tr class="item" title="{ROW.status}" data-url="{ROW.onclick}" <!-- BEGIN: is_processed --> style="color:#aaa"<!-- END: is_processed -->>
                     <td class="text-center" style="width:1%;">
-                        <input class="form-control" name="sends[]" type="checkbox" value="{ROW.id}" data-toggle="checkSingle"{ROW.disabled} />
+                        <input class="form-control" name="sends[]" type="checkbox" value="{ROW.id}" data-toggle="checkSingle" {ROW.disabled} />
                     </td>
                     <td class="pointer text-nowrap text-center view_feedback" style="width:1%{ROW.style}">
                         <!-- BEGIN: process --><span class="fa fa-spinner fa-spin"></span><!-- END: process -->

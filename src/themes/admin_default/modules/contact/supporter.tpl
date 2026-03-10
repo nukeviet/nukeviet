@@ -151,6 +151,7 @@
     </div>
 
     <div class="text-right">
+        <input type="hidden" name="checkss" value="{CHECKSS}">
         <input type="hidden" name="fc" value="content">
         <input type="hidden" name="id" value="{SUPPORTER.id}">
         <input type="hidden" name="save" value="1">

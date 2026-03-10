@@ -3,6 +3,7 @@
     <div class="col-lg-16">
         <form method="post" action="{FORM_ACTION}" class="send-form">
             <input name="save" type="hidden" value="1" />
+            <input name="checkss" type="hidden" value="{CHECKSS}" />
             <div class="table-responsive">
                 <table class="table table-striped table-bordered">
                     <tfoot>
@@ -17,7 +18,7 @@
                             <td>
                                 <select name="mail_lang" class="form-control" style="width:fit-content">
                                     <!-- BEGIN: loop -->
-                                    <option value="{MAIL_LANG.key}"{MAIL_LANG.sel}>{MAIL_LANG.name}</option>
+                                    <option value="{MAIL_LANG.key}" {MAIL_LANG.sel}>{MAIL_LANG.name}</option>
                                     <!-- END: loop -->
                                 </select>
                             </td>

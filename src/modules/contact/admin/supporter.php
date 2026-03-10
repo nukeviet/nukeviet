@@ -42,7 +42,17 @@ function supporter_fix_weight($departmentid, $skip_id = 0, $skip_weight = 0)
 
 $page_url = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op;
 
+$checkss_expected = hash_hmac('sha256', NV_CHECK_SESSION . '_' . $module_name . '_' . $op . '_' . $admin_info['userid'], NV_CACHE_PREFIX);
+
 if ($nv_Request->isset_request('fc', 'post')) {
+    $checkss = $nv_Request->get_string('checkss', 'post', '');
+    if (!hash_equals($checkss_expected, $checkss)) {
+        nv_jsonOutput([
+            'status' => 'error',
+            'mess' => 'Error: Invalid CSRF token'
+        ]);
+    }
+
     $fc = $nv_Request->get_string('fc', 'post', '');
     // Thay đổi thứ tự
     if ($fc == 'change_weight') {
@@ -133,7 +143,7 @@ if ($nv_Request->isset_request('fc', 'post')) {
                 ]);
             }
 
-            if (is_file(NV_DOCUMENT_ROOT . $post['image'])) {
+            if (nv_is_file($post['image'], NV_UPLOADS_DIR . '/' . $module_upload)) {
                 $size = getimagesize(NV_DOCUMENT_ROOT . $post['image']);
                 if (empty($size[0]) or $size[0] < 100 or $size[0] > 300 or $size[0] != $size[1]) {
                     nv_jsonOutput([
@@ -156,7 +166,8 @@ if ($nv_Request->isset_request('fc', 'post')) {
                     }
                 }
             }
-            $post['others'] = !empty($others) ? json_encode($others) : '';
+
+            $post['others'] = !empty($others) ? json_encode($others, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) : '';
             try {
                 if (empty($id)) {
                     nv_insert_logs(NV_LANG_DATA, $module_name, 'LOG_ADD_SUPPORTER', 'NAME: ' . $post['full_name'], $admin_info['userid']);
@@ -208,9 +219,10 @@ if ($nv_Request->isset_request('fc', 'post')) {
             }
 
             if (!empty($supporter['others'])) {
-                $supporter['others'] = json_decode($supporter['others'], true);
+                $_others = $supporter['others'];
+                $supporter['others'] = json_decode($_others, true);
                 if (json_last_error() !== JSON_ERROR_NONE) {
-                    $supporter['others'] = unserialize($supporter['others']);
+                    $supporter['others'] = unserialize($_others, ['allowed_classes' => false]);
                 }
             }
             if (empty($supporter['others'])) {
@@ -318,6 +330,7 @@ if (!empty($supporters)) {
 $xtpl = new XTemplate($op . '.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
 $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
 $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
+$xtpl->assign('CHECKSS', $checkss_expected);
 $xtpl->assign('OP_URL', $page_url);
 
 if (!empty($list)) {

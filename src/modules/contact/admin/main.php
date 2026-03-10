@@ -15,6 +15,7 @@ if (!defined('NV_IS_FILE_ADMIN')) {
 
 $page_title = $module_info['site_title'];
 $contact_allowed = nv_getAllowed();
+$checkss_expected = hash_hmac('sha256', NV_CHECK_SESSION . '_' . $module_name . '_' . $op . '_' . $admin_info['userid'], NV_CACHE_PREFIX);
 
 if (!empty($contact_allowed['reply'])) {
     $db_deps = 'cid IN (' . implode(',', array_keys($contact_allowed['reply'])) . ')';
@@ -32,7 +33,7 @@ if (!empty($contact_allowed['reply'])) {
         }
 
         $checkss = $nv_Request->get_title('checkss', 'post', '');
-        if ($checkss != md5(NV_CHECK_SESSION . '_' . $module_name . '_' . $admin_info['userid'])) {
+        if (!hash_equals($checkss_expected, $checkss)) {
             nv_jsonOutput([
                 'status' => 'error',
                 'mess' => $nv_Lang->getGlobal('error_code_11')
@@ -169,8 +170,8 @@ if (!empty($contact_allowed['exec'])) {
     $checkss = $nv_Request->get_title('checkss', 'post', '');
     // Đánh dấu phản hồi đã đọc/chưa đọc, đã xử lý/chưa xử lý
     if ($nv_Request->isset_request('mark', 'post')) {
-        if ($checkss != md5(string: NV_CHECK_SESSION . '_' . $module_name . '_' . $admin_info['userid'])) {
-            nv_jsonOutput(array_data: [
+        if (!hash_equals($checkss_expected, $checkss)) {
+            nv_jsonOutput([
                 'status' => 'error',
                 'mess' => $nv_Lang->getGlobal('error_code_11')
             ]);
@@ -211,7 +212,7 @@ if (!empty($contact_allowed['exec'])) {
 
     // Xóa phản hồi
     if ($nv_Request->isset_request('delete', 'post')) {
-        if ($checkss != md5(NV_CHECK_SESSION . '_' . $module_name . '_' . $admin_info['userid'])) {
+        if (!hash_equals($checkss_expected, $checkss)) {
             nv_jsonOutput([
                 'status' => 'error',
                 'mess' => $nv_Lang->getGlobal('error_code_11')
@@ -351,7 +352,7 @@ if (!empty($contact_allowed['view'])) {
         $tpl->assign('LANG', $nv_Lang);
         $tpl->assign('MODULE_NAME', $module_name);
         $tpl->assign('OP', $op);
-        $tpl->assign('CHECKSS', md5(NV_CHECK_SESSION . '_' . $module_name . '_' . $admin_info['userid']));
+        $tpl->assign('CHECKSS', $checkss_expected);
         $tpl->assign('DATA', $row);
         $tpl->assign('ADMINS', $admins);
         $tpl->assign('DEPARTMENTS', $departments);
@@ -447,7 +448,7 @@ $tpl->setTemplateDir(get_module_tpl_dir('main.tpl'));
 $tpl->assign('LANG', $nv_Lang);
 $tpl->assign('MODULE_NAME', $module_name);
 $tpl->assign('OP', $op);
-$tpl->assign('CHECKSS', md5(NV_CHECK_SESSION . '_' . $module_name . '_' . $admin_info['userid']));
+$tpl->assign('CHECKSS', $checkss_expected);
 if (!empty($contact_allowed['view'])) {
     $in = implode(',', array_keys($contact_allowed['view']));
 

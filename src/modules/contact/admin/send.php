@@ -17,7 +17,16 @@ if (defined('NV_EDITOR')) {
     require_once NV_ROOTDIR . '/' . NV_EDITORSDIR . '/' . NV_EDITOR . '/nv.php';
 }
 
+$checkss_expected = hash_hmac('sha256', NV_CHECK_SESSION . '_' . $module_name . '_' . $op . '_' . $admin_info['userid'], NV_CACHE_PREFIX);
+
 if ($nv_Request->isset_request('save', 'post')) {
+    $checkss = $nv_Request->get_string('checkss', 'post', '');
+    if (!hash_equals($checkss_expected, $checkss)) {
+        nv_jsonOutput([
+            'status' => 'error',
+            'mess' => $nv_Lang->getModule('error_security_code')
+        ]);
+    }
     $post = [
         'mail_lang' => $nv_Request->get_title('mail_lang', 'post', ''),
         'title' => $nv_Request->get_title('title', 'post', ''),
@@ -110,6 +119,7 @@ $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
 $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
 
 $xtpl->assign('FORM_ACTION', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op);
+$xtpl->assign('CHECKSS', $checkss_expected);
 $xtpl->assign('MESS_CONTENT', $mess_content);
 
 if (count($global_config['setup_langs']) > 1) {

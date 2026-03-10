@@ -4,7 +4,7 @@
         <table class="table table-striped table-bordered">
             <tfoot>
                 <tr>
-                    <td colspan="2" class="text-center"><input type="hidden" name="save" value="1"><input type="submit" value="{LANG.save}" class="btn btn-primary" /></td>
+                    <td colspan="2" class="text-center"><input type="hidden" name="checkss" value="{CHECKSS}"><input type="hidden" name="save" value="1"><input type="submit" value="{LANG.save}" class="btn btn-primary" /></td>
                 </tr>
             </tfoot>
             <tbody>
