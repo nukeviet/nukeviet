@@ -1,4 +1,13 @@
 <?php
+ 
+/**
+ * NukeViet Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2026 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
+ */
 if (!defined('NV_ADMIN') or !defined('NV_MAINFILE')) {
     exit('Stop!!!');
 }
@@ -9,7 +18,7 @@ $module_version = [
     'is_sysmod'   => 0,
     'virtual'     => 1,
     'version'     => '5.0.00',
-    'date'        => 'Mon, 1 Jan 2025 00:00:00 GMT',
+    'date'        => 'Thu, 1 Jan 2026 00:00:00 GMT',
     'author'      => 'Tác giả',
     'note'        => '',
     'uploads_dir' => [$module_upload],  // dùng $module_upload, không phải $module_name
