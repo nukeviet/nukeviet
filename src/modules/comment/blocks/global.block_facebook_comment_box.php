@@ -29,15 +29,15 @@ if (!nv_function_exists('nv_facebook_comment_box_blocks')) {
 
         $html .= '<div class="row mb-3">';
         $html .= '	<label class="col-sm-3 col-form-label text-sm-end text-truncate fw-medium">' . $nv_Lang->getModule('facebookappid') . ':</label>';
-        $html .= '	<div class="col-sm-9"><input class="form-control" type="text" name="config_facebookappid" value="' . $data_block['facebookappid'] . '"/></div>';
+        $html .= '	<div class="col-sm-9"><input class="form-control" type="text" name="config_facebookappid" value="' . nv_htmlspecialchars($data_block['facebookappid']) . '"/></div>';
         $html .= '</div>';
         $html .= '<div class="row mb-3">';
         $html .= '	<label class="col-sm-3 col-form-label text-sm-end text-truncate fw-medium">' . $nv_Lang->getModule('width') . ':</label>';
-        $html .= '	<div class="col-sm-9"><input class="form-control" type="text" name="config_width" value="' . $data_block['width'] . '"/></div>';
+        $html .= '	<div class="col-sm-9"><input class="form-control" type="text" name="config_width" value="' . nv_htmlspecialchars($data_block['width']) . '"/></div>';
         $html .= '</div>';
         $html .= '<div class="row mb-3">';
         $html .= ' <label class="col-sm-3 col-form-label text-sm-end text-truncate fw-medium">' . $nv_Lang->getModule('numpost') . ':</label>';
-        $html .= ' <div class="col-sm-9"><input class="form-control" type="text" name="config_numpost" value="' . $data_block['numpost'] . '"/></div>';
+        $html .= ' <div class="col-sm-9"><input class="form-control" type="text" name="config_numpost" value="' . nv_htmlspecialchars($data_block['numpost']) . '"/></div>';
         $html .= '</div>';
 
         $html .= '<div class="row mb-3">';
@@ -70,7 +70,7 @@ if (!nv_function_exists('nv_facebook_comment_box_blocks')) {
         $return['error'] = [];
         $return['config'] = [];
         $return['config']['facebookappid'] = $nv_Request->get_title('config_facebookappid', 'post', 0);
-        $return['config']['width'] = $nv_Request->get_string('config_width', 'post', 0);
+        $return['config']['width'] = $nv_Request->get_title('config_width', 'post', '');
         $return['config']['numpost'] = $nv_Request->get_int('config_numpost', 'post', 0);
         $return['config']['scheme'] = $nv_Request->get_title('config_scheme', 'post', 0);
 
