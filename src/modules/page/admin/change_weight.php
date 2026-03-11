@@ -17,7 +17,7 @@ $checkss = $nv_Request->get_title('checkss', 'post', '');
 $id = $nv_Request->get_int('id', 'post', 0);
 $new_weight = $nv_Request->get_int('new_weight', 'post', 0);
 
-if (empty($id) or empty($new_weight) or $checkss != md5($id . NV_CHECK_SESSION)) {
+if (empty($id) or empty($new_weight) or !hash_equals(md5($id . NV_CHECK_SESSION), (string) $checkss)) {
     nv_jsonOutput([
         'success' => 0,
         'text' => 'Wrong data!'

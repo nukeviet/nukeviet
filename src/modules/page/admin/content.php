@@ -50,7 +50,7 @@ $groups_list = nv_groups_list();
 $checkss = md5(NV_CHECK_SESSION . '-' . $module_name . '-' . $op . '-' . $id);
 
 // Xử lý khi lưu (AJAX)
-if ($checkss == $nv_Request->get_string('checkss', 'post')) {
+if (hash_equals($checkss, $nv_Request->get_string('checkss', 'post', ''))) {
     $respon = [
         'status' => 'error',
         'mess' => '',

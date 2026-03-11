@@ -18,7 +18,7 @@ $cacheFile = 'sitemap_' . NV_CACHE_PREFIX . '.cache';
 $cacheTTL = 7200;
 
 if (($cache = $nv_Cache->getItem($module_name, $cacheFile, ttl: $cacheTTL)) != false) {
-    $url = unserialize($cache);
+    $url = unserialize($cache, ['allowed_classes' => false]);
 } else {
     $sql = 'SELECT alias,add_time FROM ' . NV_PREFIXLANG . '_' . $module_data . ' WHERE status=1';
     $result = $db_slave->query($sql);

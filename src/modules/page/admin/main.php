@@ -41,7 +41,7 @@ foreach ($_rows as $row) {
     if ($iw != $row['weight']) {
         $row['weight'] = $iw;
         $sth = $db->prepare('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . ' SET weight=' . $row['weight'] . ' WHERE id= :id');
-        $sth->bindParam(':id', $row['id'], PDO::PARAM_STR);
+        $sth->bindParam(':id', $row['id'], PDO::PARAM_INT);
         $sth->execute();
         $is_delCache = true;
     }

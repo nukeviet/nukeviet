@@ -41,7 +41,7 @@ if (!nv_function_exists('nv_message_page')) {
             $cache_file = $cache_files[$num];
 
             if (($cache = $nv_Cache->getItem($module, $cache_file)) != false) {
-                $cache = unserialize($cache);
+                $cache = unserialize($cache, ['allowed_classes' => false]);
                 $link = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module . '&amp;' . NV_OP_VARIABLE . '=' . $cache['alias'] . $global_config['rewrite_exturl'];
                 $title = $cache['page_title'];
                 $bodytext = strip_tags($cache['bodytext']);
@@ -77,8 +77,6 @@ if (!nv_function_exists('nv_message_page')) {
         $xtpl->parse('main');
 
         return $xtpl->text('main');
-
-        return '';
     }
 }
 
