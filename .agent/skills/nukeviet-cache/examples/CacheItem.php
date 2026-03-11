@@ -7,10 +7,10 @@
 
 // Ví dụ lưu mảng:
 $data = ['name' => 'NukeViet', 'version' => '5.0'];
-$nv_Cache->setItem('my_module', 'settings.cache', serialize($data));
+$nv_Cache->setItem('my_module', 'settings.cache', json_encode($data, JSON_UNESCAPED_UNICODE));
 
 // Đọc lại
 $cache = $nv_Cache->getItem('my_module', 'settings.cache');
 if ($cache !== false) {
-    $data = unserialize($cache);
+    $data = json_decode($cache, true);
 }

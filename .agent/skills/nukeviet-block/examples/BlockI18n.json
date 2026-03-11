@@ -5,14 +5,14 @@
     "i18n": {
         "vi": {
             "info": { "name": "Block Demo (VI)" },
-            "config": {
+            "language": {
                 "numrow": "Số dòng hiển thị",
                 "show_title": "Hiển thị tiêu đề"
             }
         },
         "en": {
             "info": { "name": "Block Demo (EN)" },
-            "config": {
+            "language": {
                 "numrow": "Number of rows",
                 "show_title": "Show title"
             }

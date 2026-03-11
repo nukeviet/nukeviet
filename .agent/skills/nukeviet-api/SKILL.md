@@ -70,12 +70,17 @@ public function execute()
 
     // Load ngôn ngữ module trước khi dùng $lang_module
     // (trong luồng API, Core không tự load ngôn ngữ module)
-    $nv_Lang->loadModule($module_info['module_file']); // api.php đã gọi khi adminLev+module
-    // Nếu Uapi module: cũng đã được load tự động trong src/api.php (dòng 302)
+    $nv_Lang->loadModule($module_info['module_file'], false, true); // api.php đã gọi khi adminLev+module
+    // Nếu Uapi module: cũng đã được load tự động trong src/api.php
     // Chỉ cần load thủ công khi viết system Api không gắn với module
+    // Tham số thứ 3 = true để load tạm, tránh đè mất ngôn ngữ chính của module hiện tại (nếu có)
 
     // Sau đó dùng bình thường
     $message = $lang_module['hello'];
+
+    // Trước khi kết thúc cần hủy lang tạm
+    $nv_Lang->changeLang();
+
     // ...
 }
 ```
