@@ -57,7 +57,12 @@ if ($nv_Request->get_int('save', 'post') == '1') {
         $exp_time_custom = 0;
     }
 
-    if (empty($title)) {
+    $checkss = $nv_Request->get_title('checkss', 'post', '');
+    $checkss_expected = hash_hmac('sha256', NV_CHECK_SESSION . '_' . $module_name . '_' . $op . '_' . $admin_info['userid'], NV_CACHE_PREFIX);
+
+    if (!hash_equals($checkss_expected, $checkss)) {
+        $error = 'Error: CSRF detected';
+    } elseif (empty($title)) {
         $error = $nv_Lang->getModule('title_empty');
     } elseif ($width < 50 or $height < 50) {
         $error = $nv_Lang->getModule('size_incorrect');
@@ -114,6 +119,7 @@ $allow_langs = array_flip($global_config['allow_sitelangs']);
 $allow_langs = array_intersect_key($language_array, $allow_langs);
 
 $contents = [];
+$contents['checkss'] = hash_hmac('sha256', NV_CHECK_SESSION . '_' . $module_name . '_' . $op . '_' . $admin_info['userid'], NV_CACHE_PREFIX);
 $contents['info'] = $info;
 $contents['is_error'] = $is_error;
 $contents['submit'] = $nv_Lang->getModule('add_plan');

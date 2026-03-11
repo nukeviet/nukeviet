@@ -548,6 +548,7 @@ class Request
     {
         $this->referer = Site::getEnv(['HTTP_REFERER', 'Referer']);
         if (!empty($this->referer)) {
+            $this->referer = str_replace(['<', '>', '"', "'", "\r", "\n", "\t"], '', $this->referer);
             $ref = parse_url($this->referer);
             if (isset($ref['scheme']) and in_array($ref['scheme'], ['http', 'https', 'ftp', 'gopher'], true) and isset($ref['host'])) {
                 $this->ref_origin = ($ref['scheme'] . '://' . $ref['host'] . ((isset($ref['port']) and $ref['port'] != '80' and $ref['port'] != '443') ? (':' . $ref['port']) : ''));

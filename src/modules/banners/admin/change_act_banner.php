@@ -18,8 +18,10 @@ if (!defined('NV_IS_AJAX')) {
 }
 
 $id = $nv_Request->get_int('id', 'post', 0);
+$checkss = $nv_Request->get_title('checkss', 'post,get', '');
+$checkss_expected = hash_hmac('sha256', NV_CHECK_SESSION . '_' . $module_name . '_' . $op . '_' . $admin_info['userid'], NV_CACHE_PREFIX);
 
-if (empty($id)) {
+if (empty($id) or !hash_equals($checkss_expected, $checkss)) {
     nv_htmlOutput('NO|act_' . $id);
 }
 

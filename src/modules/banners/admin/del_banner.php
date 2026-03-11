@@ -13,6 +13,13 @@ if (!defined('NV_IS_FILE_ADMIN')) {
     exit('Stop!!!');
 }
 $id = $nv_Request->get_int('id', 'post,get');
+$checkss = $nv_Request->get_title('checkss', 'post,get', '');
+$checkss_expected = hash_hmac('sha256', NV_CHECK_SESSION . '_' . $module_name . '_' . $op . '_' . $admin_info['userid'], NV_CACHE_PREFIX);
+
+if (empty($id) or !hash_equals($checkss_expected, $checkss)) {
+    echo $nv_Lang->getModule('delfile_error');
+    exit();
+}
 
 $sql = 'SELECT * FROM ' . NV_BANNERS_GLOBALTABLE . '_rows WHERE id=' . $id;
 $row = $db->query($sql)->fetch();

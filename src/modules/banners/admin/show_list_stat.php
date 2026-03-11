@@ -130,7 +130,9 @@ while ($row = $result->fetch()) {
     $contents['rows'][$a][] = isset($countries[$row['click_country']]) ? $countries[$row['click_country']][1] : $row['click_country'];
     $contents['rows'][$a][] = $row['click_browse_name'];
     $contents['rows'][$a][] = $row['click_os_name'];
-    $contents['rows'][$a][] = !empty($row['click_ref']) ? '<a href="' . $row['click_ref'] . '">' . $nv_Lang->getModule('select') . '</a>' : '';
+
+    $safe_ref = nv_htmlspecialchars($row['click_ref']);
+    $contents['rows'][$a][] = (!empty($row['click_ref']) && nv_is_url($row['click_ref'])) ? '<a rel="nofollow" href="' . $safe_ref . '">' . $nv_Lang->getModule('select') . '</a>' : $safe_ref;
 
     if ($data_ext == 'browse' and empty($replacement)) {
         $replacement = $row['click_browse_name'];

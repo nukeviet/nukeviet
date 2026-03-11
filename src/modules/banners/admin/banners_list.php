@@ -82,10 +82,11 @@ while ($row = $result->fetch()) {
     $contents['rows'][$row['id']]['clid'] = $row['clid'];
     $contents['rows'][$row['id']]['publ_date'] = date('d/m/Y', $row['publ_time']);
     $contents['rows'][$row['id']]['exp_date'] = !empty($row['exp_time']) ? date('d/m/Y', $row['exp_time']) : $nv_Lang->getModule('unlimited');
+    $checkss_act = hash_hmac('sha256', NV_CHECK_SESSION . '_' . $module_name . '_change_act_banner_' . $admin_info['userid'], NV_CACHE_PREFIX);
     $contents['rows'][$row['id']]['act'] = [
         'act_' . $row['id'],
         $row['act'],
-        'nv_b_chang_act(' . $row['id'] . ",'act_" . $row['id'] . "');"
+        'nv_b_chang_act(' . $row['id'] . ",'act_" . $row['id'] . "','" . $checkss_act . "');"
     ];
     $contents['rows'][$row['id']]['view'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=info_banner&amp;id=' . $row['id'];
     $contents['rows'][$row['id']]['edit'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=edit_banner&amp;id=' . $row['id'];

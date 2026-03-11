@@ -1,6 +1,7 @@
 <!-- BEGIN: main -->
 <div class="alert alert-info">{CONTENTS.info}</div>
 <form method="post" action="{CONTENTS.action}">
+    <input type="hidden" name="checkss" value="{CONTENTS.checkss}" />
     <input type="hidden" value="1" name="save" id="save" />
     <div class="table-responsive">
         <table class="table table-striped table-bordered table-hover">

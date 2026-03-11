@@ -11,6 +11,7 @@
 <script type="text/javascript" src="{ASSETS_LANG_STATIC_URL}/js/language/jquery.ui.datepicker-{NV_LANG_INTERFACE}.js"></script>
 
 <form id="frm" method="post" enctype="multipart/form-data" action="{CONTENTS.action}">
+    <input type="hidden" name="checkss" value="{CONTENTS.checkss}" />
     <input type="hidden" value="1" name="save" id="save" />
     <div class="table-responsive">
         <table class="table table-striped table-bordered table-hover">

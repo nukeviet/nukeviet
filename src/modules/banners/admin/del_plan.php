@@ -18,6 +18,12 @@ if (!defined('NV_IS_AJAX')) {
 }
 
 $id = $nv_Request->get_int('id', 'post', 0);
+$checkss = $nv_Request->get_title('checkss', 'post,get', '');
+$checkss_expected = hash_hmac('sha256', NV_CHECK_SESSION . '_' . $module_name . '_' . $op . '_' . $admin_info['userid'], NV_CACHE_PREFIX);
+
+if (empty($id) or !hash_equals($checkss_expected, $checkss)) {
+    exit('Stop!!!');
+}
 
 $sql = 'SELECT id FROM ' . NV_BANNERS_GLOBALTABLE . '_plans WHERE id=' . $id;
 $id = $db->query($sql)->fetchColumn();

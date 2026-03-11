@@ -154,7 +154,12 @@ if ($nv_Request->get_int('save', 'post') == '1') {
         $imageforswf = '';
     }
 
-    if (empty($title)) {
+    $checkss = $nv_Request->get_title('checkss', 'post', '');
+    $checkss_expected = hash_hmac('sha256', NV_CHECK_SESSION . '_' . $module_name . '_' . $op . '_' . $admin_info['userid'], NV_CACHE_PREFIX);
+
+    if (!hash_equals($checkss_expected, $checkss)) {
+        $error = 'Error: CSRF detected';
+    } elseif (empty($title)) {
         $error = $nv_Lang->getModule('title_empty');
     } elseif (empty($pid) or !isset($plans[$pid])) {
         $error = $nv_Lang->getModule('plan_not_selected');
@@ -295,6 +300,7 @@ if ($nv_Request->get_int('save', 'post') == '1') {
     }
 }
 
+$contents['checkss'] = hash_hmac('sha256', NV_CHECK_SESSION . '_' . $module_name . '_' . $op . '_' . $admin_info['userid'], NV_CACHE_PREFIX);
 $contents['info'] = (!empty($error)) ? $error : $nv_Lang->getModule('edit_banner_info');
 $contents['is_error'] = (!empty($error)) ? 1 : 0;
 $contents['file_allowed_ext'] = implode(', ', $contents['file_allowed_ext']);

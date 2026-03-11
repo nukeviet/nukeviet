@@ -33,11 +33,13 @@ while ($row = $result->fetch()) {
     $contents['rows'][$row['id']]['title'] = $row['title'];
     $contents['rows'][$row['id']]['blang'] = (!empty($row['blang'])) ? $language_array[$row['blang']]['name'] : $nv_Lang->getModule('blang_all');
     $contents['rows'][$row['id']]['size'] = $row['width'] . ' x ' . $row['height'] . 'px';
-    $contents['rows'][$row['id']]['act'] = ['act_' . $row['id'], $row['act'], 'nv_pl_chang_act(' . $row['id'] . ",'act_" . $row['id'] . "');"];
+    $checkss_act = hash_hmac('sha256', NV_CHECK_SESSION . '_' . $module_name . '_change_act_plan_' . $admin_info['userid'], NV_CACHE_PREFIX);
+    $contents['rows'][$row['id']]['act'] = ['act_' . $row['id'], $row['act'], 'nv_pl_chang_act(' . $row['id'] . ", 'act_" . $row['id'] . "', '" . $checkss_act . "');"];
     $contents['rows'][$row['id']]['view'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=info_plan&amp;id=' . $row['id'];
     $contents['rows'][$row['id']]['edit'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=edit_plan&amp;id=' . $row['id'];
     $contents['rows'][$row['id']]['add'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=add_banner&amp;pid=' . $row['id'];
-    $contents['rows'][$row['id']]['del'] = 'nv_pl_del(' . $row['id'] . ');';
+    $checkss_del = hash_hmac('sha256', NV_CHECK_SESSION . '_' . $module_name . '_del_plan_' . $admin_info['userid'], NV_CACHE_PREFIX);
+    $contents['rows'][$row['id']]['del'] = 'nv_pl_del(' . $row['id'] . ", '" . $checkss_del . "');";
 }
 
 include NV_ROOTDIR . '/includes/header.php';

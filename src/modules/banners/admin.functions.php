@@ -621,7 +621,7 @@ function nv_banners_list_theme($contents)
  */
 function nv_b_list_theme($contents, $array_users = [])
 {
-    global $global_config, $module_file, $module_name, $global_config;
+    global $global_config, $module_file, $module_name, $global_config, $admin_info;
 
     $xtpl = new XTemplate('b_list.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
     $xtpl->assign('CONTENTS', $contents);
@@ -659,7 +659,8 @@ function nv_b_list_theme($contents, $array_users = [])
 
     if (!empty($contents['rows'])) {
         foreach ($contents['rows'] as $b_id => $values) {
-            $values['delfile'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=del_banner&id=' . $b_id;
+            $checkss_del = hash_hmac('sha256', NV_CHECK_SESSION . '_' . $module_name . '_del_banner_' . $admin_info['userid'], NV_CACHE_PREFIX);
+            $values['delfile'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=del_banner&id=' . $b_id . '&checkss=' . $checkss_del;
             $values['checked'] = $values['act'][1] == '1' ? ' checked="checked"' : '';
             $xtpl->assign('ROW', $values);
 
