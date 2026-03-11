@@ -136,126 +136,21 @@ $max   = (int) $db_slave->query('SELECT MAX(weight) FROM ' . NV_PREFIXLANG . '_i
 ```
 
 ## Pattern: phân trang
-
-```php
-// Dùng Query Builder (chuẩn)
-$db_slave->sqlreset()
-    ->select('COUNT(*)')
-    ->from(NV_PREFIXLANG . '_items')
-    ->where('status = 1');
-$total = (int) $db_slave->query($db_slave->sql())->fetchColumn();
-
-if ($total > 0) {
-    $offset = ($page - 1) * $perPage;
-    $db_slave->select('id, title, alias, created_at')
-        ->order('created_at DESC')
-        ->limit($perPage)
-        ->offset($offset);
-    $rows = $db_slave->query($db_slave->sql())->fetchAll();
-}
-
-// Hoặc dùng SQL thuần (cũng được)
-$where = ' WHERE status = 1';
-$total = (int) $db_slave->query('SELECT COUNT(*) FROM ' . NV_PREFIXLANG . '_items' . $where)->fetchColumn();
-
-if ($total > 0) {
-    $offset = ($page - 1) * $perPage;
-    $sql    = 'SELECT id, title, alias, created_at'
-            . ' FROM '  . NV_PREFIXLANG . '_items' . $where
-            . ' ORDER BY created_at DESC'
-            . ' LIMIT ' . $perPage . ' OFFSET ' . $offset;
-    $rows = $db_slave->query($sql)->fetchAll();
-}
-```
+> **Tham khảo code mẫu:** `view_file` -> `.agent/skills/nukeviet-mysql/examples/PatternPagination.php`
 
 ---
 
 ## Pattern: INSERT / UPDATE an toàn
-
 **Quy tắc:** số nguyên và hằng hệ thống nối thẳng vào SQL — dữ liệu từ user input dùng `:named_param` + `bindParam`.
-
-```php
-// INSERT
-$sql = 'INSERT INTO ' . NV_PREFIXLANG . '_items (title, content, status, created_at)
-        VALUES (:title, :content, :status, ' . NV_CURRENTTIME . ')';
-$sth = $db->prepare($sql);
-$sth->bindParam(':title',   $row['title'],   PDO::PARAM_STR);
-$sth->bindParam(':content', $row['content'], PDO::PARAM_STR, strlen($row['content']));
-$sth->bindParam(':status',  $row['status'],  PDO::PARAM_INT);
-$sth->execute();
-$new_id = $db->lastInsertId();
-
-// UPDATE
-$sql = 'UPDATE ' . NV_PREFIXLANG . '_items
-        SET title = :title, content = :content, updated_at = ' . NV_CURRENTTIME . '
-        WHERE id = ' . $id;
-$sth = $db->prepare($sql);
-$sth->bindParam(':title',   $row['title'],   PDO::PARAM_STR);
-$sth->bindParam(':content', $row['content'], PDO::PARAM_STR, strlen($row['content']));
-$sth->execute();
-if ($sth->rowCount()) {
-    // cập nhật thành công
-}
-
-// DELETE
-$db->query('DELETE FROM ' . NV_PREFIXLANG . '_items WHERE id = ' . (int) $id);
-```
-
-### Dùng helper insert_id() và affected_rows_count()
-
-```php
-// INSERT với helper — gọn hơn prepare+bindParam+execute+lastInsertId
-$sql = 'INSERT INTO ' . NV_PREFIXLANG . '_items (title, status, created_at)
-        VALUES (:title, :status, ' . NV_CURRENTTIME . ')';
-$new_id = $db->insert_id($sql, '', [
-    'title'  => $row['title'],
-    'status' => (string) $row['status']
-]);
-
-// UPDATE/DELETE với helper — trả về số dòng bị ảnh hưởng
-$sql = 'UPDATE ' . NV_PREFIXLANG . '_items SET status = :status WHERE id = ' . (int) $id;
-$affected = $db->affected_rows_count($sql, ['status' => '1']);
-if ($affected) {
-    // cập nhật thành công
-}
-```
-
-> Lưu ý: `insert_id()` và `affected_rows_count()` nhận `$data` là array `['key' => 'value']` — tất cả value đều là string (PDO::PARAM_STR). Nếu cần PARAM_INT, dùng `prepare()` + `bindParam()` thủ công.
+> **Tham khảo code mẫu INSERT/UPDATE/DELETE:** `view_file` -> `.agent/skills/nukeviet-mysql/examples/PatternWrite.php`
 
 ### LIKE query an toàn
-
-```php
-// Escape ký tự đặc biệt % và _ trong LIKE
-$keyword = $db->dblikeescape($nv_Request->get_title('keyword', 'get', ''));
-$sql = 'SELECT * FROM ' . NV_PREFIXLANG . '_items WHERE title LIKE :kw';
-$sth = $db->prepare($sql);
-$kw  = '%' . $keyword . '%';
-$sth->bindParam(':kw', $kw, PDO::PARAM_STR);
-$sth->execute();
-$rows = $sth->fetchAll();
-```
+> **Tham khảo code mẫu query LIKE:** `view_file` -> `.agent/skills/nukeviet-mysql/examples/PatternLike.php`
 
 ---
 
 ## Schema bảng chuẩn (dùng trong action_mysql.php)
-
-```php
-'CREATE TABLE ' . $db_config['prefix'] . '_' . $lang . '_' . $module_data . '_items ('
-. ' `id`         MEDIUMINT(8) UNSIGNED NOT NULL AUTO_INCREMENT,'
-. ' `title`      VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,'
-. ' `alias`      VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT \'\','
-. ' `content`    MEDIUMTEXT  CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,'
-. ' `status`     TINYINT(1)  NOT NULL DEFAULT \'1\','
-. ' `order`      SMALLINT(5) UNSIGNED NOT NULL DEFAULT \'0\','
-. ' `created_at` INT(11)     UNSIGNED NOT NULL DEFAULT \'0\','
-. ' `updated_at` INT(11)     UNSIGNED NOT NULL DEFAULT \'0\','
-. ' `author_id`  INT(11)     UNSIGNED NOT NULL DEFAULT \'0\','
-. ' PRIMARY KEY (`id`),'
-. ' KEY `idx_status` (`status`, `created_at`),'
-. ' UNIQUE KEY `uq_alias` (`alias`)'
-. ') ENGINE=MyISAM DEFAULT CHARSET=utf8'
-// Dùng utf8mb4 nếu cần lưu emoji — đồng bộ với $db_config['charset']
-```
+> **Tham khảo chuỗi CREATE TABLE chuẩn:** `view_file` -> `.agent/skills/nukeviet-mysql/examples/Schema.php`
 
 ---
 

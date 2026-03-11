@@ -8,13 +8,35 @@ Chú ý: Cần truyền tham số khi gọi lệnh.
 - Quét 1 module (admin): `/security-audit authors` (sẽ tự tìm trong src/admin/modules/ hoặc src/admin/)
 - Quét 1 file/block cụ thể: `/security-audit src/modules/contact/blocks/global.contact_form.php`
 
-// turbo-all
-1. Thực hiện quét Audit Security mở rộng trên Module/File:
+## 1. Yêu cầu nhập liệu
+Xác định mục tiêu cần quét (Ví dụ: `news`, `authors`, hoặc đường dẫn cụ thể `src/modules/...`).
+Nếu người dùng chưa cung cấp tham số, hãy hỏi lại.
+
+## 2. Kiểm tra Cú pháp & Chuẩn Coding
+Sử dụng công cụ `run_command` kiểm tra trước khi quét bảo mật:
+
+// turbo
 ```bash
-TARGET="$ARGUMENTS"
+# LƯU Ý CHO AI: Sửa biến TARGET thành chuỗi User yêu cầu
+TARGET="news"
+
+echo "1. Checking PHP Syntax..."
+find $TARGET -name "*.php" -type f -exec php -l {} \; | grep "Errors parsing"
+
+echo "2. Checking PSR-12 Coding Standard..."
+php vendor/bin/phpcs --standard=PSR12 $TARGET
+```
+
+## 3. Chạy Auto Scan Security
+Sử dụng công cụ `run_command` quét Audit Security mở rộng:
+
+// turbo
+```bash
+# LƯU Ý CHO AI: Sửa biến TARGET tương tự trên
+TARGET="news"
+
 if [ -z "$TARGET" ]; then
-    echo "LỖI: Bạn chưa truyền tham số. Hãy gọi lệnh kèm tên module hoặc đường dẫn file."
-    echo "Ví dụ: /security-audit contact"
+    echo "LỖI: Bạn chưa truyền tham số. Hãy truyền tên module hoặc đường dẫn file."
     exit 1
 fi
 
@@ -64,8 +86,9 @@ for item in "${patterns[@]}"; do
 done
 
 echo -e "\n========================================================="
-echo "✅ QUÉT HOÀN TẤT! Dựa vào kết quả trên để lập báo cáo Audit."
+echo "✅ QUÉT HOÀN TẤT! AI sẽ tự đọc kết quả và tạo báo cáo rà soát."
 echo "========================================================="
 ```
 
-2. Phân tích kết quả trong Terminal và đề xuất giải pháp sửa lỗi theo chuẩn NukeViet 5.
+## 3. Báo cáo kết quả
+Phân tích kết quả xuất ra trong Terminal và đề xuất giải pháp sửa lỗi theo chuẩn NukeViet 5.

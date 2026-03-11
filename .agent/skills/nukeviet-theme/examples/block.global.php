@@ -1,0 +1,63 @@
+<?php
+// Guard: NV_MAINFILE (không phải NV_IS_BLOCK_THEME — xem bảng phân biệt)
+if (!defined('NV_MAINFILE')) {
+    exit('Stop!!!');
+}
+
+if (!nv_function_exists('nv_tenblock')) {
+    /**
+     * Form cấu hình block (hiển thị trong trang quản trị block)
+     * Tên hàm: nv_{TEN}_config (khác với module block: nv_block_config_{TEN})
+     */
+    function nv_tenblock_config($module, $data_block, $lang_block)
+    {
+        global $lang_global;
+        $html  = '<div class="form-group">';
+        $html .= '<label>' . $lang_global['label'] . '</label>';
+        $html .= '<input type="text" name="config_numrow" value="' . $data_block['numrow'] . '">';
+        $html .= '</div>';
+        return $html;
+    }
+
+    /**
+     * Xử lý submit form cấu hình block
+     * Tên hàm: nv_{TEN}_submit
+     */
+    function nv_tenblock_submit()
+    {
+        global $nv_Request;
+        return [
+            'error'  => [],
+            'config' => ['numrow' => $nv_Request->get_int('config_numrow', 'post', 5)]
+        ];
+    }
+
+    /**
+     * Render nội dung block
+     * Tên hàm: nv_{TEN}($block_config)
+     * Fallback tpl: module_theme → site_theme → default
+     */
+    function nv_tenblock($block_config)
+    {
+        global $global_config, $lang_global;
+
+        // Tpl nằm trong blocks/ (không phải layout/)
+        if (file_exists(NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/blocks/global.tenblock.tpl')) {
+            $block_theme = $global_config['module_theme'];
+        } elseif (file_exists(NV_ROOTDIR . '/themes/' . $global_config['site_theme'] . '/blocks/global.tenblock.tpl')) {
+            $block_theme = $global_config['site_theme'];
+        } else {
+            $block_theme = 'default';
+        }
+
+        $xtpl = new XTemplate('global.tenblock.tpl', NV_ROOTDIR . '/themes/' . $block_theme . '/blocks');
+        $xtpl->assign('LANG', $lang_global);
+        $xtpl->parse('main');
+        return $xtpl->text('main');
+    }
+}
+
+// Entry point khi block được gọi từ hệ thống
+if (defined('NV_SYSTEM')) {
+    $content = nv_tenblock($block_config);
+}

@@ -15,8 +15,8 @@ Bạn (AI) phải hoạt động theo chu kỳ: **Phân tích → Lập kế ho�
      - **Các file ảnh hưởng:** (Liệt kê đường dẫn cụ thể)
      - **Thay đổi dự kiến:** (Mô tả logic sẽ sửa/thêm)
      - **Rủi ro:** (Các breaking changes nếu có)
-2. **Chờ xác nhận:** Chỉ bắt đầu code sau khi tôi (Dev) phản hồi "OK" hoặc "Proceed".
-3. **Thực thi:** Tuân thủ PSR-12 cho PHP và các kỹ năng trong `.agent/skills/`.
+2. **Chờ xác nhận:** Chỉ bắt đầu code sau khi tôi (Dev) phản hồi "OK"
+3. **Thực thi:** Tuân thủ PSR-12 cho PHP và các kỹ năng trong `.agent/skills/`
 
 ## Lệnh & Tự động hóa (Automation)
 
@@ -39,8 +39,7 @@ Khi tôi nhập các lệnh bắt đầu bằng /, hãy truy cập vào thư m�
 | `/new-hook` | Khởi tạo tệp cơ sở (scaffold) cho một Hook (Plugin) |
 | `/add-func` | Thêm function mới cho Module (Frontend / Admin) |
 | `/upgrade-module` | Nâng cấp Module cũ lên chuẩn NukeViet 5 |
-| `/review-mr` | Chạy Audit Merge Request / Lint Code |
-| `/security-audit` | Quét Security Audit thủ công trên 1 module |
+| `/security-audit` | Quét đầy đủ (Syntax, PSR-12, Security) |
 
 ## Danh mục kỹ năng (.agent/skills/)
 Dùng để tra cứu khi làm việc với các thành phần cụ thể:

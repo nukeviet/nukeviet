@@ -50,8 +50,8 @@ Sử dụng các biểu tượng biểu cảm để phân loại mức độ ngh
 
 Sử dụng workflow hỗ trợ review nhanh:
 ```bash
-# Review nhanh một thư mục/file
-/review-mr modules/ten-module/
+# Review nhanh một thư mục/file (Syntax, Lint, Security)
+/security-audit modules/ten-module/
 ```
 
 > **Lưu ý:** AI (Tôi) chỉ báo cáo và đề xuất, không tự ý sửa code trừ khi được yêu cầu cụ thể sau khi đã trình bày phương án.

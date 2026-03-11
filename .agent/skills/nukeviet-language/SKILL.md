@@ -75,30 +75,7 @@ themes/ten-theme/language/
 ---
 
 ## 4. Template file ngôn ngữ module (`vi.php`)
-
-```php
-<?php
-
-if (!defined('NV_MAINFILE')) {
-    exit('Stop!!!');
-}
-
-// ── Metadata bắt buộc ──────────────────────────────────────────────────────
-$lang_translator['author']     = 'Tên tác giả <email>';
-$lang_translator['createdate'] = 'dd/mm/yyyy, HH:MM';
-$lang_translator['copyright']  = '@Copyright (C) 2025 ... All rights reserved';
-$lang_translator['info']       = '';
-$lang_translator['langtype']   = 'lang_module'; // giá trị cố định
-
-// ── Chuỗi giao diện ───────────────────────────────────────────────────────
-$lang_module['hello']       = 'Xin chào';
-$lang_module['error_msg']   = 'Lỗi: %s';            // dùng với sprintf()
-$lang_module['item_count']  = 'Tổng cộng %d mục';   // dùng với sprintf()
-
-// ── Menu admin ─────────────────────────────────────────────────────────────
-$lang_module['menu_content'] = 'Quản lý nội dung';
-$lang_module['menu_config']  = 'Cấu hình';
-```
+> **Tham khảo Template file ngôn ngữ chuẩn:** `view_file` -> `.agent/skills/nukeviet-language/examples/LanguageFile.php`
 
 > `$lang_translator['langtype']` của file module **luôn** là `'lang_module'`.
 > File `global.php` hệ thống dùng `'lang_global'`.
@@ -133,81 +110,17 @@ echo $lang_module['hello'];
 ---
 
 ## 6. Sử dụng chuỗi ngôn ngữ trong PHP
-
-```php
-// Truy cập đơn giản
-echo $lang_module['menu_content'];
-
-// Chuỗi có tham số (sprintf)
-$msg = sprintf($lang_module['error_msg'], 'Tên lỗi');
-$msg = sprintf($lang_module['item_count'], $total);
-
-// Chuỗi hệ thống ($lang_global)
-echo $lang_global['save'];      // 'Lưu thay đổi'
-echo $lang_global['cancel'];    // 'Hủy bỏ'
-echo $lang_global['edit'];      // 'Sửa'
-echo $lang_global['delete'];    // 'Xóa'
-```
+> **Tham khảo cách sử dụng biến `$lang_module`, `$lang_global` trong PHP:** `view_file` -> `.agent/skills/nukeviet-language/examples/UseInPhp.php`
 
 ---
 
 ## 7. Truyền ngôn ngữ vào template
-
-### XTemplate (frontend module block)
-```php
-// Assign toàn bộ mảng — truy cập trong .tpl bằng {LANG.key}
-$xtpl->assign('LANG', $lang_module);
-$xtpl->assign('GLANG', $lang_global);
-
-// Trong .tpl:
-// {LANG.hello}
-// {GLANG.save}
-```
-
-### NVSmarty (admin / theme block)
-```php
-$tpl = new \NukeViet\Template\NVSmarty();
-$tpl->assign('LANG', $lang_module);
-$tpl->assign('GLANG', $lang_global);
-
-// Trong .tpl Smarty:
-// {$LANG.hello}
-// {$GLANG.save}
-```
+> **Tham khảo cách truyền ngôn ngữ cho XTemplate & Smarty:** `view_file` -> `.agent/skills/nukeviet-language/examples/TemplateAssign.php`
 
 ---
 
 ## 8. Email Template (`email_vi.php`)
-
-```php
-<?php
-
-if (!defined('NV_MAINFILE')) {
-    exit('Stop!!!');
-}
-
-use NukeViet\Module\TenModule\Shared\Emails;
-use NukeViet\Template\Email\Emf;
-
-$module_emails[Emails::WELCOME] = [
-    'pids' => Emf::P_ALL,               // loại người nhận
-    't'    => 'Mô tả loại email này',
-    's'    => 'Tiêu đề: {$ten_bien}',   // cú pháp Smarty
-    'c'    => 'Nội dung HTML: {$site_name} chào mừng {$username}'
-];
-```
-
-Hằng `Emails::WELCOME` khai báo trong class `Shared/Emails.php` của module:
-```php
-namespace NukeViet\Module\TenModule\Shared;
-
-class Emails
-{
-    const WELCOME       = 'welcome';
-    const RESET_PASS    = 'reset_password';
-    const NOTIFY_ADMIN  = 'notify_admin';
-}
-```
+> **Tham khảo Template thiết lập email đa ngôn ngữ:** `view_file` -> `.agent/skills/nukeviet-language/examples/EmailTemplate.php`
 
 ---
 
@@ -225,27 +138,7 @@ $lang_switch_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=en';
 ---
 
 ## 10. Block Language (`$lang_block`)
-
-Khi block được gọi, ngoài `$lang_module` và `$lang_global`, một số block nhận thêm `$lang_block` (mảng cấu hình UI của block đó, được định nghĩa trong `.json` của block):
-
-```json
-{
-    "i18n": {
-        "vi": { "config": { "numrow": "Số dòng hiển thị" } },
-        "en": { "config": { "numrow": "Number of rows" } }
-    }
-}
-```
-
-Trong hàm config block:
-```php
-function nv_block_config_tenblock($module, $data_block, $lang_block)
-{
-    // $lang_block chứa chuỗi UI của form config block (từ JSON i18n)
-    $html = '<label>' . $lang_block['numrow'] . '</label>';
-    //...
-}
-```
+> **Tham khảo khai báo và sử dụng `$lang_block` trong JSON/PHP:** `view_file` -> `.agent/skills/nukeviet-language/examples/BlockLanguage.php`
 
 ---
 

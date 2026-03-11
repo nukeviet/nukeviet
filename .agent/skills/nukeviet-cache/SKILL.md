@@ -23,48 +23,13 @@ Hệ thống Cache của NukeViet 5 giúp giảm tải cho cơ sở dữ liệu 
 
 ### `$nv_Cache->db()` — Cache truy vấn SQL
 Đây là phương thức phổ biến nhất, dùng để cache mảng kết quả của một câu lệnh SELECT.
-
-```php
-$nv_Cache->db(
-    string $sql,         // Câu lệnh SQL SELECT
-    string $key = '',    // Tên trường làm key cho mảng kết quả ('' = mảng index số)
-    string $moduleName,  // Tên module sở hữu cache này (để invalidate)
-    string $lang = '',   // Ngôn ngữ (mặc định NV_LANG_DATA)
-    int $ttl = 0         // Time-to-live (giây). 0 = vô hạn (cho đến khi bị xóa)
-) : array
-```
-
-**Ví dụ:**
-```php
-$sql = 'SELECT id, title FROM ' . NV_PREFIXLANG . '_news WHERE status = 1';
-$list = $nv_Cache->db($sql, 'id', 'news');
-// Kết quả: [ '1' => ['id'=>1, 'title'=>'...'], '2' => [...] ]
-```
+> **Tham khảo cú pháp `$nv_Cache->db()`:** `view_file` -> `.agent/skills/nukeviet-cache/examples/CacheDb.php`
 
 ---
 
 ### `$nv_Cache->setItem()` & `getItem()` — Cache dữ liệu tùy ý
 Dùng để lưu trữ chuỗi, mảng hoặc đối tượng (cần serialize nếu không phải chuỗi).
-
-```php
-// Lưu cache
-$nv_Cache->setItem(string $moduleName, string $fileName, string $content, string $lang = '', int $ttl = 0);
-
-// Đọc cache
-$content = $nv_Cache->getItem(string $moduleName, string $fileName, string $lang = '', int $ttl = 0);
-```
-
-**Ví dụ lưu mảng:**
-```php
-$data = ['name' => 'NukeViet', 'version' => '5.0'];
-$nv_Cache->setItem('my_module', 'settings.cache', serialize($data));
-
-// Đọc lại
-$cache = $nv_Cache->getItem('my_module', 'settings.cache');
-if ($cache !== false) {
-    $data = unserialize($cache);
-}
-```
+> **Tham khảo cú pháp SetItem/GetItem:** `view_file` -> `.agent/skills/nukeviet-cache/examples/CacheItem.php`
 
 ---
 
@@ -91,26 +56,10 @@ $nv_Cache->delMod(string $moduleName, string $lang = '');
 ## 3. Pattern sử dụng chuẩn
 
 ### Trong Block hoặc Func hiển thị
-```php
-$cache_file = 'hits_' . $id . '.cache';
-if (($cache = $nv_Cache->getItem($module_name, $cache_file, '', 3600)) !== false) {
-    $data = unserialize($cache);
-} else {
-    // Truy vấn DB và xử lý
-    $data = ...;
-    $nv_Cache->setItem($module_name, $cache_file, serialize($data));
-}
-```
+> **Tham khảo Pattern Block Display:** `view_file` -> `.agent/skills/nukeviet-cache/examples/PatternDisplay.php`
 
 ### Invalidate Cache sau khi cập nhật dữ liệu
-```php
-// Sau khi UPDATE/INSERT/DELETE thành công
-if ($sth->execute()) {
-    $nv_Cache->delMod($module_name);
-    // Hoặc nếu module có liên quan đến module khác (vd: menu)
-    $nv_Cache->delMod('menu');
-}
-```
+> **Tham khảo Pattern Cache Invalidate:** `view_file` -> `.agent/skills/nukeviet-cache/examples/PatternInvalidate.php`
 
 ---
 

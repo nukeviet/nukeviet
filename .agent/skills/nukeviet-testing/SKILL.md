@@ -44,24 +44,7 @@ Bạn có thể dùng annotation `@group [name]` trong code và chạy:
 Nằm trong `tests/Unit/`. Sử dụng chuẩn PHPUnit tích hợp trong Codeception.
 
 ### Cấu trúc Unit Test chuẩn
-```php
-namespace Tests\Unit;
-
-class MyComponentTest extends \Codeception\Test\Unit
-{
-    protected \Tests\Support\UnitTester $tester;
-
-    protected function _before() {
-        // Khởi tạo trước mỗi test
-    }
-
-    public function testFunctionality() {
-        global $db;
-        $result = $db->query("SELECT ...");
-        $this->assertNotEmpty($result);
-    }
-}
-```
+> **Tham khảo cấu trúc Unit Test:** `view_file` -> `.agent/skills/nukeviet-testing/examples/UnitTester.php`
 
 **Lớp UnitTester** cung cấp các helper như `$this->tester->listFile()`, `$this->tester->seeInDatabase()`.
 
@@ -72,32 +55,7 @@ class MyComponentTest extends \Codeception\Test\Unit
 Nằm trong `tests/Acceptance/`. Sử dụng định dạng **Cest** của Codeception.
 
 ### Cấu trúc Acceptance Test chuẩn
-```php
-namespace Tests\Acceptance;
-
-use Tests\Support\AcceptanceTester;
-
-class MyModuleCest
-{
-    public function _before(AcceptanceTester $I) {
-        // Chạy trước mỗi test (vd: login)
-    }
-
-    public function tryToPostNews(AcceptanceTester $I) {
-        $I->wantTo('Đăng bài viết mới');
-        $I->login(); // Helper login tùy chỉnh
-        $I->amOnUrl($I->getDomain() . '/admin/vi/news/content/');
-        $I->fillField(['name' => 'title'], 'Tiêu đề test');
-        $I->click('label[for="catid_1"]');
-        
-        // Thực thi JS nếu cần (vd: nạp dữ liệu editor)
-        $I->executeJS("window.nveditor.news_bodyhtml.setData('Content');");
-        
-        $I->click('#btn_save');
-        $I->waitForText('Đã ghi dữ liệu thành công', 5);
-    }
-}
-```
+> **Tham khảo cấu trúc Acceptance Test (Cest):** `view_file` -> `.agent/skills/nukeviet-testing/examples/AcceptanceCest.php`
 
 **Các helper quan trọng của $I**:
 - `$I->login()`: Đăng nhập Admin.
@@ -112,13 +70,7 @@ class MyModuleCest
 ## 5. Metadata và Groups
 
 Luôn thêm annotation `@group` để phân loại test:
-```php
-/**
- * @group all
- * @group mod_news
- */
-public function testSomething() { ... }
-```
+> **Tham khảo chú thích @group:** `view_file` -> `.agent/skills/nukeviet-testing/examples/MetaGroups.php`
 
 ---
 

@@ -3,9 +3,6 @@ name: nukeviet-upgrade
 description: Nâng cấp module/theme NukeViet. Load khi có yêu cầu nâng cấp, migrate, update từ phiên bản cũ lên mới.
 allowed-tools: Read, Write, Glob, Grep, Bash
 ---
-
-
-Sau đó đọc từng file trong `.agent/upgrade/module/` hoặc `.agent/upgrade/theme/` theo đúng thứ tự lộ trình.
 # Hướng Dẫn Nâng Cấp Module / Theme NukeViet
 
 ## Lộ trình nâng cấp — đọc file theo đúng thứ tự

@@ -23,76 +23,10 @@ Block trực thuộc một module, chỉ được quản lý cài đặt khi mod
 
 ### 1.1 Nội dung file `.json` mẫu
 Cung cấp thông tin hiển thị định danh cho Block trong màn hình cài đặt Admin.
-```json
-{
-    "info": {
-        "name": "Tên Block VD",
-        "author": "VINADES.,JSC",
-        "website": "https://vinades.vn",
-        "description": "Mô tả block"
-    },
-    "i18n": {
-        "en": {
-            "info": {
-                "name": "Display name in EN"
-            }
-        },
-        "vi": {
-            "info": {
-                "name": "Tên hiển thị tiếng Việt"
-            }
-        }
-    }
-}
-```
+> **Tham khảo JSON mẫu:** `view_file` -> `.agent/skills/nukeviet-block/examples/ModuleBlock.json`
 
 ### 1.2 Nội dung file `.php` mẫu
-```php
-<?php
-
-/**
- * @Project NukeViet
- * @Author VN
- * @Copyright (C) 2025 VN. All rights reserved
- * @License GNU/GPL version 2 or any later version
- */
-
-if (!defined('NV_SYSTEM')) {
-    exit('Stop!!!');
-}
-
-if (!nv_function_exists('nv_block_about_example')) {
-    /**
-     * nv_block_about_example()
-     *
-     * @param array $block_config
-     * @return string
-     */
-    function nv_block_about_example($block_config)
-    {
-        global $global_config, $db_slave, $module_name;
-
-        // Logic của bạn
-        $title = "Tiêu đề mẫu";
-        $link = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA;
-
-        // XPATH tìm block.about.tpl trong hệ thống theme 
-        $block_theme = get_tpl_dir([$global_config['module_theme'], $global_config['site_theme']], 'default', '/modules/' . $block_config['module'] . '/block.about.tpl');
-        
-        $xtpl = new XTemplate('block.about.tpl', NV_ROOTDIR . '/themes/' . $block_theme . '/modules/' . $block_config['module']);
-        $xtpl->assign('TITLE', $title);
-        $xtpl->assign('LINK', $link);
-
-        $xtpl->parse('main');
-        return $xtpl->text('main');
-    }
-}
-
-// Bắt buộc bước gọi hàm cuối cùng này
-if (defined('NV_SYSTEM')) {
-    $content = nv_block_about_example($block_config);
-}
-```
+> **Tham khảo mã nguồn PHP Block mẫu:** `view_file` -> `.agent/skills/nukeviet-block/examples/ModuleBlock.php`
 
 ---
 
@@ -106,61 +40,11 @@ Block trực thuộc Theme, sử dụng cho các tính năng hệ thống/layout
 
 ### 2.1 File `.php` kết hợp NVSmarty mẫu
 Theme Blocks sử dụng \NukeViet\Template\NVSmarty để parse.
-
-```php
-<?php
-
-/**
- * @Project NukeViet
- * @Author VN
- * @Copyright (C) 2025 VN. All rights reserved
- * @License GNU/GPL version 2 or any later version
- */
-
-if (!defined('NV_MAINFILE')) {
-    exit('Stop!!!');
-}
-
-if (!nv_function_exists('nv_block_theme_example')) {
-    /**
-     * nv_block_theme_example()
-     *
-     * @param array $block_config
-     * @return string
-     */
-    function nv_block_theme_example($block_config)
-    {
-        global $global_config, $page_title;
-
-        // Thêm trường title vào config truyền ra ngoài nếu cần
-        $block_config['title'] = "Custom Title";
-
-        // Khởi tạo Smarty template engine cho khối Theme
-        $stpl = new \NukeViet\Template\NVSmarty();
-        $stpl->setTemplateDir($block_config['real_path'] . '/smarty');
-        
-        // Gán mảng dữ liệu vào biến SMARTY
-        $stpl->assign('DATA', $block_config);
-
-        return $stpl->fetch('global.theme_example.tpl');
-    }
-}
-
-if (defined('NV_SYSTEM')) {
-    $content = nv_block_theme_example($block_config);
-}
-```
+> **Tham khảo mã nguồn PHP Block Theme mẫu:** `view_file` -> `.agent/skills/nukeviet-block/examples/ThemeBlock.php`
 
 ### 2.2 File `smarty/global.theme_example.tpl` mẫu
 Sử dụng cú pháp của Smarty `{...}` thay vì XTemplate `{...}`
-
-```html
-<!-- Cú pháp gọi mảng được assign từ Smarty -->
-<div class="theme-block-wrapper">
-    <h3>{$DATA.title}</h3>
-    <p>Thuộc theme: {$DATA.theme_name}</p>
-</div>
-```
+> **Tham khảo Smarty TPL mẫu:** `view_file` -> `.agent/skills/nukeviet-block/examples/ThemeBlock.tpl`
 
 ---
 
@@ -184,75 +68,9 @@ Sử dụng cú pháp của Smarty `{...}` thay vì XTemplate `{...}`
 > **Module Block** (`global.TEN.php`, `module.TEN.php`): `$lang_global` luôn có. `$lang_module` có nếu module đang được load trên trang đó.
 
 ### Khai báo i18n trong file `.json` của block
-
-```json
-{
-    "info": {
-        "name": "Block Demo"
-    },
-    "i18n": {
-        "vi": {
-            "info": { "name": "Block Demo (VI)" },
-            "config": {
-                "numrow": "Số dòng hiển thị",
-                "show_title": "Hiển thị tiêu đề"
-            }
-        },
-        "en": {
-            "info": { "name": "Block Demo (EN)" },
-            "config": {
-                "numrow": "Number of rows",
-                "show_title": "Show title"
-            }
-        }
-    }
-}
-```
+> **Tham khảo mẫu i18n JSON:** `view_file` -> `.agent/skills/nukeviet-block/examples/BlockI18n.json`
 
 `$lang_block` sẽ chứa section `config` của ngôn ngữ hiện tại — dùng trong hàm config block.
 
 ### Dùng ngôn ngữ trong hàm config và render
-
-```php
-// Hàm config block của Module — nhận $lang_block từ tham số
-function nv_block_config_tenblock($module, $data_block, $lang_block)
-{
-    // $lang_block['numrow'] → "Số dòng hiển thị" (từ JSON i18n)
-    $html  = '<div class="form-group">';
-    $html .= '<label>' . $lang_block['numrow'] . '</label>';
-    $html .= '<input type="text" name="config_numrow" value="' . $data_block['numrow'] . '">';
-    $html .= '</div>';
-    return $html;
-}
-
-// Hàm render block — dùng $lang_global và $lang_module
-function nv_tenblock($block_config)
-{
-    global $lang_global, $lang_module, $nv_Lang;
-
-    // Nếu cần ngôn ngữ của module khác — load thủ công
-    // $nv_Lang->loadModule('ten-module-khac');
-
-    $xtpl = new XTemplate('block.tenblock.tpl', ...);
-    $xtpl->assign('LANG', $lang_module);    // {LANG.key}
-    $xtpl->assign('GLANG', $lang_global);   // {GLANG.save}
-    $xtpl->parse('main');
-    return $xtpl->text('main');
-}
-```
-
-### Theme Block — ngôn ngữ với NVSmarty
-
-```php
-function nv_block_theme_example($block_config)
-{
-    global $lang_global;
-
-    $stpl = new \NukeViet\Template\NVSmarty();
-    $stpl->setTemplateDir($block_config['real_path'] . '/smarty');
-    $stpl->assign('GLANG', $lang_global);  // {$GLANG.save}
-    $stpl->assign('DATA', $block_config);
-
-    return $stpl->fetch('global.theme_example.tpl');
-}
-```
+> **Tham khảo cách dùng `$lang_block` và render Template:** `view_file` -> `.agent/skills/nukeviet-block/examples/BlockLanguagePHP.php`

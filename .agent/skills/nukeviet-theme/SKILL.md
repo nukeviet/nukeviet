@@ -103,61 +103,7 @@ cp -r themes/default themes/ten-theme-moi
 
 ## config.ini — cấu hình đầy đủ
 
-```xml
-<?xml version="1.0" encoding="UTF-8"?>
-<theme>
-    <info>
-        <name>Tên giao diện</name>
-        <author>Tác giả</author>
-        <website>https://example.com</website>
-        <description>Mô tả ngắn về theme</description>
-        <thumbnail>default.jpg</thumbnail>
-    </info>
-    <layoutdefault>left-main-right</layoutdefault>
-
-    <!-- Các block position — tag IN HOA, chỉ dùng chữ/số/gạch dưới -->
-    <positions>
-        <position>
-            <name>HEADER</name>
-            <tag>[HEADER]</tag>
-        </position>
-        <position>
-            <name>LEFT</name>
-            <tag>[LEFT]</tag>
-        </position>
-        <position>
-            <name>RIGHT</name>
-            <tag>[RIGHT]</tag>
-        </position>
-        <position>
-            <name>FOOTER</name>
-            <tag>[FOOTER]</tag>
-        </position>
-    </positions>
-
-    <!-- setlayout: gán layout cố định cho module/func cụ thể -->
-    <setlayout>
-        <layout>
-            <name>left-main</name>
-            <funcs>page:main</funcs>
-            <funcs>statistics:main,allreferers</funcs>
-        </layout>
-    </setlayout>
-
-    <!-- setblocks: khai báo blocks cài sẵn khi install theme -->
-    <setblocks>
-        <block>
-            <module>theme</module>
-            <file_name>global.copyright.php</file_name>
-            <title>Copyright</title>
-            <template>no_title</template>
-            <position>[FOOTER]</position>
-            <all_func>1</all_func>
-            <config><!-- serialized PHP array, để trống nếu không cần --></config>
-        </block>
-    </setblocks>
-</theme>
-```
+> **Tham khảo file config.ini đầy đủ:** `view_file` -> `.agent/skills/nukeviet-theme/examples/config.ini`
 
 > Sau khi sửa `config.ini`: **Admin → Công cụ web → Làm sạch cache**
 
@@ -194,28 +140,7 @@ Tag: **in hoa**, chỉ dùng chữ/số/gạch dưới — vd: `[BOTTOM_CONTENT]
 
 Layout file được tách thành nhiều phần include lẫn nhau qua cú pháp `{FILE "filename.tpl"}`:
 
-```html
-<!-- layout.main.tpl -->
-<!-- BEGIN: main -->
-{FILE "header_only.tpl"}
-{FILE "header_extended.tpl"}
-<div class="row">
-    [HEADER]
-</div>
-<div class="row">
-    <div class="col-md-24">
-        [TOP]
-        {MODULE_CONTENT}
-        [BOTTOM]
-    </div>
-</div>
-<div class="row">
-    [FOOTER]
-</div>
-{FILE "footer_extended.tpl"}
-{FILE "footer_only.tpl"}
-<!-- END: main -->
-```
+> **Tham khảo cấu trúc file layout chính:** `view_file` -> `.agent/skills/nukeviet-theme/examples/layout.main.tpl`
 
 - `header_only.tpl` — `<!DOCTYPE html>...<head>...</head><body>` — chứa CSS/JS links
 - `header_extended.tpl` — logo, search form, menu site...
@@ -278,39 +203,7 @@ return $xtpl->text('main');
 
 Guard: `NV_SYSTEM + NV_MAINFILE`
 
-```php
-<?php
-if (!defined('NV_SYSTEM') or !defined('NV_MAINFILE')) {
-    exit('Stop!!!');
-}
-
-// Cấu hình phân trang — điều chỉnh theo Bootstrap version
-$theme_config = [
-    'pagination' => [
-        // Bootstrap 3: 'pagination' / ''  / ''
-        // Bootstrap 4/5: 'pagination justify-content-center' / 'page-item' / 'page-link'
-        'ul_class' => 'pagination',
-        'li_class' => '',
-        'a_class'  => ''
-    ]
-];
-
-/**
- * Hàm bắt buộc — render email HTML của hệ thống
- */
-function nv_mailHTML($title, $content, $footer = '') { ... }
-
-/**
- * Hàm bắt buộc — render trang site đầy đủ (bọc MODULE_CONTENT + block positions)
- * $full = false → dùng simple.tpl (không có block positions)
- */
-function nv_site_theme($contents, $full = true) { ... }
-
-/**
- * Hàm bắt buộc — xử lý lỗi theme
- */
-function nv_error_theme($title, $content, $code) { ... }
-```
+> **Tham khảo code file theme.php chuẩn:** `view_file` -> `.agent/skills/nukeviet-theme/examples/theme.php`
 
 **CSS loading order** trong `nv_site_theme()`:
 ```
@@ -336,70 +229,7 @@ Block của **theme** đặt trong `themes/ten-theme/blocks/global.TEN.php`. M�
 - `global.TEN.tpl` — template HTML
 - `global.TEN.ini` — cấu hình mặc định (tùy chọn)
 
-```php
-<?php
-// Guard: NV_MAINFILE (không phải NV_IS_BLOCK_THEME — xem bảng phân biệt)
-if (!defined('NV_MAINFILE')) {
-    exit('Stop!!!');
-}
-
-if (!nv_function_exists('nv_tenblock')) {
-    /**
-     * Form cấu hình block (hiển thị trong trang quản trị block)
-     * Tên hàm: nv_{TEN}_config (khác với module block: nv_block_config_{TEN})
-     */
-    function nv_tenblock_config($module, $data_block, $lang_block)
-    {
-        global $lang_global;
-        $html  = '<div class="form-group">';
-        $html .= '<label>' . $lang_global['label'] . '</label>';
-        $html .= '<input type="text" name="config_numrow" value="' . $data_block['numrow'] . '">';
-        $html .= '</div>';
-        return $html;
-    }
-
-    /**
-     * Xử lý submit form cấu hình block
-     * Tên hàm: nv_{TEN}_submit
-     */
-    function nv_tenblock_submit()
-    {
-        global $nv_Request;
-        return [
-            'error'  => [],
-            'config' => ['numrow' => $nv_Request->get_int('config_numrow', 'post', 5)]
-        ];
-    }
-
-    /**
-     * Render nội dung block
-     * Tên hàm: nv_{TEN}($block_config)
-     * Fallback tpl: module_theme → site_theme → default
-     */
-    function nv_tenblock($block_config)
-    {
-        global $global_config, $lang_global;
-
-        // Tpl nằm trong blocks/ (không phải layout/)
-        if (file_exists(NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/blocks/global.tenblock.tpl')) {
-            $block_theme = $global_config['module_theme'];
-        } elseif (file_exists(NV_ROOTDIR . '/themes/' . $global_config['site_theme'] . '/blocks/global.tenblock.tpl')) {
-            $block_theme = $global_config['site_theme'];
-        } else {
-            $block_theme = 'default';
-        }
-
-        $xtpl = new XTemplate('global.tenblock.tpl', NV_ROOTDIR . '/themes/' . $block_theme . '/blocks');
-        $xtpl->assign('LANG', $lang_global);
-        $xtpl->parse('main');
-        return $xtpl->text('main');
-    }
-}
-
-if (defined('NV_SYSTEM')) {
-    $content = nv_tenblock($block_config);
-}
-```
+> **Tham khảo Block Global template đầy đủ:** `view_file` -> `.agent/skills/nukeviet-theme/examples/block.global.php`
 
 **Quy tắc đặt tên hàm — phân biệt theme block vs module block:**
 
@@ -424,25 +254,7 @@ if (defined('NV_SYSTEM')) {
 
 `config_default.php` — định nghĩa giá trị CSS mặc định cho giao diện tùy biến admin. Guard: `NV_MAINFILE`.
 
-```php
-<?php
-if (!defined('NV_MAINFILE')) {
-    exit('Stop!!!');
-}
-
-$default_config_theme = [
-    'body'         => ['color' => '', 'font_size' => '', 'background_color' => '', ...],
-    'a_link'       => ['color' => '', ...],
-    'a_link_hover' => ['color' => '', ...],
-    'content'      => ['margin' => '', 'padding' => '', ...],
-    'header'       => ['background_color' => '', ...],
-    'footer'       => ['background_color' => '', ...],
-    'block'        => ['background_color' => '', 'border_color' => '', ...],
-    'block_heading'=> ['background_color' => '', ...],
-    'generalcss'   => '',
-    'gfont'        => ['family' => '', 'styles' => '', 'subset' => '']
-];
-```
+> **Tham khảo form cài đặt CSS admin theme (`config_default.php`):** `view_file` -> `.agent/skills/nukeviet-theme/examples/config_default.php`
 
 `config.php` — form xử lý tùy biến CSS admin (lưu vào `NV_CONFIG_GLOBALTABLE`). Guard: `NV_IS_FILE_THEMES`. Dùng `system/config.tpl` làm template.
 

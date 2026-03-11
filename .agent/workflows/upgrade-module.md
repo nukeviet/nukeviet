@@ -6,19 +6,24 @@ Lệnh này dùng cấu trúc quy trình nâng cấp file để scan và thay th
 
 Yêu cầu tham số: Tên file module hoặc thư mục nâng cấp `$ARGUMENTS`
 
-1. Nhận diện phiên bản cũ: Tìm phiên bản trong `$ARGUMENTS/version.php`
-2. Kích hoạt tìm kiếm các mẫu cũ (NV4) cần loại bỏ:
+## 1. Xác định target
+Nhận diện đường dẫn module cần nâng cấp (Ví dụ: `modules/news`). Tìm và đọc phiên bản trong `version.php`.
+
+## 2. Tìm kiếm hàm cũ cần thay thế
 // turbo
 ```bash
-grep -rn "XTemplate\|NV_IS_FILE_ADMIN\|db_slave" $ARGUMENTS --include="*.php"
+# LƯU Ý CHO AI: Sửa biến TARGET theo yêu cầu user
+TARGET="modules/news"
+grep -rn "XTemplate\|NV_IS_FILE_ADMIN\|db_slave" $TARGET --include="*.php"
 ```
 
-3. Yêu cầu tôi (AI) tự động thay thế dựa trên log:
-   - Các file `admin/main.php` (tâm điểm cần sửa thành `NVSmarty`)
-   - Bổ sung `composer.json` nếu module cực kỳ phức tạp.
+## 3. Tự động thay thế
+AI tự động phân tích log và thay thế:
+- Chuyển `admin/main.php` sang `NVSmarty`.
+- Bổ sung `composer.json` nếu module nhiều vendor.
 
-4. Check lỗi syntax cuối:
+## 4. Check syntax
 // turbo
 ```bash
-find $ARGUMENTS -name "*.php" -type f -exec php -l {} \; | grep "Errors parsing"
+find $TARGET -name "*.php" -type f -exec php -l {} \; | grep "Errors parsing"
 ```

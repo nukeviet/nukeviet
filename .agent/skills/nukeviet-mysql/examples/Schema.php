@@ -1,0 +1,17 @@
+<?php
+$sql_create_table = [
+    'CREATE TABLE ' . $db_config['prefix'] . '_' . $lang . '_' . $module_data . '_items ('
+    . ' `id`         MEDIUMINT(8) UNSIGNED NOT NULL AUTO_INCREMENT,'
+    . ' `title`      VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,'
+    . ' `alias`      VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT \'\','
+    . ' `content`    MEDIUMTEXT  CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,'
+    . ' `status`     TINYINT(1)  NOT NULL DEFAULT \'1\','
+    . ' `order`      SMALLINT(5) UNSIGNED NOT NULL DEFAULT \'0\','
+    . ' `created_at` INT(11)     UNSIGNED NOT NULL DEFAULT \'0\','
+    . ' `updated_at` INT(11)     UNSIGNED NOT NULL DEFAULT \'0\','
+    . ' `author_id`  INT(11)     UNSIGNED NOT NULL DEFAULT \'0\','
+    . ' PRIMARY KEY (`id`),'
+    . ' KEY `idx_status` (`status`, `created_at`),'
+    . ' UNIQUE KEY `uq_alias` (`alias`)'
+    . ') ENGINE=MyISAM DEFAULT CHARSET=utf8'
+];

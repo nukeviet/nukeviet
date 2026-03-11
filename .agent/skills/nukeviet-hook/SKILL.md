@@ -74,38 +74,7 @@ includes/plugin/
 └── ten_plugin.php         # hook hệ thống (plugin toàn cục)
 ```
 
-### Template file hook chuẩn
-
-```php
-<?php
-
-/**
- * @Project NukeViet
- * @Author  ...
- * @License GNU/GPL version 2 or any later version
- */
-
-if (!defined('NV_MAINFILE')) {
-    exit('Stop!!!');
-}
-
-// Biến hệ thống tự inject vào scope khi load:
-// $module_name — Module phát sự kiện (string)
-// $hook_module — Module nhận (tên module của bạn, string)
-// $priority    — Độ ưu tiên (int, mặc định 10)
-// $pid         — ID quản lý trong CSDL (int)
-
-$callback = function ($args, $from_data, $receive_data) {
-    // Xử lý logic tại đây
-    // Luôn return null nếu không có gì trả về
-    // return null;
-
-    return $result; // hoặc null để bỏ qua
-};
-
-// Đăng ký hook — gọi ở dòng cuối file
-nv_add_hook($module_name, 'tag_name', $priority, $callback, $hook_module, $pid);
-```
+> **Tham khảo Template file hook chuẩn:** `view_file` -> `.agent/skills/nukeviet-hook/examples/TemplateHook.php`
 
 > ⚠️ **QUAN TRỌNG:** `nv_add_hook()` **BẮT BUỘC** gọi ở **cuối file** sau khi đã định nghĩa `$callback`.
 
@@ -114,91 +83,16 @@ nv_add_hook($module_name, 'tag_name', $priority, $callback, $hook_module, $pid);
 ## 4. Ví dụ thực tế
 
 ### Ví dụ 1 — Hook xóa dữ liệu khi user bị xóa
-
-```php
-<?php
-
-if (!defined('NV_MAINFILE')) {
-    exit('Stop!!!');
-}
-
-// Khi module 'users' xóa user → xóa dữ liệu module của chúng ta
-$callback = function ($args, $from_data, $receive_data) {
-    global $db;
-
-    $userid = (int) ($args[0] ?? 0);
-    if ($userid <= 0) {
-        return null;
-    }
-
-    // Xóa bài viết của user trong module tenmodule
-    $db->query('DELETE FROM ' . NV_PREFIXLANG . '_tenmodule WHERE userid = ' . $userid);
-
-    return true; // báo hiệu đã xử lý
-};
-
-nv_add_hook($module_name, 'user_delete', $priority, $callback, $hook_module, $pid);
-```
+> **Tham khảo code mẫu:** `view_file` -> `.agent/skills/nukeviet-hook/examples/ExampleUserDelete.php`
 
 ### Ví dụ 2 — Hook chỉnh sửa nội dung trước khi render detail
-
-```php
-<?php
-
-if (!defined('NV_MAINFILE')) {
-    exit('Stop!!!');
-}
-
-// Trước khi module 'page' render trang chi tiết → thêm watermark vào nội dung
-$callback = function ($args, $from_data, $receive_data) {
-    [$rowdetail, $other_links, $content_comment] = $args;
-
-    // Thêm watermark vào body
-    $rowdetail['body'] .= '<p class="watermark">© ' . date('Y') . '</p>';
-
-    return [$rowdetail, $other_links, $content_comment];
-};
-
-nv_add_hook($module_name, 'before_detail_theme', $priority, $callback, $hook_module, $pid);
-```
+> **Tham khảo code mẫu:** `view_file` -> `.agent/skills/nukeviet-hook/examples/ExampleBeforeDetailTheme.php`
 
 ### Ví dụ 3 — Hook hệ thống `change_site_buffer`
-
-```php
-<?php
-
-if (!defined('NV_MAINFILE')) {
-    exit('Stop!!!');
-}
-
-// Can thiệp toàn bộ HTML trước khi xuất ra browser
-$callback = function ($args, $from_data, $receive_data) {
-    [$global_config, [$contents, $headers]] = $args;
-
-    // Thêm comment vào cuối trang
-    $contents .= "\n<!-- Hook by tenmodule -->";
-
-    return [$contents, $headers];
-};
-
-// Module hệ thống: $module_name = '' (luôn là chuỗi rỗng khi load từ system)
-nv_add_hook($module_name, 'change_site_buffer', $priority, $callback, $hook_module, $pid);
-```
+> **Tham khảo code mẫu:** `view_file` -> `.agent/skills/nukeviet-hook/examples/ExampleChangeSiteBuffer.php`
 
 ### Ví dụ 4 — Hook với `return_type = 1` (array_merge)
-
-```php
-// Phát sự kiện lấy danh sách merge fields cho email (return_type=1 → gộp tất cả callback)
-$merge_fields = nv_apply_hook('', 'get_email_merge_fields', $_args, [], 1);
-
-// Callback của các module trả về từng phần và được merge lại
-$callback = function ($args, $from_data, $receive_data) {
-    return [
-        'my_field' => ['name' => 'Tên trường', 'data' => '']
-    ];
-};
-nv_add_hook('', 'get_email_merge_fields', $priority, $callback, $hook_module, $pid);
-```
+> **Tham khảo code mẫu:** `view_file` -> `.agent/skills/nukeviet-hook/examples/ExampleReturnType.php`
 
 ---
 

@@ -34,175 +34,14 @@ Bất cứ class API nào của một module (Ví dụ: `news`, action: `get_lis
 ## 2. Admin API Template (Api)
 
 **File lưu tại:** `modules/ten-module/Api/TenAction.php`
-Ví dụ: `modules/news/Api/GetList.php`
-
-```php
-<?php
-
-/**
- * @Project NukeViet
- * @Author VN (email)
- * @Copyright (C) 2025 VN. All rights reserved
- * @License GNU/GPL version 2 or any later version
- */
-
-// Chú ý namespace PSR-4 chuẩn NukeViet 5: NukeViet\Module\[TênModule]\Api
-namespace NukeViet\Module\News\Api;
-
-use NukeViet\Api\ApiResult;
-use NukeViet\Api\IApi;
-use NukeViet\Api\Api;
-
-if (!defined('NV_ADMIN')) {
-    exit('Stop!!!');
-}
-
-/**
- * Class GetList
- */
-class GetList implements IApi
-{
-    /**
-     * @var ApiResult
-     */
-    private $result;
-
-    /**
-     * Mức quyền Admin thiểu cần thiết để gọi API này
-     * ADMIN_LEV_GOD (1), ADMIN_LEV_SP (2), ADMIN_LEV_MOD (3)
-     */
-    public static function getAdminLev()
-    {
-        return Api::ADMIN_LEV_MOD;
-    }
-
-    /**
-     * Danh mục cấu hình quyền API
-     */
-    public static function getCat()
-    {
-        return 'System'; // Hoặc rỗng ''
-    }
-
-    /**
-     * Nhận đối tượng xử lý kết quả
-     */
-    public function setResultHander(ApiResult $result)
-    {
-        $this->result = $result;
-    }
-
-    /**
-     * Logic chính
-     */
-    public function execute()
-    {
-        global $nv_Request, $db_slave, $module_data;
-
-        // Bắt buộc dùng $nv_Request, cấm $_POST/$_GET trực tiếp
-        $limit = $nv_Request->get_int('limit', 'post,get', 10);
-        $page = $nv_Request->get_int('page', 'post,get', 1);
-
-        // Lấy thông tin module & admin đang execute
-        $module_name = Api::getModuleName(); // "news"
-        $admin_id    = Api::getAdminId();
-
-        // Xử lý Logic (ví dụ lấy danh sách bài viết)
-        // ...
-
-        $data_return = [
-            'status' => 'success',
-            'data'   => [
-                'items' => [],
-                'total' => 0
-            ]
-        ];
-
-        // Trả về JSON thông qua đối tượng result
-        return $this->result->setCode(ApiResult::CODE_OK)
-            ->setMessage('Lấy dữ liệu thành công')
-            ->setData($data_return)
-            ->returnResult();
-    }
-}
-```
+> **Tham khảo code mẫu hoàn chỉnh:** `view_file` -> `.agent/skills/nukeviet-api/examples/AdminApi.php`
 
 ---
 
 ## 3. User API Template (Uapi)
 
 **File lưu tại:** `modules/ten-module/Uapi/TenAction.php`
-Ví dụ: `modules/news/Uapi/GetList.php`
-
-```php
-<?php
-
-/**
- * @Project NukeViet
- * @Author VN (email)
- * @Copyright (C) 2025 VN. All rights reserved
- * @License GNU/GPL version 2 or any later version
- */
-
-// Không gian Uapi
-namespace NukeViet\Module\News\Uapi;
-
-use NukeViet\Uapi\UapiResult;
-use NukeViet\Uapi\UiApi;
-use NukeViet\Uapi\Uapi;
-
-if (!defined('NV_SYSTEM')) {
-    exit('Stop!!!');
-}
-
-/**
- * Class GetList
- */
-class GetList implements UiApi
-{
-    /**
-     * @var UapiResult
-     */
-    private $result;
-
-    /**
-     * Danh mục cấu hình quyền API
-     */
-    public static function getCat()
-    {
-        return '';
-    }
-
-    /**
-     * Nhận đối tượng xử lý
-     */
-    public function setResultHander(UapiResult $result)
-    {
-        $this->result = $result;
-    }
-
-    /**
-     * Logic chính
-     */
-    public function execute()
-    {
-        global $nv_Request, $db_slave;
-
-        // Lấy thông tin user nếu có
-        $userid = Uapi::getUserId();
-
-        // Logic xử lý
-        $data_return = [
-            'items' => []
-        ];
-
-        return $this->result->setCode(UapiResult::CODE_OK)
-            ->setMessage('OK')
-            ->setData($data_return)
-            ->returnResult();
-    }
-}
-```
+> **Tham khảo code mẫu hoàn chỉnh:** `view_file` -> `.agent/skills/nukeviet-api/examples/UserApi.php`
 
 ---
 
@@ -216,31 +55,7 @@ class GetList implements UiApi
     - Cấp Vai trò trên cho Credential đã tạo.
 
 ## 5. Test Gọi API (Client Example)
-Client có thể dùng Class `\NukeViet\Api\DoApi` trong Core để kết nối đến Remote API qua HTTP:
-
-```php
-use NukeViet\Api\DoApi;
-
-// Khởi tạo bộ gọi
-$apiurl = 'https://site.com/api.php';
-$apikey = 'TAO_TRONG_ADMIN';
-$apisecret = 'CUNG_TAO_TRONG_ADMIN';
-
-$api = new DoApi($apiurl, $apikey, $apisecret, false);
-
-// Gọi module news, action GetList
-$response = $api->setLang('vi')
-                ->setModule('news')
-                ->setAction('GetList')
-                ->setData(['limit' => 5])
-                ->execute();
-
-if (empty($response)) {
-    echo $api->getError();
-} else {
-    print_r($response);
-}
-```
+> **Tham khảo cách dùng `DoApi` class:** `view_file` -> `.agent/skills/nukeviet-api/examples/ClientDoApi.php`
 
 ---
 
@@ -304,55 +119,8 @@ function nv_local_api($cmd, $params, $adminidentity = '', $module = '')
 | **Hiệu suất** | Chậm hơn (qua HTTP) | Nhanh (in-process) |
 | **Khi nào dùng** | Mobile App, hệ thống ngoài, SPA | Module gọi chéo, admin function, tái sử dụng logic |
 
-### 6.4. Template gọi Local API trong Admin Function
-
-Ví dụ gọi API `GetList` của module `news` trong một admin function:
-
-```php
-// Chuẩn bị tham số
-$params = [
-    'limit' => 10,
-    'page'  => 1,
-    'catid' => $nv_Request->get_int('catid', 'post,get', 0)
-];
-
-// Gọi Local API
-$json_result = nv_local_api('GetList', $params, $admin_info['username'], $module_name);
-
-// Xử lý kết quả
-$result = json_decode($json_result, true);
-
-if ($result['code'] == '0000') {
-    // Thành công - dùng $result['data']
-    $items = $result['data']['items'];
-    $total = $result['data']['total'];
-} else {
-    // Lỗi
-    $error = $result['message'];
-}
-```
-
-### 6.5. Các pattern sử dụng phổ biến
-
-**a) Tái sử dụng logic giữa các function admin:**
-```php
-// Trong funcs/edit.php - lấy chi tiết bản ghi bằng API đã có
-$detail = nv_local_api('GetDetail', ['id' => $id], $admin_info['username'], $module_name);
-$detail = json_decode($detail, true);
-```
-
-**b) Module gọi API của module khác:**
-```php
-// Module "order" gọi API của module "products" để lấy sản phẩm
-$product = nv_local_api('GetProduct', ['product_id' => $pid], $admin_info['username'], 'products');
-$product = json_decode($product, true);
-```
-
-**c) Gọi API hệ thống (không thuộc module nào):**
-```php
-// $module rỗng → resolve class NukeViet\Api\{$cmd}
-$sys_result = nv_local_api('SystemInfo', [], $admin_info['username']);
-```
+### 6.4. Các pattern sử dụng phổ biến (Local API)
+> **Tham khảo các cách gọi Local API thường gặp:** `view_file` -> `.agent/skills/nukeviet-api/examples/LocalApiPattern.php`
 
 ### 6.6. Lưu ý quan trọng
 

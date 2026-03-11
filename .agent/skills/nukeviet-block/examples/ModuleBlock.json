@@ -1,0 +1,20 @@
+{
+    "info": {
+        "name": "Tên Block VD",
+        "author": "VINADES.,JSC",
+        "website": "https://vinades.vn",
+        "description": "Mô tả block"
+    },
+    "i18n": {
+        "en": {
+            "info": {
+                "name": "Display name in EN"
+            }
+        },
+        "vi": {
+            "info": {
+                "name": "Tên hiển thị tiếng Việt"
+            }
+        }
+    }
+}

@@ -36,8 +36,8 @@ grep -rn "is_file\|file_exists\|unlink" $TARGET --include="*.php" | grep -v "nv_
 # [4/6] unserialize() — Object Injection
 grep -rn "unserialize(" $TARGET --include="*.php"
 
-# [5/6] CSRF (Tìm file POST thiếu nv_check_formtoken hoặc checkss)
-grep -rl "isset_request(.*'post'" $TARGET --include="*.php" | xargs -r grep -L "nv_check_formtoken\|checkss\|NV_CHECK_SESSION"
+# [5/6] CSRF (Tìm file POST thiếu NV_CHECK_SESSION hoặc checkss)
+grep -rl "isset_request(.*'post'" $TARGET --include="*.php" | xargs -r grep -L "checkss\|NV_CHECK_SESSION\|hash_equals"
 
 # [6/6] TÌM MẬT KHẨU / LỘ SECRET KEY
 grep -rn "password\|passwd\|secret\|api_key" $TARGET --include="*.php" | grep -v "//\|#\|\$_POST\|\$config\|lang_module\|lang_global\|nv_Lang"
@@ -48,150 +48,24 @@ grep -rn "password\|passwd\|secret\|api_key" $TARGET --include="*.php" | grep -v
 ## Lỗi phổ biến và cách fix
 
 ### Input — PHẢI qua $nv_Request
-```php
-// ❌ Sai
-$id = $_GET['id'];
-
-// ✅ Đúng
-$id    = $nv_Request->get_int('id', 'get', 0);
-$title = $nv_Request->get_title('title', 'post', '');
-$title = nv_substr($title, 0, 255);
-$body  = $nv_Request->get_editor('body', '', NV_ALLOWED_HTML_TAGS);
-$desc  = $nv_Request->get_textarea('desc', '', NV_ALLOWED_HTML_TAGS);
-```
+> **Tham khảo mẫu chống XSS/SQLi qua Request:** `view_file` -> `.agent/skills/nukeviet-security/examples/PatternInput.php`
 
 ### SQL — PDO prepared statement cho user input
-```php
-// ❌ Sai — Nối chuỗi mảng ID gây SQLi
-$sql = "WHERE id IN (" . implode(',', $_POST['ids']) . ")";
-
-// ✅ Đúng — Ép kiểu nguyên cho toàn bộ mảng trước khi implode
-$ids = array_map('intval', $nv_Request->get_typed_array('ids', 'post', 'int', []));
-$sql = "WHERE id IN (" . implode(',', $ids) . ")";
-
-// ❌ Sai — nối chuỗi input trực tiếp
-$sql = "WHERE title = '" . $_POST['title'] . "'";
-
-// ✅ Đúng — số nguyên dùng (int)
-$sql = '... WHERE id = ' . (int) $id;
-
-// ✅ Đúng — chuỗi từ user dùng prepared statement
-$sql = 'SELECT * FROM ' . NV_PREFIXLANG . '_items WHERE title = :title';
-$sth = $db->prepare($sql);
-$sth->bindParam(':title', $title, PDO::PARAM_STR);
-$sth->execute();
-$row = $sth->fetch();
-```
+> **Tham khảo mẫu SQL Prepared Statement:** `view_file` -> `.agent/skills/nukeviet-security/examples/PatternSQL.php`
 
 > Hằng hệ thống (`NV_CURRENTTIME`, `$admin_info['admin_id']`...) và số nguyên đã ép kiểu `(int)` nối thẳng vào SQL là an toàn — không cần prepare.
 
 ### CSRF — Kiểm tra token trước khi xử lý POST
-
-NukeViet có **2 pattern** CSRF tuỳ ngữ cảnh:
-
-**Pattern 1 — Frontend (form ngoài site):**
-```php
-// Trong form HTML:
-<?php echo nv_form_token(); ?>
-
-// Khi xử lý POST:
-if (!nv_check_formtoken()) {
-    nv_redirect_location($page_url);
-}
-```
-
-**Pattern 2 — Admin (AJAX/JSON response):**
-```php
-// Trong template: gán biến CHECKSS
-$tpl->assign('CHECKSS', md5(NV_CHECK_SESSION . '_' . $module_name . '_' . $admin_info['userid']));
-
-// Khi xử lý POST:
-$checkss = $nv_Request->get_title('checkss', 'post', '');
-
-// ✅ Tính toán token an toàn (Ví dụ dùng HMAC-SHA256 với NV_CACHE_PREFIX làm salt)
-// Lưu ý: $op cần được lấy từ request nếu có trong chuỗi hash
-$checkss_expected = hash_hmac('sha256', NV_CHECK_SESSION . '_' . $module_name . '_' . $admin_info['userid'], NV_CACHE_PREFIX);
-
-// ❌ Cách cũ (không khuyến khích - dễ bị timing attack)
-// if ($checkss_expected != $checkss) { }
-
-// ✅ Xác thực an toàn (Khuyên dùng)
-if (!hash_equals($checkss_expected, $checkss)) {
-    nv_jsonOutput(['status' => 'error', 'mess' => $nv_Lang->getGlobal('error_code_11')]);
-}
-```
+NukeViet có **2 pattern** CSRF tuỳ ngữ cảnh (Frontend và Admin).
+> **Tham khảo mẫu verify CSRF Token:** `view_file` -> `.agent/skills/nukeviet-security/examples/PatternCSRF.php`
 
 > [!IMPORTANT]
 > Luôn dùng `hash_equals($expected, $actual)` để so sánh token CSRF. Trong đó `$expected` là chuỗi bí mật sinh ra từ server, `$actual` là chuỗi nhận được từ request (form/ajax). Việc so sánh bằng `!=` hoặc `==` có thể bị khai thác qua timing attacks.
 
 > ⚠ Ở admin, có module nối thêm `$op` vào chuỗi hash: `md5(NV_CHECK_SESSION . '_' . $module_name . '_' . $op . '_' . $admin_info['userid'])`.
 
-### XSS output
-```php
-// ❌ Sai
-echo $row['title'];
-
-// ✅ Đúng
-echo nv_htmlspecialchars($row['title']);
-```
-
-### Kiểm tra file — dùng nv_is_file
-```php
-// ❌ Sai — path từ user, không kiểm soát
-is_file(NV_DOCUMENT_ROOT . $path_from_user);
-
-// ✅ Đúng
-nv_is_file($path_from_user, $uploads_dir_user);
-```
-
-### Open Redirect — không dùng selfurl trực tiếp
-```php
-// ❌ Sai
-nv_redirect_location($client_info['selfurl']);
-
-// ✅ Đúng
-nv_redirect_location($page_url);
-
-// Nếu cần truyền URL qua form: nv_redirect_encrypt() / nv_get_redirect()
-// Nếu hiển thị ra HTML: nv_htmlspecialchars($client_info['selfurl'])
-```
-
-### Upload file
-```php
-// ❌ Sai — Xử lý $_FILES thủ công
-$finfo = finfo_open(FILEINFO_MIME_TYPE); // ...
-
-// ✅ Đúng — Dùng class Upload của NukeViet
-require_once NV_ROOTDIR . '/includes/class/upload.class.php';
-$upload = new \NukeViet\Files\Upload($allow_exts, $global_config['forbid_extensions'], $global_config['forbid_mimes'], NV_UPLOAD_MAX_FILESIZE, NV_DIR_USER, $nv_is_admin);
-$upload_info = $upload->save_file($_FILES['f'], $upload_dir, $replace_if_exists);
-```
-
-### Phân quyền admin
-```php
-// ❌ Chưa đủ an toàn cho các tác vụ nhạy cảm
-if (!defined('NV_IS_ADMIN')) { exit('Stop!!!'); }
-
-// ✅ Đúng — File admin phải check NV_IS_FILE_ADMIN (đã bao gồm NV_IS_MODADMIN)
-if (!defined('NV_IS_FILE_ADMIN')) { exit('Stop!!!'); }
-
-// ✅ Chức năng đặc quyền — thêm check NV_IS_SPADMIN
-if (defined('NV_IS_SPADMIN')) {
-    // Chỉ super admin mới được config, xóa toàn bộ...
-}
-```
-
-### unserialize() — Nguy cơ Object Injection
-```php
-// ❌ Sai — unserialize dữ liệu từ DB không giới hạn class
-$data = unserialize($row['others']);
-
-// ✅ Đúng — Chặn instantiate class bất kỳ
-$data = unserialize($row['others'], ['allowed_classes' => false]);
-
-// ✅ Tốt nhất — Migrate sang JSON, bỏ hẳn unserialize
-$data = json_decode($row['others'], true);
-```
+### Các lỗi bảo mật khác (XSS, Path Traversal, Open Redirect, Upload, Object Injection)
+> **Tham khảo code mẫu phòng chống các lỗi còn lại:** `view_file` -> `.agent/skills/nukeviet-security/examples/PatternMisc.php`
 
 ---
 
@@ -226,9 +100,8 @@ Có thể dùng nhiều mode cách nhau dấu phẩy — lấy từ mode đầu 
 | `nv_htmlspecialchars()` | Escape HTML output |
 | `$db->prepare()` + `bindParam()` | Chuỗi từ user vào SQL |
 | `$db->dblikeescape($value)` | Escape ký tự đặc biệt trong LIKE |
-| `nv_check_formtoken()` | Xác minh CSRF token (frontend form) |
-| `nv_form_token()` | Sinh CSRF token trong form HTML (frontend) |
-| `md5(NV_CHECK_SESSION . '_' . ...)` | Xác minh CSRF token (admin AJAX) - Luôn dùng kèm `hash_equals` |
+| `NV_CHECK_SESSION` | Hằng CSRF session — so sánh với `$nv_Request->get_title('checkss', 'post')` |
+| `md5(NV_CHECK_SESSION . '_' . ...)` | Tạo checkss đặc biệt cho từng hành động (admin) — Luôn dùng kèm `hash_equals` |
 | `nv_is_file()` | Kiểm tra file an toàn |
 | `nv_redirect_encrypt/decrypt` | Redirect an toàn |
 | `nv_check_valid_email()` | Validate email |
