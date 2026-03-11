@@ -18,14 +18,24 @@ $block = [];
 
 if ($bid) {
     $block = $db->query('SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_blocks WHERE bid=' . $bid)->fetch();
+    if (empty($block)) {
+        nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
+    }
 }
 
-$page_title = $nv_Lang->getModule('content_list') . ': ' . $block['title'];
+$page_title = $nv_Lang->getModule('content_list');
+if ($bid) {
+    $page_title .= ': ' . $block['title'];
+}
+
+// Generate Expected CSRF Token
+$checkss_expected = hash_hmac('sha256', NV_CHECK_SESSION . '_' . $module_name . '_manager_' . $admin_info['userid'], NV_CACHE_PREFIX);
 
 // Write row
 $xtpl = new XTemplate('list.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
 $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
 $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
+$xtpl->assign('CHECK_SESSION', $checkss_expected);
 
 if (defined('NV_EDITOR')) {
     require_once NV_ROOTDIR . '/' . NV_EDITORSDIR . '/' . NV_EDITOR . '/nv.php';

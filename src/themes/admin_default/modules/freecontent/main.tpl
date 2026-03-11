@@ -1,4 +1,5 @@
 <!-- BEGIN: main -->
+<script type="text/javascript">var freecontent_checkss = '{CHECK_SESSION}';</script>
 <!-- BEGIN: empty -->
 <div class="m-bottom">
     <div class="m-bottom text-center">

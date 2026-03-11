@@ -1,4 +1,5 @@
 <!-- BEGIN: main -->
+<script type="text/javascript">var freecontent_checkss = '{CHECK_SESSION}';</script>
 <!-- BEGIN: empty -->
 <p class="text-center">
     <button class="btn btn-primary content-add-trigger">{LANG.content_add}</button>

@@ -15,8 +15,19 @@ if (!defined('NV_IS_FILE_ADMIN')) {
 
 $page_title = $nv_Lang->getModule('mng');
 
+// Generate Expected CSRF Token
+$checkss_expected = hash_hmac('sha256', NV_CHECK_SESSION . '_' . $module_name . '_' . $op . '_' . $admin_info['userid'], NV_CACHE_PREFIX);
+
 // Get content info
 if ($nv_Request->isset_request('getinfo', 'post')) {
+    if (!hash_equals($checkss_expected, $nv_Request->get_title('checkss', 'post', ''))) {
+        nv_jsonOutput([
+            'status' => 'error',
+            'message' => 'Error session!!!',
+            'data' => []
+        ]);
+    }
+
     $id = $nv_Request->get_int('id', 'post', '0');
 
     $array = [];
@@ -57,6 +68,13 @@ if ($nv_Request->isset_request('getinfo', 'post')) {
 
 // Delete content
 if ($nv_Request->isset_request('del', 'post')) {
+    if (!hash_equals($checkss_expected, $nv_Request->get_title('checkss', 'post', ''))) {
+        nv_jsonOutput([
+            'status' => 'error',
+            'message' => 'Error session!!!'
+        ]);
+    }
+
     $id = $nv_Request->get_int('id', 'post', '0');
     $message = '';
 
@@ -83,6 +101,13 @@ if ($nv_Request->isset_request('del', 'post')) {
 
 // Change content status
 if ($nv_Request->isset_request('changestatus', 'post')) {
+    if (!hash_equals($checkss_expected, $nv_Request->get_title('checkss', 'post', ''))) {
+        nv_jsonOutput([
+            'status' => 'error',
+            'message' => 'Error session!!!'
+        ]);
+    }
+
     $id = $nv_Request->get_int('id', 'post', '0');
     $message = '';
     $status = 0;
@@ -168,6 +193,14 @@ if (empty($block)) {
 
 // Add + Edit submit
 if ($nv_Request->isset_request('submit', 'post')) {
+    if (!hash_equals($checkss_expected, $nv_Request->get_title('checkss', 'post', ''))) {
+        nv_jsonOutput([
+            'status' => 'error',
+            'message' => 'Error session!!!',
+            'error' => []
+        ]);
+    }
+
     $data = $error = [];
     $message = '';
 

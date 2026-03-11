@@ -15,8 +15,19 @@ if (!defined('NV_IS_FILE_ADMIN')) {
 
 $page_title = $nv_Lang->getModule('block_list');
 
+// Generate Expected CSRF Token
+$checkss_expected = hash_hmac('sha256', NV_CHECK_SESSION . '_' . $module_name . '_' . $op . '_' . $admin_info['userid'], NV_CACHE_PREFIX);
+
 // Get block info
 if ($nv_Request->isset_request('getinfo', 'post')) {
+    if (!hash_equals($checkss_expected, $nv_Request->get_title('checkss', 'post', ''))) {
+        nv_jsonOutput([
+            'status' => 'error',
+            'message' => 'Error session!!!',
+            'data' => []
+        ]);
+    }
+
     $bid = $nv_Request->get_int('bid', 'post', '0');
 
     $array = [];
@@ -39,6 +50,13 @@ if ($nv_Request->isset_request('getinfo', 'post')) {
 
 // Delete block
 if ($nv_Request->isset_request('del', 'post')) {
+    if (!hash_equals($checkss_expected, $nv_Request->get_title('checkss', 'post', ''))) {
+        nv_jsonOutput([
+            'status' => 'error',
+            'message' => 'Error session!!!'
+        ]);
+    }
+
     $bid = $nv_Request->get_int('bid', 'post', '0');
     $message = '';
 
@@ -69,6 +87,14 @@ if ($nv_Request->isset_request('del', 'post')) {
 
 // Add + Edit submit
 if ($nv_Request->isset_request('submit', 'post')) {
+    if (!hash_equals($checkss_expected, $nv_Request->get_title('checkss', 'post', ''))) {
+        nv_jsonOutput([
+            'status' => 'error',
+            'message' => 'Error session!!!',
+            'error' => []
+        ]);
+    }
+
     $data = $error = [];
     $message = '';
 
@@ -128,6 +154,7 @@ if ($nv_Request->isset_request('submit', 'post')) {
 $xtpl = new XTemplate('main.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
 $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
 $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
+$xtpl->assign('CHECK_SESSION', $checkss_expected);
 
 $sql = 'SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_blocks ORDER BY bid DESC';
 $array = $db->query($sql)->fetchAll();

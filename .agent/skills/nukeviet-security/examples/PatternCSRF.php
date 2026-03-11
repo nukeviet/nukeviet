@@ -2,21 +2,22 @@
 /**
  * Pattern bảo mật CSRF chuẩn NukeViet 5
  *
- * KHÔNG có hàm nv_check_formtoken() trong NukeViet 5.
- * Cơ chế chống CSRF dùng hằng NV_CHECK_SESSION:
+ * Tiêu chuẩn khuyến nghị: Sử dụng hash_hmac kết hợp hash_equals.
+ * Tạo chuỗi expected chung cho module admin tại đầu file.
  */
 
-// Cách 1: Kiểm tra checkss param trùng NV_CHECK_SESSION (phổ biến nhất)
-if ($nv_Request->get_title('checkss', 'post') != NV_CHECK_SESSION) {
-    // Không hợp lệ → báo lỗi hoặc redirect
-    nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
+// Quy tắc tính toán $checkss_expected (Thường đặt ở đầu file admin)
+$checkss_expected = hash_hmac('sha256', NV_CHECK_SESSION . '_' . $module_name . '_' . $op . '_' . $admin_info['userid'], NV_CACHE_PREFIX);
+
+// Cách 1: Kiểm tra checkss param tại các action ajax / submit form POST
+if (!hash_equals($checkss_expected, $nv_Request->get_title('checkss', 'post', ''))) {
+    // Không hợp lệ → báo lỗi hoặc redirect (tùy định dạng trả về)
+    nv_jsonOutput([
+        'status' => 'error',
+        'message' => 'Error session!!!'
+    ]);
 }
 
-// Cách 2: Dùng md5 kết hợp để tạo checkss cho các hành động đặc biệt
-$checkss = md5(NV_CHECK_SESSION . '_' . $id);
-if ($nv_Request->get_title('checkss', 'post') != $checkss) {
-    exit('Stop!!!');
-}
-
-// Cách 3: Truyền checkss vào form ẩn (trong template XTemplate hoặc Smarty)
-// <input type="hidden" name="checkss" value="{NV_CHECK_SESSION}" />
+// Cách 2: Truyền checkss vào template (XTemplate hoặc Smarty)
+// $xtpl->assign('CHECKSS_EXPECTED', $checkss_expected);
+// Tpl: <script>var module_checkss = '{CHECKSS_EXPECTED}';</script> hoặc <input type="hidden" name="checkss" value="{CHECKSS_EXPECTED}" />

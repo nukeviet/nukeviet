@@ -35,7 +35,7 @@ if (!nv_function_exists('nv_block_freecontent')) {
         $list = $nv_Cache->db($sql, '', $module);
 
         foreach ($list as $row) {
-            $html .= '	<option value="' . $row['bid'] . '"' . ($row['bid'] == $data_block['blockid'] ? ' selected="selected"' : '') . '>' . $row['title'] . '</option>';
+            $html .= '	<option value="' . $row['bid'] . '"' . ($row['bid'] == $data_block['blockid'] ? ' selected="selected"' : '') . '>' . nv_htmlspecialchars($row['title']) . '</option>';
         }
 
         $html .= '		</select>';

@@ -55,7 +55,6 @@ Dùng để tra cứu khi làm việc với các thành phần cụ thể:
 | `nukeviet-testing` | Unit Test, Acceptance Test với Codeception, Selenium, chạy theo Group. |
 | `nukeviet-security` | Quét lỗ hổng nguy hiểm (SQLi, CSRF, XSS), filter `$nv_Request`, `nv_htmlspecialchars()`. |
 | `nukeviet-mysql` | Query Builder thông qua `$db_slave` / `$db`, Prefix đa ngôn ngữ chuẩn NukeViet 5. |
-| `nukeviet-review` | Quy trình review code, tiêu chuẩn bảo mật, convention và cách báo cáo lỗi. |
 | `nukeviet-upgrade` | Lộ trình nâng cấp từ phiên bản NukeViet 4.x. |
 | `.agent/upgrade/` | Kho chứa logs chi tiết các breaking config khi nâng cấp module/theme. |
 

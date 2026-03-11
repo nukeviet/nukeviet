@@ -1,6 +1,6 @@
 ---
 name: nukeviet-security
-description: Bảo mật NukeViet 5.x. Load khi review bảo mật, audit code, tìm lỗ hổng XSS/SQLi/Open Redirect/upload.
+description: Bảo mật & Code Review NukeViet 5.x. Load khi audit code, review MR, tìm lỗ hổng bảo mật, kiểm duyệt convention và chất lượng code.
 allowed-tools: Read, Grep, Glob, Bash
 ---
 
@@ -60,9 +60,11 @@ NukeViet có **2 pattern** CSRF tuỳ ngữ cảnh (Frontend và Admin).
 > **Tham khảo mẫu verify CSRF Token:** `view_file` -> `.agent/skills/nukeviet-security/examples/PatternCSRF.php`
 
 > [!IMPORTANT]
-> Luôn dùng `hash_equals($expected, $actual)` để so sánh token CSRF. Trong đó `$expected` là chuỗi bí mật sinh ra từ server, `$actual` là chuỗi nhận được từ request (form/ajax). Việc so sánh bằng `!=` hoặc `==` có thể bị khai thác qua timing attacks.
+> Luôn dùng `hash_equals($expected, $actual)` để so sánh token CSRF. Việc so sánh bằng `!=` hoặc `==` có thể bị khai thác qua timing attacks.
+> Cố gắng tạo `$checkss_expected` tại 1 điểm duy nhất trên cùng của file nếu cùng giá trị để tiện bảo trì.
 
-> ⚠ Ở admin, có module nối thêm `$op` vào chuỗi hash: `md5(NV_CHECK_SESSION . '_' . $module_name . '_' . $op . '_' . $admin_info['userid'])`.
+> ⚠ Ở admin, tạo `$checkss_expected` bằng cách truyền toàn bộ context vào chuỗi hash:
+> `$checkss_expected = hash_hmac('sha256', NV_CHECK_SESSION . '_' . $module_name . '_' . $op . '_' . $admin_info['userid'], NV_CACHE_PREFIX);`
 
 ### Các lỗi bảo mật khác (XSS, Path Traversal, Open Redirect, Upload, Object Injection)
 > **Tham khảo code mẫu phòng chống các lỗi còn lại:** `view_file` -> `.agent/skills/nukeviet-security/examples/PatternMisc.php`
@@ -100,16 +102,31 @@ Có thể dùng nhiều mode cách nhau dấu phẩy — lấy từ mode đầu 
 | `nv_htmlspecialchars()` | Escape HTML output |
 | `$db->prepare()` + `bindParam()` | Chuỗi từ user vào SQL |
 | `$db->dblikeescape($value)` | Escape ký tự đặc biệt trong LIKE |
-| `NV_CHECK_SESSION` | Hằng CSRF session — so sánh với `$nv_Request->get_title('checkss', 'post')` |
-| `md5(NV_CHECK_SESSION . '_' . ...)` | Tạo checkss đặc biệt cho từng hành động (admin) — Luôn dùng kèm `hash_equals` |
+| `NV_CHECK_SESSION` | Hằng CSRF session base |
+| `hash_hmac` | Tạo `$checkss_expected` an toàn — Luôn dùng kèm `hash_equals` để kiểm tra biến POST từ JS truyền lên |
 | `nv_is_file()` | Kiểm tra file an toàn |
 | `nv_redirect_encrypt/decrypt` | Redirect an toàn |
 | `nv_check_valid_email()` | Validate email |
 
 ---
 
+## Tiêu chuẩn Code Quality & Convention (Khi Review)
+
+### Convention NukeViet 5
+- [ ] Có hằng số bảo vệ đầu file không (`NV_IS_FILE_ADMIN` hoặc `NV_SYSTEM`...)?
+- [ ] Prefix bảng có dùng `NV_PREFIXLANG` thay vì hardcode `nv4_vi_` không?
+- [ ] PSR-4: Namespace phân bổ logic có đúng không?
+- [ ] Đọc dữ liệu (SELECT) ưu tiên dùng `$db_slave`, Ghi dữ liệu dùng `$db`.
+
+### Code Quality & Performance
+- [ ] Có tuân thủ PSR-12 (4 spaces, thụt lề chuẩn, camelCase vs snake_case...)?
+- [ ] Sử dụng `$nv_Cache->db()` cho các truy vấn lấy dữ liệu tĩnh, ít đổi chưa?
+- [ ] CÓ đặt câu truy vấn DB (SQL) bên trong vòng lặp hay không (Gây rủi ro N+1 queries)?
+
+---
+
 ## Mức độ báo cáo khi review
 
-- 🔴 **CHẶN MERGE** — SQLi, XSS rõ ràng, thiếu CSRF token, thiếu kiểm tra phân quyền, `unserialize` không giới hạn class
-- 🟡 **NÊN FIX** — Open Redirect, dùng `is_file` với path từ user, `get_string` thay vì `get_title`
-- 💡 **GỢI Ý** — cải thiện thêm, không bắt buộc
+- 🔴 **CHẶN MERGE** — SQLi, XSS rõ ràng, thiếu CSRF token, thiếu kiểm tra phân quyền, `unserialize` không giới hạn class, vòng lặp chứa câu truy vấn ác ý.
+- 🟡 **NÊN FIX** — Lỗi Logic, chưa chuẩn Convention, chưa tối ưu hiệu năng (không check cache), sử dụng sai `$db_slave`.
+- 💡 **GỢI Ý** — Cải thiện tính tái sử dụng, tối ưu code thừa, không bắt buộc.
