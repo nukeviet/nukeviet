@@ -13,5 +13,4 @@ if (!defined('NV_IS_MOD_MENU')) {
     exit('Stop!!!');
 }
 
-header('location:' . $global_config['site_url']);
-exit();
+nv_redirect_location($global_config['site_url']);

@@ -22,33 +22,33 @@ $sql_create_module = $sql_drop_module;
 
 // Menu trong các bộ menu
 $sql_create_module[] = 'CREATE TABLE ' . $db_config['prefix'] . '_' . $lang . '_' . $module_data . "_rows (
- id mediumint(5) NOT NULL AUTO_INCREMENT,
- parentid mediumint(5) unsigned NOT NULL,
- mid smallint(5) NOT NULL DEFAULT '0',
+ id mediumint NOT NULL AUTO_INCREMENT,
+ parentid mediumint unsigned NOT NULL,
+ mid smallint NOT NULL DEFAULT '0',
  title varchar(255) NOT NULL,
  link text NOT NULL,
  icon varchar(255) DEFAULT '',
  image varchar(255) DEFAULT '',
  note varchar(255) DEFAULT '',
- weight int(11) NOT NULL,
- sort int(11) NOT NULL DEFAULT '0',
- lev int(11) NOT NULL DEFAULT '0',
+ weight int NOT NULL,
+ sort int NOT NULL DEFAULT '0',
+ lev int NOT NULL DEFAULT '0',
  subitem text,
  groups_view varchar(255) DEFAULT '',
  module_name varchar(255) DEFAULT '',
  op varchar(255) DEFAULT '',
- target tinyint(4) DEFAULT 0,
+ target tinyint DEFAULT 0,
  css varchar(255) DEFAULT '',
- active_type tinyint(1) unsigned NOT NULL DEFAULT '0',
- status tinyint(1) unsigned NOT NULL DEFAULT '0',
+ active_type tinyint unsigned NOT NULL DEFAULT '0',
+ status tinyint unsigned NOT NULL DEFAULT '0',
  PRIMARY KEY (id),
  KEY parentid (parentid, mid)
-) ENGINE=MyISAM";
+) ENGINE=InnoDB";
 
 // Các bộ menu
 $sql_create_module[] = 'CREATE TABLE ' . $db_config['prefix'] . '_' . $lang . '_' . $module_data . ' (
- id smallint(5) unsigned NOT NULL AUTO_INCREMENT,
+ id smallint unsigned NOT NULL AUTO_INCREMENT,
  title varchar(50) NOT NULL,
  PRIMARY KEY (id),
  UNIQUE KEY title (title)
-) ENGINE=MyISAM';
+) ENGINE=InnoDB';

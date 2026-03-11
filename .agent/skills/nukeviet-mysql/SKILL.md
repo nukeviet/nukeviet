@@ -26,7 +26,7 @@ NukeViet cung cấp **hai** biến database:
 | `$db` | WRITE — INSERT, UPDATE, DELETE, và SELECT cần fresh data |
 | `$db_slave` | READ — SELECT thông thường (tối ưu cho slave DB hoặc caching) |
 
-Trong thực tế môi trường single-server, `$db_slave` trỏ cùng server với `$db`. Tuy nhiên **luôn dùng `$db_slave` cho SELECT** để code sẵn sàng scale.
+Trong thực tế môi trường single-server, `$db_slave` trỏ cùng server với `$db`. Tuy nhiên **luôn dùng `$db_slave` cho SELECT** ở frontend/block để code sẵn sàng scale, không bắt buộc ở admin.
 
 ---
 

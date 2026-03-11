@@ -5,6 +5,7 @@
     var cat = '{LANG.cat}';
     var caton = '{LANG.caton}';
     var nv_lang_data = '{NV_LANG_DATA}';
+    var menu_checkss = '{CHECKSS}';
 </script>
 <div id="tools">
     <div class="row">
@@ -25,6 +26,7 @@
 </div>
 <!-- BEGIN: table -->
 <form id="menulist" method="post" action="{FORM_ACTION}" data-mid="{PAGE.mid}" data-parentid="{PAGE.parentid}" data-reload-confirm="{LANG.action_menu_reload_confirm}">
+    <input type="hidden" name="checkss" value="{CHECKSS}" />
     <div class="table-responsive">
         <table class="table table-striped table-bordered table-hover">
             <thead class="bg-primary">
@@ -102,18 +104,18 @@
 <div id="edit"></div>
 <!-- END FORFOOTER -->
 <script>
-    $(function() {
+    $(function () {
         $('#menulist [data-toggle="popover"]').popover({
             html: true,
             placement: 'top',
             sanitize: false,
-            content: function() {
+            content: function () {
                 return '<a href="' + $(this).data('contents') + '" target="_blank">' + $(this).data('contents') + '</a>';
             },
             template: '<div class="popover" role="tooltip"><div class="arrow"></div><h3 class="popover-title"></h3><div class="popover-content" style="word-wrap: break-word;"></div></div>'
         });
-        $('body').on('click', function(e) {
-            $('#menulist [data-toggle=popover]').each(function() {
+        $('body').on('click', function (e) {
+            $('#menulist [data-toggle=popover]').each(function () {
                 if (!$(this).is(e.target) && $(this).has(e.target).length === 0 && $('.popover').has(e.target).length === 0) {
                     (($(this).popover('hide').data('bs.popover') || {}).inState || {}).click = false;
                 }
@@ -132,6 +134,7 @@
                 <div class="modal-title"><strong class="action-row-title">{FORM_CAPTION}</strong></div>
             </div>
             <div class="modal-body action-row-contents" style="max-height: calc(100vh - 200px);overflow-y: auto;">
+                <input type="hidden" name="checkss" value="{CHECKSS}" />
                 <input type="hidden" name="id" value="{DATA.id}">
                 <input type="hidden" name="mid" value="{DATA.mid}">
                 <input type="hidden" name="pa" value="{DATA.parentid}">
@@ -282,7 +285,7 @@
 </form>
 
 <script>
-    $(function() {
+    $(function () {
         $("#parentid, [name=module_name], [name=op], [name^=groups_view]").select2()
     })
 </script>
