@@ -64,7 +64,7 @@ NukeViet có **2 pattern** CSRF tuỳ ngữ cảnh (Frontend và Admin).
 > Cố gắng tạo `$checkss_expected` tại 1 điểm duy nhất trên cùng của file nếu cùng giá trị để tiện bảo trì.
 
 > ⚠ Ở admin, tạo `$checkss_expected` bằng cách truyền toàn bộ context vào chuỗi hash:
-> `$checkss_expected = hash_hmac('sha256', NV_CHECK_SESSION . '_' . $module_name . '_' . $op . '_' . $admin_info['userid'], NV_CACHE_PREFIX);`
+> `$checkss_expected = hash_hmac('sha256', NV_CHECK_SESSION . '_' . $module_name . '_' . $op . '_' . $admin_info['admin_id'], NV_CACHE_PREFIX);`
 
 ### Các lỗi bảo mật khác (XSS, Path Traversal, Open Redirect, Upload, Object Injection)
 > **Tham khảo code mẫu phòng chống các lỗi còn lại:** `view_file` -> `.agent/skills/nukeviet-security/examples/PatternMisc.php`

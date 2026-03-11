@@ -42,7 +42,8 @@ $(function() {
                 url: pageUrl,
                 data: {
                     'action': 'inform_del',
-                    'id': id
+                    'id': id,
+                    'checkss': inform_checkss
                 },
                 dataType: "json",
                 success: function(result) {
@@ -67,7 +68,8 @@ $(function() {
             url: pageUrl,
             data: {
                 'action': 'inform_action',
-                'id': id
+                'id': id,
+                'checkss': inform_checkss
             },
             dataType: "json",
             success: function(result) {

@@ -13,7 +13,16 @@ if (!defined('NV_IS_FILE_ADMIN')) {
     exit('Stop!!!');
 }
 
+$checkss_expected = hash_hmac('sha256', NV_CHECK_SESSION . '_' . $module_name . '_' . $op . '_' . $admin_info['admin_id'], NV_CACHE_PREFIX);
 if ($nv_Request->isset_request('save', 'post')) {
+    $checkss = $nv_Request->get_title('checkss', 'post', '');
+    if (!hash_equals($checkss_expected, $checkss)) {
+        nv_jsonOutput([
+            'status' => 'error',
+            'mess' => 'Error: CSRF token invalid'
+        ]);
+    }
+
     $postdata = [
         'inform_active' => (int) $nv_Request->get_float('inform_active', 'post', false),
         'inform_default_exp' => $nv_Request->get_int('inform_default_exp', 'post', 0),
@@ -70,6 +79,7 @@ $xtpl = new XTemplate('configs.tpl', NV_ROOTDIR . '/themes/' . $global_config['m
 $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
 $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
 $xtpl->assign('FORM_ACTION', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op);
+$xtpl->assign('CHECK_SESSION', $checkss_expected);
 $xtpl->assign('DATA', $data);
 $xtpl->parse('main');
 $contents = $xtpl->text('main');

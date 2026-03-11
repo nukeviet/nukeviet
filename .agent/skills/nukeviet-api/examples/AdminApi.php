@@ -4,8 +4,9 @@
  * NukeViet Content Management System
  * @version 5.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2025 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2026 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 // Chú ý namespace PSR-4 chuẩn NukeViet 5: NukeViet\Module\[tên_module]\Api

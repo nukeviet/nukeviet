@@ -1,4 +1,13 @@
 <?php
+ 
+/**
+ * NukeViet Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2026 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
+ */
 /**
  * Pattern bảo mật CSRF chuẩn NukeViet 5
  *
@@ -7,7 +16,7 @@
  */
 
 // Quy tắc tính toán $checkss_expected (Thường đặt ở đầu file admin)
-$checkss_expected = hash_hmac('sha256', NV_CHECK_SESSION . '_' . $module_name . '_' . $op . '_' . $admin_info['userid'], NV_CACHE_PREFIX);
+$checkss_expected = hash_hmac('sha256', NV_CHECK_SESSION . '_' . $module_name . '_' . $op . '_' . $admin_info['admin_id'], NV_CACHE_PREFIX);
 
 // Cách 1: Kiểm tra checkss param tại các action ajax / submit form POST
 if (!hash_equals($checkss_expected, $nv_Request->get_title('checkss', 'post', ''))) {

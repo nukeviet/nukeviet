@@ -1,4 +1,13 @@
 <?php
+ 
+/**
+ * NukeViet Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2026 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
+ */
 
 if (!defined('NV_MAINFILE')) {
     exit('Stop!!!');
@@ -7,7 +16,7 @@ if (!defined('NV_MAINFILE')) {
 // ── Metadata bắt buộc ──────────────────────────────────────────────────────
 $lang_translator['author']     = 'Tên tác giả <email>';
 $lang_translator['createdate'] = 'dd/mm/yyyy, HH:MM';
-$lang_translator['copyright']  = '@Copyright (C) 2025 ... All rights reserved';
+$lang_translator['copyright']  = '@Copyright (C) 2026 ... All rights reserved';
 $lang_translator['info']       = '';
 $lang_translator['langtype']   = 'lang_module'; // giá trị cố định
 

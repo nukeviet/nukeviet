@@ -57,6 +57,10 @@ if ($nv_Request->isset_request('get_user_json', 'post')) {
 }
 
 $page_url = $base_url = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name;
+
+// Generate Expected CSRF Token
+$checkss_expected = hash_hmac('sha256', NV_CHECK_SESSION . '_' . $module_name . '_' . $op . '_' . $admin_info['admin_id'], NV_CACHE_PREFIX);
+
 $adminlist = admins_list();
 
 $where = [];
@@ -68,6 +72,13 @@ $action = $nv_Request->get_title('action', 'post', '');
 
 // Xóa thông báo
 if ($action == 'inform_del') {
+    $checkss = $nv_Request->get_title('checkss', 'post', '');
+    if (!hash_equals($checkss_expected, $checkss)) {
+        nv_jsonOutput([
+            'status' => 'error',
+            'mess' => 'Error: CSRF token invalid'
+        ]);
+    }
     $id = $nv_Request->get_int('id', 'post', 0);
     if ($id) {
         $where[] = '(mtb.id = ' . $id . ')';
@@ -124,6 +135,13 @@ if ($action == 'inform_action') {
     }
 
     if ($nv_Request->isset_request('save', 'post')) {
+        $checkss = $nv_Request->get_title('checkss', 'post', '');
+        if (!hash_equals($checkss_expected, $checkss)) {
+            nv_jsonOutput([
+                'status' => 'error',
+                'mess' => 'Error: CSRF token invalid'
+            ]);
+        }
         $postdata = [
             'sender_role' => $nv_Request->get_title('sender_role', 'post', ''),
             'sender_group' => $nv_Request->get_int('sender_group', 'post', 0),
@@ -368,6 +386,7 @@ if ($action == 'inform_action') {
     $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
     $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
     $xtpl->assign('PAGE_URL', $page_url);
+    $xtpl->assign('CHECK_SESSION', $checkss_expected);
     $xtpl->assign('DATA', $data);
 
     if (!defined('NV_IS_SPADMIN')) {
@@ -616,6 +635,7 @@ $xtpl = new XTemplate('main.tpl', NV_ROOTDIR . '/themes/' . $global_config['modu
 $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
 $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
 $xtpl->assign('PAGE_URL', $page_url);
+$xtpl->assign('CHECK_SESSION', $checkss_expected);
 
 if (defined('NV_IS_SPADMIN')) {
     $filters = [
