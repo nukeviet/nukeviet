@@ -79,7 +79,7 @@ NV_CONFIG_GLOBALTABLE→ bảng config toàn cục hệ thống (dùng cho comme
 ## Cấu trúc Module
 
 ```
-modules/ten-module/
+src/modules/ten-module/
 ├── version.php           # BẮT BUỘC — phiên bản dạng X.Y.ZZ (vd: 5.0.00)
 ├── functions.php         # BẮT BUỘC — không xóa dù rỗng; define NV_IS_MOD_*
 ├── admin.functions.php   # define NV_IS_FILE_ADMIN; $allow_func (module đơn giản)
@@ -92,14 +92,14 @@ modules/ten-module/
 ├── Shared/               # PSR-4 classes: namespace NukeViet\Module\{name}\Shared\
 └── language/vi.php · en.php · admin_vi.php · admin_en.php
 ```
-Template `.tpl` → `themes/[theme]/modules/[module]/` — **KHÔNG** trong `modules/`
+Template `.tpl` → `src/themes/[theme]/modules/[module]/` — **KHÔNG** trong `modules/`
 
 ---
 
 ## Cấu trúc Theme
 
 ```
-themes/ten-theme/
+src/themes/ten-theme/
 ├── config.ini            # tên, layoutdefault, positions, setlayout, setblocks
 ├── config_default.php    # CSS defaults (guard: NV_MAINFILE)
 ├── config.php            # form tùy biến CSS admin (guard: NV_IS_FILE_THEMES)

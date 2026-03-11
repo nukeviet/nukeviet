@@ -107,10 +107,22 @@ $tpl->assign('CHECKSS', md5(NV_CHECK_SESSION . '_' . $module_name . '_' . $admin
 
 // Khi xử lý POST:
 $checkss = $nv_Request->get_title('checkss', 'post', '');
-if ($checkss != md5(NV_CHECK_SESSION . '_' . $module_name . '_' . $admin_info['userid'])) {
+
+// ✅ Tính toán token an toàn (Ví dụ dùng HMAC-SHA256 với NV_CACHE_PREFIX làm salt)
+// Lưu ý: $op cần được lấy từ request nếu có trong chuỗi hash
+$checkss_expected = hash_hmac('sha256', NV_CHECK_SESSION . '_' . $module_name . '_' . $admin_info['userid'], NV_CACHE_PREFIX);
+
+// ❌ Cách cũ (không khuyến khích - dễ bị timing attack)
+// if ($checkss_expected != $checkss) { }
+
+// ✅ Xác thực an toàn (Khuyên dùng)
+if (!hash_equals($checkss_expected, $checkss)) {
     nv_jsonOutput(['status' => 'error', 'mess' => $nv_Lang->getGlobal('error_code_11')]);
 }
 ```
+
+> [!IMPORTANT]
+> Luôn dùng `hash_equals($expected, $actual)` để so sánh token CSRF. Trong đó `$expected` là chuỗi bí mật sinh ra từ server, `$actual` là chuỗi nhận được từ request (form/ajax). Việc so sánh bằng `!=` hoặc `==` có thể bị khai thác qua timing attacks.
 
 > ⚠ Ở admin, có module nối thêm `$op` vào chuỗi hash: `md5(NV_CHECK_SESSION . '_' . $module_name . '_' . $op . '_' . $admin_info['userid'])`.
 
@@ -216,7 +228,7 @@ Có thể dùng nhiều mode cách nhau dấu phẩy — lấy từ mode đầu 
 | `$db->dblikeescape($value)` | Escape ký tự đặc biệt trong LIKE |
 | `nv_check_formtoken()` | Xác minh CSRF token (frontend form) |
 | `nv_form_token()` | Sinh CSRF token trong form HTML (frontend) |
-| `md5(NV_CHECK_SESSION . '_' . ...)` | Xác minh CSRF token (admin AJAX) |
+| `md5(NV_CHECK_SESSION . '_' . ...)` | Xác minh CSRF token (admin AJAX) - Luôn dùng kèm `hash_equals` |
 | `nv_is_file()` | Kiểm tra file an toàn |
 | `nv_redirect_encrypt/decrypt` | Redirect an toàn |
 | `nv_check_valid_email()` | Validate email |
