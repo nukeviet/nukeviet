@@ -13,6 +13,9 @@ if (!defined('NV_IS_FILE_ADMIN')) {
     exit('Stop!!!');
 }
 
+// Tạo token chống CSRF
+$checkss = hash_hmac('sha256', NV_CHECK_SESSION . '_' . $module_name . '_' . $op . '_' . $admin_info['admin_id'], NV_CACHE_PREFIX);
+
 // Thêm/Sửa khối menu
 $action = $nv_Request->get_title('action', 'get', '');
 if ($action == 'block') {
@@ -31,6 +34,12 @@ if ($action == 'block') {
 
     // Ghi CSDL
     if ($nv_Request->get_int('save', 'post')) {
+        if (!hash_equals($checkss, $nv_Request->get_title('checkss', 'post'))) {
+            nv_jsonOutput([
+                'status' => 'error',
+                'mess' => 'Error CSRF token'
+            ]);
+        }
         $arr['title'] = $nv_Request->get_title('title', 'post', '');
         if (empty($arr['title'])) {
             nv_jsonOutput([
@@ -156,6 +165,7 @@ if ($action == 'block') {
     $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
     $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
     $xtpl->assign('MODULE_NAME', $module_name);
+    $xtpl->assign('CHECKSS', $checkss);
     $xtpl->assign('FORM_ACTION', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=blocks&amp;action=block' . (!empty($arr['id']) ? '&amp;id=' . $arr['id'] : ''));
     $xtpl->assign('FORM_CAPTION', $arr['id'] ? $nv_Lang->getModule('edit_menu') : $nv_Lang->getModule('add_menu'));
     $xtpl->assign('OP', $op);
@@ -176,6 +186,9 @@ if ($action == 'block') {
 if ($nv_Request->isset_request('del', 'post')) {
     if (!defined('NV_IS_AJAX')) {
         exit('Wrong URL');
+    }
+    if (!hash_equals($checkss, $nv_Request->get_title('checkss', 'post'))) {
+        exit('Stop!!!');
     }
 
     $id = $nv_Request->get_int('id', 'post', 0);
@@ -226,6 +239,7 @@ while ($row = $query2->fetch()) {
 
 $xtpl = new XTemplate('blocks.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
 $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
+$xtpl->assign('CHECKSS', $checkss);
 $xtpl->assign('FORM_ACTION', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=blocks&amp;action=block');
 
 if (empty($array)) {

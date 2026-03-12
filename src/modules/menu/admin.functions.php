@@ -76,14 +76,15 @@ function menu_fix_order($mid, $parentid = 0, $order = 0, $lev = 0)
     $weight = 0;
     if ($parentid > 0) {
         ++$lev;
-    } else {
+    }
+    else {
         $lev = 0;
     }
 
     foreach ($array_cat_order as $catid_i) {
         ++$order;
         ++$weight;
-        $sql = 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_rows SET weight=' . $weight . ', sort=' . $order . ", lev='" . $lev . "' WHERE id=" . (int) $catid_i;
+        $sql = 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_rows SET weight=' . $weight . ', sort=' . $order . ", lev='" . $lev . "' WHERE id=" . (int)$catid_i;
         $db->query($sql);
         $order = menu_fix_order($mid, $catid_i, $order, $lev);
     }
@@ -105,13 +106,14 @@ function nv_menu_del_sub($id, $parentid)
 
     $sql = 'SELECT title, subitem FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE id=' . $id . ' AND parentid=' . $parentid;
     $row = $db->query($sql)->fetch();
-
     if (empty($row)) {
         return false;
     }
 
     $sql = 'DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE id=' . $id;
     if ($db->exec($sql)) {
+        nv_insert_logs(NV_LANG_DATA, $module_name, 'Delete menu item', 'Item ID ' . $id, $admin_info['userid']);
+
         // Cap nhat cho menu cha
         if ($parentid > 0) {
             $sql = 'SELECT subitem FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE id=' . $parentid;
@@ -126,12 +128,12 @@ function nv_menu_del_sub($id, $parentid)
         }
 
         $subitem = (!empty($row['subitem'])) ? explode(',', $row['subitem']) : [];
-        foreach ($subitem as $id) {
-            $sql = 'SELECT parentid FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE id=' . $id;
+        foreach ($subitem as $_id) {
+            $sql = 'SELECT parentid FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE id=' . $_id;
+            $_parentid = $db->query($sql)->fetchColumn();
 
-            [$parentid] = $db->query($sql)->fetch(3);
-            nv_menu_del_sub($id, $parentid);
-            nv_insert_logs(NV_LANG_DATA, $module_name, 'Delete menu item', 'Item ID ' . $id, $admin_info['userid']);
+            nv_menu_del_sub($_id, $_parentid);
+            nv_insert_logs(NV_LANG_DATA, $module_name, 'Delete menu item', 'Item ID ' . $_id, $admin_info['userid']);
         }
     }
 
@@ -144,13 +146,14 @@ function nv_menu_del_sub($id, $parentid)
  * @param int    $id
  * @param string $alias_selected
  * @param array  $array_item
+ * @param string $mod_name
  * @param array  $sps
  * @param array  $subs
+ * @return array
  */
-function nv_menu_get_submenu($id, $alias_selected, $array_item, &$sps, &$subs)
+function nv_menu_get_submenu($id, $alias_selected, $array_item, $mod_name, &$sps, &$subs)
 {
-    global $array_submenu, $mod_name;
-
+    $result = [];
     foreach ($array_item as $item2) {
         if (isset($item2['parentid']) and $item2['parentid'] == $id) {
             ++$subs[$item2['parentid']];
@@ -160,11 +163,14 @@ function nv_menu_get_submenu($id, $alias_selected, $array_item, &$sps, &$subs)
             $item2['module'] = $mod_name;
             $item2['selected'] = ($item2['alias'] == $alias_selected) ? ' selected="selected"' : '';
 
-            $array_submenu[] = $item2;
-            nv_menu_get_submenu($item2['key'], $alias_selected, $array_item, $sps, $subs);
+            $result[] = $item2;
+            $result = array_merge($result, nv_menu_get_submenu($item2['key'], $alias_selected, $array_item, $mod_name, $sps, $subs));
         }
     }
+
+    return $result;
 }
+
 
 /**
  * nv_menu_get_subcat()
@@ -194,14 +200,15 @@ function nv_get_menulist($mid)
     $i = 0;
     $menulist = [];
     while ($row = $result->fetch()) {
-        $row['parentid'] = (int) $row['parentid'];
+        $row['parentid'] = (int)$row['parentid'];
         $sp_title = '';
         if ($row['parentid'] > 0) {
             !isset($subs[$row['parentid']]) && $subs[$row['parentid']] = 0;
             ++$subs[$row['parentid']];
             $sp_title = $sps[$row['parentid']] . $subs[$row['parentid']] . '.';
             $sps[$row['id']] = $sp_title;
-        } else {
+        }
+        else {
             ++$i;
             $sp_title = $i . '.';
             $sps[$row['id']] = $sp_title;

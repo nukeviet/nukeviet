@@ -1,5 +1,5 @@
 <?php
- 
+
 /**
  * NukeViet Content Management System
  * @version 5.x
@@ -15,7 +15,7 @@
  * Tạo chuỗi expected chung cho module admin tại đầu file.
  */
 
-// Quy tắc tính toán $checkss_expected (Thường đặt ở đầu file admin)
+// Tạo token chống CSRF
 $checkss_expected = hash_hmac('sha256', NV_CHECK_SESSION . '_' . $module_name . '_' . $op . '_' . $admin_info['admin_id'], NV_CACHE_PREFIX);
 
 // Cách 1: Kiểm tra checkss param tại các action ajax / submit form POST

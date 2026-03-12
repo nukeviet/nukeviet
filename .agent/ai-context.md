@@ -53,19 +53,15 @@ Tính tương thích ngược (Backward Compatibility) trong NV5 rất cao. Các
 ### 4.2. File Security Guards (Bắt buộc đầu file)
 ```php
 version.php              => defined('NV_ADMIN') && defined('NV_MAINFILE')
-functions.php            => defined('NV_SYSTEM')
-admin.functions.php      => defined('NV_ADMIN') && defined('NV_MAINFILE') && defined('NV_IS_MODADMIN')
-admin.menu.php           => defined('NV_ADMIN')
-action_mysql.php         => defined('NV_IS_FILE_MODULES')
 global.functions.php     => defined('NV_MAINFILE')
 Shared/*.php             => defined('NV_MAINFILE')
 funcs/main.php           => defined('NV_IS_MOD_TENMODULE') // (define trong functions.php)
 admin/main.php           => defined('NV_IS_FILE_ADMIN')    // (define trong admin.functions.php)
 
 // Blocks Constants
-blocks/global.*.php (mod)=> defined('NV_MAINFILE')         // (KHÔNG dùng NV_IS_BLOCK_THEME)
-blocks/module.*.php (mod)=> defined('NV_MAINFILE')         // (Chỉ active khi module đang chạy)
-blocks/*.php (theme)     => defined('NV_IS_BLOCK_THEME')
+src/modules/[module]/blocks/global.*.php (mod)=> defined('NV_MAINFILE')         // (KHÔNG dùng NV_IS_BLOCK_THEME)
+src/modules/[module]/blocks/module.*.php (mod)=> defined('NV_MAINFILE')         // (Chỉ active khi module đang chạy)
+src/themes/[theme]/blocks/*.php (theme)     => defined('NV_IS_BLOCK_THEME')
 ```
 
 ## 5. Directory Structures
@@ -80,7 +76,7 @@ blocks/*.php (theme)     => defined('NV_IS_BLOCK_THEME')
 - `theme.php` / `funcs/main.php` / `admin/main.php`: Các endpoints xử lý hiển thị.
 - `Shared/`: Thư mục các class PSR-4 chuẩn `namespace NukeViet\Module\[name]\Shared\`.
 - `language/`: Tệp i18n (`vi.php`, `admin_vi.php`, v.v.).
-- **Lưu ý TPL:** File `.tpl` của module băt buộc nằm ở `src/themes/[theme]/modules/[module]/` (KHÔNG đặt trong thư mục code `modules/`).
+- **Lưu ý TPL:** File `.tpl` của module băt buộc nằm ở `src/themes/[theme]/modules/[module]/` (KHÔNG đặt trong thư mục code `src/modules/`).
 
 ### 5.2. Theme Structure (`src/themes/[theme]/`)
 - `config.ini`: Khai báo `<layoutdefault>`, `<positions>`, `<setlayout>`, `<setblocks>`.

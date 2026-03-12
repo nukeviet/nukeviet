@@ -45,7 +45,7 @@ $(function() {
     // Xóa khối menu
     $('#menu-block .delete-menu-block').on('click', function() {
         if (confirm(nv_is_del_confirm[0])) {
-            $.post(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=blocks&nocache=' + new Date().getTime(), 'del=1&id=' + $(this).data('id'), function() {
+            $.post(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=blocks&nocache=' + new Date().getTime(), 'del=1&checkss=' + menu_checkss + '&id=' + $(this).data('id'), function() {
                 location.reload()
             });
         }
@@ -67,7 +67,7 @@ $(function() {
             type: "POST",
             url: $('#menulist').attr('action'),
             cache: !1,
-            data: 'action=chang_weight&mid=' + mid + '&parentid=' + parentid + '&id=' + id + '&new_weight=' + new_weight
+            data: 'action=chang_weight&checkss=' + menu_checkss + '&mid=' + mid + '&parentid=' + parentid + '&id=' + id + '&new_weight=' + new_weight
         }).done(function(a) {
             location.reload()
         })
@@ -82,7 +82,7 @@ $(function() {
             num = parseInt(item.data('num')),
             conf = num ? confirm(cat + num + caton) : confirm(nv_is_del_confirm[0]);
         if (conf) {
-            $.post(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&nocache=' + new Date().getTime(), 'action=delete&id=' + id + '&parentid=' + parentid + '&mid=' + mid, function() {
+            $.post(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&nocache=' + new Date().getTime(), 'action=delete&checkss=' + menu_checkss + '&id=' + id + '&parentid=' + parentid + '&mid=' + mid, function() {
                 location.reload()
             });
         }
@@ -106,7 +106,7 @@ $(function() {
                 type: "POST",
                 url: $('#menulist').attr('action'),
                 cache: !1,
-                data: 'action=delete&mid=' + mid + '&parentid=' + parentid + '&idcheck=' + list
+                data: 'action=delete&checkss=' + menu_checkss + '&mid=' + mid + '&parentid=' + parentid + '&idcheck=' + list
             }).done(function(a) {
                 location.reload()
             })
@@ -122,7 +122,7 @@ $(function() {
             type: "POST",
             url: $('#menulist').attr('action'),
             cache: !1,
-            data: 'action=change_active&id=' + id
+            data: 'action=change_active&checkss=' + menu_checkss + '&id=' + id
         }).done(function() {
             setTimeout(function() {
                 that.prop('disabled', false)
@@ -133,7 +133,7 @@ $(function() {
     // Reload lại menu
     $('#menulist .menu_reload').on('click', function() {
         if (confirm($('#menulist').data('reload-confirm'))) {
-            $.post($('#menulist').attr('action'), 'reload=1&mid=' + $('#menulist').data('mid') + '&id=' + $(this).parents('.item').data('id'), function(res) {
+            $.post($('#menulist').attr('action'), 'reload=1&checkss=' + menu_checkss + '&mid=' + $('#menulist').data('mid') + '&id=' + $(this).parents('.item').data('id'), function(res) {
                 location.reload()
             });
         }
@@ -162,7 +162,7 @@ $(function() {
             subMod.parents('.field').remove()
         }
         if (val != '') {
-            $.post(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&nocache=' + new Date().getTime(), 'action=link_module&module=' + val, function(res) {
+            $.post(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&nocache=' + new Date().getTime(), 'action=link_module&checkss=' + menu_checkss + '&module=' + val, function(res) {
                 if (res != '') {
                     mod_field.after(res);
                     $('#edit [name=func]').select2()
@@ -213,7 +213,7 @@ $(function() {
 
     // Khi thay đổi khối menu
     $('#edit').on('change', '[name=item_menu]', function() {
-        $.post(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&nocache=' + new Date().getTime(), 'action=link_menu&mid=' + $(this).val() + '&parentid=' + $(this).data('parentid'), function(res) {
+        $.post(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&nocache=' + new Date().getTime(), 'action=link_menu&checkss=' + menu_checkss + '&mid=' + $(this).val() + '&parentid=' + $(this).data('parentid'), function(res) {
             $('#edit [name=parentid]').html(res).select2();
         });
     });

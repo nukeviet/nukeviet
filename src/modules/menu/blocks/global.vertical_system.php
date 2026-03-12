@@ -13,7 +13,7 @@ if (!defined('NV_MAINFILE')) {
     exit('Stop!!!');
 }
 
-if (!function_exists('nv_block_vertica_menu_note')) {
+if (!nv_function_exists('nv_block_vertica_menu_note')) {
     /**
      * nv_block_vertica_menu_note()
      *

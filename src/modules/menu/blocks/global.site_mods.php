@@ -125,7 +125,7 @@ if (!nv_function_exists('nv_menu_site_mods')) {
                         $db->sqlreset()->select(NV_LANG_DATA . '_title as title, ' . NV_LANG_DATA . '_alias as alias')->from($db_config['prefix'] . '_' . $modvalues['module_data'] . '_catalogs')->where('parentid=0 AND inhome=1')->order('weight ASC')->limit(10);
                         $list = $nv_Cache->db($db->sql(), '', $modname);
                         foreach ($list as $l) {
-                            $is_active = ($modname == $module_name and $l['alias'] == $array_op[0]) ? true : false;
+                            $is_active = ($modname == $module_name and !empty($array_op) and $l['alias'] == $array_op[0]) ? true : false;
                             $is_active && $sub_is_active = true;
                             $array_menu['sub'][] = [
                                 'note' => $l['title'],
@@ -149,7 +149,7 @@ if (!nv_function_exists('nv_menu_site_mods')) {
                         $db->sqlreset()->select('title, alias')->from(NV_PREFIXLANG . '_' . $modvalues['module_data'] . '_categories')->where('parentid=0 AND status=1')->order('weight ASC')->limit(10);
                         $list = $nv_Cache->db($db->sql(), '', $modname);
                         foreach ($list as $l) {
-                            $is_active = ($modname == $module_name and $l['alias'] == $array_op[0]) ? true : false;
+                            $is_active = ($modname == $module_name and !empty($array_op) and $l['alias'] == $array_op[0]) ? true : false;
                             $is_active && $sub_is_active = true;
                             $array_menu['sub'][] = [
                                 'note' => $l['title'],
