@@ -76,7 +76,7 @@ public function execute()
     // Tham số thứ 3 = true để load tạm, tránh đè mất ngôn ngữ chính của module hiện tại (nếu có)
 
     // Sau đó dùng bình thường
-    $message = $lang_module['hello'];
+    $message = $nv_Lang->getModule('hello');
 
     // Trước khi kết thúc cần hủy lang tạm
     $nv_Lang->changeLang();
