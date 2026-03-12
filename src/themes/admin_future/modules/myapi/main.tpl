@@ -64,7 +64,7 @@
                             <td class="text-nowrap text-center" style="width: 1%;">{if $ROLE.credential_status|intval === 1}{$LANG->getModule('activated')}{elseif $ROLE.credential_status|intval === 0}{$LANG->getModule('suspended')}{else}{$LANG->getModule('not_activated')}{/if}</td>
                             <td class="text-center" style="width: 1%;">{if $ROLE.credential_addtime > 0}{$ROLE.credential_addtime|ddatetime}{/if}</td>
                             <td class="text-center" style="width: 1%;">{if $ROLE.credential_endtime > 0}{$ROLE.credential_endtime|ddatetime}{/if}</td>
-                            <td class="text-center" style="width: 1%;">{if $ROLE.credential_quota > 0}$ROLE.credential_quota|nnum_format{elseif $ROLE.credential_quota == 0}{$LANG->getModule('no_quota')}{/if}</td>
+                            <td class="text-center" style="width: 1%;">{if $ROLE.credential_quota > 0}{$ROLE.credential_quota|nnum_format}{elseif $ROLE.credential_quota == 0}{$LANG->getModule('no_quota')}{/if}</td>
                             <td class="text-nowrap text-center" style="width: 1%;">{if $ROLE.credential_access_count >= 0}{$ROLE.credential_access_count}{/if}</td>
                             <td class="text-nowrap text-center" style="width: 1%;">{if $ROLE.credential_last_access > 0}{$ROLE.credential_last_access|ddatetime}{/if}</td>
                             <td class="text-nowrap text-center" style="width: 1%;">
@@ -99,11 +99,11 @@
                                                     <ul class="nav nav-tabs mb-3" role="tablist">
                                                         {assign var='FORLANGS' value=[]}
                                                         {foreach $GCONFIG.setup_langs as $KEY_LANG => $_LG}
-                                                            {if $_LG == $smarty.const.NV_LANG_DATA}
-                                                                {append var='FORLANGS' value=['active' => 'active', 'in' => ' in active show', 'expanded' => 'true', 'langkey' => $_LG, 'langname' => $LANGUAGE_ARRAY[$_LG].name] index=$_LG}
-                                                            {else}
-                                                                {append var='FORLANGS' value=['active' => '', 'in' => '', 'expanded' => 'false', 'langkey' => $_LG, 'langname' => $LANGUAGE_ARRAY[$_LG].name] index=$_LG}
-                                                            {/if}
+                                                        {if $_LG == $smarty.const.NV_LANG_DATA}
+                                                        {append var='FORLANGS' value=['active' => 'active', 'in' => ' in active show', 'expanded' => 'true', 'langkey' => $_LG, 'langname' => $LANGUAGE_ARRAY[$_LG].name] index=$_LG}
+                                                        {else}
+                                                        {append var='FORLANGS' value=['active' => '', 'in' => '', 'expanded' => 'false', 'langkey' => $_LG, 'langname' => $LANGUAGE_ARRAY[$_LG].name] index=$_LG}
+                                                        {/if}
                                                         {/foreach}
                                                         {foreach $FORLANGS as $FORLANG}
                                                         <li role="presentation" class="nav-item"><a id="forlang-{$FORLANG.langkey}-{$ROLE.role_id}-tab" class="nav-link {$FORLANG.active}" href="#forlang-{$FORLANG.langkey}-{$ROLE.role_id}" aria-controls="forlang-{$FORLANG.langkey}-{$ROLE.role_id}" role="tab" data-bs-toggle="tab" aria-expanded="{$FORLANG.expanded}">{$FORLANG.langname}</a></li>
@@ -118,7 +118,7 @@
                                                             <div class="card mb-3 border">
                                                                 <div class="card-header api-header"><strong><i class="fa-solid fa-folder-open"></i> {$SITE_MOD.$MOD_TITLE.custom_title}
                                                                         {if !empty($CAT_DATA.title)}
-                                                                            <i class="fa fa-angle-right"></i> {$CAT_DATA.title}
+                                                                        <i class="fa fa-angle-right"></i> {$CAT_DATA.title}
                                                                         {/if}
                                                                     </strong></div>
                                                                 <div class="card-body">
@@ -184,7 +184,7 @@
                     {if empty($activeMethod)}
                     {assign var='activeMethod' value=$METHOD.name}
                     {/if}
-                    <li class="nav-item" role="presentation"><a href="#{$METHOD.key}-panel" class="nav-link {$METHOD.active}" data-bs-toggle="tab" data-bs-target="#{$METHOD.key}-panel" type="button" aria-controls="{$METHOD.key}-panel"  role="tab">{$METHOD.name}</a></li>
+                    <li class="nav-item" role="presentation"><a href="#{$METHOD.key}-panel" class="nav-link {$METHOD.active}" data-bs-toggle="tab" data-bs-target="#{$METHOD.key}-panel" type="button" aria-controls="{$METHOD.key}-panel" role="tab">{$METHOD.name}</a></li>
                     {/foreach}
                 </ul>
                 <div class="d-block d-sm-none mb-3">
@@ -227,7 +227,7 @@
                         </div>
                         {/if}
 
-                        <div class="api_ips"{if $METHOD.not_access_authentication}style="display:none"{/if}>
+                        <div class="api_ips" {if $METHOD.not_access_authentication}style="display:none" {/if}>
                             <div class="form-group mb-3">
                                 <label class="form-label" for="{$METHOD.key}_ips">{$LANG->getModule('api_ips')}</label>
                                 <textarea class="form-control ips" name="{$METHOD.key}_ips" id="{$METHOD.key}_ips">{$METHOD.ips ?? ''}</textarea>

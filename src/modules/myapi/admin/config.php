@@ -13,9 +13,9 @@ if (!defined('NV_IS_FILE_ADMIN')) {
     exit('Stop!!!');
 }
 
-$checkss = md5(NV_CHECK_SESSION . '_' . $module_name . '_' . $op . '_' . $admin_info['userid']);
+$checkss_expected = hash_hmac('sha256', NV_CHECK_SESSION . '_' . $module_name . '_' . $op . '_' . $admin_info['admin_id'], NV_CACHE_PREFIX);
 if ($nv_Request->isset_request('checkss', 'post')) {
-    if ($checkss == $nv_Request->get_string('checkss', 'post')) {
+    if (hash_equals($checkss_expected, $nv_Request->get_title('checkss', 'post', ''))) {
         $array_config_global = [
             'remote_api_access' => (int) $nv_Request->get_bool('remote_api_access', 'post', false),
             'api_check_time' => $nv_Request->get_absint('api_check_time', 'post', 0)
@@ -25,7 +25,6 @@ if ($nv_Request->isset_request('checkss', 'post')) {
         if ($array_config_global['api_check_time'] <= 0 or $array_config_global['api_check_time'] > 1440) {
             $array_config_global['api_check_time'] = 5;
         }
-    
         $sth = $db->prepare('UPDATE ' . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = 'sys' AND module = 'global' AND config_name = :config_name");
         foreach ($array_config_global as $config_name => $config_value) {
             $sth->bindParam(':config_name', $config_name, PDO::PARAM_STR, 30);
@@ -56,7 +55,7 @@ $tpl->setTemplateDir(get_module_tpl_dir('config.tpl'));
 $tpl->assign('LANG', $nv_Lang);
 $tpl->assign('MODULE_NAME', $module_name);
 $tpl->assign('OP', $op);
-$tpl->assign('CHECKSS', $checkss);
+$tpl->assign('CHECKSS', $checkss_expected);
 $tpl->assign('DATA', $global_config);
 
 $contents = $tpl->fetch('config.tpl');
