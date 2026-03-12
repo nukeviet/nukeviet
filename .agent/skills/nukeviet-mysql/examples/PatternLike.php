@@ -1,5 +1,5 @@
 <?php
- 
+
 /**
  * NukeViet Content Management System
  * @version 5.x
@@ -8,6 +8,7 @@
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
+
 // Escape ký tự đặc biệt % và _ trong LIKE
 $keyword = $db->dblikeescape($nv_Request->get_title('keyword', 'get', ''));
 $sql = 'SELECT * FROM ' . NV_PREFIXLANG . '_items WHERE title LIKE :kw';

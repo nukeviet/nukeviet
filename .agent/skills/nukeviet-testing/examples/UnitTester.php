@@ -8,6 +8,7 @@
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
+
 namespace Tests\Unit;
 
 class MyComponentTest extends \Codeception\Test\Unit

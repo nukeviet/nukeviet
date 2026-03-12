@@ -8,6 +8,7 @@
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
+
 // ❌ Sai — Nối chuỗi mảng ID gây SQLi
 // $sql = "WHERE id IN (" . implode(',', $_POST['ids']) . ")";
 

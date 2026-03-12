@@ -8,6 +8,7 @@
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
+
 if (!defined('NV_IS_MOD_TENMODULE')) {
     exit('Stop!!!');
 }

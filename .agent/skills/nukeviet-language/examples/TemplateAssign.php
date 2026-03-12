@@ -1,5 +1,5 @@
 <?php
- 
+
 /**
  * NukeViet Content Management System
  * @version 5.x
@@ -9,18 +9,19 @@
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
-// Assign toàn bộ mảng — truy cập trong .tpl bằng {LANG.key}
-$xtpl->assign('LANG', $lang_module);
-$xtpl->assign('GLANG', $lang_global);
+// Xtemplate (đã lỗi thời, chỉ mang tính tham khảo)
+$xtpl = new XTemplate('file.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
+$xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
+$xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
 
-// Trong .tpl:
+// Trong file.tpl:
 // {LANG.hello}
 // {GLANG.save}
 
+// Smarty (được khuyến nghị sử dụng)
 $tpl = new \NukeViet\Template\NVSmarty();
-$tpl->assign('LANG', $lang_module);
-$tpl->assign('GLANG', $lang_global);
+$tpl->assign('LANG', $nv_Lang);
 
 // Trong .tpl Smarty:
-// {$LANG.hello}
-// {$GLANG.save}
+// {$LANG->getModule('hello')}
+// {$LANG->getGlobal('save')}

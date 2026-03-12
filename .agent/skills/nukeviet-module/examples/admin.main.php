@@ -1,5 +1,5 @@
 <?php
- 
+
 /**
  * NukeViet Content Management System
  * @version 5.x
@@ -8,14 +8,14 @@
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
+
 if (!defined('NV_IS_FILE_ADMIN')) {
     exit('Stop!!!');
 }
 
 // Module Admin sử dụng NVSmarty
 $tpl = new \NukeViet\Template\NVSmarty();
-$tpl->assign('LANG', $lang_module);
-$tpl->assign('GLANG', $lang_global);
+$tpl->assign('LANG', $nv_Lang);
 
 // Gán biến cho giao diện admin...
 // $tpl->assign('VAR_NAME', $var_value);

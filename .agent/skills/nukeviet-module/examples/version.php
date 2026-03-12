@@ -1,5 +1,5 @@
 <?php
- 
+
 /**
  * NukeViet Content Management System
  * @version 5.x
@@ -8,9 +8,11 @@
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
+
 if (!defined('NV_ADMIN') or !defined('NV_MAINFILE')) {
     exit('Stop!!!');
 }
+
 $module_version = [
     'name'        => 'Tên module',
     // ... Khai báo danh sách func frontend phụ (nếu có) vào đây. Hàm main luôn đi đầu tiên (Mặc định).

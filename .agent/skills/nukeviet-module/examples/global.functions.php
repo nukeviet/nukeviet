@@ -8,6 +8,7 @@
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
+
 // Guard: NV_MAINFILE (giống block của module)
 if (!defined('NV_MAINFILE')) {
     exit('Stop!!!');

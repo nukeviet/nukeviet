@@ -20,8 +20,7 @@ src/modules/ten-module/
 ├── theme.php             # hàm giao diện ngoài site
 ├── funcs/main.php        # func mặc định ngoài site
 ├── admin/main.php        # func mặc định admin
-├── Shared/               # PSR-4 classes (namespace NukeViet\Module\{name}\Shared\)
-└── language/vi.php · en.php · admin_vi.php · admin_en.php
+└── language/vi.php · en.php · fr.php · data_vi.php · data_en.php · data_fr.php
 ```
 
 Template `.tpl` → `src/themes/[theme]/modules/[module]/` — **KHÔNG** trong `modules/`
@@ -118,41 +117,43 @@ if ($row['status'] === Posts::STATUS_PUBLISH) {
 ### Lấy input — PHẢI qua $nv_Request
 
 ```php
+$array = [];
+
 // Số nguyên
-$id    = $nv_Request->get_int('id', 'get', 0);
-$page  = $nv_Request->get_int('page', 'get', 1);
+$array['id']    = $nv_Request->get_int('id', 'get', 0);
+$array['page']  = $nv_Request->get_int('page', 'get', 1);
 
 // Số nguyên không âm (≥0)
-$num   = $nv_Request->get_absint('num', 'get', 0);
+$array['num']   = $nv_Request->get_absint('num', 'get', 0);
 
 // Boolean
-$active = $nv_Request->get_bool('active', 'post', false);
+$array['active'] = $nv_Request->get_bool('active', 'post', false);
 
 // Chuỗi ngắn (text field, tên, tiêu đề)
-$title = $nv_Request->get_title('title', 'post', '');
-$title = nv_substr($title, 0, 255);
+$array['title'] = $nv_Request->get_title('title', 'post', '');
+$array['title'] = nv_substr($array['title'], 0, 255);
 
 // Chuỗi đã lọc bảo mật — HTML bị strip/escape (dùng cho slug, alias, search keyword...)
 // Lưu ý: get_string() KHÔNG phải raw — vẫn chạy qua security filter
-$alias = $nv_Request->get_string('alias', 'post', '');
+$array['alias'] = $nv_Request->get_string('alias', 'post', '');
 
 // Nội dung rich editor (WYSIWYG) — chỉ đọc từ POST, không có param $mode
-$body  = $nv_Request->get_editor('body', '', NV_ALLOWED_HTML_TAGS);
+$array['body']  = $nv_Request->get_editor('body', '', NV_ALLOWED_HTML_TAGS);
 
 // Nội dung textarea — chỉ đọc từ POST; $save=true chuyển newline → <br />
-$desc  = $nv_Request->get_textarea('desc', '', NV_ALLOWED_HTML_TAGS);
-$desc_save = $nv_Request->get_textarea('desc', '', '', true); // newline → <br />
+$array['desc']  = $nv_Request->get_textarea('desc', '', NV_ALLOWED_HTML_TAGS);
+$array['desc_save'] = $nv_Request->get_textarea('desc', '', '', true); // newline → <br />
 
 // Mảng ID (ví dụ checkbox nhiều lựa chọn)
-$ids   = $nv_Request->get_array('ids', 'post', []);
+$array['ids']   = $nv_Request->get_array('ids', 'post', []);
 
 // Ghi session (ví dụ: đếm view không trùng lặp)
 $nv_Request->set_Session('key_name', NV_CURRENTTIME);
 $time_set = $nv_Request->get_int('key_name', 'session');
 
 // Đưa lại vào editor/textarea sau khi lấy từ DB:
-$body  = nv_htmlspecialchars(nv_editor_br2nl($row['body']));
-$desc  = nv_htmlspecialchars(nv_br2nl($row['description']));
+$array['body']  = nv_htmlspecialchars(nv_editor_br2nl($row['body']));
+$array['desc']  = nv_htmlspecialchars(nv_br2nl($row['description']));
 ```
 
 ---
@@ -215,27 +216,29 @@ NukeViet 5 hỗ trợ đa ngôn ngữ bằng cách nạp file ngôn ngữ theo t
 global $nv_Lang;
 
 // Load thủ công nếu cần (vd: trong API hay block)
-$nv_Lang->loadModule($module_info['module_file']);
+$nv_Lang->loadModule($module_info['module_file'], false, true);
 
 // Truy cập chuỗi
-echo $lang_module['hello'];
+echo $nv_Lang->getModule('hello');
 
 // Chuỗi có tham số
-$msg = sprintf($lang_module['error_msg'], 'Tên lỗi');
+$msg = $nv_Lang->getModule('error_msg', 'Tên lỗi');
 ```
 
-### Sử dụng trong XTemplate (.tpl)
+### Sử dụng trong Smarty (.tpl)
 ```php
-// Assign toàn bộ mảng
-$xtpl->assign('LANG', $lang_module);
-// Trong .tpl: {LANG.hello}
+// Assign toàn bộ mảng (khuyến khích)
+$xtpl->assign('LANG', $nv_Lang);
+// Trong .tpl: {$LANG->getModule('hello')}
 
-// Assign từng chuỗi
-$xtpl->assign('HELLO', $lang_module['hello']);
-// Trong .tpl: {HELLO}
+// Assign từng chuỗi (không khuyến khích)
+$xtpl->assign('HELLO', $nv_Lang->getModule('hello'));
+// Trong .tpl: {$HELLO}
+
+// Dùng xong nhớ xóa lang tạm
+$nv_Lang->changeLang();
 ```
 
-### Email Template (email_vi.php)
 ### Email Template (email_vi.php)
 > **Tham khảo cấu trúc khai báo:** `view_file` -> `.agent/skills/nukeviet-module/examples/email_vi.php`
 ---

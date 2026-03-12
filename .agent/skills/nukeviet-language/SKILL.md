@@ -97,7 +97,7 @@ global $nv_Lang;
 $nv_Lang->loadModule('ten-module');  // → kết quả vào $lang_module
 
 // Sau đó dùng như bình thường
-echo $lang_module['hello'];
+echo $nv_Lang->getModule('hello');
 ```
 
 **Khi nào cần load thủ công?**
@@ -137,8 +137,11 @@ $lang_switch_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=en';
 
 ---
 
-## 10. Block Language (`$lang_block`)
-> **Tham khảo khai báo và sử dụng `$lang_block` trong JSON/PHP:** `view_file` -> `.agent/skills/nukeviet-language/examples/BlockLanguage.php`
+## 10. Block Language
+
+Lang block dùng chung với lang module, ngoài ra có thể có thêm file JSON riêng để khai báo chuỗi ngôn ngữ cho phần cấu hình block (form config block).
+
+> **Tham khảo khai báo và sử dụng trong JSON/PHP:** `view_file` -> `.agent/skills/nukeviet-language/examples/BlockLanguage.php`
 
 ---
 
@@ -150,7 +153,7 @@ $lang_switch_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=en';
 - [ ] Key tên theo snake_case: `error_title`, `menu_config`
 - [ ] Không hardcode HTML phức tạp trong chuỗi ngôn ngữ (chỉ `<br />`, `<strong>` là OK)
 - [ ] Chuỗi có biến dùng `%s`, `%d`, `%1$s` (không dùng `{var}` — chỉ template Smarty dùng)
-- [ ] Tạo cả `vi.php` và `en.php` tối thiểu
+- [ ] Tạo cả `vi.php`, `en.php` và `fr.php` tối thiểu
 
 ---
 
