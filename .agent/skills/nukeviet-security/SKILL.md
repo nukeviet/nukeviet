@@ -42,7 +42,7 @@ NukeViet có **2 pattern** CSRF tuỳ ngữ cảnh (Frontend và Admin).
 
 > [!IMPORTANT]
 > Luôn dùng `hash_equals($checkss_expected, $csrf)` để so sánh token CSRF . Việc so sánh bằng `!=` hoặc `==` có thể bị khai thác qua timing attacks.
-> Tạo token chống CSRF `$checkss_expected` bằng cách sau, cố gắng tạo 1lần trong file nếu cùng giá trị để tiện bảo trì:
+> Tạo token chống CSRF `$checkss_expected` bằng cách sau, cố gắng tạo 1 lần trong file nếu cùng giá trị để tiện bảo trì:
 > `$checkss_expected = hash_hmac('sha256', NV_CHECK_SESSION . '_' . $module_name . '_' . $op . '_' . $admin_info['admin_id'], NV_CACHE_PREFIX);`
 
 ### Các lỗi bảo mật khác (XSS, Path Traversal, Open Redirect, Upload, Object Injection)

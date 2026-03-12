@@ -1,0 +1,51 @@
+<?xml version="1.0"?>
+<ruleset name="NukeViet5_Standard">
+    <description>NukeViet 5 Custom Coding Standard based on PSR-12</description>
+
+    <!-- 1. Sử dụng chuẩn PSR-12 làm nền tảng -->
+    <rule ref="PSR12"/>
+
+    <!-- 2. Cấu hình định dạng file -->
+    <arg name="colors"/>
+    <arg value="p"/>
+    <arg name="extensions" value="php,inc"/>
+    <arg name="encoding" value="utf-8"/>
+
+    <!-- 3. Loại trừ các thư mục không cần quét -->
+    <exclude-pattern>*/vendor/*</exclude-pattern>
+    <exclude-pattern>*/cache/*</exclude-pattern>
+    <exclude-pattern>*/uploads/*</exclude-pattern>
+    <exclude-pattern>*/data/*</exclude-pattern>
+    <exclude-pattern>*/assets/js/*</exclude-pattern>
+
+    <!-- 5. Quy tắc bổ sung đặc thù NukeViet -->
+    <!-- Bỏ qua cảnh báo dạng if (!defined('NV_SYSTEM')) { -->
+    <rule ref="PSR1.Files.SideEffects">
+        <severity>0</severity>
+    </rule>
+
+    <!-- Kiểm tra độ dài dòng (Cảnh báo nếu > 300, Lỗi nếu > 500) -->
+    <rule ref="Generic.Files.LineLength">
+        <properties>
+            <property name="lineLimit" value="300"/>
+            <property name="absoluteLineLimit" value="500"/>
+        </properties>
+    </rule>
+
+    <!-- Không bắt buộc docblock cho mọi function (NukeViet 5 ưu tiên sự tinh gọn) -->
+    <exclude name="Squiz.Commenting.FunctionComment"/>
+    <exclude name="Squiz.Commenting.ClassComment"/>
+
+    <!-- NukeViet nhiều file include (Tránh lỗi Side Effects do khai báo hằng số/hàm) -->
+    <exclude name="PSR1.Files.SideEffects"/>
+
+    <!-- Không cho phép dùng hàm eval() -->
+    <rule ref="Generic.PHP.ForbiddenFunctions">
+        <properties>
+            <property name="forbiddenFunctions" type="array">
+                <element key="eval" value="null"/>
+                <element key="var_dump" value="null"/>
+            </property>
+        </properties>
+    </rule>
+</ruleset>

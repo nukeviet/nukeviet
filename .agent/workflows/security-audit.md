@@ -13,46 +13,20 @@ Xác định mục tiêu cần quét (Ví dụ: `news`, `authors`, hoặc đư�
 Nếu người dùng chưa cung cấp tham số, hãy hỏi lại.
 
 ## 2. Chuẩn bị — Load kiến thức bảo mật
-Trước khi phân tích kết quả, AI **BẮT BUỘC** phải đọc:
+Trước khi phân tích kết quả, AI **BẮT BUỘC** phải dùng `view_file` đọc:
 - `.agent/skills/nukeviet-security/SKILL.md` — Quy tắc bảo mật, cách fix, code mẫu.
 - `.agent/skills/nukeviet-module/SKILL.md` — Cấu trúc file module, CSRF token pattern, `$nv_Request`.
+
+> [!IMPORTANT]
+> Nếu AI bỏ qua bước này, người dùng có quyền yêu cầu chạy lại. AI nên tóm tắt 2-3 điểm quan trọng từ mỗi file này trong báo cáo để xác nhận đã đọc.
 
 ## 3. Kiểm tra Cú pháp & Chuẩn Coding
 Sử dụng công cụ `run_command` kiểm tra trước khi quét bảo mật:
 
 // turbo
 ```bash
-# LƯU Ý CHO AI: Sửa biến MODULE thành chuỗi User yêu cầu
-MODULE="news"
-
-# Resolve đường dẫn thực tế
-TARGET=""
-for P in "src/modules/$MODULE" "src/admin/modules/$MODULE" "src/admin/$MODULE"; do
-    if [ -d "$P" ]; then
-        TARGET="$P"
-        break
-    fi
-done
-
-if [ -z "$TARGET" ]; then
-    echo "LỖI: Không tìm thấy module: $MODULE"
-    exit 1
-fi
-
-echo "1. Checking PHP Syntax..."
-find "$TARGET" -name "*.php" -type f -exec php -l {} \; | grep "Errors parsing"
-
-echo "2. Checking PSR-12 Coding Standard..."
-php vendor/bin/phpcs --standard=PSR12 "$TARGET"
-```
-
-## 4. Chạy Auto Scan Security
-Sử dụng công cụ `run_command` quét Audit Security mở rộng:
-
-// turbo
-```bash
-# LƯU Ý CHO AI: Sửa biến MODULE tương tự trên
-MODULE="news"
+# LƯU Ý CHO AI: Sửa biến MODULE thành chuỗi User yêu cầu (VD: user gõ /security-audit myapi -> MODULE="myapi")
+MODULE="TÊN_HOẶC_ĐƯỜNG_DẪN_MODULE_Ở_ĐÂY"
 
 if [ -z "$MODULE" ]; then
     echo "LỖI: Bạn chưa truyền tham số. Hãy truyền tên module hoặc đường dẫn file."
@@ -62,7 +36,7 @@ fi
 # Xây dựng danh sách đường dẫn cần quét
 SCAN_DIRS=()
 
-# Trường hợp user truyền đường dẫn cụ thể (chứa dấu /)
+# 1. Trường hợp quét file/thư mục cụ thể (có chứa dấu /)
 if [[ "$MODULE" == *"/"* ]]; then
     if [ -f "$MODULE" ] || [ -d "$MODULE" ]; then
         SCAN_DIRS+=("$MODULE")
@@ -71,25 +45,23 @@ if [[ "$MODULE" == *"/"* ]]; then
         exit 1
     fi
 else
-    # Tìm thư mục module PHP
+    # 2. Trường hợp quét tên module
+    # Tìm tất cả nơi chứa PHP của module đó (frontend, admin, api, hooks...)
     for P in "src/modules/$MODULE" "src/admin/modules/$MODULE" "src/admin/$MODULE"; do
         if [ -d "$P" ]; then
             SCAN_DIRS+=("$P")
-            break
         fi
     done
 
-    # Ghép thêm các thư mục giao diện (themes) liên quan tới module
+    # Ghép thêm thư mục giao diện (themes tpl, css, js)
     for THEME in "default" "mobile_default" "admin_default" "admin_future"; do
         THEME_DIR="src/themes/$THEME/modules/$MODULE"
         [ -d "$THEME_DIR" ] && SCAN_DIRS+=("$THEME_DIR")
-    done
 
-    # Ghép thêm các file CSS/JS riêng của module
-    for THEME in "default" "mobile_default" "admin_default" "admin_future"; do
         [ -f "src/themes/$THEME/css/$MODULE.css" ] && SCAN_DIRS+=("src/themes/$THEME/css/$MODULE.css")
         [ -f "src/themes/$THEME/js/$MODULE.js" ] && SCAN_DIRS+=("src/themes/$THEME/js/$MODULE.js")
-        # Admin có thể có file JS phụ dạng module_*.js
+
+        # JS phụ cho admin (VD: myapi_detail.js)
         for JS in src/themes/$THEME/js/${MODULE}_*.js; do
             [ -f "$JS" ] && SCAN_DIRS+=("$JS")
         done
@@ -102,8 +74,53 @@ if [ ${#SCAN_DIRS[@]} -eq 0 ]; then
 fi
 
 echo "========================================================="
-echo "🔍 ĐANG QUÉT SECURITY AUDIT:"
+echo "📁 DANH SÁCH QUÉT:"
 printf "   → %s\n" "${SCAN_DIRS[@]}"
+echo "========================================================="
+
+echo -e "\n1. Checking PHP Syntax (Quick check)..."
+# Thay vì find -exec (chậm trên Windows), ta dùng find + xargs hoặc liệt kê thư mục.
+for DIR in "${SCAN_DIRS[@]}"; do
+    if [ -d "$DIR" ]; then
+        echo "   → Linting: $DIR"
+        find "$DIR" -name "*.php" -type f -print0 | xargs -0 -n 20 php -l | grep -v "No syntax errors" || true
+    elif [ -f "$DIR" ] && [[ "$DIR" == *.php ]]; then
+        php -l "$DIR" | grep -v "No syntax errors" || true
+    fi
+done
+
+echo -e "\n2. Checking Coding Standard (PHPCS)..."
+if command -v phpcs >/dev/null 2>&1; then
+    PHPCS="phpcs"
+elif [ -f "vendor/bin/phpcs" ]; then
+    PHPCS="php vendor/bin/phpcs"
+else
+    echo -e "⚠️  CẢNH BÁO: Không tìm thấy phpcs. Bỏ qua check PSR-12."
+    PHPCS=""
+fi
+
+if [ ! -z "$PHPCS" ]; then
+    PHPCS_CONFIG="tests/phpcs.xml"
+    if [ -f "$PHPCS_CONFIG" ]; then
+        $PHPCS --standard="$PHPCS_CONFIG" "${SCAN_DIRS[@]}"
+    else
+        $PHPCS --standard=PSR12 "${SCAN_DIRS[@]}"
+    fi
+fi
+```
+
+## 4. Chạy Auto Scan Security
+Sử dụng công cụ `run_command` quét Audit Security mở rộng:
+
+// turbo
+```bash
+# LƯU Ý CHO AI: Dùng đúng biến MODULE và sao chép lại mảng SCAN_DIRS từ Script bước 3
+MODULE="TÊN_HOẶC_ĐƯỜNG_DẪN_MODULE_Ở_ĐÂY"
+# Mảng SCAN_DIRS (AI copy lại kết quả resolve đường dẫn từ bash trước đưa vào đây cho đồng bộ)
+SCAN_DIRS=( "src/modules/$MODULE" )
+
+echo "========================================================="
+echo "🔍 ĐANG QUÉT SECURITY AUDIT: $MODULE"
 echo "========================================================="
 
 # === PHẦN A: QUÉT FILE PHP ===

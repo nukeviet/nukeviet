@@ -1,0 +1,85 @@
+#!/bin/bash
+
+# 1. Xác định lệnh PHPCS (Ưu tiên Global -> Local)
+if command -v phpcs >/dev/null 2>&1; then
+    PHPCS="phpcs"
+elif [ -f "vendor/bin/phpcs" ]; then
+    PHPCS="php vendor/bin/phpcs"
+else
+    echo -e "⚠️  CẢNH BÁO: Không tìm thấy phpcs. Bỏ qua kiểm tra tiêu chuẩn code."
+    PHPCS=""
+fi
+
+# 2. Lấy danh sách các file đang staged (Chuẩn bị commit)
+STAGED_FILES_LIST=$(git diff --cached --name-only --diff-filter=ACM)
+
+if [ -z "$STAGED_FILES_LIST" ]; then
+    exit 0
+fi
+
+echo "--- 🛠️  Kiểm tra Tên thư mục, tập tin & Cú pháp ---"
+
+# Biến để lưu danh sách file PHP phục vụ cho PHPCS ở bước sau
+PHP_ONLY_FILES=""
+
+# Dùng vòng lặp while read để đọc từng dòng từ danh sách file
+while IFS= read -r FILE; do
+    [ -z "$FILE" ] && continue
+
+    # A. KIỂM TRA TÊN THƯ MỤC & TẬP TIN
+    IFS='/' read -ra PARTS <<< "$FILE"
+    for PART in "${PARTS[@]}"; do
+        # Kiểm tra ký tự hợp lệ
+        if [[ ! "$PART" =~ ^[a-zA-Z0-9._-]+$ ]]; then
+            echo "❌ LỖI: Tên thư mục hoặc tập tin không hợp lệ: \"$PART\""
+            echo "👉 Trong đường dẫn: $FILE"
+            echo "=> Quy định: Chỉ dùng chữ cái, số, gạch dưới (_), gạch ngang (-), dấu chấm (.)."
+            exit 1
+        fi
+
+        # Kiểm tra độ dài tên file (phần tử cuối cùng)
+        if [[ "$PART" == "${PARTS[-1]}" ]]; then
+            if [ ${#PART} -gt 50 ]; then
+                echo "❌ LỖI: Tên tập tin quá dài (${#PART} ký tự): \"$PART\""
+                echo "👉 Đường dẫn: $FILE"
+                echo "=> Quy định: Tên file không quá 50 ký tự."
+                exit 1
+            fi
+        fi
+    done
+
+    # B. KIỂM TRA CÚ PHÁP PHP (LINTING)
+    if [[ "$FILE" =~ \.(php|inc)$ ]]; then
+        PHP_ONLY_FILES="$PHP_ONLY_FILES $FILE" # Gom file PHP lại
+
+        PHP_LINT_OUTPUT=$(php -l "$FILE" 2>&1)
+        if [ $? -ne 0 ]; then
+            echo "❌ Lỗi cú pháp trong: $FILE"
+            echo "$PHP_LINT_OUTPUT"
+            echo "--------------------------------------------------"
+            exit 1
+        fi
+    fi
+done <<< "$STAGED_FILES_LIST"
+
+# 3. KIỂM TRA TIÊU CHUẨN CODE (PHPCS)
+if [ ! -z "$PHPCS" ] && [ ! -z "$PHP_ONLY_FILES" ]; then
+    echo "--- 🚀 Đang kiểm tra PHPCS cho các file PHP ---"
+
+    PHPCS_CONFIG="tests/phpcs.xml"
+    if [ -f "$PHPCS_CONFIG" ]; then
+        $PHPCS --standard="$PHPCS_CONFIG" $PHP_ONLY_FILES
+    else
+        echo "ℹ️  Không thấy $PHPCS_CONFIG, sử dụng mặc định PSR12."
+        $PHPCS --standard=PSR12 $PHP_ONLY_FILES
+    fi
+
+    if [ $? -ne 0 ]; then
+        echo ""
+        echo "❌ LỖI: Code không đạt tiêu chuẩn. Vui lòng sửa hoặc chạy phpcbf."
+        exit 1
+    fi
+fi
+
+echo "✅ Kiểm tra file hoàn tất"
+exit 0
