@@ -20,28 +20,9 @@ allowed-tools: Read, Grep, Glob, Bash
 
 ---
 
-## Scan nhanh thủ công (dành cho AI)
-```bash
-TARGET="src/modules/ten-module/"  # Hoặc src/admin/modules/ten-module/ hoặc src/admin/ten-module/
+## Quét bảo mật tự động
 
-# [1/6] Input không qua $nv_Request
-grep -rn "\$_GET\|\$_POST\|\$_REQUEST" $TARGET --include="*.php" | grep -v "nv_Request\|(int)\|(float)"
-
-# [2/6] Output không escape (XSS)
-grep -rn "echo \$\|print \$" $TARGET --include="*.php" | grep -v "htmlspecialchars\|nv_html\|intval\|NVSmarty"
-
-# [3/6] Path Traversal (is_file/file_exists/unlink không qua nv_is_file)
-grep -rn "is_file\|file_exists\|unlink" $TARGET --include="*.php" | grep -v "nv_is_file\|NV_ROOTDIR"
-
-# [4/6] unserialize() — Object Injection
-grep -rn "unserialize(" $TARGET --include="*.php"
-
-# [5/6] CSRF (Tìm file POST thiếu NV_CHECK_SESSION hoặc checkss)
-grep -rl "isset_request(.*'post'" $TARGET --include="*.php" | xargs -r grep -L "checkss\|NV_CHECK_SESSION\|hash_equals"
-
-# [6/6] TÌM MẬT KHẨU / LỘ SECRET KEY
-grep -rn "password\|passwd\|secret\|api_key" $TARGET --include="*.php" | grep -v "//\|#\|\$_POST\|\$config\|lang_module\|lang_global\|nv_Lang"
-```
+> Để chạy quét tự động, dùng lệnh `/security-audit` — xem chi tiết quy trình tại [security-audit workflow](../../workflows/security-audit.md).
 
 ---
 
@@ -60,10 +41,8 @@ NukeViet có **2 pattern** CSRF tuỳ ngữ cảnh (Frontend và Admin).
 > **Tham khảo mẫu verify CSRF Token:** `view_file` -> `.agent/skills/nukeviet-security/examples/PatternCSRF.php`
 
 > [!IMPORTANT]
-> Luôn dùng `hash_equals($expected, $actual)` để so sánh token CSRF. Việc so sánh bằng `!=` hoặc `==` có thể bị khai thác qua timing attacks.
-> Cố gắng tạo `$checkss_expected` tại 1 điểm duy nhất trên cùng của file nếu cùng giá trị để tiện bảo trì.
-
-> ⚠ Ở admin, tạo `$checkss_expected` bằng cách truyền toàn bộ context vào chuỗi hash:
+> Luôn dùng `hash_equals($checkss_expected, $csrf)` để so sánh token CSRF . Việc so sánh bằng `!=` hoặc `==` có thể bị khai thác qua timing attacks.
+> Tạo token chống CSRF `$checkss_expected` bằng cách sau, cố gắng tạo 1lần trong file nếu cùng giá trị để tiện bảo trì:
 > `$checkss_expected = hash_hmac('sha256', NV_CHECK_SESSION . '_' . $module_name . '_' . $op . '_' . $admin_info['admin_id'], NV_CACHE_PREFIX);`
 
 ### Các lỗi bảo mật khác (XSS, Path Traversal, Open Redirect, Upload, Object Injection)
@@ -73,60 +52,23 @@ NukeViet có **2 pattern** CSRF tuỳ ngữ cảnh (Frontend và Admin).
 
 ## Bảng tra nhanh — hàm bảo mật
 
-### $nv_Request — đầy đủ method
+- `$nv_Request`: Bắt buộc dùng để lấy input (chi tiết các method `get_int`, `get_title`, v.v xem thêm tại [nukeviet-module](../nukeviet-module/SKILL.md)).
+- `nv_htmlspecialchars()`: Escape HTML output, chống XSS.
+- `$db->prepare()` + `bindParam()`: Tham số đầu vào chuỗi SQL (chi tiết tại [nukeviet-mysql](../nukeviet-mysql/SKILL.md)).
+- `$db->dblikeescape($value)`: Escape ký tự đặc biệt trong câu lệnh LIKE.
+- `NV_CHECK_SESSION` / `hash_hmac` / `hash_equals`: Token và các hàm kiểm tra chống CSRF.
+- `nv_is_file()`: Kiểm tra sự tồn tại của file an toàn, chống Path Traversal.
+- `nv_redirect_encrypt()` / `nv_redirect_decrypt()`: Cấu trúc redirect an toàn.
+- `nv_check_valid_email()`: Hàm hệ thống dùng để validate email.
 
-**Tham số `$mode`** nhận: `'get'`, `'post'`, `'session'`, `'cookie'`, `'request'`, `'env'`, `'server'`.
-Có thể dùng nhiều mode cách nhau dấu phẩy — lấy từ mode đầu tiên tìm thấy: `'get,post'`.
-
-| Method | Dùng khi | Ghi chú |
-|---|---|---|
-| `get_int($name, $mode, $default)` | Input số nguyên | |
-| `get_absint($name, $mode, $default)` | Số nguyên tuyệt đối (luôn ≥0) | `abs((int) $value)` |
-| `get_float($name, $mode, $default)` | Input số thực | |
-| `get_bool($name, $mode, $default)` | Input boolean | |
-| `get_title($name, $mode, $default)` | Text ngắn — strip HTML, giữ text | |
-| `get_string($name, $mode, $default)` | Chuỗi đã lọc bảo mật — HTML bị strip/escape | **Không phải raw** — vẫn qua security filter |
-| `get_editor($name, $default, $allowed_tags)` | Nội dung WYSIWYG | **Chỉ đọc từ POST** — không có param `$mode` |
-| `get_textarea($name, $default, $allowed_tags, $save)` | Nội dung textarea | **Chỉ đọc từ POST** — `$save=true` chuyển newline → `<br />` |
-| `get_array($name, $mode, $default)` | Mảng từ GET/POST | vd: checkbox group |
-| `get_typed_array($name, $mode, $type, ...)` | Mảng ép kiểu | `$type`: 'int','bool','float','string','title','textarea','editor' |
-| `set_Session($name, $value)` | Ghi vào session (encode AES) | Đọc lại bằng `get_int/get_string(..., 'session')` |
-| `set_Cookie($name, $value, $expire)` | Ghi cookie an toàn (encode AES) | `$expire` = số giây kể từ bây giờ |
-| `isset_request($names, $mode, $all)` | Kiểm tra key tồn tại | `$all=true`: tất cả phải có; `$all=false`: ít nhất 1 |
-| `unset_request($names, $mode)` | Xóa key khỏi superglobal | |
-
-### Các hàm bảo mật khác
-
-| Hàm | Dùng khi |
-|---|---|
-| `nv_htmlspecialchars()` | Escape HTML output |
-| `$db->prepare()` + `bindParam()` | Chuỗi từ user vào SQL |
-| `$db->dblikeescape($value)` | Escape ký tự đặc biệt trong LIKE |
-| `NV_CHECK_SESSION` | Hằng CSRF session base |
-| `hash_hmac` | Tạo `$checkss_expected` an toàn — Luôn dùng kèm `hash_equals` để kiểm tra biến POST từ JS truyền lên |
-| `nv_is_file()` | Kiểm tra file an toàn |
-| `nv_redirect_encrypt/decrypt` | Redirect an toàn |
-| `nv_check_valid_email()` | Validate email |
+> **Lưu ý:** Các kiến thức chung về Code Convention (PSR-12), tối ưu hiệu năng (Cache, N+1 Queries), `$db_slave`, cấu trúc file/module, và chi tiết `$nv_Request` đã được chuẩn hóa tại **[nukeviet-module](../nukeviet-module/SKILL.md)** và **[nukeviet-mysql](../nukeviet-mysql/SKILL.md)**. Vui lòng tham khảo các file tương ứng trong quá trình review/code.
 
 ---
 
-## Tiêu chuẩn Code Quality & Convention (Khi Review)
+## Mức độ báo cáo khi review (Bắt buộc tuân thủ)
 
-### Convention NukeViet 5
-- [ ] Có hằng số bảo vệ đầu file không (`NV_IS_FILE_ADMIN` hoặc `NV_SYSTEM`...)?
-- [ ] Prefix bảng có dùng `NV_PREFIXLANG` thay vì hardcode `nv4_vi_` không?
-- [ ] PSR-4: Namespace phân bổ logic có đúng không?
-- [ ] Đọc dữ liệu (SELECT) ưu tiên dùng `$db_slave`, Ghi dữ liệu dùng `$db`.
+Ngoài đánh giá bảo mật, AI bắt buộc phải ghi nhận và gợi ý sửa lại các điểm mã nguồn (code) chưa tốt. Vui lòng chia báo cáo rà soát thành 3 chuyên mục:
 
-### Code Quality & Performance
-- [ ] Có tuân thủ PSR-12 (4 spaces, thụt lề chuẩn, camelCase vs snake_case...)?
-- [ ] Sử dụng `$nv_Cache->db()` cho các truy vấn lấy dữ liệu tĩnh, ít đổi chưa?
-- [ ] CÓ đặt câu truy vấn DB (SQL) bên trong vòng lặp hay không (Gây rủi ro N+1 queries)?
-
----
-
-## Mức độ báo cáo khi review
-
-- 🔴 **CHẶN MERGE** — SQLi, XSS rõ ràng, thiếu CSRF token, thiếu kiểm tra phân quyền, `unserialize` không giới hạn class, vòng lặp chứa câu truy vấn ác ý.
-- 🟡 **NÊN FIX** — Lỗi Logic, chưa chuẩn Convention, chưa tối ưu hiệu năng (không check cache), sử dụng sai `$db_slave`.
-- 💡 **GỢI Ý** — Cải thiện tính tái sử dụng, tối ưu code thừa, không bắt buộc.
+- 🔴 **LỖI BẢO MẬT NGHIÊM TRỌNG (CHẶN MERGE)** — SQLi, XSS rõ ràng, thiếu CSRF token, thiếu kiểm tra phân quyền, `unserialize` không giới hạn class, vòng lặp chứa câu truy vấn ác ý.
+- 🟡 **CÁC ĐIỂM CODE CHƯA TỐT (CODE SMELLS)** — Lỗi Logic, chưa chuẩn Convention (PSR-12), truy vấn SQL chưa tối ưu (vòng lặp chứa SQL, không dùng `$nv_Cache`, sử dụng sai `$db_slave` cho tác vụ READ ở frontend), thiếu comments, code rườm rà.
+- 💡 **GỢI Ý CẢI THIỆN (REFACTOR)** — Đề xuất giải pháp và viết đoạn code gợi ý để cấu trúc lại, cải thiện tính tái sử dụng, khử code thừa.

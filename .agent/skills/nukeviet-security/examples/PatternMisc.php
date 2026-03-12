@@ -9,9 +9,14 @@
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 // === XSS output ===
-// ❌ Sai: echo $row['title'];
+// Dữ liệu đã qua get_title() khi nhập → đã escape HTML → KHÔNG cần escape lại
+// ✅ Đúng: echo $row['title'];
+// ❌ Sai (double-encode): echo nv_htmlspecialchars($row['title']);
+
+// Dữ liệu từ get_string(), get_editor(), get_textarea() hoặc raw từ DB → CẦN escape khi echo
+// ❌ Sai: echo $row['description'];
 // ✅ Đúng:
-echo nv_htmlspecialchars($row['title']);
+echo nv_htmlspecialchars($row['description']);
 
 // === Kiểm tra file — dùng nv_is_file ===
 // ❌ Sai: is_file(NV_DOCUMENT_ROOT . $path_from_user);

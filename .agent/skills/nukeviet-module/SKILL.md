@@ -7,24 +7,52 @@ allowed-tools: Read, Write, Glob, Grep, Bash
 
 # Hướng Dẫn Module NukeViet 5.x
 
-## Cấu trúc file bắt buộc
+## Cấu trúc file thuộc module
 
-```
-src/modules/ten-module/
-├── version.php           # BẮT BUỘC — phiên bản dạng X.Y.ZZ (vd: 5.0.00)
-├── functions.php         # BẮT BUỘC — không xóa dù rỗng; define NV_IS_MOD_*
-├── admin.functions.php   # BẮT BUỘC
-├── admin.menu.php        # BẮT BUỘC — $submenu (và $allow_func nếu module phức tạp)
-├── action_mysql.php      # $sql_create_module + $sql_drop_module
-├── global.functions.php  # tùy chọn — hàm dùng chung cả frontend lẫn admin
-├── theme.php             # hàm giao diện ngoài site
-├── funcs/main.php        # func mặc định ngoài site
-├── admin/main.php        # func mặc định admin
-├── Shared/               # PSR-4 classes (namespace NukeViet\Module\{name}\Shared\)
-└── language/vi.php · en.php · admin_vi.php · admin_en.php
+```text
+src/
+├── modules/
+│   └── ten-module/
+│       ├── version.php           # BẮT BUỘC — phiên bản dạng X.Y.ZZ (vd: 5.0.00)
+│       ├── functions.php         # BẮT BUỘC — không xóa dù rỗng; define NV_IS_MOD_*
+│       ├── admin.functions.php   # BẮT BUỘC
+│       ├── admin.menu.php        # BẮT BUỘC — $submenu (và $allow_func nếu module phức tạp)
+│       ├── action_mysql.php      # $sql_create_module + $sql_drop_module
+│       ├── global.functions.php  # tùy chọn — hàm dùng chung cả frontend lẫn admin
+│       ├── theme.php             # hàm giao diện ngoài site
+│       ├── funcs/main.php        # func mặc định ngoài site
+│       ├── admin/main.php        # func mặc định admin
+│       ├── Shared/               # PSR-4 classes (namespace NukeViet\Module\{name}\Shared\)
+│       └── language/
+│           └── vi.php · en.php
+└── themes/
+    ├── default/                  # Giao diện mặc định ngoài site
+    │   ├── css/ten-module.css
+    │   ├── images/ten-module/
+    │   ├── js/ten-module.js
+    │   └── modules/ten-module/   # Chứa các file .tpl
+    ├── mobile_default/           # Giao diện mobile mặc định ngoài site
+    │   ├── css/ten-module.css
+    │   ├── images/ten-module/
+    │   ├── js/ten-module.js
+    │   └── modules/ten-module/   # Chứa các file .tpl
+    ├── admin_default/            # Giao diện Admin mặc định
+    │   ├── css/ten-module.css
+    │   ├── images/ten-module/
+    │   ├── js/
+    │   │   ├── ten-module.js
+    │   │   └── ten-module_*.js
+    │   └── modules/ten-module/   # Chứa các file .tpl
+    └── admin_future/             # Giao diện Admin mới (Future)
+        ├── css/ten-module.css
+        ├── images/ten-module/
+        ├── js/
+        │   ├── ten-module.js
+        │   └── ten-module_*.js
+        └── modules/ten-module/   # Chứa các file .tpl
 ```
 
-Template `.tpl` → `src/themes/[theme]/modules/[module]/` — **KHÔNG** trong `modules/`
+*(Đối với các giao diện khác, cấu trúc giữ nguyên nhưng thay thư mục theme tương ứng trong `src/themes/`)*
 
 ---
 
@@ -155,6 +183,32 @@ $body  = nv_htmlspecialchars(nv_editor_br2nl($row['body']));
 $desc  = nv_htmlspecialchars(nv_br2nl($row['description']));
 ```
 
+### Bảo vệ bằng CSRF Token (Admin & Frontend)
+
+NukeViet 5 sử dụng `hash_hmac` để sinh token và `hash_equals` để so sánh nhằm tránh tấn công Timing Attack.
+
+**1. Tạo Token (nên tạo 1 lần ở đầu file PHP nếu dùng chung để tiện bảo trì):**
+```php
+$checkss_expected = hash_hmac('sha256', NV_CHECK_SESSION . '_' . $module_name . '_' . $op . '_' . $admin_info['userid'], NV_CACHE_PREFIX);
+```
+*(Trong giao diện `.tpl`, gán biến `$checkss_expected` thành `{CHECKSS}` và đặt trong input hidden `name="checkss"`. Thay vì dùng biến global `NV_CHECK_SESSION` trên TPL như cũ).*
+
+**2. So khớp Token:**
+```php
+if ($nv_Request->isset_request('save', 'post') and hash_equals($checkss_expected, $nv_Request->get_title('checkss', 'post', ''))) {
+    // Lưu ý: Luôn dùng hash_equals() thay vì toán tử ===
+}
+```
+
+### Chống Path Traversal (Kiểm tra file hợp lệ)
+
+**KHÔNG** dùng trực tiếp `file_exists()` thao tác nội bộ/tĩnh. Dù bạn truyền một chuỗi tĩnh định sẵn từ hằng số (vd: `NV_ROOTDIR . '/' . $row['image']` không bị Path Traversal) nhưng để đảm bảo độ chuẩn mực cho tương lai, **luôn dùng `nv_is_file()`**:
+```php
+if (nv_is_file(NV_ROOTDIR . '/uploads/' . $module_name . '/image.jpg')) {
+    // Xử lý file
+}
+```
+
 ---
 
 ## Block trong module
@@ -183,7 +237,7 @@ Có hai loại block:
 - [ ] `functions.php` tồn tại — không xóa dù rỗng
 - [ ] Phiên bản dạng `X.Y.ZZ`
 - [ ] Template `.tpl` đặt trong `themes/` không phải `modules/`
-- [ ] Language có đủ `vi.php` và `admin_vi.php`
+- [ ] Language có đủ `vi.php` (NV5 gộp frontend + admin chung)
 - [ ] `action_mysql.php` có cả `$sql_drop_module` và `$sql_create_module`
 - [ ] `admin.functions.php` có `define('NV_IS_FILE_ADMIN', true)`
 - [ ] `$allow_func` khai báo trong `admin.functions.php` (module đơn giản) hoặc `admin.menu.php` (module phức tạp)
@@ -206,7 +260,6 @@ NukeViet 5 hỗ trợ đa ngôn ngữ bằng cách nạp file ngôn ngữ theo t
 | `email_vi.php` | Mẫu email — dùng `$module_emails[]` | `NV_MAINFILE` |
 | `data_vi.php` | Ngôn ngữ cho data layer (ít dùng) | `NV_MAINFILE` |
 
-### Template file vi.php / en.php
 ### Template file vi.php / en.php
 > **Tham khảo mẫu khai báo:** `view_file` -> `.agent/skills/nukeviet-module/examples/language.vi.php`
 
@@ -235,7 +288,6 @@ $xtpl->assign('HELLO', $lang_module['hello']);
 // Trong .tpl: {HELLO}
 ```
 
-### Email Template (email_vi.php)
 ### Email Template (email_vi.php)
 > **Tham khảo cấu trúc khai báo:** `view_file` -> `.agent/skills/nukeviet-module/examples/email_vi.php`
 ---
