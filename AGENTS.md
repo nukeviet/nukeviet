@@ -23,8 +23,9 @@ Bạn (AI) phải hoạt động theo chu kỳ: **Phân tích → Lập kế ho�
 ### Lệnh thường dùng
 ```bash
 composer install && npm install  # Khởi tạo môi trường
-npm run watch-admin              # Build CSS Admin
-npm run watch-core               # Build CSS Core
+npm run admin-css                # Build CSS Admin
+npm run core-css                 # Build CSS Core
+php vendor/bin/codecept run      # Chạy toàn bộ kịch bản test
 php vendor/bin/codecept run Unit # Chạy Unit Test
 ```
 ## Slash Commands Custom
