@@ -88,7 +88,7 @@ Có thể dùng nhiều mode cách nhau dấu phẩy — lấy từ mode đầu 
 | `get_string($name, $mode, $default)` | Chuỗi đã lọc bảo mật — HTML bị strip/escape | **Không phải raw** — vẫn qua security filter |
 | `get_editor($name, $default, $allowed_tags)` | Nội dung WYSIWYG | **Chỉ đọc từ POST** — không có param `$mode` |
 | `get_textarea($name, $default, $allowed_tags, $save)` | Nội dung textarea | **Chỉ đọc từ POST** — `$save=true` chuyển newline → `<br />` |
-| `get_array($name, $mode, $default)` | Mảng từ GET/POST | vd: checkbox group |
+| `get_array($name, $mode, $default)` | Mảng từ GET/POST | vd: checkbox group. Lưu ý kiểm tra kiểu dữ liệu, escape, ... trước khi dùng |
 | `get_typed_array($name, $mode, $type, ...)` | Mảng ép kiểu | `$type`: 'int','bool','float','string','title','textarea','editor' |
 | `set_Session($name, $value)` | Ghi vào session (encode AES) | Đọc lại bằng `get_int/get_string(..., 'session')` |
 | `set_Cookie($name, $value, $expire)` | Ghi cookie an toàn (encode AES) | `$expire` = số giây kể từ bây giờ |

@@ -24,7 +24,7 @@ if (!hash_equals($checkss_expected, $nv_Request->get_title('checkss', 'post', ''
     // Không hợp lệ → báo lỗi hoặc redirect (tùy định dạng trả về)
     nv_jsonOutput([
         'status' => 'error',
-        'message' => 'Error session!!!'
+        'mess' => 'Error session!!!'
     ]);
 }
 

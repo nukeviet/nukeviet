@@ -1,5 +1,5 @@
 <?php
- 
+
 /**
  * NukeViet Content Management System
  * @version 5.x
@@ -8,11 +8,6 @@
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
-
-// === XSS output ===
-// ❌ Sai: echo $row['title'];
-// ✅ Đúng:
-echo nv_htmlspecialchars($row['title']);
 
 // === Kiểm tra file — dùng nv_is_file ===
 // ❌ Sai: is_file(NV_DOCUMENT_ROOT . $path_from_user);
