@@ -1,5 +1,5 @@
 <?php
- 
+
 /**
  * NukeViet Content Management System
  * @version 5.x
@@ -22,4 +22,4 @@ $lang_translator['langtype']   = 'lang_module'; // Luôn là 'lang_module'
 
 // Các chuỗi hiển thị giao diện
 $lang_module['hello']     = 'Xin chào';
-$lang_module['error_msg'] = 'Lỗi: %s'; // Dùng với sprintf()
+$lang_module['error_msg'] = 'Lỗi: %s'; // Dùng với getModule, getGlobal có nhiều hơn 1 tham số

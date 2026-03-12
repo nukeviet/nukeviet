@@ -79,4 +79,4 @@ Luôn thêm annotation `@group` để phân loại test:
 1. **Database dọn dẹp**: Luôn `DROP TABLE` hoặc xóa dữ liệu rác trong `_after()` để đảm bảo môi trường sạch cho test sau.
 2. **Wait hợp lý**: Dùng `$I->waitForElement` hoặc `$I->waitForText` thay vì `$I->wait(fixed_time)` để tối ưu tốc độ test.
 3. **Môi trường Test**: Nên dùng một database riêng cho testing để tránh mất dữ liệu thực tế.
-4. **.env file**: Đảm bảo tệp `.env` trỏ đúng vào thư mục `src/` của dự án.
+4. **.env file**: Đảm bảo tệp `.env` nằm ở thư mục gốc của dự án.

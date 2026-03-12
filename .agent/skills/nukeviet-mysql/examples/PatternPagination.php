@@ -8,6 +8,7 @@
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
+
 // Dùng Query Builder (chuẩn)
 $db_slave->sqlreset()
     ->select('COUNT(*)')

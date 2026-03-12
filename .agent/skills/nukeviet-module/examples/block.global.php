@@ -1,5 +1,5 @@
 <?php
- 
+
 /**
  * NukeViet Content Management System
  * @version 5.x
@@ -8,6 +8,7 @@
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
+
 // Guard: NV_MAINFILE (không phải NV_IS_BLOCK_THEME — cái đó dành cho block của theme)
 if (!defined('NV_MAINFILE')) {
     exit('Stop!!!');
@@ -18,10 +19,12 @@ if (!nv_function_exists('nv_block_config_tenblock')) {
     /**
      * Form cấu hình block (hiển thị trong trang quản trị block)
      */
-    function nv_block_config_tenblock($module, $data_block, $lang_block)
+    function nv_block_config_tenblock($module, $data_block)
     {
+        global $nv_Lang;
+
         $html  = '<div class="form-group">';
-        $html .= '<label>' . $lang_block['numrow'] . '</label>';
+        $html .= '<label>' . $nv_Lang->getModule('numrow') . '</label>';
         $html .= '<input type="text" name="config_numrow" value="' . $data_block['numrow'] . '">';
         $html .= '</div>';
         return $html;
@@ -30,7 +33,7 @@ if (!nv_function_exists('nv_block_config_tenblock')) {
     /**
      * Xử lý submit form cấu hình block
      */
-    function nv_block_config_tenblock_submit($module, $lang_block)
+    function nv_block_config_tenblock_submit($module)
     {
         global $nv_Request;
         return [

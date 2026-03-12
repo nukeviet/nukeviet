@@ -1,5 +1,5 @@
 <?php
- 
+
 /**
  * NukeViet Content Management System
  * @version 5.x
@@ -12,15 +12,17 @@
 /* JSON i18n
 {
     "i18n": {
-        "vi": { "config": { "numrow": "Số dòng hiển thị" } },
-        "en": { "config": { "numrow": "Number of rows" } }
+        "vi": { "language": { "numrow": "Số dòng hiển thị" } },
+        "en": { "language": { "numrow": "Number of rows" } }
     }
 }
 */
 
-function nv_block_config_tenblock($module, $data_block, $lang_block)
+function nv_block_config_tenblock($module, $data_block)
 {
-    // $lang_block chứa chuỗi UI của form config block (từ JSON i18n)
-    $html = '<label>' . $lang_block['numrow'] . '</label>';
+    global $nv_Lang;
+
+    // $nv_Lang là một instance của NukeViet\Language\Language, cung cấp phương thức getModule(), getGlobal() để lấy chuỗi ngôn ngữ.
+    $html = '<label>' . $nv_Lang->getModule('numrow') . '</label>';
     //...
 }

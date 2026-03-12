@@ -1,5 +1,5 @@
 <?php
- 
+
 /**
  * NukeViet Content Management System
  * @version 5.x
@@ -8,6 +8,7 @@
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
+
 if (!defined('NV_IS_FILE_MODULES')) {
     exit('Stop!!!');
 }
@@ -30,14 +31,14 @@ $sql_create_module[] = 'CREATE TABLE ' . $db_config['prefix'] . '_' . $lang . '_
  edit_time int(11) NOT NULL DEFAULT \'0\',
  PRIMARY KEY (id),
  UNIQUE KEY alias (alias)
-) ENGINE=MyISAM';
+) ENGINE=InnoDB';
 
 // Bảng config module (pattern chuẩn — hầu hết module có bảng _config riêng)
 $sql_create_module[] = 'CREATE TABLE ' . $db_config['prefix'] . '_' . $lang . '_' . $module_data . '_config (
  config_name varchar(30) NOT NULL,
  config_value varchar(255) NOT NULL,
  UNIQUE KEY config_name (config_name)
-) ENGINE=MyISAM';
+) ENGINE=InnoDB';
 
 // Insert giá trị mặc định cho config
 $sql_create_module[] = "INSERT INTO " . $db_config['prefix'] . '_' . $lang . '_' . $module_data . "_config VALUES

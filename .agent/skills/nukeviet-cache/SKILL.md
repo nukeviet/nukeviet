@@ -12,9 +12,9 @@ Hệ thống Cache của NukeViet 5 giúp giảm tải cho cơ sở dữ liệu 
 
 | Thành phần | Chi tiết |
 |---|---|
-| **Biến toàn cục** | `$nv_Cache` (được khởi tạo trong `mainfile.php`) |
+| **Biến toàn cục** | `$nv_Cache` (được khởi tạo trong `includes/mainfile.php`) |
 | **Driver hỗ trợ** | Files (mặc định), Memcached, Redis |
-| **Cấu hình** | `$global_config['cached']` trong `data/config_global.php` |
+| **Cấu hình** | `$global_config['cached']` trong `data/config/config_global.php` |
 | **Vị trí lưu (file)** | `NV_ROOTDIR . '/' . NV_CACHEDIR . '/{module_name}/'` |
 
 ---
@@ -66,9 +66,9 @@ $nv_Cache->delMod(string $moduleName, string $lang = '');
 ## 4. Lưu ý và Best Practices
 
 1. **MD5 cho DB Cache**: Hệ thống dùng `md5($sql)` để tạo tên tệp cho `db()`. Nếu SQL thay đổi dù chỉ 1 khoảng trắng, cache cũ sẽ không được dùng. Nên dùng Query Builder `$db->sql()` để đảm bảo SQL ổn định.
-2. **TTL (Time To Live)**: 
+2. **TTL (Time To Live)**:
     - Với File Cache, TTL được kiểm tra khi đọc (`getItem`).
     - Với Memcached/Redis, TTL được thiết lập ngay khi ghi.
 3. **Prefix**: Hệ thống tự động thêm `NV_CACHE_PREFIX` và ngôn ngữ vào tên key/file, bạn không cần tự thêm.
-4. **Serialization**: Luôn `serialize` trước khi `setItem` và `unserialize` sau khi `getItem` nếu dữ liệu không phải là string thuần túy.
+4. **Serialization**: Luôn `json_encode` trước khi `setItem` và `json_decode` sau khi `getItem` nếu dữ liệu không phải là string thuần túy.
 5. **Security**: Tên file cache phải kết thúc bằng `.cache`. Các driver NukeViet 5 có regex kiểm tra tính hợp lệ của tên file để tránh tấn công path traversal.

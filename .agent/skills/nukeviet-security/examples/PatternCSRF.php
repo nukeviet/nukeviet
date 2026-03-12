@@ -8,6 +8,7 @@
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
+
 /**
  * Pattern bảo mật CSRF chuẩn NukeViet 5
  *
@@ -23,7 +24,7 @@ if (!hash_equals($checkss_expected, $nv_Request->get_title('checkss', 'post', ''
     // Không hợp lệ → báo lỗi hoặc redirect (tùy định dạng trả về)
     nv_jsonOutput([
         'status' => 'error',
-        'message' => 'Error session!!!'
+        'mess' => 'Error session!!!'
     ]);
 }
 

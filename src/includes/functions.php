@@ -3454,7 +3454,7 @@ function post_async($url, $params = [], $headers = [])
  * nv_local_api()
  *
  * @param string $cmd
- * @param string $params
+ * @param array $params
  * @param string $adminidentity
  * @param string $module
  * @return mixed

@@ -1,5 +1,5 @@
 <?php
- 
+
 /**
  * NukeViet Content Management System
  * @version 5.x
@@ -8,17 +8,18 @@
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
+
 if (!defined('NV_ADMIN')) {
     exit('Stop!!!');
 }
 
 // PATTERN 1 — module đơn giản (như page): chỉ khai báo $submenu.
 // Chỉ khai báo $submenu (menu hiển thị trên UI)
-// $submenu['content'] = $lang_module['menu_content']; // key tương ứng với tên func
+// $submenu['content'] = $nv_Lang->getModule('menu_content'); // key tương ứng với tên func
 
 // Config menu chỉ hiển thị với super admin
 // if (defined('NV_IS_SPADMIN')) {
-//     $submenu['config'] = $lang_module['menu_config'];
+//     $submenu['config'] = $nv_Lang->getModule('menu_config');
 // }
 
 // ==================================================
@@ -29,19 +30,19 @@ if (!defined('NV_ADMIN')) {
 $allow_func = ['main', 'content', 'edit', 'del'];
 
 // Submenu dạng đơn giản
-$submenu['content'] = $lang_module['menu_content'];
+$submenu['content'] = $nv_Lang->getModule('menu_content');
 
 // Submenu dạng lồng nhau (nested)
 $submenu['setting'] = [
-    'title'   => $lang_module['menu_setting'],
+    'title'   => $nv_Lang->getModule('menu_setting'),
     'submenu' => [
-        'voices' => $lang_module['menu_voices'],
-        'config' => $lang_module['menu_config'],
+        'voices' => $nv_Lang->getModule('menu_voices'),
+        'config' => $nv_Lang->getModule('menu_config'),
     ]
 ];
 
 // Thêm func theo quyền
 if (defined('NV_IS_SPADMIN')) {
     $allow_func[] = 'system';
-    $submenu['system'] = $lang_module['menu_system'];
+    $submenu['system'] = $nv_Lang->getModule('menu_system');
 }

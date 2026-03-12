@@ -29,7 +29,7 @@ Tính tương thích ngược (Backward Compatibility) trong NV5 rất cao. Các
 - **Core Namespace:** Chuyển sang quản lý qua Composer, chuẩn PSR-4 (`NukeViet\Core\Request`, v.v.). Mã nguồn lõi nằm tại `src/includes/vendor/vinades/nukeviet/`.
 - **Strict Types:** NV5 yêu cầu PHP 8.2+. Cần tuân thủ type hint và khuyến khích dùng `declare(strict_types=1);` ở các lớp thư viện mới.
 - **Testing:** Chuyển sang Codeception. Chạy test bằng lệnh `php vendor/bin/codecept run Unit` (không dùng PHPUnit thuần).
-- **Frontend Assets:** Quản lý bằng SCSS. Bắt buộc dùng `npm install` và `npm run watch-admin` hoặc `npm run watch-core` để build. KHÔNG trực tiếp chỉnh sửa các file `.css` compile ra.
+- **Frontend Assets:** Quản lý bằng SCSS. Bắt buộc dùng `npm install` và `npm run admin-css` hoặc `npm run core-css` để build. KHÔNG trực tiếp chỉnh sửa các file `.css` compile ra.
 
 ## 4. Coding Conventions & Definitions
 
