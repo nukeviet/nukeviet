@@ -143,46 +143,145 @@ if ($row['status'] === Posts::STATUS_PUBLISH) {
 }
 ```
 
-### Lấy input — PHẢI qua $nv_Request
+### Lấy giá trị biến khi submit form — PHẢI qua $nv_Request
 
+#### Lấy giá trị biến số nguyên
+
+Lấy từ POST
 ```php
-$array = [];
+$id = $nv_Request->get_int('id', 'post');
+```
+Nếu không tồn tại sẽ trả về `0`.
 
-// Số nguyên
-$array['id']    = $nv_Request->get_int('id', 'get', 0);
-$array['page']  = $nv_Request->get_int('page', 'get', 1);
+Lấy từ GET
+```php
+$default = 10;
+$id = $nv_Request->get_int('id', 'get', $default);
+```
 
-// Số nguyên không âm (≥0)
+Lấy từ POST hoặc GET
+```php
+$default = 10;
+$id = $nv_Request->get_int('id', 'post,get', $default);
+```
+
+Lấy Số nguyên không âm (≥0)
 $array['num']   = $nv_Request->get_absint('num', 'get', 0);
 
-// Boolean
-$array['active'] = $nv_Request->get_bool('active', 'post', false);
+#### Lấy giá trị biến số thực
 
-// Chuỗi ngắn (text field, tên, tiêu đề)
-$array['title'] = $nv_Request->get_title('title', 'post', '');
-$array['title'] = nv_substr($array['title'], 0, 255);
+Lấy từ POST
+```php
+$id = $nv_Request->get_float('id', 'post');
+```
 
-// Chuỗi đã lọc bảo mật — HTML bị strip/escape (dùng cho slug, alias, search keyword...)
-// Lưu ý: get_string() KHÔNG phải raw — vẫn chạy qua security filter
-$array['alias'] = $nv_Request->get_string('alias', 'post', '');
+Lấy từ GET
+```php
+$default = 10.5;
+$id = $nv_Request->get_float('id', 'get', $default);
+```
 
-// Nội dung rich editor (WYSIWYG) — chỉ đọc từ POST, không có param $mode
-$array['body']  = $nv_Request->get_editor('body', '', NV_ALLOWED_HTML_TAGS);
+Lấy từ POST hoặc GET
+```php
+$default = 10.5;
+$id = $nv_Request->get_float('id', 'post,get', $default);
+```
 
-// Nội dung textarea — chỉ đọc từ POST; $save=true chuyển newline → <br />
-$array['desc']  = $nv_Request->get_textarea('desc', '', NV_ALLOWED_HTML_TAGS);
-$array['desc_save'] = $nv_Request->get_textarea('desc', '', '', true); // newline → <br />
+### Lấy giá trị biến từ input
 
-// Mảng ID (ví dụ checkbox nhiều lựa chọn)
+Lấy từ POST
+```php
+$value = $nv_Request->get_title('input_name', 'post', '');
+```
+
+Lấy từ POST hoặc GET và lọc HTML
+```php
+$value = $nv_Request->get_title('input_name', 'post,get', "", 1);
+```
+Giá trị sẽ được lọc bởi `nv_htmlspecialchars()`.
+
+
+Lấy từ REQUEST và thay thế ký tự
+```php
+$default = "default";
+
+$preg_replace = array(
+    'pattern' => "/[^a-zA-Z0-9]/",
+    'replacement' => "_"
+);
+$value = $nv_Request->get_title('input_name', 'request', $default, 0, $preg_replace);
+```
+
+#### Lấy giá trị biến từ textarea
+
+Đối với editor
+
+Phương thức `get_editor()` chỉ dùng POST.
+```php
+$content = $nv_Request->get_editor('content', '', NV_ALLOWED_HTML_TAGS);
+```
+Chỉ các HTML tag nằm trong `NV_ALLOWED_HTML_TAGS` mới được giữ lại.
+
+
+Không lọc HTML:
+```php
+$content = $nv_Request->get_editor('content', '');
+```
+
+Chuyển xuống dòng khi lưu cần dùng thêm hàm:
+```php
+$content = nv_editor_nl2br($content);
+```
+
+Hoặc:
+```php
+$content = $nv_Request->get_editor('content', '', NV_ALLOWED_HTML_TAGS, 1);
+```
+
+Lấy dữ liệu từ database đưa vào editor
+```php
+$content = nv_htmlspecialchars(nv_editor_br2nl($row['content']));
+```
+
+
+#### Đối với textarea thường
+```php
+$content = $nv_Request->get_textarea('content', '', NV_ALLOWED_HTML_TAGS);
+```
+
+Không lọc HTML:
+```php
+$content = $nv_Request->get_textarea('content', '');
+```
+
+Lưu vào CSDL hoặc file
+```php
+$content = $nv_Request->get_textarea('content', '', NV_ALLOWED_HTML_TAGS, 1);
+```
+
+Hiển thị lại trong textarea
+
+```php
+$content = nv_htmlspecialchars(nv_br2nl($row['content']));
+```
+
+#### Lấy dữ liệu editor bằng JavaScript
+
+Nếu dùng **CKEditor**:
+
+```javascript
+value = CKEDITOR.instances['DOM-ID-HERE'].getData()
+```
+
+#### Mảng ID (ví dụ checkbox nhiều lựa chọn)
+```php
 $array['ids']   = $nv_Request->get_array('ids', 'post', []);
+```
 
-// Ghi session (ví dụ: đếm view không trùng lặp)
+#### Ghi session (ví dụ: đếm view không trùng lặp)
+```php
 $nv_Request->set_Session('key_name', NV_CURRENTTIME);
 $time_set = $nv_Request->get_int('key_name', 'session');
-
-// Đưa lại vào editor/textarea sau khi lấy từ DB:
-$array['body']  = nv_htmlspecialchars(nv_editor_br2nl($row['body']));
-$array['desc']  = nv_htmlspecialchars(nv_br2nl($row['description']));
 ```
 
 ### Bảo vệ bằng CSRF Token (Admin & Frontend)
