@@ -2,14 +2,14 @@
 
 ## Bước 1: Chạy lệnh cài đặt Mở Terminal (CMD, PowerShell hoặc Git Bash) và chạy lệnh:
 
-```
+```bash
 composer global require "squizlabs/php_codesniffer=*"
 ```
 
 ## Bước 2: Tìm đường dẫn thư mục Bin của Composer Sau khi cài xong
 
 Tắt Terminal cũ đi và mở một cái mới, gõ:
-```
+```bash
 phpcs --version
 ```
 
@@ -20,7 +20,7 @@ PHP_CodeSniffer version 4.0.1 (stable) by Squiz and PHPCSStandards
 
 Còn lỗi cần cài tiếp, bạn cần biết thư mục chứa file thực thi của Composer. Chạy lệnh:
 
-```
+```bash
 composer global config bin-dir --absolute
 ```
 
@@ -38,7 +38,7 @@ Thêm vào biến môi trường (Environment Variables) của Windows
 - Nhấn OK để đóng tất cả các cửa sổ.
 
 Kiểm tra Tắt Terminal cũ đi và mở một cái mới, gõ:
-```
+```bash
 phpcs --version
 ```
 nếu báo tương tự như sau là thành công
@@ -62,3 +62,10 @@ Thử commit file có các lỗi cơ bản sẽ dừng lại
 - Tên file đặt quá dài 50 ký tự
 - Lỗi cấu trúc file php
 - Vi phạm quy chuẩn PSR12
+
+Trong trường hợp bắt buộc phải commit mà không tuân thủ quy chuẩn, dùng lệnh để commit --no-verify
+
+ví dụ
+```bash
+git commit -m "nội dung commit, Dungpt đã đồng ý tắt pre-commit" --no-verify
+```
