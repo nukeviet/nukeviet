@@ -231,7 +231,7 @@ if (defined('NV_IS_SPADMIN')) {
                 if (!empty($department['others'])) {
                     $others = json_decode($department['others'], true);
                     if (json_last_error() !== JSON_ERROR_NONE) {
-                        $others = unserialize($department['others']);
+                        $others = unserialize($department['others'], NV_UNSERIALIZE_SAFE);
                     }
                     $department['others'] = $others;
                 }
@@ -442,7 +442,7 @@ if ($nv_Request->isset_request('id', 'get')) {
     if (!empty($department['others'])) {
         $_others = json_decode($department['others'], true);
         if (json_last_error() !== JSON_ERROR_NONE) {
-            $_others = unserialize($department['others']);
+            $_others = unserialize($department['others'], NV_UNSERIALIZE_SAFE);
         }
 
         $department['others'] = $_others;

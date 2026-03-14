@@ -201,6 +201,9 @@ define('NUKEVIET_STORE_APIURL', 'https://api.nukeviet.vn/store/');
 // Nó sẽ được gán cho biến $sys_info['supports_rewrite'] nếu hệ thông không thể tự xác định
 define('NV_MY_REWRITE_SUPPORTER', '');
 
+// Option an toàn cho unserialize — chỉ cho phép array/scalar, không cho phép object
+define('NV_UNSERIALIZE_SAFE', ['allowed_classes' => false]);
+
 //Browser Names
 define('BROWSER_OPERA', 'Opera');
 define('BROWSER_OPERAMINI', 'Opera Mini');

@@ -124,7 +124,7 @@ if (empty($author_lang)) {
     $array_translator['info'] = '';
     $array_translator['langtype'] = '';
 } else {
-    $array_translator = unserialize($author_lang);
+    $array_translator = unserialize($author_lang, NV_UNSERIALIZE_SAFE);
 }
 
 $modules_exit = nv_scandir(NV_ROOTDIR . '/modules', $global_config['check_module']);

@@ -234,7 +234,7 @@ if ($nv_Request->isset_request('save', 'post')) {
         }
         $dataform['field_type'] = $dataform_old['field_type'];
         if (!empty($dataform_old['language'])) {
-            $language = unserialize($dataform_old['language']);
+            $language = unserialize($dataform_old['language'], NV_UNSERIALIZE_SAFE);
         }
         $dataform['field'] = $dataform['fieldid'] = $dataform_old['field'];
     } else {
@@ -441,7 +441,7 @@ if ($nv_Request->isset_request('save', 'post')) {
                     'F' => $global_array_genders['F']['title']
                 ]);
             } else {
-                $old_field_choices = !empty($dataform_old['field_choices']) ? unserialize($dataform_old['field_choices']) : [];
+                $old_field_choices = !empty($dataform_old['field_choices']) ? unserialize($dataform_old['field_choices'], NV_UNSERIALIZE_SAFE) : [];
                 $field_choice_value = $nv_Request->get_typed_array('field_choice', 'post', 'title', []);
                 $field_choice_text = $nv_Request->get_typed_array('field_choice_text', 'post', 'title', []);
                 if (!count($field_choice_value)) {
@@ -715,7 +715,7 @@ if ($nv_Request->isset_request('qlist', 'get')) {
 
     if ($num) {
         foreach ($_rows as $row) {
-            $language = unserialize($row['language']);
+            $language = unserialize($row['language'], NV_UNSERIALIZE_SAFE);
 
             $weights = [];
             for ($i = ($row['is_system'] == 1 ? $row['weight'] : $fieldsys_offset + 1); $i <= ($row['is_system'] == 1 ? $row['weight'] : $num); ++$i) {
@@ -762,10 +762,10 @@ if ($nv_Request->isset_request('qlist', 'get')) {
                 $dataform['class'] = '';
             }
             if (!empty($dataform['field_choices'])) {
-                $field_choices = unserialize($dataform['field_choices']);
+                $field_choices = unserialize($dataform['field_choices'], NV_UNSERIALIZE_SAFE);
             }
             if (!empty($dataform['language'])) {
-                $language = unserialize($dataform['language']);
+                $language = unserialize($dataform['language'], NV_UNSERIALIZE_SAFE);
                 if (isset($language[NV_LANG_DATA])) {
                     $dataform['title'] = $language[NV_LANG_DATA][0];
                     $dataform['description'] = $language[NV_LANG_DATA][1];

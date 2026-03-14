@@ -32,7 +32,7 @@ while ($row = $result->fetch()) {
     if ($row['group_id'] < 10) {
         $row['title'] = $nv_Lang->getGlobal('level' . $row['group_id']);
     }
-    $row['config'] = unserialize($row['config']);
+    $row['config'] = unserialize($row['config'], NV_UNSERIALIZE_SAFE);
     $groupsList[$row['group_id']] = $row;
 }
 if (empty($groupsList)) {

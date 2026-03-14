@@ -51,7 +51,7 @@ $error = '';
 // Xác định quyền sửa tài khoản thành viên
 $sql = 'SELECT content FROM ' . NV_USERS_GLOBALTABLE . "_config WHERE config='access_admin'";
 $config_user = $db->query($sql)->fetchColumn();
-$config_user = empty($config_user) ? [] : unserialize($config_user);
+$config_user = empty($config_user) ? [] : unserialize($config_user, NV_UNSERIALIZE_SAFE);
 $manager_user_2step = false;
 if (
     isset($site_mods['users']) and isset($config_user['access_editus']) and !empty($config_user['access_editus'][$admin_info['level']])

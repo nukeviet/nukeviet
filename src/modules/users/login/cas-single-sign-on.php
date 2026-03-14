@@ -13,7 +13,7 @@ if (!defined('NV_IS_MOD_USER')) {
     exit('Stop!!!');
 }
 
-$_cas_config = unserialize($global_config['config_sso']);
+$_cas_config = unserialize($global_config['config_sso'], NV_UNSERIALIZE_SAFE);
 
 // Enable debugging
 phpCAS::setDebug();

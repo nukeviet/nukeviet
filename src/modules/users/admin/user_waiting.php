@@ -319,7 +319,7 @@ if ($nv_Request->isset_request('userid', 'get')) {
         }
 
         if (empty($post['photo'])) {
-            $reg_attribs = !empty($userdata['openid_info']) ? unserialize(nv_base64_decode($userdata['openid_info'])) : [];
+            $reg_attribs = !empty($userdata['openid_info']) ? unserialize(nv_base64_decode($userdata['openid_info']), NV_UNSERIALIZE_SAFE) : [];
             if (!empty($reg_attribs['photo'])) {
                 $upload = new NukeViet\Files\Upload(['images'], $global_config['forbid_extensions'], $global_config['forbid_mimes'], NV_UPLOAD_MAX_FILESIZE, NV_MAX_WIDTH, NV_MAX_HEIGHT);
                 $upload->setLanguage(\NukeViet\Core\Language::$lang_global);
