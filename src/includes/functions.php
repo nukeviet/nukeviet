@@ -3226,12 +3226,16 @@ function add_notification($args)
     }
 
     $sth = $db->prepare('INSERT INTO ' . NV_INFORM_GLOBALTABLE . ' (receiver_grs, receiver_ids, sender_role, sender_group, sender_admin, message, link, add_time, exp_time) VALUES
-    (:receiver_grs, :receiver_ids, :sender_role, ' . $data['sender_group'] . ', ' . $data['sender_admin'] . ', :message, :link, ' . $data['add_time'] . ', ' . $data['exp_time'] . ')');
+    (:receiver_grs, :receiver_ids, :sender_role, :sender_group, :sender_admin, :message, :link, :add_time, :exp_time)');
     $sth->bindValue(':receiver_grs', $data['receiver_grs'], PDO::PARAM_STR);
     $sth->bindValue(':receiver_ids', $data['receiver_ids'], PDO::PARAM_STR);
     $sth->bindValue(':sender_role', $data['sender_role'], PDO::PARAM_STR);
+    $sth->bindValue(':sender_group', $data['sender_group'], PDO::PARAM_INT);
+    $sth->bindValue(':sender_admin', $data['sender_admin'], PDO::PARAM_INT);
     $sth->bindValue(':message', $data['message'], PDO::PARAM_STR);
     $sth->bindValue(':link', $data['link'], PDO::PARAM_STR);
+    $sth->bindValue(':add_time', $data['add_time'], PDO::PARAM_INT);
+    $sth->bindValue(':exp_time', $data['exp_time'], PDO::PARAM_INT);
     $sth->execute();
 
     return $db->lastInsertId();
