@@ -242,8 +242,8 @@ if ($nv_Request->isset_request('logodel', 'post')) {
 }
 
 // Lưu các giá trị gửi qua form
-$checkss = md5(NV_CHECK_SESSION . '_' . $module_name . '_' . $op . '_' . $admin_info['userid']);
-if ($checkss == $nv_Request->get_string('checkss', 'post')) {
+$csrf_key = $module_name . '_' . $op . '_' . $admin_info['admin_id'];
+if (csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
     $name = $nv_Request->get_title('name', 'post', '');
     $val = (int) $nv_Request->get_bool('val', 'post', false);
 
@@ -271,7 +271,7 @@ $page_title = $nv_Lang->getModule('other_seo_tools');
 
 $tpl->registerPlugin('modifier', 'file_exists', 'file_exists');
 $tpl->assign('GCONFIG', $global_config);
-$tpl->assign('CHECKSS', $checkss);
+$tpl->assign('CHECKSS', csrf_create($csrf_key));
 
 $contents = $tpl->fetch('others.tpl');
 

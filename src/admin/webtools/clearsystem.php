@@ -45,9 +45,9 @@ if (defined('NV_IS_GODADMIN')) {
     $clears = array_merge($clears, ['clearfiletemp', 'clearerrorlogs', 'clearip_logs']);
 }
 
-$checkss = md5(NV_CHECK_SESSION . '_' . $module_name . '_' . $op . '_' . $admin_info['userid']);
+$csrf_key = $module_name . '_' . $op . '_' . $admin_info['admin_id'];
 
-if ($checkss == $nv_Request->get_string('checkss', 'post') and $nv_Request->isset_request('deltype', 'post')) {
+if (csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key) and $nv_Request->isset_request('deltype', 'post')) {
     $deltype = $nv_Request->get_typed_array('deltype', 'post', 'string', []);
     $deltype = array_intersect($deltype, $clears);
     if (empty($deltype)) {
@@ -143,7 +143,7 @@ $tpl->setTemplateDir(get_module_tpl_dir('clearsystem.tpl'));
 $tpl->assign('LANG', $nv_Lang);
 $tpl->assign('MODULE_NAME', $module_name);
 $tpl->assign('OP', $op);
-$tpl->assign('CHECKSS', $checkss);
+$tpl->assign('CHECKSS', csrf_create($csrf_key));
 $tpl->assign('CLEARS', $clears);
 
 $contents = $tpl->fetch('clearsystem.tpl');

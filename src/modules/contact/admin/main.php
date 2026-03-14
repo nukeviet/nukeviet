@@ -32,7 +32,8 @@ if (!empty($contact_allowed['reply'])) {
         }
 
         $checkss = $nv_Request->get_title('checkss', 'post', '');
-        if ($checkss != md5(NV_CHECK_SESSION . '_' . $module_name . '_' . $admin_info['userid'])) {
+        $csrf_key = $module_name . '_' . $admin_info['admin_id'];
+        if (!csrf_check($checkss, $csrf_key)) {
             nv_jsonOutput([
                 'status' => 'error',
                 'mess' => $nv_Lang->getGlobal('error_code_11')
@@ -169,7 +170,7 @@ if (!empty($contact_allowed['exec'])) {
     $checkss = $nv_Request->get_title('checkss', 'post', '');
     // Đánh dấu phản hồi đã đọc/chưa đọc, đã xử lý/chưa xử lý
     if ($nv_Request->isset_request('mark', 'post')) {
-        if ($checkss != md5(string: NV_CHECK_SESSION . '_' . $module_name . '_' . $admin_info['userid'])) {
+        if (!csrf_check($checkss, $module_name . '_' . $admin_info['admin_id'])) {
             nv_jsonOutput(array_data: [
                 'status' => 'error',
                 'mess' => $nv_Lang->getGlobal('error_code_11')
@@ -211,7 +212,7 @@ if (!empty($contact_allowed['exec'])) {
 
     // Xóa phản hồi
     if ($nv_Request->isset_request('delete', 'post')) {
-        if ($checkss != md5(NV_CHECK_SESSION . '_' . $module_name . '_' . $admin_info['userid'])) {
+        if (!csrf_check($checkss, $module_name . '_' . $admin_info['admin_id'])) {
             nv_jsonOutput([
                 'status' => 'error',
                 'mess' => $nv_Lang->getGlobal('error_code_11')
@@ -351,7 +352,7 @@ if (!empty($contact_allowed['view'])) {
         $tpl->assign('LANG', $nv_Lang);
         $tpl->assign('MODULE_NAME', $module_name);
         $tpl->assign('OP', $op);
-        $tpl->assign('CHECKSS', md5(NV_CHECK_SESSION . '_' . $module_name . '_' . $admin_info['userid']));
+        $tpl->assign('CHECKSS', csrf_create($module_name . '_' . $admin_info['admin_id']));
         $tpl->assign('DATA', $row);
         $tpl->assign('ADMINS', $admins);
         $tpl->assign('DEPARTMENTS', $departments);
@@ -447,7 +448,7 @@ $tpl->setTemplateDir(get_module_tpl_dir('main.tpl'));
 $tpl->assign('LANG', $nv_Lang);
 $tpl->assign('MODULE_NAME', $module_name);
 $tpl->assign('OP', $op);
-$tpl->assign('CHECKSS', md5(NV_CHECK_SESSION . '_' . $module_name . '_' . $admin_info['userid']));
+$tpl->assign('CHECKSS', csrf_create($module_name . '_' . $admin_info['admin_id']));
 if (!empty($contact_allowed['view'])) {
     $in = implode(',', array_keys($contact_allowed['view']));
 

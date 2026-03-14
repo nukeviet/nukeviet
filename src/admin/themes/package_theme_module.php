@@ -13,10 +13,10 @@ if (!defined('NV_IS_FILE_THEMES')) {
     exit('Stop!!!');
 }
 
-$checkss = md5(NV_CHECK_SESSION . '_' . $module_name . '_' . $op . '_' . $admin_info['userid']);
+$csrf_key = $module_name . '_' . $op . '_' . $admin_info['admin_id'];
 $page_title = $nv_Lang->getModule('package_theme_module');
 
-if ($checkss == $nv_Request->get_string('checkss', 'post')) {
+if (csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
     $themename = $nv_Request->get_string('themename', 'post');
 
     if (preg_match($global_config['check_theme'], $themename) or preg_match($global_config['check_theme_mobile'], $themename)) {
@@ -79,7 +79,7 @@ $tpl->setTemplateDir(get_module_tpl_dir('package_theme_module.tpl'));
 $tpl->assign('LANG', $nv_Lang);
 $tpl->assign('MODULE_NAME', $module_name);
 $tpl->assign('OP', $op);
-$tpl->assign('CHECKSS', $checkss);
+$tpl->assign('CHECKSS', csrf_create($csrf_key));
 
 $op = $nv_Request->get_title(NV_OP_VARIABLE, 'get', '');
 $theme_list = nv_scandir(NV_ROOTDIR . '/themes', [$global_config['check_theme'], $global_config['check_theme_mobile']]);

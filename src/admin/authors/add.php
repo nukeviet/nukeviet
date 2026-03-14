@@ -86,7 +86,7 @@ if ($global_config['max_user_admin'] > 0) {
 $adminThemes = [''];
 $adminThemes = array_merge($adminThemes, nv_scandir(NV_ROOTDIR . '/themes', $global_config['check_theme_admin']));
 unset($adminThemes[0]);
-$checkss = md5(NV_CHECK_SESSION . '_' . $module_name . '_' . $op . '_' . $admin_info['userid']);
+$csrf_key = $module_name . '_' . $op . '_' . $admin_info['admin_id'];
 
 $editors = [];
 $dirs = nv_scandir(NV_ROOTDIR . '/' . NV_EDITORSDIR, '/^[a-zA-Z0-9_\-]+$/');
@@ -110,7 +110,7 @@ if ($nv_Request->get_int('save', 'post', 0)) {
         'mess' => '',
     ];
 
-    if ($checkss != $nv_Request->get_string('checkss', 'post')) {
+    if (!csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
         $respon['mess'] = 'Error Session, Please close the browser and try again';
         nv_jsonOutput($respon);
     }
@@ -312,7 +312,7 @@ $tpl->assign('LANG', $nv_Lang);
 $tpl->assign('OP', $op);
 $tpl->assign('MODULE_NAME', $module_name);
 
-$tpl->assign('CHECKSS', $checkss);
+$tpl->assign('CHECKSS', csrf_create($csrf_key));
 $tpl->assign('FILTERSQL', $crypt->encrypt($filtersql, NV_CHECK_SESSION));
 $tpl->assign('ADMINTHEMES', $adminThemes);
 $tpl->assign('EDITORS', $editors);

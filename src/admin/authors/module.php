@@ -15,8 +15,8 @@ if (!defined('NV_IS_FILE_AUTHORS')) {
 
 $page_title = $nv_Lang->getModule('module_admin');
 
-$checkss = md5(NV_CHECK_SESSION . '_' . $module_name . '_' . $op . '_' . $admin_info['userid']);
-if (defined('NV_IS_AJAX') and $checkss == $nv_Request->get_string('checkss', 'post')) {
+$csrf_key = $module_name . '_' . $op . '_' . $admin_info['admin_id'];
+if (defined('NV_IS_AJAX') and csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
     // Thay đổi thứ tự
     if ($nv_Request->isset_request('changeweight', 'post')) {
         $respon = [
@@ -85,7 +85,7 @@ $numrows = count($rows);
 
 $tpl->assign('ARRAY', $rows);
 $tpl->assign('NUMROWS', $numrows);
-$tpl->assign('CHECKSS', $checkss);
+$tpl->assign('CHECKSS', csrf_create($csrf_key));
 
 $contents = $tpl->fetch('module.tpl');
 

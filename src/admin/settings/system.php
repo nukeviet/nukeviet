@@ -80,8 +80,8 @@ $timezone_array = array_keys($nv_parse_ini_timezone);
 $array_config_define = [];
 
 // Lưu Cấu hình chung
-$checkss = md5(NV_CHECK_SESSION . '_' . $module_name . '_' . $op . '_' . $admin_info['userid']);
-if ($checkss == $nv_Request->get_string('checkss', 'post')) {
+$csrf_key = $module_name . '_' . $op . '_' . $admin_info['admin_id'];
+if (csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
     $errormess = '';
     $array_config_site = [];
 
@@ -329,7 +329,7 @@ if ($checkss == $nv_Request->get_string('checkss', 'post')) {
 $page_title = $nv_Lang->getModule('global_config');
 
 $array_config_define['nv_debug'] = NV_DEBUG;
-$global_config['checkss'] = $checkss;
+$global_config['checkss'] = csrf_create($csrf_key);
 $global_config['reopening_date'] = '';
 $global_config['reopening_hour'] = 0;
 $global_config['reopening_min'] = 0;

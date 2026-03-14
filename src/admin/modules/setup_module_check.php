@@ -21,7 +21,7 @@ if ($nv_Request->isset_request('module', 'post')) {
         'status' => 'error',
         'module' => $modulename,
         'message' => ['Module not exists'],
-        'checkss' => md5(NV_CHECK_SESSION . '_' . $module_name . '_setup_mod_' . $modulename),
+        'checkss' => csrf_create($module_name . '_setup_mod_' . $modulename),
         'code' => 0,
         'ishook' => false,
         'hookerror' => '',

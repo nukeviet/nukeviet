@@ -122,10 +122,10 @@ if ($global_config['rewrite_enable'] and $global_config['check_rewrite_file']) {
 } else {
     $url_sitemap = NV_MY_DOMAIN . NV_BASE_SITEURL . 'index.php?' . NV_NAME_VARIABLE . '=SitemapIndex' . $global_config['rewrite_endurl'];
 }
-$checkss = md5(NV_CHECK_SESSION . '_' . $module_name . '_' . $op . '_' . $admin_info['userid']);
+$csrf_key = $module_name . '_' . $op . '_' . $admin_info['admin_id'];
 
 // Lưu cấu hình các máy chủ ping
-if ($checkss == $nv_Request->get_string('checkss2', 'post') and empty($global_config['idsite'])) {
+if (csrf_check($nv_Request->get_string('checkss2', 'post'), $csrf_key) and empty($global_config['idsite'])) {
     $searchEngineName = $nv_Request->get_array('searchEngineName', 'post');
     $searchEngineValue = $nv_Request->get_array('searchEngineValue', 'post');
     $searchEngineActive = $nv_Request->get_array('searchEngineActive', 'post');
@@ -173,7 +173,7 @@ if (file_exists($file_searchEngines)) {
 }
 
 // Gửi ping
-if (!empty($searchEngines['searchEngine']) and $nv_Request->isset_request('ping', 'post') and $checkss == $nv_Request->get_string('checkss1', 'post')) {
+if (!empty($searchEngines['searchEngine']) and $nv_Request->isset_request('ping', 'post') and csrf_check($nv_Request->get_string('checkss1', 'post'), $csrf_key)) {
     $searchEngine = $nv_Request->get_string('searchEngine', 'post');
     $module = nv_substr($nv_Request->get_title('in_module', 'post', '', 1), 0, 255);
 
@@ -218,7 +218,7 @@ $tpl->assign('MODULE_NAME', $module_name);
 $tpl->assign('OP', $op);
 
 $tpl->assign('GCONFIG', $global_config);
-$tpl->assign('CHECKSS', $checkss);
+$tpl->assign('CHECKSS', csrf_create($csrf_key));
 $tpl->assign('URL_SITEMAP', $url_sitemap);
 $tpl->assign('SITEMAPFILES', $sitemapFiles);
 $tpl->assign('SEARCHENGINES', $searchEngines);

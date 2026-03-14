@@ -112,7 +112,8 @@ if ($set_by_func) {
 while ($row = $sth->fetch()) {
     $row['module'] = ucfirst($row['module']);
     $row['order_func'] = $set_by_func ? 'order_func' : 'order';
-    $row['checkss'] = md5(NV_CHECK_SESSION . '_' . $row['bid']);
+    $csrf_key = $module_name . '_' . $row['bid'];
+    $row['checkss'] = csrf_create($csrf_key);
     $row['dtime_type_format'] = $nv_Lang->getModule('dtime_type_' . $row['dtime_type']);
 
     // Lấy danh sách function hiển thị của mỗi block
@@ -139,7 +140,7 @@ $tpl->assign('LANG', $nv_Lang);
 $tpl->assign('MODULE_NAME', $module_name);
 $tpl->assign('OP', $op);
 
-$tpl->assign('CHECKSS', md5($selectthemes . NV_CHECK_SESSION));
+$tpl->assign('CHECKSS', csrf_create($selectthemes));
 $tpl->assign('SELECTTHEMES', $selectthemes);
 $tpl->assign('FUNC_ID', $func_id);
 $tpl->assign('SELECTEDMODULE', $selectedmodule);

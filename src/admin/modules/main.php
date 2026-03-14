@@ -92,8 +92,8 @@ while ($row = $result->fetch()) {
     $mod['custom_title'] = $row['custom_title'];
     $mod['weight'] = $row['weight'];
     $mod['act'] = $row['act'];
-    $mod['act_checkss'] = md5(NV_CHECK_SESSION . '_' . $module_name . '_change_act_' . $row['title']);
-    $mod['del_checkss'] = md5(NV_CHECK_SESSION . '_' . $module_name . '_del_' . $row['title']);
+    $mod['act_checkss'] = csrf_create($module_name . '_change_act_' . $row['title']);
+    $mod['del_checkss'] = csrf_create($module_name . '_del_' . $row['title']);
     $mod['edit'] = [NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=edit&amp;mod=' . $row['title'], $nv_Lang->getGlobal('edit')];
     $mod['del'] = ($row['is_sys'] == 0 or $row['title'] != $row['module_file']) ? 1 : 0;
 
