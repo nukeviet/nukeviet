@@ -3851,9 +3851,7 @@ function mload_url_generate($module, $op, $amp = '&amp;', $checkuser = false, $o
  */
 function csrf_create($key)
 {
-    $timestamp = NV_CURRENTTIME;
-
-    return md5(NV_CHECK_SESSION . '_' . $key . '_' . $timestamp) . $timestamp;
+    return hash_hmac('sha256', NV_CHECK_SESSION . '_' . $key . '_' . NV_CURRENTTIME, NV_CACHE_PREFIX) . NV_CURRENTTIME;
 }
 
 /**
@@ -3872,7 +3870,7 @@ function csrf_check($csrf, $key)
     if ($timestamp < (NV_CURRENTTIME - $lifetime) or $timestamp > NV_CURRENTTIME) {
         return false;
     }
-    $expected = md5(NV_CHECK_SESSION . '_' . $key . '_' . $timestamp) . $timestamp;
+    $expected = hash_hmac('sha256', NV_CHECK_SESSION . '_' . $key . '_' . $timestamp, NV_CACHE_PREFIX) . $timestamp;
 
     return hash_equals($expected, $csrf);
 }
@@ -4250,10 +4248,17 @@ function nv_currency_format(float $num, string $lang = '')
     }
 
     switch ($region['currency_display']) {
-        case 3: $num = $region['currency_symbol'] . ' ' . $num; break;
-        case 2: $num = $region['currency_symbol'] . $num; break;
-        case 1: $num = $num . ' ' . $region['currency_symbol']; break;
-        default: $num .= $region['currency_symbol'];
+        case 3:
+            $num = $region['currency_symbol'] . ' ' . $num;
+            break;
+        case 2:
+            $num = $region['currency_symbol'] . $num;
+            break;
+        case 1:
+            $num = $num . ' ' . $region['currency_symbol'];
+            break;
+        default:
+            $num .= $region['currency_symbol'];
     }
 
     return $num;
