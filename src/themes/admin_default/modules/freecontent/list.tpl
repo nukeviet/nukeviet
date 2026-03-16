@@ -9,7 +9,7 @@
 <div class="clearfix m-bottom">
     <button class="btn btn-primary content-add-trigger">{LANG.content_add}</button>
 </div>
-<div class="clearfix" id="content-list-container">
+<div class="clearfix" id="content-list-container" data-checkss="{CHECKSS}">
     <!-- BEGIN: loop -->
     <div id="content-row-{ROW.id}" class="content-list">
         <div class="row">
@@ -46,7 +46,7 @@
                 <h3 class="modal-title">{LANG.content_add_edit}</h3>
             </div>
             <div class="modal-body">
-                <form class="form-horizontal">
+                <form class="form-horizontal" data-checkss="{CHECKSS}">
                     <div class="form-group">
                         <label for="content-title" class="col-sm-5 control-label">{LANG.content_title}<sup class="required">(*)</sup></label>
                         <div class="col-sm-19">

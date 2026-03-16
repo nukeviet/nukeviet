@@ -49,7 +49,7 @@ sort($myini['mimes']);
 unset($myini['mimes'][0]);
 
 if ($nv_Request->isset_request('save', 'post')) {
-    if ($nv_Request->get_title('checkss', 'post', '') !== NV_CHECK_SESSION) {
+    if (!csrf_check($nv_Request->get_title('checkss', 'post', ''), $csrf_upload_key)) {
         nv_jsonOutput([
             'status' => 'error',
             'mess' => 'Error session!!!'
@@ -264,6 +264,7 @@ if (defined('NV_IS_GODADMIN') and $global_config['idsite'] == 0) {
     $tpl->assign('UPLOAD_OVERFLOW_SIZE', $upload_overflow_size);
     $tpl->assign('UPLOAD_OVERFLOW_SIZE_TEXT', $upload_overflow_size_text);
 }
+$tpl->assign('CHECKSS', csrf_create($csrf_upload_key));
 
 $contents = $tpl->fetch('uploadconfig.tpl');
 

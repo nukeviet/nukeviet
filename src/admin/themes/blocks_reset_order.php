@@ -13,10 +13,11 @@ if (!defined('NV_IS_FILE_THEMES')) {
     exit('Stop!!!');
 }
 
+$csrf_block_key = $module_name . '_blocks_manage_' . $admin_info['admin_id'];
 $checkss = $nv_Request->get_string('checkss', 'post');
 $theme = $nv_Request->get_string('selectthemes', 'cookie', $global_config['site_theme']);
 
-if (empty($theme) or $checkss !== md5($theme . NV_CHECK_SESSION)) {
+if (empty($theme) or !csrf_check($checkss, $csrf_block_key)) {
     nv_jsonOutput([
         'success' => 0,
         'text' => 'Request params error!!!'

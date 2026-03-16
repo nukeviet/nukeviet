@@ -46,6 +46,7 @@ $contents['thead'] = [
 $contents['view'] = $nv_Lang->getGlobal('detail');
 $contents['edit'] = $nv_Lang->getGlobal('edit');
 $contents['del'] = $nv_Lang->getGlobal('delete');
+$contents['checkss'] = csrf_create($csrf_banners_key);
 $contents['rows'] = [];
 
 $sql = 'SELECT * FROM ' . NV_BANNERS_GLOBALTABLE . '_rows WHERE ';

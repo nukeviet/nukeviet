@@ -7,7 +7,7 @@
                 <a href="{$smarty.const.NV_BASE_SITEURL}install/update.php" class="btn btn-secondary"><i class="fa-solid fa-arrow-up-from-bracket text-primary"></i> {$LANG->getModule('update_package_do')}</a>
             </div>
             <div class="col-auto">
-                <a href="#" class="btn btn-secondary" data-toggle="deleteUpdPkg" data-checksess="{$smarty.const.NV_CHECK_SESSION}"><i class="fa-solid fa-trash text-danger" data-icon="fa-trash"></i> {$LANG->getModule('update_package_delete')}</a>
+                <a href="#" class="btn btn-secondary" data-toggle="deleteUpdPkg" data-checksess="{$CHECKSS_UPD}"><i class="fa-solid fa-trash text-danger" data-icon="fa-trash"></i> {$LANG->getModule('update_package_delete')}</a>
             </div>
         </div>
     </div>
@@ -17,7 +17,7 @@
 <link type="text/css" href="{$smarty.const.ASSETS_STATIC_URL}/js/jquery-ui/jquery-ui.min.css" rel="stylesheet">
 <script type="text/javascript" src="{$smarty.const.ASSETS_STATIC_URL}/js/jquery-ui/jquery-ui.min.js"></script>
 {/if}
-<div class="widget-containers" data-busy="0">
+<div class="widget-containers" data-busy="0" data-checksess="{$CHECKSS}">
     <div class="row">
         {if $IS_EDIT}
         <div class="text-center mb-3">

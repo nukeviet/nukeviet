@@ -116,5 +116,5 @@
         </div>
     </div>
     <input type="hidden" name="save" value="1">
-    <input type="hidden" name="checkss" value="{$smarty.const.NV_CHECK_SESSION}">
+    <input type="hidden" name="checkss" value="{$CHECKSS}">
 </form>

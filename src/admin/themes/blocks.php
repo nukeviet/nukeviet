@@ -112,8 +112,7 @@ if ($set_by_func) {
 while ($row = $sth->fetch()) {
     $row['module'] = ucfirst($row['module']);
     $row['order_func'] = $set_by_func ? 'order_func' : 'order';
-    $csrf_key = $module_name . '_' . $row['bid'];
-    $row['checkss'] = csrf_create($csrf_key);
+    $row['checkss'] = csrf_create($module_name . '_block_change_show_' . $row['bid'] . '_' . $admin_info['admin_id']);
     $row['dtime_type_format'] = $nv_Lang->getModule('dtime_type_' . $row['dtime_type']);
 
     // Lấy danh sách function hiển thị của mỗi block
@@ -139,8 +138,7 @@ $tpl->setTemplateDir(get_module_tpl_dir('blocks.tpl'));
 $tpl->assign('LANG', $nv_Lang);
 $tpl->assign('MODULE_NAME', $module_name);
 $tpl->assign('OP', $op);
-
-$tpl->assign('CHECKSS', csrf_create($selectthemes));
+$tpl->assign('CHECKSS', csrf_create($csrf_block_key));
 $tpl->assign('SELECTTHEMES', $selectthemes);
 $tpl->assign('FUNC_ID', $func_id);
 $tpl->assign('SELECTEDMODULE', $selectedmodule);

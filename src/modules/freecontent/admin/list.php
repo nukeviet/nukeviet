@@ -26,6 +26,7 @@ $page_title = $nv_Lang->getModule('content_list') . ': ' . $block['title'];
 $xtpl = new XTemplate('list.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
 $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
 $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
+$xtpl->assign('CHECKSS', csrf_create($csrf_freecontent_key));
 
 if (defined('NV_EDITOR')) {
     require_once NV_ROOTDIR . '/' . NV_EDITORSDIR . '/' . NV_EDITOR . '/nv.php';

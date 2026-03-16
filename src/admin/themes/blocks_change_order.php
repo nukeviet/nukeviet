@@ -13,13 +13,14 @@ if (!defined('NV_IS_FILE_THEMES')) {
     exit('Stop!!!');
 }
 
+$csrf_block_key = $module_name . '_blocks_manage_' . $admin_info['admin_id'];
 $order = $nv_Request->get_int('order', 'post,get');
 $bid = $nv_Request->get_int('bid', 'post,get');
 $func_id = $nv_Request->get_int('func_id', 'post,get');
 
 [$bid, $theme, $position] = $db->query('SELECT bid, theme, position FROM ' . NV_BLOCKS_TABLE . '_groups WHERE bid=' . $bid)->fetch(3);
 
-if ($order > 0 and $bid > 0 and md5($theme . NV_CHECK_SESSION) == $nv_Request->get_string('checkss', 'post,get')) {
+if ($order > 0 and $bid > 0 and csrf_check($nv_Request->get_string('checkss', 'post,get'), $csrf_block_key)) {
     $weight = 0;
     $sth = $db->prepare('SELECT t1.bid FROM ' . NV_BLOCKS_TABLE . '_weight t1 INNER JOIN ' . NV_BLOCKS_TABLE . '_groups t2 ON t1.bid = t2.bid WHERE t1.bid!=' . $bid . ' AND t1.func_id=' . $func_id . ' AND t2.theme = :theme AND t2.position = :position ORDER BY t1.weight ASC');
     $sth->bindParam(':theme', $theme, PDO::PARAM_STR);

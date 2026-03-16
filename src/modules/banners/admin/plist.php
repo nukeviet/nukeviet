@@ -23,6 +23,7 @@ $result = $db->query($sql);
 $contents = [];
 $contents['caption'] = $nv_Lang->getModule('plans_list2');
 $contents['thead'] = [$nv_Lang->getModule('title'), $nv_Lang->getModule('blang'), $nv_Lang->getModule('size'), $nv_Lang->getModule('is_act'), $nv_Lang->getGlobal('actions')];
+$contents['checkss'] = csrf_create($csrf_banners_key);
 $contents['view'] = $nv_Lang->getGlobal('detail');
 $contents['edit'] = $nv_Lang->getGlobal('edit');
 $contents['add'] = $nv_Lang->getModule('admin_add_banner');

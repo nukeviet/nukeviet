@@ -558,7 +558,7 @@ $(function() {
             $.ajax({
                 type: "POST",
                 url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + "=main",
-                data: "togglepreviewtheme=1&theme=" + $this.data('value'),
+                data: "togglepreviewtheme=1&theme=" + $this.data('value') + "&checkss=" + $this.data('checkss'),
                 dataType: 'JSON',
                 success: function(data) {
                     if (data.status == 'SUCCESS') {

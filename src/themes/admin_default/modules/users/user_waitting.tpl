@@ -385,7 +385,7 @@
                 <!-- END: field -->
             </div>
             <div class="text-center">
-                <input type="hidden" name="checkss" value="{DATA.checkss}" />
+                <input type="hidden" name="checkss" value="{CHECKSS}" />
                 <button class="btn btn-primary" type="submit">
                     <i class="fa fa-spin fa-spinner hidden"></i>
                     <span>{LANG.awaiting_active}</span>

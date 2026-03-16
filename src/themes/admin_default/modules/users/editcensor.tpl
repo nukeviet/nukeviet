@@ -47,8 +47,8 @@
                 <td class="text-nowrap">
                     <!-- BEGIN: allowed -->
                     <a href="{VIEW_LINK}" class="btn btn-xs btn-info"><i class="fa fa-search"></i> {LANG.check}</a>
-                    <a href="javascript:void(0);" class="btn btn-xs btn-success" onclick="nv_editcensor_row_accept({CONTENT_TD.userid}, '{LANG.editcensor_confirm_approval}');"><i class="fa fa-check"></i> {LANG.approved}</a>
-                    <a href="javascript:void(0);" class="btn btn-xs btn-danger" onclick="nv_editcensor_row_del({CONTENT_TD.userid}, '{LANG.editcensor_confirm_denied}');"><i class="fa fa-trash"></i> {LANG.denied}</a>
+                    <a href="javascript:void(0);" class="btn btn-xs btn-success" onclick="nv_editcensor_row_accept({CONTENT_TD.userid}, '{CHECKSS}', '{LANG.editcensor_confirm_approval}');"><i class="fa fa-check"></i> {LANG.approved}</a>
+                    <a href="javascript:void(0);" class="btn btn-xs btn-danger" onclick="nv_editcensor_row_del({CONTENT_TD.userid}, '{CHECKSS}', '{LANG.editcensor_confirm_denied}');"><i class="fa fa-trash"></i> {LANG.denied}</a>
                     <!-- END: allowed -->
                 </td>
             </tr>

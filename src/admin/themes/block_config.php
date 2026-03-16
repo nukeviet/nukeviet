@@ -20,7 +20,7 @@ $respon = [
     'error' => 1,
     'text' => 'Wrong session!!!'
 ];
-if ($nv_Request->get_title('checkss', 'post', '') !== NV_CHECK_SESSION) {
+if (!csrf_check($nv_Request->get_string('checkss', 'post', ''), $module_name . '_block_content_ajax_' . $admin_info['admin_id'])) {
     nv_jsonOutput($respon);
 }
 

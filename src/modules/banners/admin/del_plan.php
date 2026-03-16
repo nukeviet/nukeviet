@@ -22,7 +22,7 @@ $id = $nv_Request->get_int('id', 'post', 0);
 $sql = 'SELECT id FROM ' . NV_BANNERS_GLOBALTABLE . '_plans WHERE id=' . $id;
 $id = $db->query($sql)->fetchColumn();
 
-if (empty($id)) {
+if (empty($id) or !csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_banners_key)) {
     exit('Stop!!!');
 }
 

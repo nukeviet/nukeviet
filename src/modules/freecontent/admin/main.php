@@ -17,6 +17,9 @@ $page_title = $nv_Lang->getModule('block_list');
 
 // Get block info
 if ($nv_Request->isset_request('getinfo', 'post')) {
+    if (!csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_freecontent_key)) {
+        nv_jsonOutput(['status' => 'error', 'mess' => $nv_Lang->getGlobal('error_code_11')]);
+    }
     $bid = $nv_Request->get_int('bid', 'post', '0');
 
     $array = [];
@@ -39,6 +42,9 @@ if ($nv_Request->isset_request('getinfo', 'post')) {
 
 // Delete block
 if ($nv_Request->isset_request('del', 'post')) {
+    if (!csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_freecontent_key)) {
+        nv_jsonOutput(['status' => 'error', 'mess' => $nv_Lang->getGlobal('error_code_11')]);
+    }
     $bid = $nv_Request->get_int('bid', 'post', '0');
     $message = '';
 
@@ -69,6 +75,9 @@ if ($nv_Request->isset_request('del', 'post')) {
 
 // Add + Edit submit
 if ($nv_Request->isset_request('submit', 'post')) {
+    if (!csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_freecontent_key)) {
+        nv_jsonOutput(['status' => 'error', 'mess' => $nv_Lang->getGlobal('error_code_11')]);
+    }
     $data = $error = [];
     $message = '';
 
@@ -128,6 +137,7 @@ if ($nv_Request->isset_request('submit', 'post')) {
 $xtpl = new XTemplate('main.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
 $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
 $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
+$xtpl->assign('CHECKSS', csrf_create($csrf_freecontent_key));
 
 $sql = 'SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_blocks ORDER BY bid DESC';
 $array = $db->query($sql)->fetchAll();

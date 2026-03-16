@@ -13,11 +13,17 @@ if (!defined('NV_IS_FILE_ADMIN')) {
     exit('Stop!!!');
 }
 
+$csrf_key = $module_name . '_' . $op . '_' . $admin_info['admin_id'];
+
 if (defined('NV_EDITOR')) {
     require_once NV_ROOTDIR . '/' . NV_EDITORSDIR . '/' . NV_EDITOR . '/nv.php';
 }
 
 if ($nv_Request->isset_request('save', 'post')) {
+    $checkss = $nv_Request->get_string('checkss', 'post', '');
+    if (!csrf_check($checkss, $csrf_key)) {
+        nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op);
+    }
     $array = [];
     $array['bodytext'] = nv_editor_nl2br($nv_Request->get_editor('bodytext', '', NV_ALLOWED_HTML_TAGS));
     $array['sendcopymode'] = (int) $nv_Request->get_bool('sendcopymode', 'post', 0);
@@ -42,6 +48,7 @@ $page_title = $nv_Lang->getModule('config');
 $xtpl = new XTemplate('config.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
 $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
 $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
+$xtpl->assign('CHECKSS', csrf_create($csrf_key));
 $xtpl->assign('FORM_ACTION', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op);
 
 $array = $module_config[$module_name];

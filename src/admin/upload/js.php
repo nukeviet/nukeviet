@@ -62,6 +62,7 @@ if ($global_config['nv_overflow_size'] > $sys_max_size and $global_config['uploa
 }
 $tpl->assign('NV_MAX_SIZE_BYTES', $sys_max_size_local);
 $tpl->assign('NV_CHUNK_SIZE', $global_config['upload_chunk_size']);
+$tpl->assign('CHECKSS', csrf_create($csrf_upload_key));
 
 $tpl->assign('HTML_POPUP', escapeForJs($tpl->fetch('upload_modal.tpl')));
 $tpl->assign('HTML_CONTENT', escapeForJs($tpl->fetch('upload_ctn.tpl')));

@@ -20,6 +20,8 @@ $menu_top = [
 ];
 
 define('NV_IS_FILE_ADMIN', true);
+$csrf_key = $module_name . '_' . $op . '_' . $admin_info['admin_id'];
+$csrf_upload_key = $module_name . '_manage_' . $admin_info['admin_id'];
 
 // Document
 $array_url_instruction['main'] = 'https://wiki.nukeviet.vn/nukeviet4:admin:upload';

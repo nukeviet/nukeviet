@@ -13,6 +13,8 @@ if (!defined('NV_ADMIN') or !defined('NV_MAINFILE') or !defined('NV_IS_MODADMIN'
     exit('Stop!!!');
 }
 
+$csrf_key = $module_name . '_' . $op . '_' . $admin_info['admin_id'];
+
 define('NV_IS_FILE_ADMIN', true);
 
 //Document

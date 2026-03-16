@@ -138,10 +138,10 @@
                                 <a class="btn btn-sm btn-info" href="{EDIT_URL}" data-toggle="tooltip" title="{LANG.memberlist_edit}"><em class="fa fa-edit fa-fw"></em></a>
                                 <!-- END: edit -->
                                 <!-- BEGIN: set_official -->
-                                <button type="button" data-toggle="tooltip" title="{LANG.set_official_note}" class="btn btn-sm btn-warning" onclick="nv_set_official({CONTENT_TD.userid});"><em class="fa fa-user fa-fw"></em></button>
+                                <button type="button" data-toggle="tooltip" title="{LANG.set_official_note}" class="btn btn-sm btn-warning" onclick="nv_set_official({CONTENT_TD.userid}, '{CHECKSESS}');"><em class="fa fa-user fa-fw"></em></button>
                                 <!-- END: set_official -->
                                 <!-- BEGIN: del -->
-                                <button type="button" data-toggle="tooltip" title="{LANG.delete}" class="btn btn-sm btn-danger" onclick="nv_row_del({CONTENT_TD.userid});"><em class="fa fa-trash-o fa-fw"></em></button>
+                                <button type="button" data-toggle="tooltip" title="{LANG.delete}" class="btn btn-sm btn-danger" onclick="nv_row_del({CONTENT_TD.userid}, '{CHECKSESS}');"><em class="fa fa-trash-o fa-fw"></em></button>
                                 <!-- END: del -->
                                 <!-- BEGIN: edit2 -->
                                 <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -151,10 +151,10 @@
                                 <ul class="dropdown-menu dropdown-menu-right">
                                     <li><a href="{EDIT_OAUTH_URL}">{LANG.user_openid_mamager}</a></li>
                                     <li><a href="{EDIT_2STEP_URL}">{LANG.user_2step_mamager}</a></li>
-                                    <li><a href="javascript:void(0);" onclick="passResetRequest({CONTENT_TD.userid});">{LANG.pass_reset_request}</a></li>
-                                    <li><a href="javascript:void(0);" onclick="emailResetRequest({CONTENT_TD.userid});">{LANG.email_reset_request}</a></li>
-                                    <li><a href="javascript:void(0);" onclick="forcedReLogin({CONTENT_TD.userid});">{LANG.forcedrelogin}</a></li>
-                                    <!-- BEGIN: cancel_deletion --><li><a href="javascript:void(0);" onclick="cancelDeletion({CONTENT_TD.userid});">{LANG.delacc_cancel_adm}</a></li><!-- END: cancel_deletion -->
+                                    <li><a href="javascript:void(0);" onclick="passResetRequest({CONTENT_TD.userid}, '{CHECKSESS}');">{LANG.pass_reset_request}</a></li>
+                                    <li><a href="javascript:void(0);" onclick="emailResetRequest({CONTENT_TD.userid}, '{CHECKSESS}');">{LANG.email_reset_request}</a></li>
+                                    <li><a href="javascript:void(0);" onclick="forcedReLogin({CONTENT_TD.userid}, '{CHECKSESS}');">{LANG.forcedrelogin}</a></li>
+                                    <!-- BEGIN: cancel_deletion --><li><a href="javascript:void(0);" onclick="cancelDeletion({CONTENT_TD.userid}, '{CHECKSESS}');">{LANG.delacc_cancel_adm}</a></li><!-- END: cancel_deletion -->
                                 </ul>
                                 <!-- END: edit2 -->
                             </div>

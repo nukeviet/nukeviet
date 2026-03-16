@@ -47,7 +47,7 @@ function nv_pare_data(id, isEditor) {
             type: 'POST',
             cache: false,
             url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=manager&nocache=' + new Date().getTime(),
-            data: 'id=' + id + '&getinfo=1',
+            data: 'id=' + id + '&getinfo=1&checkss=' + $(cfg.ctList).data('checkss'),
             dataType: 'json',
             success: function(e) {
                 $(cfg.ctModal).find(cfg.load).hide();
@@ -103,7 +103,7 @@ $(document).ready(function() {
             type: 'POST',
             cache: false,
             url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=main&nocache=' + new Date().getTime(),
-            data: 'bid=' + $this.data('bid') + '&getinfo=1',
+            data: 'bid=' + $this.data('bid') + '&getinfo=1&checkss=' + $(cfg.blockList).data('checkss'),
             dataType: 'json',
             success: function(e) {
                 $(cfg.blockModal).find(cfg.load).hide();
@@ -159,7 +159,7 @@ $(document).ready(function() {
             type: 'POST',
             cache: false,
             url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=main&nocache=' + new Date().getTime(),
-            data: $.param(data) + '&submit=1',
+            data: $.param(data) + '&submit=1&checkss=' + $this.data('checkss'),
             dataType: 'json',
             success: function(e) {
                 $(cfg.blockSubmitBtn).removeAttr('disabled');
@@ -196,7 +196,7 @@ $(document).ready(function() {
             type: 'POST',
             cache: false,
             url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=main&nocache=' + new Date().getTime(),
-            data: 'bid=' + $(cfg.blockModalDelete).find('[name="bid"]').val() + '&del=1',
+            data: 'bid=' + $(cfg.blockModalDelete).find('[name="bid"]').val() + '&del=1&checkss=' + $(cfg.blockList).data('checkss'),
             dataType: 'json',
             success: function(e) {
                 $(cfg.blockModalDelete).find('.loading').hide();
@@ -308,7 +308,7 @@ $(document).ready(function() {
             type: 'POST',
             cache: false,
             url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=manager&nocache=' + new Date().getTime(),
-            data: $.param(data) + '&submit=1',
+            data: $.param(data) + '&submit=1&checkss=' + $this.data('checkss'),
             dataType: 'json',
             success: function(e) {
                 $(cfg.ctSubmitBtn).removeAttr('disabled');
@@ -369,7 +369,7 @@ $(document).ready(function() {
             type: 'POST',
             cache: false,
             url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=manager&nocache=' + new Date().getTime(),
-            data: 'id=' + $(cfg.ctModalDelete).find('[name="id"]').val() + '&del=1',
+            data: 'id=' + $(cfg.ctModalDelete).find('[name="id"]').val() + '&del=1&checkss=' + $(cfg.ctList).data('checkss'),
             dataType: 'json',
             success: function(e) {
                 $(cfg.ctModalDelete).find('.loading').hide();
@@ -404,7 +404,7 @@ $(document).ready(function() {
                 type: 'POST',
                 cache: false,
                 url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=manager&nocache=' + new Date().getTime(),
-                data: 'id=' + $this.data('id') + '&changestatus=1',
+                data: 'id=' + $this.data('id') + '&changestatus=1&checkss=' + $(cfg.ctList).data('checkss'),
                 dataType: 'json',
                 success: function(e) {
                     if (e.status == 'success') {

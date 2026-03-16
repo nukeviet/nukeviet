@@ -1,7 +1,7 @@
 <!-- BEGIN: main -->
 <link rel="stylesheet" href="{ASSETS_STATIC_URL}/js/select2/select2.min.css">
 <script type="text/javascript" src="{ASSETS_STATIC_URL}/js/select2/select2.min.js"></script>
-<div id="menu-block">
+<div id="menu-block" data-checkss="{CHECKSS}">
     <div class="m-bottom">
         <button type="button" class="btn btn-primary add-menu-block" data-url="{FORM_ACTION}">{LANG.add_menu}</button>
     </div>
@@ -42,6 +42,7 @@
 <!-- BEGIN: block -->
 <form method="post" action="{FORM_ACTION}" role="dialog" class="modal fade">
     <input name="save" type="hidden" value="1" />
+    <input name="checkss" type="hidden" value="{CHECKSS}" />
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">

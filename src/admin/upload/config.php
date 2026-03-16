@@ -27,6 +27,12 @@ $array_logo_position = [
 $logo_exts = nv_editable_imgexts();
 
 if ($nv_Request->isset_request('save', 'post')) {
+    if (!csrf_check($nv_Request->get_title('checkss', 'post', ''), $csrf_upload_key)) {
+        nv_jsonOutput([
+            'status' => 'error',
+            'mess' => 'Error session!!!'
+        ]);
+    }
     $data = [
         'upload_logo' => $nv_Request->get_title('upload_logo', 'post', ''),
         'upload_logo_pos' => $nv_Request->get_title('upload_logo_pos', 'post', ''),
@@ -108,6 +114,7 @@ if ($global_config['autologomod'] == 'all') {
 }
 $tpl->assign('AUTOLOGOMOD', $autologomod);
 $tpl->assign('NO_TINIFY', !class_exists('Tinify\Tinify'));
+$tpl->assign('CHECKSS', csrf_create($csrf_upload_key));
 
 $contents = $tpl->fetch('config.tpl');
 

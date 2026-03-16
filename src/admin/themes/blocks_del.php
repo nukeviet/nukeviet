@@ -13,11 +13,12 @@ if (!defined('NV_IS_FILE_THEMES')) {
     exit('Stop!!!');
 }
 
+$csrf_block_key = $module_name . '_blocks_manage_' . $admin_info['admin_id'];
 $bid = $nv_Request->get_int('bid', 'post');
 $checkss = $nv_Request->get_string('checkss', 'post');
 [$bid, $theme, $position] = $db->query('SELECT bid, theme, position FROM ' . NV_BLOCKS_TABLE . '_groups WHERE bid=' . $bid)->fetch(3);
 
-if (!($bid > 0 and (csrf_check($checkss, $theme) or csrf_check($checkss, $module_name . '_' . $bid)))) {
+if (!($bid > 0 and csrf_check($checkss, $csrf_block_key))) {
     nv_jsonOutput([
         'success' => 0,
         'text' => 'Request params error!!!'

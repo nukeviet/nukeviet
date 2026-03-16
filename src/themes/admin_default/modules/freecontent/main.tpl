@@ -47,7 +47,7 @@
                 <th class="text-center">{LANG.tools}</th>
             </tr>
         </thead>
-        <tbody id="block-list-container">
+        <tbody id="block-list-container" data-checkss="{CHECKSS}">
             <!-- BEGIN: loop -->
             <tr id="block-row-{ROW.bid}">
                 <td><strong><a href="{ROW.link}">{ROW.title}</a></strong></td>
@@ -71,7 +71,7 @@
                 <h3 class="modal-title">{LANG.block_add_edit}</h3>
             </div>
             <div class="modal-body">
-                <form class="form-horizontal">
+                <form class="form-horizontal" data-checkss="{CHECKSS}">
                     <div class="form-group">
                         <label for="block-title" class="col-sm-5 control-label">{LANG.block_title}<sup class="required">(*)</sup></label>
                         <div class="col-sm-19">

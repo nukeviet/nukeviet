@@ -40,7 +40,7 @@ if ($global_config['idsite']) {
 $array_config = [];
 
 // Submit form
-if ($nv_Request->get_title('tokend', 'post', '') === NV_CHECK_SESSION) {
+if (csrf_check($nv_Request->get_title('checkss', 'post', ''), $csrf_key)) {
     $array_config['user_allowed_theme'] = $nv_Request->get_typed_array('user_allowed_theme', 'post', 'title', []);
     $array_config['user_allowed_theme'] = array_intersect($array_config['user_allowed_theme'], $array_site_cat_theme);
     $array_config['user_allowed_theme'][] = $global_config['site_theme'];
@@ -75,6 +75,7 @@ $tpl->assign('LANG_MESSAGE', $nv_Lang->getModule('settings_utheme_lnote', $langu
 $tpl->assign('ARRAY', $array_site_cat_theme);
 $tpl->assign('DATA', $array_config);
 $tpl->assign('GCONFIG', $global_config);
+$tpl->assign('CHECKSS', csrf_create($csrf_key));
 
 $contents = $tpl->fetch('settings.tpl');
 

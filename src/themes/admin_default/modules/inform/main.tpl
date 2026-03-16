@@ -5,7 +5,7 @@
 <script src="{ASSETS_LANG_STATIC_URL}/js/select2/i18n/{NV_LANG_INTERFACE}.js"></script>
 <script src="{ASSETS_STATIC_URL}/js/jquery-ui/jquery-ui.min.js"></script>
 <script src="{ASSETS_LANG_STATIC_URL}/js/language/jquery.ui.datepicker-{NV_LANG_INTERFACE}.js"></script>
-<div class="inform" id="inform" data-page-url="{PAGE_URL}" data-delete-confirm="{LANG.delete_confirm}">
+<div class="inform" id="inform" data-page-url="{PAGE_URL}" data-delete-confirm="{LANG.delete_confirm}" data-checkss="{CHECKSS}">
     <div class="filter">
         <!-- BEGIN: filter -->
         <div class="select">

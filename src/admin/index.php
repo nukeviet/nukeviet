@@ -102,6 +102,9 @@ if (preg_match($global_config['check_module'], $module_name)) {
     if (file_exists($include_functions) and file_exists($include_file)) {
         define('NV_IS_MODADMIN', true);
 
+        // Tạo key CSRF dùng chung cho admin các module
+        $csrf_key = $module_name . '_' . $op . '_' . $admin_info['admin_id'];
+
         $array_lang_admin = [];
 
         if ($global_config['lang_multi']) {

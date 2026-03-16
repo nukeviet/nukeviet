@@ -17,6 +17,9 @@ $page_title = $nv_Lang->getModule('mng');
 
 // Get content info
 if ($nv_Request->isset_request('getinfo', 'post')) {
+    if (!csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_freecontent_key)) {
+        nv_jsonOutput(['status' => 'error', 'mess' => $nv_Lang->getGlobal('error_code_11')]);
+    }
     $id = $nv_Request->get_int('id', 'post', '0');
 
     $array = [];
@@ -57,6 +60,9 @@ if ($nv_Request->isset_request('getinfo', 'post')) {
 
 // Delete content
 if ($nv_Request->isset_request('del', 'post')) {
+    if (!csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_freecontent_key)) {
+        nv_jsonOutput(['status' => 'error', 'mess' => $nv_Lang->getGlobal('error_code_11')]);
+    }
     $id = $nv_Request->get_int('id', 'post', '0');
     $message = '';
 
@@ -83,6 +89,9 @@ if ($nv_Request->isset_request('del', 'post')) {
 
 // Change content status
 if ($nv_Request->isset_request('changestatus', 'post')) {
+    if (!csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_freecontent_key)) {
+        nv_jsonOutput(['status' => 'error', 'mess' => $nv_Lang->getGlobal('error_code_11')]);
+    }
     $id = $nv_Request->get_int('id', 'post', '0');
     $message = '';
     $status = 0;
@@ -168,6 +177,9 @@ if (empty($block)) {
 
 // Add + Edit submit
 if ($nv_Request->isset_request('submit', 'post')) {
+    if (!csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_freecontent_key)) {
+        nv_jsonOutput(['status' => 'error', 'mess' => $nv_Lang->getGlobal('error_code_11')]);
+    }
     $data = $error = [];
     $message = '';
 

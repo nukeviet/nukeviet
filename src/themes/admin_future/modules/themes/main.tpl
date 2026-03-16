@@ -43,7 +43,7 @@
                             {if $theme.allowed_preview}
                             <div class="mb-3 d-flex align-items-center justify-content-{in_array($theme.value, $ARRAY_ALLOW_PREVIEW, true) ? 'between' : 'end'} gap-2">
                                 <div class="preview-label{in_array($theme.value, $ARRAY_ALLOW_PREVIEW, true) ? '' : ' d-none'}">{$LANG->getModule('preview_theme_link')}:</div>
-                                <button type="button" class="btn btn-primary" data-toggle="previewtheme" data-value="{$theme.value}"><i class="fa-solid fa-spinner fa-spin-pulse d-none"></i> <span>{$LANG->getModule(in_array($theme.value, $ARRAY_ALLOW_PREVIEW, true) ? 'preview_theme_off' : 'preview_theme_on')}</span></button>
+                                <button type="button" class="btn btn-primary" data-toggle="previewtheme" data-value="{$theme.value}" data-checkss="{$theme.checkss}"><i class="fa-solid fa-spinner fa-spin-pulse d-none"></i> <span>{$LANG->getModule(in_array($theme.value, $ARRAY_ALLOW_PREVIEW, true) ? 'preview_theme_off' : 'preview_theme_on')}</span></button>
                             </div>
                             <div class="preview-link mb-3{if not in_array($theme.value, $ARRAY_ALLOW_PREVIEW, true)} d-none{/if}">
                                 <div class="input-group">

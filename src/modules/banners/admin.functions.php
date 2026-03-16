@@ -13,6 +13,8 @@ if (!defined('NV_ADMIN') or !defined('NV_MAINFILE') or !defined('NV_IS_MODADMIN'
     exit('Stop!!!');
 }
 
+$csrf_banners_key = 'banners_' . $admin_info['admin_id'];
+
 $allow_func = [
     'main',
     'plans_list',

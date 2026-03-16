@@ -35,7 +35,7 @@ $(function() {
             type: 'POST',
             url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=' + nv_func_name + '&nocache=' + new Date().getTime(),
             data: {
-                checkss: $('body').data('checksess'),
+                checkss: form.data('checkss-ajax'),
                 loadBlocks: module,
                 bid: $('[name="bid"]', form).val()
             },
@@ -109,7 +109,7 @@ $(function() {
                 type: 'POST',
                 url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=block_config&nocache=' + new Date().getTime(),
                 data: {
-                    checkss: $('body').data('checksess'),
+                    checkss: form.data('checkss-ajax'),
                     bid: $('[name="bid"]', form).val(),
                     module: module_type,
                     selectthemes: form.data('selectthemes'),
@@ -219,7 +219,7 @@ $(function() {
             type: 'POST',
             url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=' + nv_func_name + '&nocache=' + new Date().getTime(),
             data: {
-                checkss: $('body').data('checksess'),
+                checkss: form.data('checkss-ajax'),
                 get_dtime_details: dtime,
                 bid: $('[name="bid"]', form).val()
             },

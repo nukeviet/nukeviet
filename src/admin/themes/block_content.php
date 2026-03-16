@@ -22,7 +22,7 @@ if ($nv_Request->isset_request('loadBlocks, bid', 'post')) {
         'error' => 1,
         'text' => 'Wrong session!!!'
     ];
-    if ($nv_Request->get_title('checkss', 'post', '') !== NV_CHECK_SESSION) {
+    if (!csrf_check($nv_Request->get_string('checkss', 'post', ''), $module_name . '_block_content_ajax_' . $admin_info['admin_id'])) {
         nv_jsonOutput($respon);
     }
 
@@ -93,7 +93,7 @@ if ($nv_Request->isset_request('get_dtime_details', 'post')) {
         'error' => 1,
         'text' => 'Wrong session!!!'
     ];
-    if ($nv_Request->get_title('checkss', 'post', '') !== NV_CHECK_SESSION) {
+    if (!csrf_check($nv_Request->get_string('checkss', 'post', ''), $module_name . '_block_content_ajax_' . $admin_info['admin_id'])) {
         nv_jsonOutput($respon);
     }
 
@@ -597,6 +597,7 @@ $tpl->assign('OP', $op);
 $tpl->assign('TEMPLATE', $template);
 
 $row['link'] = nv_htmlspecialchars($row['link']);
+$tpl->assign('CHECKSS_AJAX', csrf_create($module_name . '_block_content_ajax_' . $admin_info['admin_id']));
 $row['checkss'] = csrf_create($csrf_key);
 $row['active_device'] = !empty($row['active']) ? array_map('intval', explode(',', $row['active'])) : [];
 $row['groups_view'] = array_map('intval', explode(',', $row['groups_view']));

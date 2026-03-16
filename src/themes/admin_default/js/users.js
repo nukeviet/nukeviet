@@ -133,9 +133,11 @@ function nv_add_question() {
     return;
 }
 
-function nv_row_del(vid) {
+function nv_row_del(vid, checkss) {
     if (confirm(nv_is_del_confirm[0])) {
-        var checkss = $("input[name='checkss']").val();
+        if (typeof checkss === 'undefined') {
+            checkss = $("input[name='checkss']").val();
+        }
         $.post(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=del&nocache=' + new Date().getTime(), 'userid=' + vid + '&checkss=' + checkss, function(res) {
             if (res == 'OK') {
                 window.location.href = window.location.href;
@@ -153,8 +155,8 @@ function nv_row_del(vid) {
     return false;
 }
 
-function nv_set_official(vid) {
-    $.post(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=setofficial&nocache=' + new Date().getTime(), 'userid=' + vid, function(res) {
+function nv_set_official(vid, checkss) {
+    $.post(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=setofficial&nocache=' + new Date().getTime(), 'userid=' + vid + '&checkss=' + checkss, function(res) {
         if (res == 'OK') {
             window.location.href = window.location.href;
         } else {
@@ -179,18 +181,18 @@ function nv_waiting_row_del(uid, checkss) {
 }
 
 // Xóa thông tin chỉnh sửa
-function nv_editcensor_row_del(uid, msg) {
+function nv_editcensor_row_del(uid, checkss, msg) {
     if (confirm(msg)) {
-        $.post(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=editcensor&nocache=' + new Date().getTime(), 'del=1&userid=' + uid, function(res) {
+        $.post(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=editcensor&nocache=' + new Date().getTime(), 'del=1&userid=' + uid + '&checkss=' + checkss, function(res) {
             location.reload();
         });
     }
 }
 
 // Xác nhận thông tin chỉnh sửa
-function nv_editcensor_row_accept(uid, msg) {
+function nv_editcensor_row_accept(uid, checkss, msg) {
     if (confirm(msg)) {
-        $.post(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=editcensor&nocache=' + new Date().getTime(), 'approved=1&userid=' + uid, function(res) {
+        $.post(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=editcensor&nocache=' + new Date().getTime(), 'approved=1&userid=' + uid + '&checkss=' + checkss, function(res) {
             if (res.status != 'SUCCESS') {
                 alert(res.mess);
             } else {
@@ -377,10 +379,10 @@ function nv_show_list_field() {
     return;
 }
 
-function nv_chang_field(fid) {
+function nv_chang_field(fid, checkss) {
     var nv_timer = nv_settimeout_disable('id_weight_' + fid, 5000);
     var new_vid = $('#id_weight_' + fid).val();
-    $.post(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=fields&nocache=' + new Date().getTime(), 'changeweight=1&fid=' + fid + '&new_vid=' + new_vid, function(res) {
+    $.post(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=fields&nocache=' + new Date().getTime(), 'changeweight=1&fid=' + fid + '&new_vid=' + new_vid + '&checkss=' + checkss, function(res) {
         if (res != 'OK') {
             alert(nv_is_change_act_confirm[2]);
         }
@@ -390,9 +392,9 @@ function nv_chang_field(fid) {
     return;
 }
 
-function nv_del_field(fid) {
+function nv_del_field(fid, checkss) {
     if (confirm(nv_is_del_confirm[0])) {
-        $.post(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=fields&nocache=' + new Date().getTime(), 'del=1&fid=' + fid, function(res) {
+        $.post(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=fields&nocache=' + new Date().getTime(), 'del=1&fid=' + fid + '&checkss=' + checkss, function(res) {
             if (res == 'OK') {
                 nv_show_list_field();
             } else {
@@ -536,50 +538,67 @@ function nv_main_action(btn) {
     }
 }
 
-function passResetRequest(id) {
+function passResetRequest(id, checkss) {
+    if (typeof checkss === 'undefined') {
+        checkss = $("input[name='checkss']").val();
+    }
     $.ajax({
         type: 'POST',
         cache: !1,
         url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=edit&userid=' + id + '&nocache=' + new Date().getTime(),
-        data: 'psr=1',
+        data: 'psr=1&checkss=' + checkss,
         dataType: "json",
         success: function(e) {
-            $('#pass-reset-modal .userid').val(e.userid);
-            $('#pass-reset-modal .username').text(e.username);
-            $('#pass-reset-modal .currentpass-created-time').text(e.pass_creation_time);
-            $('#pass-reset-modal .currentpass-request-status').text(e.pass_reset_request);
-            $('#pass-reset-modal .btn').removeClass('disabled');
-            $('#pass-reset-modal .fa-spin').hide();
-            $('#pass-reset-modal').modal('show')
+            if (e.status == 'error') {
+                alert(e.mess);
+            } else {
+                $('#pass-reset-modal .userid').val(e.userid);
+                $('#pass-reset-modal .username').text(e.username);
+                $('#pass-reset-modal .currentpass-created-time').text(e.pass_creation_time);
+                $('#pass-reset-modal .currentpass-request-status').text(e.pass_reset_request);
+                $('#pass-reset-modal .btn').removeClass('disabled');
+                $('#pass-reset-modal .fa-spin').hide();
+                $('#pass-reset-modal').modal('show')
+            }
         }
     });
 }
 
-function emailResetRequest(id) {
+function emailResetRequest(id, checkss) {
+    if (typeof checkss === 'undefined') {
+        checkss = $("input[name='checkss']").val();
+    }
     $.ajax({
         type: 'POST',
         cache: !1,
         url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=edit&userid=' + id + '&nocache=' + new Date().getTime(),
-        data: 'esr=1',
+        data: 'esr=1&checkss=' + checkss,
         dataType: "json",
         success: function(e) {
-            $('#email-reset-modal .userid').val(e.userid);
-            $('#email-reset-modal .username').text(e.username);
-            $('#email-reset-modal .currentemail-created-time').text(e.email_creation_time);
-            $('#email-reset-modal .currentemail-request-status').text(e.email_reset_request);
-            $('#email-reset-modal .btn').removeClass('disabled');
-            $('#email-reset-modal .fa-spin').hide();
-            $('#email-reset-modal').modal('show')
+            if (e.status == 'error') {
+                alert(e.mess);
+            } else {
+                $('#email-reset-modal .userid').val(e.userid);
+                $('#email-reset-modal .username').text(e.username);
+                $('#email-reset-modal .currentemail-created-time').text(e.email_creation_time);
+                $('#email-reset-modal .currentemail-request-status').text(e.email_reset_request);
+                $('#email-reset-modal .btn').removeClass('disabled');
+                $('#email-reset-modal .fa-spin').hide();
+                $('#email-reset-modal').modal('show')
+            }
         }
     });
 }
 
-function forcedReLogin(id) {
+function forcedReLogin(id, checkss) {
+    if (typeof checkss === 'undefined') {
+        checkss = $("input[name='checkss']").val();
+    }
     $.ajax({
         type: 'POST',
         cache: !1,
         url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=edit&userid=' + id + '&nocache=' + new Date().getTime(),
-        data: 'forcedrelogin=1',
+        data: 'forcedrelogin=1&checkss=' + checkss,
         dataType: "json",
         success: function(e) {
             alert(e.mess)
@@ -587,12 +606,15 @@ function forcedReLogin(id) {
     });
 }
 
-function cancelDeletion(id) {
+function cancelDeletion(id, checkss) {
+    if (typeof checkss === 'undefined') {
+        checkss = $("input[name='checkss']").val();
+    }
     $.ajax({
         type: 'POST',
         cache: !1,
         url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=edit&userid=' + id + '&nocache=' + new Date().getTime(),
-        data: 'canceldeletion=1',
+        data: 'canceldeletion=1&checkss=' + checkss,
         dataType: "json",
         success: function(e) {
             nukeviet.alert(e.mess, () => {
@@ -602,8 +624,11 @@ function cancelDeletion(id) {
     });
 }
 
-function passResetRequestSubmit(event, obj, type) {
+function passResetRequestSubmit(event, obj, type, checkss) {
     event.preventDefault();
+    if (typeof checkss === 'undefined') {
+        checkss = $("input[name='checkss']").val();
+    }
     var userid = $('#pass-reset-modal .userid').val();
     $('#pass-reset-modal .btn').addClass('disabled');
     $(obj).next().show();
@@ -611,7 +636,7 @@ function passResetRequestSubmit(event, obj, type) {
         type: 'POST',
         cache: !1,
         url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=edit&userid=' + userid + '&nocache=' + new Date().getTime(),
-        data: 'psr=1&type=' + type,
+        data: 'psr=1&type=' + type + '&checkss=' + checkss,
         dataType: "html",
         success: function(e) {
             alert(e);
@@ -620,8 +645,11 @@ function passResetRequestSubmit(event, obj, type) {
     });
 }
 
-function emailResetRequestSubmit(event, obj, type) {
+function emailResetRequestSubmit(event, obj, type, checkss) {
     event.preventDefault();
+    if (typeof checkss === 'undefined') {
+        checkss = $("input[name='checkss']").val();
+    }
     var userid = $('#email-reset-modal .userid').val();
     $('#email-reset-modal .btn').addClass('disabled');
     $(obj).next().show();
@@ -629,7 +657,7 @@ function emailResetRequestSubmit(event, obj, type) {
         type: 'POST',
         cache: !1,
         url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=edit&userid=' + userid + '&nocache=' + new Date().getTime(),
-        data: 'esr=1&type=' + type,
+        data: 'esr=1&type=' + type + '&checkss=' + checkss,
         dataType: "html",
         success: function(e) {
             alert(e);
