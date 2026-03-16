@@ -72,8 +72,6 @@ function nv_save_file_admin_config()
     return file_put_contents(NV_ROOTDIR . '/' . NV_DATADIR . '/admin_config.php', $content_config, LOCK_EX);
 }
 
-$csrf_key = $module_name . '_' . $op . '_' . $admin_info['admin_id'];
-
 // Xóa tài khoản cấu hình
 if ($nv_Request->isset_request('delid', 'post')) {
     if (!defined('NV_IS_AJAX')) {
@@ -91,8 +89,8 @@ if ($nv_Request->isset_request('delid', 'post')) {
         nv_jsonOutput($respon);
     }
     $checkss = $nv_Request->get_string('checkss', 'post', '');
-    $csrf_key_del = $module_name . '_' . $op . '_' . $delid;
-    if (!csrf_check($checkss, $csrf_key_del)) {
+    $_csrf_key = $module_name . '_' . $op . '_' . $delid;
+    if (!csrf_check($checkss, $_csrf_key)) {
         $respon['message'] = 'Wrong checss!!!';
         nv_jsonOutput($respon);
     }

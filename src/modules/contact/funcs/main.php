@@ -70,7 +70,7 @@ if (defined('NV_IS_USER')) {
 
 // Nhận phản hồi
 if ($nv_Request->isset_request('checkss', 'post')) {
-    $checkss = $nv_Request->get_title('checkss', 'post', '');
+    $checkss = $nv_Request->get_title('checkss', 'post');
     if ($checkss != NV_CHECK_SESSION) {
         exit();
     }

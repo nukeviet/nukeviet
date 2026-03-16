@@ -91,7 +91,7 @@ if (defined('NV_IS_ADMIN_FULL_MODULE')) {
         $nv_Lang->getModule('admin_module'),
         $nv_Lang->getModule('admin_full_module')];
 
-    if ($nv_Request->isset_request('save', 'post') and $userid > 0) {
+    if ($nv_Request->isset_request('save', 'post') and $userid > 0 and csrf_check($nv_Request->get_string('checkss', 'post', ''), $csrf_key)) {
         $admin_module = $nv_Request->get_int('admin_module', 'post', 0);
         if ($admin_module == 1 or $admin_module == 2) {
             if (!defined('NV_IS_SPADMIN')) {
@@ -204,6 +204,7 @@ if (defined('NV_IS_ADMIN_FULL_MODULE')) {
 
         $xtpl = new XTemplate('admin.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
         $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
+        $xtpl->assign('CHECKSS', csrf_create($csrf_key));
         foreach ($head_tds as $head_td) {
             $xtpl->assign('HEAD_TD', $head_td);
             $xtpl->parse('main.head_td');

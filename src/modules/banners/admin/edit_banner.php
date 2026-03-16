@@ -13,8 +13,6 @@ if (!defined('NV_IS_FILE_ADMIN')) {
     exit('Stop!!!');
 }
 
-$csrf_key = $module_name . '_' . $op . '_' . $admin_info['admin_id'];
-
 $id = $nv_Request->get_int('id', 'get', 0);
 
 $sql = 'SELECT * FROM ' . NV_BANNERS_GLOBALTABLE . '_rows WHERE id=' . $id;

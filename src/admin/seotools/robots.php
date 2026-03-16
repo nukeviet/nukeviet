@@ -15,7 +15,6 @@ if (!defined('NV_IS_FILE_SEOTOOLS')) {
 
 $page_title = $nv_Lang->getModule('robots');
 
-$csrf_key = $module_name . '_' . $op . '_' . $admin_info['admin_id'];
 $cache_file = NV_ROOTDIR . '/' . NV_DATADIR . '/robots.php';
 
 $tpl = new \NukeViet\Template\NVSmarty();

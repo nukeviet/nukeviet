@@ -20,8 +20,6 @@ $request['username'] = $nv_Request->get_title('username', 'post', '');
 $request['password'] = $nv_Request->get_title('password', 'post', '');
 $request['redirect'] = $nv_Request->get_title('redirect', 'post,get', '');
 
-$csrf_key = $module_name . '_' . $op . '_' . $admin_info['admin_id'];
-
 $tpl = new \NukeViet\Template\NVSmarty();
 $tpl->setTemplateDir(get_module_tpl_dir('login.tpl'));
 $tpl->assign('LANG', $nv_Lang);

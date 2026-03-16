@@ -35,7 +35,6 @@ if ($nv_Request->isset_request('checkss', 'post')) {
         'mess' => '',
     ];
 
-    $csrf_key = $module_name . '_' . $op . '_' . $admin_info['admin_id'];
     if (!csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
         $respon['mess'] = 'Session error!!!';
         nv_jsonOutput($respon);

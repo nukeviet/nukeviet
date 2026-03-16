@@ -14,7 +14,7 @@ if (!defined('NV_IS_FILE_ADMIN')) {
 }
 
 if ($nv_Request->isset_request('save', 'post')) {
-    if (!csrf_check($nv_Request->get_title('checkss', 'post', ''), $csrf_inform_key)) {
+    if (!csrf_check($nv_Request->get_title('checkss', 'post'), $csrf_key)) {
         nv_jsonOutput(['status' => 'error', 'mess' => $nv_Lang->getGlobal('error_code_11')]);
     }
     $postdata = [
@@ -74,7 +74,7 @@ $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
 $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
 $xtpl->assign('FORM_ACTION', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op);
 $xtpl->assign('DATA', $data);
-$xtpl->assign('CHECKSS', csrf_create($csrf_inform_key));
+$xtpl->assign('CHECKSS', csrf_create($csrf_key));
 $xtpl->parse('main');
 $contents = $xtpl->text('main');
 

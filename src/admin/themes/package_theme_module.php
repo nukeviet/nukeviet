@@ -13,7 +13,7 @@ if (!defined('NV_IS_FILE_THEMES')) {
     exit('Stop!!!');
 }
 
-$csrf_key = $module_name . '_' . $op . '_' . $admin_info['admin_id'];
+
 $page_title = $nv_Lang->getModule('package_theme_module');
 
 if (csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {

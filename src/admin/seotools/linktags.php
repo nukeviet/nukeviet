@@ -33,7 +33,6 @@ if (file_exists($file_linktags)) {
 }
 
 // Lưu cấu hình opensearch
-$csrf_key = $module_name . '_' . $op . '_' . $admin_info['admin_id'];
 if ($nv_Request->isset_request('opensearch', 'post') and csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
     $opensearch_link = $nv_Request->get_typed_array('opensearch_link', 'post', 'title', []);
     $shortname = $nv_Request->get_typed_array('shortname', 'post', 'title', []);

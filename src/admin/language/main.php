@@ -75,10 +75,7 @@ foreach ($lang_array_exit as $lang) {
     }
 }
 
-$csrf_key = '';
 if (defined('NV_IS_GODADMIN') or ($global_config['idsite'] > 0 and defined('NV_IS_SPADMIN'))) {
-    $csrf_key = $module_name . '_' . $op . '_' . $admin_info['admin_id'];
-
     // Change weight
     if ($nv_Request->isset_request('changeweight', 'post')) {
         if (!csrf_check($nv_Request->get_string('changeweight', 'post'), $csrf_key)) {

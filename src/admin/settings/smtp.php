@@ -46,7 +46,6 @@ function get_dkim_verified_list()
 $page_title = $nv_Lang->getModule('smtp_config_by_lang', $language_array[NV_LANG_DATA]['name']);
 $smtp_encrypted_array = ['None', 'SSL', 'TLS'];
 $errormess = '';
-$csrf_key = $module_name . '_' . $op . '_' . $admin_info['admin_id'];
 
 $tpl = new \NukeViet\Template\NVSmarty();
 $tpl->setTemplateDir(get_module_tpl_dir('smtp.tpl'));

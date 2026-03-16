@@ -29,8 +29,6 @@ if (empty($idfile) or empty($module)) {
     nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=interface');
 }
 
-$csrf_key = $module_name . '_' . $op . '_' . $admin_info['admin_id'];
-
 if (csrf_check($nv_Request->get_string('savedata', 'get'), $csrf_key)) {
     $postdata = @file_get_contents('php://input');
     $postdata = json_decode($postdata, true);

@@ -16,7 +16,6 @@ if (!defined('NV_IS_FILE_WEBTOOLS')) {
 $timezone_array = array_keys($nv_parse_ini_timezone);
 $array_config_global = [];
 
-$csrf_key = $module_name . '_' . $op . '_' . $admin_info['admin_id'];
 if (csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
     $array_config_global['online_upd'] = $nv_Request->get_int('online_upd', 'post');
     $array_config_global['statistic'] = $nv_Request->get_int('statistic', 'post');

@@ -17,8 +17,8 @@ $array_bid = $nv_Request->get_typed_array('bl', 'post', 'int', []);
 $func_id = $nv_Request->get_int('func_id', 'post');
 $position = $nv_Request->get_string('position', 'post');
 
-$csrf_key = $position;
-if (csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
+$_csrf_key = $position;
+if (csrf_check($nv_Request->get_string('checkss', 'post'), $_csrf_key)) {
     if (!empty($array_bid) and !empty($position)) {
         $pos_new = '[' . $position . ']';
 

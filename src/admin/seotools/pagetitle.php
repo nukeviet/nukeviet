@@ -16,7 +16,6 @@ if (!defined('NV_IS_FILE_SEOTOOLS')) {
 $page_title = $nv_Lang->getModule('pagetitle');
 
 $array_config = [];
-$csrf_key = $module_name . '_' . $op . '_' . $admin_info['admin_id'];
 if (csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
     $pageTitleMode = $nv_Request->get_title('pageTitleMode', 'post', '', 1);
     if (isset($global_config['pageTitleMode'])) {

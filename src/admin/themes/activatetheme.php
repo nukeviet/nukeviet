@@ -14,8 +14,8 @@ if (!defined('NV_IS_FILE_THEMES')) {
 }
 
 $selectthemes = $nv_Request->get_title('theme', 'post', '');
-$csrf_key = $module_name . '_' . $admin_info['admin_id'] . '_' . $selectthemes;
-if (!csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key) or empty($selectthemes) or !(preg_match($global_config['check_theme'], $selectthemes) or preg_match($global_config['check_theme_mobile'], $selectthemes))) {
+$_csrf_key = $module_name . '_' . $admin_info['admin_id'] . '_' . $selectthemes;
+if (!csrf_check($nv_Request->get_string('checkss', 'post'), $_csrf_key) or empty($selectthemes) or !(preg_match($global_config['check_theme'], $selectthemes) or preg_match($global_config['check_theme_mobile'], $selectthemes))) {
     exit();
 }
 

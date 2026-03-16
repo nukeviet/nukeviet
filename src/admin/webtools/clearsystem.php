@@ -45,8 +45,6 @@ if (defined('NV_IS_GODADMIN')) {
     $clears = array_merge($clears, ['clearfiletemp', 'clearerrorlogs', 'clearip_logs']);
 }
 
-$csrf_key = $module_name . '_' . $op . '_' . $admin_info['admin_id'];
-
 if (csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key) and $nv_Request->isset_request('deltype', 'post')) {
     $deltype = $nv_Request->get_typed_array('deltype', 'post', 'string', []);
     $deltype = array_intersect($deltype, $clears);

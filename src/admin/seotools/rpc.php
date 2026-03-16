@@ -15,10 +15,8 @@ if (!defined('NV_IS_FILE_SEOTOOLS')) {
 
 $page_title = $nv_Lang->getModule('rpc_setting');
 
-$csrf_key = $module_name . '_' . $op . '_' . $admin_info['admin_id'];
-
 if ($nv_Request->isset_request('submitprcservice', 'post')) {
-    if (!csrf_check($nv_Request->get_title('checkss', 'post', ''), $csrf_key)) {
+    if (!csrf_check($nv_Request->get_title('checkss', 'post'), $csrf_key)) {
         nv_jsonOutput([
             'status' => 'error',
             'mess' => 'Error session!'

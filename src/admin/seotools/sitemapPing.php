@@ -122,7 +122,6 @@ if ($global_config['rewrite_enable'] and $global_config['check_rewrite_file']) {
 } else {
     $url_sitemap = NV_MY_DOMAIN . NV_BASE_SITEURL . 'index.php?' . NV_NAME_VARIABLE . '=SitemapIndex' . $global_config['rewrite_endurl'];
 }
-$csrf_key = $module_name . '_' . $op . '_' . $admin_info['admin_id'];
 
 // Lưu cấu hình các máy chủ ping
 if (csrf_check($nv_Request->get_string('checkss2', 'post'), $csrf_key) and empty($global_config['idsite'])) {

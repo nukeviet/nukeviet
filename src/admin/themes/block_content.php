@@ -108,8 +108,8 @@ if ($nv_Request->isset_request('get_dtime_details', 'post')) {
 
 $groups_list = nv_groups_list();
 
-$csrf_key = $module_name . '_' . $op . '_' . $row['bid'];
-if (csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
+$_csrf_key = $module_name . '_' . $op . '_' . $row['bid'];
+if (csrf_check($nv_Request->get_string('checkss', 'post'), $_csrf_key)) {
     $list_file_name = $nv_Request->get_title('file_name', 'post', '', 0);
     $array_file_name = explode('|', $list_file_name);
     if (!isset($array_file_name[1])) {
@@ -598,7 +598,7 @@ $tpl->assign('TEMPLATE', $template);
 
 $row['link'] = nv_htmlspecialchars($row['link']);
 $tpl->assign('CHECKSS_AJAX', csrf_create($module_name . '_block_content_ajax_' . $admin_info['admin_id']));
-$row['checkss'] = csrf_create($csrf_key);
+$row['checkss'] = csrf_create($_csrf_key);
 $row['active_device'] = !empty($row['active']) ? array_map('intval', explode(',', $row['active'])) : [];
 $row['groups_view'] = array_map('intval', explode(',', $row['groups_view']));
 $row['block_global'] = preg_match('/^global\.([a-zA-Z0-9\-\_\.]+)\.php$/', $row['file_name']);

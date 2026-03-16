@@ -22,7 +22,6 @@ $array_config_global['dump_backup_ext'] = $global_config['dump_backup_ext'];
 $array_config_global['dump_interval'] = $global_config['dump_interval'];
 $array_config_global['dump_autobackup'] = $global_config['dump_autobackup'];
 
-$csrf_key = $module_name . '_' . $op . '_' . $admin_info['admin_id'];
 if (csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
     $array_config_global = [];
     $array_config_global['dump_backup_ext'] = $nv_Request->get_title('dump_backup_ext', 'post', '', 1);

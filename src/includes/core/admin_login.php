@@ -78,7 +78,7 @@ $passkey_allowed = !(defined('SSO_SERVER') and (defined('NV_IS_USER_FORUM') or N
 
 // Tạo thử thách đăng nhập passkey
 if ($passkey_allowed and $nv_Request->isset_request('create_challenge', 'post')) {
-    $checkss = $nv_Request->get_title('checkss', 'post', '');
+    $checkss = $nv_Request->get_title('checkss', 'post');
     if (NV_CHECK_SESSION !== $checkss) {
         nv_jsonOutput([
             'status' => 'error',
@@ -99,7 +99,7 @@ if ($passkey_allowed and $nv_Request->isset_request('create_challenge', 'post'))
 
 // Tạo thử thách xác thực passkey
 if ($passkey_allowed and $nv_Request->isset_request('create_auth_challenge', 'post') and !empty($admin_pre_data)) {
-    $checkss = $nv_Request->get_title('checkss', 'post', '');
+    $checkss = $nv_Request->get_title('checkss', 'post');
     if (NV_CHECK_SESSION !== $checkss) {
         nv_jsonOutput([
             'status' => 'error',

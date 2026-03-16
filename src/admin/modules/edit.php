@@ -15,8 +15,6 @@ if (!defined('NV_IS_FILE_MODULES')) {
 
 require NV_ROOTDIR . '/includes/fontawesome.php';
 
-$csrf_key = $module_name . '_' . $op . '_' . $admin_info['admin_id'];
-
 // Lấy icon
 if ($nv_Request->isset_request('ajax_icon', 'post') and csrf_check($nv_Request->get_title('ajax_icon', 'post', ''), $csrf_key)) {
     $respon = [
@@ -69,7 +67,6 @@ if (empty($row)) {
 }
 
 $page_title = $nv_Lang->getModule('edit', $mod);
-$csrf_key = $module_name . '_' . $op . '_' . $admin_info['admin_id'];
 
 $tpl = new \NukeViet\Template\NVSmarty();
 $tpl->setTemplateDir(get_module_tpl_dir('edit.tpl'));

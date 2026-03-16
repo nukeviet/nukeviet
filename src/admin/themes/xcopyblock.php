@@ -23,7 +23,6 @@ $tpl->setTemplateDir(get_module_tpl_dir('xcopyblock.tpl'));
 $tpl->assign('LANG', $nv_Lang);
 $tpl->assign('MODULE_NAME', $module_name);
 $tpl->assign('OP', $op);
-$csrf_key = $module_name . '_' . $op . '_' . $admin_info['admin_id'];
 $tpl->assign('CHECKSS', csrf_create($csrf_key));
 $tpl->assign('SELECTTHEMES', $selectthemes);
 

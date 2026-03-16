@@ -154,7 +154,7 @@ function apicheck($role_object, $array_post, $lang)
 // Thay đổi trạng thái của role
 if ($nv_Request->isset_request('changeStatus', 'post')) {
 
-    if (!csrf_check($nv_Request->get_title('checkss', 'post', ''), $csrf_key)) {
+    if (!csrf_check($nv_Request->get_title('checkss', 'post'), $csrf_key)) {
         nv_jsonOutput([
             'status' => 'error',
             'mess' => $nv_Lang->getGlobal('error_code_11')
@@ -186,7 +186,7 @@ if ($nv_Request->isset_request('changeStatus', 'post')) {
 
 // Xóa role
 if ($nv_Request->isset_request('roledel', 'post')) {
-    if (!csrf_check($nv_Request->get_title('checkss', 'post', ''), $csrf_key)) {
+    if (!csrf_check($nv_Request->get_title('checkss', 'post'), $csrf_key)) {
         nv_jsonOutput([
             'status' => 'error',
             'mess' => $nv_Lang->getGlobal('error_code_11')
@@ -268,7 +268,7 @@ if ($action == 'role') {
     }
 
     if ($nv_Request->isset_request('save', 'post')) {
-        if (!csrf_check($nv_Request->get_title('checkss', 'post', ''), $csrf_key)) {
+        if (!csrf_check($nv_Request->get_title('checkss', 'post'), $csrf_key)) {
             nv_jsonOutput([
                 'status' => 'error',
                 'mess' => $nv_Lang->getGlobal('error_code_11')

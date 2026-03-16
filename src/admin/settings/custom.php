@@ -13,7 +13,7 @@ if (!defined('NV_IS_FILE_SETTINGS')) {
     exit('Stop!!!');
 }
 
-$csrf_key = $module_name . '_' . $op . '_' . $admin_info['admin_id'];
+
 if (csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
     $config_key = $nv_Request->get_typed_array('config_key', 'post', 'title', []);
     $config_value = $nv_Request->get_typed_array('config_value', 'post', 'title', []);

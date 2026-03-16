@@ -31,7 +31,7 @@ if (!empty($contact_allowed['reply'])) {
             ]);
         }
 
-        $checkss = $nv_Request->get_title('checkss', 'post', '');
+        $checkss = $nv_Request->get_title('checkss', 'post');
         $csrf_key = $module_name . '_' . $admin_info['admin_id'];
         if (!csrf_check($checkss, $csrf_key)) {
             nv_jsonOutput([
@@ -167,7 +167,7 @@ if (!empty($contact_allowed['reply'])) {
 
 if (!empty($contact_allowed['exec'])) {
     $db_deps = 'cid IN (' . implode(',', array_keys($contact_allowed['exec'])) . ')';
-    $checkss = $nv_Request->get_title('checkss', 'post', '');
+    $checkss = $nv_Request->get_title('checkss', 'post');
     // Đánh dấu phản hồi đã đọc/chưa đọc, đã xử lý/chưa xử lý
     if ($nv_Request->isset_request('mark', 'post')) {
         if (!csrf_check($checkss, $module_name . '_' . $admin_info['admin_id'])) {

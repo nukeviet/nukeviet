@@ -52,7 +52,6 @@ if ($admin_info['level'] == 1) {
 }
 
 // Đánh dấu đã xem tất cả các thông báo
-$csrf_key = $module_name . '_' . $op . '_' . $admin_info['admin_id'];
 if ($nv_Request->isset_request('notification_reset', 'post')) {
     if (!csrf_check($nv_Request->get_title('checksess', 'post', ''), $csrf_key)) {
         nv_htmlOutput('NO');
@@ -287,7 +286,7 @@ $tpl->assign('DATA', $array_data);
 $tpl->assign('DATA_SEARCH', $array_search);
 $tpl->assign('MODULE_NAME', $module_name);
 $tpl->assign('OP', $op);
-$tpl->assign('CHECKSS', csrf_create($module_name . '_' . $op . '_' . $admin_info['admin_id']));
+$tpl->assign('CHECKSS', csrf_create($csrf_key));
 $tpl->assign('GENERATE_PAGE', nv_generate_page($base_url, $all_pages, $per_page, $page));
 
 $contents = $tpl->fetch('notification.tpl');

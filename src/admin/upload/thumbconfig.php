@@ -16,7 +16,7 @@ if (!defined('NV_ADMIN') or !defined('NV_MAINFILE') or !defined('NV_IS_MODADMIN'
 $nv_Lang->setModule('thumb_default_size_note', $nv_Lang->getModule('thumb_default_size_note', $global_config['thumb_max_width'], $global_config['thumb_max_height']));
 
 if ($nv_Request->isset_request('save', 'post')) {
-    if (!csrf_check($nv_Request->get_title('checkss', 'post', ''), $csrf_upload_key)) {
+    if (!csrf_check($nv_Request->get_title('checkss', 'post'), $csrf_upload_key)) {
         nv_jsonOutput([
             'status' => 'error',
             'mess' => 'Error session!!!'
@@ -122,7 +122,7 @@ if ($nv_Request->isset_request('getexample', 'post')) {
     if (!defined('NV_IS_AJAX')) {
         exit('Wrong URL');
     }
-    if (!csrf_check($nv_Request->get_title('checkss', 'post', ''), $csrf_upload_key)) {
+    if (!csrf_check($nv_Request->get_title('checkss', 'post'), $csrf_upload_key)) {
         nv_jsonOutput([
             'status' => 'error',
             'message' => 'Error session!!!'

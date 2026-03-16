@@ -15,7 +15,6 @@ if (!defined('NV_IS_FILE_AUTHORS')) {
 
 $page_title = $nv_Lang->getModule('module_admin');
 
-$csrf_key = $module_name . '_' . $op . '_' . $admin_info['admin_id'];
 if (defined('NV_IS_AJAX') and csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
     // Thay đổi thứ tự
     if ($nv_Request->isset_request('changeweight', 'post')) {

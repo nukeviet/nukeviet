@@ -42,8 +42,6 @@ $tpl->assign('LANG_EMPTY', '');
 $typelang = $nv_Request->get_title('typelang', 'post,get', '');
 $tpl->assign('TYPELANG', $typelang);
 
-$csrf_key = $module_name . '_' . $op . '_' . $admin_info['admin_id'];
-
 if (!empty($typelang) and $nv_Request->isset_request('savedata', 'post') and csrf_check($nv_Request->get_string('savedata', 'post'), $csrf_key)) {
     $pozlang = $nv_Request->get_array('pozlang', 'post', []);
 

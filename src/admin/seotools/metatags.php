@@ -57,7 +57,6 @@ $vas = [
     '<code>{SITE_EMAIL}</code> (' . $global_config['site_email'] . ')'
 ];
 
-$csrf_key = $module_name . '_' . $op . '_' . $admin_info['admin_id'];
 if (csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
     $metaGroupsName = $nv_Request->get_array('metaGroupsName', 'post');
     $metaGroupsValue = $nv_Request->get_array('metaGroupsValue', 'post');

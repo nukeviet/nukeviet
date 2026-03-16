@@ -14,7 +14,6 @@ if (!defined('NV_IS_FILE_AUTHORS')) {
 }
 
 $page_title = $nv_Lang->getModule('nv_admin_add');
-$csrf_key = $module_name . '_' . $op . '_' . $admin_info['admin_id'];
 
 if (!(defined('NV_IS_GODADMIN') or (defined('NV_IS_SPADMIN') and $global_config['spadmin_add_admin'] == 1))) {
     nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);

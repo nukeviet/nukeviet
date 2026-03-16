@@ -33,7 +33,7 @@ while ($_scratch = $result->fetch(3)) {
 }
 
 // Lưu cấu hình
-$csrf_key = $module_name . '_' . $op . '_' . $admin_info['admin_id'];
+
 if (csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
     $array_config = [];
     $array_config['site_name'] = nv_substr($nv_Request->get_title('site_name', 'post', '', 1), 0, 255);

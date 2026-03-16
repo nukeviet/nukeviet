@@ -39,8 +39,8 @@ $bid = $nv_Request->get_int('bid', 'post');
 
 [$bid, $act] = $db->query('SELECT bid, act FROM ' . NV_BLOCKS_TABLE . '_groups WHERE bid=' . $bid)->fetch(3);
 
-$csrf_key = $module_name . '_block_change_show_' . $bid . '_' . $admin_info['admin_id'];
-if ((int) $bid > 0 and csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
+$_csrf_key = $module_name . '_block_change_show_' . $bid . '_' . $admin_info['admin_id'];
+if ((int) $bid > 0 and csrf_check($nv_Request->get_string('checkss', 'post'), $_csrf_key)) {
     $act = $act ? 0 : 1;
     $db->query('UPDATE ' . NV_BLOCKS_TABLE . '_groups SET act=' . $act . ' WHERE bid=' . $bid);
     $nv_Cache->delMod('themes');

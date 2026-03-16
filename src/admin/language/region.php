@@ -30,8 +30,6 @@ $format_get = [
     'Y-m-d'
 ];
 
-$csrf_key = $module_name . '_' . $op . '_' . $admin_info['admin_id'];
-
 if ($nv_Request->isset_request('saveform', 'post')) {
     if (csrf_check($nv_Request->get_string('saveform', 'post'), $csrf_key)) {
         $respon = [

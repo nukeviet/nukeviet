@@ -246,8 +246,6 @@ function set_access_control_allow_origin($any_origin, $origins)
     return array_values($origins);
 }
 
-$csrf_key = $module_name . '_' . $op . '_' . $admin_info['admin_id'];
-
 $sconfig_file = '';
 $highlight_lang = '';
 if ($sys_info['supports_rewrite'] == 'rewrite_mode_apache') {
@@ -262,7 +260,7 @@ if ($sys_info['supports_rewrite'] == 'rewrite_mode_apache') {
 
 // Lấy nội dung file cấu hình
 if ($nv_Request->isset_request('getSconfigContents', 'post')) {
-    if (!csrf_check($nv_Request->get_title('checkss', 'post', ''), $csrf_key)) {
+    if (!csrf_check($nv_Request->get_title('checkss', 'post'), $csrf_key)) {
         nv_htmlOutput('Error session!!!');
     }
 
@@ -276,7 +274,7 @@ if ($nv_Request->isset_request('getSconfigContents', 'post')) {
 
 // Lấy nội dung tệp cấu hình mặc định theo thiết lập
 if ($nv_Request->isset_request('getSconfigBySettings', 'post')) {
-    if (!csrf_check($nv_Request->get_title('checkss', 'post', ''), $csrf_key)) {
+    if (!csrf_check($nv_Request->get_title('checkss', 'post'), $csrf_key)) {
         nv_htmlOutput('Error session!!!');
     }
 
