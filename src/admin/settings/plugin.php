@@ -21,7 +21,8 @@ if ($nv_Request->isset_request('changeweight', 'post')) {
     if (!defined('NV_IS_AJAX')) {
         exit('Wrong URL!!!');
     }
-    if ($nv_Request->get_title('checkss', 'post', '') !== NV_CHECK_SESSION) {
+    $csrf_key = $module_name . '_' . $op . '_' . $admin_info['admin_id'];
+    if (!csrf_check($nv_Request->get_title('checkss', 'post', ''), $csrf_key)) {
         nv_jsonOutput([
             'success' => 0,
             'text' => 'Error session!!!'
@@ -69,7 +70,8 @@ if ($nv_Request->isset_request('del', 'post')) {
     if (!defined('NV_IS_AJAX')) {
         exit('Wrong URL!!!');
     }
-    if ($nv_Request->get_title('checkss', 'post', '') !== NV_CHECK_SESSION) {
+    $csrf_key = $module_name . '_' . $op . '_' . $admin_info['admin_id'];
+    if (!csrf_check($nv_Request->get_title('checkss', 'post', ''), $csrf_key)) {
         nv_jsonOutput([
             'success' => 0,
             'text' => 'Error session!!!'
@@ -225,6 +227,12 @@ foreach ($file_plugins as $file_name) {
 
 // Data cho modal chọn module nguồn, đích
 if ($nv_Request->isset_request('loadform', 'post')) {
+    $csrf_key = $module_name . '_' . $op . '_' . $admin_info['admin_id'];
+    if (!csrf_check($nv_Request->get_title('checkss', 'post', ''), $csrf_key)) {
+        nv_jsonOutput([
+            'message' => 'Error session!!!'
+        ]);
+    }
     if (!defined('NV_IS_AJAX')) {
         exit('Wrong URL!!!');
     }
@@ -292,6 +300,12 @@ if ($nv_Request->isset_request('loadform', 'post')) {
 
 // Tích hợp plugin mới
 if ($nv_Request->isset_request('integrate', 'post')) {
+    $csrf_key = $module_name . '_' . $op . '_' . $admin_info['admin_id'];
+    if (!csrf_check($nv_Request->get_title('checkss', 'post', ''), $csrf_key)) {
+        nv_jsonOutput([
+            'message' => 'Error session!!!'
+        ]);
+    }
     if (!defined('NV_IS_AJAX')) {
         exit('Wrong URL!!!');
     }
@@ -378,6 +392,8 @@ $tpl->setTemplateDir(get_module_tpl_dir('plugin.tpl'));
 $tpl->assign('LANG', $nv_Lang);
 $tpl->assign('MODULE_NAME', $module_name);
 $tpl->assign('OP', $op);
+
+$tpl->assign('CHECKSS', csrf_create($module_name . '_' . $op . '_' . $admin_info['admin_id']));
 
 $tpl->assign('ARRAY_AREAS', $array_areas);
 $tpl->assign('SEARCH', $array_search);

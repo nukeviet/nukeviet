@@ -13,6 +13,8 @@ if (!defined('NV_IS_FILE_DATABASE')) {
     exit('Stop!!!');
 }
 
+$csrf_key = $module_name . '_main_' . $admin_info['admin_id'];
+
 $tables = $nv_Request->get_title('tables', 'post');
 
 if (empty($tables)) {
@@ -20,8 +22,8 @@ if (empty($tables)) {
 } else {
     $tables = explode(',', $tables);
 }
-$checkss = $nv_Request->get_title('checkss', 'post', '');
-if ($checkss !== NV_CHECK_SESSION) {
+$checkss = $nv_Request->get_string('checkss', 'post', '');
+if (!csrf_check($checkss, $csrf_key)) {
     nv_htmlOutput('Wrong session!!!');
 }
 

@@ -25,7 +25,8 @@ $(function() {
             type: 'POST',
             url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=categories&nocache=' + new Date().getTime(),
             data: {
-                'changeweight': $(this).data('checksess'),
+                'changeweight': 1,
+                'checkss': $(this).data('checkss'),
                 'catid': catid,
                 'new_weight': weight
             },
@@ -57,7 +58,8 @@ $(function() {
                 type: 'POST',
                 url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=categories&nocache=' + new Date().getTime(),
                 data: {
-                    'delete': btn.data('checksess'),
+                    'delete': 1,
+                    'checkss': btn.data('checkss'),
                     'catid': btn.data('catid')
                 },
                 cache: false,
@@ -93,7 +95,8 @@ $(function() {
                 type: 'POST',
                 url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=main&nocache=' + new Date().getTime(),
                 data: {
-                    'delete': btn.data('checksess'),
+                    'delete': 1,
+                    'checkss': btn.data('checkss'),
                     'emailid': btn.data('emailid')
                 },
                 cache: false,

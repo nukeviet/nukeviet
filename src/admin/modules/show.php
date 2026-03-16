@@ -214,6 +214,9 @@ $tpl->assign('OP', $op);
 
 $tpl->assign('ACT_FUNCS', $act_funcs);
 $tpl->assign('WEIGHT_LIST', $weight_list);
+$tpl->assign('WEI_CHECKSS', csrf_create($module_name . '_change_func_weight'));
+$tpl->assign('SUB_CHECKSS', csrf_create($module_name . '_change_func_submenu'));
+$tpl->assign('VAL_CHECKSS', csrf_create($module_name . '_change_val_func'));
 $tpl->assign('MODULE_VERSION', $module_version);
 $tpl->assign('IN_SUBMENU', $arr_in_submenu);
 $tpl->assign('CHANGE_ALIAS', $fun_change_alias);

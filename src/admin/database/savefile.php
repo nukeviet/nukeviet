@@ -15,6 +15,12 @@ if (!defined('NV_IS_FILE_DATABASE')) {
 
 $page_title = $nv_Lang->getModule('save_data');
 
+$csrf_key = $module_name . '_main_' . $admin_info['admin_id'];
+$checkss = $nv_Request->get_string('checkss', 'post', '');
+if (!csrf_check($checkss, $csrf_key)) {
+    nv_htmlOutput('Wrong session!!!');
+}
+
 $tables = $nv_Request->get_array('tables', 'post', []);
 $type = $nv_Request->get_title('type', 'post', '');
 $ext = $nv_Request->get_title('ext', 'post', '');
@@ -39,7 +45,7 @@ $contents['type'] = ($type != 'str') ? 'all' : 'str';
 $contents['savetype'] = ($ext != 'sql') ? 'gz' : 'sql';
 
 $file_ext = ($contents['savetype'] == 'sql') ? 'sql' : 'sql.gz';
-$file_name = date('Y-m-d-H-i-s') . '_backupdata_' . NV_CHECK_SESSION . '.' . $file_ext;
+$file_name = date('Y-m-d-H-i-s') . '_backupdata_' . session_id() . '.' . $file_ext;
 
 $log_dir = NV_ROOTDIR . '/' . NV_LOGS_DIR . '/dump_backup';
 if ($global_config['idsite']) {

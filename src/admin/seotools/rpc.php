@@ -15,8 +15,10 @@ if (!defined('NV_IS_FILE_SEOTOOLS')) {
 
 $page_title = $nv_Lang->getModule('rpc_setting');
 
+$csrf_key = $module_name . '_' . $op . '_' . $admin_info['admin_id'];
+
 if ($nv_Request->isset_request('submitprcservice', 'post')) {
-    if ($nv_Request->get_title('checkss', 'post', '') !== NV_CHECK_SESSION) {
+    if (!csrf_check($nv_Request->get_title('checkss', 'post', ''), $csrf_key)) {
         nv_jsonOutput([
             'status' => 'error',
             'mess' => 'Error session!'
@@ -45,6 +47,7 @@ $tpl->setTemplateDir(get_module_tpl_dir('rpc_setting.tpl'));
 $tpl->assign('LANG', $nv_Lang);
 $tpl->assign('MODULE_NAME', $module_name);
 $tpl->assign('OP', $op);
+$tpl->assign('CHECKSS', csrf_create($csrf_key));
 
 require NV_ROOTDIR . '/' . NV_DATADIR . '/rpc_services.php';
 

@@ -1076,7 +1076,8 @@ if ($nv_update_config['step'] == 1) {
                 $nv_update_config['updatelog']['data_backuped'] = NV_CURRENTTIME;
                 $NvUpdate->set_data_log($nv_update_config['updatelog']);
 
-                exit($nv_Lang->getModule('update_dump_ok') . ' ' . nv_convertfromBytes($dump[1]) . '<br /><a href="' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=database&amp;' . NV_OP_VARIABLE . '=file&amp;getbackup&amp;t=' . NV_CURRENTTIME . '&amp;p=' . $passphrase . '&amp;ext=' . $file_ext . '&amp;checkss=' . md5($file . NV_CHECK_SESSION) . '" title="' . $nv_Lang->getModule('update_dump_download') . '">' . $nv_Lang->getModule('update_dump_download') . '</a>');
+                $csrf_key_ext = 'database_file_ext_' . NV_CURRENTTIME . '_' . $file_ext;
+                exit($nv_Lang->getModule('update_dump_ok') . ' ' . nv_convertfromBytes($dump[1]) . '<br /><a href="' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=database&amp;' . NV_OP_VARIABLE . '=file&amp;getbackup&amp;t=' . NV_CURRENTTIME . '&amp;p=' . $passphrase . '&amp;ext=' . $file_ext . '&amp;checkss=' . csrf_create($csrf_key_ext) . '" title="' . $nv_Lang->getModule('update_dump_download') . '">' . $nv_Lang->getModule('update_dump_download') . '</a>');
             }
             exit($nv_Lang->getModule('update_dump_exist'));
         }

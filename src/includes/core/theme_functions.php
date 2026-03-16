@@ -212,7 +212,7 @@ function nv_htmlOutput($html, $type = 'html', $custom_headers = [])
  * @param int   $flags
  * @return never
  */
-function nv_jsonOutput($array_data, $flags = 0)
+function nv_jsonOutput($array_data, $flags = JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE)
 {
     nv_htmlOutput(json_encode($array_data, $flags), 'json');
 }

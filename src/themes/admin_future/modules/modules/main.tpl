@@ -25,7 +25,7 @@
                         {foreach from=$mods key=mod_title item=mod}
                         <tr>
                             <td>
-                                <select data-toggle="changeWeiModule" data-mod="{$mod_title}" name="change_weight_{$mod_title}" id="change_weight_{$mod_title}" class="form-select fw-75">
+                                <select data-toggle="changeWeiModule" data-mod="{$mod_title}" name="change_weight_{$mod_title}" id="change_weight_{$mod_title}" class="form-select fw-75" data-checkss="{$mod.wei_checkss}">
                                     {foreach from=$WEIGHT_LIST item=weight}
                                     <option value="{$weight}"{if $weight eq $mod.weight} selected{/if}>{$weight}</option>
                                     {/foreach}

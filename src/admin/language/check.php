@@ -42,7 +42,9 @@ $tpl->assign('LANG_EMPTY', '');
 $typelang = $nv_Request->get_title('typelang', 'post,get', '');
 $tpl->assign('TYPELANG', $typelang);
 
-if (!empty($typelang) and $nv_Request->isset_request('savedata', 'post') and $nv_Request->get_string('savedata', 'post') == NV_CHECK_SESSION) {
+$csrf_key = $module_name . '_' . $op . '_' . $admin_info['admin_id'];
+
+if (!empty($typelang) and $nv_Request->isset_request('savedata', 'post') and csrf_check($nv_Request->get_string('savedata', 'post'), $csrf_key)) {
     $pozlang = $nv_Request->get_array('pozlang', 'post', []);
 
     if (!empty($pozlang) and isset($language_array[$typelang])) {
@@ -133,6 +135,7 @@ if ($nv_Request->isset_request('save', 'post,get') and in_array($sourcelang, $ar
 
 $tpl->assign('ARRAY_LANG_DATA', $array_lang_data);
 $tpl->assign('IS_SUBMIT', $is_submit);
+$tpl->assign('CHECKSS', csrf_create($csrf_key));
 
 $contents = $tpl->fetch('check.tpl');
 

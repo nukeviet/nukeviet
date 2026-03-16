@@ -14,6 +14,7 @@ if (!defined('NV_IS_FILE_SITEINFO')) {
 }
 
 // Cấu hình giao diện
+$csrf_key = $module_name . '_' . $op . '_' . $admin_info['admin_id'];
 $theme_config = get_theme_config();
 $init_widget = [
     'widget_id' => '',
@@ -28,7 +29,7 @@ $init_widget = [
 ];
 
 // Thêm khối vào đầu hoặc cuối
-if ($nv_Request->get_title('addparent', 'post', '') === NV_CHECK_SESSION) {
+if (csrf_check($nv_Request->get_title('addparent', 'post', ''), $csrf_key)) {
     $respon = [
         'error' => 1,
         'message' => 'Error!!!'
@@ -58,7 +59,7 @@ if ($nv_Request->get_title('addparent', 'post', '') === NV_CHECK_SESSION) {
 }
 
 // Xóa khối
-if ($nv_Request->get_title('delete', 'post', '') === NV_CHECK_SESSION) {
+if (csrf_check($nv_Request->get_title('delete', 'post', ''), $csrf_key)) {
     $respon = [
         'error' => 1,
         'message' => 'Error!!!'
@@ -89,7 +90,7 @@ if ($nv_Request->get_title('delete', 'post', '') === NV_CHECK_SESSION) {
 }
 
 // Thêm khối con
-if ($nv_Request->get_title('addchild', 'post', '') === NV_CHECK_SESSION) {
+if (csrf_check($nv_Request->get_title('addchild', 'post', ''), $csrf_key)) {
     $respon = [
         'error' => 1,
         'message' => 'Error!!!'
@@ -130,7 +131,7 @@ if ($nv_Request->get_title('addchild', 'post', '') === NV_CHECK_SESSION) {
 }
 
 // Chỉnh kích thước
-if ($nv_Request->get_title('resize', 'post', '') === NV_CHECK_SESSION) {
+if (csrf_check($nv_Request->get_title('resize', 'post', ''), $csrf_key)) {
     $respon = [
         'error' => 1,
         'message' => 'Error!!!'
@@ -176,7 +177,7 @@ if ($nv_Request->get_title('resize', 'post', '') === NV_CHECK_SESSION) {
 }
 
 // Chọn widget cho khối
-if ($nv_Request->get_title('setwidget', 'post', '') === NV_CHECK_SESSION) {
+if (csrf_check($nv_Request->get_title('setwidget', 'post', ''), $csrf_key)) {
     $respon = [
         'error' => 1,
         'message' => 'Error!!!'
@@ -206,7 +207,7 @@ if ($nv_Request->get_title('setwidget', 'post', '') === NV_CHECK_SESSION) {
 }
 
 // Chọn widget cho khối
-if ($nv_Request->get_title('swapwidget', 'post', '') === NV_CHECK_SESSION) {
+if (csrf_check($nv_Request->get_title('swapwidget', 'post', ''), $csrf_key)) {
     $respon = [
         'error' => 1,
         'message' => 'Error!!!'

@@ -58,7 +58,7 @@ $array_method_update = [
 ];
 
 $file_data_tmp = NV_ROOTDIR . '/' . NV_TEMP_DIR . '/data_samplewrite_' . NV_CHECK_SESSION;
-$file_data_dump = NV_ROOTDIR . '/' . NV_TEMP_DIR . '/data_sampledump_' . NV_CHECK_SESSION . '.php';
+$file_data_dump = NV_ROOTDIR . '/' . NV_TEMP_DIR . '/data_sampledump_' . NV_CHECK_SESSION . '.tmp';
 
 // Xóa gói dữ liệu
 if ($nv_Request->isset_request('delete', 'post')) {
@@ -88,6 +88,12 @@ if ($nv_Request->isset_request('startwrite', 'get')) {
         'finish' => false,
         'reload' => false
     ];
+
+    $checkss = $nv_Request->get_string('checkss', 'post');
+    if (!csrf_check($checkss, $module_name . '_' . $op . '_startwrite')) {
+        $json['message'] = 'Wrong session!!!';
+        nv_jsonOutput($json);
+    }
 
     $array_request = [];
     $array_request['sample_name'] = nv_strtolower(nv_substr($nv_Request->get_title('sample_name', 'post', ''), 0, 50));
@@ -335,6 +341,7 @@ $tpl->setTemplateDir(get_module_tpl_dir('sampledata.tpl'));
 $tpl->assign('LANG', $nv_Lang);
 $tpl->assign('MODULE_NAME', $module_name);
 $tpl->assign('OP', $op);
+$tpl->assign('CHECKSS', csrf_create($module_name . '_' . $op . '_startwrite'));
 $tpl->assign('DATA', $array);
 
 $contents = $tpl->fetch('sampledata.tpl');

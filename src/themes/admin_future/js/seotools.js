@@ -75,7 +75,7 @@ $(function() {
             type: 'POST',
             cache: !1,
             url: url,
-            data: 'sample_data=1',
+            data: 'sample_data=1&checkss=' + $('[name=checkss]', form).val(),
             success: function(result) {
                 icon.removeClass('fa-spinner fa-spin-pulse').addClass(icon.data('icon'));
                 $('[name=jsondata]', form).val(result);
@@ -104,7 +104,7 @@ $(function() {
                 type: 'POST',
                 cache: !1,
                 url: url,
-                data: 'lbinf_delete=1',
+                data: 'lbinf_delete=1&checkss=' + $('[name=checkss]', btn.closest('form')).val(),
                 success: function(result) {
                     window.location.href = result
                 },
@@ -165,7 +165,7 @@ $(function() {
             type: 'POST',
             cache: !1,
             url: url,
-            data: 'logodel=1',
+            data: 'logodel=1&checkss=' + $('[name=checkss]', btn.closest('form')).val(),
             dataType: "json",
             success: function() {
                 location.reload();

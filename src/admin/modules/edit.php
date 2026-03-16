@@ -15,8 +15,10 @@ if (!defined('NV_IS_FILE_MODULES')) {
 
 require NV_ROOTDIR . '/includes/fontawesome.php';
 
+$csrf_key = $module_name . '_' . $op . '_' . $admin_info['admin_id'];
+
 // Lấy icon
-if ($nv_Request->get_title('ajax_icon', 'post', '') === NV_CHECK_SESSION) {
+if ($nv_Request->isset_request('ajax_icon', 'post') and csrf_check($nv_Request->get_title('ajax_icon', 'post', ''), $csrf_key)) {
     $respon = [
         'results' => [],
         'pagination' => [

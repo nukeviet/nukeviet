@@ -75,9 +75,19 @@ foreach ($lang_array_exit as $lang) {
     }
 }
 
+$csrf_key = '';
 if (defined('NV_IS_GODADMIN') or ($global_config['idsite'] > 0 and defined('NV_IS_SPADMIN'))) {
+    $csrf_key = $module_name . '_' . $op . '_' . $admin_info['admin_id'];
+
     // Change weight
-    if ($nv_Request->get_title('changeweight', 'post', '') === NV_CHECK_SESSION) {
+    if ($nv_Request->isset_request('changeweight', 'post')) {
+        if (!csrf_check($nv_Request->get_string('changeweight', 'post'), $csrf_key)) {
+            nv_jsonOutput([
+                'status' => 'error',
+                'mess' => 'Session error!!!'
+            ]);
+        }
+
         if (!defined('NV_IS_AJAX')) {
             nv_jsonOutput([
                 'status' => 'error',
@@ -493,6 +503,7 @@ $tpl->assign('NUM_LANGS', count($array_lang_setup));
 $tpl->assign('LANGUAGE_ARRAY', $language_array);
 $tpl->assign('GCONFIG', $global_config);
 $tpl->assign('OTHER_LANGS', $lang_can_install);
+$tpl->assign('CHECKSS', csrf_create($csrf_key));
 
 $contents = $tpl->fetch('main.tpl');
 

@@ -22,8 +22,16 @@ if (!$sys_info['ftp_support']) {
     include NV_ROOTDIR . '/includes/footer.php';
 }
 
+$csrf_key = $module_name . '_' . $op . '_' . $admin_info['admin_id'];
+
 // Tự động nhận diện Remove Path
 if ($nv_Request->isset_request('autodetect', 'post')) {
+    if (!csrf_check($nv_Request->get_title('checkss', 'post', ''), $csrf_key)) {
+        nv_jsonOutput([
+            'status' => 'error',
+            'mess' => 'Error session!!!'
+        ]);
+    }
     $ftp_server = nv_unhtmlspecialchars($nv_Request->get_title('ftp_server', 'post', '', 1));
     $ftp_port = $nv_Request->get_int('ftp_port', 'post');
     $ftp_user_name = nv_unhtmlspecialchars($nv_Request->get_title('ftp_user_name', 'post', '', 1));
@@ -65,7 +73,6 @@ if ($nv_Request->isset_request('autodetect', 'post')) {
 }
 
 // Lưu cấu hình
-$csrf_key = $module_name . '_' . $op . '_' . $admin_info['admin_id'];
 if ($nv_Request->isset_request('ftp_server', 'post') and csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
     $post = [
         'ftp_server' => $nv_Request->get_title('ftp_server', 'post', '', 1),

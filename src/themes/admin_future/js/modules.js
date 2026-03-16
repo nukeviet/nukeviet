@@ -22,7 +22,7 @@ $(function() {
                 data: params => {
                     return {
                         q: params.term,
-                        ajax_icon: $('body').data('checksess'),
+                        ajax_icon: sel2Fa.data('checkss'),
                         page: params.page || 1
                     };
                 }
@@ -93,7 +93,8 @@ $(function() {
             url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=change_weight&nocache=' + new Date().getTime(),
             data: {
                 mod: btn.data('mod'),
-                new_weight: btn.val()
+                new_weight: btn.val(),
+                checkss: btn.data('checkss')
             },
             dataType: 'json',
             cache: false,
@@ -362,7 +363,7 @@ $(function() {
             type: 'POST',
             cache: false,
             url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=' + type + '&nocache=' + new Date().getTime(),
-            data: 'save=1&id=' + id + '&newvalue=' + encodeURIComponent(newvalue),
+            data: $(this).serialize(),
             dataType: 'json',
             success: function(data) {
                 if ('error' == data.status) {
@@ -388,7 +389,8 @@ $(function() {
             url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=change_func_weight&nocache=' + new Date().getTime(),
             data: {
                 fid: btn.data('func-id'),
-                new_weight: btn.val()
+                new_weight: btn.val(),
+                checkss: btn.data('checkss')
             },
             dataType: 'json',
             cache: false,
@@ -421,7 +423,8 @@ $(function() {
             type: 'POST',
             url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=change_func_submenu&nocache=' + new Date().getTime(),
             data: {
-                id: btn.data('func-id')
+                id: btn.data('func-id'),
+                checkss: btn.data('checkss')
             },
             dataType: 'json',
             cache: false,

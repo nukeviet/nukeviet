@@ -44,7 +44,7 @@
                     <tr>
                         {if not empty($SEARCH.area)}
                         <td class="text-center">
-                            <select id="weight_{$row.pid}" class="form-select fw-100" data-toggle="change_plugin_weight" data-pid="{$row.pid}" data-weight="{$row.weight}" data-checkss="{$smarty.const.NV_CHECK_SESSION}">
+                            <select id="weight_{$row.pid}" class="form-select fw-100" data-toggle="change_plugin_weight" data-pid="{$row.pid}" data-weight="{$row.weight}" data-checkss="{$CHECKSS}">
                                 {for $weight=1 to $MAX_WEIGHT}
                                 <option value="{$weight}"{if $weight eq $row.weight} selected{/if}>{$weight}</option>
                                 {/for}
@@ -66,7 +66,7 @@
                             Plugin trong thư mục includes/plugin là phần cấu hình có thể xóa/thêm tự do
                             *}
                             {if empty($row.plugin_module_file)}
-                            <button class="btn btn-sm btn-danger" data-toggle="nv_del_plugin" data-pid="{$row.pid}" data-checkss="{$smarty.const.NV_CHECK_SESSION}"><i class="fa-solid fa-trash" data-icon="fa-trash"></i> {$LANG->getModule('isdel')}</button>
+                            <button class="btn btn-sm btn-danger" data-toggle="nv_del_plugin" data-pid="{$row.pid}" data-checkss="{$CHECKSS}"><i class="fa-solid fa-trash" data-icon="fa-trash"></i> {$LANG->getModule('isdel')}</button>
                             {/if}
                         </td>
                     </tr>
@@ -111,7 +111,7 @@
                         </td>
                         <td class="text-center text-nowrap">
                             {if not empty($row.area)}
-                            <button data-click="plintegrate" data-hkey="{$hook_key}" data-fkey="{$file_key}" data-hm="{$row.hook_module}" data-rm="{$row.receive_module}" class="btn btn-sm btn-primary"><i class="fa-solid fa-gear" data-icon="fa-gear"></i> {$LANG->getModule('plugin_integrate')}</button>
+                            <button data-click="plintegrate" data-hkey="{$hook_key}" data-fkey="{$file_key}" data-hm="{$row.hook_module}" data-rm="{$row.receive_module}" data-checkss="{$CHECKSS}" class="btn btn-sm btn-primary"><i class="fa-solid fa-gear" data-icon="fa-gear"></i> {$LANG->getModule('plugin_integrate')}</button>
                             {/if}
                         </td>
                     </tr>
@@ -146,7 +146,7 @@
             </div>
             <div class="modal-footer">
                 <div class="text-center">
-                    <button type="button" class="btn btn-primary" data-toggle="submitIntegratePlugin"><i class="fa-solid fa-gear" data-icon="fa-gear"></i> {$LANG->getModule('plugin_integrate')}</button>
+                    <button type="button" class="btn btn-primary" data-toggle="submitIntegratePlugin" data-checkss="{$CHECKSS}"><i class="fa-solid fa-gear" data-icon="fa-gear"></i> {$LANG->getModule('plugin_integrate')}</button>
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><i class="fa-solid fa-xmark text-danger"></i> {$LANG->getGlobal('close')}</button>
                 </div>
             </div>

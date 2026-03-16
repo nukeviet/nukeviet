@@ -18,7 +18,8 @@ if (!defined('NV_IS_FILE_SITEINFO')) {
 $page_title = $nv_Lang->getModule('logs_title');
 
 // Xóa 1 dòng, nhiều dòng log
-if (defined('NV_IS_GODADMIN') and $nv_Request->get_title('delete', 'post', '') === NV_CHECK_SESSION) {
+$csrf_key = $module_name . '_' . $op . '_' . $admin_info['admin_id'];
+if (defined('NV_IS_GODADMIN') and csrf_check($nv_Request->get_title('delete', 'post', ''), $csrf_key)) {
     $id = $nv_Request->get_int('id', 'post', 0);
     $listid = $nv_Request->get_title('listid', 'post', '');
     $listid = $listid . ',' . $id;
@@ -40,6 +41,7 @@ $tpl->setTemplateDir(get_module_tpl_dir('logs.tpl'));
 $tpl->assign('LANG', $nv_Lang);
 $tpl->assign('MODULE_NAME', $module_name);
 $tpl->assign('OP', $op);
+$tpl->assign('CHECKSS', csrf_create($csrf_key));
 
 $page = $nv_Request->get_page('page', 'get', 1);
 $per_page = 30;
@@ -98,7 +100,7 @@ if (!empty($array_search['user'])) {
 }
 
 // Xóa hết kết quả lọc
-if (defined('NV_IS_GODADMIN') and $nv_Request->get_title('truncate', 'post', '') === NV_CHECK_SESSION) {
+if (defined('NV_IS_GODADMIN') and csrf_check($nv_Request->get_title('truncate', 'post', ''), $csrf_key)) {
     $sql = "DELETE FROM " . $db_config['prefix'] . "_logs";
     if (!empty($where)) {
         $sql .= " WHERE " . implode(' AND ', $where);
@@ -243,7 +245,7 @@ foreach ($data as $key => $row) {
 
     $data[$key] = $row;
 }
-$tpl->assign('BASE_URL', $base_url);
+$tpl->assign('BASE_URL', $base_url.'&t='.NV_CURRENTTIME);
 $tpl->assign('DATA', $data);
 $tpl->assign('PAGINATION', nv_generate_page($base_url, $num_items, $per_page, $page));
 $tpl->assign('SEARCH', $array_search);

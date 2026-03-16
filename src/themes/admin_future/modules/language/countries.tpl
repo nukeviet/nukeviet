@@ -34,7 +34,7 @@
                     <tfoot>
                         <tr>
                             <td class="text-center" colspan="3">
-                                <input type="hidden" name="checkss" value="{$smarty.const.NV_CHECK_SESSION}">
+                                <input type="hidden" name="checkss" value="{$CHECKSS}">
                                 <button type="submit" class="btn btn-primary">{$LANG->getModule('nv_admin_submit')}</button>
                             </td>
                         </tr>

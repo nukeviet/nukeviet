@@ -25,6 +25,9 @@ if (defined('NV_IS_GODADMIN') and file_exists(NV_ROOTDIR . '/install/update_data
     $package_update = 1;
 }
 $tpl->assign('PACKAGE_UPDATE', $package_update);
+if ($package_update) {
+    $tpl->assign('CHECKSS_UPD', csrf_create('webtools_deleteupdate_' . $admin_info['admin_id']));
+}
 
 // Cấu hình giao diện
 $theme_config = get_theme_config();
@@ -170,6 +173,7 @@ if (!$get_widget) {
 $tpl->assign('TCONFIG', $theme_config);
 $tpl->assign('WIDGETS', $html_widgets);
 $tpl->assign('IS_EDIT', $is_edit);
+$tpl->assign('CHECKSS', csrf_create($module_name . '_widget_' . $admin_info['admin_id']));
 $tpl->assign('THEME_GRIDS', [
     'xs' => '&lt;576px',
     'sm' => '≥576px',

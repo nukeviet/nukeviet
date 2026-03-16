@@ -1,6 +1,6 @@
 <div class="card mb-4">
     <div class="card-body">
-        <a class="btn btn-primary" href="{$smarty.const.NV_BASE_ADMINURL}index.php?{$smarty.const.NV_LANG_VARIABLE}={$smarty.const.NV_LANG_DATA}&amp;{$smarty.const.NV_NAME_VARIABLE}={$MODULE_NAME}&amp;{$smarty.const.NV_OP_VARIABLE}=download&amp;checkss={$smarty.const.NV_CHECK_SESSION}"><i class="fa-solid fa-download"></i> {$LANG->getModule('download_now')}</a>
+        <a class="btn btn-primary" href="{$smarty.const.NV_BASE_ADMINURL}index.php?{$smarty.const.NV_LANG_VARIABLE}={$smarty.const.NV_LANG_DATA}&amp;{$smarty.const.NV_NAME_VARIABLE}={$MODULE_NAME}&amp;{$smarty.const.NV_OP_VARIABLE}=download&amp;checkss={$CHECKSS}"><i class="fa-solid fa-download"></i> {$LANG->getModule('download_now')}</a>
     </div>
 </div>
 {if empty($ARRAY)}

@@ -56,6 +56,9 @@ $tpl->assign('OP', $op);
 
 // Danh sách DKIM
 if ($nv_Request->isset_request('dkimlist', 'post')) {
+    if (!csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
+        exit(0);
+    }
     $dkim_list = get_dkim_list();
     $dkim_verified_list = get_dkim_verified_list();
 
@@ -71,6 +74,9 @@ if ($nv_Request->isset_request('dkimlist', 'post')) {
 
 // Đọc public key của DKIM
 if ($nv_Request->isset_request('dkimread, domain', 'post')) {
+    if (!csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
+        exit(0);
+    }
     $domain = $nv_Request->get_title('domain', 'post', '');
     $dkim_list = get_dkim_list();
     if (!in_array($domain, $dkim_list, true)) {
@@ -101,6 +107,9 @@ if ($nv_Request->isset_request('dkimread, domain', 'post')) {
 
 // Kiểm tra DKIM
 if ($nv_Request->isset_request('dkimverify, domain', 'post')) {
+    if (!csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
+        exit(0);
+    }
     $domain = $nv_Request->get_title('domain', 'post', '');
     $dkim_list = get_dkim_list();
     if (!in_array($domain, $dkim_list, true)) {
@@ -126,6 +135,9 @@ if ($nv_Request->isset_request('dkimverify, domain', 'post')) {
 
 // Xóa DKIM
 if ($nv_Request->isset_request('dkimdel, domain', 'post')) {
+    if (!csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
+        exit(0);
+    }
     $domain = $nv_Request->get_title('domain', 'post', '');
     $dkim_list = get_dkim_list();
     if (!in_array($domain, $dkim_list, true)) {
@@ -191,6 +203,9 @@ if ($nv_Request->isset_request('dkimadd', 'post') and csrf_check($nv_Request->ge
 
 // Danh sách chữ ký số S/MIME
 if ($nv_Request->isset_request('certlist', 'post')) {
+    if (!csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
+        exit(0);
+    }
     $cert_list = get_cert_list();
 
     $tpl->assign('CERT_LIST', $cert_list);
@@ -204,6 +219,9 @@ if ($nv_Request->isset_request('certlist', 'post')) {
 
 // Đọc chữ kí số S/MIME
 if ($nv_Request->isset_request('smimeread, email', 'post')) {
+    if (!csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
+        exit(0);
+    }
     $email = $nv_Request->get_title('email', 'post', '');
     $cert_list = get_cert_list();
     if (!in_array($email, $cert_list, true)) {
@@ -239,6 +257,9 @@ if ($nv_Request->isset_request('smimeread, email', 'post')) {
 
 // Xoa chung chi
 if ($nv_Request->isset_request('smimedel, email', 'post')) {
+    if (!csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
+        exit(0);
+    }
     $email = $nv_Request->get_title('email', 'post', '');
     $cert_list = get_cert_list();
     if (!in_array($email, $cert_list, true)) {
@@ -427,6 +448,9 @@ if ($nv_Request->isset_request('smimeadd', 'post') and csrf_check($nv_Request->g
 
 // Download S/MIME
 if ($nv_Request->isset_request('smimedownload, email, passphrase', 'post')) {
+    if (!csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
+        exit(0);
+    }
     $email = $nv_Request->get_title('email', 'post', '');
     $cert_list = get_cert_list();
     if (!in_array($email, $cert_list, true)) {

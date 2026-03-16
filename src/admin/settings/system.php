@@ -28,7 +28,7 @@ $closed_site_Modes[3] = $nv_Lang->getModule('closed_site_3');
 // Thay đổi chế độ site
 if (defined('NV_IS_GODADMIN')) {
     if ($nv_Request->isset_request('site_mode', 'post')) {
-        if ($nv_Request->get_title('checkss', 'post', '') !== NV_CHECK_SESSION) {
+        if (!csrf_check($nv_Request->get_title('checkss', 'post', ''), $module_name . '_' . $op . '_site_mode_' . $admin_info['admin_id'])) {
             nv_jsonOutput([
                 'status' => 'error',
                 'mess' => 'Error session!!!'
@@ -330,6 +330,7 @@ $page_title = $nv_Lang->getModule('global_config');
 
 $array_config_define['nv_debug'] = NV_DEBUG;
 $global_config['checkss'] = csrf_create($csrf_key);
+$global_config['checkss_site_mode'] = csrf_create($module_name . '_' . $op . '_site_mode_' . $admin_info['admin_id']);
 $global_config['reopening_date'] = '';
 $global_config['reopening_hour'] = 0;
 $global_config['reopening_min'] = 0;

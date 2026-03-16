@@ -35,7 +35,8 @@ if ($nv_Request->isset_request('checkss', 'post')) {
         'mess' => '',
     ];
 
-    if ($nv_Request->get_title('checkss', 'post', '') !== NV_CHECK_SESSION) {
+    $csrf_key = $module_name . '_' . $op . '_' . $admin_info['admin_id'];
+    if (!csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
         $respon['mess'] = 'Session error!!!';
         nv_jsonOutput($respon);
     }
@@ -70,6 +71,7 @@ $tpl->assign('OP', $op);
 $tpl->assign('COUNTRIES', $countries);
 $tpl->assign('LANG_SETUP', $array_lang_setup);
 $tpl->assign('CONFIG_GEO', $config_geo);
+$tpl->assign('CHECKSS', csrf_create($csrf_key));
 
 $contents = $tpl->fetch('countries.tpl');
 

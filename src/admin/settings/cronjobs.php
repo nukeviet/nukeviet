@@ -15,9 +15,11 @@ if (!defined('NV_IS_FILE_SETTINGS')) {
 
 $page_title = $nv_Lang->getGlobal('mod_cronjobs');
 
+$csrf_key = $module_name . '_' . $op . '_' . $admin_info['admin_id'];
+
 // Lưu thiết lập chung
 if ($nv_Request->isset_request('cfg, cronjobs_launcher', 'post')) {
-    if ($nv_Request->get_title('checkss', 'post', '') !== NV_CHECK_SESSION) {
+    if (!csrf_check($nv_Request->get_title('checkss', 'post', ''), $csrf_key)) {
         nv_jsonOutput([
             'status' => 'error',
             'mess' => 'Error session!!!'
@@ -55,7 +57,7 @@ if ($nv_Request->isset_request('cfg, cronjobs_launcher', 'post')) {
 
 // Lấy thông tin crontab để sửa
 if ($nv_Request->isset_request('crontabinfo', 'post')) {
-    if ($nv_Request->get_title('checkss', 'post', '') !== NV_CHECK_SESSION) {
+    if (!csrf_check($nv_Request->get_title('checkss', 'post', ''), $csrf_key)) {
         nv_jsonOutput([
             'success' => 0,
             'text' => 'Error session!'
@@ -150,7 +152,7 @@ if ($nv_Request->isset_request('cron_changeact', 'post')) {
 
 // Thêm sửa crontab
 if ($nv_Request->isset_request('crontabcontent', 'post')) {
-    if ($nv_Request->get_title('checkss', 'post', '') !== NV_CHECK_SESSION) {
+    if (!csrf_check($nv_Request->get_title('checkss', 'post', ''), $csrf_key)) {
         nv_jsonOutput([
             'status' => 'error',
             'mess' => 'Error session!'
@@ -334,6 +336,7 @@ $tpl->setTemplateDir(get_module_tpl_dir('cronjobs.tpl'));
 $tpl->assign('LANG', $nv_Lang);
 $tpl->assign('MODULE_NAME', $module_name);
 $tpl->assign('OP', $op);
+$tpl->assign('CHECKSS', csrf_create($csrf_key));
 
 $tpl->assign('GCONFIG', $global_config);
 $tpl->assign('CRONLISTS', $contents);
