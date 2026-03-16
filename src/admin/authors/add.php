@@ -14,6 +14,7 @@ if (!defined('NV_IS_FILE_AUTHORS')) {
 }
 
 $page_title = $nv_Lang->getModule('nv_admin_add');
+$csrf_key = $module_name . '_' . $op . '_' . $admin_info['admin_id'];
 
 if (!(defined('NV_IS_GODADMIN') or (defined('NV_IS_SPADMIN') and $global_config['spadmin_add_admin'] == 1))) {
     nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
@@ -21,8 +22,8 @@ if (!(defined('NV_IS_GODADMIN') or (defined('NV_IS_SPADMIN') and $global_config[
 
 // Trang chuyển tiếp kết quả
 if ($nv_Request->get_int('result', 'get', 0)) {
-    $checksess = $nv_Request->get_title('checksess', 'get', '');
-    if ($checksess != NV_CHECK_SESSION) {
+    $checkss = $nv_Request->get_string('checkss', 'get', '');
+    if (!csrf_check($checkss, $csrf_key)) {
         nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
     }
 
@@ -86,7 +87,6 @@ if ($global_config['max_user_admin'] > 0) {
 $adminThemes = [''];
 $adminThemes = array_merge($adminThemes, nv_scandir(NV_ROOTDIR . '/themes', $global_config['check_theme_admin']));
 unset($adminThemes[0]);
-$checkss = md5(NV_CHECK_SESSION . '_' . $module_name . '_' . $op . '_' . $admin_info['userid']);
 
 $editors = [];
 $dirs = nv_scandir(NV_ROOTDIR . '/' . NV_EDITORSDIR, '/^[a-zA-Z0-9_\-]+$/');
@@ -110,7 +110,7 @@ if ($nv_Request->get_int('save', 'post', 0)) {
         'mess' => '',
     ];
 
-    if ($checkss != $nv_Request->get_string('checkss', 'post')) {
+    if (!csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
         $respon['mess'] = 'Error Session, Please close the browser and try again';
         nv_jsonOutput($respon);
     }
@@ -292,7 +292,7 @@ if ($nv_Request->get_int('save', 'post', 0)) {
         }
         nv_insert_logs(NV_LANG_DATA, $module_name, $nv_Lang->getModule('menuadd'), $inf, $admin_info['userid']);
 
-        $respon['redirect'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=add&result=1&checksess=' . NV_CHECK_SESSION;
+        $respon['redirect'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=add&result=1&checkss=' . csrf_create($csrf_key);
         $respon['status'] = 'OK';
         nv_jsonOutput($respon);
     }
@@ -312,7 +312,7 @@ $tpl->assign('LANG', $nv_Lang);
 $tpl->assign('OP', $op);
 $tpl->assign('MODULE_NAME', $module_name);
 
-$tpl->assign('CHECKSS', $checkss);
+$tpl->assign('CHECKSS', csrf_create($csrf_key));
 $tpl->assign('FILTERSQL', $crypt->encrypt($filtersql, NV_CHECK_SESSION));
 $tpl->assign('ADMINTHEMES', $adminThemes);
 $tpl->assign('EDITORS', $editors);

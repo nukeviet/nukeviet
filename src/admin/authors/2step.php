@@ -51,7 +51,7 @@ $error = '';
 // Xác định quyền sửa tài khoản thành viên
 $sql = 'SELECT content FROM ' . NV_USERS_GLOBALTABLE . "_config WHERE config='access_admin'";
 $config_user = $db->query($sql)->fetchColumn();
-$config_user = empty($config_user) ? [] : unserialize($config_user);
+$config_user = empty($config_user) ? [] : unserialize($config_user, NV_UNSERIALIZE_SAFE);
 $manager_user_2step = false;
 if (
     isset($site_mods['users']) and isset($config_user['access_editus']) and !empty($config_user['access_editus'][$admin_info['level']])
@@ -60,6 +60,8 @@ if (
 ) {
     $manager_user_2step = true;
 }
+
+$csrf_key = $module_name . '_' . $op . '_' . $admin_id;
 
 $page_title = $nv_Lang->getModule('2step_manager') . ': ' . $row_user['username'];
 
@@ -74,6 +76,7 @@ $tpl->assign('USER', $row_user);
 $tpl->assign('ADMIN', $row);
 $tpl->assign('ADMIN_INFO', $admin_info);
 $tpl->assign('MANAGER_USER_2STEP', $manager_user_2step);
+$tpl->assign('CHECKSS', csrf_create($csrf_key));
 
 if ($row['admin_id'] == $admin_info['admin_id']) {
     // Xác định các cổng Oauth hỗ trợ
@@ -164,7 +167,7 @@ while ($_row = $result->fetch()) {
 }
 
 // Xóa tất cả
-if ($nv_Request->get_title('delall', 'post', '') === NV_CHECK_SESSION) {
+if ($nv_Request->isset_request('delall', 'post') and csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
     if (!defined('NV_IS_AJAX')) {
         exit('Wrong URL');
     }
@@ -205,7 +208,7 @@ if ($nv_Request->get_title('delall', 'post', '') === NV_CHECK_SESSION) {
 }
 
 // Xóa một tài khoản
-if ($nv_Request->get_title('del', 'post', '') === NV_CHECK_SESSION) {
+if ($nv_Request->isset_request('del', 'post') and csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
     if (!defined('NV_IS_AJAX')) {
         exit('Wrong URL');
     }

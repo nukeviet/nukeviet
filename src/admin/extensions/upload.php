@@ -386,7 +386,7 @@ if ($nv_Request->isset_request('uploaded', 'get')) {
         $error = $nv_Lang->getGlobal('error_zlib_support');
     } elseif (!empty($_FILES['extfile']['error'])) {
         $error = $nv_Lang->getModule('autoinstall_error_uploadfile1', nv_convertfromBytes(NV_UPLOAD_MAX_FILESIZE));
-    } elseif (is_uploaded_file($_FILES['extfile']['tmp_name']) and $nv_Request->get_title('checksess', 'post', '') === md5(NV_CHECK_SESSION . 'submit-ext')) {
+    } elseif (is_uploaded_file($_FILES['extfile']['tmp_name']) and csrf_check($nv_Request->get_string('checksess', 'post'), $module_name . '_upload_' . $admin_info['admin_id'])) {
         if (file_exists($filename)) {
             nv_deletefile($filename);
         }

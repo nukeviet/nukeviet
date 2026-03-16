@@ -88,9 +88,9 @@ for ($i = 0, $count = count($layout); $i < $count; ++$i) {
     }
 }
 
-$checkss = md5(NV_CHECK_SESSION . '_' . $module_name . '_' . $selectthemes . '_' . $admin_info['userid']);
+$csrf_key = $module_name . '_' . $selectthemes . '_' . $admin_info['admin_id'];
 
-if ($checkss == $nv_Request->get_string('checkss', 'post')) {
+if (csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
     if ($nv_Request->isset_request('save', 'post') and $nv_Request->isset_request('func', 'post')) {
         nv_insert_logs(NV_LANG_DATA, $module_name, $nv_Lang->getModule('setup_layout') . ' theme: "' . $selectthemes . '"', '', $admin_info['userid']);
 
@@ -230,7 +230,7 @@ $tpl->assign('LANG', $nv_Lang);
 $tpl->assign('MODULE_NAME', $module_name);
 $tpl->assign('OP', $op);
 
-$tpl->assign('CHECKSS', $checkss);
+$tpl->assign('CHECKSS', csrf_create($csrf_key));
 $tpl->assign('LAYOUT_ARRAY', $layout_array);
 
 $rows = $db->query('SELECT title, custom_title FROM ' . NV_MODULES_TABLE . ' ORDER BY weight ASC')->fetchAll();

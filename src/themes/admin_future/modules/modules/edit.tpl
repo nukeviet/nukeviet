@@ -119,7 +119,7 @@
             <div class="row mb-3">
                 <label for="element_icon" class="col-sm-3 col-form-label text-sm-end">{$LANG->getModule('icon')}</label>
                 <div class="col-sm-4 col-lg-6 col-xxl-5">
-                    <select class="form-select select2-fontawesome" id="element_icon" name="icon" data-placeholder="{$LANG->getModule('icon_placeholder')}">
+                    <select class="form-select select2-fontawesome" id="element_icon" name="icon" data-placeholder="{$LANG->getModule('icon_placeholder')}" data-checkss="{$CHECKSS}">
                         {if not empty($DATA.icon)}
                         <option value="{$DATA.icon}">{$ICON_PACKS[$DATA.icon] ?? $DATA.icon}</option>
                         {/if}

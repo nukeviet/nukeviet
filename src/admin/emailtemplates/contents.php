@@ -224,8 +224,9 @@ if ($emailid) {
 
 $array['showlang'] = NV_LANG_DATA;
 $array['update_for'] = 1;
+$csrf_key = $module_name . '_' . $op . '_' . $emailid;
 
-if ($nv_Request->get_title('saveform', 'post', '') == NV_CHECK_SESSION) {
+if ($nv_Request->isset_request('saveform', 'post') and csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
     if (empty($array['is_system'])) {
         $array['catid'] = $nv_Request->get_int('catid', 'post', 0);
         $array['title'] = $nv_Request->get_typed_array('title', 'post', 'title', []);
@@ -559,6 +560,7 @@ $tpl->assign('FORM_ACTION', $form_action);
 $tpl->assign('DATA', $array);
 $tpl->assign('ERROR', $error);
 $tpl->assign('LANGUAGE_ARRAY', $language_array);
+$tpl->assign('CHECKSS', csrf_create($csrf_key));
 $tpl->assign('CATS', $global_array_cat);
 $tpl->assign('UPLOAD_PATH', NV_UPLOADS_DIR . '/' . $module_upload);
 $tpl->assign('PLUGINS', $array_mplugins);

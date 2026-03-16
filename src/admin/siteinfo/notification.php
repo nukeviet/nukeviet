@@ -52,8 +52,9 @@ if ($admin_info['level'] == 1) {
 }
 
 // Đánh dấu đã xem tất cả các thông báo
+$csrf_key = $module_name . '_' . $op . '_' . $admin_info['admin_id'];
 if ($nv_Request->isset_request('notification_reset', 'post')) {
-    if ($nv_Request->get_title('checksess', 'post', '') !== NV_CHECK_SESSION) {
+    if (!csrf_check($nv_Request->get_title('checksess', 'post', ''), $csrf_key)) {
         nv_htmlOutput('NO');
     }
     nv_insert_logs(NV_LANG_DATA, $module_name, 'READ_ALL_NOTIFICATION', '', $admin_info['userid']);
@@ -95,7 +96,7 @@ if ($nv_Request->isset_request('delete', 'post')) {
         'error' => 1,
         'data' => []
     ];
-    if ($nv_Request->get_title('checksess', 'post', '') !== NV_CHECK_SESSION) {
+    if (!csrf_check($nv_Request->get_title('checksess', 'post', ''), $csrf_key)) {
         nv_jsonOutput($respon);
     }
 
@@ -124,7 +125,7 @@ if ($nv_Request->isset_request('toggle', 'post')) {
         'data' => [],
         'view' => null
     ];
-    if ($nv_Request->get_title('checksess', 'post', '') !== NV_CHECK_SESSION) {
+    if (!csrf_check($nv_Request->get_title('checksess', 'post', ''), $csrf_key)) {
         nv_jsonOutput($respon);
     }
 
@@ -205,7 +206,7 @@ $result = $db->query($db->sql());
 while ($data = $result->fetch()) {
     if (isset($admin_mods[$data['module']]) or isset($site_mods[$data['module']])) {
         $mod = $data['module'];
-        $data['content'] = !empty($data['content']) ? unserialize($data['content']) : '';
+        $data['content'] = !empty($data['content']) ? unserialize($data['content'], NV_UNSERIALIZE_SAFE) : '';
         $data['send_from_id'] = $data['send_from'];
 
         // Hien thi thong bao tu cac module he thong
@@ -286,6 +287,7 @@ $tpl->assign('DATA', $array_data);
 $tpl->assign('DATA_SEARCH', $array_search);
 $tpl->assign('MODULE_NAME', $module_name);
 $tpl->assign('OP', $op);
+$tpl->assign('CHECKSS', csrf_create($module_name . '_' . $op . '_' . $admin_info['admin_id']));
 $tpl->assign('GENERATE_PAGE', nv_generate_page($base_url, $all_pages, $per_page, $page));
 
 $contents = $tpl->fetch('notification.tpl');

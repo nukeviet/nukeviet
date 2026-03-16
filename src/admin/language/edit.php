@@ -29,7 +29,9 @@ if (empty($idfile) or empty($module)) {
     nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=interface');
 }
 
-if ($nv_Request->get_string('savedata', 'get') == NV_CHECK_SESSION) {
+$csrf_key = $module_name . '_' . $op . '_' . $admin_info['admin_id'];
+
+if (csrf_check($nv_Request->get_string('savedata', 'get'), $csrf_key)) {
     $postdata = @file_get_contents('php://input');
     $postdata = json_decode($postdata, true);
 
@@ -124,7 +126,7 @@ if (empty($author_lang)) {
     $array_translator['info'] = '';
     $array_translator['langtype'] = '';
 } else {
-    $array_translator = unserialize($author_lang);
+    $array_translator = unserialize($author_lang, NV_UNSERIALIZE_SAFE);
 }
 
 $modules_exit = nv_scandir(NV_ROOTDIR . '/modules', $global_config['check_module']);
@@ -140,6 +142,7 @@ $tpl->registerPlugin('modifier', 'strencode', 'nv_htmlspecialchars');
 $tpl->assign('FORM_ACTION', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;dirlang=' . $dirlang . '&amp;idfile=' . $idfile);
 $tpl->assign('TRANSLATOR', $array_translator);
 $tpl->assign('EDIT_MODULE', $module);
+$tpl->assign('CHECKSS', csrf_create($csrf_key));
 if ($admin_file == '1') {
     $tpl->assign('MODULE_AREA', $nv_Lang->getModule('nv_lang_admin'));
 } elseif ($admin_file == '0') {

@@ -229,7 +229,7 @@ if ($nv_Request->isset_request('save', 'post')) {
     $default_config_theme = '';
     require NV_ROOTDIR . '/themes/' . $selectthemes . '/config_default.php';
     if (isset($module_config['themes'][$selectthemes])) {
-        $config_theme = unserialize($module_config['themes'][$selectthemes]);
+        $config_theme = unserialize($module_config['themes'][$selectthemes], NV_UNSERIALIZE_SAFE);
         $config_theme = array_replace_recursive($default_config_theme, $config_theme);
     } else {
         $config_theme = $default_config_theme;

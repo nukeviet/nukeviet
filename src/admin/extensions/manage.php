@@ -583,7 +583,7 @@ $tpl->assign('OP', $op);
 
 $tpl->assign('GCONFIG', $global_config);
 $tpl->assign('SYS_INFO', $sys_info);
-$tpl->assign('SUBMIT_CHECKSESS', md5(NV_CHECK_SESSION . 'submit-ext'));
+$tpl->assign('SUBMIT_CHECKSESS', csrf_create($module_name . '_upload_' . $admin_info['admin_id']));
 
 // Array lang setup
 $sql = 'SELECT lang FROM ' . $db_config['prefix'] . '_setup_language WHERE setup=1';

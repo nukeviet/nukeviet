@@ -47,10 +47,10 @@ if (!empty($global_config['over_capacity']) and !defined('NV_IS_GODADMIN')) {
 $selectthemes = (!empty($site_mods[$module_name]['theme'])) ? $site_mods[$module_name]['theme'] : $global_config['site_theme'];
 $layout_array = nv_scandir(NV_ROOTDIR . '/themes/' . $selectthemes . '/layout', $global_config['check_op_layout']);
 $groups_list = nv_groups_list();
-$checkss = md5(NV_CHECK_SESSION . '-' . $module_name . '-' . $op . '-' . $id);
+$csrf_key = $module_name . '_' . $op . '_' . $id;
 
 // Xử lý khi lưu (AJAX)
-if ($checkss == $nv_Request->get_string('checkss', 'post')) {
+if (csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
     $respon = [
         'status' => 'error',
         'mess' => '',
@@ -271,7 +271,7 @@ $tpl->assign('GROUPS_LIST', $groups_list);
 $tpl->assign('ACTIVECOMM', $activecomm);
 $tpl->assign('ARRAY_IMGPOSITION', $array_imgposition);
 $tpl->assign('SCHEMA_TYPES', $schema_types);
-$tpl->assign('CHECKSS', $checkss);
+$tpl->assign('CHECKSS', csrf_create($csrf_key));
 
 $contents = $tpl->fetch('content.tpl');
 

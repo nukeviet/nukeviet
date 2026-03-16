@@ -212,7 +212,7 @@ function nv_htmlOutput($html, $type = 'html', $custom_headers = [])
  * @param int   $flags
  * @return never
  */
-function nv_jsonOutput($array_data, $flags = 0)
+function nv_jsonOutput($array_data, $flags = JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE)
 {
     nv_htmlOutput(json_encode($array_data, $flags), 'json');
 }
@@ -806,7 +806,7 @@ function nv_get_blocks(string $theme, bool $cache = true)
 
     $cache_file = $theme . '_configposition_' . NV_CACHE_PREFIX . '.cache';
     if ($cache and ($cache_data = $nv_Cache->getItem('themes', $cache_file)) != false) {
-        return unserialize($cache_data) ?: [];
+        return unserialize($cache_data, NV_UNSERIALIZE_SAFE) ?: [];
     }
 
     $positions = [];

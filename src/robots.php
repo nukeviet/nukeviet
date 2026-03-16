@@ -18,8 +18,8 @@ $cache_file = NV_ROOTDIR . '/' . NV_DATADIR . '/robots.php';
 if (file_exists($cache_file)) {
     $createTime = filemtime($cache_file);
     include $cache_file;
-    $robots_data = unserialize($cache);
-    $robots_other = unserialize($cache_other);
+    $robots_data = unserialize($cache, NV_UNSERIALIZE_SAFE);
+    $robots_other = unserialize($cache_other, NV_UNSERIALIZE_SAFE);
 } else {
     $createTime = gmmktime(0, 0, 0, date('m'), 1, date('Y'));
 

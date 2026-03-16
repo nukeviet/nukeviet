@@ -85,7 +85,8 @@ if (count($array['pids']) == 1 and $array['pids'][0] == Emf::P_ALL and !empty($e
 $page_title = $nv_Lang->getModule('test');
 $success = false;
 
-if ($nv_Request->get_title('tokend', 'post', '') === NV_CHECK_SESSION) {
+$csrf_key = $module_name . '_' . $op . '_' . $emailid;
+if (csrf_check($nv_Request->get_string('tokend', 'post'), $csrf_key)) {
     // Lấy các email nhận
     $test_tomail = nv_nl2br($nv_Request->get_string('test_tomail', 'post', ''), '|');
     $test_tomail = array_unique(array_filter(array_map('trim', explode('|', $test_tomail))));
@@ -168,7 +169,7 @@ $tpl->assign('DATA', $array);
 $tpl->assign('ERROR', $error);
 $tpl->assign('MODULE_NAME', $module_name);
 $tpl->assign('CATS', $global_array_cat);
-$tpl->assign('TOKEND', NV_CHECK_SESSION);
+$tpl->assign('TOKEND', csrf_create($csrf_key));
 $tpl->assign('MERGE_FIELDS', $merge_fields);
 $tpl->assign('FIELD_DATA', $field_data);
 $tpl->assign('SUCCESS', $success);

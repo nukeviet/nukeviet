@@ -77,7 +77,7 @@
                     </select>
                 </div>
                 <div class="col-6 col-lg-3 col-xl-6">
-                    <input type="hidden" name="checkss" value="{$smarty.const.NV_CHECK_SESSION}">
+                    <input type="hidden" name="checkss" value="{$CHECKSS}">
                     <button data-toggle="actionDbTbls" type="submit" class="btn btn-primary"><i class="fa-solid fa-play" data-icon="fa-play"></i> {$LANG->getModule('submit')}</button>
                 </div>
             </div>

@@ -15,6 +15,13 @@ if (!defined('NV_IS_FILE_MODULES')) {
 
 $func_id = $nv_Request->get_int('id', 'post', 0);
 
+if (!csrf_check($nv_Request->get_string('checkss', 'post'), $module_name . '_change_func_submenu')) {
+    nv_jsonOutput([
+        'success' => 0,
+        'text' => 'Session error!'
+    ]);
+}
+
 if ($func_id > 0) {
     $row = $db->query('SELECT in_submenu FROM ' . NV_MODFUNCS_TABLE . ' WHERE func_id=' . $func_id)->fetch();
     if (!empty($row)) {

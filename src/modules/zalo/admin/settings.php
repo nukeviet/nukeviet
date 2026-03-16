@@ -227,11 +227,11 @@ if ($nv_Request->isset_request('callingcodesLoad', 'post')) {
     exit;
 }
 
-$checkss = md5(NV_CHECK_SESSION . '_' . $module_name . '_' . $op . '_' . $admin_info['userid']);
+$csrf_key = $module_name . '_' . $op . '_' . $admin_info['admin_id'];
 $errormess = '';
 $array_config_site = [];
 
-if ($checkss == $nv_Request->get_string('checkss', 'post') and $nv_Request->get_string('func', 'post', '') == 'webhook') {
+if (csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key) and $nv_Request->get_string('func', 'post', '') == 'webhook') {
     $array_config_site['zaloOASecretKey'] = $nv_Request->get_title('zaloOASecretKey', 'post', '');
     $sth = $db->prepare('UPDATE ' . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = 'sys' AND module = 'site' AND config_name = :config_name");
     foreach ($array_config_site as $config_name => $config_value) {
@@ -246,7 +246,7 @@ if ($checkss == $nv_Request->get_string('checkss', 'post') and $nv_Request->get_
     }
 }
 
-if ($checkss == $nv_Request->get_string('checkss', 'post') and $nv_Request->get_string('func', 'post', '') == 'access_token_copy') {
+if (csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key) and $nv_Request->get_string('func', 'post', '') == 'access_token_copy') {
     $result = [
         'access_token' => $nv_Request->get_title('new_access_token', 'post', ''),
         'refresh_token' => $nv_Request->get_title('new_refresh_token', 'post', '')
@@ -260,7 +260,7 @@ if ($checkss == $nv_Request->get_string('checkss', 'post') and $nv_Request->get_
     ]);
 }
 
-if ($checkss == $nv_Request->get_string('checkss', 'post') and $nv_Request->get_string('func', 'post', '') == 'webhookIPs') {
+if (csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key) and $nv_Request->get_string('func', 'post', '') == 'webhookIPs') {
     $zaloWebhookIPs = $nv_Request->get_textarea('zaloWebhookIPs', 'post', '');
     $zaloWebhookIPs = !empty($zaloWebhookIPs) ? array_map('trim', explode("\n", $zaloWebhookIPs)) : [];
     if (!empty($zaloWebhookIPs)) {
@@ -284,7 +284,7 @@ if ($checkss == $nv_Request->get_string('checkss', 'post') and $nv_Request->get_
     ]);
 }
 
-if ($checkss == $nv_Request->get_string('checkss', 'post') and $nv_Request->get_string('func', 'post', '') == 'zalowebhook_ip_update') {
+if (csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key) and $nv_Request->get_string('func', 'post', '') == 'zalowebhook_ip_update') {
     $_long = nv_scandir(NV_ROOTDIR . '/' . NV_LOGS_DIR . '/zalo_logs', '/^[0-9]+\.' . nv_preg_quote(NV_LOGS_EXT) . '$/');
     if (!empty($_long)) {
         foreach ($_long as $l) {
@@ -310,7 +310,7 @@ if ($checkss == $nv_Request->get_string('checkss', 'post') and $nv_Request->get_
     ]);
 }
 
-if ($checkss == $nv_Request->get_string('checkss', 'post') and $nv_Request->get_string('func', 'post', '') == 'check_zaloip') {
+if (csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key) and $nv_Request->get_string('func', 'post', '') == 'check_zaloip') {
     $expired = NV_CURRENTTIME + 600;
     $sth = $db->prepare('UPDATE ' . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = 'sys' AND module = 'global' AND config_name = 'check_zaloip_expired'");
     $sth->bindParam(':config_value', $expired, PDO::PARAM_STR);
@@ -320,7 +320,7 @@ if ($checkss == $nv_Request->get_string('checkss', 'post') and $nv_Request->get_
     exit();
 }
 
-if ($checkss == $nv_Request->get_string('checkss', 'post') and $nv_Request->get_string('func', 'post', '') == 'settings') {
+if (csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key) and $nv_Request->get_string('func', 'post', '') == 'settings') {
     $array_config_site['zaloOfficialAccountID'] = $nv_Request->get_title('zaloOfficialAccountID', 'post', '');
     $array_config_site['zaloOfficialAccountID'] = preg_replace('/[^0-9]/', '', $array_config_site['zaloOfficialAccountID']);
     $array_config_site['zaloAppID'] = $nv_Request->get_title('zaloAppID', 'post', '');
@@ -341,7 +341,7 @@ if ($checkss == $nv_Request->get_string('checkss', 'post') and $nv_Request->get_
     }
 }
 
-$global_config['checkss'] = $checkss;
+$global_config['checkss'] = csrf_create($csrf_key);
 
 require_once NV_ROOTDIR . '/' . NV_DATADIR . '/vnsubdivisions.php';
 

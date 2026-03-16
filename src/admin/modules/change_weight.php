@@ -16,6 +16,13 @@ if (!defined('NV_IS_FILE_MODULES')) {
 $mod = $nv_Request->get_title('mod', 'post', '');
 $new_weight = $nv_Request->get_int('new_weight', 'post', 0);
 
+if (!csrf_check($nv_Request->get_string('checkss', 'post'), $module_name . '_change_weight')) {
+    nv_jsonOutput([
+        'success' => 0,
+        'text' => 'Session error!'
+    ]);
+}
+
 if (empty($mod) or empty($new_weight) or !preg_match($global_config['check_module'], $mod)) {
     nv_jsonOutput([
         'success' => 0,

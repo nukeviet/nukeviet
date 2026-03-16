@@ -72,7 +72,7 @@ function nv_save_file_admin_config()
     return file_put_contents(NV_ROOTDIR . '/' . NV_DATADIR . '/admin_config.php', $content_config, LOCK_EX);
 }
 
-$checkss = md5(NV_CHECK_SESSION . '_' . $module_name . '_' . $op . '_' . $admin_info['userid']);
+$csrf_key = $module_name . '_' . $op . '_' . $admin_info['admin_id'];
 
 // Xóa tài khoản cấu hình
 if ($nv_Request->isset_request('delid', 'post')) {
@@ -90,8 +90,9 @@ if ($nv_Request->isset_request('delid', 'post')) {
         $respon['message'] = 'No ID';
         nv_jsonOutput($respon);
     }
-    $checkss = $nv_Request->get_title('checkss', 'post', '');
-    if ($checkss !== md5(NV_CHECK_SESSION . '_' . $module_name . '_' . $op . '_' . $delid)) {
+    $checkss = $nv_Request->get_string('checkss', 'post', '');
+    $csrf_key_del = $module_name . '_' . $op . '_' . $delid;
+    if (!csrf_check($checkss, $csrf_key_del)) {
         $respon['message'] = 'Wrong checss!!!';
         nv_jsonOutput($respon);
     }
@@ -113,7 +114,7 @@ $array_iptypes = [
 ];
 
 if ($nv_Request->isset_request('savesetting', 'post')) {
-    if ($checkss == $nv_Request->get_string('checkss', 'post')) {
+    if (csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
         $array_config_global = [];
         $array_config_global['admfirewall'] = $nv_Request->get_int('admfirewall', 'post');
         $array_config_global['block_admin_ip'] = $nv_Request->get_int('block_admin_ip', 'post');
@@ -141,7 +142,7 @@ if ($nv_Request->isset_request('savesetting', 'post')) {
 }
 
 if ($nv_Request->isset_request('submituser', 'post')) {
-    if ($checkss == $nv_Request->get_string('checkss', 'post')) {
+    if (csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
         $uid = $nv_Request->get_int('uid', 'post', 0);
         $username = $nv_Request->get_title('username', 'post', '', 1);
         $password = $nv_Request->get_title('password', 'post', '', 1);
@@ -205,7 +206,7 @@ $uid = $nv_Request->get_int('uid', 'get,post');
 
 // Gửi thông tin IP cấm truy cập
 if ($nv_Request->isset_request('submitip', 'post')) {
-    if ($checkss == $nv_Request->get_string('checkss', 'post')) {
+    if (csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
         $ip_version = $nv_Request->get_int('ip_version', 'post', 4);
         $cid = $nv_Request->get_int('cid', 'post', 0);
         $keyname = $nv_Request->get_title('keyname', 'post', '');
@@ -292,7 +293,7 @@ $tpl->assign('LANG', $nv_Lang);
 
 $tpl->assign('MODULE_NAME', $module_name);
 $tpl->assign('OP', $op);
-$tpl->assign('CHECKSS', $checkss);
+$tpl->assign('CHECKSS', csrf_create($csrf_key));
 $tpl->assign('GCONFIG', $global_config);
 $tpl->assign('ERROR_USER', implode('<br/>', $error_user));
 $tpl->assign('ERROR_IP', implode('<br/>', $error_ip));
@@ -311,7 +312,7 @@ while ($_scratch = $result->fetch(3)) {
         'dbbegintime' => !empty($dbbegintime) ? nv_date_format(1, $dbbegintime) : '',
         'dbendtime' => !empty($dbendtime) ? nv_date_format(1, $dbendtime) : $nv_Lang->getModule('adminip_nolimit'),
         'url_edit' => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;uid=' . $dbid,
-        'checkss' => md5(NV_CHECK_SESSION . '_' . $module_name . '_' . $op . '_' . $dbid)
+        'checkss' => csrf_create($module_name . '_' . $op . '_' . $dbid)
     ];
 }
 $result->closeCursor();
@@ -354,7 +355,7 @@ while ($_scratch = $result->fetch(3)) {
         'dbbegintime' => nv_date_format(1, $dbbegintime),
         'dbendtime' => nv_date_format(1, $dbendtime),
         'url_edit' => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;id=' . $dbid,
-        'checkss' => md5(NV_CHECK_SESSION . '_' . $module_name . '_' . $op . '_' . $dbid)
+        'checkss' => csrf_create($module_name . '_' . $op . '_' . $dbid)
     ];
 }
 $result->closeCursor();

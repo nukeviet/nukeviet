@@ -13,6 +13,8 @@ if (!defined('NV_IS_FILE_DATABASE')) {
     exit('Stop!!!');
 }
 
+$csrf_key = $module_name . '_' . $op . '_' . $admin_info['admin_id'];
+
 $page_title = $nv_Lang->getModule('main');
 
 // Hiển thị danh sách bảng dữ liệu
@@ -25,7 +27,7 @@ if ($nv_Request->get_bool('show_tabs', 'post')) {
         'error' => 1,
         'message' => 'Error!!!',
     ];
-    if ($nv_Request->get_title('checkss', 'post', '') !== NV_CHECK_SESSION) {
+    if (!csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
         $respon['message'] = 'Wrong session!!!';
         nv_jsonOutput($respon);
     }
@@ -78,6 +80,7 @@ if ($nv_Request->get_bool('show_tabs', 'post')) {
     $tpl->assign('DB_TABLES_COUNT', nv_number_format($db_tables_count));
     $tpl->assign('DB_SIZE', $db_size);
     $tpl->assign('DB_TOTALFREE', $db_totalfree);
+    $tpl->assign('CHECKSS', csrf_create($csrf_key));
 
     $respon['error'] = 0;
     $respon['html'] = $tpl->fetch('tables.tpl');
@@ -103,6 +106,7 @@ if ($nv_Request->isset_request('tab', 'get') and preg_match('/^(' . $db_config['
         include NV_ROOTDIR . '/includes/header.php';
         echo $content;
         include NV_ROOTDIR . '/includes/footer.php';
+        exit;
     }
 
     if ($item['engine'] != 'MyISAM') {
@@ -170,6 +174,7 @@ $tpl->assign('LANG', $nv_Lang);
 $tpl->assign('MODULE_NAME', $module_name);
 
 $tpl->assign('DB', $database);
+$tpl->assign('CHECKSS', csrf_create($csrf_key));
 
 $contents = $tpl->fetch('main.tpl');
 

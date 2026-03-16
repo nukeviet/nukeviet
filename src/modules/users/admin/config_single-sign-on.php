@@ -68,7 +68,7 @@ if ($nv_Request->isset_request('save', 'post')) {
 }
 
 if (isset($global_config['config_sso'])) {
-    $_cas_config = unserialize($global_config['config_sso']);
+    $_cas_config = unserialize($global_config['config_sso'], NV_UNSERIALIZE_SAFE);
 } else {
     // Thiết lập các giá trị mặc định.
     $_cas_config = [
@@ -172,7 +172,7 @@ $_query = $db->query($sql);
 
 $fields = [];
 foreach ($_query as $row) {
-    $_language = unserialize($row['language']);
+    $_language = unserialize($row['language'], NV_UNSERIALIZE_SAFE);
     $_field_lock = (isset($_cas_config['config_field_lock'][$row['field']])) ? $_cas_config['config_field_lock'][$row['field']] : '';
     $fields[] = [
         'field' => $row['field'],

@@ -15,7 +15,7 @@
                     {foreach from=$LIST item=row}
                     <tr>
                         <td>
-                            <select class="form-select form-select-sm fw-75" data-toggle="weightcat" data-catid="{$row.catid}" data-checksess="{$smarty.const.NV_CHECK_SESSION}">
+                            <select class="form-select form-select-sm fw-75" data-toggle="weightcat" data-catid="{$row.catid}" data-checkss="{$CHECKSS}">
                                 {for $key=1 to $LISTCOUNT}
                                 <option value="{$key}"{if $key eq $row.weight} selected="selected"{/if}>{$key}</option>
                                 {/for}
@@ -25,7 +25,7 @@
                         <td class="text-center text-nowrap">
                             {if not $row.is_system}
                             <a href="{$BASE_URL}&amp;catid={$row.catid}" class="btn btn-sm btn-secondary"><i class="fa-solid fa-pencil"></i> {$LANG->get('edit')}</a>
-                            <a href="#" class="btn btn-sm btn-danger" data-toggle="delcat" data-checksess="{$smarty.const.NV_CHECK_SESSION}" data-catid="{$row.catid}"><i class="fa-solid fa-trash" data-icon="fa-trash"></i> {$LANG->get('delete')}</a>
+                            <a href="#" class="btn btn-sm btn-danger" data-toggle="delcat" data-checkss="{$CHECKSS}" data-catid="{$row.catid}"><i class="fa-solid fa-trash" data-icon="fa-trash"></i> {$LANG->get('delete')}</a>
                             {/if}
                         </td>
                     </tr>
@@ -61,7 +61,8 @@
             </div>
             <div class="row">
                 <div class="col-sm-8 offset-sm-3">
-                    <button class="btn btn-space btn-primary" type="submit" name="saveform" value="{$smarty.const.NV_CHECK_SESSION}">{$LANG->get('submit')}</button>
+                    <input type="hidden" name="checkss" value="{$CHECKSS}">
+                    <button class="btn btn-space btn-primary" type="submit" name="saveform" value="1">{$LANG->get('submit')}</button>
                 </div>
             </div>
         </form>

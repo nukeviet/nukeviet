@@ -189,6 +189,7 @@ $(function() {
                 'ftp_port': ftp_port,
                 'ftp_user_name': ftp_user_name,
                 'ftp_user_pass': ftp_user_pass,
+                'checkss': $('[name="checkss"]', form).val(),
                 'autodetect': 1
             },
             dataType: "json",
@@ -576,7 +577,8 @@ $(function() {
                 data: {
                     integrate: 1,
                     hook_key: $this.data('hkey'),
-                    file_key: $this.data('fkey')
+                    file_key: $this.data('fkey'),
+                    checkss: $this.data('checkss')
                 },
                 dataType: 'json',
                 cache: false,
@@ -604,7 +606,8 @@ $(function() {
             data: {
                 loadform: 1,
                 hook_key: $this.data('hkey'),
-                file_key: $this.data('fkey')
+                file_key: $this.data('fkey'),
+                checkss: $this.data('checkss')
             },
             dataType: 'json',
             cache: false,
@@ -710,7 +713,8 @@ $(function() {
                 hook_key: mdPCfg.data('hook_key'),
                 file_key: mdPCfg.data('file_key'),
                 hook_module: $('[name="hook_module"]', mdPCfg).val(),
-                receive_module: $('[name="receive_module"]', mdPCfg).val()
+                receive_module: $('[name="receive_module"]', mdPCfg).val(),
+                checkss: btn.data('checkss')
             },
             dataType: 'json',
             cache: false,
@@ -886,7 +890,7 @@ $(function() {
             type: 'POST',
             cache: !1,
             url: $('#dkimaddForm').attr('action'),
-            data: 'dkimlist=1',
+            data: 'dkimlist=1&checkss=' + $('#dkimaddForm [name=checkss]').val(),
             success: function(data) {
                 $('#dkim_list').html(data);
                 $('#collapse-dkim').attr('data-loaded', 'true');
@@ -960,7 +964,8 @@ $(function() {
             url: $('#dkimaddForm').attr('action'),
             data: {
                 'dkimread': 1,
-                'domain': btn.data('domain')
+                'domain': btn.data('domain'),
+                'checkss': $('#dkimaddForm [name=checkss]').val()
             },
             success: function(data) {
                 icon.removeClass('fa-spinner fa-spin-pulse').addClass(icon.data('icon'));
@@ -1003,7 +1008,8 @@ $(function() {
                 url: $('#dkimaddForm').attr('action'),
                 data: {
                     'dkimdel': 1,
-                    'domain': item.data('domain')
+                    'domain': item.data('domain'),
+                    'checkss': $('#dkimaddForm [name=checkss]').val()
                 },
                 success: function() {
                     bootstrap.Modal.getOrCreateInstance('#sign-read').hide();
@@ -1034,7 +1040,8 @@ $(function() {
             url: $('#dkimaddForm').attr('action'),
             data: {
                 'dkimverify': 1,
-                'domain': item.data('domain')
+                'domain': item.data('domain'),
+                'checkss': $('#dkimaddForm [name=checkss]').val()
             },
             dataType: "json",
             success: function(a) {
@@ -1082,7 +1089,7 @@ $(function() {
             type: 'POST',
             cache: !1,
             url: $('#certAddForm').attr('action'),
-            data: 'certlist=1',
+            data: 'certlist=1&checkss=' + $('#certAddForm [name=checkss]').val(),
             success: function(data) {
                 $('#cert_list').html(data);
                 $('#collapse-cert').attr('data-loaded', 'true');
@@ -1157,7 +1164,8 @@ $(function() {
             url: $('#certAddForm').attr('action'),
             data: {
                 'smimeread': 1,
-                'email': btn.data('email')
+                'email': btn.data('email'),
+                'checkss': $('#certAddForm [name=checkss]').val()
             },
             success: function(data) {
                 icon.removeClass('fa-spinner fa-spin-pulse').addClass(icon.data('icon'));
@@ -1200,7 +1208,8 @@ $(function() {
                 url: form.attr('action'),
                 data: {
                     'smimedel': 1,
-                    'email': form.data('email')
+                    'email': form.data('email'),
+                    'checkss': $('#certAddForm [name=checkss]').val()
                 },
                 success: function() {
                     bootstrap.Modal.getOrCreateInstance('#sign-read').hide();

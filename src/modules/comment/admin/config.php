@@ -16,9 +16,9 @@ if (!defined('NV_IS_FILE_ADMIN')) {
 $mod_name = $nv_Request->get_title('mod_name', 'post,get', '');
 
 $groups_list = nv_groups_list();
-$checkss = md5(NV_CHECK_SESSION . '_' . $module_name . '_' . $admin_info['userid']);
+$csrf_key = $module_name . '_' . $admin_info['admin_id'];
 if ($nv_Request->isset_request('save', 'post') and isset($site_mod_comm[$mod_name])) {
-    if ($nv_Request->get_title('checkss', 'post', '') != $checkss) {
+    if (!csrf_check($nv_Request->get_title('checkss', 'post', ''), $csrf_key)) {
         nv_jsonOutput(['status' => 'error', 'mess' => $nv_Lang->getGlobal('error_code_11')]);
     }
     $array_config = [];
@@ -84,7 +84,7 @@ if (!empty($mod_name)) {
     $tpl->assign('MOD_NAME', $mod_name);
     $tpl->assign('DATA', $module_config[$mod_name]);
     $tpl->assign('GROUPS', $groups_list);
-    $tpl->assign('CHECKSS', $checkss);
+    $tpl->assign('CHECKSS', csrf_create($csrf_key));
 
     $admins_mod_name = explode(',', $site_mod_comm[$mod_name]['admins']);
     $admins_module_name = explode(',', $site_mods[$module_name]['admins']);

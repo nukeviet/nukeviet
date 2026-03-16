@@ -2772,7 +2772,7 @@ function parse_csp($json_csp)
 
     $cacheFile = 'csp_' . NV_CACHE_PREFIX . '.cache';
     if (($cache = $nv_Cache->getItem('settings', $cacheFile)) != false) {
-        $_info = unserialize($cache);
+        $_info = unserialize($cache, NV_UNSERIALIZE_SAFE);
         if (!empty($_info['md5']) and $_info['md5'] == $md5) {
             return preg_replace('/nonce\-([^\']+)/', 'nonce-' . $script_nonce, $_info['content']);
         }
@@ -2896,7 +2896,7 @@ function nv_sys_mods($lang = '')
 
     $cache_file = 'smods_' . NV_CACHE_PREFIX . '.cache';
     if (($cache = $nv_Cache->getItem('modules', $cache_file, $lang)) != false) {
-        return unserialize($cache);
+        return unserialize($cache, NV_UNSERIALIZE_SAFE);
     }
 
     $sys_mods = [];
@@ -3226,12 +3226,16 @@ function add_notification($args)
     }
 
     $sth = $db->prepare('INSERT INTO ' . NV_INFORM_GLOBALTABLE . ' (receiver_grs, receiver_ids, sender_role, sender_group, sender_admin, message, link, add_time, exp_time) VALUES
-    (:receiver_grs, :receiver_ids, :sender_role, ' . $data['sender_group'] . ', ' . $data['sender_admin'] . ', :message, :link, ' . $data['add_time'] . ', ' . $data['exp_time'] . ')');
+    (:receiver_grs, :receiver_ids, :sender_role, :sender_group, :sender_admin, :message, :link, :add_time, :exp_time)');
     $sth->bindValue(':receiver_grs', $data['receiver_grs'], PDO::PARAM_STR);
     $sth->bindValue(':receiver_ids', $data['receiver_ids'], PDO::PARAM_STR);
     $sth->bindValue(':sender_role', $data['sender_role'], PDO::PARAM_STR);
+    $sth->bindValue(':sender_group', $data['sender_group'], PDO::PARAM_INT);
+    $sth->bindValue(':sender_admin', $data['sender_admin'], PDO::PARAM_INT);
     $sth->bindValue(':message', $data['message'], PDO::PARAM_STR);
     $sth->bindValue(':link', $data['link'], PDO::PARAM_STR);
+    $sth->bindValue(':add_time', $data['add_time'], PDO::PARAM_INT);
+    $sth->bindValue(':exp_time', $data['exp_time'], PDO::PARAM_INT);
     $sth->execute();
 
     return $db->lastInsertId();
@@ -3851,9 +3855,7 @@ function mload_url_generate($module, $op, $amp = '&amp;', $checkuser = false, $o
  */
 function csrf_create($key)
 {
-    $timestamp = NV_CURRENTTIME;
-
-    return md5(NV_CHECK_SESSION . '_' . $key . '_' . $timestamp) . $timestamp;
+    return hash_hmac('sha256', NV_CHECK_SESSION . '_' . $key . '_' . NV_CURRENTTIME, NV_CACHE_PREFIX) . NV_CURRENTTIME;
 }
 
 /**
@@ -3872,7 +3874,7 @@ function csrf_check($csrf, $key)
     if ($timestamp < (NV_CURRENTTIME - $lifetime) or $timestamp > NV_CURRENTTIME) {
         return false;
     }
-    $expected = md5(NV_CHECK_SESSION . '_' . $key . '_' . $timestamp) . $timestamp;
+    $expected = hash_hmac('sha256', NV_CHECK_SESSION . '_' . $key . '_' . $timestamp, NV_CACHE_PREFIX) . $timestamp;
 
     return hash_equals($expected, $csrf);
 }
@@ -4250,10 +4252,17 @@ function nv_currency_format(float $num, string $lang = '')
     }
 
     switch ($region['currency_display']) {
-        case 3: $num = $region['currency_symbol'] . ' ' . $num; break;
-        case 2: $num = $region['currency_symbol'] . $num; break;
-        case 1: $num = $num . ' ' . $region['currency_symbol']; break;
-        default: $num .= $region['currency_symbol'];
+        case 3:
+            $num = $region['currency_symbol'] . ' ' . $num;
+            break;
+        case 2:
+            $num = $region['currency_symbol'] . $num;
+            break;
+        case 1:
+            $num = $num . ' ' . $region['currency_symbol'];
+            break;
+        default:
+            $num .= $region['currency_symbol'];
     }
 
     return $num;
