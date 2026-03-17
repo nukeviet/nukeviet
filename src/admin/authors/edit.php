@@ -15,7 +15,7 @@ if (!defined('NV_IS_FILE_AUTHORS')) {
 
 $page_title = $nv_Lang->getModule('nv_admin_edit');
 $admin_id = $nv_Request->get_int('admin_id', 'get', 0);
-$csrf_key = $module_name . '_' . $op . '_' . $admin_id;
+$_csrf_key = $module_name . '_' . $op . '_' . $admin_id;
 
 $sql = 'SELECT * FROM ' . NV_AUTHORS_GLOBALTABLE . ' WHERE admin_id=' . $admin_id;
 $row = $db->query($sql)->fetch();
@@ -45,8 +45,7 @@ if (empty($allowed)) {
 
 // Trang chuyển tiếp kết quả
 if ($nv_Request->get_int('result', 'get', 0)) {
-    $checkss = $nv_Request->get_string('checkss', 'get', '');
-    if (!csrf_check($checkss, $csrf_key)) {
+    if (!csrf_check($nv_Request->get_string('checkss', 'get'), $_csrf_key)) {
         nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
     }
 
@@ -131,7 +130,7 @@ if ($nv_Request->get_int('save', 'post', 0)) {
         'mess' => '',
     ];
 
-    if (!csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
+    if (!csrf_check($nv_Request->get_string('checkss', 'post'), $_csrf_key)) {
         $respon['mess'] = 'Error Session, Please close the browser and try again';
         nv_jsonOutput($respon);
     }
@@ -436,7 +435,7 @@ if ($nv_Request->get_int('save', 'post', 0)) {
     if (empty($result['change'])) {
         $redirect = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&id=' . $admin_id;
     } else {
-        $redirect = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&admin_id=' . $admin_id . '&result=1&checkss=' . csrf_create($csrf_key);
+        $redirect = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&admin_id=' . $admin_id . '&result=1&checkss=' . csrf_create($_csrf_key);
         $nv_Request->set_Session('nv_admin_profile', json_encode($result));
     }
 
@@ -496,7 +495,7 @@ $tpl->assign('OP', $op);
 $tpl->assign('MODULE_NAME', $module_name);
 $tpl->assign('USER', $row_user);
 $tpl->assign('ADMIN_ID', $admin_id);
-$tpl->assign('CHECKSS', csrf_create($csrf_key));
+$tpl->assign('CHECKSS', csrf_create($_csrf_key));
 $tpl->assign('DATE_FORMAT', nv_region_config('jsdate_post'));
 
 $position_allowed = 0;

@@ -16,7 +16,7 @@ if (!defined('NV_IS_FILE_ADMIN')) {
 $page_title = $nv_Lang->getModule('draft_list');
 
 // Xóa bỏ 1 hoặc nhiều
-if ($nv_Request->get_title('delete', 'post', '') === NV_CHECK_SESSION) {
+if (csrf_check($nv_Request->get_string('delete', 'post'), $csrf_key)) {
     $id = $nv_Request->get_int('id', 'post', 0);
     $listid = $nv_Request->get_title('listid', 'post', '');
     $listid = $listid . ',' . $id;
@@ -69,6 +69,7 @@ $tpl->setTemplateDir(get_module_tpl_dir('drafts.tpl'));
 $tpl->assign('LANG', $nv_Lang);
 $tpl->assign('MODULE_NAME', $module_name);
 $tpl->assign('OP', $op);
+$tpl->assign('CHECKSS', csrf_create($csrf_key));
 
 $base_url = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op;
 $per_page = 20;

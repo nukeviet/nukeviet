@@ -13,6 +13,7 @@
                 <!-- BEGIN: turnoff_info -->
                 <div class="alert alert-info">{LANG.user_2step_turnoff_info}</div>
                 <!-- END: turnoff_info -->
+                <input type="hidden" name="checkss" value="{CHECKSS}" />
                 <input type="submit" name="turnoff2step" value="{LANG.user_2step_turnoff}" class="btn btn-danger"/>
             </form>
         </div>
@@ -48,6 +49,7 @@
             <p>
                 <label><input type="checkbox" value="1" name="sendmail"/> {LANG.user_2step_sendmail}</label>
             </p>
+            <input type="hidden" name="checkss" value="{CHECKSS}" />
             <input type="submit" name="resetbackupcodes" value="{LANG.user_2step_reset}" class="btn btn-danger"/>
         </form>
     </div>

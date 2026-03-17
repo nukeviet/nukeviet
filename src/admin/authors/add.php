@@ -14,7 +14,6 @@ if (!defined('NV_IS_FILE_AUTHORS')) {
 }
 
 $page_title = $nv_Lang->getModule('nv_admin_add');
-$csrf_key = $module_name . '_' . $op . '_' . $admin_info['admin_id'];
 
 if (!(defined('NV_IS_GODADMIN') or (defined('NV_IS_SPADMIN') and $global_config['spadmin_add_admin'] == 1))) {
     nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
@@ -22,8 +21,7 @@ if (!(defined('NV_IS_GODADMIN') or (defined('NV_IS_SPADMIN') and $global_config[
 
 // Trang chuyển tiếp kết quả
 if ($nv_Request->get_int('result', 'get', 0)) {
-    $checkss = $nv_Request->get_string('checkss', 'get', '');
-    if (!csrf_check($checkss, $csrf_key)) {
+    if (!csrf_check($nv_Request->get_string('checkss', 'get'), $csrf_key)) {
         nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
     }
 

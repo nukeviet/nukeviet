@@ -4,6 +4,7 @@
     <input type="hidden" name="action" value="inform_action" />
     <input type="hidden" name="id" value="{DATA.id}" />
     <input type="hidden" name="save" value="1" />
+    <input type="hidden" name="checkss" value="{CHECKSS}" />
     <!-- BEGIN: is_sender_not_select -->
     <input type="hidden" name="sender_role" value="admin" />
     <input type="hidden" name="sender_group" value="0" />

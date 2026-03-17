@@ -22,19 +22,19 @@
             <!-- BEGIN: loop -->
             <tr>
                 <td class="text-center">
-                    <button type="button" class="btn btn-default btn-block" data-toggle="popover" data-container="body" data-title="{LANG.change_weight}" data-bid="{ROW.bid}" data-current-weight="{ROW.weight}">{ROW.weight}</button>
+                    <button type="button" class="btn btn-default btn-block" data-toggle="popover" data-container="body" data-title="{LANG.change_weight}" data-bid="{ROW.bid}" data-current-weight="{ROW.weight}" data-checkss="{CHECKSS}">{ROW.weight}</button>
                 </td>
                 <td class="text-center"><strong>{ROW.bid}</strong></td>
                 <td><a href="{ROW.link}">{ROW.title}</a> (<a href="{ROW.linksite}">{ROW.numnews} {LANG.topic_num_news}</a>)</td>
                 <td class="text-center">
-                    <select class="form-control" id="id_adddefault_{ROW.bid}" onchange="nv_chang_block_cat('{ROW.bid}','adddefault');">
+                    <select class="form-control" id="id_adddefault_{ROW.bid}" onchange="nv_chang_block_cat('{ROW.bid}','adddefault', '{CHECKSS}');">
                         <!-- BEGIN: adddefault -->
                         <option value="{ADDDEFAULT.key}" {ADDDEFAULT.selected}>{ADDDEFAULT.title}</option>
                         <!-- END: adddefault -->
                     </select>
                 </td>
                 <td class="text-center">
-                    <select class="form-control" id="id_numlinks_{ROW.bid}" onchange="nv_chang_block_cat('{ROW.bid}','numlinks');">
+                    <select class="form-control" id="id_numlinks_{ROW.bid}" onchange="nv_chang_block_cat('{ROW.bid}','numlinks', '{CHECKSS}');">
                         <!-- BEGIN: number -->
                         <option value="{NUMBER.key}" {NUMBER.selected}>{NUMBER.title}</option>
                         <!-- END: number -->
@@ -80,7 +80,7 @@ $(function() {
             html: true,
             sanitize: false,
             content: function() {
-                $('.topic_change_weight', ppc).attr('data-bid', $(this).data('bid')).attr('data-current-weight', $(this).data('current-weight'));
+                $('.topic_change_weight', ppc).attr('data-bid', $(this).data('bid')).attr('data-current-weight', $(this).data('current-weight')).attr('data-checkss', $(this).data('checkss'));
                 $('.new-weight', ppc).attr('value', $(this).data('current-weight'));
                 return ppc.html()
             }
@@ -101,7 +101,7 @@ $(function() {
 
             $('body').trigger('click');
             if (new_weight != current_weight) {
-                $.post(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=chang_block_cat&nocache=' + new Date().getTime(), 'bid=' + bid + '&mod=weight&new_vid=' + new_weight, function(res) {
+                $.post(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=chang_block_cat&nocache=' + new Date().getTime(), 'bid=' + bid + '&mod=weight&new_vid=' + new_weight + '&checkss=' + $(this).data('checkss'), function(res) {
                     nv_show_list_block_cat()
                 })
             }

@@ -17,12 +17,12 @@ use NukeViet\Module\users\Shared\Emails;
 
 $page_title = $nv_Lang->getModule('userwait_resend_email');
 $set_active_op = 'user_waiting';
-$csrf_key = $module_name . '_' . $op . '_' . $set_active_op . '_' . $admin_info['admin_id'];
+$_csrf_key = $module_name . '_' . $set_active_op . '_' . $admin_info['admin_id'];
 
 if ($nv_Request->isset_request('ajax', 'post')) {
     $per_email = $nv_Request->get_int('per_email', 'post', 0);
     $offset = $nv_Request->get_int('offset', 'post', 0);
-    $tokend = $nv_Request->get_title('tokend', 'post', '');
+    $checkss = $nv_Request->get_title('checkss', 'post', '');
     $useriddel = array_unique(array_filter(array_map('trim', explode(',', $nv_Request->get_title('useriddel', 'post', '')))));
     $useriddel = array_map('intval', $useriddel);
 
@@ -32,7 +32,7 @@ if ($nv_Request->isset_request('ajax', 'post')) {
         'useriddel' => '',
     ];
 
-    if (csrf_check($tokend, $csrf_key) and $per_email > 0 and $offset >= 0) {
+    if (csrf_check($checkss, $_csrf_key) and $per_email > 0 and $offset >= 0) {
         delOldRegAccount();
         $sql = 'SELECT * FROM ' . NV_MOD_TABLE . '_reg';
         if ($global_config['idsite'] > 0) {
@@ -113,7 +113,7 @@ if ($nv_Request->isset_request('ajax', 'post')) {
 $tpl = new \NukeViet\Template\NVSmarty();
 $tpl->setTemplateDir(get_module_tpl_dir('user_waiting_remail.tpl'));
 $tpl->assign('LANG', $nv_Lang);
-$tpl->assign('TOKEND', csrf_create($csrf_key));
+$tpl->assign('CHECKSS', csrf_create($_csrf_key));
 $contents = $tpl->fetch('user_waiting_remail.tpl');
 
 include NV_ROOTDIR . '/includes/header.php';

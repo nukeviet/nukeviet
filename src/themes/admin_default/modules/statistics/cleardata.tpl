@@ -6,6 +6,7 @@
         <!-- END: result -->
         <form method="post" action="{FORM_ACTION}" id="formClearStatistics" data-msg="{LANG.clear_confirm}">
             <input type="hidden" name="save" value="1"/>
+            <input type="hidden" name="checkss" value="{CHECKSS}"/>
             <div class="list-group">
                 <!-- BEGIN: clearalllang1 -->
                 <div class="list-group-item">

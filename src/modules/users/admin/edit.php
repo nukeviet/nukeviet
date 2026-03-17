@@ -68,6 +68,12 @@ if ($admin_info['admin_id'] == $userid and $admin_info['safemode'] == 1) {
 
 // Yêu cầu đăng nhập lại
 if ($nv_Request->isset_request('forcedrelogin', 'post')) {
+    if (!csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
+        nv_jsonOutput([
+            'status' => 'error',
+            'mess' => 'Error Session, Please close the browser and try again'
+        ]);
+    }
     forcedrelogin($userid);
     nv_jsonOutput([
         'status' => 'OK',
@@ -77,6 +83,12 @@ if ($nv_Request->isset_request('forcedrelogin', 'post')) {
 
 // Hủy yêu cầu xóa dữ liệu
 if ($nv_Request->isset_request('canceldeletion', 'post')) {
+    if (!csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
+        nv_jsonOutput([
+            'status' => 'error',
+            'mess' => 'Error Session, Please close the browser and try again'
+        ]);
+    }
     nv_insert_logs(NV_LANG_DATA, $module_name, 'admin_cancel_request_deletion', 'User ID:' . $userid, $admin_info['admin_id']);
 
     $sql = "UPDATE " . NV_MOD_TABLE . " SET delete_at=0 WHERE userid=" . $userid;
@@ -116,6 +128,12 @@ if ($nv_Request->isset_request('canceldeletion', 'post')) {
 
 // Yêu cầu thay đổi mật khẩu
 if ($nv_Request->isset_request('psr', 'post')) {
+    if (!csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
+        nv_jsonOutput([
+            'status' => 'error',
+            'mess' => 'Error Session, Please close the browser and try again'
+        ]);
+    }
     if ($nv_Request->isset_request('type', 'post')) {
         $type = $nv_Request->get_int('type', 'post', 0);
         if ($type == 1 or $type == 2) {
@@ -163,6 +181,12 @@ if ($nv_Request->isset_request('psr', 'post')) {
 
 // Yêu cầu thay đổi email
 if ($nv_Request->isset_request('esr', 'post')) {
+    if (!csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
+        nv_jsonOutput([
+            'status' => 'error',
+            'mess' => 'Error Session, Please close the browser and try again'
+        ]);
+    }
     if ($nv_Request->isset_request('type', 'post')) {
         $type = $nv_Request->get_int('type', 'post', 0);
         if ($type == 1 or $type == 2) {
@@ -226,7 +250,6 @@ if (defined('NV_EDITOR')) {
 
 $access_passus = (isset($access_admin['access_passus'][$admin_info['level']]) and $access_admin['access_passus'][$admin_info['level']] == 1) ? true : false;
 $_user = $custom_fields = [];
-$csrf_key = $module_name . '_' . $op . '_' . $userid . '_' . $admin_info['admin_id'];
 if ($nv_Request->isset_request('confirm', 'post')) {
     if (!csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
         nv_jsonOutput([
@@ -562,7 +585,7 @@ if ($nv_Request->isset_request('confirm', 'post')) {
 $_user = $row;
 $_user['password1'] = $_user['password2'] = '';
 $_user['in_groups'] = $array_old_groups;
-$_user['checkss'] = $checkss;
+$_user['checkss'] = csrf_create($csrf_key);
 
 $sql = 'SELECT * FROM ' . NV_MOD_TABLE . '_info WHERE userid=' . $userid;
 $result = $db->query($sql);

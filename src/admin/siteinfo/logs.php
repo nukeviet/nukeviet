@@ -18,7 +18,7 @@ if (!defined('NV_IS_FILE_SITEINFO')) {
 $page_title = $nv_Lang->getModule('logs_title');
 
 // Xóa 1 dòng, nhiều dòng log
-$csrf_key = $module_name . '_' . $op . '_' . $admin_info['admin_id'];
+
 if (defined('NV_IS_GODADMIN') and csrf_check($nv_Request->get_title('delete', 'post', ''), $csrf_key)) {
     $id = $nv_Request->get_int('id', 'post', 0);
     $listid = $nv_Request->get_title('listid', 'post', '');

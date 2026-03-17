@@ -17,6 +17,9 @@ $grouplist = groups_list();
 
 // Kết quả tìm kiếm thành viên
 if ($nv_Request->isset_request('get_user_json', 'post')) {
+    if (!csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
+        nv_jsonOutput(['status' => 'error', 'mess' => $nv_Lang->getGlobal('error_code_11')]);
+    }
     $q = $nv_Request->get_title('q', 'post', '');
     $grid = $nv_Request->get_int('grid', 'post', 0);
 
@@ -68,6 +71,9 @@ $action = $nv_Request->get_title('action', 'post', '');
 
 // Xóa thông báo
 if ($action == 'inform_del') {
+    if (!csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
+        nv_jsonOutput(['status' => 'error', 'mess' => $nv_Lang->getGlobal('error_code_11')]);
+    }
     $id = $nv_Request->get_int('id', 'post', 0);
     if ($id) {
         $where[] = '(mtb.id = ' . $id . ')';
@@ -96,6 +102,9 @@ if ($action == 'inform_del') {
 
 // Thêm/sửa thông báo
 if ($action == 'inform_action') {
+    if (!csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
+        nv_jsonOutput(['status' => 'error', 'mess' => $nv_Lang->getGlobal('error_code_11')]);
+    }
     $id = $nv_Request->get_int('id', 'post', 0);
     $data = [
         'id' => 0,
@@ -369,6 +378,7 @@ if ($action == 'inform_action') {
     $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
     $xtpl->assign('PAGE_URL', $page_url);
     $xtpl->assign('DATA', $data);
+    $xtpl->assign('CHECKSS', csrf_create($csrf_key));
 
     if (!defined('NV_IS_SPADMIN')) {
         $xtpl->parse('main.is_sender_not_select');
@@ -616,6 +626,7 @@ $xtpl = new XTemplate('main.tpl', NV_ROOTDIR . '/themes/' . $global_config['modu
 $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
 $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
 $xtpl->assign('PAGE_URL', $page_url);
+$xtpl->assign('CHECKSS', csrf_create($csrf_key));
 
 if (defined('NV_IS_SPADMIN')) {
     $filters = [

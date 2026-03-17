@@ -15,7 +15,7 @@ if (!defined('NV_IS_FILE_ADMIN')) {
 
 use NukeViet\Module\news\Shared\Logs;
 
-if ($nv_Request->isset_request('checkss', 'get') and $nv_Request->get_string('checkss', 'get') == NV_CHECK_SESSION) {
+if ($nv_Request->isset_request('checkss', 'get') and csrf_check($nv_Request->get_string('checkss', 'get'), $_csrf_key)) {
     $listid = $nv_Request->get_string('listid', 'get');
     $id_array = array_map('intval', explode(',', $listid));
 

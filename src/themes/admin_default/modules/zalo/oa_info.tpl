@@ -82,7 +82,11 @@
 
 <form id="oa-info-update" method="POST" action="{FORM_ACTION}">
     <input type="hidden" name="oa_info_update" value="1" />
+    <input type="hidden" name="checkss" value="{CHECKSS}" />
 </form>
+<script>
+    var checkss = '{CHECKSS}';
+</script>
 <!-- END: main -->
 
 <!-- BEGIN: oa_clear -->
@@ -90,5 +94,6 @@
 <button type="button" class="btn btn-primary" data-toggle="oa_clear">{LANG.oa_clear}</button>
 <form id="oa-clear" method="POST" action="{FORM_ACTION}">
     <input type="hidden" name="oa_clear" value="1" />
+    <input type="hidden" name="checkss" value="{CHECKSS}" />
 </form>
 <!-- END: oa_clear -->

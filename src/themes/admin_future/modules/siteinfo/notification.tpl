@@ -63,7 +63,7 @@
                                     {$row.title}
                                     {if not empty($row.link)}
                                     <div class="mt-1">
-                                        <a href="{$row.link}" target="_blank" data-toggle="openNotiLink" data-id="{$row.id}"><i class="fa-solid fa-arrow-up-right-from-square" data-icon="fa-arrow-up-right-from-square"></i> {$LANG->getModule('open_link')}</a>
+                                        <a href="{$row.link}" target="_blank" data-toggle="openNotiLink" data-id="{$row.id}" data-checkss="{$CHECKSS}"><i class="fa-solid fa-arrow-up-right-from-square" data-icon="fa-arrow-up-right-from-square"></i> {$LANG->getModule('open_link')}</a>
                                     </div>
                                     {/if}
                                 </div>
@@ -77,11 +77,11 @@
                         </td>
                         <td class="text-end text-nowrap">
                             {if not $row.view}
-                            <a title="{$LANG->get('notification_make_read')}" href="#" class="btn btn-sm btn-secondary" data-toggle="toggleNotification" data-id="{$row.id}"><i class="fa-solid fa-eye" data-icon="fa-eye"></i></a>
+                            <a title="{$LANG->get('notification_make_read')}" href="#" class="btn btn-sm btn-secondary" data-toggle="toggleNotification" data-id="{$row.id}" data-checkss="{$CHECKSS}"><i class="fa-solid fa-eye" data-icon="fa-eye"></i></a>
                             {else}
-                            <a title="{$LANG->get('notification_make_unread')}" href="#" class="btn btn-sm btn-secondary" data-toggle="toggleNotification" data-id="{$row.id}"><i class="fa-solid fa-eye-slash" data-icon="fa-eye-slash"></i></a>
+                            <a title="{$LANG->get('notification_make_unread')}" href="#" class="btn btn-sm btn-secondary" data-toggle="toggleNotification" data-id="{$row.id}" data-checkss="{$CHECKSS}"><i class="fa-solid fa-eye-slash" data-icon="fa-eye-slash"></i></a>
                             {/if}
-                            <a title="{$LANG->get('delete')}" href="#" class="btn btn-sm btn-danger" data-toggle="delNotification" data-id="{$row.id}"><i class="fa-solid fa-trash" data-icon="fa-trash"></i></a>
+                            <a title="{$LANG->get('delete')}" href="#" class="btn btn-sm btn-danger" data-toggle="delNotification" data-id="{$row.id}" data-checkss="{$CHECKSS}"><i class="fa-solid fa-trash" data-icon="fa-trash"></i></a>
                         </td>
                     </tr>
                     {/foreach}
@@ -97,7 +97,7 @@
                 </div>
                 <div class="input-group me-1 my-1">
                     <div class="dropdown">
-                        <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" data-checkss="{$CHECKSS}">
                             {$LANG->getGlobal('select_actions')}
                         </button>
                         <ul class="dropdown-menu">

@@ -14,7 +14,6 @@ if (!defined('NV_IS_FILE_SITEINFO')) {
 }
 
 // Cấu hình giao diện
-$csrf_key = $module_name . '_' . $op . '_' . $admin_info['admin_id'];
 $theme_config = get_theme_config();
 $init_widget = [
     'widget_id' => '',

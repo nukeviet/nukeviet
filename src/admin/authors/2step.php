@@ -61,7 +61,7 @@ if (
     $manager_user_2step = true;
 }
 
-$csrf_key = $module_name . '_' . $op . '_' . $admin_id;
+$_csrf_key = $module_name . '_' . $op . '_' . $admin_id;
 
 $page_title = $nv_Lang->getModule('2step_manager') . ': ' . $row_user['username'];
 
@@ -76,7 +76,7 @@ $tpl->assign('USER', $row_user);
 $tpl->assign('ADMIN', $row);
 $tpl->assign('ADMIN_INFO', $admin_info);
 $tpl->assign('MANAGER_USER_2STEP', $manager_user_2step);
-$tpl->assign('CHECKSS', csrf_create($csrf_key));
+$tpl->assign('CHECKSS', csrf_create($_csrf_key));
 
 if ($row['admin_id'] == $admin_info['admin_id']) {
     // Xác định các cổng Oauth hỗ trợ
@@ -167,7 +167,7 @@ while ($_row = $result->fetch()) {
 }
 
 // Xóa tất cả
-if ($nv_Request->isset_request('delall', 'post') and csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
+if ($nv_Request->isset_request('delall', 'post') and csrf_check($nv_Request->get_string('checkss', 'post'), $_csrf_key)) {
     if (!defined('NV_IS_AJAX')) {
         exit('Wrong URL');
     }
@@ -208,7 +208,7 @@ if ($nv_Request->isset_request('delall', 'post') and csrf_check($nv_Request->get
 }
 
 // Xóa một tài khoản
-if ($nv_Request->isset_request('del', 'post') and csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
+if ($nv_Request->isset_request('del', 'post') and csrf_check($nv_Request->get_string('checkss', 'post'), $_csrf_key)) {
     if (!defined('NV_IS_AJAX')) {
         exit('Wrong URL');
     }

@@ -17,7 +17,7 @@
 </div>
 <!-- END: searchform -->
 <div class="table-responsive">
-    <table class="table table-striped table-bordered table-hover">
+    <table class="table table-striped table-bordered table-hover" data-checkss="{CONTENTS.checkss}">
         <caption><em class="fa fa-file-text-o">&nbsp;</em>{CONTENTS.caption}</caption>
         <!-- BEGIN: nv_banner_weight -->
         <col style="white-space:nowrap" />
@@ -69,7 +69,7 @@ $(function() {
             $.ajax({
                 type: 'POST',
                 url: url + '&nocache=' + new Date().getTime(),
-                data: '',
+                data: 'checkss=' + $(this).closest('table').data('checkss'),
                 success: function(data) {
                     alert(data);
                     location.reload();

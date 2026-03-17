@@ -2,7 +2,7 @@
 <!-- BEGIN: notexistmod -->
 <div class="infook" id="infodetectedupg">
     {LANG.updatemod_notexist}<br />
-    <strong><a class="delete_update_backage" data-checksess="{NV_CHECK_SESSION}" href="#" title="{LANG.update_package_delete}">{LANG.update_package_delete}</a></strong>
+    <strong><a class="delete_update_backage" data-checkss="{DELETE_CHECKSS}" href="#" title="{LANG.update_package_delete}">{LANG.update_package_delete}</a></strong>
 </div>
 <!-- END: notexistmod -->
 <!-- BEGIN: infoupdate -->
@@ -77,7 +77,7 @@
 <!-- BEGIN: cannotupdate -->
 <div class="infoerror" id="infodetectedupg">
     {DATA.ability}.<br />
-    <strong><a class="delete_update_backage" data-checksess="{NV_CHECK_SESSION}" href="#" title="{LANG.update_package_delete}">{LANG.update_package_delete}</a></strong>
+    <strong><a class="delete_update_backage" data-checkss="{DELETE_CHECKSS}" href="#" title="{LANG.update_package_delete}">{LANG.update_package_delete}</a></strong>
 </div>
 <!-- END: cannotupdate -->
 <!-- END: infoupdate -->

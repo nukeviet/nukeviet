@@ -50,6 +50,9 @@ if ($nv_Request->isset_request('togglepreviewtheme', 'post')) {
         'status' => 'ERROR',
         'message' => ''
     ];
+    if (!csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
+        nv_jsonOutput($array);
+    }
     $theme = $nv_Request->get_title('theme', 'post', '');
     if (in_array($theme, $theme_list, true)) {
         $array['status'] = 'SUCCESS';

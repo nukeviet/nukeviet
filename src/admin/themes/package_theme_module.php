@@ -13,7 +13,7 @@ if (!defined('NV_IS_FILE_THEMES')) {
     exit('Stop!!!');
 }
 
-$csrf_key = $module_name . '_' . $op . '_' . $admin_info['admin_id'];
+
 $page_title = $nv_Lang->getModule('package_theme_module');
 
 if (csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
@@ -57,7 +57,7 @@ if (csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
 
             nv_insert_logs(NV_LANG_DATA, $module_name, $nv_Lang->getModule('package_theme_module'), 'file name : ' . $themename . '_' . $all_module_file . '.zip', $admin_info['userid']);
 
-            $linkgetfile = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=getfile&amp;mod=nv4_theme_' . $themename . '_' . $all_module_file . '.zip&amp;checkss=' . md5($file_name . NV_CHECK_SESSION) . '&amp;filename=' . $file_name;
+            $linkgetfile = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=getfile&amp;mod=nv4_theme_' . $themename . '_' . $all_module_file . '.zip&amp;checkss=' . csrf_create($file_name) . '&amp;filename=' . $file_name;
 
             nv_jsonOutput([
                 'status' => 'success',

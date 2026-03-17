@@ -12,6 +12,7 @@
 
 <form id="frm" method="post" enctype="multipart/form-data" action="{CONTENTS.action}">
     <input type="hidden" value="1" name="save" id="save" />
+    <input type="hidden" value="{CONTENTS.checkss}" name="checkss" />
     <div class="table-responsive">
         <table class="table table-striped table-bordered table-hover">
             <col class="w300"/>
@@ -38,7 +39,7 @@
                     <td>{LANG.assign_to_user}:</td>
                     <td>&nbsp;</td>
                     <td>
-                        <div class="autosearchpersion w300 pull-left" data-checkss="{NV_CHECK_SESSION}">
+                        <div class="autosearchpersion w300 pull-left" data-checkss="{CONTENTS.checkss_stable}">
                             <span class="searchloading hidden"><i class="fa fa-spin fa-spinner"></i></span>
                             <input type="text" class="form-control" name="assign_user" value="{CONTENTS.assign_user}" autocomplete="off"/>
                             <div class="searchresultaj"></div>

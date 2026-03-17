@@ -14,6 +14,8 @@ if (!defined('NV_ADMIN') or !defined('NV_MAINFILE') or !defined('NV_IS_MODADMIN'
 }
 
 define('NV_IS_FILE_ADMIN', true);
+$_csrf_key = $module_name . '_' . $admin_info['admin_id'];
+
 
 //Document
 $array_url_instruction['main'] = 'https://wiki.nukeviet.vn/nukeviet4:admin:users';

@@ -126,6 +126,7 @@ $(function() {
                 response(cachetopic[term]);
                 return;
             }
+            request.checkss = $('[name="checkss"]').val();
             $.getJSON(script_name + "?" + nv_lang_variable + "=" + nv_lang_data + "&" + nv_name_variable + "=" + nv_module_name + "&" + nv_fc_variable + "=topicajax", request, function(data, status, xhr) {
                 cachetopic[term] = data;
                 response(data);
@@ -143,6 +144,7 @@ $(function() {
                 response(cachesource[term]);
                 return;
             }
+            request.checkss = $('[name="checkss"]').val();
             $.getJSON(script_name + "?" + nv_lang_variable + "=" + nv_lang_data + "&" + nv_name_variable + "=" + nv_module_name + "&" + nv_fc_variable + "=sourceajax", request, function(data, status, xhr) {
                 cachesource[term] = data;
                 response(data);
@@ -168,9 +170,16 @@ $(function() {
 
     }).autocomplete({
         source: function(request, response) {
-            $.getJSON(script_name + "?" + nv_lang_variable + "=" + nv_lang_data + "&" + nv_name_variable + "=" + nv_module_name + "&" + nv_fc_variable + "=keywordsajax", {
-                term: extractLast(request.term)
-            }, response);
+            $.ajax({
+                url: script_name + "?" + nv_lang_variable + "=" + nv_lang_data + "&" + nv_name_variable + "=" + nv_module_name + "&" + nv_fc_variable + "=keywordsajax",
+                type: "POST",
+                dataType: "json",
+                data: {
+                    q: extractLast(request.term),
+                    checkss: $('[name="checkss"]').val()
+                },
+                success: response
+            });
         },
         search: function() {
             // custom minLength
@@ -236,9 +245,16 @@ $(function() {
 
     }).autocomplete({
         source: function(request, response) {
-            $.getJSON(script_name + "?" + nv_lang_variable + "=" + nv_lang_data + "&" + nv_name_variable + "=" + nv_module_name + "&" + nv_fc_variable + "=tagsajax", {
-                term: extractLast(request.term)
-            }, response);
+            $.ajax({
+                url: script_name + "?" + nv_lang_variable + "=" + nv_lang_data + "&" + nv_name_variable + "=" + nv_module_name + "&" + nv_fc_variable + "=tagsajax",
+                type: "POST",
+                dataType: "json",
+                data: {
+                    q: extractLast(request.term),
+                    checkss: $('[name="checkss"]').val()
+                },
+                success: response
+            });
         },
         search: function() {
             // custom minLength

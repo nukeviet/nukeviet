@@ -17,7 +17,7 @@ use NukeViet\Module\users\Shared\Emails;
 
 // Tạo mật khẩu ngẫu nhiên
 if ($nv_Request->isset_request('nv_genpass', 'post')) {
-    if (!csrf_check($nv_Request->get_title('checkss', 'post', ''), $module_name . '_' . $op . '_' . $admin_info['admin_id'])) {
+    if (!csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
         nv_jsonOutput([
             'status' => 'error',
             'mess' => 'Session error!!!'
@@ -64,7 +64,6 @@ if ($nv_Request->isset_request('nv_redirect', 'post,get')) {
     $nv_redirect = nv_get_redirect();
 }
 
-$csrf_key = $module_name . '_' . $op . '_' . $userid . '_' . $admin_info['admin_id'];
 if ($nv_Request->isset_request('confirm', 'post')) {
     if (!csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
         nv_jsonOutput([

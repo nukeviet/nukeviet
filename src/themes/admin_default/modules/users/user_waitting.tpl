@@ -95,7 +95,7 @@
                                 <div class="input-group">
                                     <input class="form-control password" style="height: 32.5px;" type="text" id="password1" name="password" value="" maxlength="{NV_UPASSMAX}" />
                                     <span class="input-group-btn">
-                                        <button class="btn btn-default" type="button" title="{LANG.random_password}" data-toggle="genpass" data-checkss="{NV_CHECK_SESSION}" data-field1="#password1" data-field2="#password2"><i class="fa fa-retweet"></i></button>
+                                        <button class="btn btn-default" type="button" title="{LANG.random_password}" data-toggle="genpass" data-checkss="{CHECKSS}" data-field1="#password1" data-field2="#password2"><i class="fa fa-retweet"></i></button>
                                     </span>
                                 </div>
                                 <div class="help-block mb-0">{LANG.leave_blank_note}</div>
@@ -385,7 +385,7 @@
                 <!-- END: field -->
             </div>
             <div class="text-center">
-                <input type="hidden" name="checkss" value="{DATA.checkss}" />
+                <input type="hidden" name="checkss" value="{CHECKSS}" />
                 <button class="btn btn-primary" type="submit">
                     <i class="fa fa-spin fa-spinner hidden"></i>
                     <span>{LANG.awaiting_active}</span>

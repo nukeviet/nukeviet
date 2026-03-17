@@ -120,6 +120,7 @@
     </div>
     <div class="row text-center">
         <input type="button" value="{LANG.add_answervote}" onclick="nv_vote_add_item('{LANG.voting_question_num}');" class="btn btn-info" />
+        <input type="hidden" name="checkss" value="{CHECKSS}" />
         <input type="hidden" name="save" value="1"/>
         <button type="submit" class="btn btn-primary">{LANG.voting_confirm}</button>
     </div>

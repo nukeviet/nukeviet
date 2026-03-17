@@ -26,7 +26,7 @@ $tpl->assign('MODULE_NAME', $module_name);
 $tpl->assign('OP', $op);
 
 // Bước giải nén
-if ($nv_Request->get_title('checksess', 'get', '') == md5('unzip' . $version . $package . NV_CHECK_SESSION)) {
+if ($nv_Request->get_title('checkss', 'get', '') == md5('unzip' . $version . $package . NV_CHECK_SESSION)) {
     $filename = NV_TEMPNAM_PREFIX . 'sysupd_' . NV_CHECK_SESSION . '.zip';
     if (file_exists(NV_ROOTDIR . '/' . NV_TEMP_DIR . '/' . $filename)) {
         $zip = new PclZip(NV_ROOTDIR . '/' . NV_TEMP_DIR . '/' . $filename);
@@ -177,7 +177,7 @@ if ($nv_Request->get_title('checksess', 'get', '') == md5('unzip' . $version . $
 }
 
 // Bước tải gói ứng dụng
-if ($nv_Request->get_title('checksess', 'get', '') == md5('download' . $version . $package . NV_CHECK_SESSION)) {
+if ($nv_Request->get_title('checkss', 'get', '') == md5('download' . $version . $package . NV_CHECK_SESSION)) {
     $NV_Http = new NukeViet\Http\Http($global_config, NV_TEMP_DIR);
     $filename = NV_TEMPNAM_PREFIX . 'sysupd_' . NV_CHECK_SESSION . '.zip';
     $args = [
@@ -231,7 +231,7 @@ if ($nv_Request->get_title('checksess', 'get', '') == md5('download' . $version 
     }
 
     if ($warning == 1) {
-        $html = nv_theme_alert($page_title, $nv_Lang->getModule('get_update_warning', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=webtools&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;version=' . $version . '&amp;package=' . $package . '&amp;checksess=' . md5('unzip' . $version . $package . NV_CHECK_SESSION)), 'warning');
+        $html = nv_theme_alert($page_title, $nv_Lang->getModule('get_update_warning', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=webtools&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;version=' . $version . '&amp;package=' . $package . '&amp;checkss=' . md5('unzip' . $version . $package . NV_CHECK_SESSION)), 'warning');
         nv_htmlOutput($html);
     }
 
@@ -249,15 +249,15 @@ if ($nv_Request->get_title('checksess', 'get', '') == md5('download' . $version 
         nv_htmlOutput($html);
     }
 
-    $html = nv_theme_alert($page_title, $nv_Lang->getModule('get_update_ok', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=webtools&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;version=' . $version . '&amp;package=' . $package . '&amp;checksess=' . md5('unzip' . $version . $package . NV_CHECK_SESSION)), 'success');
+    $html = nv_theme_alert($page_title, $nv_Lang->getModule('get_update_ok', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=webtools&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;version=' . $version . '&amp;package=' . $package . '&amp;checkss=' . md5('unzip' . $version . $package . NV_CHECK_SESSION)), 'success');
     nv_htmlOutput($html);
 }
 
 // Bước hiển thị trang để ajax các thao tác tiếp theo
-if ($nv_Request->get_title('checksess', 'get', '') == md5($version . $package . NV_CHECK_SESSION)) {
+if ($nv_Request->get_title('checkss', 'get', '') == md5($version . $package . NV_CHECK_SESSION)) {
     $tpl->assign('VERSION', $version);
     $tpl->assign('PACKAGE', $package);
-    $tpl->assign('CHECKSESS', md5('download' . $version . $package . NV_CHECK_SESSION));
+    $tpl->assign('CHECKSS', md5('download' . $version . $package . NV_CHECK_SESSION));
 
     $contents = $tpl->fetch('getupdate.tpl');
 

@@ -1,4 +1,4 @@
-<div id="blocklist" data-selectthemes="{$SELECTTHEMES}" data-blockredirect="" data-checkss="{$CHECKSS}" data-warning1="{$LANG->getModule('block_change_pos_warning')}" data-warning2="{$LANG->getModule('block_change_pos_warning2')}" data-error-noblock="{$LANG->getModule('block_error_noblock')}" data-del-confirm="{$LANG->getModule('block_delete_confirm')}" data-funcid="{$FUNC_ID}">
+<div id="blocklist" data-selectthemes="{$SELECTTHEMES}" data-blockredirect="" data-warning1="{$LANG->getModule('block_change_pos_warning')}" data-warning2="{$LANG->getModule('block_change_pos_warning2')}" data-error-noblock="{$LANG->getModule('block_error_noblock')}" data-del-confirm="{$LANG->getModule('block_delete_confirm')}" data-funcid="{$FUNC_ID}" data-checkss="{$CHECKSS}">
     <div class="card">
         <div class="card-body">
             <div class="d-flex flex-wrap flex-md-nowrap justify-content-between gap-2">

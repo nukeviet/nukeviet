@@ -15,8 +15,6 @@ if (!defined('NV_IS_FILE_LANG')) {
 
 $page_title = $nv_Lang->getModule('nv_lang_setting');
 
-$csrf_key = $module_name . '_' . $op . '_' . $admin_info['admin_id'];
-
 // Lưu cấu hình đọc ngôn ngữ giao diện
 if ($nv_Request->isset_request('checkss', 'post')) {
     if (csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {

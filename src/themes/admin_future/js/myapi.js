@@ -14,7 +14,7 @@ $(function() {
             type: "POST",
             url: $('#role').attr('action'),
             cache: !1,
-            data: 'getapitree=' + $(this).val()
+            data: 'getapitree=' + $(this).val() + '&checkss=' + $('[name=checkss]', $('#role')).val()
         }).done(function(a) {
             if (a.status == 'error') {
                 nukeviet.toast(a.mess, 'error');
@@ -382,7 +382,8 @@ $(function() {
                 data: params => {
                     return {
                         q: params.term,
-                        page: params.page
+                        page: params.page,
+                        checkss: $('#credentiallist').data('checkss') || $('#my-role-api').data('checkss') || $('#logs').data('checkss')
                     };
                 },
                 processResults: (data, params) => {
@@ -420,7 +421,7 @@ $(function() {
                 type: "POST",
                 url: myroleapi_url,
                 cache: !1,
-                data: 'changeActivate=' + role_id,
+                data: 'changeActivate=' + role_id + '&checkss=' + $('#my-role-api').data('checkss'),
                 dataType: "json"
             }).done(function(a) {
                 if ('error' == a.status) {
@@ -452,7 +453,7 @@ $(function() {
                 type: "POST",
                 url: myroleapi_url,
                 cache: !1,
-                data: 'createAuth=' + method,
+                data: 'createAuth=' + method + '&checkss=' + $('#my-role-api').data('checkss'),
                 dataType: "json"
             }).done(function(a) {
                 setTimeout(function() {
@@ -473,7 +474,7 @@ $(function() {
                 type: "POST",
                 url: myroleapi_url,
                 cache: !1,
-                data: 'delAuth=' + method,
+                data: 'delAuth=' + method + '&checkss=' + $('#my-role-api').data('checkss'),
                 dataType: "json"
             }).done(function(a) {
                 setTimeout(function() {
@@ -499,7 +500,7 @@ $(function() {
                 type: "POST",
                 url: myroleapi_url,
                 cache: !1,
-                data: 'ipsUpdate=' + ips + '&method=' + method,
+                data: 'ipsUpdate=' + ips + '&method=' + method + '&checkss=' + $('#my-role-api').data('checkss'),
                 dataType: "json"
             }).done(function(a) {
                 if ('error' == a.status) {

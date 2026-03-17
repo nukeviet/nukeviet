@@ -28,7 +28,7 @@
             <!-- BEGIN: loop -->
             <tr>
                 <td class="text-center">
-                    <select class="form-control" id="id_weight_{ROW.fid}" onchange="nv_chang_field({ROW.fid});" {DISABLED_WEIGHT}>
+                    <select class="form-control" id="id_weight_{ROW.fid}" onchange="nv_chang_field({ROW.fid}, '{CHECKSS}');" {DISABLED_WEIGHT}>
                         <!-- BEGIN: weight -->
                         <option value="{WEIGHT.key}" {WEIGHT.selected}>{WEIGHT.title}</option>
                         <!-- END: weight -->
@@ -44,7 +44,7 @@
                 <td class="text-nowrap">
                     <button type="button" class="btn btn-default btn-sm" onclick="nv_edit_field({ROW.fid});" title="{LANG.field_edit}"><em class="fa fa-edit fa-lg"></em></button>
                     <!-- BEGIN: show_delete -->
-                    <button type="button" class="btn btn-default btn-sm" onclick="nv_del_field({ROW.fid})" title="{LANG.delete}"><em class="fa fa-trash-o fa-lg"></em></button>
+                    <button type="button" class="btn btn-default btn-sm" onclick="nv_del_field({ROW.fid}, '{CHECKSS}')" title="{LANG.delete}"><em class="fa fa-trash-o fa-lg"></em></button>
                     <!-- END: show_delete -->
                 </td>
             </tr>
@@ -64,6 +64,7 @@
 <div class="alert alert-danger">{ERROR}</div>
 <!-- END: error -->
 <form class="form-inline" action="{FORM_ACTION}" method="post" id="ffields" autocomplete="off">
+    <input type="hidden" name="checkss" value="{CHECKSS}" />
     <div class="table-responsive">
         <table class="table table-striped table-bordered">
             <caption><em class="fa fa-file-text-o">&nbsp;</em>{CAPTIONFORM} </caption>
@@ -416,9 +417,8 @@
             var table_selected = (choicesql_table == "" || choicesql_table == undefined ) ? '{SQL_DATA_CHOICE.1}' : choicesql_table;
             getval = "&module=" + module_selected + "&table=" + table_selected;
         }
-        $.post(script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=fields&nocache=' + new Date().getTime(), 'choicesql=1&choice=' + choice_name_select + getval + '&choice_seltected=' + choice_seltected, function(res) {
+        $.post(script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=fields&nocache=' + new Date().getTime(), 'choicesql=1&choice=' + choice_name_select + getval + '&choice_seltected=' + choice_seltected + '&checkss={CHECKSS}', function(res) {
             $('#choicesql_' + choice_name_select).html(res);
-
         });
     }
 </script>

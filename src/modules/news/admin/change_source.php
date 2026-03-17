@@ -17,7 +17,7 @@ $sourceid = $nv_Request->get_int('sourceid', 'post', 0);
 $mod = $nv_Request->get_string('mod', 'post', '');
 $new_vid = $nv_Request->get_int('new_vid', 'post', 0);
 
-if (empty($sourceid)) {
+if (empty($sourceid) or !csrf_check($nv_Request->get_string('checkss', 'post'), $_csrf_key)) {
     exit('NO_' . $sourceid);
 }
 $content = 'NO_' . $sourceid;

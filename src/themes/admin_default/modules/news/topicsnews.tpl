@@ -50,5 +50,6 @@ var CFG = [];
 LANG.topic_nocheck = '{LANG.topic_nocheck}';
 LANG.topic_delete_confirm = '{LANG.topic_delete_confirm}';
 CFG.topicid = '{TOPICID}';
+CFG.checkss = '{CHECKSS}';
 </script>
 <!-- END: main -->

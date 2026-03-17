@@ -102,7 +102,7 @@
                         <td>{$row.time}</td>
                         {if $ALLOWED_DELETE}
                         <td class="text-nowrap text-center">
-                            <a href="#" title="{$LANG->getGlobal('delete')}" aria-label="{$LANG->getGlobal('delete')}" data-toggle="logDelOne" data-id="{$row.id}" data-confirm="{$LANG->getModule('log_del_confirm')}"><i class="fa-solid fa-trash text-danger" data-icon="fa-trash"></i></a>
+                            <a href="#" title="{$LANG->getGlobal('delete')}" aria-label="{$LANG->getGlobal('delete')}" data-toggle="logDelOne" data-id="{$row.id}" data-checkss="{$CHECKSS}" data-confirm="{$LANG->getModule('log_del_confirm')}"><i class="fa-solid fa-trash text-danger" data-icon="fa-trash"></i></a>
                         </td>
                         {/if}
                     </tr>
@@ -116,8 +116,8 @@
             <div>
                 {if $ALLOWED_DELETE}
                 <input type="checkbox" data-toggle="checkAll" class="form-check-input m-0 align-middle" aria-label="{$LANG->getGlobal('toggle_checkall')}">
-                <button class="btn btn-outline-danger ms-2 me-1 my-1" data-toggle="logDelMulti" data-ctn="#list-items" data-confirm="{$LANG->getModule('log_del_confirm')}"><i class="fa-solid fa-trash" data-icon="fa-trash"></i> {$LANG->getGlobal('delete')}</button>
-                <button class="btn btn-danger me-1 my-1" data-toggle="logTruncate" data-confirm="{$LANG->getModule('log_del_confirm')}" data-url="{$BASE_URL}"><i class="fa-solid fa-ban" data-icon="fa-ban"></i> {$LANG->getModule('log_empty')}</button>
+                <button class="btn btn-outline-danger ms-2 me-1 my-1" data-toggle="logDelMulti" data-ctn="#list-items" data-checkss="{$CHECKSS}" data-confirm="{$LANG->getModule('log_del_confirm')}"><i class="fa-solid fa-trash" data-icon="fa-trash"></i> {$LANG->getGlobal('delete')}</button>
+                <button class="btn btn-danger me-1 my-1" data-toggle="logTruncate" data-checkss="{$CHECKSS}" data-confirm="{$LANG->getModule('log_del_confirm')}" data-url="{$BASE_URL}"><i class="fa-solid fa-ban" data-icon="fa-ban"></i> {$LANG->getModule('log_empty')}</button>
                 {/if}
             </div>
             <div class="pagination-wrap">

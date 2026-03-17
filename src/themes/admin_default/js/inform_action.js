@@ -19,14 +19,16 @@ $(function() {
                         get_user_json: 1,
                         grid: $('[name=sender_group]', formObj).val(),
                         q: params.term, // search term
-                        page: params.page
+                        page: params.page,
+                        checkss: $('[name=checkss]', formObj).val()
                     };
                 }
 
                 return {
                     get_user_json: 1,
                     q: params.term, // search term
-                    page: params.page
+                    page: params.page,
+                    checkss: $('[name=checkss]', formObj).val()
                 };
             },
             processResults: function(data, params) {

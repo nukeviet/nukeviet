@@ -13,10 +13,11 @@ if (!defined('NV_IS_FILE_THEMES')) {
     exit('Stop!!!');
 }
 
+$csrf_block_key = $module_name . '_blocks_manage_' . $admin_info['admin_id'];
 $list = $nv_Request->get_string('list', 'post,get');
 $selectthemes = $nv_Request->get_string('selectthemes', 'post,get');
 $array_bid = explode(',', $list);
-if (!empty($array_bid) and md5($selectthemes . NV_CHECK_SESSION) == $nv_Request->get_string('checkss', 'post,get')) {
+if (!empty($array_bid) and csrf_check($nv_Request->get_string('checkss', 'post,get'), $csrf_block_key)) {
     $array_bid = array_map('intval', $array_bid);
 
     $list = $nv_Request->get_string('active_device', 'post,get');

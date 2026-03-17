@@ -20,7 +20,7 @@ $bid = $nv_Request->get_int('bid', 'post', 0);
 $mod = $nv_Request->get_string('mod', 'post', '');
 $new_vid = $nv_Request->get_int('new_vid', 'post', 0);
 
-if (empty($bid)) {
+if (empty($bid) or !csrf_check($nv_Request->get_string('checkss', 'post'), $_csrf_key)) {
     exit('NO_' . $bid);
 }
 $content = 'NO_' . $bid;

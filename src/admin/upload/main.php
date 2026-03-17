@@ -171,7 +171,7 @@ $tpl->assign('REQUEST', $request);
 
 // Xử lý yêu cầu qua ajax
 if ($nv_Request->isset_request('checkss', 'post')) {
-    if ($nv_Request->get_title('checkss', 'post', '') !== NV_CHECK_SESSION) {
+    if (!csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_upload_key)) {
         nv_jsonOutput([
             'status' => 'error',
             'mess' => 'Session error!!!'

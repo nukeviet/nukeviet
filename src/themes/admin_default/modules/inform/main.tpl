@@ -5,7 +5,7 @@
 <script src="{ASSETS_LANG_STATIC_URL}/js/select2/i18n/{NV_LANG_INTERFACE}.js"></script>
 <script src="{ASSETS_STATIC_URL}/js/jquery-ui/jquery-ui.min.js"></script>
 <script src="{ASSETS_LANG_STATIC_URL}/js/language/jquery.ui.datepicker-{NV_LANG_INTERFACE}.js"></script>
-<div class="inform" id="inform" data-page-url="{PAGE_URL}" data-delete-confirm="{LANG.delete_confirm}">
+<div class="inform" id="inform" data-page-url="{PAGE_URL}" data-delete-confirm="{LANG.delete_confirm}" data-checkss="{CHECKSS}">
     <div class="filter">
         <!-- BEGIN: filter -->
         <div class="select">
@@ -18,9 +18,7 @@
             </select>
         </div>
         <!-- END: filter -->
-        <div class="add-inform">
-            <button type="button" class="btn btn-primary" data-toggle="inform_action" data-type="add" data-title="{LANG.inform_add}">{LANG.add_inform}</button>
-        </div>
+            <button type="button" class="btn btn-primary" data-toggle="inform_action" data-type="add" data-title="{LANG.inform_add}" data-checkss="{CHECKSS}">{LANG.add_inform}</button>
     </div>
     <!-- BEGIN: items -->
     <div class="table-responsive">
@@ -67,8 +65,8 @@
                         {ITEM.views}
                     </td>
                     <td class="text-center text-nowrap" style="width: 1%;vertical-align:middle">
-                        <button class="btn btn-default btn-sm" data-toggle="inform_action" data-type="edit" data-title="{LANG.inform_edit}">{GLANG.edit}</button>
-                        <button class="btn btn-default btn-sm" data-toggle="inform_del">{GLANG.delete}</button>
+                        <button class="btn btn-default btn-sm" data-toggle="inform_action" data-type="edit" data-title="{LANG.inform_edit}" data-checkss="{CHECKSS}">{GLANG.edit}</button>
+                        <button class="btn btn-default btn-sm" data-toggle="inform_del" data-checkss="{CHECKSS}">{GLANG.delete}</button>
                     </td>
                 </tr>
                 <!-- END: loop -->

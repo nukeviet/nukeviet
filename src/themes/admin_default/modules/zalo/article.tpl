@@ -391,10 +391,14 @@
         </table>
         <div class="text-center">
             <input type="hidden" name="save" value="1">
+            <input type="hidden" name="checkss" value="{CHECKSS}">
             <button type="submit" class="btn btn-primary">{GLANG.submit}</button>
         </div>
     </div>
 </form>
+<script>
+    var checkss = '{CHECKSS}';
+</script>
 <!-- END: add -->
 <!-- BEGIN: wait_getlist -->
 <meta http-equiv="refresh" content="3;url={GETLIST_LINK}" />

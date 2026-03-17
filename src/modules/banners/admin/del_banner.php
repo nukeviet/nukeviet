@@ -14,6 +14,10 @@ if (!defined('NV_IS_FILE_ADMIN')) {
 }
 $id = $nv_Request->get_int('id', 'post,get');
 
+if (empty($id) or !csrf_check($nv_Request->get_string('checkss', 'post,get'), $_csrf_key)) {
+    exit('Stop!!!');
+}
+
 $sql = 'SELECT * FROM ' . NV_BANNERS_GLOBALTABLE . '_rows WHERE id=' . $id;
 $row = $db->query($sql)->fetch();
 

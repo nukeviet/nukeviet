@@ -123,7 +123,7 @@
         <!-- END: warning_ssl -->
         <div class="form-group">
             <div class="col-xs-10 col-xs-offset-9">
-                <input type="hidden" name="checkss" value="{NV_CHECK_SESSION}">
+                <input type="hidden" name="checkss" value="{CHECKSS}">
                 <input class="btn btn-primary btn-block" type="submit" value="{GLANG.loginsubmit}">
             </div>
         </div>
@@ -185,7 +185,7 @@
             </div>
         </div>
         <div class="col-xs-8">
-            <input type="hidden" name="checkss" value="{NV_CHECK_SESSION}">
+            <input type="hidden" name="checkss" value="{CHECKSS}">
             <input type="hidden" name="submit2scode" value="1">
             <input class="btn btn-primary btn-block" type="submit" value="{GLANG.confirm}">
         </div>

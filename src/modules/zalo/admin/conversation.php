@@ -40,6 +40,12 @@ if ($nv_Request->isset_request('player,url', 'get')) {
 
 // Cap nhat hoi thoai moi
 if ($nv_Request->isset_request('conversation_refresh,user_id', 'post')) {
+    if (!csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
+        nv_jsonOutput([
+            'status' => 'error',
+            'mess' => 'CSRF error'
+        ]);
+    }
     $user_id = $nv_Request->get_string('user_id', 'post', '');
     if (empty($user_id)) {
         nv_jsonOutput([
@@ -106,6 +112,12 @@ if ($nv_Request->isset_request('conversation_refresh,user_id', 'post')) {
 
 // Lay hoi thoai tu CSDL
 if ($nv_Request->isset_request('get_conversation,user_id,refresh', 'post')) {
+    if (!csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
+        nv_jsonOutput([
+            'status' => 'error',
+            'mess' => 'CSRF error'
+        ]);
+    }
     $user_id = $nv_Request->get_string('user_id', 'post', '');
     $refresh = $nv_Request->get_bool('refresh', 'post', false);
     if (empty($user_id)) {

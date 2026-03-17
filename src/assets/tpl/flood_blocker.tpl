@@ -68,7 +68,7 @@
                     </script>
                     {/if}
                     <input type="hidden" name="captcha_pass_flood" value="1">
-                    <input type="hidden" name="tokend" value="{$smarty.const.NV_CHECK_SESSION}">
+                    <input type="hidden" name="checkss" value="{$CHECKSS}">
                     <input type="hidden" name="redirect" value="{$REDIRECT}">
                 </form>
                 {/if}

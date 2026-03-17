@@ -13,8 +13,11 @@ if (!defined('NV_IS_FILE_ADMIN')) {
     exit('Stop!!!');
 }
 
-$id = $nv_Request->get_string('list', 'post,get');
-$arr_id = array_map('intval', array_unique(array_filter(explode(',', $id))));
+$list = $nv_Request->get_title('list', 'post,get', '');
+if (empty($list) or !csrf_check($nv_Request->get_string('checkss', 'post,get'), $csrf_key)) {
+    exit('Stop!!!');
+}
+$arr_id = array_map('intval', array_unique(array_filter(explode(',', $list))));
 
 foreach ($arr_id as $id) {
     $db->query('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_rows SET topicid=0 WHERE id = ' . $id);

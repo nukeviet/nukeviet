@@ -3,9 +3,10 @@
 <div class="alert alert-info">{LANG.no_row_contact}</div>
 <!-- END: empty -->
 <!-- BEGIN: data -->
-<form name="myform" id="myform" method="post" action="{FORM_ACTION}" data-error="{LANG.please_choose}">
+<form action="{FORM_ACTION}" method="post" class="form-horizontal department_content" data-checkss="{CHECKSS}">
+    <input type="hidden" name="checkss" value="{CHECKSS}" />
     <div class="table-responsive">
-        <table class="table table-striped table-bordered">
+        <table class="table table-striped table-bordered list" data-url="{OP_URL}" data-checkss="{CHECKSS}">
             <thead class="bg-primary">
                 <tr>
                     <th class="text-nowrap text-center" style="width:1%;"><input class="form-control" type="checkbox" data-toggle="checkAll" /></th>

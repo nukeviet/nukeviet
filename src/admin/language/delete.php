@@ -13,7 +13,7 @@ if (!defined('NV_IS_FILE_LANG')) {
     exit('Stop!!!');
 }
 
-if ($nv_Request->get_string('checksess', 'get') == md5('deleteallfile' . NV_CHECK_SESSION)) {
+if ($nv_Request->get_string('checkss', 'get') == md5('deleteallfile' . NV_CHECK_SESSION)) {
     $dirlang = $nv_Request->get_title('dirlang', 'get', '');
     $type = $nv_Request->get_string('type', 'get', 'db');
     $type != 'files' && $type = 'db';

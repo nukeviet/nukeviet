@@ -120,7 +120,7 @@ $(function() {
                     listsend.push($(this).val())
                 }
             );
-            var checkss = $('[name=checkss]', form).val();
+            var checkss = $(this).data('checkss');
             $.ajax({
                 type: "POST",
                 url: script_name + "?" + nv_lang_variable + "=" + nv_lang_data + "&" + nv_name_variable + "=" + nv_module_name + "&nocache=" + new Date().getTime(),
@@ -225,7 +225,7 @@ $(function() {
                     listsend.push($(this).val())
                 }
             );
-            var checkss = $('[name=checkss]', form).val(),
+            var checkss = $(this).data('checkss'),
                 icon = $('i', $(this));
             if (icon.is('.fa-spinner')) {
                 return;
@@ -262,7 +262,7 @@ $(function() {
     // Xoá tất cả liên hệ
     $('.feedback_del_all').on('click', function() {
         var form = $('#feedback_list')
-        var checkss = $('[name=checkss]', form).val(),
+        var checkss = $(this).data('checkss'),
             icon = $('i', $(this));
         if (icon.is('.fa-spinner')) {
             return;

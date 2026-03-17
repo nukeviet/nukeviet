@@ -16,6 +16,8 @@ if (!defined('NV_ADMIN') or !defined('NV_MAINFILE') or !defined('NV_IS_MODADMIN'
     exit('Stop!!!');
 }
 
+$_csrf_key = $module_name . '_' . $admin_info['admin_id'];
+
 $menu_top = [
     'title' => $module_name,
     'module_file' => '',
@@ -1929,106 +1931,6 @@ function zaloGetError()
     }
 
     return $error;
-}
-
-/**
- * Hiển thị danh sách các đơn vị hành chính Việt Nam
- *
- * vnsubdivisions_to_html()
- *
- * @param mixed $provinces
- * @param mixed $data
- * @param mixed $subdivParent
- * @return string
- */
-function vnsubdivisions_to_html($provinces, $data, $subdivParent)
-{
-    global $global_config, $op, $module_name, $module_file, $nv_Lang;
-
-    $xtpl = new XTemplate('settings.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-
-    $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
-    $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
-    $xtpl->assign('MODULE_NAME', $module_name);
-    $xtpl->assign('OP', $op);
-    $xtpl->assign('PARENT', $subdivParent);
-
-    foreach ($provinces as $code => $names) {
-        $xtpl->assign('PROVINCE', [
-            'code' => $code,
-            'sel' => $code == $subdivParent ? ' selected="selected"' : '',
-            'name' => $nv_Lang->getModule('vnsubdivisions_parent', $names[0])
-        ]);
-        $xtpl->parse('vnsubdivisions_page.province');
-    }
-
-    $i = 0;
-    foreach ($data as $code => $names) {
-        ++$i;
-        $mainname = array_shift($names);
-        $xtpl->assign('SUBDIV', [
-            'tt' => $i,
-            'code' => $code,
-            'code_format' => (!empty($subdivParent) ? $subdivParent . '-' : '') . $code,
-            'mainname' => $mainname
-        ]);
-
-        if (empty($names)) {
-            $names = [''];
-        }
-
-        foreach ($names as $othername) {
-            $xtpl->assign('OTHER_NAME', $othername);
-            $xtpl->parse('vnsubdivisions_page.loop.other_name');
-        }
-        $xtpl->parse('vnsubdivisions_page.loop');
-    }
-
-    $xtpl->parse('vnsubdivisions_page');
-
-    return $xtpl->text('vnsubdivisions_page');
-}
-
-/**
- * Hiển thị danh sách các mã gọi của các quốc gia
- *
- * callingcodes_to_html()
- *
- * @param mixed $callingcodes
- * @return string
- */
-function callingcodes_to_html($callingcodes)
-{
-    global $global_config, $op, $module_name, $module_file, $nv_Lang;
-
-    $xtpl = new XTemplate('settings.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-    $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
-    $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
-    $xtpl->assign('MODULE_NAME', $module_name);
-    $xtpl->assign('OP', $op);
-
-    $countries = [];
-    foreach ($callingcodes as $country) {
-        !isset($countries[$country[1]]) && $countries[$country[1]] = [];
-        $countries[$country[1]][] = $country[0];
-    }
-
-    foreach ($countries as $code => $callcodes) {
-        $xtpl->assign('COUNTRY', [
-            'code' => $code,
-            'name' => $nv_Lang->existsGlobal('country_' . $code) ? $nv_Lang->getGlobal('country_' . $code) : $code
-        ]);
-
-        foreach ($callcodes as $callcode) {
-            $xtpl->assign('CALLCODE', $callcode);
-            $xtpl->parse('callingcodes_page.loop.callcode');
-        }
-        $xtpl->parse('callingcodes_page.loop');
-    }
-
-    $xtpl->parse('callingcodes_page');
-
-    return $xtpl->text('callingcodes_page');
 }
 
 /**

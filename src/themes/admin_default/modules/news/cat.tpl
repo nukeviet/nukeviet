@@ -20,6 +20,7 @@
         <input type="hidden" name ="catid" value="{catid}" />
         <input type="hidden" name ="parentid_old" value="{parentid}" />
         <input name="savecat" type="hidden" value="1" />
+        <input type="hidden" name="checkss" value="{CHECKSS}" />
         <div class="table-responsive">
             <table class="table table-striped table-bordered table-hover">
                 <caption>

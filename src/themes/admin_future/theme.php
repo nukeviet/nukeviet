@@ -27,7 +27,7 @@ if (!empty($nv_Request) and $nv_Request->isset_request('store_theme_config', 'po
         nv_jsonOutput($respon);
     }
     if ($nv_Request->get_title('store_theme_config', 'post', '') !== NV_CHECK_SESSION) {
-        $respon['message'] = 'Wrong checksess!!!';
+        $respon['message'] = 'Wrong check session !!!';
         nv_jsonOutput($respon);
     }
 
@@ -87,6 +87,7 @@ function nv_admin_theme(?string $contents, $head_site = 1)
     $tpl->assign('BREADCRUMBS', $array_mod_title);
     $tpl->assign('MODULE_FILE', $module_file);
     $tpl->assign('MODULE_NAME', $module_name);
+    $tpl->assign('CHECKSS', csrf_create($module_name . '_' . $op . '_' . $admin_info['admin_id']));
     $tpl->assign('OP', $op);
     $tpl->assign('ADMIN_INFO', $admin_info);
     $tpl->assign('IS_IE', $browser->isBrowser(Browser::BROWSER_IE));

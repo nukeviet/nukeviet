@@ -15,6 +15,9 @@ if (!defined('NV_IS_FILE_ADMIN')) {
 
 // Xóa xác thực
 if ($nv_Request->isset_request('delAuth', 'post')) {
+    if (!csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
+        nv_jsonOutput(['status' => 'error', 'mess' => $nv_Lang->getGlobal('error_code_11')]);
+    }
     $method = $nv_Request->get_title('delAuth', 'post', '');
     if (empty($method) or !in_array($method, ['none', 'password_verify', 'md5_verify'], true) or ($method == 'none' and !defined('NV_IS_SPADMIN'))) {
         nv_jsonOutput([
@@ -31,6 +34,9 @@ if ($nv_Request->isset_request('delAuth', 'post')) {
 
 // Tạo xác thực
 if ($nv_Request->isset_request('createAuth', 'post')) {
+    if (!csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
+        nv_jsonOutput(['status' => 'error', 'mess' => $nv_Lang->getGlobal('error_code_11')]);
+    }
     $method = $nv_Request->get_title('createAuth', 'post', '');
     if (empty($method) or !in_array($method, ['none', 'password_verify', 'md5_verify'], true) or ($method == 'none' and !defined('NV_IS_SPADMIN'))) {
         nv_jsonOutput([
@@ -49,6 +55,9 @@ if ($nv_Request->isset_request('createAuth', 'post')) {
 
 // Lưu IP được phép truy cập
 if ($nv_Request->isset_request('ipsUpdate', 'post')) {
+    if (!csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
+        nv_jsonOutput(['status' => 'error', 'mess' => $nv_Lang->getGlobal('error_code_11')]);
+    }
     $method = $nv_Request->get_title('method', 'post', '');
     if (empty($method) or !in_array($method, ['none', 'password_verify', 'md5_verify'], true) or ($method == 'none' and !defined('NV_IS_SPADMIN'))) {
         nv_jsonOutput([
@@ -74,6 +83,9 @@ if ($nv_Request->isset_request('ipsUpdate', 'post')) {
 
 // Kích hoạt/hủy kích hoạt quyền truy cập
 if ($nv_Request->isset_request('changeActivate', 'post')) {
+    if (!csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
+        nv_jsonOutput(['status' => 'error', 'mess' => $nv_Lang->getGlobal('error_code_11')]);
+    }
     $role_id = $nv_Request->get_int('changeActivate', 'post', 0);
     if (empty($role_id)) {
         nv_jsonOutput([
@@ -130,6 +142,7 @@ $tpl = new \NukeViet\Template\NVSmarty();
 $tpl->setTemplateDir(get_module_tpl_dir('main.tpl'));
 $tpl->assign('LANG', $nv_Lang);
 $tpl->assign('MODULE_NAME', $module_name);
+$tpl->assign('CHECKSS', csrf_create($csrf_key));
 $tpl->assign('OP', $op);
 $tpl->assign('PAGE_URL', $page_url);
 $tpl->assign('ROLE_COUNT', $roleCount);

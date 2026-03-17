@@ -29,7 +29,7 @@ if ($nv_Request->isset_request('get_topic_json', 'post')) {
     $page = $nv_Request->get_page('page', 'post', 1);
     $per_page = 20;
 
-    if (nv_strlen($q) < 2 or $nv_Request->get_title('checkss', 'post', '') != NV_CHECK_SESSION) {
+    if (nv_strlen($q) < 2 or !csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
         nv_jsonOutput($respon);
     }
 
@@ -83,7 +83,7 @@ if ($nv_Request->isset_request('get_article_json', 'post')) {
     $page = $nv_Request->get_page('page', 'post', 1);
     $per_page = 20;
 
-    if (nv_strlen($q) < 2 or $nv_Request->get_title('checkss', 'post', '') != NV_CHECK_SESSION) {
+    if (nv_strlen($q) < 2 or !csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
         nv_jsonOutput($respon);
     }
 
@@ -117,7 +117,7 @@ if ($nv_Request->isset_request('get_article_json', 'post')) {
     nv_jsonOutput($respon);
 }
 
-$is_submit_form = (($nv_Request->get_int('save', 'post') == 1 and $nv_Request->get_title('checkss', 'post', '') === NV_CHECK_SESSION) ? true : false);
+$is_submit_form = (($nv_Request->get_int('save', 'post') == 1 and csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) ? true : false);
 $is_auto_save = ($is_submit_form and $nv_Request->get_int('ajax_content', 'post', 0) == 1) ? true : false;
 
 // Kiểm tra xem đang sửa có bị cướp quyền hay không, cập nhật thêm thời gian chỉnh sửa
@@ -140,7 +140,7 @@ if ($nv_Request->isset_request('id', 'post') and $nv_Request->isset_request('che
 }
 
 // Lấy keywords từ nội dung bài viết
-if ($nv_Request->isset_request('getKeywordsFromContent', 'post') and $nv_Request->get_title('checkss', 'post') === NV_CHECK_SESSION) {
+if ($nv_Request->isset_request('getKeywordsFromContent', 'post') and csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
     $content = $nv_Request->get_title('content', 'post', '');
     $keywords = nv_get_mod_tags($content);
     $size = count($keywords);
@@ -425,7 +425,7 @@ if ($rowcontent['id'] == 0) {
     if ($restore_id) {
         $sql = 'SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_row_histories WHERE new_id=' . $rowcontent['id'] . ' AND id=' . $restore_id;
         $restore_data = $db->query($sql)->fetch();
-        if (empty($restore_data) or $restore_hash !== md5(NV_CHECK_SESSION . $admin_info['admin_id'] . $rowcontent['id'] . $restore_id . $restore_data['historytime'])) {
+        if (empty($restore_data) or $restore_hash !== md5(csrf_create($csrf_key) . $admin_info['admin_id'] . $rowcontent['id'] . $restore_id . $restore_data['historytime'])) {
             nv_error404();
         }
         unset($restore_data['id'], $restore_data['new_id'], $restore_data['admin_id'], $restore_data['changed_fields']);
@@ -601,7 +601,7 @@ if ($rowcontent['mode'] == 'edit') {
             $_authors_lev = $db->query('SELECT lev FROM ' . NV_AUTHORS_GLOBALTABLE . ' WHERE admin_id =' . $row_tmp['admin_id'])->fetchColumn();
             if ($admin_info['level'] < $_authors_lev) {
                 // Có quyền chiếm
-                $takeover = md5($rowcontent['id'] . '_takeover_' . NV_CHECK_SESSION);
+                $takeover = md5($rowcontent['id'] . '_takeover_' . csrf_create($csrf_key));
                 if ($takeover == $nv_Request->get_title('takeover', 'get', '')) {
                     $db->query('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_tmp SET
                         admin_id=' . $admin_info['admin_id'] . ',
@@ -1649,6 +1649,7 @@ $tpl->assign('IS_SUBMIT', $is_submit_form);
 $tpl->assign('TOTAL_NEWS_CURRENT', $total_news_current);
 $tpl->assign('REPORT_ID', $rid);
 $tpl->assign('REPORTLIST', $reportlist);
+$tpl->assign('CHECKSS', csrf_create($csrf_key));
 $tpl->assign('SCHEMA_TYPES', $schema_types);
 
 // Xử lý bước đầu cho chuyên mục

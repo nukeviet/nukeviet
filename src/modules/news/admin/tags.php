@@ -16,13 +16,13 @@ if (!defined('NV_IS_FILE_ADMIN')) {
 $page_title = $nv_Lang->getModule('tags_manage');
 
 // Lấy tags từ nội dung bài viết
-if ($nv_Request->isset_request('getTagsFromContent', 'post') and $nv_Request->get_title('checkss', 'post', '') === NV_CHECK_SESSION) {
+if ($nv_Request->isset_request('getTagsFromContent', 'post') and csrf_check($nv_Request->get_string('checkss', 'post'), $_csrf_key)) {
     $content = $nv_Request->get_title('content', 'post', '');
     $tags = nv_get_mod_tags($content);
     nv_jsonOutput($tags);
 }
 
-$checkss = $nv_Request->get_string('checkss', 'post', '');
+$checkss = $nv_Request->get_string('checkss', 'post');
 
 // Xóa các liên kết
 if ($nv_Request->isset_request('tagsIdDel', 'post')) {
@@ -34,7 +34,7 @@ if ($nv_Request->isset_request('tagsIdDel', 'post')) {
         'text' => 'Error session!!!'
     ];
 
-    if (!empty($ids) and !empty($tid) and $checkss === NV_CHECK_SESSION) {
+    if (!empty($ids) and !empty($tid) and csrf_check($checkss, $_csrf_key)) {
         nv_insert_logs(NV_LANG_DATA, $module_name, 'DEL_TAG_IDS', $tid . ': ' . $ids, $admin_info['userid']);
 
         $ids = preg_replace('/[^0-9\,]+/', '', $ids);
@@ -59,7 +59,7 @@ if ($nv_Request->isset_request('keywordEdit', 'post')) {
     $id = $nv_Request->get_int('id', 'post', 0);
     $tid = $nv_Request->get_int('tid', 'post', 0);
     $keyword = $nv_Request->get_title('keyword', 'post', '');
-    if (!empty($keyword) and $checkss === NV_CHECK_SESSION) {
+    if (!empty($keyword) and csrf_check($checkss, $_csrf_key)) {
         nv_insert_logs(NV_LANG_DATA, $module_name, 'EDIT_TAGID_KEYWORD', $tid . '-' . $id . ': ' . $keyword, $admin_info['userid']);
 
         $sth = $db->prepare('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_tags_id SET keyword = :keyword WHERE id=' . $id . ' AND tid =' . $tid);
@@ -79,7 +79,7 @@ if ($nv_Request->isset_request('del_listid', 'post')) {
     $del_listid = $nv_Request->get_string('del_listid', 'post', '');
     $del_listid = array_map('intval', explode(',', $del_listid));
     $del_listid = array_filter($del_listid);
-    if (!empty($del_listid) and NV_CHECK_SESSION == $checkss) {
+    if (!empty($del_listid) and csrf_check($checkss, $_csrf_key)) {
         $del_listid = implode(',', $del_listid);
         nv_insert_logs(NV_LANG_DATA, $module_name, 'DEL_TAGS', $del_listid, $admin_info['userid']);
 
@@ -102,7 +102,7 @@ if ($nv_Request->isset_request('del_listid', 'post')) {
 if ($nv_Request->isset_request('del_tid', 'post')) {
     $tid = $nv_Request->get_int('del_tid', 'post', 0);
 
-    if (!empty($tid) and NV_CHECK_SESSION == $checkss) {
+    if (!empty($tid) and csrf_check($checkss, $_csrf_key)) {
         nv_insert_logs(NV_LANG_DATA, $module_name, 'DEL_TAG', $tid, $admin_info['userid']);
 
         $db->query('DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_tags WHERE tid=' . $tid);
@@ -121,7 +121,7 @@ if ($nv_Request->isset_request('del_tid', 'post')) {
 }
 
 // Thêm nhiều tags
-if ($nv_Request->isset_request('savetag', 'post')) {
+if ($nv_Request->isset_request('savetag', 'post') and csrf_check($nv_Request->get_string('checkss', 'post'), $_csrf_key)) {
     $respon = [
         'status' => 'error',
         'mess' => 'Error!!!',
@@ -165,7 +165,7 @@ if ($nv_Request->isset_request('savetag', 'post')) {
 }
 
 // Thêm tag hoặc sửa tag
-if ($nv_Request->isset_request('savecat', 'post')) {
+if ($nv_Request->isset_request('savecat', 'post') and csrf_check($nv_Request->get_string('checkss', 'post'), $_csrf_key)) {
     $tid = $nv_Request->get_int('tid', 'post', 0);
     if (!empty($tid)) {
         $num = $db->query('SELECT COUNT(*) FROM ' . NV_PREFIXLANG . '_' . $module_data . '_tags where tid=' . $tid)->fetchColumn();
@@ -255,7 +255,7 @@ if ($nv_Request->isset_request('tagLinks', 'post')) {
         'text' => 'Error!!!',
         'html' => ''
     ];
-    if (NV_CHECK_SESSION !== $checkss) {
+    if (!csrf_check($checkss, $_csrf_key)) {
         $respon['text'] = 'Wrong session!!!';
         nv_jsonOutput($respon);
     }
@@ -301,7 +301,7 @@ if ($nv_Request->isset_request('loadEditTag', 'post')) {
         'success' => 0,
         'text' => 'Error!!!'
     ];
-    if (NV_CHECK_SESSION !== $checkss) {
+    if (!csrf_check($checkss, $_csrf_key)) {
         $respon['text'] = 'Wrong session!!!';
         nv_jsonOutput($respon);
     }
@@ -399,6 +399,7 @@ $tpl->registerPlugin('modifier', 'nv_number_format', 'nv_number_format');
 $tpl->assign('LANG', $nv_Lang);
 $tpl->assign('MODULE_NAME', $module_name);
 $tpl->assign('OP', $op);
+$tpl->assign('CHECKSS', csrf_create($_csrf_key));
 
 $tpl->assign('INCOMPLETE', $incomplete);
 $tpl->assign('COMPLETE', $complete);

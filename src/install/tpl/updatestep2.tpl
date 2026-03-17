@@ -233,6 +233,7 @@
         {LANG.update_ftp_config_info}
     </div>
     <form id="ftpconfigform" action="{ACTIONFORM}" method="post">
+    <input type="hidden" name="checkss" value="{CHECKSS}" />
     <table id="ftpconfig" cellspacing="0"
         summary="{LANG.checkftpconfig_detail}" style="width: 100%;">
         <tr>
@@ -302,7 +303,7 @@
             
             $(this).attr('disabled', 'disabled');
             
-            var data = 'ftp_server=' + ftp_server + '&ftp_port=' + ftp_port + '&ftp_user_name=' + ftp_user_name + '&ftp_user_pass=' + ftp_user_pass + '&tetectftp=1';
+            var data = 'ftp_server=' + ftp_server + '&ftp_port=' + ftp_port + '&ftp_user_name=' + ftp_user_name + '&ftp_user_pass=' + ftp_user_pass + '&tetectftp=1&checkss=' + nv_checkss;
             var url = $('#ftpconfigform').attr('action');
             
             $.ajax({type:"POST", url:url, data:data, success:function(c){

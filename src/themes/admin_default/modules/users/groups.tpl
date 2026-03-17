@@ -247,18 +247,18 @@ function get_alias() {
                 <td>
                     <!-- BEGIN: weight_text -->{WEIGHT_TEXT}<!-- END: weight_text -->
                     <!-- BEGIN: weight -->
-                    <button id="group_weight_{LOOP.group_id}" data-toggle="changegroupweight" data-mod="weight" data-min="{START_WEIGHT}" data-num="{MAX_WEIGHT}" data-id="{LOOP.group_id}" data-current="{STT}" data-tokend="{TOKEND}" data-msgerror="{LANG.errorChangeWeight}" type="button" class="btn btn-default btn-xs btn-block btn-dropdown-tool"><span class="caret"></span><span class="text">{STT}</span></button>
+                    <button id="group_weight_{LOOP.group_id}" data-toggle="changegroupweight" data-mod="weight" data-min="{START_WEIGHT}" data-num="{MAX_WEIGHT}" data-id="{LOOP.group_id}" data-current="{STT}" data-checkss="{CHECKSS}" data-msgerror="{LANG.errorChangeWeight}" type="button" class="btn btn-default btn-xs btn-block btn-dropdown-tool"><span class="caret"></span><span class="text">{STT}</span></button>
                     <!-- END: weight -->
                 </td>
                 <td class="text-left"><a title="{LANG.users}" href="{LOOP.link_userlist}">{LOOP.title}</a></td>
                 <td>{LOOP.add_time}</td>
                 <td>{LOOP.exp_time}</td>
                 <td><strong class="text-danger">{LOOP.number}</strong></td>
-                <td class="text-center"><input data-id="{LOOP.group_id}" data-tokend="{TOKEND}" type="checkbox" class="actGroup" value="1"{LOOP.act}{LOOP.disabled}></td>
+                <td class="text-center"><input data-id="{LOOP.group_id}" data-checkss="{CHECKSS}" type="checkbox" class="actGroup" value="1"{LOOP.act}{LOOP.disabled}></td>
                 <td class="text-center">
                     <!-- BEGIN: action -->
                     <a href="{MODULE_URL}={OP}&edit&id={LOOP.group_id}" class="btn btn-default btn-xs"><i class="fa fa-edit"></i> {GLANG.edit}</a>
-                    <!-- BEGIN: delete --><a class="delGroup btn btn-danger btn-xs" href="#" data-id="{LOOP.group_id}" data-tokend="{TOKEND}"><i class="fa fa-trash-o"></i> {GLANG.delete}</a><!-- END: delete -->
+                    <!-- BEGIN: delete --><a class="delGroup btn btn-danger btn-xs" href="#" data-id="{LOOP.group_id}" data-checkss="{CHECKSS}"><i class="fa fa-trash-o"></i> {GLANG.delete}</a><!-- END: delete -->
                     <!-- END: action -->
                 </td>
             </tr>
@@ -268,7 +268,7 @@ function get_alias() {
 </div>
 <!-- BEGIN: action_js -->
 <div class="form-group">
-    <a class="btn btn-danger" href="#" data-toggle="delInactiveGroup" data-tokend="{TOKEND}" data-msgconfirm="{LANG.delConfirm} ?"><i class="fa fa-trash-o" aria-hidden="true"></i> {LANG.group_del_inactive}</a>
+    <a class="btn btn-danger" href="#" data-toggle="delInactiveGroup" data-checkss="{CHECKSS}" data-msgconfirm="{LANG.delConfirm} ?"><i class="fa fa-trash-o" aria-hidden="true"></i> {LANG.group_del_inactive}</a>
 </div>
 <script type="text/javascript">
 $(document).ready(function() {
@@ -277,7 +277,7 @@ $(document).ready(function() {
         confirm("{LANG.delConfirm} ?") && $.ajax({
             type : "POST",
             url : "{MODULE_URL}={OP}",
-            data : "del=" + $(this).data('id') + '&tokend=' + $(this).data('tokend'),
+            data : "del=" + $(this).data('id') + '&checkss=' + $(this).data('checkss'),
             success : function(a) {
                 a == "OK" ? location.reload() : alert(a);
             }
@@ -289,7 +289,7 @@ $(document).ready(function() {
         $.ajax({
             type : "POST",
             url : "{MODULE_URL}={OP}",
-            data : "act=" + $this.data('id') + '&tokend=' + $this.data('tokend') + "&rand=" + nv_randomPassword(10),
+            data : "act=" + $this.data('id') + '&checkss=' + $this.data('checkss') + "&rand=" + nv_randomPassword(10),
             success : function(a) {
                 a = a.split("|");
                 $this.prop("disabled", false);

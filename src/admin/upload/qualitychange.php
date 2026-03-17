@@ -13,7 +13,7 @@ if (!defined('NV_IS_FILE_ADMIN')) {
     exit('Stop!!!');
 }
 
-if ($nv_Request->get_title('checkss', 'post', '') !== NV_CHECK_SESSION) {
+if (!csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_upload_key)) {
     nv_jsonOutput([
         'status' => 'error',
         'mess' => 'Error session!!!'

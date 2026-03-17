@@ -18,7 +18,7 @@ $page_title = $nv_Lang->getModule('addtotopics');
 $id_array = [];
 $listid = $nv_Request->get_string('listid', 'get,post', '');
 
-if ($nv_Request->isset_request('topicsid', 'post')) {
+if ($nv_Request->isset_request('topicsid', 'post') and csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
     nv_insert_logs(NV_LANG_DATA, $module_name, 'log_add_topic', 'listid ' . $listid, $admin_info['userid']);
 
     $topicsid = $nv_Request->get_int('topicsid', 'post');
@@ -57,6 +57,7 @@ $result = $db->query($db->sql());
 $xtpl = new XTemplate('addtotopics.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
 $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
 $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
+$xtpl->assign('CHECKSS', csrf_create($csrf_key));
 
 while ($_scratch = $result->fetch(3)) {
     [$id, $title] = $_scratch;

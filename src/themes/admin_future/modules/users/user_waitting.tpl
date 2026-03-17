@@ -64,7 +64,7 @@
                             </a>
                             <button type="button" class="btn btn-danger btn-sm btn-del-waiting"
                                 data-userid="{$u.userid}"
-                                data-tokend="{$u.checkss}"
+                                data-checkss="{$u.checkss}"
                                 data-icon="fa-trash"
                                 aria-label="{$LANG->getGlobal('delete')}">
                                 <i class="fa-solid fa-trash" data-icon="fa-trash"></i> {$LANG->getGlobal('delete')}
@@ -549,7 +549,7 @@
                     </button>
                     <button class="btn btn-danger btn-del-waiting ms-2" type="button"
                         data-userid="{$DATA.userid}"
-                        data-tokend="{$CHECKSS}"
+                        data-checkss="{$CHECKSS}"
                         data-icon="fa-trash">
                         <i class="fa-solid fa-trash" data-icon="fa-trash"></i> {$LANG->getGlobal('delete')}
                     </button>

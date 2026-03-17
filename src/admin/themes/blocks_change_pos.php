@@ -13,12 +13,13 @@ if (!defined('NV_IS_FILE_THEMES')) {
     exit('Stop!!!');
 }
 
+$csrf_block_key = $module_name . '_blocks_manage_' . $admin_info['admin_id'];
 $bid = $nv_Request->get_int('bid', 'post');
 $pos_new = nv_unhtmlspecialchars($nv_Request->get_title('pos', 'post', '', 0));
 
 [$bid, $theme, $pos_old] = $db->query('SELECT bid, theme, position FROM ' . NV_BLOCKS_TABLE . '_groups WHERE bid=' . $bid)->fetch(3);
 
-if ($bid > 0 and md5($theme . NV_CHECK_SESSION) == $nv_Request->get_string('checkss', 'post,get')) {
+if ($bid > 0 and csrf_check($nv_Request->get_string('checkss', 'post,get'), $csrf_block_key)) {
     $sth = $db->prepare('UPDATE ' . NV_BLOCKS_TABLE . '_groups SET position= :position, weight=8388607 WHERE bid=' . $bid);
     $sth->bindParam(':position', $pos_new, PDO::PARAM_STR);
     $sth->execute();

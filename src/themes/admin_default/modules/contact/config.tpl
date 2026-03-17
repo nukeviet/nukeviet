@@ -1,5 +1,6 @@
 <!-- BEGIN: main -->
 <form class="form-inline" action="{FORM_ACTION}" method="post">
+    <input type="hidden" name="checkss" value="{CHECKSS}" />
     <div class="table-responsive">
         <table class="table table-striped table-bordered">
             <tfoot>

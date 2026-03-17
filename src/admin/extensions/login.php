@@ -20,20 +20,18 @@ $request['username'] = $nv_Request->get_title('username', 'post', '');
 $request['password'] = $nv_Request->get_title('password', 'post', '');
 $request['redirect'] = $nv_Request->get_title('redirect', 'post,get', '');
 
-$csrf_key = $module_name . '_' . $op . '_' . $admin_info['admin_id'];
-
 $tpl = new \NukeViet\Template\NVSmarty();
 $tpl->setTemplateDir(get_module_tpl_dir('login.tpl'));
 $tpl->assign('LANG', $nv_Lang);
 $tpl->assign('MODULE_NAME', $module_name);
 $tpl->assign('OP', $op);
 
-$tpl->assign('CHECKSESS', csrf_create($csrf_key));
+$tpl->assign('CHECKSS', csrf_create($csrf_key));
 $tpl->assign('REQUEST', $request);
 
 // Submit đăng nhập
-if ($nv_Request->isset_request('checksess', 'post')) {
-    if (!csrf_check($nv_Request->get_string('checksess', 'post'), $csrf_key)) {
+if ($nv_Request->isset_request('checkss', 'post')) {
+    if (!csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
         nv_jsonOutput([
             'status' => 'error',
             'mess' => 'Session error!!!',

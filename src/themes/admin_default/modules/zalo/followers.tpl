@@ -173,6 +173,7 @@
                                 <td colspan="2" class="text-center">
                                     <input type="hidden" name="change_profile" value="1" />
                                     <input type="hidden" name="user_id" value="{OTHER.user_id}" />
+                                    <input type="hidden" name="checkss" value="{CHECKSS}" />
                                     <button type="submit" class="btn btn-primary">{GLANG.submit}</button>
                                 </td>
                             </tr>
@@ -214,6 +215,7 @@
                             <div class="col-xs-7">
                                 <input type="hidden" name="add_follower_tag" value="1" />
                                 <input type="hidden" name="user_id" value="{OTHER.user_id}" />
+                                <input type="hidden" name="checkss" value="{CHECKSS}" />
                                 <input type="submit" class="btn btn-primary btn-block" value="{LANG.add_follower_tag}" />
                             </div>
                         </form>
@@ -280,6 +282,7 @@
                                 <input type="hidden" name="user_id" value="{OTHER.user_id}"/>
                                 <input type="hidden" name="message_id" id="message_id" value=""/>
                                 <input type="hidden" name="send_text" value="1"/>
+                                <input type="hidden" name="checkss" value="{CHECKSS}"/>
                                 <button class="chat-send btn btn-primary" id="chat_submit" type="submit"><i class="fa fa-chevron-right fa-lg"></i></button>
                             </div>
                         </form>
@@ -294,6 +297,7 @@
 <form method="POST" action="{FORM_ACTION}" id="update-to-oa">
     <input type="hidden" name="updatefollowerinfo" value="1" />
     <input type="hidden" name="user_id" value="" />
+    <input type="hidden" name="checkss" value="{CHECKSS}" />
 </form>
 
 <!-- Modal -->
@@ -321,10 +325,11 @@
     </div>
 </div>
 <script>
+    var checkss = '{CHECKSS}';
     $(function() {
         var ps = new PerfectScrollbar('.message-box');
         <!-- BEGIN: action -->
-        $('a[data-toggle="collapse"][aria-controls="{ACTION}"]').trigger('click')
+        $('a[data-toggle="collapse"][aria-controls="{ACTION}"]').trigger('click');
         <!-- END: action -->
     })
 </script>

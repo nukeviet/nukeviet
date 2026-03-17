@@ -16,9 +16,8 @@ if (!defined('NV_IS_FILE_ADMIN')) {
 $mod_name = $nv_Request->get_title('mod_name', 'post,get', '');
 
 $groups_list = nv_groups_list();
-$csrf_key = $module_name . '_' . $admin_info['admin_id'];
 if ($nv_Request->isset_request('save', 'post') and isset($site_mod_comm[$mod_name])) {
-    if (!csrf_check($nv_Request->get_title('checkss', 'post', ''), $csrf_key)) {
+    if (!csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
         nv_jsonOutput(['status' => 'error', 'mess' => $nv_Lang->getGlobal('error_code_11')]);
     }
     $array_config = [];

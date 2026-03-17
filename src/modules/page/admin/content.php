@@ -47,7 +47,6 @@ if (!empty($global_config['over_capacity']) and !defined('NV_IS_GODADMIN')) {
 $selectthemes = (!empty($site_mods[$module_name]['theme'])) ? $site_mods[$module_name]['theme'] : $global_config['site_theme'];
 $layout_array = nv_scandir(NV_ROOTDIR . '/themes/' . $selectthemes . '/layout', $global_config['check_op_layout']);
 $groups_list = nv_groups_list();
-$csrf_key = $module_name . '_' . $op . '_' . $id;
 
 // Xử lý khi lưu (AJAX)
 if (csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {

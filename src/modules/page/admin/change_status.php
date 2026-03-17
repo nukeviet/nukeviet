@@ -15,7 +15,7 @@ if (!defined('NV_IS_FILE_ADMIN')) {
 
 $checkss = $nv_Request->get_string('checkss', 'post');
 $id = $nv_Request->get_int('id', 'post', 0);
-if ($id > 0 and $checkss == md5($id . NV_CHECK_SESSION)) {
+if ($id > 0 and csrf_check($checkss, $csrf_key)) {
     $row = $db->query('SELECT status FROM ' . NV_PREFIXLANG . '_' . $module_data . ' WHERE id=' . $id)->fetch();
     if (!empty($row)) {
         $act_id = $row['status'] ? 0 : 1;

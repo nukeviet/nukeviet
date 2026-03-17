@@ -29,6 +29,9 @@ $groups_list = nv_groups_list();
 unset($groups_list[1], $groups_list[2], $groups_list[3], $groups_list[5], $groups_list[6]);
 
 if ($nv_Request->get_int('save', 'post') == '1') {
+    if (!csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
+        nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&id=' . $id);
+    }
     $blang = strip_tags($nv_Request->get_string('blang', 'post', ''));
 
     if (!empty($blang) and !in_array($blang, $global_config['allow_sitelangs'], true)) {
@@ -162,6 +165,7 @@ $contents['exp_time'] = $exp_time;
 $contents['exp_time_custom'] = $exp_time_custom ?: '';
 $contents['uploadgroup'] = $uploadgroup;
 $contents['uploadtype'] = $uploadtype;
+$contents['checkss'] = csrf_create($csrf_key);
 
 if (defined('NV_EDITOR')) {
     require_once NV_ROOTDIR . '/' . NV_EDITORSDIR . '/' . NV_EDITOR . '/nv.php';

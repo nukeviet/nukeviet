@@ -27,7 +27,7 @@ if ($catid > 0) {
         } else {
             $check_rows = $db->query('SELECT COUNT(*) FROM ' . NV_PREFIXLANG . '_' . $module_data . '_' . $catid)->fetchColumn();
             if ((int) $check_rows > 0) {
-                if ($delallcheckss == md5($catid . NV_CHECK_SESSION)) {
+                if (csrf_check($delallcheckss, $_csrf_key)) {
                     $delcatandrows = $nv_Request->get_string('delcatandrows', 'post', '');
                     $movecat = $nv_Request->get_string('movecat', 'post', '');
                     $catidnews = $nv_Request->get_int('catidnews', 'post', 0);
@@ -177,12 +177,12 @@ if ($catid > 0) {
                         }
                     }
                 } else {
-                    $contents = 'ERR_ROWS_' . $catid . '_' . md5($catid . NV_CHECK_SESSION) . '_' . $nv_Lang->getModule('delcat_msg_rows', $check_rows);
+                    $contents = 'ERR_ROWS_' . $catid . '_' . csrf_create($_csrf_key) . '_' . $nv_Lang->getModule('delcat_msg_rows', $check_rows);
                 }
             }
         }
         if ($contents == 'NO_' . $catid) {
-            if ($delallcheckss == md5($catid . NV_CHECK_SESSION)) {
+            if (csrf_check($delallcheckss, $_csrf_key)) {
                 $sql = 'DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_cat WHERE catid=' . $catid;
                 if ($db->exec($sql)) {
                     nv_insert_logs(NV_LANG_DATA, $module_name, $nv_Lang->getModule('delcatandrows'), $title, $admin_info['userid']);
@@ -198,7 +198,7 @@ if ($catid > 0) {
                 $db->query('DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_admins WHERE catid=' . $catid);
                 $nv_Cache->delMod($module_name);
             } else {
-                $contents = 'CONFIRM_' . $catid . '_' . md5($catid . NV_CHECK_SESSION);
+                $contents = 'CONFIRM_' . $catid . '_' . csrf_create($_csrf_key);
             }
         }
     } else {

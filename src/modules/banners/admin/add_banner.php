@@ -48,6 +48,9 @@ if (empty($plans)) {
 $error = '';
 
 if ($nv_Request->get_int('save', 'post') == '1') {
+    if (!csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
+        nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op);
+    }
     $title = nv_htmlspecialchars(strip_tags($nv_Request->get_string('title', 'post', '')));
     $pid = $nv_Request->get_int('pid', 'post', 0);
     $file_alt = nv_htmlspecialchars(strip_tags($nv_Request->get_string('file_alt', 'post', '')));
@@ -321,6 +324,8 @@ $contents['exp_date'] = [
 ];
 $contents['bannerhtml'] = htmlspecialchars(nv_editor_br2nl($bannerhtml));
 $contents['assign_user'] = $assign_user;
+$contents['checkss'] = csrf_create($csrf_key);
+$contents['checkss_stable'] = csrf_create($_csrf_key);
 
 if (defined('NV_EDITOR')) {
     require_once NV_ROOTDIR . '/' . NV_EDITORSDIR . '/' . NV_EDITOR . '/nv.php';

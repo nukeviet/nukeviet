@@ -17,6 +17,9 @@ $groups_list = nv_groups_list();
 
 // Nạp lại thành phần con
 if ($nv_Request->isset_request('reload', 'post')) {
+    if (!csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
+        nv_jsonOutput(['status' => 'error', 'mess' => $nv_Lang->getGlobal('error_code_11')]);
+    }
     $id = $nv_Request->get_int('id', 'post', 0);
     $mid = $nv_Request->get_int('mid', 'post', 0);
     $array_sub_id = [];
@@ -82,6 +85,9 @@ if ($nv_Request->isset_request('reload', 'post')) {
 
 // Tạo/sửa menu
 if ($nv_Request->get_title('action', 'post') == 'row') {
+    if (!csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
+        nv_jsonOutput(['status' => 'error', 'mess' => $nv_Lang->getGlobal('error_code_11')]);
+    }
     $post = [];
     $post['title'] = nv_substr($nv_Request->get_title('title', 'post', '', 1), 0, 250);
     if (empty($post['title'])) {
@@ -299,6 +305,9 @@ if ($nv_Request->get_title('action', 'post') == 'row') {
 
 // Lấy html khi thay đổi khối menu
 if ($nv_Request->get_title('action', 'post') == 'link_menu' and $nv_Request->isset_request('mid,parentid', 'post')) {
+    if (!csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
+        nv_jsonOutput(['status' => 'error', 'mess' => $nv_Lang->getGlobal('error_code_11')]);
+    }
     $mid = $nv_Request->get_int('mid', 'post', 0);
     $parentid = $nv_Request->get_int('parentid', 'post', 0);
 
@@ -314,6 +323,7 @@ if ($nv_Request->get_title('action', 'post') == 'link_menu' and $nv_Request->iss
 
     $xtpl = new XTemplate('main.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
     $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
+    $xtpl->assign('CHECKSS', csrf_create($csrf_key));
 
     $xtpl->assign('CAT', [
         'key' => 0,
@@ -351,6 +361,9 @@ if ($nv_Request->get_title('action', 'post') == 'link_menu' and $nv_Request->iss
 
 // Lấy các mục của module
 if ($nv_Request->get_title('action', 'post') == 'link_module' and $nv_Request->isset_request('module', 'post')) {
+    if (!csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
+        nv_jsonOutput(['status' => 'error', 'mess' => $nv_Lang->getGlobal('error_code_11')]);
+    }
     $mod_name = $nv_Request->get_title('module', 'post', '');
 
     $stmt = $db->prepare('SELECT title, module_file, module_data FROM ' . NV_MODULES_TABLE . ' WHERE title= :module');
@@ -415,6 +428,9 @@ if ($nv_Request->get_title('action', 'post') == 'link_module' and $nv_Request->i
 
 // Thay đổi thứ tự menu
 if ($nv_Request->get_title('action', 'post') == 'chang_weight' and $nv_Request->isset_request('id,mid,parentid,new_weight', 'post')) {
+    if (!csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
+        nv_jsonOutput(['status' => 'error', 'mess' => $nv_Lang->getGlobal('error_code_11')]);
+    }
     $id = $nv_Request->get_int('id', 'post', 0);
     $mid = $nv_Request->get_int('mid', 'post', 0);
     $parentid = $nv_Request->get_int('parentid', 'post', 0);
@@ -444,6 +460,9 @@ if ($nv_Request->get_title('action', 'post') == 'chang_weight' and $nv_Request->
 
 // Thay đổi trạng thái menu
 if ($nv_Request->get_title('action', 'post') == 'change_active' and $nv_Request->isset_request('id', 'post')) {
+    if (!csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
+        nv_jsonOutput(['status' => 'error', 'mess' => $nv_Lang->getGlobal('error_code_11')]);
+    }
     $id = $nv_Request->get_int('id', 'post', 0);
     $sql = 'SELECT id, status FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE id=' . $id;
     $row = $db->query($sql)->fetch();
@@ -460,6 +479,9 @@ if ($nv_Request->get_title('action', 'post') == 'change_active' and $nv_Request-
 
 // Xoá menu
 if ($nv_Request->get_title('action', 'post') == 'delete' and $nv_Request->isset_request('id,mid,parentid', 'post')) {
+    if (!csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
+        nv_jsonOutput(['status' => 'error', 'mess' => $nv_Lang->getGlobal('error_code_11')]);
+    }
     $id = $nv_Request->get_int('id', 'post', 0);
     $mid = $nv_Request->get_int('mid', 'post', 0);
     $parentid = $nv_Request->get_int('parentid', 'post', 0);
@@ -473,6 +495,9 @@ if ($nv_Request->get_title('action', 'post') == 'delete' and $nv_Request->isset_
 
 // Xóa nhiều menu
 if ($nv_Request->get_title('action', 'post') == 'delete' and $nv_Request->isset_request('idcheck,mid,parentid', 'post')) {
+    if (!csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
+        nv_jsonOutput(['status' => 'error', 'mess' => $nv_Lang->getGlobal('error_code_11')]);
+    }
     $parentid = $nv_Request->get_int('parentid', 'post', 0);
     $mid = $nv_Request->get_int('mid', 'post', 0);
     $array_id = $nv_Request->get_title('idcheck', 'post', '');
@@ -538,6 +563,7 @@ if ($nv_Request->get_title('action', 'get') == 'add' or !empty($post['id'])) {
     $xtpl = new XTemplate('main.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
     $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
     $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
+    $xtpl->assign('CHECKSS', csrf_create($csrf_key));
     $xtpl->assign('FORM_ACTION', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;mid=' . $post['mid']) . '&amp;parentid=' . $post['parentid'];
     $xtpl->assign('FORM_CAPTION', ($post['id']) ? $nv_Lang->getModule('edit_menu') : $nv_Lang->getModule('add_item'));
     $xtpl->assign('UPLOAD_CURRENT', NV_UPLOADS_DIR . '/' . $module_upload);
@@ -717,6 +743,7 @@ $array_mod_title[$s]['active'] = true;
 $xtpl = new XTemplate('main.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
 $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
 $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
+$xtpl->assign('CHECKSS', csrf_create($csrf_key));
 $xtpl->assign('MODULE_NAME', $module_name);
 $xtpl->assign('FORM_ACTION', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;mid=' . $post['mid'] . '&amp;parentid=' . $post['parentid']);
 $xtpl->assign('DATA', $post);

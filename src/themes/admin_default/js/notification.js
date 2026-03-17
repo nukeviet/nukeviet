@@ -122,7 +122,7 @@ $(document).ready(function() {
         $.ajax({
             type: 'POST',
             url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=siteinfo&' + nv_fc_variable + '=notification&nocache=' + new Date().getTime(),
-            data: 'delete=1&id=' + eleBody.data('id') + '&checksess=' + $('#notification-area').data('checksess'),
+            data: 'delete=1&id=' + eleBody.data('id') + '&checkss=' + $('#notification-area').data('checkss'),
             dataType: 'json',
             success: function(data) {
                 if (data.error) {
@@ -158,7 +158,7 @@ $(document).ready(function() {
         $.ajax({
             type: 'POST',
             url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=siteinfo&' + nv_fc_variable + '=notification&nocache=' + new Date().getTime(),
-            data: 'toggle=1&id=' + eleBody.data('id') + '&checksess=' + $('#notification-area').data('checksess'),
+            data: 'toggle=1&id=' + eleBody.data('id') + '&checkss=' + $('#notification-area').data('checkss'),
             dataType: 'json',
             success: function(data) {
                 if (data.error) {
@@ -223,7 +223,7 @@ $(document).ready(function() {
             $.ajax({
                 type: 'POST',
                 url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=siteinfo&' + nv_fc_variable + '=notification&nocache=' + new Date().getTime(),
-                data: 'notification_reset=1&checksess=' + $('#notification-area').data('checksess'),
+                data: 'notification_reset=1&checkss=' + $('#notification-area').data('checkss'),
                 success: function() {
                     $('#notification-area>a').trigger('click');
                     $('#notification').hide();
@@ -246,7 +246,7 @@ $(document).ready(function() {
             $.ajax({
                 type: 'POST',
                 url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=siteinfo&' + nv_fc_variable + '=notification&nocache=' + new Date().getTime(),
-                data: 'toggle=1&direct_view=1&id=' + target.data('id') + '&checksess=' + $('#notification-area').data('checksess'),
+                data: 'toggle=1&direct_view=1&id=' + target.data('id') + '&checkss=' + $('#notification-area').data('checkss'),
                 success: function() {
                     var btn = $('.ntf-toggle', target.parent());
                     $('.fa', btn).removeClass('fa-eye-slash fa-eye').addClass('fa-eye-slash');

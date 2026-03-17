@@ -31,6 +31,9 @@ if ($action == 'block') {
 
     // Ghi CSDL
     if ($nv_Request->get_int('save', 'post')) {
+        if (!csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
+            nv_jsonOutput(['status' => 'error', 'mess' => $nv_Lang->getGlobal('error_code_11')]);
+        }
         $arr['title'] = $nv_Request->get_title('title', 'post', '');
         if (empty($arr['title'])) {
             nv_jsonOutput([
@@ -159,6 +162,7 @@ if ($action == 'block') {
     $xtpl->assign('FORM_ACTION', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=blocks&amp;action=block' . (!empty($arr['id']) ? '&amp;id=' . $arr['id'] : ''));
     $xtpl->assign('FORM_CAPTION', $arr['id'] ? $nv_Lang->getModule('edit_menu') : $nv_Lang->getModule('add_menu'));
     $xtpl->assign('OP', $op);
+    $xtpl->assign('CHECKSS', csrf_create($csrf_key));
 
     $xtpl->assign('DATAFORM', $arr);
     unset($site_mods['menu'], $site_mods['comment'], $site_mods['zalo']);
@@ -174,6 +178,9 @@ if ($action == 'block') {
 
 // Xóa khối menu
 if ($nv_Request->isset_request('del', 'post')) {
+    if (!csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
+        nv_jsonOutput(['status' => 'error', 'mess' => $nv_Lang->getGlobal('error_code_11')]);
+    }
     if (!defined('NV_IS_AJAX')) {
         exit('Wrong URL');
     }
@@ -227,6 +234,7 @@ while ($row = $query2->fetch()) {
 $xtpl = new XTemplate('blocks.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
 $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
 $xtpl->assign('FORM_ACTION', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=blocks&amp;action=block');
+$xtpl->assign('CHECKSS', csrf_create($csrf_key));
 
 if (empty($array)) {
     $xtpl->assign('ERROR', $nv_Lang->getModule('data_no'));

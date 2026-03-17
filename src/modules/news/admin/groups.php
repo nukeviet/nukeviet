@@ -20,7 +20,7 @@ $savecat = 0;
 $currentpath = NV_UPLOADS_DIR . '/' . $module_upload;
 
 $savecat = $nv_Request->get_int('savecat', 'post', 0);
-if (!empty($savecat)) {
+if (!empty($savecat) and csrf_check($nv_Request->get_string('checkss', 'post'), $_csrf_key)) {
     $bid = $nv_Request->get_int('bid', 'post', 0);
     $title = $nv_Request->get_title('title', 'post', '', 1);
     $keywords = $nv_Request->get_title('keywords', 'post', '', 1);
@@ -102,6 +102,7 @@ $xtpl->assign('NV_BASE_ADMINURL', NV_BASE_ADMINURL);
 $xtpl->assign('NV_NAME_VARIABLE', NV_NAME_VARIABLE);
 $xtpl->assign('MODULE_NAME', $module_name);
 $xtpl->assign('OP', $op);
+$xtpl->assign('CHECKSS', csrf_create($_csrf_key));
 
 $xtpl->assign('BLOCK_CAT_LIST', nv_show_block_cat_list());
 

@@ -13,8 +13,6 @@ if (!defined('NV_IS_FILE_EMAILTEMPLATES')) {
     exit('Stop!!!');
 }
 
-$csrf_key = $module_name . '_' . $op;
-
 // Xóa mẫu email
 if ($nv_Request->isset_request('delete', 'post') and csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
     $emailid = $nv_Request->get_int('emailid', 'post', 0);

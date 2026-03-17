@@ -35,6 +35,9 @@ if (empty($nv_update_config)) {
 define('NV_ADMIN', true);
 include_once NV_ROOTDIR . '/includes/core/admin_functions.php';
 
+// Tạo key CSRF cho quá trình cập nhật
+$csrf_key = 'install_update_' . $admin_info['admin_id'];
+
 // Xac dinh ngon ngu cap nhat
 $dirs = nv_scandir(NV_ROOTDIR . '/includes/language', '/^([a-z]{2})/');
 $languageslist = [];
@@ -100,11 +103,13 @@ class NvUpdate
      */
     public function __construct($nv_update_config)
     {
-        global $db, $nv_Lang;
+        global $db, $nv_Lang, $csrf_key, $admin_info;
 
         $this->db = $db;
         $this->lang = $nv_Lang;
         $this->config = $nv_update_config;
+        $this->csrf_key = $csrf_key;
+        $this->admin_id = $admin_info['admin_id'];
     }
 
     /**
@@ -450,6 +455,8 @@ class NvUpdate
         $xtpl->assign('NV_LANG_UPDATE', NV_LANG_UPDATE);
         $xtpl->assign('LANG', NukeViet\Core\Language::$lang_module);
         $xtpl->assign('CONFIG', $this->config);
+        $xtpl->assign('CHECKSS', csrf_create($this->csrf_key));
+        $xtpl->assign('DELETE_CHECKSS', csrf_create('webtools_deleteupdate_' . $this->admin_id));
 
         if (!empty($this->config['formodule'])) {
             // Lay module_file lam tieu de luon
@@ -511,6 +518,8 @@ class NvUpdate
         $xtpl->assign('LANG', NukeViet\Core\Language::$lang_module);
         $xtpl->assign('CONFIG', $this->config);
         $xtpl->assign('NV_BASE_SITEURL', NV_BASE_SITEURL);
+        $xtpl->assign('CHECKSS', csrf_create($this->csrf_key));
+        $xtpl->assign('DELETE_CHECKSS', csrf_create('webtools_deleteupdate_' . $this->admin_id));
 
         $xtpl->assign('RELEASE_DATE', !empty($this->config['release_date']) ? nv_datetime_format($this->config['release_date'], 0, 0) : 'N/A');
         $xtpl->assign('ALLOW_OLD_VERSION', !empty($this->config['allow_old_version']) ? implode(', ', $this->config['allow_old_version']) : 'N/A');
@@ -572,7 +581,7 @@ class NvUpdate
             if ($array['is_data_backup']) {
                 // Cho phep backup CSDL
 
-                $xtpl->assign('URL_DUMP_DB_BACKUP', NV_BASE_SITEURL . 'install/update.php?step=' . $this->config['step'] . '&amp;substep=' . $substep . '&amp;dump&amp;checksess=' . NV_CHECK_SESSION);
+                $xtpl->assign('URL_DUMP_DB_BACKUP', NV_BASE_SITEURL . 'install/update.php?step=' . $this->config['step'] . '&amp;substep=' . $substep . '&amp;dump&amp;checkss=' . csrf_create($this->csrf_key));
                 $xtpl->parse('main.step1.is_data_backup');
             } else {
                 // Thong bao khong cho backup CSDL nua
@@ -590,7 +599,7 @@ class NvUpdate
             if ($array['is_file_backup']) {
                 // Cho phep backup CODE
 
-                $xtpl->assign('URL_DUMP_FILE_BACKUP', NV_BASE_SITEURL . 'install/update.php?step=' . $this->config['step'] . '&substep=' . $substep . '&amp;dumpfile&amp;checksess=' . NV_CHECK_SESSION);
+                $xtpl->assign('URL_DUMP_FILE_BACKUP', NV_BASE_SITEURL . 'install/update.php?step=' . $this->config['step'] . '&substep=' . $substep . '&amp;dumpfile&amp;checkss=' . csrf_create($this->csrf_key));
                 $xtpl->parse('main.step1.is_file_backup');
             }
 
@@ -873,7 +882,7 @@ class NvUpdate
             $this->set_data_log($nv_update_config['updatelog']);
         }
 
-        $file_log = 'log-update-' . nv_date('H-i-s-d-m-Y', $nv_update_config['updatelog']['starttime']) . '-' . NV_CHECK_SESSION . '.log';
+        $file_log = 'log-update-' . nv_date('H-i-s-d-m-Y', $nv_update_config['updatelog']['starttime']) . '-' . $this->csrf_key . '.log';
         $time = nv_date('H:i:s_d-m-Y');
 
         if (!is_array($content)) {
@@ -1035,8 +1044,7 @@ if ($nv_update_config['step'] == 1) {
 
         // Backup CSDL
         if ($nv_Request->isset_request('dump', 'get')) {
-            $checksess = $nv_Request->get_title('checksess', 'get', '');
-            if ($checksess != NV_CHECK_SESSION) {
+            if (!csrf_check($nv_Request->get_string('checkss', 'get'), $csrf_key)) {
                 exit('Error!!!');
             }
 
@@ -1084,8 +1092,7 @@ if ($nv_update_config['step'] == 1) {
 
         // Download CODE thay doi
         if ($nv_Request->isset_request('downfile', 'get')) {
-            $checksess = $nv_Request->get_title('checksess', 'get', '');
-            if ($checksess != NV_CHECK_SESSION) {
+            if (!csrf_check($nv_Request->get_string('checkss', 'get'), $csrf_key)) {
                 exit('Error!!!');
             }
 
@@ -1128,7 +1135,7 @@ if ($nv_update_config['step'] == 1) {
             }
 
             if (!empty($zip_file_backup)) {
-                $file_src = 'backup_update_' . date('Y_m_d') . '_' . NV_CHECK_SESSION . '.zip';
+                $file_src = 'backup_update_' . date('Y_m_d') . '_' . $csrf_key . '.zip';
 
                 // Kiem tra file ton tai
                 $filename2 = $file_src;
@@ -1154,7 +1161,7 @@ if ($nv_update_config['step'] == 1) {
                 $nv_update_config['updatelog']['file_backuped'] = NV_CURRENTTIME;
                 $NvUpdate->set_data_log($nv_update_config['updatelog']);
 
-                exit('<a href="' . NV_BASE_SITEURL . 'install/update.php?step=2&amp;substep=4&downfile=' . $filename2 . '&checksess=' . NV_CHECK_SESSION . '" title="' . $nv_Lang->getModule('update_log_dump_file_down') . '">' . $nv_Lang->getModule('update_file_backup_ok') . '</a>');
+                exit('<a href="' . NV_BASE_SITEURL . 'install/update.php?step=2&amp;substep=4&downfile=' . $filename2 . '&checkss=' . csrf_create($csrf_key) . '" title="' . $nv_Lang->getModule('update_log_dump_file_down') . '">' . $nv_Lang->getModule('update_file_backup_ok') . '</a>');
             }
         }
 
@@ -1324,6 +1331,9 @@ if ($nv_update_config['step'] == 1) {
         if (!$array['errorStepMoveFile']) {
             // Tien trinh bat dau chay
             if ($nv_Request->isset_request('load', 'get')) {
+                if (!csrf_check($nv_Request->get_string('checkss', 'get'), $csrf_key)) {
+                    exit('0|NO|Error!!!');
+                }
                 $func = $nv_Request->get_title('load', 'get', '');
 
                 $nv_update_baseurl = NV_BASE_SITEURL . 'install/update.php?step=2&substep=3&load=' . $func;
@@ -1539,6 +1549,9 @@ if ($nv_update_config['step'] == 1) {
 
         // Tu dong nhan dien remove_path
         if ($nv_Request->isset_request('tetectftp', 'post')) {
+            if (!csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
+                exit('ERROR|Error!!!');
+            }
             $ftp_server = nv_unhtmlspecialchars($nv_Request->get_title('ftp_server', 'post', '', 1));
             $ftp_port = (int) ($nv_Request->get_title('ftp_port', 'post', '21', 1));
             $ftp_user_name = nv_unhtmlspecialchars($nv_Request->get_title('ftp_user_name', 'post', '', 1));
@@ -1602,6 +1615,9 @@ if ($nv_update_config['step'] == 1) {
 
         // Di chuyen cac file
         if ($nv_Request->isset_request('move', 'get')) {
+            if (!csrf_check($nv_Request->get_string('checkss', 'get'), $csrf_key)) {
+                exit('Error!!!');
+            }
             if (!isset($nv_update_config['updatelog']['is_start_move_file'])) {
                 // Danh dau da di chuyen cac file roi
                 $nv_update_config['updatelog']['is_start_move_file'] = NV_CURRENTTIME;

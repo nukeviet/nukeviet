@@ -3,6 +3,7 @@
     <div class="col-md-14">
         <form method="post" action="{FORM_ACTION}" class="form-horizontal configs">
             <input type="hidden" name="save" value="1">
+            <input type="hidden" name="checkss" value="{CHECKSS}">
             <div class="form-group">
                 <label class="col-xs-18 control-label">{LANG.inform_active}</label>
                 <div class="col-xs-6">

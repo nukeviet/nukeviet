@@ -94,7 +94,7 @@
         </div>
         <div class="card-footer border-top text-center">
             <input type="hidden" name="save" value="1">
-            <input type="hidden" name="checkss" value="{$smarty.const.NV_CHECK_SESSION}">
+            <input type="hidden" name="checkss" value="{$CHECKSS}">
             <button type="submit" class="btn btn-primary">{$LANG->getModule('pubdate')}</button>
         </div>
     </div>

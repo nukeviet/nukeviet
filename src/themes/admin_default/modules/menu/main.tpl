@@ -24,7 +24,7 @@
     </div>
 </div>
 <!-- BEGIN: table -->
-<form id="menulist" method="post" action="{FORM_ACTION}" data-mid="{PAGE.mid}" data-parentid="{PAGE.parentid}" data-reload-confirm="{LANG.action_menu_reload_confirm}">
+<form id="menulist" method="post" action="{FORM_ACTION}" data-mid="{PAGE.mid}" data-parentid="{PAGE.parentid}" data-reload-confirm="{LANG.action_menu_reload_confirm}" data-checkss="{CHECKSS}">
     <div class="table-responsive">
         <table class="table table-striped table-bordered table-hover">
             <thead class="bg-primary">
@@ -136,6 +136,7 @@
                 <input type="hidden" name="mid" value="{DATA.mid}">
                 <input type="hidden" name="pa" value="{DATA.parentid}">
                 <input type="hidden" name="action" value="row">
+                <input type="hidden" name="checkss" value="{CHECKSS}">
                 <table class="table table-striped table-bordered">
                     <colgroup>
                         <col style="width: 30%;" />

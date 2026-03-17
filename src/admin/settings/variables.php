@@ -13,7 +13,7 @@ if (!defined('NV_IS_FILE_SETTINGS')) {
     exit('Stop!!!');
 }
 
-$csrf_key = $module_name . '_' . $op . '_' . $admin_info['admin_id'];
+
 $sameSite_array = [
     'Empty' => $nv_Lang->getModule('cookie_SameSite_Empty'),
     'Lax' => $nv_Lang->getModule('cookie_SameSite_Lax'),

@@ -14,8 +14,8 @@ if (!defined('NV_IS_FILE_MODULES')) {
 }
 
 $modname = $nv_Request->get_title('mod', 'post');
-$csrf_key = $module_name . '_del_' . $modname;
-if (empty($modname) or !preg_match($global_config['check_module'], $modname) or !csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
+$_csrf_key = $module_name . '_del_' . $modname;
+if (empty($modname) or !preg_match($global_config['check_module'], $modname) or !csrf_check($nv_Request->get_string('checkss', 'post'), $_csrf_key)) {
     nv_jsonOutput([
         'success' => 0,
         'text' => 'Wrong data!'

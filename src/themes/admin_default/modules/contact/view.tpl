@@ -1,5 +1,5 @@
 <!-- BEGIN: main -->
-<div class="row page" data-url="{PAGE_URL}" data-id="{DATA.id}">
+<div class="row page" data-url="{PAGE_URL}" data-id="{DATA.id}" data-checkss="{CHECKSS}">
     <div class="col-md-14">
         <h2>
             <!-- BEGIN: process --><span class="fa fa-spinner fa-spin"></span><!-- END: process -->
@@ -206,6 +206,7 @@
                         <h4 class="modal-title">{LANG.send_title}</h4>
                     </div>
                     <form method="post" class="modal-body">
+                        <input type="hidden" name="checkss" value="{CHECKSS}" />
                         <input type="hidden" name="reply" value="{DATA.id}" />
                         <table class="table table-striped table-bordered">
                             <tfoot>
@@ -245,6 +246,7 @@
                         <h4 class="modal-title">{LANG.mark_as_forward}</h4>
                     </div>
                     <form method="post" class="modal-body">
+                        <input type="hidden" name="checkss" value="{CHECKSS}" />
                         <input type="hidden" name="forward" value="{DATA.id}" />
                         <table class="table table-striped table-bordered">
                             <tfoot>

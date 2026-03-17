@@ -98,7 +98,8 @@ function nv_show_plans_list(containerid) {
 function nv_pl_chang_act(pid, checkbox_id) {
     if (confirm(nv_is_change_act_confirm[0])) {
         var nv_timer = nv_settimeout_disable(checkbox_id, 5000);
-        $.post(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=change_act_plan&nocache=' + new Date().getTime(), 'id=' + pid, function(res) {
+        var checkss = $('#' + checkbox_id).closest('table').data('checkss');
+        $.post(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=change_act_plan&nocache=' + new Date().getTime(), 'id=' + pid + '&checkss=' + checkss, function(res) {
             var r_split = res.split("|");
             if (r_split[0] != 'OK') {
                 alert(nv_is_change_act_confirm[2]);
@@ -123,7 +124,8 @@ function nv_pl_chang_act(pid, checkbox_id) {
 
 function nv_pl_del(pid) {
     if (confirm(nv_is_del_confirm[0])) {
-        $.post(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=del_plan&nocache=' + new Date().getTime(), 'id=' + pid, function(res) {
+        var checkss = $('table[data-checkss]').data('checkss');
+        $.post(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=del_plan&nocache=' + new Date().getTime(), 'id=' + pid + '&checkss=' + checkss, function(res) {
             var r_split = res.split("|");
             if (r_split[0] == 'OK') {
                 nv_show_plans_list(r_split[1]);
@@ -139,7 +141,8 @@ function nv_pl_del(pid) {
 
 function nv_pl_chang_act2(pid) {
     if (confirm(nv_is_change_act_confirm[0])) {
-        $.post(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=change_act_plan&nocache=' + new Date().getTime(), 'id=' + pid, function(res) {
+        var checkss = $('table[data-checkss]').data('checkss');
+        $.post(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=change_act_plan&nocache=' + new Date().getTime(), 'id=' + pid + '&checkss=' + checkss, function(res) {
             var r_split = res.split("|");
             if (r_split[0] != 'OK') {
                 alert(nv_is_change_act_confirm[2]);
@@ -153,7 +156,8 @@ function nv_pl_chang_act2(pid) {
 
 function nv_pl_del2(pid) {
     if (confirm(nv_is_del_confirm[0])) {
-        $.post(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=del_plan&nocache=' + new Date().getTime(), 'id=' + pid, function(res) {
+        var checkss = $('table[data-checkss]').data('checkss');
+        $.post(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=del_plan&nocache=' + new Date().getTime(), 'id=' + pid + '&checkss=' + checkss, function(res) {
             var r_split = res.split("|");
             if (r_split[0] == 'OK') {
                 window.location.href = script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=' + r_split[2];
@@ -184,11 +188,13 @@ function nv_show_banners_list(containerid, clid, pid, act, keyword) {
 function nv_chang_weight_banners(pid, id) {
     var nv_timer = nv_settimeout_disable('id_weight_' + id, 5000);
     var weight = $("#id_weight_" + id).val();
+    var checkss = $('#id_weight_' + id).closest('table').data('checkss');
 
     var request_query = nv_fc_variable + '=b_list';
     request_query += '&pid=' + pid
     request_query += '&id=' + id;
     request_query += '&weight=' + weight;
+    request_query += '&checkss=' + checkss;
 
     $('#banners_list_act').load(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + request_query + '&act=1&num=' + nv_randomPassword(8) + '&nocache=' + new Date().getTime());
     $('#banners_list_timeract').load(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + request_query + '&act=0&num=' + nv_randomPassword(8) + '&nocache=' + new Date().getTime());
@@ -199,7 +205,8 @@ function nv_chang_weight_banners(pid, id) {
 function nv_b_chang_act(id, checkbox_id) {
     if (confirm(nv_is_change_act_confirm[0])) {
         var nv_timer = nv_settimeout_disable(checkbox_id, 5000);
-        $.post(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=change_act_banner&nocache=' + new Date().getTime(), 'id=' + id, function(res) {
+        var checkss = $('#' + checkbox_id).closest('table').data('checkss');
+        $.post(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=change_act_banner&nocache=' + new Date().getTime(), 'id=' + id + '&checkss=' + checkss, function(res) {
             var r_split = res.split("|");
             if (r_split[0] != 'OK') {
                 alert(nv_is_change_act_confirm[2]);
@@ -226,7 +233,8 @@ function nv_b_chang_act(id, checkbox_id) {
 
 function nv_b_chang_act2(id) {
     if (confirm(nv_is_change_act_confirm[0])) {
-        $.post(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=change_act_banner&nocache=' + new Date().getTime(), 'id=' + id, function(res) {
+        var checkss = $('table[data-checkss]').data('checkss');
+        $.post(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=change_act_banner&nocache=' + new Date().getTime(), 'id=' + id + '&checkss=' + checkss, function(res) {
             var r_split = res.split("|");
             if (r_split[0] != 'OK') {
                 alert(nv_is_change_act_confirm[2]);

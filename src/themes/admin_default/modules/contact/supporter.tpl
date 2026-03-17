@@ -1,7 +1,7 @@
 <!-- BEGIN: main -->
 <!-- BEGIN: list -->
 <div class="table-responsive">
-    <table class="table table-striped table-bordered list" data-url="{OP_URL}">
+    <table class="table table-striped table-bordered list" data-url="{OP_URL}" data-checkss="{CHECKSS}">
         <thead class="bg-primary">
             <tr>
                 <th colspan="2" class="text-center">{LANG.full_name}</th>
@@ -64,7 +64,8 @@
 <!-- END: main -->
 
 <!-- BEGIN: content -->
-<form action="{FORM_ACTION}" method="post" class="form-horizontal supporter_content">
+<form action="{FORM_ACTION}" method="post" class="form-horizontal supporter_content" data-checkss="{CHECKSS}">
+    <input type="hidden" name="checkss" value="{CHECKSS}" />
     <div class="form-group">
         <label class="col-sm-8 control-label">{LANG.department_parent}</label>
         <div class="col-sm-16">

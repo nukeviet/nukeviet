@@ -2,6 +2,7 @@
 <div class="alert alert-info">{CONTENTS.info}</div>
 <form method="post" action="{CONTENTS.action}">
     <input type="hidden" value="1" name="save" id="save" />
+    <input type="hidden" value="{CONTENTS.checkss}" name="checkss" />
     <div class="table-responsive">
         <table class="table table-striped table-bordered table-hover">
             <col class="w200">

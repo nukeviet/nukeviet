@@ -19,7 +19,7 @@ if (!defined('NV_IS_AJAX')) {
 
 $id = $nv_Request->get_int('id', 'post', 0);
 
-if (empty($id)) {
+if (empty($id) or !csrf_check($nv_Request->get_string('checkss', 'post'), $_csrf_key)) {
     nv_htmlOutput('NO|act_' . $id);
 }
 

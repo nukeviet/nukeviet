@@ -44,6 +44,13 @@ $page_url = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_D
 
 if ($nv_Request->isset_request('fc', 'post')) {
     $fc = $nv_Request->get_string('fc', 'post', '');
+
+    if (!csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
+        nv_jsonOutput([
+            'status' => 'error',
+            'mess' => $nv_Lang->getGlobal('error_code_11')
+        ]);
+    }
     // Thay đổi thứ tự
     if ($fc == 'change_weight') {
         $id = $nv_Request->get_int('id', 'post', 0);
@@ -220,6 +227,7 @@ if ($nv_Request->isset_request('fc', 'post')) {
             $xtpl = new XTemplate('supporter.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
             $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
             $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
+            $xtpl->assign('CHECKSS', csrf_create($csrf_key));
             $xtpl->assign('FORM_ACTION', $page_url);
             $xtpl->assign('SUPPORTER', $supporter);
             $xtpl->assign('MODULE_UPLOAD', NV_UPLOADS_DIR . '/' . $module_upload);
@@ -318,6 +326,7 @@ if (!empty($supporters)) {
 $xtpl = new XTemplate($op . '.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
 $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
 $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
+$xtpl->assign('CHECKSS', csrf_create($csrf_key));
 $xtpl->assign('OP_URL', $page_url);
 
 if (!empty($list)) {

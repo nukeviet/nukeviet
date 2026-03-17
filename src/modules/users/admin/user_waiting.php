@@ -27,8 +27,7 @@ if (defined('NV_EDITOR')) {
 // Xóa tài khoản chờ kích hoạt
 if ($nv_Request->isset_request('del', 'post')) {
     $userid = $nv_Request->get_absint('userid', 'post', 0);
-    $csrf_key = $module_name . '_' . $op . '_' . $userid . '_' . $admin_info['admin_id'];
-    if (csrf_check($nv_Request->get_string('checkss', 'post', ''), $csrf_key)) {
+    if (csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
         $sql = 'SELECT users_info FROM ' . NV_MOD_TABLE . '_reg WHERE userid=' . $userid;
         if ($global_config['idsite'] > 0) {
             $sql .= ' AND idsite=' . $global_config['idsite'];
@@ -94,11 +93,9 @@ if ($nv_Request->isset_request('userid', 'get')) {
     $userdata['photo'] = '';
 
     $groups_list = nv_groups_list($module_data);
-    $csrf_key = $module_name . '_' . $op . '_' . $userid . '_' . $admin_info['admin_id'];
-    $checkss = csrf_create($csrf_key);
 
     // Nếu chấp nhận kích hoạt
-    if (csrf_check($nv_Request->get_string('checkss', 'post', ''), $csrf_key)) {
+    if (csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
         $post = [
             'username' => $nv_Request->get_title('username', 'post', '', 1),
             'email' => nv_strtolower(nv_substr($nv_Request->get_title('email', 'post', '', 1), 0, 100)),
@@ -683,7 +680,7 @@ if ($nv_Request->isset_request('userid', 'get')) {
     $tpl->assign('NV_UPASSMAX', $global_config['nv_upassmax']);
     $tpl->assign('NV_UPASSMIN', $global_config['nv_upassmin']);
     $tpl->assign('DATA', $userdata);
-    $tpl->assign('CHECKSS', $checkss);
+    $tpl->assign('CHECKSS', csrf_create($csrf_key));
     $tpl->assign('SYSTEM_FIELDS', $system_fields);
     $tpl->assign('CUSTOM_FIELDS', $custom_fields_data);
     $tpl->assign('HAVE_CUSTOM_FIELDS', $have_custom_fields);
@@ -791,7 +788,7 @@ while ($row = $result->fetch()) {
         'full_name' => nv_show_name_user($row['first_name'], $row['last_name'], $row['username']),
         'email' => $row['email'],
         'regdate' => nv_datetime_format($row['regdate']),
-        'checkss' => csrf_create($module_name . '_' . $op . '_' . $row['userid'] . '_' . $admin_info['admin_id']),
+        'checkss' => csrf_create($csrf_key),
         'activate_url' => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=user_waiting&amp;userid=' . $row['userid']
     ];
 }

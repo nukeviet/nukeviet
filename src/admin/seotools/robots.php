@@ -15,7 +15,6 @@ if (!defined('NV_IS_FILE_SEOTOOLS')) {
 
 $page_title = $nv_Lang->getModule('robots');
 
-$csrf_key = $module_name . '_' . $op . '_' . $admin_info['admin_id'];
 $cache_file = NV_ROOTDIR . '/' . NV_DATADIR . '/robots.php';
 
 $tpl = new \NukeViet\Template\NVSmarty();
@@ -40,7 +39,7 @@ foreach ($files as $file) {
     }
 }
 
-if (csrf_check($nv_Request->get_string('checkss', 'post', ''), $csrf_key)) {
+if (csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
     $_robots_data = $nv_Request->get_array('filename', 'post');
     $_fileother = $nv_Request->get_array('fileother', 'post');
     $_optionother = $nv_Request->get_array('optionother', 'post');

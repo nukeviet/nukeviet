@@ -22,6 +22,12 @@ $tags = get_tags(); // Danh sach cac tag
 
 // Sua ten nhan
 if ($nv_Request->isset_request('edit', 'get') and $nv_Request->isset_request('alias,new_name', 'post')) {
+    if (!csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
+        nv_jsonOutput([
+            'status' => 'error',
+            'mess' => 'CSRF error'
+        ]);
+    }
     $tag_alias = $nv_Request->get_title('alias', 'post', '');
     if (empty($tag_alias)) {
         nv_jsonOutput([
@@ -55,6 +61,12 @@ if ($nv_Request->isset_request('edit', 'get') and $nv_Request->isset_request('al
 
 // Xóa nhãn
 if ($nv_Request->isset_request('delete_tag,tag_alias', 'post')) {
+    if (!csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
+        nv_jsonOutput([
+            'status' => 'error',
+            'mess' => 'CSRF error'
+        ]);
+    }
     $tag_alias = $nv_Request->get_title('tag_alias', 'post', '');
     if (empty($tag_alias)) {
         nv_jsonOutput([
@@ -92,6 +104,12 @@ if ($nv_Request->isset_request('delete_tag,tag_alias', 'post')) {
 
 // Thêm nhãn
 if ($nv_Request->isset_request('add_tag,new_tag', 'post')) {
+    if (!csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
+        nv_jsonOutput([
+            'status' => 'error',
+            'mess' => 'CSRF error'
+        ]);
+    }
     $new_tag = $nv_Request->get_title('new_tag', 'post', '');
     if (empty($new_tag)) {
         nv_jsonOutput([
@@ -144,6 +162,7 @@ if (!empty($tags)) {
     $xtpl->parse('main.ifTags');
 }
 
+$xtpl->assign('CHECKSS', csrf_create($csrf_key));
 $xtpl->parse('main');
 $contents = $xtpl->text('main');
 

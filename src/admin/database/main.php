@@ -13,8 +13,6 @@ if (!defined('NV_IS_FILE_DATABASE')) {
     exit('Stop!!!');
 }
 
-$csrf_key = $module_name . '_' . $op . '_' . $admin_info['admin_id'];
-
 $page_title = $nv_Lang->getModule('main');
 
 // Hiển thị danh sách bảng dữ liệu

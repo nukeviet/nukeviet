@@ -66,8 +66,8 @@ if ($nv_Request->isset_request('delete', 'post')) {
         nv_htmlOutput('Wrong URL');
     }
     $sname = nv_strtolower(nv_substr($nv_Request->get_title('sname', 'post', ''), 0, 50));
-    $csrf_key = $module_name . '_' . $op . '_' . $sname;
-    if (csrf_check($nv_Request->get_string('delete', 'post'), $csrf_key) and preg_match('/^([a-z0-9]+)$/', $sname) and file_exists(NV_ROOTDIR . '/install/samples/data_' . $sname . '.php')) {
+    $_csrf_key = $module_name . '_' . $op . '_' . $sname;
+    if (csrf_check($nv_Request->get_string('delete', 'post'), $_csrf_key) and preg_match('/^([a-z0-9]+)$/', $sname) and file_exists(NV_ROOTDIR . '/install/samples/data_' . $sname . '.php')) {
         nv_deletefile(NV_ROOTDIR . '/install/samples/data_' . $sname . '.php');
         nv_insert_logs(NV_LANG_DATA, $module_name, $nv_Lang->getModule('sampledata'), 'Delete: ' . $sname, $admin_info['userid']);
     }

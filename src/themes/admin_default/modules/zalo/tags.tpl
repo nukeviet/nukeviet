@@ -24,6 +24,10 @@
         <input type="text" class="form-control" name="new_tag" id="new_tag" value="" placeholder="{LANG.enter_tag_name}" maxlength="50">
     </div>
     <input type="hidden" name="add_tag" value="1"/>
+    <input type="hidden" name="checkss" value="{CHECKSS}"/>
     <button type="submit" class="btn btn-primary">{LANG.add_tag}</button>
 </form>
+<script>
+    var checkss = '{CHECKSS}';
+</script>
 <!-- END: main -->

@@ -64,7 +64,7 @@ function get_cdn_urls($urls = '', $countries_string = false, $except_inc = true)
 }
 
 $page_title = $nv_Lang->getModule('cdn_backendhost');
-$csrf_key = $module_name . '_' . $op . '_' . $admin_info['admin_id'];
+
 
 $tpl = new \NukeViet\Template\NVSmarty();
 $tpl->setTemplateDir(get_module_tpl_dir('cdn_backendhost.tpl'));

@@ -26,7 +26,7 @@ if (!empty($vid)) {
     }
 }
 
-if ($nv_Request->isset_request('save', 'post')) {
+if ($nv_Request->isset_request('save', 'post') and csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
     $question = $nv_Request->get_title('question', 'post', '', 1);
     $link = $nv_Request->get_title('link', 'post', '');
     if (!empty($link) and !nv_is_url($link, true)) {
@@ -220,6 +220,7 @@ $xtpl = new XTemplate('content.tpl', NV_ROOTDIR . '/themes/' . $global_config['m
 $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
 $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
 $xtpl->assign('FORM_ACTION', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;vid=' . $vid);
+$xtpl->assign('CHECKSS', csrf_create($csrf_key));
 
 $rowvote['link'] = nv_htmlspecialchars($rowvote['link']);
 $rowvote['active_captcha'] = $active_captcha ? ' checked="checked"' : '';

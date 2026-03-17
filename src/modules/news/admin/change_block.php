@@ -20,7 +20,7 @@ $new_vid = $nv_Request->get_int('new_vid', 'post', 0);
 $del_list = $nv_Request->get_string('del_list', 'post', '');
 $content = 'NO_' . $bid;
 
-if ($bid > 0) {
+if ($bid > 0 and csrf_check($nv_Request->get_string('checkss', 'post'), $_csrf_key)) {
     if ($del_list != '') {
         $array_id = array_map('intval', explode(',', $del_list));
         foreach ($array_id as $id) {

@@ -16,6 +16,7 @@
     <div role="tabpanel" class="tab-pane" id="zalo_events">
         <div class="table-responsive">
             <form method="POST" action="{PAGE_LINK}" data-toggle="event_action_submit" data-action-error-mess="{LANG.action_empty}" data-parameter-error-mess="{LANG.parameter_empty}">
+                <input type="hidden" name="checkss" value="{CHECKSS}" />
                 <table class="table table-bordered table-striped">
                     <thead>
                         <tr class="bg-primary">
@@ -68,6 +69,7 @@
             <div class="well well-sm">{LANG.command_keyword_note}</div>
             <div class="table-responsive">
                 <form method="POST" action="{PAGE_LINK}" data-toggle="command_keyword_submit" data-keyword-error-mess="{LANG.keyword_empty}" data-action-error-mess="{LANG.action_empty}" data-parameter-error-mess="{LANG.parameter_empty}">
+                    <input type="hidden" name="checkss" value="{CHECKSS}" />
                     <table class="table table-bordered table-striped">
                         <thead>
                             <tr class="bg-primary">

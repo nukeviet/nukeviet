@@ -16,9 +16,8 @@ if (!defined('NV_IS_FILE_THEMES')) {
 $theme1 = $nv_Request->get_title('theme1', 'post', '');
 $theme2 = $nv_Request->get_title('theme2', 'post', '');
 
-$checkss = $nv_Request->get_title('checkss', 'post', '');
-$csrf_key = $module_name . '_xcopyblock_' . $admin_info['admin_id'];
-if (!csrf_check($checkss, $csrf_key)) {
+$_csrf_key = $module_name . '_xcopyblock_' . $admin_info['admin_id'];
+if (!csrf_check($nv_Request->get_string('checkss', 'post'), $_csrf_key)) {
     nv_jsonOutput([
         'success' => 0,
         'text' => 'Session error!!!'

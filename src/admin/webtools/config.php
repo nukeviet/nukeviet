@@ -13,7 +13,6 @@ if (!defined('NV_IS_FILE_WEBTOOLS')) {
     exit('Stop!!!');
 }
 
-$csrf_key = $module_name . '_' . $op . '_' . $admin_info['admin_id'];
 if (csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
     $array_config_global = [];
     $array_config_global['autocheckupdate'] = $nv_Request->get_int('autocheckupdate', 'post', 0);

@@ -106,6 +106,7 @@ function nv_admin_theme($contents, $head_site = 1)
     $xtpl->assign('JS_PM', nv_region_config('pm_char'));
     $xtpl->assign('TIMESTAMP', $global_config['timestamp']);
     $xtpl->assign('MODULE_NAME', $module_name);
+    $xtpl->assign('CHECKSS', csrf_create($module_name . '_' . $op . '_' . $admin_info['admin_id']));
     $xtpl->assign('OP', $op);
     $xtpl->assign('MODULE_FILE', $module_file);
     $xtpl->assign('NV_ADMIN_THEME', $admin_info['admin_theme']);

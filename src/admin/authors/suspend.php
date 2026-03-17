@@ -18,7 +18,7 @@ if (!defined('NV_IS_SPADMIN')) {
 }
 
 $admin_id = $nv_Request->get_int('admin_id', 'get', 0);
-$csrf_key = $module_name . '_' . $op . '_' . $admin_id;
+$_csrf_key = $module_name . '_' . $op . '_' . $admin_id;
 
 if (empty($admin_id) or $admin_id == $admin_info['admin_id']) {
     nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
@@ -54,7 +54,7 @@ if (empty($old_suspend)) {
 $new_suspend = ($old_suspend) ? 0 : 1;
 
 if ($allow_change and $nv_Request->get_int('save', 'post', 0)) {
-    if (!csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
+    if (!csrf_check($nv_Request->get_string('checkss', 'post'), $_csrf_key)) {
         nv_jsonOutput([
             'status' => 'error',
             'mess' => 'SESSION error'
@@ -179,7 +179,7 @@ $tpl->assign('MODULE_NAME', $module_name);
 
 $tpl->assign('OLD_SUSPEND', $old_suspend);
 $tpl->assign('NEW_SUSPEND', $new_suspend);
-$tpl->assign('CHECKSS', csrf_create($csrf_key));
+$tpl->assign('CHECKSS', csrf_create($_csrf_key));
 $tpl->assign('SUSP_REASON', $susp_reason);
 $tpl->assign('USER', $row_user);
 $tpl->assign('ALLOW_CHANGE', $allow_change);

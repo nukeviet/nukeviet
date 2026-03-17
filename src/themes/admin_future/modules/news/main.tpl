@@ -219,7 +219,7 @@
                         <td>
                             <div class="text-truncate-2">
                                 {if $row.tool_sort}
-                                <a href="#" class="d-inline-block me-1 link-info" data-toggle="sortArticle" data-id="{$row.id}" data-checksess="{$row.checksess}" data-title="{$LANG->getModule('order_articles')} &quot;{$row.title}&quot;" data-weight="{$row.weight}" aria-label="{$LANG->getModule('order_articles')}"><i class="fa-solid fa-sort" data-bs-toggle="tooltip" data-bs-title="{$LANG->getModule('order_articles_number')}: {$row.weight|nformat}" data-bs-trigger="hover"></i></a>
+                                <a href="#" class="d-inline-block me-1 link-info" data-toggle="sortArticle" data-id="{$row.id}" data-checkss="{$row.checkss}" data-title="{$LANG->getModule('order_articles')} &quot;{$row.title}&quot;" data-weight="{$row.weight}" aria-label="{$LANG->getModule('order_articles')}"><i class="fa-solid fa-sort" data-bs-toggle="tooltip" data-bs-title="{$LANG->getModule('order_articles_number')}: {$row.weight|nformat}" data-bs-trigger="hover"></i></a>
                                 {/if}
                                 {if $row.is_editing}
                                 <i class="fa-solid {if $row.is_locked}fa-lock{else}fa-unlock{/if} me-1 text-warning" aria-label="{$row.user_editing} {$LANG->getModule('post_is_editing')}." data-bs-toggle="tooltip" data-bs-title="{$row.user_editing} {$LANG->getModule('post_is_editing')}." data-bs-trigger="hover"></i>
@@ -274,7 +274,7 @@
                                     <li><a class="dropdown-item" href="#" data-loadurl="{$BASE_URL}&amp;loadhistory={$row.id}" data-toggle="historyArticle"><i class="fa-solid fa-clock-rotate-left fa-fw text-center"></i> {$LANG->getModule('history')}</a></li>
                                     {/if}
                                     {if isset($row.feature.delete)}
-                                    <li><a class="dropdown-item" href="#" data-toggle="delArticle" data-id="{$row.id}" data-checksess="{$row.checksess}"><i class="fa-solid fa-trash fa-fw text-center text-danger" data-icon="fa-trash"></i> {$LANG->getGlobal('delete')}</a></li>
+                                    <li><a class="dropdown-item" href="#" data-toggle="delArticle" data-id="{$row.id}" data-checkss="{$row.checkss}"><i class="fa-solid fa-trash fa-fw text-center text-danger" data-icon="fa-trash"></i> {$LANG->getGlobal('delete')}</a></li>
                                     {/if}
                                 </ul>
                             </div>

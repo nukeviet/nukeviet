@@ -52,7 +52,7 @@ if ($nv_Request->isset_request('i', 'get')) {
             'info' => (string) $new_version->message,
             'need_update' => (nv_version_compare($global_config['version'], (string) $new_version->version) < 0),
             'updateable' => $updateable,
-            'link_update' => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=getupdate&amp;version=' . $updateable . '&amp;package=' . $updatepackage . '&amp;checksess=' . md5($updateable . $updatepackage . NV_CHECK_SESSION),
+            'link_update' => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=getupdate&amp;version=' . $updateable . '&amp;package=' . $updatepackage . '&amp;checkss=' . md5($updateable . $updatepackage . NV_CHECK_SESSION),
             'link' => (string) $new_version->link,
             'updatepackage' => $updatepackage
         ];
@@ -153,7 +153,7 @@ if ($nv_Request->isset_request('i', 'get')) {
                     $value['up_need'] = 1;
                     $value['up_new_version'] = $updateVersion;
                     if (!empty($updateVersion)) {
-                        $value['up_link'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=extensions&amp;' . NV_OP_VARIABLE . '=update&amp;eid=' . $value['id'] . '&amp;fid=' . $updateVersion['fid'] . '&amp;checksess=' . md5($value['id'] . $updateVersion['fid'] . NV_CHECK_SESSION);
+                        $value['up_link'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=extensions&amp;' . NV_OP_VARIABLE . '=update&amp;eid=' . $value['id'] . '&amp;fid=' . $updateVersion['fid'] . '&amp;checkss=' . md5($value['id'] . $updateVersion['fid'] . NV_CHECK_SESSION);
                     }
                 } elseif (!$value['origin']) {
                     $value['status_level'] = 2;

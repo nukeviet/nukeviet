@@ -16,8 +16,8 @@ if (!defined('NV_IS_FILE_MODULES')) {
 $modname = $nv_Request->get_title('mod', 'post');
 $sample = $nv_Request->get_int('sample', 'post', 0);
 
-$csrf_key = $module_name . '_setup_mod_' . $modname;
-if (!empty($modname) and preg_match($global_config['check_module'], $modname) and csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
+$_csrf_key = $module_name . '_setup_mod_' . $modname;
+if (!empty($modname) and preg_match($global_config['check_module'], $modname) and csrf_check($nv_Request->get_string('checkss', 'post'), $_csrf_key)) {
     nv_insert_logs(NV_LANG_DATA, $module_name, $nv_Lang->getGlobal('recreate') . ' module "' . $modname . '"', '', $admin_info['userid']);
     if (!defined('NV_MODULE_RECREATE')) {
         define('NV_MODULE_RECREATE', true);

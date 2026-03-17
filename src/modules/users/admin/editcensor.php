@@ -17,6 +17,10 @@ $page_title = $table_caption = $nv_Lang->getModule('editcensor');
 
 // Hủy bỏ thông tin chỉnh sửa
 if ($nv_Request->isset_request('del', 'post')) {
+    if (!csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
+        nv_htmlOutput('ERROR');
+    }
+
     $userid = $nv_Request->get_int('userid', 'post', 0);
 
     // Kiểm tra quyền
@@ -76,6 +80,13 @@ if ($nv_Request->isset_request('del', 'post')) {
 
 // Xác nhận thông tin chỉnh sửa
 if ($nv_Request->isset_request('approved', 'post')) {
+    if (!csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
+        nv_jsonOutput([
+            'status' => 'ERROR',
+            'mess' => 'Wrong session!!!',
+        ]);
+    }
+
     $userid = $nv_Request->get_int('userid', 'post', 0);
 
     // Kiểm tra quyền
@@ -240,6 +251,12 @@ if (!empty($reviewuid)) {
 
     // Xác nhận duyệt thông tin chỉnh sửa
     if ($nv_Request->isset_request('confirm', 'post')) {
+        if (!csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
+            nv_jsonOutput([
+                'status' => 'error',
+                'mess' => 'Wrong session!!!',
+            ]);
+        }
         $custom_fields = array_merge($row_basic, $row_info, $nv_Request->get_array('custom_fields', 'post'));
         if (!empty($info_basic)) {
             $_user = [];
@@ -325,6 +342,7 @@ if (!empty($reviewuid)) {
     $xtpl = new XTemplate('editcensor_review.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
     $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
     $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
+    $xtpl->assign('CHECKSS', csrf_create($csrf_key));
     $xtpl->assign('REVIEWUID', $reviewuid);
     $xtpl->assign('FORM_ACTION', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;reviewuid=' . $reviewuid);
 
@@ -481,7 +499,7 @@ if (!empty($reviewuid)) {
                     $xtpl->assign('FILEMAXSIZE', $row['limited_values']['file_max_size']);
                     $xtpl->assign('FILEMAXSIZE_FORMAT', nv_convertfromBytes($row['limited_values']['file_max_size']));
                     $xtpl->assign('FILEMAXNUM', $row['limited_values']['maxnum']);
-                    $xtpl->assign('CSRF', md5(NV_CHECK_SESSION . '_' . $module_name . $row['field']));
+                    $xtpl->assign('CSRF', csrf_create($module_name . '_' . $row['field']));
                     $xtpl->assign('URL_MODULE', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name);
                     $widthlimit = image_size_info($row['limited_values']['widthlimit'], 'width');
                     $heightlimit = image_size_info($row['limited_values']['heightlimit'], 'height');
@@ -649,6 +667,7 @@ while ($row = $result->fetch()) {
 
 $xtpl = new XTemplate('editcensor.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
 $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
+$xtpl->assign('CHECKSS', csrf_create($csrf_key));
 $xtpl->assign('FORM_ACTION', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op);
 $xtpl->assign('SORTURL', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
 $xtpl->assign('SEARCH_VALUE', nv_htmlspecialchars($methodvalue));

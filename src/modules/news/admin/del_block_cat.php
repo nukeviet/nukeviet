@@ -16,8 +16,8 @@ if (!defined('NV_IS_FILE_ADMIN')) {
 $bid = $nv_Request->get_int('bid', 'post', 0);
 
 $contents = 'NO_' . $bid;
-$bid = $db->query('SELECT bid FROM ' . NV_PREFIXLANG . '_' . $module_data . '_block_cat WHERE bid=' . (int) $bid)->fetchColumn();
-if ($bid > 0) {
+$checkss = $nv_Request->get_string('checkss', 'post');
+if ($bid > 0 and csrf_check($checkss, $_csrf_key)) {
     nv_insert_logs(NV_LANG_DATA, $module_name, 'log_del_blockcat', 'block_catid ' . $bid, $admin_info['userid']);
     $query = 'DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_block_cat WHERE bid=' . $bid;
     if ($db->exec($query)) {

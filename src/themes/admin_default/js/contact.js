@@ -15,7 +15,8 @@ function modal_content(url, id) {
         cache: !1,
         data: {
             'fc': 'content',
-            'id': id
+            'id': id,
+            'checkss': $('#' + id).closest('table, .page, form').data('checkss') || $('.list').data('checkss') || $('.page').data('checkss') || $('[data-checkss]').first().data('checkss')
         },
         dataType: "json"
     }).done(function(a) {
@@ -37,7 +38,8 @@ function department_change_alias(form) {
         data: {
             'fc': 'alias',
             'id': $('[name=id]', form).val(),
-            'title': rawurldecode(trim($('[name=full_name]', form).val()))
+            'title': rawurldecode(trim($('[name=full_name]', form).val())),
+            'checkss': form.data('checkss')
         }
     }).done(function(a) {
         $('[name=alias]', form).val(a)
@@ -129,7 +131,8 @@ $(function() {
             cache: !1,
             data: {
                 'mark': mark,
-                'send': page.data('id')
+                'send': page.data('id'),
+                'checkss': page.data('checkss')
             }
         }).done(function(a) {
             if (mark == 'unread') {
@@ -147,7 +150,7 @@ $(function() {
                 type: "POST",
                 url: page.data('url'),
                 cache: !1,
-                data: 'id=' + page.data('id') + '&delete=1'
+                data: 'id=' + page.data('id') + '&delete=1&checkss=' + page.data('checkss')
             }).done(function(a) {
                 window.location.href = page.data('url')
             })
@@ -179,7 +182,7 @@ $(function() {
                 type: "POST",
                 url: form.attr('action'),
                 cache: !1,
-                data: 'delete=3'
+                data: 'delete=3&checkss=' + form.data('checkss')
             }).done(function(a) {
                 window.location.reload()
             })
@@ -273,7 +276,8 @@ $(function() {
                 cache: !1,
                 data: {
                     'fc': 'delete',
-                    'id': id
+                    'id': id,
+                    'checkss': that.closest('table').data('checkss')
                 },
                 dataType: "json"
             }).done(function(a) {
@@ -299,7 +303,8 @@ $(function() {
             data: {
                 'fc': 'change_status',
                 'id': id,
-                'ns': nstatus
+                'ns': nstatus,
+                'checkss': that.closest('table').data('checkss')
             },
             dataType: "json"
         }).done(function(a) {
@@ -328,7 +333,8 @@ $(function() {
             cache: !1,
             data: {
                 'fc': 'set_default',
-                'id': id
+                'id': id,
+                'checkss': that.data('checkss')
             },
             dataType: "json"
         }).done(function(a) {
@@ -354,7 +360,8 @@ $(function() {
             data: {
                 'fc': 'change_weight',
                 'id': id,
-                'nw': nweight
+                'nw': nweight,
+                'checkss': that.closest('table').data('checkss')
             },
             dataType: "json"
         }).done(function(a) {
@@ -375,7 +382,8 @@ $(function() {
                 cache: !1,
                 data: {
                     'fc': 'delete',
-                    'id': $(this).parents('.item').data('id')
+                    'id': $(this).parents('.item').data('id'),
+                    'checkss': $(this).parents('.list').data('checkss')
                 },
                 dataType: "json"
             }).done(function(a) {
@@ -394,7 +402,8 @@ $(function() {
             url = that.parents('.list').data('url'),
             data = {
                 'fc': 'change_act',
-                'id': that.parents('.item').data('id')
+                'id': that.parents('.item').data('id'),
+                'checkss': that.parents('.list').data('checkss')
             };
         that.prop('disabled', true);
         $.ajax({

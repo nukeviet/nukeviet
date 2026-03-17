@@ -1,6 +1,6 @@
 <!-- BEGIN: main -->
 <div class="table-responsive">
-	<table class="table table-striped table-bordered table-hover">
+	<table class="table table-striped table-bordered table-hover" data-checkss="{CONTENTS.checkss}">
 		<caption><em class="fa fa-file-text-o">&nbsp;</em>{CONTENTS.caption}</caption>
 		<colgroup>
 			<col span="3">

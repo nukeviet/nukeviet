@@ -17,7 +17,8 @@
             nv_name_variable = '{NV_NAME_VARIABLE}',
             nv_fc_variable = '{NV_OP_VARIABLE}',
             nv_lang_variable = '{NV_LANG_VARIABLE}',
-            nv_my_abbr = '{NV_CURRENTTIME}';
+            nv_my_abbr = '{NV_CURRENTTIME}',
+            nv_checkss = '{CHECKSS}';
         </script>
         <script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/jquery/jquery.min.js"></script>
         <script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/global.js"></script>

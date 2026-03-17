@@ -9,7 +9,6 @@
 
 $(function() {
     if ($('#cmt-main').length) {
-        let checkss = $('[name=checkss]').val();
         var fmt = nv_jsdate_get.replace(/dd/g, 'd').replace(/mm/g, 'm').replace(/yyyy/g, 'Y');
         $('#from_date,#to_date').flatpickr({
             enableTime: false,
@@ -35,7 +34,7 @@ $(function() {
                 $.ajax({
                     type: "POST",
                     url: url,
-                    data: 'checkss=' + checkss,
+                    data: 'checkss=' + that.data('checkss'),
                     success: function(res) {
                         if (res.status === 'ok') {
                             location.reload();
@@ -73,7 +72,7 @@ $(function() {
                         url: script_name + "?" + nv_lang_variable + "=" + nv_lang_data + "&" + nv_name_variable + "=" + nv_module_name + "&" + nv_fc_variable + "=del&nocache=" + new Date().getTime(),
                         data: {
                             list: listid.join(','),
-                            checkss: checkss
+                            checkss: btn.data('checkss')
                         },
                         success: function(res) {
                             btn.prop('disabled', false);
@@ -103,7 +102,7 @@ $(function() {
                     data: {
                         list: listid.join(','),
                         active: (action === 'enable' ? 1 : 0),
-                        checkss: checkss
+                        checkss: btn.data('checkss')
                     },
                     success: function(res) {
                         btn.prop('disabled', false);
@@ -158,7 +157,7 @@ $(function() {
 
 function nv_change_active(cid) {
     var new_status = $('#change_active_' + cid).is(':checked') ? 1 : 0;
-    let checkss = $('[name=checkss]').val();
+    let checkss = $('#change_active_' + cid).data('checkss');
     nvConfirm(nv_is_change_act_confirm[0], function() {
         var nv_timer = nv_settimeout_disable('change_active_' + cid, 3000);
         $.post(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=change_active&nocache=' + new Date().getTime(), 'change_active=1&cid=' + cid + '&new_status=' + new_status + '&checkss=' + checkss, function(res) {

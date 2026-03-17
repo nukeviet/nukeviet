@@ -16,7 +16,7 @@ if (!defined('NV_IS_FILE_ADMIN')) {
 $checkss = $nv_Request->get_string('checkss', 'post');
 $vid = $nv_Request->get_int('vid', 'post', 0);
 
-if ($vid > 0 and $checkss == md5($vid . NV_CHECK_SESSION)) {
+if ($vid > 0 and csrf_check($checkss, $_csrf_key)) {
     $row = $db->query('SELECT act FROM ' . NV_PREFIXLANG . '_' . $module_data . ' WHERE vid=' . $vid)->fetch();
     if (!empty($row)) {
         $act_vid = $row['act'] ? 0 : 1;

@@ -18,7 +18,6 @@ $cid = $nv_Request->get_int('cid', 'get,post');
 $sql = 'SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . ' WHERE cid=' . $cid;
 $row = $db->query($sql)->fetch();
 
-$csrf_key = $module_name . '_' . $admin_info['admin_id'];
 $dir = date('Y_m');
 if (!is_dir(NV_UPLOADS_REAL_DIR . '/' . $module_upload . '/' . $dir)) {
     $mk = nv_mkdir(NV_UPLOADS_REAL_DIR . '/' . $module_upload, $dir);
@@ -32,7 +31,7 @@ if (!is_dir(NV_UPLOADS_REAL_DIR . '/' . $module_upload . '/' . $dir)) {
 }
 
 if ($nv_Request->isset_request('save', 'post')) {
-    if (!csrf_check($nv_Request->get_title('checkss', 'post'), $csrf_key) or empty($row) or !isset($site_mod_comm[$row['module']])) {
+    if (!csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key) or empty($row) or !isset($site_mod_comm[$row['module']])) {
         nv_jsonOutput(['status' => 'error', 'mess' => $nv_Lang->getGlobal('error_code_11')]);
     }
     $delete = $nv_Request->get_int('delete', 'post', 0);

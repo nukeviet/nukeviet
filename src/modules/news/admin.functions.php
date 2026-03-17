@@ -22,6 +22,7 @@ if ($NV_IS_ADMIN_FULL_MODULE) {
 }
 
 define('NV_MIN_MEDIUM_SYSTEM_ROWS', 100000);
+$_csrf_key = $module_name . '_' . $admin_info['admin_id'];
 
 $array_viewcat_full = [
     'viewcat_page_new' => $nv_Lang->getModule('viewcat_page_new'),
@@ -217,11 +218,12 @@ function nv_news_fix_block($bid, $repairtable = true)
  */
 function nv_show_cat_list($parentid = 0)
 {
-    global $db, $nv_Lang, $nv_Lang, $module_name, $module_data, $array_viewcat_full, $array_viewcat_nosub, $array_cat_admin, $global_array_cat, $admin_id, $global_config, $module_file, $module_config, $global_code_defined;
+    global $db, $nv_Lang, $nv_Lang, $module_name, $module_data, $array_viewcat_full, $array_viewcat_nosub, $array_cat_admin, $global_array_cat, $admin_id, $global_config, $module_file, $module_config, $global_code_defined, $_csrf_key;
 
     $xtpl = new XTemplate('cat_list.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
     $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
     $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
+    $xtpl->assign('CHECKSS', csrf_create($_csrf_key));
 
     // Cac chu de co quyen han
     $array_cat_check_content = [];
@@ -410,7 +412,7 @@ function nv_show_cat_list($parentid = 0)
  */
 function nv_show_topics_list($page = 1)
 {
-    global $db_slave, $module_name, $module_data, $module_config, $global_config, $module_file, $module_info;
+    global $db_slave, $module_name, $module_data, $module_config, $global_config, $module_file, $module_info, $_csrf_key;
 
     $per_page = $module_config[$module_name]['per_page'];
     $db_slave->sqlreset()
@@ -434,6 +436,7 @@ function nv_show_topics_list($page = 1)
         $xtpl = new XTemplate('topics_list.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
         $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
         $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
+        $xtpl->assign('CHECKSS', csrf_create($_csrf_key));
         $xtpl->assign('TOTAL', $num_items);
         foreach ($_array_topic as $row) {
             $numnews = $db_slave->query('SELECT COUNT(*) FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows where topicid=' . $row['topicid'])->fetchColumn();
@@ -467,7 +470,7 @@ function nv_show_topics_list($page = 1)
  */
 function nv_show_block_cat_list()
 {
-    global $db_slave, $nv_Lang, $module_name, $module_data, $module_file, $global_config, $module_info;
+    global $db_slave, $nv_Lang, $module_name, $module_data, $module_file, $global_config, $module_info, $_csrf_key;
 
     $sql = 'SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_block_cat ORDER BY weight ASC';
     $_array_block_cat = $db_slave->query($sql)->fetchAll();
@@ -482,6 +485,7 @@ function nv_show_block_cat_list()
         $xtpl = new XTemplate('blockcat_lists.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
         $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
         $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
+        $xtpl->assign('CHECKSS', csrf_create($_csrf_key));
         $xtpl->assign('TOTAL', $num);
 
         foreach ($_array_block_cat as $row) {
@@ -532,7 +536,7 @@ function nv_show_block_cat_list()
  */
 function nv_show_sources_list()
 {
-    global $db_slave, $module_name, $module_data, $nv_Request, $module_file, $global_config;
+    global $db_slave, $module_name, $module_data, $nv_Request, $module_file, $global_config, $_csrf_key;
 
     $num = $db_slave->query('SELECT COUNT(*) FROM ' . NV_PREFIXLANG . '_' . $module_data . '_sources')->fetchColumn();
     $base_url = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=sources';
@@ -542,6 +546,8 @@ function nv_show_sources_list()
 
     $xtpl = new XTemplate('sources_list.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
     $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
+    $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
+    $xtpl->assign('CHECKSS', csrf_create($_csrf_key));
     $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
     $xtpl->assign('TOTAL', $num);
 
@@ -588,7 +594,7 @@ function nv_show_sources_list()
  */
 function nv_show_block_list($bid)
 {
-    global $db_slave, $nv_Lang, $module_name, $module_data, $op, $global_array_cat, $module_file, $global_config;
+    global $db_slave, $nv_Lang, $module_name, $module_data, $op, $global_array_cat, $module_file, $global_config, $_csrf_key;
 
     $xtpl = new XTemplate('block_list.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
     $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
@@ -630,7 +636,7 @@ function nv_show_block_list($bid)
         }
 
         if (defined('NV_IS_SPADMIN')) {
-            $xtpl->assign('ORDER_PUBLTIME', md5($bid . NV_CHECK_SESSION));
+            $xtpl->assign('ORDER_PUBLTIME', csrf_create($_csrf_key));
             $xtpl->parse('main.order_publtime');
         }
 

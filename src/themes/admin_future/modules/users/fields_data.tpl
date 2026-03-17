@@ -19,7 +19,7 @@
                     {foreach from=$DATA_ROWS item=row}
                     <tr>
                         <td class="text-center">
-                            <select class="form-select form-select-sm fw-75" id="id_weight_{$row.fid}" data-fid="{$row.fid}"{if $row.disabled_weight} disabled{/if}>
+                            <select class="form-select form-select-sm fw-75" id="id_weight_{$row.fid}" data-fid="{$row.fid}" data-checkss="{$CHECKSS}"{if $row.disabled_weight} disabled{/if}>
                                 {foreach from=$row.weights item=weight}
                                 <option value="{$weight.key}"{if $weight.selected} selected{/if}>{$weight.title}</option>
                                 {/foreach}
@@ -35,7 +35,7 @@
                         <td class="text-nowrap text-center">
                             <button type="button" class="btn btn-secondary btn-sm" data-action="edit" data-fid="{$row.fid}" title="{$LANG->getModule('field_edit')}" aria-label="{$LANG->getModule('field_edit')}"><i class="fa-solid fa-pen" data-icon="fa-pen"></i></button>
                             {if not $row.is_system}
-                            <button type="button" class="btn btn-danger btn-sm" data-action="delete" data-fid="{$row.fid}" title="{$LANG->getGlobal('delete')}" aria-label="{$LANG->getGlobal('delete')}"><i class="fa-solid fa-trash" data-icon="fa-trash"></i></button>
+                            <button type="button" class="btn btn-danger btn-sm" data-action="delete" data-fid="{$row.fid}" data-checkss="{$CHECKSS}" title="{$LANG->getGlobal('delete')}" aria-label="{$LANG->getGlobal('delete')}"><i class="fa-solid fa-trash" data-icon="fa-trash"></i></button>
                             {/if}
                         </td>
                     </tr>

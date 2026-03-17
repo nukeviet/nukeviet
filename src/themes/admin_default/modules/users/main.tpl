@@ -131,17 +131,17 @@
                             <span class="text-info">{CONTENT_TD.regdate}</span>
                             <div class="mt-1">{CONTENT_TD.active_obj}</div>
                         </td>
-                        <td class="text-nowrap text-center align-middle"><input type="checkbox" name="active" id="change_status_{CONTENT_TD.userid}" value="{CONTENT_TD.userid}" {CONTENT_TD.checked}{CONTENT_TD.disabled} /></td>
+                        <td class="text-nowrap text-center align-middle"><input type="checkbox" name="active" id="change_status_{CONTENT_TD.userid}" value="{CONTENT_TD.userid}" data-checkss="{CHECKSS}" {CONTENT_TD.checked}{CONTENT_TD.disabled} /></td>
                         <td class="text-nowrap align-middle">
                             <div class="btn-group d-inline-flex">
                                 <!-- BEGIN: edit -->
                                 <a class="btn btn-sm btn-info" href="{EDIT_URL}" data-toggle="tooltip" title="{LANG.memberlist_edit}"><em class="fa fa-edit fa-fw"></em></a>
                                 <!-- END: edit -->
                                 <!-- BEGIN: set_official -->
-                                <button type="button" data-toggle="tooltip" title="{LANG.set_official_note}" class="btn btn-sm btn-warning" onclick="nv_set_official({CONTENT_TD.userid});"><em class="fa fa-user fa-fw"></em></button>
+                                <button type="button" data-toggle="tooltip" title="{LANG.set_official_note}" class="btn btn-sm btn-warning" onclick="nv_set_official({CONTENT_TD.userid}, '{CHECKSS}');"><em class="fa fa-user fa-fw"></em></button>
                                 <!-- END: set_official -->
                                 <!-- BEGIN: del -->
-                                <button type="button" data-toggle="tooltip" title="{LANG.delete}" class="btn btn-sm btn-danger" onclick="nv_row_del({CONTENT_TD.userid});"><em class="fa fa-trash-o fa-fw"></em></button>
+                                <button type="button" data-toggle="tooltip" title="{LANG.delete}" class="btn btn-sm btn-danger" onclick="nv_row_del({CONTENT_TD.userid}, '{CHECKSS}');"><em class="fa fa-trash-o fa-fw"></em></button>
                                 <!-- END: del -->
                                 <!-- BEGIN: edit2 -->
                                 <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -151,10 +151,10 @@
                                 <ul class="dropdown-menu dropdown-menu-right">
                                     <li><a href="{EDIT_OAUTH_URL}">{LANG.user_openid_mamager}</a></li>
                                     <li><a href="{EDIT_2STEP_URL}">{LANG.user_2step_mamager}</a></li>
-                                    <li><a href="javascript:void(0);" onclick="passResetRequest({CONTENT_TD.userid});">{LANG.pass_reset_request}</a></li>
-                                    <li><a href="javascript:void(0);" onclick="emailResetRequest({CONTENT_TD.userid});">{LANG.email_reset_request}</a></li>
-                                    <li><a href="javascript:void(0);" onclick="forcedReLogin({CONTENT_TD.userid});">{LANG.forcedrelogin}</a></li>
-                                    <!-- BEGIN: cancel_deletion --><li><a href="javascript:void(0);" onclick="cancelDeletion({CONTENT_TD.userid});">{LANG.delacc_cancel_adm}</a></li><!-- END: cancel_deletion -->
+                                     <li><a href="javascript:void(0);" onclick="passResetRequest({CONTENT_TD.userid}, '{CHECKSS}');">{LANG.pass_reset_request}</a></li>
+                                    <li><a href="javascript:void(0);" onclick="emailResetRequest({CONTENT_TD.userid}, '{CHECKSS}');">{LANG.email_reset_request}</a></li>
+                                    <li><a href="javascript:void(0);" onclick="forcedReLogin({CONTENT_TD.userid}, '{CHECKSS}');">{LANG.forcedrelogin}</a></li>
+                                    <!-- BEGIN: cancel_deletion --><li><a href="javascript:void(0);" onclick="cancelDeletion({CONTENT_TD.userid}, '{CHECKSS}');">{LANG.delacc_cancel_adm}</a></li><!-- END: cancel_deletion -->
                                 </ul>
                                 <!-- END: edit2 -->
                             </div>
@@ -166,7 +166,7 @@
                 <tfoot>
                     <tr>
                         <td colspan="7">
-                            <input type="hidden" name="checkss" value="{CHECKSESS}" />
+                            <input type="hidden" name="checkss" value="{CHECKSS}" />
                             <!-- BEGIN: action -->
                             <div class="input-group pull-left margin-right" style="width: fit-content;">
                                 <select class="form-control" id="mainuseropt" style="width: fit-content;">
@@ -205,8 +205,8 @@
                 <p>{GLANG.username}: <span class="username"></span></p>
                 <p>{LANG.currentpass_created_time}: <span class="currentpass-created-time"></span></p>
                 <p>{LANG.currentpass_request_status}: <span class="currentpass-request-status"></span></p>
-                <p><a class="btn btn-primary btn-xs" href="javascript:void(0);" onclick="passResetRequestSubmit(event, this, 1);">{LANG.pass_reset_request1_send}</a><span class="fa fa-spinner fa-spin m-left" style="display:none"></span></p>
-                <p><a class="btn btn-primary btn-xs" href="javascript:void(0);" onclick="passResetRequestSubmit(event, this, 2);">{LANG.pass_reset_request2_send}</a><span class="fa fa-spinner fa-spin m-left" style="display:none"></span></p>
+                <p><a class="btn btn-primary btn-xs" href="javascript:void(0);" onclick="passResetRequestSubmit(event, this, 1, '{CHECKSS}');">{LANG.pass_reset_request1_send}</a><span class="fa fa-spinner fa-spin m-left" style="display:none"></span></p>
+                <p><a class="btn btn-primary btn-xs" href="javascript:void(0);" onclick="passResetRequestSubmit(event, this, 2, '{CHECKSS}');">{LANG.pass_reset_request2_send}</a><span class="fa fa-spinner fa-spin m-left" style="display:none"></span></p>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">{GLANG.close}</button>
@@ -226,8 +226,8 @@
                 <p>{GLANG.username}: <span class="username"></span></p>
                 <p>{LANG.currentemail_created_time}: <span class="currentemail-created-time"></span></p>
                 <p>{LANG.currentemail_request_status}: <span class="currentemail-request-status"></span></p>
-                <p><a class="btn btn-primary btn-xs" href="javascript:void(0);" onclick="emailResetRequestSubmit(event, this, 1);">{LANG.email_reset_request1_send}</a><span class="fa fa-spinner fa-spin m-left" style="display:none"></span></p>
-                <p><a class="btn btn-primary btn-xs" href="javascript:void(0);" onclick="emailResetRequestSubmit(event, this, 2);">{LANG.email_reset_request2_send}</a><span class="fa fa-spinner fa-spin m-left" style="display:none"></span></p>
+                <p><a class="btn btn-primary btn-xs" href="javascript:void(0);" onclick="emailResetRequestSubmit(event, this, 1, '{CHECKSS}');">{LANG.email_reset_request1_send}</a><span class="fa fa-spinner fa-spin m-left" style="display:none"></span></p>
+                <p><a class="btn btn-primary btn-xs" href="javascript:void(0);" onclick="emailResetRequestSubmit(event, this, 2, '{CHECKSS}');">{LANG.email_reset_request2_send}</a><span class="fa fa-spinner fa-spin m-left" style="display:none"></span></p>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">{GLANG.close}</button>

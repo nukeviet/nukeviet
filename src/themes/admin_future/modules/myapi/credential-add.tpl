@@ -58,6 +58,7 @@
 </div>
 <div class="row">
     <div class="text-center">
+        <input type="hidden" name="checkss" value="{$CHECKSS}">
         <button type="submit" class="btn btn-primary">{$LANG->getGlobal('submit')}</button>
     </div>
 </div>

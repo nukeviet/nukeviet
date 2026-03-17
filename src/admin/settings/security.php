@@ -126,8 +126,6 @@ if (!defined('NV_IS_GODADMIN')) {
     $selectedtab = 0;
 }
 
-$csrf_key = $module_name . '_' . $op . '_' . $admin_info['admin_id'];
-
 // Xử lý các thiết lập cơ bản
 if (defined('NV_IS_GODADMIN') and $nv_Request->isset_request('basicsave', 'post') and csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
     $post = [

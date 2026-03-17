@@ -153,7 +153,8 @@ function conv_refresh(url, user_id, silent) {
         url: url,
         data: {
             'conversation_refresh': 1,
-            'user_id': user_id
+            'user_id': user_id,
+            'checkss': typeof checkss !== 'undefined' ? checkss : ''
         },
         dataType: "json",
         success: function(b) {
@@ -183,7 +184,8 @@ function update_message_box(url, user_id, refresh) {
         data: {
             'get_conversation': 1,
             'user_id': user_id,
-            'refresh': refresh
+            'refresh': refresh,
+            'checkss': typeof checkss !== 'undefined' ? checkss : ''
         },
         dataType: "json",
         success: function(b) {
@@ -218,7 +220,8 @@ function follower_getprofile(url, user_id) {
         url: url,
         data: {
             'get_follower_profile': 1,
-            'user_id': user_id
+            'user_id': user_id,
+            'checkss': typeof checkss !== 'undefined' ? checkss : ''
         },
         dataType: "json",
         success: function(b) {
@@ -234,6 +237,13 @@ function follower_getprofile(url, user_id) {
 
 function ajax_json(url, data) {
     wait_modal_show();
+    if (typeof checkss !== 'undefined') {
+        if (typeof data === 'string') {
+            data += '&checkss=' + checkss;
+        } else if (typeof data === 'object') {
+            data.checkss = checkss;
+        }
+    }
     $.ajax({
         type: 'POST',
         cache: !1,
@@ -345,7 +355,8 @@ $(function() {
             url: url,
             data: {
                 'get_districts': 1,
-                'city_id': city_id
+                'city_id': city_id,
+                'checkss': typeof checkss !== 'undefined' ? checkss : ''
             },
             dataType: "html",
             success: function(b) {
@@ -494,7 +505,7 @@ $(function() {
             type: 'POST',
             cache: !1,
             url: url,
-            data: 'get_accesstoken=1',
+            data: 'get_accesstoken=1&checkss=' + (typeof checkss !== 'undefined' ? checkss : ''),
             dataType: "html",
             success: function(accesstoken) {
                 $.ajax({
@@ -519,6 +530,7 @@ $(function() {
                             data.append('filename', filename);
                             data.append('description', description);
                             data.append('zalo_id', (a.data.attachment_id ? a.data.attachment_id : a.data.token));
+                            data.append('checkss', typeof checkss !== 'undefined' ? checkss : '');
                             $.ajax({
                                 type: 'POST',
                                 cache: !1,
@@ -542,7 +554,7 @@ $(function() {
                                 type: 'POST',
                                 cache: !1,
                                 url: url,
-                                data: 'type=' + type + '&filename=' + filename + '&description=' + description + '&zalo_id=' + (a.data.attachment_id ? a.data.attachment_id : a.data.token),
+                                data: 'type=' + type + '&filename=' + filename + '&description=' + description + '&zalo_id=' + (a.data.attachment_id ? a.data.attachment_id : a.data.token) + '&checkss=' + (typeof checkss !== 'undefined' ? checkss : ''),
                                 dataType: "json",
                                 success: function(b) {
                                     if (b.status != "success") {
@@ -585,7 +597,7 @@ $(function() {
             type: 'POST',
             cache: !1,
             url: url,
-            data: 'get_accesstoken=1',
+            data: 'get_accesstoken=1&checkss=' + (typeof checkss !== 'undefined' ? checkss : ''),
             dataType: "html",
             success: function(accesstoken) {
                 $.ajax({
@@ -609,7 +621,7 @@ $(function() {
                             type: 'POST',
                             cache: !1,
                             url: url,
-                            data: 'add=1&filename=' + filename + '&description=' + description + '&view=' + view + '&thumb=' + thumb + '&token=' + a.data.token,
+                            data: 'add=1&filename=' + filename + '&description=' + description + '&view=' + view + '&thumb=' + thumb + '&token=' + a.data.token + '&checkss=' + (typeof checkss !== 'undefined' ? checkss : ''),
                             dataType: "json",
                             success: function(b) {
                                 if (b.status == "error") {

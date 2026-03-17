@@ -77,7 +77,7 @@ $(document).ready(function() {
                     per_email: per_email,
                     offset: emailOffset,
                     useriddel: emailDelete,
-                    tokend: '{TOKEND}'
+                    checkss: '{CHECKSS}'
                 },
                 dataType: 'json',
                 cache: false,

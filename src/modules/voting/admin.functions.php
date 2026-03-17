@@ -13,6 +13,8 @@ if (!defined('NV_ADMIN') or !defined('NV_MAINFILE') or !defined('NV_IS_MODADMIN'
     exit('Stop!!!');
 }
 
+$_csrf_key = $module_name . '_' . $admin_info['admin_id'];
+
 $submenu['content'] = $nv_Lang->getModule('voting_add');
 
 $allow_func = [

@@ -36,7 +36,7 @@
                 </div>
             </div>
             {* Trường ẩn lưu token xác thực *}
-            <input type="hidden" name="tokend" id="resend_tokend" value="{$TOKEND}">
+            <input type="hidden" name="checkss" id="resend_checkss" value="{$CHECKSS}">
         </form>
     </div>
 </div>

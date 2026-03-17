@@ -1,4 +1,4 @@
-<div class="vstack gap-4">
+<div class="vstack gap-4" id="listUsersCtn" data-checkss="{CHECKSS}">
     {foreach from=$LIST_USERS key=type item=list_data}
     {if $type eq 'pending'}
     <div id="id_pending">

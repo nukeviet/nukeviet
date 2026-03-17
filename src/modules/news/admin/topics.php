@@ -27,7 +27,7 @@ $array['description'] = '';
 $array['keywords'] = '';
 
 $savecat = $nv_Request->get_int('savecat', 'post', 0);
-if (!empty($savecat)) {
+if (!empty($savecat) and csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
     $array['topicid'] = $nv_Request->get_int('topicid', 'post', 0);
     $array['title'] = $nv_Request->get_title('title', 'post', '', 1);
     $array['keywords'] = $nv_Request->get_title('keywords', 'post', '', 1);
@@ -114,6 +114,7 @@ $xtpl->assign('NV_BASE_ADMINURL', NV_BASE_ADMINURL);
 $xtpl->assign('NV_NAME_VARIABLE', NV_NAME_VARIABLE);
 $xtpl->assign('MODULE_NAME', $module_name);
 $xtpl->assign('OP', $op);
+$xtpl->assign('CHECKSS', csrf_create($csrf_key));
 $xtpl->assign('UPLOADS_DIR', NV_UPLOADS_DIR . '/' . $module_upload . '/topics');
 $xtpl->assign('DATA', $array);
 $xtpl->assign('TOPIC_LIST', nv_show_topics_list($page));

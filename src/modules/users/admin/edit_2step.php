@@ -65,6 +65,8 @@ $select_options[NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LA
 $xtpl = new XTemplate('user_2step.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
 $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
 $xtpl->assign('FORM_ACTION', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;userid=' . $row['userid']);
+$xtpl->assign('CHECKSS', csrf_create($csrf_key));
+
 
 if (empty($row['active2step'])) {
     $xtpl->parse('turnoff');
@@ -75,7 +77,7 @@ if (empty($row['active2step'])) {
     }
 
     // Tắt xác thực hai bước
-    if ($nv_Request->isset_request('turnoff2step', 'post')) {
+    if ($nv_Request->isset_request('turnoff2step', 'post') and csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
         $db->query('DELETE FROM ' . NV_MOD_TABLE . '_backupcodes WHERE userid=' . $row['userid']);
         $db->query('DELETE FROM ' . NV_MOD_TABLE . '_passkey WHERE userid=' . $row['userid'] . ' AND enable_login=0');
         $db->query('UPDATE ' . NV_MOD_TABLE . " SET active2step=0, secretkey='', last_update=" . NV_CURRENTTIME . ' WHERE userid=' . $row['userid']);
@@ -115,7 +117,7 @@ if (empty($row['active2step'])) {
     }
 
     // Tạo lại mã dự phòng
-    if ($nv_Request->isset_request('resetbackupcodes', 'post')) {
+    if ($nv_Request->isset_request('resetbackupcodes', 'post') and csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
         $db->query('DELETE FROM ' . NV_MOD_TABLE . '_backupcodes WHERE userid=' . $row['userid']);
 
         $new_code = [];

@@ -13,13 +13,14 @@ if (!defined('NV_IS_FILE_THEMES')) {
     exit('Stop!!!');
 }
 
+$csrf_block_key = $module_name . '_blocks_manage_' . $admin_info['admin_id'];
 $list = $nv_Request->get_string('list', 'post,get');
 $selectthemes = $nv_Request->get_string('selectthemes', 'cookie', $global_config['site_theme']);
 
 $array_bid = explode(',', $list);
 $array_bid = array_map('intval', $array_bid);
 
-if (!empty($array_bid) and md5($selectthemes . NV_CHECK_SESSION) == $nv_Request->get_string('checkss', 'post,get')) {
+if (!empty($array_bid) and csrf_check($nv_Request->get_string('checkss', 'post,get'), $csrf_block_key)) {
     $array_expression = [];
     $result = $db->query('SELECT bid, theme, position FROM ' . NV_BLOCKS_TABLE . '_groups WHERE bid in (' . implode(',', $array_bid) . ')');
 

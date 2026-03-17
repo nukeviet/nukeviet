@@ -48,9 +48,7 @@ if (defined('NV_IS_SPADMIN')) {
     if ($nv_Request->isset_request('fc', 'post')) {
 
         $fc = $nv_Request->get_string('fc', 'post', '');
-        $checkss = $nv_Request->get_string('checkss', 'post', '');
-        $csrf_key = $module_name . '_' . $op . '_' . $admin_info['admin_id'];
-        if (!csrf_check($checkss, $csrf_key)) {
+        if (!csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
             nv_jsonOutput([
                 'status' => 'error',
                 'mess' => $nv_Lang->getGlobal('error_code_11')
@@ -267,7 +265,6 @@ if (defined('NV_IS_SPADMIN')) {
                 $tpl->assign('LANG', $nv_Lang);
                 $tpl->assign('MODULE_NAME', $module_name);
                 $tpl->assign('OP', $op);
-                $tpl->assign('CHECKSS', csrf_create($module_name . '_' . $op . '_' . $admin_info['admin_id']));
                 $tpl->assign('DEPARTMENT', $department);
                 $tpl->assign('NV_ADMIN_THEME', $global_config['admin_theme']);
                 $tpl->assign('MODULE_UPLOAD', $module_upload);
@@ -501,7 +498,7 @@ $tpl->setTemplateDir(get_module_tpl_dir('department.tpl'));
 $tpl->assign('LANG', $nv_Lang);
 $tpl->assign('MODULE_NAME', $module_name);
 $tpl->assign('OP', $op);
-$tpl->assign('CHECKSS', csrf_create($module_name . '_' . $op . '_' . $admin_info['admin_id']));
+$tpl->assign('CHECKSS', csrf_create($csrf_key));
 $tpl->assign('DEPARTMENTS', $departments);
 
 $contents = $tpl->fetch('department.tpl');

@@ -23,6 +23,12 @@ $page_title = $nv_Lang->getModule('followers');
 
 // Gui tin nhan
 if ($nv_Request->isset_request('send_text,user_id,message_id,chat_text', 'post')) {
+    if (!csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
+        nv_jsonOutput([
+            'status' => 'error',
+            'mess' => 'CSRF error'
+        ]);
+    }
     $attachment_type = $nv_Request->get_title('attachment_type', 'post', 'plaintext');
 
     if ($attachment_type == 'request') {
@@ -283,6 +289,12 @@ if ($nv_Request->isset_request('send_text,user_id,message_id,chat_text', 'post')
 
 // Gỡ nhãn khỏi người quan tâm
 if ($nv_Request->isset_request('remove_ftag,user_id,tag_alias', 'post')) {
+    if (!csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
+        nv_jsonOutput([
+            'status' => 'error',
+            'mess' => 'CSRF error'
+        ]);
+    }
     $user_id = $nv_Request->get_string('user_id', 'post', '');
     if (empty($user_id)) {
         nv_jsonOutput([
@@ -334,6 +346,12 @@ if ($nv_Request->isset_request('remove_ftag,user_id,tag_alias', 'post')) {
 
 // Gán nhãn cho người quan tâm
 if ($nv_Request->isset_request('add_follower_tag,user_id', 'post')) {
+    if (!csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
+        nv_jsonOutput([
+            'status' => 'error',
+            'mess' => 'CSRF error'
+        ]);
+    }
     $user_id = $nv_Request->get_string('user_id', 'post', '');
     if (empty($user_id)) {
         nv_jsonOutput([
@@ -414,6 +432,9 @@ if ($nv_Request->isset_request('add_follower_tag,user_id', 'post')) {
 
 // Lưu thông tin người quan tâm được chỉnh sửa vao CSDL va Zalo
 if ($nv_Request->isset_request('change_profile,user_id', 'post')) {
+    if (!csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
+        nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=followers&user_id=' . $nv_Request->get_string('user_id', 'post', '') . '&action=edit_fi');
+    }
     $user_id = $nv_Request->get_string('user_id', 'post', '');
     if (empty($user_id)) {
         info_redirect($nv_Lang->getModule('user_id_not_found'), NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=followers');
@@ -475,6 +496,12 @@ if ($nv_Request->isset_request('change_profile,user_id', 'post')) {
 
 // Lay thong tin nguoi quan tam tu Zalo
 if ($nv_Request->isset_request('get_follower_profile,user_id', 'post')) {
+    if (!csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
+        nv_jsonOutput([
+            'status' => 'error',
+            'mess' => 'CSRF error'
+        ]);
+    }
     $user_id = $nv_Request->get_string('user_id', 'post', '');
     if (empty($user_id)) {
         nv_jsonOutput([
@@ -510,7 +537,7 @@ if ($nv_Request->isset_request('get_follower_profile,user_id', 'post')) {
 }
 
 // Tu dong lay thong tin nguoi quan tam tu Zalo
-if ($nv_Request->isset_request('getfollowersProfile', 'get')) {
+if ($nv_Request->isset_request('getfollowersProfile', 'get') and csrf_check($nv_Request->get_string('checkss', 'get'), $csrf_key)) {
     $not_sync = get_followers_not_sync(10);
     if (empty($not_sync)) {
         nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=followers');
@@ -529,11 +556,11 @@ if ($nv_Request->isset_request('getfollowersProfile', 'get')) {
         follower_profile_save($user_id, $follower_profile['data']);
     }
 
-    info_redirect($nv_Lang->getModule('wait_update_info'), NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=followers&getfollowersProfile=1');
+    info_redirect($nv_Lang->getModule('wait_update_info'), NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=followers&getfollowersProfile=1&checkss=' . csrf_create($csrf_key));
 }
 
 // Lay danh sach followers tu zalo
-if ($nv_Request->isset_request('getfollowers', 'get')) {
+if ($nv_Request->isset_request('getfollowers', 'get') and csrf_check($nv_Request->get_string('checkss', 'get'), $csrf_key)) {
     get_accesstoken($accesstoken);
     $offset = $nv_Request->get_int('offset', 'get', 0);
 
@@ -569,12 +596,12 @@ if ($nv_Request->isset_request('getfollowers', 'get')) {
     }
 
     if ($offset < $total) {
-        info_redirect($nv_Lang->getModule('wait_update_info'), NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=followers&getfollowers=1&offset=' . $offset);
+        info_redirect($nv_Lang->getModule('wait_update_info'), NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=followers&getfollowers=1&offset=' . $offset . '&checkss=' . csrf_create($csrf_key));
     }
 
     $not_sync = get_followers_not_sync(1);
     if (!empty($not_sync)) {
-        nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=followers&getfollowersProfile=1');
+        nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=followers&getfollowersProfile=1&checkss=' . csrf_create($csrf_key));
     } else {
         nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=followers');
     }
@@ -605,6 +632,7 @@ if ($nv_Request->isset_request('user_id', 'get')) {
     $xtpl->assign('POPUP_FILE_URL', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=upload&amp;type=file&amp;popup=1&amp;idfield=attachment&amp;textfield=chat_text&amp;clfield=chat_submit');
     $xtpl->assign('POPUP_REQUEST_URL', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=templates&amp;type=request&amp;popup=1&amp;idfield=attachment&amp;clfield=chat_submit');
     $xtpl->assign('POPUP_PLAINTEXT_URL', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=templates&amp;type=plaintext&amp;popup=1&amp;idfield=chat_text');
+    $xtpl->assign('CHECKSS', csrf_create($csrf_key));
 
     require_once NV_ROOTDIR . '/' . NV_DATADIR . '/callingcodes.php';
     require_once NV_ROOTDIR . '/' . NV_DATADIR . '/vnsubdivisions.php';
@@ -798,7 +826,8 @@ $generate_page = nv_generate_page($base_url, $followers_count, $per_page, $page)
 $xtpl = new XTemplate('followers.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
 $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
 $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
-$xtpl->assign('GETFOLLOWERS_LINK', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=followers&amp;getfollowers=1');
+$xtpl->assign('CHECKSS', csrf_create($csrf_key));
+$xtpl->assign('GETFOLLOWERS_LINK', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=followers&amp;getfollowers=1&amp;checkss=' . csrf_create($csrf_key));
 $xtpl->assign('UNFOLLOWERS_LINK', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=unfollowers');
 $xtpl->assign('FORM_ACTION', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=followers');
 

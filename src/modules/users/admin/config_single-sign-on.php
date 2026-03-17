@@ -44,7 +44,7 @@ if ($nv_Request->isset_request('save', 'post')) {
 
     $_cas_config['config_field'] = $nv_Request->get_array('config_field', 'post', '');
     $_cas_config['config_field_lock'] = $nv_Request->get_array('config_field_lock', 'post', '');
-    if ($checkss == $nv_Request->get_string('checkss', 'post')) {
+    if (csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
         $config_sso = serialize($_cas_config);
 
         try {

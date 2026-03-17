@@ -20,7 +20,7 @@ $action = $nv_Request->get_title('action', 'post', '');
 // Xóa báo cáo lỗi
 if (($action == 'del_action' or $action == 'del_mail_action') and $nv_Request->isset_request('rid', 'post')) {
     $rid = $nv_Request->get_int('rid', 'post', 0);
-    if ($nv_Request->get_string('checkss', 'post', '') !== NV_CHECK_SESSION or empty($rid)) {
+    if (!csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key) or empty($rid)) {
         nv_jsonOutput([
             'success' => 0,
             'text' => 'Session error or no data!!!'
@@ -56,7 +56,7 @@ if (($action == 'del_action' or $action == 'del_mail_action') and $nv_Request->i
 
 // Xóa hàng loạt báo cáo lỗi
 if ($action == 'multidel' and $nv_Request->isset_request('list', 'post')) {
-    if ($nv_Request->get_string('checkss', 'post', '') !== NV_CHECK_SESSION) {
+    if (!csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
         nv_jsonOutput([
             'success' => 0,
             'text' => 'Session error!!!'
@@ -119,6 +119,7 @@ $tpl->assign('LANG', $nv_Lang);
 $tpl->assign('MODULE_NAME', $module_name);
 $tpl->assign('OP', $op);
 $tpl->assign('ROWS', $array);
+$tpl->assign('CHECKSS', csrf_create($csrf_key));
 $tpl->assign('GENERATE_PAGE', $generate_page);
 
 $contents = $tpl->fetch('report.tpl');

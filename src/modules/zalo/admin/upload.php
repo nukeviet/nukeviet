@@ -91,6 +91,12 @@ if ($nv_Request->isset_request('file_download,id', 'get')) {
 
 // Sua chu thich cho file
 if ($nv_Request->isset_request('file_desc_change', 'get') and $nv_Request->isset_request('description,id', 'post')) {
+    if (!csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
+        nv_jsonOutput([
+            'status' => 'error',
+            'mess' => 'CSRF error'
+        ]);
+    }
     $description = $nv_Request->get_title('description', 'post', '');
     $description = nv_nl2br($description, ' ');
     $description = trim(preg_replace('/\s+/', ' ', $description));
@@ -104,6 +110,12 @@ if ($nv_Request->isset_request('file_desc_change', 'get') and $nv_Request->isset
 
 // Xoa file
 if ($nv_Request->isset_request('file_delete,id', 'post')) {
+    if (!csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
+        nv_jsonOutput([
+            'status' => 'error',
+            'mess' => 'CSRF error'
+        ]);
+    }
     $id = $nv_Request->get_int('id', 'post', 0);
     if (empty($id)) {
         nv_jsonOutput([
@@ -122,6 +134,12 @@ if ($nv_Request->isset_request('file_delete,id', 'post')) {
 
 // Gia han
 if ($nv_Request->isset_request('renewal,id', 'post')) {
+    if (!csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
+        nv_jsonOutput([
+            'status' => 'error',
+            'mess' => 'CSRF error'
+        ]);
+    }
     $id = $nv_Request->get_int('id', 'post', 0);
     if (empty($id)) {
         nv_jsonOutput([
@@ -162,6 +180,12 @@ if ($nv_Request->isset_request('renewal,id', 'post')) {
 
 // Upload len Zalo
 if ($nv_Request->isset_request('zalo_upload', 'get')) {
+    if (!csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
+        nv_jsonOutput([
+            'status' => 'error',
+            'mess' => 'CSRF error'
+        ]);
+    }
     $type = $nv_Request->get_title('type', 'post', '');
     $description = $nv_Request->get_title('description', 'post', '');
     $description = nv_nl2br($description, ' ');
@@ -343,6 +367,7 @@ if (!$popup) {
 
     $xtpl->assign('TYPE', $type);
     $xtpl->assign('ZALO_URL', $myZalo::UPLOAD_URL . $type);
+    $xtpl->assign('CHECKSS', csrf_create($csrf_key));
     $xtpl->parse('main.type_hide');
 }
 
@@ -385,6 +410,7 @@ if (!empty($files)) {
     $xtpl->parse('main.isFiles');
 }
 
+$xtpl->assign('CHECKSS', csrf_create($csrf_key));
 $xtpl->parse('main');
 $contents = $xtpl->text('main');
 
