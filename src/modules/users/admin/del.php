@@ -23,7 +23,7 @@ $userids = $nv_Request->get_title('userid', 'post', '');
 $userids = array_filter(array_unique(array_map('intval', array_map('trim', explode(',', $userids)))));
 
 $error = '';
-if (md5(NV_CHECK_SESSION . '_' . $module_name . '_main') == $nv_Request->get_string('checkss', 'post')) {
+if (csrf_check($nv_Request->get_string('checkss', 'post'), $module_name . '_main_' . $admin_info['admin_id'])) {
     foreach ($userids as $userid) {
         $sql = 'SELECT admin_id FROM ' . NV_AUTHORS_GLOBALTABLE . ' WHERE admin_id=' . $userid;
         $admin_id = $db->query($sql)->fetchColumn();

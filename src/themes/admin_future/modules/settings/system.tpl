@@ -59,7 +59,7 @@
                 <div class="row">
                     <div class="col-sm-8 offset-sm-3">
                         <input type="hidden" name="site_mode" value="1">
-                        <input type="hidden" name="checkss" value="{$smarty.const.NV_CHECK_SESSION}">
+                        <input type="hidden" name="checkss" value="{$DATA.checkss_site_mode}">
                         <button type="submit" class="btn btn-primary">{$LANG->getModule('submit')}</button>
                     </div>
                 </div>

@@ -57,8 +57,8 @@ $vas = [
     '<code>{SITE_EMAIL}</code> (' . $global_config['site_email'] . ')'
 ];
 
-$checkss = md5(NV_CHECK_SESSION . '_' . $module_name . '_' . $op . '_' . $admin_info['userid']);
-if ($checkss == $nv_Request->get_string('checkss', 'post')) {
+$csrf_key = $module_name . '_' . $op . '_' . $admin_info['admin_id'];
+if (csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
     $metaGroupsName = $nv_Request->get_array('metaGroupsName', 'post');
     $metaGroupsValue = $nv_Request->get_array('metaGroupsValue', 'post');
     $metaContents = $nv_Request->get_array('metaContents', 'post');
@@ -154,7 +154,7 @@ if (empty($metatags['meta'])) {
     ];
 }
 $tpl->assign('METAS', $metatags['meta']);
-$tpl->assign('CHECKSS', $checkss);
+$tpl->assign('CHECKSS', csrf_create($csrf_key));
 $tpl->assign('GCONFIG', $global_config);
 
 $meta_name_list = 'author, designer, publisher, revisit-after, distribution, web_author, subject, copyright, reply-to, abstract, city, country, classification, robots,googlebot, google, googlebot-news,  twitter:title, twitter:description, twitter:image, twitter:card, twitter:site, twitter:creator, google-site-verification, rating';

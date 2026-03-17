@@ -48,7 +48,7 @@
                         <td class="text-break">{$oauth.oauth_email ?: $oauth.oauth_id}</td>
                         <td class="text-nowrap">{datetime_format($oauth.addtime, 1)}</td>
                         <td class="text-end text-nowrap">
-                            <a href="#" data-toggle="del2step" data-userid="{$ADMIN.admin_id}" data-id="{$oauth.id}" class="btn btn-danger btn-sm"><i class="fa-solid fa-trash" data-icon="fa-trash"></i> {$LANG->getGlobal('delete')}</a>
+                            <a href="#" data-toggle="del2step" data-userid="{$ADMIN.admin_id}" data-id="{$oauth.id}" data-checkss="{$CHECKSS}" class="btn btn-danger btn-sm"><i class="fa-solid fa-trash" data-icon="fa-trash"></i> {$LANG->getGlobal('delete')}</a>
                         </td>
                     </tr>
                     {/foreach}
@@ -75,7 +75,7 @@
             </div>
             <div class="col-sm-5 text-sm-end">
                 {if not empty($OAUTHS)}
-                <a href="#" data-toggle="truncate2step" data-userid="{$ADMIN.admin_id}" class="btn btn-danger"><i class="fa-solid fa-trash" data-icon="fa-trash"></i> {$LANG->getModule('2step_delete_all')}</a>
+                <a href="#" data-toggle="truncate2step" data-userid="{$ADMIN.admin_id}" data-checkss="{$CHECKSS}" class="btn btn-danger"><i class="fa-solid fa-trash" data-icon="fa-trash"></i> {$LANG->getModule('2step_delete_all')}</a>
                 {/if}
             </div>
         </div>

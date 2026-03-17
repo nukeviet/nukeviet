@@ -19,7 +19,7 @@
                     {if in_array($keylang, $EXISTS_LANGS, true)}
                     <tr>
                         <td>
-                            <select class="form-select fw-75" data-toggle="change_weight" data-keylang="{$keylang}" data-current="{$linfo.weight}">
+                            <select class="form-select fw-75" data-toggle="change_weight" data-keylang="{$keylang}" data-current="{$linfo.weight}" data-checkss="{$CHECKSS}">
                                 {for $weight=1 to $NUM_LANGS}
                                 <option value="{$weight}"{if $weight eq $linfo.weight} selected{/if}>{$weight}</option>
                                 {/for}

@@ -59,7 +59,8 @@ $(function() {
         var url = script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=' + nv_func_name + '&startwrite=1';
         var data = {
             sample_name: sname,
-            delifexists: delifexists
+            delifexists: delifexists,
+            checkss: $('[name="checkss"]', $this).val()
         };
 
         setTimeout(function() {
@@ -177,7 +178,7 @@ $(function() {
             dataType: 'json',
             data: {
                 show_tabs: 1,
-                checkss: $('body').data('checksess')
+                checkss: eleDbTbls.data('checkss')
             },
             success: function(data) {
                 if (data.error) {

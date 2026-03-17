@@ -17,7 +17,7 @@ $bid = $nv_Request->get_int('bid', 'post');
 $checkss = $nv_Request->get_string('checkss', 'post');
 [$bid, $theme, $position] = $db->query('SELECT bid, theme, position FROM ' . NV_BLOCKS_TABLE . '_groups WHERE bid=' . $bid)->fetch(3);
 
-if (!($bid > 0 and (md5($theme . NV_CHECK_SESSION) == $checkss or md5(NV_CHECK_SESSION . '_' . $bid) == $checkss))) {
+if (!($bid > 0 and (csrf_check($checkss, $theme) or csrf_check($checkss, $module_name . '_' . $bid)))) {
     nv_jsonOutput([
         'success' => 0,
         'text' => 'Request params error!!!'

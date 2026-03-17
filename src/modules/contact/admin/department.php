@@ -49,7 +49,8 @@ if (defined('NV_IS_SPADMIN')) {
 
         $fc = $nv_Request->get_string('fc', 'post', '');
         $checkss = $nv_Request->get_string('checkss', 'post', '');
-        if ($checkss != md5(NV_CHECK_SESSION . '_' . $module_name . '_' . $op . '_' . $admin_info['userid'])) {
+        $csrf_key = $module_name . '_' . $op . '_' . $admin_info['admin_id'];
+        if (!csrf_check($checkss, $csrf_key)) {
             nv_jsonOutput([
                 'status' => 'error',
                 'mess' => $nv_Lang->getGlobal('error_code_11')
@@ -231,7 +232,7 @@ if (defined('NV_IS_SPADMIN')) {
                 if (!empty($department['others'])) {
                     $others = json_decode($department['others'], true);
                     if (json_last_error() !== JSON_ERROR_NONE) {
-                        $others = unserialize($department['others']);
+                        $others = unserialize($department['others'], NV_UNSERIALIZE_SAFE);
                     }
                     $department['others'] = $others;
                 }
@@ -266,7 +267,7 @@ if (defined('NV_IS_SPADMIN')) {
                 $tpl->assign('LANG', $nv_Lang);
                 $tpl->assign('MODULE_NAME', $module_name);
                 $tpl->assign('OP', $op);
-                $tpl->assign('CHECKSS', md5(NV_CHECK_SESSION . '_' . $module_name . '_' . $op . '_' . $admin_info['userid']));
+                $tpl->assign('CHECKSS', csrf_create($module_name . '_' . $op . '_' . $admin_info['admin_id']));
                 $tpl->assign('DEPARTMENT', $department);
                 $tpl->assign('NV_ADMIN_THEME', $global_config['admin_theme']);
                 $tpl->assign('MODULE_UPLOAD', $module_upload);
@@ -442,7 +443,7 @@ if ($nv_Request->isset_request('id', 'get')) {
     if (!empty($department['others'])) {
         $_others = json_decode($department['others'], true);
         if (json_last_error() !== JSON_ERROR_NONE) {
-            $_others = unserialize($department['others']);
+            $_others = unserialize($department['others'], NV_UNSERIALIZE_SAFE);
         }
 
         $department['others'] = $_others;
@@ -500,7 +501,7 @@ $tpl->setTemplateDir(get_module_tpl_dir('department.tpl'));
 $tpl->assign('LANG', $nv_Lang);
 $tpl->assign('MODULE_NAME', $module_name);
 $tpl->assign('OP', $op);
-$tpl->assign('CHECKSS', md5(NV_CHECK_SESSION . '_' . $module_name . '_' . $op . '_' . $admin_info['userid']));
+$tpl->assign('CHECKSS', csrf_create($module_name . '_' . $op . '_' . $admin_info['admin_id']));
 $tpl->assign('DEPARTMENTS', $departments);
 
 $contents = $tpl->fetch('department.tpl');

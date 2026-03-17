@@ -65,6 +65,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="{$LANG->getGlobal('close')}"></button>
             </div>
             <form class="modal-body" id="upload-form" target="upload-form-listener" method="post" enctype="multipart/form-data" action="{$smarty.const.NV_BASE_ADMINURL}index.php?{$smarty.const.NV_LANG_VARIABLE}={$smarty.const.NV_LANG_DATA}&amp;{$smarty.const.NV_NAME_VARIABLE}={$MODULE_NAME}&amp;{$smarty.const.NV_OP_VARIABLE}={$OP}&amp;logoupload=1">
+                <input type="hidden" name="checkss" value="{$CHECKSS}">
                 <div class="row g-3">
                     <div class="col-lg-8">
                         <div id="organlogo-picker">

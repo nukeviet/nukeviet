@@ -30,7 +30,7 @@ $widget_info = [
         $cacheTTL = 1800;
 
         if (($cache = $nv_Cache->getItem($module_name, $cacheFile, ttl: $cacheTTL)) != false) {
-            $_arr_siteinfo = unserialize($cache);
+            $_arr_siteinfo = unserialize($cache, NV_UNSERIALIZE_SAFE);
         } else {
             if ($global_config['idsite'] > 0) {
                 $site_condition = ' WHERE idsite=' . $global_config['idsite'];

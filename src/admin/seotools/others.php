@@ -71,7 +71,14 @@ $tpl->assign('OP', $op);
 
 // Khai báo thông tin doanh nghiệp
 if ($nv_Request->isset_request('localbusiness_information', 'get')) {
+    $csrf_key = $module_name . '_' . $op . '_localbusiness_' . $admin_info['admin_id'];
     if ($nv_Request->isset_request('save', 'post')) {
+        if (!csrf_check($nv_Request->get_title('checkss', 'post', ''), $csrf_key)) {
+            nv_jsonOutput([
+                'status' => 'error',
+                'mess' => 'Error session'
+            ]);
+        }
         $jsondata = $nv_Request->get_textarea('jsondata', '', '', false, false);
         if (empty($jsondata)) {
             nv_jsonOutput([
@@ -131,6 +138,7 @@ if ($nv_Request->isset_request('localbusiness_information', 'get')) {
         $data = $sample_data;
     }
     $tpl->assign('DATA', htmlspecialchars(json_encode($data, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE)));
+    $tpl->assign('CHECKSS', csrf_create($csrf_key));
 
     $contents = $tpl->fetch('localbusiness.tpl');
 
@@ -141,11 +149,17 @@ if ($nv_Request->isset_request('localbusiness_information', 'get')) {
 
 // Lấy thông tin doanh nghiệp mẫu
 if ($nv_Request->isset_request('sample_data', 'post')) {
+    if (!csrf_check($nv_Request->get_title('checkss', 'post', ''), $module_name . '_' . $op . '_localbusiness_' . $admin_info['admin_id'])) {
+        exit('Stop!!!');
+    }
     nv_htmlOutput(json_encode($sample_data, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
 }
 
 // Xóa file thông tin doanh nghiệp
 if ($nv_Request->isset_request('lbinf_delete', 'post')) {
+    if (!csrf_check($nv_Request->get_title('checkss', 'post', ''), $module_name . '_' . $op . '_localbusiness_' . $admin_info['admin_id'])) {
+        exit('Stop!!!');
+    }
     if (file_exists(NV_ROOTDIR . '/' . NV_DATADIR . '/localbusiness.json')) {
         nv_deletefile(NV_ROOTDIR . '/' . NV_DATADIR . '/localbusiness.json');
     }
@@ -158,6 +172,9 @@ if ($nv_Request->isset_request('lbinf_delete', 'post')) {
 
 // Upload biểu trưng
 if ($nv_Request->isset_request('logoupload', 'get')) {
+    if (!csrf_check($nv_Request->get_string('checkss', 'post'), $module_name . '_' . $op . '_' . $admin_info['admin_id'])) {
+        nv_htmlOutput('Error session!');
+    }
     $array = [];
     $array['success'] = 0;
     $array['error'] = '';
@@ -231,6 +248,12 @@ if ($nv_Request->isset_request('logoupload', 'get')) {
 
 // Xóa biểu trưng
 if ($nv_Request->isset_request('logodel', 'post')) {
+    if (!csrf_check($nv_Request->get_string('checkss', 'post'), $module_name . '_' . $op . '_' . $admin_info['admin_id'])) {
+        nv_jsonOutput([
+            'status' => 'error',
+            'mess' => 'Error session!'
+        ]);
+    }
     if (!empty($global_config['organization_logo']) and file_exists(NV_ROOTDIR . '/' . $global_config['organization_logo'])) {
         nv_deletefile(NV_ROOTDIR . '/' . $global_config['organization_logo']);
     }
@@ -242,8 +265,8 @@ if ($nv_Request->isset_request('logodel', 'post')) {
 }
 
 // Lưu các giá trị gửi qua form
-$checkss = md5(NV_CHECK_SESSION . '_' . $module_name . '_' . $op . '_' . $admin_info['userid']);
-if ($checkss == $nv_Request->get_string('checkss', 'post')) {
+$csrf_key = $module_name . '_' . $op . '_' . $admin_info['admin_id'];
+if (csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
     $name = $nv_Request->get_title('name', 'post', '');
     $val = (int) $nv_Request->get_bool('val', 'post', false);
 
@@ -271,7 +294,7 @@ $page_title = $nv_Lang->getModule('other_seo_tools');
 
 $tpl->registerPlugin('modifier', 'file_exists', 'file_exists');
 $tpl->assign('GCONFIG', $global_config);
-$tpl->assign('CHECKSS', $checkss);
+$tpl->assign('CHECKSS', csrf_create($csrf_key));
 
 $contents = $tpl->fetch('others.tpl');
 

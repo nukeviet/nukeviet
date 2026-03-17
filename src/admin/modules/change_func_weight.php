@@ -16,6 +16,13 @@ if (!defined('NV_IS_FILE_MODULES')) {
 $fid = $nv_Request->get_int('fid', 'post', 0);
 $new_weight = $nv_Request->get_int('new_weight', 'post', 0);
 
+if (!csrf_check($nv_Request->get_string('checkss', 'post'), $module_name . '_change_func_weight')) {
+    nv_jsonOutput([
+        'success' => 0,
+        'text' => 'Session error!'
+    ]);
+}
+
 if (empty($fid) or empty($new_weight)) {
     nv_jsonOutput([
         'success' => 0,

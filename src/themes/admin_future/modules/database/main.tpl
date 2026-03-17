@@ -15,7 +15,7 @@
         </ul>
     </div>
 </div>
-<div id="show_db_tables">
+<div id="show_db_tables" data-checkss="{$CHECKSS}">
     <div class="text-center">
         <i class="fa-solid fa-2x fa-spinner fa-spin-pulse"></i>
         <div>{$LANG->getGlobal('wait_page_load')}</div>

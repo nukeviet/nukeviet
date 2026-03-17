@@ -16,8 +16,8 @@ if (!defined('NV_IS_FILE_WEBTOOLS')) {
 $timezone_array = array_keys($nv_parse_ini_timezone);
 $array_config_global = [];
 
-$checkss = md5(NV_CHECK_SESSION . '_' . $module_name . '_' . $op . '_' . $admin_info['userid']);
-if ($checkss == $nv_Request->get_string('checkss', 'post')) {
+$csrf_key = $module_name . '_' . $op . '_' . $admin_info['admin_id'];
+if (csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
     $array_config_global['online_upd'] = $nv_Request->get_int('online_upd', 'post');
     $array_config_global['statistic'] = $nv_Request->get_int('statistic', 'post');
     $array_config_global['stat_excl_bot'] = (int) $nv_Request->get_bool('stat_excl_bot', 'post', false);
@@ -65,7 +65,7 @@ $tpl->setTemplateDir(get_module_tpl_dir('statistics.tpl'));
 $tpl->assign('LANG', $nv_Lang);
 $tpl->assign('MODULE_NAME', $module_name);
 $tpl->assign('OP', $op);
-$tpl->assign('CHECKSS', $checkss);
+$tpl->assign('CHECKSS', csrf_create($csrf_key));
 
 sort($timezone_array);
 $tpl->assign('TIMEZONE_ARRAY', $timezone_array);

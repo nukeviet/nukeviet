@@ -11,6 +11,8 @@
 
 namespace NukeViet\Core;
 
+use NukeViet\Http\HttpException;
+
 /**
  * NukeViet\Core\Blocker
  *
@@ -209,7 +211,7 @@ class Blocker
         $info = [];
         $logfile = $this->_get_logfile();
         if (file_exists($logfile)) {
-            $info = unserialize(file_get_contents($logfile));
+            $info = unserialize(file_get_contents($logfile), NV_UNSERIALIZE_SAFE);
         }
 
         return $info;

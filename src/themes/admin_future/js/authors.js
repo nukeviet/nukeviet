@@ -229,7 +229,8 @@ $(function() {
                 url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=' + nv_func_name + '&nocache=' + new Date().getTime(),
                 data: {
                     admin_id: btn.data('userid'),
-                    delall: $('body').data('checksess')
+                    delall: 1,
+                    checkss: btn.data('checkss')
                 },
                 dataType: 'json',
                 success: function(data) {
@@ -265,7 +266,8 @@ $(function() {
                 data: {
                     id: btn.data('id'),
                     admin_id: btn.data('userid'),
-                    del: $('body').data('checksess')
+                    del: 1,
+                    checkss: btn.data('checkss')
                 },
                 dataType: 'json',
                 success: function(data) {

@@ -111,7 +111,7 @@ function nv_blocks_content($sitecontent)
 
         while ($_row = $_result->fetch()) {
             // Cau hinh block
-            $block_config = (!empty($_row['config'])) ? unserialize($_row['config']) : [];
+            $block_config = (!empty($_row['config'])) ? unserialize($_row['config'], NV_UNSERIALIZE_SAFE) : [];
             $block_config['bid'] = $_row['bid'];
             $block_config['module'] = $_row['module'];
             $block_config['title'] = $_row['title'];
@@ -1128,7 +1128,7 @@ function set_theme_configs(&$global_config, &$is_mobile, $module_info)
             } elseif (theme_file_exists('default/theme.php')) {
                 $global_config['module_theme'] = 'default';
             } else {
-                throw new \NukeViet\Core\HttpException('Error! Does not exist themes default', 500);
+                throw new \NukeViet\Http\HttpException('Error! Does not exist themes default', 500);
             }
             $theme_type = $global_config['current_theme_type'];
         }

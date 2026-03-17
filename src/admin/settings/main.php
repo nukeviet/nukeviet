@@ -33,8 +33,8 @@ while ($_scratch = $result->fetch(3)) {
 }
 
 // Lưu cấu hình
-$checkss = md5(NV_CHECK_SESSION . '_' . $module_name . '_' . $op . '_' . $admin_info['userid']);
-if ($nv_Request->get_string('checkss', 'post') == $checkss) {
+$csrf_key = $module_name . '_' . $op . '_' . $admin_info['admin_id'];
+if (csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
     $array_config = [];
     $array_config['site_name'] = nv_substr($nv_Request->get_title('site_name', 'post', '', 1), 0, 255);
     if (empty($array_config['site_name'])) {
@@ -177,7 +177,7 @@ if (!empty($global_config['site_favicon']) and $global_config['site_favicon'] !=
 }
 
 $value_setting = [
-    'checkss' => $checkss,
+    'checkss' => csrf_create($csrf_key),
     'sitename' => $global_config['site_name'],
     'site_logo' => $site_logo,
     'site_banner' => $site_banner,

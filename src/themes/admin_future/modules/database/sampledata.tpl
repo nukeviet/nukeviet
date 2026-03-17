@@ -7,6 +7,7 @@
             </div>
             <div class="card-body" id="sampledataarea" data-errsys="{$LANG->getModule('sampledata_error_sys')}" data-init="{$LANG->getModule('sampledata_dat_init')}">
                 <form method="post">
+                    <input type="hidden" name="checkss" value="{$CHECKSS}">
                     <input type="hidden" name="delifexists" value="0">
                     <div class="row mb-3">
                         <label class="col-12 col-sm-4 col-form-label text-sm-end" for="element_sample_name">{$LANG->getModule('sampledata_name')} <span class="text-danger">(*)</span></label>

@@ -13,9 +13,11 @@ if (!defined('NV_IS_FILE_DATABASE')) {
     exit('Stop!!!');
 }
 
-$checkss = $nv_Request->get_title('checkss', 'post,get');
+$csrf_key = $module_name . '_main_' . $admin_info['admin_id'];
 
-if ($checkss == NV_CHECK_SESSION) {
+$checkss = $nv_Request->get_string('checkss', 'post,get');
+
+if (csrf_check($checkss, $csrf_key)) {
     $tables = $nv_Request->get_array('tables', 'post', []);
     $type = $nv_Request->get_title('type', 'post', '');
     $ext = $nv_Request->get_title('ext', 'post', $global_config['dump_backup_ext']);

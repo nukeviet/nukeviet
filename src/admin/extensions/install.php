@@ -44,7 +44,7 @@ $array = $NV_Http->post(NUKEVIET_STORE_APIURL, $args);
 
 if (is_array($array)) {
     $cookies = $array['cookies'];
-    $array = !empty($array['body']) ? @unserialize($array['body']) : [];
+    $array = !empty($array['body']) ? @unserialize($array['body'], NV_UNSERIALIZE_SAFE) : [];
 } else {
     // Do post có thể trả về object
     $array = [];

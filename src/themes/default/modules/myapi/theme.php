@@ -25,7 +25,7 @@ if (!defined('NV_IS_API_MOD')) {
  */
 function main_theme($type, $roleCount, $roleList, $api_user, $generate_page)
 {
-    global $nv_Lang, $module_name, $site_mods, $global_config, $language_array;
+    global $nv_Lang, $module_name, $site_mods, $global_config, $language_array, $checkss;
 
     $page_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name;
 
@@ -65,6 +65,7 @@ function main_theme($type, $roleCount, $roleList, $api_user, $generate_page)
     $stpl->setTemplateDir(str_replace(DIRECTORY_SEPARATOR, '/', __DIR__) . '/smarty');
     $stpl->assign('LANG', $nv_Lang);
     $stpl->assign('PAGE_URL', $page_url);
+    $stpl->assign('CHECKSS', $checkss);
     $stpl->assign('METHODS', $methods);
     $stpl->assign('TYPE', $type);
     $stpl->assign('ROLECOUNT', $roleCount);

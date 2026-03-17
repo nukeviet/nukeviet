@@ -226,9 +226,9 @@ if (defined('NV_EDITOR')) {
 
 $access_passus = (isset($access_admin['access_passus'][$admin_info['level']]) and $access_admin['access_passus'][$admin_info['level']] == 1) ? true : false;
 $_user = $custom_fields = [];
-$checkss = md5(NV_CHECK_SESSION . '_' . $module_name . '_' . $op . '_' . $userid);
+$csrf_key = $module_name . '_' . $op . '_' . $userid . '_' . $admin_info['admin_id'];
 if ($nv_Request->isset_request('confirm', 'post')) {
-    if ($checkss != $nv_Request->get_string('checkss', 'post')) {
+    if (!csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
         nv_jsonOutput([
             'status' => 'error',
             'mess' => 'Error Session, Please close the browser and try again'
@@ -793,7 +793,7 @@ if (defined('NV_IS_USER_FORUM')) {
                 $xtpl->assign('FILEMAXSIZE', $row['limited_values']['file_max_size']);
                 $xtpl->assign('FILEMAXSIZE_FORMAT', nv_convertfromBytes($row['limited_values']['file_max_size']));
                 $xtpl->assign('FILEMAXNUM', $row['limited_values']['maxnum']);
-                $xtpl->assign('CSRF', md5(NV_CHECK_SESSION . '_' . $module_name . $row['field']));
+                $xtpl->assign('CSRF', csrf_create($module_name . '_' . $row['field'] . '_' . $admin_info['admin_id']));
                 $xtpl->assign('URL_MODULE', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name);
                 $widthlimit = image_size_info($row['limited_values']['widthlimit'], 'width');
                 $heightlimit = image_size_info($row['limited_values']['heightlimit'], 'height');

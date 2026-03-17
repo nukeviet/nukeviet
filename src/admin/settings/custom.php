@@ -13,8 +13,8 @@ if (!defined('NV_IS_FILE_SETTINGS')) {
     exit('Stop!!!');
 }
 
-$checkss = md5(NV_CHECK_SESSION . '_' . $module_name . '_' . $op . '_' . $admin_info['userid']);
-if ($checkss == $nv_Request->get_string('checkss', 'post')) {
+$csrf_key = $module_name . '_' . $op . '_' . $admin_info['admin_id'];
+if (csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
     $config_key = $nv_Request->get_typed_array('config_key', 'post', 'title', []);
     $config_value = $nv_Request->get_typed_array('config_value', 'post', 'title', []);
     $config_description = $nv_Request->get_typed_array('config_description', 'post', 'title', []);
@@ -62,7 +62,7 @@ $tpl->assign('LANG', $nv_Lang);
 $tpl->assign('MODULE_NAME', $module_name);
 $tpl->assign('OP', $op);
 
-$tpl->assign('CHECKSS', $checkss);
+$tpl->assign('CHECKSS', csrf_create($csrf_key));
 $tpl->assign('CUSTOM_CONFIGS', $custom_configs);
 
 $contents = $tpl->fetch('custom.tpl');

@@ -153,8 +153,8 @@ function apicheck($role_object, $array_post, $lang)
 
 // Thay đổi trạng thái của role
 if ($nv_Request->isset_request('changeStatus', 'post')) {
-    $checkss = md5(NV_CHECK_SESSION . '_' . $module_name . '_' . $op . '_' . $admin_info['userid']);
-    if ($checkss != $nv_Request->get_title('checkss', 'post', '')) {
+    $csrf_key = $module_name . '_' . $op . '_' . $admin_info['admin_id'];
+    if (!csrf_check($nv_Request->get_title('checkss', 'post', ''), $csrf_key)) {
         nv_jsonOutput([
             'status' => 'error',
             'mess' => $nv_Lang->getGlobal('error_code_11')
@@ -187,7 +187,7 @@ if ($nv_Request->isset_request('changeStatus', 'post')) {
 // Xóa role
 if ($nv_Request->isset_request('roledel', 'post')) {
     $checkss = md5(NV_CHECK_SESSION . '_' . $module_name . '_' . $op . '_' . $admin_info['userid']);
-    if ($checkss != $nv_Request->get_title('checkss', 'post', '')) {
+    if (!csrf_check($nv_Request->get_title('checkss', 'post', ''), $module_name . '_' . $op . '_' . $admin_info['admin_id'])) {
         nv_jsonOutput([
             'status' => 'error',
             'mess' => $nv_Lang->getGlobal('error_code_11')
@@ -243,11 +243,6 @@ if ($action == 'role') {
         !isset($array_post['role_data'][$lg]) && $array_post['role_data'][$lg] = [];
         $isAdd = false;
         $page_url .= '&amp;id=' . $id;
-    } elseif ($is_getapitree) {
-        nv_jsonOutput([
-            'status' => 'error',
-            'mess' => $nv_Lang->getGlobal('error_code_11')
-        ]);
     } else {
         $array_post = [
             'role_type' => 'private',
@@ -275,7 +270,7 @@ if ($action == 'role') {
 
     if ($nv_Request->isset_request('save', 'post')) {
         $checkss = md5(NV_CHECK_SESSION . '_' . $module_name . '_' . $op . '_' . $admin_info['userid']);
-        if ($checkss != $nv_Request->get_title('checkss', 'post', '')) {
+        if (!csrf_check($nv_Request->get_title('checkss', 'post', ''), $module_name . '_' . $op . '_' . $admin_info['admin_id'])) {
             nv_jsonOutput([
                 'status' => 'error',
                 'mess' => $nv_Lang->getGlobal('error_code_11')
@@ -433,7 +428,7 @@ if ($action == 'role') {
     $tpl = new \NukeViet\Template\NVSmarty();
     $tpl->setTemplateDir(get_module_tpl_dir('roles-add.tpl'));
     $tpl->assign('LANG', $nv_Lang);
-    $tpl->assign('CHECKSS', md5(NV_CHECK_SESSION . '_' . $module_name . '_' . $op . '_' . $admin_info['userid']));
+    $tpl->assign('CHECKSS', csrf_create($module_name . '_' . $op . '_' . $admin_info['admin_id']));
     $tpl->assign('DATA', $array_post);
     $tpl->assign('APICHECK', apicheck($array_post['role_object'], $array_post, $lg));
     $tpl->assign('FORM_ACTION', $page_url);
@@ -469,7 +464,7 @@ $tpl->assign('PAGE_URL', $page_url);
 $tpl->assign('ADD_API_ROLE_URL', $page_url . '&amp;action=role');
 $tpl->assign('GCONFIG', $global_config);
 $tpl->assign('LANGUAGE_ARRAY', $language_array);
-$tpl->assign('CHECKSS', md5(NV_CHECK_SESSION . '_' . $module_name . '_' . $op . '_' . $admin_info['userid']));
+$tpl->assign('CHECKSS', csrf_create($module_name . '_' . $op . '_' . $admin_info['admin_id']));
 
 $type = $nv_Request->get_title('type', 'get', '');
 (!empty($type) and !in_array($type, ['private', 'public'], true)) && $type = '';

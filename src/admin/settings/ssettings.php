@@ -246,7 +246,7 @@ function set_access_control_allow_origin($any_origin, $origins)
     return array_values($origins);
 }
 
-$checkss = md5(NV_CHECK_SESSION . '_' . $module_name . '_' . $op . '_' . $admin_info['userid']);
+$csrf_key = $module_name . '_' . $op . '_' . $admin_info['admin_id'];
 
 $sconfig_file = '';
 $highlight_lang = '';
@@ -262,7 +262,7 @@ if ($sys_info['supports_rewrite'] == 'rewrite_mode_apache') {
 
 // Lấy nội dung file cấu hình
 if ($nv_Request->isset_request('getSconfigContents', 'post')) {
-    if ($nv_Request->get_title('checkss', 'post', '') !== $checkss) {
+    if (!csrf_check($nv_Request->get_title('checkss', 'post', ''), $csrf_key)) {
         nv_htmlOutput('Error session!!!');
     }
 
@@ -276,7 +276,7 @@ if ($nv_Request->isset_request('getSconfigContents', 'post')) {
 
 // Lấy nội dung tệp cấu hình mặc định theo thiết lập
 if ($nv_Request->isset_request('getSconfigBySettings', 'post')) {
-    if ($nv_Request->get_title('checkss', 'post', '') !== $checkss) {
+    if (!csrf_check($nv_Request->get_title('checkss', 'post', ''), $csrf_key)) {
         nv_htmlOutput('Error session!!!');
     }
 
@@ -301,7 +301,7 @@ $server_configs = file_get_contents($server_config_file);
 $server_configs = json_decode($server_configs, true);
 $csrf = $nv_Request->get_string('_csrf', 'post', '');
 
-if ($nv_Request->isset_request('save', 'post') and hash_equals($checkss, $csrf)) {
+if ($nv_Request->isset_request('save', 'post') and csrf_check($csrf, $csrf_key)) {
     $posts = [];
     $posts['site_mimetypes'] = set_mime_types($nv_Request->get_textarea('site_mimetypes', '', '', false, false));
     $posts['compress_file_exts'] = set_mimes($nv_Request->get_string('compress_file_exts', 'post', '', true, false), $posts['site_mimetypes']);
@@ -392,7 +392,7 @@ $tpl->assign('MODULE_NAME', $module_name);
 $tpl->assign('OP', $op);
 
 $tpl->assign('DATA', $server_configs);
-$tpl->assign('CHECKSS', $checkss);
+$tpl->assign('CHECKSS', csrf_create($csrf_key));
 $tpl->assign('INFO', $info);
 $tpl->assign('SYS_INFO', $sys_info);
 $tpl->assign('HIGHLIGHT_LANG', $highlight_lang);

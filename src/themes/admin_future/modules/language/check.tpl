@@ -69,7 +69,7 @@
     <input type="hidden" name="sourcelang" value="{$SOURCELANG}">
     <input type="hidden" name="check_type" value="{$CHECK_TYPE}">
     <input type="hidden" name="idfile" value="{$IDFILE}">
-    <input type="hidden" name="savedata" value="{$smarty.const.NV_CHECK_SESSION}">
+    <input type="hidden" name="savedata" value="{$CHECKSS}">
     <div class="row mt-4 g-2">
         {foreach from=$ARRAY_LANG_DATA key=idfile_i item=file_data}
         <div class="col-{if count($ARRAY_LANG_DATA) eq 1}12{else}xxl-6{/if}">

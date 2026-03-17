@@ -344,7 +344,7 @@ $(function() {
             url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&nocache=' + new Date().getTime(),
             dataType: 'json',
             data: {
-                changeweight: $('body').data('checksess'),
+                changeweight: btn.data('checkss'),
                 keylang: btn.data('keylang'),
                 new_weight: new_weight
             },

@@ -148,7 +148,7 @@ if (empty($array)) {
     $array = [];
 }
 $sth->closeCursor();
-$checkss = md5(NV_CHECK_SESSION . '_' . $module_name . '_' . $admin_info['userid']);
+$checkss = csrf_create($module_name . '_' . $admin_info['admin_id']);
 $from['from_date'] = nv_u2d_get($from['from_date']);
 $from['to_date'] = nv_u2d_get($from['to_date']);
 

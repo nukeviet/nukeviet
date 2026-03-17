@@ -44,7 +44,7 @@ function cron_expadmin_handling()
 
             $nv_Lang->loadFile(NV_ROOTDIR . '/includes/language/' . $userlang . '/admin_authors.php', true);
 
-            $susp_reason = !empty($susp_reason) ? unserialize($susp_reason) : [];
+            $susp_reason = !empty($susp_reason) ? unserialize($susp_reason, NV_UNSERIALIZE_SAFE) : [];
             array_unshift($susp_reason, [
                 'starttime' => NV_CURRENTTIME,
                 'endtime' => 0,

@@ -16,7 +16,7 @@ if (!defined('NV_IS_FILE_ADMIN')) {
 $status = $nv_Request->get_int('active', 'post');
 $listcid = $nv_Request->get_string('list', 'post');
 $checkss = $nv_Request->get_string('checkss', 'post', '');
-if ($checkss != md5(NV_CHECK_SESSION . '_' . $module_name . '_' . $admin_info['userid']) || empty($listcid)) {
+if (!csrf_check($checkss, $module_name . '_' . $admin_info['admin_id']) || empty($listcid)) {
     nv_jsonOutput(['status' => 'error', 'mess' => $nv_Lang->getGlobal('error_code_11')]);
 }
 

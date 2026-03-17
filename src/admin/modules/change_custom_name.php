@@ -30,6 +30,12 @@ if (empty($row)) {
 }
 
 if ($nv_Request->get_int('save', 'post') == '1') {
+    if (!csrf_check($nv_Request->get_string('checkss', 'post'), $module_name . '_change_val_func')) {
+        nv_jsonOutput([
+            'status' => 'error',
+            'mess' => 'Session error!'
+        ]);
+    }
     $func_custom_name = $nv_Request->get_title('newvalue', 'post', '', 1);
 
     if (empty($func_custom_name)) {

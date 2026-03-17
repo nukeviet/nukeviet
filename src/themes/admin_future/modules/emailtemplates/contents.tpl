@@ -221,7 +221,8 @@
     </div>
     {/if}
     <input type="hidden" name="showlang" value="{$DATA.showlang}">
-    <input type="hidden" name="saveform" value="{$smarty.const.NV_CHECK_SESSION}">
+    <input type="hidden" name="checkss" value="{$CHECKSS}">
+    <input type="hidden" name="saveform" value="1">
 </form>
 <div class="card mt-3">
     <div class="card-header fw-medium fs-5 py-2">
