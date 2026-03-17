@@ -26,12 +26,12 @@ $tpl->assign('LANG', $nv_Lang);
 $tpl->assign('MODULE_NAME', $module_name);
 $tpl->assign('OP', $op);
 
-$tpl->assign('CHECKSESS', csrf_create($csrf_key));
+$tpl->assign('CHECKSS', csrf_create($csrf_key));
 $tpl->assign('REQUEST', $request);
 
 // Submit đăng nhập
-if ($nv_Request->isset_request('checksess', 'post')) {
-    if (!csrf_check($nv_Request->get_string('checksess', 'post'), $csrf_key)) {
+if ($nv_Request->isset_request('checkss', 'post')) {
+    if (!csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
         nv_jsonOutput([
             'status' => 'error',
             'mess' => 'Session error!!!',

@@ -46,7 +46,7 @@ foreach ($_rows as $row) {
         $is_delCache = true;
     }
 
-    $row['checkss'] = md5($row['id'] . NV_CHECK_SESSION);
+    $row['checkss'] = csrf_create($_csrf_key);
     $row['url_view'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $row['alias'] . $global_config['rewrite_exturl'];
     $row['url_edit'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=content&amp;id=' . $row['id'];
     $array_row[] = $row;

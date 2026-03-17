@@ -53,7 +53,7 @@ if ($admin_info['level'] == 1) {
 
 // Đánh dấu đã xem tất cả các thông báo
 if ($nv_Request->isset_request('notification_reset', 'post')) {
-    if (!csrf_check($nv_Request->get_title('checksess', 'post', ''), $csrf_key)) {
+    if (!csrf_check($nv_Request->get_title('checkss', 'post', ''), $csrf_key)) {
         nv_htmlOutput('NO');
     }
     nv_insert_logs(NV_LANG_DATA, $module_name, 'READ_ALL_NOTIFICATION', '', $admin_info['userid']);
@@ -95,7 +95,7 @@ if ($nv_Request->isset_request('delete', 'post')) {
         'error' => 1,
         'data' => []
     ];
-    if (!csrf_check($nv_Request->get_title('checksess', 'post', ''), $csrf_key)) {
+    if (!csrf_check($nv_Request->get_title('checkss', 'post', ''), $csrf_key)) {
         nv_jsonOutput($respon);
     }
 
@@ -124,7 +124,7 @@ if ($nv_Request->isset_request('toggle', 'post')) {
         'data' => [],
         'view' => null
     ];
-    if (!csrf_check($nv_Request->get_title('checksess', 'post', ''), $csrf_key)) {
+    if (!csrf_check($nv_Request->get_title('checkss', 'post', ''), $csrf_key)) {
         nv_jsonOutput($respon);
     }
 

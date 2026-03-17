@@ -64,24 +64,24 @@
                         <td colspan="7">
                             <div class="row row-cols-auto g-2">
                                 <div class="col">
-                                    <button type="button" class="btn btn-secondary feedback_del_sel"><i class="fa-solid fa-trash text-danger"></i> {$LANG->getModule('bt_del_row_title')}</button>
+                                    <button type="button" class="btn btn-secondary feedback_del_sel" data-checkss="{$CHECKSS}"><i class="fa-solid fa-trash text-danger"></i> {$LANG->getModule('bt_del_row_title')}</button>
                                 </div>
                                 {if !empty($smarty.const.NV_IS_SPADMIN)}
                                 <div class="col">
-                                    <button type="button" class="btn btn-secondary feedback_del_all"><i class="fa-solid fa-trash text-danger"></i> {$LANG->getModule('delall')}</button>
+                                    <button type="button" class="btn btn-secondary feedback_del_all" data-checkss="{$CHECKSS}"><i class="fa-solid fa-trash text-danger"></i> {$LANG->getModule('delall')}</button>
                                 </div>
                                 {/if}
                                 <div class="col">
-                                    <button type="button" class="btn btn-secondary feedback_mark" data-mark="unread"><i class="fa-solid fa-bookmark"></i> {$LANG->getModule('mark_as_unread')}</button>
+                                    <button type="button" class="btn btn-secondary feedback_mark" data-mark="unread" data-checkss="{$CHECKSS}"><i class="fa-solid fa-bookmark"></i> {$LANG->getModule('mark_as_unread')}</button>
                                 </div>
                                 <div class="col">
-                                    <button type="button" class="btn btn-secondary feedback_mark" data-mark="read"><i class="fa-regular fa-bookmark"></i> {$LANG->getModule('mark_as_read')}</button>
+                                    <button type="button" class="btn btn-secondary feedback_mark" data-mark="read" data-checkss="{$CHECKSS}"><i class="fa-solid fa-bookmark"></i> {$LANG->getModule('mark_as_read')}</button>
                                 </div>
                                 <div class="col">
-                                    <button type="button" class="btn btn-secondary feedback_mark" data-mark="unprocess"><i class="fa-regular fa-circle"></i> {$LANG->getModule('mark_as_unprocess')}</button>
+                                    <button type="button" class="btn btn-secondary feedback_mark" data-mark="unprocess" data-checkss="{$CHECKSS}"><i class="fa-regular fa-circle"></i> {$LANG->getModule('mark_as_unprocess')}</button>
                                 </div>
                                 <div class="col">
-                                    <button type="button" class="btn btn-secondary feedback_mark" data-mark="processed"><i class="fa-regular fa-circle-check"></i> {$LANG->getModule('mark_as_processed')}</button>
+                                    <button type="button" class="btn btn-secondary feedback_mark" data-mark="processed" data-checkss="{$CHECKSS}"><i class="fa-regular fa-circle-check"></i> {$LANG->getModule('mark_as_processed')}</button>
                                 </div>
                             </div>
                         </td>

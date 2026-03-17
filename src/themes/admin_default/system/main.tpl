@@ -70,7 +70,7 @@
                 </ul>
             </li>
             <!-- BEGIN: notification -->
-            <li class="dropdown" id="notification-area" data-checksess="{NV_CHECK_SESSION}">
+            <li class="dropdown" id="notification-area" data-checkss="{CHECKSS}">
                 <span id="notification" style="display: none"></span>
                 <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown"> <em class="fa fa-bell-o fa-2x fix"></em></a>
                 <div class="dropdown-menu">

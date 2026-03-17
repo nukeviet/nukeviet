@@ -24,7 +24,7 @@ if ($global_config['idsite']) {
 
 $modules_site = nv_scandir(NV_ROOTDIR . '/modules', $global_config['check_module']);
 
-if (csrf_check($nv_Request->get_title('checkss', 'post'), $csrf_key)) {
+if (csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
     $title = $nv_Request->get_title('title', 'post', '', 1);
     $title = strtolower(change_alias($title));
     $modfile = $nv_Request->get_title('m_file', 'post', '', 1);

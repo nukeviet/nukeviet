@@ -24,7 +24,7 @@ if (!$sys_info['ftp_support']) {
 
 // Tự động nhận diện Remove Path
 if ($nv_Request->isset_request('autodetect', 'post')) {
-    if (!csrf_check($nv_Request->get_title('checkss', 'post'), $csrf_key)) {
+    if (!csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
         nv_jsonOutput([
             'status' => 'error',
             'mess' => 'Error session!!!'

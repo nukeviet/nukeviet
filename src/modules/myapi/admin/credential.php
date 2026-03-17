@@ -183,7 +183,7 @@ if ($action == 'getUser' and $nv_Request->isset_request('q', 'post')) {
 
 // Thay đổi trạng thái quyền truy cập API-role
 if ($action == 'changeStatus' and $nv_Request->isset_request('userid', 'post')) {
-    $checkss = $nv_Request->get_title('checkss', 'post');
+    $checkss = $nv_Request->get_string('checkss', 'post');
     if (!csrf_check($checkss, $csrf_key)) {
         nv_jsonOutput([
             'status' => 'error',
@@ -216,7 +216,7 @@ if ($action == 'changeStatus' and $nv_Request->isset_request('userid', 'post')) 
 
 // Xóa quyền truy cập
 if ($action == 'del' and $nv_Request->isset_request('userid', 'post')) {
-    $checkss = $nv_Request->get_title('checkss', 'post');
+    $checkss = $nv_Request->get_string('checkss', 'post');
     if (!csrf_check($checkss, $csrf_key)) {
         nv_jsonOutput([
             'status' => 'error',

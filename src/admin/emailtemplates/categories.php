@@ -15,8 +15,6 @@ if (!defined('NV_IS_FILE_EMAILTEMPLATES')) {
 
 $page_title = $nv_Lang->getModule('categories');
 
-$csrf_key = $module_name . '_' . $op;
-
 // Thay đổi thứ tự
 if ($nv_Request->isset_request('changeweight', 'post') and csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
     $catid = $nv_Request->get_int('catid', 'post', 0);

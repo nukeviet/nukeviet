@@ -49,6 +49,10 @@ $user_orient_actions = [
 
 //change_alias
 if ($nv_Request->isset_request('change_alias', 'post')) {
+    if (!csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
+        header('HTTP/1.1 403 Forbidden');
+        exit('CSRF error');
+    }
     $text = $nv_Request->get_title('change_alias', 'post', '');
     if (!empty($text)) {
         $text = strtolower(change_alias($text));
@@ -70,6 +74,12 @@ if ($nv_Request->isset_request('change_alias', 'post')) {
 
 // Luu tu khoa lenh
 if ($nv_Request->isset_request('command_keywords,keyword,action,parameter', 'post')) {
+    if (!csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
+        nv_jsonOutput([
+            'status' => 'error',
+            'mess' => 'CSRF error'
+        ]);
+    }
     $title = $nv_Request->get_typed_array('title', 'post', 'title', []);
     $keyword = $nv_Request->get_typed_array('keyword', 'post', 'title', []);
     $action = $nv_Request->get_typed_array('action', 'post', 'title', []);
@@ -85,6 +95,12 @@ if ($nv_Request->isset_request('command_keywords,keyword,action,parameter', 'pos
 
 // Luu zalo_events
 if ($nv_Request->isset_request('zalo_events,action,parameter', 'post')) {
+    if (!csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
+        nv_jsonOutput([
+            'status' => 'error',
+            'mess' => 'CSRF error'
+        ]);
+    }
     $action = $nv_Request->get_typed_array('action', 'post', 'title', []);
     $parameter = $nv_Request->get_typed_array('parameter', 'post', 'title', []);
 
@@ -113,6 +129,7 @@ $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
 $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
 $xtpl->assign('DATA', $global_config);
 $xtpl->assign('PAGE_LINK', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op);
+$xtpl->assign('CHECKSS', csrf_create($csrf_key));
 $xtpl->assign('TAB_ACTIVE', $tab);
 $xtpl->assign('IDFIELD', $idfield);
 

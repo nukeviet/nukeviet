@@ -37,6 +37,12 @@ if (!empty($thumbfield)) {
 
 // Sua thong tin video
 if ($nv_Request->isset_request('edit,id,view,thumb,description', 'post')) {
+    if (!csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
+        nv_jsonOutput([
+            'status' => 'error',
+            'mess' => 'CSRF error'
+        ]);
+    }
     $id = $nv_Request->get_int('id', 'post', 0);
     $view = $nv_Request->get_title('view', 'post', 'horizontal');
     $thumb = $nv_Request->get_title('thumb', 'post', '');
@@ -77,6 +83,12 @@ if ($nv_Request->isset_request('edit,id,view,thumb,description', 'post')) {
 
 // Xoa video
 if ($nv_Request->isset_request('file_delete,id', 'post')) {
+    if (!csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
+        nv_jsonOutput([
+            'status' => 'error',
+            'mess' => 'CSRF error'
+        ]);
+    }
     $id = $nv_Request->get_int('id', 'post', 0);
     if (empty($id)) {
         nv_jsonOutput([
@@ -95,6 +107,12 @@ if ($nv_Request->isset_request('file_delete,id', 'post')) {
 
 // Kiem tra trang thai video
 if ($nv_Request->isset_request('check,id', 'post')) {
+    if (!csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
+        nv_jsonOutput([
+            'status' => 'error',
+            'mess' => 'CSRF error'
+        ]);
+    }
     $id = $nv_Request->get_int('id', 'post', 0);
     if (empty($id)) {
         nv_jsonOutput([
@@ -132,6 +150,12 @@ if ($nv_Request->isset_request('check,id', 'post')) {
 
 // Them video
 if ($nv_Request->isset_request('add', 'post')) {
+    if (!csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
+        nv_jsonOutput([
+            'status' => 'error',
+            'mess' => 'CSRF error'
+        ]);
+    }
     $token = $nv_Request->get_string('token', 'post', '');
     $video_name = $nv_Request->get_title('filename', 'post', '');
     $description = $nv_Request->get_title('description', 'post', '');
@@ -228,6 +252,7 @@ $xtpl->assign('DEL_LINK', $base_url);
 $xtpl->assign('IDFIELD', $idfield);
 $xtpl->assign('VIEWFIELD', $viewfield);
 $xtpl->assign('THUMBFIELD', $thumbfield);
+$xtpl->assign('CHECKSS', csrf_create($csrf_key));
 
 if (!$popup) {
 } else {

@@ -27,7 +27,7 @@ if ($topicid > 0) {
     $_rows = $query->fetchAll();
     $check_rows = count($_rows);
 
-    if ($check_rows > 0 and $checkss == md5($topicid . NV_CHECK_SESSION)) {
+    if ($check_rows > 0 and csrf_check($checkss, $_csrf_key)) {
         foreach ($_rows as $row) {
             $arr_catid = explode(',', $row['listcatid']);
             foreach ($arr_catid as $catid_i) {
@@ -37,7 +37,7 @@ if ($topicid > 0) {
         }
         $check_del_topicid = true;
     } elseif ($check_rows > 0) {
-        $contents = 'ERR_ROWS_' . $topicid . '_' . md5($topicid . NV_CHECK_SESSION) . '_' . $nv_Lang->getModule('deltopic_msg_rows', $check_rows);
+        $contents = 'ERR_ROWS_' . $topicid . '_' . csrf_create($_csrf_key) . '_' . $nv_Lang->getModule('deltopic_msg_rows', $check_rows);
     } else {
         $check_del_topicid = true;
     }

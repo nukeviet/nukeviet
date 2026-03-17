@@ -14,16 +14,18 @@ if (!defined('NV_IS_FILE_ADMIN')) {
 }
 
 $id = $nv_Request->get_int('id', 'post', 0);
-$checkss = $nv_Request->get_string('checkss', 'post', '');
+$checkss = $nv_Request->get_string('checkss', 'post');
 $listid = $nv_Request->get_string('listid', 'post', '');
 $contents = 'NO_' . $id;
 
-if ($listid != '' and NV_CHECK_SESSION == $checkss) {
-    $del_array = array_map('intval', explode(',', $listid));
-} elseif (md5($id . NV_CHECK_SESSION) == $checkss) {
-    $del_array = [
-        $id
-    ];
+if (($listid != '' or $id > 0) and csrf_check($checkss, $_csrf_key)) {
+    if ($listid != '') {
+        $del_array = array_map('intval', explode(',', $listid));
+    } else {
+        $del_array = [
+            $id
+        ];
+    }
 }
 if (!empty($del_array)) {
     $weight_min = 0;

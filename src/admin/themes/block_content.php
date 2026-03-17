@@ -22,7 +22,7 @@ if ($nv_Request->isset_request('loadBlocks, bid', 'post')) {
         'error' => 1,
         'text' => 'Wrong session!!!'
     ];
-    if (!csrf_check($nv_Request->get_string('checkss', 'post', ''), $module_name . '_block_content_ajax_' . $admin_info['admin_id'])) {
+    if (!csrf_check($nv_Request->get_string('checkss', 'post'), $module_name . '_block_content_ajax_' . $admin_info['admin_id'])) {
         nv_jsonOutput($respon);
     }
 
@@ -93,7 +93,7 @@ if ($nv_Request->isset_request('get_dtime_details', 'post')) {
         'error' => 1,
         'text' => 'Wrong session!!!'
     ];
-    if (!csrf_check($nv_Request->get_string('checkss', 'post', ''), $module_name . '_block_content_ajax_' . $admin_info['admin_id'])) {
+    if (!csrf_check($nv_Request->get_string('checkss', 'post'), $module_name . '_block_content_ajax_' . $admin_info['admin_id'])) {
         nv_jsonOutput($respon);
     }
 

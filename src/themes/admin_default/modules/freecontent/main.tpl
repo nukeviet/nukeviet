@@ -53,9 +53,9 @@
                 <td><strong><a href="{ROW.link}">{ROW.title}</a></strong></td>
                 <td>{ROW.description}</td>
                 <td class="text-center">
-                    <em class="fa fa-edit fa-lg">&nbsp;</em> <a href="#" class="block-edit" data-bid="{ROW.bid}">{GLANG.edit}</a>
+                    <em class="fa fa-edit fa-lg">&nbsp;</em> <a href="#" class="block-edit" data-bid="{ROW.bid}" data-checkss="{CHECKSS}">{GLANG.edit}</a>
                      &nbsp;
-                    <em class="fa fa-trash-o fa-lg">&nbsp;</em> <a href="#" class="block-delete" data-bid="{ROW.bid}" data-title="{ROW.title}">{GLANG.delete}</a>
+                    <em class="fa fa-trash-o fa-lg">&nbsp;</em> <a href="#" class="block-delete" data-bid="{ROW.bid}" data-title="{ROW.title}" data-checkss="{CHECKSS}">{GLANG.delete}</a>
                 </td>
             </tr>
             <!-- END: loop -->
@@ -90,7 +90,7 @@
             <div class="modal-footer">
                 <span class="per-loading"> <i class="fa fa-circle-o-notch fa-spin"></i> </span>
                 <button type="button" class="btn btn-default" data-dismiss="modal">{GLANG.cancel}</button>
-                <button type="button" class="btn btn-primary block-submit-trigger">{GLANG.save}</button>
+                <button type="button" class="btn btn-primary block-submit-trigger" data-checkss="{CHECKSS}">{GLANG.save}</button>
             </div>
         </div>
     </div>
@@ -115,7 +115,7 @@
             <div class="modal-footer">
                 <input type="hidden" name="bid" value="">
                 <button type="button" class="btn btn-default" data-dismiss="modal">{GLANG.cancel}</button>
-                <button type="button" class="btn btn-primary block-delete-trigger">{GLANG.delete}</button>
+                <button type="button" class="btn btn-primary block-delete-trigger" data-checkss="{CHECKSS}">{GLANG.delete}</button>
             </div>
         </div>
     </div>

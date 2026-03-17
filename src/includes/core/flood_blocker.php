@@ -38,13 +38,13 @@ if (!$ip_exclusion) {
     if ($flb->is_flooded) {
         // Nếu recaptcha được kích hoạt, dùng nó để xác nhận khi bị chặn
         $captchaPass = (!empty($global_config['recaptcha_sitekey']) and !empty($global_config['recaptcha_secretkey']) and ($global_config['recaptcha_ver'] == 2 or $global_config['recaptcha_ver'] == 3));
+        $csrf_key = 'flood_blocker_' . $captchaPass;
         if ($captchaPass) {
             if ($nv_Request->isset_request('captcha_pass_flood', 'post')) {
-                $tokend = $nv_Request->get_title('tokend', 'post', '');
                 $captcha_txt = $nv_Request->get_title('g-recaptcha-response', 'post', '');
                 $redirect = $nv_Request->get_title('redirect', 'post', '');
 
-                if ($tokend === NV_CHECK_SESSION and nv_capcha_txt($captcha_txt, 'recaptcha')) {
+                if (csrf_check($nv_Request->get_title('checkss', 'post'), $csrf_key) and nv_capcha_txt($captcha_txt, 'recaptcha')) {
                     $flb->resetTrackFlood();
 
                     $redirect = nv_redirect_decrypt($redirect);
@@ -68,6 +68,7 @@ if (!$ip_exclusion) {
             $tpl->assign('REDIRECT', nv_redirect_encrypt($client_info['selfurl']));
             $tpl->assign('CAPTCHA_PASS', $captchaPass);
             $tpl->assign('GCONFIG', $global_config);
+            $tpl->assign('CHECKSS', csrf_create($csrf_key));
 
             include NV_ROOTDIR . '/includes/header.php';
             echo $tpl->fetch('flood_blocker.tpl');

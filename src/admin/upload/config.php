@@ -27,7 +27,7 @@ $array_logo_position = [
 $logo_exts = nv_editable_imgexts();
 
 if ($nv_Request->isset_request('save', 'post')) {
-    if (!csrf_check($nv_Request->get_title('checkss', 'post'), $csrf_upload_key)) {
+    if (!csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_upload_key)) {
         nv_jsonOutput([
             'status' => 'error',
             'mess' => 'Error session!!!'

@@ -45,8 +45,7 @@ if (empty($allowed)) {
 
 // Trang chuyển tiếp kết quả
 if ($nv_Request->get_int('result', 'get', 0)) {
-    $checkss = $nv_Request->get_string('checkss', 'get', '');
-    if (!csrf_check($checkss, $_csrf_key)) {
+    if (!csrf_check($nv_Request->get_string('checkss', 'get'), $_csrf_key)) {
         nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
     }
 

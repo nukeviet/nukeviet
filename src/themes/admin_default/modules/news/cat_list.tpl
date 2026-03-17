@@ -25,7 +25,7 @@
                 <td class="text-center">
                     <!-- BEGIN: stt -->{STT}<!-- END: stt -->
                     <!-- BEGIN: weight -->
-                    <button id="cat_weight_{ROW.catid}" data-toggle="changecat" data-mod="weight" data-min="1" data-num="{MAX_WEIGHT}" data-catid="{ROW.catid}" data-current="{STT}" type="button" class="btn btn-default btn-xs btn-block btn-cattool"><span class="caret"></span><span class="text">{STT}</span></button>
+                    <button id="cat_weight_{ROW.catid}" data-toggle="changecat" data-mod="weight" data-min="1" data-num="{MAX_WEIGHT}" data-catid="{ROW.catid}" data-current="{STT}" data-checkss="{CHECKSS}" type="button" class="btn btn-default btn-xs btn-block btn-cattool"><span class="caret"></span><span class="text">{STT}</span></button>
                     <!-- END: weight -->
                 </td>
                 <td>
@@ -40,7 +40,7 @@
                     {NUMLINKS}
                     <!-- END: title_numlinks -->
                     <!-- BEGIN: numlinks -->
-                    <button id="cat_numlinks_{ROW.catid}" data-toggle="changecat" data-mod="numlinks" data-min="0" data-num="{MAX_NUMLINKS}" data-catid="{ROW.catid}" data-current="{NUMLINKS}" type="button" class="btn btn-default btn-xs btn-block btn-cattool"><span class="caret"></span><span class="text">{NUMLINKS}</span></button>
+                    <button id="cat_numlinks_{ROW.catid}" data-toggle="changecat" data-mod="numlinks" data-min="0" data-num="{MAX_NUMLINKS}" data-catid="{ROW.catid}" data-current="{NUMLINKS}" data-checkss="{CHECKSS}" type="button" class="btn btn-default btn-xs btn-block btn-cattool"><span class="caret"></span><span class="text">{NUMLINKS}</span></button>
                     <!-- END: numlinks -->
                 </td>
                 <td class="text-center">
@@ -48,7 +48,7 @@
                     {NEWDAY}
                     <!-- END: title_newday -->
                     <!-- BEGIN: newday -->
-                    <button id="cat_newday_{ROW.catid}" data-toggle="changecat" data-mod="newday" data-min="0" data-num="{MAX_NEWDAY}" data-catid="{ROW.catid}" data-current="{NEWDAY}" type="button" class="btn btn-default btn-xs btn-block btn-cattool"><span class="caret"></span><span class="text">{NEWDAY}</span></button>
+                    <button id="cat_newday_{ROW.catid}" data-toggle="changecat" data-mod="newday" data-min="0" data-num="{MAX_NEWDAY}" data-catid="{ROW.catid}" data-current="{NEWDAY}" data-checkss="{CHECKSS}" type="button" class="btn btn-default btn-xs btn-block btn-cattool"><span class="caret"></span><span class="text">{NEWDAY}</span></button>
                     <!-- END: newday -->
                 </td>
                 <td class="text-left">
@@ -56,7 +56,7 @@
                     {VIEWCAT}
                     <!-- END: disabled_viewcat -->
                     <!-- BEGIN: viewcat -->
-                    <button id="cat_viewcat_{ROW.catid}" data-toggle="changecat" data-mod="viewcat" data-catid="{ROW.catid}" data-current="{VIEWCAT_VAL}" data-mode="{VIEWCAT_MODE}" type="button" class="btn btn-default btn-xs btn-block btn-cattool"><span class="caret"></span><span class="text">{VIEWCAT}</span></button>
+                    <button id="cat_viewcat_{ROW.catid}" data-toggle="changecat" data-mod="viewcat" data-catid="{ROW.catid}" data-current="{VIEWCAT_VAL}" data-mode="{VIEWCAT_MODE}" data-checkss="{CHECKSS}" type="button" class="btn btn-default btn-xs btn-block btn-cattool"><span class="caret"></span><span class="text">{VIEWCAT}</span></button>
                     <!-- END: viewcat -->
                 </td>
                 <td class="text-center">
@@ -64,7 +64,7 @@
                     {STATUS}
                     <!-- END: disabled_status -->
                     <!-- BEGIN: status -->
-                    <button id="cat_status_{ROW.catid}" data-toggle="changecat" data-mod="status" data-catid="{ROW.catid}" data-current="{STATUS_VAL}" data-cmess="{LANG.cat_status_0_confirm}" type="button" class="btn btn-default btn-xs btn-block btn-cattool"><span class="caret"></span><span class="text">{STATUS}</span></button>
+                    <button id="cat_status_{ROW.catid}" data-toggle="changecat" data-mod="status" data-catid="{ROW.catid}" data-current="{STATUS_VAL}" data-cmess="{LANG.cat_status_0_confirm}" data-checkss="{CHECKSS}" type="button" class="btn btn-default btn-xs btn-block btn-cattool"><span class="caret"></span><span class="text">{STATUS}</span></button>
                     <!-- END: status -->
                 </td>
                 <td class="text-center">{ROW.adminfuncs}</td>

@@ -109,7 +109,7 @@ $(window).on('load', function() {
 <div id="endupdate">
     <div class="infoalert" id="infodetectedupg">
         {LANG.update_info_end}<br />
-        <strong><a class="delete_update_backage_end" href="#" data-checksess="{NV_CHECK_SESSION}" title="{LANG.update_package_delete}">{LANG.update_package_delete}</a></strong>
+        <strong><a class="delete_update_backage_end" href="#" data-checkss="{NV_CHECK_SESSION}" title="{LANG.update_package_delete}">{LANG.update_package_delete}</a></strong>
         <script type="text/javascript">
         var completeUpdate = 0;
         var URL_GOHOME = '{URL_GOHOME}';

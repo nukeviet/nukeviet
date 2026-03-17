@@ -23,7 +23,7 @@ use Webauthn\AuthenticatorAssertionResponse;
 use Webauthn\AuthenticatorAssertionResponseValidator;
 
 $checkss = md5(NV_CHECK_SESSION . '_' . $module_name . '_' . $op);
-$csrf = $nv_Request->get_title('checkss', 'post', '');
+$csrf = $nv_Request->get_string('checkss', 'post');
 if (!hash_equals($checkss, $csrf)) {
     signin_result([
         'status' => 'error',

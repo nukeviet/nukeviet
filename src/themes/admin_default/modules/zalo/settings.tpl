@@ -329,6 +329,7 @@
         <form action="{NV_BASE_ADMINURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&{NV_NAME_VARIABLE}={MODULE_NAME}&amp;{NV_OP_VARIABLE}={OP}" method="post" data-toggle="vnsubdivisionsSubmit">
             <input type="hidden" name="parent" value="{PARENT}">
             <input type="hidden" name="vnsubdivisionsSave" value="1">
+            <input type="hidden" name="checkss" value="{CHECKSS}">
             <div class="table-responsive">
                 <table class="table table-striped table-bordered">
                     <thead>
@@ -382,6 +383,7 @@
     <div class="row">
         <div class="col-md-12">
             <input type="hidden" name="callingcodesSave" value="1">
+            <input type="hidden" name="checkss" value="{CHECKSS}">
             <div class="table-responsive">
                 <table class="table table-striped table-bordered">
                     <thead>

@@ -69,6 +69,7 @@ $(function() {
     <div class="row">
         <div class="col-sm-12">
             <form method="POST" action="{FORM_ACTION}" enctype="multipart/form-data" data-toggle="zalo_video" data-url="{ZALO_URL}">
+                <input type="hidden" name="checkss" value="{CHECKSS}" />
                 <div class="panel panel-primary">
                     <div class="panel-heading">{LANG.video_add}</div>
                     <table class="table table-striped table-bordered">
@@ -141,6 +142,7 @@ $(function() {
                 <form method="POST" action="{FORM_ACTION}" data-toggle="video_edit">
                     <input type="hidden" name="edit" value="1" />
                     <input type="hidden" name="id" value="" />
+                    <input type="hidden" name="checkss" value="{CHECKSS}" />
                     <table class="table table-striped table-bordered">
                         <tbody>
                             <tr>

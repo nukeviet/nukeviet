@@ -14,7 +14,7 @@
                         <input type="password" autocomplete="off" class="form-control" id="element_password" name="password" value="">
                         <div class="invalid-feedback">{$LANG->getGlobal('required_invalid')}</div>
                     </div>
-                    <input type="hidden" name="checksess" value="{$CHECKSESS}">
+                    <input type="hidden" name="checkss" value="{$CHECKSS}">
                     <input type="hidden" name="redirect" value="{$REQUEST.redirect}">
                     <button type="submit" class="btn btn-primary w-100 text-center">{$LANG->getGlobal('loginsubmit')}</button>
                 </form>

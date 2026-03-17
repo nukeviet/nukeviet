@@ -16,7 +16,7 @@
             <!-- BEGIN: loop -->
             <tr>
                 <td class="text-center">
-                    <select id="change_weight_{ROW.id}" onchange="nv_change_voice_weight('{ROW.id}', '{NV_CHECK_SESSION}');" class="form-control input-sm">
+                    <select id="change_weight_{ROW.id}" onchange="nv_change_voice_weight('{ROW.id}', '{CHECKSS}');" class="form-control input-sm">
                         <!-- BEGIN: weight -->
                         <option value="{WEIGHT.w}"{WEIGHT.selected}>{WEIGHT.w}</option>
                         <!-- END: weight -->
@@ -26,11 +26,11 @@
                     <strong>{ROW.title}</strong>
                 </td>
                 <td class="text-center">
-                    <input name="status" id="change_status{ROW.id}" value="1" type="checkbox"{ROW.status_render} onclick="nv_change_voice_status('{ROW.id}', '{NV_CHECK_SESSION}');">
+                    <input name="status" id="change_status{ROW.id}" value="1" type="checkbox"{ROW.status_render} onclick="nv_change_voice_status('{ROW.id}', '{CHECKSS}');">
                 </td>
                 <td class="text-center text-nowrap">
                     <a class="btn btn-sm btn-default" href="{ROW.url_edit}"><i class="fa fa-edit"></i> {GLANG.edit}</a>
-                    <a class="btn btn-sm btn-danger" href="javascript:void(0);" onclick="nv_delele_voice('{ROW.id}', '{NV_CHECK_SESSION}');"><i class="fa fa-trash"></i> {GLANG.delete}</a>
+                    <a class="btn btn-sm btn-danger" href="javascript:void(0);" onclick="nv_delele_voice('{ROW.id}', '{CHECKSS}');"><i class="fa fa-trash"></i> {GLANG.delete}</a>
                 </td>
             </tr>
             <!-- END: loop -->

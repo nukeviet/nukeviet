@@ -45,7 +45,7 @@ if ($cookie_bid != $bid) {
 }
 $page_title = $array_block[$bid];
 
-if ($nv_Request->isset_request('checkss,idcheck', 'post') and $nv_Request->get_string('checkss', 'post') == NV_CHECK_SESSION) {
+if ($nv_Request->isset_request('checkss,idcheck', 'post') and csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
     $sql = 'SELECT id FROM ' . NV_PREFIXLANG . '_' . $module_data . '_block WHERE bid=' . $bid;
     $result = $db_slave->query($sql);
     $_id_array_exit = [];
@@ -70,7 +70,7 @@ if ($nv_Request->isset_request('checkss,idcheck', 'post') and $nv_Request->get_s
     nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&bid=' . $bid);
 }
 
-if ($bid > 0 and defined('NV_IS_SPADMIN') and $nv_Request->get_string('order_publtime', 'get') == md5($bid . NV_CHECK_SESSION)) {
+if ($bid > 0 and defined('NV_IS_SPADMIN') and csrf_check($nv_Request->get_string('order_publtime', 'get'), $csrf_key)) {
     $_result = $db->query('SELECT t1.id FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows t1 INNER JOIN ' . NV_PREFIXLANG . '_' . $module_data . '_block t2 ON t1.id = t2.id WHERE t2.bid= ' . $bid . ' ORDER BY t1.' . $order_articles_by . ' DESC, t2.weight ASC');
     $weight = 0;
     while ($_row = $_result->fetch()) {
@@ -96,6 +96,7 @@ $xtpl->assign('NV_NAME_VARIABLE', NV_NAME_VARIABLE);
 $xtpl->assign('NV_OP_VARIABLE', NV_OP_VARIABLE);
 $xtpl->assign('MODULE_NAME', $module_name);
 $xtpl->assign('OP', $op);
+$xtpl->assign('CHECKSS', csrf_create($csrf_key));
 
 $listid = $nv_Request->get_string('listid', 'get', '');
 if ($listid == '' and $bid) {

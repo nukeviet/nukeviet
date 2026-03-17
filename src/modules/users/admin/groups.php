@@ -98,10 +98,7 @@ if (!$checkEmptyGroup and !$nv_Request->isset_request('add', 'get')) {
     nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&add');
 }
 
-$request_tokend = $nv_Request->get_title('tokend', 'post', '');
-
-// Thay đổi thứ tự nhóm
-if ($nv_Request->isset_request('cWeight, id', 'post') and hash_equals(NV_CHECK_SESSION, $request_tokend)) {
+if ($nv_Request->isset_request('cWeight, id', 'post') and csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
     $group_id = $nv_Request->get_int('id', 'post');
     $cWeight = $nv_Request->get_int('cWeight', 'post');
 
@@ -144,7 +141,7 @@ if ($nv_Request->isset_request('cWeight, id', 'post') and hash_equals(NV_CHECK_S
 }
 
 // Kích hoạt/ Đình chỉ nhóm
-if ($nv_Request->isset_request('act', 'post') and hash_equals(NV_CHECK_SESSION, $request_tokend)) {
+if ($nv_Request->isset_request('act', 'post') and csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
     $group_id = $nv_Request->get_int('act', 'post');
     if (!isset($groupsList[$group_id]) or !defined('NV_IS_SPADMIN') or $group_id < 10 or $groupsList[$group_id]['idsite'] != $global_config['idsite']) {
         nv_jsonOutput([
@@ -167,7 +164,7 @@ if ($nv_Request->isset_request('act', 'post') and hash_equals(NV_CHECK_SESSION, 
 }
 
 // Xóa nhóm
-if ($nv_Request->isset_request('del', 'post') and hash_equals(NV_CHECK_SESSION, $request_tokend)) {
+if ($nv_Request->isset_request('del', 'post') and csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
     $group_id = $nv_Request->get_int('del', 'post', 0);
 
     if (!isset($groupsList[$group_id]) or !defined('NV_IS_SPADMIN') or $group_id < 10 or $groupsList[$group_id]['idsite'] != $global_config['idsite']) {
@@ -217,7 +214,7 @@ if ($nv_Request->isset_request('del', 'post') and hash_equals(NV_CHECK_SESSION, 
 }
 
 // Xóa các nhóm đang ngưng kích hoạt
-if ($nv_Request->isset_request('deleteinactive', 'post') and hash_equals(NV_CHECK_SESSION, $request_tokend) and defined('NV_IS_SPADMIN')) {
+if ($nv_Request->isset_request('deleteinactive', 'post') and csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key) and defined('NV_IS_SPADMIN')) {
     $num_deleted = 0;
 
     foreach ($groupsList as $group_id => $group_row) {
@@ -265,7 +262,7 @@ if ($nv_Request->isset_request('deleteinactive', 'post') and hash_equals(NV_CHEC
 }
 
 // Thêm thành viên vào nhóm
-if ($nv_Request->isset_request('gid,uid', 'post') and hash_equals(NV_CHECK_SESSION, $request_tokend)) {
+if ($nv_Request->isset_request('gid,uid', 'post') and csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
     $gid = $nv_Request->get_int('gid', 'post', 0);
     $uid = $nv_Request->get_int('uid', 'post', 0);
     if (!isset($groupsList[$gid]) or $gid < 10) {
@@ -309,7 +306,7 @@ if ($nv_Request->isset_request('gid,uid', 'post') and hash_equals(NV_CHECK_SESSI
 }
 
 // Loại thành viên khỏi nhóm
-if ($nv_Request->isset_request('gid,exclude', 'post') and hash_equals(NV_CHECK_SESSION, $request_tokend)) {
+if ($nv_Request->isset_request('gid,exclude', 'post') and csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
     $gid = $nv_Request->get_int('gid', 'post', 0);
     $uid = $nv_Request->get_int('exclude', 'post', 0);
     if (!isset($groupsList[$gid]) or $gid < 10) {
@@ -352,7 +349,7 @@ if ($nv_Request->isset_request('gid,exclude', 'post') and hash_equals(NV_CHECK_S
 }
 
 // Thăng cấp thành viên
-if ($nv_Request->isset_request('gid,promote', 'post') and hash_equals(NV_CHECK_SESSION, $request_tokend)) {
+if ($nv_Request->isset_request('gid,promote', 'post') and csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
     $gid = $nv_Request->get_int('gid', 'post', 0);
     $uid = $nv_Request->get_int('promote', 'post', 0);
     if (!isset($groupsList[$gid]) or $gid < 10) {
@@ -390,7 +387,7 @@ if ($nv_Request->isset_request('gid,promote', 'post') and hash_equals(NV_CHECK_S
 }
 
 // Giáng cấp quản trị
-if ($nv_Request->isset_request('gid,demote', 'post') and hash_equals(NV_CHECK_SESSION, $request_tokend)) {
+if ($nv_Request->isset_request('gid,demote', 'post') and csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
     $gid = $nv_Request->get_int('gid', 'post', 0);
     $uid = $nv_Request->get_int('demote', 'post', 0);
     if (!isset($groupsList[$gid]) or $gid < 10) {
@@ -428,7 +425,7 @@ if ($nv_Request->isset_request('gid,demote', 'post') and hash_equals(NV_CHECK_SE
 }
 
 // Duyệt vào nhóm
-if ($nv_Request->isset_request('gid,approved', 'post') and hash_equals(NV_CHECK_SESSION, $request_tokend)) {
+if ($nv_Request->isset_request('gid,approved', 'post') and csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
     $gid = $nv_Request->get_int('gid', 'post', 0);
     $uid = $nv_Request->get_int('approved', 'post', 0);
     if (!isset($groupsList[$gid]) or $gid < 10) {
@@ -467,7 +464,7 @@ if ($nv_Request->isset_request('gid,approved', 'post') and hash_equals(NV_CHECK_
 }
 
 // Từ chối gia nhập nhóm
-if ($nv_Request->isset_request('gid,denied', 'post') and hash_equals(NV_CHECK_SESSION, $request_tokend)) {
+if ($nv_Request->isset_request('gid,denied', 'post') and csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
     $gid = $nv_Request->get_int('gid', 'post', 0);
     $uid = $nv_Request->get_int('denied', 'post', 0);
     if (!isset($groupsList[$gid]) or $gid < 10) {
@@ -626,6 +623,7 @@ if ($nv_Request->isset_request('listUsers', 'get')) {
         }
 
         $tpl->assign('LIST_USERS', $listUsers_data);
+        $tpl->assign('CHECKSS', csrf_create($csrf_key));
 
         if (empty($type) or $type == 'leaders') {
             // Đánh số lại số thành viên
@@ -656,8 +654,9 @@ if ($nv_Request->isset_request('userlist', 'get')) {
     if ($groupsList[$group_id]['idsite'] != $global_config['idsite'] and $groupsList[$group_id]['idsite'] == 0) {
         $filtersql .= ' AND idsite=' . $global_config['idsite'];
     }
-    $tpl->assign('FILTERSQL', $crypt->encrypt($filtersql, NV_CHECK_SESSION));
+    $tpl->assign('FILTERSQL', $crypt->encrypt($filtersql, $csrf_key));
     $tpl->assign('GID', $group_id);
+    $tpl->assign('CHECKSS', csrf_create($csrf_key));
     $tpl->assign('SHOW_ADD_USER', ($group_id > 9) ? true : false);
 
     $contents = $tpl->fetch('groups_userlist.tpl');
@@ -672,7 +671,6 @@ if ($nv_Request->isset_request('add', 'get') or $nv_Request->isset_request('edit
     if (defined('NV_IS_SPADMIN')) {
         $post = [];
         $post['id'] = $nv_Request->get_int('id', 'get');
-        $checkss = md5(NV_CHECK_SESSION . '_' . $module_name . '_' . $op . '_' . $post['id']);
 
         if ($nv_Request->isset_request('edit', 'get')) {
             if (empty($post['id']) or !isset($groupsList[$post['id']]) or $groupsList[$post['id']]['idsite'] != $global_config['idsite']) {
@@ -691,8 +689,7 @@ if ($nv_Request->isset_request('add', 'get') or $nv_Request->isset_request('edit
         }
 
         if ($nv_Request->isset_request('save', 'post')) {
-            $checkss = $nv_Request->get_string('checkss', 'post', '');
-            if (!hash_equals(md5(NV_CHECK_SESSION . '_' . $module_name . '_' . $op . '_' . $post['id']), $checkss)) {
+            if (!csrf_check($nv_Request->get_string('checkss', 'post', ''), $csrf_key)) {
                 nv_jsonOutput([
                     'status' => 'error',
                     'mess' => $nv_Lang->getGlobal('error_invalid_session')
@@ -925,7 +922,7 @@ if ($nv_Request->isset_request('add', 'get') or $nv_Request->isset_request('edit
         if (!empty($post['group_avatar']) and is_file(NV_UPLOADS_REAL_DIR . '/' . $module_upload . '/' . $post['group_avatar'])) {
             $post['group_avatar'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $post['group_avatar'];
         }
-        $post['checkss'] = $checkss;
+        $post['checkss'] = csrf_create($csrf_key);
 
         // Chuẩn bị dữ liệu cho template
         $tpl->assign('PAGE_TITLE', $page_title);
@@ -1019,6 +1016,8 @@ $tpl->assign('GROUPS_LIST', $groups_list);
 $tpl->assign('MAX_WEIGHT', $allGroupCount);
 $tpl->assign('START_WEIGHT', empty($global_config['idsite']) ? 1 : ($weight_siteus + 1));
 $tpl->assign('SHOW_ADD_NEW', defined('NV_IS_SPADMIN') ? true : false);
+$tpl->assign('PTITLE', $page_title);
+$tpl->assign('CHECKSS', csrf_create($csrf_key));
 $tpl->assign('SHOW_ACTION_JS', defined('NV_IS_SPADMIN') ? true : false);
 
 $contents = $tpl->fetch('groups.tpl');

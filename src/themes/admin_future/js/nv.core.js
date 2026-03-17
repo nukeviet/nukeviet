@@ -65,7 +65,7 @@ $(function() {
             type: 'POST',
             url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=siteinfo&nocache=' + new Date().getTime(),
             data: {
-                store_theme_config: $('body').data('checksess'),
+                store_theme_config: $('#site-color-mode').data('checkss') || $('#site-text-direction').data('checkss'),
                 config_name: configName,
                 config_value: configValue
             },

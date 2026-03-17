@@ -96,6 +96,12 @@ $page_url = $base_url;
 if ($type == 'plaintext') {
     // Xóa mẫu
     if ($nv_Request->isset_request('delete,id', 'post')) {
+        if (!csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
+            nv_jsonOutput([
+                'status' => 'error',
+                'mess' => 'CSRF error'
+            ]);
+        }
         $id = $nv_Request->get_int('id', 'post', 0);
         if (empty($id)) {
             nv_jsonOutput([
@@ -159,6 +165,12 @@ if ($type == 'plaintext') {
         }
 
         if ($is_save) {
+            if (!csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
+                nv_jsonOutput([
+                    'status' => 'error',
+                    'mess' => 'CSRF error'
+                ]);
+            }
             $title = $nv_Request->get_title('title', 'post', '');
             $content = $nv_Request->get_title('content', 'post', '');
             $content = nv_nl2br($content, '<br/>');
@@ -195,6 +207,7 @@ if ($type == 'plaintext') {
         }
 
         $xtpl = new XTemplate('plaintext.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
+        $xtpl->assign('CHECKSS', csrf_create($csrf_key));
         $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
         $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
         $xtpl->assign('LIST_LINK', $base_url);
@@ -229,6 +242,7 @@ if ($type == 'plaintext') {
     }
 
     $xtpl = new XTemplate('plaintext.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
+    $xtpl->assign('CHECKSS', csrf_create($csrf_key));
     $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
     $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
     $xtpl->assign('ADD_LINK', $base_url . '&amp;add=1');
@@ -285,6 +299,12 @@ elseif ($type == 'request') {
 
     // Them/Cap nhat/Xoa request
     if ($action == 'update' or $action == 'delete') {
+        if (!csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
+            nv_jsonOutput([
+                'status' => 'error',
+                'mess' => 'CSRF error'
+            ]);
+        }
         $id = $nv_Request->get_int('id', 'post', 0);
         if (empty($id)) {
             nv_jsonOutput([
@@ -314,6 +334,12 @@ elseif ($type == 'request') {
     }
 
     if ($action == 'add' or $action == 'update') {
+        if (!csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
+            nv_jsonOutput([
+                'status' => 'error',
+                'mess' => 'CSRF error'
+            ]);
+        }
         $image_url = $nv_Request->get_string('image_url', 'post', '');
         if (empty($image_url)) {
             nv_jsonOutput([
@@ -378,6 +404,7 @@ elseif ($type == 'request') {
     $page_title = $nv_Lang->getModule('info_request');
 
     $xtpl = new XTemplate('request.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
+    $xtpl->assign('CHECKSS', csrf_create($csrf_key));
     $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
     $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
     $xtpl->assign('FORM_ACTION', $page_url);

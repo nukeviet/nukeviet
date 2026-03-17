@@ -19,8 +19,8 @@ if (!defined('NV_IS_AJAX')) {
 $sourceid = $nv_Request->get_int('sourceid', 'post', 0);
 
 $contents = 'NO_' . $sourceid;
-[$sourceid, $title, $logo_old] = $db->query('SELECT sourceid, title, logo FROM ' . NV_PREFIXLANG . '_' . $module_data . '_sources WHERE sourceid=' . $sourceid)->fetch(3);
-if ($sourceid > 0) {
+$checkss = $nv_Request->get_string('checkss', 'post');
+if ($sourceid > 0 and csrf_check($checkss, $_csrf_key)) {
     nv_insert_logs(NV_LANG_DATA, $module_name, 'log_del_source', $title, $admin_info['userid']);
     $result = $db->query('SELECT id, listcatid FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE sourceid = ' . $sourceid);
     while ($row = $result->fetch()) {

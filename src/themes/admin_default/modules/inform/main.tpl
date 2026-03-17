@@ -18,9 +18,7 @@
             </select>
         </div>
         <!-- END: filter -->
-        <div class="add-inform">
-            <button type="button" class="btn btn-primary" data-toggle="inform_action" data-type="add" data-title="{LANG.inform_add}">{LANG.add_inform}</button>
-        </div>
+            <button type="button" class="btn btn-primary" data-toggle="inform_action" data-type="add" data-title="{LANG.inform_add}" data-checkss="{CHECKSS}">{LANG.add_inform}</button>
     </div>
     <!-- BEGIN: items -->
     <div class="table-responsive">
@@ -67,8 +65,8 @@
                         {ITEM.views}
                     </td>
                     <td class="text-center text-nowrap" style="width: 1%;vertical-align:middle">
-                        <button class="btn btn-default btn-sm" data-toggle="inform_action" data-type="edit" data-title="{LANG.inform_edit}">{GLANG.edit}</button>
-                        <button class="btn btn-default btn-sm" data-toggle="inform_del">{GLANG.delete}</button>
+                        <button class="btn btn-default btn-sm" data-toggle="inform_action" data-type="edit" data-title="{LANG.inform_edit}" data-checkss="{CHECKSS}">{GLANG.edit}</button>
+                        <button class="btn btn-default btn-sm" data-toggle="inform_del" data-checkss="{CHECKSS}">{GLANG.delete}</button>
                     </td>
                 </tr>
                 <!-- END: loop -->

@@ -163,8 +163,8 @@
                                 </select>
                             </div>
                             <div class="mb-0">
-                                <label for="topictext" class="form-label">{$LANG->getModule('admin_topic_manual')}:</label>
-                                <input type="text" class="form-control" id="topictext" name="topictext" value="{$DATA.topictext}" maxlength="255">
+                                <label for="AjaxTopicText" class="form-label">{$LANG->getModule('admin_topic_manual')}:</label>
+                                <input type="text" class="form-control" id="AjaxTopicText" name="topictext" value="{$DATA.topictext}" maxlength="255">
                             </div>
                         </div>
                     </div>
@@ -176,8 +176,8 @@
                         </div>
                         <div class="card-body">
                             <div class="mb-3 position-relative">
-                                <label for="newcontent_sourceid" class="form-label">{$LANG->getModule('content_sourceid_guide')}:</label>
-                                <input type="text" class="form-control" id="newcontent_sourceid" name="sourcetext" maxlength="255" value="{$DATA.sourcetext}">
+                                <label for="AjaxSourceText" class="form-label">{$LANG->getModule('content_sourceid_guide')}:</label>
+                                <input type="text" class="form-control" id="AjaxSourceText" name="sourcetext" maxlength="255" value="{$DATA.sourcetext}">
                             </div>
                             <div class="mb-0">
                                 <div class="form-check">
@@ -569,7 +569,7 @@
         </div>
     </div>
     <input type="hidden" value="1" name="save">
-    <input type="hidden" value="{$smarty.const.NV_CHECK_SESSION}" name="checkss">
+    <input type="hidden" value="{$CHECKSS}" name="checkss">
     <input type="hidden" value="{$ISCOPY}" name="copy">
     <input type="hidden" value="{$DATA.id}" name="id">
     <input type="hidden" value="{$DATA.referer}" name="referer">

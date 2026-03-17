@@ -20,7 +20,9 @@ $xtpl->assign('FORM_ACTION', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE 
 $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
 $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
 
-if ($nv_Request->isset_request('save', 'post')) {
+$xtpl->assign('CHECKSS', csrf_create($csrf_key));
+
+if ($nv_Request->isset_request('save', 'post') and csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
     $clearall = $nv_Request->isset_request('all', 'post');
     $alllang = $nv_Request->get_int('alllang', 'post', 0);
     $clearmode = '';

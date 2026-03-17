@@ -29,7 +29,7 @@ $closed_site_Modes[3] = $nv_Lang->getModule('closed_site_3');
 if (defined('NV_IS_GODADMIN')) {
     if ($nv_Request->isset_request('site_mode', 'post')) {
         $_csrf_key = $module_name . '_' . $op . '_site_mode_' . $admin_info['admin_id'];
-        if (!csrf_check($nv_Request->get_title('checkss', 'post'), $_csrf_key)) {
+        if (!csrf_check($nv_Request->get_string('checkss', 'post'), $_csrf_key)) {
             nv_jsonOutput([
                 'status' => 'error',
                 'mess' => 'Error session!!!'

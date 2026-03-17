@@ -20,7 +20,7 @@ if (!$myZalo->isValid()) {
 $page_url = $base_url = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=article';
 
 // Cap nhat danh sach bai viet tu Zalo
-if ($nv_Request->isset_request('getlist,type', 'get')) {
+if ($nv_Request->isset_request('getlist,type', 'get') and csrf_check($nv_Request->get_string('checkss', 'get'), $csrf_key)) {
     $type = $nv_Request->get_title('type', 'get', '');
     $type != 'video' && $type = 'normal';
     $base_url .= '&amp;getlist=1&amp;type=' . $type;
@@ -59,7 +59,7 @@ if ($nv_Request->isset_request('getlist,type', 'get')) {
     if ($offset < $total) {
         $xtpl = new XTemplate('article.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
         $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
-        $xtpl->assign('GETLIST_LINK', $page_url . '&amp;getlist=1&amp;type=' . $type . '&amp;offset=' . $offset);
+        $xtpl->assign('GETLIST_LINK', $page_url . '&amp;getlist=1&amp;type=' . $type . '&amp;offset=' . $offset . '&amp;checkss=' . csrf_create($csrf_key));
         $xtpl->parse('wait_getlist');
         $contents = $xtpl->text('wait_getlist');
 
@@ -89,6 +89,12 @@ if ($nv_Request->isset_request('getlist,type', 'get')) {
 
 // Xoa bai viet
 if ($nv_Request->isset_request('delete,id', 'post')) {
+    if (!csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
+        nv_jsonOutput([
+            'status' => 'error',
+            'mess' => 'CSRF error'
+        ]);
+    }
     $id = $nv_Request->get_int('id', 'post', 0);
     if (empty($id)) {
         nv_jsonOutput([
@@ -127,6 +133,12 @@ if ($nv_Request->isset_request('delete,id', 'post')) {
 
 // Dong bo bai viet
 if ($nv_Request->isset_request('sync,id', 'post')) {
+    if (!csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
+        nv_jsonOutput([
+            'status' => 'error',
+            'mess' => 'CSRF error'
+        ]);
+    }
     $id = $nv_Request->get_int('id', 'post', 0);
     if (empty($id)) {
         nv_jsonOutput([
@@ -162,6 +174,12 @@ if ($nv_Request->isset_request('sync,id', 'post')) {
 
 // Lay Zalo_id
 if ($nv_Request->isset_request('get_zalo_id,id', 'post')) {
+    if (!csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
+        nv_jsonOutput([
+            'status' => 'error',
+            'mess' => 'CSRF error'
+        ]);
+    }
     $id = $nv_Request->get_int('id', 'post', 0);
     if (empty($id)) {
         nv_jsonOutput([
@@ -315,6 +333,14 @@ if ($action == 'edit') {
 
 if ($action == 'add' or $action == 'edit') {
     if ($nv_Request->isset_request('save', 'post')) {
+        if (!csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
+            nv_jsonOutput([
+                'status' => 'error',
+                'body_id' => '',
+                'input' => '',
+                'mess' => 'CSRF error'
+            ]);
+        }
         $is_localhost = is_localhost();
 
         $save_article = [
@@ -679,6 +705,7 @@ if ($action == 'add' or $action == 'edit') {
     $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
     $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
     $xtpl->assign('FORM_ACTION', $base_url);
+    $xtpl->assign('CHECKSS', csrf_create($csrf_key));
     $xtpl->assign('LIST_LINK', $list_url);
     $xtpl->assign('COVER_VIDEO_GET_URL', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=video&amp;popup=1&amp;idfield=cover_video_id&amp;viewfield=cover_view');
     $xtpl->assign('BODY_VIDEO_GET_URL', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=video&amp;popup=1');
@@ -852,6 +879,8 @@ $xtpl = new XTemplate('article.tpl', NV_ROOTDIR . '/themes/' . $global_config['m
 $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
 $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
 $xtpl->assign('FORM_ACTION', $page_url);
+$xtpl->assign('FILTER_URL', $page_url . '&checkss=' . csrf_create($csrf_key));
+$xtpl->assign('CHECKSS', csrf_create($csrf_key));
 $xtpl->assign('ADD_LINK', $base_url . '&amp;action=add');
 $xtpl->assign('IDFIELD', $idfield);
 

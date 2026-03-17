@@ -20,7 +20,7 @@ $(document).ready(function() {
             type: 'POST',
             url: nv_base_siteurl + nv_admindir + '/index.php?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=webtools&' + nv_fc_variable + '=deleteupdate&nocache=' + new Date().getTime(),
             data: {
-                'checksess': $this.data('checksess')
+                'checkss': $this.data('checkss')
             },
             dataType: 'json',
             success: function(data) {
@@ -60,7 +60,7 @@ $(document).ready(function() {
             type: 'POST',
             url: nv_base_siteurl + nv_admindir + '/index.php?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=webtools&' + nv_fc_variable + '=deleteupdate&nocache=' + new Date().getTime(),
             data: {
-                'checksess': $this.data('checksess')
+                'checkss': $this.data('checkss')
             },
             dataType: 'json',
             success: function(data) {
@@ -113,7 +113,7 @@ NVU.Start = function() {
 NVU.load = function() {
     var url;
     if (NVU.NextUrl == '') {
-        url = nv_base_siteurl + 'install/update.php?step=2&substep=3&load=' + NVU.NextFuncs;
+        url = nv_base_siteurl + 'install/update.php?step=2&substep=3&load=' + NVU.NextFuncs + '&checkss=' + nv_checkss;
     } else {
         url = NVU.NextUrl;
     }
@@ -206,7 +206,7 @@ NVMF.Start = function() {
     }
     $('#nv-toolmove').slideUp(200, function() {
         $('#nv-message').slideDown(200, function() {
-            $.get(nv_base_siteurl + 'install/update.php?step=2&substep=4&move', function(r) {
+            $.get(nv_base_siteurl + 'install/update.php?step=2&substep=4&move&checkss=' + nv_checkss, function(r) {
                 NVMF.IsStart = 0;
                 if (r == 'OK') {
                     $('.workitem').removeClass('ierror').removeClass('iload').removeClass('iwarn').addClass('iok');

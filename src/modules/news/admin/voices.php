@@ -16,7 +16,7 @@ if (!defined('NV_IS_FILE_ADMIN')) {
 $page_title = $nv_Lang->getModule('voice_manager');
 
 // Thay đổi thứ tự
-if ($nv_Request->get_title('changeweight', 'post', '') === NV_CHECK_SESSION) {
+if (csrf_check($nv_Request->get_string('changeweight', 'post', ''), $csrf_key)) {
     $id = $nv_Request->get_int('id', 'post', 0);
     $new_weight = $nv_Request->get_int('new_weight', 'post', 0);
 
@@ -52,7 +52,7 @@ if ($nv_Request->get_title('changeweight', 'post', '') === NV_CHECK_SESSION) {
 }
 
 // Thay đổi hoạt động
-if ($nv_Request->get_title('changestatus', 'post', '') === NV_CHECK_SESSION) {
+if (csrf_check($nv_Request->get_string('changestatus', 'post', ''), $csrf_key)) {
     $id = $nv_Request->get_int('id', 'post', 0);
 
     // Kiểm tra tồn tại
@@ -74,7 +74,7 @@ if ($nv_Request->get_title('changestatus', 'post', '') === NV_CHECK_SESSION) {
 }
 
 // Xóa
-if ($nv_Request->get_title('delete', 'post', '') === NV_CHECK_SESSION) {
+if (csrf_check($nv_Request->get_string('delete', 'post', ''), $csrf_key)) {
     $id = $nv_Request->get_int('id', 'post', 0);
 
     // Kiểm tra tồn tại
@@ -133,7 +133,7 @@ if (!empty($id)) {
     $form_action = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op;
 }
 
-if ($nv_Request->isset_request('save', 'post')) {
+if ($nv_Request->isset_request('save', 'post') and csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
     $array['title'] = nv_substr($nv_Request->get_title('title', 'post', ''), 0, 250);
     $array['voice_key'] = nv_substr($nv_Request->get_title('voice_key', 'post', ''), 0, 250);
     $array['description'] = $nv_Request->get_string('description', 'post', '');
@@ -204,6 +204,7 @@ $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
 $xtpl->assign('CAPTION', $caption);
 $xtpl->assign('FORM_ACTION', $form_action);
 $xtpl->assign('DATA', $array);
+$xtpl->assign('CHECKSS', csrf_create($csrf_key));
 
 $sql = 'SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_voices ORDER BY weight ASC';
 $array_voices = $db->query($sql)->fetchAll();

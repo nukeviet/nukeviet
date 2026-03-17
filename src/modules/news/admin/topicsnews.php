@@ -50,6 +50,7 @@ $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
 $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
 $xtpl->assign('TOPICID', $topicid);
 $xtpl->assign('GENERATE_PAGE', $generate_page);
+$xtpl->assign('CHECKSS', csrf_create($csrf_key));
 
 $i = 0;
 while ($row = $result->fetch()) {

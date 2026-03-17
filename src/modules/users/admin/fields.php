@@ -24,12 +24,11 @@ if ($nv_Request->isset_request('changeweight', 'post')) {
 
     $fid = $nv_Request->get_int('fid', 'post', 0);
     $new_vid = $nv_Request->get_int('new_vid', 'post', 0);
-    $checkss = $nv_Request->get_title('checkss', 'post', '');
 
-    if (!hash_equals(NV_CHECK_SESSION, $checkss)) {
+    if (!csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
         nv_jsonOutput([
             'status' => 'error',
-            'mess' => 'Session error!'
+            'mess' => $nv_Lang->getGlobal('error_session')
         ]);
     }
 
@@ -76,6 +75,10 @@ $array_sqlchoice_order = [
 if ($nv_Request->isset_request('choicesql', 'post')) {
     if (!defined('NV_IS_AJAX')) {
         exit('Wrong URL');
+    }
+
+    if (!csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
+        exit('Session error!!!');
     }
 
     $array_choicesql = [
@@ -178,9 +181,9 @@ $text_fields = $number_fields = $date_fields = $choice_fields = $file_fields = $
 $error = $error_input = $error_input_parent = '';
 $field_choices = [];
 if ($nv_Request->isset_request('save', 'post')) {
-    $checkss = $nv_Request->get_title('checkss', 'post', '');
+    $checkss = $nv_Request->get_string('checkss', 'post');
 
-    if (!hash_equals(NV_CHECK_SESSION, $checkss)) {
+    if (!csrf_check($checkss, $csrf_key)) {
         nv_jsonOutput([
             'status' => 'error',
             'mess' => $nv_Lang->getGlobal('error_session')
@@ -638,12 +641,11 @@ if ($nv_Request->isset_request('del', 'post')) {
     }
 
     $fid = $nv_Request->get_int('fid', 'post', 0);
-    $checkss = $nv_Request->get_title('checkss', 'post', '');
 
-    if (!hash_equals(NV_CHECK_SESSION, $checkss)) {
+    if (!csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
         nv_jsonOutput([
             'status' => 'error',
-            'mess' => 'Session error!'
+            'mess' => $nv_Lang->getGlobal('error_session')
         ]);
     }
 
@@ -699,6 +701,7 @@ $tpl->setTemplateDir(NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . 
 $tpl->assign('LANG', $nv_Lang);
 $tpl->assign('MODULE_NAME', $module_name);
 $tpl->assign('OP', $op);
+$tpl->assign('CHECKSS', csrf_create($csrf_key));
 
 // Danh sách các trường dữ liệu tùy biến
 if ($nv_Request->isset_request('qlist', 'get')) {
@@ -747,6 +750,7 @@ if ($nv_Request->isset_request('qlist', 'get')) {
     }
 
     $tpl->assign('DATA_ROWS', $data_rows);
+    $tpl->assign('CHECKSS', csrf_create($csrf_key));
     $contents = $tpl->fetch('fields_data.tpl');
 } else {
     $fid = $nv_Request->get_int('fid', 'get,post', 0);

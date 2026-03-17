@@ -62,7 +62,7 @@
                     {/if}
                     <div class="row">
                         <div class="col-sm-9 offset-sm-3">
-                            <input type="hidden" name="tokend" value="{$TOKEND}">
+                            <input type="hidden" name="checkss" value="{CHECKSS}">
                             <button class="btn btn-space btn-primary" type="submit">{$LANG->get('submit')}</button>
                         </div>
                     </div>

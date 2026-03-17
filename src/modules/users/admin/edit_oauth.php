@@ -65,6 +65,7 @@ $select_options[NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LA
 $xtpl = new XTemplate('user_oauth.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
 $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
 $xtpl->assign('USERID', $row['userid']);
+$xtpl->assign('CHECKSS', csrf_create($csrf_key));
 
 $sql = 'SELECT openid, opid, id, email FROM ' . NV_MOD_TABLE . '_openid WHERE userid=' . $row['userid'];
 $array_oauth = $db->query($sql)->fetchAll();
@@ -74,7 +75,7 @@ if (empty($array_oauth)) {
     $contents = $xtpl->text('empty');
 } else {
     // Xóa OpenID của thành viên
-    if ($nv_Request->isset_request('del', 'post')) {
+    if ($nv_Request->isset_request('del', 'post') and csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
         if (!defined('NV_IS_AJAX')) {
             exit('Wrong URL');
         }
@@ -126,7 +127,7 @@ if (empty($array_oauth)) {
     }
 
     // Xóa tất cả các OpenID của thành viên
-    if ($nv_Request->isset_request('delall', 'post')) {
+    if ($nv_Request->isset_request('delall', 'post') and csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
         if (!defined('NV_IS_AJAX')) {
             exit('Wrong URL');
         }

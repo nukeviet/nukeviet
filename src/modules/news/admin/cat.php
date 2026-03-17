@@ -76,7 +76,7 @@ if ($catid > 0) {
 
 $savecat = $nv_Request->get_int('savecat', 'post', 0);
 
-if (!empty($savecat)) {
+if (!empty($savecat) and csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
     $catid = $nv_Request->get_int('catid', 'post', 0);
     $parentid_old = $nv_Request->get_int('parentid_old', 'post', 0);
     $parentid = $nv_Request->get_int('parentid', 'post', 0);
@@ -325,6 +325,7 @@ $xtpl->assign('NV_BASE_ADMINURL', NV_BASE_ADMINURL);
 $xtpl->assign('NV_NAME_VARIABLE', NV_NAME_VARIABLE);
 $xtpl->assign('MODULE_NAME', $module_name);
 $xtpl->assign('OP', $op);
+$xtpl->assign('CHECKSS', csrf_create($csrf_key));
 
 $xtpl->assign('caption', $caption);
 $xtpl->assign('catid', $catid);

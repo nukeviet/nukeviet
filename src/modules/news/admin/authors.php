@@ -16,7 +16,7 @@ if (!defined('NV_IS_FILE_ADMIN')) {
 $my_author_detail = my_author_detail($admin_info['userid']);
 
 // Tìm tác giả thuộc quyền quản lý qua ajax
-if ($nv_Request->isset_request('searchAjax', 'post') and $nv_Request->get_title('checkss', 'post', '') === NV_CHECK_SESSION) {
+if ($nv_Request->isset_request('searchAjax', 'post') and csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
     $respon = [
         'results' => [],
         'pagination' => [
@@ -63,7 +63,7 @@ if ($nv_Request->isset_request('searchAjax', 'post') and $nv_Request->get_title(
 }
 
 // Xoa tac gia
-if ($nv_Request->isset_request('authordel', 'post')) {
+if ($nv_Request->isset_request('authordel', 'post') and csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
     $aid = $nv_Request->get_int('aid', 'post', 0);
     if ($aid != $my_author_detail['id']) {
         $db->query('DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_authorlist WHERE aid=' . $aid);
@@ -76,7 +76,7 @@ if ($nv_Request->isset_request('authordel', 'post')) {
 }
 
 // Vo hieu/Kich hoat tac gia
-if ($nv_Request->isset_request('changeStatus', 'post')) {
+if ($nv_Request->isset_request('changeStatus', 'post') and csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
     $aid = $nv_Request->get_int('aid', 'post', 0);
     $status = $db->query('SELECT active FROM ' . NV_PREFIXLANG . '_' . $module_data . '_author WHERE id =' . $aid)->fetchColumn();
     $status = $status ? 0 : 1;
@@ -123,7 +123,7 @@ if ($nv_Request->isset_request('get_account_json', 'post, get')) {
 }
 
 // Them/Sua tac gia
-if ($nv_Request->isset_request('save', 'post')) {
+if ($nv_Request->isset_request('save', 'post') and csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
     $aid = $nv_Request->get_int('aid', 'post', 0);
     $pseudonym = $nv_Request->get_title('pseudonym', 'post', '', 1);
     $uid = $nv_Request->get_int('uid', 'post', 0);
@@ -321,10 +321,11 @@ $xtpl->assign('MODULE_NAME', $module_name);
 $xtpl->assign('MODULE_UPLOAD', $module_upload);
 $xtpl->assign('OP', $op);
 $xtpl->assign('DATA', $data);
+$xtpl->assign('CHECKSS', csrf_create($csrf_key));
 
 if (!empty($authors)) {
     foreach ($authors as $row) {
-        $row['newslist_link'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;q=' . urlencode($row['alias']) . '&amp;stype=author&amp;checkss=' . NV_CHECK_SESSION;
+        $row['newslist_link'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;q=' . urlencode($row['alias']) . '&amp;stype=author&amp;checkss=' . csrf_create($csrf_key);
         $row['account'] = $uids[$row['uid']]['username'];
         $row['email'] = $uids[$row['uid']]['email'];
         $row['account_link'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=users&amp;' . NV_OP_VARIABLE . '=memberlist/' . change_alias($uids[$row['uid']]['username']) . '-' . $uids[$row['uid']]['md5username'];

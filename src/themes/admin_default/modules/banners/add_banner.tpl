@@ -39,7 +39,7 @@
                     <td>{LANG.assign_to_user}:</td>
                     <td>&nbsp;</td>
                     <td>
-                        <div class="autosearchpersion w300 pull-left" data-checkss="{CONTENTS.checkss}">
+                        <div class="autosearchpersion w300 pull-left" data-checkss="{CONTENTS.checkss_stable}">
                             <span class="searchloading hidden"><i class="fa fa-spin fa-spinner"></i></span>
                             <input type="text" class="form-control" name="assign_user" value="{CONTENTS.assign_user}" autocomplete="off"/>
                             <div class="searchresultaj"></div>

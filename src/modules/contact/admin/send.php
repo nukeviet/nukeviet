@@ -18,6 +18,12 @@ if (defined('NV_EDITOR')) {
 }
 
 if ($nv_Request->isset_request('save', 'post')) {
+    if (!csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
+        nv_jsonOutput([
+            'status' => 'error',
+            'mess' => $nv_Lang->getGlobal('error_code_11')
+        ]);
+    }
     $post = [
         'mail_lang' => $nv_Request->get_title('mail_lang', 'post', ''),
         'title' => $nv_Request->get_title('title', 'post', ''),
@@ -110,6 +116,7 @@ $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
 $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
 
 $xtpl->assign('FORM_ACTION', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op);
+$xtpl->assign('CHECKSS', csrf_create($csrf_key));
 $xtpl->assign('MESS_CONTENT', $mess_content);
 
 if (count($global_config['setup_langs']) > 1) {

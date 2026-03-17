@@ -48,8 +48,7 @@ if (defined('NV_IS_SPADMIN')) {
     if ($nv_Request->isset_request('fc', 'post')) {
 
         $fc = $nv_Request->get_string('fc', 'post', '');
-        $checkss = $nv_Request->get_string('checkss', 'post', '');
-        if (!csrf_check($checkss, $csrf_key)) {
+        if (!csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
             nv_jsonOutput([
                 'status' => 'error',
                 'mess' => $nv_Lang->getGlobal('error_code_11')

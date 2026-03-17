@@ -202,9 +202,9 @@ function nv_editcensor_row_accept(uid, checkss, msg) {
     }
 }
 
-function nv_chang_status(vid) {
+function nv_chang_status(vid, obj) {
     var nv_timer = nv_settimeout_disable('change_status_' + vid, 5000);
-    var checkss = $("input[name='checkss']").val();
+    var checkss = (obj !== undefined) ? $(obj).data('checkss') : $("input[name='checkss']").val();
     $.post(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=setactive&nocache=' + new Date().getTime(), 'userid=' + vid + '&checkss=' + checkss, function(res) {
         if (res != 'OK') {
             alert(nv_is_change_act_confirm[2]);
@@ -459,9 +459,9 @@ function control_theme_groups() {
     }
 }
 
-function nv_del_oauthall(userid) {
+function nv_del_oauthall(userid, checkss) {
     if (confirm(nv_is_del_confirm[0])) {
-        $.post(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=edit_oauth&nocache=' + new Date().getTime(), 'delall=1&userid=' + userid, function(res) {
+        $.post(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=edit_oauth&nocache=' + new Date().getTime(), 'delall=1&userid=' + userid + '&checkss=' + checkss, function(res) {
             if (res == 'OK') {
                 window.location.href = window.location.href;
             } else {
@@ -472,9 +472,9 @@ function nv_del_oauthall(userid) {
     return false;
 }
 
-function nv_del_oauthone(opid, userid) {
+function nv_del_oauthone(opid, userid, checkss) {
     if (confirm(nv_is_del_confirm[0])) {
-        $.post(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=edit_oauth&nocache=' + new Date().getTime(), 'del=1&userid=' + userid + '&opid=' + opid, function(res) {
+        $.post(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=edit_oauth&nocache=' + new Date().getTime(), 'del=1&userid=' + userid + '&opid=' + opid + '&checkss=' + checkss, function(res) {
             if (res == 'OK') {
                 window.location.href = window.location.href;
             } else {
@@ -499,7 +499,7 @@ function nv_main_action(btn) {
 
     if (listid != '') {
         var action = $('#mainuseropt').val();
-        var checkss = $("input[name='checkss']").val();
+        var checkss = $("input[name='checkss_" + action + "']").val() || $("input[name='checkss']").val();
         if (action == 'del') {
             if (confirm(nv_is_del_confirm[0])) {
                 $.post(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=del&nocache=' + new Date().getTime(), 'userid=' + listid + '&checkss=' + checkss, function(res) {
@@ -923,7 +923,7 @@ $(document).ready(function() {
         btn.prop('disabled', true);
         $.post(
             script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=groups&nocache=' + new Date().getTime(),
-            'id=' + ctn.data('id') + '&cWeight=' + $this.data('value') + '&tokend=' + btn.data('tokend'),
+            'id=' + ctn.data('id') + '&cWeight=' + $this.data('value') + '&checkss=' + btn.data('checkss'),
             function(res) {
                 if (res != 'OK') {
                     alert(btn.data('msgerror'));
@@ -951,7 +951,7 @@ $(document).ready(function() {
             $this.data('busy', true);
             $.post(
                 script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=groups&nocache=' + new Date().getTime(),
-                'deleteinactive=1&tokend=' + $this.data('tokend'),
+                'deleteinactive=1&checkss=' + $this.data('checkss'),
                 function(res) {
                     alert(res);
                     location.reload();

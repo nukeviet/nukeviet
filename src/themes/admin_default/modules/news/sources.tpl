@@ -1,5 +1,5 @@
 <!-- BEGIN: main -->
-<div id="module_show_list">
+<div id="module_show_list" data-checkss="{CHECKSS}">
     {SOURCES_LIST}
 </div>
 <br />
@@ -12,6 +12,7 @@
     <input type="hidden" name ="{NV_OP_VARIABLE}" value="{OP}" />
     <input type="hidden" name ="sourceid" value="{sourceid}" />
     <input name="savecat" type="hidden" value="1" />
+    <input type="hidden" name="checkss" value="{CHECKSS}" />
     <div class="table-responsive">
         <table class="table table-striped table-bordered table-hover">
             <caption><em class="fa fa-file-text-o">&nbsp;</em>{LANG.add_sources}</caption>

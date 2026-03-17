@@ -618,7 +618,7 @@ $(function () {
                 data: {
                     id: ctn.data('id'),
                     cWeight: $this.data('value'),
-                    tokend: btn.data('tokend')
+                    checkss: btn.data('checkss')
                 },
                 dataType: 'json',
                 cache: false,
@@ -693,7 +693,7 @@ $(function () {
                     url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=groups&nocache=' + new Date().getTime(),
                     data: {
                         del: btn.data('id'),
-                        tokend: btn.data('tokend')
+                        checkss: btn.data('checkss')
                     },
                     dataType: 'json',
                     cache: false,
@@ -723,7 +723,7 @@ $(function () {
                 url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=groups&nocache=' + new Date().getTime(),
                 data: {
                     act: btn.data('id'),
-                    tokend: btn.data('tokend')
+                    checkss: btn.data('checkss')
                 },
                 dataType: 'json',
                 cache: false,
@@ -762,7 +762,7 @@ $(function () {
                     url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=groups&nocache=' + new Date().getTime(),
                     data: {
                         deleteinactive: 1,
-                        tokend: btn.data('tokend')
+                        checkss: btn.data('checkss')
                     },
                     dataType: 'json',
                     cache: false,
@@ -815,7 +815,7 @@ $(function () {
                     data: {
                         gid: gid,
                         uid: uid,
-                        tokend: $('body').data('checksess')
+                        checkss: $('#listUsersCtn').data('checkss')
                     },
                     dataType: 'json',
                     cache: false,
@@ -855,7 +855,7 @@ $(function () {
                         data: {
                             gid: gid,
                             approved: btn.data('id'),
-                            tokend: $('body').data('checksess')
+                            checkss: $('#listUsersCtn').data('checkss')
                         },
                         dataType: 'json',
                         cache: false,
@@ -895,7 +895,7 @@ $(function () {
                         data: {
                             gid: gid,
                             denied: btn.data('id'),
-                            tokend: $('body').data('checksess')
+                            checkss: $('#listUsersCtn').data('checkss')
                         },
                         dataType: 'json',
                         cache: false,
@@ -935,7 +935,7 @@ $(function () {
                         data: {
                             gid: gid,
                             exclude: btn.data('id'),
-                            tokend: $('body').data('checksess')
+                            checkss: $('#listUsersCtn').data('checkss')
                         },
                         dataType: 'json',
                         cache: false,
@@ -974,7 +974,7 @@ $(function () {
                     data: {
                         gid: gid,
                         demote: btn.data('id'),
-                        tokend: $('body').data('checksess')
+                        checkss: $('#listUsersCtn').data('checkss')
                     },
                     dataType: 'json',
                     cache: false,
@@ -1013,7 +1013,7 @@ $(function () {
                         data: {
                             gid: gid,
                             exclude: btn.data('id'),
-                            tokend: $('body').data('checksess')
+                            checkss: $('#listUsersCtn').data('checkss')
                         },
                         dataType: 'json',
                         cache: false,
@@ -1051,7 +1051,7 @@ $(function () {
                     data: {
                         gid: gid,
                         promote: btn.data('id'),
-                        tokend: $('body').data('checksess')
+                        checkss: $('#listUsersCtn').data('checkss')
                     },
                     dataType: 'json',
                     cache: false,
@@ -1108,7 +1108,7 @@ $(function () {
                     data: {
                         del: 1,
                         userid: btn.data('userid'),
-                        checkss: btn.data('tokend')
+                        checkss: btn.data('checkss')
                     },
                     dataType: 'json',
                     cache: false,
@@ -1189,7 +1189,7 @@ $(function () {
                 url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=user_add&nocache=' + new Date().getTime(),
                 data: {
                     nv_genpass: 1,
-                    checkss: $('body').data('checksess')
+                    checkss: btn.data('checkss')
                 },
                 dataType: 'json',
                 cache: false,
@@ -1370,7 +1370,7 @@ $(function () {
                     clearInterval(runInterval);
                 }
 
-                const tokend = $('#resend_tokend').val();
+                const checkss = $('#resend_checkss').val();
 
                 $.ajax({
                     type: 'POST',
@@ -1380,7 +1380,7 @@ $(function () {
                         per_email: per_email,
                         offset: emailOffset,
                         useriddel: emailDelete,
-                        tokend: tokend
+                        checkss: checkss
                     },
                     dataType: 'json',
                     cache: false,

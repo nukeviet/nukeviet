@@ -18,8 +18,7 @@ if (defined('NV_EDITOR')) {
 }
 
 if ($nv_Request->isset_request('save', 'post')) {
-    $checkss = $nv_Request->get_string('checkss', 'post', '');
-    if (!csrf_check($checkss, $csrf_key)) {
+    if (!csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
         nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op);
     }
     $array = [];
@@ -35,7 +34,6 @@ if ($nv_Request->isset_request('save', 'post')) {
         $sth->bindParam(':config_value', $config_value, PDO::PARAM_STR, strlen($config_value));
         $sth->execute();
     }
-
     nv_insert_logs(NV_LANG_DATA, $module_name, 'Change config module', '', $admin_info['userid']);
     $nv_Cache->delMod('settings');
     nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op);

@@ -86,7 +86,7 @@ function nv_comment_data($module, $area, $id, $page, $sortcomm, $base_url)
         $row['check_like'] = md5($row['cid'] . '_' . NV_CHECK_SESSION);
         $row['post_email'] = ($emailcomm) ? $row['post_email'] : '';
         if (!empty($row['attach'])) {
-            $row['attach'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=comment&amp;' . NV_OP_VARIABLE . '=down&cid=' . $row['cid'] . '&amp;tokend=' . md5($row['cid'] . '_' . NV_CHECK_SESSION);
+            $row['attach'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=comment&amp;' . NV_OP_VARIABLE . '=down&cid=' . $row['cid'] . '&amp;checkss=' . md5($row['cid'] . '_' . NV_CHECK_SESSION);
         }
         $row['user'] = !empty($row['username']) ? change_alias($row['username']) . '-' . $row['md5username'] : '';
         $comment_array[$row['cid']] = $row;
@@ -148,7 +148,7 @@ function nv_comment_get_reply($cid, $module, $session_id, $sortcomm)
         $row['check_like'] = md5($row['cid'] . '_' . $session_id);
         $row['post_email'] = ($emailcomm) ? $row['post_email'] : '';
         if (!empty($row['attach'])) {
-            $row['attach'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=comment&amp;' . NV_OP_VARIABLE . '=down&cid=' . $row['cid'] . '&amp;tokend=' . md5($row['cid'] . '_' . NV_CHECK_SESSION);
+            $row['attach'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=comment&amp;' . NV_OP_VARIABLE . '=down&cid=' . $row['cid'] . '&amp;checkss=' . md5($row['cid'] . '_' . NV_CHECK_SESSION);
         }
         $row['user'] = !empty($row['username']) ? change_alias($row['username']) . '-' . $row['md5username'] : '';
         $data_reply_comment[$row['cid']] = $row;

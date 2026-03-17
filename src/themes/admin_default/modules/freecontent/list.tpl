@@ -21,9 +21,9 @@
             <div class="col-lg-22 col-md-21 col-sm-20 col-xs-24">
                 <div class="pull-right">
                     <div class="btn-group">
-                        <a title="{ROW.status_text}" class="btn btn-sm btn-default content-status ct-status{ROW.status}" data-id="{ROW.id}" data-status="{ROW.status}" href="#"><i class="fa fa-circle"></i></a>
-                        <a title="{GLANG.edit}" class="btn btn-sm btn-default content-edit" data-id="{ROW.id}" href="#"><i class="fa fa-edit"></i></a>
-                        <a title="{GLANG.delete}" class="btn btn-sm btn-default content-delete" data-id="{ROW.id}" data-title="{ROW.title}" href="#"><i class="fa fa-trash"></i></a>
+                        <a title="{ROW.status_text}" class="btn btn-sm btn-default content-status ct-status{ROW.status}" data-id="{ROW.id}" data-status="{ROW.status}" data-checkss="{CHECKSS}" href="#"><i class="fa fa-circle"></i></a>
+                        <a title="{GLANG.edit}" class="btn btn-sm btn-default content-edit" data-id="{ROW.id}" data-checkss="{CHECKSS}" href="#"><i class="fa fa-edit"></i></a>
+                        <a title="{GLANG.delete}" class="btn btn-sm btn-default content-delete" data-id="{ROW.id}" data-title="{ROW.title}" data-checkss="{CHECKSS}" href="#"><i class="fa fa-trash"></i></a>
                     </div>
                 </div>
                 <h3 class="content-title">{ROW.title}</h3>
@@ -122,7 +122,7 @@
             <div class="modal-footer">
                 <span class="per-loading"> <i class="fa fa-circle-o-notch fa-spin"></i> </span>
                 <button type="button" class="btn btn-default" data-dismiss="modal">{GLANG.cancel}</button>
-                <button type="button" class="btn btn-primary content-submit-trigger">{GLANG.save}</button>
+                <button type="button" class="btn btn-primary content-submit-trigger" data-checkss="{CHECKSS}">{GLANG.save}</button>
             </div>
         </div>
     </div>
@@ -147,7 +147,7 @@
             <div class="modal-footer">
                 <input type="hidden" name="id" value="">
                 <button type="button" class="btn btn-default" data-dismiss="modal">{GLANG.cancel}</button>
-                <button type="button" class="btn btn-primary content-delete-trigger">{GLANG.delete}</button>
+                <button type="button" class="btn btn-primary content-delete-trigger" data-checkss="{CHECKSS}">{GLANG.delete}</button>
             </div>
         </div>
     </div>

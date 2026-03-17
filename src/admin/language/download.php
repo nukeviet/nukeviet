@@ -16,7 +16,7 @@ if (!defined('NV_IS_FILE_LANG')) {
 $dirlang = $nv_Request->get_title('dirlang', 'get', '');
 $page_title = $language_array[$dirlang]['name'] . ': ' . $nv_Lang->getModule('nv_admin_read');
 
-if ($nv_Request->get_string('checksess', 'get') == md5('downloadallfile' . NV_CHECK_SESSION)) {
+if ($nv_Request->get_string('checkss', 'get') == md5('downloadallfile' . NV_CHECK_SESSION)) {
     if (preg_match('/^([a-z]{2})$/', $dirlang)) {
         $allowfolder = [];
         $dirs = nv_scandir(NV_ROOTDIR . '/modules', $global_config['check_module']);
@@ -87,5 +87,5 @@ if ($nv_Request->get_string('checksess', 'get') == md5('downloadallfile' . NV_CH
         exit();
     }
 } else {
-    throw new \NukeViet\Http\HttpException('error checksess', 403);
+    throw new \NukeViet\Http\HttpException('error check session', 403);
 }

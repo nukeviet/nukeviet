@@ -75,7 +75,7 @@ $(function () {
                 type: 'POST',
                 url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=del_content&nocache=' + new Date().getTime(),
                 data: {
-                    checkss: btn.data('checksess'),
+                    checkss: btn.data('checkss'),
                     id: btn.data('id')
                 },
                 success: function (res) {
@@ -147,7 +147,7 @@ $(function () {
                 });
             });
         } else {
-            window.location.href = script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=' + action + '&listid=' + listid.join(',') + '&checkss=' + $('body').data('checksess');
+            window.location.href = script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=' + action + '&listid=' + listid.join(',') + '&checkss=' + btn.data('checkss');
         }
     });
 
@@ -162,7 +162,7 @@ $(function () {
         $('#sortArticleNew').val(btn.data('weight'));
 
         mdSortArt.data('id', btn.data('id'));
-        mdSortArt.data('checksess', btn.data('checksess'));
+        mdSortArt.data('checkss', btn.data('checkss'));
         mdSortArt.data('weight', btn.data('weight'));
         const md = bootstrap.Modal.getOrCreateInstance(mdSortArt[0]);
         md.show();
@@ -187,7 +187,7 @@ $(function () {
                 data: {
                     order_articles_new: $('#sortArticleNew').val(),
                     order_articles_id: mdSortArt.data('id'),
-                    order_articles_checkss: mdSortArt.data('checksess')
+                    order_articles_checkss: mdSortArt.data('checkss')
                 },
                 success: function (res) {
                     icon.removeClass('fa-spinner fa-spin-pulse').addClass(icon.data('icon'));
@@ -241,7 +241,7 @@ $(function () {
                 type: 'POST',
                 url: btn.attr('href') + '&nocache=' + new Date().getTime(),
                 data: {
-                    restorehistory: $('body').data('checksess'),
+                    restorehistory: btn.data('checkss'),
                     id: btn.data('id')
                 },
                 dataType: 'json',
@@ -629,7 +629,7 @@ $(function () {
                     return {
                         q: params.term,
                         page: params.page || 1,
-                        checkss: $('body').data('checksess')
+                        checkss: $('[name="checkss"]').val()
                     };
                 },
                 cache: false
@@ -657,7 +657,7 @@ $(function () {
                     return {
                         q: params.term,
                         page: params.page || 1,
-                        checkss: $('body').data('checksess')
+                        checkss: $('[name="checkss"]').val()
                     };
                 },
                 cache: false
@@ -812,7 +812,7 @@ $(function () {
                         searchAjax: 1,
                         q: params.term,
                         page: params.page || 1,
-                        checkss: $('body').data('checksess')
+                        checkss: $('[data-checkss]').first().data('checkss')
                     };
                 },
                 cache: false
@@ -899,7 +899,7 @@ $(function () {
                         q: params.term,
                         get_topic_json: 1,
                         page: params.page || 1,
-                        checkss: $('body').data('checksess')
+                        checkss: $('#form-news-content [name="checkss"]').val()
                     };
                 }
             },
@@ -1392,7 +1392,7 @@ $(function () {
                         id: iptRelated.data('id'),
                         q: params.term,
                         page: params.page || 1,
-                        checkss: $('body').data('checksess'),
+                        checkss: $('[name="checkss"]').val(),
                         get_article_json: 1
                     };
                 },
@@ -1466,7 +1466,7 @@ $(function () {
                     type: 'POST',
                     url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=drafts&nocache=' + new Date().getTime(),
                     data: {
-                        delete: $('body').data('checksess'),
+                        delete: $('[data-checkss]').first().data('checkss'),
                         listid: listid.join(',')
                     },
                     success: function (respon) {

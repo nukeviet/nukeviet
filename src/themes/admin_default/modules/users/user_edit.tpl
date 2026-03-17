@@ -402,7 +402,7 @@
                         <div class="input-group w300">
                             <input class="form-control password" style="height: 32.5px;" type="text" id="password1" name="password1" value="" maxlength="{NV_UPASSMAX}" />
                             <span class="input-group-btn">
-                                <button class="btn btn-default" type="button" title="{LANG.random_password}" data-toggle="genpass" data-checkss="{NV_CHECK_SESSION}" data-field1="#password1" data-field2="#password2"><i class="fa fa-retweet"></i></button>
+                                <button class="btn btn-default" type="button" title="{LANG.random_password}" data-toggle="genpass" data-checkss="{CHECKSS}" data-field1="#password1" data-field2="#password2"><i class="fa fa-retweet"></i></button>
                             </span>
                         </div>
                     </td>

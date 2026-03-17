@@ -137,12 +137,12 @@ $(function() {
             url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=siteinfo&' + nv_fc_variable + '=notification&nocache=' + new Date().getTime(),
             data: {
                 notification_reset: 1,
-                checksess: $('body').data('checksess')
+                checkss: $('#main-notifications').data('checkss')
             },
             success: function(res) {
                 $('.loader', ctn).addClass('d-none');
                 if (res != 'OK') {
-                    nvToast('Wrong checkesss!!', 'error');
+                    nvToast('Wrong checkss!!', 'error');
                     return;
                 }
                 $('.badge', ctn).text('0').data('count', 0);
@@ -174,7 +174,7 @@ $(function() {
             data: {
                 toggle: 1,
                 id: noti.data('id'),
-                checksess: $('body').data('checksess')
+                checkss: $('#main-notifications').data('checkss')
             },
             dataType: 'json',
             success: function(data) {
@@ -230,7 +230,7 @@ $(function() {
             data: {
                 delete: 1,
                 id: noti.data('id'),
-                checksess: $('body').data('checksess')
+                checkss: $('#main-notifications').data('checkss')
             },
             dataType: 'json',
             success: function(data) {
@@ -291,7 +291,7 @@ $(function() {
                     toggle: 1,
                     direct_view: 1,
                     id: noti.data('id'),
-                    checksess: $('body').data('checksess')
+                    checkss: $('#main-notifications').data('checkss')
                 },
                 dataType: 'json',
                 success: function(data) {

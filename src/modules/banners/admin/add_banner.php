@@ -325,6 +325,7 @@ $contents['exp_date'] = [
 $contents['bannerhtml'] = htmlspecialchars(nv_editor_br2nl($bannerhtml));
 $contents['assign_user'] = $assign_user;
 $contents['checkss'] = csrf_create($csrf_key);
+$contents['checkss_stable'] = csrf_create($_csrf_key);
 
 if (defined('NV_EDITOR')) {
     require_once NV_ROOTDIR . '/' . NV_EDITORSDIR . '/' . NV_EDITOR . '/nv.php';

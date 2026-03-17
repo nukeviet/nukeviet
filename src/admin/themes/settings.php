@@ -40,7 +40,7 @@ if ($global_config['idsite']) {
 $array_config = [];
 
 // Submit form
-if (csrf_check($nv_Request->get_title('checkss', 'post'), $csrf_key)) {
+if (csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
     $array_config['user_allowed_theme'] = $nv_Request->get_typed_array('user_allowed_theme', 'post', 'title', []);
     $array_config['user_allowed_theme'] = array_intersect($array_config['user_allowed_theme'], $array_site_cat_theme);
     $array_config['user_allowed_theme'][] = $global_config['site_theme'];

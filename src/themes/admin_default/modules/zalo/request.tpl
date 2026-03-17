@@ -22,6 +22,7 @@
             <form method="POST" action="{FORM_ACTION}" data-toggle="request_form_submit" data-idfield="{IDFIELD}" data-clfield="{CLFIELD}">
                 <input type="hidden" name="id" value="{REQUEST.id}" />
                 <input type="hidden" name="action" value="update" />
+                <input type="hidden" name="checkss" value="{CHECKSS}" />
                 <div class="panel panel-primary request_form">
                     <div class="panel-image image-9-16"><img class="panel-image" src="{ASSETS_STATIC_URL}/images/pix.svg" alt="" style="background-image: url({REQUEST.image_url});" /></div>
                     <div class="panel-body">
@@ -60,6 +61,7 @@
         <div class="col-sm-8">
             <form method="POST" action="{FORM_ACTION}" data-toggle="request_form_submit">
                 <input type="hidden" name="action" value="add" />
+                <input type="hidden" name="checkss" value="{CHECKSS}" />
                 <div class="panel panel-primary">
                     <div class="panel-image image-9-16"><img class="panel-image" src="{NV_STATIC_URL}{NV_ASSETS_DIR}/images/pix.gif" alt="" /><div class="desc">{LANG.add_info_request}</div></div>
                     <div class="panel-body">

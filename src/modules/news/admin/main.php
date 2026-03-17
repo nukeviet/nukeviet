@@ -23,6 +23,7 @@ $tpl->registerPlugin('modifier', 'dformat', 'nv_datetime_format');
 $tpl->setTemplateDir(get_module_tpl_dir('main.tpl'));
 $tpl->assign('LANG', $nv_Lang);
 $tpl->assign('MODULE_NAME', $module_name);
+$tpl->assign('CHECKSS', csrf_create($_csrf_key));
 
 $base_url = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name;
 $type_search = [
@@ -132,7 +133,7 @@ if ($NV_IS_ADMIN_MODULE and $module_config[$module_name]['order_articles'] and e
     $_weight_new = $nv_Request->get_int('order_articles_new', 'post', 0);
     $_id = $nv_Request->get_int('order_articles_id', 'post', 0);
     $_order_articles = $nv_Request->get_title('order_articles_checkss', 'post', '');
-    if ($_id > 0 and $_weight_new > 0 and $_order_articles == md5($_id . NV_CHECK_SESSION)) {
+    if ($_id > 0 and $_weight_new > 0 and csrf_check($_order_articles, $_csrf_key)) {
         $sql = 'SELECT weight, listcatid FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE id=' . $_id;
         $_row1 = $db->query($sql)->fetch();
         if (!empty($_row1)) {
@@ -795,10 +796,10 @@ if (!empty($module_config[$module_name]['elas_use'])) {
     }
 
     $_sql = $db_slave->sql();
-    $num_checkss = md5($num_items . NV_CHECK_SESSION . $_sql);
+    $num_checkss = md5($num_items . $csrf_key . $_sql);
     if ($num_checkss != $nv_Request->get_string('num_checkss', 'get', '')) {
         $num_items = $db_slave->query($_sql)->fetchColumn();
-        $num_checkss = md5($num_items . NV_CHECK_SESSION . $_sql);
+        $num_checkss = md5($num_items . $csrf_key . $_sql);
     }
     $base_url .= '&amp;num_items=' . $num_items . '&amp;num_checkss=' . $num_checkss;
 
@@ -954,7 +955,7 @@ if (!empty($array_ids)) {
     while ($_row = $result->fetch()) {
         !isset($internal_authors[$_row['id']]) and $internal_authors[$_row['id']] = [];
         $internal_authors[$_row['id']][] = [
-            'href' => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;q=' . urlencode($_row['alias']) . '&amp;stype=author&amp;checkss=' . NV_CHECK_SESSION,
+            'href' => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;q=' . urlencode($_row['alias']) . '&amp;stype=author&amp;checkss=' . csrf_create($csrf_key),
             'pseudonym' => $_row['pseudonym']
         ];
     }
@@ -1116,7 +1117,7 @@ foreach ($data as $row) {
     $row['user_editing'] = $is_editing_row ? $array_userid[$array_editdata[$row['id']]['admin_id']]['username'] : '';
     $row['is_locked'] = $is_locked_row;
     $row['show_history'] = false;
-    $row['checksess'] = md5($row['id'] . NV_CHECK_SESSION);
+    $row['checkss'] = csrf_create($csrf_key);
     $row['abs_link'] = urlRewriteWithDomain($row['link'], NV_MY_DOMAIN);
 
     if (isset($row['feature']['edit']) and isset($array_histories[$row['id']])) {
@@ -1129,6 +1130,7 @@ foreach ($data as $row) {
     $array[] = $row;
 }
 $tpl->assign('DATA', $array);
+$tpl->assign('CHECKSS', csrf_create($csrf_key));
 $tpl->assign('ARRAY_ORDER', $array_order);
 $tpl->assign('BASE_URL', $base_url);
 $tpl->assign('BASE_URL_ORDER', $base_url_order);
@@ -1194,6 +1196,7 @@ if ($loadhistory) {
         }, explode(',', $row['changed_fields']));
             $row['changed_fields'] = implode(', ', $row['changed_fields']);
 
+            $row['checkss'] = csrf_create($csrf_key);
             $array_histories[$row['id']] = $row;
 
             if (!empty($row['admin_id'])) {
@@ -1202,7 +1205,7 @@ if ($loadhistory) {
     }
 
     // Khôi phục 1 phiên bản
-    if ($nv_Request->get_title('restorehistory', 'post', '') === NV_CHECK_SESSION) {
+    if (csrf_check($nv_Request->get_string('restorehistory', 'post'), $_csrf_key)) {
         $respon = [
             'success' => false,
             'text' => '',
@@ -1263,7 +1266,7 @@ if ($loadhistory) {
 
         // Đẩy qua trang content để sử dụng lại cái form đó cho chuẩn
         $respon['success'] = true;
-        $respon['url'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=content&id=' . $loadhistory_id . '&restore=' . $history_id . '&restorehash=' . md5(NV_CHECK_SESSION . $admin_info['admin_id'] . $loadhistory_id . $history_id . $post_new['historytime']);
+        $respon['url'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=content&id=' . $loadhistory_id . '&restore=' . $history_id . '&restorehash=' . md5(csrf_create($csrf_key) . $admin_info['admin_id'] . $loadhistory_id . $history_id . $post_new['historytime']);
         nv_jsonOutput($respon);
     }
 

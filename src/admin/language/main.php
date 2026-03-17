@@ -131,11 +131,11 @@ if (defined('NV_IS_GODADMIN') or ($global_config['idsite'] > 0 and defined('NV_I
         ]);
     }
 
-    $checksess = $nv_Request->get_title('checksess', 'get', '');
+    $checkss = $nv_Request->get_title('checkss', 'get', '');
     $keylang = $nv_Request->get_title('keylang', 'get', '', 1);
     $deletekeylang = $nv_Request->get_title('deletekeylang', 'get', '', 1);
 
-    if ($nv_Request->isset_request('activelang', 'get') and $checksess == md5('activelang_' . $keylang . NV_CHECK_SESSION) and preg_match('/^[a-z]{2}$/', $keylang)) {
+    if ($nv_Request->isset_request('activelang', 'get') and csrf_check($checkss, $csrf_key) and preg_match('/^[a-z]{2}$/', $keylang)) {
         // Kích hoạt hiển thị ngoài site một ngôn ngữ
         if (empty($global_config['idsite'])) {
             $activelang = $nv_Request->get_int('activelang', 'get', 0);
@@ -165,7 +165,7 @@ if (defined('NV_IS_GODADMIN') or ($global_config['idsite'] > 0 and defined('NV_I
             'success' => 0,
             'text' => 'Wrong request data!!!'
         ]);
-    } elseif ($checksess == md5($keylang . NV_CHECK_SESSION) and in_array($keylang, $lang_array_exit, true)) {
+    } elseif (csrf_check($checkss, $csrf_key) and in_array($keylang, $lang_array_exit, true)) {
         // Cài đặt ngôn ngữ data mới
         if (isset($array_lang_setup[$keylang]) and $array_lang_setup[$keylang]['setup'] == 1) {
             nv_jsonOutput([
@@ -391,7 +391,7 @@ if (defined('NV_IS_GODADMIN') or ($global_config['idsite'] > 0 and defined('NV_I
                 'mess' => $nv_Lang->getModule('nv_data_note')
             ]);
         }
-    } elseif ($checksess == md5($deletekeylang . NV_CHECK_SESSION . 'deletekeylang') and !in_array($deletekeylang, $global_config['allow_sitelangs'], true)) {
+    } elseif (csrf_check($checkss, $csrf_key) and !in_array($deletekeylang, $global_config['allow_sitelangs'], true)) {
         // Xóa ngôn ngữ data
         define('NV_IS_FILE_MODULES', true);
 

@@ -188,11 +188,13 @@ function nv_show_banners_list(containerid, clid, pid, act, keyword) {
 function nv_chang_weight_banners(pid, id) {
     var nv_timer = nv_settimeout_disable('id_weight_' + id, 5000);
     var weight = $("#id_weight_" + id).val();
+    var checkss = $('#id_weight_' + id).closest('table').data('checkss');
 
     var request_query = nv_fc_variable + '=b_list';
     request_query += '&pid=' + pid
     request_query += '&id=' + id;
     request_query += '&weight=' + weight;
+    request_query += '&checkss=' + checkss;
 
     $('#banners_list_act').load(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + request_query + '&act=1&num=' + nv_randomPassword(8) + '&nocache=' + new Date().getTime());
     $('#banners_list_timeract').load(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + request_query + '&act=0&num=' + nv_randomPassword(8) + '&nocache=' + new Date().getTime());

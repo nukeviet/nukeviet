@@ -179,7 +179,7 @@ if ($action == 'block') {
 // Xóa khối menu
 if ($nv_Request->isset_request('del', 'post')) {
     if (!csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
-        exit('Error checkss!!!');
+        nv_jsonOutput(['status' => 'error', 'mess' => $nv_Lang->getGlobal('error_code_11')]);
     }
     if (!defined('NV_IS_AJAX')) {
         exit('Wrong URL');

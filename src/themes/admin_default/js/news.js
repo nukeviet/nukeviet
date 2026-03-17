@@ -426,10 +426,11 @@ $(function() {
             return false;
         }
         if (confirm(LANG.topic_delete_confirm)) {
+            var checkss = CFG.checkss;
             $.ajax({
                 type: 'POST',
                 url: 'index.php?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=topicdelnews',
-                data: 'list=' + list,
+                data: 'list=' + list + '&checkss=' + checkss,
                 success: function(data) {
                     alert(data);
                     window.location = 'index.php?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=topicsnews&topicid=' + CFG.topicid;
@@ -559,10 +560,11 @@ $(function() {
             return false;
         }
         var topic = $('select[name=topicsid]').val();
+        var checkss = $('input[name=checkss]').val();
         $.ajax({
             type: 'POST',
             url: 'index.php?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=addtotopics',
-            data: 'listid=' + listid + '&topicsid=' + topic,
+            data: 'listid=' + listid + '&topicsid=' + topic + '&checkss=' + checkss,
             success: function(data) {
                 alert(data);
                 window.location = 'index.php?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=topicsnews&topicid=' + topic;
@@ -703,7 +705,7 @@ $(function() {
             type: 'POST',
             url: $this.attr('href') + '&nocache=' + new Date().getTime(),
             data: {
-                restorehistory: $this.data('tokend'),
+                restorehistory: $this.data('checkss'),
                 id: $this.data('id')
             },
             dataType: 'json',
@@ -864,12 +866,12 @@ function getPopoverContent(e) {
     return '<div class="dropdown-cattool-ctn"><ul class="dropdown-cattool" data-mod="' + $(e).data('mod') + '" data-catid="' + $(e).data('catid') + '">' + tmpcat.html() + '</ul></div>';
 }
 
-function nv_change_voice_weight(id, tokend) {
+function nv_change_voice_weight(id, checkss) {
     var new_weight = $('#change_weight_' + id).val();
     $('#change_weight_' + id).prop('disabled', true);
     $.post(
         script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=voices&nocache=' + new Date().getTime(),
-        'changeweight=' + tokend + '&id=' + id + '&new_weight=' + new_weight,
+        'changeweight=' + checkss + '&id=' + id + '&new_weight=' + new_weight,
         function(res) {
             $('#change_weight_' + id).prop('disabled', false);
             var r_split = res.split("_");
@@ -880,11 +882,11 @@ function nv_change_voice_weight(id, tokend) {
         });
 }
 
-function nv_change_voice_status(id, tokend) {
+function nv_change_voice_status(id, checkss) {
     $('#change_status' + id).prop('disabled', true);
     $.post(
         script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=voices&nocache=' + new Date().getTime(),
-        'changestatus=' + tokend + '&id=' + id,
+        'changestatus=' + checkss + '&id=' + id,
         function(res) {
             $('#change_status' + id).prop('disabled', false);
             if (res != 'OK') {
@@ -894,11 +896,11 @@ function nv_change_voice_status(id, tokend) {
         });
 }
 
-function nv_delele_voice(id, tokend) {
+function nv_delele_voice(id, checkss) {
     if (confirm(nv_is_del_confirm[0])) {
         $.post(
             script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=voices&nocache=' + new Date().getTime(),
-            'delete=' + tokend + '&id=' + id,
+            'delete=' + checkss + '&id=' + id,
             function(res) {
                 var r_split = res.split("_");
                 if (r_split[0] == 'OK') {

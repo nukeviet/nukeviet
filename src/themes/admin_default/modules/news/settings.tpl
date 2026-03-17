@@ -354,6 +354,7 @@
                 <tr>
                     <td class="text-center" colspan="2">
                         <input class="btn btn-primary" type="submit" value="{LANG.save}" name="Submit1" id="btn_savesetting">
+                        <input type="hidden" name="checkss" value="{CHECKSS}" />
                         <input type="hidden" value="1" name="savesetting" />
                     </td>
                 </tr>
@@ -370,6 +371,7 @@ $(document).ready(function() {
 </script>
 <!-- BEGIN: admin_config_post -->
 <form class="form-inline" action="{FORM_ACTION}" method="post">
+    <input type="hidden" name="checkss" value="{CHECKSS}" />
     <div class="table-responsive">
         <table class="table table-striped table-bordered table-hover">
             <caption><em class="fa fa-file-text-o">&nbsp;</em>{LANG.group_content}</caption>

@@ -55,6 +55,7 @@
     </div>
     <form method="POST" action="{FORM_ACTION}" data-toggle="list_form_submit">
         <input type="hidden" name="save" value="1" />
+        <input type="hidden" name="checkss" value="{CHECKSS}" />
         <div class="row">
             <div class="col-sm-8">
                 <div class="panel panel-primary">
@@ -78,6 +79,7 @@
 </div>
 <script>
 $(function() {
+    var checkss = '{CHECKSS}';
     resizeTextArea($('textarea.auto-resize'))
 })
 </script>

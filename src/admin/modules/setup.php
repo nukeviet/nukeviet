@@ -29,7 +29,7 @@ $autosetup = $nv_Request->get_title('autosetup', 'get', '', 1);
 
 $_csrf_key = $module_name . '_setmodule_' . $setmodule;
 if (!empty($setmodule) and preg_match($global_config['check_module'], $setmodule)) {
-    if (csrf_check($nv_Request->get_title('checkss', 'get'), $_csrf_key)) {
+    if (csrf_check($nv_Request->get_string('checkss', 'get'), $_csrf_key)) {
         $sample = $nv_Request->get_int('sample', 'get', 0);
         $hook_files = $nv_Request->get_title('hook_files', 'get', '');
         $hook_mods = $nv_Request->get_title('hook_mods', 'get', '');

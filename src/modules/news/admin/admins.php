@@ -91,7 +91,7 @@ if (defined('NV_IS_ADMIN_FULL_MODULE')) {
         $nv_Lang->getModule('admin_module'),
         $nv_Lang->getModule('admin_full_module')];
 
-    if ($nv_Request->isset_request('save', 'post') and $userid > 0 and csrf_check($nv_Request->get_string('checkss', 'post', ''), $csrf_key)) {
+    if ($nv_Request->isset_request('save', 'post') and $userid > 0 and csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
         $admin_module = $nv_Request->get_int('admin_module', 'post', 0);
         if ($admin_module == 1 or $admin_module == 2) {
             if (!defined('NV_IS_SPADMIN')) {

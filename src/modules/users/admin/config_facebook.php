@@ -18,7 +18,7 @@ $array_url_instruction['config'] = 'http://wiki.nukeviet.vn/nukeviet4:admin:user
 if ($nv_Request->isset_request('save', 'post')) {
     $array_config['oauth_client_id'] = (string) $nv_Request->get_title('oauth_client_id', 'post', '');
     $array_config['oauth_client_secret'] = $nv_Request->get_title('oauth_client_secret', 'post', '');
-    if ($checkss !== $nv_Request->get_string('checkss', 'post')) {
+    if (!csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
         nv_jsonOutput([
             'status' => 'error',
             'mess' => 'Session error!'

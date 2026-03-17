@@ -13,7 +13,7 @@ if (!defined('NV_ADMIN') or !defined('NV_MAINFILE') or !defined('NV_IS_MODADMIN'
     exit('Stop!!!');
 }
 
-$csrf_banners_key = 'banners_' . $admin_info['admin_id'];
+$_csrf_key = $module_name . '_' . $admin_info['admin_id'];
 
 $allow_func = [
     'main',
@@ -145,10 +145,11 @@ function nv_CreateXML_bannerPlan()
     $sql = 'SELECT * FROM ' . NV_BANNERS_GLOBALTABLE . '_plans WHERE act = 1';
     $result = $db->query($sql);
     while ($row = $result->fetch()) {
-        $id = (int) ($row['id']);
+        $id = (int)($row['id']);
         if ($global_config['idsite']) {
             $xmlfile = NV_ROOTDIR . '/' . NV_DATADIR . '/site_' . $global_config['idsite'] . '_bpl_' . $id . '.xml';
-        } else {
+        }
+        else {
             $xmlfile = NV_ROOTDIR . '/' . NV_DATADIR . '/bpl_' . $id . '.xml';
         }
         $plan = [];
@@ -201,7 +202,7 @@ function nv_CreateXML_bannerPlan()
 function nv_fix_banner_weight($pid)
 {
     global $db;
-    [$pid, $form] = $db->query('SELECT id, form FROM ' . NV_BANNERS_GLOBALTABLE . '_plans WHERE id=' . (int) $pid)->fetch(3);
+    [$pid, $form] = $db->query('SELECT id, form FROM ' . NV_BANNERS_GLOBALTABLE . '_plans WHERE id=' . (int)$pid)->fetch(3);
     if ($pid > 0 and $form == 'sequential') {
         $query_weight = 'SELECT id FROM ' . NV_BANNERS_GLOBALTABLE . '_rows WHERE pid=' . $pid . ' AND act IN(0,1,3) ORDER BY weight ASC, id DESC';
         $result = $db->query($query_weight);
@@ -214,7 +215,8 @@ function nv_fix_banner_weight($pid)
         // Các banner hết hạn và banner chờ duyệt có weight = 0
         $sql = 'UPDATE ' . NV_BANNERS_GLOBALTABLE . '_rows SET weight=0 WHERE act IN(2,4) AND pid=' . $pid;
         $db->query($sql);
-    } elseif ($pid > 0 and $form == 'random') {
+    }
+    elseif ($pid > 0 and $form == 'random') {
         $sql = 'UPDATE ' . NV_BANNERS_GLOBALTABLE . '_rows SET weight=0 WHERE pid=' . $pid;
         $db->query($sql);
     }
@@ -258,7 +260,8 @@ function nv_add_plan_theme($contents, $array_uploadtype, $groups_list)
 
     if ($contents['description'][5] and nv_function_exists('nv_aleditor')) {
         $description = nv_aleditor($contents['description'][1], $contents['description'][3], $contents['description'][4], $contents['description'][2], '', NV_UPLOADS_DIR . '/' . $module_upload, NV_UPLOADS_DIR . '/' . $module_upload . '/files');
-    } else {
+    }
+    else {
         $description = '<textarea name="' . $contents['description'][1] . '" id="' . $contents['description'][1] . '" style="width:' . $contents['description'][3] . ';height:' . $contents['description'][4] . '">' . $contents['description'][2] . '</textarea>\n';
     }
     $xtpl->assign('DESCRIPTION', $description);
@@ -288,7 +291,7 @@ function nv_add_plan_theme($contents, $array_uploadtype, $groups_list)
     foreach ($groups_list as $_group_id => $_title) {
         $xtpl->assign('UPLOADGROUP', [
             'key' => $_group_id,
-            'checked' => in_array((int) $_group_id, $uploadgroup, true) ? ' checked="checked"' : '',
+            'checked' => in_array((int)$_group_id, $uploadgroup, true) ? ' checked="checked"' : '',
             'title' => $_title
         ]);
         $xtpl->parse('main.uploadgroup');
@@ -348,7 +351,8 @@ function nv_edit_plan_theme($contents, $array_uploadtype, $groups_list)
 
     if ($contents['description'][5] and nv_function_exists('nv_aleditor')) {
         $description = nv_aleditor($contents['description'][1], $contents['description'][3], $contents['description'][4], $contents['description'][2], '', NV_UPLOADS_DIR . '/' . $module_upload, NV_UPLOADS_DIR . '/' . $module_upload . '/files');
-    } else {
+    }
+    else {
         $description = '<textarea name="' . $contents['description'][1] . '" id="' . $contents['description'][1] . '" style="width:' . $contents['description'][3] . ';height:' . $contents['description'][4] . '">' . $contents['description'][2] . '</textarea>\n';
     }
     $xtpl->assign('DESCRIPTION', $description);
@@ -378,7 +382,7 @@ function nv_edit_plan_theme($contents, $array_uploadtype, $groups_list)
     foreach ($groups_list as $_group_id => $_title) {
         $xtpl->assign('UPLOADGROUP', [
             'key' => $_group_id,
-            'checked' => in_array((int) $_group_id, $uploadgroup, true) ? ' checked="checked"' : '',
+            'checked' => in_array((int)$_group_id, $uploadgroup, true) ? ' checked="checked"' : '',
             'title' => $_title
         ]);
         $xtpl->parse('main.uploadgroup');
@@ -559,7 +563,8 @@ function nv_edit_banner_theme($contents)
     if (!empty($contents['file_name'][1])) {
         $xtpl->parse('main.img_info');
         $xtpl->assign('SHOW_BANNER', ' class="hidden"');
-    } else {
+    }
+    else {
         $xtpl->assign('SHOW_BANNER', '');
     }
 
@@ -567,7 +572,8 @@ function nv_edit_banner_theme($contents)
     if (!empty($contents['imageforswf'][0])) {
         $xtpl->parse('main.imageforswf');
         $xtpl->assign('SHOW_IMAGEFORSWF', ' class="hidden"');
-    } else {
+    }
+    else {
         $xtpl->assign('SHOW_IMAGEFORSWF', '');
     }
 
@@ -673,7 +679,8 @@ function nv_b_list_theme($contents, $array_users = [])
                 $user = $array_users[$values['clid']];
                 if ($is_allowed_viewuser) {
                     $user['link'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=users&' . NV_OP_VARIABLE . '=memberlist/' . change_alias($user['username']) . '-' . $user['md5username'];
-                } else {
+                }
+                else {
                     $user['link'] = 'javascript:void(0);';
                 }
                 $xtpl->assign('USER', $user);
@@ -748,7 +755,8 @@ function nv_show_stat_theme($contents)
             $xtpl->assign('ROW', $value);
             if (!preg_match('/^[0-9]+$/', $key)) {
                 $xtpl->parse('main.loop.t1');
-            } else {
+            }
+            else {
                 $xtpl->parse('main.loop.t2');
             }
             if (!empty($value[1])) {
@@ -814,8 +822,7 @@ function nv_clean60_bannerlink($string, $num = 60)
 
 // Tìm kiếm thành viên AJAX
 if ($nv_Request->isset_request('ajaxqueryusername', 'post')) {
-    $checkss = $nv_Request->get_title('checkss', 'post');
-    if ($checkss != NV_CHECK_SESSION or !defined('NV_IS_AJAX')) {
+    if (!csrf_check($nv_Request->get_string('checkss', 'post'), $_csrf_key) or !defined('NV_IS_AJAX')) {
         exit('Wrong URL');
     }
     $username = $nv_Request->get_title('ajaxqueryusername', 'post', '');
@@ -827,7 +834,8 @@ if ($nv_Request->isset_request('ajaxqueryusername', 'post')) {
         if (preg_match('/^\=(.*)$/', $username, $m)) {
             $username = $m[1];
             $sql = 'SELECT username, first_name, last_name, photo FROM ' . NV_USERS_GLOBALTABLE . ' WHERE active=1 AND username=' . $db->quote($username) . ' ORDER BY username ASC LIMIT 0,10';
-        } else {
+        }
+        else {
             $dbkey = $db->dblikeescape($username);
             $sql = 'SELECT username, first_name, last_name, photo FROM ' . NV_USERS_GLOBALTABLE . " WHERE active=1 AND (
                 username LIKE '%" . $dbkey . "%' OR CONCAT(first_name,' ',last_name) LIKE '%" . $dbkey . "%'
@@ -837,7 +845,8 @@ if ($nv_Request->isset_request('ajaxqueryusername', 'post')) {
         while ($row = $result->fetch()) {
             if (!empty($row['photo'])) {
                 $row['photo'] = NV_BASE_SITEURL . $row['photo'];
-            } else {
+            }
+            else {
                 $row['photo'] = $default_photo;
             }
             $row['fullname'] = nv_show_name_user($row['first_name'], $row['last_name'], $row['username']);

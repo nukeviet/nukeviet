@@ -39,7 +39,7 @@ foreach ($files as $file) {
     }
 }
 
-if (csrf_check($nv_Request->get_string('checkss', 'post', ''), $csrf_key)) {
+if (csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
     $_robots_data = $nv_Request->get_array('filename', 'post');
     $_fileother = $nv_Request->get_array('fileother', 'post');
     $_optionother = $nv_Request->get_array('optionother', 'post');

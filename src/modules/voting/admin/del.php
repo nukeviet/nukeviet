@@ -20,7 +20,7 @@ if (!defined('NV_IS_AJAX')) {
 $checkss = $nv_Request->get_string('checkss', 'post');
 $vid = $nv_Request->get_int('vid', 'post', 0);
 
-if ($vid > 0 and $checkss == md5($vid . NV_CHECK_SESSION)) {
+if ($vid > 0 and csrf_check($checkss, $vid . $_csrf_key)) {
     nv_insert_logs(NV_LANG_DATA, $module_name, 'log_del_vote', 'votingid ' . $vid, $admin_info['userid']);
     $sql = 'DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . ' WHERE vid=' . $vid;
     if ($db->exec($sql)) {

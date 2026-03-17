@@ -22,7 +22,8 @@
 							<option value="{TOPICSID.key}">{TOPICSID.title}</option>
 							<!-- END: topicsid -->
 						</select> 
-						<input class="btn btn-primary" name="update" id="update-topic" type="button" value="{LANG.save}" /></td>
+						<input class="btn btn-primary" name="update" id="update-topic" type="button" value="{LANG.save}" />
+						<input type="hidden" name="checkss" value="{CHECKSS}" /></td>
 					</tr>
 				</tfoot>
 				<tbody>

@@ -19,7 +19,7 @@ $page_title = $nv_Lang->getModule('sources');
 
 $savecat = $nv_Request->get_int('savecat', 'post', 0);
 
-if (!empty($savecat)) {
+if (!empty($savecat) and csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
     $sourceid = $nv_Request->get_int('sourceid', 'post', 0);
     $title = $nv_Request->get_title('title', 'post', '', 1);
     $link = strtolower($nv_Request->get_title('link', 'post', ''));
@@ -104,6 +104,7 @@ $xtpl->assign('MODULE_NAME', $module_name);
 $xtpl->assign('MODULE_UPLOAD', $module_upload);
 $xtpl->assign('NV_UPLOADS_DIR', NV_UPLOADS_DIR);
 $xtpl->assign('OP', $op);
+$xtpl->assign('CHECKSS', csrf_create($csrf_key));
 
 $xtpl->assign('SOURCES_LIST', nv_show_sources_list());
 

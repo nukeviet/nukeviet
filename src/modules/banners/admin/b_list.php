@@ -46,7 +46,7 @@ $contents['thead'] = [
 $contents['view'] = $nv_Lang->getGlobal('detail');
 $contents['edit'] = $nv_Lang->getGlobal('edit');
 $contents['del'] = $nv_Lang->getGlobal('delete');
-$contents['checkss'] = csrf_create($csrf_banners_key);
+$contents['checkss'] = csrf_create($_csrf_key);
 $contents['rows'] = [];
 
 $sql = 'SELECT * FROM ' . NV_BANNERS_GLOBALTABLE . '_rows WHERE ';
@@ -97,6 +97,9 @@ if (defined('NV_BANNER_WEIGHT')) {
     $new_weight = $nv_Request->get_int('weight', 'get', 0);
 
     if ($id > 0 and $new_weight > 0) {
+        if (!csrf_check($nv_Request->get_string('checkss', 'get'), $_csrf_key)) {
+            exit();
+        }
         $query_weight = 'SELECT id FROM ' . NV_BANNERS_GLOBALTABLE . '_rows WHERE id!=' . $id . ' AND pid=' . $pid . ' AND act IN(0,1,3) ORDER BY weight ASC';
         $result = $db->query($query_weight);
 

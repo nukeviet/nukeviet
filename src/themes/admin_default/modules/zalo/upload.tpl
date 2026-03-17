@@ -52,6 +52,7 @@
                     <td>
                         <form method="POST" action="{FORM_ACTION}&amp;file_desc_change=1" data-toggle="file_desc">
                             <input type="hidden" name="id" value="{FILE.id}" />
+                            <input type="hidden" name="checkss" value="{CHECKSS}" />
                             <input type="text" name="description" value="{FILE.description}" class="form-control" style="min-width: 150px;" maxlength="250" data-toggle="file_desc_change" data-default="{FILE.description}">
                         </form>
                     </td>
@@ -61,7 +62,7 @@
                     <td class="text-center" style="width:1%">
                         {FILE.exptime}
                     </td>
-                    <td class="text-nowrap text-center" style="1%">
+                    <td class="text-nowrap text-center" style="width:1%">
                         <select class="form-control" style="width:100px;" data-toggle="file_action_change" data-url="{FORM_ACTION}" data-id="{FILE.id}" data-confirm="{LANG.delete_confirm}">
                             <option value=""></option>
                             <!-- BEGIN: select -->
@@ -105,6 +106,7 @@
             <form method="POST" action="{FORM_UPLOAD_ACTION}" enctype="multipart/form-data" data-toggle="zalo_upload" data-store-on-server="{STORE_ON_SERVER}">
                 <!-- BEGIN: type_hide -->
                 <input type="hidden" name="type" value="{TYPE}" data-url="{ZALO_URL}"/>
+                <input type="hidden" name="checkss" value="{CHECKSS}" />
                 <!-- END: type_hide -->
                 <div class="panel panel-primary">
                     <div class="panel-heading">{LANG.upload_form}</div>
@@ -119,6 +121,7 @@
                                         <option value="{FILE_TYPE.key}" data-accept="{FILE_TYPE.accept}" data-url="{FILE_TYPE.url}" data-maxsize="{FILE_TYPE.maxsize}" {FILE_TYPE.sel}>{FILE_TYPE.name}</option>
                                         <!-- END: type -->
                                     </select>
+                                    <input type="hidden" name="checkss" value="{CHECKSS}" />
                                 </td>
                             </tr>
                             <!-- END: type_select -->
@@ -145,6 +148,9 @@
         </div>
     </div>
 </div>
+<script>
+    var checkss = '{CHECKSS}';
+</script>
 <!-- END: main -->
 <!-- BEGIN: preview -->
 <div class="panel panel-primary">

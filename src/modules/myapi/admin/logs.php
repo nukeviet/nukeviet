@@ -51,8 +51,7 @@ if ($nv_Request->isset_request('getUser, q', 'post')) {
 // Xóa log
 if (defined('MANUALL_DEL_API_LOG') and MANUALL_DEL_API_LOG === true) {
     if ($nv_Request->isset_request('delLog', 'post')) {
-        $checkss = $nv_Request->get_title('checkss', 'post');
-        if (!csrf_check($checkss, $csrf_key)) {
+        if (!csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
             nv_jsonOutput([
                 'status' => 'error',
                 'mess' => $nv_Lang->getGlobal('error_code_11')
@@ -75,8 +74,7 @@ if (defined('MANUALL_DEL_API_LOG') and MANUALL_DEL_API_LOG === true) {
 
     // Xóa nhiều log
     if ($nv_Request->isset_request('delLogs', 'post')) {
-        $checkss = $nv_Request->get_title('checkss', 'post');
-        if (!csrf_check($checkss, $csrf_key)) {
+        if (!csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
             nv_jsonOutput([
                 'status' => 'error',
                 'mess' => $nv_Lang->getGlobal('error_code_11')
@@ -100,8 +98,7 @@ if (defined('MANUALL_DEL_API_LOG') and MANUALL_DEL_API_LOG === true) {
 
     // Xóa tất cả log
     if ($nv_Request->isset_request('delAllLogs', 'post')) {
-        $checkss = $nv_Request->get_title('checkss', 'post');
-        if (!csrf_check($checkss, $csrf_key)) {
+        if (!csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
             nv_jsonOutput([
                 'status' => 'error',
                 'mess' => $nv_Lang->getGlobal('error_code_11')

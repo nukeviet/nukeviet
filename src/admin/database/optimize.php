@@ -22,9 +22,9 @@ if (empty($tables)) {
 } else {
     $tables = explode(',', $tables);
 }
-$checkss = $nv_Request->get_string('checkss', 'post', '');
-if (!csrf_check($checkss, $_csrf_key)) {
+if (!csrf_check($nv_Request->get_string('checkss', 'post'), $_csrf_key)) {
     nv_htmlOutput('Wrong session!!!');
+    exit;
 }
 
 nv_insert_logs(NV_LANG_DATA, $module_name, $nv_Lang->getModule('optimize'), '', $admin_info['userid']);

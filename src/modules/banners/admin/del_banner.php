@@ -14,7 +14,7 @@ if (!defined('NV_IS_FILE_ADMIN')) {
 }
 $id = $nv_Request->get_int('id', 'post,get');
 
-if (empty($id) or !csrf_check($nv_Request->get_string('checkss', 'post,get'), $csrf_banners_key)) {
+if (empty($id) or !csrf_check($nv_Request->get_string('checkss', 'post,get'), $_csrf_key)) {
     exit('Stop!!!');
 }
 

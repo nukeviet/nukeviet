@@ -382,6 +382,7 @@ $contents['bannerhtml'] = htmlspecialchars(nv_editor_br2nl($bannerhtml));
 $contents['remove_banner'] = $remove_banner;
 $contents['remove_imageforswf'] = $remove_imageforswf;
 $contents['checkss'] = csrf_create($csrf_key);
+$contents['checkss_stable'] = csrf_create($_csrf_key);
 
 if (defined('NV_EDITOR')) {
     require_once NV_ROOTDIR . '/' . NV_EDITORSDIR . '/' . NV_EDITOR . '/nv.php';

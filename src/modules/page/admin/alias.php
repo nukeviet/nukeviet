@@ -14,9 +14,9 @@ if (!defined('NV_IS_FILE_ADMIN')) {
 }
 
 $id = $nv_Request->get_int('id', 'post', 0);
-$csrf_key = $module_name . '_content_' . $id;
+$_csrf_key = $module_name . '_content_' . $id;
 
-if (!csrf_check($nv_Request->get_string('checkss', 'post', ''), $csrf_key)) {
+if (!csrf_check($nv_Request->get_string('checkss', 'post'), $_csrf_key)) {
     exit('Stop!!!');
 }
 

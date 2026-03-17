@@ -16,8 +16,7 @@ if (!defined('NV_IS_FILE_DATABASE')) {
 $page_title = $nv_Lang->getModule('save_data');
 
 $_csrf_key = $module_name . '_main_' . $admin_info['admin_id'];
-$checkss = $nv_Request->get_string('checkss', 'post', '');
-if (!csrf_check($checkss, $_csrf_key)) {
+if (!csrf_check($nv_Request->get_string('checkss', 'post'), $_csrf_key)) {
     nv_htmlOutput('Wrong session!!!');
 }
 

@@ -28,7 +28,7 @@ $(function() {
                 type: 'POST',
                 url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=webtools&' + nv_fc_variable + '=deleteupdate&nocache=' + new Date().getTime(),
                 data: {
-                    'checksess': $this.data('checksess')
+                    'checkss': $this.data('checkss')
                 },
                 dataType: 'json',
                 success: function(data) {
@@ -83,7 +83,7 @@ $(function() {
             type: 'POST',
             url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=widget&nocache=' + new Date().getTime(),
             data: {
-                'addparent': widgetCtn.data('checksess'),
+                'addparent': widgetCtn.data('checkss'),
                 'placement': $this.data('placement')
             },
             dataType: 'json',
@@ -118,7 +118,7 @@ $(function() {
             type: 'POST',
             url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=widget&nocache=' + new Date().getTime(),
             data: {
-                'delete': widgetCtn.data('checksess'),
+                'delete': widgetCtn.data('checkss'),
                 'widget_id': $this.data('id'),
                 'widget_parentid': $this.data('parent-id')
             },
@@ -154,7 +154,7 @@ $(function() {
             type: 'POST',
             url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=widget&nocache=' + new Date().getTime(),
             data: {
-                'addchild': widgetCtn.data('checksess'),
+                'addchild': widgetCtn.data('checkss'),
                 'widget_id': $this.data('id'),
                 'placement': $this.data('placement')
             },
@@ -189,7 +189,7 @@ $(function() {
             type: 'POST',
             url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=widget&nocache=' + new Date().getTime(),
             data: {
-                'resize': widgetCtn.data('checksess'),
+                'resize': widgetCtn.data('checkss'),
                 'widget_id': $this.data('id'),
                 'widget_parentid': $this.data('parent-id'),
                 'breakpoint': $this.data('breakpoint'),
@@ -269,7 +269,7 @@ $(function() {
             type: 'POST',
             url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=widget&nocache=' + new Date().getTime(),
             data: {
-                'setwidget': widgetCtn.data('checksess'),
+                'setwidget': widgetCtn.data('checkss'),
                 'widget_id': mdChooseWidget.data('widget-id'),
                 'widget_parentid': mdChooseWidget.data('parent-id'),
                 'id': $this.data('widget-id')
@@ -338,7 +338,7 @@ $(function() {
                         type: 'POST',
                         url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=widget&nocache=' + new Date().getTime(),
                         data: {
-                            'swapwidget': widgetCtn.data('checksess'),
+                            'swapwidget': widgetCtn.data('checkss'),
                             'widget_id1': target.data('id'),
                             'widget_parentid1': target.data('parent-id'),
                             'widget_id2': widgetDrag.data('id'),
@@ -519,7 +519,7 @@ $(function() {
                     data: {
                         delete: 1,
                         listid: listid,
-                        checksess: $this.closest('.card-footer').find('.dropdown-toggle').data('checkss')
+                        checkss: $this.closest('.card-footer').find('.dropdown-toggle').data('checkss')
                     },
                     dataType: 'json',
                     success: function(data) {
@@ -545,7 +545,7 @@ $(function() {
                     toggle: 1,
                     direct_view: 1,
                     listid: listid,
-                    checksess: $this.closest('.card-footer').find('.dropdown-toggle').data('checkss')
+                    checkss: $this.closest('.card-footer').find('.dropdown-toggle').data('checkss')
                 },
                 dataType: 'json',
                 success: function(data) {
@@ -570,7 +570,7 @@ $(function() {
                     toggle: 1,
                     direct_view: 0,
                     listid: listid,
-                    checksess: $this.closest('.card-footer').find('.dropdown-toggle').data('checkss')
+                    checkss: $this.closest('.card-footer').find('.dropdown-toggle').data('checkss')
                 },
                 dataType: 'json',
                 success: function(data) {
@@ -605,7 +605,7 @@ $(function() {
                 data: {
                     delete: 1,
                     id: btn.data('id'),
-                    checksess: btn.data('checkss')
+                    checkss: btn.data('checkss')
                 },
                 success: function(data) {
                     icon.removeClass('fa-spinner fa-spin-pulse').addClass(icon.data('icon'));
@@ -640,7 +640,7 @@ $(function() {
             data: {
                 toggle: 1,
                 id: btn.data('id'),
-                checksess: btn.data('checkss')
+                checkss: btn.data('checkss')
             },
             success: function(data) {
                 icon.removeClass('fa-spinner fa-spin-pulse').addClass(icon.data('icon'));
@@ -680,7 +680,7 @@ $(function() {
                 toggle: 1,
                 direct_view: 1,
                 id: btn.data('id'),
-                checksess: btn.data('checkss')
+                checkss: btn.data('checkss')
             },
             dataType: 'json',
             success: function(data) {

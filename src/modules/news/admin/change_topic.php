@@ -20,7 +20,7 @@ $topicid = $nv_Request->get_int('topicid', 'post', 0);
 $mod = $nv_Request->get_string('mod', 'post', '');
 $new_vid = $nv_Request->get_int('new_vid', 'post', 0);
 
-if (empty($topicid)) {
+if (empty($topicid) or !csrf_check($nv_Request->get_string('checkss', 'post'), $_csrf_key)) {
     exit('NO_' . $topicid);
 }
 $content = 'NO_' . $topicid;

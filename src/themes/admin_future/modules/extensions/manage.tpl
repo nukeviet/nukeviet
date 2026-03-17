@@ -16,7 +16,7 @@
                         <span class="text-danger fw-medium">{$LANG->getModule('install_ips', $smarty.const.NV_CLIENT_IP)}.</span>
                         {else}
                         <form id="formSubmitExt" method="post" enctype="multipart/form-data" data-error-choose="{$LANG->getModule('install_error_nofile')}" data-error-type="{$LANG->getModule('install_error_filetype')}" action="{$smarty.const.NV_BASE_ADMINURL}index.php?{$smarty.const.NV_LANG_VARIABLE}={$smarty.const.NV_LANG_DATA}&amp;{$smarty.const.NV_NAME_VARIABLE}={$MODULE_NAME}&amp;{$smarty.const.NV_OP_VARIABLE}=upload">
-                            <input type="hidden" name="checksess" value="{$SUBMIT_CHECKSESS}">
+                            <input type="hidden" name="checkss" value="{$CHECKSS}">
                             <div class="input-group">
                                 <input type="file" class="form-control" name="extfile">
                                 <button type="submit" class="btn btn-primary">{$LANG->getModule('install_submit')}</button>

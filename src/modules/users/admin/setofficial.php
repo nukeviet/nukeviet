@@ -19,6 +19,10 @@ if (!defined('NV_IS_AJAX')) {
 
 $userid = $nv_Request->get_int('userid', 'post', 0);
 
+if (!csrf_check($nv_Request->get_string('checkss', 'post'), $_csrf_key)) {
+    exit('NO');
+}
+
 if (!$userid or $admin_info['admin_id'] == $userid) {
     exit('NO');
 }

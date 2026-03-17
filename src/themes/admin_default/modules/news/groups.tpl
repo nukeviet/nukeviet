@@ -1,5 +1,5 @@
 <!-- BEGIN: main -->
-<div id="module_show_list">
+<div id="module_show_list" data-checkss="{CHECKSS}">
 	{BLOCK_CAT_LIST}
 </div>
 <br />
@@ -11,6 +11,7 @@
 	<input type="hidden" name ="{NV_NAME_VARIABLE}" value="{MODULE_NAME}" />
 	<input type="hidden" name ="{NV_OP_VARIABLE}" value="{OP}" />
 	<input type="hidden" name ="bid" value="{bid}" />
+	<input type="hidden" name ="checkss" value="{CHECKSS}" />
 	<input name="savecat" type="hidden" value="1" />
 	<div class="table-responsive">
 		<table class="table table-striped table-bordered table-hover">

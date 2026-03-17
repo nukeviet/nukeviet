@@ -221,7 +221,7 @@ while ($row = $result2->fetch()) {
         'email' => $row['email'],
         'regdate' => nv_datetime_format($row['regdate']),
         'checked' => $row['active'] ? ' checked="checked"' : '',
-        'disabled' => ($is_setactive) ? ' onclick="nv_chang_status(' . $row['userid'] . ');"' : ' disabled="disabled"',
+        'disabled' => ($is_setactive) ? ' onclick="nv_chang_status(' . $row['userid'] . ', this);"' : ' disabled="disabled"',
         'setactive' => $is_setactive,
         'is_edit' => $is_edit,
         'is_delete' => $is_delete,
@@ -324,7 +324,8 @@ $xtpl->assign('SORTURL', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=
 $xtpl->assign('SEARCH_VALUE', nv_htmlspecialchars($methodvalue));
 $xtpl->assign('TABLE_CAPTION', $table_caption);
 $xtpl->assign('HEAD', $head_tds);
-$xtpl->assign('CHECKSESS', csrf_create($module_name . '_' . $op . '_' . $admin_info['admin_id']));
+$xtpl->assign('CHECKSS', csrf_create($_csrf_key));
+
 $xtpl->assign('REG_TIME_FROM', $reg_from);
 $xtpl->assign('REG_TIME_TO', $reg_to);
 

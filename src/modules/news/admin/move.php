@@ -24,7 +24,7 @@ $listid = $nv_Request->get_string('listid', 'get,post', '');
 $catids = array_unique($nv_Request->get_typed_array('catids', 'post', 'int', []));
 $catid = $nv_Request->get_int('catid', 'get,post', 0);
 
-if ($nv_Request->isset_request('idcheck', 'post')) {
+if ($nv_Request->isset_request('idcheck', 'post') and csrf_check($nv_Request->get_string('checkss', 'post'), $_csrf_key)) {
     // Kiểm tra ID các chuyên mục phải hợp lệ
     $array_catid_allowed = [];
     foreach ($global_array_cat as $catid_i => $array_value) {
@@ -88,6 +88,7 @@ $xtpl->assign('NV_BASE_ADMINURL', NV_BASE_ADMINURL);
 $xtpl->assign('NV_NAME_VARIABLE', NV_NAME_VARIABLE);
 $xtpl->assign('MODULE_NAME', $module_name);
 $xtpl->assign('OP', $op);
+$xtpl->assign('CHECKSS', csrf_create($_csrf_key));
 
 while ($_scratch = $result->fetch(3)) {
     [$id, $title] = $_scratch;

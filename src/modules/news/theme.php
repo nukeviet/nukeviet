@@ -715,7 +715,7 @@ function detail_theme($news_contents, $array_keyword, $related_new_array, $relat
     $xtpl->assign('NEWSID', $news_contents['id']);
     $xtpl->assign('NEWSCHECKSS', $news_contents['newscheckss']);
     $xtpl->assign('DETAIL', $news_contents);
-    $xtpl->assign('CHECKSESSION', md5($news_contents['id'] . NV_CHECK_SESSION));
+    $xtpl->assign('CHECKSS', md5($news_contents['id'] . NV_CHECK_SESSION));
 
     // Xuất giọng đọc
     if (!empty($news_contents['current_voice'])) {
