@@ -4,7 +4,7 @@
 
 ### Quy định về cách dùng json_encode
 
-Đã định nghĩ trong src/includes/constants.php
+Đã định nghĩa trong src/includes/constants.php
 
 ```php
 // JSON encode cho API response và lưu DB
@@ -29,7 +29,7 @@ echo json_encode($data, NV_JSON_ENCODE_SCRIPT);
 
 ### Quy định về cách dùng unserialize
 
-Đã định nghĩ trong src/includes/constants.php
+Đã định nghĩa trong src/includes/constants.php
 
 ```php
 // Option an toàn cho unserialize — chỉ cho phép array/scalar, không cho phép object
