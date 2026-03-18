@@ -21,7 +21,7 @@ function parse_others($others)
     if (!empty($others)) {
         $_others = json_decode($others, true);
         if (json_last_error() !== JSON_ERROR_NONE) {
-            $_others = unserialize($others);
+            $_others = unserialize($others, NV_UNSERIALIZE_SAFE);
         }
 
         return $_others;
@@ -41,7 +41,7 @@ function get_department_list()
 
     $cache_file = 'departmentlist' . NV_CACHE_PREFIX . '.cache';
     if (($cache = $nv_Cache->getItem($module_name, $cache_file)) != false) {
-        return unserialize($cache);
+        return unserialize($cache, NV_UNSERIALIZE_SAFE);
     }
 
     $sql = 'SELECT * FROM ' . NV_MOD_TABLE . '_department ORDER BY weight';
@@ -99,7 +99,7 @@ function get_supporter_list($departments)
 
     $cache_file = 'supporterlist' . NV_CACHE_PREFIX . '.cache';
     if (($cache = $nv_Cache->getItem($module_name, $cache_file)) != false) {
-        return unserialize($cache);
+        return unserialize($cache, NV_UNSERIALIZE_SAFE);
     }
 
     $supporter_list = [];

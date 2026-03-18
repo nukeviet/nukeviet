@@ -188,8 +188,8 @@ if ($nv_Request->get_title('action', 'post') == 'row') {
     $pa_old = $nv_Request->get_int('pa', 'post', 0);
 
     if ($post['id'] == 0) {
-        $weight = $db->query('SELECT max(weight) FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE mid=' . (int) ($post['mid']) . ' AND parentid=' . (int) ($post['parentid'] . ' AND mid=' . $post['mid']))->fetchColumn();
-        $weight = (int) $weight + 1;
+        $weight = $db->query('SELECT max(weight) FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE mid=' . (int)$post['mid'] . ' AND parentid=' . (int)$post['parentid'])->fetchColumn();
+        $weight = (int)$weight + 1;
         $sql = 'INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . '_rows
             (parentid, mid, title, link, icon, image, note, weight, sort, lev, subitem, groups_view,
             module_name, op, target, css, active_type, status) VALUES

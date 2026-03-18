@@ -25,7 +25,7 @@ if (!function_exists('block_supporter_parse_others')) {
         if (!empty($others)) {
             $_others = json_decode($others, true);
             if (json_last_error() !== JSON_ERROR_NONE) {
-                $_others = unserialize($others);
+                $_others = unserialize($others, NV_UNSERIALIZE_SAFE);
             }
 
             return $_others;
@@ -50,7 +50,7 @@ if (!function_exists('block_supporter_get_list')) {
         $mod_table = NV_PREFIXLANG . '_' . $site_mods[$module]['module_data'];
         $cache_file = 'supporterlist' . NV_CACHE_PREFIX . '.cache';
         if (($cache = $nv_Cache->getItem($module, $cache_file)) != false) {
-            return unserialize($cache);
+            return unserialize($cache, NV_UNSERIALIZE_SAFE);
         }
 
         $supporter_list = [];

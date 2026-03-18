@@ -515,7 +515,7 @@ if (defined('NV_IS_USER') and isset($array_op[1]) and ($array_op[0] == 'register
 
         if (!empty($row)) {
             $group = $group_lists[$row['group_id']];
-            $group['config'] = unserialize($group['config']);
+            $group['config'] = unserialize($group['config'], NV_UNSERIALIZE_SAFE);
 
             if ($group['config']['access_addus'] and $array_op[0] == 'register') {
                 // Trưởng nhóm tạo tài khoản

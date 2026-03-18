@@ -24,7 +24,7 @@ function nv_groups_list($mod_data = 'users')
     global $nv_Cache;
     $cache_file = 'groups_list_' . NV_CACHE_PREFIX . '.cache';
     if (($cache = $nv_Cache->getItem($mod_data, $cache_file)) != false) {
-        return unserialize($cache);
+        return unserialize($cache, NV_UNSERIALIZE_SAFE);
     }
     global $db, $db_config, $global_config, $nv_Lang;
 
@@ -324,7 +324,7 @@ function nv_geVersion($updatetime = 3600)
         ];
 
         $array = $NV_Http->post(NUKEVIET_STORE_APIURL, $args);
-        $array = (is_array($array) and !empty($array['body'])) ? @unserialize($array['body']) : [];
+        $array = (is_array($array) and !empty($array['body'])) ? @unserialize($array['body'], NV_UNSERIALIZE_SAFE) : [];
 
         $error = '';
         if (!empty(NukeViet\Http\Http::$error)) {
@@ -606,7 +606,7 @@ function nv_getExtVersion($updatetime = 3600)
             ];
 
             $apidata = $NV_Http->post(NUKEVIET_STORE_APIURL, $args);
-            $apidata = (is_array($apidata) and !empty($apidata['body'])) ? @unserialize($apidata['body']) : [];
+            $apidata = (is_array($apidata) and !empty($apidata['body'])) ? @unserialize($apidata['body'], NV_UNSERIALIZE_SAFE) : [];
 
             $error = '';
             if (!empty(NukeViet\Http\Http::$error)) {
@@ -943,8 +943,8 @@ function nv_update_robots($robots_config, bool $save = false, array $config = []
         $cache_file = NV_ROOTDIR . '/' . NV_DATADIR . '/robots.php';
         if (file_exists($cache_file)) {
             include $cache_file;
-            $robots_data = unserialize($cache);
-            $robots_other = unserialize($cache_other);
+            $robots_data = unserialize($cache, NV_UNSERIALIZE_SAFE);
+            $robots_other = unserialize($cache_other, NV_UNSERIALIZE_SAFE);
         } else {
             $robots_data['/data/'] = 0;
             $robots_data['/includes/'] = 0;

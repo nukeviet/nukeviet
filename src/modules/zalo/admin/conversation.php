@@ -20,6 +20,10 @@ if (!$myZalo->isValid()) {
 // Play file am thanh
 if ($nv_Request->isset_request('player,url', 'get')) {
     $url = $nv_Request->get_string('url', 'get', '');
+    if (empty($url) or !nv_is_url($url, true)) {
+        nv_htmlOutput('Invalid URL');
+    }
+
     $data = file_get_contents($url);
     $md5file = md5($url);
     header('Content-Type: audio/AMR');
@@ -62,10 +66,6 @@ if ($nv_Request->isset_request('conversation_refresh,user_id', 'post')) {
         $result = $myZalo->conversation($accesstoken, $user_id, $offset, 10);
         if (empty($result)) {
             break;
-            nv_jsonOutput([
-                'status' => 'error',
-                'mess' => zaloGetError()
-            ]);
         }
 
         $count = count($result['data']);

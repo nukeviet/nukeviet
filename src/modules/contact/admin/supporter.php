@@ -210,7 +210,7 @@ if ($nv_Request->isset_request('fc', 'post')) {
             if (!empty($supporter['others'])) {
                 $supporter['others'] = json_decode($supporter['others'], true);
                 if (json_last_error() !== JSON_ERROR_NONE) {
-                    $supporter['others'] = unserialize($supporter['others']);
+                    $supporter['others'] = unserialize($supporter['others'], NV_UNSERIALIZE_SAFE);
                 }
             }
             if (empty($supporter['others'])) {

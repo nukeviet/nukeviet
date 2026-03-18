@@ -76,7 +76,7 @@ if ($nv_Request->isset_request('checksess', 'post')) {
 
     if (is_array($array)) {
         $cookies = $array['cookies'];
-        $array = !empty($array['body']) ? (is_serialized_string($array['body']) ? unserialize($array['body']) : []) : [];
+        $array = !empty($array['body']) ? (is_serialized_string($array['body']) ? unserialize($array['body'], NV_UNSERIALIZE_SAFE) : []) : [];
     }
 
     $error = '';

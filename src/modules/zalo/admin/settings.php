@@ -73,6 +73,9 @@ if ($nv_Request->isset_request('callingcodesSave', 'post')) {
 
     $callcodes = $nv_Request->get_typed_array('callcode', 'post', 'array', []);
     foreach ($callcodes as $name => $codes) {
+        if (!preg_match('/^[A-Z0-9]+$/', $name)) {
+            continue;
+        }
         $codes = array_filter($codes);
         $codes = array_unique($codes);
         foreach ($codes as $code) {
@@ -129,7 +132,7 @@ if ($nv_Request->isset_request('vnsubdivisionsSave, parent', 'post')) {
     foreach ($subdiv_mainname as $code => $name) {
         $code = (string) $code;
         $name = trim(strip_tags($name));
-        if (empty($name)) {
+        if (empty($name) or !preg_match('/^[A-Z0-9]+$/', $code)) {
             nv_jsonOutput([
                 'status' => 'error',
                 'mess' => $nv_Lang->getModule('vnsubdivisions_title_empty')
@@ -150,7 +153,7 @@ if ($nv_Request->isset_request('vnsubdivisionsSave, parent', 'post')) {
         $names = array_map('strip_tags', $names);
         $names = array_map('trim', $names);
         $names = array_unique($names, SORT_LOCALE_STRING);
-        if (!empty($names)) {
+        if (!empty($names) and preg_match('/^[A-Z0-9]+$/', $code)) {
             foreach ($names as $name) {
                 if (empty($parent)) {
                     if (!in_array($name, $db_provinces[$code], true)) {

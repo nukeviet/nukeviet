@@ -831,7 +831,7 @@ $db->sqlreset()
     ->select('COUNT(*)')
     ->from(NV_MOD_TABLE . '_article');
 if (!empty($type)) {
-    $db->where("type='" . $type . "'");
+    $db->where('type=' . $db->quote($type));
 }
 
 $num_items = $db->query($db->sql())->fetchColumn();

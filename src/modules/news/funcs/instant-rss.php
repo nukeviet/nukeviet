@@ -74,7 +74,7 @@ $cacheTTL = 60 * (int) ($module_config[$module_file]['instant_articles_livetime'
 $FBIA = new \NukeViet\Facebook\InstantArticles(\NukeViet\Core\Language::$lang_module);
 
 if (!defined('NV_IS_MODADMIN') and ($cache = $nv_Cache->getItem($module_name, $cacheFile, ttl: $cacheTTL)) != false) {
-    $items = unserialize($cache);
+    $items = unserialize($cache, NV_UNSERIALIZE_SAFE);
 } else {
     $result = $db_slave->query($db_slave->sql());
     while ($row = $result->fetch()) {

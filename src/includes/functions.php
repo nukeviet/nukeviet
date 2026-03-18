@@ -2772,7 +2772,7 @@ function parse_csp($json_csp)
 
     $cacheFile = 'csp_' . NV_CACHE_PREFIX . '.cache';
     if (($cache = $nv_Cache->getItem('settings', $cacheFile)) != false) {
-        $_info = unserialize($cache);
+        $_info = unserialize($cache, NV_UNSERIALIZE_SAFE);
         if (!empty($_info['md5']) and $_info['md5'] == $md5) {
             return preg_replace('/nonce\-([^\']+)/', 'nonce-' . $script_nonce, $_info['content']);
         }
@@ -2896,7 +2896,7 @@ function nv_sys_mods($lang = '')
 
     $cache_file = 'smods_' . NV_CACHE_PREFIX . '.cache';
     if (($cache = $nv_Cache->getItem('modules', $cache_file, $lang)) != false) {
-        return unserialize($cache);
+        return unserialize($cache, NV_UNSERIALIZE_SAFE);
     }
 
     $sys_mods = [];

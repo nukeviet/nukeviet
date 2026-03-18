@@ -39,7 +39,7 @@ $susp_reason = [];
 $last_reason = [];
 
 if (!empty($row['susp_reason'])) {
-    $susp_reason = unserialize($row['susp_reason']);
+    $susp_reason = unserialize($row['susp_reason'], NV_UNSERIALIZE_SAFE);
     $last_reason = (!empty($susp_reason)) ? $susp_reason[0] : '';
 }
 
