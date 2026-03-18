@@ -35,6 +35,7 @@ $lang_global['error_login_title'] = 'Login system is interrupted';
 $lang_global['error_login_content'] = 'We are unable to log you into the system at this time. Please try closing and reopening your browser first. If that doesn\'t work, try clearing your browser cookies and try again. If the problem persists, please contact support for assistance. We sincerely apologize for the inconvenience!';
 $lang_global['error_layout_title'] = 'Interface processing Error';
 $lang_global['error_layout_content'] = 'Error: interface does not exist! Please contact the site administrator about this';
+$lang_global['error_checkss'] = 'Security error, please reload page!';
 $lang_global['logout'] = 'Logout';
 $lang_global['admin_logout_title'] = 'Leave Administration';
 $lang_global['admin_logout_ok'] = 'All login information was eraser. You\'ve log out adminitrator account';

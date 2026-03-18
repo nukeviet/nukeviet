@@ -35,6 +35,7 @@ $lang_global['error_login_title'] = 'Le système de connexion est interrompu';
 $lang_global['error_login_content'] = 'Nous ne pouvons pas vous connecter au système pour le moment. Veuillez essayer de fermer et de rouvrir votre navigateur. Si cela ne fonctionne toujours pas, veuillez supprimer les cookies de votre navigateur et réessayer. Si le problème persiste, veuillez contacter le support pour obtenir de l\'aide. Nous nous excusons sincèrement pour ce désagrément!';
 $lang_global['error_layout_title'] = 'Erreur de traitement de l\'interface';
 $lang_global['error_layout_content'] = 'Erreur: Thème introuvable, merci d\'informer l\'administrateur';
+$lang_global['error_checkss'] = 'Erreur de sécurité, veuillez recharger la page!';
 $lang_global['logout'] = 'Déconnexion';
 $lang_global['admin_logout_title'] = 'Quitter l\'Administration';
 $lang_global['admin_logout_ok'] = 'Toutes les informations de session sont supprimées. Vous avez quitté l\'Administration';

@@ -79,10 +79,11 @@ $passkey_allowed = !(defined('SSO_SERVER') and (defined('NV_IS_USER_FORUM') or N
 // Tạo thử thách đăng nhập passkey
 if ($passkey_allowed and $nv_Request->isset_request('create_challenge', 'post')) {
     $checkss = $nv_Request->get_string('checkss', 'post');
-    if (NV_CHECK_SESSION !== $checkss) {
+	if (!csrf_check($nv_Request->get_string('checkss', 'post'), 'admin_login')) {
         nv_jsonOutput([
             'status' => 'error',
-            'mess' => 'Session error, please reload page!'
+            'input' => '',
+            'mess' => $nv_Lang->getGlobal('error_checkss')
         ]);
     }
 
@@ -99,11 +100,11 @@ if ($passkey_allowed and $nv_Request->isset_request('create_challenge', 'post'))
 
 // Tạo thử thách xác thực passkey
 if ($passkey_allowed and $nv_Request->isset_request('create_auth_challenge', 'post') and !empty($admin_pre_data)) {
-    $checkss = $nv_Request->get_string('checkss', 'post');
-    if (NV_CHECK_SESSION !== $checkss) {
+    if (!csrf_check($nv_Request->get_string('checkss', 'post'), 'admin_login')) {
         nv_jsonOutput([
             'status' => 'error',
-            'mess' => 'Session error, please reload page!'
+            'input' => '',
+            'mess' => $nv_Lang->getGlobal('error_checkss')
         ]);
     }
 
@@ -280,7 +281,14 @@ if ($passkey_allowed and $nv_Request->isset_request('login_assertion', 'post')) 
 }
 
 // Đăng xuất tài khoản login bước 1 để login lại
-if (!empty($admin_pre_data) and $nv_Request->isset_request('pre_logout', 'get') and $nv_Request->get_string('checkss', 'get') == NV_CHECK_SESSION) {
+if (!empty($admin_pre_data) and $nv_Request->isset_request('pre_logout', 'get')) {
+    if (!csrf_check($nv_Request->get_string('checkss', 'get'), 'admin_login')) {
+        nv_jsonOutput([
+            'status' => 'error',
+            'input' => '',
+            'mess' => $nv_Lang->getGlobal('error_checkss')
+        ]);
+    }
     $nv_Request->unset_request('admin_pre', 'session');
 
     // Gỡ phiên đăng nhập của user nếu trước đó setup xác thực 2 bước
@@ -454,7 +462,15 @@ if (!empty($admin_pre_data) and in_array(($opt = $nv_Request->get_title('auth', 
 }
 
 // Login bước 2 bằng mã xác nhận từ ứng dụng
-if (!empty($admin_pre_data) and $nv_Request->isset_request('submit2scode', 'post') and $nv_Request->get_string('checkss', 'post') == NV_CHECK_SESSION and $cfg_2step['active_code'] and in_array('code', $cfg_2step['opts'], true)) {
+if (!empty($admin_pre_data) and $nv_Request->isset_request('submit2scode', 'post') and $cfg_2step['active_code'] and in_array('code', $cfg_2step['opts'], true)) {
+    if (!csrf_check($nv_Request->get_string('checkss', 'post'), 'admin_login')) {
+        nv_jsonOutput([
+            'status' => 'error',
+            'input' => '',
+            'mess' => $nv_Lang->getGlobal('error_checkss')
+        ]);
+    }
+
     $nv_totppin = $nv_Request->get_title('nv_totppin', 'post', '');
     $nv_backupcodepin = $nv_Request->get_title('nv_backupcodepin', 'post', '');
 
@@ -499,7 +515,14 @@ if (!empty($admin_pre_data) and $nv_Request->isset_request('submit2scode', 'post
 }
 
 // Login bước 2 bằng passkey
-if (!empty($admin_pre_data) and $nv_Request->isset_request('submit2spasskey', 'post') and $nv_Request->get_string('checkss', 'post') == NV_CHECK_SESSION and $cfg_2step['active_key'] and in_array('key', $cfg_2step['opts'], true)) {
+if (!empty($admin_pre_data) and $nv_Request->isset_request('submit2spasskey', 'post') and $cfg_2step['active_key'] and in_array('key', $cfg_2step['opts'], true)) {
+    if (!csrf_check($nv_Request->get_string('checkss', 'post'), 'admin_login')) {
+        nv_jsonOutput([
+            'status' => 'error',
+            'input' => '',
+            'mess' => $nv_Lang->getGlobal('error_checkss')
+        ]);
+    }
     $serializer = SerializerFactory::create();
 
     $challenge = json_decode($nv_Request->get_string('admin_auth_challenge', 'session', '', false, false), true);
@@ -616,7 +639,14 @@ if (!empty($admin_pre_data) and $nv_Request->isset_request('submit2spasskey', 'p
 }
 
 // Login bước 1
-if (empty($admin_pre_data) and $nv_Request->isset_request('nv_login,nv_password', 'post') and csrf_check($nv_Request->get_string('checkss', 'post'), 'admin_login')) {
+if (empty($admin_pre_data) and $nv_Request->isset_request('nv_login,nv_password', 'post')) {
+    if (!csrf_check($nv_Request->get_string('checkss', 'post'), 'admin_login')) {
+        nv_jsonOutput([
+            'status' => 'error',
+            'input' => '',
+            'mess' => $nv_Lang->getGlobal('error_checkss')
+        ]);
+    }
     $nv_username = $nv_Request->get_title('nv_login', 'post', '', 1);
     $nv_password = $nv_Request->get_title('nv_password', 'post', '');
 

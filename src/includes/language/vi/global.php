@@ -35,6 +35,7 @@ $lang_global['error_login_title'] = 'Hệ thống đăng nhập đang bị gián
 $lang_global['error_login_content'] = 'Chúng tôi không thể đăng nhập bạn vào hệ thống ngay lúc này. Vui lòng thử đóng và mở lại trình duyệt trước. Nếu vẫn không được, hãy xóa cookie của trình duyệt rồi thử lại. Nếu vấn đề vẫn tiếp diễn, vui lòng liên hệ bộ phận hỗ trợ để được giúp đỡ. Thành thật xin lỗi vì sự bất tiện này!';
 $lang_global['error_layout_title'] = 'Lỗi xử lý giao diện';
 $lang_global['error_layout_content'] = 'Lỗi: Không tồn tại giao diện! Vui lòng liên hệ với quản trị site về vấn đề này!';
+$lang_global['error_checkss'] = 'Lỗi bảo mật, vui lòng tải lại trang!';
 $lang_global['logout'] = 'Thoát';
 $lang_global['admin_logout_title'] = 'Thoát khỏi tài khoản quản trị';
 $lang_global['admin_logout_ok'] = 'Bạn đã thoát khỏi tài khoản quản trị';
