@@ -562,6 +562,13 @@ class Request
         if (!empty($this->referer)) {
             $ref = parse_url($this->referer);
             if (isset($ref['scheme']) and in_array($ref['scheme'], ['http', 'https', 'ftp', 'gopher'], true) and isset($ref['host'])) {
+                $ref['host'] = preg_replace('/[^a-zA-Z0-9\-\.\[\]\:\x{0080}-\x{FFFF}]/u', '', $ref['host']);
+                if (empty($ref['host'])) {
+                    $this->referer_key = 0;
+                    $this->referer = '';
+                    unset($_SERVER['HTTP_REFERER']);
+                    return;
+                }
                 $ref_origin = ($ref['scheme'] . '://' . $ref['host'] . ((isset($ref['port']) and $ref['port'] != '80' and $ref['port'] != '443') ? (':' . $ref['port']) : ''));
                 // Server dạng IPv6 trực tiếp
                 if (substr($ref['host'], 0, 1) == '[' and substr($ref['host'], -1) == ']') {
