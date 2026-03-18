@@ -129,6 +129,10 @@ If your CSS compilation has changes even though you haven't modified any scss fi
 
 Please see the [technical manual](https://wiki.nukeviet.vn/technical_manual5) for more information.
 
+**Avoid configuration conflicts:**
+
+To avoid accidental commits of your local configuration files (like DB connection or `.htaccess`), please follow our [Git Configuration Guide](docs/git_config_guide.md).
+
 ## Licensing
 NukeViet is released under GNU/GPL version 2 or any later version.
 
