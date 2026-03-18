@@ -15,7 +15,7 @@ Detailed information about Nukeviet at Wikipedia Encyclopedia: http://vi.wikiped
 
 ### For users
 
-**Requirements:**  
+**Requirements:**
 - OS: Unix (Linux, Ubuntu, Fedora ...) or Windows
 - PHP: From PHP 8.2 to PHP 8.5
 - MySQL: MySQL 5.5 or newer
@@ -38,7 +38,7 @@ Please see the [user manual](https://wiki.nukeviet.vn/nukeviet5) for more inform
 
 If you only need to develop modules, themes, blocks, plugins. You just need to read the Getting Started For Users above. If you are planning on core development or testing, please follow this guide:
 
-**Requirements:**  
+**Requirements:**
 - Node.JS v18.17+
 - NPM v10.5+
 - Git
@@ -128,6 +128,10 @@ If your CSS compilation has changes even though you haven't modified any scss fi
 **Next step:**
 
 Please see the [technical manual](https://wiki.nukeviet.vn/technical_manual5) for more information.
+
+**Avoid config conflicts:**
+
+To avoid accidental commits of your local configuration files (like DB connection or `.htaccess`), please follow our [Git Config Guide](docs/git_config_guide.md).
 
 ## Licensing
 NukeViet is released under GNU/GPL version 2 or any later version.
