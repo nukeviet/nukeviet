@@ -114,7 +114,7 @@ if (preg_match($global_config['check_module'], $module_name)) {
         }
 
         // Tạo key CSRF dùng chung cho admin các module
-        $csrf_key = $module_name . '_' . $op . '_' . $admin_info['admin_id'];
+        $csrf_key = $admin_info['admin_id'] . '_' . $module_name . '_' . $op;
 
         // Ket noi voi giao dien chung cua admin
         $admin_info['admin_theme'] = (!empty($admin_info['admin_theme']) and file_exists(NV_ROOTDIR . '/themes/' . $admin_info['admin_theme'] . '/theme.php')) ? $admin_info['admin_theme'] : $global_config['admin_theme'];

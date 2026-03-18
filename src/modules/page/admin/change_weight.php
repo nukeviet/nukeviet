@@ -14,9 +14,8 @@ if (!defined('NV_IS_FILE_ADMIN')) {
 }
 
 $id = $nv_Request->get_int('id', 'post', 0);
-$_csrf_key = $module_name . '_' . $admin_info['admin_id'] . '_' . $id;
 
-if (!csrf_check($nv_Request->get_title('checkss', 'post', ''), $_csrf_key)) {
+if (!csrf_check($nv_Request->get_string('checkss', 'post'), $admin_info['admin_id'] . '_' . $module_name . '_' . $id)) {
     nv_jsonOutput([
         'success' => 0,
         'text' => $nv_Lang->getGlobal('error_checkss')

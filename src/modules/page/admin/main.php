@@ -46,7 +46,7 @@ foreach ($_rows as $row) {
         $is_delCache = true;
     }
 
-    $row['checkss'] = csrf_create($module_name . '_' . $admin_info['admin_id'] . '_' . $row['id']);
+    $row['checkss'] = csrf_create($admin_info['admin_id'] . '_' . $module_name . '_' . $row['id']);
     $row['url_view'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $row['alias'] . $global_config['rewrite_exturl'];
     $row['url_edit'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=content&amp;id=' . $row['id'];
     $array_row[] = $row;

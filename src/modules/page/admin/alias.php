@@ -15,9 +15,8 @@ if (!defined('NV_IS_FILE_ADMIN')) {
 
 $id = $nv_Request->get_int('id', 'post', 0);
 
-$_csrf_key = $module_name . '_content_' . $admin_info['admin_id'];
-if (!csrf_check($nv_Request->get_string('checkss', 'post', ''), $_csrf_key)) {
-    exit('Stop!!!');
+if (!csrf_check($nv_Request->get_string('checkss', 'post', ''), $admin_info['admin_id'] . '_' . $module_name . '_content')) {
+    exit($nv_Lang->getGlobal('error_checkss'));
 }
 
 $title = $nv_Request->get_title('title', 'post', '');

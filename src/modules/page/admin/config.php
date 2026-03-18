@@ -19,7 +19,7 @@ $array_config = [];
 $socialbuttons = ['facebook', 'twitter', 'zalo'];
 
 if ($nv_Request->isset_request('save', 'post')) {
-    if (!csrf_check($nv_Request->get_title('checkss', 'post', ''), $csrf_key)) {
+    if (!csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
         nv_jsonOutput([
             'status' => 'error',
             'mess' => $nv_Lang->getGlobal('error_checkss')
