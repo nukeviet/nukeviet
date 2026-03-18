@@ -30,6 +30,7 @@ $tpl->assign('PAGE_TITLE', $nv_Lang->getGlobal('admin_page'));
 $tpl->assign('IS_IE', $browser->isBrowser(Browser::BROWSER_IE));
 $tpl->assign('ADMIN_THEME', $dir_tpl);
 $tpl->assign('PASSKEY_ALLOWED', $passkey_allowed);
+$tpl->assign('CHECKSS', csrf_create('admin_login'));
 
 // Icon site
 $site_favicon = NV_BASE_SITEURL . 'favicon.ico';
