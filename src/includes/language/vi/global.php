@@ -36,6 +36,7 @@ $lang_global['error_login_content'] = 'Chúng tôi không thể đăng nhập b�
 $lang_global['error_layout_title'] = 'Lỗi xử lý giao diện';
 $lang_global['error_layout_content'] = 'Lỗi: Không tồn tại giao diện! Vui lòng liên hệ với quản trị site về vấn đề này!';
 $lang_global['logout'] = 'Thoát';
+$lang_global['error_checkss'] = 'Lỗi bảo mật, vui lòng tải lại trang!';
 $lang_global['admin_logout_title'] = 'Thoát khỏi tài khoản quản trị';
 $lang_global['admin_logout_ok'] = 'Bạn đã thoát khỏi tài khoản quản trị';
 $lang_global['admin_logout_question'] = 'Bạn thực sự muốn thoát khỏi tài khoản quản trị';

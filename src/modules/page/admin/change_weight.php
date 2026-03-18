@@ -13,11 +13,19 @@ if (!defined('NV_IS_FILE_ADMIN')) {
     exit('Stop!!!');
 }
 
-$checkss = $nv_Request->get_title('checkss', 'post', '');
 $id = $nv_Request->get_int('id', 'post', 0);
+$_csrf_key = $module_name . '_' . $admin_info['admin_id'] . '_' . $id;
+
+if (!csrf_check($nv_Request->get_title('checkss', 'post', ''), $_csrf_key)) {
+    nv_jsonOutput([
+        'success' => 0,
+        'text' => $nv_Lang->getGlobal('error_checkss')
+    ]);
+}
+
 $new_weight = $nv_Request->get_int('new_weight', 'post', 0);
 
-if (empty($id) or empty($new_weight) or $checkss != md5($id . NV_CHECK_SESSION)) {
+if (empty($id) or empty($new_weight)) {
     nv_jsonOutput([
         'success' => 0,
         'text' => 'Wrong data!'

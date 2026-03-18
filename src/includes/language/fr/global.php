@@ -36,6 +36,7 @@ $lang_global['error_login_content'] = 'Nous ne pouvons pas vous connecter au sys
 $lang_global['error_layout_title'] = 'Erreur de traitement de l\'interface';
 $lang_global['error_layout_content'] = 'Erreur: Thème introuvable, merci d\'informer l\'administrateur';
 $lang_global['logout'] = 'Déconnexion';
+$lang_global['error_checkss'] = 'Erreur de sécurité, veuillez recharger la page!';
 $lang_global['admin_logout_title'] = 'Quitter l\'Administration';
 $lang_global['admin_logout_ok'] = 'Toutes les informations de session sont supprimées. Vous avez quitté l\'Administration';
 $lang_global['admin_logout_question'] = 'Êtes vous sûr de vouloir quitter l\'Administration?';

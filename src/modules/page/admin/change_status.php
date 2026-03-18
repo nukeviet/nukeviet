@@ -13,9 +13,17 @@ if (!defined('NV_IS_FILE_ADMIN')) {
     exit('Stop!!!');
 }
 
-$checkss = $nv_Request->get_string('checkss', 'post');
 $id = $nv_Request->get_int('id', 'post', 0);
-if ($id > 0 and $checkss == md5($id . NV_CHECK_SESSION)) {
+$_csrf_key = $module_name . '_' . $admin_info['admin_id'] . '_' . $id;
+
+if (!csrf_check($nv_Request->get_string('checkss', 'post'), $_csrf_key)) {
+    nv_jsonOutput([
+        'success' => 0,
+        'text' => $nv_Lang->getGlobal('error_checkss')
+    ]);
+}
+
+if ($id > 0) {
     $row = $db->query('SELECT status FROM ' . NV_PREFIXLANG . '_' . $module_data . ' WHERE id=' . $id)->fetch();
     if (!empty($row)) {
         $act_id = $row['status'] ? 0 : 1;

@@ -17,10 +17,17 @@ if (!defined('NV_IS_AJAX')) {
     exit('Wrong URL');
 }
 
-$checkss = $nv_Request->get_string('checkss', 'post');
 $id = $nv_Request->get_int('id', 'post', 0);
+$_csrf_key = $module_name . '_' . $admin_info['admin_id'] . '_' . $id;
 
-if ($id > 0 and $checkss == md5($id . NV_CHECK_SESSION)) {
+if (!csrf_check($nv_Request->get_string('checkss', 'post'), $_csrf_key)) {
+    nv_jsonOutput([
+        'success' => 0,
+        'text' => $nv_Lang->getGlobal('error_checkss')
+    ]);
+}
+
+if ($id > 0) {
     nv_insert_logs(NV_LANG_DATA, $module_name, 'log_del_page', 'pageid ' . $id, $admin_info['userid']);
     $sql = 'DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . ' WHERE id=' . $id;
     if ($db->exec($sql)) {

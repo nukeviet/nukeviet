@@ -19,10 +19,10 @@ $array_config = [];
 $socialbuttons = ['facebook', 'twitter', 'zalo'];
 
 if ($nv_Request->isset_request('save', 'post')) {
-    if ($nv_Request->get_title('checkss', 'post', '') !== NV_CHECK_SESSION) {
+    if (!csrf_check($nv_Request->get_title('checkss', 'post', ''), $csrf_key)) {
         nv_jsonOutput([
             'status' => 'error',
-            'mess' => 'Error session!!!'
+            'mess' => $nv_Lang->getGlobal('error_checkss')
         ]);
     }
 
@@ -97,6 +97,7 @@ $tpl->assign('SOCIAL_BUTTONS', $socialbuttons);
 $tpl->assign('GCONFIG', $global_config);
 $tpl->assign('SCHEMA_TYPES', $schema_types);
 $tpl->assign('SCHEMA_ABOUTS', $schema_abouts);
+$tpl->assign('CHECKSS', csrf_create($csrf_key));
 
 $contents = $tpl->fetch('config.tpl');
 

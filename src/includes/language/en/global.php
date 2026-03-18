@@ -36,6 +36,7 @@ $lang_global['error_login_content'] = 'We are unable to log you into the system 
 $lang_global['error_layout_title'] = 'Interface processing Error';
 $lang_global['error_layout_content'] = 'Error: interface does not exist! Please contact the site administrator about this';
 $lang_global['logout'] = 'Logout';
+$lang_global['error_checkss'] = 'Security error, please reload page!';
 $lang_global['admin_logout_title'] = 'Leave Administration';
 $lang_global['admin_logout_ok'] = 'All login information was eraser. You\'ve log out adminitrator account';
 $lang_global['admin_logout_question'] = 'Are you sure you want to log out of your administrator account';
