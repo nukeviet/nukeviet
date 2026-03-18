@@ -674,8 +674,8 @@ if ($checkss == $array_data['checkss'] and $array_data['type'] == 'basic') {
 
         $info_basic = $custom_fields;
         $info_basic['view_mail'] = $array_data['view_mail'];
-        $array_data['awaitinginfo']['info_basic'] = json_encode($info_basic);
-        $array_data['awaitinginfo']['info_custom'] = empty($array_data['awaitinginfo']['info_custom']) ? '' : json_encode($array_data['awaitinginfo']['info_custom']);
+        $array_data['awaitinginfo']['info_basic'] = json_encode($info_basic, NV_JSON_ENCODE);
+        $array_data['awaitinginfo']['info_custom'] = empty($array_data['awaitinginfo']['info_custom']) ? '' : json_encode($array_data['awaitinginfo']['info_custom'], NV_JSON_ENCODE);
 
         $stmt = $db->prepare($sql);
         $stmt->bindParam(':info_basic', $array_data['awaitinginfo']['info_basic'], PDO::PARAM_STR, strlen($array_data['awaitinginfo']['info_basic']));
@@ -1296,8 +1296,8 @@ if ($checkss == $array_data['checkss'] and $array_data['type'] == 'basic') {
             WHERE userid=' . $edit_userid;
         }
 
-        $array_data['awaitinginfo']['info_basic'] = empty($array_data['awaitinginfo']['info_basic']) ? '' : json_encode($array_data['awaitinginfo']['info_basic']);
-        $array_data['awaitinginfo']['info_custom'] = json_encode($valid_field);
+        $array_data['awaitinginfo']['info_basic'] = empty($array_data['awaitinginfo']['info_basic']) ? '' : json_encode($array_data['awaitinginfo']['info_basic'], NV_JSON_ENCODE);
+        $array_data['awaitinginfo']['info_custom'] = json_encode($valid_field, NV_JSON_ENCODE);
 
         $stmt = $db->prepare($sql);
         $stmt->bindParam(':info_basic', $array_data['awaitinginfo']['info_basic'], PDO::PARAM_STR, strlen($array_data['awaitinginfo']['info_basic']));

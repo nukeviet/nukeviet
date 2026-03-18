@@ -150,7 +150,7 @@ if ($nv_Request->isset_request('create_challenge', 'post')) {
     $nv_Request->set_Session($module_data . '_creat_challenge', json_encode([
         'opts' => $jsonObject,
         'time' => time(),
-    ]));
+    ], NV_JSON_ENCODE));
 
     nv_jsonOutput([
         'status' => 'ok',

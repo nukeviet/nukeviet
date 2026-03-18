@@ -46,7 +46,7 @@ if ($nv_Request->get_title('tokend', 'post', '') === NV_CHECK_SESSION) {
     $array_config['user_allowed_theme'][] = $global_config['site_theme'];
     $array_config['user_allowed_theme'] = array_unique($array_config['user_allowed_theme']);
     asort($array_config['user_allowed_theme']);
-    $array_config['user_allowed_theme'] = empty($array_config['user_allowed_theme']) ? '' : json_encode($array_config['user_allowed_theme']);
+    $array_config['user_allowed_theme'] = empty($array_config['user_allowed_theme']) ? '' : json_encode($array_config['user_allowed_theme'], NV_JSON_ENCODE);
 
     $sth = $db->prepare('UPDATE ' . NV_CONFIG_GLOBALTABLE . " SET config_value= :config_value WHERE config_name = :config_name AND lang = '" . NV_LANG_DATA . "' AND module='global'");
     foreach ($array_config as $config_name => $config_value) {

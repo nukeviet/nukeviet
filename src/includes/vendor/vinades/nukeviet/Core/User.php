@@ -41,7 +41,7 @@ class User
         $nvloginhash_name = substr($data['checknum'], 5, 8);
         $nvloginhash_name_encrypt = 'ls' . substr(md5($nvloginhash_name . $global_config['sitekey']), 8, 10) . 'le';
         $nv_Request->set_Cookie('lghm', $nvloginhash_name, $live_cookie_time);
-        $nv_Request->set_Cookie($nvloginhash_name_encrypt, json_encode($data), $live_cookie_time);
+        $nv_Request->set_Cookie($nvloginhash_name_encrypt, json_encode($data, NV_JSON_ENCODE), $live_cookie_time);
     }
 
     /**

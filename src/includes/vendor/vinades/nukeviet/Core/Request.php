@@ -1035,7 +1035,7 @@ class Request
     {
         $prefix = '';
         if (is_array($string)) {
-            $string = json_encode($string);
+            $string = json_encode($string, NV_JSON_ENCODE);
             $prefix = 'jsn.';
         }
         $iv = substr($this->cookie_key, 0, 16);

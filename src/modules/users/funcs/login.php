@@ -411,8 +411,8 @@ function new_openid_user_save($reg_username, $reg_email, $reg_password, $attribs
         $data_insert['email'] = $reg_email;
         $data_insert['first_name'] = $reg_attribs['first_name'];
         $data_insert['last_name'] = $reg_attribs['last_name'];
-        $data_insert['users_info'] = json_encode($query_field, JSON_UNESCAPED_UNICODE);
-        $data_insert['openid_info'] = json_encode($reg_attribs, JSON_UNESCAPED_UNICODE);
+        $data_insert['users_info'] = json_encode($query_field, NV_JSON_ENCODE);
+        $data_insert['openid_info'] = json_encode($reg_attribs, NV_JSON_ENCODE);
         $userid = $db->insert_id($sql, 'userid', $data_insert);
 
         if (!$userid) {
@@ -769,7 +769,7 @@ if (defined('NV_OPENID_ALLOWED') and $nv_Request->isset_request('server', 'get')
         }
 
         $verikey = nv_genpass(8);
-        $sess_verify = json_encode(['code' => md5($verikey), 'time' => NV_CURRENTTIME]);
+        $sess_verify = json_encode(['code' => md5($verikey), 'time' => NV_CURRENTTIME], NV_JSON_ENCODE);
         $nv_Request->set_Session($md5_reg_email, $sess_verify);
 
         $send_data = [[
@@ -973,7 +973,7 @@ if ($nv_Request->isset_request('_csrf, nv_login', 'post')) {
             'username' => $row_reg['username'],
             'email' => $row_reg['email'],
             'time' => NV_CURRENTTIME,
-        ]));
+        ], NV_JSON_ENCODE));
         signin_result([
             'status' => 'activation',
             'input' => nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=lostactivelink&autosubmit=1' . (!empty($nv_redirect) ? '&nv_redirect=' . $nv_redirect : ''), true),
@@ -1038,7 +1038,7 @@ if ($nv_Request->isset_request('_csrf, nv_login', 'post')) {
             $nv_Request->set_Session($module_data . '_auth_challenge', json_encode([
                 'opts' => $jsonObject,
                 'time' => time(),
-            ]));
+            ], NV_JSON_ENCODE));
             signin_result([
                 'status' => 'ok',
                 'requestOptions' => $jsonObject,

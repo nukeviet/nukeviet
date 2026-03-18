@@ -42,7 +42,7 @@ $widget_info = [
             'data_formatted' => $data_formatted,
             'unit' => $nv_Lang->getModule('hits1'),
             'hour' => $nv_Lang->getGlobal('hour'),
-        ], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES));
+        ], NV_JSON_ENCODE));
 
         return $tpl->fetch('widget_hour.tpl');
     }

@@ -1438,7 +1438,7 @@ if (!$is_search) {
             ];
             $array_others_count += $number;
         }
-        $nv_Cache->setItem($module_name, $cache_file, json_encode([$array_others, $array_others_count]), ttl: $cacheTTL);
+        $nv_Cache->setItem($module_name, $cache_file, json_encode([$array_others, $array_others_count], NV_JSON_ENCODE), ttl: $cacheTTL);
     }
 }
 $tpl->assign('DRAFTS', $array_drafts);

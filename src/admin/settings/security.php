@@ -171,7 +171,7 @@ if (defined('NV_IS_GODADMIN') and $nv_Request->isset_request('basicsave', 'post'
             }
         }
     }
-    $post['domains_whitelist'] = empty($post['domains_whitelist']) ? '' : json_encode(array_unique($post['domains_whitelist']));
+    $post['domains_whitelist'] = empty($post['domains_whitelist']) ? '' : json_encode(array_unique($post['domains_whitelist']), NV_JSON_ENCODE);
 
     $post['login_number_tracking'] < 1 && $post['login_number_tracking'] = 5;
     $post['login_time_tracking'] <= 0 && $post['login_time_tracking'] = 5;
@@ -212,7 +212,7 @@ if (defined('NV_IS_GODADMIN') and $nv_Request->isset_request('basicsave', 'post'
             }
         }
     }
-    $post['end_url_variables'] = !empty($_end_url_variables) ? json_encode($_end_url_variables) : '';
+    $post['end_url_variables'] = !empty($_end_url_variables) ? json_encode($_end_url_variables, NV_JSON_ENCODE) : '';
 
     $sth = $db->prepare('UPDATE ' . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = 'sys' AND module = 'global' AND config_name = :config_name");
     foreach ($post as $config_name => $config_value) {
@@ -642,7 +642,7 @@ if (defined('NV_IS_GODADMIN') and $nv_Request->isset_request('corssave', 'post')
                 }
             }
         }
-        $post[$cfg_key] = empty($post[$cfg_key]) ? '' : json_encode(array_unique($post[$cfg_key]));
+        $post[$cfg_key] = empty($post[$cfg_key]) ? '' : json_encode(array_unique($post[$cfg_key]), NV_JSON_ENCODE);
     }
 
     // Lấy các request IPs
@@ -658,7 +658,7 @@ if (defined('NV_IS_GODADMIN') and $nv_Request->isset_request('corssave', 'post')
                 $post[$cfg_key][] = $str_ip;
             }
         }
-        $post[$cfg_key] = empty($post[$cfg_key]) ? '' : json_encode(array_unique($post[$cfg_key]));
+        $post[$cfg_key] = empty($post[$cfg_key]) ? '' : json_encode(array_unique($post[$cfg_key]), NV_JSON_ENCODE);
     }
 
     // Lấy các request có biến được chấp nhận
@@ -683,7 +683,7 @@ if (defined('NV_IS_GODADMIN') and $nv_Request->isset_request('corssave', 'post')
         }
     }
 
-    $post['crosssite_allowed_variables'] = empty($res) ? '' : json_encode($res);
+    $post['crosssite_allowed_variables'] = empty($res) ? '' : json_encode($res, NV_JSON_ENCODE);
     $post['allow_null_origin'] = (int) $nv_Request->get_bool('allow_null_origin', 'post', false);
     $post['auto_acao'] = (int) $nv_Request->get_bool('auto_acao', 'post', false);
     $post['load_files_seccode'] = $nv_Request->get_string('load_files_seccode', 'post', '');
@@ -696,7 +696,7 @@ if (defined('NV_IS_GODADMIN') and $nv_Request->isset_request('corssave', 'post')
         $sth->execute();
     }
 
-    nv_insert_logs(NV_LANG_DATA, $module_name, 'LOG_CHANGE_CORS_SETTING', json_encode($post), $admin_info['userid']);
+    nv_insert_logs(NV_LANG_DATA, $module_name, 'LOG_CHANGE_CORS_SETTING', json_encode($post, NV_JSON_ENCODE), $admin_info['userid']);
     nv_save_file_config_global();
 
     nv_jsonOutput([
@@ -729,7 +729,7 @@ if ($nv_Request->isset_request('cspsave', 'post') and $checkss == $nv_Request->g
     }
 
     $post = [
-        'nv_csp' => json_encode($directives),
+        'nv_csp' => json_encode($directives, NV_JSON_ENCODE),
         'nv_csp_act' => (int) $nv_Request->get_bool('nv_csp_act', 'post', false),
         'nv_csp_script_nonce' => (int) $nv_Request->get_bool('nv_csp_script_nonce', 'post', false)
     ];

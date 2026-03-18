@@ -204,7 +204,7 @@ function webhook_handle($data)
                     $links[] = $link['payload'];
                 }
                 $contents['type'] = 'links';
-                $contents['links'] = json_encode($links);
+                $contents['links'] = json_encode($links, NV_JSON_ENCODE);
                 break;
         }
 
@@ -383,7 +383,7 @@ function last_conversation_update($accesstoken, $user_id)
                 'time' => !empty($new['time']) ? floor($new['time'] / 1000) : 0,
                 'type' => !empty($new['type']) ? $new['type'] : 'nosupport',
                 'message' => !empty($new['message']) ? $new['message'] : '',
-                'links' => !empty($new['links']) ? json_encode($new['links']) : '',
+                'links' => !empty($new['links']) ? json_encode($new['links'], NV_JSON_ENCODE) : '',
                 'thumb' => !empty($new['thumb']) ? $new['thumb'] : '',
                 'url' => !empty($new['url']) ? $new['url'] : '',
                 'description' => !empty($new['description']) ? $new['description'] : '',
@@ -449,7 +449,7 @@ function sent_text_message($template_id, $user_id, $message_id)
                 'send_type' => 'plaintext',
                 'type' => 'text',
                 'message' => $content
-            ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE));
+            ], NV_JSON_ENCODE));
 
             last_conversation_update($accesstoken, $user_id);
         }
@@ -488,7 +488,7 @@ function sent_image_message($fileid, $user_id, $message_id)
                 'type' => 'photo',
                 'description' => $row['description'],
                 'upload_id' => $fileid
-            ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE));
+            ], NV_JSON_ENCODE));
 
             last_conversation_update($accesstoken, $user_id);
         }
@@ -526,7 +526,7 @@ function sent_file_message($fileid, $user_id, $message_id)
                 'send_type' => 'file',
                 'type' => 'file',
                 'upload_id' => $fileid
-            ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE));
+            ], NV_JSON_ENCODE));
 
             last_conversation_update($accesstoken, $user_id);
         }

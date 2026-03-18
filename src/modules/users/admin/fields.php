@@ -316,7 +316,7 @@ if ($nv_Request->isset_request('save', 'post')) {
             }
         }
         $default_value[NV_LANG_DATA] = $nv_Request->get_title('default_value', 'post', '');
-        $dataform['default_value'] = json_encode($default_value, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+        $dataform['default_value'] = json_encode($default_value, NV_JSON_ENCODE);
 
         if ($dataform['min_length'] >= $dataform['max_length']) {
             !$error && $error = $nv_Lang->getModule('field_number_error');
@@ -423,7 +423,7 @@ if ($nv_Request->isset_request('save', 'post')) {
                 ];
             }
 
-            $dataform['limited_values'] = json_encode($datafile);
+            $dataform['limited_values'] = json_encode($datafile, NV_JSON_ENCODE);
         }
     } else {
         $dataform['choicetypes'] = $nv_Request->get_string('choicetypes', 'post', '');

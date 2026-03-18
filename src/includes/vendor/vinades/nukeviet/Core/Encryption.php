@@ -174,8 +174,8 @@ class Encryption
      */
     public function encodeJwt($payload, $secret = '')
     {
-        $header = json_encode(['typ' => 'JWT', 'alg' => 'HS256']);
-        $payload = json_encode($payload);
+        $header = json_encode(['typ' => 'JWT', 'alg' => 'HS256'], NV_JSON_ENCODE);
+        $payload = json_encode($payload, NV_JSON_ENCODE);
         $base64UrlHeader = str_replace(['+', '/', '='], ['-', '_', ''], base64_encode($header));
         $base64UrlPayload = str_replace(['+', '/', '='], ['-', '_', ''], base64_encode($payload));
         $signature = hash_hmac('sha256', $base64UrlHeader . '.' . $base64UrlPayload, $secret, true);

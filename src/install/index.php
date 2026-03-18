@@ -1262,7 +1262,7 @@ function nv_save_file_config()
                     'ftp_check_login' => $global_config['ftp_check_login']
                 ];
 
-                $nv_Request->set_Session('ftp_server_array', json_encode($ftp_server_array));
+                $nv_Request->set_Session('ftp_server_array', json_encode($ftp_server_array, NV_JSON_ENCODE));
             }
 
             $content .= "\n";

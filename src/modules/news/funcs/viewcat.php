@@ -445,7 +445,7 @@ if (empty($contents)) {
         $nv_Cache->setItem($module_name, $cache_file, json_encode([
             'html' => $contents,
             'schemas' => $schemas,
-        ]), ttl: 3600);
+        ], NV_JSON_ENCODE), ttl: 3600);
     }
 }
 

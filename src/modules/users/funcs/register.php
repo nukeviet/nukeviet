@@ -327,7 +327,7 @@ if ($checkss == $array_register['checkss']) {
         $data_insert['question'] = $array_register['question'];
         $data_insert['answer'] = $array_register['answer'];
         $data_insert['checknum'] = $checknum;
-        $data_insert['users_info'] = json_encode($query_field, JSON_UNESCAPED_UNICODE);
+        $data_insert['users_info'] = json_encode($query_field, NV_JSON_ENCODE);
         $data_insert['idsite'] = $global_config['idsite'];
         $userid = $db->insert_id($sql, 'userid', $data_insert);
 

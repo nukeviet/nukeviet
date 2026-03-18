@@ -233,7 +233,7 @@ if ($nv_Request->isset_request('send_text,user_id,message_id,chat_text', 'post')
         ]);
     }
 
-    save_conversation($user_id, $result['data']['message_id'], json_encode($note, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE));
+    save_conversation($user_id, $result['data']['message_id'], json_encode($note, NV_JSON_ENCODE));
 
     $contents = [];
     $result = $myZalo->conversation($accesstoken, $user_id, 0, 10);
@@ -254,7 +254,7 @@ if ($nv_Request->isset_request('send_text,user_id,message_id,chat_text', 'post')
                 'time' => !empty($new['time']) ? floor($new['time'] / 1000) : 0,
                 'type' => !empty($new['type']) ? $new['type'] : 'nosupport',
                 'message' => !empty($new['message']) ? $new['message'] : '',
-                'links' => !empty($new['links']) ? json_encode($new['links']) : '',
+                'links' => !empty($new['links']) ? json_encode($new['links'], NV_JSON_ENCODE) : '',
                 'thumb' => !empty($new['thumb']) ? $new['thumb'] : '',
                 'url' => !empty($new['url']) ? $new['url'] : '',
                 'description' => !empty($new['description']) ? $new['description'] : '',

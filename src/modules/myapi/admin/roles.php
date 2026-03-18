@@ -323,7 +323,7 @@ if ($action == 'role') {
                 }
             }
         }
-        $data['flood_rules'] = json_encode($data['flood_rules']);
+        $data['flood_rules'] = json_encode($data['flood_rules'], NV_JSON_ENCODE);
         $data['log_period'] *= 3600;
 
         $data['role_data']['sys'] = [];
@@ -364,7 +364,7 @@ if ($action == 'role') {
             }
         }
 
-        $data['role_data'] = json_encode($data['role_data']);
+        $data['role_data'] = json_encode($data['role_data'], NV_JSON_ENCODE);
 
         if ($isAdd) {
             $sth = $db->prepare('INSERT INTO ' . $db_config['prefix'] . '_api_role (

@@ -104,7 +104,7 @@ if (($array['dellogin'] or $array['delloginall']) and !$confirm_pwd) {
         'delloginall' => $array['delloginall'],
         'page' => $array['page']
     ];
-    $nv_Request->set_Session('pending_action', json_encode($pending_action));
+    $nv_Request->set_Session('pending_action', json_encode($pending_action, NV_JSON_ENCODE));
     nv_jsonOutput([
         'status' => 'not_verified',
         'redirect' => go_verified_password('security_privacy', $page_url, false)

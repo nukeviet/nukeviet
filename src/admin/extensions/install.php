@@ -84,7 +84,7 @@ $tpl->assign('DATA', $array['data']);
 
 $array_string = $array['data'];
 unset($array_string['title'], $array_string['documentation'], $array_string['require']);
-$tpl->assign('STRING_DATA', nv_base64_encode(json_encode($array_string)));
+$tpl->assign('STRING_DATA', nv_base64_encode(json_encode($array_string, NV_JSON_ENCODE)));
 
 $page_title = $nv_Lang->getModule('install_title', $array['data']['title']);
 

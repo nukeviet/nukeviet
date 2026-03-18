@@ -355,7 +355,7 @@ if ($nv_Request->isset_request('save', 'post') and hash_equals($checkss, $csrf))
         'expires' => set_expires($nv_Request->get_title('font_expires', 'post', ''))
     ];
 
-    $posts = json_encode($posts, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
+    $posts = json_encode($posts, NV_JSON_ENCODE);
 
     file_put_contents($server_config_file, $posts, LOCK_EX);
     nv_jsonOutput([

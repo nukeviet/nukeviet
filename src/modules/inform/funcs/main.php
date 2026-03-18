@@ -208,12 +208,12 @@ if ($nv_Request->isset_request('manager', 'get')) {
             $postdata['message'] = json_encode([
                 'isdef' => $postdata['isdef'],
                 'contents' => $contents
-            ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+            ], NV_JSON_ENCODE);
 
             $postdata['link'] = json_encode([
                 'isdef' => $postdata['isdef'],
                 'contents' => $postdata['link']
-            ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+            ], NV_JSON_ENCODE);
 
             $postdata['add_time'] = mktime($postdata['add_hour'], $postdata['add_min'], 0, $add_time_array[2], $add_time_array[1], $add_time_array[3]);
             if (!empty($exp_time_array)) {

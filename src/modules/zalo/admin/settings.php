@@ -271,7 +271,7 @@ if ($checkss == $nv_Request->get_string('checkss', 'post') and $nv_Request->get_
         $zaloWebhookIPs = array_filter($zaloWebhookIPs, function ($el) {
             return filter_var($el, FILTER_VALIDATE_IP) ? true : false;
         });
-        $zaloWebhookIPs = json_encode($zaloWebhookIPs);
+        $zaloWebhookIPs = json_encode($zaloWebhookIPs, NV_JSON_ENCODE);
     } else {
         $zaloWebhookIPs = '';
     }
@@ -297,7 +297,7 @@ if ($checkss == $nv_Request->get_string('checkss', 'post') and $nv_Request->get_
 
     if (!empty($zaloWebhookIPs)) {
         $zaloWebhookIPs = array_unique($zaloWebhookIPs);
-        $zaloWebhookIPs = json_encode($zaloWebhookIPs);
+        $zaloWebhookIPs = json_encode($zaloWebhookIPs, NV_JSON_ENCODE);
     } else {
         $zaloWebhookIPs = '';
     }

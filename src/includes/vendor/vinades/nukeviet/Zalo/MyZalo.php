@@ -542,7 +542,7 @@ class MyZalo
             unset($_data['tag_name']);
         }
 
-        $data = ['data' => json_encode($_data)];
+        $data = ['data' => json_encode($_data, NV_JSON_ENCODE)];
 
         try {
             $response = $this->zalo->get(ZaloEndPoint::API_OA_GET_LIST_FOLLOWER, $accesstoken, $data);
@@ -567,7 +567,7 @@ class MyZalo
     {
         $data = ['data' => json_encode([
             'user_id' => $user_id
-        ])];
+        ], NV_JSON_ENCODE)];
         try {
             $response = $this->zalo->get(ZaloEndPoint::API_OA_GET_USER_PROFILE, $accesstoken, $data);
             return $response->getDecodedBody();
@@ -705,7 +705,7 @@ class MyZalo
             'user_id' => $user_id,
             'offset' => $offset,
             'count' => $count
-        ])];
+        ], NV_JSON_ENCODE)];
 
         try {
             $response = $this->zalo->get(ZaloEndPoint::API_OA_GET_CONVERSATION, $accesstoken, $data);
@@ -737,7 +737,7 @@ class MyZalo
         $data = ['data' => json_encode([
             'offset' => $offset,
             'count' => $count
-        ])];
+        ], NV_JSON_ENCODE)];
 
         try {
             $response = $this->zalo->get(ZaloEndPoint::API_OA_GET_LIST_RECENT_CHAT, $accesstoken, $data);

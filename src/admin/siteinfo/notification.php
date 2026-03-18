@@ -103,7 +103,7 @@ if ($nv_Request->isset_request('delete', 'post')) {
     $listid = $nv_Request->get_title('listid', 'post', '');
     $ids = array_filter(array_unique(array_map('intval', explode(',', $id . ',' . $listid))));
 
-    nv_insert_logs(NV_LANG_DATA, $module_name, 'DELETE_NOTIFICATION', json_encode($ids), $admin_info['userid']);
+    nv_insert_logs(NV_LANG_DATA, $module_name, 'DELETE_NOTIFICATION', json_encode($ids, NV_JSON_ENCODE), $admin_info['userid']);
 
     foreach ($ids as $id) {
         $sql = 'DELETE FROM ' . NV_NOTIFICATION_GLOBALTABLE . '

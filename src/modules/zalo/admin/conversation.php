@@ -81,7 +81,7 @@ if ($nv_Request->isset_request('conversation_refresh,user_id', 'post')) {
                     'time' => !empty($new['time']) ? floor($new['time'] / 1000) : 0,
                     'type' => !empty($new['type']) ? $new['type'] : 'nosupport',
                     'message' => !empty($new['message']) ? nv_nl2br(str_replace(["'", '"', '<', '>'], ['&#039;', '&quot;', '&lt;', '&gt;'], $new['message']), '<br/>') : '',
-                    'links' => !empty($new['links']) ? json_encode($new['links']) : '',
+                    'links' => !empty($new['links']) ? json_encode($new['links'], NV_JSON_ENCODE) : '',
                     'thumb' => !empty($new['thumb']) ? $new['thumb'] : '',
                     'url' => !empty($new['url']) ? $new['url'] : '',
                     'description' => !empty($new['description']) ? nv_nl2br(str_replace(["'", '"', '<', '>'], ['&#039;', '&quot;', '&lt;', '&gt;'], $new['description']), '<br/>') : '',

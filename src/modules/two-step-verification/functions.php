@@ -76,7 +76,7 @@ function nv_get_secretkey()
         'secretkey' => $secretkey,
         'csrf' => csrf_create($module_data . '_secretkey'),
         'time' => NV_CURRENTTIME
-    ]));
+    ], NV_JSON_ENCODE));
     return $secretkey;
 }
 

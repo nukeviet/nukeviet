@@ -214,7 +214,7 @@ function nv_htmlOutput($html, $type = 'html', $custom_headers = [])
  */
 function nv_jsonOutput($array_data, $flags = 0)
 {
-    nv_htmlOutput(json_encode($array_data, $flags), 'json');
+    nv_htmlOutput(json_encode($array_data, NV_JSON_ENCODE), 'json');
 }
 
 /**

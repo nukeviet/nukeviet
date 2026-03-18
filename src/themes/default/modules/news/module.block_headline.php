@@ -135,7 +135,7 @@ if (!nv_function_exists('nv_block_headline')) {
                 }
             }
 
-            $cache = json_encode($block_contents, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+            $cache = json_encode($block_contents, NV_JSON_ENCODE);
             $nv_Cache->setItem($module_name, $cache_file, $cache);
         }
 

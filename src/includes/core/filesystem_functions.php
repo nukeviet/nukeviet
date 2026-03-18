@@ -1078,13 +1078,13 @@ function get_theme_filelist()
     $cache_file = 'themefiles_' . NV_CACHE_PREFIX . '.cache';
     if (NV_DEBUG and defined('NV_IS_ADMIN')) {
         nv_scandirfile(NV_ROOTDIR . '/themes', '/([a-zA-Z0-9\.\-\_]+)\.(php|ini|json|ttf|woff|woff2|tpl|js|css|gif|jpg|jpeg|png|webp|avg|ico|xsl)$/', $themefilelist, 'themes');
-        $nv_Cache->setItem('sys', $cache_file, json_encode($themefilelist));
+        $nv_Cache->setItem('sys', $cache_file, json_encode($themefilelist, NV_JSON_ENCODE));
     } else {
         if (($cache = $nv_Cache->getItem('sys', $cache_file)) != false) {
             $themefilelist = json_decode($cache, true);
         } else {
             nv_scandirfile(NV_ROOTDIR . '/themes', '/([a-zA-Z0-9\.\-\_]+)\.(php|ini|json|ttf|woff|woff2|tpl|js|css|gif|jpg|jpeg|png|webp|avg|ico|xsl)$/', $themefilelist, 'themes');
-            $nv_Cache->setItem('sys', $cache_file, json_encode($themefilelist));
+            $nv_Cache->setItem('sys', $cache_file, json_encode($themefilelist, NV_JSON_ENCODE));
         }
     }
 
@@ -1104,13 +1104,13 @@ function get_module_filelist()
     $cache_file = 'modulefiles_' . NV_CACHE_PREFIX . '.cache';
     if (NV_DEBUG and defined('NV_IS_ADMIN')) {
         nv_scandirfile(NV_ROOTDIR . '/modules', '/([a-zA-Z0-9\.\-\_]+)\.(php|ini|json|ttf|woff|woff2|tpl|js|css|gif|jpg|jpeg|png|webp|avg|ico|xsl)$/', $modulefilelist, 'modules');
-        $nv_Cache->setItem('sys', $cache_file, json_encode($modulefilelist));
+        $nv_Cache->setItem('sys', $cache_file, json_encode($modulefilelist, NV_JSON_ENCODE));
     } else {
         if (($cache = $nv_Cache->getItem('sys', $cache_file)) != false) {
             $modulefilelist = json_decode($cache, true);
         } else {
             nv_scandirfile(NV_ROOTDIR . '/modules', '/([a-zA-Z0-9\.\-\_]+)\.(php|ini|json|ttf|woff|woff2|tpl|js|css|gif|jpg|jpeg|png|webp|avg|ico|xsl)$/', $modulefilelist, 'modules');
-            $nv_Cache->setItem('sys', $cache_file, json_encode($modulefilelist));
+            $nv_Cache->setItem('sys', $cache_file, json_encode($modulefilelist, NV_JSON_ENCODE));
         }
     }
 

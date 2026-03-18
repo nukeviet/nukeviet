@@ -252,7 +252,7 @@ if ($nv_Request->get_int('save', 'post', 0)) {
 
     $allow_files_type = array_values(array_intersect($global_config['file_allowed_ext'], $allow_files_type));
     $files_level = (!empty($allow_files_type) ? implode(',', $allow_files_type) : '') . '|' . $allow_modify_files . '|' . $allow_create_subdirectories . '|' . $allow_modify_subdirectories;
-    $after_modules_sql = $downgrade_to_modadmin ? json_encode($after_modules) : '';
+    $after_modules_sql = $downgrade_to_modadmin ? json_encode($after_modules, NV_JSON_ENCODE) : '';
 
     $sth = $db->prepare('INSERT INTO ' . NV_AUTHORS_GLOBALTABLE . '
         (admin_id, editor, lev, lev_expired, after_exp_action, files_level, position, admin_theme, is_suspend, susp_reason, check_num, last_login, last_ip, last_agent) VALUES
@@ -283,7 +283,7 @@ if ($nv_Request->get_int('save', 'post', 0)) {
             'allow_modify_subdirectories' => $allow_modify_subdirectories,
             'position' => $position,
             'modules' => !empty($mds) ? implode(', ', $mds) : ''
-        ]);
+        ], NV_JSON_ENCODE);
         $nv_Request->set_Session('nv_admin_profile', $session_files);
 
         $inf = 'Username: ' . $username . '<br/>' . $nv_Lang->getModule('lev') . ': ' . ($lev == 2 ? $nv_Lang->getGlobal('level2') : $nv_Lang->getGlobal('level3') . (!empty($mds) ? ': ' . implode(', ', $mds) : '')) . '<br/>' . $nv_Lang->getModule('lev_expired') . ': ' . (!empty($lev_expired) ? $lev_expired : $nv_Lang->getModule('unlimited'));

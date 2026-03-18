@@ -170,7 +170,7 @@ if ($nv_Request->get_title('saveform', 'post', '') === NV_CHECK_SESSION) {
 
     $region = $global_config['region'] ?? [];
     $region[NV_LANG_DATA] = $array;
-    $region = json_encode($region, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+    $region = json_encode($region, NV_JSON_ENCODE);
 
     $sth = $db->prepare('UPDATE ' . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = 'sys' AND module = 'global' AND config_name = :config_name");
     $sth->bindValue(':config_name', 'region', PDO::PARAM_STR);

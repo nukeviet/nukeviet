@@ -366,7 +366,7 @@ function save_theme_config($config_name, $config_value, bool $lang = true)
     foreach ($config_name as $key => $config_name_i) {
         $config_value_i = $config_value[$key];
         if (is_array($config_value_i)) {
-            $config_value_i = json_encode($config_value_i, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+            $config_value_i = json_encode($config_value_i, NV_JSON_ENCODE);
         }
 
         $sql = "SELECT * FROM " . NV_AUTHORS_GLOBALTABLE . "_vars WHERE admin_id=" . $admin_info['admin_id'] . "
