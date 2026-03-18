@@ -520,7 +520,7 @@ function nv_save_history($post_old, $post_new)
         $array_insert['titlesite'] = $post_old['titlesite'];
         $array_insert['description'] = $post_old['description'];
         $array_insert['bodyhtml'] = $post_old['bodyhtml'];
-        $array_insert['voicedata'] = json_encode($post_old['voicedata']);
+        $array_insert['voicedata'] = json_encode($post_old['voicedata'], NV_JSON_ENCODE);
         $array_insert['keywords'] = $post_old['keywords'];
         $array_insert['sourcetext'] = $post_old['sourcetext'];
         $array_insert['files'] = $post_old['files'];

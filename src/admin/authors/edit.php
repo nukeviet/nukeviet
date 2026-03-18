@@ -254,7 +254,7 @@ if ($nv_Request->get_int('save', 'post', 0)) {
     unset($matches);
 
     $lev_expired_sql = nv_d2u_post($lev_expired, 23, 59, 59);
-    $after_modules_sql = $downgrade_to_modadmin ? json_encode($after_modules) : '';
+    $after_modules_sql = $downgrade_to_modadmin ? json_encode($after_modules,NV_JSON_ENCODE) : '';
 
     $sth = $db->prepare('UPDATE ' . NV_AUTHORS_GLOBALTABLE . ' SET editor = :editor, lev=' . $lev . ', lev_expired=' . $lev_expired_sql . ', after_exp_action=:after_exp_action, files_level= :files_level, position= :position, main_module = :main_module, admin_theme = :admin_theme, edittime=' . NV_CURRENTTIME . ' WHERE admin_id=' . $admin_id);
     $sth->bindParam(':editor', $editor, PDO::PARAM_STR);
@@ -436,7 +436,7 @@ if ($nv_Request->get_int('save', 'post', 0)) {
         $redirect = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&id=' . $admin_id;
     } else {
         $redirect = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&admin_id=' . $admin_id . '&result=1&checkss=' . csrf_create($_csrf_key);
-        $nv_Request->set_Session('nv_admin_profile', json_encode($result));
+        $nv_Request->set_Session('nv_admin_profile', json_encode($result, NV_JSON_ENCODE));
     }
 
     $respon['redirect'] = $redirect;

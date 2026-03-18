@@ -90,7 +90,7 @@ if ($passkey_allowed and $nv_Request->isset_request('create_challenge', 'post'))
     $nv_Request->set_Session('admin_login_challenge', json_encode([
         'opts' => $jsonObject,
         'time' => time(),
-    ]));
+    ], NV_JSON_ENCODE));
     nv_jsonOutput([
         'status' => 'ok',
         'requestOptions' => $jsonObject,
@@ -120,7 +120,7 @@ if ($passkey_allowed and $nv_Request->isset_request('create_auth_challenge', 'po
     $nv_Request->set_Session('admin_auth_challenge', json_encode([
         'opts' => $jsonObject,
         'time' => time(),
-    ]));
+    ], NV_JSON_ENCODE));
     nv_jsonOutput([
         'status' => 'ok',
         'requestOptions' => $jsonObject,
@@ -753,7 +753,7 @@ if (empty($admin_pre_data) and $nv_Request->isset_request('nv_login,nv_password'
             'current_ip' => NV_CLIENT_IP,
             'current_login' => NV_CURRENTTIME
         ];
-        $admin_serialize = json_encode($array_admin);
+        $admin_serialize = json_encode($array_admin, NV_JSON_ENCODE);
 
         $sql = 'UPDATE ' . NV_AUTHORS_GLOBALTABLE . ' SET
                     pre_check_num = :check_num,
@@ -798,7 +798,7 @@ if ($admin_login_success === true) {
         'current_login' => NV_CURRENTTIME,
         'last_login' => (int) ($row['admin_last_login'])
     ];
-    $admin_encode = json_encode($array_admin);
+    $admin_encode = json_encode($array_admin, NV_JSON_ENCODE);
 
     $sth = $db->prepare('UPDATE ' . NV_AUTHORS_GLOBALTABLE . ' SET
         check_num = :check_num, last_login = ' . NV_CURRENTTIME . ',

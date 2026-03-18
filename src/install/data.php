@@ -123,7 +123,7 @@ $csp = [
         ]
     ]
 ];
-$csp = json_encode($csp, JSON_UNESCAPED_SLASHES);
+$csp = json_encode($csp, NV_JSON_ENCODE);
 
 $sql_create_table[] = 'INSERT INTO ' . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES
 ('sys', 'site', 'admin_theme', 'admin_default'),

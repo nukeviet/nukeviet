@@ -22,7 +22,7 @@ if (!defined('NV_IS_MOD_COMMENT')) {
 function _loadContents(array $json): void
 {
     include NV_ROOTDIR . '/includes/header.php';
-    echo '<script' . (defined('NV_SCRIPT_NONCE') ? ' nonce="' . NV_SCRIPT_NONCE . '"' : '') . '>parent.nv_commment_reload(' . json_encode($json) . ');</script>';
+    echo '<script' . (defined('NV_SCRIPT_NONCE') ? ' nonce="' . NV_SCRIPT_NONCE . '"' : '') . '>parent.nv_commment_reload(' . json_encode($json, NV_JSON_ENCODE_SCRIPT) . ');</script>';
     include NV_ROOTDIR . '/includes/footer.php';
 }
 

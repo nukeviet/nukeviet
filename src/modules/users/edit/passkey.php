@@ -143,14 +143,14 @@ if ($nv_Request->isset_request('create_challenge', 'post')) {
         'json',
         [
             AbstractObjectNormalizer::SKIP_NULL_VALUES => true,
-            JsonEncode::OPTIONS => JSON_THROW_ON_ERROR | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT,
+            JsonEncode::OPTIONS => JSON_THROW_ON_ERROR | NV_JSON_ENCODE,
         ]
     );
 
     $nv_Request->set_Session($module_data . '_creat_challenge', json_encode([
         'opts' => $jsonObject,
         'time' => time(),
-    ]));
+    ], NV_JSON_ENCODE));
 
     nv_jsonOutput([
         'status' => 'ok',

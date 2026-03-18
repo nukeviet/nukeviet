@@ -1758,7 +1758,7 @@ function nv_sendmail_async($from, $to, $subject, $message, $files = '', $AddEmbe
         'mailhtml' => $mailhtml,
         'custom_headers' => $custom_headers,
         'lang' => $lang
-    ], JSON_UNESCAPED_UNICODE);
+    ], NV_JSON_ENCODE);
 
     $file_name = nv_genpass(8);
     $temp_file = NV_ROOTDIR . '/' . NV_TEMP_DIR . '/' . md5($global_config['sitekey'] . $file_name);
@@ -1795,7 +1795,7 @@ function nv_sendmail_template_async($emailid, $data = [], $lang = '', $attachmen
         'data' => $data,
         'attachments' => $attachments,
         'lang' => $lang
-    ], JSON_UNESCAPED_UNICODE);
+    ], NV_JSON_ENCODE);
 
     $file_name = nv_genpass(8);
     $temp_file = NV_ROOTDIR . '/' . NV_TEMP_DIR . '/' . md5($global_config['sitekey'] . $file_name);
@@ -2746,7 +2746,7 @@ function nv_change_buffer($buffer)
                 if (count($strdata) == 1) {
                     $strdata = $strdata[0];
                 }
-                $strdata = json_encode($strdata, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
+                $strdata = json_encode($strdata, NV_JSON_ENCODE_SCRIPT);
                 $strdata = '<script type="application/ld+json">' . PHP_EOL . $strdata . PHP_EOL . '</script>';
                 $buffer = preg_replace('/(<\/head[^>]*>)/', PHP_EOL . $strdata . '$1', $buffer, 1);
             }
@@ -3219,7 +3219,7 @@ function add_notification($args)
     $data['message'] = json_encode([
         'isdef' => $data['isdef'],
         'contents' => $contents
-    ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+    ], NV_JSON_ENCODE);
 
     if (!empty($data['link']) and !preg_match('#^https?\:\/\/#', $data['link'])) {
         str_starts_with($data['link'], NV_BASE_SITEURL) && $data['link'] = substr($data['link'], strlen(NV_BASE_SITEURL));
@@ -3932,7 +3932,7 @@ function set_verified_password(string $area, string $module = ''): void
         'time' => NV_CURRENTTIME,
         'area' => $area,
         'csrf' => csrf_create($site_mods[$module]['module_data'] . '_confirm_pwd')
-    ]));
+    ], NV_JSON_ENCODE));
 }
 
 /**

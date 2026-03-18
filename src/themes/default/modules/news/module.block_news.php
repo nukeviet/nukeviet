@@ -81,7 +81,7 @@ if (!nv_function_exists('nv_news_block_news')) {
                     'newday' => $publtime + (86400 * $module_array_cat[$catid]['newday'])
                 ];
             }
-            $cache = json_encode($array_block_news);
+            $cache = json_encode($array_block_news, NV_JSON_ENCODE);
             $nv_Cache->setItem($module, $cache_file, $cache);
         }
 

@@ -232,7 +232,7 @@ if ($nv_Request->isset_request('crontabcontent', 'post')) {
     }
 
     if (!empty($array['id'])) {
-        nv_insert_logs(NV_LANG_DATA, $module_name, 'log_cronjob_edit', json_encode($array, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES), $admin_info['userid']);
+        nv_insert_logs(NV_LANG_DATA, $module_name, 'log_cronjob_edit', json_encode($array, NV_JSON_ENCODE), $admin_info['userid']);
         $sth = $db->prepare('UPDATE ' . NV_CRONJOBS_GLOBALTABLE . ' SET
             start_time=' . $array['start_time'] . ', inter_val=' . $array['interval'] . ',
             inter_val_type=' . $array['inter_val_type'] . ', run_file= :run_file,
@@ -246,7 +246,7 @@ if ($nv_Request->isset_request('crontabcontent', 'post')) {
         $sth->bindParam(':cron_name', $array['cron_name'], PDO::PARAM_STR);
         $sth->execute();
     } else {
-        nv_insert_logs(NV_LANG_DATA, $module_name, 'log_cronjob_add', json_encode($array, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES), $admin_info['userid']);
+        nv_insert_logs(NV_LANG_DATA, $module_name, 'log_cronjob_add', json_encode($array, NV_JSON_ENCODE), $admin_info['userid']);
         $sql = 'INSERT INTO ' . NV_CRONJOBS_GLOBALTABLE . ' (
             start_time, inter_val, inter_val_type, run_file, run_func, params, del, is_sys, act,
             last_time, last_result, ' . NV_LANG_INTERFACE . '_cron_name

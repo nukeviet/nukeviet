@@ -915,7 +915,7 @@ if ($is_submit_form) {
                     1, 0, ' . $admin_info['admin_id'] . ', ' . NV_CURRENTTIME . ', ' . NV_CURRENTTIME . ', ' . $db->quote($client_info['ip']) . ', :uuid, :properties
                 )');
                 $stmt->bindParam(':uuid', $uuid, PDO::PARAM_STR);
-                $stmt->bindValue(':properties', json_encode($rowcontent, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES), PDO::PARAM_STR);
+                $stmt->bindValue(':properties', json_encode($rowcontent, NV_JSON_ENCODE), PDO::PARAM_STR);
                 $stmt->execute();
             } else {
                 $stmt = $db->prepare('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_tmp SET
@@ -923,7 +923,7 @@ if ($is_submit_form) {
                     ip=' . $db->quote($client_info['ip']) . ',
                     properties= :properties
                 WHERE uuid=' . $db->quote($uuid) . ' AND type=1 AND new_id=0 AND admin_id=' . $admin_info['admin_id']);
-                $stmt->bindValue(':properties', json_encode($rowcontent, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES), PDO::PARAM_STR);
+                $stmt->bindValue(':properties', json_encode($rowcontent, NV_JSON_ENCODE), PDO::PARAM_STR);
                 $stmt->execute();
             }
         } else {
@@ -936,7 +936,7 @@ if ($is_submit_form) {
                 ) VALUES (
                     1, ' . $rowcontent['id'] . ', ' . $admin_info['admin_id'] . ', ' . NV_CURRENTTIME . ', ' . NV_CURRENTTIME . ', ' . $db->quote($client_info['ip']) . ', :properties
                 )');
-                $stmt->bindValue(':properties', json_encode($rowcontent, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES), PDO::PARAM_STR);
+                $stmt->bindValue(':properties', json_encode($rowcontent, NV_JSON_ENCODE), PDO::PARAM_STR);
                 $stmt->execute();
             } else {
                 $stmt = $db->prepare('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_tmp SET
@@ -944,7 +944,7 @@ if ($is_submit_form) {
                     ip=' . $db->quote($client_info['ip']) . ',
                     properties= :properties
                 WHERE new_id=' . $rowcontent['id'] . ' AND type=1 AND admin_id=' . $admin_info['admin_id']);
-                $stmt->bindValue(':properties', json_encode($rowcontent, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES), PDO::PARAM_STR);
+                $stmt->bindValue(':properties', json_encode($rowcontent, NV_JSON_ENCODE), PDO::PARAM_STR);
                 $stmt->execute();
             }
         }
@@ -1167,8 +1167,8 @@ if ($is_submit_form) {
                     ' . $db->quote($rowcontent['schema_type']) . '
                 )');
 
-                $voicedata = empty($rowcontent['voicedata']) ? '' : json_encode($rowcontent['voicedata']);
-                $localization = empty($rowcontent['localversions']) ? '' : json_encode($rowcontent['localversions']);
+                $voicedata = empty($rowcontent['voicedata']) ? '' : json_encode($rowcontent['voicedata'], NV_JSON_ENCODE);
+                $localization = empty($rowcontent['localversions']) ? '' : json_encode($rowcontent['localversions'], NV_JSON_ENCODE);
 
                 $stmt->bindParam(':files', $rowcontent['files'], PDO::PARAM_STR);
                 $stmt->bindParam(':reject_reason', $rowcontent['reject_reason'], PDO::PARAM_STR, strlen($rowcontent['reject_reason']));
@@ -1302,8 +1302,8 @@ if ($is_submit_form) {
                     schema_type=' . $db->quote($rowcontent['schema_type']) . '
                 WHERE id =' . $rowcontent['id']);
 
-                $voicedata = empty($rowcontent['voicedata']) ? '' : json_encode($rowcontent['voicedata']);
-                $localization = empty($rowcontent['localversions']) ? '' : json_encode($rowcontent['localversions']);
+                $voicedata = empty($rowcontent['voicedata']) ? '' : json_encode($rowcontent['voicedata'], NV_JSON_ENCODE);
+                $localization = empty($rowcontent['localversions']) ? '' : json_encode($rowcontent['localversions'], NV_JSON_ENCODE);
 
                 $sth->bindParam(':files', $rowcontent['files'], PDO::PARAM_STR);
                 $sth->bindParam(':reject_reason', $rowcontent['reject_reason'], PDO::PARAM_STR, strlen($rowcontent['reject_reason']));

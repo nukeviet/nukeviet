@@ -163,7 +163,7 @@ if ($nv_Request->isset_request('fc', 'post')) {
                     }
                 }
             }
-            $post['others'] = !empty($others) ? json_encode($others) : '';
+            $post['others'] = !empty($others) ? json_encode($others, NV_JSON_ENCODE) : '';
             try {
                 if (empty($id)) {
                     nv_insert_logs(NV_LANG_DATA, $module_name, 'LOG_ADD_SUPPORTER', 'NAME: ' . $post['full_name'], $admin_info['userid']);

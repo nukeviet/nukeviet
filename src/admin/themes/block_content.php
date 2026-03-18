@@ -470,7 +470,7 @@ if (csrf_check($nv_Request->get_string('checkss', 'post'), $_csrf_key)) {
             $row['bid'] = 0;
         }
 
-        $row['dtime_details'] = json_encode($row['dtime_details'], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+        $row['dtime_details'] = json_encode($row['dtime_details'], NV_JSON_ENCODE);
 
         if (empty($row['bid'])) {
             $sth = $db->prepare('SELECT MAX(weight) FROM ' . NV_BLOCKS_TABLE . '_groups WHERE theme = :theme AND position= :position');

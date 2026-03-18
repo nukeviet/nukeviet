@@ -1347,7 +1347,7 @@ function webhook_actions_save($action, $parameter)
     foreach ($action as $key => $act) {
         $par = $parameter[$key];
         if (!empty($act) and !empty($par)) {
-            $val = json_encode([$act, $par]);
+            $val = json_encode([$act, $par], NV_JSON_ENCODE);
             $sth->bindValue(':skey', $key, PDO::PARAM_STR);
             $sth->bindParam(':svalue', $val, PDO::PARAM_STR);
             $sth->execute();
@@ -1428,7 +1428,7 @@ function keyword_actions_save($title, $keyword, $action, $parameter)
         $par = $parameter[$k];
         if (!empty($key) and !empty($act) and !empty($par) and (empty($keys) or !in_array($key, $keys, true))) {
             $keys[] = $key;
-            $val = json_encode([$act, $par, $ttl], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+            $val = json_encode([$act, $par, $ttl], NV_JSON_ENCODE);
             $sth->bindValue(':skey', $key, PDO::PARAM_STR);
             $sth->bindParam(':svalue', $val, PDO::PARAM_STR);
             $sth->execute();
@@ -1698,7 +1698,7 @@ function article_body_create($article_body)
         }
     }
 
-    return !empty($body) ? json_encode($body, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) : '';
+    return !empty($body) ? json_encode($body, NV_JSON_ENCODE) : '';
 }
 
 /**
@@ -1725,7 +1725,7 @@ function save_article($save_article)
         'cover_status' => !empty($save_article['cover']['status']) ? $save_article['cover']['status'] : 'hide',
         'description' => !empty($save_article['description']) ? $save_article['description'] : '',
         'body' => !empty($save_article['body']) ? article_body_create($save_article['body']) : '',
-        'related_medias' => !empty($save_article['related_medias']) ? json_encode($save_article['related_medias']) : '',
+        'related_medias' => !empty($save_article['related_medias']) ? json_encode($save_article['related_medias'], NV_JSON_ENCODE) : '',
         'tracking_link' => !empty($save_article['tracking_link']) ? $save_article['tracking_link'] : '',
         'video_id' => !empty($save_article['video_id']) ? $save_article['video_id'] : '',
         'video_avatar' => !empty($save_article['avatar']) ? $save_article['avatar'] : '',
@@ -1763,7 +1763,7 @@ function update_article($id, $save_article)
         'cover_status' => !empty($save_article['cover']['status']) ? $save_article['cover']['status'] : 'hide',
         'description' => !empty($save_article['description']) ? $save_article['description'] : '',
         'body' => !empty($save_article['body']) ? article_body_create($save_article['body']) : '',
-        'related_medias' => !empty($save_article['related_medias']) ? json_encode($save_article['related_medias']) : '',
+        'related_medias' => !empty($save_article['related_medias']) ? json_encode($save_article['related_medias'], NV_JSON_ENCODE) : '',
         'tracking_link' => !empty($save_article['tracking_link']) ? $save_article['tracking_link'] : '',
         'video_id' => !empty($save_article['video_id']) ? $save_article['video_id'] : '',
         'video_avatar' => !empty($save_article['avatar']) ? $save_article['avatar'] : '',

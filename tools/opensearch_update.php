@@ -53,7 +53,7 @@ foreach ($array_sitelangs as $lang) {
         ];
     }
 
-    $sql = "UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value=" . $db->quote(json_encode($new_value)) . "
+    $sql = "UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value=" . $db->quote(json_encode($new_value, NV_JSON_ENCODE)) . "
     WHERE lang='" . $lang . "' AND module='global' AND config_name='opensearch_link'";
     $db->query($sql);
 }

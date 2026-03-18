@@ -29,8 +29,8 @@ $note = 'Receive requests, suggestions, comments relating to the operations of c
 $others = json_encode([
     'viber' => 'myViber',
     'skype' => 'mySkype'
-]);
-$cats = json_encode(['Consulting', 'Complaints', 'Cooperation'], JSON_UNESCAPED_UNICODE);
+], NV_JSON_ENCODE);
+$cats = json_encode(['Consulting', 'Complaints', 'Cooperation'], NV_JSON_ENCODE);
 $weight = 1;
 $is_default = 1;
 $sth->bindParam(':full_name', $full_name, PDO::PARAM_STR, strlen($full_name));
@@ -55,7 +55,7 @@ $others = json_encode([
     'viber' => 'myViber2',
     'skype' => 'mySkype2'
 ]);
-$cats = json_encode(['Bug Reports', 'Recommendations to improve'], JSON_UNESCAPED_UNICODE);
+$cats = json_encode(['Bug Reports', 'Recommendations to improve'], NV_JSON_ENCODE);
 $weight = 2;
 $is_default = 0;
 $sth->bindParam(':full_name', $full_name, PDO::PARAM_STR, strlen($full_name));

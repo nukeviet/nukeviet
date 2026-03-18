@@ -139,7 +139,7 @@ if (defined('NV_IS_SPADMIN')) {
                 }
 
                 $post['cats'] = array_filter($post['cats']);
-                $post['cats'] = !empty($post['cats']) ? json_encode(array_unique($post['cats']), JSON_UNESCAPED_UNICODE) : '';
+                $post['cats'] = !empty($post['cats']) ? json_encode(array_unique($post['cats']), NV_JSON_ENCODE) : '';
                 $post['phone'] = str_replace(['&#91;', '&#93;'], ['[', ']'], $post['phone']);
 
                 $view_level = $nv_Request->get_typed_array('view_level', 'post', 'int', []);
@@ -168,7 +168,7 @@ if (defined('NV_IS_SPADMIN')) {
                 if (!empty($admins['view_level'])) {
                     $admins['view_level'] = array_unique($admins['view_level']);
                 }
-                $post['admins'] = !empty($admins) ? json_encode($admins) : '';
+                $post['admins'] = !empty($admins) ? json_encode($admins, NV_JSON_ENCODE) : '';
 
                 $other_name = $nv_Request->get_typed_array('other_name', 'post', 'title', []);
                 $other_value = $nv_Request->get_typed_array('other_value', 'post', 'title', []);
@@ -180,7 +180,7 @@ if (defined('NV_IS_SPADMIN')) {
                         }
                     }
                 }
-                $post['others'] = !empty($others) ? json_encode($others) : '';
+                $post['others'] = !empty($others) ? json_encode($others, NV_JSON_ENCODE) : '';
 
                 try {
                     if (empty($id)) {

@@ -113,7 +113,7 @@ function makeDefaultJson(string $block_name)
         $config_json['i18n'][$lang]['info']['name'] = $block_name;
     }
 
-    $config_json = json_encode($config_json, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
+    $config_json = json_encode($config_json, NV_JSON_ENCODE);
     return $config_json;
 }
 
@@ -185,6 +185,6 @@ function getIni(string $fileIni, string $block_name)
     }
     $config_json['i18n'] = $i18n;
 
-    $config_json = json_encode($config_json, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
+    $config_json = json_encode($config_json, NV_JSON_ENCODE);
     return $config_json;
 }

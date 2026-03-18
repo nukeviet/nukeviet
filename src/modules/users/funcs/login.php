@@ -411,8 +411,8 @@ function new_openid_user_save($reg_username, $reg_email, $reg_password, $attribs
         $data_insert['email'] = $reg_email;
         $data_insert['first_name'] = $reg_attribs['first_name'];
         $data_insert['last_name'] = $reg_attribs['last_name'];
-        $data_insert['users_info'] = json_encode($query_field, JSON_UNESCAPED_UNICODE);
-        $data_insert['openid_info'] = json_encode($reg_attribs, JSON_UNESCAPED_UNICODE);
+        $data_insert['users_info'] = json_encode($query_field, NV_JSON_ENCODE);
+        $data_insert['openid_info'] = json_encode($reg_attribs, NV_JSON_ENCODE);
         $userid = $db->insert_id($sql, 'userid', $data_insert);
 
         if (!$userid) {
@@ -1038,7 +1038,7 @@ if ($nv_Request->isset_request('_csrf, nv_login', 'post')) {
             $nv_Request->set_Session($module_data . '_auth_challenge', json_encode([
                 'opts' => $jsonObject,
                 'time' => time(),
-            ]));
+            ], NV_JSON_ENCODE));
             signin_result([
                 'status' => 'ok',
                 'requestOptions' => $jsonObject,

@@ -59,7 +59,7 @@ function nv_aleditor($textareaname, $width = '100%', $height = '450px', string $
         $customtoolbar = json_decode($customtoolbar, true);
         if (is_array($customtoolbar)) {
             $custom_toolbar = true;
-            $create[] = "toolbar : " . json_encode($customtoolbar);
+            $create[] = "toolbar : " . json_encode($customtoolbar, NV_JSON_ENCODE_SCRIPT);
         }
     }
     $toolbars = [

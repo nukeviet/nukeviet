@@ -96,7 +96,7 @@ if (!nv_function_exists('nv_department_info')) {
             }
 
             empty($departments) && $departments = [];
-            $cache = json_encode($departments);
+            $cache = json_encode($departments, NV_JSON_ENCODE);
             $nv_Cache->setItem($module, $cache_file, $cache);
         }
 

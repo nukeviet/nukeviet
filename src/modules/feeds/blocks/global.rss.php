@@ -204,7 +204,7 @@ if (!nv_function_exists('nv_block_data_config_rss')) {
                 }
             }
 
-            $cache = json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+            $cache = json_encode($data, NV_JSON_ENCODE);
             $nv_Cache->setItem('rss', $cache_file, $cache);
         }
 

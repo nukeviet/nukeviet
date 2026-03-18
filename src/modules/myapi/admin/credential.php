@@ -86,7 +86,7 @@ if ($nv_Request->isset_request('changeAuth', 'post')) {
             return $ips->isIp4($ip) or $ips->isIp6($ip);
         });
 
-        $iplist = json_encode($api_ips);
+        $iplist = json_encode($api_ips, NV_JSON_ENCODE);
         ipsUpdate($iplist, $method, $userid);
         nv_jsonOutput([
             'status' => 'OK',

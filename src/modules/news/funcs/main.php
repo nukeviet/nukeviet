@@ -455,7 +455,7 @@ if (empty($contents)) {
             'schemas' => $schemas,
             'description' => $desc,
             'keyword' => $kw
-        ]), ttl: 3600);
+        ], NV_JSON_ENCODE), ttl: 3600);
     }
 }
 

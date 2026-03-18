@@ -30,8 +30,8 @@ $others = json_encode([
     'viber' => 'myViber',
     'skype' => 'mySkype',
     'zalo' => '0933456789'
-]);
-$cats = json_encode(['Tư vấn', 'Khiếu nại, phản ánh', 'Đề nghị hợp tác'], JSON_UNESCAPED_UNICODE);
+], NV_JSON_ENCODE);
+$cats = json_encode(['Tư vấn', 'Khiếu nại, phản ánh', 'Đề nghị hợp tác'], NV_JSON_ENCODE);
 $weight = 1;
 $is_default = 1;
 $sth->bindParam(':full_name', $full_name, PDO::PARAM_STR, strlen($full_name));
@@ -56,8 +56,8 @@ $others = json_encode([
     'viber' => 'myViber2',
     'skype' => 'mySkype2',
     'zalo' => '0923456789'
-]);
-$cats = json_encode(['Thông báo lỗi', 'Góp ý cải tiến'], JSON_UNESCAPED_UNICODE);
+], NV_JSON_ENCODE);
+$cats = json_encode(['Thông báo lỗi', 'Góp ý cải tiến'], NV_JSON_ENCODE);
 $weight = 2;
 $is_default = 0;
 $sth->bindParam(':full_name', $full_name, PDO::PARAM_STR, strlen($full_name));

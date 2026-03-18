@@ -116,7 +116,7 @@ function apicheck($role_object, $array_post, $lang)
     $tpl->assign('LANG', $nv_Lang);
     $tpl->assign('TOTAL_API_ENABLED', $total_api_enabled);
     $tpl->assign('TOTAL_API_CHECKED', $total_api_enabled ? ' checked' : '');
-    
+
     // Xuất các danh mục API
     foreach ($array_api_trees as $k => $api_tree) {
         $api_tree['api_checked'] = $api_tree['total_api'] ? ' checked' : '';
@@ -321,7 +321,7 @@ if ($action == 'role') {
                 }
             }
         }
-        $data['flood_rules'] = json_encode($data['flood_rules']);
+        $data['flood_rules'] = json_encode($data['flood_rules'], NV_JSON_ENCODE);
         $data['log_period'] *= 3600;
 
         $data['role_data']['sys'] = [];
@@ -362,7 +362,7 @@ if ($action == 'role') {
             }
         }
 
-        $data['role_data'] = json_encode($data['role_data']);
+        $data['role_data'] = json_encode($data['role_data'], NV_JSON_ENCODE);
 
         if ($isAdd) {
             $sth = $db->prepare('INSERT INTO ' . $db_config['prefix'] . '_api_role (

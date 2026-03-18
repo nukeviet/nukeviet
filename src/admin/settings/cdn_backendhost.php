@@ -107,7 +107,7 @@ if ($nv_Request->isset_request('by_country', 'get')) {
         if (empty($urls['except'])) {
             unset($urls['except']);
         }
-        $urls = json_encode($urls);
+        $urls = json_encode($urls, NV_JSON_ENCODE);
         $sth = $db->prepare('UPDATE ' . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = 'sys' AND module = 'global' AND config_name = 'cdn_url'");
         $sth->bindParam(':config_value', $urls, PDO::PARAM_STR);
         $sth->execute();
@@ -197,7 +197,7 @@ if (csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
     if (!empty($old_cdn_urls['except']['countries'])) {
         $cdns['except'] = [1 => $old_cdn_urls['except']['countries']];
     }
-    $array_config_global['cdn_url'] = json_encode($cdns);
+    $array_config_global['cdn_url'] = json_encode($cdns, NV_JSON_ENCODE);
 
     $array_config_global['assets_cdn'] = (int) $nv_Request->get_bool('assets_cdn', 'post', false);
 

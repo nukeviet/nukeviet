@@ -85,7 +85,7 @@ foreach ($json as $icon_key => $icon) {
 }
 
 $file = NV_ROOTDIR . '/assets/fonts/fontawesome.json';
-file_put_contents($file, json_encode($array), LOCK_EX);
+file_put_contents($file, json_encode($array, NV_JSON_ENCODE), LOCK_EX);
 
 $file = NV_ROOTDIR . '/includes/fontawesome.php';
 $fileContent = "<?php\n\n" . NV_FILEHEAD . "\n\nif (!defined('NV_MAINFILE')) {\n    exit('Stop!!!');\n}\n\n\$fontawesome_icons = " . nv_var_export($array) . ";\n\n\$fontawesome_packs = " . nv_var_export($icons) . ";\n";

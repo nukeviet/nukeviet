@@ -117,7 +117,7 @@ if ($nv_Request->isset_request('localbusiness_information', 'get')) {
             ]);
         }
 
-        $jsondata = json_encode($jsondata, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
+        $jsondata = json_encode($jsondata, NV_JSON_ENCODE);
         file_put_contents(NV_ROOTDIR . '/' . NV_DATADIR . '/localbusiness.json', $jsondata, LOCK_EX);
         nv_jsonOutput([
             'status' => 'OK',
@@ -137,7 +137,7 @@ if ($nv_Request->isset_request('localbusiness_information', 'get')) {
     if (empty($data)) {
         $data = $sample_data;
     }
-    $tpl->assign('DATA', htmlspecialchars(json_encode($data, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE)));
+    $tpl->assign('DATA', htmlspecialchars(json_encode($data, NV_JSON_ENCODE)));
     $tpl->assign('CHECKSS', csrf_create($_csrf_key));
 
     $contents = $tpl->fetch('localbusiness.tpl');
@@ -153,7 +153,7 @@ if ($nv_Request->isset_request('sample_data', 'post')) {
     if (!csrf_check($nv_Request->get_string('checkss', 'post'), $_csrf_key)) {
         exit('Stop!!!');
     }
-    nv_htmlOutput(json_encode($sample_data, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
+    nv_htmlOutput(json_encode($sample_data, NV_JSON_ENCODE));
 }
 
 // Xóa file thông tin doanh nghiệp
@@ -239,7 +239,7 @@ if ($nv_Request->isset_request('logoupload', 'get')) {
     $nv_Lang->setModule('bigsize', $nv_Lang->getModule('bigsize', NV_MAX_WIDTH, NV_MAX_HEIGHT));
     $nv_Lang->setModule('smallsize', $nv_Lang->getModule('smallsize', $logo_config['logo_width'], $logo_config['logo_height']));
 
-    $tpl->assign('DATA', json_encode($array));
+    $tpl->assign('DATA', json_encode($array, NV_JSON_ENCODE));
 
     $contents = $tpl->fetch('others-uploaded.tpl');
 

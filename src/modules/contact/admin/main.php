@@ -296,7 +296,7 @@ if (!empty($contact_allowed['view'])) {
         $row['read_admins'] = !empty($row['read_admins']) ? json_decode($row['read_admins'], true) : [];
         if (empty($row['read_admins']) or !isset($row['read_admins'][$admin_info['admin_id']])) {
             $row['read_admins'][$admin_info['admin_id']] = NV_CURRENTTIME;
-            $read_admins = json_encode($row['read_admins']);
+            $read_admins = json_encode($row['read_admins'], NV_JSON_ENCODE);
             $db->query('UPDATE ' . NV_MOD_TABLE . '_send SET read_admins=' . $db->quote($read_admins) . ' WHERE id=' . $id);
         }
 

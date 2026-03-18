@@ -140,7 +140,7 @@ function nv_blocks_content($sitecontent)
             ];
         }
         $_result->closeCursor();
-        $nv_Cache->setItem('themes', $cache_file, json_encode($mod_blocklist, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE));
+        $nv_Cache->setItem('themes', $cache_file, json_encode($mod_blocklist, NV_JSON_ENCODE));
     }
 
     if (isset($mod_blocklist[$module_info['funcs'][$op]['func_id']])) {
@@ -946,7 +946,7 @@ function nv_html_site_js($html = true, $other_js = [], $language_js = true, $glo
         $return[] = [
             'type' => 'application/ld+json',
             'ext' => 0,
-            'content' => json_encode(nv_unhtmlspecialchars($schemas), JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT)
+            'content' => json_encode(nv_unhtmlspecialchars($schemas), NV_JSON_ENCODE)
         ];
     }
 

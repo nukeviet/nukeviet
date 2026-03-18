@@ -27,7 +27,7 @@ if (csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
             }
         }
     }
-    $custom_configs = !empty($custom_configs) ? json_encode($custom_configs) : '';
+    $custom_configs = !empty($custom_configs) ? json_encode($custom_configs, NV_JSON_ENCODE) : '';
     if (empty($global_config['custom_configs'])) {
         if (!empty($custom_configs)) {
             $sth = $db->prepare('INSERT INTO ' . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('" . NV_LANG_DATA . "', 'global', 'custom_configs', :config_value)");

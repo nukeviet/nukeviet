@@ -51,7 +51,7 @@ class RequestPasskey
             'json',
             [
                 AbstractObjectNormalizer::SKIP_NULL_VALUES => true,
-                JsonEncode::OPTIONS => JSON_THROW_ON_ERROR | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT,
+                JsonEncode::OPTIONS => JSON_THROW_ON_ERROR | NV_JSON_ENCODE,
             ]
         );
     }

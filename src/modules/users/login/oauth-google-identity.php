@@ -146,7 +146,7 @@ if ($nv_Request->isset_request('credential', 'post')) {
     ];
 
     nv_apply_hook($module_name, 'prehandling_oauth_google_identity', [$is_edit, $attribs]);
-    $nv_Request->set_Session('openid_attribs', json_encode($attribs));
+    $nv_Request->set_Session('openid_attribs', json_encode($attribs, NV_JSON_ENCODE));
     if ($is_edit) {
         nv_redirect_location(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=editinfo/openid&server=google-identity&result=1&t=' . NV_CURRENTTIME);
     } else {

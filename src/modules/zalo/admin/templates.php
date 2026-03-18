@@ -193,7 +193,7 @@ if ($type == 'plaintext') {
             $content = json_encode([
                 'title' => $title,
                 'content' => $content
-            ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+            ], NV_JSON_ENCODE);
             if ($action == 'add') {
                 template_save('plaintext', $content);
             } else {
@@ -386,13 +386,13 @@ elseif ($type == 'request') {
                 'title' => $title,
                 'subtitle' => $subtitle,
                 'image_url' => $image_url
-            ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE));
+            ], NV_JSON_ENCODE));
         } else {
             template_save('request', json_encode([
                 'title' => $title,
                 'subtitle' => $subtitle,
                 'image_url' => $image_url
-            ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE));
+            ], NV_JSON_ENCODE));
         }
 
         nv_jsonOutput([

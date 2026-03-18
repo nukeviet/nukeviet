@@ -51,7 +51,7 @@ try {
 
                 return (bool) ($item != $theme);
             });
-            $array_user_allowed_theme = empty($array_user_allowed_theme) ? '' : json_encode(array_values($array_user_allowed_theme));
+            $array_user_allowed_theme = empty($array_user_allowed_theme) ? '' : json_encode(array_values($array_user_allowed_theme), NV_JSON_ENCODE);
             $sth = $db->prepare('UPDATE ' . NV_CONFIG_GLOBALTABLE . " SET config_value= :config_value WHERE config_name = 'user_allowed_theme' AND lang = '" . NV_LANG_DATA . "' AND module='global'");
             $sth->bindParam(':config_value', $array_user_allowed_theme, PDO::PARAM_STR);
             $sth->execute();

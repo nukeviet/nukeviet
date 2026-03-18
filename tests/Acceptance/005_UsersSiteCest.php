@@ -49,7 +49,7 @@ class UsersSiteCest
             'expires' => time() + 86400,
             'issued_at' => time(),
         ], $payload);
-        $payloadJson = json_encode($payloadWithMeta);
+        $payloadJson = json_encode($payloadWithMeta, NV_JSON_ENCODE);
 
         // $sig = hash_hmac('sha256', $payloadJson, $_ENV['FACEBOOK_APP_SECRET'], true); // raw binary
         // $sig_b64 = $this->base64UrlEncode($sig);

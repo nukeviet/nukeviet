@@ -129,8 +129,8 @@ function webhook_handle($data)
     global $db, $global_config;
 
     if (!empty($data['message']['msg_id'])) {
-        $sth = $db->prepare('INSERT IGNORE INTO ' . NV_MOD_TABLE . "_conversation 
-        (message_id, user_id, src, time, type, message, links, thumb, url, description, location, note) VALUES 
+        $sth = $db->prepare('INSERT IGNORE INTO ' . NV_MOD_TABLE . "_conversation
+        (message_id, user_id, src, time, type, message, links, thumb, url, description, location, note) VALUES
         (:message_id, :user_id, :src, :time, :type, :message, :links, :thumb, :url, :description, :location, '')");
 
         if ($data['sender']['id'] != $global_config['zaloOfficialAccountID']) {
@@ -204,7 +204,7 @@ function webhook_handle($data)
                     $links[] = $link['payload'];
                 }
                 $contents['type'] = 'links';
-                $contents['links'] = json_encode($links);
+                $contents['links'] = json_encode($links, NV_JSON_ENCODE);
                 break;
         }
 
@@ -226,7 +226,7 @@ function webhook_handle($data)
         $offset = $db->query('SELECT MAX(weight) FROM ' . NV_MOD_TABLE . '_followers')->fetchColumn();
         ++$offset;
 
-        $sth = $db->prepare('INSERT INTO ' . NV_MOD_TABLE . "_followers (user_id, app_id, user_id_by_app, tags_info, notes_info, isfollow, weight, updatetime) VALUES 
+        $sth = $db->prepare('INSERT INTO ' . NV_MOD_TABLE . "_followers (user_id, app_id, user_id_by_app, tags_info, notes_info, isfollow, weight, updatetime) VALUES
         (:user_id, :app_id, :user_id_by_app, '', '', :isfollow, :weight, :updatetime) ON DUPLICATE KEY UPDATE app_id=VALUES(app_id), isfollow=VALUES(isfollow), updatetime=VALUES(updatetime)");
 
         $sth->bindValue(':user_id', $data['follower']['id'], PDO::PARAM_STR);
@@ -252,8 +252,8 @@ function webhook_handle($data)
         $offset = $db->query('SELECT MAX(weight) FROM ' . NV_MOD_TABLE . '_followers')->fetchColumn();
         ++$offset;
 
-        $sth = $db->prepare('INSERT INTO ' . NV_MOD_TABLE . "_followers (user_id, app_id, user_id_by_app, tags_info, notes_info, weight, name, phone_code, phone_number, address, city_id, district_id, is_sync, updatetime) VALUES 
-        (:user_id, :app_id, :user_id_by_app, '', '', :weight, :name, :phone_code, :phone_number, :address, :city_id, :district_id, 0, :updatetime) ON DUPLICATE KEY UPDATE 
+        $sth = $db->prepare('INSERT INTO ' . NV_MOD_TABLE . "_followers (user_id, app_id, user_id_by_app, tags_info, notes_info, weight, name, phone_code, phone_number, address, city_id, district_id, is_sync, updatetime) VALUES
+        (:user_id, :app_id, :user_id_by_app, '', '', :weight, :name, :phone_code, :phone_number, :address, :city_id, :district_id, 0, :updatetime) ON DUPLICATE KEY UPDATE
         app_id=VALUES(app_id), name=VALUES(name), phone_code=VALUES(phone_code), phone_number=VALUES(phone_number), address=VALUES(address), city_id=VALUES(city_id), district_id=VALUES(district_id), updatetime=VALUES(updatetime)");
         $sth->bindValue(':user_id', $data['sender']['id'], PDO::PARAM_STR);
         $sth->bindValue(':app_id', $data['app_id'], PDO::PARAM_STR);
@@ -310,8 +310,8 @@ function save_conversation($user_id, $message_id, $note)
     global $db;
 
     if (!empty($message_id)) {
-        $sth = $db->prepare('INSERT IGNORE INTO ' . NV_MOD_TABLE . '_conversation 
-        (message_id, user_id, src, time, message, links, description, note) VALUES 
+        $sth = $db->prepare('INSERT IGNORE INTO ' . NV_MOD_TABLE . '_conversation
+        (message_id, user_id, src, time, message, links, description, note) VALUES
         (:message_id, :user_id, 0, ' . NV_CURRENTTIME . ", '', '', '', :note)");
 
         $sth->bindValue(':message_id', $message_id, PDO::PARAM_STR);
@@ -371,9 +371,9 @@ function last_conversation_update($accesstoken, $user_id)
 
     $result = $myZalo->conversation($accesstoken, $user_id, 0, 10);
     if (!empty($result)) {
-        $sth = $db->prepare('INSERT INTO ' . NV_MOD_TABLE . "_conversation 
-        (message_id, user_id, src, time, type, message, links, thumb, url, description, location, note) VALUES 
-        (:message_id, :user_id, :src, :time, :type, :message, :links, :thumb, :url, :description, :location, '') ON DUPLICATE KEY UPDATE 
+        $sth = $db->prepare('INSERT INTO ' . NV_MOD_TABLE . "_conversation
+        (message_id, user_id, src, time, type, message, links, thumb, url, description, location, note) VALUES
+        (:message_id, :user_id, :src, :time, :type, :message, :links, :thumb, :url, :description, :location, '') ON DUPLICATE KEY UPDATE
         time=VALUES(time), type=VALUES(type), message=VALUES(message), links=VALUES(links), thumb=VALUES(thumb), url=VALUES(url), description=VALUES(description), location=VALUES(location)");
 
         $isUpdated = false;
@@ -383,7 +383,7 @@ function last_conversation_update($accesstoken, $user_id)
                 'time' => !empty($new['time']) ? floor($new['time'] / 1000) : 0,
                 'type' => !empty($new['type']) ? $new['type'] : 'nosupport',
                 'message' => !empty($new['message']) ? $new['message'] : '',
-                'links' => !empty($new['links']) ? json_encode($new['links']) : '',
+                'links' => !empty($new['links']) ? json_encode($new['links'], NV_JSON_ENCODE) : '',
                 'thumb' => !empty($new['thumb']) ? $new['thumb'] : '',
                 'url' => !empty($new['url']) ? $new['url'] : '',
                 'description' => !empty($new['description']) ? $new['description'] : '',
@@ -449,7 +449,7 @@ function sent_text_message($template_id, $user_id, $message_id)
                 'send_type' => 'plaintext',
                 'type' => 'text',
                 'message' => $content
-            ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE));
+            ], NV_JSON_ENCODE));
 
             last_conversation_update($accesstoken, $user_id);
         }
@@ -488,7 +488,7 @@ function sent_image_message($fileid, $user_id, $message_id)
                 'type' => 'photo',
                 'description' => $row['description'],
                 'upload_id' => $fileid
-            ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE));
+            ], NV_JSON_ENCODE));
 
             last_conversation_update($accesstoken, $user_id);
         }
@@ -526,7 +526,7 @@ function sent_file_message($fileid, $user_id, $message_id)
                 'send_type' => 'file',
                 'type' => 'file',
                 'upload_id' => $fileid
-            ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE));
+            ], NV_JSON_ENCODE));
 
             last_conversation_update($accesstoken, $user_id);
         }
