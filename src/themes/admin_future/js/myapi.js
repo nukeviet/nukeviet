@@ -352,7 +352,7 @@ $(function() {
                     }
                 })
             })
-            var fmt = nv_jsdate_post.replace(/dd/g, 'd').replace(/mm/g, 'm').replace(/yyyy/g, 'Y');
+            const fmt = nv_jsdate_post.replace(/dd/g, 'd').replace(/mm/g, 'm').replace(/yyyy/g, 'Y');
             $(".adddate, .enddate").flatpickr({
                 enableTime: false,
                 dateFormat: fmt,
@@ -407,6 +407,14 @@ $(function() {
             templateSelection: function(repo) {
                 return repo.title || repo.text
             }
+        });
+        const fmt = nv_jsdate_post.replace(/dd/g, 'd').replace(/mm/g, 'm').replace(/yyyy/g, 'Y');
+        $(".adddate, .enddate").flatpickr({
+            enableTime: false,
+            dateFormat: fmt,
+            ariaDateFormat: fmt,
+            locale: nv_lang_interface,
+            appendTo: document.getElementById('credential-add')
         });
     }
 
