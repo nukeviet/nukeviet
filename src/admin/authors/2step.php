@@ -163,8 +163,13 @@ while ($_row = $result->fetch()) {
     $list_for_mail[] = $oauthid . '(' . ucfirst($_row['oauth_server']) . ')';
 }
 
+$_csrf_key = $csrf_key . '_' . $row['admin_id'];
+
 // Xóa tất cả
-if ($nv_Request->get_title('delall', 'post', '') === NV_CHECK_SESSION) {
+if ($nv_Request->isset_request('delall', 'post')) {
+    if (!csrf_check($nv_Request->get_string('checkss', 'post'), $_csrf_key)) {
+        nv_jsonOutput(['error' => 1, 'message' => $nv_Lang->getGlobal('error_checkss')]);
+    }
     if (!defined('NV_IS_AJAX')) {
         exit('Wrong URL');
     }
@@ -205,7 +210,10 @@ if ($nv_Request->get_title('delall', 'post', '') === NV_CHECK_SESSION) {
 }
 
 // Xóa một tài khoản
-if ($nv_Request->get_title('del', 'post', '') === NV_CHECK_SESSION) {
+if ($nv_Request->isset_request('del', 'post')) {
+    if (!csrf_check($nv_Request->get_string('checkss', 'post'), $_csrf_key)) {
+        nv_jsonOutput(['error' => 1, 'message' => $nv_Lang->getGlobal('error_checkss')]);
+    }
     if (!defined('NV_IS_AJAX')) {
         exit('Wrong URL');
     }
@@ -255,6 +263,7 @@ if ($nv_Request->get_title('del', 'post', '') === NV_CHECK_SESSION) {
     nv_jsonOutput($respon);
 }
 
+$tpl->assign('CHECKSS', csrf_create($_csrf_key));
 $tpl->assign('OAUTHS', $array_oauth);
 $tpl->assign('ERROR', $error);
 

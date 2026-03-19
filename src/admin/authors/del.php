@@ -67,9 +67,14 @@ $row_user = $db->query($sql)->fetch();
 
 $action_account = $nv_Request->get_int('action_account', 'post', 0);
 $action_account = (isset($array_action_account[$action_account])) ? $action_account : 0;
-$checkss = md5(NV_CHECK_SESSION . '_' . $module_name . '_' . $op . '_' . $admin_id);
+$_csrf_key = $csrf_key . '_' . $admin_id;
 
-if ($nv_Request->get_title('checkss', 'post') == $checkss) {
+if (!csrf_check($nv_Request->get_string('checkss', 'post'), $_csrf_key)) {
+    nv_jsonOutput([
+        'status' => 'error',
+        'mess' => $nv_Lang->getGlobal('error_checkss')
+    ]);
+} else {
     $respon = [
         'status' => 'error',
         'mess' => '',
@@ -227,7 +232,7 @@ if ($nv_Request->get_title('checkss', 'post') == $checkss) {
 $tpl = new \NukeViet\Template\NVSmarty();
 $tpl->setTemplateDir(get_module_tpl_dir('del.tpl'));
 $tpl->assign('LANG', $nv_Lang);
-$tpl->assign('CHECKSS', $checkss);
+$tpl->assign('CHECKSS', csrf_create($_csrf_key));
 $tpl->assign('OP', $op);
 $tpl->assign('MODULE_NAME', $module_name);
 
