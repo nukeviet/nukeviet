@@ -268,6 +268,9 @@ if (($cache = $nv_Cache->getItem('modules', $cache_file)) != false) {
     $nv_Cache->setItem('modules', $cache_file, $cache);
 }
 
+// Tạo key CSRF dùng chung cho module ngoài site
+$csrf_key = defined('NV_IS_USER') ? $user_info['userid'] . '_' . $module_name . '_' . $op : $module_name . '_' . $op;
+
 // Doc file cau hinh giao dien
 $theme_config_positions = nv_get_blocks($global_config['module_theme']);
 

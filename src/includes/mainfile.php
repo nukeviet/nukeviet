@@ -24,7 +24,7 @@ define('NV_CURRENTTIME', $_SERVER['REQUEST_TIME'] ?? time());
 
 // Khong cho xac dinh tu do cac variables
 $db_config = $global_config = $module_config = $client_info = $user_info = $admin_info = $sys_info = $lang_global = $lang_module = $rss = $nv_vertical_menu = $array_mod_title = $content_type = $submenu = $error_info = $countries = $loadScript = $headers = $theme_config = $nv_hooks = $nv_plugins = $custom_preloads = $user_cookie = $nv_html_links = $nv_schemas = $strdata = $meta_property = [];
-$page_title = $key_words = $page_url = $canonicalUrl = $prevPage = $nextPage = $my_head = $my_footer = $description = $contents = '';
+$page_title = $key_words = $page_url = $canonicalUrl = $prevPage = $nextPage = $my_head = $my_footer = $description = $contents = $csrf_key = '';
 $editor = false;
 
 // Ket noi voi cac file constants, config
