@@ -9,6 +9,8 @@
 /.jsbeautifyrc
 /.php-cs-fixer.php
 /.vscode
+/.agents
+/ANTIGRAVITY.md
 /src/.jsbeautifyrc
 /src/.php-cs-fixer.php
 /src/.vscode
@@ -47,7 +49,7 @@
 /node_modules
 /package-lock.json
 
-#vendor test ignore 
+#vendor test ignore
 /src/includes/vendor/**/demo/
 /src/includes/vendor/**/example/
 /src/includes/vendor/**/examples/

@@ -1,4 +1,4 @@
-# NukeViet 5.x — Claude Code Guide
+# NukeViet 5.x — AI Code Guide
 
 ## Quy trình làm việc bắt buộc
 
@@ -54,8 +54,7 @@ rm -rf src/data/cache/*/*.cache && rm -rf src/data/cache/smarty-compile/*.php
 3. **Output HTML:** Raw DB/user data → `nv_htmlspecialchars()`. Data từ `get_title()` đã escape — KHÔNG escape lại (tránh double-encode)
 4. **CSRF:**
    ```php
-   $csrf_key = $module_name . '_' . $op . '_' . $admin_info['admin_id'];
-   $csrf     = csrf_create($csrf_key);   // sinh token (1 lần / page)
+   $csrf     = csrf_create($csrf_key);   // $csrf_key hệ thống định nghĩa sẵn
    csrf_check($csrf, $csrf_key);          // kiểm tra khi nhận POST
    ```
 5. **File:** Dùng `nv_is_file()`, KHÔNG `is_file()` với path từ user

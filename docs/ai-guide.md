@@ -76,7 +76,7 @@ Claude Code AI đã được cấu hình sẵn với bộ **skills chuyên biệ
 # Quét bảo mật module users
 /security-audit users
 
-# Tạo module mới tên "portfolio"  
+# Tạo module mới tên "portfolio"
 /new-module portfolio
 
 # Thêm function "export" vào module news
@@ -95,49 +95,7 @@ Claude Code AI đã được cấu hình sẵn với bộ **skills chuyên biệ
 
 ---
 
-## 2. GitHub Copilot
-
-### Thiết lập
-
-1. **Cài đặt extension:** GitHub Copilot Chat trong VS Code
-2. **Agent đã có sẵn:** `@migrate2adminfuture` (tham chiếu skill Claude)
-
-### Cách sử dụng Agents
-
-**Cú pháp:** `@{agent-name} [prompt]`
-
-```
-# Sử dụng agent migration
-@migrate2adminfuture Chuyển admin/content.php của module news sang admin_future
-
-# Chat thường với context project
-Làm sao để tạo một block mới cho module news?
-```
-
-### Mở rộng Agents
-
-Để tạo agent mới cho Copilot:
-
-```bash
-# Tạo file agent mới
-touch .github/agents/new-agent-name.agent.md
-```
-
-**Template agent:**
-```yaml
----
-name: new-agent-name
-description: >
-  Mô tả ngắn gọn về agent này.
----
-
-Làm theo những gì quy định trong `.claude/skills/{skill-name}/SKILL.md` để thực hiện tác vụ. 
-Hãy đảm bảo tuân thủ đúng quy trình và best practices của NukeViet.
-```
-
----
-
-## 3. Google Antigravity (Gemini)
+## 2. Google Antigravity (Gemini)
 
 ### Thiết lập
 
@@ -145,12 +103,16 @@ Antigravity sử dụng `.agents` folder. Tạo symlink/junction từ `.claude`:
 
 #### Windows
 ```cmd
-mklink /J "d:\nukeviet\.agents" "d:\nukeviet\.claude"
+cd d:\nukeviet\
+mklink /J ".agents" ".claude"
+mklink /H "ANTIGRAVITY.md" "CLAUDE.md"
 ```
 
-#### Linux/macOS  
+#### Linux/macOS
 ```bash
-ln -sf "/path/to/nukeviet/.claude" "/path/to/nukeviet/.agents"
+cd /path/to/nukeviet
+ln -sf ".claude" ".agents"
+ln "CLAUDE.md" "ANTIGRAVITY.md"
 ```
 
 ### Cách sử dụng
@@ -158,6 +120,13 @@ ln -sf "/path/to/nukeviet/.claude" "/path/to/nukeviet/.agents"
 Sau khi tạo symlink, Antigravity sẽ tự động nhận diện các skills từ thư mục `.agents/skills/`.
 
 **Lưu ý:** Thay đổi path theo đường dẫn thực tế của dự án trên máy bạn.
+
+---
+
+
+## 2. GitHub Copilot
+
+Thiết lập như Google Antigravity bên trên
 
 ---
 
@@ -181,7 +150,7 @@ Sau khi tạo symlink, Antigravity sẽ tự động nhận diện các skills t
 ### Best Practices
 
 - **Luôn backup** code trước khi chạy skill lớn
-- **Xóa cache** sau khi thay đổi cấu trúc: `rm -rf src/data/cache/*/*.cache`  
+- **Xóa cache** sau khi thay đổi cấu trúc: `rm -rf src/data/cache/*/*.cache`
 - **Kiểm tra syntax:** `php -l filename.php`
 - **Test bảo mật:** Dùng `/security-audit` trước khi commit
 - **Đọc changelog:** Khi upgrade module/theme
@@ -211,7 +180,7 @@ allowed-tools: Read, Grep, Glob, Edit, Write, Bash
 ## Bước 1 - Phân tích yêu cầu
 ...
 
-## Bước 2 - Thu thập thông tin  
+## Bước 2 - Thu thập thông tin
 ...
 
 ## Bước 3 - Thực hiện
@@ -241,7 +210,7 @@ File `.claude/settings.json` kiểm soát quyền hạn của AI:
   "permissions": {
     "allow": [
       "Bash(php -l *)",
-      "Bash(php vendor/bin/codecept *)", 
+      "Bash(php vendor/bin/codecept *)",
       "Bash(composer *)"
     ]
   }
@@ -284,7 +253,7 @@ grep -A 10 '"allow"' .claude/settings.json
 ## 7. Tài liệu tham khảo
 
 - **Kiến thức sâu:** `docs/knowledge/` — đọc trước khi phát triển
-- **Code patterns:** `docs/knowledge/examples/` — templates và patterns chuẩn  
+- **Code patterns:** `docs/knowledge/examples/` — templates và patterns chuẩn
 - **Security guide:** `docs/knowledge/security.md` — bảo mật bắt buộc
 - **Migration guide:** `docs/knowledge/xtemplate-to-smarty.md` — nâng cấp giao diện
 - **API reference:** `docs/knowledge/api.md` — phát triển API endpoint
@@ -296,6 +265,6 @@ grep -A 10 '"allow"' .claude/settings.json
 Hệ thống AI skills của NukeViet giúp tự động hóa các tác vụ phổ biến và đảm bảo code tuân thủ chuẩn an toàn. Ưu tiên sử dụng skills có sẵn trước khi chat tự do để có kết quả tốt nhất.
 
 **Next steps:**
-1. Thử nghiệm với skill đơn giản như `/security-audit` 
-2. Đọc `docs/knowledge/module.md` để hiểu cấu trúc  
+1. Thử nghiệm với skill đơn giản như `/security-audit`
+2. Đọc `docs/knowledge/module.md` để hiểu cấu trúc
 3. Tạo skill tùy chỉnh cho workflow riêng của team
