@@ -16,7 +16,11 @@ if (!defined('NV_IS_FILE_EMAILTEMPLATES')) {
 $page_title = $nv_Lang->getModule('categories');
 
 // Thay đổi thứ tự
-if ($nv_Request->get_title('changeweight', 'post', '') == NV_CHECK_SESSION) {
+if ($nv_Request->isset_request('new_weight', 'post')) {
+    if (!csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
+        exit($nv_Lang->getGlobal('error_checkss'));
+    }
+
     $catid = $nv_Request->get_int('catid', 'post', 0);
 
     $sql = 'SELECT catid FROM ' . NV_EMAILTEMPLATES_GLOBALTABLE . '_categories WHERE catid=' . $catid;
@@ -55,7 +59,11 @@ if ($nv_Request->get_title('changeweight', 'post', '') == NV_CHECK_SESSION) {
 }
 
 // Xóa danh mục
-if ($nv_Request->get_title('delete', 'post', '') == NV_CHECK_SESSION) {
+if ($nv_Request->isset_request('delcat', 'post')) {
+    if (!csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
+        exit($nv_Lang->getGlobal('error_checkss'));
+    }
+
     $catid = $nv_Request->get_int('catid', 'post', 0);
 
     $sql = 'SELECT catid, is_system FROM ' . NV_EMAILTEMPLATES_GLOBALTABLE . '_categories WHERE catid=' . $catid;
@@ -118,11 +126,13 @@ if (!empty($catid)) {
     $caption = $nv_Lang->getModule('categories_add');
 }
 
-if ($nv_Request->get_title('saveform', 'post', '') == NV_CHECK_SESSION) {
+if ($nv_Request->isset_request('saveform', 'post')) {
     $data['title'] = $nv_Request->get_title('title', 'post', '', true);
     $data['status'] = (int) $nv_Request->get_bool('status', 'post', false);
 
-    if (empty($data['title'])) {
+    if (!csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
+        $error = $nv_Lang->getGlobal('error_checkss');
+    } elseif (empty($data['title'])) {
         $error = $nv_Lang->getModule('categories_error_title');
     } else {
         if (!$catid) {
@@ -213,6 +223,7 @@ $tpl->assign('DATA', $data);
 $tpl->assign('CAPTION', $caption);
 $tpl->assign('LIST', $global_array_cat);
 $tpl->assign('LISTCOUNT', count($global_array_cat));
+$tpl->assign('CHECKSS', csrf_create($csrf_key));
 $tpl->assign('ERROR', $error);
 
 $contents = $tpl->fetch('categories.tpl');

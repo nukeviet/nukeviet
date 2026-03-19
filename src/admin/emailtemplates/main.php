@@ -14,7 +14,11 @@ if (!defined('NV_IS_FILE_EMAILTEMPLATES')) {
 }
 
 // Xóa mẫu email
-if ($nv_Request->get_title('delete', 'post', '') == NV_CHECK_SESSION) {
+if ($nv_Request->isset_request('deltpl', 'post')) {
+    if (!csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
+        exit($nv_Lang->getGlobal('error_checkss'));
+    }
+
     $emailid = $nv_Request->get_int('emailid', 'post', 0);
 
     $sql = 'SELECT emailid, is_system, module_name FROM ' . NV_EMAILTEMPLATES_GLOBALTABLE . ' WHERE emailid=' . $emailid;
@@ -161,6 +165,7 @@ $tpl->assign('NV_BASE_ADMINURL', NV_BASE_ADMINURL);
 $tpl->assign('OP', $op);
 $tpl->assign('LANGS', $language_array);
 $tpl->assign('MODULES', $all_modules);
+$tpl->assign('CHECKSS', csrf_create($csrf_key));
 $tpl->assign('DATE_FORMAT', nv_region_config('jsdate_get'));
 
 $array_search['from'] = nv_u2d_get($array_search['from']);

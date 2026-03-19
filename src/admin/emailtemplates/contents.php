@@ -44,6 +44,9 @@ foreach ($lists as $mailtpl) {
 
 // List các merge fields
 if ($nv_Request->isset_request('getMergeFields', 'post')) {
+    if (!csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
+        exit($nv_Lang->getGlobal('error_checkss'));
+    }
     $pids = $nv_Request->get_typed_array('pids', 'post', 'int', []);
     $pids = array_intersect($pids, array_keys($array_mplugins));
 
@@ -225,7 +228,7 @@ if ($emailid) {
 $array['showlang'] = NV_LANG_DATA;
 $array['update_for'] = 1;
 
-if ($nv_Request->get_title('saveform', 'post', '') == NV_CHECK_SESSION) {
+if ($nv_Request->isset_request('saveform', 'post') and csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
     if (empty($array['is_system'])) {
         $array['catid'] = $nv_Request->get_int('catid', 'post', 0);
         $array['title'] = $nv_Request->get_typed_array('title', 'post', 'title', []);
@@ -557,6 +560,7 @@ if (empty($array['attachments'])) {
 $tpl->assign('NV_BASE_ADMINURL', NV_BASE_ADMINURL);
 $tpl->assign('FORM_ACTION', $form_action);
 $tpl->assign('DATA', $array);
+$tpl->assign('CHECKSS', csrf_create($csrf_key));
 $tpl->assign('ERROR', $error);
 $tpl->assign('LANGUAGE_ARRAY', $language_array);
 $tpl->assign('CATS', $global_array_cat);

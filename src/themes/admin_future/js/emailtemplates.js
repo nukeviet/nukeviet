@@ -25,7 +25,7 @@ $(function() {
             type: 'POST',
             url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=categories&nocache=' + new Date().getTime(),
             data: {
-                'changeweight': $(this).data('checksess'),
+                'checkss': $(this).data('checkss'),
                 'catid': catid,
                 'new_weight': weight
             },
@@ -57,7 +57,8 @@ $(function() {
                 type: 'POST',
                 url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=categories&nocache=' + new Date().getTime(),
                 data: {
-                    'delete': btn.data('checksess'),
+                    'delcat': 1,
+                    'checkss': btn.data('checkss'),
                     'catid': btn.data('catid')
                 },
                 cache: false,
@@ -93,7 +94,8 @@ $(function() {
                 type: 'POST',
                 url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=main&nocache=' + new Date().getTime(),
                 data: {
-                    'delete': btn.data('checksess'),
+                    'deltpl': 1,
+                    'checkss': btn.data('checkss'),
                     'emailid': btn.data('emailid')
                 },
                 cache: false,
@@ -150,7 +152,8 @@ $(function() {
                     url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=contents&nocache=' + new Date().getTime(),
                     data: {
                         'getMergeFields': 1,
-                        'pids': pids
+                        'pids': pids,
+                        'checkss': $('[name="checkss"]').val()
                     },
                     cache: false,
                     success: function(res) {
