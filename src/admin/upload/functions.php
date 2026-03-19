@@ -201,7 +201,7 @@ function nv_check_path_upload($path)
 
     $path = str_replace('\\', '/', $path);
     $path = str_replace(NV_ROOTDIR . '/', '', $path);
-    if (preg_match('/^' . nv_preg_quote(NV_UPLOADS_DIR) . '/', $path) or $path = NV_UPLOADS_DIR) {
+    if (preg_match('/^' . nv_preg_quote(NV_UPLOADS_DIR) . '/', $path) or $path == NV_UPLOADS_DIR) {
         return $path;
     }
 
