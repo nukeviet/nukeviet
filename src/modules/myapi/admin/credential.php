@@ -16,11 +16,10 @@ if (!defined('NV_IS_FILE_ADMIN')) {
 $page_url = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op;
 
 if ($nv_Request->isset_request('changeAuth', 'post')) {
-    $checkss = $nv_Request->get_title('checkss', 'post', '');
-    if ($checkss != md5(NV_CHECK_SESSION . '_' . $module_name . '_' . $op . '_' . $admin_info['userid'])) {
+    if (!csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
         nv_jsonOutput([
             'status' => 'error',
-            'mess' => $nv_Lang->getGlobal('error_code_11')
+            'mess' => $nv_Lang->getGlobal('error_checkss')
         ]);
     }
     $userid = $nv_Request->get_int('changeAuth', 'post', 0);
@@ -116,6 +115,7 @@ if ($nv_Request->isset_request('changeAuth', 'post')) {
         $methods[$key] = $method;
     }
     $tpl->assign('METHODS', $methods);
+    $tpl->assign('CHECKSS', csrf_create($csrf_key));
 
     $contents = $tpl->fetch('credential-auth.tpl');
 
@@ -179,11 +179,10 @@ if ($action == 'getUser' and $nv_Request->isset_request('q', 'post')) {
 
 // Thay đổi trạng thái quyền truy cập API-role
 if ($action == 'changeStatus' and $nv_Request->isset_request('userid', 'post')) {
-    $checkss = $nv_Request->get_title('checkss', 'post', '');
-    if ($checkss != md5(NV_CHECK_SESSION . '_' . $module_name . '_' . $op . '_' . $admin_info['userid'])) {
+    if (!csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
         nv_jsonOutput([
             'status' => 'error',
-            'mess' => $nv_Lang->getGlobal('error_code_11')
+            'mess' => $nv_Lang->getGlobal('error_checkss')
         ]);
     }
     $userid = $nv_Request->get_int('userid', 'post', 0);
@@ -212,11 +211,10 @@ if ($action == 'changeStatus' and $nv_Request->isset_request('userid', 'post')) 
 
 // Xóa quyền truy cập
 if ($action == 'del' and $nv_Request->isset_request('userid', 'post')) {
-    $checkss = $nv_Request->get_title('checkss', 'post', '');
-    if ($checkss != md5(NV_CHECK_SESSION . '_' . $module_name . '_' . $op . '_' . $admin_info['userid'])) {
+    if (!csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
         nv_jsonOutput([
             'status' => 'error',
-            'mess' => $nv_Lang->getGlobal('error_code_11')
+            'mess' => $nv_Lang->getGlobal('error_checkss')
         ]);
     }
     $userid = $nv_Request->get_int('userid', 'post', 0);
@@ -356,6 +354,7 @@ if ($action == 'credential') {
     $tpl->assign('MODULE_NAME', $module_name);
     $tpl->assign('OP', $op);
     $tpl->assign('CREDENTIAL', $credential_data);
+    $tpl->assign('CHECKSS', csrf_create($csrf_key));
     if (!$credential_data['userid']) {
         $tpl->assign('ROLE_ID', $role_id);
         $tpl->assign('ROLE_OBJECT', $rolelist[$role_id]['role_object']);
@@ -395,7 +394,7 @@ $tpl->assign('ROLE_LIST', $rolelist);
 $tpl->assign('CREDENTIAL_COUNT', $credentialcount);
 $tpl->assign('GENERATE_PAGE', $generate_page);
 $tpl->assign('CREDENTIAL_LIST', $credentiallist);
-$tpl->assign('CHECKSS', md5(NV_CHECK_SESSION . '_' . $module_name . '_' . $op . '_' . $admin_info['userid']));
+$tpl->assign('CHECKSS', csrf_create($csrf_key));
 $tpl->registerPlugin('modifier', 'ddatetime', 'nv_datetime_format');
 $tpl->registerPlugin('modifier', 'nnum_format', 'nv_number_format');
 

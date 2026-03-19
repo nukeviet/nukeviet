@@ -1,3 +1,4 @@
+<div id="credential-auth-container" data-checkss="{$CHECKSS}">
 <div class="form-label">{$LANG->getModule('auth_method')}</div>
 {assign var='activeMethod' value=''}
 <ul class="d-none d-sm-flex nav nav-tabs mb-3" role="tablist" data-toggle="tablist">

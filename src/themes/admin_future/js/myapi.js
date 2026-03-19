@@ -14,7 +14,7 @@ $(function() {
             type: "POST",
             url: $('#role').attr('action'),
             cache: !1,
-            data: 'getapitree=' + $(this).val()
+            data: 'getapitree=' + $(this).val() + '&checkss=' + $('#role [name=checkss]').val()
         }).done(function(a) {
             if (a.status == 'error') {
                 nukeviet.toast(a.mess, 'error');
@@ -420,7 +420,7 @@ $(function() {
                 type: "POST",
                 url: myroleapi_url,
                 cache: !1,
-                data: 'changeActivate=' + role_id,
+                data: 'changeActivate=' + role_id + '&checkss=' + myroleapi.data('checkss'),
                 dataType: "json"
             }).done(function(a) {
                 if ('error' == a.status) {
@@ -452,7 +452,7 @@ $(function() {
                 type: "POST",
                 url: myroleapi_url,
                 cache: !1,
-                data: 'createAuth=' + method,
+                data: 'createAuth=' + method + '&checkss=' + myroleapi.data('checkss'),
                 dataType: "json"
             }).done(function(a) {
                 setTimeout(function() {
@@ -473,7 +473,7 @@ $(function() {
                 type: "POST",
                 url: myroleapi_url,
                 cache: !1,
-                data: 'delAuth=' + method,
+                data: 'delAuth=' + method + '&checkss=' + myroleapi.data('checkss'),
                 dataType: "json"
             }).done(function(a) {
                 setTimeout(function() {
@@ -499,7 +499,7 @@ $(function() {
                 type: "POST",
                 url: myroleapi_url,
                 cache: !1,
-                data: 'ipsUpdate=' + ips + '&method=' + method,
+                data: 'ipsUpdate=' + ips + '&method=' + method + '&checkss=' + myroleapi.data('checkss'),
                 dataType: "json"
             }).done(function(a) {
                 if ('error' == a.status) {

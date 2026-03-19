@@ -1,4 +1,5 @@
 {if empty($CREDENTIAL.userid)}
+<input type="hidden" name="checkss" value="{$CHECKSS}">
 <input type="hidden" name="add" value="1">
 <div class="row mb-4">
     <label class="col-sm-3 col-form-label text-sm-end" for="getUser">{$LANG->getModule('api_role_object_'|cat:$ROLE_OBJECT)}</label>
@@ -8,6 +9,7 @@
     </div>
 </div>
 {else}
+<input type="hidden" name="checkss" value="{$CHECKSS}">
 <input type="hidden" name="edit" value="1">
 <input type="hidden" name="userid" value="{$CREDENTIAL.userid}">
 {/if}

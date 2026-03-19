@@ -13,12 +13,9 @@ if (!defined('NV_IS_API_MOD')) {
     exit('Stop!!!');
 }
 
-$checkss = md5(NV_CHECK_SESSION . '_' . $module_name);
-
 // Xóa xác thực
 if ($nv_Request->isset_request('delAuth', 'post')) {
-    $_checkss = $nv_Request->get_title('checkss', 'post', '');
-    if (!hash_equals($checkss, $_checkss)) {
+    if (!csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
         nv_jsonOutput([
             'status' => 'error',
             'mess' => 'Error session!!!'
@@ -40,8 +37,7 @@ if ($nv_Request->isset_request('delAuth', 'post')) {
 
 // Tạo xác thực
 if ($nv_Request->isset_request('createAuth', 'post')) {
-    $_checkss = $nv_Request->get_title('checkss', 'post', '');
-    if (!hash_equals($checkss, $_checkss)) {
+    if (!csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
         nv_jsonOutput([
             'status' => 'error',
             'mess' => 'Error session!!!'
@@ -66,8 +62,7 @@ if ($nv_Request->isset_request('createAuth', 'post')) {
 
 // Lưu IP được phép truy cập
 if ($nv_Request->isset_request('ipsUpdate', 'post')) {
-    $_checkss = $nv_Request->get_title('checkss', 'post', '');
-    if (!hash_equals($checkss, $_checkss)) {
+    if (!csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
         nv_jsonOutput([
             'status' => 'error',
             'mess' => 'Error session!!!'
@@ -99,8 +94,7 @@ if ($nv_Request->isset_request('ipsUpdate', 'post')) {
 
 // Kích hoạt/hủy kích hoạt quyền truy cập
 if ($nv_Request->isset_request('changeActivate', 'post')) {
-    $_checkss = $nv_Request->get_title('checkss', 'post', '');
-    if (!hash_equals($checkss, $_checkss)) {
+    if (!csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
         nv_jsonOutput([
             'status' => 'error',
             'mess' => 'Error session!!!'
@@ -165,6 +159,7 @@ $page_title = $nv_Lang->getModule('main_title');
 $key_words = $module_info['keywords'];
 
 $canonicalUrl = getCanonicalUrl($page_url);
+$checkss = csrf_create($csrf_key);
 
 $contents = main_theme($type, $roleCount, $roleList, $api_user, $generate_page);
 

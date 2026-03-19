@@ -1,4 +1,4 @@
-<div id="my-role-api" data-page-url="{$smarty.const.NV_BASE_ADMINURL}index.php?{$smarty.const.NV_LANG_VARIABLE}={$smarty.const.NV_LANG_DATA}&amp;{$smarty.const.NV_NAME_VARIABLE}={$MODULE_NAME}">
+<div id="my-role-api" data-checkss="{$CHECKSS}" data-page-url="{$smarty.const.NV_BASE_ADMINURL}index.php?{$smarty.const.NV_LANG_VARIABLE}={$smarty.const.NV_LANG_DATA}&amp;{$smarty.const.NV_NAME_VARIABLE}={$MODULE_NAME}">
     <div class="text-end mb-3">
         <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#credential_auth"><i class="fa-solid fa-shield-halved fa-lg text-danger"></i> {$LANG->getModule('authentication')}</button>
     </div>
