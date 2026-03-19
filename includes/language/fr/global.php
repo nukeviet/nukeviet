@@ -349,6 +349,7 @@ $lang_global['required'] = 'Note: Vous devez declarer toute les zones cochés av
 $lang_global['cookie_notice'] = 'Nous utilisons des cookies pour vous offrir la meilleure expérience sur notre site web. Lorsque vous utilisez notre site, vous êtes informé que nous utilisons des cookies et que vous pouvez modifier cette utilisation à tout moment. <a href="%s">En savoir plus</a>.';
 $lang_global['on'] = 'On';
 $lang_global['off'] = 'De';
+$lang_global['share'] = 'Partager';
 $lang_global['country_AD'] = 'Andorre';
 $lang_global['country_AE'] = 'Arabes Unis';
 $lang_global['country_AF'] = 'Afghanistan';

@@ -1247,6 +1247,47 @@ header.header-up {
     margin-right: -4px;
 }
 
+/* Social share */
+.social-share-container {
+    display: flex;
+    align-items: center;
+}
+
+.social-share-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    align-items: center;
+}
+
+.social-share-buttons button {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding: 5px 10px;
+    color: #fff;
+    border: none;
+    border-radius: 9999px;
+    cursor: pointer;
+    line-height: 1;
+    font-size: 12px;
+}
+
+.social-share-buttons button.social-share-facebook {
+    background-color: #1877F2;
+}
+
+.social-share-buttons button.social-share-twitter {
+    background-color: #1DA1F2;
+}
+
+.social-share-label {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    margin-right: 10px;
+}
+
 .contactList li .fa,
 .contactList li [class^='icon-'],
 .contactList li [class*=' icon-'] {

@@ -38,4 +38,35 @@ $(function() {
             $(form).submit();
         }
     });
-})
+
+    // Nút chia sẻ mạng xã hội
+    $('body').on('click', '[data-toggle="nv-social-share"]', function(e) {
+        e.preventDefault();
+        const url = $(this).data('url') || window.location.href;
+        const title = $(this).data('title') || document.title;
+        let shareUrl = '';
+
+        switch ($(this).data('platform')) {
+            case 'facebook':
+                shareUrl = 'https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(url);
+                break;
+            case 'twitter':
+                shareUrl = 'https://twitter.com/intent/tweet?text=' + encodeURIComponent(title) + '&url=' + encodeURIComponent(url);
+                break;
+            case 'linkedin':
+                shareUrl = 'https://www.linkedin.com/shareArticle?mini=true&url=' + encodeURIComponent(url) + '&title=' + encodeURIComponent(title);
+                break;
+            case 'reddit':
+                shareUrl = 'https://www.reddit.com/submit?url=' + encodeURIComponent(url) + '&title=' + encodeURIComponent(title);
+                break;
+            case 'pocket':
+                shareUrl = 'https://getpocket.com/save?url=' + encodeURIComponent(url) + '&title=' + encodeURIComponent(title);
+                break;
+            default:
+                return;
+        }
+
+        const options = 'scrollbars=0, resizable=1, menubar=0, left=100, top=100, width=550, height=440, toolbar=0, status=0';
+        window.open(shareUrl, '_blank', options);
+    });
+});

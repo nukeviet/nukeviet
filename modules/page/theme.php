@@ -61,10 +61,6 @@ function nv_page_main($row, $ab_links, $content_comment)
         if (str_contains($page_config['socialbutton'], 'twitter')) {
             $xtpl->parse('main.socialbutton.twitter');
         }
-        if (str_contains($page_config['socialbutton'], 'zalo') and !empty($global_config['zaloOfficialAccountID'])) {
-            $xtpl->assign('ZALO_OAID', $global_config['zaloOfficialAccountID']);
-            $xtpl->parse('main.socialbutton.zalo');
-        }
 
         $xtpl->parse('main.socialbutton');
     }

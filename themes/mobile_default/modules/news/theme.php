@@ -723,10 +723,6 @@ function detail_theme($news_contents, $array_keyword, $related_new_array, $relat
         if (str_contains($module_config[$module_name]['socialbutton'], 'twitter')) {
             $xtpl->parse('main.socialbutton.twitter');
         }
-        if (str_contains($module_config[$module_name]['socialbutton'], 'zalo') and !empty($global_config['zaloOfficialAccountID'])) {
-            $xtpl->assign('ZALO_OAID', $global_config['zaloOfficialAccountID']);
-            $xtpl->parse('main.socialbutton.zalo');
-        }
 
         $xtpl->parse('main.socialbutton');
     }

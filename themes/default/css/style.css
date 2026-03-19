@@ -1858,6 +1858,47 @@ a.btn {
     transform: translate(-50%, -50%);
 }
 
+/* Social share */
+.social-share-container {
+    display: flex;
+    align-items: center;
+}
+
+.social-share-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    align-items: center;
+}
+
+.social-share-buttons button {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding: 5px 10px;
+    color: #fff;
+    border: none;
+    border-radius: 9999px;
+    cursor: pointer;
+    line-height: 1;
+    font-size: 12px;
+}
+
+.social-share-buttons button.social-share-facebook {
+    background-color: #1877F2;
+}
+
+.social-share-buttons button.social-share-twitter {
+    background-color: #1DA1F2;
+}
+
+.social-share-label {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    margin-right: 10px;
+}
+
 /* Body */
 
 #body {
@@ -2093,7 +2134,8 @@ a.btn {
     border-bottom-style: solid;
     margin: 10px 0;
     -webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
-    -box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
+    -moz-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
 }
 
 .nv-hr.nv-hr-lg {
@@ -2361,6 +2403,7 @@ input[type='radio'] {
     width: 16px;
     min-width: 16px;
     -webkit-appearance: none;
+    appearance: none;
     -webkit-box-sizing: border-box;
     box-sizing: border-box;
     color: #707070;
@@ -2385,11 +2428,9 @@ input[type='radio']:disabled:checked:before {
 input[type='checkbox']:checked:before,
 input[type='radio']:checked:before {
     float: left;
-    display: inline-block;
     vertical-align: middle;
     width: 14px;
     font: normal 14px/1 'FontAwesome';
-    speak: none;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
 }
@@ -2483,6 +2524,7 @@ button.close {
     background: 0 0;
     border: 0;
     -webkit-appearance: none;
+    appearance: none;
 }
 
 .close {
