@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(php -l *)",
+      "Bash(php vendor/bin/codecept *)",
+      "Bash(composer *)"
+    ]
+  }
+}

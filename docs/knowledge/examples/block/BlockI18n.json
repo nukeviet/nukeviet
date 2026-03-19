@@ -1,0 +1,21 @@
+{
+    "info": {
+        "name": "Block Demo"
+    },
+    "i18n": {
+        "vi": {
+            "info": { "name": "Block Demo (VI)" },
+            "language": {
+                "numrow": "Số dòng hiển thị",
+                "show_title": "Hiển thị tiêu đề"
+            }
+        },
+        "en": {
+            "info": { "name": "Block Demo (EN)" },
+            "language": {
+                "numrow": "Number of rows",
+                "show_title": "Show title"
+            }
+        }
+    }
+}
