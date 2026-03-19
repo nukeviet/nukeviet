@@ -15,9 +15,9 @@ if (!defined('NV_IS_FILE_ADMIN')) {
 
 $status = $nv_Request->get_int('active', 'post');
 $listcid = $nv_Request->get_string('list', 'post');
-$checkss = $nv_Request->get_string('checkss', 'post', '');
-if ($checkss != md5(NV_CHECK_SESSION . '_' . $module_name . '_' . $admin_info['userid']) || empty($listcid)) {
-    nv_jsonOutput(['status' => 'error', 'mess' => $nv_Lang->getGlobal('error_code_11')]);
+$_csrf_key = $admin_info['admin_id'] . '_' . $module_name . '_main';
+if (!csrf_check($nv_Request->get_string('checkss', 'post'), $_csrf_key) || empty($listcid)) {
+    nv_jsonOutput(['status' => 'error', 'mess' => $nv_Lang->getGlobal('error_checkss')]);
 }
 
 $status = ($status == 1) ? 1 : 0;

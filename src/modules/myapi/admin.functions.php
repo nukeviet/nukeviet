@@ -86,7 +86,7 @@ function checkRoleExist($id)
 {
     global $db, $db_config;
 
-    $exists = $db->query('SELECT COUNT(*) FROM ' . $db_config['prefix'] . '_api_role WHERE role_id =' . $id)->fetchColumn();
+    $exists = $db->query('SELECT COUNT(*) FROM ' . $db_config['prefix'] . '_api_role WHERE role_id =' . (int) $id)->fetchColumn();
 
     return !empty($exists);
 }
@@ -114,7 +114,7 @@ function getCredentialList($role_id, $for_admin, $page, $per_page)
         ->select('COUNT(*)')
         ->from($db_config['prefix'] . '_api_role_credential tb1')
         ->join($join)
-        ->where('tb1.role_id=' . $role_id);
+        ->where('tb1.role_id=' . (int) $role_id);
     $all_pages = $db->query($db->sql())
         ->fetchColumn();
 

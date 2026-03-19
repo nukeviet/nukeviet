@@ -28,7 +28,8 @@ if ($id > 0) {
         $act_id = $row['status'] ? 0 : 1;
         nv_insert_logs(NV_LANG_DATA, $module_name, 'log_change_status' , 'status ' . $act_id . ' pageid ' . $id, $admin_info['userid']);
         $db->query('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . ' SET status=' . $act_id . ' WHERE id= ' . $id);
-        $nv_Cache->delMod('modules');
+
+        $nv_Cache->delMod($module_name);
         nv_jsonOutput([
             'success' => 1,
             'text' => 'Success!'

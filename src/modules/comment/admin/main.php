@@ -148,7 +148,6 @@ if (empty($array)) {
     $array = [];
 }
 $sth->closeCursor();
-$checkss = md5(NV_CHECK_SESSION . '_' . $module_name . '_' . $admin_info['userid']);
 $from['from_date'] = nv_u2d_get($from['from_date']);
 $from['to_date'] = nv_u2d_get($from['to_date']);
 
@@ -166,7 +165,7 @@ $tpl->assign('SITE_MOD_COMM', $site_mod_comm);
 $tpl->assign('PER_PAGE', $per_page);
 $tpl->assign('ARRAY_SEARCH', $array_search);
 $tpl->assign('ARRAY_STATUS_VIEW', $array_status_view);
-$tpl->assign('CHECKSS', $checkss);
+$tpl->assign('CHECKSS', csrf_create($csrf_key));
 $tpl->assign('ARRAY_ROW', $array);
 $tpl->assign('GENERATE_PAGE', $generate_page);
 

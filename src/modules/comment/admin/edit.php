@@ -18,7 +18,6 @@ $cid = $nv_Request->get_int('cid', 'get,post');
 $sql = 'SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . ' WHERE cid=' . $cid;
 $row = $db->query($sql)->fetch();
 
-$checkss = md5(NV_CHECK_SESSION . '_' . $module_name . '_' . $admin_info['userid']);
 $dir = date('Y_m');
 if (!is_dir(NV_UPLOADS_REAL_DIR . '/' . $module_upload . '/' . $dir)) {
     $mk = nv_mkdir(NV_UPLOADS_REAL_DIR . '/' . $module_upload, $dir);
@@ -32,8 +31,8 @@ if (!is_dir(NV_UPLOADS_REAL_DIR . '/' . $module_upload . '/' . $dir)) {
 }
 
 if ($nv_Request->isset_request('save', 'post')) {
-    if ($checkss != $nv_Request->get_title('checkss', 'post') or empty($row) or !isset($site_mod_comm[$row['module']])) {
-        nv_jsonOutput(['status' => 'error', 'mess' => $nv_Lang->getGlobal('error_code_11')]);
+    if (!csrf_check($nv_Request->get_title('checkss', 'post'), $csrf_key) or empty($row) or !isset($site_mod_comm[$row['module']])) {
+        nv_jsonOutput(['status' => 'error', 'mess' => $nv_Lang->getGlobal('error_checkss')]);
     }
     $delete = $nv_Request->get_int('delete', 'post', 0);
     if ($delete) {
@@ -107,7 +106,7 @@ $tpl->assign('CID', $cid);
 $tpl->assign('ROW', $row);
 $tpl->assign('MODULE_UPLOAD', $module_upload);
 $tpl->assign('DIR', $dir);
-$tpl->assign('CHECKSS', $checkss);
+$tpl->assign('CHECKSS', csrf_create($csrf_key));
 
 $contents = $tpl->fetch('edit.tpl');
 

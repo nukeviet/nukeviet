@@ -14,9 +14,9 @@ if (!defined('NV_IS_FILE_ADMIN')) {
 }
 
 $cid = $nv_Request->get_int('cid', 'post', 0);
-$checkss = $nv_Request->get_string('checkss', 'post', '');
-if ($checkss != md5(NV_CHECK_SESSION . '_' . $module_name . '_' . $admin_info['userid'])) {
-    nv_jsonOutput(['status' => 'error', 'mess' => $nv_Lang->getGlobal('error_code_11')]);
+$_csrf_key = $admin_info['admin_id'] . '_' . $module_name . '_main';
+if (!csrf_check($nv_Request->get_string('checkss', 'post'), $_csrf_key)) {
+    nv_jsonOutput(['status' => 'error', 'mess' => $nv_Lang->getGlobal('error_checkss')]);
 }
 $sql = 'SELECT id, module FROM ' . NV_PREFIXLANG . '_' . $module_data . ' WHERE cid=' . $cid;
 

@@ -18,7 +18,7 @@ if ($nv_Request->isset_request('delAuth', 'post')) {
     if (!csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
         nv_jsonOutput([
             'status' => 'error',
-            'mess' => 'Error session!!!'
+            'mess' => $nv_Lang->getGlobal('error_checkss')
         ]);
     }
 
@@ -40,7 +40,7 @@ if ($nv_Request->isset_request('createAuth', 'post')) {
     if (!csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
         nv_jsonOutput([
             'status' => 'error',
-            'mess' => 'Error session!!!'
+            'mess' => $nv_Lang->getGlobal('error_checkss')
         ]);
     }
 
@@ -65,7 +65,7 @@ if ($nv_Request->isset_request('ipsUpdate', 'post')) {
     if (!csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
         nv_jsonOutput([
             'status' => 'error',
-            'mess' => 'Error session!!!'
+            'mess' => $nv_Lang->getGlobal('error_checkss')
         ]);
     }
 
@@ -97,7 +97,7 @@ if ($nv_Request->isset_request('changeActivate', 'post')) {
     if (!csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
         nv_jsonOutput([
             'status' => 'error',
-            'mess' => 'Error session!!!'
+            'mess' => $nv_Lang->getGlobal('error_checkss')
         ]);
     }
 
