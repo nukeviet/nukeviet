@@ -25,8 +25,8 @@ if ($nv_Request->get_bool('show_tabs', 'post')) {
         'error' => 1,
         'message' => 'Error!!!',
     ];
-    if ($nv_Request->get_title('checkss', 'post', '') !== NV_CHECK_SESSION) {
-        $respon['message'] = 'Wrong session!!!';
+    if (!csrf_check($nv_Request->get_title('checkss', 'post', ''), $csrf_key)) {
+        $respon['message'] = $nv_Lang->getGlobal('error_checkss');
         nv_jsonOutput($respon);
     }
 
@@ -72,6 +72,7 @@ if ($nv_Request->get_bool('show_tabs', 'post')) {
     $tpl->setTemplateDir(get_module_tpl_dir('tables.tpl'));
     $tpl->assign('LANG', $nv_Lang);
     $tpl->assign('MODULE_NAME', $module_name);
+    $tpl->assign('CHECKSS', csrf_create($csrf_key));
 
     $tpl->assign('DBNAME', $db->dbname);
     $tpl->assign('TABLES', $tables);
@@ -166,6 +167,7 @@ if ($db->dbtype == 'mysql') {
 
 $tpl = new \NukeViet\Template\NVSmarty();
 $tpl->setTemplateDir(get_module_tpl_dir('main.tpl'));
+$tpl->assign('CHECKSS', csrf_create($csrf_key));
 $tpl->assign('LANG', $nv_Lang);
 $tpl->assign('MODULE_NAME', $module_name);
 

@@ -58,7 +58,7 @@ $array_method_update = [
 ];
 
 $file_data_tmp = NV_ROOTDIR . '/' . NV_TEMP_DIR . '/data_samplewrite_' . NV_CHECK_SESSION;
-$file_data_dump = NV_ROOTDIR . '/' . NV_TEMP_DIR . '/data_sampledump_' . NV_CHECK_SESSION . '.php';
+$file_data_dump = NV_ROOTDIR . '/' . NV_TEMP_DIR . '/data_sampledump_' . NV_CHECK_SESSION . '.tmp';
 
 // Xóa gói dữ liệu
 if ($nv_Request->isset_request('delete', 'post')) {
@@ -66,7 +66,7 @@ if ($nv_Request->isset_request('delete', 'post')) {
         nv_htmlOutput('Wrong URL');
     }
     $sname = nv_strtolower(nv_substr($nv_Request->get_title('sname', 'post', ''), 0, 50));
-    if ($nv_Request->get_string('delete', 'post') == md5(NV_CHECK_SESSION . '_' . $module_name . '_' . $op . '_' . $sname) and preg_match('/^([a-z0-9]+)$/', $sname) and file_exists(NV_ROOTDIR . '/install/samples/data_' . $sname . '.php')) {
+    if (csrf_check($nv_Request->get_string('delete', 'post'), $admin_info['admin_id'] . '_' . $module_name . '_' . $op . '_' . $sname) and preg_match('/^([a-z0-9]+)$/', $sname) and file_exists(NV_ROOTDIR . '/install/samples/data_' . $sname . '.php')) {
         nv_deletefile(NV_ROOTDIR . '/install/samples/data_' . $sname . '.php');
         nv_insert_logs(NV_LANG_DATA, $module_name, $nv_Lang->getModule('sampledata'), 'Delete: ' . $sname, $admin_info['userid']);
     }
@@ -75,6 +75,11 @@ if ($nv_Request->isset_request('delete', 'post')) {
 
 // Tiến trình quét bằng AJAX
 if ($nv_Request->isset_request('startwrite', 'get')) {
+    if (!csrf_check($nv_Request->get_title('checkss', 'post'), $csrf_key)) {
+        nv_jsonOutput([
+            'message' => $nv_Lang->getGlobal('error_checkss')
+        ]);
+    }
     if ($sys_info['allowed_set_time_limit']) {
         set_time_limit(0);
     }
@@ -93,6 +98,7 @@ if ($nv_Request->isset_request('startwrite', 'get')) {
     $array_request['delifexists'] = $nv_Request->get_int('delifexists', 'post', 0);
     $array_request['offsettable'] = $nv_Request->get_int('offsettable', 'post', 0);
     $array_request['offsetrow'] = $nv_Request->get_int('offsetrow', 'post', 0);
+    $array_request['checkss'] = $nv_Request->get_title('checkss', 'post', '');
 
     if (empty($array_request['sample_name'])) {
         $json['message'] = $nv_Lang->getModule('sampledata_error_name');
@@ -325,7 +331,7 @@ foreach ($files as $file) {
         'title' => substr(substr($file, 5), 0, -4),
         'creattime' => nv_datetime_format(filemtime(NV_ROOTDIR . '/install/samples/' . $file), 1)
     ];
-    $row['checkss'] = md5(NV_CHECK_SESSION . '_' . $module_name . '_' . $op . '_' . $row['title']);
+    $row['checkss'] = csrf_create($admin_info['admin_id'] . '_' . $module_name . '_' . $op . '_' . $row['title']);
     $array[] = $row;
 }
 
@@ -333,6 +339,7 @@ $tpl = new \NukeViet\Template\NVSmarty();
 $tpl->setTemplateDir(get_module_tpl_dir('sampledata.tpl'));
 $tpl->assign('LANG', $nv_Lang);
 $tpl->assign('MODULE_NAME', $module_name);
+$tpl->assign('CHECKSS', csrf_create($csrf_key));
 $tpl->assign('OP', $op);
 $tpl->assign('DATA', $array);
 

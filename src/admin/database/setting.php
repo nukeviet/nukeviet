@@ -22,8 +22,7 @@ $array_config_global['dump_backup_ext'] = $global_config['dump_backup_ext'];
 $array_config_global['dump_interval'] = $global_config['dump_interval'];
 $array_config_global['dump_autobackup'] = $global_config['dump_autobackup'];
 
-$checkss = md5(NV_CHECK_SESSION . '_' . $module_name . '_' . $op . '_' . $admin_info['userid']);
-if ($checkss == $nv_Request->get_string('checkss', 'post')) {
+if (csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
     $array_config_global = [];
     $array_config_global['dump_backup_ext'] = $nv_Request->get_title('dump_backup_ext', 'post', '', 1);
     $array_config_global['dump_autobackup'] = $nv_Request->get_int('dump_autobackup', 'post');
@@ -57,7 +56,7 @@ $tpl->setTemplateDir(get_module_tpl_dir('setting.tpl'));
 $tpl->assign('LANG', $nv_Lang);
 $tpl->assign('MODULE_NAME', $module_name);
 $tpl->assign('OP', $op);
-$tpl->assign('CHECKSS', $checkss);
+$tpl->assign('CHECKSS', csrf_create($csrf_key));
 $tpl->assign('DATA', $array_config_global);
 $tpl->assign('SQL_EXTS', $array_sql_ext);
 

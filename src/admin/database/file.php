@@ -57,7 +57,7 @@ if ($nv_Request->isset_request('getbackup,t,p,ext', 'get')) {
     $name = date('Y-m-d-H-i-s', $time);
     $filename = $name . '_' . md5($passphrase . NV_CHECK_SESSION) . '.' . $ext;
     $path = $log_dir . '/' . $filename;
-    if ($checkss !== md5($filename . NV_CHECK_SESSION) or !nv_is_file(NV_BASE_SITEURL . str_replace(NV_ROOTDIR . '/', '', $path), str_replace(NV_ROOTDIR . '/', '', $log_dir))) {
+    if (!csrf_check($checkss, $admin_info['admin_id'] . '_' . $module_name . '_' . $op . '_' . $filename) or !nv_is_file(NV_BASE_SITEURL . str_replace(NV_ROOTDIR . '/', '', $path), str_replace(NV_ROOTDIR . '/', '', $log_dir))) {
         nv_info_die($nv_Lang->getGlobal('error_404_title'), $nv_Lang->getGlobal('error_404_title'), $nv_Lang->getGlobal('error_404_content'), 403);
     }
 
@@ -74,7 +74,7 @@ if ($nv_Request->isset_request('getbackup,index,checkss', 'get')) {
     $index = $nv_Request->get_absint('index', 'get', 0);
     $checkss = $nv_Request->get_title('checkss', 'get', '');
 
-    if (isset($array_content[$filetime], $array_content[$filetime][$index]) and md5($filetime . $index . NV_CHECK_SESSION) === $checkss) {
+    if (isset($array_content[$filetime], $array_content[$filetime][$index]) and csrf_check($checkss, $admin_info['admin_id'] . '_' . $module_name . '_' . $op . '_' . $filetime . '_' . $index)) {
         $file = $array_content[$filetime][$index];
 
         nv_insert_logs(NV_LANG_DATA, $module_name, $nv_Lang->getModule('download'), 'File name: ' . basename($file['path']), $admin_info['userid']);
@@ -99,7 +99,7 @@ if ($nv_Request->isset_request('delbackup,index,checkss', 'get')) {
         'message' => 'Wrong Session or Data!!!'
     ];
 
-    if (isset($array_content[$filetime], $array_content[$filetime][$index]) and md5($filetime . $index . NV_CHECK_SESSION) === $checkss) {
+    if (isset($array_content[$filetime], $array_content[$filetime][$index]) and csrf_check($checkss, $admin_info['admin_id'] . '_' . $module_name . '_' . $op . '_' . $filetime . '_' . $index)) {
         $file = $array_content[$filetime][$index];
         nv_insert_logs(NV_LANG_DATA, $module_name, $nv_Lang->getGlobal('delete') . ' ' . $nv_Lang->getModule('file_backup'), 'File name: ' . basename($file['path']), $admin_info['userid']);
         nv_deletefile($file['path']);
@@ -114,7 +114,7 @@ krsort($array_content);
 foreach ($array_content as $filetime => $files) {
     krsort($files);
     foreach ($files as $file_index => $file) {
-        $files[$file_index]['checkss'] = md5($filetime . $file_index . NV_CHECK_SESSION);
+        $files[$file_index]['checkss'] = csrf_create($admin_info['admin_id'] . '_' . $module_name . '_' . $op . '_' . $filetime . '_' . $file_index);
     }
     $array_content[$filetime] = $files;
 }
@@ -125,6 +125,7 @@ $tpl->registerPlugin('modifier', 'displaySize', 'nv_convertfromBytes');
 $tpl->registerPlugin('modifier', 'displayTime', 'nv_datetime_format');
 $tpl->assign('LANG', $nv_Lang);
 $tpl->assign('MODULE_NAME', $module_name);
+$tpl->assign('CHECKSS', csrf_create($csrf_key));
 $tpl->assign('OP', $op);
 $tpl->assign('ARRAY', $array_content);
 

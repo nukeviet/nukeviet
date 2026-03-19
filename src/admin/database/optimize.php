@@ -21,8 +21,8 @@ if (empty($tables)) {
     $tables = explode(',', $tables);
 }
 $checkss = $nv_Request->get_title('checkss', 'post', '');
-if ($checkss !== NV_CHECK_SESSION) {
-    nv_htmlOutput('Wrong session!!!');
+if (!csrf_check($checkss, $admin_info['admin_id'] . '_' . $module_name . '_main')) {
+    nv_htmlOutput($nv_Lang->getGlobal('error_checkss'));
 }
 
 nv_insert_logs(NV_LANG_DATA, $module_name, $nv_Lang->getModule('optimize'), '', $admin_info['userid']);

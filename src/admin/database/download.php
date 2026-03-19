@@ -15,7 +15,7 @@ if (!defined('NV_IS_FILE_DATABASE')) {
 
 $checkss = $nv_Request->get_title('checkss', 'post,get');
 
-if ($checkss == NV_CHECK_SESSION) {
+if (csrf_check($checkss, $admin_info['admin_id'] . '_' . $module_name . '_main') or csrf_check($checkss, $admin_info['admin_id'] . '_' . $module_name . '_file')) {
     $tables = $nv_Request->get_array('tables', 'post', []);
     $type = $nv_Request->get_title('type', 'post', '');
     $ext = $nv_Request->get_title('ext', 'post', $global_config['dump_backup_ext']);

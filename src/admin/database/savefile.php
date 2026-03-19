@@ -19,6 +19,10 @@ $tables = $nv_Request->get_array('tables', 'post', []);
 $type = $nv_Request->get_title('type', 'post', '');
 $ext = $nv_Request->get_title('ext', 'post', '');
 
+if (!csrf_check($nv_Request->get_string('checkss', 'post'), $admin_info['admin_id'] . '_' . $module_name . '_main')) {
+    nv_info_die($nv_Lang->getGlobal('error_404_title'), $nv_Lang->getGlobal('error_404_title'), $nv_Lang->getGlobal('error_checkss'));
+}
+
 if (empty($tables)) {
     $tables = [];
 } elseif (!is_array($tables)) {
