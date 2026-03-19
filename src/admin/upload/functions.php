@@ -31,7 +31,7 @@ $allow_func = [
     'main', 'delimg', 'createimg',
     'dlimg', 'renameimg', 'moveimg',
     'delfolder', 'renamefolder', 'createfolder',
-    'upload', 'addlogo', 'cropimg', 'rotateimg', 'download',
+    'upload', 'addlogo', 'cropimg', 'rotateimg',
     'webpconvert', 'compressimage', 'qualitychange', 'js'
 ];
 
