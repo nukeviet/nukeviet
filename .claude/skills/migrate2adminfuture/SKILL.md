@@ -114,7 +114,7 @@ $tpl->setTemplateDir(get_module_tpl_dir(basename(__FILE__, '.php') . '.tpl'));
 $tpl->assign('LANG', $nv_Lang);
 $tpl->assign('MODULE_NAME', $module_name);
 $tpl->assign('OP', $op);
-$tpl->assign('CHECKSS', csrf_create($module_name . '_' . $op . '_' . $admin_info['admin_id']));
+$tpl->assign('CHECKSS', csrf_create($csrf_key));
 // ... assign thêm data
 
 $contents = $tpl->fetch(basename(__FILE__, '.php') . '.tpl');

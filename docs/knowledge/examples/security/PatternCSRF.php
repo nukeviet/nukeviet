@@ -9,13 +9,10 @@
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
-// 1. Định nghĩa key định danh duy nhất cho tác vụ
-$csrf_key = $module_name . '_' . $op . '_' . $admin_info['admin_id'];
-
-// 2. Tạo token chống CSRF (thường gán vào template)
+// 1. Tạo token chống CSRF (thường gán vào template)
 $csrf_create = csrf_create($csrf_key);
 
-// 3. Kiểm tra token khi có request POST
+// 2. Kiểm tra token khi có request POST
 if ($nv_Request->isset_request('save', 'post')) {
     if (!csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
         // Không hợp lệ → báo lỗi hoặc redirect (tùy định dạng trả về)

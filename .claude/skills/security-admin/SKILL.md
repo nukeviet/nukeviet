@@ -53,8 +53,7 @@ Chỉ audit **một** giao diện theo thứ tự ưu tiên. Chỉ sửa JS xu�
 - Đã cast `(int)` hoặc quote → gợi ý cải tiến, không phải lỗi nghiêm trọng
 
 **CSRF:**
-- `$csrf_key = $module_name . '_' . $op . '_' . $admin_info['admin_id']`
-- `csrf_create($csrf_key)` — sinh 1 lần nếu cùng giá trị
+- `csrf_create($csrf_key)` — $csrf_key hệ thống định nghĩa sẵn
 - `csrf_check($csrf, $csrf_key)` — kiểm tra khi nhận POST
 - Kiểm tra đồng bộ `.tpl` và `.js` tương ứng
 

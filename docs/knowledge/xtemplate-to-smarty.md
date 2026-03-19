@@ -75,7 +75,7 @@ $contents = $tpl->fetch('main.tpl');
 $tpl->assign('LANG', $nv_Lang);
 $tpl->assign('MODULE_NAME', $module_name);
 $tpl->assign('OP', $op);
-$tpl->assign('CHECKSS', csrf_create($module_name . '_' . $op . '_' . $admin_info['admin_id']));
+$tpl->assign('CHECKSS', csrf_create($csrf_key));
 ```
 
 ### 3.4 Giá trị mặc định (tránh Undefined array key)
