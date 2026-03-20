@@ -6,7 +6,7 @@
     </div>
 </div>
 <form method="post" id="lang-edit-form" action="{$FORM_ACTION}" novalidate>
-    <input type="hidden" name="savedata" value="{$smarty.const.NV_CHECK_SESSION}">
+    <input type="hidden" name="savedata" value="{$CHECKSS}">
     <input type="hidden" name="pozauthor[langtype]" data-key="langtype" value="{$TRANSLATOR.langtype}">
     <div class="card border-primary border-3 border-bottom-0 border-start-0 border-end-0">
         <div class="card-header fs-5 fw-medium">

@@ -32,7 +32,7 @@ $format_get = [
     'Y-m-d'
 ];
 
-if ($nv_Request->get_title('saveform', 'post', '') === NV_CHECK_SESSION) {
+if (csrf_check($nv_Request->get_string('saveform', 'post'), $csrf_key)) {
     $respon = [
         'status' => 'error',
         'mess' => '',
@@ -195,6 +195,7 @@ $tpl->assign('TAB', $tab);
 $tpl->assign('DATA', $array);
 $tpl->assign('FORMAT_GET', $format_get);
 $tpl->assign('FORMAT_POST', $format_post);
+$tpl->assign('CHECKSS', csrf_create($csrf_key));
 
 $contents = $tpl->fetch('region.tpl');
 

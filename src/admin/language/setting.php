@@ -16,7 +16,7 @@ if (!defined('NV_IS_FILE_LANG')) {
 $page_title = $nv_Lang->getModule('nv_lang_setting');
 
 // Lưu cấu hình đọc ngôn ngữ giao diện
-if ($nv_Request->get_string('checkss', 'post') == NV_CHECK_SESSION) {
+if (csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
     $read_type = $nv_Request->get_int('read_type', 'post', 0);
     $db->query('UPDATE ' . NV_CONFIG_GLOBALTABLE . " SET config_value = '" . $read_type . "' WHERE lang='sys' AND module = 'global' AND config_name = 'read_type'");
     nv_save_file_config_global();
@@ -48,10 +48,10 @@ foreach ($language_array as $key => $value) {
             'allowed_write' => (in_array($key, $lang_array_data_exit, true) and in_array('write', $allow_func, true)),
             'allowed_delete' => (in_array($key, $lang_array_data_exit, true) and in_array('delete', $allow_func, true)),
             'allowed_delete_files' => (!in_array($key, $global_config['setup_langs'], true) and in_array('delete', $allow_func, true)),
-            'checkss_read' => md5('readallfile' . NV_CHECK_SESSION),
-            'checkss_write' => md5('writeallfile' . NV_CHECK_SESSION),
-            'checkss_download' => md5('downloadallfile' . NV_CHECK_SESSION),
-            'checkss_delete' => md5('deleteallfile' . NV_CHECK_SESSION)
+            'checkss_read' => csrf_create($admin_info['admin_id'] . '_' . $module_name . '_readallfile'),
+            'checkss_write' => csrf_create($admin_info['admin_id'] . '_' . $module_name . '_writeallfile'),
+            'checkss_download' => csrf_create($admin_info['admin_id'] . '_' . $module_name . '_downloadallfile'),
+            'checkss_delete' => csrf_create($admin_info['admin_id'] . '_' . $module_name . '_deleteallfile')
         ];
     }
 }
@@ -63,6 +63,7 @@ $tpl->assign('MODULE_NAME', $module_name);
 $tpl->assign('OP', $op);
 $tpl->assign('GCONFIG', $global_config);
 $tpl->assign('ROWS', $array);
+$tpl->assign('CHECKSS', csrf_create($csrf_key));
 
 $contents = $tpl->fetch('setting.tpl');
 

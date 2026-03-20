@@ -42,7 +42,7 @@ $tpl->assign('LANG_EMPTY', '');
 $typelang = $nv_Request->get_title('typelang', 'post,get', '');
 $tpl->assign('TYPELANG', $typelang);
 
-if (!empty($typelang) and $nv_Request->isset_request('savedata', 'post') and $nv_Request->get_string('savedata', 'post') == NV_CHECK_SESSION) {
+if (!empty($typelang) and $nv_Request->isset_request('savedata', 'post') and csrf_check($nv_Request->get_string('savedata', 'post'), $csrf_key)) {
     $pozlang = $nv_Request->get_array('pozlang', 'post', []);
 
     if (!empty($pozlang) and isset($language_array[$typelang])) {
@@ -96,6 +96,7 @@ $tpl->assign('SOURCELANG', $sourcelang);
 $tpl->assign('CHECK_TYPE', $check_type);
 $tpl->assign('ARRAY_FILES', $array_files);
 $tpl->assign('IDFILE', $idfile);
+$tpl->assign('CHECKSS', csrf_create($csrf_key));
 
 $array_lang_data = [];
 $is_submit = 0;

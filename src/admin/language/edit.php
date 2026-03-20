@@ -29,7 +29,7 @@ if (empty($idfile) or empty($module)) {
     nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=interface');
 }
 
-if ($nv_Request->get_string('savedata', 'get') == NV_CHECK_SESSION) {
+if (csrf_check($nv_Request->get_string('savedata', 'get'), $csrf_key)) {
     $postdata = @file_get_contents('php://input');
     $postdata = json_decode($postdata, true);
 
@@ -40,7 +40,7 @@ if ($nv_Request->get_string('savedata', 'get') == NV_CHECK_SESSION) {
     $postdata['pozauthor']['createdate'] = !empty($postdata['pozauthor']['createdate']) ? strip_tags(nv_unhtmlspecialchars($postdata['pozauthor']['createdate'])) : date('d/m/Y, H:i');
     $postdata['pozauthor']['copyright'] = !empty($postdata['pozauthor']['copyright']) ? strip_tags(nv_unhtmlspecialchars($postdata['pozauthor']['copyright'])) : '@Copyright (C) ' . date('Y') . ' VINADES.,JSC. All rights reserved';
     $postdata['pozauthor']['info'] = !empty($postdata['pozauthor']['info']) ? strip_tags(nv_unhtmlspecialchars($postdata['pozauthor']['info'])) : '';
-    $postdata['pozauthor']['langtype'] = !empty($postdata['pozauthor']['langtype']) ? strip_tags($postdata['pozauthor']['langtype']) : 'lang_module';
+    $postdata['pozauthor']['langtype'] = (isset($postdata['pozauthor']['langtype']) && preg_match('/^[a-z0-9\_]{3,30}$/', $postdata['pozauthor']['langtype'])) ? $postdata['pozauthor']['langtype'] : 'lang_module';
     $author = serialize($postdata['pozauthor']);
 
     $sth = $db->prepare('UPDATE ' . NV_LANGUAGE_GLOBALTABLE . '_file SET author_' . $dirlang . '= :author WHERE idfile = ' . $idfile);
@@ -110,7 +110,7 @@ if ($nv_Request->get_string('savedata', 'get') == NV_CHECK_SESSION) {
     ]);
 }
 
-if (!$nv_Request->isset_request('checksess', 'get') or $nv_Request->get_string('checksess', 'get') != md5($idfile . NV_CHECK_SESSION)) {
+if (!$nv_Request->isset_request('checksess', 'get') or !csrf_check($nv_Request->get_string('checksess', 'get'), $admin_info['admin_id'] . '_' . $module_name . '_edit_' . $idfile)) {
     nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=interface');
 }
 
@@ -138,6 +138,7 @@ $tpl->assign('OP', $op);
 $tpl->registerPlugin('modifier', 'strencode', 'nv_htmlspecialchars');
 
 $tpl->assign('FORM_ACTION', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;dirlang=' . $dirlang . '&amp;idfile=' . $idfile);
+$tpl->assign('CHECKSS', csrf_create($csrf_key));
 $tpl->assign('TRANSLATOR', $array_translator);
 $tpl->assign('EDIT_MODULE', $module);
 if ($admin_file == '1') {

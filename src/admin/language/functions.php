@@ -182,14 +182,11 @@ function nv_admin_write_lang($dirlang, $idfile)
         $content_lang .= "if (!defined('NV_MAINFILE')) {\n";
         $content_lang .= "    exit('Stop!!!');\n}\n\n";
 
-        empty($array_translator['info']) && $array_translator['info'] = '';
-
-        $content_lang .= "\$lang_translator['author'] = '" . $array_translator['author'] . "';\n";
-        $content_lang .= "\$lang_translator['createdate'] = '" . $array_translator['createdate'] . "';\n";
-        $content_lang .= "\$lang_translator['copyright'] = '" . $array_translator['copyright'] . "';\n";
-        $content_lang .= "\$lang_translator['info'] = '" . $array_translator['info'] . "';\n";
-        $content_lang .= "\$lang_translator['langtype'] = '" . $array_translator['langtype'] . "';\n";
-        $content_lang .= "\n";
+        foreach (['author', 'createdate', 'copyright', 'info'] as $key) {
+            $content_lang .= "\$lang_translator['" . $key . "'] = '" . addcslashes($array_translator[$key] ?? '', "'\\") . "';\n";
+        }
+        $langtype_save = (isset($array_translator['langtype']) && preg_match('/^[a-z0-9\_]{3,30}$/', $array_translator['langtype'])) ? $array_translator['langtype'] : 'lang_module';
+        $content_lang .= "\$lang_translator['langtype'] = '" . $langtype_save . "';\n\n";
     }
 
     $numrows = 0;
@@ -201,11 +198,13 @@ function nv_admin_write_lang($dirlang, $idfile)
         ++$numrows;
         $lang_value = str_replace("\'", "'", $lang_value);
         $lang_value = str_replace("'", "\'", $lang_value);
-        if ($current_langtype != '' and $current_langtype != $langtype_row) {
-            $content_lang .= "\n";
+        if (preg_match('/^[a-z0-9\_]{3,30}$/', $langtype_row) and preg_match('/^[a-zA-Z0-9\_]{1,100}$/', $lang_key)) {
+            if ($current_langtype != '' and $current_langtype != $langtype_row) {
+                $content_lang .= "\n";
+            }
+            $content_lang .= '$' . $langtype_row . "['" . $lang_key . "'] = '" . $lang_value . "';\n";
+            $current_langtype = $langtype_row;
         }
-        $content_lang .= '$' . $langtype_row . "['" . $lang_key . "'] = '" . $lang_value . "';\n";
-        $current_langtype = $langtype_row;
     }
 
     if ($numrows) {

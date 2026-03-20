@@ -67,7 +67,7 @@
             </div>
             <div class="row">
                 <div class="col-sm-8 offset-sm-3">
-                    <input type="hidden" name="checkss" value="{$smarty.const.NV_CHECK_SESSION}">
+                    <input type="hidden" name="checkss" value="{$CHECKSS}">
                     <button type="submit" class="btn btn-primary">{$LANG->getGlobal('submit')}</button>
                 </div>
             </div>

@@ -14,14 +14,15 @@ if (!defined('NV_IS_FILE_LANG')) {
 }
 
 $page_title = $nv_Lang->getModule('nv_lang_data');
-$_md5_lang_multi = md5('lang_multi_' . NV_CHECK_SESSION);
+$_csrf_key_lang_multi = $admin_info['admin_id'] . '_' . $module_name . '_lang_multi';
+$_md5_lang_multi = csrf_create($_csrf_key_lang_multi);
 if (!$global_config['lang_multi']) {
     $nv_Lang->setModule('nv_data_note', $nv_Lang->getModule('nv_data_note2', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&lang_multi=' . $_md5_lang_multi) . ' ' . $nv_Lang->getModule('nv_data_note'));
 }
 
 $_lang_multi = $nv_Request->get_title('lang_multi', 'get', '');
 
-if ($_lang_multi == $_md5_lang_multi) {
+if (csrf_check($_lang_multi, $_csrf_key_lang_multi)) {
     $errormess = '';
     $array_config_global = [];
     $array_config_global['lang_multi'] = 1;
@@ -77,7 +78,7 @@ foreach ($lang_array_exit as $lang) {
 
 if (defined('NV_IS_GODADMIN') or ($global_config['idsite'] > 0 and defined('NV_IS_SPADMIN'))) {
     // Change weight
-    if ($nv_Request->get_title('changeweight', 'post', '') === NV_CHECK_SESSION) {
+    if (csrf_check($nv_Request->get_string('changeweight', 'post', ''), $csrf_key)) {
         if (!defined('NV_IS_AJAX')) {
             nv_jsonOutput([
                 'status' => 'error',
@@ -128,7 +129,7 @@ if (defined('NV_IS_GODADMIN') or ($global_config['idsite'] > 0 and defined('NV_I
     $keylang = $nv_Request->get_title('keylang', 'get', '', 1);
     $deletekeylang = $nv_Request->get_title('deletekeylang', 'get', '', 1);
 
-    if ($nv_Request->isset_request('activelang', 'get') and $checksess == md5('activelang_' . $keylang . NV_CHECK_SESSION) and preg_match('/^[a-z]{2}$/', $keylang)) {
+    if ($nv_Request->isset_request('activelang', 'get') and csrf_check($checksess, $admin_info['admin_id'] . '_' . $module_name . '_activelang_' . $keylang) and preg_match('/^[a-z]{2}$/', $keylang)) {
         // Kích hoạt hiển thị ngoài site một ngôn ngữ
         if (empty($global_config['idsite'])) {
             $activelang = $nv_Request->get_int('activelang', 'get', 0);
@@ -158,7 +159,7 @@ if (defined('NV_IS_GODADMIN') or ($global_config['idsite'] > 0 and defined('NV_I
             'success' => 0,
             'text' => 'Wrong request data!!!'
         ]);
-    } elseif ($checksess == md5($keylang . NV_CHECK_SESSION) and in_array($keylang, $lang_array_exit, true)) {
+    } elseif (csrf_check($checksess, $admin_info['admin_id'] . '_' . $module_name . '_setup_' . $keylang) and in_array($keylang, $lang_array_exit, true)) {
         // Cài đặt ngôn ngữ data mới
         if (isset($array_lang_setup[$keylang]) and $array_lang_setup[$keylang]['setup'] == 1) {
             nv_jsonOutput([
@@ -384,7 +385,7 @@ if (defined('NV_IS_GODADMIN') or ($global_config['idsite'] > 0 and defined('NV_I
                 'mess' => $nv_Lang->getModule('nv_data_note')
             ]);
         }
-    } elseif ($checksess == md5($deletekeylang . NV_CHECK_SESSION . 'deletekeylang') and !in_array($deletekeylang, $global_config['allow_sitelangs'], true)) {
+    } elseif (csrf_check($checksess, $admin_info['admin_id'] . '_' . $module_name . '_delete_' . $deletekeylang) and !in_array($deletekeylang, $global_config['allow_sitelangs'], true)) {
         // Xóa ngôn ngữ data
         define('NV_IS_FILE_MODULES', true);
 
@@ -482,16 +483,18 @@ if (defined('NV_IS_GODADMIN') or ($global_config['idsite'] > 0 and defined('NV_I
 
 $tpl = new \NukeViet\Template\NVSmarty();
 $tpl->setTemplateDir(get_module_tpl_dir('main.tpl'));
-$tpl->registerPlugin('modifier', 'md5', 'md5');
+$tpl->registerPlugin('modifier', 'csrf_create', 'csrf_create');
 $tpl->assign('LANG', $nv_Lang);
 $tpl->assign('MODULE_NAME', $module_name);
 $tpl->assign('OP', $op);
+$tpl->assign('ADMIN_ID', $admin_info['admin_id']);
 
 $tpl->assign('EXISTS_LANGS', $lang_array_exit);
 $tpl->assign('LIST_LANGS', $array_lang_setup);
 $tpl->assign('NUM_LANGS', count($array_lang_setup));
 $tpl->assign('LANGUAGE_ARRAY', $language_array);
 $tpl->assign('GCONFIG', $global_config);
+$tpl->assign('CHECKSS', csrf_create($csrf_key));
 $tpl->assign('OTHER_LANGS', $lang_can_install);
 
 $contents = $tpl->fetch('main.tpl');

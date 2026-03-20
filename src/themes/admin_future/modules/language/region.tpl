@@ -267,7 +267,7 @@
                         </div>
                     </div>
                     <input type="hidden" name="tab" value="numbers">
-                    <input type="hidden" name="saveform" value="{$smarty.const.NV_CHECK_SESSION}">
+                    <input type="hidden" name="saveform" value="{$CHECKSS}">
                 </form>
             </div>
         </div>
