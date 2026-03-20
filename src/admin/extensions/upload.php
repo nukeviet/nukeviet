@@ -29,7 +29,7 @@ $filename = NV_ROOTDIR . '/' . NV_TEMP_DIR . '/' . NV_TEMPNAM_PREFIX . 'auto_' .
 if ($nv_Request->isset_request('extract', 'get')) {
     $extract = $nv_Request->get_title('extract', 'get', '');
 
-    if ($extract == md5($filename . NV_CHECK_SESSION)) {
+    if ($extract == md5($filename . NV_CHECK_SESSION) and csrf_check($nv_Request->get_title('checkss', 'get'), $admin_info['userid'] . '_extract')) {
         if (!file_exists($filename)) {
             nv_htmlOutput(nv_theme_alert($nv_Lang->getGlobal('danger_level'), $nv_Lang->getModule('autoinstall_error_downloaded'), 'danger'));
         }
@@ -96,9 +96,20 @@ if ($nv_Request->isset_request('extract', 'get')) {
             }
         }
 
+        $check_patterns = [
+            'system'           => '/\bsystem\s*\(/i',
+            'exec'            => '/(?<!->)\bexec\s*\(/i',
+            'passthru'         => '/\bpassthru\s*\(/i',
+            'shell_exec'       => '/\bshell_exec\s*\(/i',
+            'proc_open'        => '/\bproc_open\s*\(/i',
+            'popen'            => '/\bpopen\s*\(/i',
+            'eval'             => '/\beval\s*\(/i',
+            'create_function'  => '/\bcreate_function\s*\(/i',
+            'superglobal'      => '/\$_(GET|POST|REQUEST|COOKIE)\s*\[/i',
+        ];
+
         // Giải nén vào thư mục tạm
         $extract = $zip->extract(PCLZIP_OPT_PATH, NV_ROOTDIR . '/' . $temp_extract_dir);
-
         foreach ($extract as $extract_i) {
             if ($extract_i['status'] != 'ok' and $extract_i['status'] != 'already_a_directory') {
                 $no_extract[] = $extract_i['stored_filename'];
@@ -110,18 +121,26 @@ if ($nv_Request->isset_request('extract', 'get')) {
 
             // Xác định ứng dụng hệ thống hoặc không
             if (preg_match("/^modules\/[a-zA-Z0-9\-]+\/version\.php$/", $extract_i['stored_filename'])) {
-                $module_version = [];
-                include $extract_i['filename'];
+                $_txt = file_get_contents($extract_i['filename']);
 
-                if (isset($module_version['is_sysmod'])) {
-                    $fileConfig['sys'] = $module_version['is_sysmod'];
+                if (preg_match("/['\"]is_sysmod['\"]\s*=>\s*(['\"]?)(\d+)\1/", $_txt, $m)) {
+                    $fileConfig['sys'] = (int)$m[2];
                 }
 
-                if (isset($module_version['virtual'])) {
-                    $fileConfig['virtual'] = $module_version['virtual'];
+                if (preg_match("/['\"]virtual['\"]\s*=>\s*(['\"]?)(\d+)\1\s*[,\]]/", $_txt, $m)) {
+                    $fileConfig['virtual'] = (int)$m[2];
                 }
-
-                unset($module_version);
+                unset($m, $_txt);
+            } elseif (preg_match("/\.php$/", $extract_i['stored_filename'])) {
+                $_txt = file_get_contents($extract_i['filename']);
+                foreach ($check_patterns as $name => $pattern) {
+                    if (preg_match($pattern, $_txt)) {
+                        $_content = $nv_Lang->getModule('autoinstall_error_check_fail');
+                        $_content .= '<br>pattern: ' . $name;
+                        $_content .= '<br>file: ' . $extract_i['stored_filename'];
+                        nv_htmlOutput(nv_theme_alert($nv_Lang->getGlobal('danger_level'), $_content, 'danger'));
+                    }
+                }
             }
 
             // Xóa các file .htaccess đã giải nén được để đảm bảo bảo mật
@@ -153,7 +172,7 @@ if ($nv_Request->isset_request('extract', 'get')) {
             $error_create_folder = array_unique($error_create_folder);
             $array_cute_files = [];
             $array_exists_files = [];
-            $dimiss_mime = $nv_Request->get_title('dismiss', 'get', '') == md5('dismiss' . $filename . NV_CHECK_SESSION) ? true : false;
+            $dimiss_mime = csrf_check($nv_Request->get_title('dismiss', 'get'), $admin_info['userid'] . '_dismiss') ? true : false;
 
             // Kiểm tra mime các tệp
             if (!$dimiss_mime and empty($global_config['extension_upload_mode'])) {
@@ -361,7 +380,7 @@ if ($nv_Request->isset_request('extract', 'get')) {
             $tpl->assign('ERROR_MOVE_FOLDER', $error_move_folder);
             $tpl->assign('ARRAY_ERROR_MINE', $array_error_mine);
             $tpl->assign('EXTCONFIG', $extConfig);
-            $tpl->assign('DISMISS_LINK', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;extract=' . md5($filename . NV_CHECK_SESSION) . '&amp;dismiss=' . md5('dismiss' . $filename . NV_CHECK_SESSION));
+            $tpl->assign('DISMISS_LINK', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;extract=' . md5($filename . NV_CHECK_SESSION) . '&amp;checkss=' . csrf_create($admin_info['userid'] . '_extract') . '&amp;dismiss=' . csrf_create($admin_info['userid'] . '_dismiss'));
 
             $contents = $tpl->fetch('upload-extract.tpl');
 
@@ -386,7 +405,7 @@ if ($nv_Request->isset_request('uploaded', 'get')) {
         $error = $nv_Lang->getGlobal('error_zlib_support');
     } elseif (!empty($_FILES['extfile']['error'])) {
         $error = $nv_Lang->getModule('autoinstall_error_uploadfile1', nv_convertfromBytes(NV_UPLOAD_MAX_FILESIZE));
-    } elseif (is_uploaded_file($_FILES['extfile']['tmp_name']) and $nv_Request->get_title('checksess', 'post', '') === md5(NV_CHECK_SESSION . 'submit-ext')) {
+    } elseif (is_uploaded_file($_FILES['extfile']['tmp_name']) and csrf_check($nv_Request->get_title('checkss', 'post'), $admin_info['userid'] . '_submit_ext')) {
         if (file_exists($filename)) {
             nv_deletefile($filename);
         }
@@ -561,7 +580,7 @@ if (!empty($error)) {
 }
 
 $tpl->assign('INFO', $info);
-$tpl->assign('EXTRACTLINK', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&extract=' . md5($filename . NV_CHECK_SESSION));
+$tpl->assign('EXTRACTLINK', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&extract=' . md5($filename . NV_CHECK_SESSION) . '&checkss=' . csrf_create($admin_info['userid'] . '_extract'));
 
 $contents = $tpl->fetch('upload.tpl');
 

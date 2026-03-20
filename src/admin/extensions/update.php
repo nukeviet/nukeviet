@@ -26,7 +26,7 @@ $tpl->assign('OP', $op);
 $tpl->assign('GCONFIG', $global_config);
 
 // Giải nén và kiểm tra gói cập nhật
-if ($nv_Request->get_title('checksess', 'get', '') == md5('unzip' . $eid . $fid . NV_CHECK_SESSION)) {
+if (csrf_check($nv_Request->get_title('checkss', 'get', ''), $csrf_key . '_unzip' . $eid . '_' . $fid)) {
     $filename = NV_TEMPNAM_PREFIX . 'extupd_' . NV_CHECK_SESSION . '.zip';
     if (!file_exists(NV_ROOTDIR . '/' . NV_TEMP_DIR . '/' . $filename)) {
         nv_htmlOutput('File not exists!!!');
@@ -177,7 +177,7 @@ if ($nv_Request->get_title('checksess', 'get', '') == md5('unzip' . $eid . $fid 
 }
 
 // Tải gói cập nhật
-if ($nv_Request->get_title('checksess', 'get', '') == md5('download' . $eid . $fid . NV_CHECK_SESSION)) {
+if (csrf_check($nv_Request->get_title('checkss', 'get', ''), $csrf_key . '_download' . $eid . '_' . $fid)) {
     $NV_Http = new NukeViet\Http\Http($global_config, NV_TEMP_DIR);
     $stored_cookies = nv_get_cookies();
 
@@ -228,7 +228,7 @@ if ($nv_Request->get_title('checksess', 'get', '') == md5('download' . $eid . $f
     }
 
     $tpl->assign('WARNING', $warning);
-    $tpl->assign('LINK_UNZIP', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=extensions&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;eid=' . $eid . '&amp;fid=' . $fid . '&amp;checksess=' . md5('unzip' . $eid . $fid . NV_CHECK_SESSION));
+    $tpl->assign('LINK_UNZIP', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=extensions&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;eid=' . $eid . '&amp;fid=' . $fid . '&amp;checkss=' . csrf_create($csrf_key . '_unzip' . $eid . '_' . $fid));
 
     $contents = $tpl->fetch('update-download.tpl');
 
@@ -238,7 +238,7 @@ if ($nv_Request->get_title('checksess', 'get', '') == md5('download' . $eid . $f
 }
 
 // Lấy thông tin
-if ($nv_Request->get_title('checksess', 'get', '') == md5('check' . $eid . $fid . NV_CHECK_SESSION)) {
+if (csrf_check($nv_Request->get_title('checkss', 'get', ''), $csrf_key . '_check' . $eid . '_' . $fid)) {
     $NV_Http = new NukeViet\Http\Http($global_config, NV_TEMP_DIR);
     $stored_cookies = nv_get_cookies();
 
@@ -274,9 +274,9 @@ if ($nv_Request->get_title('checksess', 'get', '') == md5('check' . $eid . $fid 
 
     if ($array['fileInfo'] === 'ready') {
         $array['message'] = $nv_Lang->getModule('extUpdCheckSuccess');
-        $array['link'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=update&eid=' . $eid . '&fid=' . $fid . '&checksess=' . md5('download' . $eid . $fid . NV_CHECK_SESSION);
+        $array['link'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=update&eid=' . $eid . '&fid=' . $fid . '&checkss=' . csrf_create($csrf_key . '_download' . $eid . '_' . $fid);
     } elseif ($array['fileInfo'] == 'notlogin') {
-        $redirect = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=update&eid=' . $eid . '&fid=' . $fid . '&checksess=' . md5($eid . $fid . NV_CHECK_SESSION);
+        $redirect = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=update&eid=' . $eid . '&fid=' . $fid . '&checkss=' . csrf_create($csrf_key . '_' . $eid . '_' . $fid);
         $array['message'] = $nv_Lang->getModule('extUpdNotLogin');
         $array['message_detail'] = $nv_Lang->getModule('extUpdLoginRequire', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=login&amp;redirect=' . nv_redirect_encrypt($redirect));
     } elseif ($array['fileInfo'] == 'unpaid') {
@@ -297,10 +297,10 @@ if ($nv_Request->get_title('checksess', 'get', '') == md5('check' . $eid . $fid 
 }
 
 // Load thông tin chậm
-if ($nv_Request->get_title('checksess', 'get', '') == md5($eid . $fid . NV_CHECK_SESSION)) {
+if (csrf_check($nv_Request->get_title('checkss', 'get', ''), $csrf_key . '_' . $eid . '_' . $fid)) {
     $tpl->assign('EID', $eid);
     $tpl->assign('FID', $fid);
-    $tpl->assign('CHECKSESS', md5('check' . $eid . $fid . NV_CHECK_SESSION));
+    $tpl->assign('CHECKSS', csrf_create($csrf_key . '_check' . $eid . '_' . $fid));
 
     $contents = $tpl->fetch('update.tpl');
 

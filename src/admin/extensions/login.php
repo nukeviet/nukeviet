@@ -20,23 +20,12 @@ $request['username'] = $nv_Request->get_title('username', 'post', '');
 $request['password'] = $nv_Request->get_title('password', 'post', '');
 $request['redirect'] = $nv_Request->get_title('redirect', 'post,get', '');
 
-$checksess = md5(NV_CHECK_SESSION . 'mer-login');
-
-$tpl = new \NukeViet\Template\NVSmarty();
-$tpl->setTemplateDir(get_module_tpl_dir('login.tpl'));
-$tpl->assign('LANG', $nv_Lang);
-$tpl->assign('MODULE_NAME', $module_name);
-$tpl->assign('OP', $op);
-
-$tpl->assign('CHECKSESS', $checksess);
-$tpl->assign('REQUEST', $request);
-
 // Submit đăng nhập
 if ($nv_Request->isset_request('checksess', 'post')) {
-    if ($nv_Request->get_title('checksess', 'post', '') !== $checksess) {
+    if (!csrf_check($nv_Request->get_string('checksess', 'post', ''), $csrf_key)) {
         nv_jsonOutput([
             'status' => 'error',
-            'mess' => 'Session error!!!',
+            'mess' => $nv_Lang->getGlobal('error_checkss')
         ]);
     }
 
@@ -104,6 +93,13 @@ if ($nv_Request->isset_request('checksess', 'post')) {
     ]);
 }
 
+$tpl = new \NukeViet\Template\NVSmarty();
+$tpl->setTemplateDir(get_module_tpl_dir('login.tpl'));
+$tpl->assign('LANG', $nv_Lang);
+$tpl->assign('MODULE_NAME', $module_name);
+$tpl->assign('OP', $op);
+$tpl->assign('CHECKSS', csrf_create($csrf_key));
+$tpl->assign('REQUEST', $request);
 $contents = $tpl->fetch('login.tpl');
 
 include NV_ROOTDIR . '/includes/header.php';
