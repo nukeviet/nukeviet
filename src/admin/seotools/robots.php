@@ -15,7 +15,6 @@ if (!defined('NV_IS_FILE_SEOTOOLS')) {
 
 $page_title = $nv_Lang->getModule('robots');
 
-$checkss = md5(NV_CHECK_SESSION . '_' . $module_name . '_' . $op . '_' . $admin_info['userid']);
 $cache_file = NV_ROOTDIR . '/' . NV_DATADIR . '/robots.php';
 
 $tpl = new \NukeViet\Template\NVSmarty();
@@ -40,7 +39,10 @@ foreach ($files as $file) {
     }
 }
 
-if ($checkss == $nv_Request->get_string('checkss', 'post', '')) {
+if ($nv_Request->isset_request('checkss', 'post')) {
+    if (!csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
+        nv_info_die($nv_Lang->getGlobal('error_checkss'), $nv_Lang->getGlobal('error_checkss'), $nv_Lang->getGlobal('error_checkss'));
+    }
     $_robots_data = $nv_Request->get_array('filename', 'post');
     $_fileother = $nv_Request->get_array('fileother', 'post');
     $_optionother = $nv_Request->get_array('optionother', 'post');
@@ -110,7 +112,7 @@ if ($checkss == $nv_Request->get_string('checkss', 'post', '')) {
 
 [$robots_data, $robots_other] = nv_update_robots(false);
 
-$tpl->assign('CHECKSS', $checkss);
+$tpl->assign('CHECKSS', csrf_create($csrf_key));
 $tpl->assign('ROBOTS_DATA', $robots_data);
 $tpl->assign('STATIC_FILES', $static_files);
 $tpl->assign('ROBOTS_OTHER', $robots_other);

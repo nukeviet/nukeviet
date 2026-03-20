@@ -16,10 +16,10 @@ if (!defined('NV_IS_FILE_SEOTOOLS')) {
 $page_title = $nv_Lang->getModule('rpc_setting');
 
 if ($nv_Request->isset_request('submitprcservice', 'post')) {
-    if ($nv_Request->get_title('checkss', 'post', '') !== NV_CHECK_SESSION) {
+    if (!csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
         nv_jsonOutput([
             'status' => 'error',
-            'mess' => 'Error session!'
+            'mess' => $nv_Lang->getGlobal('error_checkss')
         ]);
     }
 
@@ -52,6 +52,7 @@ $tpl->assign('SERVICES', $services);
 $tpl->assign('IMGPATH', NV_STATIC_URL . 'themes/' . $global_config['module_theme'] . '/images/' . $module_file);
 $tpl->assign('NO_CONFIG', (!isset($module_config[$module_name]['prcservice'])));
 $tpl->assign('PRCSERVICE', $prcservice);
+$tpl->assign('CHECKSS', csrf_create($csrf_key));
 
 $contents = $tpl->fetch('rpc_setting.tpl');
 

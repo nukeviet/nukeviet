@@ -99,6 +99,7 @@
                 <input type="hidden" id="crop_y" name="crop_y">
                 <input type="hidden" id="crop_width" name="crop_width">
                 <input type="hidden" id="crop_height" name="crop_height">
+                <input type="hidden" name="checkss" value="{$CHECKSS}">
                 <input type="file" name="image_file" id="image_file" class="d-none" accept=".jpg,.jpeg,.png,.webp">
             </form>
             <iframe id="upload-form-listener" name="upload-form-listener" class="d-none"></iframe>
