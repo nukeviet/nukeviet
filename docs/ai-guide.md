@@ -124,9 +124,14 @@ Sau khi tạo symlink, Antigravity sẽ tự động nhận diện các skills t
 ---
 
 
-## 2. GitHub Copilot
+## 3. GitHub Copilot
 
-Thiết lập như Google Antigravity bên trên
+Thiết lập như Google Antigravity bên trên, ví dụ trên windows
+```cmd
+cd d:\nukeviet\
+mklink /J ".agents" ".claude"
+mklink /H ".github/copilot-instructions.md" "CLAUDE.md"
+```
 
 ---
 

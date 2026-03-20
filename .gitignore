@@ -11,6 +11,7 @@
 /.vscode
 /.agents
 /ANTIGRAVITY.md
+/.github/copilot-instructions.md
 /src/.jsbeautifyrc
 /src/.php-cs-fixer.php
 /src/.vscode
