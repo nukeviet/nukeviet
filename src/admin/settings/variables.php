@@ -13,14 +13,13 @@ if (!defined('NV_IS_FILE_SETTINGS')) {
     exit('Stop!!!');
 }
 
-$checkss = md5(NV_CHECK_SESSION . '_' . $module_name . '_' . $op . '_' . $admin_info['userid']);
 $sameSite_array = [
     'Empty' => $nv_Lang->getModule('cookie_SameSite_Empty'),
     'Lax' => $nv_Lang->getModule('cookie_SameSite_Lax'),
     'Strict' => $nv_Lang->getModule('cookie_SameSite_Strict'),
     'None' => $nv_Lang->getModule('cookie_SameSite_None')
 ];
-if ($checkss == $nv_Request->get_string('checkss', 'post')) {
+if ($nv_Request->isset_request('checkss', 'post') and csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
     $preg_replace = ['pattern' => '/[^a-zA-Z0-9\_]/', 'replacement' => ''];
 
     $array_config_global = [];
@@ -61,14 +60,12 @@ if ($checkss == $nv_Request->get_string('checkss', 'post')) {
     ]);
 }
 
-$global_config['checkss'] = $checkss;
-
 $tpl = new \NukeViet\Template\NVSmarty();
 $tpl->setTemplateDir(get_module_tpl_dir('variables.tpl'));
 $tpl->assign('LANG', $nv_Lang);
 $tpl->assign('MODULE_NAME', $module_name);
 $tpl->assign('OP', $op);
-
+$tpl->assign('CHECKSS', csrf_create($csrf_key));
 $tpl->assign('DATA', $global_config);
 $tpl->assign('NV_LIVE_COOKIE_TIME', round(NV_LIVE_COOKIE_TIME / 86400));
 $tpl->assign('NV_LIVE_SESSION_TIME', round(NV_LIVE_SESSION_TIME / 60));

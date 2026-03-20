@@ -204,7 +204,7 @@
                     <div class="row">
                         <div class="col-sm-6 offset-sm-6 offset-lg-4 offset-xxl-3">
                             <input type="hidden" name="submitsave" value="1">
-                            <input type="hidden" name="checkss" value="{$DATA.checkss}">
+                            <input type="hidden" name="checkss" value="{$CHECKSS}">
                             <div class="hstack gap-1 flex-wrap">
                                 <button type="submit" class="btn btn-primary">{$LANG->getModule('submit')}</button>
                                 <button type="button" class="btn btn-secondary" data-toggle="smtp_test">{$LANG->getModule('smtp_test')}</button>
@@ -229,7 +229,7 @@
             </ul>
             <div class="accordion-body">
                 <form id="dkimaddForm" action="{$smarty.const.NV_BASE_ADMINURL}index.php?{$smarty.const.NV_LANG_VARIABLE}={$smarty.const.NV_LANG_DATA}&amp;{$smarty.const.NV_NAME_VARIABLE}={$MODULE_NAME}&amp;{$smarty.const.NV_OP_VARIABLE}={$OP}" method="post">
-                    <input type="hidden" name="checkss" value="{$DATA.checkss}">
+                    <input type="hidden" name="checkss" value="{$CHECKSS}">
                     <input type="hidden" name="dkimadd" value="1">
                     <div class="row mb-3">
                         <label for="element_domain" class="col-sm-6 col-lg-4 col-xxl-3 col-form-label text-sm-end">{$LANG->getModule('DKIM_domain')}</label>
@@ -260,7 +260,7 @@
             </ul>
             <div class="accordion-body">
                 <form id="certAddForm" action="{$smarty.const.NV_BASE_ADMINURL}index.php?{$smarty.const.NV_LANG_VARIABLE}={$smarty.const.NV_LANG_DATA}&amp;{$smarty.const.NV_NAME_VARIABLE}={$MODULE_NAME}&amp;{$smarty.const.NV_OP_VARIABLE}={$OP}" method="post" enctype="multipart/form-data" data-prompt="{$LANG->getModule('smime_passphrase')}">
-                    <input type="hidden" name="checkss" value="{$DATA.checkss}">
+                    <input type="hidden" name="checkss" value="{$CHECKSS}">
                     <input type="hidden" name="smimeadd" value="1">
                     <input type="hidden" name="overwrite" value="0">
                     <div class="row mb-3">
@@ -302,7 +302,7 @@
                             <div class="form-text">{$LANG->getModule('smime_chain_certificates_note')}</div>
                         </div>
                         <div class="text-center">
-                            <input type="hidden" name="checkss" value="{$DATA.checkss}">
+                            <input type="hidden" name="checkss" value="{$CHECKSS}">
                             <input type="hidden" name="smimeadd" value="1">
                             <input type="hidden" name="overwrite" value="0">
                             <button type="submit" class="btn btn-primary">{$LANG->getModule('smime_add_button')}</button>

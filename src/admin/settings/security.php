@@ -126,10 +126,9 @@ if (!defined('NV_IS_GODADMIN')) {
     $selectedtab = 0;
 }
 
-$checkss = md5(NV_CHECK_SESSION . '_' . $module_name . '_' . $op . '_' . $admin_info['userid']);
 
 // Xử lý các thiết lập cơ bản
-if (defined('NV_IS_GODADMIN') and $nv_Request->isset_request('basicsave', 'post') and $checkss == $nv_Request->get_string('checkss', 'post')) {
+if (defined('NV_IS_GODADMIN') and $nv_Request->isset_request('basicsave', 'post') and csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
     $post = [
         'str_referer_blocker' => (int) $nv_Request->get_bool('str_referer_blocker', 'post'),
         'is_login_blocker' => (int) $nv_Request->get_bool('is_login_blocker', 'post', false),
@@ -254,7 +253,7 @@ if (defined('NV_IS_GODADMIN') and $nv_Request->isset_request('basicsave', 'post'
 }
 
 // Chống Flood
-if (defined('NV_IS_GODADMIN') and $nv_Request->isset_request('floodsave', 'post') and $checkss == $nv_Request->get_string('checkss', 'post')) {
+if (defined('NV_IS_GODADMIN') and $nv_Request->isset_request('floodsave', 'post') and csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
     $post = [
         'is_flood_blocker' => (int) $nv_Request->get_bool('is_flood_blocker', 'post'),
         'max_requests_60' => $nv_Request->get_int('max_requests_60', 'post'),
@@ -320,7 +319,7 @@ if (defined('NV_IS_GODADMIN') and ($action == 'fip' or $action == 'bip')) {
         $version = 4;
     }
 
-    if ($nv_Request->isset_request('save', 'post') and $checkss == $nv_Request->get_string('checkss', 'post')) {
+    if ($nv_Request->isset_request('save', 'post') and csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
         $post = [
             'version' => $nv_Request->get_int('version', 'post', 4),
             'ip' => $nv_Request->get_title('ip', 'post', ''),
@@ -382,14 +381,18 @@ if (defined('NV_IS_GODADMIN') and ($action == 'fip' or $action == 'bip')) {
         if ($id) {
             $db->query('DELETE FROM ' . $db_config['prefix'] . '_ips WHERE type = ' . $type . ' AND ip = ' . $db->quote($post['ip']) . ' AND id != ' . $id);
             $sth = $db->prepare('UPDATE ' . $db_config['prefix'] . '_ips
-                SET ip = :ip, mask = ' . $post['mask'] . ', area = ' . $post['area'] . ', begintime = ' . $post['begintime'] . ', endtime = ' . $post['endtime'] . ', notice = :notice
+                SET ip = :ip, mask = :mask, area = :area, begintime = :begintime, endtime = :endtime, notice = :notice
                 WHERE id=' . $id);
         } else {
             $db->query('DELETE FROM ' . $db_config['prefix'] . '_ips WHERE type = ' . $type . ' AND ip = ' . $db->quote($post['ip']));
             $sth = $db->prepare('INSERT INTO ' . $db_config['prefix'] . '_ips (type, ip, mask, area, begintime, endtime, notice) VALUES
-            (' . $type . ', :ip, ' . $post['mask'] . ', ' . $post['area'] . ', ' . $post['begintime'] . ', ' . $post['endtime'] . ', :notice )');
+            (' . $type . ', :ip, :mask, :area, :begintime, :endtime, :notice )');
         }
         $sth->bindParam(':ip', $post['ip'], PDO::PARAM_STR);
+        $sth->bindParam(':mask', $post['mask'], PDO::PARAM_INT);
+        $sth->bindParam(':area', $post['area'], PDO::PARAM_INT);
+        $sth->bindParam(':begintime', $post['begintime'], PDO::PARAM_INT);
+        $sth->bindParam(':endtime', $post['endtime'], PDO::PARAM_INT);
         $sth->bindParam(':notice', $post['notice'], PDO::PARAM_STR);
         $sth->execute();
 
@@ -424,7 +427,7 @@ if (defined('NV_IS_GODADMIN') and ($action == 'fip' or $action == 'bip')) {
         $endmin = 59;
     }
 
-    $tpl->assign('CHECKSS', $checkss);
+    $tpl->assign('CHECKSS', csrf_create($csrf_key));
     $tpl->assign('IPTYPES', $iptypes);
     $tpl->assign('VERSION', $version);
     $tpl->assign('DATA', $ipdetails);
@@ -445,7 +448,7 @@ if (defined('NV_IS_GODADMIN') and ($action == 'fip' or $action == 'bip')) {
 }
 
 // Xóa IP
-if (defined('NV_IS_GODADMIN') and ($action == 'delfip' or $action == 'delbip') and $checkss == $nv_Request->get_string('checkss', 'post')) {
+if (defined('NV_IS_GODADMIN') and ($action == 'delfip' or $action == 'delbip') and csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
     $id = $nv_Request->get_int('id', 'post', 0);
     $type = $action == 'delfip' ? 1 : 0;
     if (!empty($id)) {
@@ -484,7 +487,7 @@ if (defined('NV_IS_GODADMIN') and ($action == 'fiplist' or $action == 'biplist')
 }
 
 // Cấu hình captcha chung
-if (defined('NV_IS_GODADMIN') and $nv_Request->isset_request('captchasave', 'post') and $checkss == $nv_Request->get_string('checkss', 'post')) {
+if (defined('NV_IS_GODADMIN') and $nv_Request->isset_request('captchasave', 'post') and csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
     $post = [
         'recaptcha_ver' => $nv_Request->get_int('recaptcha_ver', 'post', 2),
         'recaptcha_sitekey' => $nv_Request->get_title('recaptcha_sitekey', 'post', ''),
@@ -544,7 +547,7 @@ if (defined('NV_IS_GODADMIN') and $nv_Request->isset_request('captchasave', 'pos
 }
 
 // Cấu hình hiển thị captcha cho từng module
-if (defined('NV_IS_GODADMIN') and $nv_Request->isset_request('modcapt', 'post') and $checkss == $nv_Request->get_string('checkss', 'post')) {
+if (defined('NV_IS_GODADMIN') and $nv_Request->isset_request('modcapt', 'post') and csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
     $mod_capts = $nv_Request->get_typed_array('captcha_type', 'post', 'title', '');
     $sth = $db->prepare('UPDATE ' . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = :lang AND module = :module AND config_name = 'captcha_type'");
     foreach ($mod_capts as $mod => $type) {
@@ -578,7 +581,7 @@ if (defined('NV_IS_GODADMIN') and $nv_Request->isset_request('modcapt', 'post') 
 }
 
 // Khu vực sử dụng captcha của module Thành viên
-if (defined('NV_IS_GODADMIN') and $nv_Request->isset_request('captarea', 'post') and $checkss == $nv_Request->get_string('checkss', 'post')) {
+if (defined('NV_IS_GODADMIN') and $nv_Request->isset_request('captarea', 'post') and csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
     $captcha_areas = $nv_Request->get_typed_array('captcha_area', 'post', 'string');
     $captcha_areas = !empty($captcha_areas) ? implode(',', $captcha_areas) : '';
     $sth = $db->prepare('UPDATE ' . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = 'sys' AND module = 'site' AND config_name = 'captcha_area'");
@@ -594,7 +597,7 @@ if (defined('NV_IS_GODADMIN') and $nv_Request->isset_request('captarea', 'post')
 }
 
 // Đối tượng áp dụng captcha khi tham gia Bình luận
-if (defined('NV_IS_GODADMIN') and $nv_Request->isset_request('captcommarea', 'post') and $checkss == $nv_Request->get_string('checkss', 'post')) {
+if (defined('NV_IS_GODADMIN') and $nv_Request->isset_request('captcommarea', 'post') and csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
     $captcha_areas_comm = $nv_Request->get_typed_array('captcha_area_comm', 'post', 'int', 0);
     $sth = $db->prepare('UPDATE ' . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = '" . NV_LANG_DATA . "' AND module = :module AND config_name = 'captcha_area_comm'");
     foreach ($captcha_areas_comm as $mod => $area) {
@@ -614,7 +617,7 @@ if (defined('NV_IS_GODADMIN') and $nv_Request->isset_request('captcommarea', 'po
 }
 
 // Xử lý thiết lập CORS, Anti CSRF
-if (defined('NV_IS_GODADMIN') and $nv_Request->isset_request('corssave', 'post') and $checkss == $nv_Request->get_string('checkss', 'post')) {
+if (defined('NV_IS_GODADMIN') and $nv_Request->isset_request('corssave', 'post') and csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
     $post = [
         'crosssite_restrict' => (int) $nv_Request->get_bool('crosssite_restrict', 'post', false),
         'crossadmin_restrict' => (int) $nv_Request->get_bool('crossadmin_restrict', 'post', false)
@@ -706,7 +709,7 @@ if (defined('NV_IS_GODADMIN') and $nv_Request->isset_request('corssave', 'post')
 }
 
 // Thiết lập CSP
-if ($nv_Request->isset_request('cspsave', 'post') and $checkss == $nv_Request->get_string('checkss', 'post')) {
+if ($nv_Request->isset_request('cspsave', 'post') and csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
     $_directives = $_POST['directives'];
     $directives = [];
     foreach ($_directives as $directive => $sources) {
@@ -750,7 +753,7 @@ if ($nv_Request->isset_request('cspsave', 'post') and $checkss == $nv_Request->g
 }
 
 // Thiết lập RP
-if ($nv_Request->isset_request('rpsave', 'post') and $checkss == $nv_Request->get_string('checkss', 'post')) {
+if ($nv_Request->isset_request('rpsave', 'post') and csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
     $post = [];
     $post['nv_rp'] = [];
     $nv_rp = $nv_Request->get_title('nv_rp', 'post', '');
@@ -783,7 +786,7 @@ if ($nv_Request->isset_request('rpsave', 'post') and $checkss == $nv_Request->ge
 }
 
 // Thiết lập PP
-if ($nv_Request->isset_request('ppsave', 'post') and $checkss == $nv_Request->get_string('checkss', 'post')) {
+if ($nv_Request->isset_request('ppsave', 'post') and csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
     $post = [];
     $post['nv_pp'] = [];
     $post['nv_fp'] = [];
@@ -892,7 +895,7 @@ $cross_config_list = [
 if (!empty($global_config['crosssite_allowed_variables'])) {
     $res = [];
     foreach ($global_config['crosssite_allowed_variables'] as $variable) {
-        $res[] = http_build_query($variable);
+        $res[] = is_array($variable) ? http_build_query($variable) : $variable;
     }
     $cross_config_list['crosssite_allowed_variables'] = implode("\n", $res);
 } else {
@@ -957,7 +960,7 @@ unset($_directives);
 empty($global_config_list['end_url_variables']) && $global_config_list['end_url_variables'][] = [];
 
 $tpl->assign('SELECTEDTAB', $selectedtab);
-$tpl->assign('CHECKSS', $checkss);
+$tpl->assign('CHECKSS', csrf_create($csrf_key));
 $tpl->assign('FORM_ACTION', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op);
 $tpl->assign('GDATA', $global_config_list);
 $tpl->assign('DDATA', $define_config_list);

@@ -46,7 +46,6 @@ function get_dkim_verified_list()
 $page_title = $nv_Lang->getModule('smtp_config_by_lang', $language_array[NV_LANG_DATA]['name']);
 $smtp_encrypted_array = ['None', 'SSL', 'TLS'];
 $errormess = '';
-$checkss = md5(NV_CHECK_SESSION . '_' . $module_name . '_' . $op . '_' . $admin_info['userid']);
 
 $tpl = new \NukeViet\Template\NVSmarty();
 $tpl->setTemplateDir(get_module_tpl_dir('smtp.tpl'));
@@ -55,7 +54,7 @@ $tpl->assign('MODULE_NAME', $module_name);
 $tpl->assign('OP', $op);
 
 // Danh sách DKIM
-if ($nv_Request->isset_request('dkimlist', 'post')) {
+if ($nv_Request->isset_request('dkimlist', 'post') and csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
     $dkim_list = get_dkim_list();
     $dkim_verified_list = get_dkim_verified_list();
 
@@ -70,7 +69,7 @@ if ($nv_Request->isset_request('dkimlist', 'post')) {
 }
 
 // Đọc public key của DKIM
-if ($nv_Request->isset_request('dkimread, domain', 'post')) {
+if ($nv_Request->isset_request('dkimread, domain', 'post') and csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
     $domain = $nv_Request->get_title('domain', 'post', '');
     $dkim_list = get_dkim_list();
     if (!in_array($domain, $dkim_list, true)) {
@@ -100,7 +99,7 @@ if ($nv_Request->isset_request('dkimread, domain', 'post')) {
 }
 
 // Kiểm tra DKIM
-if ($nv_Request->isset_request('dkimverify, domain', 'post')) {
+if ($nv_Request->isset_request('dkimverify, domain', 'post') and csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
     $domain = $nv_Request->get_title('domain', 'post', '');
     $dkim_list = get_dkim_list();
     if (!in_array($domain, $dkim_list, true)) {
@@ -125,7 +124,7 @@ if ($nv_Request->isset_request('dkimverify, domain', 'post')) {
 }
 
 // Xóa DKIM
-if ($nv_Request->isset_request('dkimdel, domain', 'post')) {
+if ($nv_Request->isset_request('dkimdel, domain', 'post') and csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
     $domain = $nv_Request->get_title('domain', 'post', '');
     $dkim_list = get_dkim_list();
     if (!in_array($domain, $dkim_list, true)) {
@@ -149,7 +148,7 @@ if ($nv_Request->isset_request('dkimdel, domain', 'post')) {
 }
 
 // Thêm DKIM
-if ($nv_Request->isset_request('dkimadd', 'post') and $checkss == $nv_Request->get_string('checkss', 'post')) {
+if ($nv_Request->isset_request('dkimadd', 'post') and csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
     $domain = $nv_Request->get_title('domain', 'post', '');
     $domain = nv_check_domain($domain);
     if (empty($domain)) {
@@ -190,7 +189,7 @@ if ($nv_Request->isset_request('dkimadd', 'post') and $checkss == $nv_Request->g
 }
 
 // Danh sách chữ ký số S/MIME
-if ($nv_Request->isset_request('certlist', 'post')) {
+if ($nv_Request->isset_request('certlist', 'post') and csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
     $cert_list = get_cert_list();
 
     $tpl->assign('CERT_LIST', $cert_list);
@@ -203,7 +202,7 @@ if ($nv_Request->isset_request('certlist', 'post')) {
 }
 
 // Đọc chữ kí số S/MIME
-if ($nv_Request->isset_request('smimeread, email', 'post')) {
+if ($nv_Request->isset_request('smimeread, email', 'post') and csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
     $email = $nv_Request->get_title('email', 'post', '');
     $cert_list = get_cert_list();
     if (!in_array($email, $cert_list, true)) {
@@ -238,7 +237,7 @@ if ($nv_Request->isset_request('smimeread, email', 'post')) {
 }
 
 // Xoa chung chi
-if ($nv_Request->isset_request('smimedel, email', 'post')) {
+if ($nv_Request->isset_request('smimedel, email', 'post') and csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
     $email = $nv_Request->get_title('email', 'post', '');
     $cert_list = get_cert_list();
     if (!in_array($email, $cert_list, true)) {
@@ -259,7 +258,7 @@ if ($nv_Request->isset_request('smimedel, email', 'post')) {
 }
 
 // Thêm S/MIME hoặc upload S/MIME
-if ($nv_Request->isset_request('smimeadd', 'post') and $checkss == $nv_Request->get_string('checkss', 'post')) {
+if ($nv_Request->isset_request('smimeadd', 'post') and csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
     if (!empty($_FILES['pkcs12'])) {
         $passphrase = $nv_Request->get_string('passphrase', 'post', '');
         $upload = new NukeViet\Files\Upload(['certificate'], $global_config['forbid_extensions'], $global_config['forbid_mimes']);
@@ -426,7 +425,7 @@ if ($nv_Request->isset_request('smimeadd', 'post') and $checkss == $nv_Request->
 }
 
 // Download S/MIME
-if ($nv_Request->isset_request('smimedownload, email, passphrase', 'post')) {
+if ($nv_Request->isset_request('smimedownload, email, passphrase', 'post') and csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
     $email = $nv_Request->get_title('email', 'post', '');
     $cert_list = get_cert_list();
     if (!in_array($email, $cert_list, true)) {
@@ -463,7 +462,7 @@ if ($nv_Request->isset_request('smimedownload, email, passphrase', 'post')) {
 }
 
 // Gửi thử email để kiểm tra
-if ($nv_Request->isset_request('submittest', 'post') and $checkss == $nv_Request->get_string('checkss', 'post')) {
+if ($nv_Request->isset_request('submittest', 'post') and csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
     $maillang = NV_LANG_INTERFACE;
     if (NV_LANG_DATA != NV_LANG_INTERFACE) {
         $maillang = NV_LANG_DATA;
@@ -491,7 +490,7 @@ foreach ($themelist as $theme) {
 }
 $array_config = [];
 // Lưu cấu hình gửi mail
-if ($nv_Request->isset_request('submitsave', 'post') and $checkss == $nv_Request->get_string('checkss', 'post')) {
+if ($nv_Request->isset_request('submitsave', 'post') and csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
     $array_config['mailer_mode'] = nv_substr($nv_Request->get_title('mailer_mode', 'post', '', 1), 0, 255);
     $array_config['smtp_host'] = nv_substr($nv_Request->get_title('smtp_host', 'post', '', 1), 0, 255);
     $array_config['smtp_port'] = nv_substr($nv_Request->get_title('smtp_port', 'post', '', 1), 0, 255);
@@ -626,12 +625,12 @@ $array_config['notify_email_error'] = $global_config['notify_email_error'];
 $array_config['mail_tpl'] = !empty($global_config['mail_tpl']) ? $global_config['mail_tpl'] : '';
 $array_config['dkim_included'] = !empty($global_config['dkim_included']) ? explode(',', $global_config['dkim_included']) : [];
 $array_config['smime_included'] = !empty($global_config['smime_included']) ? explode(',', $global_config['smime_included']) : [];
-$array_config['checkss'] = $checkss;
 
 $tpl->assign('DATA', $array_config);
 $tpl->assign('MAIL_TPL_OPT', $mail_tpl_opt);
 $tpl->assign('GCONFIG', $global_config);
 $tpl->assign('SMTP_ENCRYPTED_ARRAY', $smtp_encrypted_array);
+$tpl->assign('CHECKSS', csrf_create($csrf_key));
 
 $contents = $tpl->fetch('smtp.tpl');
 

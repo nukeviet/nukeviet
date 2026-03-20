@@ -17,10 +17,10 @@ $page_title = $nv_Lang->getGlobal('mod_cronjobs');
 
 // Lưu thiết lập chung
 if ($nv_Request->isset_request('cfg, cronjobs_launcher', 'post')) {
-    if ($nv_Request->get_title('checkss', 'post', '') !== NV_CHECK_SESSION) {
+    if (!csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
         nv_jsonOutput([
             'status' => 'error',
-            'mess' => 'Error session!!!'
+            'mess' => $nv_Lang->getGlobal('error_checkss')
         ]);
     }
 
@@ -55,10 +55,10 @@ if ($nv_Request->isset_request('cfg, cronjobs_launcher', 'post')) {
 
 // Lấy thông tin crontab để sửa
 if ($nv_Request->isset_request('crontabinfo', 'post')) {
-    if ($nv_Request->get_title('checkss', 'post', '') !== NV_CHECK_SESSION) {
+    if (!csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
         nv_jsonOutput([
             'success' => 0,
-            'text' => 'Error session!'
+            'text' => $nv_Lang->getGlobal('error_checkss')
         ]);
     }
 
@@ -96,10 +96,10 @@ if ($nv_Request->isset_request('crontabinfo', 'post')) {
 if ($nv_Request->isset_request('cron_del', 'post')) {
     $id = $nv_Request->get_int('cron_del', 'post', 0);
 
-    if ($nv_Request->get_title('checkss', 'post', '') !== md5(NV_CHECK_SESSION . '_' . $module_name . '_cronjobs_del_' . $id)) {
+    if (!csrf_check($nv_Request->get_string('checkss', 'post'), $module_name . '_cronjobs_del_' . $id)) {
         nv_jsonOutput([
             'success' => 0,
-            'text' => 'Error session!'
+            'text' => $nv_Lang->getGlobal('error_checkss')
         ]);
     }
 
@@ -122,10 +122,10 @@ if ($nv_Request->isset_request('cron_del', 'post')) {
 if ($nv_Request->isset_request('cron_changeact', 'post')) {
     $id = $nv_Request->get_int('cron_changeact', 'post', 0);
 
-    if ($nv_Request->get_title('checkss', 'post', '') !== md5(NV_CHECK_SESSION . '_' . $module_name . '_cronjobs_act_' . $id)) {
+    if (!csrf_check($nv_Request->get_string('checkss', 'post'), $module_name . '_cronjobs_act_' . $id)) {
         nv_jsonOutput([
             'success' => 0,
-            'text' => 'Error session!'
+            'text' => $nv_Lang->getGlobal('error_checkss')
         ]);
     }
 
@@ -148,10 +148,10 @@ if ($nv_Request->isset_request('cron_changeact', 'post')) {
 
 // Thêm sửa crontab
 if ($nv_Request->isset_request('crontabcontent', 'post')) {
-    if ($nv_Request->get_title('checkss', 'post', '') !== NV_CHECK_SESSION) {
+    if (!csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
         nv_jsonOutput([
             'status' => 'error',
-            'mess' => 'Error session!'
+            'mess' => $nv_Lang->getGlobal('error_checkss')
         ]);
     }
 
@@ -225,23 +225,27 @@ if ($nv_Request->isset_request('crontabcontent', 'post')) {
     }
 
     if (!empty($array['params'])) {
-        $array['params'] = explode(',', $array['params']);
-        $array['params'] = array_map('trim', $array['params']);
-        $array['params'] = implode(',', $array['params']);
+        $array_params = explode(',', $array['params']);
+        $array_params = array_map('trim', $array_params);
+        $array['params'] = implode(',', $array_params);
     }
 
     if (!empty($array['id'])) {
         nv_insert_logs(NV_LANG_DATA, $module_name, 'log_cronjob_edit', json_encode($array, NV_JSON_ENCODE), $admin_info['userid']);
         $sth = $db->prepare('UPDATE ' . NV_CRONJOBS_GLOBALTABLE . ' SET
-            start_time=' . $array['start_time'] . ', inter_val=' . $array['interval'] . ',
-            inter_val_type=' . $array['inter_val_type'] . ', run_file= :run_file,
-            run_func= :run_func, params= :params, del=' . $array['del'] . ',
+            start_time=:start_time, inter_val=:interval,
+            inter_val_type=:inter_val_type, run_file= :run_file,
+            run_func= :run_func, params= :params, del=:del,
             ' . NV_LANG_INTERFACE . '_cron_name= :cron_name
         WHERE id=' . $array['id']);
 
+        $sth->bindParam(':start_time', $array['start_time'], PDO::PARAM_INT);
+        $sth->bindParam(':interval', $array['interval'], PDO::PARAM_INT);
+        $sth->bindParam(':inter_val_type', $array['inter_val_type'], PDO::PARAM_INT);
         $sth->bindParam(':run_file', $array['run_file'], PDO::PARAM_STR);
         $sth->bindParam(':run_func', $array['run_func'], PDO::PARAM_STR);
         $sth->bindParam(':params', $array['params'], PDO::PARAM_STR);
+        $sth->bindParam(':del', $array['del'], PDO::PARAM_INT);
         $sth->bindParam(':cron_name', $array['cron_name'], PDO::PARAM_STR);
         $sth->execute();
     } else {
@@ -250,13 +254,17 @@ if ($nv_Request->isset_request('crontabcontent', 'post')) {
             start_time, inter_val, inter_val_type, run_file, run_func, params, del, is_sys, act,
             last_time, last_result, ' . NV_LANG_INTERFACE . '_cron_name
         ) VALUES (
-            ' . $array['start_time'] . ', ' . $array['interval'] . ', ' . $array['inter_val_type'] . ',
-            :run_file, :run_func, :params, ' . $array['del'] . ', 0, 1, 0, 0, :cron_name
+            :start_time, :interval, :inter_val_type,
+            :run_file, :run_func, :params, :del, 0, 1, 0, 0, :cron_name
         )';
         $data = [];
+        $data['start_time'] = $array['start_time'];
+        $data['interval'] = $array['interval'];
+        $data['inter_val_type'] = $array['inter_val_type'];
         $data['run_file'] = $array['run_file'];
         $data['run_func'] = $array['run_func'];
         $data['params'] = $array['params'];
+        $data['del'] = $array['del'];
         $data['cron_name'] = $array['cron_name'];
         $id = $db->insert_id($sql, 'id', $data);
         if (empty($id)) {
@@ -271,8 +279,9 @@ if ($nv_Request->isset_request('crontabcontent', 'post')) {
         while ($_scratch = $result->fetch(3)) {
             [$lang_i] = $_scratch;
             unset($_scratch);
-            $sth = $db->prepare('UPDATE ' . NV_CRONJOBS_GLOBALTABLE . ' SET ' . $lang_i . '_cron_name= :run_func WHERE id=' . $id);
+            $sth = $db->prepare('UPDATE ' . NV_CRONJOBS_GLOBALTABLE . ' SET ' . $lang_i . '_cron_name= :run_func WHERE id=:id');
             $sth->bindParam(':run_func', $array['run_func'], PDO::PARAM_STR);
+            $sth->bindParam(':id', $id, PDO::PARAM_INT);
             $sth->execute();
         }
     }
@@ -290,8 +299,8 @@ $result = $db->query('SELECT * FROM ' . NV_CRONJOBS_GLOBALTABLE . ' ORDER BY is_
 $contents = [];
 while ($row = $result->fetch()) {
     $contents[$row['id']]['caption'] = $row[NV_LANG_INTERFACE . '_cron_name'] ?? ($row[NV_LANG_DATA . '_cron_name'] ?? $row['run_func']);
-    $contents[$row['id']]['del_checkss'] = md5(NV_CHECK_SESSION . '_' . $module_name . '_cronjobs_del_' . $row['id']);
-    $contents[$row['id']]['act_checkss'] = md5(NV_CHECK_SESSION . '_' . $module_name . '_cronjobs_act_' . $row['id']);
+    $contents[$row['id']]['del_checkss'] = csrf_create($module_name . '_cronjobs_del_' . $row['id']);
+    $contents[$row['id']]['act_checkss'] = csrf_create($module_name . '_cronjobs_act_' . $row['id']);
     $contents[$row['id']]['is_sys'] = $row['is_sys'];
     $contents[$row['id']]['act'] = $row['act'];
     $contents[$row['id']]['last_time'] = $row['last_time'];
@@ -332,6 +341,7 @@ $tpl->setTemplateDir(get_module_tpl_dir('cronjobs.tpl'));
 $tpl->assign('LANG', $nv_Lang);
 $tpl->assign('MODULE_NAME', $module_name);
 $tpl->assign('OP', $op);
+$tpl->assign('CHECKSS', csrf_create($csrf_key));
 
 $tpl->assign('GCONFIG', $global_config);
 $tpl->assign('CRONLISTS', $contents);

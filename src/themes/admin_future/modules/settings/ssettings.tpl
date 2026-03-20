@@ -399,7 +399,7 @@
                     <li class="list-group-item bg-body">
                         <div class="row g-2">
                             <div class="col-sm-7 offset-sm-5 text-center text-sm-start">
-                                <input type="hidden" name="_csrf" value="{$CHECKSS}">
+                                <input type="hidden" name="checkss" value="{$CHECKSS}">
                                 <input type="hidden" name="save" value="1">
                                 <button type="submit" class="btn btn-primary">{$LANG->getModule('submit')}</button>
                             </div>

@@ -32,7 +32,7 @@
                     <div class="row">
                         <div class="col-sm-8 offset-sm-3 offset-xl-4">
                             <input type="hidden" name="cfg" value="1">
-                            <input type="hidden" name="checkss" value="{$smarty.const.NV_CHECK_SESSION}">
+                            <input type="hidden" name="checkss" value="{$CHECKSS}">
                             <button type="submit" class="btn btn-primary">{$LANG->getModule('submit')}</button>
                         </div>
                     </div>
@@ -113,7 +113,7 @@
                             <li class="list-group-item bg-secondary-subtle">
                                 <div class="hstack gap-1 justify-content-center">
                                     {if empty($crinfo.is_sys)}
-                                    <button class="btn btn-secondary" data-toggle="editCron" data-id="{$crid}" data-checkss="{$smarty.const.NV_CHECK_SESSION}"><i class="fa-solid fa-pencil"></i> {$LANG->getGlobal('edit')}</button>
+                                    <button class="btn btn-secondary" data-toggle="editCron" data-id="{$crid}" data-checkss="{$CHECKSS}"><i class="fa-solid fa-pencil"></i> {$LANG->getGlobal('edit')}</button>
                                     {/if}
                                     <button class="btn btn-secondary" data-toggle="actCron" data-id="{$crid}" data-checkss="{$crinfo.act_checkss}"><i class="fa-solid fa-ban text-warning"></i> {$crinfo.act ? $LANG->getGlobal('disable') : $LANG->getGlobal('activate')}</button>
                                     {if empty($crinfo.is_sys)}
@@ -227,7 +227,7 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <input type="hidden" name="checkss" value="{$smarty.const.NV_CHECK_SESSION}">
+                <input type="hidden" name="checkss" value="{$CHECKSS}">
                 <input type="hidden" name="crontabcontent" value="1">
                 <input type="hidden" name="id" value="0">
                 <button type="submit" class="btn btn-primary">{$LANG->getGlobal('submit')}</button>

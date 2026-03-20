@@ -106,5 +106,5 @@
             </div>
         </div>
     </div>
-    <input type="hidden" name="checkss" value="{$DATA.checkss}">
+    <input type="hidden" name="checkss" value="{$CHECKSS}">
 </form>

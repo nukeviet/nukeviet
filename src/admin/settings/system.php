@@ -28,10 +28,10 @@ $closed_site_Modes[3] = $nv_Lang->getModule('closed_site_3');
 // Thay đổi chế độ site
 if (defined('NV_IS_GODADMIN')) {
     if ($nv_Request->isset_request('site_mode', 'post')) {
-        if ($nv_Request->get_title('checkss', 'post', '') !== NV_CHECK_SESSION) {
+        if (!csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
             nv_jsonOutput([
                 'status' => 'error',
-                'mess' => 'Error session!!!'
+                'mess' => $nv_Lang->getGlobal('error_checkss')
             ]);
         }
 
@@ -80,8 +80,7 @@ $timezone_array = array_keys($nv_parse_ini_timezone);
 $array_config_define = [];
 
 // Lưu Cấu hình chung
-$checkss = md5(NV_CHECK_SESSION . '_' . $module_name . '_' . $op . '_' . $admin_info['userid']);
-if ($checkss == $nv_Request->get_string('checkss', 'post')) {
+if ($nv_Request->isset_request('checkss', 'post') and csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
     $errormess = '';
     $array_config_site = [];
 
@@ -329,7 +328,6 @@ if ($checkss == $nv_Request->get_string('checkss', 'post')) {
 $page_title = $nv_Lang->getModule('global_config');
 
 $array_config_define['nv_debug'] = NV_DEBUG;
-$global_config['checkss'] = $checkss;
 $global_config['reopening_date'] = '';
 $global_config['reopening_hour'] = 0;
 $global_config['reopening_min'] = 0;
@@ -358,6 +356,7 @@ $tpl->assign('SITE_MODS', $site_mods);
 $tpl->assign('ADMINTHEMES', $adminThemes);
 $tpl->assign('CLOSED_SITE_MODES', $closed_site_Modes);
 $tpl->assign('CRYPT', $crypt);
+$tpl->assign('CHECKSS', csrf_create($csrf_key));
 
 $array_config_global = [];
 if (defined('NV_IS_GODADMIN')) {

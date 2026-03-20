@@ -64,20 +64,19 @@ function get_cdn_urls($urls = '', $countries_string = false, $except_inc = true)
 }
 
 $page_title = $nv_Lang->getModule('cdn_backendhost');
-$checkss = md5(NV_CHECK_SESSION . '_' . $module_name . '_' . $op . '_' . $admin_info['userid']);
 
 $tpl = new \NukeViet\Template\NVSmarty();
 $tpl->setTemplateDir(get_module_tpl_dir('cdn_backendhost.tpl'));
 $tpl->assign('LANG', $nv_Lang);
 $tpl->assign('MODULE_NAME', $module_name);
 $tpl->assign('OP', $op);
-$tpl->assign('CHECKSS', $checkss);
+$tpl->assign('CHECKSS', csrf_create($csrf_key));
 
 // Load form cấu hình CDN theo ngôn ngữ
 if ($nv_Request->isset_request('by_country', 'get')) {
     $cdn_urls = get_cdn_urls();
 
-    if ($checkss == $nv_Request->get_string('checkss', 'post')) {
+    if ($nv_Request->isset_request('checkss', 'post') and csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
         $urls = [];
         if (!empty($cdn_urls)) {
             foreach ($cdn_urls as $cdn_url) {
@@ -130,7 +129,13 @@ if ($nv_Request->isset_request('by_country', 'get')) {
 }
 
 // Lưu thiết lập CDN
-if ($checkss == $nv_Request->get_string('checkss', 'post')) {
+if ($nv_Request->isset_request('checkss', 'post')) {
+    if (!csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
+        nv_jsonOutput([
+            'status' => 'error',
+            'mess' => $nv_Lang->getGlobal('error_checkss')
+        ]);
+    }
     $array_config_global = [];
 
     $array_config_global['nv_static_url'] = '';

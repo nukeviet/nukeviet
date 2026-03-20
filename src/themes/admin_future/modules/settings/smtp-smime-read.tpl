@@ -1,4 +1,5 @@
 <form method="post" action="{$smarty.const.NV_BASE_ADMINURL}index.php?{$smarty.const.NV_LANG_VARIABLE}={$smarty.const.NV_LANG_DATA}&amp;{$smarty.const.NV_NAME_VARIABLE}={$MODULE_NAME}&amp;{$smarty.const.NV_OP_VARIABLE}={$OP}" data-email="{$EMAIL}" data-prompt="{$LANG->getModule('smime_download_passphrase')}" data-confirm="{$LANG->getModule('smime_del_confirm')}">
+    <input type="hidden" name="checkss" value="{$CHECKSS}">
     <input type="hidden" name="email" value="{$EMAIL}">
     <input type="hidden" name="passphrase" value="">
     <input type="hidden" name="smimedownload" value="1">
