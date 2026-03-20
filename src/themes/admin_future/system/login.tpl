@@ -99,7 +99,7 @@
                                             'language': "{$smarty.const.NV_LANG_INTERFACE}"
                                         });
                                     });
-                                    </script>                                    
+                                    </script>
                                     {/if}
                                     {/if}
                                     <div class="d-grid">
@@ -185,7 +185,7 @@
                             {/foreach}
                         </select>
                         {/if}
-                        <a id="adm-redirect" class="btn btn-secondary btn-sm d-none" href="#"><i class="fa-solid fa-star text-warning"></i> {$LANG->getGlobal('acp')}</a>
+                        <a id="adm-redirect" class="btn btn-secondary btn-sm d-none" href="#"><i class="fa-solid fa-star"></i> {$LANG->getGlobal('acp')}</a>
                         <a class="btn btn-secondary btn-sm ms-auto" href="{$GCONFIG.site_url}"><i class="fa-solid fa-house"></i> {$LANG->getGlobal('go_clientsector')}</a>
                     </div>
                 </div>
