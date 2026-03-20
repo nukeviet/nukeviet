@@ -125,7 +125,7 @@
 }
 
 .flatpickr-calendar.arrowTop:after {
-    border-bottom-color: #fff;
+    border-bottom-color: var(--#{$prefix}body-bg);
 }
 
 .flatpickr-calendar.arrowBottom:before,

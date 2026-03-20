@@ -27583,7 +27583,7 @@ p + .image-style-side {
 }
 
 .flatpickr-calendar.arrowTop:after {
-  border-bottom-color: #fff;
+  border-bottom-color: var(--bs-body-bg);
 }
 
 .flatpickr-calendar.arrowBottom:before,
