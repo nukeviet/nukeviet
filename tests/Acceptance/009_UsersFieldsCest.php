@@ -115,11 +115,20 @@ class UsersFieldsCest
 
     /**
      * Gửi form bằng JS và chờ redirect về trang thêm mới.
+     * Wait cho toast success message để đảm bảo DB đã commit.
      */
     private function submitAndWaitForRedirect(AcceptanceTester $I): void
     {
         $I->executeJS("document.querySelector('button[type=\"submit\"]').click();");
-        $I->waitForElement('#field_id', 15);
+
+        /*
+         * Chờ toast success xuất hiện với class chính xác của NukeViet
+         * Toast success có class: cr-toast cr-toast-lev-success cr-show và phải visible
+         */
+        $I->waitForElementVisible('.cr-toast.cr-toast-lev-success.cr-show', 5);
+
+        // Sau khi có toast success, chờ page redirect về form mới
+        $I->waitForElement('#field_id', 10);
     }
 
     // -------------------------------------------------------------------------

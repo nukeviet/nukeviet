@@ -122,6 +122,27 @@ $contents = $tpl->fetch(basename(__FILE__, '.php') . '.tpl');
 
 Lưu ý: vòng lặp collect array assign một lần — không `parse()` từng item. Tất cả biến assign cần có giá trị mặc định.
 
+**Nguyên tắc assign mảng — không assign từng phần tử rời:**
+
+Khi cần truyền nhiều giá trị từ cùng một mảng PHP, assign **nguyên mảng** thay vì từng phần tử rời. Template truy cập qua `{$VARNAME.key}`.
+
+```php
+// Sai — assign từng phần tử rời:
+$tpl->assign('NV_UNICKMIN', $global_config['nv_unickmin']);
+$tpl->assign('NV_UNICKMAX', $global_config['nv_unickmax']);
+$tpl->assign('NAME_SHOW',   (int) $global_config['name_show']);
+
+// Đúng — assign nguyên mảng:
+$tpl->assign('GCONFIG', $global_config);
+// Template dùng: {$GCONFIG.nv_unickmin}, {$GCONFIG.nv_unickmax}, {$GCONFIG.name_show}
+```
+
+**Bảng mapping tên biến assign chuẩn:**
+
+| Biến PHP | Tên assign | Dùng trong tpl |
+|---|---|---|
+| `$global_config` | `GCONFIG` | `{$GCONFIG.key}` |
+
 **Quy tắc nv_jsonOutput:**
 - Chỉ dùng các key chuẩn: `status`, `mess`, `redirect`, `refresh`, `input`, `tab`, `warning`, `timeout` — không copy key cũ từ XTemplate code
 - Mọi response thành công **phải** có `redirect` (URL không rỗng) hoặc `refresh: true` — không để trống khiến form đứng im
@@ -201,6 +222,7 @@ Sau đó báo cáo:
 - [ ] Xóa toàn bộ `$xtpl->*`, thay bằng `new NVSmarty()` + `setTemplateDir()` + `fetch()`
 - [ ] Vòng lặp collect array, không parse từng item
 - [ ] Assign đủ: `LANG`, `MODULE_NAME`, `OP`, `CHECKSS`
+- [ ] Assign nguyên mảng thay vì từng phần tử rời: `$global_config` → `GCONFIG`
 - [ ] Tất cả biến assign có giá trị mặc định (tránh undefined key)
 
 **Template:**
