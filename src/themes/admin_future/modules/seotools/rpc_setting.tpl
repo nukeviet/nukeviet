@@ -20,7 +20,7 @@
         </ul>
         <div class="card-footer border-top">
             <div class="hstack gap-2">
-                <input type="hidden" name="checkss" value="{$smarty.const.NV_CHECK_SESSION}">
+                <input type="hidden" name="checkss" value="{$CHECKSS}">
                 <input type="hidden" name="submitprcservice" value="1">
                 <input type="checkbox" data-toggle="checkAll" name="checkall" class="form-check-input m-0 align-middle" aria-label="{$LANG->getGlobal('toggle_checkall')}">
                 <button type="submit" class="btn btn-primary">{$LANG->getGlobal('save')}</button>

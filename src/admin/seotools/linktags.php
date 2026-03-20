@@ -33,8 +33,14 @@ if (file_exists($file_linktags)) {
 }
 
 // Lưu cấu hình opensearch
-$checkss = md5(NV_CHECK_SESSION . '_' . $module_name . '_' . $op . '_' . $admin_info['userid']);
-if ($nv_Request->isset_request('opensearch', 'post') and $checkss == $nv_Request->get_string('checkss', 'post')) {
+
+if ($nv_Request->isset_request('opensearch', 'post')) {
+    if (!csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
+        nv_jsonOutput([
+            'status' => 'error',
+            'mess' => $nv_Lang->getGlobal('error_checkss')
+        ]);
+    }
     $opensearch_link = $nv_Request->get_typed_array('opensearch_link', 'post', 'title', []);
     $shortname = $nv_Request->get_typed_array('shortname', 'post', 'title', []);
     $description = $nv_Request->get_typed_array('description', 'post', 'title', []);
@@ -79,7 +85,13 @@ if ($nv_Request->isset_request('opensearch', 'post') and $checkss == $nv_Request
 }
 
 // Thêm linktag
-if ($nv_Request->isset_request('add', 'post') and $checkss == $nv_Request->get_string('checkss', 'post')) {
+if ($nv_Request->isset_request('add', 'post')) {
+    if (!csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
+        nv_jsonOutput([
+            'status' => 'error',
+            'mess' => $nv_Lang->getGlobal('error_checkss')
+        ]);
+    }
     $key = $nv_Request->get_string('key', 'post', '');
     $linktags_key = -1;
     if (!empty($key)) {
@@ -128,7 +140,13 @@ if ($nv_Request->isset_request('add', 'post') and $checkss == $nv_Request->get_s
 }
 
 // Xóa linktag
-if ($nv_Request->isset_request('del,key', 'post') and $checkss == $nv_Request->get_string('checkss', 'post')) {
+if ($nv_Request->isset_request('del,key', 'post')) {
+    if (!csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
+        nv_jsonOutput([
+            'status' => 'error',
+            'mess' => $nv_Lang->getGlobal('error_checkss')
+        ]);
+    }
     $key = $nv_Request->get_string('key', 'post', '');
     $key = (int) (substr($key, 2));
     if (isset($linktags['link'][$key])) {
@@ -163,7 +181,7 @@ $tpl->setTemplateDir(get_module_tpl_dir('linktags.tpl'));
 $tpl->assign('LANG', $nv_Lang);
 $tpl->assign('MODULE_NAME', $module_name);
 $tpl->assign('OP', $op);
-$tpl->assign('CHECKSS', $checkss);
+$tpl->assign('CHECKSS', csrf_create($csrf_key));
 
 $tpl->assign('SITE_MODS', $site_mods);
 $tpl->assign('OPENSEARCH_LINK', $opensearch_link);

@@ -68,10 +68,17 @@ $tpl->assign('LANG', $nv_Lang);
 $tpl->assign('MODULE_NAME', $module_name);
 $tpl->assign('TEMPLATE', $template);
 $tpl->assign('OP', $op);
+$tpl->assign('CHECKSS', csrf_create($csrf_key));
 
 // Khai báo thông tin doanh nghiệp
 if ($nv_Request->isset_request('localbusiness_information', 'get')) {
     if ($nv_Request->isset_request('save', 'post')) {
+        if (!csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
+            nv_jsonOutput([
+                'status' => 'error',
+                'mess' => $nv_Lang->getGlobal('error_checkss')
+            ]);
+        }
         $jsondata = $nv_Request->get_textarea('jsondata', '', '', false, false);
         if (empty($jsondata)) {
             nv_jsonOutput([
@@ -111,7 +118,12 @@ if ($nv_Request->isset_request('localbusiness_information', 'get')) {
         }
 
         $jsondata = json_encode($jsondata, NV_JSON_ENCODE);
-        file_put_contents(NV_ROOTDIR . '/' . NV_DATADIR . '/localbusiness.json', $jsondata, LOCK_EX);
+        if (file_put_contents(NV_ROOTDIR . '/' . NV_DATADIR . '/localbusiness.json', $jsondata, LOCK_EX) === false) {
+            nv_jsonOutput([
+                'status' => 'error',
+                'mess' => 'Error: Can not write file localbusiness.json'
+            ]);
+        }
         nv_jsonOutput([
             'status' => 'OK',
             'redirect' => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op
@@ -141,11 +153,23 @@ if ($nv_Request->isset_request('localbusiness_information', 'get')) {
 
 // Lấy thông tin doanh nghiệp mẫu
 if ($nv_Request->isset_request('sample_data', 'post')) {
+    if (!csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
+        nv_jsonOutput([
+            'status' => 'error',
+            'mess' => $nv_Lang->getGlobal('error_checkss')
+        ]);
+    }
     nv_htmlOutput(json_encode($sample_data, NV_JSON_ENCODE));
 }
 
 // Xóa file thông tin doanh nghiệp
 if ($nv_Request->isset_request('lbinf_delete', 'post')) {
+    if (!csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
+        nv_jsonOutput([
+            'status' => 'error',
+            'mess' => $nv_Lang->getGlobal('error_checkss')
+        ]);
+    }
     if (file_exists(NV_ROOTDIR . '/' . NV_DATADIR . '/localbusiness.json')) {
         nv_deletefile(NV_ROOTDIR . '/' . NV_DATADIR . '/localbusiness.json');
     }
@@ -158,6 +182,12 @@ if ($nv_Request->isset_request('lbinf_delete', 'post')) {
 
 // Upload biểu trưng
 if ($nv_Request->isset_request('logoupload', 'get')) {
+    if (!csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
+        nv_jsonOutput([
+            'status' => 'error',
+            'mess' => $nv_Lang->getGlobal('error_checkss')
+        ]);
+    }
     $array = [];
     $array['success'] = 0;
     $array['error'] = '';
@@ -231,10 +261,16 @@ if ($nv_Request->isset_request('logoupload', 'get')) {
 
 // Xóa biểu trưng
 if ($nv_Request->isset_request('logodel', 'post')) {
+    if (!csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
+        nv_jsonOutput([
+            'status' => 'error',
+            'mess' => $nv_Lang->getGlobal('error_checkss')
+        ]);
+    }
     if (!empty($global_config['organization_logo']) and file_exists(NV_ROOTDIR . '/' . $global_config['organization_logo'])) {
         nv_deletefile(NV_ROOTDIR . '/' . $global_config['organization_logo']);
     }
-    $db->query('UPDATE ' . NV_CONFIG_GLOBALTABLE . " SET config_value = '' WHERE lang = 'sys' AND module = 'site' AND config_name = 'organization_logo'");
+    $db->query("UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value = '' WHERE lang = 'sys' AND module = 'site' AND config_name = 'organization_logo'");
     $nv_Cache->delAll(false);
     nv_jsonOutput([
         'status' => 'OK'
@@ -242,8 +278,14 @@ if ($nv_Request->isset_request('logodel', 'post')) {
 }
 
 // Lưu các giá trị gửi qua form
-$checkss = md5(NV_CHECK_SESSION . '_' . $module_name . '_' . $op . '_' . $admin_info['userid']);
-if ($checkss == $nv_Request->get_string('checkss', 'post')) {
+
+if ($nv_Request->isset_request('checkss', 'post')) {
+    if (!csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
+        nv_jsonOutput([
+            'status' => 'error',
+            'mess' => $nv_Lang->getGlobal('error_checkss')
+        ]);
+    }
     $name = $nv_Request->get_title('name', 'post', '');
     $val = (int) $nv_Request->get_bool('val', 'post', false);
 
@@ -271,7 +313,6 @@ $page_title = $nv_Lang->getModule('other_seo_tools');
 
 $tpl->registerPlugin('modifier', 'file_exists', 'file_exists');
 $tpl->assign('GCONFIG', $global_config);
-$tpl->assign('CHECKSS', $checkss);
 
 $contents = $tpl->fetch('others.tpl');
 
