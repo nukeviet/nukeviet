@@ -40,7 +40,14 @@ if ($is_edit) {
     $select_options[$url] = $nv_Lang->getModule('edit_grid');
 }
 
-$get_widget = $nv_Request->isset_request('load_list_widgets', 'post') ? 0 : 1;
+if ($nv_Request->isset_request('load_list_widgets', 'post')) {
+    if (!csrf_check($nv_Request->get_string('checkss', 'post'), $admin_info['admin_id'] . '_' . $module_name . '_widget')) {
+        nv_htmlOutput($nv_Lang->getGlobal('error_checkss'));
+    }
+    $get_widget = 0;
+} else {
+    $get_widget = 1;
+}
 
 // Thông tin thống kê và thông tin chờ xử lý từ các module
 $stat_info = $pending_info = [];
@@ -162,14 +169,14 @@ if (!$get_widget) {
     $tpl->assign('WIDGETS', $array_widgets);
 
     $contents = $tpl->fetch('main_widgets.tpl');
-    include NV_ROOTDIR . '/includes/header.php';
-    echo $contents;
-    include NV_ROOTDIR . '/includes/footer.php';
+    nv_htmlOutput($contents);
 }
 
 $tpl->assign('TCONFIG', $theme_config);
 $tpl->assign('WIDGETS', $html_widgets);
 $tpl->assign('IS_EDIT', $is_edit);
+$tpl->assign('CHECKSS', csrf_create($admin_info['admin_id'] . '_' . $module_name . '_widget'));
+$tpl->assign('CHECKSS_WEBTOOLS', csrf_create($admin_info['admin_id'] . '_webtools_deleteupdate'));
 $tpl->assign('THEME_GRIDS', [
     'xs' => '&lt;576px',
     'sm' => '≥576px',

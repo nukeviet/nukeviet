@@ -55,7 +55,7 @@
         </form>
     </div>
     <div class="card-body">
-        <div class="table-responsive-lg table-card" id="list-items">
+        <div class="table-responsive-lg table-card" id="list-items" data-checkss="{$CHECKSS}">
             <table class="table align-middle table-sticky mb-0">
                 <thead class="text-muted">
                     <tr>
@@ -117,7 +117,7 @@
                 {if $ALLOWED_DELETE}
                 <input type="checkbox" data-toggle="checkAll" class="form-check-input m-0 align-middle" aria-label="{$LANG->getGlobal('toggle_checkall')}">
                 <button class="btn btn-outline-danger ms-2 me-1 my-1" data-toggle="logDelMulti" data-ctn="#list-items" data-confirm="{$LANG->getModule('log_del_confirm')}"><i class="fa-solid fa-trash" data-icon="fa-trash"></i> {$LANG->getGlobal('delete')}</button>
-                <button class="btn btn-danger me-1 my-1" data-toggle="logTruncate" data-confirm="{$LANG->getModule('log_del_confirm')}" data-url="{$BASE_URL}"><i class="fa-solid fa-ban" data-icon="fa-ban"></i> {$LANG->getModule('log_empty')}</button>
+                <button class="btn btn-danger me-1 my-1" data-toggle="logTruncate" data-confirm="{$LANG->getModule('log_del_confirm')}"><i class="fa-solid fa-ban" data-icon="fa-ban"></i> {$LANG->getModule('log_empty')}</button>
                 {/if}
             </div>
             <div class="pagination-wrap">

@@ -56,6 +56,7 @@ if (defined('NV_IS_GODADMIN') and !$is_windows) {
     }
 }
 
+$tpl->assign('CHECKSS', csrf_create($csrf_key));
 $tpl->assign('CHMODS', $chmods);
 
 $contents = $tpl->fetch('system_info.tpl');

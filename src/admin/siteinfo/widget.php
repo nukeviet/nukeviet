@@ -28,7 +28,7 @@ $init_widget = [
 ];
 
 // Thêm khối vào đầu hoặc cuối
-if ($nv_Request->get_title('addparent', 'post', '') === NV_CHECK_SESSION) {
+if ($nv_Request->isset_request('addparent', 'post') and csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
     $respon = [
         'error' => 1,
         'message' => 'Error!!!'
@@ -58,7 +58,7 @@ if ($nv_Request->get_title('addparent', 'post', '') === NV_CHECK_SESSION) {
 }
 
 // Xóa khối
-if ($nv_Request->get_title('delete', 'post', '') === NV_CHECK_SESSION) {
+if ($nv_Request->isset_request('delete', 'post') and csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
     $respon = [
         'error' => 1,
         'message' => 'Error!!!'
@@ -89,7 +89,7 @@ if ($nv_Request->get_title('delete', 'post', '') === NV_CHECK_SESSION) {
 }
 
 // Thêm khối con
-if ($nv_Request->get_title('addchild', 'post', '') === NV_CHECK_SESSION) {
+if ($nv_Request->isset_request('addchild', 'post') and csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
     $respon = [
         'error' => 1,
         'message' => 'Error!!!'
@@ -130,7 +130,7 @@ if ($nv_Request->get_title('addchild', 'post', '') === NV_CHECK_SESSION) {
 }
 
 // Chỉnh kích thước
-if ($nv_Request->get_title('resize', 'post', '') === NV_CHECK_SESSION) {
+if ($nv_Request->isset_request('resize', 'post') and csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
     $respon = [
         'error' => 1,
         'message' => 'Error!!!'
@@ -176,7 +176,7 @@ if ($nv_Request->get_title('resize', 'post', '') === NV_CHECK_SESSION) {
 }
 
 // Chọn widget cho khối
-if ($nv_Request->get_title('setwidget', 'post', '') === NV_CHECK_SESSION) {
+if ($nv_Request->isset_request('setwidget', 'post') and csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
     $respon = [
         'error' => 1,
         'message' => 'Error!!!'
@@ -206,7 +206,7 @@ if ($nv_Request->get_title('setwidget', 'post', '') === NV_CHECK_SESSION) {
 }
 
 // Chọn widget cho khối
-if ($nv_Request->get_title('swapwidget', 'post', '') === NV_CHECK_SESSION) {
+if ($nv_Request->isset_request('swapwidget', 'post') and csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
     $respon = [
         'error' => 1,
         'message' => 'Error!!!'

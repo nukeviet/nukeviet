@@ -25,7 +25,7 @@
         </form>
     </div>
     <div class="card-body">
-        <div class="table-responsive-lg table-card" id="list-items">
+        <div class="table-responsive-lg table-card" id="list-items" data-checkss="{$CHECKSS}">
             <table class="table table-striped table-sticky mb-0">
                 <thead class="text-muted">
                     <tr class="notilist-head">

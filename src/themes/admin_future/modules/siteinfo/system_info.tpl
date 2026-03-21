@@ -102,8 +102,9 @@
     {if not empty($smarty.const.NV_IS_GODADMIN) and not $IS_WIN}
     <div class="col-12">
         <div class="card text-bg-primary">
-            <div class="card-header">
+            <div class="card-header d-flex align-items-center justify-content-between">
                 <h5 class="card-title mb-0">{$LANG->getModule('chmod')}</h5>
+                <button type="button" class="btn btn-secondary btn-sm" id="btn-checkchmod" data-checkss="{$CHECKSS}"><i class="fa-solid fa-arrows-rotate me-1"></i>{$LANG->getModule('chmod')}</button>
             </div>
             <ul class="list-group list-group-flush">
                 {foreach from=$CHMODS item=chmod}

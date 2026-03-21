@@ -13,7 +13,7 @@ if (!defined('NV_IS_FILE_SITEINFO')) {
     exit('Stop!!!');
 }
 
-if (defined('NV_IS_GODADMIN')) {
+if (defined('NV_IS_GODADMIN') and $nv_Request->isset_request('check', 'post') and csrf_check($nv_Request->get_string('checkss', 'post'), $admin_info['admin_id'] . '_' . $module_name . '_system_info')) {
     $array_dir = [NV_DATADIR, NV_LOGS_DIR, NV_LOGS_DIR . '/data_logs', NV_LOGS_DIR . '/dump_backup', NV_LOGS_DIR . '/error_logs', NV_LOGS_DIR . '/error_logs/errors256', NV_LOGS_DIR . '/error_logs/old', NV_LOGS_DIR . '/error_logs/tmp', NV_LOGS_DIR . '/ip_logs', NV_LOGS_DIR . '/ref_logs', NV_LOGS_DIR . '/voting_logs', NV_CACHEDIR, NV_UPLOADS_DIR, NV_TEMP_DIR, NV_FILES_DIR, NV_ASSETS_DIR . '/css'];
 
     $error = [];

@@ -25,7 +25,7 @@ if ($admin_info['level'] == 1) {
      * + Hoặc chỉ định chính người nhận là mình
      */
     $sql_lev_admin = '((admin_view_allowed!=1 AND logic_mode=0) OR (
-        admin_view_allowed=1 AND (send_to=\'\' OR FIND_IN_SET(' . $admin_info['admin_id'] . ', send_to))
+        admin_view_allowed=1 AND (send_to=\'\' OR FIND_IN_SET(' . (int) $admin_info['admin_id'] . ', send_to))
     ))';
 } elseif ($admin_info['level'] == 2) {
     /*
@@ -37,7 +37,7 @@ if ($admin_info['level'] == 1) {
      */
     $sql_lev_admin = '(admin_view_allowed!=1 AND (
         (admin_view_allowed!=2 AND logic_mode=0) OR (
-            admin_view_allowed=2 AND (send_to=\'\' OR FIND_IN_SET(' . $admin_info['admin_id'] . ', send_to))
+            admin_view_allowed=2 AND (send_to=\'\' OR FIND_IN_SET(' . (int) $admin_info['admin_id'] . ', send_to))
         )
     ))';
 } else {
@@ -47,13 +47,13 @@ if ($admin_info['level'] == 1) {
      * - Hoặc thông báo set cho chính mình
      */
     $sql_lev_admin = '(admin_view_allowed=0 AND (
-        send_to=\'\' OR FIND_IN_SET(' . $admin_info['admin_id'] . ', send_to)
+        send_to=\'\' OR FIND_IN_SET(' . (int) $admin_info['admin_id'] . ', send_to)
     ))';
 }
 
 // Đánh dấu đã xem tất cả các thông báo
 if ($nv_Request->isset_request('notification_reset', 'post')) {
-    if ($nv_Request->get_title('checksess', 'post', '') !== NV_CHECK_SESSION) {
+    if (!csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
         nv_htmlOutput('NO');
     }
     nv_insert_logs(NV_LANG_DATA, $module_name, 'READ_ALL_NOTIFICATION', '', $admin_info['userid']);
@@ -95,7 +95,7 @@ if ($nv_Request->isset_request('delete', 'post')) {
         'error' => 1,
         'data' => []
     ];
-    if ($nv_Request->get_title('checksess', 'post', '') !== NV_CHECK_SESSION) {
+    if (!csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
         nv_jsonOutput($respon);
     }
 
@@ -124,7 +124,7 @@ if ($nv_Request->isset_request('toggle', 'post')) {
         'data' => [],
         'view' => null
     ];
-    if ($nv_Request->get_title('checksess', 'post', '') !== NV_CHECK_SESSION) {
+    if (!csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
         nv_jsonOutput($respon);
     }
 
@@ -218,7 +218,7 @@ while ($data = $result->fetch()) {
 
         if ($data['module'] == 'settings') {
             if ($data['type'] == 'auto_deactive_cronjobs') {
-                $cron_title = $db->query('SELECT ' . NV_LANG_DATA . '_cron_name FROM ' . $db_config['dbsystem'] . '.' . NV_CRONJOBS_GLOBALTABLE . ' WHERE id=' . $data['content']['cron_id'])->fetchColumn();
+                $cron_title = $db->query('SELECT ' . NV_LANG_DATA . '_cron_name FROM ' . $db_config['dbsystem'] . '.' . NV_CRONJOBS_GLOBALTABLE . ' WHERE id=' . (int) $data['content']['cron_id'])->fetchColumn();
                 $data['title'] = $nv_Lang->getModule('notification_cronjobs_auto_deactive', $cron_title);
                 $data['link'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $data['module'] . '&amp;' . NV_OP_VARIABLE . '=cronjobs';
             } elseif ($data['type'] == 'sendmail_failure') {
@@ -233,7 +233,7 @@ while ($data = $result->fetch()) {
         // Thông báo từ các module ngoài site
         if (isset($site_mods[$data['module']]) and file_exists(NV_ROOTDIR . '/modules/' . $site_mods[$data['module']]['module_file'] . '/notification.php')) {
             if ($data['send_from'] > 0) {
-                $user = $db->query('SELECT username, first_name, last_name, photo FROM ' . NV_USERS_GLOBALTABLE . ' WHERE userid = ' . $data['send_from'])->fetch();
+                $user = $db->query('SELECT username, first_name, last_name, photo FROM ' . NV_USERS_GLOBALTABLE . ' WHERE userid = ' . (int) $data['send_from'])->fetch();
                 if ($user) {
                     $data['send_from'] = nv_show_name_user($user['first_name'], $user['last_name'], $user['username']);
                 } else {
@@ -271,6 +271,7 @@ if ($is_ajax) {
     $tpl->assign('LANG', $nv_Lang);
     $tpl->assign('DATA', $array_data);
     $tpl->assign('LAST_ID', $last_id);
+    $tpl->assign('CHECKSS', csrf_create($csrf_key));
 
     $contents = $tpl->fetch('notification_ajax.tpl');
     nv_jsonOutput([
@@ -287,6 +288,7 @@ $tpl->assign('DATA_SEARCH', $array_search);
 $tpl->assign('MODULE_NAME', $module_name);
 $tpl->assign('OP', $op);
 $tpl->assign('GENERATE_PAGE', nv_generate_page($base_url, $all_pages, $per_page, $page));
+$tpl->assign('CHECKSS', csrf_create($csrf_key));
 
 $contents = $tpl->fetch('notification.tpl');
 

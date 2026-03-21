@@ -28,7 +28,7 @@ $(function() {
                 type: 'POST',
                 url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=webtools&' + nv_fc_variable + '=deleteupdate&nocache=' + new Date().getTime(),
                 data: {
-                    'checksess': $this.data('checksess')
+                    'checkss': $this.data('checkss')
                 },
                 dataType: 'json',
                 success: function(data) {
@@ -83,7 +83,8 @@ $(function() {
             type: 'POST',
             url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=widget&nocache=' + new Date().getTime(),
             data: {
-                'addparent': $('body').data('checksess'),
+                'addparent': 1,
+                'checkss': widgetCtn.data('checkss'),
                 'placement': $this.data('placement')
             },
             dataType: 'json',
@@ -118,7 +119,8 @@ $(function() {
             type: 'POST',
             url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=widget&nocache=' + new Date().getTime(),
             data: {
-                'delete': $('body').data('checksess'),
+                'delete': 1,
+                'checkss': widgetCtn.data('checkss'),
                 'widget_id': $this.data('id'),
                 'widget_parentid': $this.data('parent-id')
             },
@@ -154,7 +156,8 @@ $(function() {
             type: 'POST',
             url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=widget&nocache=' + new Date().getTime(),
             data: {
-                'addchild': $('body').data('checksess'),
+                'addchild': 1,
+                'checkss': widgetCtn.data('checkss'),
                 'widget_id': $this.data('id'),
                 'placement': $this.data('placement')
             },
@@ -189,7 +192,8 @@ $(function() {
             type: 'POST',
             url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=widget&nocache=' + new Date().getTime(),
             data: {
-                'resize': $('body').data('checksess'),
+                'resize': 1,
+                'checkss': widgetCtn.data('checkss'),
                 'widget_id': $this.data('id'),
                 'widget_parentid': $this.data('parent-id'),
                 'breakpoint': $this.data('breakpoint'),
@@ -234,7 +238,8 @@ $(function() {
                 type: 'POST',
                 url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&nocache=' + new Date().getTime(),
                 data: {
-                    'load_list_widgets': 1
+                    'load_list_widgets': 1,
+                    'checkss': widgetCtn.data('checkss')
                 },
                 success: function(data) {
                     $('.loader', mdChooseWidget).addClass('d-none');
@@ -269,7 +274,8 @@ $(function() {
             type: 'POST',
             url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=widget&nocache=' + new Date().getTime(),
             data: {
-                'setwidget': $('body').data('checksess'),
+                'setwidget': 1,
+                'checkss': widgetCtn.data('checkss'),
                 'widget_id': mdChooseWidget.data('widget-id'),
                 'widget_parentid': mdChooseWidget.data('parent-id'),
                 'id': $this.data('widget-id')
@@ -338,7 +344,8 @@ $(function() {
                         type: 'POST',
                         url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=widget&nocache=' + new Date().getTime(),
                         data: {
-                            'swapwidget': $('body').data('checksess'),
+                            'swapwidget': 1,
+                            'checkss': widgetCtn.data('checkss'),
                             'widget_id1': target.data('id'),
                             'widget_parentid1': target.data('parent-id'),
                             'widget_id2': widgetDrag.data('id'),
@@ -409,7 +416,8 @@ $(function() {
                 type: 'POST',
                 url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=' + nv_func_name + '&nocache=' + new Date().getTime(),
                 data: {
-                    delete: $('body').data('checksess'),
+                    delete: 1,
+                    checkss: $('#list-items').data('checkss'),
                     id: btn.data('id')
                 },
                 success: function() {
@@ -446,7 +454,8 @@ $(function() {
                 type: 'POST',
                 url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=' + nv_func_name + '&nocache=' + new Date().getTime(),
                 data: {
-                    delete: $('body').data('checksess'),
+                    delete: 1,
+                    checkss: $('#list-items').data('checkss'),
                     listid: listid.join(',')
                 },
                 success: function() {
@@ -473,9 +482,10 @@ $(function() {
             icon.removeClass(icon.data('icon')).addClass('fa-spinner fa-spin-pulse');
             $.ajax({
                 type: 'POST',
-                url: btn.data('url') + '&nocache=' + new Date().getTime(),
+                url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=' + nv_func_name + '&nocache=' + new Date().getTime(),
                 data: {
-                    truncate: $('body').data('checksess')
+                    truncate: 1,
+                    checkss: $('#list-items').data('checkss')
                 },
                 success: function() {
                     location.reload();
@@ -519,7 +529,7 @@ $(function() {
                     data: {
                         delete: 1,
                         listid: listid,
-                        checksess: $('body').data('checksess')
+                        checkss: $('#list-items').data('checkss')
                     },
                     dataType: 'json',
                     success: function(data) {
@@ -545,7 +555,7 @@ $(function() {
                     toggle: 1,
                     direct_view: 1,
                     listid: listid,
-                    checksess: $('body').data('checksess')
+                    checkss: $('#list-items').data('checkss')
                 },
                 dataType: 'json',
                 success: function(data) {
@@ -570,7 +580,7 @@ $(function() {
                     toggle: 1,
                     direct_view: 0,
                     listid: listid,
-                    checksess: $('body').data('checksess')
+                    checkss: $('#list-items').data('checkss')
                 },
                 dataType: 'json',
                 success: function(data) {
@@ -605,7 +615,7 @@ $(function() {
                 data: {
                     delete: 1,
                     id: btn.data('id'),
-                    checksess: $('body').data('checksess')
+                    checkss: $('#list-items').data('checkss')
                 },
                 success: function(data) {
                     icon.removeClass('fa-spinner fa-spin-pulse').addClass(icon.data('icon'));
@@ -640,7 +650,7 @@ $(function() {
             data: {
                 toggle: 1,
                 id: btn.data('id'),
-                checksess: $('body').data('checksess')
+                checkss: $('#list-items').data('checkss')
             },
             success: function(data) {
                 icon.removeClass('fa-spinner fa-spin-pulse').addClass(icon.data('icon'));
@@ -680,7 +690,7 @@ $(function() {
                 toggle: 1,
                 direct_view: 1,
                 id: btn.data('id'),
-                checksess: $('body').data('checksess')
+                checkss: $('#list-items').data('checkss')
             },
             dataType: 'json',
             success: function(data) {
@@ -708,6 +718,35 @@ $(function() {
             },
             error: function(xhr, text, err) {
                 icon.removeClass('fa-spinner fa-spin-pulse').addClass(icon.data('icon'));
+                nvToast(text, 'error');
+                console.log(xhr, text, err);
+            }
+        });
+    });
+
+    // Thực hiện CHMOD
+    $('#btn-checkchmod').on('click', function(e) {
+        e.preventDefault();
+        var icon = $('i', this);
+        if (icon.is('.fa-spin-pulse')) {
+            return;
+        }
+        icon.addClass('fa-spin-pulse');
+        $.ajax({
+            type: 'POST',
+            url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=checkchmod&nocache=' + new Date().getTime(),
+            data: {
+                'check': 1,
+                'checkss': $(this).data('checkss')
+            },
+            success: function(data) {
+                icon.removeClass('fa-spin-pulse');
+                nvAlert(data, function() {
+                    location.reload();
+                });
+            },
+            error: function(xhr, text, err) {
+                icon.removeClass('fa-spin-pulse');
                 nvToast(text, 'error');
                 console.log(xhr, text, err);
             }
