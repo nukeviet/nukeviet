@@ -35,7 +35,10 @@ while ($_scratch = $result->fetch(3)) {
     $array_site_theme[] = $theme;
 }
 if ($global_config['idsite']) {
-    $theme = $db->query('SELECT t1.theme FROM ' . $db_config['dbsystem'] . '.' . $db_config['prefix'] . '_site_cat t1 INNER JOIN ' . $db_config['dbsystem'] . '.' . $db_config['prefix'] . '_site t2 ON t1.cid=t2.cid WHERE t2.idsite=' . $global_config['idsite'])->fetchColumn();
+    $sth = $db->prepare('SELECT t1.theme FROM ' . $db_config['dbsystem'] . '.' . $db_config['prefix'] . '_site_cat t1 INNER JOIN ' . $db_config['dbsystem'] . '.' . $db_config['prefix'] . '_site t2 ON t1.cid=t2.cid WHERE t2.idsite= :idsite');
+    $sth->bindParam(':idsite', $global_config['idsite'], PDO::PARAM_INT);
+    $sth->execute();
+    $theme = $sth->fetchColumn();
     if (!empty($theme)) {
         $array_site_cat_theme = explode(',', $theme);
     }
@@ -51,6 +54,10 @@ if ($nv_Request->isset_request('togglepreviewtheme', 'post')) {
         'message' => ''
     ];
     $theme = $nv_Request->get_title('theme', 'post', '');
+    if (!csrf_check($nv_Request->get_string('checkss', 'post'), $admin_info['admin_id'] . '_' . $module_name . '_' . $theme)) {
+        $array['message'] = $nv_Lang->getGlobal('error_checkss');
+        nv_jsonOutput($array);
+    }
     if (in_array($theme, $theme_list, true)) {
         $array['status'] = 'SUCCESS';
         if (in_array($theme, $array_allow_preview, true)) {
@@ -66,7 +73,10 @@ if ($nv_Request->isset_request('togglepreviewtheme', 'post')) {
             $array['link'] = urlRewriteWithDomain(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=nv-preview-theme&theme=' . $theme . '&checksum=' . md5(NV_LANG_DATA . $theme . $global_config['sitekey']), NV_MY_DOMAIN);
         }
         $array_allow_preview = implode(',', array_intersect($array_allow_preview, $theme_list));
-        $db->query('UPDATE ' . NV_CONFIG_GLOBALTABLE . ' SET config_value=' . $db->quote($array_allow_preview) . ' WHERE lang=' . $db->quote(NV_LANG_DATA) . ' AND module=\'global\' AND config_name=\'preview_theme\'');
+        $sth = $db->prepare('UPDATE ' . NV_CONFIG_GLOBALTABLE . ' SET config_value= :config_value WHERE lang= :lang AND module=\'global\' AND config_name=\'preview_theme\'');
+        $sth->bindParam(':config_value', $array_allow_preview, PDO::PARAM_STR);
+        $sth->bindValue(':lang', NV_LANG_DATA, PDO::PARAM_STR);
+        $sth->execute();
         $nv_Cache->delMod('settings');
         nv_insert_logs(NV_LANG_DATA, $module_name, $array['mode'] . ' preview theme', $theme, $admin_info['userid']);
     }
@@ -107,7 +117,7 @@ foreach ($theme_list as $value) {
         'author' => (string) $info[0]->author,
         'thumbnail' => (string) $info[0]->thumbnail,
         'description' => (string) $info[0]->description,
-        'checkss' => md5(NV_CHECK_SESSION . '_' . $module_name . '_' . $admin_info['userid'] . '_' . $value),
+        'checkss' => csrf_create($admin_info['admin_id'] . '_' . $module_name . '_' . $value),
         'value' => $value,
         'pos' => $pos,
         'allowed_delete' => 0,

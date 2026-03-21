@@ -26,9 +26,11 @@ while ($_scratch = $result->fetch(3)) {
     }
 }
 if ($global_config['idsite']) {
-    $sql = 'SELECT t1.theme FROM ' . $db_config['dbsystem'] . '.' . $db_config['prefix'] . '_site_cat t1
-    INNER JOIN ' . $db_config['dbsystem'] . '.' . $db_config['prefix'] . '_site t2 ON t1.cid=t2.cid WHERE t2.idsite=' . $global_config['idsite'];
-    $theme = $db->query($sql)->fetchColumn();
+    $sth = $db->prepare('SELECT t1.theme FROM ' . $db_config['dbsystem'] . '.' . $db_config['prefix'] . '_site_cat t1
+    INNER JOIN ' . $db_config['dbsystem'] . '.' . $db_config['prefix'] . '_site t2 ON t1.cid=t2.cid WHERE t2.idsite= :idsite');
+    $sth->bindParam(':idsite', $global_config['idsite'], PDO::PARAM_INT);
+    $sth->execute();
+    $theme = $sth->fetchColumn();
     if (!empty($theme)) {
         $array_site_cat_theme = explode(',', $theme);
     }
@@ -40,7 +42,13 @@ if ($global_config['idsite']) {
 $array_config = [];
 
 // Submit form
-if ($nv_Request->get_title('tokend', 'post', '') === NV_CHECK_SESSION) {
+if ($nv_Request->isset_request('checkss', 'post')) {
+    if (!csrf_check($nv_Request->get_title('checkss', 'post', ''), $csrf_key)) {
+        nv_jsonOutput([
+            'status' => 'error',
+            'mess' => $nv_Lang->getGlobal('error_checkss')
+        ]);
+    }
     $array_config['user_allowed_theme'] = $nv_Request->get_typed_array('user_allowed_theme', 'post', 'title', []);
     $array_config['user_allowed_theme'] = array_intersect($array_config['user_allowed_theme'], $array_site_cat_theme);
     $array_config['user_allowed_theme'][] = $global_config['site_theme'];
@@ -76,6 +84,7 @@ $tpl->assign('ARRAY', $array_site_cat_theme);
 $tpl->assign('DATA', $array_config);
 $tpl->assign('GCONFIG', $global_config);
 
+$tpl->assign('CHECKSS', csrf_create($csrf_key));
 $contents = $tpl->fetch('settings.tpl');
 
 include NV_ROOTDIR . '/includes/header.php';

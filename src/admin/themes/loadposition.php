@@ -16,11 +16,10 @@ if (!defined('NV_IS_FILE_THEMES')) {
 $theme1 = $nv_Request->get_title('theme1', 'post', '');
 $theme2 = $nv_Request->get_title('theme2', 'post', '');
 
-$checkss = $nv_Request->get_title('checkss', 'post', '');
-if ($checkss !== md5(NV_CHECK_SESSION . '_' . $module_name . '_xcopyblock_' . $admin_info['userid'])) {
+if (!csrf_check($nv_Request->get_title('checkss', 'post'), $admin_info['admin_id'] . '_' . $module_name . '_xcopyblock')) {
     nv_jsonOutput([
         'success' => 0,
-        'text' => 'Session error!!!'
+        'text' => $nv_Lang->getGlobal('error_checkss')
     ]);
 }
 

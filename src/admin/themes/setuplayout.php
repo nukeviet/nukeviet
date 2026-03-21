@@ -88,9 +88,10 @@ for ($i = 0, $count = count($layout); $i < $count; ++$i) {
     }
 }
 
-$checkss = md5(NV_CHECK_SESSION . '_' . $module_name . '_' . $selectthemes . '_' . $admin_info['userid']);
+$check_key = $admin_info['admin_id'] . '_' . $module_name . '_' . $selectthemes;
+$checkss = csrf_create($check_key);
 
-if ($checkss == $nv_Request->get_string('checkss', 'post')) {
+if (csrf_check($nv_Request->get_string('checkss', 'post'), $check_key)) {
     if ($nv_Request->isset_request('save', 'post') and $nv_Request->isset_request('func', 'post')) {
         nv_insert_logs(NV_LANG_DATA, $module_name, $nv_Lang->getModule('setup_layout') . ' theme: "' . $selectthemes . '"', '', $admin_info['userid']);
 

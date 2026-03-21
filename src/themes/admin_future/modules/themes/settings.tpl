@@ -16,7 +16,7 @@
                 {/foreach}
             </div>
             <button type="submit" class="btn btn-primary">{$LANG->getGlobal('submit')}</button>
-            <input type="hidden" name="tokend" value="{$smarty.const.NV_CHECK_SESSION}">
+            <input type="hidden" name="checkss" value="{$CHECKSS}">
         </form>
     </div>
 </div>

@@ -23,7 +23,7 @@ $tpl->setTemplateDir(get_module_tpl_dir('xcopyblock.tpl'));
 $tpl->assign('LANG', $nv_Lang);
 $tpl->assign('MODULE_NAME', $module_name);
 $tpl->assign('OP', $op);
-$tpl->assign('CHECKSS', md5(NV_CHECK_SESSION . '_' . $module_name . '_' . $op . '_' . $admin_info['userid']));
+$tpl->assign('CHECKSS', csrf_create($admin_info['admin_id'] . '_' . $module_name . '_xcopyblock'));
 $tpl->assign('SELECTTHEMES', $selectthemes);
 
 $theme_list = nv_scandir(NV_ROOTDIR . '/themes/', $global_config['check_theme']);
