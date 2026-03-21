@@ -741,7 +741,7 @@ $(function() {
             },
             success: function(data) {
                 icon.removeClass('fa-spin-pulse');
-                nvAlert(data, function() {
+                nvAlert({ html: true, message: `<pre><code>${data}</code></pre>` }, function() {
                     location.reload();
                 });
             },

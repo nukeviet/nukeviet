@@ -53,7 +53,7 @@ if (defined('NV_IS_GODADMIN') and $nv_Request->isset_request('check', 'post') an
     }
 
     if (!empty($error)) {
-        echo implode('', $error);
+        echo implode("\n", $error);
     } else {
         echo $nv_Lang->getModule('checkchmod_success');
     }
