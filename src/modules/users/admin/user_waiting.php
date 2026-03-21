@@ -582,6 +582,15 @@ if ($nv_Request->isset_request('userid', 'get')) {
                             'value' => get_value_by_lang2($key, $value)
                         ];
                     }
+                } elseif ($row['field_type'] == 'multiselect') {
+                    $valueselect = (!empty($row['value'])) ? explode(',', $row['value']) : [];
+                    foreach ($row['field_choices'] as $key => $value) {
+                        $choices_prepared[] = [
+                            'key' => $key,
+                            'selected' => in_array((string) $key, $valueselect, true),
+                            'value' => get_value_by_lang2($key, $value)
+                        ];
+                    }
                 } else {
                     foreach ($row['field_choices'] as $key => $value) {
                         $choices_prepared[] = [

@@ -1448,7 +1448,7 @@ $(function () {
     }
 
     // Trang Thêm thành viên mới
-    if (nv_func_name === 'user_add') {
+    if (nv_func_name === 'user_add' || nv_func_name === 'edit') {
         // Ẩn/hiện mật khẩu
         $(document).on('click', '.btn-eye', function (e) {
             e.preventDefault();
@@ -1661,6 +1661,14 @@ $(function () {
             } else {
                 window.location.href = url;
             }
+        });
+
+        // Xóa ảnh đại diện hiện tại
+        $(document).on('click', '[data-toggle="deletephoto"]', function (e) {
+            e.preventDefault();
+            $('[name="delpic"]').val(1);
+            $('#current-photo').addClass('d-none');
+            $('#change-photo').removeClass('d-none');
         });
     }
 

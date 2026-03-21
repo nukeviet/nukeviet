@@ -25,7 +25,7 @@ nv_add_hook($module_name, 'get_global_admin_theme', $priority, function ($vars) 
     if (($module_info['module_file'] ?? '') == 'news' and in_array($op, ['drafts', 'report', 'content', 'tags', 'main'])) {
         return $new_theme;
     }
-    if (($module_info['module_file'] ?? '') == 'users' and in_array($op, ['config', 'fields', 'siteterms', 'question', 'groups', 'user_waiting', 'user_waiting_remail', 'user_add', 'edit_oauth', 'edit_2step', 'getuserid'])) {
+    if (($module_info['module_file'] ?? '') == 'users' and in_array($op, ['config', 'fields', 'siteterms', 'question', 'groups', 'user_waiting', 'user_waiting_remail', 'user_add', 'edit_oauth', 'edit_2step', 'getuserid', 'edit'])) {
         return $new_theme;
     }
     if (in_array($module_name, ['upload', 'themes', 'emailtemplates', 'settings', 'seotools', 'modules', 'extensions', 'webtools', 'language', 'siteinfo', 'authors', 'database', 'comment', 'myapi'])) {
