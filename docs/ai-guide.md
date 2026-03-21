@@ -13,29 +13,15 @@ Dự án NukeViet đã được tích hợp sẵn bộ **skills và agents chuy�
     ├── migrate2adminfuture/      # XTemplate → Smarty migration
     ├── security-admin/           # Security audit for admin functions
     ├── security-audit/           # Module-wide security analysis
-    ├── new-module/               # Generate new module structure
-    ├── new-theme/                # Create new theme from template
-    ├── new-block/                # Block development helper
-    ├── new-hook/                 # Hook system integration
-    ├── new-api/                  # API endpoint generator
-    ├── add-func/                 # Add new function to existing module
     ├── upgrade-module/           # Version upgrade automation
-    └── upgrade-theme/            # Theme compatibility updates
-
-.github/agents/                   # GitHub Copilot agents
-└── migrate2adminfuture.agent.md  # Copilot agent referencing Claude skill
+    └── ...
 
 docs/knowledge/                   # Deep knowledge base
 ├── module.md                     # Module development guide
 ├── theme.md                      # Theme development guide
 ├── security.md                   # Security best practices
 ├── mysql.md                      # Database patterns
-├── cache.md                      # Caching system
-├── hook.md                       # Hook system
-├── language.md                   # Multi-language system
-├── api.md                        # API development
-├── testing.md                    # Testing framework
-├── xtemplate-to-smarty.md        # Migration guide
+├── ...
 └── examples/                     # Code templates and patterns
 ```
 
@@ -45,7 +31,12 @@ docs/knowledge/                   # Deep knowledge base
 
 ### Thiết lập
 
-Claude Code AI đã được cấu hình sẵn với bộ **skills chuyên biệt** cho NukeViet. Không cần cài đặt thêm.
+- Hãy đảm bảo bạn đã cài đặt thành công NukeViet theo [Hướng dẫn cài đặt NukeViet](../../README.md#installation).
+- Chạy `bbash scripts/claude.sh` để sinh ra tệp .mcp.json ở thư mục gốc
+- Khởi chạy `claude` và accept khi nó hỏi.
+- Chạy `/mcp` để xem trạng thái các mcp đã kết nối thành công chưa.
+
+Về Skill: Claude Code AI đã được cấu hình sẵn với bộ **skills chuyên biệt** cho NukeViet. Không cần cài đặt thêm.
 
 ### Cách sử dụng Skills
 
@@ -58,14 +49,6 @@ Claude Code AI đã được cấu hình sẵn với bộ **skills chuyên biệ
 | **`/migrate2adminfuture`** | Chuyển admin_default → admin_future | `/migrate2adminfuture news/authors` |
 | **`/security-audit`** | Quét bảo mật toàn module | `/security-audit news` |
 | **`/security-admin`** | Audit function admin cụ thể | `/security-admin news authors` |
-| **`/new-module`** | Tạo module mới hoàn chỉnh | `/new-module mymodule` |
-| **`/new-theme`** | Tạo theme từ template | `/new-theme mytheme` |
-| **`/new-block`** | Tạo block cho module/theme | `/new-block news latest` |
-| **`/new-hook`** | Tạo hook integration | `/new-hook users user_delete` |
-| **`/new-api`** | Tạo API endpoint | `/new-api news GetList` |
-| **`/add-func`** | Thêm function vào module | `/add-func news export` |
-| **`/upgrade-module`** | Nâng cấp module lên phiên bản mới | `/upgrade-module news 5.0.00` |
-| **`/upgrade-theme`** | Cập nhật theme tương thích | `/upgrade-theme default 5.0.00` |
 
 ### Ví dụ sử dụng
 
@@ -78,22 +61,7 @@ Claude Code AI đã được cấu hình sẵn với bộ **skills chuyên biệ
 
 # Tạo module mới tên "portfolio"
 /new-module portfolio
-
-# Thêm function "export" vào module news
-/add-func news export
 ```
-
-### Khi nào dùng Skills vs Chat thường
-
-| Tình huống | Dùng Skills | Chat thường |
-|------------|-------------|-------------|
-| Tác vụ có sẵn skill tương ứng | ✅ Ưu tiên | ❌ |
-| Tác vụ phức tạp, theo quy trình chuẩn | ✅ | ❌ |
-| Câu hỏi đơn giản, giải thích code | ❌ | ✅ |
-| Debug lỗi nhanh | ❌ | ✅ |
-| Thay đổi nhỏ (1-2 dòng) | ❌ | ✅ |
-
----
 
 ## 2. Google Antigravity (Gemini)
 

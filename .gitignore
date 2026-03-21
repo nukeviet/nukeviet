@@ -15,6 +15,7 @@
 /src/.jsbeautifyrc
 /src/.php-cs-fixer.php
 /src/.vscode
+.mcp.json
 
 /composer.lock
 /vendor
