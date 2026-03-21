@@ -168,7 +168,7 @@ $selected = ($row['type'] == 1) ? ' selected="selected"' : '';
 ### 5.1 List page
 
 Quy tắc bảng danh sách:
-- Mọi `<th>` trong thead có class `text-nowrap`; độ rộng cột dùng `style="width:X%"` thay vì px
+- Mọi `<th>` trong thead có class `text-nowrap`; độ rộng cột dùng `style="width:X%"` thay vì px, mọi th trong thead đều phải có width và tổng lại phải bằng 100%
 - Không dùng `text-center` ở thead nếu tbody tương ứng không có
 - Button xóa luôn dùng `btn-danger`; button chỉ có icon cần `aria-label`; không dùng class `fa-lg`
 - Select thứ tự trong tbody thêm class `fw-75`
@@ -182,7 +182,7 @@ Quy tắc bảng danh sách:
             <i class="fa-solid fa-plus-circle"></i> {$LANG->getGlobal('add')}
         </a>
     </div>
-    <div class="card-body p-0">
+    <div class="card-body">
         <div class="table-responsive-lg table-card pb-1">
             <table class="table table-striped align-middle table-sticky mb-0">
                 <thead>

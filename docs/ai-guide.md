@@ -32,7 +32,7 @@ docs/knowledge/                   # Deep knowledge base
 ### Thiết lập
 
 - Hãy đảm bảo bạn đã cài đặt thành công NukeViet theo [Hướng dẫn cài đặt NukeViet](../../README.md#installation).
-- Chạy `bbash scripts/claude.sh` để sinh ra tệp .mcp.json ở thư mục gốc
+- Chạy `bash scripts/claude.sh` để sinh ra tệp .mcp.json ở thư mục gốc
 - Khởi chạy `claude` và accept khi nó hỏi.
 - Chạy `/mcp` để xem trạng thái các mcp đã kết nối thành công chưa.
 
@@ -94,14 +94,7 @@ Sau khi tạo symlink, Antigravity sẽ tự động nhận diện các skills t
 
 ## 3. GitHub Copilot
 
-Thiết lập như Google Antigravity bên trên, ví dụ trên windows
-```cmd
-cd d:\nukeviet\
-mklink /J ".agents" ".claude"
-mklink /H ".github/copilot-instructions.md" "CLAUDE.md"
-```
-
----
+Skills và Project Instructions tương thích với Claude nên không cần làm gì thêm.
 
 ## 4. Quy trình làm việc với AI
 

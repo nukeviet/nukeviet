@@ -1741,4 +1741,78 @@ $(function () {
             });
         });
     }
+
+    // Trang quản lý xác thực hai bước
+    if (nv_func_name === 'edit_2step') {
+        // Tắt xác thực hai bước
+        $(document).on('click', '[data-toggle="turnoff2step"]', function (e) {
+            e.preventDefault();
+            const btn = $(this);
+            const icon = $('i', btn);
+            if (icon.is('.fa-spinner')) {
+                return;
+            }
+            nvConfirm(btn.data('msgconfirm'), function () {
+                const orig = icon.data('icon');
+                icon.removeClass(orig).addClass('fa-spinner fa-spin-pulse');
+                $.ajax({
+                    type: 'POST',
+                    url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=' + nv_func_name + '&userid=' + btn.data('userid') + '&nocache=' + new Date().getTime(),
+                    data: {
+                        turnoff2step: 1,
+                        checkss: btn.data('tokend')
+                    },
+                    dataType: 'json',
+                    cache: false,
+                    success: function (res) {
+                        icon.removeClass('fa-spinner fa-spin-pulse').addClass(orig);
+                        if (res.status === 'error') {
+                            return nvToast(res.mess, 'error');
+                        }
+                        location.reload();
+                    },
+                    error: function (xhr, text) {
+                        icon.removeClass('fa-spinner fa-spin-pulse').addClass(orig);
+                        nvToast(text, 'error');
+                    }
+                });
+            });
+        });
+
+        // Tạo lại mã dự phòng
+        $(document).on('click', '[data-toggle="resetbackupcodes"]', function (e) {
+            e.preventDefault();
+            const btn = $(this);
+            const icon = $('i', btn);
+            if (icon.is('.fa-spinner')) {
+                return;
+            }
+            nvConfirm(btn.data('msgconfirm'), function () {
+                const orig = icon.data('icon');
+                icon.removeClass(orig).addClass('fa-spinner fa-spin-pulse');
+                $.ajax({
+                    type: 'POST',
+                    url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=' + nv_func_name + '&userid=' + btn.data('userid') + '&nocache=' + new Date().getTime(),
+                    data: {
+                        resetbackupcodes: 1,
+                        sendmail: $('[name="sendmail"]').is(':checked') ? 1 : 0,
+                        checkss: btn.data('tokend')
+                    },
+                    dataType: 'json',
+                    cache: false,
+                    success: function (res) {
+                        icon.removeClass('fa-spinner fa-spin-pulse').addClass(orig);
+                        if (res.status === 'error') {
+                            return nvToast(res.mess, 'error');
+                        }
+                        location.reload();
+                    },
+                    error: function (xhr, text) {
+                        icon.removeClass('fa-spinner fa-spin-pulse').addClass(orig);
+                        nvToast(text, 'error');
+                    }
+                });
+            });
+        });
+    }
 });
