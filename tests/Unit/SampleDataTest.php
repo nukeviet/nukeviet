@@ -242,4 +242,116 @@ class SampleDataTest extends \Codeception\Test\Unit
 
         $this->assertGreaterThan(0, $inserted, 'Không có dòng nào được insert vào bảng _users_openid.');
     }
+
+    /**
+     * Dữ liệu mẫu thông tin chỉnh sửa chờ duyệt (editcensor) cho module users
+     *
+     * Mỗi user sẽ có 1 bản ghi trong _users_edit với:
+     * - info_basic: JSON các trường hệ thống (first_name, last_name, gender, birthday, sig, view_mail)
+     * - info_custom: JSON các trường tùy biến từ _users_field (is_system=0, user_editable=1)
+     *
+     * @group sample-data
+     */
+    public function testInsertSampleDataForUsersEditCensor()
+    {
+        global $db, $db_config;
+
+        // Lấy toàn bộ user hiện có
+        $users = $db->query(
+            'SELECT userid FROM ' . $db_config['prefix'] . '_users ORDER BY userid ASC'
+        )->fetchAll(\PDO::FETCH_ASSOC);
+
+        if (empty($users)) {
+            $this->markTestSkipped('Không có user nào trong bảng ' . $db_config['prefix'] . '_users.');
+        }
+
+        // Lấy các trường tùy biến (non-system, user_editable=1) từ _users_field
+        $customFields = $db->query(
+            'SELECT field, field_type, field_choices FROM ' . $db_config['prefix'] . '_users_field'
+            . ' WHERE is_system = 0 AND user_editable = 1 ORDER BY weight ASC'
+        )->fetchAll(\PDO::FETCH_ASSOC);
+
+        $esc = fn (string $s) => str_replace(["\\", "'"], ["\\\\", "\\'"], $s);
+
+        $firstNames = ['Nguyễn', 'Trần', 'Lê', 'Phạm', 'Hoàng', 'Huỳnh', 'Phan', 'Vũ', 'Đặng', 'Bùi'];
+        $lastNames  = ['An', 'Bình', 'Cường', 'Dũng', 'Giang', 'Hà', 'Hùng', 'Linh', 'Long', 'Minh',
+                       'Nam', 'Ngọc', 'Phúc', 'Quân', 'Thành', 'Tuấn', 'Uyên', 'Việt', 'Xuân', 'Yên'];
+        $genders    = ['m', 'f', ''];
+        $sigs       = ['Lập trình viên NukeViet', 'Thành viên mới', 'Hello World!', '', 'Yêu thích mã nguồn mở'];
+
+        $year      = (int) date('Y');
+        $startTime = mktime(0, 0, 0, 1, 1, $year - 40);
+        $endTime   = mktime(0, 0, 0, 12, 31, $year - 18);
+
+        // Hàm sinh giá trị ngẫu nhiên theo field_type
+        $randomValue = function (array $field) use ($startTime, $endTime): string {
+            $choices = [];
+            if (!empty($field['field_choices'])) {
+                $parsed = @unserialize($field['field_choices']);
+                if (is_array($parsed)) {
+                    $choices = array_keys($parsed);
+                }
+            }
+
+            return match ($field['field_type']) {
+                'number'                    => (string) rand(1, 100),
+                'date'                      => (string) rand($startTime, $endTime),
+                'select', 'radio'           => !empty($choices) ? (string) $choices[array_rand($choices)] : '',
+                'checkbox', 'multiselect'   => !empty($choices)
+                    ? implode(',', array_slice($choices, 0, rand(1, min(2, count($choices)))))
+                    : '',
+                'file'                      => '', // bỏ qua trường file
+                default                     => 'sample_' . substr(md5((string) rand()), 0, 8),
+            };
+        };
+
+        $values = [];
+
+        foreach ($users as $user) {
+            $userid = (int) $user['userid'];
+
+            // info_basic: các trường hệ thống
+            $infoBasic = [
+                'first_name' => $firstNames[array_rand($firstNames)],
+                'last_name'  => $lastNames[array_rand($lastNames)],
+                'gender'     => $genders[array_rand($genders)],
+                'birthday'   => rand($startTime, $endTime),
+                'sig'        => $sigs[array_rand($sigs)],
+                'view_mail'  => rand(0, 1),
+            ];
+
+            // info_custom: các trường tùy biến, mỗi user chọn ngẫu nhiên một số trường
+            $infoCustom = [];
+            if (!empty($customFields)) {
+                $randKeys = array_rand($customFields, rand(1, count($customFields)));
+                $picked   = array_intersect_key($customFields, array_flip((array) $randKeys));
+                foreach ($picked as $cf) {
+                    $val = $randomValue($cf);
+                    if ($val !== '') {
+                        $infoCustom[$cf['field']] = $val;
+                    }
+                }
+            }
+
+            $lastedit       = rand(strtotime("$year-01-01"), strtotime("$year-12-31"));
+            $infoBasicJson  = $esc(json_encode($infoBasic, JSON_UNESCAPED_UNICODE));
+            $infoCustomJson = $esc(!empty($infoCustom) ? json_encode($infoCustom, JSON_UNESCAPED_UNICODE) : '');
+
+            $values[] = sprintf(
+                "(%d,%d,'%s','%s')",
+                $userid,
+                $lastedit,
+                $infoBasicJson,
+                $infoCustomJson
+            );
+        }
+
+        $db->exec(
+            'INSERT IGNORE INTO ' . $db_config['prefix'] . '_users_edit'
+            . ' (userid, lastedit, info_basic, info_custom) VALUES '
+            . implode(',', $values)
+        );
+
+        $this->assertTrue(true);
+    }
 }
