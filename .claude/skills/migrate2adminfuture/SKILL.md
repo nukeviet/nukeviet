@@ -15,6 +15,11 @@ Ví dụ: `/migrate2adminfuture news/authors` → migrate:
 - Các template được khai báo trong PHP đó tại `src/themes/admin_default/modules/news/`
 - Js nếu có tại `src/themes/admin_default/js/news.js` liên quan đến các chức năng trong tpl đó.
 
+## Quy tắc chung áp dụng xuyên suốt
+
+- **Comment code**: Dùng `// Comment` — sau `//` có một dấu cách, chữ cái đầu viết hoa. Không dùng `//====` hay `//----` kiểu separator.
+- **Không giữ backward cho admin_default**: Tối ưu hóa hoàn toàn cho admin_future, không cần tương thích ngược.
+
 ## Bước 1 — Xác định mục tiêu
 
 Từ `$ARGUMENTS` split theo `/` lấy:
@@ -59,6 +64,8 @@ Nếu `$ARGUMENTS` trống, không có `/` hoặc sai cú pháp, hỏi lại use
 
 7. **Language file global:** `src/includes/language/vi/global.php`
 
+   > **Quy tắc ngôn ngữ:** Trước khi tạo langkey mới trong module, kiểm tra `global.php` — nếu có key tương đương nghĩa thì dùng `$LANG->getGlobal('key')` thay vì tạo mới. Khi bổ sung langkey mới vào module, bổ sung đầy đủ cho **tất cả** ngôn ngữ (vi, en, fr, ...).
+
 8. **Admin functions:** `src/modules/{MODULE}/admin.functions.php` (nếu tồn tại)
 
 10. **Module js admin_default:** `src/themes/admin_default/js/{MODULE}.js` (nếu tồn tại)
@@ -101,7 +108,15 @@ Tuân thủ toàn bộ quy tắc trong `docs/knowledge/xtemplate-to-smarty.md` (
 - JS: `data-toggle`, `data-tokend="{$CHECKSS}"`, `data-msgconfirm="{$LANG->getModule(...)}"` — không `onclick=`
 - Icons: `fa-solid fa-*` (Font Awesome 6), không `fa fa-*`
 - Bootstrap 5: `card`, `float-end`, `d-none`, `btn-secondary` — không dùng class BS3
-
+- **`<label>` không có input tương ứng** (editor, selector group...): đổi thành `<div class="form-label">`
+- **Button chỉ có icon** (không có text): thêm `aria-label="..."`
+- **Xóa class `fa-lg`** trong button và thẻ `<a>` — icon quá to
+- **Button xóa**: luôn dùng `btn-danger`; không dùng `btn-warning`/`btn-secondary` cho nút xóa
+- **`name` attribute**: mọi `<select>`, `<input>`, `<textarea>` phải có `name`
+- **`input[type=password]`** trong `input-group` đã có eye-button: thêm class `btn-eye-added`
+- **Xóa `select2.min.css`** nếu có trong tpl — admin_future đã tích hợp sẵn
+- **`autocomplete`**: thêm cho input phổ thông (`email`, `username`, `current-password`, `tel`, `url`...); không rõ thì `autocomplete="off"`
+- **Bảng danh sách**: nếu có phân trang/tool thì thêm `card-footer border-top` bên dưới `card-body`; mọi `<th>` trong thead có class `text-nowrap`; độ rộng cột dùng `style="width:X%"` thay vì px; select thứ tự ở tbody thêm class `fw-75` (xem cấu trúc đầy đủ tại `docs/knowledge/xtemplate-to-smarty.md` mục 5.1)
 
 ### 5B. Cập nhật PHP controller
 
@@ -154,6 +169,12 @@ $tpl->assign('GCONFIG', $global_config);
   NV_BASE_ADMINURL . 'index.php?...' . NV_OP_VARIABLE . '=main'
   ```
 
+**Các quy tắc PHP bổ sung khi migrate:**
+- **`checked`/`selected`**: không tạo chuỗi ` checked="checked"` hay ` selected="selected"` từ PHP — chuyển logic sang `{if}` trong tpl
+- **`PDOException`**: đổi thành `Throwable` trong catch nếu gặp; không tự thêm try-catch mới
+- **`nv_date()`**: đổi thành `nv_datetime_format()` (có giờ) hoặc `nv_date_format()` (chỉ ngày)
+- **`nv_insert_logs()`**: bổ sung cho mọi thao tác thêm/sửa/xóa CSDL nếu chưa có
+
 ---
 
 ### 5C. Xử lý JavaScript
@@ -163,6 +184,10 @@ $tpl->assign('GCONFIG', $global_config);
 - Form submit: thêm `class="ajax-submit" novalidate` + `<div class="invalid-feedback"></div>` cạnh input
 - PHP trả: `nv_jsonOutput(['status' => 'OK'|'error', 'mess' => '...'])` — không `echo json_encode`
 - Nếu tpl cũ có JS inline → kiểm tra `src/themes/admin_default/js/{MODULE}.js`, port sang `data-toggle` pattern
+- Dùng `let`/`const` thay vì `var`
+- Nếu không có thay đổi gì JS: **không** thêm comment vào file
+- Kiểm tra cú pháp khi port JS từ tpl: tpl có thể chứa thẻ HTML không hợp lệ gây lỗi JS
+- Sau khi ajax inject HTML có `.ajax-submit` vào DOM: gọi `initFormAjKeyboard()` để khởi tạo lại validate bàn phím
 
 **Quy trình chèn code vào module JS admin_future:**
 
@@ -221,9 +246,13 @@ Sau đó báo cáo:
 **PHP:**
 - [ ] Xóa toàn bộ `$xtpl->*`, thay bằng `new NVSmarty()` + `setTemplateDir()` + `fetch()`
 - [ ] Vòng lặp collect array, không parse từng item
-- [ ] Assign đủ: `LANG`, `MODULE_NAME`, `OP`, `CHECKSS`
+- [ ] Assign đủ: `LANG` (dùng `$nv_Lang`), `MODULE_NAME`, `OP`, `CHECKSS`
 - [ ] Assign nguyên mảng thay vì từng phần tử rời: `$global_config` → `GCONFIG`
 - [ ] Tất cả biến assign có giá trị mặc định (tránh undefined key)
+- [ ] Không tạo chuỗi `checked="checked"` / `selected="selected"` từ PHP
+- [ ] `PDOException` đã đổi thành `Throwable` (nếu có)
+- [ ] `nv_date()` đã đổi thành `nv_datetime_format()` / `nv_date_format()` (nếu có)
+- [ ] `nv_insert_logs()` đã bổ sung cho thao tác thêm/sửa/xóa CSDL
 
 **Template:**
 - [ ] Không còn XTemplate syntax (`<!-- BEGIN: -->`, `{VAR}` không có `$`)
@@ -232,6 +261,11 @@ Sau đó báo cáo:
 - [ ] Action form ghép trong tpl (không hardcode URL, không assign URL từ PHP)
 - [ ] CSRF: `<input type="hidden" name="checkss" value="{$CHECKSS}">` trong mọi form POST
 - [ ] Icons dùng Font Awesome 6 (`fa-solid fa-*`)
+- [ ] `<label>` không có input tương ứng đã đổi thành `<div class="form-label">`
+- [ ] Button chỉ có icon có `aria-label`; không còn class `fa-lg` trong button/thẻ `<a>`
+- [ ] Button xóa dùng `btn-danger`; mọi form element có `name`
+- [ ] Bảng có `text-nowrap` ở thead, độ rộng cột dùng `%`, select thứ tự có `fw-75`
+- [ ] Đã xóa `select2.min.css` nếu có
 
 **PHP — nv_jsonOutput:**
 - [ ] Tất cả key dùng đúng chuẩn: `status`, `mess`, `redirect`, `refresh`... (không copy key cũ từ XTemplate)
@@ -244,6 +278,7 @@ Sau đó báo cáo:
 - [ ] Handler mới nằm trong block `if (nv_func_name === '{FILE}')` riêng, không lọt vào block op khác
 - [ ] Handler cần thiết (datepicker, genpass...) đã được duplicate vào block `{FILE}` nếu chúng đang nằm trong block op khác
 - [ ] Form submit dùng `class="ajax-submit"` + PHP trả `nv_jsonOutput([...])`
+- [ ] Dùng `let`/`const`, không dùng `var`; cú pháp JS hợp lệ sau khi port từ tpl
 
 **Routing & cache:**
 - [ ] Đã cập nhật `get_module_admin_theme.php` **VÀ** `get_global_admin_theme.php`

@@ -140,6 +140,24 @@ $tpl->registerPlugin('modifier', 'clean60',   'nv_clean60');
 {$LANG->getModule('count_items', $TOTAL|dnumber)}  {* với placeholder *}
 ```
 
+### 4.3 checked / selected — xử lý trong Smarty, không từ PHP
+
+**Sai — PHP tạo chuỗi:**
+```php
+$checked = $row['active'] ? ' checked="checked"' : '';
+$selected = ($row['type'] == 1) ? ' selected="selected"' : '';
+```
+```smarty
+<input type="checkbox"{$CHECKED}>
+<option value="1"{$SELECTED}>
+```
+
+**Đúng — Smarty xử lý điều kiện:**
+```smarty
+<input type="checkbox" name="active" value="1"{if $ITEM.active} checked{/if}>
+<option value="1"{if $ITEM.type == 1} selected{/if}>Loại 1</option>
+```
+
 ## 5. Cấu trúc template admin_future chuẩn
 
 **Action URL** — luôn ghép từ constants, không hardcode:
@@ -148,6 +166,13 @@ $tpl->registerPlugin('modifier', 'clean60',   'nv_clean60');
 ```
 
 ### 5.1 List page
+
+Quy tắc bảng danh sách:
+- Mọi `<th>` trong thead có class `text-nowrap`; độ rộng cột dùng `style="width:X%"` thay vì px
+- Không dùng `text-center` ở thead nếu tbody tương ứng không có
+- Button xóa luôn dùng `btn-danger`; button chỉ có icon cần `aria-label`; không dùng class `fa-lg`
+- Select thứ tự trong tbody thêm class `fw-75`
+- Nếu có phân trang hoặc công cụ: thêm `card-footer border-top` sau `card-body`
 
 ```smarty
 <div class="card">
@@ -160,19 +185,23 @@ $tpl->registerPlugin('modifier', 'clean60',   'nv_clean60');
     <div class="card-body p-0">
         <div class="table-responsive-lg table-card pb-1">
             <table class="table table-striped align-middle table-sticky mb-0">
-                <thead><tr>
-                    <th>{$LANG->getModule('col_title')}</th>
-                    <th class="text-center" style="width:80px">{$LANG->getGlobal('action')}</th>
-                </tr></thead>
+                <thead>
+                    <tr>
+                        <th class="text-nowrap">{$LANG->getModule('col_title')}</th>
+                        <th class="text-center text-nowrap" style="width:10%">{$LANG->getGlobal('action')}</th>
+                    </tr>
+                </thead>
                 <tbody>
                     {foreach from=$LIST item=row}
                     <tr>
                         <td>{$row.title}</td>
                         <td class="text-center text-nowrap">
-                            <a href="...&amp;{$smarty.const.NV_OP_VARIABLE}=edit&amp;id={$row.id}" class="btn btn-sm btn-secondary">
+                            <a href="...&amp;{$smarty.const.NV_OP_VARIABLE}=edit&amp;id={$row.id}"
+                               class="btn btn-sm btn-secondary" aria-label="{$LANG->getGlobal('edit')}">
                                 <i class="fa-solid fa-pen-to-square"></i>
                             </a>
                             <button type="button" class="btn btn-sm btn-danger"
+                                    aria-label="{$LANG->getGlobal('delete')}"
                                     data-toggle="confirm-delete"
                                     data-id="{$row.id}"
                                     data-tokend="{$CHECKSS}"
@@ -186,6 +215,18 @@ $tpl->registerPlugin('modifier', 'clean60',   'nv_clean60');
                     {/foreach}
                 </tbody>
             </table>
+        </div>
+    </div>
+    {* Card-footer khi có phân trang hoặc công cụ *}
+    <div class="card-footer border-top">
+        <div class="d-flex flex-wrap justify-content-between align-items-center">
+            <div class="d-flex flex-wrap flex-sm-nowrap align-items-center">
+                {* Công cụ nếu có *}
+            </div>
+            <div class="pagination-wrap">
+                {* Phân trang nếu có — assign $PAGINATION từ PHP *}
+                {$PAGINATION}
+            </div>
         </div>
     </div>
 </div>
@@ -364,6 +405,22 @@ nv_jsonOutput(['status' => 'error', 'mess' => $nv_Lang->getModule('save_failed')
 
 Nếu form có `data-callback="functionName"` → gọi hàm đó trước khi redirect/refresh.
 
+**Ajax inject HTML có form vào DOM:**
+
+Nếu response ajax trả về HTML chứa element `.ajax-submit`, cần gọi `initFormAjKeyboard()` để khởi tạo lại xử lý phím validate:
+
+```js
+$.ajax({
+    // ...
+    success: function(html) {
+        $('#target').html(html);
+        if ($('#target').find('.ajax-submit').length) {
+            initFormAjKeyboard();
+        }
+    }
+});
+```
+
 ### 7.6 File module JS
 
 Tạo mới nếu chưa có: `src/themes/admin_future/js/{module_file}.js`
@@ -390,18 +447,22 @@ $(function() {
 ### PHP controller
 - [ ] Xóa `new XTemplate(...)` và toàn bộ `$xtpl->*`
 - [ ] Chuyển loop parse thành collect array
-- [ ] Assign đủ: `LANG`, `MODULE_NAME`, `OP`, `CHECKSS`
+- [ ] Assign đủ: `LANG` (dùng `$nv_Lang`), `MODULE_NAME`, `OP`, `CHECKSS`
 - [ ] Tất cả biến assign có giá trị mặc định (tránh undefined key)
 - [ ] Register modifier nếu template dùng
 - [ ] `$tpl->fetch('filename.tpl')` (setTemplateDir đã trỏ đúng thư mục)
+- [ ] Không tạo chuỗi `checked="checked"` / `selected="selected"` từ PHP
+- [ ] `nv_insert_logs()` đã bổ sung cho thao tác thêm/sửa/xóa CSDL
 
 ### JavaScript
 - [ ] Không có JS inline (`onclick=`, `onchange=`, `javascript:`)
 - [ ] Sự kiện bắt qua `data-toggle` trong module JS
 - [ ] Tham số truyền qua `data-*` (không hardcode trong JS)
 - [ ] Dùng `nvToast`, `nvConfirm`, `nvAlert` — không dùng native `alert()`/`confirm()`
+- [ ] Dùng `let`/`const`, không dùng `var`
 - [ ] Form submit dùng `class="ajax-submit"` + PHP trả `nv_jsonOutput([...])`
 - [ ] Nếu chưa có `{module}.js` → tạo mới tại `src/themes/admin_future/js/`
+- [ ] Ajax inject HTML có `.ajax-submit` → gọi `initFormAjKeyboard()`
 
 ### Template
 - [ ] Không còn `<!-- BEGIN: -->` / `<!-- END: -->`
@@ -409,8 +470,11 @@ $(function() {
 - [ ] Không còn class Bootstrap 3 (`col-xs-*`, `pull-right`, `panel`, ...)
 - [ ] Action URL ghép từ constants (không hardcode)
 - [ ] CSRF: `<input type="hidden" name="checkss" value="{$CHECKSS}">`
-- [ ] Icons dùng Font Awesome 6 (`fa-solid fa-*`)
+- [ ] Icons dùng Font Awesome 6 (`fa-solid fa-*`); không còn class `fa-lg`
+- [ ] Button chỉ có icon có `aria-label`; button xóa dùng `btn-danger`
+- [ ] Mọi form element có `name`; `checked`/`selected` dùng `{if}` trong tpl
+- [ ] Thead có `text-nowrap`; độ rộng cột dùng `%`
 
 ### Routing & cache
-- [ ] Thêm op vào `src/includes/plugin/get_module_admin_theme.php`
+- [ ] Thêm op vào `src/includes/plugin/get_module_admin_theme.php` **VÀ** `get_global_admin_theme.php`
 - [ ] Xóa cache: `rm -rf src/data/cache/*/*.cache && rm -rf src/data/cache/smarty-compile/*.php`
