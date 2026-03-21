@@ -1824,6 +1824,221 @@ $(function () {
         });
     }
 
+    // Trang Kiểm duyệt thông tin thành viên
+    if (nv_func_name === 'editcensor') {
+        // Duyệt thông tin từ danh sách
+        $(document).on('click', '[data-toggle="approve-censor"]', function (e) {
+            e.preventDefault();
+            const btn = $(this);
+            const icon = $('i', btn);
+            if (icon.is('.fa-spinner')) {
+                return;
+            }
+            nukeviet.confirm(btn.data('msgconfirm'), function () {
+                const orig = icon.data('icon');
+                icon.removeClass(orig).addClass('fa-spinner fa-spin-pulse');
+                $.ajax({
+                    type: 'POST',
+                    url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=editcensor&nocache=' + new Date().getTime(),
+                    data: {
+                        approved: 1,
+                        userid: btn.data('userid'),
+                        checkss: btn.data('tokend')
+                    },
+                    dataType: 'json',
+                    cache: false,
+                    success: function (res) {
+                        icon.removeClass('fa-spinner fa-spin-pulse').addClass(orig);
+                        if (res.status === 'error') {
+                            return nukeviet.toast(res.mess, 'error');
+                        }
+                        nukeviet.toast(res.mess, 'success');
+                        setTimeout(function () {
+                            location.reload();
+                        }, 2000);
+                    },
+                    error: function (xhr, text, err) {
+                        icon.removeClass('fa-spinner fa-spin-pulse').addClass(orig);
+                        nukeviet.toast(text, 'error');
+                        console.log(xhr, text, err);
+                    }
+                });
+            });
+        });
+
+        // Từ chối / xóa thông tin chỉnh sửa
+        $(document).on('click', '[data-toggle="deny-censor"]', function (e) {
+            e.preventDefault();
+            const btn = $(this);
+            const icon = $('i', btn);
+            if (icon.is('.fa-spinner')) {
+                return;
+            }
+            nukeviet.confirm(btn.data('msgconfirm'), function () {
+                const orig = icon.data('icon');
+                icon.removeClass(orig).addClass('fa-spinner fa-spin-pulse');
+                $.ajax({
+                    type: 'POST',
+                    url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=editcensor&nocache=' + new Date().getTime(),
+                    data: {
+                        del: 1,
+                        userid: btn.data('userid'),
+                        checkss: btn.data('tokend')
+                    },
+                    dataType: 'json',
+                    cache: false,
+                    success: function (res) {
+                        icon.removeClass('fa-spinner fa-spin-pulse').addClass(orig);
+                        if (res.status === 'error') {
+                            return nukeviet.toast(res.mess, 'error');
+                        }
+                        nukeviet.toast(res.mess, 'success');
+                        setTimeout(function () {
+                            location.reload();
+                        }, 2000);
+                    },
+                    error: function (xhr, text, err) {
+                        icon.removeClass('fa-spinner fa-spin-pulse').addClass(orig);
+                        nukeviet.toast(text, 'error');
+                        console.log(xhr, text, err);
+                    }
+                });
+            });
+        });
+
+        // Khởi tạo datepicker cho các trường ngày tháng
+        if ($('.datepicker').length > 0) {
+            $('.datepicker').datepicker({
+                showOn: 'focus',
+                dateFormat: nv_jsdate_post.replace('yyyy', 'yy'),
+                changeMonth: true,
+                changeYear: true,
+                yearRange: 'c-100:c',
+                showOtherMonths: true,
+                beforeShow: function () {
+                    setTimeout(function () {
+                        $('.ui-datepicker').css('z-index', 999999999);
+                    }, 0);
+                }
+            });
+        }
+
+        // Xử lý nút "Thêm file" trong trường tùy biến kiểu file
+        $(document).on('click', '[data-toggle="addfilebtn"]', function () {
+            const btn = $(this);
+            const filelist = btn.parents('.filelist');
+            let filenum = $('[name^=custom_fields]', filelist).length;
+            const maxnum = parseInt(filelist.data('maxnum')) || 0;
+            const modalObj = $('#' + btn.data('modal'));
+            const fileAccept = modalObj.data('accept') || '';
+            const maxsize = parseInt(modalObj.data('maxsize')) || 0;
+
+            const setAddFileBtn = function (num) {
+                if (maxnum && num >= maxnum) {
+                    btn.hide();
+                } else {
+                    btn.show();
+                }
+            };
+
+            const updateFileInput = function () {
+                const input = $('<input type="file"/>');
+                if (fileAccept !== '') {
+                    input.attr('accept', fileAccept);
+                }
+                input.on('change', function () {
+                    const sFileName = $(this).val();
+                    if (sFileName.length > 0) {
+                        if (fileAccept !== '') {
+                            const fileAcceptArr = fileAccept.split(',');
+                            let blnValid = false;
+                            for (let j = 0; j < fileAcceptArr.length; j++) {
+                                if (sFileName.toLowerCase().endsWith(fileAcceptArr[j].toLowerCase())) {
+                                    blnValid = true;
+                                    break;
+                                }
+                            }
+                            if (!blnValid) {
+                                updateFileInput();
+                                nukeviet.toast(modalObj.data('ext-error') + ' ' + fileAcceptArr.join(', '), 'error');
+                                return;
+                            }
+                        }
+                        if (typeof this.files !== 'undefined' && this.files.length > 0 && this.files[0].size > maxsize) {
+                            const maxsizeKB = parseFloat(maxsize / 1024).toFixed(2);
+                            const sizeKB = parseFloat(this.files[0].size / 1024).toFixed(2);
+                            updateFileInput();
+                            nukeviet.toast(modalObj.data('size-error') + ' (' + sizeKB + ' KB) ' + modalObj.data('size-error2') + ' (' + maxsizeKB + ' KB)', 'error');
+                            return;
+                        }
+                        if (typeof this.files !== 'undefined' && this.files.length > 0) {
+                            const data = new FormData();
+                            data.append('file', this.files[0]);
+                            data.append('field', modalObj.data('field'));
+                            data.append('_csrf', modalObj.data('csrf'));
+                            data.append('field_fileupload', 1);
+                            $.ajax({
+                                type: 'POST',
+                                url: modalObj.data('url'),
+                                enctype: 'multipart/form-data',
+                                data: data,
+                                cache: false,
+                                processData: false,
+                                contentType: false,
+                                dataType: 'json'
+                            }).done(function (a) {
+                                if (a.status === 'error') {
+                                    updateFileInput();
+                                    return nukeviet.toast(a.mess, 'error');
+                                }
+                                if (a.status === 'success' || a.status === 'OK') {
+                                    const newfile = $('<li class="d-flex align-items-center gap-1 mb-1"></li>');
+                                    newfile.append('<input type="checkbox" class="form-check-input ' + filelist.data('oclass') + '" name="custom_fields[' + filelist.data('field') + '][]" value="' + a.file_key + '" checked>');
+                                    newfile.append('<button type="button" class="btn btn-success btn-sm btn-file type-' + (a.file_type || 'other') + '" data-url="' + a.file_url + '">' + a.file_value + '</button>');
+                                    newfile.append('<button type="button" class="btn btn-link btn-sm" data-toggle="thisfile_del">' + modalObj.data('delete') + '</button>');
+                                    $('.items', filelist).append(newfile);
+                                    modalObj.modal('hide');
+                                    filenum++;
+                                    setAddFileBtn(filenum);
+                                }
+                            });
+                        }
+                    }
+                });
+                $('.fileinput', modalObj).html(input);
+            };
+
+            updateFileInput();
+            modalObj.modal('show');
+        });
+
+        // Xóa file đã chọn trong trường tùy biến kiểu file
+        $(document).on('click', '[data-toggle="thisfile_del"]', function () {
+            const filelist = $(this).parents('.filelist');
+            $(this).parents('li').remove();
+            const addBtn = $('[data-toggle="addfilebtn"]', filelist);
+            if (addBtn.length) {
+                const maxnum = parseInt(filelist.data('maxnum')) || 0;
+                if (maxnum && $('[name^=custom_fields]', filelist).length >= maxnum) {
+                    addBtn.hide();
+                } else {
+                    addBtn.show();
+                }
+            }
+        });
+
+        // Xem file đã tải lên
+        $(document).on('click', '.btn-file', function (e) {
+            e.preventDefault();
+            const url = $(this).data('url');
+            if ($(this).is('.type-image, .type-pdf')) {
+                window.open(url, 'NVFile', 'width=650,height=430,resizable=no,scrollbars=1,toolbar=no,location=no,status=no');
+            } else {
+                window.location.href = url;
+            }
+        });
+    }
+
     // Trang lấy ID tài khoản (popup)
     if (nv_func_name === 'getuserid') {
         // Khởi tạo datepicker cho các ô ngày tháng
