@@ -1815,4 +1815,49 @@ $(function () {
             });
         });
     }
+
+    // Trang lấy ID tài khoản (popup)
+    if (nv_func_name === 'getuserid') {
+        // Khởi tạo datepicker cho các ô ngày tháng
+        if ($('.datepicker-get').length > 0) {
+            $('.datepicker-get').datepicker({
+                dateFormat: nv_jsdate_get.replace('yyyy', 'yy'),
+                changeMonth: true,
+                changeYear: true,
+                showOtherMonths: true,
+                yearRange: '-90:+0'
+            });
+        }
+
+        // Toggle hiện/ẩn tùy chọn tìm kiếm nâng cao
+        $('#btn_toggle_other').on('click', function() {
+            $('#search_other').toggleClass('d-none');
+        });
+
+        // Chặn submit form mặc định, load kết quả vào #resultdata qua AJAX
+        $('#formgetuid').on('submit', function(e) {
+            e.preventDefault();
+            $('#resultdata').load($(this).attr('action') + '&' + $(this).serialize());
+        });
+
+        // Intercept link sort/phân trang trong #resultdata để load lại qua AJAX
+        $(document).on('click', '#resultdata a[href]:not([data-toggle])', function(e) {
+            e.preventDefault();
+            $('#resultdata').load($(this).attr('href'));
+        });
+
+        // Chọn user → điền vào input của opener và đóng popup
+        $(document).on('click', '[data-toggle="select-user"]', function(e) {
+            e.preventDefault();
+            const value = $(this).data('value');
+            const area = $(this).data('area');
+            const element = window.opener.document.getElementById(area);
+            if (element) {
+                element.value = value;
+                element.focus();
+                element.dispatchEvent(new Event('change'));
+            }
+            window.close();
+        });
+    }
 });

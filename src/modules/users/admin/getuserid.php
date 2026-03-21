@@ -24,25 +24,10 @@ $access_viewlist = empty($access_admin['access_viewlist'][$admin_info['level']])
 $page_title = $nv_Lang->getModule('pagetitle');
 $filtersql = $nv_Request->get_string('filtersql', 'get', '');
 
-$xtpl = new XTemplate($op . '.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-
 $nv_Lang->setModule('fullname', $global_config['name_show'] == 0 ? $nv_Lang->getModule('lastname_firstname') : $nv_Lang->getModule('firstname_lastname'));
-$xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
-$xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
-$xtpl->assign('GLOBAL_CONFIG', $global_config);
-$xtpl->assign('MODULE_NAME', $module_name);
-$xtpl->assign('MODULE_FILE', $module_file);
-$xtpl->assign('AREA', $area);
-$xtpl->assign('RETURN', $return);
-$xtpl->assign('FORM_ACTION', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&area=' . $area . '&filtersql=' . $filtersql);
-
-$array = [];
-
-$base_url = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&amp;area=' . $area . '&amp;return=' . $return . '&amp;save=1';
 
 if ($nv_Request->isset_request('save', 'get')) {
     $array_user = [];
-    $generate_page = '';
 
     $orderid = $nv_Request->get_title('orderid', 'get', '');
     $orderusername = $nv_Request->get_title('orderusername', 'get', '');
@@ -62,6 +47,7 @@ if ($nv_Request->isset_request('save', 'get')) {
         $orderregdate = 'ASC';
     }
 
+    $array = [];
     $array['username'] = $nv_Request->get_title('username', 'get', '');
     $array['full_name'] = $nv_Request->get_title('full_name', 'get', '');
     $array['email'] = $nv_Request->get_title('email', 'get', '');
@@ -73,18 +59,12 @@ if ($nv_Request->isset_request('save', 'get')) {
     $array['last_ip'] = $nv_Request->get_title('last_ip', 'get', '');
     $array['gender'] = $nv_Request->get_title('gender', 'get', '');
 
-    $is_null = true;
-    foreach ($array as $check) {
-        if (!empty($check)) {
-            $is_null = false;
-            break;
-        }
-    }
-
     $array_where = [];
     if ($global_config['idsite'] > 0) {
         $array_where[] = '(idsite=' . $global_config['idsite'] . ' OR userid=' . $admin_info['admin_id'] . ')';
     }
+
+    $base_url = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&amp;area=' . $area . '&amp;return=' . $return . '&amp;save=1';
 
     if (!empty($array['username'])) {
         $base_url .= '&amp;username=' . rawurlencode($array['username']);
@@ -93,7 +73,6 @@ if ($nv_Request->isset_request('save', 'get')) {
 
     if (!empty($array['full_name'])) {
         $base_url .= '&amp;full_name=' . rawurlencode($array['full_name']);
-
         $where_fullname = $global_config['name_show'] == 0 ? "concat(last_name,' ',first_name)" : "concat(first_name,' ',last_name)";
         $array_where[] = '(' . $where_fullname . " LIKE '%" . $db->dblikeescape($array['full_name']) . "%' )";
     }
@@ -137,6 +116,7 @@ if ($nv_Request->isset_request('save', 'get')) {
         $base_url .= '&amp;last_loginto=' . rawurlencode(nv_u2d_get($array['last_loginto']));
         $array_where[] = '( last_login <= ' . $array['last_loginto'] . ' )';
     }
+
     if (!empty($filtersql)) {
         $data_str = $crypt->decrypt($filtersql, NV_CHECK_SESSION);
         if (!empty($data_str)) {
@@ -145,22 +125,22 @@ if ($nv_Request->isset_request('save', 'get')) {
     }
 
     // Order data
-    $orderida = [
+    $order_id = [
         'url' => ($orderid == 'ASC') ? $base_url . '&amp;orderid=DESC' : $base_url . '&amp;orderid=ASC',
         'class' => ($orderid == '') ? 'nooder' : strtolower($orderid)
     ];
 
-    $orderusernamea = [
+    $order_username = [
         'url' => ($orderusername == 'ASC') ? $base_url . '&amp;orderusername=DESC' : $base_url . '&amp;orderusername=ASC',
         'class' => ($orderusername == '') ? 'nooder' : strtolower($orderusername)
     ];
 
-    $orderemaila = [
+    $order_email = [
         'url' => ($orderemail == 'ASC') ? $base_url . '&amp;orderemail=DESC' : $base_url . '&amp;orderemail=ASC',
         'class' => ($orderemail == '') ? 'nooder' : strtolower($orderemail)
     ];
 
-    $orderregdatea = [
+    $order_regdate = [
         'url' => ($orderregdate == 'ASC') ? $base_url . '&amp;orderregdate=DESC' : $base_url . '&amp;orderregdate=ASC',
         'class' => ($orderregdate == '') ? 'nooder' : strtolower($orderregdate)
     ];
@@ -211,72 +191,47 @@ if ($nv_Request->isset_request('save', 'get')) {
     }
     $result2 = $db->query($db->sql());
     while ($row = $result2->fetch()) {
-        $array_user[$row['userid']] = $row;
+        $row['regdate'] = nv_datetime_format($row['regdate']);
+        $row['return'] = $row[$return];
+        $array_user[] = $row;
     }
 
-    if (!empty($array_user)) {
-        if ($access_viewlist) {
-            $xtpl->assign('ODER_ID', $orderida);
-            $xtpl->assign('ODER_USERNAME', $orderusernamea);
-            $xtpl->assign('ODER_EMAIL', $orderemaila);
-            $xtpl->assign('ODER_REGDATE', $orderregdatea);
-            $xtpl->parse('resultdata.data.order');
-        } else {
-            $xtpl->parse('resultdata.data.no_order');
-        }
-
-        foreach ($array_user as $row) {
-            $row['regdate'] = nv_datetime_format($row['regdate']);
-            $row['return'] = $row[$return];
-            $xtpl->assign('ROW', $row);
-            $xtpl->parse('resultdata.data.row');
-        }
-
-        if ($access_viewlist) {
-            $generate_page = nv_generate_page($base_url, $num_items, $per_page, $page);
-            if (!empty($generate_page)) {
-                $xtpl->assign('GENERATE_PAGE', $generate_page);
-                $xtpl->parse('resultdata.data.generate_page');
-            }
-        }
-
-        $xtpl->parse('resultdata.data');
-    } elseif ($nv_Request->isset_request('save', 'get')) {
-        $xtpl->parse('resultdata.nodata');
+    $pagination = '';
+    if ($access_viewlist) {
+        $pagination = nv_generate_page($base_url, $num_items, $per_page, $page);
     }
 
-    $xtpl->parse('resultdata');
-    $contents = $xtpl->text('resultdata');
+    $tpl = new \NukeViet\Template\NVSmarty();
+    $tpl->setTemplateDir(get_module_tpl_dir('getuserid_result.tpl'));
+    $tpl->assign('LANG', $nv_Lang);
+    $tpl->assign('MODULE_NAME', $module_name);
+    $tpl->assign('OP', $op);
+    $tpl->assign('AREA', $area);
+    $tpl->assign('ACCESS_VIEWLIST', $access_viewlist);
+    $tpl->assign('ROWS', $array_user);
+    $tpl->assign('ORDER_ID', $order_id);
+    $tpl->assign('ORDER_USERNAME', $order_username);
+    $tpl->assign('ORDER_EMAIL', $order_email);
+    $tpl->assign('ORDER_REGDATE', $order_regdate);
+    $tpl->assign('PAGINATION', $pagination);
+
+    $contents = $tpl->fetch('getuserid_result.tpl');
 
     include NV_ROOTDIR . '/includes/header.php';
     echo $contents;
     include NV_ROOTDIR . '/includes/footer.php';
 } else {
-    $gender = $array['gender'] ?? '';
-    $array['gender'] = [];
-    $array['gender'][] = [
-        'key' => '',
-        'title' => $nv_Lang->getModule('select_gender'),
-        'selected' => ('' == $gender) ? ' selected="selected"' : ''
-    ];
-    $array['gender'][] = [
-        'key' => 'M',
-        'title' => $nv_Lang->getModule('select_gender_male'),
-        'selected' => ('M' == $gender) ? ' selected="selected"' : ''
-    ];
-    $array['gender'][] = [
-        'key' => 'F',
-        'title' => $nv_Lang->getModule('select_gender_female'),
-        'selected' => ('F' == $gender) ? ' selected="selected"' : ''
-    ];
+    $tpl = new \NukeViet\Template\NVSmarty();
+    $tpl->setTemplateDir(get_module_tpl_dir('getuserid.tpl'));
+    $tpl->assign('LANG', $nv_Lang);
+    $tpl->assign('MODULE_NAME', $module_name);
+    $tpl->assign('OP', $op);
+    $tpl->assign('AREA', $area);
+    $tpl->assign('RETURN', $return);
+    $tpl->assign('FILTERSQL', $filtersql);
+    $tpl->assign('GCONFIG', $global_config);
 
-    foreach ($array['gender'] as $gender) {
-        $xtpl->assign('GENDER', $gender);
-        $xtpl->parse('main.gender');
-    }
-
-    $xtpl->parse('main');
-    $contents = $xtpl->text('main');
+    $contents = $tpl->fetch('getuserid.tpl');
 
     include NV_ROOTDIR . '/includes/header.php';
     echo nv_admin_theme($contents, 0);
