@@ -164,4 +164,82 @@ class SampleDataTest extends \Codeception\Test\Unit
 
         $this->assertTrue(true);
     }
+
+    /**
+     * Dữ liệu mẫu OpenID (OAuth) cho tất cả tài khoản trong nv5_users
+     *
+     * Mỗi user sẽ được gán ngẫu nhiên 1–3 kết nối OAuth từ các provider:
+     * google, google-identity, facebook, zalo.
+     *
+     * @group sample-data
+     */
+    public function testInsertSampleDataForUsersOpenid()
+    {
+        global $db, $db_config;
+
+        // Lấy toàn bộ user hiện có
+        $stmt = $db->query('SELECT userid, email FROM ' . $db_config['prefix'] . '_users ORDER BY userid ASC');
+        $users = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+
+        if (empty($users)) {
+            $this->markTestSkipped('Không có user nào trong bảng ' . $db_config['prefix'] . '_users.');
+        }
+
+        // Danh sách provider thực tế của NukeViet
+        $providers = ['google', 'google-identity', 'facebook', 'zalo'];
+
+        // Tạo opid ngẫu nhiên 10–18 chữ số (giả lập ID từ provider)
+        $randomOpid = function () {
+            return (string) rand(1000000000, 9999999999) . rand(100000000, 999999999);
+        };
+
+        // Tạo id (OpenID URL hoặc sub) theo từng provider
+        $buildId = function (string $provider, string $opid): string {
+            return match ($provider) {
+                'google', 'google-identity' => $opid,             // Google dùng "sub" = chuỗi số
+                'facebook'                  => $opid,             // Facebook dùng numeric ID
+                'zalo'                      => $opid,             // Zalo dùng numeric ID
+                default                     => $opid,
+            };
+        };
+
+        $values = [];
+
+        foreach ($users as $user) {
+            $userid = (int) $user['userid'];
+            $email  = $user['email'];
+
+            // Mỗi user kết nối ngẫu nhiên 1–3 provider, không trùng provider
+            $shuffled = $providers;
+            shuffle($shuffled);
+            $count = rand(1, min(3, count($shuffled)));
+            $selectedProviders = array_slice($shuffled, 0, $count);
+
+            foreach ($selectedProviders as $provider) {
+                $opid  = $randomOpid();
+                $id    = $buildId($provider, $opid);
+
+                $esc = fn (string $s) => str_replace(["\\", "'"], ["\\\\", "\\'"], $s);
+
+                $values[] = sprintf(
+                    "(%d,'%s','%s','%s','%s')",
+                    $userid,
+                    $esc($provider),
+                    $esc($opid),
+                    $esc($id),
+                    $esc($email)
+                );
+            }
+        }
+
+        $this->assertNotEmpty($values, 'Không có dòng nào được tạo để insert.');
+
+        $inserted = $db->exec(
+            'INSERT IGNORE INTO ' . $db_config['prefix'] . '_users_openid'
+            . ' (userid, openid, opid, id, email) VALUES '
+            . implode(',', $values)
+        );
+
+        $this->assertGreaterThan(0, $inserted, 'Không có dòng nào được insert vào bảng _users_openid.');
+    }
 }
