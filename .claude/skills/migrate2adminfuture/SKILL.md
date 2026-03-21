@@ -64,8 +64,6 @@ Nếu `$ARGUMENTS` trống, không có `/` hoặc sai cú pháp, hỏi lại use
 
 7. **Language file global:** `src/includes/language/vi/global.php`
 
-   > **Quy tắc ngôn ngữ:** Trước khi tạo langkey mới trong module, kiểm tra `global.php` — nếu có key tương đương nghĩa thì dùng `$LANG->getGlobal('key')` thay vì tạo mới. Khi bổ sung langkey mới vào module, bổ sung đầy đủ cho **tất cả** ngôn ngữ (vi, en, fr, ...).
-
 8. **Admin functions:** `src/modules/{MODULE}/admin.functions.php` (nếu tồn tại)
 
 10. **Module js admin_default:** `src/themes/admin_default/js/{MODULE}.js` (nếu tồn tại)
