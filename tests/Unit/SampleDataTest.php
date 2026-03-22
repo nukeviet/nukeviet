@@ -276,7 +276,7 @@ class SampleDataTest extends \Codeception\Test\Unit
         $firstNames = ['Nguyễn', 'Trần', 'Lê', 'Phạm', 'Hoàng', 'Huỳnh', 'Phan', 'Vũ', 'Đặng', 'Bùi'];
         $lastNames  = ['An', 'Bình', 'Cường', 'Dũng', 'Giang', 'Hà', 'Hùng', 'Linh', 'Long', 'Minh',
                        'Nam', 'Ngọc', 'Phúc', 'Quân', 'Thành', 'Tuấn', 'Uyên', 'Việt', 'Xuân', 'Yên'];
-        $genders    = ['m', 'f', ''];
+        $genders    = ['M', 'F', ''];
         $sigs       = ['Lập trình viên NukeViet', 'Thành viên mới', 'Hello World!', '', 'Yêu thích mã nguồn mở'];
 
         $year      = (int) date('Y');

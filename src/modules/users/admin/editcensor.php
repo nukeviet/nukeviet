@@ -19,6 +19,10 @@ $page_title = $table_caption = $nv_Lang->getModule('editcensor');
 if ($nv_Request->isset_request('del', 'post')) {
     $userid = $nv_Request->get_int('userid', 'post', 0);
 
+    if (!csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
+        nv_jsonOutput(['status' => 'error', 'mess' => $nv_Lang->getGlobal('error_checkss')]);
+    }
+
     // Kiểm tra quyền
     $allow = false;
 
@@ -32,12 +36,16 @@ if ($nv_Request->isset_request('del', 'post')) {
         }
     }
 
-    if ($global_config['idsite'] > 0 and $row['idsite'] != $global_config['idsite'] and $admin_info['admin_id'] != $userid) {
-        $allow = false;
+    if ($global_config['idsite'] > 0 and $admin_info['admin_id'] != $userid) {
+        $sql = 'SELECT idsite FROM ' . NV_MOD_TABLE . ' WHERE userid=' . $userid;
+        $rowsite = $db->query($sql)->fetch();
+        if (!empty($rowsite) and $rowsite['idsite'] != $global_config['idsite']) {
+            $allow = false;
+        }
     }
 
     if (!$allow) {
-        nv_htmlOutput('ERROR');
+        nv_jsonOutput(['status' => 'error', 'mess' => 'Not allowed!']);
     }
 
     $sql = 'SELECT * FROM ' . NV_MOD_TABLE . '_edit WHERE userid=' . $userid;
@@ -71,12 +79,19 @@ if ($nv_Request->isset_request('del', 'post')) {
     $db->exec($sql);
 
     nv_insert_logs(NV_LANG_DATA, $module_name, 'Log Denied User Edit', 'Userid: ' . $userid, $admin_info['userid']);
-    nv_htmlOutput('OK');
+    nv_jsonOutput([
+        'status' => 'OK',
+        'mess' => $nv_Lang->getModule('active_success')
+    ]);
 }
 
-// Xác nhận thông tin chỉnh sửa
+// Xác nhận thông tin chỉnh sửa (từ danh sách)
 if ($nv_Request->isset_request('approved', 'post')) {
     $userid = $nv_Request->get_int('userid', 'post', 0);
+
+    if (!csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
+        nv_jsonOutput(['status' => 'error', 'mess' => $nv_Lang->getGlobal('error_checkss')]);
+    }
 
     // Kiểm tra quyền
     $allow = false;
@@ -91,15 +106,16 @@ if ($nv_Request->isset_request('approved', 'post')) {
         }
     }
 
-    if ($global_config['idsite'] > 0 and $row['idsite'] != $global_config['idsite'] and $admin_info['admin_id'] != $userid) {
-        $allow = false;
+    if ($global_config['idsite'] > 0 and $admin_info['admin_id'] != $userid) {
+        $sql = 'SELECT idsite FROM ' . NV_MOD_TABLE . ' WHERE userid=' . $userid;
+        $rowsite = $db->query($sql)->fetch();
+        if (!empty($rowsite) and $rowsite['idsite'] != $global_config['idsite']) {
+            $allow = false;
+        }
     }
 
     if (!$allow) {
-        nv_jsonOutput([
-            'status' => 'ERROR',
-            'mess' => 'Not allowed!!!',
-        ]);
+        nv_jsonOutput(['status' => 'error', 'mess' => 'Not allowed!']);
     }
 
     $sql = 'SELECT * FROM ' . NV_MOD_TABLE . '_edit tb1, ' . NV_MOD_TABLE . ' tb2 WHERE tb1.userid=tb2.userid AND tb1.userid=' . $userid;
@@ -138,7 +154,7 @@ if ($nv_Request->isset_request('approved', 'post')) {
                 if ($field['field_type'] == 'date') {
                     $custom_fields[$fkey] = nv_u2d_post($custom_fields[$fkey] ?? 0);
                 } elseif ($field['field_type'] == 'checkbox' or $field['field_type'] == 'multiselect' or $field['field_type'] == 'file') {
-                    $custom_fields[$fkey] = empty($custom_fields[$fkey]) ? [] : explode(',', $custom_fields[$fkey]);
+                    $custom_fields[$fkey] = empty($custom_fields[$fkey]) ? '' : explode(',', $custom_fields[$fkey]);
                 }
             }
         }
@@ -178,7 +194,7 @@ if ($nv_Request->isset_request('approved', 'post')) {
 
     $nv_Cache->delMod($module_name);
     nv_insert_logs(NV_LANG_DATA, $module_name, 'Log Approved User Edit', 'Userid: ' . $userid, $admin_info['userid']);
-    nv_jsonOutput(['status' => 'SUCCESS']);
+    nv_jsonOutput(['status' => 'OK', 'mess' => $nv_Lang->getModule('active_success'), 'refresh' => true]);
 }
 
 $reviewuid = $nv_Request->get_int('reviewuid', 'get', 0);
@@ -202,8 +218,12 @@ if (!empty($reviewuid)) {
         }
     }
 
-    if ($global_config['idsite'] > 0 and $row['idsite'] != $global_config['idsite'] and $admin_info['admin_id'] != $reviewuid) {
-        $allow = false;
+    if ($global_config['idsite'] > 0 and $admin_info['admin_id'] != $reviewuid) {
+        $sql = 'SELECT idsite FROM ' . NV_MOD_TABLE . ' WHERE userid=' . $reviewuid;
+        $rowsite = $db->query($sql)->fetch();
+        if (!empty($rowsite) and $rowsite['idsite'] != $global_config['idsite']) {
+            $allow = false;
+        }
     }
 
     if (empty($row_basic) or !$allow) {
@@ -234,12 +254,15 @@ if (!empty($reviewuid)) {
     $custom_fields = array_merge($custom_fields_old, $info_basic);
 
     // Cộng thêm các trường tùy biến cũ và mới
-    $custom_fields_old = array_merge($custom_fields_old, $row_info);
-    $custom_fields = array_merge($custom_fields, $row_info);
+    $custom_fields_old = array_merge($custom_fields_old, (array) $row_info);
+    $custom_fields = array_merge($custom_fields, (array) $row_info);
     $custom_fields = array_merge($custom_fields, $info_custom);
 
     // Xác nhận duyệt thông tin chỉnh sửa
     if ($nv_Request->isset_request('confirm', 'post')) {
+        if (!csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
+            nv_jsonOutput(['status' => 'error', 'mess' => $nv_Lang->getGlobal('error_checkss')]);
+        }
         $custom_fields = array_merge($row_basic, $row_info, $nv_Request->get_array('custom_fields', 'post'));
         if (!empty($info_basic)) {
             $_user = [];
@@ -315,211 +338,182 @@ if (!empty($reviewuid)) {
         $nv_Cache->delMod($module_name);
 
         nv_jsonOutput([
-            'status' => 'ok',
-            'input' => '',
-            'admin_add' => 'no',
-            'mess' => ''
+            'status' => 'OK',
+            'mess' => $nv_Lang->getModule('active_success'),
+            'redirect' => nv_url_rewrite(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op, true)
         ]);
     }
 
-    $xtpl = new XTemplate('editcensor_review.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-    $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
-    $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
-    $xtpl->assign('REVIEWUID', $reviewuid);
-    $xtpl->assign('FORM_ACTION', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;reviewuid=' . $reviewuid);
-
     $page_title .= ': ' . $row_basic['username'];
 
-    $have_custom_fields = false;
+    // Build basic fields cho template
+    $tpl_basic_fields = [];
     $have_name_field = false;
     foreach ($array_field_config as $row) {
-        if (!$row['for_admin']) {
-            $row['value'] = (isset($custom_fields[$row['field']])) ? $custom_fields[$row['field']] : get_value_by_lang($row['default_value']);
-            $row['valueold'] = (isset($custom_fields_old[$row['field']])) ? $custom_fields_old[$row['field']] : '';
-            $row['required'] = ($row['required']) ? 'required' : '';
+        if (!$row['for_admin'] and !empty($row['system'])) {
+            $field = $row;
+            $field['value'] = $custom_fields[$field['field']] ?? get_value_by_lang($row['default_value']);
+            $field['valueold'] = $custom_fields_old[$field['field']] ?? '';
+            $field['required'] = !empty($row['required']);
 
-            $xtpl->assign('FIELD', $row);
-
-            // Các trường hệ thống xuất độc lập
-            if (!empty($row['system'])) {
-                if ($row['field'] == 'birthday') {
-                    $row['value'] = nv_u2d_post($row['value']);
-                    $row['valueold'] = nv_u2d_post($row['valueold']);
-                } elseif ($row['field'] == 'sig') {
-                    $row['value'] = nv_htmlspecialchars(nv_br2nl($row['value']));
-                }
-                $xtpl->assign('FIELD', $row);
-                if ($row['field'] == 'first_name' or $row['field'] == 'last_name') {
-                    $show_key = 'name_show_' . $global_config['name_show'] . '.show_' . $row['field'];
-                    $have_name_field = true;
-                } else {
-                    $show_key = 'show_' . $row['field'];
-                }
-                if ($row['required']) {
-                    $xtpl->parse('main.basic.' . $show_key . '.required');
-                }
-                if ($row['field'] == 'gender') {
-                    $xtpl->assign('GENDER_OLD', isset($global_array_genders[$row['valueold']]) ? $global_array_genders[$row['valueold']]['title'] : '');
-                    foreach ($global_array_genders as $gender) {
-                        $gender['selected'] = $row['value'] == $gender['key'] ? ' selected="selected"' : '';
-                        $xtpl->assign('GENDER', $gender);
-                        $xtpl->parse('main.basic.' . $show_key . '.gender');
-                    }
-                }
-                if ($row['description']) {
-                    $xtpl->parse('main.basic.' . $show_key . '.description');
-                }
-                $xtpl->parse('main.basic.' . $show_key);
-            } else {
-                if ($row['required']) {
-                    $xtpl->parse('main.custom.loop.required');
-                }
-                if ($row['description']) {
-                    $xtpl->parse('main.custom.loop.description');
-                }
-                if ($row['field_type'] == 'textbox' or $row['field_type'] == 'number') {
-                    $xtpl->parse('main.custom.loop.textbox');
-                } elseif ($row['field_type'] == 'date') {
-                    $row['value'] = nv_u2d_post($row['value']);
-                    $row['valueold'] = nv_u2d_post($row['valueold']);
-                    $xtpl->assign('FIELD', $row);
-                    $xtpl->parse('main.custom.loop.date');
-                } elseif ($row['field_type'] == 'textarea') {
-                    $row['value'] = nv_htmlspecialchars(nv_br2nl($row['value']));
-                    $xtpl->assign('FIELD', $row);
-                    $xtpl->parse('main.custom.loop.textarea');
-                } elseif ($row['field_type'] == 'editor') {
-                    $row['value'] = htmlspecialchars(nv_editor_br2nl($row['value']));
-                    if (defined('NV_EDITOR') and nv_function_exists('nv_aleditor')) {
-                        $array_tmp = explode('@', $row['class']);
-                        $edits = nv_aleditor('custom_fields[' . $row['field'] . ']', $array_tmp[0], $array_tmp[1], $row['value']);
-                        $xtpl->assign('EDITOR', $edits);
-                        $xtpl->parse('main.custom.loop.editor');
-                    } else {
-                        $row['class'] = '';
-                        $xtpl->assign('FIELD', $row);
-                        $xtpl->parse('main.custom.loop.textarea');
-                    }
-                } elseif ($row['field_type'] == 'select') {
-                    foreach ($row['field_choices'] as $key => $value) {
-                        $xtpl->assign('FIELD_CHOICES', [
-                            'key' => $key,
-                            'selected' => ($key == $row['value']) ? ' selected="selected"' : '',
-                            'value' => get_value_by_lang2($key, $value)
-                        ]);
-                        $xtpl->parse('main.custom.loop.select.loop');
-                    }
-                    $row['valueold'] = isset($row['field_choices'][$row['valueold']]) ? get_value_by_lang2($row['valueold'], $row['field_choices'][$row['valueold']]) : $row['valueold'];
-                    $xtpl->assign('FIELD', $row);
-                    $xtpl->parse('main.custom.loop.select');
-                } elseif ($row['field_type'] == 'radio') {
-                    $number = 0;
-                    $row['valueold'] = isset($row['field_choices'][$row['valueold']]) ? get_value_by_lang2($row['valueold'], $row['field_choices'][$row['valueold']]) : $row['valueold'];
-                    $xtpl->assign('FIELD', $row);
-                    foreach ($row['field_choices'] as $key => $value) {
-                        $xtpl->assign('FIELD_CHOICES', [
-                            'id' => $row['fid'] . '_' . $number++,
-                            'key' => $key,
-                            'checked' => ($key == $row['value']) ? ' checked="checked"' : '',
-                            'value' => get_value_by_lang2($key, $value)
-                        ]);
-                        $xtpl->parse('main.custom.loop.radio');
-                    }
-                } elseif ($row['field_type'] == 'checkbox') {
-                    $valueold = empty($row['valueold']) ? [] : explode(',', $row['valueold']);
-                    $row['valueold'] = [];
-                    $number = 0;
-                    $valuecheckbox = (!empty($row['value'])) ? explode(',', $row['value']) : [];
-                    foreach ($row['field_choices'] as $key => $value) {
-                        $xtpl->assign('FIELD_CHOICES', [
-                            'id' => $row['fid'] . '_' . $number++,
-                            'key' => $key,
-                            'checked' => (in_array((string) $key, $valuecheckbox, true)) ? ' checked="checked"' : '',
-                            'value' => get_value_by_lang2($key, $value)
-                        ]);
-                        $xtpl->parse('main.custom.loop.checkbox');
-                        if (in_array((string) $key, $valueold, true)) {
-                            $row['valueold'][] = get_value_by_lang2($key, $value);
-                        }
-                    }
-                    $row['valueold'] = implode(', ', $row['valueold']);
-                    $xtpl->assign('FIELD', $row);
-                } elseif ($row['field_type'] == 'multiselect') {
-                    $valueold = empty($row['valueold']) ? [] : explode(',', $row['valueold']);
-                    $row['valueold'] = [];
-                    $valueselect = (!empty($row['value'])) ? explode(',', $row['value']) : [];
-                    foreach ($row['field_choices'] as $key => $value) {
-                        $xtpl->assign('FIELD_CHOICES', [
-                            'key' => $key,
-                            'selected' => (in_array((string) $key, $valueselect, true)) ? ' selected="selected"' : '',
-                            'value' => get_value_by_lang2($key, $value)
-                        ]);
-                        $xtpl->parse('main.custom.loop.multiselect.loop');
-                        if (in_array((string) $key, $valueold, true)) {
-                            $row['valueold'][] = get_value_by_lang2($key, $value);
-                        }
-                    }
-                    $xtpl->parse('main.custom.loop.multiselect');
-                    $row['valueold'] = implode(', ', $row['valueold']);
-                    $xtpl->assign('FIELD', $row);
-                } elseif ($row['field_type'] == 'file') {
-                    $filelist = !empty($row['value']) ? array_map('trim', explode(',', $row['value'])) : [];
-                    $old = !empty($row['valueold']) ? array_map('trim', explode(',', $row['valueold'])) : [];
-                    $all = array_merge($filelist, $old);
-                    if (!empty($all)) {
-                        $all = array_unique($all);
-                        foreach ($all as $file_item) {
-                            $assign = file_type_name($file_item);
-                            $assign['checked'] = (!empty($filelist) and in_array($file_item, $filelist, true)) ? ' checked="checked"' : '';
-                            $assign['url'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;userfile=' . $file_item;
-                            $xtpl->assign('FILE_ITEM', $assign);
-                            $xtpl->parse('main.custom.loop.file.loop');
-                        }
-                    }
-                    $row['limited_values'] = !empty($row['limited_values']) ? json_decode($row['limited_values'], true) : [];
-                    $xtpl->assign('FILEACCEPT', !empty($row['limited_values']['mime']) ? '.' . implode(',.', $row['limited_values']['mime']) : '');
-                    $xtpl->assign('FILEMAXSIZE', $row['limited_values']['file_max_size']);
-                    $xtpl->assign('FILEMAXSIZE_FORMAT', nv_convertfromBytes($row['limited_values']['file_max_size']));
-                    $xtpl->assign('FILEMAXNUM', $row['limited_values']['maxnum']);
-                    $xtpl->assign('CSRF', md5(NV_CHECK_SESSION . '_' . $module_name . $row['field']));
-                    $xtpl->assign('URL_MODULE', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name);
-                    $widthlimit = image_size_info($row['limited_values']['widthlimit'], 'width');
-                    $heightlimit = image_size_info($row['limited_values']['heightlimit'], 'height');
-                    if (!empty($widthlimit)) {
-                        $xtpl->assign('WIDTHLIMIT', $widthlimit);
-                        $xtpl->parse('main.custom.loop.file.widthlimit');
-                    }
-                    if (!empty($heightlimit)) {
-                        $xtpl->assign('HEIGHTLIMIT', $heightlimit);
-                        $xtpl->parse('main.custom.loop.file.heightlimit');
-                    }
-                    if (!(empty($row['limited_values']['maxnum']) or (count($filelist) < $row['limited_values']['maxnum']))) {
-                        $xtpl->parse('main.custom.loop.file.addfile');
-                    }
-                    $row['valueold'] = !empty($old) ? '<p>' . implode('</p><p>', $old) . '</p>' : '';
-                    $xtpl->assign('FIELD', $row);
-                    $xtpl->parse('main.custom.loop.file');
-                }
-                $xtpl->parse('main.custom.loop');
-                $have_custom_fields = true;
+            if ($field['field'] == 'birthday') {
+                $field['value'] = nv_u2d_post($field['value']);
+                $field['valueold'] = nv_u2d_post($field['valueold']);
+            } elseif ($field['field'] == 'sig') {
+                $field['value'] = nv_htmlspecialchars(nv_br2nl($field['value']));
             }
+
+            if ($field['field'] == 'first_name' or $field['field'] == 'last_name') {
+                $have_name_field = true;
+            }
+
+            if ($field['field'] == 'gender') {
+                $gender_options = [];
+                foreach ($global_array_genders as $gender) {
+                    $gender_options[] = [
+                        'key' => $gender['key'],
+                        'title' => $gender['title'],
+                        'selected' => ($field['value'] == $gender['key']),
+                    ];
+                }
+                $field['gender_options'] = $gender_options;
+                $field['gender_old'] = isset($global_array_genders[$field['valueold']]) ? $global_array_genders[$field['valueold']]['title'] : '';
+            }
+
+            $tpl_basic_fields[$field['field']] = $field;
         }
     }
-    if ($have_name_field) {
-        $xtpl->parse('main.basic.name_show_' . $global_config['name_show']);
-    }
-    if (!empty($info_basic)) {
-        // Hiển thị email xuất riêng không theo trường dữ liệu quản lý
-        $xtpl->assign('VIEW_MAIL_OLD', empty($custom_fields_old['view_mail']) ? $nv_Lang->getGlobal('no') : $nv_Lang->getGlobal('yes'));
-        $xtpl->assign('VIEW_MAIL_NEW', empty($custom_fields['view_mail']) ? '' : ' checked="checked"');
-        $xtpl->parse('main.basic');
-    }
-    if ($have_custom_fields and !empty($info_custom)) {
-        $xtpl->parse('main.custom');
+
+    // Build custom fields cho template
+    $tpl_custom_fields = [];
+    $have_custom_fields = false;
+    foreach ($array_field_config as $row) {
+        if (!$row['for_admin'] and empty($row['system'])) {
+            $field = $row;
+            $field['value'] = $custom_fields[$field['field']] ?? get_value_by_lang($row['default_value']);
+            $field['valueold'] = $custom_fields_old[$field['field']] ?? '';
+            $field['required'] = !empty($row['required']);
+
+            if ($field['field_type'] == 'date') {
+                $field['value'] = nv_u2d_post($field['value']);
+                $field['valueold'] = nv_u2d_post($field['valueold']);
+            } elseif ($field['field_type'] == 'textarea') {
+                $field['value'] = nv_htmlspecialchars(nv_br2nl($field['value']));
+            } elseif ($field['field_type'] == 'editor') {
+                $field['value'] = htmlspecialchars(nv_editor_br2nl($field['value']));
+                if (defined('NV_EDITOR') and nv_function_exists('nv_aleditor')) {
+                    $array_tmp = explode('@', $field['class']);
+                    $field['editor_html'] = nv_aleditor('custom_fields[' . $field['field'] . ']', $array_tmp[0], $array_tmp[1], $field['value']);
+                    $field['has_editor'] = true;
+                } else {
+                    $field['class'] = '';
+                    $field['has_editor'] = false;
+                }
+            } elseif ($field['field_type'] == 'select') {
+                $options = [];
+                foreach ($field['field_choices'] as $key => $value) {
+                    $options[] = [
+                        'key' => $key,
+                        'value' => get_value_by_lang2($key, $value),
+                        'selected' => ($key == $field['value']),
+                    ];
+                }
+                $field['choices_options'] = $options;
+                $field['valueold'] = isset($field['field_choices'][$field['valueold']]) ? get_value_by_lang2($field['valueold'], $field['field_choices'][$field['valueold']]) : $field['valueold'];
+            } elseif ($field['field_type'] == 'radio') {
+                $options = [];
+                $number = 0;
+                $field['valueold'] = isset($field['field_choices'][$field['valueold']]) ? get_value_by_lang2($field['valueold'], $field['field_choices'][$field['valueold']]) : $field['valueold'];
+                foreach ($field['field_choices'] as $key => $value) {
+                    $options[] = [
+                        'id' => $field['fid'] . '_' . $number++,
+                        'key' => $key,
+                        'value' => get_value_by_lang2($key, $value),
+                        'checked' => ($key == $field['value']),
+                    ];
+                }
+                $field['choices_options'] = $options;
+            } elseif ($field['field_type'] == 'checkbox') {
+                $valueold = empty($field['valueold']) ? [] : explode(',', $field['valueold']);
+                $valuecheckbox = !empty($field['value']) ? explode(',', $field['value']) : [];
+                $options = [];
+                $number = 0;
+                $valueold_labels = [];
+                foreach ($field['field_choices'] as $key => $value) {
+                    $options[] = [
+                        'id' => $field['fid'] . '_' . $number++,
+                        'key' => $key,
+                        'value' => get_value_by_lang2($key, $value),
+                        'checked' => in_array((string) $key, $valuecheckbox, true),
+                    ];
+                    if (in_array((string) $key, $valueold, true)) {
+                        $valueold_labels[] = get_value_by_lang2($key, $value);
+                    }
+                }
+                $field['choices_options'] = $options;
+                $field['valueold'] = implode(', ', $valueold_labels);
+            } elseif ($field['field_type'] == 'multiselect') {
+                $valueold = empty($field['valueold']) ? [] : explode(',', $field['valueold']);
+                $valueselect = !empty($field['value']) ? explode(',', $field['value']) : [];
+                $options = [];
+                $valueold_labels = [];
+                foreach ($field['field_choices'] as $key => $value) {
+                    $options[] = [
+                        'key' => $key,
+                        'value' => get_value_by_lang2($key, $value),
+                        'selected' => in_array((string) $key, $valueselect, true),
+                    ];
+                    if (in_array((string) $key, $valueold, true)) {
+                        $valueold_labels[] = get_value_by_lang2($key, $value);
+                    }
+                }
+                $field['choices_options'] = $options;
+                $field['valueold'] = implode(', ', $valueold_labels);
+            } elseif ($field['field_type'] == 'file') {
+                $filelist = !empty($field['value']) ? array_map('trim', explode(',', $field['value'])) : [];
+                $old = !empty($field['valueold']) ? array_map('trim', explode(',', $field['valueold'])) : [];
+                $all = array_unique(array_merge($filelist, $old));
+                $all_files = [];
+                foreach ($all as $file_item) {
+                    $finfo = file_type_name($file_item);
+                    $finfo['checked'] = !empty($filelist) && in_array($file_item, $filelist, true);
+                    $finfo['url'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;userfile=' . $file_item;
+                    $all_files[] = $finfo;
+                }
+                $limited_values = !empty($field['limited_values']) ? json_decode($field['limited_values'], true) : [];
+                $field['all_files'] = $all_files;
+                $field['fileaccept'] = !empty($limited_values['mime']) ? '.' . implode(',.', $limited_values['mime']) : '';
+                $field['filemaxsize'] = $limited_values['file_max_size'] ?? 0;
+                $field['filemaxsize_format'] = nv_convertfromBytes($limited_values['file_max_size'] ?? 0);
+                $field['filemaxnum'] = $limited_values['maxnum'] ?? 0;
+                $field['csrf'] = md5(NV_CHECK_SESSION . '_' . $module_name . $field['field']);
+                $field['widthlimit'] = image_size_info($limited_values['widthlimit'] ?? '', 'width');
+                $field['heightlimit'] = image_size_info($limited_values['heightlimit'] ?? '', 'height');
+                $field['hide_addfile'] = !(empty($limited_values['maxnum']) or (count($filelist) < $limited_values['maxnum']));
+                $field['valueold'] = !empty($old) ? '<p>' . implode('</p><p>', $old) . '</p>' : '';
+            }
+
+            $tpl_custom_fields[] = $field;
+            $have_custom_fields = true;
+        }
     }
 
-    $xtpl->parse('main');
-    $contents = $xtpl->text('main');
+    $tpl = new \NukeViet\Template\NVSmarty();
+    $tpl->setTemplateDir(get_module_tpl_dir('editcensor_review.tpl'));
+    $tpl->assign('LANG', $nv_Lang);
+    $tpl->assign('MODULE_NAME', $module_name);
+    $tpl->assign('OP', $op);
+    $tpl->assign('CHECKSS', csrf_create($csrf_key));
+    $tpl->assign('REVIEWUID', $reviewuid);
+    $tpl->assign('GCONFIG', $global_config);
+    $tpl->assign('HAVE_NAME_FIELD', $have_name_field);
+    $tpl->assign('HAVE_BASIC', !empty($info_basic));
+    $tpl->assign('HAVE_CUSTOM', $have_custom_fields and !empty($info_custom));
+    $tpl->assign('BASIC_FIELDS', $tpl_basic_fields);
+    $tpl->assign('CUSTOM_FIELDS', $tpl_custom_fields);
+    $tpl->assign('VIEW_MAIL_OLD', empty($custom_fields_old['view_mail']) ? $nv_Lang->getGlobal('no') : $nv_Lang->getGlobal('yes'));
+    $tpl->assign('VIEW_MAIL_NEW', !empty($custom_fields['view_mail']));
+    $contents = $tpl->fetch('editcensor_review.tpl');
 
     include NV_ROOTDIR . '/includes/header.php';
     echo nv_admin_theme($contents);
@@ -587,7 +581,7 @@ if (!empty($method) and isset($methods[$method]) and !empty($methodvalue)) {
 
 $db->where(implode(' AND ', $where));
 $page = $nv_Request->get_page('page', 'get', 1);
-$per_page = 30;
+$per_page = 20;
 
 $num_items = $db->query($db->sql())
     ->fetchColumn();
@@ -647,50 +641,27 @@ while ($row = $result->fetch()) {
     $array_admin[$row['admin_id']] = $row['lev'];
 }
 
-$xtpl = new XTemplate('editcensor.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-$xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
-$xtpl->assign('FORM_ACTION', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op);
-$xtpl->assign('SORTURL', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
-$xtpl->assign('SEARCH_VALUE', nv_htmlspecialchars($methodvalue));
-$xtpl->assign('TABLE_CAPTION', $table_caption);
-
-if (defined('NV_IS_USER_FORUM')) {
-    $xtpl->parse('main.is_forum');
+// Bổ sung checkss, allow, view_link cho từng user
+foreach ($users_list as $uid => $u) {
+    $u['allow'] = !isset($array_admin[$u['userid']]) || $u['userid'] == $admin_info['userid'] || $array_admin[$u['userid']] > $admin_info['level'];
+    $u['checkss'] = csrf_create($csrf_key);
+    $u['view_link'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;reviewuid=' . $u['userid'];
+    $users_list[$uid] = $u;
 }
 
-foreach ($methods as $m) {
-    $xtpl->assign('METHODS', $m);
-    $xtpl->parse('main.method');
-}
-
-foreach ($head_tds as $head_td) {
-    $xtpl->assign('HEAD_TD', $head_td);
-    $xtpl->parse('main.head_td');
-}
-
-foreach ($users_list as $u) {
-    $xtpl->assign('CONTENT_TD', $u);
-
-    // Kiểm duyệt tài khoản thành viên hoặc chính bản thân hoặc admin cấp thấp hơn
-    // Không có quyền kiểm duyệt admin đồng cấp hoặc cấp cao hơn
-    if (!isset($array_admin[$u['userid']]) or $u['userid'] == $admin_info['userid'] or $array_admin[$u['userid']] > $admin_info['level']) {
-        $xtpl->assign('VIEW_LINK', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;reviewuid=' . $u['userid']);
-        $xtpl->parse('main.xusers.allowed');
-        $xtpl->parse('main.xusers.user_link');
-    } else {
-        $xtpl->parse('main.xusers.user_text');
-    }
-
-    $xtpl->parse('main.xusers');
-}
-
-if (!empty($generate_page)) {
-    $xtpl->assign('GENERATE_PAGE', $generate_page);
-    $xtpl->parse('main.generate_page');
-}
-
-$xtpl->parse('main');
-$contents = $xtpl->text('main');
+$tpl = new \NukeViet\Template\NVSmarty();
+$tpl->setTemplateDir(get_module_tpl_dir('editcensor.tpl'));
+$tpl->assign('LANG', $nv_Lang);
+$tpl->assign('MODULE_NAME', $module_name);
+$tpl->assign('OP', $op);
+$tpl->assign('IS_FORUM', defined('NV_IS_USER_FORUM'));
+$tpl->assign('METHODS', $methods);
+$tpl->assign('SEARCH_VALUE', nv_htmlspecialchars($methodvalue));
+$tpl->assign('TABLE_CAPTION', $table_caption);
+$tpl->assign('HEAD_TDS', $head_tds);
+$tpl->assign('USERS_LIST', $users_list);
+$tpl->assign('GENERATE_PAGE', $generate_page);
+$contents = $tpl->fetch('editcensor.tpl');
 
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_admin_theme($contents);
