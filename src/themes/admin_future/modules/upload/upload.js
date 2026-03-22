@@ -185,6 +185,7 @@ var nukeviet = nukeviet || {};
             trigger: 'auto', // auto|manual auto là tự động gắn sự kiện click vào element, manual là gọi hàm show() để mở
             area: '', // ID thẻ đổ src về khi pick.
             alt: '', // ID thẻ đổ alt về khi pick.
+            checkss: '{$CHECKSS}', // Token CSRF
             onSelect: null // Hàm trả về khi select
         }, options);
 
@@ -537,7 +538,8 @@ var nukeviet = nukeviet || {};
             file_data_name: 'upload',
             multipart: true,
             multipart_params: {
-                "filealt": "--"
+                "filealt": "--",
+                "checkss": self.settings.checkss
             },
             filters: {
                 max_file_size: {$NV_MAX_SIZE_BYTES},
@@ -596,7 +598,8 @@ var nukeviet = nukeviet || {};
                     }
                     self.up.settings.multipart_params = {
                         filealt: filealt,
-                        autologo: ($('[name="queue_autologo"]', self.fms).is(':checked') ? 1 : 0)
+                        autologo: ($('[name="queue_autologo"]', self.fms).is(':checked') ? 1 : 0),
+                        checkss: self.settings.checkss
                     };
                 },
                 Error: (up, err) => {
@@ -803,7 +806,7 @@ var nukeviet = nukeviet || {};
                     url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=upload&' + nv_fc_variable + '=delimg&nocache=' + new Date().getTime(),
                     data: {
                         files: fss,
-                        checkss: $('body').data('checksess')
+                        checkss: self.settings.checkss
                     },
                     dataType: 'json',
                     cache: false,
@@ -891,7 +894,7 @@ var nukeviet = nukeviet || {};
                     url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=upload&' + nv_fc_variable + '=delfolder&nocache=' + new Date().getTime(),
                     data: {
                         path: tree.data('path'),
-                        checkss: $('body').data('checksess')
+                        checkss: self.settings.checkss
                     },
                     dataType: 'json',
                     cache: false,
@@ -950,7 +953,7 @@ var nukeviet = nukeviet || {};
                 data: {
                     path: file.data('dir'),
                     img: file.data('name'),
-                    checkss: $('body').data('checksess')
+                    checkss: self.settings.checkss
                 },
                 dataType: 'json',
                 cache: false,
@@ -1058,7 +1061,7 @@ var nukeviet = nukeviet || {};
                 data: {
                     path: file.data('dir'),
                     img: file.data('name'),
-                    checkss: $('body').data('checksess')
+                    checkss: self.settings.checkss
                 },
                 dataType: 'json',
                 cache: false,
@@ -1216,7 +1219,7 @@ var nukeviet = nukeviet || {};
                     img: file.data('name'),
                     quality: quality,
                     preview: 1,
-                    checkss: $('body').data('checksess')
+                    checkss: self.settings.checkss
                 },
                 dataType: 'json',
                 cache: false,
@@ -1467,7 +1470,7 @@ var nukeviet = nukeviet || {};
         self.showLoader();
 
         let pr = {
-            checkss: $('body').data('checksess'),
+            checkss: '{$CHECKSS}',
             show_file: file ? 1 : 0,
             show_folder: tree ? 1 : 0,
             path: self.settings.path,
@@ -1802,7 +1805,7 @@ var nukeviet = nukeviet || {};
             $('[name="newalt"]', dialog).val(file.data('alt'));
             $('[name="path"]', dialog).val(self.getCurrentPath());
             $('[name="file"]', dialog).val(file.data('name'));
-            $('[name="checkss"]', dialog).val($('body').data('checksess'));
+            $('[name="checkss"]', dialog).val(self.settings.checkss);
         }
 
         // Lọc trên mobile
@@ -1848,7 +1851,7 @@ var nukeviet = nukeviet || {};
         if (name == 'createfolder') {
             const tree = extra;
             $('[name="path"]', dialog).val(tree.data('path'));
-            $('[name="checkss"]', dialog).val($('body').data('checksess'));
+            $('[name="checkss"]', dialog).val(self.settings.checkss);
             return;
         }
 
@@ -1857,7 +1860,7 @@ var nukeviet = nukeviet || {};
             const tree = extra;
             $('[name="newname"]', dialog).val(tree.data('title'));
             $('[name="path"]', dialog).val(tree.data('path'));
-            $('[name="checkss"]', dialog).val($('body').data('checksess'));
+            $('[name="checkss"]', dialog).val(self.settings.checkss);
             return;
         }
 
@@ -1871,7 +1874,7 @@ var nukeviet = nukeviet || {};
         // Di chuyển file
         if (name == 'move') {
             const files = extra;
-            $('[name="checkss"]', dialog).val($('body').data('checksess'));
+            $('[name="checkss"]', dialog).val(self.settings.checkss);
 
             if (files.length > 1) {
                 $('[data-toggle="name"]', dialog).text(self.lang.moveMultiple.replace('%s', files.length));
@@ -1908,7 +1911,7 @@ var nukeviet = nukeviet || {};
             const file = extra;
 
             dialog.data('uuid', file.data('uuid'));
-            $('[name="checkss"]', dialog).val($('body').data('checksess'));
+            $('[name="checkss"]', dialog).val(self.settings.checkss);
             $('[name="path"]', dialog).val(file.data('dir'));
             $('[name="img"]', dialog).val(file.data('name'));
             $('[data-toggle="sizeoriginal"]', dialog).text(file.data('filesize'));
@@ -1939,7 +1942,7 @@ var nukeviet = nukeviet || {};
             const maxWidth = ctn.innerWidth();
             const maxHeight = maxWidth;
 
-            $('[name="checkss"]', dialog).val($('body').data('checksess'));
+            $('[name="checkss"]', dialog).val(self.settings.checkss);
             $('[name="path"]', dialog).val(file.data('dir'));
             $('[name="file"]', dialog).val(file.data('name'));
 
@@ -2045,7 +2048,7 @@ var nukeviet = nukeviet || {};
             const maxWidth = ctn.innerWidth();
             const maxHeight = maxWidth;
 
-            $('[name="checkss"]', dialog).val($('body').data('checksess'));
+            $('[name="checkss"]', dialog).val(self.settings.checkss);
             $('[name="path"]', dialog).val(file.data('dir'));
             $('[name="file"]', dialog).val(file.data('name'));
 
@@ -2104,7 +2107,7 @@ var nukeviet = nukeviet || {};
             const file = extra;
 
             dialog.data('uuid', file.data('uuid'));
-            $('[name="checkss"]', dialog).val($('body').data('checksess'));
+            $('[name="checkss"]', dialog).val(self.settings.checkss);
             $('[name="path"]', dialog).val(file.data('dir'));
             $('[name="img"]', dialog).val(file.data('name'));
 
@@ -2127,7 +2130,7 @@ var nukeviet = nukeviet || {};
             const file = extra;
 
             dialog.data('uuid', file.data('uuid'));
-            $('[name="checkss"]', dialog).val($('body').data('checksess'));
+            $('[name="checkss"]', dialog).val(self.settings.checkss);
             $('[name="path"]', dialog).val(file.data('dir'));
             $('[name="file"]', dialog).val(file.data('name'));
 
@@ -2328,7 +2331,7 @@ var nukeviet = nukeviet || {};
                 $('[name="filealt"]', dig).addClass('is-invalid').focus();
                 return;
             }
-            const data = $(form).serialize();
+            const data = $(form).serialize() + '&checkss=' + self.settings.checkss;
             $('input, textarea, select, button', $(form)).prop('disabled', true);
             $.ajax({
                 url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=upload&' + nv_fc_variable + '=upload&nocache=' + new Date().getTime(),
@@ -2432,7 +2435,7 @@ var nukeviet = nukeviet || {};
 
             $('.is-invalid', $(form)).removeClass('is-invalid');
             $('.is-valid', $(form)).removeClass('is-valid');
-            const data = $(form).serialize();
+            const data = $(form).serialize() + '&checkss=' + self.settings.checkss;
             $('input, textarea, select, button', $(form)).prop('disabled', true);
             $.ajax({
                 url: $(form).attr('action'),
@@ -3171,7 +3174,7 @@ var nukeviet = nukeviet || {};
                                 url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=upload&' + nv_fc_variable + '=delimg&nocache=' + new Date().getTime(),
                                 data: {
                                     files: fss,
-                                    checkss: $('body').data('checksess')
+                                    checkss: self.settings.checkss
                                 },
                                 dataType: 'json',
                                 cache: false,
@@ -3509,7 +3512,7 @@ var nukeviet = nukeviet || {};
             data: {
                 idf: idf,
                 path: dialog.data('path'),
-                checkss: $('body').data('checksess')
+                checkss: self.settings.checkss
             },
             dataType: 'json',
             cache: false,

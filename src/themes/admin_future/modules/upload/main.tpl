@@ -11,7 +11,8 @@ document.addEventListener('nv.picker.ready', () => {
         CKEditorFuncNum: {$REQUEST.CKEditorFuncNum},
         editorId: '{$REQUEST.editor_id}',
         area: '{$REQUEST.area}',
-        alt: '{$REQUEST.alt}'
+        alt: '{$REQUEST.alt}',
+        checkss: '{$CHECKSS}'
     });
 });
 </script>

@@ -168,13 +168,14 @@ $tpl->assign('LANG', $nv_Lang);
 $tpl->assign('MODULE_NAME', $module_name);
 $tpl->assign('OP', $op);
 $tpl->assign('REQUEST', $request);
+$tpl->assign('CHECKSS', csrf_create($_csrf_key));
 
 // Xử lý yêu cầu qua ajax
 if ($nv_Request->isset_request('checkss', 'post')) {
-    if ($nv_Request->get_title('checkss', 'post', '') !== NV_CHECK_SESSION) {
+    if (!csrf_check($nv_Request->get_string('checkss', 'post'), $_csrf_key)) {
         nv_jsonOutput([
             'status' => 'error',
-            'mess' => 'Session error!!!'
+            'mess' => $nv_Lang->getGlobal('error_checkss')
         ]);
     }
 
@@ -236,11 +237,11 @@ if ($nv_Request->isset_request('checkss', 'post')) {
                 $dbkey = $db->dblikeescape($request['q']);
                 $select = 'tb1.*,tb2.dirname';
 
-                $where[] = "(tb1.title LIKE '%" . $dbkey . "%' OR tb1.alt LIKE '%" . $dbkey . "%')";
-                $where[] = "(tb2.dirname='" . $request['currentpath'] . "' OR tb2.dirname LIKE '" . $request['currentpath'] . "/%')";
+                $where[] = '(tb1.title LIKE ' . $db->quote('%' . $dbkey . '%') . ' OR tb1.alt LIKE ' . $db->quote('%' . $dbkey . '%') . ')';
+                $where[] = '(tb2.dirname = ' . $db->quote($request['currentpath']) . ' OR tb2.dirname LIKE ' . $db->quote($request['currentpath'] . '/%') . ')';
             } else {
                 $select = 'tb1.*';
-                $where[] = 'tb1.did=' . $array_dirname[$request['currentpath']];
+                $where[] = 'tb1.did = ' . (int) $array_dirname[$request['currentpath']];
             }
             if ($request['type'] != 'file') {
                 $where[] = "tb1.type=" . $db->quote($request['type']);

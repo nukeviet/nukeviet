@@ -27,6 +27,12 @@ $array_logo_position = [
 $logo_exts = nv_editable_imgexts();
 
 if ($nv_Request->isset_request('save', 'post')) {
+    if (!csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
+        nv_jsonOutput([
+            'status' => 'error',
+            'mess' => $nv_Lang->getGlobal('error_checkss')
+        ]);
+    }
     $data = [
         'upload_logo' => $nv_Request->get_title('upload_logo', 'post', ''),
         'upload_logo_pos' => $nv_Request->get_title('upload_logo_pos', 'post', ''),
@@ -94,6 +100,7 @@ $tpl->setTemplateDir(get_module_tpl_dir('config.tpl'));
 $tpl->assign('LANG', $nv_Lang);
 $tpl->assign('MODULE_NAME', $module_name);
 $tpl->assign('OP', $op);
+$tpl->assign('CHECKSS', csrf_create($csrf_key));
 
 $tpl->assign('GCONFIG', $global_config);
 $tpl->assign('AUTOLOGOSIZE', $array_autologosize);

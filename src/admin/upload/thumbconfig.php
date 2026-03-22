@@ -16,10 +16,10 @@ if (!defined('NV_ADMIN') or !defined('NV_MAINFILE') or !defined('NV_IS_MODADMIN'
 $nv_Lang->setModule('thumb_default_size_note', $nv_Lang->getModule('thumb_default_size_note', $global_config['thumb_max_width'], $global_config['thumb_max_height']));
 
 if ($nv_Request->isset_request('save', 'post')) {
-    if ($nv_Request->get_title('checkss', 'post', '') !== NV_CHECK_SESSION) {
+    if (!csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
         nv_jsonOutput([
             'status' => 'error',
-            'mess' => 'Error session!!!'
+            'mess' => $nv_Lang->getGlobal('error_checkss')
         ]);
     }
 
@@ -101,7 +101,7 @@ if ($nv_Request->isset_request('save', 'post')) {
         $db->query('UPDATE ' . NV_UPLOAD_GLOBALTABLE . '_dir SET
             thumb_type = ' . $opt[0] . ', thumb_width = ' . $opt[1] . ',
             thumb_height = ' . $opt[2] . ', thumb_quality = ' . $opt[3] . '
-            WHERE did = ' . $did);
+            WHERE did = ' . (int) $did);
     }
 
     $in = implode(',', array_keys($opts));
@@ -122,10 +122,10 @@ if ($nv_Request->isset_request('getexample', 'post')) {
     if (!defined('NV_IS_AJAX')) {
         exit('Wrong URL');
     }
-    if ($nv_Request->get_title('checkss', 'post', '') !== NV_CHECK_SESSION) {
+    if (!csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
         nv_jsonOutput([
             'status' => 'error',
-            'message' => 'Error session!!!'
+            'message' => $nv_Lang->getGlobal('error_checkss')
         ]);
     }
 
@@ -156,7 +156,10 @@ if ($nv_Request->isset_request('getexample', 'post')) {
                 break;
             }
             if (str_starts_with($dirname, $select_dir)) {
-                $image_demo = $db->query('SELECT * FROM ' . NV_UPLOAD_GLOBALTABLE . '_file tb1, ' . NV_UPLOAD_GLOBALTABLE . '_dir tb2 WHERE tb1.did=tb2.did AND tb1.type=\'image\' AND tb1.did=' . $did . ' ORDER BY RAND() LIMIT 1')->fetch();
+                $sth = $db->prepare('SELECT * FROM ' . NV_UPLOAD_GLOBALTABLE . '_file tb1, ' . NV_UPLOAD_GLOBALTABLE . '_dir tb2 WHERE tb1.did = tb2.did AND tb1.type = \'image\' AND tb1.did = :did ORDER BY RAND() LIMIT 1');
+                $sth->bindValue(':did', $did, PDO::PARAM_INT);
+                $sth->execute();
+                $image_demo = $sth->fetch();
             }
         }
     }
@@ -184,7 +187,7 @@ if ($nv_Request->isset_request('getexample', 'post')) {
 
     $file_tmp_name = 'thumbdemo_' . NV_CACHE_PREFIX . '.' . $image_demo['ext'];
     $file_tmp = NV_ROOTDIR . '/' . NV_TEMP_DIR . '/' . $file_tmp_name;
-    if (file_exists($file_tmp)) {
+    if (nv_is_file($file_tmp, NV_TEMP_DIR)) {
         nv_deletefile($file_tmp);
     }
     $image = new NukeViet\Files\Image(NV_ROOTDIR . '/' . $image_demo['dirname'] . '/' . $image_demo['title'], NV_MAX_WIDTH, NV_MAX_HEIGHT);
@@ -225,6 +228,7 @@ $tpl->setTemplateDir(get_module_tpl_dir('thumbconfig.tpl'));
 $tpl->assign('LANG', $nv_Lang);
 $tpl->assign('MODULE_NAME', $module_name);
 $tpl->assign('OP', $op);
+$tpl->assign('CHECKSS', csrf_create($csrf_key));
 
 $sql = 'SELECT * FROM ' . NV_UPLOAD_GLOBALTABLE . '_dir ORDER BY dirname ASC';
 $result = $db->query($sql);

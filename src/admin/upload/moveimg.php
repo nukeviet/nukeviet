@@ -13,10 +13,10 @@ if (!defined('NV_IS_FILE_ADMIN')) {
     exit('Stop!!!');
 }
 
-if ($nv_Request->get_title('checkss', 'post', '') !== NV_CHECK_SESSION) {
+if (!csrf_check($nv_Request->get_string('checkss', 'post'), $_csrf_key)) {
     nv_jsonOutput([
         'status' => 'error',
-        'mess' => 'Error session!!!'
+        'mess' => $nv_Lang->getGlobal('error_checkss')
     ]);
 }
 
@@ -88,7 +88,20 @@ foreach ($images as $image) {
         $info = nv_getFileInfo($newfolder, $file);
         $info['userid'] = $admin_info['userid'];
 
-        $db->query('INSERT INTO ' . NV_UPLOAD_GLOBALTABLE . "_file (name, ext, type, filesize, src, srcwidth, srcheight, sizes, userid, mtime, did, title) VALUES ('" . $info['name'] . "', '" . $info['ext'] . "', '" . $info['type'] . "', " . $info['filesize'] . ", '" . $info['src'] . "', " . $info['srcwidth'] . ', ' . $info['srcheight'] . ", '" . $info['size'] . "', " . $info['userid'] . ', ' . $info['mtime'] . ', ' . $did . ", '" . $file . "')");
+        $sth = $db->prepare('INSERT INTO ' . NV_UPLOAD_GLOBALTABLE . '_file (name, ext, type, filesize, src, srcwidth, srcheight, sizes, userid, mtime, did, title) VALUES (:name, :ext, :type, :filesize, :src, :srcwidth, :srcheight, :sizes, :userid, :mtime, :did, :title)');
+        $sth->bindValue(':name', $info['name'], PDO::PARAM_STR);
+        $sth->bindValue(':ext', $info['ext'], PDO::PARAM_STR);
+        $sth->bindValue(':type', $info['type'], PDO::PARAM_STR);
+        $sth->bindValue(':filesize', $info['filesize'], PDO::PARAM_INT);
+        $sth->bindValue(':src', $info['src'], PDO::PARAM_STR);
+        $sth->bindValue(':srcwidth', $info['srcwidth'], PDO::PARAM_INT);
+        $sth->bindValue(':srcheight', $info['srcheight'], PDO::PARAM_INT);
+        $sth->bindValue(':sizes', $info['size'], PDO::PARAM_STR);
+        $sth->bindValue(':userid', $info['userid'], PDO::PARAM_INT);
+        $sth->bindValue(':mtime', $info['mtime'], PDO::PARAM_INT);
+        $sth->bindValue(':did', $did, PDO::PARAM_INT);
+        $sth->bindValue(':title', $file, PDO::PARAM_STR);
+        $sth->execute();
     }
 
     if (!$mirror) {
@@ -102,7 +115,10 @@ foreach ($images as $image) {
 
         if (isset($array_dirname[$path])) {
             $did = $array_dirname[$path];
-            $db->query('DELETE FROM ' . NV_UPLOAD_GLOBALTABLE . '_file WHERE did = ' . $did . " AND title='" . $image . "'");
+            $sth = $db->prepare('DELETE FROM ' . NV_UPLOAD_GLOBALTABLE . '_file WHERE did = :did AND title = :title');
+            $sth->bindValue(':did', $did, PDO::PARAM_INT);
+            $sth->bindValue(':title', $image, PDO::PARAM_STR);
+            $sth->execute();
         }
     }
     nv_dirListRefreshSize();

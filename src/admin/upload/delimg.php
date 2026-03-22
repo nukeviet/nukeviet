@@ -13,10 +13,10 @@ if (!defined('NV_IS_FILE_ADMIN')) {
     exit('Stop!!!');
 }
 
-if ($nv_Request->get_title('checkss', 'post', '') !== NV_CHECK_SESSION) {
+if (!csrf_check($nv_Request->get_string('checkss', 'post'), $_csrf_key)) {
     nv_jsonOutput([
         'status' => 'error',
-        'mess' => 'Error session!!!'
+        'mess' => $nv_Lang->getGlobal('error_checkss')
     ]);
 }
 
@@ -52,7 +52,10 @@ foreach ($files as $file) {
         nv_deletefile(NV_ROOTDIR . '/' . NV_MOBILE_FILES_DIR . '/' . $m[1]);
     }
     if (isset($array_dirname[$path])) {
-        $db->query('DELETE FROM ' . NV_UPLOAD_GLOBALTABLE . '_file WHERE did = ' . $array_dirname[$path] . " AND title='" . $file . "'");
+        $sth = $db->prepare('DELETE FROM ' . NV_UPLOAD_GLOBALTABLE . '_file WHERE did = :did AND title = :title');
+        $sth->bindValue(':did', $array_dirname[$path], PDO::PARAM_INT);
+        $sth->bindValue(':title', $file, PDO::PARAM_STR);
+        $sth->execute();
         nv_dirListRefreshSize();
     }
     $deleted++;

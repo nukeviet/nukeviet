@@ -13,10 +13,10 @@ if (!defined('NV_IS_FILE_ADMIN')) {
     exit('Stop!!!');
 }
 
-if ($nv_Request->get_title('checkss', 'post', '') !== NV_CHECK_SESSION) {
+if (!csrf_check($nv_Request->get_string('checkss', 'post'), $_csrf_key)) {
     nv_jsonOutput([
         'status' => 'error',
-        'mess' => 'Error session!!!'
+        'mess' => $nv_Lang->getGlobal('error_checkss')
     ]);
 }
 
@@ -81,13 +81,18 @@ if (rename(NV_ROOTDIR . '/' . $path, NV_ROOTDIR . '/' . $newpath)) {
         $dir_replace2 = NV_FILES_DIR . '/' . $m2[1] . '/';
     }
 
-    $result = $db->query('SELECT did, dirname FROM ' . NV_UPLOAD_GLOBALTABLE . "_dir WHERE dirname='" . $path . "' OR dirname LIKE '" . $path . "/%'");
-    while ($_scratch = $result->fetch(3)) {
+    $sth = $db->prepare('SELECT did, dirname FROM ' . NV_UPLOAD_GLOBALTABLE . '_dir WHERE dirname = :path OR dirname LIKE :path_like');
+    $sth->bindValue(':path', $path, PDO::PARAM_STR);
+    $sth->bindValue(':path_like', $path . '/%', PDO::PARAM_STR);
+    $sth->execute();
+    while ($_scratch = $sth->fetch(3)) {
         [$did, $dirname] = $_scratch;
         unset($_scratch);
         $dirname2 = str_replace(NV_ROOTDIR . '/' . $path, $newpath, NV_ROOTDIR . '/' . $dirname);
-        $result_file = $db->query('SELECT src, title FROM ' . NV_UPLOAD_GLOBALTABLE . '_file WHERE did=' . $did . " AND type = 'image'");
-        while ($_scratch = $result_file->fetch(3)) {
+        $sth_file = $db->prepare('SELECT src, title FROM ' . NV_UPLOAD_GLOBALTABLE . '_file WHERE did = :did AND type = \'image\'');
+        $sth_file->bindValue(':did', $did, PDO::PARAM_INT);
+        $sth_file->execute();
+        while ($_scratch = $sth_file->fetch(3)) {
             [$src, $title] = $_scratch;
             unset($_scratch);
             if ($action) {
@@ -95,9 +100,16 @@ if (rename(NV_ROOTDIR . '/' . $path, NV_ROOTDIR . '/' . $newpath)) {
             } else {
                 $src2 = preg_replace('/^' . nv_preg_quote($dirname) . '/', $dirname2, $src);
             }
-            $db->query('UPDATE ' . NV_UPLOAD_GLOBALTABLE . "_file SET src = '" . $src2 . "' WHERE did = " . $did . " AND title='" . $title . "'");
+            $sth_up = $db->prepare('UPDATE ' . NV_UPLOAD_GLOBALTABLE . '_file SET src = :src2 WHERE did = :did AND title = :title');
+            $sth_up->bindValue(':src2', $src2, PDO::PARAM_STR);
+            $sth_up->bindValue(':did', $did, PDO::PARAM_INT);
+            $sth_up->bindValue(':title', $title, PDO::PARAM_STR);
+            $sth_up->execute();
         }
-        $db->query('UPDATE ' . NV_UPLOAD_GLOBALTABLE . "_dir SET dirname = '" . $dirname2 . "' WHERE did = " . $did);
+        $sth_up = $db->prepare('UPDATE ' . NV_UPLOAD_GLOBALTABLE . '_dir SET dirname = :dirname2 WHERE did = :did');
+        $sth_up->bindValue(':dirname2', $dirname2, PDO::PARAM_STR);
+        $sth_up->bindValue(':did', $did, PDO::PARAM_INT);
+        $sth_up->execute();
     }
     nv_dirListRefreshSize();
     nv_insert_logs(NV_LANG_DATA, $module_name, $nv_Lang->getModule('renamefolder'), $path . ' -> ' . $newpath, $admin_info['userid']);

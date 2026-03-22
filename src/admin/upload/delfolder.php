@@ -13,10 +13,10 @@ if (!defined('NV_IS_FILE_ADMIN')) {
     exit('Stop!!!');
 }
 
-if ($nv_Request->get_title('checkss', 'post', '') !== NV_CHECK_SESSION) {
+if (!csrf_check($nv_Request->get_string('checkss', 'post'), $_csrf_key)) {
     nv_jsonOutput([
         'status' => 'error',
-        'mess' => 'Error session!!!'
+        'mess' => $nv_Lang->getGlobal('error_checkss')
     ]);
 }
 
@@ -44,12 +44,20 @@ if ($d[0]) {
         @nv_deletefile(NV_ROOTDIR . '/' . NV_MOBILE_FILES_DIR . '/' . $m[1], true);
     }
 
-    $result = $db->query('SELECT did FROM ' . NV_UPLOAD_GLOBALTABLE . "_dir WHERE dirname='" . $path . "' OR dirname LIKE '" . $path . "/%'");
-    while ($_scratch = $result->fetch(3)) {
+    $sth = $db->prepare('SELECT did FROM ' . NV_UPLOAD_GLOBALTABLE . '_dir WHERE dirname = :path OR dirname LIKE :path_like');
+    $sth->bindValue(':path', $path, PDO::PARAM_STR);
+    $sth->bindValue(':path_like', $path . '/%', PDO::PARAM_STR);
+    $sth->execute();
+    while ($_scratch = $sth->fetch(3)) {
         [$did] = $_scratch;
         unset($_scratch);
-        $db->query('DELETE FROM ' . NV_UPLOAD_GLOBALTABLE . '_file WHERE did = ' . $did);
-        $db->query('DELETE FROM ' . NV_UPLOAD_GLOBALTABLE . '_dir WHERE did = ' . $did);
+        $sth_del = $db->prepare('DELETE FROM ' . NV_UPLOAD_GLOBALTABLE . '_file WHERE did = :did');
+        $sth_del->bindValue(':did', $did, PDO::PARAM_INT);
+        $sth_del->execute();
+
+        $sth_del = $db->prepare('DELETE FROM ' . NV_UPLOAD_GLOBALTABLE . '_dir WHERE did = :did');
+        $sth_del->bindValue(':did', $did, PDO::PARAM_INT);
+        $sth_del->execute();
     }
 
     nv_dirListRefreshSize();

@@ -49,10 +49,10 @@ sort($myini['mimes']);
 unset($myini['mimes'][0]);
 
 if ($nv_Request->isset_request('save', 'post')) {
-    if ($nv_Request->get_title('checkss', 'post', '') !== NV_CHECK_SESSION) {
+    if (!csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
         nv_jsonOutput([
             'status' => 'error',
-            'mess' => 'Error session!!!'
+            'mess' => $nv_Lang->getGlobal('error_checkss')
         ]);
     }
 
@@ -213,6 +213,7 @@ $tpl->setTemplateDir(get_module_tpl_dir('uploadconfig.tpl'));
 $tpl->assign('LANG', $nv_Lang);
 $tpl->assign('MODULE_NAME', $module_name);
 $tpl->assign('OP', $op);
+$tpl->assign('CHECKSS', csrf_create($csrf_key));
 
 $tpl->assign('GCONFIG', $global_config);
 

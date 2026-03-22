@@ -42,6 +42,8 @@ if (defined('NV_IS_SPADMIN')) {
     $allow_func[] = 'uploadconfig';
 }
 
+$_csrf_key = $admin_info['admin_id'] . '_' . $module_name . '_main';
+
 // Các module trong quản trị
 $sql = 'SELECT module FROM ' . NV_AUTHORS_GLOBALTABLE . '_module';
 $acp_mods = $db->query($sql)->fetchAll(PDO::FETCH_COLUMN);
@@ -546,7 +548,17 @@ function nv_filesListRefresh($pathimg)
                         $dif = array_diff_assoc($info, $results[$title]);
                         if (!empty($dif)) {
                             // Cập nhật CSDL file thay đổi
-                            $db->query('UPDATE ' . NV_UPLOAD_GLOBALTABLE . '_file SET filesize=' . (int) ($info['filesize']) . ", src='" . $info['src'] . "', srcwidth=" . (int) ($info['srcwidth']) . ', srcheight=' . (int) ($info['srcheight']) . ", sizes='" . $info['sizes'] . "', userid=" . $admin_info['userid'] . ', mtime=' . $info['mtime'] . ' WHERE did = ' . $did . ' AND title = ' . $db->quote($title));
+                            $sth_up = $db->prepare('UPDATE ' . NV_UPLOAD_GLOBALTABLE . '_file SET filesize = :filesize, src = :src, srcwidth = :srcwidth, srcheight = :srcheight, sizes = :sizes, userid = :userid, mtime = :mtime WHERE did = :did AND title = :title');
+                            $sth_up->bindValue(':filesize', $info['filesize'], PDO::PARAM_INT);
+                            $sth_up->bindValue(':src', $info['src'], PDO::PARAM_STR);
+                            $sth_up->bindValue(':srcwidth', $info['srcwidth'], PDO::PARAM_INT);
+                            $sth_up->bindValue(':srcheight', $info['srcheight'], PDO::PARAM_INT);
+                            $sth_up->bindValue(':sizes', $info['sizes'], PDO::PARAM_STR);
+                            $sth_up->bindValue(':userid', $admin_info['userid'], PDO::PARAM_INT);
+                            $sth_up->bindValue(':mtime', $info['mtime'], PDO::PARAM_INT);
+                            $sth_up->bindValue(':did', $did, PDO::PARAM_INT);
+                            $sth_up->bindValue(':title', $title, PDO::PARAM_STR);
+                            $sth_up->execute();
                         }
                         unset($results[$title]);
                     } else {
@@ -555,12 +567,22 @@ function nv_filesListRefresh($pathimg)
                         $newalt = str_replace('-', ' ', change_alias($newalt));
 
                         // Thêm file mới
-                        $sth = $db->prepare('INSERT INTO ' . NV_UPLOAD_GLOBALTABLE . "_file
+                        $sth = $db->prepare('INSERT INTO ' . NV_UPLOAD_GLOBALTABLE . '_file
                             (name, ext, type, filesize, src, srcwidth, srcheight, sizes, userid, mtime, did, title, alt)
-                            VALUES (:name, '" . $info['ext'] . "', '" . $info['type'] . "', " . (int) ($info['filesize']) . ", '" . $info['src'] . "', " . (int) ($info['srcwidth']) . ', ' . (int) ($info['srcheight']) . ", '" . $info['sizes'] . "', " . $info['userid'] . ', ' . $info['mtime'] . ', ' . $did . ', :title, :newalt)');
-                        $sth->bindParam(':name', $info['name'], PDO::PARAM_STR);
-                        $sth->bindParam(':title', $title, PDO::PARAM_STR);
-                        $sth->bindParam(':newalt', $newalt, PDO::PARAM_STR);
+                            VALUES (:name, :ext, :type, :filesize, :src, :srcwidth, :srcheight, :sizes, :userid, :mtime, :did, :title, :newalt)');
+                        $sth->bindValue(':name', $info['name'], PDO::PARAM_STR);
+                        $sth->bindValue(':ext', $info['ext'], PDO::PARAM_STR);
+                        $sth->bindValue(':type', $info['type'], PDO::PARAM_STR);
+                        $sth->bindValue(':filesize', $info['filesize'], PDO::PARAM_INT);
+                        $sth->bindValue(':src', $info['src'], PDO::PARAM_STR);
+                        $sth->bindValue(':srcwidth', $info['srcwidth'], PDO::PARAM_INT);
+                        $sth->bindValue(':srcheight', $info['srcheight'], PDO::PARAM_INT);
+                        $sth->bindValue(':sizes', $info['sizes'], PDO::PARAM_STR);
+                        $sth->bindValue(':userid', $info['userid'], PDO::PARAM_INT);
+                        $sth->bindValue(':mtime', $info['mtime'], PDO::PARAM_INT);
+                        $sth->bindValue(':did', $did, PDO::PARAM_INT);
+                        $sth->bindValue(':title', $title, PDO::PARAM_STR);
+                        $sth->bindValue(':newalt', $newalt, PDO::PARAM_STR);
                         $sth->execute();
                     }
                 }
@@ -581,7 +603,11 @@ function nv_filesListRefresh($pathimg)
             )";
             $total_size = (float) ($db->query($sql)->fetchColumn());
 
-            $db->query('UPDATE ' . NV_UPLOAD_GLOBALTABLE . '_dir SET time=' . NV_CURRENTTIME . ', total_size=' . $total_size . ' WHERE did = ' . $did);
+            $sth_up = $db->prepare('UPDATE ' . NV_UPLOAD_GLOBALTABLE . '_dir SET time = :time, total_size = :total_size WHERE did = :did');
+            $sth_up->bindValue(':time', NV_CURRENTTIME, PDO::PARAM_INT);
+            $sth_up->bindValue(':total_size', $total_size, PDO::PARAM_STR);
+            $sth_up->bindValue(':did', $did, PDO::PARAM_INT);
+            $sth_up->execute();
         }
     } else {
         // Xóa CSDL thư mục không còn tồn tại
@@ -609,7 +635,10 @@ function nv_dirListRefreshSize()
         )";
         $total_size = (float) ($db->query($sql)->fetchColumn());
 
-        $db->query('UPDATE ' . NV_UPLOAD_GLOBALTABLE . '_dir SET total_size=' . $total_size . ' WHERE did=' . (int) $did);
+        $sth_up = $db->prepare('UPDATE ' . NV_UPLOAD_GLOBALTABLE . '_dir SET total_size = :total_size WHERE did = :did');
+        $sth_up->bindValue(':total_size', $total_size, PDO::PARAM_STR);
+        $sth_up->bindValue(':did', $did, PDO::PARAM_INT);
+        $sth_up->execute();
     }
 }
 
@@ -647,7 +676,7 @@ $array_documents = ['doc', 'xls', 'chm', 'pdf', 'docx', 'xlsx'];
 $array_dirname = [];
 $array_thumb_config = [];
 
-$refresh = $nv_Request->isset_request('refresh', 'post');
+$refresh = ($nv_Request->isset_request('refresh', 'post') and csrf_check($nv_Request->get_string('checkss', 'post'), $_csrf_key));
 $path = nv_check_path_upload($nv_Request->get_string('path', 'get', NV_UPLOADS_DIR));
 
 $sql = 'SELECT * FROM ' . NV_UPLOAD_GLOBALTABLE . '_dir ORDER BY dirname ASC';
@@ -663,7 +692,7 @@ while ($row = $result->fetch()) {
 }
 unset($array_dirname['']);
 
-if ($nv_Request->isset_request('dirListRefresh', 'post')) {
+if ($nv_Request->isset_request('dirListRefresh', 'post') and csrf_check($nv_Request->get_string('checkss', 'post'), $_csrf_key)) {
     $real_dirlist = nv_listUploadDir(NV_UPLOADS_DIR);
     $dirlist = array_keys($array_dirname);
     $result_no_exit = array_diff($dirlist, $real_dirlist);
@@ -677,7 +706,10 @@ if ($nv_Request->isset_request('dirListRefresh', 'post')) {
     $result_new = array_diff($real_dirlist, $dirlist);
     foreach ($result_new as $dirname) {
         try {
-            $array_dirname[$dirname] = $db->insert_id('INSERT INTO ' . NV_UPLOAD_GLOBALTABLE . "_dir (dirname, time, thumb_type, thumb_width, thumb_height, thumb_quality) VALUES ('" . $dirname . "', '0', '0', '0', '0', '0')", 'did');
+            $sth = $db->prepare('INSERT INTO ' . NV_UPLOAD_GLOBALTABLE . '_dir (dirname, time, thumb_type, thumb_width, thumb_height, thumb_quality) VALUES (:dirname, \'0\', \'0\', \'0\', \'0\', \'0\')');
+            $sth->bindValue(':dirname', $dirname, PDO::PARAM_STR);
+            $sth->execute();
+            $array_dirname[$dirname] = $db->lastInsertId();
         } catch (PDOException $e) {
             trigger_error($e->getMessage());
         }
