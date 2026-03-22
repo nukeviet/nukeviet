@@ -22,7 +22,8 @@ $userids = array_filter(array_unique(array_map('intval', array_map('trim', explo
 $setactive = $nv_Request->get_int('setactive', 'post', -1);
 $is_setactive = (in_array('setactive', $allow_func, true) and !defined('NV_IS_USER_FORUM')) ? true : false;
 
-if ($is_setactive and md5(NV_CHECK_SESSION . '_' . $module_name . '_main') == $nv_Request->get_string('checkss', 'post')) {
+$_csrf_key = $admin_info['admin_id'] . '_' . $module_name . '_main';
+if ($is_setactive and csrf_check($nv_Request->get_string('checkss', 'post'), $_csrf_key)) {
     foreach ($userids as $userid) {
         if (!$userid or $admin_info['admin_id'] == $userid) {
             continue;
@@ -63,4 +64,4 @@ if ($is_setactive and md5(NV_CHECK_SESSION . '_' . $module_name . '_main') == $n
     $nv_Cache->delMod($module_name);
 }
 
-nv_htmlOutput('OK');
+nv_jsonOutput(['status' => 'OK']);

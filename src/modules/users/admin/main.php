@@ -51,31 +51,31 @@ $methods = [
         'key' => 'userid',
         'sql' => ['tb1.userid'],
         'value' => $nv_Lang->getModule('search_id'),
-        'selected' => ''
+        'selected' => false
     ],
     'username' => [
         'key' => 'username',
         'sql' => ['tb1.username'],
         'value' => $nv_Lang->getModule('search_account'),
-        'selected' => ''
+        'selected' => false
     ],
     'fullname' => [
         'key' => 'fullname',
         'sql' => [$global_config['name_show'] == 0 ? "concat(tb1.last_name,' ',tb1.first_name)" : "concat(tb1.first_name,' ',tb1.last_name)"],
         'value' => $nv_Lang->getModule('search_name'),
-        'selected' => ''
+        'selected' => false
     ],
     'email' => [
         'key' => 'email',
         'sql' => ['tb1.email'],
         'value' => $nv_Lang->getModule('search_mail'),
-        'selected' => ''
+        'selected' => false
     ],
     'oauth' => [
         'key' => 'oauth',
         'sql' => ['tb2.id', 'tb2.email'],
         'value' => $nv_Lang->getModule('search_oauth'),
-        'selected' => ''
+        'selected' => false
     ]
 ];
 
@@ -111,7 +111,7 @@ if (!empty($methodvalue)) {
             $array_like[] = $method_sql . " LIKE '%" . $db->dblikeescape($methodvalue) . "%'";
         }
         $_arr_where[] = '(' . implode(' OR ', $array_like) . ')';
-        $methods[$method]['selected'] = ' selected="selected"';
+        $methods[$method]['selected'] = true;
     }
     $base_url .= '&amp;method=' . urlencode($method) . '&amp;value=' . urlencode($methodvalue);
     $table_caption = $nv_Lang->getModule('search_page_title');
@@ -220,8 +220,7 @@ while ($row = $result2->fetch()) {
         'full_name' => nv_show_name_user($row['first_name'], $row['last_name'], $row['username']),
         'email' => $row['email'],
         'regdate' => nv_datetime_format($row['regdate']),
-        'checked' => $row['active'] ? ' checked="checked"' : '',
-        'disabled' => ($is_setactive) ? ' onclick="nv_chang_status(' . $row['userid'] . ');"' : ' disabled="disabled"',
+        'active' => (bool) $row['active'],
         'setactive' => $is_setactive,
         'is_edit' => $is_edit,
         'is_delete' => $is_delete,
@@ -280,12 +279,10 @@ if (!empty($admin_in)) {
             }
         }
         if (!$users_list[$row['admin_id']]['is_edit']) {
-            $users_list[$row['admin_id']]['disabled'] = ' disabled="disabled"';
             $users_list[$row['admin_id']]['setactive'] = false;
         }
     }
     if (isset($users_list[$admin_info['admin_id']])) {
-        $users_list[$admin_info['admin_id']]['disabled'] = ' disabled="disabled"';
         $users_list[$admin_info['admin_id']]['setactive'] = false;
         $users_list[$admin_info['admin_id']]['is_edit'] = true;
     }
@@ -315,71 +312,44 @@ foreach ($orders as $order) {
     }
 }
 
-$xtpl = new XTemplate('main.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-$xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
-$xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
-$xtpl->assign('FORM_ACTION', NV_BASE_ADMINURL . 'index.php');
-$xtpl->assign('MODULE_NAME', $module_name);
-$xtpl->assign('SORTURL', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
-$xtpl->assign('SEARCH_VALUE', nv_htmlspecialchars($methodvalue));
-$xtpl->assign('TABLE_CAPTION', $table_caption);
-$xtpl->assign('HEAD', $head_tds);
-$xtpl->assign('CHECKSESS', md5(NV_CHECK_SESSION . '_' . $module_name . '_' . $op));
-$xtpl->assign('REG_TIME_FROM', $reg_from);
-$xtpl->assign('REG_TIME_TO', $reg_to);
-
-if (defined('NV_IS_USER_FORUM')) {
-    $xtpl->parse('main.is_forum');
-}
-
-foreach ($methods as $m) {
-    $xtpl->assign('METHODS', $m);
-    $xtpl->parse('main.method');
-}
+// Build usactive dropdown options
+$usactive_options = [
+    ['key' => -1, 'value' => '---' . $nv_Lang->getModule('usactive') . '---', 'selected' => ($usactive == -1)],
+    ['key' => -2, 'value' => $nv_Lang->getGlobal('level7'), 'selected' => ($usactive == -2)],
+];
 $_bg = (defined('NV_CONFIG_DIR') and $global_config['idsite'] == 0) ? 3 : 1;
 for ($i = $_bg; $i >= 0; --$i) {
-    $m = [
-        'key' => $i,
-        'selected' => ($i == $usactive) ? ' selected="selected"' : '',
-        'value' => $nv_Lang->getModule('usactive_' . $i)
-    ];
-    $xtpl->assign('USACTIVE', $m);
-    $xtpl->parse('main.usactive');
+    $usactive_options[] = ['key' => $i, 'value' => $nv_Lang->getModule('usactive_' . $i), 'selected' => ($i == $usactive)];
 }
-$xtpl->assign('SELECTED_NEW_USERS', $usactive == -2 ? ' selected="selected"' : '');
 
-// get all group
+// Build groups dropdown
+$groups_list = [];
 $sql = 'SELECT * FROM ' . NV_MOD_TABLE . '_groups AS g LEFT JOIN ' . NV_MOD_TABLE . "_groups_detail d ON ( g.group_id = d.group_id AND d.lang='" . NV_LANG_DATA . "' ) WHERE g.idsite = " . $global_config['idsite'] . ' OR (g.idsite=0 AND g.group_id>3 AND g.siteus=1) ORDER BY g.idsite, g.weight ASC';
 $result = $db->query($sql);
 while ($group = $result->fetch()) {
-    $group['selected'] = ($group['group_id'] == $selgroup) ? ' selected="selected"' : '';
-    $group['title'] = ($group['group_id'] < 10) ? $nv_Lang->getGlobal('level' . $group['group_id']) : $group['title'];
-    $xtpl->assign('GROUP', $group);
-    $xtpl->parse('main.group');
+    $groups_list[] = [
+        'group_id' => $group['group_id'],
+        'title' => ($group['group_id'] < 10) ? $nv_Lang->getGlobal('level' . $group['group_id']) : $group['title'],
+        'selected' => ($group['group_id'] == $selgroup)
+    ];
 }
 
-$active2steps = [
-    '' => $nv_Lang->getModule('active2step_status'),
-    'disabled' => $nv_Lang->getModule('active2step_status0'),
-    'enabled' => $nv_Lang->getModule('active2step_status1'),
-    'request' => $nv_Lang->getModule('active2step_status2')
+// Build active2step dropdown options
+$active2steps_options = [
+    ['val' => '', 'name' => $nv_Lang->getModule('active2step_status'), 'selected' => ($active2step === '')],
+    ['val' => 'disabled', 'name' => $nv_Lang->getModule('active2step_status0'), 'selected' => ($active2step === 'disabled')],
+    ['val' => 'enabled', 'name' => $nv_Lang->getModule('active2step_status1'), 'selected' => ($active2step === 'enabled')],
+    ['val' => 'request', 'name' => $nv_Lang->getModule('active2step_status2'), 'selected' => ($active2step === 'request')],
 ];
-foreach ($active2steps as $k => $v) {
-    $xtpl->assign('ACTIVE2STEP', [
-        'val' => $k,
-        'sel' => (!empty($active2step) and $active2step == $k) ? ' selected="selected"' : '',
-        'name' => $v
-    ]);
-    $xtpl->parse('main.active2step');
-}
 
-$xtpl->assign('SELECTED_NEW_USERS', $usactive == -2 ? ' selected="selected"' : '');
+// Xử lý dữ liệu hiển thị cho từng user
 $view_user_allowed = nv_user_in_groups($global_config['whoviewuser']);
 $has_choose = false;
 $set_active_num = 0;
 $delete_num = 0;
 
-foreach ($users_list as $u) {
+foreach ($users_list as &$u) {
+    // Xử lý active_obj hiển thị
     if ($u['active_obj'] == 'SYSTEM') {
         $u['active_obj'] = $nv_Lang->getModule('active_obj_1');
     } elseif ($u['active_obj'] == 'EMAIL') {
@@ -395,62 +365,31 @@ foreach ($users_list as $u) {
     } else {
         $u['active_obj'] = 'N/A';
     }
-    $xtpl->assign('CONTENT_TD', $u);
-    $xtpl->assign('NV_ADMIN_THEME', $global_config['admin_theme']);
 
-    if ($u['is_admin']) {
-        $xtpl->parse('main.xusers.is_admin');
-    }
-
-    $pending_deletion = false;
+    // Xử lý pending deletion
     if (!empty($u['delete_at']) and $u['delete_at'] > NV_CURRENTTIME) {
-        $pending_deletion = true;
-        $xtpl->assign('DELETE_AT', $nv_Lang->getModule('datadeletion_pedding_adm', nv_datetime_format($u['delete_at'], 1)));
-        $xtpl->parse('main.xusers.datadeletion_pending');
-    }
-
-    if ($view_user_allowed) {
-        $xtpl->parse('main.xusers.view');
+        $u['is_pending_deletion'] = true;
+        $u['delete_at_display'] = $nv_Lang->getModule('datadeletion_pedding_adm', nv_datetime_format($u['delete_at'], 1));
     } else {
-        $xtpl->parse('main.xusers.show');
+        $u['is_pending_deletion'] = false;
+        $u['delete_at_display'] = '';
     }
 
-    if (!defined('NV_IS_USER_FORUM')) {
-        if ($u['is_edit']) {
-            $xtpl->assign('EDIT_URL', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=edit&amp;userid=' . $u['userid']);
-            $xtpl->assign('EDIT_2STEP_URL', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=edit_2step&amp;userid=' . $u['userid']);
-            $xtpl->assign('EDIT_OAUTH_URL', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=edit_oauth&amp;userid=' . $u['userid']);
-            $xtpl->parse('main.xusers.edit');
+    // Set official
+    $u['is_set_official'] = ($u['is_newuser'] and in_array('setofficial', $allow_func, true) and !defined('NV_IS_USER_FORUM'));
 
-            if ($pending_deletion) {
-                $xtpl->parse('main.xusers.edit2.cancel_deletion');
-            }
-
-            $xtpl->parse('main.xusers.edit2');
-        }
-        if ($u['is_delete']) {
-            $xtpl->parse('main.xusers.del');
-        }
-        if ($u['is_newuser'] and in_array('setofficial', $allow_func, true)) {
-            $xtpl->parse('main.xusers.set_official');
-        }
-
-        if ($u['setactive'] or $u['is_delete']) {
-            $has_choose = true;
-            $xtpl->parse('main.xusers.choose');
-        }
-        if ($u['setactive']) {
-            ++$set_active_num;
-        }
-        if ($u['is_delete']) {
-            ++$delete_num;
-        }
+    if ($u['setactive'] or $u['is_delete']) {
+        $has_choose = true;
     }
-
-    $xtpl->parse('main.xusers');
+    if ($u['setactive']) {
+        ++$set_active_num;
+    }
+    if ($u['is_delete']) {
+        ++$delete_num;
+    }
 }
+unset($u);
 
-$has_footer = false;
 $array_action = [];
 if ($delete_num > 0) {
     $array_action['del'] = $nv_Lang->getModule('delete');
@@ -459,33 +398,37 @@ if ($set_active_num > 0) {
     $array_action['active'] = $nv_Lang->getModule('memberlist_active');
     $array_action['unactive'] = $nv_Lang->getModule('memberlist_unactive');
 }
-if ($has_choose) {
-    $has_footer = true;
-    foreach ($array_action as $action_key => $action_lang) {
-        $xtpl->assign('ACTION_KEY', $action_key);
-        $xtpl->assign('ACTION_LANG', $action_lang);
-        $xtpl->parse('main.footer.action.loop');
-    }
-    $xtpl->parse('main.footer.action');
-}
 
-if (!empty($generate_page)) {
-    $xtpl->assign('GENERATE_PAGE', $generate_page);
-    $xtpl->parse('main.footer.generate_page');
-    $has_footer = true;
-}
+$tpl = new \NukeViet\Template\NVSmarty();
+$tpl->setTemplateDir(get_module_tpl_dir('main.tpl'));
 
-if (in_array('export', $allow_func, true)) {
-    $has_footer = true;
-    $xtpl->parse('main.footer.exportfile');
-}
+$tpl->assign('LANG', $nv_Lang);
+$tpl->assign('MODULE_NAME', $module_name);
+$tpl->assign('OP', $op);
+$tpl->assign('CHECKSS', csrf_create($csrf_key));
 
-if ($has_footer) {
-    $xtpl->parse('main.footer');
-}
+$tpl->assign('IS_FORUM', defined('NV_IS_USER_FORUM'));
+$tpl->assign('SEARCH_VALUE', nv_htmlspecialchars($methodvalue));
+$tpl->assign('TABLE_CAPTION', $table_caption);
+$tpl->assign('HEAD', $head_tds);
+$tpl->assign('REG_FROM', $reg_from);
+$tpl->assign('REG_TO', $reg_to);
 
-$xtpl->parse('main');
-$contents = $xtpl->text('main');
+$tpl->assign('METHODS', array_values($methods));
+$tpl->assign('USACTIVE_OPTIONS', $usactive_options);
+$tpl->assign('GROUPS_LIST', $groups_list);
+$tpl->assign('ACTIVE2STEPS_OPTIONS', $active2steps_options);
+$tpl->assign('ADV_EXPANDED', ($usactive != -1 || $selgroup != 6 || $active2step !== '' || $reg_from !== '' || $reg_to !== ''));
+
+$tpl->assign('USERS_LIST', array_values($users_list));
+$tpl->assign('VIEW_USER_ALLOWED', $view_user_allowed);
+
+$tpl->assign('HAS_CHOOSE', $has_choose);
+$tpl->assign('ARRAY_ACTION', $array_action);
+$tpl->assign('PAGINATION', $generate_page);
+$tpl->assign('CAN_EXPORT', in_array('export', $allow_func, true));
+
+$contents = $tpl->fetch('main.tpl');
 
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_admin_theme($contents);

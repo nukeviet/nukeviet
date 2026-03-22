@@ -1824,6 +1824,403 @@ $(function () {
         });
     }
 
+    // Trang Danh sách tài khoản
+    if (nv_func_name === 'main') {
+        const tableCard = $('.table-responsive-lg');
+        const checkss = tableCard.data('checkss');
+
+        // Khởi tạo datepicker cho ô lọc ngày đăng ký
+        if ($('.datepicker-search').length > 0) {
+            $('.datepicker-search').datepicker({
+                showOn: 'focus',
+                dateFormat: nv_jsdate_post.replace('yyyy', 'yy'),
+                changeMonth: true,
+                changeYear: true,
+                showOtherMonths: true,
+                beforeShow: function () {
+                    setTimeout(function () {
+                        $('.ui-datepicker').css('z-index', 999999999);
+                    }, 0);
+                }
+            });
+        }
+
+        // Toggle icon/tooltip/aria-label khi mở rộng / thu gọn bộ lọc nâng cao
+        $('#search-adv').on('show.bs.collapse hide.bs.collapse', function (e) {
+            const isExpanding = e.type === 'show';
+            const labelExpand = $(this).data('label-expand');
+            const labelCollapse = $(this).data('label-collapse');
+            const label = isExpanding ? labelCollapse : labelExpand;
+            const $btn = $('[data-bs-target="#search-adv"]');
+            const $span = $btn.closest('[data-bs-toggle="tooltip"]');
+            const $icon = $btn.find('i');
+
+            $icon.toggleClass('fa-expand', !isExpanding).toggleClass('fa-compress', isExpanding);
+            $btn.attr('aria-label', label);
+            const tooltip = bootstrap.Tooltip.getInstance($span[0]);
+            if (tooltip) {
+                $span.attr('data-bs-title', label);
+                tooltip.setContent({ '.tooltip-inner': label });
+            }
+        });
+
+        // Check all / uncheck all
+        $(document).on('change', '#check_all', function () {
+            const checked = $(this).is(':checked');
+            $('.idcheck').prop('checked', checked);
+        });
+
+        // Từng checkbox ảnh hưởng đến check_all
+        $(document).on('change', '.idcheck', function () {
+            const total = $('.idcheck').length;
+            const checked = $('.idcheck:checked').length;
+            $('#check_all').prop('checked', total === checked).prop('indeterminate', checked > 0 && checked < total);
+        });
+
+        // Toggle trạng thái hoạt động (checkbox cá nhân)
+        $(document).on('change', '[data-toggle="setactive"]', function () {
+            const checkbox = $(this);
+            const userid = checkbox.data('userid');
+            checkbox.prop('disabled', true);
+            $.ajax({
+                type: 'POST',
+                url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=setactive&nocache=' + new Date().getTime(),
+                data: { userid: userid, checkss: checkss },
+                dataType: 'json',
+                success: function (res) {
+                    checkbox.prop('disabled', false);
+                    if (res.status === 'error') {
+                        checkbox.prop('checked', !checkbox.is(':checked'));
+                        nvToast(res.mess || nv_is_change_act_confirm[2], 'error');
+                    }
+                },
+                error: function (xhr, text) {
+                    checkbox.prop('disabled', false);
+                    checkbox.prop('checked', !checkbox.is(':checked'));
+                    nvToast(text, 'error');
+                }
+            });
+        });
+
+        // Xóa user (nút trash cá nhân)
+        $(document).on('click', '[data-toggle="row-del"]', function (e) {
+            e.preventDefault();
+            const btn = $(this);
+            const icon = $('i', btn);
+            if (icon.is('.fa-spinner')) {
+                return;
+            }
+            nvConfirm(btn.data('msgconfirm'), function () {
+                const orig = icon.data('icon');
+                icon.removeClass(orig).addClass('fa-spinner fa-spin-pulse');
+                $.ajax({
+                    type: 'POST',
+                    url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=del&nocache=' + new Date().getTime(),
+                    data: { userid: btn.data('userid'), checkss: checkss },
+                    dataType: 'json',
+                    success: function (res) {
+                        icon.removeClass('fa-spinner fa-spin-pulse').addClass(orig);
+                        if (res.status === 'error') {
+                            return nvToast(res.mess, 'error');
+                        }
+                        location.reload();
+                    },
+                    error: function (xhr, text) {
+                        icon.removeClass('fa-spinner fa-spin-pulse').addClass(orig);
+                        nvToast(text, 'error');
+                    }
+                });
+            });
+        });
+
+        // Set official
+        $(document).on('click', '[data-toggle="set-official"]', function (e) {
+            e.preventDefault();
+            const btn = $(this);
+            const icon = $('i', btn);
+            if (icon.is('.fa-spinner')) {
+                return;
+            }
+            const orig = icon.data('icon');
+            icon.removeClass(orig).addClass('fa-spinner fa-spin-pulse');
+            $.ajax({
+                type: 'POST',
+                url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=setofficial&nocache=' + new Date().getTime(),
+                data: { userid: btn.data('userid'), checkss: checkss },
+                dataType: 'json',
+                success: function (res) {
+                    icon.removeClass('fa-spinner fa-spin-pulse').addClass(orig);
+                    if (res.status === 'error') {
+                        return nvToast(res.mess, 'error');
+                    }
+                    location.reload();
+                },
+                error: function (xhr, text) {
+                    icon.removeClass('fa-spinner fa-spin-pulse').addClass(orig);
+                    nvToast(text, 'error');
+                }
+            });
+        });
+
+        // Xem trang cá nhân user trong popup
+        $(document).on('click', '[data-toggle="view-user"]', function (e) {
+            e.preventDefault();
+            const link = $(this).data('link');
+            nv_open_browse(link + '/s', 'VIEWUSER', 550, 500, 'resizable=no,scrollbars=1,toolbar=no,location=no,titlebar=no,menubar=0,status=no');
+        });
+
+        // Yêu cầu thay đổi mật khẩu — mở modal
+        $(document).on('click', '[data-toggle="pass-reset-request"]', function (e) {
+            e.preventDefault();
+            const userid = $(this).data('userid');
+            $.ajax({
+                type: 'POST',
+                url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=edit&userid=' + userid + '&nocache=' + new Date().getTime(),
+                data: { psr: 1 },
+                dataType: 'json',
+                success: function (res) {
+                    $('#pass-reset-modal .userid').val(res.userid);
+                    $('#pass-reset-modal .username').text(res.username);
+                    $('#pass-reset-modal .currentpass-created-time').text(res.pass_creation_time);
+                    $('#pass-reset-modal .currentpass-request-status').text(res.pass_reset_request);
+                    $('#pass-reset-modal .btn-pass-reset-submit').prop('disabled', false);
+                    const modal = new bootstrap.Modal(document.getElementById('pass-reset-modal'));
+                    modal.show();
+                }
+            });
+        });
+
+        // Gửi yêu cầu thay đổi mật khẩu
+        $(document).on('click', '.btn-pass-reset-submit', function (e) {
+            e.preventDefault();
+            const btn = $(this);
+            const icon = $('i', btn);
+            if (icon.is('.fa-spinner')) {
+                return;
+            }
+            const userid = $('#pass-reset-modal .userid').val();
+            const type = btn.data('type');
+            const orig = icon.data('icon');
+            icon.removeClass(orig).addClass('fa-spinner fa-spin-pulse');
+            $('#pass-reset-modal .btn-pass-reset-submit').prop('disabled', true);
+            $.ajax({
+                type: 'POST',
+                url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=edit&userid=' + userid + '&nocache=' + new Date().getTime(),
+                data: { psr: 1, type: type },
+                dataType: 'json',
+                success: function (res) {
+                    icon.removeClass('fa-spinner fa-spin-pulse').addClass(orig);
+                    $('#pass-reset-modal .btn-pass-reset-submit').prop('disabled', false);
+                    nvToast(res.mess || '', res.status === 'OK' ? 'success' : 'error');
+                    bootstrap.Modal.getInstance(document.getElementById('pass-reset-modal')).hide();
+                },
+                error: function (xhr, text) {
+                    icon.removeClass('fa-spinner fa-spin-pulse').addClass(orig);
+                    $('#pass-reset-modal .btn-pass-reset-submit').prop('disabled', false);
+                    nvToast(text, 'error');
+                }
+            });
+        });
+
+        // Yêu cầu thay đổi email — mở modal
+        $(document).on('click', '[data-toggle="email-reset-request"]', function (e) {
+            e.preventDefault();
+            const userid = $(this).data('userid');
+            $.ajax({
+                type: 'POST',
+                url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=edit&userid=' + userid + '&nocache=' + new Date().getTime(),
+                data: { esr: 1 },
+                dataType: 'json',
+                success: function (res) {
+                    $('#email-reset-modal .userid').val(res.userid);
+                    $('#email-reset-modal .username').text(res.username);
+                    $('#email-reset-modal .currentemail-created-time').text(res.email_creation_time);
+                    $('#email-reset-modal .currentemail-request-status').text(res.email_reset_request);
+                    $('#email-reset-modal .btn-email-reset-submit').prop('disabled', false);
+                    const modal = new bootstrap.Modal(document.getElementById('email-reset-modal'));
+                    modal.show();
+                }
+            });
+        });
+
+        // Gửi yêu cầu thay đổi email
+        $(document).on('click', '.btn-email-reset-submit', function (e) {
+            e.preventDefault();
+            const btn = $(this);
+            const icon = $('i', btn);
+            if (icon.is('.fa-spinner')) {
+                return;
+            }
+            const userid = $('#email-reset-modal .userid').val();
+            const type = btn.data('type');
+            const orig = icon.data('icon');
+            icon.removeClass(orig).addClass('fa-spinner fa-spin-pulse');
+            $('#email-reset-modal .btn-email-reset-submit').prop('disabled', true);
+            $.ajax({
+                type: 'POST',
+                url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=edit&userid=' + userid + '&nocache=' + new Date().getTime(),
+                data: { esr: 1, type: type },
+                dataType: 'json',
+                success: function (res) {
+                    icon.removeClass('fa-spinner fa-spin-pulse').addClass(orig);
+                    $('#email-reset-modal .btn-email-reset-submit').prop('disabled', false);
+                    nvToast(res.mess || '', res.status === 'OK' ? 'success' : 'error');
+                    bootstrap.Modal.getInstance(document.getElementById('email-reset-modal')).hide();
+                },
+                error: function (xhr, text) {
+                    icon.removeClass('fa-spinner fa-spin-pulse').addClass(orig);
+                    $('#email-reset-modal .btn-email-reset-submit').prop('disabled', false);
+                    nvToast(text, 'error');
+                }
+            });
+        });
+
+        // Buộc đăng nhập lại
+        $(document).on('click', '[data-toggle="forced-relogin"]', function (e) {
+            e.preventDefault();
+            const userid = $(this).data('userid');
+            $.ajax({
+                type: 'POST',
+                url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=edit&userid=' + userid + '&nocache=' + new Date().getTime(),
+                data: { forcedrelogin: 1 },
+                dataType: 'json',
+                success: function (res) {
+                    nvToast(res.mess, res.status === 'OK' ? 'success' : 'error');
+                }
+            });
+        });
+
+        // Hủy yêu cầu xóa tài khoản
+        $(document).on('click', '[data-toggle="cancel-deletion"]', function (e) {
+            e.preventDefault();
+            const userid = $(this).data('userid');
+            $.ajax({
+                type: 'POST',
+                url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=edit&userid=' + userid + '&nocache=' + new Date().getTime(),
+                data: { canceldeletion: 1 },
+                dataType: 'json',
+                success: function (res) {
+                    nvAlert(res.mess, function () {
+                        location.reload();
+                    });
+                }
+            });
+        });
+
+        // Thực hiện hành động hàng loạt
+        $('#mainusersaction').on('click', function () {
+            const btn = $(this);
+            const listid = $('.idcheck:checked').map(function () {
+                return $(this).val();
+            }).get().join(',');
+
+            if (!listid) {
+                nvToast(btn.data('msgnocheck'), 'warning');
+                return;
+            }
+
+            const action = $('#mainuseropt').val();
+            btn.prop('disabled', true);
+
+            if (action === 'del') {
+                nvConfirm(nv_is_del_confirm[0], function () {
+                    $.ajax({
+                        type: 'POST',
+                        url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=del&nocache=' + new Date().getTime(),
+                        data: { userid: listid, checkss: checkss },
+                        dataType: 'json',
+                        success: function (res) {
+                            btn.prop('disabled', false);
+                            if (res.status === 'error') {
+                                return nvToast(res.mess, 'error');
+                            }
+                            location.reload();
+                        },
+                        error: function (xhr, text) {
+                            btn.prop('disabled', false);
+                            nvToast(text, 'error');
+                        }
+                    });
+                }, function () {
+                    btn.prop('disabled', false);
+                });
+            } else {
+                const setactive = action === 'active' ? 1 : 0;
+                $.ajax({
+                    type: 'POST',
+                    url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=setactive&nocache=' + new Date().getTime(),
+                    data: { userid: listid, setactive: setactive, checkss: checkss },
+                    dataType: 'json',
+                    success: function (res) {
+                        btn.prop('disabled', false);
+                        if (res.status === 'error') {
+                            return nvToast(res.mess, 'error');
+                        }
+                        location.reload();
+                    },
+                    error: function (xhr, text) {
+                        btn.prop('disabled', false);
+                        nvToast(text, 'error');
+                    }
+                });
+            }
+        });
+
+        // Xuất dữ liệu
+        $(document).on('click', '[data-toggle="data-export"]', function () {
+            const btn = $(this);
+            const icon = $('i', btn);
+            const orig = icon.data('icon');
+            const noteMsg = btn.data('note');
+            const completeMsg = btn.data('complete');
+
+            if (icon.is('.fa-spinner')) {
+                return;
+            }
+
+            nvToast(noteMsg, 'warning');
+            icon.removeClass(orig).addClass('fa-spinner fa-spin-pulse');
+            btn.prop('disabled', true);
+
+            function doExport(setExport) {
+                $.ajax({
+                    type: 'POST',
+                    url: script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=export&nocache=' + new Date().getTime(),
+                    data: {
+                        step: 1,
+                        set_export: setExport,
+                        method: $('select[name=method]').val(),
+                        value: $('input[name=value]').val(),
+                        usactive: $('select[name=usactive]').val()
+                    },
+                    success: function (response) {
+                        if (response === 'OK_GETFILE') {
+                            doExport(0);
+                        } else if (response === 'OK_COMPLETE') {
+                            icon.removeClass('fa-spinner fa-spin-pulse').addClass(orig);
+                            btn.prop('disabled', false);
+                            nvToast(completeMsg, 'success');
+                            setTimeout(function () {
+                                window.location.href = script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=export&step=2';
+                            }, 2000);
+                        } else {
+                            icon.removeClass('fa-spinner fa-spin-pulse').addClass(orig);
+                            btn.prop('disabled', false);
+                            nvToast(response, 'error');
+                        }
+                    },
+                    error: function (xhr, text) {
+                        icon.removeClass('fa-spinner fa-spin-pulse').addClass(orig);
+                        btn.prop('disabled', false);
+                        nvToast(text, 'error');
+                    }
+                });
+            }
+
+            doExport(1);
+        });
+    }
+
     // Trang Kiểm duyệt thông tin thành viên
     if (nv_func_name === 'editcensor') {
         // Duyệt thông tin từ danh sách

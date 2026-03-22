@@ -151,7 +151,7 @@ if ($nv_Request->isset_request('psr', 'post')) {
             ]];
             nv_sendmail_template_async([$module_name, Emails::REQUEST_RESET_PASS], $send_data, $maillang);
         }
-        exit($nv_Lang->getModule('pass_reset_request_sent'));
+        nv_jsonOutput(['status' => 'OK', 'mess' => $nv_Lang->getModule('pass_reset_request_sent')]);
     }
     nv_jsonOutput([
         'userid' => $userid,
@@ -194,7 +194,7 @@ if ($nv_Request->isset_request('esr', 'post')) {
             ]];
             nv_sendmail_template_async([$module_name, Emails::REQUEST_RESET_EMAIL], $send_data, $maillang);
         }
-        exit($nv_Lang->getModule('email_reset_request_sent'));
+        nv_jsonOutput(['status' => 'OK', 'mess' => $nv_Lang->getModule('email_reset_request_sent')]);
     }
     nv_jsonOutput([
         'userid' => $userid,
