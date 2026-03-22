@@ -11,7 +11,7 @@
                 "sendmail" => $LANG->getModule('errorlog_sendmail')
             ]}
             <div>
-                <select class="form-select" id="errorfile" data-url="{$PAGE_URL}">
+                <select class="form-select" id="errorfile" data-url="{$PAGE_URL}" data-checkss="{$CHECKSS}">
                     {foreach from=$FILELIST key=type item=list}
                     {if not empty($list)}
                     {assign var="list" value=array_keys($list) nocache}
@@ -25,7 +25,7 @@
                 </select>
             </div>
             <div>
-                <select class="form-select" id="display-mode" data-url="{$PAGE_URL}">
+                <select class="form-select" id="display-mode" data-url="{$PAGE_URL}" data-checkss="{$CHECKSS}">
                     {foreach from=$MODES key=key item=value}
                     <option value="{$key}"{if $key eq $MODE} selected{/if}>{$value}</option>
                     {/foreach}

@@ -16,12 +16,12 @@ if (!defined('NV_IS_FILE_WEBTOOLS')) {
 $page_title = $nv_Lang->getModule('clearsystem');
 
 /**
- * @param string $dir
  * @param string $base
  * @return array
  */
-function nv_clear_files($dir, $base)
+function nv_clear_files($base)
 {
+    $dir = NV_ROOTDIR . '/' . $base;
     $dels = [];
     if ($dh = opendir($dir)) {
         while (($file = readdir($dh)) !== false) {
@@ -45,9 +45,13 @@ if (defined('NV_IS_GODADMIN')) {
     $clears = array_merge($clears, ['clearfiletemp', 'clearerrorlogs', 'clearip_logs']);
 }
 
-$checkss = md5(NV_CHECK_SESSION . '_' . $module_name . '_' . $op . '_' . $admin_info['userid']);
-
-if ($checkss == $nv_Request->get_string('checkss', 'post') and $nv_Request->isset_request('deltype', 'post')) {
+if ($nv_Request->isset_request('deltype', 'post')) {
+    if (!csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
+        nv_jsonOutput([
+            'status' => 'error',
+            'mess' => $nv_Lang->getGlobal('error_checkss')
+        ]);
+    }
     $deltype = $nv_Request->get_typed_array('deltype', 'post', 'string', []);
     $deltype = array_intersect($deltype, $clears);
     if (empty($deltype)) {
@@ -82,32 +86,27 @@ if ($checkss == $nv_Request->get_string('checkss', 'post') and $nv_Request->isse
                 closedir($dh);
             }
         } elseif ($type == 'clearerrorlogs') {
-            $dir = NV_ROOTDIR . '/' . NV_LOGS_DIR . '/error_logs';
-            $files = nv_clear_files($dir, NV_LOGS_DIR . '/error_logs');
+            $files = nv_clear_files(NV_LOGS_DIR . '/error_logs');
             foreach ($files as $file) {
                 $contents[] = $file;
             }
 
-            $dir = NV_ROOTDIR . '/' . NV_LOGS_DIR . '/error_logs/errors256';
-            $files = nv_clear_files($dir, NV_LOGS_DIR . '/error_logs/errors256');
+            $files = nv_clear_files(NV_LOGS_DIR . '/error_logs/errors256');
             foreach ($files as $file) {
                 $contents[] = $file;
             }
 
-            $dir = NV_ROOTDIR . '/' . NV_LOGS_DIR . '/error_logs/old';
-            $files = nv_clear_files($dir, NV_LOGS_DIR . '/error_logs/old');
+            $files = nv_clear_files(NV_LOGS_DIR . '/error_logs/old');
             foreach ($files as $file) {
                 $contents[] = $file;
             }
 
-            $dir = NV_ROOTDIR . '/' . NV_LOGS_DIR . '/error_logs/tmp';
-            $files = nv_clear_files($dir, NV_LOGS_DIR . '/error_logs/tmp');
+            $files = nv_clear_files(NV_LOGS_DIR . '/error_logs/tmp');
             foreach ($files as $file) {
                 $contents[] = $file;
             }
         } elseif ($type == 'clearip_logs') {
-            $dir = NV_ROOTDIR . '/' . NV_LOGS_DIR . '/ip_logs';
-            $files = nv_clear_files($dir, NV_LOGS_DIR . '/ip_logs');
+            $files = nv_clear_files(NV_LOGS_DIR . '/ip_logs');
             foreach ($files as $file) {
                 $contents[] = $file;
             }
@@ -115,8 +114,7 @@ if ($checkss == $nv_Request->get_string('checkss', 'post') and $nv_Request->isse
             if ($dh = opendir(NV_ROOTDIR . '/' . NV_CACHEDIR)) {
                 while (($modname = readdir($dh)) !== false) {
                     if (preg_match($global_config['check_module'], $modname)) {
-                        $cacheDir = NV_ROOTDIR . '/' . NV_CACHEDIR . '/' . $modname;
-                        $files = nv_clear_files($cacheDir, NV_CACHEDIR . '/' . $modname);
+                        $files = nv_clear_files(NV_CACHEDIR . '/' . $modname);
                         foreach ($files as $file) {
                             $contents[] = $file;
                         }
@@ -143,7 +141,7 @@ $tpl->setTemplateDir(get_module_tpl_dir('clearsystem.tpl'));
 $tpl->assign('LANG', $nv_Lang);
 $tpl->assign('MODULE_NAME', $module_name);
 $tpl->assign('OP', $op);
-$tpl->assign('CHECKSS', $checkss);
+$tpl->assign('CHECKSS', csrf_create($csrf_key));
 $tpl->assign('CLEARS', $clears);
 
 $contents = $tpl->fetch('clearsystem.tpl');

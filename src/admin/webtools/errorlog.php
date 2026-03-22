@@ -14,6 +14,12 @@ if (!defined('NV_IS_FILE_WEBTOOLS')) {
 }
 
 if ($nv_Request->isset_request('changemode, mode', 'post')) {
+    if (!csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
+        nv_jsonOutput([
+            'status' => 'error',
+            'mess' => $nv_Lang->getGlobal('error_checkss')
+        ]);
+    }
     $mode = $nv_Request->get_string('mode', 'post', '');
     if ($mode == 'tabular' or $mode == 'plaintext') {
         $nv_Request->set_Session('errorfile_view_mode', $mode);
@@ -86,8 +92,16 @@ if (empty($filelist)) {
 }
 
 $errorfile = $nv_Request->get_string('errorfile', 'post', '');
-if (!empty($errorfile) and !isset($filelist[$errorfile])) {
-    nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&rand=' . nv_genpass());
+if (!empty($errorfile)) {
+    if (!csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
+        nv_jsonOutput([
+            'status' => 'error',
+            'mess' => $nv_Lang->getGlobal('error_checkss')
+        ]);
+    }
+    if (!isset($filelist[$errorfile])) {
+        nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&rand=' . nv_genpass());
+    }
 }
 
 $is_default = false;
@@ -113,6 +127,20 @@ $errors = array_map('trim', $errors);
 $errors = array_filter($errors);
 krsort($errors);
 
+foreach ($errors as $id => $json) {
+    $item = json_decode($json, true);
+    if (is_array($item)) {
+        array_walk_recursive($item, function (&$val) {
+            if (is_string($val)) {
+                $val = nv_htmlspecialchars($val);
+            }
+        });
+        $errors[$id] = $item;
+    } else {
+        unset($errors[$id]);
+    }
+}
+
 $file_content = nv_htmlspecialchars($file_content);
 
 $tpl = new \NukeViet\Template\NVSmarty();
@@ -122,7 +150,6 @@ $tpl->assign('MODULE_NAME', $module_name);
 $tpl->assign('OP', $op);
 
 $tpl->registerPlugin('modifier', 'array_keys', 'array_keys');
-$tpl->registerPlugin('modifier', 'json_decode', 'json_decode');
 $tpl->registerPlugin('modifier', 'nv_datetime_format', 'nv_datetime_format');
 $tpl->registerPlugin('modifier', 'strtotime', 'strtotime');
 $tpl->registerPlugin('modifier', 'is_numeric', 'is_numeric');
@@ -139,6 +166,7 @@ $modes = [
 empty($mode) && $mode = array_key_first($modes);
 
 $tpl->assign('MODES', $modes);
+$tpl->assign('CHECKSS', csrf_create($csrf_key));
 $tpl->assign('MODE', $mode);
 $tpl->assign('ERRORS', $errors);
 

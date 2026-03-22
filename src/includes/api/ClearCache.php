@@ -66,8 +66,7 @@ class ClearCache implements IApi
         if ($dh = opendir(NV_ROOTDIR . '/' . NV_CACHEDIR)) {
             while (($modname = readdir($dh)) !== false) {
                 if (preg_match($global_config['check_module'], $modname)) {
-                    $cacheDir = NV_ROOTDIR . '/' . NV_CACHEDIR . '/' . $modname;
-                    $files = $this->nv_clear_files($cacheDir, NV_CACHEDIR . '/' . $modname);
+                    $this->nv_clear_files(NV_CACHEDIR . '/' . $modname);
                 }
             }
             closedir($dh);
@@ -85,12 +84,12 @@ class ClearCache implements IApi
     /**
      * nv_clear_files()
      *
-     * @param string $dir
      * @param string $base
      * @return array
      */
-    private function nv_clear_files($dir, $base)
+    private function nv_clear_files($base)
     {
+        $dir = NV_ROOTDIR . '/' . $base;
         $dels = [];
         if ($dh = opendir($dir)) {
             while (($file = readdir($dh)) !== false) {

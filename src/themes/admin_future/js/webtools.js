@@ -202,7 +202,10 @@ $(function() {
         $.ajax({
             type: "POST",
             url: url,
-            data: 'errorfile=' + efile,
+            data: {
+                errorfile: efile,
+                checkss: $(this).data('checkss')
+            },
             cache: !1,
             dataType: "json",
             success: function(response) {
@@ -225,7 +228,11 @@ $(function() {
         $.ajax({
             type: "POST",
             url: url,
-            data: 'changemode=1&mode=' + val,
+            data: {
+                changemode: 1,
+                mode: val,
+                checkss: $(this).data('checkss')
+            },
             cache: !1,
             success: function() {
                 if (val == 'tabular') {

@@ -1,5 +1,4 @@
 {foreach from=$ERRORS key=id item=item}
-{assign var="item" value=json_decode($item, true) nocache}
 <div class="card text-bg-primary">
     <a class="card-header fw-medium" id="heading-error-{$id}" data-bs-toggle="collapse" href="#body-error-{$id}" role="button" aria-expanded="true" aria-controls="body-error-{$id}">
         {$LANG->getModule('errorlog_time')}: {strtotime($item.time)|nv_datetime_format:1:0}
