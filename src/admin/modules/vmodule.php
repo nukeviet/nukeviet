@@ -24,7 +24,7 @@ if ($global_config['idsite']) {
 
 $modules_site = nv_scandir(NV_ROOTDIR . '/modules', $global_config['check_module']);
 
-if ($nv_Request->get_title('checkss', 'post') == NV_CHECK_SESSION) {
+if (csrf_check($nv_Request->get_title('checkss', 'post'), $csrf_key)) {
     $title = $nv_Request->get_title('title', 'post', '', 1);
     $title = strtolower(change_alias($title));
     $modfile = $nv_Request->get_title('m_file', 'post', '', 1);
@@ -100,6 +100,7 @@ $tpl->setTemplateDir(get_module_tpl_dir('vmodule.tpl'));
 $tpl->assign('LANG', $nv_Lang);
 $tpl->assign('MODULE_NAME', $module_name);
 $tpl->assign('OP', $op);
+$tpl->assign('CHECKSS', csrf_create($csrf_key));
 
 $sql = 'SELECT title FROM ' . $db_config['prefix'] . '_setup_extensions WHERE is_virtual=1 AND type=\'module\' ORDER BY addtime ASC';
 $result = $db->query($sql);

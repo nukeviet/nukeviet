@@ -21,7 +21,7 @@
                     {if $funcs.show_func}
                     <tr>
                         <td>
-                            <select data-toggle="changeWeiFunc" data-func-id="{$funcs.func_id}" name="change_weight_{$funcs.func_id}" id="change_weight_{$funcs.func_id}" class="form-select fw-75">
+                            <select data-toggle="changeWeiFunc" data-func-id="{$funcs.func_id}" data-checkss="{$CHECKSS}" name="change_weight_{$funcs.func_id}" id="change_weight_{$funcs.func_id}" class="form-select fw-75">
                                 {foreach from=$WEIGHT_LIST item=weight}
                                 <option value="{$weight}"{if $weight eq $funcs.subweight} selected{/if}>{$weight}</option>
                                 {/foreach}
@@ -30,7 +30,7 @@
                         <td class="text-center">
                             <div class="d-inline-flex">
                                 <div class="form-check form-switch mb-0">
-                                    <input class="form-check-input" type="checkbox" role="switch" aria-label="{$LANG->getModule('funcs_in_submenu')}" data-toggle="changeMenuFunc" data-func-id="{$funcs.func_id}" name="chang_func_in_submenu_{$funcs.func_id}" id="chang_func_in_submenu_{$funcs.func_id}"{if not empty($funcs.in_submenu)} checked{/if}{if not in_array($func_name, $IN_SUBMENU)} disabled{/if}>
+                                    <input class="form-check-input" type="checkbox" role="switch" aria-label="{$LANG->getModule('funcs_in_submenu')}" data-toggle="changeMenuFunc" data-func-id="{$funcs.func_id}" data-checkss="{$CHECKSS}" name="chang_func_in_submenu_{$funcs.func_id}" id="chang_func_in_submenu_{$funcs.func_id}"{if not empty($funcs.in_submenu)} checked{/if}{if not in_array($func_name, $IN_SUBMENU)} disabled{/if}>
                                 </div>
                             </div>
                         </td>
@@ -38,15 +38,15 @@
                         {if $MODULE_VERSION.virtual}
                         <td class="text-break">
                             {if $func_name neq 'main' and in_array($func_name, $CHANGE_ALIAS)}
-                            <a href="#" data-toggle="changeValFunc" data-func-id="{$funcs.func_id}" data-mode="change_alias"><i class="fa-solid fa-pencil" data-icon="fa-pencil"></i> {$funcs.alias}</a>
+                            <a href="#" data-toggle="changeValFunc" data-func-id="{$funcs.func_id}" data-checkss="{$CHECKSS}" data-mode="change_alias"><i class="fa-solid fa-pencil" data-icon="fa-pencil"></i> {$funcs.alias}</a>
                             {else}
                             {$funcs.alias}
                             {/if}
                         </td>
                         {/if}
-                        <td><a href="#" data-toggle="changeValFunc" data-func-id="{$funcs.func_id}" data-mode="change_custom_name"><i class="fa-solid fa-pencil" data-icon="fa-pencil"></i> {$funcs.func_custom_name}</a></td>
-                        <td><a href="#" data-toggle="changeValFunc" data-func-id="{$funcs.func_id}" data-mode="change_site_title"><i class="fa-solid fa-pencil" data-icon="fa-pencil"></i> {$funcs.func_site_title}</a></td>
-                        <td><a href="#" data-toggle="changeValFunc" data-func-id="{$funcs.func_id}" data-mode="change_description"><i class="fa-solid fa-pencil" data-icon="fa-pencil"></i> {$funcs.description ?: $LANG->getModule('empty')}</a></td>
+                        <td><a href="#" data-toggle="changeValFunc" data-func-id="{$funcs.func_id}" data-checkss="{$CHECKSS}" data-mode="change_custom_name"><i class="fa-solid fa-pencil" data-icon="fa-pencil"></i> {$funcs.func_custom_name}</a></td>
+                        <td><a href="#" data-toggle="changeValFunc" data-func-id="{$funcs.func_id}" data-checkss="{$CHECKSS}" data-mode="change_site_title"><i class="fa-solid fa-pencil" data-icon="fa-pencil"></i> {$funcs.func_site_title}</a></td>
+                        <td><a href="#" data-toggle="changeValFunc" data-func-id="{$funcs.func_id}" data-checkss="{$CHECKSS}" data-mode="change_description"><i class="fa-solid fa-pencil" data-icon="fa-pencil"></i> {$funcs.description ?: $LANG->getModule('empty')}</a></td>
                         <td>{$funcs.layout}</td>
                     </tr>
                     {/if}

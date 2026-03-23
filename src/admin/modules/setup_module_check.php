@@ -15,13 +15,21 @@ if (!defined('NV_IS_FILE_MODULES')) {
 
 if ($nv_Request->isset_request('module', 'post')) {
     $modulename = $nv_Request->get_title('module', 'post');
+    if (!csrf_check($nv_Request->get_string('checkss', 'post'), $admin_info['admin_id'] . '_' . $module_name . '_main')) {
+        nv_jsonOutput([
+            'status' => 'error',
+            'module' => $modulename,
+            'message' => [$nv_Lang->getGlobal('error_checkss')]
+        ]);
+    }
+    $modulename = $nv_Request->get_title('module', 'post');
     $is_setup = $nv_Request->get_int('setup', 'post', 0);
 
     $contents = [
         'status' => 'error',
         'module' => $modulename,
         'message' => ['Module not exists'],
-        'checkss' => md5(NV_CHECK_SESSION . '_' . $module_name . '_setup_mod_' . $modulename),
+        'checkss' => csrf_create($admin_info['admin_id'] . '_' . $module_name . '_recreate_mod_' . $modulename),
         'code' => 0,
         'ishook' => false,
         'hookerror' => '',

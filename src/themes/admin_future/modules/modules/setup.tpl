@@ -29,7 +29,7 @@
                             <td>{$mod.addtime}</td>
                             <td class="text-break">{$mod.author}</td>
                             <td class="text-norwap">
-                                <button type="button" class="btn text-nowrap btn-sm btn-primary" data-toggle="setupModule" data-mod="{$mod.title}" data-link="{$mod.url_setup}"><i class="fa-solid fa-sun" data-icon="fa-sun"></i> {$LANG->getModule('setup')}</button>
+                                <button type="button" class="btn text-nowrap btn-sm btn-primary" data-toggle="setupModule" data-mod="{$mod.title}" data-checkss="{$CHECKSS}" data-link="{$mod.url_setup}"><i class="fa-solid fa-sun" data-icon="fa-sun"></i> {$LANG->getModule('setup')}</button>
                             </td>
                         </tr>
                         {/foreach}
@@ -70,7 +70,7 @@
                             <td>{$mod.note}</td>
                             <td class="text-norwap">
                                 {if not empty($mod.url_setup)}
-                                <button type="button" class="btn text-nowrap btn-sm btn-primary" data-toggle="setupModule" data-mod="{$mod.title}" data-link="{$mod.url_setup}"><i class="fa-solid fa-sun" data-icon="fa-sun"></i> {$LANG->getModule('setup')}</button>
+                                <button type="button" class="btn text-nowrap btn-sm btn-primary" data-toggle="setupModule" data-mod="{$mod.title}" data-checkss="{$CHECKSS}" data-link="{$mod.url_setup}"><i class="fa-solid fa-sun" data-icon="fa-sun"></i> {$LANG->getModule('setup')}</button>
                                 {/if}
                             </td>
                         </tr>

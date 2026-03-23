@@ -25,7 +25,7 @@
                         {foreach from=$mods key=mod_title item=mod}
                         <tr>
                             <td>
-                                <select data-toggle="changeWeiModule" data-mod="{$mod_title}" name="change_weight_{$mod_title}" id="change_weight_{$mod_title}" class="form-select fw-75">
+                                <select data-toggle="changeWeiModule" data-mod="{$mod_title}" data-checkss="{$CHECKSS}" name="change_weight_{$mod_title}" id="change_weight_{$mod_title}" class="form-select fw-75">
                                     {foreach from=$WEIGHT_LIST item=weight}
                                     <option value="{$weight}"{if $weight eq $mod.weight} selected{/if}>{$weight}</option>
                                     {/foreach}
@@ -46,7 +46,7 @@
                             <td class="text-norwap">
                                 <div class="d-flex gap-1">
                                     <a href="{$smarty.const.NV_BASE_ADMINURL}index.php?{$smarty.const.NV_LANG_VARIABLE}={$smarty.const.NV_LANG_DATA}&amp;{$smarty.const.NV_NAME_VARIABLE}={$MODULE_NAME}&amp;{$smarty.const.NV_OP_VARIABLE}=edit&amp;mod={$mod_title}" class="btn text-nowrap btn-sm btn-secondary"><i class="fa-solid fa-pencil"></i> {$LANG->getGlobal('edit')}</a>
-                                    <button type="button" class="btn text-nowrap btn-sm btn-secondary" data-toggle="recreateModule" data-mod="{$mod_title}"><i class="fa-solid fa-sun" data-icon="fa-sun"></i> {$LANG->getGlobal('recreate')}</button>
+                                    <button type="button" class="btn text-nowrap btn-sm btn-secondary" data-toggle="recreateModule" data-mod="{$mod_title}" data-checkss="{$CHECKSS}"><i class="fa-solid fa-sun" data-icon="fa-sun"></i> {$LANG->getGlobal('recreate')}</button>
                                     {if $mod.del}
                                     <button data-toggle="deleteModule" data-mod="{$mod_title}" data-checkss="{$mod.del_checkss}" type="button" class="btn text-nowrap btn-sm btn-secondary"><i class="fa-solid fa-trash text-danger" data-icon="fa-trash"></i> {$LANG->getGlobal('delete')}</button>
                                     {/if}

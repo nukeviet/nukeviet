@@ -21,10 +21,10 @@ if (empty($mod) or !preg_match($global_config['check_module'], $mod)) {
     ]);
 }
 
-if (md5(NV_CHECK_SESSION . '_' . $module_name . '_change_act_' . $mod) !== $nv_Request->get_string('checkss', 'post')) {
+if (!csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key . '_' . $mod)) {
     nv_jsonOutput([
         'success' => 0,
-        'text' => 'Session error!'
+        'text' => $nv_Lang->getGlobal('error_checkss')
     ]);
 }
 

@@ -15,8 +15,16 @@ if (!defined('NV_IS_FILE_MODULES')) {
 
 require NV_ROOTDIR . '/includes/fontawesome.php';
 
+$mod = $nv_Request->get_title('mod', 'get');
+
 // Lấy icon
-if ($nv_Request->get_title('ajax_icon', 'post', '') === NV_CHECK_SESSION) {
+if ($nv_Request->get_title('ajax_icon', 'post', '') === '1') {
+    if (!csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key . '_' . $mod)) {
+        nv_jsonOutput([
+            'status' => 'error',
+            'mess' => $nv_Lang->getGlobal('error_checkss')
+        ]);
+    }
     $respon = [
         'results' => [],
         'pagination' => [
@@ -52,7 +60,6 @@ if ($nv_Request->get_title('ajax_icon', 'post', '') === NV_CHECK_SESSION) {
 }
 
 $data = [];
-$mod = $nv_Request->get_title('mod', 'get');
 
 if (empty($mod) or !preg_match($global_config['check_module'], $mod)) {
     nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
@@ -67,14 +74,13 @@ if (empty($row)) {
 }
 
 $page_title = $nv_Lang->getModule('edit', $mod);
-$checkss = md5(NV_CHECK_SESSION . '_' . $module_name . '_' . $op . '_' . $admin_info['userid']);
 
 $tpl = new \NukeViet\Template\NVSmarty();
 $tpl->setTemplateDir(get_module_tpl_dir('edit.tpl'));
 $tpl->assign('LANG', $nv_Lang);
 $tpl->assign('MODULE_NAME', $module_name);
 $tpl->assign('OP', $op);
-$tpl->assign('CHECKSS', $checkss);
+$tpl->assign('CHECKSS', csrf_create($csrf_key . '_' . $mod));
 
 $theme_site_array = $theme_mobile_array = [];
 $theme_array = scandir(NV_ROOTDIR . '/themes');
@@ -131,7 +137,7 @@ if (empty($row['custom_title'])) {
 $row['groups_view'] = empty($row['groups_view']) ? [] : explode(',', $row['groups_view']);
 
 // Xử lý khi lưu
-if ($checkss == $nv_Request->get_string('checkss', 'post')) {
+if (csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key . '_' . $mod)) {
     $respon = [
         'status' => 'error',
         'mess' => '',

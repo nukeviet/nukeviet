@@ -16,10 +16,22 @@ if (!defined('NV_IS_FILE_MODULES')) {
 $func_id = $nv_Request->get_int('id', 'post', 0);
 
 if ($func_id > 0) {
-    $row = $db->query('SELECT in_submenu FROM ' . NV_MODFUNCS_TABLE . ' WHERE func_id=' . $func_id)->fetch();
+    if (!csrf_check($nv_Request->get_string('checkss', 'post'), $admin_info['admin_id'] . '_' . $module_name . '_show')) {
+        nv_jsonOutput([
+            'success' => 0,
+            'text' => $nv_Lang->getGlobal('error_checkss')
+        ]);
+    }
+    $sth = $db->prepare('SELECT in_submenu FROM ' . NV_MODFUNCS_TABLE . ' WHERE func_id = :id');
+    $sth->bindParam(':id', $func_id, PDO::PARAM_INT);
+    $sth->execute();
+    $row = $sth->fetch();
     if (!empty($row)) {
         $in_submenu = $row['in_submenu'] ? 0 : 1;
-        $db->query('UPDATE ' . NV_MODFUNCS_TABLE . ' SET in_submenu=' . $in_submenu . ' WHERE func_id=' . $func_id);
+        $sth = $db->prepare('UPDATE ' . NV_MODFUNCS_TABLE . ' SET in_submenu = :in_submenu WHERE func_id = :id');
+        $sth->bindParam(':in_submenu', $in_submenu, PDO::PARAM_INT);
+        $sth->bindParam(':id', $func_id, PDO::PARAM_INT);
+        $sth->execute();
         $nv_Cache->delMod('modules');
         nv_jsonOutput([
             'success' => 1,

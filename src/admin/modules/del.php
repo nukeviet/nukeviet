@@ -14,10 +14,17 @@ if (!defined('NV_IS_FILE_MODULES')) {
 }
 
 $modname = $nv_Request->get_title('mod', 'post');
-if (empty($modname) or !preg_match($global_config['check_module'], $modname) or md5(NV_CHECK_SESSION . '_' . $module_name . '_del_' . $modname) != $nv_Request->get_string('checkss', 'post')) {
+if (empty($modname) or !preg_match($global_config['check_module'], $modname)) {
     nv_jsonOutput([
         'success' => 0,
         'text' => 'Wrong data!'
+    ]);
+}
+
+if (!csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key . '_' . $modname)) {
+    nv_jsonOutput([
+        'success' => 0,
+        'text' => $nv_Lang->getGlobal('error_checkss')
     ]);
 }
 
@@ -156,11 +163,15 @@ if (!$check_exit_mod) {
     $sth->bindValue(':dirname', NV_UPLOADS_DIR . '/' . $modname, PDO::PARAM_STR);
     $sth->bindValue(':dirnamelike', NV_UPLOADS_DIR . '/' . $modname . '/%', PDO::PARAM_STR);
     $sth->execute();
+    $sth_file = $db->prepare('DELETE FROM ' . NV_UPLOAD_GLOBALTABLE . '_file WHERE did = :did');
+    $sth_dir_del = $db->prepare('DELETE FROM ' . NV_UPLOAD_GLOBALTABLE . '_dir WHERE did = :did');
     while ($_scratch = $sth->fetch(3)) {
         [$did] = $_scratch;
         unset($_scratch);
-        $db->query('DELETE FROM ' . NV_UPLOAD_GLOBALTABLE . '_file WHERE did = ' . $did);
-        $db->query('DELETE FROM ' . NV_UPLOAD_GLOBALTABLE . '_dir WHERE did = ' . $did);
+        $sth_file->bindParam(':did', $did, PDO::PARAM_INT);
+        $sth_file->execute();
+        $sth_dir_del->bindParam(':did', $did, PDO::PARAM_INT);
+        $sth_dir_del->execute();
     }
 
     $plugin_deleted = 0;
@@ -173,9 +184,12 @@ if (!$check_exit_mod) {
             $sql = 'SELECT pid FROM ' . $db_config['prefix'] . '_plugins WHERE (plugin_lang=' . $db->quote(NV_LANG_DATA) . ' OR plugin_lang=\'all\') AND plugin_area=' . $db->quote($plugin['plugin_area']) . ' AND hook_module=' . $db->quote($plugin['hook_module']) . ' ORDER BY weight ASC';
             $result = $db->query($sql);
             $weight = 0;
+            $sth_weight = $db->prepare('UPDATE ' . $db_config['prefix'] . '_plugins SET weight = :weight WHERE pid = :pid');
             while ($row = $result->fetch()) {
                 ++$weight;
-                $db->query('UPDATE ' . $db_config['prefix'] . '_plugins SET weight=' . $weight . ' WHERE pid=' . $row['pid']);
+                $sth_weight->bindParam(':weight', $weight, PDO::PARAM_INT);
+                $sth_weight->bindParam(':pid', $row['pid'], PDO::PARAM_INT);
+                $sth_weight->execute();
             }
         }
     }
@@ -185,7 +199,11 @@ if (!$check_exit_mod) {
 }
 
 // Xóa các mẫu email
-$db->query('DELETE FROM ' . $db_config['prefix'] . '_emailtemplates WHERE lang=' . $db->quote(NV_LANG_DATA) . ' AND module_name=' . $db->quote($modname));
+$sth = $db->prepare('DELETE FROM ' . $db_config['prefix'] . '_emailtemplates WHERE lang = :lang AND module_name = :module_name');
+$sth->bindValue(':lang', NV_LANG_DATA, PDO::PARAM_STR);
+$sth->bindParam(':module_name', $modname, PDO::PARAM_STR);
+$sth->execute();
+
 $nv_Cache->delAll();
 nv_fix_module_weight();
 nv_jsonOutput([

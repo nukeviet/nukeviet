@@ -28,7 +28,7 @@ $setmodule = $nv_Request->get_title('setmodule', 'get', '', 1);
 $autosetup = $nv_Request->get_title('autosetup', 'get', '', 1);
 
 if (!empty($setmodule) and preg_match($global_config['check_module'], $setmodule)) {
-    if ($nv_Request->get_title('checkss', 'get') == md5('setmodule' . $setmodule . NV_CHECK_SESSION)) {
+    if (csrf_check($nv_Request->get_title('checkss', 'get'), $csrf_key . '_setup_mod_' . $setmodule)) {
         $sample = $nv_Request->get_int('sample', 'get', 0);
         $hook_files = $nv_Request->get_title('hook_files', 'get', '');
         $hook_mods = $nv_Request->get_title('hook_mods', 'get', '');
@@ -315,7 +315,7 @@ foreach ($modules_data as $row) {
             $mod['addtime'] = nv_datetime_format($row['addtime'], 1);
             $mod['author'] = nv_htmlspecialchars($row['author']);
             $mod['note'] = $row['note'];
-            $mod['url_setup'] = array_key_exists($row['title'], $modules_for_title) ? '' : NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;setmodule=' . $row['title'] . '&amp;checkss=' . md5('setmodule' . $row['title'] . NV_CHECK_SESSION);
+            $mod['url_setup'] = array_key_exists($row['title'], $modules_for_title) ? '' : NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;setmodule=' . $row['title'] . '&amp;checkss=' . csrf_create($csrf_key . '_setup_mod_' . $row['title']);
 
             if ($mod['module_file'] == $mod['title']) {
                 $array_modules[] = $mod;
@@ -338,7 +338,7 @@ $tpl->setTemplateDir(get_module_tpl_dir('setup.tpl'));
 $tpl->assign('LANG', $nv_Lang);
 $tpl->assign('MODULE_NAME', $module_name);
 $tpl->assign('OP', $op);
-
+$tpl->assign('CHECKSS', csrf_create($admin_info['admin_id'] . '_' . $module_name . '_main'));
 $tpl->assign('AUTOSETUP', $autosetup);
 $tpl->assign('MODULES', $array_modules);
 $tpl->assign('VMODULES', $array_virtual_modules);

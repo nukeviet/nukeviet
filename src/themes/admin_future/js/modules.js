@@ -22,7 +22,8 @@ $(function() {
                 data: params => {
                     return {
                         q: params.term,
-                        ajax_icon: $('body').data('checksess'),
+                        ajax_icon: 1,
+                        checkss: sel2Fa.data('checkss'),
                         page: params.page || 1
                     };
                 }
@@ -92,6 +93,7 @@ $(function() {
             type: 'POST',
             url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=change_weight&nocache=' + new Date().getTime(),
             data: {
+                checkss: btn.data('checkss'),
                 mod: btn.data('mod'),
                 new_weight: btn.val()
             },
@@ -214,6 +216,7 @@ $(function() {
             type: 'POST',
             url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=setup_module_check&nocache=' + new Date().getTime(),
             data: {
+                checkss: btn.data('checkss'),
                 setup: 1,
                 module: btn.data('mod')
             },
@@ -322,8 +325,12 @@ $(function() {
         }
         icon.removeClass(icon.data('icon')).addClass('fa-spinner fa-spin-pulse');
         $.ajax({
-            type: 'GET',
-            url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=' + btn.data('mode') + '&id=' + btn.data('func-id') + '&nocache=' + new Date().getTime(),
+            type: 'POST',
+            url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=' + btn.data('mode') + '&nocache=' + new Date().getTime(),
+            data: {
+                id: btn.data('func-id'),
+                checkss: btn.data('checkss')
+            },
             dataType: 'json',
             cache: false,
             success: function(data) {
@@ -334,6 +341,7 @@ $(function() {
                 $('#funChange-name').attr('value', data.value).attr('maxlength', data.maxlength);
                 $('#funChange-type').attr('value', data.type);
                 $('#funChange-id').attr('value', data.id);
+                $('#funChange').data('checkss', btn.data('checkss'));
                 bootstrap.Modal.getOrCreateInstance(md[0]).show();
             },
             error: function(xhr, text, err) {
@@ -362,7 +370,12 @@ $(function() {
             type: 'POST',
             cache: false,
             url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=' + type + '&nocache=' + new Date().getTime(),
-            data: 'save=1&id=' + id + '&newvalue=' + encodeURIComponent(newvalue),
+            data: {
+                save: 1,
+                id: id,
+                newvalue: newvalue,
+                checkss: $('#funChange').data('checkss')
+            },
             dataType: 'json',
             success: function(data) {
                 if ('error' == data.status) {
@@ -387,6 +400,7 @@ $(function() {
             type: 'POST',
             url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=change_func_weight&nocache=' + new Date().getTime(),
             data: {
+                checkss: btn.data('checkss'),
                 fid: btn.data('func-id'),
                 new_weight: btn.val()
             },
@@ -421,6 +435,7 @@ $(function() {
             type: 'POST',
             url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=change_func_submenu&nocache=' + new Date().getTime(),
             data: {
+                checkss: btn.data('checkss'),
                 id: btn.data('func-id')
             },
             dataType: 'json',

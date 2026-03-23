@@ -19,8 +19,17 @@ if (!$nv_Request->isset_request('id', 'post,get')) {
 
 $id = $nv_Request->get_int('id', 'post,get', 0);
 
-$sql = 'SELECT f.func_name AS func_title,f.description,m.custom_title AS mod_custom_title FROM ' . NV_MODFUNCS_TABLE . ' AS f, ' . NV_MODULES_TABLE . ' AS m WHERE f.func_id=' . $id . ' AND f.in_module=m.title';
-$row = $db->query($sql)->fetch();
+$sth = $db->prepare('SELECT f.func_name AS func_title, f.description, m.custom_title AS mod_custom_title FROM ' . NV_MODFUNCS_TABLE . ' AS f, ' . NV_MODULES_TABLE . ' AS m WHERE f.func_id = :id AND f.in_module = m.title');
+$sth->bindParam(':id', $id, PDO::PARAM_INT);
+$sth->execute();
+$row = $sth->fetch();
+
+if (!csrf_check($nv_Request->get_string('checkss', 'post'), $admin_info['admin_id'] . '_' . $module_name . '_show')) {
+    nv_jsonOutput([
+        'status' => 'error',
+        'mess' => $nv_Lang->getGlobal('error_checkss')
+    ]);
+}
 
 if (empty($row)) {
     nv_jsonOutput([
@@ -33,8 +42,9 @@ if ($nv_Request->get_int('save', 'post') == '1') {
     $description = $nv_Request->get_title('newvalue', 'post', '');
 
     if ($description != $row['description']) {
-        $sth = $db->prepare('UPDATE ' . NV_MODFUNCS_TABLE . ' SET description= :description WHERE func_id=' . $id);
+        $sth = $db->prepare('UPDATE ' . NV_MODFUNCS_TABLE . ' SET description = :description WHERE func_id = :id');
         $sth->bindParam(':description', $description, PDO::PARAM_STR);
+        $sth->bindParam(':id', $id, PDO::PARAM_INT);
         $sth->execute();
 
         $nv_Cache->delMod('modules');

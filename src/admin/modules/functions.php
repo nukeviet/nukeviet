@@ -73,7 +73,10 @@ function nv_fix_subweight($mod)
     $sth->execute();
     while ($row = $sth->fetch()) {
         ++$subweight;
-        $db->query('UPDATE ' . NV_MODFUNCS_TABLE . ' SET subweight=' . $subweight . ' WHERE func_id=' . $row['func_id']);
+        $sth2 = $db->prepare('UPDATE ' . NV_MODFUNCS_TABLE . ' SET subweight = :subweight WHERE func_id = :func_id');
+        $sth2->bindParam(':subweight', $subweight, PDO::PARAM_INT);
+        $sth2->bindParam(':func_id', $row['func_id'], PDO::PARAM_INT);
+        $sth2->execute();
     }
 }
 
@@ -128,8 +131,12 @@ function nv_setup_block_module($mod, $func_id = 0)
             $old_position = $row['position'];
         }
 
+        $sth2 = $db->prepare('INSERT INTO ' . NV_BLOCKS_TABLE . '_weight (bid, func_id, weight) VALUES (:bid, :func_id, :weight)');
         foreach ($array_funcid as $func_id) {
-            $db->query('INSERT INTO ' . NV_BLOCKS_TABLE . '_weight (bid, func_id, weight) VALUES (' . $row['bid'] . ', ' . $func_id . ', ' . $weight . ')');
+            $sth2->bindParam(':bid', $row['bid'], PDO::PARAM_INT);
+            $sth2->bindParam(':func_id', $func_id, PDO::PARAM_INT);
+            $sth2->bindParam(':weight', $weight, PDO::PARAM_INT);
+            $sth2->execute();
         }
     }
 
@@ -280,7 +287,11 @@ function nv_setup_data_module($lang, $module_name, $sample = 0)
             $in_submenu = (in_array($func, $array_submenu, true)) ? 1 : 0;
             if (isset($arr_func_id_old[$func]) and isset($arr_func_id_old[$func]) > 0) {
                 $arr_func_id[$func] = $arr_func_id_old[$func];
-                $db->query('UPDATE ' . $db_config['prefix'] . '_' . $lang . '_modfuncs SET show_func= ' . $show_func . ', in_submenu=' . $in_submenu . ', subweight=0 WHERE func_id=' . $arr_func_id[$func]);
+                $sth2 = $db->prepare('UPDATE ' . $db_config['prefix'] . '_' . $lang . '_modfuncs SET show_func = :show_func, in_submenu = :in_submenu, subweight = 0 WHERE func_id = :func_id');
+                $sth2->bindParam(':show_func', $show_func, PDO::PARAM_INT);
+                $sth2->bindParam(':in_submenu', $in_submenu, PDO::PARAM_INT);
+                $sth2->bindParam(':func_id', $arr_func_id[$func], PDO::PARAM_INT);
+                $sth2->execute();
             } else {
                 $data = [];
                 $data['func_name'] = $func;
@@ -310,7 +321,11 @@ function nv_setup_data_module($lang, $module_name, $sample = 0)
                 $arr_show_func[] = $func_id;
                 $show_func = 1;
                 ++$subweight;
-                $db->query('UPDATE ' . $db_config['prefix'] . '_' . $lang . '_modfuncs SET subweight=' . $subweight . ', show_func=' . $show_func . ' WHERE func_id=' . $func_id);
+                $sth2 = $db->prepare('UPDATE ' . $db_config['prefix'] . '_' . $lang . '_modfuncs SET subweight = :subweight, show_func = :show_func WHERE func_id = :func_id');
+                $sth2->bindParam(':subweight', $subweight, PDO::PARAM_INT);
+                $sth2->bindParam(':show_func', $show_func, PDO::PARAM_INT);
+                $sth2->bindParam(':func_id', $func_id, PDO::PARAM_INT);
+                $sth2->execute();
             }
         }
     } else {

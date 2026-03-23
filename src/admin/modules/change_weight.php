@@ -23,6 +23,13 @@ if (empty($mod) or empty($new_weight) or !preg_match($global_config['check_modul
     ]);
 }
 
+if (!csrf_check($nv_Request->get_string('checkss', 'post'), $admin_info['admin_id'] . '_' . $module_name . '_main')) {
+    nv_jsonOutput([
+        'success' => 0,
+        'text' => $nv_Lang->getGlobal('error_checkss')
+    ]);
+}
+
 $sth = $db->prepare('SELECT weight FROM ' . NV_MODULES_TABLE . ' WHERE title= :title');
 $sth->bindParam(':title', $mod, PDO::PARAM_STR);
 $sth->execute();
@@ -45,12 +52,14 @@ while ($row = $sth->fetch()) {
         ++$weight;
     }
 
-    $sth2 = $db->prepare('UPDATE ' . NV_MODULES_TABLE . ' SET weight=' . $weight . ' WHERE title= :title');
+    $sth2 = $db->prepare('UPDATE ' . NV_MODULES_TABLE . ' SET weight = :weight WHERE title = :title');
+    $sth2->bindParam(':weight', $weight, PDO::PARAM_INT);
     $sth2->bindParam(':title', $row['title'], PDO::PARAM_STR);
     $sth2->execute();
 }
 
-$sth2 = $db->prepare('UPDATE ' . NV_MODULES_TABLE . ' SET weight=' . $new_weight . ' WHERE title= :title');
+$sth2 = $db->prepare('UPDATE ' . NV_MODULES_TABLE . ' SET weight = :weight WHERE title = :title');
+$sth2->bindParam(':weight', $new_weight, PDO::PARAM_INT);
 $sth2->bindParam(':title', $mod, PDO::PARAM_STR);
 $sth2->execute();
 

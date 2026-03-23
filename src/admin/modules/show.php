@@ -115,10 +115,18 @@ $new_funcs = array_diff_key($local_funcs, $data_funcs);
 
 $is_refresh = false;
 if (!empty($old_funcs)) {
+    $sth_del_weight = $db->prepare('DELETE FROM ' . NV_BLOCKS_TABLE . '_weight WHERE func_id = :func_id');
+    $sth_del_func = $db->prepare('DELETE FROM ' . NV_MODFUNCS_TABLE . ' WHERE func_id = :func_id');
+    $sth_del_theme = $db->prepare('DELETE FROM ' . NV_PREFIXLANG . '_modthemes WHERE func_id = :func_id');
     foreach ($old_funcs as $values) {
-        $db->query('DELETE FROM ' . NV_BLOCKS_TABLE . '_weight WHERE func_id = ' . $values['func_id']);
-        $db->query('DELETE FROM ' . NV_MODFUNCS_TABLE . ' WHERE func_id = ' . $values['func_id']);
-        $db->query('DELETE FROM ' . NV_PREFIXLANG . '_modthemes WHERE func_id = ' . $values['func_id']);
+        $sth_del_weight->bindParam(':func_id', $values['func_id'], PDO::PARAM_INT);
+        $sth_del_weight->execute();
+
+        $sth_del_func->bindParam(':func_id', $values['func_id'], PDO::PARAM_INT);
+        $sth_del_func->execute();
+
+        $sth_del_theme->bindParam(':func_id', $values['func_id'], PDO::PARAM_INT);
+        $sth_del_theme->execute();
         $is_delCache = true;
     }
 
@@ -211,7 +219,7 @@ $tpl->setTemplateDir(get_module_tpl_dir('show.tpl'));
 $tpl->assign('LANG', $nv_Lang);
 $tpl->assign('MODULE_NAME', $module_name);
 $tpl->assign('OP', $op);
-
+$tpl->assign('CHECKSS', csrf_create($csrf_key));
 $tpl->assign('ACT_FUNCS', $act_funcs);
 $tpl->assign('WEIGHT_LIST', $weight_list);
 $tpl->assign('MODULE_VERSION', $module_version);
