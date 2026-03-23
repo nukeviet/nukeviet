@@ -14,6 +14,10 @@ NukeViet 5 sử dụng **Codeception** làm framework kiểm thử chính, hỗ 
 - **Hệ điều hành**: Unix/Linux khuyến khích (Windows hỗ trợ qua Selenium).
 - **Environment**: File `.env` cần được cấu hình đúng URL và DB.
 
+cd vào thư mục gốc của dự án (có file .env) chạy
+```
+composer install
+```
 ---
 
 ## 2. Cách chạy Testing
