@@ -25,10 +25,10 @@
                                 <td><a href="mailto:{$row.email}">{$row.email}</a></td>
                                 <td class="text-center text-nowrap">
                                 {if $row.show_tools}
-                                <button class="btn btn-sm btn-secondary approved" data-id="{$row.userid}">
+                                <button class="btn btn-sm btn-secondary approved" data-id="{$row.userid}" data-checkss="{$CHECKSS}">
                                     <i class="fa-solid fa-check text-success" data-icon="fa-check"></i> {$LANG->getModule('approved')}
                                 </button>
-                                <button class="btn btn-sm btn-secondary denied" data-id="{$row.userid}">
+                                <button class="btn btn-sm btn-secondary denied" data-id="{$row.userid}" data-checkss="{$CHECKSS}">
                                     <i class="fa-solid fa-times text-danger" data-icon="fa-times"></i> {$LANG->getModule('denied')}
                                 </button>
                                 {/if}
@@ -71,10 +71,10 @@
                                 <td><a href="mailto:{$row.email}">{$row.email}</a></td>
                                 <td class="text-center text-nowrap">
                                 {if $row.show_tools}
-                                <button class="btn btn-sm btn-secondary demote" data-id="{$row.userid}">
+                                <button class="btn btn-sm btn-secondary demote" data-id="{$row.userid}" data-checkss="{$CHECKSS}">
                                     <i class="fa-solid fa-star-half" data-icon="fa-star-half"></i> {$LANG->getModule('demote')}
                                 </button>
-                                <button class="btn btn-sm btn-secondary deleteleader" data-id="{$row.userid}">
+                                <button class="btn btn-sm btn-secondary deleteleader" data-id="{$row.userid}" data-checkss="{$CHECKSS}">
                                     <i class="fa-solid fa-trash text-danger" data-icon="fa-trash"></i> {$LANG->getModule('exclude_user2')}
                                 </button>
                                 {/if}
@@ -117,10 +117,10 @@
                                 <td><a href="mailto:{$row.email}">{$row.email}</a></td>
                                 <td class="text-center text-nowrap">
                                     {if $row.show_tools}
-                                    <button class="btn btn-sm btn-secondary promote" data-id="{$row.userid}">
+                                    <button class="btn btn-sm btn-secondary promote" data-id="{$row.userid}" data-checkss="{$CHECKSS}">
                                         <i class="fa-solid fa-star text-warning" data-icon="fa-star"></i> {$LANG->getModule('promote')}
                                     </button>
-                                    <button class="btn btn-sm btn-secondary deletemember" data-id="{$row.userid}">
+                                    <button class="btn btn-sm btn-secondary deletemember" data-id="{$row.userid}" data-checkss="{$CHECKSS}">
                                         <i class="fa-solid fa-trash text-danger" data-icon="fa-trash"></i> {$LANG->getModule('exclude_user2')}
                                     </button>
                                     {/if}

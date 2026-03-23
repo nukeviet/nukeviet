@@ -21,11 +21,10 @@ if ($nv_Request->isset_request('edit', 'post')) {
         exit('Wrong URL');
     }
 
-    $checkss = $nv_Request->get_title('checkss', 'post', '');
-    if (!hash_equals(NV_CHECK_SESSION, $checkss)) {
+    if (!csrf_check($nv_Request->get_title('checkss', 'post', ''), $csrf_key)) {
         nv_jsonOutput([
             'status' => 'error',
-            'mess' => 'Wrong URL'
+            'mess' => $nv_Lang->getGlobal('error_checkss')
         ]);
     }
 
@@ -65,11 +64,10 @@ if ($nv_Request->isset_request('add', 'post')) {
         exit('Wrong URL');
     }
 
-    $checkss = $nv_Request->get_title('checkss', 'post', '');
-    if (!hash_equals(NV_CHECK_SESSION, $checkss)) {
+    if (!csrf_check($nv_Request->get_title('checkss', 'post', ''), $csrf_key)) {
         nv_jsonOutput([
             'status' => 'error',
-            'mess' => 'Wrong URL'
+            'mess' => $nv_Lang->getGlobal('error_checkss')
         ]);
     }
 
@@ -111,11 +109,10 @@ if ($nv_Request->isset_request('changeweight', 'post')) {
         exit('Wrong URL');
     }
 
-    $checkss = $nv_Request->get_title('checkss', 'post', '');
-    if (!hash_equals(NV_CHECK_SESSION, $checkss)) {
+    if (!csrf_check($nv_Request->get_title('checkss', 'post', ''), $csrf_key)) {
         nv_jsonOutput([
             'status' => 'error',
-            'mess' => 'Wrong URL'
+            'mess' => $nv_Lang->getGlobal('error_checkss')
         ]);
     }
 
@@ -159,11 +156,10 @@ if ($nv_Request->isset_request('del', 'post')) {
         exit('Wrong URL');
     }
 
-    $checkss = $nv_Request->get_title('checkss', 'post', '');
-    if (!hash_equals(NV_CHECK_SESSION, $checkss)) {
+    if (!csrf_check($nv_Request->get_title('checkss', 'post', ''), $csrf_key)) {
         nv_jsonOutput([
             'status' => 'error',
-            'mess' => 'Wrong URL'
+            'mess' => $nv_Lang->getGlobal('error_checkss')
         ]);
     }
 
@@ -203,6 +199,7 @@ if ($nv_Request->isset_request('del', 'post')) {
 
 $tpl = new \NukeViet\Template\NVSmarty();
 $tpl->setTemplateDir(get_module_tpl_dir('question.tpl'));
+$tpl->assign('CHECKSS', csrf_create($csrf_key));
 $tpl->assign('LANG', $nv_Lang);
 
 // Load danh sách câu hỏi
@@ -221,7 +218,7 @@ if ($num) {
                 'selected' => $i == $row['weight']
             ];
         }
-        
+
         $array_questions[] = [
             'qid' => $row['qid'],
             'title' => $row['title'],

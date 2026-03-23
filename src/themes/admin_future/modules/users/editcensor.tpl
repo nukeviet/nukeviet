@@ -63,7 +63,7 @@
                                     aria-label="{$LANG->getModule('approved')}"
                                     data-toggle="approve-censor"
                                     data-userid="{$u.userid}"
-                                    data-tokend="{$u.checkss}"
+                                    data-checkss="{$u.checkss}"
                                     data-msgconfirm="{$LANG->getModule('editcensor_confirm_approval')}"
                                     data-icon="fa-check">
                                 <i class="fa-solid fa-check" data-icon="fa-check"></i>
@@ -72,7 +72,7 @@
                                     aria-label="{$LANG->getModule('denied')}"
                                     data-toggle="deny-censor"
                                     data-userid="{$u.userid}"
-                                    data-tokend="{$u.checkss}"
+                                    data-checkss="{$u.checkss}"
                                     data-msgconfirm="{$LANG->getModule('editcensor_confirm_denied')}"
                                     data-icon="fa-trash">
                                 <i class="fa-solid fa-trash" data-icon="fa-trash"></i>

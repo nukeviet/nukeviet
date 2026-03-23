@@ -3,7 +3,7 @@
 {else}
 <div class="card"
      data-userid="{$USERID}"
-     data-tokend="{$CHECKSS}">
+     data-checkss="{$CHECKSS}">
     <div class="card-header">
         <h5 class="card-title mb-0">{$LANG->getModule('user_oauthmanager_list')}</h5>
     </div>

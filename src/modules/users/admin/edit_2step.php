@@ -72,8 +72,12 @@ if (!empty($row['active2step'])) {
         }
 
         if (!csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
-            nv_jsonOutput(['status' => 'error', 'mess' => $nv_Lang->getGlobal('error_checkss')]);
+            nv_jsonOutput([
+                'status' => 'error',
+                'mess' => $nv_Lang->getGlobal('error_checkss')
+            ]);
         }
+
 
         $db->query('DELETE FROM ' . NV_MOD_TABLE . '_backupcodes WHERE userid=' . $row['userid']);
         $db->query('DELETE FROM ' . NV_MOD_TABLE . '_passkey WHERE userid=' . $row['userid'] . ' AND enable_login=0');
@@ -121,8 +125,12 @@ if (!empty($row['active2step'])) {
         }
 
         if (!csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
-            nv_jsonOutput(['status' => 'error', 'mess' => $nv_Lang->getGlobal('error_checkss')]);
+            nv_jsonOutput([
+                'status' => 'error',
+                'mess' => $nv_Lang->getGlobal('error_checkss')
+            ]);
         }
+
 
         $db->query('DELETE FROM ' . NV_MOD_TABLE . '_backupcodes WHERE userid=' . $row['userid']);
 

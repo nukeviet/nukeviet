@@ -129,12 +129,22 @@ if (csrf_check($nv_Request->get_string('checkss', 'post'), $_csrf_key)) {
             nv_apply_hook($module_name, 'user_delete', [$userid, $row]);
         }
     }
-
-    $nv_Cache->delMod($module_name);
+} else {
+    nv_jsonOutput([
+        'status' => 'error',
+        'mess' => $nv_Lang->getGlobal('error_checkss')
+    ]);
 }
+
+$nv_Cache->delMod($module_name);
 
 if ($error) {
-    nv_jsonOutput(['status' => 'error', 'mess' => $error]);
+    nv_jsonOutput([
+        'status' => 'error',
+        'mess' => $error
+    ]);
 }
 
-nv_jsonOutput(['status' => 'OK']);
+nv_jsonOutput([
+    'status' => 'ok'
+]);

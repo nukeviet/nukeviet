@@ -68,6 +68,12 @@ if ($admin_info['admin_id'] == $userid and $admin_info['safemode'] == 1) {
 
 // Yêu cầu đăng nhập lại
 if ($nv_Request->isset_request('forcedrelogin', 'post')) {
+    if (!csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
+        nv_jsonOutput([
+            'status' => 'error',
+            'mess' => $nv_Lang->getGlobal('error_checkss')
+        ]);
+    }
     forcedrelogin($userid);
     nv_jsonOutput([
         'status' => 'OK',
@@ -77,6 +83,12 @@ if ($nv_Request->isset_request('forcedrelogin', 'post')) {
 
 // Hủy yêu cầu xóa dữ liệu
 if ($nv_Request->isset_request('canceldeletion', 'post')) {
+    if (!csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
+        nv_jsonOutput([
+            'status' => 'error',
+            'mess' => $nv_Lang->getGlobal('error_checkss')
+        ]);
+    }
     nv_insert_logs(NV_LANG_DATA, $module_name, 'admin_cancel_request_deletion', 'User ID:' . $userid, $admin_info['admin_id']);
 
     $sql = "UPDATE " . NV_MOD_TABLE . " SET delete_at=0 WHERE userid=" . $userid;
@@ -116,6 +128,12 @@ if ($nv_Request->isset_request('canceldeletion', 'post')) {
 
 // Yêu cầu thay đổi mật khẩu
 if ($nv_Request->isset_request('psr', 'post')) {
+    if (!csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
+        nv_jsonOutput([
+            'status' => 'error',
+            'mess' => $nv_Lang->getGlobal('error_checkss')
+        ]);
+    }
     if ($nv_Request->isset_request('type', 'post')) {
         $type = $nv_Request->get_int('type', 'post', 0);
         if ($type == 1 or $type == 2) {
@@ -163,6 +181,12 @@ if ($nv_Request->isset_request('psr', 'post')) {
 
 // Yêu cầu thay đổi email
 if ($nv_Request->isset_request('esr', 'post')) {
+    if (!csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
+        nv_jsonOutput([
+            'status' => 'error',
+            'mess' => $nv_Lang->getGlobal('error_checkss')
+        ]);
+    }
     if ($nv_Request->isset_request('type', 'post')) {
         $type = $nv_Request->get_int('type', 'post', 0);
         if ($type == 1 or $type == 2) {
@@ -226,9 +250,8 @@ if (defined('NV_EDITOR')) {
 
 $access_passus = (isset($access_admin['access_passus'][$admin_info['level']]) and $access_admin['access_passus'][$admin_info['level']] == 1) ? true : false;
 $_user = $custom_fields = [];
-$checkss = md5(NV_CHECK_SESSION . '_' . $module_name . '_' . $op . '_' . $userid);
 if ($nv_Request->isset_request('confirm', 'post')) {
-    if ($checkss != $nv_Request->get_string('checkss', 'post')) {
+    if (!csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
         nv_jsonOutput([
             'status' => 'error',
             'mess' => 'Error Session, Please close the browser and try again'
@@ -735,7 +758,7 @@ foreach ($array_field_config as $row_f) {
             $row_f['filemaxsize'] = $row_f['limited_values']['file_max_size'] ?? 0;
             $row_f['filemaxsize_format'] = nv_convertfromBytes($row_f['limited_values']['file_max_size'] ?? 0);
             $row_f['filemaxnum'] = $row_f['limited_values']['maxnum'] ?? 0;
-            $row_f['csrf'] = md5(NV_CHECK_SESSION . '_' . $module_name . $row_f['field']);
+            $row_f['csrf'] = csrf_create($admin_info['admin_id'] . '_' . $module_name . '_' . $row_f['field']);
             $row_f['url_module'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name;
             $row_f['widthlimit'] = image_size_info($row_f['limited_values']['widthlimit'] ?? '', 'width');
             $row_f['heightlimit'] = image_size_info($row_f['limited_values']['heightlimit'] ?? '', 'height');
@@ -776,7 +799,7 @@ $tpl->setTemplateDir(get_module_tpl_dir('user_edit.tpl'));
 $tpl->assign('LANG', $nv_Lang);
 $tpl->assign('MODULE_NAME', $module_name);
 $tpl->assign('OP', $op);
-$tpl->assign('CHECKSS', $checkss);
+$tpl->assign('CHECKSS', csrf_create($csrf_key));
 $tpl->assign('GCONFIG', $global_config);
 $tpl->assign('DATA', $_user);
 $tpl->assign('NV_REDIRECT', $nv_redirect);

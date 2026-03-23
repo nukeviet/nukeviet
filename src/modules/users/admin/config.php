@@ -37,7 +37,6 @@ $array_config = [];
 
 // Cấu hình riêng các cổng đăng nhập bên thứ 3
 $oauth_config = $nv_Request->get_title('oauth_config', 'post,get');
-$checkss = md5(NV_CHECK_SESSION . '_' . $module_name . '_' . $op . '_' . $oauth_config);
 if (preg_match('/^([a-z0-9\-\_]+)$/', $oauth_config, $m) and file_exists(NV_ROOTDIR . '/modules/users/admin/config_' . $oauth_config . '.php')) {
     $page_title = $nv_Lang->getModule('oauth_config', $oauth_config);
     require NV_ROOTDIR . '/modules/users/admin/config_' . $oauth_config . '.php';
@@ -60,10 +59,13 @@ if ($nv_Request->isset_request('save', 'post')) {
         'mess' => '',
     ];
 
-    if ($checkss != $nv_Request->get_string('checkss', 'post')) {
-        $respon['mess'] = 'Wrong session';
-        nv_jsonOutput($respon);
+    if (!csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
+        nv_jsonOutput([
+            'status' => 'error',
+            'mess' => $nv_Lang->getGlobal('error_checkss')
+        ]);
     }
+
 
     $array_config['is_user_forum'] = $nv_Request->get_int('is_user_forum', 'post', 0);
     $array_config['dir_forum'] = $nv_Request->get_string('dir_forum', 'post');
@@ -306,7 +308,7 @@ $ignorefolders = [
     'index.html',
     '.htaccess'
 ];
-$array_config['checkss'] = $checkss;
+$array_config['checkss'] = csrf_create($csrf_key);
 $array_config['whoviewuser'] = array_map('intval', explode(',', $array_config['whoviewuser']));
 
 $tpl = new \NukeViet\Template\NVSmarty();

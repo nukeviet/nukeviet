@@ -26,10 +26,10 @@ if ($nv_Request->isset_request('changeweight', 'post')) {
     $new_vid = $nv_Request->get_int('new_vid', 'post', 0);
     $checkss = $nv_Request->get_title('checkss', 'post', '');
 
-    if (!hash_equals(NV_CHECK_SESSION, $checkss)) {
+    if (!csrf_check($nv_Request->get_title('checkss', 'post', ''), $csrf_key)) {
         nv_jsonOutput([
             'status' => 'error',
-            'mess' => 'Session error!'
+            'mess' => $nv_Lang->getGlobal('error_checkss')
         ]);
     }
 
@@ -88,6 +88,7 @@ if ($nv_Request->isset_request('choicesql', 'post')) {
 
     $tpl = new \NukeViet\Template\NVSmarty();
     $tpl->setTemplateDir(NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
+    $tpl->assign('CHECKSS', csrf_create($csrf_key));
     $tpl->assign('LANG', $nv_Lang);
 
     if ($choice == 'module') {
@@ -180,7 +181,7 @@ $field_choices = [];
 if ($nv_Request->isset_request('save', 'post')) {
     $checkss = $nv_Request->get_title('checkss', 'post', '');
 
-    if (!hash_equals(NV_CHECK_SESSION, $checkss)) {
+    if (!csrf_check($checkss, $csrf_key)) {
         nv_jsonOutput([
             'status' => 'error',
             'mess' => $nv_Lang->getGlobal('error_session')
@@ -640,10 +641,10 @@ if ($nv_Request->isset_request('del', 'post')) {
     $fid = $nv_Request->get_int('fid', 'post', 0);
     $checkss = $nv_Request->get_title('checkss', 'post', '');
 
-    if (!hash_equals(NV_CHECK_SESSION, $checkss)) {
+    if (!csrf_check($checkss, $csrf_key)) {
         nv_jsonOutput([
             'status' => 'error',
-            'mess' => 'Session error!'
+            'mess' => $nv_Lang->getGlobal('error_checkss')
         ]);
     }
 
@@ -696,6 +697,7 @@ $array_choice_type = [
 
 $tpl = new \NukeViet\Template\NVSmarty();
 $tpl->setTemplateDir(NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
+$tpl->assign('CHECKSS', csrf_create($csrf_key));
 $tpl->assign('LANG', $nv_Lang);
 $tpl->assign('MODULE_NAME', $module_name);
 $tpl->assign('OP', $op);

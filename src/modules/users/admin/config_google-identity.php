@@ -17,10 +17,10 @@ $array_url_instruction['config'] = 'http://wiki.nukeviet.vn/nukeviet4:admin:user
 
 if ($nv_Request->isset_request('save', 'post')) {
     $array_config['oauth_client_id'] = (string) $nv_Request->get_title('oauth_client_id', 'post', '');
-    if ($checkss !== $nv_Request->get_string('checkss', 'post')) {
+    if (!csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
         nv_jsonOutput([
             'status' => 'error',
-            'mess' => 'Session error!'
+            'mess' => $nv_Lang->getGlobal('error_checkss')
         ]);
     }
     $sth = $db->prepare('UPDATE ' . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = 'sys' AND module = 'site' AND config_name = :config_name");
@@ -40,7 +40,7 @@ if ($nv_Request->isset_request('save', 'post')) {
 }
 
 $array_config['oauth_client_id'] = $global_config['google_client_id'];
-$array_config['checkss'] = $checkss;
+$array_config['checkss'] = csrf_create($csrf_key);
 
 $tpl = new \NukeViet\Template\NVSmarty();
 $tpl->setTemplateDir(get_module_tpl_dir('config_oauth_google-identity.tpl'));

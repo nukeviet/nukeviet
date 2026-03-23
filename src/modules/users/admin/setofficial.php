@@ -13,6 +13,15 @@ if (!defined('NV_IS_FILE_ADMIN')) {
     exit('Stop!!!');
 }
 
+$_csrf_key = $admin_info['admin_id'] . '_' . $module_name . '_main';
+if (!csrf_check($nv_Request->get_string('checkss', 'post'), $_csrf_key)) {
+    nv_jsonOutput([
+        'status' => 'error',
+        'mess' => $nv_Lang->getGlobal('error_checkss')
+    ]);
+}
+
+
 if (!defined('NV_IS_AJAX')) {
     exit('Wrong URL');
 }
@@ -20,7 +29,10 @@ if (!defined('NV_IS_AJAX')) {
 $userid = $nv_Request->get_int('userid', 'post', 0);
 
 if (!$userid or $admin_info['admin_id'] == $userid) {
-    exit('NO');
+    nv_jsonOutput([
+        'status' => 'error',
+        'mess' => 'NO'
+    ]);
 }
 
 $sql = 'SELECT * FROM ' . NV_MOD_TABLE . ' WHERE userid = ' . $userid;
@@ -30,7 +42,10 @@ if (!empty($row)) {
     $row['in_groups'] = array_map('intval', explode(',', $row['in_groups']));
 
     if ($row['group_id'] != 7 and !in_array(7, $row['in_groups'], true)) {
-        exit('NO');
+        nv_jsonOutput([
+            'status' => 'error',
+            'mess' => 'NO'
+        ]);
     }
 
     if ($row['group_id'] == 7) {
@@ -50,8 +65,13 @@ if (!empty($row)) {
         trigger_error(print_r($e, true));
     }
 
-    $nv_Cache->delMod($module_name);
-    exit('OK');
+    nv_jsonOutput([
+        'status' => 'success',
+        'mess' => 'OK'
+    ]);
 }
 
-exit('NO');
+nv_jsonOutput([
+    'status' => 'error',
+    'mess' => 'NO'
+]);

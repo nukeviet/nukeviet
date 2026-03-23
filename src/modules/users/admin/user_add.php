@@ -13,18 +13,11 @@ if (!defined('NV_IS_FILE_ADMIN')) {
     exit('Stop!!!');
 }
 
+
 use NukeViet\Module\users\Shared\Emails;
 
 // Tạo mật khẩu ngẫu nhiên
 if ($nv_Request->isset_request('nv_genpass', 'post')) {
-    $checkss = $nv_Request->get_title('checkss', 'post', '');
-    if (!hash_equals(NV_CHECK_SESSION, $checkss)) {
-        nv_jsonOutput([
-            'status' => 'error',
-            'mess' => 'Session error!!!'
-        ]);
-    }
-
     $_len = round(($global_config['nv_upassmin'] + $global_config['nv_upassmax']) / 2);
 
     nv_jsonOutput([
@@ -65,12 +58,11 @@ if ($nv_Request->isset_request('nv_redirect', 'post,get')) {
     $nv_redirect = nv_get_redirect();
 }
 
-$checkss = md5(NV_CHECK_SESSION . '_' . $module_name . '_' . $op . '_' . $userid);
 if ($nv_Request->isset_request('confirm', 'post')) {
-    if ($checkss != $nv_Request->get_string('checkss', 'post')) {
+    if (!csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
         nv_jsonOutput([
             'status' => 'error',
-            'mess' => 'Error Session, Please close the browser and try again'
+            'mess' => $nv_Lang->getGlobal('error_checkss')
         ]);
     }
     $_user['username'] = $nv_Request->get_title('username', 'post', '', 1);
@@ -562,7 +554,7 @@ foreach ($array_field_config as $row) {
             $row['filemaxsize'] = $row['limited_values']['file_max_size'] ?? 0;
             $row['filemaxsize_format'] = nv_convertfromBytes($row['limited_values']['file_max_size'] ?? 0);
             $row['filemaxnum'] = $row['limited_values']['maxnum'] ?? 0;
-            $row['csrf'] = md5(NV_CHECK_SESSION . '_' . $module_name . $row['field']);
+            $row['csrf'] = csrf_create($admin_info['admin_id'] . '_' . $module_name . '_' . $row['field']);
             $row['url_module'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name;
             $row['widthlimit'] = image_size_info($row['limited_values']['widthlimit'] ?? '', 'width');
             $row['heightlimit'] = image_size_info($row['limited_values']['heightlimit'] ?? '', 'height');
@@ -617,7 +609,7 @@ $tpl->setTemplateDir(get_module_tpl_dir('user_add.tpl'));
 $tpl->assign('LANG', $nv_Lang);
 $tpl->assign('MODULE_NAME', $module_name);
 $tpl->assign('OP', $op);
-$tpl->assign('CHECKSS', $checkss);
+$tpl->assign('CHECKSS', csrf_create($csrf_key));
 $tpl->assign('GCONFIG', $global_config);
 $tpl->assign('DATA', $_user);
 $tpl->assign('NV_REDIRECT', $nv_redirect);

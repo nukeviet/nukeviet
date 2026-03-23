@@ -287,7 +287,7 @@
         <button type="button" class="btn btn-danger"
                 data-toggle="deny-censor"
                 data-userid="{$REVIEWUID}"
-                data-tokend="{$CHECKSS}"
+                data-checkss="{$CHECKSS}"
                 data-msgconfirm="{$LANG->getModule('editcensor_confirm_denied')}"
                 data-icon="fa-trash">
             <i class="fa-solid fa-trash" data-icon="fa-trash"></i> {$LANG->getModule('denied')}

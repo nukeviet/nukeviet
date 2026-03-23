@@ -27,8 +27,7 @@ if (defined('NV_EDITOR')) {
 // Xóa tài khoản chờ kích hoạt
 if ($nv_Request->isset_request('del', 'post')) {
     $userid = $nv_Request->get_absint('userid', 'post', 0);
-    $checkss = md5(NV_CHECK_SESSION . '_' . $module_name . '_' . $op . '_' . $userid);
-    if (hash_equals($checkss, $nv_Request->get_string('checkss', 'post', ''))) {
+    if (csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
         $sql = 'SELECT users_info FROM ' . NV_MOD_TABLE . '_reg WHERE userid=' . $userid;
         if ($global_config['idsite'] > 0) {
             $sql .= ' AND idsite=' . $global_config['idsite'];
@@ -58,10 +57,22 @@ if ($nv_Request->isset_request('del', 'post')) {
         if ($db->exec($sql)) {
             nv_delete_notification(NV_LANG_DATA, $module_name, 'send_active_link_fail', $userid);
             nv_insert_logs(NV_LANG_DATA, $module_name, $nv_Lang->getModule('delete'), 'userid_reg: ' . $userid, $admin_info['userid']);
-            nv_jsonOutput(['status' => 'success', 'mess' => '', 'refresh' => true]);
+            nv_jsonOutput([
+                'status' => 'success',
+                'mess' => '',
+                'refresh' => true
+            ]);
         }
+        nv_jsonOutput([
+            'status' => 'error',
+            'mess' => 'NO'
+        ]);
+    } else {
+        nv_jsonOutput([
+            'status' => 'error',
+            'mess' => $nv_Lang->getGlobal('error_checkss')
+        ]);
     }
-    nv_jsonOutput(['status' => 'error', 'mess' => 'NO']);
 }
 
 // Kích hoạt tài khoản
@@ -94,10 +105,9 @@ if ($nv_Request->isset_request('userid', 'get')) {
     $userdata['photo'] = '';
 
     $groups_list = nv_groups_list($module_data);
-    $checkss = md5(NV_CHECK_SESSION . '_' . $module_name . '_' . $op . '_' . $userid);
 
     // Nếu chấp nhận kích hoạt
-    if (hash_equals($checkss, $nv_Request->get_string('checkss', 'post', ''))) {
+    if (csrf_check($nv_Request->get_string('checkss', 'post', ''), $csrf_key)) {
         $post = [
             'username' => $nv_Request->get_title('username', 'post', '', 1),
             'email' => nv_strtolower(nv_substr($nv_Request->get_title('email', 'post', '', 1), 0, 100)),
@@ -632,7 +642,7 @@ if ($nv_Request->isset_request('userid', 'get')) {
                 $row['filemaxsize'] = $row['limited_values']['file_max_size'] ?? 0;
                 $row['filemaxsize_format'] = nv_convertfromBytes($row['limited_values']['file_max_size'] ?? 0);
                 $row['filemaxnum'] = $row['limited_values']['maxnum'] ?? 0;
-                $row['csrf'] = md5(NV_CHECK_SESSION . '_' . $module_name . $row['field']);
+                $row['csrf'] = csrf_create($admin_info['admin_id'] . '_' . $module_name . '_' . $row['field']);
                 $row['url_module'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name;
                 $row['widthlimit'] = image_size_info($row['limited_values']['widthlimit'] ?? '', 'width');
                 $row['heightlimit'] = image_size_info($row['limited_values']['heightlimit'] ?? '', 'height');
@@ -691,7 +701,7 @@ if ($nv_Request->isset_request('userid', 'get')) {
     $tpl->assign('NV_UPASSMAX', $global_config['nv_upassmax']);
     $tpl->assign('NV_UPASSMIN', $global_config['nv_upassmin']);
     $tpl->assign('DATA', $userdata);
-    $tpl->assign('CHECKSS', $checkss);
+    $tpl->assign('CHECKSS', csrf_create($csrf_key));
     $tpl->assign('SYSTEM_FIELDS', $system_fields);
     $tpl->assign('CUSTOM_FIELDS', $custom_fields_data);
     $tpl->assign('HAVE_CUSTOM_FIELDS', $have_custom_fields);
@@ -799,7 +809,7 @@ while ($row = $result->fetch()) {
         'full_name' => nv_show_name_user($row['first_name'], $row['last_name'], $row['username']),
         'email' => $row['email'],
         'regdate' => nv_datetime_format($row['regdate']),
-        'checkss' => md5(NV_CHECK_SESSION . '_' . $module_name . '_' . $op . '_' . $row['userid']),
+        'checkss' => csrf_create($csrf_key),
         'activate_url' => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=user_waiting&amp;userid=' . $row['userid']
     ];
 }

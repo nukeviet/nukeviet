@@ -6,7 +6,7 @@
 
 <form class="ajax-submit" method="post" action="{$smarty.const.NV_BASE_ADMINURL}index.php?{$smarty.const.NV_LANG_VARIABLE}={$smarty.const.NV_LANG_DATA}&amp;{$smarty.const.NV_NAME_VARIABLE}={$MODULE_NAME}&amp;{$smarty.const.NV_OP_VARIABLE}={$OP}" autocomplete="off" novalidate>
     <input type="hidden" name="save" value="1">
-    <input type="hidden" name="checkss" value="{$smarty.const.NV_CHECK_SESSION}">
+    <input type="hidden" name="checkss" value="{$CHECKSS}">
     <input type="hidden" name="system" value="{$DATAFORM.system}">
     <input type="hidden" name="fid" value="{$DATAFORM.fid}">
     <input type="hidden" name="fieldid" value="{$DATAFORM.field}">
@@ -444,7 +444,3 @@
 {if $LOAD_SQLCHOICE}
 <input type="hidden" id="sql_data_choice" data-module="{$SQL_DATA_CHOICE[0]}" data-table="{$SQL_DATA_CHOICE[1]}" data-column-key="{$SQL_DATA_CHOICE[2]}" data-column-val="{$SQL_DATA_CHOICE[3]}" data-column-order="{$SQL_DATA_CHOICE[4]}" data-column-sort="{$SQL_DATA_CHOICE[5]}">
 {/if}
-
-<script>
-var nv_check_session = '{$smarty.const.NV_CHECK_SESSION}';
-</script>

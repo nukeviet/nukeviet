@@ -30,7 +30,6 @@ if (empty($row)) {
     $mode = 'edit';
 }
 
-$checkss = md5(NV_CHECK_SESSION . '_' . $module_name . '_' . $op . '_' . NV_LANG_DATA);
 if ($nv_Request->get_int('save', 'post') == 1) {
     $respon = [
         'status' => 'error',
@@ -38,8 +37,8 @@ if ($nv_Request->get_int('save', 'post') == 1) {
     ];
 
     $post_checkss = $nv_Request->get_title('checkss', 'post', '');
-    if (!hash_equals($checkss, $post_checkss)) {
-        $respon['mess'] = 'Wrong session';
+    if (!csrf_check($post_checkss, $csrf_key)) {
+        $respon['mess'] = $nv_Lang->getGlobal('error_checkss');
         nv_jsonOutput($respon);
     }
 
@@ -89,7 +88,7 @@ $tpl->setTemplateDir(get_module_tpl_dir('siteterms.tpl'));
 $tpl->assign('LANG', $nv_Lang);
 $tpl->assign('MODULE_NAME', $module_name);
 $tpl->assign('OP', $op);
-$tpl->assign('CHECKSS', $checkss);
+$tpl->assign('CHECKSS', csrf_create($csrf_key));
 $tpl->assign('EDITOR', $editor);
 
 $contents = $tpl->fetch('siteterms.tpl');

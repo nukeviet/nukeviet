@@ -20,8 +20,12 @@ if ($nv_Request->isset_request('del', 'post')) {
     $userid = $nv_Request->get_int('userid', 'post', 0);
 
     if (!csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
-        nv_jsonOutput(['status' => 'error', 'mess' => $nv_Lang->getGlobal('error_checkss')]);
+        nv_jsonOutput([
+            'status' => 'error',
+            'mess' => $nv_Lang->getGlobal('error_checkss')
+        ]);
     }
+
 
     // Kiểm tra quyền
     $allow = false;
@@ -45,7 +49,10 @@ if ($nv_Request->isset_request('del', 'post')) {
     }
 
     if (!$allow) {
-        nv_jsonOutput(['status' => 'error', 'mess' => 'Not allowed!']);
+        nv_jsonOutput([
+            'status' => 'error',
+            'mess' => 'Not allowed!'
+        ]);
     }
 
     $sql = 'SELECT * FROM ' . NV_MOD_TABLE . '_edit WHERE userid=' . $userid;
@@ -80,7 +87,7 @@ if ($nv_Request->isset_request('del', 'post')) {
 
     nv_insert_logs(NV_LANG_DATA, $module_name, 'Log Denied User Edit', 'Userid: ' . $userid, $admin_info['userid']);
     nv_jsonOutput([
-        'status' => 'OK',
+        'status' => 'ok',
         'mess' => $nv_Lang->getModule('active_success')
     ]);
 }
@@ -90,8 +97,12 @@ if ($nv_Request->isset_request('approved', 'post')) {
     $userid = $nv_Request->get_int('userid', 'post', 0);
 
     if (!csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
-        nv_jsonOutput(['status' => 'error', 'mess' => $nv_Lang->getGlobal('error_checkss')]);
+        nv_jsonOutput([
+            'status' => 'error',
+            'mess' => $nv_Lang->getGlobal('error_checkss')
+        ]);
     }
+
 
     // Kiểm tra quyền
     $allow = false;
@@ -115,7 +126,10 @@ if ($nv_Request->isset_request('approved', 'post')) {
     }
 
     if (!$allow) {
-        nv_jsonOutput(['status' => 'error', 'mess' => 'Not allowed!']);
+        nv_jsonOutput([
+            'status' => 'error',
+            'mess' => 'Not allowed!'
+        ]);
     }
 
     $sql = 'SELECT * FROM ' . NV_MOD_TABLE . '_edit tb1, ' . NV_MOD_TABLE . ' tb2 WHERE tb1.userid=tb2.userid AND tb1.userid=' . $userid;
@@ -194,7 +208,11 @@ if ($nv_Request->isset_request('approved', 'post')) {
 
     $nv_Cache->delMod($module_name);
     nv_insert_logs(NV_LANG_DATA, $module_name, 'Log Approved User Edit', 'Userid: ' . $userid, $admin_info['userid']);
-    nv_jsonOutput(['status' => 'OK', 'mess' => $nv_Lang->getModule('active_success'), 'refresh' => true]);
+    nv_jsonOutput([
+        'status' => 'ok',
+        'mess' => $nv_Lang->getModule('active_success'),
+        'refresh' => true
+    ]);
 }
 
 $reviewuid = $nv_Request->get_int('reviewuid', 'get', 0);
@@ -261,7 +279,10 @@ if (!empty($reviewuid)) {
     // Xác nhận duyệt thông tin chỉnh sửa
     if ($nv_Request->isset_request('confirm', 'post')) {
         if (!csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
-            nv_jsonOutput(['status' => 'error', 'mess' => $nv_Lang->getGlobal('error_checkss')]);
+            nv_jsonOutput([
+                'status' => 'error',
+                'mess' => $nv_Lang->getGlobal('error_checkss')
+            ]);
         }
         $custom_fields = array_merge($row_basic, $row_info, $nv_Request->get_array('custom_fields', 'post'));
         if (!empty($info_basic)) {
@@ -338,7 +359,7 @@ if (!empty($reviewuid)) {
         $nv_Cache->delMod($module_name);
 
         nv_jsonOutput([
-            'status' => 'OK',
+            'status' => 'ok',
             'mess' => $nv_Lang->getModule('active_success'),
             'redirect' => nv_url_rewrite(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op, true)
         ]);
@@ -486,7 +507,7 @@ if (!empty($reviewuid)) {
                 $field['filemaxsize'] = $limited_values['file_max_size'] ?? 0;
                 $field['filemaxsize_format'] = nv_convertfromBytes($limited_values['file_max_size'] ?? 0);
                 $field['filemaxnum'] = $limited_values['maxnum'] ?? 0;
-                $field['csrf'] = md5(NV_CHECK_SESSION . '_' . $module_name . $field['field']);
+                $field['csrf'] = csrf_create($admin_info['admin_id'] . '_' . $module_name . '_' . $field['field']);
                 $field['widthlimit'] = image_size_info($limited_values['widthlimit'] ?? '', 'width');
                 $field['heightlimit'] = image_size_info($limited_values['heightlimit'] ?? '', 'height');
                 $field['hide_addfile'] = !(empty($limited_values['maxnum']) or (count($filelist) < $limited_values['maxnum']));

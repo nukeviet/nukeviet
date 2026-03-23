@@ -102,7 +102,7 @@ $(function () {
             $.ajax({
                 type: 'POST',
                 url: script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=fields&nocache=' + new Date().getTime(),
-                data: 'changeweight=1&fid=' + fid + '&new_vid=' + new_vid + '&checkss=' + nv_check_session,
+                data: 'changeweight=1&fid=' + fid + '&new_vid=' + new_vid + '&checkss=' + ($('.table-card').data('checkss') || $('[name="checkss"]').val()),
                 dataType: 'json',
                 success: function(res) {
                     if (res.status === 'success') {
@@ -140,7 +140,7 @@ $(function () {
                 $.ajax({
                     type: 'POST',
                     url: script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=fields&nocache=' + new Date().getTime(),
-                    data: 'del=1&fid=' + fid + '&checkss=' + nv_check_session,
+                    data: 'del=1&fid=' + fid + '&checkss=' + ($('.table-card').data('checkss') || $('[name="checkss"]').val()),
                     dataType: 'json',
                     success: function(res) {
                         icon.removeClass('fa-spinner fa-spin-pulse').addClass(icon.data('icon'));
@@ -618,7 +618,7 @@ $(function () {
                 data: {
                     id: ctn.data('id'),
                     cWeight: $this.data('value'),
-                    tokend: btn.data('tokend')
+                    checkss: btn.data('checkss')
                 },
                 dataType: 'json',
                 cache: false,
@@ -693,7 +693,7 @@ $(function () {
                     url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=groups&nocache=' + new Date().getTime(),
                     data: {
                         del: btn.data('id'),
-                        tokend: btn.data('tokend')
+                        checkss: btn.data('checkss')
                     },
                     dataType: 'json',
                     cache: false,
@@ -723,7 +723,7 @@ $(function () {
                 url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=groups&nocache=' + new Date().getTime(),
                 data: {
                     act: btn.data('id'),
-                    tokend: btn.data('tokend')
+                    checkss: btn.data('checkss')
                 },
                 dataType: 'json',
                 cache: false,
@@ -762,7 +762,7 @@ $(function () {
                     url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=groups&nocache=' + new Date().getTime(),
                     data: {
                         deleteinactive: 1,
-                        tokend: btn.data('tokend')
+                        checkss: btn.data('checkss')
                     },
                     dataType: 'json',
                     cache: false,
@@ -797,6 +797,7 @@ $(function () {
             // Thêm người dùng vào nhóm
             $(document).on('click', '[name=addUser]', function(e) {
                 e.preventDefault();
+                const btn = $(this);
                 let uid = $('#ablist input[name=uid]').val();
                 uid = intval(uid);
                 if (uid == 0) {
@@ -815,7 +816,7 @@ $(function () {
                     data: {
                         gid: gid,
                         uid: uid,
-                        tokend: $('body').data('checksess')
+                        checkss: btn.data('checkss')
                     },
                     dataType: 'json',
                     cache: false,
@@ -855,7 +856,7 @@ $(function () {
                         data: {
                             gid: gid,
                             approved: btn.data('id'),
-                            tokend: $('body').data('checksess')
+                            checkss: btn.data('checkss')
                         },
                         dataType: 'json',
                         cache: false,
@@ -895,7 +896,7 @@ $(function () {
                         data: {
                             gid: gid,
                             denied: btn.data('id'),
-                            tokend: $('body').data('checksess')
+                            checkss: btn.data('checkss')
                         },
                         dataType: 'json',
                         cache: false,
@@ -935,7 +936,7 @@ $(function () {
                         data: {
                             gid: gid,
                             exclude: btn.data('id'),
-                            tokend: $('body').data('checksess')
+                            checkss: btn.data('checkss')
                         },
                         dataType: 'json',
                         cache: false,
@@ -974,7 +975,7 @@ $(function () {
                     data: {
                         gid: gid,
                         demote: btn.data('id'),
-                        tokend: $('body').data('checksess')
+                        checkss: btn.data('checkss')
                     },
                     dataType: 'json',
                     cache: false,
@@ -1013,7 +1014,7 @@ $(function () {
                         data: {
                             gid: gid,
                             exclude: btn.data('id'),
-                            tokend: $('body').data('checksess')
+                            checkss: btn.data('checkss')
                         },
                         dataType: 'json',
                         cache: false,
@@ -1051,7 +1052,7 @@ $(function () {
                     data: {
                         gid: gid,
                         promote: btn.data('id'),
-                        tokend: $('body').data('checksess')
+                        checkss: btn.data('checkss')
                     },
                     dataType: 'json',
                     cache: false,
@@ -1108,7 +1109,7 @@ $(function () {
                     data: {
                         del: 1,
                         userid: btn.data('userid'),
-                        checkss: btn.data('tokend')
+                        checkss: btn.data('checkss')
                     },
                     dataType: 'json',
                     cache: false,
@@ -1190,7 +1191,7 @@ $(function () {
                 url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=user_add&nocache=' + new Date().getTime(),
                 data: {
                     nv_genpass: 1,
-                    checkss: $('body').data('checksess')
+                    checkss: btn.data('checkss')
                 },
                 dataType: 'json',
                 cache: false,
@@ -1371,7 +1372,7 @@ $(function () {
                     clearInterval(runInterval);
                 }
 
-                const tokend = $('#resend_tokend').val();
+                const checkss = $('#resend_checkss').val();
 
                 $.ajax({
                     type: 'POST',
@@ -1381,7 +1382,7 @@ $(function () {
                         per_email: per_email,
                         offset: emailOffset,
                         useriddel: emailDelete,
-                        tokend: tokend
+                        checkss: checkss
                     },
                     dataType: 'json',
                     cache: false,
@@ -1526,7 +1527,7 @@ $(function () {
                 url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=user_add&nocache=' + new Date().getTime(),
                 data: {
                     nv_genpass: 1,
-                    checkss: $('body').data('checksess')
+                    checkss: btn.data('checkss')
                 },
                 dataType: 'json',
                 cache: false,
@@ -1674,7 +1675,7 @@ $(function () {
 
     // Trang Quản lý tài khoản OAuth của thành viên
     if (nv_func_name === 'edit_oauth') {
-        const oauthCard = $('[data-tokend]');
+        const oauthCard = $('[data-checkss]');
 
         // Xóa một kết nối OAuth
         $(document).on('click', '[data-toggle="delete-one-oauth"]', function (e) {
@@ -1694,7 +1695,7 @@ $(function () {
                         del: 1,
                         userid: oauthCard.data('userid'),
                         opid: btn.data('opid'),
-                        checkss: oauthCard.data('tokend')
+                                                checkss: oauthCard.data('checkss')
                     },
                     dataType: 'json',
                     cache: false,
@@ -1730,7 +1731,7 @@ $(function () {
                     data: {
                         delall: 1,
                         userid: oauthCard.data('userid'),
-                        checkss: oauthCard.data('tokend')
+                        checkss: oauthCard.data('checkss')
                     },
                     dataType: 'json',
                     cache: false,
@@ -1768,7 +1769,7 @@ $(function () {
                     url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=' + nv_func_name + '&userid=' + btn.data('userid') + '&nocache=' + new Date().getTime(),
                     data: {
                         turnoff2step: 1,
-                        checkss: btn.data('tokend')
+                        checkss: btn.data('checkss')
                     },
                     dataType: 'json',
                     cache: false,
@@ -1804,7 +1805,7 @@ $(function () {
                     data: {
                         resetbackupcodes: 1,
                         sendmail: $('[name="sendmail"]').is(':checked') ? 1 : 0,
-                        checkss: btn.data('tokend')
+                        checkss: btn.data('checkss')
                     },
                     dataType: 'json',
                     cache: false,
@@ -1973,10 +1974,11 @@ $(function () {
         $(document).on('click', '[data-toggle="pass-reset-request"]', function (e) {
             e.preventDefault();
             const userid = $(this).data('userid');
+            const checkss = $('.table-card').data('checkss') || $('[name="checkss"]').val();
             $.ajax({
                 type: 'POST',
                 url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=edit&userid=' + userid + '&nocache=' + new Date().getTime(),
-                data: { psr: 1 },
+                data: { psr: 1, checkss: checkss },
                 dataType: 'json',
                 success: function (res) {
                     $('#pass-reset-modal .userid').val(res.userid);
@@ -2003,10 +2005,11 @@ $(function () {
             const orig = icon.data('icon');
             icon.removeClass(orig).addClass('fa-spinner fa-spin-pulse');
             $('#pass-reset-modal .btn-pass-reset-submit').prop('disabled', true);
+            const checkss = $('.table-card').data('checkss') || $('[name="checkss"]').val();
             $.ajax({
                 type: 'POST',
                 url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=edit&userid=' + userid + '&nocache=' + new Date().getTime(),
-                data: { psr: 1, type: type },
+                data: { psr: 1, type: type, checkss: checkss },
                 dataType: 'json',
                 success: function (res) {
                     icon.removeClass('fa-spinner fa-spin-pulse').addClass(orig);
@@ -2026,10 +2029,11 @@ $(function () {
         $(document).on('click', '[data-toggle="email-reset-request"]', function (e) {
             e.preventDefault();
             const userid = $(this).data('userid');
+            const checkss = $('.table-card').data('checkss') || $('[name="checkss"]').val();
             $.ajax({
                 type: 'POST',
                 url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=edit&userid=' + userid + '&nocache=' + new Date().getTime(),
-                data: { esr: 1 },
+                data: { esr: 1, checkss: checkss },
                 dataType: 'json',
                 success: function (res) {
                     $('#email-reset-modal .userid').val(res.userid);
@@ -2056,10 +2060,11 @@ $(function () {
             const orig = icon.data('icon');
             icon.removeClass(orig).addClass('fa-spinner fa-spin-pulse');
             $('#email-reset-modal .btn-email-reset-submit').prop('disabled', true);
+            const checkss = $('.table-card').data('checkss') || $('[name="checkss"]').val();
             $.ajax({
                 type: 'POST',
                 url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=edit&userid=' + userid + '&nocache=' + new Date().getTime(),
-                data: { esr: 1, type: type },
+                data: { esr: 1, type: type, checkss: checkss },
                 dataType: 'json',
                 success: function (res) {
                     icon.removeClass('fa-spinner fa-spin-pulse').addClass(orig);
@@ -2079,10 +2084,11 @@ $(function () {
         $(document).on('click', '[data-toggle="forced-relogin"]', function (e) {
             e.preventDefault();
             const userid = $(this).data('userid');
+            const checkss = $('.table-card').data('checkss') || $('[name="checkss"]').val();
             $.ajax({
                 type: 'POST',
                 url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=edit&userid=' + userid + '&nocache=' + new Date().getTime(),
-                data: { forcedrelogin: 1 },
+                data: { forcedrelogin: 1, checkss: checkss },
                 dataType: 'json',
                 success: function (res) {
                     nvToast(res.mess, res.status === 'OK' ? 'success' : 'error');
@@ -2094,10 +2100,11 @@ $(function () {
         $(document).on('click', '[data-toggle="cancel-deletion"]', function (e) {
             e.preventDefault();
             const userid = $(this).data('userid');
+            const checkss = $('.table-card').data('checkss') || $('[name="checkss"]').val();
             $.ajax({
                 type: 'POST',
                 url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=edit&userid=' + userid + '&nocache=' + new Date().getTime(),
-                data: { canceldeletion: 1 },
+                data: { canceldeletion: 1, checkss: checkss },
                 dataType: 'json',
                 success: function (res) {
                     nvAlert(res.mess, function () {
@@ -2240,7 +2247,7 @@ $(function () {
                     data: {
                         approved: 1,
                         userid: btn.data('userid'),
-                        checkss: btn.data('tokend')
+                        checkss: btn.data('checkss')
                     },
                     dataType: 'json',
                     cache: false,
@@ -2280,7 +2287,7 @@ $(function () {
                     data: {
                         del: 1,
                         userid: btn.data('userid'),
-                        checkss: btn.data('tokend')
+                        checkss: btn.data('checkss')
                     },
                     dataType: 'json',
                     cache: false,

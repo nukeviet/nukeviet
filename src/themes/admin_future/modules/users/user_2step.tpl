@@ -13,7 +13,7 @@
             <button type="button" class="btn btn-danger"
                     data-toggle="turnoff2step"
                     data-userid="{$ROW.userid}"
-                    data-tokend="{$CHECKSS}"
+                    data-checkss="{$CHECKSS}"
                     data-msgconfirm="{$LANG->getModule('user_2step_turnoff')}">
                 <i class="fa-solid fa-shield-halved" data-icon="fa-shield-halved"></i>
                 {$LANG->getModule('user_2step_turnoff')}
@@ -65,7 +65,7 @@
             <button type="button" class="btn btn-danger"
                     data-toggle="resetbackupcodes"
                     data-userid="{$ROW.userid}"
-                    data-tokend="{$CHECKSS}"
+                    data-checkss="{$CHECKSS}"
                     data-msgconfirm="{$LANG->getModule('user_2step_reset')}">
                 <i class="fa-solid fa-rotate" data-icon="fa-rotate"></i>
                 {$LANG->getModule('user_2step_reset')}
