@@ -18,7 +18,7 @@ $allow_func = [
     'plans-list',
     'plist',
     'change_act_plan',
-    'add_plan',
+    'add-plan',
     'edit_plan',
     'del_plan',
     'info_plan',
@@ -41,7 +41,7 @@ $targets = [
 
 // Document
 $array_url_instruction['plans-list'] = 'https://wiki.nukeviet.vn/nukeviet4:admin:banners#khối_quảng_cao';
-$array_url_instruction['add_plan'] = 'https://wiki.nukeviet.vn/nukeviet4:admin:banners#them_khối_quảng_cao';
+$array_url_instruction['add-plan'] = 'https://wiki.nukeviet.vn/nukeviet4:admin:banners#them_khối_quảng_cao';
 $array_url_instruction['edit_plan'] = 'https://wiki.nukeviet.vn/nukeviet4:admin:banners#sửa_khối_quảng_cao';
 $array_url_instruction['add_banner'] = 'https://wiki.nukeviet.vn/nukeviet4:admin:banners#them_quảng_cao';
 $array_url_instruction['edit_banner'] = 'https://wiki.nukeviet.vn/nukeviet4:admin:banners#sửa_quảng_cao';
@@ -213,96 +213,6 @@ function nv_fix_banner_weight($pid)
         $sql = 'UPDATE ' . NV_BANNERS_GLOBALTABLE . '_rows SET weight=0 WHERE pid=' . $pid;
         $db->query($sql);
     }
-}
-
-/**
- * nv_add_plan_theme()
- *
- * @param array $contents
- * @param array $array_uploadtype
- * @param array $groups_list
- * @return string
- */
-function nv_add_plan_theme($contents, $array_uploadtype, $groups_list)
-{
-    global $global_config, $module_file, $module_upload, $nv_Lang, $array_exp_time;
-
-    $xtpl = new XTemplate('add_plan.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-    $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
-    $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
-    $xtpl->assign('CONTENTS', $contents);
-    $xtpl->assign('CLASS', $contents['is_error'] ? ' class="error"' : '');
-
-    foreach ($contents['blang'][3] as $key => $blang) {
-        $xtpl->assign('BLANG', [
-            'key' => $key,
-            'title' => $blang['name'],
-            'selected' => $key == $contents['blang'][4] ? ' selected="selected"' : ''
-        ]);
-        $xtpl->parse('main.blang');
-    }
-
-    foreach ($contents['form'][2] as $form) {
-        $xtpl->assign('FORM', [
-            'key' => $form,
-            'title' => $nv_Lang->existsModule('form_' . $form) ? $nv_Lang->getModule('form_' . $form) : $form,
-            'checked' => $form == $contents['form'][3] ? ' checked="checked"' : ''
-        ]);
-        $xtpl->parse('main.form');
-    }
-
-    if ($contents['description'][5] and nv_function_exists('nv_aleditor')) {
-        $description = nv_aleditor($contents['description'][1], $contents['description'][3], $contents['description'][4], $contents['description'][2], '', NV_UPLOADS_DIR . '/' . $module_upload, NV_UPLOADS_DIR . '/' . $module_upload . '/files');
-    } else {
-        $description = '<textarea name="' . $contents['description'][1] . '" id="' . $contents['description'][1] . '" style="width:' . $contents['description'][3] . ';height:' . $contents['description'][4] . '">' . $contents['description'][2] . '</textarea>\n';
-    }
-    $xtpl->assign('DESCRIPTION', $description);
-
-    for ($i = 1; $i >= 0; --$i) {
-        $require_image = [
-            'key' => $i,
-            'title' => $nv_Lang->getModule('require_image' . $i),
-            'checked' => $i == $contents['require_image'] ? ' checked="checked"' : ''
-        ];
-        $xtpl->assign('REQUIRE_IMAGE', $require_image);
-        $xtpl->parse('main.require_image');
-    }
-
-    $contents['uploadtype'] = explode(',', $contents['uploadtype']);
-    foreach ($array_uploadtype as $uploadtype) {
-        $uploadtype = [
-            'key' => $uploadtype,
-            'title' => $uploadtype,
-            'checked' => in_array($uploadtype, $contents['uploadtype'], true) ? ' checked="checked"' : ''
-        ];
-        $xtpl->assign('UPLOADTYPE', $uploadtype);
-        $xtpl->parse('main.uploadtype');
-    }
-
-    $uploadgroup = array_map('intval', explode(',', $contents['uploadgroup']));
-    foreach ($groups_list as $_group_id => $_title) {
-        $xtpl->assign('UPLOADGROUP', [
-            'key' => $_group_id,
-            'checked' => in_array((int) $_group_id, $uploadgroup, true) ? ' checked="checked"' : '',
-            'title' => $_title
-        ]);
-        $xtpl->parse('main.uploadgroup');
-    }
-
-    foreach ($array_exp_time as $exp_time) {
-        $exp_time = [
-            'key' => $exp_time[0],
-            'title' => $exp_time[1],
-            'selected' => $contents['exp_time'] == $exp_time[0] ? ' selected="selected"' : ''
-        ];
-        $xtpl->assign('EXP_TIME', $exp_time);
-        $xtpl->parse('main.exp_time');
-    }
-    $xtpl->assign('DISPLAY_CUSTOM_EXPTIME', $contents['exp_time'] == -1 ? '' : ' style="display:none;"');
-
-    $xtpl->parse('main');
-
-    return $xtpl->text('main');
 }
 
 /**

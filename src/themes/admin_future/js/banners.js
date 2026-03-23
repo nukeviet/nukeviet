@@ -140,6 +140,17 @@ $(function() {
         });
     }
 
+    // Thêm khối quảng cáo mới
+    if (nv_func_name === 'add-plan') {
+        $('#plan_exp_time').on('change', function() {
+            if ($(this).val() === '-1') {
+                $('#plan_exp_time_custom').removeClass('d-none');
+            } else {
+                $('#plan_exp_time_custom').addClass('d-none');
+            }
+        });
+    }
+
     // Trang thông tin chi tiết banner
     if (nv_func_name === 'info-banner') {
         // Xem ảnh banner qua modal
