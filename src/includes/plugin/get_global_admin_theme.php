@@ -44,7 +44,7 @@ nv_add_hook($module_name, 'get_global_admin_theme', $priority, function ($vars) 
     if ($module_file == 'feeds' and in_array($op, ['main'])) {
         return $new_theme;
     }
-    if ($module_file == 'banners' and $op === 'main') {
+    if ($module_file == 'banners' and in_array($op, ['main', 'info-banner'])) {
         return $new_theme;
     }
 

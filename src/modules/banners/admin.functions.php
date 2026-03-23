@@ -25,7 +25,7 @@ $allow_func = [
     'add_banner',
     'edit_banner',
     'change_act_banner',
-    'info_banner',
+    'info-banner',
     'show_stat',
     'show_list_stat',
     'del_banner'
@@ -593,44 +593,6 @@ function nv_edit_banner_theme($contents)
     return $xtpl->text('main');
 }
 
-/**
- * nv_info_b_theme()
- *
- * @param array $contents
- * @return string
- */
-function nv_info_b_theme($contents)
-{
-    global $global_config, $module_file, $module_name;
-    $xtpl = new XTemplate('info_b.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-    $xtpl->assign('CONTENTS', $contents);
-    $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
-    $xtpl->assign('MODULE_NAME', $module_name);
-    if (isset($contents['act'])) {
-        $xtpl->parse('main.act');
-    }
-    $a = 0;
-    if ($contents['rows'][5][1] == '') {
-        $contents['rows'][4][1] = '';
-    }
-    foreach ($contents['rows'] as $row) {
-        $xtpl->assign('ROW1', $row);
-        $xtpl->parse('main.loop1');
-    }
-    foreach ($contents['stat'][3] as $k => $v) {
-        $xtpl->assign('K', $k);
-        $xtpl->assign('V', $v);
-        $xtpl->parse('main.stat1');
-    }
-    foreach ($contents['stat'][5] as $k => $v) {
-        $xtpl->assign('K', $k);
-        $xtpl->assign('V', $v);
-        $xtpl->parse('main.stat2');
-    }
-    $xtpl->parse('main');
-
-    return $xtpl->text('main');
-}
 
 /**
  * nv_show_stat_theme()

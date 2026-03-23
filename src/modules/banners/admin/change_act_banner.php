@@ -82,7 +82,7 @@ $nv_Cache->delMod($module_name);
 nv_CreateXML_bannerPlan();
 
 if ($ok) {
-    nv_jsonOutput(['status' => 'OK', 'mess' => '']);
+    nv_jsonOutput(['status' => 'OK', 'mess' => '', 'refresh' => true]);
 } else {
     nv_jsonOutput(['status' => 'error', 'mess' => '']);
 }

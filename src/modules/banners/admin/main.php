@@ -126,7 +126,7 @@ while ($row = $result->fetch()) {
     $item = [
         'id'        => $row['id'],
         'title'     => $row['title'],
-        'view_url'  => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=info_banner&amp;id=' . $row['id'],
+        'view_url'  => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=info-banner&amp;id=' . $row['id'],
         'pid'       => $row['pid'],
         'pid_title' => $plans[$row['pid']] ?? '',
         'pid_url'   => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=info_plan&amp;id=' . $row['pid'],
