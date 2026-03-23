@@ -94,6 +94,79 @@ $tpl->registerPlugin('modifier', 'dnumber',   'nv_number_format');
 $tpl->registerPlugin('modifier', 'clean60',   'nv_clean60');
 ```
 
+### 3.6 Không dùng hàm trung gian trong admin.functions.php
+
+Một số module cũ có hàm theme (ví dụ `nv_b_list_theme()`) trong `admin.functions.php` để đứng ra khởi tạo XTemplate, loop parse từng item, rồi trả về HTML. Hàm đó tồn tại vì XTemplate **bắt PHP phải điều khiển vòng lặp render** — Smarty không cần điều đó nữa.
+
+**Quy tắc:** Khi migrate, xóa bỏ lớp hàm trung gian này. Toàn bộ xử lý (query, build array, assign, fetch) nằm trực tiếp trong controller PHP. Hàm trung gian chỉ hợp lý nếu nó được gọi từ nhiều nơi — nếu chỉ một nơi gọi thì không cần tách ra.
+
+```php
+// Sai — giữ lại pattern hàm trung gian:
+$content = call_user_func('nv_b_list_theme', $contents, $array_users);
+
+// Đúng — xử lý trực tiếp trong controller:
+$tpl = new \NukeViet\Template\NVSmarty();
+$tpl->setTemplateDir(get_module_tpl_dir('b_list.tpl'));
+$tpl->assign('LANG', $nv_Lang);
+// ... assign các biến ...
+$contents = $tpl->fetch('b_list.tpl');
+```
+
+**Sau khi migrate xong:** grep kiểm tra hàm trung gian cũ còn được gọi ở đâu không:
+
+```bash
+grep -rn "nv_b_list_theme" src/modules/{MODULE}/
+```
+
+- Không còn chỗ nào gọi → **xóa hàm** khỏi `admin.functions.php`
+- Còn chỗ khác gọi → **báo lại Dev** để quyết định hướng xử lý (không tự xóa)
+
+### 3.7 Tách biến theo nhóm ngữ nghĩa — không dồn vào $contents[]
+
+**Sai — dồn tất cả vào một mảng hỗn hợp:**
+```php
+$contents = [];
+$contents['keyword']  = '...';   // search
+$contents['plans']    = [...];   // Khối quảng cáo
+$contents['thead']    = [...];   // language strings
+$contents['view']     = '...';   // language string
+$contents['rows']     = [...];   // DB data
+$tpl->assign('CONTENTS', $contents);
+// Template: {$CONTENTS.keyword}, {$CONTENTS.thead}, {$CONTENTS.rows}...
+```
+
+**Đúng — tách theo nhóm ngữ nghĩa:**
+
+| Biến | Chứa gì |
+|---|---|
+| `$array_search` | Dữ liệu form tìm kiếm/lọc: keyword, filter options, selected values |
+| `$array_plans` | Dữ liệu đọc từ CSDL hoặc biến global các khối quảng cáo |
+| `$array` | Rows đọc từ CSDL, đã xử lý sẵn cho hiển thị (formatted dates, URLs, bool flags...) |
+| Language strings | **Không assign** — dùng `$LANG->getModule()` / `$LANG->getGlobal()` trực tiếp trong tpl |
+
+```php
+$array_search = [
+    'keyword' => $nv_Request->get_title('q', 'get', ''),
+    'pid'     => $nv_Request->get_int('pid', 'get', 0),
+];
+
+$array = [];
+while ($row = $result->fetch()) {
+    $array[] = [
+        'id'        => $row['id'],
+        'title'     => $row['title'],
+        'act'       => (bool) $row['act'],      // bool, không phải chuỗi HTML
+        'publ_date' => nv_date_format($row['publ_time']),
+        // ...
+    ];
+}
+
+$tpl->assign('ARRAY_SEARCH', $array_search);
+$tpl->assign('ARRAY_PLANS', $array_plans);
+$tpl->assign('ARRAY', $array);
+// Language strings KHÔNG assign
+```
+
 ## 4. Template syntax
 
 ### 4.1 Bảng so sánh
@@ -452,6 +525,9 @@ $(function() {
 - [ ] Register modifier nếu template dùng
 - [ ] `$tpl->fetch('filename.tpl')` (setTemplateDir đã trỏ đúng thư mục)
 - [ ] Không tạo chuỗi `checked="checked"` / `selected="selected"` từ PHP
+- [ ] Không dùng hàm trung gian trong `admin.functions.php` — xử lý trực tiếp trong controller
+- [ ] Grep kiểm tra hàm trung gian cũ còn được gọi ở đâu không: còn → báo Dev; không còn → xóa hàm
+- [ ] Tách biến: `$array_search` (tìm kiếm/lọc), `$array` (rows DB) — không dồn vào `$contents[]` hỗn hợp; language strings dùng trực tiếp trong tpl
 - [ ] `nv_insert_logs()` đã bổ sung cho thao tác thêm/sửa/xóa CSDL
 
 ### JavaScript
