@@ -42,7 +42,8 @@ if (defined('NV_IS_SPADMIN')) {
     $allow_func[] = 'uploadconfig';
 }
 
-$_csrf_key = defined('NV_IS_MODADMIN') ? $admin_info['admin_id'] . '_' . $module_name . '_main' : '';
+// Cần có isset($admin_info['admin_id']) để khi cài đặt không báo lỗi
+$_csrf_key = isset($admin_info['admin_id']) ? $admin_info['admin_id'] . '_' . $module_name . '_main' : '';
 
 // Các module trong quản trị
 $sql = 'SELECT module FROM ' . NV_AUTHORS_GLOBALTABLE . '_module';
