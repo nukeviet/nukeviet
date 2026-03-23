@@ -32,17 +32,23 @@ $(function() {
     if ("undefined" != typeof drag_block && 0 != drag_block) {
         $("a.delblock").click(function(e) {
             e.preventDefault();
-            confirm(block_delete_confirm) && $.post(post_url + "blocks_del", "bid=" + $(this).attr("name") + "&checkss=" + $(this).data("checkss"), function(a) {
-                alert(a);
-                window.location.href = selfurl
-            })
+            nukeviet.confirm(block_delete_confirm, () => {
+                $.post(post_url + "blocks_del", "bid=" + $(this).attr("name") + "&checkss=" + $(this).data("checkss"), function(a) {
+                    nukeviet.alert(a.text, () => {
+                        location.reload();
+                    });
+                });
+            });
         });
         $("a.outgroupblock").click(function(e) {
             e.preventDefault();
-            confirm(block_outgroup_confirm) && $.post(post_url + "block_outgroup", "func_id=" + func_id + "&bid=" + $(this).attr("name") + "&checkss=" + $(this).data("checkss"), function(a) {
-                alert(a);
-                window.location.href = selfurl
-            })
+            nukeviet.confirm(block_outgroup_confirm, () => {
+                $.post(post_url + "block_outgroup", "func_id=" + func_id + "&bid=" + $(this).attr("name") + "&checkss=" + $(this).data("checkss"), function(a) {
+                    nukeviet.alert(a, () => {
+                        location.reload();
+                    });
+                });
+            });
         });
         $("a.block_content").click(function(e) {
             e.preventDefault();

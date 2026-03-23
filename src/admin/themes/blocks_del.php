@@ -67,5 +67,5 @@ $db->query('OPTIMIZE TABLE ' . NV_BLOCKS_TABLE . '_weight');
 
 nv_jsonOutput([
     'success' => 1,
-    'text' => ''
+    'text' => $nv_Lang->getModule('block_delete_success')
 ]);
