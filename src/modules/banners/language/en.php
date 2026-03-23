@@ -77,6 +77,7 @@ $lang_module['act3'] = 'Suspend';
 $lang_module['change_act'] = 'Suspend/Active';
 $lang_module['plans_list'] = 'Banner block';
 $lang_module['plans_list2'] = 'Banner blocks';
+$lang_module['plans_list_empty'] = 'No banner block found';
 $lang_module['in_plan'] = 'Banner block';
 $lang_module['add_plan'] = 'Add block';
 $lang_module['banners_list'] = 'Banners';

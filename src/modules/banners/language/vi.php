@@ -80,6 +80,7 @@ $lang_module['act4'] = 'Đang đợi chấp nhận';
 $lang_module['change_act'] = 'Đình chỉ/Kích hoạt';
 $lang_module['plans_list'] = 'Khối banner';
 $lang_module['plans_list2'] = 'Danh sách các khối banner';
+$lang_module['plans_list_empty'] = 'Không tìm thấy khối banner nào';
 $lang_module['in_plan'] = 'Thuộc khối';
 $lang_module['add_plan'] = 'Thêm khối';
 $lang_module['banners_list'] = 'Quảng cáo';

@@ -62,6 +62,8 @@ $db->query('OPTIMIZE TABLE ' . NV_BANNERS_GLOBALTABLE . '_rows');
 
 $nv_Cache->delMod($module_name);
 
-include NV_ROOTDIR . '/includes/header.php';
-echo 'OK|plans_list|plans_list';
-include NV_ROOTDIR . '/includes/footer.php';
+nv_jsonOutput([
+    'status' => 'OK',
+    'mess'   => $nv_Lang->getModule('delfile_success'),
+    'refresh' => true
+]);

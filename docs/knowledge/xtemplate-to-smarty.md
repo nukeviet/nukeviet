@@ -243,7 +243,8 @@ $selected = ($row['type'] == 1) ? ' selected="selected"' : '';
 Quy tắc bảng danh sách:
 - Mọi `<th>` trong thead có class `text-nowrap`; độ rộng cột dùng `style="width:X%"` thay vì px, mọi th trong thead đều phải có width và tổng lại phải bằng 100%
 - Không dùng `text-center` ở thead nếu tbody tương ứng không có
-- Button xóa luôn dùng `btn-danger`; button chỉ có icon cần `aria-label`; không dùng class `fa-lg`
+- Button xóa luôn dùng `btn-danger`; không dùng class `fa-lg`
+- **Nguyên tắc button action**: nếu nút **ít và text ngắn** → giữ text (icon + text). Chỉ dùng icon-only khi text quá dài hoặc quá nhiều nút trong một ô. Khi icon-only: bắt buộc có `aria-label` **và** `data-bs-toggle="tooltip" title="..."`
 - Select thứ tự trong tbody thêm class `fw-75`
 - Nếu có phân trang hoặc công cụ: thêm `card-footer border-top` sau `card-body`
 
@@ -269,12 +270,15 @@ Quy tắc bảng danh sách:
                     <tr>
                         <td>{$row.title}</td>
                         <td class="text-center text-nowrap">
+                            {* Ít nút + text ngắn → giữ text *}
                             <a href="...&amp;{$smarty.const.NV_OP_VARIABLE}=edit&amp;id={$row.id}"
-                               class="btn btn-sm btn-secondary" aria-label="{$LANG->getGlobal('edit')}">
-                                <i class="fa-solid fa-pen-to-square"></i>
+                               class="btn btn-sm btn-secondary">
+                                <i class="fa-solid fa-pen-to-square"></i> {$LANG->getGlobal('edit')}
                             </a>
+                            {* Hoặc icon-only khi nhiều nút: bắt buộc aria-label + tooltip *}
                             <button type="button" class="btn btn-sm btn-danger"
                                     aria-label="{$LANG->getGlobal('delete')}"
+                                    data-bs-toggle="tooltip" title="{$LANG->getGlobal('delete')}"
                                     data-toggle="confirm-delete"
                                     data-id="{$row.id}"
                                     data-tokend="{$CHECKSS}"
@@ -548,7 +552,7 @@ $(function() {
 - [ ] Action URL ghép từ constants (không hardcode)
 - [ ] CSRF: `<input type="hidden" name="checkss" value="{$CHECKSS}">`
 - [ ] Icons dùng Font Awesome 6 (`fa-solid fa-*`); không còn class `fa-lg`
-- [ ] Button chỉ có icon có `aria-label`; button xóa dùng `btn-danger`
+- [ ] Nút ít + text ngắn → giữ text; nút icon-only → có `aria-label` + `data-bs-toggle="tooltip"`; button xóa dùng `btn-danger`
 - [ ] Mọi form element có `name`; `checked`/`selected` dùng `{if}` trong tpl
 - [ ] Thead có `text-nowrap`; độ rộng cột dùng `%`
 

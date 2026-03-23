@@ -37,6 +37,8 @@ $return = $db->exec($sql) ? 'OK' : 'NO';
 $nv_Cache->delMod($module_name);
 nv_CreateXML_bannerPlan();
 
-include NV_ROOTDIR . '/includes/header.php';
-echo $return . '|act_' . $id . '|' . $id . '|plan_info';
-include NV_ROOTDIR . '/includes/footer.php';
+if ($return === 'OK') {
+    nv_jsonOutput(['status' => 'OK', 'mess' => '', 'refresh' => true]);
+} else {
+    nv_jsonOutput(['status' => 'error', 'mess' => $nv_Lang->getModule('delfile_error')]);
+}

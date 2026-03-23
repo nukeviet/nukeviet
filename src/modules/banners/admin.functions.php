@@ -15,7 +15,7 @@ if (!defined('NV_ADMIN') or !defined('NV_MAINFILE') or !defined('NV_IS_MODADMIN'
 
 $allow_func = [
     'main',
-    'plans_list',
+    'plans-list',
     'plist',
     'change_act_plan',
     'add_plan',
@@ -40,7 +40,7 @@ $targets = [
 ];
 
 // Document
-$array_url_instruction['plans_list'] = 'https://wiki.nukeviet.vn/nukeviet4:admin:banners#khối_quảng_cao';
+$array_url_instruction['plans-list'] = 'https://wiki.nukeviet.vn/nukeviet4:admin:banners#khối_quảng_cao';
 $array_url_instruction['add_plan'] = 'https://wiki.nukeviet.vn/nukeviet4:admin:banners#them_khối_quảng_cao';
 $array_url_instruction['edit_plan'] = 'https://wiki.nukeviet.vn/nukeviet4:admin:banners#sửa_khối_quảng_cao';
 $array_url_instruction['add_banner'] = 'https://wiki.nukeviet.vn/nukeviet4:admin:banners#them_quảng_cao';
@@ -390,22 +390,6 @@ function nv_edit_plan_theme($contents, $array_uploadtype, $groups_list)
     }
     $xtpl->assign('DISPLAY_CUSTOM_EXPTIME', $contents['exp_time'] == -1 ? '' : ' style="display:none;"');
 
-    $xtpl->parse('main');
-
-    return $xtpl->text('main');
-}
-
-/**
- * nv_plans_list_theme()
- *
- * @param array $contents
- * @return string
- */
-function nv_plans_list_theme($contents)
-{
-    global $global_config, $module_file;
-    $xtpl = new XTemplate('plans_list.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-    $xtpl->assign('CONTENTS', $contents);
     $xtpl->parse('main');
 
     return $xtpl->text('main');

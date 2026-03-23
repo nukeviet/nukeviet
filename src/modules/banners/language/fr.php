@@ -80,6 +80,7 @@ $lang_module['act4'] = 'En attente d\'acceptation';
 $lang_module['change_act'] = 'Suspendre/Activer';
 $lang_module['plans_list'] = 'Bloc bannière';
 $lang_module['plans_list2'] = 'Blocs de bannière';
+$lang_module['plans_list_empty'] = 'Aucun bloc de bannière trouvé';
 $lang_module['in_plan'] = 'Bloc bannière';
 $lang_module['add_plan'] = 'Ajouter un bloc';
 $lang_module['banners_list'] = 'Bannières';

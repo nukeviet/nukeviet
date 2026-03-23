@@ -107,7 +107,7 @@ Tuân thủ toàn bộ quy tắc trong `docs/knowledge/xtemplate-to-smarty.md` (
 - Icons: `fa-solid fa-*` (Font Awesome 6), không `fa fa-*`
 - Bootstrap 5: `card`, `float-end`, `d-none`, `btn-secondary` — không dùng class BS3
 - **`<label>` không có input tương ứng** (editor, selector group...): đổi thành `<div class="form-label">`
-- **Button chỉ có icon** (không có text): thêm `aria-label="..."`
+- **Button action**: nếu nút **ít và text ngắn** thì giữ text (icon + text); chỉ dùng icon-only khi text quá dài hoặc quá nhiều nút trong một ô — lúc đó bắt buộc thêm `aria-label="..."` **và** `data-bs-toggle="tooltip" title="..."`
 - **Xóa class `fa-lg`** trong button và thẻ `<a>` — icon quá to
 - **Button xóa**: luôn dùng `btn-danger`; không dùng `btn-warning`/`btn-secondary` cho nút xóa
 - **`name` attribute**: mọi `<select>`, `<input>`, `<textarea>` phải có `name`
@@ -260,7 +260,7 @@ Sau đó báo cáo:
 - [ ] CSRF: `<input type="hidden" name="checkss" value="{$CHECKSS}">` trong mọi form POST
 - [ ] Icons dùng Font Awesome 6 (`fa-solid fa-*`)
 - [ ] `<label>` không có input tương ứng đã đổi thành `<div class="form-label">`
-- [ ] Button chỉ có icon có `aria-label`; không còn class `fa-lg` trong button/thẻ `<a>`
+- [ ] Nút ít + text ngắn → giữ text; nút icon-only (text dài / quá nhiều nút) → có `aria-label` + `data-bs-toggle="tooltip"`; không còn class `fa-lg` trong button/thẻ `<a>`
 - [ ] Button xóa dùng `btn-danger`; mọi form element có `name`
 - [ ] Bảng có `text-nowrap` ở thead, độ rộng cột dùng `%`, select thứ tự có `fw-75`
 - [ ] Đã xóa `select2.min.css` nếu có
