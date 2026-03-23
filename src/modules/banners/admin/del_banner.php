@@ -35,11 +35,14 @@ if (!empty($row)) {
     nv_CreateXML_bannerPlan();
 
     nv_insert_logs(NV_LANG_DATA, $module_name, 'log_del_banner', 'bannerid ' . $id, $admin_info['userid']);
+
     if (defined('NV_IS_AJAX')) {
-        echo $nv_Lang->getModule('delfile_success');
+        nv_jsonOutput(['status' => 'OK', 'mess' => $nv_Lang->getModule('delfile_success')]);
     } else {
-        nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=banners_list');
+        nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=main');
     }
 } else {
-    echo $nv_Lang->getModule('delfile_error');
+    if (defined('NV_IS_AJAX')) {
+        nv_jsonOutput(['status' => 'error', 'mess' => $nv_Lang->getModule('delfile_error')]);
+    }
 }

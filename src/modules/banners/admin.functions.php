@@ -22,10 +22,8 @@ $allow_func = [
     'edit_plan',
     'del_plan',
     'info_plan',
-    'banners_list',
     'add_banner',
     'edit_banner',
-    'b_list',
     'change_act_banner',
     'info_banner',
     'show_stat',
@@ -42,7 +40,6 @@ $targets = [
 ];
 
 // Document
-$array_url_instruction['banners_list'] = 'https://wiki.nukeviet.vn/nukeviet4:admin:banners#quảng_cao';
 $array_url_instruction['plans_list'] = 'https://wiki.nukeviet.vn/nukeviet4:admin:banners#khối_quảng_cao';
 $array_url_instruction['add_plan'] = 'https://wiki.nukeviet.vn/nukeviet4:admin:banners#them_khối_quảng_cao';
 $array_url_instruction['edit_plan'] = 'https://wiki.nukeviet.vn/nukeviet4:admin:banners#sửa_khối_quảng_cao';
@@ -589,97 +586,6 @@ function nv_edit_banner_theme($contents)
         ]);
         $xtpl->parse('main.m_pub');
         $xtpl->parse('main.m_exp');
-    }
-
-    $xtpl->parse('main');
-
-    return $xtpl->text('main');
-}
-
-/**
- * nv_banners_list_theme()
- *
- * @param array $contents
- * @return string
- */
-function nv_banners_list_theme($contents)
-{
-    global $global_config, $module_file;
-    $xtpl = new XTemplate('banners_list.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-    $xtpl->assign('CONTENTS', $contents);
-    $xtpl->parse('main');
-
-    return $xtpl->text('main');
-}
-
-/**
- * nv_b_list_theme()
- *
- * @param array $contents
- * @param array $array_users
- * @return string
- */
-function nv_b_list_theme($contents, $array_users = [])
-{
-    global $global_config, $module_file, $module_name, $global_config;
-
-    $xtpl = new XTemplate('b_list.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-    $xtpl->assign('CONTENTS', $contents);
-    $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
-    $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
-    $xtpl->assign('MODULE_NAME', $module_name);
-
-    if (defined('NV_BANNER_WEIGHT')) {
-        $xtpl->parse('main.nv_banner_weight');
-    }
-
-    if (!empty($contents['searchform'])) {
-        $xtpl->assign('FORM_ACTION', NV_BASE_ADMINURL . 'index.php');
-        $xtpl->assign('NV_LANG_VARIABLE', NV_LANG_VARIABLE);
-        $xtpl->assign('NV_LANG_DATA', NV_LANG_DATA);
-        $xtpl->assign('NV_NAME_VARIABLE', NV_NAME_VARIABLE);
-        $xtpl->assign('NV_OP_VARIABLE', NV_OP_VARIABLE);
-
-        foreach ($contents['plans'] as $plan) {
-            $plan['selected'] = $plan['id'] == $contents['pid'] ? ' selected="selected"' : '';
-            $xtpl->assign('PLAN', $plan);
-            $xtpl->parse('main.searchform.plan');
-        }
-
-        $xtpl->parse('main.searchform');
-    }
-
-    foreach ($contents['thead'] as $thead) {
-        $xtpl->assign('THEAD', $thead);
-        $xtpl->parse('main.thead');
-    }
-
-    $is_allowed_viewuser = nv_user_in_groups($global_config['whoviewuser']);
-    $a = 0;
-
-    if (!empty($contents['rows'])) {
-        foreach ($contents['rows'] as $b_id => $values) {
-            $values['delfile'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=del_banner&id=' . $b_id;
-            $values['checked'] = $values['act'][1] == '1' ? ' checked="checked"' : '';
-            $xtpl->assign('ROW', $values);
-
-            if (defined('NV_BANNER_WEIGHT')) {
-                $xtpl->parse('main.loop.nv_banner_weight');
-            }
-
-            if (!empty($values['clid']) and isset($array_users[$values['clid']])) {
-                $user = $array_users[$values['clid']];
-                if ($is_allowed_viewuser) {
-                    $user['link'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=users&' . NV_OP_VARIABLE . '=memberlist/' . change_alias($user['username']) . '-' . $user['md5username'];
-                } else {
-                    $user['link'] = 'javascript:void(0);';
-                }
-                $xtpl->assign('USER', $user);
-                $xtpl->parse('main.loop.user');
-            }
-
-            $xtpl->parse('main.loop');
-        }
     }
 
     $xtpl->parse('main');

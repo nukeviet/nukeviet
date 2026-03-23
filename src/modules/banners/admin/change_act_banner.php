@@ -20,19 +20,19 @@ if (!defined('NV_IS_AJAX')) {
 $id = $nv_Request->get_int('id', 'post', 0);
 
 if (empty($id)) {
-    nv_htmlOutput('NO|act_' . $id);
+    nv_jsonOutput(['status' => 'error', 'mess' => '']);
 }
 
 $sql = 'SELECT * FROM ' . NV_BANNERS_GLOBALTABLE . '_rows WHERE id=' . $id . ' AND act IN (0,1,2,3,4)';
 $row = $db->query($sql)->fetch();
 if (empty($row)) {
-    nv_htmlOutput('NO|act_' . $id);
+    nv_jsonOutput(['status' => 'error', 'mess' => '']);
 }
 
 $sql = 'SELECT * FROM ' . NV_BANNERS_GLOBALTABLE . '_plans WHERE id=' . $row['pid'];
 $plan = $db->query($sql)->fetch();
 if (empty($plan)) {
-    nv_htmlOutput('NO|act_' . $id);
+    nv_jsonOutput(['status' => 'error', 'mess' => '']);
 }
 
 $act = (int) ($row['act']);
@@ -76,8 +76,13 @@ if ($row['act'] == 2 or $row['act'] == 4) {
 }
 
 $sql = 'UPDATE ' . NV_BANNERS_GLOBALTABLE . '_rows SET act=' . $act . ', publ_time=' . $publ_time . ', exp_time=' . $exp_time . ', weight=' . $weight . ' WHERE id=' . $id;
-$return = ($db->exec($sql)) ? 'OK' : 'NO';
+$ok = (bool) $db->exec($sql);
 
 $nv_Cache->delMod($module_name);
 nv_CreateXML_bannerPlan();
-nv_htmlOutput($return . '|act_' . $id);
+
+if ($ok) {
+    nv_jsonOutput(['status' => 'OK', 'mess' => '']);
+} else {
+    nv_jsonOutput(['status' => 'error', 'mess' => '']);
+}

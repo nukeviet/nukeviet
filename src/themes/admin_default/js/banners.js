@@ -199,11 +199,10 @@ function nv_chang_weight_banners(pid, id) {
 function nv_b_chang_act(id, checkbox_id) {
     if (confirm(nv_is_change_act_confirm[0])) {
         var nv_timer = nv_settimeout_disable(checkbox_id, 5000);
-        $.post(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=change_act_banner&nocache=' + new Date().getTime(), 'id=' + id, function(res) {
-            var r_split = res.split("|");
-            if (r_split[0] != 'OK') {
+        $.post(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=change_act_banner&nocache=' + new Date().getTime(), 'id=' + id, function(data) {
+            if (data.status !== 'OK' && data.status !== 'ok') {
                 alert(nv_is_change_act_confirm[2]);
-                var sl = document.getElementById(r_split[1]);
+                var sl = document.getElementById(checkbox_id);
                 if (sl.checked == true)
                     sl.checked = false;
                 else
@@ -213,7 +212,7 @@ function nv_b_chang_act(id, checkbox_id) {
             } else {
                 window.location.href = window.location.href;
             }
-        });
+        }, 'json');
     } else {
         var sl = document.getElementById(checkbox_id);
         if (sl.checked == true)
@@ -226,14 +225,13 @@ function nv_b_chang_act(id, checkbox_id) {
 
 function nv_b_chang_act2(id) {
     if (confirm(nv_is_change_act_confirm[0])) {
-        $.post(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=change_act_banner&nocache=' + new Date().getTime(), 'id=' + id, function(res) {
-            var r_split = res.split("|");
-            if (r_split[0] != 'OK') {
+        $.post(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=change_act_banner&nocache=' + new Date().getTime(), 'id=' + id, function(data) {
+            if (data.status !== 'OK' && data.status !== 'ok') {
                 alert(nv_is_change_act_confirm[2]);
             } else {
                 window.location.href = window.location.href;
             }
-        });
+        }, 'json');
     }
     return;
 }
