@@ -136,7 +136,7 @@ while ($row = $result->fetch()) {
         'act'       => (int) $row['act'],
         'act_label' => $nv_Lang->getModule('banner_act_' . $row['act']),
         'act_color' => $act_colors[(int) $row['act']] ?? 'secondary',
-        'edit_url'  => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=edit_banner&amp;id=' . $row['id'],
+        'edit_url'  => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=banner-content&amp;id=' . $row['id'],
         'user'      => null,
     ];
 

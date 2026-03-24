@@ -21,7 +21,7 @@ $allow_func = [
     'plan-content',
     'del_plan',
     'info_plan',
-    'add-banner',
+    'banner-content',
     'edit_banner',
     'change_act_banner',
     'info-banner',
@@ -41,8 +41,7 @@ $targets = [
 // Document
 $array_url_instruction['plans-list'] = 'https://wiki.nukeviet.vn/nukeviet4:admin:banners#khối_quảng_cao';
 $array_url_instruction['plan-content'] = 'https://wiki.nukeviet.vn/nukeviet4:admin:banners#them_khối_quảng_cao';
-$array_url_instruction['add-banner'] = 'https://wiki.nukeviet.vn/nukeviet4:admin:banners#them_quảng_cao';
-$array_url_instruction['edit_banner'] = 'https://wiki.nukeviet.vn/nukeviet4:admin:banners#sửa_quảng_cao';
+$array_url_instruction['banner-content'] = 'https://wiki.nukeviet.vn/nukeviet4:admin:banners#them_quảng_cao';
 
 $array_uploadtype = [
     'images'

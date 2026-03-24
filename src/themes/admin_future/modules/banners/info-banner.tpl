@@ -1,6 +1,6 @@
 {* Nút hành động *}
 <div class="d-flex flex-wrap gap-2 mb-3 justify-content-end">
-    <a href="{$smarty.const.NV_BASE_ADMINURL}index.php?{$smarty.const.NV_LANG_VARIABLE}={$smarty.const.NV_LANG_DATA}&amp;{$smarty.const.NV_NAME_VARIABLE}={$MODULE_NAME}&amp;{$smarty.const.NV_OP_VARIABLE}=edit_banner&amp;id={$BANNER_ID}" class="btn btn-secondary">
+    <a href="{$smarty.const.NV_BASE_ADMINURL}index.php?{$smarty.const.NV_LANG_VARIABLE}={$smarty.const.NV_LANG_DATA}&amp;{$smarty.const.NV_NAME_VARIABLE}={$MODULE_NAME}&amp;{$smarty.const.NV_OP_VARIABLE}=banner-content&amp;id={$BANNER_ID}" class="btn btn-secondary">
         <i class="fa-solid fa-pencil"></i> {$LANG->getGlobal('edit')}
     </a>
     <button type="button" class="btn btn-warning"

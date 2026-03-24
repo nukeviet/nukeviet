@@ -6,7 +6,7 @@
 <div class="alert alert-danger">{$UPLOAD_BLOCKED_MSG}</div>
 {else}
 <form method="post" class="ajax-submit" novalidate enctype="multipart/form-data"
-      action="{$smarty.const.NV_BASE_ADMINURL}index.php?{$smarty.const.NV_LANG_VARIABLE}={$smarty.const.NV_LANG_DATA}&amp;{$smarty.const.NV_NAME_VARIABLE}={$MODULE_NAME}&amp;{$smarty.const.NV_OP_VARIABLE}={$OP}">
+      action="{$smarty.const.NV_BASE_ADMINURL}index.php?{$smarty.const.NV_LANG_VARIABLE}={$smarty.const.NV_LANG_DATA}&amp;{$smarty.const.NV_NAME_VARIABLE}={$MODULE_NAME}&amp;{$smarty.const.NV_OP_VARIABLE}={$OP}{if $IS_EDIT}&amp;id={$ITEM.id}{/if}">
     <div class="card">
         <div class="card-body">
             <div class="row mb-3">
@@ -59,12 +59,32 @@
 
             <div class="row mb-3">
                 <div class="col-12 col-sm-4 col-lg-3 col-form-label text-sm-end">
-                    {$LANG->getModule('upload', $FILE_ALLOWED_EXT)}
+                    {if $IS_EDIT and $CURRENT_FILE}
+                        {$LANG->getModule('re_upload', $FILE_ALLOWED_EXT)}
+                    {else}
+                        {$LANG->getModule('upload', $FILE_ALLOWED_EXT)}
+                    {/if}
                     <span class="text-danger d-none" id="require_image_mark">(*)</span>
                 </div>
                 <div class="col-12 col-sm-8 col-lg-6 col-xxl-5">
+                    {if $IS_EDIT and $CURRENT_FILE}
+                    <div id="current_banner_wrap" class="mt-2 mb-2 d-flex align-items-center gap-2">
+                        <a href="javascript:void(0)" class="open-modal-image" data-src="{$CURRENT_FILE.url}">
+                            <i class="fa-regular fa-image"></i> {$LANG->getModule('click_show_img')}
+                        </a>
+                        <a href="javascript:void(0)" class="text-danger" data-toggle="remove-banner">
+                            <i class="fa-solid fa-trash"></i> {$LANG->getGlobal('delete')}
+                        </a>
+                    </div>
+                    <input type="hidden" name="remove_banner" id="remove_banner" value="{$ITEM.remove_banner}">
+                    <div id="new_banner_wrap" class="d-none">
+                        <input type="file" class="form-control" name="banner" id="banner" accept="image/*">
+                        <div class="invalid-feedback"></div>
+                    </div>
+                    {else}
                     <input type="file" class="form-control" name="banner" id="banner" accept="image/*">
                     <div class="invalid-feedback"></div>
+                    {/if}
                 </div>
             </div>
 
@@ -73,7 +93,22 @@
                     {$LANG->getModule('imageforswf')}
                 </label>
                 <div class="col-12 col-sm-8 col-lg-6 col-xxl-5">
+                    {if $IS_EDIT and $CURRENT_IMAGEFORSWF}
+                    <div id="current_imageforswf_wrap" class="mt-2 mb-2 d-flex align-items-center gap-2">
+                        <a href="javascript:void(0)" class="open-modal-image" data-src="{$CURRENT_IMAGEFORSWF}">
+                            <i class="fa-regular fa-image"></i> {$LANG->getModule('click_show_img')}
+                        </a>
+                        <a href="javascript:void(0)" class="text-danger" data-toggle="remove-imageforswf">
+                            <i class="fa-solid fa-trash"></i> {$LANG->getGlobal('delete')}
+                        </a>
+                    </div>
+                    <input type="hidden" name="remove_imageforswf" id="remove_imageforswf" value="{$ITEM.remove_imageforswf}">
+                    <div id="new_imageforswf_wrap" class="d-none">
+                        <input type="file" class="form-control" name="imageforswf" id="imageforswf" accept="image/*">
+                    </div>
+                    {else}
                     <input type="file" class="form-control" name="imageforswf" id="imageforswf" accept="image/*">
+                    {/if}
                 </div>
             </div>
 
@@ -196,9 +231,23 @@
             <input type="hidden" name="save" value="1">
             <input type="hidden" name="checkss" value="{$CHECKSS}">
             <button type="submit" class="btn btn-primary">
-                <i class="fa-solid fa-floppy-disk"></i> {$LANG->getGlobal('save')}
+                <i class="fa-solid fa-floppy-disk"></i>
+                {if $IS_EDIT}{$LANG->getGlobal('save')}{else}{$LANG->getGlobal('add')}{/if}
             </button>
         </div>
     </div>
 </form>
+{if $IS_EDIT}
+<div class="modal fade" id="imagemodal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">{$LANG->getModule('file_name')}</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body text-center" id="imagemodal-body"></div>
+        </div>
+    </div>
+</div>
+{/if}
 {/if}

@@ -32,7 +32,7 @@
                 <i class="fa-solid fa-xmark"></i>
             </a>
             {/if}
-            <a href="{$smarty.const.NV_BASE_ADMINURL}index.php?{$smarty.const.NV_LANG_VARIABLE}={$smarty.const.NV_LANG_DATA}&amp;{$smarty.const.NV_NAME_VARIABLE}={$MODULE_NAME}&amp;{$smarty.const.NV_OP_VARIABLE}=add-banner" class="btn btn-success">
+            <a href="{$smarty.const.NV_BASE_ADMINURL}index.php?{$smarty.const.NV_LANG_VARIABLE}={$smarty.const.NV_LANG_DATA}&amp;{$smarty.const.NV_NAME_VARIABLE}={$MODULE_NAME}&amp;{$smarty.const.NV_OP_VARIABLE}=banner-content" class="btn btn-success">
                 <i class="fa-solid fa-plus-circle"></i> {$LANG->getGlobal('add')}
             </a>
         </div>

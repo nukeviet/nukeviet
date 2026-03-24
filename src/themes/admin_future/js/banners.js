@@ -21,7 +21,7 @@ $(function() {
         }
     });
 
-    // Autocomplete tìm kiếm người dùng (dùng cho add-banner, edit_banner)
+    // Autocomplete tìm kiếm người dùng
     const autosearchWrap = $('.autosearch-user');
     if (autosearchWrap.length) {
         let autosearchTimer = null;
@@ -89,6 +89,15 @@ $(function() {
             }
         });
     }
+
+    // Xem ảnh qua modal (dùng chung cho banner-content và info-banner)
+    $(document).on('click', '.open-modal-image', function(e) {
+        e.preventDefault();
+        const src = $(this).data('src');
+        $('#imagemodal-body').html('<img src="' + src + '" class="img-fluid">');
+        const modal = new bootstrap.Modal(document.getElementById('imagemodal'));
+        modal.show();
+    });
 
     // Xóa quảng cáo
     $('[data-toggle="del-banner"]').on('click', function(e) {
@@ -234,7 +243,7 @@ $(function() {
     }
 
     // Form thêm banner mới
-    if (nv_func_name === 'add-banner') {
+    if (nv_func_name === 'banner-content') {
         // Khởi tạo datepicker cho ngày bắt đầu và kết thúc
         if ($('.datepicker').length) {
             $('.datepicker').datepicker({
@@ -271,19 +280,26 @@ $(function() {
 
         $('#pid').on('change', updatePlanUI);
         updatePlanUI();
+
+        // Xoá banner chính: ẩn preview, hiện input upload
+        $('[data-toggle="remove-banner"]').on('click', function(e) {
+            e.preventDefault();
+            $('#current_banner_wrap').addClass('d-none');
+            $('#new_banner_wrap').removeClass('d-none');
+            $('#remove_banner').val('1');
+        });
+
+        // Xoá ảnh mobile: ẩn preview, hiện input upload
+        $('[data-toggle="remove-imageforswf"]').on('click', function(e) {
+            e.preventDefault();
+            $('#current_imageforswf_wrap').addClass('d-none');
+            $('#new_imageforswf_wrap').removeClass('d-none');
+            $('#remove_imageforswf').val('1');
+        });
     }
 
     // Trang thông tin chi tiết banner
     if (nv_func_name === 'info-banner') {
-        // Xem ảnh banner qua modal
-        $(document).on('click', '.open-modal-image', function(e) {
-            e.preventDefault();
-            const src = $(this).data('src');
-            $('#imagemodal-body').html('<img src="' + src + '" class="img-fluid">');
-            const modal = new bootstrap.Modal(document.getElementById('imagemodal'));
-            modal.show();
-        });
-
         // Xem thống kê chi tiết
         $('#btn-show-stat').on('click', function() {
             const btn = $(this);
