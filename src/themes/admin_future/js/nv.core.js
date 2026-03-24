@@ -705,13 +705,15 @@ $(function() {
         }
 
         var that = $(this),
-            data = that.serialize(),
+            data = new FormData(that[0]),
             callback = that.data('callback');
         $('input, textarea, select, button', that).prop('disabled', true);
         $.ajax({
             url: that.attr('action'),
             type: 'POST',
             data: data,
+            contentType: false,
+            processData: false,
             cache: false,
             dataType: "json",
             success: function(a) {

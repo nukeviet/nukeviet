@@ -22,7 +22,7 @@ $allow_func = [
     'edit_plan',
     'del_plan',
     'info_plan',
-    'add_banner',
+    'add-banner',
     'edit_banner',
     'change_act_banner',
     'info-banner',
@@ -43,7 +43,7 @@ $targets = [
 $array_url_instruction['plans-list'] = 'https://wiki.nukeviet.vn/nukeviet4:admin:banners#khối_quảng_cao';
 $array_url_instruction['add-plan'] = 'https://wiki.nukeviet.vn/nukeviet4:admin:banners#them_khối_quảng_cao';
 $array_url_instruction['edit_plan'] = 'https://wiki.nukeviet.vn/nukeviet4:admin:banners#sửa_khối_quảng_cao';
-$array_url_instruction['add_banner'] = 'https://wiki.nukeviet.vn/nukeviet4:admin:banners#them_quảng_cao';
+$array_url_instruction['add-banner'] = 'https://wiki.nukeviet.vn/nukeviet4:admin:banners#them_quảng_cao';
 $array_url_instruction['edit_banner'] = 'https://wiki.nukeviet.vn/nukeviet4:admin:banners#sửa_quảng_cao';
 
 $array_uploadtype = [
@@ -574,10 +574,17 @@ function nv_clean60_bannerlink($string, $num = 60)
 
 // Tìm kiếm thành viên AJAX
 if ($nv_Request->isset_request('ajaxqueryusername', 'post')) {
-    $checkss = $nv_Request->get_title('checkss', 'post', '');
-    if ($checkss != NV_CHECK_SESSION or !defined('NV_IS_AJAX')) {
+    if (!defined('NV_IS_AJAX')) {
         exit('Wrong URL');
     }
+    $_csrf_key = $admin_info['admin_id'] . '_' . $module_name . '_ajaxqueryusername';
+    if (!csrf_check($nv_Request->get_string('checkss', 'post'), $_csrf_key)) {
+        nv_jsonOutput([
+            'status' => 'error',
+            'mess' => $nv_Lang->getGlobal('error_checkss')
+        ]);
+    }
+
     $username = $nv_Request->get_title('ajaxqueryusername', 'post', '');
     $return = [];
 
