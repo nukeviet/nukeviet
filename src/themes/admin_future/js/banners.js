@@ -294,7 +294,7 @@ $(function() {
             btn.prop('disabled', true);
             $.ajax({
                 type: 'GET',
-                url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=show_stat&id=' + id + '&month=' + month + '&ext=' + ext + '&nocache=' + new Date().getTime(),
+                url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=show-stat&id=' + id + '&month=' + month + '&ext=' + ext + '&nocache=' + new Date().getTime(),
                 success: (html) => {
                     $('#statistic').html(html);
                     btn.prop('disabled', false);
@@ -303,6 +303,20 @@ $(function() {
                     btn.prop('disabled', false);
                 }
             });
+        });
+
+        // Xem danh sách click theo mục thống kê
+        $(document).on('click', '[data-toggle="show-list-stat"]', function(e) {
+            e.preventDefault();
+            const btn = $(this);
+            const container = btn.data('container') || 'statistic';
+            let requestQuery = nv_fc_variable + '=show-list-stat';
+            requestQuery += '&bid=' + encodeURIComponent(btn.data('bid'));
+            requestQuery += '&month=' + encodeURIComponent(btn.data('month'));
+            requestQuery += '&ext=' + encodeURIComponent(btn.data('ext'));
+            requestQuery += '&val=' + encodeURIComponent(btn.data('val'));
+
+            $('#' + container).load(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + requestQuery + '&nocache=' + new Date().getTime());
         });
 
         // Đình chỉ / Kích hoạt banner

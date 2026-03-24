@@ -26,8 +26,8 @@ $allow_func = [
     'edit_banner',
     'change_act_banner',
     'info-banner',
-    'show_stat',
-    'show_list_stat',
+    'show-stat',
+    'show-list-stat',
     'del_banner'
 ];
 define('NV_IS_FILE_ADMIN', true);
@@ -487,75 +487,6 @@ function nv_edit_banner_theme($contents)
     return $xtpl->text('main');
 }
 
-
-/**
- * nv_show_stat_theme()
- *
- * @param array $contents
- * @return string
- */
-function nv_show_stat_theme($contents)
-{
-    global $global_config, $module_file, $module_name;
-    $xtpl = new XTemplate('show_stat.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-    $xtpl->assign('CONTENTS', $contents);
-    $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
-    $xtpl->assign('MODULE_NAME', $module_name);
-    if (!empty($contents[2])) {
-        $a = 0;
-        foreach ($contents[2] as $key => $value) {
-            $xtpl->assign('KEY', $key);
-            $xtpl->assign('ROW', $value);
-            if (!preg_match('/^[0-9]+$/', $key)) {
-                $xtpl->parse('main.loop.t1');
-            } else {
-                $xtpl->parse('main.loop.t2');
-            }
-            if (!empty($value[1])) {
-                $xtpl->assign('WIDTH', $value[1] * 3);
-                $xtpl->parse('main.loop.t3');
-            }
-            $xtpl->parse('main.loop');
-        }
-    }
-    $xtpl->parse('main');
-
-    return $xtpl->text('main');
-}
-
-/**
- * nv_show_list_stat_theme()
- *
- * @param array $contents
- * @return string
- */
-function nv_show_list_stat_theme($contents)
-{
-    global $global_config, $module_file, $module_name;
-    $xtpl = new XTemplate('show_list_stat.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-    $xtpl->assign('CONTENTS', $contents);
-    $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
-    $xtpl->assign('MODULE_NAME', $module_name);
-    foreach ($contents['thead'] as $thead) {
-        $xtpl->assign('THEAD', $thead);
-        $xtpl->parse('main.thead');
-    }
-    $a = 0;
-    foreach ($contents['rows'] as $row) {
-        $xtpl->assign('ROW', $row);
-        foreach ($row as $r) {
-            $xtpl->assign('R', $r);
-            $xtpl->parse('main.loop.r');
-        }
-        $xtpl->parse('main.loop');
-    }
-    if (!empty($contents['generate_page'])) {
-        $xtpl->parse('main.generate_page');
-    }
-    $xtpl->parse('main');
-
-    return $xtpl->text('main');
-}
 
 /**
  * nv_clean60_bannerlink()

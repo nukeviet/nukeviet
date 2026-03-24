@@ -23,149 +23,6 @@ class SampleDataTest extends \Codeception\Test\Unit
     }
 
     /**
-     * Dữ liệu mẫu click quảng cáo
-     *
-     * @group sample-data
-     */
-    public function testInsertSampleDataForBannerClicks()
-    {
-        global $db, $db_config;
-
-        $year = (int) date('Y');
-        $startTime = strtotime("$year-01-01 00:00:00");
-        $endTime   = strtotime("$year-01-31 23:59:59");
-
-        $countries = ['VN', 'US', 'JP', 'KR', 'DE'];
-        $oses = [
-            'windows' => 'Windows',
-            'android' => 'Android',
-            'ios'     => 'iOS',
-            'linux'   => 'Linux',
-            'macos'   => 'macOS'
-        ];
-        $browsers = [
-            'chrome'  => 'Google Chrome',
-            'firefox' => 'Firefox',
-            'edge'    => 'Microsoft Edge',
-            'safari'  => 'Safari',
-            'opera'   => 'Opera'
-        ];
-
-        $buildRows = function ($rows) {
-            return implode(',', $rows);
-        };
-
-        $randomIp = function () {
-            return rand(1,255).'.'.rand(0,255).'.'.rand(0,255).'.'.rand(0,255);
-        };
-
-        /* =======================
-        * 1. 5000 records theo quốc gia
-        * ======================= */
-        $values = [];
-
-        for ($i = 0; $i < 5000; $i++) {
-            $time = rand($startTime, $endTime);
-            $day  = (int)date('j', $time);
-
-            $country = $countries[array_rand($countries)];
-            $osKey   = array_rand($oses);
-            $brKey   = array_rand($browsers);
-
-            $values[] = sprintf(
-                "(1,%d,%d,'%s','%s','%s','%s','%s','%s','%s')",
-                $time,
-                $day,
-                $randomIp(),
-                $country,
-                $brKey,
-                $browsers[$brKey],
-                $osKey,
-                $oses[$osKey],
-                'https://example.com/?c='.uniqid()
-            );
-        }
-
-        $db->exec("
-            INSERT INTO nv5_banners_click
-            (bid, click_time, click_day, click_ip, click_country,
-            click_browse_key, click_browse_name,
-            click_os_key, click_os_name, click_ref)
-            VALUES " . $buildRows($values)
-        );
-
-        /* =======================
-        * 2. 5000 records theo OS (100 mỗi OS)
-        * ======================= */
-        $values = [];
-
-        foreach ($oses as $osKey => $osName) {
-            for ($i = 0; $i < 1000; $i++) {
-                $time = rand($startTime, $endTime);
-                $day  = (int)date('j', $time);
-
-                $brKey = array_rand($browsers);
-
-                $values[] = sprintf(
-                    "(1,%d,%d,'%s','VN','%s','%s','%s','%s','%s')",
-                    $time,
-                    $day,
-                    $randomIp(),
-                    $brKey,
-                    $browsers[$brKey],
-                    $osKey,
-                    $osName,
-                    'https://example.com/?os='.uniqid()
-                );
-            }
-        }
-
-        $db->exec("
-            INSERT INTO " . $db_config['prefix'] . "_banners_click
-            (bid, click_time, click_day, click_ip, click_country,
-            click_browse_key, click_browse_name,
-            click_os_key, click_os_name, click_ref)
-            VALUES " . $buildRows($values)
-        );
-
-        /* =======================
-        * 3. 5000 records theo Browser (100 mỗi browser)
-        * ======================= */
-        $values = [];
-
-        foreach ($browsers as $brKey => $brName) {
-            for ($i = 0; $i < 1000; $i++) {
-                $time = rand($startTime, $endTime);
-                $day  = (int)date('j', $time);
-
-                $osKey = array_rand($oses);
-
-                $values[] = sprintf(
-                    "(1,%d,%d,'%s','US','%s','%s','%s','%s','%s')",
-                    $time,
-                    $day,
-                    $randomIp(),
-                    $brKey,
-                    $brName,
-                    $osKey,
-                    $oses[$osKey],
-                    'https://example.com/?br='.uniqid()
-                );
-            }
-        }
-
-        $db->exec("
-            INSERT INTO " . $db_config['prefix'] . "_banners_click
-            (bid, click_time, click_day, click_ip, click_country,
-            click_browse_key, click_browse_name,
-            click_os_key, click_os_name, click_ref)
-            VALUES " . $buildRows($values)
-        );
-
-        $this->assertTrue(true);
-    }
-
-    /**
      * Dữ liệu mẫu OpenID (OAuth) cho tất cả tài khoản trong nv5_users
      *
      * Mỗi user sẽ được gán ngẫu nhiên 1–3 kết nối OAuth từ các provider:
@@ -241,6 +98,112 @@ class SampleDataTest extends \Codeception\Test\Unit
         );
 
         $this->assertGreaterThan(0, $inserted, 'Không có dòng nào được insert vào bảng _users_openid.');
+    }
+
+    /**
+     * Dữ liệu mẫu thống kê click đầy đủ cho toàn bộ banner trong hệ thống
+     *
+     * Mỗi banner sẽ có ~800 click rải đều trong 6 tháng gần nhất,
+     * với đa dạng quốc gia, trình duyệt, hệ điều hành, IP và referrer —
+     * đủ để trang info-banner hiển thị đồ thị theo ngày/tháng/quốc gia/browser/OS.
+     *
+     * @group sample-data
+     */
+    public function testInsertSampleDataForBannersAllStats()
+    {
+        global $db, $db_config;
+
+        // Lấy toàn bộ banner hiện có
+        $bannerIds = $db->query(
+            'SELECT id FROM ' . $db_config['prefix'] . '_banners_rows ORDER BY id ASC'
+        )->fetchAll(\PDO::FETCH_COLUMN);
+
+        if (empty($bannerIds)) {
+            $this->markTestSkipped('Không có banner nào trong bảng ' . $db_config['prefix'] . '_banners_rows.');
+        }
+
+        $countries = ['VN', 'US', 'JP', 'KR', 'DE', 'FR', 'SG'];
+        $oses = [
+            'windows' => 'Windows',
+            'android' => 'Android',
+            'ios'     => 'iOS',
+            'linux'   => 'Linux',
+            'macos'   => 'macOS',
+        ];
+        $browsers = [
+            'chrome'  => 'Google Chrome',
+            'firefox' => 'Firefox',
+            'edge'    => 'Microsoft Edge',
+            'safari'  => 'Safari',
+            'opera'   => 'Opera',
+        ];
+        $refs = [
+            'https://google.com/search?q=banner',
+            'https://facebook.com/',
+            'https://zalo.me/',
+            'https://example.com/',
+            '',
+        ];
+
+        $randomIp = function (): string {
+            return rand(1, 255) . '.' . rand(0, 255) . '.' . rand(0, 255) . '.' . rand(0, 255);
+        };
+
+        // Tạo danh sách 6 tháng gần nhất (timestamp bắt đầu và kết thúc từng tháng)
+        $months = [];
+        $now = time();
+        for ($m = 0; $m < 6; $m++) {
+            $year  = (int) date('Y', strtotime("-$m months", $now));
+            $month = (int) date('n', strtotime("-$m months", $now));
+            $months[] = [
+                'start' => mktime(0, 0, 0, $month, 1, $year),
+                'end'   => mktime(23, 59, 59, $month, (int) date('t', mktime(0, 0, 0, $month, 1, $year)), $year),
+            ];
+        }
+
+        $countryKeys  = array_values($countries);
+        $osKeys       = array_keys($oses);
+        $browserKeys  = array_keys($browsers);
+
+        foreach ($bannerIds as $bid) {
+            $bid    = (int) $bid;
+            $values = [];
+
+            // ~800 click: ~133 per month × 6 months
+            foreach ($months as $range) {
+                for ($i = 0; $i < 133; $i++) {
+                    $time    = rand($range['start'], $range['end']);
+                    $day     = (int) date('j', $time);
+                    $country = $countryKeys[array_rand($countryKeys)];
+                    $osKey   = $osKeys[array_rand($osKeys)];
+                    $brKey   = $browserKeys[array_rand($browserKeys)];
+                    $ref     = $refs[array_rand($refs)];
+
+                    $values[] = sprintf(
+                        "(%d,%d,%d,'%s','%s','%s','%s','%s','%s','%s')",
+                        $bid,
+                        $time,
+                        $day,
+                        $randomIp(),
+                        $country,
+                        $brKey,
+                        $browsers[$brKey],
+                        $osKey,
+                        $oses[$osKey],
+                        str_replace(["\\", "'"], ["\\\\", "\\'"], $ref)
+                    );
+                }
+            }
+
+            $db->exec(
+                'INSERT INTO ' . $db_config['prefix'] . '_banners_click'
+                . ' (bid, click_time, click_day, click_ip, click_country,'
+                . ' click_browse_key, click_browse_name, click_os_key, click_os_name, click_ref)'
+                . ' VALUES ' . implode(',', $values)
+            );
+        }
+
+        $this->assertTrue(true);
     }
 
     /**

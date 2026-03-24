@@ -241,6 +241,7 @@ $selected = ($row['type'] == 1) ? ' selected="selected"' : '';
 ### 5.1 List page
 
 Quy tắc bảng danh sách:
+- **`<div class="card-body">` KHÔNG dùng class `p-0`** — giữ padding mặc định, bảng tự set padding qua `table-responsive-lg table-card`
 - Mọi `<th>` trong thead có class `text-nowrap`; độ rộng cột dùng `style="width:X%"` thay vì px, mọi th trong thead đều phải có width và tổng lại phải bằng 100%
 - Không dùng `text-center` ở thead nếu tbody tương ứng không có
 - Button xóa luôn dùng `btn-danger`; không dùng class `fa-lg`

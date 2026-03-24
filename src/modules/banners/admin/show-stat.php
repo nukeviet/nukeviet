@@ -14,7 +14,7 @@ if (!defined('NV_IS_FILE_ADMIN')) {
 }
 
 if ($client_info['is_myreferer'] != 1) {
-    exit('Wrong URL');
+    nv_htmlOutput('Wrong URL');
 }
 
 $id = $nv_Request->get_int('id', 'get', 0);
@@ -23,7 +23,7 @@ $sql = 'SELECT * FROM ' . NV_BANNERS_GLOBALTABLE . '_rows WHERE id=' . $id;
 $row = $db->query($sql)->fetch();
 
 if (empty($row)) {
-    exit('Stop!!!');
+    nv_htmlOutput('Stop!!!');
 }
 
 $current_day = date('d');
@@ -33,7 +33,7 @@ $publ_day = date('d', $row['publ_time']);
 $publ_month = date('n', $row['publ_time']);
 $publ_year = date('Y', $row['publ_time']);
 
-$data_month = $nv_Request->get_int('month', 'get');
+$data_month = $current_month;
 
 if ($nv_Request->isset_request('month', 'get') and preg_match('/^[0-9]{1,2}$/', $nv_Request->get_int('month', 'get'))) {
     $get_month = $nv_Request->get_int('month', 'get');
@@ -55,6 +55,7 @@ $minday = mktime(0, 0, 0, $data_month, $day_min, $current_year);
 $sum = $db->query('SELECT COUNT(*) FROM ' . NV_BANNERS_GLOBALTABLE . '_click WHERE bid=' . $id . ' AND click_time>=' . $minday . ' AND click_time<=' . $maxday)->fetchColumn();
 
 $cts = [];
+$month_label = nv_monthname($data_month) . ' ' . $current_year;
 
 $ext = in_array($nv_Request->get_string('ext', 'get', 'no'), ['country', 'browse', 'os'], true) ? $nv_Request->get_string('ext', 'get') : 'day';
 
@@ -64,33 +65,45 @@ if ($ext == 'country') {
     $unknown = 0;
 
     if (!empty($result)) {
-        $result = $db->query($sql);
         $bd = [];
-        if (!empty($result)) {
-            while ($row = $result->fetch()) {
-                if (!isset($bd[$row['click_country']])) {
-                    $bd[$row['click_country']] = 0;
-                }
-                $bd[$row['click_country']] += 1;
+        while ($row = $result->fetch()) {
+            if (!isset($bd[$row['click_country']])) {
+                $bd[$row['click_country']] = 0;
             }
+            $bd[$row['click_country']] += 1;
         }
+
         foreach ($bd as $shortname => $click_count) {
             $country = $shortname;
             if (preg_match('/^[A-Z]{2}$/', $country)) {
-                $key = 'nv_show_list_stat(' . $id . ',' . $data_month . ",'" . $ext . "','" . $country . "','statistic',0);";
-                $cts[$key][0] = isset($countries[$country]) ? $countries[$country][1] : $country;
-                $cts[$key][1] = ($sum > 0) ? round($click_count * 100 / $sum, 1) : 0;
-                $cts[$key][2] = $click_count;
+                $cts[] = [
+                    'label' => isset($countries[$country]) ? $countries[$country][1] : $country,
+                    'percent' => ($sum > 0) ? round($click_count * 100 / $sum, 1) : 0,
+                    'count' => $click_count,
+                    'drill_down' => [
+                        'bid' => $id,
+                        'month' => $data_month,
+                        'ext' => $ext,
+                        'val' => $country
+                    ]
+                ];
             } else {
                 $unknown += $click_count;
             }
         }
 
         if (!empty($unknown)) {
-            $key = 'nv_show_list_stat(' . $id . ',' . $data_month . ",'" . $ext . "','Unknown','statistic',0);";
-            $cts[$key][0] = $nv_Lang->getModule('unknown');
-            $cts[$key][1] = ($sum > 0) ? round($unknown * 100 / $sum) : 0;
-            $cts[$key][2] = $unknown;
+            $cts[] = [
+                'label' => $nv_Lang->getModule('unknown'),
+                'percent' => ($sum > 0) ? round($unknown * 100 / $sum) : 0,
+                'count' => $unknown,
+                'drill_down' => [
+                    'bid' => $id,
+                    'month' => $data_month,
+                    'ext' => $ext,
+                    'val' => 'Unknown'
+                ]
+            ];
         }
     }
     $caption = $nv_Lang->getModule('info_stat_bycountry_caption', nv_monthname($data_month), $current_year);
@@ -110,19 +123,33 @@ if ($ext == 'country') {
     $unknown = 0;
     foreach ($bd as $shortname => $click_count) {
         if (trim($shortname) != 'Unknown') {
-            $key = 'nv_show_list_stat(' . $id . ',' . $data_month . ",'" . $ext . "','" . $shortname . "','statistic',0);";
-            $cts[$key][0] = $shortname;
-            $cts[$key][1] = ($sum > 0) ? round($click_count * 100 / $sum, 1) : 0;
-            $cts[$key][2] = $click_count;
+            $cts[] = [
+                'label' => $shortname,
+                'percent' => ($sum > 0) ? round($click_count * 100 / $sum, 1) : 0,
+                'count' => $click_count,
+                'drill_down' => [
+                    'bid' => $id,
+                    'month' => $data_month,
+                    'ext' => $ext,
+                    'val' => $shortname
+                ]
+            ];
         } else {
             $unknown += $click_count;
         }
     }
     if (!empty($unknown)) {
-        $key = 'nv_show_list_stat(' . $id . ',' . $data_month . ",'" . $ext . "','Unknown','statistic',0);";
-        $cts[$key][0] = $nv_Lang->getModule('unknown');
-        $cts[$key][1] = ($sum > 0) ? round($unknown * 100 / $sum) : 0;
-        $cts[$key][2] = $unknown;
+        $cts[] = [
+            'label' => $nv_Lang->getModule('unknown'),
+            'percent' => ($sum > 0) ? round($unknown * 100 / $sum) : 0,
+            'count' => $unknown,
+            'drill_down' => [
+                'bid' => $id,
+                'month' => $data_month,
+                'ext' => $ext,
+                'val' => 'Unknown'
+            ]
+        ];
     }
 
     $caption = $nv_Lang->getModule('info_stat_bybrowse_caption', nv_monthname($data_month), $current_year);
@@ -141,19 +168,34 @@ if ($ext == 'country') {
     }
 
     $unknown = 0;
+    $robots = [];
     foreach ($bd as $shortname => $click_count) {
         $os_key = $os_name = $shortname;
 
         if (preg_match('/^Robot\:/', $os_name)) {
-            $key = 'nv_show_list_stat(' . $id . ',' . $data_month . ",'" . $ext . "','" . $os_key . "','statistic',0);";
-            $robots[$key][0] = $os_name;
-            $robots[$key][1] = ($sum > 0) ? round($click_count * 100 / $sum, 1) : 0;
-            $robots[$key][2] = $click_count;
+            $robots[] = [
+                'label' => $os_name,
+                'percent' => ($sum > 0) ? round($click_count * 100 / $sum, 1) : 0,
+                'count' => $click_count,
+                'drill_down' => [
+                    'bid' => $id,
+                    'month' => $data_month,
+                    'ext' => $ext,
+                    'val' => $os_key
+                ]
+            ];
         } elseif ($os_key != 'Unknown') {
-            $key = 'nv_show_list_stat(' . $id . ',' . $data_month . ",'" . $ext . "','" . $os_key . "','statistic',0);";
-            $cts[$key][0] = $os_name;
-            $cts[$key][1] = ($sum > 0) ? round($click_count * 100 / $sum, 1) : 0;
-            $cts[$key][2] = $click_count;
+            $cts[] = [
+                'label' => $os_name,
+                'percent' => ($sum > 0) ? round($click_count * 100 / $sum, 1) : 0,
+                'count' => $click_count,
+                'drill_down' => [
+                    'bid' => $id,
+                    'month' => $data_month,
+                    'ext' => $ext,
+                    'val' => $os_key
+                ]
+            ];
         } else {
             $unknown += $click_count;
         }
@@ -164,10 +206,17 @@ if ($ext == 'country') {
     }
 
     if (!empty($unknown)) {
-        $key = 'nv_show_list_stat(' . $id . ',' . $data_month . ",'" . $ext . "','Unknown','statistic',0);";
-        $cts[$key][0] = $nv_Lang->getModule('unknown');
-        $cts[$key][1] = ($sum > 0) ? round($unknown * 100 / $sum) : 0;
-        $cts[$key][2] = $unknown;
+        $cts[] = [
+            'label' => $nv_Lang->getModule('unknown'),
+            'percent' => ($sum > 0) ? round($unknown * 100 / $sum) : 0,
+            'count' => $unknown,
+            'drill_down' => [
+                'bid' => $id,
+                'month' => $data_month,
+                'ext' => $ext,
+                'val' => 'Unknown'
+            ]
+        ];
     }
 
     $caption = $nv_Lang->getModule('info_stat_byos_caption', nv_monthname($data_month), $current_year);
@@ -187,16 +236,42 @@ if ($ext == 'country') {
 
     for ($i = $day_max; $i >= $day_min; --$i) {
         $c = $bd[$i] ?? 0;
-        $key = isset($bd[$i]) ? 'nv_show_list_stat(' . $id . ',' . $data_month . ",'day','" . $i . "','statistic',0);" : $i;
-        $cts[$key][0] = str_pad($i, 2, '0', STR_PAD_LEFT) . ' ' . nv_date('F Y', $time);
-        $cts[$key][1] = ($sum > 0) ? round(($c * 100) / $sum, 1) : 0;
-        $cts[$key][2] = $c;
+        $item = [
+            'label' => str_pad($i, 2, '0', STR_PAD_LEFT) . ' ' . $month_label,
+            'percent' => ($sum > 0) ? round(($c * 100) / $sum, 1) : 0,
+            'count' => $c,
+            'drill_down' => null
+        ];
+        if (isset($bd[$i])) {
+            $item['drill_down'] = [
+                'bid' => $id,
+                'month' => $data_month,
+                'ext' => 'day',
+                'val' => $i
+            ];
+        }
+        $cts[] = $item;
     }
 
     $caption = $nv_Lang->getModule('info_stat_byday_caption', nv_monthname($data_month), $current_year);
 }
 
-$contents = nv_show_stat_theme([$caption, $sum, $cts]);
+$tpl = new \NukeViet\Template\NVSmarty();
+$tpl->setTemplateDir(get_module_tpl_dir('show_stat.tpl'));
+
+foreach ($cts as $index => $ct) {
+    $cts[$index]['count_format'] = nv_number_format((float) ($ct['count'] ?? 0));
+}
+
+$tpl->assign('LANG', $nv_Lang);
+$tpl->assign('MODULE_NAME', $module_name);
+$tpl->assign('OP', $op);
+$tpl->assign('CAPTION', $caption);
+$tpl->assign('SUM', $sum);
+$tpl->assign('SUM_FORMAT', nv_number_format((float) $sum));
+$tpl->assign('CTS', $cts);
+
+$contents = $tpl->fetch('show_stat.tpl');
 
 include NV_ROOTDIR . '/includes/header.php';
 echo $contents;

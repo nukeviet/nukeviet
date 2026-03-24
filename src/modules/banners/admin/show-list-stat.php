@@ -16,13 +16,13 @@ if (!defined('NV_IS_FILE_ADMIN')) {
 $bid = $nv_Request->get_int('bid', 'get', 0);
 
 if (empty($bid)) {
-    exit('Stop!!!');
+    nv_htmlOutput('Stop!!!');
 }
 
 $row = $db->query('SELECT * FROM ' . NV_BANNERS_GLOBALTABLE . '_rows WHERE id=' . $bid)->fetch();
 
 if (empty($row)) {
-    exit('Stop!!!');
+    nv_htmlOutput('Stop!!!');
 }
 
 $current_day = date('d');
@@ -52,7 +52,7 @@ $day_min = ($current_month == $publ_month and $current_year == $publ_year) ? $pu
 
 $where = 'bid=' . $bid;
 
-$base_url = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=show_list_stat&amp;bid=' . $bid . '&amp;month=' . $data_month;
+$base_url = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=show-list-stat&amp;bid=' . $bid . '&amp;month=' . $data_month;
 $caption = $nv_Lang->getModule('show_list_stat1', nv_monthname($data_month), $current_year);
 
 $data_ext = $data_val = '';
@@ -120,36 +120,42 @@ $db->select('*')
 
 $result = $db->query($db->sql());
 
-$contents = [];
+$rows = [];
 $replacement = '';
 
-$a = 0;
 while ($row = $result->fetch()) {
-    $contents['rows'][$a][] = nv_datetime_format($row['click_time']);
-    $contents['rows'][$a][] = $row['click_ip'];
-    $contents['rows'][$a][] = isset($countries[$row['click_country']]) ? $countries[$row['click_country']][1] : $row['click_country'];
-    $contents['rows'][$a][] = $row['click_browse_name'];
-    $contents['rows'][$a][] = $row['click_os_name'];
-    $contents['rows'][$a][] = !empty($row['click_ref']) ? '<a href="' . $row['click_ref'] . '">' . $nv_Lang->getModule('select') . '</a>' : '';
+    $rows[] = [
+        'click_time' => nv_datetime_format($row['click_time']),
+        'click_ip' => $row['click_ip'],
+        'click_country' => isset($countries[$row['click_country']]) ? $countries[$row['click_country']][1] : $row['click_country'],
+        'click_browse_name' => $row['click_browse_name'],
+        'click_os_name' => $row['click_os_name'],
+        'click_ref' => $row['click_ref']
+    ];
 
     if ($data_ext == 'browse' and empty($replacement)) {
         $replacement = $row['click_browse_name'];
     } elseif ($data_ext == 'os' and empty($replacement)) {
         $replacement = $row['click_os_name'];
     }
-
-    ++$a;
 }
 
 if (!empty($replacement)) {
     $caption = preg_replace('/\{pattern\}/', $replacement, $caption);
 }
 
-$contents['caption'] = $caption;
-$contents['thead'] = [$nv_Lang->getModule('click_date'), $nv_Lang->getModule('click_ip'), $nv_Lang->getModule('click_country'), $nv_Lang->getModule('click_browse'), $nv_Lang->getModule('click_os'), $nv_Lang->getModule('click_ref')];
-$contents['generate_page'] = nv_generate_page($base_url, $num_items, $per_page, $page, true, true, 'nv_urldecode_ajax', 'statistic');
+$tpl = new \NukeViet\Template\NVSmarty();
+$tpl->setTemplateDir(get_module_tpl_dir('show_list_stat.tpl'));
 
-$contents = nv_show_list_stat_theme($contents);
+$tpl->assign('LANG', $nv_Lang);
+$tpl->assign('MODULE_NAME', $module_name);
+$tpl->assign('OP', $op);
+$tpl->assign('CAPTION', $caption);
+$tpl->assign('ROWS', $rows);
+$tpl->assign('THEAD', [$nv_Lang->getModule('click_date'), $nv_Lang->getModule('click_ip'), $nv_Lang->getModule('click_country'), $nv_Lang->getModule('click_browse'), $nv_Lang->getModule('click_os'), $nv_Lang->getModule('click_ref')]);
+$tpl->assign('GENERATE_PAGE', nv_generate_page($base_url, $num_items, $per_page, $page, true, true, 'nv_urldecode_ajax', 'statistic'));
+
+$contents = $tpl->fetch('show_list_stat.tpl');
 
 include NV_ROOTDIR . '/includes/header.php';
 echo $contents;
