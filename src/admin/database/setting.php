@@ -39,7 +39,9 @@ if (csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
 
     if ($array_config_global['dump_interval'] != $global_config['dump_interval']) {
         $dump_interval = $array_config_global['dump_interval'] * 1440;
-        $db->query('UPDATE ' . NV_CRONJOBS_GLOBALTABLE . ' SET inter_val=' . $dump_interval . " WHERE run_file = 'dump_autobackup.php' AND run_func = 'cron_dump_autobackup'");
+        $stmt_update = $db->prepare("UPDATE " . NV_CRONJOBS_GLOBALTABLE . " SET inter_val = :dump_interval WHERE run_file = 'dump_autobackup.php' AND run_func = 'cron_dump_autobackup'");
+        $stmt_update->bindValue(':dump_interval', $dump_interval, PDO::PARAM_INT);
+        $stmt_update->execute();
     }
 
     nv_save_file_config_global();

@@ -305,56 +305,55 @@ if ($nv_Request->isset_request('extract', 'get')) {
 
                     if (empty($error_move_folder)) {
                         // Luu vao bang extensions neu ung dung chua co
-                        $sql = 'SELECT COUNT(*) FROM ' . $db_config['prefix'] . '_setup_extensions WHERE type=:type AND title=:title';
-                        $sth = $db->prepare($sql);
-                        $sth->bindParam(':type', $extConfig['extension']['type'], PDO::PARAM_STR);
-                        $sth->bindParam(':title', $extConfig['extension']['name'], PDO::PARAM_STR);
-                        $sth->execute();
+                        $stmt = $db->prepare('SELECT COUNT(*) FROM ' . $db_config['prefix'] . '_setup_extensions WHERE type = :type AND title = :title');
+                        $stmt->bindValue(':type', $extConfig['extension']['type'], PDO::PARAM_STR);
+                        $stmt->bindValue(':title', $extConfig['extension']['name'], PDO::PARAM_STR);
+                        $stmt->execute();
 
-                        if (!$sth->fetchColumn()) {
-                            $sql = 'INSERT INTO ' . $db_config['prefix'] . '_setup_extensions VALUES( ' . (int) ($extConfig['extension']['id']) . ', :type, :title, ' . ((int) ($extConfig['extension']['sys']) == 1 ? 1 : 0) . ', ' . ((int) ($extConfig['extension']['virtual']) == 1 ? 1 : 0) . ', :basename, :table_prefix, :version, ' . NV_CURRENTTIME . ', :author, :note )';
+                        if (!$stmt->fetchColumn()) {
+                            $stmt = $db->prepare('INSERT INTO ' . $db_config['prefix'] . '_setup_extensions VALUES(' . (int) ($extConfig['extension']['id']) . ', :type, :title, ' . ((int) ($extConfig['extension']['sys']) == 1 ? 1 : 0) . ', ' . ((int) ($extConfig['extension']['virtual']) == 1 ? 1 : 0) . ', :basename, :table_prefix, :version, ' . NV_CURRENTTIME . ', :author, :note)');
                             $table_prefix = preg_replace('/(\W+)/i', '_', $extConfig['extension']['name']);
                             $author = $extConfig['author']['name'] . ' (' . $extConfig['author']['email'] . ')';
                             $version = $extConfig['extension']['version'] . ' ' . NV_CURRENTTIME;
 
-                            $sth = $db->prepare($sql);
-                            $sth->bindParam(':type', $extConfig['extension']['type'], PDO::PARAM_STR);
-                            $sth->bindParam(':title', $extConfig['extension']['name'], PDO::PARAM_STR);
-                            $sth->bindParam(':basename', $extConfig['extension']['name'], PDO::PARAM_STR);
-                            $sth->bindParam(':table_prefix', $table_prefix, PDO::PARAM_STR);
-                            $sth->bindParam(':version', $version, PDO::PARAM_STR);
-                            $sth->bindParam(':author', $author, PDO::PARAM_STR);
-                            $sth->bindParam(':note', $extConfig['note']['text'], PDO::PARAM_STR);
-                            $sth->execute();
+                            $stmt->bindValue(':type', $extConfig['extension']['type'], PDO::PARAM_STR);
+                            $stmt->bindValue(':title', $extConfig['extension']['name'], PDO::PARAM_STR);
+                            $stmt->bindValue(':basename', $extConfig['extension']['name'], PDO::PARAM_STR);
+                            $stmt->bindValue(':table_prefix', $table_prefix, PDO::PARAM_STR);
+                            $stmt->bindValue(':version', $version, PDO::PARAM_STR);
+                            $stmt->bindValue(':author', $author, PDO::PARAM_STR);
+                            $stmt->bindValue(':note', $extConfig['note']['text'], PDO::PARAM_STR);
+                            $stmt->execute();
                         }
 
                         // Danh sach file moi trong mang $array_cute_files
                         // Lay danh sach file neu ung dung da co tren he thong
-                        $sql = 'SELECT path FROM ' . $db_config['prefix'] . '_extension_files WHERE type=' . $db->quote($extConfig['extension']['type']) . ' AND title=' . $db->quote($extConfig['extension']['name']);
-                        $files = $db->query($sql)->fetchAll(PDO::FETCH_COLUMN, 0);
+                        $stmt = $db->prepare('SELECT path FROM ' . $db_config['prefix'] . '_extension_files WHERE type = :type AND title = :title');
+                        $stmt->bindValue(':type', $extConfig['extension']['type'], PDO::PARAM_STR);
+                        $stmt->bindValue(':title', $extConfig['extension']['name'], PDO::PARAM_STR);
+                        $stmt->execute();
+                        $files = $stmt->fetchAll(PDO::FETCH_COLUMN, 0);
 
                         $new_files = array_diff($array_cute_files, $files);
                         $array_exists_files = array_diff($array_exists_files, $files);
 
                         // Luu danh sach file moi vao CSDL
                         if (!empty($new_files)) {
+                            $stmt = $db->prepare('INSERT INTO ' . $db_config['prefix'] . '_extension_files VALUES (NULL, :type, :title, :path, ' . NV_CURRENTTIME . ', 0)');
                             foreach ($new_files as $file) {
-                                $sql = 'INSERT INTO ' . $db_config['prefix'] . '_extension_files VALUES( NULL, :type, :title, :path, ' . NV_CURRENTTIME . ', 0 )';
-                                $sth = $db->prepare($sql);
-                                $sth->bindParam(':type', $extConfig['extension']['type'], PDO::PARAM_STR);
-                                $sth->bindParam(':title', $extConfig['extension']['name'], PDO::PARAM_STR);
-                                $sth->bindParam(':path', $file, PDO::PARAM_STR);
-                                $sth->execute();
+                                $stmt->bindValue(':type', $extConfig['extension']['type'], PDO::PARAM_STR);
+                                $stmt->bindValue(':title', $extConfig['extension']['name'], PDO::PARAM_STR);
+                                $stmt->bindValue(':path', $file, PDO::PARAM_STR);
+                                $stmt->execute();
                             }
                         }
 
                         // Cap nhat cac file da co
                         if (!empty($array_exists_files)) {
+                            $stmt = $db->prepare('UPDATE ' . $db_config['prefix'] . '_extension_files SET duplicate = duplicate + 1 WHERE path = :path');
                             foreach ($array_exists_files as $file) {
-                                $sql = 'UPDATE ' . $db_config['prefix'] . '_extension_files SET duplicate = duplicate + 1 WHERE path = :path';
-                                $sth = $db->prepare($sql);
-                                $sth->bindParam(':path', $file, PDO::PARAM_STR);
-                                $sth->execute();
+                                $stmt->bindValue(':path', $file, PDO::PARAM_STR);
+                                $stmt->execute();
                             }
                         }
                     }
