@@ -26,6 +26,7 @@ grep -rn '\$db->query\|\$db->exec' <path> --include="*.php"
   - `$db`: Dùng cho các lệnh ghi (INSERT, UPDATE, DELETE) và SELECT cần dữ liệu chính xác tuyệt đối (thường ở Admin).
   - `$db_slave`: **Bắt buộc** dùng cho các lệnh `SELECT` ở Frontend/Block (truy cập công cộng) để tối ưu hiệu năng.
 - **Không tham số hóa:** Hằng số bảng (`NV_PREFIXLANG`, `$db_config['prefix']`, `NV_USERS_GLOBALTABLE`, v.v.) — đây là tên bảng tĩnh.
+- **Loại bỏ Query Builder:** Hủy bỏ hoàn toàn cấu trúc Query Builder (vd: `$db->sqlreset()->select(...)->from(...)`) và chuyển sang dùng chuỗi SQL chuẩn kết hợp PDO Prepared Statements (`$db->prepare('SELECT ...')`) để tối ưu hóa, giữ code đồng nhất và thân thiện với lập trình viên mới.
 - **Định dạng chuỗi:** Sử dụng dấu ngoặc kép `""` bao ngoài câu lệnh SQL **chỉ khi** câu lệnh đó chứa các giá trị tĩnh được bao bởi dấu nháy đơn `'` (ví dụ: `$db->prepare("SELECT ... WHERE type = 'admin'")`). Việc này giúp tránh dùng ký tự thoát (escape) `\'`. Nếu SQL không chứa nháy đơn, hãy ưu tiên dùng dấu nháy đơn `'` bao ngoài để tối ưu hiệu năng PHP.
 
 ### Trường hợp SQL tĩnh, hoặc không có tham số
@@ -58,9 +59,28 @@ while ($row = $stmt->fetch()) {
 $stmt->closeCursor(); // Đóng cursor sau khi kết thúc vòng lặp hoặc khi thoát vòng lặp sớm
 ```
 Lưu ý định dạng:
+  - Phân tách (cách 1 dòng trắng) giữa các cụm lệnh PDO độc lập liên tiếp nhau (từ bước `prepare` đến `execute`/`fetch`) để code thoáng và dễ bảo trì.
   - Chỉ cách 1 dòng nếu sau đó là code logic mới.
   - Tuyệt đối KHÔNG cách dòng nếu ngay sau đó là dấu đóng khối '}'.
 
+
+### Destructuring array (`[...]` / `list()`)
+Không dùng destructuring trực tiếp trong điều kiện `while` — PHP không đảm bảo giá trị trả về luôn là array, gây `Warning: Cannot destructure non-array value`.
+
+**Sửa — đặt tên biến theo ngữ nghĩa, dùng trực tiếp thay vì chia nhiều biến độc lập:**
+```php
+// ❌ Sai
+while ([$layout, $in_module, $func_name] = $result->fetch(PDO::FETCH_NUM)) {
+
+// ✅ Đúng
+while ($_row_file = $result->fetch()) {
+    // dùng $_row_file['layout'], $_row_file['in_module'], $_row_file['func_name']
+}
+```
+
+Lưu ý đặt tên biến fetch:
+- Không dùng `$row` chung chung — đặt tên theo nội dung truy vấn (`$_row_cat`, `$_row_user`, `$_row_file`, `$_row_module`...) để tránh trùng biến, đặc biệt trong các vòng lặp lồng nhau.
+- Luôn dùng `$result->fetch()` — NukeViet 5 đã cấu hình `PDO::FETCH_ASSOC` làm mặc định trong `Database.php`, không cần truyền tham số. Không dùng `PDO::FETCH_NUM` — tránh bug ngầm khi thứ tự cột trong `SELECT` thay đổi.
 
 ### INSERT — chuẩn PDO
 ```php
@@ -111,14 +131,8 @@ $stmt->execute();
 ```
 
 ## Bước 3 — Lưu ý
-- `bindValue` ưu tiên cho mọi trường hợp. Chỉ dùng `bindParam` khi tái sử dụng prepared statement trong vòng lặp.
+- **Tái sử dụng prepared statement trong vòng lặp:** Gọi `prepare()` BÊN NGOÀI vòng lặp, sau đó dùng `bindValue()` kết hợp `execute()` BÊN TRONG vòng lặp. Tuyệt đối KHÔNG dùng `bindParam` trong vòng lặp vì tham chiếu có thể bị thay đổi bởi logic vòng lặp bên trong gây ra bug khó phát hiện.
+- `bindValue` ưu tiên cho mọi trường hợp.
 - **Bảo tồn logic & comment:** Tuyệt đối KHÔNG xóa comment hoặc các dòng khởi tạo biến (ví dụ `$array = [];`) của code cũ khi refactor SQL. Chỉ thay thế phần thực thi truy vấn.
 - Giữ nguyên `intval()`, `strip_tags()`, v.v. — chúng phục vụ validate nghiệp vụ, không liên quan SQL.
 - Đảm bảo `global $db, $db_slave;` được khai báo trong hàm nếu cần.
-
-## Bước 4 — Kiểm tra
-```bash
-# Kiểm tra còn sót ghép chuỗi không
-grep -n '\$db->query\|->exec' <file> | grep '\.'
-```
-Nếu còn thì cần thực hiện tiếp
