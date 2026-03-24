@@ -18,7 +18,11 @@ $page_title = $nv_Lang->getModule('nv_lang_setting');
 // Lưu cấu hình đọc ngôn ngữ giao diện
 if (csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
     $read_type = $nv_Request->get_int('read_type', 'post', 0);
-    $db->query('UPDATE ' . NV_CONFIG_GLOBALTABLE . " SET config_value = '" . $read_type . "' WHERE lang='sys' AND module = 'global' AND config_name = 'read_type'");
+
+    $stmt = $db->prepare('UPDATE ' . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = 'sys' AND module = 'global' AND config_name = 'read_type'");
+    $stmt->bindValue(':config_value', $read_type, PDO::PARAM_INT);
+    $stmt->execute();
+
     nv_save_file_config_global();
 
     nv_jsonOutput([

@@ -23,7 +23,16 @@ if (empty($dirlang) or !isset($language_array[$dirlang])) {
 $idfile = $nv_Request->get_int('idfile', 'get', 0);
 $module = '';
 if (!empty($idfile)) {
-    [$idfile, $module, $admin_file, $langtype, $author_lang] = $db->query('SELECT idfile, module, admin_file, langtype, author_' . $dirlang . ' FROM ' . NV_LANGUAGE_GLOBALTABLE . '_file WHERE idfile =' . $idfile)->fetch(3);
+    $stmt_file = $db->prepare('SELECT idfile, module, admin_file, langtype, author_' . $dirlang . ' FROM ' . NV_LANGUAGE_GLOBALTABLE . '_file WHERE idfile = :idfile');
+    $stmt_file->bindValue(':idfile', $idfile, PDO::PARAM_INT);
+    $stmt_file->execute();
+
+    $_row = $stmt_file->fetch();
+    $idfile = $_row ? $_row['idfile'] : 0;
+    $module = $_row ? $_row['module'] : '';
+    $admin_file = $_row ? $_row['admin_file'] : 0;
+    $langtype = $_row ? $_row['langtype'] : '';
+    $author_lang = $_row ? $_row['author_' . $dirlang] : '';
 }
 if (empty($idfile) or empty($module)) {
     nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=interface');
@@ -43,39 +52,45 @@ if (csrf_check($nv_Request->get_string('savedata', 'get'), $csrf_key)) {
     $postdata['pozauthor']['langtype'] = (isset($postdata['pozauthor']['langtype']) && preg_match('/^[a-z0-9\_]{3,30}$/', $postdata['pozauthor']['langtype'])) ? $postdata['pozauthor']['langtype'] : 'lang_module';
     $author = serialize($postdata['pozauthor']);
 
-    $sth = $db->prepare('UPDATE ' . NV_LANGUAGE_GLOBALTABLE . '_file SET author_' . $dirlang . '= :author WHERE idfile = ' . $idfile);
-    $sth->bindParam(':author', $author, PDO::PARAM_STR);
-    $sth->execute();
+    $stmt_file_upd = $db->prepare('UPDATE ' . NV_LANGUAGE_GLOBALTABLE . '_file SET author_' . $dirlang . ' = :author WHERE idfile = :idfile');
+    $stmt_file_upd->bindValue(':author', $author, PDO::PARAM_STR);
+    $stmt_file_upd->bindValue(':idfile', $idfile, PDO::PARAM_INT);
+    $stmt_file_upd->execute();
     nv_insert_logs(NV_LANG_DATA, $module_name, $nv_Lang->getModule('nv_admin_edit') . ' -> ' . $language_array[$dirlang]['name'], $module . ' : idfile = ' . $idfile, $admin_info['userid']);
 
     $weight = 0;
     $langkeys = [];
-    $sth = $db->prepare('UPDATE ' . NV_LANGUAGE_GLOBALTABLE . ' SET lang_key = :lang_key, weight = :weight, lang_' . $dirlang . ' = :lang_value, update_' . $dirlang . ' = ' . NV_CURRENTTIME . '  WHERE id= :id');
-    $sth2 = $db->prepare('INSERT INTO ' . NV_LANGUAGE_GLOBALTABLE . ' (idfile, langtype, lang_key, weight, lang_' . $dirlang . ', update_' . $dirlang . ') VALUES (' . $idfile . ', :langtype, :lang_key, :weight, :lang_value, ' . NV_CURRENTTIME . ')');
+    
+    $stmt_upd = $db->prepare('UPDATE ' . NV_LANGUAGE_GLOBALTABLE . ' SET lang_key = :lang_key, weight = :weight, lang_' . $dirlang . ' = :lang_value, update_' . $dirlang . ' = ' . NV_CURRENTTIME . ' WHERE id = :id');
+    $stmt_ins = $db->prepare('INSERT INTO ' . NV_LANGUAGE_GLOBALTABLE . ' (idfile, langtype, lang_key, weight, lang_' . $dirlang . ', update_' . $dirlang . ') VALUES (:idfile, :langtype, :lang_key, :weight, :lang_value, ' . NV_CURRENTTIME . ')');
+    $stmt_ins->bindValue(':idfile', $idfile, PDO::PARAM_INT);
+    $stmt_del = $db->prepare('DELETE FROM ' . NV_LANGUAGE_GLOBALTABLE . ' WHERE id = :id');
+
     foreach ($postdata['ids'] as $key => $id) {
         $postdata['values'][$key] = trim(strip_tags(str_replace(['&amp;', '“', '”'], ['&', '&ldquo;', '&rdquo;'], str_replace(['&lt;', '&gt;'], ['<', '>'], $postdata['values'][$key])), NV_ALLOWED_HTML_LANG));
         if ($id > 0) {
             if ($postdata['isdels'][$key]) {
-                $db->query('DELETE FROM ' . NV_LANGUAGE_GLOBALTABLE . ' WHERE id = ' . $id);
+                $stmt_del->bindValue(':id', $id, PDO::PARAM_INT);
+                $stmt_del->execute();
             } else {
                 if (preg_match('/^[a-zA-Z0-9\_]{1,50}$/', $postdata['keys'][$key]) and !in_array($postdata['keys'][$key], $langkeys, true)) {
                     ++$weight;
-                    $sth->bindParam(':lang_key', $postdata['keys'][$key], PDO::PARAM_STR);
-                    $sth->bindParam(':weight', $weight, PDO::PARAM_INT);
-                    $sth->bindParam(':lang_value', $postdata['values'][$key], PDO::PARAM_STR);
-                    $sth->bindParam(':id', $id, PDO::PARAM_INT);
-                    $sth->execute();
+                    $stmt_upd->bindValue(':lang_key', $postdata['keys'][$key], PDO::PARAM_STR);
+                    $stmt_upd->bindValue(':weight', $weight, PDO::PARAM_INT);
+                    $stmt_upd->bindValue(':lang_value', $postdata['values'][$key], PDO::PARAM_STR);
+                    $stmt_upd->bindValue(':id', $id, PDO::PARAM_INT);
+                    $stmt_upd->execute();
                     $langkeys[] = $postdata['keys'][$key];
                 }
             }
         } else {
             if (preg_match('/^[a-zA-Z0-9\_]{1,50}$/', $postdata['keys'][$key]) and !in_array($postdata['keys'][$key], $langkeys, true)) {
                 ++$weight;
-                $sth2->bindParam(':langtype', $postdata['pozauthor']['langtype'], PDO::PARAM_STR);
-                $sth2->bindParam(':lang_key', $postdata['keys'][$key], PDO::PARAM_STR);
-                $sth2->bindParam(':weight', $weight, PDO::PARAM_INT);
-                $sth2->bindParam(':lang_value', $postdata['values'][$key], PDO::PARAM_STR);
-                $sth2->execute();
+                $stmt_ins->bindValue(':langtype', $postdata['pozauthor']['langtype'], PDO::PARAM_STR);
+                $stmt_ins->bindValue(':lang_key', $postdata['keys'][$key], PDO::PARAM_STR);
+                $stmt_ins->bindValue(':weight', $weight, PDO::PARAM_INT);
+                $stmt_ins->bindValue(':lang_value', $postdata['values'][$key], PDO::PARAM_STR);
+                $stmt_ins->execute();
             }
         }
     }
@@ -154,13 +169,15 @@ if ($admin_file == '1') {
 }
 $tpl->assign('ALLOWED_WRITE', in_array('write', $allow_func, true));
 
-$sql = 'SELECT id, lang_key, lang_' . $dirlang . ' FROM ' . NV_LANGUAGE_GLOBALTABLE . ' WHERE idfile=' . $idfile . ' ORDER BY weight ASC';
-$result = $db->query($sql);
+$stmt_list = $db->prepare('SELECT id, lang_key, lang_' . $dirlang . ' FROM ' . NV_LANGUAGE_GLOBALTABLE . ' WHERE idfile = :idfile ORDER BY weight ASC');
+$stmt_list->bindValue(':idfile', $idfile, PDO::PARAM_INT);
+$stmt_list->execute();
 
 $array = [];
-while ($_scratch = $result->fetch(3)) {
-    [$id, $lang_key, $lang_value] = $_scratch;
-    unset($_scratch);
+while ($_row = $stmt_list->fetch()) {
+    $id = $_row['id'];
+    $lang_key = $_row['lang_key'];
+    $lang_value = $_row['lang_' . $dirlang];
     $array[] = [
         'lang_key' => $lang_key,
         'value' => !empty($lang_value) ? str_replace(['&lt;', '&gt;', '&quot;', '<', '>', '"', "'"], ['&amp;lt;', '&amp;gt;', '&amp;quot;', '&lt;', '&gt;', '&quot;', '&#039;'], $lang_value) : '',

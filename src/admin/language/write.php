@@ -49,9 +49,9 @@ if ($nv_Request->isset_request('checksess', 'get') and csrf_check($nv_Request->g
         $array_filename = [];
 
         $result = $db->query('SELECT idfile, author_' . $dirlang . ' FROM ' . NV_LANGUAGE_GLOBALTABLE . '_file ORDER BY idfile ASC');
-        while ($_scratch = $result->fetch(3)) {
-            [$idfile, $author_lang] = $_scratch;
-            unset($_scratch);
+        while ($_row = $result->fetch()) {
+            $idfile = $_row['idfile'];
+            $author_lang = $_row['author_' . $dirlang];
             $content = nv_admin_write_lang($dirlang, $idfile);
 
             if (!empty($content)) {

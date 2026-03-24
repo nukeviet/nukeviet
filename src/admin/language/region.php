@@ -172,10 +172,10 @@ if (csrf_check($nv_Request->get_string('saveform', 'post'), $csrf_key)) {
     $region[NV_LANG_DATA] = $array;
     $region = json_encode($region, NV_JSON_ENCODE);
 
-    $sth = $db->prepare('UPDATE ' . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = 'sys' AND module = 'global' AND config_name = :config_name");
-    $sth->bindValue(':config_name', 'region', PDO::PARAM_STR);
-    $sth->bindParam(':config_value', $region, PDO::PARAM_STR);
-    $sth->execute();
+    $stmt = $db->prepare('UPDATE ' . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = 'sys' AND module = 'global' AND config_name = :config_name");
+    $stmt->bindValue(':config_name', 'region', PDO::PARAM_STR);
+    $stmt->bindValue(':config_value', $region, PDO::PARAM_STR);
+    $stmt->execute();
 
     nv_save_file_config_global();
 

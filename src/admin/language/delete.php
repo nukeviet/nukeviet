@@ -74,16 +74,16 @@ if (csrf_check($nv_Request->get_string('checksess', 'get'), $admin_info['admin_i
 
         if (!empty($array_lang_exit) and in_array($dirlang, $array_lang_exit, true)) {
             try {
-                $db->query('ALTER TABLE ' . NV_LANGUAGE_GLOBALTABLE . '_file DROP author_' . $dirlang);
-                $db->query('ALTER TABLE ' . NV_LANGUAGE_GLOBALTABLE . ' DROP lang_' . $dirlang);
-                $db->query('ALTER TABLE ' . NV_LANGUAGE_GLOBALTABLE . ' DROP update_' . $dirlang);
+                $db->exec('ALTER TABLE ' . NV_LANGUAGE_GLOBALTABLE . '_file DROP author_' . $dirlang);
+                $db->exec('ALTER TABLE ' . NV_LANGUAGE_GLOBALTABLE . ' DROP lang_' . $dirlang);
+                $db->exec('ALTER TABLE ' . NV_LANGUAGE_GLOBALTABLE . ' DROP update_' . $dirlang);
             } catch (PDOException $e) {
-                trigger_error($e->getMessage());
+                trigger_error($e);
             }
 
             if (count($array_lang_exit) == 1) {
-                $db->query('TRUNCATE ' . NV_LANGUAGE_GLOBALTABLE . '_file');
-                $db->query('TRUNCATE ' . NV_LANGUAGE_GLOBALTABLE);
+                $db->exec('TRUNCATE ' . NV_LANGUAGE_GLOBALTABLE . '_file');
+                $db->exec('TRUNCATE ' . NV_LANGUAGE_GLOBALTABLE);
             }
         }
 

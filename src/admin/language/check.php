@@ -49,10 +49,10 @@ if (!empty($typelang) and $nv_Request->isset_request('savedata', 'post') and csr
         foreach ($pozlang as $id => $lang_value) {
             $lang_value = trim(strip_tags(str_replace(['&amp;', '“', '”'], ['&', '&ldquo;', '&rdquo;'], str_replace(['&lt;', '&gt;'], ['<', '>'], $lang_value)), NV_ALLOWED_HTML_LANG));
             if (!empty($lang_value)) {
-                $sth = $db->prepare('UPDATE ' . NV_LANGUAGE_GLOBALTABLE . ' SET lang_' . $typelang . '= :lang_value, update_' . $typelang . '= ' . NV_CURRENTTIME . ' WHERE id= :id');
-                $sth->bindParam(':id', $id, PDO::PARAM_INT);
-                $sth->bindParam(':lang_value', $lang_value, PDO::PARAM_STR);
-                $sth->execute();
+                $stmt = $db->prepare('UPDATE ' . NV_LANGUAGE_GLOBALTABLE . ' SET lang_' . $typelang . ' = :lang_value, update_' . $typelang . ' = ' . NV_CURRENTTIME . ' WHERE id = :id');
+                $stmt->bindValue(':id', $id, PDO::PARAM_INT);
+                $stmt->bindValue(':lang_value', $lang_value, PDO::PARAM_STR);
+                $stmt->execute();
             }
         }
     }
@@ -63,13 +63,13 @@ $idfile = $nv_Request->get_int('idfile', 'post,get', 0);
 $check_type = $nv_Request->get_int('check_type', 'post,get', 0);
 
 $modules_exit = nv_scandir(NV_ROOTDIR . '/modules', $global_config['check_module']);
-$sql = 'SELECT idfile, module, admin_file FROM ' . NV_LANGUAGE_GLOBALTABLE . '_file ORDER BY idfile ASC';
-$result = $db->query($sql);
+$result = $db->query('SELECT idfile, module, admin_file FROM ' . NV_LANGUAGE_GLOBALTABLE . '_file ORDER BY idfile ASC');
 
 $array_files = [];
-while ($_scratch = $result->fetch(3)) {
-    [$idfile_i, $module, $admin_file] = $_scratch;
-    unset($_scratch);
+while ($_row = $result->fetch()) {
+    $idfile_i = $_row['idfile'];
+    $module = $_row['module'];
+    $admin_file = $_row['admin_file'];
     $module = preg_replace('/^theme\_(.*?)$/', 'Theme: \\1', $module);
     switch ($admin_file) {
         case '1':
@@ -121,9 +121,12 @@ if ($nv_Request->isset_request('save', 'post,get') and in_array($sourcelang, $ar
     }
     $result = $db->query($query);
 
-    while ($_scratch = $result->fetch(3)) {
-        [$id, $idfile_i, $lang_key, $datalang, $datasourcelang] = $_scratch;
-        unset($_scratch);
+    while ($_row = $result->fetch()) {
+        $id = $_row['id'];
+        $idfile_i = $_row['idfile'];
+        $lang_key = $_row['lang_key'];
+        $datalang = $_row['datalang'];
+        $datasourcelang = $_row['sourcelang'];
         $array_lang_data[$idfile_i][$id] = [
             'lang_key' => $lang_key,
             'datalang' => $datalang,

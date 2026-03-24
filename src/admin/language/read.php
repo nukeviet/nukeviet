@@ -57,11 +57,14 @@ function nv_admin_read_lang($dirlang, $module, $admin_file = 1)
 
         include $include_lang;
 
-        $sth = $db->prepare('SELECT idfile, langtype FROM ' . NV_LANGUAGE_GLOBALTABLE . '_file WHERE module = :module AND admin_file= :admin_file');
-        $sth->bindParam(':module', $module, PDO::PARAM_STR);
-        $sth->bindParam(':admin_file', $admin_file, PDO::PARAM_STR);
-        $sth->execute();
-        [$idfile, $langtype] = $sth->fetch(3);
+        $stmt = $db->prepare('SELECT idfile, langtype FROM ' . NV_LANGUAGE_GLOBALTABLE . '_file WHERE module = :module AND admin_file = :admin_file');
+        $stmt->bindValue(':module', $module, PDO::PARAM_STR);
+        $stmt->bindValue(':admin_file', $admin_file, PDO::PARAM_STR);
+        $stmt->execute();
+
+        $_row = $stmt->fetch();
+        $idfile = $_row ? $_row['idfile'] : 0;
+        $langtype = $_row ? $_row['langtype'] : '';
 
         if (empty($idfile)) {
             // Tạo file mới trong CSDL
@@ -97,10 +100,12 @@ function nv_admin_read_lang($dirlang, $module, $admin_file = 1)
 
             $author = serialize($lang_translator_save);
             try {
-                $sth = $db->prepare('UPDATE ' . NV_LANGUAGE_GLOBALTABLE . '_file SET author_' . $dirlang . '= :author WHERE idfile= ' . $idfile);
-                $sth->bindParam(':author', $author, PDO::PARAM_STR, strlen($author));
-                $sth->execute();
+                $stmt_upd = $db->prepare('UPDATE ' . NV_LANGUAGE_GLOBALTABLE . '_file SET author_' . $dirlang . ' = :author WHERE idfile = :idfile');
+                $stmt_upd->bindValue(':author', $author, PDO::PARAM_STR);
+                $stmt_upd->bindValue(':idfile', $idfile, PDO::PARAM_INT);
+                $stmt_upd->execute();
             } catch (PDOException $e) {
+                trigger_error($e);
                 nv_info_die($nv_Lang->getGlobal('error_404_title'), $nv_Lang->getGlobal('error_404_title'), $e->getMessage(), 404);
             }
         }
@@ -130,15 +135,15 @@ function nv_admin_read_lang($dirlang, $module, $admin_file = 1)
 
         $read_type = (int) $global_config['read_type'];
 
-        $sth_is = $db->prepare('INSERT INTO ' . NV_LANGUAGE_GLOBALTABLE . ' (
+        $stmt_is = $db->prepare('INSERT INTO ' . NV_LANGUAGE_GLOBALTABLE . ' (
             idfile, langtype, lang_key, weight, lang_' . $dirlang . ', update_' . $dirlang . '
         ) VALUES (
             :idfile, :langtype, :lang_key, :weight, :lang_value, ' . NV_CURRENTTIME . '
         )');
-        $sth_ud = $db->prepare('UPDATE ' . NV_LANGUAGE_GLOBALTABLE . ' SET
+        $stmt_ud = $db->prepare('UPDATE ' . NV_LANGUAGE_GLOBALTABLE . ' SET
             lang_' . $dirlang . ' = :lang_value,
             update_' . $dirlang . ' = ' . NV_CURRENTTIME . '
-        WHERE idfile = :idfile AND langtype=:langtype AND lang_key = :lang_key');
+        WHERE idfile = :idfile AND langtype = :langtype AND lang_key = :lang_key');
 
         foreach ($array_full_readlang as $langtype_row => $data_row) {
             $weight = 0;
@@ -152,16 +157,17 @@ function nv_admin_read_lang($dirlang, $module, $admin_file = 1)
                 if ($read_type == 0 or $read_type == 1) {
                     ++$weight;
                     try {
-                        $sth_is->bindParam(':idfile', $idfile, PDO::PARAM_INT);
-                        $sth_is->bindParam(':langtype', $langtype_row, PDO::PARAM_STR);
-                        $sth_is->bindParam(':lang_key', $lang_key, PDO::PARAM_STR);
-                        $sth_is->bindParam(':weight', $weight, PDO::PARAM_INT);
-                        $sth_is->bindParam(':lang_value', $lang_value, PDO::PARAM_STR);
-                        $sth_is->execute();
-                        if ($read_type == 0 and !$sth_is->rowCount()) {
+                        $stmt_is->bindValue(':idfile', $idfile, PDO::PARAM_INT);
+                        $stmt_is->bindValue(':langtype', $langtype_row, PDO::PARAM_STR);
+                        $stmt_is->bindValue(':lang_key', $lang_key, PDO::PARAM_STR);
+                        $stmt_is->bindValue(':weight', $weight, PDO::PARAM_INT);
+                        $stmt_is->bindValue(':lang_value', $lang_value, PDO::PARAM_STR);
+                        $stmt_is->execute();
+                        if ($read_type == 0 and !$stmt_is->rowCount()) {
                             $check_type_update = true;
                         }
                     } catch (PDOException $e) {
+                        trigger_error($e);
                         if ($read_type == 0) {
                             $check_type_update = true;
                         }
@@ -170,12 +176,11 @@ function nv_admin_read_lang($dirlang, $module, $admin_file = 1)
 
                 if ($read_type == 2 or $check_type_update) {
                     ++$weight;
-                    $sth_ud->bindParam(':idfile', $idfile, PDO::PARAM_INT);
-                    $sth_ud->bindParam(':langtype', $langtype_row, PDO::PARAM_STR);
-                    $sth_ud->bindParam(':lang_key', $lang_key, PDO::PARAM_STR);
-                    $sth_is->bindParam(':weight', $weight, PDO::PARAM_INT);
-                    $sth_ud->bindParam(':lang_value', $lang_value, PDO::PARAM_STR);
-                    $sth_ud->execute();
+                    $stmt_ud->bindValue(':idfile', $idfile, PDO::PARAM_INT);
+                    $stmt_ud->bindValue(':langtype', $langtype_row, PDO::PARAM_STR);
+                    $stmt_ud->bindValue(':lang_key', $lang_key, PDO::PARAM_STR);
+                    $stmt_ud->bindValue(':lang_value', $lang_value, PDO::PARAM_STR);
+                    $stmt_ud->execute();
                 }
             }
         }

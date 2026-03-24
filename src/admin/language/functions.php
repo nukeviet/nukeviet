@@ -129,7 +129,15 @@ function nv_admin_write_lang($dirlang, $idfile)
 {
     global $db, $language_array, $global_config, $include_lang, $nv_Lang;
 
-    [$module, $admin_file, $langtype, $author_lang] = $db->query('SELECT module, admin_file, langtype, author_' . $dirlang . ' FROM ' . NV_LANGUAGE_GLOBALTABLE . '_file WHERE idfile =' . (int) $idfile)->fetch(3);
+    $stmt = $db->prepare('SELECT module, admin_file, langtype, author_' . $dirlang . ' FROM ' . NV_LANGUAGE_GLOBALTABLE . '_file WHERE idfile = :idfile');
+    $stmt->bindValue(':idfile', $idfile, PDO::PARAM_INT);
+    $stmt->execute();
+    
+    $_row = $stmt->fetch();
+    $module = $_row ? $_row['module'] : '';
+    $admin_file = $_row ? $_row['admin_file'] : 0;
+    $langtype = $_row ? $_row['langtype'] : '';
+    $author_lang = $_row ? $_row['author_' . $dirlang] : '';
 
     if (empty($dirlang) or empty($module)) {
         return $nv_Lang->getModule('nv_error_exit_module') . ' : ' . $module;
@@ -191,10 +199,14 @@ function nv_admin_write_lang($dirlang, $idfile)
 
     $numrows = 0;
     $current_langtype = '';
-    $result = $db->query('SELECT langtype, lang_key, lang_' . $dirlang . ' FROM ' . NV_LANGUAGE_GLOBALTABLE . ' WHERE idfile=' . $idfile . ' ORDER BY langtype ASC, weight ASC');
-    while ($_scratch = $result->fetch(3)) {
-        [$langtype_row, $lang_key, $lang_value] = $_scratch;
-        unset($_scratch);
+    $stmt_lang = $db->prepare('SELECT langtype, lang_key, lang_' . $dirlang . ' FROM ' . NV_LANGUAGE_GLOBALTABLE . ' WHERE idfile = :idfile ORDER BY langtype ASC, weight ASC');
+    $stmt_lang->bindValue(':idfile', $idfile, PDO::PARAM_INT);
+    $stmt_lang->execute();
+    
+    while ($_row = $stmt_lang->fetch()) {
+        $langtype_row = $_row['langtype'];
+        $lang_key = $_row['lang_key'];
+        $lang_value = $_row['lang_' . $dirlang];
         ++$numrows;
         $lang_value = str_replace("\'", "'", $lang_value);
         $lang_value = str_replace("'", "\'", $lang_value);

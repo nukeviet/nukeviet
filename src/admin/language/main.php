@@ -29,11 +29,11 @@ if (csrf_check($_lang_multi, $_csrf_key_lang_multi)) {
     $array_config_global['rewrite_optional'] = 0;
     $array_config_global['rewrite_op_mod'] = '';
 
-    $sth = $db->prepare('UPDATE ' . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = 'sys' AND module = 'global' AND config_name = :config_name");
+    $stmt = $db->prepare('UPDATE ' . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = 'sys' AND module = 'global' AND config_name = :config_name");
     foreach ($array_config_global as $config_name => $config_value) {
-        $sth->bindParam(':config_name', $config_name, PDO::PARAM_STR, 30);
-        $sth->bindParam(':config_value', $config_value, PDO::PARAM_STR);
-        $sth->execute();
+        $stmt->bindValue(':config_name', $config_name, PDO::PARAM_STR);
+        $stmt->bindValue(':config_value', $config_value, PDO::PARAM_STR);
+        $stmt->execute();
     }
 
     nv_save_file_config_global();
@@ -58,8 +58,7 @@ if (csrf_check($_lang_multi, $_csrf_key_lang_multi)) {
 $lang_array_exit = nv_scandir(NV_ROOTDIR . '/includes/language', '/^[a-z]{2}+$/');
 
 $array_lang_setup = $array_lang_installed = [];
-$db->sqlreset()->select('*')->from($db_config['prefix'] . '_setup_language')->order('weight ASC');
-$result = $db->query($db->sql());
+$result = $db->query('SELECT * FROM ' . $db_config['prefix'] . '_setup_language ORDER BY weight ASC');
 while ($row = $result->fetch()) {
     $array_lang_setup[$row['lang']] = [
         'setup' => (int) ($row['setup']),
@@ -104,18 +103,22 @@ if (defined('NV_IS_GODADMIN') or ($global_config['idsite'] > 0 and defined('NV_I
         }
 
         $weight = 0;
+        $stmt_weight = $db->prepare('UPDATE ' . $db_config['prefix'] . '_setup_language SET weight = :weight WHERE lang = :lang');
         foreach (array_keys($array_lang_setup) as $lang) {
             if ($lang != $keylang) {
                 ++$weight;
                 if ($weight == $new_weight) {
                     ++$weight;
                 }
-                $db->query('UPDATE ' . $db_config['prefix'] . '_setup_language SET weight=' . $weight . ' WHERE lang=' . $db->quote($lang));
+                $stmt_weight->bindValue(':weight', $weight, PDO::PARAM_INT);
+                $stmt_weight->bindValue(':lang', $lang, PDO::PARAM_STR);
+                $stmt_weight->execute();
             }
         }
 
-        $sql = 'UPDATE ' . $db_config['prefix'] . '_setup_language SET weight=' . $new_weight . ' WHERE lang=' . $db->quote($keylang);
-        $db->query($sql);
+        $stmt_weight->bindValue(':weight', $new_weight, PDO::PARAM_INT);
+        $stmt_weight->bindValue(':lang', $keylang, PDO::PARAM_STR);
+        $stmt_weight->execute();
 
         nv_update_config_allow_sitelangs();
         nv_save_file_config_global();
@@ -169,14 +172,17 @@ if (defined('NV_IS_GODADMIN') or ($global_config['idsite'] > 0 and defined('NV_I
         } elseif ($global_config['lang_multi']) {
             nv_insert_logs(NV_LANG_DATA, $module_name, $nv_Lang->getModule('nv_setup_new') . ' ' . $nv_Lang->getModule('nv_lang_data'), ' langkey : ' . $keylang, $admin_info['userid']);
 
-            $site_theme = $db->query('SELECT config_value FROM ' . NV_CONFIG_GLOBALTABLE . " where lang='" . $global_config['site_lang'] . "' AND module='global' AND config_name='site_theme'")->fetchColumn();
+            $stmt_theme = $db->prepare('SELECT config_value FROM ' . NV_CONFIG_GLOBALTABLE . " WHERE lang = :lang AND module = 'global' AND config_name = 'site_theme'");
+            $stmt_theme->bindValue(':lang', $global_config['site_lang'], PDO::PARAM_STR);
+            $stmt_theme->execute();
+            $site_theme = $stmt_theme->fetchColumn();
 
             $global_config['site_theme'] = $site_theme;
 
             try {
                 $db->exec('ALTER DATABASE ' . $db_config['dbname'] . ' DEFAULT CHARACTER SET ' . $db_config['charset'] . ' COLLATE ' . $db_config['collation']);
             } catch (PDOException $e) {
-                trigger_error($e->getMessage());
+                trigger_error($e);
             }
             require_once NV_ROOTDIR . '/includes/action_' . $db->dbtype . '.php';
 
@@ -186,6 +192,7 @@ if (defined('NV_IS_GODADMIN') or ($global_config['idsite'] > 0 and defined('NV_I
                 try {
                     $db->query($query);
                 } catch (PDOException $e) {
+                    trigger_error($e);
                     nv_jsonOutput([
                         'status' => 'error',
                         'mess' => 'ERROR SETUP SQL: <br />' . $query
@@ -221,6 +228,7 @@ if (defined('NV_IS_GODADMIN') or ($global_config['idsite'] > 0 and defined('NV_I
 
                 include_once NV_ROOTDIR . '/install/data_' . $filesavedata . '.php';
 
+                $stmt_del = $db->prepare('DELETE FROM ' . $db_config['prefix'] . '_' . $keylang . '_modules WHERE title = :module');
                 $result = $db->query('SELECT * FROM ' . $db_config['prefix'] . '_' . $keylang . '_modules ORDER BY weight ASC');
                 while ($row = $result->fetch()) {
                     $setmodule = $row['title'];
@@ -231,19 +239,23 @@ if (defined('NV_IS_GODADMIN') or ($global_config['idsite'] > 0 and defined('NV_I
                         }
                         nv_setup_data_module($keylang, $setmodule);
                     } else {
-                        $sth = $db->prepare('DELETE FROM ' . $db_config['prefix'] . '_' . $keylang . '_modules WHERE title= :module');
-                        $sth->bindParam(':module', $setmodule, PDO::PARAM_STR);
-                        $sth->execute();
+                        $stmt_del->bindValue(':module', $setmodule, PDO::PARAM_STR);
+                        $stmt_del->execute();
                     }
                 }
 
                 // Cai dat du lieu mau
                 $global_config['site_home_module'] = 'users';
-                $_site_home_module = $db->query('SELECT config_value FROM ' . $db_config['prefix'] . "_config WHERE module = 'global' AND config_name = 'site_home_module' AND lang=" . $db->quote($global_config['site_lang']))
-                ->fetchColumn();
+                $stmt_home = $db->prepare('SELECT config_value FROM ' . $db_config['prefix'] . "_config WHERE module = 'global' AND config_name = 'site_home_module' AND lang = :lang");
+                $stmt_home->bindValue(':lang', $global_config['site_lang'], PDO::PARAM_STR);
+                $stmt_home->execute();
+                $_site_home_module = $stmt_home->fetchColumn();
+
                 if (!empty($_site_home_module)) {
-                    $result = $db->query('SELECT COUNT(*) FROM ' . $db_config['prefix'] . '_' . $keylang . '_modules where title=' . $db->quote($_site_home_module));
-                    if ($result->fetchColumn()) {
+                    $stmt_count = $db->prepare('SELECT COUNT(*) FROM ' . $db_config['prefix'] . '_' . $keylang . '_modules WHERE title = :title');
+                    $stmt_count->bindValue(':title', $_site_home_module, PDO::PARAM_STR);
+                    $stmt_count->execute();
+                    if ($stmt_count->fetchColumn()) {
                         $global_config['site_home_module'] = $_site_home_module;
                     }
                 }
@@ -274,25 +286,27 @@ if (defined('NV_IS_GODADMIN') or ($global_config['idsite'] > 0 and defined('NV_I
                     $result = $db->query('SELECT COUNT(*) FROM ' . $db_config['prefix'] . '_' . $lang_data . "_modules WHERE title='news'");
                     if ($result->fetchColumn()) {
                         $result = $db->query('SELECT catid FROM ' . $db_config['prefix'] . '_' . $lang_data . '_news_cat ORDER BY sort ASC');
-                        while ($_scratch = $result->fetch(3)) {
-                            [$catid_i] = $_scratch;
-                            unset($_scratch);
+                        while ($_row = $result->fetch()) {
+                            $catid_i = $_row['catid'];
                             nv_copy_structure_table($db_config['prefix'] . '_' . $lang_data . '_news_' . $catid_i, $db_config['prefix'] . '_' . $lang_data . '_news_rows');
                         }
                         $result->closeCursor();
 
                         $result = $db->query('SELECT id, listcatid FROM ' . $db_config['prefix'] . '_' . $lang_data . '_news_rows ORDER BY id ASC');
-                        while ($_scratch = $result->fetch(3)) {
-                            [$id, $listcatid] = $_scratch;
-                            unset($_scratch);
+                        while ($_row = $result->fetch()) {
+                            $id = $_row['id'];
+                            $listcatid = $_row['listcatid'];
                             $arr_catid = explode(',', $listcatid);
                             foreach ($arr_catid as $catid) {
-                                $db->query('INSERT INTO ' . $db_config['prefix'] . '_' . $lang_data . '_news_' . $catid . ' SELECT * FROM ' . $db_config['prefix'] . '_' . $lang_data . '_news_rows WHERE id=' . $id);
+                                $stmt_ins = $db->prepare('INSERT INTO ' . $db_config['prefix'] . '_' . $lang_data . '_news_' . $catid . ' SELECT * FROM ' . $db_config['prefix'] . '_' . $lang_data . '_news_rows WHERE id = :id');
+                                $stmt_ins->bindValue(':id', $id, PDO::PARAM_INT);
+                                $stmt_ins->execute();
                             }
                         }
                         $result->closeCursor();
                     }
                 } catch (PDOException $e) {
+                    trigger_error($e);
                     nv_jsonOutput([
                         'status' => 'error',
                         'mess' => 'ERROR SETUP: <br />' . $e->getMessage()
@@ -316,6 +330,7 @@ if (defined('NV_IS_GODADMIN') or ($global_config['idsite'] > 0 and defined('NV_I
                         }
                     }
                 } catch (PDOException $e) {
+                    trigger_error($e);
                     nv_jsonOutput([
                         'status' => 'error',
                         'mess' => 'ERROR SETUP: <br />' . $e->getMessage()
@@ -329,10 +344,13 @@ if (defined('NV_IS_GODADMIN') or ($global_config['idsite'] > 0 and defined('NV_I
              * tệp email_langmới.php. Đối với mẫu email của các module này khi thiết lập
              * nó đã tự cài trên tất cả các ngôn ngữ
              */
-            $sql = "SELECT * FROM " . NV_EMAILTEMPLATES_GLOBALTABLE . " WHERE lang!='' AND lang!=" . $db->quote($keylang);
-            $result = $db->query($sql);
+            $stmt_email = $db->prepare('SELECT * FROM ' . NV_EMAILTEMPLATES_GLOBALTABLE . " WHERE lang != '' AND lang != :lang");
+            $stmt_email->bindValue(':lang', $keylang, PDO::PARAM_STR);
+            $stmt_email->execute();
+            $result = $stmt_email;
 
             $email_langs = [];
+            $stmt_upd_email = $db->prepare('UPDATE ' . NV_EMAILTEMPLATES_GLOBALTABLE . ' SET ' . $keylang . '_title = :title, ' . $keylang . '_subject = :subject, ' . $keylang . '_content = :content WHERE emailid = :emailid');
             while ($row = $result->fetch()) {
                 if (isset($email_langs[$row['module_file']])) {
                     // Mỗi module chỉ đọc 1 lần
@@ -354,12 +372,11 @@ if (defined('NV_IS_GODADMIN') or ($global_config['idsite'] > 0 and defined('NV_I
                 }
 
                 try {
-                    $sql = "UPDATE " . NV_EMAILTEMPLATES_GLOBALTABLE . " SET
-                        " . $keylang . "_title=" . $db->quote($module_emails[$row['id']]['t']) . ",
-                        " . $keylang . "_subject=" . $db->quote($module_emails[$row['id']]['s'] ?? '') . ",
-                        " . $keylang . "_content=" . $db->quote($module_emails[$row['id']]['c'] ?? '') . "
-                    WHERE emailid=" . $row['emailid'];
-                    $db->query($sql);
+                    $stmt_upd_email->bindValue(':title', $module_emails[$row['id']]['t'], PDO::PARAM_STR);
+                    $stmt_upd_email->bindValue(':subject', $module_emails[$row['id']]['s'] ?? '', PDO::PARAM_STR);
+                    $stmt_upd_email->bindValue(':content', $module_emails[$row['id']]['c'] ?? '', PDO::PARAM_STR);
+                    $stmt_upd_email->bindValue(':emailid', $row['emailid'], PDO::PARAM_INT);
+                    $stmt_upd_email->execute();
                 } catch (Throwable $e) {
                     nv_jsonOutput([
                         'status' => 'error',
@@ -412,30 +429,44 @@ if (defined('NV_IS_GODADMIN') or ($global_config['idsite'] > 0 and defined('NV_I
                         try {
                             $db->query($sql);
                         } catch (PDOException $e) {
-                            trigger_error($e->getMessage());
+                            trigger_error($e);
                         }
                     }
                 }
             }
 
             // Xóa plugin của module theo ngôn ngữ
-            $sql = 'SELECT * FROM ' . $db_config['prefix'] . '_plugins WHERE plugin_lang=' . $db->quote($lang) . " AND plugin_module_file!='' AND plugin_module_name=" . $db->quote($title);
-            $plugins = $db->query($sql)->fetchAll();
+            $stmt_plugin = $db->prepare('SELECT * FROM ' . $db_config['prefix'] . '_plugins WHERE plugin_lang = :lang AND plugin_module_file != \'\' AND plugin_module_name = :title');
+            $stmt_plugin->bindValue(':lang', $lang, PDO::PARAM_STR);
+            $stmt_plugin->bindValue(':title', $title, PDO::PARAM_STR);
+            $stmt_plugin->execute();
+            $plugins = $stmt_plugin->fetchAll();
             foreach ($plugins as $plugin) {
                 if ($db->exec('DELETE FROM ' . $db_config['prefix'] . '_plugins WHERE pid=' . $plugin['pid'])) {
                     // Sắp xếp lại thứ tự
-                    $sql = 'SELECT pid FROM ' . $db_config['prefix'] . '_plugins WHERE (plugin_lang=' . $db->quote($lang) . ' OR plugin_lang=\'all\') AND plugin_area=' . $db->quote($plugin['plugin_area']) . ' AND hook_module=' . $db->quote($plugin['hook_module']) . ' ORDER BY weight ASC';
-                    $result = $db->query($sql);
+                    $stmt_plugin_sel = $db->prepare('SELECT pid FROM ' . $db_config['prefix'] . '_plugins WHERE (plugin_lang = :lang OR plugin_lang = \'all\') AND plugin_area = :area AND hook_module = :hook ORDER BY weight ASC');
+                    $stmt_plugin_sel->bindValue(':lang', $lang, PDO::PARAM_STR);
+                    $stmt_plugin_sel->bindValue(':area', $plugin['plugin_area'], PDO::PARAM_STR);
+                    $stmt_plugin_sel->bindValue(':hook', $plugin['hook_module'], PDO::PARAM_STR);
+                    $stmt_plugin_sel->execute();
+                    $result = $stmt_plugin_sel;
+
                     $weight = 0;
+                    $stmt_plugin_upd = $db->prepare('UPDATE ' . $db_config['prefix'] . '_plugins SET weight = :weight WHERE pid = :pid');
                     while ($row = $result->fetch()) {
                         ++$weight;
-                        $db->query('UPDATE ' . $db_config['prefix'] . '_plugins SET weight=' . $weight . ' WHERE pid=' . $row['pid']);
+                        $stmt_plugin_upd->bindValue(':weight', $weight, PDO::PARAM_INT);
+                        $stmt_plugin_upd->bindValue(':pid', $row['pid'], PDO::PARAM_INT);
+                        $stmt_plugin_upd->execute();
                     }
                 }
             }
 
             // Xóa các mẫu email
-            $db->query('DELETE FROM ' . $db_config['prefix'] . '_emailtemplates WHERE lang=' . $db->quote($lang) . ' AND module_name=' . $db->quote($title));
+            $stmt_del_email = $db->prepare('DELETE FROM ' . $db_config['prefix'] . '_emailtemplates WHERE lang = :lang AND module_name = :title');
+            $stmt_del_email->bindValue(':lang', $lang, PDO::PARAM_STR);
+            $stmt_del_email->bindValue(':title', $title, PDO::PARAM_STR);
+            $stmt_del_email->execute();
         }
 
         $db->query('ALTER TABLE ' . NV_COUNTER_GLOBALTABLE . ' DROP ' . $deletekeylang . '_count');
@@ -448,21 +479,28 @@ if (defined('NV_IS_GODADMIN') or ($global_config['idsite'] > 0 and defined('NV_I
             try {
                 $db->query($sql);
             } catch (PDOException $e) {
-                trigger_error($e->getMessage());
+                trigger_error($e);
             }
         }
 
-        $db->query('DELETE FROM ' . NV_CONFIG_GLOBALTABLE . " WHERE lang = '" . $deletekeylang . "'");
-        $db->query('DELETE FROM ' . $db_config['prefix'] . "_setup_language WHERE lang = '" . $deletekeylang . "'");
+        $stmt_del_1 = $db->prepare('DELETE FROM ' . NV_CONFIG_GLOBALTABLE . " WHERE lang = :lang");
+        $stmt_del_1->bindValue(':lang', $deletekeylang, PDO::PARAM_STR);
+        $stmt_del_1->execute();
+
+        $stmt_del_2 = $db->prepare('DELETE FROM ' . $db_config['prefix'] . "_setup_language WHERE lang = :lang");
+        $stmt_del_2->bindValue(':lang', $deletekeylang, PDO::PARAM_STR);
+        $stmt_del_2->execute();
 
         $sql = 'SELECT lang, setup FROM ' . $db_config['prefix'] . '_setup_language ORDER BY weight ASC';
         $result = $db->query($sql);
 
         $weight = 0;
+        $stmt_weight_upd = $db->prepare('UPDATE ' . $db_config['prefix'] . '_setup_language SET weight = :weight WHERE lang = :lang');
         while ($row = $result->fetch()) {
             ++$weight;
-            $sql = 'UPDATE ' . $db_config['prefix'] . '_setup_language SET weight=' . $weight . ' WHERE lang=' . $db->quote($row['lang']);
-            $db->query($sql);
+            $stmt_weight_upd->bindValue(':weight', $weight, PDO::PARAM_INT);
+            $stmt_weight_upd->bindValue(':lang', $row['lang'], PDO::PARAM_STR);
+            $stmt_weight_upd->execute();
         }
 
         nv_deletefile(NV_ROOTDIR . '/' . NV_DATADIR . '/disable_site_content.' . $deletekeylang . '.txt');

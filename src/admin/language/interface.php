@@ -56,13 +56,15 @@ foreach ($array_lang_exit as $langkey) {
 }
 
 $modules_exit = nv_scandir(NV_ROOTDIR . '/modules', $global_config['check_module']);
-$sql = 'SELECT idfile, module, admin_file, langtype, author_' . $dirlang . ' FROM ' . NV_LANGUAGE_GLOBALTABLE . '_file ORDER BY idfile ASC';
-$result = $db->query($sql);
+$result = $db->query('SELECT idfile, module, admin_file, langtype, author_' . $dirlang . ' FROM ' . NV_LANGUAGE_GLOBALTABLE . '_file ORDER BY idfile ASC');
 
 $array = [];
-while ($_scratch = $result->fetch(3)) {
-    [$idfile, $module, $admin_file, $langtype, $author_lang] = $_scratch;
-    unset($_scratch);
+while ($_row = $result->fetch()) {
+    $idfile = $_row['idfile'];
+    $module = $_row['module'];
+    $admin_file = $_row['admin_file'];
+    $langtype = $_row['langtype'];
+    $author_lang = $_row['author_' . $dirlang];
     switch ($admin_file) {
         case '1':
             $langsitename = $nv_Lang->getModule('nv_lang_admin');
