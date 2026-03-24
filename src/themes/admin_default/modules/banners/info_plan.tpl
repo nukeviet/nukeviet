@@ -6,7 +6,7 @@
             <tfoot>
                 <tr>
                     <td colspan="2">
-                        <a class="btn btn-primary btn-sm" href="{NV_BASE_ADMINURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&amp;{NV_NAME_VARIABLE}={MODULE_NAME}&amp;{NV_OP_VARIABLE}=edit_plan&amp;id={ROW.id}">{GLANG.edit}</a>
+                        <a class="btn btn-primary btn-sm" href="{NV_BASE_ADMINURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&amp;{NV_NAME_VARIABLE}={MODULE_NAME}&amp;{NV_OP_VARIABLE}=plan-content&amp;id={ROW.id}">{GLANG.edit}</a>
                         <a class="btn btn-primary btn-sm" href="javascript:void(0);" onclick="nv_pl_chang_act2({ROW.id});">{LANG.change_act}</a>
                         <a class="btn btn-primary btn-sm" href="{NV_BASE_ADMINURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&amp;{NV_NAME_VARIABLE}={MODULE_NAME}&amp;{NV_OP_VARIABLE}=add_banner&amp;pid={ROW.id}">{LANG.add_banner}</a>
                         <a class="btn btn-danger btn-sm" href="javascript:void(0);" onclick="nv_pl_del2({ROW.id});">{GLANG.delete}</a>

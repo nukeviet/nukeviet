@@ -44,7 +44,7 @@ nv_add_hook($module_name, 'get_module_admin_theme', $priority, function ($vars) 
     if ($module_file == 'feeds' and in_array($op, ['main'])) {
         return $new_theme;
     }
-    if ($module_file == 'banners' and in_array($op, ['main', 'info-banner', 'plans-list', 'add-plan', 'add-banner', 'show-stat', 'show-list-stat'])) {
+    if ($module_file == 'banners' and in_array($op, ['main', 'info-banner', 'plans-list', 'plan-content', 'add-banner', 'show-stat', 'show-list-stat'])) {
         return $new_theme;
     }
 

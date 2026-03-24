@@ -103,6 +103,7 @@ function nv_admin_theme(?string $contents, $head_site = 1)
 
     // Menu của các module
     $array_mod_menu = $array_mod_current = [];
+    $hasSetActiveOp = isset($set_active_op) and $set_active_op !== '';
     foreach ($admin_menu_mods as $m => $v) {
         if ($m != $module_name) {
             // Các module khác
@@ -119,21 +120,21 @@ function nv_admin_theme(?string $contents, $head_site = 1)
                 'link' => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $m,
                 'title' => $v,
                 'icon' => (isset($site_mods[$m]) and !empty($site_mods[$m]['icon'])) ? $site_mods[$m]['icon'] : ((isset($admin_mods[$m]) and !empty($admin_mods[$m]['icon'])) ? $admin_mods[$m]['icon'] : 'fa-solid fa-globe'),
-                'active' => ((empty($op) or $op == 'main') or (!empty($set_active_op) and $set_active_op == 'main')) ? true : false,
+                'active' => ($hasSetActiveOp ? ($set_active_op == 'main') : (empty($op) or $op == 'main')) ? true : false,
                 'subs' => []
             ];
             if (!empty($submenu)) {
                 foreach ($submenu as $_op => $_op_title) {
                     $subs = [];
                     $subs['link'] = preg_match('/^\#/', $_op) ? '#' : NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $m . '&amp;' . NV_OP_VARIABLE . '=' . $_op;
-                    $subs['active'] = ((!empty($op) and $op == $_op) or (!empty($set_active_op) and $set_active_op == $_op)) ? true : false;
+                    $subs['active'] = ($hasSetActiveOp ? ($set_active_op == $_op) : (!empty($op) and $op == $_op)) ? true : false;
                     $subs['open'] = false;
                     $subs['subs'] = [];
                     if (is_array($_op_title) and isset($_op_title['submenu'])) {
                         // Có menu cấp 3
                         $subs['title'] = $_op_title['title'];
                         foreach ($_op_title['submenu'] as $s_op => $s_op_title) {
-                            $isSub2Active = ((!empty($op) and $op == $s_op) or (!empty($set_active_op) and $set_active_op == $s_op)) ? true : false;
+                            $isSub2Active = ($hasSetActiveOp ? ($set_active_op == $s_op) : (!empty($op) and $op == $s_op)) ? true : false;
                             $subs['subs'][] = [
                                 'link' => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $m . '&amp;' . NV_OP_VARIABLE . '=' . $s_op,
                                 'title' => $s_op_title,

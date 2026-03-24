@@ -223,7 +223,7 @@ $(function() {
     }
 
     // Thêm khối quảng cáo mới
-    if (nv_func_name === 'add-plan') {
+    if (nv_func_name === 'plan-content') {
         $('#plan_exp_time').on('change', function() {
             if ($(this).val() === '-1') {
                 $('#plan_exp_time_custom').removeClass('d-none');

@@ -120,6 +120,7 @@
             </div>
         </div>
         <div class="card-footer text-center">
+            <input type="hidden" name="id" value="{$ITEM.id}">
             <input type="hidden" name="checkss" value="{$CHECKSS}">
             <button type="submit" class="btn btn-primary">
                 <i class="fa-solid fa-floppy-disk"></i> {$LANG->getGlobal('save')}
