@@ -61,6 +61,7 @@ function nv_save_file_admin_config()
             }
         }
     }
+    $result->closeCursor();
     $content_config = "<?php\n\n";
     $content_config .= NV_FILEHEAD . "\n\n";
     $content_config .= "if (!defined('NV_MAINFILE')) {\n    exit('Stop!!!');\n}\n\n";
@@ -94,11 +95,15 @@ if ($nv_Request->isset_request('delid', 'post')) {
         nv_jsonOutput($respon);
     }
 
-    $sql = 'SELECT keyname FROM ' . NV_AUTHORS_GLOBALTABLE . '_config WHERE id=' . $delid;
-    $keyname = $db->query($sql)->fetchColumn();
+    $stmt = $db->prepare('SELECT keyname FROM ' . NV_AUTHORS_GLOBALTABLE . '_config WHERE id = :id');
+    $stmt->bindValue(':id', $delid, PDO::PARAM_INT);
+    $stmt->execute();
+    $keyname = $stmt->fetchColumn();
 
     nv_insert_logs(NV_LANG_DATA, $module_name, $nv_Lang->getModule('adminip_delete') . ' ' . $nv_Lang->getModule('config'), ' keyname : ' . $keyname, $admin_info['userid']);
-    $db->query('DELETE FROM ' . NV_AUTHORS_GLOBALTABLE . '_config WHERE id=' . $delid);
+    $stmt = $db->prepare('DELETE FROM ' . NV_AUTHORS_GLOBALTABLE . '_config WHERE id = :id');
+    $stmt->bindValue(':id', $delid, PDO::PARAM_INT);
+    $stmt->execute();
     nv_save_file_admin_config();
     $respon['error'] = 0;
     nv_jsonOutput($respon);
@@ -157,8 +162,11 @@ if ($nv_Request->isset_request('submituser', 'post')) {
         } elseif (preg_match('/[^a-zA-Z0-9_-]/', $username)) {
             $error_user[] = $nv_Lang->getModule('rule_user');
         } else {
-            $sql = "SELECT id FROM " . NV_AUTHORS_GLOBALTABLE . "_config WHERE keyname=" . $db->quote($username) . " AND id!=" . $uid;
-            if ($db->query($sql)->fetchColumn()) {
+            $stmt = $db->prepare('SELECT id FROM ' . NV_AUTHORS_GLOBALTABLE . '_config WHERE keyname = :keyname AND id != :id');
+            $stmt->bindValue(':keyname', $username, PDO::PARAM_STR);
+            $stmt->bindValue(':id', $uid, PDO::PARAM_INT);
+            $stmt->execute();
+            if ($stmt->fetchColumn()) {
                 $error_user[] = $nv_Lang->getModule('adminur_exists');
             }
         }
@@ -254,7 +262,9 @@ if ($nv_Request->isset_request('submitip', 'post')) {
 
                 nv_insert_logs(NV_LANG_DATA, $module_name, $nv_Lang->getModule('adminip'), $nv_Lang->getModule('adminip_edit') . ' ID ' . $cid . ' -> ' . $keyname, $admin_info['userid']);
             } else {
-                $result = $db->query('DELETE FROM ' . NV_AUTHORS_GLOBALTABLE . '_config WHERE keyname=' . $db->quote($keyname));
+                $stmt = $db->prepare('DELETE FROM ' . NV_AUTHORS_GLOBALTABLE . '_config WHERE keyname = :keyname');
+                $stmt->bindValue(':keyname', $keyname, PDO::PARAM_STR);
+                $result = $stmt->execute();
                 if ($result) {
                     $sth = $db->prepare('INSERT INTO ' . NV_AUTHORS_GLOBALTABLE . '_config (keyname, mask, begintime, endtime, notice) VALUES ( :keyname, :mask, ' . $begintime . ', ' . $endtime . ', :notice )');
                     $sth->bindParam(':keyname', $keyname, PDO::PARAM_STR);
@@ -271,7 +281,11 @@ if ($nv_Request->isset_request('submitip', 'post')) {
     }
 } else {
     if (!empty($cid)) {
-        [$id, $keyname, $mask, $begintime, $endtime, $notice] = $db->query('SELECT id, keyname, mask, begintime, endtime, notice FROM ' . NV_AUTHORS_GLOBALTABLE . "_config WHERE mask != '-1' AND id=" . $cid)->fetch(3);
+        $stmt = $db->prepare("SELECT id, keyname, mask, begintime, endtime, notice FROM " . NV_AUTHORS_GLOBALTABLE . "_config WHERE mask != '-1' AND id = :id");
+        $stmt->bindValue(':id', $cid, PDO::PARAM_INT);
+        $stmt->execute();
+        [$id, $keyname, $mask, $begintime, $endtime, $notice] = $stmt->fetch(3);
+        $stmt->closeCursor();
         $nv_Lang->setModule('adminip_add', $nv_Lang->getModule('adminip_edit'));
         if ($ips->isIp4($keyname)) {
             $ip_version = 4;
@@ -321,7 +335,11 @@ $result->closeCursor();
 $tpl->assign('FIREWALLS', $firewalls);
 
 if (!empty($uid)) {
-    [$username, $begintime1, $endtime1] = $db->query('SELECT keyname, begintime, endtime FROM ' . NV_AUTHORS_GLOBALTABLE . "_config WHERE mask = '-1' AND id=" . $uid)->fetch(3);
+    $stmt = $db->prepare("SELECT keyname, begintime, endtime FROM " . NV_AUTHORS_GLOBALTABLE . "_config WHERE mask = '-1' AND id = :id");
+    $stmt->bindValue(':id', $uid, PDO::PARAM_INT);
+    $stmt->execute();
+    [$username, $begintime1, $endtime1] = $stmt->fetch(3);
+    $stmt->closeCursor();
 
     $nv_Lang->setModule('username_add', $nv_Lang->getModule('username_edit'));
     $password2 = $password = '';

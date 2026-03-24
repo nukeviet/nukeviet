@@ -16,8 +16,11 @@ if (!defined('NV_IS_FILE_AUTHORS')) {
 $page_title = $nv_Lang->getModule('nv_admin_edit');
 $admin_id = $nv_Request->get_int('admin_id', 'get', 0);
 
-$sql = 'SELECT * FROM ' . NV_AUTHORS_GLOBALTABLE . ' WHERE admin_id=' . $admin_id;
-$row = $db->query($sql)->fetch();
+$stmt = $db->prepare('SELECT * FROM ' . NV_AUTHORS_GLOBALTABLE . ' WHERE admin_id = :admin_id');
+$stmt->bindValue(':admin_id', $admin_id, PDO::PARAM_INT);
+$stmt->execute();
+$row = $stmt->fetch();
+$stmt->closeCursor();
 
 if (empty($row)) {
     nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
@@ -98,8 +101,11 @@ $old_lev_expired = nv_u2d_post($row['lev_expired']);
 $old_downgrade_to_modadmin = !empty($row['after_exp_action']) ? true : false;
 $old_after_modules = $old_downgrade_to_modadmin ? json_decode($row['after_exp_action'], true) : [];
 
-$sql = 'SELECT * FROM ' . NV_USERS_GLOBALTABLE . ' WHERE userid=' . $admin_id;
-$row_user = $db->query($sql)->fetch();
+$stmt = $db->prepare('SELECT * FROM ' . NV_USERS_GLOBALTABLE . ' WHERE userid = :userid');
+$stmt->bindValue(':userid', $admin_id, PDO::PARAM_INT);
+$stmt->execute();
+$row_user = $stmt->fetch();
+$stmt->closeCursor();
 
 if (empty($row['files_level'])) {
     $old_allow_files_type = [];
@@ -467,6 +473,7 @@ if ($admin_id != $admin_info['userid']) {
             'title' => $nv_Lang->existsGlobal($_row['lang_key']) ? $nv_Lang->getGlobal($_row['lang_key']) : $_row['module']
         ];
     }
+    $result->closeCursor();
 } else {
     foreach ($admin_mods as $mod) {
         $array_module[$mod['module']] = [

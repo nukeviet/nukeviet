@@ -32,17 +32,24 @@ if (defined('NV_IS_AJAX')) {
         $mid = $nv_Request->get_int('changeweight', 'post', 0);
         $new_vid = $nv_Request->get_int('new_vid', 'post', 0);
 
-        $query = 'SELECT mid FROM ' . NV_AUTHORS_GLOBALTABLE . '_module WHERE mid!=' . $mid . ' ORDER BY weight ASC';
-        $result = $db->query($query);
+        $stmt = $db->prepare('SELECT mid FROM ' . NV_AUTHORS_GLOBALTABLE . '_module WHERE mid != :mid ORDER BY weight ASC');
+        $stmt->bindValue(':mid', $mid, PDO::PARAM_INT);
+        $stmt->execute();
         $weight = 0;
-        while ($row = $result->fetch()) {
+        $stmt_update = $db->prepare('UPDATE ' . NV_AUTHORS_GLOBALTABLE . '_module SET weight = :weight WHERE mid = :mid');
+        while ($row = $stmt->fetch()) {
             ++$weight;
             if ($weight == $new_vid) {
                 ++$weight;
             }
-            $db->query('UPDATE ' . NV_AUTHORS_GLOBALTABLE . '_module SET weight=' . $weight . ' WHERE mid=' . $row['mid']);
+            $stmt_update->bindValue(':weight', $weight, PDO::PARAM_INT);
+            $stmt_update->bindValue(':mid', $row['mid'], PDO::PARAM_INT);
+            $stmt_update->execute();
         }
-        $db->query('UPDATE ' . NV_AUTHORS_GLOBALTABLE . '_module SET weight=' . $new_vid . ' WHERE mid=' . $mid);
+        $stmt->closeCursor();
+        $stmt_update->bindValue(':weight', $new_vid, PDO::PARAM_INT);
+        $stmt_update->bindValue(':mid', $mid, PDO::PARAM_INT);
+        $stmt_update->execute();
         $nv_Cache->delMod('authors');
 
         nv_jsonOutput($respon);
@@ -52,8 +59,11 @@ if (defined('NV_IS_AJAX')) {
     if ($nv_Request->isset_request('changact', 'post')) {
         $mid = $nv_Request->get_int('mid', 'post', 0);
         $act = $nv_Request->get_int('changact', 'post', 1);
-        $query = 'SELECT * FROM ' . NV_AUTHORS_GLOBALTABLE . '_module WHERE mid=' . $mid;
-        $row = $db->query($query)->fetch();
+        $stmt = $db->prepare('SELECT * FROM ' . NV_AUTHORS_GLOBALTABLE . '_module WHERE mid = :mid');
+        $stmt->bindValue(':mid', $mid, PDO::PARAM_INT);
+        $stmt->execute();
+        $row = $stmt->fetch();
+        $stmt->closeCursor();
 
         $respon = [
             'error' => 1,
@@ -71,7 +81,11 @@ if (defined('NV_IS_AJAX')) {
             if ($save) {
                 $act_val = ($row['act_' . $act]) ? 0 : 1;
                 $checksum = md5($row['module'] . '#' . $row['act_1'] . '#' . $row['act_2'] . '#' . $row['act_3'] . '#' . $global_config['sitekey']);
-                $db->query('UPDATE ' . NV_AUTHORS_GLOBALTABLE . '_module SET act_' . $act . " = '" . $act_val . "', checksum = '" . $checksum . "' WHERE mid = " . $mid);
+                $stmt_update = $db->prepare('UPDATE ' . NV_AUTHORS_GLOBALTABLE . '_module SET act_' . $act . ' = :act_val, checksum = :checksum WHERE mid = :mid');
+                $stmt_update->bindValue(':act_val', $act_val, PDO::PARAM_INT);
+                $stmt_update->bindValue(':checksum', $checksum, PDO::PARAM_STR);
+                $stmt_update->bindValue(':mid', $mid, PDO::PARAM_INT);
+                $stmt_update->execute();
                 $nv_Cache->delMod('authors');
                 $respon['error'] = 0;
             }

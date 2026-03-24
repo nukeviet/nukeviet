@@ -115,21 +115,26 @@ if ($nv_Request->get_int('save', 'post', 0)) {
     $userid = $nv_Request->get_title('userid', 'post', 0);
     $md5username = nv_md5safe($userid);
     if (preg_match('/^([0-9]+)$/', $userid)) {
-        $sql = 'SELECT userid, username, active, group_id, in_groups, delete_at
-        FROM ' . NV_USERS_GLOBALTABLE . ' WHERE userid=' . (int) $userid . ' OR md5username=' . $db->quote($md5username);
+        $stmt = $db->prepare('SELECT userid, username, active, group_id, in_groups, delete_at FROM ' . NV_USERS_GLOBALTABLE . ' WHERE userid = :userid OR md5username = :md5username');
+        $stmt->bindValue(':userid', $userid, PDO::PARAM_INT);
+        $stmt->bindValue(':md5username', $md5username, PDO::PARAM_STR);
     } else {
-        $sql = 'SELECT userid, username, active, group_id, in_groups, delete_at
-        FROM ' . NV_USERS_GLOBALTABLE . ' WHERE md5username=' . $db->quote($md5username);
+        $stmt = $db->prepare('SELECT userid, username, active, group_id, in_groups, delete_at FROM ' . NV_USERS_GLOBALTABLE . ' WHERE md5username = :md5username');
+        $stmt->bindValue(':md5username', $md5username, PDO::PARAM_STR);
     }
-    [$userid, $username, $active, $_group_id, $_in_groups, $delete_at] = $db->query($sql)->fetch(3);
+    $stmt->execute();
+    [$userid, $username, $active, $_group_id, $_in_groups, $delete_at] = $stmt->fetch(3);
+    $stmt->closeCursor();
     if (empty($userid)) {
         $respon['input'] = 'userid';
         $respon['mess'] = $nv_Lang->getModule('add_error_choose');
         nv_jsonOutput($respon);
     }
 
-    $sql = 'SELECT COUNT(*) FROM ' . NV_AUTHORS_GLOBALTABLE . ' WHERE admin_id=' . $userid;
-    $count = $db->query($sql)->fetchColumn();
+    $stmt = $db->prepare('SELECT COUNT(*) FROM ' . NV_AUTHORS_GLOBALTABLE . ' WHERE admin_id = :admin_id');
+    $stmt->bindValue(':admin_id', $userid, PDO::PARAM_INT);
+    $stmt->execute();
+    $count = $stmt->fetchColumn();
     if ($count) {
         $respon['input'] = 'userid';
         $respon['mess'] = $nv_Lang->getModule('add_error_exist');
@@ -265,8 +270,10 @@ if ($nv_Request->get_int('save', 'post', 0)) {
         nv_groups_add_user($lev, $userid);
 
         // Đặt nhóm mặc định là nhóm quản trị
-        $sql = 'UPDATE ' . NV_USERS_GLOBALTABLE . ' SET group_id=' . $lev . ' WHERE userid=' . $userid;
-        $db->query($sql);
+        $stmt_update = $db->prepare('UPDATE ' . NV_USERS_GLOBALTABLE . ' SET group_id = :group_id WHERE userid = :userid');
+        $stmt_update->bindValue(':group_id', $lev, PDO::PARAM_INT);
+        $stmt_update->bindValue(':userid', $userid, PDO::PARAM_INT);
+        $stmt_update->execute();
 
         $session_files = json_encode([
             'admin_id' => $userid,

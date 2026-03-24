@@ -15,8 +15,11 @@ if (!defined('NV_IS_FILE_AUTHORS')) {
 
 $admin_id = $nv_Request->get_absint('admin_id', 'get,post', $admin_info['admin_id']);
 
-$sql = 'SELECT * FROM ' . NV_AUTHORS_GLOBALTABLE . ' WHERE admin_id=' . $admin_id;
-$row = $db->query($sql)->fetch();
+$stmt = $db->prepare('SELECT * FROM ' . NV_AUTHORS_GLOBALTABLE . ' WHERE admin_id = :admin_id');
+$stmt->bindValue(':admin_id', $admin_id, PDO::PARAM_INT);
+$stmt->execute();
+$row = $stmt->fetch();
+$stmt->closeCursor();
 
 if (empty($row)) {
     nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
@@ -41,8 +44,11 @@ if (empty($allowed)) {
     nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
 }
 
-$sql = 'SELECT * FROM ' . NV_USERS_GLOBALTABLE . ' WHERE userid=' . $admin_id;
-$row_user = $db->query($sql)->fetch();
+$stmt = $db->prepare('SELECT * FROM ' . NV_USERS_GLOBALTABLE . ' WHERE userid = :userid');
+$stmt->bindValue(':userid', $admin_id, PDO::PARAM_INT);
+$stmt->execute();
+$row_user = $stmt->fetch();
+$stmt->closeCursor();
 if (empty($row_user)) {
     throw new \NukeViet\Http\HttpException('Data error: No user for admin account!', 500);
 }
@@ -98,22 +104,31 @@ if ($row['admin_id'] == $admin_info['admin_id']) {
                 $error = $nv_Lang->getGlobal('admin_oauth_error_getdata');
             } else {
                 // Kiểm tra trùng
-                $sql = 'SELECT * FROM ' . NV_AUTHORS_GLOBALTABLE . '_oauth WHERE oauth_uid=' . $db->quote($attribs['full_identity']) . '
-                AND admin_id=' . $row['admin_id'] . ' AND oauth_server=' . $db->quote($opt);
-                if ($db->query($sql)->fetch()) {
+                $stmt = $db->prepare('SELECT * FROM ' . NV_AUTHORS_GLOBALTABLE . '_oauth WHERE oauth_uid = :oauth_uid AND admin_id = :admin_id AND oauth_server = :oauth_server');
+                $stmt->bindValue(':oauth_uid', $attribs['full_identity'], PDO::PARAM_STR);
+                $stmt->bindValue(':admin_id', $row['admin_id'], PDO::PARAM_INT);
+                $stmt->bindValue(':oauth_server', $opt, PDO::PARAM_STR);
+                $stmt->execute();
+                $is_exists = $stmt->fetch();
+                $stmt->closeCursor();
+                if ($is_exists) {
                     $error = $nv_Lang->getModule('2step_error_oauth_exists');
                 }
             }
 
             if (empty($error)) {
                 // Thêm mới vào CSDL
-                $sql = 'INSERT INTO ' . NV_AUTHORS_GLOBALTABLE . '_oauth (
+                $stmt = $db->prepare('INSERT INTO ' . NV_AUTHORS_GLOBALTABLE . '_oauth (
                     admin_id, oauth_server, oauth_uid, oauth_email, oauth_id, addtime
                 ) VALUES (
-                    ' . $row['admin_id'] . ', ' . $db->quote($opt) . ', ' . $db->quote($attribs['full_identity']) . ',
-                    ' . $db->quote($attribs['email']) . ', ' . $db->quote($attribs['identity']) . ', ' . NV_CURRENTTIME . '
-                )';
-                if (!$db->insert_id($sql, 'id')) {
+                    :admin_id, :oauth_server, :oauth_uid, :oauth_email, :oauth_id, ' . NV_CURRENTTIME . '
+                )');
+                $stmt->bindValue(':admin_id', $row['admin_id'], PDO::PARAM_INT);
+                $stmt->bindValue(':oauth_server', $opt, PDO::PARAM_STR);
+                $stmt->bindValue(':oauth_uid', $attribs['full_identity'], PDO::PARAM_STR);
+                $stmt->bindValue(':oauth_email', $attribs['email'], PDO::PARAM_STR);
+                $stmt->bindValue(':oauth_id', $attribs['identity'], PDO::PARAM_STR);
+                if (!$stmt->execute()) {
                     $error = $nv_Lang->getGlobal('admin_oauth_error_savenew');
                 } else {
                     $oauthid = !empty($attribs['email']) ? $attribs['email'] : $attribs['identity'];
@@ -155,13 +170,15 @@ if ($row['admin_id'] == $admin_info['admin_id']) {
 // Danh sách các cổng xác thực
 $array_oauth = [];
 $list_for_mail = [];
-$sql = 'SELECT * FROM ' . NV_AUTHORS_GLOBALTABLE . '_oauth WHERE admin_id=' . $row['admin_id'] . ' ORDER BY addtime DESC';
-$result = $db->query($sql);
-while ($_row = $result->fetch()) {
+$stmt = $db->prepare('SELECT * FROM ' . NV_AUTHORS_GLOBALTABLE . '_oauth WHERE admin_id = :admin_id ORDER BY addtime DESC');
+$stmt->bindValue(':admin_id', $row['admin_id'], PDO::PARAM_INT);
+$stmt->execute();
+while ($_row = $stmt->fetch()) {
     $array_oauth[$_row['id']] = $_row;
     $oauthid = !empty($_row['oauth_email']) ? $_row['oauth_email'] : $_row['oauth_id'];
     $list_for_mail[] = $oauthid . '(' . ucfirst($_row['oauth_server']) . ')';
 }
+$stmt->closeCursor();
 
 $_csrf_key = $csrf_key . '_' . $row['admin_id'];
 
@@ -174,8 +191,9 @@ if ($nv_Request->isset_request('delall', 'post')) {
         exit('Wrong URL');
     }
 
-    $sql = 'DELETE FROM ' . NV_AUTHORS_GLOBALTABLE . '_oauth WHERE admin_id=' . $row['admin_id'];
-    $db->query($sql);
+    $stmt = $db->prepare('DELETE FROM ' . NV_AUTHORS_GLOBALTABLE . '_oauth WHERE admin_id = :admin_id');
+    $stmt->bindValue(':admin_id', $row['admin_id'], PDO::PARAM_INT);
+    $stmt->execute();
 
     $list_for_mail = implode(', ', $list_for_mail);
 
@@ -229,8 +247,10 @@ if ($nv_Request->isset_request('del', 'post')) {
         nv_jsonOutput($respon);
     }
 
-    $sql = 'DELETE FROM ' . NV_AUTHORS_GLOBALTABLE . '_oauth WHERE admin_id=' . $row['admin_id'] . ' AND id=' . $id;
-    $db->query($sql);
+    $stmt_del = $db->prepare('DELETE FROM ' . NV_AUTHORS_GLOBALTABLE . '_oauth WHERE admin_id = :admin_id AND id = :id');
+    $stmt_del->bindValue(':admin_id', $row['admin_id'], PDO::PARAM_INT);
+    $stmt_del->bindValue(':id', $id, PDO::PARAM_INT);
+    $stmt_del->execute();
 
     $oauthid = !empty($array_oauth[$id]['oauth_email']) ? $array_oauth[$id]['oauth_email'] : $array_oauth[$id]['oauth_id'];
 

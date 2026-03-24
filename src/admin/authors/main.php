@@ -19,10 +19,12 @@ $admins = [];
 if ($nv_Request->isset_request('id', 'get')) {
     // Trường hợp xem chi tiết một quản trị
     $admin_id = $nv_Request->get_int('id', 'get', 0);
-    $sql = 'SELECT t1.admin_id as admin_id, t1.admin_theme admin_theme, t1.check_num as check_num, t1.last_agent as last_agent, t1.last_ip as last_ip, t1.last_login as last_login, t1.files_level as files_level, t1.lev as lev,t1.position as position, t1.editor as editor, t1.is_suspend as is_suspend, t1.susp_reason as susp_reason,
+    $stmt = $db->prepare('SELECT t1.admin_id as admin_id, t1.admin_theme admin_theme, t1.check_num as check_num, t1.last_agent as last_agent, t1.last_ip as last_ip, t1.last_login as last_login, t1.files_level as files_level, t1.lev as lev,t1.position as position, t1.editor as editor, t1.is_suspend as is_suspend, t1.susp_reason as susp_reason,
     t2.username as username, t2.email as email, t2.first_name as first_name, t2.last_name as last_name, t2.view_mail as view_mail, t2.regdate as regdate, t2.active as active
-    FROM ' . NV_AUTHORS_GLOBALTABLE . ' t1 INNER JOIN ' . NV_USERS_GLOBALTABLE . ' t2 ON t1.admin_id = t2.userid WHERE admin_id=' . $admin_id;
-    $adminrows = $db->query($sql)->fetchAll();
+    FROM ' . NV_AUTHORS_GLOBALTABLE . ' t1 INNER JOIN ' . NV_USERS_GLOBALTABLE . ' t2 ON t1.admin_id = t2.userid WHERE admin_id = :admin_id');
+    $stmt->bindValue(':admin_id', $admin_id, PDO::PARAM_INT);
+    $stmt->execute();
+    $adminrows = $stmt->fetchAll();
     $numrows = count($adminrows);
 
     if ($numrows != 1) {
@@ -69,7 +71,11 @@ if ($numrows) {
         if (!empty($is_suspend)) {
             $last_reason = unserialize($row['susp_reason'], NV_UNSERIALIZE_SAFE);
             $last_reason = array_shift($last_reason);
-            [$susp_admin_id, $susp_admin_name] = $db->query('SELECT userid,first_name,last_name FROM ' . NV_USERS_GLOBALTABLE . ' WHERE userid=' . (int) ($last_reason['start_admin']))->fetch(3);
+            $stmt = $db->prepare('SELECT userid, first_name, last_name FROM ' . NV_USERS_GLOBALTABLE . ' WHERE userid = :userid');
+            $stmt->bindValue(':userid', (int) ($last_reason['start_admin']), PDO::PARAM_INT);
+            $stmt->execute();
+            [$susp_admin_id, $susp_admin_name] = $stmt->fetch(3);
+            $stmt->closeCursor();
             $susp_admin_name = '<a href="' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;id=' . $susp_admin_id . '">' . $susp_admin_name . '</a>';
             $is_suspend = $nv_Lang->getModule('is_suspend1', nv_datetime_format($last_reason['starttime']), $susp_admin_name, $last_reason['info']);
         } elseif (empty($row['active'])) {

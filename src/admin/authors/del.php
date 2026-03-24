@@ -25,8 +25,11 @@ if (empty($admin_id) or $admin_id == $admin_info['admin_id']) {
     nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
 }
 
-$sql = 'SELECT * FROM ' . NV_AUTHORS_GLOBALTABLE . ' WHERE admin_id=' . $admin_id;
-$row = $db->query($sql)->fetch();
+$stmt = $db->prepare('SELECT * FROM ' . NV_AUTHORS_GLOBALTABLE . ' WHERE admin_id = :admin_id');
+$stmt->bindValue(':admin_id', $admin_id, PDO::PARAM_INT);
+$stmt->execute();
+$row = $stmt->fetch();
+$stmt->closeCursor();
 if (empty($row)) {
     nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
 }
@@ -43,8 +46,10 @@ function nv_checkAdmpass($adminpass)
 {
     global $db, $admin_info, $crypt;
 
-    $sql = 'SELECT password FROM ' . NV_USERS_GLOBALTABLE . ' WHERE userid=' . $admin_info['userid'];
-    $pass = $db->query($sql)->fetchColumn();
+    $stmt = $db->prepare('SELECT password FROM ' . NV_USERS_GLOBALTABLE . ' WHERE userid = :userid');
+    $stmt->bindValue(':userid', $admin_info['userid'], PDO::PARAM_INT);
+    $stmt->execute();
+    $pass = $stmt->fetchColumn();
 
     return $crypt->validate_password($adminpass, $pass);
 }
@@ -62,8 +67,11 @@ if (isset($access_admin['access_delus'][$level]) and $access_admin['access_delus
     $array_action_account[2] = $nv_Lang->getModule('action_account_del');
 }
 
-$sql = 'SELECT * FROM ' . NV_USERS_GLOBALTABLE . ' WHERE userid=' . $admin_id;
-$row_user = $db->query($sql)->fetch();
+$stmt = $db->prepare('SELECT * FROM ' . NV_USERS_GLOBALTABLE . ' WHERE userid = :userid');
+$stmt->bindValue(':userid', $admin_id, PDO::PARAM_INT);
+$stmt->execute();
+$row_user = $stmt->fetch();
+$stmt->closeCursor();
 
 $action_account = $nv_Request->get_int('action_account', 'post', 0);
 $action_account = (isset($array_action_account[$action_account])) ? $action_account : 0;
@@ -124,52 +132,81 @@ if (!csrf_check($nv_Request->get_string('checkss', 'post'), $_csrf_key)) {
         }
     }
 
-    $db->query('DELETE FROM ' . NV_AUTHORS_GLOBALTABLE . ' WHERE admin_id = ' . $admin_id);
-    $db->query('DELETE FROM ' . NV_AUTHORS_GLOBALTABLE . '_vars WHERE admin_id = ' . $admin_id);
+    $stmt = $db->prepare('DELETE FROM ' . NV_AUTHORS_GLOBALTABLE . ' WHERE admin_id = :admin_id');
+    $stmt->bindValue(':admin_id', $admin_id, PDO::PARAM_INT);
+    $stmt->execute();
+
+    $stmt = $db->prepare('DELETE FROM ' . NV_AUTHORS_GLOBALTABLE . '_vars WHERE admin_id = :admin_id');
+    $stmt->bindValue(':admin_id', $admin_id, PDO::PARAM_INT);
+    $stmt->execute();
 
     if ($action_account == 1) {
         // Đình chỉ tài khoản
-        $db->query('UPDATE ' . NV_USERS_GLOBALTABLE . ' SET active=0 WHERE userid=' . $admin_id);
+        $stmt_update = $db->prepare('UPDATE ' . NV_USERS_GLOBALTABLE . ' SET active = 0 WHERE userid = :userid');
+        $stmt_update->bindValue(':userid', $admin_id, PDO::PARAM_INT);
+        $stmt_update->execute();
     } elseif ($action_account == 2) {
         // Xóa tài khoản
         try {
-            $db->query('UPDATE ' . NV_GROUPS_GLOBALTABLE . ' SET numbers = numbers-1 WHERE group_id IN (SELECT group_id FROM ' . NV_GROUPS_GLOBALTABLE . '_users WHERE userid=' . $admin_id . ' AND approved = 1)');
+            $stmt_update = $db->prepare('UPDATE ' . NV_GROUPS_GLOBALTABLE . ' SET numbers = numbers - 1 WHERE group_id IN (SELECT group_id FROM ' . NV_GROUPS_GLOBALTABLE . '_users WHERE userid = :userid AND approved = 1)');
+            $stmt_update->bindValue(':userid', $admin_id, PDO::PARAM_INT);
+            $stmt_update->execute();
         } catch (PDOException $e) {
             trigger_error(print_r($e, true));
         }
-        $db->query('DELETE FROM ' . NV_GROUPS_GLOBALTABLE . '_users WHERE userid=' . $admin_id);
-        $db->query('DELETE FROM ' . NV_USERS_GLOBALTABLE . '_openid WHERE userid=' . $admin_id);
-        $db->query('DELETE FROM ' . NV_USERS_GLOBALTABLE . '_info WHERE userid=' . $admin_id);
-        $db->query('DELETE FROM ' . NV_USERS_GLOBALTABLE . '_passkey WHERE userid=' . $admin_id);
-        $db->query('DELETE FROM ' . NV_USERS_GLOBALTABLE . '_deleted WHERE userid=' . $admin_id);
-        $db->query('DELETE FROM ' . NV_USERS_GLOBALTABLE . ' WHERE userid=' . $admin_id);
+        $stmt_del = $db->prepare('DELETE FROM ' . NV_GROUPS_GLOBALTABLE . '_users WHERE userid = :userid');
+        $stmt_del->bindValue(':userid', $admin_id, PDO::PARAM_INT);
+        $stmt_del->execute();
+
+        $stmt_del = $db->prepare('DELETE FROM ' . NV_USERS_GLOBALTABLE . '_openid WHERE userid = :userid');
+        $stmt_del->bindValue(':userid', $admin_id, PDO::PARAM_INT);
+        $stmt_del->execute();
+
+        $stmt_del = $db->prepare('DELETE FROM ' . NV_USERS_GLOBALTABLE . '_info WHERE userid = :userid');
+        $stmt_del->bindValue(':userid', $admin_id, PDO::PARAM_INT);
+        $stmt_del->execute();
+
+        $stmt_del = $db->prepare('DELETE FROM ' . NV_USERS_GLOBALTABLE . '_passkey WHERE userid = :userid');
+        $stmt_del->bindValue(':userid', $admin_id, PDO::PARAM_INT);
+        $stmt_del->execute();
+
+        $stmt_del = $db->prepare('DELETE FROM ' . NV_USERS_GLOBALTABLE . '_deleted WHERE userid = :userid');
+        $stmt_del->bindValue(':userid', $admin_id, PDO::PARAM_INT);
+        $stmt_del->execute();
+
+        $stmt_del = $db->prepare('DELETE FROM ' . NV_USERS_GLOBALTABLE . ' WHERE userid = :userid');
+        $stmt_del->bindValue(':userid', $admin_id, PDO::PARAM_INT);
+        $stmt_del->execute();
         if (!empty($row_user['photo']) and is_file(NV_ROOTDIR . '/' . $row_user['photo'])) {
             @nv_deletefile(NV_ROOTDIR . '/' . $row_user['photo']);
         }
         // Xóa API
-        $db->query('DELETE FROM ' . $db_config['prefix'] . '_api_role_credential WHERE userid=' . $admin_id);
+        $stmt_del = $db->prepare('DELETE FROM ' . $db_config['prefix'] . '_api_role_credential WHERE userid = :userid');
+        $stmt_del->bindValue(':userid', $admin_id, PDO::PARAM_INT);
+        $stmt_del->execute();
         nv_apply_hook('users', 'user_delete', [$admin_id, $row_user]);
     }
 
     if ($action_account != 2) {
         // Xóa API cho admin
-        $db->sqlreset()
-            ->select('COUNT(*)')
-            ->from($db_config['prefix'] . '_api_role_credential tb1')
-            ->join('INNER JOIN ' . $db_config['prefix'] . '_api_role tb2 ON (tb2.role_id =tb1.role_id)')
-            ->where('tb1.userid = ' . $admin_id . " AND tb2.role_object='admin'");
-        $count = $db->query($db->sql())
-            ->fetchColumn();
+        $stmt = $db->prepare("SELECT COUNT(*) FROM " . $db_config['prefix'] . "_api_role_credential tb1 INNER JOIN " . $db_config['prefix'] . "_api_role tb2 ON (tb2.role_id = tb1.role_id) WHERE tb1.userid = :userid AND tb2.role_object = 'admin'");
+        $stmt->bindValue(':userid', $admin_id, PDO::PARAM_INT);
+        $stmt->execute();
+        $count = $stmt->fetchColumn();
         if ($count) {
-            $db->select('tb1.id');
-            $result = $db->query($db->sql());
+            $stmt = $db->prepare("SELECT tb1.id FROM " . $db_config['prefix'] . "_api_role_credential tb1 INNER JOIN " . $db_config['prefix'] . "_api_role tb2 ON (tb2.role_id = tb1.role_id) WHERE tb1.userid = :userid AND tb2.role_object = 'admin'");
+            $stmt->bindValue(':userid', $admin_id, PDO::PARAM_INT);
+            $stmt->execute();
             $credential_ids = [];
-            while ($row = $result->fetch()) {
+            while ($row = $stmt->fetch()) {
                 $credential_ids[] = $row['id'];
             }
+            $stmt->closeCursor();
 
             $credential_ids = implode(', ', $credential_ids);
-            $db->query('DELETE FROM ' . $db_config['prefix'] . '_api_role_credential WHERE id IN (' . $credential_ids . ') AND userid=' . $admin_id);
+            $stmt_del = $db->prepare('DELETE FROM ' . $db_config['prefix'] . '_api_role_credential WHERE id IN (' . $credential_ids . ') AND userid = :userid');
+            $stmt_del->bindValue(':userid', $admin_id, PDO::PARAM_INT);
+            $stmt_del->execute();
         }
 
         nv_groups_del_user($row['lev'], $admin_id);
@@ -184,8 +221,11 @@ if (!csrf_check($nv_Request->get_string('checkss', 'post'), $_csrf_key)) {
         $row_user['in_groups'] = array_filter(array_unique(array_map('trim', $row_user['in_groups'])));
         $row_user['in_groups'] = empty($row_user['in_groups']) ? '' : implode(',', $row_user['in_groups']);
 
-        $sql = 'UPDATE ' . NV_USERS_GLOBALTABLE . ' SET group_id=' . $row_user['group_id'] . ', in_groups=' . $db->quote($row_user['in_groups']) . ' WHERE userid=' . $admin_id;
-        $db->query($sql);
+        $stmt = $db->prepare('UPDATE ' . NV_USERS_GLOBALTABLE . ' SET group_id = :group_id, in_groups = :in_groups WHERE userid = :userid');
+        $stmt->bindValue(':group_id', $row_user['group_id'], PDO::PARAM_INT);
+        $stmt->bindValue(':in_groups', $row_user['in_groups'], PDO::PARAM_STR);
+        $stmt->bindValue(':userid', $admin_id, PDO::PARAM_INT);
+        $stmt->execute();
     }
     nv_insert_logs(NV_LANG_DATA, $module_name, $nv_Lang->getModule('nv_admin_del'), 'Username: ' . $row_user['username'] . ', ' . $array_action_account[$action_account], $admin_info['userid']);
 

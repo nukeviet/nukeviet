@@ -24,8 +24,11 @@ if (empty($admin_id) or $admin_id == $admin_info['admin_id']) {
     nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
 }
 
-$sql = 'SELECT * FROM ' . NV_AUTHORS_GLOBALTABLE . ' WHERE admin_id=' . $admin_id;
-$row = $db->query($sql)->fetch();
+$stmt = $db->prepare('SELECT * FROM ' . NV_AUTHORS_GLOBALTABLE . ' WHERE admin_id = :admin_id');
+$stmt->bindValue(':admin_id', $admin_id, PDO::PARAM_INT);
+$stmt->execute();
+$row = $stmt->fetch();
+$stmt->closeCursor();
 if (empty($row)) {
     nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
 }
@@ -34,7 +37,11 @@ if ($row['lev'] == 1 or (!defined('NV_IS_GODADMIN') and $row['lev'] == 2)) {
     nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
 }
 
-$row_user = $db->query('SELECT * FROM ' . NV_USERS_GLOBALTABLE . ' WHERE userid=' . $admin_id)->fetch();
+$stmt = $db->prepare('SELECT * FROM ' . NV_USERS_GLOBALTABLE . ' WHERE userid = :userid');
+$stmt->bindValue(':userid', $admin_id, PDO::PARAM_INT);
+$stmt->execute();
+$row_user = $stmt->fetch();
+$stmt->closeCursor();
 $susp_reason = [];
 $last_reason = [];
 
@@ -109,7 +116,9 @@ if ($allow_change and $nv_Request->get_int('save', 'post', 0)) {
     $sth->bindValue(':susp_reason', serialize($susp_reason), PDO::PARAM_STR);
     if ($sth->execute()) {
         if (empty($row_user['active'])) {
-            $db->query('UPDATE ' . NV_USERS_GLOBALTABLE . ' SET active= 1 WHERE userid=' . $admin_id);
+            $stmt_update = $db->prepare('UPDATE ' . NV_USERS_GLOBALTABLE . ' SET active = 1 WHERE userid = :userid');
+            $stmt_update->bindValue(':userid', $admin_id, PDO::PARAM_INT);
+            $stmt_update->execute();
         }
         nv_insert_logs(NV_LANG_DATA, $module_name, $nv_Lang->getModule('suspend' . $new_suspend) . ' ', ' Username : ' . $row_user['username'], $admin_info['userid']);
         if (!empty($sendmail)) {
@@ -159,13 +168,14 @@ if (!empty($susp_reason)) {
 
     $ads = array_unique($ads);
     $ads = implode(',', $ads);
-    $result2 = $db->query('SELECT userid, username, first_name, last_name FROM ' . NV_USERS_GLOBALTABLE . ' WHERE userid IN (' . $ads . ')');
+    $stmt = $db->prepare('SELECT userid, username, first_name, last_name FROM ' . NV_USERS_GLOBALTABLE . ' WHERE userid IN (' . $ads . ')');
+    $stmt->execute();
     $ads = [];
     $ads[0] = $nv_Lang->getGlobal('system');
-    while ($row2 = $result2->fetch()) {
+    while ($row2 = $stmt->fetch()) {
         $ads[$row2['userid']] = '<a href="' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;id=' . $row2['userid'] . '">' . $row2['first_name'] . '</a>';
     }
-    $result2->closeCursor();
+    $stmt->closeCursor();
 }
 
 $page_title = $nv_Lang->getModule('nv_admin_chg_suspend', $row_user['username']);
