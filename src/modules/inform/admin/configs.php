@@ -14,8 +14,15 @@ if (!defined('NV_IS_FILE_ADMIN')) {
 }
 
 if ($nv_Request->isset_request('save', 'post')) {
+    if (!csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
+        nv_jsonOutput([
+            'status' => 'error',
+            'mess' => $nv_Lang->getGlobal('error_checkss')
+        ]);
+    }
+
     $postdata = [
-        'inform_active' => (int) $nv_Request->get_float('inform_active', 'post', false),
+        'inform_active' => (int) $nv_Request->get_bool('inform_active', 'post', false),
         'inform_default_exp' => $nv_Request->get_int('inform_default_exp', 'post', 0),
         'inform_exp_del' => $nv_Request->get_int('inform_exp_del', 'post', 0),
         'inform_refresh_time' => $nv_Request->get_int('inform_refresh_time', 'post', 0),
@@ -28,6 +35,7 @@ if ($nv_Request->isset_request('save', 'post')) {
             if (empty($value)) {
                 nv_jsonOutput([
                     'status' => 'error',
+                    'mess' => $nv_Lang->getModule('field_required'),
                     'input' => $key
                 ]);
             }
@@ -40,25 +48,28 @@ if ($nv_Request->isset_request('save', 'post')) {
     $sth2 = $db->prepare('INSERT INTO ' . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('sys', 'site', :config_name, :config_value)");
     foreach ($postdata as $config_name => $config_value) {
         if (isset($global_config[$config_name])) {
-            $sth->bindParam(':config_name', $config_name, PDO::PARAM_STR, 30);
-            $sth->bindParam(':config_value', $config_value, PDO::PARAM_STR);
+            $sth->bindValue(':config_name', $config_name, PDO::PARAM_STR);
+            $sth->bindValue(':config_value', (string) $config_value, PDO::PARAM_STR);
             $sth->execute();
         } else {
-            $sth2->bindParam(':config_name', $config_name, PDO::PARAM_STR, 30);
-            $sth2->bindParam(':config_value', $config_value, PDO::PARAM_STR);
+            $sth2->bindValue(':config_name', $config_name, PDO::PARAM_STR);
+            $sth2->bindValue(':config_value', (string) $config_value, PDO::PARAM_STR);
             $sth2->execute();
         }
     }
+    nv_insert_logs(NV_LANG_DATA, $module_name, 'Change inform config', '', $admin_info['userid']);
     $nv_Cache->delAll(false);
     nv_jsonOutput([
-        'status' => 'OK'
+        'status' => 'OK',
+        'mess' => $nv_Lang->getGlobal('save_success'),
+        'redirect' => nv_url_rewrite(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op, true)
     ]);
 }
 
 $page_title = $nv_Lang->getModule('configs');
 
 $data = [
-    'inform_active_checked' => !empty($global_config['inform_active']) ? ' checked="checked"' : '',
+    'inform_active' => !empty($global_config['inform_active']) ? 1 : 0,
     'inform_default_exp' => !empty($global_config['inform_default_exp']) ? round($global_config['inform_default_exp'] / 86400) : 30,
     'inform_exp_del' => !empty($global_config['inform_exp_del']) ? round($global_config['inform_exp_del'] / 86400) : 30,
     'inform_refresh_time' => !empty($global_config['inform_refresh_time']) ? $global_config['inform_refresh_time'] : 30,
@@ -66,13 +77,16 @@ $data = [
     'inform_numrows' => !empty($global_config['inform_numrows']) ? $global_config['inform_numrows'] : 10
 ];
 
-$xtpl = new XTemplate('configs.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-$xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
-$xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
-$xtpl->assign('FORM_ACTION', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op);
-$xtpl->assign('DATA', $data);
-$xtpl->parse('main');
-$contents = $xtpl->text('main');
+$tpl = new \NukeViet\Template\NVSmarty();
+$tpl->setTemplateDir(get_module_tpl_dir('configs.tpl'));
+
+$tpl->assign('LANG', $nv_Lang);
+$tpl->assign('MODULE_NAME', $module_name);
+$tpl->assign('OP', $op);
+$tpl->assign('CHECKSS', csrf_create($csrf_key));
+$tpl->assign('DATA', $data);
+
+$contents = $tpl->fetch('configs.tpl');
 
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_admin_theme($contents);
