@@ -31,6 +31,13 @@ if ($action == 'block') {
 
     // Ghi CSDL
     if ($nv_Request->get_int('save', 'post')) {
+        if (!csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
+            nv_jsonOutput([
+                'status' => 'error',
+                'mess' => $nv_Lang->getGlobal('error_checkss')
+            ]);
+        }
+
         $arr['title'] = $nv_Request->get_title('title', 'post', '');
         if (empty($arr['title'])) {
             nv_jsonOutput([
@@ -147,35 +154,47 @@ if ($action == 'block') {
 
         $nv_Cache->delMod($module_name);
         nv_jsonOutput([
-            'status' => 'OK'
+            'status' => 'OK',
+            'mess' => $nv_Lang->getGlobal('save_success'),
+            'refresh' => true
         ]);
     }
 
     // Xuất HTML cho modal
-    $xtpl = new XTemplate('blocks.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-    $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
-    $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
-    $xtpl->assign('MODULE_NAME', $module_name);
-    $xtpl->assign('FORM_ACTION', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=blocks&amp;action=block' . (!empty($arr['id']) ? '&amp;id=' . $arr['id'] : ''));
-    $xtpl->assign('FORM_CAPTION', $arr['id'] ? $nv_Lang->getModule('edit_menu') : $nv_Lang->getModule('add_menu'));
-    $xtpl->assign('OP', $op);
-
-    $xtpl->assign('DATAFORM', $arr);
-    unset($site_mods['menu'], $site_mods['comment'], $site_mods['zalo']);
-    foreach ($site_mods as $mod_name => $modvalues) {
-        $xtpl->assign('OPTIONVALUE', $mod_name);
-        $xtpl->assign('OPTIONTITLE', $modvalues['custom_title']);
-        $xtpl->parse('block.action_menu');
+    $site_mods_filtered = $site_mods;
+    unset($site_mods_filtered['menu'], $site_mods_filtered['comment'], $site_mods_filtered['zalo']);
+    $action_menu_options = [];
+    foreach ($site_mods_filtered as $mod_name => $modvalues) {
+        $action_menu_options[] = [
+            'value' => $mod_name,
+            'title' => $modvalues['custom_title']
+        ];
     }
 
-    $xtpl->parse('block');
-    nv_htmlOutput($xtpl->text('block'));
+    $tpl = new \NukeViet\Template\NVSmarty();
+    $tpl->setTemplateDir(get_module_tpl_dir('blocks-modal.tpl'));
+    $tpl->assign('LANG', $nv_Lang);
+    $tpl->assign('MODULE_NAME', $module_name);
+    $tpl->assign('OP', $op);
+    $tpl->assign('CHECKSS', csrf_create($csrf_key));
+    $tpl->assign('FORM_CAPTION', !empty($arr['id']) ? $nv_Lang->getModule('edit_menu') : $nv_Lang->getModule('add_menu'));
+    $tpl->assign('DATAFORM', $arr);
+    $tpl->assign('ACTION_MENU_OPTIONS', $action_menu_options);
+
+    nv_htmlOutput($tpl->fetch('blocks-modal.tpl'));
 }
 
 // Xóa khối menu
 if ($nv_Request->isset_request('del', 'post')) {
     if (!defined('NV_IS_AJAX')) {
         exit('Wrong URL');
+    }
+
+    if (!csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
+        nv_jsonOutput([
+            'status' => 'error',
+            'mess' => $nv_Lang->getGlobal('error_checkss')
+        ]);
     }
 
     $id = $nv_Request->get_int('id', 'post', 0);
@@ -190,7 +209,11 @@ if ($nv_Request->isset_request('del', 'post')) {
             $nv_Cache->delMod($module_name);
         }
     }
-    exit('OK');
+
+    nv_jsonOutput([
+        'status' => 'OK',
+        'mess' => ''
+    ]);
 }
 
 $page_title = $nv_Lang->getModule('name_block');
@@ -224,23 +247,15 @@ while ($row = $query2->fetch()) {
     ];
 }
 
-$xtpl = new XTemplate('blocks.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-$xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
-$xtpl->assign('FORM_ACTION', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=blocks&amp;action=block');
+$tpl = new \NukeViet\Template\NVSmarty();
+$tpl->setTemplateDir(get_module_tpl_dir('blocks.tpl'));
+$tpl->assign('LANG', $nv_Lang);
+$tpl->assign('MODULE_NAME', $module_name);
+$tpl->assign('OP', $op);
+$tpl->assign('CHECKSS', csrf_create($csrf_key));
+$tpl->assign('ARRAY', $array);
 
-if (empty($array)) {
-    $xtpl->assign('ERROR', $nv_Lang->getModule('data_no'));
-    $xtpl->parse('main.error');
-} else {
-    foreach ($array as $row) {
-        $xtpl->assign('ROW', $row);
-        $xtpl->parse('main.table.loop1');
-    }
-    $xtpl->parse('main.table');
-}
-
-$xtpl->parse('main');
-$contents = $xtpl->text('main');
+$contents = $tpl->fetch('blocks.tpl');
 
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_admin_theme($contents);
