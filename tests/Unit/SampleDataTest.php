@@ -395,4 +395,202 @@ class SampleDataTest extends \Codeception\Test\Unit
 
         $this->assertGreaterThan(0, $inserted, 'Không có dòng nào được insert vào bảng ' . $tablePrefix . '_supporter.');
     }
+
+    /**
+     * Dữ liệu mẫu thông báo cho màn quản trị danh sách thông báo của module inform
+     *
+     * Sinh 50 bản ghi ở bảng _inform với đủ kiểu người gửi, người nhận,
+     * trạng thái waiting/active/expired/unlimited và thêm trạng thái đọc ở _inform_status.
+     *
+     * @group sample-data
+     */
+    public function testInsertSampleDataForInformAdminMain()
+    {
+        global $db, $db_config;
+
+        $informTable = $db_config['prefix'] . '_inform';
+        $statusTable = $db_config['prefix'] . '_inform_status';
+        $usersTable = $db_config['prefix'] . '_users';
+        $authorsTable = $db_config['prefix'] . '_authors';
+        $groupsTable = $db_config['prefix'] . '_users_groups';
+
+        $userIds = $db->query(
+            'SELECT userid FROM ' . $usersTable . ' ORDER BY userid ASC LIMIT 30'
+        )->fetchAll(\PDO::FETCH_COLUMN);
+
+        if (empty($userIds)) {
+            $this->markTestSkipped('Không có user nào trong bảng ' . $usersTable . '.');
+        }
+
+        $adminIds = $db->query(
+            'SELECT admin_id FROM ' . $authorsTable . ' ORDER BY admin_id ASC'
+        )->fetchAll(\PDO::FETCH_COLUMN);
+
+        if (empty($adminIds)) {
+            $this->markTestSkipped('Không có admin nào trong bảng ' . $authorsTable . '.');
+        }
+
+        $groupIds = $db->query(
+            'SELECT group_id FROM ' . $groupsTable . ' WHERE act = 1 ORDER BY group_id ASC'
+        )->fetchAll(\PDO::FETCH_COLUMN);
+
+        $esc = fn (string $s) => str_replace(["\\", "'"], ["\\\\", "\\'"], $s);
+
+        $seedMark = 'seed-inform-admin-main-' . date('YmdHis') . '-' . rand(1000, 9999);
+        $now = time();
+        $values = [];
+        $totalRecords = 50;
+        $userCount = count($userIds);
+        $adminCount = count($adminIds);
+        $groupCount = count($groupIds);
+
+        for ($index = 1; $index <= $totalRecords; ++$index) {
+            $senderRole = match ($index % 3) {
+                1       => 'system',
+                2       => $groupCount > 0 ? 'group' : 'admin',
+                default => 'admin',
+            };
+
+            $senderGroup = $senderRole === 'group' ? (int) $groupIds[($index - 1) % $groupCount] : 0;
+            $senderAdmin = $senderRole === 'admin' ? (int) $adminIds[($index - 1) % $adminCount] : 0;
+
+            if ($senderRole === 'group') {
+                $receiverGrs = '';
+                $receiverIds = [
+                    (int) $userIds[($index - 1) % $userCount],
+                    (int) $userIds[$index % $userCount],
+                ];
+                $receiverIds = implode(',', array_values(array_unique($receiverIds)));
+            } elseif ($index % 4 === 0) {
+                $receiverGrs = '';
+                $receiverIds = '';
+            } elseif ($index % 4 === 1 && $groupCount > 0) {
+                $receiverGroups = [(int) $groupIds[($index - 1) % $groupCount]];
+                if ($groupCount > 1 && $index % 8 === 1) {
+                    $receiverGroups[] = (int) $groupIds[$index % $groupCount];
+                }
+                $receiverGrs = implode(',', array_values(array_unique($receiverGroups)));
+                $receiverIds = '';
+            } else {
+                $receiverGrs = '';
+                $receiverUsers = [
+                    (int) $userIds[($index - 1) % $userCount],
+                    (int) $userIds[$index % $userCount],
+                ];
+                if ($userCount > 2 && $index % 5 === 0) {
+                    $receiverUsers[] = (int) $userIds[($index + 1) % $userCount];
+                }
+                $receiverIds = implode(',', array_values(array_unique($receiverUsers)));
+            }
+
+            switch ($index % 5) {
+                case 0:
+                    $addTime = $now + rand(3600, 5 * 86400);
+                    $expTime = $addTime + rand(2, 10) * 86400;
+                    break;
+                case 1:
+                    $addTime = $now - rand(1, 15) * 86400;
+                    $expTime = $now + rand(3, 20) * 86400;
+                    break;
+                case 2:
+                    $addTime = $now - rand(1, 30) * 86400;
+                    $expTime = 0;
+                    break;
+                case 3:
+                    $addTime = $now - rand(20, 60) * 86400;
+                    $expTime = $now - rand(1, 10) * 86400;
+                    break;
+                default:
+                    $addTime = $now - rand(0, 3) * 86400;
+                    $expTime = $now + rand(15, 40) * 86400;
+                    break;
+            }
+
+            $messageData = [
+                'isdef' => 'vi',
+                'contents' => [
+                    'vi' => '[' . $seedMark . '] Thong bao mau #' . $index . ' cho danh sach admin inform',
+                    'en' => '[' . $seedMark . '] Sample notification #' . $index . ' for inform admin list',
+                ],
+            ];
+
+            $linkData = [
+                'isdef' => 'vi',
+                'contents' => [
+                    'vi' => $index % 6 === 0 ? '' : 'index.php?seed=' . $seedMark . '&item=' . $index,
+                    'en' => $index % 6 === 0 ? '' : 'https://example.com/' . $seedMark . '/' . $index,
+                ],
+            ];
+
+            $messageJson = $esc(json_encode($messageData, JSON_UNESCAPED_UNICODE));
+            $linkJson = $index % 6 === 0 ? '' : $esc(json_encode($linkData, JSON_UNESCAPED_UNICODE));
+
+            $values[] = sprintf(
+                "('%s','%s','%s',%d,%d,'%s','%s',%d,%d)",
+                $esc($receiverGrs),
+                $esc($receiverIds),
+                $senderRole,
+                $senderGroup,
+                $senderAdmin,
+                $messageJson,
+                $linkJson,
+                $addTime,
+                $expTime
+            );
+        }
+
+        $this->assertCount(50, $values, 'Số lượng bản ghi mẫu tạo cho _inform không đúng 50.');
+
+        $inserted = $db->exec(
+            'INSERT INTO ' . $informTable
+            . ' (receiver_grs, receiver_ids, sender_role, sender_group, sender_admin, message, link, add_time, exp_time) VALUES '
+            . implode(',', $values)
+        );
+
+        $this->assertGreaterThan(0, $inserted, 'Không có dòng nào được insert vào bảng ' . $informTable . '.');
+
+        $informIds = $db->query(
+            "SELECT id FROM " . $informTable . " WHERE message LIKE '%" . $esc($seedMark) . "%' ORDER BY id ASC"
+        )->fetchAll(\PDO::FETCH_COLUMN);
+
+        $this->assertCount(50, $informIds, 'Không lấy đủ 50 bản ghi vừa insert từ bảng ' . $informTable . '.');
+
+        $statusValues = [];
+        $statusUsers = array_slice($userIds, 0, min(6, $userCount));
+
+        foreach (array_slice($informIds, 0, 24) as $index => $pid) {
+            $pid = (int) $pid;
+
+            foreach ($statusUsers as $offset => $userId) {
+                if ($offset === 2 && $index % 2 !== 0) {
+                    continue;
+                }
+
+                $shownTime = $now - rand(600, 20 * 86400);
+                $viewedTime = $offset === 2 ? 0 : $shownTime + rand(60, 7200);
+                $favoriteTime = ($index % 4 === 0 && $offset === 0) ? $shownTime + rand(120, 3600) : 0;
+                $hiddenTime = ($index % 5 === 0 && $offset === 1) ? $shownTime + rand(180, 5400) : 0;
+
+                $statusValues[] = sprintf(
+                    '(%d,%d,%d,%d,%d,%d)',
+                    $pid,
+                    (int) $userId,
+                    $shownTime,
+                    $viewedTime,
+                    $favoriteTime,
+                    $hiddenTime
+                );
+            }
+        }
+
+        if (!empty($statusValues)) {
+            $db->exec(
+                'INSERT IGNORE INTO ' . $statusTable
+                . ' (pid, userid, shown_time, viewed_time, favorite_time, hidden_time) VALUES '
+                . implode(',', $statusValues)
+            );
+        }
+
+        $this->assertTrue(true);
+    }
 }
