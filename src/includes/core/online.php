@@ -30,19 +30,19 @@ function nv_online_upd()
         $username = 'bot:' . $client_info['browser']['name'];
     }
 
-    $sth = $db->prepare('UPDATE ' . NV_SESSIONS_GLOBALTABLE . ' SET userid = ' . $userid . ', username = :username, onl_time = ' . NV_CURRENTTIME . ' WHERE session_id = :session_id');
-    $sth->bindParam(':session_id', $client_info['session_id'], PDO::PARAM_STR);
-    $sth->bindParam(':username', $username, PDO::PARAM_STR);
-    $sth->execute();
-    if (!$sth->rowCount()) {
-        try {
-            $sth = $db->prepare('INSERT INTO ' . NV_SESSIONS_GLOBALTABLE . ' VALUES ( :session_id, ' . $userid . ', :username, ' . NV_CURRENTTIME . ')');
-            $sth->bindParam(':session_id', $client_info['session_id'], PDO::PARAM_STR);
-            $sth->bindParam(':username', $username, PDO::PARAM_STR);
-            $sth->execute();
-        } catch (Throwable $e) {
-            trigger_error($e);
-        }
+    try {
+        $sql = 'INSERT INTO ' . NV_SESSIONS_GLOBALTABLE . ' (session_id, userid, username, onl_time)
+            VALUES (:session_id, :userid, :username, :onl_time)
+            ON DUPLICATE KEY UPDATE userid = VALUES(userid), username = VALUES(username), onl_time = VALUES(onl_time)';
+        $sth = $db->prepare($sql);
+        $sth->bindValue(':session_id', $client_info['session_id'], PDO::PARAM_STR);
+        $sth->bindValue(':userid', $userid, PDO::PARAM_INT);
+        $sth->bindValue(':username', $username, PDO::PARAM_STR);
+        $sth->bindValue(':onl_time', NV_CURRENTTIME, PDO::PARAM_INT);
+        $sth->execute();
+    }
+    catch (Throwable $e) {
+        trigger_error($e);
     }
 }
 
