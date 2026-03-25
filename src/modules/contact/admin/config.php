@@ -18,6 +18,13 @@ if (defined('NV_EDITOR')) {
 }
 
 if ($nv_Request->isset_request('save', 'post')) {
+    if (!csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
+        nv_jsonOutput([
+            'status' => 'error',
+            'mess' => $nv_Lang->getGlobal('error_checkss')
+        ]);
+    }
+
     $array = [];
     $array['bodytext'] = nv_editor_nl2br($nv_Request->get_editor('bodytext', '', NV_ALLOWED_HTML_TAGS));
     $array['sendcopymode'] = (int) $nv_Request->get_bool('sendcopymode', 'post', 0);
@@ -34,15 +41,22 @@ if ($nv_Request->isset_request('save', 'post')) {
 
     nv_insert_logs(NV_LANG_DATA, $module_name, 'Change config module', '', $admin_info['userid']);
     $nv_Cache->delMod('settings');
-    nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op);
+    nv_jsonOutput([
+        'status' => 'OK',
+        'mess' => $nv_Lang->getGlobal('save_success'),
+        'redirect' => nv_url_rewrite(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op, true)
+    ]);
 }
 
 $page_title = $nv_Lang->getModule('config');
 
-$xtpl = new XTemplate('config.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-$xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
-$xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
-$xtpl->assign('FORM_ACTION', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op);
+$tpl = new \NukeViet\Template\NVSmarty();
+$tpl->setTemplateDir(get_module_tpl_dir('config.tpl'));
+
+$tpl->assign('LANG', $nv_Lang);
+$tpl->assign('MODULE_NAME', $module_name);
+$tpl->assign('OP', $op);
+$tpl->assign('CHECKSS', csrf_create($csrf_key));
 
 $array = $module_config[$module_name];
 
@@ -52,40 +66,39 @@ if (defined('NV_EDITOR') and nv_function_exists('nv_aleditor')) {
 } else {
     $array['bodytext'] = '<textarea style="width: 100%" name="bodytext" id="bodytext" cols="20" rows="8" class="form-control">' . $array['bodytext'] . '</textarea>';
 }
-$array['silent_mode'] = !empty($module_config[$module_name]['silent_mode']) ? ' checked="checked"' : '';
+$array['silent_mode'] = !empty($module_config[$module_name]['silent_mode']) ? 1 : 0;
 $array['feedback_phone'] = !empty($module_config[$module_name]['feedback_phone']) ? (int) $module_config[$module_name]['feedback_phone'] : 0;
 $array['feedback_address'] = !empty($module_config[$module_name]['feedback_address']) ? (int) $module_config[$module_name]['feedback_address'] : 0;
 
-$xtpl->assign('DATA', $array);
+$tpl->assign('DATA', $array);
 
+// Thu thập options cho select boxes
+$sendcopymode_options = [];
 for ($i = 0; $i <= 1; ++$i) {
-    $sendcopymode = [
+    $sendcopymode_options[] = [
         'key' => $i,
-        'title' => $nv_Lang->getModule('config_sendcopymode' . $i),
-        'selected' => $i == $array['sendcopymode'] ? ' selected="selected"' : ''
+        'title' => $nv_Lang->getModule('config_sendcopymode' . $i)
     ];
-    $xtpl->assign('SENDCOPYMODE', $sendcopymode);
-    $xtpl->parse('main.sendcopymode');
 }
 
+$feedback_phone_options = [];
+$feedback_address_options = [];
 for ($i = 0; $i <= 2; ++$i) {
-    $xtpl->assign('PHONE', [
+    $feedback_phone_options[] = [
         'val' => $i,
-        'sel' => $i == $array['feedback_phone'] ? ' selected="selected"' : '',
         'title' => $nv_Lang->getModule('option_' . $i)
-    ]);
-    $xtpl->parse('main.feedback_phone');
-
-    $xtpl->assign('ADDRESS', [
+    ];
+    $feedback_address_options[] = [
         'val' => $i,
-        'sel' => $i == $array['feedback_address'] ? ' selected="selected"' : '',
         'title' => $nv_Lang->getModule('option_' . $i)
-    ]);
-    $xtpl->parse('main.feedback_address');
+    ];
 }
 
-$xtpl->parse('main');
-$contents = $xtpl->text('main');
+$tpl->assign('SENDCOPYMODE_OPTIONS', $sendcopymode_options);
+$tpl->assign('FEEDBACK_PHONE_OPTIONS', $feedback_phone_options);
+$tpl->assign('FEEDBACK_ADDRESS_OPTIONS', $feedback_address_options);
+
+$contents = $tpl->fetch('config.tpl');
 
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_admin_theme($contents);

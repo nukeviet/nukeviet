@@ -121,7 +121,50 @@ grep -rn "nv_b_list_theme" src/modules/{MODULE}/
 - Không còn chỗ nào gọi → **xóa hàm** khỏi `admin.functions.php`
 - Còn chỗ khác gọi → **báo lại Dev** để quyết định hướng xử lý (không tự xóa)
 
-### 3.7 Tách biến theo nhóm ngữ nghĩa — không dồn vào $contents[]
+### 3.7 PHP Array Formatting Rules
+
+**Quy tắc formatting array:**
+
+**A. Numeric array (toàn số):** Format 1 dòng
+```php
+$array = [1, 2, 3, 4, 5];
+$list = ['item1', 'item2', 'item3'];
+$options = [0, 1, 2];
+```
+
+**B. Associative array (có key cụ thể):** Xuống dòng từng phần tử
+```php
+$config = [
+    'key1' => 'value1',
+    'key2' => 'value2',
+    'status' => true
+];
+
+$item = [
+    'id' => $row['id'],
+    'title' => $row['title'],
+    'created_at' => nv_datetime_format($row['created_time'])
+];
+
+// Trong vòng lặp tạo options cho select
+$options[] = [
+    'value' => $i,
+    'label' => $nv_Lang->getModule('option_' . $i),
+    'selected' => ($i == $current_value)
+];
+```
+
+**C. Mixed hoặc phức tạp:** Luôn xuống dòng
+```php
+$complex = [
+    0 => 'first_item',
+    'config' => ['nested' => true],
+    'data' => $db_result,
+    99 => 'last_item'
+];
+```
+
+### 3.8 Tách biến theo nhóm ngữ nghĩa — không dồn vào $contents[]
 
 **Sai — dồn tất cả vào một mảng hỗn hợp:**
 ```php
@@ -166,6 +209,39 @@ $tpl->assign('ARRAY_PLANS', $array_plans);
 $tpl->assign('ARRAY', $array);
 // Language strings KHÔNG assign
 ```
+
+### 3.9 JSON Response và Redirect URLs
+
+Khi trả về JSON response (điển hình trong AJAX form), cần tuân thủ các quy tắc:
+
+**A. Array formatting:** Luôn dùng multi-line cho associative arrays
+```php
+// ❌ Sai - 1 dòng với associative array
+nv_jsonOutput(['status' => 'error', 'mess' => $nv_Lang->getGlobal('error_checkss')]);
+
+// ✅ Đúng - multi-line formatting
+nv_jsonOutput([
+    'status' => 'error',
+    'mess' => $nv_Lang->getGlobal('error_checkss')
+]);
+
+nv_jsonOutput([
+    'status' => 'OK',
+    'mess' => $nv_Lang->getGlobal('save_success'),
+    'redirect' => nv_url_rewrite(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op, true)
+]);
+```
+
+**B. Redirect URLs:** LUÔN dùng `nv_url_rewrite(full_url, true)`
+```php
+// ❌ Sai - ghép chuỗi thô
+'redirect' => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op
+
+// ✅ Đúng - dùng nv_url_rewrite với TOÀN BỘ URL làm tham số đầu
+'redirect' => nv_url_rewrite(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op, true)
+```
+
+**Lý do:** `nv_url_rewrite()` xử lý URL theo cấu hình rewrite rules và SEO-friendly URLs của hệ thống. Tham số đầu tiên phải là URL đầy đủ hoàn chỉnh, tham số thứ 2 `true` để force absolute URL.
 
 ## 4. Template syntax
 
@@ -313,11 +389,40 @@ Quy tắc bảng danh sách:
 
 ### 5.2 Form (add/edit) với ajax-submit
 
+**2 pattern layout button submit trong admin_future:**
+
+**A. Grid form (label trái, input phải):** Button align với input fields
 ```smarty
 <form method="post" class="ajax-submit" novalidate
       action="{$smarty.const.NV_BASE_ADMINURL}index.php?...&amp;{$smarty.const.NV_OP_VARIABLE}={$OP}">
     <div class="card">
-        <div class="card-header"><h5 class="card-title mb-0">{$LANG->getModule('form_title')}</h5></div>
+        <div class="card-body pt-4">
+            <div class="row mb-3">
+                <label for="title" class="col-md-3 col-form-label text-md-end">{$LANG->getModule('field_title')} <span class="text-danger">*</span></label>
+                <div class="col-md-9">
+                    <input type="text" class="form-control required" id="title" name="title" value="{$ITEM.title}">
+                    <div class="invalid-feedback"></div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-9 offset-md-3">
+                    <input type="hidden" name="checkss" value="{$CHECKSS}">
+                    <input type="hidden" name="id" value="{$ITEM.id}">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fa-solid fa-floppy-disk"></i> {$LANG->getGlobal('save')}
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+```
+
+**B. Simple form (không có grid):** Button trong `card-footer text-center`
+```smarty
+<form method="post" class="ajax-submit" novalidate
+      action="{$smarty.const.NV_BASE_ADMINURL}index.php?...&amp;{$smarty.const.NV_OP_VARIABLE}={$OP}">
+    <div class="card">
         <div class="card-body">
             <div class="mb-3">
                 <label class="form-label">{$LANG->getModule('field_title')} <span class="text-danger">*</span></label>
@@ -325,7 +430,7 @@ Quy tắc bảng danh sách:
                 <div class="invalid-feedback"></div>  {* nv.core.js tự điền mess lỗi vào đây *}
             </div>
         </div>
-        <div class="card-footer text-end">
+        <div class="card-footer text-center">
             <input type="hidden" name="checkss" value="{$CHECKSS}">
             <input type="hidden" name="id" value="{$ITEM.id}">
             <button type="submit" class="btn btn-primary">
