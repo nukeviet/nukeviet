@@ -17,9 +17,11 @@ use NukeViet\Template\Email\Emf;
 
 $emailid = $nv_Request->get_absint('emailid', 'post,get', 0);
 
-$sql = 'SELECT * FROM ' . NV_EMAILTEMPLATES_GLOBALTABLE . ' WHERE emailid = ' . $emailid;
-$result = $db->query($sql);
-$array = $result->fetch();
+$stmt = $db->prepare('SELECT * FROM ' . NV_EMAILTEMPLATES_GLOBALTABLE . ' WHERE emailid = :emailid');
+$stmt->bindValue(':emailid', $emailid, PDO::PARAM_INT);
+$stmt->execute();
+$array = $stmt->fetch();
+$stmt->closeCursor();
 if (empty($array)) {
     nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
 }

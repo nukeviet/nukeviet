@@ -22,15 +22,15 @@ $mobile_theme_array_file = nv_scandir(NV_ROOTDIR . '/themes', $global_config['ch
 
 $sql = 'SELECT DISTINCT theme FROM ' . NV_PREFIXLANG . '_modthemes WHERE func_id=0';
 $result = $db->query($sql);
-while ($_scratch = $result->fetch(3)) {
-    [$theme] = $_scratch;
-    unset($_scratch);
+while ($_row_theme = $result->fetch()) {
+    $theme = $_row_theme['theme'];
     if (in_array($theme, $theme_array_file, true)) {
         $theme_array[] = $theme;
     } elseif (in_array($theme, $mobile_theme_array_file, true)) {
         $mobile_theme_array[] = $theme;
     }
 }
+$result->closeCursor();
 
 // Lưu cấu hình
 if ($nv_Request->isset_request('checkss', 'post')) {
@@ -150,8 +150,8 @@ if ($nv_Request->isset_request('checkss', 'post')) {
 
     $sth = $db->prepare('UPDATE ' . NV_CONFIG_GLOBALTABLE . " SET config_value= :config_value WHERE config_name = :config_name AND lang = '" . NV_LANG_DATA . "' AND module='global'");
     foreach ($array_config as $config_name => $config_value) {
-        $sth->bindParam(':config_name', $config_name, PDO::PARAM_STR, 30);
-        $sth->bindParam(':config_value', $config_value, PDO::PARAM_STR);
+        $sth->bindValue(':config_name', $config_name, PDO::PARAM_STR);
+        $sth->bindValue(':config_value', $config_value, PDO::PARAM_STR);
         $sth->execute();
     }
 

@@ -36,16 +36,18 @@ if ($nv_Request->isset_request('checkss', 'post')) {
     if (empty($global_config['custom_configs'])) {
         if (!empty($custom_configs)) {
             $sth = $db->prepare('INSERT INTO ' . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('" . NV_LANG_DATA . "', 'global', 'custom_configs', :config_value)");
-            $sth->bindParam(':config_value', $custom_configs, PDO::PARAM_STR);
+            $sth->bindValue(':config_value', $custom_configs, PDO::PARAM_STR);
             $sth->execute();
         }
     } else {
         if (!empty($custom_configs)) {
             $sth = $db->prepare('UPDATE ' . NV_CONFIG_GLOBALTABLE . " SET config_value= :config_value WHERE config_name = 'custom_configs' AND lang = '" . NV_LANG_DATA . "' AND module='global'");
-            $sth->bindParam(':config_value', $custom_configs, PDO::PARAM_STR);
+            $sth->bindValue(':config_value', $custom_configs, PDO::PARAM_STR);
             $sth->execute();
         } else {
-            $db->query('DELETE FROM ' . NV_CONFIG_GLOBALTABLE . " WHERE config_name = 'custom_configs' AND lang = '" . NV_LANG_DATA . "' AND module='global'");
+            $stmt = $db->prepare("DELETE FROM " . NV_CONFIG_GLOBALTABLE . " WHERE config_name = 'custom_configs' AND lang = :lang AND module = 'global'");
+            $stmt->bindValue(':lang', NV_LANG_DATA, PDO::PARAM_STR);
+            $stmt->execute();
         }
     }
 
@@ -57,7 +59,10 @@ if ($nv_Request->isset_request('checkss', 'post')) {
     ]);
 }
 
-$custom_configs = $db->query('SELECT config_value FROM ' . NV_CONFIG_GLOBALTABLE . " WHERE config_name = 'custom_configs' AND lang='" . NV_LANG_DATA . "' AND module='global'")->fetchColumn();
+$stmt = $db->prepare("SELECT config_value FROM " . NV_CONFIG_GLOBALTABLE . " WHERE config_name = 'custom_configs' AND lang = :lang AND module = 'global'");
+$stmt->bindValue(':lang', NV_LANG_DATA, PDO::PARAM_STR);
+$stmt->execute();
+$custom_configs = $stmt->fetchColumn();
 $custom_configs = !empty($custom_configs) ? json_decode($custom_configs, true) : ['' => ['', '']];
 $page_title = $nv_Lang->getModule('custom_configs', $language_array[NV_LANG_DATA]['name']);
 

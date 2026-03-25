@@ -28,10 +28,13 @@ if (!csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key . '_' . $m
     ]);
 }
 
-$sth = $db->prepare('SELECT is_sys, basename FROM ' . $db_config['prefix'] . '_setup_extensions WHERE title= :title AND type=\'module\'');
-$sth->bindParam(':title', $modname, PDO::PARAM_STR);
-$sth->execute();
-[$is_sys, $module_file] = $sth->fetch(3);
+$stmt = $db->prepare('SELECT is_sys, basename FROM ' . $db_config['prefix'] . "_setup_extensions WHERE title = :title AND type = 'module'");
+$stmt->bindValue(':title', $modname, PDO::PARAM_STR);
+$stmt->execute();
+
+$_row_module = $stmt->fetch();
+$is_sys = $_row_module['is_sys'];
+$module_file = $_row_module['basename'];
 if ((int) $is_sys == 1) {
     nv_jsonOutput([
         'success' => 0,
@@ -45,10 +48,11 @@ if (file_exists(NV_ROOTDIR . '/modules/' . $module_file . '/action_' . $db->dbty
     $module_name_action = $module_name;
     $module_name = $modname;
 
-    $sth = $db->prepare('SELECT module_data FROM ' . NV_MODULES_TABLE . ' WHERE title= :title');
-    $sth->bindParam(':title', $modname, PDO::PARAM_STR);
-    $sth->execute();
-    $module_data = $sth->fetchColumn();
+    $stmt = $db->prepare('SELECT module_data FROM ' . NV_MODULES_TABLE . ' WHERE title = :title');
+    $stmt->bindValue(':title', $modname, PDO::PARAM_STR);
+    $stmt->execute();
+
+    $module_data = $stmt->fetchColumn();
 
     $lang = NV_LANG_DATA;
     $sql_drop_module = [];
@@ -75,18 +79,18 @@ if (file_exists(NV_ROOTDIR . '/modules/' . $module_file . '/action_' . $db->dbty
 }
 
 // Xoa du lieu tai bang nvx_vi_blocks
-$sth = $db->prepare('DELETE FROM ' . NV_BLOCKS_TABLE . '_weight WHERE bid in (SELECT bid FROM ' . NV_BLOCKS_TABLE . '_groups WHERE module= :module)');
-$sth->bindParam(':module', $modname, PDO::PARAM_STR);
-if (!$sth->execute()) {
+$stmt = $db->prepare('DELETE FROM ' . NV_BLOCKS_TABLE . '_weight WHERE bid IN (SELECT bid FROM ' . NV_BLOCKS_TABLE . '_groups WHERE module = :module)');
+$stmt->bindValue(':module', $modname, PDO::PARAM_STR);
+if (!$stmt->execute()) {
     nv_jsonOutput([
         'success' => 0,
         'text' => 'Error delete blocks set!'
     ]);
 }
 
-$sth = $db->prepare('DELETE FROM ' . NV_BLOCKS_TABLE . '_groups WHERE module= :module');
-$sth->bindParam(':module', $modname, PDO::PARAM_STR);
-if (!$sth->execute()) {
+$stmt = $db->prepare('DELETE FROM ' . NV_BLOCKS_TABLE . '_groups WHERE module = :module');
+$stmt->bindValue(':module', $modname, PDO::PARAM_STR);
+if (!$stmt->execute()) {
     nv_jsonOutput([
         'success' => 0,
         'text' => 'Error delete block groups!'
@@ -94,9 +98,9 @@ if (!$sth->execute()) {
 }
 
 $nv_Cache->delMod('themes');
-$sth = $db->prepare('DELETE FROM ' . NV_PREFIXLANG . '_modthemes WHERE func_id IN (SELECT func_id FROM ' . NV_MODFUNCS_TABLE . ' WHERE in_module= :module)');
-$sth->bindParam(':module', $modname, PDO::PARAM_STR);
-if (!$sth->execute()) {
+$stmt = $db->prepare('DELETE FROM ' . NV_PREFIXLANG . '_modthemes WHERE func_id IN (SELECT func_id FROM ' . NV_MODFUNCS_TABLE . ' WHERE in_module = :module)');
+$stmt->bindValue(':module', $modname, PDO::PARAM_STR);
+if (!$stmt->execute()) {
     nv_jsonOutput([
         'success' => 0,
         'text' => 'Error delete module theme!'
@@ -104,9 +108,9 @@ if (!$sth->execute()) {
 }
 
 // Xoa du lieu tai bang nvx_vi_modfuncs
-$sth = $db->prepare('DELETE FROM ' . NV_MODFUNCS_TABLE . ' WHERE in_module= :module');
-$sth->bindParam(':module', $modname, PDO::PARAM_STR);
-if (!$sth->execute()) {
+$stmt = $db->prepare('DELETE FROM ' . NV_MODFUNCS_TABLE . ' WHERE in_module = :module');
+$stmt->bindValue(':module', $modname, PDO::PARAM_STR);
+if (!$stmt->execute()) {
     nv_jsonOutput([
         'success' => 0,
         'text' => 'Error delete module function!'
@@ -114,9 +118,9 @@ if (!$sth->execute()) {
 }
 
 // Xoa du lieu tai bang nvx_vi_modules
-$sth = $db->prepare('DELETE FROM ' . NV_MODULES_TABLE . ' WHERE title= :module');
-$sth->bindParam(':module', $modname, PDO::PARAM_STR);
-if (!$sth->execute()) {
+$stmt = $db->prepare('DELETE FROM ' . NV_MODULES_TABLE . ' WHERE title = :module');
+$stmt->bindValue(':module', $modname, PDO::PARAM_STR);
+if (!$stmt->execute()) {
     nv_jsonOutput([
         'success' => 0,
         'text' => 'Error delete module!'
@@ -124,9 +128,10 @@ if (!$sth->execute()) {
 }
 
 // Xoa du lieu tai bang nvx_config
-$sth = $db->prepare('DELETE FROM ' . NV_CONFIG_GLOBALTABLE . " WHERE lang='" . NV_LANG_DATA . "' AND module= :module");
-$sth->bindParam(':module', $modname, PDO::PARAM_STR);
-$sth->execute();
+$stmt = $db->prepare('DELETE FROM ' . NV_CONFIG_GLOBALTABLE . ' WHERE lang = :lang AND module = :module');
+$stmt->bindValue(':lang', NV_LANG_DATA, PDO::PARAM_STR);
+$stmt->bindValue(':module', $modname, PDO::PARAM_STR);
+$stmt->execute();
 
 // Xóa vị trí block tùy chỉnh
 nv_purge_blocks($modname);
@@ -137,11 +142,11 @@ $langs = $db->query($sql)->fetchAll(PDO::FETCH_COLUMN);
 // Kiểm tra module trùng tên trên ngôn ngữ khác
 $check_exit_mod = false;
 foreach ($langs as $lang_i) {
-    $sth = $db->prepare('SELECT COUNT(*) FROM ' . $db_config['prefix'] . '_' . $lang_i . '_modules WHERE title= :module');
-    $sth->bindParam(':module', $modname, PDO::PARAM_STR);
-    $sth->execute();
+    $stmt = $db->prepare('SELECT COUNT(*) FROM ' . $db_config['prefix'] . '_' . $lang_i . '_modules WHERE title = :module');
+    $stmt->bindValue(':module', $modname, PDO::PARAM_STR);
+    $stmt->execute();
 
-    if ($sth->fetchColumn()) {
+    if ($stmt->fetchColumn()) {
         $check_exit_mod = true;
         break;
     }
@@ -150,7 +155,8 @@ foreach ($langs as $lang_i) {
 if (!$check_exit_mod) {
     if ($module_file != $modname) {
         $sth = $db->prepare('DELETE FROM ' . $db_config['prefix'] . '_setup_extensions WHERE title= :module AND type=\'module\'');
-        $sth->bindParam(':module', $modname, PDO::PARAM_STR);
+
+        $sth->bindValue(':module', $modname, PDO::PARAM_STR);
         $sth->execute();
     }
 
@@ -165,30 +171,43 @@ if (!$check_exit_mod) {
     $sth->execute();
     $sth_file = $db->prepare('DELETE FROM ' . NV_UPLOAD_GLOBALTABLE . '_file WHERE did = :did');
     $sth_dir_del = $db->prepare('DELETE FROM ' . NV_UPLOAD_GLOBALTABLE . '_dir WHERE did = :did');
-    while ($_scratch = $sth->fetch(3)) {
-        [$did] = $_scratch;
-        unset($_scratch);
-        $sth_file->bindParam(':did', $did, PDO::PARAM_INT);
+
+    while ($_row_dir = $sth->fetch()) {
+        $sth_file->bindValue(':did', $_row_dir['did'], PDO::PARAM_INT);
         $sth_file->execute();
-        $sth_dir_del->bindParam(':did', $did, PDO::PARAM_INT);
+
+        $sth_dir_del->bindValue(':did', $_row_dir['did'], PDO::PARAM_INT);
         $sth_dir_del->execute();
     }
 
     $plugin_deleted = 0;
-    $sql = 'SELECT * FROM ' . $db_config['prefix'] . '_plugins WHERE plugin_lang=' . $db->quote(NV_LANG_DATA) . " AND plugin_module_file!='' AND plugin_module_name=" . $db->quote($modname);
-    $plugins = $db->query($sql)->fetchAll();
+    $stmt_pl = $db->prepare("SELECT * FROM " . $db_config['prefix'] . "_plugins WHERE plugin_lang = :lang AND plugin_module_file != '' AND plugin_module_name = :modname");
+    $stmt_pl->bindValue(':lang', NV_LANG_DATA, PDO::PARAM_STR);
+    $stmt_pl->bindValue(':modname', $modname, PDO::PARAM_STR);
+    $stmt_pl->execute();
+    $plugins = $stmt_pl->fetchAll();
+
+    $stmt_del_pl = $db->prepare('DELETE FROM ' . $db_config['prefix'] . '_plugins WHERE pid = :pid');
+    $stmt_pl_ord = $db->prepare("SELECT pid FROM " . $db_config['prefix'] . "_plugins WHERE (plugin_lang = :lang OR plugin_lang = 'all') AND plugin_area = :area AND hook_module = :hook ORDER BY weight ASC");
+    $sth_weight = $db->prepare('UPDATE ' . $db_config['prefix'] . '_plugins SET weight = :weight WHERE pid = :pid');
+
     foreach ($plugins as $plugin) {
-        if ($db->exec('DELETE FROM ' . $db_config['prefix'] . '_plugins WHERE pid=' . $plugin['pid'])) {
+        $stmt_del_pl->bindValue(':pid', $plugin['pid'], PDO::PARAM_INT);
+        if ($stmt_del_pl->execute()) {
             ++$plugin_deleted;
+
             // Sắp xếp lại thứ tự
-            $sql = 'SELECT pid FROM ' . $db_config['prefix'] . '_plugins WHERE (plugin_lang=' . $db->quote(NV_LANG_DATA) . ' OR plugin_lang=\'all\') AND plugin_area=' . $db->quote($plugin['plugin_area']) . ' AND hook_module=' . $db->quote($plugin['hook_module']) . ' ORDER BY weight ASC';
-            $result = $db->query($sql);
+            $stmt_pl_ord->bindValue(':lang', NV_LANG_DATA, PDO::PARAM_STR);
+            $stmt_pl_ord->bindValue(':area', $plugin['plugin_area'], PDO::PARAM_STR);
+            $stmt_pl_ord->bindValue(':hook', $plugin['hook_module'], PDO::PARAM_STR);
+            $stmt_pl_ord->execute();
+
             $weight = 0;
-            $sth_weight = $db->prepare('UPDATE ' . $db_config['prefix'] . '_plugins SET weight = :weight WHERE pid = :pid');
-            while ($row = $result->fetch()) {
+            while ($_row_plugin = $stmt_pl_ord->fetch()) {
                 ++$weight;
-                $sth_weight->bindParam(':weight', $weight, PDO::PARAM_INT);
-                $sth_weight->bindParam(':pid', $row['pid'], PDO::PARAM_INT);
+
+                $sth_weight->bindValue(':weight', $weight, PDO::PARAM_INT);
+                $sth_weight->bindValue(':pid', $_row_plugin['pid'], PDO::PARAM_INT);
                 $sth_weight->execute();
             }
         }
@@ -199,10 +218,10 @@ if (!$check_exit_mod) {
 }
 
 // Xóa các mẫu email
-$sth = $db->prepare('DELETE FROM ' . $db_config['prefix'] . '_emailtemplates WHERE lang = :lang AND module_name = :module_name');
-$sth->bindValue(':lang', NV_LANG_DATA, PDO::PARAM_STR);
-$sth->bindParam(':module_name', $modname, PDO::PARAM_STR);
-$sth->execute();
+$stmt = $db->prepare('DELETE FROM ' . $db_config['prefix'] . '_emailtemplates WHERE lang = :lang AND module_name = :module_name');
+$stmt->bindValue(':lang', NV_LANG_DATA, PDO::PARAM_STR);
+$stmt->bindValue(':module_name', $modname, PDO::PARAM_STR);
+$stmt->execute();
 
 $nv_Cache->delAll();
 nv_fix_module_weight();

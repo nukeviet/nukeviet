@@ -122,17 +122,19 @@ function nv_get_cookies($full = false)
     $data['domain'] = '.' . $arrURL['host'];
     $data['path'] = '/';
 
-    $sql = 'SELECT * FROM ' . NV_COOKIES_GLOBALTABLE . ' WHERE domain=' . $db->quote($data['domain']) . ' AND path=' . $db->quote($data['path']);
-    $result = $db->query($sql);
+    $stmt = $db->prepare('SELECT * FROM ' . NV_COOKIES_GLOBALTABLE . ' WHERE domain = :domain AND path = :path');
+    $stmt->bindValue(':domain', $data['domain'], PDO::PARAM_STR);
+    $stmt->bindValue(':path', $data['path'], PDO::PARAM_STR);
+    $stmt->execute();
 
     $array = [];
     $array_expires = [];
 
-    while ($row = $result->fetch()) {
+    while ($row = $stmt->fetch()) {
         $row['expires'] = (float) ($row['expires']);
 
         if ($row['expires'] <= NV_CURRENTTIME) {
-            $array_expires[] = $db->quote($row['name']);
+            $array_expires[] = $row['name'];
         } else {
             if ($full === false) {
                 $array[$row['name']] = $row['value'];
@@ -144,11 +146,19 @@ function nv_get_cookies($full = false)
             }
         }
     }
+    $stmt->closeCursor();
 
     // Delete expired cookies
     if (!empty($array_expires)) {
-        $sql = 'DELETE FROM ' . NV_COOKIES_GLOBALTABLE . ' WHERE name IN(' . implode($array_expires) . ') AND domain=' . $db->quote($data['domain']) . ' AND path=' . $db->quote($data['path']);
-        $db->query($sql);
+        $values = array_values($array_expires);
+        $placeholders = implode(', ', array_map(fn($k) => ':v' . $k, array_keys($values)));
+        $stmt_del = $db->prepare('DELETE FROM ' . NV_COOKIES_GLOBALTABLE . ' WHERE name IN (' . $placeholders . ') AND domain = :domain AND path = :path');
+        foreach ($values as $k => $v) {
+            $stmt_del->bindValue(':v' . $k, $v, PDO::PARAM_STR);
+        }
+        $stmt_del->bindValue(':domain', $data['domain'], PDO::PARAM_STR);
+        $stmt_del->bindValue(':path', $data['path'], PDO::PARAM_STR);
+        $stmt_del->execute();
     }
 
     return $array;
@@ -165,6 +175,9 @@ function nv_store_cookies($cookies = [], $currCookies = [])
     global $db;
 
     if (!empty($cookies)) {
+        $stmt_update = $db->prepare('UPDATE ' . NV_COOKIES_GLOBALTABLE . ' SET value = :value, expires = :expires WHERE name = :name AND domain = :domain AND path = :path');
+        $stmt_insert = $db->prepare('INSERT INTO ' . NV_COOKIES_GLOBALTABLE . ' (name, value, domain, path, expires, secure) VALUES (:name, :value, :domain, :path, :expires, 0)');
+
         foreach ($cookies as $cookie) {
             if (!empty($cookie['expires'])) {
                 if (!preg_match('/^([0-9]+)$/', $cookie['expires'])) {
@@ -176,20 +189,23 @@ function nv_store_cookies($cookies = [], $currCookies = [])
                 // Update cookie
                 if (isset($currCookies[$cookie['name']])) {
                     try {
-                        $sth = $db->prepare('UPDATE ' . NV_COOKIES_GLOBALTABLE . ' SET value= :value, expires= ' . $cookie['expires'] . ' WHERE name=' . $db->quote($cookie['name']) . ' AND domain=' . $db->quote($cookie['domain']) . ' AND path=' . $db->quote($cookie['path']));
-                        $sth->bindParam(':value', $cookie['value'], PDO::PARAM_STR);
-                        $sth->execute();
+                        $stmt_update->bindValue(':value', $cookie['value'], PDO::PARAM_STR);
+                        $stmt_update->bindValue(':expires', $cookie['expires'], PDO::PARAM_INT);
+                        $stmt_update->bindValue(':name', $cookie['name'], PDO::PARAM_STR);
+                        $stmt_update->bindValue(':domain', $cookie['domain'], PDO::PARAM_STR);
+                        $stmt_update->bindValue(':path', $cookie['path'], PDO::PARAM_STR);
+                        $stmt_update->execute();
                     } catch (PDOException $e) {
                         trigger_error($e->getMessage());
                     }
                 } else {
                     try {
-                        $sth = $db->prepare('INSERT INTO ' . NV_COOKIES_GLOBALTABLE . ' ( name, value, domain, path, expires, secure ) VALUES( :name, :value, :domain, :path, ' . $cookie['expires'] . ', 0 )');
-                        $sth->bindParam(':name', $cookie['name'], PDO::PARAM_STR);
-                        $sth->bindParam(':value', $cookie['value'], PDO::PARAM_STR);
-                        $sth->bindParam(':domain', $cookie['domain'], PDO::PARAM_STR);
-                        $sth->bindParam(':path', $cookie['path'], PDO::PARAM_STR);
-                        $sth->execute();
+                        $stmt_insert->bindValue(':name', $cookie['name'], PDO::PARAM_STR);
+                        $stmt_insert->bindValue(':value', $cookie['value'], PDO::PARAM_STR);
+                        $stmt_insert->bindValue(':domain', $cookie['domain'], PDO::PARAM_STR);
+                        $stmt_insert->bindValue(':path', $cookie['path'], PDO::PARAM_STR);
+                        $stmt_insert->bindValue(':expires', $cookie['expires'], PDO::PARAM_INT);
+                        $stmt_insert->execute();
                     } catch (PDOException $e) {
                         trigger_error($e->getMessage());
                     }

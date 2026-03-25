@@ -54,8 +54,8 @@ if (defined('NV_IS_GODADMIN')) {
 
         $sth = $db->prepare('UPDATE ' . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = 'sys' AND module = 'global' AND config_name = :config_name");
         foreach ($array_config_global as $config_name => $config_value) {
-            $sth->bindParam(':config_name', $config_name, PDO::PARAM_STR, 30);
-            $sth->bindParam(':config_value', $config_value, PDO::PARAM_STR);
+            $sth->bindValue(':config_name', $config_name, PDO::PARAM_STR);
+            $sth->bindValue(':config_value', $config_value, PDO::PARAM_STR);
             $sth->execute();
         }
 
@@ -116,8 +116,8 @@ if ($nv_Request->isset_request('checkss', 'post') and csrf_check($nv_Request->ge
 
     $sth = $db->prepare('UPDATE ' . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = 'sys' AND module = 'site' AND config_name = :config_name");
     foreach ($array_config_site as $config_name => $config_value) {
-        $sth->bindParam(':config_name', $config_name, PDO::PARAM_STR, 30);
-        $sth->bindParam(':config_value', $config_value, PDO::PARAM_STR);
+        $sth->bindValue(':config_name', $config_name, PDO::PARAM_STR);
+        $sth->bindValue(':config_value', $config_value, PDO::PARAM_STR);
         $sth->execute();
     }
 
@@ -164,7 +164,10 @@ if ($nv_Request->isset_request('checkss', 'post') and csrf_check($nv_Request->ge
         $array_config_global['notification_active'] = $nv_Request->get_int('notification_active', 'post');
         $array_config_global['notification_autodel'] = $nv_Request->get_int('notification_autodel', 'post', 15);
         if ($array_config_global['notification_active'] != $global_config['notification_active']) {
-            $db->query('UPDATE ' . $db_config['dbsystem'] . '.' . NV_CRONJOBS_GLOBALTABLE . ' SET act=' . $array_config_global['notification_active'] . ', last_time=' . NV_CURRENTTIME . ', last_result=0 WHERE run_func="cron_notification_autodel"');
+            $stmt = $db->prepare('UPDATE ' . $db_config['dbsystem'] . '.' . NV_CRONJOBS_GLOBALTABLE . ' SET act = :act, last_time = :last_time, last_result = 0 WHERE run_func = \'cron_notification_autodel\'');
+            $stmt->bindValue(':act', $array_config_global['notification_active'], PDO::PARAM_INT);
+            $stmt->bindValue(':last_time', NV_CURRENTTIME, PDO::PARAM_INT);
+            $stmt->execute();
         }
 
         $site_lang = $nv_Request->get_title('site_lang', 'post', '', 1);
@@ -266,8 +269,8 @@ if ($nv_Request->isset_request('checkss', 'post') and csrf_check($nv_Request->ge
 
         $sth = $db->prepare('UPDATE ' . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = 'sys' AND module = 'global' AND config_name = :config_name");
         foreach ($array_config_global as $config_name => $config_value) {
-            $sth->bindParam(':config_name', $config_name, PDO::PARAM_STR, 30);
-            $sth->bindParam(':config_value', $config_value, PDO::PARAM_STR);
+            $sth->bindValue(':config_name', $config_name, PDO::PARAM_STR);
+            $sth->bindValue(':config_value', $config_value, PDO::PARAM_STR);
             $sth->execute();
         }
 
@@ -276,8 +279,8 @@ if ($nv_Request->isset_request('checkss', 'post') and csrf_check($nv_Request->ge
 
         $sth = $db->prepare('UPDATE ' . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = 'sys' AND module = 'define' AND config_name = :config_name");
         foreach ($array_config_define as $config_name => $config_value) {
-            $sth->bindParam(':config_name', $config_name, PDO::PARAM_STR, 30);
-            $sth->bindParam(':config_value', $config_value, PDO::PARAM_STR);
+            $sth->bindValue(':config_name', $config_name, PDO::PARAM_STR);
+            $sth->bindValue(':config_value', $config_value, PDO::PARAM_STR);
             $sth->execute();
         }
 
@@ -361,11 +364,10 @@ $tpl->assign('CHECKSS', csrf_create($csrf_key));
 $array_config_global = [];
 if (defined('NV_IS_GODADMIN')) {
     $result = $db->query('SELECT config_name, config_value FROM ' . NV_CONFIG_GLOBALTABLE . " WHERE lang='sys' AND module='global'");
-    while ($_scratch = $result->fetch(3)) {
-        [$c_config_name, $c_config_value] = $_scratch;
-        unset($_scratch);
-        $array_config_global[$c_config_name] = $c_config_value;
+    while ($_row_cfg = $result->fetch()) {
+        $array_config_global[$_row_cfg['config_name']] = $_row_cfg['config_value'];
     }
+    $result->closeCursor();
 }
 $tpl->assign('GDATA', $array_config_global);
 $tpl->assign('DDATA', $array_config_define);

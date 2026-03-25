@@ -40,8 +40,8 @@ if ($nv_Request->isset_request('cfg, cronjobs_launcher', 'post')) {
 
     $sth = $db->prepare('UPDATE ' . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = 'sys' AND module = 'site' AND config_name = :config_name");
     foreach ($array_config_site as $config_name => $config_value) {
-        $sth->bindParam(':config_name', $config_name, PDO::PARAM_STR, 30);
-        $sth->bindParam(':config_value', $config_value, PDO::PARAM_STR);
+        $sth->bindValue(':config_name', $config_name, PDO::PARAM_STR);
+        $sth->bindValue(':config_value', $config_value, PDO::PARAM_STR);
         $sth->execute();
     }
 
@@ -64,8 +64,11 @@ if ($nv_Request->isset_request('crontabinfo', 'post')) {
 
     $id = $nv_Request->get_int('id', 'post', 0);
 
-    $sql = 'SELECT * FROM ' . NV_CRONJOBS_GLOBALTABLE . ' WHERE id=' . $id . ' AND is_sys=0';
-    $row = $db->query($sql)->fetch();
+    $stmt = $db->prepare('SELECT * FROM ' . NV_CRONJOBS_GLOBALTABLE . ' WHERE id = :id AND is_sys = 0');
+    $stmt->bindValue(':id', $id, PDO::PARAM_INT);
+    $stmt->execute();
+    $row = $stmt->fetch();
+    $stmt->closeCursor();
     if (empty($row)) {
         nv_jsonOutput([
             'success' => 0,
@@ -105,9 +108,13 @@ if ($nv_Request->isset_request('cron_del', 'post')) {
 
     nv_insert_logs(NV_LANG_DATA, $module_name, 'Delete crontab', $id, $admin_info['userid']);
 
-    $sql = 'SELECT COUNT(*) FROM ' . NV_CRONJOBS_GLOBALTABLE . ' WHERE id=' . $id . ' AND is_sys=0';
-    if ($db->query($sql)->fetchColumn()) {
-        $db->exec('DELETE FROM ' . NV_CRONJOBS_GLOBALTABLE . ' WHERE id = ' . $id);
+    $stmt = $db->prepare('SELECT COUNT(*) FROM ' . NV_CRONJOBS_GLOBALTABLE . ' WHERE id = :id AND is_sys = 0');
+    $stmt->bindValue(':id', $id, PDO::PARAM_INT);
+    $stmt->execute();
+    if ($stmt->fetchColumn()) {
+        $stmt = $db->prepare('DELETE FROM ' . NV_CRONJOBS_GLOBALTABLE . ' WHERE id = :id');
+        $stmt->bindValue(':id', $id, PDO::PARAM_INT);
+        $stmt->execute();
         $db->query('OPTIMIZE TABLE ' . NV_CRONJOBS_GLOBALTABLE);
         update_cronjob_next_time();
     }
@@ -131,13 +138,19 @@ if ($nv_Request->isset_request('cron_changeact', 'post')) {
 
     nv_insert_logs(NV_LANG_DATA, $module_name, 'log_cronjob_atc', 'id ' . $id, $admin_info['userid']);
 
-    $sql = 'SELECT act FROM ' . NV_CRONJOBS_GLOBALTABLE . ' WHERE id=' . $id . ' AND (is_sys=0 OR act=0)';
-    $row = $db->query($sql)->fetch();
+    $stmt = $db->prepare('SELECT act FROM ' . NV_CRONJOBS_GLOBALTABLE . ' WHERE id = :id AND (is_sys = 0 OR act = 0)');
+    $stmt->bindValue(':id', $id, PDO::PARAM_INT);
+    $stmt->execute();
+    $row = $stmt->fetch();
+    $stmt->closeCursor();
 
     if (!empty($row)) {
         $act = (int) ($row['act']);
         $new_act = (!empty($act)) ? 0 : 1;
-        $db->query('UPDATE ' . NV_CRONJOBS_GLOBALTABLE . ' SET act=' . $new_act . ' WHERE id=' . $id);
+        $stmt = $db->prepare('UPDATE ' . NV_CRONJOBS_GLOBALTABLE . ' SET act = :act WHERE id = :id');
+        $stmt->bindValue(':act', $new_act, PDO::PARAM_INT);
+        $stmt->bindValue(':id', $id, PDO::PARAM_INT);
+        $stmt->execute();
     }
 
     nv_jsonOutput([
@@ -167,8 +180,11 @@ if ($nv_Request->isset_request('crontabcontent', 'post')) {
 
     // Kiểm tra chỉnh sửa
     if (!empty($array['id'])) {
-        $sql = 'SELECT * FROM ' . NV_CRONJOBS_GLOBALTABLE . ' WHERE id=' . $array['id'] . ' AND is_sys=0';
-        $row = $db->query($sql)->fetch();
+        $stmt = $db->prepare('SELECT * FROM ' . NV_CRONJOBS_GLOBALTABLE . ' WHERE id = :id AND is_sys = 0');
+        $stmt->bindValue(':id', $array['id'], PDO::PARAM_INT);
+        $stmt->execute();
+        $row = $stmt->fetch();
+        $stmt->closeCursor();
         if (empty($row)) {
             nv_jsonOutput([
                 'status' => 'error',
@@ -237,36 +253,38 @@ if ($nv_Request->isset_request('crontabcontent', 'post')) {
             inter_val_type=:inter_val_type, run_file= :run_file,
             run_func= :run_func, params= :params, del=:del,
             ' . NV_LANG_INTERFACE . '_cron_name= :cron_name
-        WHERE id=' . $array['id']);
+        WHERE id = :id');
 
-        $sth->bindParam(':start_time', $array['start_time'], PDO::PARAM_INT);
-        $sth->bindParam(':interval', $array['interval'], PDO::PARAM_INT);
-        $sth->bindParam(':inter_val_type', $array['inter_val_type'], PDO::PARAM_INT);
-        $sth->bindParam(':run_file', $array['run_file'], PDO::PARAM_STR);
-        $sth->bindParam(':run_func', $array['run_func'], PDO::PARAM_STR);
-        $sth->bindParam(':params', $array['params'], PDO::PARAM_STR);
-        $sth->bindParam(':del', $array['del'], PDO::PARAM_INT);
-        $sth->bindParam(':cron_name', $array['cron_name'], PDO::PARAM_STR);
+        $sth->bindValue(':start_time', $array['start_time'], PDO::PARAM_INT);
+        $sth->bindValue(':interval', $array['interval'], PDO::PARAM_INT);
+        $sth->bindValue(':inter_val_type', $array['inter_val_type'], PDO::PARAM_INT);
+        $sth->bindValue(':run_file', $array['run_file'], PDO::PARAM_STR);
+        $sth->bindValue(':run_func', $array['run_func'], PDO::PARAM_STR);
+        $sth->bindValue(':params', $array['params'], PDO::PARAM_STR);
+        $sth->bindValue(':del', $array['del'], PDO::PARAM_INT);
+        $sth->bindValue(':cron_name', $array['cron_name'], PDO::PARAM_STR);
+        $sth->bindValue(':id', $array['id'], PDO::PARAM_INT);
         $sth->execute();
     } else {
         nv_insert_logs(NV_LANG_DATA, $module_name, 'log_cronjob_add', json_encode($array, NV_JSON_ENCODE), $admin_info['userid']);
-        $sql = 'INSERT INTO ' . NV_CRONJOBS_GLOBALTABLE . ' (
+        $sth = $db->prepare('INSERT INTO ' . NV_CRONJOBS_GLOBALTABLE . ' (
             start_time, inter_val, inter_val_type, run_file, run_func, params, del, is_sys, act,
             last_time, last_result, ' . NV_LANG_INTERFACE . '_cron_name
         ) VALUES (
             :start_time, :interval, :inter_val_type,
             :run_file, :run_func, :params, :del, 0, 1, 0, 0, :cron_name
-        )';
-        $data = [];
-        $data['start_time'] = $array['start_time'];
-        $data['interval'] = $array['interval'];
-        $data['inter_val_type'] = $array['inter_val_type'];
-        $data['run_file'] = $array['run_file'];
-        $data['run_func'] = $array['run_func'];
-        $data['params'] = $array['params'];
-        $data['del'] = $array['del'];
-        $data['cron_name'] = $array['cron_name'];
-        $id = $db->insert_id($sql, 'id', $data);
+        )');
+
+        $sth->bindValue(':start_time', $array['start_time'], PDO::PARAM_INT);
+        $sth->bindValue(':interval', $array['interval'], PDO::PARAM_INT);
+        $sth->bindValue(':inter_val_type', $array['inter_val_type'], PDO::PARAM_INT);
+        $sth->bindValue(':run_file', $array['run_file'], PDO::PARAM_STR);
+        $sth->bindValue(':run_func', $array['run_func'], PDO::PARAM_STR);
+        $sth->bindValue(':params', $array['params'], PDO::PARAM_STR);
+        $sth->bindValue(':del', $array['del'], PDO::PARAM_INT);
+        $sth->bindValue(':cron_name', $array['cron_name'], PDO::PARAM_STR);
+        $sth->execute();
+        $id = $db->lastInsertId();
         if (empty($id)) {
             nv_jsonOutput([
                 'status' => 'error',
@@ -274,16 +292,16 @@ if ($nv_Request->isset_request('crontabcontent', 'post')) {
             ]);
         }
 
-        $sql = 'SELECT lang FROM ' . $db_config['prefix'] . "_setup_language where lang!='" . NV_LANG_INTERFACE . "'";
+        $sql = 'SELECT lang FROM ' . $db_config['prefix'] . "_setup_language WHERE lang != '" . NV_LANG_INTERFACE . "'";
         $result = $db->query($sql);
-        while ($_scratch = $result->fetch(3)) {
-            [$lang_i] = $_scratch;
-            unset($_scratch);
-            $sth = $db->prepare('UPDATE ' . NV_CRONJOBS_GLOBALTABLE . ' SET ' . $lang_i . '_cron_name= :run_func WHERE id=:id');
-            $sth->bindParam(':run_func', $array['run_func'], PDO::PARAM_STR);
-            $sth->bindParam(':id', $id, PDO::PARAM_INT);
+        while ($_row_lang = $result->fetch()) {
+            $lang_i = $_row_lang['lang'];
+            $sth = $db->prepare('UPDATE ' . NV_CRONJOBS_GLOBALTABLE . ' SET ' . $lang_i . '_cron_name = :run_func WHERE id = :id');
+            $sth->bindValue(':run_func', $array['run_func'], PDO::PARAM_STR);
+            $sth->bindValue(':id', $id, PDO::PARAM_INT);
             $sth->execute();
         }
+        $result->closeCursor();
     }
 
     update_cronjob_next_time();

@@ -81,8 +81,16 @@ function update_cronjob_next_time()
         }
     }
 
-    if ($cronjobs_next_time > 0 and $db->exec('UPDATE ' . NV_CONFIG_GLOBALTABLE . " SET config_value = '" . $cronjobs_next_time . "' WHERE lang = '" . NV_LANG_DATA . "' AND module = 'global' AND config_name = 'cronjobs_next_time' AND (CAST(config_value AS UNSIGNED) <= " . NV_CURRENTTIME . ' OR CAST(config_value AS UNSIGNED) >= ' . $cronjobs_next_time . ')')) {
-        $nv_Cache->delMod('settings');
+    if ($cronjobs_next_time > 0) {
+        $stmt = $db->prepare("UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value = :next_time WHERE lang = :lang AND module = 'global' AND config_name = 'cronjobs_next_time' AND (CAST(config_value AS UNSIGNED) <= :current_time OR CAST(config_value AS UNSIGNED) >= :next_time2)");
+        $stmt->bindValue(':next_time', $cronjobs_next_time, PDO::PARAM_STR);
+        $stmt->bindValue(':next_time2', $cronjobs_next_time, PDO::PARAM_STR);
+        $stmt->bindValue(':lang', NV_LANG_DATA, PDO::PARAM_STR);
+        $stmt->bindValue(':current_time', NV_CURRENTTIME, PDO::PARAM_INT);
+        $stmt->execute();
+        if ($stmt->rowCount()) {
+            $nv_Cache->delMod('settings');
+        }
     }
 
     $nv_Cache->delMod('settings');
@@ -140,11 +148,12 @@ function get_list_ips($type)
     ];
     $arealist = [$nv_Lang->getModule('area_select'), $nv_Lang->getModule('area_front'), $nv_Lang->getModule('area_admin'), $nv_Lang->getModule('area_both')];
 
-    $sql = 'SELECT id, ip, mask, area, begintime, endtime FROM ' . $db_config['prefix'] . '_ips WHERE type = ' . $type . ' ORDER BY id DESC';
-    $result = $db->query($sql);
+    $stmt = $db->prepare('SELECT id, ip, mask, area, begintime, endtime FROM ' . $db_config['prefix'] . '_ips WHERE type = :type ORDER BY id DESC');
+    $stmt->bindValue(':type', $type, PDO::PARAM_INT);
+    $stmt->execute();
 
     $list = [];
-    while ($row = $result->fetch()) {
+    while ($row = $stmt->fetch()) {
         $status = $row['begintime'] > NV_CURRENTTIME ? 2 : ((!empty($row['endtime']) and $row['endtime'] < NV_CURRENTTIME) ? 0 : 1);
         $note = [];
         $note[] = $nv_Lang->getModule('ip_mask') . ': ' . ($ips->isIp4($row['ip']) ? $masklist[$row['mask']] : '/' . $row['mask']);
@@ -157,6 +166,7 @@ function get_list_ips($type)
         $row['status_text'] = $status === 2 ? $nv_Lang->getModule('waiting') : ($status === 0 ? $nv_Lang->getModule('ended') : $nv_Lang->getModule('running'));
         $list[$row['id']] = $row;
     }
+    $stmt->closeCursor();
 
     return $list;
 }

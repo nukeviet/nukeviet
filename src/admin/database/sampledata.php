@@ -182,9 +182,11 @@ if ($nv_Request->isset_request('startwrite', 'get')) {
                     $from = 0;
                     $a = 0;
                     for ($i = 0; $i < $maxi; ++$i) {
-                        $db->sqlreset()->select('*')->from($table['name'])->limit($table['limit'])->offset($from);
-                        $result = $db->query($db->sql());
-                        while ($row = $result->fetch()) {
+                        $stmt = $db->prepare('SELECT * FROM ' . $table['name'] . ' LIMIT :limit OFFSET :offset');
+                        $stmt->bindValue(':limit', $table['limit'], PDO::PARAM_INT);
+                        $stmt->bindValue(':offset', $from, PDO::PARAM_INT);
+                        $stmt->execute();
+                        while ($row = $stmt->fetch()) {
                             // Bỏ qua tài khoản có userid = 1
                             if ($table['name'] == NV_USERS_GLOBALTABLE and $row['userid'] == 1) {
                                 continue;
@@ -273,7 +275,7 @@ if ($nv_Request->isset_request('startwrite', 'get')) {
                                 break;
                             }
                         }
-                        $result->closeCursor();
+                        $stmt->closeCursor();
                         $from += $table['limit'];
                     }
                 }

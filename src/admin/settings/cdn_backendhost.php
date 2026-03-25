@@ -108,7 +108,7 @@ if ($nv_Request->isset_request('by_country', 'get')) {
         }
         $urls = json_encode($urls, NV_JSON_ENCODE);
         $sth = $db->prepare('UPDATE ' . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = 'sys' AND module = 'global' AND config_name = 'cdn_url'");
-        $sth->bindParam(':config_value', $urls, PDO::PARAM_STR);
+        $sth->bindValue(':config_value', $urls, PDO::PARAM_STR);
         $sth->execute();
 
         nv_save_file_config_global();
@@ -208,8 +208,8 @@ if ($nv_Request->isset_request('checkss', 'post')) {
 
     $sth = $db->prepare('UPDATE ' . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = 'sys' AND module = 'global' AND config_name = :config_name");
     foreach ($array_config_global as $config_name => $config_value) {
-        $sth->bindParam(':config_name', $config_name, PDO::PARAM_STR, 30);
-        $sth->bindParam(':config_value', $config_value, PDO::PARAM_STR);
+        $sth->bindValue(':config_name', $config_name, PDO::PARAM_STR);
+        $sth->bindValue(':config_value', $config_value, PDO::PARAM_STR);
         $sth->execute();
     }
 
@@ -222,11 +222,10 @@ if ($nv_Request->isset_request('checkss', 'post')) {
 
 $array_config_global = [];
 $result = $db->query('SELECT config_name, config_value FROM ' . NV_CONFIG_GLOBALTABLE . " WHERE lang='sys' AND module='global'");
-while ($_scratch = $result->fetch(3)) {
-    [$c_config_name, $c_config_value] = $_scratch;
-    unset($_scratch);
-    $array_config_global[$c_config_name] = $c_config_value;
+while ($_row_cfg = $result->fetch()) {
+    $array_config_global[$_row_cfg['config_name']] = $_row_cfg['config_value'];
 }
+$result->closeCursor();
 
 $core_cdn_url = !empty($global_config['core_cdn_url']) ? $global_config['core_cdn_url'] : 'https://cdn.jsdelivr.net/gh/nukeviet/nukeviet/';
 $array_config_global['assets_cdn_note'] = $nv_Lang->getModule('assets_cdn_note', NV_ASSETS_DIR . '/css, ' . NV_ASSETS_DIR . '/fonts, ' . NV_ASSETS_DIR . '/images, ' . NV_ASSETS_DIR . '/js', NV_BASE_SITEURL . NV_ASSETS_DIR . '/js/jquery/jquery.min.js', $core_cdn_url . 'assets/js/jquery/jquery.min.js');
