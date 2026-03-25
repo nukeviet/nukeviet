@@ -112,7 +112,7 @@ if (defined('NV_EDITOR') and nv_function_exists('nv_aleditor')) {
 }
 
 $tpl = new \NukeViet\Template\NVSmarty();
-$tpl->setTemplateDir(get_module_tpl_dir(basename(__FILE__, '.php') . '.tpl'));
+$tpl->setTemplateDir(get_module_tpl_dir('send.tpl'));
 
 $tpl->assign('LANG', $nv_Lang);
 $tpl->assign('MODULE_NAME', $module_name);
@@ -132,7 +132,7 @@ if (count($global_config['setup_langs']) > 1) {
 }
 $tpl->assign('MAIL_LANGS', $mail_langs);
 
-$contents = $tpl->fetch(basename(__FILE__, '.php') . '.tpl');
+$contents = $tpl->fetch('send.tpl');
 
 $page_title = $module_info['site_title'];
 

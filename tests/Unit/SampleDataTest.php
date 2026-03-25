@@ -317,4 +317,82 @@ class SampleDataTest extends \Codeception\Test\Unit
 
         $this->assertTrue(true);
     }
+
+    /**
+     * Dữ liệu mẫu nhân viên hỗ trợ (supporter) cho module contact
+     *
+     * Sinh 10 supporter phân bổ vào các department hiện có.
+     * Yêu cầu bảng _contact_department phải có ít nhất 1 bản ghi.
+     *
+     * @group sample-data
+     */
+    public function testInsertSampleDataForContactSupporter()
+    {
+        global $db, $db_config;
+
+        $tablePrefix = $db_config['prefix'] . '_vi_contact';
+
+        // Lấy danh sách department hiện có
+        $departmentIds = $db->query(
+            'SELECT id FROM ' . $tablePrefix . '_department ORDER BY id ASC'
+        )->fetchAll(\PDO::FETCH_COLUMN);
+
+        if (empty($departmentIds)) {
+            $this->markTestSkipped('Không có department nào trong bảng ' . $tablePrefix . '_department.');
+        }
+
+        $fullNames = [
+            'Nguyễn Văn An',
+            'Trần Thị Bình',
+            'Lê Văn Cường',
+            'Phạm Thị Dung',
+            'Hoàng Văn Em',
+            'Huỳnh Thị Phương',
+            'Phan Văn Giang',
+            'Vũ Thị Hà',
+            'Đặng Văn Hùng',
+            'Bùi Thị Lan',
+        ];
+
+        $deptCount = count($departmentIds);
+        $values = [];
+
+        // Lấy weight lớn nhất hiện có theo từng department để tránh trùng khi chạy nhiều lần
+        $weightMap = [];
+        foreach ($departmentIds as $did) {
+            $max = $db->query(
+                'SELECT MAX(weight) FROM ' . $tablePrefix . '_supporter WHERE departmentid = ' . (int) $did
+            )->fetchColumn();
+            $weightMap[(int) $did] = (int) $max;
+        }
+
+        foreach ($fullNames as $i => $name) {
+            $departmentid = (int) $departmentIds[$i % $deptCount];
+
+            $weightMap[$departmentid] += 1;
+            $weight = $weightMap[$departmentid];
+
+            $phone = '09' . str_pad((string) rand(10000000, 99999999), 8, '0', STR_PAD_LEFT);
+            $email = 'supporter' . ($i + 1) . '@example.com';
+
+            $esc = fn (string $s) => str_replace(["\\", "'"], ["\\\\", "\\'"], $s);
+
+            $values[] = sprintf(
+                "(%d,'%s','','%s','%s','',1,%d)",
+                $departmentid,
+                $esc($name),
+                $esc($phone),
+                $esc($email),
+                $weight
+            );
+        }
+
+        $inserted = $db->exec(
+            'INSERT INTO ' . $tablePrefix . '_supporter'
+            . ' (departmentid, full_name, image, phone, email, others, act, weight) VALUES '
+            . implode(',', $values)
+        );
+
+        $this->assertGreaterThan(0, $inserted, 'Không có dòng nào được insert vào bảng ' . $tablePrefix . '_supporter.');
+    }
 }

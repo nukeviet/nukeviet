@@ -40,10 +40,17 @@ function supporter_fix_weight($departmentid, $skip_id = 0, $skip_weight = 0)
     }
 }
 
-$page_url = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op;
+$page_url = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op;
 
 if ($nv_Request->isset_request('fc', 'post')) {
     $fc = $nv_Request->get_string('fc', 'post', '');
+    if (!csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
+        nv_jsonOutput([
+            'status' => 'error',
+            'mess' => $nv_Lang->getGlobal('error_checkss')
+        ]);
+    }
+
     // Thay đổi thứ tự
     if ($fc == 'change_weight') {
         $id = $nv_Request->get_int('id', 'post', 0);
@@ -62,7 +69,8 @@ if ($nv_Request->isset_request('fc', 'post')) {
         $db->query('UPDATE ' . NV_MOD_TABLE . '_supporter SET weight=' . $new_weight . ' WHERE id=' . $id);
         $nv_Cache->delMod($module_name);
         nv_jsonOutput([
-            'status' => 'OK'
+            'status' => 'OK',
+            'mess' => $nv_Lang->getGlobal('save_success')
         ]);
     }
 
@@ -74,7 +82,7 @@ if ($nv_Request->isset_request('fc', 'post')) {
             if (!$supporter) {
                 nv_jsonOutput([
                     'status' => 'error',
-                    'mess' => 'Unspecified Supporter'
+                    'mess' => $nv_Lang->getGlobal('error_code_11')
                 ]);
             }
         } else {
@@ -106,21 +114,24 @@ if ($nv_Request->isset_request('fc', 'post')) {
             if (!empty($post['departmentid']) and !isset($departments[$post['departmentid']])) {
                 nv_jsonOutput([
                     'status' => 'error',
-                    'mess' => $nv_Lang->getModule('error_required_departmentid')
+                    'mess' => $nv_Lang->getModule('error_required_departmentid'),
+                    'input' => 'departmentid'
                 ]);
             }
 
             if (nv_strlen($post['full_name']) < 3) {
                 nv_jsonOutput([
                     'status' => 'error',
-                    'mess' => $nv_Lang->getModule('error_required_full_name')
+                    'mess' => $nv_Lang->getModule('error_required_full_name'),
+                    'input' => 'full_name'
                 ]);
             }
 
             if (nv_strlen($post['phone']) < 6) {
                 nv_jsonOutput([
                     'status' => 'error',
-                    'mess' => $nv_Lang->getModule('error_required_phone')
+                    'mess' => $nv_Lang->getModule('error_required_phone'),
+                    'input' => 'phone'
                 ]);
             }
 
@@ -129,16 +140,18 @@ if ($nv_Request->isset_request('fc', 'post')) {
             if (!empty($post['email']) and $check_email[0] != '') {
                 nv_jsonOutput([
                     'status' => 'error',
-                    'mess' => $check_email[0]
+                    'mess' => $check_email[0],
+                    'input' => 'email'
                 ]);
             }
 
-            if (is_file(NV_DOCUMENT_ROOT . $post['image'])) {
+            if (!empty($post['image']) and nv_is_file($post['image'], NV_UPLOADS_DIR . '/' . $module_upload)) {
                 $size = getimagesize(NV_DOCUMENT_ROOT . $post['image']);
                 if (empty($size[0]) or $size[0] < 100 or $size[0] > 300 or $size[0] != $size[1]) {
                     nv_jsonOutput([
                         'status' => 'error',
-                        'mess' => $nv_Lang->getModule('supporter_avatar_note')
+                        'mess' => $nv_Lang->getModule('supporter_avatar_note'),
+                        'input' => 'image'
                     ]);
                 }
                 $post['image'] = substr($post['image'], strlen(NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/'));
@@ -157,51 +170,61 @@ if ($nv_Request->isset_request('fc', 'post')) {
                 }
             }
             $post['others'] = !empty($others) ? json_encode($others, NV_JSON_ENCODE) : '';
-            try {
-                if (empty($id)) {
-                    nv_insert_logs(NV_LANG_DATA, $module_name, 'LOG_ADD_SUPPORTER', 'NAME: ' . $post['full_name'], $admin_info['userid']);
 
+            if (empty($id)) {
+                nv_insert_logs(NV_LANG_DATA, $module_name, 'LOG_ADD_SUPPORTER', 'NAME: ' . $post['full_name'], $admin_info['userid']);
+
+                $weight = $db->query('SELECT max(weight) FROM ' . NV_MOD_TABLE . '_supporter WHERE departmentid=' . $post['departmentid'])->fetchColumn();
+                $weight = (int) $weight + 1;
+                $stmt = $db->prepare('INSERT INTO ' . NV_MOD_TABLE . '_supporter (departmentid, full_name, image, phone, email, others, weight) VALUES (' . $post['departmentid'] . ', :full_name, :image, :phone, :email, :others, ' . $weight . ')');
+                $old_departmentid = 0;
+            } else {
+                nv_insert_logs(NV_LANG_DATA, $module_name, 'LOG_EDIT_SUPPORTER', 'ID: ' . $id . ', NAME: ' . $post['full_name'], $admin_info['userid']);
+
+                $old_departmentid = (int) $supporter['departmentid'];
+                if ($post['departmentid'] == $supporter['departmentid']) {
+                    $weight = (int) $supporter['weight'];
+                } else {
                     $weight = $db->query('SELECT max(weight) FROM ' . NV_MOD_TABLE . '_supporter WHERE departmentid=' . $post['departmentid'])->fetchColumn();
                     $weight = (int) $weight + 1;
-                    $stmt = $db->prepare('INSERT INTO ' . NV_MOD_TABLE . '_supporter (departmentid, full_name, image, phone, email, others, weight) VALUES (' . $post['departmentid'] . ', :full_name, :image, :phone, :email, :others, ' . $weight . ')');
-                } else {
-                    nv_insert_logs(NV_LANG_DATA, $module_name, 'LOG_EDIT_SUPPORTER', 'ID: ' . $id . ', NAME: ' . $post['full_name'], $admin_info['userid']);
-
-                    if ($post['departmentid'] == $supporter['departmentid']) {
-                        $weight = (int) $supporter['weight'];
-                    } else {
-                        $weight = $db->query('SELECT max(weight) FROM ' . NV_MOD_TABLE . '_supporter WHERE departmentid=' . $post['departmentid'])->fetchColumn();
-                        $weight = (int) $weight + 1;
-                        define('OLD_DEPARTMENTID', $supporter['departmentid']);
-                    }
-                    $stmt = $db->prepare('UPDATE ' . NV_MOD_TABLE . '_supporter SET departmentid = ' . $post['departmentid'] . ', full_name = :full_name, image = :image, phone = :phone, email = :email, others = :others, weight = ' . $weight . ' WHERE id=' . $id);
                 }
-                $stmt->bindParam(':full_name', $post['full_name'], PDO::PARAM_STR);
-                $stmt->bindParam(':image', $post['image'], PDO::PARAM_STR);
-                $stmt->bindParam(':phone', $post['phone'], PDO::PARAM_STR);
-                $stmt->bindParam(':email', $post['email'], PDO::PARAM_STR);
-                $stmt->bindParam(':others', $post['others'], PDO::PARAM_STR, strlen($post['others']));
-                $exc = $stmt->execute();
-                if ($exc) {
-                    if (defined('OLD_DEPARTMENTID')) {
-                        supporter_fix_weight(OLD_DEPARTMENTID);
-                    }
-
-                    $nv_Cache->delMod($module_name);
-                    nv_jsonOutput([
-                        'status' => 'OK'
-                    ]);
-                } else {
-                    nv_jsonOutput([
-                        'status' => 'error',
-                        'mess' => 'An unknown error has occurred'
-                    ]);
+                $stmt = $db->prepare('UPDATE ' . NV_MOD_TABLE . '_supporter SET departmentid = ' . $post['departmentid'] . ', full_name = :full_name, image = :image, phone = :phone, email = :email, others = :others, weight = ' . $weight . ' WHERE id=' . $id);
+            }
+            $stmt->bindParam(':full_name', $post['full_name'], PDO::PARAM_STR);
+            $stmt->bindParam(':image', $post['image'], PDO::PARAM_STR);
+            $stmt->bindParam(':phone', $post['phone'], PDO::PARAM_STR);
+            $stmt->bindParam(':email', $post['email'], PDO::PARAM_STR);
+            $stmt->bindParam(':others', $post['others'], PDO::PARAM_STR, strlen($post['others']));
+            $exc = $stmt->execute();
+            if ($exc) {
+                if (!empty($old_departmentid) and $old_departmentid != $post['departmentid']) {
+                    supporter_fix_weight($old_departmentid);
                 }
-            } catch (PDOException $e) {
-                trigger_error($e->getMessage());
+
+                $nv_Cache->delMod($module_name);
+                nv_jsonOutput([
+                    'status' => 'OK',
+                    'mess' => $nv_Lang->getGlobal('save_success'),
+                    'refresh' => true
+                ]);
+            } else {
+                nv_jsonOutput([
+                    'status' => 'error',
+                    'mess' => $nv_Lang->getGlobal('error_code_11')
+                ]);
             }
         } else {
-            if (!empty($supporter['image']) and is_file(NV_UPLOADS_REAL_DIR . '/' . $module_upload . '/' . $supporter['image'])) {
+            $supporter = array_merge([
+                'id' => 0,
+                'departmentid' => 0,
+                'full_name' => '',
+                'image' => '',
+                'phone' => '',
+                'email' => '',
+                'others' => ''
+            ], $supporter);
+
+            if (!empty($supporter['image']) and nv_is_file(NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $supporter['image'], NV_UPLOADS_DIR . '/' . $module_upload)) {
                 $supporter['image'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $supporter['image'];
             } else {
                 $supporter['image'] = '';
@@ -213,35 +236,42 @@ if ($nv_Request->isset_request('fc', 'post')) {
                     $supporter['others'] = unserialize($supporter['others'], NV_UNSERIALIZE_SAFE);
                 }
             }
-            if (empty($supporter['others'])) {
+
+            if (empty($supporter['others']) or !is_array($supporter['others'])) {
                 $supporter['others'] = ['' => ''];
             }
 
-            $xtpl = new XTemplate('supporter.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-            $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
-            $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
-            $xtpl->assign('FORM_ACTION', $page_url);
-            $xtpl->assign('SUPPORTER', $supporter);
-            $xtpl->assign('MODULE_UPLOAD', NV_UPLOADS_DIR . '/' . $module_upload);
-
-            if (!empty($departments)) {
-                foreach ($departments as $department) {
-                    $department['sel'] = $supporter['departmentid'] == $department['id'] ? ' selected="selected"' : '';
-                    $xtpl->assign('DEPARTMENT', $department);
-                    $xtpl->parse('content.department');
-                }
+            $department_options = [[
+                'id' => 0,
+                'full_name' => $nv_Lang->getModule('department_empty')
+            ]];
+            foreach ($departments as $department) {
+                $department_options[] = [
+                    'id' => (int) $department['id'],
+                    'full_name' => $department['full_name']
+                ];
             }
 
+            $other_contacts = [];
             foreach ($supporter['others'] as $name => $value) {
-                $xtpl->assign('OTHER', [
+                $other_contacts[] = [
                     'name' => $name,
                     'value' => $value
-                ]);
-                $xtpl->parse('content.other');
+                ];
             }
 
-            $xtpl->parse('content');
-            $contents = $xtpl->text('content');
+            $tpl = new \NukeViet\Template\NVSmarty();
+            $tpl->setTemplateDir(get_module_tpl_dir('supporter-content.tpl'));
+            $tpl->assign('LANG', $nv_Lang);
+            $tpl->assign('MODULE_NAME', $module_name);
+            $tpl->assign('OP', $op);
+            $tpl->assign('CHECKSS', csrf_create($csrf_key));
+            $tpl->assign('SUPPORTER', $supporter);
+            $tpl->assign('DEPARTMENT_OPTIONS', $department_options);
+            $tpl->assign('OTHER_CONTACTS', $other_contacts);
+            $tpl->assign('MODULE_UPLOAD', $module_upload);
+
+            $contents = $tpl->fetch('supporter-content.tpl');
             nv_jsonOutput([
                 'status' => 'OK',
                 'title' => $id ? $nv_Lang->getModule('supporter_edit') : $nv_Lang->getModule('supporter_add'),
@@ -258,7 +288,7 @@ if ($nv_Request->isset_request('fc', 'post')) {
         if (!$supporter) {
             nv_jsonOutput([
                 'status' => 'error',
-                'mess' => 'Unspecified Supporter'
+                'mess' => $nv_Lang->getGlobal('error_code_11')
             ]);
         }
 
@@ -268,7 +298,8 @@ if ($nv_Request->isset_request('fc', 'post')) {
         supporter_fix_weight($supporter['departmentid']);
         $nv_Cache->delMod($module_name);
         nv_jsonOutput([
-            'status' => 'OK'
+            'status' => 'OK',
+            'mess' => $nv_Lang->getGlobal('save_success')
         ]);
     }
 
@@ -280,7 +311,7 @@ if ($nv_Request->isset_request('fc', 'post')) {
         if (!$supporter) {
             nv_jsonOutput([
                 'status' => 'error',
-                'mess' => 'Unspecified Supporter'
+                'mess' => $nv_Lang->getGlobal('error_code_11')
             ]);
         }
 
@@ -291,7 +322,8 @@ if ($nv_Request->isset_request('fc', 'post')) {
         $db->query('UPDATE ' . NV_MOD_TABLE . '_supporter SET act=' . $new_status . ' WHERE id=' . $id);
         $nv_Cache->delMod($module_name);
         nv_jsonOutput([
-            'status' => 'OK'
+            'status' => 'OK',
+            'mess' => $nv_Lang->getGlobal('save_success')
         ]);
     }
 }
@@ -299,63 +331,64 @@ if ($nv_Request->isset_request('fc', 'post')) {
 // Hiển thị danh sách nhân viên hỗ trợ
 $supporters = get_supporter_list();
 
-$departments = get_department_list();
-$departments[0] = [
+$departments = [0 => [
     'id' => 0,
     'full_name' => $nv_Lang->getModule('department_empty')
-];
+]] + get_department_list();
 
-$list = [];
-if (!empty($supporters)) {
-    foreach ($supporters as $supporter) {
-        empty($list[$supporter['departmentid']]) && $list[$supporter['departmentid']] = [];
-        empty($departments[$supporter['departmentid']]['supporters']) && $departments[$supporter['departmentid']]['supporters'] = 0;
-        $list[$supporter['departmentid']][] = $supporter;
-        ++$departments[$supporter['departmentid']]['supporters'];
+$department_counts = [];
+foreach ($supporters as $supporter) {
+    $departmentid = (int) $supporter['departmentid'];
+    $department_counts[$departmentid] = ($department_counts[$departmentid] ?? 0) + 1;
+}
+
+$department_groups = [];
+foreach ($supporters as $supporter) {
+    $departmentid = (int) $supporter['departmentid'];
+    $department_info = $departments[$departmentid] ?? [
+        'id' => $departmentid,
+        'full_name' => $nv_Lang->getModule('department_not_exist') . ' #' . $departmentid
+    ];
+
+    if (!isset($department_groups[$departmentid])) {
+        $department_groups[$departmentid] = [
+            'id' => $departmentid,
+            'full_name' => $department_info['full_name'],
+            'supporters' => []
+        ];
     }
-}
 
-$xtpl = new XTemplate($op . '.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-$xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
-$xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
-$xtpl->assign('OP_URL', $page_url);
-
-if (!empty($list)) {
-    foreach ($list as $department => $supporters) {
-        $xtpl->assign('DEPARTMENT', [
-            'href' => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=row&id=' . $department,
-            'full_name' => $departments[$department]['full_name']
-        ]);
-        if (!empty($department)) {
-            $xtpl->parse('main.list.department.href');
-            $xtpl->parse('main.list.department.href2');
-        }
-
-        foreach ($supporters as $supporter) {
-            $supporter['act_checked'] = !empty($supporter['act']) ? ' checked="checked"' : '';
-            $xtpl->assign('SUPPORTER', $supporter);
-
-            for ($i = 1; $i <= $departments[$department]['supporters']; ++$i) {
-                $xtpl->assign('WEIGHT', [
-                    'key' => $i,
-                    'sel' => $supporter['weight'] == $i ? ' selected="selected"' : '',
-                    'title' => str_pad($i, 2, '0', STR_PAD_LEFT)
-                ]);
-                $xtpl->parse('main.list.department.loop.weight');
-            }
-            $xtpl->parse('main.list.department.loop');
-        }
-        $xtpl->parse('main.list.department');
+    $weight_options = [];
+    for ($i = 1; $i <= ($department_counts[$departmentid] ?? 0); ++$i) {
+        $weight_options[] = [
+            'value' => $i,
+            'title' => str_pad((string) $i, 2, '0', STR_PAD_LEFT)
+        ];
     }
-    $xtpl->parse('main.list');
+
+    $department_groups[$departmentid]['supporters'][] = [
+        'id' => (int) $supporter['id'],
+        'full_name' => $supporter['full_name'],
+        'phone' => $supporter['phone'],
+        'email' => $supporter['email'],
+        'act' => !empty($supporter['act']) ? 1 : 0,
+        'weight' => (int) $supporter['weight'],
+        'weight_options' => $weight_options
+    ];
 }
 
-if (empty($supporters)) {
-    $xtpl->parse('main.show_form');
-}
+$tpl = new \NukeViet\Template\NVSmarty();
+$tpl->setTemplateDir(get_module_tpl_dir('supporter.tpl'));
+$tpl->assign('LANG', $nv_Lang);
+$tpl->assign('MODULE_NAME', $module_name);
+$tpl->assign('OP', $op);
+$tpl->assign('CHECKSS', csrf_create($csrf_key));
+$tpl->assign('DEPARTMENT_OP_URL', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=department');
+$tpl->assign('DEPARTMENT_CHECKSS', md5(NV_CHECK_SESSION . '_' . $module_name . '_department_' . $admin_info['userid']));
+$tpl->assign('OP_URL', $page_url);
+$tpl->assign('DEPARTMENT_GROUPS', array_values($department_groups));
 
-$xtpl->parse('main');
-$contents = $xtpl->text('main');
+$contents = $tpl->fetch('supporter.tpl');
 
 $page_title = $nv_Lang->getModule('supporter');
 

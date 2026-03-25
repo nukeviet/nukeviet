@@ -32,7 +32,7 @@ docs/knowledge/                   # Deep knowledge base
 ### Thiết lập
 
 - Hãy đảm bảo bạn đã cài đặt thành công NukeViet theo [Hướng dẫn cài đặt NukeViet](../../README.md#installation).
-- Chạy `bash scripts/claude.sh` để sinh ra tệp .mcp.json ở thư mục gốc
+- Chạy `bash scripts/setup-claude.sh` để sinh ra tệp .mcp.json ở thư mục gốc
 - Khởi chạy `claude` và accept khi nó hỏi.
 - Chạy `/mcp` để xem trạng thái các mcp đã kết nối thành công chưa.
 

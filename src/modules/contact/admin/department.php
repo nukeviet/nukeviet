@@ -452,30 +452,32 @@ if ($nv_Request->isset_request('id', 'get')) {
         if (json_last_error() !== JSON_ERROR_NONE) {
             $cats = explode('|', $department['cats']);
         }
-        $department['cats'] = '<ul><li>' . implode('</li><li>', $cats) . '</li></ul>';
+        $department['cats'] = array_values(array_filter($cats));
+    } else {
+        $department['cats'] = [];
     }
     if (!empty($department['admins'])) {
         $department['admins'] = parse_admins($department['admins']);
-        $department['your_authority'] = [];
-        if (defined('NV_IS_SPADMIN') or (!empty($department['admins']['view_level']) and in_array((int) $admin_info['userid'], $department['admins']['view_level'], true))) {
-            $department['your_authority'][] = $nv_Lang->getModule('admin_view_level');
-        }
-        if (defined('NV_IS_SPADMIN') or (!empty($department['admins']['exec_level']) and in_array((int) $admin_info['userid'], $department['admins']['exec_level'], true))) {
-            $department['your_authority'][] = $nv_Lang->getModule('admin_exec_level');
-        }
-        if (defined('NV_IS_SPADMIN') or (!empty($department['admins']['reply_level']) and in_array((int) $admin_info['userid'], $department['admins']['reply_level'], true))) {
-            $department['your_authority'][] = $nv_Lang->getModule('admin_reply_level');
-        }
-        if (!empty($department['admins']['obt_level']) and in_array((int) $admin_info['userid'], $department['admins']['obt_level'], true)) {
-            $department['your_authority'][] = $nv_Lang->getModule('admin_obt_level');
-        }
-        $department['your_authority'] = !empty($department['your_authority']) ? '<ul><li>' . implode('</li><li>', $department['your_authority']) . '</li></ul>' : $nv_Lang->getModule('your_not_authority');
     } else {
-        $department['your_authority'] = $nv_Lang->getModule('your_not_authority');
+        $department['admins'] = [];
+    }
+
+    $department['your_authority'] = [];
+    if (defined('NV_IS_SPADMIN') or (!empty($department['admins']['view_level']) and in_array((int) $admin_info['userid'], $department['admins']['view_level'], true))) {
+        $department['your_authority'][] = $nv_Lang->getModule('admin_view_level');
+    }
+    if (defined('NV_IS_SPADMIN') or (!empty($department['admins']['exec_level']) and in_array((int) $admin_info['userid'], $department['admins']['exec_level'], true))) {
+        $department['your_authority'][] = $nv_Lang->getModule('admin_exec_level');
+    }
+    if (defined('NV_IS_SPADMIN') or (!empty($department['admins']['reply_level']) and in_array((int) $admin_info['userid'], $department['admins']['reply_level'], true))) {
+        $department['your_authority'][] = $nv_Lang->getModule('admin_reply_level');
+    }
+    if (!empty($department['admins']['obt_level']) and in_array((int) $admin_info['userid'], $department['admins']['obt_level'], true)) {
+        $department['your_authority'][] = $nv_Lang->getModule('admin_obt_level');
     }
 
     $tpl = new \NukeViet\Template\NVSmarty();
-    $tpl->setTemplateDir(get_module_tpl_dir('department.tpl'));
+    $tpl->setTemplateDir(get_module_tpl_dir('department-view.tpl'));
     $tpl->assign('LANG', $nv_Lang);
     $tpl->assign('MODULE_NAME', $module_name);
     $tpl->assign('OP', $op);
