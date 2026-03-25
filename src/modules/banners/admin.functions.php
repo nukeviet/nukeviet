@@ -20,7 +20,7 @@ $allow_func = [
     'change_act_plan',
     'plan-content',
     'del_plan',
-    'info_plan',
+    'info-plan',
     'banner-content',
     'edit_banner',
     'change_act_banner',

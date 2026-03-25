@@ -29,6 +29,9 @@ function initFormAjKeyboard(formAj) {
             $(this).parent().removeClass('is-invalid is-valid');
         }
     });
+    $('[type="file"]', formAj).on('change', function() {
+        $(this).removeClass('is-invalid is-valid');
+    });
     $('[type="text"], [type="password"], [type="number"], [type="email"], [type="url"], textarea', formAj).on('change keyup', function(e) {
         if (e.type == "keyup" && e.which == 13) {
             return;

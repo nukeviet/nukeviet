@@ -244,6 +244,7 @@ Quy tắc bảng danh sách:
 - **`<div class="card-body">` KHÔNG dùng class `p-0`** — giữ padding mặc định, bảng tự set padding qua `table-responsive-lg table-card`
 - Mọi `<th>` trong thead có class `text-nowrap`; độ rộng cột dùng `style="width:X%"` thay vì px, mọi th trong thead đều phải có width và tổng lại phải bằng 100%
 - Không dùng `text-center` ở thead nếu tbody tương ứng không có
+- **Icon button chuẩn**: nút Sửa dùng `fa-pencil` (không dùng `fa-pen-to-square`); nút Xóa dùng `fa-trash`; nút Đình chỉ/Kích hoạt dùng `fa-toggle-on`
 - Button xóa luôn dùng `btn-danger`; không dùng class `fa-lg`
 - **Nguyên tắc button action**: nếu nút **ít và text ngắn** → giữ text (icon + text). Chỉ dùng icon-only khi text quá dài hoặc quá nhiều nút trong một ô. Khi icon-only: bắt buộc có `aria-label` **và** `data-bs-toggle="tooltip" title="..."`
 - Select thứ tự trong tbody thêm class `fw-75`
@@ -274,7 +275,7 @@ Quy tắc bảng danh sách:
                             {* Ít nút + text ngắn → giữ text *}
                             <a href="...&amp;{$smarty.const.NV_OP_VARIABLE}=edit&amp;id={$row.id}"
                                class="btn btn-sm btn-secondary">
-                                <i class="fa-solid fa-pen-to-square"></i> {$LANG->getGlobal('edit')}
+                                <i class="fa-solid fa-pencil"></i> {$LANG->getGlobal('edit')}
                             </a>
                             {* Hoặc icon-only khi nhiều nút: bắt buộc aria-label + tooltip *}
                             <button type="button" class="btn btn-sm btn-danger"

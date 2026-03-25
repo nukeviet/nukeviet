@@ -184,3 +184,4 @@ $lang_module['admin_add_banner'] = 'Ajouter une bannière';
 $lang_module['chart_data_empty'] = 'Aucun clic';
 $lang_module['chart_lbl_clicks'] = 'Nombre de clics';
 $lang_module['chart_lbl_total'] = 'Total';
+$lang_module['info_plan_banner_stat'] = 'Bannières dans ce bloc';

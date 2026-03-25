@@ -44,7 +44,7 @@
             <div class="row">
                 <div class="col-sm-3 fw-semibold text-muted">{$LANG->getModule('in_plan')}</div>
                 <div class="col-sm-9">
-                    <a href="{$smarty.const.NV_BASE_ADMINURL}index.php?{$smarty.const.NV_LANG_VARIABLE}={$smarty.const.NV_LANG_DATA}&amp;{$smarty.const.NV_NAME_VARIABLE}={$MODULE_NAME}&amp;{$smarty.const.NV_OP_VARIABLE}=info_plan&amp;id={$PLAN.id}">{$PLAN.title} ({$PLAN.blang_name})</a>
+                    <a href="{$smarty.const.NV_BASE_ADMINURL}index.php?{$smarty.const.NV_LANG_VARIABLE}={$smarty.const.NV_LANG_DATA}&amp;{$smarty.const.NV_NAME_VARIABLE}={$MODULE_NAME}&amp;{$smarty.const.NV_OP_VARIABLE}=info-plan&amp;id={$PLAN.id}">{$PLAN.title} ({$PLAN.blang_name})</a>
                 </div>
             </div>
         </li>
@@ -163,7 +163,7 @@
         <h5 class="card-title mb-0">{$LANG->getModule('info_stat_caption')}</h5>
     </div>
     <div class="card-body">
-        <div class="row g-2 align-items-end">
+        <div class="row g-2 align-items-center">
             <div class="col-sm-auto">
                 <div class="form-label mb-0">{$LANG->getModule('please_select_month')}:</div>
             </div>

@@ -129,7 +129,7 @@ while ($row = $result->fetch()) {
         'view_url'  => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=info-banner&amp;id=' . $row['id'],
         'pid'       => $row['pid'],
         'pid_title' => $plans[$row['pid']] ?? '',
-        'pid_url'   => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=info_plan&amp;id=' . $row['pid'],
+        'pid_url'   => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=info-plan&amp;id=' . $row['pid'],
         'clid'      => $row['clid'],
         'publ_date' => !empty($row['publ_time']) ? nv_datetime_format($row['publ_time']) : '',
         'exp_date'  => !empty($row['exp_time']) ? nv_datetime_format($row['exp_time']) : $nv_Lang->getModule('unlimited'),

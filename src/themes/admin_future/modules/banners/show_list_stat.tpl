@@ -28,7 +28,7 @@
                     </tr>
                     {foreachelse}
                     <tr>
-                        <td colspan="6" class="text-center text-muted py-4">{$LANG->getGlobal('no_data')}</td>
+                        <td colspan="6" class="text-center text-muted py-4">{$LANG->getModule('chart_data_empty')}</td>
                     </tr>
                     {/foreach}
                 </tbody>

@@ -26,7 +26,7 @@ while ($row = $result->fetch()) {
         'blang'    => !empty($row['blang']) ? $language_array[$row['blang']]['name'] : $nv_Lang->getModule('blang_all'),
         'size'     => $row['width'] . ' x ' . $row['height'] . 'px',
         'act'      => (int) $row['act'],
-        'view_url' => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=info_plan&id=' . $row['id'],
+        'view_url' => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=info-plan&id=' . $row['id'],
         'edit_url' => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=plan-content&id=' . $row['id'],
         'add_url'  => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=banner-content&pid=' . $row['id'],
     ];

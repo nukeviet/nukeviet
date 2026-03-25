@@ -171,6 +171,37 @@ $(function() {
         });
     }
 
+    // Xóa khối banner (dùng chung cho plans-list và info-plan)
+    $('[data-toggle="del-plan"]').on('click', function(e) {
+        e.preventDefault();
+        const btn = $(this);
+        const icon = $('i', btn);
+        if (icon.is('.fa-spinner')) return;
+        nvConfirm(btn.data('msgconfirm'), () => {
+            const orig = icon.data('icon');
+            icon.removeClass(orig).addClass('fa-spinner fa-spin-pulse');
+            $.ajax({
+                type: 'POST',
+                url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=del_plan&nocache=' + new Date().getTime(),
+                data: { id: btn.data('id'), checkss: btn.data('tokend') },
+                dataType: 'json',
+                success: (data) => {
+                    icon.removeClass('fa-spinner fa-spin-pulse').addClass(orig);
+                    if (data.status === 'OK' || data.status === 'ok') {
+                        const redirect = btn.data('redirect');
+                        redirect ? (location.href = redirect) : location.reload();
+                    } else {
+                        nvToast(data.mess, 'error');
+                    }
+                },
+                error: (xhr, text) => {
+                    icon.removeClass('fa-spinner fa-spin-pulse').addClass(orig);
+                    nvToast(text, 'error');
+                }
+            });
+        });
+    });
+
     // Danh sách các khối banner
     if (nv_func_name === 'plans-list') {
         // Kích hoạt / hủy kích hoạt khối
@@ -199,34 +230,34 @@ $(function() {
                 }
             });
         });
+    }
 
-        // Xóa khối banner
-        $('[data-toggle="del-plan"]').on('click', function(e) {
-            e.preventDefault();
+    // Trang thông tin chi tiết khối banner
+    if (nv_func_name === 'info-plan') {
+        // Đình chỉ / Kích hoạt khối banner
+        $('[data-toggle="change-act-plan"]').on('click', function() {
             const btn = $(this);
             const icon = $('i', btn);
             if (icon.is('.fa-spinner')) return;
-            nvConfirm(btn.data('msgconfirm'), () => {
-                const orig = icon.data('icon');
-                icon.removeClass(orig).addClass('fa-spinner fa-spin-pulse');
-                $.ajax({
-                    type: 'POST',
-                    url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=del_plan&nocache=' + new Date().getTime(),
-                    data: { id: btn.data('id'), checkss: btn.data('tokend') },
-                    dataType: 'json',
-                    success: (data) => {
+            const orig = icon.data('icon');
+            icon.removeClass(orig).addClass('fa-spinner fa-spin-pulse');
+            $.ajax({
+                type: 'POST',
+                url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=change_act_plan&nocache=' + new Date().getTime(),
+                data: { id: btn.data('id'), checkss: btn.data('tokend') },
+                dataType: 'json',
+                success: (data) => {
+                    if (data.status === 'OK' || data.status === 'ok') {
+                        location.reload();
+                    } else {
                         icon.removeClass('fa-spinner fa-spin-pulse').addClass(orig);
-                        if (data.status === 'OK' || data.status === 'ok') {
-                            location.reload();
-                        } else {
-                            nvToast(data.mess, 'error');
-                        }
-                    },
-                    error: (xhr, text) => {
-                        icon.removeClass('fa-spinner fa-spin-pulse').addClass(orig);
-                        nvToast(text, 'error');
+                        nvToast(data.mess, 'error');
                     }
-                });
+                },
+                error: (xhr, text) => {
+                    icon.removeClass('fa-spinner fa-spin-pulse').addClass(orig);
+                    nvToast(text, 'error');
+                }
             });
         });
     }

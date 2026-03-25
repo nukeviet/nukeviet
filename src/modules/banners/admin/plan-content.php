@@ -113,7 +113,7 @@ if ($nv_Request->isset_request('checkss', 'post')) {
         nv_jsonOutput([
             'status'   => 'OK',
             'mess'     => $nv_Lang->getGlobal('success_level'),
-            'redirect' => nv_url_rewrite(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=info_plan&id=' . $post_id, true),
+            'redirect' => nv_url_rewrite(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=info-plan&id=' . $post_id, true),
         ]);
     } else {
         $_sql = 'INSERT INTO ' . NV_BANNERS_GLOBALTABLE . '_plans (
@@ -138,7 +138,7 @@ if ($nv_Request->isset_request('checkss', 'post')) {
         nv_jsonOutput([
             'status'   => 'OK',
             'mess'     => $nv_Lang->getGlobal('success_level'),
-            'redirect' => nv_url_rewrite(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=info_plan&id=' . $id_new, true),
+            'redirect' => nv_url_rewrite(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=info-plan&id=' . $id_new, true),
         ]);
     }
 }

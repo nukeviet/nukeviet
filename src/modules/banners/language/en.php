@@ -184,3 +184,4 @@ $lang_module['admin_add_banner'] = 'Add banner';
 $lang_module['chart_data_empty'] = 'No clicks available';
 $lang_module['chart_lbl_clicks'] = 'Clicks';
 $lang_module['chart_lbl_total'] = 'Total';
+$lang_module['info_plan_banner_stat'] = 'Banners in this block';

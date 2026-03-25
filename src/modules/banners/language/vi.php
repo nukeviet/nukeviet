@@ -184,3 +184,4 @@ $lang_module['admin_add_banner'] = 'Thêm banner';
 $lang_module['chart_data_empty'] = 'Không có lượt click nào';
 $lang_module['chart_lbl_clicks'] = 'Lượt nhấp';
 $lang_module['chart_lbl_total'] = 'Tổng';
+$lang_module['info_plan_banner_stat'] = 'Thống kê quảng cáo trong khối';
