@@ -18,10 +18,11 @@ if (empty($mod) or !preg_match($global_config['check_module'], $mod)) {
     nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
 }
 
-$sth = $db->prepare('SELECT module_file, module_upload, custom_title, admin_file FROM ' . NV_MODULES_TABLE . ' WHERE title= :title');
-$sth->bindParam(':title', $mod, PDO::PARAM_STR);
-$sth->execute();
-$row = $sth->fetch();
+$stmt = $db->prepare('SELECT module_file, module_upload, custom_title, admin_file FROM ' . NV_MODULES_TABLE . ' WHERE title = :title');
+$stmt->bindValue(':title', $mod, PDO::PARAM_STR);
+$stmt->execute();
+$row = $stmt->fetch();
+$stmt->closeCursor();
 if (empty($row)) {
     nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
 }
@@ -34,9 +35,10 @@ $admin_file = (file_exists(NV_ROOTDIR . '/modules/' . $mod_file . '/admin.functi
 $is_delCache = false;
 
 if ($admin_file != (int) ($row['admin_file'])) {
-    $sth = $db->prepare('UPDATE ' . NV_MODULES_TABLE . ' SET admin_file=' . $admin_file . ' WHERE title= :title');
-    $sth->bindParam(':title', $mod, PDO::PARAM_STR);
-    $sth->execute();
+    $stmt = $db->prepare('UPDATE ' . NV_MODULES_TABLE . ' SET admin_file = :admin_file WHERE title = :title');
+    $stmt->bindValue(':admin_file', $admin_file, PDO::PARAM_INT);
+    $stmt->bindValue(':title', $mod, PDO::PARAM_STR);
+    $stmt->execute();
 
     $is_delCache = true;
 }
@@ -80,17 +82,20 @@ $arr_in_submenu = array_map('trim', explode(',', $module_version['submenu']));
 $data_funcs = [];
 $weight_list = [];
 
-$sth = $db->prepare('SELECT * FROM ' . NV_MODFUNCS_TABLE . ' WHERE in_module= :in_module ORDER BY subweight ASC');
-$sth->bindParam(':in_module', $mod, PDO::PARAM_STR);
-$sth->execute();
+$stmt = $db->prepare('SELECT * FROM ' . NV_MODFUNCS_TABLE . ' WHERE in_module = :in_module ORDER BY subweight ASC');
+$stmt->bindValue(':in_module', $mod, PDO::PARAM_STR);
+$stmt->execute();
 
-while ($row = $sth->fetch()) {
+while ($row = $stmt->fetch()) {
     $func = $row['func_name'];
     $show_func = in_array($func, $modfuncs, true) ? 1 : 0;
 
     if ($row['show_func'] != $show_func) {
         $row['show_func'] = $show_func;
-        $db->query('UPDATE ' . NV_MODFUNCS_TABLE . ' SET show_func=' . $show_func . ' WHERE func_id=' . $row['func_id']);
+        $stmt_upd = $db->prepare('UPDATE ' . NV_MODFUNCS_TABLE . ' SET show_func = :show_func WHERE func_id = :func_id');
+        $stmt_upd->bindValue(':show_func', $show_func, PDO::PARAM_INT);
+        $stmt_upd->bindValue(':func_id', $row['func_id'], PDO::PARAM_INT);
+        $stmt_upd->execute();
         $is_delCache = true;
     }
 
@@ -108,6 +113,7 @@ while ($row = $sth->fetch()) {
         $weight_list[] = $row['subweight'];
     }
 }
+$stmt->closeCursor();
 
 $act_funcs = array_intersect_key($data_funcs, $local_funcs);
 $old_funcs = array_diff_key($data_funcs, $local_funcs);
@@ -115,18 +121,18 @@ $new_funcs = array_diff_key($local_funcs, $data_funcs);
 
 $is_refresh = false;
 if (!empty($old_funcs)) {
-    $sth_del_weight = $db->prepare('DELETE FROM ' . NV_BLOCKS_TABLE . '_weight WHERE func_id = :func_id');
-    $sth_del_func = $db->prepare('DELETE FROM ' . NV_MODFUNCS_TABLE . ' WHERE func_id = :func_id');
-    $sth_del_theme = $db->prepare('DELETE FROM ' . NV_PREFIXLANG . '_modthemes WHERE func_id = :func_id');
+    $stmt_del_weight = $db->prepare('DELETE FROM ' . NV_BLOCKS_TABLE . '_weight WHERE func_id = :func_id');
+    $stmt_del_func = $db->prepare('DELETE FROM ' . NV_MODFUNCS_TABLE . ' WHERE func_id = :func_id');
+    $stmt_del_theme = $db->prepare('DELETE FROM ' . NV_PREFIXLANG . '_modthemes WHERE func_id = :func_id');
     foreach ($old_funcs as $values) {
-        $sth_del_weight->bindParam(':func_id', $values['func_id'], PDO::PARAM_INT);
-        $sth_del_weight->execute();
+        $stmt_del_weight->bindValue(':func_id', $values['func_id'], PDO::PARAM_INT);
+        $stmt_del_weight->execute();
 
-        $sth_del_func->bindParam(':func_id', $values['func_id'], PDO::PARAM_INT);
-        $sth_del_func->execute();
+        $stmt_del_func->bindValue(':func_id', $values['func_id'], PDO::PARAM_INT);
+        $stmt_del_func->execute();
 
-        $sth_del_theme->bindParam(':func_id', $values['func_id'], PDO::PARAM_INT);
-        $sth_del_theme->execute();
+        $stmt_del_theme->bindValue(':func_id', $values['func_id'], PDO::PARAM_INT);
+        $stmt_del_theme->execute();
         $is_delCache = true;
     }
 
@@ -150,7 +156,7 @@ if (!empty($new_funcs)) {
 
     $array_keys = array_keys($new_funcs);
 
-    $sth2 = $db->prepare('INSERT INTO ' . NV_PREFIXLANG . '_modthemes (func_id, layout, theme) VALUES (:func_id, :layout, :theme)');
+    $stmt2 = $db->prepare('INSERT INTO ' . NV_PREFIXLANG . '_modthemes (func_id, layout, theme) VALUES (:func_id, :layout, :theme)');
 
     foreach ($array_keys as $func) {
         $show_func = in_array($func, $modfuncs, true) ? 1 : 0;
@@ -164,13 +170,14 @@ if (!empty($new_funcs)) {
             $_sql = 'INSERT INTO ' . NV_MODFUNCS_TABLE . ' (func_name, alias, func_custom_name, in_module, show_func, in_submenu, subweight, setting) VALUES ( :func_name, :alias, :func_custom_name, :in_module, ' . $show_func . ", 0, 0, '')";
             $func_id = $db->insert_id($_sql, 'func_id', $data);
             if ($show_func) {
-                $sth2->bindParam(':func_id', $func_id, PDO::PARAM_INT);
-                $sth2->bindParam(':layout', $layoutdefault, PDO::PARAM_STR);
-                $sth2->bindParam(':theme', $mod_theme, PDO::PARAM_STR);
-                $sth2->execute();
+                $stmt2->bindValue(':func_id', $func_id, PDO::PARAM_INT);
+                $stmt2->bindValue(':layout', $layoutdefault, PDO::PARAM_STR);
+                $stmt2->bindValue(':theme', $mod_theme, PDO::PARAM_STR);
+                $stmt2->execute();
                 nv_setup_block_module($mod, $func_id);
             }
-        } catch (PDOException $e) {
+        } catch (Throwable $e) {
+            trigger_error($e);
         }
     }
 
@@ -184,10 +191,10 @@ if ($is_refresh) {
     $act_funcs = [];
     $weight_list = [];
 
-    $sth = $db->prepare('SELECT * FROM ' . NV_MODFUNCS_TABLE . ' WHERE in_module= :in_module AND show_func=1 ORDER BY subweight ASC');
-    $sth->bindParam(':in_module', $mod, PDO::PARAM_STR);
-    $sth->execute();
-    while ($row = $sth->fetch()) {
+    $stmt = $db->prepare('SELECT * FROM ' . NV_MODFUNCS_TABLE . ' WHERE in_module = :in_module AND show_func=1 ORDER BY subweight ASC');
+    $stmt->bindValue(':in_module', $mod, PDO::PARAM_STR);
+    $stmt->execute();
+    while ($row = $stmt->fetch()) {
         $func = $row['func_name'];
 
         $act_funcs[$func]['func_id'] = $row['func_id'];
@@ -202,6 +209,7 @@ if ($is_refresh) {
 
         $weight_list[] = $row['subweight'];
     }
+    $stmt->closeCursor();
 }
 
 if ($is_delCache) {

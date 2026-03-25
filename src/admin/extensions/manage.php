@@ -186,12 +186,18 @@ if (!empty($request['checkss']) and csrf_check($request['checkss'], $csrf_key . 
                     $config_ini .= "\t</positions>";
 
                     $array_layout_other = [];
-                    $result = $db->query('SELECT layout, in_module, func_name FROM ' . NV_PREFIXLANG . '_modthemes t1, ' . NV_MODFUNCS_TABLE . ' t2 WHERE t1.theme=' . $db->quote($row['basename']) . ' AND t1.func_id=t2.func_id AND t1.layout!=' . $db->quote($layoutdefault));
-                    while ($_scratch = $result->fetch(3)) {
+                    $stmt = $db->prepare('SELECT layout, in_module, func_name FROM ' . NV_PREFIXLANG . '_modthemes t1, ' . NV_MODFUNCS_TABLE . ' t2 WHERE t1.theme = :theme AND t1.func_id = t2.func_id AND t1.layout != :layout');
+                    $stmt->bindValue(':theme', $row['basename'], PDO::PARAM_STR);
+                    $stmt->bindValue(':layout', $layoutdefault, PDO::PARAM_STR);
+                    $stmt->execute();
+
+                    while ($_scratch = $stmt->fetch(3)) {
                         [$layout, $in_module, $func_name] = $_scratch;
                         unset($_scratch);
                         $array_layout_other[$layout][$in_module][] = $func_name;
                     }
+                    $stmt->closeCursor();
+
                     if (!empty($array_layout_other)) {
                         $config_ini .= "\n\n\t<setlayout>";
                         foreach ($array_layout_other as $layout => $array_layout_i) {
@@ -206,24 +212,29 @@ if (!empty($request['checkss']) and csrf_check($request['checkss'], $csrf_key . 
 
                     $array_layout_block = [];
                     $array_not_all_func = [];
-                    $result = $db->query('SELECT * FROM ' . NV_BLOCKS_TABLE . '_groups WHERE theme=' . $db->quote($row['basename']) . ' ORDER BY position ASC, weight ASC');
+                    $stmt = $db->prepare('SELECT * FROM ' . NV_BLOCKS_TABLE . '_groups WHERE theme = :theme ORDER BY position ASC, weight ASC');
+                    $stmt->bindValue(':theme', $row['basename'], PDO::PARAM_STR);
+                    $stmt->execute();
 
-                    while ($_row = $result->fetch()) {
+                    while ($_row = $stmt->fetch()) {
                         $array_layout_block[] = $_row;
                         if (empty($_row['all_func'])) {
                             $array_not_all_func[] = $_row['bid'];
                         }
                     }
+                    $stmt->closeCursor();
 
                     if (!empty($array_layout_block)) {
                         $array_block_func = [];
                         if (!empty($array_not_all_func)) {
-                            $result = $db->query('SELECT bid, func_name, in_module FROM ' . NV_BLOCKS_TABLE . '_weight t1, ' . NV_MODFUNCS_TABLE . ' t2 WHERE t1.bid IN (' . implode(',', $array_not_all_func) . ') AND t1.func_id=t2.func_id');
+                            $bids_str = implode(',', array_map('intval', $array_not_all_func));
+                            $result = $db->query('SELECT bid, func_name, in_module FROM ' . NV_BLOCKS_TABLE . '_weight t1, ' . NV_MODFUNCS_TABLE . ' t2 WHERE t1.bid IN (' . $bids_str . ') AND t1.func_id = t2.func_id');
                             while ($_scratch = $result->fetch(3)) {
                                 [$bid, $func_name, $in_module] = $_scratch;
                                 unset($_scratch);
                                 $array_block_func[$bid][$in_module][] = $func_name;
                             }
+                            $result->closeCursor();
                         }
 
                         $config_ini .= "\n\n\t<setblocks>";
@@ -354,22 +365,23 @@ if (!empty($request['checkss']) and csrf_check($request['checkss'], $csrf_key . 
         if ($row['type'] == 'module' && preg_match($global_config['check_module'], $request['title'])) {
             $module_exit = [];
 
-            $result = $db->query('SELECT lang FROM ' . $db_config['prefix'] . '_setup_language WHERE setup=1');
+            $result = $db->query('SELECT lang FROM ' . $db_config['prefix'] . '_setup_language WHERE setup = 1');
             while ($_scratch = $result->fetch(3)) {
                 [$lang_i] = $_scratch;
                 unset($_scratch);
-                $sth = $db->prepare('SELECT COUNT(*) FROM ' . $db_config['prefix'] . '_' . $lang_i . '_modules WHERE module_file= :module_file');
-                $sth->bindParam(':module_file', $request['title'], PDO::PARAM_STR);
+                $sth = $db->prepare('SELECT COUNT(*) FROM ' . $db_config['prefix'] . '_' . $lang_i . '_modules WHERE module_file = :module_file');
+                $sth->bindValue(':module_file', $request['title'], PDO::PARAM_STR);
                 $sth->execute();
                 if ($sth->fetchColumn()) {
                     $module_exit[] = $lang_i;
                 }
             }
+            $result->closeCursor();
 
             if (empty($module_exit)) {
-                $sth = $db->prepare('SELECT COUNT(*) FROM ' . $db_config['prefix'] . '_setup_extensions WHERE basename= :basename AND title!= :title AND type=\'module\'');
-                $sth->bindParam(':basename', $request['title'], PDO::PARAM_STR);
-                $sth->bindParam(':title', $request['title'], PDO::PARAM_STR);
+                $sth = $db->prepare('SELECT COUNT(*) FROM ' . $db_config['prefix'] . '_setup_extensions WHERE basename = :basename AND title != :title AND type = \'module\'');
+                $sth->bindValue(':basename', $request['title'], PDO::PARAM_STR);
+                $sth->bindValue(':title', $request['title'], PDO::PARAM_STR);
                 $sth->execute();
 
                 if ($sth->fetchColumn()) {
@@ -382,21 +394,23 @@ if (!empty($request['checkss']) and csrf_check($request['checkss'], $csrf_key . 
                 $result = $db->query('SELECT * FROM ' . $db_config['dbsystem'] . '.' . $db_config['prefix'] . '_site ORDER BY domain ASC');
                 while ($row = $result->fetch()) {
                     try {
-                        $result2 = $db->query('SELECT lang FROM ' . $row['dbsite'] . '.' . $db_config['prefix'] . '_setup_language WHERE setup=1');
+                        $result2 = $db->query('SELECT lang FROM ' . $row['dbsite'] . '.' . $db_config['prefix'] . '_setup_language WHERE setup = 1');
                         while ($_scratch = $result2->fetch(3)) {
                             [$lang_i] = $_scratch;
                             unset($_scratch);
-                            $sth = $db->prepare('SELECT COUNT(*) FROM ' . $row['dbsite'] . '.' . $db_config['prefix'] . '_' . $lang_i . '_modules WHERE module_file= :module_file');
-                            $sth->bindParam(':module_file', $request['title'], PDO::PARAM_STR);
+                            $sth = $db->prepare('SELECT COUNT(*) FROM ' . $row['dbsite'] . '.' . $db_config['prefix'] . '_' . $lang_i . '_modules WHERE module_file = :module_file');
+                            $sth->bindValue(':module_file', $request['title'], PDO::PARAM_STR);
                             $sth->execute();
                             if ($sth->fetchColumn()) {
                                 $module_exit[] = $row['title'] . ' :' . $lang_i;
                             }
                         }
+                        $result2->closeCursor();
                     } catch (PDOException $e) {
                         // Nothinh
                     }
                 }
+                $result->closeCursor();
             }
 
             if (empty($module_exit)) {
@@ -437,28 +451,27 @@ if (!empty($request['checkss']) and csrf_check($request['checkss'], $csrf_key . 
 
             $sql_theme = (preg_match($global_config['check_theme_mobile'], $request['title'])) ? 'mobile' : 'theme';
 
-            $result = $db->query('SELECT lang FROM ' . $db_config['prefix'] . '_setup_language where setup = 1');
+            $result = $db->query('SELECT lang FROM ' . $db_config['prefix'] . '_setup_language WHERE setup = 1');
             while ($_scratch = $result->fetch(3)) {
                 [$lang_i] = $_scratch;
                 unset($_scratch);
                 $module_array = [];
 
-                $sth = $db->prepare('SELECT title, custom_title
-                    FROM ' . $db_config['prefix'] . '_' . $lang_i . '_modules
-                    WHERE ' . $sql_theme . ' = :theme
-                    ORDER BY weight ASC');
-                $sth->bindParam(':theme', $request['title'], PDO::PARAM_STR);
+                $sth = $db->prepare('SELECT title, custom_title FROM ' . $db_config['prefix'] . '_' . $lang_i . '_modules WHERE ' . $sql_theme . ' = :theme ORDER BY weight ASC');
+                $sth->bindValue(':theme', $request['title'], PDO::PARAM_STR);
                 $sth->execute();
                 while ($_scratch = $sth->fetch(3)) {
                     [$title, $custom_title] = $_scratch;
                     unset($_scratch);
                     $module_array[] = $custom_title;
                 }
+                $sth->closeCursor();
 
                 if (!empty($module_array)) {
                     $lang_module_array[] = $lang_i . ': ' . implode(', ', $module_array);
                 }
             }
+            $result->closeCursor();
 
             if (!empty($lang_module_array)) {
                 nv_jsonOutput([
@@ -470,22 +483,23 @@ if (!empty($request['checkss']) and csrf_check($request['checkss'], $csrf_key . 
             nv_deletefile(NV_ROOTDIR . '/themes/' . $request['title'], true);
 
             if (!file_exists(NV_ROOTDIR . '/themes/' . $request['title'])) {
-                $result = $db->query('SELECT lang FROM ' . $db_config['prefix'] . '_setup_language WHERE setup=1');
+                $result = $db->query('SELECT lang FROM ' . $db_config['prefix'] . '_setup_language WHERE setup = 1');
                 while ($_scratch = $result->fetch(3)) {
                     [$_lang] = $_scratch;
                     unset($_scratch);
                     $sth = $db->prepare('DELETE FROM ' . $db_config['prefix'] . '_' . $_lang . '_modthemes WHERE theme = :theme');
-                    $sth->bindParam(':theme', $request['title'], PDO::PARAM_STR);
+                    $sth->bindValue(':theme', $request['title'], PDO::PARAM_STR);
                     $sth->execute();
 
-                    $sth = $db->prepare('DELETE FROM ' . $db_config['prefix'] . '_' . $_lang . '_blocks_weight WHERE bid IN (SELECT bid FROM ' . $db_config['prefix'] . '_' . $_lang . '_blocks_groups WHERE theme= :theme)');
-                    $sth->bindParam(':theme', $request['title'], PDO::PARAM_STR);
+                    $sth = $db->prepare('DELETE FROM ' . $db_config['prefix'] . '_' . $_lang . '_blocks_weight WHERE bid IN (SELECT bid FROM ' . $db_config['prefix'] . '_' . $_lang . '_blocks_groups WHERE theme = :theme)');
+                    $sth->bindValue(':theme', $request['title'], PDO::PARAM_STR);
                     $sth->execute();
 
                     $sth = $db->prepare('DELETE FROM ' . $db_config['prefix'] . '_' . $_lang . '_blocks_groups WHERE theme = :theme');
-                    $sth->bindParam(':theme', $request['title'], PDO::PARAM_STR);
+                    $sth->bindValue(':theme', $request['title'], PDO::PARAM_STR);
                     $sth->execute();
                 }
+                $result->closeCursor();
                 $nv_Cache->delMod('themes');
                 $nv_Cache->delMod('sys');
 
@@ -597,6 +611,7 @@ $array_langs = [];
 while ($row = $result->fetch()) {
     $array_langs[$row['lang']] = $row['lang'];
 }
+$result->closeCursor();
 
 // Array modules exists
 $array_modules_exists = [];
@@ -608,6 +623,7 @@ foreach ($array_langs as $lang) {
     while ($row = $result->fetch()) {
         $array_modules_exists[$row['module_file']] = $row['module_file'];
     }
+    $result->closeCursor();
 }
 
 // Array themes exists
@@ -623,6 +639,7 @@ foreach ($array_langs as $lang) {
     while ($row = $result->fetch()) {
         $array_blocks_exists[$row['file_name']] = $row['file_name'];
     }
+    $result->closeCursor();
 }
 
 // Array crons exists
@@ -635,19 +652,24 @@ foreach ($array_langs as $lang) {
     while ($row = $result->fetch()) {
         $array_crons_exists[$row['run_file']] = $row['run_file'];
     }
+    $result->closeCursor();
 }
 
 // Danh sách các ứng dụng trong CSDL
 $sql = 'SELECT * FROM ' . $db_config['prefix'] . '_setup_extensions WHERE title=basename';
 if (in_array($selecttype, $array_extType, true)) {
-    $sql .= ' AND type = ' . $db->quote($selecttype);
+    $sql .= ' AND type = :type';
     $page_title .= ': ' . $nv_Lang->getModule('extType_' . $selecttype);
 }
 $sql .= ' ORDER BY addtime DESC';
-$result = $db->query($sql);
+$stmt = $db->prepare($sql);
+if (in_array($selecttype, $array_extType, true)) {
+    $stmt->bindValue(':type', $selecttype, PDO::PARAM_STR);
+}
+$stmt->execute();
 
 $array_parse = [];
-while ($row = $result->fetch()) {
+while ($row = $stmt->fetch()) {
     if ($row['type'] == 'theme') {
         $array_themes_indb[] = $row['basename'];
     }
@@ -679,6 +701,7 @@ while ($row = $result->fetch()) {
 
     $array_parse[] = $row;
 }
+$stmt->closeCursor();
 
 // Thêm các module trong quản trị
 if ($selecttype == '' or $selecttype == 'admin') {
@@ -702,6 +725,9 @@ if ($selecttype == '' or $selecttype == 'theme') {
     $theme_list = nv_scandir(NV_ROOTDIR . '/themes/', $global_config['check_theme']);
     $theme_mobile_list = nv_scandir(NV_ROOTDIR . '/themes/', $global_config['check_theme_mobile']);
     $theme_list = array_merge($theme_list, $theme_mobile_list);
+
+    $stmt_insert = $db->prepare('INSERT INTO ' . $db_config['prefix'] . '_setup_extensions VALUES (0, \'theme\', :title, 0, 0, :basename, :table_prefix, :version, ' . NV_CURRENTTIME . ', :author, :note)');
+
     foreach ($theme_list as $_theme) {
         if (!in_array($_theme, $array_themes_indb, true) and file_exists(NV_ROOTDIR . '/themes/' . $_theme . '/config.ini')) {
             if ($xml = @simplexml_load_file(NV_ROOTDIR . '/themes/' . $_theme . '/config.ini')) {
@@ -723,15 +749,13 @@ if ($selecttype == '' or $selecttype == 'theme') {
                 ];
 
                 // Save to database
-                $sql = 'INSERT INTO ' . $db_config['prefix'] . '_setup_extensions VALUES( 0, \'theme\', :title, 0, 0, :basename, :table_prefix, :version, ' . NV_CURRENTTIME . ', :author, :note )';
-                $sth = $db->prepare($sql);
-                $sth->bindParam(':title', $_theme, PDO::PARAM_STR);
-                $sth->bindParam(':basename', $_theme, PDO::PARAM_STR);
-                $sth->bindParam(':author', $author, PDO::PARAM_STR);
-                $sth->bindParam(':table_prefix', $table_prefix, PDO::PARAM_STR);
-                $sth->bindParam(':version', $version, PDO::PARAM_STR);
-                $sth->bindParam(':note', $note, PDO::PARAM_STR);
-                $sth->execute();
+                $stmt_insert->bindValue(':title', $_theme, PDO::PARAM_STR);
+                $stmt_insert->bindValue(':basename', $_theme, PDO::PARAM_STR);
+                $stmt_insert->bindValue(':author', $author, PDO::PARAM_STR);
+                $stmt_insert->bindValue(':table_prefix', $table_prefix, PDO::PARAM_STR);
+                $stmt_insert->bindValue(':version', $version, PDO::PARAM_STR);
+                $stmt_insert->bindValue(':note', $note, PDO::PARAM_STR);
+                $stmt_insert->execute();
 
                 $is_reload = true;
             }

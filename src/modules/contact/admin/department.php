@@ -218,8 +218,8 @@ if (defined('NV_IS_SPADMIN')) {
                             'mess' => $nv_Lang->getGlobal('error_code_11')
                         ]);
                     }
-                } catch (PDOException $e) {
-                    trigger_error($e->getMessage());
+                } catch (Throwable $e) {
+                    trigger_error($e);
                 }
             } else {
                 if (!empty($department['image']) and is_file(NV_UPLOADS_REAL_DIR . '/' . $module_upload . '/' . $department['image'])) {

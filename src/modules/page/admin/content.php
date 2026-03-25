@@ -205,8 +205,8 @@ if ($nv_Request->isset_request('checkss', 'post')) {
             $respon['mess'] = $nv_Lang->getModule('errorsave');
             nv_jsonOutput($respon);
         }
-    } catch (PDOException $e) {
-        trigger_error(print_r($e, true));
+    } catch (Throwable $e) {
+        trigger_error($e);
         $respon['mess'] = $nv_Lang->getModule('errorsave');
         nv_jsonOutput($respon);
     }

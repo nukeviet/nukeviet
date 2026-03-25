@@ -28,10 +28,12 @@ if (!csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key . '_' . $m
     ]);
 }
 
-$sth = $db->prepare('SELECT act, module_file FROM ' . NV_MODULES_TABLE . ' WHERE title= :title');
-$sth->bindParam(':title', $mod, PDO::PARAM_STR);
-$sth->execute();
-$row = $sth->fetch();
+$stmt = $db->prepare('SELECT act, module_file FROM ' . NV_MODULES_TABLE . ' WHERE title = :title');
+$stmt->bindValue(':title', $mod, PDO::PARAM_STR);
+$stmt->execute();
+$row = $stmt->fetch();
+$stmt->closeCursor();
+
 if (empty($row)) {
     nv_jsonOutput([
         'success' => 0,
@@ -57,9 +59,10 @@ if ($act == 0 and $mod == $global_config['site_home_module']) {
     ]);
 }
 
-$sth = $db->prepare('UPDATE ' . NV_MODULES_TABLE . ' SET act=' . $act . ' WHERE title= :title');
-$sth->bindParam(':title', $mod, PDO::PARAM_STR);
-$sth->execute();
+$stmt = $db->prepare('UPDATE ' . NV_MODULES_TABLE . ' SET act = :act WHERE title = :title');
+$stmt->bindValue(':act', $act, PDO::PARAM_INT);
+$stmt->bindValue(':title', $mod, PDO::PARAM_STR);
+$stmt->execute();
 
 $nv_Cache->delMod('modules');
 

@@ -23,8 +23,10 @@ if ($nv_Request->isset_request('new_weight', 'post')) {
 
     $catid = $nv_Request->get_int('catid', 'post', 0);
 
-    $sql = 'SELECT catid FROM ' . NV_EMAILTEMPLATES_GLOBALTABLE . '_categories WHERE catid=' . $catid;
-    $catid = $db->query($sql)->fetchColumn();
+    $stmt = $db->prepare('SELECT catid FROM ' . NV_EMAILTEMPLATES_GLOBALTABLE . '_categories WHERE catid = :catid');
+    $stmt->bindValue(':catid', $catid, PDO::PARAM_INT);
+    $stmt->execute();
+    $catid = $stmt->fetchColumn();
     if (empty($catid)) {
         exit('NO_' . $catid);
     }
@@ -34,22 +36,29 @@ if ($nv_Request->isset_request('new_weight', 'post')) {
         exit('NO_' . $module_name);
     }
 
-    $sql = 'SELECT catid FROM ' . NV_EMAILTEMPLATES_GLOBALTABLE . '_categories WHERE catid!=' . $catid . ' ORDER BY weight ASC';
-    $result = $db->query($sql);
+    $stmt = $db->prepare('SELECT catid FROM ' . NV_EMAILTEMPLATES_GLOBALTABLE . '_categories WHERE catid != :catid ORDER BY weight ASC');
+    $stmt->bindValue(':catid', $catid, PDO::PARAM_INT);
+    $stmt->execute();
+
+    $stmt_update = $db->prepare('UPDATE ' . NV_EMAILTEMPLATES_GLOBALTABLE . '_categories SET weight = :weight WHERE catid = :catid');
 
     $weight = 0;
-    while ($row = $result->fetch()) {
+    while ($row = $stmt->fetch()) {
         ++$weight;
         if ($weight == $new_weight) {
             ++$weight;
         }
 
-        $sql = 'UPDATE ' . NV_EMAILTEMPLATES_GLOBALTABLE . '_categories SET weight=' . $weight . ' WHERE catid=' . $row['catid'];
-        $db->query($sql);
+        $stmt_update->bindValue(':weight', $weight, PDO::PARAM_INT);
+        $stmt_update->bindValue(':catid', $row['catid'], PDO::PARAM_INT);
+        $stmt_update->execute();
     }
+    $stmt->closeCursor();
 
-    $sql = 'UPDATE ' . NV_EMAILTEMPLATES_GLOBALTABLE . '_categories SET weight=' . $new_weight . ' WHERE catid=' . $catid;
-    $db->query($sql);
+    $stmt_update2 = $db->prepare('UPDATE ' . NV_EMAILTEMPLATES_GLOBALTABLE . '_categories SET weight = :weight WHERE catid = :catid');
+    $stmt_update2->bindValue(':weight', $new_weight, PDO::PARAM_INT);
+    $stmt_update2->bindValue(':catid', $catid, PDO::PARAM_INT);
+    $stmt_update2->execute();
 
     $nv_Cache->delMod($module_name);
 
@@ -66,29 +75,39 @@ if ($nv_Request->isset_request('delcat', 'post')) {
 
     $catid = $nv_Request->get_int('catid', 'post', 0);
 
-    $sql = 'SELECT catid, is_system FROM ' . NV_EMAILTEMPLATES_GLOBALTABLE . '_categories WHERE catid=' . $catid;
-    $row = $db->query($sql)->fetch();
+    $stmt = $db->prepare('SELECT catid, is_system FROM ' . NV_EMAILTEMPLATES_GLOBALTABLE . '_categories WHERE catid = :catid');
+    $stmt->bindValue(':catid', $catid, PDO::PARAM_INT);
+    $stmt->execute();
+    $row = $stmt->fetch();
+    $stmt->closeCursor();
 
     if (empty($row) or $row['is_system']) {
         exit('NO_' . $catid);
     }
 
-    $sql = 'DELETE FROM ' . NV_EMAILTEMPLATES_GLOBALTABLE . '_categories WHERE catid = ' . $catid;
+    $stmt = $db->prepare('DELETE FROM ' . NV_EMAILTEMPLATES_GLOBALTABLE . '_categories WHERE catid = :catid');
+    $stmt->bindValue(':catid', $catid, PDO::PARAM_INT);
 
-    if ($db->exec($sql)) {
+    if ($stmt->execute() and $stmt->rowCount()) {
         nv_insert_logs(NV_LANG_DATA, $module_name, 'Delete cat', 'ID: ' . $catid, $admin_info['userid']);
 
         $sql = 'SELECT catid FROM ' . NV_EMAILTEMPLATES_GLOBALTABLE . '_categories ORDER BY weight ASC';
         $result = $db->query($sql);
         $weight = 0;
 
+        $stmt_update = $db->prepare('UPDATE ' . NV_EMAILTEMPLATES_GLOBALTABLE . '_categories SET weight = :weight WHERE catid = :catid');
+
         while ($row = $result->fetch()) {
             ++$weight;
-            $sql = 'UPDATE ' . NV_EMAILTEMPLATES_GLOBALTABLE . '_categories SET weight=' . $weight . ' WHERE catid=' . $row['catid'];
-            $db->query($sql);
+            $stmt_update->bindValue(':weight', $weight, PDO::PARAM_INT);
+            $stmt_update->bindValue(':catid', $row['catid'], PDO::PARAM_INT);
+            $stmt_update->execute();
         }
+        $result->closeCursor();
 
-        $db->query('UPDATE ' . NV_EMAILTEMPLATES_GLOBALTABLE . ' SET catid = 0 WHERE catid =' . $catid);
+        $stmt_update = $db->prepare('UPDATE ' . NV_EMAILTEMPLATES_GLOBALTABLE . ' SET catid = 0 WHERE catid = :catid');
+        $stmt_update->bindValue(':catid', $catid, PDO::PARAM_INT);
+        $stmt_update->execute();
 
         $nv_Cache->delMod($module_name);
     } else {
@@ -106,9 +125,11 @@ $error = '';
 $catid = $nv_Request->get_int('catid', 'post,get', 0);
 
 if (!empty($catid)) {
-    $sql = 'SELECT catid, status, ' . NV_LANG_DATA . '_title title FROM ' . NV_EMAILTEMPLATES_GLOBALTABLE . '_categories WHERE catid = ' . $catid;
-    $result = $db->query($sql);
-    $data = $result->fetch();
+    $stmt = $db->prepare('SELECT catid, status, ' . NV_LANG_DATA . '_title title FROM ' . NV_EMAILTEMPLATES_GLOBALTABLE . '_categories WHERE catid = :catid');
+    $stmt->bindValue(':catid', $catid, PDO::PARAM_INT);
+    $stmt->execute();
+    $data = $stmt->fetch();
+    $stmt->closeCursor();
 
     if (empty($data)) {
         $url = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op;
@@ -162,6 +183,7 @@ if ($nv_Request->isset_request('saveform', 'post')) {
                 $sql = 'SELECT MAX(weight) weight FROM ' . NV_EMAILTEMPLATES_GLOBALTABLE . '_categories';
                 $result = $db->query($sql);
                 $weight = $result->fetch();
+                $result->closeCursor();
                 $weight = $weight['weight'] + 1;
 
                 $field_title = $field_value = '';
@@ -207,8 +229,8 @@ if ($nv_Request->isset_request('saveform', 'post')) {
                     $error = $nv_Lang->getModule('errorsave');
                 }
             } catch (Throwable $e) {
-                trigger_error(print_r($e, true));
-                $error = $nv_Lang->getModule('errorsave');
+                trigger_error($e);
+                $error = $e->getMessage();
             }
         }
     }

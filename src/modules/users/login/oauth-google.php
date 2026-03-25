@@ -57,9 +57,9 @@ if ($nv_Request->get_title('state', 'get', '') !== $nv_Request->get_title('oauth
             'picture_mode' => 0, // 0: Remote picture
             'current_mode' => 3
         ];
-    } catch (Exception $e) {
+    } catch (Throwable $e) {
         $attribs = ['result' => 'notlogin'];
-        trigger_error($e->getMessage());
+        trigger_error($e);
     }
 }
 

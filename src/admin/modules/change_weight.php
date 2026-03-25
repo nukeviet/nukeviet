@@ -30,10 +30,12 @@ if (!csrf_check($nv_Request->get_string('checkss', 'post'), $admin_info['admin_i
     ]);
 }
 
-$sth = $db->prepare('SELECT weight FROM ' . NV_MODULES_TABLE . ' WHERE title= :title');
-$sth->bindParam(':title', $mod, PDO::PARAM_STR);
-$sth->execute();
-$row = $sth->fetch();
+$stmt = $db->prepare('SELECT weight FROM ' . NV_MODULES_TABLE . ' WHERE title = :title');
+$stmt->bindValue(':title', $mod, PDO::PARAM_STR);
+$stmt->execute();
+$row = $stmt->fetch();
+$stmt->closeCursor();
+
 if (empty($row)) {
     nv_jsonOutput([
         'success' => 0,
@@ -41,27 +43,28 @@ if (empty($row)) {
     ]);
 }
 
-$sth = $db->prepare('SELECT title FROM ' . NV_MODULES_TABLE . ' WHERE title != :title ORDER BY weight ASC');
-$sth->bindParam(':title', $mod, PDO::PARAM_STR);
-$sth->execute();
+$stmt_sel = $db->prepare('SELECT title FROM ' . NV_MODULES_TABLE . ' WHERE title != :title ORDER BY weight ASC');
+$stmt_sel->bindValue(':title', $mod, PDO::PARAM_STR);
+$stmt_sel->execute();
 
 $weight = 0;
-while ($row = $sth->fetch()) {
+$stmt_upd = $db->prepare('UPDATE ' . NV_MODULES_TABLE . ' SET weight = :weight WHERE title = :title');
+
+while ($row = $stmt_sel->fetch()) {
     ++$weight;
     if ($weight == $new_weight) {
         ++$weight;
     }
 
-    $sth2 = $db->prepare('UPDATE ' . NV_MODULES_TABLE . ' SET weight = :weight WHERE title = :title');
-    $sth2->bindParam(':weight', $weight, PDO::PARAM_INT);
-    $sth2->bindParam(':title', $row['title'], PDO::PARAM_STR);
-    $sth2->execute();
+    $stmt_upd->bindValue(':weight', $weight, PDO::PARAM_INT);
+    $stmt_upd->bindValue(':title', $row['title'], PDO::PARAM_STR);
+    $stmt_upd->execute();
 }
+$stmt_sel->closeCursor();
 
-$sth2 = $db->prepare('UPDATE ' . NV_MODULES_TABLE . ' SET weight = :weight WHERE title = :title');
-$sth2->bindParam(':weight', $new_weight, PDO::PARAM_INT);
-$sth2->bindParam(':title', $mod, PDO::PARAM_STR);
-$sth2->execute();
+$stmt_upd->bindValue(':weight', $new_weight, PDO::PARAM_INT);
+$stmt_upd->bindValue(':title', $mod, PDO::PARAM_STR);
+$stmt_upd->execute();
 
 $nv_Cache->delMod('modules');
 nv_insert_logs(NV_LANG_DATA, $module_name, $nv_Lang->getModule('weight') . ' module: ' . $mod, $weight . ' -> ' . $new_weight, $admin_info['userid']);

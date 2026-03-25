@@ -19,10 +19,11 @@ if (!$nv_Request->isset_request('id', 'post,get')) {
 
 $id = $nv_Request->get_int('id', 'post,get', 0);
 
-$sth = $db->prepare('SELECT f.func_name AS func_title, f.func_custom_name AS func_custom_title, f.alias AS fun_alias, m.custom_title AS mod_custom_title FROM ' . NV_MODFUNCS_TABLE . ' AS f, ' . NV_MODULES_TABLE . ' AS m WHERE f.func_id = :id AND f.in_module = m.title');
-$sth->bindParam(':id', $id, PDO::PARAM_INT);
-$sth->execute();
-$row = $sth->fetch();
+$stmt = $db->prepare('SELECT f.func_name AS func_title, f.func_custom_name AS func_custom_title, f.alias AS fun_alias, m.custom_title AS mod_custom_title FROM ' . NV_MODFUNCS_TABLE . ' AS f, ' . NV_MODULES_TABLE . ' AS m WHERE f.func_id = :id AND f.in_module = m.title');
+$stmt->bindValue(':id', $id, PDO::PARAM_INT);
+$stmt->execute();
+$row = $stmt->fetch();
+$stmt->closeCursor();
 
 if (!csrf_check($nv_Request->get_string('checkss', 'post'), $admin_info['admin_id'] . '_' . $module_name . '_show')) {
     nv_jsonOutput([
@@ -47,10 +48,10 @@ if ($nv_Request->get_int('save', 'post') == '1') {
     $fun_alias = strtolower(change_alias($fun_alias));
 
     if ($fun_alias != $row['fun_alias']) {
-        $sth = $db->prepare('UPDATE ' . NV_MODFUNCS_TABLE . ' SET alias = :alias WHERE func_id = :id');
-        $sth->bindParam(':alias', $fun_alias, PDO::PARAM_STR);
-        $sth->bindParam(':id', $id, PDO::PARAM_INT);
-        $sth->execute();
+        $stmt = $db->prepare('UPDATE ' . NV_MODFUNCS_TABLE . ' SET alias = :alias WHERE func_id = :id');
+        $stmt->bindValue(':alias', $fun_alias, PDO::PARAM_STR);
+        $stmt->bindValue(':id', $id, PDO::PARAM_INT);
+        $stmt->execute();
 
         $nv_Cache->delMod('modules');
     }

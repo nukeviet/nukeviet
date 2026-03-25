@@ -104,7 +104,7 @@ if ($nv_Request->isset_request('ajax', 'post')) {
                 try {
                     $db->query('DELETE FROM ' . NV_MOD_TABLE . '_reg WHERE userid IN(' . $respon['useriddel'] . ')');
                 } catch (Throwable $e) {
-                    trigger_error(print_r($e, true));
+                    trigger_error($e);
                 }
             }
         }

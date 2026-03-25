@@ -83,9 +83,11 @@ $copyid = $nv_Request->get_absint('copyid', 'post,get', 0);
 $error = [];
 
 if ($emailid or $copyid) {
-    $sql = 'SELECT * FROM ' . NV_EMAILTEMPLATES_GLOBALTABLE . ' WHERE emailid = ' . ($emailid ? $emailid : $copyid);
-    $result = $db->query($sql);
-    $array = $result->fetch();
+    $stmt = $db->prepare('SELECT * FROM ' . NV_EMAILTEMPLATES_GLOBALTABLE . ' WHERE emailid = :emailid');
+    $stmt->bindValue(':emailid', ($emailid ? $emailid : $copyid), PDO::PARAM_INT);
+    $stmt->execute();
+    $array = $stmt->fetch();
+    $stmt->closeCursor();
 
     if (empty($array)) {
         nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
@@ -444,43 +446,58 @@ if ($nv_Request->isset_request('saveform', 'post') and csrf_check($nv_Request->g
                 } else {
                     nv_insert_logs(NV_LANG_DATA, $module_name, 'Add Email Template', 'ID: ' . $new_emailid, $admin_info['userid']);
 
-                    $sql = "UPDATE " . NV_EMAILTEMPLATES_GLOBALTABLE . " SET id=" . $new_emailid . " WHERE emailid=" . $new_emailid;
-                    $db->query($sql);
+                    $stmt_update = $db->prepare('UPDATE ' . NV_EMAILTEMPLATES_GLOBALTABLE . ' SET id = :id WHERE emailid = :emailid');
+                    $stmt_update->bindValue(':id', $new_emailid, PDO::PARAM_INT);
+                    $stmt_update->bindValue(':emailid', $new_emailid, PDO::PARAM_INT);
+                    $stmt_update->execute();
                 }
 
                 // Thực hiện cập nhật cho các mẫu khác
                 if (!empty($update_for) and isset($update_for[$array['update_for']]) and $array['update_for'] != 4) {
-                    $sql = "SELECT emailid, lang FROM " . NV_EMAILTEMPLATES_GLOBALTABLE . " WHERE emailid!=" . $array['emailid'] . " AND
-                    id=" . $array['id'] . " AND ";
+                    $sql = "SELECT emailid, lang FROM " . NV_EMAILTEMPLATES_GLOBALTABLE . " WHERE emailid != :emailid AND id = :id AND ";
                     if ($array['update_for'] == 1) {
                         // Tất cả
-                        $sql .= 'module_file=' . $db->quote($array['module_file']) . " AND module_file!=''";
+                        $sql .= "module_file = :module_file AND module_file != ''";
                     } elseif ($array['update_for'] == 2) {
                         // Cùng ngôn ngữ
-                        $sql .= "lang=" . $db->quote($array['lang']) . " AND lang!='' AND module_file=" . $db->quote($array['module_file']) . " AND module_file!=''";
+                        $sql .= "lang = :lang AND lang != '' AND module_file = :module_file AND module_file != ''";
                     } else {
                         // Cùng tên
-                        $sql .= "module_file=" . $db->quote($array['module_file']) . " AND module_file!='' AND module_name=" . $db->quote($array['module_name']) . " AND module_name!=''";
+                        $sql .= "module_file = :module_file AND module_file != '' AND module_name = :module_name AND module_name != ''";
                     }
-                    $result = $db->query($sql);
+                    $stmt_select = $db->prepare($sql);
+                    $stmt_select->bindValue(':emailid', $array['emailid'], PDO::PARAM_INT);
+                    $stmt_select->bindValue(':id', $array['id'], PDO::PARAM_INT);
+                    if ($array['update_for'] == 1) {
+                        $stmt_select->bindValue(':module_file', $array['module_file'], PDO::PARAM_STR);
+                    } elseif ($array['update_for'] == 2) {
+                        $stmt_select->bindValue(':lang', $array['lang'], PDO::PARAM_STR);
+                        $stmt_select->bindValue(':module_file', $array['module_file'], PDO::PARAM_STR);
+                    } else {
+                        $stmt_select->bindValue(':module_file', $array['module_file'], PDO::PARAM_STR);
+                        $stmt_select->bindValue(':module_name', $array['module_name'], PDO::PARAM_STR);
+                    }
+                    $stmt_select->execute();
 
-                    while ($row = $result->fetch()) {
-                        $sql = 'UPDATE ' . NV_EMAILTEMPLATES_GLOBALTABLE . ' SET
-                            time_update = ' . NV_CURRENTTIME . ',
-                            default_subject = :default_subject,
-                            default_content = :default_content';
-                        foreach ($global_config['setup_langs'] as $lang) {
-                            $sql .= ', ' . $lang . '_title = :' . $lang . '_title,
-                            ' . $lang . '_subject = :' . $lang . '_subject,
-                            ' . $lang . '_content = :' . $lang . '_content';
-                        }
-                        $sql .= ' WHERE emailid=' . $row['emailid'];
-                        $sth = $db->prepare($sql);
+                    $sql_update = 'UPDATE ' . NV_EMAILTEMPLATES_GLOBALTABLE . ' SET
+                        time_update = ' . NV_CURRENTTIME . ',
+                        default_subject = :default_subject,
+                        default_content = :default_content';
+                    foreach ($global_config['setup_langs'] as $lang) {
+                        $sql_update .= ', ' . $lang . '_title = :' . $lang . '_title,
+                        ' . $lang . '_subject = :' . $lang . '_subject,
+                        ' . $lang . '_content = :' . $lang . '_content';
+                    }
+                    $sql_update .= ' WHERE emailid = :emailid';
 
+                    $sth = $db->prepare($sql_update);
+
+                    while ($row = $stmt_select->fetch()) {
                         // Chuyển mặc định của ngôn ngữ đích thành tương ứng ngôn ngữ nguồn nếu có. Hoặc là mặc định của nguồn
                         $d_subject = !empty($array['subject'][$row['lang']]) ? $array['subject'][$row['lang']] : $array['default_subject'];
                         $d_content = !empty($array['content'][$row['lang']]) ? nv_editor_nl2br($array['content'][$row['lang']]) : $default_content;
 
+                        $sth->bindValue(':emailid', $row['emailid'], PDO::PARAM_INT);
                         $sth->bindValue(':default_subject', $d_subject, PDO::PARAM_STR);
                         $sth->bindValue(':default_content', $d_content, PDO::PARAM_STR);
 
@@ -510,7 +527,7 @@ if ($nv_Request->isset_request('saveform', 'post') and csrf_check($nv_Request->g
 
                         $sth->execute();
                     }
-                    $result->closeCursor();
+                    $stmt_select->closeCursor();
                 }
 
                 nv_apply_hook('', 'emailtemplates_content_after_save', [$array]);
@@ -522,7 +539,7 @@ if ($nv_Request->isset_request('saveform', 'post') and csrf_check($nv_Request->g
             }
         } catch (Throwable $e) {
             // Hook khi bị lỗi lưu vào CSDL
-            trigger_error(print_r($e, true));
+            trigger_error($e);
             nv_apply_hook('', 'emailtemplates_on_emailtemplate_save_error', [$array, $e]);
             $error[] = $nv_Lang->getModule('errorsave');
         }

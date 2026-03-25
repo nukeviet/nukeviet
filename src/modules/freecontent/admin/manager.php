@@ -250,7 +250,8 @@ if ($nv_Request->isset_request('submit', 'post')) {
                     'value' => $nv_Lang->getModule('error_save')
                 ];
             }
-        } catch (PDOException $e) {
+        } catch (Throwable $e) {
+            trigger_error($e);
             $error[] = [
                 'name' => '',
                 'value' => $nv_Lang->getModule('error_save')

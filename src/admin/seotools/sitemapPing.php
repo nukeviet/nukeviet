@@ -116,6 +116,7 @@ $result = $db->query($sql);
 while ($row = $result->fetch()) {
     $sitemapFiles[$row['name']] = $row['title'];
 }
+$result->closeCursor();
 
 if ($global_config['rewrite_enable'] and $global_config['check_rewrite_file']) {
     $url_sitemap = NV_MY_DOMAIN . NV_BASE_SITEURL . 'sitemap.xml';

@@ -30,10 +30,12 @@ if (!csrf_check($nv_Request->get_string('checkss', 'post'), $admin_info['admin_i
     ]);
 }
 
-$sth = $db->prepare('SELECT in_module FROM ' . NV_MODFUNCS_TABLE . ' WHERE func_id = :id');
-$sth->bindParam(':id', $fid, PDO::PARAM_INT);
-$sth->execute();
-$row = $sth->fetch();
+$stmt = $db->prepare('SELECT in_module FROM ' . NV_MODFUNCS_TABLE . ' WHERE func_id = :id');
+$stmt->bindValue(':id', $fid, PDO::PARAM_INT);
+$stmt->execute();
+$row = $stmt->fetch();
+$stmt->closeCursor();
+
 if (empty($row)) {
     nv_jsonOutput([
         'success' => 0,
@@ -41,33 +43,35 @@ if (empty($row)) {
     ]);
 }
 
-$sth = $db->prepare('UPDATE ' . NV_MODFUNCS_TABLE . ' SET subweight=0 WHERE in_module= :in_module AND show_func = 0');
-$sth->bindParam(':in_module', $row['in_module'], PDO::PARAM_STR);
-$sth->execute();
+$stmt = $db->prepare('UPDATE ' . NV_MODFUNCS_TABLE . ' SET subweight = 0 WHERE in_module = :in_module AND show_func = 0');
+$stmt->bindValue(':in_module', $row['in_module'], PDO::PARAM_STR);
+$stmt->execute();
 
-$sth = $db->prepare('SELECT func_id FROM ' . NV_MODFUNCS_TABLE . ' WHERE in_module = :in_module AND func_id != :id AND show_func = 1 ORDER BY subweight ASC');
-$sth->bindParam(':in_module', $row['in_module'], PDO::PARAM_STR);
-$sth->bindParam(':id', $fid, PDO::PARAM_INT);
-$sth->execute();
+$stmt_sel = $db->prepare('SELECT func_id FROM ' . NV_MODFUNCS_TABLE . ' WHERE in_module = :in_module AND func_id != :id AND show_func = 1 ORDER BY subweight ASC');
+$stmt_sel->bindValue(':in_module', $row['in_module'], PDO::PARAM_STR);
+$stmt_sel->bindValue(':id', $fid, PDO::PARAM_INT);
+$stmt_sel->execute();
 
 $weight = 0;
-while ($row = $sth->fetch()) {
+$stmt_upd = $db->prepare('UPDATE ' . NV_MODFUNCS_TABLE . ' SET subweight = :weight WHERE func_id = :id');
+
+while ($row = $stmt_sel->fetch()) {
     ++$weight;
 
     if ($weight == $new_weight) {
         ++$weight;
     }
 
-    $sth2 = $db->prepare('UPDATE ' . NV_MODFUNCS_TABLE . ' SET subweight = :weight WHERE func_id = :id');
-    $sth2->bindParam(':weight', $weight, PDO::PARAM_INT);
-    $sth2->bindParam(':id', $row['func_id'], PDO::PARAM_INT);
-    $sth2->execute();
+    $stmt_upd->bindValue(':weight', $weight, PDO::PARAM_INT);
+    $stmt_upd->bindValue(':id', $row['func_id'], PDO::PARAM_INT);
+    $stmt_upd->execute();
 }
+$stmt_sel->closeCursor();
 
-$sth2 = $db->prepare('UPDATE ' . NV_MODFUNCS_TABLE . ' SET subweight = :weight WHERE func_id = :id');
-$sth2->bindParam(':weight', $new_weight, PDO::PARAM_INT);
-$sth2->bindParam(':id', $fid, PDO::PARAM_INT);
-$sth2->execute();
+$stmt_upd = $db->prepare('UPDATE ' . NV_MODFUNCS_TABLE . ' SET subweight = :weight WHERE func_id = :id');
+$stmt_upd->bindValue(':weight', $new_weight, PDO::PARAM_INT);
+$stmt_upd->bindValue(':id', $fid, PDO::PARAM_INT);
+$stmt_upd->execute();
 $nv_Cache->delMod('modules');
 nv_jsonOutput([
     'success' => 1,

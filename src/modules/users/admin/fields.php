@@ -608,7 +608,7 @@ if ($nv_Request->isset_request('save', 'post')) {
                     $save = true;
                 } catch (Throwable $e) {
                     $save = false;
-                    trigger_error(print_r($e, true));
+                    trigger_error($e);
                 }
             }
         }

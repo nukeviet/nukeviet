@@ -240,7 +240,7 @@ if ($nv_Request->isset_request('savecat', 'post')) {
             'refresh' => 1
         ]);
     } catch (Throwable $e) {
-        trigger_error(print_r($e, true));
+        trigger_error($e);
         nv_jsonOutput([
             'status' => 'error',
             'mess' => $nv_Lang->getModule('errorsave')

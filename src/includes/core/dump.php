@@ -305,7 +305,8 @@ function nv_dump_restore($file)
                 $sql = preg_replace(["/\{\|prefix\|\}/", "/\{\|lang\|\}/"], [$db_config['prefix'], NV_LANG_DATA], $sql);
                 try {
                     $db->query($sql);
-                } catch (PDOException $e) {
+                } catch (Throwable $e) {
+                    trigger_error($e);
                     return false;
                 }
 

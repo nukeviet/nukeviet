@@ -21,16 +21,20 @@ if ($nv_Request->isset_request('deltpl', 'post')) {
 
     $emailid = $nv_Request->get_int('emailid', 'post', 0);
 
-    $sql = 'SELECT emailid, is_system, module_name FROM ' . NV_EMAILTEMPLATES_GLOBALTABLE . ' WHERE emailid=' . $emailid;
-    $row = $db->query($sql)->fetch();
+    $stmt = $db->prepare('SELECT emailid, is_system, module_name FROM ' . NV_EMAILTEMPLATES_GLOBALTABLE . ' WHERE emailid = :emailid');
+    $stmt->bindValue(':emailid', $emailid, PDO::PARAM_INT);
+    $stmt->execute();
+    $row = $stmt->fetch();
+    $stmt->closeCursor();
 
     if (empty($row) or $row['is_system'] or $row['module_name']) {
         exit('NO_' . $emailid);
     }
 
-    $sql = 'DELETE FROM ' . NV_EMAILTEMPLATES_GLOBALTABLE . ' WHERE emailid = ' . $emailid;
+    $stmt = $db->prepare('DELETE FROM ' . NV_EMAILTEMPLATES_GLOBALTABLE . ' WHERE emailid = :emailid');
+    $stmt->bindValue(':emailid', $emailid, PDO::PARAM_INT);
 
-    if ($db->exec($sql)) {
+    if ($stmt->execute() and $stmt->rowCount()) {
         nv_insert_logs(NV_LANG_DATA, $module_name, 'Delete tpl', 'ID: ' . $emailid, $admin_info['userid']);
         nv_apply_hook('', 'emailtemplates_after_delete', [$emailid]);
         $nv_Cache->delMod($module_name);
@@ -69,8 +73,7 @@ if (!isset($global_array_cat[$array_search['catid']])) {
     $array_search['catid'] = 0;
 }
 
-$db->sqlreset()->select('COUNT(*)')->from(NV_EMAILTEMPLATES_GLOBALTABLE);
-
+$bind_params = [];
 $where = [];
 if (!empty($array_search['q'])) {
     $base_url .= '&amp;q=' . urlencode($array_search['q']);
@@ -86,28 +89,33 @@ if (!empty($array_search['q'])) {
 }
 if (!empty($array_search['from'])) {
     $base_url .= '&amp;f=' . nv_u2d_get($array_search['from']);
-    $where[] = "time_add>=" . $array_search['from'];
+    $where[] = "time_add >= :from";
+    $bind_params[':from'] = $array_search['from'];
     $is_search++;
 }
 if (!empty($array_search['to'])) {
     $base_url .= '&amp;t=' . nv_u2d_get($array_search['to']);
-    $where[] = "time_add<=" . $array_search['to'];
+    $where[] = "time_add <= :to";
+    $bind_params[':to'] = $array_search['to'];
     $is_search++;
 }
 if (!empty($array_search['catid'])) {
     $base_url .= '&amp;c=' . $array_search['catid'];
-    $where[] = "catid=" . $array_search['catid'];
+    $where[] = "catid = :catid";
+    $bind_params[':catid'] = $array_search['catid'];
     $is_search++;
 }
 if (!empty($array_search['module_name'])) {
     $base_url .= '&amp;m=' . urlencode($array_search['module_name']);
-    $where[] = "module_name=" . $db->quote($array_search['module_name']);
+    $where[] = "module_name = :module_name";
+    $bind_params[':module_name'] = $array_search['module_name'];
     $is_search++;
     $per_page = 200;
 }
 if (!empty($array_search['lang'])) {
     $base_url .= '&amp;l=' . urlencode($array_search['lang']);
-    $where[] = "lang=" . $db->quote($array_search['lang']);
+    $where[] = "lang = :lang";
+    $bind_params[':lang'] = $array_search['lang'];
     $is_search++;
 }
 
@@ -131,25 +139,43 @@ if (!in_array($array_order['value'], $order_values)) {
     $array_order['value'] = '';
 }
 
-if (!empty($where)) {
-    $db->where(implode(' AND ', $where));
-}
+$where_sql = !empty($where) ? ' WHERE ' . implode(' AND ', $where) : '';
 
-$num_items = $db->query($db->sql())->fetchColumn();
+$stmt = $db->prepare('SELECT COUNT(*) FROM ' . NV_EMAILTEMPLATES_GLOBALTABLE . $where_sql);
+foreach ($bind_params as $pk => $pv) {
+    if (is_int($pv)) {
+        $stmt->bindValue($pk, $pv, PDO::PARAM_INT);
+    } else {
+        $stmt->bindValue($pk, $pv, PDO::PARAM_STR);
+    }
+}
+$stmt->execute();
+$num_items = $stmt->fetchColumn();
 
 if (!empty($array_order['field']) and !empty($array_order['value'])) {
     $order = $array_order['field'] . ' ' . $array_order['value'];
 } else {
     $order = 'emailid DESC';
 }
-$db->select('*')->order($order)->limit($per_page)->offset(($page - 1) * $per_page);
-$result = $db->query($db->sql());
+
+$stmt = $db->prepare('SELECT * FROM ' . NV_EMAILTEMPLATES_GLOBALTABLE . $where_sql . ' ORDER BY ' . $order . ' LIMIT :limit OFFSET :offset');
+foreach ($bind_params as $pk => $pv) {
+    if (is_int($pv)) {
+        $stmt->bindValue($pk, $pv, PDO::PARAM_INT);
+    } else {
+        $stmt->bindValue($pk, $pv, PDO::PARAM_STR);
+    }
+}
+$stmt->bindValue(':limit', $per_page, PDO::PARAM_INT);
+$stmt->bindValue(':offset', ($page - 1) * $per_page, PDO::PARAM_INT);
+$stmt->execute();
 
 $array = [];
-while ($row = $result->fetch()) {
+while ($row = $stmt->fetch()) {
     $row['title'] = $row[NV_LANG_DATA . '_title'];
     $array[$row['emailid']] = $row;
 }
+$stmt->closeCursor();
 
 if (empty($array) and $page = 1 and empty($is_search)) {
     $url = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=contents';

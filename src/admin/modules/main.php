@@ -30,9 +30,12 @@ $result = $db->query($sql);
 
 $is_delCache = false;
 $act2 = [];
-while ($_scratch = $result->fetch(3)) {
-    [$m, $mod_file, $is_sys, $version] = $_scratch;
-    unset($_scratch);
+while ($_row_mod = $result->fetch()) {
+    $m          = $_row_mod['title'];
+    $mod_file   = $_row_mod['basename'];
+    $is_sys     = $_row_mod['is_sys'];
+    $version    = $_row_mod['version'];
+    
     $new_modules[$m] = [
         'module_file' => $mod_file,
         'is_sys' => $is_sys,
@@ -43,10 +46,16 @@ while ($_scratch = $result->fetch(3)) {
         $act2[] = $m;
     }
 }
+$result->closeCursor();
 
 if (!empty($act2)) {
-    $act2 = "'" . implode("','", $act2) . "'";
-    $db->query('UPDATE ' . NV_MODULES_TABLE . ' SET act=2 WHERE title IN (' . $act2 . ')');
+    $values       = array_values($act2);
+    $placeholders = implode(', ', array_map(fn($k) => ':v' . $k, array_keys($values)));
+    $stmt         = $db->prepare('UPDATE ' . NV_MODULES_TABLE . ' SET act=2 WHERE title IN (' . $placeholders . ')');
+    foreach ($values as $k => $v) {
+        $stmt->bindValue(':v' . $k, $v, PDO::PARAM_STR);
+    }
+    $stmt->execute();
     $is_delCache = true;
 }
 
@@ -55,13 +64,15 @@ $iw = 0;
 $sql = 'SELECT * FROM ' . NV_MODULES_TABLE . ' ORDER BY weight ASC';
 $result = $db->query($sql);
 
+$stmt_weight = $db->prepare('UPDATE ' . NV_MODULES_TABLE . ' SET weight = :weight WHERE title = :title');
+
 while ($row = $result->fetch()) {
     ++$iw;
     if ($iw != $row['weight']) {
         $row['weight'] = $iw;
-        $sth = $db->prepare('UPDATE ' . NV_MODULES_TABLE . ' SET weight=' . $row['weight'] . ' WHERE title= :title');
-        $sth->bindParam(':title', $row['title'], PDO::PARAM_STR);
-        $sth->execute();
+        $stmt_weight->bindValue(':weight', $row['weight'], PDO::PARAM_INT);
+        $stmt_weight->bindValue(':title', $row['title'], PDO::PARAM_STR);
+        $stmt_weight->execute();
         $is_delCache = true;
     }
 

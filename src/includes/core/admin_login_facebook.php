@@ -52,7 +52,8 @@ if ($nv_Request->get_title('state', 'get', '') !== $nv_Request->get_title('oauth
             'first_name' => $ownerDetails->getFirstName(),
             'last_name' => $ownerDetails->getLastName()
         ];
-    } catch (Exception $e) {
+    } catch (Throwable $e) {
+        trigger_error($e);
         $error = $e->getMessage();
     }
 }

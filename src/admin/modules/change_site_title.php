@@ -19,10 +19,11 @@ if (!$nv_Request->isset_request('id', 'post,get')) {
 
 $id = $nv_Request->get_int('id', 'post,get', 0);
 
-$sth = $db->prepare('SELECT f.func_name AS func_title, f.func_site_title AS func_site_title, m.custom_title AS mod_custom_title FROM ' . NV_MODFUNCS_TABLE . ' AS f, ' . NV_MODULES_TABLE . ' AS m WHERE f.func_id = :id AND f.in_module = m.title');
-$sth->bindParam(':id', $id, PDO::PARAM_INT);
-$sth->execute();
-$row = $sth->fetch();
+$stmt = $db->prepare('SELECT f.func_name AS func_title, f.func_site_title AS func_site_title, m.custom_title AS mod_custom_title FROM ' . NV_MODFUNCS_TABLE . ' AS f, ' . NV_MODULES_TABLE . ' AS m WHERE f.func_id = :id AND f.in_module = m.title');
+$stmt->bindValue(':id', $id, PDO::PARAM_INT);
+$stmt->execute();
+$row = $stmt->fetch();
+$stmt->closeCursor();
 
 if (!csrf_check($nv_Request->get_string('checkss', 'post'), $admin_info['admin_id'] . '_' . $module_name . '_show')) {
     nv_jsonOutput([
@@ -42,10 +43,10 @@ if ($nv_Request->get_int('save', 'post') == '1') {
     $func_site_title = $nv_Request->get_title('newvalue', 'post', '');
 
     if ($func_site_title != $row['func_site_title']) {
-        $sth = $db->prepare('UPDATE ' . NV_MODFUNCS_TABLE . ' SET func_site_title = :func_site_title WHERE func_id = :id');
-        $sth->bindParam(':func_site_title', $func_site_title, PDO::PARAM_STR);
-        $sth->bindParam(':id', $id, PDO::PARAM_INT);
-        $sth->execute();
+        $stmt = $db->prepare('UPDATE ' . NV_MODFUNCS_TABLE . ' SET func_site_title = :func_site_title WHERE func_id = :id');
+        $stmt->bindValue(':func_site_title', $func_site_title, PDO::PARAM_STR);
+        $stmt->bindValue(':id', $id, PDO::PARAM_INT);
+        $stmt->execute();
 
         $nv_Cache->delMod('modules');
     }

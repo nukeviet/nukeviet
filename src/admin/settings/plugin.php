@@ -31,7 +31,12 @@ if ($nv_Request->isset_request('changeweight', 'post')) {
     $pid = $nv_Request->get_int('pid', 'post', 0);
     $new_weight = $nv_Request->get_int('new_weight', 'post', 0);
 
-    $row = $db->query('SELECT * FROM ' . $db_config['prefix'] . '_plugins WHERE pid=' . $pid)->fetch();
+    $stmt = $db->prepare('SELECT * FROM ' . $db_config['prefix'] . '_plugins WHERE pid = :pid');
+    $stmt->bindValue(':pid', $pid, PDO::PARAM_INT);
+    $stmt->execute();
+    $row = $stmt->fetch();
+    $stmt->closeCursor();
+
     if (empty($row)) {
         nv_jsonOutput([
             'success' => 0,
@@ -41,21 +46,31 @@ if ($nv_Request->isset_request('changeweight', 'post')) {
 
     nv_insert_logs(NV_LANG_DATA, $module_name, $nv_Lang->getModule('plugin_log_weight'), $pid . '-' . $new_weight, $admin_info['userid']);
 
-    $sql = 'SELECT pid FROM ' . $db_config['prefix'] . '_plugins
-    WHERE pid!=' . $pid . ' AND (plugin_lang=' . $db->quote(NV_LANG_DATA) . ' OR plugin_lang=\'all\')
-    AND plugin_area=' . $db->quote($row['plugin_area']) . '
-    AND hook_module=' . $db->quote($row['hook_module']) . ' ORDER BY weight ASC';
-    $result = $db->query($sql);
+    $stmt = $db->prepare('SELECT pid FROM ' . $db_config['prefix'] . "_plugins
+    WHERE pid != :pid AND (plugin_lang = :lang OR plugin_lang = 'all')
+    AND plugin_area = :plugin_area AND hook_module = :hook_module ORDER BY weight ASC");
+    $stmt->bindValue(':pid', $pid, PDO::PARAM_INT);
+    $stmt->bindValue(':lang', NV_LANG_DATA, PDO::PARAM_STR);
+    $stmt->bindValue(':plugin_area', $row['plugin_area'], PDO::PARAM_STR);
+    $stmt->bindValue(':hook_module', $row['hook_module'], PDO::PARAM_STR);
+    $stmt->execute();
+
+    $sth_upd = $db->prepare('UPDATE ' . $db_config['prefix'] . '_plugins SET weight = :weight WHERE pid = :pid');
     $weight = 0;
-    while ($row = $result->fetch()) {
+    while ($row = $stmt->fetch()) {
         ++$weight;
         if ($weight == $new_weight) {
             ++$weight;
         }
-        $db->query('UPDATE ' . $db_config['prefix'] . '_plugins SET weight=' . $weight . ' WHERE pid=' . $row['pid']);
+        $sth_upd->bindValue(':weight', $weight, PDO::PARAM_INT);
+        $sth_upd->bindValue(':pid', $row['pid'], PDO::PARAM_INT);
+        $sth_upd->execute();
     }
+    $stmt->closeCursor();
 
-    $db->query('UPDATE ' . $db_config['prefix'] . '_plugins SET weight=' . $new_weight . ' WHERE pid=' . $pid);
+    $sth_upd->bindValue(':weight', $new_weight, PDO::PARAM_INT);
+    $sth_upd->bindValue(':pid', $pid, PDO::PARAM_INT);
+    $sth_upd->execute();
 
     nv_save_file_config_global();
     nv_jsonOutput([
@@ -77,7 +92,11 @@ if ($nv_Request->isset_request('del', 'post')) {
     }
 
     $pid = $nv_Request->get_int('pid', 'post', 0);
-    $row = $db->query('SELECT * FROM ' . $db_config['prefix'] . '_plugins WHERE pid=' . $pid)->fetch();
+    $stmt = $db->prepare('SELECT * FROM ' . $db_config['prefix'] . '_plugins WHERE pid = :pid');
+    $stmt->bindValue(':pid', $pid, PDO::PARAM_INT);
+    $stmt->execute();
+    $row = $stmt->fetch();
+    $stmt->closeCursor();
     if (empty($row) or !empty($row['plugin_module_file']) or ($row['plugin_lang'] != 'all' and $row['plugin_lang'] != NV_LANG_DATA)) {
         nv_jsonOutput([
             'success' => 0,
@@ -87,21 +106,29 @@ if ($nv_Request->isset_request('del', 'post')) {
 
     nv_insert_logs(NV_LANG_DATA, $module_name, $nv_Lang->getModule('plugin_log_del'), $pid . '-' . $row['plugin_file'], $admin_info['userid']);
 
-    $db->exec('DELETE FROM ' . $db_config['prefix'] . '_plugins WHERE pid = ' . $pid);
+    $stmt = $db->prepare('DELETE FROM ' . $db_config['prefix'] . '_plugins WHERE pid = :pid');
+    $stmt->bindValue(':pid', $pid, PDO::PARAM_INT);
+    $stmt->execute();
 
     $weight = (int) ($row['weight']);
-    $_query = $db->query('SELECT pid FROM ' . $db_config['prefix'] . '_plugins
-    WHERE (plugin_lang=' . $db->quote(NV_LANG_DATA) . ' OR plugin_lang=\'all\')
-    AND plugin_area=' . $db->quote($row['plugin_area']) . '
-    AND hook_module=' . $db->quote($row['hook_module']) . '
-    AND weight > ' . $weight . ' ORDER BY weight ASC');
+    $stmt = $db->prepare('SELECT pid FROM ' . $db_config['prefix'] . "_plugins
+    WHERE (plugin_lang = :lang OR plugin_lang = 'all')
+    AND plugin_area = :plugin_area AND hook_module = :hook_module
+    AND weight > :weight ORDER BY weight ASC");
+    $stmt->bindValue(':lang', NV_LANG_DATA, PDO::PARAM_STR);
+    $stmt->bindValue(':plugin_area', $row['plugin_area'], PDO::PARAM_STR);
+    $stmt->bindValue(':hook_module', $row['hook_module'], PDO::PARAM_STR);
+    $stmt->bindValue(':weight', $weight, PDO::PARAM_INT);
+    $stmt->execute();
 
-    while ($_scratch = $_query->fetch(3)) {
-        [$pid] = $_scratch;
-        unset($_scratch);
-        $db->query('UPDATE ' . $db_config['prefix'] . '_plugins SET weight = ' . $weight . ' WHERE pid=' . $pid);
+    $sth_upd = $db->prepare('UPDATE ' . $db_config['prefix'] . '_plugins SET weight = :weight WHERE pid = :pid');
+    while ($_row_plugin = $stmt->fetch()) {
+        $sth_upd->bindValue(':weight', $weight, PDO::PARAM_INT);
+        $sth_upd->bindValue(':pid', $_row_plugin['pid'], PDO::PARAM_INT);
+        $sth_upd->execute();
         ++$weight;
     }
+    $stmt->closeCursor();
 
     nv_save_file_config_global();
     nv_jsonOutput([
@@ -111,14 +138,15 @@ if ($nv_Request->isset_request('del', 'post')) {
 }
 
 // Lấy list các HOOK theo module hoặc hệ thống
-$sql = 'SELECT DISTINCT plugin_area, hook_module FROM ' . $db_config['prefix'] . "_plugins
-WHERE plugin_lang='all' OR plugin_lang='" . NV_LANG_DATA . "'";
-$result = $db->query($sql);
+$stmt = $db->prepare('SELECT DISTINCT plugin_area, hook_module FROM ' . $db_config['prefix'] . "_plugins WHERE plugin_lang = 'all' OR plugin_lang = :lang");
+$stmt->bindValue(':lang', NV_LANG_DATA, PDO::PARAM_STR);
+$stmt->execute();
 $array_areas = [];
-while ($row = $result->fetch()) {
+while ($row = $stmt->fetch()) {
     $_key = (empty($row['hook_module']) ? '' : $row['hook_module'] . ':') . $row['plugin_area'];
     $array_areas[$_key] = $_key;
 }
+$stmt->closeCursor();
 
 // Tìm kiếm
 $array_search = [
@@ -132,7 +160,7 @@ if (!empty($array_search['area']) and !isset($array_areas[$array_search['area']]
 
 // Đọc các plugin trong CSDL
 $max_weight = 0;
-$sql = 'SELECT * FROM ' . $db_config['prefix'] . "_plugins WHERE plugin_lang='all' OR plugin_lang='" . NV_LANG_DATA . "'";
+$sql = 'SELECT * FROM ' . $db_config['prefix'] . "_plugins WHERE plugin_lang = 'all' OR plugin_lang = :lang";
 if (!empty($array_search['area'])) {
     // Xử lý lại phần tìm kiếm
     $_area = explode(':', $array_search['area']);
@@ -144,14 +172,21 @@ if (!empty($array_search['area'])) {
     }
 
     $sql .= ' ORDER BY weight ASC';
-    $max_weight = $db->query('SELECT MAX(weight) FROM ' . $db_config['prefix'] . "_plugins
-    WHERE (plugin_lang='all' OR plugin_lang='" . NV_LANG_DATA . "')
-    AND plugin_area=" . $db->quote($array_search['s_plugin_area']) . '
-    AND hook_module=' . $db->quote($array_search['s_hook_module']))->fetchColumn();
+    $stmt = $db->prepare('SELECT MAX(weight) FROM ' . $db_config['prefix'] . "_plugins
+    WHERE (plugin_lang = 'all' OR plugin_lang = :lang)
+    AND plugin_area = :plugin_area AND hook_module = :hook_module");
+    $stmt->bindValue(':lang', NV_LANG_DATA, PDO::PARAM_STR);
+    $stmt->bindValue(':plugin_area', $array_search['s_plugin_area'], PDO::PARAM_STR);
+    $stmt->bindValue(':hook_module', $array_search['s_hook_module'], PDO::PARAM_STR);
+    $stmt->execute();
+    $max_weight = $stmt->fetchColumn();
 } else {
     $sql .= ' ORDER BY hook_module ASC, plugin_area ASC';
 }
-$result = $db->query($sql);
+$stmt = $db->prepare($sql);
+$stmt->bindValue(':lang', NV_LANG_DATA, PDO::PARAM_STR);
+$stmt->execute();
+$result = $stmt;
 
 $array = $sys_exists = $mod_counts = $mod_exists = [];
 while ($row = $result->fetch()) {
@@ -343,10 +378,16 @@ if ($nv_Request->isset_request('integrate', 'post')) {
     }
 
     // Kiểm tra trùng
-    $sql = 'SELECT pid FROM ' . $db_config['prefix'] . '_plugins WHERE plugin_lang=' . $db->quote($post['lang']) . '
-    AND plugin_file=' . $db->quote($row['file']) . ' AND plugin_area=' . $db->quote($row['area'][0]) . '
-    AND plugin_module_name=' . $db->quote($post['receive_module']) . ' AND hook_module=' . $db->quote($post['hook_module']);
-    if ($db->query($sql)->fetchColumn()) {
+    $stmt = $db->prepare('SELECT pid FROM ' . $db_config['prefix'] . '_plugins WHERE plugin_lang = :plugin_lang
+    AND plugin_file = :plugin_file AND plugin_area = :plugin_area
+    AND plugin_module_name = :plugin_module_name AND hook_module = :hook_module');
+    $stmt->bindValue(':plugin_lang', $post['lang'], PDO::PARAM_STR);
+    $stmt->bindValue(':plugin_file', $row['file'], PDO::PARAM_STR);
+    $stmt->bindValue(':plugin_area', $row['area'][0], PDO::PARAM_STR);
+    $stmt->bindValue(':plugin_module_name', $post['receive_module'], PDO::PARAM_STR);
+    $stmt->bindValue(':hook_module', $post['hook_module'], PDO::PARAM_STR);
+    $stmt->execute();
+    if ($stmt->fetchColumn()) {
         $respon['message'] = 'Error exists!!!';
         nv_jsonOutput($respon);
     }
@@ -354,10 +395,13 @@ if ($nv_Request->isset_request('integrate', 'post')) {
     nv_insert_logs(NV_LANG_DATA, $module_name, $nv_Lang->getModule('plugin_log_integrate'), $post['hook_module'] . ' - ' . $row['file'] . ' - ' . $post['receive_module'], $admin_info['userid']);
 
     // Lấy vị trí mới
-    $_sql = 'SELECT MAX(weight) FROM ' . $db_config['prefix'] . '_plugins
-    WHERE plugin_lang=' . $db->quote($post['lang']) . ' AND plugin_area=' . $db->quote($row['area'][0]) . '
-    AND hook_module=' . $db->quote($post['hook_module']);
-    $weight = $db->query($_sql)->fetchColumn();
+    $stmt = $db->prepare('SELECT MAX(weight) FROM ' . $db_config['prefix'] . '_plugins
+    WHERE plugin_lang = :plugin_lang AND plugin_area = :plugin_area AND hook_module = :hook_module');
+    $stmt->bindValue(':plugin_lang', $post['lang'], PDO::PARAM_STR);
+    $stmt->bindValue(':plugin_area', $row['area'][0], PDO::PARAM_STR);
+    $stmt->bindValue(':hook_module', $post['hook_module'], PDO::PARAM_STR);
+    $stmt->execute();
+    $weight = $stmt->fetchColumn();
     $weight = (int) $weight + 1;
 
     try {
@@ -366,17 +410,17 @@ if ($nv_Request->isset_request('integrate', 'post')) {
         ) VALUES (
             :plugin_lang, :plugin_file, :plugin_area, :plugin_module_name, :hook_module, :weight
         )');
-        $sth->bindParam(':plugin_lang', $post['lang'], PDO::PARAM_STR);
-        $sth->bindParam(':plugin_file', $row['file'], PDO::PARAM_STR);
-        $sth->bindParam(':plugin_area', $row['area'][0], PDO::PARAM_STR);
-        $sth->bindParam(':plugin_module_name', $post['receive_module'], PDO::PARAM_STR);
-        $sth->bindParam(':hook_module', $post['hook_module'], PDO::PARAM_STR);
-        $sth->bindParam(':weight', $weight, PDO::PARAM_INT);
+        $sth->bindValue(':plugin_lang', $post['lang'], PDO::PARAM_STR);
+        $sth->bindValue(':plugin_file', $row['file'], PDO::PARAM_STR);
+        $sth->bindValue(':plugin_area', $row['area'][0], PDO::PARAM_STR);
+        $sth->bindValue(':plugin_module_name', $post['receive_module'], PDO::PARAM_STR);
+        $sth->bindValue(':hook_module', $post['hook_module'], PDO::PARAM_STR);
+        $sth->bindValue(':weight', $weight, PDO::PARAM_INT);
         $sth->execute();
 
         nv_save_file_config_global();
-    } catch (PDOException $e) {
-        trigger_error($e->getMessage());
+    } catch (Throwable $e) {
+        trigger_error($e);
         $respon['message'] = 'Error DB1';
     }
 

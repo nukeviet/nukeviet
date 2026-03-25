@@ -416,7 +416,8 @@ if ($step == 1) {
         try {
             $db = $db_slave = new NukeViet\Core\Database($db_config);
             $connect = $db->connect;
-        } catch (PDOException $e) {
+        } catch (Throwable $e) {
+            trigger_error($e);
             $connect = 0;
         }
         if (!$connect) {
@@ -426,7 +427,8 @@ if ($step == 1) {
                 try {
                     $db = $db_slave = new NukeViet\Core\Database($db_config);
                     $connect = $db->connect;
-                } catch (PDOException $e) {
+                } catch (Throwable $e) {
+                    trigger_error($e);
                     $connect = 0;
                 }
                 $db_config['dbname'] = $db_config['dbsystem'];
@@ -437,8 +439,8 @@ if ($step == 1) {
 
                         $db_config['error'] = '';
                         $connect = 1;
-                    } catch (PDOException $e) {
-                        trigger_error($e->getMessage());
+                    } catch (Throwable $e) {
+                        trigger_error($e);
                     }
                 }
             }
@@ -458,8 +460,8 @@ if ($step == 1) {
 
             try {
                 $db->exec('ALTER DATABASE ' . $db_config['dbname'] . ' DEFAULT CHARACTER SET ' . $db_config['charset'] . ' COLLATE ' . $db_config['collation']);
-            } catch (PDOException $e) {
-                trigger_error($e->getMessage());
+            } catch (Throwable $e) {
+                trigger_error($e);
             }
 
             $row = $db->query('SELECT @@session.character_set_database AS character_set_database,  @@session.collation_database AS collation_database')->fetch();
@@ -479,8 +481,8 @@ if ($step == 1) {
                     $db = $db_slave = new NukeViet\Core\Database($db_config);
                     try {
                         $db->exec('ALTER DATABASE ' . $db_config['dbname'] . ' DEFAULT CHARACTER SET ' . $db_config['charset'] . ' COLLATE ' . $db_config['collation']);
-                    } catch (PDOException $e) {
-                        trigger_error($e->getMessage());
+                    } catch (Throwable $e) {
+                        trigger_error($e);
                     }
                 }
             }
@@ -513,10 +515,10 @@ if ($step == 1) {
                     foreach ($sql_drop_table as $_sql) {
                         try {
                             $db->query($_sql);
-                        } catch (PDOException $e) {
+                        } catch (Throwable $e) {
                             $nv_Request->set_Session('maxstep', 4);
                             $db_config['error'] = $e->getMessage();
-                            trigger_error($e->getMessage());
+                            trigger_error($e);
                             break;
                         }
                     }
@@ -535,10 +537,10 @@ if ($step == 1) {
                 foreach ($sql_create_table as $_sql) {
                     try {
                         $db->query($_sql);
-                    } catch (PDOException $e) {
+                    } catch (Throwable $e) {
                         $nv_Request->set_Session('maxstep', 4);
                         $db_config['error'] = $e->getMessage();
-                        trigger_error($e->getMessage());
+                        trigger_error($e);
                         break;
                     }
                 }
@@ -566,10 +568,10 @@ if ($step == 1) {
                     foreach ($sql_create_table as $_sql) {
                         try {
                             $db->query($_sql);
-                        } catch (PDOException $e) {
+                        } catch (Throwable $e) {
                             $nv_Request->set_Session('maxstep', 4);
                             $db_config['error'] = $e->getMessage();
-                            trigger_error($e->getMessage());
+                            trigger_error($e);
                             break;
                         }
                     }
@@ -628,10 +630,10 @@ if ($step == 1) {
 
                         // Xoa du lieu tai bang nvx_menu
                         $db->query('DELETE FROM ' . $db_config['prefix'] . '_' . $lang_data . '_menu_rows WHERE module_name NOT IN (SELECT title FROM ' . $db_config['prefix'] . '_' . $lang_data . '_modules)');
-                    } catch (PDOException $e) {
+                    } catch (Throwable $e) {
                         $nv_Request->set_Session('maxstep', 4);
                         $db_config['error'] = $e->getMessage();
-                        trigger_error($e->getMessage());
+                        trigger_error($e);
                     }
 
                     // Cai dat du lieu mau module
@@ -655,9 +657,9 @@ if ($step == 1) {
                                 }
                             }
                         }
-                    } catch (PDOException $e) {
+                    } catch (Throwable $e) {
                         $db_config['error'] = $e->getMessage();
-                        trigger_error($e->getMessage());
+                        trigger_error($e);
                     }
 
                     if (empty($db_config['error'])) {
@@ -810,8 +812,8 @@ if ($step == 1) {
                             $db->query('UPDATE ' . NV_CONFIG_GLOBALTABLE . " SET config_value='1' WHERE lang='sys' AND module='site' AND config_name='private_site'");
                             $db->query('UPDATE ' . NV_CONFIG_GLOBALTABLE . " SET config_value='1' WHERE lang='sys' AND module='define' AND config_name='nv_debug'");
                         }
-                    } catch (PDOException $e) {
-                        trigger_error($e->getMessage());
+                    } catch (Throwable $e) {
+                        trigger_error($e);
                         exit($e->getMessage());
                     }
 
@@ -875,8 +877,8 @@ if ($step == 1) {
                         foreach ($real_dirlist as $dirname) {
                             try {
                                 $array_dirname[$dirname] = $db->insert_id('INSERT INTO ' . NV_UPLOAD_GLOBALTABLE . "_dir (dirname, time, thumb_type, thumb_width, thumb_height, thumb_quality) VALUES ('" . $dirname . "', '0', '0', '0', '0', '0')", 'did');
-                            } catch (PDOException $e) {
-                                trigger_error($e->getMessage());
+                            } catch (Throwable $e) {
+                                trigger_error($e);
                             }
 
                             // Quét các file upload có sẵn
@@ -1025,6 +1027,7 @@ if ($step == 1) {
             }
         }
     } catch (Throwable $e) {
+        trigger_error($e);
         echo '<pre><code>';
         echo htmlspecialchars(print_r($e, true));
         die('</code></pre>');
@@ -1050,8 +1053,8 @@ if ($step == 1) {
         foreach ($sql_create_table as $sql) {
             try {
                 $db->query($sql);
-            } catch (PDOException $e) {
-                trigger_error($e->getMessage());
+            } catch (Throwable $e) {
+                trigger_error($e);
             }
         }
 
@@ -1075,7 +1078,8 @@ if ($step == 1) {
             }
             nv_rewrite_change($array_config_rewrite);
             nv_server_config_change();
-        } catch (PDOException $e) {
+        } catch (Throwable $e) {
+            trigger_error($e);
             echo '<pre>';
             print_r($e);
             echo '</pre>';

@@ -143,8 +143,8 @@ if ($catid > 0) {
                                     try {
                                         $db->query('INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . '_' . $catidnews . ' SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE id=' . $row['id']);
                                         $arr_catid_news[] = $catidnews;
-                                    } catch (PDOException $e) {
-                                        trigger_error($e->getMessage());
+                                    } catch (Throwable $e) {
+                                        trigger_error($e);
                                     }
                                 }
                                 if ($catid == $row['catid']) {

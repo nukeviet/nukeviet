@@ -26,8 +26,8 @@ if ($nv_Request->isset_request('submitprcservice', 'post')) {
     $prcservice = $nv_Request->get_array('prcservice', 'post');
     $prcservice = implode(',', $prcservice);
     $sth = $db->prepare('UPDATE ' . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = '" . NV_LANG_DATA . "' AND module = :module_name AND config_name = 'prcservice'");
-    $sth->bindParam(':module_name', $module_name, PDO::PARAM_STR);
-    $sth->bindParam(':config_value', $prcservice, PDO::PARAM_STR);
+    $sth->bindValue(':module_name', $module_name, PDO::PARAM_STR);
+    $sth->bindValue(':config_value', $prcservice, PDO::PARAM_STR);
     $sth->execute();
 
     $nv_Cache->delMod('settings');

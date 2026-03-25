@@ -56,13 +56,13 @@ if (!empty($row)) {
     $db->query('UPDATE ' . NV_MOD_TABLE . ' SET group_id = ' . $row['group_id'] . ", in_groups='" . implode(',', $row['in_groups']) . "', last_update=" . NV_CURRENTTIME . ' WHERE userid = ' . $userid);
     try {
         $db->query('UPDATE ' . NV_MOD_TABLE . '_groups SET numbers = numbers-1 WHERE group_id=7');
-    } catch (PDOException $e) {
-        trigger_error(print_r($e, true));
+    } catch (Throwable $e) {
+        trigger_error($e);
     }
     try {
         $db->query('UPDATE ' . NV_MOD_TABLE . '_groups SET numbers = numbers+1 WHERE group_id=4');
-    } catch (PDOException $e) {
-        trigger_error(print_r($e, true));
+    } catch (Throwable $e) {
+        trigger_error($e);
     }
 
     nv_jsonOutput([

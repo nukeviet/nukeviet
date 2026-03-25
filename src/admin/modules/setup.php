@@ -15,7 +15,10 @@ if (!defined('NV_IS_FILE_MODULES')) {
 
 $array_site_cat_module = [];
 if ($global_config['idsite']) {
-    $_module = $db->query('SELECT module FROM ' . $db_config['dbsystem'] . '.' . $db_config['prefix'] . '_site_cat t1 INNER JOIN ' . $db_config['dbsystem'] . '.' . $db_config['prefix'] . '_site t2 ON t1.cid=t2.cid WHERE t2.idsite=' . $global_config['idsite'])->fetchColumn();
+    $stmt = $db->prepare('SELECT module FROM ' . $db_config['dbsystem'] . '.' . $db_config['prefix'] . '_site_cat t1 INNER JOIN ' . $db_config['dbsystem'] . '.' . $db_config['prefix'] . '_site t2 ON t1.cid=t2.cid WHERE t2.idsite=:idsite');
+    $stmt->bindValue(':idsite', $global_config['idsite'], PDO::PARAM_INT);
+    $stmt->execute();
+    $_module = $stmt->fetchColumn();
     if (!empty($_module)) {
         $array_site_cat_module = explode(',', $_module);
     }
@@ -43,10 +46,11 @@ if (!empty($setmodule) and preg_match($global_config['check_module'], $setmodule
             $hook_data[$file] = $hook_mods[$fkey];
         }
 
-        $sth = $db->prepare('SELECT basename, table_prefix FROM ' . $db_config['prefix'] . '_setup_extensions WHERE title=:title AND type=\'module\'');
-        $sth->bindParam(':title', $setmodule, PDO::PARAM_STR);
-        $sth->execute();
-        $modrow = $sth->fetch();
+        $stmt = $db->prepare('SELECT basename, table_prefix FROM ' . $db_config['prefix'] . "_setup_extensions WHERE title = :title AND type = 'module'");
+        $stmt->bindValue(':title', $setmodule, PDO::PARAM_STR);
+        $stmt->execute();
+        $modrow = $stmt->fetch();
+        $stmt->closeCursor();
 
         if (!empty($modrow)) {
             if (!empty($array_site_cat_module) and !in_array($modrow['basename'], $array_site_cat_module, true)) {
@@ -94,26 +98,27 @@ if (!empty($setmodule) and preg_match($global_config['check_module'], $setmodule
             $_module_data = (strlen($modrow['table_prefix']) > 30) ? trim(substr($modrow['table_prefix'], 0, 20), '_') . '_' . NV_CURRENTTIME : $modrow['table_prefix'];
 
             try {
-                $sth = $db->prepare('INSERT INTO ' . NV_MODULES_TABLE . " (
+                $stmt = $db->prepare('INSERT INTO ' . NV_MODULES_TABLE . " (
                     title, module_file, module_data, module_upload, module_theme, custom_title, admin_title,
                     set_time, main_file, admin_file, theme, mobile, description, keywords, groups_view, weight,
                     act, admins, rss, sitemap, icon
                 ) VALUES (
                     :title, :module_file, :module_data, :module_upload, :module_theme, :custom_title, '',
                     " . NV_CURRENTTIME . ', ' . $_main_file . ', ' . $_admin_file . ", '', '', '', '', '6',
-                    " . $weight . ", 0, '', 1, 1, :icon
+                    :weight, 0, '', 1, 1, :icon
                 )");
 
-                $sth->bindParam(':title', $setmodule, PDO::PARAM_STR);
-                $sth->bindParam(':module_file', $modrow['basename'], PDO::PARAM_STR);
-                $sth->bindParam(':module_data', $_module_data, PDO::PARAM_STR);
-                $sth->bindParam(':module_upload', $setmodule, PDO::PARAM_STR);
-                $sth->bindParam(':module_theme', $modrow['basename'], PDO::PARAM_STR);
-                $sth->bindParam(':custom_title', $custom_title, PDO::PARAM_STR);
-                $sth->bindValue(':icon', $module_version['icon'] ?? '', PDO::PARAM_STR);
-                $sth->execute();
-            } catch (PDOException $e) {
-                trigger_error($e->getMessage());
+                $stmt->bindValue(':title', $setmodule, PDO::PARAM_STR);
+                $stmt->bindValue(':module_file', $modrow['basename'], PDO::PARAM_STR);
+                $stmt->bindValue(':module_data', $_module_data, PDO::PARAM_STR);
+                $stmt->bindValue(':module_upload', $setmodule, PDO::PARAM_STR);
+                $stmt->bindValue(':module_theme', $modrow['basename'], PDO::PARAM_STR);
+                $stmt->bindValue(':custom_title', $custom_title, PDO::PARAM_STR);
+                $stmt->bindValue(':weight', $weight, PDO::PARAM_INT);
+                $stmt->bindValue(':icon', $module_version['icon'] ?? '', PDO::PARAM_STR);
+                $stmt->execute();
+            } catch (Throwable $e) {
+                trigger_error($e);
             }
 
             $nv_Cache->delMod('modules');
@@ -124,9 +129,9 @@ if (!empty($setmodule) and preg_match($global_config['check_module'], $setmodule
             if ($return['success']) {
                 nv_setup_block_module($setmodule);
 
-                $sth = $db->prepare('UPDATE ' . NV_MODULES_TABLE . ' SET act=1 WHERE title=:title');
-                $sth->bindParam(':title', $setmodule, PDO::PARAM_STR);
-                $sth->execute();
+                $stmt = $db->prepare('UPDATE ' . NV_MODULES_TABLE . ' SET act=1 WHERE title = :title');
+                $stmt->bindValue(':title', $setmodule, PDO::PARAM_STR);
+                $stmt->execute();
 
                 // Cài đặt hook
                 $email_pids = [];
@@ -134,28 +139,35 @@ if (!empty($setmodule) and preg_match($global_config['check_module'], $setmodule
                     foreach ($array_hooks as $hook) {
                         try {
                             // Lấy vị trí mới
-                            $_sql = 'SELECT max(weight) FROM ' . $db_config['prefix'] . '_plugins WHERE plugin_lang=' . $db->quote(NV_LANG_DATA) . ' AND plugin_area=' . $db->quote($hook['plugin_area']) . ' AND hook_module=' . $db->quote($hook['hook_module']);
-                            $weight = $db->query($_sql)->fetchColumn();
+                            $stmt_wt = $db->prepare('SELECT max(weight) FROM ' . $db_config['prefix'] . '_plugins WHERE plugin_lang = :plugin_lang AND plugin_area = :plugin_area AND hook_module = :hook_module');
+                            $stmt_wt->bindValue(':plugin_lang', NV_LANG_DATA, PDO::PARAM_STR);
+                            $stmt_wt->bindValue(':plugin_area', $hook['plugin_area'], PDO::PARAM_STR);
+                            $stmt_wt->bindValue(':hook_module', $hook['hook_module'], PDO::PARAM_STR);
+                            $stmt_wt->execute();
+
+                            $weight = $stmt_wt->fetchColumn();
                             $weight = (int) $weight + 1;
 
-                            $db->query('INSERT INTO ' . $db_config['prefix'] . '_plugins (
+                            $stmt_plugin = $db->prepare('INSERT INTO ' . $db_config['prefix'] . '_plugins (
                                 plugin_lang, plugin_file, plugin_area, plugin_module_name, plugin_module_file, hook_module, weight
                             ) VALUES (
-                                ' . $db->quote(NV_LANG_DATA) . ',
-                                ' . $db->quote($hook['plugin_file']) . ',
-                                ' . $db->quote($hook['plugin_area']) . ',
-                                ' . $db->quote($setmodule) . ',
-                                ' . $db->quote($modrow['basename']) . ',
-                                ' . $db->quote($hook['hook_module']) . ',
-                                ' . $weight . '
+                                :plugin_lang, :plugin_file, :plugin_area, :plugin_module_name, :plugin_module_file, :hook_module, :weight
                             )');
+                            $stmt_plugin->bindValue(':plugin_lang', NV_LANG_DATA, PDO::PARAM_STR);
+                            $stmt_plugin->bindValue(':plugin_file', $hook['plugin_file'], PDO::PARAM_STR);
+                            $stmt_plugin->bindValue(':plugin_area', $hook['plugin_area'], PDO::PARAM_STR);
+                            $stmt_plugin->bindValue(':plugin_module_name', $setmodule, PDO::PARAM_STR);
+                            $stmt_plugin->bindValue(':plugin_module_file', $modrow['basename'], PDO::PARAM_STR);
+                            $stmt_plugin->bindValue(':hook_module', $hook['hook_module'], PDO::PARAM_STR);
+                            $stmt_plugin->bindValue(':weight', $weight, PDO::PARAM_INT);
+                            $stmt_plugin->execute();
                             $pid = $db->lastInsertId();
 
                             if ($hook['plugin_area'] == 'get_email_merge_fields') {
                                 $email_pids[$hook['plugin_file']] = $pid;
                             }
-                        } catch (PDOException $e) {
-                            trigger_error(print_r($e, true));
+                        } catch (Throwable $e) {
+                            trigger_error($e);
                         }
                     }
                     nv_save_file_config_global();
@@ -163,14 +175,16 @@ if (!empty($setmodule) and preg_match($global_config['check_module'], $setmodule
 
                 // Kết nối hook và các mẫu email nếu có
                 if (!empty($email_pids) and !empty($return['emails'])) {
+                    $stmt_email = $db->prepare('UPDATE ' . NV_EMAILTEMPLATES_GLOBALTABLE . ' SET sys_pids = :pids WHERE emailid = :emailid');
                     foreach ($return['emails'] as $emailid => $pfiles) {
                         $pids = array_intersect_key($email_pids, array_flip($pfiles));
                         if (empty($pids)) {
                             continue;
                         }
                         $pids = implode(',', $pids);
-                        $sql = "UPDATE " . NV_EMAILTEMPLATES_GLOBALTABLE . " SET sys_pids=" . $db->quote($pids). " WHERE emailid=" . $emailid;
-                        $db->query($sql);
+                        $stmt_email->bindValue(':pids', $pids, PDO::PARAM_STR);
+                        $stmt_email->bindValue(':emailid', $emailid, PDO::PARAM_INT);
+                        $stmt_email->execute();
                     }
                 }
 
@@ -192,24 +206,26 @@ $modules_data = [];
 
 $is_delCache = false;
 
-$sql_data = 'SELECT * FROM ' . $db_config['prefix'] . '_setup_extensions WHERE type=\'module\' ORDER BY addtime ASC';
+$sql_data = 'SELECT * FROM ' . $db_config['prefix'] . "_setup_extensions WHERE type = 'module' ORDER BY addtime ASC";
 $result = $db->query($sql_data);
+
+$stmt_del = $db->prepare('DELETE FROM ' . $db_config['prefix'] . "_setup_extensions WHERE title = :title AND type = 'module'");
+$stmt_upd = $db->prepare('UPDATE ' . NV_MODULES_TABLE . ' SET act=2 WHERE title = :title');
 
 while ($row = $result->fetch()) {
     if (array_key_exists($row['basename'], $modules_exit)) {
         $modules_data[$row['title']] = $row;
     } else {
-        $sth = $db->prepare('DELETE FROM ' . $db_config['prefix'] . '_setup_extensions WHERE title= :title AND type=\'module\'');
-        $sth->bindParam(':title', $row['title'], PDO::PARAM_STR);
-        $sth->execute();
+        $stmt_del->bindValue(':title', $row['title'], PDO::PARAM_STR);
+        $stmt_del->execute();
 
-        $sth = $db->prepare('UPDATE ' . NV_MODULES_TABLE . ' SET act=2 WHERE title=:title');
-        $sth->bindParam(':title', $row['title'], PDO::PARAM_STR);
-        $sth->execute();
+        $stmt_upd->bindValue(':title', $row['title'], PDO::PARAM_STR);
+        $stmt_upd->execute();
 
         $is_delCache = true;
     }
 }
+$result->closeCursor();
 
 if ($is_delCache) {
     $nv_Cache->delMod('modules');
@@ -263,16 +279,18 @@ foreach ($arr_module_news as $module_name_i => $arr) {
         // Chỉ cho phép ảo hóa module khi virtual = 1, Khi virtual = 2, chỉ đổi được tên các func
         $module_version['virtual'] = ($module_version['virtual'] == 1) ? 1 : 0;
 
-        $sth = $db->prepare('INSERT INTO ' . $db_config['prefix'] . '_setup_extensions (type, title, is_sys, is_virtual, basename, table_prefix, version, addtime, author, note) VALUES (
-            \'module\', :title, ' . (int) ($module_version['is_sysmod']) . ', ' . (int) ($module_version['virtual']) . ', :basename, :table_prefix, :version, ' . NV_CURRENTTIME . ', :author, :note)');
+        $stmt = $db->prepare('INSERT INTO ' . $db_config['prefix'] . "_setup_extensions (type, title, is_sys, is_virtual, basename, table_prefix, version, addtime, author, note) VALUES (
+            'module', :title, :is_sys, :is_virtual, :basename, :table_prefix, :version, " . NV_CURRENTTIME . ", :author, :note)");
 
-        $sth->bindParam(':title', $module_name_i, PDO::PARAM_STR);
-        $sth->bindParam(':basename', $module_name_i, PDO::PARAM_STR);
-        $sth->bindParam(':table_prefix', $module_data, PDO::PARAM_STR);
-        $sth->bindParam(':version', $version, PDO::PARAM_STR);
-        $sth->bindParam(':author', $author, PDO::PARAM_STR);
-        $sth->bindParam(':note', $note, PDO::PARAM_STR);
-        $sth->execute();
+        $stmt->bindValue(':title', $module_name_i, PDO::PARAM_STR);
+        $stmt->bindValue(':is_sys', (int) $module_version['is_sysmod'], PDO::PARAM_INT);
+        $stmt->bindValue(':is_virtual', (int) $module_version['virtual'], PDO::PARAM_INT);
+        $stmt->bindValue(':basename', $module_name_i, PDO::PARAM_STR);
+        $stmt->bindValue(':table_prefix', $module_data, PDO::PARAM_STR);
+        $stmt->bindValue(':version', $version, PDO::PARAM_STR);
+        $stmt->bindValue(':author', $author, PDO::PARAM_STR);
+        $stmt->bindValue(':note', $note, PDO::PARAM_STR);
+        $stmt->execute();
     }
 }
 

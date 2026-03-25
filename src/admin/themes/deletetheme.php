@@ -66,6 +66,7 @@ try {
     } else {
         echo $nv_Lang->getModule('theme_delete_unsuccess');
     }
-} catch (PDOException $e) {
+} catch (Throwable $e) {
+    trigger_error($e);
     exit($e->getMessage());
 }

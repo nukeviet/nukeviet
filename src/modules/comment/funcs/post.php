@@ -183,8 +183,8 @@ if (!empty($module_config[$module]['allowattachcomm']) and isset($_FILES['fileat
         if ($mk[0] > 0) {
             try {
                 $db->query('INSERT INTO ' . NV_UPLOAD_GLOBALTABLE . "_dir (dirname, time) VALUES ('" . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $dir . "', 0)");
-            } catch (PDOException $e) {
-                trigger_error($e->getMessage());
+            } catch (Throwable $e) {
+                trigger_error($e);
             }
         }
     }
@@ -263,5 +263,6 @@ try {
         _loadContents(['status' => 'OK', 'mess' => nv_base64_encode($comment_success)]);
     }
 } catch (Throwable $e) {
+    trigger_error($e);
     _loadContents(['status' => 'ERR', 'mess' => $e->getMessage()]);
 }

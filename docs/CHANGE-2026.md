@@ -2,6 +2,16 @@
 
 ## Tháng 3 năm 2026
 
+### Thống nhất dùng try catch
+```php
+try {
+
+} catch (Throwable $e) {
+    trigger_error($e);
+}
+```
+Chạy tool tools\try_catch_audit.php để quét tất cả các file và sửa lại, sau đó nhờ AI sửa dựa trên file report
+
 ### Thêm đối số NV_JSON_ENCODE cho hàm json_encode
 
 Đã định nghĩa trong src/includes/constants.php

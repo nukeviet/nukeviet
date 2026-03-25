@@ -378,6 +378,7 @@ if (defined('NV_IS_GODADMIN') or ($global_config['idsite'] > 0 and defined('NV_I
                     $stmt_upd_email->bindValue(':emailid', $row['emailid'], PDO::PARAM_INT);
                     $stmt_upd_email->execute();
                 } catch (Throwable $e) {
+                    trigger_error($e);
                     nv_jsonOutput([
                         'status' => 'error',
                         'mess' => 'ERROR EMAIL: <br />' . $e->getMessage()

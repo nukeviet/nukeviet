@@ -180,7 +180,7 @@ if ($checkss == NV_CHECK_SESSION) {
         ]];
         nv_sendmail_template_async([$module_file, NukeViet\Template\Email\Tpl2Step::ACTIVE_2STEP], $send_data);
     } catch (Throwable $e) {
-        trigger_error(print_r($e, true));
+        trigger_error($e);
         throw new \NukeViet\Http\HttpException('Error active 2-step Auth!!!', 500);
     }
 

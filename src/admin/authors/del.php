@@ -151,8 +151,8 @@ if (!csrf_check($nv_Request->get_string('checkss', 'post'), $_csrf_key)) {
             $stmt_update = $db->prepare('UPDATE ' . NV_GROUPS_GLOBALTABLE . ' SET numbers = numbers - 1 WHERE group_id IN (SELECT group_id FROM ' . NV_GROUPS_GLOBALTABLE . '_users WHERE userid = :userid AND approved = 1)');
             $stmt_update->bindValue(':userid', $admin_id, PDO::PARAM_INT);
             $stmt_update->execute();
-        } catch (PDOException $e) {
-            trigger_error(print_r($e, true));
+        } catch (Throwable $e) {
+            trigger_error($e);
         }
         $stmt_del = $db->prepare('DELETE FROM ' . NV_GROUPS_GLOBALTABLE . '_users WHERE userid = :userid');
         $stmt_del->bindValue(':userid', $admin_id, PDO::PARAM_INT);

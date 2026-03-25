@@ -59,8 +59,8 @@ if ($nv_Request->isset_request('save', 'post')) {
         $sth->bindValue(':config_name', 'config_sso', PDO::PARAM_STR);
         $sth->bindParam(':config_value', $config_sso, PDO::PARAM_STR);
         $sth->execute();
-    } catch (PDOException $e) {
-        trigger_error($e->getMessage());
+    } catch (Throwable $e) {
+        trigger_error($e);
     }
 
     nv_insert_logs(NV_LANG_DATA, $module_name, $nv_Lang->getModule('config'), $page_title, $admin_info['userid']);

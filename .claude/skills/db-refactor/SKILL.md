@@ -79,7 +79,8 @@ while ($_row_file = $result->fetch()) {
 ```
 
 Lưu ý đặt tên biến fetch:
-- Không dùng `$row` chung chung — đặt tên theo nội dung truy vấn (`$_row_cat`, `$_row_user`, `$_row_file`, `$_row_module`...) để tránh trùng biến, đặc biệt trong các vòng lặp lồng nhau.
+- `$row` là hợp lệ cho vòng lặp đơn, không lồng nhau.
+- Khi có **vòng lặp lồng nhau**, bắt buộc đặt tên theo ngữ nghĩa (`$_row_cat`, `$_row_user`, `$_row_file`, `$_row_module`...) để tránh trùng biến.
 - Luôn dùng `$result->fetch()` — NukeViet 5 đã cấu hình `PDO::FETCH_ASSOC` làm mặc định trong `Database.php`, không cần truyền tham số. Không dùng `PDO::FETCH_NUM` — tránh bug ngầm khi thứ tự cột trong `SELECT` thay đổi.
 
 ### INSERT — chuẩn PDO
@@ -136,3 +137,4 @@ $stmt->execute();
 - **Bảo tồn logic & comment:** Tuyệt đối KHÔNG xóa comment hoặc các dòng khởi tạo biến (ví dụ `$array = [];`) của code cũ khi refactor SQL. Chỉ thay thế phần thực thi truy vấn.
 - Giữ nguyên `intval()`, `strip_tags()`, v.v. — chúng phục vụ validate nghiệp vụ, không liên quan SQL.
 - Đảm bảo `global $db, $db_slave;` được khai báo trong hàm nếu cần.
+- Để tiết kiệm token, AI chỉ báo cáo các điểm thực sự quan trọng, Bỏ qua các giải thích lý thuyết rườm rà.

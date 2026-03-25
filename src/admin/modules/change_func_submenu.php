@@ -22,16 +22,17 @@ if ($func_id > 0) {
             'text' => $nv_Lang->getGlobal('error_checkss')
         ]);
     }
-    $sth = $db->prepare('SELECT in_submenu FROM ' . NV_MODFUNCS_TABLE . ' WHERE func_id = :id');
-    $sth->bindParam(':id', $func_id, PDO::PARAM_INT);
-    $sth->execute();
-    $row = $sth->fetch();
+    $stmt = $db->prepare('SELECT in_submenu FROM ' . NV_MODFUNCS_TABLE . ' WHERE func_id = :id');
+    $stmt->bindValue(':id', $func_id, PDO::PARAM_INT);
+    $stmt->execute();
+    $row = $stmt->fetch();
+    $stmt->closeCursor();
     if (!empty($row)) {
         $in_submenu = $row['in_submenu'] ? 0 : 1;
-        $sth = $db->prepare('UPDATE ' . NV_MODFUNCS_TABLE . ' SET in_submenu = :in_submenu WHERE func_id = :id');
-        $sth->bindParam(':in_submenu', $in_submenu, PDO::PARAM_INT);
-        $sth->bindParam(':id', $func_id, PDO::PARAM_INT);
-        $sth->execute();
+        $stmt = $db->prepare('UPDATE ' . NV_MODFUNCS_TABLE . ' SET in_submenu = :in_submenu WHERE func_id = :id');
+        $stmt->bindValue(':in_submenu', $in_submenu, PDO::PARAM_INT);
+        $stmt->bindValue(':id', $func_id, PDO::PARAM_INT);
+        $stmt->execute();
         $nv_Cache->delMod('modules');
         nv_jsonOutput([
             'success' => 1,

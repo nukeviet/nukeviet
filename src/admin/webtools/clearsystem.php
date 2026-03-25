@@ -124,7 +124,9 @@ if ($nv_Request->isset_request('deltype', 'post')) {
             }
             $nv_Cache->delAll();
             if (defined('NV_IS_GODADMIN')) {
-                $db->query('UPDATE ' . NV_CONFIG_GLOBALTABLE . " SET config_value = '" . NV_CURRENTTIME . "' WHERE lang = 'sys' AND module = 'global' AND config_name = 'timestamp'");
+                $stmt = $db->prepare("UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = 'sys' AND module = 'global' AND config_name = 'timestamp'");
+                $stmt->bindValue(':config_value', NV_CURRENTTIME, PDO::PARAM_INT);
+                $stmt->execute();
                 nv_save_file_config_global();
             }
         }

@@ -61,7 +61,8 @@ if ($nv_Request->isset_request('idcheck', 'post')) {
             foreach ($catids as $catid_i) {
                 try {
                     $db->exec('INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . '_' . $catid_i . ' SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE id=' . $id);
-                } catch (PDOException $e) {
+                } catch (Throwable $e) {
+                    trigger_error($e);
                     $db->exec('DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_' . $catid_i . ' WHERE id=' . $id);
                     $db->exec('INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . '_' . $catid_i . ' SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE id=' . $id);
                 }

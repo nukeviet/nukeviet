@@ -15,7 +15,10 @@ if (!defined('NV_IS_FILE_MODULES')) {
 
 $array_site_cat_module = [];
 if ($global_config['idsite']) {
-    $_module = $db->query('SELECT module FROM ' . $db_config['dbsystem'] . '.' . $db_config['prefix'] . '_site_cat t1 INNER JOIN ' . $db_config['dbsystem'] . '.' . $db_config['prefix'] . '_site t2 ON t1.cid=t2.cid WHERE t2.idsite=' . $global_config['idsite'])->fetchColumn();
+    $stmt = $db->prepare('SELECT module FROM ' . $db_config['dbsystem'] . '.' . $db_config['prefix'] . '_site_cat t1 INNER JOIN ' . $db_config['dbsystem'] . '.' . $db_config['prefix'] . '_site t2 ON t1.cid=t2.cid WHERE t2.idsite=:idsite');
+    $stmt->bindValue(':idsite', $global_config['idsite'], PDO::PARAM_INT);
+    $stmt->execute();
+    $_module = $stmt->fetchColumn();
 
     if (!empty($_module)) {
         $array_site_cat_module = explode(',', $_module);
@@ -48,8 +51,12 @@ if (csrf_check($nv_Request->get_title('checkss', 'post'), $csrf_key)) {
     $modules_admin = nv_scandir(NV_ROOTDIR . '/' . NV_ADMINDIR, $global_config['check_module']);
 
     // Kiểm tra tồn tại
-    $sql = "SELECT * FROM " . $db_config['prefix'] . "_setup_extensions WHERE type='module' AND title=" . $db->quote($title);
-    $is_exists = $db->query($sql)->fetch();
+    $stmt = $db->prepare('SELECT * FROM ' . $db_config['prefix'] . "_setup_extensions WHERE type = 'module' AND title = :title");
+    $stmt->bindValue(':title', $title, PDO::PARAM_STR);
+    $stmt->execute();
+    
+    $is_exists = $stmt->fetch();
+    $stmt->closeCursor();
 
     if (!$is_exists and !in_array($title, $modules_site, true) and !in_array($title, $modules_admin, true) and preg_match($global_config['check_module'], $title) and preg_match($global_config['check_module'], $modfile)) {
         $version = '';
@@ -58,18 +65,18 @@ if (csrf_check($nv_Request->get_title('checkss', 'post'), $csrf_key)) {
         $module_data = preg_replace('/(\W+)/i', '_', $title);
         if (empty($array_site_cat_module) or in_array($modfile, $array_site_cat_module, true)) {
             try {
-                $sth = $db->prepare('INSERT INTO ' . $db_config['prefix'] . '_setup_extensions (
+                $stmt = $db->prepare('INSERT INTO ' . $db_config['prefix'] . "_setup_extensions (
                     type, title, is_sys, is_virtual, basename, table_prefix, version, addtime, author, note
                 ) VALUES (
-                    \'module\', :title, 0, 0, :basename, :table_prefix, :version, ' . NV_CURRENTTIME . ', :author, :note
-                )');
-                $sth->bindParam(':title', $title, PDO::PARAM_STR);
-                $sth->bindParam(':basename', $modfile, PDO::PARAM_STR);
-                $sth->bindParam(':table_prefix', $module_data, PDO::PARAM_STR);
-                $sth->bindParam(':version', $version, PDO::PARAM_STR);
-                $sth->bindParam(':author', $author, PDO::PARAM_STR);
-                $sth->bindParam(':note', $note, PDO::PARAM_STR);
-                if ($sth->execute()) {
+                    'module', :title, 0, 0, :basename, :table_prefix, :version, " . NV_CURRENTTIME . ", :author, :note
+                )");
+                $stmt->bindValue(':title', $title, PDO::PARAM_STR);
+                $stmt->bindValue(':basename', $modfile, PDO::PARAM_STR);
+                $stmt->bindValue(':table_prefix', $module_data, PDO::PARAM_STR);
+                $stmt->bindValue(':version', $version, PDO::PARAM_STR);
+                $stmt->bindValue(':author', $author, PDO::PARAM_STR);
+                $stmt->bindValue(':note', $note, PDO::PARAM_STR);
+                if ($stmt->execute()) {
                     nv_insert_logs(NV_LANG_DATA, $module_name, $nv_Lang->getModule('vmodule_add') . ' ' . $module_data, '', $admin_info['userid']);
                 }
                 nv_jsonOutput([
@@ -77,7 +84,7 @@ if (csrf_check($nv_Request->get_title('checkss', 'post'), $csrf_key)) {
                     'redirect' => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=setup&autosetup=' . $title
                 ]);
             } catch (Throwable $e) {
-                trigger_error($e->getMessage());
+                trigger_error($e);
                 nv_jsonOutput([
                     'status' => 'error',
                     'mess' => $e->getMessage(),
@@ -102,13 +109,12 @@ $tpl->assign('MODULE_NAME', $module_name);
 $tpl->assign('OP', $op);
 $tpl->assign('CHECKSS', csrf_create($csrf_key));
 
-$sql = 'SELECT title FROM ' . $db_config['prefix'] . '_setup_extensions WHERE is_virtual=1 AND type=\'module\' ORDER BY addtime ASC';
+$sql = 'SELECT title FROM ' . $db_config['prefix'] . "_setup_extensions WHERE is_virtual = 1 AND type = 'module' ORDER BY addtime ASC";
 $result = $db->query($sql);
 
 $modfile = [];
-while ($_scratch = $result->fetch(3)) {
-    [$modfile_i] = $_scratch;
-    unset($_scratch);
+while ($_row_mod = $result->fetch()) {
+    $modfile_i = $_row_mod['title'];
     if (in_array($modfile_i, $modules_site, true)) {
         if (!empty($array_site_cat_module) and !in_array($modfile_i, $array_site_cat_module, true)) {
             continue;
@@ -116,6 +122,7 @@ while ($_scratch = $result->fetch(3)) {
         $modfile[] = $modfile_i;
     }
 }
+$result->closeCursor();
 $tpl->assign('MODFILE', $modfile);
 
 $contents = $tpl->fetch('vmodule.tpl');

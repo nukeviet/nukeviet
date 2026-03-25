@@ -215,8 +215,8 @@ if (defined('NV_IS_GODADMIN') and $nv_Request->isset_request('basicsave', 'post'
 
     $sth = $db->prepare('UPDATE ' . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = 'sys' AND module = 'global' AND config_name = :config_name");
     foreach ($post as $config_name => $config_value) {
-        $sth->bindParam(':config_name', $config_name, PDO::PARAM_STR, 30);
-        $sth->bindParam(':config_value', $config_value, PDO::PARAM_STR);
+        $sth->bindValue(':config_name', $config_name, PDO::PARAM_STR);
+        $sth->bindValue(':config_value', $config_value, PDO::PARAM_STR);
         $sth->execute();
     }
 
@@ -239,8 +239,8 @@ if (defined('NV_IS_GODADMIN') and $nv_Request->isset_request('basicsave', 'post'
 
     $sth = $db->prepare('UPDATE ' . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = 'sys' AND module = 'define' AND config_name = :config_name");
     foreach ($post as $config_name => $config_value) {
-        $sth->bindParam(':config_name', $config_name, PDO::PARAM_STR, 30);
-        $sth->bindParam(':config_value', $config_value, PDO::PARAM_STR);
+        $sth->bindValue(':config_name', $config_name, PDO::PARAM_STR);
+        $sth->bindValue(':config_value', $config_value, PDO::PARAM_STR);
         $sth->execute();
     }
 
@@ -269,8 +269,8 @@ if (defined('NV_IS_GODADMIN') and $nv_Request->isset_request('floodsave', 'post'
 
     $sth = $db->prepare('UPDATE ' . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = 'sys' AND module = 'global' AND config_name = :config_name");
     foreach ($post as $config_name => $config_value) {
-        $sth->bindParam(':config_name', $config_name, PDO::PARAM_STR, 30);
-        $sth->bindParam(':config_value', $config_value, PDO::PARAM_STR);
+        $sth->bindValue(':config_name', $config_name, PDO::PARAM_STR);
+        $sth->bindValue(':config_value', $config_value, PDO::PARAM_STR);
         $sth->execute();
     }
 
@@ -298,7 +298,12 @@ if (defined('NV_IS_GODADMIN') and ($action == 'fip' or $action == 'bip')) {
     $id = $nv_Request->get_int('id', 'get', 0);
     $type = $action == 'fip' ? 1 : 0;
     if (!empty($id)) {
-        $ipdetails = $db->query('SELECT * FROM ' . $db_config['prefix'] . '_ips WHERE id=' . $id . ' AND type=' . $type)->fetch();
+        $stmt = $db->prepare('SELECT * FROM ' . $db_config['prefix'] . '_ips WHERE id = :id AND type = :type');
+        $stmt->bindValue(':id', $id, PDO::PARAM_INT);
+        $stmt->bindValue(':type', $type, PDO::PARAM_INT);
+        $stmt->execute();
+        $ipdetails = $stmt->fetch();
+        $stmt->closeCursor();
         if (empty($ipdetails)) {
             exit('IP not found in database');
         }
@@ -379,21 +384,31 @@ if (defined('NV_IS_GODADMIN') and ($action == 'fip' or $action == 'bip')) {
         $post['notice'] = $nv_Request->get_title('notice', 'post', '', 1);
 
         if ($id) {
-            $db->query('DELETE FROM ' . $db_config['prefix'] . '_ips WHERE type = ' . $type . ' AND ip = ' . $db->quote($post['ip']) . ' AND id != ' . $id);
+            $stmt = $db->prepare('DELETE FROM ' . $db_config['prefix'] . '_ips WHERE type = :type AND ip = :ip AND id != :id');
+            $stmt->bindValue(':type', $type, PDO::PARAM_INT);
+            $stmt->bindValue(':ip', $post['ip'], PDO::PARAM_STR);
+            $stmt->bindValue(':id', $id, PDO::PARAM_INT);
+            $stmt->execute();
+
             $sth = $db->prepare('UPDATE ' . $db_config['prefix'] . '_ips
                 SET ip = :ip, mask = :mask, area = :area, begintime = :begintime, endtime = :endtime, notice = :notice
-                WHERE id=' . $id);
+                WHERE id = :id');
+            $sth->bindValue(':id', $id, PDO::PARAM_INT);
         } else {
-            $db->query('DELETE FROM ' . $db_config['prefix'] . '_ips WHERE type = ' . $type . ' AND ip = ' . $db->quote($post['ip']));
-            $sth = $db->prepare('INSERT INTO ' . $db_config['prefix'] . '_ips (type, ip, mask, area, begintime, endtime, notice) VALUES
-            (' . $type . ', :ip, :mask, :area, :begintime, :endtime, :notice )');
+            $stmt = $db->prepare('DELETE FROM ' . $db_config['prefix'] . '_ips WHERE type = :type AND ip = :ip');
+            $stmt->bindValue(':type', $type, PDO::PARAM_INT);
+            $stmt->bindValue(':ip', $post['ip'], PDO::PARAM_STR);
+            $stmt->execute();
+
+            $sth = $db->prepare('INSERT INTO ' . $db_config['prefix'] . '_ips (type, ip, mask, area, begintime, endtime, notice) VALUES (:type, :ip, :mask, :area, :begintime, :endtime, :notice)');
+            $sth->bindValue(':type', $type, PDO::PARAM_INT);
         }
-        $sth->bindParam(':ip', $post['ip'], PDO::PARAM_STR);
-        $sth->bindParam(':mask', $post['mask'], PDO::PARAM_INT);
-        $sth->bindParam(':area', $post['area'], PDO::PARAM_INT);
-        $sth->bindParam(':begintime', $post['begintime'], PDO::PARAM_INT);
-        $sth->bindParam(':endtime', $post['endtime'], PDO::PARAM_INT);
-        $sth->bindParam(':notice', $post['notice'], PDO::PARAM_STR);
+        $sth->bindValue(':ip', $post['ip'], PDO::PARAM_STR);
+        $sth->bindValue(':mask', $post['mask'], PDO::PARAM_INT);
+        $sth->bindValue(':area', $post['area'], PDO::PARAM_INT);
+        $sth->bindValue(':begintime', $post['begintime'], PDO::PARAM_INT);
+        $sth->bindValue(':endtime', $post['endtime'], PDO::PARAM_INT);
+        $sth->bindValue(':notice', $post['notice'], PDO::PARAM_STR);
         $sth->execute();
 
         $save = nv_save_file_ips($type);
@@ -452,7 +467,10 @@ if (defined('NV_IS_GODADMIN') and ($action == 'delfip' or $action == 'delbip') a
     $id = $nv_Request->get_int('id', 'post', 0);
     $type = $action == 'delfip' ? 1 : 0;
     if (!empty($id)) {
-        $db->query('DELETE FROM ' . $db_config['prefix'] . '_ips WHERE type = ' . $type . ' AND id = ' . $id);
+        $stmt = $db->prepare('DELETE FROM ' . $db_config['prefix'] . '_ips WHERE type = :type AND id = :id');
+        $stmt->bindValue(':type', $type, PDO::PARAM_INT);
+        $stmt->bindValue(':id', $id, PDO::PARAM_INT);
+        $stmt->execute();
     }
 
     $save = nv_save_file_ips($type);
@@ -504,8 +522,8 @@ if (defined('NV_IS_GODADMIN') and $nv_Request->isset_request('captchasave', 'pos
 
     $sth = $db->prepare('UPDATE ' . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = 'sys' AND module = 'global' AND config_name = :config_name");
     foreach ($post as $config_name => $config_value) {
-        $sth->bindParam(':config_name', $config_name, PDO::PARAM_STR, 30);
-        $sth->bindParam(':config_value', $config_value, PDO::PARAM_STR);
+        $sth->bindValue(':config_name', $config_name, PDO::PARAM_STR);
+        $sth->bindValue(':config_value', $config_value, PDO::PARAM_STR);
         $sth->execute();
     }
 
@@ -517,8 +535,8 @@ if (defined('NV_IS_GODADMIN') and $nv_Request->isset_request('captchasave', 'pos
 
     $sth = $db->prepare('UPDATE ' . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = 'sys' AND module = 'define' AND config_name = :config_name");
     foreach ($post as $config_name => $config_value) {
-        $sth->bindParam(':config_name', $config_name, PDO::PARAM_STR, 30);
-        $sth->bindParam(':config_value', $config_value, PDO::PARAM_STR);
+        $sth->bindValue(':config_name', $config_name, PDO::PARAM_STR);
+        $sth->bindValue(':config_value', $config_value, PDO::PARAM_STR);
         $sth->execute();
     }
 
@@ -533,8 +551,8 @@ if (defined('NV_IS_GODADMIN') and $nv_Request->isset_request('captchasave', 'pos
 
     $sth = $db->prepare('UPDATE ' . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = 'sys' AND module = 'global' AND config_name = :config_name");
     foreach ($post as $config_name => $config_value) {
-        $sth->bindParam(':config_name', $config_name, PDO::PARAM_STR, 30);
-        $sth->bindParam(':config_value', $config_value, PDO::PARAM_STR);
+        $sth->bindValue(':config_name', $config_name, PDO::PARAM_STR);
+        $sth->bindValue(':config_value', $config_value, PDO::PARAM_STR);
         $sth->execute();
     }
 
@@ -565,9 +583,9 @@ if (defined('NV_IS_GODADMIN') and $nv_Request->isset_request('modcapt', 'post') 
             }
         }
         if (isset($lg, $modl)) {
-            $sth->bindParam(':config_value', $type, PDO::PARAM_STR);
-            $sth->bindParam(':lang', $lg, PDO::PARAM_STR);
-            $sth->bindParam(':module', $modl, PDO::PARAM_STR);
+            $sth->bindValue(':config_value', $type, PDO::PARAM_STR);
+            $sth->bindValue(':lang', $lg, PDO::PARAM_STR);
+            $sth->bindValue(':module', $modl, PDO::PARAM_STR);
             $sth->execute();
         }
     }
@@ -584,8 +602,7 @@ if (defined('NV_IS_GODADMIN') and $nv_Request->isset_request('modcapt', 'post') 
 if (defined('NV_IS_GODADMIN') and $nv_Request->isset_request('captarea', 'post') and csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
     $captcha_areas = $nv_Request->get_typed_array('captcha_area', 'post', 'string');
     $captcha_areas = !empty($captcha_areas) ? implode(',', $captcha_areas) : '';
-    $sth = $db->prepare('UPDATE ' . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = 'sys' AND module = 'site' AND config_name = 'captcha_area'");
-    $sth->bindParam(':config_value', $captcha_areas, PDO::PARAM_STR);
+    $sth->bindValue(':config_value', $captcha_areas, PDO::PARAM_STR);
     $sth->execute();
 
     $nv_Cache->delMod('settings');
@@ -602,8 +619,8 @@ if (defined('NV_IS_GODADMIN') and $nv_Request->isset_request('captcommarea', 'po
     $sth = $db->prepare('UPDATE ' . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = '" . NV_LANG_DATA . "' AND module = :module AND config_name = 'captcha_area_comm'");
     foreach ($captcha_areas_comm as $mod => $area) {
         if (isset($module_config[$mod]['captcha_area_comm'], $module_config[$mod]['activecomm'], $captcha_comm_list[$area])) {
-            $sth->bindParam(':config_value', $area, PDO::PARAM_STR);
-            $sth->bindParam(':module', $mod, PDO::PARAM_STR);
+            $sth->bindValue(':config_value', $area, PDO::PARAM_STR);
+            $sth->bindValue(':module', $mod, PDO::PARAM_STR);
             $sth->execute();
         }
     }
@@ -694,8 +711,8 @@ if (defined('NV_IS_GODADMIN') and $nv_Request->isset_request('corssave', 'post')
 
     $sth = $db->prepare('UPDATE ' . NV_CONFIG_GLOBALTABLE . " SET config_value=:config_value WHERE lang='sys' AND module='global' AND config_name=:config_name");
     foreach ($post as $config_name => $config_value) {
-        $sth->bindParam(':config_name', $config_name, PDO::PARAM_STR, 30);
-        $sth->bindParam(':config_value', $config_value, PDO::PARAM_STR);
+        $sth->bindValue(':config_name', $config_name, PDO::PARAM_STR);
+        $sth->bindValue(':config_value', $config_value, PDO::PARAM_STR);
         $sth->execute();
     }
 
@@ -739,8 +756,8 @@ if ($nv_Request->isset_request('cspsave', 'post') and csrf_check($nv_Request->ge
 
     $sth = $db->prepare('UPDATE ' . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = 'sys' AND module = 'site' AND config_name = :config_name");
     foreach ($post as $config_name => $config_value) {
-        $sth->bindParam(':config_value', $config_value, PDO::PARAM_STR);
-        $sth->bindParam(':config_name', $config_name, PDO::PARAM_STR, 30);
+        $sth->bindValue(':config_value', $config_value, PDO::PARAM_STR);
+        $sth->bindValue(':config_name', $config_name, PDO::PARAM_STR);
         $sth->execute();
     }
 
@@ -772,8 +789,8 @@ if ($nv_Request->isset_request('rpsave', 'post') and csrf_check($nv_Request->get
 
     $sth = $db->prepare('UPDATE ' . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = 'sys' AND module = 'site' AND config_name = :config_name");
     foreach ($post as $config_name => $config_value) {
-        $sth->bindParam(':config_value', $config_value, PDO::PARAM_STR);
-        $sth->bindParam(':config_name', $config_name, PDO::PARAM_STR, 30);
+        $sth->bindValue(':config_value', $config_value, PDO::PARAM_STR);
+        $sth->bindValue(':config_name', $config_name, PDO::PARAM_STR);
         $sth->execute();
     }
 

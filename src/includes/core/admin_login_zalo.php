@@ -39,7 +39,8 @@ if (!empty($_GET['code'])) {
                 ];
             }
         }
-    } catch (Exception $e) {
+    } catch (Throwable $e) {
+        trigger_error($e);
         $error = $e->getMessage();
     }
 } else {
