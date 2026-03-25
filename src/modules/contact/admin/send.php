@@ -28,7 +28,8 @@ if ($nv_Request->isset_request('save', 'post')) {
     if (nv_strlen($post['title']) < 3) {
         nv_jsonOutput([
             'status' => 'error',
-            'mess' => $nv_Lang->getModule('admin_error_title')
+            'mess' => $nv_Lang->getModule('admin_error_title'),
+            'input' => 'title'
         ]);
     }
 
@@ -51,7 +52,8 @@ if ($nv_Request->isset_request('save', 'post')) {
     if (empty($post['email'])) {
         nv_jsonOutput([
             'status' => 'error',
-            'mess' => $nv_Lang->getModule('error_mail_empty')
+            'mess' => $nv_Lang->getModule('error_mail_empty'),
+            'input' => 'email'
         ]);
     }
 
@@ -59,7 +61,8 @@ if ($nv_Request->isset_request('save', 'post')) {
     if (empty($test_content)) {
         nv_jsonOutput([
             'status' => 'error',
-            'mess' => $nv_Lang->getModule('no_content_send_title')
+            'mess' => $nv_Lang->getModule('no_content_send_title'),
+            'input' => 'mess_content'
         ]);
     }
 
@@ -74,6 +77,9 @@ if ($nv_Request->isset_request('save', 'post')) {
         $maillang = NV_LANG_DATA;
     }
 
+    /**
+     * @var array<array<string>> $post['email']
+     */
     foreach ($post['email'] as $emails) {
         if ($s) {
             sleep(2);
@@ -105,27 +111,28 @@ if (defined('NV_EDITOR') and nv_function_exists('nv_aleditor')) {
     $mess_content = '<textarea style="width:99%" name="mess_content" id="mess_content" cols="20" rows="8">' . $mess_content . '</textarea>';
 }
 
-$xtpl = new XTemplate($op . '.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-$xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
-$xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
+$tpl = new \NukeViet\Template\NVSmarty();
+$tpl->setTemplateDir(get_module_tpl_dir(basename(__FILE__, '.php') . '.tpl'));
 
-$xtpl->assign('FORM_ACTION', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op);
-$xtpl->assign('MESS_CONTENT', $mess_content);
+$tpl->assign('LANG', $nv_Lang);
+$tpl->assign('MODULE_NAME', $module_name);
+$tpl->assign('OP', $op);
+$tpl->assign('CHECKSS', csrf_create($csrf_key));
+$tpl->assign('MESS_CONTENT', $mess_content);
 
+$mail_langs = [];
 if (count($global_config['setup_langs']) > 1) {
     foreach ($global_config['setup_langs'] as $langkey) {
-        $xtpl->assign('MAIL_LANG', [
+        $mail_langs[] = [
             'key' => $langkey,
-            'sel' => $langkey == NV_LANG_DATA ? ' selected="selected"' : '',
+            'selected' => ($langkey == NV_LANG_DATA),
             'name' => $language_array[$langkey]['name']
-        ]);
-        $xtpl->parse('main.mail_lang.loop');
+        ];
     }
-    $xtpl->parse('main.mail_lang');
 }
+$tpl->assign('MAIL_LANGS', $mail_langs);
 
-$xtpl->parse('main');
-$contents = $xtpl->text('main');
+$contents = $tpl->fetch(basename(__FILE__, '.php') . '.tpl');
 
 $page_title = $module_info['site_title'];
 
