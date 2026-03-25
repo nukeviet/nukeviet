@@ -133,7 +133,7 @@ function cron_user_datadeletion_handling()
             $db->commit();
         } catch (Throwable $e) {
             $db->rollBack();
-            trigger_error(print_r($e, true));
+            trigger_error($e);
             continue;
         }
 

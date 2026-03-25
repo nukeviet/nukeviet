@@ -179,6 +179,7 @@ if ($nv_Request->isset_request('save_credential', 'post')) {
             'json'
         );
     } catch (Throwable $e) {
+        trigger_error($e);
         nv_jsonOutput([
             'status' => 'error',
             'mess' => $nv_Lang->getGlobal('passkey_error_challenge1'),
@@ -200,6 +201,7 @@ if ($nv_Request->isset_request('save_credential', 'post')) {
             'json'
         );
     } catch (Throwable $e) {
+        trigger_error($e);
         nv_jsonOutput([
             'status' => 'error',
             'mess' => $nv_Lang->getGlobal('passkey_error_credential1'),

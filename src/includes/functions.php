@@ -771,6 +771,7 @@ function nv_groups_add_user($group_id, $userid, $approved = 1, $mod_data = 'user
             $db->query('UPDATE ' . $_mod_table . '_groups SET numbers = numbers+1 WHERE group_id=' . $group_id);
         }
     } catch (Throwable $e) {
+        trigger_error($e);
         if ($group_id > 3) {
             return false;
         }
@@ -1657,8 +1658,8 @@ function nv_sendmail($from, $to, $subject, $message, $files = '', $AddEmbeddedIm
         }
 
         return $testmode ? '' : true;
-    } catch (PHPMailer\PHPMailer\Exception $e) {
-        trigger_error($e->errorMessage(), E_USER_WARNING);
+    } catch (Throwable $e) {
+        trigger_error($e);
 
         return $testmode ? $e->errorMessage() : false;
     }
@@ -2945,8 +2946,8 @@ function nv_sys_mods($lang = '')
         $cache = serialize($sys_mods);
         $nv_Cache->setItem('modules', $cache_file, $cache, $lang);
         unset($cache, $result);
-    } catch (PDOException $e) {
-        // trigger_error( $e->getMessage() );
+    } catch (Throwable $e) {
+        trigger_error($e);
     }
 
     return $sys_mods;
@@ -3120,8 +3121,8 @@ function nv_delete_notification($language, $module, $type, $obid)
             $sth->bindParam(':module', $module, PDO::PARAM_STR);
             $sth->bindParam(':type', $type, PDO::PARAM_STR);
             $sth->execute();
-        } catch (PDOException $e) {
-            trigger_error(print_r($e, true));
+        } catch (Throwable $e) {
+            trigger_error($e);
         }
     }
 
@@ -4188,7 +4189,7 @@ function nv_sendmail_from_template($emailid, $data = [], $lang = '', $attachment
 
             $result[] = nv_sendmail($_email_data['from'], $row['to'], $email_subject, $email_content, implode(',', $_email_data['attachments']), false, $test_mode, $_email_data['cc'], $_email_data['bcc'], !$email_data['is_selftemplate'], [], $email_lang, $_email_data['mailtpl']);
         } catch (Throwable $e) {
-            trigger_error(print_r($e, true));
+            trigger_error($e);
             $result[] = false;
         }
     }

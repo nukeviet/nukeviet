@@ -211,8 +211,8 @@ if ($nv_Request->isset_request('save', 'post')) {
     } else {
         try {
             $db->query('INSERT INTO ' . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('sys', 'site', 'sitetimestamp', '1')");
-        } catch (PDOException $e) {
-            trigger_error($e->getMessage());
+        } catch (Throwable $e) {
+            trigger_error($e);
         }
     }
 

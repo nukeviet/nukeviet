@@ -152,7 +152,7 @@ if ($nv_Request->isset_request('checkss', 'post') and csrf_check($nv_Request->ge
 
             unset($tpl_string);
         } catch (Throwable $e) {
-            trigger_error(print_r($e, true));
+            trigger_error($e);
             $error[] = nv_htmlspecialchars($e->getMessage());
         }
     }

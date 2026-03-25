@@ -197,8 +197,8 @@ if (file_exists(NV_UPLOADS_REAL_DIR . '/' . $currentpath)) {
                     $upload_real_dir_page = $mk[2];
                     try {
                         $db->query('INSERT INTO ' . NV_UPLOAD_GLOBALTABLE . "_dir (dirname, time) VALUES ('" . NV_UPLOADS_DIR . '/' . $cp . $p . "', 0)");
-                    } catch (PDOException $e) {
-                        trigger_error($e->getMessage());
+                    } catch (Throwable $e) {
+                        trigger_error($e);
                     }
                 }
             } elseif (!empty($p)) {
@@ -1435,7 +1435,8 @@ if ($is_submit_form) {
                             $sth = $db->prepare('INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . '_tags_id (id, tid, keyword) VALUES (' . $rowcontent['id'] . ', ' . (int) $tid . ', :keyword)');
                             $sth->bindParam(':keyword', $_tag, PDO::PARAM_STR);
                             $sth->execute();
-                        } catch (PDOException $e) {
+                        } catch (Throwable $e) {
+                            trigger_error($e);
                             $sth = $db->prepare('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_tags_id SET keyword = :keyword WHERE id = ' . $rowcontent['id'] . ' AND tid=' . (int) $tid);
                             $sth->bindParam(':keyword', $_tag, PDO::PARAM_STR);
                             $sth->execute();

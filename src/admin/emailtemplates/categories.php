@@ -229,8 +229,8 @@ if ($nv_Request->isset_request('saveform', 'post')) {
                     $error = $nv_Lang->getModule('errorsave');
                 }
             } catch (Throwable $e) {
-                trigger_error(print_r($e, true));
-                $error = $nv_Lang->getModule('errorsave');
+                trigger_error($e);
+                $error = $e->getMessage();
             }
         }
     }

@@ -84,7 +84,7 @@ if (csrf_check($nv_Request->get_title('checkss', 'post'), $csrf_key)) {
                     'redirect' => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=setup&autosetup=' . $title
                 ]);
             } catch (Throwable $e) {
-                trigger_error($e->getMessage());
+                trigger_error($e);
                 nv_jsonOutput([
                     'status' => 'error',
                     'mess' => $e->getMessage(),

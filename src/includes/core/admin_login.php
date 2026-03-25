@@ -151,6 +151,7 @@ if ($passkey_allowed and $nv_Request->isset_request('login_assertion', 'post')) 
             'json'
         );
     } catch (Throwable $e) {
+        trigger_error($e);
         nv_jsonOutput([
             'status' => 'error',
             'mess' => $nv_Lang->getGlobal('passkey_error_challenge1'),
@@ -172,6 +173,7 @@ if ($passkey_allowed and $nv_Request->isset_request('login_assertion', 'post')) 
             'json'
         );
     } catch (Throwable $e) {
+        trigger_error($e);
         nv_jsonOutput([
             'status' => 'error',
             'mess' => $nv_Lang->getGlobal('passkey_error_credential1'),
@@ -222,6 +224,7 @@ if ($passkey_allowed and $nv_Request->isset_request('login_assertion', 'post')) 
             $userhandle
         );
     } catch (Throwable $e) {
+        trigger_error($e);
         nv_jsonOutput([
             'status' => 'error',
             'mess' => $nv_Lang->getGlobal('passkey_error_validator'),
@@ -522,6 +525,7 @@ if (!empty($admin_pre_data) and $nv_Request->isset_request('submit2spasskey', 'p
             'json'
         );
     } catch (Throwable $e) {
+        trigger_error($e);
         nv_jsonOutput([
             'status' => 'error',
             'mess' => $nv_Lang->getGlobal('passkey_error_challenge1'),
@@ -543,6 +547,7 @@ if (!empty($admin_pre_data) and $nv_Request->isset_request('submit2spasskey', 'p
             'json'
         );
     } catch (Throwable $e) {
+        trigger_error($e);
         nv_jsonOutput([
             'status' => 'error',
             'mess' => $nv_Lang->getGlobal('passkey_error_credential1'),
@@ -590,6 +595,7 @@ if (!empty($admin_pre_data) and $nv_Request->isset_request('submit2spasskey', 'p
             userHandle: null
         );
     } catch (Throwable $e) {
+        trigger_error($e);
         nv_jsonOutput([
             'status' => 'error',
             'mess' => $nv_Lang->getGlobal('passkey_error_validator'),

@@ -68,6 +68,7 @@ if ($nv_Request->isset_request('auth_assertion', 'post')) {
             'json'
         );
     } catch (Throwable $e) {
+        trigger_error($e);
         signin_result([
             'status' => 'error',
             'mess' => $nv_Lang->getGlobal('passkey_error_challenge1'),
@@ -89,6 +90,7 @@ if ($nv_Request->isset_request('auth_assertion', 'post')) {
             'json'
         );
     } catch (Throwable $e) {
+        trigger_error($e);
         signin_result([
             'status' => 'error',
             'mess' => $nv_Lang->getGlobal('passkey_error_credential1'),
@@ -146,6 +148,7 @@ if ($nv_Request->isset_request('auth_assertion', 'post')) {
             $userhandle
         );
     } catch (Throwable $e) {
+        trigger_error($e);
         signin_result([
             'status' => 'error',
             'mess' => $nv_Lang->getGlobal('passkey_error_validator'),

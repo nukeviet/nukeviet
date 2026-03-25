@@ -40,8 +40,8 @@ function nv_online_upd()
             $sth->bindParam(':session_id', $client_info['session_id'], PDO::PARAM_STR);
             $sth->bindParam(':username', $username, PDO::PARAM_STR);
             $sth->execute();
-        } catch (PDOException $e) {
-            //die($e->getMessage());
+        } catch (Throwable $e) {
+            trigger_error($e);
         }
     }
 }

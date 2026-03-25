@@ -67,7 +67,7 @@ if (file_exists(NV_ROOTDIR . '/modules/' . $module_file . '/action_' . $db->dbty
             try {
                 $db->query($sql);
             } catch (Throwable $e) {
-                trigger_error($e->getMessage());
+                trigger_error($e);
                 nv_jsonOutput([
                     'success' => 0,
                     'text' => $e->getMessage()

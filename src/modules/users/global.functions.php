@@ -93,8 +93,8 @@ function oldPassSave($userid, $oldpass, $oldpass_creation_time)
             $mtime = (int) $mtime;
             $db->query('DELETE FROM ' . NV_MOD_TABLE . '_oldpass WHERE userid=' . $userid . ' AND pass_creation_time <= ' . $mtime);
         }
-    } catch (PDOException $e) {
-        trigger_error(print_r($e, true));
+    } catch (Throwable $e) {
+        trigger_error($e);
     }
 }
 

@@ -62,7 +62,8 @@ if ($func_id > 0 and isset($row['bid']) and md5(NV_CHECK_SESSION . '_' . $bid) =
         $nv_Cache->delMod('themes');
 
         echo $nv_Lang->getModule('block_front_outgroup_success') . $new_bid;
-    } catch (PDOException $e) {
+    } catch (Throwable $e) {
+        trigger_error($e);
         echo $nv_Lang->getModule('block_front_outgroup_error_update');
     }
 } else {

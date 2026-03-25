@@ -58,7 +58,8 @@ try {
     $sth->bindParam(':ident', $api_credential['apikey'], PDO::PARAM_STR);
     $sth->execute();
     $credential_data = $sth->fetch();
-} catch (Exception $e) {
+} catch (Throwable $e) {
+    trigger_error($e);
     $apiresults->setCode(ApiResult::CODE_SYS_ERROR)
         ->setMessage('System error, please try again later !!!')
         ->returnResult();

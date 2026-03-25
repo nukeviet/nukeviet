@@ -190,7 +190,8 @@ if ($nv_Request->isset_request('save', 'post')) {
             } else {
                 $error = $nv_Lang->getModule('errorsave');
             }
-        } catch (PDOException $e) {
+        } catch (Throwable $e) {
+            trigger_error($e);
             $error = $nv_Lang->getModule('errorsave');
         }
     }

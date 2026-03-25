@@ -480,7 +480,8 @@ if ($module_data != 'users' or $op != 'recreate_mod') {
                 $sql_create_module[] = 'UPDATE ' . $db_config['prefix'] . '_' . $module_data . '_field SET language=' . $db->quote(serialize($_row['language'])) . ' WHERE fid=' . $_row['fid'];
             }
         }
-    } catch (PDOException $e) {
+    } catch (Throwable $e) {
+        trigger_error($e);
         $sql_create_module[] = 'UPDATE ' . $db_config['prefix'] . '_' . $module_data . '_field SET language=' . $db->quote(serialize([$lang => [0 => $nv_Lang->getModule('first_name'), 1 => '']])) . " WHERE field='first_name'";
         $sql_create_module[] = 'UPDATE ' . $db_config['prefix'] . '_' . $module_data . '_field SET language=' . $db->quote(serialize([$lang => [0 => $nv_Lang->getModule('last_name'), 1 => '']])) . " WHERE field='last_name'";
         $sql_create_module[] = 'UPDATE ' . $db_config['prefix'] . '_' . $module_data . '_field SET language=' . $db->quote(serialize([$lang => [0 => $nv_Lang->getModule('gender'), 1 => '']])) . " WHERE field='gender'";

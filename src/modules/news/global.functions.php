@@ -199,7 +199,8 @@ function nv_fix_weight_content($weight_min)
             foreach ($_array_catid as $_catid) {
                 try {
                     $db->query('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_' . (int) $_catid . ' SET weight=' . $weight . ' WHERE id=' . $_row2['id']);
-                } catch (PDOException $e) {
+                } catch (Throwable $e) {
+                    trigger_error($e);
                 }
             }
             ++$weight;

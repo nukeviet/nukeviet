@@ -1284,7 +1284,7 @@ if (!empty($module_data) and $module_data == 'language') {
         try {
             $db->query('UPDATE ' . $db_config['prefix'] . '_emailtemplates_categories SET ' . $lang_data . '_title=' . $db->quote($_cattitle) . ' WHERE catid=' . $_catid);
         } catch (Throwable $e) {
-            trigger_error(print_r($e, true));
+            trigger_error($e);
         }
     }
 
@@ -1294,7 +1294,7 @@ if (!empty($module_data) and $module_data == 'language') {
         try {
             $db->query('UPDATE ' . $db_config['prefix'] . '_emailtemplates SET ' . $lang_data . '_title=' . $db->quote($_tpldata['t']) . ' WHERE emailid=' . $_tplid);
         } catch (Throwable $e) {
-            trigger_error(print_r($e, true));
+            trigger_error($e);
         }
     }
 } else {

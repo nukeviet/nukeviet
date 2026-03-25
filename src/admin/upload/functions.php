@@ -711,8 +711,8 @@ if ($nv_Request->isset_request('dirListRefresh', 'post') and csrf_check($nv_Requ
             $sth->bindValue(':dirname', $dirname, PDO::PARAM_STR);
             $sth->execute();
             $array_dirname[$dirname] = $db->lastInsertId();
-        } catch (PDOException $e) {
-            trigger_error($e->getMessage());
+        } catch (Throwable $e) {
+            trigger_error($e);
         }
     }
     nv_dirListRefreshSize();

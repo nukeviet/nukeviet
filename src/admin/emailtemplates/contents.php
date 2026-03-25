@@ -539,7 +539,7 @@ if ($nv_Request->isset_request('saveform', 'post') and csrf_check($nv_Request->g
             }
         } catch (Throwable $e) {
             // Hook khi bị lỗi lưu vào CSDL
-            trigger_error(print_r($e, true));
+            trigger_error($e);
             nv_apply_hook('', 'emailtemplates_on_emailtemplate_save_error', [$array, $e]);
             $error[] = $nv_Lang->getModule('errorsave');
         }

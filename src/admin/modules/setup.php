@@ -117,8 +117,8 @@ if (!empty($setmodule) and preg_match($global_config['check_module'], $setmodule
                 $stmt->bindValue(':weight', $weight, PDO::PARAM_INT);
                 $stmt->bindValue(':icon', $module_version['icon'] ?? '', PDO::PARAM_STR);
                 $stmt->execute();
-            } catch (PDOException $e) {
-                trigger_error($e->getMessage());
+            } catch (Throwable $e) {
+                trigger_error($e);
             }
 
             $nv_Cache->delMod('modules');
@@ -166,8 +166,8 @@ if (!empty($setmodule) and preg_match($global_config['check_module'], $setmodule
                             if ($hook['plugin_area'] == 'get_email_merge_fields') {
                                 $email_pids[$hook['plugin_file']] = $pid;
                             }
-                        } catch (PDOException $e) {
-                            trigger_error(print_r($e, true));
+                        } catch (Throwable $e) {
+                            trigger_error($e);
                         }
                     }
                     nv_save_file_config_global();

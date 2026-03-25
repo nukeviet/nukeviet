@@ -479,6 +479,7 @@ function nv_rewrite_change($array_config_global = [])
                 $md5_new_file = md5_file($filename);
             }
         } catch (Throwable $e) {
+            trigger_error($e);
             $return = false;
         }
     }
@@ -530,6 +531,7 @@ function nv_server_config_change($my_domains = [], $admin_rewrite = null)
                 $md5_new_file = md5_file($filename);
             }
         } catch (Throwable $e) {
+            trigger_error($e);
             $return = false;
         }
     }

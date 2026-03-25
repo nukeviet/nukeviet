@@ -60,8 +60,8 @@ if ($nv_Request->isset_request('checkss,idcheck', 'post') and $nv_Request->get_s
         if (!in_array($id, $_id_array_exit, true)) {
             try {
                 $db->query('INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . '_block (bid, id, weight) VALUES (' . $bid . ', ' . $id . ', 0)');
-            } catch (PDOException $e) {
-                trigger_error($e->getMessage());
+            } catch (Throwable $e) {
+                trigger_error($e);
             }
         }
     }

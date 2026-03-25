@@ -232,7 +232,7 @@ if ($sender == 'facebook') {
             $db->commit();
         } catch (Throwable $e) {
             $db->rollBack();
-            trigger_error(print_r($e, true));
+            trigger_error($e);
             http_response_code(500);
             nv_jsonOutput([
                 'error' => 'server_error',

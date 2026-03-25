@@ -36,6 +36,7 @@ if ($nv_Request->isset_request('changeweight', 'post')) {
     $stmt->execute();
     $row = $stmt->fetch();
     $stmt->closeCursor();
+
     if (empty($row)) {
         nv_jsonOutput([
             'success' => 0,
@@ -418,8 +419,8 @@ if ($nv_Request->isset_request('integrate', 'post')) {
         $sth->execute();
 
         nv_save_file_config_global();
-    } catch (PDOException $e) {
-        trigger_error($e->getMessage());
+    } catch (Throwable $e) {
+        trigger_error($e);
         $respon['message'] = 'Error DB1';
     }
 

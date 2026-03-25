@@ -210,8 +210,8 @@ function nv_setup_data_module($lang, $module_name, $sample = 0)
 
         try {
             $db->exec('ALTER DATABASE ' . $db_config['dbname'] . ' DEFAULT CHARACTER SET ' . $db_config['charset'] . ' COLLATE ' . $db_config['collation']);
-        } catch (PDOException $e) {
-            trigger_error($e->getMessage());
+        } catch (Throwable $e) {
+            trigger_error($e);
         }
 
         include NV_ROOTDIR . '/modules/' . $module_file . '/action_' . $db->dbtype . '.php';
@@ -220,8 +220,8 @@ function nv_setup_data_module($lang, $module_name, $sample = 0)
             foreach ($sql_create_module as $sql) {
                 try {
                     $db->query($sql);
-                } catch (PDOException $e) {
-                    trigger_error(print_r($e, true));
+                } catch (Throwable $e) {
+                    trigger_error($e);
 
                     return $return;
                 }
@@ -373,7 +373,8 @@ function nv_setup_data_module($lang, $module_name, $sample = 0)
                             try {
                                 $sth_dir->bindValue(':dirname', NV_UPLOADS_DIR . '/' . $cp . $p, PDO::PARAM_STR);
                                 $sth_dir->execute();
-                            } catch (PDOException $e) {
+                            } catch (Throwable $e) {
+                                trigger_error($e);
                             }
                         }
                     }
@@ -500,7 +501,7 @@ function nv_setup_data_module($lang, $module_name, $sample = 0)
                         $return_emails[$emailid] = is_array($value['pfile']) ? $value['pfile'] : [$value['pfile']];
                     }
                 } catch (Throwable $e) {
-                    trigger_error(print_r($e, true));
+                    trigger_error($e);
                     return $return;
                 }
             }

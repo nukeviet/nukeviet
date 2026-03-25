@@ -176,7 +176,8 @@ if (!empty($new_funcs)) {
                 $stmt2->execute();
                 nv_setup_block_module($mod, $func_id);
             }
-        } catch (PDOException $e) {
+        } catch (Throwable $e) {
+            trigger_error($e);
         }
     }
 

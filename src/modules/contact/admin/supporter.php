@@ -197,8 +197,8 @@ if ($nv_Request->isset_request('fc', 'post')) {
                         'mess' => 'An unknown error has occurred'
                     ]);
                 }
-            } catch (PDOException $e) {
-                trigger_error($e->getMessage());
+            } catch (Throwable $e) {
+                trigger_error($e);
             }
         } else {
             if (!empty($supporter['image']) and is_file(NV_UPLOADS_REAL_DIR . '/' . $module_upload . '/' . $supporter['image'])) {

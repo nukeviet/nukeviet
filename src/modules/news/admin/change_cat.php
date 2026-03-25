@@ -76,8 +76,8 @@ if ($catid > 0) {
                     if ($_catid != $catid) {
                         try {
                             $db->query('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_cat SET ' . $query_update_cat . ' WHERE catid=' . $_catid);
-                        } catch (Exception $e) {
-                            trigger_error($e->getMessage());
+                        } catch (Throwable $e) {
+                            trigger_error($e);
                         }
                     }
 
@@ -89,15 +89,15 @@ if ($catid > 0) {
                         // Khóa ở bảng rows
                         try {
                             $db->query('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_rows SET ' . $query_update_row . ' WHERE status<=' . $global_code_defined['row_locked_status'] . ' AND FIND_IN_SET(' . $_catid . ',listcatid)');
-                        } catch (Exception $e) {
-                            trigger_error($e->getMessage());
+                        } catch (Throwable $e) {
+                            trigger_error($e);
                         }
                         // Khóa ở các bảng cat
                         foreach ($global_array_cat as $_catid_i => $_cat_value) {
                             try {
                                 $db->query('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_' . $_catid_i . ' SET ' . $query_update_row . ' WHERE status<=' . $global_code_defined['row_locked_status'] . ' AND FIND_IN_SET(' . $_catid . ',listcatid)');
-                            } catch (Exception $e) {
-                                trigger_error($e->getMessage());
+                            } catch (Throwable $e) {
+                                trigger_error($e);
                             }
                         }
                         // Khi khóa, không ghi log thay đổi của row
@@ -112,15 +112,15 @@ if ($catid > 0) {
                                 // Mở khóa ở bảng rows
                                 try {
                                     $db->query('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_rows SET ' . $query_update_row . ' WHERE id=' . $row['id']);
-                                } catch (Exception $e) {
-                                    trigger_error($e->getMessage());
+                                } catch (Throwable $e) {
+                                    trigger_error($e);
                                 }
                                 // Mở khóa các bảng cat
                                 foreach ($row['listcatid'] as $_catid_i) {
                                     try {
                                         $db->query('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_' . $_catid_i . ' SET ' . $query_update_row . ' WHERE id=' . $row['id']);
-                                    } catch (Exception $e) {
-                                        trigger_error($e->getMessage());
+                                    } catch (Throwable $e) {
+                                        trigger_error($e);
                                     }
                                 }
                             }

@@ -160,7 +160,8 @@ if ($NV_IS_ADMIN_MODULE and $module_config[$module_name]['order_articles'] and e
                 foreach ($_array_catid as $_catid) {
                     try {
                         $db->query('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_' . (int) $_catid . ' SET weight=' . $weight . ' WHERE id=' . $_row2['id']);
-                    } catch (PDOException $e) {
+                    } catch (Throwable $e) {
+                        trigger_error($e);
                     }
                 }
                 ++$weight;
@@ -170,7 +171,8 @@ if ($NV_IS_ADMIN_MODULE and $module_config[$module_name]['order_articles'] and e
             foreach ($_array_catid as $_catid) {
                 try {
                     $db->query('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_' . (int) $_catid . ' SET weight=' . $_weight_new . ' WHERE id=' . $_id);
-                } catch (PDOException $e) {
+                } catch (Throwable $e) {
+                    trigger_error($e);
                 }
             }
             $nv_Cache->delMod($module_name);

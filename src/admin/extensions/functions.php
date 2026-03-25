@@ -195,8 +195,8 @@ function nv_store_cookies($cookies = [], $currCookies = [])
                         $stmt_update->bindValue(':domain', $cookie['domain'], PDO::PARAM_STR);
                         $stmt_update->bindValue(':path', $cookie['path'], PDO::PARAM_STR);
                         $stmt_update->execute();
-                    } catch (PDOException $e) {
-                        trigger_error($e->getMessage());
+                    } catch (Throwable $e) {
+                        trigger_error($e);
                     }
                 } else {
                     try {
@@ -206,8 +206,8 @@ function nv_store_cookies($cookies = [], $currCookies = [])
                         $stmt_insert->bindValue(':path', $cookie['path'], PDO::PARAM_STR);
                         $stmt_insert->bindValue(':expires', $cookie['expires'], PDO::PARAM_INT);
                         $stmt_insert->execute();
-                    } catch (PDOException $e) {
-                        trigger_error($e->getMessage());
+                    } catch (Throwable $e) {
+                        trigger_error($e);
                     }
                 }
             }

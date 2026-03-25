@@ -58,14 +58,14 @@ if (csrf_check($nv_Request->get_string('checkss', 'post'), $_csrf_key)) {
             try {
                 // Giảm thống kê số thành viên trong nhóm
                 $db->exec('UPDATE ' . NV_MOD_TABLE . '_groups SET numbers = numbers-1 WHERE group_id IN (SELECT group_id FROM ' . NV_MOD_TABLE . '_groups_users WHERE userid=' . $userid . ' AND approved = 1)');
-            } catch (PDOException $e) {
-                trigger_error($e->getMessage());
+            } catch (Throwable $e) {
+                trigger_error($e);
             }
             try {
                 // Giảm thống kê số thành viên chính thức và số thành viên mới xuống
                 $db->query('UPDATE ' . NV_MOD_TABLE . '_groups SET numbers = numbers-1 WHERE group_id=' . (($group_id == 7 or in_array(7, $in_groups, true)) ? 7 : 4));
-            } catch (PDOException $e) {
-                trigger_error($e->getMessage());
+            } catch (Throwable $e) {
+                trigger_error($e);
             }
 
             $sql = 'SELECT * FROM ' . NV_MOD_TABLE . '_info WHERE userid=' . $userid;

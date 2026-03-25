@@ -140,7 +140,7 @@ if ($nv_Request->isset_request('psr', 'post')) {
             try {
                 $db->query('UPDATE ' . NV_MOD_TABLE . ' SET pass_reset_request = ' . $type . ', last_update = ' . NV_CURRENTTIME . ' WHERE userid=' . $userid);
             } catch (Throwable $e) {
-                trigger_error(print_r($e, true));
+                trigger_error($e);
             }
 
             nv_insert_logs(NV_LANG_DATA, $module_name, 'Change password request', 'userid ' . $userid, $admin_info['admin_id']);
@@ -449,12 +449,12 @@ if ($nv_Request->isset_request('confirm', 'post')) {
             try {
                 $db->query('UPDATE ' . NV_MOD_TABLE . '_groups SET numbers = numbers+1 WHERE group_id=4');
             } catch (Throwable $e) {
-                trigger_error(print_r($e, true));
+                trigger_error($e);
             }
             try {
                 $db->query('UPDATE ' . NV_MOD_TABLE . '_groups SET numbers = numbers-1 WHERE group_id=7');
             } catch (Throwable $e) {
-                trigger_error(print_r($e, true));
+                trigger_error($e);
             }
         }
     } else {

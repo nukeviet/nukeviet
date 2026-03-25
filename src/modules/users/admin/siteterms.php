@@ -70,6 +70,7 @@ if ($nv_Request->get_int('save', 'post') == 1) {
         $respon['mess'] = $nv_Lang->getModule('saveok');
         nv_jsonOutput($respon);
     } catch (Throwable $e) {
+        trigger_error($e);
         $respon['mess'] = $nv_Lang->getModule('errorsave');
         nv_jsonOutput($respon);
     }
