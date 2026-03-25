@@ -23,7 +23,7 @@ nv_add_hook($module_name, 'get_module_admin_theme', $priority, function ($vars) 
     $new_theme = 'admin_future';
     $module_file = $module_info['module_file'] ?? '';
 
-    if (in_array($module_file, ['users', 'banners', 'contact', 'inform'], true)) {
+    if (in_array($module_file, ['users', 'banners', 'contact', 'inform', 'menu'], true)) {
         return $new_theme;
     }
     if (in_array($module_name, ['upload', 'themes', 'emailtemplates', 'settings', 'seotools', 'modules', 'extensions', 'webtools', 'language', 'siteinfo', 'authors', 'database', 'comment', 'myapi'])) {
@@ -39,9 +39,6 @@ nv_add_hook($module_name, 'get_module_admin_theme', $priority, function ($vars) 
         return $new_theme;
     }
     if ($module_file == 'feeds' and in_array($op, ['main'])) {
-        return $new_theme;
-    }
-    if ($module_file == 'menu' and in_array($op, ['blocks'])) {
         return $new_theme;
     }
 
