@@ -1808,6 +1808,219 @@ $(function () {
             });
         });
     }
+
+    if (nv_func_name === 'groups') {
+        // Cuộn trang xuống form khi đang ở chế độ sửa
+        const groupForm = $('#group-form');
+        if (groupForm.length && groupForm.data('is-edit')) {
+            $('html, body').animate({ scrollTop: groupForm.offset().top - 60 }, 400);
+        }
+
+        // Đếm ký tự tiêu đề
+        $('#titlelength').text($('#idtitle').val().length);
+        $('#idtitle').on('keyup paste', function () {
+            $('#titlelength').text($(this).val().length);
+        });
+
+        // Đếm ký tự mô tả
+        $('#descriptionlength').text($('#group-description').val().length);
+        $('#group-description').on('keyup paste', function () {
+            $('#descriptionlength').text($(this).val().length);
+        });
+
+        // Tự động lấy alias khi tiêu đề thay đổi và alias đang trống
+        $('#idtitle').on('change', function () {
+            if ($('#idalias').val() === '') {
+                get_alias('blockcat', $('[name="bid"]', groupForm).val() || '0');
+            }
+        });
+
+        // Nút làm mới alias thủ công
+        $('[data-toggle="refresh-alias"]').on('click', function () {
+            get_alias('blockcat', $(this).data('bid') || '0');
+        });
+
+        // Thay đổi thứ tự nhóm tin bằng popover nhập số
+        const groupWeightTplEl = document.getElementById('group-weight-tpl');
+        if (groupWeightTplEl) {
+            $('[data-toggle="change-group-weight"]').each(function () {
+                const btn = $(this);
+                new bootstrap.Popover(this, {
+                    html: true,
+                    sanitize: false,
+                    trigger: 'click',
+                    placement: 'bottom',
+                    title: btn.attr('data-bs-title'),
+                    content: function () {
+                        const clone = $(groupWeightTplEl).clone().removeClass('d-none');
+                        clone.find('.group-new-weight').attr('value', btn.data('current-weight'));
+                        clone.find('.group-weight-ok')
+                            .attr('data-bid', btn.data('bid'))
+                            .attr('data-current-weight', btn.data('current-weight'));
+                        return clone.html();
+                    }
+                });
+            });
+
+            // Đóng popover khi click ra ngoài
+            $(document).on('click.groupWeight', function (e) {
+                if (!$(e.target).closest('[data-toggle="change-group-weight"], .popover').length) {
+                    $('[data-toggle="change-group-weight"]').each(function () {
+                        const pop = bootstrap.Popover.getInstance(this);
+                        if (pop) pop.hide();
+                    });
+                }
+            });
+
+            // Tăng/giảm giá trị
+            $(document).on('click', '.group-weight-up, .group-weight-down', function () {
+                const ipt = $(this).closest('.group-weight-item').find('.group-new-weight');
+                const max = parseInt(ipt.attr('max'));
+                let val = parseInt(ipt.val()) || 1;
+                val = $(this).is('.group-weight-up') ? Math.min(val + 1, max) : Math.max(val - 1, 1);
+                ipt.val(val).removeClass('is-invalid');
+            });
+
+            // Xác nhận thay đổi thứ tự
+            $(document).on('click', '.group-weight-ok', function () {
+                const okBtn = $(this);
+                const ipt = okBtn.closest('.group-weight-item').find('.group-new-weight');
+                const bid = okBtn.attr('data-bid');
+                const currentWeight = parseInt(okBtn.attr('data-current-weight'));
+                const newWeight = parseInt(ipt.val());
+                const max = parseInt(ipt.attr('max'));
+
+                if (!newWeight || newWeight < 1 || newWeight > max) {
+                    ipt.addClass('is-invalid');
+                    return;
+                }
+
+                $('[data-toggle="change-group-weight"]').each(function () {
+                    const pop = bootstrap.Popover.getInstance(this);
+                    if (pop) pop.hide();
+                });
+
+                if (newWeight !== currentWeight) {
+                    const checkss = $('[data-toggle="change-group-weight"][data-bid="' + bid + '"]').data('tokend');
+                    $.ajax({
+                        type: 'POST',
+                        dataType: 'json',
+                        url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=' + nv_func_name + '&nocache=' + new Date().getTime(),
+                        data: {
+                            changeweight: 1,
+                            checkss: checkss,
+                            bid: bid,
+                            new_weight: newWeight
+                        },
+                        success: function (respon) {
+                            if (respon.status !== 'OK') {
+                                nvToast(nv_is_change_act_confirm[2], 'error');
+                            }
+                            location.reload();
+                        },
+                        error: function (xhr, text) {
+                            nvToast(text, 'error');
+                        }
+                    });
+                }
+            });
+        }
+
+        // Xóa nhóm tin
+        $('[data-toggle="delete-group"]').on('click', function (e) {
+            e.preventDefault();
+            const btn = $(this);
+            const icon = $('i', btn);
+            if (icon.is('.fa-spinner')) {
+                return;
+            }
+            nvConfirm(nv_is_del_confirm[0], function () {
+                icon.removeClass(icon.data('icon')).addClass('fa-spinner fa-spin-pulse');
+                $.ajax({
+                    type: 'POST',
+                    dataType: 'json',
+                    url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=' + nv_func_name + '&nocache=' + new Date().getTime(),
+                    data: {
+                        delete: 1,
+                        checkss: btn.data('tokend'),
+                        bid: btn.data('id')
+                    },
+                    success: function (respon) {
+                        icon.removeClass('fa-spinner fa-spin-pulse').addClass(icon.data('icon'));
+                        if (respon.status !== 'OK') {
+                            nvToast(nv_is_del_confirm[2], 'error');
+                            return;
+                        }
+                        location.reload();
+                    },
+                    error: function (xhr, text) {
+                        icon.removeClass('fa-spinner fa-spin-pulse').addClass(icon.data('icon'));
+                        nvToast(text, 'error');
+                    }
+                });
+            });
+        });
+
+        // Thay đổi trạng thái mặc định
+        $('[data-toggle="change-group-adddefault"]').on('change', function () {
+            const sel = $(this);
+            if (sel.prop('disabled')) {
+                return;
+            }
+            sel.prop('disabled', true);
+            $.ajax({
+                type: 'POST',
+                dataType: 'json',
+                url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=' + nv_func_name + '&nocache=' + new Date().getTime(),
+                data: {
+                    changeadddefault: 1,
+                    checkss: sel.data('tokend'),
+                    bid: sel.data('bid'),
+                    new_val: sel.val()
+                },
+                success: function (respon) {
+                    sel.prop('disabled', false);
+                    if (respon.status !== 'OK') {
+                        nvToast(nv_is_change_act_confirm[2], 'error');
+                    }
+                },
+                error: function (xhr, text) {
+                    sel.prop('disabled', false);
+                    nvToast(text, 'error');
+                }
+            });
+        });
+
+        // Thay đổi số lượng liên kết hiển thị
+        $('[data-toggle="change-group-numlinks"]').on('change', function () {
+            const sel = $(this);
+            if (sel.prop('disabled')) {
+                return;
+            }
+            sel.prop('disabled', true);
+            $.ajax({
+                type: 'POST',
+                dataType: 'json',
+                url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=' + nv_func_name + '&nocache=' + new Date().getTime(),
+                data: {
+                    changenumlinks: 1,
+                    checkss: sel.data('tokend'),
+                    bid: sel.data('bid'),
+                    new_val: sel.val()
+                },
+                success: function (respon) {
+                    sel.prop('disabled', false);
+                    if (respon.status !== 'OK') {
+                        nvToast(nv_is_change_act_confirm[2], 'error');
+                    }
+                },
+                error: function (xhr, text) {
+                    sel.prop('disabled', false);
+                    nvToast(text, 'error');
+                }
+            });
+        });
+    }
 });
 
 $(window).on('load', function() {
