@@ -8,6 +8,47 @@
  */
 
 $(function() {
+    if (nv_func_name === 'cleardata') {
+        const card = $('[data-tokend]').first();
+
+        $('[data-toggle="confirm-clear"]').on('click', function() {
+            const btn = $(this);
+            const icon = $('i', btn);
+            const origIcon = icon.data('icon');
+            const msgConfirm = card.data('msgconfirm');
+            const tokend = card.data('tokend');
+
+            nvConfirm(msgConfirm, () => {
+                if (icon.is('.fa-spinner')) return;
+                const alllang = $('input[name="alllang"]').is(':checked') ? 1 : 0;
+                icon.removeClass(origIcon).addClass('fa-spinner fa-spin-pulse');
+                $.ajax({
+                    type: 'POST',
+                    url: script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=' + nv_func_name,
+                    data: {
+                        save: 1,
+                        cleartype: btn.data('type'),
+                        alllang: alllang,
+                        checkss: tokend
+                    },
+                    dataType: 'json',
+                    success: (data) => {
+                        icon.removeClass('fa-spinner fa-spin-pulse').addClass(origIcon);
+                        if (data.status === 'OK' || data.status === 'ok' || data.status === 'success') {
+                            nvToast(data.mess, 'success');
+                        } else {
+                            nvToast(data.mess, 'error');
+                        }
+                    },
+                    error: (xhr, text) => {
+                        icon.removeClass('fa-spinner fa-spin-pulse').addClass(origIcon);
+                        nvToast(text, 'error');
+                    }
+                });
+            });
+        });
+    }
+
     // Hàm định dạng số
     function _format(value, decimals = 0, decPoint = '.', thousandsSep = ',') {
         let formatted = '';

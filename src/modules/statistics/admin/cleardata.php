@@ -15,18 +15,27 @@ if (!defined('NV_IS_MOD_STATISTICS')) {
 
 $page_title = $nv_Lang->getModule('cleardata');
 
-$xtpl = new XTemplate('cleardata.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-$xtpl->assign('FORM_ACTION', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op);
-$xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
-$xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
-
 if ($nv_Request->isset_request('save', 'post')) {
-    $clearall = $nv_Request->isset_request('all', 'post');
-    $alllang = $nv_Request->get_int('alllang', 'post', 0);
-    $clearmode = '';
+    if (!csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
+        nv_jsonOutput([
+            'status' => 'error',
+            'mess' => $nv_Lang->getGlobal('error_checkss')
+        ]);
+    }
 
-    $query_update = [];
-    $query_update[] = 'last_update=0';
+    $cleartype = $nv_Request->get_title('cleartype', 'post', '');
+    $alllang = $nv_Request->get_int('alllang', 'post', 0);
+
+    if (!in_array($cleartype, ['bot', 'browser', 'country', 'os', 'referer', 'hit', 'all'], true)) {
+        nv_jsonOutput([
+            'status' => 'error',
+            'mess' => $nv_Lang->getGlobal('error_send_data')
+        ]);
+    }
+
+    $clearall = ($cleartype === 'all');
+
+    $query_update = ['last_update=0'];
     foreach ($global_config['allow_sitelangs'] as $lang) {
         if ($alllang or $lang == NV_LANG_DATA) {
             $query_update[] = $lang . '_count=0';
@@ -38,28 +47,23 @@ if ($nv_Request->isset_request('save', 'post')) {
     $query_update = implode(', ', $query_update);
 
     // Xóa máy chủ tìm kiếm
-    if ($clearall or $nv_Request->isset_request('bot', 'post')) {
-        $clearmode = 'Bot';
+    if ($clearall or $cleartype === 'bot') {
         $db->query('UPDATE ' . NV_COUNTER_GLOBALTABLE . ' SET ' . $query_update . " WHERE c_type='bot'");
     }
     // Xóa thống kê theo trình duyệt
-    if ($clearall or $nv_Request->isset_request('browser', 'post')) {
-        $clearmode = 'Browser';
+    if ($clearall or $cleartype === 'browser') {
         $db->query('UPDATE ' . NV_COUNTER_GLOBALTABLE . ' SET ' . $query_update . " WHERE c_type='browser'");
     }
     // Xóa thống kê quốc gia truy cập
-    if ($clearall or $nv_Request->isset_request('country', 'post')) {
-        $clearmode = 'Country';
+    if ($clearall or $cleartype === 'country') {
         $db->query('UPDATE ' . NV_COUNTER_GLOBALTABLE . ' SET ' . $query_update . " WHERE c_type='country'");
     }
-    // Xóa thống kê máy chủ tìm kiếm
-    if ($clearall or $nv_Request->isset_request('os', 'post')) {
-        $clearmode = 'OS';
+    // Xóa thống kê hệ điều hành
+    if ($clearall or $cleartype === 'os') {
         $db->query('UPDATE ' . NV_COUNTER_GLOBALTABLE . ' SET ' . $query_update . " WHERE c_type='os'");
     }
     // Xóa đường dẫn đến site
-    if ($clearall or $nv_Request->isset_request('referer', 'post')) {
-        $clearmode = 'Referer';
+    if ($clearall or $cleartype === 'referer') {
         foreach ($global_config['allow_sitelangs'] as $lang) {
             if ($alllang or $lang == NV_LANG_DATA) {
                 $db->query('TRUNCATE ' . $db_config['prefix'] . '_' . $lang . '_referer_stats');
@@ -67,30 +71,34 @@ if ($nv_Request->isset_request('save', 'post')) {
         }
     }
     // Xóa bộ đếm lượt truy cập
-    if ($clearall or $nv_Request->isset_request('hit', 'post')) {
+    if ($clearall or $cleartype === 'hit') {
         $db->query('UPDATE ' . NV_COUNTER_GLOBALTABLE . ' SET ' . $query_update . " WHERE c_type IN('hour', 'dayofweek', 'day', 'month', 'year', 'total', 'c_time')");
     }
-
-    $clearmode = $clearall ? 'All' : $clearmode;
 
     $db->query('OPTIMIZE TABLE ' . NV_COUNTER_GLOBALTABLE);
     $db->query('OPTIMIZE TABLE ' . NV_REFSTAT_TABLE);
 
+    $clearmode = $clearall ? 'All' : ucfirst($cleartype);
     nv_insert_logs(NV_LANG_DATA, $module_name, 'Clear statistics', $clearmode, $admin_info['userid']);
-    $xtpl->parse('main.result');
-} else {
-    $alllang = 0;
+
+    nv_jsonOutput([
+        'status' => 'OK',
+        'mess' => $nv_Lang->getModule('clear_success')
+    ]);
 }
 
-if ($global_config['lang_multi']) {
-    $xtpl->assign('ALLLANG_MSG', $nv_Lang->getModule('clear_alllang_msg', $language_array[NV_LANG_DATA]['name']));
-    $xtpl->assign('ALLLANG', $alllang ? ' checked="checked"' : '');
-    $xtpl->parse('main.clearalllang1');
-    $xtpl->parse('main.clearalllang2');
-}
+$tpl = new \NukeViet\Template\NVSmarty();
+$tpl->setTemplateDir(get_module_tpl_dir('cleardata.tpl'));
 
-$xtpl->parse('main');
-$contents = $xtpl->text('main');
+$tpl->assign('LANG', $nv_Lang);
+$tpl->assign('MODULE_NAME', $module_name);
+$tpl->assign('OP', $op);
+$tpl->assign('CHECKSS', csrf_create($csrf_key));
+$tpl->assign('LANG_MULTI', (bool) $global_config['lang_multi']);
+$tpl->assign('ALLLANG', 0);
+$tpl->assign('ALLLANG_MSG', $global_config['lang_multi'] ? $nv_Lang->getModule('clear_alllang_msg', $language_array[NV_LANG_DATA]['name']) : '');
+
+$contents = $tpl->fetch('cleardata.tpl');
 
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_admin_theme($contents);
