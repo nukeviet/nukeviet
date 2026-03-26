@@ -528,60 +528,6 @@ function nv_show_block_cat_list()
 }
 
 /**
- * nv_show_sources_list()
- */
-function nv_show_sources_list()
-{
-    global $db_slave, $module_name, $module_data, $nv_Request, $module_file, $global_config;
-
-    $num = $db_slave->query('SELECT COUNT(*) FROM ' . NV_PREFIXLANG . '_' . $module_data . '_sources')->fetchColumn();
-    $base_url = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=sources';
-    $num_items = ($num > 1) ? $num : 1;
-    $per_page = 20;
-    $page = $nv_Request->get_page('page', 'get', 1);
-
-    $xtpl = new XTemplate('sources_list.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-    $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
-    $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
-    $xtpl->assign('TOTAL', $num);
-
-    if ($num > 0) {
-        $db_slave->sqlreset()
-            ->select('*')
-            ->from(NV_PREFIXLANG . '_' . $module_data . '_sources')
-            ->order('weight')
-            ->limit($per_page)
-            ->offset(($page - 1) * $per_page);
-
-        $result = $db_slave->query($db_slave->sql());
-        while ($row = $result->fetch()) {
-            $xtpl->assign('ROW', [
-                'sourceid' => $row['sourceid'],
-                'weight' => $row['weight'],
-                'title' => $row['title'],
-                'link' => $row['link'],
-                'url_edit' => $base_url . '&amp;sourceid=' . $row['sourceid']
-            ]);
-            $xtpl->parse('main.loop');
-        }
-        $result->closeCursor();
-
-        $generate_page = nv_generate_page($base_url, $num_items, $per_page, $page);
-        if (!empty($generate_page)) {
-            $xtpl->assign('GENERATE_PAGE', $generate_page);
-            $xtpl->parse('main.generate_page');
-        }
-
-        $xtpl->parse('main');
-        $contents = $xtpl->text('main');
-    } else {
-        $contents = '&nbsp;';
-    }
-
-    return $contents;
-}
-
-/**
  * nv_show_block_list()
  *
  * @param mixed $bid

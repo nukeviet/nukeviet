@@ -222,6 +222,7 @@ $lang_module['clickgotomodule'] = 'Click vào đây để chuyển vào trang qu
 $lang_module['no_name'] = 'Không có tiêu đề';
 $lang_module['titlesite'] = 'Tùy chỉnh Tiêu đề site';
 $lang_module['error_name'] = 'Lỗi:Bạn cần nhập Tiêu đề';
+$lang_module['no_data'] = 'Không có dữ liệu';
 $lang_module['weight'] = 'Vị trí';
 $lang_module['numsubcat'] = 'Số chuyên mục con';
 $lang_module['numlinks'] = 'Số liên kết';

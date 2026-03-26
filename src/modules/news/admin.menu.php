@@ -124,9 +124,6 @@ if ($NV_IS_ADMIN_MODULE) {
     $allow_func[] = 'del_topic';
 
     $allow_func[] = 'sources';
-    $allow_func[] = 'change_source';
-    $allow_func[] = 'list_source';
-    $allow_func[] = 'del_source';
 
     $allow_func[] = 'block';
     $allow_func[] = 'groups';

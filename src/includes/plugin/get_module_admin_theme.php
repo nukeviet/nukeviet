@@ -29,7 +29,7 @@ nv_add_hook($module_name, 'get_module_admin_theme', $priority, function ($vars) 
     if (in_array($module_name, ['upload', 'themes', 'emailtemplates', 'settings', 'seotools', 'modules', 'extensions', 'webtools', 'language', 'siteinfo', 'authors', 'database', 'comment', 'myapi'])) {
         return $new_theme;
     }
-    if ($module_file == 'news' and in_array($op, ['drafts', 'report', 'content', 'tags', 'main', 'voices'])) {
+    if ($module_file == 'news' and in_array($op, ['drafts', 'report', 'content', 'tags', 'main', 'voices', 'sources'])) {
         return $new_theme;
     }
     if ($module_file == 'page' and in_array($op, ['main', 'config', 'content'])) {

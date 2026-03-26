@@ -222,6 +222,7 @@ $lang_module['clickgotomodule'] = 'Cliquez ici pour aller à la gestion des arti
 $lang_module['no_name'] = 'Aucun titre';
 $lang_module['titlesite'] = 'Modification Le titre du site';
 $lang_module['error_name'] = 'Erreur: Manque de titre';
+$lang_module['no_data'] = 'Aucune donnée';
 $lang_module['weight'] = 'Position';
 $lang_module['numsubcat'] = 'Nombre de sous-catégories';
 $lang_module['numlinks'] = 'Nombre de liens';

@@ -643,4 +643,70 @@ class SampleDataTest extends \Codeception\Test\Unit
 
         $this->assertTrue(true);
     }
+
+    /**
+     * Dữ liệu mẫu nguồn tin cho màn quản trị nguồn của module news
+     *
+     * Sinh 50 nguồn tin với title duy nhất, domain hợp lệ và weight tăng tiếp
+     * từ dữ liệu hiện có để màn sources có đủ dữ liệu phân trang và sắp xếp.
+     *
+     * @group sample-data
+     */
+    public function testInsertSampleDataForNewsSources()
+    {
+        global $db, $db_config;
+
+        $table = $db_config['prefix'] . '_vi_news_sources';
+        $maxWeight = (int) $db->query('SELECT MAX(weight) FROM ' . $table)->fetchColumn();
+
+        $esc = fn (string $s) => str_replace(["\\", "'"], ["\\\\", "\\'"], $s);
+
+        $domains = [
+            ['VnExpress', 'https://vnexpress.net'],
+            ['Tuoi Tre', 'https://tuoitre.vn'],
+            ['Thanh Nien', 'https://thanhnien.vn'],
+            ['Dan Tri', 'https://dantri.com.vn'],
+            ['VietnamNet', 'https://vietnamnet.vn'],
+            ['Nguoi Lao Dong', 'https://nld.com.vn'],
+            ['Reuters', 'https://www.reuters.com'],
+            ['Associated Press', 'https://apnews.com'],
+            ['BBC News', 'https://www.bbc.com'],
+            ['CNN', 'https://www.cnn.com'],
+        ];
+
+        $batchMark = 'seed-sources-' . date('YmdHis') . '-' . rand(1000, 9999);
+        $now = time();
+        $values = [];
+
+        for ($index = 1; $index <= 50; ++$index) {
+            [$name, $link] = $domains[($index - 1) % count($domains)];
+            $weight = $maxWeight + $index;
+            $addTime = $now - rand(0, 45 * 86400);
+            $editTime = $addTime + rand(0, 7 * 86400);
+            if ($editTime > $now) {
+                $editTime = $now;
+            }
+
+            $title = $name . ' Sample Source ' . str_pad((string) $index, 2, '0', STR_PAD_LEFT) . ' [' . $batchMark . ']';
+
+            $values[] = sprintf(
+                "('%s','%s','',%d,%d,%d)",
+                $esc($title),
+                $esc($link),
+                $weight,
+                $addTime,
+                $editTime
+            );
+        }
+
+        $this->assertCount(50, $values, 'Số lượng nguồn tin mẫu tạo ra không đúng 50 bản ghi.');
+
+        $inserted = $db->exec(
+            'INSERT INTO ' . $table
+            . ' (title, link, logo, weight, add_time, edit_time) VALUES '
+            . implode(',', $values)
+        );
+
+        $this->assertGreaterThan(0, $inserted, 'Không có dòng nào được insert vào bảng ' . $table . '.');
+    }
 }

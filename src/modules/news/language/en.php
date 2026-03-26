@@ -222,6 +222,7 @@ $lang_module['clickgotomodule'] = 'Click here to management posts.';
 $lang_module['no_name'] = 'Empty title';
 $lang_module['titlesite'] = 'Customize the site title';
 $lang_module['error_name'] = 'Error: Please add title';
+$lang_module['no_data'] = 'No data';
 $lang_module['weight'] = 'Position';
 $lang_module['numsubcat'] = 'Number of sub-categories';
 $lang_module['numlinks'] = 'Number of link';
