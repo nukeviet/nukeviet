@@ -120,7 +120,7 @@
                                         <a href="#">{$LANG->getGlobal('passkey_login')}</a>
                                     </div>
                                 </div>
-                                <input type="hidden" name="checkss" value="{$smarty.const.NV_CHECK_SESSION}">
+                                <input type="hidden" name="checkss" value="{$CHECKSS}">
                                 {if $SV->getOriginalProtocol() neq 'https'}
                                 <div class="mt-3">
                                     <small><strong class="text-danger">{$LANG->getGlobal('warning_ssl')}:</strong> {$LANG->getGlobal('content_ssl')}</small>
@@ -170,7 +170,7 @@
                                     {/if}
                                     {/if}
                                     <div class="text-center">
-                                        <a href="#" data-href="{$smarty.const.NV_BASE_ADMINURL}index.php?pre_logout=1&amp;checkss={$smarty.const.NV_CHECK_SESSION}" data-toggle="preLogout">{$LANG->getGlobal('admin_pre_logout')}</a>
+                                        <a href="#" data-href="{$smarty.const.NV_BASE_ADMINURL}index.php?pre_logout=1&amp;checkss={$CHECKSS}" data-toggle="preLogout">{$LANG->getGlobal('admin_pre_logout')}</a>
                                     </div>
                                 </div>
                             </form>

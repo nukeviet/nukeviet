@@ -14,7 +14,7 @@
             <button type="submit" class="btn btn-primary text-nowrap">{$LANG->getGlobal('confirm')}</button>
         </div>
     </div>
-    <input type="hidden" name="checkss" value="{$smarty.const.NV_CHECK_SESSION}">
+    <input type="hidden" name="checkss" value="{$CHECKSS}">
     <input type="hidden" name="submit2scode" value="1">
 </div>
 {elseif $OPT eq 'key'}
