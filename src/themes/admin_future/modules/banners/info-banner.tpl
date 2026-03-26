@@ -6,7 +6,7 @@
     <button type="button" class="btn btn-warning"
             data-toggle="change-act-banner"
             data-id="{$BANNER_ID}"
-            data-tokend="{$CHECKSS}"
+            data-checkss="{$CHECKSS}"
             {if $ROW.act eq 0}data-msgconfirm="{$LANG->getModule('banner_confirm_act0')}"{/if}
             {if $ROW.act eq 2}data-msgconfirm="{$LANG->getModule('banner_confirm_act2')}"{/if}>
         <i class="fa-solid fa-toggle-on" data-icon="fa-toggle-on"></i> {$LANG->getModule('change_act')}
@@ -14,7 +14,7 @@
     <button type="button" class="btn btn-danger"
             data-toggle="del-banner"
             data-id="{$BANNER_ID}"
-            data-tokend="{$CHECKSS}"
+            data-checkss="{$CHECKSS}"
             data-msgconfirm="{$LANG->getModule('file_del_confirm')}">
         <i class="fa-solid fa-trash" data-icon="fa-trash"></i> {$LANG->getGlobal('delete')}
     </button>

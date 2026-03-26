@@ -16,17 +16,18 @@ if (!defined('NV_IS_FILE_ADMIN')) {
 $page_title = $nv_Lang->getModule('banners_list');
 
 // Load plans
-$sql = 'SELECT id, title, blang FROM ' . NV_BANNERS_GLOBALTABLE . '_plans ORDER BY blang, title ASC';
-$result = $db->query($sql);
+$stmt = $db->prepare('SELECT id, title, blang FROM ' . NV_BANNERS_GLOBALTABLE . '_plans ORDER BY blang, title ASC');
+$stmt->execute();
 
 $array_plans = [];
 $plans = [];
-while ($row = $result->fetch()) {
+while ($row = $stmt->fetch()) {
     $blang_name = !empty($row['blang']) ? ($language_array[$row['blang']]['name'] ?? $row['blang']) : $nv_Lang->getModule('blang_all');
     $row['blang_name'] = $blang_name;
     $array_plans[] = $row;
     $plans[$row['id']] = $row['title'] . ' (' . $blang_name . ')';
 }
+$stmt->closeCursor();
 
 // Search params
 $array_search = [
@@ -48,12 +49,14 @@ $array_search['is_filtered'] = (
 
 // WHERE chung dùng cho cả đếm lẫn list
 $where = [];
+$params = [];
 if (!empty($array_search['keyword'])) {
-    $kw = $db->dblikeescape($array_search['keyword']);
-    $where[] = "(title LIKE '%" . $kw . "%' OR file_alt LIKE '%" . $kw . "%' OR click_url LIKE '%" . $kw . "%' OR bannerhtml LIKE '%" . $kw . "%')";
+    $where[] = '(title LIKE :keyword OR file_alt LIKE :keyword OR click_url LIKE :keyword OR bannerhtml LIKE :keyword)';
+    $params[':keyword'] = '%' . $array_search['keyword'] . '%';
 }
 if ($array_search['pid'] > 0 && isset($plans[$array_search['pid']])) {
-    $where[] = 'pid=' . $array_search['pid'];
+    $where[] = 'pid = :pid';
+    $params[':pid'] = $array_search['pid'];
 }
 
 // Màu và nhãn ngắn theo trạng thái
@@ -77,10 +80,21 @@ if ($array_search['pid'] > 0 && isset($plans[$array_search['pid']])) {
 $status_cards = [];
 foreach ([0, 1, 2, 3, 4] as $s) {
     $where_card = $where;
-    $where_card[] = 'act=' . $s;
+    $where_card[] = 'act = :act' . $s;
+    $params_card = $params;
+    $params_card[':act' . $s] = $s;
+
+    $stmt = $db->prepare('SELECT COUNT(*) FROM ' . NV_BANNERS_GLOBALTABLE . '_rows WHERE ' . implode(' AND ', $where_card));
+    foreach ($params_card as $p => $v) {
+        $stmt->bindValue($p, $v, is_int($v) ? PDO::PARAM_INT : PDO::PARAM_STR);
+    }
+    $stmt->execute();
+    $count = (int) $stmt->fetchColumn();
+    $stmt->closeCursor();
+
     $status_cards[] = [
         'act'   => $s,
-        'count' => (int) $db->query('SELECT COUNT(*) FROM ' . NV_BANNERS_GLOBALTABLE . '_rows WHERE ' . implode(' AND ', $where_card))->fetchColumn(),
+        'count' => $count,
         'title' => $nv_Lang->getModule('banner_act_' . $s),
         'url'   => $base_url . '&amp;act=' . $s,
         'color' => $act_colors[$s],
@@ -91,12 +105,20 @@ foreach ([0, 1, 2, 3, 4] as $s) {
 $per_page = 20;
 
 $where_list = $where;
+$params_list = $params;
 if ($array_search['act'] >= 0) {
-    $where_list[] = 'act=' . $array_search['act'];
+    $where_list[] = 'act = :act';
+    $params_list[':act'] = $array_search['act'];
 }
 
 $where_list_sql = !empty($where_list) ? 'WHERE ' . implode(' AND ', $where_list) : '';
-$num_items = (int) $db->query('SELECT COUNT(*) FROM ' . NV_BANNERS_GLOBALTABLE . '_rows ' . $where_list_sql)->fetchColumn();
+$stmt = $db->prepare('SELECT COUNT(*) FROM ' . NV_BANNERS_GLOBALTABLE . '_rows ' . $where_list_sql);
+foreach ($params_list as $p => $v) {
+    $stmt->bindValue($p, $v, is_int($v) ? PDO::PARAM_INT : PDO::PARAM_STR);
+}
+$stmt->execute();
+$num_items = (int) $stmt->fetchColumn();
+$stmt->closeCursor();
 
 $page_base_url = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op;
 if ($array_search['act'] >= 0) {
@@ -112,14 +134,21 @@ if ($array_search['pid'] > 0 && isset($plans[$array_search['pid']])) {
 $pagination = nv_generate_page($page_base_url, $num_items, $per_page, $array_search['page']);
 
 $sql = 'SELECT * FROM ' . NV_BANNERS_GLOBALTABLE . '_rows ' . $where_list_sql . ' ORDER BY id DESC LIMIT ' . $per_page . ' OFFSET ' . ($array_search['page'] - 1) * $per_page;
-$result = $db->query($sql);
+$stmt = $db->prepare($sql);
+foreach ($params_list as $p => $v) {
+    $stmt->bindValue($p, $v, is_int($v) ? PDO::PARAM_INT : PDO::PARAM_STR);
+}
+$stmt->execute();
+
+$stmt_update_act = $db->prepare('UPDATE ' . NV_BANNERS_GLOBALTABLE . '_rows SET act = 2 WHERE id = :id');
 
 $array = [];
 $array_userids = $array_users = [];
 
-while ($row = $result->fetch()) {
+while ($row = $stmt->fetch()) {
     if ($row['exp_time'] != 0 && $row['exp_time'] <= NV_CURRENTTIME) {
-        $db->exec('UPDATE ' . NV_BANNERS_GLOBALTABLE . '_rows SET act=2 WHERE id=' . $row['id']);
+        $stmt_update_act->bindValue(':id', $row['id'], PDO::PARAM_INT);
+        $stmt_update_act->execute();
         $row['act'] = 2;
     }
 
@@ -146,14 +175,18 @@ while ($row = $result->fetch()) {
         $array_userids[$row['clid']] = $row['clid'];
     }
 }
+$stmt->closeCursor();
 
 // Xác định người đăng
 if (!empty($array_userids)) {
-    $sql = 'SELECT userid, username, md5username FROM ' . NV_USERS_GLOBALTABLE . ' WHERE userid IN(' . implode(',', $array_userids) . ')';
-    $result = $db->query($sql);
-    while ($row = $result->fetch()) {
+    // iders in list
+    $userids = implode(', ', array_map('intval', $array_userids));
+    $stmt_user = $db->prepare('SELECT userid, username, md5username FROM ' . NV_USERS_GLOBALTABLE . ' WHERE userid IN (' . $userids . ')');
+    $stmt_user->execute();
+    while ($row = $stmt_user->fetch()) {
         $array_users[$row['userid']] = $row;
     }
+    $stmt_user->closeCursor();
 }
 
 $is_allowed_viewuser = nv_user_in_groups($global_config['whoviewuser']);

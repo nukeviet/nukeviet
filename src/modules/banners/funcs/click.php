@@ -18,7 +18,12 @@ $nv_BotManager->setPrivate();
 $links = NV_MY_DOMAIN;
 $id = $nv_Request->get_int('id', 'get', 0);
 if ($id > 0) {
-    $click_url = $db->query('SELECT click_url FROM ' . NV_BANNERS_GLOBALTABLE . '_rows WHERE id=' . $id . ' AND act=1')->fetchColumn();
+    $stmt = $db->prepare('SELECT click_url FROM ' . NV_BANNERS_GLOBALTABLE . '_rows WHERE id = :id AND act = 1');
+    $stmt->bindValue(':id', $id, PDO::PARAM_INT);
+    $stmt->execute();
+    $click_url = $stmt->fetchColumn();
+    $stmt->closeCursor();
+
     if (!empty($click_url)) {
         $links = $click_url;
         $time_set = $nv_Request->get_int($module_name . '_clickid_' . $id, 'cookie', 0);
@@ -27,16 +32,25 @@ if ($id > 0) {
 
             $br = ($client_info['is_mobile']) ? 'Mobile' : $client_info['browser']['key'];
 
-            $db->query('UPDATE ' . NV_BANNERS_GLOBALTABLE . '_rows SET hits_total=hits_total+1 WHERE id=' . $id);
-            $sql = 'INSERT INTO ' . NV_BANNERS_GLOBALTABLE . '_click (
+            $stmt = $db->prepare('UPDATE ' . NV_BANNERS_GLOBALTABLE . '_rows SET hits_total = hits_total + 1 WHERE id = :id');
+            $stmt->bindValue(':id', $id, PDO::PARAM_INT);
+            $stmt->execute();
+
+            $stmt = $db->prepare('INSERT INTO ' . NV_BANNERS_GLOBALTABLE . '_click (
                 bid, click_time, click_day, click_ip, click_country, click_browse_key, click_browse_name, click_os_key, click_os_name, click_ref
             ) VALUES (
-                ' . $id . ', ' . NV_CURRENTTIME . ', 0, ' . $db->quote($client_info['ip']) . ',
-                ' . $db->quote($client_info['country']) . ", '', " . $db->quote($br) . ", '',
-                " . $db->quote($client_info['client_os']['name']) . ',
-                ' . $db->quote(nv_substr($client_info['referer'], 0, 250)) . '
-            );';
-            $db->query($sql);
+                :bid, :click_time, 0, :click_ip, :click_country, :click_browse_key, :click_browse_name, :click_os_key, :click_os_name, :click_ref
+            )');
+            $stmt->bindValue(':bid', $id, PDO::PARAM_INT);
+            $stmt->bindValue(':click_time', NV_CURRENTTIME, PDO::PARAM_INT);
+            $stmt->bindValue(':click_ip', $client_info['ip'], PDO::PARAM_STR);
+            $stmt->bindValue(':click_country', $client_info['country'], PDO::PARAM_STR);
+            $stmt->bindValue(':click_browse_key', '', PDO::PARAM_STR);
+            $stmt->bindValue(':click_browse_name', $br, PDO::PARAM_STR);
+            $stmt->bindValue(':click_os_key', '', PDO::PARAM_STR);
+            $stmt->bindValue(':click_os_name', $client_info['client_os']['name'], PDO::PARAM_STR);
+            $stmt->bindValue(':click_ref', nv_substr($client_info['referer'], 0, 250), PDO::PARAM_STR);
+            $stmt->execute();
         }
     }
 }

@@ -16,13 +16,13 @@
             <button type="button" class="btn btn-sm btn-warning"
                     data-toggle="change-act-plan"
                     data-id="{$ROW.id}"
-                    data-tokend="{$CHECKSS}">
+                    data-checkss="{$CHECKSS}">
                 <i class="fa-solid fa-toggle-on" data-icon="fa-toggle-on"></i> {$LANG->getModule('change_act')}
             </button>
             <button type="button" class="btn btn-sm btn-danger"
                     data-toggle="del-plan"
                     data-id="{$ROW.id}"
-                    data-tokend="{$CHECKSS}"
+                    data-checkss="{$CHECKSS}"
                     data-redirect="{$smarty.const.NV_BASE_ADMINURL}index.php?{$smarty.const.NV_LANG_VARIABLE}={$smarty.const.NV_LANG_DATA}&amp;{$smarty.const.NV_NAME_VARIABLE}={$MODULE_NAME}&amp;{$smarty.const.NV_OP_VARIABLE}=plans-list"
                     data-msgconfirm="{$LANG->getModule('file_del_confirm')}">
                 <i class="fa-solid fa-trash" data-icon="fa-trash"></i> {$LANG->getGlobal('delete')}

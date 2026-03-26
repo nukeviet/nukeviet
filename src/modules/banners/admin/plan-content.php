@@ -17,7 +17,11 @@ $id = $nv_Request->get_int('id', 'get', 0);
 $is_edit = $id > 0;
 
 if ($is_edit) {
-    $row = $db->query('SELECT * FROM ' . NV_BANNERS_GLOBALTABLE . '_plans WHERE id=' . $id)->fetch();
+    $stmt = $db->prepare('SELECT * FROM ' . NV_BANNERS_GLOBALTABLE . '_plans WHERE id = :id');
+    $stmt->bindValue(':id', $id, PDO::PARAM_INT);
+    $stmt->execute();
+    $row = $stmt->fetch();
+    $stmt->closeCursor();
     if (empty($row)) {
         nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=plans-list');
     }
@@ -33,7 +37,10 @@ unset($groups_list[1], $groups_list[2], $groups_list[3], $groups_list[5], $group
 // Xử lý khi lưu (AJAX)
 if ($nv_Request->isset_request('checkss', 'post')) {
     if (!csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
-        nv_jsonOutput(['status' => 'error', 'mess' => $nv_Lang->getGlobal('error_checkss')]);
+        nv_jsonOutput([
+            'status' => 'error',
+            'mess' => $nv_Lang->getGlobal('error_checkss')
+        ]);
     }
 
     $post_id = $nv_Request->get_int('id', 'post', 0);
@@ -87,20 +94,30 @@ if ($nv_Request->isset_request('checkss', 'post')) {
     }
 
     if ($is_edit_post) {
-        [$blang_old, $form_old] = $db->query('SELECT blang, form FROM ' . NV_BANNERS_GLOBALTABLE . '_plans WHERE id=' . $post_id)->fetch(3);
+        $stmt = $db->prepare('SELECT blang, form FROM ' . NV_BANNERS_GLOBALTABLE . '_plans WHERE id = :post_id');
+        $stmt->bindValue(':post_id', $post_id, PDO::PARAM_INT);
+        $stmt->execute();
+        $_row_plan = $stmt->fetch();
+        $stmt->closeCursor();
+
+        $blang_old = $_row_plan['blang'];
+        $form_old  = $_row_plan['form'];
 
         $stmt = $db->prepare('UPDATE ' . NV_BANNERS_GLOBALTABLE . '_plans SET
-            blang= :blang, title= :title, description= :description, form= :form, require_image= :require_image, width=' . $width . ', height=' . $height . ',
-            uploadtype=:uploadtype, uploadgroup=:uploadgroup, exp_time=:exp_time
-        WHERE id=' . $post_id);
-        $stmt->bindParam(':blang', $blang, PDO::PARAM_STR);
-        $stmt->bindParam(':title', $title, PDO::PARAM_STR);
-        $stmt->bindParam(':description', $description, PDO::PARAM_STR);
-        $stmt->bindParam(':form', $form, PDO::PARAM_STR);
-        $stmt->bindParam(':require_image', $require_image, PDO::PARAM_STR);
-        $stmt->bindParam(':uploadtype', $uploadtype, PDO::PARAM_STR);
-        $stmt->bindParam(':uploadgroup', $uploadgroup, PDO::PARAM_STR);
-        $stmt->bindParam(':exp_time', $exp_time_value, PDO::PARAM_INT);
+            blang = :blang, title = :title, description = :description, form = :form, require_image = :require_image, width = :width, height = :height,
+            uploadtype = :uploadtype, uploadgroup = :uploadgroup, exp_time = :exp_time
+        WHERE id = :post_id');
+        $stmt->bindValue(':blang', $blang, PDO::PARAM_STR);
+        $stmt->bindValue(':title', $title, PDO::PARAM_STR);
+        $stmt->bindValue(':description', $description, PDO::PARAM_STR);
+        $stmt->bindValue(':form', $form, PDO::PARAM_STR);
+        $stmt->bindValue(':require_image', $require_image, PDO::PARAM_INT);
+        $stmt->bindValue(':width', $width, PDO::PARAM_INT);
+        $stmt->bindValue(':height', $height, PDO::PARAM_INT);
+        $stmt->bindValue(':uploadtype', $uploadtype, PDO::PARAM_STR);
+        $stmt->bindValue(':uploadgroup', $uploadgroup, PDO::PARAM_STR);
+        $stmt->bindValue(':exp_time', $exp_time_value, PDO::PARAM_INT);
+        $stmt->bindValue(':post_id', $post_id, PDO::PARAM_INT);
         $stmt->execute();
 
         if ($form_old != $form || $blang_old != $blang) {
@@ -116,22 +133,23 @@ if ($nv_Request->isset_request('checkss', 'post')) {
             'redirect' => nv_url_rewrite(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=info-plan&id=' . $post_id, true),
         ]);
     } else {
-        $_sql = 'INSERT INTO ' . NV_BANNERS_GLOBALTABLE . '_plans (
+        $stmt = $db->prepare('INSERT INTO ' . NV_BANNERS_GLOBALTABLE . '_plans (
             blang, title, description, form, width, height, act, require_image, uploadtype, uploadgroup, exp_time
         ) VALUES (
-            :blang, :title, :description, :form, ' . $width . ', ' . $height . ', 1, :require_image, :uploadtype, :uploadgroup, :exp_time
-        )';
-        $data_insert = [
-            'blang'         => $blang,
-            'title'         => $title,
-            'description'   => $description,
-            'form'          => $form,
-            'require_image' => $require_image,
-            'uploadtype'    => $uploadtype,
-            'uploadgroup'   => $uploadgroup,
-            'exp_time'      => $exp_time_value,
-        ];
-        $id_new = $db->insert_id($_sql, 'id', $data_insert);
+            :blang, :title, :description, :form, :width, :height, 1, :require_image, :uploadtype, :uploadgroup, :exp_time
+        )');
+        $stmt->bindValue(':blang', $blang, PDO::PARAM_STR);
+        $stmt->bindValue(':title', $title, PDO::PARAM_STR);
+        $stmt->bindValue(':description', $description, PDO::PARAM_STR);
+        $stmt->bindValue(':form', $form, PDO::PARAM_STR);
+        $stmt->bindValue(':width', $width, PDO::PARAM_INT);
+        $stmt->bindValue(':height', $height, PDO::PARAM_INT);
+        $stmt->bindValue(':require_image', $require_image, PDO::PARAM_INT);
+        $stmt->bindValue(':uploadtype', $uploadtype, PDO::PARAM_STR);
+        $stmt->bindValue(':uploadgroup', $uploadgroup, PDO::PARAM_STR);
+        $stmt->bindValue(':exp_time', $exp_time_value, PDO::PARAM_INT);
+        $stmt->execute();
+        $id_new = $db->lastInsertId();
 
         $nv_Cache->delMod($module_name);
         nv_insert_logs(NV_LANG_DATA, $module_name, 'log_add_plan', 'planid ' . $id_new, $admin_info['userid']);

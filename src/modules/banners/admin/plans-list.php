@@ -31,6 +31,7 @@ while ($row = $result->fetch()) {
         'add_url'  => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=banner-content&pid=' . $row['id'],
     ];
 }
+$result->closeCursor();
 
 $tpl = new \NukeViet\Template\NVSmarty();
 $tpl->setTemplateDir(get_module_tpl_dir('plans-list.tpl'));

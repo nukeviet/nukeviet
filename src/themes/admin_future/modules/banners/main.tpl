@@ -98,7 +98,7 @@
                                        data-toggle="toggle-banner-act"
                                        data-id="{$row.id}"
                                        data-act="{$row.act}"
-                                       data-tokend="{$CHECKSS}"
+                                       data-checkss="{$CHECKSS}"
                                        {if $row.act eq 0}data-msgconfirm="{$LANG->getModule('banner_confirm_act0')}"{/if}
                                        {if $row.act eq 2}data-msgconfirm="{$LANG->getModule('banner_confirm_act2')}"{/if}
                                        aria-label="{$row.title}">
@@ -114,7 +114,7 @@
                                         aria-label="{$LANG->getGlobal('delete')}"
                                         data-toggle="del-banner"
                                         data-id="{$row.id}"
-                                        data-tokend="{$CHECKSS}"
+                                        data-checkss="{$CHECKSS}"
                                         data-msgconfirm="{$LANG->getModule('file_del_confirm')}">
                                     <i class="fa-solid fa-trash" data-icon="fa-trash"></i>
                                 </button>

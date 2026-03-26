@@ -17,22 +17,36 @@ if (!defined('NV_IS_AJAX')) {
     exit('Wrong URL');
 }
 
+$_csrf_key = $admin_info['admin_id'] . '_' . $module_name . '_plans-list';
+if (!csrf_check($nv_Request->get_string('checkss', 'post'), $_csrf_key)) {
+    nv_jsonOutput([
+        'status' => 'error',
+        'mess' => $nv_Lang->getGlobal('error_checkss')
+    ]);
+}
+
 $id = $nv_Request->get_int('id', 'post', 0);
 
 if (empty($id)) {
     exit('Stop!!!');
 }
 
-$sql = 'SELECT act FROM ' . NV_BANNERS_GLOBALTABLE . '_plans WHERE id=' . $id;
-$row = $db->query($sql)->fetch();
+$stmt = $db->prepare('SELECT act FROM ' . NV_BANNERS_GLOBALTABLE . '_plans WHERE id = :id');
+$stmt->bindValue(':id', $id, PDO::PARAM_INT);
+$stmt->execute();
+$row = $stmt->fetch();
+$stmt->closeCursor();
 if (empty($row)) {
     exit('Stop!!!');
 }
 
 $act = $row['act'] ? 0 : 1;
 
-$sql = 'UPDATE ' . NV_BANNERS_GLOBALTABLE . '_plans SET act=' . $act . ' WHERE id=' . $id;
-$return = $db->exec($sql) ? 'OK' : 'NO';
+$stmt = $db->prepare('UPDATE ' . NV_BANNERS_GLOBALTABLE . '_plans SET act = :act WHERE id = :id');
+$stmt->bindValue(':act', $act, PDO::PARAM_INT);
+$stmt->bindValue(':id', $id, PDO::PARAM_INT);
+$stmt->execute();
+$return = $stmt->rowCount() ? 'OK' : 'NO';
 
 $nv_Cache->delMod($module_name);
 nv_CreateXML_bannerPlan();

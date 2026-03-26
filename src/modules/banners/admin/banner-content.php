@@ -16,7 +16,11 @@ if (!defined('NV_IS_FILE_ADMIN')) {
 $id = $nv_Request->get_int('id', 'get', 0);
 $row = [];
 if ($id > 0) {
-    $row = $db->query('SELECT * FROM ' . NV_BANNERS_GLOBALTABLE . '_rows WHERE id=' . $id)->fetch();
+    $stmt = $db->prepare('SELECT * FROM ' . NV_BANNERS_GLOBALTABLE . '_rows WHERE id = :id');
+    $stmt->bindValue(':id', $id, PDO::PARAM_INT);
+    $stmt->execute();
+    $row = $stmt->fetch();
+    $stmt->closeCursor();
     if (empty($row)) {
         nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
     }
@@ -70,6 +74,7 @@ while ($row_plan = $result->fetch()) {
         'exp_time'      => $row_plan['exp_time'],
     ];
 }
+$result->closeCursor();
 
 if (empty($array_plans)) {
     nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=plan-content');
@@ -79,7 +84,7 @@ if ($nv_Request->get_int('save', 'post') == 1) {
     if (!csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
         nv_jsonOutput([
             'status' => 'error',
-            'mess'   => $nv_Lang->getGlobal('error_checkss')
+            'mess' => $nv_Lang->getGlobal('error_checkss')
         ]);
     }
 
@@ -126,20 +131,20 @@ if ($nv_Request->get_int('save', 'post') == 1) {
 
     $click_url_allow = !empty($click_url) ? nv_is_url($click_url, true) : true;
 
-    $sql = 'SELECT require_image FROM ' . NV_BANNERS_GLOBALTABLE . '_plans where id = ' . $pid;
-    $result = $db->query($sql);
-    $array_require_image = $result->fetchAll();
+    $stmt = $db->prepare('SELECT require_image FROM ' . NV_BANNERS_GLOBALTABLE . '_plans WHERE id = :pid');
+    $stmt->bindValue(':pid', $pid, PDO::PARAM_INT);
+    $stmt->execute();
+    $array_require_image = $stmt->fetchAll();
 
     $error_assign_user = '';
     if (!empty($assign_user)) {
-        $sql = 'SELECT userid FROM ' . NV_USERS_GLOBALTABLE . ' WHERE active=1 AND username=:username';
-        $sth = $db->prepare($sql);
-        $sth->bindParam(':username', $assign_user, PDO::PARAM_STR);
-        $sth->execute();
-        if ($sth->rowCount() != 1) {
+        $stmt = $db->prepare('SELECT userid FROM ' . NV_USERS_GLOBALTABLE . ' WHERE active = 1 AND username = :username');
+        $stmt->bindValue(':username', $assign_user, PDO::PARAM_STR);
+        $stmt->execute();
+        if ($stmt->rowCount() != 1) {
             $error_assign_user = $nv_Lang->getModule('assign_to_user_err', $assign_user);
         } else {
-            $assign_user_id = $sth->fetchColumn();
+            $assign_user_id = $stmt->fetchColumn();
         }
     }
 
@@ -273,25 +278,36 @@ if ($nv_Request->get_int('save', 'post') == 1) {
 
     if ($is_edit) {
         // Lấy pid cũ để fix weight nếu đổi plan
-        $pid_old = (int) $db->query('SELECT pid FROM ' . NV_BANNERS_GLOBALTABLE . '_rows WHERE id=' . $id)->fetchColumn();
+        $stmt_old_pid = $db->prepare('SELECT pid FROM ' . NV_BANNERS_GLOBALTABLE . '_rows WHERE id = :id');
+        $stmt_old_pid->bindValue(':id', $id, PDO::PARAM_INT);
+        $stmt_old_pid->execute();
+        $pid_old = (int) $stmt_old_pid->fetchColumn();
 
         $stmt = $db->prepare('UPDATE ' . NV_BANNERS_GLOBALTABLE . '_rows SET
-            title= :title, pid=' . $pid . ', clid=' . $assign_user_id . ',
-            file_name= :file_name, file_ext= :file_ext, file_mime= :file_mime,
-            width=' . $width . ', height=' . $height . ', file_alt= :file_alt, imageforswf= :imageforswf,
-            click_url= :click_url, target= :target, bannerhtml= :bannerhtml,
-            publ_time=' . $publtime . ', exp_time=' . $exptime . ', act=' . $act . '
-        WHERE id=' . $id);
+            title = :title, pid = :pid, clid = :clid,
+            file_name = :file_name, file_ext = :file_ext, file_mime = :file_mime,
+            width = :width, height = :height, file_alt = :file_alt, imageforswf = :imageforswf,
+            click_url = :click_url, target = :target, bannerhtml = :bannerhtml,
+            publ_time = :publ_time, exp_time = :exp_time, act = :act
+        WHERE id = :id');
 
-        $stmt->bindParam(':title', $title, PDO::PARAM_STR);
-        $stmt->bindParam(':file_name', $file_name, PDO::PARAM_STR);
-        $stmt->bindParam(':file_ext', $file_ext, PDO::PARAM_STR);
-        $stmt->bindParam(':file_mime', $file_mime, PDO::PARAM_STR);
-        $stmt->bindParam(':file_alt', $file_alt, PDO::PARAM_STR);
-        $stmt->bindParam(':imageforswf', $imageforswf, PDO::PARAM_STR);
-        $stmt->bindParam(':click_url', $click_url, PDO::PARAM_STR);
-        $stmt->bindParam(':target', $target, PDO::PARAM_STR);
-        $stmt->bindParam(':bannerhtml', $bannerhtml, PDO::PARAM_STR, strlen($bannerhtml));
+        $stmt->bindValue(':title', $title, PDO::PARAM_STR);
+        $stmt->bindValue(':pid', $pid, PDO::PARAM_INT);
+        $stmt->bindValue(':clid', $assign_user_id, PDO::PARAM_INT);
+        $stmt->bindValue(':file_name', $file_name, PDO::PARAM_STR);
+        $stmt->bindValue(':file_ext', $file_ext, PDO::PARAM_STR);
+        $stmt->bindValue(':file_mime', $file_mime, PDO::PARAM_STR);
+        $stmt->bindValue(':width', $width, PDO::PARAM_INT);
+        $stmt->bindValue(':height', $height, PDO::PARAM_INT);
+        $stmt->bindValue(':file_alt', $file_alt, PDO::PARAM_STR);
+        $stmt->bindValue(':imageforswf', $imageforswf, PDO::PARAM_STR);
+        $stmt->bindValue(':click_url', $click_url, PDO::PARAM_STR);
+        $stmt->bindValue(':target', $target, PDO::PARAM_STR);
+        $stmt->bindValue(':bannerhtml', $bannerhtml, PDO::PARAM_STR);
+        $stmt->bindValue(':publ_time', $publtime, PDO::PARAM_INT);
+        $stmt->bindValue(':exp_time', $exptime, PDO::PARAM_INT);
+        $stmt->bindValue(':act', $act, PDO::PARAM_INT);
+        $stmt->bindValue(':id', $id, PDO::PARAM_INT);
         $stmt->execute();
 
         if ($pid_old != $pid) {
@@ -311,31 +327,41 @@ if ($nv_Request->get_int('save', 'post') == 1) {
     } else {
         $_weight = 0;
         if ($array_plans[$pid]['form'] == 'sequential' and $act != 2) {
-            $_weight = $db->query('SELECT COUNT(*) FROM ' . NV_BANNERS_GLOBALTABLE . '_rows WHERE act IN(0,1,3) AND pid=' . $pid)->fetchColumn();
+            $stmt_weight = $db->prepare('SELECT COUNT(*) FROM ' . NV_BANNERS_GLOBALTABLE . '_rows WHERE act IN(0,1,3) AND pid = :pid');
+            $stmt_weight->bindValue(':pid', $pid, PDO::PARAM_INT);
+            $stmt_weight->execute();
+            $_weight = $stmt_weight->fetchColumn();
             $_weight = (int) $_weight + 1;
         }
 
-        $_sql = 'INSERT INTO ' . NV_BANNERS_GLOBALTABLE . '_rows (
+        $stmt = $db->prepare('INSERT INTO ' . NV_BANNERS_GLOBALTABLE . '_rows (
             title, pid, clid, file_name, file_ext, file_mime, width, height, file_alt, imageforswf, click_url, target, bannerhtml,
             add_time, publ_time, exp_time, hits_total, act, weight
         ) VALUES (
-            :title, ' . $pid . ', ' . $assign_user_id . ', :file_name, :file_ext, :file_mime,
-            ' . $width . ', ' . $height . ', :file_alt, :imageforswf, :click_url, :target, :bannerhtml, ' . NV_CURRENTTIME . ', ' . $publtime . ', ' . $exptime . ',
-            0, ' . $act . ', ' . $_weight . '
-        )';
-
-        $data_insert = [
-            'title'       => $title,
-            'file_name'   => $file_name,
-            'file_ext'    => $file_ext,
-            'file_mime'   => $file_mime,
-            'file_alt'    => $file_alt,
-            'imageforswf' => $imageforswf,
-            'click_url'   => $click_url,
-            'target'      => $target,
-            'bannerhtml'  => $bannerhtml,
-        ];
-        $id = $db->insert_id($_sql, 'id', $data_insert);
+            :title, :pid, :clid, :file_name, :file_ext, :file_mime,
+            :width, :height, :file_alt, :imageforswf, :click_url, :target, :bannerhtml, :add_time, :publ_time, :exp_time,
+            0, :act, :weight
+        )');
+        $stmt->bindValue(':title', $title, PDO::PARAM_STR);
+        $stmt->bindValue(':pid', $pid, PDO::PARAM_INT);
+        $stmt->bindValue(':clid', $assign_user_id, PDO::PARAM_INT);
+        $stmt->bindValue(':file_name', $file_name, PDO::PARAM_STR);
+        $stmt->bindValue(':file_ext', $file_ext, PDO::PARAM_STR);
+        $stmt->bindValue(':file_mime', $file_mime, PDO::PARAM_STR);
+        $stmt->bindValue(':width', $width, PDO::PARAM_INT);
+        $stmt->bindValue(':height', $height, PDO::PARAM_INT);
+        $stmt->bindValue(':file_alt', $file_alt, PDO::PARAM_STR);
+        $stmt->bindValue(':imageforswf', $imageforswf, PDO::PARAM_STR);
+        $stmt->bindValue(':click_url', $click_url, PDO::PARAM_STR);
+        $stmt->bindValue(':target', $target, PDO::PARAM_STR);
+        $stmt->bindValue(':bannerhtml', $bannerhtml, PDO::PARAM_STR);
+        $stmt->bindValue(':add_time', NV_CURRENTTIME, PDO::PARAM_INT);
+        $stmt->bindValue(':publ_time', $publtime, PDO::PARAM_INT);
+        $stmt->bindValue(':exp_time', $exptime, PDO::PARAM_INT);
+        $stmt->bindValue(':act', $act, PDO::PARAM_INT);
+        $stmt->bindValue(':weight', $_weight, PDO::PARAM_INT);
+        $stmt->execute();
+        $id = $db->lastInsertId();
 
         nv_insert_logs(NV_LANG_DATA, $module_name, 'log_add_banner', 'bannerid ' . $id, $admin_info['userid']);
     }
@@ -382,7 +408,11 @@ if ($is_edit) {
 
     $assign_user = '';
     if (!empty($row['clid']) and $row['clid'] != $admin_info['userid']) {
-        $cl_user = $db->query('SELECT username FROM ' . NV_USERS_GLOBALTABLE . ' WHERE userid=' . $row['clid'])->fetch();
+        $stmt = $db->prepare('SELECT username FROM ' . NV_USERS_GLOBALTABLE . ' WHERE userid = :userid');
+        $stmt->bindValue(':userid', $row['clid'], PDO::PARAM_INT);
+        $stmt->execute();
+        $cl_user = $stmt->fetch();
+        $stmt->closeCursor();
         if (!empty($cl_user)) {
             $assign_user = $cl_user['username'];
         }

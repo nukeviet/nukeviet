@@ -26,6 +26,7 @@ if (defined('NV_IS_INSTALL') or defined('NV_MODULE_RECREATE') or defined('NV_MOD
             $sql_drop_module[] = 'DELETE FROM ' . $db_config['prefix'] . '_' . $_row['lang'] . '_blocks_groups WHERE bid IN (' . $bids . ')';
         }
     }
+    $_result->closeCursor();
 
     $sql_drop_module[] = 'DROP TABLE IF EXISTS ' . $db_config['prefix'] . '_banners_click;';
     $sql_drop_module[] = 'DROP TABLE IF EXISTS ' . $db_config['prefix'] . '_banners_plans;';
@@ -37,12 +38,17 @@ if (defined('NV_IS_INSTALL') or defined('NV_MODULE_RECREATE') or defined('NV_MOD
         $sql_drop_module[] = 'DELETE FROM ' . $db_config['prefix'] . '_' . $lang . '_blocks_groups WHERE bid IN (' . $bids . ')';
     }
 
-    $rids = $db->query('SELECT GROUP_CONCAT(id) FROM ' . $db_config['prefix'] . '_banners_rows WHERE pid IN (SELECT id FROM ' . $db_config['prefix'] . '_banners_plans WHERE blang=' . $db->quote($lang) . ')')->fetchColumn();
+    $stmt = $db->prepare('SELECT GROUP_CONCAT(id) FROM ' . $db_config['prefix'] . '_banners_rows WHERE pid IN (SELECT id FROM ' . $db_config['prefix'] . '_banners_plans WHERE blang = :lang)');
+    $stmt->bindValue(':lang', $lang, PDO::PARAM_STR);
+    $stmt->execute();
+    $rids = $stmt->fetchColumn();
+    $stmt->closeCursor();
+
     if (!empty($rids)) {
         $sql_drop_module[] = 'DELETE FROM ' . $db_config['prefix'] . '_banners_click WHERE bid IN (' . $rids . ')';
         $sql_drop_module[] = 'DELETE FROM ' . $db_config['prefix'] . '_banners_rows WHERE id IN (' . $rids . ')';
     }
-    $sql_drop_module[] = 'DELETE FROM ' . $db_config['prefix'] . '_banners_plans WHERE blang=' . $db->quote($lang);
+    $sql_drop_module[] = 'DELETE FROM ' . $db_config['prefix'] . '_banners_plans WHERE blang = ' . $db->quote($lang);
 }
 
 $sql_create_module = $sql_drop_module;

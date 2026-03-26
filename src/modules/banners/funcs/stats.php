@@ -18,13 +18,15 @@ if (!defined('NV_IS_BANNER_CLIENT')) {
 }
 
 // Các quảng cáo của khách hàng
-$sql = 'SELECT id, title FROM ' . NV_BANNERS_GLOBALTABLE . "_rows WHERE act=1 AND clid=" . $user_info['userid'] . ' ORDER BY id ASC';
-$result = $db->query($sql);
+$stmt = $db_slave->prepare('SELECT id, title FROM ' . NV_BANNERS_GLOBALTABLE . '_rows WHERE act = 1 AND clid = :clid ORDER BY id ASC');
+$stmt->bindValue(':clid', $user_info['userid'], PDO::PARAM_INT);
+$stmt->execute();
 
 $ads = [];
-while ($row = $result->fetch()) {
+while ($row = $stmt->fetch()) {
     $ads[] = $row;
 }
+$stmt->closeCursor();
 
 $contents = nv_banner_theme_stats($ads);
 

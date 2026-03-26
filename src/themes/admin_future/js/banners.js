@@ -111,7 +111,7 @@ $(function() {
             $.ajax({
                 type: 'POST',
                 url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=del_banner&nocache=' + new Date().getTime(),
-                data: { id: btn.data('id'), checkss: btn.data('tokend') },
+                data: { id: btn.data('id'), checkss: btn.data('checkss') },
                 dataType: 'json',
                 success: (data) => {
                     icon.removeClass('fa-spinner fa-spin-pulse').addClass(orig);
@@ -141,7 +141,7 @@ $(function() {
                 $.ajax({
                     type: 'POST',
                     url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=change_act_banner&nocache=' + new Date().getTime(),
-                    data: { id: chk.data('id'), checkss: chk.data('tokend') },
+                    data: { id: chk.data('id'), checkss: chk.data('checkss') },
                     dataType: 'json',
                     success: (data) => {
                         if (data.status === 'OK' || data.status === 'ok') {
@@ -183,7 +183,7 @@ $(function() {
             $.ajax({
                 type: 'POST',
                 url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=del_plan&nocache=' + new Date().getTime(),
-                data: { id: btn.data('id'), checkss: btn.data('tokend') },
+                data: { id: btn.data('id'), checkss: btn.data('checkss') },
                 dataType: 'json',
                 success: (data) => {
                     icon.removeClass('fa-spinner fa-spin-pulse').addClass(orig);
@@ -244,7 +244,7 @@ $(function() {
             $.ajax({
                 type: 'POST',
                 url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=change_act_plan&nocache=' + new Date().getTime(),
-                data: { id: btn.data('id'), checkss: btn.data('tokend') },
+                data: { id: btn.data('id'), checkss: btn.data('checkss') },
                 dataType: 'json',
                 success: (data) => {
                     if (data.status === 'OK' || data.status === 'ok') {
@@ -377,7 +377,7 @@ $(function() {
                 $.ajax({
                     type: 'POST',
                     url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=change_act_banner&nocache=' + new Date().getTime(),
-                    data: { id: btn.data('id'), checkss: btn.data('tokend') },
+                    data: { id: btn.data('id'), checkss: btn.data('checkss') },
                     dataType: 'json',
                     success: (data) => {
                         if (data.status === 'OK' || data.status === 'ok') {

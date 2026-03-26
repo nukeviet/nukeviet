@@ -44,12 +44,17 @@ foreach ($types_map as $chart_type => $db_field) {
     $data = [];
     $title = '';
 
-    $result = $db->query('SELECT a.' . $db_field . ', b.title FROM ' . NV_BANNERS_GLOBALTABLE . '_click a
-    INNER JOIN ' . NV_BANNERS_GLOBALTABLE . '_rows b ON a.bid=b.id
-    WHERE b.clid= ' . $user_info['userid'] . ' AND a.click_time <= ' . $enddate . ' AND a.click_time >= ' . $firstdate . '
-    AND a.bid=' . $ads . ' ORDER BY click_time ASC');
+    $stmt = $db_slave->prepare('SELECT a.' . $db_field . ', b.title FROM ' . NV_BANNERS_GLOBALTABLE . '_click a
+    INNER JOIN ' . NV_BANNERS_GLOBALTABLE . '_rows b ON a.bid = b.id
+    WHERE b.clid = :clid AND a.click_time <= :enddate AND a.click_time >= :firstdate
+    AND a.bid = :bid ORDER BY click_time ASC');
+    $stmt->bindValue(':clid', $user_info['userid'], PDO::PARAM_INT);
+    $stmt->bindValue(':enddate', $enddate, PDO::PARAM_INT);
+    $stmt->bindValue(':firstdate', $firstdate, PDO::PARAM_INT);
+    $stmt->bindValue(':bid', $ads, PDO::PARAM_INT);
+    $stmt->execute();
 
-    while ($row = $result->fetch()) {
+    while ($row = $stmt->fetch()) {
         if ($chart_type == 'date') {
             $data[] = date('d/m', $row[$db_field]);
         } else {
@@ -57,6 +62,7 @@ foreach ($types_map as $chart_type => $db_field) {
         }
         $title = $row['title'];
     }
+    $stmt->closeCursor();
 
     if (count($data) > 0) {
         $statics = array_count_values($data);

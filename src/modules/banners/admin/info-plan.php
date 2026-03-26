@@ -15,8 +15,11 @@ if (!defined('NV_IS_FILE_ADMIN')) {
 
 $id = $nv_Request->get_int('id', 'get', 0);
 
-$sql = 'SELECT * FROM ' . NV_BANNERS_GLOBALTABLE . '_plans WHERE id=' . $id;
-$row = $db->query($sql)->fetch();
+$stmt = $db->prepare('SELECT * FROM ' . NV_BANNERS_GLOBALTABLE . '_plans WHERE id = :id');
+$stmt->bindValue(':id', $id, PDO::PARAM_INT);
+$stmt->execute();
+$row = $stmt->fetch();
+$stmt->closeCursor();
 
 if (empty($row)) {
     nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
@@ -47,7 +50,12 @@ $main_url = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_D
 
 $status_cards = [];
 foreach ([0, 1, 2, 3, 4] as $s) {
-    $count = (int) $db->query('SELECT COUNT(*) FROM ' . NV_BANNERS_GLOBALTABLE . '_rows WHERE pid=' . $id . ' AND act=' . $s)->fetchColumn();
+    $stmt = $db->prepare('SELECT COUNT(*) FROM ' . NV_BANNERS_GLOBALTABLE . '_rows WHERE pid = :pid AND act = :act');
+    $stmt->bindValue(':pid', $id, PDO::PARAM_INT);
+    $stmt->bindValue(':act', $s, PDO::PARAM_INT);
+    $stmt->execute();
+    $count = (int) $stmt->fetchColumn();
+    $stmt->closeCursor();
     $status_cards[] = [
         'act'   => $s,
         'count' => $count,
@@ -63,7 +71,8 @@ $tpl->setTemplateDir(get_module_tpl_dir('info-plan.tpl'));
 $tpl->assign('LANG', $nv_Lang);
 $tpl->assign('MODULE_NAME', $module_name);
 $tpl->assign('OP', $op);
-$tpl->assign('CHECKSS', csrf_create($csrf_key));
+$_csrf_key = $admin_info['admin_id'] . '_' . $module_name . '_plans-list';
+$tpl->assign('CHECKSS', csrf_create($_csrf_key));
 $tpl->assign('ROW', $row);
 $tpl->assign('STATUS_CARDS', $status_cards);
 

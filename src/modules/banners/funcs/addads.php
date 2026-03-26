@@ -138,22 +138,30 @@ if ($nv_Request->isset_request('confirm', 'post')) {
         $endtime = $begintime + $global_array_uplans[$post['blockid']]['exp_time'];
     }
 
-    $sql = 'INSERT INTO ' . NV_BANNERS_GLOBALTABLE . '_rows (
+    $stmt = $db->prepare('INSERT INTO ' . NV_BANNERS_GLOBALTABLE . '_rows (
             title, pid, clid, file_name, file_ext, file_mime, width, height, file_alt, imageforswf, click_url, bannerhtml, add_time, publ_time, exp_time, hits_total, act, weight
         ) VALUES (
-            :title, ' . $post['blockid'] . ', ' . $user_info['userid'] . ', :file_name, :file_ext, :file_mime, ' . $width . ', ' . $height . ", :description, '',
-            :url, '', " . NV_CURRENTTIME . ', ' . $begintime . ', ' . $endtime . ', 0, 4, 0
-        )';
+            :title, :pid, :clid, :file_name, :file_ext, :file_mime, :width, :height, :file_alt, :imageforswf, :click_url, :bannerhtml, :add_time, :publ_time, :exp_time, 0, 4, 0
+        )');
 
-    $data_insert = [];
-    $data_insert['title'] = $post['title'];
-    $data_insert['file_name'] = $file_name;
-    $data_insert['file_ext'] = $file_ext;
-    $data_insert['file_mime'] = $file_mime;
-    $data_insert['description'] = $post['description'];
-    $data_insert['url'] = $post['url'];
+    $stmt->bindValue(':title', $post['title'], PDO::PARAM_STR);
+    $stmt->bindValue(':pid', $post['blockid'], PDO::PARAM_INT);
+    $stmt->bindValue(':clid', $user_info['userid'], PDO::PARAM_INT);
+    $stmt->bindValue(':file_name', $file_name, PDO::PARAM_STR);
+    $stmt->bindValue(':file_ext', $file_ext, PDO::PARAM_STR);
+    $stmt->bindValue(':file_mime', $file_mime, PDO::PARAM_STR);
+    $stmt->bindValue(':width', $width, PDO::PARAM_INT);
+    $stmt->bindValue(':height', $height, PDO::PARAM_INT);
+    $stmt->bindValue(':file_alt', $post['description'], PDO::PARAM_STR);
+    $stmt->bindValue(':imageforswf', '', PDO::PARAM_STR);
+    $stmt->bindValue(':click_url', $post['url'], PDO::PARAM_STR);
+    $stmt->bindValue(':bannerhtml', '', PDO::PARAM_STR);
+    $stmt->bindValue(':add_time', NV_CURRENTTIME, PDO::PARAM_INT);
+    $stmt->bindValue(':publ_time', $begintime, PDO::PARAM_INT);
+    $stmt->bindValue(':exp_time', $endtime, PDO::PARAM_INT);
+    $stmt->execute();
 
-    $id = $db->insert_id($sql, 'id', $data_insert);
+    $id = $db->lastInsertId();
     nv_jsonOutput([
         'status' => 'OK',
         'mess' => $nv_Lang->getModule('addads_success'),

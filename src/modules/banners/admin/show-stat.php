@@ -19,8 +19,11 @@ if ($client_info['is_myreferer'] != 1) {
 
 $id = $nv_Request->get_int('id', 'get', 0);
 
-$sql = 'SELECT * FROM ' . NV_BANNERS_GLOBALTABLE . '_rows WHERE id=' . $id;
-$row = $db->query($sql)->fetch();
+$stmt = $db->prepare('SELECT * FROM ' . NV_BANNERS_GLOBALTABLE . '_rows WHERE id = :id');
+$stmt->bindValue(':id', $id, PDO::PARAM_INT);
+$stmt->execute();
+$row = $stmt->fetch();
+$stmt->closeCursor();
 
 if (empty($row)) {
     nv_htmlOutput('Stop!!!');
@@ -52,7 +55,12 @@ $day_max = ($data_month == $current_month) ? $current_day : date('t', $time);
 $day_min = ($current_month == $publ_month and $current_year == $publ_year) ? $publ_day : 1;
 $maxday = mktime(24, 60, 60, $data_month, $day_max, $current_year);
 $minday = mktime(0, 0, 0, $data_month, $day_min, $current_year);
-$sum = $db->query('SELECT COUNT(*) FROM ' . NV_BANNERS_GLOBALTABLE . '_click WHERE bid=' . $id . ' AND click_time>=' . $minday . ' AND click_time<=' . $maxday)->fetchColumn();
+$stmt = $db->prepare('SELECT COUNT(*) FROM ' . NV_BANNERS_GLOBALTABLE . '_click WHERE bid = :id AND click_time >= :minday AND click_time <= :maxday');
+$stmt->bindValue(':id', $id, PDO::PARAM_INT);
+$stmt->bindValue(':minday', $minday, PDO::PARAM_INT);
+$stmt->bindValue(':maxday', $maxday, PDO::PARAM_INT);
+$stmt->execute();
+$sum = $stmt->fetchColumn();
 
 $cts = [];
 $month_label = nv_monthname($data_month) . ' ' . $current_year;
@@ -60,18 +68,23 @@ $month_label = nv_monthname($data_month) . ' ' . $current_year;
 $ext = in_array($nv_Request->get_string('ext', 'get', 'no'), ['country', 'browse', 'os'], true) ? $nv_Request->get_string('ext', 'get') : 'day';
 
 if ($ext == 'country') {
-    $sql = 'SELECT click_country FROM ' . NV_BANNERS_GLOBALTABLE . '_click WHERE bid=' . $id . ' AND click_time>=' . $minday . ' AND click_time<=' . $maxday . ' ORDER BY click_country DESC';
-    $result = $db->query($sql);
-    $unknown = 0;
+    $stmt = $db->prepare('SELECT click_country FROM ' . NV_BANNERS_GLOBALTABLE . '_click WHERE bid = :id AND click_time >= :minday AND click_time <= :maxday ORDER BY click_country DESC');
+    $stmt->bindValue(':id', $id, PDO::PARAM_INT);
+    $stmt->bindValue(':minday', $minday, PDO::PARAM_INT);
+    $stmt->bindValue(':maxday', $maxday, PDO::PARAM_INT);
+    $stmt->execute();
 
-    if (!empty($result)) {
-        $bd = [];
-        while ($row = $result->fetch()) {
+    $bd = [];
+    if ($stmt->rowCount() > 0) {
+        while ($row = $stmt->fetch()) {
             if (!isset($bd[$row['click_country']])) {
                 $bd[$row['click_country']] = 0;
             }
             $bd[$row['click_country']] += 1;
         }
+        $stmt->closeCursor();
+
+        $unknown = 0;
 
         foreach ($bd as $shortname => $click_count) {
             $country = $shortname;
@@ -108,18 +121,22 @@ if ($ext == 'country') {
     }
     $caption = $nv_Lang->getModule('info_stat_bycountry_caption', nv_monthname($data_month), $current_year);
 } elseif ($ext == 'browse') {
-    $sql = 'SELECT click_browse_name FROM ' . NV_BANNERS_GLOBALTABLE . '_click WHERE bid=' . $id . ' AND click_time>=' . $minday . ' AND click_time<=' . $maxday . ' ORDER BY click_country DESC';
-
-    $result = $db->query($sql);
+    $stmt = $db->prepare('SELECT click_browse_name FROM ' . NV_BANNERS_GLOBALTABLE . '_click WHERE bid = :id AND click_time >= :minday AND click_time <= :maxday ORDER BY click_browse_name DESC');
+    $stmt->bindValue(':id', $id, PDO::PARAM_INT);
+    $stmt->bindValue(':minday', $minday, PDO::PARAM_INT);
+    $stmt->bindValue(':maxday', $maxday, PDO::PARAM_INT);
+    $stmt->execute();
     $bd = [];
-    if (!empty($result)) {
-        while ($row = $result->fetch()) {
+    if ($stmt->rowCount() > 0) {
+        while ($row = $stmt->fetch()) {
             if (!isset($bd[$row['click_browse_name']])) {
                 $bd[$row['click_browse_name']] = 0;
             }
             $bd[$row['click_browse_name']] += 1;
         }
+        $stmt->closeCursor();
     }
+
     $unknown = 0;
     foreach ($bd as $shortname => $click_count) {
         if (trim($shortname) != 'Unknown') {
@@ -154,17 +171,20 @@ if ($ext == 'country') {
 
     $caption = $nv_Lang->getModule('info_stat_bybrowse_caption', nv_monthname($data_month), $current_year);
 } elseif ($ext == 'os') {
-    $sql = 'SELECT click_os_name FROM ' . NV_BANNERS_GLOBALTABLE . '_click WHERE bid=' . $id . ' AND click_time>=' . $minday . ' AND click_time<=' . $maxday . ' ORDER BY click_os_name DESC';
-    $result = $db->query($sql);
+    $stmt = $db->prepare('SELECT click_os_name FROM ' . NV_BANNERS_GLOBALTABLE . '_click WHERE bid = :id AND click_time >= :minday AND click_time <= :maxday ORDER BY click_os_name DESC');
+    $stmt->bindValue(':id', $id, PDO::PARAM_INT);
+    $stmt->bindValue(':minday', $minday, PDO::PARAM_INT);
+    $stmt->bindValue(':maxday', $maxday, PDO::PARAM_INT);
+    $stmt->execute();
     $bd = [];
-
-    if (!empty($result)) {
-        while ($row = $result->fetch()) {
+    if ($stmt->rowCount() > 0) {
+        while ($row = $stmt->fetch()) {
             if (!isset($bd[$row['click_os_name']])) {
                 $bd[$row['click_os_name']] = 0;
             }
             $bd[$row['click_os_name']] += 1;
         }
+        $stmt->closeCursor();
     }
 
     $unknown = 0;
@@ -221,17 +241,20 @@ if ($ext == 'country') {
 
     $caption = $nv_Lang->getModule('info_stat_byos_caption', nv_monthname($data_month), $current_year);
 } else {
-    $sql = 'SELECT click_time FROM ' . NV_BANNERS_GLOBALTABLE . '_click WHERE bid=' . $id . ' AND click_time>=' . $minday . ' AND click_time<=' . $maxday . ' ORDER BY click_time DESC';
-    $result = $db->query($sql);
+    $stmt = $db->prepare('SELECT click_time FROM ' . NV_BANNERS_GLOBALTABLE . '_click WHERE bid = :id AND click_time >= :minday AND click_time <= :maxday ORDER BY click_time DESC');
+    $stmt->bindValue(':id', $id, PDO::PARAM_INT);
+    $stmt->bindValue(':minday', $minday, PDO::PARAM_INT);
+    $stmt->bindValue(':maxday', $maxday, PDO::PARAM_INT);
+    $stmt->execute();
     $bd = [];
-
-    if (!empty($result)) {
-        while ($row = $result->fetch()) {
+    if ($stmt->rowCount() > 0) {
+        while ($row = $stmt->fetch()) {
             if (!isset($bd[date('d', $row['click_time'])])) {
                 $bd[date('d', $row['click_time'])] = 0;
             }
             $bd[date('d', $row['click_time'])] += 1;
         }
+        $stmt->closeCursor();
     }
 
     for ($i = $day_max; $i >= $day_min; --$i) {

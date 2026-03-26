@@ -151,13 +151,17 @@ function nv_CreateXML_bannerPlan()
         $plan['form'] = $row['form'];
         $plan['width'] = $row['width'];
         $plan['height'] = $row['height'];
-        $query2 = 'SELECT * FROM ' . NV_BANNERS_GLOBALTABLE . '_rows WHERE pid = ' . $id . ' AND (exp_time > ' . NV_CURRENTTIME . ' OR exp_time = 0) AND (act = 1 OR act = 0)';
+
+        $query2 = 'SELECT * FROM ' . NV_BANNERS_GLOBALTABLE . '_rows WHERE pid = :id AND (exp_time > :current_time OR exp_time = 0) AND (act = 1 OR act = 0)';
         if ($row['form'] == 'sequential') {
             $query2 .= ' ORDER BY weight ASC';
         }
         $plan['banners'] = [];
-        $result2 = $db->query($query2);
-        while ($row2 = $result2->fetch()) {
+        $stmt2 = $db->prepare($query2);
+        $stmt2->bindValue(':id', $id, PDO::PARAM_INT);
+        $stmt2->bindValue(':current_time', NV_CURRENTTIME, PDO::PARAM_INT);
+        $stmt2->execute();
+        while ($row2 = $stmt2->fetch()) {
             $plan['banners'][] = [
                 'id' => $row2['id'],
                 'title' => $row2['title'],
@@ -191,22 +195,35 @@ function nv_CreateXML_bannerPlan()
 function nv_fix_banner_weight($pid)
 {
     global $db;
-    [$pid, $form] = $db->query('SELECT id, form FROM ' . NV_BANNERS_GLOBALTABLE . '_plans WHERE id=' . (int) $pid)->fetch(3);
-    if ($pid > 0 and $form == 'sequential') {
-        $query_weight = 'SELECT id FROM ' . NV_BANNERS_GLOBALTABLE . '_rows WHERE pid=' . $pid . ' AND act IN(0,1,3) ORDER BY weight ASC, id DESC';
-        $result = $db->query($query_weight);
+    $stmt = $db->prepare('SELECT id, form FROM ' . NV_BANNERS_GLOBALTABLE . '_plans WHERE id = :pid');
+    $stmt->bindValue(':pid', (int) $pid, PDO::PARAM_INT);
+    $stmt->execute();
+    $_row_plan = $stmt->fetch();
+    $stmt->closeCursor();
+
+    if ($_row_plan && $_row_plan['id'] > 0 && $_row_plan['form'] == 'sequential') {
+        $stmt = $db->prepare('SELECT id FROM ' . NV_BANNERS_GLOBALTABLE . '_rows WHERE pid = :pid AND act IN(0,1,3) ORDER BY weight ASC, id DESC');
+        $stmt->bindValue(':pid', $_row_plan['id'], PDO::PARAM_INT);
+        $stmt->execute();
+
         $weight = 0;
-        while ($row = $result->fetch()) {
+        $stmt_update = $db->prepare('UPDATE ' . NV_BANNERS_GLOBALTABLE . '_rows SET weight = :weight WHERE id = :id');
+        while ($row = $stmt->fetch()) {
             ++$weight;
-            $sql = 'UPDATE ' . NV_BANNERS_GLOBALTABLE . '_rows SET weight=' . $weight . ' WHERE id=' . $row['id'];
-            $db->query($sql);
+            $stmt_update->bindValue(':weight', $weight, PDO::PARAM_INT);
+            $stmt_update->bindValue(':id', $row['id'], PDO::PARAM_INT);
+            $stmt_update->execute();
         }
+        $stmt->closeCursor();
+
         // Các banner hết hạn và banner chờ duyệt có weight = 0
-        $sql = 'UPDATE ' . NV_BANNERS_GLOBALTABLE . '_rows SET weight=0 WHERE act IN(2,4) AND pid=' . $pid;
-        $db->query($sql);
-    } elseif ($pid > 0 and $form == 'random') {
-        $sql = 'UPDATE ' . NV_BANNERS_GLOBALTABLE . '_rows SET weight=0 WHERE pid=' . $pid;
-        $db->query($sql);
+        $stmt = $db->prepare('UPDATE ' . NV_BANNERS_GLOBALTABLE . '_rows SET weight = 0 WHERE act IN(2,4) AND pid = :pid');
+        $stmt->bindValue(':pid', $_row_plan['id'], PDO::PARAM_INT);
+        $stmt->execute();
+    } elseif ($_row_plan && $_row_plan['id'] > 0 && $_row_plan['form'] == 'random') {
+        $stmt = $db->prepare('UPDATE ' . NV_BANNERS_GLOBALTABLE . '_rows SET weight = 0 WHERE pid = :pid');
+        $stmt->bindValue(':pid', $_row_plan['id'], PDO::PARAM_INT);
+        $stmt->execute();
     }
 }
 
@@ -246,15 +263,19 @@ if ($nv_Request->isset_request('ajaxqueryusername', 'post')) {
     if (nv_strlen($username) >= 3) {
         if (preg_match('/^\=(.*)$/', $username, $m)) {
             $username = $m[1];
-            $sql = 'SELECT username, first_name, last_name, photo FROM ' . NV_USERS_GLOBALTABLE . ' WHERE active=1 AND username=' . $db->quote($username) . ' ORDER BY username ASC LIMIT 0,10';
+            $stmt = $db->prepare('SELECT username, first_name, last_name, photo FROM ' . NV_USERS_GLOBALTABLE . ' WHERE active = 1 AND username = :username ORDER BY username ASC LIMIT 10');
+            $stmt->bindValue(':username', $username, PDO::PARAM_STR);
         } else {
-            $dbkey = $db->dblikeescape($username);
-            $sql = 'SELECT username, first_name, last_name, photo FROM ' . NV_USERS_GLOBALTABLE . " WHERE active=1 AND (
-                username LIKE '%" . $dbkey . "%' OR CONCAT(first_name,' ',last_name) LIKE '%" . $dbkey . "%'
-            ) ORDER BY username ASC LIMIT 0,10";
+            $stmt = $db->prepare('SELECT username, first_name, last_name, photo FROM ' . NV_USERS_GLOBALTABLE . ' WHERE active = 1 AND (
+                username LIKE :username OR CONCAT(first_name, :space, last_name) LIKE :fullname
+            ) ORDER BY username ASC LIMIT 10');
+            $stmt->bindValue(':username', '%' . $username . '%', PDO::PARAM_STR);
+            $stmt->bindValue(':space', ' ', PDO::PARAM_STR);
+            $stmt->bindValue(':fullname', '%' . $username . '%', PDO::PARAM_STR);
         }
-        $result = $db->query($sql);
-        while ($row = $result->fetch()) {
+        $stmt->execute();
+
+        while ($row = $stmt->fetch()) {
             if (!empty($row['photo'])) {
                 $row['photo'] = NV_BASE_SITEURL . $row['photo'];
             } else {

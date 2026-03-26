@@ -15,14 +15,24 @@ if (!defined('NV_IS_FILE_ADMIN')) {
 
 $id = $nv_Request->get_int('id', 'get', 0);
 
-$sql = 'SELECT * FROM ' . NV_BANNERS_GLOBALTABLE . '_rows WHERE id=' . $id;
-$row = $db->query($sql)->fetch();
+$stmt = $db->prepare('SELECT * FROM ' . NV_BANNERS_GLOBALTABLE . '_rows WHERE id = :id');
+$stmt->bindValue(':id', $id, PDO::PARAM_INT);
+$stmt->execute();
+$row = $stmt->fetch();
+$stmt->closeCursor();
 
 if (empty($row)) {
     nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
 }
 
-[$ptitle_raw, $blang] = $db->query('SELECT title, blang FROM ' . NV_BANNERS_GLOBALTABLE . '_plans WHERE id=' . $row['pid'])->fetch(3);
+$stmt = $db->prepare('SELECT title, blang FROM ' . NV_BANNERS_GLOBALTABLE . '_plans WHERE id = :pid');
+$stmt->bindValue(':pid', $row['pid'], PDO::PARAM_INT);
+$stmt->execute();
+$_row_plan = $stmt->fetch();
+$stmt->closeCursor();
+
+$ptitle_raw = $_row_plan['title'];
+$blang = $_row_plan['blang'];
 $blang_name = !empty($blang) ? $language_array[$blang]['name'] : $nv_Lang->getModule('blang_all');
 
 $img_info = '';
@@ -32,7 +42,11 @@ if ($row['file_ext'] != 'no_image') {
 
 $cl_user = [];
 if (!empty($row['clid'])) {
-    $user = $db->query('SELECT userid, username, md5username FROM ' . NV_USERS_GLOBALTABLE . ' WHERE userid=' . $row['clid'])->fetch();
+    $stmt = $db->prepare('SELECT userid, username, md5username FROM ' . NV_USERS_GLOBALTABLE . ' WHERE userid = :userid');
+    $stmt->bindValue(':userid', $row['clid'], PDO::PARAM_INT);
+    $stmt->execute();
+    $user = $stmt->fetch();
+    $stmt->closeCursor();
     if (!empty($user)) {
         $cl_user = [
             'username' => $user['username'],
@@ -67,7 +81,8 @@ $tpl->registerPlugin('modifier', 'ddatetime', 'nv_datetime_format');
 $tpl->assign('LANG', $nv_Lang);
 $tpl->assign('MODULE_NAME', $module_name);
 $tpl->assign('OP', $op);
-$tpl->assign('CHECKSS', csrf_create($csrf_key));
+$_csrf_key = $admin_info['admin_id'] . '_' . $module_name . '_main';
+$tpl->assign('CHECKSS', csrf_create($_csrf_key));
 $tpl->assign('BANNER_ID', $id);
 $tpl->assign('ROW', $row);
 $tpl->assign('PLAN', ['id' => $row['pid'], 'title' => $ptitle_raw, 'blang_name' => $blang_name]);

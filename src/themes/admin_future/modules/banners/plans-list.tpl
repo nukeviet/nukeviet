@@ -31,7 +31,7 @@
                                        {if $row.act} checked{/if}
                                        data-toggle="toggle-plan-act"
                                        data-id="{$row.id}"
-                                       data-tokend="{$CHECKSS}"
+                                       data-checkss="{$CHECKSS}"
                                        aria-label="{$row.title}">
                             </div>
                         </td>
@@ -57,7 +57,7 @@
                                         data-bs-toggle="tooltip" title="{$LANG->getGlobal('delete')}"
                                         data-toggle="del-plan"
                                         data-id="{$row.id}"
-                                        data-tokend="{$CHECKSS}"
+                                        data-checkss="{$CHECKSS}"
                                         data-msgconfirm="{$LANG->getModule('file_del_confirm')}">
                                     <i class="fa-solid fa-trash" data-icon="fa-trash"></i>
                                 </button>

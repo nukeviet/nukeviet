@@ -19,7 +19,11 @@ if (empty($bid)) {
     nv_htmlOutput('Stop!!!');
 }
 
-$row = $db->query('SELECT * FROM ' . NV_BANNERS_GLOBALTABLE . '_rows WHERE id=' . $bid)->fetch();
+$stmt = $db->prepare('SELECT * FROM ' . NV_BANNERS_GLOBALTABLE . '_rows WHERE id = :bid');
+$stmt->bindValue(':bid', $bid, PDO::PARAM_INT);
+$stmt->execute();
+$row = $stmt->fetch();
+$stmt->closeCursor();
 
 if (empty($row)) {
     nv_htmlOutput('Stop!!!');
@@ -50,7 +54,8 @@ $time = mktime(0, 0, 0, $data_month, 15, $current_year);
 $day_max = ($data_month == $current_month) ? $current_day : date('t', $time);
 $day_min = ($current_month == $publ_month and $current_year == $publ_year) ? $publ_day : 1;
 
-$where = 'bid=' . $bid;
+$where = ['bid = :bid'];
+$params = [':bid' => $bid];
 
 $base_url = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=show-list-stat&amp;bid=' . $bid . '&amp;month=' . $data_month;
 $caption = $nv_Lang->getModule('show_list_stat1', nv_monthname($data_month), $current_year);
@@ -65,7 +70,9 @@ if (in_array($nv_Request->get_string('ext', 'get', 'no'), ['day', 'country', 'br
                 $data_val = $nv_Request->get_int('val', 'get');
                 $maxday = mktime(24, 60, 60, $data_month, $data_val, $current_year);
                 $minday = mktime(0, 0, 0, $data_month, $data_val, $current_year);
-                $where .= ' AND click_time>=' . $minday . ' AND click_time<=' . $maxday;
+                $where[] = 'click_time >= :minday AND click_time <= :maxday';
+                $params[':minday'] = $minday;
+                $params[':maxday'] = $maxday;
                 $base_url .= '&amp;ext=' . $data_ext . '&amp;val=' . $data_val;
                 $caption = $nv_Lang->getModule('show_list_stat2', str_pad($data_val, 2, '0', STR_PAD_LEFT), nv_monthname($data_month), $current_year);
             }
@@ -74,7 +81,8 @@ if (in_array($nv_Request->get_string('ext', 'get', 'no'), ['day', 'country', 'br
             if ($nv_Request->isset_request('val', 'get') and ($nv_Request->get_string('val', 'get') == 'Unknown' or preg_match('/^[A-Z]{2}$/', $nv_Request->get_string('val', 'get')))) {
                 $data_ext = 'country';
                 $data_val = $nv_Request->get_string('val', 'get');
-                $where .= ' AND click_country= ' . $db->quote($data_val);
+                $where[] = 'click_country = :data_val';
+                $params[':data_val'] = $data_val;
                 $base_url .= '&amp;ext=' . $data_ext . '&amp;val=' . $data_val;
                 $caption = $nv_Lang->getModule('show_list_stat3', (isset($countries[$data_val]) ? $countries[$data_val][1] : $data_val), nv_monthname($data_month), $current_year);
             }
@@ -83,7 +91,8 @@ if (in_array($nv_Request->get_string('ext', 'get', 'no'), ['day', 'country', 'br
             if ($nv_Request->isset_request('val', 'get') and preg_match('/^[a-zA-Z0-9]+$/', $nv_Request->get_string('val', 'get'))) {
                 $data_ext = 'browse';
                 $data_val = $nv_Request->get_string('val', 'get');
-                $where .= ' AND click_browse_name= ' . $db->quote($data_val);
+                $where[] = 'click_browse_name = :data_val';
+                $params[':data_val'] = $data_val;
                 $base_url .= '&amp;ext=' . $data_ext . '&amp;val=' . $data_val;
                 $caption = $nv_Lang->getModule('show_list_stat4', '{pattern}', nv_monthname($data_month), $current_year);
             }
@@ -92,7 +101,8 @@ if (in_array($nv_Request->get_string('ext', 'get', 'no'), ['day', 'country', 'br
             if ($nv_Request->isset_request('val', 'get') and preg_match('/^[a-zA-Z0-9-\\s]+$/', $nv_Request->get_string('val', 'get'))) {
                 $data_ext = 'os';
                 $data_val = $nv_Request->get_string('val', 'get');
-                $where .= ' AND click_os_name= ' . $db->quote($data_val);
+                $where[] = 'click_os_name = :data_val';
+                $params[':data_val'] = $data_val;
                 $base_url .= '&amp;ext=' . $data_ext . '&amp;val=' . $data_val;
                 $caption = $nv_Lang->getModule('show_list_stat5', '{pattern}', nv_monthname($data_month), $current_year);
             }
@@ -100,12 +110,15 @@ if (in_array($nv_Request->get_string('ext', 'get', 'no'), ['day', 'country', 'br
     }
 }
 
-$db->sqlreset()
-    ->select('COUNT(*)')->from(NV_BANNERS_GLOBALTABLE . '_click')
-    ->where($where);
+$where_sql = implode(' AND ', $where);
+$stmt = $db->prepare('SELECT COUNT(*) FROM ' . NV_BANNERS_GLOBALTABLE . '_click WHERE ' . $where_sql);
+foreach ($params as $p => $v) {
+    $stmt->bindValue($p, $v, is_int($v) ? PDO::PARAM_INT : PDO::PARAM_STR);
+}
+$stmt->execute();
+$num_items = (int) $stmt->fetchColumn();
+$stmt->closeCursor();
 
-$num_items = $db->query($db->sql())
-    ->fetchColumn();
 if (empty($num_items)) {
     exit('Wrong URL');
 }
@@ -113,17 +126,16 @@ if (empty($num_items)) {
 $page = $nv_Request->get_page('page', 'get', 1);
 $per_page = 50;
 
-$db->select('*')
-    ->order('click_time DESC')
-    ->limit($per_page)
-    ->offset(($page - 1) * $per_page);
-
-$result = $db->query($db->sql());
+$stmt = $db->prepare('SELECT * FROM ' . NV_BANNERS_GLOBALTABLE . '_click WHERE ' . $where_sql . ' ORDER BY click_time DESC LIMIT ' . $per_page . ' OFFSET ' . (($page - 1) * $per_page));
+foreach ($params as $p => $v) {
+    $stmt->bindValue($p, $v, is_int($v) ? PDO::PARAM_INT : PDO::PARAM_STR);
+}
+$stmt->execute();
 
 $rows = [];
 $replacement = '';
 
-while ($row = $result->fetch()) {
+while ($row = $stmt->fetch()) {
     $rows[] = [
         'click_time' => nv_datetime_format($row['click_time']),
         'click_ip' => $row['click_ip'],
@@ -139,6 +151,7 @@ while ($row = $result->fetch()) {
         $replacement = $row['click_os_name'];
     }
 }
+$stmt->closeCursor();
 
 if (!empty($replacement)) {
     $caption = preg_replace('/\{pattern\}/', $replacement, $caption);
