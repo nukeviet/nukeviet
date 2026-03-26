@@ -28,7 +28,13 @@ if (!empty($array_bid) and md5($selectthemes . NV_CHECK_SESSION) == $nv_Request-
         $active = implode(',', $array_active_device);
     }
 
-    $db->query('UPDATE ' . NV_BLOCKS_TABLE . '_groups SET active=' . $db->quote($active) . ' WHERE bid in (' . implode(',', $array_bid) . ')');
+    $placeholders = implode(',', array_fill(0, count($array_bid), '?'));
+    $stmt = $db->prepare('UPDATE ' . NV_BLOCKS_TABLE . '_groups SET active= ? WHERE bid IN (' . $placeholders . ')');
+    $stmt->bindValue(1, $active, PDO::PARAM_STR);
+    foreach ($array_bid as $k => $id) {
+        $stmt->bindValue($k + 2, $id, PDO::PARAM_INT);
+    }
+    $stmt->execute();
     $nv_Cache->delMod('themes');
 
     echo $nv_Lang->getModule('block_update_success');

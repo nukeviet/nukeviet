@@ -29,14 +29,13 @@ $errorconfig = [];
 $array_site_theme = [];
 $array_site_cat_theme = [];
 $result = $db->query('SELECT DISTINCT theme FROM ' . NV_PREFIXLANG . '_modthemes WHERE func_id=0');
-while ($_scratch = $result->fetch(3)) {
-    [$theme] = $_scratch;
-    unset($_scratch);
-    $array_site_theme[] = $theme;
+while ($_row_theme = $result->fetch()) {
+    $array_site_theme[] = $_row_theme['theme'];
 }
+$result->closeCursor();
 if ($global_config['idsite']) {
     $sth = $db->prepare('SELECT t1.theme FROM ' . $db_config['dbsystem'] . '.' . $db_config['prefix'] . '_site_cat t1 INNER JOIN ' . $db_config['dbsystem'] . '.' . $db_config['prefix'] . '_site t2 ON t1.cid=t2.cid WHERE t2.idsite= :idsite');
-    $sth->bindParam(':idsite', $global_config['idsite'], PDO::PARAM_INT);
+    $sth->bindValue(':idsite', $global_config['idsite'], PDO::PARAM_INT);
     $sth->execute();
     $theme = $sth->fetchColumn();
     if (!empty($theme)) {
@@ -74,7 +73,7 @@ if ($nv_Request->isset_request('togglepreviewtheme', 'post')) {
         }
         $array_allow_preview = implode(',', array_intersect($array_allow_preview, $theme_list));
         $sth = $db->prepare('UPDATE ' . NV_CONFIG_GLOBALTABLE . ' SET config_value= :config_value WHERE lang= :lang AND module=\'global\' AND config_name=\'preview_theme\'');
-        $sth->bindParam(':config_value', $array_allow_preview, PDO::PARAM_STR);
+        $sth->bindValue(':config_value', $array_allow_preview, PDO::PARAM_STR);
         $sth->bindValue(':lang', NV_LANG_DATA, PDO::PARAM_STR);
         $sth->execute();
         $nv_Cache->delMod('settings');

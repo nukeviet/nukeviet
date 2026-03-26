@@ -15,50 +15,68 @@ if (!defined('NV_IS_FILE_THEMES')) {
 
 $bid = $nv_Request->get_int('bid', 'post');
 $checkss = $nv_Request->get_string('checkss', 'post');
-[$bid, $theme, $position] = $db->query('SELECT bid, theme, position FROM ' . NV_BLOCKS_TABLE . '_groups WHERE bid=' . $bid)->fetch(3);
+$stmt = $db->prepare('SELECT bid, theme, position FROM ' . NV_BLOCKS_TABLE . '_groups WHERE bid= :bid');
+$stmt->bindValue(':bid', $bid, PDO::PARAM_INT);
+$stmt->execute();
+$row = $stmt->fetch();
+$stmt->closeCursor();
 
-if (!($bid > 0 and (md5($theme . NV_CHECK_SESSION) == $checkss or md5(NV_CHECK_SESSION . '_' . $bid) == $checkss))) {
+if (!($row['bid'] > 0 and (md5($row['theme'] . NV_CHECK_SESSION) == $checkss or md5(NV_CHECK_SESSION . '_' . $row['bid']) == $checkss))) {
     nv_jsonOutput([
         'success' => 0,
         'text' => 'Request params error!!!'
     ]);
 }
+$theme = $row['theme'];
+$position = $row['position'];
 
-$db->query('DELETE FROM ' . NV_BLOCKS_TABLE . '_groups WHERE bid=' . $bid);
-$db->query('DELETE FROM ' . NV_BLOCKS_TABLE . '_weight WHERE bid=' . $bid);
+$stmt_del = $db->prepare('DELETE FROM ' . NV_BLOCKS_TABLE . '_groups WHERE bid= :bid');
+$stmt_del->bindValue(':bid', $bid, PDO::PARAM_INT);
+$stmt_del->execute();
+
+$stmt_del_w = $db->prepare('DELETE FROM ' . NV_BLOCKS_TABLE . '_weight WHERE bid= :bid');
+$stmt_del_w->bindValue(':bid', $bid, PDO::PARAM_INT);
+$stmt_del_w->execute();
 
 // reupdate
 $weight = 0;
 $sth = $db->prepare('SELECT bid FROM ' . NV_BLOCKS_TABLE . '_groups WHERE theme=:theme AND position=:position ORDER BY weight ASC');
-$sth->bindParam(':theme', $theme, PDO::PARAM_STR);
-$sth->bindParam(':position', $position, PDO::PARAM_STR);
+$sth->bindValue(':theme', $theme, PDO::PARAM_STR);
+$sth->bindValue(':position', $position, PDO::PARAM_STR);
 $sth->execute();
-while ($_scratch = $sth->fetch(3)) {
-    [$bid_i] = $_scratch;
-    unset($_scratch);
+
+$stmt_update = $db->prepare('UPDATE ' . NV_BLOCKS_TABLE . '_groups SET weight= :weight WHERE bid= :bid');
+while ($_row_bid = $sth->fetch()) {
     ++$weight;
-    $db->query('UPDATE ' . NV_BLOCKS_TABLE . '_groups SET weight=' . $weight . ' WHERE bid=' . $bid_i);
+    $stmt_update->bindValue(':weight', $weight, PDO::PARAM_INT);
+    $stmt_update->bindValue(':bid', $_row_bid['bid'], PDO::PARAM_INT);
+    $stmt_update->execute();
 }
+$sth->closeCursor();
 
 $func_id_old = $weight = 0;
 $sth = $db->prepare('SELECT t1.bid, t1.func_id FROM ' . NV_BLOCKS_TABLE . '_weight t1 INNER JOIN ' . NV_BLOCKS_TABLE . '_groups t2
     ON t1.bid = t2.bid
     WHERE t2.theme=:theme AND t2.position=:position ORDER BY t1.func_id ASC, t1.weight ASC');
-$sth->bindParam(':theme', $theme, PDO::PARAM_STR);
-$sth->bindParam(':position', $position, PDO::PARAM_STR);
+$sth->bindValue(':theme', $theme, PDO::PARAM_STR);
+$sth->bindValue(':position', $position, PDO::PARAM_STR);
 $sth->execute();
-while ($_scratch = $sth->fetch(3)) {
-    [$bid_i, $func_id_i] = $_scratch;
-    unset($_scratch);
-    if ($func_id_i == $func_id_old) {
+
+$stmt_update_w = $db->prepare('UPDATE ' . NV_BLOCKS_TABLE . '_weight SET weight= :weight WHERE bid= :bid AND func_id= :func_id');
+while ($_row_weight = $sth->fetch()) {
+    if ($_row_weight['func_id'] == $func_id_old) {
         ++$weight;
     } else {
         $weight = 1;
-        $func_id_old = $func_id_i;
+        $func_id_old = $_row_weight['func_id'];
     }
 
-    $db->query('UPDATE ' . NV_BLOCKS_TABLE . '_weight SET weight=' . $weight . ' WHERE bid=' . $bid_i . ' AND func_id=' . $func_id_i);
+    $stmt_update_w->bindValue(':weight', $weight, PDO::PARAM_INT);
+    $stmt_update_w->bindValue(':bid', $_row_weight['bid'], PDO::PARAM_INT);
+    $stmt_update_w->bindValue(':func_id', $_row_weight['func_id'], PDO::PARAM_INT);
+    $stmt_update_w->execute();
 }
+$sth->closeCursor();
 
 $nv_Cache->delMod('themes');
 

@@ -155,9 +155,10 @@ function loadblock($module, $bid, $selectthemes = '')
     $row = ['theme' => '', 'file_name' => ''];
     if ($bid > 0) {
         $sth = $db->prepare('SELECT theme, file_name FROM ' . NV_BLOCKS_TABLE . '_groups WHERE bid= :bid');
-        $sth->bindParam(':bid', $bid, PDO::PARAM_INT);
+        $sth->bindValue(':bid', $bid, PDO::PARAM_INT);
         $sth->execute();
         $row = $sth->fetch();
+        $sth->closeCursor();
     }
 
     $return = '<option value="">' . $nv_Lang->getModule('block_select') . '</option>';

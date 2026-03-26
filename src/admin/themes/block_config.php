@@ -138,7 +138,11 @@ $data_block = $array_config;
 $bid = $nv_Request->get_int('bid', 'get,post', 0);
 
 if ($bid > 0) {
-    $row_config = $db->query('SELECT module, file_name, config FROM ' . NV_BLOCKS_TABLE . '_groups WHERE bid=' . $bid)->fetch();
+    $stmt = $db->prepare('SELECT module, file_name, config FROM ' . NV_BLOCKS_TABLE . '_groups WHERE bid= :bid');
+    $stmt->bindValue(':bid', $bid, PDO::PARAM_INT);
+    $stmt->execute();
+    $row_config = $stmt->fetch();
+    $stmt->closeCursor();
     if ($row_config['file_name'] == $file_name and $row_config['module'] == $module) {
         $data_block = unserialize($row_config['config'], NV_UNSERIALIZE_SAFE);
     }

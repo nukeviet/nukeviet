@@ -23,19 +23,19 @@ if (csrf_check($nv_Request->get_string('checkss', 'post'), $admin_info['admin_id
         $pos = nv_unhtmlspecialchars($pos);
         // Begin drop all exist blocks behavior with theme 2 and position relative
         $sth = $db->prepare('DELETE FROM ' . NV_BLOCKS_TABLE . '_weight WHERE bid IN (SELECT bid FROM ' . NV_BLOCKS_TABLE . '_groups WHERE theme = :theme AND position= :position)');
-        $sth->bindParam(':theme', $theme2, PDO::PARAM_STR);
-        $sth->bindParam(':position', $pos, PDO::PARAM_STR);
+        $sth->bindValue(':theme', $theme2, PDO::PARAM_STR);
+        $sth->bindValue(':position', $pos, PDO::PARAM_STR);
         $sth->execute();
 
         $sth = $db->prepare('DELETE FROM ' . NV_BLOCKS_TABLE . '_groups WHERE theme = :theme AND position= :position');
-        $sth->bindParam(':theme', $theme2, PDO::PARAM_STR);
-        $sth->bindParam(':position', $pos, PDO::PARAM_STR);
+        $sth->bindValue(':theme', $theme2, PDO::PARAM_STR);
+        $sth->bindValue(':position', $pos, PDO::PARAM_STR);
         $sth->execute();
 
         // Get and insert block from theme 1
         $sth = $db->prepare('SELECT * FROM ' . NV_BLOCKS_TABLE . '_groups WHERE theme = :theme AND position= :position');
-        $sth->bindParam(':theme', $theme1, PDO::PARAM_STR);
-        $sth->bindParam(':position', $pos, PDO::PARAM_STR);
+        $sth->bindValue(':theme', $theme1, PDO::PARAM_STR);
+        $sth->bindValue(':position', $pos, PDO::PARAM_STR);
         $sth->execute();
         while ($row = $sth->fetch()) {
             $_sql = 'INSERT INTO ' . NV_BLOCKS_TABLE . '_groups (
@@ -65,12 +65,18 @@ if (csrf_check($nv_Request->get_string('checkss', 'post'), $admin_info['admin_id
             $data['config'] = $row['config'];
             $bid = $db->insert_id($_sql, 'bid', $data);
 
-            $result_weight = $db->query('SELECT func_id, weight FROM ' . NV_BLOCKS_TABLE . '_weight WHERE bid = ' . $row['bid']);
-            while ($_scratch = $result_weight->fetch(3)) {
-                [$func_id, $weight] = $_scratch;
-                unset($_scratch);
-                $db->query('INSERT INTO ' . NV_BLOCKS_TABLE . '_weight (bid, func_id, weight) VALUES (' . $bid . ', ' . $func_id . ', ' . $weight . ')');
+            $stmt_weight = $db->prepare('SELECT func_id, weight FROM ' . NV_BLOCKS_TABLE . '_weight WHERE bid = :bid');
+            $stmt_weight->bindValue(':bid', $row['bid'], PDO::PARAM_INT);
+            $stmt_weight->execute();
+
+            $stmt_insert = $db->prepare('INSERT INTO ' . NV_BLOCKS_TABLE . '_weight (bid, func_id, weight) VALUES (:new_bid, :func_id, :weight)');
+            while ($_row_weight = $stmt_weight->fetch()) {
+                $stmt_insert->bindValue(':new_bid', $bid, PDO::PARAM_INT);
+                $stmt_insert->bindValue(':func_id', $_row_weight['func_id'], PDO::PARAM_INT);
+                $stmt_insert->bindValue(':weight', $_row_weight['weight'], PDO::PARAM_INT);
+                $stmt_insert->execute();
             }
+            $stmt_weight->closeCursor();
         }
     }
 

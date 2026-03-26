@@ -18,16 +18,18 @@ $select_options = [];
 $theme_array = nv_scandir(NV_ROOTDIR . '/themes', [$global_config['check_theme'], $global_config['check_theme_mobile']]);
 
 if ($global_config['idsite']) {
-    $theme = $db->query('SELECT t1.theme FROM ' . $db_config['dbsystem'] . '.' . $db_config['prefix'] . '_site_cat t1 INNER JOIN ' . $db_config['dbsystem'] . '.' . $db_config['prefix'] . '_site t2 ON t1.cid=t2.cid WHERE t2.idsite=' . $global_config['idsite'])->fetchColumn();
+    $stmt_site = $db->prepare('SELECT t1.theme FROM ' . $db_config['dbsystem'] . '.' . $db_config['prefix'] . '_site_cat t1 INNER JOIN ' . $db_config['dbsystem'] . '.' . $db_config['prefix'] . '_site t2 ON t1.cid=t2.cid WHERE t2.idsite= :idsite');
+    $stmt_site->bindValue(':idsite', $global_config['idsite'], PDO::PARAM_INT);
+    $stmt_site->execute();
+    $theme = $stmt_site->fetchColumn();
     if (!empty($theme)) {
         $array_site_cat_theme = explode(',', $theme);
 
         $result = $db->query('SELECT DISTINCT theme FROM ' . NV_PREFIXLANG . '_modthemes WHERE func_id=0');
-        while ($_scratch = $result->fetch(3)) {
-            [$theme] = $_scratch;
-            unset($_scratch);
-            $array_site_cat_theme[] = $theme;
+        while ($_row_theme = $result->fetch()) {
+            $array_site_cat_theme[] = $_row_theme['theme'];
         }
+        $result->closeCursor();
         $theme_array = array_intersect($theme_array, $array_site_cat_theme);
     }
 }
@@ -100,9 +102,9 @@ if (csrf_check($nv_Request->get_string('checkss', 'post'), $check_key)) {
         foreach ($func_arr_save as $func_id => $layout_name) {
             if (in_array($layout_name, $layout_array, true)) {
                 $sth = $db->prepare('UPDATE ' . NV_PREFIXLANG . '_modthemes SET layout=:layout WHERE func_id = :func_id AND theme= :theme');
-                $sth->bindParam(':layout', $layout_name, PDO::PARAM_STR);
-                $sth->bindParam(':func_id', $func_id, PDO::PARAM_INT);
-                $sth->bindParam(':theme', $selectthemes, PDO::PARAM_STR);
+                $sth->bindValue(':layout', $layout_name, PDO::PARAM_STR);
+                $sth->bindValue(':func_id', $func_id, PDO::PARAM_INT);
+                $sth->bindValue(':theme', $selectthemes, PDO::PARAM_STR);
                 $sth->execute();
             }
         }
@@ -136,15 +138,15 @@ if (csrf_check($nv_Request->get_string('checkss', 'post'), $check_key)) {
         if (empty($module)) {
             // Thiết lập layout cho tất cả
             $sth = $db->prepare('UPDATE ' . NV_PREFIXLANG . '_modthemes SET layout= :layout WHERE func_id IN (SELECT func_id FROM ' . NV_MODFUNCS_TABLE . ' WHERE show_func=1) AND theme= :theme');
-            $sth->bindParam(':layout', $layout, PDO::PARAM_STR);
-            $sth->bindParam(':theme', $selectthemes, PDO::PARAM_STR);
+            $sth->bindValue(':layout', $layout, PDO::PARAM_STR);
+            $sth->bindValue(':theme', $selectthemes, PDO::PARAM_STR);
             $sth->execute();
         } elseif (isset($site_mods[$module])) {
             // Thiết lập layout cho module
             $sth = $db->prepare('UPDATE ' . NV_PREFIXLANG . '_modthemes SET layout= :layout WHERE func_id IN (SELECT func_id FROM ' . NV_MODFUNCS_TABLE . ' WHERE in_module = :in_module AND show_func=1) AND theme= :theme');
-            $sth->bindParam(':layout', $layout, PDO::PARAM_STR);
-            $sth->bindParam(':theme', $selectthemes, PDO::PARAM_STR);
-            $sth->bindParam(':in_module', $module, PDO::PARAM_STR);
+            $sth->bindValue(':layout', $layout, PDO::PARAM_STR);
+            $sth->bindValue(':theme', $selectthemes, PDO::PARAM_STR);
+            $sth->bindValue(':in_module', $module, PDO::PARAM_STR);
             $sth->execute();
         }
 
@@ -161,27 +163,26 @@ if (csrf_check($nv_Request->get_string('checkss', 'post'), $check_key)) {
 
 $array_layout_func_data = [];
 $sth = $db->prepare('SELECT func_id, layout FROM ' . NV_PREFIXLANG . '_modthemes WHERE theme= :theme');
-$sth->bindParam(':theme', $selectthemes, PDO::PARAM_STR);
+$sth->bindValue(':theme', $selectthemes, PDO::PARAM_STR);
 $sth->execute();
-while ($_scratch = $sth->fetch(3)) {
-    [$func_id, $layout] = $_scratch;
-    unset($_scratch);
-    $array_layout_func_data[$func_id] = $layout;
+while ($_row_func = $sth->fetch()) {
+    $array_layout_func_data[$_row_func['func_id']] = $_row_func['layout'];
 }
+$sth->closeCursor();
 
 if (!isset($array_layout_func_data[0])) {
     $sth = $db->prepare('INSERT INTO ' . NV_PREFIXLANG . '_modthemes
         (func_id, layout, theme) VALUES
         (0, :layout, :theme)');
-    $sth->bindParam(':layout', $layoutdefault, PDO::PARAM_STR);
-    $sth->bindParam(':theme', $selectthemes, PDO::PARAM_STR);
+    $sth->bindValue(':layout', $layoutdefault, PDO::PARAM_STR);
+    $sth->bindValue(':theme', $selectthemes, PDO::PARAM_STR);
     $sth->execute();
 
     $set_layout_site = true;
 } elseif ($array_layout_func_data[0] != $layoutdefault) {
     $sth = $db->prepare('UPDATE ' . NV_PREFIXLANG . '_modthemes SET layout= :layout WHERE func_id=0 AND theme= :theme');
-    $sth->bindParam(':layout', $layoutdefault, PDO::PARAM_STR);
-    $sth->bindParam(':theme', $selectthemes, PDO::PARAM_STR);
+    $sth->bindValue(':layout', $layoutdefault, PDO::PARAM_STR);
+    $sth->bindValue(':theme', $selectthemes, PDO::PARAM_STR);
     $sth->execute();
 
     $set_layout_site = true;
@@ -189,9 +190,11 @@ if (!isset($array_layout_func_data[0])) {
 
 $array_layout_func = [];
 $fnresult = $db->query('SELECT func_id, func_name, func_custom_name, in_module FROM ' . NV_MODFUNCS_TABLE . ' WHERE show_func=1 ORDER BY subweight ASC');
-while ($_scratch = $fnresult->fetch(3)) {
-    [$func_id, $func_name, $func_custom_name, $in_module] = $_scratch;
-    unset($_scratch);
+while ($_row_fn = $fnresult->fetch()) {
+    $func_id = $_row_fn['func_id'];
+    $func_name = $_row_fn['func_name'];
+    $func_custom_name = $_row_fn['func_custom_name'];
+    $in_module = $_row_fn['in_module'];
     if (isset($array_layout_func_data[$func_id]) and !empty($array_layout_func_data[$func_id])) {
         $layout_name = $array_layout_func_data[$func_id];
 
@@ -199,9 +202,9 @@ while ($_scratch = $fnresult->fetch(3)) {
             $layout_name = $layoutdefault;
 
             $sth = $db->prepare('UPDATE ' . NV_PREFIXLANG . '_modthemes SET layout= :layout WHERE func_id= :func_id AND theme= :theme');
-            $sth->bindParam(':layout', $layout_name, PDO::PARAM_STR);
-            $sth->bindParam(':func_id', $func_id, PDO::PARAM_INT);
-            $sth->bindParam(':theme', $selectthemes, PDO::PARAM_STR);
+            $sth->bindValue(':layout', $layout_name, PDO::PARAM_STR);
+            $sth->bindValue(':func_id', $func_id, PDO::PARAM_INT);
+            $sth->bindValue(':theme', $selectthemes, PDO::PARAM_STR);
             $sth->execute();
 
             $set_layout_site = true;
@@ -209,9 +212,9 @@ while ($_scratch = $fnresult->fetch(3)) {
     } else {
         $layout_name = (isset($array_layout_func_default[$in_module][$func_name])) ? $array_layout_func_default[$in_module][$func_name] : $layoutdefault;
         $sth = $db->prepare('INSERT INTO ' . NV_PREFIXLANG . '_modthemes (func_id, layout, theme) VALUES (:func_id, :layout, :theme)');
-        $sth->bindParam(':func_id', $func_id, PDO::PARAM_INT);
-        $sth->bindParam(':layout', $layout_name, PDO::PARAM_STR);
-        $sth->bindParam(':theme', $selectthemes, PDO::PARAM_STR);
+        $sth->bindValue(':func_id', $func_id, PDO::PARAM_INT);
+        $sth->bindValue(':layout', $layout_name, PDO::PARAM_STR);
+        $sth->bindValue(':theme', $selectthemes, PDO::PARAM_STR);
         $sth->execute();
 
         $set_layout_site = true;
@@ -219,6 +222,7 @@ while ($_scratch = $fnresult->fetch(3)) {
 
     $array_layout_func[$in_module][$func_name] = [$func_id, $func_custom_name, $layout_name];
 }
+$fnresult->closeCursor();
 
 if ($set_layout_site) {
     $nv_Cache->delMod('themes');

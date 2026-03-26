@@ -16,15 +16,17 @@ if (!defined('NV_IS_FILE_THEMES')) {
 $select_options = [];
 $theme_array = nv_scandir(NV_ROOTDIR . '/themes', [$global_config['check_theme'], $global_config['check_theme_mobile']]);
 if ($global_config['idsite']) {
-    $theme = $db->query('SELECT t1.theme FROM ' . $db_config['dbsystem'] . '.' . $db_config['prefix'] . '_site_cat t1 INNER JOIN ' . $db_config['dbsystem'] . '.' . $db_config['prefix'] . '_site t2 ON t1.cid=t2.cid WHERE t2.idsite=' . $global_config['idsite'])->fetchColumn();
+    $stmt_site = $db->prepare('SELECT t1.theme FROM ' . $db_config['dbsystem'] . '.' . $db_config['prefix'] . '_site_cat t1 INNER JOIN ' . $db_config['dbsystem'] . '.' . $db_config['prefix'] . '_site t2 ON t1.cid=t2.cid WHERE t2.idsite= :idsite');
+    $stmt_site->bindValue(':idsite', $global_config['idsite'], PDO::PARAM_INT);
+    $stmt_site->execute();
+    $theme = $stmt_site->fetchColumn();
     if (!empty($theme)) {
         $array_site_cat_theme = explode(',', $theme);
         $result = $db->query('SELECT DISTINCT theme FROM ' . NV_PREFIXLANG . '_modthemes WHERE func_id=0');
-        while ($_scratch = $result->fetch(3)) {
-            [$theme] = $_scratch;
-            unset($_scratch);
-            $array_site_cat_theme[] = $theme;
+        while ($_row_theme = $result->fetch()) {
+            $array_site_cat_theme[] = $_row_theme['theme'];
         }
+        $result->closeCursor();
         $theme_array = array_intersect($theme_array, $array_site_cat_theme);
     }
 }

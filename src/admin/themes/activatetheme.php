@@ -19,12 +19,12 @@ if (!csrf_check($nv_Request->get_string('checkss', 'post'), $admin_info['admin_i
 }
 
 $sth = $db->prepare('SELECT COUNT(*) FROM ' . NV_PREFIXLANG . '_modthemes WHERE func_id=0 AND theme= :theme');
-$sth->bindParam(':theme', $selectthemes, PDO::PARAM_STR);
+$sth->bindValue(':theme', $selectthemes, PDO::PARAM_STR);
 $sth->execute();
 if (preg_match($global_config['check_theme'], $selectthemes) and $sth->fetchColumn()) {
     // Kích hoạt sử dụng nếu đã có thiết lập
     $sth = $db->prepare('UPDATE ' . NV_CONFIG_GLOBALTABLE . " SET config_value= :theme WHERE config_name='site_theme' AND lang='" . NV_LANG_DATA . "'");
-    $sth->bindParam(':theme', $selectthemes, PDO::PARAM_STR);
+    $sth->bindValue(':theme', $selectthemes, PDO::PARAM_STR);
     $sth->execute();
 
     $global_config['site_theme'] = $selectthemes;
@@ -35,7 +35,7 @@ if (preg_match($global_config['check_theme'], $selectthemes) and $sth->fetchColu
 } elseif (!empty($selectthemes) and file_exists(NV_ROOTDIR . '/themes/' . $selectthemes . '/config.ini')) {
     // Thiết lập giao diện theo cấu hình mặc định
     $sth = $db->prepare('SELECT count(*) FROM ' . NV_PREFIXLANG . '_modthemes WHERE func_id = 0 AND theme= :theme');
-    $sth->bindParam(':theme', $selectthemes, PDO::PARAM_STR);
+    $sth->bindValue(':theme', $selectthemes, PDO::PARAM_STR);
     $sth->execute();
     $count = $sth->fetchColumn();
     if (empty($count)) {
@@ -65,29 +65,27 @@ if (preg_match($global_config['check_theme'], $selectthemes) and $sth->fetchColu
 
         $sth = $db->prepare('INSERT INTO ' . NV_PREFIXLANG . '_modthemes (func_id, layout, theme) VALUES (:func_id, :layout, :theme)');
         $sth->bindValue(':func_id', 0, PDO::PARAM_INT);
-        $sth->bindParam(':layout', $layoutdefault, PDO::PARAM_STR);
-        $sth->bindParam(':theme', $selectthemes, PDO::PARAM_STR);
+        $sth->bindValue(':layout', $layoutdefault, PDO::PARAM_STR);
+        $sth->bindValue(':theme', $selectthemes, PDO::PARAM_STR);
         $sth->execute();
 
         $fnresult = $db->query('SELECT func_id, func_name, func_custom_name, in_module FROM ' . NV_MODFUNCS_TABLE . ' WHERE show_func=1 ORDER BY subweight ASC');
-        while ($_scratch = $fnresult->fetch(3)) {
-            [$func_id, $func_name, $func_custom_name, $in_module] = $_scratch;
-            unset($_scratch);
-            $layout_name = (isset($array_layout_func_default[$in_module][$func_name])) ? $array_layout_func_default[$in_module][$func_name] : $layoutdefault;
-            $sth->bindParam(':func_id', $func_id, PDO::PARAM_INT);
-            $sth->bindParam(':layout', $layout_name, PDO::PARAM_STR);
-            $sth->bindParam(':theme', $selectthemes, PDO::PARAM_STR);
+        while ($_row_func = $fnresult->fetch()) {
+            $layout_name = (isset($array_layout_func_default[$_row_func['in_module']][$_row_func['func_name']])) ? $array_layout_func_default[$_row_func['in_module']][$_row_func['func_name']] : $layoutdefault;
+            $sth->bindValue(':func_id', $_row_func['func_id'], PDO::PARAM_INT);
+            $sth->bindValue(':layout', $layout_name, PDO::PARAM_STR);
+            $sth->bindValue(':theme', $selectthemes, PDO::PARAM_STR);
             $sth->execute();
         }
+        $fnresult->closeCursor();
 
         // Thiết lập Block
         $array_all_funcid = [];
         $func_result = $db->query('SELECT func_id FROM ' . NV_MODFUNCS_TABLE . ' WHERE show_func = 1 ORDER BY in_module ASC, subweight ASC');
-        while ($_scratch = $func_result->fetch(3)) {
-            [$func_id_i] = $_scratch;
-            unset($_scratch);
-            $array_all_funcid[] = $func_id_i;
+        while ($_row = $func_result->fetch()) {
+            $array_all_funcid[] = $_row['func_id'];
         }
+        $func_result->closeCursor();
 
         $blocks = $xml->xpath('setblocks/block');
         for ($i = 0, $count = count($blocks); $i < $count; ++$i) {
@@ -119,8 +117,8 @@ if (preg_match($global_config['check_theme'], $selectthemes) and $sth->fetchColu
             }
 
             $sth = $db->prepare('SELECT MAX(weight) FROM ' . NV_BLOCKS_TABLE . '_groups WHERE theme = :theme AND position= :position');
-            $sth->bindParam(':theme', $selectthemes, PDO::PARAM_STR);
-            $sth->bindParam(':position', $row['position'], PDO::PARAM_STR);
+            $sth->bindValue(':theme', $selectthemes, PDO::PARAM_STR);
+            $sth->bindValue(':position', $row['position'], PDO::PARAM_STR);
             $sth->execute();
 
             $row['weight'] = (int) ($sth->fetchColumn()) + 1;
@@ -175,15 +173,21 @@ if (preg_match($global_config['check_theme'], $selectthemes) and $sth->fetchColu
                 }
             }
 
-            $sth = $db->prepare('SELECT MAX(t1.weight) FROM ' . NV_BLOCKS_TABLE . '_weight t1 INNER JOIN ' . NV_BLOCKS_TABLE . '_groups t2 ON t1.bid = t2.bid WHERE t1.func_id= :func_id AND t2.theme= ' . $db->quote($selectthemes) . ' AND t2.position= :position');
+            $sth = $db->prepare('SELECT MAX(t1.weight) FROM ' . NV_BLOCKS_TABLE . '_weight t1 INNER JOIN ' . NV_BLOCKS_TABLE . '_groups t2 ON t1.bid = t2.bid WHERE t1.func_id= :func_id AND t2.theme= :theme AND t2.position= :position');
+            $stmt_insert = $db->prepare('INSERT INTO ' . NV_BLOCKS_TABLE . '_weight (bid, func_id, weight) VALUES (:bid, :func_id, :weight)');
+
             foreach ($array_funcid as $func_id) {
-                $sth->bindParam(':func_id', $func_id, PDO::PARAM_INT);
-                $sth->bindParam(':position', $row['position'], PDO::PARAM_STR);
+                $sth->bindValue(':func_id', $func_id, PDO::PARAM_INT);
+                $sth->bindValue(':theme', $selectthemes, PDO::PARAM_STR);
+                $sth->bindValue(':position', $row['position'], PDO::PARAM_STR);
                 $sth->execute();
                 $weight = $sth->fetchColumn();
                 $weight = (int) $weight + 1;
 
-                $db->query('INSERT INTO ' . NV_BLOCKS_TABLE . '_weight (bid, func_id, weight) VALUES (' . $row['bid'] . ', ' . $func_id . ', ' . $weight . ')');
+                $stmt_insert->bindValue(':bid', $row['bid'], PDO::PARAM_INT);
+                $stmt_insert->bindValue(':func_id', $func_id, PDO::PARAM_INT);
+                $stmt_insert->bindValue(':weight', $weight, PDO::PARAM_INT);
+                $stmt_insert->execute();
             }
         }
     }

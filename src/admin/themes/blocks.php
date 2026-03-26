@@ -17,15 +17,17 @@ if (!defined('NV_IS_FILE_THEMES')) {
 $select_options = [];
 $theme_array = nv_scandir(NV_ROOTDIR . '/themes', [$global_config['check_theme'], $global_config['check_theme_mobile']]);
 if ($global_config['idsite']) {
-    $theme = $db->query('SELECT t1.theme FROM ' . $db_config['dbsystem'] . '.' . $db_config['prefix'] . '_site_cat t1 INNER JOIN ' . $db_config['dbsystem'] . '.' . $db_config['prefix'] . '_site t2 ON t1.cid=t2.cid WHERE t2.idsite=' . $global_config['idsite'])->fetchColumn();
+    $stmt_theme = $db->prepare('SELECT t1.theme FROM ' . $db_config['dbsystem'] . '.' . $db_config['prefix'] . '_site_cat t1 INNER JOIN ' . $db_config['dbsystem'] . '.' . $db_config['prefix'] . '_site t2 ON t1.cid=t2.cid WHERE t2.idsite= :idsite');
+    $stmt_theme->bindValue(':idsite', $global_config['idsite'], PDO::PARAM_INT);
+    $stmt_theme->execute();
+    $theme = $stmt_theme->fetchColumn();
     if (!empty($theme)) {
         $array_site_cat_theme = explode(',', $theme);
         $result = $db->query('SELECT DISTINCT theme FROM ' . NV_PREFIXLANG . '_modthemes WHERE func_id=0');
-        while ($_scratch = $result->fetch(3)) {
-            [$theme] = $_scratch;
-            unset($_scratch);
-            $array_site_cat_theme[] = $theme;
+        while ($_row = $result->fetch()) {
+            $array_site_cat_theme[] = $_row['theme'];
         }
+        $result->closeCursor();
         $theme_array = array_intersect($theme_array, $array_site_cat_theme);
     }
 }
@@ -57,7 +59,10 @@ $selectedmodule = $nv_Request->get_title('module', 'get', '', 1);
 $func_id = $nv_Request->get_int('func', 'get', 0);
 $set_by_func = false;
 if ($func_id > 0) {
-    $selectedmodule = $db->query('SELECT in_module FROM ' . NV_MODFUNCS_TABLE . ' WHERE func_id=' . $func_id)->fetchColumn();
+    $stmt_mod = $db->prepare('SELECT in_module FROM ' . NV_MODFUNCS_TABLE . ' WHERE func_id= :func_id');
+    $stmt_mod->bindValue(':func_id', $func_id, PDO::PARAM_INT);
+    $stmt_mod->execute();
+    $selectedmodule = $stmt_mod->fetchColumn();
     if (empty($selectedmodule)) {
         nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=blocks');
     }
@@ -65,7 +70,7 @@ if ($func_id > 0) {
     $set_by_func = true;
 } elseif (!empty($selectedmodule)) {
     $sth = $db->prepare('SELECT func_id FROM ' . NV_MODFUNCS_TABLE . " WHERE func_name='main' AND in_module= :module");
-    $sth->bindParam(':module', $selectedmodule, PDO::PARAM_STR);
+    $sth->bindValue(':module', $selectedmodule, PDO::PARAM_STR);
     $sth->execute();
     $func_id = $sth->fetchColumn();
     if (empty($func_id)) {
@@ -82,16 +87,18 @@ $modlist = [];
 while ($row = $result->fetch()) {
     $modlist[$row['title']] = $row['custom_title'];
 }
+$result->closeCursor();
 
 // Danh sách các functions của module đã chọn
 $funclist = [];
 if ($set_by_func) {
     $sth = $db->prepare('SELECT func_id, func_custom_name FROM ' . NV_MODFUNCS_TABLE . ' WHERE in_module=:module AND show_func=1 ORDER BY subweight ASC');
-    $sth->bindParam(':module', $selectedmodule, PDO::PARAM_STR);
+    $sth->bindValue(':module', $selectedmodule, PDO::PARAM_STR);
     $sth->execute();
     while ($row = $sth->fetch()) {
         $funclist[$row['func_id']] = $row['func_custom_name'];
     }
+    $sth->closeCursor();
 }
 
 // Danh sách các block + Danh sách các position đã được sử dụng
@@ -100,15 +107,17 @@ $positionlist = [];
 if ($set_by_func) {
     $sth = $db->prepare('SELECT t1.*, t2.func_id, t2.weight as bweight FROM ' . NV_BLOCKS_TABLE . '_groups t1
     INNER JOIN ' . NV_BLOCKS_TABLE . '_weight t2 ON t1.bid = t2.bid
-    WHERE t2.func_id = ' . $func_id . ' AND t1.theme = :theme
+    WHERE t2.func_id = :func_id AND t1.theme = :theme
     ORDER BY t1.position ASC, t2.weight ASC');
-    $sth->bindParam(':theme', $selectthemes, PDO::PARAM_STR);
+    $sth->bindValue(':func_id', $func_id, PDO::PARAM_INT);
+    $sth->bindValue(':theme', $selectthemes, PDO::PARAM_STR);
     $sth->execute();
 } else {
     $sth = $db->prepare('SELECT * FROM ' . NV_BLOCKS_TABLE . '_groups WHERE theme = :theme ORDER BY position ASC, weight ASC');
-    $sth->bindParam(':theme', $selectthemes, PDO::PARAM_STR);
+    $sth->bindValue(':theme', $selectthemes, PDO::PARAM_STR);
     $sth->execute();
 }
+$stmt_func = $db->prepare('SELECT a.func_id, a.in_module, a.func_custom_name FROM ' . NV_MODFUNCS_TABLE . ' a INNER JOIN ' . NV_BLOCKS_TABLE . '_weight b ON a.func_id=b.func_id WHERE b.bid= :bid');
 while ($row = $sth->fetch()) {
     $row['module'] = ucfirst($row['module']);
     $row['order_func'] = $set_by_func ? 'order_func' : 'order';
@@ -118,17 +127,19 @@ while ($row = $sth->fetch()) {
     // Lấy danh sách function hiển thị của mỗi block
     $row['in_funcs'] = [];
     if (empty($row['all_func'])) {
-        $result_func = $db->query('SELECT a.func_id, a.in_module, a.func_custom_name FROM ' . NV_MODFUNCS_TABLE . ' a INNER JOIN ' . NV_BLOCKS_TABLE . '_weight b ON a.func_id=b.func_id WHERE b.bid=' . $row['bid']);
-        while ($func = $result_func->fetch()) {
+        $stmt_func->bindValue(':bid', $row['bid'], PDO::PARAM_INT);
+        $stmt_func->execute();
+        while ($func = $stmt_func->fetch()) {
             $row['in_funcs'][] = $func;
         }
-        $result_func->closeCursor();
+        $stmt_func->closeCursor();
     }
 
     $blocklist[$row['bid']] = $row;
     !isset($positionlist[$row['position']]) && $positionlist[$row['position']] = 0;
     ++$positionlist[$row['position']];
 }
+$sth->closeCursor();
 
 // Tiêu đề trang
 $page_title = $set_by_func ? $nv_Lang->getModule('theme', nv_ucfirst($selectthemes)) . ' &gt; ' . $nv_Lang->getModule('blocks_by_funcs') : $nv_Lang->getModule('theme', nv_ucfirst($selectthemes)) . ' &gt; ' . $nv_Lang->getModule('blocks');

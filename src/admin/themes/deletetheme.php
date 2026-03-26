@@ -19,7 +19,7 @@ if (!csrf_check($nv_Request->get_string('checkss', 'post'), $admin_info['admin_i
 }
 try {
     $sth = $db->prepare('SELECT COUNT(*) FROM ' . NV_PREFIXLANG . '_modthemes WHERE func_id=0 AND theme= :theme');
-    $sth->bindParam(':theme', $theme, PDO::PARAM_STR);
+    $sth->bindValue(':theme', $theme, PDO::PARAM_STR);
     $sth->execute();
     if ($sth->fetchColumn() and $global_config['site_theme'] != $theme) {
         nv_insert_logs(NV_LANG_DATA, $module_name, $nv_Lang->getModule('theme_delete'), 'theme ' . $theme, $admin_info['userid']);
@@ -29,19 +29,19 @@ try {
         } else {
             $sth = $db->prepare('UPDATE ' . NV_MODULES_TABLE . " SET theme='' WHERE theme = :theme");
         }
-        $sth->bindParam(':theme', $theme, PDO::PARAM_STR);
+        $sth->bindValue(':theme', $theme, PDO::PARAM_STR);
         $sth->execute();
 
         $sth = $db->prepare('DELETE FROM ' . NV_PREFIXLANG . '_modthemes WHERE theme = :theme');
-        $sth->bindParam(':theme', $theme, PDO::PARAM_STR);
+        $sth->bindValue(':theme', $theme, PDO::PARAM_STR);
         $sth->execute();
 
         $sth = $db->prepare('DELETE FROM ' . NV_PREFIXLANG . '_blocks_weight WHERE bid IN (SELECT bid FROM ' . NV_PREFIXLANG . '_blocks_groups WHERE theme= :theme)');
-        $sth->bindParam(':theme', $theme, PDO::PARAM_STR);
+        $sth->bindValue(':theme', $theme, PDO::PARAM_STR);
         $sth->execute();
 
         $sth = $db->prepare('DELETE FROM ' . NV_PREFIXLANG . '_blocks_groups WHERE theme = :theme');
-        $sth->bindParam(':theme', $theme, PDO::PARAM_STR);
+        $sth->bindValue(':theme', $theme, PDO::PARAM_STR);
         $sth->execute();
 
         if (in_array($theme, $global_config['array_user_allowed_theme'], true)) {
@@ -52,7 +52,7 @@ try {
             });
             $array_user_allowed_theme = empty($array_user_allowed_theme) ? '' : json_encode(array_values($array_user_allowed_theme), NV_JSON_ENCODE);
             $sth = $db->prepare('UPDATE ' . NV_CONFIG_GLOBALTABLE . " SET config_value= :config_value WHERE config_name = 'user_allowed_theme' AND lang = '" . NV_LANG_DATA . "' AND module='global'");
-            $sth->bindParam(':config_value', $array_user_allowed_theme, PDO::PARAM_STR);
+            $sth->bindValue(':config_value', $array_user_allowed_theme, PDO::PARAM_STR);
             $sth->execute();
         }
 

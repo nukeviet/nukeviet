@@ -16,11 +16,15 @@ if (!defined('NV_IS_FILE_THEMES')) {
 $bid = $nv_Request->get_int('bid', 'post');
 $func_id = $nv_Request->get_int('func_id', 'post');
 
-$row = $db->query('SELECT * FROM ' . NV_BLOCKS_TABLE . '_groups WHERE bid=' . $bid)->fetch();
+$stmt = $db->prepare('SELECT * FROM ' . NV_BLOCKS_TABLE . '_groups WHERE bid= :bid');
+$stmt->bindValue(':bid', $bid, PDO::PARAM_INT);
+$stmt->execute();
+$row = $stmt->fetch();
+$stmt->closeCursor();
 
 if ($func_id > 0 and isset($row['bid']) and md5(NV_CHECK_SESSION . '_' . $bid) == $nv_Request->get_string('checkss', 'post')) {
     $sth = $db->prepare('SELECT MAX(weight) FROM ' . NV_BLOCKS_TABLE . '_groups WHERE theme = :theme');
-    $sth->bindParam(':theme', $row['theme'], PDO::PARAM_STR);
+    $sth->bindValue(':theme', $row['theme'], PDO::PARAM_STR);
     $sth->execute();
     $maxweight = $sth->fetchColumn();
 
@@ -53,10 +57,16 @@ if ($func_id > 0 and isset($row['bid']) and md5(NV_CHECK_SESSION . '_' . $bid) =
 
         $new_bid = $db->insert_id($_sql, 'bid', $data);
 
-        $db->query('UPDATE ' . NV_BLOCKS_TABLE . '_weight SET bid=' . $new_bid . ' WHERE bid=' . $bid . ' AND func_id=' . $func_id);
+        $stmt_update = $db->prepare('UPDATE ' . NV_BLOCKS_TABLE . '_weight SET bid= :new_bid WHERE bid= :bid AND func_id= :func_id');
+        $stmt_update->bindValue(':new_bid', $new_bid, PDO::PARAM_INT);
+        $stmt_update->bindValue(':bid', $bid, PDO::PARAM_INT);
+        $stmt_update->bindValue(':func_id', $func_id, PDO::PARAM_INT);
+        $stmt_update->execute();
 
         if (!empty($row['all_func'])) {
-            $db->query('UPDATE ' . NV_BLOCKS_TABLE . '_groups SET all_func=0 WHERE bid=' . $bid);
+            $stmt_all_func = $db->prepare('UPDATE ' . NV_BLOCKS_TABLE . '_groups SET all_func=0 WHERE bid= :bid');
+            $stmt_all_func->bindValue(':bid', $bid, PDO::PARAM_INT);
+            $stmt_all_func->execute();
         }
 
         $nv_Cache->delMod('themes');

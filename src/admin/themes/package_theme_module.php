@@ -103,6 +103,7 @@ while ($row = $result->fetch()) {
         ];
     }
 }
+$result->closeCursor();
 $modules_list = nv_scandir(NV_ROOTDIR . '/modules', $global_config['check_module']);
 foreach ($modules_list as $module_i) {
     if (!in_array($module_i, $array_module_setup, true)) {

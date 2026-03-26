@@ -73,7 +73,11 @@ $is_add = true;
 
 $row['bid'] = $nv_Request->get_int('bid', 'get,post', 0);
 if ($row['bid'] > 0) {
-    $row = $db->query('SELECT * FROM ' . NV_BLOCKS_TABLE . '_groups WHERE bid=' . $row['bid'])->fetch();
+    $stmt = $db->prepare('SELECT * FROM ' . NV_BLOCKS_TABLE . '_groups WHERE bid= :bid');
+    $stmt->bindValue(':bid', $row['bid'], PDO::PARAM_INT);
+    $stmt->execute();
+    $row = $stmt->fetch();
+    $stmt->closeCursor();
 
     if (empty($row)) {
         nv_error404();
@@ -444,27 +448,40 @@ if ($checkss == $nv_Request->get_string('checkss', 'post')) {
     if (!empty($array_funcid)) {
         // Tach va tao nhom moi
         if (!empty($row['leavegroup'])) {
-            $db->query('UPDATE ' . NV_BLOCKS_TABLE . '_groups SET all_func= 0 WHERE bid=' . $row['bid']);
-            $db->query('DELETE FROM ' . NV_BLOCKS_TABLE . '_weight WHERE bid=' . $row['bid'] . ' AND func_id in (' . implode(',', $array_funcid) . ')');
+            $stmt_all_func = $db->prepare('UPDATE ' . NV_BLOCKS_TABLE . '_groups SET all_func= 0 WHERE bid= :bid');
+            $stmt_all_func->bindValue(':bid', $row['bid'], PDO::PARAM_INT);
+            $stmt_all_func->execute();
+
+            $placeholders = implode(',', array_fill(0, count($array_funcid), '?'));
+            $stmt_del = $db->prepare('DELETE FROM ' . NV_BLOCKS_TABLE . '_weight WHERE bid= ? AND func_id in (' . $placeholders . ')');
+            $stmt_del->bindValue(1, $row['bid'], PDO::PARAM_INT);
+            foreach ($array_funcid as $k => $id) {
+                $stmt_del->bindValue($k + 2, $id, PDO::PARAM_INT);
+            }
+            $stmt_del->execute();
 
             // Cap nhat lai thu tu cho nhom cu
             $func_id_old = $weight = 0;
             $sth = $db->prepare('SELECT t1.bid, t1.func_id FROM ' . NV_BLOCKS_TABLE . '_weight t1 INNER JOIN ' . NV_BLOCKS_TABLE . '_groups t2 ON t1.bid = t2.bid WHERE t2.theme= :theme AND t2.position= :position ORDER BY t1.func_id ASC, t1.weight ASC');
-            $sth->bindParam(':theme', $row_old['theme'], PDO::PARAM_STR);
-            $sth->bindParam(':position', $row_old['position'], PDO::PARAM_STR);
+            $sth->bindValue(':theme', $row_old['theme'], PDO::PARAM_STR);
+            $sth->bindValue(':position', $row_old['position'], PDO::PARAM_STR);
             $sth->execute();
-            while ($_scratch = $sth->fetch(3)) {
-                [$bid_i, $func_id_i] = $_scratch;
-                unset($_scratch);
-                if ($func_id_i == $func_id_old) {
+            
+            $stmt_update = $db->prepare('UPDATE ' . NV_BLOCKS_TABLE . '_weight SET weight= :weight WHERE bid= :bid AND func_id= :func_id');
+            while ($_row_weight = $sth->fetch()) {
+                if ($_row_weight['func_id'] == $func_id_old) {
                     ++$weight;
                 } else {
                     $weight = 1;
-                    $func_id_old = $func_id_i;
+                    $func_id_old = $_row_weight['func_id'];
                 }
 
-                $db->query('UPDATE ' . NV_BLOCKS_TABLE . '_weight SET weight=' . $weight . ' WHERE bid=' . $bid_i . ' AND func_id=' . $func_id_i);
+                $stmt_update->bindValue(':weight', $weight, PDO::PARAM_INT);
+                $stmt_update->bindValue(':bid', $_row_weight['bid'], PDO::PARAM_INT);
+                $stmt_update->bindValue(':func_id', $_row_weight['func_id'], PDO::PARAM_INT);
+                $stmt_update->execute();
             }
+            $sth->closeCursor();
             unset($func_id_old, $weight);
 
             $row['bid'] = 0;
@@ -474,8 +491,8 @@ if ($checkss == $nv_Request->get_string('checkss', 'post')) {
 
         if (empty($row['bid'])) {
             $sth = $db->prepare('SELECT MAX(weight) FROM ' . NV_BLOCKS_TABLE . '_groups WHERE theme = :theme AND position= :position');
-            $sth->bindParam(':theme', $selectthemes, PDO::PARAM_STR);
-            $sth->bindParam(':position', $row['position'], PDO::PARAM_STR);
+            $sth->bindValue(':theme', $selectthemes, PDO::PARAM_STR);
+            $sth->bindValue(':position', $row['position'], PDO::PARAM_STR);
             $sth->execute();
             $row['weight'] = (int) ($sth->fetchColumn()) + 1;
 
@@ -523,18 +540,18 @@ if ($checkss == $nv_Request->get_string('checkss', 'post')) {
                     config=:config
                     WHERE bid = ' . $row['bid']);
 
-            $sth->bindParam(':module', $row['module'], PDO::PARAM_STR);
-            $sth->bindParam(':file_name', $row['file_name'], PDO::PARAM_STR);
-            $sth->bindParam(':title', $row['title'], PDO::PARAM_STR);
-            $sth->bindParam(':link', $row['link'], PDO::PARAM_STR);
-            $sth->bindParam(':template', $row['template'], PDO::PARAM_STR);
-            $sth->bindParam(':heading', $row['heading'], PDO::PARAM_INT);
-            $sth->bindParam(':position', $row['position'], PDO::PARAM_STR);
-            $sth->bindParam(':dtime_type', $row['dtime_type'], PDO::PARAM_STR);
-            $sth->bindParam(':dtime_details', $row['dtime_details'], PDO::PARAM_STR);
-            $sth->bindParam(':active', $row['active'], PDO::PARAM_STR);
-            $sth->bindParam(':groups_view', $row['groups_view'], PDO::PARAM_STR);
-            $sth->bindParam(':config', $row['config'], PDO::PARAM_STR);
+            $sth->bindValue(':module', $row['module'], PDO::PARAM_STR);
+            $sth->bindValue(':file_name', $row['file_name'], PDO::PARAM_STR);
+            $sth->bindValue(':title', $row['title'], PDO::PARAM_STR);
+            $sth->bindValue(':link', $row['link'], PDO::PARAM_STR);
+            $sth->bindValue(':template', $row['template'], PDO::PARAM_STR);
+            $sth->bindValue(':heading', $row['heading'], PDO::PARAM_INT);
+            $sth->bindValue(':position', $row['position'], PDO::PARAM_STR);
+            $sth->bindValue(':dtime_type', $row['dtime_type'], PDO::PARAM_STR);
+            $sth->bindValue(':dtime_details', $row['dtime_details'], PDO::PARAM_STR);
+            $sth->bindValue(':active', $row['active'], PDO::PARAM_STR);
+            $sth->bindValue(':groups_view', $row['groups_view'], PDO::PARAM_STR);
+            $sth->bindValue(':config', $row['config'], PDO::PARAM_STR);
             $sth->execute();
 
             if (isset($site_mods[$module])) {
@@ -546,37 +563,56 @@ if ($checkss == $nv_Request->get_string('checkss', 'post')) {
 
         if (!empty($row['bid'])) {
             $func_list = [];
-            $result_func = $db->query('SELECT func_id FROM ' . NV_BLOCKS_TABLE . '_weight WHERE bid=' . $row['bid']);
+            $stmt_func = $db->prepare('SELECT func_id FROM ' . NV_BLOCKS_TABLE . '_weight WHERE bid= :bid');
+            $stmt_func->bindValue(':bid', $row['bid'], PDO::PARAM_INT);
+            $stmt_func->execute();
 
-            while ($_scratch = $result_func->fetch(3)) {
-                [$func_inlist] = $_scratch;
-                unset($_scratch);
-                $func_list[] = $func_inlist;
+            while ($_row_func = $stmt_func->fetch()) {
+                $func_list[] = $_row_func['func_id'];
             }
+            $stmt_func->closeCursor();
 
             $array_funcid_old = array_diff($func_list, $array_funcid);
 
             if (!empty($array_funcid_old)) {
-                $db->query('DELETE FROM ' . NV_BLOCKS_TABLE . '_weight WHERE bid=' . $row['bid'] . ' AND func_id in (' . implode(',', $array_funcid_old) . ')');
+                $placeholders = implode(',', array_fill(0, count($array_funcid_old), '?'));
+                $stmt_del_old = $db->prepare('DELETE FROM ' . NV_BLOCKS_TABLE . '_weight WHERE bid= ? AND func_id in (' . $placeholders . ')');
+                $stmt_del_old->bindValue(1, $row['bid'], PDO::PARAM_INT);
+                $k = 2;
+                foreach ($array_funcid_old as $id) {
+                    $stmt_del_old->bindValue($k++, $id, PDO::PARAM_INT);
+                }
+                $stmt_del_old->execute();
             }
+            $sth = $db->prepare('SELECT MAX(t1.weight) FROM ' . NV_BLOCKS_TABLE . '_weight t1 INNER JOIN ' . NV_BLOCKS_TABLE . '_groups t2 ON t1.bid = t2.bid WHERE t1.func_id= :func_id AND t2.theme= :theme AND t2.position= :position');
+            $stmt_insert = $db->prepare('INSERT INTO ' . NV_BLOCKS_TABLE . '_weight (bid, func_id, weight) VALUES (:bid, :func_id, :weight)');
+            
             foreach ($array_funcid as $func_id) {
                 if (!in_array((int) $func_id, array_map('intval', $func_list), true)) {
-                    $sth = $db->prepare('SELECT MAX(t1.weight) FROM ' . NV_BLOCKS_TABLE . '_weight t1 INNER JOIN ' . NV_BLOCKS_TABLE . '_groups t2 ON t1.bid = t2.bid WHERE t1.func_id=' . $func_id . ' AND t2.theme= :theme AND t2.position= :position');
-                    $sth->bindParam(':theme', $selectthemes, PDO::PARAM_STR);
-                    $sth->bindParam(':position', $row['position'], PDO::PARAM_STR);
+                    $sth->bindValue(':func_id', $func_id, PDO::PARAM_INT);
+                    $sth->bindValue(':theme', $selectthemes, PDO::PARAM_STR);
+                    $sth->bindValue(':position', $row['position'], PDO::PARAM_STR);
                     $sth->execute();
                     $weight = $sth->fetchColumn();
                     $weight = (int) $weight + 1;
 
-                    $db->query('INSERT INTO ' . NV_BLOCKS_TABLE . '_weight (bid, func_id, weight) VALUES (' . $row['bid'] . ', ' . $func_id . ', ' . $weight . ')');
+                    $stmt_insert->bindValue(':bid', $row['bid'], PDO::PARAM_INT);
+                    $stmt_insert->bindValue(':func_id', $func_id, PDO::PARAM_INT);
+                    $stmt_insert->bindValue(':weight', $weight, PDO::PARAM_INT);
+                    $stmt_insert->execute();
                 }
             }
 
             $nv_Cache->delMod('themes');
         }
     } elseif (!empty($row['bid'])) {
-        $db->query('DELETE FROM ' . NV_BLOCKS_TABLE . '_groups WHERE bid=' . $row['bid']);
-        $db->query('DELETE FROM ' . NV_BLOCKS_TABLE . '_weight WHERE bid=' . $row['bid']);
+        $stmt_del_groups = $db->prepare('DELETE FROM ' . NV_BLOCKS_TABLE . '_groups WHERE bid= :bid');
+        $stmt_del_groups->bindValue(':bid', $row['bid'], PDO::PARAM_INT);
+        $stmt_del_groups->execute();
+
+        $stmt_del_weight = $db->prepare('DELETE FROM ' . NV_BLOCKS_TABLE . '_weight WHERE bid= :bid');
+        $stmt_del_weight->bindValue(':bid', $row['bid'], PDO::PARAM_INT);
+        $stmt_del_weight->execute();
 
         $nv_Cache->delMod('themes');
     }
@@ -632,39 +668,42 @@ $dtime_details = get_dtime_details($row['dtime_type'], $row['dtime_details']);
 $tpl->assign('DTIME_DETAILS', $dtime_details);
 
 if (!empty($row['bid'])) {
-    $blocks_num = $db->query('SELECT COUNT(*) FROM ' . NV_BLOCKS_TABLE . '_weight WHERE bid=' . $row['bid'])->fetchColumn();
+    $stmt_count = $db->prepare('SELECT COUNT(*) FROM ' . NV_BLOCKS_TABLE . '_weight WHERE bid= :bid');
+    $stmt_count->bindValue(':bid', $row['bid'], PDO::PARAM_INT);
+    $stmt_count->execute();
+    $blocks_num = $stmt_count->fetchColumn();
     $tpl->assign('BLOCKS_NUM', nv_number_format($blocks_num));
 }
 
 $sql = 'SELECT func_id, func_custom_name, in_module FROM ' . NV_MODFUNCS_TABLE . ' WHERE show_func=1 ORDER BY in_module ASC, subweight ASC';
 $func_result = $db->query($sql);
 $aray_mod_func = [];
-while ($_scratch = $func_result->fetch(3)) {
-    [$id_i, $func_custom_name_i, $in_module_i] = $_scratch;
-    unset($_scratch);
-    $aray_mod_func[$in_module_i][] = [
-        'id' => $id_i,
-        'func_custom_name' => $func_custom_name_i
+while ($_row_func = $func_result->fetch()) {
+    $aray_mod_func[$_row_func['in_module']][] = [
+        'id' => $_row_func['func_id'],
+        'func_custom_name' => $_row_func['func_custom_name']
     ];
 }
+$func_result->closeCursor();
 
 $func_list = [];
 if ($row['bid']) {
-    $result_func = $db->query('SELECT func_id FROM ' . NV_BLOCKS_TABLE . '_weight WHERE bid=' . $row['bid']);
-    while ($_scratch = $result_func->fetch(3)) {
-        [$func_inlist] = $_scratch;
-        unset($_scratch);
-        $func_list[] = $func_inlist;
+    $stmt_func = $db->prepare('SELECT func_id FROM ' . NV_BLOCKS_TABLE . '_weight WHERE bid= :bid');
+    $stmt_func->bindValue(':bid', $row['bid'], PDO::PARAM_INT);
+    $stmt_func->execute();
+    while ($_row_func = $stmt_func->fetch()) {
+        $func_list[] = $_row_func['func_id'];
     }
+    $stmt_func->closeCursor();
 }
 
 $sql = 'SELECT title, custom_title FROM ' . NV_MODULES_TABLE . (!NV_DEBUG ? ' WHERE act = 1' : '') . ' ORDER BY weight ASC';
 $result = $db->query($sql);
 
 $mod_funcs = [];
-while ($_scratch = $result->fetch(3)) {
-    [$m_title, $m_custom_title] = $_scratch;
-    unset($_scratch);
+while ($_row_mod = $result->fetch()) {
+    $m_title = $_row_mod['title'];
+    $m_custom_title = $_row_mod['custom_title'];
     if (isset($aray_mod_func[$m_title]) and count($aray_mod_func[$m_title]) > 0) {
         if (!isset($mod_funcs[$m_title])) {
             $mod_funcs[$m_title] = [
@@ -689,6 +728,7 @@ while ($_scratch = $result->fetch(3)) {
         }
     }
 }
+$result->closeCursor();
 $tpl->assign('MOD_FUNCS', $mod_funcs);
 
 $contents = $tpl->fetch('block-content.tpl');

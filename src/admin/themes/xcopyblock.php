@@ -30,13 +30,12 @@ $theme_list = nv_scandir(NV_ROOTDIR . '/themes/', $global_config['check_theme'])
 
 $result = $db->query('SELECT DISTINCT theme FROM ' . NV_PREFIXLANG . '_modthemes WHERE func_id=0');
 $array_themes = [];
-while ($_scratch = $result->fetch(3)) {
-    [$theme] = $_scratch;
-    unset($_scratch);
-    if (in_array($theme, $theme_list, true)) {
-        $array_themes[] = $theme;
+while ($_row_theme = $result->fetch()) {
+    if (in_array($_row_theme['theme'], $theme_list, true)) {
+        $array_themes[] = $_row_theme['theme'];
     }
 }
+$result->closeCursor();
 $tpl->assign('ARRAY_THEMES', $array_themes);
 
 $contents = $tpl->fetch('xcopyblock.tpl');
