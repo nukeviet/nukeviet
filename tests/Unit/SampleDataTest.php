@@ -781,4 +781,110 @@ class SampleDataTest extends \Codeception\Test\Unit
 
         $this->assertGreaterThan(0, $inserted, 'Không có dòng nào được insert vào bảng ' . $table . '.');
     }
+
+    /**
+     * Dữ liệu mẫu nhóm tin cho màn quản trị groups của module news
+     *
+     * Sinh 10 nhóm tin ở bảng vi_news_block_cat với weight tăng liên tục,
+     * đồng thời gán bài viết mẫu vào vi_news_block nếu đã có bài trong hệ thống.
+     *
+     * @group sample-data
+     */
+    public function testInsertSampleDataForNewsGroups()
+    {
+        global $db, $db_config;
+
+        $blockCatTable = $db_config['prefix'] . '_vi_news_block_cat';
+        $blockTable = $db_config['prefix'] . '_vi_news_block';
+        $rowsTable = $db_config['prefix'] . '_vi_news_rows';
+
+        $esc = fn (string $s) => str_replace(["\\", "'"], ["\\\\", "\\'"], $s);
+
+        $maxWeight = (int) $db->query('SELECT MAX(weight) FROM ' . $blockCatTable)->fetchColumn();
+        $batchMark = 'seed-news-groups-' . date('YmdHis') . '-' . rand(1000, 9999);
+        $now = time();
+
+        $groupSeeds = [
+            ['Tin nổi bật', 'Nhom tin noi bat tren trang chu'],
+            ['Tin cập nhật', 'Nhom tong hop tin cap nhat nhanh trong ngay'],
+            ['Phân tích', 'Nhom bai viet phan tich va goc nhin chuyen sau'],
+            ['Tiêu điểm', 'Nhom bai viet duoc dat o vi tri tieu diem'],
+            ['Dữ liệu', 'Nhom tin su kien kem so lieu va du lieu'],
+            ['Theo dòng sự kiện', 'Nhom tong hop bai viet theo dong su kien'],
+            ['Góc nhìn', 'Nhom bai viet binh luan va goc nhin'],
+            ['Đọc nhiều', 'Nhom bai viet doc nhieu va duoc quan tam'],
+            ['Nổi bật tuần', 'Nhom bai viet noi bat trong tuan'],
+            ['Khuyến nghị', 'Nhom bai viet goi y cho bien tap vien'],
+        ];
+
+        $groupValues = [];
+
+        foreach ($groupSeeds as $index => [$baseTitle, $baseDescription]) {
+            $position = $index + 1;
+            $title = $baseTitle . ' [' . $batchMark . ' #' . str_pad((string) $position, 2, '0', STR_PAD_LEFT) . ']';
+            $alias = 'news-group-' . $batchMark . '-' . str_pad((string) $position, 2, '0', STR_PAD_LEFT);
+            $description = $baseDescription . ' [' . $batchMark . ']';
+            $keywords = implode(', ', [$baseTitle, 'news groups', 'seed data', 'vi']);
+            $weight = $maxWeight + $position;
+            $addDefault = $position === 1 ? 1 : 0;
+            $numbers = 3 + ($index % 6);
+
+            $groupValues[] = sprintf(
+                "(%d,%d,'%s','%s','','%s',%d,'%s',%d,%d)",
+                $addDefault,
+                $numbers,
+                $esc($title),
+                $esc($alias),
+                $esc($description),
+                $weight,
+                $esc($keywords),
+                $now,
+                $now
+            );
+        }
+
+        $this->assertCount(10, $groupValues, 'Số lượng nhóm tin mẫu tạo ra không đúng 10 bản ghi.');
+
+        $insertedGroups = $db->exec(
+            'INSERT INTO ' . $blockCatTable
+            . ' (adddefault, numbers, title, alias, image, description, weight, keywords, add_time, edit_time) VALUES '
+            . implode(',', $groupValues)
+        );
+
+        $this->assertGreaterThan(0, $insertedGroups, 'Không có nhóm tin nào được insert vào bảng ' . $blockCatTable . '.');
+
+        $insertedBids = $db->query(
+            "SELECT bid FROM " . $blockCatTable . " WHERE alias LIKE 'news-group-" . $esc($batchMark) . "-%' ORDER BY bid ASC"
+        )->fetchAll(\PDO::FETCH_COLUMN);
+
+        $this->assertCount(10, $insertedBids, 'Không lấy đủ 10 nhóm tin vừa insert từ bảng ' . $blockCatTable . '.');
+
+        $rowIds = $db->query(
+            'SELECT id FROM ' . $rowsTable . ' ORDER BY publtime DESC, id DESC LIMIT 30'
+        )->fetchAll(\PDO::FETCH_COLUMN);
+
+        if (!empty($rowIds)) {
+            $blockValues = [];
+            $rowCount = count($rowIds);
+
+            foreach ($insertedBids as $groupIndex => $bid) {
+                $bid = (int) $bid;
+
+                for ($weight = 1; $weight <= 3; ++$weight) {
+                    $rowId = (int) $rowIds[(($groupIndex * 3) + ($weight - 1)) % $rowCount];
+                    $blockValues[] = sprintf('(%d,%d,%d)', $bid, $rowId, $weight);
+                }
+            }
+
+            if (!empty($blockValues)) {
+                $db->exec(
+                    'INSERT IGNORE INTO ' . $blockTable
+                    . ' (bid, id, weight) VALUES '
+                    . implode(',', $blockValues)
+                );
+            }
+        }
+
+        $this->assertTrue(true);
+    }
 }
