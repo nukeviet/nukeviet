@@ -62,11 +62,12 @@ if ($nv_Request->isset_request('save', 'post')) {
         $data['autologomod'] = implode(',', $data['autologomod']);
     }
 
-    $sth = $db->prepare('UPDATE ' . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = '" . NV_LANG_DATA . "' AND module = 'global' AND config_name = :config_name");
+    $stmt = $db->prepare("UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = :lang AND module = 'global' AND config_name = :config_name");
     foreach ($data as $config_name => $config_value) {
-        $sth->bindParam(':config_value', $config_value, PDO::PARAM_STR);
-        $sth->bindParam(':config_name', $config_name, PDO::PARAM_STR);
-        $sth->execute();
+        $stmt->bindValue(':lang', NV_LANG_DATA, PDO::PARAM_STR);
+        $stmt->bindValue(':config_value', $config_value, PDO::PARAM_STR);
+        $stmt->bindValue(':config_name', $config_name, PDO::PARAM_STR);
+        $stmt->execute();
     }
 
     $db->query('UPDATE ' . NV_CONFIG_GLOBALTABLE . " SET config_value = '" . NV_CURRENTTIME . "' WHERE lang = 'sys' AND module = 'global' AND config_name = 'timestamp'");

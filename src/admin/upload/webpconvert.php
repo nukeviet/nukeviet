@@ -62,9 +62,24 @@ if (isset($array_dirname[$path])) {
     $did = $array_dirname[$path];
     $info = nv_getFileInfo($path, $newimg);
     $info['userid'] = $admin_info['userid'];
-    $db->query('INSERT INTO ' . NV_UPLOAD_GLOBALTABLE . "_file
-    (name, ext, type, filesize, src, srcwidth, srcheight, sizes, userid, mtime, did, title) VALUES
-    ('" . $info['name'] . "', '" . $info['ext'] . "', '" . $info['type'] . "', " . $info['filesize'] . ", '" . $info['src'] . "', " . $info['srcwidth'] . ', ' . $info['srcheight'] . ", '" . $info['size'] . "', " . $info['userid'] . ', ' . $info['mtime'] . ', ' . $did . ", '" . $newimg . "')");
+    $stmt = $db->prepare('INSERT INTO ' . NV_UPLOAD_GLOBALTABLE . '_file (
+        name, ext, type, filesize, src, srcwidth, srcheight, sizes, userid, mtime, did, title
+    ) VALUES (
+        :name, :ext, :type, :filesize, :src, :srcwidth, :srcheight, :sizes, :userid, :mtime, :did, :title
+    )');
+    $stmt->bindValue(':name', $info['name'], PDO::PARAM_STR);
+    $stmt->bindValue(':ext', $info['ext'], PDO::PARAM_STR);
+    $stmt->bindValue(':type', $info['type'], PDO::PARAM_STR);
+    $stmt->bindValue(':filesize', $info['filesize'], PDO::PARAM_INT);
+    $stmt->bindValue(':src', $info['src'], PDO::PARAM_STR);
+    $stmt->bindValue(':srcwidth', $info['srcwidth'], PDO::PARAM_INT);
+    $stmt->bindValue(':srcheight', $info['srcheight'], PDO::PARAM_INT);
+    $stmt->bindValue(':sizes', $info['size'], PDO::PARAM_STR);
+    $stmt->bindValue(':userid', $info['userid'], PDO::PARAM_INT);
+    $stmt->bindValue(':mtime', $info['mtime'], PDO::PARAM_INT);
+    $stmt->bindValue(':did', $did, PDO::PARAM_INT);
+    $stmt->bindValue(':title', $newimg, PDO::PARAM_STR);
+    $stmt->execute();
 }
 
 nv_insert_logs(NV_LANG_DATA, $module_name, $nv_Lang->getModule('webpconvert'), $path . '/' . $newimg, $admin_info['userid']);

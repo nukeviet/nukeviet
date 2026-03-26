@@ -60,11 +60,11 @@ if ($nv_Request->isset_request('save', 'post')) {
     $array_config = [];
     $array_config['show_folder_size'] = (int) $nv_Request->get_bool('show_folder_size', 'post', false);
 
-    $sth = $db->prepare('UPDATE ' . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang='sys' AND module='site' AND config_name=:config_name");
+    $stmt = $db->prepare("UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang='sys' AND module='site' AND config_name=:config_name");
     foreach ($array_config as $config_name => $config_value) {
-        $sth->bindParam(':config_name', $config_name, PDO::PARAM_STR);
-        $sth->bindParam(':config_value', $config_value, PDO::PARAM_STR);
-        $sth->execute();
+        $stmt->bindValue(':config_name', $config_name, PDO::PARAM_STR);
+        $stmt->bindValue(':config_value', $config_value, PDO::PARAM_STR);
+        $stmt->execute();
     }
 
     // Quyền tối cao
@@ -134,7 +134,7 @@ if ($nv_Request->isset_request('save', 'post')) {
             $nv_overflow_size = 0;
         }
 
-        $sth = $db->prepare('UPDATE ' . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = 'sys' AND module = 'global' AND config_name = :config_name");
+        $sth = $db->prepare("UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = 'sys' AND module = 'global' AND config_name = :config_name");
         $sth->bindValue(':config_name', 'file_allowed_ext', PDO::PARAM_STR);
         $sth->bindValue(':config_value', $type, PDO::PARAM_STR);
         $sth->execute();
@@ -184,11 +184,11 @@ if ($nv_Request->isset_request('save', 'post')) {
         $array_config_define['nv_max_height'] = $nv_Request->get_int('nv_max_height', 'post');
         $array_config_define['nv_mobile_mode_img'] = $nv_Request->get_int('nv_mobile_mode_img', 'post', 0);
 
-        $sth = $db->prepare('UPDATE ' . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = 'sys' AND module = 'define' AND config_name = :config_name");
+        $stmt2 = $db->prepare("UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = 'sys' AND module = 'define' AND config_name = :config_name");
         foreach ($array_config_define as $config_name => $config_value) {
-            $sth->bindParam(':config_name', $config_name, PDO::PARAM_STR, 30);
-            $sth->bindParam(':config_value', $config_value, PDO::PARAM_STR);
-            $sth->execute();
+            $stmt2->bindValue(':config_name', $config_name, PDO::PARAM_STR);
+            $stmt2->bindValue(':config_value', $config_value, PDO::PARAM_STR);
+            $stmt2->execute();
         }
 
         $db->query('UPDATE ' . NV_CONFIG_GLOBALTABLE . " SET config_value = '" . NV_CURRENTTIME . "' WHERE lang = 'sys' AND module = 'global' AND config_name = 'timestamp'");

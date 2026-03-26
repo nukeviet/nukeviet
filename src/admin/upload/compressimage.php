@@ -72,12 +72,37 @@ if (isset($array_dirname[$path])) {
     $info = nv_getFileInfo($path, $newimg);
     if (!empty($info['filesize'])) {
         if ($isNewFile) {
-            $db->query('INSERT INTO ' . NV_UPLOAD_GLOBALTABLE . "_file
-                (name, ext, type, filesize, src, srcwidth, srcheight, sizes, userid, mtime, did, title) VALUES
-                ('" . $info['name'] . "', '" . $info['ext'] . "', '" . $info['type'] . "', " . $info['filesize'] . ", '" . $info['src'] . "', " . $info['srcwidth'] . ', ' . $info['srcheight'] . ", '" . $info['size'] . "', " . $admin_info['userid'] . ', ' . $info['mtime'] . ', ' . $did . ", '" . $newimg . "')");
+            $stmt = $db->prepare('INSERT INTO ' . NV_UPLOAD_GLOBALTABLE . '_file (
+                name, ext, type, filesize, src, srcwidth, srcheight, sizes, userid, mtime, did, title
+            ) VALUES (
+                :name, :ext, :type, :filesize, :src, :srcwidth, :srcheight, :sizes, :userid, :mtime, :did, :title
+            )');
+            $stmt->bindValue(':name', $info['name'], PDO::PARAM_STR);
+            $stmt->bindValue(':ext', $info['ext'], PDO::PARAM_STR);
+            $stmt->bindValue(':type', $info['type'], PDO::PARAM_STR);
+            $stmt->bindValue(':filesize', $info['filesize'], PDO::PARAM_INT);
+            $stmt->bindValue(':src', $info['src'], PDO::PARAM_STR);
+            $stmt->bindValue(':srcwidth', $info['srcwidth'], PDO::PARAM_INT);
+            $stmt->bindValue(':srcheight', $info['srcheight'], PDO::PARAM_INT);
+            $stmt->bindValue(':sizes', $info['size'], PDO::PARAM_STR);
+            $stmt->bindValue(':userid', $admin_info['userid'], PDO::PARAM_INT);
+            $stmt->bindValue(':mtime', $info['mtime'], PDO::PARAM_INT);
+            $stmt->bindValue(':did', $did, PDO::PARAM_INT);
+            $stmt->bindValue(':title', $newimg, PDO::PARAM_STR);
+            $stmt->execute();
         } else {
-            $db->query('UPDATE ' . NV_UPLOAD_GLOBALTABLE . '_file SET
-                filesize=' . $info['filesize'] . ', srcwidth=' . $info['srcwidth'] . ', srcheight=' . $info['srcheight'] . ", sizes='" . $info['size'] . "', userid=" . $admin_info['userid'] . ', mtime=' . $info['mtime'] . ' WHERE did = ' . $did . " AND title = '" . $newimg . "'");
+            $stmt = $db->prepare('UPDATE ' . NV_UPLOAD_GLOBALTABLE . '_file SET
+                filesize = :filesize, srcwidth = :srcwidth, srcheight = :srcheight, sizes = :sizes, userid = :userid, mtime = :mtime
+            WHERE did = :did AND title = :title');
+            $stmt->bindValue(':filesize', $info['filesize'], PDO::PARAM_INT);
+            $stmt->bindValue(':srcwidth', $info['srcwidth'], PDO::PARAM_INT);
+            $stmt->bindValue(':srcheight', $info['srcheight'], PDO::PARAM_INT);
+            $stmt->bindValue(':sizes', $info['size'], PDO::PARAM_STR);
+            $stmt->bindValue(':userid', $admin_info['userid'], PDO::PARAM_INT);
+            $stmt->bindValue(':mtime', $info['mtime'], PDO::PARAM_INT);
+            $stmt->bindValue(':did', $did, PDO::PARAM_INT);
+            $stmt->bindValue(':title', $newimg, PDO::PARAM_STR);
+            $stmt->execute();
         }
         nv_dirListRefreshSize();
         nv_insert_logs(NV_LANG_DATA, $module_name, $nv_Lang->getModule('compressimage'), $path . '/' . $newimg, $admin_info['userid']);

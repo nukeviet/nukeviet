@@ -191,13 +191,14 @@ if ($nv_Request->isset_request('checkss', 'post')) {
     if ($request['show_folder']) {
         $array_folders = [];
         if (!empty($global_config['show_folder_size'])) {
-            $sql = 'SELECT dirname, total_size FROM ' . NV_UPLOAD_GLOBALTABLE . '_dir WHERE
-            dirname=' . $db->quote($request['path']) . " OR dirname LIKE '" . $db->dblikeescape($request['path'] . '/') . "%'";
-            $result = $db->query($sql);
-            while ($row = $result->fetch()) {
-                $array_folders[$row['dirname']] = $row['total_size'];
+            $stmt = $db->prepare('SELECT dirname, total_size FROM ' . NV_UPLOAD_GLOBALTABLE . '_dir WHERE dirname = :dirname OR dirname LIKE :dirnamelike');
+            $stmt->bindValue(':dirname', $request['path'], PDO::PARAM_STR);
+            $stmt->bindValue(':dirnamelike', $request['path'] . '/%', PDO::PARAM_STR);
+            $stmt->execute();
+            while ($_row_folder = $stmt->fetch()) {
+                $array_folders[$_row_folder['dirname']] = $_row_folder['total_size'];
             }
-            $result->closeCursor();
+            $stmt->closeCursor();
         }
 
         $allowed = nv_check_allow_upload_dir($request['path']);
@@ -228,69 +229,96 @@ if ($nv_Request->isset_request('checkss', 'post')) {
                 nv_filesListRefresh($request['currentpath']);
             }
 
-            $db->sqlreset()->select('COUNT(tb1.name)')->from(NV_UPLOAD_GLOBALTABLE . '_file tb1');
+            $sql_count = 'SELECT COUNT(tb1.name) FROM ' . NV_UPLOAD_GLOBALTABLE . '_file tb1';
+            $sql_select = 'SELECT ';
 
+            $join = '';
             $where = [];
+            $params = [];
+
             if (!empty($request['q'])) {
-                $db->join('INNER JOIN ' . NV_UPLOAD_GLOBALTABLE . '_dir tb2 ON tb1.did=tb2.did');
+                $join = ' INNER JOIN ' . NV_UPLOAD_GLOBALTABLE . '_dir tb2 ON tb1.did=tb2.did';
+                $select = 'tb1.*, tb2.dirname';
 
-                $dbkey = $db->dblikeescape($request['q']);
-                $select = 'tb1.*,tb2.dirname';
+                $where[] = '(tb1.title LIKE :q_title OR tb1.alt LIKE :q_alt)';
+                $params[':q_title'] = '%' . $request['q'] . '%';
+                $params[':q_alt'] = '%' . $request['q'] . '%';
 
-                $where[] = '(tb1.title LIKE ' . $db->quote('%' . $dbkey . '%') . ' OR tb1.alt LIKE ' . $db->quote('%' . $dbkey . '%') . ')';
-                $where[] = '(tb2.dirname = ' . $db->quote($request['currentpath']) . ' OR tb2.dirname LIKE ' . $db->quote($request['currentpath'] . '/%') . ')';
+                $where[] = '(tb2.dirname = :dirname OR tb2.dirname LIKE :dirnamelike)';
+                $params[':dirname'] = $request['currentpath'];
+                $params[':dirnamelike'] = $request['currentpath'] . '/%';
             } else {
                 $select = 'tb1.*';
-                $where[] = 'tb1.did = ' . (int) $array_dirname[$request['currentpath']];
+                $where[] = 'tb1.did = :did';
+                $params[':did'] = (int) $array_dirname[$request['currentpath']];
             }
+
             if ($request['type'] != 'file') {
-                $where[] = "tb1.type=" . $db->quote($request['type']);
+                $where[] = 'tb1.type = :type';
+                $params[':type'] = $request['type'];
             }
             if ($request['author'] == 1) {
-                $where[] = "tb1.userid=" . $admin_info['admin_id'];
+                $where[] = 'tb1.userid = :userid';
+                $params[':userid'] = $admin_info['admin_id'];
             }
 
+            $where_str = '';
             if (!empty($where)) {
-                $db->where(implode(' AND ', $where));
+                $where_str = ' WHERE ' . implode(' AND ', $where);
             }
 
-            $num_items = $db->query($db->sql())->fetchColumn();
+            $sql_count .= $join . $where_str;
+            
+            $stmt_count = $db->prepare($sql_count);
+            foreach ($params as $key => $value) {
+                $stmt_count->bindValue($key, $value, is_int($value) ? PDO::PARAM_INT : PDO::PARAM_STR);
+            }
+            $stmt_count->execute();
+            $num_items = $stmt_count->fetchColumn();
+
             $per_page = 60;
 
-            $db->select($select);
+            $sql_query = $sql_select . $select . ' FROM ' . NV_UPLOAD_GLOBALTABLE . '_file tb1' . $join . $where_str;
+            
             if ($request['order'] == 1) {
-                $db->order('tb1.mtime ASC');
+                $sql_query .= ' ORDER BY tb1.mtime ASC';
             } elseif ($request['order'] == 2) {
-                $db->order('tb1.title ASC');
+                $sql_query .= ' ORDER BY tb1.title ASC';
             } else {
-                $db->order('tb1.mtime DESC');
+                $sql_query .= ' ORDER BY tb1.mtime DESC';
             }
 
-            $db->limit($per_page)->offset(($request['page'] - 1) * $per_page);
+            $sql_query .= ' LIMIT :limit OFFSET :offset';
 
-            $result = $db->query($db->sql());
+            $stmt = $db->prepare($sql_query);
+            foreach ($params as $key => $value) {
+                $stmt->bindValue($key, $value, is_int($value) ? PDO::PARAM_INT : PDO::PARAM_STR);
+            }
+            $stmt->bindValue(':limit', $per_page, PDO::PARAM_INT);
+            $stmt->bindValue(':offset', ($request['page'] - 1) * $per_page, PDO::PARAM_INT);
+            $stmt->execute();
 
             $files = [];
             $num_file = $num_images = 0;
-            while ($row = $result->fetch()) {
+            while ($_row_file = $stmt->fetch()) {
                 $file = [];
-                $file['src'] = NV_BASE_SITEURL . $row['src'] . '?' . $row['mtime'];
-                $file['thumb'] = NV_BASE_SITEURL . $row['src'];
-                $file['alt'] = $row['alt'];
-                $file['name'] = $row['name'];
-                $file['real_name'] = $row['title'];
-                $file['ext'] = $row['ext'];
+                $file['src'] = NV_BASE_SITEURL . $_row_file['src'] . '?' . $_row_file['mtime'];
+                $file['thumb'] = NV_BASE_SITEURL . $_row_file['src'];
+                $file['alt'] = $_row_file['alt'];
+                $file['name'] = $_row_file['name'];
+                $file['real_name'] = $_row_file['title'];
+                $file['ext'] = $_row_file['ext'];
                 $file['uuid'] = uniqid();
-                $file['path'] = NV_BASE_SITEURL . (empty($row['dirname']) ? $request['currentpath'] : $row['dirname']) . '/' . $row['title'];
+                $file['path'] = NV_BASE_SITEURL . (empty($_row_file['dirname']) ? $request['currentpath'] : $_row_file['dirname']) . '/' . $_row_file['title'];
                 $file['abs_path'] = NV_MY_DOMAIN . $file['path'];
-                $file['nocache_path'] = $file['path'] . '?' . $row['mtime'];
-                $file['dir_path'] = (empty($row['dirname']) ? $request['currentpath'] : $row['dirname']) . '/' . $row['title'];
-                $file['dir'] = (empty($row['dirname']) ? $request['currentpath'] : $row['dirname']);
-                $file['mtime'] = nv_datetime_format($row['mtime'], 0, 0);
-                $file['type'] = $row['type'];
-                $file['filesize_show'] = nv_convertfromBytes($row['filesize']);
+                $file['nocache_path'] = $file['path'] . '?' . $_row_file['mtime'];
+                $file['dir_path'] = (empty($_row_file['dirname']) ? $request['currentpath'] : $_row_file['dirname']) . '/' . $_row_file['title'];
+                $file['dir'] = (empty($_row_file['dirname']) ? $request['currentpath'] : $_row_file['dirname']);
+                $file['mtime'] = nv_datetime_format($_row_file['mtime'], 0, 0);
+                $file['type'] = $_row_file['type'];
+                $file['filesize_show'] = nv_convertfromBytes($_row_file['filesize']);
 
-                $sizes = explode('|', $row['sizes']);
+                $sizes = explode('|', $_row_file['sizes']);
                 $file['width'] = 0;
                 $file['height'] = 0;
                 if (!empty($sizes[1])) {
@@ -298,9 +326,9 @@ if ($nv_Request->isset_request('checkss', 'post')) {
                     $file['height'] = intval($sizes[1]);
                 }
 
-                if ($row['type'] == 'image' or $row['ext'] == 'swf') {
+                if ($_row_file['type'] == 'image' or $_row_file['ext'] == 'swf') {
                     $num_images++;
-                    $file['size'] = str_replace('|', ' x ', $row['sizes']) . ' px';
+                    $file['size'] = str_replace('|', ' x ', $_row_file['sizes']) . ' px';
                     $file['size_detail'] = $file['size'] . ' (' . $file['filesize_show'] . ')';
                 } else {
                     $num_file++;
@@ -309,7 +337,7 @@ if ($nv_Request->isset_request('checkss', 'post')) {
 
                 $files[] = $file;
             }
-            $result->closeCursor();
+            $stmt->closeCursor();
 
             $tpl->assign('FILES', $files);
             $respon['files'] = $tpl->fetch('listfile.tpl');

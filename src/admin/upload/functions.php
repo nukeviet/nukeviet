@@ -525,10 +525,13 @@ function nv_filesListRefresh($pathimg)
     $did = $array_dirname[$pathimg];
     if (is_dir(NV_ROOTDIR . '/' . $pathimg)) {
         // Lấy hết các file đã lưu trong CSDL của thư mục này
-        $result = $db->query('SELECT * FROM ' . NV_UPLOAD_GLOBALTABLE . '_file WHERE did = ' . $did);
-        while ($row = $result->fetch()) {
-            $results[$row['title']] = $row;
+        $stmt_files = $db->prepare('SELECT * FROM ' . NV_UPLOAD_GLOBALTABLE . '_file WHERE did = :did');
+        $stmt_files->bindValue(':did', $did, PDO::PARAM_INT);
+        $stmt_files->execute();
+        while ($_row_file = $stmt_files->fetch()) {
+            $results[$_row_file['title']] = $_row_file;
         }
+        $stmt_files->closeCursor();
 
         // Quét tệp tin trên máy chủ
         if ($dh = opendir(NV_ROOTDIR . '/' . $pathimg)) {
@@ -592,17 +595,20 @@ function nv_filesListRefresh($pathimg)
 
             if (!empty($results)) {
                 // Xóa CSDL file không còn tồn tại
+                $stmt_del = $db->prepare('DELETE FROM ' . NV_UPLOAD_GLOBALTABLE . '_file WHERE did = :did AND title = :title');
+                $stmt_del->bindValue(':did', $did, PDO::PARAM_INT);
                 foreach ($results as $_row) {
-                    $db->query('DELETE FROM ' . NV_UPLOAD_GLOBALTABLE . '_file WHERE did = ' . $did . ' AND title=' . $db->quote($_row['title']));
+                    $stmt_del->bindValue(':title', $_row['title'], PDO::PARAM_STR);
+                    $stmt_del->execute();
                 }
             }
 
             // Tính toán lại dung lượng thư mục
-            $sql = 'SELECT SUM(filesize) FROM ' . NV_UPLOAD_GLOBALTABLE . '_file WHERE did IN(
-                SELECT did FROM ' . NV_UPLOAD_GLOBALTABLE . '_dir WHERE
-                dirname=' . $db->quote($pathimg) . " OR dirname LIKE '" . $db->dblikeescape($pathimg . '/') . "%'
-            )";
-            $total_size = (float) ($db->query($sql)->fetchColumn());
+            $stmt_sum = $db->prepare('SELECT SUM(filesize) FROM ' . NV_UPLOAD_GLOBALTABLE . '_file WHERE did IN (SELECT did FROM ' . NV_UPLOAD_GLOBALTABLE . '_dir WHERE dirname = :dirname OR dirname LIKE :dirnamelike)');
+            $stmt_sum->bindValue(':dirname', $pathimg, PDO::PARAM_STR);
+            $stmt_sum->bindValue(':dirnamelike', $pathimg . '/%', PDO::PARAM_STR);
+            $stmt_sum->execute();
+            $total_size = (float) $stmt_sum->fetchColumn();
 
             $sth_up = $db->prepare('UPDATE ' . NV_UPLOAD_GLOBALTABLE . '_dir SET time = :time, total_size = :total_size WHERE did = :did');
             $sth_up->bindValue(':time', NV_CURRENTTIME, PDO::PARAM_INT);
@@ -612,8 +618,13 @@ function nv_filesListRefresh($pathimg)
         }
     } else {
         // Xóa CSDL thư mục không còn tồn tại
-        $db->query('DELETE FROM ' . NV_UPLOAD_GLOBALTABLE . '_file WHERE did = ' . $did);
-        $db->query('DELETE FROM ' . NV_UPLOAD_GLOBALTABLE . '_dir WHERE did = ' . $did);
+        $stmt_del_f = $db->prepare('DELETE FROM ' . NV_UPLOAD_GLOBALTABLE . '_file WHERE did = :did');
+        $stmt_del_f->bindValue(':did', $did, PDO::PARAM_INT);
+        $stmt_del_f->execute();
+
+        $stmt_del_d = $db->prepare('DELETE FROM ' . NV_UPLOAD_GLOBALTABLE . '_dir WHERE did = :did');
+        $stmt_del_d->bindValue(':did', $did, PDO::PARAM_INT);
+        $stmt_del_d->execute();
     }
 }
 
@@ -630,11 +641,11 @@ function nv_dirListRefreshSize()
 
     foreach ($array_dirname as $dirname => $did) {
         // Tính toán lại dung lượng thư mục
-        $sql = 'SELECT SUM(filesize) FROM ' . NV_UPLOAD_GLOBALTABLE . '_file WHERE did IN(
-            SELECT did FROM ' . NV_UPLOAD_GLOBALTABLE . '_dir WHERE
-            dirname=' . $db->quote($dirname) . " OR dirname LIKE '" . $db->dblikeescape($dirname . '/') . "%'
-        )";
-        $total_size = (float) ($db->query($sql)->fetchColumn());
+        $stmt_sum = $db->prepare('SELECT SUM(filesize) FROM ' . NV_UPLOAD_GLOBALTABLE . '_file WHERE did IN (SELECT did FROM ' . NV_UPLOAD_GLOBALTABLE . '_dir WHERE dirname = :dirname OR dirname LIKE :dirnamelike)');
+        $stmt_sum->bindValue(':dirname', $dirname, PDO::PARAM_STR);
+        $stmt_sum->bindValue(':dirnamelike', $dirname . '/%', PDO::PARAM_STR);
+        $stmt_sum->execute();
+        $total_size = (float) $stmt_sum->fetchColumn();
 
         $sth_up = $db->prepare('UPDATE ' . NV_UPLOAD_GLOBALTABLE . '_dir SET total_size = :total_size WHERE did = :did');
         $sth_up->bindValue(':total_size', $total_size, PDO::PARAM_STR);
@@ -700,8 +711,14 @@ if ($nv_Request->isset_request('dirListRefresh', 'post') and csrf_check($nv_Requ
     foreach ($result_no_exit as $dirname) {
         // Xóa CSDL thư mục không còn tồn tại
         $did = $array_dirname[$dirname];
-        $db->query('DELETE FROM ' . NV_UPLOAD_GLOBALTABLE . '_file WHERE did = ' . $did);
-        $db->query('DELETE FROM ' . NV_UPLOAD_GLOBALTABLE . '_dir WHERE did = ' . $did);
+        
+        $stmt_del_f = $db->prepare('DELETE FROM ' . NV_UPLOAD_GLOBALTABLE . '_file WHERE did = :did');
+        $stmt_del_f->bindValue(':did', $did, PDO::PARAM_INT);
+        $stmt_del_f->execute();
+
+        $stmt_del_d = $db->prepare('DELETE FROM ' . NV_UPLOAD_GLOBALTABLE . '_dir WHERE did = :did');
+        $stmt_del_d->bindValue(':did', $did, PDO::PARAM_INT);
+        $stmt_del_d->execute();
         unset($array_dirname[$dirname]);
     }
     $result_new = array_diff($real_dirlist, $dirlist);

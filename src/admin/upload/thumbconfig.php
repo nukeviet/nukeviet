@@ -97,18 +97,29 @@ if ($nv_Request->isset_request('save', 'post')) {
         $opts[$did] = [$type, $width, $height, $quality];
     }
 
+    $stmt = $db->prepare('UPDATE ' . NV_UPLOAD_GLOBALTABLE . '_dir SET 
+        thumb_type = :thumb_type, thumb_width = :thumb_width, thumb_height = :thumb_height, thumb_quality = :thumb_quality 
+        WHERE did = :did');
     foreach ($opts as $did => $opt) {
-        $db->query('UPDATE ' . NV_UPLOAD_GLOBALTABLE . '_dir SET
-            thumb_type = ' . $opt[0] . ', thumb_width = ' . $opt[1] . ',
-            thumb_height = ' . $opt[2] . ', thumb_quality = ' . $opt[3] . '
-            WHERE did = ' . (int) $did);
+        $stmt->bindValue(':thumb_type', $opt[0], PDO::PARAM_INT);
+        $stmt->bindValue(':thumb_width', $opt[1], PDO::PARAM_INT);
+        $stmt->bindValue(':thumb_height', $opt[2], PDO::PARAM_INT);
+        $stmt->bindValue(':thumb_quality', $opt[3], PDO::PARAM_INT);
+        $stmt->bindValue(':did', $did, PDO::PARAM_INT);
+        $stmt->execute();
     }
 
-    $in = implode(',', array_keys($opts));
-    $db->query('UPDATE ' . NV_UPLOAD_GLOBALTABLE . '_dir SET
-        thumb_type = 0, thumb_width = 0,
-        thumb_height = 0, thumb_quality = 0
-    WHERE did NOT IN (' . $in . ')');
+    $ids = implode(', ', array_map('intval', array_keys($opts)));
+    if (!empty($ids)) {
+        $db->query('UPDATE ' . NV_UPLOAD_GLOBALTABLE . '_dir SET
+            thumb_type = 0, thumb_width = 0,
+            thumb_height = 0, thumb_quality = 0
+            WHERE did NOT IN (' . $ids . ')');
+    } else {
+        $db->query('UPDATE ' . NV_UPLOAD_GLOBALTABLE . '_dir SET
+            thumb_type = 0, thumb_width = 0,
+            thumb_height = 0, thumb_quality = 0');
+    }
 
     nv_jsonOutput([
         'status' => 'success',
