@@ -1664,6 +1664,150 @@ $(function () {
             });
         });
     }
+
+    if (nv_func_name === 'topics') {
+        // Cuộn trang xuống form khi đang ở chế độ sửa
+        const topicForm = $('#topic-form');
+        if (topicForm.length && topicForm.data('is-edit')) {
+            $('html, body').animate({ scrollTop: topicForm.offset().top - 60 }, 400);
+        }
+
+        // Tự động lấy alias khi tiêu đề thay đổi và alias đang trống
+        $('#idtitle').on('change', function () {
+            if ($('#idalias').val() === '') {
+                get_alias('topics', $('[name="topicid"]', topicForm).val() || '0');
+            }
+        });
+
+        // Nút làm mới alias thủ công
+        $('[data-toggle="refresh-alias"]').on('click', function () {
+            get_alias('topics', $(this).data('topicid') || '0');
+        });
+
+        // Thay đổi thứ tự dòng sự kiện bằng popover nhập số
+        const weightTplEl = document.getElementById('topic-weight-tpl');
+        if (weightTplEl) {
+            $('[data-toggle="change-topic-weight"]').each(function () {
+                const btn = $(this);
+                new bootstrap.Popover(this, {
+                    html: true,
+                    sanitize: false,
+                    trigger: 'click',
+                    placement: 'bottom',
+                    title: btn.attr('data-bs-title'),
+                    content: function () {
+                        const clone = $(weightTplEl).clone().removeClass('d-none');
+                        clone.find('.topic-new-weight').attr('value', btn.data('current-weight'));
+                        clone.find('.topic-weight-ok')
+                            .attr('data-topicid', btn.data('topicid'))
+                            .attr('data-current-weight', btn.data('current-weight'));
+                        return clone.html();
+                    }
+                });
+            });
+
+            // Đóng popover khi click ra ngoài
+            $(document).on('click.topicWeight', function (e) {
+                if (!$(e.target).closest('[data-toggle="change-topic-weight"], .popover').length) {
+                    $('[data-toggle="change-topic-weight"]').each(function () {
+                        const pop = bootstrap.Popover.getInstance(this);
+                        if (pop) pop.hide();
+                    });
+                }
+            });
+
+            // Tăng/giảm giá trị
+            $(document).on('click', '.topic-weight-up, .topic-weight-down', function () {
+                const ipt = $(this).closest('.topic-weight-item').find('.topic-new-weight');
+                const max = parseInt(ipt.attr('max'));
+                let val = parseInt(ipt.val()) || 1;
+                val = $(this).is('.topic-weight-up') ? Math.min(val + 1, max) : Math.max(val - 1, 1);
+                ipt.val(val).removeClass('is-invalid');
+            });
+
+            // Xác nhận thay đổi thứ tự
+            $(document).on('click', '.topic-weight-ok', function () {
+                const okBtn = $(this);
+                const ipt = okBtn.closest('.topic-weight-item').find('.topic-new-weight');
+                const topicid = okBtn.attr('data-topicid');
+                const currentWeight = parseInt(okBtn.attr('data-current-weight'));
+                const newWeight = parseInt(ipt.val());
+                const max = parseInt(ipt.attr('max'));
+
+                if (!newWeight || newWeight < 1 || newWeight > max) {
+                    ipt.addClass('is-invalid');
+                    return;
+                }
+
+                $('[data-toggle="change-topic-weight"]').each(function () {
+                    const pop = bootstrap.Popover.getInstance(this);
+                    if (pop) pop.hide();
+                });
+
+                if (newWeight !== currentWeight) {
+                    const checkss = $('[data-toggle="change-topic-weight"][data-topicid="' + topicid + '"]').data('tokend');
+                    $.ajax({
+                        type: 'POST',
+                        dataType: 'json',
+                        url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=' + nv_func_name + '&nocache=' + new Date().getTime(),
+                        data: {
+                            changeweight: 1,
+                            checkss: checkss,
+                            topicid: topicid,
+                            new_weight: newWeight
+                        },
+                        success: function (respon) {
+                            if (respon.status !== 'OK') {
+                                nvToast(nv_is_change_act_confirm[2], 'error');
+                            }
+                            location.reload();
+                        },
+                        error: function (xhr, text) {
+                            nvToast(text, 'error');
+                        }
+                    });
+                }
+            });
+        }
+
+        // Hàm thực hiện xóa dòng sự kiện (hỗ trợ 2 bước khi topic còn bài viết)
+        function doDeleteTopic(topicid, checkss, force) {
+            $.ajax({
+                type: 'POST',
+                dataType: 'json',
+                url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=' + nv_func_name + '&nocache=' + new Date().getTime(),
+                data: {
+                    delete: 1,
+                    checkss: checkss,
+                    topicid: topicid,
+                    force: force ? 1 : 0
+                },
+                success: function (respon) {
+                    if (respon.status === 'OK') {
+                        location.reload();
+                    } else if (respon.status === 'confirm') {
+                        nvConfirm(respon.mess, function () {
+                            doDeleteTopic(topicid, checkss, true);
+                        });
+                    } else {
+                        nvToast(respon.mess || nv_is_del_confirm[2], 'error');
+                    }
+                },
+                error: function (xhr, text) {
+                    nvToast(text, 'error');
+                }
+            });
+        }
+
+        // Xóa dòng sự kiện
+        $('[data-toggle="delete-topic"]').on('click', function (e) {
+            e.preventDefault();
+            const btn = $(this);
+            nvConfirm(nv_is_del_confirm[0], function () {
+                doDeleteTopic(btn.data('id'), btn.data('tokend'), false);
+            });
+        });
+    }
 });
 
 $(window).on('load', function() {

@@ -709,4 +709,76 @@ class SampleDataTest extends \Codeception\Test\Unit
 
         $this->assertGreaterThan(0, $inserted, 'Không có dòng nào được insert vào bảng ' . $table . '.');
     }
+
+    /**
+     * Dữ liệu mẫu theo dòng sự kiện cho màn quản trị topics của module news
+     *
+     * Sinh 50 topic ở bảng ngôn ngữ vi với title, alias duy nhất,
+     * weight tăng tiếp từ dữ liệu hiện có để màn quản trị có đủ dữ liệu hiển thị.
+     *
+     * @group sample-data
+     */
+    public function testInsertSampleDataForNewsAdminTopics()
+    {
+        global $db, $db_config;
+
+        $table = $db_config['prefix'] . '_vi_news_topics';
+        $maxWeight = (int) $db->query('SELECT MAX(weight) FROM ' . $table)->fetchColumn();
+
+        $esc = fn (string $s) => str_replace(["\\", "'"], ["\\\\", "\\'"], $s);
+
+        $topicSeeds = [
+            ['Kinh tế', 'Dòng sự kiện về kinh tế, doanh nghiệp và thị trường', 'kinh-te'],
+            ['Chính trị', 'Theo dõi các diễn biến chính trị nổi bật trong nước và quốc tế', 'chinh-tri'],
+            ['Xã hội', 'Tin tức xã hội, dân sinh và các vấn đề cộng đồng', 'xa-hoi'],
+            ['Giáo dục', 'Cập nhật chuyển động giáo dục, tuyển sinh và trường học', 'giao-duc'],
+            ['Y tế', 'Diễn biến lĩnh vực y tế, bệnh viện và chăm sóc sức khỏe', 'y-te'],
+            ['Công nghệ', 'Tin công nghệ, AI, chuyển đổi số và sản phẩm mới', 'cong-nghe'],
+            ['Thể thao', 'Lịch thi đấu, kết quả và sự kiện thể thao đáng chú ý', 'the-thao'],
+            ['Giải trí', 'Sự kiện văn hóa, điện ảnh, âm nhạc và người nổi tiếng', 'giai-tri'],
+            ['Pháp luật', 'Thông tin pháp luật, điều tra và các vụ việc quan trọng', 'phap-luat'],
+            ['Môi trường', 'Biến đổi khí hậu, tài nguyên và các vấn đề môi trường', 'moi-truong'],
+        ];
+
+        $batchMark = 'vi-topic-' . date('YmdHis') . '-' . rand(1000, 9999);
+        $now = time();
+        $values = [];
+
+        for ($index = 1; $index <= 50; ++$index) {
+            [$baseTitle, $baseDescription, $baseAlias] = $topicSeeds[($index - 1) % count($topicSeeds)];
+
+            $weight = $maxWeight + $index;
+            $addTime = $now - rand(0, 90 * 86400);
+            $editTime = $addTime + rand(0, 10 * 86400);
+            if ($editTime > $now) {
+                $editTime = $now;
+            }
+
+            $title = $baseTitle . ' - Chủ đề mẫu ' . str_pad((string) $index, 2, '0', STR_PAD_LEFT) . ' [' . $batchMark . ']';
+            $alias = $baseAlias . '-sample-' . str_pad((string) $index, 2, '0', STR_PAD_LEFT) . '-' . $batchMark;
+            $description = $baseDescription . ' [seed ' . $index . ']';
+            $keywords = implode(', ', [$baseTitle, 'chu de mau', 'news topic', 'seed ' . $index]);
+
+            $values[] = sprintf(
+                "('%s','%s','','%s',%d,'%s',%d,%d)",
+                $esc($title),
+                $esc($alias),
+                $esc($description),
+                $weight,
+                $esc($keywords),
+                $addTime,
+                $editTime
+            );
+        }
+
+        $this->assertCount(50, $values, 'Số lượng topic mẫu tạo ra không đúng 50 bản ghi.');
+
+        $inserted = $db->exec(
+            'INSERT INTO ' . $table
+            . ' (title, alias, image, description, weight, keywords, add_time, edit_time) VALUES '
+            . implode(',', $values)
+        );
+
+        $this->assertGreaterThan(0, $inserted, 'Không có dòng nào được insert vào bảng ' . $table . '.');
+    }
 }
