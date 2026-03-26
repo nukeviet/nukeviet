@@ -23,10 +23,10 @@ $tpl->assign('OP', $op);
 
 $array_config = [];
 if ($nv_Request->isset_request('checkss', 'post')) {
-    if ($nv_Request->get_title('checkss', 'post', '') !== NV_CHECK_SESSION) {
+    if (!csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
         nv_jsonOutput([
             'status' => 'error',
-            'mess' => 'Error session!!!'
+            'mess' => $nv_Lang->getGlobal('error_checkss')
         ]);
     }
 
@@ -38,8 +38,8 @@ if ($nv_Request->isset_request('checkss', 'post')) {
 
     $sth = $db->prepare('UPDATE ' . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = '" . NV_LANG_DATA . "' AND module = '" . $module_name . "' AND config_name = :config_name");
     foreach ($array_config as $config_name => $config_value) {
-        $sth->bindParam(':config_name', $config_name, PDO::PARAM_STR, 30);
-        $sth->bindParam(':config_value', $config_value, PDO::PARAM_STR);
+        $sth->bindValue(':config_name', $config_name, PDO::PARAM_STR);
+        $sth->bindValue(':config_value', (string) $config_value, PDO::PARAM_STR);
         $sth->execute();
     }
 
@@ -56,6 +56,7 @@ $array_config = $module_config[$module_name];
 $array_config['difftimeout'] = round($array_config['difftimeout'] / 3600);
 
 $tpl->assign('DATA', $array_config);
+$tpl->assign('CHECKSS', csrf_create($csrf_key));
 
 $contents = $tpl->fetch('setting.tpl');
 

@@ -42,10 +42,9 @@ if (empty($vid)) {
     }
 
     if (!empty($is_update)) {
-        $is_update = implode(',', $is_update);
+        $ids_str = implode(', ', array_map('intval', $is_update));
 
-        $sql = 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . ' SET act=0 WHERE vid IN (' . $is_update . ')';
-        $db->query($sql);
+        $db->query('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . ' SET act=0 WHERE vid IN (' . $ids_str . ')');
 
         $nv_Cache->delMod($module_name);
     }
@@ -177,7 +176,11 @@ if (empty($vid)) {
         $acceptcm = (int) $row['acceptcm'];
         if (!empty($row['vote_one'])) {
             $is_voted = false;
-            $userlist = $db->query('SELECT voted FROM ' . NV_PREFIXLANG . '_' . $module_data . '_voted WHERE vid=' . $vid)->fetchColumn();
+            $stmt = $db->prepare('SELECT voted FROM ' . NV_PREFIXLANG . '_' . $module_data . '_voted WHERE vid = :vid');
+            $stmt->bindValue(':vid', $vid, PDO::PARAM_INT);
+            $stmt->execute();
+            $userlist = $stmt->fetchColumn();
+
             if (!empty($userlist)) {
                 if (preg_match('/\,\s*' . $user_info['userid'] . '\s*\,/', ',' . $userlist . ',')) {
                     $is_voted = true;
@@ -191,13 +194,15 @@ if (empty($vid)) {
                 $note = ($acceptcm > 1) ? $nv_Lang->getModule('voting_warning_all', $acceptcm) : $nv_Lang->getModule('voting_warning_accept1');
                 $is_error = true;
             } else {
-                $in = implode(',', $array_id);
-                $sql = 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_rows SET hitstotal = hitstotal+1 WHERE vid =' . $vid . ' AND id IN (' . $in . ')';
-                $db->query($sql);
+                $in = implode(', ', $array_id);
+                $db->query('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_rows SET hitstotal = hitstotal+1 WHERE vid = ' . $vid . ' AND id IN (' . $in . ')');
 
                 $userlist .= !empty($userlist) ? ',' . $user_info['userid'] : $user_info['userid'];
-                $sql = 'INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . '_voted (vid, voted) VALUES (' . $vid . ", '" . $userlist . "') ON DUPLICATE KEY UPDATE voted = VALUES(voted)";
-                $db->query($sql);
+
+                $stmt = $db->prepare("INSERT INTO " . NV_PREFIXLANG . '_' . $module_data . "_voted (vid, voted) VALUES (:vid, :voted) ON DUPLICATE KEY UPDATE voted = VALUES(voted)");
+                $stmt->bindValue(':vid', $vid, PDO::PARAM_INT);
+                $stmt->bindValue(':voted', $userlist, PDO::PARAM_STR);
+                $stmt->execute();
 
                 $note = $nv_Lang->getModule('okmsg');
             }
@@ -212,9 +217,8 @@ if (empty($vid)) {
                 $note = ($acceptcm > 1) ? $nv_Lang->getModule('voting_warning_all', $acceptcm) : $nv_Lang->getModule('voting_warning_accept1');
                 $is_error = true;
             } else {
-                $in = implode(',', $array_id);
-                $sql = 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_rows SET hitstotal = hitstotal+1 WHERE vid =' . $vid . ' AND id IN (' . $in . ')';
-                $db->query($sql);
+                $in = implode(', ', $array_id);
+                $db->query('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_rows SET hitstotal = hitstotal+1 WHERE vid = ' . $vid . ' AND id IN (' . $in . ')');
 
                 file_put_contents($dir . '/' . $logfile, '', LOCK_EX);
                 $note = $nv_Lang->getModule('okmsg');
@@ -222,16 +226,18 @@ if (empty($vid)) {
         }
     }
 
-    $sql = 'SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE vid = ' . $vid . ' ORDER BY id ASC';
-    $result = $db->query($sql);
+    $stmt = $db_slave->prepare('SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE vid = :vid ORDER BY id ASC');
+    $stmt->bindValue(':vid', $vid, PDO::PARAM_INT);
+    $stmt->execute();
 
     $totalvote = 0;
     $vrow = [];
 
-    while ($row2 = $result->fetch()) {
+    while ($row2 = $stmt->fetch()) {
         $totalvote += (int) $row2['hitstotal'];
         $vrow[] = $row2;
     }
+    $stmt->closeCursor();
 
     $pubtime = nv_datetime_format($row['publ_time']);
     $lang = [

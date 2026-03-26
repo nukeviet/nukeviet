@@ -26,16 +26,21 @@ $tpl->assign('MODULE_NAME', $module_name);
 
 $array_row = [];
 
+$stmt_sum = $db->prepare('SELECT SUM(hitstotal) FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE vid = :vid');
+
 while ($row = $result->fetch()) {
-    $sql_sum = 'SELECT SUM(hitstotal) FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE vid=' . $row['vid'];
-    $totalvote = $db->query($sql_sum)->fetchColumn();
+    $stmt_sum->bindValue(':vid', $row['vid'], PDO::PARAM_INT);
+    $stmt_sum->execute();
+    $totalvote = $stmt_sum->fetchColumn();
+    $stmt_sum->closeCursor();
     $array_row[] = [
         'status' => $row['act'],
         'vid' => $row['vid'],
         'question' => $row['question'],
         'totalvote' => $totalvote,
         'url_edit' => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=content&amp;vid=' . $row['vid'],
-        'checksess' => md5($row['vid'] . NV_CHECK_SESSION)
+        'checksess' => csrf_create($admin_info['admin_id'] . '_' . $module_name . '_change_act_' . $row['vid']),
+        'checksess_del' => csrf_create($admin_info['admin_id'] . '_' . $module_name . '_del_' . $row['vid'])
     ];
 }
 if (empty($array_row)) {

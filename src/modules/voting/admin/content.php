@@ -19,7 +19,10 @@ $vid = $nv_Request->get_int('vid', 'post,get');
 $groups_list = nv_groups_list();
 
 if (!empty($vid)) {
-    $exists = $db->query('SELECT COUNT(*) FROM ' . NV_PREFIXLANG . '_' . $module_data . ' WHERE vid=' . $vid)->fetchColumn();
+    $stmt = $db->prepare('SELECT COUNT(*) FROM ' . NV_PREFIXLANG . '_' . $module_data . ' WHERE vid = :vid');
+    $stmt->bindValue(':vid', $vid, PDO::PARAM_INT);
+    $stmt->execute();
+    $exists = $stmt->fetchColumn();
     if (!$exists) {
         nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
     }
@@ -123,32 +126,54 @@ if ($nv_Request->isset_request('save', 'post')) {
     $active_captcha = $nv_Request->get_int('active_captcha', 'post', 0) ? 1 : 0;
 
     if (empty($vid)) {
-        $sql = 'INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . ' (
+        $stmt = $db->prepare('INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . ' (
             question, link, acceptcm, active_captcha, admin_id, groups_view, publ_time, exp_time, act, vote_one
         ) VALUES (
-            ' . $db->quote($question) . ', ' . $db->quote($link) . ', ' . $maxoption . ', ' . $active_captcha . ', ' . $admin_info['admin_id'] . ', ' . $db->quote($groups_view) . ', 0, 0, 1, ' . $vote_one . '
-        )';
-        $vid = $db->insert_id($sql, 'vid');
+            :question, :link, :acceptcm, :active_captcha, :admin_id, :groups_view, 0, 0, 1, :vote_one
+        )');
+        $stmt->bindValue(':question', $question, PDO::PARAM_STR);
+        $stmt->bindValue(':link', $link, PDO::PARAM_STR);
+        $stmt->bindValue(':acceptcm', $maxoption, PDO::PARAM_INT);
+        $stmt->bindValue(':active_captcha', $active_captcha, PDO::PARAM_INT);
+        $stmt->bindValue(':admin_id', $admin_info['admin_id'], PDO::PARAM_INT);
+        $stmt->bindValue(':groups_view', $groups_view, PDO::PARAM_STR);
+        $stmt->bindValue(':vote_one', $vote_one, PDO::PARAM_INT);
+        $stmt->execute();
+        $vid = (int) $db->lastInsertId();
         nv_insert_logs(NV_LANG_DATA, $module_name, $nv_Lang->getModule('voting_add'), $question, $admin_info['userid']);
     }
 
     if ($vid > 0) {
         $maxoption_data = 0;
+        $stmt_update_row = $db->prepare('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_rows SET title = :title, url = :url WHERE id = :id AND vid = :vid');
+        $stmt_delete_row = $db->prepare('DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE id = :id AND vid = :vid');
+
         foreach ($array_answervote as $id => $title) {
             if (!empty($title)) {
                 $url = $array_urlvote[$id];
-                $db->query('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_rows SET title = ' . $db->quote($title) . ', url = ' . $db->quote($url) . ' WHERE id =' . (int) $id . ' AND vid =' . $vid);
+                $stmt_update_row->bindValue(':title', $title, PDO::PARAM_STR);
+                $stmt_update_row->bindValue(':url', $url, PDO::PARAM_STR);
+                $stmt_update_row->bindValue(':id', (int) $id, PDO::PARAM_INT);
+                $stmt_update_row->bindValue(':vid', $vid, PDO::PARAM_INT);
+                $stmt_update_row->execute();
                 ++$maxoption_data;
             } else {
-                $db->query('DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE id =' . (int) $id . ' AND vid =' . $vid);
+                $stmt_delete_row->bindValue(':id', (int) $id, PDO::PARAM_INT);
+                $stmt_delete_row->bindValue(':vid', $vid, PDO::PARAM_INT);
+                $stmt_delete_row->execute();
             }
         }
+
+        $stmt_insert_row = $db->prepare('INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . '_rows (vid, title, url, hitstotal) VALUES (:vid, :title, :url, 0)');
 
         foreach ($answervotenews as $key => $title) {
             if (!empty($title)) {
                 $url = $urlvotenews[$key];
-                $sql = 'INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . '_rows (vid, title, url, hitstotal) VALUES (' . $db->quote($vid) . ', ' . $db->quote($title) . ', ' . $db->quote($url) . ', 0)';
-                if ($db->insert_id($sql, 'id')) {
+                $stmt_insert_row->bindValue(':vid', $vid, PDO::PARAM_INT);
+                $stmt_insert_row->bindValue(':title', $title, PDO::PARAM_STR);
+                $stmt_insert_row->bindValue(':url', $url, PDO::PARAM_STR);
+                $stmt_insert_row->execute();
+                if ($db->lastInsertId()) {
                     ++$maxoption_data;
                 }
             }
@@ -164,13 +189,25 @@ if ($nv_Request->isset_request('save', 'post')) {
             $act = 1;
         }
 
-        $sql = 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . ' SET
-            question=' . $db->quote($question) . ', link=' . $db->quote($link) . ', acceptcm = ' . $maxoption . ', active_captcha=' . $active_captcha . ',
-            admin_id = ' . $admin_info['admin_id'] . ', groups_view = ' . $db->quote($groups_view) . ',
-            publ_time=' . $begindate . ', exp_time=' . $enddate . ', act=' . $act . ', vote_one=' . $vote_one . '
-        WHERE vid =' . $vid;
+        $stmt = $db->prepare('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . ' SET
+            question = :question, link = :link, acceptcm = :acceptcm, active_captcha = :active_captcha,
+            admin_id = :admin_id, groups_view = :groups_view,
+            publ_time = :publ_time, exp_time = :exp_time, act = :act, vote_one = :vote_one
+        WHERE vid = :vid');
+        $stmt->bindValue(':question', $question, PDO::PARAM_STR);
+        $stmt->bindValue(':link', $link, PDO::PARAM_STR);
+        $stmt->bindValue(':acceptcm', $maxoption, PDO::PARAM_INT);
+        $stmt->bindValue(':active_captcha', $active_captcha, PDO::PARAM_INT);
+        $stmt->bindValue(':admin_id', $admin_info['admin_id'], PDO::PARAM_INT);
+        $stmt->bindValue(':groups_view', $groups_view, PDO::PARAM_STR);
+        $stmt->bindValue(':publ_time', $begindate, PDO::PARAM_INT);
+        $stmt->bindValue(':exp_time', $enddate, PDO::PARAM_INT);
+        $stmt->bindValue(':act', $act, PDO::PARAM_INT);
+        $stmt->bindValue(':vote_one', $vote_one, PDO::PARAM_INT);
+        $stmt->bindValue(':vid', $vid, PDO::PARAM_INT);
+        $stmt->execute();
 
-        if ($db->query($sql)) {
+        if ($stmt->rowCount() >= 0) {
             nv_insert_logs(NV_LANG_DATA, $module_name, $nv_Lang->getModule('voting_edit'), $question, $admin_info['userid']);
             $nv_Cache->delMod($module_name);
             nv_jsonOutput([
@@ -193,18 +230,22 @@ $array_answervote = [];
 $array_urlvote = [];
 
 if ($vid > 0) {
-    $rowvote = $db->query('SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . ' WHERE vid=' . $vid)->fetch();
+    $stmt = $db->prepare('SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . ' WHERE vid = :vid');
+    $stmt->bindValue(':vid', $vid, PDO::PARAM_INT);
+    $stmt->execute();
+    $rowvote = $stmt->fetch();
+    $stmt->closeCursor();
 
-    $sql = 'SELECT id, title, url FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE vid=' . $vid . ' ORDER BY id ASC';
-    $result = $db->query($sql);
+    $stmt = $db->prepare('SELECT id, title, url FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE vid = :vid ORDER BY id ASC');
+    $stmt->bindValue(':vid', $vid, PDO::PARAM_INT);
+    $stmt->execute();
 
-    while ($_scratch = $result->fetch(3)) {
-        [$id, $title, $url] = $_scratch;
-        unset($_scratch);
-        $array_answervote[$id] = $title;
-        $array_urlvote[$id] = $url;
+    while ($row = $stmt->fetch()) {
+        $array_answervote[$row['id']] = $row['title'];
+        $array_urlvote[$row['id']] = $row['url'];
         ++$maxoption;
     }
+    $stmt->closeCursor();
     if ($maxoption > 1) {
         $maxoption -= 1;
     }

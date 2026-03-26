@@ -15,7 +15,7 @@
             </div>
             <div class="row">
                 <div class="col-sm-8 col-lg-6 col-xxl-5 offset-lg-3 offset-sm-5">
-                    <input type="hidden" name="checkss" value="{$smarty.const.NV_CHECK_SESSION}">
+                    <input type="hidden" name="checkss" value="{$CHECKSS}">
                     <button type="submit" class="btn btn-primary">{$LANG->getModule('config_save')}</button>
                 </div>
             </div>
