@@ -137,7 +137,7 @@ $(function() {
             url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=siteinfo&' + nv_fc_variable + '=notification&nocache=' + new Date().getTime(),
             data: {
                 notification_reset: 1,
-                checksess: $('body').data('checksess')
+                checkss: $('[data-checkss]:last', ctn).data('checkss')
             },
             success: function(res) {
                 $('.loader', ctn).addClass('d-none');
@@ -174,7 +174,7 @@ $(function() {
             data: {
                 toggle: 1,
                 id: noti.data('id'),
-                checksess: $('body').data('checksess')
+                checkss: $('[data-checkss]:last', ctn).data('checkss')
             },
             dataType: 'json',
             success: function(data) {
@@ -230,7 +230,7 @@ $(function() {
             data: {
                 delete: 1,
                 id: noti.data('id'),
-                checksess: $('body').data('checksess')
+                checkss: $('[data-checkss]:last', ctn).data('checkss')
             },
             dataType: 'json',
             success: function(data) {
@@ -291,7 +291,7 @@ $(function() {
                     toggle: 1,
                     direct_view: 1,
                     id: noti.data('id'),
-                    checksess: $('body').data('checksess')
+                    checkss: $('[data-checkss]:last', ctn).data('checkss')
                 },
                 dataType: 'json',
                 success: function(data) {
