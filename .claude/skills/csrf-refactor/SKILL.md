@@ -1,7 +1,7 @@
 ---
 name: csrf-refactor
 description: Refactor CSRF cho module
-argument-hint: <module>
+argument-hint: <module> [admin|funcs]
 disable-model-invocation: false
 allowed-tools: Read, Grep, Glob, Edit, Write, Bash
 ---
@@ -12,10 +12,10 @@ allowed-tools: Read, Grep, Glob, Edit, Write, Bash
 Sử dụng Tiếng Việt trong mọi phản hồi và tài liệu.
 
 ## 1. Xác định phạm vi mục tiêu
-Luạt chủ mới: tuỳ theo đầu vào, xác định phạm vi cần rà soát.
+Tuỳ theo đầu vào, xác định phạm vi cần rà soát.
 
 - **Toàn bộ Module**: `/csrf-refactor [module]` (Mặc định rà soát mọi file trong thư mục module).
-- **Theo phân vùng**: `/csrf-refactor [module] [admin|site]` (Chỉ tập trung vào các thư mục tương ứng).
+- **Theo phân vùng**: `/csrf-refactor [module] [admin|funcs]` (Chỉ tập trung vào các thư mục tương ứng).
 - **Tệp tin cụ thể**: `/csrf-refactor [path/to/file.php]` (Chỉ rà soát tệp được chỉ định).
 - *Lưu ý*: Nếu người dùng không nhập tham số, AI sẽ tự động lấy thông tin từ tệp tin đang mở làm phạm vi.
 

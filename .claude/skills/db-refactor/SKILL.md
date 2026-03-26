@@ -1,7 +1,7 @@
 ---
 name: db-refactor
 description: Chuyển đổi các lệnh truy vấn SQL từ ghép chuỗi sang Prepared Statements (PDO) trong NukeViet 5
-argument-hint: <path/to/file.php> hoặc <module_name>
+argument-hint: <module> [admin|funcs]
 disable-model-invocation: false
 allowed-tools: Read, Grep, Glob, Edit, Write, Bash
 ---
@@ -11,13 +11,17 @@ allowed-tools: Read, Grep, Glob, Edit, Write, Bash
 Chuẩn hóa SQL sang PDO Prepared Statements. Phản hồi bằng **Tiếng Việt**.
 
 ## Bước 1 — Xác định phạm vi & quét
-- Tham số là file → xử lý file đó. Là module → toàn bộ `src/admin/{module}/` và `src/modules/{module}/` nếu có
-- Nếu là toàn bộ thư mục (vd: src/admin): Liệt kê tất cả module con, quét và refactor từng module tuần tự để tránh xung đột.
-- Quét dấu hiệu cần refactor:
-```bash
-grep -rn '\$db->query\|\$db->exec' <path> --include="*.php"
-```
-- Nếu là module: Phân tích toàn bộ file trong module để sửa đồng thời, tránh quét lặp lại.
+Tuỳ theo đầu vào, xác định phạm vi cần rà soát.
+
+- **Toàn bộ Module**: `/db-refactor [module]` (Mặc định rà soát mọi file trong thư mục module).
+- **Theo phân vùng**: `/db-refactor [module] [admin|funcs]` (Chỉ tập trung vào các thư mục tương ứng).
+- **Tệp tin cụ thể**: `/db-refactor [path/to/file.php]` (Chỉ rà soát tệp được chỉ định).
+- *Lưu ý*: Nếu người dùng không nhập tham số, AI sẽ tự động lấy thông tin từ tệp tin đang mở làm phạm vi.
+
+Với mỗi module/phân vùng, tìm theo ưu tiên:
+1. `src/modules/{module}/`
+2. `src/admin/{module}/`
+*Nếu không thấy -> Báo lỗi và dừng.*
 
 ## Bước 2 — Quy tắc chuyển đổi
 
@@ -27,7 +31,10 @@ grep -rn '\$db->query\|\$db->exec' <path> --include="*.php"
   - `$db_slave`: **Bắt buộc** dùng cho các lệnh `SELECT` ở Frontend/Block (truy cập công cộng) để tối ưu hiệu năng.
 - **Không tham số hóa:** Hằng số bảng (`NV_PREFIXLANG`, `$db_config['prefix']`, `NV_USERS_GLOBALTABLE`, v.v.) — đây là tên bảng tĩnh.
 - **Loại bỏ Query Builder:** Hủy bỏ hoàn toàn cấu trúc Query Builder (vd: `$db->sqlreset()->select(...)->from(...)`) và chuyển sang dùng chuỗi SQL chuẩn kết hợp PDO Prepared Statements (`$db->prepare('SELECT ...')`) để tối ưu hóa, giữ code đồng nhất và thân thiện với lập trình viên mới.
-- **Định dạng chuỗi:** Sử dụng dấu ngoặc kép `""` bao ngoài câu lệnh SQL **chỉ khi** câu lệnh đó chứa các giá trị tĩnh được bao bởi dấu nháy đơn `'` (ví dụ: `$db->prepare("SELECT ... WHERE type = 'admin'")`). Việc này giúp tránh dùng ký tự thoát (escape) `\'`. Nếu SQL không chứa nháy đơn, hãy ưu tiên dùng dấu nháy đơn `'` bao ngoài để tối ưu hiệu năng PHP.
+- **Định dạng chuỗi:** Ưu tiên dùng dấu nháy đơn `'` bao ngoài chuỗi SQL để tối ưu hiệu năng. Tuy nhiên, nếu lệnh SQL chứa giá trị tĩnh được bao bởi nháy đơn `'` (ví dụ: `WHERE status = 'active'`), hãy dùng dấu nháy kép `""` bao ngoài để tránh dùng ký tự thoát `\'`.
+  - **Trường hợp ghép chuỗi (Concatenation):** Khi ghép chuỗi với hằng số bảng (vd: `NV_PREFIXLANG`), nếu phần chuỗi tĩnh tiếp theo có chứa nháy đơn, hãy dùng dấu nháy kép `""` bao ngoài toàn bộ các đoạn chuỗi để giữ code đồng nhất và dễ đọc.
+  - ❌ Sai: `$db->prepare('UPDATE ' . NV_PREFIXLANG . "_table SET type='admin'")`
+  - ✅ Đúng: `$db->prepare("UPDATE " . NV_PREFIXLANG . "_table SET type='admin'")`
 
 ### Trường hợp SQL tĩnh, hoặc không có tham số
 Giữ nguyên `$db->query()` / `$db->exec()` khi câu lệnh không chứa biến truyền vào (chỉ có hằng số bảng hệ thống):

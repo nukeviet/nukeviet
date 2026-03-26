@@ -5,7 +5,7 @@
 </div>
 {/if}
 {else}
-<ul class="list-unstyled">
+<ul class="list-unstyled" data-checkss="{$CHECKSS}">
     {foreach from=$DATA item=row}
     <li class="notification border-bottom position-relative{if not $row.view} notification-unread{/if}" data-id="{$row.id}">
         <div class="tools d-flex align-items-center">

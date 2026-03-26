@@ -97,9 +97,12 @@ function get_theme_config()
 {
     global $db, $admin_info;
 
-    $sql = "SELECT config_name, config_value FROM " . NV_AUTHORS_GLOBALTABLE . "_vars WHERE admin_id=" . $admin_info['admin_id'] . "
-    AND theme=" . $db->quote($admin_info['admin_theme']) . " AND (lang='all' OR lang=" . $db->quote(NV_LANG_DATA) . ")";
-    $theme_config = $db->query($sql)->fetchAll(PDO::FETCH_KEY_PAIR);
+    $stmt = $db->prepare("SELECT config_name, config_value FROM " . NV_AUTHORS_GLOBALTABLE . "_vars WHERE admin_id = :admin_id AND theme = :theme AND (lang = 'all' OR lang = :lang)");
+    $stmt->bindValue(':admin_id', $admin_info['admin_id'], PDO::PARAM_INT);
+    $stmt->bindValue(':theme', $admin_info['admin_theme'], PDO::PARAM_STR);
+    $stmt->bindValue(':lang', NV_LANG_DATA, PDO::PARAM_STR);
+    $stmt->execute();
+    $theme_config = $stmt->fetchAll(PDO::FETCH_KEY_PAIR);
 
     if (!isset($theme_config['grid_widgets'])) {
         if (defined('NV_IS_SPADMIN')) {
@@ -363,30 +366,47 @@ function save_theme_config($config_name, $config_value, bool $lang = true)
         $config_value = [$config_value];
     }
 
+    $sql_select = 'SELECT * FROM ' . NV_AUTHORS_GLOBALTABLE . '_vars WHERE admin_id = :admin_id AND theme = :theme AND config_name = :config_name';
+    if ($lang) {
+        $sql_select .= ' AND lang = :lang';
+    }
+    $stmt_select = $db->prepare($sql_select);
+
+    $sql_insert = 'INSERT INTO ' . NV_AUTHORS_GLOBALTABLE . '_vars (admin_id' . ($lang ? ', lang' : '') . ', theme, config_name, config_value) VALUES (:admin_id' . ($lang ? ', :lang' : '') . ', :theme, :config_name, :config_value)';
+    $stmt_insert = $db->prepare($sql_insert);
+
+    $stmt_update = $db->prepare('UPDATE ' . NV_AUTHORS_GLOBALTABLE . '_vars SET config_value = :config_value WHERE id = :id');
+
     foreach ($config_name as $key => $config_name_i) {
         $config_value_i = $config_value[$key];
         if (is_array($config_value_i)) {
             $config_value_i = json_encode($config_value_i, NV_JSON_ENCODE);
         }
 
-        $sql = "SELECT * FROM " . NV_AUTHORS_GLOBALTABLE . "_vars WHERE admin_id=" . $admin_info['admin_id'] . "
-        AND theme=" . $db->quote($admin_info['admin_theme']) . " AND config_name=" . $db->quote($config_name_i);
+        $stmt_select->bindValue(':admin_id', $admin_info['admin_id'], PDO::PARAM_INT);
+        $stmt_select->bindValue(':theme', $admin_info['admin_theme'], PDO::PARAM_STR);
+        $stmt_select->bindValue(':config_name', $config_name_i, PDO::PARAM_STR);
         if ($lang) {
-            $sql .= " AND lang=" . $db->quote(NV_LANG_DATA);
+            $stmt_select->bindValue(':lang', NV_LANG_DATA, PDO::PARAM_STR);
         }
-        $row = $db->query($sql)->fetch();
+        $stmt_select->execute();
+        $row = $stmt_select->fetch();
+        $stmt_select->closeCursor();
 
         if (empty($row)) {
-            $sql = "INSERT INTO " . NV_AUTHORS_GLOBALTABLE . "_vars (
-                admin_id" . ($lang ? ', lang' : '') . ", theme, config_name, config_value
-            ) VALUES (
-                " . $admin_info['admin_id']. ($lang ? (', ' . $db->quote(NV_LANG_DATA)) : '') . ", " . $db->quote($admin_info['admin_theme']) . ",
-                " . $db->quote($config_name_i) . ", " . $db->quote($config_value_i) . "
-            )";
+            $stmt_insert->bindValue(':admin_id', $admin_info['admin_id'], PDO::PARAM_INT);
+            if ($lang) {
+                $stmt_insert->bindValue(':lang', NV_LANG_DATA, PDO::PARAM_STR);
+            }
+            $stmt_insert->bindValue(':theme', $admin_info['admin_theme'], PDO::PARAM_STR);
+            $stmt_insert->bindValue(':config_name', $config_name_i, PDO::PARAM_STR);
+            $stmt_insert->bindValue(':config_value', $config_value_i, PDO::PARAM_STR);
+            $stmt_insert->execute();
         } else {
-            $sql = "UPDATE " . NV_AUTHORS_GLOBALTABLE . "_vars SET config_value=" . $db->quote($config_value_i) . " WHERE id=" . $row['id'];
+            $stmt_update->bindValue(':config_value', $config_value_i, PDO::PARAM_STR);
+            $stmt_update->bindValue(':id', $row['id'], PDO::PARAM_INT);
+            $stmt_update->execute();
         }
-        $db->query($sql);
     }
 }
 

@@ -57,10 +57,17 @@ if ($nv_Request->isset_request('notification_reset', 'post')) {
         nv_htmlOutput('NO');
     }
     nv_insert_logs(NV_LANG_DATA, $module_name, 'READ_ALL_NOTIFICATION', '', $admin_info['userid']);
-    $sql = 'UPDATE ' . NV_NOTIFICATION_GLOBALTABLE . ' SET view=1
-    WHERE view=0 AND (area = 1 OR area = 2) AND module IN(\'' . implode("', '", $allowed_mods) . '\') AND language=' . $db->quote(NV_LANG_DATA) .
-    ' AND ' . $sql_lev_admin;
-    $db->query($sql);
+    $values = array_values($allowed_mods);
+    $placeholders = implode(', ', array_map(fn($k) => ':module' . $k, array_keys($values)));
+
+    $sql = 'UPDATE ' . NV_NOTIFICATION_GLOBALTABLE . ' SET view = 1
+    WHERE view = 0 AND (area = 1 OR area = 2) AND module IN (' . $placeholders . ') AND language = :language AND ' . $sql_lev_admin;
+    $stmt = $db->prepare($sql);
+    foreach ($values as $k => $v) {
+        $stmt->bindValue(':module' . $k, $v, PDO::PARAM_STR);
+    }
+    $stmt->bindValue(':language', NV_LANG_DATA, PDO::PARAM_STR);
+    $stmt->execute();
     nv_htmlOutput('OK');
 }
 
@@ -71,9 +78,18 @@ function get_unread_notification()
 {
     global $db, $allowed_mods, $sql_lev_admin;
 
-    $sql = 'SELECT COUNT(id) FROM ' . NV_NOTIFICATION_GLOBALTABLE . ' WHERE language="' . NV_LANG_DATA . '"
-    AND (area = 1 OR area = 2) AND view=0 AND module IN(\'' . implode("', '", $allowed_mods) . '\') AND ' . $sql_lev_admin;
-    $count = (int) $db->query($sql)->fetchColumn();
+    $values = array_values($allowed_mods);
+    $placeholders = implode(', ', array_map(fn($k) => ':module' . $k, array_keys($values)));
+
+    $sql = 'SELECT COUNT(id) FROM ' . NV_NOTIFICATION_GLOBALTABLE . ' WHERE language = :language
+    AND (area = 1 OR area = 2) AND view = 0 AND module IN (' . $placeholders . ') AND ' . $sql_lev_admin;
+    $stmt = $db->prepare($sql);
+    foreach ($values as $k => $v) {
+        $stmt->bindValue(':module' . $k, $v, PDO::PARAM_STR);
+    }
+    $stmt->bindValue(':language', NV_LANG_DATA, PDO::PARAM_STR);
+    $stmt->execute();
+    $count = (int) $stmt->fetchColumn();
 
     return [
         'count' => $count,
@@ -105,10 +121,18 @@ if ($nv_Request->isset_request('delete', 'post')) {
 
     nv_insert_logs(NV_LANG_DATA, $module_name, 'DELETE_NOTIFICATION', json_encode($ids, NV_JSON_ENCODE), $admin_info['userid']);
 
+    $values = array_values($allowed_mods);
+    $placeholders = implode(', ', array_map(fn($k) => ':module' . $k, array_keys($values)));
+
+    $stmt = $db->prepare('DELETE FROM ' . NV_NOTIFICATION_GLOBALTABLE . ' WHERE id = :id AND module IN (' . $placeholders . ') AND (area = 1 OR area = 2) AND language = :language AND ' . $sql_lev_admin);
+    foreach ($values as $k => $v) {
+        $stmt->bindValue(':module' . $k, $v, PDO::PARAM_STR);
+    }
+    $stmt->bindValue(':language', NV_LANG_DATA, PDO::PARAM_STR);
+
     foreach ($ids as $id) {
-        $sql = 'DELETE FROM ' . NV_NOTIFICATION_GLOBALTABLE . '
-        WHERE id=' . $id . ' AND module IN(\'' . implode("', '", $allowed_mods) . '\') AND (area = 1 OR area = 2) AND language=\'' . NV_LANG_DATA . '\' AND ' . $sql_lev_admin;
-        if ($db->exec($sql)) {
+        $stmt->bindValue(':id', $id, PDO::PARAM_INT);
+        if ($stmt->execute()) {
             $respon['error'] = 0;
         }
     }
@@ -125,6 +149,7 @@ if ($nv_Request->isset_request('toggle', 'post')) {
         'view' => null
     ];
     if (!csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
+        $respon['message'] = $nv_Lang->getGlobal('error_checkss');
         nv_jsonOutput($respon);
     }
 
@@ -139,13 +164,24 @@ if ($nv_Request->isset_request('toggle', 'post')) {
         $view = 'IF(view=0, 1, 0)';
     }
 
+    $values = array_values($allowed_mods);
+    $placeholders = implode(', ', array_map(fn($k) => ':module' . $k, array_keys($values)));
+
+    $stmt = $db->prepare('UPDATE ' . NV_NOTIFICATION_GLOBALTABLE . ' SET view = ' . $view . ' WHERE id = :id AND module IN (' . $placeholders . ') AND (area = 1 OR area = 2) AND language = :language AND ' . $sql_lev_admin);
+    foreach ($values as $k => $v) {
+        $stmt->bindValue(':module' . $k, $v, PDO::PARAM_STR);
+    }
+    $stmt->bindValue(':language', NV_LANG_DATA, PDO::PARAM_STR);
+
+    $stmt2 = $db->prepare('SELECT view FROM ' . NV_NOTIFICATION_GLOBALTABLE . ' WHERE id = :id');
+
     foreach ($ids as $id) {
-        $sql = 'UPDATE ' . NV_NOTIFICATION_GLOBALTABLE . ' SET view=' . $view . '
-        WHERE id=' . $id . ' AND module IN(\'' . implode("', '", $allowed_mods) . '\') AND (area = 1 OR area = 2) AND language=\'' . NV_LANG_DATA . '\' AND ' . $sql_lev_admin;
-        if ($db->exec($sql) or $direct_view != -1) {
-            $sql = "SELECT view FROM " . NV_NOTIFICATION_GLOBALTABLE . " WHERE id=" . $id;
+        $stmt->bindValue(':id', $id, PDO::PARAM_INT);
+        if ($stmt->execute() or $direct_view != -1) {
+            $stmt2->bindValue(':id', $id, PDO::PARAM_INT);
+            $stmt2->execute();
             $respon['error'] = 0;
-            $respon['view'] = intval($db->query($sql)->fetchColumn());
+            $respon['view'] = intval($stmt2->fetchColumn());
         }
     }
 
@@ -158,7 +194,10 @@ $last_id = $nv_Request->get_int('last_id', 'get', 0);
 $is_ajax = $nv_Request->isset_request('ajax', 'post,get');
 $base_url = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op;
 
-$where = 'language = "' . NV_LANG_DATA . '" AND (area = 1 OR area = 2) AND module IN(\'' . implode("', '", $allowed_mods) . '\') AND ' . $sql_lev_admin;
+$values = array_values($allowed_mods);
+$placeholders = implode(', ', array_map(fn($k) => ':module' . $k, array_keys($values)));
+
+$where = 'language = :language AND (area = 1 OR area = 2) AND module IN (' . $placeholders . ') AND ' . $sql_lev_admin;
 
 // Ajax lấy số thông báo bằng cách lấy dần từ id cuối, không phân trang
 if (!$is_ajax) {
@@ -169,7 +208,7 @@ if (!$is_ajax) {
     $per_page = 10;
 }
 if ($last_id > 0) {
-    $where .= ' AND id<' . $last_id;
+    $where .= ' AND id < :last_id';
 }
 
 $array_data = [];
@@ -181,28 +220,45 @@ if ($array_search['v'] < 0 or $array_search['v'] > 2 or $is_ajax) {
 }
 if ($array_search['v']) {
     $base_url .= '&amp;v=' . $array_search['v'];
-    $where .= ' AND view=' . ($array_search['v'] - 1);
+    $where .= ' AND view = :view';
 }
 
-$db->sqlreset()
-    ->select('COUNT(*)')
-    ->from(NV_NOTIFICATION_GLOBALTABLE)
-    ->where($where);
+$sql = 'SELECT COUNT(*) FROM ' . NV_NOTIFICATION_GLOBALTABLE . ' WHERE ' . $where;
+$stmt = $db->prepare($sql);
+foreach ($values as $k => $v) {
+    $stmt->bindValue(':module' . $k, $v, PDO::PARAM_STR);
+}
+$stmt->bindValue(':language', NV_LANG_DATA, PDO::PARAM_STR);
+if ($last_id > 0) {
+    $stmt->bindValue(':last_id', $last_id, PDO::PARAM_INT);
+}
+if ($array_search['v']) {
+    $stmt->bindValue(':view', $array_search['v'] - 1, PDO::PARAM_INT);
+}
+$stmt->execute();
+$all_pages = $stmt->fetchColumn();
 
-$all_pages = $db->query($db->sql())
-    ->fetchColumn();
-
-$db->select('*')
-    ->order('id DESC')
-    ->limit($per_page);
-
+$sql = 'SELECT * FROM ' . NV_NOTIFICATION_GLOBALTABLE . ' WHERE ' . $where . ' ORDER BY id DESC LIMIT ' . $per_page;
 if (!$last_id) {
-    $db->offset(($page - 1) * $per_page);
+    $sql .= ' OFFSET ' . (($page - 1) * $per_page);
 }
+$stmt = $db->prepare($sql);
+foreach ($values as $k => $v) {
+    $stmt->bindValue(':module' . $k, $v, PDO::PARAM_STR);
+}
+$stmt->bindValue(':language', NV_LANG_DATA, PDO::PARAM_STR);
+if ($last_id > 0) {
+    $stmt->bindValue(':last_id', $last_id, PDO::PARAM_INT);
+}
+if ($array_search['v']) {
+    $stmt->bindValue(':view', $array_search['v'] - 1, PDO::PARAM_INT);
+}
+$stmt->execute();
 
-$result = $db->query($db->sql());
+$stmt_cron = $db->prepare('SELECT ' . NV_LANG_DATA . '_cron_name FROM ' . $db_config['dbsystem'] . '.' . NV_CRONJOBS_GLOBALTABLE . ' WHERE id = :id');
+$stmt_user = $db->prepare('SELECT username, first_name, last_name, photo FROM ' . NV_USERS_GLOBALTABLE . ' WHERE userid = :userid');
 
-while ($data = $result->fetch()) {
+while ($data = $stmt->fetch()) {
     if (isset($admin_mods[$data['module']]) or isset($site_mods[$data['module']])) {
         $mod = $data['module'];
         $data['content'] = !empty($data['content']) ? unserialize($data['content'], NV_UNSERIALIZE_SAFE) : '';
@@ -218,7 +274,9 @@ while ($data = $result->fetch()) {
 
         if ($data['module'] == 'settings') {
             if ($data['type'] == 'auto_deactive_cronjobs') {
-                $cron_title = $db->query('SELECT ' . NV_LANG_DATA . '_cron_name FROM ' . $db_config['dbsystem'] . '.' . NV_CRONJOBS_GLOBALTABLE . ' WHERE id=' . (int) $data['content']['cron_id'])->fetchColumn();
+                $stmt_cron->bindValue(':id', $data['content']['cron_id'], PDO::PARAM_INT);
+                $stmt_cron->execute();
+                $cron_title = $stmt_cron->fetchColumn();
                 $data['title'] = $nv_Lang->getModule('notification_cronjobs_auto_deactive', $cron_title);
                 $data['link'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $data['module'] . '&amp;' . NV_OP_VARIABLE . '=cronjobs';
             } elseif ($data['type'] == 'sendmail_failure') {
@@ -233,7 +291,10 @@ while ($data = $result->fetch()) {
         // Thông báo từ các module ngoài site
         if (isset($site_mods[$data['module']]) and file_exists(NV_ROOTDIR . '/modules/' . $site_mods[$data['module']]['module_file'] . '/notification.php')) {
             if ($data['send_from'] > 0) {
-                $user = $db->query('SELECT username, first_name, last_name, photo FROM ' . NV_USERS_GLOBALTABLE . ' WHERE userid = ' . (int) $data['send_from'])->fetch();
+                $stmt_user->bindValue(':userid', $data['send_from'], PDO::PARAM_INT);
+                $stmt_user->execute();
+                $user = $stmt_user->fetch();
+                $stmt_user->closeCursor();
                 if ($user) {
                     $data['send_from'] = nv_show_name_user($user['first_name'], $user['last_name'], $user['username']);
                 } else {
@@ -263,6 +324,7 @@ while ($data = $result->fetch()) {
         }
     }
 }
+$stmt->closeCursor();
 
 // Danh sách dạng ajax
 if ($is_ajax) {
