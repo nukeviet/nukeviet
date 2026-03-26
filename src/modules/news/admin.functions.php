@@ -404,65 +404,6 @@ function nv_show_cat_list($parentid = 0)
 }
 
 /**
- * nv_show_topics_list()
- *
- * @param mixed $page
- */
-function nv_show_topics_list($page = 1)
-{
-    global $db_slave, $module_name, $module_data, $module_config, $global_config, $module_file, $module_info;
-
-    $per_page = $module_config[$module_name]['per_page'];
-    $db_slave->sqlreset()
-        ->select('COUNT(*)')
-        ->from(NV_PREFIXLANG . '_' . $module_data . '_topics');
-
-    $num_items = $db_slave->query($db_slave->sql())->fetchColumn();
-    $max_height = $page * $per_page;
-    if ($max_height > $num_items) {
-        $max_height = $num_items;
-    }
-
-    $db_slave->select('*')
-        ->order('weight ASC')
-        ->limit($per_page)
-        ->offset(($page - 1) * $per_page);
-    $_array_topic = $db_slave->query($db_slave->sql())->fetchAll();
-    $num = count($_array_topic);
-
-    if ($num > 0) {
-        $xtpl = new XTemplate('topics_list.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-        $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
-        $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
-        $xtpl->assign('TOTAL', $num_items);
-        foreach ($_array_topic as $row) {
-            $numnews = $db_slave->query('SELECT COUNT(*) FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows where topicid=' . $row['topicid'])->fetchColumn();
-
-            $xtpl->assign('ROW', [
-                'weight' => $row['weight'],
-                'topicid' => $row['topicid'],
-                'description' => $row['description'],
-                'title' => $row['title'],
-                'link' => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=topicsnews&amp;topicid=' . $row['topicid'],
-                'linksite' => NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $module_info['alias']['topic'] . '/' . $row['alias'],
-                'numnews' => $numnews,
-                'url_edit' => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=topics&amp;topicid=' . $row['topicid'] . '#edit'
-            ]);
-
-            $xtpl->parse('main.loop');
-        }
-
-        $xtpl->parse('main');
-        $contents = $xtpl->text('main');
-        $contents .= nv_generate_page(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=topics', $num_items, $per_page, $page);
-    } else {
-        $contents = '&nbsp;';
-    }
-
-    return $contents;
-}
-
-/**
  * nv_show_block_cat_list()
  */
 function nv_show_block_cat_list()

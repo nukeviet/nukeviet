@@ -119,7 +119,6 @@ if ($NV_IS_ADMIN_MODULE) {
     $allow_func[] = 'topics';
     $allow_func[] = 'topicdelnews';
     $allow_func[] = 'addtotopics';
-    $allow_func[] = 'list_topic';
 
     $allow_func[] = 'sources';
 
