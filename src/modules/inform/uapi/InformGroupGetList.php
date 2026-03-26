@@ -14,6 +14,7 @@ namespace NukeViet\Module\inform\uapi;
 use NukeViet\Uapi\Uapi;
 use NukeViet\Uapi\UapiResult;
 use NukeViet\Uapi\UiApi;
+use PDO;
 
 if (!defined('NV_MAINFILE')) {
     exit('Stop!!!');
@@ -78,7 +79,12 @@ class InformGroupGetList implements UiApi
                 ->getResult();
         }
 
-        $count = $db->query('SELECT COUNT(*) FROM ' . NV_USERS_GLOBALTABLE . '_groups_users WHERE group_id=' . $group_id . ' AND is_leader=1 AND userid=' . $user_id)->fetchColumn();
+        $sth = $db->prepare('SELECT COUNT(*) FROM ' . NV_USERS_GLOBALTABLE . '_groups_users WHERE group_id = :group_id AND is_leader=1 AND userid = :userid');
+        $sth->bindValue(':group_id', $group_id, PDO::PARAM_INT);
+        $sth->bindValue(':userid', $user_id, PDO::PARAM_INT);
+        $sth->execute();
+        $count = $sth->fetchColumn();
+
         if (!$count) {
             return $this->result->setError()
                 ->setCode('5015')
@@ -86,7 +92,13 @@ class InformGroupGetList implements UiApi
                 ->getResult();
         }
 
-        $where = "(mtb.sender_role='group' AND mtb.sender_group=" . $group_id . ')';
+        $params = [
+            ':group_id' => [$group_id, PDO::PARAM_INT]
+        ];
+        $where_arr = [
+            'mtb.sender_role = \'group\'',
+            'mtb.sender_group = :group_id'
+        ];
 
         $postdata = [];
         $postdata['page'] = $nv_Request->get_page('page', 'post', 1);
@@ -94,28 +106,39 @@ class InformGroupGetList implements UiApi
         $postdata['filter'] = $nv_Request->get_title('filter', 'post', '');
 
         if ($postdata['filter'] == 'active') {
-            $where .= ' AND (mtb.add_time <= ' . NV_CURRENTTIME . ' AND (mtb.exp_time = 0 OR mtb.exp_time > ' . NV_CURRENTTIME . '))';
+            $where_arr[] = '(mtb.add_time <= :current_time AND (mtb.exp_time = 0 OR mtb.exp_time > :current_time))';
+            $params[':current_time'] = [NV_CURRENTTIME, PDO::PARAM_INT];
         } elseif ($postdata['filter'] == 'waiting') {
-            $where .= ' AND (mtb.add_time > ' . NV_CURRENTTIME . ')';
+            $where_arr[] = '(mtb.add_time > :current_time)';
+            $params[':current_time'] = [NV_CURRENTTIME, PDO::PARAM_INT];
         } elseif ($postdata['filter'] == 'expired') {
-            $where .= ' AND (mtb.exp_time != 0 AND mtb.exp_time < ' . NV_CURRENTTIME . ')';
+            $where_arr[] = '(mtb.exp_time != 0 AND mtb.exp_time < :current_time)';
+            $params[':current_time'] = [NV_CURRENTTIME, PDO::PARAM_INT];
         }
 
-        $db->sqlreset()
-            ->select('COUNT(*)')
-            ->from(NV_INFORM_GLOBALTABLE . ' AS mtb')
-            ->where($where);
-        $num_items = $db->query($db->sql())
-            ->fetchColumn();
+        $where_str = ' WHERE ' . implode(' AND ', $where_arr);
+
+        $sth = $db->prepare('SELECT COUNT(*) FROM ' . NV_INFORM_GLOBALTABLE . ' AS mtb' . $where_str);
+        foreach ($params as $key => $val) {
+            $sth->bindValue($key, $val[0], $val[1]);
+        }
+        $sth->execute();
+        $num_items = $sth->fetchColumn();
         $this->result->set('total', $num_items);
 
-        $db->select('mtb.*, (SELECT COUNT(*) FROM ' . NV_INFORM_STATUS_GLOBALTABLE . ' WHERE pid = mtb.id AND viewed_time != 0) AS views')
-            ->order('mtb.add_time DESC')
-            ->limit($postdata['per_page'])
-            ->offset(($postdata['page'] - 1) * $postdata['per_page']);
-        $result = $db->query($db->sql());
+        $sth = $db->prepare('SELECT mtb.*, (SELECT COUNT(*) FROM ' . NV_INFORM_STATUS_GLOBALTABLE . ' WHERE pid = mtb.id AND viewed_time != 0) AS views
+            FROM ' . NV_INFORM_GLOBALTABLE . ' AS mtb' . $where_str . '
+            ORDER BY mtb.add_time DESC
+            LIMIT :limit OFFSET :offset');
+        foreach ($params as $key => $val) {
+            $sth->bindValue($key, $val[0], $val[1]);
+        }
+        $sth->bindValue(':limit', $postdata['per_page'], PDO::PARAM_INT);
+        $sth->bindValue(':offset', ($postdata['page'] - 1) * $postdata['per_page'], PDO::PARAM_INT);
+        $sth->execute();
+
         $items = [];
-        while ($row = $result->fetch()) {
+        while ($row = $sth->fetch()) {
             $messages = json_decode($row['message'], true);
             if (json_last_error() === JSON_ERROR_NONE) {
                 $row['message'] = $messages;

@@ -59,18 +59,27 @@ function userlist_by_ids($ids, $grid = 0, $full = false)
 {
     global $db, $global_config;
 
-    if (is_array($ids)) {
-        $ids = implode(',', $ids);
+    if (!is_array($ids)) {
+        $ids = explode(',', $ids);
+    }
+    $ids = array_map('intval', $ids);
+
+    if (empty($ids)) {
+        return [];
     }
 
+    $ids_str = implode(',', $ids);
+
     if ($grid) {
-        $sql = 'SELECT userid, username, first_name, last_name FROM ' . NV_USERS_GLOBALTABLE . ' WHERE userid IN (' . $ids . ') AND userid IN (SELECT userid FROM ' . NV_USERS_GLOBALTABLE . '_groups_users WHERE group_id = ' . $grid . ')';
+        $sth = $db->prepare('SELECT userid, username, first_name, last_name FROM ' . NV_USERS_GLOBALTABLE . ' WHERE userid IN (' . $ids_str . ') AND userid IN (SELECT userid FROM ' . NV_USERS_GLOBALTABLE . '_groups_users WHERE group_id = :grid)');
+        $sth->bindValue(':grid', (int) $grid, PDO::PARAM_INT);
     } else {
-        $sql = 'SELECT userid, username, first_name, last_name FROM ' . NV_USERS_GLOBALTABLE . ' WHERE userid IN (' . $ids . ')';
+        $sth = $db->prepare('SELECT userid, username, first_name, last_name FROM ' . NV_USERS_GLOBALTABLE . ' WHERE userid IN (' . $ids_str . ')');
     }
-    $result = $db->query($sql);
+    $sth->execute();
+
     $users = [];
-    while ($row = $result->fetch()) {
+    while ($row = $sth->fetch()) {
         $full_name = $global_config['name_show'] ? [$row['first_name'], $row['last_name']] : [$row['last_name'], $row['first_name']];
         $full_name = array_filter($full_name);
         $full_name = implode(' ', array_map('trim', $full_name));
@@ -81,6 +90,7 @@ function userlist_by_ids($ids, $grid = 0, $full = false)
             $users[$row['userid']] = $full_name;
         }
     }
+    $sth->closeCursor();
 
     return $users;
 }

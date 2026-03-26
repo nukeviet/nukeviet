@@ -14,6 +14,7 @@ namespace NukeViet\Module\inform\Api;
 use NukeViet\Api\Api;
 use NukeViet\Api\ApiResult;
 use NukeViet\Api\IApi;
+use PDO;
 
 if (!defined('NV_ADMIN') or !defined('NV_MAINFILE')) {
     exit('Stop!!!');
@@ -73,11 +74,6 @@ class InformGetInfo implements IApi
         $admin_id = Api::getAdminId();
         $admin_lev = Api::getAdminLev();
 
-        $where = [];
-        if ($admin_lev > Api::ADMIN_LEV_SP) {
-            $where[] = '(mtb.sender_admin=' . $admin_id . ')';
-        }
-
         $postdata = [];
         $postdata['id'] = $nv_Request->get_int('id', 'post', 0);
         // Nếu thông báo chưa được xác định
@@ -88,9 +84,25 @@ class InformGetInfo implements IApi
                 ->getResult();
         }
 
-        $where[] = '(mtb.id = ' . $postdata['id'] . ')';
-        $sql = 'SELECT * FROM ' . NV_INFORM_GLOBALTABLE . ' AS mtb WHERE ' . implode(' AND ', $where);
-        $data = $db->query($sql)->fetch();
+        $where = [];
+        $params = [];
+        if ($admin_lev > Api::ADMIN_LEV_SP) {
+            $where[] = '(mtb.sender_admin = :sender_admin)';
+            $params[':sender_admin'] = [$admin_id, PDO::PARAM_INT];
+        }
+
+        $where[] = '(mtb.id = :id)';
+        $params[':id'] = [$postdata['id'], PDO::PARAM_INT];
+
+        $sth = $db->prepare('SELECT * FROM ' . NV_INFORM_GLOBALTABLE . ' AS mtb WHERE ' . implode(' AND ', $where));
+        foreach ($params as $key => $val) {
+            $sth->bindValue($key, $val[0], $val[1]);
+        }
+        $sth->execute();
+        $data = $sth->fetch();
+        $sth->closeCursor();
+
+        // Nếu thông báo không tồn tại trong CSDL
         if (empty($data)) {
             return $this->result->setError()
                 ->setCode('5004')

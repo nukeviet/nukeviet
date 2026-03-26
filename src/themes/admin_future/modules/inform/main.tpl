@@ -19,6 +19,7 @@
         <button type="button" class="btn btn-sm btn-primary"
                 data-toggle="inform-action"
                 data-type="add"
+                data-checkss="{$CHECKSS}"
                 data-title="{$LANG->getModule('inform_add')}">
             <i class="fa-solid fa-plus-circle"></i> {$LANG->getModule('add_inform')}
         </button>
@@ -95,6 +96,7 @@
                             <button type="button" class="btn btn-sm btn-secondary"
                                     data-toggle="inform-action"
                                     data-type="edit"
+                                    data-checkss="{$CHECKSS}"
                                     data-title="{$LANG->getModule('inform_edit')}">
                                 <i class="fa-solid fa-pencil"></i> {$LANG->getGlobal('edit')}
                             </button>
@@ -103,7 +105,7 @@
                                     data-bs-toggle="tooltip" title="{$LANG->getGlobal('delete')}"
                                     data-toggle="confirm-delete"
                                     data-id="{$item.id}"
-                                    data-tokend="{$CHECKSS}"
+                                    data-checkss="{$CHECKSS}"
                                     data-msgconfirm="{$LANG->getModule('delete_confirm')}">
                                 <i class="fa-solid fa-trash" data-icon="fa-trash"></i>
                             </button>
@@ -146,3 +148,177 @@
         </div>
     </div>
 </div>
+
+<script>
+$(function() {
+    const list = $('#inform-list');
+    const modal = $('#inform-action-modal');
+    const filter = $('#inform-filter');
+    const urlMain = filter.data('url');
+
+    // Filter
+    filter.on('change', function() {
+        const val = $(this).val();
+        let url = urlMain;
+        if (val !== '') {
+            url += '&filter=' + val;
+        }
+        window.location.href = url;
+    });
+
+    // Actions (Add/Edit)
+    $(document).on('click', '[data-toggle="inform-action"]', function(e) {
+        e.preventDefault();
+        const btn = $(this);
+        const type = btn.data('type');
+        const id = type === 'add' ? 0 : btn.closest('tr').data('id');
+        const title = btn.data('title');
+        const checkss = btn.data('checkss');
+        const bsModal = bootstrap.Modal.getOrCreateInstance(modal[0]);
+
+        $('.modal-title', modal).text(title);
+        $('#inform-action-body').html('<div class="text-center py-4"><i class="fa-solid fa-spinner fa-spin-pulse fa-2x"></i></div>');
+        bsModal.show();
+
+        $.ajax({
+            type: 'POST',
+            url: urlMain,
+            data: {
+                action: 'inform_action',
+                id: id,
+                checkss: checkss
+            },
+            dataType: 'json',
+            success: function(res) {
+                if (res.status === 'error') {
+                    nvToast(res.mess, 'error');
+                    bsModal.hide();
+                    return;
+                }
+                const body = $('#inform-action-body');
+                body.html(res.content);
+
+                // Initialize internal components
+                $('.datepicker', body).datepicker({
+                    dateFormat: nv_jsdate_get.replace('yyyy', 'yy'),
+                    changeMonth: true,
+                    changeYear: true,
+                    showOtherMonths: true,
+                    showButtonPanel: true,
+                    isRTL: $('html').attr('dir') === 'rtl'
+                });
+
+                $('[data-toggle="focusDate"]', body).on('click', function() {
+                    $(this).parent().find('input').focus();
+                });
+
+                if ($('#receiver_grs', body).length) {
+                    $('#receiver_grs', body).select2({
+                        dropdownParent: modal,
+                        width: '100%',
+                        language: nv_lang_interface
+                    });
+                }
+
+                if ($('#receiver_ids', body).length) {
+                    $('#receiver_ids', body).select2({
+                        dropdownParent: modal,
+                        width: '100%',
+                        language: nv_lang_interface,
+                        ajax: {
+                            url: urlMain,
+                            dataType: 'json',
+                            delay: 250,
+                            type: 'POST',
+                            data: function (params) {
+                                return {
+                                    q: params.term,
+                                    get_user_json: 1,
+                                    checkss: $('[name="checkss"]', body).val()
+                                };
+                            },
+                            processResults: function (data) {
+                                return {
+                                    results: $.map(data, function (item) {
+                                        return {
+                                            id: item.id,
+                                            text: item.username + ' (' + item.fullname + ')'
+                                        }
+                                    })
+                                };
+                            },
+                            cache: true
+                        },
+                        minimumInputLength: 2
+                    });
+                }
+
+                // Handle sender_role change
+                $('[name="sender_role"]', body).on('change', function() {
+                    const role = $(this).val();
+                    $('.sender-group-wrap', body).toggleClass('d-none', role !== 'group');
+                    $('.sender-admin-wrap', body).toggleClass('d-none', role !== 'admin');
+                    $('[name="sender_group"], [name="sender_admin"]', body).prop('disabled', true);
+                    if (role === 'group') $('[name="sender_group"]', body).prop('disabled', false);
+                    if (role === 'admin') $('[name="sender_admin"]', body).prop('disabled', false);
+                });
+
+                // Handle receiver_type change
+                $('[name="receiver_type"]', body).on('change', function() {
+                    const rtype = $(this).val();
+                    $('.receiver-grs-wrap', body).toggleClass('d-none', rtype !== 'grs');
+                    $('.receiver-ids-wrap', body).toggleClass('d-none', rtype !== 'ids');
+                    $('[name="receiver_grs[]"], [name="receiver_ids[]"]', body).prop('disabled', true);
+                    if (rtype === 'grs') $('[name="receiver_grs[]"]', body).prop('disabled', false);
+                    if (rtype === 'ids') $('[name="receiver_ids[]"]', body).prop('disabled', false);
+                });
+            },
+            error: function() {
+                nvToast('Request error', 'error');
+                bsModal.hide();
+            }
+        });
+    });
+
+    // Delete
+    $(document).on('click', '[data-toggle="confirm-delete"]', function(e) {
+        e.preventDefault();
+        const btn = $(this);
+        const icon = $('i', btn);
+        if (icon.is('.fa-spinner')) return;
+
+        nvConfirm(btn.data('msgconfirm'), () => {
+            icon.removeClass(icon.data('icon')).addClass('fa-spinner fa-spin-pulse');
+            $.ajax({
+                type: 'POST',
+                url: urlMain,
+                data: {
+                    action: 'inform_del',
+                    id: btn.data('id'),
+                    checkss: btn.data('checkss')
+                },
+                dataType: 'json',
+                success: function(res) {
+                    if (res.status === 'OK') {
+                        location.reload();
+                    } else {
+                        icon.removeClass('fa-spinner fa-spin-pulse').addClass(icon.data('icon'));
+                        nvToast(res.mess, 'error');
+                    }
+                },
+                error: function() {
+                    icon.removeClass('fa-spinner fa-spin-pulse').addClass(icon.data('icon'));
+                    nvToast('Delete error', 'error');
+                }
+            });
+        });
+    });
+
+    // View more
+    list.on('click', '[data-toggle="inform-more"]', function() {
+        const item = $(this).closest('td');
+        $('.more', item).addClass('d-none');
+        $('.morecontent', item).removeClass('d-none');
+    });
+});
+</script>

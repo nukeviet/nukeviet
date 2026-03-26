@@ -14,6 +14,7 @@ namespace NukeViet\Module\inform\uapi;
 use NukeViet\Uapi\Uapi;
 use NukeViet\Uapi\UapiResult;
 use NukeViet\Uapi\UiApi;
+use PDO;
 
 if (!defined('NV_MAINFILE')) {
     exit('Stop!!!');
@@ -80,24 +81,37 @@ class InformAction implements UiApi
                 ->getResult();
         }
 
-        $where = [];
-        $where[] = "(mtb.receiver_grs = '' AND mtb.receiver_ids = '')";
+        $where_arr = [];
+        $params = [];
+        $where_arr[] = "(mtb.receiver_grs = '' AND mtb.receiver_ids = '')";
         if (!empty($u_groups)) {
-            $where[] = "(mtb.receiver_grs != '' AND (CONCAT(',', mtb.receiver_grs, ',') REGEXP ',(" . implode('|', $u_groups) . "),'))";
+            $where_arr[] = "(mtb.receiver_grs != '' AND (CONCAT(',', mtb.receiver_grs, ',') REGEXP :u_groups_regexp))";
+            $params[':u_groups_regexp'] = [',(' . implode('|', $u_groups) . '),', PDO::PARAM_STR];
         }
-        $where[] = "(mtb.receiver_ids != '' AND FIND_IN_SET(" . $user_id . ', mtb.receiver_ids))';
-        $where = '(' . implode(' OR ', $where) . ') AND (mtb.add_time <= ' . NV_CURRENTTIME . ') AND (mtb.exp_time = 0 OR mtb.exp_time > ' . NV_CURRENTTIME . ')';
+        $where_arr[] = "(mtb.receiver_ids != '' AND FIND_IN_SET(:userid, mtb.receiver_ids))";
+        $params[':userid'] = [$user_id, PDO::PARAM_INT];
+
+        $where_str = '(' . implode(' OR ', $where_arr) . ') AND (mtb.add_time <= :current_time) AND (mtb.exp_time = 0 OR mtb.exp_time > :current_time)';
+        $params[':current_time'] = [NV_CURRENTTIME, PDO::PARAM_INT];
+
         if (!empty($u_groups)) {
-            $where .= " AND (mtb.sender_role != 'group' OR (mtb.sender_role = 'group' AND mtb.sender_group IN (" . implode(',', $u_groups) . ')))';
+            $where_str .= ' AND (mtb.sender_role != \'group\' OR (mtb.sender_role = \'group\' AND mtb.sender_group IN (' . implode(',', array_map('intval', $u_groups)) . ')))';
         } else {
-            $where .= " AND (mtb.sender_role != 'group')";
+            $where_str .= " AND (mtb.sender_role != 'group')";
         }
-        $db->select('mtb.id, IFNULL(jtb.shown_time, 0) AS shown_time, IFNULL(jtb.viewed_time, 0) AS viewed_time, IFNULL(jtb.favorite_time, 0) AS favorite_time, IFNULL(jtb.hidden_time, 0) AS hidden_time')
-            ->from(NV_INFORM_GLOBALTABLE . ' AS mtb')
-            ->join('LEFT JOIN ' . NV_INFORM_STATUS_GLOBALTABLE . ' AS jtb ON (jtb.pid = mtb.id AND jtb.userid = ' . $user_id . ')')
-            ->where($where . ' AND mtb.id=' . $id);
-        $result = $db->query($db->sql());
-        $row = $result->fetch();
+
+        $sth = $db->prepare('SELECT mtb.id, IFNULL(jtb.shown_time, 0) AS shown_time, IFNULL(jtb.viewed_time, 0) AS viewed_time, IFNULL(jtb.favorite_time, 0) AS favorite_time, IFNULL(jtb.hidden_time, 0) AS hidden_time
+            FROM ' . NV_INFORM_GLOBALTABLE . ' AS mtb
+            LEFT JOIN ' . NV_INFORM_STATUS_GLOBALTABLE . ' AS jtb ON (jtb.pid = mtb.id AND jtb.userid = :userid)
+            WHERE ' . $where_str . ' AND mtb.id = :id');
+        $sth->bindValue(':id', $id, PDO::PARAM_INT);
+        foreach ($params as $key => $val) {
+            $sth->bindValue($key, $val[0], $val[1]);
+        }
+        $sth->execute();
+        $row = $sth->fetch();
+        $sth->closeCursor();
+
         if (empty($row['id'])) {
             return $this->result->setError()
                 ->setCode('5003')
@@ -140,10 +154,14 @@ class InformAction implements UiApi
         }
 
         if (empty($row['shown_time']) and empty($row['viewed_time']) and empty($row['favorite_time']) and empty($row['hidden_time'])) {
-            $db->query('INSERT IGNORE INTO ' . NV_INFORM_STATUS_GLOBALTABLE . ' (pid, userid, ' . $field_name . ') VALUES (' . $id . ', ' . $user_id . ', ' . $field_value . ')');
+            $sth = $db->prepare('INSERT IGNORE INTO ' . NV_INFORM_STATUS_GLOBALTABLE . ' (pid, userid, ' . $field_name . ') VALUES (:id, :userid, :field_value)');
         } else {
-            $db->query('UPDATE ' . NV_INFORM_STATUS_GLOBALTABLE . ' SET ' . $field_name . ' = ' . $field_value . ' WHERE pid=' . $id . ' AND userid=' . $user_id);
+            $sth = $db->prepare('UPDATE ' . NV_INFORM_STATUS_GLOBALTABLE . ' SET ' . $field_name . ' = :field_value WHERE pid = :id AND userid = :userid');
         }
+        $sth->bindValue(':id', $id, PDO::PARAM_INT);
+        $sth->bindValue(':userid', $user_id, PDO::PARAM_INT);
+        $sth->bindValue(':field_value', $field_value, PDO::PARAM_INT);
+        $sth->execute();
 
         $this->result->setSuccess();
 

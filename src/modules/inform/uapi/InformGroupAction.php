@@ -79,7 +79,12 @@ class InformGroupAction implements UiApi
                 ->getResult();
         }
 
-        $count = $db->query('SELECT COUNT(*) FROM ' . NV_USERS_GLOBALTABLE . '_groups_users WHERE group_id=' . $group_id . ' AND is_leader=1 AND userid=' . $user_id)->fetchColumn();
+        $sth = $db->prepare('SELECT COUNT(*) FROM ' . NV_USERS_GLOBALTABLE . '_groups_users WHERE group_id = :group_id AND is_leader=1 AND userid = :userid');
+        $sth->bindValue(':group_id', $group_id, PDO::PARAM_INT);
+        $sth->bindValue(':userid', $user_id, PDO::PARAM_INT);
+        $sth->execute();
+        $count = $sth->fetchColumn();
+
         if (!$count) {
             return $this->result->setError()
                 ->setCode('5015')
@@ -143,8 +148,12 @@ class InformGroupAction implements UiApi
                     ->getResult();
             }
 
-            $where .= ' AND (mtb.id=' . $postdata['id'] . ')';
-            $exist = $db->query('SELECT COUNT(*) FROM ' . NV_INFORM_GLOBALTABLE . ' AS mtb WHERE ' . $where . ' LIMIT 1')->fetchColumn();
+            $sth = $db->prepare('SELECT COUNT(*) FROM ' . NV_INFORM_GLOBALTABLE . ' AS mtb WHERE mtb.sender_role = \'group\' AND mtb.sender_group = :group_id AND mtb.id = :id');
+            $sth->bindValue(':group_id', $group_id, PDO::PARAM_INT);
+            $sth->bindValue(':id', $postdata['id'], PDO::PARAM_INT);
+            $sth->execute();
+            $exist = $sth->fetchColumn();
+
             // Nếu thông báo không tồn tại
             if (empty($exist)) {
                 return $this->result->setError()
@@ -168,10 +177,13 @@ class InformGroupAction implements UiApi
 
         // Nếu là xóa thông báo
         if ($postdata['operation'] == 'delete') {
-            $db->query('DELETE FROM ' . NV_INFORM_STATUS_GLOBALTABLE . ' WHERE pid = ' . $postdata['id']);
-            $db->query('DELETE FROM ' . NV_INFORM_GLOBALTABLE . ' WHERE id = ' . $postdata['id']);
-            $db->query('OPTIMIZE TABLE ' . NV_INFORM_STATUS_GLOBALTABLE);
-            $db->query('OPTIMIZE TABLE ' . NV_INFORM_GLOBALTABLE);
+            $sth = $db->prepare('DELETE FROM ' . NV_INFORM_STATUS_GLOBALTABLE . ' WHERE pid = :pid');
+            $sth->bindValue(':pid', $postdata['id'], PDO::PARAM_INT);
+            $sth->execute();
+
+            $sth = $db->prepare('DELETE FROM ' . NV_INFORM_GLOBALTABLE . ' WHERE id = :id');
+            $sth->bindValue(':id', $postdata['id'], PDO::PARAM_INT);
+            $sth->execute();
         }
         // Nếu là thêm/sửa thông báo
         elseif ($postdata['operation'] == 'add' or $postdata['operation'] == 'edit') {
@@ -252,17 +264,21 @@ class InformGroupAction implements UiApi
             }
             if ($postdata['operation'] == 'edit') {
                 $sth = $db->prepare('UPDATE ' . NV_INFORM_GLOBALTABLE . ' SET
-                receiver_ids = :receiver_ids, message = :message, link = :link, add_time = ' . $postdata['add_time'] . ', exp_time = ' . $postdata['exp_time'] . '
-                WHERE id = ' . $postdata['id']);
+                receiver_ids = :receiver_ids, message = :message, link = :link, add_time = :add_time, exp_time = :exp_time
+                WHERE id = :id');
+                $sth->bindValue(':id', $postdata['id'], PDO::PARAM_INT);
             } else {
-                $sth = $db->prepare('INSERT INTO ' . NV_INFORM_GLOBALTABLE . "
+                $sth = $db->prepare('INSERT INTO ' . NV_INFORM_GLOBALTABLE . '
                 (receiver_ids, sender_role, sender_group, sender_admin, message, link, add_time, exp_time) VALUES
-                (:receiver_ids, 'group', " . $group_id . ', 0, :message, :link, ' . $postdata['add_time'] . ', ' . $postdata['exp_time'] . ')');
+                (:receiver_ids, \'group\', :group_id, 0, :message, :link, :add_time, :exp_time)');
+                $sth->bindValue(':group_id', $group_id, PDO::PARAM_INT);
             }
 
             $sth->bindValue(':receiver_ids', $postdata['receiver_ids'], PDO::PARAM_STR);
             $sth->bindValue(':message', $postdata['message'], PDO::PARAM_STR);
             $sth->bindValue(':link', $postdata['link'], PDO::PARAM_STR);
+            $sth->bindValue(':add_time', $postdata['add_time'], PDO::PARAM_INT);
+            $sth->bindValue(':exp_time', $postdata['exp_time'], PDO::PARAM_INT);
             $sth->execute();
         }
 

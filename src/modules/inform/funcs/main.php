@@ -30,7 +30,12 @@ if ($nv_Request->isset_request('manager', 'get')) {
         exit(0);
     }
 
-    $count = $db->query('SELECT COUNT(*) FROM ' . NV_USERS_GLOBALTABLE . '_groups_users WHERE group_id=' . $group_id . ' AND is_leader=1 AND userid=' . $user_info['userid'])->fetchColumn();
+    $sth = $db->prepare('SELECT COUNT(*) FROM ' . NV_USERS_GLOBALTABLE . '_groups_users WHERE group_id = :group_id AND is_leader=1 AND userid = :userid');
+    $sth->bindValue(':group_id', $group_id, PDO::PARAM_INT);
+    $sth->bindValue(':userid', $user_info['userid'], PDO::PARAM_INT);
+    $sth->execute();
+    $count = $sth->fetchColumn();
+
     if (!$count) {
         exit(0);
     }
@@ -39,35 +44,28 @@ if ($nv_Request->isset_request('manager', 'get')) {
     if ($nv_Request->isset_request('get_user_json', 'post')) {
         $q = $nv_Request->get_title('q', 'post', '');
 
-        $where = '(username LIKE :username OR email LIKE :email OR first_name like :first_name OR last_name like :last_name) AND userid IN (SELECT userid FROM ' . NV_USERS_GLOBALTABLE . '_groups_users WHERE group_id = ' . $group_id . ')';
+        $where = '(username LIKE :username OR email LIKE :email OR first_name like :first_name OR last_name like :last_name) AND userid IN (SELECT userid FROM ' . NV_USERS_GLOBALTABLE . '_groups_users WHERE group_id = :group_id)';
 
-        $db->sqlreset()
-            ->select('userid, username, email, first_name, last_name')
-            ->from(NV_USERS_GLOBALTABLE)
-            ->where($where)
-            ->order('username ASC')
-            ->limit(20);
-
-        $sth = $db->prepare($db->sql());
+        $sth = $db->prepare('SELECT userid, username, email, first_name, last_name FROM ' . NV_USERS_GLOBALTABLE . ' WHERE ' . $where . ' ORDER BY username ASC LIMIT 20');
         $sth->bindValue(':username', '%' . $q . '%', PDO::PARAM_STR);
         $sth->bindValue(':email', '%' . $q . '%', PDO::PARAM_STR);
         $sth->bindValue(':first_name', '%' . $q . '%', PDO::PARAM_STR);
         $sth->bindValue(':last_name', '%' . $q . '%', PDO::PARAM_STR);
+        $sth->bindValue(':group_id', $group_id, PDO::PARAM_INT);
         $sth->execute();
 
         $data = [];
-        while ($_scratch = $sth->fetch(3)) {
-            [$userid, $username, $email, $first_name, $last_name] = $_scratch;
-            unset($_scratch);
-            $full_name = $global_config['name_show'] ? [$first_name, $last_name] : [$last_name, $first_name];
+        while ($row = $sth->fetch()) {
+            $full_name = $global_config['name_show'] ? [$row['first_name'], $row['last_name']] : [$row['last_name'], $row['first_name']];
             $full_name = array_filter($full_name);
             $data[] = [
-                'id' => $userid,
-                'username' => $username,
+                'id' => $row['userid'],
+                'username' => $row['username'],
                 'fullname' => implode(' ', $full_name),
-                'email' => $email
+                'email' => $row['email']
             ];
         }
+        $sth->closeCursor();
 
         nv_jsonOutput($data);
     }
@@ -88,18 +86,20 @@ if ($nv_Request->isset_request('manager', 'get')) {
         }
         $id = $nv_Request->get_int('delete', 'post', 0);
         if ($id) {
-            $where .= ' AND (mtb.id=' . $id . ')';
-            $db->sqlreset()
-                ->select('COUNT(*)')
-                ->from(NV_INFORM_GLOBALTABLE . ' AS mtb')
-                ->where($where);
-            $num_items = $db->query($db->sql())
-                ->fetchColumn();
+            $sth = $db->prepare('SELECT COUNT(*) FROM ' . NV_INFORM_GLOBALTABLE . ' AS mtb WHERE mtb.sender_role = \'group\' AND mtb.sender_group = :group_id AND mtb.id = :id');
+            $sth->bindValue(':group_id', $group_id, PDO::PARAM_INT);
+            $sth->bindValue(':id', $id, PDO::PARAM_INT);
+            $sth->execute();
+            $num_items = $sth->fetchColumn();
+
             if ($num_items) {
-                $db->query('DELETE FROM ' . NV_INFORM_STATUS_GLOBALTABLE . ' WHERE pid = ' . $id);
-                $db->query('DELETE FROM ' . NV_INFORM_GLOBALTABLE . ' WHERE id = ' . $id);
-                $db->query('OPTIMIZE TABLE ' . NV_INFORM_STATUS_GLOBALTABLE);
-                $db->query('OPTIMIZE TABLE ' . NV_INFORM_GLOBALTABLE);
+                $sth = $db->prepare('DELETE FROM ' . NV_INFORM_STATUS_GLOBALTABLE . ' WHERE pid = :pid');
+                $sth->bindValue(':pid', $id, PDO::PARAM_INT);
+                $sth->execute();
+
+                $sth = $db->prepare('DELETE FROM ' . NV_INFORM_GLOBALTABLE . ' WHERE id = :id');
+                $sth->bindValue(':id', $id, PDO::PARAM_INT);
+                $sth->execute();
             }
         }
         nv_jsonOutput([
@@ -113,13 +113,13 @@ if ($nv_Request->isset_request('manager', 'get')) {
 
         $data = ['id' => 0, 'add_time' => NV_CURRENTTIME, 'exp_time' => NV_CURRENTTIME + $global_config['inform_default_exp']];
         if (!empty($id)) {
-            $where .= ' AND (mtb.id=' . $id . ')';
-            $db->sqlreset()
-                ->select('*')
-                ->from(NV_INFORM_GLOBALTABLE . ' AS mtb')
-                ->where($where);
-            $result = $db->query($db->sql());
-            $data = $result->fetch();
+            $sth = $db->prepare('SELECT * FROM ' . NV_INFORM_GLOBALTABLE . ' AS mtb WHERE mtb.sender_role = \'group\' AND mtb.sender_group = :group_id AND mtb.id = :id');
+            $sth->bindValue(':group_id', $group_id, PDO::PARAM_INT);
+            $sth->bindValue(':id', $id, PDO::PARAM_INT);
+            $sth->execute();
+            $data = $sth->fetch();
+            $sth->closeCursor();
+
             if (empty($data)) {
                 nv_jsonOutput([
                     'status' => 'error',
@@ -226,17 +226,21 @@ if ($nv_Request->isset_request('manager', 'get')) {
 
             if (!empty($id)) {
                 $sth = $db->prepare('UPDATE ' . NV_INFORM_GLOBALTABLE . ' SET
-                receiver_ids = :receiver_ids, message = :message, link = :link, add_time = ' . $postdata['add_time'] . ', exp_time = ' . $postdata['exp_time'] . '
-                WHERE id = ' . $id);
+                receiver_ids = :receiver_ids, message = :message, link = :link, add_time = :add_time, exp_time = :exp_time
+                WHERE id = :id');
+                $sth->bindValue(':id', $id, PDO::PARAM_INT);
             } else {
-                $sth = $db->prepare('INSERT INTO ' . NV_INFORM_GLOBALTABLE . "
+                $sth = $db->prepare("INSERT INTO " . NV_INFORM_GLOBALTABLE . "
                 (receiver_ids, sender_role, sender_group, sender_admin, message, link, add_time, exp_time) VALUES
-                (:receiver_ids, 'group', " . $group_id . ', 0, :message, :link, ' . $postdata['add_time'] . ', ' . $postdata['exp_time'] . ')');
+                (:receiver_ids, 'group', :group_id, 0, :message, :link, :add_time, :exp_time)");
+                $sth->bindValue(':group_id', $group_id, PDO::PARAM_INT);
             }
 
             $sth->bindValue(':receiver_ids', $postdata['receiver_ids'], PDO::PARAM_STR);
             $sth->bindValue(':message', $postdata['message'], PDO::PARAM_STR);
             $sth->bindValue(':link', $postdata['link'], PDO::PARAM_STR);
+            $sth->bindValue(':add_time', $postdata['add_time'], PDO::PARAM_INT);
+            $sth->bindValue(':exp_time', $postdata['exp_time'], PDO::PARAM_INT);
             $sth->execute();
 
             nv_jsonOutput([
@@ -308,30 +312,49 @@ if ($nv_Request->isset_request('manager', 'get')) {
     $page > 1 && $ajax = true;
     $base_url .= '&amp;ajax=' . nv_genpass(10);
 
+    $params = [
+        ':group_id' => [$group_id, PDO::PARAM_INT]
+    ];
+    $where_arr = [
+        'mtb.sender_role = \'group\'',
+        'mtb.sender_group = :group_id'
+    ];
+
     if ($filter == 'active') {
-        $where .= ' AND (mtb.add_time <= ' . NV_CURRENTTIME . ' AND (mtb.exp_time = 0 OR mtb.exp_time > ' . NV_CURRENTTIME . '))';
+        $where_arr[] = '(mtb.add_time <= :current_time AND (mtb.exp_time = 0 OR mtb.exp_time > :current_time))';
+        $params[':current_time'] = [NV_CURRENTTIME, PDO::PARAM_INT];
     } elseif ($filter == 'waiting') {
-        $where .= ' AND (mtb.add_time > ' . NV_CURRENTTIME . ')';
+        $where_arr[] = '(mtb.add_time > :current_time)';
+        $params[':current_time'] = [NV_CURRENTTIME, PDO::PARAM_INT];
     } elseif ($filter == 'expired') {
-        $where .= ' AND (mtb.exp_time != 0 AND mtb.exp_time < ' . NV_CURRENTTIME . ')';
+        $where_arr[] = '(mtb.exp_time != 0 AND mtb.exp_time < :current_time)';
+        $params[':current_time'] = [NV_CURRENTTIME, PDO::PARAM_INT];
     }
 
-    $db->sqlreset()
-        ->select('COUNT(*)')
-        ->from(NV_INFORM_GLOBALTABLE . ' AS mtb')
-        ->where($where);
-    $num_items = $db->query($db->sql())
-        ->fetchColumn();
+    $where_str = ' WHERE ' . implode(' AND ', $where_arr);
+
+    $sth = $db->prepare('SELECT COUNT(*) FROM ' . NV_INFORM_GLOBALTABLE . ' AS mtb' . $where_str);
+    foreach ($params as $key => $val) {
+        $sth->bindValue($key, $val[0], $val[1]);
+    }
+    $sth->execute();
+    $num_items = $sth->fetchColumn();
+
     $generate_page = nv_generate_page($base_url, $num_items, $per_page, $page, true, true, 'nv_urldecode_ajax', 'generate_page');
 
-    $db->select('mtb.*, (SELECT COUNT(*) FROM ' . NV_INFORM_STATUS_GLOBALTABLE . ' WHERE pid = mtb.id AND viewed_time != 0) AS views')
-        ->order('mtb.add_time DESC')
-        ->limit($per_page)
-        ->offset(($page - 1) * $per_page);
-    $result = $db->query($db->sql());
+    $sth = $db->prepare('SELECT mtb.*, (SELECT COUNT(*) FROM ' . NV_INFORM_STATUS_GLOBALTABLE . ' WHERE pid = mtb.id AND viewed_time != 0) AS views
+        FROM ' . NV_INFORM_GLOBALTABLE . ' AS mtb' . $where_str . '
+        ORDER BY mtb.add_time DESC
+        LIMIT :limit OFFSET :offset');
+    foreach ($params as $key => $val) {
+        $sth->bindValue($key, $val[0], $val[1]);
+    }
+    $sth->bindValue(':limit', $per_page, PDO::PARAM_INT);
+    $sth->bindValue(':offset', ($page - 1) * $per_page, PDO::PARAM_INT);
+    $sth->execute();
     $items = [];
     $members = [];
-    while ($row = $result->fetch()) {
+    while ($row = $sth->fetch()) {
         if (!empty($row['message'])) {
             $messages = json_decode($row['message'], true);
             if (json_last_error() === JSON_ERROR_NONE) {
@@ -404,17 +427,23 @@ if ($nv_Request->isset_request('manager', 'get')) {
     nv_htmlOutput(notifications_manager_theme($contents, nv_url_rewrite($page_url, true), $filter, $checkss));
 }
 
-$where = [];
-$where[] = "(mtb.receiver_grs = '' AND mtb.receiver_ids = '')";
+$where_arr = [];
+$params = [];
+$where_arr[] = "(mtb.receiver_grs = '' AND mtb.receiver_ids = '')";
 if (!empty($u_groups)) {
-    $where[] = "(mtb.receiver_grs != '' AND (CONCAT(',', mtb.receiver_grs, ',') REGEXP ',(" . implode('|', $u_groups) . "),'))";
+    $where_arr[] = "(mtb.receiver_grs != '' AND (CONCAT(',', mtb.receiver_grs, ',') REGEXP :u_groups_regexp))";
+    $params[':u_groups_regexp'] = [',(' . implode('|', $u_groups) . '),', PDO::PARAM_STR];
 }
-$where[] = "(mtb.receiver_ids != '' AND FIND_IN_SET(" . $user_info['userid'] . ', mtb.receiver_ids))';
-$where = '(' . implode(' OR ', $where) . ') AND (mtb.add_time <= ' . NV_CURRENTTIME . ') AND (mtb.exp_time = 0 OR mtb.exp_time > ' . NV_CURRENTTIME . ')';
+$where_arr[] = "(mtb.receiver_ids != '' AND FIND_IN_SET(:userid, mtb.receiver_ids))";
+$params[':userid'] = [$user_info['userid'], PDO::PARAM_INT];
+
+$where_str = '(' . implode(' OR ', $where_arr) . ') AND (mtb.add_time <= :current_time) AND (mtb.exp_time = 0 OR mtb.exp_time > :current_time)';
+$params[':current_time'] = [NV_CURRENTTIME, PDO::PARAM_INT];
+
 if (!empty($u_groups)) {
-    $where .= " AND (mtb.sender_role != 'group' OR (mtb.sender_role = 'group' AND mtb.sender_group IN (" . implode(',', $u_groups) . ')))';
+    $where_str .= ' AND (mtb.sender_role != \'group\' OR (mtb.sender_role = \'group\' AND mtb.sender_group IN (' . implode(',', array_map('intval', $u_groups)) . ')))';
 } else {
-    $where .= " AND (mtb.sender_role != 'group')";
+    $where_str .= " AND (mtb.sender_role != 'group')";
 }
 
 // Lấy tổng số thông báo chưa xem
@@ -471,18 +500,28 @@ if ($nv_Request->isset_request('setStatus', 'post')) {
                 break;
         }
 
-        $db->select('mtb.id, IFNULL(jtb.shown_time, 0) AS shown_time, IFNULL(jtb.viewed_time, 0) AS viewed_time, IFNULL(jtb.favorite_time, 0) AS favorite_time, IFNULL(jtb.hidden_time, 0) AS hidden_time')
-            ->from(NV_INFORM_GLOBALTABLE . ' AS mtb')
-            ->join('LEFT JOIN ' . NV_INFORM_STATUS_GLOBALTABLE . ' AS jtb ON (jtb.pid = mtb.id AND jtb.userid = ' . $user_info['userid'] . ')')
-            ->where($where . ' AND mtb.id=' . $id);
-        $result = $db->query($db->sql());
-        $row = $result->fetch();
+        $sth = $db->prepare('SELECT mtb.id, IFNULL(jtb.shown_time, 0) AS shown_time, IFNULL(jtb.viewed_time, 0) AS viewed_time, IFNULL(jtb.favorite_time, 0) AS favorite_time, IFNULL(jtb.hidden_time, 0) AS hidden_time
+            FROM ' . NV_INFORM_GLOBALTABLE . ' AS mtb
+            LEFT JOIN ' . NV_INFORM_STATUS_GLOBALTABLE . ' AS jtb ON (jtb.pid = mtb.id AND jtb.userid = :userid)
+            WHERE ' . $where_str . ' AND mtb.id = :id');
+        $sth->bindValue(':id', $id, PDO::PARAM_INT);
+        foreach ($params as $key => $val) {
+            $sth->bindValue($key, $val[0], $val[1]);
+        }
+        $sth->execute();
+        $row = $sth->fetch();
+        $sth->closeCursor();
+
         if (!empty($row['id'])) {
             if (empty($row['shown_time']) and empty($row['viewed_time']) and empty($row['favorite_time']) and empty($row['hidden_time'])) {
-                $db->query('INSERT IGNORE INTO ' . NV_INFORM_STATUS_GLOBALTABLE . ' (pid, userid, ' . $field_name . ') VALUES (' . $id . ', ' . $user_info['userid'] . ', ' . $field_value . ')');
+                $sth = $db->prepare('INSERT IGNORE INTO ' . NV_INFORM_STATUS_GLOBALTABLE . ' (pid, userid, ' . $field_name . ') VALUES (:id, :userid, :field_value)');
             } else {
-                $db->query('UPDATE ' . NV_INFORM_STATUS_GLOBALTABLE . ' SET ' . $field_name . ' = ' . $field_value . ' WHERE pid=' . $id . ' AND userid=' . $user_info['userid']);
+                $sth = $db->prepare('UPDATE ' . NV_INFORM_STATUS_GLOBALTABLE . ' SET ' . $field_name . ' = :field_value WHERE pid = :id AND userid = :userid');
             }
+            $sth->bindValue(':id', $id, PDO::PARAM_INT);
+            $sth->bindValue(':userid', $user_info['userid'], PDO::PARAM_INT);
+            $sth->bindValue(':field_value', $field_value, PDO::PARAM_INT);
+            $sth->execute();
         }
 
         nv_jsonOutput([
@@ -542,19 +581,26 @@ if (defined('NV_IS_AJAX') or $nv_Request->isset_request('ajax', 'get')) {
             betweenURLs($page, ceil($num_items / $per_page), $base_url, '&amp;page=', $prevPage, $nextPage);
         }
 
-        $db->select('mtb.id, mtb.sender_role, mtb.sender_group, mtb.sender_admin, mtb.message, mtb.link, mtb.add_time, IFNULL(jtb.shown_time, 0) AS shown_time, IFNULL(jtb.viewed_time, 0) AS viewed_time, IFNULL(jtb.favorite_time, 0) AS favorite_time')
-            ->join('LEFT JOIN ' . NV_INFORM_STATUS_GLOBALTABLE . ' AS jtb ON (jtb.pid = mtb.id AND jtb.userid = ' . $user_info['userid'] . ')')
-            ->order('mtb.add_time DESC')
-            ->limit($per_page)
-            ->offset(($page - 1) * $per_page);
-        $result = $db->query($db->sql());
+        $sth = $db->prepare('SELECT mtb.id, mtb.sender_role, mtb.sender_group, mtb.sender_admin, mtb.message, mtb.link, mtb.add_time, IFNULL(jtb.shown_time, 0) AS shown_time, IFNULL(jtb.viewed_time, 0) AS viewed_time, IFNULL(jtb.favorite_time, 0) AS favorite_time
+            FROM ' . NV_INFORM_GLOBALTABLE . ' AS mtb
+            LEFT JOIN ' . NV_INFORM_STATUS_GLOBALTABLE . ' AS jtb ON (jtb.pid = mtb.id AND jtb.userid = :userid)
+            WHERE ' . $where_str . '
+            ORDER BY mtb.add_time DESC
+            LIMIT :limit OFFSET :offset');
+        $sth->bindValue(':limit', $per_page, PDO::PARAM_INT);
+        $sth->bindValue(':offset', ($page - 1) * $per_page, PDO::PARAM_INT);
+        $sth->bindValue(':userid', $user_info['userid'], PDO::PARAM_INT);
+        foreach ($params as $key => $val) {
+            $sth->bindValue($key, $val[0], $val[1]);
+        }
+        $sth->execute();
 
         $items = [];
         $notshown = [];
         $adminlist = admins_list();
         $grouplist = groups_list();
 
-        while ($row = $result->fetch()) {
+        while ($row = $sth->fetch()) {
             if (!empty($row['message'])) {
                 $messages = json_decode($row['message'], true);
                 if (json_last_error() === JSON_ERROR_NONE) {
@@ -610,14 +656,23 @@ if (defined('NV_IS_AJAX') or $nv_Request->isset_request('ajax', 'get')) {
         $items = nv_apply_hook($module_name, 'inform_get_list_after', [$items, $filter, $page, $per_page], $items);
 
         if (!empty($notshown)) {
-            foreach ($notshown as $id) {
-                if (empty($items[$id]['viewed_time']) and empty($items[$id]['favorite_time']) and empty($items[$id]['hidden_time'])) {
-                    $db->query('INSERT IGNORE INTO ' . NV_INFORM_STATUS_GLOBALTABLE . ' (pid, userid, shown_time) VALUES (' . $id . ', ' . $user_info['userid'] . ', ' . NV_CURRENTTIME . ')');
+            $sth_ins = $db->prepare('INSERT IGNORE INTO ' . NV_INFORM_STATUS_GLOBALTABLE . ' (pid, userid, shown_time) VALUES (:id, :userid, :current_time)');
+            $sth_upd = $db->prepare('UPDATE ' . NV_INFORM_STATUS_GLOBALTABLE . ' SET shown_time = :current_time WHERE pid = :id AND userid = :userid');
+            foreach ($notshown as $notshown_id) {
+                if (empty($items[$notshown_id]['viewed_time']) and empty($items[$notshown_id]['favorite_time']) and empty($items[$notshown_id]['hidden_time'])) {
+                    $sth = $sth_ins;
                 } else {
-                    $db->query('UPDATE ' . NV_INFORM_STATUS_GLOBALTABLE . ' SET shown_time = ' . NV_CURRENTTIME . ' WHERE pid=' . $id . ' AND userid=' . $user_info['userid']);
+                    $sth = $sth_upd;
                 }
+                $sth->bindValue(':id', $notshown_id, PDO::PARAM_INT);
+                $sth->bindValue(':userid', $user_info['userid'], PDO::PARAM_INT);
+                $sth->bindValue(':current_time', NV_CURRENTTIME, PDO::PARAM_INT);
+                $sth->execute();
             }
-            $db->query('UPDATE ' . NV_USERS_GLOBALTABLE . "_info SET inform='' WHERE userid=" . $user_info['userid']);
+
+            $sth = $db->prepare('UPDATE ' . NV_USERS_GLOBALTABLE . '_info SET inform = \'\' WHERE userid = :userid');
+            $sth->bindValue(':userid', $user_info['userid'], PDO::PARAM_INT);
+            $sth->execute();
         }
 
         $count = count($notshown);

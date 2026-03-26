@@ -14,6 +14,7 @@ namespace NukeViet\Module\inform\Api;
 use NukeViet\Api\Api;
 use NukeViet\Api\ApiResult;
 use NukeViet\Api\IApi;
+use PDO;
 
 if (!defined('NV_ADMIN') or !defined('NV_MAINFILE')) {
     exit('Stop!!!');
@@ -78,9 +79,10 @@ class InformGetList implements IApi
         $postdata['per_page'] = $nv_Request->get_page('per_page', 'post', 20);
         $postdata['filter'] = $nv_Request->get_title('filter', 'post', '');
 
-        $where = [];
+        $params = [];
         if ($admin_lev > Api::ADMIN_LEV_SP) {
-            $where[] = '(mtb.sender_admin=' . $admin_id . ')';
+            $where[] = '(mtb.sender_admin = :sender_admin)';
+            $params[':sender_admin'] = [$admin_id, PDO::PARAM_INT];
         } else {
             !in_array($postdata['filter'], ['system', 'group', 'admins', 'admin', 'active', 'waiting', 'expired'], true) && $postdata['filter'] = '';
             if ($postdata['filter'] == 'system') {
@@ -90,32 +92,42 @@ class InformGetList implements IApi
             } elseif ($postdata['filter'] == 'admins') {
                 $where[] = "(mtb.sender_role = 'admin')";
             } elseif ($postdata['filter'] == 'admin') {
-                $where[] = "(mtb.sender_role = 'admin' AND mtb.sender_admin=" . $admin_id . ')';
+                $where[] = "(mtb.sender_role = 'admin' AND mtb.sender_admin = :sender_admin)";
+                $params[':sender_admin'] = [$admin_id, PDO::PARAM_INT];
             } elseif ($postdata['filter'] == 'active') {
-                $where[] = '(mtb.add_time <= ' . NV_CURRENTTIME . ' AND (mtb.exp_time = 0 OR mtb.exp_time > ' . NV_CURRENTTIME . '))';
+                $where[] = '(mtb.add_time <= :current_time AND (mtb.exp_time = 0 OR mtb.exp_time > :current_time))';
+                $params[':current_time'] = [NV_CURRENTTIME, PDO::PARAM_INT];
             } elseif ($postdata['filter'] == 'waiting') {
-                $where[] = '(mtb.add_time > ' . NV_CURRENTTIME . ')';
+                $where[] = '(mtb.add_time > :current_time)';
+                $params[':current_time'] = [NV_CURRENTTIME, PDO::PARAM_INT];
             } elseif ($postdata['filter'] == 'expired') {
-                $where[] = '(mtb.exp_time != 0 AND mtb.exp_time < ' . NV_CURRENTTIME . ')';
+                $where[] = '(mtb.exp_time != 0 AND mtb.exp_time < :current_time)';
+                $params[':current_time'] = [NV_CURRENTTIME, PDO::PARAM_INT];
             }
         }
 
-        $where = implode(' AND ', $where);
-        $db->sqlreset()
-            ->select('COUNT(*)')
-            ->from(NV_INFORM_GLOBALTABLE . ' AS mtb')
-            ->where($where);
-        $num_items = $db->query($db->sql())
-            ->fetchColumn();
+        $where_str = !empty($where) ? ' WHERE ' . implode(' AND ', $where) : '';
+
+        $sth = $db->prepare('SELECT COUNT(*) FROM ' . NV_INFORM_GLOBALTABLE . ' AS mtb' . $where_str);
+        foreach ($params as $key => $val) {
+            $sth->bindValue($key, $val[0], $val[1]);
+        }
+        $sth->execute();
+        $num_items = $sth->fetchColumn();
         $this->result->set('total', $num_items);
 
-        $db->select('mtb.*, (SELECT COUNT(*) FROM ' . NV_INFORM_STATUS_GLOBALTABLE . ' WHERE pid = mtb.id AND viewed_time != 0) AS views')
-            ->order('mtb.add_time DESC')
-            ->limit($postdata['per_page'])
-            ->offset(($postdata['page'] - 1) * $postdata['per_page']);
-        $result = $db->query($db->sql());
+        $sth = $db->prepare('SELECT mtb.*, (SELECT COUNT(*) FROM ' . NV_INFORM_STATUS_GLOBALTABLE . ' WHERE pid = mtb.id AND viewed_time != 0) AS views
+            FROM ' . NV_INFORM_GLOBALTABLE . ' AS mtb' . $where_str . '
+            ORDER BY mtb.add_time DESC
+            LIMIT :limit OFFSET :offset');
+        foreach ($params as $key => $val) {
+            $sth->bindValue($key, $val[0], $val[1]);
+        }
+        $sth->bindValue(':limit', $postdata['per_page'], PDO::PARAM_INT);
+        $sth->bindValue(':offset', ($postdata['page'] - 1) * $postdata['per_page'], PDO::PARAM_INT);
+        $sth->execute();
         $items = [];
-        while ($row = $result->fetch()) {
+        while ($row = $sth->fetch()) {
             $messages = json_decode($row['message'], true);
             if (json_last_error() === JSON_ERROR_NONE) {
                 $row['message'] = $messages;

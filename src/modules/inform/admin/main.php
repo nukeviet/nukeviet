@@ -17,41 +17,43 @@ $grouplist = groups_list();
 
 // Kết quả tìm kiếm thành viên
 if ($nv_Request->isset_request('get_user_json', 'post')) {
+    if (!csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
+        nv_jsonOutput([
+            'status' => 'error',
+            'mess' => $nv_Lang->getGlobal('error_checkss')
+        ]);
+    }
+
     $q = $nv_Request->get_title('q', 'post', '');
     $grid = $nv_Request->get_int('grid', 'post', 0);
 
     if (!empty($grid) and isset($grouplist[$grid])) {
-        $where = '(username LIKE :username OR email LIKE :email OR first_name like :first_name OR last_name like :last_name) AND userid IN (SELECT userid FROM ' . NV_USERS_GLOBALTABLE . '_groups_users WHERE group_id = ' . $grid . ')';
+        $where = '(username LIKE :username OR email LIKE :email OR first_name like :first_name OR last_name like :last_name) AND userid IN (SELECT userid FROM ' . NV_USERS_GLOBALTABLE . '_groups_users WHERE group_id = :grid)';
     } else {
         $where = '(username LIKE :username OR email LIKE :email OR first_name like :first_name OR last_name like :last_name)';
     }
-    $db->sqlreset()
-        ->select('userid, username, email, first_name, last_name')
-        ->from(NV_USERS_GLOBALTABLE)
-        ->where($where)
-        ->order('username ASC')
-        ->limit(20);
-
-    $sth = $db->prepare($db->sql());
+    $sth = $db->prepare('SELECT userid, username, email, first_name, last_name FROM ' . NV_USERS_GLOBALTABLE . ' WHERE ' . $where . ' ORDER BY username ASC LIMIT 20');
     $sth->bindValue(':username', '%' . $q . '%', PDO::PARAM_STR);
     $sth->bindValue(':email', '%' . $q . '%', PDO::PARAM_STR);
     $sth->bindValue(':first_name', '%' . $q . '%', PDO::PARAM_STR);
     $sth->bindValue(':last_name', '%' . $q . '%', PDO::PARAM_STR);
+    if (!empty($grid) and isset($grouplist[$grid])) {
+        $sth->bindValue(':grid', $grid, PDO::PARAM_INT);
+    }
     $sth->execute();
 
     $data = [];
-    while ($_scratch = $sth->fetch(3)) {
-        [$userid, $username, $email, $first_name, $last_name] = $_scratch;
-        unset($_scratch);
-        $full_name = $global_config['name_show'] ? [$first_name, $last_name] : [$last_name, $first_name];
+    while ($row = $sth->fetch()) {
+        $full_name = $global_config['name_show'] ? [$row['first_name'], $row['last_name']] : [$row['last_name'], $row['first_name']];
         $full_name = array_filter($full_name);
         $data[] = [
-            'id' => $userid,
-            'username' => $username,
+            'id' => $row['userid'],
+            'username' => $row['username'],
             'fullname' => implode(' ', $full_name),
-            'email' => $email
+            'email' => $row['email']
         ];
     }
+    $sth->closeCursor();
 
     nv_jsonOutput($data);
 }
@@ -60,8 +62,10 @@ $page_url = $base_url = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '='
 $adminlist = admins_list();
 
 $where = [];
+$params = [];
 if (!defined('NV_IS_SPADMIN')) {
-    $where[] = '(mtb.sender_admin=' . $admin_info['admin_id'] . ')';
+    $where[] = '(mtb.sender_admin = :sender_admin)';
+    $params[':sender_admin'] = [$admin_info['admin_id'], PDO::PARAM_INT];
 }
 
 $action = $nv_Request->get_title('action', 'post', '');
@@ -76,19 +80,27 @@ if ($action == 'inform_del') {
     }
     $id = $nv_Request->get_int('id', 'post', 0);
     if ($id) {
-        $where[] = '(mtb.id = ' . $id . ')';
-        $where = implode(' AND ', $where);
-        $db->sqlreset()
-            ->select('COUNT(*)')
-            ->from(NV_INFORM_GLOBALTABLE . ' AS mtb')
-            ->where($where);
-        $num_items = $db->query($db->sql())
-            ->fetchColumn();
+        $where[] = '(mtb.id = :id)';
+        $where_str = !empty($where) ? ' WHERE ' . implode(' AND ', $where) : '';
+
+        $sth = $db->prepare('SELECT COUNT(*) FROM ' . NV_INFORM_GLOBALTABLE . ' AS mtb' . $where_str);
+        $sth->bindValue(':id', $id, PDO::PARAM_INT);
+        foreach ($params as $key => $val) {
+            $sth->bindValue($key, $val[0], $val[1]);
+        }
+        $sth->execute();
+        $num_items = $sth->fetchColumn();
+        $sth->closeCursor();
+
         if ($num_items) {
-            $db->query('DELETE FROM ' . NV_INFORM_STATUS_GLOBALTABLE . ' WHERE pid = ' . $id);
-            $db->query('DELETE FROM ' . NV_INFORM_GLOBALTABLE . ' WHERE id = ' . $id);
-            $db->query('OPTIMIZE TABLE ' . NV_INFORM_STATUS_GLOBALTABLE);
-            $db->query('OPTIMIZE TABLE ' . NV_INFORM_GLOBALTABLE);
+            $sth = $db->prepare('DELETE FROM ' . NV_INFORM_STATUS_GLOBALTABLE . ' WHERE pid = :pid');
+            $sth->bindValue(':pid', $id, PDO::PARAM_INT);
+            $sth->execute();
+
+            $sth = $db->prepare('DELETE FROM ' . NV_INFORM_GLOBALTABLE . ' WHERE id = :id');
+            $sth->bindValue(':id', $id, PDO::PARAM_INT);
+            $sth->execute();
+
             nv_insert_logs(NV_LANG_DATA, $module_name, 'Delete inform', $id, $admin_info['userid']);
             nv_jsonOutput([
                 'status' => 'OK',
@@ -104,6 +116,13 @@ if ($action == 'inform_del') {
 
 // Thêm/sửa thông báo
 if ($action == 'inform_action') {
+    if (!csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
+        nv_jsonOutput([
+            'status' => 'error',
+            'mess' => $nv_Lang->getGlobal('error_checkss')
+        ]);
+    }
+
     $id = $nv_Request->get_int('id', 'post', 0);
     $data = [
         'id' => 0,
@@ -120,9 +139,14 @@ if ($action == 'inform_action') {
         'exp_time' => NV_CURRENTTIME + $global_config['inform_default_exp']
     ];
     if (!empty($id)) {
-        $where[] = '(mtb.id = ' . $id . ')';
-        $sql = 'SELECT * FROM ' . NV_INFORM_GLOBALTABLE . ' AS mtb WHERE ' . implode(' AND ', $where);
-        $data = $db->query($sql)->fetch();
+        $where[] = '(mtb.id = :id)';
+
+        $sth = $db->prepare('SELECT * FROM ' . NV_INFORM_GLOBALTABLE . ' AS mtb WHERE ' . implode(' AND ', $where));
+        $sth->bindValue(':id', $id, PDO::PARAM_INT);
+        $sth->execute();
+        $data = $sth->fetch();
+        $sth->closeCursor();
+
         if (empty($data)) {
             nv_jsonOutput([
                 'status' => 'error',
@@ -132,6 +156,7 @@ if ($action == 'inform_action') {
     }
 
     if ($nv_Request->isset_request('save', 'post')) {
+        // CSRF check is already here, but keep it for consistency
         if (!csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
             nv_jsonOutput([
                 'status' => 'error',
@@ -277,20 +302,25 @@ if ($action == 'inform_action') {
         if (!empty($id)) {
             $sth = $db->prepare('UPDATE ' . NV_INFORM_GLOBALTABLE . ' SET
             receiver_grs = :receiver_grs, receiver_ids = :receiver_ids, sender_role = :sender_role,
-            sender_group = ' . $postdata['sender_group'] . ', sender_admin = ' . $postdata['sender_admin'] . ',
-            message = :message, link = :link, add_time = ' . $postdata['add_time'] . ', exp_time = ' . $postdata['exp_time'] . '
-            WHERE id = ' . $id);
+            sender_group = :sender_group, sender_admin = :sender_admin,
+            message = :message, link = :link, add_time = :add_time, exp_time = :exp_time
+            WHERE id = :id');
+            $sth->bindValue(':id', $id, PDO::PARAM_INT);
         } else {
             $sth = $db->prepare('INSERT INTO ' . NV_INFORM_GLOBALTABLE . '
             (receiver_grs, receiver_ids, sender_role, sender_group, sender_admin, message, link, add_time, exp_time) VALUES
-            (:receiver_grs, :receiver_ids, :sender_role, ' . $postdata['sender_group'] . ', ' . $postdata['sender_admin'] . ', :message, :link, ' . $postdata['add_time'] . ', ' . $postdata['exp_time'] . ')');
+            (:receiver_grs, :receiver_ids, :sender_role, :sender_group, :sender_admin, :message, :link, :add_time, :exp_time)');
         }
 
         $sth->bindValue(':receiver_grs', $postdata['receiver_grs'], PDO::PARAM_STR);
         $sth->bindValue(':receiver_ids', $postdata['receiver_ids'], PDO::PARAM_STR);
         $sth->bindValue(':sender_role', $postdata['sender_role'], PDO::PARAM_STR);
+        $sth->bindValue(':sender_group', $postdata['sender_group'], PDO::PARAM_INT);
+        $sth->bindValue(':sender_admin', $postdata['sender_admin'], PDO::PARAM_INT);
         $sth->bindValue(':message', $postdata['message'], PDO::PARAM_STR);
         $sth->bindValue(':link', $postdata['link'], PDO::PARAM_STR);
+        $sth->bindValue(':add_time', $postdata['add_time'], PDO::PARAM_INT);
+        $sth->bindValue(':exp_time', $postdata['exp_time'], PDO::PARAM_INT);
         $sth->execute();
 
         $log_id = !empty($id) ? $id : $db->lastInsertId();
@@ -483,13 +513,17 @@ if (defined('NV_IS_SPADMIN')) {
     } elseif ($filter == 'admins') {
         $where[] = "(mtb.sender_role = 'admin')";
     } elseif ($filter == 'admin') {
-        $where[] = "(mtb.sender_role = 'admin' AND mtb.sender_admin=" . $admin_info['admin_id'] . ')';
+        $where[] = "(mtb.sender_role = 'admin' AND mtb.sender_admin = :sender_admin)";
+        $params[':sender_admin'] = [$admin_info['admin_id'], PDO::PARAM_INT];
     } elseif ($filter == 'active') {
-        $where[] = '(mtb.add_time <= ' . NV_CURRENTTIME . ' AND (mtb.exp_time = 0 OR mtb.exp_time > ' . NV_CURRENTTIME . '))';
+        $where[] = '(mtb.add_time <= :current_time AND (mtb.exp_time = 0 OR mtb.exp_time > :current_time))';
+        $params[':current_time'] = [NV_CURRENTTIME, PDO::PARAM_INT];
     } elseif ($filter == 'waiting') {
-        $where[] = '(mtb.add_time > ' . NV_CURRENTTIME . ')';
+        $where[] = '(mtb.add_time > :current_time)';
+        $params[':current_time'] = [NV_CURRENTTIME, PDO::PARAM_INT];
     } elseif ($filter == 'expired') {
-        $where[] = '(mtb.exp_time != 0 AND mtb.exp_time < ' . NV_CURRENTTIME . ')';
+        $where[] = '(mtb.exp_time != 0 AND mtb.exp_time < :current_time)';
+        $params[':current_time'] = [NV_CURRENTTIME, PDO::PARAM_INT];
     }
 
     $filters = [
@@ -503,24 +537,31 @@ if (defined('NV_IS_SPADMIN')) {
     ];
 }
 
-$where = implode(' AND ', $where);
+$where_str = !empty($where) ? ' WHERE ' . implode(' AND ', $where) : '';
 
-$db->sqlreset()
-    ->select('COUNT(*)')
-    ->from(NV_INFORM_GLOBALTABLE . ' AS mtb')
-    ->where($where);
-$num_items = $db->query($db->sql())
-    ->fetchColumn();
+$sth = $db->prepare('SELECT COUNT(*) FROM ' . NV_INFORM_GLOBALTABLE . ' AS mtb' . $where_str);
+foreach ($params as $key => $val) {
+    $sth->bindValue($key, $val[0], $val[1]);
+}
+$sth->execute();
+$num_items = $sth->fetchColumn();
+$sth->closeCursor();
+
 $generate_page = nv_generate_page($base_url, $num_items, $per_page, $page);
 
-$db->select('mtb.*, (SELECT COUNT(*) FROM ' . NV_INFORM_STATUS_GLOBALTABLE . ' WHERE pid = mtb.id AND viewed_time != 0) AS views')
-    ->order('mtb.add_time DESC')
-    ->limit($per_page)
-    ->offset(($page - 1) * $per_page);
-$result = $db->query($db->sql());
+$sth = $db->prepare('SELECT mtb.*, (SELECT COUNT(*) FROM ' . NV_INFORM_STATUS_GLOBALTABLE . ' WHERE pid = mtb.id AND viewed_time != 0) AS views
+    FROM ' . NV_INFORM_GLOBALTABLE . ' AS mtb' . $where_str . '
+    ORDER BY mtb.add_time DESC
+    LIMIT :limit OFFSET :offset');
+foreach ($params as $key => $val) {
+    $sth->bindValue($key, $val[0], $val[1]);
+}
+$sth->bindValue(':limit', (int) $per_page, PDO::PARAM_INT);
+$sth->bindValue(':offset', (int) (($page - 1) * $per_page), PDO::PARAM_INT);
+$sth->execute();
 $items = [];
 $user_ids = [];
-while ($row = $result->fetch()) {
+while ($row = $sth->fetch()) {
     if (!empty($row['message'])) {
         $messages = json_decode($row['message'], true);
         if (json_last_error() === JSON_ERROR_NONE) {
@@ -591,6 +632,7 @@ while ($row = $result->fetch()) {
 
     $items[$row['id']] = $row;
 }
+$sth->closeCursor();
 
 // Lấy thông tin người dùng nhận thông báo
 $users = !empty($user_ids) ? userlist_by_ids($user_ids, 0, true) : [];

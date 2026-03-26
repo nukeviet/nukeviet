@@ -14,6 +14,7 @@ namespace NukeViet\Module\inform\uapi;
 use NukeViet\Uapi\Uapi;
 use NukeViet\Uapi\UapiResult;
 use NukeViet\Uapi\UiApi;
+use PDO;
 
 if (!defined('NV_MAINFILE')) {
     exit('Stop!!!');
@@ -78,15 +79,18 @@ class InformGroupGetInfo implements UiApi
                 ->getResult();
         }
 
-        $count = $db->query('SELECT COUNT(*) FROM ' . NV_USERS_GLOBALTABLE . '_groups_users WHERE group_id=' . $group_id . ' AND is_leader=1 AND userid=' . $user_id)->fetchColumn();
+        $sth = $db->prepare('SELECT COUNT(*) FROM ' . NV_USERS_GLOBALTABLE . '_groups_users WHERE group_id = :group_id AND is_leader=1 AND userid = :userid');
+        $sth->bindValue(':group_id', $group_id, PDO::PARAM_INT);
+        $sth->bindValue(':userid', $user_id, PDO::PARAM_INT);
+        $sth->execute();
+        $count = $sth->fetchColumn();
+
         if (!$count) {
             return $this->result->setError()
                 ->setCode('5015')
                 ->setMessage($nv_Lang->getModule('not_group_manager'))
                 ->getResult();
         }
-
-        $where = "(mtb.sender_role='group' AND mtb.sender_group=" . $group_id . ')';
 
         $postdata = [];
         $postdata['id'] = $nv_Request->get_int('id', 'post', 0);
@@ -97,13 +101,13 @@ class InformGroupGetInfo implements UiApi
                 ->setMessage($nv_Lang->getModule('notification_not_exist'))
                 ->getResult();
         }
-        $where .= ' AND (mtb.id=' . $postdata['id'] . ')';
-        $db->sqlreset()
-            ->select('*')
-            ->from(NV_INFORM_GLOBALTABLE . ' AS mtb')
-            ->where($where);
-        $result = $db->query($db->sql());
-        $data = $result->fetch();
+
+        $sth = $db->prepare('SELECT * FROM ' . NV_INFORM_GLOBALTABLE . ' AS mtb WHERE mtb.sender_role = \'group\' AND mtb.sender_group = :group_id AND mtb.id = :id');
+        $sth->bindValue(':group_id', $group_id, PDO::PARAM_INT);
+        $sth->bindValue(':id', $postdata['id'], PDO::PARAM_INT);
+        $sth->execute();
+        $data = $sth->fetch();
+
         // Nếu thông báo không tồn tại trong CSDL
         if (empty($data)) {
             return $this->result->setError()
