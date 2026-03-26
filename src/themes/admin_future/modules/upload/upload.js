@@ -201,6 +201,8 @@ var nukeviet = nukeviet || {};
         this.bodyDigEndPadding = 0;
         this.bodyDigOverflow = '';
         this.bodyDigVScroll = false;
+        this.bsFocusTrapModal = null;
+        this.bsFocusTrapDisabled = false;
 
         this.refresh = false;
         this.page = 1;
@@ -243,6 +245,79 @@ var nukeviet = nukeviet || {};
 
         this.debug = {$DEBUG};
         this.init();
+    }
+
+    getTopBootstrapModal() {
+        let topModal = null;
+        let maxZIndex = 0;
+
+        document.querySelectorAll('.modal').forEach((modal) => {
+            if (window.getComputedStyle(modal).display !== 'block') {
+                return;
+            }
+
+            const zIndex = parseInt(window.getComputedStyle(modal).zIndex, 10);
+            if (zIndex > maxZIndex) {
+                maxZIndex = zIndex;
+                topModal = modal;
+            }
+        });
+
+        return topModal;
+    }
+
+    disableBootstrapFocusTrap() {
+        if (
+            !window.jQuery || !$ || !$.fn || !($.fn.modal && $.fn.modal.Constructor && $.fn.modal.Constructor.VERSION)
+        ) {
+            return;
+        }
+
+        const topModal = this.getTopBootstrapModal();
+        if (!topModal) {
+            return;
+        }
+
+        const bsVersion = parseInt($.fn.modal.Constructor.VERSION.substring(0, 1));
+        if (bsVersion > 4) {
+            const modalInstance = bootstrap.Modal.getInstance(topModal);
+            if (!modalInstance || !modalInstance._focustrap) {
+                return;
+            }
+            modalInstance._focustrap.deactivate();
+        } else {
+            $(document).off('focusin.bs.modal');
+        }
+
+        this.bsFocusTrapModal = topModal;
+        this.bsFocusTrapDisabled = true;
+    }
+
+    restoreBootstrapFocusTrap() {
+        if (
+            !this.bsFocusTrapDisabled ||
+            !this.bsFocusTrapModal ||
+            !window.jQuery || !$ || !$.fn || !($.fn.modal && $.fn.modal.Constructor && $.fn.modal.Constructor.VERSION)
+        ) {
+            this.bsFocusTrapModal = null;
+            this.bsFocusTrapDisabled = false;
+            return;
+        }
+
+        const topModal = this.bsFocusTrapModal;
+        const bsVersion = parseInt($.fn.modal.Constructor.VERSION.substring(0, 1));
+        if (bsVersion > 4) {
+            const modalInstance = bootstrap.Modal.getInstance(topModal);
+            if (modalInstance && modalInstance._focustrap && window.getComputedStyle(topModal).display === 'block') {
+                modalInstance._focustrap.activate();
+            }
+        } else if ($(topModal).is(':visible')) {
+            const modalInstance = $(topModal).data('bs.modal');
+            modalInstance && modalInstance.enforceFocus();
+        }
+
+        this.bsFocusTrapModal = null;
+        this.bsFocusTrapDisabled = false;
     }
 
     // Dựng trình quản lý tệp tin
@@ -1397,6 +1472,7 @@ var nukeviet = nukeviet || {};
                 body.removeAttribute('style');
             }
             $('body').removeClass('fmm-open');
+            self.restoreBootstrapFocusTrap();
         }, 300);
     }
 
@@ -1404,6 +1480,7 @@ var nukeviet = nukeviet || {};
     showModal() {
         const self = this;
         self.isFocused = true;
+        self.disableBootstrapFocusTrap();
 
         // Tạo HTML cho modal và lắng nghe các sự kiện
         self.fmm = $(self.htmlModal);
@@ -1684,6 +1761,8 @@ var nukeviet = nukeviet || {};
         if (dig.length != 1 || dig.is('.show')) {
             return;
         }
+
+        self.disableBootstrapFocusTrap();
 
         // Đình chỉ thanh cuộn của body
         const body = document.body;
@@ -2275,6 +2354,7 @@ var nukeviet = nukeviet || {};
                 body.removeAttribute('style');
             }
             $('body').removeClass('fmd-open');
+            self.restoreBootstrapFocusTrap();
             self.hideDialogCallback(dig);
             dig.removeAttr('aria-modal');
             dig.attr('aria-hidden', 'true');
