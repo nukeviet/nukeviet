@@ -47,6 +47,7 @@ function nv_list_menu()
             'title' => $row['title'],
         ];
     }
+    $result->closeCursor();
 
     return $list;
 }
@@ -64,14 +65,16 @@ function menu_fix_order($mid, $parentid = 0, $order = 0, $lev = 0)
 {
     global $db, $module_data;
 
-    $sql = 'SELECT id, parentid FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE parentid=' . $parentid . ' AND mid= ' . $mid . ' ORDER BY weight ASC';
-    $result = $db->query($sql);
+    $stmt = $db->prepare('SELECT id, parentid FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE parentid = :parentid AND mid = :mid ORDER BY weight ASC');
+    $stmt->bindValue(':parentid', $parentid, PDO::PARAM_INT);
+    $stmt->bindValue(':mid', $mid, PDO::PARAM_INT);
+    $stmt->execute();
 
     $array_cat_order = [];
-    while ($row = $result->fetch()) {
+    while ($row = $stmt->fetch()) {
         $array_cat_order[] = $row['id'];
     }
-    $result->closeCursor();
+    $stmt->closeCursor();
 
     $weight = 0;
     if ($parentid > 0) {
@@ -80,11 +83,17 @@ function menu_fix_order($mid, $parentid = 0, $order = 0, $lev = 0)
         $lev = 0;
     }
 
+    $stmt_update = $db->prepare('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_rows SET weight = :weight, sort = :sort, lev = :lev WHERE id = :id');
+
     foreach ($array_cat_order as $catid_i) {
         ++$order;
         ++$weight;
-        $sql = 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_rows SET weight=' . $weight . ', sort=' . $order . ", lev='" . $lev . "' WHERE id=" . (int) $catid_i;
-        $db->query($sql);
+        $stmt_update->bindValue(':weight', $weight, PDO::PARAM_INT);
+        $stmt_update->bindValue(':sort', $order, PDO::PARAM_INT);
+        $stmt_update->bindValue(':lev', $lev, PDO::PARAM_INT);
+        $stmt_update->bindValue(':id', $catid_i, PDO::PARAM_INT);
+        $stmt_update->execute();
+
         $order = menu_fix_order($mid, $catid_i, $order, $lev);
     }
 
@@ -103,35 +112,48 @@ function nv_menu_del_sub($id, $parentid)
 {
     global $module_data, $module_name, $db, $admin_info;
 
-    $sql = 'SELECT title, subitem FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE id=' . $id . ' AND parentid=' . $parentid;
-    $row = $db->query($sql)->fetch();
+    $stmt = $db->prepare('SELECT title, subitem FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE id = :id AND parentid = :parentid');
+    $stmt->bindValue(':id', $id, PDO::PARAM_INT);
+    $stmt->bindValue(':parentid', $parentid, PDO::PARAM_INT);
+    $stmt->execute();
+    $row = $stmt->fetch();
+    $stmt->closeCursor();
 
     if (empty($row)) {
         return false;
     }
 
-    $sql = 'DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE id=' . $id;
-    if ($db->exec($sql)) {
+    $stmt = $db->prepare('DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE id = :id');
+    $stmt->bindValue(':id', $id, PDO::PARAM_INT);
+    if ($stmt->execute() && $stmt->rowCount()) {
         // Cap nhat cho menu cha
         if ($parentid > 0) {
-            $sql = 'SELECT subitem FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE id=' . $parentid;
-            $subitem = $db->query($sql)->fetch();
-            if (!empty($subitem)) {
-                $subitem = implode(',', array_diff(array_filter(array_unique(explode(',', $subitem['subitem']))), [$id]));
+            $stmt_sub = $db->prepare('SELECT subitem FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE id = :id');
+            $stmt_sub->bindValue(':id', $parentid, PDO::PARAM_INT);
+            $stmt_sub->execute();
+            $subitem = $stmt_sub->fetch();
+            $stmt_sub->closeCursor();
 
-                $stmt = $db->prepare('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_rows SET subitem= :subitem WHERE id=' . $parentid);
-                $stmt->bindParam(':subitem', $subitem, PDO::PARAM_STR, strlen($subitem));
-                $stmt->execute();
+            if (!empty($subitem)) {
+                $subitem_str = implode(',', array_diff(array_filter(array_unique(explode(',', $subitem['subitem']))), [$id]));
+
+                $stmt_upd = $db->prepare('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_rows SET subitem = :subitem WHERE id = :id');
+                $stmt_upd->bindValue(':subitem', $subitem_str, PDO::PARAM_STR);
+                $stmt_upd->bindValue(':id', $parentid, PDO::PARAM_INT);
+                $stmt_upd->execute();
             }
         }
 
         $subitem = (!empty($row['subitem'])) ? explode(',', $row['subitem']) : [];
-        foreach ($subitem as $id) {
-            $sql = 'SELECT parentid FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE id=' . $id;
+        $stmt_parent = $db->prepare('SELECT parentid FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE id = :id');
 
-            [$parentid] = $db->query($sql)->fetch(3);
-            nv_menu_del_sub($id, $parentid);
-            nv_insert_logs(NV_LANG_DATA, $module_name, 'Delete menu item', 'Item ID ' . $id, $admin_info['userid']);
+        foreach ($subitem as $sub_id) {
+            $stmt_parent->bindValue(':id', $sub_id, PDO::PARAM_INT);
+            $stmt_parent->execute();
+            $parentid_child = $stmt_parent->fetchColumn();
+
+            nv_menu_del_sub($sub_id, $parentid_child);
+            nv_insert_logs(NV_LANG_DATA, $module_name, 'Delete menu item', 'Item ID ' . $sub_id, $admin_info['userid']);
         }
     }
 
@@ -187,13 +209,15 @@ function nv_get_menulist($mid)
 {
     global $db, $module_data;
 
-    $sql = 'SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE mid=' . $mid . ' ORDER BY parentid, sort ASC';
-    $result = $db->query($sql);
+    $stmt = $db->prepare('SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE mid = :mid ORDER BY parentid, sort ASC');
+    $stmt->bindValue(':mid', $mid, PDO::PARAM_INT);
+    $stmt->execute();
+
     $sps = [];
     $subs = [];
     $i = 0;
     $menulist = [];
-    while ($row = $result->fetch()) {
+    while ($row = $stmt->fetch()) {
         $row['parentid'] = (int) $row['parentid'];
         $sp_title = '';
         if ($row['parentid'] > 0) {
@@ -210,6 +234,7 @@ function nv_get_menulist($mid)
         $row['name'] = $sp_title . ' ' . $row['title'];
         $menulist[$row['id']] = $row;
     }
+    $stmt->closeCursor();
 
     return $menulist;
 }
@@ -232,38 +257,27 @@ function nv_menu_insert_id($mid, $parentid, $title, $weight, $sort, $lev, $mod_n
 {
     global $module_data, $db;
 
-    $sql = 'INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . '_rows (parentid, mid, title, link, note, weight, sort, lev, subitem, groups_view, module_name, op, target, css, active_type, status) VALUES (
-		' . $parentid . ',
-		' . $mid . ',
-		:title,
-		:link,
-		:note,
-		' . $weight . ',
-		' . $sort . ',
-		' . $lev . ",
-		'',
-		:groups_view,
-		:module_name,
-		:op,
-		1,
-		'',
-		1,
-		1
-	)";
+    $stmt = $db->prepare('INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . "_rows (parentid, mid, title, link, note, weight, sort, lev, subitem, groups_view, module_name, op, target, css, active_type, status) VALUES (:parentid, :mid, :title, :link, :note, :weight, :sort, :lev, '', :groups_view, :module_name, :op, 1, '', 1, 1)");
 
     $link = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $mod_name;
     if (!empty($op_mod)) {
         $link .= '&amp;' . NV_OP_VARIABLE . '=' . $op_mod;
     }
-    $data_insert = [];
-    $data_insert['title'] = $title;
-    $data_insert['link'] = $link;
-    $data_insert['note'] = '';
-    $data_insert['groups_view'] = $groups_view;
-    $data_insert['module_name'] = $mod_name;
-    $data_insert['op'] = $op_mod;
 
-    return $db->insert_id($sql, 'id', $data_insert);
+    $stmt->bindValue(':parentid', $parentid, PDO::PARAM_INT);
+    $stmt->bindValue(':mid', $mid, PDO::PARAM_INT);
+    $stmt->bindValue(':title', $title, PDO::PARAM_STR);
+    $stmt->bindValue(':link', $link, PDO::PARAM_STR);
+    $stmt->bindValue(':note', '', PDO::PARAM_STR);
+    $stmt->bindValue(':weight', $weight, PDO::PARAM_INT);
+    $stmt->bindValue(':sort', $sort, PDO::PARAM_INT);
+    $stmt->bindValue(':lev', $lev, PDO::PARAM_INT);
+    $stmt->bindValue(':groups_view', $groups_view, PDO::PARAM_STR);
+    $stmt->bindValue(':module_name', $mod_name, PDO::PARAM_STR);
+    $stmt->bindValue(':op', $op_mod, PDO::PARAM_STR);
+    $stmt->execute();
+
+    return $db->lastInsertId();
 }
 
 /**
@@ -297,6 +311,9 @@ function nv_menu_insert_submenu($mid, $parentid, &$sort, $lev, $mod_name, $array
     }
 
     if (!empty($array_sub_id)) {
-        $db->query('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . "_rows SET subitem='" . implode(',', $array_sub_id) . "' WHERE id=" . $parentid);
+        $stmt = $db->prepare('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_rows SET subitem = :subitem WHERE id = :id');
+        $stmt->bindValue(':subitem', implode(',', $array_sub_id), PDO::PARAM_STR);
+        $stmt->bindValue(':id', $parentid, PDO::PARAM_INT);
+        $stmt->execute();
     }
 }

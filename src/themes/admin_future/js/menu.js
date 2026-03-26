@@ -145,7 +145,7 @@ $(function () {
                 type: 'POST',
                 url: $('#menulist').attr('action'),
                 cache: false,
-                data: 'action=chang_weight&mid=' + mid + '&parentid=' + parentid + '&id=' + id + '&new_weight=' + new_weight
+                data: 'action=chang_weight&mid=' + mid + '&parentid=' + parentid + '&id=' + id + '&new_weight=' + new_weight + '&checkss=' + $('#menulist').data('checkss')
             }).done(function () {
                 location.reload();
             }).fail(function (xhr, text) {
@@ -162,7 +162,7 @@ $(function () {
                 type: 'POST',
                 url: $('#menulist').attr('action'),
                 cache: false,
-                data: 'action=change_active&id=' + id
+                data: 'action=change_active&id=' + id + '&checkss=' + $('#menulist').data('checkss')
             }).done(function () {
                 setTimeout(function () {
                     chk.prop('disabled', false);
@@ -187,7 +187,7 @@ $(function () {
             nvConfirm(msg, function () {
                 $.post(
                     script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&nocache=' + new Date().getTime(),
-                    'action=delete&id=' + id + '&parentid=' + parentid + '&mid=' + mid,
+                    'action=delete&id=' + id + '&parentid=' + parentid + '&mid=' + mid + '&checkss=' + $('#menulist').data('checkss'),
                     function () {
                         location.reload();
                     }
@@ -214,7 +214,7 @@ $(function () {
                     type: 'POST',
                     url: $('#menulist').attr('action'),
                     cache: false,
-                    data: 'action=delete&mid=' + mid + '&parentid=' + parentid + '&idcheck=' + list.join(',')
+                    data: 'action=delete&mid=' + mid + '&parentid=' + parentid + '&idcheck=' + list.join(',') + '&checkss=' + $('#menulist').data('checkss')
                 }).done(function () {
                     location.reload();
                 }).fail(function (xhr, text) {
@@ -234,7 +234,7 @@ $(function () {
                 icon.removeClass(orig).addClass('fa-spinner fa-spin-pulse');
                 $.post(
                     $('#menulist').attr('action'),
-                    'reload=1&mid=' + $('#menulist').data('mid') + '&id=' + btn.closest('.item').data('id'),
+                    'reload=1&mid=' + $('#menulist').data('mid') + '&id=' + btn.closest('.item').data('id') + '&checkss=' + $('#menulist').data('checkss'),
                     function (res) {
                         icon.removeClass('fa-spinner fa-spin-pulse').addClass(orig);
                         location.reload();
@@ -326,7 +326,7 @@ $(function () {
                     data: {
                         del: 1,
                         id: btn.data('id'),
-                        checkss: btn.data('tokend')
+                        checkss: btn.data('checkss')
                     },
                     dataType: 'json',
                     cache: false

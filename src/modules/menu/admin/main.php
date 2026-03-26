@@ -17,27 +17,37 @@ $groups_list = nv_groups_list();
 
 // Nạp lại thành phần con
 if ($nv_Request->isset_request('reload', 'post')) {
+    if (!csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
+        exit('NO_' . $nv_Lang->getGlobal('error_checkss'));
+    }
+
     $id = $nv_Request->get_int('id', 'post', 0);
     $mid = $nv_Request->get_int('mid', 'post', 0);
     $array_sub_id = [];
 
-    $rows = $db->query('SELECT id, parentid, module_name, lev, subitem FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE id=' . $id)->fetch();
-
-    $mod_name = $rows['module_name'];
-    $mod_data = $site_mods[$rows['module_name']]['module_data'];
-    $mod_file = $site_mods[$rows['module_name']]['module_file'];
+    $stmt = $db->prepare('SELECT id, parentid, module_name, lev, subitem FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE id = :id');
+    $stmt->bindValue(':id', $id, PDO::PARAM_INT);
+    $stmt->execute();
+    $rows = $stmt->fetch();
+    $stmt->closeCursor();
 
     if (empty($rows)) {
         exit('NO_' . $nv_Lang->getModule('action_menu_reload_none_success'));
     }
 
+    $mod_name = $rows['module_name'];
+    $mod_data = $site_mods[$rows['module_name']]['module_data'];
+    $mod_file = $site_mods[$rows['module_name']]['module_file'];
+
     // Xoa menu cu
     if (!empty($rows['subitem'])) {
         $rows['subitem'] = explode(',', $rows['subitem']);
-        foreach ($rows['subitem'] as $subid) {
-            $sql = 'SELECT parentid FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE id=' . $subid;
+        $stmt_parent = $db->prepare('SELECT parentid FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE id = :id');
 
-            [$parentid] = $db->query($sql)->fetch(3);
+        foreach ($rows['subitem'] as $subid) {
+            $stmt_parent->bindValue(':id', $subid, PDO::PARAM_INT);
+            $stmt_parent->execute();
+            $parentid = $stmt_parent->fetchColumn();
             nv_menu_del_sub($subid, $parentid);
         }
     }
@@ -45,7 +55,13 @@ if ($nv_Request->isset_request('reload', 'post')) {
     if (file_exists(NV_ROOTDIR . '/modules/' . $site_mods[$rows['module_name']]['module_file'] . '/menu.php')) {
         include NV_ROOTDIR . '/modules/' . $site_mods[$rows['module_name']]['module_file'] . '/menu.php';
 
-        [$sort, $weight] = $db->query('SELECT MAX(weight), MAX(sort) FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE parentid=' . $rows['parentid'])->fetch(3);
+        $stmt = $db->prepare('SELECT MAX(weight) AS max_weight, MAX(sort) AS max_sort FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE parentid = :parentid');
+        $stmt->bindValue(':parentid', $rows['parentid'], PDO::PARAM_INT);
+        $stmt->execute();
+        $_row_max = $stmt->fetch();
+        $stmt->closeCursor();
+        $weight = $_row_max ? $_row_max['max_weight'] : 0;
+        $sort = $_row_max ? $_row_max['max_sort'] : 0;
 
         // Nap lai menu moi
         foreach ($array_item as $key => $item) {
@@ -73,7 +89,11 @@ if ($nv_Request->isset_request('reload', 'post')) {
     }
 
     if (!empty($array_sub_id)) {
-        $db->query('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . "_rows SET subitem='" . implode(',', $array_sub_id) . "' WHERE id=" . $id);
+        $stmt = $db->prepare('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_rows SET subitem = :subitem WHERE id = :id');
+        $stmt->bindValue(':subitem', implode(',', $array_sub_id), PDO::PARAM_STR);
+        $stmt->bindValue(':id', $id, PDO::PARAM_INT);
+        $stmt->execute();
+
         menu_fix_order($mid, $id);
         $nv_Cache->delMod($module_name);
     }
@@ -82,6 +102,13 @@ if ($nv_Request->isset_request('reload', 'post')) {
 
 // Tạo/sửa menu
 if ($nv_Request->get_title('action', 'post') == 'row') {
+    if (!csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
+        nv_jsonOutput([
+            'status' => 'error',
+            'mess' => $nv_Lang->getGlobal('error_checkss')
+        ]);
+    }
+
     $post = [];
     $post['title'] = nv_substr($nv_Request->get_title('title', 'post', '', 1), 0, 250);
     if (empty($post['title'])) {
@@ -188,76 +215,86 @@ if ($nv_Request->get_title('action', 'post') == 'row') {
     $pa_old = $nv_Request->get_int('pa', 'post', 0);
 
     if ($post['id'] == 0) {
-        $weight = $db->query('SELECT max(weight) FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE mid=' . (int)$post['mid'] . ' AND parentid=' . (int)$post['parentid'])->fetchColumn();
-        $weight = (int)$weight + 1;
-        $sql = 'INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . '_rows
-            (parentid, mid, title, link, icon, image, note, weight, sort, lev, subitem, groups_view,
-            module_name, op, target, css, active_type, status) VALUES
-            (' . (int) ($post['parentid']) . ', ' . (int) ($post['mid']) . ', :title, :link, :icon, :image, :note, ' . (int) $weight . ", 0, 0, '',
-            :groups_view, :module_name, :op, " . (int) ($post['target']) . ', :css, ' . (int) ($post['active_type']) . ', 1
-        )';
+        $stmt = $db->prepare('SELECT max(weight) FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE mid = :mid AND parentid = :parentid');
+        $stmt->bindValue(':mid', $post['mid'], PDO::PARAM_INT);
+        $stmt->bindValue(':parentid', $post['parentid'], PDO::PARAM_INT);
+        $stmt->execute();
+        $weight = $stmt->fetchColumn();
 
-        $data_insert = [];
-        $data_insert['title'] = $post['title'];
-        $data_insert['link'] = $post['link'];
-        $data_insert['icon'] = $post['icon'];
-        $data_insert['image'] = $post['image'];
-        $data_insert['note'] = $post['note'];
-        $data_insert['groups_view'] = $post['groups_view'];
-        $data_insert['module_name'] = $post['module_name'];
-        $data_insert['op'] = $post['op'];
-        $data_insert['css'] = $post['css'];
-        $insert_id = $db->insert_id($sql, 'id', $data_insert);
+        $weight = (int) $weight + 1;
+
+        $stmt = $db->prepare('INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . "_rows (parentid, mid, title, link, icon, image, note, weight, sort, lev, subitem, groups_view, module_name, op, target, css, active_type, status) VALUES (:parentid, :mid, :title, :link, :icon, :image, :note, :weight, 0, 0, '', :groups_view, :module_name, :op, :target, :css, :active_type, 1)");
+        $stmt->bindValue(':parentid', $post['parentid'], PDO::PARAM_INT);
+        $stmt->bindValue(':mid', $post['mid'], PDO::PARAM_INT);
+        $stmt->bindValue(':title', $post['title'], PDO::PARAM_STR);
+        $stmt->bindValue(':link', $post['link'], PDO::PARAM_STR);
+        $stmt->bindValue(':icon', $post['icon'], PDO::PARAM_STR);
+        $stmt->bindValue(':image', $post['image'], PDO::PARAM_STR);
+        $stmt->bindValue(':note', $post['note'], PDO::PARAM_STR);
+        $stmt->bindValue(':weight', $weight, PDO::PARAM_INT);
+        $stmt->bindValue(':groups_view', $post['groups_view'], PDO::PARAM_STR);
+        $stmt->bindValue(':module_name', $post['module_name'], PDO::PARAM_STR);
+        $stmt->bindValue(':op', $post['op'], PDO::PARAM_STR);
+        $stmt->bindValue(':target', $post['target'], PDO::PARAM_INT);
+        $stmt->bindValue(':css', $post['css'], PDO::PARAM_STR);
+        $stmt->bindValue(':active_type', $post['active_type'], PDO::PARAM_INT);
+        $stmt->execute();
+        $insert_id = $db->lastInsertId();
+
         menu_fix_order($post['mid']);
 
         if ($post['parentid'] != 0) {
             $arr_item_menu = [];
-            $sql = 'SELECT id FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE mid=' . $post['mid'] . ' AND parentid=' . $post['parentid'];
-            $result = $db->query($sql);
+            $stmt = $db->prepare('SELECT id FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE mid = :mid AND parentid = :parentid');
+            $stmt->bindValue(':mid', $post['mid'], PDO::PARAM_INT);
+            $stmt->bindValue(':parentid', $post['parentid'], PDO::PARAM_INT);
+            $stmt->execute();
 
-            while ($row = $result->fetch()) {
+            while ($row = $stmt->fetch()) {
                 $arr_item_menu[] = $row['id'];
             }
+            $stmt->closeCursor();
 
-            $sql = 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . "_rows SET subitem= '" . implode(',', $arr_item_menu) . "' WHERE mid= " . $post['mid'] . ' AND id=' . $post['parentid'];
-            $db->query($sql);
+            $stmt = $db->prepare('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_rows SET subitem = :subitem WHERE mid = :mid AND id = :id');
+            $stmt->bindValue(':subitem', implode(',', $arr_item_menu), PDO::PARAM_STR);
+            $stmt->bindValue(':mid', $post['mid'], PDO::PARAM_INT);
+            $stmt->bindValue(':id', $post['parentid'], PDO::PARAM_INT);
+            $stmt->execute();
         }
 
         nv_insert_logs(NV_LANG_DATA, $module_name, 'Add row menu', 'Row menu id: ' . $insert_id . ' of Menu id: ' . $post['mid'], $admin_info['userid']);
     } else {
-        $stmt = $db->prepare('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_rows SET
-            parentid=' . (int) ($post['parentid']) . ',
-            mid=' . (int) ($post['mid']) . ',
-            title= :title,
-            link= :link,
-            icon= :icon,
-            image= :image,
-            note= :note,
-            groups_view= :groups_view,
-            module_name= :module_name,
-            op= :op,
-            target=' . (int) ($post['target']) . ',
-            css= :css,
-            active_type=' . (int) ($post['active_type']) . '
-        WHERE id=' . (int) ($post['id']));
+        $stmt = $db->prepare('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_rows SET parentid = :parentid, mid = :mid, title = :title, link = :link, icon = :icon, image = :image, note = :note, groups_view = :groups_view, module_name = :module_name, op = :op, target = :target, css = :css, active_type = :active_type WHERE id = :id');
 
-        $stmt->bindParam(':title', $post['title'], PDO::PARAM_STR);
-        $stmt->bindParam(':link', $post['link'], PDO::PARAM_STR);
-        $stmt->bindParam(':icon', $post['icon'], PDO::PARAM_STR);
-        $stmt->bindParam(':image', $post['image'], PDO::PARAM_STR);
-        $stmt->bindParam(':note', $post['note'], PDO::PARAM_STR);
-        $stmt->bindParam(':groups_view', $post['groups_view'], PDO::PARAM_STR);
-        $stmt->bindParam(':module_name', $post['module_name'], PDO::PARAM_STR);
-        $stmt->bindParam(':op', $post['op'], PDO::PARAM_STR);
-        $stmt->bindParam(':css', $post['css'], PDO::PARAM_STR);
+        $stmt->bindValue(':parentid', $post['parentid'], PDO::PARAM_INT);
+        $stmt->bindValue(':mid', $post['mid'], PDO::PARAM_INT);
+        $stmt->bindValue(':title', $post['title'], PDO::PARAM_STR);
+        $stmt->bindValue(':link', $post['link'], PDO::PARAM_STR);
+        $stmt->bindValue(':icon', $post['icon'], PDO::PARAM_STR);
+        $stmt->bindValue(':image', $post['image'], PDO::PARAM_STR);
+        $stmt->bindValue(':note', $post['note'], PDO::PARAM_STR);
+        $stmt->bindValue(':groups_view', $post['groups_view'], PDO::PARAM_STR);
+        $stmt->bindValue(':module_name', $post['module_name'], PDO::PARAM_STR);
+        $stmt->bindValue(':op', $post['op'], PDO::PARAM_STR);
+        $stmt->bindValue(':target', $post['target'], PDO::PARAM_INT);
+        $stmt->bindValue(':css', $post['css'], PDO::PARAM_STR);
+        $stmt->bindValue(':active_type', $post['active_type'], PDO::PARAM_INT);
+        $stmt->bindValue(':id', $post['id'], PDO::PARAM_INT);
         $stmt->execute();
 
         if ($pa_old != $post['parentid']) {
-            $weight = $db->query('SELECT max(weight) FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE mid=' . (int) ($post['mid']) . ' AND parentid=' . (int) ($post['parentid'] . ' '))->fetchColumn();
+            $stmt = $db->prepare('SELECT max(weight) FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE mid = :mid AND parentid = :parentid');
+            $stmt->bindValue(':mid', $post['mid'], PDO::PARAM_INT);
+            $stmt->bindValue(':parentid', $post['parentid'], PDO::PARAM_INT);
+            $stmt->execute();
+            $weight = $stmt->fetchColumn();
+
             $weight = (int) $weight + 1;
 
-            $sql = 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_rows SET weight=' . (int) $weight . ' WHERE id=' . (int) ($post['id']);
-            $db->query($sql);
+            $stmt = $db->prepare('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_rows SET weight = :weight WHERE id = :id');
+            $stmt->bindValue(':weight', $weight, PDO::PARAM_INT);
+            $stmt->bindValue(':id', $post['id'], PDO::PARAM_INT);
+            $stmt->execute();
         }
 
         menu_fix_order($post['mid']);
@@ -268,24 +305,38 @@ if ($nv_Request->get_title('action', 'post') == 'row') {
 
         if ($post['parentid'] != 0) {
             $arr_item_menu = [];
-            $sql = 'SELECT id FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE mid= ' . $post['mid'] . ' AND parentid=' . $post['parentid'];
-            $result = $db->query($sql);
-            while ($row = $result->fetch()) {
+            $stmt = $db->prepare('SELECT id FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE mid = :mid AND parentid = :parentid');
+            $stmt->bindValue(':mid', $post['mid'], PDO::PARAM_INT);
+            $stmt->bindValue(':parentid', $post['parentid'], PDO::PARAM_INT);
+            $stmt->execute();
+            while ($row = $stmt->fetch()) {
                 $arr_item_menu[] = $row['id'];
             }
+            $stmt->closeCursor();
 
-            $db->query('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . "_rows SET subitem='" . implode(',', $arr_item_menu) . "' WHERE mid=" . $post['mid'] . ' AND id=' . $post['parentid']);
+            $stmt = $db->prepare('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_rows SET subitem = :subitem WHERE mid = :mid AND id = :id');
+            $stmt->bindValue(':subitem', implode(',', $arr_item_menu), PDO::PARAM_STR);
+            $stmt->bindValue(':mid', $post['mid'], PDO::PARAM_INT);
+            $stmt->bindValue(':id', $post['parentid'], PDO::PARAM_INT);
+            $stmt->execute();
         }
 
         if ($pa_old != 0) {
             $arr_item_menu = [];
-            $sql = 'SELECT id FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE mid= ' . $mid_old . ' AND parentid=' . $pa_old;
-            $result = $db->query($sql);
-            while ($row = $result->fetch()) {
+            $stmt = $db->prepare('SELECT id FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE mid = :mid AND parentid = :parentid');
+            $stmt->bindValue(':mid', $mid_old, PDO::PARAM_INT);
+            $stmt->bindValue(':parentid', $pa_old, PDO::PARAM_INT);
+            $stmt->execute();
+            while ($row = $stmt->fetch()) {
                 $arr_item_menu[] = $row['id'];
             }
+            $stmt->closeCursor();
 
-            $db->query('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . "_rows SET subitem= '" . implode(',', $arr_item_menu) . "' WHERE mid=" . $mid_old . ' AND id=' . $pa_old);
+            $stmt = $db->prepare('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_rows SET subitem = :subitem WHERE mid = :mid AND id = :id');
+            $stmt->bindValue(':subitem', implode(',', $arr_item_menu), PDO::PARAM_STR);
+            $stmt->bindValue(':mid', $mid_old, PDO::PARAM_INT);
+            $stmt->bindValue(':id', $pa_old, PDO::PARAM_INT);
+            $stmt->execute();
         }
 
         nv_insert_logs(NV_LANG_DATA, $module_name, 'Edit row menu', 'Row menu id: ' . $post['id'], $admin_info['userid']);
@@ -325,10 +376,16 @@ if ($nv_Request->get_title('action', 'post') == 'link_menu' and $nv_Request->iss
 if ($nv_Request->get_title('action', 'post') == 'link_module' and $nv_Request->isset_request('module', 'post')) {
     $mod_name = $nv_Request->get_title('module', 'post', '');
 
-    $stmt = $db->prepare('SELECT title, module_file, module_data FROM ' . NV_MODULES_TABLE . ' WHERE title= :module');
-    $stmt->bindParam(':module', $mod_name, PDO::PARAM_STR);
+    $stmt = $db->prepare('SELECT title, module_file, module_data FROM ' . NV_MODULES_TABLE . ' WHERE title = :module');
+    $stmt->bindValue(':module', $mod_name, PDO::PARAM_STR);
     $stmt->execute();
-    [$mod_name, $mod_file, $mod_data] = $stmt->fetch(3);
+    $_row_module = $stmt->fetch();
+    $stmt->closeCursor();
+
+    $mod_name = $_row_module ? $_row_module['title'] : '';
+    $mod_file = $_row_module ? $_row_module['module_file'] : '';
+    $mod_data = $_row_module ? $_row_module['module_data'] : '';
+
     if (empty($mod_name)) {
         exit($nv_Lang->getModule('add_error_module'));
     }
@@ -380,24 +437,47 @@ if ($nv_Request->get_title('action', 'post') == 'link_module' and $nv_Request->i
 
 // Thay đổi thứ tự menu
 if ($nv_Request->get_title('action', 'post') == 'chang_weight' and $nv_Request->isset_request('id,mid,parentid,new_weight', 'post')) {
+    if (!csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
+        exit('NO_' . $nv_Lang->getGlobal('error_checkss'));
+    }
+
     $id = $nv_Request->get_int('id', 'post', 0);
     $mid = $nv_Request->get_int('mid', 'post', 0);
     $parentid = $nv_Request->get_int('parentid', 'post', 0);
     $new_weight = $nv_Request->get_int('new_weight', 'post', 0);
 
-    if ($db->query('SELECT COUNT(*) FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE id=' . $id . ' AND parentid=' . $parentid)->fetchColumn()) {
-        $query = 'SELECT id FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE id !=' . $id . ' AND parentid=' . $parentid . ' AND mid=' . $mid . ' ORDER BY weight ASC';
-        $result = $db->query($query);
+    $stmt = $db->prepare('SELECT COUNT(*) FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE id = :id AND parentid = :parentid');
+    $stmt->bindValue(':id', $id, PDO::PARAM_INT);
+    $stmt->bindValue(':parentid', $parentid, PDO::PARAM_INT);
+    $stmt->execute();
+    $count = $stmt->fetchColumn();
+
+    if ($count) {
+        $stmt = $db->prepare('SELECT id FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE id != :id AND parentid = :parentid AND mid = :mid ORDER BY weight ASC');
+        $stmt->bindValue(':id', $id, PDO::PARAM_INT);
+        $stmt->bindValue(':parentid', $parentid, PDO::PARAM_INT);
+        $stmt->bindValue(':mid', $mid, PDO::PARAM_INT);
+        $stmt->execute();
+
         $weight = 0;
-        while ($row = $result->fetch()) {
+        $stmt_update = $db->prepare('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_rows SET weight = :weight WHERE id = :row_id');
+
+        while ($row = $stmt->fetch()) {
             ++$weight;
             if ($weight == $new_weight) {
                 ++$weight;
             }
-            $db->query('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_rows SET weight=' . $weight . ' WHERE id=' . $row['id']);
+            $stmt_update->bindValue(':weight', $weight, PDO::PARAM_INT);
+            $stmt_update->bindValue(':row_id', $row['id'], PDO::PARAM_INT);
+            $stmt_update->execute();
         }
+        $stmt->closeCursor();
 
-        $db->query('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_rows SET weight=' . $new_weight . ' WHERE id=' . $id . ' AND parentid=' . $parentid);
+        $stmt = $db->prepare('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_rows SET weight = :weight WHERE id = :id AND parentid = :parentid');
+        $stmt->bindValue(':weight', $new_weight, PDO::PARAM_INT);
+        $stmt->bindValue(':id', $id, PDO::PARAM_INT);
+        $stmt->bindValue(':parentid', $parentid, PDO::PARAM_INT);
+        $stmt->execute();
 
         nv_insert_logs(NV_LANG_DATA, $module_name, 'Change weight row menu', 'Row menu id: ' . $id . ', new weight: ' . $new_weight, $admin_info['userid']);
         menu_fix_order($mid);
@@ -409,13 +489,24 @@ if ($nv_Request->get_title('action', 'post') == 'chang_weight' and $nv_Request->
 
 // Thay đổi trạng thái menu
 if ($nv_Request->get_title('action', 'post') == 'change_active' and $nv_Request->isset_request('id', 'post')) {
+    if (!csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
+        exit('NO_' . $nv_Lang->getGlobal('error_checkss'));
+    }
+
     $id = $nv_Request->get_int('id', 'post', 0);
-    $sql = 'SELECT id, status FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE id=' . $id;
-    $row = $db->query($sql)->fetch();
+    $stmt = $db->prepare('SELECT id, status FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE id = :id');
+    $stmt->bindValue(':id', $id, PDO::PARAM_INT);
+    $stmt->execute();
+    $row = $stmt->fetch();
+    $stmt->closeCursor();
+
     if (!empty($row)) {
         $new_status = (int) $row['status'] ? 0 : 1;
-        $sql = 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_rows SET status=' . $new_status . ' WHERE id=' . $id;
-        $db->query($sql);
+        $stmt = $db->prepare('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_rows SET status = :status WHERE id = :id');
+        $stmt->bindValue(':status', $new_status, PDO::PARAM_INT);
+        $stmt->bindValue(':id', $id, PDO::PARAM_INT);
+        $stmt->execute();
+
         $nv_Cache->delMod($module_name);
         $text = $new_status ? 'Active row menu' : 'Inactive row menu';
         nv_insert_logs(NV_LANG_DATA, $module_name, $text, 'Row menu id: ' . $id, $admin_info['userid']);
@@ -425,6 +516,10 @@ if ($nv_Request->get_title('action', 'post') == 'change_active' and $nv_Request-
 
 // Xoá menu
 if ($nv_Request->get_title('action', 'post') == 'delete' and $nv_Request->isset_request('id,mid,parentid', 'post')) {
+    if (!csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
+        exit('NO_' . $nv_Lang->getGlobal('error_checkss'));
+    }
+
     $id = $nv_Request->get_int('id', 'post', 0);
     $mid = $nv_Request->get_int('mid', 'post', 0);
     $parentid = $nv_Request->get_int('parentid', 'post', 0);
@@ -438,6 +533,10 @@ if ($nv_Request->get_title('action', 'post') == 'delete' and $nv_Request->isset_
 
 // Xóa nhiều menu
 if ($nv_Request->get_title('action', 'post') == 'delete' and $nv_Request->isset_request('idcheck,mid,parentid', 'post')) {
+    if (!csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
+        exit('NO_' . $nv_Lang->getGlobal('error_checkss'));
+    }
+
     $parentid = $nv_Request->get_int('parentid', 'post', 0);
     $mid = $nv_Request->get_int('mid', 'post', 0);
     $array_id = $nv_Request->get_title('idcheck', 'post', '');
@@ -699,10 +798,15 @@ if (!empty($parentid_menulist)) {
     $num = count($parentid_menulist);
     $weight_options = range(1, $num);
 
+    $stmt_count = $db->prepare('SELECT COUNT(*) FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE parentid = :parentid');
+
     foreach ($parentid_menulist as $menu_id) {
         $row = $menulist[$menu_id];
-        $sql = 'SELECT COUNT(*) FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE parentid=' . $row['id'];
-        $row['nu'] = (int) $db->query($sql)->fetchColumn();
+
+        $stmt_count->bindValue(':parentid', $row['id'], PDO::PARAM_INT);
+        $stmt_count->execute();
+        $row['nu'] = (int) $stmt_count->fetchColumn();
+
         $row['sub'] = count(array_filter(explode(',', $row['subitem'])));
 
         $array_groups_view = array_map('intval', explode(',', $row['groups_view']));

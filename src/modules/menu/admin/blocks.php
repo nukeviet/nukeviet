@@ -21,9 +21,11 @@ if ($action == 'block') {
         'title' => ''
     ];
     if (!empty($arr['id'])) {
-        $sql = 'SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . ' WHERE id=' . $arr['id'];
-        $result = $db->query($sql);
-        $arr = $result->fetch();
+        $stmt = $db->prepare('SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . ' WHERE id = :id');
+        $stmt->bindValue(':id', $arr['id'], PDO::PARAM_INT);
+        $stmt->execute();
+        $arr = $stmt->fetch();
+        $stmt->closeCursor();
         if (empty($arr)) {
             exit('Error');
         }
@@ -47,10 +49,10 @@ if ($action == 'block') {
         }
 
         if (empty($arr['id'])) {
-            $sql = 'INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . ' (title) VALUES ( :title )';
-            $data_insert = [];
-            $data_insert['title'] = $arr['title'];
-            $arr['id'] = $db->insert_id($sql, 'id', $data_insert);
+            $stmt = $db->prepare('INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . ' (title) VALUES (:title)');
+            $stmt->bindValue(':title', $arr['title'], PDO::PARAM_STR);
+            $stmt->execute();
+            $arr['id'] = $db->lastInsertId();
             if (empty($arr['id'])) {
                 nv_jsonOutput([
                     'status' => 'error',
@@ -59,8 +61,9 @@ if ($action == 'block') {
             }
             nv_insert_logs(NV_LANG_DATA, $module_name, 'Add menu-block', 'Menu-block id: ' . $arr['id'], $admin_info['userid']);
         } else {
-            $stmt = $db->prepare('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . ' SET title= :title WHERE id =' . $arr['id']);
-            $stmt->bindParam(':title', $arr['title'], PDO::PARAM_STR);
+            $stmt = $db->prepare('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . ' SET title = :title WHERE id = :id');
+            $stmt->bindValue(':title', $arr['title'], PDO::PARAM_STR);
+            $stmt->bindValue(':id', $arr['id'], PDO::PARAM_INT);
             if (!$stmt->execute()) {
                 nv_jsonOutput([
                     'status' => 'error',
@@ -75,7 +78,9 @@ if ($action == 'block') {
         $sort = 0;
         $mid = $arr['id'];
         if ($action_menu == 'sys_mod' or $action_menu == 'sys_mod_sub') {
-            $db->query('DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE mid=' . $mid);
+            $stmt = $db->prepare('DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE mid = :mid');
+            $stmt->bindValue(':mid', $mid, PDO::PARAM_INT);
+            $stmt->execute();
             unset($site_mods['menu'], $site_mods['comment'], $site_mods['zalo']);
             foreach ($site_mods as $mod_name => $modvalues) {
                 ++$weight;
@@ -114,14 +119,20 @@ if ($action == 'block') {
                         }
                     }
                     if (!empty($array_sub_id)) {
-                        $db->query('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . "_rows SET subitem='" . implode(',', $array_sub_id) . "' WHERE id=" . $parentid);
+                        $stmt_subitem = $db->prepare('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_rows SET subitem = :subitem WHERE id = :id');
+                        $stmt_subitem->bindValue(':subitem', implode(',', $array_sub_id), PDO::PARAM_STR);
+                        $stmt_subitem->bindValue(':id', $parentid, PDO::PARAM_INT);
+                        $stmt_subitem->execute();
                     }
                 }
             }
         } elseif (isset($site_mods[$action_menu])) {
             $mod_name = $action_menu;
             $modvalues = $site_mods[$action_menu];
-            $db->query('DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE mid=' . $mid);
+
+            $stmt = $db->prepare('DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE mid = :mid');
+            $stmt->bindValue(':mid', $mid, PDO::PARAM_INT);
+            $stmt->execute();
             // Thêm menu từ các chủ đề của module
             if (file_exists(NV_ROOTDIR . '/modules/' . $modvalues['module_file'] . '/menu.php')) {
                 $mod_data = $modvalues['module_data'];
@@ -199,12 +210,20 @@ if ($nv_Request->isset_request('del', 'post')) {
 
     $id = $nv_Request->get_int('id', 'post', 0);
 
-    $query = 'SELECT title FROM ' . NV_PREFIXLANG . '_' . $module_data . ' WHERE id=' . $id;
-    $title = $db->query($query)->fetchColumn();
+    $stmt = $db->prepare('SELECT title FROM ' . NV_PREFIXLANG . '_' . $module_data . ' WHERE id = :id');
+    $stmt->bindValue(':id', $id, PDO::PARAM_INT);
+    $stmt->execute();
+    $title = $stmt->fetchColumn();
 
     if (!empty($title)) {
-        if ($db->exec('DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . ' WHERE id = ' . $id)) {
-            $db->query('DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE mid = ' . $id);
+        $stmt = $db->prepare('DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . ' WHERE id = :id');
+        $stmt->bindValue(':id', $id, PDO::PARAM_INT);
+        $stmt->execute();
+
+        if ($stmt->rowCount()) {
+            $stmt_del = $db->prepare('DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE mid = :mid');
+            $stmt_del->bindValue(':mid', $id, PDO::PARAM_INT);
+            $stmt_del->execute();
             nv_insert_logs(NV_LANG_DATA, $module_name, 'delete menu-block id: ' . $id, $title, $admin_info['userid']);
             $nv_Cache->delMod($module_name);
         }
@@ -219,23 +238,20 @@ if ($nv_Request->isset_request('del', 'post')) {
 $page_title = $nv_Lang->getModule('name_block');
 
 // List menu
-$db->sqlreset()
-    ->select('*')
-    ->from(NV_PREFIXLANG . '_' . $module_data)
-    ->order('id DESC');
-
-$query2 = $db->query($db->sql());
+$stmt = $db->prepare('SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . ' ORDER BY id DESC');
+$stmt->execute();
 
 $array = [];
-while ($row = $query2->fetch()) {
+$stmt_items = $db->prepare('SELECT title FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE mid = :mid ORDER BY sort ASC');
+
+while ($row = $stmt->fetch()) {
     $arr_items = [];
-    $sql = 'SELECT title FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE mid = ' . $row['id'] . ' ORDER BY sort ASC';
-    $result = $db->query($sql);
-    while ($_scratch = $result->fetch(3)) {
-        [$title_i] = $_scratch;
-        unset($_scratch);
-        $arr_items[] = $title_i;
+    $stmt_items->bindValue(':mid', $row['id'], PDO::PARAM_INT);
+    $stmt_items->execute();
+    while ($_row_item = $stmt_items->fetch()) {
+        $arr_items[] = $_row_item['title'];
     }
+    $stmt_items->closeCursor();
 
     $array[$row['id']] = [
         'id' => $row['id'],

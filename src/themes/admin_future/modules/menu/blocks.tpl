@@ -32,7 +32,7 @@
                             <button type="button" class="btn btn-sm btn-danger"
                                     data-toggle="delete-block"
                                     data-id="{$row.id}"
-                                    data-tokend="{$CHECKSS}"
+                                    data-checkss="{$CHECKSS}"
                                     aria-label="{$LANG->getModule('delete')}"
                                     data-bs-toggle="tooltip" title="{$LANG->getModule('delete')}">
                                 <i class="fa-solid fa-trash" data-icon="fa-trash"></i>
