@@ -15,7 +15,6 @@ if (!defined('NV_IS_FILE_ADMIN')) {
 
 $page_title = $nv_Lang->getModule('voting_edit');
 
-$error = '';
 $vid = $nv_Request->get_int('vid', 'post,get');
 $groups_list = nv_groups_list();
 
@@ -27,6 +26,13 @@ if (!empty($vid)) {
 }
 
 if ($nv_Request->isset_request('save', 'post')) {
+    if (!csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
+        nv_jsonOutput([
+            'status' => 'error',
+            'mess' => $nv_Lang->getGlobal('error_checkss')
+        ]);
+    }
+
     $question = $nv_Request->get_title('question', 'post', '', 1);
     $link = $nv_Request->get_title('link', 'post', '');
     if (!empty($link) and !nv_is_url($link, true)) {
@@ -99,224 +105,183 @@ if ($nv_Request->isset_request('save', 'post')) {
         $maxoption = $number_answer;
     }
 
-    $rowvote = [
-        'groups_view' => '6',
-        'publ_time' => $begindate,
-        'exp_time' => $enddate,
-        'acceptcm' => $maxoption,
-        'question' => $question,
-        'link' => $link
-    ];
+    if (empty($question)) {
+        nv_jsonOutput([
+            'status' => 'error',
+            'mess' => $nv_Lang->getModule('voting_error_content'),
+            'input' => 'question'
+        ]);
+    }
+
+    if ($number_answer <= 1) {
+        nv_jsonOutput([
+            'status' => 'error',
+            'mess' => $nv_Lang->getModule('voting_error_answer')
+        ]);
+    }
 
     $active_captcha = $nv_Request->get_int('active_captcha', 'post', 0) ? 1 : 0;
 
-    if (!empty($question) and $number_answer > 1) {
-        $error = $nv_Lang->getModule('voting_error');
-
-        if (empty($vid)) {
-            $sql = 'INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . ' (
-                question, link, acceptcm, active_captcha, admin_id, groups_view, publ_time, exp_time, act, vote_one
-            ) VALUES (
-                ' . $db->quote($question) . ', ' . $db->quote($link) . ', ' . $maxoption . ', ' . $active_captcha . ',' . $admin_info['admin_id'] . ', ' . $db->quote($groups_view) . ', 0, 0, 1, ' . $vote_one . '
-            )';
-            $vid = $db->insert_id($sql, 'vid');
-            nv_insert_logs(NV_LANG_DATA, $module_name, $nv_Lang->getModule('voting_add'), $question, $admin_info['userid']);
-        }
-
-        if ($vid > 0) {
-            $maxoption_data = 0;
-            foreach ($array_answervote as $id => $title) {
-                if (!empty($title)) {
-                    $url = $array_urlvote[$id];
-                    $db->query('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_rows SET title = ' . $db->quote($title) . ', url = ' . $db->quote($url) . ' WHERE id =' . (int) $id . ' AND vid =' . $vid);
-                    ++$maxoption_data;
-                } else {
-                    $db->query('DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE id =' . (int) $id . ' AND vid =' . $vid);
-                }
-            }
-
-            foreach ($answervotenews as $key => $title) {
-                if (!empty($title)) {
-                    $url = $urlvotenews[$key];
-                    $sql = 'INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . '_rows (vid, title, url, hitstotal) VALUES (' . $db->quote($vid) . ', ' . $db->quote($title) . ', ' . $db->quote($url) . ', 0)';
-                    if ($db->insert_id($sql, 'id')) {
-                        ++$maxoption_data;
-                    }
-                }
-            }
-
-            if ($maxoption > $maxoption_data) {
-                $maxoption = $maxoption_data;
-            }
-
-            if ($begindate > NV_CURRENTTIME or ($enddate > 0 and $enddate < NV_CURRENTTIME)) {
-                $act = 0;
-            } else {
-                $act = 1;
-            }
-
-            $sql = 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . ' SET
-                question=' . $db->quote($question) . ', link=' . $db->quote($link) . ', acceptcm = ' . $maxoption . ', active_captcha=' . $active_captcha . ',
-                admin_id = ' . $admin_info['admin_id'] . ', groups_view = ' . $db->quote($groups_view) . ',
-                publ_time=' . $begindate . ', exp_time=' . $enddate . ', act=' . $act . ', vote_one=' . $vote_one . '
-            WHERE vid =' . $vid;
-
-            if ($db->query($sql)) {
-                nv_insert_logs(NV_LANG_DATA, $module_name, $nv_Lang->getModule('voting_edit'), $question, $admin_info['userid']);
-                $nv_Cache->delMod($module_name);
-                nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
-            }
-        }
-    } else {
-        $error = $nv_Lang->getModule('voting_error_content');
+    if (empty($vid)) {
+        $sql = 'INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . ' (
+            question, link, acceptcm, active_captcha, admin_id, groups_view, publ_time, exp_time, act, vote_one
+        ) VALUES (
+            ' . $db->quote($question) . ', ' . $db->quote($link) . ', ' . $maxoption . ', ' . $active_captcha . ', ' . $admin_info['admin_id'] . ', ' . $db->quote($groups_view) . ', 0, 0, 1, ' . $vote_one . '
+        )';
+        $vid = $db->insert_id($sql, 'vid');
+        nv_insert_logs(NV_LANG_DATA, $module_name, $nv_Lang->getModule('voting_add'), $question, $admin_info['userid']);
     }
-
-    foreach ($answervotenews as $key => $title) {
-        if (!empty($title)) {
-            $array_answervote[] = $title;
-            $array_urlvote[] = $urlvotenews[$key];
-        }
-    }
-} else {
-    $maxoption = 1;
-    $array_answervote = [];
-    $array_urlvote = [];
 
     if ($vid > 0) {
-        $queryvote = 'SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . ' WHERE vid=' . $vid;
-        $rowvote = $db->query($queryvote)->fetch();
-
-        $sql = 'SELECT id, title, url FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE vid=' . $vid . ' ORDER BY id ASC';
-        $result = $db->query($sql);
-
-        while ($_scratch = $result->fetch(3)) {
-            [$id, $title, $url] = $_scratch;
-            unset($_scratch);
-            $array_answervote[$id] = $title;
-            $array_urlvote[$id] = $url;
-            ++$maxoption;
-        }
-        if ($maxoption > 1) {
-            $maxoption -= 1;
+        $maxoption_data = 0;
+        foreach ($array_answervote as $id => $title) {
+            if (!empty($title)) {
+                $url = $array_urlvote[$id];
+                $db->query('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_rows SET title = ' . $db->quote($title) . ', url = ' . $db->quote($url) . ' WHERE id =' . (int) $id . ' AND vid =' . $vid);
+                ++$maxoption_data;
+            } else {
+                $db->query('DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE id =' . (int) $id . ' AND vid =' . $vid);
+            }
         }
 
-        $active_captcha = $rowvote['active_captcha'];
-    } else {
-        $rowvote = [
-            'groups_view' => '6',
-            'publ_time' => NV_CURRENTTIME,
-            'exp_time' => '',
-            'acceptcm' => 1,
-            'active_captcha' => 1,
-            'question' => '',
-            'link' => '',
-            'vote_one' => 0
-        ];
-        $active_captcha = 1;
+        foreach ($answervotenews as $key => $title) {
+            if (!empty($title)) {
+                $url = $urlvotenews[$key];
+                $sql = 'INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . '_rows (vid, title, url, hitstotal) VALUES (' . $db->quote($vid) . ', ' . $db->quote($title) . ', ' . $db->quote($url) . ', 0)';
+                if ($db->insert_id($sql, 'id')) {
+                    ++$maxoption_data;
+                }
+            }
+        }
+
+        if ($maxoption > $maxoption_data) {
+            $maxoption = $maxoption_data;
+        }
+
+        if ($begindate > NV_CURRENTTIME or ($enddate > 0 and $enddate < NV_CURRENTTIME)) {
+            $act = 0;
+        } else {
+            $act = 1;
+        }
+
+        $sql = 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . ' SET
+            question=' . $db->quote($question) . ', link=' . $db->quote($link) . ', acceptcm = ' . $maxoption . ', active_captcha=' . $active_captcha . ',
+            admin_id = ' . $admin_info['admin_id'] . ', groups_view = ' . $db->quote($groups_view) . ',
+            publ_time=' . $begindate . ', exp_time=' . $enddate . ', act=' . $act . ', vote_one=' . $vote_one . '
+        WHERE vid =' . $vid;
+
+        if ($db->query($sql)) {
+            nv_insert_logs(NV_LANG_DATA, $module_name, $nv_Lang->getModule('voting_edit'), $question, $admin_info['userid']);
+            $nv_Cache->delMod($module_name);
+            nv_jsonOutput([
+                'status' => 'OK',
+                'mess' => $nv_Lang->getGlobal('save_success'),
+                'redirect' => nv_url_rewrite(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name, true)
+            ]);
+        }
     }
-}
 
-$xtpl = new XTemplate('content.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-$xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
-$xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
-$xtpl->assign('FORM_ACTION', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;vid=' . $vid);
-
-$rowvote['link'] = nv_htmlspecialchars($rowvote['link']);
-$rowvote['active_captcha'] = $active_captcha ? ' checked="checked"' : '';
-$rowvote['question_maxlength'] = ($db_config['charset'] == 'utf8') ? 333 : 250;
-$rowvote['vote_one'] = $rowvote['vote_one'] ? ' checked="checked"' : '';
-
-$xtpl->assign('DATA', $rowvote);
-
-if ($error != '') {
-    $xtpl->assign('ERROR', $error);
-    $xtpl->parse('main.error');
-}
-
-$tdate = date('d|m|Y|H|i');
-[$pday, $pmonth, $pyear, $phour, $pmin] = explode('|', $tdate);
-$emonth = $eday = $eyear = $emin = $ehour = 0;
-
-$tdate = date('H|i', $rowvote['publ_time']);
-$publ_date = date('d/m/Y', $rowvote['publ_time']);
-[$phour, $pmin] = explode('|', $tdate);
-
-// Thoi gian dang
-$xtpl->assign('PUBL_DATE', $publ_date);
-for ($i = 0; $i <= 23; ++$i) {
-    $xtpl->assign('PHOUR', [
-        'key' => $i,
-        'title' => str_pad($i, 2, '0', STR_PAD_LEFT),
-        'selected' => $i == $phour ? ' selected="selected"' : ''
+    nv_jsonOutput([
+        'status' => 'error',
+        'mess' => $nv_Lang->getModule('voting_error')
     ]);
-    $xtpl->parse('main.phour');
-}
-for ($i = 0; $i < 60; ++$i) {
-    $xtpl->assign('PMIN', [
-        'key' => $i,
-        'title' => str_pad($i, 2, '0', STR_PAD_LEFT),
-        'selected' => $i == $pmin ? ' selected="selected"' : ''
-    ]);
-    $xtpl->parse('main.pmin');
 }
 
-// Thoi gian ket thuc
-if ($rowvote['exp_time'] > 0) {
-    $tdate = date('H|i', $rowvote['exp_time']);
-    $exp_date = date('d/m/Y', $rowvote['exp_time']);
-    [$ehour, $emin] = explode('|', $tdate);
+// Đọc dữ liệu thăm dò để hiển thị form
+$maxoption = 1;
+$array_answervote = [];
+$array_urlvote = [];
+
+if ($vid > 0) {
+    $rowvote = $db->query('SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . ' WHERE vid=' . $vid)->fetch();
+
+    $sql = 'SELECT id, title, url FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE vid=' . $vid . ' ORDER BY id ASC';
+    $result = $db->query($sql);
+
+    while ($_scratch = $result->fetch(3)) {
+        [$id, $title, $url] = $_scratch;
+        unset($_scratch);
+        $array_answervote[$id] = $title;
+        $array_urlvote[$id] = $url;
+        ++$maxoption;
+    }
+    if ($maxoption > 1) {
+        $maxoption -= 1;
+    }
 } else {
-    $emin = $ehour = 0;
-    $exp_date = '';
-}
-$xtpl->assign('EXP_DATE', $exp_date);
-for ($i = 0; $i <= 23; ++$i) {
-    $xtpl->assign('EHOUR', [
-        'key' => $i,
-        'title' => str_pad($i, 2, '0', STR_PAD_LEFT),
-        'selected' => $i == $ehour ? ' selected="selected"' : ''
-    ]);
-    $xtpl->parse('main.ehour');
-}
-for ($i = 0; $i < 60; ++$i) {
-    $xtpl->assign('EMIN', [
-        'key' => $i,
-        'title' => str_pad($i, 2, '0', STR_PAD_LEFT),
-        'selected' => $i == $emin ? ' selected="selected"' : ''
-    ]);
-    $xtpl->parse('main.emin');
+    $rowvote = [
+        'groups_view' => '6',
+        'publ_time' => NV_CURRENTTIME,
+        'exp_time' => 0,
+        'acceptcm' => 1,
+        'active_captcha' => 1,
+        'question' => '',
+        'link' => '',
+        'vote_one' => 0
+    ];
 }
 
-$items = 0;
+$rowvote['link'] = nv_htmlspecialchars($rowvote['link'] ?? '');
+$rowvote['question_maxlength'] = ($db_config['charset'] == 'utf8') ? 333 : 250;
+
+$publ_date = date('d/m/Y', $rowvote['publ_time']);
+$phour = (int) date('H', $rowvote['publ_time']);
+$pmin = (int) date('i', $rowvote['publ_time']);
+
+if (!empty($rowvote['exp_time'])) {
+    $exp_date = date('d/m/Y', $rowvote['exp_time']);
+    $ehour = (int) date('H', $rowvote['exp_time']);
+    $emin = (int) date('i', $rowvote['exp_time']);
+} else {
+    $exp_date = '';
+    $ehour = 0;
+    $emin = 0;
+}
+
+$hour_options = [];
+for ($i = 0; $i <= 23; ++$i) {
+    $hour_options[] = ['key' => $i, 'title' => str_pad($i, 2, '0', STR_PAD_LEFT)];
+}
+
+$min_options = [];
+for ($i = 0; $i < 60; ++$i) {
+    $min_options[] = ['key' => $i, 'title' => str_pad($i, 2, '0', STR_PAD_LEFT)];
+}
+
+$items = [];
 foreach ($array_answervote as $id => $title) {
-    $xtpl->assign('ITEM', [
-        'stt' => ++$items,
+    $items[] = [
         'id' => $id,
         'title' => $title,
-        'link' => nv_htmlspecialchars($array_urlvote[$id])
-    ]);
-
-    $xtpl->parse('main.item');
+        'url' => nv_htmlspecialchars($array_urlvote[$id] ?? '')
+    ];
 }
 
-$xtpl->assign('NEW_ITEM', ++$items);
-$xtpl->assign('NEW_ITEM_NUM', $items);
+$groups_view = !empty($rowvote['groups_view']) ? array_map('intval', explode(',', $rowvote['groups_view'])) : [];
 
-$groups_view = array_map('intval', explode(',', $rowvote['groups_view']));
-foreach ($groups_list as $_group_id => $_title) {
-    $xtpl->assign('GROUPS_VIEW', [
-        'value' => $_group_id,
-        'checked' => in_array((int) $_group_id, $groups_view, true) ? ' checked="checked"' : '',
-        'title' => $_title
-    ]);
-    $xtpl->parse('main.groups_view');
-}
+$tpl = new \NukeViet\Template\NVSmarty();
+$tpl->setTemplateDir(get_module_tpl_dir('content.tpl'));
 
-$xtpl->parse('main');
-$contents = $xtpl->text('main');
-if ($vid) {
-    $op = '';
-}
+$tpl->assign('LANG', $nv_Lang);
+$tpl->assign('MODULE_NAME', $module_name);
+$tpl->assign('OP', $op);
+$tpl->assign('CHECKSS', csrf_create($csrf_key));
+$tpl->assign('VID', $vid);
+$tpl->assign('ROWVOTE', $rowvote);
+$tpl->assign('PUBL_DATE', $publ_date);
+$tpl->assign('PHOUR', $phour);
+$tpl->assign('PMIN', $pmin);
+$tpl->assign('EXP_DATE', $exp_date);
+$tpl->assign('EHOUR', $ehour);
+$tpl->assign('EMIN', $emin);
+$tpl->assign('HOUR_OPTIONS', $hour_options);
+$tpl->assign('MIN_OPTIONS', $min_options);
+$tpl->assign('ITEMS', $items);
+$tpl->assign('NEW_ITEM_NUM', count($items) + 1);
+$tpl->assign('GROUPS_LIST', $groups_list);
+$tpl->assign('GROUPS_VIEW', $groups_view);
+
+$contents = $tpl->fetch('content.tpl');
 
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_admin_theme($contents);

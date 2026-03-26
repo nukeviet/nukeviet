@@ -8,6 +8,19 @@
  */
 
 $(function () {
+    // Xóa giá trị ngày + reset giờ/phút về 0
+    $('[data-toggle="delval"]').on('click', function(e) {
+        e.preventDefault();
+        const target = $(this).data('target');
+        const selects = $(this).data('select');
+        if (target) {
+            $(target).val('');
+        }
+        if (selects) {
+            $(selects).val('0');
+        }
+    });
+
     // Xóa 1 voting
     $('[data-toggle=nv_del_voting]').on('click', function (e) {
         e.preventDefault();
@@ -108,5 +121,44 @@ $(function () {
             }
         });
     });
-});
 
+    // Form thêm/sửa thăm dò
+    if (nv_func_name === 'content') {
+        // Khởi tạo datepicker cho ngày đăng và ngày kết thúc
+        if ($('.datepicker').length) {
+            $('.datepicker').datepicker({
+                dateFormat: nv_jsdate_post.replace('yyyy', 'yy'),
+                changeMonth: true,
+                changeYear: true,
+                showOtherMonths: true,
+                showOn: 'focus',
+                beforeShow: function() {
+                    setTimeout(function() {
+                        $('.ui-datepicker').css('z-index', 999999999);
+                    }, 0);
+                }
+            });
+        }
+
+        $('#publ_date_btn').on('click', function() {
+            $('#publ_date').datepicker('show');
+        });
+
+        $('#exp_date_btn').on('click', function() {
+            $('#exp_date').datepicker('show');
+        });
+
+        // Thêm hàng đáp án mới vào bảng
+        $('[data-toggle="add-answer"]').on('click', function() {
+            const tbody = $('#items tbody');
+            const count = tbody.find('tr').length;
+            const label = $(this).data('label');
+            const newRow = '<tr>'
+                + '<td class="text-end text-muted">' + label + ' ' + (count + 1) + '</td>'
+                + '<td><input class="form-control form-control-sm" type="text" name="answervotenews[]" maxlength="245" autocomplete="off"></td>'
+                + '<td><input class="form-control form-control-sm" type="text" name="urlvotenews[]" maxlength="255" autocomplete="off"></td>'
+                + '</tr>';
+            tbody.append(newRow);
+        });
+    }
+});

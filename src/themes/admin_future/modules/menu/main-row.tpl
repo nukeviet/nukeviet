@@ -66,7 +66,7 @@
                     </div>
 
                     <div class="row mb-3">
-                        <label for="row_title" class="col-md-3 col-form-label text-md-end">{$LANG->getModule('title')} <span class="text-danger">*</span></label>
+                        <label for="row_title" class="col-md-3 col-form-label text-md-end">{$LANG->getModule('title')} <span class="text-danger">(*)</span></label>
                         <div class="col-md-9">
                             <div class="input-group">
                                 <input type="text" class="form-control required" id="row_title" name="title"
