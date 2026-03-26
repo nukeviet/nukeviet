@@ -1488,6 +1488,108 @@ $(function () {
             });
         }
     });
+
+    // Cuộn trang xuống form khi đang ở chế độ sửa giọng đọc
+    const voiceForm = $('#voice-form');
+    if (voiceForm.length && voiceForm.data('is-edit')) {
+        $('html, body').animate({ scrollTop: voiceForm.offset().top - 60 }, 400);
+    }
+
+    // Thay đổi thứ tự giọng đọc
+    $('[data-toggle="change-voice-weight"]').on('change', function () {
+        const sel = $(this);
+        if (sel.prop('disabled')) {
+            return;
+        }
+        sel.prop('disabled', true);
+        $.ajax({
+            type: 'POST',
+            url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=voices&nocache=' + new Date().getTime(),
+            dataType: 'json',
+            data: {
+                changeweight: 1,
+                checkss: sel.data('tokend'),
+                id: sel.data('id'),
+                new_weight: sel.val()
+            },
+            success: function (respon) {
+                sel.prop('disabled', false);
+                if (respon.status !== 'OK') {
+                    nvToast(nv_is_change_act_confirm[2], 'error');
+                }
+                location.reload();
+            },
+            error: function (xhr, text) {
+                sel.prop('disabled', false);
+                nvToast(text, 'error');
+            }
+        });
+    });
+
+    // Thay đổi trạng thái giọng đọc
+    $('[data-toggle="change-voice-status"]').on('change', function () {
+        const chk = $(this);
+        if (chk.prop('disabled')) {
+            return;
+        }
+        chk.prop('disabled', true);
+        $.ajax({
+            type: 'POST',
+            url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=voices&nocache=' + new Date().getTime(),
+            dataType: 'json',
+            data: {
+                changestatus: 1,
+                checkss: chk.data('tokend'),
+                id: chk.data('id')
+            },
+            success: function (respon) {
+                chk.prop('disabled', false);
+                if (respon.status !== 'OK') {
+                    nvToast(nv_is_change_act_confirm[2], 'error');
+                    location.reload();
+                }
+            },
+            error: function (xhr, text) {
+                chk.prop('disabled', false);
+                nvToast(text, 'error');
+            }
+        });
+    });
+
+    // Xóa giọng đọc
+    $('[data-toggle="delete-voice"]').on('click', function (e) {
+        e.preventDefault();
+        const btn = $(this);
+        const icon = $('i', btn);
+        if (icon.is('.fa-spinner')) {
+            return;
+        }
+        nvConfirm(nv_is_del_confirm[0], () => {
+            icon.removeClass(icon.data('icon')).addClass('fa-spinner fa-spin-pulse');
+            $.ajax({
+                type: 'POST',
+                url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=voices&nocache=' + new Date().getTime(),
+                dataType: 'json',
+                data: {
+                    delete: 1,
+                    checkss: btn.data('tokend'),
+                    id: btn.data('id')
+                },
+                success: function (respon) {
+                    icon.removeClass('fa-spinner fa-spin-pulse').addClass(icon.data('icon'));
+                    if (respon.status !== 'OK') {
+                        nvToast(nv_is_del_confirm[2], 'error');
+                        return;
+                    }
+                    location.reload();
+                },
+                error: function (xhr, text) {
+                    icon.removeClass('fa-spinner fa-spin-pulse').addClass(icon.data('icon'));
+                    nvToast(text, 'error');
+                }
+            });
+        });
+    });
 });
 
 $(window).on('load', function() {

@@ -593,4 +593,54 @@ class SampleDataTest extends \Codeception\Test\Unit
 
         $this->assertTrue(true);
     }
+
+    /**
+     * Dữ liệu mẫu giọng đọc (voices) cho module news
+     *
+     * Sinh 4 giọng đọc mẫu (Nam Bắc, Nữ Bắc, Nam Nam, Nữ Nam).
+     * Weight tự động tăng từ MAX(weight) hiện có trong bảng.
+     *
+     * @group sample-data
+     */
+    public function testInsertSampleDataForNewsVoices()
+    {
+        global $db, $db_config;
+
+        $table = $db_config['prefix'] . '_vi_news_voices';
+
+        // Lấy weight lớn nhất hiện có để tự động tăng tiếp
+        $maxWeight = (int) $db->query('SELECT MAX(weight) FROM ' . $table)->fetchColumn();
+
+        $now = time();
+        $voices = [
+            ['voice_key' => 'male-north',   'title' => 'Giọng Nam Bắc',  'description' => 'Giọng đọc nam giới vùng miền Bắc'],
+            ['voice_key' => 'female-north', 'title' => 'Giọng Nữ Bắc',  'description' => 'Giọng đọc nữ giới vùng miền Bắc'],
+            ['voice_key' => 'male-south',   'title' => 'Giọng Nam Nam',  'description' => 'Giọng đọc nam giới vùng miền Nam'],
+            ['voice_key' => 'female-south', 'title' => 'Giọng Nữ Nam',  'description' => 'Giọng đọc nữ giới vùng miền Nam'],
+        ];
+
+        $esc = fn (string $s) => str_replace(["\\", "'"], ["\\\\", "\\'"], $s);
+
+        $values = [];
+        foreach ($voices as $i => $v) {
+            $weight = $maxWeight + $i + 1;
+            $values[] = sprintf(
+                "('%s','%s','%s',%d,%d,%d,1)",
+                $esc($v['voice_key']),
+                $esc($v['title']),
+                $esc($v['description']),
+                $now,
+                0,
+                $weight
+            );
+        }
+
+        $db->exec(
+            'INSERT IGNORE INTO ' . $table
+            . ' (voice_key, title, description, add_time, edit_time, weight, status) VALUES '
+            . implode(',', $values)
+        );
+
+        $this->assertTrue(true);
+    }
 }

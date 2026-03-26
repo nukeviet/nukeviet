@@ -323,17 +323,11 @@ Quy tắc bảng danh sách:
 - **Icon button chuẩn**: nút Sửa dùng `fa-pencil` (không dùng `fa-pen-to-square`); nút Xóa dùng `fa-trash`; nút Đình chỉ/Kích hoạt dùng `fa-toggle-on`
 - Button xóa luôn dùng `btn-danger`; không dùng class `fa-lg`
 - **Nguyên tắc button action**: nếu nút **ít và text ngắn** → giữ text (icon + text). Chỉ dùng icon-only khi text quá dài hoặc quá nhiều nút trong một ô. Khi icon-only: bắt buộc có `aria-label` **và** `data-bs-toggle="tooltip" title="..."`
-- Select thứ tự trong tbody thêm class `fw-75`
+- Select thứ tự trong tbody thêm class `fw-75`, nếu các nút action trong row để `form-control-sm` hoặc `btn-sm` thì select cũng phải thêm class `form-select-sm`
 - Nếu có phân trang hoặc công cụ: thêm `card-footer border-top` sau `card-body`
 
 ```smarty
 <div class="card">
-    <div class="card-header d-flex justify-content-between align-items-center">
-        <h5 class="card-title mb-0">{$LANG->getModule('list_title')}</h5>
-        <a href="...&amp;{$smarty.const.NV_OP_VARIABLE}=add" class="btn btn-sm btn-primary">
-            <i class="fa-solid fa-plus-circle"></i> {$LANG->getGlobal('add')}
-        </a>
-    </div>
     <div class="card-body">
         <div class="table-responsive-lg table-card pb-1">
             <table class="table table-striped align-middle table-sticky mb-0">
@@ -398,14 +392,14 @@ Quy tắc bảng danh sách:
     <div class="card">
         <div class="card-body pt-4">
             <div class="row mb-3">
-                <label for="title" class="col-md-3 col-form-label text-md-end">{$LANG->getModule('field_title')} <span class="text-danger">*</span></label>
-                <div class="col-md-9">
+                <label for="title" class="col-sm-3 col-form-label text-sm-end">{$LANG->getModule('field_title')} <span class="text-danger">(*)</span></label>
+                <div class="col-sm-8 col-lg-6 col-xxl-5">
                     <input type="text" class="form-control required" id="title" name="title" value="{$ITEM.title}">
                     <div class="invalid-feedback"></div>
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-9 offset-md-3">
+                <div class="col-sm-8 offset-sm-3">
                     <input type="hidden" name="checkss" value="{$CHECKSS}">
                     <input type="hidden" name="id" value="{$ITEM.id}">
                     <button type="submit" class="btn btn-primary">
@@ -425,7 +419,7 @@ Quy tắc bảng danh sách:
     <div class="card">
         <div class="card-body">
             <div class="mb-3">
-                <label class="form-label">{$LANG->getModule('field_title')} <span class="text-danger">*</span></label>
+                <label class="form-label">{$LANG->getModule('field_title')} <span class="text-danger">(*)</span></label>
                 <input type="text" class="form-control required" name="title" value="{$ITEM.title}">
                 <div class="invalid-feedback"></div>  {* nv.core.js tự điền mess lỗi vào đây *}
             </div>
