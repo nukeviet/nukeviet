@@ -13,8 +13,7 @@ if (!defined('NV_IS_FILE_ADMIN')) {
     exit('Stop!!!');
 }
 
-$sql = 'SELECT * FROM ' . NV_PREFIXLANG . '_' . $mod_data . '_department WHERE act = 1 ORDER BY weight ASC';
-$result = $db->query($sql);
+$result = $db_slave->query('SELECT * FROM ' . NV_PREFIXLANG . '_' . $mod_data . '_department WHERE act = 1 ORDER BY weight ASC');
 while ($row = $result->fetch()) {
     $array_item[$row['id']] = [
         'key' => $row['id'],

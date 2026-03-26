@@ -18,6 +18,13 @@ if (defined('NV_EDITOR')) {
 }
 
 if ($nv_Request->isset_request('save', 'post')) {
+    if (!csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
+        nv_jsonOutput([
+            'status' => 'error',
+            'mess' => $nv_Lang->getGlobal('error_checkss')
+        ]);
+    }
+
     $post = [
         'mail_lang' => $nv_Request->get_title('mail_lang', 'post', ''),
         'title' => $nv_Request->get_title('title', 'post', ''),

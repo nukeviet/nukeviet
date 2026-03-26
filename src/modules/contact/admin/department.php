@@ -23,11 +23,12 @@ function department_fix_weight($skip_id = 0, $skip_weight = 0)
 {
     global $db, $nv_Cache, $module_name;
 
-    $sql = 'SELECT id FROM ' . NV_MOD_TABLE . '_department WHERE id != ' . $skip_id . ' ORDER BY weight ASC';
-    $result = $db->query($sql);
+    $stmt = $db->prepare('SELECT id FROM ' . NV_MOD_TABLE . '_department WHERE id != :skip_id ORDER BY weight ASC');
+    $stmt->bindValue(':skip_id', $skip_id, PDO::PARAM_INT);
+    $stmt->execute();
     $weight = 0;
     $res = [];
-    while ($row = $result->fetch()) {
+    while ($row = $stmt->fetch()) {
         ++$weight;
         if ($weight == $skip_weight) {
             ++$weight;
@@ -37,7 +38,8 @@ function department_fix_weight($skip_id = 0, $skip_weight = 0)
     if (!empty($res)) {
         $in = implode(',', array_keys($res));
         $when = implode(' ', $res);
-        $db->query('UPDATE ' . NV_MOD_TABLE . '_department SET weight = CASE ' . $when . ' ELSE weight END WHERE id in (' . $in . ')');
+        $stmt = $db->prepare('UPDATE ' . NV_MOD_TABLE . '_department SET weight = CASE ' . $when . ' ELSE weight END WHERE id IN (' . $in . ')');
+        $stmt->execute();
         $nv_Cache->delMod($module_name);
     }
 }
@@ -48,18 +50,21 @@ if (defined('NV_IS_SPADMIN')) {
     if ($nv_Request->isset_request('fc', 'post')) {
 
         $fc = $nv_Request->get_string('fc', 'post', '');
-        $checkss = $nv_Request->get_string('checkss', 'post', '');
-        if ($checkss != md5(NV_CHECK_SESSION . '_' . $module_name . '_' . $op . '_' . $admin_info['userid'])) {
+        if (!csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
             nv_jsonOutput([
                 'status' => 'error',
-                'mess' => $nv_Lang->getGlobal('error_code_11')
+                'mess' => $nv_Lang->getGlobal('error_checkss')
             ]);
         }
         // Thêm/Sửa bộ phận
         if ($fc == 'content') {
             $id = $nv_Request->get_int('id', 'post', 0);
             if (!empty($id)) {
-                $department = $db->query('SELECT * FROM ' . NV_MOD_TABLE . '_department WHERE id=' . $id)->fetch();
+                $stmt = $db->prepare('SELECT * FROM ' . NV_MOD_TABLE . '_department WHERE id = :id');
+                $stmt->bindValue(':id', $id, PDO::PARAM_INT);
+                $stmt->execute();
+                $department = $stmt->fetch();
+                $stmt->closeCursor();
                 if (!$department) {
                     nv_jsonOutput([
                         'status' => 'error',
@@ -133,7 +138,7 @@ if (defined('NV_IS_SPADMIN')) {
                     $post['email'] = implode(', ', $email);
                 }
 
-                if (is_file(NV_DOCUMENT_ROOT . $post['image'])) {
+                if (nv_is_file($post['image'], NV_UPLOADS_DIR . '/' . $module_upload)) {
                     $post['image'] = substr($post['image'], strlen(NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/'));
                 } else {
                     $post['image'] = '';
@@ -188,22 +193,29 @@ if (defined('NV_IS_SPADMIN')) {
                         $weight = $db->query('SELECT max(weight) FROM ' . NV_MOD_TABLE . '_department')->fetchColumn();
                         $weight = (int) $weight + 1;
                         $is_default = $weight > 1 ? 0 : 1;
-                        $sql = 'INSERT INTO ' . NV_MOD_TABLE . '_department (full_name, alias, image, phone, fax, email, address, others, cats, note, admins, act, weight, is_default) VALUES (:full_name, :alias, :image, :phone, :fax, :email, :address, :others, :cats, :note, :admins, 1, ' . $weight . ', ' . $is_default . ')';
+                        $sql = 'INSERT INTO ' . NV_MOD_TABLE . '_department (full_name, alias, image, phone, fax, email, address, others, cats, note, admins, act, weight, is_default) VALUES (:full_name, :alias, :image, :phone, :fax, :email, :address, :others, :cats, :note, :admins, 1, :weight, :is_default)';
                     } else {
-                        $sql = 'UPDATE ' . NV_MOD_TABLE . '_department SET full_name=:full_name, alias=:alias, image = :image, phone = :phone, fax=:fax, email=:email, address=:address, others=:others, cats=:cats, note=:note, admins=:admins WHERE id =' . $id;
+                        $sql = 'UPDATE ' . NV_MOD_TABLE . '_department SET full_name=:full_name, alias=:alias, image=:image, phone=:phone, fax=:fax, email=:email, address=:address, others=:others, cats=:cats, note=:note, admins=:admins WHERE id=:id';
                     }
                     $sth = $db->prepare($sql);
-                    $sth->bindParam(':full_name', $post['full_name'], PDO::PARAM_STR);
-                    $sth->bindParam(':alias', $post['alias'], PDO::PARAM_STR);
-                    $sth->bindParam(':image', $post['image'], PDO::PARAM_STR);
-                    $sth->bindParam(':phone', $post['phone'], PDO::PARAM_STR);
-                    $sth->bindParam(':fax', $post['fax'], PDO::PARAM_STR);
-                    $sth->bindParam(':email', $post['email'], PDO::PARAM_STR);
-                    $sth->bindParam(':address', $post['address'], PDO::PARAM_STR);
-                    $sth->bindParam(':others', $post['others'], PDO::PARAM_STR);
-                    $sth->bindParam(':cats', $post['cats'], PDO::PARAM_STR);
-                    $sth->bindParam(':note', $post['note'], PDO::PARAM_STR);
-                    $sth->bindParam(':admins', $post['admins'], PDO::PARAM_STR);
+                    if (empty($id)) {
+                        $sth->bindValue(':weight', $weight, PDO::PARAM_INT);
+                        $sth->bindValue(':is_default', $is_default, PDO::PARAM_INT);
+                    }
+                    $sth->bindValue(':full_name', $post['full_name'], PDO::PARAM_STR);
+                    $sth->bindValue(':alias', $post['alias'], PDO::PARAM_STR);
+                    $sth->bindValue(':image', $post['image'], PDO::PARAM_STR);
+                    $sth->bindValue(':phone', $post['phone'], PDO::PARAM_STR);
+                    $sth->bindValue(':fax', $post['fax'], PDO::PARAM_STR);
+                    $sth->bindValue(':email', $post['email'], PDO::PARAM_STR);
+                    $sth->bindValue(':address', $post['address'], PDO::PARAM_STR);
+                    $sth->bindValue(':others', $post['others'], PDO::PARAM_STR);
+                    $sth->bindValue(':cats', $post['cats'], PDO::PARAM_STR);
+                    $sth->bindValue(':note', $post['note'], PDO::PARAM_STR);
+                    $sth->bindValue(':admins', $post['admins'], PDO::PARAM_STR);
+                    if (!empty($id)) {
+                        $sth->bindValue(':id', $id, PDO::PARAM_INT);
+                    }
                     $exc = $sth->execute();
                     if ($exc) {
                         nv_insert_logs(NV_LANG_DATA, $module_name, (empty($id) ? 'log_add_row' : 'log_edit_row'), (empty($id) ? $post['full_name'] : 'id: ' . $id . ' ' . $post['full_name']), $admin_info['userid']);
@@ -266,7 +278,7 @@ if (defined('NV_IS_SPADMIN')) {
                 $tpl->assign('LANG', $nv_Lang);
                 $tpl->assign('MODULE_NAME', $module_name);
                 $tpl->assign('OP', $op);
-                $tpl->assign('CHECKSS', md5(NV_CHECK_SESSION . '_' . $module_name . '_' . $op . '_' . $admin_info['userid']));
+                $tpl->assign('CHECKSS', csrf_create($csrf_key));
                 $tpl->assign('DEPARTMENT', $department);
                 $tpl->assign('NV_ADMIN_THEME', $global_config['admin_theme']);
                 $tpl->assign('MODULE_UPLOAD', $module_upload);
@@ -296,7 +308,14 @@ if (defined('NV_IS_SPADMIN')) {
 
             $alias = change_alias($title);
             $i = 0;
-            while ($db->query('SELECT COUNT(*) FROM ' . NV_MOD_TABLE . '_department WHERE id!=' . $id . ' AND alias=' . $db->quote($alias))->fetchColumn()) {
+            $stmt = $db->prepare('SELECT COUNT(*) FROM ' . NV_MOD_TABLE . '_department WHERE id != :id AND alias = :alias');
+            $stmt->bindValue(':id', $id, PDO::PARAM_INT);
+            while (true) {
+                $stmt->bindValue(':alias', $alias, PDO::PARAM_STR);
+                $stmt->execute();
+                if (!$stmt->fetchColumn()) {
+                    break;
+                }
                 ++$i;
                 $alias .= '-' . $i;
             }
@@ -312,7 +331,11 @@ if (defined('NV_IS_SPADMIN')) {
             $id = $nv_Request->get_int('id', 'post', 0);
             $new_weight = $nv_Request->get_int('nw', 'post', 0);
 
-            $department = $db->query('SELECT * FROM ' . NV_MOD_TABLE . '_department WHERE id=' . $id)->fetch();
+            $stmt = $db->prepare('SELECT * FROM ' . NV_MOD_TABLE . '_department WHERE id = :id');
+            $stmt->bindValue(':id', $id, PDO::PARAM_INT);
+            $stmt->execute();
+            $department = $stmt->fetch();
+            $stmt->closeCursor();
             if (!$department) {
                 nv_jsonOutput([
                     'status' => 'error',
@@ -321,7 +344,10 @@ if (defined('NV_IS_SPADMIN')) {
             }
 
             department_fix_weight($id, $new_weight);
-            $db->query('UPDATE ' . NV_MOD_TABLE . '_department SET weight=' . $new_weight . ' WHERE id=' . $id);
+            $stmt = $db->prepare('UPDATE ' . NV_MOD_TABLE . '_department SET weight = :weight WHERE id = :id');
+            $stmt->bindValue(':weight', $new_weight, PDO::PARAM_INT);
+            $stmt->bindValue(':id', $id, PDO::PARAM_INT);
+            $stmt->execute();
             $nv_Cache->delMod($module_name);
             nv_jsonOutput([
                 'status' => 'OK'
@@ -333,7 +359,11 @@ if (defined('NV_IS_SPADMIN')) {
             $id = $nv_Request->get_int('id', 'post', 0);
             $new_status = $nv_Request->get_int('ns', 'post', 0);
 
-            $department = $db->query('SELECT * FROM ' . NV_MOD_TABLE . '_department WHERE id=' . $id)->fetch();
+            $stmt = $db->prepare('SELECT * FROM ' . NV_MOD_TABLE . '_department WHERE id = :id');
+            $stmt->bindValue(':id', $id, PDO::PARAM_INT);
+            $stmt->execute();
+            $department = $stmt->fetch();
+            $stmt->closeCursor();
             if (!$department) {
                 nv_jsonOutput([
                     'status' => 'error',
@@ -348,7 +378,10 @@ if (defined('NV_IS_SPADMIN')) {
                 ]);
             }
 
-            $db->query('UPDATE ' . NV_MOD_TABLE . '_department SET act=' . $new_status . ' WHERE id=' . $id);
+            $stmt = $db->prepare('UPDATE ' . NV_MOD_TABLE . '_department SET act = :act WHERE id = :id');
+            $stmt->bindValue(':act', $new_status, PDO::PARAM_INT);
+            $stmt->bindValue(':id', $id, PDO::PARAM_INT);
+            $stmt->execute();
             $nv_Cache->delMod($module_name);
             nv_jsonOutput([
                 'status' => 'OK',
@@ -360,7 +393,11 @@ if (defined('NV_IS_SPADMIN')) {
         if ($fc == 'set_default') {
             $id = $nv_Request->get_int('id', 'post', 0);
 
-            $department = $db->query('SELECT * FROM ' . NV_MOD_TABLE . '_department WHERE id=' . $id)->fetch();
+            $stmt = $db->prepare('SELECT * FROM ' . NV_MOD_TABLE . '_department WHERE id = :id');
+            $stmt->bindValue(':id', $id, PDO::PARAM_INT);
+            $stmt->execute();
+            $department = $stmt->fetch();
+            $stmt->closeCursor();
             if (!$department) {
                 nv_jsonOutput([
                     'status' => 'error',
@@ -368,8 +405,13 @@ if (defined('NV_IS_SPADMIN')) {
                 ]);
             }
 
-            $db->query('UPDATE ' . NV_MOD_TABLE . '_department SET is_default=0 WHERE id!=' . $id);
-            $db->query('UPDATE ' . NV_MOD_TABLE . '_department SET is_default=1 WHERE id=' . $id);
+            $stmt = $db->prepare('UPDATE ' . NV_MOD_TABLE . '_department SET is_default = 0 WHERE id != :id');
+            $stmt->bindValue(':id', $id, PDO::PARAM_INT);
+            $stmt->execute();
+
+            $stmt = $db->prepare('UPDATE ' . NV_MOD_TABLE . '_department SET is_default = 1 WHERE id = :id');
+            $stmt->bindValue(':id', $id, PDO::PARAM_INT);
+            $stmt->execute();
             $nv_Cache->delMod($module_name);
             nv_jsonOutput([
                 'status' => 'OK',
@@ -381,7 +423,11 @@ if (defined('NV_IS_SPADMIN')) {
         if ($fc == 'delete') {
             $id = $nv_Request->get_int('id', 'post', 0);
 
-            $department = $db->query('SELECT * FROM ' . NV_MOD_TABLE . '_department WHERE id=' . $id)->fetch();
+            $stmt = $db->prepare('SELECT * FROM ' . NV_MOD_TABLE . '_department WHERE id = :id');
+            $stmt->bindValue(':id', $id, PDO::PARAM_INT);
+            $stmt->execute();
+            $department = $stmt->fetch();
+            $stmt->closeCursor();
             if (!$department) {
                 nv_jsonOutput([
                     'status' => 'error',
@@ -389,22 +435,28 @@ if (defined('NV_IS_SPADMIN')) {
                 ]);
             }
 
-            if ($db->query('SELECT COUNT(*) FROM ' . NV_MOD_TABLE . '_supporter WHERE departmentid=' . $id)->fetchColumn()) {
+            $stmt = $db->prepare('SELECT COUNT(*) FROM ' . NV_MOD_TABLE . '_supporter WHERE departmentid = :departmentid');
+            $stmt->bindValue(':departmentid', $id, PDO::PARAM_INT);
+            $stmt->execute();
+            if ($stmt->fetchColumn()) {
                 nv_jsonOutput([
                     'status' => 'error',
                     'mess' => $nv_Lang->getModule('department_delete_error')
                 ]);
             }
 
-            if ($db->exec('DELETE FROM ' . NV_MOD_TABLE . '_department WHERE id = ' . $id)) {
+            $stmt = $db->prepare('DELETE FROM ' . NV_MOD_TABLE . '_department WHERE id = :id');
+            $stmt->bindValue(':id', $id, PDO::PARAM_INT);
+            if ($stmt->execute()) {
                 department_fix_weight();
                 nv_insert_logs(NV_LANG_DATA, $module_name, 'log_del_row', 'rowid ' . $id, $admin_info['userid']);
 
-                $db->query('DELETE FROM ' . NV_MOD_TABLE . '_send WHERE cid = ' . $id);
-                $db->query('DELETE FROM ' . NV_MOD_TABLE . '_reply WHERE id NOT IN (SELECT id FROM ' . NV_MOD_TABLE . '_send)');
-                $db->query('OPTIMIZE TABLE ' . NV_MOD_TABLE . '_department');
-                $db->query('OPTIMIZE TABLE ' . NV_MOD_TABLE . '_send');
-                $db->query('OPTIMIZE TABLE ' . NV_MOD_TABLE . '_reply');
+                $stmt = $db->prepare('DELETE FROM ' . NV_MOD_TABLE . '_send WHERE cid = :cid');
+                $stmt->bindValue(':cid', $id, PDO::PARAM_INT);
+                $stmt->execute();
+
+                $stmt = $db->prepare('DELETE FROM ' . NV_MOD_TABLE . '_reply WHERE id NOT IN (SELECT id FROM ' . NV_MOD_TABLE . '_send)');
+                $stmt->execute();
 
                 $nv_Cache->delMod($module_name);
                 nv_jsonOutput([
@@ -428,7 +480,11 @@ if ($nv_Request->isset_request('id', 'get')) {
             'mess' => $nv_Lang->getModule('error_required_departmentid')
         ]);
     }
-    $department = $db->query('SELECT * FROM ' . NV_MOD_TABLE . '_department WHERE id=' . $id)->fetch();
+    $stmt = $db->prepare('SELECT * FROM ' . NV_MOD_TABLE . '_department WHERE id = :id');
+    $stmt->bindValue(':id', $id, PDO::PARAM_INT);
+    $stmt->execute();
+    $department = $stmt->fetch();
+    $stmt->closeCursor();
     if (empty($department)) {
         nv_jsonOutput([
             'status' => 'error',
@@ -502,7 +558,7 @@ $tpl->setTemplateDir(get_module_tpl_dir('department.tpl'));
 $tpl->assign('LANG', $nv_Lang);
 $tpl->assign('MODULE_NAME', $module_name);
 $tpl->assign('OP', $op);
-$tpl->assign('CHECKSS', md5(NV_CHECK_SESSION . '_' . $module_name . '_' . $op . '_' . $admin_info['userid']));
+$tpl->assign('CHECKSS', csrf_create($csrf_key));
 $tpl->assign('DEPARTMENTS', $departments);
 
 $contents = $tpl->fetch('department.tpl');

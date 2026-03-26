@@ -32,10 +32,12 @@ if ($nv_Request->isset_request('save', 'post')) {
     $array['feedback_phone'] = $nv_Request->get_int('feedback_phone', 'post', 0);
     $array['feedback_address'] = $nv_Request->get_int('feedback_address', 'post', 0);
 
-    $sth = $db->prepare('UPDATE ' . NV_CONFIG_GLOBALTABLE . " SET config_value=:config_value WHERE config_name=:config_name AND lang = '" . NV_LANG_DATA . "' AND module='" . $module_name . "'");
+    $sth = $db->prepare('UPDATE ' . NV_CONFIG_GLOBALTABLE . ' SET config_value = :config_value WHERE config_name = :config_name AND lang = :lang AND module = :module');
+    $sth->bindValue(':lang', NV_LANG_DATA, PDO::PARAM_STR);
+    $sth->bindValue(':module', $module_name, PDO::PARAM_STR);
     foreach ($array as $config_name => $config_value) {
-        $sth->bindParam(':config_name', $config_name, PDO::PARAM_STR);
-        $sth->bindParam(':config_value', $config_value, PDO::PARAM_STR, strlen($config_value));
+        $sth->bindValue(':config_name', $config_name, PDO::PARAM_STR);
+        $sth->bindValue(':config_value', $config_value, PDO::PARAM_STR);
         $sth->execute();
     }
 

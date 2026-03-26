@@ -22,11 +22,13 @@ function supporter_fix_weight($departmentid, $skip_id = 0, $skip_weight = 0)
 {
     global $db;
 
-    $sql = 'SELECT id FROM ' . NV_MOD_TABLE . '_supporter WHERE id != ' . $skip_id . ' AND departmentid = ' . $departmentid . ' ORDER BY weight ASC';
-    $result = $db->query($sql);
+    $stmt = $db->prepare('SELECT id FROM ' . NV_MOD_TABLE . '_supporter WHERE id != :skip_id AND departmentid = :departmentid ORDER BY weight ASC');
+    $stmt->bindValue(':skip_id', $skip_id, PDO::PARAM_INT);
+    $stmt->bindValue(':departmentid', $departmentid, PDO::PARAM_INT);
+    $stmt->execute();
     $weight = 0;
     $res = [];
-    while ($row = $result->fetch()) {
+    while ($row = $stmt->fetch()) {
         ++$weight;
         if ($weight == $skip_weight) {
             ++$weight;
@@ -36,7 +38,8 @@ function supporter_fix_weight($departmentid, $skip_id = 0, $skip_weight = 0)
     if (!empty($res)) {
         $in = implode(',', array_keys($res));
         $when = implode(' ', $res);
-        $db->query('UPDATE ' . NV_MOD_TABLE . '_supporter SET weight = CASE ' . $when . ' ELSE weight END WHERE id in (' . $in . ')');
+        $stmt = $db->prepare('UPDATE ' . NV_MOD_TABLE . '_supporter SET weight = CASE ' . $when . ' ELSE weight END WHERE id IN (' . $in . ')');
+        $stmt->execute();
     }
 }
 
@@ -56,7 +59,11 @@ if ($nv_Request->isset_request('fc', 'post')) {
         $id = $nv_Request->get_int('id', 'post', 0);
         $new_weight = $nv_Request->get_int('nw', 'post', 0);
 
-        $supporter = $db->query('SELECT * FROM ' . NV_MOD_TABLE . '_supporter WHERE id=' . $id)->fetch();
+        $stmt = $db->prepare('SELECT * FROM ' . NV_MOD_TABLE . '_supporter WHERE id = :id');
+        $stmt->bindValue(':id', $id, PDO::PARAM_INT);
+        $stmt->execute();
+        $supporter = $stmt->fetch();
+        $stmt->closeCursor();
         if (!$supporter) {
             nv_jsonOutput([
                 'status' => 'error',
@@ -66,7 +73,10 @@ if ($nv_Request->isset_request('fc', 'post')) {
 
         nv_insert_logs(NV_LANG_DATA, $module_name, 'LOG_SUPPORTER_WEIGHT', 'ID: ' . $id . ', W: ' . $new_weight, $admin_info['userid']);
         supporter_fix_weight($supporter['departmentid'], $id, $new_weight);
-        $db->query('UPDATE ' . NV_MOD_TABLE . '_supporter SET weight=' . $new_weight . ' WHERE id=' . $id);
+        $stmt = $db->prepare('UPDATE ' . NV_MOD_TABLE . '_supporter SET weight = :weight WHERE id = :id');
+        $stmt->bindValue(':weight', $new_weight, PDO::PARAM_INT);
+        $stmt->bindValue(':id', $id, PDO::PARAM_INT);
+        $stmt->execute();
         $nv_Cache->delMod($module_name);
         nv_jsonOutput([
             'status' => 'OK',
@@ -78,7 +88,11 @@ if ($nv_Request->isset_request('fc', 'post')) {
     if ($fc == 'content') {
         $id = $nv_Request->get_int('id', 'post', 0);
         if (!empty($id)) {
-            $supporter = $db->query('SELECT * FROM ' . NV_MOD_TABLE . '_supporter WHERE id=' . $id)->fetch();
+            $stmt = $db->prepare('SELECT * FROM ' . NV_MOD_TABLE . '_supporter WHERE id = :id');
+            $stmt->bindValue(':id', $id, PDO::PARAM_INT);
+            $stmt->execute();
+            $supporter = $stmt->fetch();
+            $stmt->closeCursor();
             if (!$supporter) {
                 nv_jsonOutput([
                     'status' => 'error',
@@ -174,9 +188,11 @@ if ($nv_Request->isset_request('fc', 'post')) {
             if (empty($id)) {
                 nv_insert_logs(NV_LANG_DATA, $module_name, 'LOG_ADD_SUPPORTER', 'NAME: ' . $post['full_name'], $admin_info['userid']);
 
-                $weight = $db->query('SELECT max(weight) FROM ' . NV_MOD_TABLE . '_supporter WHERE departmentid=' . $post['departmentid'])->fetchColumn();
-                $weight = (int) $weight + 1;
-                $stmt = $db->prepare('INSERT INTO ' . NV_MOD_TABLE . '_supporter (departmentid, full_name, image, phone, email, others, weight) VALUES (' . $post['departmentid'] . ', :full_name, :image, :phone, :email, :others, ' . $weight . ')');
+                $stmt = $db->prepare('SELECT max(weight) FROM ' . NV_MOD_TABLE . '_supporter WHERE departmentid = :departmentid');
+                $stmt->bindValue(':departmentid', $post['departmentid'], PDO::PARAM_INT);
+                $stmt->execute();
+                $weight = (int) $stmt->fetchColumn() + 1;
+                $stmt = $db->prepare('INSERT INTO ' . NV_MOD_TABLE . '_supporter (departmentid, full_name, image, phone, email, others, weight) VALUES (:departmentid, :full_name, :image, :phone, :email, :others, :weight)');
                 $old_departmentid = 0;
             } else {
                 nv_insert_logs(NV_LANG_DATA, $module_name, 'LOG_EDIT_SUPPORTER', 'ID: ' . $id . ', NAME: ' . $post['full_name'], $admin_info['userid']);
@@ -185,16 +201,21 @@ if ($nv_Request->isset_request('fc', 'post')) {
                 if ($post['departmentid'] == $supporter['departmentid']) {
                     $weight = (int) $supporter['weight'];
                 } else {
-                    $weight = $db->query('SELECT max(weight) FROM ' . NV_MOD_TABLE . '_supporter WHERE departmentid=' . $post['departmentid'])->fetchColumn();
-                    $weight = (int) $weight + 1;
+                    $stmt = $db->prepare('SELECT max(weight) FROM ' . NV_MOD_TABLE . '_supporter WHERE departmentid = :departmentid');
+                    $stmt->bindValue(':departmentid', $post['departmentid'], PDO::PARAM_INT);
+                    $stmt->execute();
+                    $weight = (int) $stmt->fetchColumn() + 1;
                 }
-                $stmt = $db->prepare('UPDATE ' . NV_MOD_TABLE . '_supporter SET departmentid = ' . $post['departmentid'] . ', full_name = :full_name, image = :image, phone = :phone, email = :email, others = :others, weight = ' . $weight . ' WHERE id=' . $id);
+                $stmt = $db->prepare('UPDATE ' . NV_MOD_TABLE . '_supporter SET departmentid = :departmentid, full_name = :full_name, image = :image, phone = :phone, email = :email, others = :others, weight = :weight WHERE id = :id');
+                $stmt->bindValue(':id', $id, PDO::PARAM_INT);
             }
-            $stmt->bindParam(':full_name', $post['full_name'], PDO::PARAM_STR);
-            $stmt->bindParam(':image', $post['image'], PDO::PARAM_STR);
-            $stmt->bindParam(':phone', $post['phone'], PDO::PARAM_STR);
-            $stmt->bindParam(':email', $post['email'], PDO::PARAM_STR);
-            $stmt->bindParam(':others', $post['others'], PDO::PARAM_STR, strlen($post['others']));
+            $stmt->bindValue(':departmentid', $post['departmentid'], PDO::PARAM_INT);
+            $stmt->bindValue(':full_name', $post['full_name'], PDO::PARAM_STR);
+            $stmt->bindValue(':image', $post['image'], PDO::PARAM_STR);
+            $stmt->bindValue(':phone', $post['phone'], PDO::PARAM_STR);
+            $stmt->bindValue(':email', $post['email'], PDO::PARAM_STR);
+            $stmt->bindValue(':others', $post['others'], PDO::PARAM_STR);
+            $stmt->bindValue(':weight', $weight, PDO::PARAM_INT);
             $exc = $stmt->execute();
             if ($exc) {
                 if (!empty($old_departmentid) and $old_departmentid != $post['departmentid']) {
@@ -284,7 +305,11 @@ if ($nv_Request->isset_request('fc', 'post')) {
     if ($fc == 'delete') {
         $id = $nv_Request->get_int('id', 'post', 0);
 
-        $supporter = $db->query('SELECT * FROM ' . NV_MOD_TABLE . '_supporter WHERE id=' . $id)->fetch();
+        $stmt = $db->prepare('SELECT * FROM ' . NV_MOD_TABLE . '_supporter WHERE id = :id');
+        $stmt->bindValue(':id', $id, PDO::PARAM_INT);
+        $stmt->execute();
+        $supporter = $stmt->fetch();
+        $stmt->closeCursor();
         if (!$supporter) {
             nv_jsonOutput([
                 'status' => 'error',
@@ -294,7 +319,9 @@ if ($nv_Request->isset_request('fc', 'post')) {
 
         nv_insert_logs(NV_LANG_DATA, $module_name, 'LOG_DEL_SUPPORTER', 'ID: ' . $id . ', NAME: ' . $supporter['full_name'], $admin_info['userid']);
 
-        $db->query('DELETE FROM ' . NV_MOD_TABLE . '_supporter  WHERE id = ' . $id);
+        $stmt = $db->prepare('DELETE FROM ' . NV_MOD_TABLE . '_supporter WHERE id = :id');
+        $stmt->bindValue(':id', $id, PDO::PARAM_INT);
+        $stmt->execute();
         supporter_fix_weight($supporter['departmentid']);
         $nv_Cache->delMod($module_name);
         nv_jsonOutput([
@@ -307,7 +334,11 @@ if ($nv_Request->isset_request('fc', 'post')) {
     if ($fc == 'change_act') {
         $id = $nv_Request->get_int('id', 'post', 0);
 
-        $supporter = $db->query('SELECT * FROM ' . NV_MOD_TABLE . '_supporter WHERE id=' . $id)->fetch();
+        $stmt = $db->prepare('SELECT * FROM ' . NV_MOD_TABLE . '_supporter WHERE id = :id');
+        $stmt->bindValue(':id', $id, PDO::PARAM_INT);
+        $stmt->execute();
+        $supporter = $stmt->fetch();
+        $stmt->closeCursor();
         if (!$supporter) {
             nv_jsonOutput([
                 'status' => 'error',
@@ -319,7 +350,10 @@ if ($nv_Request->isset_request('fc', 'post')) {
 
         nv_insert_logs(NV_LANG_DATA, $module_name, 'LOG_STATUS_SUPPORTER', 'ID: ' . $id . ', NAME: ' . $supporter['full_name'], $admin_info['userid']);
 
-        $db->query('UPDATE ' . NV_MOD_TABLE . '_supporter SET act=' . $new_status . ' WHERE id=' . $id);
+        $stmt = $db->prepare('UPDATE ' . NV_MOD_TABLE . '_supporter SET act = :act WHERE id = :id');
+        $stmt->bindValue(':act', $new_status, PDO::PARAM_INT);
+        $stmt->bindValue(':id', $id, PDO::PARAM_INT);
+        $stmt->execute();
         $nv_Cache->delMod($module_name);
         nv_jsonOutput([
             'status' => 'OK',
@@ -384,7 +418,7 @@ $tpl->assign('MODULE_NAME', $module_name);
 $tpl->assign('OP', $op);
 $tpl->assign('CHECKSS', csrf_create($csrf_key));
 $tpl->assign('DEPARTMENT_OP_URL', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=department');
-$tpl->assign('DEPARTMENT_CHECKSS', md5(NV_CHECK_SESSION . '_' . $module_name . '_department_' . $admin_info['userid']));
+$tpl->assign('DEPARTMENT_CHECKSS', csrf_create($admin_info['admin_id'] . '_' . $module_name . '_department'));
 $tpl->assign('OP_URL', $page_url);
 $tpl->assign('DEPARTMENT_GROUPS', array_values($department_groups));
 

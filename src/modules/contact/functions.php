@@ -95,7 +95,7 @@ function get_department_list()
  */
 function get_supporter_list($departments)
 {
-    global $db, $nv_Cache, $module_name, $module_info;
+    global $db_slave, $nv_Cache, $module_name, $module_info;
 
     $cache_file = 'supporterlist' . NV_CACHE_PREFIX . '.cache';
     if (($cache = $nv_Cache->getItem($module_name, $cache_file)) != false) {
@@ -103,7 +103,7 @@ function get_supporter_list($departments)
     }
 
     $supporter_list = [];
-    $result = $db->query('SELECT * FROM ' . NV_MOD_TABLE . '_supporter WHERE act = 1 ORDER BY departmentid, weight');
+    $result = $db_slave->query('SELECT * FROM ' . NV_MOD_TABLE . '_supporter WHERE act = 1 ORDER BY departmentid, weight');
     while ($row = $result->fetch()) {
         !isset($supporter_list[$row['departmentid']]) && $supporter_list[$row['departmentid']] = [];
         $supporter_list[$row['departmentid']][$row['id']] = [

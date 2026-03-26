@@ -211,19 +211,21 @@ if ($nv_Request->isset_request('checkss', 'post')) {
     $fsendcopy = ($nv_Request->get_bool('sendcopy', 'post') and $feedback['sendcopy']);
     $feedback['sender_id'] = (int) (defined('NV_IS_USER') ? $user_info['userid'] : 0);
 
-    $sql = 'INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . '_send
-    (cid, cat, title, content, send_time, sender_id, sender_name, sender_email, sender_phone, sender_address, sender_ip, is_read, is_reply) VALUES
-    (' . $feedback['department'] . ', :cat, :title, :content, ' . NV_CURRENTTIME . ', ' . $feedback['sender_id'] . ', :sender_name, :sender_email, :sender_phone, :sender_address, :sender_ip, 0, 0)';
-    $data_insert = [];
-    $data_insert['cat'] = $feedback['category'];
-    $data_insert['title'] = $feedback['title'];
-    $data_insert['content'] = $feedback['content'];
-    $data_insert['sender_name'] = $feedback['sender_name'];
-    $data_insert['sender_email'] = $feedback['sender_email'];
-    $data_insert['sender_phone'] = $feedback['sender_phone'];
-    $data_insert['sender_address'] = $feedback['sender_address'];
-    $data_insert['sender_ip'] = $client_info['ip'];
-    $feedback['id'] = $db->insert_id($sql, 'id', $data_insert);
+    $stmt = $db->prepare('INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . '_send
+        (cid, cat, title, content, send_time, sender_id, sender_name, sender_email, sender_phone, sender_address, sender_ip, is_read, is_reply) VALUES
+        (:cid, :cat, :title, :content, ' . NV_CURRENTTIME . ', :sender_id, :sender_name, :sender_email, :sender_phone, :sender_address, :sender_ip, 0, 0)');
+    $stmt->bindValue(':cid', $feedback['department'], PDO::PARAM_INT);
+    $stmt->bindValue(':cat', $feedback['category'], PDO::PARAM_STR);
+    $stmt->bindValue(':title', $feedback['title'], PDO::PARAM_STR);
+    $stmt->bindValue(':content', $feedback['content'], PDO::PARAM_STR);
+    $stmt->bindValue(':sender_id', (int) $feedback['sender_id'], PDO::PARAM_INT);
+    $stmt->bindValue(':sender_name', $feedback['sender_name'], PDO::PARAM_STR);
+    $stmt->bindValue(':sender_email', $feedback['sender_email'], PDO::PARAM_STR);
+    $stmt->bindValue(':sender_phone', $feedback['sender_phone'], PDO::PARAM_STR);
+    $stmt->bindValue(':sender_address', $feedback['sender_address'], PDO::PARAM_STR);
+    $stmt->bindValue(':sender_ip', $client_info['ip'], PDO::PARAM_STR);
+    $stmt->execute();
+    $feedback['id'] = $db->lastInsertId();
     if ($feedback['id'] > 0) {
         $custom_headers = [
             'References' => md5('contact' . $feedback['id'] . $global_config['sitekey'])
@@ -243,14 +245,17 @@ if ($nv_Request->isset_request('checkss', 'post')) {
             }
 
             if (!empty($departments[$feedback['department']]['admins']['obt_level'])) {
-                $sql = 'SELECT t1.admin_id, t2.email as admin_email FROM ' . NV_AUTHORS_GLOBALTABLE . ' t1 INNER JOIN ' . NV_USERS_GLOBALTABLE . ' t2 ON t1.admin_id = t2.userid WHERE t1.lev!=0 AND t1.is_suspend=0 AND t2.active=1 AND t1.admin_id IN (' . implode(',', $departments[$feedback['department']]['admins']['obt_level']) . ')';
-                $result = $db_slave->query($sql);
-                while ($row = $result->fetch()) {
+                $obt_level = array_map('intval', $departments[$feedback['department']]['admins']['obt_level']);
+                $placeholders = implode(',', array_fill(0, count($obt_level), '?'));
+                $stmt = $db_slave->prepare('SELECT t1.admin_id, t2.email as admin_email FROM ' . NV_AUTHORS_GLOBALTABLE . ' t1 INNER JOIN ' . NV_USERS_GLOBALTABLE . ' t2 ON t1.admin_id = t2.userid WHERE t1.lev!=0 AND t1.is_suspend=0 AND t2.active=1 AND t1.admin_id IN (' . $placeholders . ')');
+                $stmt->execute($obt_level);
+                while ($row = $stmt->fetch()) {
                     if (nv_check_valid_email($row['admin_email']) == '') {
                         $email_list[] = $row['admin_email'];
                         $auto_forward[] = $row['admin_id'];
                     }
                 }
+                $stmt->closeCursor();
             }
 
             if (!empty($email_list)) {
@@ -265,7 +270,10 @@ if ($nv_Request->isset_request('checkss', 'post')) {
 
                 $auto_forward = array_unique($auto_forward);
                 $auto_forward = implode(',', $auto_forward);
-                $db->query('UPDATE ' . NV_MOD_TABLE . '_send SET auto_forward=' . $db->quote($auto_forward) . ' WHERE id=' . $feedback['id']);
+                $stmt = $db->prepare('UPDATE ' . NV_MOD_TABLE . '_send SET auto_forward=:auto_forward WHERE id=:id');
+                $stmt->bindValue(':auto_forward', $auto_forward, PDO::PARAM_STR);
+                $stmt->bindValue(':id', $feedback['id'], PDO::PARAM_INT);
+                $stmt->execute();
             }
         }
 
