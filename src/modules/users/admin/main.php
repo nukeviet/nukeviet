@@ -31,16 +31,20 @@ if ($usactive_old != $usactive) {
     $nv_Request->set_Cookie('usactive', $usactive);
 }
 $_arr_where = [];
+$params = [];
 if ($global_config['idsite'] > 0) {
-    $_arr_where[] = '(tb1.idsite=' . $global_config['idsite'] . ' OR tb1.userid = ' . $admin_info['admin_id'] . ')';
+    $_arr_where[] = '(tb1.idsite = :idsite OR tb1.userid = :admin_id)';
+    $params[':idsite'] = $global_config['idsite'];
+    $params[':admin_id'] = $admin_info['admin_id'];
 }
 if ($usactive == -3) {
-    $_arr_where[] = 'tb1.group_id!=7';
+    $_arr_where[] = 'tb1.group_id != 7';
 } elseif ($usactive == -2) {
-    $_arr_where[] = 'tb1.group_id=7';
+    $_arr_where[] = 'tb1.group_id = 7';
 } else {
     if ($usactive > -1) {
-        $_arr_where[] = 'tb1.active=' . ($usactive % 2);
+        $_arr_where[] = 'tb1.active = :active';
+        $params[':active'] = ($usactive % 2);
     }
 }
 
@@ -92,23 +96,31 @@ $join = '';
 
 if (!empty($methodvalue)) {
     if (empty($method)) {
-        $join = 'LEFT JOIN ' . NV_MOD_TABLE . '_openid tb2 ON tb1.userid=tb2.userid';
+        $join = 'LEFT JOIN ' . NV_MOD_TABLE . '_openid tb2 ON tb1.userid = tb2.userid';
     } elseif ($method == 'oauth') {
-        $join = 'INNER JOIN ' . NV_MOD_TABLE . '_openid tb2 ON tb1.userid=tb2.userid';
+        $join = 'INNER JOIN ' . NV_MOD_TABLE . '_openid tb2 ON tb1.userid = tb2.userid';
     }
 
     if (empty($method)) {
         $array_like = [];
+        $i = 0;
         foreach ($methods as $method_i) {
             foreach ($method_i['sql'] as $method_sql) {
-                $array_like[] = $method_sql . " LIKE '%" . $db->dblikeescape($methodvalue) . "%'";
+                $pname = ':methodvalue' . $i;
+                $array_like[] = $method_sql . ' LIKE ' . $pname;
+                $params[$pname] = '%' . $methodvalue . '%';
+                ++$i;
             }
         }
         $_arr_where[] = '(' . implode(' OR ', $array_like) . ')';
     } else {
         $array_like = [];
+        $i = 0;
         foreach ($methods[$method]['sql'] as $method_sql) {
-            $array_like[] = $method_sql . " LIKE '%" . $db->dblikeescape($methodvalue) . "%'";
+            $pname = ':methodvalue' . $i;
+            $array_like[] = $method_sql . ' LIKE ' . $pname;
+            $params[$pname] = '%' . $methodvalue . '%';
+            ++$i;
         }
         $_arr_where[] = '(' . implode(' OR ', $array_like) . ')';
         $methods[$method]['selected'] = true;
@@ -120,7 +132,8 @@ if (!empty($methodvalue)) {
 // Default group is all
 $selgroup = $nv_Request->get_int('group', 'post,get', 6);
 if (!empty($selgroup) and $selgroup != 6) {
-    $_arr_where[] = '(FIND_IN_SET(' . $selgroup . ', tb1.in_groups) OR tb1.group_id = ' . $selgroup . ')';
+    $_arr_where[] = '(FIND_IN_SET(:selgroup, tb1.in_groups) OR tb1.group_id = :selgroup)';
+    $params[':selgroup'] = $selgroup;
     $base_url .= '&amp;group=' . $selgroup;
 }
 
@@ -140,7 +153,8 @@ if ($active2step == 'disabled') {
 $reg_from = $nv_Request->get_title('reg_from', 'post,get', '');
 $reg_from_t = nv_d2u_get($reg_from);
 if ($reg_from_t != 0) {
-    $_arr_where[] = 'tb1.regdate >= ' . $reg_from_t;
+    $_arr_where[] = 'tb1.regdate >= :reg_from_t';
+    $params[':reg_from_t'] = $reg_from_t;
     $base_url .= '&amp;reg_from=' . $reg_from;
 } else {
     $reg_from = '';
@@ -149,7 +163,8 @@ if ($reg_from_t != 0) {
 $reg_to = $nv_Request->get_title('reg_to', 'post,get', '');
 $reg_to_t = nv_d2u_get($reg_to, 23, 59, 59);
 if ($reg_to_t != 0) {
-    $_arr_where[] = 'tb1.regdate <= ' . $reg_to_t;
+    $_arr_where[] = 'tb1.regdate <= :reg_to_t';
+    $params[':reg_to_t'] = $reg_to_t;
     $base_url .= '&amp;reg_to=' . $reg_to;
 } else {
     $reg_to = '';
@@ -158,31 +173,45 @@ if ($reg_to_t != 0) {
 $page = $nv_Request->get_page('page', 'get', 1);
 $per_page = 30;
 
-$db->sqlreset()
-    ->select('COUNT(*)')
-    ->from(NV_MOD_TABLE . ' tb1');
+$query_cnt = 'SELECT COUNT(*) FROM ' . NV_MOD_TABLE . ' tb1';
+$query_list = 'SELECT tb1.* FROM ' . NV_MOD_TABLE . ' tb1';
 
 if (!empty($join)) {
-    $db->join($join);
+    $query_cnt .= ' ' . $join;
+    $query_list .= ' ' . $join;
 }
 
 if (!empty($_arr_where)) {
-    $db->where(implode(' AND ', $_arr_where));
+    $query_where = ' WHERE ' . implode(' AND ', $_arr_where);
+    $query_cnt .= $query_where;
+    $query_list .= $query_where;
 }
 
-$num_items = $db->query($db->sql())->fetchColumn();
+$stmt = $db->prepare($query_cnt);
+foreach ($params as $pname => $pvalue) {
+    $stmt->bindValue($pname, $pvalue);
+}
+$stmt->execute();
+$num_items = $stmt->fetchColumn();
+$stmt->closeCursor();
+
 $page_url = $base_url;
 
-$db->select('tb1.*')
-    ->limit($per_page)
-    ->offset(($page - 1) * $per_page);
 if (!empty($orderby) and in_array($orderby, $orders, true)) {
     $orderby_sql = $orderby != 'full_name' ? 'tb1.' . $orderby : ($global_config['name_show'] == 0 ? "concat(tb1.first_name,' ',tb1.last_name)" : "concat(tb1.last_name,' ',tb1.first_name)");
-    $db->order($orderby_sql . ' ' . $ordertype);
+    $query_list .= ' ORDER BY ' . $orderby_sql . ' ' . $ordertype;
     $base_url .= '&amp;sortby=' . $orderby . '&amp;sorttype=' . $ordertype;
 }
 
-$result2 = $db->query($db->sql());
+$query_list .= ' LIMIT :limit OFFSET :offset';
+$stmt = $db->prepare($query_list);
+foreach ($params as $pname => $pvalue) {
+    $stmt->bindValue($pname, $pvalue);
+}
+$stmt->bindValue(':limit', $per_page, PDO::PARAM_INT);
+$stmt->bindValue(':offset', ($page - 1) * $per_page, PDO::PARAM_INT);
+$stmt->execute();
+$result2 = $stmt;
 
 $users_list = [];
 $admin_in = [];
@@ -241,21 +270,29 @@ while ($row = $result2->fetch()) {
 
 // Lấy tên các thành viên kích hoạt tài khoản
 if (!empty($array_userids)) {
-    $sql = 'SELECT userid, username, first_name, last_name FROM ' . NV_MOD_TABLE . ' WHERE userid IN(' . implode(',', $array_userids) . ')';
-    $result = $db->query($sql);
-    while ($row = $result->fetch()) {
+    $in_userids = implode(',', array_fill(0, count($array_userids), '?'));
+    $stmt = $db->prepare('SELECT userid, username, first_name, last_name FROM ' . NV_MOD_TABLE . ' WHERE userid IN (' . $in_userids . ')');
+    foreach (array_values($array_userids) as $k => $uid) {
+        $stmt->bindValue(($k + 1), $uid, PDO::PARAM_INT);
+    }
+    $stmt->execute();
+    while ($row = $stmt->fetch()) {
         $array_users[$row['userid']] = [
             'username' => $row['username'],
             'full_name' => nv_show_name_user($row['first_name'], $row['last_name'], $row['username'])
         ];
     }
+    $stmt->closeCursor();
 }
 
 if (!empty($admin_in)) {
-    $admin_in = implode(',', $admin_in);
-    $sql = 'SELECT admin_id, lev FROM ' . NV_AUTHORS_GLOBALTABLE . ' WHERE admin_id IN (' . $admin_in . ')';
-    $query = $db->query($sql);
-    while ($row = $query->fetch()) {
+    $in_admin = implode(',', array_fill(0, count($admin_in), '?'));
+    $stmt = $db->prepare('SELECT admin_id, lev FROM ' . NV_AUTHORS_GLOBALTABLE . ' WHERE admin_id IN (' . $in_admin . ')');
+    foreach (array_values($admin_in) as $k => $aid) {
+        $stmt->bindValue(($k + 1), $aid, PDO::PARAM_INT);
+    }
+    $stmt->execute();
+    while ($row = $stmt->fetch()) {
         $users_list[$row['admin_id']]['is_delete'] = false;
         if ($row['lev'] == 1) {
             $users_list[$row['admin_id']]['level'] = $nv_Lang->getGlobal('level1');
@@ -282,6 +319,7 @@ if (!empty($admin_in)) {
             $users_list[$row['admin_id']]['setactive'] = false;
         }
     }
+    $stmt->closeCursor();
     if (isset($users_list[$admin_info['admin_id']])) {
         $users_list[$admin_info['admin_id']]['setactive'] = false;
         $users_list[$admin_info['admin_id']]['is_edit'] = true;
@@ -324,9 +362,11 @@ for ($i = $_bg; $i >= 0; --$i) {
 
 // Build groups dropdown
 $groups_list = [];
-$sql = 'SELECT * FROM ' . NV_MOD_TABLE . '_groups AS g LEFT JOIN ' . NV_MOD_TABLE . "_groups_detail d ON ( g.group_id = d.group_id AND d.lang='" . NV_LANG_DATA . "' ) WHERE g.idsite = " . $global_config['idsite'] . ' OR (g.idsite=0 AND g.group_id>3 AND g.siteus=1) ORDER BY g.idsite, g.weight ASC';
-$result = $db->query($sql);
-while ($group = $result->fetch()) {
+$stmt = $db->prepare('SELECT * FROM ' . NV_MOD_TABLE . '_groups AS g LEFT JOIN ' . NV_MOD_TABLE . '_groups_detail d ON (g.group_id = d.group_id AND d.lang = :lang) WHERE g.idsite = :idsite OR (g.idsite = 0 AND g.group_id > 3 AND g.siteus = 1) ORDER BY g.idsite, g.weight ASC');
+$stmt->bindValue(':lang', NV_LANG_DATA, PDO::PARAM_STR);
+$stmt->bindValue(':idsite', $global_config['idsite'], PDO::PARAM_INT);
+$stmt->execute();
+while ($group = $stmt->fetch()) {
     $groups_list[] = [
         'group_id' => $group['group_id'],
         'title' => ($group['group_id'] < 10) ? $nv_Lang->getGlobal('level' . $group['group_id']) : $group['title'],

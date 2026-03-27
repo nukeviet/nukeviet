@@ -196,36 +196,41 @@ function myApiRoleList($type = 'public', $page = 0, $per_page = 20)
 {
     global $db, $db_config, $admin_info, $user_info;
 
-    $type != 'private' && $type = 'public';
     $userid = defined('NV_ADMIN') ? $admin_info['admin_id'] : $user_info['userid'];
-
+    $params = [
+        ':role_type' => [$type, PDO::PARAM_STR]
+    ];
     $select = 'tb1.*, IFNULL(tb2.access_count,-1) AS credential_access_count, IFNULL(tb2.last_access,-1) AS credential_last_access, IFNULL(tb2.addtime,-1) AS credential_addtime, IFNULL(tb2.endtime,-1) AS credential_endtime, IFNULL(tb2.quota,-1) AS credential_quota, IFNULL(tb2.status,-1) AS credential_status';
-    $where = "tb1.role_type = '" . $type . "'";
+    $where = 'tb1.role_type = :role_type';
     if (!defined('NV_ADMIN')) {
         $where .= " AND tb1.role_object ='user'";
     }
-    $join = ($type == 'private' ? 'INNER JOIN' : 'LEFT JOIN') . ' ' . $db_config['prefix'] . '_api_role_credential tb2 ON (tb2.role_id =tb1.role_id AND tb2.userid=' . $userid . ')';
+    $join = ($type == 'private' ? 'INNER JOIN' : 'LEFT JOIN') . ' ' . $db_config['prefix'] . '_api_role_credential tb2 ON (tb2.role_id =tb1.role_id AND tb2.userid = :userid)';
+    $params[':userid'] = [$userid, PDO::PARAM_INT];
 
-    $db->sqlreset()
-        ->select('COUNT(*)')
-        ->from($db_config['prefix'] . '_api_role tb1')
-        ->join($join)
-        ->where($where);
-    $all_pages = $db->query($db->sql())
-        ->fetchColumn();
-
-    $db->select($select)
-        ->order('tb1.role_id DESC');
-    if (!empty($page)) {
-        $db->limit($per_page)
-            ->offset(($page - 1) * $per_page);
+    $sql_count = 'SELECT COUNT(*) FROM ' . $db_config['prefix'] . '_api_role tb1 ' . $join . ' WHERE ' . $where;
+    $stmt = $db->prepare($sql_count);
+    foreach ($params as $key => $val) {
+        $stmt->bindValue($key, $val[0], $val[1]);
     }
-    $result = $db->query($db->sql());
+    $stmt->execute();
+    $all_pages = $stmt->fetchColumn();
+
+    $sql = 'SELECT ' . $select . ' FROM ' . $db_config['prefix'] . '_api_role tb1 ' . $join . ' WHERE ' . $where . ' ORDER BY tb1.role_id DESC';
+    if (!empty($page)) {
+        $sql .= ' LIMIT ' . (int) ($page - 1) * $per_page . ',' . (int) $per_page;
+    }
+    $stmt = $db->prepare($sql);
+    foreach ($params as $key => $val) {
+        $stmt->bindValue($key, $val[0], $val[1]);
+    }
+    $stmt->execute();
 
     $array = [];
-    while ($row = $result->fetch()) {
+    while ($row = $stmt->fetch()) {
         $array[$row['role_id']] = parseRole($row);
     }
+    $stmt->closeCursor();
 
     return [$all_pages, $array];
 }
@@ -242,7 +247,12 @@ function getRoleDetails($id, $isParseRole = true)
 {
     global $db, $db_config;
 
-    $row = $db->query('SELECT * FROM ' . $db_config['prefix'] . '_api_role WHERE role_id = ' . $id)->fetch();
+    $stmt = $db->prepare('SELECT * FROM ' . $db_config['prefix'] . '_api_role WHERE role_id = :role_id');
+    $stmt->bindValue(':role_id', $id, PDO::PARAM_INT);
+    $stmt->execute();
+    $row = $stmt->fetch();
+    $stmt->closeCursor();
+
     if (!$isParseRole) {
         return $row;
     }
@@ -265,7 +275,10 @@ function delAuth($method, $userid = 0)
         $userid = defined('NV_ADMIN') ? $admin_info['admin_id'] : $user_info['userid'];
     }
 
-    $db->query('DELETE FROM ' . $db_config['prefix'] . '_api_user WHERE userid = ' . $userid . ' AND method = ' . $db->quote($method));
+    $stmt = $db->prepare('DELETE FROM ' . $db_config['prefix'] . '_api_user WHERE userid = :userid AND method = :method');
+    $stmt->bindValue(':userid', $userid, PDO::PARAM_INT);
+    $stmt->bindValue(':method', $method, PDO::PARAM_STR);
+    $stmt->execute();
 
     return true;
 }
@@ -288,31 +301,58 @@ function createAuth($method, $userid = 0)
 
     $new_ident = '';
     $new_secret = '';
-    while (empty($new_ident) or $db->query('SELECT COUNT(*) FROM ' . $db_config['prefix'] . '_api_user WHERE ident = ' . $db->quote($new_ident) . ' AND userid != ' . $userid)->fetchColumn()) {
+    $sql_check = 'SELECT COUNT(*) FROM ' . $db_config['prefix'] . '_api_user WHERE ident = :ident AND userid != :userid';
+    $stmt_check = $db->prepare($sql_check);
+    $stmt_check->bindValue(':userid', $userid, PDO::PARAM_INT);
+
+    while (empty($new_ident)) {
         $new_ident = nv_genpass(32, 3);
+        $stmt_check->bindValue(':ident', $new_ident, PDO::PARAM_STR);
+        $stmt_check->execute();
+        if ($stmt_check->fetchColumn()) {
+            $new_ident = '';
+        }
     }
-    while (empty($new_secret) or $db->query('SELECT COUNT(*) FROM ' . $db_config['prefix'] . '_api_user WHERE secret = ' . $db->quote($new_secret) . ' AND userid != ' . $userid)->fetchColumn()) {
+
+    $sql_check = 'SELECT COUNT(*) FROM ' . $db_config['prefix'] . '_api_user WHERE secret = :secret AND userid != :userid';
+    $stmt_check = $db->prepare($sql_check);
+    $stmt_check->bindValue(':userid', $userid, PDO::PARAM_INT);
+
+    while (empty($new_secret)) {
         $new_secret = nv_genpass(32, 3);
+        $stmt_check->bindValue(':secret', $new_secret, PDO::PARAM_STR);
+        $stmt_check->execute();
+        if ($stmt_check->fetchColumn()) {
+            $new_secret = '';
+        }
     }
+
     $new_secret_db = $crypt->encrypt($new_secret);
 
-    if ($db->query('SELECT COUNT(*) FROM ' . $db_config['prefix'] . '_api_user WHERE userid = ' . $userid . ' AND method=' . $db->quote($method))->fetchColumn()) {
+    $stmt_exists = $db->prepare('SELECT COUNT(*) FROM ' . $db_config['prefix'] . '_api_user WHERE userid = :userid AND method = :method');
+    $stmt_exists->bindValue(':userid', $userid, PDO::PARAM_INT);
+    $stmt_exists->bindValue(':method', $method, PDO::PARAM_STR);
+    $stmt_exists->execute();
+
+    if ($stmt_exists->fetchColumn()) {
         $sql = 'UPDATE ' . $db_config['prefix'] . '_api_user SET
             ident = :ident,
             secret = :secret,
-            edittime=' . NV_CURRENTTIME . '
-            WHERE userid =' . $userid . ' AND method=:method';
+            edittime = :edittime
+            WHERE userid = :userid AND method = :method';
     } else {
         $sql = 'INSERT INTO ' . $db_config['prefix'] . '_api_user (
             userid, ident, secret, ips, method, addtime
         ) VALUES (
-            ' . $userid . ", :ident, :secret, '[]', :method, " . NV_CURRENTTIME . '
+            :userid, :ident, :secret, \'[]\', :method, :edittime
         )';
     }
     $sth = $db->prepare($sql);
-    $sth->bindParam(':ident', $new_ident, PDO::PARAM_STR);
-    $sth->bindParam(':secret', $new_secret_db, PDO::PARAM_STR);
-    $sth->bindParam(':method', $method, PDO::PARAM_STR);
+    $sth->bindValue(':ident', $new_ident, PDO::PARAM_STR);
+    $sth->bindValue(':secret', $new_secret_db, PDO::PARAM_STR);
+    $sth->bindValue(':method', $method, PDO::PARAM_STR);
+    $sth->bindValue(':userid', $userid, PDO::PARAM_INT);
+    $sth->bindValue(':edittime', NV_CURRENTTIME, PDO::PARAM_INT);
     $sth->execute();
 
     return [$new_ident, $new_secret];
@@ -337,10 +377,12 @@ function ipsUpdate($api_ips, $method, $userid = 0)
 
     $sth = $db->prepare('UPDATE ' . $db_config['prefix'] . '_api_user SET
     ips = :ips,
-    edittime=' . NV_CURRENTTIME . '
-    WHERE userid =' . $userid . ' AND method=:method');
-    $sth->bindParam(':ips', $api_ips, PDO::PARAM_STR);
-    $sth->bindParam(':method', $method, PDO::PARAM_STR);
+    edittime = :edittime
+    WHERE userid = :userid AND method = :method');
+    $sth->bindValue(':ips', $api_ips, PDO::PARAM_STR);
+    $sth->bindValue(':method', $method, PDO::PARAM_STR);
+    $sth->bindValue(':userid', $userid, PDO::PARAM_INT);
+    $sth->bindValue(':edittime', NV_CURRENTTIME, PDO::PARAM_INT);
 
     return $sth->execute();
 }
@@ -359,10 +401,11 @@ function get_api_user($userid = 0)
         $userid = defined('NV_ADMIN') ? $admin_info['admin_id'] : $user_info['userid'];
     }
 
-    $sql = 'SELECT * FROM ' . $db_config['prefix'] . '_api_user WHERE userid = ' . $userid;
-    $result = $db->query($sql);
+    $stmt = $db->prepare('SELECT * FROM ' . $db_config['prefix'] . '_api_user WHERE userid = :userid');
+    $stmt->bindValue(':userid', $userid, PDO::PARAM_INT);
+    $stmt->execute();
     $api_user = [];
-    while ($row = $result->fetch()) {
+    while ($row = $stmt->fetch()) {
         if (!empty($row['ips'])) {
             $row['ips'] = json_decode($row['ips'], true);
             if (json_last_error() === JSON_ERROR_NONE) {
@@ -373,6 +416,7 @@ function get_api_user($userid = 0)
         }
         $api_user[$row['method']] = $row;
     }
+    $stmt->closeCursor();
 
     return $api_user;
 }

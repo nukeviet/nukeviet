@@ -43,6 +43,7 @@ while ($row = $result->fetch()) {
         'checksess_del' => csrf_create($admin_info['admin_id'] . '_' . $module_name . '_del_' . $row['vid'])
     ];
 }
+$result->closeCursor();
 if (empty($array_row)) {
     nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=content');
 }

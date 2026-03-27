@@ -27,10 +27,11 @@ if (!nv_function_exists('nv_block_data_config_banners')) {
 
         $html = "<select name=\"config_idplanbanner\" class=\"form-select\">\n";
         $html .= '<option value="">' . $nv_Lang->getModule('idplanbanner') . "</option>\n";
-        $query = 'SELECT * FROM ' . NV_BANNERS_GLOBALTABLE . "_plans WHERE (blang='" . NV_LANG_DATA . "' OR blang='') ORDER BY title ASC";
-        $result = $db->query($query);
+        $stmt = $db->prepare("SELECT * FROM " . NV_BANNERS_GLOBALTABLE . "_plans WHERE (blang = :lang OR blang = '') ORDER BY title ASC");
+        $stmt->bindValue(':lang', NV_LANG_DATA, PDO::PARAM_STR);
+        $stmt->execute();
 
-        while ($row_bpn = $result->fetch()) {
+        while ($row_bpn = $stmt->fetch()) {
             $value = $row_bpn['title'] . ' (';
             $value .= ((!empty($row_bpn['blang']) and isset($language_array[$row_bpn['blang']])) ? $language_array[$row_bpn['blang']]['name'] : $nv_Lang->getModule('blang_all')) . ', ';
             $value .= $row_bpn['form'] . ', ';
@@ -40,6 +41,7 @@ if (!nv_function_exists('nv_block_data_config_banners')) {
 
             $html .= '<option value="' . $row_bpn['id'] . '" ' . $sel . '>' . $value . "</option>\n";
         }
+        $stmt->closeCursor();
 
         $html .= "</select>\n";
 

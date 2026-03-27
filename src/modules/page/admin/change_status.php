@@ -23,11 +23,19 @@ if (!csrf_check($nv_Request->get_string('checkss', 'post'), $admin_info['admin_i
 }
 
 if ($id > 0) {
-    $row = $db->query('SELECT status FROM ' . NV_PREFIXLANG . '_' . $module_data . ' WHERE id=' . $id)->fetch();
+    $stmt = $db->prepare('SELECT status FROM ' . NV_PREFIXLANG . '_' . $module_data . ' WHERE id = :id');
+    $stmt->bindValue(':id', $id, PDO::PARAM_INT);
+    $stmt->execute();
+    $row = $stmt->fetch();
+    $stmt->closeCursor();
+
     if (!empty($row)) {
         $act_id = $row['status'] ? 0 : 1;
-        nv_insert_logs(NV_LANG_DATA, $module_name, 'log_change_status' , 'status ' . $act_id . ' pageid ' . $id, $admin_info['userid']);
-        $db->query('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . ' SET status=' . $act_id . ' WHERE id= ' . $id);
+        nv_insert_logs(NV_LANG_DATA, $module_name, 'log_change_status', 'status ' . $act_id . ' pageid ' . $id, $admin_info['userid']);
+        $stmt = $db->prepare('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . ' SET status = :status WHERE id = :id');
+        $stmt->bindValue(':status', $act_id, PDO::PARAM_INT);
+        $stmt->bindValue(':id', $id, PDO::PARAM_INT);
+        $stmt->execute();
 
         $nv_Cache->delMod($module_name);
         nv_jsonOutput([

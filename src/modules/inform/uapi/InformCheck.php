@@ -14,6 +14,7 @@ namespace NukeViet\Module\inform\uapi;
 use NukeViet\Uapi\Uapi;
 use NukeViet\Uapi\UapiResult;
 use NukeViet\Uapi\UiApi;
+use PDO;
 
 if (!defined('NV_MAINFILE')) {
     exit('Stop!!!');
@@ -74,20 +75,21 @@ class InformCheck implements UiApi
         if (!empty($groups)) {
             $where[] = "(mtb.receiver_grs != '' AND (CONCAT(',', mtb.receiver_grs, ',') REGEXP ',(" . str_replace(',', '|', $groups) . "),'))";
         }
-        $where[] = "(mtb.receiver_ids != '' AND FIND_IN_SET(" . $user_id . ', mtb.receiver_ids))';
-        $where = '(' . implode(' OR ', $where) . ') AND (mtb.add_time <= ' . NV_CURRENTTIME . ') AND (mtb.exp_time = 0 OR mtb.exp_time > ' . NV_CURRENTTIME . ')';
+        $where[] = "(mtb.receiver_ids != '' AND FIND_IN_SET(:userid, mtb.receiver_ids))";
+        $where = '(' . implode(' OR ', $where) . ') AND (mtb.add_time <= :current_time) AND (mtb.exp_time = 0 OR mtb.exp_time > :current_time)';
         if (!empty($groups)) {
             $where .= " AND (mtb.sender_role != 'group' OR (mtb.sender_role = 'group' AND mtb.sender_group IN (" . $groups . ')))';
         } else {
             $where .= " AND (mtb.sender_role != 'group')";
         }
 
-        $where .= ' AND mtb.id NOT IN (SELECT exc.pid FROM ' . NV_INFORM_STATUS_GLOBALTABLE . ' AS exc WHERE (exc.pid = mtb.id AND exc.userid = ' . $user_id . ') AND (exc.shown_time != 0 OR exc.hidden_time != 0))';
+        $where .= ' AND mtb.id NOT IN (SELECT exc.pid FROM ' . NV_INFORM_STATUS_GLOBALTABLE . ' AS exc WHERE (exc.pid = mtb.id AND exc.userid = :userid) AND (exc.shown_time != 0 OR exc.hidden_time != 0))';
         $sql = 'SELECT mtb.id FROM ' . NV_INFORM_GLOBALTABLE . ' AS mtb WHERE ' . $where;
-        $result = $db->query($sql);
-        if ($result) {
-            $count = $result->rowCount();
-        }
+        $sth = $db->prepare($sql);
+        $sth->bindValue(':userid', $user_id, PDO::PARAM_INT);
+        $sth->bindValue(':current_time', NV_CURRENTTIME, PDO::PARAM_INT);
+        $sth->execute();
+        $count = $sth->rowCount();
 
         $this->result->set('count', $count);
         $this->result->setSuccess();

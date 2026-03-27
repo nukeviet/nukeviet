@@ -29,21 +29,24 @@ if ($cid > 0 and $checkss == md5($cid . '_' . NV_CHECK_SESSION)) {
 
     $nv_Request->set_Cookie($module_data . '_like_' . $cid, 1, 86400);
 
-    $_sql = 'SELECT cid, likes, dislikes FROM ' . NV_PREFIXLANG . '_' . $module_data . ' WHERE cid=' . $cid;
-    $row = $db->query($_sql)->fetch();
+    $stmt = $db->prepare('SELECT cid, likes, dislikes FROM ' . NV_PREFIXLANG . '_' . $module_data . ' WHERE cid = :cid');
+    $stmt->bindValue(':cid', $cid, PDO::PARAM_INT);
+    $stmt->execute();
+    $row = $stmt->fetch();
+    $stmt->closeCursor();
+
     if (isset($row['cid'])) {
         $like = $nv_Request->get_int('like', 'post');
-        $query = 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . ' SET';
 
         if ($like > 0) {
             $count = nv_number_format($row['likes'] + 1);
-            $query .= ' likes=likes+1';
+            $stmt = $db->prepare('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . ' SET likes = likes + 1 WHERE cid = :cid');
         } else {
             $count = nv_number_format($row['dislikes'] + 1);
-            $query .= ' dislikes=dislikes+1';
+            $stmt = $db->prepare('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . ' SET dislikes = dislikes + 1 WHERE cid = :cid');
         }
-        $query .= ' WHERE cid=' . $cid;
-        $db->query($query);
+        $stmt->bindValue(':cid', $cid, PDO::PARAM_INT);
+        $stmt->execute();
 
         nv_jsonOutput([
             'status' => 'success',

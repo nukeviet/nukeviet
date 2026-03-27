@@ -50,7 +50,11 @@ if ($tokend_confirm_password != $tokend) {
     ];
     $blocker->trackLogin($rules, $global_config['is_login_blocker']);
 
-    $db_password = $db->query('SELECT password FROM ' . $db_config['prefix'] . '_' . $site_mods[NV_BRIDGE_USER_MODULE]['module_data'] . ' WHERE userid=' . $user_info['userid'])->fetchColumn();
+    $stmt = $db->prepare('SELECT password FROM ' . $db_config['prefix'] . '_' . $site_mods[NV_BRIDGE_USER_MODULE]['module_data'] . ' WHERE userid = :userid');
+    $stmt->bindValue(':userid', $user_info['userid'], PDO::PARAM_INT);
+    $stmt->execute();
+    $db_password = $stmt->fetchColumn();
+    $stmt->closeCursor();
     $is_pass_valid = !empty($db_password);
 
     if ($checkss == NV_CHECK_SESSION and $is_pass_valid) {

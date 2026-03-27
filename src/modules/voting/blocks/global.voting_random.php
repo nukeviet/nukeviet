@@ -53,10 +53,12 @@ if (!nv_function_exists('nv_block_voting')) {
         }
 
         if (!empty($is_update)) {
-            $is_update = implode(',', $is_update);
-
-            $sql = 'UPDATE ' . NV_PREFIXLANG . '_' . $site_mods['voting']['module_data'] . ' SET act=0 WHERE vid IN (' . $is_update . ')';
-            $db->query($sql);
+            $in = implode(',', array_fill(0, count($is_update), '?'));
+            $stmt = $db->prepare('UPDATE ' . NV_PREFIXLANG . '_' . $site_mods['voting']['module_data'] . ' SET act = 0 WHERE vid IN (' . $in . ')');
+            foreach ($is_update as $k => $vid_update) {
+                $stmt->bindValue(($k + 1), (int) $vid_update, PDO::PARAM_INT);
+            }
+            $stmt->execute();
 
             $nv_Cache->delMod('voting');
         }

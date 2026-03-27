@@ -33,10 +33,17 @@ if ($nv_Request->isset_request('changeweight', 'post')) {
         ]);
     }
 
-    $query = 'SELECT COUNT(*) FROM ' . NV_MOD_TABLE . '_field WHERE fid=' . $fid . ' AND is_system=0';
-    $numrows = $db->query($query)->fetchColumn();
+    $stmt = $db->prepare('SELECT COUNT(*) FROM ' . NV_MOD_TABLE . '_field WHERE fid = :fid AND is_system = 0');
+    $stmt->bindValue(':fid', $fid, PDO::PARAM_INT);
+    $stmt->execute();
+    $numrows = $stmt->fetchColumn();
+    $stmt->closeCursor();
 
-    $weightsystem = $db->query('SELECT max(weight) FROM ' . NV_MOD_TABLE . '_field WHERE is_system=1')->fetchColumn();
+    $stmt = $db->prepare('SELECT MAX(weight) FROM ' . NV_MOD_TABLE . '_field WHERE is_system = 1');
+    $stmt->execute();
+    $weightsystem = (int) $stmt->fetchColumn();
+    $stmt->closeCursor();
+
     if ($numrows != 1 or $new_vid <= $weightsystem) {
         nv_jsonOutput([
             'status' => 'error',
@@ -44,19 +51,25 @@ if ($nv_Request->isset_request('changeweight', 'post')) {
         ]);
     }
 
-    $query = 'SELECT fid FROM ' . NV_MOD_TABLE . '_field WHERE fid!=' . $fid . ' ORDER BY weight ASC';
-    $result = $db->query($query);
+    $stmt = $db->prepare('SELECT fid FROM ' . NV_MOD_TABLE . '_field WHERE fid != :fid ORDER BY weight ASC');
+    $stmt->bindValue(':fid', $fid, PDO::PARAM_INT);
+    $stmt->execute();
     $weight = 0;
-    while ($row = $result->fetch()) {
+    $stmt_update = $db->prepare('UPDATE ' . NV_MOD_TABLE . '_field SET weight = :weight WHERE fid = :fid');
+    while ($row = $stmt->fetch()) {
         ++$weight;
         if ($weight == $new_vid) {
             ++$weight;
         }
-        $sql = 'UPDATE ' . NV_MOD_TABLE . '_field SET weight=' . $weight . ' WHERE fid=' . $row['fid'];
-        $db->query($sql);
+        $stmt_update->bindValue(':weight', $weight, PDO::PARAM_INT);
+        $stmt_update->bindValue(':fid', $row['fid'], PDO::PARAM_INT);
+        $stmt_update->execute();
     }
-    $sql = 'UPDATE ' . NV_MOD_TABLE . '_field SET weight=' . $new_vid . ' WHERE fid=' . $fid;
-    $db->query($sql);
+    $stmt->closeCursor();
+
+    $stmt_update->bindValue(':weight', $new_vid, PDO::PARAM_INT);
+    $stmt_update->bindValue(':fid', $fid, PDO::PARAM_INT);
+    $stmt_update->execute();
 
     // Ghi log
     nv_insert_logs(NV_LANG_DATA, $module_name, 'Change field weight', 'fid: ' . $fid . ', weight: ' . $new_vid, $admin_info['userid']);
@@ -110,7 +123,11 @@ if ($nv_Request->isset_request('choicesql', 'post')) {
         if (!preg_match('/^[a-z0-9\_]+$/', $module)) {
             exit();
         }
-        $_items = $db->query("SHOW TABLE STATUS LIKE '%\_" . $module . "%'")->fetchAll();
+        $stmt = $db->prepare('SHOW TABLE STATUS LIKE :module');
+        $stmt->bindValue(':module', '%\_' . $module . '%', PDO::PARAM_STR);
+        $stmt->execute();
+        $_items = $stmt->fetchAll();
+        $stmt->closeCursor();
         $num_table = count($_items);
 
         $array_table_module = [];
@@ -229,7 +246,11 @@ if ($nv_Request->isset_request('save', 'post')) {
     $language = [];
     if ($dataform['fid']) {
         // Trường hợp sửa field
-        $dataform_old = $db->query('SELECT * FROM ' . NV_MOD_TABLE . '_field WHERE fid=' . $dataform['fid'])->fetch();
+        $stmt = $db->prepare('SELECT * FROM ' . NV_MOD_TABLE . '_field WHERE fid = :fid');
+        $stmt->bindValue(':fid', $dataform['fid'], PDO::PARAM_INT);
+        $stmt->execute();
+        $dataform_old = $stmt->fetch();
+        $stmt->closeCursor();
         if (empty($dataform_old)) {
             throw new \NukeViet\Http\HttpException('Data error!!!', 403);
         }
@@ -255,13 +276,14 @@ if ($nv_Request->isset_request('save', 'post')) {
         } else {
             // Kiểm tra trùng trường dữ liệu
             $stmt = $db->prepare('SELECT * FROM ' . NV_MOD_TABLE . '_field WHERE field= :field');
-            $stmt->bindParam(':field', $dataform['field'], PDO::PARAM_STR);
+            $stmt->bindValue(':field', $dataform['field'], PDO::PARAM_STR);
             $stmt->execute();
             if ($stmt->fetchColumn()) {
                 $error = $nv_Lang->getModule('field_error');
                 $error_input = 'field';
                 $error_input_parent = 'row_field_id';
             }
+            $stmt->closeCursor();
         }
     }
 
@@ -503,34 +525,50 @@ if ($nv_Request->isset_request('save', 'post')) {
     }
 
     if (empty($dataform['fid'])) {
-        // Cập nhật sửa field
+        // Thêm mới field
         $_columns_array = $db->columns_array(NV_MOD_TABLE);
 
         if ($dataform['max_length'] <= 4294967296 and !empty($dataform['field']) and !empty($dataform['title']) and !isset($_columns_array[$dataform['field']])) {
-            $weight = $db->query('SELECT MAX(weight) FROM ' . NV_MOD_TABLE . '_field')->fetchColumn();
-            $weight = (int) $weight + 1;
+            $stmt = $db->prepare('SELECT MAX(weight) FROM ' . NV_MOD_TABLE . '_field');
+            $stmt->execute();
+            $weight = (int) $stmt->fetchColumn();
+            $stmt->closeCursor();
+            $weight = $weight + 1;
 
-            $sql = 'INSERT INTO ' . NV_MOD_TABLE . "_field (
+            $stmt = $db->prepare('INSERT INTO ' . NV_MOD_TABLE . '_field (
                 field, weight, field_type, field_choices, sql_choices, match_type,
                 match_regex, func_callback, min_length, max_length, limited_values,
                 for_admin, required, show_register, user_editable,
                 show_profile, class, language, default_value
             ) VALUES (
-                '" . $dataform['field'] . "', " . $weight . ", '" . $dataform['field_type'] . "', '" . $dataform['field_choices'] . "', " . $db->quote($dataform['sql_choices']) . ", '" . $dataform['match_type'] . "',
-                :match_regex, :func_callback,
-                " . $dataform['min_length'] . ', ' . $dataform['max_length'] . ', :limited_values,
-                ' . $dataform['for_admin'] . ', ' . $dataform['required'] . ', ' . $dataform['show_register'] . ", '" . $dataform['user_editable'] . "',
-                " . $dataform['show_profile'] . ", :class, '" . serialize($language) . "', :default_value
-            )";
+                :field, :weight, :field_type, :field_choices, :sql_choices, :match_type,
+                :match_regex, :func_callback, :min_length, :max_length, :limited_values,
+                :for_admin, :required, :show_register, :user_editable,
+                :show_profile, :class, :language, :default_value
+            )');
 
-            $data_insert = [];
-            $data_insert['limited_values'] = $dataform['limited_values'];
-            $data_insert['match_regex'] = nv_unhtmlspecialchars($dataform['match_regex']);
-            $data_insert['func_callback'] = nv_unhtmlspecialchars($dataform['func_callback']);
-            $data_insert['class'] = $dataform['class'];
-            $data_insert['default_value'] = $dataform['default_value'];
-            $dataform['fid'] = $db->insert_id($sql, 'fid', $data_insert);
-            if ($dataform['fid']) {
+            $stmt->bindValue(':field', $dataform['field'], PDO::PARAM_STR);
+            $stmt->bindValue(':weight', $weight, PDO::PARAM_INT);
+            $stmt->bindValue(':field_type', $dataform['field_type'], PDO::PARAM_STR);
+            $stmt->bindValue(':field_choices', $dataform['field_choices'], PDO::PARAM_STR);
+            $stmt->bindValue(':sql_choices', $dataform['sql_choices'], PDO::PARAM_STR);
+            $stmt->bindValue(':match_type', $dataform['match_type'], PDO::PARAM_STR);
+            $stmt->bindValue(':match_regex', nv_unhtmlspecialchars($dataform['match_regex']), PDO::PARAM_STR);
+            $stmt->bindValue(':func_callback', nv_unhtmlspecialchars($dataform['func_callback']), PDO::PARAM_STR);
+            $stmt->bindValue(':min_length', $dataform['min_length'], PDO::PARAM_INT);
+            $stmt->bindValue(':max_length', $dataform['max_length'], PDO::PARAM_INT);
+            $stmt->bindValue(':limited_values', $dataform['limited_values'], PDO::PARAM_STR);
+            $stmt->bindValue(':for_admin', $dataform['for_admin'], PDO::PARAM_INT);
+            $stmt->bindValue(':required', $dataform['required'], PDO::PARAM_INT);
+            $stmt->bindValue(':show_register', $dataform['show_register'], PDO::PARAM_INT);
+            $stmt->bindValue(':user_editable', $dataform['user_editable'], PDO::PARAM_STR);
+            $stmt->bindValue(':show_profile', $dataform['show_profile'], PDO::PARAM_INT);
+            $stmt->bindValue(':class', $dataform['class'], PDO::PARAM_STR);
+            $stmt->bindValue(':language', serialize($language), PDO::PARAM_STR);
+            $stmt->bindValue(':default_value', $dataform['default_value'], PDO::PARAM_STR);
+
+            if ($stmt->execute()) {
+                $dataform['fid'] = $db->lastInsertId();
                 $type_date = '';
                 if ($dataform['field_type'] == 'number' or $dataform['field_type'] == 'date') {
                     $type_date = "DOUBLE NOT NULL DEFAULT '" . $dataform['default_value'] . "'";
@@ -548,40 +586,56 @@ if ($nv_Request->isset_request('save', 'post')) {
                     //2^32 LONGTEXT
                     $type_date = 'LONGTEXT NOT NULL';
                 }
-                $save = $db->exec('ALTER TABLE ' . NV_MOD_TABLE . '_info ADD ' . $dataform['field'] . ' ' . $type_date . ' COMMENT ' . $db->quote($dataform['title']));
+                // Validate $dataform['field'] against allowed characters before using in ALTER TABLE
+                if (preg_match('/^[a-z0-9\_]+$/', $dataform['field'])) {
+                    try {
+                        $db->query('ALTER TABLE ' . NV_MOD_TABLE . '_info ADD ' . $dataform['field'] . ' ' . $type_date . ' COMMENT ' . $db->quote($dataform['title']));
+                        $save = true;
+                    } catch (Throwable $e) {
+                        $save = false;
+                        trigger_error($e);
+                    }
+                }
             }
         }
-    } elseif ($dataform['max_length'] <= 4294967296) {
-        // Thêm field
-        $query = 'UPDATE ' . NV_MOD_TABLE . '_field SET';
-        if ($text_fields == 1) {
-            $query .= " match_type='" . $dataform['match_type'] . "',
-            match_regex=:match_regex, func_callback=:func_callback, ";
-        }
-        $query .= ' max_length=' . $dataform['max_length'] . ', min_length=' . $dataform['min_length'] . ',
+    } else {
+        // Cập nhật sửa field
+        $stmt = $db->prepare('UPDATE ' . NV_MOD_TABLE . '_field SET
+            match_type = :match_type,
+            match_regex = :match_regex,
+            func_callback = :func_callback,
+            max_length = :max_length,
+            min_length = :min_length,
             limited_values = :limited_values,
-            for_admin = ' . $dataform['for_admin'] . ',
-            required = ' . $dataform['required'] . ",
-            field_choices='" . $dataform['field_choices'] . "',
-            sql_choices = '" . $dataform['sql_choices'] . "',
-            show_register = " . $dataform['show_register'] . ',
-            user_editable = ' . $dataform['user_editable'] . ',
-            show_profile = ' . $dataform['show_profile'] . ",
+            for_admin = :for_admin,
+            required = :required,
+            field_choices = :field_choices,
+            sql_choices = :sql_choices,
+            show_register = :show_register,
+            user_editable = :user_editable,
+            show_profile = :show_profile,
             class = :class,
-            language='" . serialize($language) . "',
-            default_value= :default_value
-            WHERE fid = " . $dataform['fid'];
+            language = :language,
+            default_value = :default_value
+        WHERE fid = :fid');
 
-        $stmt = $db->prepare($query);
-        if ($text_fields == 1) {
-            $dataform['match_regex'] = nv_unhtmlspecialchars($dataform['match_regex']);
-            $dataform['func_callback'] = nv_unhtmlspecialchars($dataform['func_callback']);
-            $stmt->bindParam(':match_regex', $dataform['match_regex'], PDO::PARAM_STR);
-            $stmt->bindParam(':func_callback', $dataform['func_callback'], PDO::PARAM_STR);
-        }
-        $stmt->bindParam(':limited_values', $dataform['limited_values'], PDO::PARAM_STR);
-        $stmt->bindParam(':class', $dataform['class'], PDO::PARAM_STR);
-        $stmt->bindParam(':default_value', $dataform['default_value'], PDO::PARAM_STR, strlen($dataform['default_value']));
+        $stmt->bindValue(':match_type', $dataform['match_type'], PDO::PARAM_STR);
+        $stmt->bindValue(':match_regex', nv_unhtmlspecialchars($dataform['match_regex']), PDO::PARAM_STR);
+        $stmt->bindValue(':func_callback', nv_unhtmlspecialchars($dataform['func_callback']), PDO::PARAM_STR);
+        $stmt->bindValue(':max_length', $dataform['max_length'], PDO::PARAM_INT);
+        $stmt->bindValue(':min_length', $dataform['min_length'], PDO::PARAM_INT);
+        $stmt->bindValue(':limited_values', $dataform['limited_values'], PDO::PARAM_STR);
+        $stmt->bindValue(':for_admin', $dataform['for_admin'], PDO::PARAM_INT);
+        $stmt->bindValue(':required', $dataform['required'], PDO::PARAM_INT);
+        $stmt->bindValue(':field_choices', $dataform['field_choices'], PDO::PARAM_STR);
+        $stmt->bindValue(':sql_choices', $dataform['sql_choices'], PDO::PARAM_STR);
+        $stmt->bindValue(':show_register', $dataform['show_register'], PDO::PARAM_INT);
+        $stmt->bindValue(':user_editable', $dataform['user_editable'], PDO::PARAM_STR);
+        $stmt->bindValue(':show_profile', $dataform['show_profile'], PDO::PARAM_INT);
+        $stmt->bindValue(':class', $dataform['class'], PDO::PARAM_STR);
+        $stmt->bindValue(':language', serialize($language), PDO::PARAM_STR);
+        $stmt->bindValue(':default_value', $dataform['default_value'], PDO::PARAM_STR);
+        $stmt->bindValue(':fid', $dataform['fid'], PDO::PARAM_INT);
         $save = $stmt->execute();
 
         if (empty($dataform['system'])) {
@@ -603,12 +657,15 @@ if ($nv_Request->isset_request('save', 'post')) {
                     //2^32 LONGTEXT
                     $type_date = 'LONGTEXT NOT NULL';
                 }
-                try {
-                    $db->query('ALTER TABLE ' . NV_MOD_TABLE . '_info CHANGE ' . $dataform_old['field'] . ' ' . $dataform_old['field'] . ' ' . $type_date . ' COMMENT ' . $db->quote($dataform['title']));
-                    $save = true;
-                } catch (Throwable $e) {
-                    $save = false;
-                    trigger_error($e);
+                // Validate $dataform_old['field'] against allowed characters before using in ALTER TABLE
+                if (preg_match('/^[a-z0-9\_]+$/', $dataform_old['field'])) {
+                    try {
+                        $db->query('ALTER TABLE ' . NV_MOD_TABLE . '_info CHANGE ' . $dataform_old['field'] . ' ' . $dataform_old['field'] . ' ' . $type_date . ' COMMENT ' . $db->quote($dataform['title']));
+                        $save = true;
+                    } catch (Throwable $e) {
+                        $save = false;
+                        trigger_error($e);
+                    }
                 }
             }
         }
@@ -648,26 +705,44 @@ if ($nv_Request->isset_request('del', 'post')) {
         ]);
     }
 
-    [$fid, $field, $weight, $system] = $db->query('SELECT fid, field, weight, is_system FROM ' . NV_MOD_TABLE . '_field WHERE fid=' . $fid)->fetch(3);
+    $stmt = $db->prepare('SELECT fid, field, weight, is_system FROM ' . NV_MOD_TABLE . '_field WHERE fid = :fid');
+    $stmt->bindValue(':fid', $fid, PDO::PARAM_INT);
+    $stmt->execute();
+    $res = $stmt->fetch();
+    $stmt->closeCursor();
 
-    if ($fid and !empty($field) and empty($system)) {
-        $query1 = 'DELETE FROM ' . NV_MOD_TABLE . '_field WHERE fid=' . $fid;
-        $query2 = 'ALTER TABLE ' . NV_MOD_TABLE . '_info DROP ' . $field;
-        if ($db->query($query1) and $db->query($query2)) {
-            $query = 'SELECT fid FROM ' . NV_MOD_TABLE . '_field WHERE weight > ' . $weight . ' ORDER BY weight ASC';
-            $result = $db->query($query);
-            while ($row = $result->fetch()) {
-                $db->query('UPDATE ' . NV_MOD_TABLE . '_field SET weight=' . $weight . ' WHERE fid=' . $row['fid']);
-                ++$weight;
+    if ($res) {
+        $fid    = $res['fid'];
+        $field  = $res['field'];
+        $weight = $res['weight'];
+        $system = $res['is_system'];
+        if (!empty($field) and empty($system)) {
+            $stmt_del = $db->prepare('DELETE FROM ' . NV_MOD_TABLE . '_field WHERE fid = :fid');
+            $stmt_del->bindValue(':fid', $fid, PDO::PARAM_INT);
+            if ($stmt_del->execute()) {
+                // ALTER TABLE DROP field - name validated via regex/whitelist above
+                $db->query('ALTER TABLE ' . NV_MOD_TABLE . '_info DROP ' . $field);
+
+                $stmt = $db->prepare('SELECT fid FROM ' . NV_MOD_TABLE . '_field WHERE weight > :weight ORDER BY weight ASC');
+                $stmt->bindValue(':weight', $weight, PDO::PARAM_INT);
+                $stmt->execute();
+                $stmt_update = $db->prepare('UPDATE ' . NV_MOD_TABLE . '_field SET weight = :weight WHERE fid = :fid');
+                while ($row = $stmt->fetch()) {
+                    $stmt_update->bindValue(':weight', $weight, PDO::PARAM_INT);
+                    $stmt_update->bindValue(':fid', $row['fid'], PDO::PARAM_INT);
+                    $stmt_update->execute();
+                    ++$weight;
+                }
+                $stmt->closeCursor();
+
+                // Ghi log
+                nv_insert_logs(NV_LANG_DATA, $module_name, 'Delete field', 'field: ' . $field, $admin_info['userid']);
+
+                nv_jsonOutput([
+                    'status' => 'success',
+                    'mess' => $nv_Lang->getGlobal('delete_success')
+                ]);
             }
-
-            // Ghi log
-            nv_insert_logs(NV_LANG_DATA, $module_name, 'Delete field', 'field: ' . $field, $admin_info['userid']);
-
-            nv_jsonOutput([
-                'status' => 'success',
-                'mess' => $nv_Lang->getGlobal('delete_success')
-            ]);
         }
     }
 
@@ -707,8 +782,10 @@ if ($nv_Request->isset_request('qlist', 'get')) {
     if (!defined('NV_IS_AJAX')) {
         exit('Wrong URL');
     }
-    $sql = 'SELECT * FROM ' . NV_MOD_TABLE . '_field ORDER BY weight ASC';
-    $_rows = $db->query($sql)->fetchAll();
+    $stmt = $db->prepare('SELECT * FROM ' . NV_MOD_TABLE . '_field ORDER BY weight ASC');
+    $stmt->execute();
+    $_rows = $stmt->fetchAll();
+
     $num = count($_rows);
 
     // Các trường hệ thống luôn ở trên đầu, do đó bắt đầu weight từ khi có trường tùy chỉnh
@@ -754,7 +831,11 @@ if ($nv_Request->isset_request('qlist', 'get')) {
     $fid = $nv_Request->get_int('fid', 'get,post', 0);
     if (!isset($dataform)) {
         if ($fid) {
-            $dataform = $db->query('SELECT * FROM ' . NV_MOD_TABLE . '_field WHERE fid=' . $fid)->fetch();
+            $stmt = $db->prepare('SELECT * FROM ' . NV_MOD_TABLE . '_field WHERE fid = :fid');
+            $stmt->bindValue(':fid', $fid, PDO::PARAM_INT);
+            $stmt->execute();
+            $dataform = $stmt->fetch();
+            $stmt->closeCursor();
 
             $dataform['fid'] = $fid;
             if ($dataform['field_type'] == 'editor') {

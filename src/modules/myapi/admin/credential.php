@@ -30,7 +30,11 @@ if ($nv_Request->isset_request('changeAuth', 'post')) {
         ]);
     }
 
-    $username = $db->query('SELECT username FROM ' . NV_USERS_GLOBALTABLE . ' WHERE userid =' . $userid)->fetchColumn();
+    $stmt = $db->prepare('SELECT username FROM ' . NV_USERS_GLOBALTABLE . ' WHERE userid = :userid');
+    $stmt->bindValue(':userid', $userid, PDO::PARAM_INT);
+    $stmt->execute();
+    $username = $stmt->fetchColumn();
+
     if (empty($username)) {
         nv_jsonOutput([
             'status' => 'error',
@@ -144,35 +148,38 @@ if ($action == 'getUser' and $nv_Request->isset_request('q', 'post')) {
     $q = $nv_Request->get_title('q', 'post', '');
     $q = str_replace('+', ' ', $q);
     $q = nv_htmlspecialchars($q);
-    $dbkeyhtml = $db->dblikeescape($q);
 
     $page = $nv_Request->get_page('page', 'post', 1);
 
-    $where = "(tb1.username LIKE '%" . $dbkeyhtml . "%' OR tb1.email LIKE '%" . $dbkeyhtml . "%' OR tb1.first_name like '%" . $dbkeyhtml . "%' OR tb1.last_name like '%" . $dbkeyhtml . "%') AND tb1.userid NOT IN (SELECT tb2.userid FROM " . $db_config['prefix'] . '_api_role_credential tb2 WHERE tb2.role_id=' . $role_id . ')';
+    $where = '(tb1.username LIKE :q OR tb1.email LIKE :q OR tb1.first_name LIKE :q OR tb1.last_name LIKE :q) AND tb1.userid NOT IN (SELECT tb2.userid FROM ' . $db_config['prefix'] . '_api_role_credential tb2 WHERE tb2.role_id = :role_id)';
     if ($rolelist[$role_id]['role_object'] == 'admin') {
         $where .= ' AND tb1.userid IN (SELECT tb3.admin_id FROM ' . NV_AUTHORS_GLOBALTABLE . ' tb3)';
     }
 
-    $array_data = [];
-    $db->sqlreset()
-        ->select('COUNT(*)')
-        ->from(NV_USERS_GLOBALTABLE . ' tb1')
-        ->where($where);
-    $array_data['total_count'] = $db->query($db->sql())->fetchColumn();
-    $db->select('tb1.userid, tb1.username')
-        ->order('tb1.username ASC')
-        ->limit(30)
-        ->offset(($page - 1) * 30);
-    $result = $db->query($db->sql());
-    $array_data['results'] = [];
-    while ($_scratch = $result->fetch(3)) {
+    $stmt = $db->prepare('SELECT COUNT(*) FROM ' . NV_USERS_GLOBALTABLE . ' tb1 WHERE ' . $where);
+    $stmt->bindValue(':q', '%' . $q . '%', PDO::PARAM_STR);
+    $stmt->bindValue(':role_id', $role_id, PDO::PARAM_INT);
+    $stmt->execute();
+    $total_count = $stmt->fetchColumn();
+
+    $stmt = $db->prepare('SELECT tb1.userid, tb1.username FROM ' . NV_USERS_GLOBALTABLE . ' tb1 WHERE ' . $where . ' ORDER BY tb1.username ASC LIMIT ' . (int) ($page - 1) * 30 . ', 30');
+    $stmt->bindValue(':q', '%' . $q . '%', PDO::PARAM_STR);
+    $stmt->bindValue(':role_id', $role_id, PDO::PARAM_INT);
+    $stmt->execute();
+
+    $array_data = [
+        'total_count' => $total_count,
+        'results' => []
+    ];
+
+    while ($_scratch = $stmt->fetch(PDO::FETCH_NUM)) {
         [$userid, $username] = $_scratch;
-        unset($_scratch);
         $array_data['results'][] = [
             'id' => $userid,
             'title' => $username
         ];
     }
+    $stmt->closeCursor();
 
     nv_jsonOutput($array_data);
 }
@@ -193,7 +200,13 @@ if ($action == 'changeStatus' and $nv_Request->isset_request('userid', 'post')) 
         ]);
     }
 
-    [$userid, $status] = $db->query('SELECT userid, status FROM ' . $db_config['prefix'] . '_api_role_credential WHERE userid = ' . $userid . ' AND role_id = ' . $role_id)->fetch(3);
+    $stmt = $db->prepare('SELECT userid, status FROM ' . $db_config['prefix'] . '_api_role_credential WHERE userid = :userid AND role_id = :role_id');
+    $stmt->bindValue(':userid', $userid, PDO::PARAM_INT);
+    $stmt->bindValue(':role_id', $role_id, PDO::PARAM_INT);
+    $stmt->execute();
+    [$userid, $status] = $stmt->fetch(PDO::FETCH_NUM);
+    $stmt->closeCursor();
+
     if (empty($userid)) {
         nv_jsonOutput([
             'status' => 'error',
@@ -202,7 +215,12 @@ if ($action == 'changeStatus' and $nv_Request->isset_request('userid', 'post')) 
     }
 
     $status = $status ? 0 : 1;
-    $db->query('UPDATE ' . $db_config['prefix'] . '_api_role_credential SET status=' . $status . ' WHERE userid=' . $userid . ' AND role_id = ' . $role_id);
+    $stmt = $db->prepare('UPDATE ' . $db_config['prefix'] . '_api_role_credential SET status = :status WHERE userid = :userid AND role_id = :role_id');
+    $stmt->bindValue(':status', $status, PDO::PARAM_INT);
+    $stmt->bindValue(':userid', $userid, PDO::PARAM_INT);
+    $stmt->bindValue(':role_id', $role_id, PDO::PARAM_INT);
+    $stmt->execute();
+
     nv_jsonOutput([
         'status' => 'OK',
         'mess' => $nv_Lang->getGlobal('save_success')
@@ -225,15 +243,22 @@ if ($action == 'del' and $nv_Request->isset_request('userid', 'post')) {
         ]);
     }
 
-    $exists = $db->query('SELECT COUNT(*) FROM ' . $db_config['prefix'] . '_api_role_credential WHERE userid = ' . $userid . ' AND role_id = ' . $role_id)->fetchColumn();
-    if (!$exists) {
+    $stmt = $db->prepare('SELECT COUNT(*) FROM ' . $db_config['prefix'] . '_api_role_credential WHERE userid = :userid AND role_id = :role_id');
+    $stmt->bindValue(':userid', $userid, PDO::PARAM_INT);
+    $stmt->bindValue(':role_id', $role_id, PDO::PARAM_INT);
+    $stmt->execute();
+
+    if (!$stmt->fetchColumn()) {
         nv_jsonOutput([
             'status' => 'error',
             'mess' => $nv_Lang->getModule('api_role_credential_unknown')
         ]);
     }
 
-    $db->query('DELETE FROM ' . $db_config['prefix'] . '_api_role_credential WHERE userid = ' . $userid . ' AND role_id = ' . $role_id);
+    $stmt = $db->prepare('DELETE FROM ' . $db_config['prefix'] . '_api_role_credential WHERE userid = :userid AND role_id = :role_id');
+    $stmt->bindValue(':userid', $userid, PDO::PARAM_INT);
+    $stmt->bindValue(':role_id', $role_id, PDO::PARAM_INT);
+    $stmt->execute();
     nv_jsonOutput([
         'status' => 'OK'
     ]);
@@ -251,8 +276,11 @@ if ($action == 'credential') {
             ]);
         }
 
-        $exists = $db->query('SELECT COUNT(*) FROM ' . NV_USERS_GLOBALTABLE . ' WHERE userid =' . $userid)->fetchColumn();
-        if (!$exists) {
+        $stmt = $db->prepare('SELECT COUNT(*) FROM ' . NV_USERS_GLOBALTABLE . ' WHERE userid = :userid');
+        $stmt->bindValue(':userid', $userid, PDO::PARAM_INT);
+        $stmt->execute();
+
+        if (!$stmt->fetchColumn()) {
             nv_jsonOutput([
                 'status' => 'error',
                 'mess' => $nv_Lang->getModule('api_role_credential_error')
@@ -260,8 +288,11 @@ if ($action == 'credential') {
         }
 
         if ($rolelist[$role_id]['role_object'] == 'admin') {
-            $exists = $db->query('SELECT COUNT(*) FROM ' . NV_AUTHORS_GLOBALTABLE . ' WHERE admin_id =' . $userid)->fetchColumn();
-            if (!$exists) {
+            $stmt = $db->prepare('SELECT COUNT(*) FROM ' . NV_AUTHORS_GLOBALTABLE . ' WHERE admin_id = :userid');
+            $stmt->bindValue(':userid', $userid, PDO::PARAM_INT);
+            $stmt->execute();
+
+            if (!$stmt->fetchColumn()) {
                 nv_jsonOutput([
                     'status' => 'error',
                     'mess' => $nv_Lang->getModule('api_role_credential_error')
@@ -269,7 +300,12 @@ if ($action == 'credential') {
             }
         }
 
-        $exists = $db->query('SELECT COUNT(*) FROM ' . $db_config['prefix'] . '_api_role_credential WHERE userid = ' . $userid . ' AND role_id = ' . $role_id)->fetchColumn();
+        $stmt = $db->prepare('SELECT COUNT(*) FROM ' . $db_config['prefix'] . '_api_role_credential WHERE userid = :userid AND role_id = :role_id');
+        $stmt->bindValue(':userid', $userid, PDO::PARAM_INT);
+        $stmt->bindValue(':role_id', $role_id, PDO::PARAM_INT);
+        $stmt->execute();
+        $exists = $stmt->fetchColumn();
+
         if ($isAdd and $exists) {
             nv_jsonOutput([
                 'status' => 'error',
@@ -295,10 +331,16 @@ if ($action == 'credential') {
         $quota = $nv_Request->get_int('quota', 'post', 0);
 
         if ($isAdd) {
-            $db->query('INSERT INTO ' . $db_config['prefix'] . '_api_role_credential (userid, role_id, addtime, endtime, quota) VALUES (' . $userid . ', ' . $role_id . ', ' . $addtime . ', ' . $endtime . ', ' . $quota . ')');
+            $stmt = $db->prepare('INSERT INTO ' . $db_config['prefix'] . '_api_role_credential (userid, role_id, addtime, endtime, quota) VALUES (:userid, :role_id, :addtime, :endtime, :quota)');
         } else {
-            $db->query('UPDATE ' . $db_config['prefix'] . '_api_role_credential SET addtime = ' . $addtime . ', endtime = ' . $endtime . ', quota = ' . $quota . ' WHERE userid = ' . $userid . ' AND role_id = ' . $role_id);
+            $stmt = $db->prepare('UPDATE ' . $db_config['prefix'] . '_api_role_credential SET addtime = :addtime, endtime = :endtime, quota = :quota WHERE userid = :userid AND role_id = :role_id');
         }
+        $stmt->bindValue(':userid', $userid, PDO::PARAM_INT);
+        $stmt->bindValue(':role_id', $role_id, PDO::PARAM_INT);
+        $stmt->bindValue(':addtime', $addtime, PDO::PARAM_INT);
+        $stmt->bindValue(':endtime', $endtime, PDO::PARAM_INT);
+        $stmt->bindValue(':quota', $quota, PDO::PARAM_INT);
+        $stmt->execute();
 
         nv_jsonOutput([
             'status' => 'OK',
@@ -320,7 +362,13 @@ if ($action == 'credential') {
     if ($nv_Request->isset_request('edit, userid', 'get')) {
         $userid = $nv_Request->get_absint('userid', 'get', 0);
         if (!empty($userid)) {
-            $row = $db->query('SELECT addtime, endtime, quota FROM ' . $db_config['prefix'] . '_api_role_credential WHERE userid = ' . $userid . ' AND role_id = ' . $role_id)->fetch();
+            $stmt = $db->prepare('SELECT addtime, endtime, quota FROM ' . $db_config['prefix'] . '_api_role_credential WHERE userid = :userid AND role_id = :role_id');
+            $stmt->bindValue(':userid', $userid, PDO::PARAM_INT);
+            $stmt->bindValue(':role_id', $role_id, PDO::PARAM_INT);
+            $stmt->execute();
+            $row = $stmt->fetch();
+            $stmt->closeCursor();
+
             if (!empty($row)) {
                 $credential_data['userid'] = $userid;
 

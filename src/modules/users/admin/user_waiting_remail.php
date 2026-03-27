@@ -40,21 +40,36 @@ if ($nv_Request->isset_request('ajax', 'post')) {
     if ($per_email > 0 and $offset >= 0) {
         delOldRegAccount();
         $sql = 'SELECT * FROM ' . NV_MOD_TABLE . '_reg';
+        $params = [];
         if ($global_config['idsite'] > 0) {
-            $sql .= ' WHERE idsite=' . $global_config['idsite'];
+            $sql .= ' WHERE idsite = :idsite';
+            $params[':idsite'] = [$global_config['idsite'], PDO::PARAM_INT];
         }
-        $sql .= ' ORDER BY userid ASC LIMIT ' . $offset . ', ' . $per_email;
-        $result = $db->query($sql);
-        $numrows = $result->rowCount();
+        $sql .= ' ORDER BY userid ASC LIMIT :offset, :per_email';
+        $params[':offset'] = [$offset, PDO::PARAM_INT];
+        $params[':per_email'] = [$per_email, PDO::PARAM_INT];
+
+        $stmt = $db->prepare($sql);
+        foreach ($params as $key => $val) {
+            $stmt->bindValue($key, $val[0], $val[1]);
+        }
+        $stmt->execute();
+        $numrows = $stmt->rowCount();
         if ($numrows) {
             $maillang = NV_LANG_INTERFACE;
             if (NV_LANG_DATA != NV_LANG_INTERFACE) {
                 $maillang = NV_LANG_DATA;
             }
 
-            while ($row = $result->fetch()) {
+            $stmt_check_email = $db->prepare('SELECT COUNT(*) FROM ' . NV_MOD_TABLE . ' WHERE email = :email');
+            $stmt_update_reg = $db->prepare('UPDATE ' . NV_MOD_TABLE . '_reg SET regdate = :regdate WHERE userid = :userid');
+
+            while ($row = $stmt->fetch()) {
                 // Kiểm tra xem email đã tồn tại chưa nếu có xóa đi
-                if ($db->query('SELECT userid FROM ' . NV_MOD_TABLE . ' WHERE email=' . $db->quote($row['email']))->fetchColumn()) {
+                $stmt_check_email->bindValue(':email', $row['email'], PDO::PARAM_STR);
+                $stmt_check_email->execute();
+                if ($stmt_check_email->fetchColumn()) {
+                    $stmt_check_email->closeCursor();
                     $respon['messages'][] = $row['email'] . ': ' . $nv_Lang->getModule('userwait_resend_delete');
                     if (!in_array((int) $row['userid'], $useriddel, true)) {
                         $useriddel[] = (int) $row['userid'];
@@ -79,7 +94,9 @@ if ($nv_Request->isset_request('ajax', 'post')) {
                          * Cập nhật lại thời gian đăng ký là ngay lúc gửi mail này
                          * để đảm bảo thành viên vào kích hoạt thì không bị xóa mất tài khoản chờ duyệt
                          */
-                        $db->query('UPDATE ' . NV_MOD_TABLE . '_reg SET regdate=' . NV_CURRENTTIME . ' WHERE userid=' . $row['userid']);
+                        $stmt_update_reg->bindValue(':regdate', NV_CURRENTTIME, PDO::PARAM_INT);
+                        $stmt_update_reg->bindValue(':userid', $row['userid'], PDO::PARAM_INT);
+                        $stmt_update_reg->execute();
                     }
 
                     $respon['messages'][] = $row['email'] . ': ' . ($checkSend ? $nv_Lang->getModule('userwait_resend_ok') : $nv_Lang->getModule('userwait_resend_error'));
@@ -102,7 +119,10 @@ if ($nv_Request->isset_request('ajax', 'post')) {
             // Xóa các email đã kích hoạt
             if (!empty($respon['useriddel'])) {
                 try {
-                    $db->query('DELETE FROM ' . NV_MOD_TABLE . '_reg WHERE userid IN(' . $respon['useriddel'] . ')');
+                    $useriddel_arr = array_map('intval', explode(',', $respon['useriddel']));
+                    $placeholders = implode(',', array_fill(0, count($useriddel_arr), '?'));
+                    $stmt_del = $db->prepare('DELETE FROM ' . NV_MOD_TABLE . '_reg WHERE userid IN (' . $placeholders . ')');
+                    $stmt_del->execute($useriddel_arr);
                 } catch (Throwable $e) {
                     trigger_error($e);
                 }

@@ -23,9 +23,10 @@ if ($nv_Request->isset_request('getinfo', 'post')) {
 
     if ($id) {
         $sth = $db->prepare('SELECT title, description, link, target, image, start_time, end_time, status FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE id=:id');
-        $sth->bindParam(':id', $id, PDO::PARAM_INT);
+        $sth->bindValue(':id', $id, PDO::PARAM_INT);
         $sth->execute();
         $array = $sth->fetch();
+        $sth->closeCursor();
 
         if (!empty($array)) {
             // Check image exists
@@ -62,7 +63,7 @@ if ($nv_Request->isset_request('del', 'post')) {
 
     if ($id) {
         $sth = $db->prepare('DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE id=:id');
-        $sth->bindParam(':id', $id, PDO::PARAM_INT);
+        $sth->bindValue(':id', $id, PDO::PARAM_INT);
         $sth->execute();
 
         if ($sth->rowCount()) {
@@ -89,7 +90,7 @@ if ($nv_Request->isset_request('changestatus', 'post')) {
 
     if ($id) {
         $sth = $db->prepare('SELECT status, start_time, end_time FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE id=:id');
-        $sth->bindParam(':id', $id, PDO::PARAM_INT);
+        $sth->bindValue(':id', $id, PDO::PARAM_INT);
         $sth->execute();
         $row = $sth->fetchAll();
 
@@ -116,21 +117,26 @@ if ($nv_Request->isset_request('changestatus', 'post')) {
                     $end_time = $row['end_time'];
                 }
 
-                $sql = 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_rows SET status = :status, start_time = ' . $start_time . ', end_time = ' . $end_time . ' WHERE id=:id';
+                $sql = 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_rows SET status = :status, start_time = :start_time, end_time = :end_time WHERE id=:id';
             }
 
             $sth = $db->prepare($sql);
-            $sth->bindParam(':status', $status, PDO::PARAM_INT);
-            $sth->bindParam(':id', $id, PDO::PARAM_INT);
+            $sth->bindValue(':status', $status, PDO::PARAM_INT);
+            if ($status == 1) {
+                $sth->bindValue(':start_time', $start_time, PDO::PARAM_INT);
+                $sth->bindValue(':end_time', $end_time, PDO::PARAM_INT);
+            }
+            $sth->bindValue(':id', $id, PDO::PARAM_INT);
             $sth->execute();
 
             // Get next execute
             $sql = 'SELECT MIN(end_time) next_execute FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE end_time > 0 AND status = 1';
             $result = $db->query($sql);
             $next_execute = (int) ($result->fetchColumn());
-            $sth = $db->prepare('UPDATE ' . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = '" . NV_LANG_DATA . "' AND module = :module_name AND config_name = 'next_execute'");
-            $sth->bindParam(':module_name', $module_name, PDO::PARAM_STR);
-            $sth->bindParam(':config_value', $next_execute, PDO::PARAM_STR);
+            $sth = $db->prepare('UPDATE ' . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = :lang AND module = :module_name AND config_name = 'next_execute'");
+            $sth->bindValue(':lang', NV_LANG_DATA, PDO::PARAM_STR);
+            $sth->bindValue(':module_name', $module_name, PDO::PARAM_STR);
+            $sth->bindValue(':config_value', $next_execute, PDO::PARAM_STR);
             $sth->execute();
 
             nv_insert_logs(NV_LANG_DATA, $module_name, 'Change Status', 'ID:' . $id . ' - ' . $status, $admin_info['userid']);
@@ -154,7 +160,11 @@ $bid = $nv_Request->get_int('bid', 'post', '');
 $block = [];
 
 if ($bid) {
-    $block = $db->query('SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_blocks WHERE bid=' . $bid)->fetch();
+    $sth = $db->prepare('SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_blocks WHERE bid=:bid');
+    $sth->bindValue(':bid', $bid, PDO::PARAM_INT);
+    $sth->execute();
+    $block = $sth->fetch();
+    $sth->closeCursor();
 }
 
 if (empty($block)) {
@@ -206,23 +216,28 @@ if ($nv_Request->isset_request('submit', 'post')) {
         if ($data['id']) {
             $sql = 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_rows SET
 				title = :title, description = :description, link = :link, target = :target, image = :image, start_time = :start_time, end_time = :end_time, status = :status
-			WHERE id = ' . $data['id'];
+			WHERE id = :id';
         } else {
             $sql = 'INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . '_rows (bid, title, description, link, target, image, start_time, end_time, status) VALUES (
-				' . $bid . ', :title, :description, :link, :target, :image, :start_time, :end_time, :status
+				:bid, :title, :description, :link, :target, :image, :start_time, :end_time, :status
 			)';
         }
 
         try {
             $sth = $db->prepare($sql);
-            $sth->bindParam(':title', $data['title'], PDO::PARAM_STR);
-            $sth->bindParam(':description', $data['description'], PDO::PARAM_STR, strlen($data['description']));
-            $sth->bindParam(':link', $data['link'], PDO::PARAM_STR);
-            $sth->bindParam(':target', $data['target'], PDO::PARAM_STR);
-            $sth->bindParam(':image', $data['image'], PDO::PARAM_STR);
-            $sth->bindParam(':start_time', $data['start_time'], PDO::PARAM_INT);
-            $sth->bindParam(':end_time', $data['end_time'], PDO::PARAM_INT);
-            $sth->bindParam(':status', $data['status'], PDO::PARAM_INT);
+            $sth->bindValue(':title', $data['title'], PDO::PARAM_STR);
+            $sth->bindValue(':description', $data['description'], PDO::PARAM_STR);
+            $sth->bindValue(':link', $data['link'], PDO::PARAM_STR);
+            $sth->bindValue(':target', $data['target'], PDO::PARAM_STR);
+            $sth->bindValue(':image', $data['image'], PDO::PARAM_STR);
+            $sth->bindValue(':start_time', $data['start_time'], PDO::PARAM_INT);
+            $sth->bindValue(':end_time', $data['end_time'], PDO::PARAM_INT);
+            $sth->bindValue(':status', $data['status'], PDO::PARAM_INT);
+            if ($data['id']) {
+                $sth->bindValue(':id', $data['id'], PDO::PARAM_INT);
+            } else {
+                $sth->bindValue(':bid', $bid, PDO::PARAM_INT);
+            }
             $sth->execute();
 
             if ($sth->rowCount()) {
@@ -230,9 +245,10 @@ if ($nv_Request->isset_request('submit', 'post')) {
                 $sql = 'SELECT MIN(end_time) next_execute FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE end_time > 0 AND status = 1';
                 $result = $db->query($sql);
                 $next_execute = (int) ($result->fetchColumn());
-                $sth = $db->prepare('UPDATE ' . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = '" . NV_LANG_DATA . "' AND module = :module_name AND config_name = 'next_execute'");
-                $sth->bindParam(':module_name', $module_name, PDO::PARAM_STR);
-                $sth->bindParam(':config_value', $next_execute, PDO::PARAM_STR);
+                $sth = $db->prepare('UPDATE ' . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = :lang AND module = :module_name AND config_name = 'next_execute'");
+                $sth->bindValue(':lang', NV_LANG_DATA, PDO::PARAM_STR);
+                $sth->bindValue(':module_name', $module_name, PDO::PARAM_STR);
+                $sth->bindValue(':config_value', $next_execute, PDO::PARAM_STR);
                 $sth->execute();
 
                 if ($data['id']) {

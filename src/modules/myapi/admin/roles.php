@@ -176,7 +176,10 @@ if ($nv_Request->isset_request('changeStatus', 'post')) {
     }
 
     $status = !empty($array_post['status']) ? 0 : 1;
-    $db->query('UPDATE ' . $db_config['prefix'] . '_api_role SET status=' . $status . ' WHERE role_id = ' . $id);
+    $stmt = $db->prepare('UPDATE ' . $db_config['prefix'] . '_api_role SET status = :status WHERE role_id = :role_id');
+    $stmt->bindValue(':status', $status, PDO::PARAM_INT);
+    $stmt->bindValue(':role_id', $id, PDO::PARAM_INT);
+    $stmt->execute();
     nv_jsonOutput([
         'status' => 'OK',
         'mess' => $nv_Lang->getGlobal('save_success')
@@ -205,8 +208,14 @@ if ($nv_Request->isset_request('roledel', 'post')) {
         ]);
     }
 
-    $db->query('DELETE FROM ' . $db_config['prefix'] . '_api_role WHERE role_id=' . $id);
-    $db->query('DELETE FROM ' . $db_config['prefix'] . '_api_role_credential WHERE role_id=' . $id);
+    $stmt = $db->prepare('DELETE FROM ' . $db_config['prefix'] . '_api_role WHERE role_id = :role_id');
+    $stmt->bindValue(':role_id', $id, PDO::PARAM_INT);
+    $stmt->execute();
+
+    $stmt = $db->prepare('DELETE FROM ' . $db_config['prefix'] . '_api_role_credential WHERE role_id = :role_id');
+    $stmt->bindValue(':role_id', $id, PDO::PARAM_INT);
+    $stmt->execute();
+
     nv_insert_logs(NV_LANG_DATA, $module_name, 'Delete API-role', $id . ': ' . $array_post['role_title'], $admin_info['userid']);
     nv_jsonOutput([
         'status' => 'OK'
@@ -295,8 +304,12 @@ if ($action == 'role') {
         }
 
         $md5title = md5($data['role_title']);
-        $exists = $db->query('SELECT COUNT(*) FROM ' . $db_config['prefix'] . '_api_role WHERE role_id !=' . $id . ' AND role_md5title = ' . $db->quote($md5title))->fetchColumn();
-        if ($exists) {
+        $stmt = $db->prepare('SELECT COUNT(*) FROM ' . $db_config['prefix'] . '_api_role WHERE role_id != :role_id AND role_md5title = :role_md5title');
+        $stmt->bindValue(':role_id', $id, PDO::PARAM_INT);
+        $stmt->bindValue(':role_md5title', $md5title, PDO::PARAM_STR);
+        $stmt->execute();
+
+        if ($stmt->fetchColumn()) {
             nv_jsonOutput([
                 'status' => 'error',
                 'mess' => $nv_Lang->getModule('api_roles_error_exists')
@@ -367,15 +380,17 @@ if ($action == 'role') {
             $sth = $db->prepare('INSERT INTO ' . $db_config['prefix'] . '_api_role (
                 role_md5title, role_type, role_object, role_title, role_description, role_data, log_period, flood_rules, addtime
             ) VALUES (
-                :role_md5title, :role_type, :role_object, :role_title, :role_description, :role_data, ' . $data['log_period'] . ', :flood_rules, ' . NV_CURRENTTIME . '
+                :role_md5title, :role_type, :role_object, :role_title, :role_description, :role_data, :log_period, :flood_rules, :addtime
             )');
-            $sth->bindParam(':role_md5title', $md5title, PDO::PARAM_STR);
-            $sth->bindParam(':role_type', $data['role_type'], PDO::PARAM_STR);
-            $sth->bindParam(':role_object', $data['role_object'], PDO::PARAM_STR);
-            $sth->bindParam(':role_title', $data['role_title'], PDO::PARAM_STR);
-            $sth->bindParam(':role_description', $data['role_description'], PDO::PARAM_STR);
-            $sth->bindParam(':role_data', $data['role_data'], PDO::PARAM_STR);
-            $sth->bindParam(':flood_rules', $data['flood_rules'], PDO::PARAM_STR);
+            $sth->bindValue(':role_md5title', $md5title, PDO::PARAM_STR);
+            $sth->bindValue(':role_type', $data['role_type'], PDO::PARAM_STR);
+            $sth->bindValue(':role_object', $data['role_object'], PDO::PARAM_STR);
+            $sth->bindValue(':role_title', $data['role_title'], PDO::PARAM_STR);
+            $sth->bindValue(':role_description', $data['role_description'], PDO::PARAM_STR);
+            $sth->bindValue(':role_data', $data['role_data'], PDO::PARAM_STR);
+            $sth->bindValue(':log_period', $data['log_period'], PDO::PARAM_INT);
+            $sth->bindValue(':flood_rules', $data['flood_rules'], PDO::PARAM_STR);
+            $sth->bindValue(':addtime', NV_CURRENTTIME, PDO::PARAM_INT);
             $sth->execute();
             $id = $db->lastInsertId();
             nv_insert_logs(NV_LANG_DATA, $module_name, 'Add API-role', $id . ': ' . $data['role_title'], $admin_info['userid']);
@@ -387,17 +402,20 @@ if ($action == 'role') {
                 role_title = :role_title,
                 role_description = :role_description,
                 role_data = :role_data,
-                log_period = ' . $data['log_period'] . ',
+                log_period = :log_period,
                 flood_rules = :flood_rules,
-                edittime = ' . NV_CURRENTTIME . '
-                WHERE role_id=' . $id);
-            $sth->bindParam(':role_md5title', $md5title, PDO::PARAM_STR);
-            $sth->bindParam(':role_type', $data['role_type'], PDO::PARAM_STR);
-            $sth->bindParam(':role_object', $data['role_object'], PDO::PARAM_STR);
-            $sth->bindParam(':role_title', $data['role_title'], PDO::PARAM_STR);
-            $sth->bindParam(':role_description', $data['role_description'], PDO::PARAM_STR);
-            $sth->bindParam(':role_data', $data['role_data'], PDO::PARAM_STR);
-            $sth->bindParam(':flood_rules', $data['flood_rules'], PDO::PARAM_STR);
+                edittime = :edittime
+                WHERE role_id = :role_id');
+            $sth->bindValue(':role_md5title', $md5title, PDO::PARAM_STR);
+            $sth->bindValue(':role_type', $data['role_type'], PDO::PARAM_STR);
+            $sth->bindValue(':role_object', $data['role_object'], PDO::PARAM_STR);
+            $sth->bindValue(':role_title', $data['role_title'], PDO::PARAM_STR);
+            $sth->bindValue(':role_description', $data['role_description'], PDO::PARAM_STR);
+            $sth->bindValue(':role_data', $data['role_data'], PDO::PARAM_STR);
+            $sth->bindValue(':log_period', $data['log_period'], PDO::PARAM_INT);
+            $sth->bindValue(':flood_rules', $data['flood_rules'], PDO::PARAM_STR);
+            $sth->bindValue(':edittime', NV_CURRENTTIME, PDO::PARAM_INT);
+            $sth->bindValue(':role_id', $id, PDO::PARAM_INT);
             $sth->execute();
             nv_insert_logs(NV_LANG_DATA, $module_name, 'Edit API-role', $id . ': ' . $array_post['role_title'], $admin_info['userid']);
         }

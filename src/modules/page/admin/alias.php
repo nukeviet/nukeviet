@@ -24,12 +24,14 @@ $title = $nv_Request->get_title('title', 'post', '');
 $alias = change_alias($title);
 $alias = $page_config['alias_lower'] ? strtolower($alias) : $alias;
 
-$stmt = $db->prepare('SELECT COUNT(*) FROM ' . NV_PREFIXLANG . '_' . $module_data . ' WHERE id !=' . $id . ' AND alias = :alias');
-$stmt->bindParam(':alias', $alias, PDO::PARAM_STR);
+$stmt = $db->prepare('SELECT COUNT(*) FROM ' . NV_PREFIXLANG . '_' . $module_data . ' WHERE id != :id AND alias = :alias');
+$stmt->bindValue(':id', $id, PDO::PARAM_INT);
+$stmt->bindValue(':alias', $alias, PDO::PARAM_STR);
 $stmt->execute();
 
 if ($stmt->fetchColumn()) {
-    $weight = $db->query('SELECT MAX(id) FROM ' . NV_PREFIXLANG . '_' . $module_data)->fetchColumn();
+    $stmt = $db->query('SELECT MAX(id) FROM ' . NV_PREFIXLANG . '_' . $module_data);
+    $weight = $stmt->fetchColumn();
     $weight = (int) $weight + 1;
     $alias = $alias . '-' . $weight;
 }

@@ -26,12 +26,15 @@ if ($nv_Request->isset_request('del', 'post')) {
         ]);
     }
 
-
     // Kiểm tra quyền
     $allow = false;
 
-    $sql = 'SELECT lev FROM ' . NV_AUTHORS_GLOBALTABLE . ' WHERE admin_id=' . $userid;
-    $rowlev = $db->query($sql)->fetch();
+    $stmt = $db->prepare('SELECT lev FROM ' . NV_AUTHORS_GLOBALTABLE . ' WHERE admin_id = :userid');
+    $stmt->bindValue(':userid', $userid, PDO::PARAM_INT);
+    $stmt->execute();
+    $rowlev = $stmt->fetch();
+    $stmt->closeCursor();
+
     if (empty($rowlev)) {
         $allow = true;
     } else {
@@ -41,8 +44,11 @@ if ($nv_Request->isset_request('del', 'post')) {
     }
 
     if ($global_config['idsite'] > 0 and $admin_info['admin_id'] != $userid) {
-        $sql = 'SELECT idsite FROM ' . NV_MOD_TABLE . ' WHERE userid=' . $userid;
-        $rowsite = $db->query($sql)->fetch();
+        $stmt = $db->prepare('SELECT idsite FROM ' . NV_MOD_TABLE . ' WHERE userid = :userid');
+        $stmt->bindValue(':userid', $userid, PDO::PARAM_INT);
+        $stmt->execute();
+        $rowsite = $stmt->fetch();
+        $stmt->closeCursor();
         if (!empty($rowsite) and $rowsite['idsite'] != $global_config['idsite']) {
             $allow = false;
         }
@@ -55,13 +61,20 @@ if ($nv_Request->isset_request('del', 'post')) {
         ]);
     }
 
-    $sql = 'SELECT * FROM ' . NV_MOD_TABLE . '_edit WHERE userid=' . $userid;
-    $row = $db->query($sql)->fetch();
+    $stmt = $db->prepare('SELECT * FROM ' . NV_MOD_TABLE . '_edit WHERE userid = :userid');
+    $stmt->bindValue(':userid', $userid, PDO::PARAM_INT);
+    $stmt->execute();
+    $row = $stmt->fetch();
+    $stmt->closeCursor();
+
     if (!empty($row['info_custom'])) {
         $info_custom = json_decode($row['info_custom'], true);
 
-        $sql = 'SELECT * FROM ' . NV_MOD_TABLE . '_info WHERE userid=' . $userid;
-        $row_info = $db->query($sql)->fetch();
+        $stmt = $db->prepare('SELECT * FROM ' . NV_MOD_TABLE . '_info WHERE userid = :userid');
+        $stmt->bindValue(':userid', $userid, PDO::PARAM_INT);
+        $stmt->execute();
+        $row_info = $stmt->fetch();
+        $stmt->closeCursor();
 
         $array_field_config = nv_get_users_field_config();
 
@@ -82,8 +95,9 @@ if ($nv_Request->isset_request('del', 'post')) {
             }
         }
     }
-    $sql = 'DELETE FROM ' . NV_MOD_TABLE . '_edit WHERE userid=' . $userid;
-    $db->exec($sql);
+    $stmt = $db->prepare('DELETE FROM ' . NV_MOD_TABLE . '_edit WHERE userid = :userid');
+    $stmt->bindValue(':userid', $userid, PDO::PARAM_INT);
+    $stmt->execute();
 
     nv_insert_logs(NV_LANG_DATA, $module_name, 'Log Denied User Edit', 'Userid: ' . $userid, $admin_info['userid']);
     nv_jsonOutput([
@@ -107,8 +121,12 @@ if ($nv_Request->isset_request('approved', 'post')) {
     // Kiểm tra quyền
     $allow = false;
 
-    $sql = 'SELECT lev FROM ' . NV_AUTHORS_GLOBALTABLE . ' WHERE admin_id=' . $userid;
-    $rowlev = $db->query($sql)->fetch();
+    $stmt = $db->prepare('SELECT lev FROM ' . NV_AUTHORS_GLOBALTABLE . ' WHERE admin_id = :admin_id');
+    $stmt->bindValue(':admin_id', $userid, PDO::PARAM_INT);
+    $stmt->execute();
+    $rowlev = $stmt->fetch();
+    $stmt->closeCursor();
+
     if (empty($rowlev)) {
         $allow = true;
     } else {
@@ -118,8 +136,11 @@ if ($nv_Request->isset_request('approved', 'post')) {
     }
 
     if ($global_config['idsite'] > 0 and $admin_info['admin_id'] != $userid) {
-        $sql = 'SELECT idsite FROM ' . NV_MOD_TABLE . ' WHERE userid=' . $userid;
-        $rowsite = $db->query($sql)->fetch();
+        $stmt = $db->prepare('SELECT idsite FROM ' . NV_MOD_TABLE . ' WHERE userid = :userid');
+        $stmt->bindValue(':userid', $userid, PDO::PARAM_INT);
+        $stmt->execute();
+        $rowsite = $stmt->fetch();
+        $stmt->closeCursor();
         if (!empty($rowsite) and $rowsite['idsite'] != $global_config['idsite']) {
             $allow = false;
         }
@@ -132,11 +153,17 @@ if ($nv_Request->isset_request('approved', 'post')) {
         ]);
     }
 
-    $sql = 'SELECT * FROM ' . NV_MOD_TABLE . '_edit tb1, ' . NV_MOD_TABLE . ' tb2 WHERE tb1.userid=tb2.userid AND tb1.userid=' . $userid;
-    $row = $db->query($sql)->fetch();
+    $stmt = $db->prepare('SELECT * FROM ' . NV_MOD_TABLE . '_edit tb1, ' . NV_MOD_TABLE . ' tb2 WHERE tb1.userid = tb2.userid AND tb1.userid = :userid');
+    $stmt->bindValue(':userid', $userid, PDO::PARAM_INT);
+    $stmt->execute();
+    $row = $stmt->fetch();
+    $stmt->closeCursor();
 
-    $sql = 'SELECT * FROM ' . NV_MOD_TABLE . '_info WHERE userid=' . $userid;
-    $row_info = $db->query($sql)->fetch();
+    $stmt = $db->prepare('SELECT * FROM ' . NV_MOD_TABLE . '_info WHERE userid = :userid');
+    $stmt->bindValue(':userid', $userid, PDO::PARAM_INT);
+    $stmt->execute();
+    $row_info = $stmt->fetch();
+    $stmt->closeCursor();
 
     if (!empty($row)) {
         $array_field_config = nv_get_users_field_config();
@@ -187,15 +214,16 @@ if ($nv_Request->isset_request('approved', 'post')) {
          * Đến đây tức là đã check hợp lệ dữ liệu
          * Cập nhật thông tin cơ bản
          */
-        $db->query('UPDATE ' . NV_MOD_TABLE . ' SET
-            first_name=' . $db->quote($custom_fields['first_name']) . ',
-            last_name=' . $db->quote($custom_fields['last_name']) . ',
-            gender=' . $db->quote($custom_fields['gender']) . ',
-            birthday=' . (int) ($custom_fields['birthday']) . ',
-            sig=' . $db->quote($custom_fields['sig']) . ',
-            view_mail=' . $custom_fields['view_mail'] . ',
-            last_update=' . NV_CURRENTTIME . '
-        WHERE userid=' . $userid);
+        $stmt = $db->prepare('UPDATE ' . NV_MOD_TABLE . ' SET first_name = :first_name, last_name = :last_name, gender = :gender, birthday = :birthday, sig = :sig, view_mail = :view_mail, last_update = :last_update WHERE userid = :userid');
+        $stmt->bindValue(':first_name', $custom_fields['first_name'], PDO::PARAM_STR);
+        $stmt->bindValue(':last_name', $custom_fields['last_name'], PDO::PARAM_STR);
+        $stmt->bindValue(':gender', $custom_fields['gender'], PDO::PARAM_STR);
+        $stmt->bindValue(':birthday', (int) $custom_fields['birthday'], PDO::PARAM_INT);
+        $stmt->bindValue(':sig', $custom_fields['sig'], PDO::PARAM_STR);
+        $stmt->bindValue(':view_mail', (int) $custom_fields['view_mail'], PDO::PARAM_INT);
+        $stmt->bindValue(':last_update', NV_CURRENTTIME, PDO::PARAM_INT);
+        $stmt->bindValue(':userid', $userid, PDO::PARAM_INT);
+        $stmt->execute();
 
         // Cập nhật thông tin tùy biến dữ liệu
         if (!empty($query_field)) {
@@ -204,7 +232,9 @@ if ($nv_Request->isset_request('approved', 'post')) {
     }
 
     // Xóa thông tin chỉnh sửa
-    $db->query('DELETE FROM ' . NV_MOD_TABLE . '_edit WHERE userid=' . $userid);
+    $stmt = $db->prepare('DELETE FROM ' . NV_MOD_TABLE . '_edit WHERE userid = :userid');
+    $stmt->bindValue(':userid', $userid, PDO::PARAM_INT);
+    $stmt->execute();
 
     $nv_Cache->delMod($module_name);
     nv_insert_logs(NV_LANG_DATA, $module_name, 'Log Approved User Edit', 'Userid: ' . $userid, $admin_info['userid']);
@@ -217,17 +247,27 @@ if ($nv_Request->isset_request('approved', 'post')) {
 
 $reviewuid = $nv_Request->get_int('reviewuid', 'get', 0);
 if (!empty($reviewuid)) {
-    $sql = 'SELECT * FROM ' . NV_MOD_TABLE . '_edit tb1, ' . NV_MOD_TABLE . ' tb2 WHERE tb1.userid=tb2.userid AND tb1.userid=' . $reviewuid;
-    $row_basic = $db->query($sql)->fetch();
+    $stmt = $db->prepare('SELECT * FROM ' . NV_MOD_TABLE . '_edit tb1, ' . NV_MOD_TABLE . ' tb2 WHERE tb1.userid = tb2.userid AND tb1.userid = :reviewuid');
+    $stmt->bindValue(':reviewuid', $reviewuid, PDO::PARAM_INT);
+    $stmt->execute();
+    $row_basic = $stmt->fetch();
+    $stmt->closeCursor();
 
-    $sql = 'SELECT * FROM ' . NV_MOD_TABLE . '_info WHERE userid=' . $reviewuid;
-    $row_info = $db->query($sql)->fetch();
+    $stmt = $db->prepare('SELECT * FROM ' . NV_MOD_TABLE . '_info WHERE userid = :reviewuid');
+    $stmt->bindValue(':reviewuid', $reviewuid, PDO::PARAM_INT);
+    $stmt->execute();
+    $row_info = $stmt->fetch();
+    $stmt->closeCursor();
 
     // Kiểm tra quyền
     $allow = false;
 
-    $sql = 'SELECT lev FROM ' . NV_AUTHORS_GLOBALTABLE . ' WHERE admin_id=' . $reviewuid;
-    $rowlev = $db->query($sql)->fetch();
+    $stmt = $db->prepare('SELECT lev FROM ' . NV_AUTHORS_GLOBALTABLE . ' WHERE admin_id = :admin_id');
+    $stmt->bindValue(':admin_id', $reviewuid, PDO::PARAM_INT);
+    $stmt->execute();
+    $rowlev = $stmt->fetch();
+    $stmt->closeCursor();
+
     if (empty($rowlev)) {
         $allow = true;
     } else {
@@ -237,8 +277,11 @@ if (!empty($reviewuid)) {
     }
 
     if ($global_config['idsite'] > 0 and $admin_info['admin_id'] != $reviewuid) {
-        $sql = 'SELECT idsite FROM ' . NV_MOD_TABLE . ' WHERE userid=' . $reviewuid;
-        $rowsite = $db->query($sql)->fetch();
+        $stmt = $db->prepare('SELECT idsite FROM ' . NV_MOD_TABLE . ' WHERE userid = :reviewuid');
+        $stmt->bindValue(':reviewuid', $reviewuid, PDO::PARAM_INT);
+        $stmt->execute();
+        $rowsite = $stmt->fetch();
+        $stmt->closeCursor();
         if (!empty($rowsite) and $rowsite['idsite'] != $global_config['idsite']) {
             $allow = false;
         }
@@ -317,15 +360,16 @@ if (!empty($reviewuid)) {
 
         // Cập nhật thông tin cơ bản
         if (!empty($info_basic)) {
-            $db->query('UPDATE ' . NV_MOD_TABLE . ' SET
-                first_name=' . $db->quote($_user['first_name']) . ',
-                last_name=' . $db->quote($_user['last_name']) . ',
-                gender=' . $db->quote($_user['gender']) . ',
-                birthday=' . (int) ($_user['birthday']) . ',
-                sig=' . $db->quote($_user['sig']) . ',
-                view_mail=' . $_user['view_mail'] . ',
-                last_update=' . NV_CURRENTTIME . '
-            WHERE userid=' . $reviewuid);
+            $stmt = $db->prepare('UPDATE ' . NV_MOD_TABLE . ' SET first_name = :first_name, last_name = :last_name, gender = :gender, birthday = :birthday, sig = :sig, view_mail = :view_mail, last_update = :last_update WHERE userid = :reviewuid');
+            $stmt->bindValue(':first_name', $_user['first_name'], PDO::PARAM_STR);
+            $stmt->bindValue(':last_name', $_user['last_name'], PDO::PARAM_STR);
+            $stmt->bindValue(':gender', $_user['gender'], PDO::PARAM_STR);
+            $stmt->bindValue(':birthday', (int) ($_user['birthday'] ?? 0), PDO::PARAM_INT);
+            $stmt->bindValue(':sig', $_user['sig'], PDO::PARAM_STR);
+            $stmt->bindValue(':view_mail', (int) $_user['view_mail'], PDO::PARAM_INT);
+            $stmt->bindValue(':last_update', NV_CURRENTTIME, PDO::PARAM_INT);
+            $stmt->bindValue(':reviewuid', $reviewuid, PDO::PARAM_INT);
+            $stmt->execute();
         }
 
         if (!empty($query_field)) {
@@ -353,7 +397,9 @@ if (!empty($reviewuid)) {
         }
 
         // Xóa thông tin chỉnh sửa
-        $db->query('DELETE FROM ' . NV_MOD_TABLE . '_edit WHERE userid=' . $reviewuid);
+        $stmt = $db->prepare('DELETE FROM ' . NV_MOD_TABLE . '_edit WHERE userid = :reviewuid');
+        $stmt->bindValue(':reviewuid', $reviewuid, PDO::PARAM_INT);
+        $stmt->execute();
 
         nv_insert_logs(NV_LANG_DATA, $module_name, 'Log Approved User Edit', 'Userid: ' . $reviewuid, $admin_info['userid']);
         $nv_Cache->delMod($module_name);
@@ -557,7 +603,7 @@ $methods = [
     ],
     'full_name' => [
         'key' => 'full_name',
-        'sql' => $global_config['name_show'] == 0 ? "concat(tb2.last_name,' ',tb2.first_name)" : "concat(tb2.first_name,' ',tb2.last_name)",
+        'sql' => $global_config['name_show'] == 0 ? 'concat(tb2.last_name,\' \',tb2.first_name)' : 'concat(tb2.first_name,\' \',tb2.last_name)',
         'value' => $nv_Lang->getModule('search_name'),
         'selected' => ''
     ],
@@ -584,51 +630,61 @@ if ($ordertype != 'ASC') {
     $ordertype = 'DESC';
 }
 
-$db->sqlreset()
-    ->select('COUNT(tb1.userid)')
-    ->from(NV_MOD_TABLE . '_edit tb1, ' . NV_MOD_TABLE . ' tb2');
-
 $where = [];
-$where[] = 'tb1.userid=tb2.userid';
+$params = [];
+$where[] = 'tb1.userid = tb2.userid';
 if (!empty($global_config['idsite'])) {
-    $where[] = 'idsite=' . $global_config['idsite'];
+    $where[] = 'idsite = :idsite';
+    $params[':idsite'] = $global_config['idsite'];
 }
 if (!empty($method) and isset($methods[$method]) and !empty($methodvalue)) {
     $base_url .= '&amp;method=' . urlencode($method) . '&amp;value=' . urlencode($methodvalue);
     $methods[$method]['selected'] = ' selected="selected"';
     $table_caption = $nv_Lang->getModule('search_page_title');
-    $where[] = $methods[$method]['sql'] . " LIKE '%" . $db->dblikeescape($methodvalue) . "%'";
+    $where[] = $methods[$method]['sql'] . ' LIKE :method_val';
+    $params[':method_val'] = '%' . $methodvalue . '%';
 }
 
-$db->where(implode(' AND ', $where));
 $page = $nv_Request->get_page('page', 'get', 1);
 $per_page = 20;
 
-$num_items = $db->query($db->sql())
-    ->fetchColumn();
+$where_sql = !empty($where) ? ' WHERE ' . implode(' AND ', $where) : '';
 
-$db->select('tb1.userid, tb1.lastedit, tb2.username, tb2.first_name, tb2.last_name, tb2.email')
-    ->limit($per_page)
-    ->offset(($page - 1) * $per_page);
+$stmt = $db->prepare('SELECT COUNT(tb1.userid) FROM ' . NV_MOD_TABLE . '_edit tb1, ' . NV_MOD_TABLE . ' tb2' . $where_sql);
+foreach ($params as $key => $val) {
+    $stmt->bindValue($key, $val, is_int($val) ? PDO::PARAM_INT : PDO::PARAM_STR);
+}
+$stmt->execute();
+$num_items = $stmt->fetchColumn();
 
+$orderby_sql = '';
 if (!empty($orderby) and in_array($orderby, $orders, true)) {
     $orderby_sql = $orderby != 'full_name' ? (($orderby != 'lastedit' ? 'tb2.' : 'tb1.') . $orderby) : ($global_config['name_show'] == 0 ? "concat(tb2.first_name,' ',tb2.last_name)" : "concat(tb2.last_name,' ',tb2.first_name)");
-    $db->order($orderby_sql . ' ' . $ordertype);
     $base_url .= '&amp;sortby=' . $orderby . '&amp;sorttype=' . $ordertype;
 }
 
-$result = $db->query($db->sql());
+$limit_offset = ' LIMIT :limit OFFSET :offset';
+$order_clause = !empty($orderby_sql) ? ' ORDER BY ' . $orderby_sql . ' ' . $ordertype : '';
+
+$stmt = $db->prepare('SELECT tb1.userid, tb1.lastedit, tb2.username, tb2.first_name, tb2.last_name, tb2.email FROM ' . NV_MOD_TABLE . '_edit tb1, ' . NV_MOD_TABLE . ' tb2' . $where_sql . $order_clause . $limit_offset);
+foreach ($params as $key => $val) {
+    $stmt->bindValue($key, $val, is_int($val) ? PDO::PARAM_INT : PDO::PARAM_STR);
+}
+$stmt->bindValue(':limit', $per_page, PDO::PARAM_INT);
+$stmt->bindValue(':offset', ($page - 1) * $per_page, PDO::PARAM_INT);
+$stmt->execute();
 
 $users_list = [];
-while ($row = $result->fetch()) {
+while ($row = $stmt->fetch()) {
     $users_list[$row['userid']] = [
-        'userid' => $row['userid'],
+        'userid'   => $row['userid'],
         'username' => $row['username'],
         'full_name' => nv_show_name_user($row['first_name'], $row['last_name'], $row['username']),
-        'email' => $row['email'],
+        'email'    => $row['email'],
         'lastedit' => nv_datetime_format($row['lastedit'])
     ];
 }
+$stmt->closeCursor();
 
 $generate_page = nv_generate_page($base_url, $num_items, $per_page, $page);
 
@@ -656,11 +712,11 @@ foreach ($orders as $order) {
 
 // Xác định admin của site
 $array_admin = [];
-$sql = 'SELECT admin_id, lev FROM ' . NV_AUTHORS_GLOBALTABLE;
-$result = $db->query($sql);
+$result = $db->query('SELECT admin_id, lev FROM ' . NV_AUTHORS_GLOBALTABLE);
 while ($row = $result->fetch()) {
     $array_admin[$row['admin_id']] = $row['lev'];
 }
+$result->closeCursor();
 
 // Bổ sung checkss, allow, view_link cho từng user
 foreach ($users_list as $uid => $u) {

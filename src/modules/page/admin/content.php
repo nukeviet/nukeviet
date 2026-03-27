@@ -17,8 +17,11 @@ $id = $nv_Request->get_int('id', 'post,get', 0);
 $copy = $nv_Request->get_int('copy', 'get,post', 0);
 
 if ($id) {
-    $sql = 'SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . ' WHERE id=' . $id;
-    $row = $db->query($sql)->fetch();
+    $stmt = $db->prepare('SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . ' WHERE id = :id');
+    $stmt->bindValue(':id', $id, PDO::PARAM_INT);
+    $stmt->execute();
+    $row = $stmt->fetch();
+    $stmt->closeCursor();
 
     if (empty($row)) {
         nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
@@ -103,11 +106,17 @@ if ($nv_Request->isset_request('checkss', 'post')) {
     }
 
     // Kiểm tra trùng
-    $sql = 'SELECT id FROM ' . NV_PREFIXLANG . '_' . $module_data . ' WHERE alias=' . $db->quote($row['alias']);
+    $sql = 'SELECT COUNT(*) FROM ' . NV_PREFIXLANG . '_' . $module_data . ' WHERE alias = :alias';
     if ($id and !$copy) {
-        $sql .= ' AND id!=' . $id;
+        $sql .= ' AND id != :id';
     }
-    $is_exists = $db->query($sql)->fetchColumn();
+    $stmt = $db->prepare($sql);
+    $stmt->bindValue(':alias', $row['alias'], PDO::PARAM_STR);
+    if ($id and !$copy) {
+        $stmt->bindValue(':id', $id, PDO::PARAM_INT);
+    }
+    $stmt->execute();
+    $is_exists = $stmt->fetchColumn();
 
     if (empty($row['title'])) {
         $respon['input'] = 'title';
@@ -142,45 +151,59 @@ if ($nv_Request->isset_request('checkss', 'post')) {
             imageposition = :imageposition, description = :description,
             bodytext = :bodytext, keywords = :keywords, socialbutton = :socialbutton,
             activecomm = :activecomm, layout_func = :layout_func,
-            edit_time = ' . NV_CURRENTTIME . ', hot_post = :hot_post, schema_type=:schema_type,
-            schema_about=:schema_about
-        WHERE id =' . $id;
+            edit_time = :edit_time, hot_post = :hot_post, schema_type = :schema_type,
+            schema_about = :schema_about
+        WHERE id = :id';
     } else {
         if ($page_config['news_first']) {
             $weight = 1;
         } else {
-            $weight = $db->query('SELECT MAX(weight) FROM ' . NV_PREFIXLANG . '_' . $module_data)->fetchColumn();
+            $stmt = $db->prepare('SELECT MAX(weight) FROM ' . NV_PREFIXLANG . '_' . $module_data);
+            $stmt->execute();
+            $weight = $stmt->fetchColumn();
+            $stmt->closeCursor();
             $weight = (int) $weight + 1;
         }
 
         $_sql = 'INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . ' (
             title, alias, image, imagealt, imageposition, description, bodytext, keywords,
-            socialbutton, activecomm, layout_func, weight,admin_id, add_time, edit_time, status, hot_post,
+            socialbutton, activecomm, layout_func, weight, admin_id, add_time, edit_time, status, hot_post,
             schema_type, schema_about
         ) VALUES (
             :title, :alias, :image, :imagealt, :imageposition, :description, :bodytext,
-            :keywords, :socialbutton, :activecomm, :layout_func, ' . $weight . ',
-            ' . $admin_info['admin_id'] . ', ' . NV_CURRENTTIME . ', ' . NV_CURRENTTIME . ', 1, :hot_post,
+            :keywords, :socialbutton, :activecomm, :layout_func, :weight,
+            :admin_id, :add_time, :edit_time, 1, :hot_post,
             :schema_type, :schema_about
         )';
     }
 
     try {
         $sth = $db->prepare($_sql);
-        $sth->bindParam(':title', $row['title'], PDO::PARAM_STR);
-        $sth->bindParam(':alias', $row['alias'], PDO::PARAM_STR);
-        $sth->bindParam(':image', $row['image'], PDO::PARAM_STR);
-        $sth->bindParam(':imagealt', $row['imagealt'], PDO::PARAM_STR);
-        $sth->bindParam(':imageposition', $row['imageposition'], PDO::PARAM_INT);
-        $sth->bindParam(':description', $row['description'], PDO::PARAM_STR);
-        $sth->bindParam(':bodytext', $row['bodytext'], PDO::PARAM_STR, strlen($row['bodytext']));
-        $sth->bindParam(':keywords', $row['keywords'], PDO::PARAM_STR);
-        $sth->bindParam(':socialbutton', $row['socialbutton'], PDO::PARAM_INT);
-        $sth->bindParam(':activecomm', $row['activecomm'], PDO::PARAM_INT);
-        $sth->bindParam(':layout_func', $row['layout_func'], PDO::PARAM_STR);
-        $sth->bindParam(':hot_post', $row['hot_post'], PDO::PARAM_INT);
-        $sth->bindParam(':schema_type', $row['schema_type'], PDO::PARAM_STR);
-        $sth->bindParam(':schema_about', $row['schema_about'], PDO::PARAM_STR);
+        $sth->bindValue(':title', $row['title'], PDO::PARAM_STR);
+        $sth->bindValue(':alias', $row['alias'], PDO::PARAM_STR);
+        $sth->bindValue(':image', $row['image'], PDO::PARAM_STR);
+        $sth->bindValue(':imagealt', $row['imagealt'], PDO::PARAM_STR);
+        $sth->bindValue(':imageposition', $row['imageposition'], PDO::PARAM_INT);
+        $sth->bindValue(':description', $row['description'], PDO::PARAM_STR);
+        $sth->bindValue(':bodytext', $row['bodytext'], PDO::PARAM_STR);
+        $sth->bindValue(':keywords', $row['keywords'], PDO::PARAM_STR);
+        $sth->bindValue(':socialbutton', $row['socialbutton'], PDO::PARAM_INT);
+        $sth->bindValue(':activecomm', $row['activecomm'], PDO::PARAM_STR);
+        $sth->bindValue(':layout_func', $row['layout_func'], PDO::PARAM_STR);
+        $sth->bindValue(':hot_post', $row['hot_post'], PDO::PARAM_INT);
+        $sth->bindValue(':schema_type', $row['schema_type'], PDO::PARAM_STR);
+        $sth->bindValue(':schema_about', $row['schema_about'], PDO::PARAM_STR);
+
+        if ($id and !$copy) {
+            $sth->bindValue(':edit_time', NV_CURRENTTIME, PDO::PARAM_INT);
+            $sth->bindValue(':id', $id, PDO::PARAM_INT);
+        } else {
+            $sth->bindValue(':weight', $weight, PDO::PARAM_INT);
+            $sth->bindValue(':admin_id', $admin_info['admin_id'], PDO::PARAM_INT);
+            $sth->bindValue(':add_time', NV_CURRENTTIME, PDO::PARAM_INT);
+            $sth->bindValue(':edit_time', NV_CURRENTTIME, PDO::PARAM_INT);
+        }
+
         $sth->execute();
 
         if ($sth->rowCount()) {
@@ -189,7 +212,9 @@ if ($nv_Request->isset_request('checkss', 'post')) {
             } else {
                 if ($page_config['news_first']) {
                     $id = $db->lastInsertId();
-                    $db->query('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . ' SET weight=weight+1 WHERE id!=' . $id);
+                    $stmt = $db->prepare('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . ' SET weight = weight + 1 WHERE id != :id');
+                    $stmt->bindValue(':id', $id, PDO::PARAM_INT);
+                    $stmt->execute();
                 }
 
                 nv_insert_logs(NV_LANG_DATA, $module_name, 'Add', ' ', $admin_info['userid']);

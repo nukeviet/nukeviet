@@ -133,11 +133,16 @@ if ($array_search['pid'] > 0 && isset($plans[$array_search['pid']])) {
 
 $pagination = nv_generate_page($page_base_url, $num_items, $per_page, $array_search['page']);
 
-$sql = 'SELECT * FROM ' . NV_BANNERS_GLOBALTABLE . '_rows ' . $where_list_sql . ' ORDER BY id DESC LIMIT ' . $per_page . ' OFFSET ' . ($array_search['page'] - 1) * $per_page;
+$limit  = $per_page;
+$offset = ($array_search['page'] - 1) * $per_page;
+
+$sql = 'SELECT * FROM ' . NV_BANNERS_GLOBALTABLE . '_rows ' . $where_list_sql . ' ORDER BY id DESC LIMIT :limit OFFSET :offset';
 $stmt = $db->prepare($sql);
 foreach ($params_list as $p => $v) {
     $stmt->bindValue($p, $v, is_int($v) ? PDO::PARAM_INT : PDO::PARAM_STR);
 }
+$stmt->bindValue(':limit', $limit, PDO::PARAM_INT);
+$stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
 $stmt->execute();
 
 $stmt_update_act = $db->prepare('UPDATE ' . NV_BANNERS_GLOBALTABLE . '_rows SET act = 2 WHERE id = :id');
@@ -179,9 +184,11 @@ $stmt->closeCursor();
 
 // Xác định người đăng
 if (!empty($array_userids)) {
-    // iders in list
-    $userids = implode(', ', array_map('intval', $array_userids));
-    $stmt_user = $db->prepare('SELECT userid, username, md5username FROM ' . NV_USERS_GLOBALTABLE . ' WHERE userid IN (' . $userids . ')');
+    $in = implode(',', array_fill(0, count($array_userids), '?'));
+    $stmt_user = $db->prepare('SELECT userid, username, md5username FROM ' . NV_USERS_GLOBALTABLE . ' WHERE userid IN (' . $in . ')');
+    foreach (array_values($array_userids) as $k => $uid) {
+        $stmt_user->bindValue(($k + 1), (int) $uid, PDO::PARAM_INT);
+    }
     $stmt_user->execute();
     while ($row = $stmt_user->fetch()) {
         $array_users[$row['userid']] = $row;

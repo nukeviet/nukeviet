@@ -36,19 +36,22 @@ function nv_comment_data($module, $area, $id, $page, $sortcomm, $base_url)
 
     $per_page_comment = empty($module_config[$module]['perpagecomm']) ? 5 : $module_config[$module]['perpagecomm'];
 
-    $_where = 'a.module=' . $db_slave->quote($module);
+    $_where = 'a.module = :module';
+    $params = [':module' => [$module, PDO::PARAM_STR]];
     if ($area) {
-        $_where .= ' AND a.area= ' . $db_slave->quote($area);
+        $_where .= ' AND a.area = :area';
+        $params[':area'] = [$area, PDO::PARAM_STR];
     }
-    $_where .= ' AND a.id= ' . $db_slave->quote($id) . ' AND a.status=1 AND a.pid=0';
+    $_where .= ' AND a.id = :id AND a.status = 1 AND a.pid = 0';
+    $params[':id'] = [$id, PDO::PARAM_INT];
 
-    $db_slave->sqlreset()
-        ->select('COUNT(*)')
-        ->from(NV_PREFIXLANG . '_comment a')
-        ->join('LEFT JOIN ' . NV_USERS_GLOBALTABLE . ' b ON a.userid =b.userid')
-        ->where($_where);
+    $stmt = $db_slave->prepare('SELECT COUNT(*) FROM ' . NV_PREFIXLANG . '_comment a LEFT JOIN ' . NV_USERS_GLOBALTABLE . ' b ON a.userid = b.userid WHERE ' . $_where);
+    foreach ($params as $p => $v) {
+        $stmt->bindValue($p, $v[0], $v[1]);
+    }
+    $stmt->execute();
+    $num_items = $stmt->fetchColumn();
 
-    $num_items = $db_slave->query($db_slave->sql())->fetchColumn();
     if (empty($num_items)) {
         return [
             'comment' => [],
@@ -61,23 +64,32 @@ function nv_comment_data($module, $area, $id, $page, $sortcomm, $base_url)
         $page = 1;
     }
 
-    $emailcomm = $module_config[$module]['emailcomm'];
-    $db_slave->select('a.cid, a.pid, a.content, a.attach, a.post_time, a.post_name, a.post_email, a.likes, a.dislikes, b.userid, b.username, b.md5username, b.email, b.first_name, b.last_name, b.photo, b.view_mail')
-        ->limit($per_page_comment)
-        ->offset(($page - 1) * $per_page_comment);
-
+    $order = 'a.cid DESC';
     if ($sortcomm == 1) {
-        $db_slave->order('a.cid ASC');
+        $order = 'a.cid ASC';
     } elseif ($sortcomm == 2) {
-        $db_slave->order('a.likes DESC, a.cid DESC');
-    } else {
-        $db_slave->order('a.cid DESC');
+        $order = 'a.likes DESC, a.cid DESC';
     }
 
-    $result = $db_slave->query($db_slave->sql());
+    $emailcomm = $module_config[$module]['emailcomm'];
+    $sql = 'SELECT a.cid, a.pid, a.content, a.attach, a.post_time, a.post_name, a.post_email, a.likes, a.dislikes, b.userid, b.username, b.md5username, b.email, b.first_name, b.last_name, b.photo, b.view_mail
+            FROM ' . NV_PREFIXLANG . '_comment a
+            LEFT JOIN ' . NV_USERS_GLOBALTABLE . ' b ON a.userid = b.userid
+            WHERE ' . $_where . '
+            ORDER BY ' . $order . '
+            LIMIT :limit OFFSET :offset';
+
+    $stmt = $db_slave->prepare($sql);
+    foreach ($params as $p => $v) {
+        $stmt->bindValue($p, $v[0], $v[1]);
+    }
+    $stmt->bindValue(':limit', $per_page_comment, PDO::PARAM_INT);
+    $stmt->bindValue(':offset', ($page - 1) * $per_page_comment, PDO::PARAM_INT);
+    $stmt->execute();
+
     $comment_list_id = $comment_array = [];
 
-    while ($row = $result->fetch()) {
+    while ($row = $stmt->fetch()) {
         $comment_list_id[] = $row['cid'];
         if ($row['userid'] > 0) {
             $row['post_email'] = $row['email'];
@@ -91,12 +103,12 @@ function nv_comment_data($module, $area, $id, $page, $sortcomm, $base_url)
         $row['user'] = !empty($row['username']) ? change_alias($row['username']) . '-' . $row['md5username'] : '';
         $comment_array[$row['cid']] = $row;
     }
+    $stmt->closeCursor();
+
     if (!empty($comment_list_id)) {
         foreach ($comment_list_id as $cid) {
             $comment_array[$cid]['subcomment'] = nv_comment_get_reply($cid, $module, NV_CHECK_SESSION, $sortcomm);
         }
-        $result->closeCursor();
-        unset($row, $result);
         $generate_page = nv_generate_page($base_url, $num_items, $per_page_comment, $page, true, true, 'nv_urldecode_ajax', 'showcomment');
     } else {
         $generate_page = '';
@@ -121,30 +133,36 @@ function nv_comment_get_reply($cid, $module, $session_id, $sortcomm)
 {
     global $db_slave, $module_config;
 
-    $db_slave->sqlreset()
-        ->select('COUNT(*)')
-        ->from(NV_PREFIXLANG . '_comment a')
-        ->join('LEFT JOIN ' . NV_USERS_GLOBALTABLE . ' b ON a.userid =b.userid')
-        ->where('a.pid=' . $cid . ' AND a.status=1');
+    $stmt = $db_slave->prepare('SELECT COUNT(*) FROM ' . NV_PREFIXLANG . '_comment WHERE pid = :pid AND status = 1');
+    $stmt->bindValue(':pid', $cid, PDO::PARAM_INT);
+    $stmt->execute();
+    $num_items_sub = $stmt->fetchColumn();
 
-    $num_items_sub = $db_slave->query($db_slave->sql())->fetchColumn();
     if (empty($num_items_sub)) {
         return [];
     }
 
     $data_reply_comment = [];
     $emailcomm = $module_config[$module]['emailcomm'];
-    $db_slave->select('a.cid, a.pid, a.content, a.attach, a.post_time, a.post_name, a.post_email, a.likes, a.dislikes, b.userid, b.username, b.md5username, b.email, b.first_name, b.last_name, b.photo, b.view_mail');
 
+    $order = 'a.cid DESC';
     if ($sortcomm == 1) {
-        $db_slave->order('a.cid ASC');
+        $order = 'a.cid ASC';
     } elseif ($sortcomm == 2) {
-        $db_slave->order('a.likes DESC, a.cid DESC');
-    } else {
-        $db_slave->order('a.cid DESC');
+        $order = 'a.likes DESC, a.cid DESC';
     }
-    $result = $db_slave->query($db_slave->sql());
-    while ($row = $result->fetch()) {
+
+    $sql = 'SELECT a.cid, a.pid, a.content, a.attach, a.post_time, a.post_name, a.post_email, a.likes, a.dislikes, b.userid, b.username, b.md5username, b.email, b.first_name, b.last_name, b.photo, b.view_mail
+            FROM ' . NV_PREFIXLANG . '_comment a
+            LEFT JOIN ' . NV_USERS_GLOBALTABLE . ' b ON a.userid = b.userid
+            WHERE a.pid = :pid AND a.status = 1
+            ORDER BY ' . $order;
+
+    $stmt = $db_slave->prepare($sql);
+    $stmt->bindValue(':pid', $cid, PDO::PARAM_INT);
+    $stmt->execute();
+
+    while ($row = $stmt->fetch()) {
         $row['check_like'] = md5($row['cid'] . '_' . $session_id);
         $row['post_email'] = ($emailcomm) ? $row['post_email'] : '';
         if (!empty($row['attach'])) {
@@ -154,6 +172,7 @@ function nv_comment_get_reply($cid, $module, $session_id, $sortcomm)
         $data_reply_comment[$row['cid']] = $row;
         $data_reply_comment[$row['cid']]['subcomment'] = nv_comment_get_reply($row['cid'], $module, $session_id, $sortcomm);
     }
+    $stmt->closeCursor();
 
     return $data_reply_comment;
 }

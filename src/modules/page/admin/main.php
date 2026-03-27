@@ -35,14 +35,17 @@ $array_row = [];
 $iw = 0;
 $is_delCache = false;
 
+// Prepare the update statement outside the loop
+$sth_update_weight = $db->prepare('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . ' SET weight = :weight WHERE id = :id');
+
 foreach ($_rows as $row) {
     ++$iw;
 
     if ($iw != $row['weight']) {
         $row['weight'] = $iw;
-        $sth = $db->prepare('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . ' SET weight=' . $row['weight'] . ' WHERE id= :id');
-        $sth->bindParam(':id', $row['id'], PDO::PARAM_STR);
-        $sth->execute();
+        $sth_update_weight->bindValue(':weight', $row['weight'], PDO::PARAM_INT);
+        $sth_update_weight->bindValue(':id', $row['id'], PDO::PARAM_INT);
+        $sth_update_weight->execute();
         $is_delCache = true;
     }
 

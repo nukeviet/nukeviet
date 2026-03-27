@@ -30,7 +30,7 @@ if ($nv_Request->isset_request('manager', 'get')) {
         exit(0);
     }
 
-    $sth = $db->prepare('SELECT COUNT(*) FROM ' . NV_USERS_GLOBALTABLE . '_groups_users WHERE group_id = :group_id AND is_leader=1 AND userid = :userid');
+    $sth = $db_slave->prepare('SELECT COUNT(*) FROM ' . NV_USERS_GLOBALTABLE . '_groups_users WHERE group_id = :group_id AND is_leader=1 AND userid = :userid');
     $sth->bindValue(':group_id', $group_id, PDO::PARAM_INT);
     $sth->bindValue(':userid', $user_info['userid'], PDO::PARAM_INT);
     $sth->execute();
@@ -46,7 +46,7 @@ if ($nv_Request->isset_request('manager', 'get')) {
 
         $where = '(username LIKE :username OR email LIKE :email OR first_name like :first_name OR last_name like :last_name) AND userid IN (SELECT userid FROM ' . NV_USERS_GLOBALTABLE . '_groups_users WHERE group_id = :group_id)';
 
-        $sth = $db->prepare('SELECT userid, username, email, first_name, last_name FROM ' . NV_USERS_GLOBALTABLE . ' WHERE ' . $where . ' ORDER BY username ASC LIMIT 20');
+        $sth = $db_slave->prepare('SELECT userid, username, email, first_name, last_name FROM ' . NV_USERS_GLOBALTABLE . ' WHERE ' . $where . ' ORDER BY username ASC LIMIT 20');
         $sth->bindValue(':username', '%' . $q . '%', PDO::PARAM_STR);
         $sth->bindValue(':email', '%' . $q . '%', PDO::PARAM_STR);
         $sth->bindValue(':first_name', '%' . $q . '%', PDO::PARAM_STR);
@@ -71,7 +71,7 @@ if ($nv_Request->isset_request('manager', 'get')) {
     }
 
     $checkss = md5(NV_CHECK_SESSION . '_' . $module_name);
-    $where = "(mtb.sender_role='group' AND mtb.sender_group=" . $group_id . ')';
+    $where = "(mtb.sender_role='group' AND mtb.sender_group=:group_id)";
     $base_url .= '&amp;manager=' . $group_id;
     $page_url = $base_url;
 
@@ -86,7 +86,7 @@ if ($nv_Request->isset_request('manager', 'get')) {
         }
         $id = $nv_Request->get_int('delete', 'post', 0);
         if ($id) {
-            $sth = $db->prepare('SELECT COUNT(*) FROM ' . NV_INFORM_GLOBALTABLE . ' AS mtb WHERE mtb.sender_role = \'group\' AND mtb.sender_group = :group_id AND mtb.id = :id');
+            $sth = $db->prepare('SELECT COUNT(*) FROM ' . NV_INFORM_GLOBALTABLE . ' AS mtb WHERE ' . $where . ' AND mtb.id = :id');
             $sth->bindValue(':group_id', $group_id, PDO::PARAM_INT);
             $sth->bindValue(':id', $id, PDO::PARAM_INT);
             $sth->execute();
@@ -113,7 +113,7 @@ if ($nv_Request->isset_request('manager', 'get')) {
 
         $data = ['id' => 0, 'add_time' => NV_CURRENTTIME, 'exp_time' => NV_CURRENTTIME + $global_config['inform_default_exp']];
         if (!empty($id)) {
-            $sth = $db->prepare('SELECT * FROM ' . NV_INFORM_GLOBALTABLE . ' AS mtb WHERE mtb.sender_role = \'group\' AND mtb.sender_group = :group_id AND mtb.id = :id');
+            $sth = $db->prepare('SELECT * FROM ' . NV_INFORM_GLOBALTABLE . ' AS mtb WHERE ' . $where . ' AND mtb.id = :id');
             $sth->bindValue(':group_id', $group_id, PDO::PARAM_INT);
             $sth->bindValue(':id', $id, PDO::PARAM_INT);
             $sth->execute();
@@ -333,7 +333,7 @@ if ($nv_Request->isset_request('manager', 'get')) {
 
     $where_str = ' WHERE ' . implode(' AND ', $where_arr);
 
-    $sth = $db->prepare('SELECT COUNT(*) FROM ' . NV_INFORM_GLOBALTABLE . ' AS mtb' . $where_str);
+    $sth = $db_slave->prepare('SELECT COUNT(*) FROM ' . NV_INFORM_GLOBALTABLE . ' AS mtb' . $where_str);
     foreach ($params as $key => $val) {
         $sth->bindValue($key, $val[0], $val[1]);
     }
@@ -342,7 +342,7 @@ if ($nv_Request->isset_request('manager', 'get')) {
 
     $generate_page = nv_generate_page($base_url, $num_items, $per_page, $page, true, true, 'nv_urldecode_ajax', 'generate_page');
 
-    $sth = $db->prepare('SELECT mtb.*, (SELECT COUNT(*) FROM ' . NV_INFORM_STATUS_GLOBALTABLE . ' WHERE pid = mtb.id AND viewed_time != 0) AS views
+    $sth = $db_slave->prepare('SELECT mtb.*, (SELECT COUNT(*) FROM ' . NV_INFORM_STATUS_GLOBALTABLE . ' WHERE pid = mtb.id AND viewed_time != 0) AS views
         FROM ' . NV_INFORM_GLOBALTABLE . ' AS mtb' . $where_str . '
         ORDER BY mtb.add_time DESC
         LIMIT :limit OFFSET :offset');
@@ -413,6 +413,7 @@ if ($nv_Request->isset_request('manager', 'get')) {
 
         $items[$row['id']] = $row;
     }
+    $sth->closeCursor();
 
     if (!empty($members)) {
         $members = userlist_by_ids(array_unique($members), $group_id, true);
@@ -500,11 +501,12 @@ if ($nv_Request->isset_request('setStatus', 'post')) {
                 break;
         }
 
-        $sth = $db->prepare('SELECT mtb.id, IFNULL(jtb.shown_time, 0) AS shown_time, IFNULL(jtb.viewed_time, 0) AS viewed_time, IFNULL(jtb.favorite_time, 0) AS favorite_time, IFNULL(jtb.hidden_time, 0) AS hidden_time
+        $sth = $db_slave->prepare('SELECT mtb.id, IFNULL(jtb.shown_time, 0) AS shown_time, IFNULL(jtb.viewed_time, 0) AS viewed_time, IFNULL(jtb.favorite_time, 0) AS favorite_time, IFNULL(jtb.hidden_time, 0) AS hidden_time
             FROM ' . NV_INFORM_GLOBALTABLE . ' AS mtb
             LEFT JOIN ' . NV_INFORM_STATUS_GLOBALTABLE . ' AS jtb ON (jtb.pid = mtb.id AND jtb.userid = :userid)
             WHERE ' . $where_str . ' AND mtb.id = :id');
         $sth->bindValue(':id', $id, PDO::PARAM_INT);
+        $sth->bindValue(':userid', $user_info['userid'], PDO::PARAM_INT);
         foreach ($params as $key => $val) {
             $sth->bindValue($key, $val[0], $val[1]);
         }
@@ -560,31 +562,34 @@ if (defined('NV_IS_AJAX') or $nv_Request->isset_request('ajax', 'get')) {
     ], [null, null, null]);
 
     if (is_null($num_items)) {
+        $where_inform = $where_str;
         if ($filter == 'unviewed') {
-            $where .= ' AND NOT EXISTS (SELECT 1 FROM ' . NV_INFORM_STATUS_GLOBALTABLE . ' AS exc WHERE exc.pid = mtb.id AND exc.userid = ' . $user_info['userid'] . ' AND (exc.viewed_time != 0 OR exc.hidden_time != 0))';
+            $where_inform .= ' AND NOT EXISTS (SELECT 1 FROM ' . NV_INFORM_STATUS_GLOBALTABLE . ' AS exc WHERE exc.pid = mtb.id AND exc.userid = :userid AND (exc.viewed_time != 0 OR exc.hidden_time != 0))';
         } elseif ($filter == 'favorite') {
-            $where .= ' AND EXISTS (SELECT 1 FROM ' . NV_INFORM_STATUS_GLOBALTABLE . ' AS exc WHERE exc.pid = mtb.id AND exc.userid = ' . $user_info['userid'] . ' AND (exc.favorite_time != 0 AND exc.hidden_time = 0))';
+            $where_inform .= ' AND EXISTS (SELECT 1 FROM ' . NV_INFORM_STATUS_GLOBALTABLE . ' AS exc WHERE exc.pid = mtb.id AND exc.userid = :userid AND (exc.favorite_time != 0 AND exc.hidden_time = 0))';
         } elseif ($filter == 'hidden') {
-            $where .= ' AND EXISTS (SELECT 1 FROM ' . NV_INFORM_STATUS_GLOBALTABLE . ' AS exc WHERE exc.pid = mtb.id AND exc.userid = ' . $user_info['userid'] . ' AND exc.hidden_time != 0)';
+            $where_inform .= ' AND EXISTS (SELECT 1 FROM ' . NV_INFORM_STATUS_GLOBALTABLE . ' AS exc WHERE exc.pid = mtb.id AND exc.userid = :userid AND exc.hidden_time != 0)';
         } else {
-            $where .= ' AND NOT EXISTS (SELECT 1 FROM ' . NV_INFORM_STATUS_GLOBALTABLE . ' AS exc WHERE exc.pid = mtb.id AND exc.userid = ' . $user_info['userid'] . ' AND exc.hidden_time != 0)';
+            $where_inform .= ' AND NOT EXISTS (SELECT 1 FROM ' . NV_INFORM_STATUS_GLOBALTABLE . ' AS exc WHERE exc.pid = mtb.id AND exc.userid = :userid AND exc.hidden_time != 0)';
         }
 
-        $db->sqlreset()
-            ->select('COUNT(*)')
-            ->from(NV_INFORM_GLOBALTABLE . ' AS mtb')
-            ->where($where);
+        $sth = $db_slave->prepare('SELECT COUNT(*) FROM ' . NV_INFORM_GLOBALTABLE . ' AS mtb WHERE ' . $where_inform);
+        $sth->bindValue(':userid', $user_info['userid'], PDO::PARAM_INT);
+        foreach ($params as $key => $val) {
+            $sth->bindValue($key, $val[0], $val[1]);
+        }
+        $sth->execute();
+        $num_items = $sth->fetchColumn();
 
-        $num_items = $db->query($db->sql())->fetchColumn();
         if ($num_items) {
             // Không cho tùy ý đánh số page + xác định trang trước, trang sau
             betweenURLs($page, ceil($num_items / $per_page), $base_url, '&amp;page=', $prevPage, $nextPage);
         }
 
-        $sth = $db->prepare('SELECT mtb.id, mtb.sender_role, mtb.sender_group, mtb.sender_admin, mtb.message, mtb.link, mtb.add_time, IFNULL(jtb.shown_time, 0) AS shown_time, IFNULL(jtb.viewed_time, 0) AS viewed_time, IFNULL(jtb.favorite_time, 0) AS favorite_time
+        $sth = $db_slave->prepare('SELECT mtb.id, mtb.sender_role, mtb.sender_group, mtb.sender_admin, mtb.message, mtb.link, mtb.add_time, IFNULL(jtb.shown_time, 0) AS shown_time, IFNULL(jtb.viewed_time, 0) AS viewed_time, IFNULL(jtb.favorite_time, 0) AS favorite_time
             FROM ' . NV_INFORM_GLOBALTABLE . ' AS mtb
             LEFT JOIN ' . NV_INFORM_STATUS_GLOBALTABLE . ' AS jtb ON (jtb.pid = mtb.id AND jtb.userid = :userid)
-            WHERE ' . $where_str . '
+            WHERE ' . $where_inform . '
             ORDER BY mtb.add_time DESC
             LIMIT :limit OFFSET :offset');
         $sth->bindValue(':limit', $per_page, PDO::PARAM_INT);
@@ -653,6 +658,7 @@ if (defined('NV_IS_AJAX') or $nv_Request->isset_request('ajax', 'get')) {
 
             $items[$row['id']] = $row;
         }
+        $sth->closeCursor();
         $items = nv_apply_hook($module_name, 'inform_get_list_after', [$items, $filter, $page, $per_page], $items);
 
         if (!empty($notshown)) {

@@ -27,14 +27,17 @@ function getAlias($alias, $id, $num = 0)
     global $db, $global_config;
 
     $_alias = $num ? $alias . '-' . $num : $alias;
-    $stmt = $db->prepare('SELECT group_id FROM ' . NV_MOD_TABLE . '_groups WHERE alias = :alias AND group_id!= ' . (int) $id . ' AND (idsite=' . $global_config['idsite'] . ' OR (idsite=0 AND siteus=1))');
-    $stmt->bindParam(':alias', $_alias, PDO::PARAM_STR);
+    $stmt = $db->prepare('SELECT COUNT(*) FROM ' . NV_MOD_TABLE . '_groups WHERE alias = :alias AND group_id != :id AND (idsite = :idsite OR (idsite = 0 AND siteus = 1))');
+    $stmt->bindValue(':alias', $_alias, PDO::PARAM_STR);
+    $stmt->bindValue(':id', (int) $id, PDO::PARAM_INT);
+    $stmt->bindValue(':idsite', $global_config['idsite'], PDO::PARAM_INT);
     $stmt->execute();
     if ($stmt->fetchColumn()) {
         ++$num;
 
         return getAlias($alias, $id, $num);
     }
+    $stmt->closeCursor();
 
     return $_alias;
 }
@@ -54,13 +57,15 @@ if ($nv_Request->isset_request('getAlias, id, title', 'post')) {
 $page_title = $nv_Lang->getGlobal('mod_groups');
 
 // Lấy danh sách nhóm
-$sql = 'SELECT * FROM ' . NV_MOD_TABLE . '_groups AS g LEFT JOIN ' . NV_MOD_TABLE . "_groups_detail d ON ( g.group_id = d.group_id AND d.lang='" . NV_LANG_DATA . "' ) WHERE g.idsite = " . $global_config['idsite'] . ' OR (g.idsite=0 AND g.group_id>3 AND g.siteus=1) ORDER BY g.idsite, g.weight ASC';
-$result = $db->query($sql);
+$stmt = $db->prepare('SELECT * FROM ' . NV_MOD_TABLE . '_groups AS g LEFT JOIN ' . NV_MOD_TABLE . '_groups_detail d ON (g.group_id = d.group_id AND d.lang = :lang) WHERE g.idsite = :idsite OR (g.idsite = 0 AND g.group_id > 3 AND g.siteus = 1) ORDER BY g.idsite, g.weight ASC');
+$stmt->bindValue(':lang', NV_LANG_DATA, PDO::PARAM_STR);
+$stmt->bindValue(':idsite', $global_config['idsite'], PDO::PARAM_INT);
+$stmt->execute();
 $groupsList = [];
 $weight_siteus = 0;
 $checkEmptyGroup = 0; // Sử dụng cái này để tính cả những nhóm "SHARE"
 
-while ($row = $result->fetch()) {
+while ($row = $stmt->fetch()) {
     if ($row['idsite'] == $global_config['idsite']) {
         ++$checkEmptyGroup;
     } else {
@@ -72,22 +77,23 @@ while ($row = $result->fetch()) {
     }
     $groupsList[$row['group_id']] = $row;
 }
+$stmt->closeCursor();
 
 // Thống kê thành viên
 if (!empty($global_config['idsite'])) {
     // Thành viên mới của site
-    $db->sqlreset()
-        ->select('COUNT(userid)')
-        ->from(NV_MOD_TABLE)
-        ->where('idsite = ' . $global_config['idsite'] . ' AND (group_id=7 OR FIND_IN_SET(7, in_groups))');
-    $groupsList[7]['numbers'] = $db->query($db->sql())->fetchColumn();
+    $stmt = $db->prepare('SELECT COUNT(userid) FROM ' . NV_MOD_TABLE . ' WHERE idsite = :idsite AND (group_id = 7 OR FIND_IN_SET(7, in_groups))');
+    $stmt->bindValue(':idsite', $global_config['idsite'], PDO::PARAM_INT);
+    $stmt->execute();
+    $groupsList[7]['numbers'] = $stmt->fetchColumn();
+    $stmt->closeCursor();
 
     // Thành viên chính thức của site
-    $db->sqlreset()
-        ->select('COUNT(userid)')
-        ->from(NV_MOD_TABLE)
-        ->where('idsite = ' . $global_config['idsite']);
-    $all_member = $db->query($db->sql())->fetchColumn();
+    $stmt = $db->prepare('SELECT COUNT(userid) FROM ' . NV_MOD_TABLE . ' WHERE idsite = :idsite');
+    $stmt->bindValue(':idsite', $global_config['idsite'], PDO::PARAM_INT);
+    $stmt->execute();
+    $all_member = $stmt->fetchColumn();
+    $stmt->closeCursor();
     $groupsList[4]['numbers'] = $all_member - $groupsList[7]['numbers'];
 }
 $groupsList[5]['numbers'] = '-';
@@ -127,20 +133,27 @@ if ($nv_Request->isset_request('cWeight, id', 'post')) {
         $cWeight = 1;
     }
 
-    $sql = 'SELECT group_id FROM ' . NV_MOD_TABLE . '_groups WHERE group_id!=' . $group_id . ' AND idsite=' . $global_config['idsite'] . ' ORDER BY weight ASC';
-    $result = $db->query($sql);
+    $stmt = $db->prepare('SELECT group_id FROM ' . NV_MOD_TABLE . '_groups WHERE group_id != :group_id AND idsite = :idsite ORDER BY weight ASC');
+    $stmt->bindValue(':group_id', $group_id, PDO::PARAM_INT);
+    $stmt->bindValue(':idsite', $global_config['idsite'], PDO::PARAM_INT);
+    $stmt->execute();
 
     $weight = 0;
-    while ($row = $result->fetch()) {
+    $stmt_update = $db->prepare('UPDATE ' . NV_MOD_TABLE . '_groups SET weight = :weight WHERE group_id = :gid');
+    while ($row = $stmt->fetch()) {
         ++$weight;
         if ($weight == $cWeight) {
             ++$weight;
         }
-        $sql = 'UPDATE ' . NV_MOD_TABLE . '_groups SET weight=' . $weight . ' WHERE group_id=' . $row['group_id'];
-        $db->query($sql);
+        $stmt_update->bindValue(':weight', $weight, PDO::PARAM_INT);
+        $stmt_update->bindValue(':gid', $row['group_id'], PDO::PARAM_INT);
+        $stmt_update->execute();
     }
-    $sql = 'UPDATE ' . NV_MOD_TABLE . '_groups SET weight=' . $cWeight . ' WHERE group_id=' . $group_id;
-    $db->query($sql);
+    $stmt->closeCursor();
+
+    $stmt_update->bindValue(':weight', $cWeight, PDO::PARAM_INT);
+    $stmt_update->bindValue(':gid', $group_id, PDO::PARAM_INT);
+    $stmt_update->execute();
 
     $nv_Cache->delMod($module_name);
     nv_insert_logs(NV_LANG_DATA, $module_name, $nv_Lang->getModule('changeGroupWeight'), 'group_id: ' . $group_id, $admin_info['userid']);
@@ -168,8 +181,10 @@ if ($nv_Request->isset_request('act', 'post')) {
     }
 
     $act = $groupsList[$group_id]['act'] ? 0 : 1;
-    $sql = 'UPDATE ' . NV_MOD_TABLE . '_groups SET act=' . $act . ' WHERE group_id=' . $group_id;
-    $db->query($sql);
+    $stmt = $db->prepare('UPDATE ' . NV_MOD_TABLE . '_groups SET act = :act WHERE group_id = :group_id');
+    $stmt->bindValue(':act', $act, PDO::PARAM_INT);
+    $stmt->bindValue(':group_id', $group_id, PDO::PARAM_INT);
+    $stmt->execute();
 
     $nv_Cache->delMod($module_name);
     nv_insert_logs(NV_LANG_DATA, $module_name, $nv_Lang->getModule('ChangeGroupAct'), 'group_id: ' . $group_id, $admin_info['userid']);
@@ -199,35 +214,53 @@ if ($nv_Request->isset_request('del', 'post')) {
     }
 
     $array_groups = [];
-    $sql = 'SELECT group_id, userid FROM ' . NV_MOD_TABLE . '_groups_users WHERE userid IN (
-        SELECT userid FROM ' . NV_MOD_TABLE . '_groups_users WHERE group_id=' . $group_id . '
-    )';
-    $result = $db->query($sql);
+    $stmt = $db->prepare('SELECT group_id, userid FROM ' . NV_MOD_TABLE . '_groups_users WHERE userid IN (SELECT userid FROM ' . NV_MOD_TABLE . '_groups_users WHERE group_id = :group_id)');
+    $stmt->bindValue(':group_id', $group_id, PDO::PARAM_INT);
+    $stmt->execute();
 
-    while ($row = $result->fetch()) {
+    while ($row = $stmt->fetch()) {
         $array_groups[$row['userid']][$row['group_id']] = 1;
     }
+    $stmt->closeCursor();
 
-    foreach ($array_groups as $userid => $gr) {
-        unset($gr[$group_id]);
-        $in_groups = array_keys($gr);
-        $db->exec('UPDATE ' . NV_MOD_TABLE . " SET in_groups='" . implode(',', $in_groups) . "', last_update=" . NV_CURRENTTIME . ' WHERE userid=' . $userid);
+    if (!empty($array_groups)) {
+        $stmt = $db->prepare('UPDATE ' . NV_MOD_TABLE . ' SET in_groups = :in_groups, last_update = :last_update WHERE userid = :userid');
+        foreach ($array_groups as $userid => $gr) {
+            unset($gr[$group_id]);
+            $in_groups = array_keys($gr);
+            $stmt->bindValue(':in_groups', implode(',', $in_groups), PDO::PARAM_STR);
+            $stmt->bindValue(':last_update', NV_CURRENTTIME, PDO::PARAM_INT);
+            $stmt->bindValue(':userid', $userid, PDO::PARAM_INT);
+            $stmt->execute();
+        }
     }
 
-    $db->query('DELETE FROM ' . NV_MOD_TABLE . '_groups WHERE group_id = ' . $group_id);
-    $db->query('DELETE FROM ' . NV_MOD_TABLE . '_groups_detail WHERE group_id = ' . $group_id);
-    $db->query('DELETE FROM ' . NV_MOD_TABLE . '_groups_users WHERE group_id = ' . $group_id);
+    $stmt = $db->prepare('DELETE FROM ' . NV_MOD_TABLE . '_groups WHERE group_id = :group_id');
+    $stmt->bindValue(':group_id', $group_id, PDO::PARAM_INT);
+    $stmt->execute();
+
+    $stmt = $db->prepare('DELETE FROM ' . NV_MOD_TABLE . '_groups_detail WHERE group_id = :group_id');
+    $stmt->bindValue(':group_id', $group_id, PDO::PARAM_INT);
+    $stmt->execute();
+
+    $stmt = $db->prepare('DELETE FROM ' . NV_MOD_TABLE . '_groups_users WHERE group_id = :group_id');
+    $stmt->bindValue(':group_id', $group_id, PDO::PARAM_INT);
+    $stmt->execute();
 
     // Cập nhật lại thứ tự
-    $sql = 'SELECT group_id FROM ' . NV_MOD_TABLE . '_groups WHERE idsite=' . $global_config['idsite'] . ' ORDER BY weight ASC';
-    $result = $db->query($sql);
+    $stmt = $db->prepare('SELECT group_id FROM ' . NV_MOD_TABLE . '_groups WHERE idsite = :idsite ORDER BY weight ASC');
+    $stmt->bindValue(':idsite', $global_config['idsite'], PDO::PARAM_INT);
+    $stmt->execute();
 
     $weight = 0;
-    while ($row = $result->fetch()) {
+    $stmt_update = $db->prepare('UPDATE ' . NV_MOD_TABLE . '_groups SET weight = :weight WHERE group_id = :gid');
+    while ($row = $stmt->fetch()) {
         ++$weight;
-        $sql = 'UPDATE ' . NV_MOD_TABLE . '_groups SET weight=' . $weight . ' WHERE group_id=' . $row['group_id'];
-        $db->query($sql);
+        $stmt_update->bindValue(':weight', $weight, PDO::PARAM_INT);
+        $stmt_update->bindValue(':gid', $row['group_id'], PDO::PARAM_INT);
+        $stmt_update->execute();
     }
+    $stmt->closeCursor();
 
     $nv_Cache->delMod($module_name);
     nv_insert_logs(NV_LANG_DATA, $module_name, $nv_Lang->getModule('delGroup'), 'group_id: ' . $group_id, $admin_info['userid']);
@@ -251,38 +284,58 @@ if ($nv_Request->isset_request('deleteinactive', 'post') and defined('NV_IS_SPAD
     foreach ($groupsList as $group_id => $group_row) {
         if ($group_id > 9 and $group_row['idsite'] == $global_config['idsite'] and empty($group_row['act'])) {
             $array_groups = [];
-            $sql = 'SELECT group_id, userid FROM ' . NV_MOD_TABLE . '_groups_users WHERE userid IN (
-                SELECT userid FROM ' . NV_MOD_TABLE . '_groups_users WHERE group_id=' . $group_id . '
-            )';
-            $result = $db->query($sql);
-
-            while ($row = $result->fetch()) {
+            $stmt = $db->prepare('SELECT group_id, userid FROM ' . NV_MOD_TABLE . '_groups_users WHERE userid IN (
+                SELECT userid FROM ' . NV_MOD_TABLE . '_groups_users WHERE group_id = :group_id
+            )');
+            $stmt->bindValue(':group_id', $group_id, PDO::PARAM_INT);
+            $stmt->execute();
+            while ($row = $stmt->fetch()) {
                 $array_groups[$row['userid']][$row['group_id']] = 1;
             }
+            $stmt->closeCursor();
 
-            foreach ($array_groups as $userid => $gr) {
-                unset($gr[$group_id]);
-                $in_groups = array_keys($gr);
-                $db->exec('UPDATE ' . NV_MOD_TABLE . " SET in_groups='" . implode(',', $in_groups) . "', last_update=" . NV_CURRENTTIME . ' WHERE userid=' . $userid);
+            if (!empty($array_groups)) {
+                $stmt_upd = $db->prepare('UPDATE ' . NV_MOD_TABLE . ' SET in_groups = :in_groups, last_update = :last_update WHERE userid = :userid');
+                foreach ($array_groups as $userid => $gr) {
+                    unset($gr[$group_id]);
+                    $in_groups = array_keys($gr);
+                    $stmt_upd->bindValue(':in_groups', implode(',', $in_groups), PDO::PARAM_STR);
+                    $stmt_upd->bindValue(':last_update', NV_CURRENTTIME, PDO::PARAM_INT);
+                    $stmt_upd->bindValue(':userid', $userid, PDO::PARAM_INT);
+                    $stmt_upd->execute();
+                }
             }
 
-            $db->query('DELETE FROM ' . NV_MOD_TABLE . '_groups WHERE group_id = ' . $group_id);
-            $db->query('DELETE FROM ' . NV_MOD_TABLE . '_groups_detail WHERE group_id = ' . $group_id);
-            $db->query('DELETE FROM ' . NV_MOD_TABLE . '_groups_users WHERE group_id = ' . $group_id);
+            $stmt = $db->prepare('DELETE FROM ' . NV_MOD_TABLE . '_groups WHERE group_id = :group_id');
+            $stmt->bindValue(':group_id', $group_id, PDO::PARAM_INT);
+            $stmt->execute();
+
+            $stmt = $db->prepare('DELETE FROM ' . NV_MOD_TABLE . '_groups_detail WHERE group_id = :group_id');
+            $stmt->bindValue(':group_id', $group_id, PDO::PARAM_INT);
+            $stmt->execute();
+
+            $stmt = $db->prepare('DELETE FROM ' . NV_MOD_TABLE . '_groups_users WHERE group_id = :group_id');
+            $stmt->bindValue(':group_id', $group_id, PDO::PARAM_INT);
+            $stmt->execute();
+
             ++$num_deleted;
         }
     }
 
     // Cập nhật lại thứ tự
-    $sql = 'SELECT group_id FROM ' . NV_MOD_TABLE . '_groups WHERE idsite=' . $global_config['idsite'] . ' ORDER BY weight ASC';
-    $result = $db->query($sql);
+    $stmt = $db->prepare('SELECT group_id FROM ' . NV_MOD_TABLE . '_groups WHERE idsite = :idsite ORDER BY weight ASC');
+    $stmt->bindValue(':idsite', $global_config['idsite'], PDO::PARAM_INT);
+    $stmt->execute();
 
     $weight = 0;
-    while ($row = $result->fetch()) {
+    $stmt_upd = $db->prepare('UPDATE ' . NV_MOD_TABLE . '_groups SET weight = :weight WHERE group_id = :gid');
+    while ($row = $stmt->fetch()) {
         ++$weight;
-        $sql = 'UPDATE ' . NV_MOD_TABLE . '_groups SET weight=' . $weight . ' WHERE group_id=' . $row['group_id'];
-        $db->query($sql);
+        $stmt_upd->bindValue(':weight', $weight, PDO::PARAM_INT);
+        $stmt_upd->bindValue(':gid', $row['group_id'], PDO::PARAM_INT);
+        $stmt_upd->execute();
     }
+    $stmt->closeCursor();
 
     $nv_Cache->delMod($module_name);
     nv_insert_logs(NV_LANG_DATA, $module_name, $nv_Lang->getModule('group_del_inactive'), 'Num: ' . $num_deleted, $admin_info['userid']);
@@ -311,7 +364,11 @@ if ($nv_Request->isset_request('gid,uid', 'post')) {
     }
 
     if ($groupsList[$gid]['idsite'] != $global_config['idsite'] and $groupsList[$gid]['idsite'] == 0) {
-        $row = $db->query('SELECT idsite FROM ' . NV_MOD_TABLE . ' WHERE userid=' . $uid)->fetch();
+        $stmt_idsite = $db->prepare('SELECT idsite FROM ' . NV_MOD_TABLE . ' WHERE userid = :uid');
+        $stmt_idsite->bindValue(':uid', $uid, PDO::PARAM_INT);
+        $stmt_idsite->execute();
+        $row = $stmt_idsite->fetch();
+        $stmt_idsite->closeCursor();
         if (!empty($row)) {
             if ($row['idsite'] != $global_config['idsite']) {
                 nv_jsonOutput([
@@ -362,7 +419,11 @@ if ($nv_Request->isset_request('gid,exclude', 'post')) {
     }
 
     if ($groupsList[$gid]['idsite'] != $global_config['idsite'] and $groupsList[$gid]['idsite'] == 0) {
-        $row = $db->query('SELECT idsite FROM ' . NV_MOD_TABLE . ' WHERE userid=' . $uid)->fetch();
+        $stmt_idsite = $db->prepare('SELECT idsite FROM ' . NV_MOD_TABLE . ' WHERE userid = :uid');
+        $stmt_idsite->bindValue(':uid', $uid, PDO::PARAM_INT);
+        $stmt_idsite->execute();
+        $row = $stmt_idsite->fetch();
+        $stmt_idsite->closeCursor();
         if (!empty($row)) {
             if ($row['idsite'] != $global_config['idsite']) {
                 nv_jsonOutput([
@@ -412,7 +473,11 @@ if ($nv_Request->isset_request('gid,promote', 'post')) {
     }
 
     if ($groupsList[$gid]['idsite'] != $global_config['idsite'] and $groupsList[$gid]['idsite'] == 0) {
-        $row = $db->query('SELECT idsite FROM ' . NV_MOD_TABLE . ' WHERE userid=' . $uid)->fetch();
+        $stmt_idsite = $db->prepare('SELECT idsite FROM ' . NV_MOD_TABLE . ' WHERE userid = :uid');
+        $stmt_idsite->bindValue(':uid', $uid, PDO::PARAM_INT);
+        $stmt_idsite->execute();
+        $row = $stmt_idsite->fetch();
+        $stmt_idsite->closeCursor();
         if (!empty($row)) {
             if ($row['idsite'] != $global_config['idsite']) {
                 nv_jsonOutput([
@@ -428,7 +493,10 @@ if ($nv_Request->isset_request('gid,promote', 'post')) {
         }
     }
 
-    $db->query('UPDATE ' . NV_MOD_TABLE . '_groups_users SET is_leader = 1 WHERE group_id = ' . $gid . ' AND userid=' . $uid);
+    $stmt = $db->prepare('UPDATE ' . NV_MOD_TABLE . '_groups_users SET is_leader = 1 WHERE group_id = :gid AND userid = :uid');
+    $stmt->bindValue(':gid', $gid, PDO::PARAM_INT);
+    $stmt->bindValue(':uid', $uid, PDO::PARAM_INT);
+    $stmt->execute();
 
     $nv_Cache->delMod($module_name);
     nv_insert_logs(NV_LANG_DATA, $module_name, $nv_Lang->getModule('promote'), 'Member Id: ' . $uid . ' group ID: ' . $gid, $admin_info['userid']);
@@ -457,7 +525,11 @@ if ($nv_Request->isset_request('gid,demote', 'post')) {
     }
 
     if ($groupsList[$gid]['idsite'] != $global_config['idsite'] and $groupsList[$gid]['idsite'] == 0) {
-        $row = $db->query('SELECT idsite FROM ' . NV_MOD_TABLE . ' WHERE userid=' . $uid)->fetch();
+        $stmt_idsite = $db->prepare('SELECT idsite FROM ' . NV_MOD_TABLE . ' WHERE userid = :uid');
+        $stmt_idsite->bindValue(':uid', $uid, PDO::PARAM_INT);
+        $stmt_idsite->execute();
+        $row = $stmt_idsite->fetch();
+        $stmt_idsite->closeCursor();
         if (!empty($row)) {
             if ($row['idsite'] != $global_config['idsite']) {
                 nv_jsonOutput([
@@ -473,7 +545,10 @@ if ($nv_Request->isset_request('gid,demote', 'post')) {
         }
     }
 
-    $db->query('UPDATE ' . NV_MOD_TABLE . '_groups_users SET is_leader = 0 WHERE group_id = ' . $gid . ' AND userid=' . $uid);
+    $stmt = $db->prepare('UPDATE ' . NV_MOD_TABLE . '_groups_users SET is_leader = 0 WHERE group_id = :gid AND userid = :uid');
+    $stmt->bindValue(':gid', $gid, PDO::PARAM_INT);
+    $stmt->bindValue(':uid', $uid, PDO::PARAM_INT);
+    $stmt->execute();
 
     $nv_Cache->delMod($module_name);
     nv_insert_logs(NV_LANG_DATA, $module_name, $nv_Lang->getModule('demote'), 'Member Id: ' . $uid . ' group ID: ' . $gid, $admin_info['userid']);
@@ -502,7 +577,11 @@ if ($nv_Request->isset_request('gid,approved', 'post')) {
     }
 
     if ($groupsList[$gid]['idsite'] != $global_config['idsite'] and $groupsList[$gid]['idsite'] == 0) {
-        $row = $db->query('SELECT idsite FROM ' . NV_MOD_TABLE . ' WHERE userid=' . $uid)->fetch();
+        $stmt_idsite = $db->prepare('SELECT idsite FROM ' . NV_MOD_TABLE . ' WHERE userid = :uid');
+        $stmt_idsite->bindValue(':uid', $uid, PDO::PARAM_INT);
+        $stmt_idsite->execute();
+        $row = $stmt_idsite->fetch();
+        $stmt_idsite->closeCursor();
         if (!empty($row)) {
             if ($row['idsite'] != $global_config['idsite']) {
                 nv_jsonOutput([
@@ -518,8 +597,15 @@ if ($nv_Request->isset_request('gid,approved', 'post')) {
         }
     }
 
-    $db->query('UPDATE ' . NV_MOD_TABLE . '_groups_users SET approved = 1, time_approved = ' . NV_CURRENTTIME . ' WHERE group_id = ' . $gid . ' AND userid=' . $uid);
-    $db->query('UPDATE ' . NV_MOD_TABLE . '_groups SET numbers = numbers+1 WHERE group_id = ' . $gid);
+    $stmt = $db->prepare('UPDATE ' . NV_MOD_TABLE . '_groups_users SET approved = 1, time_approved = :time_approved WHERE group_id = :gid AND userid = :uid');
+    $stmt->bindValue(':time_approved', NV_CURRENTTIME, PDO::PARAM_INT);
+    $stmt->bindValue(':gid', $gid, PDO::PARAM_INT);
+    $stmt->bindValue(':uid', $uid, PDO::PARAM_INT);
+    $stmt->execute();
+
+    $stmt = $db->prepare('UPDATE ' . NV_MOD_TABLE . '_groups SET numbers = numbers + 1 WHERE group_id = :gid');
+    $stmt->bindValue(':gid', $gid, PDO::PARAM_INT);
+    $stmt->execute();
 
     $nv_Cache->delMod($module_name);
     nv_insert_logs(NV_LANG_DATA, $module_name, $nv_Lang->getModule('approved'), 'Member Id: ' . $uid . ' group ID: ' . $gid, $admin_info['userid']);
@@ -548,7 +634,11 @@ if ($nv_Request->isset_request('gid,denied', 'post')) {
     }
 
     if ($groupsList[$gid]['idsite'] != $global_config['idsite'] and $groupsList[$gid]['idsite'] == 0) {
-        $row = $db->query('SELECT idsite FROM ' . NV_MOD_TABLE . ' WHERE userid=' . $uid)->fetch();
+        $stmt_idsite = $db->prepare('SELECT idsite FROM ' . NV_MOD_TABLE . ' WHERE userid = :uid');
+        $stmt_idsite->bindValue(':uid', $uid, PDO::PARAM_INT);
+        $stmt_idsite->execute();
+        $row = $stmt_idsite->fetch();
+        $stmt_idsite->closeCursor();
         if (!empty($row)) {
             if ($row['idsite'] != $global_config['idsite']) {
                 nv_jsonOutput([
@@ -564,7 +654,10 @@ if ($nv_Request->isset_request('gid,denied', 'post')) {
         }
     }
 
-    $db->query('DELETE FROM ' . NV_MOD_TABLE . '_groups_users WHERE group_id = ' . $gid . ' AND userid=' . $uid);
+    $stmt = $db->prepare('DELETE FROM ' . NV_MOD_TABLE . '_groups_users WHERE group_id = :gid AND userid = :uid');
+    $stmt->bindValue(':gid', $gid, PDO::PARAM_INT);
+    $stmt->bindValue(':uid', $uid, PDO::PARAM_INT);
+    $stmt->execute();
 
     $nv_Cache->delMod($module_name);
     nv_insert_logs(NV_LANG_DATA, $module_name, $nv_Lang->getModule('denied'), 'Member Id: ' . $uid . ' group ID: ' . $gid, $admin_info['userid']);
@@ -604,74 +697,82 @@ if ($nv_Request->isset_request('listUsers', 'get')) {
 
     // Danh sách xin gia nhập nhóm
     if (empty($type) or $type == 'pending') {
-        $db->sqlreset()
-            ->select('COUNT(*)')
-            ->from(NV_MOD_TABLE . '_groups_users')
-            ->where('group_id=' . $group_id . ' AND approved=0');
-        $array_number['pending'] = $db->query($db->sql())
-            ->fetchColumn();
+        $stmt = $db->prepare('SELECT COUNT(*) FROM ' . NV_MOD_TABLE . '_groups_users WHERE group_id = :gid AND approved = 0');
+        $stmt->bindValue(':gid', $group_id, PDO::PARAM_INT);
+        $stmt->execute();
+        $array_number['pending'] = $stmt->fetchColumn();
+        $stmt->closeCursor();
+
         if ($array_number['pending']) {
-            $db->select('userid')
-                ->limit($per_page)
-                ->offset(($page - 1) * $per_page);
-            $result = $db->query($db->sql());
-            while ($row = $result->fetch()) {
+            $stmt = $db->prepare('SELECT userid FROM ' . NV_MOD_TABLE . '_groups_users WHERE group_id = :gid AND approved = 0 LIMIT :limit OFFSET :offset');
+            $stmt->bindValue(':gid', $group_id, PDO::PARAM_INT);
+            $stmt->bindValue(':limit', $per_page, PDO::PARAM_INT);
+            $stmt->bindValue(':offset', ($page - 1) * $per_page, PDO::PARAM_INT);
+            $stmt->execute();
+            while ($row = $stmt->fetch()) {
                 $group_users['pending'][] = $row['userid'];
                 $array_userid[] = $row['userid'];
             }
-            $result->closeCursor();
+            $stmt->closeCursor();
         }
     }
 
     // Danh sách quản trị nhóm
     if (empty($type) or $type == 'leaders') {
-        $db->sqlreset()
-            ->select('COUNT(*)')
-            ->from(NV_MOD_TABLE . '_groups_users')
-            ->where('group_id=' . $group_id . ' AND is_leader=1');
-        $array_number['leaders'] = $db->query($db->sql())
-            ->fetchColumn();
+        $stmt = $db->prepare('SELECT COUNT(*) FROM ' . NV_MOD_TABLE . '_groups_users WHERE group_id = :gid AND is_leader = 1');
+        $stmt->bindValue(':gid', $group_id, PDO::PARAM_INT);
+        $stmt->execute();
+        $array_number['leaders'] = $stmt->fetchColumn();
+        $stmt->closeCursor();
+
         if ($array_number['leaders']) {
-            $db->select('userid')
-                ->limit($per_page)
-                ->offset(($page - 1) * $per_page);
-            $result = $db->query($db->sql());
-            while ($row = $result->fetch()) {
+            $stmt = $db->prepare('SELECT userid FROM ' . NV_MOD_TABLE . '_groups_users WHERE group_id = :gid AND is_leader = 1 LIMIT :limit OFFSET :offset');
+            $stmt->bindValue(':gid', $group_id, PDO::PARAM_INT);
+            $stmt->bindValue(':limit', $per_page, PDO::PARAM_INT);
+            $stmt->bindValue(':offset', ($page - 1) * $per_page, PDO::PARAM_INT);
+            $stmt->execute();
+            while ($row = $stmt->fetch()) {
                 $group_users['leaders'][] = $row['userid'];
                 $array_userid[] = $row['userid'];
             }
-            $result->closeCursor();
+            $stmt->closeCursor();
         }
     }
 
     // Danh sách thành viên của nhóm
     if (empty($type) or $type == 'members') {
-        $db->sqlreset()
-            ->select('COUNT(*)')
-            ->from(NV_MOD_TABLE . '_groups_users')
-            ->where('group_id=' . $group_id . ' AND approved=1 AND is_leader=0');
-        $array_number['members'] = $db->query($db->sql())
-            ->fetchColumn();
+        $stmt = $db->prepare('SELECT COUNT(*) FROM ' . NV_MOD_TABLE . '_groups_users WHERE group_id = :gid AND approved = 1 AND is_leader = 0');
+        $stmt->bindValue(':gid', $group_id, PDO::PARAM_INT);
+        $stmt->execute();
+        $array_number['members'] = $stmt->fetchColumn();
+        $stmt->closeCursor();
+
         if ($array_number['members']) {
-            $db->select('userid')
-                ->limit($per_page)
-                ->offset(($page - 1) * $per_page);
-            $result = $db->query($db->sql());
-            while ($row = $result->fetch()) {
+            $stmt = $db->prepare('SELECT userid FROM ' . NV_MOD_TABLE . '_groups_users WHERE group_id = :gid AND approved = 1 AND is_leader = 0 LIMIT :limit OFFSET :offset');
+            $stmt->bindValue(':gid', $group_id, PDO::PARAM_INT);
+            $stmt->bindValue(':limit', $per_page, PDO::PARAM_INT);
+            $stmt->bindValue(':offset', ($page - 1) * $per_page, PDO::PARAM_INT);
+            $stmt->execute();
+            while ($row = $stmt->fetch()) {
                 $group_users['members'][] = $row['userid'];
                 $array_userid[] = $row['userid'];
             }
-            $result->closeCursor();
+            $stmt->closeCursor();
         }
     }
 
     if (!empty($group_users)) {
-        $sql = 'SELECT userid, username, first_name, last_name, email, idsite FROM ' . NV_MOD_TABLE . ' WHERE userid IN (' . implode(',', $array_userid) . ')';
-        $result = $db->query($sql);
+        $in_userids = implode(',', array_fill(0, count($array_userid), '?'));
+        $stmt = $db->prepare('SELECT userid, username, first_name, last_name, email, idsite FROM ' . NV_MOD_TABLE . ' WHERE userid IN (' . $in_userids . ')');
+        foreach (array_values($array_userid) as $k => $uid) {
+            $stmt->bindValue(($k + 1), $uid, PDO::PARAM_INT);
+        }
+        $stmt->execute();
         $array_userid = [];
-        while ($row = $result->fetch()) {
+        while ($row = $stmt->fetch()) {
             $array_userid[$row['userid']] = $row;
         }
+        $stmt->closeCursor();
         $idsite = ($global_config['idsite'] == $groupsList[$group_id]['idsite']) ? 0 : $global_config['idsite'];
         $listUsers_data = [];
         foreach ($group_users as $_type => $arr_userids) {
@@ -708,7 +809,10 @@ if ($nv_Request->isset_request('listUsers', 'get')) {
                 $numberusers += $array_number['leaders'];
             }
             if ($numberusers != $groupsList[$group_id]['numbers']) {
-                $db->query('UPDATE ' . NV_MOD_TABLE . '_groups SET numbers = ' . $numberusers . ' WHERE group_id=' . $group_id);
+                $stmt = $db->prepare('UPDATE ' . NV_MOD_TABLE . '_groups SET numbers = :numberusers WHERE group_id = :gid');
+                $stmt->bindValue(':numberusers', $numberusers, PDO::PARAM_INT);
+                $stmt->bindValue(':gid', $group_id, PDO::PARAM_INT);
+                $stmt->execute();
             }
         }
     }
@@ -783,16 +887,20 @@ if ($nv_Request->isset_request('add', 'get') or $nv_Request->isset_request('edit
                 $post['alias'] = change_alias($post['alias'] ?: $post['title']);
 
                 // Kiểm tra trùng tên nhóm
-                $stmt = $db->prepare('SELECT group_id FROM ' . NV_MOD_TABLE . '_groups WHERE alias = :alias AND group_id!= ' . (int) ($post['id']) . ' AND (idsite=' . $global_config['idsite'] . ' or (idsite=0 AND siteus=1))');
-                $stmt->bindParam(':alias', $post['alias'], PDO::PARAM_STR);
+                $stmt = $db->prepare('SELECT COUNT(*) FROM ' . NV_MOD_TABLE . '_groups WHERE alias = :alias AND group_id != :id AND (idsite = :idsite OR (idsite = 0 AND siteus = 1))');
+                $stmt->bindValue(':alias', $post['alias'], PDO::PARAM_STR);
+                $stmt->bindValue(':id', (int) $post['id'], PDO::PARAM_INT);
+                $stmt->bindValue(':idsite', $global_config['idsite'], PDO::PARAM_INT);
                 $stmt->execute();
                 if ($stmt->fetchColumn()) {
+                    $stmt->closeCursor();
                     nv_jsonOutput([
                         'status' => 'error',
                         'mess' => $nv_Lang->getModule('error_alias_exists', $post['alias']),
                         'input' => 'alias'
                     ]);
                 }
+                $stmt->closeCursor();
 
                 $post['description'] = $nv_Request->get_title('description', 'post', '', 1);
                 $post['content'] = $nv_Request->get_editor('content', '', NV_ALLOWED_HTML_TAGS);
@@ -862,54 +970,67 @@ if ($nv_Request->isset_request('add', 'get') or $nv_Request->isset_request('edit
 
             if (isset($post['id'])) {
                 if ($nv_Request->isset_request('add', 'get')) {
-                    $weight = $db->query('SELECT max(weight) FROM ' . NV_MOD_TABLE . '_groups WHERE idsite=' . $global_config['idsite'])->fetchColumn();
-                    $weight = (int) $weight + 1;
+                    $stmt = $db->prepare('SELECT MAX(weight) FROM ' . NV_MOD_TABLE . '_groups WHERE idsite = :idsite');
+                    $stmt->bindValue(':idsite', $global_config['idsite'], PDO::PARAM_INT);
+                    $stmt->execute();
+                    $weight = (int) $stmt->fetchColumn();
+                    $stmt->closeCursor();
+                    $weight = $weight + 1;
 
                     $_sql = 'INSERT INTO ' . NV_MOD_TABLE . '_groups (
                         alias, email, group_type, group_color, group_avatar, require_2step_admin, require_2step_site, is_default, add_time, exp_time, weight, act,
                         idsite, numbers, siteus, config
                     ) VALUES (
-                        :alias, :email, ' . $post['group_type'] . ', :group_color,
-                        :group_avatar, ' . $post['require_2step_admin'] . ', ' . $post['require_2step_site'] . ', ' . $post['is_default'] . ', ' . NV_CURRENTTIME . ', ' . $post['exp_time'] . ',
-                        ' . $weight . ', 1, ' . $global_config['idsite'] . ', 0, ' . $post['siteus'] . ', :config
+                        :alias, :email, :group_type, :group_color,
+                        :group_avatar, :require_2step_admin, :require_2step_site, :is_default, :add_time, :exp_time,
+                        :weight, 1, :idsite, 0, :siteus, :config
                     )';
 
-                    $data_insert = [];
-                    $data_insert['alias'] = $post['alias'];
-                    $data_insert['email'] = $post['email'];
-                    $data_insert['group_color'] = $post['group_color'];
-                    $data_insert['group_avatar'] = $post['group_avatar'];
-                    $data_insert['config'] = $post['config'];
+                    $stmt = $db->prepare($_sql);
+                    $stmt->bindValue(':alias', $post['alias'], PDO::PARAM_STR);
+                    $stmt->bindValue(':email', $post['email'], PDO::PARAM_STR);
+                    $stmt->bindValue(':group_type', $post['group_type'], PDO::PARAM_INT);
+                    $stmt->bindValue(':group_color', $post['group_color'], PDO::PARAM_STR);
+                    $stmt->bindValue(':group_avatar', $post['group_avatar'], PDO::PARAM_STR);
+                    $stmt->bindValue(':require_2step_admin', $post['require_2step_admin'], PDO::PARAM_INT);
+                    $stmt->bindValue(':require_2step_site', $post['require_2step_site'], PDO::PARAM_INT);
+                    $stmt->bindValue(':is_default', $post['is_default'], PDO::PARAM_INT);
+                    $stmt->bindValue(':add_time', NV_CURRENTTIME, PDO::PARAM_INT);
+                    $stmt->bindValue(':exp_time', $post['exp_time'], PDO::PARAM_INT);
+                    $stmt->bindValue(':weight', $weight, PDO::PARAM_INT);
+                    $stmt->bindValue(':idsite', $global_config['idsite'], PDO::PARAM_INT);
+                    $stmt->bindValue(':siteus', $post['siteus'], PDO::PARAM_INT);
+                    $stmt->bindValue(':config', $post['config'], PDO::PARAM_STR);
 
-                    $ok = $post['id'] = $db->insert_id($_sql, 'group_id', $data_insert);
+                    $ok = $stmt->execute();
+                    $post['id'] = $db->lastInsertId();
                     if ($ok) {
-                        $stmt = $db->prepare('INSERT INTO ' . NV_MOD_TABLE . '_groups_detail (group_id, lang, title, description, content) VALUES (' . $post['id'] . ", '" . NV_LANG_DATA . "', :title, :description, :content)");
-                        $stmt->bindParam(':title', $post['title'], PDO::PARAM_STR);
-                        $stmt->bindParam(':description', $post['description'], PDO::PARAM_STR);
-                        $stmt->bindParam(':content', $post['content'], PDO::PARAM_STR, strlen($post['content']));
+                        $stmt = $db->prepare('INSERT INTO ' . NV_MOD_TABLE . '_groups_detail (group_id, lang, title, description, content) VALUES (:group_id, :lang, :title, :description, :content)');
+                        $stmt->bindValue(':group_id', $post['id'], PDO::PARAM_INT);
+                        $stmt->bindValue(':lang', NV_LANG_DATA, PDO::PARAM_STR);
+                        $stmt->bindValue(':title', $post['title'], PDO::PARAM_STR);
+                        $stmt->bindValue(':description', $post['description'], PDO::PARAM_STR);
+                        $stmt->bindValue(':content', $post['content'], PDO::PARAM_STR);
                         $stmt->execute();
                     }
                 } elseif ($post['id'] > 9) {
                     // Sửa nhóm tự tạo
-                    $stmt = $db->prepare('UPDATE ' . NV_MOD_TABLE . "_groups SET
-                        alias = :alias,
-                        email = :email,
-                        group_type = '" . $post['group_type'] . "',
-                        group_color = :group_color,
-                        group_avatar = :group_avatar,
-                        require_2step_admin = " . $post['require_2step_admin'] . ',
-                        require_2step_site = ' . $post['require_2step_site'] . ',
-                        is_default = ' . $post['is_default'] . ",
-                        exp_time ='" . $post['exp_time'] . "',
-                        siteus = '" . $post['siteus'] . "',
-                        config = :config
-                    WHERE group_id = " . $post['id']);
+                    $stmt = $db->prepare('UPDATE ' . NV_MOD_TABLE . '_groups SET
+                    alias = :alias, email = :email, group_type = :group_type, group_color = :group_color, group_avatar = :group_avatar, require_2step_admin = :require_2step_admin, require_2step_site = :require_2step_site, is_default = :is_default, exp_time = :exp_time, siteus = :siteus, config = :config
+                        WHERE group_id = :group_id');
 
-                    $stmt->bindParam(':alias', $post['alias'], PDO::PARAM_STR);
-                    $stmt->bindParam(':email', $post['email'], PDO::PARAM_STR);
-                    $stmt->bindParam(':group_color', $post['group_color']);
-                    $stmt->bindParam(':group_avatar', $post['group_avatar']);
-                    $stmt->bindParam(':config', $post['config'], PDO::PARAM_STR);
+                    $stmt->bindValue(':alias', $post['alias'], PDO::PARAM_STR);
+                    $stmt->bindValue(':email', $post['email'], PDO::PARAM_STR);
+                    $stmt->bindValue(':group_type', $post['group_type'], PDO::PARAM_INT);
+                    $stmt->bindValue(':group_color', $post['group_color'], PDO::PARAM_STR);
+                    $stmt->bindValue(':group_avatar', $post['group_avatar'], PDO::PARAM_STR);
+                    $stmt->bindValue(':require_2step_admin', $post['require_2step_admin'], PDO::PARAM_INT);
+                    $stmt->bindValue(':require_2step_site', $post['require_2step_site'], PDO::PARAM_INT);
+                    $stmt->bindValue(':is_default', $post['is_default'], PDO::PARAM_INT);
+                    $stmt->bindValue(':exp_time', $post['exp_time'], PDO::PARAM_INT);
+                    $stmt->bindValue(':siteus', $post['siteus'], PDO::PARAM_INT);
+                    $stmt->bindValue(':config', $post['config'], PDO::PARAM_STR);
+                    $stmt->bindValue(':group_id', $post['id'], PDO::PARAM_INT);
 
                     $ok = $stmt->execute();
                     if ($ok) {
@@ -917,11 +1038,13 @@ if ($nv_Request->isset_request('add', 'get') or $nv_Request->isset_request('edit
                             title = :title,
                             description = :description,
                             content = :content
-                        WHERE group_id = ' . $post['id'] . " AND lang='" . NV_LANG_DATA . "'");
+                        WHERE group_id = :group_id AND lang = :lang');
 
-                        $stmt->bindParam(':title', $post['title'], PDO::PARAM_STR);
-                        $stmt->bindParam(':description', $post['description'], PDO::PARAM_STR);
-                        $stmt->bindParam(':content', $post['content'], PDO::PARAM_STR, strlen($post['content']));
+                        $stmt->bindValue(':title', $post['title'], PDO::PARAM_STR);
+                        $stmt->bindValue(':description', $post['description'], PDO::PARAM_STR);
+                        $stmt->bindValue(':content', $post['content'], PDO::PARAM_STR);
+                        $stmt->bindValue(':group_id', $post['id'], PDO::PARAM_INT);
+                        $stmt->bindValue(':lang', NV_LANG_DATA, PDO::PARAM_STR);
                         $stmt->execute();
                     }
                 } else {
@@ -930,15 +1053,18 @@ if ($nv_Request->isset_request('add', 'get') or $nv_Request->isset_request('edit
                         email = :email,
                         group_color = :group_color,
                         group_avatar = :group_avatar,
-                        require_2step_admin = ' . $post['require_2step_admin'] . ',
-                        require_2step_site = ' . $post['require_2step_site'] . ',
+                        require_2step_admin = :require_2step_admin,
+                        require_2step_site = :require_2step_site,
                         config = :config
-                    WHERE group_id=' . $post['id']);
+                    WHERE group_id = :group_id');
 
-                    $stmt->bindParam(':email', $post['email']);
-                    $stmt->bindParam(':group_color', $post['group_color']);
-                    $stmt->bindParam(':group_avatar', $post['group_avatar']);
-                    $stmt->bindParam(':config', $post['config']);
+                    $stmt->bindValue(':email', $post['email'], PDO::PARAM_STR);
+                    $stmt->bindValue(':group_color', $post['group_color'], PDO::PARAM_STR);
+                    $stmt->bindValue(':group_avatar', $post['group_avatar'], PDO::PARAM_STR);
+                    $stmt->bindValue(':require_2step_admin', $post['require_2step_admin'], PDO::PARAM_INT);
+                    $stmt->bindValue(':require_2step_site', $post['require_2step_site'], PDO::PARAM_INT);
+                    $stmt->bindValue(':config', $post['config'], PDO::PARAM_STR);
+                    $stmt->bindValue(':group_id', $post['id'], PDO::PARAM_INT);
 
                     $ok = $stmt->execute();
                 }

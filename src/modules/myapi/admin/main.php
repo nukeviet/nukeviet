@@ -109,11 +109,22 @@ if ($nv_Request->isset_request('changeActivate', 'post')) {
         ]);
     }
 
-    $exists = $db->query('SELECT COUNT(*) FROM ' . $db_config['prefix'] . '_api_role_credential WHERE userid = ' . $admin_info['admin_id'] . ' AND role_id = ' . $role_id)->fetchColumn();
-    if ($exists) {
-        $db->query('DELETE FROM ' . $db_config['prefix'] . '_api_role_credential WHERE userid = ' . $admin_info['admin_id'] . ' AND role_id = ' . $role_id);
+    $stmt_exists = $db->prepare('SELECT COUNT(*) FROM ' . $db_config['prefix'] . '_api_role_credential WHERE userid = :userid AND role_id = :role_id');
+    $stmt_exists->bindValue(':userid', $admin_info['admin_id'], PDO::PARAM_INT);
+    $stmt_exists->bindValue(':role_id', $role_id, PDO::PARAM_INT);
+    $stmt_exists->execute();
+
+    if ($stmt_exists->fetchColumn()) {
+        $stmt = $db->prepare('DELETE FROM ' . $db_config['prefix'] . '_api_role_credential WHERE userid = :userid AND role_id = :role_id');
+        $stmt->bindValue(':userid', $admin_info['admin_id'], PDO::PARAM_INT);
+        $stmt->bindValue(':role_id', $role_id, PDO::PARAM_INT);
+        $stmt->execute();
     } else {
-        $db->query('INSERT INTO ' . $db_config['prefix'] . '_api_role_credential (userid, role_id, addtime) VALUES (' . $admin_info['admin_id'] . ', ' . $role_id . ', ' . NV_CURRENTTIME . ')');
+        $stmt = $db->prepare('INSERT INTO ' . $db_config['prefix'] . '_api_role_credential (userid, role_id, addtime) VALUES (:userid, :role_id, :addtime)');
+        $stmt->bindValue(':userid', $admin_info['admin_id'], PDO::PARAM_INT);
+        $stmt->bindValue(':role_id', $role_id, PDO::PARAM_INT);
+        $stmt->bindValue(':addtime', NV_CURRENTTIME, PDO::PARAM_INT);
+        $stmt->execute();
     }
     nv_jsonOutput([
         'status' => 'OK'

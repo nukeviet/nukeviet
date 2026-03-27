@@ -28,11 +28,11 @@ if ($nv_Request->isset_request('save', 'post')) {
     $sth = $db->prepare('UPDATE ' . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = 'sys' AND module = 'site' AND config_name = :config_name");
 
     $sth->bindValue(':config_name', 'google_client_id', PDO::PARAM_STR);
-    $sth->bindParam(':config_value', $array_config['oauth_client_id'], PDO::PARAM_STR);
+    $sth->bindValue(':config_value', $array_config['oauth_client_id'], PDO::PARAM_STR);
     $sth->execute();
 
     $sth->bindValue(':config_name', 'google_client_secret', PDO::PARAM_STR);
-    $sth->bindParam(':config_value', $array_config['oauth_client_secret'], PDO::PARAM_STR);
+    $sth->bindValue(':config_value', $array_config['oauth_client_secret'], PDO::PARAM_STR);
     $sth->execute();
 
     nv_insert_logs(NV_LANG_DATA, $module_name, $nv_Lang->getModule('config'), $page_title, $admin_info['userid']);

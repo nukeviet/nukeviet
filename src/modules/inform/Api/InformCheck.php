@@ -14,6 +14,7 @@ namespace NukeViet\Module\inform\Api;
 use NukeViet\Api\Api;
 use NukeViet\Api\ApiResult;
 use NukeViet\Api\IApi;
+use PDO;
 
 if (!defined('NV_ADMIN') or !defined('NV_MAINFILE')) {
     exit('Stop!!!');
@@ -74,8 +75,12 @@ class InformCheck implements IApi
                 ->getResult();
         }
 
-        $sql = 'SELECT group_id, in_groups FROM ' . NV_USERS_GLOBALTABLE . ' WHERE userid=' . $userid . ' AND active=1';
-        $user = $db->query($sql)->fetch();
+        $sth = $db->prepare('SELECT group_id, in_groups FROM ' . NV_USERS_GLOBALTABLE . ' WHERE userid=:userid AND active=1');
+        $sth->bindValue(':userid', $userid, PDO::PARAM_INT);
+        $sth->execute();
+        $user = $sth->fetch();
+        $sth->closeCursor();
+
         if (empty($user)) {
             return $this->result->setError()
                 ->setCode('5017')
@@ -93,20 +98,27 @@ class InformCheck implements IApi
         $where[] = "(mtb.receiver_grs = '' AND mtb.receiver_ids = '')";
 
         if (!empty($array_groups)) {
-            $where[] = "(mtb.receiver_grs != '' AND (CONCAT(',', mtb.receiver_grs, ',') REGEXP ',(" . implode('|', $array_groups) . "),'))";
+            $where[] = "(mtb.receiver_grs != '' AND (CONCAT(',', mtb.receiver_grs, ',') REGEXP :array_groups_regex))";
         }
 
-        $where[] = "(mtb.receiver_ids != '' AND FIND_IN_SET(" . $userid . ', mtb.receiver_ids))';
-        $where = '(' . implode(' OR ', $where) . ') AND (mtb.add_time <= ' . NV_CURRENTTIME . ') AND (mtb.exp_time = 0 OR mtb.exp_time > ' . NV_CURRENTTIME . ')';
+        $where[] = "(mtb.receiver_ids != '' AND FIND_IN_SET(:userid, mtb.receiver_ids))";
+        $where = '(' . implode(' OR ', $where) . ') AND (mtb.add_time <= :current_time) AND (mtb.exp_time = 0 OR mtb.exp_time > :current_time)';
         if (!empty($array_groups)) {
             $where .= " AND (mtb.sender_role != 'group' OR (mtb.sender_role = 'group' AND mtb.sender_group IN (" . implode(',', $array_groups) . ')))';
         } else {
             $where .= " AND (mtb.sender_role != 'group')";
         }
 
-        $where .= ' AND mtb.id NOT IN (SELECT exc.pid FROM ' . NV_INFORM_STATUS_GLOBALTABLE . ' AS exc WHERE (exc.pid = mtb.id AND exc.userid = ' . $userid . ') AND (exc.shown_time != 0 OR exc.hidden_time != 0))';
+        $where .= ' AND mtb.id NOT IN (SELECT exc.pid FROM ' . NV_INFORM_STATUS_GLOBALTABLE . ' AS exc WHERE (exc.pid = mtb.id AND exc.userid = :userid) AND (exc.shown_time != 0 OR exc.hidden_time != 0))';
         $sql = 'SELECT COUNT(mtb.id) FROM ' . NV_INFORM_GLOBALTABLE . ' AS mtb WHERE ' . $where;
-        $count = (int) $db->query($sql)->fetchColumn();
+        $sth = $db->prepare($sql);
+        $sth->bindValue(':userid', $userid, PDO::PARAM_INT);
+        $sth->bindValue(':current_time', NV_CURRENTTIME, PDO::PARAM_INT);
+        if (!empty($array_groups)) {
+            $sth->bindValue(':array_groups_regex', ',(' . implode('|', $array_groups) . '),', PDO::PARAM_STR);
+        }
+        $sth->execute();
+        $count = (int) $sth->fetchColumn();
 
         $this->result->set('count', $count);
         $this->result->setSuccess();

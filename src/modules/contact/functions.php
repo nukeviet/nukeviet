@@ -114,6 +114,7 @@ function get_supporter_list($departments)
             'others' => parse_others($row['others'])
         ];
     }
+    $result->closeCursor();
 
     $supporters = [];
     if (isset($supporter_list[0])) {

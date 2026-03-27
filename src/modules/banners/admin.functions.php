@@ -180,11 +180,13 @@ function nv_CreateXML_bannerPlan()
                 'exp_time' => $row2['exp_time']
             ];
         }
+        $stmt2->closeCursor();
         if (count($plan['banners'])) {
             $array2XML = new NukeViet\Xml\Array2XML();
             $array2XML->saveXML($plan, 'plan', $xmlfile, $encoding = $global_config['site_charset']);
         }
     }
+    $result->closeCursor();
 }
 
 /**
@@ -284,6 +286,7 @@ if ($nv_Request->isset_request('ajaxqueryusername', 'post')) {
             $row['fullname'] = nv_show_name_user($row['first_name'], $row['last_name'], $row['username']);
             $return[] = $row;
         }
+        $stmt->closeCursor();
     }
 
     nv_jsonOutput($return);

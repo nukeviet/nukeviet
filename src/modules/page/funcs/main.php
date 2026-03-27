@@ -144,17 +144,15 @@ if ($page_config['viewtype'] == 2) {
 
     $related_articles = (int) ($page_config['related_articles']);
     if ($related_articles) {
-        $db_slave->sqlreset()
-            ->select('*')
-            ->from(NV_PREFIXLANG . '_' . $module_data)
-            ->where('status=1 AND id !=' . $id)
-            ->order('weight ASC')
-            ->limit($related_articles);
-        $result = $db_slave->query($db_slave->sql());
-        while ($_other = $result->fetch()) {
+        $stmt = $db_slave->prepare('SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . ' WHERE status = 1 AND id != :id ORDER BY weight ASC LIMIT :limit');
+        $stmt->bindValue(':id', $id, PDO::PARAM_INT);
+        $stmt->bindValue(':limit', $related_articles, PDO::PARAM_INT);
+        $stmt->execute();
+        while ($_other = $stmt->fetch()) {
             $_other['link'] = $base_url . '&amp;' . NV_OP_VARIABLE . '=' . $_other['alias'] . $global_config['rewrite_exturl'];
             $other_links[$_other['id']] = $_other;
         }
+        $stmt->closeCursor();
     }
 
     // Bình luận
@@ -177,8 +175,9 @@ if ($page_config['viewtype'] == 2) {
     $time_set = $nv_Request->get_int($module_data . '_' . $op . '_' . $id, 'session');
     if (empty($time_set)) {
         $nv_Request->set_Session($module_data . '_' . $op . '_' . $id, NV_CURRENTTIME);
-        $query = 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . ' SET hitstotal=hitstotal+1 WHERE id=' . $id;
-        $db->query($query);
+        $stmt = $db->prepare('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . ' SET hitstotal = hitstotal + 1 WHERE id = :id');
+        $stmt->bindValue(':id', $id, PDO::PARAM_INT);
+        $stmt->execute();
     }
     [$rowdetail, $other_links, $content_comment] = nv_apply_hook($module_name, 'before_detail_theme', [$rowdetail, $other_links, $content_comment], [$rowdetail, $other_links, $content_comment]);
     $nv_schemas[] = $schema;
@@ -197,28 +196,22 @@ if ($page_config['viewtype'] == 2) {
     $per_page = $page_config['per_page'];
 
     $array_data = [];
-    $db_slave->sqlreset()
-        ->select('COUNT(*)')
-        ->from(NV_PREFIXLANG . '_' . $module_data)
-        ->where('status=1');
-    $num_items = $db_slave->query($db_slave->sql())
-        ->fetchColumn();
+    $stmt = $db_slave->query('SELECT COUNT(*) FROM ' . NV_PREFIXLANG . '_' . $module_data . ' WHERE status = 1');
+    $num_items = $stmt->fetchColumn();
+    $stmt->closeCursor();
 
     // Không cho tùy ý đánh số page + xác định trang trước, trang sau
     betweenURLs($page, ceil($num_items / $per_page), $base_url, '/page-', $prevPage, $nextPage);
 
-    $db_slave->select('*')
-        ->order('weight')
-        ->limit($per_page)
-        ->offset(($page - 1) * $per_page);
+    $stmt = $db_slave->query('SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . ' WHERE status = 1 ORDER BY weight ASC LIMIT ' . (int) ($page - 1) * $per_page . ', ' . (int) $per_page);
 
-    $result = $db_slave->query($db_slave->sql());
-    while ($row = $result->fetch()) {
+    while ($row = $stmt->fetch()) {
         empty($row['description']) && $row['description'] = strip_tags(trim($row['bodytext']));
         $row['description'] = nv_clean60($row['description'], 300);
         $row['link'] = $base_url . '&amp;' . NV_OP_VARIABLE . '=' . $row['alias'] . $global_config['rewrite_exturl'];
         $array_data[$row['id']] = $row;
     }
+    $stmt->closeCursor();
 
     $generate_page = nv_alias_page($page_title, $base_url, $num_items, $per_page, $page);
 

@@ -39,7 +39,12 @@ function nv_creat_backupcodes()
     global $user_info, $db, $db_config, $site_mods;
 
     $module_data = $db_config['prefix'] . '_' . $site_mods[NV_BRIDGE_USER_MODULE]['module_data'];
-    $db->query('DELETE FROM ' . $module_data . '_backupcodes WHERE userid=' . $user_info['userid']);
+
+    // Delete existing backup codes
+    $stmt = $db->prepare('DELETE FROM ' . $module_data . '_backupcodes WHERE userid = :userid');
+    $stmt->bindValue(':userid', $user_info['userid'], PDO::PARAM_INT);
+    $stmt->execute();
+    $stmt->closeCursor();
 
     $new_code = [];
     while (count($new_code) < 10) {
@@ -49,9 +54,12 @@ function nv_creat_backupcodes()
         }
     }
 
+    $stmt = $db->prepare('INSERT INTO ' . $module_data . '_backupcodes (userid, code, is_used, time_used, time_creat) VALUES (:userid, :code, 0, 0, :time_creat)');
     foreach ($new_code as $code) {
-        $db->query('INSERT INTO ' . $module_data . '_backupcodes (userid, code, is_used, time_used, time_creat) VALUES (
-        ' . $user_info['userid'] . ', ' . $db->quote($code) . ', 0, 0, ' . NV_CURRENTTIME . ')');
+        $stmt->bindValue(':userid', $user_info['userid'], PDO::PARAM_INT);
+        $stmt->bindValue(':code', $code, PDO::PARAM_STR);
+        $stmt->bindValue(':time_creat', NV_CURRENTTIME, PDO::PARAM_INT);
+        $stmt->execute();
     }
 }
 

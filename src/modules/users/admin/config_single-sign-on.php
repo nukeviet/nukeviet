@@ -57,7 +57,7 @@ if ($nv_Request->isset_request('save', 'post')) {
         }
 
         $sth->bindValue(':config_name', 'config_sso', PDO::PARAM_STR);
-        $sth->bindParam(':config_value', $config_sso, PDO::PARAM_STR);
+        $sth->bindValue(':config_value', $config_sso, PDO::PARAM_STR);
         $sth->execute();
     } catch (Throwable $e) {
         trigger_error($e);
@@ -168,8 +168,10 @@ $usertype = [
 ];
 $tpl->assign('USERTYPE', $usertype);
 
-$sql = 'SELECT * FROM ' . NV_MOD_TABLE . '_field ORDER BY weight ASC';
-$_query = $db->query($sql);
+$stmt = $db->prepare('SELECT * FROM ' . NV_MOD_TABLE . '_field ORDER BY weight ASC');
+$stmt->execute();
+$_query = $stmt->fetchAll();
+$stmt->closeCursor();
 
 $fields = [];
 foreach ($_query as $row) {

@@ -17,7 +17,11 @@ $bid = $nv_Request->get_int('bid', 'get', '');
 $block = [];
 
 if ($bid) {
-    $block = $db->query('SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_blocks WHERE bid=' . $bid)->fetch();
+    $sth = $db->prepare('SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_blocks WHERE bid=:bid');
+    $sth->bindValue(':bid', $bid, PDO::PARAM_INT);
+    $sth->execute();
+    $block = $sth->fetch();
+    $sth->closeCursor();
 }
 
 $page_title = $nv_Lang->getModule('content_list') . ': ' . $block['title'];
@@ -44,8 +48,10 @@ $xtpl->assign('EDITOR', $allow_editor ? 'true' : 'false');
 $xtpl->assign('UPLOADS_DIR_USER', NV_UPLOADS_DIR . '/' . $module_upload);
 $xtpl->assign('BID', $bid);
 
-$sql = 'SELECT id, title, description, link, image, start_time, end_time, status FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE bid=' . $bid . ' ORDER BY bid DESC';
-$array = $db->query($sql)->fetchAll();
+$sth = $db->prepare('SELECT id, title, description, link, image, start_time, end_time, status FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE bid=:bid ORDER BY bid DESC');
+$sth->bindValue(':bid', $bid, PDO::PARAM_INT);
+$sth->execute();
+$array = $sth->fetchAll();
 $num_rows = count($array);
 
 if ($num_rows < 1) {

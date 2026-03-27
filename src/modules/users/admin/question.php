@@ -38,10 +38,11 @@ if ($nv_Request->isset_request('edit', 'post')) {
         ]);
     }
 
-    $stmt = $db->prepare('UPDATE ' . NV_MOD_TABLE . '_question SET
-        title= :title, edit_time=' . NV_CURRENTTIME . '
-        WHERE qid=' . $qid . " AND lang='" . NV_LANG_DATA . "'");
-    $stmt->bindParam(':title', $title, PDO::PARAM_STR, strlen($title));
+    $stmt = $db->prepare('UPDATE ' . NV_MOD_TABLE . '_question SET title = :title, edit_time = :edit_time WHERE qid = :qid AND lang = :lang');
+    $stmt->bindValue(':title', $title, PDO::PARAM_STR);
+    $stmt->bindValue(':edit_time', NV_CURRENTTIME, PDO::PARAM_INT);
+    $stmt->bindValue(':qid', $qid, PDO::PARAM_INT);
+    $stmt->bindValue(':lang', NV_LANG_DATA, PDO::PARAM_STR);
 
     if ($stmt->execute()) {
         nv_insert_logs(NV_LANG_DATA, $module_name, $nv_Lang->getModule('savequestion'), 'id: ' . $qid . '; ' . $title);
@@ -79,16 +80,21 @@ if ($nv_Request->isset_request('add', 'post')) {
         ]);
     }
 
-    $sql = 'SELECT MAX(weight) FROM ' . NV_MOD_TABLE . "_question WHERE lang='" . NV_LANG_DATA . "'";
-    $weight = $db->query($sql)->fetchColumn();
-    $weight = (int) $weight + 1;
-    $_sql = 'INSERT INTO ' . NV_MOD_TABLE . "_question
-        (title, lang, weight, add_time, edit_time) VALUES
-        ( :title, '" . NV_LANG_DATA . "', " . $weight . ', ' . NV_CURRENTTIME . ', ' . NV_CURRENTTIME . ')';
+    $stmt = $db->prepare('SELECT MAX(weight) FROM ' . NV_MOD_TABLE . '_question WHERE lang = :lang');
+    $stmt->bindValue(':lang', NV_LANG_DATA, PDO::PARAM_STR);
+    $stmt->execute();
+    $weight = (int) $stmt->fetchColumn();
+    $stmt->closeCursor();
+    $weight = $weight + 1;
 
-    $data_insert = [];
-    $data_insert['title'] = $title;
-    if ($db->insert_id($_sql, 'qid', $data_insert)) {
+    $stmt = $db->prepare('INSERT INTO ' . NV_MOD_TABLE . '_question (title, lang, weight, add_time, edit_time) VALUES (:title, :lang, :weight, :add_time, :edit_time)');
+    $stmt->bindValue(':title', $title, PDO::PARAM_STR);
+    $stmt->bindValue(':lang', NV_LANG_DATA, PDO::PARAM_STR);
+    $stmt->bindValue(':weight', $weight, PDO::PARAM_INT);
+    $stmt->bindValue(':add_time', NV_CURRENTTIME, PDO::PARAM_INT);
+    $stmt->bindValue(':edit_time', NV_CURRENTTIME, PDO::PARAM_INT);
+
+    if ($stmt->execute()) {
         nv_insert_logs(NV_LANG_DATA, $module_name, $nv_Lang->getModule('addquestion'), $title);
         nv_jsonOutput([
             'status' => 'success',
@@ -119,8 +125,12 @@ if ($nv_Request->isset_request('changeweight', 'post')) {
     $qid = $nv_Request->get_int('qid', 'post', 0);
     $new_vid = $nv_Request->get_int('new_vid', 'post', 0);
 
-    $query = 'SELECT COUNT(*) FROM ' . NV_MOD_TABLE . '_question WHERE qid=' . $qid . " AND lang='" . NV_LANG_DATA . "'";
-    $numrows = $db->query($query)->fetchColumn();
+    $stmt = $db->prepare('SELECT COUNT(*) FROM ' . NV_MOD_TABLE . '_question WHERE qid = :qid AND lang = :lang');
+    $stmt->bindValue(':qid', $qid, PDO::PARAM_INT);
+    $stmt->bindValue(':lang', NV_LANG_DATA, PDO::PARAM_STR);
+    $stmt->execute();
+    $numrows = $stmt->fetchColumn();
+    $stmt->closeCursor();
     if ($numrows != 1) {
         nv_jsonOutput([
             'status' => 'error',
@@ -128,19 +138,26 @@ if ($nv_Request->isset_request('changeweight', 'post')) {
         ]);
     }
 
-    $query = 'SELECT qid FROM ' . NV_MOD_TABLE . '_question WHERE qid!=' . $qid . " AND lang='" . NV_LANG_DATA . "' ORDER BY weight ASC";
-    $result = $db->query($query);
+    $stmt = $db->prepare('SELECT qid FROM ' . NV_MOD_TABLE . '_question WHERE qid != :qid AND lang = :lang ORDER BY weight ASC');
+    $stmt->bindValue(':qid', $qid, PDO::PARAM_INT);
+    $stmt->bindValue(':lang', NV_LANG_DATA, PDO::PARAM_STR);
+    $stmt->execute();
     $weight = 0;
-    while ($row = $result->fetch()) {
+    $stmt_update = $db->prepare('UPDATE ' . NV_MOD_TABLE . '_question SET weight = :weight WHERE qid = :qid');
+    while ($row = $stmt->fetch()) {
         ++$weight;
         if ($weight == $new_vid) {
             ++$weight;
         }
-        $sql = 'UPDATE ' . NV_MOD_TABLE . '_question SET weight=' . $weight . ' WHERE qid=' . $row['qid'];
-        $db->query($sql);
+        $stmt_update->bindValue(':weight', $weight, PDO::PARAM_INT);
+        $stmt_update->bindValue(':qid', $row['qid'], PDO::PARAM_INT);
+        $stmt_update->execute();
     }
-    $sql = 'UPDATE ' . NV_MOD_TABLE . '_question SET weight=' . $new_vid . ' WHERE qid=' . $qid;
-    $db->query($sql);
+    $stmt->closeCursor();
+
+    $stmt_update->bindValue(':weight', $new_vid, PDO::PARAM_INT);
+    $stmt_update->bindValue(':qid', $qid, PDO::PARAM_INT);
+    $stmt_update->execute();
 
     nv_insert_logs(NV_LANG_DATA, $module_name, $nv_Lang->getGlobal('changeweight'), 'qid: ' . $qid);
     nv_jsonOutput([
@@ -165,23 +182,32 @@ if ($nv_Request->isset_request('del', 'post')) {
 
     $qid = $nv_Request->get_int('qid', 'post', 0);
 
-    [$qid, $title] = $db->query('SELECT qid, title FROM ' . NV_MOD_TABLE . '_question WHERE qid=' . $qid)->fetch(3);
+    $stmt = $db->prepare('SELECT qid, title FROM ' . NV_MOD_TABLE . '_question WHERE qid = :qid');
+    $stmt->bindValue(':qid', $qid, PDO::PARAM_INT);
+    $stmt->execute();
+    $res = $stmt->fetch(3);
+    $stmt->closeCursor();
 
-    if ($qid) {
-        $sql = 'DELETE FROM ' . NV_MOD_TABLE . '_question WHERE qid=' . $qid;
-        if ($db->exec($sql)) {
+    if ($res) {
+        [$qid, $title] = $res;
+        $stmt = $db->prepare('DELETE FROM ' . NV_MOD_TABLE . '_question WHERE qid = :qid');
+        $stmt->bindValue(':qid', $qid, PDO::PARAM_INT);
+        if ($stmt->execute()) {
             nv_insert_logs(NV_LANG_DATA, $module_name, $nv_Lang->getModule('deletequestion'), 'id: ' . $qid . '; ' . $title);
 
             // fix weight question
-            $sql = 'SELECT qid FROM ' . NV_MOD_TABLE . "_question WHERE lang='" . NV_LANG_DATA . "' ORDER BY weight ASC";
-            $result = $db->query($sql);
+            $stmt = $db->prepare('SELECT qid FROM ' . NV_MOD_TABLE . '_question WHERE lang = :lang ORDER BY weight ASC');
+            $stmt->bindValue(':lang', NV_LANG_DATA, PDO::PARAM_STR);
+            $stmt->execute();
             $weight = 0;
-            while ($row = $result->fetch()) {
+            $stmt_update = $db->prepare('UPDATE ' . NV_MOD_TABLE . '_question SET weight = :weight WHERE qid = :qid');
+            while ($row = $stmt->fetch()) {
                 ++$weight;
-                $sql = 'UPDATE ' . NV_MOD_TABLE . '_question SET weight=' . $weight . ' WHERE qid=' . $row['qid'];
-                $db->query($sql);
+                $stmt_update->bindValue(':weight', $weight, PDO::PARAM_INT);
+                $stmt_update->bindValue(':qid', $row['qid'], PDO::PARAM_INT);
+                $stmt_update->execute();
             }
-            $result->closeCursor();
+            $stmt->closeCursor();
 
             nv_jsonOutput([
                 'status' => 'success',
@@ -203,8 +229,11 @@ $tpl->assign('CHECKSS', csrf_create($csrf_key));
 $tpl->assign('LANG', $nv_Lang);
 
 // Load danh sách câu hỏi
-$sql = 'SELECT * FROM ' . NV_MOD_TABLE . "_question WHERE lang='" . NV_LANG_DATA . "' ORDER BY weight ASC";
-$_rows = $db->query($sql)->fetchAll();
+$stmt = $db->prepare('SELECT * FROM ' . NV_MOD_TABLE . '_question WHERE lang = :lang ORDER BY weight ASC');
+$stmt->bindValue(':lang', NV_LANG_DATA, PDO::PARAM_STR);
+$stmt->execute();
+$_rows = $stmt->fetchAll();
+$stmt->closeCursor();
 $num = count($_rows);
 
 $array_questions = [];

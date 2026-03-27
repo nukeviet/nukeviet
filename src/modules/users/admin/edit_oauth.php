@@ -17,8 +17,12 @@ use NukeViet\Module\users\Shared\Emails;
 
 $userid = $nv_Request->get_int('userid', 'get,post', 0);
 
-$sql = 'SELECT * FROM ' . NV_MOD_TABLE . ' WHERE userid=' . $userid;
-$row = $db->query($sql)->fetch();
+$stmt = $db->prepare('SELECT * FROM ' . NV_MOD_TABLE . ' WHERE userid = :userid');
+$stmt->bindValue(':userid', $userid, PDO::PARAM_INT);
+$stmt->execute();
+$row = $stmt->fetch();
+$stmt->closeCursor();
+
 if (empty($row)) {
     nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
 }
@@ -27,8 +31,12 @@ $page_title = $nv_Lang->getModule('user_oauthmanager') . ' ' . $row['username'];
 
 $allow = false;
 
-$sql = 'SELECT lev FROM ' . NV_AUTHORS_GLOBALTABLE . ' WHERE admin_id=' . $userid;
-$rowlev = $db->query($sql)->fetch();
+$stmt = $db->prepare('SELECT lev FROM ' . NV_AUTHORS_GLOBALTABLE . ' WHERE admin_id = :userid');
+$stmt->bindValue(':userid', $userid, PDO::PARAM_INT);
+$stmt->execute();
+$rowlev = $stmt->fetch();
+$stmt->closeCursor();
+
 if (empty($rowlev)) {
     $allow = true;
 } else {
@@ -70,8 +78,10 @@ $tpl->assign('OP', $op);
 $tpl->assign('CHECKSS', csrf_create($csrf_key));
 $tpl->assign('USERID', $row['userid']);
 
-$sql = 'SELECT openid, opid, id, email FROM ' . NV_MOD_TABLE . '_openid WHERE userid=' . $row['userid'];
-$array_oauth = $db->query($sql)->fetchAll();
+$stmt = $db->prepare('SELECT openid, opid, id, email FROM ' . NV_MOD_TABLE . '_openid WHERE userid = :userid');
+$stmt->bindValue(':userid', $row['userid'], PDO::PARAM_INT);
+$stmt->execute();
+$array_oauth = $stmt->fetchAll();
 
 // Xóa OpenID của thành viên
 if ($nv_Request->isset_request('del', 'post')) {
@@ -89,13 +99,19 @@ if ($nv_Request->isset_request('del', 'post')) {
 
     $o = $nv_Request->get_title('opid', 'post', '');
     [$opid, $server] = explode('_', $o, 2);
-    $sql = 'SELECT * FROM ' . NV_MOD_TABLE . '_openid WHERE opid=' . $db->quote($opid) . ' AND openid=' . $db->quote($server) . ' AND userid=' . $row['userid'];
-    $openid = $db->query($sql)->fetch();
+    $stmt = $db->prepare('SELECT * FROM ' . NV_MOD_TABLE . '_openid WHERE opid = :opid AND openid = :openid AND userid = :userid');
+    $stmt->bindValue(':opid', $opid, PDO::PARAM_STR);
+    $stmt->bindValue(':openid', $server, PDO::PARAM_STR);
+    $stmt->bindValue(':userid', $row['userid'], PDO::PARAM_INT);
+    $stmt->execute();
+    $openid = $stmt->fetch();
+    $stmt->closeCursor();
 
     if (!empty($openid)) {
-        $stmt = $db->prepare('DELETE FROM ' . NV_MOD_TABLE . '_openid WHERE opid=:opid AND openid=:openid AND userid=' . $row['userid']);
-        $stmt->bindParam(':opid', $opid, PDO::PARAM_STR);
-        $stmt->bindParam(':openid', $server, PDO::PARAM_STR);
+        $stmt = $db->prepare('DELETE FROM ' . NV_MOD_TABLE . '_openid WHERE opid = :opid AND openid = :openid AND userid = :userid');
+        $stmt->bindValue(':opid', $opid, PDO::PARAM_STR);
+        $stmt->bindValue(':openid', $server, PDO::PARAM_STR);
+        $stmt->bindValue(':userid', $row['userid'], PDO::PARAM_INT);
         $stmt->execute();
 
         // Gửi email thông báo
@@ -147,7 +163,9 @@ if ($nv_Request->isset_request('delall', 'post')) {
         ]);
     }
 
-    if ($db->exec('DELETE FROM ' . NV_MOD_TABLE . '_openid WHERE userid=' . $row['userid'])) {
+    $stmt = $db->prepare('DELETE FROM ' . NV_MOD_TABLE . '_openid WHERE userid = :userid');
+    $stmt->bindValue(':userid', $row['userid'], PDO::PARAM_INT);
+    if ($stmt->execute()) {
         nv_insert_logs(NV_LANG_DATA, $module_name, 'log_delete_all_openid', 'userid ' . $row['userid'], $admin_info['userid']);
 
         // Gửi email thông báo

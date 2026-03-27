@@ -126,10 +126,15 @@ if (empty($num_items)) {
 $page = $nv_Request->get_page('page', 'get', 1);
 $per_page = 50;
 
-$stmt = $db->prepare('SELECT * FROM ' . NV_BANNERS_GLOBALTABLE . '_click WHERE ' . $where_sql . ' ORDER BY click_time DESC LIMIT ' . $per_page . ' OFFSET ' . (($page - 1) * $per_page));
+$limit = $per_page;
+$offset = ($page - 1) * $per_page;
+
+$stmt = $db->prepare('SELECT * FROM ' . NV_BANNERS_GLOBALTABLE . '_click WHERE ' . $where_sql . ' ORDER BY click_time DESC LIMIT :limit OFFSET :offset');
 foreach ($params as $p => $v) {
     $stmt->bindValue($p, $v, is_int($v) ? PDO::PARAM_INT : PDO::PARAM_STR);
 }
+$stmt->bindValue(':limit', $limit, PDO::PARAM_INT);
+$stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
 $stmt->execute();
 
 $rows = [];

@@ -42,36 +42,39 @@ function getRoleList($type, $object, $page, $per_page)
     global $db, $db_config;
 
     $where = [];
+    $params = [];
     if (!empty($type)) {
-        $where[] = 'role_type = ' . $db->quote($type);
+        $where[] = 'role_type = :role_type';
+        $params[':role_type'] = [$type, PDO::PARAM_STR];
     }
     if (!empty($object)) {
-        $where[] = 'role_object = ' . $db->quote($object);
+        $where[] = 'role_object = :role_object';
+        $params[':role_object'] = [$object, PDO::PARAM_STR];
     }
-    $where = !empty($where) ? implode(' AND ', $where) : '';
+    $where_str = !empty($where) ? ' WHERE ' . implode(' AND ', $where) : '';
 
-    $db->sqlreset()
-        ->select('COUNT(*)')
-        ->from($db_config['prefix'] . '_api_role');
-    if (!empty($where)) {
-        $db->where($where);
+    $stmt = $db->prepare('SELECT COUNT(*) FROM ' . $db_config['prefix'] . '_api_role' . $where_str);
+    foreach ($params as $key => $val) {
+        $stmt->bindValue($key, $val[0], $val[1]);
     }
+    $stmt->execute();
+    $all_pages = $stmt->fetchColumn();
 
-    $all_pages = $db->query($db->sql())
-        ->fetchColumn();
-
-    $db->select('*')
-        ->order('role_id DESC');
+    $sql = 'SELECT * FROM ' . $db_config['prefix'] . '_api_role' . $where_str . ' ORDER BY role_id DESC';
     if (!empty($page)) {
-        $db->limit($per_page)
-            ->offset(($page - 1) * $per_page);
+        $sql .= ' LIMIT ' . (int) ($page - 1) * $per_page . ',' . (int) $per_page;
     }
-    $result = $db->query($db->sql());
+    $stmt = $db->prepare($sql);
+    foreach ($params as $key => $val) {
+        $stmt->bindValue($key, $val[0], $val[1]);
+    }
+    $stmt->execute();
 
     $array = [];
-    while ($row = $result->fetch()) {
+    while ($row = $stmt->fetch()) {
         $array[$row['role_id']] = parseRole($row);
     }
+    $stmt->closeCursor();
 
     return [$all_pages, $array];
 }
@@ -86,7 +89,10 @@ function checkRoleExist($id)
 {
     global $db, $db_config;
 
-    $exists = $db->query('SELECT COUNT(*) FROM ' . $db_config['prefix'] . '_api_role WHERE role_id =' . (int) $id)->fetchColumn();
+    $stmt = $db->prepare('SELECT COUNT(*) FROM ' . $db_config['prefix'] . '_api_role WHERE role_id = :role_id');
+    $stmt->bindValue(':role_id', $id, PDO::PARAM_INT);
+    $stmt->execute();
+    $exists = $stmt->fetchColumn();
 
     return !empty($exists);
 }
@@ -104,34 +110,33 @@ function getCredentialList($role_id, $for_admin, $page, $per_page)
 {
     global $db, $db_config;
 
-    $join = 'INNER JOIN ' . NV_USERS_GLOBALTABLE . ' tb2 ON (tb1.userid=tb2.userid)';
+    $join = 'INNER JOIN ' . NV_USERS_GLOBALTABLE . ' tb2 ON (tb1.userid = tb2.userid)';
     $select = 'tb1.*, tb2.username, tb2.first_name, tb2.last_name';
     if ($for_admin) {
-        $join .= ' INNER JOIN ' . NV_AUTHORS_GLOBALTABLE . ' tb3 ON tb1.userid=tb3.admin_id';
+        $join .= ' INNER JOIN ' . NV_AUTHORS_GLOBALTABLE . ' tb3 ON tb1.userid = tb3.admin_id';
         $select .= ', tb3.lev AS level';
     }
-    $db->sqlreset()
-        ->select('COUNT(*)')
-        ->from($db_config['prefix'] . '_api_role_credential tb1')
-        ->join($join)
-        ->where('tb1.role_id=' . (int) $role_id);
-    $all_pages = $db->query($db->sql())
-        ->fetchColumn();
 
-    $db->select($select)
-        ->order('tb1.addtime DESC');
+    $stmt = $db->prepare('SELECT COUNT(*) FROM ' . $db_config['prefix'] . '_api_role_credential tb1 ' . $join . ' WHERE tb1.role_id = :role_id');
+    $stmt->bindValue(':role_id', $role_id, PDO::PARAM_INT);
+    $stmt->execute();
+    $all_pages = $stmt->fetchColumn();
+
+    $sql = 'SELECT ' . $select . ' FROM ' . $db_config['prefix'] . '_api_role_credential tb1 ' . $join . ' WHERE tb1.role_id = :role_id ORDER BY tb1.addtime DESC';
     if (!empty($page)) {
-        $db->limit($per_page)
-            ->offset(($page - 1) * $per_page);
+        $sql .= ' LIMIT ' . (int) ($page - 1) * $per_page . ',' . (int) $per_page;
     }
-    $result = $db->query($db->sql());
+    $stmt = $db->prepare($sql);
+    $stmt->bindValue(':role_id', $role_id, PDO::PARAM_INT);
+    $stmt->execute();
 
     $array = [];
-    while ($row = $result->fetch()) {
+    while ($row = $stmt->fetch()) {
         $row['fullname'] = nv_show_name_user($row['first_name'], $row['last_name'], $row['username']);
         !isset($row['level']) && $row['level'] = 0;
         $array[$row['userid']] = $row;
     }
+    $stmt->closeCursor();
 
     return [$all_pages, $array];
 }

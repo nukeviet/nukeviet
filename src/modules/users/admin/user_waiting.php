@@ -28,11 +28,14 @@ if (defined('NV_EDITOR')) {
 if ($nv_Request->isset_request('del', 'post')) {
     $userid = $nv_Request->get_absint('userid', 'post', 0);
     if (csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
-        $sql = 'SELECT users_info FROM ' . NV_MOD_TABLE . '_reg WHERE userid=' . $userid;
+        $stmt = $db->prepare('SELECT users_info FROM ' . NV_MOD_TABLE . '_reg WHERE userid = :userid' . ($global_config['idsite'] > 0 ? ' AND idsite = :idsite' : ''));
+        $stmt->bindValue(':userid', $userid, PDO::PARAM_INT);
         if ($global_config['idsite'] > 0) {
-            $sql .= ' AND idsite=' . $global_config['idsite'];
+            $stmt->bindValue(':idsite', $global_config['idsite'], PDO::PARAM_INT);
         }
-        $users_info = $db->query($sql)->fetchColumn();
+        $stmt->execute();
+        $users_info = $stmt->fetchColumn();
+
         if (!empty($users_info)) {
             $users_info = json_decode($users_info, true);
             foreach ($users_info as $key => $value) {
@@ -50,11 +53,12 @@ if ($nv_Request->isset_request('del', 'post')) {
             }
         }
 
-        $sql = 'DELETE FROM ' . NV_MOD_TABLE . '_reg WHERE userid=' . $userid;
+        $stmt = $db->prepare('DELETE FROM ' . NV_MOD_TABLE . '_reg WHERE userid = :userid' . ($global_config['idsite'] > 0 ? ' AND idsite = :idsite' : ''));
+        $stmt->bindValue(':userid', $userid, PDO::PARAM_INT);
         if ($global_config['idsite'] > 0) {
-            $sql .= ' AND idsite=' . $global_config['idsite'];
+            $stmt->bindValue(':idsite', $global_config['idsite'], PDO::PARAM_INT);
         }
-        if ($db->exec($sql)) {
+        if ($stmt->execute()) {
             nv_delete_notification(NV_LANG_DATA, $module_name, 'send_active_link_fail', $userid);
             nv_insert_logs(NV_LANG_DATA, $module_name, $nv_Lang->getModule('delete'), 'userid_reg: ' . $userid, $admin_info['userid']);
             nv_jsonOutput([
@@ -78,11 +82,13 @@ if ($nv_Request->isset_request('del', 'post')) {
 // Kích hoạt tài khoản
 if ($nv_Request->isset_request('userid', 'get')) {
     if ($global_config['max_user_number']) {
-        $sql = 'SELECT count(*) FROM ' . NV_MOD_TABLE;
+        $stmt = $db->prepare('SELECT COUNT(*) FROM ' . NV_MOD_TABLE . ($global_config['idsite'] > 0 ? ' WHERE idsite = :idsite' : ''));
         if ($global_config['idsite'] > 0) {
-            $sql .= ' WHERE idsite=' . $global_config['idsite'];
+            $stmt->bindValue(':idsite', $global_config['idsite'], PDO::PARAM_INT);
         }
-        $user_number = $db->query($sql)->fetchColumn();
+        $stmt->execute();
+        $user_number = $stmt->fetchColumn();
+
         if ($user_number >= $global_config['max_user_number']) {
             $contents = $nv_Lang->getGlobal('limit_user_number', $global_config['max_user_number']);
             include NV_ROOTDIR . '/includes/header.php';
@@ -92,12 +98,14 @@ if ($nv_Request->isset_request('userid', 'get')) {
     }
 
     $userid = $nv_Request->get_int('userid', 'get', 0);
-    $sql = 'SELECT * FROM ' . NV_MOD_TABLE . '_reg WHERE userid=' . $userid;
+    $stmt = $db->prepare('SELECT * FROM ' . NV_MOD_TABLE . '_reg WHERE userid = :userid' . ($global_config['idsite'] > 0 ? ' AND idsite = :idsite' : ''));
+    $stmt->bindValue(':userid', $userid, PDO::PARAM_INT);
     if ($global_config['idsite'] > 0) {
-        $sql .= ' AND idsite=' . $global_config['idsite'];
+        $stmt->bindValue(':idsite', $global_config['idsite'], PDO::PARAM_INT);
     }
-
-    $userdata = $db->query($sql)->fetch();
+    $stmt->execute();
+    $userdata = $stmt->fetch();
+    $stmt->closeCursor();
     if (empty($userdata)) {
         nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
     }
@@ -160,11 +168,12 @@ if ($nv_Request->isset_request('userid', 'get')) {
         }
 
         // Kiểm tra username đã tồn tại chưa
-        $stmt = $db->prepare('SELECT userid FROM ' . NV_MOD_TABLE . ' WHERE username LIKE :username OR md5username= :md5username');
-        $stmt->bindParam(':username', $post['username'], PDO::PARAM_STR);
-        $stmt->bindParam(':md5username', $post['md5username'], PDO::PARAM_STR);
+        $stmt = $db->prepare('SELECT userid FROM ' . NV_MOD_TABLE . ' WHERE username LIKE :username OR md5username = :md5username');
+        $stmt->bindValue(':username', $post['username'], PDO::PARAM_STR);
+        $stmt->bindValue(':md5username', $post['md5username'], PDO::PARAM_STR);
         $stmt->execute();
         $query_error_username = $stmt->fetchColumn();
+
         if ($query_error_username) {
             nv_jsonOutput([
                 'status' => 'error',
@@ -173,11 +182,13 @@ if ($nv_Request->isset_request('userid', 'get')) {
             ]);
         }
 
-        $stmt = $db->prepare('SELECT userid FROM ' . NV_MOD_TABLE . '_reg WHERE userid != ' . $userid . ' AND (username LIKE :username OR md5username= :md5username)');
-        $stmt->bindParam(':username', $post['username'], PDO::PARAM_STR);
-        $stmt->bindParam(':md5username', $post['md5username'], PDO::PARAM_STR);
+        $stmt = $db->prepare('SELECT userid FROM ' . NV_MOD_TABLE . '_reg WHERE userid != :userid AND (username LIKE :username OR md5username = :md5username)');
+        $stmt->bindValue(':userid', $userid, PDO::PARAM_INT);
+        $stmt->bindValue(':username', $post['username'], PDO::PARAM_STR);
+        $stmt->bindValue(':md5username', $post['md5username'], PDO::PARAM_STR);
         $stmt->execute();
         $query_error_username = $stmt->fetchColumn();
+
         if ($query_error_username) {
             nv_jsonOutput([
                 'status' => 'error',
@@ -197,10 +208,11 @@ if ($nv_Request->isset_request('userid', 'get')) {
         $post['email'] = $error_xemail[1];
 
         // Kiểm tra email đã tồn tại chưa
-        $stmt = $db->prepare('SELECT userid FROM ' . NV_MOD_TABLE . ' WHERE email= :email');
-        $stmt->bindParam(':email', $post['email'], PDO::PARAM_STR);
+        $stmt = $db->prepare('SELECT userid FROM ' . NV_MOD_TABLE . ' WHERE email = :email');
+        $stmt->bindValue(':email', $post['email'], PDO::PARAM_STR);
         $stmt->execute();
         $query_error_email = $stmt->fetchColumn();
+
         if ($query_error_email) {
             nv_jsonOutput([
                 'status' => 'error',
@@ -210,10 +222,12 @@ if ($nv_Request->isset_request('userid', 'get')) {
         }
 
         // Kiểm tra email đã tồn tại trong users_reg chưa
-        $stmt = $db->prepare('SELECT userid FROM ' . NV_MOD_TABLE . '_reg WHERE userid != ' . $userid . ' AND email= :email');
-        $stmt->bindParam(':email', $post['email'], PDO::PARAM_STR);
+        $stmt = $db->prepare('SELECT userid FROM ' . NV_MOD_TABLE . '_reg WHERE userid != :userid AND email = :email');
+        $stmt->bindValue(':userid', $userid, PDO::PARAM_INT);
+        $stmt->bindValue(':email', $post['email'], PDO::PARAM_STR);
         $stmt->execute();
         $query_error_email_reg = $stmt->fetchColumn();
+
         if ($query_error_email_reg) {
             nv_jsonOutput([
                 'status' => 'error',
@@ -223,10 +237,11 @@ if ($nv_Request->isset_request('userid', 'get')) {
         }
 
         // Kiểm tra email đã tồn tại trong users_openid chưa
-        $stmt = $db->prepare('SELECT userid FROM ' . NV_MOD_TABLE . '_openid WHERE email= :email');
-        $stmt->bindParam(':email', $post['email'], PDO::PARAM_STR);
+        $stmt = $db->prepare('SELECT userid FROM ' . NV_MOD_TABLE . '_openid WHERE email = :email');
+        $stmt->bindValue(':email', $post['email'], PDO::PARAM_STR);
         $stmt->execute();
         $query_error_email_openid = $stmt->fetchColumn();
+
         if ($query_error_email_openid) {
             nv_jsonOutput([
                 'status' => 'error',
@@ -273,12 +288,14 @@ if ($nv_Request->isset_request('userid', 'get')) {
                 }
             }
             $post['in_groups'] = array_intersect($in_groups, array_keys($groups_list));
+            $post['in_groups'][] = 4; // Add default official group
             $post['in_groups'] = array_map('intval', $post['in_groups']);
+            $post['in_groups'] = array_unique($post['in_groups']);
 
             // Kiểm tra nhóm mặc định phải thuộc các nhóm đã chọn
-            !in_array($post['group_id'], $post['in_groups'], true) && $post['group_id'] = 4;
-
-            $post['in_groups'][] = 4;
+            if (!in_array($post['group_id'], $post['in_groups'], true)) {
+                $post['group_id'] = 4;
+            }
         }
 
         if ($post['pass_reset_request'] > 2 or $post['pass_reset_request'] < 0) {
@@ -349,7 +366,7 @@ if ($nv_Request->isset_request('userid', 'get')) {
                     $check = nv_renamefile($fullname, NV_UPLOADS_REAL_DIR . '/' . $module_upload . '/' . $newname);
 
                     if ($check[0] == 1) {
-                        $post['photo'] = NV_UPLOADS_DIR . '/' . $module_upload . '/' . $newname;
+                        $post['photo'] = substr(NV_UPLOADS_REAL_DIR . '/' . $module_upload . '/' . $newname, strlen(NV_ROOTDIR . '/'));
                     }
                 }
             }
@@ -362,28 +379,38 @@ if ($nv_Request->isset_request('userid', 'get')) {
             email_verification_time, active_obj
         ) VALUES (
             :group_id, :username, :md5username, :password, :email, :first_name, :last_name, :gender, :photo, :birthday, :sig,
-            ' . $userdata['regdate'] . ', :question, :answer, ' . $post['view_mail'] . ', 1, :in_groups, 1,
-            ' . $userdata['idsite'] . ', ' . $post['pass_creation_time'] . ', ' . $post['pass_reset_request'] . ',
-            ' . $userdata['regdate'] . ', ' . $post['email_reset_request'] . ', ' . $post['email_verification_time'] . ', :active_obj
+            :regdate, :question, :answer, :view_mail, 1, :in_groups, 1,
+            :idsite, :pass_creation_time, :pass_reset_request, :email_creation_time, :email_reset_request,
+            :email_verification_time, :active_obj
         )';
 
-        $data_insert = [];
-        $data_insert['group_id'] = $post['group_id'];
-        $data_insert['username'] = $post['username'];
-        $data_insert['md5username'] = $post['md5username'];
-        $data_insert['password'] = $post['password'];
-        $data_insert['email'] = $post['email'];
-        $data_insert['first_name'] = $post['first_name'];
-        $data_insert['last_name'] = $post['last_name'];
-        $data_insert['gender'] = $post['gender'];
-        $data_insert['photo'] = $post['photo'];
-        $data_insert['birthday'] = $post['birthday'];
-        $data_insert['sig'] = $post['sig'];
-        $data_insert['question'] = $post['question'];
-        $data_insert['answer'] = $post['answer'];
-        $data_insert['in_groups'] = implode(',', $post['in_groups']);
-        $data_insert['active_obj'] = $admin_info['userid'];
-        $user_id = $db->insert_id($sql, 'userid', $data_insert);
+        $stmt = $db->prepare($sql);
+        $stmt->bindValue(':group_id', $post['group_id'], PDO::PARAM_INT);
+        $stmt->bindValue(':username', $post['username'], PDO::PARAM_STR);
+        $stmt->bindValue(':md5username', $post['md5username'], PDO::PARAM_STR);
+        $stmt->bindValue(':password', $post['password'], PDO::PARAM_STR);
+        $stmt->bindValue(':email', $post['email'], PDO::PARAM_STR);
+        $stmt->bindValue(':first_name', $post['first_name'], PDO::PARAM_STR);
+        $stmt->bindValue(':last_name', $post['last_name'], PDO::PARAM_STR);
+        $stmt->bindValue(':gender', $post['gender'], PDO::PARAM_STR);
+        $stmt->bindValue(':photo', $post['photo'], PDO::PARAM_STR);
+        $stmt->bindValue(':birthday', !empty($post['birthday']) ? nv_d2u_post($post['birthday']) : 0, PDO::PARAM_INT);
+        $stmt->bindValue(':sig', $post['sig'], PDO::PARAM_STR);
+        $stmt->bindValue(':regdate', $userdata['regdate'], PDO::PARAM_INT);
+        $stmt->bindValue(':question', $post['question'], PDO::PARAM_STR);
+        $stmt->bindValue(':answer', $post['answer'], PDO::PARAM_STR);
+        $stmt->bindValue(':view_mail', $post['view_mail'], PDO::PARAM_INT);
+        $stmt->bindValue(':in_groups', implode(',', $post['in_groups']), PDO::PARAM_STR);
+        $stmt->bindValue(':idsite', $userdata['idsite'], PDO::PARAM_INT);
+        $stmt->bindValue(':pass_creation_time', $post['pass_creation_time'], PDO::PARAM_INT);
+        $stmt->bindValue(':pass_reset_request', $post['pass_reset_request'], PDO::PARAM_INT);
+        $stmt->bindValue(':email_creation_time', $userdata['regdate'], PDO::PARAM_INT);
+        $stmt->bindValue(':email_reset_request', $post['email_reset_request'], PDO::PARAM_INT);
+        $stmt->bindValue(':email_verification_time', $post['email_verification_time'], PDO::PARAM_INT);
+        $stmt->bindValue(':active_obj', $admin_info['userid'], PDO::PARAM_INT);
+
+        $ok = $stmt->execute();
+        $user_id = $db->lastInsertId();
 
         if (!$user_id) {
             nv_jsonOutput([
@@ -394,17 +421,20 @@ if ($nv_Request->isset_request('userid', 'get')) {
         }
         // Lưu vào bảng OpenID
         if (!empty($reg_attribs)) {
-            $stmt = $db->prepare('INSERT INTO ' . NV_MOD_TABLE . '_openid VALUES (' . $user_id . ', :server, :opid , :id, :email)');
-            $stmt->bindParam(':server', $reg_attribs['server'], PDO::PARAM_STR);
-            $stmt->bindParam(':opid', $reg_attribs['opid'], PDO::PARAM_STR);
-            $stmt->bindParam(':id', $reg_attribs['openid'], PDO::PARAM_STR);
-            $stmt->bindParam(':email', $reg_attribs['email'], PDO::PARAM_STR);
+            $stmt = $db->prepare('INSERT INTO ' . NV_MOD_TABLE . '_openid (userid, server, opid, id, email) VALUES (:userid, :server, :opid, :id, :email)');
+            $stmt->bindValue(':userid', $user_id, PDO::PARAM_INT);
+            $stmt->bindValue(':server', $reg_attribs['server'], PDO::PARAM_STR);
+            $stmt->bindValue(':opid', $reg_attribs['opid'], PDO::PARAM_STR);
+            $stmt->bindValue(':id', $reg_attribs['openid'], PDO::PARAM_STR);
+            $stmt->bindValue(':email', $reg_attribs['email'], PDO::PARAM_STR);
             $stmt->execute();
         }
 
         $query_field['userid'] = $user_id;
         if (!userInfoTabDb($query_field)) {
-            $db->query('DELETE FROM ' . NV_MOD_TABLE . ' WHERE userid=' . $user_id);
+            $stmt = $db->prepare('DELETE FROM ' . NV_MOD_TABLE . ' WHERE userid = :userid');
+            $stmt->bindValue(':userid', $user_id, PDO::PARAM_INT);
+            $stmt->execute();
             nv_jsonOutput([
                 'status' => 'error',
                 'input' => '',
@@ -440,8 +470,13 @@ if ($nv_Request->isset_request('userid', 'get')) {
             }
         }
 
-        $db->query('UPDATE ' . NV_MOD_TABLE . '_groups SET numbers = numbers+1 WHERE group_id=' . ($post['is_official'] ? 4 : 7));
-        $db->query('DELETE FROM ' . NV_MOD_TABLE . '_reg WHERE userid=' . $userid);
+        $stmt = $db->prepare('UPDATE ' . NV_MOD_TABLE . '_groups SET numbers = numbers + 1 WHERE group_id = :gid');
+        $stmt->bindValue(':gid', ($post['is_official'] ? 4 : 7), PDO::PARAM_INT);
+        $stmt->execute();
+
+        $stmt = $db->prepare('DELETE FROM ' . NV_MOD_TABLE . '_reg WHERE userid = :userid');
+        $stmt->bindValue(':userid', $userid, PDO::PARAM_INT);
+        $stmt->execute();
 
         // Callback sau khi đăng ký
         if (nv_function_exists('nv_user_register_callback')) {
@@ -486,11 +521,13 @@ if ($nv_Request->isset_request('userid', 'get')) {
 
     // Danh sách câu hỏi bảo mật
     $data_questions = [];
-    $sql = 'SELECT qid, title FROM ' . NV_MOD_TABLE . "_question WHERE lang='" . NV_LANG_DATA . "' ORDER BY weight ASC";
-    $result = $db->query($sql);
-    while ($row = $result->fetch()) {
+    $stmt = $db->prepare('SELECT qid, title FROM ' . NV_MOD_TABLE . '_question WHERE lang = :lang ORDER BY weight ASC');
+    $stmt->bindValue(':lang', NV_LANG_DATA, PDO::PARAM_STR);
+    $stmt->execute();
+    while ($row = $stmt->fetch()) {
         $data_questions[$row['qid']] = $row['title'];
     }
+    $stmt->closeCursor();
 
     // Chuẩn bị các trường hệ thống cho Smarty
     $system_fields = [];
@@ -750,6 +787,33 @@ $methods = [
 ];
 $method = $nv_Request->isset_request('method', 'post') ? $nv_Request->get_string('method', 'post', '') : ($nv_Request->isset_request('method', 'get') ? urldecode($nv_Request->get_string('method', 'get', '')) : '');
 $methodvalue = $nv_Request->isset_request('value', 'post') ? $nv_Request->get_string('value', 'post') : ($nv_Request->isset_request('value', 'get') ? urldecode($nv_Request->get_string('value', 'get', '')) : '');
+$ar_where = [];
+$params = [];
+if ($global_config['idsite'] > 0) {
+    $ar_where[] = 'idsite = :idsite';
+    $params[':idsite'] = [$global_config['idsite'], PDO::PARAM_INT];
+}
+
+if (!empty($method) and isset($methods[$method]) and !empty($methodvalue)) {
+    $base_url .= '&amp;method=' . urlencode($method) . '&amp;value=' . urlencode($methodvalue);
+    $methods[$method]['selected'] = true;
+    $table_caption = $nv_Lang->getModule('search_page_title');
+    $ar_where[] = $methods[$method]['sql'] . ' LIKE :methodvalue';
+    $params[':methodvalue'] = ['%' . $db->dblikeescape($methodvalue) . '%', PDO::PARAM_STR];
+}
+
+$page = $nv_Request->get_page('page', 'get', 1);
+$per_page = 30;
+
+$where_sql = !empty($ar_where) ? ' WHERE ' . implode(' AND ', $ar_where) : '';
+
+$stmt = $db->prepare('SELECT COUNT(*) FROM ' . NV_MOD_TABLE . '_reg' . $where_sql);
+foreach ($params as $key => $val) {
+    $stmt->bindValue($key, $val[0], $val[1]);
+}
+$stmt->execute();
+$num_items = (int) $stmt->fetchColumn();
+$stmt->closeCursor();
 
 $orders = [
     'userid',
@@ -764,41 +828,22 @@ if ($ordertype != 'ASC') {
     $ordertype = 'DESC';
 }
 
-$ar_where = [];
-if ($global_config['idsite'] > 0) {
-    $ar_where[] = 'idsite=' . $global_config['idsite'];
-}
-$db->sqlreset()
-    ->select('COUNT(*)')
-    ->from(NV_MOD_TABLE . '_reg');
-
-if (!empty($method) and isset($methods[$method]) and !empty($methodvalue)) {
-    $base_url .= '&amp;method=' . urlencode($method) . '&amp;value=' . urlencode($methodvalue);
-    $methods[$method]['selected'] = true;
-    $table_caption = $nv_Lang->getModule('search_page_title');
-    $ar_where[] = $methods[$method]['sql'] . " LIKE '%" . $db->dblikeescape($methodvalue) . "%'";
-}
-if (!empty($ar_where)) {
-    $db->where(implode(' AND ', $ar_where));
-}
-
-$page = $nv_Request->get_page('page', 'get', 1);
-$per_page = 30;
-
-$num_items = $db->query($db->sql())
-    ->fetchColumn();
-
-$db->select('*')
-    ->limit($per_page)
-    ->offset(($page - 1) * $per_page);
-
+$orderby_sql = '';
 if (!empty($orderby) and in_array($orderby, $orders, true)) {
-    $orderby_sql = $orderby != 'full_name' ? $orderby : ($global_config['name_show'] == 0 ? "concat(first_name,' ',last_name)" : "concat(last_name,' ',first_name)");
-    $db->order($orderby_sql . ' ' . $ordertype);
+    $orderby_sql_field = $orderby != 'full_name' ? $orderby : ($global_config['name_show'] == 0 ? 'concat(first_name,\' \',last_name)' : 'concat(last_name,\' \',first_name)');
+    $orderby_sql = ' ORDER BY ' . $orderby_sql_field . ' ' . $ordertype;
     $base_url .= '&amp;sortby=' . $orderby . '&amp;sorttype=' . $ordertype;
 }
 
-$result = $db->query($db->sql());
+$stmt = $db->prepare('SELECT * FROM ' . NV_MOD_TABLE . '_reg' . $where_sql . $orderby_sql . ' LIMIT :limit OFFSET :offset');
+foreach ($params as $key => $val) {
+    $stmt->bindValue($key, $val[0], $val[1]);
+}
+$stmt->bindValue(':limit', $per_page, PDO::PARAM_INT);
+$stmt->bindValue(':offset', ($page - 1) * $per_page, PDO::PARAM_INT);
+$stmt->execute();
+$array_data = $stmt->fetchAll();
+$stmt->closeCursor();
 
 // Chuẩn bị danh sách user cho Smarty
 $users_list_for_tpl = [];

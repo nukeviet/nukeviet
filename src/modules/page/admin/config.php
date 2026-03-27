@@ -78,11 +78,10 @@ $array_config['alias_lower'] = 1;
 
 $sql = 'SELECT config_name, config_value FROM ' . NV_PREFIXLANG . '_' . $module_data . '_config';
 $result = $db->query($sql);
-while ($_scratch = $result->fetch(3)) {
-    [$c_config_name, $c_config_value] = $_scratch;
-    unset($_scratch);
-    $array_config[$c_config_name] = $c_config_value;
+while ($_row = $result->fetch()) {
+    $array_config[$_row['config_name']] = $_row['config_value'];
 }
+$result->closeCursor();
 
 $array_config['socialbutton'] = !empty($array_config['socialbutton']) ? array_map('trim', explode(',', $array_config['socialbutton'])) : [];
 

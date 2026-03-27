@@ -213,7 +213,8 @@ if ($nv_Request->isset_request('checkss', 'post')) {
 
     $stmt = $db->prepare('INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . '_send
         (cid, cat, title, content, send_time, sender_id, sender_name, sender_email, sender_phone, sender_address, sender_ip, is_read, is_reply) VALUES
-        (:cid, :cat, :title, :content, ' . NV_CURRENTTIME . ', :sender_id, :sender_name, :sender_email, :sender_phone, :sender_address, :sender_ip, 0, 0)');
+        (:cid, :cat, :title, :content, :send_time, :sender_id, :sender_name, :sender_email, :sender_phone, :sender_address, :sender_ip, 0, 0)');
+    $stmt->bindValue(':send_time', NV_CURRENTTIME, PDO::PARAM_INT);
     $stmt->bindValue(':cid', $feedback['department'], PDO::PARAM_INT);
     $stmt->bindValue(':cat', $feedback['category'], PDO::PARAM_STR);
     $stmt->bindValue(':title', $feedback['title'], PDO::PARAM_STR);

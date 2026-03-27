@@ -20,9 +20,14 @@ if (defined('NV_EDITOR')) {
 $page_title = $nv_Lang->getModule('siteterms');
 
 $content = '';
+$config_name = 'siteterms_' . NV_LANG_DATA;
 
-$sql = 'SELECT content FROM ' . NV_MOD_TABLE . "_config WHERE config='siteterms_" . NV_LANG_DATA . "'";
-$row = $db->query($sql)->fetch();
+$stmt = $db->prepare('SELECT content FROM ' . NV_MOD_TABLE . '_config WHERE config = :config');
+$stmt->bindValue(':config', $config_name, PDO::PARAM_STR);
+$stmt->execute();
+$row = $stmt->fetch();
+$stmt->closeCursor();
+
 if (empty($row)) {
     $mode = 'add';
 } else {
@@ -52,16 +57,14 @@ if ($nv_Request->get_int('save', 'post') == 1) {
 
     try {
         if ($mode == 'edit') {
-            $stmt = $db->prepare('UPDATE ' . NV_MOD_TABLE . "_config SET
-                content = :content,
-                edit_time = " . NV_CURRENTTIME . "
-                WHERE config = 'siteterms_" . NV_LANG_DATA . "'");
+            $stmt = $db->prepare('UPDATE ' . NV_MOD_TABLE . '_config SET content = :content, edit_time = :edit_time WHERE config = :config');
         } else {
-            $stmt = $db->prepare('INSERT INTO ' . NV_MOD_TABLE . "_config VALUES (
-                'siteterms_" . NV_LANG_DATA . "', :content, " . NV_CURRENTTIME . ')');
+            $stmt = $db->prepare('INSERT INTO ' . NV_MOD_TABLE . '_config (config, content, edit_time) VALUES (:config, :content, :edit_time)');
         }
 
-        $stmt->bindParam(':content', $content, PDO::PARAM_STR, strlen($content));
+        $stmt->bindValue(':config', $config_name, PDO::PARAM_STR);
+        $stmt->bindValue(':content', $content, PDO::PARAM_STR);
+        $stmt->bindValue(':edit_time', NV_CURRENTTIME, PDO::PARAM_INT);
         $stmt->execute();
 
         nv_insert_logs(NV_LANG_DATA, $module_name, $nv_Lang->getModule('siteterms'), '', $admin_info['userid']);

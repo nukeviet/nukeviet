@@ -17,8 +17,12 @@ use NukeViet\Module\users\Shared\Emails;
 
 $userid = $nv_Request->get_int('userid', 'get', 0);
 
-$sql = 'SELECT * FROM ' . NV_MOD_TABLE . ' WHERE userid=' . $userid;
-$row = $db->query($sql)->fetch();
+$stmt = $db->prepare('SELECT * FROM ' . NV_MOD_TABLE . ' WHERE userid = :userid');
+$stmt->bindValue(':userid', $userid, PDO::PARAM_INT);
+$stmt->execute();
+$row = $stmt->fetch();
+$stmt->closeCursor();
+
 if (empty($row)) {
     nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
 }
@@ -27,8 +31,12 @@ $page_title = $nv_Lang->getModule('user_2step_of') . ' ' . $row['username'];
 
 $allow = false;
 
-$sql = 'SELECT lev FROM ' . NV_AUTHORS_GLOBALTABLE . ' WHERE admin_id=' . $userid;
-$rowlev = $db->query($sql)->fetch();
+$stmt = $db->prepare('SELECT lev FROM ' . NV_AUTHORS_GLOBALTABLE . ' WHERE admin_id = :userid');
+$stmt->bindValue(':userid', $userid, PDO::PARAM_INT);
+$stmt->execute();
+$rowlev = $stmt->fetch();
+$stmt->closeCursor();
+
 if (empty($rowlev)) {
     $allow = true;
 } else {
@@ -79,9 +87,19 @@ if (!empty($row['active2step'])) {
         }
 
 
-        $db->query('DELETE FROM ' . NV_MOD_TABLE . '_backupcodes WHERE userid=' . $row['userid']);
-        $db->query('DELETE FROM ' . NV_MOD_TABLE . '_passkey WHERE userid=' . $row['userid'] . ' AND enable_login=0');
-        $db->query('UPDATE ' . NV_MOD_TABLE . " SET active2step=0, secretkey='', last_update=" . NV_CURRENTTIME . ' WHERE userid=' . $row['userid']);
+        $stmt = $db->prepare('DELETE FROM ' . NV_MOD_TABLE . '_backupcodes WHERE userid = :userid');
+        $stmt->bindValue(':userid', $row['userid'], PDO::PARAM_INT);
+        $stmt->execute();
+
+        $stmt = $db->prepare('DELETE FROM ' . NV_MOD_TABLE . '_passkey WHERE userid = :userid AND enable_login = 0');
+        $stmt->bindValue(':userid', $row['userid'], PDO::PARAM_INT);
+        $stmt->execute();
+
+        $stmt = $db->prepare('UPDATE ' . NV_MOD_TABLE . " SET active2step = 0, secretkey = '', last_update = :last_update WHERE userid = :userid");
+        $stmt->bindValue(':last_update', NV_CURRENTTIME, PDO::PARAM_INT);
+        $stmt->bindValue(':userid', $row['userid'], PDO::PARAM_INT);
+        $stmt->execute();
+
         nv_delete_notification(NV_LANG_DATA, $module_name, 'remove_2step_request', $row['userid']);
 
         // Gửi email thông báo
@@ -132,7 +150,10 @@ if (!empty($row['active2step'])) {
         }
 
 
-        $db->query('DELETE FROM ' . NV_MOD_TABLE . '_backupcodes WHERE userid=' . $row['userid']);
+        $stmt = $db->prepare('DELETE FROM ' . NV_MOD_TABLE . '_backupcodes WHERE userid = :userid');
+        $stmt->bindValue(':userid', $row['userid'], PDO::PARAM_INT);
+        $stmt->execute();
+        $stmt->closeCursor();
 
         $new_code = [];
         while (count($new_code) < 10) {
@@ -142,9 +163,13 @@ if (!empty($row['active2step'])) {
             }
         }
 
+        $stmt = $db->prepare('INSERT INTO ' . NV_MOD_TABLE . '_backupcodes (userid, code, is_used, time_used, time_creat) VALUES (:userid, :code, 0, 0, :time_creat)');
         foreach ($new_code as $code) {
-            $db->query('INSERT INTO ' . NV_MOD_TABLE . '_backupcodes (userid, code, is_used, time_used, time_creat) VALUES (
-            ' . $row['userid'] . ', ' . $db->quote($code) . ', 0, 0, ' . NV_CURRENTTIME . ')');
+            $stmt->bindValue(':userid', $row['userid'], PDO::PARAM_INT);
+            $stmt->bindValue(':code', $code, PDO::PARAM_STR);
+            $stmt->bindValue(':time_creat', NV_CURRENTTIME, PDO::PARAM_INT);
+            $stmt->execute();
+            $stmt->closeCursor();
         }
 
         if ($nv_Request->get_int('sendmail', 'post', 0) == 1) {
@@ -180,9 +205,10 @@ if (!empty($row['active2step'])) {
         ]);
     }
 
-    $sql = 'SELECT * FROM ' . NV_MOD_TABLE . '_backupcodes WHERE userid=' . $row['userid'];
-    $result = $db->query($sql);
-    while ($code = $result->fetch()) {
+    $stmt = $db->prepare('SELECT * FROM ' . NV_MOD_TABLE . '_backupcodes WHERE userid = :userid');
+    $stmt->bindValue(':userid', $row['userid'], PDO::PARAM_INT);
+    $stmt->execute();
+    while ($code = $stmt->fetch()) {
         $code['status_label'] = $nv_Lang->getModule('user_2step_codes_s' . $code['is_used']);
         $codes[] = $code;
     }

@@ -23,9 +23,10 @@ if ($nv_Request->isset_request('getinfo', 'post')) {
 
     if ($bid) {
         $sth = $db->prepare('SELECT title, description FROM ' . NV_PREFIXLANG . '_' . $module_data . '_blocks WHERE bid=:bid');
-        $sth->bindParam(':bid', $bid, PDO::PARAM_INT);
+        $sth->bindValue(':bid', $bid, PDO::PARAM_INT);
         $sth->execute();
         $array = $sth->fetch();
+        $sth->closeCursor();
     }
 
     $message = $array ? '' : 'Invalid post data';
@@ -44,12 +45,12 @@ if ($nv_Request->isset_request('del', 'post')) {
 
     if ($bid) {
         $sth = $db->prepare('DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_blocks WHERE bid=:bid');
-        $sth->bindParam(':bid', $bid, PDO::PARAM_INT);
+        $sth->bindValue(':bid', $bid, PDO::PARAM_INT);
         $sth->execute();
 
         if ($sth->rowCount()) {
             $sth = $db->prepare('DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE bid=:bid');
-            $sth->bindParam(':bid', $bid, PDO::PARAM_INT);
+            $sth->bindValue(':bid', $bid, PDO::PARAM_INT);
             $sth->execute();
 
             nv_insert_logs(NV_LANG_DATA, $module_name, 'Del Block', 'ID:' . $bid, $admin_info['userid']);
@@ -83,15 +84,18 @@ if ($nv_Request->isset_request('submit', 'post')) {
         ];
     } else {
         if ($data['bid']) {
-            $sql = 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_blocks SET title = :title, description = :description WHERE bid = ' . $data['bid'];
+            $sql = 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_blocks SET title = :title, description = :description WHERE bid = :bid';
         } else {
             $sql = 'INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . '_blocks (title, description) VALUES (:title, :description)';
         }
 
         try {
             $sth = $db->prepare($sql);
-            $sth->bindParam(':title', $data['title'], PDO::PARAM_STR);
-            $sth->bindParam(':description', $data['description'], PDO::PARAM_STR);
+            $sth->bindValue(':title', $data['title'], PDO::PARAM_STR);
+            $sth->bindValue(':description', $data['description'], PDO::PARAM_STR);
+            if ($data['bid']) {
+                $sth->bindValue(':bid', $data['bid'], PDO::PARAM_INT);
+            }
             $sth->execute();
 
             if ($sth->rowCount()) {

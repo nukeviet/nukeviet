@@ -31,10 +31,11 @@ if (empty($id) or empty($new_weight)) {
     ]);
 }
 
-$sth = $db->prepare('SELECT id, title FROM ' . NV_PREFIXLANG . '_' . $module_data . ' WHERE id= :id');
-$sth->bindParam(':id', $id, PDO::PARAM_INT);
+$sth = $db->prepare('SELECT id, title FROM ' . NV_PREFIXLANG . '_' . $module_data . ' WHERE id = :id');
+$sth->bindValue(':id', $id, PDO::PARAM_INT);
 $sth->execute();
 $row_data = $sth->fetch();
+$sth->closeCursor();
 if (empty($row_data)) {
     nv_jsonOutput([
         'success' => 0,
@@ -43,24 +44,26 @@ if (empty($row_data)) {
 }
 
 $sth = $db->prepare('SELECT id FROM ' . NV_PREFIXLANG . '_' . $module_data . ' WHERE id != :id ORDER BY weight ASC');
-$sth->bindParam(':id', $id, PDO::PARAM_INT);
+$sth->bindValue(':id', $id, PDO::PARAM_INT);
 $sth->execute();
 
 $weight = 0;
+$sth_update = $db->prepare('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . ' SET weight = :weight WHERE id = :id');
 while ($row = $sth->fetch()) {
     ++$weight;
     if ($weight == $new_weight) {
         ++$weight;
     }
 
-    $sth2 = $db->prepare('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . ' SET weight=' . $weight . ' WHERE id= :id');
-    $sth2->bindParam(':id', $row['id'], PDO::PARAM_INT);
-    $sth2->execute();
+    $sth_update->bindValue(':weight', $weight, PDO::PARAM_INT);
+    $sth_update->bindValue(':id', $row['id'], PDO::PARAM_INT);
+    $sth_update->execute();
 }
+$sth->closeCursor();
 
-$sth2 = $db->prepare('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . ' SET weight=' . $new_weight . ' WHERE id= :id');
-$sth2->bindParam(':id', $id, PDO::PARAM_INT);
-$sth2->execute();
+$sth_update->bindValue(':weight', $new_weight, PDO::PARAM_INT);
+$sth_update->bindValue(':id', $id, PDO::PARAM_INT);
+$sth_update->execute();
 
 $nv_Cache->delMod($module_name);
 nv_insert_logs(NV_LANG_DATA, $module_name, 'Change weight ID: ' . $row_data['id'] . ': ' . $row_data['title'], $weight . ' -> ' . $new_weight, $admin_info['userid']);

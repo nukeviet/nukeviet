@@ -19,8 +19,12 @@ function groups_list($mod_data = 'users')
 
     $_mod_table = ($mod_data == 'users') ? NV_USERS_GLOBALTABLE : $db_config['prefix'] . '_' . $mod_data;
 
-    $query = 'SELECT g.group_id, d.title, g.group_type, g.exp_time FROM ' . $_mod_table . '_groups AS g LEFT JOIN ' . $_mod_table . "_groups_detail d ON ( g.group_id = d.group_id AND d.lang='" . NV_LANG_DATA . "' ) WHERE g.act=1 AND (g.idsite = " . $global_config['idsite'] . ' OR (g.idsite =0 AND g.siteus = 1)) ORDER BY g.idsite, g.weight';
-    $list = $nv_Cache->db($query, '', $mod_data);
+    $query = 'SELECT g.group_id, d.title, g.group_type, g.exp_time FROM ' . $_mod_table . '_groups AS g LEFT JOIN ' . $_mod_table . '_groups_detail d ON ( g.group_id = d.group_id AND d.lang=:lang ) WHERE g.act=1 AND (g.idsite = :idsite OR (g.idsite =0 AND g.siteus = 1)) ORDER BY g.idsite, g.weight';
+    $bind = [
+        [':lang', NV_LANG_DATA, PDO::PARAM_STR],
+        [':idsite', $global_config['idsite'], PDO::PARAM_INT]
+    ];
+    $list = $nv_Cache->db($query, '', $mod_data, '', 0, $bind);
 
     if (empty($list)) {
         return [];

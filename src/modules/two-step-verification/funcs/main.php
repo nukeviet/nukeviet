@@ -35,9 +35,11 @@ $array_data['pref_2fa'] = $user_info['pref_2fa'];
 
 // Lấy danh sách khóa đăng nhập, khóa bảo mật
 $sql = 'SELECT id, keyid, created_at, last_used_at, clid, enable_login, nickname
-FROM ' . $db_config['prefix'] . '_' . $site_mods[NV_BRIDGE_USER_MODULE]['module_data'] . '_passkey WHERE userid=' . $user_info['userid'];
-$result = $db->query($sql);
-while ($_row = $result->fetch()) {
+FROM ' . $db_config['prefix'] . '_' . $site_mods[NV_BRIDGE_USER_MODULE]['module_data'] . '_passkey WHERE userid = :userid';
+$stmt = $db->prepare($sql);
+$stmt->bindValue(':userid', $user_info['userid'], PDO::PARAM_INT);
+$stmt->execute();
+while ($_row = $stmt->fetch()) {
     $array_data['publicKeys'][$_row['keyid']] = $_row;
     if (!empty($_row['enable_login'])) {
         $array_data['login_keys']++;
@@ -45,7 +47,7 @@ while ($_row = $result->fetch()) {
         $array_data['security_keys']++;
     }
 }
-$result->closeCursor();
+$stmt->closeCursor();
 
 // Lưu phương thức xác thực 2 bước ưu thích
 if ($nv_Request->isset_request('change_preferred_2fa', 'post')) {
@@ -75,10 +77,11 @@ if ($nv_Request->isset_request('change_preferred_2fa', 'post')) {
         ]);
     }
     if ($pref_2fa != $user_info['pref_2fa']) {
-        $sql = 'UPDATE ' . $db_config['prefix'] . '_' . $site_mods[NV_BRIDGE_USER_MODULE]['module_data'] . ' SET
-            pref_2fa=' . $pref_2fa . ', last_update=' . NV_CURRENTTIME . '
-        WHERE userid=' . $user_info['userid'];
-        $db->query($sql);
+        $stmt = $db->prepare('UPDATE ' . $db_config['prefix'] . '_' . $site_mods[NV_BRIDGE_USER_MODULE]['module_data'] . ' SET pref_2fa = :pref_2fa, last_update = :last_update WHERE userid = :userid');
+        $stmt->bindValue(':pref_2fa', $pref_2fa, PDO::PARAM_INT);
+        $stmt->bindValue(':last_update', NV_CURRENTTIME, PDO::PARAM_INT);
+        $stmt->bindValue(':userid', $user_info['userid'], PDO::PARAM_INT);
+        $stmt->execute();
         nv_insert_logs(NV_LANG_DATA, $module_name, 'log_change_pref_2fa', $pref_2fa, $user_info['userid']);
     }
     nv_jsonOutput([
@@ -101,18 +104,20 @@ if ($nv_Request->isset_request('turnoff2step', 'post')) {
         ]);
     }
 
-    $sql = 'UPDATE ' . $db_config['prefix'] . '_' . $site_mods[NV_BRIDGE_USER_MODULE]['module_data'] . ' SET
-        active2step=0, secretkey=\'\', last_update=' . NV_CURRENTTIME . '
-    WHERE userid=' . $user_info['userid'];
-    $db->query($sql);
+    $stmt = $db->prepare('UPDATE ' . $db_config['prefix'] . '_' . $site_mods[NV_BRIDGE_USER_MODULE]['module_data'] . ' SET active2step = 0, secretkey = \'\', last_update = :last_update WHERE userid = :userid');
+    $stmt->bindValue(':last_update', NV_CURRENTTIME, PDO::PARAM_INT);
+    $stmt->bindValue(':userid', $user_info['userid'], PDO::PARAM_INT);
+    $stmt->execute();
 
     // Xóa security keys
-    $sql = 'DELETE FROM ' . $db_config['prefix'] . '_' . $site_mods[NV_BRIDGE_USER_MODULE]['module_data'] . '_passkey WHERE userid=' . $user_info['userid'] . ' AND enable_login=0';
-    $db->query($sql);
+    $stmt = $db->prepare('DELETE FROM ' . $db_config['prefix'] . '_' . $site_mods[NV_BRIDGE_USER_MODULE]['module_data'] . '_passkey WHERE userid = :userid AND enable_login = 0');
+    $stmt->bindValue(':userid', $user_info['userid'], PDO::PARAM_INT);
+    $stmt->execute();
 
     // Xóa mã dự phòng
-    $sql = 'DELETE FROM ' . $db_config['prefix'] . '_' . $site_mods[NV_BRIDGE_USER_MODULE]['module_data'] . '_backupcodes WHERE userid=' . $user_info['userid'];
-    $db->query($sql);
+    $stmt = $db->prepare('DELETE FROM ' . $db_config['prefix'] . '_' . $site_mods[NV_BRIDGE_USER_MODULE]['module_data'] . '_backupcodes WHERE userid = :userid');
+    $stmt->bindValue(':userid', $user_info['userid'], PDO::PARAM_INT);
+    $stmt->execute();
 
     // Gửi email thông báo bảo mật
     $send_data = [[
@@ -165,8 +170,11 @@ if ($nv_Request->isset_request('changecode2step', 'post')) {
     ]);
 }
 
-$sql = 'SELECT * FROM ' . $db_config['prefix'] . '_' . $site_mods[NV_BRIDGE_USER_MODULE]['module_data'] . '_backupcodes WHERE userid=' . $user_info['userid'];
-$array_data['backupcodes'] = $db->query($sql)->fetchAll();
+$stmt = $db->prepare('SELECT * FROM ' . $db_config['prefix'] . '_' . $site_mods[NV_BRIDGE_USER_MODULE]['module_data'] . '_backupcodes WHERE userid = :userid');
+$stmt->bindValue(':userid', $user_info['userid'], PDO::PARAM_INT);
+$stmt->execute();
+$array_data['backupcodes'] = $stmt->fetchAll();
+$stmt->closeCursor();
 
 $array_data['print_code_url'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=print';
 $array_data['download_code_url'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;downloadcode=' . md5('downloadcode' . NV_CHECK_SESSION);
@@ -243,10 +251,11 @@ if ($array_data['show_type'] == 'app') {
 
         nv_insert_logs(NV_LANG_DATA, $module_name, 'log_edit_2step', '', $user_info['userid']);
 
-        $sql = 'UPDATE ' . $db_config['prefix'] . '_' . $site_mods[NV_BRIDGE_USER_MODULE]['module_data'] . ' SET
-            active2step=1, secretkey=' . $db->quote($array_data['secretkey']) . ', last_update=' . NV_CURRENTTIME . '
-        WHERE userid=' . $user_info['userid'];
-        $db->query($sql);
+        $stmt = $db->prepare('UPDATE ' . $db_config['prefix'] . '_' . $site_mods[NV_BRIDGE_USER_MODULE]['module_data'] . ' SET active2step = 1, secretkey = :secretkey, last_update = :last_update WHERE userid = :userid');
+        $stmt->bindValue(':secretkey', $array_data['secretkey'], PDO::PARAM_STR);
+        $stmt->bindValue(':last_update', NV_CURRENTTIME, PDO::PARAM_INT);
+        $stmt->bindValue(':userid', $user_info['userid'], PDO::PARAM_INT);
+        $stmt->execute();
 
         $nv_Request->unset_request($module_data . '_secretkey', 'session');
 

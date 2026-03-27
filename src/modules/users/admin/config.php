@@ -243,8 +243,11 @@ if ($nv_Request->isset_request('save', 'post')) {
         $access_admin['access_delus'] = $nv_Request->get_typed_array('access_delus', 'post', 'bool');
         $access_admin['access_passus'] = $nv_Request->get_typed_array('access_passus', 'post', 'bool');
         $access_admin['access_groups'] = $nv_Request->get_typed_array('access_groups', 'post', 'bool');
-        $sql = 'UPDATE ' . NV_MOD_TABLE . "_config SET content='" . serialize($access_admin) . "', edit_time=" . NV_CURRENTTIME . " WHERE config='access_admin'";
-        $db->query($sql);
+
+        $stmt = $db->prepare('UPDATE ' . NV_MOD_TABLE . '_config SET content = :content, edit_time = :edit_time WHERE config = \'access_admin\'');
+        $stmt->bindValue(':content', serialize($access_admin), PDO::PARAM_STR);
+        $stmt->bindValue(':edit_time', NV_CURRENTTIME, PDO::PARAM_INT);
+        $stmt->execute();
         nv_save_file_config_global();
     }
     nv_insert_logs(NV_LANG_DATA, $module_name, $nv_Lang->getModule('ChangeConfigModule'), '', $admin_info['userid']);
@@ -261,21 +264,25 @@ if ($nv_Request->isset_request('save', 'post')) {
 $array_config['pass_timeout'] /= 86400;
 $array_config['openid_processing'] = !empty($array_config['openid_processing']) ? array_map('trim', explode(',', $array_config['openid_processing'])) : [];
 
-$sql = 'SELECT config, content FROM ' . NV_MOD_TABLE . "_config WHERE
-    config='deny_email' OR config='deny_name' OR config='password_simple' OR
-    config='avatar_width' OR config='avatar_height' OR config='active_group_newusers' OR
-    config='active_editinfo_censor' OR config='active_user_logs' OR config='min_old_user' OR
-    config='auto_assign_oauthuser' OR config='admin_email' OR config='register_active_time' OR
-    config='hold_deleted_username'
-";
-$result = $db->query($sql);
-while ($_scratch = $result->fetch(3)) {
+$configs = [
+    'deny_email', 'deny_name', 'password_simple', 'avatar_width', 'avatar_height',
+    'active_group_newusers', 'active_editinfo_censor', 'active_user_logs',
+    'min_old_user', 'auto_assign_oauthuser', 'admin_email', 'register_active_time',
+    'hold_deleted_username'
+];
+$in_configs = implode(',', array_fill(0, count($configs), '?'));
+
+$stmt = $db->prepare('SELECT config, content FROM ' . NV_MOD_TABLE . '_config WHERE config IN (' . $in_configs . ')');
+foreach ($configs as $k => $config) {
+    $stmt->bindValue(($k + 1), $config, PDO::PARAM_STR);
+}
+$stmt->execute();
+while ($_scratch = $stmt->fetch(PDO::FETCH_NUM)) {
     [$config, $content] = $_scratch;
-    unset($_scratch);
     $content = array_map('trim', explode('|', $content));
     $array_config[$config] = implode(', ', $content);
 }
-$result->closeCursor();
+$stmt->closeCursor();
 
 $array_config['active_group_newusers'] = !empty($array_config['active_group_newusers']) ? ' checked="checked"' : '';
 $array_config['active_editinfo_censor'] = !empty($array_config['active_editinfo_censor']) ? ' checked="checked"' : '';

@@ -31,17 +31,30 @@ if (!csrf_check($nv_Request->get_string('checkss', 'post'), $_csrf_key)) {
 }
 
 if ($is_setactive) {
+    $stmt_check_admin = $db->prepare('SELECT a.lev, b.username, b.active, b.idsite FROM ' . NV_AUTHORS_GLOBALTABLE . ' a, ' . NV_MOD_TABLE . ' b WHERE a.admin_id = :userid AND a.admin_id = b.userid');
+    $stmt_get_user = $db->prepare('SELECT username, active, idsite FROM ' . NV_MOD_TABLE . ' WHERE userid = :userid');
+    $stmt_update_user = $db->prepare('UPDATE ' . NV_MOD_TABLE . ' SET active = :active, last_update = :last_update WHERE userid = :userid');
+
     foreach ($userids as $userid) {
         if (!$userid or $admin_info['admin_id'] == $userid) {
             continue;
         }
 
-        $sql = 'SELECT a.lev, b.username, b.active, b.idsite FROM ' . NV_AUTHORS_GLOBALTABLE . ' a, ' . NV_MOD_TABLE . ' b WHERE a.admin_id=' . $userid . ' AND a.admin_id=b.userid';
-        $row = $db->query($sql)->fetch(3);
+        $stmt_check_admin->bindValue(':userid', $userid, PDO::PARAM_INT);
+        $stmt_check_admin->execute();
+        $row = $stmt_check_admin->fetch(3);
+        $stmt_check_admin->closeCursor();
+
         if (empty($row)) {
             $level = 0;
-            $sql = 'SELECT username, active, idsite FROM ' . NV_MOD_TABLE . ' WHERE userid=' . $userid;
-            [$username, $active, $idsite] = $db->query($sql)->fetch(3);
+            $stmt_get_user->bindValue(':userid', $userid, PDO::PARAM_INT);
+            $stmt_get_user->execute();
+            $res = $stmt_get_user->fetch(3);
+            $stmt_get_user->closeCursor();
+            if (empty($res)) {
+                continue;
+            }
+            [$username, $active, $idsite] = $res;
         } else {
             [$level, $username, $active, $idsite] = $row;
             $level = (int) $level;
@@ -60,8 +73,10 @@ if ($is_setactive) {
                 $active = 1;
             }
 
-            $sql = 'UPDATE ' . NV_MOD_TABLE . ' SET active=' . $active . ', last_update=' . NV_CURRENTTIME . ' WHERE userid=' . $userid;
-            $result = $db->query($sql);
+            $stmt_update_user->bindValue(':active', $active, PDO::PARAM_INT);
+            $stmt_update_user->bindValue(':last_update', NV_CURRENTTIME, PDO::PARAM_INT);
+            $stmt_update_user->bindValue(':userid', $userid, PDO::PARAM_INT);
+            $stmt_update_user->execute();
 
             $note = ($active) ? $nv_Lang->getModule('active_users') : $nv_Lang->getModule('unactive_users');
             nv_insert_logs(NV_LANG_DATA, $module_name, $note, 'userid: ' . $userid . ' - username: ' . $username, $admin_info['userid']);

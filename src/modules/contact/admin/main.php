@@ -162,7 +162,8 @@ if (!empty($contact_allowed['reply'])) {
             $mess = $nv_Lang->getModule('forwarded');
         }
 
-        $stmt = $db->prepare('INSERT INTO ' . NV_MOD_TABLE . '_reply (id, reply_recipient, reply_cc, reply_content, reply_time, reply_aid) VALUES (:id, :reply_recipient, :reply_cc, :reply_content, ' . NV_CURRENTTIME . ', :reply_aid)');
+        $stmt = $db->prepare('INSERT INTO ' . NV_MOD_TABLE . '_reply (id, reply_recipient, reply_cc, reply_content, reply_time, reply_aid) VALUES (:id, :reply_recipient, :reply_cc, :reply_content, :reply_time, :reply_aid)');
+        $stmt->bindValue(':reply_time', NV_CURRENTTIME, PDO::PARAM_INT);
         $stmt->bindValue(':id', $id, PDO::PARAM_INT);
         $stmt->bindValue(':reply_recipient', $recipient, PDO::PARAM_STR);
         $stmt->bindValue(':reply_cc', $acc, PDO::PARAM_STR);
@@ -477,6 +478,7 @@ if (!empty($contact_allowed['view'])) {
                 $replylist[] = $reply;
                 $is_collapsed = true;
             }
+            $stmt->closeCursor();
 
             if (!empty($admins)) {
                 $admins = array_unique($admins);
@@ -519,7 +521,8 @@ if (!empty($contact_allowed['view'])) {
     $num_items = $db->query('SELECT COUNT(*) FROM ' . NV_MOD_TABLE . '_send WHERE cid IN (' . $in . ')')->fetchColumn();
 
     if ($num_items) {
-        $stmt = $db->prepare('SELECT * FROM ' . NV_MOD_TABLE . '_send WHERE cid IN (' . $in . ') ORDER BY id DESC LIMIT ' . $per_page . ' OFFSET :offset');
+        $stmt = $db->prepare('SELECT * FROM ' . NV_MOD_TABLE . '_send WHERE cid IN (' . $in . ') ORDER BY id DESC LIMIT :limit OFFSET :offset');
+        $stmt->bindValue(':limit', $per_page, PDO::PARAM_INT);
         $stmt->bindValue(':offset', (int) (($page - 1) * $per_page), PDO::PARAM_INT);
         $stmt->execute();
         $array_row = $stmt->fetchAll();

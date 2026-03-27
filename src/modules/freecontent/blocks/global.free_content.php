@@ -91,16 +91,18 @@ if (!nv_function_exists('nv_block_freecontent')) {
 
         // Set content status
         if (!empty($module_config[$module]['next_execute']) and $module_config[$module]['next_execute'] <= NV_CURRENTTIME) {
-            $sql = 'UPDATE ' . NV_PREFIXLANG . '_' . $site_mods[$module]['module_data'] . '_rows SET status = 2 WHERE end_time > 0 AND end_time < ' . NV_CURRENTTIME;
-            $db->query($sql);
+            $stmt = $db->prepare('UPDATE ' . NV_PREFIXLANG . '_' . $site_mods[$module]['module_data'] . '_rows SET status = 2 WHERE end_time > 0 AND end_time < :current_time');
+            $stmt->bindValue(':current_time', NV_CURRENTTIME, PDO::PARAM_INT);
+            $stmt->execute();
 
             // Get next execute
             $sql = 'SELECT MIN(end_time) next_execute FROM ' . NV_PREFIXLANG . '_' . $site_mods[$module]['module_data'] . '_rows WHERE end_time > 0 AND status = 1';
             $result = $db->query($sql);
             $next_execute = (int) ($result->fetchColumn());
-            $sth = $db->prepare('UPDATE ' . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = '" . NV_LANG_DATA . "' AND module = :module_name AND config_name = 'next_execute'");
-            $sth->bindParam(':module_name', $module, PDO::PARAM_STR);
-            $sth->bindParam(':config_value', $next_execute, PDO::PARAM_STR);
+            $sth = $db->prepare('UPDATE ' . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = :lang AND module = :module_name AND config_name = 'next_execute'");
+            $sth->bindValue(':lang', NV_LANG_DATA, PDO::PARAM_STR);
+            $sth->bindValue(':module_name', $module, PDO::PARAM_STR);
+            $sth->bindValue(':config_value', $next_execute, PDO::PARAM_STR);
             $sth->execute();
 
             $nv_Cache->delMod('settings');

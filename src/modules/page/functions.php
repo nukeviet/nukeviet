@@ -36,22 +36,18 @@ if ($page_config['viewtype'] != 2) {
         $id = 0;
         $alias = '';
     } elseif (empty($alias) and empty($page_config['viewtype'])) {
-        $db_slave->sqlreset()
-            ->select('*')
-            ->from(NV_PREFIXLANG . '_' . $module_data)
-            ->where('status=1')
-            ->order('weight ASC')
-            ->limit(1);
-        $rowdetail = $db_slave->query($db_slave->sql())
-            ->fetch();
+        $stmt = $db_slave->query('SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . ' WHERE status = 1 ORDER BY weight ASC LIMIT 1');
+        $rowdetail = $stmt->fetch();
+        $stmt->closeCursor();
         if (!empty($rowdetail)) {
             $id = $rowdetail['id'];
         }
     } elseif (!empty($alias)) {
-        $sth = $db_slave->prepare('SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . ' WHERE alias=:alias');
-        $sth->bindParam(':alias', $alias, PDO::PARAM_STR);
+        $sth = $db_slave->prepare('SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . ' WHERE alias = :alias');
+        $sth->bindValue(':alias', $alias, PDO::PARAM_STR);
         $sth->execute();
         $rowdetail = $sth->fetch();
+        $sth->closeCursor();
         if (empty($rowdetail)) {
             nv_redirect_location($base_url);
         }

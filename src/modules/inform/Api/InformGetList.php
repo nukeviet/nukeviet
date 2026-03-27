@@ -80,6 +80,7 @@ class InformGetList implements IApi
         $postdata['filter'] = $nv_Request->get_title('filter', 'post', '');
 
         $params = [];
+        $where = [];
         if ($admin_lev > Api::ADMIN_LEV_SP) {
             $where[] = '(mtb.sender_admin = :sender_admin)';
             $params[':sender_admin'] = [$admin_id, PDO::PARAM_INT];

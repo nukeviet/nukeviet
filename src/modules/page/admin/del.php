@@ -28,19 +28,27 @@ if (!csrf_check($nv_Request->get_string('checkss', 'post'), $admin_info['admin_i
 
 if ($id > 0) {
     nv_insert_logs(NV_LANG_DATA, $module_name, 'log_del_page', 'pageid ' . $id, $admin_info['userid']);
-    $sql = 'DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . ' WHERE id=' . $id;
-    if ($db->exec($sql)) {
-        // Xóa bình luận
-        $db->query('DELETE FROM ' . NV_PREFIXLANG . '_comment WHERE module=' . $db->quote($module_name) . ' AND id = ' . $id);
+    $stmt = $db->prepare('DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . ' WHERE id = :id');
+    $stmt->bindValue(':id', $id, PDO::PARAM_INT);
 
-        $sql = 'SELECT id FROM ' . NV_PREFIXLANG . '_' . $module_data . ' ORDER BY weight ASC';
-        $result = $db->query($sql);
+    if ($stmt->execute()) {
+        // Xóa bình luận
+        $stmt = $db->prepare('DELETE FROM ' . NV_PREFIXLANG . '_comment WHERE module = :module AND id = :id');
+        $stmt->bindValue(':module', $module_name, PDO::PARAM_STR);
+        $stmt->bindValue(':id', $id, PDO::PARAM_INT);
+        $stmt->execute();
+
+        $stmt = $db->prepare('SELECT id FROM ' . NV_PREFIXLANG . '_' . $module_data . ' ORDER BY weight ASC');
+        $stmt->execute();
         $weight = 0;
-        while ($row = $result->fetch()) {
+        $stmt_update = $db->prepare('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . ' SET weight = :weight WHERE id = :id');
+        while ($row = $stmt->fetch()) {
             ++$weight;
-            $sql = 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . ' SET weight=' . $weight . ' WHERE id=' . $row['id'];
-            $db->query($sql);
+            $stmt_update->bindValue(':weight', $weight, PDO::PARAM_INT);
+            $stmt_update->bindValue(':id', $row['id'], PDO::PARAM_INT);
+            $stmt_update->execute();
         }
+        $stmt->closeCursor();
         $nv_Cache->delMod($module_name);
 
         nv_jsonOutput([

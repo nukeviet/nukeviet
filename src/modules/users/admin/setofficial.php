@@ -35,8 +35,11 @@ if (!$userid or $admin_info['admin_id'] == $userid) {
     ]);
 }
 
-$sql = 'SELECT * FROM ' . NV_MOD_TABLE . ' WHERE userid = ' . $userid;
-$row = $db->query($sql)->fetch();
+$stmt = $db->prepare('SELECT * FROM ' . NV_MOD_TABLE . ' WHERE userid = :userid');
+$stmt->bindValue(':userid', $userid, PDO::PARAM_INT);
+$stmt->execute();
+$row = $stmt->fetch();
+$stmt->closeCursor();
 
 if (!empty($row)) {
     $row['in_groups'] = array_map('intval', explode(',', $row['in_groups']));
@@ -53,14 +56,19 @@ if (!empty($row)) {
     }
     $row['in_groups'] = array_diff($row['in_groups'], [7]);
 
-    $db->query('UPDATE ' . NV_MOD_TABLE . ' SET group_id = ' . $row['group_id'] . ", in_groups='" . implode(',', $row['in_groups']) . "', last_update=" . NV_CURRENTTIME . ' WHERE userid = ' . $userid);
+    $stmt = $db->prepare('UPDATE ' . NV_MOD_TABLE . ' SET group_id = :gid, in_groups = :in_groups, last_update = :last_update WHERE userid = :userid');
+    $stmt->bindValue(':gid', $row['group_id'], PDO::PARAM_INT);
+    $stmt->bindValue(':in_groups', implode(',', $row['in_groups']), PDO::PARAM_STR);
+    $stmt->bindValue(':last_update', NV_CURRENTTIME, PDO::PARAM_INT);
+    $stmt->bindValue(':userid', $userid, PDO::PARAM_INT);
+    $stmt->execute();
     try {
-        $db->query('UPDATE ' . NV_MOD_TABLE . '_groups SET numbers = numbers-1 WHERE group_id=7');
+        $db->query('UPDATE ' . NV_MOD_TABLE . '_groups SET numbers = numbers - 1 WHERE group_id = 7');
     } catch (Throwable $e) {
         trigger_error($e);
     }
     try {
-        $db->query('UPDATE ' . NV_MOD_TABLE . '_groups SET numbers = numbers+1 WHERE group_id=4');
+        $db->query('UPDATE ' . NV_MOD_TABLE . '_groups SET numbers = numbers + 1 WHERE group_id = 4');
     } catch (Throwable $e) {
         trigger_error($e);
     }

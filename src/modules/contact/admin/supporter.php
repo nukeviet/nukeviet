@@ -35,6 +35,8 @@ function supporter_fix_weight($departmentid, $skip_id = 0, $skip_weight = 0)
         }
         $res[$row['id']] = 'WHEN id = ' . $row['id'] . ' THEN ' . $weight;
     }
+    $stmt->closeCursor();
+
     if (!empty($res)) {
         $in = implode(',', array_keys($res));
         $when = implode(' ', $res);

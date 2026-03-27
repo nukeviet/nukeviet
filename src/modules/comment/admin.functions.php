@@ -41,6 +41,7 @@ while ($row = $result->fetch()) {
         }
     }
 }
+$result->closeCursor();
 
 if ($nv_Request->isset_request('downloadfile', 'get')) {
     $file = $nv_Request->get_string('downloadfile', 'get', '');

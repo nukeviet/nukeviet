@@ -18,32 +18,32 @@ if ($nv_Request->isset_request('getUser, q', 'post')) {
     $q = $nv_Request->get_title('q', 'post', '');
     $q = str_replace('+', ' ', $q);
     $q = nv_htmlspecialchars($q);
-    $dbkeyhtml = $db->dblikeescape($q);
 
     $page = $nv_Request->get_page('page', 'post', 1);
 
-    $where = "(tb1.username LIKE '%" . $dbkeyhtml . "%' OR tb1.email LIKE '%" . $dbkeyhtml . "%' OR tb1.first_name like '%" . $dbkeyhtml . "%' OR tb1.last_name like '%" . $dbkeyhtml . "%') AND tb1.userid IN (SELECT tb2.userid FROM " . $db_config['prefix'] . '_api_role_logs tb2)';
+    $where = '(tb1.username LIKE :q OR tb1.email LIKE :q OR tb1.first_name LIKE :q OR tb1.last_name LIKE :q) AND tb1.userid IN (SELECT tb2.userid FROM ' . $db_config['prefix'] . '_api_role_logs tb2)';
 
-    $array_data = [];
-    $db->sqlreset()
-        ->select('COUNT(*)')
-        ->from(NV_USERS_GLOBALTABLE . ' tb1')
-        ->where($where);
-    $array_data['total_count'] = $db->query($db->sql())->fetchColumn();
-    $db->select('tb1.userid, tb1.username')
-        ->order('tb1.username ASC')
-        ->limit(30)
-        ->offset(($page - 1) * 30);
-    $result = $db->query($db->sql());
-    $array_data['results'] = [];
-    while ($_scratch = $result->fetch(3)) {
-        [$userid, $username] = $_scratch;
-        unset($_scratch);
+    $stmt = $db->prepare('SELECT COUNT(*) FROM ' . NV_USERS_GLOBALTABLE . ' tb1 WHERE ' . $where);
+    $stmt->bindValue(':q', '%' . $q . '%', PDO::PARAM_STR);
+    $stmt->execute();
+    $total_count = $stmt->fetchColumn();
+
+    $stmt = $db->prepare('SELECT tb1.userid, tb1.username FROM ' . NV_USERS_GLOBALTABLE . ' tb1 WHERE ' . $where . ' ORDER BY tb1.username ASC LIMIT ' . (int) ($page - 1) * 30 . ', 30');
+    $stmt->bindValue(':q', '%' . $q . '%', PDO::PARAM_STR);
+    $stmt->execute();
+
+    $array_data = [
+        'total_count' => $total_count,
+        'results' => []
+    ];
+
+    while ($_row = $stmt->fetch()) {
         $array_data['results'][] = [
-            'id' => $userid,
-            'title' => $username
+            'id' => $_row['userid'],
+            'title' => $_row['username']
         ];
     }
+    $stmt->closeCursor();
 
     nv_jsonOutput($array_data);
 }
@@ -59,7 +59,9 @@ if (defined('MANUALL_DEL_API_LOG') and MANUALL_DEL_API_LOG === true) {
         }
         $id = $nv_Request->get_int('delLog', 'post', 0);
         if (!empty($id)) {
-            $db->query('DELETE FROM ' . $db_config['prefix'] . '_api_role_logs WHERE id=' . $id);
+            $stmt = $db->prepare('DELETE FROM ' . $db_config['prefix'] . '_api_role_logs WHERE id = :id');
+            $stmt->bindValue(':id', $id, PDO::PARAM_INT);
+            $stmt->execute();
         } else {
             nv_jsonOutput([
                 'status' => 'error',
@@ -82,8 +84,11 @@ if (defined('MANUALL_DEL_API_LOG') and MANUALL_DEL_API_LOG === true) {
         }
         $ids = $nv_Request->get_title('delLogs', 'post', '');
         if (!empty($ids)) {
-            $ids = preg_replace('/[^0-9\,]+/', '', $ids);
-            $db->query('DELETE FROM ' . $db_config['prefix'] . '_api_role_logs WHERE id IN (' . $ids . ')');
+            $ids_arr = array_map('intval', explode(',', preg_replace('/[^0-9\,]+/', '', $ids)));
+            $ids_str = implode(',', $ids_arr);
+            if (!empty($ids_str)) {
+                $db->query('DELETE FROM ' . $db_config['prefix'] . '_api_role_logs WHERE id IN (' . $ids_str . ')');
+            }
         } else {
             nv_jsonOutput([
                 'status' => 'error',
@@ -131,11 +136,13 @@ while ($row = $result->fetch()) {
 }
 
 $where = [];
+$params = [];
 $get_data = [];
 $get_data['role_id'] = $nv_Request->get_absint('role_id', 'get', 0);
 if (!empty($get_data['role_id']) and !empty($roles[$get_data['role_id']])) {
     $page_url .= '&amp;role_id=' . $get_data['role_id'];
-    $where[] = 'tb1.role_id = ' . $get_data['role_id'];
+    $where[] = 'tb1.role_id = :role_id';
+    $params[':role_id'] = [$get_data['role_id'], PDO::PARAM_INT];
 } else {
     $get_data['role_id'] = 0;
 }
@@ -143,7 +150,8 @@ if (!empty($get_data['role_id']) and !empty($roles[$get_data['role_id']])) {
 $get_data['command'] = $nv_Request->get_title('command', 'get', '');
 if (!empty($get_data['command']) and in_array($get_data['command'], $apis, true)) {
     $page_url .= '&amp;command=' . $get_data['command'];
-    $where[] = 'tb1.command = ' . $db->quote($get_data['command']);
+    $where[] = 'tb1.command = :command';
+    $params[':command'] = [$get_data['command'], PDO::PARAM_STR];
 } else {
     $get_data['command'] = '';
 }
@@ -151,10 +159,15 @@ if (!empty($get_data['command']) and in_array($get_data['command'], $apis, true)
 $get_data['userid'] = $nv_Request->get_absint('userid', 'get', 0);
 $get_data['username'] = '';
 if (!empty($get_data['userid'])) {
-    $get_data['username'] = $db->query('SELECT username FROM ' . NV_USERS_GLOBALTABLE . ' WHERE userid =' . $get_data['userid'])->fetchColumn();
+    $stmt = $db->prepare('SELECT username FROM ' . NV_USERS_GLOBALTABLE . ' WHERE userid = :userid');
+    $stmt->bindValue(':userid', $get_data['userid'], PDO::PARAM_INT);
+    $stmt->execute();
+    $get_data['username'] = $stmt->fetchColumn();
+
     if (!empty($get_data['username'])) {
         $page_url .= '&amp;userid=' . $get_data['userid'];
-        $where[] = 'tb1.userid = ' . $get_data['userid'];
+        $where[] = 'tb1.userid = :userid';
+        $params[':userid'] = [$get_data['userid'], PDO::PARAM_INT];
     } else {
         $get_data['userid'] = 0;
     }
@@ -163,41 +176,47 @@ if (!empty($get_data['userid'])) {
 $get_data['fromdate'] = nv_d2u_get($nv_Request->get_title('fromdate', 'get', ''));
 if ($get_data['fromdate'] !== false) {
     $page_url .= '&amp;fromdate=' . nv_u2d_get($get_data['fromdate']);
-    $where[] = 'tb1.log_time >= ' . $get_data['fromdate'];
+    $where[] = 'tb1.log_time >= :fromdate';
+    $params[':fromdate'] = [$get_data['fromdate'], PDO::PARAM_INT];
 }
 
 $get_data['todate'] = nv_d2u_get($nv_Request->get_title('todate', 'get', ''), 23, 59, 59);
 if ($get_data['todate'] !== false) {
     $page_url .= '&amp;todate=' . nv_u2d_get($get_data['todate']);
-    $where[] = 'tb1.log_time <= ' . $get_data['todate'];
+    $where[] = 'tb1.log_time <= :todate';
+    $params[':todate'] = [$get_data['todate'], PDO::PARAM_INT];
 }
 
 $page = $nv_Request->get_page('page', 'get', 1);
 $per_page = 30;
 
-$db->sqlreset()
-    ->select('COUNT(*)')
-    ->from($db_config['prefix'] . '_api_role_logs tb1')
-    ->join('INNER JOIN ' . $db_config['prefix'] . '_api_role tb2 ON (tb1.role_id=tb2.role_id) INNER JOIN ' . NV_USERS_GLOBALTABLE . ' tb3 ON (tb1.userid=tb3.userid)');
-if (!empty($where)) {
-    $db->where(implode(' AND ', $where));
+$where_str = !empty($where) ? ' WHERE ' . implode(' AND ', $where) : '';
+$join = ' INNER JOIN ' . $db_config['prefix'] . '_api_role tb2 ON (tb1.role_id = tb2.role_id) INNER JOIN ' . NV_USERS_GLOBALTABLE . ' tb3 ON (tb1.userid = tb3.userid)';
+
+$stmt = $db->prepare('SELECT COUNT(*) FROM ' . $db_config['prefix'] . '_api_role_logs tb1' . $join . $where_str);
+foreach ($params as $key => $val) {
+    $stmt->bindValue($key, $val[0], $val[1]);
 }
-$all_pages = $db->query($db->sql())
-    ->fetchColumn();
+$stmt->execute();
+$all_pages = $stmt->fetchColumn();
+
 $data = [];
 $generate_page = '';
 if ($all_pages) {
-    $db->select('tb1.*, tb2.role_title, tb2.role_type, tb2.role_object, tb3.username')
-        ->order('tb1.log_time DESC')
-        ->limit($per_page)
-        ->offset(($page - 1) * $per_page);
-    $result = $db->query($db->sql());
-    while ($row = $result->fetch()) {
+    $sql = 'SELECT tb1.*, tb2.role_title, tb2.role_type, tb2.role_object, tb3.username FROM ' . $db_config['prefix'] . '_api_role_logs tb1' . $join . $where_str . ' ORDER BY tb1.log_time DESC LIMIT ' . (int) ($page - 1) * $per_page . ',' . (int) $per_page;
+    $stmt = $db->prepare($sql);
+    foreach ($params as $key => $val) {
+        $stmt->bindValue($key, $val[0], $val[1]);
+    }
+    $stmt->execute();
+
+    while ($row = $stmt->fetch()) {
         $row['log_time'] = nv_datetime_format($row['log_time']);
         $row['role_type'] = $nv_Lang->getModule('api_role_type_' . $row['role_type']);
         $row['role_object'] = $nv_Lang->getModule('api_role_object_' . $row['role_object']);
         $data[$row['id']] = $row;
     }
+    $stmt->closeCursor();
     $generate_page = nv_generate_page($page_url, $all_pages, $per_page, $page);
 }
 

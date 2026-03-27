@@ -139,6 +139,7 @@ class InformAction implements IApi
         }
 
         $params = [];
+        $where = [];
         if ($admin_lev > Api::ADMIN_LEV_SP) {
             $where[] = '(mtb.sender_admin = :sender_admin)';
             $params[':sender_admin'] = [$admin_id, PDO::PARAM_INT];

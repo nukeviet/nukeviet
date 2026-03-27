@@ -182,7 +182,9 @@ if (!empty($module_config[$module]['allowattachcomm']) and isset($_FILES['fileat
         $mk = nv_mkdir(NV_UPLOADS_REAL_DIR . '/' . $module_upload, $dir);
         if ($mk[0] > 0) {
             try {
-                $db->query('INSERT INTO ' . NV_UPLOAD_GLOBALTABLE . "_dir (dirname, time) VALUES ('" . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $dir . "', 0)");
+            $stmt = $db->prepare('INSERT INTO ' . NV_UPLOAD_GLOBALTABLE . '_dir (dirname, time) VALUES (:dirname, 0)');
+            $stmt->bindValue(':dirname', NV_UPLOADS_DIR . '/' . $module_upload . '/' . $dir, PDO::PARAM_STR);
+            $stmt->execute();
             } catch (Throwable $e) {
                 trigger_error($e);
             }
@@ -222,18 +224,27 @@ if (!empty($module_config[$module]['allowattachcomm']) and isset($_FILES['fileat
 }
 
 try {
-    $_sql = 'INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . ' (module, area, id, pid, content, attach, post_time, userid, post_name, post_email, post_ip, status) VALUES
-            (:module, :area, :id, ' . $pid . ', :content, :attach, ' . NV_CURRENTTIME . ', ' . $userid . ', :post_name, :post_email, :post_ip, ' . $status . ')';
-    $data_insert = [];
-    $data_insert['module'] = $module;
-    $data_insert['area'] = $area;
-    $data_insert['id'] = $id;
-    $data_insert['content'] = $content;
-    $data_insert['attach'] = $fileupload;
-    $data_insert['post_name'] = $name;
-    $data_insert['post_email'] = $email;
-    $data_insert['post_ip'] = NV_CLIENT_IP;
-    $new_id = $db->insert_id($_sql, 'cid', $data_insert);
+    $stmt = $db->prepare('INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . ' (
+        module, area, id, pid, content, attach, post_time, userid, post_name, post_email, post_ip, status
+    ) VALUES (
+        :module, :area, :id, :pid, :content, :attach, :post_time, :userid, :post_name, :post_email, :post_ip, :status
+    )');
+
+    $stmt->bindValue(':module', $module, PDO::PARAM_STR);
+    $stmt->bindValue(':area', $area, PDO::PARAM_STR);
+    $stmt->bindValue(':id', $id, PDO::PARAM_STR);
+    $stmt->bindValue(':pid', $pid, PDO::PARAM_INT);
+    $stmt->bindValue(':content', $content, PDO::PARAM_STR);
+    $stmt->bindValue(':attach', $fileupload, PDO::PARAM_STR);
+    $stmt->bindValue(':post_time', NV_CURRENTTIME, PDO::PARAM_INT);
+    $stmt->bindValue(':userid', $userid, PDO::PARAM_INT);
+    $stmt->bindValue(':post_name', $name, PDO::PARAM_STR);
+    $stmt->bindValue(':post_email', $email, PDO::PARAM_STR);
+    $stmt->bindValue(':post_ip', NV_CLIENT_IP, PDO::PARAM_STR);
+    $stmt->bindValue(':status', $status, PDO::PARAM_INT);
+    $stmt->execute();
+
+    $new_id = $db->lastInsertId();
 
     if ($new_id > 0) {
         if ($difftimeout) {
