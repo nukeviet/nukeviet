@@ -29,7 +29,7 @@ if (csrf_check($_lang_multi, $_csrf_key_lang_multi)) {
     $array_config_global['rewrite_optional'] = 0;
     $array_config_global['rewrite_op_mod'] = '';
 
-    $stmt = $db->prepare('UPDATE ' . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = 'sys' AND module = 'global' AND config_name = :config_name");
+    $stmt = $db->prepare("UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = 'sys' AND module = 'global' AND config_name = :config_name");
     foreach ($array_config_global as $config_name => $config_value) {
         $stmt->bindValue(':config_name', $config_name, PDO::PARAM_STR);
         $stmt->bindValue(':config_value', $config_value, PDO::PARAM_STR);
@@ -172,7 +172,7 @@ if (defined('NV_IS_GODADMIN') or ($global_config['idsite'] > 0 and defined('NV_I
         } elseif ($global_config['lang_multi']) {
             nv_insert_logs(NV_LANG_DATA, $module_name, $nv_Lang->getModule('nv_setup_new') . ' ' . $nv_Lang->getModule('nv_lang_data'), ' langkey : ' . $keylang, $admin_info['userid']);
 
-            $stmt_theme = $db->prepare('SELECT config_value FROM ' . NV_CONFIG_GLOBALTABLE . " WHERE lang = :lang AND module = 'global' AND config_name = 'site_theme'");
+            $stmt_theme = $db->prepare("SELECT config_value FROM " . NV_CONFIG_GLOBALTABLE . " WHERE lang = :lang AND module = 'global' AND config_name = 'site_theme'");
             $stmt_theme->bindValue(':lang', $global_config['site_lang'], PDO::PARAM_STR);
             $stmt_theme->execute();
             $site_theme = $stmt_theme->fetchColumn();
@@ -246,7 +246,7 @@ if (defined('NV_IS_GODADMIN') or ($global_config['idsite'] > 0 and defined('NV_I
 
                 // Cai dat du lieu mau
                 $global_config['site_home_module'] = 'users';
-                $stmt_home = $db->prepare('SELECT config_value FROM ' . $db_config['prefix'] . "_config WHERE module = 'global' AND config_name = 'site_home_module' AND lang = :lang");
+                $stmt_home = $db->prepare("SELECT config_value FROM " . $db_config['prefix'] . "_config WHERE module = 'global' AND config_name = 'site_home_module' AND lang = :lang");
                 $stmt_home->bindValue(':lang', $global_config['site_lang'], PDO::PARAM_STR);
                 $stmt_home->execute();
                 $_site_home_module = $stmt_home->fetchColumn();
@@ -262,26 +262,31 @@ if (defined('NV_IS_GODADMIN') or ($global_config['idsite'] > 0 and defined('NV_I
 
                 try {
                     include_once NV_ROOTDIR . '/install/data_by_lang.php';
-                    //xoa du lieu tai bang nvx_vi_modules
-                    $db->query('DELETE FROM ' . $db_config['prefix'] . '_' . $lang_data . "_modules WHERE module_file NOT IN ('" . implode("', '", $modules_exit) . "')");
 
-                    //xoa du lieu tai bang nvx_setup_extensions
-                    $db->query('DELETE FROM ' . $db_config['prefix'] . "_setup_extensions WHERE basename NOT IN ('" . implode("', '", $modules_exit) . "') AND type='module'");
+                    $placeholders = implode(', ', array_map(fn($k) => ':v' . $k, array_keys($modules_exit)));
+                    $stmt_del_m = $db->prepare('DELETE FROM ' . $db_config['prefix'] . '_' . $lang_data . '_modules WHERE module_file NOT IN (' . $placeholders . ')');
+                    foreach ($modules_exit as $k => $v) {
+                        $stmt_del_m->bindValue(':v' . $k, $v, PDO::PARAM_STR);
+                    }
+                    $stmt_del_m->execute();
 
-                    //xoa du lieu tai bang nvx_vi_blocks_groups
-                    $db->query('DELETE FROM ' . $db_config['prefix'] . '_' . $lang_data . '_blocks_groups WHERE module!=\'theme\' AND module NOT IN (SELECT title FROM ' . $db_config['prefix'] . '_' . $lang_data . '_modules)');
+                    $stmt_del_e = $db->prepare("DELETE FROM " . $db_config['prefix'] . "_setup_extensions WHERE basename NOT IN (" . $placeholders . ") AND type = 'module'");
+                    foreach ($modules_exit as $k => $v) {
+                        $stmt_del_e->bindValue(':v' . $k, $v, PDO::PARAM_STR);
+                    }
+                    $stmt_del_e->execute();
 
-                    //xoa du lieu tai bang nvx_vi_blocks
+                    $db->query('DELETE FROM ' . $db_config['prefix'] . '_' . $lang_data . '_blocks_groups WHERE module != \'theme\' AND module NOT IN (SELECT title FROM ' . $db_config['prefix'] . '_' . $lang_data . '_modules)');
+
                     $db->query('DELETE FROM ' . $db_config['prefix'] . '_' . $lang_data . '_blocks_weight WHERE bid NOT IN (SELECT bid FROM ' . $db_config['prefix'] . '_' . $lang_data . '_blocks_groups)');
 
-                    //xoa du lieu tai bang nvx_vi_modthemes
                     $db->query('DELETE FROM ' . $db_config['prefix'] . '_' . $lang_data . '_modthemes WHERE func_id in (SELECT func_id FROM ' . $db_config['prefix'] . '_' . $lang_data . '_modfuncs WHERE in_module NOT IN (SELECT title FROM ' . $db_config['prefix'] . '_' . $lang_data . '_modules))');
 
-                    //xoa du lieu tai bang nvx_vi_modfuncs
                     $db->query('DELETE FROM ' . $db_config['prefix'] . '_' . $lang_data . '_modfuncs WHERE in_module NOT IN (SELECT title FROM ' . $db_config['prefix'] . '_' . $lang_data . '_modules)');
 
-                    //xoa du lieu tai bang nvx_config
-                    $db->query('DELETE FROM ' . $db_config['prefix'] . "_config WHERE lang= '" . $lang_data . "' AND module!='global' AND module NOT IN (SELECT title FROM " . $db_config['prefix'] . '_' . $lang_data . '_modules)');
+                    $stmt_del_c = $db->prepare('DELETE FROM ' . $db_config['prefix'] . '_config WHERE lang = :lang AND module != \'global\' AND module NOT IN (SELECT title FROM ' . $db_config['prefix'] . '_' . $lang_data . '_modules)');
+                    $stmt_del_c->bindValue(':lang', $lang_data, PDO::PARAM_STR);
+                    $stmt_del_c->execute();
 
                     $result = $db->query('SELECT COUNT(*) FROM ' . $db_config['prefix'] . '_' . $lang_data . "_modules WHERE title='news'");
                     if ($result->fetchColumn()) {
@@ -344,7 +349,7 @@ if (defined('NV_IS_GODADMIN') or ($global_config['idsite'] > 0 and defined('NV_I
              * tệp email_langmới.php. Đối với mẫu email của các module này khi thiết lập
              * nó đã tự cài trên tất cả các ngôn ngữ
              */
-            $stmt_email = $db->prepare('SELECT * FROM ' . NV_EMAILTEMPLATES_GLOBALTABLE . " WHERE lang != '' AND lang != :lang");
+            $stmt_email = $db->prepare("SELECT * FROM " . NV_EMAILTEMPLATES_GLOBALTABLE . " WHERE lang != '' AND lang != :lang");
             $stmt_email->bindValue(':lang', $keylang, PDO::PARAM_STR);
             $stmt_email->execute();
             $result = $stmt_email;
@@ -415,9 +420,10 @@ if (defined('NV_IS_GODADMIN') or ($global_config['idsite'] > 0 and defined('NV_I
         $sql = 'SELECT title, module_file, module_data FROM ' . $db_config['prefix'] . '_' . $lang . '_modules ORDER BY weight ASC';
         $result_del_module = $db->query($sql);
 
-        while ($_scratch = $result_del_module->fetch(3)) {
-            [$title, $module_file, $module_data] = $_scratch;
-            unset($_scratch);
+        while ($_row_mod = $result_del_module->fetch()) {
+            $title = $_row_mod['title'];
+            $module_file = $_row_mod['module_file'];
+            $module_data = $_row_mod['module_data'];
             if (file_exists(NV_ROOTDIR . '/modules/' . $module_file . '/action_' . $db->dbtype . '.php')) {
                 $sql_drop_module = [];
 
@@ -437,15 +443,19 @@ if (defined('NV_IS_GODADMIN') or ($global_config['idsite'] > 0 and defined('NV_I
             }
 
             // Xóa plugin của module theo ngôn ngữ
-            $stmt_plugin = $db->prepare('SELECT * FROM ' . $db_config['prefix'] . '_plugins WHERE plugin_lang = :lang AND plugin_module_file != \'\' AND plugin_module_name = :title');
+            $stmt_plugin = $db->prepare("SELECT * FROM " . $db_config['prefix'] . "_plugins WHERE plugin_lang = :lang AND plugin_module_file != '' AND plugin_module_name = :title");
             $stmt_plugin->bindValue(':lang', $lang, PDO::PARAM_STR);
             $stmt_plugin->bindValue(':title', $title, PDO::PARAM_STR);
             $stmt_plugin->execute();
+
             $plugins = $stmt_plugin->fetchAll();
+
             foreach ($plugins as $plugin) {
-                if ($db->exec('DELETE FROM ' . $db_config['prefix'] . '_plugins WHERE pid=' . $plugin['pid'])) {
+                $stmt_del_p = $db->prepare("DELETE FROM " . $db_config['prefix'] . "_plugins WHERE pid = :pid");
+                $stmt_del_p->bindValue(':pid', $plugin['pid'], PDO::PARAM_INT);
+                if ($stmt_del_p->execute()) {
                     // Sắp xếp lại thứ tự
-                    $stmt_plugin_sel = $db->prepare('SELECT pid FROM ' . $db_config['prefix'] . '_plugins WHERE (plugin_lang = :lang OR plugin_lang = \'all\') AND plugin_area = :area AND hook_module = :hook ORDER BY weight ASC');
+                    $stmt_plugin_sel = $db->prepare("SELECT pid FROM " . $db_config['prefix'] . "_plugins WHERE (plugin_lang = :lang OR plugin_lang = 'all') AND plugin_area = :area AND hook_module = :hook ORDER BY weight ASC");
                     $stmt_plugin_sel->bindValue(':lang', $lang, PDO::PARAM_STR);
                     $stmt_plugin_sel->bindValue(':area', $plugin['plugin_area'], PDO::PARAM_STR);
                     $stmt_plugin_sel->bindValue(':hook', $plugin['hook_module'], PDO::PARAM_STR);
@@ -453,7 +463,8 @@ if (defined('NV_IS_GODADMIN') or ($global_config['idsite'] > 0 and defined('NV_I
                     $result = $stmt_plugin_sel;
 
                     $weight = 0;
-                    $stmt_plugin_upd = $db->prepare('UPDATE ' . $db_config['prefix'] . '_plugins SET weight = :weight WHERE pid = :pid');
+                    $stmt_plugin_upd = $db->prepare("UPDATE " . $db_config['prefix'] . "_plugins SET weight = :weight WHERE pid = :pid");
+
                     while ($row = $result->fetch()) {
                         ++$weight;
                         $stmt_plugin_upd->bindValue(':weight', $weight, PDO::PARAM_INT);

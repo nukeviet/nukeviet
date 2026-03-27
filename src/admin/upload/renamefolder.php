@@ -85,16 +85,16 @@ if (rename(NV_ROOTDIR . '/' . $path, NV_ROOTDIR . '/' . $newpath)) {
     $sth->bindValue(':path', $path, PDO::PARAM_STR);
     $sth->bindValue(':path_like', $path . '/%', PDO::PARAM_STR);
     $sth->execute();
-    while ($_scratch = $sth->fetch(3)) {
-        [$did, $dirname] = $_scratch;
-        unset($_scratch);
+    while ($_row_dir = $sth->fetch()) {
+        $did = $_row_dir['did'];
+        $dirname = $_row_dir['dirname'];
         $dirname2 = str_replace(NV_ROOTDIR . '/' . $path, $newpath, NV_ROOTDIR . '/' . $dirname);
-        $sth_file = $db->prepare('SELECT src, title FROM ' . NV_UPLOAD_GLOBALTABLE . '_file WHERE did = :did AND type = \'image\'');
+        $sth_file = $db->prepare("SELECT src, title FROM " . NV_UPLOAD_GLOBALTABLE . "_file WHERE did = :did AND type = 'image'");
         $sth_file->bindValue(':did', $did, PDO::PARAM_INT);
         $sth_file->execute();
-        while ($_scratch = $sth_file->fetch(3)) {
-            [$src, $title] = $_scratch;
-            unset($_scratch);
+        while ($_row_file = $sth_file->fetch()) {
+            $src = $_row_file['src'];
+            $title = $_row_file['title'];
             if ($action) {
                 $src2 = preg_replace('/^' . nv_preg_quote($dir_replace1) . '/', $dir_replace2, $src);
             } else {

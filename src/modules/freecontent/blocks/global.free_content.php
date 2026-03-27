@@ -113,8 +113,11 @@ if (!nv_function_exists('nv_block_freecontent')) {
             return '';
         }
 
-        $sql = 'SELECT id, title, description, image, link, target FROM ' . NV_PREFIXLANG . '_' . $site_mods[$module]['module_data'] . '_rows WHERE status = 1 AND bid = ' . $block_config['blockid'];
-        $list = $nv_Cache->db($sql, 'id', $module);
+        $sql = 'SELECT id, title, description, image, link, target FROM ' . NV_PREFIXLANG . '_' . $site_mods[$module]['module_data'] . '_rows WHERE status = 1 AND bid = :bid';
+        $bind = [
+            [':bid', $block_config['blockid'], PDO::PARAM_INT]
+        ];
+        $list = $nv_Cache->db($sql, 'id', $module, '', 0, $bind);
 
         if (!empty($list)) {
             $block_theme = get_tpl_dir([$global_config['module_theme'], $global_config['site_theme']], 'default', '/modules/' . $site_mods[$module]['module_file'] . '/block.free_content.tpl');

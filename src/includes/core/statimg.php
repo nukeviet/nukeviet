@@ -14,7 +14,11 @@ if (!defined('NV_MAINFILE')) {
 }
 
 if ($global_config['online_upd']) {
-    $online = $db->query('SELECT COUNT(*) FROM ' . NV_SESSIONS_GLOBALTABLE . ' WHERE onl_time >= ' . (NV_CURRENTTIME - NV_ONLINE_UPD_TIME))->fetchColumn();
+    $onl_time = NV_CURRENTTIME - NV_ONLINE_UPD_TIME;
+    $stmt = $db->prepare('SELECT COUNT(*) FROM ' . NV_SESSIONS_GLOBALTABLE . ' WHERE onl_time >= :onl_time');
+    $stmt->bindValue(':onl_time', $onl_time, PDO::PARAM_INT);
+    $stmt->execute();
+    $online = $stmt->fetchColumn();
     $online = str_pad($online, 3, '0', STR_PAD_LEFT);
 } else {
     $online = 'Hits';

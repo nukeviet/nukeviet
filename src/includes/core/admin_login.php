@@ -108,12 +108,13 @@ if ($passkey_allowed and $nv_Request->isset_request('create_auth_challenge', 'po
 
     // Lấy các khóa được phép
     $allowCredentials = [];
-    $sql = 'SELECT keyid, type FROM ' . NV_USERS_GLOBALTABLE . '_passkey WHERE userid=' . $admin_pre_data['userid'];
-    $result = $db->query($sql);
-    while ($credential = $result->fetch()) {
+    $stmt = $db->prepare('SELECT keyid, type FROM ' . NV_USERS_GLOBALTABLE . '_passkey WHERE userid = :userid');
+    $stmt->bindValue(':userid', $admin_pre_data['userid'], PDO::PARAM_INT);
+    $stmt->execute();
+    while ($credential = $stmt->fetch()) {
         $allowCredentials[] = PublicKeyCredentialDescriptor::create($credential['type'], base64_decode($credential['keyid']));
     }
-    $result->closeCursor();
+    $stmt->closeCursor();
 
     $jsonObject = RequestPasskey::create(false, $allowCredentials);
     $nv_Request->set_Session('admin_auth_challenge', json_encode([
@@ -268,10 +269,12 @@ if ($passkey_allowed and $nv_Request->isset_request('login_assertion', 'post')) 
     $credential['counter'] = $publicKeyCheck->counter;
 
     $sql = 'UPDATE ' . NV_USERS_GLOBALTABLE . '_passkey SET
-        counter=:counter, last_used_at=' . NV_CURRENTTIME . '
-    WHERE id=' . $row['passkey_id'];
+        counter = :counter, last_used_at = :last_used_at
+    WHERE id = :id';
     $stmt = $db->prepare($sql);
-    $stmt->bindParam(':counter', $credential['counter'], PDO::PARAM_INT);
+    $stmt->bindValue(':counter', $credential['counter'], PDO::PARAM_INT);
+    $stmt->bindValue(':last_used_at', NV_CURRENTTIME, PDO::PARAM_INT);
+    $stmt->bindValue(':id', $row['passkey_id'], PDO::PARAM_INT);
     $stmt->execute();
     unset($credential);
 
@@ -392,16 +395,18 @@ if (!empty($admin_pre_data) and in_array(($opt = $nv_Request->get_title('auth', 
 
         $stmt = $db->prepare('UPDATE ' . NV_USERS_GLOBALTABLE . ' SET
             checknum = :checknum,
-            last_login = ' . NV_CURRENTTIME . ",
+            last_login = :last_login,
             last_ip = :last_ip,
             last_agent = :last_agent,
-            last_openid = '',
+            last_openid = \'\',
             remember = 1
-        WHERE userid=" . $admin_pre_data['userid']);
+        WHERE userid = :userid');
 
         $stmt->bindValue(':checknum', $checknum, PDO::PARAM_STR);
+        $stmt->bindValue(':last_login', NV_CURRENTTIME, PDO::PARAM_INT);
         $stmt->bindValue(':last_ip', NV_CLIENT_IP, PDO::PARAM_STR);
         $stmt->bindValue(':last_agent', NV_USER_AGENT, PDO::PARAM_STR);
+        $stmt->bindValue(':userid', $admin_pre_data['userid'], PDO::PARAM_INT);
         $stmt->execute();
 
         if ($global_config['allowuserloginmulti']) {
@@ -449,10 +454,18 @@ if (!empty($admin_pre_data) and in_array(($opt = $nv_Request->get_title('auth', 
             $sql = 'INSERT INTO ' . NV_AUTHORS_GLOBALTABLE . '_oauth (
                 admin_id, oauth_server, oauth_uid, oauth_email, oauth_id, addtime
             ) VALUES (
-                ' . $admin_pre_data['admin_id'] . ', ' . $db->quote($opt) . ', ' . $db->quote($attribs['full_identity']) . ',
-                ' . $db->quote($attribs['email']) . ', ' . $db->quote($attribs['identity']) . ', ' . NV_CURRENTTIME . '
+                :admin_id, :oauth_server, :oauth_uid, :oauth_email, :oauth_id, :addtime
             )';
-            if ($db->insert_id($sql, 'id')) {
+            $stmt = $db->prepare($sql);
+            $stmt->bindValue(':admin_id', $admin_pre_data['admin_id'], PDO::PARAM_INT);
+            $stmt->bindValue(':oauth_server', $opt, PDO::PARAM_STR);
+            $stmt->bindValue(':oauth_uid', $attribs['full_identity'], PDO::PARAM_STR);
+            $stmt->bindValue(':oauth_email', $attribs['email'], PDO::PARAM_STR);
+            $stmt->bindValue(':oauth_id', $attribs['identity'], PDO::PARAM_STR);
+            $stmt->bindValue(':addtime', NV_CURRENTTIME, PDO::PARAM_INT);
+
+            if ($stmt->execute()) {
+                $db->lastInsertId(); // Ensure consistency with insert_id check
                 $row = $admin_pre_data;
                 $admin_login_success = true;
             } else {
@@ -460,9 +473,14 @@ if (!empty($admin_pre_data) and in_array(($opt = $nv_Request->get_title('auth', 
             }
         } else {
             // Nếu đã kích hoạt rồi thì tìm xem trong CSDL khớp với thông tin xác thực này không!
-            $sql = 'SELECT * FROM ' . NV_AUTHORS_GLOBALTABLE . '_oauth WHERE admin_id=' . $admin_pre_data['admin_id'] . '
-            AND oauth_server=' . $db->quote($opt) . ' AND oauth_uid=' . $db->quote($attribs['full_identity']);
-            $oauth = $db->query($sql)->fetch();
+            $sql = 'SELECT * FROM ' . NV_AUTHORS_GLOBALTABLE . '_oauth WHERE admin_id = :admin_id AND oauth_server = :oauth_server AND oauth_uid = :oauth_uid';
+            $stmt = $db->prepare($sql);
+            $stmt->bindValue(':admin_id', $admin_pre_data['admin_id'], PDO::PARAM_INT);
+            $stmt->bindValue(':oauth_server', $opt, PDO::PARAM_STR);
+            $stmt->bindValue(':oauth_uid', $attribs['full_identity'], PDO::PARAM_STR);
+            $stmt->execute();
+            $oauth = $stmt->fetch();
+            $stmt->closeCursor();
             if (empty($oauth)) {
                 $error = $nv_Lang->getGlobal('admin_oauth_error');
             } else {
@@ -493,8 +511,9 @@ if (!empty($admin_pre_data) and $nv_Request->isset_request('submit2scode', 'post
         $step2_isvalid = true;
     } elseif (!empty($nv_backupcodepin)) {
         $nv_backupcodepin = nv_strtolower($nv_backupcodepin);
-        $sth = $db->prepare('SELECT code FROM ' . NV_USERS_GLOBALTABLE . '_backupcodes WHERE is_used=0 AND code=:code AND userid=' . $admin_pre_data['userid']);
-        $sth->bindParam(':code', $nv_backupcodepin, PDO::PARAM_STR);
+        $sth = $db->prepare('SELECT code FROM ' . NV_USERS_GLOBALTABLE . '_backupcodes WHERE is_used = 0 AND code = :code AND userid = :userid');
+        $sth->bindValue(':code', $nv_backupcodepin, PDO::PARAM_STR);
+        $sth->bindValue(':userid', $admin_pre_data['userid'], PDO::PARAM_INT);
         $sth->execute();
 
         if ($sth->rowCount() != 1) {
@@ -636,10 +655,12 @@ if (!empty($admin_pre_data) and $nv_Request->isset_request('submit2spasskey', 'p
     $credential['counter'] = $publicKeyCheck->counter;
 
     $sql = 'UPDATE ' . NV_USERS_GLOBALTABLE . '_passkey SET
-        counter=:counter, last_used_at=' . NV_CURRENTTIME . '
-    WHERE id=' . $publickey['id'];
+        counter = :counter, last_used_at = :last_used_at
+    WHERE id = :id';
     $stmt = $db->prepare($sql);
-    $stmt->bindParam(':counter', $credential['counter'], PDO::PARAM_INT);
+    $stmt->bindValue(':counter', $credential['counter'], PDO::PARAM_INT);
+    $stmt->bindValue(':last_used_at', NV_CURRENTTIME, PDO::PARAM_INT);
+    $stmt->bindValue(':id', $publickey['id'], PDO::PARAM_INT);
     $stmt->execute();
     unset($credential, $publickey);
 
@@ -789,14 +810,16 @@ if (empty($admin_pre_data) and $nv_Request->isset_request('nv_login,nv_password'
 
         $sql = 'UPDATE ' . NV_AUTHORS_GLOBALTABLE . ' SET
                     pre_check_num = :check_num,
-                    pre_last_login = ' . NV_CURRENTTIME . ',
+                    pre_last_login = :last_login,
                     pre_last_ip = :last_ip,
                     pre_last_agent = :last_agent
-                WHERE admin_id=' . $admin_id;
+                WHERE admin_id = :admin_id';
         $sth = $db->prepare($sql);
         $sth->bindValue(':check_num', $checknum, PDO::PARAM_STR);
+        $sth->bindValue(':last_login', NV_CURRENTTIME, PDO::PARAM_INT);
         $sth->bindValue(':last_ip', NV_CLIENT_IP, PDO::PARAM_STR);
         $sth->bindValue(':last_agent', NV_USER_AGENT, PDO::PARAM_STR);
+        $sth->bindValue(':admin_id', $admin_id, PDO::PARAM_INT);
         $sth->execute();
 
         $nv_Request->set_Session('admin_pre', $admin_serialize);

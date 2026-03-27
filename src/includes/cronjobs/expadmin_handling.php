@@ -22,21 +22,32 @@ function cron_expadmin_handling()
 {
     global $db, $db_config, $nv_Lang, $global_config, $nv_Cache, $language_array;
 
-    $sql = 'SELECT admin_id, lev, after_exp_action, susp_reason FROM ' . NV_AUTHORS_GLOBALTABLE . ' WHERE lev!=1 AND lev_expired <=' . NV_CURRENTTIME . ' AND lev_expired>0 AND is_suspend=0';
-    $result = $db->query($sql);
+    $sql = 'SELECT admin_id, lev, after_exp_action, susp_reason FROM ' . NV_AUTHORS_GLOBALTABLE . ' WHERE lev != 1 AND lev_expired <= :current_time AND lev_expired > 0 AND is_suspend = 0';
+    $stmt = $db->prepare($sql);
+    $stmt->bindValue(':current_time', NV_CURRENTTIME, PDO::PARAM_INT);
+    $stmt->execute();
+
     $suspends = [];
     $downgrades = [];
-    while ($row = $result->fetch()) {
+    while ($row = $stmt->fetch()) {
         if (!empty($row['after_exp_action']) and $row['lev'] == '2') {
             $downgrades[$row['admin_id']] = $row['after_exp_action'];
         } else {
             $suspends[$row['admin_id']] = $row['susp_reason'];
         }
     }
+    $stmt->closeCursor();
 
     if (!empty($suspends)) {
+        $stmt_user = $db->prepare('SELECT * FROM ' . NV_USERS_GLOBALTABLE . ' WHERE userid = :userid');
+        $stmt_update = $db->prepare('UPDATE ' . NV_AUTHORS_GLOBALTABLE . ' SET edittime = :edittime, is_suspend = 1, susp_reason = :susp_reason WHERE admin_id = :admin_id');
+
         foreach ($suspends as $admin_id => $susp_reason) {
-            $row_user = $db->query('SELECT * FROM ' . NV_USERS_GLOBALTABLE . ' WHERE userid=' . $admin_id)->fetch();
+            $stmt_user->bindValue(':userid', $admin_id, PDO::PARAM_INT);
+            $stmt_user->execute();
+            $row_user = $stmt_user->fetch();
+            $stmt_user->closeCursor();
+
             $userlang = NV_LANG_DATA;
             if (!empty($row_user['language']) and in_array($row_user['language'], $global_config['setup_langs'], true)) {
                 $userlang = $row_user['language'];
@@ -53,10 +64,13 @@ function cron_expadmin_handling()
                 'info' => $nv_Lang->getModule('admin_rights_expired')
             ]);
             $susp_reason = serialize($susp_reason);
-            $sth = $db->prepare('UPDATE ' . NV_AUTHORS_GLOBALTABLE . ' SET edittime=' . NV_CURRENTTIME . ', is_suspend=1, susp_reason=:susp_reason WHERE admin_id=' . $admin_id);
-            $sth->bindValue(':susp_reason', $susp_reason, PDO::PARAM_STR);
+
+            $stmt_update->bindValue(':edittime', NV_CURRENTTIME, PDO::PARAM_INT);
+            $stmt_update->bindValue(':susp_reason', $susp_reason, PDO::PARAM_STR);
+            $stmt_update->bindValue(':admin_id', $admin_id, PDO::PARAM_INT);
+
             $is_sendmail = [];
-            if ($sth->execute()) {
+            if ($stmt_update->execute()) {
                 nv_insert_logs($userlang, 'authors', $nv_Lang->getModule('suspend1'), $nv_Lang->getModule('lev_expired_suspend', $row_user['username']), 0);
                 $is_sendmail = [[
                     'to' => $row_user['email'],
@@ -85,8 +99,13 @@ function cron_expadmin_handling()
 
         $nv_Lang->loadFile(NV_ROOTDIR . '/includes/language/' . NV_LANG_DATA . '/admin_authors.php', true);
 
+        $stmt_update = $db->prepare('UPDATE ' . NV_AUTHORS_GLOBALTABLE . " SET lev = 3, lev_expired = 0, after_exp_action = '', edittime = :edittime WHERE admin_id = :admin_id");
+        $stmt_user = $db->prepare('SELECT * FROM ' . NV_USERS_GLOBALTABLE . ' WHERE userid = :userid');
+
         foreach ($downgrades as $admin_id => $after_exp_action) {
-            $db->query('UPDATE ' . NV_AUTHORS_GLOBALTABLE . " SET lev=3, lev_expired=0, after_exp_action='', edittime=" . NV_CURRENTTIME . ' WHERE admin_id = ' . $admin_id);
+            $stmt_update->bindValue(':edittime', NV_CURRENTTIME, PDO::PARAM_INT);
+            $stmt_update->bindValue(':admin_id', $admin_id, PDO::PARAM_INT);
+            $stmt_update->execute();
 
             nv_groups_add_user(3, $admin_id);
             nv_groups_del_user(2, $admin_id);
@@ -97,15 +116,15 @@ function cron_expadmin_handling()
                 foreach ($_modules as $l => $vs) {
                     $cache_del = false;
                     if (!empty($vs)) {
+                        $sth = $db->prepare('UPDATE ' . $db_config['prefix'] . '_' . $l . '_modules SET admins = :admins WHERE title = :mod');
                         foreach ($vs as $m) {
                             if (isset($allmods[$l][$m])) {
                                 $admins = (!empty($allmods[$l][$m]['admins']) ? $allmods[$l][$m]['admins'] . ',' : '') . $admin_id;
                                 $admins = array_map('intval', explode(',', $admins));
                                 $admins = array_unique($admins);
                                 $admins = implode(',', $admins);
-                                $sth = $db->prepare('UPDATE ' . $db_config['prefix'] . '_' . $l . '_modules SET admins= :admins WHERE title= :mod');
-                                $sth->bindParam(':admins', $admins, PDO::PARAM_STR);
-                                $sth->bindParam(':mod', $m, PDO::PARAM_STR);
+                                $sth->bindValue(':admins', $admins, PDO::PARAM_STR);
+                                $sth->bindValue(':mod', $m, PDO::PARAM_STR);
                                 $sth->execute();
                                 $new[] = $m . ' (' . $language_array[$l]['name'] . ')';
                                 $cache_del = true;
@@ -118,7 +137,10 @@ function cron_expadmin_handling()
                 }
             }
 
-            $row_user = $db->query('SELECT * FROM ' . NV_USERS_GLOBALTABLE . ' WHERE userid=' . $admin_id)->fetch();
+            $stmt_user->bindValue(':userid', $admin_id, PDO::PARAM_INT);
+            $stmt_user->execute();
+            $row_user = $stmt_user->fetch();
+            $stmt_user->closeCursor();
 
             $log_note = [];
             $log_note[] = 'Username: ' . $row_user['username'];

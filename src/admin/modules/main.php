@@ -25,7 +25,7 @@ $modules_exit = array_flip(nv_scandir(NV_ROOTDIR . '/modules', $global_config['c
 // Danh sách module có trong hệ thống
 $new_modules = [];
 
-$sql = 'SELECT title, basename, is_sys, version FROM ' . $db_config['prefix'] . '_setup_extensions WHERE type=\'module\' ORDER BY title ASC';
+$sql = "SELECT title, basename, is_sys, version FROM " . $db_config['prefix'] . "_setup_extensions WHERE type = 'module' ORDER BY title ASC";
 $result = $db->query($sql);
 
 $is_delCache = false;

@@ -112,12 +112,16 @@ function nv_admin_checkdata($adm_session_value)
         b.email_creation_time, b.email_reset_request,
         b.email_verification_time email_verification_time, b.language
         FROM ' . NV_AUTHORS_GLOBALTABLE . ' a, ' . NV_USERS_GLOBALTABLE . ' b
-        WHERE a.admin_id = ' . $array_admin['admin_id'] . '
-        AND a.lev!=0
-        AND a.is_suspend=0
-        AND b.userid=a.admin_id
-        AND b.active=1';
-    $admin_info = $db->query($sql)->fetch();
+        WHERE a.admin_id = :admin_id
+        AND a.lev != 0
+        AND a.is_suspend = 0
+        AND b.userid = a.admin_id
+        AND b.active = 1';
+    $stmt = $db->prepare($sql);
+    $stmt->bindValue(':admin_id', $array_admin['admin_id'], PDO::PARAM_INT);
+    $stmt->execute();
+    $admin_info = $stmt->fetch();
+    $stmt->closeCursor();
     if (empty($admin_info)) {
         return [];
     }
@@ -142,8 +146,9 @@ function nv_admin_checkdata($adm_session_value)
             $update = implode(',', $allow_files_type2);
             $update .= '|' . $allow_modify_files . '|' . $allow_create_subdirectories . '|' . $allow_modify_subdirectories;
 
-            $sth = $db->prepare('UPDATE ' . NV_AUTHORS_GLOBALTABLE . ' SET files_level = :files_level WHERE admin_id=' . $array_admin['admin_id']);
-            $sth->bindParam(':files_level', $update, PDO::PARAM_STR);
+            $sth = $db->prepare('UPDATE ' . NV_AUTHORS_GLOBALTABLE . ' SET files_level = :files_level WHERE admin_id = :admin_id');
+            $sth->bindValue(':files_level', $update, PDO::PARAM_STR);
+            $sth->bindValue(':admin_id', $array_admin['admin_id'], PDO::PARAM_INT);
             $sth->execute();
         }
         $allow_files_type = $allow_files_type2;
@@ -228,12 +233,16 @@ function nv_admin_check_predata($adm_session_value)
         b.last_agent user_last_agent, b.last_ip user_last_ip, b.last_login user_last_login, b.last_openid user_last_openid,
         b.secretkey user_2s_secretkey, b.language, b.pref_2fa, b.sec_keys
         FROM ' . NV_AUTHORS_GLOBALTABLE . ' a, ' . NV_USERS_GLOBALTABLE . ' b
-        WHERE a.admin_id = ' . $array_admin['admin_id'] . '
-        AND a.lev!=0
-        AND a.is_suspend=0
-        AND b.userid=a.admin_id
-        AND b.active=1';
-    $admin_info = $db->query($sql)->fetch();
+        WHERE a.admin_id = :admin_id
+        AND a.lev != 0
+        AND a.is_suspend = 0
+        AND b.userid = a.admin_id
+        AND b.active = 1';
+    $stmt = $db->prepare($sql);
+    $stmt->bindValue(':admin_id', $array_admin['admin_id'], PDO::PARAM_INT);
+    $stmt->execute();
+    $admin_info = $stmt->fetch();
+    $stmt->closeCursor();
     if (empty($admin_info)) {
         return [];
     }

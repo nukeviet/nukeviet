@@ -85,17 +85,19 @@ function nv_referer_update()
 
             if ($_numrow > 0) {
                 $sth = $db->prepare('UPDATE ' . NV_REFSTAT_TABLE . ' SET
-                    total=total+1,
-                    month' . date('m', NV_CURRENTTIME) . '=month' . date('m', NV_CURRENTTIME) . '+1,
-                    last_update=' . NV_CURRENTTIME . '
-                    WHERE host= :host');
+                    total = total + 1,
+                    month' . date('m', NV_CURRENTTIME) . ' = month' . date('m', NV_CURRENTTIME) . ' + 1,
+                    last_update = :last_update
+                    WHERE host = :host');
+                $sth->bindValue(':last_update', NV_CURRENTTIME, PDO::PARAM_INT);
                 $sth->bindValue(':host', $host, PDO::PARAM_STR);
                 $sth->execute();
             } else {
                 $sth = $db->prepare('INSERT INTO ' . NV_REFSTAT_TABLE . '
                     (host, total, month' . date('m', NV_CURRENTTIME) . ', last_update)
-                    VALUES ( :host, 1, 1,' . NV_CURRENTTIME . ')');
+                    VALUES (:host, 1, 1, :last_update)');
                 $sth->bindValue(':host', $host, PDO::PARAM_STR);
+                $sth->bindValue(':last_update', NV_CURRENTTIME, PDO::PARAM_INT);
                 $sth->execute();
             }
             unset($_numrow);

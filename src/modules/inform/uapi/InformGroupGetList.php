@@ -59,7 +59,7 @@ class InformGroupGetList implements UiApi
      */
     public function execute()
     {
-        global $db, $nv_Request, $nv_Lang;
+        global $db_slave, $nv_Request, $nv_Lang;
 
         $module_name = Uapi::getModuleName();
         $module_info = Uapi::getModuleInfo();
@@ -79,7 +79,7 @@ class InformGroupGetList implements UiApi
                 ->getResult();
         }
 
-        $sth = $db->prepare('SELECT COUNT(*) FROM ' . NV_USERS_GLOBALTABLE . '_groups_users WHERE group_id = :group_id AND is_leader=1 AND userid = :userid');
+        $sth = $db_slave->prepare("SELECT COUNT(*) FROM " . NV_USERS_GLOBALTABLE . "_groups_users WHERE group_id = :group_id AND is_leader = 1 AND userid = :userid");
         $sth->bindValue(':group_id', $group_id, PDO::PARAM_INT);
         $sth->bindValue(':userid', $user_id, PDO::PARAM_INT);
         $sth->execute();
@@ -96,8 +96,8 @@ class InformGroupGetList implements UiApi
             ':group_id' => [$group_id, PDO::PARAM_INT]
         ];
         $where_arr = [
-            'mtb.sender_role = \'group\'',
-            'mtb.sender_group = :group_id'
+            "mtb.sender_role = 'group'",
+            "mtb.sender_group = :group_id"
         ];
 
         $postdata = [];
@@ -118,7 +118,7 @@ class InformGroupGetList implements UiApi
 
         $where_str = ' WHERE ' . implode(' AND ', $where_arr);
 
-        $sth = $db->prepare('SELECT COUNT(*) FROM ' . NV_INFORM_GLOBALTABLE . ' AS mtb' . $where_str);
+        $sth = $db_slave->prepare('SELECT COUNT(*) FROM ' . NV_INFORM_GLOBALTABLE . ' AS mtb' . $where_str);
         foreach ($params as $key => $val) {
             $sth->bindValue($key, $val[0], $val[1]);
         }
@@ -126,7 +126,7 @@ class InformGroupGetList implements UiApi
         $num_items = $sth->fetchColumn();
         $this->result->set('total', $num_items);
 
-        $sth = $db->prepare('SELECT mtb.*, (SELECT COUNT(*) FROM ' . NV_INFORM_STATUS_GLOBALTABLE . ' WHERE pid = mtb.id AND viewed_time != 0) AS views
+        $sth = $db_slave->prepare('SELECT mtb.*, (SELECT COUNT(*) FROM ' . NV_INFORM_STATUS_GLOBALTABLE . ' WHERE pid = mtb.id AND viewed_time != 0) AS views
             FROM ' . NV_INFORM_GLOBALTABLE . ' AS mtb' . $where_str . '
             ORDER BY mtb.add_time DESC
             LIMIT :limit OFFSET :offset');

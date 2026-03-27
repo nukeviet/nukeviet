@@ -25,8 +25,11 @@ if (!nv_function_exists('nv_metismenu')) {
     {
         global $nv_Cache;
 
-        $sql = 'SELECT id, parentid, title, link, icon, note, subitem, groups_view, module_name, op, target, css, active_type FROM ' . NV_PREFIXLANG . '_menu_rows WHERE status=1 AND mid = ' . $block_config['menuid'] . ' ORDER BY parentid, weight ASC';
-        $list = $nv_Cache->db($sql, 'id', $block_config['module']);
+        $sql = 'SELECT id, parentid, title, link, icon, note, subitem, groups_view, module_name, op, target, css, active_type FROM ' . NV_PREFIXLANG . '_menu_rows WHERE status=1 AND mid = :mid ORDER BY parentid, weight ASC';
+        $bind = [
+            [':mid', $block_config['menuid'], \PDO::PARAM_INT]
+        ];
+        $list = $nv_Cache->db($sql, 'id', $block_config['module'], '', 0, $bind);
 
         $menulist = menu_getdata($list, 0, $block_config);
         $block_theme = get_tpl_dir([$block_config['real_theme']], 'default', '/css/jquery.metisMenu.css');

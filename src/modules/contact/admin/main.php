@@ -94,7 +94,7 @@ if (!empty($contact_allowed['reply'])) {
                     $admins = parse_admins($departments[$row['cid']]['admins']);
                     if (!empty($admins['obt_level'])) {
                         $in = implode(',', array_map('intval', $admins['obt_level']));
-                        $stmt = $db->prepare('SELECT userid, username, email, first_name, last_name FROM ' . NV_USERS_GLOBALTABLE . ' WHERE userid IN (SELECT admin_id FROM ' . NV_AUTHORS_GLOBALTABLE . ' WHERE admin_id IN (' . $in . ') AND is_suspend=0) AND active=1');
+                        $stmt = $db->prepare("SELECT userid, username, email, first_name, last_name FROM " . NV_USERS_GLOBALTABLE . " WHERE userid IN (SELECT admin_id FROM " . NV_AUTHORS_GLOBALTABLE . " WHERE admin_id IN (" . $in . ") AND is_suspend = 0) AND active = 1");
                         $stmt->execute();
 
                         while ($_row = $stmt->fetch()) {
@@ -143,7 +143,7 @@ if (!empty($contact_allowed['reply'])) {
             if (!empty($maillang)) {
                 $values = array_values(array_keys($gconfigs));
                 $placeholders = implode(', ', array_map(fn($k) => ':v' . $k, array_keys($values)));
-                $stmt = $db->prepare('SELECT config_name, config_value FROM ' . NV_CONFIG_GLOBALTABLE . ' WHERE lang = :lang AND module = \'global\' AND config_name IN (' . $placeholders . ')');
+                $stmt = $db->prepare("SELECT config_name, config_value FROM " . NV_CONFIG_GLOBALTABLE . " WHERE lang = :lang AND module = 'global' AND config_name IN (" . $placeholders . ")");
                 $stmt->bindValue(':lang', $maillang, PDO::PARAM_STR);
                 foreach ($values as $k => $v) {
                     $stmt->bindValue(':v' . $k, $v, PDO::PARAM_STR);
@@ -247,7 +247,7 @@ if (!empty($contact_allowed['exec'])) {
         // Xóa toàn bộ các thư thuộc bộ phận được phép xem
         if ($type == 3) {
             if (defined('NV_IS_SPADMIN')) {
-                $ids = $db->query('SELECT GROUP_CONCAT(DISTINCT id SEPARATOR \',\') AS ids FROM ' . NV_MOD_TABLE . '_send')->fetchColumn();
+                $ids = $db->query("SELECT GROUP_CONCAT(DISTINCT id SEPARATOR ',') AS ids FROM " . NV_MOD_TABLE . "_send")->fetchColumn();
                 if (!empty($ids)) {
                     nv_delete_notification(NV_LANG_DATA, $module_name, 'contact_new', $ids);
 
@@ -271,7 +271,7 @@ if (!empty($contact_allowed['exec'])) {
             $sends = $nv_Request->get_typed_array('sends', 'post', 'int', []);
             if (!empty($sends)) {
                 $in_sends = implode(',', $sends);
-                $ids = $db->query('SELECT GROUP_CONCAT(DISTINCT id SEPARATOR \',\') AS ids FROM ' . NV_MOD_TABLE . '_send WHERE id IN (' . $in_sends . ') AND ' . $db_deps)->fetchColumn();
+                $ids = $db->query("SELECT GROUP_CONCAT(DISTINCT id SEPARATOR ',') AS ids FROM " . NV_MOD_TABLE . "_send WHERE id IN (" . $in_sends . ") AND " . $db_deps)->fetchColumn();
                 nv_delete_notification(NV_LANG_DATA, $module_name, 'contact_new', $ids);
 
                 if (!empty($ids)) {

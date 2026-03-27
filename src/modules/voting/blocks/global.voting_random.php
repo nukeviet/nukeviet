@@ -66,9 +66,11 @@ if (!nv_function_exists('nv_block_voting')) {
             $rand = random_int(0, $a);
             $current_voting = $allowed[$rand];
 
-            $sql = 'SELECT id, vid, title, url FROM ' . NV_PREFIXLANG . '_' . $site_mods['voting']['module_data'] . '_rows WHERE vid = ' . $current_voting['vid'] . ' ORDER BY id ASC';
-
-            $list = $nv_Cache->db($sql, '', 'voting');
+            $sql = 'SELECT id, vid, title, url FROM ' . NV_PREFIXLANG . '_' . $site_mods['voting']['module_data'] . '_rows WHERE vid = :vid ORDER BY id ASC';
+            $bind = [
+                [':vid', $current_voting['vid'], PDO::PARAM_INT]
+            ];
+            $list = $nv_Cache->db($sql, '', 'voting', '', 0, $bind);
 
             if (empty($list)) {
                 return '';

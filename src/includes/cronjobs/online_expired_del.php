@@ -21,7 +21,10 @@ if (!defined('NV_MAINFILE') or !defined('NV_IS_CRON')) {
 function cron_online_expired_del()
 {
     global $db;
-    $db->query('DELETE FROM ' . NV_SESSIONS_GLOBALTABLE . ' WHERE onl_time < ' . (NV_CURRENTTIME - NV_ONLINE_UPD_TIME));
+    $onl_time = NV_CURRENTTIME - NV_ONLINE_UPD_TIME;
+    $stmt = $db->prepare('DELETE FROM ' . NV_SESSIONS_GLOBALTABLE . ' WHERE onl_time < :onl_time');
+    $stmt->bindValue(':onl_time', $onl_time, PDO::PARAM_INT);
+    $stmt->execute();
 
     return true;
 }

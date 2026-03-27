@@ -24,10 +24,16 @@ function cron_apilogs_autodel()
 
     $sql = 'SELECT role_id, log_period FROM ' . $db_config['prefix'] . '_api_role WHERE log_period > 0';
     $result = $db->query($sql);
+
+    $stmt = $db->prepare('DELETE FROM ' . $db_config['prefix'] . '_api_role_logs WHERE role_id = :role_id AND log_time < :log_time');
+
     while ($row = $result->fetch()) {
         $interval = NV_CURRENTTIME - $row['log_period'];
-        $db->query('DELETE FROM ' . $db_config['prefix'] . '_api_role_logs WHERE role_id = ' . $row['role_id'] . ' AND log_time < ' . $interval);
+        $stmt->bindValue(':role_id', $row['role_id'], PDO::PARAM_INT);
+        $stmt->bindValue(':log_time', $interval, PDO::PARAM_INT);
+        $stmt->execute();
     }
+    $result->closeCursor();
 
     return true;
 }

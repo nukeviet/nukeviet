@@ -100,12 +100,13 @@ function nv_blocks_content($sitecontent)
                 $in[] = $row['func_id'];
             }
         }
-        $stmt = $db->prepare('SELECT t1.*, t2.func_id FROM ' . NV_BLOCKS_TABLE . '_groups t1
-             INNER JOIN ' . NV_BLOCKS_TABLE . '_weight t2
+        $ids = implode(',', array_map('intval', $in));
+        $stmt = $db->prepare("SELECT t1.*, t2.func_id FROM " . NV_BLOCKS_TABLE . "_groups t1
+             INNER JOIN " . NV_BLOCKS_TABLE . "_weight t2
              ON t1.bid = t2.bid
-             WHERE t2.func_id IN (' . $in . ")
-             AND t1.theme =:theme
-             AND t1.active!=''
+             WHERE t2.func_id IN (" . $ids . ")
+             AND t1.theme = :theme
+             AND t1.active != ''
              ORDER BY t2.weight ASC");
         $stmt->bindValue(':theme', $global_config['module_theme'], PDO::PARAM_STR);
         $stmt->execute();
@@ -985,7 +986,7 @@ function nv_admin_menu()
 
     $enable_drag = false;
     if (defined('NV_IS_SPADMIN')) {
-        $sql = 'SELECT COUNT(*) AS count FROM ' . NV_AUTHORS_GLOBALTABLE . '_module WHERE act_' . $admin_info['level'] . ' = 1 AND module=\'themes\'';
+        $sql = "SELECT COUNT(*) AS count FROM " . NV_AUTHORS_GLOBALTABLE . "_module WHERE act_" . $admin_info['level'] . " = 1 AND module = 'themes'";
         $list = $nv_Cache->db($sql, '', 'authors');
         if (!empty($list[0]['count'])) {
             $enable_drag = true;
@@ -1007,12 +1008,12 @@ function nv_groups_list_pub($mod_data = 'users')
 
     $_mod_table = ($mod_data == 'users') ? NV_USERS_GLOBALTABLE : $db_config['prefix'] . '_' . $mod_data;
 
-    $query = 'SELECT g.group_id, d.title, g.group_type, g.exp_time FROM ' . $_mod_table . '_groups AS g LEFT JOIN ' . $_mod_table . "_groups_detail d ON ( g.group_id = d.group_id AND d.lang='" . NV_LANG_DATA . "' ) WHERE g.act=1 AND (g.idsite = :idsite OR (g.idsite =0 AND g.siteus = 1)) ORDER BY g.idsite, g.weight";
+    $query = "SELECT g.group_id, d.title, g.group_type, g.exp_time FROM " . $_mod_table . "_groups AS g LEFT JOIN " . $_mod_table . "_groups_detail d ON ( g.group_id = d.group_id AND d.lang = :lang ) WHERE g.act = 1 AND (g.idsite = :idsite OR (g.idsite = 0 AND g.siteus = 1)) ORDER BY g.idsite, g.weight";
     $stmt = $db->prepare($query);
+    $stmt->bindValue(':lang', NV_LANG_DATA, PDO::PARAM_STR);
     $stmt->bindValue(':idsite', $global_config['idsite'], PDO::PARAM_INT);
     $stmt->execute();
     $list = $stmt->fetchAll();
-    $stmt->closeCursor();
 
     if (empty($list)) {
         return [];
@@ -1030,7 +1031,9 @@ function nv_groups_list_pub($mod_data = 'users')
 
     if ($reload) {
         $reload_in = implode(',', array_map('intval', $reload));
-        $db->query('UPDATE ' . $_mod_table . '_groups SET act=0 WHERE group_id IN (' . $reload_in . ')');
+        $stmt = $db->prepare("UPDATE " . $_mod_table . "_groups SET act = 0 WHERE group_id IN (" . $reload_in . ")");
+        $stmt->execute();
+
         $nv_Cache->delMod($mod_data);
     }
 

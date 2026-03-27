@@ -59,7 +59,7 @@ class InformGroupGetInfo implements UiApi
      */
     public function execute()
     {
-        global $db, $nv_Request, $nv_Lang;
+        global $db_slave, $nv_Request, $nv_Lang;
 
         $module_name = Uapi::getModuleName();
         $module_info = Uapi::getModuleInfo();
@@ -79,7 +79,7 @@ class InformGroupGetInfo implements UiApi
                 ->getResult();
         }
 
-        $sth = $db->prepare('SELECT COUNT(*) FROM ' . NV_USERS_GLOBALTABLE . '_groups_users WHERE group_id = :group_id AND is_leader=1 AND userid = :userid');
+        $sth = $db_slave->prepare("SELECT COUNT(*) FROM " . NV_USERS_GLOBALTABLE . "_groups_users WHERE group_id = :group_id AND is_leader = 1 AND userid = :userid");
         $sth->bindValue(':group_id', $group_id, PDO::PARAM_INT);
         $sth->bindValue(':userid', $user_id, PDO::PARAM_INT);
         $sth->execute();
@@ -102,7 +102,7 @@ class InformGroupGetInfo implements UiApi
                 ->getResult();
         }
 
-        $sth = $db->prepare('SELECT * FROM ' . NV_INFORM_GLOBALTABLE . ' AS mtb WHERE mtb.sender_role = \'group\' AND mtb.sender_group = :group_id AND mtb.id = :id');
+        $sth = $db_slave->prepare("SELECT * FROM " . NV_INFORM_GLOBALTABLE . " AS mtb WHERE mtb.sender_role = 'group' AND mtb.sender_group = :group_id AND mtb.id = :id");
         $sth->bindValue(':group_id', $group_id, PDO::PARAM_INT);
         $sth->bindValue(':id', $postdata['id'], PDO::PARAM_INT);
         $sth->execute();

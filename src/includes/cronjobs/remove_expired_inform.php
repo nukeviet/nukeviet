@@ -23,8 +23,14 @@ function cron_remove_expired_inform()
     global $db, $global_config;
 
     if ($global_config['inform_active']) {
-        $db->query('DELETE FROM ' . NV_INFORM_STATUS_GLOBALTABLE . ' WHERE pid IN (SELECT id FROM ' . NV_INFORM_GLOBALTABLE . ' WHERE (exp_time != 0 AND exp_time < ' . (NV_CURRENTTIME - $global_config['inform_exp_del']) . '))');
-        $db->query('DELETE FROM ' . NV_INFORM_GLOBALTABLE . ' WHERE (exp_time != 0 AND exp_time < ' . (NV_CURRENTTIME - $global_config['inform_exp_del']) . ')');
+        $exp_time = NV_CURRENTTIME - $global_config['inform_exp_del'];
+        $stmt = $db->prepare('DELETE FROM ' . NV_INFORM_STATUS_GLOBALTABLE . ' WHERE pid IN (SELECT id FROM ' . NV_INFORM_GLOBALTABLE . ' WHERE (exp_time != 0 AND exp_time < :exp_time))');
+        $stmt->bindValue(':exp_time', $exp_time, PDO::PARAM_INT);
+        $stmt->execute();
+
+        $stmt = $db->prepare('DELETE FROM ' . NV_INFORM_GLOBALTABLE . ' WHERE (exp_time != 0 AND exp_time < :exp_time)');
+        $stmt->bindValue(':exp_time', $exp_time, PDO::PARAM_INT);
+        $stmt->execute();
     }
 
     return true;

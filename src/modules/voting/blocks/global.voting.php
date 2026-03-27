@@ -77,8 +77,11 @@ if (!nv_function_exists('nv_block_voting_select')) {
         if (isset($list[$block_config['vid']])) {
             $current_voting = $list[$block_config['vid']];
             if ($current_voting['publ_time'] <= NV_CURRENTTIME and nv_user_in_groups($current_voting['groups_view'])) {
-                $sql = 'SELECT id, vid, title, url FROM ' . NV_PREFIXLANG . '_' . $site_mods['voting']['module_data'] . '_rows WHERE vid = ' . $block_config['vid'] . ' ORDER BY id ASC';
-                $list = $nv_Cache->db($sql, '', 'voting');
+                $sql = 'SELECT id, vid, title, url FROM ' . NV_PREFIXLANG . '_' . $site_mods['voting']['module_data'] . '_rows WHERE vid = :vid ORDER BY id ASC';
+                $bind = [
+                    [':vid', $block_config['vid'], PDO::PARAM_INT]
+                ];
+                $list = $nv_Cache->db($sql, '', 'voting', '', 0, $bind);
 
                 if (empty($list)) {
                     return '';

@@ -663,7 +663,7 @@ function nv_user_groups($in_groups, $res_2step = false, $manual_groups = [])
     $_2step_require = false;
 
     if (!empty($in_groups) or !empty($manual_groups)) {
-        $query = 'SELECT g.group_id, d.title, g.require_2step_admin, g.require_2step_site, g.exp_time FROM ' . NV_GROUPS_GLOBALTABLE . ' AS g LEFT JOIN ' . NV_GROUPSDETAIL_GLOBALTABLE . " d ON ( g.group_id = d.group_id AND d.lang='" . NV_LANG_DATA . "' ) WHERE g.act=1 AND (g.idsite = " . $global_config['idsite'] . ' OR (g.idsite =0 AND g.siteus = 1)) ORDER BY g.idsite, g.weight';
+        $query = 'SELECT g.group_id, d.title, g.require_2step_admin, g.require_2step_site, g.exp_time FROM ' . NV_GROUPS_GLOBALTABLE . ' AS g LEFT JOIN ' . NV_GROUPSDETAIL_GLOBALTABLE . " d ON ( g.group_id = d.group_id AND d.lang='" . NV_LANG_DATA . "' ) WHERE g.act=1 AND (g.idsite = " . (int) $global_config['idsite'] . ' OR (g.idsite =0 AND g.siteus = 1)) ORDER BY g.idsite, g.weight';
         $list = $nv_Cache->db($query, '', 'users');
         if (!empty($list)) {
             $reload = [];
@@ -755,20 +755,31 @@ function nv_groups_add_user($group_id, $userid, $approved = 1, $mod_data = 'user
     $userid = (int) $userid;
 
     $_mod_table = ($mod_data == 'users') ? NV_USERS_GLOBALTABLE : $db_config['prefix'] . '_' . $mod_data;
-    $query = $db->query('SELECT COUNT(*) FROM ' . $_mod_table . ' WHERE userid=' . $userid);
-    if (!$query->fetchColumn()) {
+    $stmt = $db->prepare('SELECT COUNT(*) FROM ' . $_mod_table . ' WHERE userid = :userid');
+    $stmt->bindValue(':userid', $userid, PDO::PARAM_INT);
+    $stmt->execute();
+    if (!$stmt->fetchColumn()) {
         return false;
     }
 
     try {
-        $db->query('INSERT INTO ' . $_mod_table . '_groups_users (
+        $stmt = $db->prepare('INSERT INTO ' . $_mod_table . '_groups_users (
             group_id, userid, approved, data, time_requested, time_approved
         ) VALUES (
-            ' . $group_id . ', ' . $userid . ', ' . $approved . ", '" . $global_config['idsite'] . "',
-            " . NV_CURRENTTIME . ', ' . ($approved ? NV_CURRENTTIME : 0) . '
+            :group_id, :userid, :approved, :data, :time_requested, :time_approved
         )');
+        $stmt->bindValue(':group_id', $group_id, PDO::PARAM_INT);
+        $stmt->bindValue(':userid', $userid, PDO::PARAM_INT);
+        $stmt->bindValue(':approved', $approved, PDO::PARAM_INT);
+        $stmt->bindValue(':data', $global_config['idsite'], PDO::PARAM_STR);
+        $stmt->bindValue(':time_requested', NV_CURRENTTIME, PDO::PARAM_INT);
+        $stmt->bindValue(':time_approved', $approved ? NV_CURRENTTIME : 0, PDO::PARAM_INT);
+        $stmt->execute();
+
         if ($approved) {
-            $db->query('UPDATE ' . $_mod_table . '_groups SET numbers = numbers+1 WHERE group_id=' . $group_id);
+            $stmt = $db->prepare('UPDATE ' . $_mod_table . '_groups SET numbers = numbers+1 WHERE group_id = :group_id');
+            $stmt->bindValue(':group_id', $group_id, PDO::PARAM_INT);
+            $stmt->execute();
         }
     } catch (Throwable $e) {
         trigger_error($e);
@@ -776,17 +787,29 @@ function nv_groups_add_user($group_id, $userid, $approved = 1, $mod_data = 'user
             return false;
         }
 
-        $data = $db->query('SELECT data FROM ' . $_mod_table . '_groups_users WHERE group_id=' . $group_id . ' AND userid=' . $userid)->fetchColumn();
+        $stmt = $db->prepare('SELECT data FROM ' . $_mod_table . '_groups_users WHERE group_id = :group_id AND userid = :userid');
+        $stmt->bindValue(':group_id', $group_id, PDO::PARAM_INT);
+        $stmt->bindValue(':userid', $userid, PDO::PARAM_INT);
+        $stmt->execute();
+        $data = $stmt->fetchColumn();
+
         $data = ($data != '') ? explode(',', $data) : [];
         $data[] = $global_config['idsite'];
         $data = implode(',', array_unique(array_map('intval', $data)));
-        $db->query('UPDATE ' . $_mod_table . "_groups_users SET data = '" . $data . "' WHERE group_id=" . $group_id . ' AND userid=' . $userid);
+
+        $stmt = $db->prepare('UPDATE ' . $_mod_table . '_groups_users SET data = :data WHERE group_id = :group_id AND userid = :userid');
+        $stmt->bindValue(':data', $data, PDO::PARAM_STR);
+        $stmt->bindValue(':group_id', $group_id, PDO::PARAM_INT);
+        $stmt->bindValue(':userid', $userid, PDO::PARAM_INT);
+        $stmt->execute();
     }
 
     // Cập nhật lại danh sách nhóm cho user
     if ($approved) {
-        $sql = "SELECT group_id FROM " . $_mod_table . "_groups_users WHERE userid=" . $userid . " AND approved=1";
-        $in_groups = $db->query($sql)->fetchAll(PDO::FETCH_COLUMN);
+        $stmt = $db->prepare('SELECT group_id FROM ' . $_mod_table . '_groups_users WHERE userid = :userid AND approved=1');
+        $stmt->bindValue(':userid', $userid, PDO::PARAM_INT);
+        $stmt->execute();
+        $in_groups = $stmt->fetchAll(PDO::FETCH_COLUMN);
         $in_groups = array_map('intval', $in_groups);
 
         // Loại bỏ nhóm mới nếu thêm quản trị hoặc thành viên chính thức
@@ -801,7 +824,10 @@ function nv_groups_add_user($group_id, $userid, $approved = 1, $mod_data = 'user
         $in_groups = array_unique($in_groups);
         $in_groups = empty($in_groups) ? '' : implode(',', $in_groups);
 
-        $db->query('UPDATE ' . $_mod_table . ' SET in_groups = ' . $db->quote($in_groups) . ' WHERE userid=' . $userid);
+        $stmt = $db->prepare('UPDATE ' . $_mod_table . ' SET in_groups = :in_groups WHERE userid = :userid');
+        $stmt->bindValue(':in_groups', $in_groups, PDO::PARAM_STR);
+        $stmt->bindValue(':userid', $userid, PDO::PARAM_INT);
+        $stmt->execute();
     }
 
     return true;
@@ -823,16 +849,24 @@ function nv_groups_del_user($group_id, $userid, $mod_data = 'users')
     $userid = (int) $userid;
 
     $_mod_table = ($mod_data == 'users') ? NV_USERS_GLOBALTABLE : $db_config['prefix'] . '_' . $mod_data;
-    $row = $db->query('SELECT data, approved FROM ' . $_mod_table . '_groups_users WHERE group_id=' . $group_id . ' AND userid=' . $userid)->fetch();
+    $stmt = $db->prepare('SELECT data, approved FROM ' . $_mod_table . '_groups_users WHERE group_id = :group_id AND userid = :userid');
+    $stmt->bindValue(':group_id', $group_id, PDO::PARAM_INT);
+    $stmt->bindValue(':userid', $userid, PDO::PARAM_INT);
+    $stmt->execute();
+    $row = $stmt->fetch();
     if (empty($row)) {
         return false;
     }
+    $stmt->closeCursor();
 
-    $sql = 'SELECT userid, group_id FROM ' . $_mod_table . ' WHERE userid=' . $userid;
-    $user = $db->query($sql)->fetch();
+    $stmt = $db->prepare('SELECT userid, group_id FROM ' . $_mod_table . ' WHERE userid = :userid');
+    $stmt->bindValue(':userid', $userid, PDO::PARAM_INT);
+    $stmt->execute();
+    $user = $stmt->fetch();
     if (empty($user)) {
         return false;
     }
+    $stmt->closeCursor();
 
     $set_number = false;
     if ($group_id > 3) {
@@ -843,21 +877,32 @@ function nv_groups_del_user($group_id, $userid, $mod_data = 'users')
         if ($data == '') {
             $set_number = true;
         } else {
-            $db->query('UPDATE ' . $_mod_table . "_groups_users SET data = '" . $data . "' WHERE group_id=" . $group_id . ' AND userid=' . $userid);
+            $stmt = $db->prepare('UPDATE ' . $_mod_table . '_groups_users SET data = :data WHERE group_id = :group_id AND userid = :userid');
+            $stmt->bindValue(':data', $data, PDO::PARAM_STR);
+            $stmt->bindValue(':group_id', $group_id, PDO::PARAM_INT);
+            $stmt->bindValue(':userid', $userid, PDO::PARAM_INT);
+            $stmt->execute();
         }
     }
 
     if ($set_number) {
-        $db->query('DELETE FROM ' . $_mod_table . '_groups_users WHERE group_id = ' . $group_id . ' AND userid = ' . $userid);
+        $stmt = $db->prepare('DELETE FROM ' . $_mod_table . '_groups_users WHERE group_id = :group_id AND userid = :userid');
+        $stmt->bindValue(':group_id', $group_id, PDO::PARAM_INT);
+        $stmt->bindValue(':userid', $userid, PDO::PARAM_INT);
+        $stmt->execute();
 
         if ($row['approved']) {
-            $db->query('UPDATE ' . $_mod_table . '_groups SET numbers = numbers-1 WHERE group_id=' . $group_id);
+            $stmt = $db->prepare('UPDATE ' . $_mod_table . '_groups SET numbers = numbers-1 WHERE group_id = :group_id');
+            $stmt->bindValue(':group_id', $group_id, PDO::PARAM_INT);
+            $stmt->execute();
         }
     }
 
     // Cập nhật lại danh sách nhóm cho user
-    $sql = "SELECT group_id FROM " . $_mod_table . "_groups_users WHERE userid=" . $userid . " AND approved=1";
-    $in_groups = $db->query($sql)->fetchAll(PDO::FETCH_COLUMN);
+    $stmt = $db->prepare('SELECT group_id FROM ' . $_mod_table . '_groups_users WHERE userid = :userid AND approved=1');
+    $stmt->bindValue(':userid', $userid, PDO::PARAM_INT);
+    $stmt->execute();
+    $in_groups = $stmt->fetchAll(PDO::FETCH_COLUMN);
     $in_groups = array_map('intval', $in_groups);
 
     // Xử lý lại nhóm chính nếu xóa khỏi nhóm này
@@ -882,7 +927,11 @@ function nv_groups_del_user($group_id, $userid, $mod_data = 'users')
     $in_groups = array_unique($in_groups);
     $in_groups = empty($in_groups) ? '' : implode(',', $in_groups);
 
-    $db->query('UPDATE ' . $_mod_table . ' SET in_groups = ' . $db->quote($in_groups) . ', group_id=' . $new_group_id . ' WHERE userid=' . $userid);
+    $stmt = $db->prepare('UPDATE ' . $_mod_table . ' SET in_groups = :in_groups, group_id = :group_id WHERE userid = :userid');
+    $stmt->bindValue(':in_groups', $in_groups, PDO::PARAM_STR);
+    $stmt->bindValue(':group_id', $new_group_id, PDO::PARAM_INT);
+    $stmt->bindValue(':userid', $userid, PDO::PARAM_INT);
+    $stmt->execute();
 
     return true;
 }
@@ -901,7 +950,10 @@ function nv_show_name_user($first_name, $last_name, $user_name = '', $lang = '')
     global $global_config, $db;
 
     if (!empty($lang) and $lang != NV_LANG_DATA) {
-        $name_show = $db->query('SELECT config_value FROM ' . NV_CONFIG_GLOBALTABLE . " WHERE config_name='name_show' AND lang='" . $lang . "' AND module='global'")->fetchColumn();
+        $stmt = $db->prepare('SELECT config_value FROM ' . NV_CONFIG_GLOBALTABLE . " WHERE config_name='name_show' AND lang = :lang AND module='global'");
+        $stmt->bindValue(':lang', $lang, PDO::PARAM_STR);
+        $stmt->execute();
+        $name_show = $stmt->fetchColumn();
     } else {
         $name_show = $global_config['name_show'];
     }
@@ -1497,8 +1549,10 @@ function nv_sendmail($from, $to, $subject, $message, $files = '', $AddEmbeddedIm
 
     $gconfigs = $global_config;
     if ($lang != NV_LANG_DATA) {
-        $result = $db->query('SELECT lang, module, config_name, config_value FROM ' . NV_CONFIG_GLOBALTABLE . " WHERE lang='" . $lang . "' AND module='global'");
-        while ($row = $result->fetch()) {
+        $stmt = $db->prepare('SELECT lang, module, config_name, config_value FROM ' . NV_CONFIG_GLOBALTABLE . " WHERE lang = :lang AND module='global'");
+        $stmt->bindValue(':lang', $lang, PDO::PARAM_STR);
+        $stmt->execute();
+        while ($row = $stmt->fetch()) {
             if ($row['config_name'] == 'smtp_password') {
                 $row['config_value'] = $crypt->decrypt($row['config_value']);
             }
@@ -1509,6 +1563,7 @@ function nv_sendmail($from, $to, $subject, $message, $files = '', $AddEmbeddedIm
             }
             $gconfigs[$row['config_name']] = $row['config_value'];
         }
+        $stmt->closeCursor();
     }
     if (!empty($mail_tpl)) {
         $gconfigs['mail_tpl'] = $mail_tpl;
@@ -2872,13 +2927,14 @@ function nv_insert_logs($lang = '', $module_name = '', $name_key = '', $note_act
 
     $sth = $db->prepare('INSERT INTO ' . $db_config['prefix'] . '_logs
         (lang, module_name, name_key, note_action, link_acess, userid, log_time) VALUES
-        (:lang, :module_name, :name_key, :note_action, :link_acess, :userid, ' . NV_CURRENTTIME . ')');
-    $sth->bindParam(':lang', $lang, PDO::PARAM_STR);
-    $sth->bindParam(':module_name', $module_name, PDO::PARAM_STR);
-    $sth->bindParam(':name_key', $name_key, PDO::PARAM_STR);
-    $sth->bindParam(':note_action', $note_action, PDO::PARAM_STR, strlen($note_action));
-    $sth->bindParam(':link_acess', $link_acess, PDO::PARAM_STR);
-    $sth->bindParam(':userid', $userid, PDO::PARAM_INT);
+        (:lang, :module_name, :name_key, :note_action, :link_acess, :userid, :log_time)');
+    $sth->bindValue(':lang', $lang, PDO::PARAM_STR);
+    $sth->bindValue(':module_name', $module_name, PDO::PARAM_STR);
+    $sth->bindValue(':name_key', $name_key, PDO::PARAM_STR);
+    $sth->bindValue(':note_action', $note_action, PDO::PARAM_STR);
+    $sth->bindValue(':link_acess', $link_acess, PDO::PARAM_STR);
+    $sth->bindValue(':userid', $userid, PDO::PARAM_INT);
+    $sth->bindValue(':log_time', NV_CURRENTTIME, PDO::PARAM_INT);
 
     return (bool) ($sth->execute());
 }
@@ -3117,9 +3173,9 @@ function nv_delete_notification($language, $module, $type, $obid)
     if ($global_config['notification_active']) {
         try {
             $sth = $db->prepare('DELETE FROM ' . NV_NOTIFICATION_GLOBALTABLE . ' WHERE language = :language AND module = :module AND obid IN (' . $in . ') AND type = :type');
-            $sth->bindParam(':language', $language, PDO::PARAM_STR);
-            $sth->bindParam(':module', $module, PDO::PARAM_STR);
-            $sth->bindParam(':type', $type, PDO::PARAM_STR);
+            $sth->bindValue(':language', $language, PDO::PARAM_STR);
+            $sth->bindValue(':module', $module, PDO::PARAM_STR);
+            $sth->bindValue(':type', $type, PDO::PARAM_STR);
             $sth->execute();
         } catch (Throwable $e) {
             trigger_error($e);
@@ -3147,12 +3203,12 @@ function nv_status_notification($language, $module, $type, $obid, $status = 1, $
 
     if ($global_config['notification_active']) {
         $sth = $db->prepare('UPDATE ' . NV_NOTIFICATION_GLOBALTABLE . ' SET view = :view WHERE language = :language AND module = :module AND obid = :obid AND type = :type AND area = :area');
-        $sth->bindParam(':view', $status, PDO::PARAM_INT);
-        $sth->bindParam(':language', $language, PDO::PARAM_STR);
-        $sth->bindParam(':module', $module, PDO::PARAM_STR);
-        $sth->bindParam(':obid', $obid, PDO::PARAM_INT);
-        $sth->bindParam(':type', $type, PDO::PARAM_STR);
-        $sth->bindParam(':area', $area, PDO::PARAM_INT);
+        $sth->bindValue(':view', $status, PDO::PARAM_INT);
+        $sth->bindValue(':language', $language, PDO::PARAM_STR);
+        $sth->bindValue(':module', $module, PDO::PARAM_STR);
+        $sth->bindValue(':obid', $obid, PDO::PARAM_INT);
+        $sth->bindValue(':type', $type, PDO::PARAM_STR);
+        $sth->bindValue(':area', $area, PDO::PARAM_INT);
         $sth->execute();
     }
 
@@ -3226,13 +3282,20 @@ function add_notification($args)
         str_starts_with($data['link'], NV_BASE_SITEURL) && $data['link'] = substr($data['link'], strlen(NV_BASE_SITEURL));
     }
 
-    $sth = $db->prepare('INSERT INTO ' . NV_INFORM_GLOBALTABLE . ' (receiver_grs, receiver_ids, sender_role, sender_group, sender_admin, message, link, add_time, exp_time) VALUES
-    (:receiver_grs, :receiver_ids, :sender_role, ' . $data['sender_group'] . ', ' . $data['sender_admin'] . ', :message, :link, ' . $data['add_time'] . ', ' . $data['exp_time'] . ')');
+    $sth = $db->prepare('INSERT INTO ' . NV_INFORM_GLOBALTABLE . ' (
+        receiver_grs, receiver_ids, sender_role, sender_group, sender_admin, message, link, add_time, exp_time
+    ) VALUES (
+        :receiver_grs, :receiver_ids, :sender_role, :sender_group, :sender_admin, :message, :link, :add_time, :exp_time
+    )');
     $sth->bindValue(':receiver_grs', $data['receiver_grs'], PDO::PARAM_STR);
     $sth->bindValue(':receiver_ids', $data['receiver_ids'], PDO::PARAM_STR);
     $sth->bindValue(':sender_role', $data['sender_role'], PDO::PARAM_STR);
+    $sth->bindValue(':sender_group', $data['sender_group'], PDO::PARAM_INT);
+    $sth->bindValue(':sender_admin', $data['sender_admin'], PDO::PARAM_INT);
     $sth->bindValue(':message', $data['message'], PDO::PARAM_STR);
     $sth->bindValue(':link', $data['link'], PDO::PARAM_STR);
+    $sth->bindValue(':add_time', $data['add_time'], PDO::PARAM_INT);
+    $sth->bindValue(':exp_time', $data['exp_time'], PDO::PARAM_INT);
     $sth->execute();
 
     return $db->lastInsertId();
@@ -3508,14 +3571,21 @@ function nv_local_api($cmd, $params, $adminidentity = '', $module = '')
     }
     if ($adminidentity) {
         global $db;
-        if (is_numeric($adminidentity)) {
-            $where = 'tb2.userid=' . (int) $adminidentity;
-        } else {
-            $where = 'tb2.username=' . $db->quote($adminidentity);
-        }
         $sql = 'SELECT tb1.admin_id, tb1.lev, tb2.username FROM ' . NV_AUTHORS_GLOBALTABLE . ' tb1 INNER JOIN ' . NV_USERS_GLOBALTABLE . ' tb2
-        ON tb1.admin_id=tb2.userid WHERE tb1.is_suspend=0 AND tb2.active=1 AND ' . $where;
-        $admin_info = $db->query($sql)->fetch();
+        ON tb1.admin_id=tb2.userid WHERE tb1.is_suspend=0 AND tb2.active=1';
+
+        if (is_numeric($adminidentity)) {
+            $sql .= ' AND tb2.userid = :adminidentity';
+        } else {
+            $sql .= ' AND tb2.username = :adminidentity';
+        }
+
+        $stmt = $db->prepare($sql);
+        $stmt->bindValue(':adminidentity', $adminidentity, is_numeric($adminidentity) ? PDO::PARAM_INT : PDO::PARAM_STR);
+        $stmt->execute();
+        $admin_info = $stmt->fetch();
+        $stmt->closeCursor();
+
         if (empty($admin_info)) {
             $apiresults->setCode(NukeViet\Api\ApiResult::CODE_NO_ADMIN_FOUND)->setMessage('No admin found!!!');
 
@@ -4022,7 +4092,7 @@ function nv_get_email_template($emailid, $lang = '')
         $sth->bindValue(':module_name', $emailid[0] ?? '', PDO::PARAM_STR);
         $sth->bindValue(':id', $emailid[1] ?? 0, PDO::PARAM_INT);
     } else {
-        $sth->bindParam(':emailid', $emailid, PDO::PARAM_INT);
+        $sth->bindValue(':emailid', $emailid, PDO::PARAM_INT);
     }
 
     $sth->execute();
@@ -4031,6 +4101,7 @@ function nv_get_email_template($emailid, $lang = '')
         // Không
         return false;
     }
+    $sth->closeCursor();
 
     $attachments = [];
     $email_data['attachments'] = explode(',', $email_data['attachments']);
@@ -4106,10 +4177,13 @@ function nv_sendmail_from_template($emailid, $data = [], $lang = '', $attachment
     if ((empty($email_data['from'][0]) or empty($email_data['from'][1])) and !empty($lang) and $lang != NV_LANG_DATA and in_array($lang, $global_config['setup_langs'], true)) {
         // Gửi email ngôn ngữ khác thì lấy lại tên site trong CSDL
         $in = "'" . implode("', '", array_keys($gconfigs)) . "'";
-        $result = $db->query('SELECT config_name, config_value FROM ' . NV_CONFIG_GLOBALTABLE . " WHERE lang='" . $lang . "' AND module='global' AND config_name IN (" . $in . ')');
-        while ($row = $result->fetch()) {
+        $stmt = $db->prepare('SELECT config_name, config_value FROM ' . NV_CONFIG_GLOBALTABLE . " WHERE lang = :lang AND module='global' AND config_name IN (" . $in . ')');
+        $stmt->bindValue(':lang', $lang, PDO::PARAM_STR);
+        $stmt->execute();
+        while ($row = $stmt->fetch()) {
             $gconfigs[$row['config_name']] = $row['config_value'];
         }
+        $stmt->closeCursor();
     }
     if (empty($email_data['from'][0])) {
         $email_data['from'][0] = $gconfigs['site_name'];

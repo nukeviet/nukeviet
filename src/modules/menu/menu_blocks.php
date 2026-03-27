@@ -24,8 +24,11 @@ function nv_menu_blocks($block_config)
     global $nv_Cache, $global_config, $site_mods;
 
     $list_cats = [];
-    $sql = 'SELECT id, parentid, title, link, icon, note, subitem, groups_view, module_name, op, target, css, active_type FROM ' . NV_PREFIXLANG . '_menu_rows WHERE status=1 AND mid = ' . $block_config['menuid'] . ' ORDER BY weight ASC';
-    $list = $nv_Cache->db($sql, '', $block_config['module']);
+    $sql = 'SELECT id, parentid, title, link, icon, note, subitem, groups_view, module_name, op, target, css, active_type FROM ' . NV_PREFIXLANG . '_menu_rows WHERE status=1 AND mid = :mid ORDER BY weight ASC';
+    $bind = [
+        [':mid', $block_config['menuid'], PDO::PARAM_INT]
+    ];
+    $list = $nv_Cache->db($sql, '', $block_config['module'], '', 0, $bind);
 
     $search = ['&amp;', '&lt;', '&gt;', '&#x005C;', '&#x002F;', '&#40;', '&#41;', '&#42;', '&#91;', '&#93;', '&#33;', '&#x3D;', '&#x23;', '&#x25;', '&#x5E;', '&#x3A;', '&#x7B;', '&#x7D;', '&#x60;', '&#x7E;'];
     $replace = ['&', '<', '>', '\\', '/', '(', ')', '*', '[', ']', '!', '=', '#', '%', '^', ':', '{', '}', '`', '~'];

@@ -35,23 +35,32 @@ function cron_user_datadeletion_handling()
 
     // Xử lý chống trùng lặp
     $sql = "UPDATE " . NV_USERS_GLOBALTABLE . "_deleted SET
-        status=-" .  NV_CURRENTTIME . ",
-        uniqid='" . $uniqid . "'
-    WHERE request_time<=" . $offset_time . " AND request_time>=" . $min_time . " AND uniqid='' AND status=0
+        status = :status,
+        uniqid = :uniqid
+    WHERE request_time <= :offset_time AND request_time >= :min_time AND uniqid = '' AND status = 0
     ORDER BY request_time ASC LIMIT 10";
-    $exec = $db->exec($sql);
+    $stmt = $db->prepare($sql);
+    $stmt->bindValue(':status', -NV_CURRENTTIME, PDO::PARAM_INT);
+    $stmt->bindValue(':uniqid', $uniqid, PDO::PARAM_STR);
+    $stmt->bindValue(':offset_time', $offset_time, PDO::PARAM_INT);
+    $stmt->bindValue(':min_time', $min_time, PDO::PARAM_INT);
+    $stmt->execute();
+    $exec = $stmt->rowCount();
     if (empty($exec)) {
         return true;
     }
 
     // Lấy danh sách thông tin xóa
-    $sql = "SELECT * FROM " . NV_USERS_GLOBALTABLE . "_deleted WHERE uniqid='" . $uniqid . "'";
-    $result = $db->query($sql);
+    $sql = "SELECT * FROM " . NV_USERS_GLOBALTABLE . "_deleted WHERE uniqid = :uniqid";
+    $stmt = $db->prepare($sql);
+    $stmt->bindValue(':uniqid', $uniqid, PDO::PARAM_STR);
+    $stmt->execute();
     $deleted_users = $array_userids = [];
-    while ($row = $result->fetch()) {
+    while ($row = $stmt->fetch()) {
         $deleted_users[] = $row;
         $array_userids[$row['userid']] = $row['userid'];
     }
+    $stmt->closeCursor();
     if (empty($deleted_users)) {
         return true;
     }
@@ -59,25 +68,46 @@ function cron_user_datadeletion_handling()
     // Thông tin thành viên của những yêu cầu xóa
     $array_users = [];
     if (!empty($array_userids)) {
-        $sql = "SELECT * FROM " . NV_USERS_GLOBALTABLE . " WHERE userid IN (" . implode(',', $array_userids) . ")";
-        $result = $db->query($sql);
-        while ($row = $result->fetch()) {
+        $ids = implode(',', array_map('intval', $array_userids));
+        $stmt = $db->prepare("SELECT * FROM " . NV_USERS_GLOBALTABLE . " WHERE userid IN (" . $ids . ")");
+        $stmt->execute();
+        while ($row = $stmt->fetch()) {
             $array_users[$row['userid']] = $row;
         }
+        $stmt->closeCursor();
     }
 
     // Xác định cấu hình giữ username
-    $sql = "SELECT content FROM " . NV_USERS_GLOBALTABLE . "_config WHERE config='hold_deleted_username'";
-    $hold_deleted_username = intval($db->query($sql)->fetchColumn() ?: 0);
+    $stmt = $db->prepare("SELECT content FROM " . NV_USERS_GLOBALTABLE . "_config WHERE config = 'hold_deleted_username'");
+    $stmt->execute();
+    $hold_deleted_username = intval($stmt->fetchColumn() ?: 0);
+
+    // Chuẩn bị các câu lệnh lặp
+    $stmt_del_deleted = $db->prepare("UPDATE " . NV_USERS_GLOBALTABLE . "_deleted SET status = :status, uniqid = '' WHERE id = :id");
+    $stmt_del_info = $db->prepare("DELETE FROM " . NV_USERS_GLOBALTABLE . "_info WHERE userid = :userid");
+    $stmt_ins_info = $db->prepare("INSERT INTO " . NV_USERS_GLOBALTABLE . "_info (userid) VALUES (:userid)");
+    $stmt_del_openid = $db->prepare("DELETE FROM " . NV_USERS_GLOBALTABLE . "_openid WHERE userid = :userid");
+    $stmt_del_codes = $db->prepare("DELETE FROM " . NV_USERS_GLOBALTABLE . "_backupcodes WHERE userid = :userid");
+    $stmt_del_edit = $db->prepare("DELETE FROM " . NV_USERS_GLOBALTABLE . "_edit WHERE userid = :userid");
+    $stmt_del_login = $db->prepare("DELETE FROM " . NV_USERS_GLOBALTABLE . "_login WHERE userid = :userid");
+    $stmt_del_passkey = $db->prepare("DELETE FROM " . NV_USERS_GLOBALTABLE . "_passkey WHERE userid = :userid");
+    $stmt_upd_user = $db->prepare("UPDATE " . NV_USERS_GLOBALTABLE . " SET
+            username = :username,
+            md5username = :md5username,
+            email = :email,
+            first_name = :first_name,
+            last_name = :last_name,
+            gender = 'N', birthday = 0, sig = '', question = '', answer = '',
+            photo = '', active = 0, checknum = ''
+        WHERE userid = :userid");
 
     // Lặp và xử lý từng người một
     foreach ($deleted_users as $row) {
         if (!isset($array_users[$row['userid']])) {
             // Thành viên không tồn tại, đánh dấu đã xóa
-            $sql = "UPDATE " . NV_USERS_GLOBALTABLE . "_deleted SET
-                status=" . NV_CURRENTTIME . ", uniqid=''
-            WHERE id=" . $row['id'];
-            $db->exec($sql);
+            $stmt_del_deleted->bindValue(':status', NV_CURRENTTIME, PDO::PARAM_INT);
+            $stmt_del_deleted->bindValue(':id', $row['id'], PDO::PARAM_INT);
+            $stmt_del_deleted->execute();
             continue;
         }
 
@@ -91,44 +121,40 @@ function cron_user_datadeletion_handling()
             $new_data['email'] = $new_data['username'] . '@' . NV_SERVER_NAME;
 
             // Xóa các dữ liệu liên quan
-            $sql = "DELETE FROM " . NV_USERS_GLOBALTABLE . "_info WHERE userid=" . $row['userid'];
-            $db->query($sql);
+            $stmt_del_info->bindValue(':userid', $row['userid'], PDO::PARAM_INT);
+            $stmt_del_info->execute();
 
-            $sql = "INSERT INTO " . NV_USERS_GLOBALTABLE . "_info (userid) VALUES (" . $row['userid'] . ")";
-            $db->query($sql);
+            $stmt_ins_info->bindValue(':userid', $row['userid'], PDO::PARAM_INT);
+            $stmt_ins_info->execute();
 
-            $sql = "DELETE FROM " . NV_USERS_GLOBALTABLE . "_openid WHERE userid=" . $row['userid'];
-            $db->query($sql);
+            $stmt_del_openid->bindValue(':userid', $row['userid'], PDO::PARAM_INT);
+            $stmt_del_openid->execute();
 
-            $sql = "DELETE FROM " . NV_USERS_GLOBALTABLE . "_backupcodes WHERE userid=" . $row['userid'];
-            $db->query($sql);
+            $stmt_del_codes->bindValue(':userid', $row['userid'], PDO::PARAM_INT);
+            $stmt_del_codes->execute();
 
-            $sql = "DELETE FROM " . NV_USERS_GLOBALTABLE . "_edit WHERE userid=" . $row['userid'];
-            $db->query($sql);
+            $stmt_del_edit->bindValue(':userid', $row['userid'], PDO::PARAM_INT);
+            $stmt_del_edit->execute();
 
-            $sql = "DELETE FROM " . NV_USERS_GLOBALTABLE . "_login WHERE userid=" . $row['userid'];
-            $db->query($sql);
+            $stmt_del_login->bindValue(':userid', $row['userid'], PDO::PARAM_INT);
+            $stmt_del_login->execute();
 
-            $sql = "DELETE FROM " . NV_USERS_GLOBALTABLE . "_passkey WHERE userid=" . $row['userid'];
-            $db->query($sql);
+            $stmt_del_passkey->bindValue(':userid', $row['userid'], PDO::PARAM_INT);
+            $stmt_del_passkey->execute();
 
             // Hủy thông tin cá nhân
-            $sql = "UPDATE " . NV_USERS_GLOBALTABLE . " SET
-                username=" . $db->quote($new_data['username']) . ",
-                md5username=" . $db->quote(nv_md5safe($new_data['username'])) . ",
-                email=" . $db->quote($new_data['email']) . ",
-                first_name=" . $db->quote($new_data['first_name']) . ",
-                last_name=" . $db->quote($new_data['last_name']) . ",
-                gender='N', birthday=0, sig='', question='', answer='',
-                photo='', active=0, checknum=''
-            WHERE userid=" . $row['userid'];
-            $db->query($sql);
+            $stmt_upd_user->bindValue(':username', $new_data['username'], PDO::PARAM_STR);
+            $stmt_upd_user->bindValue(':md5username', nv_md5safe($new_data['username']), PDO::PARAM_STR);
+            $stmt_upd_user->bindValue(':email', $new_data['email'], PDO::PARAM_STR);
+            $stmt_upd_user->bindValue(':first_name', $new_data['first_name'], PDO::PARAM_STR);
+            $stmt_upd_user->bindValue(':last_name', $new_data['last_name'], PDO::PARAM_STR);
+            $stmt_upd_user->bindValue(':userid', $row['userid'], PDO::PARAM_INT);
+            $stmt_upd_user->execute();
 
             // Đánh dấu hoàn thành
-            $sql = "UPDATE " . NV_USERS_GLOBALTABLE . "_deleted SET
-                status=" . NV_CURRENTTIME . ", uniqid=''
-            WHERE id=" . $row['id'];
-            $db->exec($sql);
+            $stmt_del_deleted->bindValue(':status', NV_CURRENTTIME, PDO::PARAM_INT);
+            $stmt_del_deleted->bindValue(':id', $row['id'], PDO::PARAM_INT);
+            $stmt_del_deleted->execute();
 
             $db->commit();
         } catch (Throwable $e) {

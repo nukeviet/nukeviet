@@ -68,8 +68,11 @@ if (empty($vid)) {
             ];
             $xtpl->assign('VOTING', $voting_array);
 
-            $sql = 'SELECT id, vid, title, url FROM ' . NV_PREFIXLANG . '_' . $site_mods['voting']['module_data'] . '_rows WHERE vid = ' . $current_voting['vid'] . ' ORDER BY id ASC';
-            $list = $nv_Cache->db($sql, '', $module_name);
+            $sql = 'SELECT id, vid, title, url FROM ' . NV_PREFIXLANG . '_' . $site_mods['voting']['module_data'] . '_rows WHERE vid = :vid ORDER BY id ASC';
+            $bind = [
+                [':vid', $current_voting['vid'], PDO::PARAM_INT]
+            ];
+            $list = $nv_Cache->db($sql, '', $module_name, '', 0, $bind);
 
             foreach ($list as $row) {
                 if (!empty($row['url'])) {
@@ -194,12 +197,14 @@ if (empty($vid)) {
                 $note = ($acceptcm > 1) ? $nv_Lang->getModule('voting_warning_all', $acceptcm) : $nv_Lang->getModule('voting_warning_accept1');
                 $is_error = true;
             } else {
-                $in = implode(', ', $array_id);
-                $db->query('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_rows SET hitstotal = hitstotal+1 WHERE vid = ' . $vid . ' AND id IN (' . $in . ')');
+                $in = implode(',', array_map('intval', $array_id));
+                $stmt = $db->prepare('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_rows SET hitstotal = hitstotal + 1 WHERE vid = :vid AND id IN (' . $in . ')');
+                $stmt->bindValue(':vid', $vid, PDO::PARAM_INT);
+                $stmt->execute();
 
                 $userlist .= !empty($userlist) ? ',' . $user_info['userid'] : $user_info['userid'];
 
-                $stmt = $db->prepare("INSERT INTO " . NV_PREFIXLANG . '_' . $module_data . "_voted (vid, voted) VALUES (:vid, :voted) ON DUPLICATE KEY UPDATE voted = VALUES(voted)");
+                $stmt = $db->prepare('INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . '_voted (vid, voted) VALUES (:vid, :voted) ON DUPLICATE KEY UPDATE voted = VALUES(voted)');
                 $stmt->bindValue(':vid', $vid, PDO::PARAM_INT);
                 $stmt->bindValue(':voted', $userlist, PDO::PARAM_STR);
                 $stmt->execute();
@@ -217,8 +222,10 @@ if (empty($vid)) {
                 $note = ($acceptcm > 1) ? $nv_Lang->getModule('voting_warning_all', $acceptcm) : $nv_Lang->getModule('voting_warning_accept1');
                 $is_error = true;
             } else {
-                $in = implode(', ', $array_id);
-                $db->query('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_rows SET hitstotal = hitstotal+1 WHERE vid = ' . $vid . ' AND id IN (' . $in . ')');
+                $in = implode(',', array_map('intval', $array_id));
+                $stmt = $db->prepare('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_rows SET hitstotal = hitstotal + 1 WHERE vid = :vid AND id IN (' . $in . ')');
+                $stmt->bindValue(':vid', $vid, PDO::PARAM_INT);
+                $stmt->execute();
 
                 file_put_contents($dir . '/' . $logfile, '', LOCK_EX);
                 $note = $nv_Lang->getModule('okmsg');
