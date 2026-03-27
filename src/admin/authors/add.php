@@ -257,14 +257,17 @@ if ($nv_Request->get_int('save', 'post', 0)) {
     $files_level = (!empty($allow_files_type) ? implode(',', $allow_files_type) : '') . '|' . $allow_modify_files . '|' . $allow_create_subdirectories . '|' . $allow_modify_subdirectories;
     $after_modules_sql = $downgrade_to_modadmin ? json_encode($after_modules, NV_JSON_ENCODE) : '';
 
-    $sth = $db->prepare('INSERT INTO ' . NV_AUTHORS_GLOBALTABLE . '
+    $sth = $db->prepare('INSERT INTO ' . NV_AUTHORS_GLOBALTABLE . "
         (admin_id, editor, lev, lev_expired, after_exp_action, files_level, position, admin_theme, is_suspend, susp_reason, check_num, last_login, last_ip, last_agent) VALUES
-        ( ' . $userid . ', :editor, ' . $lev . ', ' . $lev_expired_sql . ", :after_exp_action, :files_level, :position, :admin_theme, 0,'', '', 0, '', ''	)");
-    $sth->bindParam(':editor', $editor, PDO::PARAM_STR);
-    $sth->bindParam(':after_exp_action', $after_modules_sql, PDO::PARAM_STR);
-    $sth->bindParam(':files_level', $files_level, PDO::PARAM_STR);
-    $sth->bindParam(':position', $position, PDO::PARAM_STR);
-    $sth->bindParam(':admin_theme', $admin_theme, PDO::PARAM_STR);
+        (:admin_id, :editor, :lev, :lev_expired, :after_exp_action, :files_level, :position, :admin_theme, 0, '', '', 0, '', '')");
+    $sth->bindValue(':admin_id', $userid, PDO::PARAM_INT);
+    $sth->bindValue(':editor', $editor, PDO::PARAM_STR);
+    $sth->bindValue(':lev', $lev, PDO::PARAM_INT);
+    $sth->bindValue(':lev_expired', $lev_expired_sql, PDO::PARAM_INT);
+    $sth->bindValue(':after_exp_action', $after_modules_sql, PDO::PARAM_STR);
+    $sth->bindValue(':files_level', $files_level, PDO::PARAM_STR);
+    $sth->bindValue(':position', $position, PDO::PARAM_STR);
+    $sth->bindValue(':admin_theme', $admin_theme, PDO::PARAM_STR);
 
     if ($sth->execute()) {
         nv_groups_add_user($lev, $userid);

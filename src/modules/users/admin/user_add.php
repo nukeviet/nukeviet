@@ -37,7 +37,6 @@ if ($global_config['max_user_number'] > 0) {
     }
     $stmt->execute();
     $user_number = (int) $stmt->fetchColumn();
-    $stmt->closeCursor();
     if ($user_number >= $global_config['max_user_number']) {
         $contents = $nv_Lang->getGlobal('limit_user_number', $global_config['max_user_number']);
         include NV_ROOTDIR . '/includes/header.php';
@@ -121,7 +120,6 @@ if ($nv_Request->isset_request('confirm', 'post')) {
     $stmt->bindValue(':md5username', $md5username, PDO::PARAM_STR);
     $stmt->execute();
     $query_error_username = $stmt->fetchColumn();
-    $stmt->closeCursor();
     if ($query_error_username) {
         nv_jsonOutput([
             'status' => 'error',
@@ -135,7 +133,6 @@ if ($nv_Request->isset_request('confirm', 'post')) {
     $stmt->bindValue(':md5username', $md5username, PDO::PARAM_STR);
     $stmt->execute();
     $query_error_username = $stmt->fetchColumn();
-    $stmt->closeCursor();
     if ($query_error_username) {
         nv_jsonOutput([
             'status' => 'error',
@@ -160,7 +157,6 @@ if ($nv_Request->isset_request('confirm', 'post')) {
     $stmt->bindValue(':email', $_user['email'], PDO::PARAM_STR);
     $stmt->execute();
     $query_error_email = $stmt->fetchColumn();
-    $stmt->closeCursor();
     if ($query_error_email) {
         nv_jsonOutput([
             'status' => 'error',
@@ -175,7 +171,6 @@ if ($nv_Request->isset_request('confirm', 'post')) {
     $stmt->bindValue(':email', $_user['email'], PDO::PARAM_STR);
     $stmt->execute();
     $query_error_email_reg = $stmt->fetchColumn();
-    $stmt->closeCursor();
     if ($query_error_email_reg) {
         nv_jsonOutput([
             'status' => 'error',
@@ -190,7 +185,6 @@ if ($nv_Request->isset_request('confirm', 'post')) {
     $stmt->bindValue(':email', $_user['email'], PDO::PARAM_STR);
     $stmt->execute();
     $query_error_email_openid = $stmt->fetchColumn();
-    $stmt->closeCursor();
     if ($query_error_email_openid) {
         nv_jsonOutput([
             'status' => 'error',

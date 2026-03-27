@@ -59,6 +59,9 @@ if (defined('NV_IS_AJAX')) {
     if ($nv_Request->isset_request('changact', 'post')) {
         $mid = $nv_Request->get_int('mid', 'post', 0);
         $act = $nv_Request->get_int('changact', 'post', 1);
+        if (!in_array($act, [1, 2, 3], true)) {
+            $act = 1;
+        }
         $stmt = $db->prepare('SELECT * FROM ' . NV_AUTHORS_GLOBALTABLE . '_module WHERE mid = :mid');
         $stmt->bindValue(':mid', $mid, PDO::PARAM_INT);
         $stmt->execute();

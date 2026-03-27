@@ -112,8 +112,11 @@ if ($allow_change and $nv_Request->get_int('save', 'post', 0)) {
             ];
         }
     }
-    $sth = $db->prepare('UPDATE ' . NV_AUTHORS_GLOBALTABLE . ' SET edittime=' . NV_CURRENTTIME . ', is_suspend=' . $new_suspend . ', susp_reason= :susp_reason WHERE admin_id=' . $admin_id);
+    $sth = $db->prepare('UPDATE ' . NV_AUTHORS_GLOBALTABLE . ' SET edittime = :edittime, is_suspend = :is_suspend, susp_reason = :susp_reason WHERE admin_id = :admin_id');
+    $sth->bindValue(':edittime', NV_CURRENTTIME, PDO::PARAM_INT);
+    $sth->bindValue(':is_suspend', $new_suspend, PDO::PARAM_INT);
     $sth->bindValue(':susp_reason', serialize($susp_reason), PDO::PARAM_STR);
+    $sth->bindValue(':admin_id', $admin_id, PDO::PARAM_INT);
     if ($sth->execute()) {
         if (empty($row_user['active'])) {
             $stmt_update = $db->prepare('UPDATE ' . NV_USERS_GLOBALTABLE . ' SET active = 1 WHERE userid = :userid');

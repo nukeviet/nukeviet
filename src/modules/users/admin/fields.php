@@ -283,7 +283,6 @@ if ($nv_Request->isset_request('save', 'post')) {
                 $error_input = 'field';
                 $error_input_parent = 'row_field_id';
             }
-            $stmt->closeCursor();
         }
     }
 

@@ -84,7 +84,6 @@ if ($nv_Request->isset_request('add', 'post')) {
     $stmt->bindValue(':lang', NV_LANG_DATA, PDO::PARAM_STR);
     $stmt->execute();
     $weight = (int) $stmt->fetchColumn();
-    $stmt->closeCursor();
     $weight = $weight + 1;
 
     $stmt = $db->prepare('INSERT INTO ' . NV_MOD_TABLE . '_question (title, lang, weight, add_time, edit_time) VALUES (:title, :lang, :weight, :add_time, :edit_time)');
@@ -130,7 +129,6 @@ if ($nv_Request->isset_request('changeweight', 'post')) {
     $stmt->bindValue(':lang', NV_LANG_DATA, PDO::PARAM_STR);
     $stmt->execute();
     $numrows = $stmt->fetchColumn();
-    $stmt->closeCursor();
     if ($numrows != 1) {
         nv_jsonOutput([
             'status' => 'error',
@@ -185,11 +183,12 @@ if ($nv_Request->isset_request('del', 'post')) {
     $stmt = $db->prepare('SELECT qid, title FROM ' . NV_MOD_TABLE . '_question WHERE qid = :qid');
     $stmt->bindValue(':qid', $qid, PDO::PARAM_INT);
     $stmt->execute();
-    $res = $stmt->fetch(3);
+    $res = $stmt->fetch();
     $stmt->closeCursor();
 
     if ($res) {
-        [$qid, $title] = $res;
+        $qid   = $res['qid'];
+        $title = $res['title'];
         $stmt = $db->prepare('DELETE FROM ' . NV_MOD_TABLE . '_question WHERE qid = :qid');
         $stmt->bindValue(':qid', $qid, PDO::PARAM_INT);
         if ($stmt->execute()) {
@@ -233,7 +232,6 @@ $stmt = $db->prepare('SELECT * FROM ' . NV_MOD_TABLE . '_question WHERE lang = :
 $stmt->bindValue(':lang', NV_LANG_DATA, PDO::PARAM_STR);
 $stmt->execute();
 $_rows = $stmt->fetchAll();
-$stmt->closeCursor();
 $num = count($_rows);
 
 $array_questions = [];

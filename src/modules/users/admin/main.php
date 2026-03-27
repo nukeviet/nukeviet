@@ -193,7 +193,6 @@ foreach ($params as $pname => $pvalue) {
 }
 $stmt->execute();
 $num_items = $stmt->fetchColumn();
-$stmt->closeCursor();
 
 $page_url = $base_url;
 

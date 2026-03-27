@@ -386,24 +386,24 @@ if ($nv_Request->isset_request('saveform', 'post') and csrf_check($nv_Request->g
                 catid, pids, time_add, send_name, send_email, send_cc, send_bcc, attachments, is_system, is_plaintext, is_disabled,
                 is_selftemplate, mailtpl, default_subject, default_content' . $field_title . '
             ) VALUES (
-                ' . $array['catid'] . ', ' . $db->quote(implode(',', $array['pids'])) . ', ' . NV_CURRENTTIME . ',
+                :catid, :pids, ' . NV_CURRENTTIME . ',
                 :send_name, :send_email, :send_cc, :send_bcc, :attachments, 0,
-                ' . $array['is_plaintext'] . ', ' . $array['is_disabled'] . ', ' . $array['is_selftemplate'] . ', :mailtpl,
+                :is_plaintext, :is_disabled, :is_selftemplate, :mailtpl,
                 :default_subject, :default_content' . $field_value . '
             )';
         } else {
             $sql = 'UPDATE ' . NV_EMAILTEMPLATES_GLOBALTABLE . ' SET
-                catid = ' . $array['catid'] . ',
-                pids = ' . $db->quote(implode(',', $array['pids'])) . ',
+                catid = :catid,
+                pids = :pids,
                 time_update = ' . NV_CURRENTTIME . ',
                 send_name = :send_name,
                 send_email = :send_email,
                 send_cc = :send_cc,
                 send_bcc = :send_bcc,
                 attachments = :attachments,
-                is_plaintext = ' . $array['is_plaintext'] . ',
-                is_disabled = ' . $array['is_disabled'] . ',
-                is_selftemplate = ' . $array['is_selftemplate'] . ',
+                is_plaintext = :is_plaintext,
+                is_disabled = :is_disabled,
+                is_selftemplate = :is_selftemplate,
                 mailtpl = :mailtpl,
                 default_subject = :default_subject,
                 default_content = :default_content';
@@ -420,8 +420,16 @@ if ($nv_Request->isset_request('saveform', 'post') and csrf_check($nv_Request->g
         $attachments = implode(',', $array['attachments']);
         $default_content = nv_editor_nl2br($array['default_content']);
 
+        $pids = implode(',', $array['pids']);
+
         try {
             $sth = $db->prepare($sql);
+            $sth->bindValue(':catid', $array['catid'], PDO::PARAM_INT);
+            $sth->bindValue(':pids', $pids, PDO::PARAM_STR);
+            $sth->bindValue(':is_plaintext', $array['is_plaintext'], PDO::PARAM_INT);
+            $sth->bindValue(':is_disabled', $array['is_disabled'], PDO::PARAM_INT);
+            $sth->bindValue(':is_selftemplate', $array['is_selftemplate'], PDO::PARAM_INT);
+            
             $sth->bindParam(':send_name', $array['send_name'], PDO::PARAM_STR);
             $sth->bindParam(':send_email', $array['send_email'], PDO::PARAM_STR);
             $sth->bindParam(':send_cc', $send_cc, PDO::PARAM_STR, strlen($send_cc));

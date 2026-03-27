@@ -262,13 +262,17 @@ if ($nv_Request->get_int('save', 'post', 0)) {
     $lev_expired_sql = nv_d2u_post($lev_expired, 23, 59, 59);
     $after_modules_sql = $downgrade_to_modadmin ? json_encode($after_modules, NV_JSON_ENCODE) : '';
 
-    $sth = $db->prepare('UPDATE ' . NV_AUTHORS_GLOBALTABLE . ' SET editor = :editor, lev=' . $lev . ', lev_expired=' . $lev_expired_sql . ', after_exp_action=:after_exp_action, files_level= :files_level, position= :position, main_module = :main_module, admin_theme = :admin_theme, edittime=' . NV_CURRENTTIME . ' WHERE admin_id=' . $admin_id);
-    $sth->bindParam(':editor', $editor, PDO::PARAM_STR);
-    $sth->bindParam(':after_exp_action', $after_modules_sql, PDO::PARAM_STR);
-    $sth->bindParam(':files_level', $files_level, PDO::PARAM_STR);
-    $sth->bindParam(':position', $position, PDO::PARAM_STR);
-    $sth->bindParam(':main_module', $main_module, PDO::PARAM_STR);
-    $sth->bindParam(':admin_theme', $admin_theme, PDO::PARAM_STR);
+    $sth = $db->prepare('UPDATE ' . NV_AUTHORS_GLOBALTABLE . ' SET editor = :editor, lev = :lev, lev_expired = :lev_expired, after_exp_action = :after_exp_action, files_level = :files_level, position = :position, main_module = :main_module, admin_theme = :admin_theme, edittime = :edittime WHERE admin_id = :admin_id');
+    $sth->bindValue(':editor', $editor, PDO::PARAM_STR);
+    $sth->bindValue(':lev', $lev, PDO::PARAM_INT);
+    $sth->bindValue(':lev_expired', $lev_expired_sql, PDO::PARAM_INT);
+    $sth->bindValue(':after_exp_action', $after_modules_sql, PDO::PARAM_STR);
+    $sth->bindValue(':files_level', $files_level, PDO::PARAM_STR);
+    $sth->bindValue(':position', $position, PDO::PARAM_STR);
+    $sth->bindValue(':main_module', $main_module, PDO::PARAM_STR);
+    $sth->bindValue(':admin_theme', $admin_theme, PDO::PARAM_STR);
+    $sth->bindValue(':edittime', NV_CURRENTTIME, PDO::PARAM_INT);
+    $sth->bindValue(':admin_id', $admin_id, PDO::PARAM_INT);
     $sth->execute();
 
     if ($lev != $row['lev']) {

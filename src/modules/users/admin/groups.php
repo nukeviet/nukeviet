@@ -37,7 +37,6 @@ function getAlias($alias, $id, $num = 0)
 
         return getAlias($alias, $id, $num);
     }
-    $stmt->closeCursor();
 
     return $_alias;
 }
@@ -86,14 +85,12 @@ if (!empty($global_config['idsite'])) {
     $stmt->bindValue(':idsite', $global_config['idsite'], PDO::PARAM_INT);
     $stmt->execute();
     $groupsList[7]['numbers'] = $stmt->fetchColumn();
-    $stmt->closeCursor();
 
     // Thành viên chính thức của site
     $stmt = $db->prepare('SELECT COUNT(userid) FROM ' . NV_MOD_TABLE . ' WHERE idsite = :idsite');
     $stmt->bindValue(':idsite', $global_config['idsite'], PDO::PARAM_INT);
     $stmt->execute();
     $all_member = $stmt->fetchColumn();
-    $stmt->closeCursor();
     $groupsList[4]['numbers'] = $all_member - $groupsList[7]['numbers'];
 }
 $groupsList[5]['numbers'] = '-';
@@ -701,7 +698,6 @@ if ($nv_Request->isset_request('listUsers', 'get')) {
         $stmt->bindValue(':gid', $group_id, PDO::PARAM_INT);
         $stmt->execute();
         $array_number['pending'] = $stmt->fetchColumn();
-        $stmt->closeCursor();
 
         if ($array_number['pending']) {
             $stmt = $db->prepare('SELECT userid FROM ' . NV_MOD_TABLE . '_groups_users WHERE group_id = :gid AND approved = 0 LIMIT :limit OFFSET :offset');
@@ -723,7 +719,6 @@ if ($nv_Request->isset_request('listUsers', 'get')) {
         $stmt->bindValue(':gid', $group_id, PDO::PARAM_INT);
         $stmt->execute();
         $array_number['leaders'] = $stmt->fetchColumn();
-        $stmt->closeCursor();
 
         if ($array_number['leaders']) {
             $stmt = $db->prepare('SELECT userid FROM ' . NV_MOD_TABLE . '_groups_users WHERE group_id = :gid AND is_leader = 1 LIMIT :limit OFFSET :offset');
@@ -745,7 +740,6 @@ if ($nv_Request->isset_request('listUsers', 'get')) {
         $stmt->bindValue(':gid', $group_id, PDO::PARAM_INT);
         $stmt->execute();
         $array_number['members'] = $stmt->fetchColumn();
-        $stmt->closeCursor();
 
         if ($array_number['members']) {
             $stmt = $db->prepare('SELECT userid FROM ' . NV_MOD_TABLE . '_groups_users WHERE group_id = :gid AND approved = 1 AND is_leader = 0 LIMIT :limit OFFSET :offset');
@@ -893,14 +887,12 @@ if ($nv_Request->isset_request('add', 'get') or $nv_Request->isset_request('edit
                 $stmt->bindValue(':idsite', $global_config['idsite'], PDO::PARAM_INT);
                 $stmt->execute();
                 if ($stmt->fetchColumn()) {
-                    $stmt->closeCursor();
                     nv_jsonOutput([
                         'status' => 'error',
                         'mess' => $nv_Lang->getModule('error_alias_exists', $post['alias']),
                         'input' => 'alias'
                     ]);
                 }
-                $stmt->closeCursor();
 
                 $post['description'] = $nv_Request->get_title('description', 'post', '', 1);
                 $post['content'] = $nv_Request->get_editor('content', '', NV_ALLOWED_HTML_TAGS);
@@ -974,7 +966,6 @@ if ($nv_Request->isset_request('add', 'get') or $nv_Request->isset_request('edit
                     $stmt->bindValue(':idsite', $global_config['idsite'], PDO::PARAM_INT);
                     $stmt->execute();
                     $weight = (int) $stmt->fetchColumn();
-                    $stmt->closeCursor();
                     $weight = $weight + 1;
 
                     $_sql = 'INSERT INTO ' . NV_MOD_TABLE . '_groups (

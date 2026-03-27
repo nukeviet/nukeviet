@@ -191,10 +191,8 @@ if (!empty($request['checkss']) and csrf_check($request['checkss'], $csrf_key . 
                     $stmt->bindValue(':layout', $layoutdefault, PDO::PARAM_STR);
                     $stmt->execute();
 
-                    while ($_scratch = $stmt->fetch(3)) {
-                        [$layout, $in_module, $func_name] = $_scratch;
-                        unset($_scratch);
-                        $array_layout_other[$layout][$in_module][] = $func_name;
+                    while ($row_stmt = $stmt->fetch()) {
+                        $array_layout_other[$row_stmt['layout']][$row_stmt['in_module']][] = $row_stmt['func_name'];
                     }
                     $stmt->closeCursor();
 
@@ -227,14 +225,13 @@ if (!empty($request['checkss']) and csrf_check($request['checkss'], $csrf_key . 
                     if (!empty($array_layout_block)) {
                         $array_block_func = [];
                         if (!empty($array_not_all_func)) {
-                            $bids_str = implode(',', array_map('intval', $array_not_all_func));
-                            $result = $db->query('SELECT bid, func_name, in_module FROM ' . NV_BLOCKS_TABLE . '_weight t1, ' . NV_MODFUNCS_TABLE . ' t2 WHERE t1.bid IN (' . $bids_str . ') AND t1.func_id = t2.func_id');
-                            while ($_scratch = $result->fetch(3)) {
-                                [$bid, $func_name, $in_module] = $_scratch;
-                                unset($_scratch);
-                                $array_block_func[$bid][$in_module][] = $func_name;
+                            $placeholders = implode(',', array_fill(0, count($array_not_all_func), '?'));
+                            $stmt_res = $db->prepare('SELECT bid, func_name, in_module FROM ' . NV_BLOCKS_TABLE . '_weight t1, ' . NV_MODFUNCS_TABLE . ' t2 WHERE t1.bid IN (' . $placeholders . ') AND t1.func_id = t2.func_id');
+                            $stmt_res->execute(array_values($array_not_all_func));
+                            while ($_row = $stmt_res->fetch()) {
+                                $array_block_func[$_row['bid']][$_row['in_module']][] = $_row['func_name'];
                             }
-                            $result->closeCursor();
+                            $stmt_res->closeCursor();
                         }
 
                         $config_ini .= "\n\n\t<setblocks>";
@@ -366,9 +363,8 @@ if (!empty($request['checkss']) and csrf_check($request['checkss'], $csrf_key . 
             $module_exit = [];
 
             $result = $db->query('SELECT lang FROM ' . $db_config['prefix'] . '_setup_language WHERE setup = 1');
-            while ($_scratch = $result->fetch(3)) {
-                [$lang_i] = $_scratch;
-                unset($_scratch);
+            while ($row_res = $result->fetch()) {
+                $lang_i = $row_res['lang'];
                 $sth = $db->prepare('SELECT COUNT(*) FROM ' . $db_config['prefix'] . '_' . $lang_i . '_modules WHERE module_file = :module_file');
                 $sth->bindValue(':module_file', $request['title'], PDO::PARAM_STR);
                 $sth->execute();
@@ -395,9 +391,8 @@ if (!empty($request['checkss']) and csrf_check($request['checkss'], $csrf_key . 
                 while ($row = $result->fetch()) {
                     try {
                         $result2 = $db->query('SELECT lang FROM ' . $row['dbsite'] . '.' . $db_config['prefix'] . '_setup_language WHERE setup = 1');
-                        while ($_scratch = $result2->fetch(3)) {
-                            [$lang_i] = $_scratch;
-                            unset($_scratch);
+                        while ($row_res2 = $result2->fetch()) {
+                            $lang_i = $row_res2['lang'];
                             $sth = $db->prepare('SELECT COUNT(*) FROM ' . $row['dbsite'] . '.' . $db_config['prefix'] . '_' . $lang_i . '_modules WHERE module_file = :module_file');
                             $sth->bindValue(':module_file', $request['title'], PDO::PARAM_STR);
                             $sth->execute();
@@ -452,18 +447,15 @@ if (!empty($request['checkss']) and csrf_check($request['checkss'], $csrf_key . 
             $sql_theme = (preg_match($global_config['check_theme_mobile'], $request['title'])) ? 'mobile' : 'theme';
 
             $result = $db->query('SELECT lang FROM ' . $db_config['prefix'] . '_setup_language WHERE setup = 1');
-            while ($_scratch = $result->fetch(3)) {
-                [$lang_i] = $_scratch;
-                unset($_scratch);
+            while ($row_res = $result->fetch()) {
+                $lang_i = $row_res['lang'];
                 $module_array = [];
 
                 $sth = $db->prepare('SELECT title, custom_title FROM ' . $db_config['prefix'] . '_' . $lang_i . '_modules WHERE ' . $sql_theme . ' = :theme ORDER BY weight ASC');
                 $sth->bindValue(':theme', $request['title'], PDO::PARAM_STR);
                 $sth->execute();
-                while ($_scratch = $sth->fetch(3)) {
-                    [$title, $custom_title] = $_scratch;
-                    unset($_scratch);
-                    $module_array[] = $custom_title;
+                while ($row_sth = $sth->fetch()) {
+                    $module_array[] = $row_sth['custom_title'];
                 }
                 $sth->closeCursor();
 
@@ -484,9 +476,8 @@ if (!empty($request['checkss']) and csrf_check($request['checkss'], $csrf_key . 
 
             if (!file_exists(NV_ROOTDIR . '/themes/' . $request['title'])) {
                 $result = $db->query('SELECT lang FROM ' . $db_config['prefix'] . '_setup_language WHERE setup = 1');
-                while ($_scratch = $result->fetch(3)) {
-                    [$_lang] = $_scratch;
-                    unset($_scratch);
+                while ($row_res = $result->fetch()) {
+                    $_lang = $row_res['lang'];
                     $sth = $db->prepare('DELETE FROM ' . $db_config['prefix'] . '_' . $_lang . '_modthemes WHERE theme = :theme');
                     $sth->bindValue(':theme', $request['title'], PDO::PARAM_STR);
                     $sth->execute();
