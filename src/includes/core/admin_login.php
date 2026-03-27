@@ -289,9 +289,14 @@ if (!empty($admin_pre_data) and $nv_Request->isset_request('pre_logout', 'get') 
     $user_cookie = NukeViet\Core\User::get_userlogin_hash();
     if (!empty($user_cookie['admin_prelogin'])) {
         if ($global_config['allowuserloginmulti']) {
-            $db->query('DELETE FROM ' . NV_USERS_GLOBALTABLE . '_login WHERE userid=' . $admin_pre_data['userid'] . ' AND clid=' . $db->quote($client_info['clid']));
+            $stmt = $db->prepare('DELETE FROM ' . NV_USERS_GLOBALTABLE . '_login WHERE userid=:userid AND clid=:clid');
+            $stmt->bindValue(':userid', $admin_pre_data['userid'], PDO::PARAM_INT);
+            $stmt->bindValue(':clid', $client_info['clid'], PDO::PARAM_STR);
+            $stmt->execute();
         } else {
-            $db->query('DELETE FROM ' . NV_USERS_GLOBALTABLE . '_login WHERE userid=' . $admin_pre_data['userid']);
+            $stmt = $db->prepare('DELETE FROM ' . NV_USERS_GLOBALTABLE . '_login WHERE userid=:userid');
+            $stmt->bindValue(':userid', $admin_pre_data['userid'], PDO::PARAM_INT);
+            $stmt->execute();
         }
     }
 
@@ -320,18 +325,26 @@ if (!empty($admin_pre_data)) {
     }
     if (in_array('facebook', $_2step_opt, true) and !empty($global_config['facebook_client_id']) and !empty($global_config['facebook_client_secret'])) {
         $cfg_2step['opts'][] = 'facebook';
-        $sql = 'SELECT COUNT(oauth_uid) FROM ' . NV_AUTHORS_GLOBALTABLE . '_oauth WHERE admin_id=' . $admin_pre_data['admin_id'] . " AND oauth_server='facebook'";
-        $cfg_2step['active_facebook'] = (bool) ($db->query($sql)->fetchColumn());
+        $stmt = $db->prepare("SELECT COUNT(oauth_uid) FROM " . NV_AUTHORS_GLOBALTABLE . "_oauth WHERE admin_id=:admin_id AND oauth_server='facebook'");
+        $stmt->bindValue(':admin_id', $admin_pre_data['admin_id'], PDO::PARAM_INT);
+        $stmt->execute();
+        $cfg_2step['active_facebook'] = (bool) ($stmt->fetchColumn());
     }
+
     if (in_array('google', $_2step_opt, true) and !empty($global_config['google_client_id']) and !empty($global_config['google_client_secret'])) {
         $cfg_2step['opts'][] = 'google';
-        $sql = 'SELECT COUNT(oauth_uid) FROM ' . NV_AUTHORS_GLOBALTABLE . '_oauth WHERE admin_id=' . $admin_pre_data['admin_id'] . " AND oauth_server='google'";
-        $cfg_2step['active_google'] = (bool) ($db->query($sql)->fetchColumn());
+        $stmt = $db->prepare("SELECT COUNT(oauth_uid) FROM " . NV_AUTHORS_GLOBALTABLE . "_oauth WHERE admin_id=:admin_id AND oauth_server='google'");
+        $stmt->bindValue(':admin_id', $admin_pre_data['admin_id'], PDO::PARAM_INT);
+        $stmt->execute();
+        $cfg_2step['active_google'] = (bool) ($stmt->fetchColumn());
     }
+
     if (in_array('zalo', $_2step_opt, true) and !empty($global_config['zaloOfficialAccountID']) and !empty($global_config['zaloAppID']) and !empty($global_config['zaloAppSecretKey'])) {
         $cfg_2step['opts'][] = 'zalo';
-        $sql = 'SELECT COUNT(oauth_uid) FROM ' . NV_AUTHORS_GLOBALTABLE . '_oauth WHERE admin_id=' . $admin_pre_data['admin_id'] . " AND oauth_server='zalo'";
-        $cfg_2step['active_zalo'] = (bool) ($db->query($sql)->fetchColumn());
+        $stmt = $db->prepare("SELECT COUNT(oauth_uid) FROM " . NV_AUTHORS_GLOBALTABLE . "_oauth WHERE admin_id=:admin_id AND oauth_server='zalo'");
+        $stmt->bindValue(':admin_id', $admin_pre_data['admin_id'], PDO::PARAM_INT);
+        $stmt->execute();
+        $cfg_2step['active_zalo'] = (bool) ($stmt->fetchColumn());
     }
     if (empty($cfg_2step['default']) or !in_array($cfg_2step['default'], $cfg_2step['opts'], true)) {
         $cfg_2step['default'] = current($cfg_2step['opts']);
@@ -392,9 +405,14 @@ if (!empty($admin_pre_data) and in_array(($opt = $nv_Request->get_title('auth', 
         $stmt->execute();
 
         if ($global_config['allowuserloginmulti']) {
-            $db->query('DELETE FROM ' . NV_USERS_GLOBALTABLE . '_login WHERE userid=' . $admin_pre_data['userid'] . ' AND clid=' . $db->quote($client_info['clid']));
+            $stmt = $db->prepare('DELETE FROM ' . NV_USERS_GLOBALTABLE . '_login WHERE userid=:userid AND clid=:clid');
+            $stmt->bindValue(':userid', $admin_pre_data['userid'], PDO::PARAM_INT);
+            $stmt->bindValue(':clid', $client_info['clid'], PDO::PARAM_STR);
+            $stmt->execute();
         } else {
-            $db->query('DELETE FROM ' . NV_USERS_GLOBALTABLE . '_login WHERE userid=' . $admin_pre_data['userid']);
+            $stmt = $db->prepare('DELETE FROM ' . NV_USERS_GLOBALTABLE . '_login WHERE userid=:userid');
+            $stmt->bindValue(':userid', $admin_pre_data['userid'], PDO::PARAM_INT);
+            $stmt->execute();
         }
 
         $sth = $db->prepare('INSERT INTO ' . NV_USERS_GLOBALTABLE . '_login (
@@ -488,7 +506,12 @@ if (!empty($admin_pre_data) and $nv_Request->isset_request('submit2scode', 'post
         }
 
         $code = $sth->fetchColumn();
-        $db->query('UPDATE ' . NV_USERS_GLOBALTABLE . '_backupcodes SET is_used=1, time_used=' . NV_CURRENTTIME . " WHERE code='" . $code . "' AND userid=" . $admin_pre_data['userid']);
+
+        $stmt = $db->prepare("UPDATE " . NV_USERS_GLOBALTABLE . "_backupcodes SET is_used=1, time_used=:time_used WHERE code=:code AND userid=:userid");
+        $stmt->bindValue(':time_used', NV_CURRENTTIME, PDO::PARAM_INT);
+        $stmt->bindValue(':code', $code, PDO::PARAM_STR);
+        $stmt->bindValue(':userid', $admin_pre_data['userid'], PDO::PARAM_INT);
+        $stmt->execute();
         $step2_isvalid = true;
     }
 
@@ -561,8 +584,12 @@ if (!empty($admin_pre_data) and $nv_Request->isset_request('submit2spasskey', 'p
 
     $keyid = base64_encode($publicKeyCredential->rawId);
 
-    $sql = 'SELECT * FROM ' . NV_USERS_GLOBALTABLE . '_passkey WHERE keyid=' . $db->quote($keyid) . ' AND userid=' . $admin_pre_data['userid'];
-    $publickey = $db->query($sql)->fetch();
+    $stmt = $db->prepare('SELECT * FROM ' . NV_USERS_GLOBALTABLE . '_passkey WHERE keyid=:keyid AND userid=:userid');
+    $stmt->bindValue(':keyid', $keyid, PDO::PARAM_STR);
+    $stmt->bindValue(':userid', $admin_pre_data['userid'], PDO::PARAM_INT);
+    $stmt->execute();
+    $publickey = $stmt->fetch();
+    $stmt->closeCursor();
     if (empty($publickey)) {
         nv_jsonOutput([
             'status' => 'error',
@@ -820,8 +847,10 @@ if ($admin_login_success === true) {
     $nv_Request->set_Cookie('isal', 1, NV_LIVE_COOKIE_TIME, false);
 
     if ($global_config['lang_multi']) {
-        $sql = 'SELECT setup FROM ' . $db_config['prefix'] . '_setup_language WHERE lang=' . $db->quote(NV_LANG_INTERFACE);
-        $setup = $db->query($sql)->fetchColumn();
+        $stmt = $db->prepare('SELECT setup FROM ' . $db_config['prefix'] . '_setup_language WHERE lang=:lang');
+        $stmt->bindValue(':lang', NV_LANG_INTERFACE, PDO::PARAM_STR);
+        $stmt->execute();
+        $setup = $stmt->fetchColumn();
         if ($setup) {
             $nv_Request->set_Cookie(DATA_LANG_COOKIE_NAME, NV_LANG_INTERFACE, NV_LIVE_COOKIE_TIME);
         }

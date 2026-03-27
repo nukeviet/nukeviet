@@ -100,16 +100,17 @@ function nv_blocks_content($sitecontent)
                 $in[] = $row['func_id'];
             }
         }
-        $in = implode(',', $in);
-        $_result = $db->query('SELECT t1.*, t2.func_id FROM ' . NV_BLOCKS_TABLE . '_groups t1
+        $stmt = $db->prepare('SELECT t1.*, t2.func_id FROM ' . NV_BLOCKS_TABLE . '_groups t1
              INNER JOIN ' . NV_BLOCKS_TABLE . '_weight t2
              ON t1.bid = t2.bid
              WHERE t2.func_id IN (' . $in . ")
-             AND t1.theme ='" . $global_config['module_theme'] . "'
+             AND t1.theme =:theme
              AND t1.active!=''
              ORDER BY t2.weight ASC");
+        $stmt->bindValue(':theme', $global_config['module_theme'], PDO::PARAM_STR);
+        $stmt->execute();
 
-        while ($_row = $_result->fetch()) {
+        while ($_row = $stmt->fetch()) {
             // Cau hinh block
             $block_config = (!empty($_row['config'])) ? unserialize($_row['config'], NV_UNSERIALIZE_SAFE) : [];
             $block_config['bid'] = $_row['bid'];
@@ -139,7 +140,7 @@ function nv_blocks_content($sitecontent)
                 'block_config' => $block_config
             ];
         }
-        $_result->closeCursor();
+        $stmt->closeCursor();
         $nv_Cache->setItem('themes', $cache_file, json_encode($mod_blocklist, NV_JSON_ENCODE));
     }
 
@@ -1006,8 +1007,12 @@ function nv_groups_list_pub($mod_data = 'users')
 
     $_mod_table = ($mod_data == 'users') ? NV_USERS_GLOBALTABLE : $db_config['prefix'] . '_' . $mod_data;
 
-    $query = 'SELECT g.group_id, d.title, g.group_type, g.exp_time FROM ' . $_mod_table . '_groups AS g LEFT JOIN ' . $_mod_table . "_groups_detail d ON ( g.group_id = d.group_id AND d.lang='" . NV_LANG_DATA . "' ) WHERE g.act=1 AND (g.idsite = " . $global_config['idsite'] . ' OR (g.idsite =0 AND g.siteus = 1)) ORDER BY g.idsite, g.weight';
-    $list = $nv_Cache->db($query, '', $mod_data);
+    $query = 'SELECT g.group_id, d.title, g.group_type, g.exp_time FROM ' . $_mod_table . '_groups AS g LEFT JOIN ' . $_mod_table . "_groups_detail d ON ( g.group_id = d.group_id AND d.lang='" . NV_LANG_DATA . "' ) WHERE g.act=1 AND (g.idsite = :idsite OR (g.idsite =0 AND g.siteus = 1)) ORDER BY g.idsite, g.weight";
+    $stmt = $db->prepare($query);
+    $stmt->bindValue(':idsite', $global_config['idsite'], PDO::PARAM_INT);
+    $stmt->execute();
+    $list = $stmt->fetchAll();
+    $stmt->closeCursor();
 
     if (empty($list)) {
         return [];
@@ -1024,7 +1029,8 @@ function nv_groups_list_pub($mod_data = 'users')
     }
 
     if ($reload) {
-        $db->query('UPDATE ' . $_mod_table . '_groups SET act=0 WHERE group_id IN (' . implode(',', $reload) . ')');
+        $reload_in = implode(',', array_map('intval', $reload));
+        $db->query('UPDATE ' . $_mod_table . '_groups SET act=0 WHERE group_id IN (' . $reload_in . ')');
         $nv_Cache->delMod($mod_data);
     }
 

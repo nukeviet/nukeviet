@@ -78,20 +78,24 @@ function nv_referer_update()
             file_put_contents($log_path . '/' . $log_current . '.' . NV_LOGS_EXT, $content, FILE_APPEND);
             file_put_contents($tmp, NV_CURRENTTIME . '|' . $md5);
 
-            $_numrow = $db->query('SELECT COUNT(*) FROM ' . NV_REFSTAT_TABLE . ' WHERE host=' . $db->quote($host))->fetchColumn();
+            $stmt = $db->prepare('SELECT COUNT(*) FROM ' . NV_REFSTAT_TABLE . ' WHERE host=:host');
+            $stmt->bindValue(':host', $host, PDO::PARAM_STR);
+            $stmt->execute();
+            $_numrow = $stmt->fetchColumn();
+
             if ($_numrow > 0) {
                 $sth = $db->prepare('UPDATE ' . NV_REFSTAT_TABLE . ' SET
                     total=total+1,
                     month' . date('m', NV_CURRENTTIME) . '=month' . date('m', NV_CURRENTTIME) . '+1,
                     last_update=' . NV_CURRENTTIME . '
                     WHERE host= :host');
-                $sth->bindParam(':host', $host, PDO::PARAM_STR);
+                $sth->bindValue(':host', $host, PDO::PARAM_STR);
                 $sth->execute();
             } else {
                 $sth = $db->prepare('INSERT INTO ' . NV_REFSTAT_TABLE . '
                     (host, total, month' . date('m', NV_CURRENTTIME) . ', last_update)
                     VALUES ( :host, 1, 1,' . NV_CURRENTTIME . ')');
-                $sth->bindParam(':host', $host, PDO::PARAM_STR);
+                $sth->bindValue(':host', $host, PDO::PARAM_STR);
                 $sth->execute();
             }
             unset($_numrow);
@@ -108,15 +112,15 @@ function nv_referer_update()
 
                     if (!empty($key)) {
                         $sth = $db->prepare('UPDATE ' . NV_SEARCHKEYS_TABLE . ' SET total=total+1 WHERE id= :id AND search_engine= :search_engine');
-                        $sth->bindParam(':id', $id, PDO::PARAM_STR);
-                        $sth->bindParam(':search_engine', $nv_Request->search_engine, PDO::PARAM_STR);
+                        $sth->bindValue(':id', $id, PDO::PARAM_STR);
+                        $sth->bindValue(':search_engine', $nv_Request->search_engine, PDO::PARAM_STR);
                         $update = $sth->execute();
 
                         if (empty($update)) {
                             $sth = $db->prepare('INSERT INTO ' . NV_SEARCHKEYS_TABLE . ' VALUES ( :id, :key, 1, :search_engine)');
-                            $sth->bindParam(':id', $id, PDO::PARAM_STR);
-                            $sth->bindParam(':key', $key, PDO::PARAM_STR);
-                            $sth->bindParam(':search_engine', $nv_Request->search_engine, PDO::PARAM_STR);
+                            $sth->bindValue(':id', $id, PDO::PARAM_STR);
+                            $sth->bindValue(':key', $key, PDO::PARAM_STR);
+                            $sth->bindValue(':search_engine', $nv_Request->search_engine, PDO::PARAM_STR);
                             $sth->execute();
                         }
                     }

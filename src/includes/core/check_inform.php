@@ -22,7 +22,11 @@ $csrf = $nv_Request->get_title('_csrf', 'post', '');
 $checkss = md5($userid . $groups . NV_CHECK_SESSION);
 if ($userid and hash_equals($checkss, $csrf)) {
     nv_apply_hook('', 'check_inform', [$userid, $groups]);
-    $dbinfo = $db->query('SELECT inform FROM ' . NV_USERS_GLOBALTABLE . '_info WHERE userid = ' . $userid)->fetchColumn();
+    $stmt = $db->prepare('SELECT inform FROM ' . NV_USERS_GLOBALTABLE . '_info WHERE userid = :userid');
+    $stmt->bindValue(':userid', $userid, PDO::PARAM_INT);
+    $stmt->execute();
+    $dbinfo = $stmt->fetchColumn();
+
     unset($matches);
     if ($dbinfo and preg_match('/^([0-9]+)\|([0-9]{10,11})$/', $dbinfo, $matches) and ((int) $matches[2] > (NV_CURRENTTIME - 1800))) {
         $count = (int) $matches[1];
@@ -45,7 +49,11 @@ if ($userid and hash_equals($checkss, $csrf)) {
         $where .= ' AND mtb.id NOT IN (SELECT exc.pid FROM ' . NV_INFORM_STATUS_GLOBALTABLE . ' AS exc WHERE (exc.pid = mtb.id AND exc.userid = ' . $userid . ') AND (exc.shown_time != 0 OR exc.hidden_time != 0))';
         $sql = 'SELECT COUNT(mtb.id) FROM ' . NV_INFORM_GLOBALTABLE . ' AS mtb WHERE ' . $where;
         $count = (int) $db->query($sql)->fetchColumn();
-        $db->query('UPDATE ' . NV_USERS_GLOBALTABLE . "_info SET inform='" . $count . "|" . NV_CURRENTTIME . "' WHERE userid=" . $userid);
+
+        $stmt = $db->prepare("UPDATE " . NV_USERS_GLOBALTABLE . "_info SET inform=:inform WHERE userid=:userid");
+        $stmt->bindValue(':inform', $count . '|' . NV_CURRENTTIME, PDO::PARAM_STR);
+        $stmt->bindValue(':userid', $userid, PDO::PARAM_INT);
+        $stmt->execute();
     }
 }
 

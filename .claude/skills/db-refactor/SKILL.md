@@ -55,15 +55,17 @@ $count = $stmt->fetchColumn();     // Lấy một giá trị
 ```
 
 Quản lý tài nguyên (Resource Management):
-1. Nếu dùng fetchAll(), PDO tự động lấy hết dữ liệu và đóng cursor ngầm, nên closeCursor() không bắt buộc.
-2. Với fetch(), hãy luôn tập thói quen đóng cursor bằng $stmt->closeCursor() nếu không định gọi fetch() thêm lần nào nữa cho cùng một $stmt (ví dụ: chỉ lấy 1 dòng duy nhất).
+1. **`fetchColumn()`: Không dùng `closeCursor()` sau khi gọi hàm này.
+2. **`fetch()` (lấy 1 dòng duy nhất)**: **BẮT BUỘC** dùng `$stmt->closeCursor()` ngay sau đó.
+3. **`fetchAll()`**: PDO tự động đóng cursor, nên Không dùng `closeCursor()` sau khi gọi hàm này.
+4. **Vòng lặp `while ($row = $stmt->fetch())`**: **BẮT BUỘC** phải có `$stmt->closeCursor()` ngay sau khi kết thúc khối lệnh `while`.
 
 ```php
 // Vòng lặp: fetch trực tiếp từ $stmt, tuyệt đối KHÔNG gán $result = $stmt
 while ($row = $stmt->fetch()) {
     // ...
 }
-$stmt->closeCursor(); // Đóng cursor sau khi kết thúc vòng lặp hoặc khi thoát vòng lặp sớm
+$stmt->closeCursor(); // Bắt buộc đóng cursor sau khi kết thúc vòng lặp
 ```
 Lưu ý định dạng:
   - Phân tách (cách 1 dòng trắng) giữa các cụm lệnh PDO độc lập liên tiếp nhau (từ bước `prepare` đến `execute`/`fetch`) để code thoáng và dễ bảo trì.

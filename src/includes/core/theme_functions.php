@@ -713,10 +713,10 @@ function nv_register_block(string $tag, string $name = '', string $module = '')
         :module_name, :tag, :ini_tag, :title
     )";
     $stmt = $db->prepare($sql);
-    $stmt->bindParam(':module_name', $module, PDO::PARAM_STR);
-    $stmt->bindParam(':tag', $tag, PDO::PARAM_STR);
-    $stmt->bindParam(':ini_tag', $ini_tag, PDO::PARAM_STR);
-    $stmt->bindParam(':title', $name, PDO::PARAM_STR);
+    $stmt->bindValue(':module_name', $module, PDO::PARAM_STR);
+    $stmt->bindValue(':tag', $tag, PDO::PARAM_STR);
+    $stmt->bindValue(':ini_tag', $ini_tag, PDO::PARAM_STR);
+    $stmt->bindValue(':title', $name, PDO::PARAM_STR);
     $stmt->execute();
     if ($stmt->rowCount() > 0) {
         $nv_Cache->delMod('themes');
@@ -747,9 +747,9 @@ function nv_unregister_block(string $tag, string $module = '', bool $all = false
 
     $sql = "SELECT tag, ini_tag FROM " . NV_PREFIXLANG . "_modblocks WHERE module_name=:module_name" . ($all ? '' : " AND tag=:tag");
     $stmt = $db->prepare($sql);
-    $stmt->bindParam(':module_name', $module, PDO::PARAM_STR);
+    $stmt->bindValue(':module_name', $module, PDO::PARAM_STR);
     if (!$all) {
-        $stmt->bindParam(':tag', $tag, PDO::PARAM_STR);
+        $stmt->bindValue(':tag', $tag, PDO::PARAM_STR);
     }
     $stmt->execute();
     $tags = $stmt->fetchAll();
@@ -757,11 +757,11 @@ function nv_unregister_block(string $tag, string $module = '', bool $all = false
         return false;
     }
 
-    foreach ($tags as $tag) {
+    foreach ($tags as $tag_row) {
         $sql = "DELETE FROM " . NV_PREFIXLANG . "_modblocks WHERE module_name=:module_name AND tag=:tag";
         $stmt = $db->prepare($sql);
-        $stmt->bindParam(':module_name', $module, PDO::PARAM_STR);
-        $stmt->bindParam(':tag', $tag['tag'], PDO::PARAM_STR);
+        $stmt->bindValue(':module_name', $module, PDO::PARAM_STR);
+        $stmt->bindValue(':tag', $tag_row['tag'], PDO::PARAM_STR);
         $stmt->execute();
         if (!$stmt->rowCount()) {
             continue;
@@ -769,11 +769,15 @@ function nv_unregister_block(string $tag, string $module = '', bool $all = false
 
         // Xóa toàn bộ block trong tag tên tất cả các giao diện
         $sql = "DELETE tb1 FROM " . NV_BLOCKS_TABLE . "_weight tb1
-        INNER JOIN " . NV_BLOCKS_TABLE . "_groups tb2 ON tb1.bid=tb2.bid WHERE tb2.position=" . $db->quote($tag['ini_tag']);
-        $db->query($sql);
+        INNER JOIN " . NV_BLOCKS_TABLE . "_groups tb2 ON tb1.bid=tb2.bid WHERE tb2.position=:position";
+        $stmt = $db->prepare($sql);
+        $stmt->bindValue(':position', $tag_row['ini_tag'], PDO::PARAM_STR);
+        $stmt->execute();
 
-        $sql = "DELETE FROM " . NV_BLOCKS_TABLE . "_groups WHERE position=" . $db->quote($tag['ini_tag']);
-        $db->query($sql);
+        $sql = "DELETE FROM " . NV_BLOCKS_TABLE . "_groups WHERE position=:position";
+        $stmt = $db->prepare($sql);
+        $stmt->bindValue(':position', $tag_row['ini_tag'], PDO::PARAM_STR);
+        $stmt->execute();
     }
 
     $nv_Cache->delMod('themes');

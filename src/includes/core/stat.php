@@ -31,9 +31,14 @@ function nv_stat_update()
 
     // Bắt đầu vào giai đoạn thống kê mới thì reset lại số liệu
     if ($last_year != $current_year) {
-        $year_exists = $db->query('SELECT COUNT(*) FROM ' . NV_COUNTER_GLOBALTABLE . " WHERE c_type='year' AND c_val='" . $current_year . "'")->fetchColumn();
+        $stmt = $db->prepare("SELECT COUNT(*) FROM " . NV_COUNTER_GLOBALTABLE . " WHERE c_type='year' AND c_val=:year");
+        $stmt->bindValue(':year', $current_year, PDO::PARAM_STR);
+        $stmt->execute();
+        $year_exists = $stmt->fetchColumn();
         if (!$year_exists) {
-            $db->query('INSERT INTO ' . NV_COUNTER_GLOBALTABLE . " (c_type, c_val) VALUES ('year', '" . $current_year . "')");
+            $stmt = $db->prepare("INSERT INTO " . NV_COUNTER_GLOBALTABLE . " (c_type, c_val) VALUES ('year', :year)");
+            $stmt->bindValue(':year', $current_year, PDO::PARAM_STR);
+            $stmt->execute();
         }
 
         $db->query('UPDATE ' . NV_COUNTER_GLOBALTABLE . ' SET c_count= 0, ' . NV_LANG_DATA . "_count= 0 WHERE (c_type='month' OR c_type='day' OR c_type='hour')");
@@ -60,22 +65,27 @@ function nv_stat_update()
         $stat_bot = true;
 
         $where[] = "(c_type='total' AND c_val='hits')";
-        $where[] = "(c_type='year' AND c_val='" . $current_year . "')";
-        $where[] = "(c_type='month' AND c_val='" . $current_month . "')";
-        $where[] = "(c_type='day' AND c_val='" . $current_day . "')";
-        $where[] = "(c_type='dayofweek' AND c_val='" . $current_week . "')";
-        $where[] = "(c_type='hour' AND c_val='" . $current_hour . "')";
+        $where[] = "(c_type='year' AND c_val= :year)";
+        $where[] = "(c_type='month' AND c_val= :month)";
+        $where[] = "(c_type='day' AND c_val= :day)";
+        $where[] = "(c_type='dayofweek' AND c_val= :week)";
+        $where[] = "(c_type='hour' AND c_val= :hour)";
         $where[] = "(c_type='browser' AND c_val= :browser)";
         $where[] = "(c_type='os' AND c_val= :client_os)";
         $where[] = "(c_type='country' AND c_val= :country)";
     }
 
     $sth = $db->prepare('UPDATE ' . NV_COUNTER_GLOBALTABLE . ' SET last_update=' . NV_CURRENTTIME . ', c_count=c_count + 1, ' . NV_LANG_DATA . '_count= ' . NV_LANG_DATA . '_count + 1 WHERE ' . implode(' OR ', $where));
-    $sth->bindParam(':bot_name', $bot_name, PDO::PARAM_STR);
+    $sth->bindValue(':bot_name', $bot_name, PDO::PARAM_STR);
     if ($stat_bot) {
-        $sth->bindParam(':browser', $br, PDO::PARAM_STR);
-        $sth->bindParam(':client_os', $client_info['client_os']['key'], PDO::PARAM_STR);
-        $sth->bindParam(':country', $client_info['country'], PDO::PARAM_STR);
+        $sth->bindValue(':year', $current_year, PDO::PARAM_STR);
+        $sth->bindValue(':month', $current_month, PDO::PARAM_STR);
+        $sth->bindValue(':day', $current_day, PDO::PARAM_STR);
+        $sth->bindValue(':week', $current_week, PDO::PARAM_STR);
+        $sth->bindValue(':hour', $current_hour, PDO::PARAM_STR);
+        $sth->bindValue(':browser', $br, PDO::PARAM_STR);
+        $sth->bindValue(':client_os', $client_info['client_os']['key'], PDO::PARAM_STR);
+        $sth->bindValue(':country', $client_info['country'], PDO::PARAM_STR);
     }
     $sth->execute();
 

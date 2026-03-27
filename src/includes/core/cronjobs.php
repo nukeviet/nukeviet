@@ -16,7 +16,9 @@ if (!defined('NV_MAINFILE')) {
 ignore_user_abort(true);
 
 // Duyệt tất cả các cron đến giờ chạy
-$cron_result = $db->query('SELECT * FROM ' . $db_config['dbsystem'] . '.' . NV_CRONJOBS_GLOBALTABLE . ' WHERE act=1 AND start_time <= ' . NV_CURRENTTIME . ' ORDER BY is_sys DESC');
+$cron_result = $db->prepare('SELECT * FROM ' . $db_config['dbsystem'] . '.' . NV_CRONJOBS_GLOBALTABLE . ' WHERE act=1 AND start_time <= :start_time ORDER BY is_sys DESC');
+$cron_result->bindValue(':start_time', NV_CURRENTTIME, PDO::PARAM_INT);
+$cron_result->execute();
 while ($cron_row = $cron_result->fetch()) {
     // Kiểm tra chính xác cron có đúng thời gian chạy hay chưa
     $cron_allowed = false;
@@ -60,7 +62,10 @@ while ($cron_row = $cron_result->fetch()) {
         }
         if (!nv_function_exists($cron_row['run_func'])) {
             nv_insert_notification('settings', 'auto_deactive_cronjobs', ['cron_id' => $cron_row['id']]);
-            $db->query('UPDATE ' . $db_config['dbsystem'] . '.' . NV_CRONJOBS_GLOBALTABLE . ' SET act=0, last_time=' . $this_time . ', last_result=0 WHERE id=' . $cron_row['id']);
+            $stmt = $db->prepare('UPDATE ' . $db_config['dbsystem'] . '.' . NV_CRONJOBS_GLOBALTABLE . ' SET act=0, last_time=:last_time, last_result=0 WHERE id=:id');
+            $stmt->bindValue(':last_time', $this_time, PDO::PARAM_INT);
+            $stmt->bindValue(':id', $cron_row['id'], PDO::PARAM_INT);
+            $stmt->execute();
             continue;
         }
 
@@ -79,20 +84,32 @@ while ($cron_row = $cron_result->fetch()) {
         $result2 = call_user_func_array($cron_row['run_func'], $params);
         if (!$result2) {
             nv_insert_notification('settings', 'auto_deactive_cronjobs', ['cron_id' => $cron_row['id']]);
-            $db->query('UPDATE ' . $db_config['dbsystem'] . '.' . NV_CRONJOBS_GLOBALTABLE . ' SET act=0, last_time=' . $this_time . ', last_result=0 WHERE id=' . $cron_row['id']);
+            $stmt = $db->prepare('UPDATE ' . $db_config['dbsystem'] . '.' . NV_CRONJOBS_GLOBALTABLE . ' SET act=0, last_time=:last_time, last_result=0 WHERE id=:id');
+            $stmt->bindValue(':last_time', $this_time, PDO::PARAM_INT);
+            $stmt->bindValue(':id', $cron_row['id'], PDO::PARAM_INT);
+            $stmt->execute();
         } else {
             if ($cron_row['del']) {
-                $db->query('DELETE FROM ' . $db_config['dbsystem'] . '.' . NV_CRONJOBS_GLOBALTABLE . ' WHERE id = ' . $cron_row['id']);
+                $stmt = $db->prepare('DELETE FROM ' . $db_config['dbsystem'] . '.' . NV_CRONJOBS_GLOBALTABLE . ' WHERE id=:id');
+                $stmt->bindValue(':id', $cron_row['id'], PDO::PARAM_INT);
+                $stmt->execute();
             } elseif (empty($cron_row['inter_val'])) {
                 nv_insert_notification('settings', 'auto_deactive_cronjobs', ['cron_id' => $cron_row['id']]);
-                $db->query('UPDATE ' . $db_config['dbsystem'] . '.' . NV_CRONJOBS_GLOBALTABLE . ' SET act=0, last_time=' . $this_time . ', last_result=1 WHERE id=' . $cron_row['id']);
+                $stmt = $db->prepare('UPDATE ' . $db_config['dbsystem'] . '.' . NV_CRONJOBS_GLOBALTABLE . ' SET act=0, last_time=:last_time, last_result=1 WHERE id=:id');
+                $stmt->bindValue(':last_time', $this_time, PDO::PARAM_INT);
+                $stmt->bindValue(':id', $cron_row['id'], PDO::PARAM_INT);
+                $stmt->execute();
             } else {
-                $db->query('UPDATE ' . $db_config['dbsystem'] . '.' . NV_CRONJOBS_GLOBALTABLE . ' SET last_time=' . $this_time . ', last_result=1 WHERE id=' . $cron_row['id']);
+                $stmt = $db->prepare('UPDATE ' . $db_config['dbsystem'] . '.' . NV_CRONJOBS_GLOBALTABLE . ' SET last_time=:last_time, last_result=1 WHERE id=:id');
+                $stmt->bindValue(':last_time', $this_time, PDO::PARAM_INT);
+                $stmt->bindValue(':id', $cron_row['id'], PDO::PARAM_INT);
+                $stmt->execute();
             }
         }
         unlink($check_run_cronjobs);
         clearstatcache();
     }
 }
+$cron_result->closeCursor();
 
 exit();

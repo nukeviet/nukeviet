@@ -30,13 +30,17 @@ function nv_groups_list($mod_data = 'users')
 
     $groups = [];
     $_mod_table = ($mod_data == 'users') ? NV_USERS_GLOBALTABLE : $db_config['prefix'] . '_' . $mod_data;
-    $result = $db->query('SELECT g.group_id, d.title, g.idsite FROM ' . $_mod_table . '_groups AS g LEFT JOIN ' . $_mod_table . "_groups_detail d ON ( g.group_id = d.group_id AND d.lang='" . NV_LANG_DATA . "' ) WHERE (g.idsite = " . $global_config['idsite'] . ' OR (g.idsite =0 AND g.siteus = 1)) ORDER BY g.idsite, g.weight');
-    while ($row = $result->fetch()) {
+    $stmt = $db->prepare("SELECT g.group_id, d.title, g.idsite FROM " . $_mod_table . "_groups AS g LEFT JOIN " . $_mod_table . "_groups_detail d ON ( g.group_id = d.group_id AND d.lang='" . NV_LANG_DATA . "' ) WHERE (g.idsite = :idsite OR (g.idsite =0 AND g.siteus = 1)) ORDER BY g.idsite, g.weight");
+    $stmt->bindValue(':idsite', $global_config['idsite'], PDO::PARAM_INT);
+    $stmt->execute();
+    while ($row = $stmt->fetch()) {
         if ($row['group_id'] < 9) {
             $row['title'] = $nv_Lang->getGlobal('level' . $row['group_id']);
         }
         $groups[$row['group_id']] = ($global_config['idsite'] > 0 and empty($row['idsite'])) ? '<strong>' . $row['title'] . '</strong>' : $row['title'];
     }
+    $stmt->closeCursor();
+
     $nv_Cache->setItem($mod_data, $cache_file, serialize($groups));
 
     return $groups;
@@ -118,9 +122,9 @@ function nv_save_file_config_global()
     $sql = 'SELECT module, config_name, config_value FROM ' . NV_CONFIG_GLOBALTABLE . " WHERE lang='sys' AND (module='global' OR module='define') ORDER BY config_name ASC";
     $result = $db->query($sql);
 
-    while ($_scratch = $result->fetch(3)) {
-        [$c_module, $c_config_name, $c_config_value] = $_scratch;
-        unset($_scratch);
+    while ($_row_cfg = $result->fetch()) {
+        [$c_module, $c_config_name, $c_config_value] = [$_row_cfg['module'], $_row_cfg['config_name'], $_row_cfg['config_value']];
+        unset($_row_cfg);
         if ($c_module == 'define') {
             if (preg_match('/^\d+$/', $c_config_value)) {
                 $content_config .= "define('" . strtoupper($c_config_name) . "', " . $c_config_value . ");\n";
@@ -134,6 +138,7 @@ function nv_save_file_config_global()
             $config_variable[$c_config_name] = $c_config_value;
         }
     }
+    $result->closeCursor();
 
     $nv_eol = strtoupper(substr(PHP_OS, 0, 3) == 'WIN') ? '"\r\n"' : (strtoupper(substr(PHP_OS, 0, 3) == 'MAC') ? '"\r"' : '"\n"');
     $upload_max_filesize = min(nv_converttoBytes(ini_get('upload_max_filesize')), nv_converttoBytes(ini_get('post_max_size')), $config_variable['nv_max_size']);
@@ -248,8 +253,11 @@ function nv_save_file_config_global()
     $nv_plugins = [];
     foreach ($setup_langs as $lang) {
         $nv_plugins[$lang] = [];
-        $_sql = 'SELECT * FROM ' . $db_config['prefix'] . '_plugins WHERE plugin_lang=\'all\' OR plugin_lang=\'' . $lang . '\' ORDER BY hook_module, plugin_area ASC, weight ASC';
-        $_query = $db->query($_sql);
+        $_sql = 'SELECT * FROM ' . $db_config['prefix'] . '_plugins WHERE plugin_lang=:plugin_lang_all OR plugin_lang=:plugin_lang ORDER BY hook_module, plugin_area ASC, weight ASC';
+        $_query = $db->prepare($_sql);
+        $_query->bindValue(':plugin_lang_all', 'all', PDO::PARAM_STR);
+        $_query->bindValue(':plugin_lang', $lang, PDO::PARAM_STR);
+        $_query->execute();
         while ($row = $_query->fetch()) {
             // Xác định HOOK gọi từ module hay hệ thống
             if (!isset($nv_plugins[$lang][$row['hook_module']])) {
@@ -717,10 +725,12 @@ function nv_save_file_ips($type = 0)
         return true;
     }
 
-    $result = $db->query('SELECT ip, mask, area, begintime, endtime FROM ' . $db_config['prefix'] . '_ips WHERE type=' . $type);
-    while ($_scratch = $result->fetch(3)) {
-        [$dbip, $dbmask, $dbarea, $dbbegintime, $dbendtime] = $_scratch;
-        unset($_scratch);
+    $stmt = $db->prepare('SELECT ip, mask, area, begintime, endtime FROM ' . $db_config['prefix'] . '_ips WHERE type=:type');
+    $stmt->bindValue(':type', $type, PDO::PARAM_INT);
+    $stmt->execute();
+    while ($_row_ip = $stmt->fetch()) {
+        [$dbip, $dbmask, $dbarea, $dbbegintime, $dbendtime] = [$_row_ip['ip'], $_row_ip['mask'], $_row_ip['area'], $_row_ip['begintime'], $_row_ip['endtime']];
+        unset($_row_ip);
         $dbendtime = (int) $dbendtime;
         $dbarea = (int) $dbarea;
 
@@ -754,6 +764,7 @@ function nv_save_file_ips($type = 0)
             }
         }
     }
+    $stmt->closeCursor();
 
     if (!$content_config_site and !$content_config_admin) {
         nv_deletefile(NV_ROOTDIR . '/' . NV_DATADIR . '/' . $file_name . '.php');

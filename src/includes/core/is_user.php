@@ -36,15 +36,18 @@ if (defined('NV_IS_ADMIN')) {
             if (isset($user_cookie['userid']) and isset($user_cookie['checknum']) and isset($user_cookie['checkhash'])) {
                 $user_cookie['userid'] = (int) ($user_cookie['userid']);
                 if ($user_cookie['checkhash'] === md5($user_cookie['userid'] . $user_cookie['checknum'] . $global_config['sitekey'] . $client_info['clid'])) {
-                    $_sql = 'SELECT a.userid, a.group_id, a.username, a.email, a.first_name, a.last_name, a.gender, a.photo, a.birthday, a.regdate,
+                    $stmt = $db->prepare('SELECT a.userid, a.group_id, a.username, a.email, a.first_name, a.last_name, a.gender, a.photo, a.birthday, a.regdate,
                         a.view_mail, a.remember, a.in_groups, a.active2step, a.pref_2fa, a.checknum, a.password, a.question, a.answer, a.safemode, a.pass_creation_time,
                         a.pass_reset_request, a.email_creation_time, a.email_reset_request, a.email_verification_time, a.last_agent, a.last_ip,
                         a.last_login, a.last_openid, a.language, a.delete_at,
                         b.mode current_mode, b.agent AS current_agent, b.ip AS current_ip, b.logtime AS current_login, b.mode_extra AS current_mode_extra
                         FROM ' . NV_USERS_GLOBALTABLE . ' AS a INNER JOIN ' . NV_USERS_GLOBALTABLE . '_login AS b ON a.userid=b.userid
-                        WHERE a.userid = ' . $user_cookie['userid'] . ' AND b.clid=' . $db->quote($client_info['clid']) . ' AND a.active=1';
-
-                    $user_info = $db->query($_sql)->fetch();
+                        WHERE a.userid = :userid AND b.clid = :clid AND a.active=1');
+                    $stmt->bindValue(':userid', $user_cookie['userid'], PDO::PARAM_INT);
+                    $stmt->bindValue(':clid', $client_info['clid'], PDO::PARAM_STR);
+                    $stmt->execute();
+                    $user_info = $stmt->fetch();
+                    $stmt->closeCursor();
                     if (!empty($user_info)) {
                         if (
                             ($user_cookie['checknum'] === $user_info['checknum'] and $user_cookie['loginhash'] === substr($user_info['checknum'], 5, 8)) // checknum
@@ -79,9 +82,10 @@ if (defined('NV_IS_ADMIN')) {
                                     $user_info['current_openid'] = $user_info['current_mode_extra'];
 
                                     $sth = $db->prepare('SELECT openid, id, email FROM ' . NV_USERS_GLOBALTABLE . '_openid WHERE opid= :current_openid');
-                                    $sth->bindParam(':current_openid', $user_info['current_openid'], PDO::PARAM_STR);
+                                    $sth->bindValue(':current_openid', $user_info['current_openid'], PDO::PARAM_STR);
                                     $sth->execute();
                                     $row = $sth->fetch();
+                                    $sth->closeCursor();
 
                                     if (empty($row)) {
                                         $user_info = [];
@@ -111,14 +115,20 @@ if (defined('NV_IS_ADMIN')) {
                 }
             } else {
                 if (!empty($user_cookie['userid'])) {
-                    $db->query('DELETE FROM ' . NV_USERS_GLOBALTABLE . '_login WHERE userid=' . $user_cookie['userid'] . ' AND clid=' . $db->quote($client_info['clid']));
+                    $stmt = $db->prepare('DELETE FROM ' . NV_USERS_GLOBALTABLE . '_login WHERE userid=:userid AND clid=:clid');
+                    $stmt->bindValue(':userid', $user_cookie['userid'], PDO::PARAM_INT);
+                    $stmt->bindValue(':clid', $client_info['clid'], PDO::PARAM_STR);
+                    $stmt->execute();
                 }
                 NukeViet\Core\User::unset_userlogin_hash();
                 $user_info = [];
             }
         } else {
             if (!empty($user_cookie['userid'])) {
-                $db->query('DELETE FROM ' . NV_USERS_GLOBALTABLE . '_login WHERE userid=' . $user_cookie['userid'] . ' AND clid=' . $db->quote($client_info['clid']));
+                $stmt = $db->prepare('DELETE FROM ' . NV_USERS_GLOBALTABLE . '_login WHERE userid=:userid AND clid=:clid');
+                $stmt->bindValue(':userid', $user_cookie['userid'], PDO::PARAM_INT);
+                $stmt->bindValue(':clid', $client_info['clid'], PDO::PARAM_STR);
+                $stmt->execute();
             }
             NukeViet\Core\User::unset_userlogin_hash();
             $user_info = [];
