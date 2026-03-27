@@ -812,7 +812,7 @@ $(function () {
                         searchAjax: 1,
                         q: params.term,
                         page: params.page || 1,
-                        checkss: $('body').data('checksess')
+                        checkss: iptInnerAuthor.data('checkss')
                     };
                 },
                 cache: false
@@ -1590,6 +1590,158 @@ $(function () {
             });
         });
     });
+
+    if (nv_func_name === 'admins') {
+        // Cuộn xuống form khi đang sửa quyền hạn của người dùng.
+        const adminPermissionForm = $('#admin-permission-form');
+        if (adminPermissionForm.length && adminPermissionForm.data('is-edit')) {
+            $('html, body').animate({ scrollTop: adminPermissionForm.offset().top - 60 }, 400);
+        }
+
+        // Bật/tắt ma trận quyền theo radio loại quyền quản lý.
+        const adminPermissionMatrix = $('#admin-permission-matrix');
+        $('[name="admin_module"]').on('change', function () {
+            if ($(this).val() === '0') {
+                adminPermissionMatrix.removeClass('d-none');
+            } else {
+                adminPermissionMatrix.addClass('d-none');
+            }
+        });
+
+        // Double click tiêu đề cột để chọn hoặc bỏ chọn toàn bộ quyền trong cột đó.
+        $('[data-toggle="toggle-admin-column"]').on('dblclick', function (e) {
+            e.preventDefault();
+            const inputs = $('[name="' + $(this).data('target') + '[]"]');
+            if (!inputs.length) {
+                return;
+            }
+            inputs.prop('checked', inputs.filter(':checked').length !== inputs.length);
+        });
+    }
+
+    if (nv_func_name === 'authors') {
+        // Cuộn đến form khi đang ở chế độ sửa tác giả.
+        const authorForm = $('#author-form');
+        if (authorForm.length && authorForm.data('is-edit')) {
+            $('html, body').animate({ scrollTop: authorForm.offset().top - 60 }, 400);
+        }
+
+        // Khởi tạo select2 tìm tài khoản người dùng qua AJAX.
+        const uidField = $('#author_uid');
+        if (uidField.length) {
+            uidField.select2({
+                language: nv_lang_interface,
+                dir: $('html').attr('dir'),
+                width: '100%',
+                ajax: {
+                    url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=authors&nocache=' + new Date().getTime(),
+                    dataType: 'json',
+                    delay: 250,
+                    type: 'POST',
+                    data: function (params) {
+                        return {
+                            get_account_json: 1,
+                            checkss: $('[name="checkss"]', authorForm).val(),
+                            q: params.term,
+                            page: params.page || 1
+                        };
+                    },
+                    processResults: function (data, params) {
+                        params.page = params.page || 1;
+                        return {
+                            results: data.results,
+                            pagination: {
+                                more: data.pagination && data.pagination.more
+                            }
+                        };
+                    },
+                    cache: false
+                },
+                minimumInputLength: 3,
+                placeholder: uidField.data('placeholder'),
+                templateResult: function (repo) {
+                    if (repo.loading) {
+                        return repo.text;
+                    }
+                    return repo.title || repo.text;
+                },
+                templateSelection: function (repo) {
+                    return repo.title || repo.text || '';
+                }
+            });
+
+            // Gỡ trạng thái lỗi khi người dùng chọn lại tài khoản.
+            uidField.on('change', function () {
+                uidField.removeClass('is-invalid');
+            });
+        }
+
+        // Bật/tắt trạng thái hiệu lực trực tiếp trên danh sách.
+        $('[data-toggle="change-author-status"]').on('change', function () {
+            const chk = $(this);
+            if (chk.prop('disabled')) {
+                return;
+            }
+            chk.prop('disabled', true);
+            $.ajax({
+                type: 'POST',
+                url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=authors&nocache=' + new Date().getTime(),
+                dataType: 'json',
+                data: {
+                    changeStatus: 1,
+                    aid: chk.data('id'),
+                    checkss: chk.data('tokend')
+                },
+                success: function (respon) {
+                    chk.prop('disabled', false);
+                    if (respon.status !== 'OK') {
+                        chk.prop('checked', !chk.prop('checked'));
+                        nvToast(respon.mess || nv_is_change_act_confirm[2], 'error');
+                    }
+                },
+                error: function (xhr, text) {
+                    chk.prop('disabled', false);
+                    chk.prop('checked', !chk.prop('checked'));
+                    nvToast(text, 'error');
+                }
+            });
+        });
+
+        // Xóa tác giả bằng confirm + AJAX, sau đó tải lại danh sách.
+        $('[data-toggle="delete-author"]').on('click', function (e) {
+            e.preventDefault();
+            const btn = $(this);
+            const icon = $('i', btn);
+            if (icon.is('.fa-spinner')) {
+                return;
+            }
+            nvConfirm(nv_is_del_confirm[0], () => {
+                icon.removeClass(icon.data('icon')).addClass('fa-spinner fa-spin-pulse');
+                $.ajax({
+                    type: 'POST',
+                    url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=authors&nocache=' + new Date().getTime(),
+                    dataType: 'json',
+                    data: {
+                        authordel: 1,
+                        aid: btn.data('id'),
+                        checkss: btn.data('tokend')
+                    },
+                    success: function (respon) {
+                        icon.removeClass('fa-spinner fa-spin-pulse').addClass(icon.data('icon'));
+                        if (respon.status !== 'OK') {
+                            nvToast(respon.mess || nv_is_del_confirm[2], 'error');
+                            return;
+                        }
+                        location.reload();
+                    },
+                    error: function (xhr, text) {
+                        icon.removeClass('fa-spinner fa-spin-pulse').addClass(icon.data('icon'));
+                        nvToast(text, 'error');
+                    }
+                });
+            });
+        });
+    }
 
     if (nv_func_name === 'sources') {
         // Cuộn trang xuống form khi đang ở chế độ sửa nguồn tin

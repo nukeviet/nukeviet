@@ -1651,6 +1651,7 @@ $tpl->assign('TOTAL_NEWS_CURRENT', $total_news_current);
 $tpl->assign('REPORT_ID', $rid);
 $tpl->assign('REPORTLIST', $reportlist);
 $tpl->assign('SCHEMA_TYPES', $schema_types);
+$tpl->assign('AUTHORS_CHECKSS', csrf_create($csrf_key_author));
 
 // Xử lý bước đầu cho chuyên mục
 $list_cats = [];

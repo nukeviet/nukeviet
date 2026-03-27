@@ -334,7 +334,7 @@
                 <div class="card-body">
                     <div class="mb-3">
                         <label for="newcontent_internal_authors" class="form-label">{$LANG->getModule('content_internal_author')}:</label>
-                        <select id="newcontent_internal_authors" class="form-control" aria-label="{$LANG->getModule('content_internal_author')}" name="internal_authors[]" multiple data-placeholder="{$LANG->getModule('input_pseudonym')}">
+                        <select id="newcontent_internal_authors" class="form-control" aria-label="{$LANG->getModule('content_internal_author')}" name="internal_authors[]" multiple data-placeholder="{$LANG->getModule('input_pseudonym')}" data-checkss="{$AUTHORS_CHECKSS}">
                             {foreach from=$DATA.internal_authors item=author_id}
                             <option value="{$author_id}" selected>{isset($AUTHORS_LIST[$author_id]) ? {$AUTHORS_LIST[$author_id].pseudonym} : 'N/A'}</option>
                             {/foreach}
