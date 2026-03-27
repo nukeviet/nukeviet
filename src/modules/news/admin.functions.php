@@ -77,6 +77,8 @@ while ($row = $result->fetch()) {
     $global_array_cat[$row['catid']] = $row;
 }
 
+$csrf_key_author = $admin_info['admin_id'] . '_' . $module_name . '_authors';
+
 /**
  * nv_fix_cat_order()
  *

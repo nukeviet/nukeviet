@@ -887,4 +887,67 @@ class SampleDataTest extends \Codeception\Test\Unit
 
         $this->assertTrue(true);
     }
+
+    /**
+     * Dữ liệu mẫu tác giả (author) cho module News
+     *
+     * Mỗi user trong nv5_users được tạo 1 dòng tác giả tương ứng.
+     * Dùng INSERT IGNORE để bỏ qua nếu uid hoặc alias đã tồn tại.
+     * Nếu không có dòng nào được insert thì không xem là lỗi.
+     *
+     * @group sample-data
+     */
+    public function testInsertSampleDataForNewsAuthors()
+    {
+        global $db, $db_config;
+
+        $authorTable = $db_config['prefix'] . '_vi_news_author';
+
+        // Lấy toàn bộ user hiện có
+        $stmt = $db->query(
+            'SELECT userid, username, first_name, last_name FROM ' . $db_config['prefix'] . '_users ORDER BY userid ASC'
+        );
+        $users = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+
+        if (empty($users)) {
+            $this->markTestSkipped('Không có user nào trong bảng ' . $db_config['prefix'] . '_users.');
+        }
+
+        $esc = fn(string $s): string => str_replace(["\\", "'"], ["\\\\", "\\'"], $s);
+
+        $now    = time();
+        $values = [];
+
+        foreach ($users as $user) {
+            $uid = (int) $user['userid'];
+
+            // Pseudonym = Họ + Tên, fallback về username nếu thiếu
+            $firstName = trim($user['first_name'] ?? '');
+            $lastName  = trim($user['last_name'] ?? '');
+            $pseudonym = trim($lastName . ' ' . $firstName);
+            if ($pseudonym === '') {
+                $pseudonym = $user['username'];
+            }
+
+            // Alias = username viết thường, thay _ bằng - (unique vì username đã unique)
+            $alias = strtolower(str_replace('_', '-', $user['username']));
+
+            $values[] = sprintf(
+                "(%d,'%s','%s','','%s',%d,0,1,0)",
+                $uid,
+                $esc($alias),
+                $esc($pseudonym),
+                '',
+                $now
+            );
+        }
+
+        $db->exec(
+            'INSERT IGNORE INTO ' . $authorTable
+            . ' (uid, alias, pseudonym, image, description, add_time, edit_time, active, numnews) VALUES '
+            . implode(',', $values)
+        );
+
+        $this->assertTrue(true);
+    }
 }
