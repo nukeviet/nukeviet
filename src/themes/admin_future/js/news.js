@@ -1591,6 +1591,34 @@ $(function () {
         });
     });
 
+    if (nv_func_name === 'admins') {
+        // Cuộn xuống form khi đang sửa quyền hạn của người dùng.
+        const adminPermissionForm = $('#admin-permission-form');
+        if (adminPermissionForm.length && adminPermissionForm.data('is-edit')) {
+            $('html, body').animate({ scrollTop: adminPermissionForm.offset().top - 60 }, 400);
+        }
+
+        // Bật/tắt ma trận quyền theo radio loại quyền quản lý.
+        const adminPermissionMatrix = $('#admin-permission-matrix');
+        $('[name="admin_module"]').on('change', function () {
+            if ($(this).val() === '0') {
+                adminPermissionMatrix.removeClass('d-none');
+            } else {
+                adminPermissionMatrix.addClass('d-none');
+            }
+        });
+
+        // Double click tiêu đề cột để chọn hoặc bỏ chọn toàn bộ quyền trong cột đó.
+        $('[data-toggle="toggle-admin-column"]').on('dblclick', function (e) {
+            e.preventDefault();
+            const inputs = $('[name="' + $(this).data('target') + '[]"]');
+            if (!inputs.length) {
+                return;
+            }
+            inputs.prop('checked', inputs.filter(':checked').length !== inputs.length);
+        });
+    }
+
     if (nv_func_name === 'authors') {
         // Cuộn đến form khi đang ở chế độ sửa tác giả.
         const authorForm = $('#author-form');
