@@ -40,7 +40,7 @@ if (!empty($row) and md5($row['theme'] . NV_CHECK_SESSION) == $nv_Request->get_s
     $sth->bindValue(':theme', $theme, PDO::PARAM_STR);
     $sth->bindValue(':position', $pos_old, PDO::PARAM_STR);
     $sth->execute();
-    
+
     $weight = 0;
     $stmt_update = $db->prepare('UPDATE ' . NV_BLOCKS_TABLE . '_groups SET weight= :weight WHERE bid= :bid');
     while ($_row_bid = $sth->fetch()) {
@@ -57,7 +57,7 @@ if (!empty($row) and md5($row['theme'] . NV_CHECK_SESSION) == $nv_Request->get_s
         $sth->bindValue(':theme', $theme, PDO::PARAM_STR);
         $sth->bindValue(':position', $pos_old, PDO::PARAM_STR);
         $sth->execute();
-        
+
         $stmt_update2 = $db->prepare('UPDATE ' . NV_BLOCKS_TABLE . '_weight SET weight= :weight WHERE bid= :bid AND func_id= :func_id');
         while ($_row_weight = $sth->fetch()) {
             if ($_row_weight['func_id'] == $func_id_old) {
@@ -97,7 +97,7 @@ if (!empty($row) and md5($row['theme'] . NV_CHECK_SESSION) == $nv_Request->get_s
         $sth->bindValue(':theme', $theme, PDO::PARAM_STR);
         $sth->bindValue(':position', $pos_new, PDO::PARAM_STR);
         $sth->execute();
-        
+
         $stmt_update_n2 = $db->prepare('UPDATE ' . NV_BLOCKS_TABLE . '_weight SET weight= :weight WHERE bid= :bid AND func_id= :func_id');
         while ($_row_weight = $sth->fetch()) {
             if ($_row_weight['func_id'] == $func_id_old) {
@@ -114,9 +114,6 @@ if (!empty($row) and md5($row['theme'] . NV_CHECK_SESSION) == $nv_Request->get_s
         $sth->closeCursor();
     }
     $nv_Cache->delMod('themes');
-
-    $db->query('OPTIMIZE TABLE ' . NV_BLOCKS_TABLE . '_groups');
-    $db->query('OPTIMIZE TABLE ' . NV_BLOCKS_TABLE . '_weight');
 
     echo $nv_Lang->getModule('block_update_success');
 } else {

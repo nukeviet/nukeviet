@@ -52,7 +52,7 @@ if (!empty($array_bid) and md5($selectthemes . NV_CHECK_SESSION) == $nv_Request-
                 $sth->bindValue(':theme', $theme_i, PDO::PARAM_STR);
                 $sth->bindValue(':position', $position, PDO::PARAM_STR);
                 $sth->execute();
-                
+
                 $stmt_update = $db->prepare('UPDATE ' . NV_BLOCKS_TABLE . '_groups SET weight= :weight WHERE bid= :bid');
                 while ($_row_bid = $sth->fetch()) {
                     ++$weight;
@@ -69,7 +69,7 @@ if (!empty($array_bid) and md5($selectthemes . NV_CHECK_SESSION) == $nv_Request-
                 $sth->bindValue(':theme', $theme_i, PDO::PARAM_STR);
                 $sth->bindValue(':position', $position, PDO::PARAM_STR);
                 $sth->execute();
-                
+
                 $stmt_update2 = $db->prepare('UPDATE ' . NV_BLOCKS_TABLE . '_weight SET weight= :weight WHERE bid= :bid AND func_id= :func_id');
                 while ($_row_weight = $sth->fetch()) {
                     if ($_row_weight['func_id'] == $func_id_old) {
@@ -89,9 +89,6 @@ if (!empty($array_bid) and md5($selectthemes . NV_CHECK_SESSION) == $nv_Request-
         }
 
         $nv_Cache->delMod('themes');
-
-        $db->query('OPTIMIZE TABLE ' . NV_BLOCKS_TABLE . '_weight');
-        $db->query('OPTIMIZE TABLE ' . NV_BLOCKS_TABLE . '_groups');
     }
 }
 

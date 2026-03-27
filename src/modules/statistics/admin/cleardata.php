@@ -75,9 +75,6 @@ if ($nv_Request->isset_request('save', 'post')) {
         $db->query('UPDATE ' . NV_COUNTER_GLOBALTABLE . ' SET ' . $query_update . " WHERE c_type IN('hour', 'dayofweek', 'day', 'month', 'year', 'total', 'c_time')");
     }
 
-    $db->query('OPTIMIZE TABLE ' . NV_COUNTER_GLOBALTABLE);
-    $db->query('OPTIMIZE TABLE ' . NV_REFSTAT_TABLE);
-
     $clearmode = $clearall ? 'All' : ucfirst($cleartype);
     nv_insert_logs(NV_LANG_DATA, $module_name, 'Clear statistics', $clearmode, $admin_info['userid']);
 

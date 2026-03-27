@@ -25,14 +25,14 @@ $stmt->closeCursor();
 if (!empty($row) and $order > 0 and md5($row['theme'] . NV_CHECK_SESSION) == $nv_Request->get_string('checkss', 'post,get')) {
     $theme = $row['theme'];
     $position = $row['position'];
-    
+
     $weight = 0;
     $sth = $db->prepare('SELECT bid FROM ' . NV_BLOCKS_TABLE . '_groups WHERE bid!= :bid AND theme= :theme AND position= :position ORDER BY weight ASC');
     $sth->bindValue(':bid', $row['bid'], PDO::PARAM_INT);
     $sth->bindValue(':theme', $theme, PDO::PARAM_STR);
     $sth->bindValue(':position', $position, PDO::PARAM_STR);
     $sth->execute();
-    
+
     $stmt_update = $db->prepare('UPDATE ' . NV_BLOCKS_TABLE . '_groups SET weight= :weight WHERE bid= :bid');
     while ($_row_bid = $sth->fetch()) {
         ++$weight;
@@ -51,7 +51,6 @@ if (!empty($row) and $order > 0 and md5($row['theme'] . NV_CHECK_SESSION) == $nv
     $stmt_update2->execute();
     $nv_Cache->delMod('themes');
 
-    $db->query('OPTIMIZE TABLE ' . NV_BLOCKS_TABLE . '_groups');
     echo 'OK';
 } else {
     echo 'ERROR';

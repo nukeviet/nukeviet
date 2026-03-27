@@ -188,7 +188,7 @@ function nv_fix_source()
  * @param mixed $bid
  * @param bool  $repairtable
  */
-function nv_news_fix_block($bid, $repairtable = true)
+function nv_news_fix_block($bid)
 {
     global $db, $module_data;
     $bid = (int) $bid;
@@ -206,9 +206,6 @@ function nv_news_fix_block($bid, $repairtable = true)
             $db->query($sql);
         }
         $result->closeCursor();
-        if ($repairtable) {
-            $db->query('OPTIMIZE TABLE ' . NV_PREFIXLANG . '_' . $module_data . '_block');
-        }
     }
 }
 

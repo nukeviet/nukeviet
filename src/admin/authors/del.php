@@ -229,8 +229,6 @@ if (!csrf_check($nv_Request->get_string('checkss', 'post'), $_csrf_key)) {
     }
     nv_insert_logs(NV_LANG_DATA, $module_name, $nv_Lang->getModule('nv_admin_del'), 'Username: ' . $row_user['username'] . ', ' . $array_action_account[$action_account], $admin_info['userid']);
 
-    $db->query('OPTIMIZE TABLE ' . NV_AUTHORS_GLOBALTABLE);
-
     if ($sendmail) {
         $maillang = NV_LANG_INTERFACE;
         if (!empty($row_user['language']) and in_array($row_user['language'], $global_config['setup_langs'], true)) {

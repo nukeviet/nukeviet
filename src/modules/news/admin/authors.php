@@ -87,8 +87,6 @@ if ($nv_Request->isset_request('authordel', 'post')) {
 
     $db->query('DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_authorlist WHERE aid=' . $aid);
     $db->query('DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_author WHERE id=' . $aid);
-    $db->query('OPTIMIZE TABLE ' . NV_PREFIXLANG . '_' . $module_data . '_authorlist');
-    $db->query('OPTIMIZE TABLE ' . NV_PREFIXLANG . '_' . $module_data . '_author');
 
     nv_insert_logs(NV_LANG_DATA, $module_name, 'log_del_author', $author['pseudonym'], $admin_info['userid']);
     $nv_Cache->delMod($module_name);
