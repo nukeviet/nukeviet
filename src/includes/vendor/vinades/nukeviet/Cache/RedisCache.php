@@ -210,22 +210,23 @@ class RedisCache extends Cache
      * @param string $moduleName
      * @param string $lang
      * @param int $ttl
+     * @param array $bind Mảng các tham số liên kết (bind parameters), mỗi phần tử là [tên, giá trị, kiểu]
      * @return array
      */
-    public function db(string $sql, string $key, string $moduleName, string $lang = '', int $ttl = 0): array
+    public function db(string $sql, string $key, string $moduleName, string $lang = '', int $ttl = 0, array $bind = []): array
     {
         if (empty($sql)) {
             return [];
         }
 
-        $keyCache = $this->key($moduleName, $sql . '_' . $this->keySuffix, $lang);
+        $keyCache = $this->key($moduleName, $sql . '_' . (!empty($bind) ? serialize($bind) : '') . '_' . $this->keySuffix, $lang);
 
         $list = $this->redis->get($keyCache);
         if ($list) {
             return $list;
         }
 
-        $list = parent::getList($sql, $key);
+        $list = parent::getList($sql, $key, $bind);
         if ($list === false) {
             return [];
         }

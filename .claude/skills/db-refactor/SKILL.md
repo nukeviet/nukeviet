@@ -67,6 +67,25 @@ while ($row = $stmt->fetch()) {
 }
 $stmt->closeCursor(); // Bắt buộc đóng cursor sau khi kết thúc vòng lặp
 ```
+
+### Cache Truy vấn ($nv_Cache->db)
+Đối với các truy vấn sử dụng bộ nhớ đệm `$nv_Cache->db()`, tuyệt đối không ghép chuỗi biến vào SQL. Hãy sử dụng tham số `bind` ở cuối hàm theo định dạng chặt chẽ.
+
+**Quy tắc `$bind`:** Mỗi phần tử trong mảng là một mảng con gồm 3 giá trị: `[tên_placeholder, giá trị, kiểu_dữ_liệu]`.
+
+```php
+// ❌ Sai: Ghép chuỗi biến trực tiếp
+$sql = 'SELECT * FROM ' . NV_USERS_TABLE . ' WHERE active = ' . $active;
+$list = $nv_Cache->db($sql, 'userid', 'users');
+
+// ✅ Đúng: Sử dụng mảng $bind
+$sql = 'SELECT * FROM ' . NV_USERS_TABLE . ' WHERE active = :active';
+$bind = [
+    [':active', $active, PDO::PARAM_INT]
+];
+$list = $nv_Cache->db($sql, 'userid', 'users', '', 0, $bind);
+```
+
 Lưu ý định dạng:
   - Phân tách (cách 1 dòng trắng) giữa các cụm lệnh PDO độc lập liên tiếp nhau (từ bước `prepare` đến `execute`/`fetch`) để code thoáng và dễ bảo trì.
   - Chỉ cách 1 dòng nếu sau đó là code logic mới.

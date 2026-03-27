@@ -13,6 +13,7 @@ namespace NukeViet;
 
 use Memcached;
 use Redis;
+use PDO;
 
 /**
  * NukeViet\Cache
@@ -197,21 +198,30 @@ abstract class Cache
     /**
      * @param string $sql
      * @param string $key
+     * @param array $bind Mảng các tham số liên kết, mỗi phần tử là [tên, giá trị, kiểu]
      * @return array|false
      */
-    protected function getList($sql, $key): array|false
+    protected function getList(string $sql, string $key, array $bind = []): array|false
     {
         $list = false;
 
-        if (($result = $this->db->query($sql)) !== false) {
-            $list = [];
-            $a = 0;
-            while ($row = $result->fetch()) {
-                $key2 = (!empty($key) and isset($row[$key])) ? $row[$key] : $a;
-                $list[$key2] = $row;
-                ++$a;
+        $stmt = $this->db->prepare($sql);
+        if ($stmt) {
+            foreach ($bind as $param) {
+                // $param[0] là tên, $param[1] là giá trị, $param[2] là kiểu (mặc định là PDO::PARAM_STR)
+                $stmt->bindValue($param[0], $param[1], $param[2] ?? PDO::PARAM_STR);
             }
-            $result->closeCursor();
+
+            if ($stmt->execute()) {
+                $list = [];
+                $a = 0;
+                while ($row = $stmt->fetch()) {
+                    $key2 = (!empty($key) and isset($row[$key])) ? $row[$key] : $a;
+                    $list[$key2] = $row;
+                    ++$a;
+                }
+                $stmt->closeCursor();
+            }
         }
 
         return $list;
@@ -275,9 +285,10 @@ abstract class Cache
      * @param string $moduleName Tên module
      * @param string $lang Ngôn ngữ, để trống thì dùng ngôn ngữ hiện tại
      * @param int $ttl Thời gian sống của bộ nhớ đệm (tính bằng giây). Đặt là 0 để vô hạn.
+     * @param array $bind Mảng các tham số liên kết (bind parameters), mỗi phần tử là [tên, giá trị, kiểu]
      * @return array Mảng kết quả trả về từ truy vấn
      */
-    abstract public function db(string $sql, string $key, string $moduleName, string $lang = '', int $ttl = 0): array;
+    abstract public function db(string $sql, string $key, string $moduleName, string $lang = '', int $ttl = 0, array $bind = []): array;
 
     /**
      * Lấy instance tùy loại cache và có thể cấu hình thêm

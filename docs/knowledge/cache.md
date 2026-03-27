@@ -15,9 +15,26 @@ Hệ thống Cache của NukeViet 5 giúp giảm tải cho cơ sở dữ liệu 
 
 ## 2. Các phương thức cốt lõi
 
-### `$nv_Cache->db()` — Cache truy vấn SQL
-Đây là phương thức phổ biến nhất, dùng để cache mảng kết quả của một câu lệnh SELECT.
-> **Tham khảo cú pháp `$nv_Cache->db()`:** `docs/knowledge/examples/cache/CacheDb.php`
+### `$nv_Cache->db()` — Cache truy vấn SQL (Hỗ trợ Prepared Statements)
+Đây là phương thức phổ biến nhất, dùng để cache mảng kết quả của một câu lệnh SELECT. Từ NukeViet 5.x, phương thức này đã hỗ trợ truyền mảng tham số `bind` để bảo mật chống SQL Injection và tối ưu hóa truy vấn.
+
+**Cú pháp:**
+```php
+$nv_Cache->db(string $sql, string $key, string $moduleName, string $lang = '', int $ttl = 0, array $bind = []): array;
+```
+
+**Tham số `$bind`:**
+Để đảm bảo tính chặt chẽ, mảng `$bind` yêu cầu mỗi phần tử là một mảng con gồm 3 giá trị: `[tên_placeholder, giá trị, kiểu_dữ_liệu]`.
+
+**Ví dụ:**
+```php
+$sql = 'SELECT * FROM ' . NV_USERS_TABLE . ' WHERE userid = :userid AND status = :status';
+$bind = [
+    [':userid', 1, PDO::PARAM_INT],
+    [':status', 1, PDO::PARAM_INT]
+];
+$user_data = $nv_Cache->db($sql, 'userid', 'users', 'vi', 0, $bind);
+```
 
 ---
 
@@ -59,7 +76,7 @@ $nv_Cache->delMod(string $moduleName, string $lang = '');
 
 ## 4. Lưu ý và Best Practices
 
-1. **MD5 cho DB Cache**: Hệ thống dùng `md5($sql)` để tạo tên tệp cho `db()`. Nếu SQL thay đổi dù chỉ 1 khoảng trắng, cache cũ sẽ không được dùng. Nên dùng Query Builder `$db->sql()` để đảm bảo SQL ổn định.
+1. **Khóa Cache (Key/Filename)**: Hệ thống dùng `md5($sql . serialize($bind))` để tạo định danh cho `db()`. Điều này đảm bảo rằng các truy vấn cùng SQL nhưng khác tham số `bind` sẽ được lưu trữ riêng biệt, tránh xung đột dữ liệu.
 2. **TTL (Time To Live)**:
     - Với File Cache, TTL được kiểm tra khi đọc (`getItem`).
     - Với Memcached/Redis, TTL được thiết lập ngay khi ghi.

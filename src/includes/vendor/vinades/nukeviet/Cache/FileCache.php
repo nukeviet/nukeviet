@@ -190,22 +190,23 @@ class FileCache extends Cache
      * @param string $moduleName
      * @param string $lang
      * @param int $ttl
+     * @param array $bind Mảng các tham số liên kết (bind parameters), mỗi phần tử là [tên, giá trị, kiểu]
      * @return array
      */
-    public function db(string $sql, string $key, string $moduleName, string $lang = '', int $ttl = 0): array
+    public function db(string $sql, string $key, string $moduleName, string $lang = '', int $ttl = 0, array $bind = []): array
     {
         if (empty($sql)) {
             return [];
         }
 
-        $cache_file = md5($sql) . '_' . $this->keySuffix . '.cache';
+        $cache_file = md5($sql . (!empty($bind) ? serialize($bind) : '')) . '_' . $this->keySuffix . '.cache';
 
         if (($cache = $this->getItem($moduleName, $cache_file, $lang, $ttl)) !== false) {
             $data = unserialize($cache, NV_UNSERIALIZE_SAFE);
             return is_array($data) ? $data : [];
         }
 
-        $list = parent::getList($sql, $key);
+        $list = parent::getList($sql, $key, $bind);
         if ($list === false) {
             return [];
         }
