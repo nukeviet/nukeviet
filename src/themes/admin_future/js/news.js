@@ -1591,6 +1591,41 @@ $(function () {
         });
     });
 
+    if (nv_func_name === 'setting') {
+        // Ẩn/hiện mật khẩu Instant Articles.
+        $(document).on('click', '.btn-eye', function (e) {
+            e.preventDefault();
+            const fieldId = $(this).data('field');
+            const field = $(fieldId);
+            const icon = $('i', this);
+            if (field.attr('type') === 'password') {
+                field.attr('type', 'text');
+                icon.removeClass('fa-eye').addClass('fa-eye-slash');
+            } else {
+                field.attr('type', 'password');
+                icon.removeClass('fa-eye-slash').addClass('fa-eye');
+            }
+        });
+
+        // Chọn toàn bộ URL feed khi focus để sao chép nhanh.
+        $(document).on('focus', '[data-toggle="selectall"]', function () {
+            this.select();
+        });
+
+        // Tạo mật khẩu ngẫu nhiên cho nguồn cấp Instant Articles.
+        $('[data-toggle="setting-genpass"]').on('click', function (e) {
+            e.preventDefault();
+            const btn = $(this);
+            const field = $(btn.data('field'));
+            if (!field.length) {
+                return;
+            }
+
+            field.prop('type', 'text').val(nv_randomPassword(10)).trigger('input').focus().select();
+            field.closest('.input-group').find('.btn-eye i').removeClass('fa-eye').addClass('fa-eye-slash');
+        });
+    }
+
     if (nv_func_name === 'admins') {
         // Cuộn xuống form khi đang sửa quyền hạn của người dùng.
         const adminPermissionForm = $('#admin-permission-form');
