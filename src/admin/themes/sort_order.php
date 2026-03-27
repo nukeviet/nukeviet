@@ -139,9 +139,6 @@ if (md5(NV_CHECK_SESSION . '_' . $position) == $nv_Request->get_string('checkss'
     }
 
     $nv_Cache->delMod('themes');
-
-    $db->query('OPTIMIZE TABLE ' . NV_BLOCKS_TABLE . '_groups');
-    $db->query('OPTIMIZE TABLE ' . NV_BLOCKS_TABLE . '_weight');
 }
 
 exit('OK_' . $func_id);

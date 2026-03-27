@@ -80,9 +80,6 @@ $sth->closeCursor();
 
 $nv_Cache->delMod('themes');
 
-$db->query('OPTIMIZE TABLE ' . NV_BLOCKS_TABLE . '_groups');
-$db->query('OPTIMIZE TABLE ' . NV_BLOCKS_TABLE . '_weight');
-
 nv_jsonOutput([
     'success' => 1,
     'text' => $nv_Lang->getModule('block_delete_success')

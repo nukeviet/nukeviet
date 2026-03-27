@@ -502,10 +502,6 @@ if (!empty($request['checkss']) and csrf_check($request['checkss'], $csrf_key . 
                 $result->closeCursor();
                 $nv_Cache->delMod('themes');
                 $nv_Cache->delMod('sys');
-
-                $db->query('OPTIMIZE TABLE ' . $db_config['prefix'] . '_' . $_lang . '_modthemes');
-                $db->query('OPTIMIZE TABLE ' . $db_config['prefix'] . '_' . $_lang . '_blocks_weight');
-                $db->query('OPTIMIZE TABLE ' . $db_config['prefix'] . '_' . $_lang . '_blocks_groups');
             } else {
                 nv_jsonOutput([
                     'success' => 0,

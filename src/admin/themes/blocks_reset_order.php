@@ -125,7 +125,7 @@ foreach ($array_position as $position) {
     $sth->bindValue(':theme', $theme, PDO::PARAM_STR);
     $sth->bindValue(':position', $position, PDO::PARAM_STR);
     $sth->execute();
-    
+
     $stmt_update = $db->prepare('UPDATE ' . NV_BLOCKS_TABLE . '_weight SET weight= :weight WHERE bid= :bid AND func_id= :func_id');
     while ($_row_weight = $sth->fetch()) {
         if ($_row_weight['func_id'] == $func_id_old) {
@@ -145,9 +145,6 @@ foreach ($array_position as $position) {
 
 nv_insert_logs(NV_LANG_DATA, $module_name, $nv_Lang->getModule('block_weight'), 'reset position all block', $admin_info['userid']);
 $nv_Cache->delMod('themes');
-
-$db->query('OPTIMIZE TABLE ' . NV_BLOCKS_TABLE . '_groups');
-$db->query('OPTIMIZE TABLE ' . NV_BLOCKS_TABLE . '_weight');
 
 nv_jsonOutput([
     'success' => 1,

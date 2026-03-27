@@ -1391,7 +1391,7 @@ if ($is_submit_form) {
 
             $array_block_fix = array_unique($array_block_fix);
             foreach ($array_block_fix as $bid_i) {
-                nv_news_fix_block($bid_i, false);
+                nv_news_fix_block($bid_i);
             }
 
             if ($rowcontent['tags'] != $rowcontent['tags_old'] or $copy) {

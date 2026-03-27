@@ -115,7 +115,6 @@ if ($nv_Request->isset_request('cron_del', 'post')) {
         $stmt = $db->prepare('DELETE FROM ' . NV_CRONJOBS_GLOBALTABLE . ' WHERE id = :id');
         $stmt->bindValue(':id', $id, PDO::PARAM_INT);
         $stmt->execute();
-        $db->query('OPTIMIZE TABLE ' . NV_CRONJOBS_GLOBALTABLE);
         update_cronjob_next_time();
     }
 

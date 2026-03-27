@@ -68,8 +68,6 @@ if ($nv_Request->isset_request('authordel', 'post')) {
     if ($aid != $my_author_detail['id']) {
         $db->query('DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_authorlist WHERE aid=' . $aid);
         $db->query('DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_author WHERE id=' . $aid);
-        $db->query('OPTIMIZE TABLE ' . NV_PREFIXLANG . '_' . $module_data . '_authorlist');
-        $db->query('OPTIMIZE TABLE ' . NV_PREFIXLANG . '_' . $module_data . '_author');
     }
     echo 'OK';
     exit(0);

@@ -135,10 +135,6 @@ if (!empty($old_funcs)) {
         $stmt_del_theme->execute();
         $is_delCache = true;
     }
-
-    $db->query('OPTIMIZE TABLE ' . NV_BLOCKS_TABLE . '_weight');
-    $db->query('OPTIMIZE TABLE ' . NV_MODFUNCS_TABLE);
-    $db->query('OPTIMIZE TABLE ' . NV_PREFIXLANG . '_modthemes');
     $is_refresh = true;
 }
 

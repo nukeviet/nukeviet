@@ -58,10 +58,6 @@ try {
 
         $nv_Cache->delAll();
 
-        $db->query('OPTIMIZE TABLE ' . NV_PREFIXLANG . '_modthemes');
-        $db->query('OPTIMIZE TABLE ' . NV_PREFIXLANG . '_blocks_weight');
-        $db->query('OPTIMIZE TABLE ' . NV_PREFIXLANG . '_blocks_groups');
-
         echo $nv_Lang->getModule('theme_delete_success');
     } else {
         echo $nv_Lang->getModule('theme_delete_unsuccess');

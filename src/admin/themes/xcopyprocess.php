@@ -80,9 +80,6 @@ if (csrf_check($nv_Request->get_string('checkss', 'post'), $admin_info['admin_id
         }
     }
 
-    $db->query('OPTIMIZE TABLE ' . NV_BLOCKS_TABLE . '_groups');
-    $db->query('OPTIMIZE TABLE ' . NV_BLOCKS_TABLE . '_weight');
-
     nv_insert_logs(NV_LANG_DATA, $module_name, $nv_Lang->getModule('xcopyblock'), $nv_Lang->getModule('xcopyblock_from') . ' ' . $theme1 . ' ' . $nv_Lang->getModule('xcopyblock_to') . ' ' . $theme2, $admin_info['userid']);
     $nv_Cache->delMod('themes');
 
