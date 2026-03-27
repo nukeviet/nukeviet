@@ -149,27 +149,20 @@ if (isset($array_op[1]) and !empty($array_op[1])) {
         }
     }
 
-    $db->sqlreset()
-        ->select('COUNT(*)')
-        ->from(NV_MOD_TABLE)
-        ->where((defined('NV_IS_ADMIN') ? '' : 'active=1'));
-
-    $num_items = $db->query($db->sql())
-        ->fetchColumn();
+    $where = defined('NV_IS_ADMIN') ? '' : 'WHERE active=1';
+    $num_items = $db->query('SELECT COUNT(*) FROM ' . NV_MOD_TABLE . ' ' . $where)->fetchColumn();
 
     $urlappend = '&page=';
     betweenURLs($page, ceil($num_items / $per_page), $base_url, $urlappend, $prevPage, $nextPage);
 
-    $db->select('userid, username, md5username, first_name, last_name, photo, gender, regdate')
-        ->order($orderby . ' ' . $sortby)
-        ->limit($per_page)
-        ->offset(($page - 1) * $per_page);
-
-    $result = $db->query($db->sql());
+    $stmt = $db->prepare('SELECT userid, username, md5username, first_name, last_name, photo, gender, regdate FROM ' . NV_MOD_TABLE . ' ' . $where . ' ORDER BY ' . $orderby . ' ' . $sortby . ' LIMIT :limit OFFSET :offset');
+    $stmt->bindValue(':limit', $per_page, PDO::PARAM_INT);
+    $stmt->bindValue(':offset', ($page - 1) * $per_page, PDO::PARAM_INT);
+    $stmt->execute();
 
     $users_array = [];
 
-    while ($item = $result->fetch()) {
+    while ($item = $stmt->fetch()) {
         $item['full_name'] = nv_show_name_user($item['first_name'], $item['last_name']);
         if (!empty($item['photo']) and file_exists(NV_ROOTDIR . '/' . $item['photo'])) {
             $item['photo'] = NV_BASE_SITEURL . $item['photo'];
@@ -184,7 +177,7 @@ if (isset($array_op[1]) and !empty($array_op[1])) {
 
         $users_array[$item['userid']] = $item;
     }
-    $result->closeCursor();
+    $stmt->closeCursor();
 
     // Them vao tieu de trang
     if (!empty($orderby)) {

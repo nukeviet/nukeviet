@@ -131,28 +131,33 @@ if (preg_match($global_config['check_theme'], $selectthemes) and $sth->fetchColu
 
             $all_func = ($row['all_func'] == 1 and preg_match('/^global\.([a-zA-Z0-9\-\_\.]+)\.php$/', $file_name)) ? 1 : 0;
 
-            $_sql = 'INSERT INTO ' . NV_BLOCKS_TABLE . "_groups (
+            $_sql = 'INSERT INTO ' . NV_BLOCKS_TABLE . '_groups (
                 theme, module, file_name, title, link, template, heading, position,
                 dtime_type, dtime_details, active, bot_visible, groups_view, all_func, weight, config
             ) VALUES (
                 :selectthemes, :module, :file_name, :title, :link, :template, :heading, :position,
-                :dtime_type, :dtime_details, '" . $row['active'] . "', '" . $row['bot_visible'] . "', :groups_view,
-                '" . $all_func . "', '" . $row['weight'] . "', :config
-            )";
-            $data = [];
-            $data['selectthemes'] = $selectthemes;
-            $data['module'] = $row['module'];
-            $data['file_name'] = $file_name;
-            $data['title'] = $row['title'];
-            $data['link'] = $row['link'];
-            $data['template'] = (string) $row['template'];
-            $data['heading'] = (int) $row['heading'];
-            $data['position'] = $row['position'];
-            $data['dtime_type'] = $row['dtime_type'];
-            $data['dtime_details'] = $row['dtime_details'];
-            $data['groups_view'] = $row['groups_view'];
-            $data['config'] = !empty($row['config']) ? (string) $row['config'] : '';
-            $row['bid'] = $db->insert_id($_sql, 'bid', $data);
+                :dtime_type, :dtime_details, :active, :bot_visible, :groups_view, :all_func, :weight, :config
+            )';
+
+            $sth_ins = $db->prepare($_sql);
+            $sth_ins->bindValue(':selectthemes', $selectthemes, PDO::PARAM_STR);
+            $sth_ins->bindValue(':module', $row['module'], PDO::PARAM_STR);
+            $sth_ins->bindValue(':file_name', $file_name, PDO::PARAM_STR);
+            $sth_ins->bindValue(':title', $row['title'], PDO::PARAM_STR);
+            $sth_ins->bindValue(':link', $row['link'], PDO::PARAM_STR);
+            $sth_ins->bindValue(':template', (string) $row['template'], PDO::PARAM_STR);
+            $sth_ins->bindValue(':heading', (int) $row['heading'], PDO::PARAM_INT);
+            $sth_ins->bindValue(':position', $row['position'], PDO::PARAM_STR);
+            $sth_ins->bindValue(':dtime_type', $row['dtime_type'], PDO::PARAM_INT);
+            $sth_ins->bindValue(':dtime_details', $row['dtime_details'], PDO::PARAM_STR);
+            $sth_ins->bindValue(':active', $row['active'], PDO::PARAM_STR);
+            $sth_ins->bindValue(':bot_visible', $row['bot_visible'], PDO::PARAM_STR);
+            $sth_ins->bindValue(':groups_view', $row['groups_view'], PDO::PARAM_STR);
+            $sth_ins->bindValue(':all_func', $all_func, PDO::PARAM_INT);
+            $sth_ins->bindValue(':weight', $row['weight'], PDO::PARAM_INT);
+            $sth_ins->bindValue(':config', !empty($row['config']) ? (string) $row['config'] : '', PDO::PARAM_STR);
+            $sth_ins->execute();
+            $row['bid'] = $db->lastInsertId();
             if ($all_func) {
                 $array_funcid = $array_all_funcid;
             } else {

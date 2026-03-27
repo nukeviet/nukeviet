@@ -13,26 +13,22 @@ if (!defined('NV_IS_MOD_SEARCH')) {
     exit('Stop!!!');
 }
 
-$db_slave->sqlreset()
-    ->select('COUNT(*)')
-    ->from(NV_PREFIXLANG . '_' . $m_values['module_data'])
-    ->where('status=1 AND (' . nv_like_logic('title', $dbkeyword, $logic) . ' OR ' . nv_like_logic('description', $dbkeyword, $logic) . ' OR ' . nv_like_logic('bodytext', $dbkeyword, $logic) . ')');
-$num_items = $db_slave->query($db_slave->sql())->fetchColumn();
+$sql_where = 'status=1 AND (' . nv_like_logic('title', $dbkeyword, $logic) . ' OR ' . nv_like_logic('description', $dbkeyword, $logic) . ' OR ' . nv_like_logic('bodytext', $dbkeyword, $logic) . ')';
+$num_items = $db_slave->query('SELECT COUNT(*) FROM ' . NV_PREFIXLANG . '_' . $m_values['module_data'] . ' WHERE ' . $sql_where)->fetchColumn();
 
 if ($num_items) {
     $link = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $m_values['module_name'] . '&amp;' . NV_OP_VARIABLE . '=';
 
-    $db_slave->select('id,title, alias, description, bodytext')
-        ->limit($limit)
-        ->offset(($page - 1) * $limit);
-    $result = $db_slave->query($db_slave->sql());
-    while ($_scratch = $result->fetch(3)) {
-        [$id, $tilterow, $alias, $description, $content] = $_scratch;
-        unset($_scratch);
+    $stmt = $db_slave->prepare('SELECT id, title, alias, description, bodytext FROM ' . NV_PREFIXLANG . '_' . $m_values['module_data'] . ' WHERE ' . $sql_where . ' LIMIT :limit OFFSET :offset');
+    $stmt->bindValue(':limit', $limit, PDO::PARAM_INT);
+    $stmt->bindValue(':offset', ($page - 1) * $limit, PDO::PARAM_INT);
+    $stmt->execute();
+    while ($row = $stmt->fetch()) {
         $result_array[] = [
-            'link' => $link . $alias . $global_config['rewrite_exturl'],
-            'title' => BoldKeywordInStr($tilterow, $key, $logic),
-            'content' => BoldKeywordInStr($description . ' ' . $content, $key, $logic)
+            'link' => $link . $row['alias'] . $global_config['rewrite_exturl'],
+            'title' => BoldKeywordInStr($row['title'], $key, $logic),
+            'content' => BoldKeywordInStr($row['description'] . ' ' . $row['bodytext'], $key, $logic)
         ];
     }
+    $stmt->closeCursor();
 }

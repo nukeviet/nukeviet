@@ -604,17 +604,30 @@ if ($step == 1) {
                             }
                         } else {
                             unset($modules[$key]);
-                            $db->query('DELETE FROM ' . $db_config['prefix'] . '_' . NV_LANG_DATA . '_modules WHERE title=' . $db->quote($setmodule));
+                            $stmt = $db->prepare('DELETE FROM ' . $db_config['prefix'] . '_' . NV_LANG_DATA . '_modules WHERE title = :title');
+                            $stmt->bindValue(':title', $setmodule, PDO::PARAM_STR);
+                            $stmt->execute();
                         }
                     }
 
                     // Cai dat du lieu mau he thong
                     try {
+                        $values       = array_values($modules_exit);
+                        $placeholders = implode(', ', array_map(fn($k) => ':v' . $k, array_keys($values)));
+
                         // Xoa du lieu tai bang nvx_vi_modules
-                        $db->query('DELETE FROM ' . $db_config['prefix'] . '_' . $lang_data . "_modules WHERE module_file NOT IN ('" . implode("', '", $modules_exit) . "')");
+                        $stmt = $db->prepare('DELETE FROM ' . $db_config['prefix'] . '_' . $lang_data . '_modules WHERE module_file NOT IN (' . $placeholders . ')');
+                        foreach ($values as $k => $v) {
+                            $stmt->bindValue(':v' . $k, $v, PDO::PARAM_STR);
+                        }
+                        $stmt->execute();
 
                         // Xoa du lieu tai bang nvx_setup_extensions
-                        $db->query('DELETE FROM ' . $db_config['prefix'] . "_setup_extensions WHERE basename NOT IN ('" . implode("', '", $modules_exit) . "') AND type='module'");
+                        $stmt = $db->prepare('DELETE FROM ' . $db_config['prefix'] . "_setup_extensions WHERE type='module' AND basename NOT IN (" . $placeholders . ")");
+                        foreach ($values as $k => $v) {
+                            $stmt->bindValue(':v' . $k, $v, PDO::PARAM_STR);
+                        }
+                        $stmt->execute();
 
                         // Xoa du lieu tai bang nvx_vi_blocks_groups
                         $db->query('DELETE FROM ' . $db_config['prefix'] . '_' . $lang_data . "_blocks_groups WHERE module!='theme' AND module NOT IN (SELECT title FROM " . $db_config['prefix'] . '_' . $lang_data . '_modules)');
@@ -653,7 +666,10 @@ if ($step == 1) {
 
                             if (empty($array_data['socialbutton'])) {
                                 if ($module_file == 'news') {
-                                    $db->query('UPDATE ' . NV_CONFIG_GLOBALTABLE . " SET config_value = '0' WHERE module = '" . $module_name . "' AND config_name = 'socialbutton' AND lang='" . $lang . "'");
+                                    $stmt = $db->prepare('UPDATE ' . NV_CONFIG_GLOBALTABLE . " SET config_value = '0' WHERE module = :module AND config_name = 'socialbutton' AND lang = :lang");
+                                    $stmt->bindValue(':module', $module_name, PDO::PARAM_STR);
+                                    $stmt->bindValue(':lang', $lang, PDO::PARAM_STR);
+                                    $stmt->execute();
                                 }
                             }
                         }
@@ -761,35 +777,49 @@ if ($step == 1) {
                         $db->query('INSERT INTO ' . $db_config['prefix'] . '_users_info (userid) VALUES (' . $userid . ')');
                         $db->query('INSERT INTO ' . $db_config['prefix'] . '_users_groups_users (group_id, userid, is_leader, approved, data, time_requested, time_approved) VALUES(1, ' . $userid . ", 1, 1, '0', " . NV_CURRENTTIME . ', ' . NV_CURRENTTIME . ')');
 
-                        $db->query('INSERT INTO ' . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('sys', 'site', 'statistics_timezone', " . $db->quote(NV_SITE_TIMEZONE_NAME) . ')');
-                        $db->query('INSERT INTO ' . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('sys', 'site', 'site_email', " . $db->quote($global_config['site_email']) . ')');
-                        $db->query('INSERT INTO ' . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('sys', 'global', 'error_set_logs', " . $db->quote($global_config['error_set_logs']) . ')');
-                        $db->query('INSERT INTO ' . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('sys', 'global', 'error_send_email', " . $db->quote($global_config['site_email']) . ')');
-                        $db->query('INSERT INTO ' . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('sys', 'global', 'site_lang', '" . NV_LANG_DATA . "')");
+                        $stmt = $db->prepare('INSERT INTO ' . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES (:lang, :module, :config_name, :config_value)");
+                        $configs = [
+                            ['sys', 'site', 'statistics_timezone', NV_SITE_TIMEZONE_NAME],
+                            ['sys', 'site', 'site_email', $global_config['site_email']],
+                            ['sys', 'global', 'error_set_logs', $global_config['error_set_logs']],
+                            ['sys', 'global', 'error_send_email', $global_config['site_email']],
+                            ['sys', 'global', 'site_lang', NV_LANG_DATA],
+                            ['sys', 'global', 'my_domains', NV_SERVER_NAME],
+                            ['sys', 'global', 'cookie_prefix', $global_config['cookie_prefix']],
+                            ['sys', 'global', 'session_prefix', $global_config['session_prefix']],
+                            ['sys', 'global', 'site_timezone', $global_config['site_timezone']],
+                            ['sys', 'global', 'proxy_blocker', $global_config['proxy_blocker']],
+                            ['sys', 'global', 'str_referer_blocker', $global_config['str_referer_blocker']],
+                            ['sys', 'global', 'lang_multi', $global_config['lang_multi']],
+                            ['sys', 'global', 'lang_geo', $global_config['lang_geo']],
+                            ['sys', 'global', 'ftp_server', $global_config['ftp_server']],
+                            ['sys', 'global', 'ftp_port', $global_config['ftp_port']],
+                            ['sys', 'global', 'ftp_user_name', $global_config['ftp_user_name']],
+                            ['sys', 'global', 'ftp_user_pass', $crypt->encrypt($global_config['ftp_user_pass'])],
+                            ['sys', 'global', 'ftp_path', $global_config['ftp_path']],
+                            ['sys', 'global', 'ftp_check_login', $global_config['ftp_check_login']]
+                        ];
+                        foreach ($configs as $conf) {
+                            $stmt->bindValue(':lang', $conf[0], PDO::PARAM_STR);
+                            $stmt->bindValue(':module', $conf[1], PDO::PARAM_STR);
+                            $stmt->bindValue(':config_name', $conf[2], PDO::PARAM_STR);
+                            $stmt->bindValue(':config_value', $conf[3], PDO::PARAM_STR);
+                            $stmt->execute();
+                        }
 
-                        $db->query('INSERT INTO ' . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('sys', 'global', 'my_domains', " . $db->quote(NV_SERVER_NAME) . ')');
-                        $db->query('INSERT INTO ' . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('sys', 'global', 'cookie_prefix', " . $db->quote($global_config['cookie_prefix']) . ')');
-                        $db->query('INSERT INTO ' . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('sys', 'global', 'session_prefix', " . $db->quote($global_config['session_prefix']) . ')');
-                        $db->query('INSERT INTO ' . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('sys', 'global', 'site_timezone', " . $db->quote($global_config['site_timezone']) . ')');
-                        $db->query('INSERT INTO ' . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('sys', 'global', 'proxy_blocker', " . $db->quote($global_config['proxy_blocker']) . ')');
-                        $db->query('INSERT INTO ' . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('sys', 'global', 'str_referer_blocker', " . $db->quote($global_config['str_referer_blocker']) . ')');
-                        $db->query('INSERT INTO ' . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('sys', 'global', 'lang_multi', " . $db->quote($global_config['lang_multi']) . ')');
-                        $db->query('INSERT INTO ' . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('sys', 'global', 'lang_geo', " . $db->quote($global_config['lang_geo']) . ')');
-                        $db->query('INSERT INTO ' . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('sys', 'global', 'ftp_server', " . $db->quote($global_config['ftp_server']) . ')');
-                        $db->query('INSERT INTO ' . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('sys', 'global', 'ftp_port', " . $db->quote($global_config['ftp_port']) . ')');
-                        $db->query('INSERT INTO ' . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('sys', 'global', 'ftp_user_name', " . $db->quote($global_config['ftp_user_name']) . ')');
-
-                        $ftp_user_pass = $crypt->encrypt($global_config['ftp_user_pass']);
-                        $db->query('INSERT INTO ' . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('sys', 'global', 'ftp_user_pass', " . $db->quote($ftp_user_pass) . ')');
-                        $db->query('INSERT INTO ' . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('sys', 'global', 'ftp_path', " . $db->quote($global_config['ftp_path']) . ')');
-                        $db->query('INSERT INTO ' . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('sys', 'global', 'ftp_check_login', " . $db->quote($global_config['ftp_check_login']) . ')');
-                        $db->query('UPDATE ' . NV_CONFIG_GLOBALTABLE . ' SET config_value = ' . $db->quote($array_data['site_name']) . " WHERE module = 'global' AND config_name = 'site_name'");
+                        $stmt_up = $db->prepare('UPDATE ' . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE module = 'global' AND config_name = 'site_name'");
+                        $stmt_up->bindValue(':config_value', $array_data['site_name'], PDO::PARAM_STR);
+                        $stmt_up->execute();
 
                         $result = $db->query('SELECT * FROM ' . $db_config['prefix'] . '_authors_module ORDER BY weight ASC');
+                        $stmt_update = $db->prepare('UPDATE ' . $db_config['prefix'] . "_authors_module SET checksum = :checksum WHERE mid = :mid");
                         while ($row = $result->fetch()) {
                             $checksum = md5($row['module'] . '#' . $row['act_1'] . '#' . $row['act_2'] . '#' . $row['act_3'] . '#' . $global_config['sitekey']);
-                            $db->query('UPDATE ' . $db_config['prefix'] . "_authors_module SET checksum = '" . $checksum . "' WHERE mid = " . $row['mid']);
+                            $stmt_update->bindValue(':checksum', $checksum, PDO::PARAM_STR);
+                            $stmt_update->bindValue(':mid', $row['mid'], PDO::PARAM_INT);
+                            $stmt_update->execute();
                         }
+                        $result->closeCursor();
 
                         if (!(nv_function_exists('finfo_open') or nv_class_exists('finfo', false) or nv_function_exists('mime_content_type') or (substr($sys_info['os'], 0, 3) != 'WIN' and (nv_function_exists('system') or nv_function_exists('exec'))))) {
                             $db->query('UPDATE ' . NV_CONFIG_GLOBALTABLE . " SET config_value = 'mild' WHERE lang='sys' AND module = 'global' AND config_name = 'upload_checking_mode'");
@@ -874,9 +904,12 @@ if ($step == 1) {
                         foreach ($allow_upload_dir as $dir) {
                             $real_dirlist = nv_listUploadDir($dir, $real_dirlist);
                         }
+                        $stmt_ins_dir = $db->prepare('INSERT INTO ' . NV_UPLOAD_GLOBALTABLE . '_dir (dirname, time, thumb_type, thumb_width, thumb_height, thumb_quality) VALUES (:dirname, 0, 0, 0, 0, 0)');
                         foreach ($real_dirlist as $dirname) {
                             try {
-                                $array_dirname[$dirname] = $db->insert_id('INSERT INTO ' . NV_UPLOAD_GLOBALTABLE . "_dir (dirname, time, thumb_type, thumb_width, thumb_height, thumb_quality) VALUES ('" . $dirname . "', '0', '0', '0', '0', '0')", 'did');
+                                $stmt_ins_dir->bindValue(':dirname', $dirname, PDO::PARAM_STR);
+                                $stmt_ins_dir->execute();
+                                $array_dirname[$dirname] = $db->lastInsertId();
                             } catch (Throwable $e) {
                                 trigger_error($e);
                             }
@@ -891,32 +924,50 @@ if ($step == 1) {
                         nv_dirListRefreshSize();
 
                         // Data Counter
-                        $db->query('INSERT INTO ' . $db_config['prefix'] . "_counter VALUES ('c_time', 'start', 0, 0, 0)");
-                        $db->query('INSERT INTO ' . $db_config['prefix'] . "_counter VALUES ('c_time', 'last', 0, 0, 0)");
-                        $db->query('INSERT INTO ' . $db_config['prefix'] . "_counter VALUES ('total', 'hits', 0, 0, 0)");
+                        $stmt_counter = $db->prepare('INSERT INTO ' . $db_config['prefix'] . '_counter VALUES (:type, :val, 0, 0, 0)');
+
+                        $stmt_counter->bindValue(':type', 'c_time', PDO::PARAM_STR);
+                        $stmt_counter->bindValue(':val', 'start', PDO::PARAM_STR);
+                        $stmt_counter->execute();
+                        $stmt_counter->bindValue(':val', 'last', PDO::PARAM_STR);
+                        $stmt_counter->execute();
+
+                        $stmt_counter->bindValue(':type', 'total', PDO::PARAM_STR);
+                        $stmt_counter->bindValue(':val', 'hits', PDO::PARAM_STR);
+                        $stmt_counter->execute();
 
                         $year = date('Y');
                         for ($i = 0; $i < 9; ++$i) {
-                            $db->query('INSERT INTO ' . $db_config['prefix'] . "_counter VALUES ('year', '" . $year . "', 0, 0, 0)");
+                            $stmt_counter->bindValue(':type', 'year', PDO::PARAM_STR);
+                            $stmt_counter->bindValue(':val', $year, PDO::PARAM_STR);
+                            $stmt_counter->execute();
                             ++$year;
                         }
 
                         $ar_tmp = explode(',', 'Jan,Feb,Mar,Apr,May,Jun,Jul,Aug,Sep,Oct,Nov,Dec');
                         foreach ($ar_tmp as $month) {
-                            $db->query('INSERT INTO ' . $db_config['prefix'] . "_counter VALUES ('month', '" . $month . "', 0, 0, 0)");
+                            $stmt_counter->bindValue(':type', 'month', PDO::PARAM_STR);
+                            $stmt_counter->bindValue(':val', $month, PDO::PARAM_STR);
+                            $stmt_counter->execute();
                         }
 
                         for ($i = 1; $i < 32; ++$i) {
-                            $db->query('INSERT INTO ' . $db_config['prefix'] . "_counter VALUES ('day', '" . str_pad($i, 2, '0', STR_PAD_LEFT) . "', 0, 0, 0)");
+                            $stmt_counter->bindValue(':type', 'day', PDO::PARAM_STR);
+                            $stmt_counter->bindValue(':val', str_pad($i, 2, '0', STR_PAD_LEFT), PDO::PARAM_STR);
+                            $stmt_counter->execute();
                         }
 
                         $ar_tmp = explode(',', 'Sunday,Monday,Tuesday,Wednesday,Thursday,Friday,Saturday');
                         foreach ($ar_tmp as $dayofweek) {
-                            $db->query('INSERT INTO ' . $db_config['prefix'] . "_counter VALUES ('dayofweek', '" . $dayofweek . "', 0, 0, 0)");
+                            $stmt_counter->bindValue(':type', 'dayofweek', PDO::PARAM_STR);
+                            $stmt_counter->bindValue(':val', $dayofweek, PDO::PARAM_STR);
+                            $stmt_counter->execute();
                         }
 
                         for ($i = 0; $i < 24; ++$i) {
-                            $db->query('INSERT INTO ' . $db_config['prefix'] . "_counter VALUES ('hour', '" . str_pad($i, 2, '0', STR_PAD_LEFT) . "', 0, 0, 0)");
+                            $stmt_counter->bindValue(':type', 'hour', PDO::PARAM_STR);
+                            $stmt_counter->bindValue(':val', str_pad($i, 2, '0', STR_PAD_LEFT), PDO::PARAM_STR);
+                            $stmt_counter->execute();
                         }
 
                         $bots = [
@@ -928,7 +979,9 @@ if ($step == 1) {
                             'coccocbot'
                         ];
                         foreach ($bots as $_bot) {
-                            $db->query('INSERT INTO ' . $db_config['prefix'] . "_counter VALUES ('bot', " . $db->quote($_bot) . ', 0, 0, 0)');
+                            $stmt_counter->bindValue(':type', 'bot', PDO::PARAM_STR);
+                            $stmt_counter->bindValue(':val', $_bot, PDO::PARAM_STR);
+                            $stmt_counter->execute();
                         }
 
                         $tmp_array = [
@@ -972,12 +1025,18 @@ if ($step == 1) {
                             'phoenix'
                         ];
                         foreach ($tmp_array as $_browser) {
-                            $db->query('INSERT INTO ' . $db_config['prefix'] . "_counter VALUES ('browser', " . $db->quote($_browser) . ', 0, 0, 0)');
+                            $stmt_counter->bindValue(':type', 'browser', PDO::PARAM_STR);
+                            $stmt_counter->bindValue(':val', $_browser, PDO::PARAM_STR);
+                            $stmt_counter->execute();
                         }
 
-                        $db->query('INSERT INTO ' . $db_config['prefix'] . "_counter VALUES ('browser', 'Mobile', 0, 0, 0)");
-                        $db->query('INSERT INTO ' . $db_config['prefix'] . "_counter VALUES ('browser', 'bots', 0, 0, 0)");
-                        $db->query('INSERT INTO ' . $db_config['prefix'] . "_counter VALUES ('browser', 'Unknown', 0, 0, 0)");
+                        $stmt_counter->bindValue(':type', 'browser', PDO::PARAM_STR);
+                        $stmt_counter->bindValue(':val', 'Mobile', PDO::PARAM_STR);
+                        $stmt_counter->execute();
+                        $stmt_counter->bindValue(':val', 'bots', PDO::PARAM_STR);
+                        $stmt_counter->execute();
+                        $stmt_counter->bindValue(':val', 'Unknown', PDO::PARAM_STR);
+                        $stmt_counter->execute();
 
                         $tmp_array = [
                             'unknown',
@@ -1009,13 +1068,20 @@ if ($step == 1) {
                             'palm'
                         ];
                         foreach ($tmp_array as $_os) {
-                            $db->query('INSERT INTO ' . $db_config['prefix'] . "_counter VALUES ('os', " . $db->quote($_os) . ', 0, 0, 0)');
+                            $stmt_counter->bindValue(':type', 'os', PDO::PARAM_STR);
+                            $stmt_counter->bindValue(':val', $_os, PDO::PARAM_STR);
+                            $stmt_counter->execute();
                         }
 
                         foreach ($countries as $_country => $v) {
-                            $db->query('INSERT INTO ' . $db_config['prefix'] . "_counter VALUES ('country', " . $db->quote($_country) . ', 0, 0, 0)');
+                            $stmt_counter->bindValue(':type', 'country', PDO::PARAM_STR);
+                            $stmt_counter->bindValue(':val', $_country, PDO::PARAM_STR);
+                            $stmt_counter->execute();
                         }
-                        $db->query('INSERT INTO ' . $db_config['prefix'] . "_counter VALUES ('country', 'unkown', 0, 0, 0)");
+
+                        $stmt_counter->bindValue(':type', 'country', PDO::PARAM_STR);
+                        $stmt_counter->bindValue(':val', 'unkown', PDO::PARAM_STR);
+                        $stmt_counter->execute();
 
                         nv_redirect_location(NV_BASE_SITEURL . 'install/index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&step=' . $step);
                     } else {
@@ -1059,7 +1125,9 @@ if ($step == 1) {
         }
 
         define('NV_CONFIG_GLOBALTABLE', $db_config['prefix'] . '_config');
-        $db->query('UPDATE ' . NV_CONFIG_GLOBALTABLE . ' SET config_value = ' . $db->quote(NV_SERVER_NAME) . " WHERE lang = 'sys' AND module = 'global' AND config_name = 'my_domains'");
+        $stmt = $db->prepare('UPDATE ' . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = 'sys' AND module = 'global' AND config_name = 'my_domains'");
+        $stmt->bindValue(':config_value', NV_SERVER_NAME, PDO::PARAM_STR);
+        $stmt->execute();
 
         try {
             nv_save_file_config_global();
@@ -1071,11 +1139,19 @@ if ($step == 1) {
                 'rewrite_op_mod' => $global_config['rewrite_op_mod'],
                 'ssl_https' => 0
             ];
-            $sql = 'SELECT config_name, config_value FROM ' . NV_CONFIG_GLOBALTABLE . " WHERE lang='sys' AND module='global' AND config_name IN('" . implode("', '", array_keys($array_config_rewrite)) . "')";
-            $result = $db->query($sql);
-            while ($row = $result->fetch()) {
+            $keys         = array_keys($array_config_rewrite);
+            $values       = array_values($keys);
+            $placeholders = implode(', ', array_map(fn($k) => ':v' . $k, array_keys($values)));
+
+            $stmt = $db->prepare('SELECT config_name, config_value FROM ' . NV_CONFIG_GLOBALTABLE . " WHERE lang='sys' AND module='global' AND config_name IN (" . $placeholders . ")");
+            foreach ($values as $k => $v) {
+                $stmt->bindValue(':v' . $k, $v, PDO::PARAM_STR);
+            }
+            $stmt->execute();
+            while ($row = $stmt->fetch()) {
                 $array_config_rewrite[$row['config_name']] = $row['config_value'];
             }
+            $stmt->closeCursor();
             nv_rewrite_change($array_config_rewrite);
             nv_server_config_change();
         } catch (Throwable $e) {

@@ -190,12 +190,7 @@ function nv_dump_save($params)
             $from = 0;
             $a = 0;
             for ($i = 0; $i < $maxi; ++$i) {
-                $db->sqlreset()
-                    ->select('*')
-                    ->from($table['name'])
-                    ->limit($table['limit'])
-                    ->offset($from);
-                $result = $db->query($db->sql());
+                $result = $db->query('SELECT * FROM ' . $table['name'] . ' LIMIT ' . (int) $table['limit'] . ' OFFSET ' . (int) $from);
                 while ($row = $result->fetch()) {
                     if (isset($row['bodyhtml'])) {
                         $row['bodyhtml'] = strtr($row['bodyhtml'], [

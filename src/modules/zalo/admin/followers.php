@@ -761,37 +761,36 @@ $per_page = 50;
 
 // Lấy danh sách followers từ CSDL
 if (empty($tag)) {
-    $db->sqlreset()
-        ->select('COUNT(*)')
-        ->from(NV_MOD_TABLE . '_followers')
-        ->where('isfollow=1 AND app_id=' . $db->quote($global_config['zaloAppID']));
-    $followers_count = $db->query($db->sql())
-        ->fetchColumn();
+    $stmt_count = $db->prepare('SELECT COUNT(*) FROM ' . NV_MOD_TABLE . '_followers WHERE isfollow=1 AND app_id=:app_id');
+    $stmt_count->bindValue(':app_id', $global_config['zaloAppID'], PDO::PARAM_STR);
+    $stmt_count->execute();
+    $followers_count = $stmt_count->fetchColumn();
 
-    $db->select('*')
-        ->limit($per_page)
-        ->offset(($page - 1) * $per_page)
-        ->order('weight ASC');
+    $stmt = $db->prepare('SELECT * FROM ' . NV_MOD_TABLE . '_followers WHERE isfollow=1 AND app_id=:app_id ORDER BY weight ASC LIMIT :limit OFFSET :offset');
+    $stmt->bindValue(':app_id', $global_config['zaloAppID'], PDO::PARAM_STR);
+    $stmt->bindValue(':limit', $per_page, PDO::PARAM_INT);
+    $stmt->bindValue(':offset', ($page - 1) * $per_page, PDO::PARAM_INT);
+    $stmt->execute();
 } else {
-    $db->sqlreset()
-        ->select('COUNT(*)')
-        ->from(NV_MOD_TABLE . '_followers tb1, ' . NV_MOD_TABLE . '_tags_follower tb2')
-        ->where('tb1.isfollow=1 AND tb1.app_id=' . $db->quote($global_config['zaloAppID']) . ' AND tb2.user_id=tb1.user_id AND tb2.tag=' . $db->quote($tag));
-    $followers_count = $db->query($db->sql())
-        ->fetchColumn();
+    $stmt_count = $db->prepare('SELECT COUNT(*) FROM ' . NV_MOD_TABLE . '_followers tb1, ' . NV_MOD_TABLE . '_tags_follower tb2 WHERE tb1.isfollow=1 AND tb1.app_id=:app_id AND tb2.user_id=tb1.user_id AND tb2.tag=:tag');
+    $stmt_count->bindValue(':app_id', $global_config['zaloAppID'], PDO::PARAM_STR);
+    $stmt_count->bindValue(':tag', $tag, PDO::PARAM_STR);
+    $stmt_count->execute();
+    $followers_count = $stmt_count->fetchColumn();
 
-    $db->select('tb1.*')
-        ->limit($per_page)
-        ->offset(($page - 1) * $per_page)
-        ->order('tb1.weight ASC');
+    $stmt = $db->prepare('SELECT tb1.* FROM ' . NV_MOD_TABLE . '_followers tb1, ' . NV_MOD_TABLE . '_tags_follower tb2 WHERE tb1.isfollow=1 AND tb1.app_id=:app_id AND tb2.user_id=tb1.user_id AND tb2.tag=:tag ORDER BY tb1.weight ASC LIMIT :limit OFFSET :offset');
+    $stmt->bindValue(':app_id', $global_config['zaloAppID'], PDO::PARAM_STR);
+    $stmt->bindValue(':tag', $tag, PDO::PARAM_STR);
+    $stmt->bindValue(':limit', $per_page, PDO::PARAM_INT);
+    $stmt->bindValue(':offset', ($page - 1) * $per_page, PDO::PARAM_INT);
+    $stmt->execute();
 }
-
-$result = $db->query($db->sql());
 
 $followers = [];
-while ($row = $result->fetch()) {
+while ($row = $stmt->fetch()) {
     $followers[$row['user_id']] = $row;
 }
+$stmt->closeCursor();
 
 $generate_page = nv_generate_page($base_url, $followers_count, $per_page, $page);
 

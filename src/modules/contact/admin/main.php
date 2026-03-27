@@ -99,8 +99,7 @@ if (!empty($contact_allowed['reply'])) {
 
                         while ($_row = $stmt->fetch()) {
                             if (!in_array($_row['email'], $emaillist, true)) {
-                                $_row['full_name'] = nv_show_name_user($_row['first_name'], $_row['last_name'], $_row['username']);
-                                $cc[$_row['email']] = $_row['full_name'];
+                                $cc[$_row['email']] = nv_show_name_user($_row['first_name'], $_row['last_name'], $_row['username']);
                                 $acc[] = $_row['userid'];
                                 $emaillist[] = $_row['email'];
                             }

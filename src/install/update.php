@@ -973,6 +973,7 @@ if ($nv_update_config['step'] == 1) {
                 $sth->bindParam(':basename', $nv_update_config['formodule'], PDO::PARAM_STR);
                 $sth->execute();
                 $row = $sth->fetch();
+                $sth->closeCursor();
 
                 $v = '';
                 $d = 0;

@@ -48,13 +48,8 @@ if ($api_credential['timestamp'] + $global_config['api_check_time'] < NV_CURRENT
 }
 
 // Kiểm tra thông tin xác thực
-$db->sqlreset()->from($db_config['prefix'] . '_api_user tb1');
-$db->join('LEFT JOIN ' . NV_AUTHORS_GLOBALTABLE . ' tb2 ON tb1.userid=tb2.admin_id INNER JOIN ' . NV_USERS_GLOBALTABLE . ' tb3 ON tb1.userid=tb3.userid');
-$db->select('tb1.userid, tb1.secret, tb1.ips, tb1.method, IFNULL(tb2.lev, -1) AS lev, IFNULL(tb2.is_suspend, -1) AS is_suspend, tb3.username, tb3.in_groups');
-$db->where('tb1.ident=:ident AND tb3.active=1');
-
 try {
-    $sth = $db->prepare($db->sql());
+    $sth = $db->prepare('SELECT tb1.userid, tb1.secret, tb1.ips, tb1.method, IFNULL(tb2.lev, -1) AS lev, IFNULL(tb2.is_suspend, -1) AS is_suspend, tb3.username, tb3.in_groups FROM ' . $db_config['prefix'] . '_api_user tb1 LEFT JOIN ' . NV_AUTHORS_GLOBALTABLE . ' tb2 ON tb1.userid=tb2.admin_id INNER JOIN ' . NV_USERS_GLOBALTABLE . ' tb3 ON tb1.userid=tb3.userid WHERE tb1.ident=:ident AND tb3.active=1');
     $sth->bindParam(':ident', $api_credential['apikey'], PDO::PARAM_STR);
     $sth->execute();
     $credential_data = $sth->fetch();

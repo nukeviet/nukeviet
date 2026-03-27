@@ -311,15 +311,15 @@ function nv_setup_data_module($lang, $module_name, $sample = 0)
                 $stmt_upd_func->bindValue(':func_id', $arr_func_id[$func], PDO::PARAM_INT);
                 $stmt_upd_func->execute();
             } else {
-                $data = [];
-                $data['func_name'] = $func;
-                $data['alias'] = $func;
-                $data['func_custom_name'] = ucfirst($func);
-                $data['in_module'] = $module_name;
-
-                $arr_func_id[$func] = $db->insert_id('INSERT INTO ' . $db_config['prefix'] . '_' . $lang . '_modfuncs
+                $sth_ins = $db->prepare("INSERT INTO " . $db_config['prefix'] . "_" . $lang . "_modfuncs
                     (func_name, alias, func_custom_name, in_module, show_func, in_submenu, subweight, setting) VALUES
-                     (:func_name, :alias, :func_custom_name, :in_module, ' . $show_func . ', ' . $in_submenu . ', ' . $weight . ", '')", 'func_id', $data);
+                     (:func_name, :alias, :func_custom_name, :in_module, $show_func, $in_submenu, $weight, '')");
+                $sth_ins->bindValue(':func_name', $func, PDO::PARAM_STR);
+                $sth_ins->bindValue(':alias', $func, PDO::PARAM_STR);
+                $sth_ins->bindValue(':func_custom_name', ucfirst($func), PDO::PARAM_STR);
+                $sth_ins->bindValue(':in_module', $module_name, PDO::PARAM_STR);
+                $sth_ins->execute();
+                $arr_func_id[$func] = $db->lastInsertId();
                 if ($arr_func_id[$func]) {
                     $layout = $layoutdefault;
                     if (isset($array_layout_func_default[$module_name][$func])) {

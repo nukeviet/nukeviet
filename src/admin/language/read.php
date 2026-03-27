@@ -77,12 +77,13 @@ function nv_admin_read_lang($dirlang, $module, $admin_file = 1)
             $lang_translator_save['info'] = isset($lang_translator['info']) ? trim($lang_translator['info']) : '';
             $lang_translator_save['langtype'] = $langtype;
 
-            $data = [];
-            $data['module'] = $module;
-            $data['admin_file'] = $admin_file;
-            $data['langtype'] = $langtype;
-            $data['author'] = serialize($lang_translator_save);
-            $idfile = $db->insert_id('INSERT INTO ' . NV_LANGUAGE_GLOBALTABLE . '_file (module, admin_file, langtype, author_' . $dirlang . ') VALUES (:module, :admin_file, :langtype, :author)', 'idfile', $data);
+            $sth_ins = $db->prepare('INSERT INTO ' . NV_LANGUAGE_GLOBALTABLE . '_file (module, admin_file, langtype, author_' . $dirlang . ') VALUES (:module, :admin_file, :langtype, :author)');
+            $sth_ins->bindValue(':module', $module, PDO::PARAM_STR);
+            $sth_ins->bindValue(':admin_file', $admin_file, PDO::PARAM_STR);
+            $sth_ins->bindValue(':langtype', $langtype, PDO::PARAM_STR);
+            $sth_ins->bindValue(':author', serialize($lang_translator_save), PDO::PARAM_STR);
+            $sth_ins->execute();
+            $idfile = $db->lastInsertId();
             if (empty($idfile)) {
                 nv_info_die($nv_Lang->getGlobal('error_404_title'), $nv_Lang->getGlobal('error_404_title'), 'error read file: ' . str_replace(NV_ROOTDIR . '/', '', $include_lang), 404);
             }

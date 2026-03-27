@@ -91,8 +91,9 @@ class InformAction implements UiApi
         $where_arr[] = "(mtb.receiver_ids != '' AND FIND_IN_SET(:userid, mtb.receiver_ids))";
         $params[':userid'] = [$user_id, PDO::PARAM_INT];
 
-        $where_str = '(' . implode(' OR ', $where_arr) . ') AND (mtb.add_time <= :current_time) AND (mtb.exp_time = 0 OR mtb.exp_time > :current_time)';
-        $params[':current_time'] = [NV_CURRENTTIME, PDO::PARAM_INT];
+        $where_str = '(' . implode(' OR ', $where_arr) . ') AND (mtb.add_time <= :current_time1) AND (mtb.exp_time = 0 OR mtb.exp_time > :current_time2)';
+        $params[':current_time1'] = [NV_CURRENTTIME, PDO::PARAM_INT];
+        $params[':current_time2'] = [NV_CURRENTTIME, PDO::PARAM_INT];
 
         if (!empty($u_groups)) {
             $where_str .= " AND (mtb.sender_role != 'group' OR (mtb.sender_role = 'group' AND mtb.sender_group IN (" . implode(',', array_map('intval', $u_groups)) . ")))";

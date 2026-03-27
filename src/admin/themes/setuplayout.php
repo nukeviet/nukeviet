@@ -191,28 +191,24 @@ if (!isset($array_layout_func_data[0])) {
 $array_layout_func = [];
 $fnresult = $db->query('SELECT func_id, func_name, func_custom_name, in_module FROM ' . NV_MODFUNCS_TABLE . ' WHERE show_func=1 ORDER BY subweight ASC');
 while ($_row_fn = $fnresult->fetch()) {
-    $func_id = $_row_fn['func_id'];
-    $func_name = $_row_fn['func_name'];
-    $func_custom_name = $_row_fn['func_custom_name'];
-    $in_module = $_row_fn['in_module'];
-    if (isset($array_layout_func_data[$func_id]) and !empty($array_layout_func_data[$func_id])) {
-        $layout_name = $array_layout_func_data[$func_id];
+    if (isset($array_layout_func_data[$_row_fn['func_id']]) and !empty($array_layout_func_data[$_row_fn['func_id']])) {
+        $layout_name = $array_layout_func_data[$_row_fn['func_id']];
 
         if (!in_array($layout_name, $layout_array, true)) {
             $layout_name = $layoutdefault;
 
             $sth = $db->prepare('UPDATE ' . NV_PREFIXLANG . '_modthemes SET layout= :layout WHERE func_id= :func_id AND theme= :theme');
             $sth->bindValue(':layout', $layout_name, PDO::PARAM_STR);
-            $sth->bindValue(':func_id', $func_id, PDO::PARAM_INT);
+            $sth->bindValue(':func_id', $_row_fn['func_id'], PDO::PARAM_INT);
             $sth->bindValue(':theme', $selectthemes, PDO::PARAM_STR);
             $sth->execute();
 
             $set_layout_site = true;
         }
     } else {
-        $layout_name = (isset($array_layout_func_default[$in_module][$func_name])) ? $array_layout_func_default[$in_module][$func_name] : $layoutdefault;
+        $layout_name = (isset($array_layout_func_default[$_row_fn['in_module']][$_row_fn['func_name']])) ? $array_layout_func_default[$_row_fn['in_module']][$_row_fn['func_name']] : $layoutdefault;
         $sth = $db->prepare('INSERT INTO ' . NV_PREFIXLANG . '_modthemes (func_id, layout, theme) VALUES (:func_id, :layout, :theme)');
-        $sth->bindValue(':func_id', $func_id, PDO::PARAM_INT);
+        $sth->bindValue(':func_id', $_row_fn['func_id'], PDO::PARAM_INT);
         $sth->bindValue(':layout', $layout_name, PDO::PARAM_STR);
         $sth->bindValue(':theme', $selectthemes, PDO::PARAM_STR);
         $sth->execute();
@@ -220,7 +216,7 @@ while ($_row_fn = $fnresult->fetch()) {
         $set_layout_site = true;
     }
 
-    $array_layout_func[$in_module][$func_name] = [$func_id, $func_custom_name, $layout_name];
+    $array_layout_func[$_row_fn['in_module']][$_row_fn['func_name']] = [$_row_fn['func_id'], $_row_fn['func_custom_name'], $layout_name];
 }
 $fnresult->closeCursor();
 

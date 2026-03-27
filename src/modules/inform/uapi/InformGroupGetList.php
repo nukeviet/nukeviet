@@ -106,8 +106,9 @@ class InformGroupGetList implements UiApi
         $postdata['filter'] = $nv_Request->get_title('filter', 'post', '');
 
         if ($postdata['filter'] == 'active') {
-            $where_arr[] = '(mtb.add_time <= :current_time AND (mtb.exp_time = 0 OR mtb.exp_time > :current_time))';
-            $params[':current_time'] = [NV_CURRENTTIME, PDO::PARAM_INT];
+            $where_arr[] = '(mtb.add_time <= :current_time1 AND (mtb.exp_time = 0 OR mtb.exp_time > :current_time2))';
+            $params[':current_time1'] = [NV_CURRENTTIME, PDO::PARAM_INT];
+            $params[':current_time2'] = [NV_CURRENTTIME, PDO::PARAM_INT];
         } elseif ($postdata['filter'] == 'waiting') {
             $where_arr[] = '(mtb.add_time > :current_time)';
             $params[':current_time'] = [NV_CURRENTTIME, PDO::PARAM_INT];

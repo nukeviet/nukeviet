@@ -31,19 +31,14 @@ $result = $db->query($sql);
 $is_delCache = false;
 $act2 = [];
 while ($_row_mod = $result->fetch()) {
-    $m          = $_row_mod['title'];
-    $mod_file   = $_row_mod['basename'];
-    $is_sys     = $_row_mod['is_sys'];
-    $version    = $_row_mod['version'];
-    
-    $new_modules[$m] = [
-        'module_file' => $mod_file,
-        'is_sys' => $is_sys,
-        'version' => $version
+    $new_modules[$_row_mod['title']] = [
+        'module_file' => $_row_mod['basename'],
+        'is_sys' => $_row_mod['is_sys'],
+        'version' => $_row_mod['version']
     ];
 
-    if (!isset($modules_exit[$mod_file])) {
-        $act2[] = $m;
+    if (!isset($modules_exit[$_row_mod['basename']])) {
+        $act2[] = $_row_mod['title'];
     }
 }
 $result->closeCursor();

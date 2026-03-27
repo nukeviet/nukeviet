@@ -20,15 +20,12 @@ $cacheTTL = 7200;
 if (($cache = $nv_Cache->getItem($module_name, $cacheFile, ttl: $cacheTTL)) != false) {
     $url = unserialize($cache, NV_UNSERIALIZE_SAFE);
 } else {
-    $sql = 'SELECT alias,add_time FROM ' . NV_PREFIXLANG . '_' . $module_data . ' WHERE status=1';
+    $sql = 'SELECT alias, add_time FROM ' . NV_PREFIXLANG . '_' . $module_data . ' WHERE status=1';
     $result = $db_slave->query($sql);
-
-    while ($_scratch = $result->fetch(3)) {
-        [$alias, $publtime] = $_scratch;
-        unset($_scratch);
+    while ($row = $result->fetch()) {
         $url[] = [
-            'link' => NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $alias . $global_config['rewrite_exturl'],
-            'publtime' => $publtime
+            'link' => NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $row['alias'] . $global_config['rewrite_exturl'],
+            'publtime' => $row['add_time']
         ];
     }
 

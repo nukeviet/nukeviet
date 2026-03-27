@@ -53,7 +53,7 @@ if ($checknum == $row['checknum']) {
             $check_update_user = true;
         }
     } elseif (!defined('NV_IS_USER') and $global_config['allowuserreg'] == 2) {
-        $sql = 'INSERT INTO ' . NV_MOD_TABLE . " (
+        $sql = 'INSERT INTO ' . NV_MOD_TABLE . ' (
             group_id, username, md5username, password, email, first_name, last_name,
             gender, photo, birthday, regdate, question, answer,
             passlostkey, view_mail, remember, in_groups,
@@ -62,28 +62,43 @@ if ($checknum == $row['checknum']) {
             active_obj
         ) VALUES (
             :group_id, :username, :md5_username, :password, :email, :first_name, :last_name,
-            :gender, '', :birthday, :regdate, :question, :answer,
-            '', 0, 1, :in_groups,
-            1, '', 0, '', '', '', " . $global_config['idsite'] . ', ' . NV_CURRENTTIME . ', 0,
-            ' . NV_CURRENTTIME . ", " . NV_CURRENTTIME . ", 'EMAIL'
-        )";
+            :gender, :photo, :birthday, :regdate, :question, :answer,
+            :passlostkey, :view_mail, :remember, :in_groups,
+            1, :checknum, 0, :last_ip, :last_agent, :last_openid, :idsite,
+            :pass_creation_time, 0, :email_creation_time, :email_verification_time, :active_obj
+        )';
 
-        $data_insert = [];
-        $data_insert['group_id'] = (!empty($global_users_config['active_group_newusers']) ? 7 : 4);
-        $data_insert['username'] = $row['username'];
-        $data_insert['md5_username'] = nv_md5safe($row['username']);
-        $data_insert['password'] = $row['password'];
-        $data_insert['email'] = $row['email'];
-        $data_insert['first_name'] = $row['first_name'];
-        $data_insert['last_name'] = $row['last_name'];
-        $data_insert['gender'] = $row['gender'];
-        $data_insert['birthday'] = $row['birthday'];
-        $data_insert['regdate'] = $row['regdate'];
-        $data_insert['question'] = $row['question'];
-        $data_insert['answer'] = $row['answer'];
-        $data_insert['in_groups'] = $data_insert['group_id'];
+        $group_id = (!empty($global_users_config['active_group_newusers']) ? 7 : 4);
 
-        $userid = $db->insert_id($sql, 'userid', $data_insert);
+        $sth = $db->prepare($sql);
+        $sth->bindValue(':group_id', $group_id, PDO::PARAM_INT);
+        $sth->bindValue(':username', $row['username'], PDO::PARAM_STR);
+        $sth->bindValue(':md5_username', nv_md5safe($row['username']), PDO::PARAM_STR);
+        $sth->bindValue(':password', $row['password'], PDO::PARAM_STR);
+        $sth->bindValue(':email', $row['email'], PDO::PARAM_STR);
+        $sth->bindValue(':first_name', $row['first_name'], PDO::PARAM_STR);
+        $sth->bindValue(':last_name', $row['last_name'], PDO::PARAM_STR);
+        $sth->bindValue(':gender', $row['gender'], PDO::PARAM_STR);
+        $sth->bindValue(':photo', '', PDO::PARAM_STR);
+        $sth->bindValue(':birthday', $row['birthday'], PDO::PARAM_INT);
+        $sth->bindValue(':regdate', $row['regdate'], PDO::PARAM_INT);
+        $sth->bindValue(':question', $row['question'], PDO::PARAM_STR);
+        $sth->bindValue(':answer', $row['answer'], PDO::PARAM_STR);
+        $sth->bindValue(':passlostkey', '', PDO::PARAM_STR);
+        $sth->bindValue(':view_mail', 0, PDO::PARAM_INT);
+        $sth->bindValue(':remember', 1, PDO::PARAM_INT);
+        $sth->bindValue(':in_groups', $group_id, PDO::PARAM_STR);
+        $sth->bindValue(':checknum', '', PDO::PARAM_STR);
+        $sth->bindValue(':last_ip', '', PDO::PARAM_STR);
+        $sth->bindValue(':last_agent', '', PDO::PARAM_STR);
+        $sth->bindValue(':last_openid', '', PDO::PARAM_STR);
+        $sth->bindValue(':idsite', $global_config['idsite'], PDO::PARAM_INT);
+        $sth->bindValue(':pass_creation_time', NV_CURRENTTIME, PDO::PARAM_INT);
+        $sth->bindValue(':email_creation_time', NV_CURRENTTIME, PDO::PARAM_INT);
+        $sth->bindValue(':email_verification_time', NV_CURRENTTIME, PDO::PARAM_INT);
+        $sth->bindValue(':active_obj', 'EMAIL', PDO::PARAM_STR);
+        $sth->execute();
+        $userid = $db->lastInsertId();
         if ($userid) {
             $users_info = json_decode($row['users_info'], true);
             $query_field = [];

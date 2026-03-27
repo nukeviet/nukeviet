@@ -1711,31 +1711,33 @@ function save_article($save_article)
 {
     global $db;
 
-    $data = [
-        'token' => $save_article['token'],
-        'type' => $save_article['type'],
-        'title' => $save_article['title'],
-        'author' => !empty($save_article['author']) ? $save_article['author'] : '',
-        'cover_type' => !empty($save_article['cover']['cover_type']) ? $save_article['cover']['cover_type'] : '',
-        'cover_photo_url' => !empty($save_article['cover']['photo_url']) ? $save_article['cover']['photo_url'] : '',
-        'cover_video_id' => !empty($save_article['cover']['video_id']) ? $save_article['cover']['video_id'] : '',
-        'cover_view' => !empty($save_article['cover']['cover_view']) ? $save_article['cover']['cover_view'] : '',
-        'cover_status' => !empty($save_article['cover']['status']) ? $save_article['cover']['status'] : 'hide',
-        'description' => !empty($save_article['description']) ? $save_article['description'] : '',
-        'body' => !empty($save_article['body']) ? article_body_create($save_article['body']) : '',
-        'related_medias' => !empty($save_article['related_medias']) ? json_encode($save_article['related_medias'], NV_JSON_ENCODE) : '',
-        'tracking_link' => !empty($save_article['tracking_link']) ? $save_article['tracking_link'] : '',
-        'video_id' => !empty($save_article['video_id']) ? $save_article['video_id'] : '',
-        'video_avatar' => !empty($save_article['avatar']) ? $save_article['avatar'] : '',
-        'status' => !empty($save_article['status']) ? $save_article['status'] : 'show',
-        'comment' => !empty($save_article['comment']) ? $save_article['comment'] : 'show'
-    ];
-
-    $sql = 'INSERT INTO ' . NV_MOD_TABLE . '_article
+    $sql = "INSERT INTO " . NV_MOD_TABLE . "_article
         (token, type, title, author, cover_type, cover_photo_url, cover_video_id, cover_view, cover_status, description, body, related_medias, tracking_link, video_id, video_avatar, status, comment, create_date, update_date, is_sync) VALUES
-        (:token, :type, :title, :author, :cover_type, :cover_photo_url, :cover_video_id, :cover_view, :cover_status, :description, :body, :related_medias, :tracking_link, :video_id, :video_avatar, :status, :comment, ' . NV_CURRENTTIME . ', ' . NV_CURRENTTIME . ', 1)';
+        (:token, :type, :title, :author, :cover_type, :cover_photo_url, :cover_video_id, :cover_view, :cover_status, :description, :body, :related_medias, :tracking_link, :video_id, :video_avatar, :status, :comment, :create_date, :update_date, 1)";
 
-    return $db->insert_id($sql, 'id', $data);
+    $sth = $db->prepare($sql);
+    $sth->bindValue(':token', $save_article['token'], PDO::PARAM_STR);
+    $sth->bindValue(':type', $save_article['type'], PDO::PARAM_STR);
+    $sth->bindValue(':title', $save_article['title'], PDO::PARAM_STR);
+    $sth->bindValue(':author', (!empty($save_article['author']) ? $save_article['author'] : ''), PDO::PARAM_STR);
+    $sth->bindValue(':cover_type', (!empty($save_article['cover']['cover_type']) ? $save_article['cover']['cover_type'] : ''), PDO::PARAM_STR);
+    $sth->bindValue(':cover_photo_url', (!empty($save_article['cover']['photo_url']) ? $save_article['cover']['photo_url'] : ''), PDO::PARAM_STR);
+    $sth->bindValue(':cover_video_id', (!empty($save_article['cover']['video_id']) ? $save_article['cover']['video_id'] : ''), PDO::PARAM_STR);
+    $sth->bindValue(':cover_view', (!empty($save_article['cover']['cover_view']) ? $save_article['cover']['cover_view'] : ''), PDO::PARAM_STR);
+    $sth->bindValue(':cover_status', (!empty($save_article['cover']['status']) ? $save_article['cover']['status'] : 'hide'), PDO::PARAM_STR);
+    $sth->bindValue(':description', (!empty($save_article['description']) ? $save_article['description'] : ''), PDO::PARAM_STR);
+    $sth->bindValue(':body', (!empty($save_article['body']) ? article_body_create($save_article['body']) : ''), PDO::PARAM_STR);
+    $sth->bindValue(':related_medias', (!empty($save_article['related_medias']) ? json_encode($save_article['related_medias'], NV_JSON_ENCODE) : ''), PDO::PARAM_STR);
+    $sth->bindValue(':tracking_link', (!empty($save_article['tracking_link']) ? $save_article['tracking_link'] : ''), PDO::PARAM_STR);
+    $sth->bindValue(':video_id', (!empty($save_article['video_id']) ? $save_article['video_id'] : ''), PDO::PARAM_STR);
+    $sth->bindValue(':video_avatar', (!empty($save_article['avatar']) ? $save_article['avatar'] : ''), PDO::PARAM_STR);
+    $sth->bindValue(':status', (!empty($save_article['status']) ? $save_article['status'] : 'show'), PDO::PARAM_STR);
+    $sth->bindValue(':comment', (!empty($save_article['comment']) ? $save_article['comment'] : 'show'), PDO::PARAM_STR);
+    $sth->bindValue(':create_date', NV_CURRENTTIME, PDO::PARAM_INT);
+    $sth->bindValue(':update_date', NV_CURRENTTIME, PDO::PARAM_INT);
+    $sth->execute();
+
+    return $db->lastInsertId();
 }
 
 /**

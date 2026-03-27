@@ -76,7 +76,7 @@ class InformCheck implements UiApi
             $where[] = "(mtb.receiver_grs != '' AND (CONCAT(',', mtb.receiver_grs, ',') REGEXP ',(" . str_replace(',', '|', $groups) . "),'))";
         }
         $where[] = "(mtb.receiver_ids != '' AND FIND_IN_SET(:userid, mtb.receiver_ids))";
-        $where = '(' . implode(' OR ', $where) . ') AND (mtb.add_time <= :current_time) AND (mtb.exp_time = 0 OR mtb.exp_time > :current_time)';
+        $where = '(' . implode(' OR ', $where) . ') AND (mtb.add_time <= :current_time1) AND (mtb.exp_time = 0 OR mtb.exp_time > :current_time2)';
         if (!empty($groups)) {
             $where .= " AND (mtb.sender_role != 'group' OR (mtb.sender_role = 'group' AND mtb.sender_group IN (" . $groups . ')))';
         } else {
@@ -87,7 +87,8 @@ class InformCheck implements UiApi
         $sql = 'SELECT mtb.id FROM ' . NV_INFORM_GLOBALTABLE . ' AS mtb WHERE ' . $where;
         $sth = $db->prepare($sql);
         $sth->bindValue(':userid', $user_id, PDO::PARAM_INT);
-        $sth->bindValue(':current_time', NV_CURRENTTIME, PDO::PARAM_INT);
+        $sth->bindValue(':current_time1', NV_CURRENTTIME, PDO::PARAM_INT);
+        $sth->bindValue(':current_time2', NV_CURRENTTIME, PDO::PARAM_INT);
         $sth->execute();
         $count = $sth->rowCount();
 

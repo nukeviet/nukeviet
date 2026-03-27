@@ -827,24 +827,18 @@ if ($action == 'add' or $action == 'edit') {
 $page = $nv_Request->get_page('page', 'get', 1);
 $per_page = 10;
 
-$db->sqlreset()
-    ->select('COUNT(*)')
-    ->from(NV_MOD_TABLE . '_article');
-if (!empty($type)) {
-    $db->where('type=' . $db->quote($type));
-}
-
-$num_items = $db->query($db->sql())->fetchColumn();
+$where_type = !empty($type) ? " WHERE type=" . $db->quote($type) : '';
+$num_items = $db->query('SELECT COUNT(*) FROM ' . NV_MOD_TABLE . '_article' . $where_type)->fetchColumn();
 
 if ($page < 1 or ($page > 1 and $page > ceil($num_items / $per_page))) {
     nv_redirect_location($base_url);
 }
 
-$db->select('*')
-    ->limit($per_page)
-    ->offset(($page - 1) * $per_page)
-    ->order('create_date DESC');
-$result = $db->query($db->sql());
+$stmt = $db->prepare('SELECT * FROM ' . NV_MOD_TABLE . '_article' . $where_type . ' ORDER BY create_date DESC LIMIT :limit OFFSET :offset');
+$stmt->bindValue(':limit', $per_page, PDO::PARAM_INT);
+$stmt->bindValue(':offset', ($page - 1) * $per_page, PDO::PARAM_INT);
+$stmt->execute();
+$result = $stmt;
 
 $generate_page = nv_generate_page($base_url, $num_items, $per_page, $page);
 

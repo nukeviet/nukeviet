@@ -44,8 +44,7 @@ if (!nv_function_exists('nv_block_headline')) {
                 'tooltip_length' => $block_config['tooltip_length']
             ];
 
-            $db_slave->sqlreset()->select('bid, title, numbers')->from(NV_PREFIXLANG . '_' . $module_data . '_block_cat')->order('weight ASC')->limit(2);
-            $result = $db_slave->query($db_slave->sql());
+            $result = $db_slave->query('SELECT bid, title, numbers FROM ' . NV_PREFIXLANG . '_' . $module_data . '_block_cat ORDER BY weight ASC LIMIT 2');
 
             $blockslist = [];
             $bids = [];
@@ -69,8 +68,7 @@ if (!nv_function_exists('nv_block_headline')) {
                         'title' => $blockslist[$bid]['title'],
                         'items' => []
                     ];
-                    $db_slave->sqlreset()->select('t1.id, t1.catid, t1.publtime, t1.title, t1.alias, t1.homeimgthumb, t1.homeimgfile, t1.homeimgalt, t1.hometext, t1.external_link')->from(NV_PREFIXLANG . '_' . $module_data . '_rows t1')->join('INNER JOIN ' . NV_PREFIXLANG . '_' . $module_data . '_block t2 ON t1.id = t2.id')->where('t1.status= 1 AND t2.bid=' . $bid)->order('t2.weight ASC')->limit($blockslist[$bid]['number']);
-                    $result = $db_slave->query($db_slave->sql());
+                    $result = $db_slave->query('SELECT t1.id, t1.catid, t1.publtime, t1.title, t1.alias, t1.homeimgthumb, t1.homeimgfile, t1.homeimgalt, t1.hometext, t1.external_link FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows t1 INNER JOIN ' . NV_PREFIXLANG . '_' . $module_data . '_block t2 ON t1.id = t2.id WHERE t1.status= 1 AND t2.bid=' . (int) $bid . ' ORDER BY t2.weight ASC LIMIT ' . (int) $blockslist[$bid]['number']);
                     while ($_scratch = $result->fetch(3)) {
                         [$id, $catid_i, $publtime, $title, $alias, $homeimgthumb, $homeimgfile, $homeimgalt, $hometext, $external_link] = $_scratch;
                         unset($_scratch);

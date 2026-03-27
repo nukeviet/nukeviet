@@ -37,39 +37,41 @@ if (csrf_check($nv_Request->get_string('checkss', 'post'), $admin_info['admin_id
         $sth->bindValue(':theme', $theme1, PDO::PARAM_STR);
         $sth->bindValue(':position', $pos, PDO::PARAM_STR);
         $sth->execute();
+
+        $sth_ins = $db->prepare('INSERT INTO ' . NV_BLOCKS_TABLE . '_groups (
+            theme, module, file_name, title, link, template, heading, position,
+            dtime_type, dtime_details, active, bot_visible, groups_view, all_func, weight, config
+        ) VALUES (
+            :theme, :module, :file_name, :title, :link, :template, :heading, :position,
+            :dtime_type, :dtime_details, :active, :bot_visible, :groups_view, :all_func, :weight, :config
+        )');
+
+        $stmt_weight = $db->prepare('SELECT func_id, weight FROM ' . NV_BLOCKS_TABLE . '_weight WHERE bid = :bid');
+        $stmt_insert = $db->prepare('INSERT INTO ' . NV_BLOCKS_TABLE . '_weight (bid, func_id, weight) VALUES (:new_bid, :func_id, :weight)');
+
         while ($row = $sth->fetch()) {
-            $_sql = 'INSERT INTO ' . NV_BLOCKS_TABLE . '_groups (
-                theme, module, file_name, title, link, template, heading, position,
-                dtime_type, dtime_details, active, bot_visible, groups_view, all_func, weight, config
-            ) VALUES (
-                :theme, :module, :file_name, :title, :link, :template, :heading, :position,
-                :dtime_type, :dtime_details, :active, :bot_visible, :groups_view, :all_func, :weight, :config
-            )';
+            $sth_ins->bindValue(':theme', $theme2, PDO::PARAM_STR);
+            $sth_ins->bindValue(':module', $row['module'], PDO::PARAM_STR);
+            $sth_ins->bindValue(':file_name', $row['file_name'], PDO::PARAM_STR);
+            $sth_ins->bindValue(':title', $row['title'], PDO::PARAM_STR);
+            $sth_ins->bindValue(':link', $row['link'], PDO::PARAM_STR);
+            $sth_ins->bindValue(':template', $row['template'], PDO::PARAM_STR);
+            $sth_ins->bindValue(':heading', $row['heading'], PDO::PARAM_INT);
+            $sth_ins->bindValue(':position', $row['position'], PDO::PARAM_STR);
+            $sth_ins->bindValue(':dtime_type', $row['dtime_type'], PDO::PARAM_INT);
+            $sth_ins->bindValue(':dtime_details', $row['dtime_details'], PDO::PARAM_STR);
+            $sth_ins->bindValue(':active', $row['active'], PDO::PARAM_INT);
+            $sth_ins->bindValue(':bot_visible', $row['bot_visible'], PDO::PARAM_INT);
+            $sth_ins->bindValue(':groups_view', $row['groups_view'], PDO::PARAM_STR);
+            $sth_ins->bindValue(':all_func', $row['all_func'], PDO::PARAM_INT);
+            $sth_ins->bindValue(':weight', $row['weight'], PDO::PARAM_INT);
+            $sth_ins->bindValue(':config', $row['config'], PDO::PARAM_STR);
+            $sth_ins->execute();
+            $bid = $db->lastInsertId();
 
-            $data = [];
-            $data['theme'] = $theme2;
-            $data['module'] = $row['module'];
-            $data['file_name'] = $row['file_name'];
-            $data['title'] = $row['title'];
-            $data['link'] = $row['link'];
-            $data['template'] = $row['template'];
-            $data['heading'] = $row['heading'];
-            $data['position'] = $row['position'];
-            $data['dtime_type'] = $row['dtime_type'];
-            $data['dtime_details'] = $row['dtime_details'];
-            $data['active'] = $row['active'];
-            $data['bot_visible'] = $row['bot_visible'];
-            $data['groups_view'] = $row['groups_view'];
-            $data['all_func'] = $row['all_func'];
-            $data['weight'] = $row['weight'];
-            $data['config'] = $row['config'];
-            $bid = $db->insert_id($_sql, 'bid', $data);
-
-            $stmt_weight = $db->prepare('SELECT func_id, weight FROM ' . NV_BLOCKS_TABLE . '_weight WHERE bid = :bid');
             $stmt_weight->bindValue(':bid', $row['bid'], PDO::PARAM_INT);
             $stmt_weight->execute();
 
-            $stmt_insert = $db->prepare('INSERT INTO ' . NV_BLOCKS_TABLE . '_weight (bid, func_id, weight) VALUES (:new_bid, :func_id, :weight)');
             while ($_row_weight = $stmt_weight->fetch()) {
                 $stmt_insert->bindValue(':new_bid', $bid, PDO::PARAM_INT);
                 $stmt_insert->bindValue(':func_id', $_row_weight['func_id'], PDO::PARAM_INT);
@@ -78,6 +80,7 @@ if (csrf_check($nv_Request->get_string('checkss', 'post'), $admin_info['admin_id
             }
             $stmt_weight->closeCursor();
         }
+        $sth->closeCursor();
     }
 
     nv_insert_logs(NV_LANG_DATA, $module_name, $nv_Lang->getModule('xcopyblock'), $nv_Lang->getModule('xcopyblock_from') . ' ' . $theme1 . ' ' . $nv_Lang->getModule('xcopyblock_to') . ' ' . $theme2, $admin_info['userid']);

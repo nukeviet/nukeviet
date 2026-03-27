@@ -26,18 +26,16 @@ if (!nv_function_exists('nv_news_block_newscenter')) {
 
         $order_articles_by = ($module_config[$module_name]['order_articles']) ? 'weight' : 'publtime';
 
-        $db->sqlreset()
-            ->select('id, catid, publtime, title, alias, hometext, homeimgthumb, homeimgfile, external_link')
-            ->from(NV_PREFIXLANG . '_' . $module_data . '_rows')
-            ->order($order_articles_by . ' DESC')
-            ->limit($block_config['numrow']);
+        $numrow = (int) $block_config['numrow'];
         if (empty($block_config['nocatid'])) {
-            $db->where('status= 1');
+            $sql_where = 'status= 1';
         } else {
-            $db->where('status= 1 AND catid NOT IN (' . implode(',', $block_config['nocatid']) . ')');
+            $nocatid_ids = implode(',', array_map('intval', $block_config['nocatid']));
+            $sql_where = 'status= 1 AND catid NOT IN (' . $nocatid_ids . ')';
         }
 
-        $list = $nv_Cache->db($db->sql(), 'id', $module_name);
+        $sql = 'SELECT id, catid, publtime, title, alias, hometext, homeimgthumb, homeimgfile, external_link FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE ' . $sql_where . ' ORDER BY ' . $order_articles_by . ' DESC LIMIT ' . $numrow;
+        $list = $nv_Cache->db($sql, 'id', $module_name);
 
         if (!empty($list)) {
             $width = $block_config['width'] ?? 400;

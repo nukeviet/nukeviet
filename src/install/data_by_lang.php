@@ -1203,23 +1203,40 @@ foreach ($blocks_weight as $block_weight) {
     $sth->execute($block_weight);
 }
 
-$db->query('UPDATE ' . $db_config['prefix'] . '_config SET config_value = ' . $db->quote($install_lang['nukeviet_description']) . " WHERE module = 'global' AND config_name = 'site_description' AND lang='" . $lang_data . "'");
-$db->query('UPDATE ' . $db_config['prefix'] . '_config SET config_value = ' . $db->quote($install_lang['disable_site_content']) . " WHERE module = 'global' AND config_name = 'disable_site_content' AND lang='" . $lang_data . "'");
+$stmt = $db->prepare('UPDATE ' . $db_config['prefix'] . "_config SET config_value = :config_value WHERE module = 'global' AND config_name = 'site_description' AND lang = :lang");
+$stmt->bindValue(':config_value', $install_lang['nukeviet_description'], PDO::PARAM_STR);
+$stmt->bindValue(':lang', $lang_data, PDO::PARAM_STR);
+$stmt->execute();
+
+$stmt = $db->prepare('UPDATE ' . $db_config['prefix'] . "_config SET config_value = :config_value WHERE module = 'global' AND config_name = 'disable_site_content' AND lang = :lang");
+$stmt->bindValue(':config_value', $install_lang['disable_site_content'], PDO::PARAM_STR);
+$stmt->bindValue(':lang', $lang_data, PDO::PARAM_STR);
+$stmt->execute();
 file_put_contents(NV_ROOTDIR . '/' . NV_DATADIR . '/disable_site_content.' . $lang_data . '.txt', $install_lang['disable_site_content'], LOCK_EX);
 
+$stmt_up = $db->prepare('UPDATE ' . $db_config['prefix'] . '_cronjobs SET ' . $lang_data . '_cron_name = :cron_name WHERE id = :id');
 $result = $db->query('SELECT id, run_func FROM ' . $db_config['prefix'] . '_cronjobs ORDER BY id ASC');
-while ($_scratch = $result->fetch(3)) {
-    [$id, $run_func] = $_scratch;
-    unset($_scratch);
-    $cron_name = (isset($install_lang['cron'][$run_func])) ? $install_lang['cron'][$run_func] : $run_func;
-    $db->query('UPDATE ' . $db_config['prefix'] . '_cronjobs SET ' . $lang_data . '_cron_name = ' . $db->quote($cron_name) . ' WHERE id=' . $id);
+while ($row = $result->fetch()) {
+    $cron_name = $install_lang['cron'][$row['run_func']] ?? $row['run_func'];
+    $stmt_up->bindValue(':cron_name', $cron_name, PDO::PARAM_STR);
+    $stmt_up->bindValue(':id', $row['id'], PDO::PARAM_INT);
+    $stmt_up->execute();
 }
+$result->closeCursor();
 
-$db->query('UPDATE ' . $db_config['prefix'] . "_config SET config_value = '" . $global_config['site_theme'] . "' WHERE lang = '" . $lang_data . "' AND module = 'global' AND config_name = 'site_theme'");
+$stmt = $db->prepare('UPDATE ' . $db_config['prefix'] . "_config SET config_value = :config_value WHERE lang = :lang AND module = 'global' AND config_name = 'site_theme'");
+$stmt->bindValue(':config_value', $global_config['site_theme'], PDO::PARAM_STR);
+$stmt->bindValue(':lang', $lang_data, PDO::PARAM_STR);
+$stmt->execute();
 
-$result = $db->query('SELECT COUNT(*) FROM ' . $db_config['prefix'] . '_' . $lang_data . "_modules where title='" . $global_config['site_home_module'] . "'");
-if ($result->fetchColumn()) {
-    $db->query('UPDATE ' . $db_config['prefix'] . "_config SET config_value = '" . $global_config['site_home_module'] . "' WHERE module = 'global' AND config_name = 'site_home_module' AND lang='" . $lang_data . "'");
+$stmt = $db->prepare('SELECT COUNT(*) FROM ' . $db_config['prefix'] . '_' . $lang_data . '_modules WHERE title = :title');
+$stmt->bindValue(':title', $global_config['site_home_module'], PDO::PARAM_STR);
+$stmt->execute();
+if ($stmt->fetchColumn()) {
+    $stmt = $db->prepare('UPDATE ' . $db_config['prefix'] . "_config SET config_value = :config_value WHERE module = 'global' AND config_name = 'site_home_module' AND lang = :lang");
+    $stmt->bindValue(':config_value', $global_config['site_home_module'], PDO::PARAM_STR);
+    $stmt->bindValue(':lang', $lang_data, PDO::PARAM_STR);
+    $stmt->execute();
 }
 
 if (!empty($menu_rows_lev0)) {
@@ -1280,19 +1297,26 @@ if (!empty($module_data) and $module_data == 'language') {
      */
 
     // Cập nhật tên danh mục của hệ thống
+    $sth = $db->prepare('UPDATE ' . $db_config['prefix'] . '_emailtemplates_categories SET ' . $lang_data . '_title = :title WHERE catid = :catid');
     foreach ($install_lang['emailtemplates']['cats'] as $_catid => $_cattitle) {
         try {
-            $db->query('UPDATE ' . $db_config['prefix'] . '_emailtemplates_categories SET ' . $lang_data . '_title=' . $db->quote($_cattitle) . ' WHERE catid=' . $_catid);
+            $sth->bindValue(':title', $_cattitle, PDO::PARAM_STR);
+            $sth->bindValue(':catid', $_catid, PDO::PARAM_INT);
+            $sth->execute();
         } catch (Throwable $e) {
             trigger_error($e);
         }
     }
 
     // Cập nhật tên, tiêu đề và nội dung các mẫu email của hệ thống
+    $sth = $db->prepare('UPDATE ' . $db_config['prefix'] . '_emailtemplates SET ' . $lang_data . '_subject = :subject, ' . $lang_data . '_content = :content, ' . $lang_data . '_title = :title WHERE emailid = :emailid');
     foreach ($install_lang['emailtemplates']['emails'] as $_tplid => $_tpldata) {
-        $db->query('UPDATE ' . $db_config['prefix'] . '_emailtemplates SET ' . $lang_data . '_subject=' . $db->quote($_tpldata['s']) . ', ' . $lang_data . '_content=' . $db->quote($_tpldata['c']) . ' WHERE emailid=' . $_tplid);
         try {
-            $db->query('UPDATE ' . $db_config['prefix'] . '_emailtemplates SET ' . $lang_data . '_title=' . $db->quote($_tpldata['t']) . ' WHERE emailid=' . $_tplid);
+            $sth->bindValue(':subject', $_tpldata['s'], PDO::PARAM_STR);
+            $sth->bindValue(':content', $_tpldata['c'], PDO::PARAM_STR);
+            $sth->bindValue(':title', $_tpldata['t'], PDO::PARAM_STR);
+            $sth->bindValue(':emailid', $_tplid, PDO::PARAM_INT);
+            $sth->execute();
         } catch (Throwable $e) {
             trigger_error($e);
         }
@@ -1303,32 +1327,32 @@ if (!empty($module_data) and $module_data == 'language') {
      */
 
     // Thêm mới danh mục
-    $sql_emailtpl = [];
+    $sth = $db->prepare('INSERT INTO ' . $db_config['prefix'] . '_emailtemplates_categories (catid, time_add, weight, is_system, ' . $lang_data . '_title) VALUES (:catid, ' . NV_CURRENTTIME . ', :weight, 1, :title)');
     $weight = 0;
     foreach ($install_lang['emailtemplates']['cats'] as $_catid => $_cattitle) {
         ++$weight;
-        $sql_emailtpl[] = '(' . $_catid . ', ' . NV_CURRENTTIME . ', ' . $weight . ', 1, ' . $db->quote($_cattitle) . ')';
-    }
-    if (!empty($sql_emailtpl)) {
-        $db->query('INSERT INTO ' . $db_config['prefix'] . '_emailtemplates_categories (
-            catid, time_add, weight, is_system, ' . $lang_data . '_title
-        ) VALUES ' . implode(', ', $sql_emailtpl));
+        $sth->bindValue(':catid', $_catid, PDO::PARAM_INT);
+        $sth->bindValue(':weight', $weight, PDO::PARAM_INT);
+        $sth->bindValue(':title', $_cattitle, PDO::PARAM_STR);
+        $sth->execute();
     }
 
     /*
      * Các mẫu email
      */
-    $sql_emailtpl = [];
+    $sth = $db->prepare('INSERT INTO ' . $db_config['prefix'] . '_emailtemplates (
+        emailid, id, sys_pids, catid, time_add, send_cc, send_bcc, attachments, is_system, default_subject, default_content,
+        ' . $lang_data . '_title, ' . $lang_data . '_subject, ' . $lang_data . '_content
+        ) VALUES (:emailid, :id, :sys_pids, :catid, ' . NV_CURRENTTIME . ", '', '', '', 1, '', '', :title, :subject, :content)");
+
     foreach ($install_lang['emailtemplates']['emails'] as $_tplid => $_tpldata) {
-        $sql_emailtpl[] = '(
-            ' . $_tplid . ", " . $_tplid . ", '" . $_tpldata['pids'] . "', " . $_tpldata['catid'] . ', ' . NV_CURRENTTIME . ", '', '', '', 1,
-            " . $db->quote($_tpldata['s']) . ', ' . $db->quote($_tpldata['c']) . ', ' . $db->quote($_tpldata['t']) . ", '', ''
-        )";
-    }
-    if (!empty($sql_emailtpl)) {
-        $db->query('INSERT INTO ' . $db_config['prefix'] . '_emailtemplates (
-            emailid, id, sys_pids, catid, time_add, send_cc, send_bcc, attachments, is_system, default_subject, default_content,
-            ' . $lang_data . '_title, ' . $lang_data . '_subject, ' . $lang_data . '_content
-        ) VALUES ' . implode(', ', $sql_emailtpl));
+        $sth->bindValue(':emailid', $_tplid, PDO::PARAM_INT);
+        $sth->bindValue(':id', $_tplid, PDO::PARAM_INT);
+        $sth->bindValue(':sys_pids', $_tpldata['pids'], PDO::PARAM_STR);
+        $sth->bindValue(':catid', $_tpldata['catid'], PDO::PARAM_INT);
+        $sth->bindValue(':title', $_tpldata['t'], PDO::PARAM_STR);
+        $sth->bindValue(':subject', $_tpldata['s'], PDO::PARAM_STR);
+        $sth->bindValue(':content', $_tpldata['c'], PDO::PARAM_STR);
+        $sth->execute();
     }
 }

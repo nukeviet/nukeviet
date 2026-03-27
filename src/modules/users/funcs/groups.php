@@ -56,14 +56,7 @@ if ($nv_Request->isset_request('gid, get_user_json ', 'post, get')) {
         exit($nv_Lang->getModule('no_premission'));
     }
 
-    $db->sqlreset()
-        ->select('userid, username, email, first_name, last_name')
-        ->from(NV_MOD_TABLE)
-        ->where('( username LIKE :username OR email LIKE :email OR first_name like :first_name OR last_name like :last_name ) AND userid NOT IN (SELECT userid FROM ' . NV_MOD_TABLE . '_groups_users WHERE group_id = :gid)')
-        ->order('username ASC')
-        ->limit(20);
-
-    $sth = $db->prepare($db->sql());
+    $sth = $db->prepare('SELECT userid, username, email, first_name, last_name FROM ' . NV_MOD_TABLE . ' WHERE ( username LIKE :username OR email LIKE :email OR first_name LIKE :first_name OR last_name LIKE :last_name ) AND userid NOT IN (SELECT userid FROM ' . NV_MOD_TABLE . "_groups_users WHERE group_id = :gid) ORDER BY username ASC LIMIT 20");
     $sth->bindValue(':gid', $gid, PDO::PARAM_INT);
     $sth->bindValue(':username', '%' . $q . '%', PDO::PARAM_STR);
     $sth->bindValue(':email', '%' . $q . '%', PDO::PARAM_STR);
@@ -109,38 +102,32 @@ if ($nv_Request->isset_request('gid, getuserid', 'post, get')) {
             nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
         }
 
-        $sql = 'INSERT INTO ' . NV_MOD_TABLE . " (
+        $sql = "INSERT INTO " . NV_MOD_TABLE . " (
             username, md5username, password, email, first_name, last_name, gender, photo, birthday,
             regdate, question,
             answer, passlostkey, view_mail, remember, in_groups, active, checknum,
             last_login, last_ip, last_agent, last_openid, idsite, pass_creation_time, pass_reset_request, email_creation_time
-            ) VALUES (
-            :username,
-            :md5_username,
-            :password,
-            :email,
-            :first_name,
-            :last_name,
-            '', '', 0, :regdate,
-            :question,
-            :answer,
-            '', 0, 0, '', 1, '', 0, '', '', '', :idsite,
-            :pass_creation_time, 0, :email_creation_time)";
+        ) VALUES (
+            :username, :md5_username, :password, :email, :first_name, :last_name, '', '', 0, :regdate, :question,
+            :answer, '', 0, 0, '', 1, '', 0, '', '', '', :idsite,
+            :pass_creation_time, 0, :email_creation_time
+        )";
 
-        $data_insert = [];
-        $data_insert['username'] = $row['username'];
-        $data_insert['md5_username'] = nv_md5safe($row['username']);
-        $data_insert['password'] = $row['password'];
-        $data_insert['email'] = nv_strtolower($row['email']);
-        $data_insert['first_name'] = $row['first_name'];
-        $data_insert['last_name'] = $row['last_name'];
-        $data_insert['regdate'] = $row['regdate'];
-        $data_insert['question'] = $row['question'];
-        $data_insert['answer'] = $row['answer'];
-        $data_insert['idsite'] = $global_config['idsite'];
-        $data_insert['pass_creation_time'] = !empty($row['password']) ? NV_CURRENTTIME : 0;
-        $data_insert['email_creation_time'] = NV_CURRENTTIME;
-        $userid = $db->insert_id($sql, 'userid', $data_insert);
+        $sth = $db->prepare($sql);
+        $sth->bindValue(':username', $row['username'], PDO::PARAM_STR);
+        $sth->bindValue(':md5_username', nv_md5safe($row['username']), PDO::PARAM_STR);
+        $sth->bindValue(':password', $row['password'], PDO::PARAM_STR);
+        $sth->bindValue(':email', nv_strtolower($row['email']), PDO::PARAM_STR);
+        $sth->bindValue(':first_name', $row['first_name'], PDO::PARAM_STR);
+        $sth->bindValue(':last_name', $row['last_name'], PDO::PARAM_STR);
+        $sth->bindValue(':regdate', $row['regdate'], PDO::PARAM_INT);
+        $sth->bindValue(':question', $row['question'], PDO::PARAM_STR);
+        $sth->bindValue(':answer', $row['answer'], PDO::PARAM_STR);
+        $sth->bindValue(':idsite', $global_config['idsite'], PDO::PARAM_INT);
+        $sth->bindValue(':pass_creation_time', (!empty($row['password']) ? NV_CURRENTTIME : 0), PDO::PARAM_INT);
+        $sth->bindValue(':email_creation_time', NV_CURRENTTIME, PDO::PARAM_INT);
+        $sth->execute();
+        $userid = $db->lastInsertId();
 
         if ($userid) {
             // Luu vao bang OpenID
@@ -157,11 +144,12 @@ if ($nv_Request->isset_request('gid, getuserid', 'post, get')) {
             $stmt = $db->prepare('INSERT INTO ' . NV_MOD_TABLE . '_groups_users (
                 group_id, userid, is_leader, approved, data, time_requested, time_approved
             ) VALUES(
-                :gid, :userid, 0, 1, \'\', :current_time, :current_time
+                :gid, :userid, 0, 1, \'\', :time_requested, :time_approved
             )');
             $stmt->bindValue(':gid', $gid, PDO::PARAM_INT);
             $stmt->bindValue(':userid', $userid, PDO::PARAM_INT);
-            $stmt->bindValue(':current_time', NV_CURRENTTIME, PDO::PARAM_INT);
+            $stmt->bindValue(':time_requested', NV_CURRENTTIME, PDO::PARAM_INT);
+            $stmt->bindValue(':time_approved', NV_CURRENTTIME, PDO::PARAM_INT);
             $stmt->execute();
 
             $stmt = $db->prepare('UPDATE ' . NV_MOD_TABLE . '_groups SET numbers = numbers + 1 WHERE group_id = 4 OR group_id = :gid');
@@ -280,14 +268,12 @@ if ($nv_Request->isset_request('gid, getuserid', 'post, get')) {
         $page = $nv_Request->get_page('page', 'get', 1);
         $per_page = 10;
 
-        $db->sqlreset()
-            ->select('COUNT(*)')
-            ->from(NV_MOD_TABLE . '_reg');
+        $sql = 'SELECT COUNT(*) FROM ' . NV_MOD_TABLE . '_reg';
         if (!empty($array_where)) {
-            $db->where(implode(' AND ', $array_where));
+            $sql .= ' WHERE ' . implode(' AND ', $array_where);
         }
 
-        $stmt = $db->prepare($db->sql());
+        $stmt = $db->prepare($sql);
         foreach ($params as $key => $val) {
             $stmt->bindValue($key, $val[0], $val[1]);
         }
@@ -819,11 +805,7 @@ if ($nv_Request->isset_request('listUsers', 'get')) {
 
     // Danh sách xin gia nhập nhóm
     if (empty($type) or $type == 'pending') {
-        $db->sqlreset()
-            ->select('COUNT(*)')
-            ->from(NV_MOD_TABLE . '_groups_users')
-            ->where('group_id = :group_id AND approved = 0');
-        $stmt = $db->prepare($db->sql());
+        $stmt = $db->prepare('SELECT COUNT(*) FROM ' . NV_MOD_TABLE . '_groups_users WHERE group_id = :group_id AND approved = 0');
         $stmt->bindValue(':group_id', $group_id, PDO::PARAM_INT);
         $stmt->execute();
         $array_number['pending'] = $stmt->fetchColumn();
@@ -845,11 +827,7 @@ if ($nv_Request->isset_request('listUsers', 'get')) {
 
     // Danh sách quản trị nhóm
     if (empty($type) or $type == 'leaders') {
-        $db->sqlreset()
-            ->select('COUNT(*)')
-            ->from(NV_MOD_TABLE . '_groups_users')
-            ->where('group_id = :group_id AND is_leader = 1');
-        $stmt = $db->prepare($db->sql());
+        $stmt = $db->prepare('SELECT COUNT(*) FROM ' . NV_MOD_TABLE . '_groups_users WHERE group_id = :group_id AND is_leader = 1');
         $stmt->bindValue(':group_id', $group_id, PDO::PARAM_INT);
         $stmt->execute();
         $array_number['leaders'] = $stmt->fetchColumn();
@@ -871,11 +849,7 @@ if ($nv_Request->isset_request('listUsers', 'get')) {
 
     // Danh sách thành viên của nhóm
     if (empty($type) or $type == 'members') {
-        $db->sqlreset()
-            ->select('COUNT(*)')
-            ->from(NV_MOD_TABLE . '_groups_users')
-            ->where('group_id = :group_id AND approved = 1 AND is_leader = 0');
-        $stmt = $db->prepare($db->sql());
+        $stmt = $db->prepare('SELECT COUNT(*) FROM ' . NV_MOD_TABLE . '_groups_users WHERE group_id = :group_id AND approved = 1 AND is_leader = 0');
         $stmt->bindValue(':group_id', $group_id, PDO::PARAM_INT);
         $stmt->execute();
         $array_number['members'] = $stmt->fetchColumn();

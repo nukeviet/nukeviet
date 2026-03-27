@@ -71,9 +71,9 @@ if (!nv_function_exists('nv_page_list')) {
             return '';
         }
 
-        $db->sqlreset()->select('id, title, alias, description')->from(NV_PREFIXLANG . '_' . $site_mods[$module]['module_data'])->where('status = 1')->order('weight ASC')->limit($block_config['numrow']);
-
-        $list = $nv_Cache->db($db->sql(), 'id', $module);
+        $numrow = (int) $block_config['numrow'];
+        $sql = 'SELECT id, title, alias, description FROM ' . NV_PREFIXLANG . '_' . $site_mods[$module]['module_data'] . " WHERE status = 1 ORDER BY weight ASC LIMIT " . $numrow;
+        $list = $nv_Cache->db($sql, 'id', $module);
 
         if (!empty($list)) {
             $block_theme = get_tpl_dir([$global_config['module_theme'], $global_config['site_theme']], 'default', '/modules/page/block.page_list.tpl');

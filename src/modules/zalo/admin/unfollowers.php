@@ -24,23 +24,18 @@ $per_page = 50;
 $page_title = $nv_Lang->getModule('unfollowers');
 
 // Lấy danh sách unfollowers từ CSDL
-$db->sqlreset()
-    ->select('COUNT(*)')
-    ->from(NV_MOD_TABLE . '_followers')
-    ->where('isfollow=0');
-$unfollowers_count = $db->query($db->sql())
-    ->fetchColumn();
+$unfollowers_count = $db->query('SELECT COUNT(*) FROM ' . NV_MOD_TABLE . "_followers WHERE isfollow=0")->fetchColumn();
 
-$db->select('*')
-    ->limit($per_page)
-    ->offset(($page - 1) * $per_page)
-    ->order('weight ASC');
-$result = $db->query($db->sql());
+$stmt = $db->prepare('SELECT * FROM ' . NV_MOD_TABLE . "_followers WHERE isfollow=0 ORDER BY weight ASC LIMIT :limit OFFSET :offset");
+$stmt->bindValue(':limit', $per_page, PDO::PARAM_INT);
+$stmt->bindValue(':offset', ($page - 1) * $per_page, PDO::PARAM_INT);
+$stmt->execute();
 
 $unfollowers = [];
-while ($row = $result->fetch()) {
+while ($row = $stmt->fetch()) {
     $unfollowers[$row['user_id']] = $row;
 }
+$stmt->closeCursor();
 
 $generate_page = nv_generate_page($base_url, $unfollowers_count, $per_page, $page);
 

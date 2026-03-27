@@ -157,14 +157,14 @@ if (!empty($new_funcs)) {
     foreach ($array_keys as $func) {
         $show_func = in_array($func, $modfuncs, true) ? 1 : 0;
         try {
-            $data = [];
-            $data['func_name'] = $func;
-            $data['alias'] = $func;
-            $data['func_custom_name'] = ucfirst($func);
-            $data['in_module'] = $mod;
-
-            $_sql = 'INSERT INTO ' . NV_MODFUNCS_TABLE . ' (func_name, alias, func_custom_name, in_module, show_func, in_submenu, subweight, setting) VALUES ( :func_name, :alias, :func_custom_name, :in_module, ' . $show_func . ", 0, 0, '')";
-            $func_id = $db->insert_id($_sql, 'func_id', $data);
+            $_sql = "INSERT INTO " . NV_MODFUNCS_TABLE . " (func_name, alias, func_custom_name, in_module, show_func, in_submenu, subweight, setting) VALUES (:func_name, :alias, :func_custom_name, :in_module, $show_func, 0, 0, '')";
+            $sth_ins = $db->prepare($_sql);
+            $sth_ins->bindValue(':func_name', $func, PDO::PARAM_STR);
+            $sth_ins->bindValue(':alias', $func, PDO::PARAM_STR);
+            $sth_ins->bindValue(':func_custom_name', ucfirst($func), PDO::PARAM_STR);
+            $sth_ins->bindValue(':in_module', $mod, PDO::PARAM_STR);
+            $sth_ins->execute();
+            $func_id = $db->lastInsertId();
             if ($show_func) {
                 $stmt2->bindValue(':func_id', $func_id, PDO::PARAM_INT);
                 $stmt2->bindValue(':layout', $layoutdefault, PDO::PARAM_STR);

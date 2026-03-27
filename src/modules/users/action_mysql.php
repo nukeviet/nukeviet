@@ -38,11 +38,14 @@ $array_lang_setup = [];
 while ($_row = $_result->fetch()) {
     $array_lang_setup[$_row['lang']] = $_row['lang'];
 }
+$_result->closeCursor();
 
 // Xác định các ngôn ngữ đã cài module
 foreach ($array_lang_setup as $_lang) {
-    $is_setup = $db->query('SELECT COUNT(*) FROM ' . $db_config['prefix'] . '_' . $_lang . '_modules WHERE module_data=' . $db->quote($module_data))->fetchColumn();
-    if ($is_setup and $op != 'setup') {
+    $stmt = $db->prepare('SELECT COUNT(*) FROM ' . $db_config['prefix'] . '_' . $_lang . '_modules WHERE module_data = :module_data');
+    $stmt->bindValue(':module_data', $module_data, PDO::PARAM_STR);
+    $stmt->execute();
+    if ($stmt->fetchColumn() and $op != 'setup') {
         $array_lang_module_setup[$_lang] = $_lang;
     }
 }
@@ -77,6 +80,7 @@ if (in_array($lang, $array_lang_module_setup, true) and $num_module_exists > 1) 
                     $sql_drop_module[] = 'UPDATE ' . $db_config['prefix'] . '_' . $module_data . '_field SET language=' . $db->quote($_row['language']) . ' WHERE fid=' . $_row['fid'];
                 }
             }
+            $_result->closeCursor();
         }
         $sql_drop_module[] = 'DELETE FROM ' . $db_config['prefix'] . '_' . $module_data . "_question WHERE lang='" . $lang . "'";
         $sql_drop_module[] = 'DELETE FROM ' . $db_config['prefix'] . '_' . $module_data . "_groups_detail WHERE lang='" . $lang . "'";
@@ -480,8 +484,9 @@ if ($module_data != 'users' or $op != 'recreate_mod') {
                 $sql_create_module[] = 'UPDATE ' . $db_config['prefix'] . '_' . $module_data . '_field SET language=' . $db->quote(serialize($_row['language'])) . ' WHERE fid=' . $_row['fid'];
             }
         }
+        $_result->closeCursor();
     } catch (Throwable $e) {
-        trigger_error($e);
+        // trigger_error($e);
         $sql_create_module[] = 'UPDATE ' . $db_config['prefix'] . '_' . $module_data . '_field SET language=' . $db->quote(serialize([$lang => [0 => $nv_Lang->getModule('first_name'), 1 => '']])) . " WHERE field='first_name'";
         $sql_create_module[] = 'UPDATE ' . $db_config['prefix'] . '_' . $module_data . '_field SET language=' . $db->quote(serialize([$lang => [0 => $nv_Lang->getModule('last_name'), 1 => '']])) . " WHERE field='last_name'";
         $sql_create_module[] = 'UPDATE ' . $db_config['prefix'] . '_' . $module_data . '_field SET language=' . $db->quote(serialize([$lang => [0 => $nv_Lang->getModule('gender'), 1 => '']])) . " WHERE field='gender'";

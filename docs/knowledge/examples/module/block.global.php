@@ -52,14 +52,10 @@ if (!nv_function_exists('nv_block_config_tenblock')) {
         global $nv_Cache, $db, $global_config;
         $module = $block_config['module'];
 
-        // Dùng Query Builder + cache cho SELECT. Xem chi tiết tại [tài liệu Cache](../nukeviet-cache/SKILL.md)
-        $db->sqlreset()
-            ->select('id, title, alias')
-            ->from(NV_PREFIXLANG . '_' . $block_config['module_data'])
-            ->where('status = 1')
-            ->order('weight ASC')
-            ->limit($block_config['numrow']);
-        $list = $nv_Cache->db($db->sql(), 'id', $module);
+        // Dùng SQL chuẩn + cache cho SELECT. Xem chi tiết tại [tài liệu Cache](../nukeviet-cache/SKILL.md)
+        $numrow = (int) $block_config['numrow'];
+        $sql = 'SELECT id, title, alias FROM ' . NV_PREFIXLANG . '_' . $block_config['module_data'] . ' WHERE status = 1 ORDER BY weight ASC LIMIT ' . $numrow;
+        $list = $nv_Cache->db($sql, 'id', $module);
 
         if (empty($list)) {
             return '';

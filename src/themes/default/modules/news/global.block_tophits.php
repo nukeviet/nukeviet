@@ -36,18 +36,14 @@ if (!nv_function_exists('nv_news_block_tophits')) {
             $array_block_news = json_decode($cache, true);
         } else {
             $array_block_news = [];
-            $db_slave->sqlreset()
-                ->select('id, catid, publtime, title, alias, homeimgthumb, homeimgfile, hometext, external_link')
-                ->from(NV_PREFIXLANG . '_' . $mod_data . '_rows')
-                ->order('hitstotal DESC')
-                ->limit($numrow);
             if (empty($block_config['nocatid'])) {
-                $db_slave->where('status= 1 AND publtime > ' . $publtime);
+                $sql_where = 'status= 1 AND publtime > ' . $publtime;
             } else {
-                $db_slave->where('status= 1 AND publtime > ' . $publtime . ' AND catid NOT IN (' . implode(',', $block_config['nocatid']) . ')');
+                $nocatid_ids = implode(',', array_map('intval', $block_config['nocatid']));
+                $sql_where = 'status= 1 AND publtime > ' . $publtime . ' AND catid NOT IN (' . $nocatid_ids . ')';
             }
 
-            $result = $db_slave->query($db_slave->sql());
+            $result = $db_slave->query('SELECT id, catid, publtime, title, alias, homeimgthumb, homeimgfile, hometext, external_link FROM ' . NV_PREFIXLANG . '_' . $mod_data . '_rows WHERE ' . $sql_where . ' ORDER BY hitstotal DESC LIMIT ' . (int) $numrow);
             while ($_scratch = $result->fetch(3)) {
                 [$id, $catid, $publtime, $title, $alias, $homeimgthumb, $homeimgfile, $hometext, $external_link] = $_scratch;
                 unset($_scratch);

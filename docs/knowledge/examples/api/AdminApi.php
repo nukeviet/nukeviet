@@ -12,6 +12,7 @@
 // Chú ý namespace PSR-4 chuẩn NukeViet 5: NukeViet\Module\[tên_module]\Api
 namespace NukeViet\Module\TenModule\Api;
 
+use PDO;
 use NukeViet\Api\Api;
 use NukeViet\Api\ApiResult;
 use NukeViet\Api\IApi;
@@ -72,21 +73,19 @@ class GetList implements IApi
         $per_page = $nv_Request->get_page('per_page', 'post', 20);
 
         // Xử lý Logic (ví dụ lấy danh sách)
-        $db->sqlreset()
-            ->select('COUNT(*)')
-            ->from($module_data . '_main AS mtb');
-        $num_items = $db->query($db->sql())->fetchColumn();
+        $num_items = $db->query('SELECT COUNT(*) FROM ' . $module_data . '_main')->fetchColumn();
         $this->result->set('total', $num_items);
 
-        $db->select('mtb.*')
-            ->order('mtb.id DESC')
-            ->limit($per_page)
-            ->offset(($page - 1) * $per_page);
-        $result = $db->query($db->sql());
+        $stmt = $db->prepare('SELECT * FROM ' . $module_data . '_main ORDER BY id DESC LIMIT :limit OFFSET :offset');
+        $stmt->bindValue(':limit', $per_page, PDO::PARAM_INT);
+        $stmt->bindValue(':offset', ($page - 1) * $per_page, PDO::PARAM_INT);
+        $stmt->execute();
+
         $items = [];
-        while ($row = $result->fetch()) {
+        while ($row = $stmt->fetch()) {
             $items[$row['id']] = $row;
         }
+        $stmt->closeCursor();
         $this->result->set('items', $items);
 
         // Thành công: setSuccess() rồi getResult()

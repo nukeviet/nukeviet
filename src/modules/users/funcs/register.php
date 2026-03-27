@@ -41,11 +41,16 @@ if (!$global_config['allowuserreg']) {
 }
 
 if ($global_config['max_user_number'] > 0) {
-    $sql = 'SELECT count(*) FROM ' . NV_MOD_TABLE;
+    $sql = 'SELECT COUNT(*) FROM ' . NV_MOD_TABLE;
     if ($global_config['idsite'] > 0) {
-        $sql .= ' WHERE idsite=' . $global_config['idsite'];
+        $sql .= ' WHERE idsite = :idsite';
     }
-    $user_number = $db->query($sql)->fetchColumn();
+    $stmt = $db_slave->prepare($sql);
+    if ($global_config['idsite'] > 0) {
+        $stmt->bindValue(':idsite', $global_config['idsite'], PDO::PARAM_INT);
+    }
+    $stmt->execute();
+    $user_number = $stmt->fetchColumn();
     if ($user_number >= $global_config['max_user_number']) {
         if (defined('NV_REGISTER_DOMAIN')) {
             /** @disregard P1011 */
@@ -98,14 +103,17 @@ function reg_result($array)
 
 // Cau hoi lay lai mat khau
 $data_questions = [];
-$sql = 'SELECT qid, title FROM ' . NV_MOD_TABLE . "_question WHERE lang='" . NV_LANG_DATA . "' ORDER BY weight ASC";
-$result = $db->query($sql);
-while ($row = $result->fetch()) {
+$sth = $db_slave->prepare('SELECT qid, title FROM ' . NV_MOD_TABLE . '_question WHERE lang = :lang ORDER BY weight ASC');
+$sth->bindValue(':lang', NV_LANG_DATA, PDO::PARAM_STR);
+$sth->execute();
+
+while ($row = $sth->fetch()) {
     $data_questions[$row['qid']] = [
         'qid' => $row['qid'],
         'title' => $row['title']
     ];
 }
+$sth->closeCursor();
 
 // Captcha
 $array_gfx_chk = !empty($global_config['captcha_area']) ? explode(',', $global_config['captcha_area']) : [];
@@ -158,7 +166,7 @@ $page_title = $nv_Lang->getModule('register');
 $key_words = $module_info['keywords'];
 
 $array_field_config = [];
-$result_field = $db->query('SELECT * FROM ' . NV_MOD_TABLE . '_field ORDER BY weight ASC');
+$result_field = $db_slave->query('SELECT * FROM ' . NV_MOD_TABLE . '_field ORDER BY weight ASC');
 while ($row_field = $result_field->fetch()) {
     $language = unserialize($row_field['language'], NV_UNSERIALIZE_SAFE);
     $row_field['title'] = (isset($language[NV_LANG_DATA])) ? $language[NV_LANG_DATA][0] : $row['field'];
@@ -168,20 +176,21 @@ while ($row_field = $result_field->fetch()) {
     } elseif (!empty($row_field['sql_choices'])) {
         $row_field['sql_choices'] = explode('|', $row_field['sql_choices']);
         $row_field['field_choices'] = [];
-        $query = 'SELECT ' . $row_field['sql_choices'][2] . ', ' . $row_field['sql_choices'][3] . ' FROM ' . $row_field['sql_choices'][1];
+        $query = 'SELECT ' . $row_field['sql_choices'][2] . ' as field_key, ' . $row_field['sql_choices'][3] . ' as field_value FROM ' . $row_field['sql_choices'][1];
         if (!empty($row_field['sql_choices'][4]) and !empty($row_field['sql_choices'][5])) {
             $query .= ' ORDER BY ' . $row_field['sql_choices'][4] . ' ' . $row_field['sql_choices'][5];
         }
-        $result = $db->query($query);
-        while ($_scratch = $result->fetch(3)) {
-            [$key, $val] = $_scratch;
-            unset($_scratch);
-            $row_field['field_choices'][$key] = $val;
+
+        $sth = $db_slave->query($query);
+        while ($row = $sth->fetch()) {
+            $row_field['field_choices'][$row['field_key']] = $row['field_value'];
         }
+        $sth->closeCursor();
     }
     $row_field['system'] = $row_field['is_system'];
     $array_field_config[$row_field['field']] = $row_field;
 }
+$result_field->closeCursor();
 
 if (!defined('NV_EDITOR')) {
     define('NV_EDITOR', 'ckeditor5-classic');
@@ -294,42 +303,29 @@ if ($checkss == $array_register['checkss']) {
 
     if (!defined('ACCESS_ADDUS') and ($global_config['allowuserreg'] == 2 or $global_config['allowuserreg'] == 3)) {
         // Kích hoạt qua email hoặc nguời quản trị kích hoạt
-        $sql = 'INSERT INTO ' . NV_MOD_TABLE . '_reg (
+        $sth = $db->prepare("INSERT INTO " . NV_MOD_TABLE . "_reg (
             username, md5username, password, email, first_name, last_name, gender, birthday, sig, regdate, question, answer, checknum, users_info, idsite
         ) VALUES (
-            :username,
-            :md5username,
-            :password,
-            :email,
-            :first_name,
-            :last_name,
-            :gender,
-            :birthday,
-            :sig,
-            ' . NV_CURRENTTIME . ',
-            :question,
-            :answer,
-            :checknum,
-            :users_info,
-            :idsite
-        )';
+            :username, :md5username, :password, :email, :first_name, :last_name, :gender, :birthday, :sig, :regdate, :question, :answer, :checknum, :users_info, :idsite
+        )");
 
-        $data_insert = [];
-        $data_insert['username'] = $array_register['username'];
-        $data_insert['md5username'] = nv_md5safe($array_register['username']);
-        $data_insert['password'] = $password;
-        $data_insert['email'] = $array_register['email'];
-        $data_insert['first_name'] = $array_register['first_name'];
-        $data_insert['last_name'] = $array_register['last_name'];
-        $data_insert['gender'] = $array_register['gender'];
-        $data_insert['birthday'] = (int) ($array_register['birthday']);
-        $data_insert['sig'] = $array_register['sig'];
-        $data_insert['question'] = $array_register['question'];
-        $data_insert['answer'] = $array_register['answer'];
-        $data_insert['checknum'] = $checknum;
-        $data_insert['users_info'] = json_encode($query_field, NV_JSON_ENCODE);
-        $data_insert['idsite'] = $global_config['idsite'];
-        $userid = $db->insert_id($sql, 'userid', $data_insert);
+        $sth->bindValue(':username', $array_register['username'], PDO::PARAM_STR);
+        $sth->bindValue(':md5username', nv_md5safe($array_register['username']), PDO::PARAM_STR);
+        $sth->bindValue(':password', $password, PDO::PARAM_STR);
+        $sth->bindValue(':email', $array_register['email'], PDO::PARAM_STR);
+        $sth->bindValue(':first_name', $array_register['first_name'], PDO::PARAM_STR);
+        $sth->bindValue(':last_name', $array_register['last_name'], PDO::PARAM_STR);
+        $sth->bindValue(':gender', $array_register['gender'], PDO::PARAM_STR);
+        $sth->bindValue(':birthday', (int) $array_register['birthday'], PDO::PARAM_INT);
+        $sth->bindValue(':sig', $array_register['sig'], PDO::PARAM_STR);
+        $sth->bindValue(':regdate', NV_CURRENTTIME, PDO::PARAM_INT);
+        $sth->bindValue(':question', $array_register['question'], PDO::PARAM_STR);
+        $sth->bindValue(':answer', $array_register['answer'], PDO::PARAM_STR);
+        $sth->bindValue(':checknum', $checknum, PDO::PARAM_STR);
+        $sth->bindValue(':users_info', json_encode($query_field, NV_JSON_ENCODE), PDO::PARAM_STR);
+        $sth->bindValue(':idsite', $global_config['idsite'], PDO::PARAM_INT);
+        $sth->execute();
+        $userid = $db->lastInsertId();
 
         if (!$userid) {
             reg_result([
@@ -395,45 +391,38 @@ if ($checkss == $array_register['checkss']) {
         }
     } else {
         // Không cần kích hoạt
-        $sql = 'INSERT INTO ' . NV_MOD_TABLE . ' (
+        $sth = $db->prepare("INSERT INTO " . NV_MOD_TABLE . " (
             group_id, username, md5username, password, email, first_name, last_name, gender, photo, birthday, sig, regdate,
             question, answer, passlostkey, view_mail, remember, in_groups,
             active, checknum, last_login, last_ip, last_agent, last_openid, idsite,
             pass_creation_time, pass_reset_request, email_creation_time, email_verification_time, active_obj
         ) VALUES (
-            ' . (defined('ACCESS_ADDUS') ? $group_id : ($global_users_config['active_group_newusers'] ? 7 : 4)) . ",
-            :username,
-            :md5username,
-            :password,
-            :email,
-            :first_name,
-            :last_name,
-            :gender
-            , '',
-            :birthday,
-            :sig,
-             " . NV_CURRENTTIME . ",
-            :question,
-            :answer,
-            '', 0, 1,
-            '" . (defined('ACCESS_ADDUS') ? $group_id : ($global_users_config['active_group_newusers'] ? 7 : 4)) . "',
-            1, '', 0, '', '', '', " . $global_config['idsite'] . ', ' . NV_CURRENTTIME . ", 0, " . NV_CURRENTTIME . ", -1, 'SYSTEM'
-        )";
+            :group_id, :username, :md5username, :password, :email, :first_name, :last_name, :gender, '', :birthday, :sig, :regdate,
+            :question, :answer, '', 0, 1, :in_groups,
+            1, '', 0, '', '', '', :idsite,
+            :pass_creation_time, 0, :email_creation_time, -1, 'SYSTEM'
+        )");
 
-        $data_insert = [];
-        $data_insert['username'] = $array_register['username'];
-        $data_insert['md5username'] = nv_md5safe($array_register['username']);
-        $data_insert['password'] = $password;
-        $data_insert['email'] = $array_register['email'];
-        $data_insert['first_name'] = $array_register['first_name'];
-        $data_insert['last_name'] = $array_register['last_name'];
-        $data_insert['question'] = $array_register['question'];
-        $data_insert['answer'] = $array_register['answer'];
-        $data_insert['gender'] = $array_register['gender'];
-        $data_insert['birthday'] = (int) ($array_register['birthday']);
-        $data_insert['sig'] = $array_register['sig'];
-
-        $userid = $db->insert_id($sql, 'userid', $data_insert);
+        $group_id_new = (defined('ACCESS_ADDUS') ? $group_id : ($global_users_config['active_group_newusers'] ? 7 : 4));
+        $sth->bindValue(':group_id', $group_id_new, PDO::PARAM_INT);
+        $sth->bindValue(':username', $array_register['username'], PDO::PARAM_STR);
+        $sth->bindValue(':md5username', nv_md5safe($array_register['username']), PDO::PARAM_STR);
+        $sth->bindValue(':password', $password, PDO::PARAM_STR);
+        $sth->bindValue(':email', $array_register['email'], PDO::PARAM_STR);
+        $sth->bindValue(':first_name', $array_register['first_name'], PDO::PARAM_STR);
+        $sth->bindValue(':last_name', $array_register['last_name'], PDO::PARAM_STR);
+        $sth->bindValue(':gender', $array_register['gender'], PDO::PARAM_STR);
+        $sth->bindValue(':birthday', (int) $array_register['birthday'], PDO::PARAM_INT);
+        $sth->bindValue(':sig', $array_register['sig'], PDO::PARAM_STR);
+        $sth->bindValue(':regdate', NV_CURRENTTIME, PDO::PARAM_INT);
+        $sth->bindValue(':question', $array_register['question'], PDO::PARAM_STR);
+        $sth->bindValue(':answer', $array_register['answer'], PDO::PARAM_STR);
+        $sth->bindValue(':in_groups', (string) $group_id_new, PDO::PARAM_STR);
+        $sth->bindValue(':idsite', $global_config['idsite'], PDO::PARAM_INT);
+        $sth->bindValue(':pass_creation_time', NV_CURRENTTIME, PDO::PARAM_INT);
+        $sth->bindValue(':email_creation_time', NV_CURRENTTIME, PDO::PARAM_INT);
+        $sth->execute();
+        $userid = $db->lastInsertId();
 
         if (!$userid) {
             reg_result([
@@ -446,14 +435,22 @@ if ($checkss == $array_register['checkss']) {
             userInfoTabDb($query_field);
 
             if (defined('ACCESS_ADDUS')) {
-                $db->query('INSERT INTO ' . NV_MOD_TABLE . '_groups_users (
+                $stmt = $db->prepare("INSERT INTO " . NV_MOD_TABLE . "_groups_users (
                     group_id, userid, is_leader, approved, data, time_requested, time_approved
                 ) VALUES (
-                    ' . $group_id . ',' . $userid . ', 0, 1, \'0\', ' . NV_CURRENTTIME . ', ' . NV_CURRENTTIME . '
-                )');
+                    :group_id, :userid, 0, 1, '0', :time_requested, :time_approved
+                )");
+                $stmt->bindValue(':group_id', $group_id, PDO::PARAM_INT);
+                $stmt->bindValue(':userid', $userid, PDO::PARAM_INT);
+                $stmt->bindValue(':time_requested', NV_CURRENTTIME, PDO::PARAM_INT);
+                $stmt->bindValue(':time_approved', NV_CURRENTTIME, PDO::PARAM_INT);
+                $stmt->execute();
             }
 
-            $db->query('UPDATE ' . NV_MOD_TABLE . '_groups SET numbers = numbers+1 WHERE group_id=' . (defined('ACCESS_ADDUS') ? $group_id : ($global_users_config['active_group_newusers'] ? 7 : 4)));
+            $group_id_update = defined('ACCESS_ADDUS') ? $group_id : ($global_users_config['active_group_newusers'] ? 7 : 4);
+            $stmt = $db->prepare('UPDATE ' . NV_MOD_TABLE . '_groups SET numbers = numbers + 1 WHERE group_id = :group_id');
+            $stmt->bindValue(':group_id', $group_id_update, PDO::PARAM_INT);
+            $stmt->execute();
 
             // Gửi email thông báo
             $send_data = [[

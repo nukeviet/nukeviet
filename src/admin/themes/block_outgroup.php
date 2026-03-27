@@ -36,26 +36,27 @@ if ($func_id > 0 and isset($row['bid']) and md5(NV_CHECK_SESSION . '_' . $bid) =
             dtime_type, dtime_details, active, bot_visible, groups_view, all_func, weight, config
         ) VALUES (
             :theme, :module, :file_name, :title, :link, :template, :heading, :position,
-            :dtime_type, :dtime_details, :active, :bot_visible, :groups_view, 0, ' . $row['weight'] . ', :config
+            :dtime_type, :dtime_details, :active, :bot_visible, :groups_view, 0, :weight, :config
         )';
 
-        $data = [];
-        $data['theme'] = $row['theme'];
-        $data['module'] = $row['module'];
-        $data['file_name'] = $row['file_name'];
-        $data['title'] = $row['title'];
-        $data['link'] = $row['link'];
-        $data['template'] = $row['template'];
-        $data['heading'] = $row['heading'];
-        $data['position'] = $row['position'];
-        $data['dtime_type'] = $row['dtime_type'];
-        $data['dtime_details'] = $row['dtime_details'];
-        $data['active'] = $row['active'];
-        $data['bot_visible'] = $row['bot_visible'];
-        $data['groups_view'] = $row['groups_view'];
-        $data['config'] = $row['config'];
-
-        $new_bid = $db->insert_id($_sql, 'bid', $data);
+        $sth_ins = $db->prepare($_sql);
+        $sth_ins->bindValue(':theme', $row['theme'], PDO::PARAM_STR);
+        $sth_ins->bindValue(':module', $row['module'], PDO::PARAM_STR);
+        $sth_ins->bindValue(':file_name', $row['file_name'], PDO::PARAM_STR);
+        $sth_ins->bindValue(':title', $row['title'], PDO::PARAM_STR);
+        $sth_ins->bindValue(':link', $row['link'], PDO::PARAM_STR);
+        $sth_ins->bindValue(':template', $row['template'], PDO::PARAM_STR);
+        $sth_ins->bindValue(':heading', $row['heading'], PDO::PARAM_INT);
+        $sth_ins->bindValue(':position', $row['position'], PDO::PARAM_STR);
+        $sth_ins->bindValue(':dtime_type', $row['dtime_type'], PDO::PARAM_INT);
+        $sth_ins->bindValue(':dtime_details', $row['dtime_details'], PDO::PARAM_STR);
+        $sth_ins->bindValue(':active', $row['active'], PDO::PARAM_INT);
+        $sth_ins->bindValue(':bot_visible', $row['bot_visible'], PDO::PARAM_INT);
+        $sth_ins->bindValue(':groups_view', $row['groups_view'], PDO::PARAM_STR);
+        $sth_ins->bindValue(':weight', $row['weight'], PDO::PARAM_INT);
+        $sth_ins->bindValue(':config', $row['config'], PDO::PARAM_STR);
+        $sth_ins->execute();
+        $new_bid = $db->lastInsertId();
 
         $stmt_update = $db->prepare('UPDATE ' . NV_BLOCKS_TABLE . '_weight SET bid= :new_bid WHERE bid= :bid AND func_id= :func_id');
         $stmt_update->bindValue(':new_bid', $new_bid, PDO::PARAM_INT);

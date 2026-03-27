@@ -47,18 +47,18 @@ if ($d[0]) {
     $sth = $db->prepare('SELECT did FROM ' . NV_UPLOAD_GLOBALTABLE . '_dir WHERE dirname = :path OR dirname LIKE :path_like');
     $sth->bindValue(':path', $path, PDO::PARAM_STR);
     $sth->bindValue(':path_like', $path . '/%', PDO::PARAM_STR);
-    $sth->execute();
-    while ($_scratch = $sth->fetch(3)) {
-        [$did] = $_scratch;
-        unset($_scratch);
-        $sth_del = $db->prepare('DELETE FROM ' . NV_UPLOAD_GLOBALTABLE . '_file WHERE did = :did');
-        $sth_del->bindValue(':did', $did, PDO::PARAM_INT);
-        $sth_del->execute();
+    $sth_del_file = $db->prepare('DELETE FROM ' . NV_UPLOAD_GLOBALTABLE . '_file WHERE did = :did');
+    $sth_del_dir = $db->prepare('DELETE FROM ' . NV_UPLOAD_GLOBALTABLE . '_dir WHERE did = :did');
 
-        $sth_del = $db->prepare('DELETE FROM ' . NV_UPLOAD_GLOBALTABLE . '_dir WHERE did = :did');
-        $sth_del->bindValue(':did', $did, PDO::PARAM_INT);
-        $sth_del->execute();
+    $sth->execute();
+    while ($row = $sth->fetch()) {
+        $sth_del_file->bindValue(':did', $row['did'], PDO::PARAM_INT);
+        $sth_del_file->execute();
+
+        $sth_del_dir->bindValue(':did', $row['did'], PDO::PARAM_INT);
+        $sth_del_dir->execute();
     }
+    $sth->closeCursor();
 
     nv_dirListRefreshSize();
     nv_insert_logs(NV_LANG_DATA, $module_name, $nv_Lang->getModule('deletefolder'), $path, $admin_info['userid']);

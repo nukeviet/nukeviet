@@ -27,14 +27,9 @@ if (!nv_function_exists('nv_block_news_groups')) {
         $show_no_image = $module_config[$module]['show_no_image'];
         $blockwidth = $module_config[$module]['blockwidth'];
 
-        $db->sqlreset()
-            ->select('t1.id, t1.catid, t1.title, t1.alias, t1.homeimgfile, t1.homeimgthumb,t1.hometext,t1.publtime,t1.external_link')
-            ->from(NV_PREFIXLANG . '_' . $site_mods[$module]['module_data'] . '_rows t1')
-            ->join('INNER JOIN ' . NV_PREFIXLANG . '_' . $site_mods[$module]['module_data'] . '_block t2 ON t1.id = t2.id')
-            ->where('t2.bid= ' . $block_config['blockid'] . ' AND t1.status= 1')
-            ->order('t2.weight ASC')
-            ->limit($block_config['numrow']);
-        $list = $nv_Cache->db($db->sql(), '', $module);
+        $numrow = (int) ($block_config['numrow'] ?? 20);
+        $sql = 'SELECT t1.id, t1.catid, t1.title, t1.alias, t1.homeimgfile, t1.homeimgthumb, t1.hometext, t1.publtime, t1.external_link FROM ' . NV_PREFIXLANG . '_' . $site_mods[$module]['module_data'] . '_rows t1 INNER JOIN ' . NV_PREFIXLANG . '_' . $site_mods[$module]['module_data'] . '_block t2 ON t1.id = t2.id WHERE t2.bid= ' . (int) $block_config['blockid'] . ' AND t1.status= 1 ORDER BY t2.weight ASC LIMIT ' . $numrow;
+        $list = $nv_Cache->db($sql, '', $module);
 
         $array_block_news = [];
         if (!empty($list)) {

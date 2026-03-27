@@ -18,8 +18,8 @@ if (!nv_function_exists('site_terms')) {
     {
         global $nv_Cache, $global_config, $site_mods, $db, $nv_Lang;
 
-        $db->sqlreset()->select('id, title, alias, description')->from(NV_PREFIXLANG . '_' . $site_mods[$module]['module_data'])->where('status = 1')->order('weight ASC');
-        $list = $nv_Cache->db($db->sql(), 'id', $module);
+        $sql = 'SELECT id, title, alias, description FROM ' . NV_PREFIXLANG . '_' . $site_mods[$module]['module_data'] . " WHERE status = 1 ORDER BY weight ASC";
+        $list = $nv_Cache->db($sql, 'id', $module);
 
         $term_names = !empty($data_block['term_names']) ? array_map('trim', explode('|', $data_block['term_names'])) : [''];
         $term_queries = !empty($data_block['term_queries']) ? array_map('trim', explode('|', $data_block['term_queries'])) : [''];

@@ -3123,10 +3123,9 @@ function nv_insert_notification($module, $type, $content = [], $obid = 0, $send_
         $_sql = 'INSERT INTO ' . NV_NOTIFICATION_GLOBALTABLE . ' (
             admin_view_allowed, logic_mode, send_to, send_from, area, language, module, obid, type, content, add_time, view
         ) VALUES (
-            :admin_view_allowed, :logic_mode, :send_to, :send_from, :area, ' . $db->quote(NV_LANG_DATA) . ',
-            :module, :obid, :type, :content, ' . NV_CURRENTTIME . ', 0
+            :admin_view_allowed, :logic_mode, :send_to, :send_from, :area, :language, :module, :obid, :type, :content, :add_time, 0
         )';
-        $data_insert = [];
+
         if (empty($send_to)) {
             $send_to = '';
         } elseif (is_array($send_to)) {
@@ -3134,23 +3133,30 @@ function nv_insert_notification($module, $type, $content = [], $obid = 0, $send_
         } else {
             $send_to = (string) (int) $send_to;
         }
+
         $admin_view_allowed = (int) $admin_view_allowed;
         if ($admin_view_allowed < 0 or $admin_view_allowed > 2) {
             $admin_view_allowed = 0;
         }
+
         if ($logic_mode > 1 or $logic_mode < 0) {
             $logic_mode = 0;
         }
-        $data_insert['admin_view_allowed'] = $admin_view_allowed;
-        $data_insert['logic_mode'] = $logic_mode;
-        $data_insert['send_to'] = $send_to;
-        $data_insert['send_from'] = $send_from;
-        $data_insert['area'] = $area;
-        $data_insert['module'] = $module;
-        $data_insert['obid'] = $obid;
-        $data_insert['type'] = $type;
-        $data_insert['content'] = $content;
-        $new_id = $db->insert_id($_sql, 'id', $data_insert);
+
+        $sth = $db->prepare($_sql);
+        $sth->bindValue(':admin_view_allowed', $admin_view_allowed, PDO::PARAM_INT);
+        $sth->bindValue(':logic_mode', $logic_mode, PDO::PARAM_INT);
+        $sth->bindValue(':send_to', $send_to, PDO::PARAM_STR);
+        $sth->bindValue(':send_from', $send_from, PDO::PARAM_INT);
+        $sth->bindValue(':area', $area, PDO::PARAM_INT);
+        $sth->bindValue(':language', NV_LANG_DATA, PDO::PARAM_STR);
+        $sth->bindValue(':module', $module, PDO::PARAM_STR);
+        $sth->bindValue(':obid', $obid, PDO::PARAM_INT);
+        $sth->bindValue(':type', $type, PDO::PARAM_STR);
+        $sth->bindValue(':content', $content, PDO::PARAM_STR);
+        $sth->bindValue(':add_time', NV_CURRENTTIME, PDO::PARAM_INT);
+        $sth->execute();
+        $new_id = $db->lastInsertId();
     }
 
     return $new_id;

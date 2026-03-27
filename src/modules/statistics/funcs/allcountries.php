@@ -18,9 +18,13 @@ $key_words = $module_info['keywords'];
 $page_url = NV_BASE_MOD_URL . '&amp;' . NV_OP_VARIABLE . '=' . $module_info['alias']['allcountries'];
 $contents = '';
 
-$sql = 'SELECT COUNT(*), MAX(c_count) FROM ' . NV_COUNTER_GLOBALTABLE . " WHERE c_type='country' AND c_count!=0";
-$result = $db->query($sql);
-[$num_items, $max] = $result->fetch(3);
+$sql = 'SELECT COUNT(*) as num_items, MAX(c_count) as max FROM ' . NV_COUNTER_GLOBALTABLE . " WHERE c_type = 'country' AND c_count != 0";
+$result = $db_slave->query($sql);
+$row_meta = $result->fetch();
+$result->closeCursor();
+
+$num_items = $row_meta['num_items'] ?? 0;
+$max = $row_meta['max'] ?? 0;
 
 if ($num_items) {
     $base_url = $page_url;
@@ -34,28 +38,23 @@ if ($num_items) {
     // Không cho tùy ý đánh số page + xác định trang trước, trang sau
     betweenURLs($page, ceil($num_items / $per_page), $base_url, '&amp;page=', $prevPage, $nextPage);
 
-    $db->sqlreset()
-        ->select('c_val,c_count, last_update')
-        ->from(NV_COUNTER_GLOBALTABLE)
-        ->where("c_type='country' AND c_count!=0")
-        ->order('c_count DESC')
-        ->limit($per_page)
-        ->offset(($page - 1) * $per_page);
-    $result = $db->query($db->sql());
+    $stmt = $db->prepare("SELECT c_val, c_count, last_update FROM " . NV_COUNTER_GLOBALTABLE . " WHERE c_type='country' AND c_count!=0 ORDER BY c_count DESC LIMIT :limit OFFSET :offset");
+    $stmt->bindValue(':limit', $per_page, PDO::PARAM_INT);
+    $stmt->bindValue(':offset', ($page - 1) * $per_page, PDO::PARAM_INT);
+    $stmt->execute();
 
     $countries_list = [];
-    while ($_scratch = $result->fetch(3)) {
-        [$country, $count, $last_visit] = $_scratch;
-        unset($_scratch);
+    while ($row = $stmt->fetch()) {
         $countries_list[] = [
-            'key' => $country,
-            'name' => ($country != 'ZZ' and isset($countries[$country])) ? ($nv_Lang->existsGlobal('country_' . $country) ? $nv_Lang->getGlobal('country_' . $country) : $countries[$country][1]) : $nv_Lang->getGlobal('unknown'),
-            'count' => $count,
-            'count_format' => !empty($count) ? nv_number_format($count) : 0,
-            'last_visit' => !empty($last_visit) ? nv_datetime_format($last_visit, 0, 0) : '',
-            'proc' => ceil(($count / $max) * 100)
+            'key' => $row['c_val'],
+            'name' => ($row['c_val'] != 'ZZ' and isset($countries[$row['c_val']])) ? ($nv_Lang->existsGlobal('country_' . $row['c_val']) ? $nv_Lang->getGlobal('country_' . $row['c_val']) : $countries[$row['c_val']][1]) : $nv_Lang->getGlobal('unknown'),
+            'count' => $row['c_count'],
+            'count_format' => !empty($row['c_count']) ? nv_number_format($row['c_count']) : 0,
+            'last_visit' => !empty($row['last_update']) ? nv_datetime_format($row['last_update'], 0, 0) : '',
+            'proc' => ceil(($row['c_count'] / $max) * 100)
         ];
     }
+    $stmt->closeCursor();
 
     $generate_page = nv_generate_page($base_url, $num_items, $per_page, $page);
 

@@ -466,7 +466,7 @@ if ($checkss == $nv_Request->get_string('checkss', 'post')) {
             $sth->bindValue(':theme', $row_old['theme'], PDO::PARAM_STR);
             $sth->bindValue(':position', $row_old['position'], PDO::PARAM_STR);
             $sth->execute();
-            
+
             $stmt_update = $db->prepare('UPDATE ' . NV_BLOCKS_TABLE . '_weight SET weight= :weight WHERE bid= :bid AND func_id= :func_id');
             while ($_row_weight = $sth->fetch()) {
                 if ($_row_weight['func_id'] == $func_id_old) {
@@ -501,28 +501,14 @@ if ($checkss == $nv_Request->get_string('checkss', 'post')) {
                 dtime_details, active, bot_visible, act, groups_view, all_func, weight, config
             ) VALUES (
                 :selectthemes, :module, :file_name, :title, :link, :template, :heading, :position,
-                :dtime_type, :dtime_details, :active, ' . $row['bot_visible'] . ', ' . $row['act'] . ', :groups_view,
-                ' . $row['all_func'] . ', ' . $row['weight'] . ', :config
+                :dtime_type, :dtime_details, :active, :bot_visible, :act, :groups_view, :all_func, :weight, :config
             )';
-            $data = [];
-            $data['selectthemes'] = $selectthemes;
-            $data['module'] = $row['module'];
-            $data['file_name'] = $row['file_name'];
-            $data['title'] = $row['title'];
-            $data['link'] = $row['link'];
-            $data['template'] = $row['template'];
-            $data['heading'] = $row['heading'];
-            $data['position'] = $row['position'];
-            $data['dtime_type'] = $row['dtime_type'];
-            $data['dtime_details'] = $row['dtime_details'];
-            $data['active'] = $row['active'];
-            $data['groups_view'] = $row['groups_view'];
-            $data['config'] = $row['config'];
-            $row['bid'] = $db->insert_id($_sql, 'bid', $data);
 
-            nv_insert_logs(NV_LANG_DATA, $module_name, $nv_Lang->getModule('block_add'), 'Name : ' . $row['title'], $admin_info['userid']);
+            $sth_final = $db->prepare($_sql);
+            $sth_final->bindValue(':selectthemes', $selectthemes, PDO::PARAM_STR);
+            $sth_final->bindValue(':weight', $row['weight'], PDO::PARAM_INT);
         } else {
-            $sth = $db->prepare('UPDATE ' . NV_BLOCKS_TABLE . '_groups SET
+            $_sql = 'UPDATE ' . NV_BLOCKS_TABLE . '_groups SET
                     module=:module,
                     file_name=:file_name,
                     title=:title,
@@ -533,33 +519,41 @@ if ($checkss == $nv_Request->get_string('checkss', 'post')) {
                     dtime_type=:dtime_type,
                     dtime_details=:dtime_details,
                     active=:active,
-                    bot_visible=' . $row['bot_visible'] . ',
-                    act=' . $row['act'] . ',
+                    bot_visible=:bot_visible,
+                    act=:act,
                     groups_view=:groups_view,
-                    all_func=' . $row['all_func'] . ',
+                    all_func=:all_func,
                     config=:config
-                    WHERE bid = ' . $row['bid']);
+                    WHERE bid = :bid';
 
-            $sth->bindValue(':module', $row['module'], PDO::PARAM_STR);
-            $sth->bindValue(':file_name', $row['file_name'], PDO::PARAM_STR);
-            $sth->bindValue(':title', $row['title'], PDO::PARAM_STR);
-            $sth->bindValue(':link', $row['link'], PDO::PARAM_STR);
-            $sth->bindValue(':template', $row['template'], PDO::PARAM_STR);
-            $sth->bindValue(':heading', $row['heading'], PDO::PARAM_INT);
-            $sth->bindValue(':position', $row['position'], PDO::PARAM_STR);
-            $sth->bindValue(':dtime_type', $row['dtime_type'], PDO::PARAM_STR);
-            $sth->bindValue(':dtime_details', $row['dtime_details'], PDO::PARAM_STR);
-            $sth->bindValue(':active', $row['active'], PDO::PARAM_STR);
-            $sth->bindValue(':groups_view', $row['groups_view'], PDO::PARAM_STR);
-            $sth->bindValue(':config', $row['config'], PDO::PARAM_STR);
-            $sth->execute();
+            $sth_final = $db->prepare($_sql);
+            $sth_final->bindValue(':bid', $row['bid'], PDO::PARAM_INT);
+        }
 
-            if (isset($site_mods[$module])) {
-                $nv_Cache->delMod($module);
-            }
+        $sth_final->bindValue(':module', $row['module'], PDO::PARAM_STR);
+        $sth_final->bindValue(':file_name', $row['file_name'], PDO::PARAM_STR);
+        $sth_final->bindValue(':title', $row['title'], PDO::PARAM_STR);
+        $sth_final->bindValue(':link', $row['link'], PDO::PARAM_STR);
+        $sth_final->bindValue(':template', $row['template'], PDO::PARAM_STR);
+        $sth_final->bindValue(':heading', $row['heading'], PDO::PARAM_INT);
+        $sth_final->bindValue(':position', $row['position'], PDO::PARAM_STR);
+        $sth_final->bindValue(':dtime_type', $row['dtime_type'], PDO::PARAM_INT);
+        $sth_final->bindValue(':dtime_details', $row['dtime_details'], PDO::PARAM_STR);
+        $sth_final->bindValue(':active', $row['active'], PDO::PARAM_INT);
+        $sth_final->bindValue(':bot_visible', $row['bot_visible'], PDO::PARAM_INT);
+        $sth_final->bindValue(':act', $row['act'], PDO::PARAM_INT);
+        $sth_final->bindValue(':groups_view', $row['groups_view'], PDO::PARAM_STR);
+        $sth_final->bindValue(':all_func', $row['all_func'], PDO::PARAM_INT);
+        $sth_final->bindValue(':config', $row['config'], PDO::PARAM_STR);
+        $sth_final->execute();
 
+        if (empty($row['bid'])) {
+            $row['bid'] = $db->lastInsertId();
+            nv_insert_logs(NV_LANG_DATA, $module_name, $nv_Lang->getModule('block_add'), 'Name : ' . $row['title'], $admin_info['userid']);
+        } else {
             nv_insert_logs(NV_LANG_DATA, $module_name, $nv_Lang->getModule('block_edit'), 'Name : ' . $row['title'], $admin_info['userid']);
         }
+        $nv_Cache->delMod($module);
 
         if (!empty($row['bid'])) {
             $func_list = [];
@@ -586,7 +580,7 @@ if ($checkss == $nv_Request->get_string('checkss', 'post')) {
             }
             $sth = $db->prepare('SELECT MAX(t1.weight) FROM ' . NV_BLOCKS_TABLE . '_weight t1 INNER JOIN ' . NV_BLOCKS_TABLE . '_groups t2 ON t1.bid = t2.bid WHERE t1.func_id= :func_id AND t2.theme= :theme AND t2.position= :position');
             $stmt_insert = $db->prepare('INSERT INTO ' . NV_BLOCKS_TABLE . '_weight (bid, func_id, weight) VALUES (:bid, :func_id, :weight)');
-            
+
             foreach ($array_funcid as $func_id) {
                 if (!in_array((int) $func_id, array_map('intval', $func_list), true)) {
                     $sth->bindValue(':func_id', $func_id, PDO::PARAM_INT);
@@ -701,29 +695,27 @@ $sql = 'SELECT title, custom_title FROM ' . NV_MODULES_TABLE . (!NV_DEBUG ? ' WH
 $result = $db->query($sql);
 
 $mod_funcs = [];
-while ($_row_mod = $result->fetch()) {
-    $m_title = $_row_mod['title'];
-    $m_custom_title = $_row_mod['custom_title'];
-    if (isset($aray_mod_func[$m_title]) and count($aray_mod_func[$m_title]) > 0) {
-        if (!isset($mod_funcs[$m_title])) {
-            $mod_funcs[$m_title] = [
-                'key' => $m_title,
-                'title' => $m_custom_title,
+while ($_row = $result->fetch()) {
+    if (isset($aray_mod_func[$_row['title']]) and count($aray_mod_func[$_row['title']]) > 0) {
+        if (!isset($mod_funcs[$_row['title']])) {
+            $mod_funcs[$_row['title']] = [
+                'key' => $_row['title'],
+                'title' => $_row['custom_title'],
                 'func_checked' => 0,
                 'funcs' => []
             ];
         }
 
-        foreach ($aray_mod_func[$m_title] as $aray_mod_func_i) {
-            $mod_funcs[$m_title]['funcs'][$aray_mod_func_i['id']] = [
+        foreach ($aray_mod_func[$_row['title']] as $aray_mod_func_i) {
+            $mod_funcs[$_row['title']]['funcs'][$aray_mod_func_i['id']] = [
                 'id' => $aray_mod_func_i['id'],
                 'name' => $aray_mod_func_i['func_custom_name'],
                 'checked' => 0
             ];
 
             if (in_array((int) $aray_mod_func_i['id'], array_map('intval', $func_list), true) or $functionid == $aray_mod_func_i['id']) {
-                $mod_funcs[$m_title]['funcs'][$aray_mod_func_i['id']]['checked'] = 1;
-                $mod_funcs[$m_title]['func_checked']++;
+                $mod_funcs[$_row['title']]['funcs'][$aray_mod_func_i['id']]['checked'] = 1;
+                $mod_funcs[$_row['title']]['func_checked']++;
             }
         }
     }

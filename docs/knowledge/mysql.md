@@ -32,18 +32,14 @@ $db->query($sql)->fetch()         // lấy 1 dòng (associative array)
 $db->query($sql)->fetchAll()      // lấy tất cả dòng
 $db->query($sql)->fetchColumn()   // lấy giá trị ô đầu tiên (COUNT, MAX...)
 
-// Prepared statement (cho user input là chuỗi)
+// Prepared statement (cho user input)
 $db->prepare($sql)                // chuẩn bị statement, trả về PDOStatement
 $db->lastInsertId()               // ID vừa INSERT
-
-// Helper methods (gộp prepare + execute + result)
-$db->insert_id($sql, '', $data)           // INSERT + trả về lastInsertId
-$db->affected_rows_count($sql, $data)     // UPDATE/DELETE + trả về rowCount()
 
 // Escape helpers
 $db->dblikeescape($value)         // escape ký tự đặc biệt trong LIKE (%, _)
 $db->regexpescape($value)         // escape ký tự đặc biệt trong REGEXP
-$db->quote($value)                // PDO quote — dùng khi không thể dùng bindParam
+$db->quote($value)                // PDO quote — dùng khi không thể dùng bindValue (ví dụ: query() trực tiếp)
 
 // closeCursor — giải phóng connection sau while-loop (quan trọng khi có nhiều query song song)
 $result = $db_slave->query($sql);
@@ -61,54 +57,20 @@ foreach ($rows as [$id, $title, $alias]) {
 
 ---
 
-## Query Builder — pattern phổ biến nhất
+## Pattern: TRUY VẤN AN TOÀN (PDO)
 
-Thay vì nối chuỗi SQL thủ công, dùng Query Builder (luôn kết hợp với `$db_slave` cho SELECT):
+NukeViet 5.0 không còn sử dụng Query Builder. Mọi truy vấn có tham số từ người dùng **PHẢI** sử dụng Placeholders và Prepared Statements.
 
-```php
-$db_slave->sqlreset()           // reset tất cả điều kiện cũ
-    ->select('id, title, alias')
-    ->from(NV_PREFIXLANG . '_items')
-    ->where('status = 1')
-    ->order('weight ASC')
-    ->limit(10)
-    ->offset(($page - 1) * 10);
+### Mục tiêu
+1. Chống SQL Injection tuyệt đối.
+2. Tối ưu hiệu suất bằng cách tái sử dụng Statement.
+3. Code sạch, dễ bảo trì.
 
-$result = $db_slave->query($db_slave->sql());
-while ($row = $result->fetch()) {
-    // xử lý từng dòng
-}
-
-// Hoặc dùng fetchAll():
-$rows = $db_slave->query($db_slave->sql())->fetchAll();
-```
-
-Có thể chain tiếp sau `sqlreset()` mà không cần reset lại (chỉ thay đổi clause cần thiết):
-```php
-// Đếm trước
-$db_slave->sqlreset()->select('COUNT(*)')->from(NV_PREFIXLANG . '_items')->where('status=1');
-$total = (int) $db_slave->query($db_slave->sql())->fetchColumn();
-
-// Dùng lại, chỉ đổi select + thêm limit/offset
-$db_slave->select('*')->order('weight ASC')->limit($per_page)->offset($offset);
-$rows = $db_slave->query($db_slave->sql())->fetchAll();
-```
-
-Tất cả method Query Builder đều trả về `$this` nên chain được:
-
-| Method | Tương đương SQL |
-|---|---|
-| `select('col1, col2')` | `SELECT col1, col2` |
-| `from('table')` | `FROM table` |
-| `join('LEFT JOIN t2 ON t1.id = t2.id')` | `LEFT JOIN ...` — truyền cả mệnh đề JOIN |
-| `where('status = 1 AND id > 0')` | `WHERE ...` |
-| `group('category_id')` | `GROUP BY category_id` |
-| `having('COUNT(*) > 1')` | `HAVING COUNT(*) > 1` |
-| `order('weight ASC')` | `ORDER BY weight ASC` |
-| `limit(10)` | `LIMIT 10` |
-| `offset(20)` | `OFFSET 20` |
-| `sql()` | Trả về chuỗi SQL hoàn chỉnh |
-| `sqlreset()` | Reset tất cả về rỗng — gọi trước mỗi query mới |
+### Các bước thực hiện
+1. Viết SQL với các placeholder dạng `:name`.
+2. Dùng `$db->prepare($sql)` để chuẩn bị.
+3. Dùng `$sth->bindValue(':name', $value, $type)` để gán giá trị.
+4. Dùng `$sth->execute()` để thực thi.
 
 ---
 
@@ -165,9 +127,8 @@ foreach ($list as $row) {
 }
 
 // Lấy danh sách với key = 'id'
-$db->sqlreset()->select('id, title, alias')->from(NV_PREFIXLANG . '_items')
-    ->where('status = 1')->order('weight ASC')->limit(10);
-$list = $nv_Cache->db($db->sql(), 'id', $module_name);
+$sql = 'SELECT id, title, alias FROM ' . NV_PREFIXLANG . '_items WHERE status = 1 ORDER BY weight ASC LIMIT 10';
+$list = $nv_Cache->db($sql, 'id', $module_name);
 // $list['5'] = ['id' => 5, 'title' => '...', 'alias' => '...']
 ```
 

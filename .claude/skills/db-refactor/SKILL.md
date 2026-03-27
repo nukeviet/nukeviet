@@ -135,6 +135,22 @@ $stmt->execute();
 $affected = $stmt->rowCount();
 ```
 
+### Placeholder Duy nhất (Unique Placeholders)
+**BẮT BUỘC:** Mỗi placeholder trong một câu lệnh Prepared Statement phải là duy nhất, ngay cả khi giá trị được bind là giống nhau. Việc dùng lặp lại cùng một placeholder (ví dụ `:time`) trong một chuỗi SQL sẽ gây lỗi `SQLSTATE[HY093]: Invalid parameter number` khi `PDO::ATTR_EMULATE_PREPARES` được thiết lập là `false` (mặc định của NukeViet 5).
+
+```php
+// ❌ Sai: Dùng lặp lại :time
+$sql = 'INSERT INTO table (time1, time2) VALUES (:time, :time)';
+$stmt = $db->prepare($sql);
+$stmt->bindValue(':time', NV_CURRENTTIME, PDO::PARAM_INT);
+
+// ✅ Đúng: Đặt tên placeholder khác nhau
+$sql = 'INSERT INTO table (time1, time2) VALUES (:time1, :time2)';
+$stmt = $db->prepare($sql);
+$stmt->bindValue(':time1', NV_CURRENTTIME, PDO::PARAM_INT);
+$stmt->bindValue(':time2', NV_CURRENTTIME, PDO::PARAM_INT);
+```
+
 ### LIKE — dấu `%` ghép vào giá trị, không vào placeholder
 ```php
 $stmt->bindValue(':kw', '%' . $keyword . '%', PDO::PARAM_STR);

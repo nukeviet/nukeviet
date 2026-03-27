@@ -37,13 +37,7 @@ if (!nv_function_exists('nv_news_block_news')) {
         } else {
             $array_block_news = [];
 
-            $db_slave->sqlreset()
-                ->select('id, catid, publtime, exptime, title, alias, homeimgthumb, homeimgfile, hometext, external_link')
-                ->from(NV_PREFIXLANG . '_' . $mod_data . '_rows')
-                ->where('status= 1')
-                ->order($order_articles_by . ' DESC')
-                ->limit($numrow);
-            $result = $db_slave->query($db_slave->sql());
+            $result = $db_slave->query('SELECT id, catid, publtime, exptime, title, alias, homeimgthumb, homeimgfile, hometext, external_link FROM ' . NV_PREFIXLANG . '_' . $mod_data . "_rows WHERE status= 1 ORDER BY " . $order_articles_by . ' DESC LIMIT ' . (int) $numrow);
 
             while ($_scratch = $result->fetch(3)) {
                 [$id, $catid, $publtime, $exptime, $title, $alias, $homeimgthumb, $homeimgfile, $hometext, $external_link] = $_scratch;

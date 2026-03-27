@@ -18,9 +18,12 @@ $key_words = $module_info['keywords'];
 $page_url = NV_BASE_MOD_URL . '&amp;' . NV_OP_VARIABLE . '=' . $module_info['alias']['allreferers'];
 $contents = '';
 
-$sql = 'SELECT COUNT(*), SUM(total), MAX(total) FROM ' . NV_REFSTAT_TABLE;
+$sql = 'SELECT COUNT(*) as num_items, SUM(total) as total_sum, MAX(total) as max FROM ' . NV_REFSTAT_TABLE;
 $result = $db->query($sql);
-[$num_items, $total, $max] = $result->fetch(3);
+$row_meta = $result->fetch();
+$num_items = $row_meta['num_items'] ?? 0;
+$total = $row_meta['total_sum'] ?? 0;
+$max = $row_meta['max'] ?? 0;
 
 if ($num_items) {
     $base_url = $page_url;
@@ -34,28 +37,23 @@ if ($num_items) {
     // Không cho tùy ý đánh số page + xác định trang trước, trang sau
     betweenURLs($page, ceil($num_items / $per_page), $base_url, '&amp;page=', $prevPage, $nextPage);
 
-    $db->sqlreset()
-        ->select('host, total, last_update')
-        ->from(NV_REFSTAT_TABLE)
-        ->where('total!=0')
-        ->order('total DESC')
-        ->limit($per_page)
-        ->offset(($page - 1) * $per_page);
-    $result = $db->query($db->sql());
+    $stmt = $db->prepare('SELECT host, total, last_update FROM ' . NV_REFSTAT_TABLE . ' WHERE total!=0 ORDER BY total DESC LIMIT :limit OFFSET :offset');
+    $stmt->bindValue(':limit', $per_page, PDO::PARAM_INT);
+    $stmt->bindValue(':offset', ($page - 1) * $per_page, PDO::PARAM_INT);
+    $stmt->execute();
 
     $host_list = [];
-    while ($_scratch = $result->fetch(3)) {
-        [$host, $count, $last_visit] = $_scratch;
-        unset($_scratch);
+    while ($row = $stmt->fetch()) {
         $host_list[] = [
-            'key' => $host,
-            'count' => $count,
-            'count_format' => nv_number_format($count),
-            'last_visit' => !empty($last_visit) ? nv_datetime_format($last_visit, 0, 0) : '',
-            'bymonth_link' => NV_BASE_MOD_URL . '&amp;' . NV_OP_VARIABLE . '=' . $module_info['alias']['referer'] . '&amp;host=' . $host,
-            'proc' => ceil(($count / $max) * 100)
+            'key' => $row['host'],
+            'count' => $row['total'],
+            'count_format' => nv_number_format($row['total']),
+            'last_visit' => !empty($row['last_update']) ? nv_datetime_format($row['last_update'], 0, 0) : '',
+            'bymonth_link' => NV_BASE_MOD_URL . '&amp;' . NV_OP_VARIABLE . '=' . $module_info['alias']['referer'] . '&amp;host=' . $row['host'],
+            'proc' => ceil(($row['total'] / $max) * 100)
         ];
     }
+    $stmt->closeCursor();
 
     $generate_page = nv_generate_page($base_url, $num_items, $per_page, $page);
 

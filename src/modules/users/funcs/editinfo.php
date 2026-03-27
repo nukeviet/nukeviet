@@ -47,13 +47,20 @@ function nv_check_username_change($login, $edit_userid)
         return $nv_Lang->getModule('account_deny_name', $login);
     }
 
-    $sql = 'SELECT userid FROM ' . NV_MOD_TABLE . ' WHERE userid!=' . $edit_userid . ' AND (username LIKE ' . $db->quote($login) . ' OR md5username=' . $db->quote(nv_md5safe($login)) . ')';
-    if ($db->query($sql)->fetchColumn()) {
+    $sth = $db->prepare('SELECT userid FROM ' . NV_MOD_TABLE . ' WHERE userid != :userid AND (username LIKE :username OR md5username = :md5username)');
+    $sth->bindValue(':userid', $edit_userid, PDO::PARAM_INT);
+    $sth->bindValue(':username', $login, PDO::PARAM_STR);
+    $sth->bindValue(':md5username', nv_md5safe($login), PDO::PARAM_STR);
+    $sth->execute();
+    if ($sth->fetchColumn()) {
         return $nv_Lang->getModule('account_registered_name', $login);
     }
 
-    $sql = 'SELECT userid FROM ' . NV_MOD_TABLE . '_reg WHERE username LIKE ' . $db->quote($login) . ' OR md5username=' . $db->quote(nv_md5safe($login));
-    if ($db->query($sql)->fetchColumn()) {
+    $sth = $db->prepare('SELECT userid FROM ' . NV_MOD_TABLE . '_reg WHERE username LIKE :username OR md5username = :md5username');
+    $sth->bindValue(':username', $login, PDO::PARAM_STR);
+    $sth->bindValue(':md5username', nv_md5safe($login), PDO::PARAM_STR);
+    $sth->execute();
+    if ($sth->fetchColumn()) {
         return $nv_Lang->getModule('account_registered_name', $login);
     }
 
@@ -175,15 +182,14 @@ function get_field_config()
         } elseif (!empty($row_field['sql_choices'])) {
             $row_field['sql_choices'] = explode('|', $row_field['sql_choices']);
             $row_field['field_choices'] = [];
-            $query = 'SELECT ' . $row_field['sql_choices'][2] . ', ' . $row_field['sql_choices'][3] . ' FROM ' . $row_field['sql_choices'][1];
+
+            $query = 'SELECT ' . $row_field['sql_choices'][2] . ' as field_key, ' . $row_field['sql_choices'][3] . ' as field_value FROM ' . $row_field['sql_choices'][1];
             if (!empty($row_field['sql_choices'][4]) and !empty($row_field['sql_choices'][5])) {
                 $query .= ' ORDER BY ' . $row_field['sql_choices'][4] . ' ' . $row_field['sql_choices'][5];
             }
             $result = $db->query($query);
-            while ($_scratch = $result->fetch(3)) {
-                [$key, $val] = $_scratch;
-                unset($_scratch);
-                $row_field['field_choices'][$key] = $val;
+            while ($row = $result->fetch()) {
+                $row_field['field_choices'][$row['field_key']] = $row['field_value'];
             }
         }
         $row_field['limited_values'] = !empty($row_field['limited_values']) ? json_decode($row_field['limited_values'], true) : [];
@@ -267,11 +273,16 @@ function nv_groups_list_pub2($edit_userid)
         'all' => [],
         'share' => []
     ];
-    $resul = $db->query('SELECT g.*, d.*, u.userid, u.is_leader, u.approved FROM ' . NV_MOD_TABLE . '_groups AS g
-        LEFT JOIN ' . NV_MOD_TABLE . "_groups_detail d ON ( g.group_id = d.group_id AND d.lang='" . NV_LANG_DATA . "' )
-        LEFT JOIN " . NV_MOD_TABLE . '_groups_users u ON ( g.group_id = u.group_id AND u.userid=' . $edit_userid . ' )
-        WHERE g.act=1 AND (g.idsite = ' . $global_config['idsite'] . ' OR (g.idsite =0 AND g.siteus = 1)) ORDER BY g.idsite, g.weight');
-    while ($row = $resul->fetch()) {
+    $sth = $db->prepare('SELECT g.*, d.*, u.userid, u.is_leader, u.approved FROM ' . NV_MOD_TABLE . '_groups AS g
+        LEFT JOIN ' . NV_MOD_TABLE . '_groups_detail d ON ( g.group_id = d.group_id AND d.lang = :lang )
+        LEFT JOIN ' . NV_MOD_TABLE . '_groups_users u ON ( g.group_id = u.group_id AND u.userid = :userid )
+        WHERE g.act=1 AND (g.idsite = :idsite OR (g.idsite = 0 AND g.siteus = 1)) ORDER BY g.idsite, g.weight');
+    $sth->bindValue(':lang', NV_LANG_DATA, PDO::PARAM_STR);
+    $sth->bindValue(':userid', $edit_userid, PDO::PARAM_INT);
+    $sth->bindValue(':idsite', $global_config['idsite'], PDO::PARAM_INT);
+    $sth->execute();
+
+    while ($row = $sth->fetch()) {
         if ($row['group_id'] < 10) {
             $row['title'] = $nv_Lang->getGlobal('level' . $row['group_id']);
         }
@@ -310,18 +321,21 @@ if (isset($array_op[2]) and !defined('ACCESS_EDITUS')) {
 // Nếu là trưởng nhóm sửa thì $edit_userid = $userid được sửa còn không thì là $user_info['userid'] của thành viên tự sửa
 $edit_userid = (defined('ACCESS_EDITUS')) ? $userid : $user_info['userid'];
 
-$sql = 'SELECT * FROM ' . NV_MOD_TABLE . ' WHERE userid=' . $edit_userid;
-$query = $db->query($sql);
-$row = $query->fetch();
+$sth = $db->prepare('SELECT * FROM ' . NV_MOD_TABLE . ' WHERE userid = :userid');
+$sth->bindValue(':userid', $edit_userid, PDO::PARAM_INT);
+$sth->execute();
+$row = $sth->fetch();
 empty($row['gender']) && $row['gender'] = 'N';
+
 /*
  * Lấy thông tin đợi duyệt trước đó
  * Trưởng nhóm edit thì không phải duyệt
  */
 if ($array_data['editcensor'] and !defined('ACCESS_EDITUS')) {
-    $sql = 'SELECT * FROM ' . NV_MOD_TABLE . '_edit WHERE userid=' . $edit_userid;
-    $query = $db->query($sql);
-    $_row = $query->fetch();
+    $sth = $db->prepare('SELECT * FROM ' . NV_MOD_TABLE . '_edit WHERE userid = :userid');
+    $sth->bindValue(':userid', $edit_userid, PDO::PARAM_INT);
+    $sth->execute();
+    $_row = $sth->fetch();
     if (!empty($_row)) {
         $array_data['awaitinginfo'] = $_row;
         $array_data['awaitinginfo']['info_basic'] = empty($array_data['awaitinginfo']['info_basic']) ? [] : json_decode($array_data['awaitinginfo']['info_basic'], true);
@@ -1196,12 +1210,12 @@ if ($checkss == $array_data['checkss'] and $array_data['type'] == 'basic') {
                     // Danh sách email trưởng nhóm
                     $send_data = [];
                     $url_group = urlRewriteWithDomain(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=groups/' . $gid, NV_MY_DOMAIN);
-                    $result = $db->query('SELECT t2.email FROM ' . NV_MOD_TABLE . '_groups_users t1 INNER JOIN ' . NV_MOD_TABLE . ' t2 ON t1.userid=t2.userid WHERE t1.is_leader=1 AND t1.group_id=' . $gid);
-                    while ($_scratch = $result->fetch(3)) {
-                        [$email] = $_scratch;
-                        unset($_scratch);
+                    $sth = $db->prepare('SELECT t2.email FROM ' . NV_MOD_TABLE . '_groups_users t1 INNER JOIN ' . NV_MOD_TABLE . ' t2 ON t1.userid = t2.userid WHERE t1.is_leader = 1 AND t1.group_id = :gid');
+                    $sth->bindValue(':gid', $gid, PDO::PARAM_INT);
+                    $sth->execute();
+                    while ($row = $sth->fetch()) {
                         $send_data[] = [
-                            'to' => $email,
+                            'to' => $row['email'],
                             'data' => [
                                 'first_name' => $user_info['first_name'],
                                 'last_name' => $user_info['last_name'],

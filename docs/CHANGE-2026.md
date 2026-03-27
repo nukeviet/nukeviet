@@ -2,6 +2,14 @@
 
 ## Tháng 3 năm 2026
 
+### db-refactor
+- Bỏ ->sqlreset khỏi codebase
+- Bỏ ->insert_id khỏi codebase
+- Bỏ ->affected_rows_count
+- Tối ưu biến tạm khi dùng ->fetch(3)
+- Tối ưu code theo Skill db-refactor
+
+
 ### Thống nhất dùng try catch
 ```php
 try {

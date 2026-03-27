@@ -602,6 +602,7 @@ if (defined('NV_IS_GODADMIN') and $nv_Request->isset_request('modcapt', 'post') 
 if (defined('NV_IS_GODADMIN') and $nv_Request->isset_request('captarea', 'post') and csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
     $captcha_areas = $nv_Request->get_typed_array('captcha_area', 'post', 'string');
     $captcha_areas = !empty($captcha_areas) ? implode(',', $captcha_areas) : '';
+    $sth = $db->prepare('UPDATE ' . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = 'sys' AND module = 'site' AND config_name = 'captcha_area'");
     $sth->bindValue(':config_value', $captcha_areas, PDO::PARAM_STR);
     $sth->execute();
 

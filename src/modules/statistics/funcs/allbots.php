@@ -18,8 +18,10 @@ $key_words = $module_info['keywords'];
 $page_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op;
 $contents = '';
 
-$result = $db->query('SELECT COUNT(*), MAX(c_count) FROM ' . NV_COUNTER_GLOBALTABLE . " WHERE c_type='bot' AND c_count!=0");
-[$num_items, $max] = $result->fetch(3);
+$result = $db->query('SELECT COUNT(*) as num_items, MAX(c_count) as max FROM ' . NV_COUNTER_GLOBALTABLE . " WHERE c_type='bot' AND c_count!=0");
+$row_meta = $result->fetch();
+$num_items = $row_meta['num_items'] ?? 0;
+$max = $row_meta['max'] ?? 0;
 
 if ($num_items) {
     $base_url = $page_url;
@@ -33,28 +35,22 @@ if ($num_items) {
     // Không cho tùy ý đánh số page + xác định trang trước, trang sau
     betweenURLs($page, ceil($num_items / $per_page), $base_url, '&amp;page=', $prevPage, $nextPage);
 
-    $db->sqlreset()
-        ->select('c_val,c_count, last_update')
-        ->from(NV_COUNTER_GLOBALTABLE)
-        ->where("c_type='bot' AND c_count!=0")
-        ->order('c_count DESC')
-        ->limit($per_page)
-        ->offset(($page - 1) * $per_page);
-
-    $result = $db->query($db->sql());
+    $stmt = $db->prepare("SELECT c_val, c_count, last_update FROM " . NV_COUNTER_GLOBALTABLE . " WHERE c_type='bot' AND c_count!=0 ORDER BY c_count DESC LIMIT :limit OFFSET :offset");
+    $stmt->bindValue(':limit', $per_page, PDO::PARAM_INT);
+    $stmt->bindValue(':offset', ($page - 1) * $per_page, PDO::PARAM_INT);
+    $stmt->execute();
 
     $bot_list = [];
-    while ($_scratch = $result->fetch(3)) {
-        [$bot, $count, $last_visit] = $_scratch;
-        unset($_scratch);
+    while ($row = $stmt->fetch()) {
         $bot_list[] = [
-            'name' => $bot,
-            'count' => $count,
-            'count_format' => !empty($count) ? nv_number_format($count) : 0,
-            'last_visit' => !empty($last_visit) ? nv_datetime_format($last_visit, 0, 0) : '',
-            'proc' => ceil(($count / $max) * 100)
+            'name' => $row['c_val'],
+            'count' => $row['c_count'],
+            'count_format' => !empty($row['c_count']) ? nv_number_format($row['c_count']) : 0,
+            'last_visit' => !empty($row['last_update']) ? nv_datetime_format($row['last_update'], 0, 0) : '',
+            'proc' => ceil(($row['c_count'] / $max) * 100)
         ];
     }
+    $stmt->closeCursor();
 
     $generate_page = nv_generate_page($base_url, $num_items, $per_page, $page);
 

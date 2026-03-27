@@ -26,11 +26,9 @@ if (!nv_function_exists('nv_block_counter')) {
         $sql = 'SELECT c_type, c_count FROM ' . NV_COUNTER_GLOBALTABLE . " WHERE (c_type='day' AND c_val='" . date('d', NV_CURRENTTIME) . "') OR (c_type='month' AND c_val='" . date('M', NV_CURRENTTIME) . "') OR (c_type='total' AND c_val='hits')";
         $query = $db->query($sql);
         $count_data = [];
-        while ($_scratch = $query->fetch(3)) {
-            [$c_type, $c_count] = $_scratch;
-            unset($_scratch);
-            $c_type == 'total' && $c_type = 'all';
-            $count_data[$c_type] = $c_count;
+        while ($row = $query->fetch()) {
+            $key = ($row['c_type'] == 'total') ? 'all' : $row['c_type'];
+            $count_data[$key] = $row['c_count'];
         }
 
         $sql = 'SELECT userid, username FROM ' . NV_SESSIONS_GLOBALTABLE . ' WHERE onl_time >= ' . (NV_CURRENTTIME - NV_ONLINE_UPD_TIME);

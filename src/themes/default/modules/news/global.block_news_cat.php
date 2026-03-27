@@ -36,13 +36,10 @@ if (!nv_function_exists('nv_block_news_cat')) {
 
         $catid = implode(',', $block_config['catid']);
 
-        $db->sqlreset()
-            ->select('id, catid, title, alias, homeimgfile, homeimgthumb, hometext, publtime, external_link')
-            ->from(NV_PREFIXLANG . '_' . $site_mods[$module]['module_data'] . '_rows')
-            ->where('status= 1 AND catid IN(' . $catid . ')')
-            ->order($order_articles_by . ' DESC')
-            ->limit($numrow);
-        $list = $nv_Cache->db($db->sql(), '', $module);
+        $catid_safe = implode(',', array_map('intval', $block_config['catid']));
+        $numrow = (int) ($block_config['numrow'] ?? 20);
+        $sql = 'SELECT id, catid, title, alias, homeimgfile, homeimgthumb, hometext, publtime, external_link FROM ' . NV_PREFIXLANG . '_' . $site_mods[$module]['module_data'] . "_rows WHERE status= 1 AND catid IN(" . $catid_safe . ') ORDER BY ' . $order_articles_by . ' DESC LIMIT ' . $numrow;
+        $list = $nv_Cache->db($sql, '', $module);
 
         if (empty($list)) {
             return '';

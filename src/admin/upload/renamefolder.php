@@ -81,35 +81,28 @@ if (rename(NV_ROOTDIR . '/' . $path, NV_ROOTDIR . '/' . $newpath)) {
         $dir_replace2 = NV_FILES_DIR . '/' . $m2[1] . '/';
     }
 
-    $sth = $db->prepare('SELECT did, dirname FROM ' . NV_UPLOAD_GLOBALTABLE . '_dir WHERE dirname = :path OR dirname LIKE :path_like');
-    $sth->bindValue(':path', $path, PDO::PARAM_STR);
-    $sth->bindValue(':path_like', $path . '/%', PDO::PARAM_STR);
-    $sth->execute();
+    $sth_file = $db->prepare("SELECT src, title FROM " . NV_UPLOAD_GLOBALTABLE . "_file WHERE did = :did AND type = 'image'");
+    $sth_up_file = $db->prepare('UPDATE ' . NV_UPLOAD_GLOBALTABLE . '_file SET src = :src2 WHERE did = :did AND title = :title');
+    $sth_up_dir = $db->prepare('UPDATE ' . NV_UPLOAD_GLOBALTABLE . '_dir SET dirname = :dirname2 WHERE did = :did');
+
     while ($_row_dir = $sth->fetch()) {
-        $did = $_row_dir['did'];
-        $dirname = $_row_dir['dirname'];
-        $dirname2 = str_replace(NV_ROOTDIR . '/' . $path, $newpath, NV_ROOTDIR . '/' . $dirname);
-        $sth_file = $db->prepare("SELECT src, title FROM " . NV_UPLOAD_GLOBALTABLE . "_file WHERE did = :did AND type = 'image'");
-        $sth_file->bindValue(':did', $did, PDO::PARAM_INT);
+        $dirname2 = str_replace(NV_ROOTDIR . '/' . $path, $newpath, NV_ROOTDIR . '/' . $_row_dir['dirname']);
+        $sth_file->bindValue(':did', $_row_dir['did'], PDO::PARAM_INT);
         $sth_file->execute();
         while ($_row_file = $sth_file->fetch()) {
-            $src = $_row_file['src'];
-            $title = $_row_file['title'];
             if ($action) {
-                $src2 = preg_replace('/^' . nv_preg_quote($dir_replace1) . '/', $dir_replace2, $src);
+                $src2 = preg_replace('/^' . nv_preg_quote($dir_replace1) . '/', $dir_replace2, $_row_file['src']);
             } else {
-                $src2 = preg_replace('/^' . nv_preg_quote($dirname) . '/', $dirname2, $src);
+                $src2 = preg_replace('/^' . nv_preg_quote($_row_dir['dirname']) . '/', $dirname2, $_row_file['src']);
             }
-            $sth_up = $db->prepare('UPDATE ' . NV_UPLOAD_GLOBALTABLE . '_file SET src = :src2 WHERE did = :did AND title = :title');
-            $sth_up->bindValue(':src2', $src2, PDO::PARAM_STR);
-            $sth_up->bindValue(':did', $did, PDO::PARAM_INT);
-            $sth_up->bindValue(':title', $title, PDO::PARAM_STR);
-            $sth_up->execute();
+            $sth_up_file->bindValue(':src2', $src2, PDO::PARAM_STR);
+            $sth_up_file->bindValue(':did', $_row_dir['did'], PDO::PARAM_INT);
+            $sth_up_file->bindValue(':title', $_row_file['title'], PDO::PARAM_STR);
+            $sth_up_file->execute();
         }
-        $sth_up = $db->prepare('UPDATE ' . NV_UPLOAD_GLOBALTABLE . '_dir SET dirname = :dirname2 WHERE did = :did');
-        $sth_up->bindValue(':dirname2', $dirname2, PDO::PARAM_STR);
-        $sth_up->bindValue(':did', $did, PDO::PARAM_INT);
-        $sth_up->execute();
+        $sth_up_dir->bindValue(':dirname2', $dirname2, PDO::PARAM_STR);
+        $sth_up_dir->bindValue(':did', $_row_dir['did'], PDO::PARAM_INT);
+        $sth_up_dir->execute();
     }
     nv_dirListRefreshSize();
     nv_insert_logs(NV_LANG_DATA, $module_name, $nv_Lang->getModule('renamefolder'), $path . ' -> ' . $newpath, $admin_info['userid']);

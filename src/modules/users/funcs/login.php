@@ -272,37 +272,36 @@ function new_openid_user_save($reg_username, $reg_email, $reg_password, $attribs
      * Neu dang ky moi va cho dang ky khong can kich hoat hoac kich hoat qua email (allowuserreg = 1, 2)
      */
     if ($global_config['allowuserreg'] == 1 or $global_config['allowuserreg'] == 2) {
-        $sql = 'INSERT INTO ' . NV_MOD_TABLE . ' (
+        $sql = "INSERT INTO " . NV_MOD_TABLE . " (
                 group_id, username, md5username, password, email, first_name, last_name, gender, photo, birthday, regdate,
                 question, answer, passlostkey, view_mail, remember, in_groups,
                 active, checknum, last_login, last_ip, last_agent, last_openid, idsite, email_verification_time, active_obj
             ) VALUES (
-                ' . ($global_users_config['active_group_newusers'] ? 7 : 4) . ',
-                :username,
-                :md5username,
-                :password,
-                :email,
-                :first_name,
-                :last_name,
-                :gender,
-                :photo,
-                0,
-                ' . NV_CURRENTTIME . ",
-                '', '', '', 0, 0, '" . ($global_users_config['active_group_newusers'] ? '7' : '') . "', 1, '', 0, '', '', '', " . (int) ($global_config['idsite']) . ',
-                -1, ' . $db->quote('OAUTH:' . $reg_attribs['server']) . '
-            )';
+                :group_id, :username, :md5username, :password, :email, :first_name, :last_name, :gender, :photo, 0, :regdate,
+                '', '', '', 0, 0, :in_groups, 1, '', 0, '', '', '', :idsite, -1, :active_obj
+            )";
 
-        $data_insert = [];
-        $data_insert['username'] = $reg_username;
-        $data_insert['md5username'] = nv_md5safe($reg_username);
-        $data_insert['password'] = $reg_password;
-        $data_insert['email'] = $reg_email;
-        $data_insert['first_name'] = $reg_attribs['first_name'];
-        $data_insert['last_name'] = $reg_attribs['last_name'];
-        $data_insert['gender'] = !empty($reg_attribs['gender']) ? ucfirst(substr($reg_attribs['gender'], 0, 1)) : 'N';
-        $data_insert['photo'] = $reg_attribs['photo'];
+        $group_id = ($global_users_config['active_group_newusers'] ? 7 : 4);
+        $in_groups = ($global_users_config['active_group_newusers'] ? '7' : '');
+        $gender = !empty($reg_attribs['gender']) ? ucfirst(substr($reg_attribs['gender'], 0, 1)) : 'N';
+        $active_obj = 'OAUTH:' . $reg_attribs['server'];
 
-        $userid = $db->insert_id($sql, 'userid', $data_insert);
+        $sth = $db->prepare($sql);
+        $sth->bindValue(':group_id', $group_id, PDO::PARAM_INT);
+        $sth->bindValue(':username', $reg_username, PDO::PARAM_STR);
+        $sth->bindValue(':md5username', nv_md5safe($reg_username), PDO::PARAM_STR);
+        $sth->bindValue(':password', $reg_password, PDO::PARAM_STR);
+        $sth->bindValue(':email', $reg_email, PDO::PARAM_STR);
+        $sth->bindValue(':first_name', $reg_attribs['first_name'], PDO::PARAM_STR);
+        $sth->bindValue(':last_name', $reg_attribs['last_name'], PDO::PARAM_STR);
+        $sth->bindValue(':gender', $gender, PDO::PARAM_STR);
+        $sth->bindValue(':photo', $reg_attribs['photo'], PDO::PARAM_STR);
+        $sth->bindValue(':regdate', NV_CURRENTTIME, PDO::PARAM_INT);
+        $sth->bindValue(':in_groups', $in_groups, PDO::PARAM_STR);
+        $sth->bindValue(':idsite', (int) $global_config['idsite'], PDO::PARAM_INT);
+        $sth->bindValue(':active_obj', $active_obj, PDO::PARAM_STR);
+        $sth->execute();
+        $userid = $db->lastInsertId();
 
         if (!$userid) {
             opidr_login([
@@ -413,7 +412,12 @@ function new_openid_user_save($reg_username, $reg_email, $reg_password, $attribs
         $data_insert['last_name'] = $reg_attribs['last_name'];
         $data_insert['users_info'] = json_encode($query_field, NV_JSON_ENCODE);
         $data_insert['openid_info'] = json_encode($reg_attribs, NV_JSON_ENCODE);
-        $userid = $db->insert_id($sql, 'userid', $data_insert);
+        $sth = $db->prepare($sql);
+        foreach ($data_insert as $key => $value) {
+            $sth->bindValue(':' . $key, $value, is_int($value) ? PDO::PARAM_INT : PDO::PARAM_STR);
+        }
+        $sth->execute();
+        $userid = $db->lastInsertId();
 
         if (!$userid) {
             opidr_login([
