@@ -53,14 +53,14 @@
                 </td>
                 <td class="text-nowrap" style="width:1%">
                     <!-- BEGIN: zalo_id --><button type="button" class="btn btn-block btn-sm<!-- BEGIN: view --> btn-primary" data-toggle="view_article" data-url="{ARTICLE.zalo_url}<!-- END: view -->">{ARTICLE.zalo_id}</button><!-- END: zalo_id -->
-                    <!-- BEGIN: get_zalo_id --><button type="button" class="btn btn-default btn-block btn-sm" data-toggle="get_zalo_id" data-id="{ARTICLE.id}">{LANG.get_zalo_id}</button><!-- END: get_zalo_id -->
+                    <!-- BEGIN: get_zalo_id --><button type="button" class="btn btn-default btn-block btn-sm" data-toggle="get_zalo_id" data-id="{ARTICLE.id}" data-checkss="{CHECKSS}">{LANG.get_zalo_id}</button><!-- END: get_zalo_id -->
                     <!-- BEGIN: not_defined -->{LANG.not_defined}<!-- END: not_defined -->
                 </td>
                 <td>{ARTICLE.title}</td>
                 <td class="text-nowrap text-center" style="width:1%">{ARTICLE.create_date_format}</td>
                 <td style="width:1%">
                     <!-- BEGIN: if_not_popup -->
-                    <select class="form-control" style="width: auto;" data-toggle="article_action_change" data-id="{ARTICLE.id}">
+                    <select class="form-control" style="width: auto;" data-toggle="article_action_change" data-id="{ARTICLE.id}" data-checkss="{CHECKSS}">
                         <option value=""></option>
                         <option value="edit">{GLANG.edit}</option>
                         <option value="sync">{LANG.sync}</option>
@@ -86,7 +86,7 @@
         </div>
         <div class="modal-body">{GET_ZALO_ID.note}</div>
         <div class="modal-footer">
-            <button type="button" class="btn btn-danger" data-toggle="get_zalo_id" data-id="{GET_ZALO_ID.id}">{LANG.get_zalo_id}</button>
+            <button type="button" class="btn btn-danger" data-toggle="get_zalo_id" data-id="{GET_ZALO_ID.id}" data-checkss="{CHECKSS}">{LANG.get_zalo_id}</button>
             <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
         </div>
         </div>
@@ -121,6 +121,7 @@
 </div>
 <!-- END: if_add -->
 <form class="row" method="POST" action="{FORM_ACTION}" data-toggle="article_form_submit" autocomplete="off" novalidate>
+    <input type="hidden" name="checkss" value="{CHECKSS}" />
     <div class="col-md-12">
         <table class="table table-striped table-bordered">
             <colgroup>

@@ -44,7 +44,7 @@
         <div class="panel-group" id="oa_actions" role="tablist" aria-multiselectable="true">
             <div class="panel panel-default">
                 <div class="panel-heading" role="tab">
-                    <h4 class="panel-title"><a href="#" role="button" data-toggle="oa_info_update">{LANG.oa_info_update}</a></h4>
+                    <h4 class="panel-title"><a href="#" role="button" data-toggle="oa_info_update" data-checkss="{CHECKSS}">{LANG.oa_info_update}</a></h4>
                 </div>
             </div>
             <div class="panel panel-default">
@@ -82,6 +82,7 @@
 
 <form id="oa-info-update" method="POST" action="{FORM_ACTION}">
     <input type="hidden" name="oa_info_update" value="1" />
+    <input type="hidden" name="checkss" value="{CHECKSS}" />
 </form>
 <!-- END: main -->
 
@@ -90,5 +91,6 @@
 <button type="button" class="btn btn-primary" data-toggle="oa_clear">{LANG.oa_clear}</button>
 <form id="oa-clear" method="POST" action="{FORM_ACTION}">
     <input type="hidden" name="oa_clear" value="1" />
+    <input type="hidden" name="checkss" value="{CHECKSS}" />
 </form>
 <!-- END: oa_clear -->

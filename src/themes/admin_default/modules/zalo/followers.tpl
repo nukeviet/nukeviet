@@ -14,7 +14,7 @@
     </div>
     <!-- END: isTags -->
     <div class="form-group">
-        <button type="button" class="btn btn-default" data-toggle="getfollowers" data-mess="{LANG.getfollowers_note}" data-url="{GETFOLLOWERS_LINK}">{LANG.getfollowers}</button>
+        <button type="button" class="btn btn-default" data-toggle="getfollowers" data-mess="{LANG.getfollowers_note}" data-url="{GETFOLLOWERS_LINK}" data-checkss="{CHECKSS}">{LANG.getfollowers}</button>
     </div>
 </div>
 <!-- BEGIN: isFollowers -->
@@ -38,7 +38,7 @@
                 <td class="text-nowrap text-right updatetime_format vertical-align-middle" style="width:5%">{FOLLOWER.updatetime_format}</td>
                 <td class="text-nowrap text-right vertical-align-middle" style="width:5%">
                     <a role="button" class="btn btn-primary" href="{FORM_ACTION}&amp;user_id={FOLLOWER.user_id}">{LANG.details}</a>
-                    <button type="button" class="btn btn-primary" data-toggle="follower_getprofile">{LANG.getprofile}</button>
+                    <button type="button" class="btn btn-primary" data-toggle="follower_getprofile" data-checkss="{CHECKSS}">{LANG.getprofile}</button>
                 </td>
             </tr>
             <!-- END: follower -->
@@ -105,7 +105,7 @@
             <div class="panel panel-default">
                 <div class="panel-heading" role="tab">
                     <h4 class="panel-title">
-                        <a role="button" data-toggle="follower_getprofile2" data-url="{FORM_ACTION}" data-user-id="{OTHER.user_id}">
+                        <a role="button" data-toggle="follower_getprofile2" data-url="{FORM_ACTION}" data-user-id="{OTHER.user_id}" data-checkss="{CHECKSS}">
                             {LANG.getprofile2}
                         </a>
                     </h4>
@@ -173,6 +173,7 @@
                                 <td colspan="2" class="text-center">
                                     <input type="hidden" name="change_profile" value="1" />
                                     <input type="hidden" name="user_id" value="{OTHER.user_id}" />
+                                    <input type="hidden" name="checkss" value="{CHECKSS}" />
                                     <button type="submit" class="btn btn-primary">{GLANG.submit}</button>
                                 </td>
                             </tr>
@@ -192,7 +193,7 @@
                 <div id="edit_ftags" class="panel-collapse collapse" role="tabpanel" aria-labelledby="edit_ftags_title" data-location="{LOCATION}&amp;action=edit_ftags">
                     <div class="panel-body">
                         <!-- BEGIN: follower_tag -->
-                        <span class="tag"><a class="view" href="{TAG_LINK}&amp;tag={FOLLOWER_TAG.alias}">{FOLLOWER_TAG.name}</a><a class="remove" href="{FORM_ACTION}" title="{LANG.click_to_remove}" data-toggle="remove_ftag" data-tag-alias="{FOLLOWER_TAG.alias}" data-user-id="{OTHER.user_id}"><span aria-hidden="true">&times;</span></a></span>
+                        <span class="tag"><a class="view" href="{TAG_LINK}&amp;tag={FOLLOWER_TAG.alias}">{FOLLOWER_TAG.name}</a><a class="remove" href="{FORM_ACTION}" title="{LANG.click_to_remove}" data-toggle="remove_ftag" data-tag-alias="{FOLLOWER_TAG.alias}" data-user-id="{OTHER.user_id}" data-checkss="{CHECKSS}"><span aria-hidden="true">&times;</span></a></span>
                         <!-- END: follower_tag -->
                         <!-- BEGIN: no_tags_assigned -->
                         <div class="text-center">{LANG.no_tags_assigned}</div>
@@ -214,6 +215,7 @@
                             <div class="col-xs-7">
                                 <input type="hidden" name="add_follower_tag" value="1" />
                                 <input type="hidden" name="user_id" value="{OTHER.user_id}" />
+                                <input type="hidden" name="checkss" value="{CHECKSS}" />
                                 <input type="submit" class="btn btn-primary btn-block" value="{LANG.add_follower_tag}" />
                             </div>
                         </form>
@@ -239,7 +241,7 @@
                     <div class="panel-footer">
                         <div class="row m-bottom">
                             <div class="col-xs-12">
-                                <button type="button" class="btn btn-primary" data-toggle="conversation_refresh" data-url="{CONVERSATION_LINK}" data-user-id="{OTHER.user_id}">{LANG.refresh}</button>
+                                <button type="button" class="btn btn-primary" data-toggle="conversation_refresh" data-url="{CONVERSATION_LINK}" data-user-id="{OTHER.user_id}" data-checkss="{CHECKSS}">{LANG.refresh}</button>
                             </div>
                             <div class="col-xs-12 text-right">
                                 <button type="button" class="btn btn-default" data-toggle="conversation_gobottom"><i class="fa fa-chevron-down"></i></button><button type="button" class="btn btn-default" data-toggle="conversation_gotop"><i class="fa fa-chevron-up"></i></button>
@@ -280,6 +282,7 @@
                                 <input type="hidden" name="user_id" value="{OTHER.user_id}"/>
                                 <input type="hidden" name="message_id" id="message_id" value=""/>
                                 <input type="hidden" name="send_text" value="1"/>
+                                <input type="hidden" name="checkss" value="{CHECKSS}"/>
                                 <button class="chat-send btn btn-primary" id="chat_submit" type="submit"><i class="fa fa-chevron-right fa-lg"></i></button>
                             </div>
                         </form>

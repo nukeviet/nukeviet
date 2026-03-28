@@ -17,6 +17,8 @@ if (!$myZalo->isValid()) {
     nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=settings');
 }
 
+$checkss = $nv_Request->get_string('checkss', 'post');
+
 $events = [
     'user_send_location' => ['user_orient_actions'],
     'user_send_image' => ['user_orient_actions'],
@@ -70,6 +72,12 @@ if ($nv_Request->isset_request('change_alias', 'post')) {
 
 // Luu tu khoa lenh
 if ($nv_Request->isset_request('command_keywords,keyword,action,parameter', 'post')) {
+    if (!csrf_check($checkss, $csrf_key)) {
+        nv_jsonOutput([
+            'status' => 'error',
+            'mess' => $nv_Lang->getGlobal('error_checkss')
+        ]);
+    }
     $title = $nv_Request->get_typed_array('title', 'post', 'title', []);
     $keyword = $nv_Request->get_typed_array('keyword', 'post', 'title', []);
     $action = $nv_Request->get_typed_array('action', 'post', 'title', []);
@@ -85,6 +93,12 @@ if ($nv_Request->isset_request('command_keywords,keyword,action,parameter', 'pos
 
 // Luu zalo_events
 if ($nv_Request->isset_request('zalo_events,action,parameter', 'post')) {
+    if (!csrf_check($checkss, $csrf_key)) {
+        nv_jsonOutput([
+            'status' => 'error',
+            'mess' => $nv_Lang->getGlobal('error_checkss')
+        ]);
+    }
     $action = $nv_Request->get_typed_array('action', 'post', 'title', []);
     $parameter = $nv_Request->get_typed_array('parameter', 'post', 'title', []);
 
@@ -111,6 +125,7 @@ $xtpl = new XTemplate('chatbot.tpl', NV_ROOTDIR . '/themes/' . $global_config['m
 
 $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
 $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
+$xtpl->assign('CHECKSS', csrf_create($csrf_key));
 $xtpl->assign('DATA', $global_config);
 $xtpl->assign('PAGE_LINK', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op);
 $xtpl->assign('TAB_ACTIVE', $tab);

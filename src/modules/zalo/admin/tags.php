@@ -17,11 +17,19 @@ if (!$myZalo->isValid()) {
     nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=settings');
 }
 
+$checkss = $nv_Request->get_string('checkss', 'post');
+
 $page_title = $nv_Lang->getModule('tags');
 $tags = get_tags(); // Danh sach cac tag
 
 // Sua ten nhan
 if ($nv_Request->isset_request('edit', 'get') and $nv_Request->isset_request('alias,new_name', 'post')) {
+    if (!csrf_check($checkss, $csrf_key)) {
+        nv_jsonOutput([
+            'status' => 'error',
+            'mess' => $nv_Lang->getGlobal('error_checkss')
+        ]);
+    }
     $tag_alias = $nv_Request->get_title('alias', 'post', '');
     if (empty($tag_alias)) {
         nv_jsonOutput([
@@ -55,6 +63,12 @@ if ($nv_Request->isset_request('edit', 'get') and $nv_Request->isset_request('al
 
 // Xóa nhãn
 if ($nv_Request->isset_request('delete_tag,tag_alias', 'post')) {
+    if (!csrf_check($checkss, $csrf_key)) {
+        nv_jsonOutput([
+            'status' => 'error',
+            'mess' => $nv_Lang->getGlobal('error_checkss')
+        ]);
+    }
     $tag_alias = $nv_Request->get_title('tag_alias', 'post', '');
     if (empty($tag_alias)) {
         nv_jsonOutput([
@@ -92,6 +106,12 @@ if ($nv_Request->isset_request('delete_tag,tag_alias', 'post')) {
 
 // Thêm nhãn
 if ($nv_Request->isset_request('add_tag,new_tag', 'post')) {
+    if (!csrf_check($checkss, $csrf_key)) {
+        nv_jsonOutput([
+            'status' => 'error',
+            'mess' => $nv_Lang->getGlobal('error_checkss')
+        ]);
+    }
     $new_tag = $nv_Request->get_title('new_tag', 'post', '');
     if (empty($new_tag)) {
         nv_jsonOutput([
@@ -129,6 +149,7 @@ if ($nv_Request->isset_request('add_tag,new_tag', 'post')) {
 $xtpl = new XTemplate('tags.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
 $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
 $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
+$xtpl->assign('CHECKSS', csrf_create($csrf_key));
 $xtpl->assign('FORM_ACTION', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=tags');
 $xtpl->assign('TAG_LINK', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=followers');
 $xtpl->assign('EDIT_LINK', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=tags&amp;edit=1');

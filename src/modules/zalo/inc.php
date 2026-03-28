@@ -32,6 +32,7 @@ while ($row = $result->fetch()) {
         $module_configs[$row['type']][$row['skey']] = $row['svalue'];
     }
 }
+$result->closeCursor();
 
 /**
  * Xác định mã gọi + số điện thoại
@@ -209,16 +210,16 @@ function webhook_handle($data)
         }
 
         $sth->bindValue(':message_id', $contents['message_id'], PDO::PARAM_STR);
-        $sth->bindParam(':user_id', $user_id, PDO::PARAM_STR);
-        $sth->bindParam(':src', $src, PDO::PARAM_INT);
-        $sth->bindParam(':time', $contents['time'], PDO::PARAM_INT);
-        $sth->bindParam(':type', $contents['type'], PDO::PARAM_STR);
-        $sth->bindParam(':message', $contents['message'], PDO::PARAM_STR);
-        $sth->bindParam(':links', $contents['links'], PDO::PARAM_STR);
-        $sth->bindParam(':thumb', $contents['thumb'], PDO::PARAM_STR);
-        $sth->bindParam(':url', $contents['url'], PDO::PARAM_STR);
-        $sth->bindParam(':description', $contents['description'], PDO::PARAM_STR);
-        $sth->bindParam(':location', $contents['location'], PDO::PARAM_STR);
+        $sth->bindValue(':user_id', $user_id, PDO::PARAM_STR);
+        $sth->bindValue(':src', $src, PDO::PARAM_INT);
+        $sth->bindValue(':time', $contents['time'], PDO::PARAM_INT);
+        $sth->bindValue(':type', $contents['type'], PDO::PARAM_STR);
+        $sth->bindValue(':message', $contents['message'], PDO::PARAM_STR);
+        $sth->bindValue(':links', $contents['links'], PDO::PARAM_STR);
+        $sth->bindValue(':thumb', $contents['thumb'], PDO::PARAM_STR);
+        $sth->bindValue(':url', $contents['url'], PDO::PARAM_STR);
+        $sth->bindValue(':description', $contents['description'], PDO::PARAM_STR);
+        $sth->bindValue(':location', $contents['location'], PDO::PARAM_STR);
         $sth->execute();
     } elseif ($data['event_name'] == 'follow' or $data['event_name'] == 'unfollow') {
         $isfollow = $data['event_name'] == 'follow' ? 1 : 0;
@@ -288,8 +289,8 @@ function accessTokenUpdate($result)
 
     $sth = $db->prepare('UPDATE ' . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = 'sys' AND module = 'site' AND config_name = :config_name");
     foreach ($array_config_site as $config_name => $config_value) {
-        $sth->bindParam(':config_name', $config_name, PDO::PARAM_STR, 30);
-        $sth->bindParam(':config_value', $config_value, PDO::PARAM_STR);
+        $sth->bindValue(':config_name', $config_name, PDO::PARAM_STR);
+        $sth->bindValue(':config_value', $config_value, PDO::PARAM_STR);
         $sth->execute();
     }
 
@@ -315,14 +316,21 @@ function save_conversation($user_id, $message_id, $note)
         (:message_id, :user_id, 0, ' . NV_CURRENTTIME . ", '', '', '', :note)");
 
         $sth->bindValue(':message_id', $message_id, PDO::PARAM_STR);
-        $sth->bindParam(':user_id', $user_id, PDO::PARAM_STR);
-        $sth->bindParam(':note', $note, PDO::PARAM_STR);
+        $sth->bindValue(':user_id', $user_id, PDO::PARAM_STR);
+        $sth->bindValue(':note', $note, PDO::PARAM_STR);
         $sth->execute();
     }
 
-    $oldtime = $db->query('SELECT time FROM ' . NV_MOD_TABLE . '_conversation WHERE user_id = ' . $db->quote($user_id) . ' ORDER BY time DESC LIMIT 100, 1')->fetchColumn();
+    $stmt = $db->prepare('SELECT time FROM ' . NV_MOD_TABLE . '_conversation WHERE user_id = :user_id ORDER BY time DESC LIMIT 100, 1');
+    $stmt->bindValue(':user_id', $user_id, PDO::PARAM_STR);
+    $stmt->execute();
+    $oldtime = $stmt->fetchColumn();
+
     if (!empty($oldtime)) {
-        $db->query('DELETE FROM ' . NV_MOD_TABLE . '_conversation WHERE user_id = ' . $db->quote($user_id) . ' AND time <= ' . $oldtime);
+        $stmt_delete = $db->prepare('DELETE FROM ' . NV_MOD_TABLE . '_conversation WHERE user_id = :user_id AND time <= :time');
+        $stmt_delete->bindValue(':user_id', $user_id, PDO::PARAM_STR);
+        $stmt_delete->bindValue(':time', $oldtime, PDO::PARAM_INT);
+        $stmt_delete->execute();
     }
 }
 
@@ -392,24 +400,31 @@ function last_conversation_update($accesstoken, $user_id)
 
             if (!empty($new['message_id'])) {
                 $sth->bindValue(':message_id', $new['message_id'], PDO::PARAM_STR);
-                $sth->bindParam(':user_id', $user_id, PDO::PARAM_STR);
-                $sth->bindParam(':src', $content['src'], PDO::PARAM_INT);
-                $sth->bindParam(':time', $content['time'], PDO::PARAM_INT);
-                $sth->bindParam(':type', $content['type'], PDO::PARAM_STR);
-                $sth->bindParam(':message', $content['message'], PDO::PARAM_STR);
-                $sth->bindParam(':links', $content['links'], PDO::PARAM_STR);
-                $sth->bindParam(':thumb', $content['thumb'], PDO::PARAM_STR);
-                $sth->bindParam(':url', $content['url'], PDO::PARAM_STR);
-                $sth->bindParam(':description', $content['description'], PDO::PARAM_STR);
-                $sth->bindParam(':location', $content['location'], PDO::PARAM_STR);
+                $sth->bindValue(':user_id', $user_id, PDO::PARAM_STR);
+                $sth->bindValue(':src', $content['src'], PDO::PARAM_INT);
+                $sth->bindValue(':time', $content['time'], PDO::PARAM_INT);
+                $sth->bindValue(':type', $content['type'], PDO::PARAM_STR);
+                $sth->bindValue(':message', $content['message'], PDO::PARAM_STR);
+                $sth->bindValue(':links', $content['links'], PDO::PARAM_STR);
+                $sth->bindValue(':thumb', $content['thumb'], PDO::PARAM_STR);
+                $sth->bindValue(':url', $content['url'], PDO::PARAM_STR);
+                $sth->bindValue(':description', $content['description'], PDO::PARAM_STR);
+                $sth->bindValue(':location', $content['location'], PDO::PARAM_STR);
                 $sth->execute();
                 $isUpdated = true;
             }
         }
         if ($isUpdated) {
-            $oldtime = $db->query('SELECT time FROM ' . NV_MOD_TABLE . '_conversation WHERE user_id = ' . $db->quote($user_id) . ' ORDER BY time DESC LIMIT 100, 1')->fetchColumn();
+            $stmt = $db->prepare('SELECT time FROM ' . NV_MOD_TABLE . '_conversation WHERE user_id = :user_id ORDER BY time DESC LIMIT 100, 1');
+            $stmt->bindValue(':user_id', $user_id, PDO::PARAM_STR);
+            $stmt->execute();
+            $oldtime = $stmt->fetchColumn();
+
             if (!empty($oldtime)) {
-                $db->query('DELETE FROM ' . NV_MOD_TABLE . '_conversation WHERE user_id = ' . $db->quote($user_id) . ' AND time <= ' . $oldtime);
+                $stmt_delete = $db->prepare('DELETE FROM ' . NV_MOD_TABLE . '_conversation WHERE user_id = :user_id AND time <= :time');
+                $stmt_delete->bindValue(':user_id', $user_id, PDO::PARAM_STR);
+                $stmt_delete->bindValue(':time', $oldtime, PDO::PARAM_INT);
+                $stmt_delete->execute();
             }
         }
     }
@@ -430,9 +445,11 @@ function sent_text_message($template_id, $user_id, $message_id)
 {
     global $db, $global_config;
 
-    $sql = 'SELECT * FROM ' . NV_MOD_TABLE . '_template WHERE id=' . $template_id . " AND type='plaintext'";
-    $result = $db->query($sql);
-    $row = $result->fetch();
+    $stmt = $db->prepare('SELECT * FROM ' . NV_MOD_TABLE . "_template WHERE id = :id AND type = 'plaintext'");
+    $stmt->bindValue(':id', $template_id, PDO::PARAM_INT);
+    $stmt->execute();
+    $row = $stmt->fetch();
+    $stmt->closeCursor();
     if (!$row) {
         return false;
     }
@@ -471,9 +488,11 @@ function sent_image_message($fileid, $user_id, $message_id)
 {
     global $db, $global_config;
 
-    $sql = 'SELECT * FROM ' . NV_MOD_TABLE . '_upload WHERE id=' . $fileid . " AND type='image'";
-    $result = $db->query($sql);
-    $row = $result->fetch();
+    $stmt = $db->prepare('SELECT * FROM ' . NV_MOD_TABLE . "_upload WHERE id = :id AND type = 'image'");
+    $stmt->bindValue(':id', $fileid, PDO::PARAM_INT);
+    $stmt->execute();
+    $row = $stmt->fetch();
+    $stmt->closeCursor();
     if (!$row) {
         return false;
     }
@@ -510,9 +529,11 @@ function sent_file_message($fileid, $user_id, $message_id)
 {
     global $db, $global_config;
 
-    $sql = 'SELECT * FROM ' . NV_MOD_TABLE . '_upload WHERE id=' . $fileid . " AND type='file'";
-    $result = $db->query($sql);
-    $row = $result->fetch();
+    $stmt = $db->prepare('SELECT * FROM ' . NV_MOD_TABLE . "_upload WHERE id = :id AND type = 'file'");
+    $stmt->bindValue(':id', $fileid, PDO::PARAM_INT);
+    $stmt->execute();
+    $row = $stmt->fetch();
+    $stmt->closeCursor();
     if (!$row) {
         return false;
     }

@@ -17,6 +17,8 @@ if (!$myZalo->isValid()) {
     nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=settings');
 }
 
+$checkss = $nv_Request->get_string('checkss', 'post');
+
 $types = [
     'image' => $nv_Lang->getModule('type_image'),
     'gif' => $nv_Lang->getModule('type_gif'),
@@ -104,6 +106,12 @@ if ($nv_Request->isset_request('file_desc_change', 'get') and $nv_Request->isset
 
 // Xoa file
 if ($nv_Request->isset_request('file_delete,id', 'post')) {
+    if (!csrf_check($checkss, $csrf_key)) {
+        nv_jsonOutput([
+            'status' => 'error',
+            'mess' => $nv_Lang->getGlobal('error_checkss')
+        ]);
+    }
     $id = $nv_Request->get_int('id', 'post', 0);
     if (empty($id)) {
         nv_jsonOutput([
@@ -122,6 +130,12 @@ if ($nv_Request->isset_request('file_delete,id', 'post')) {
 
 // Gia han
 if ($nv_Request->isset_request('renewal,id', 'post')) {
+    if (!csrf_check($checkss, $csrf_key)) {
+        nv_jsonOutput([
+            'status' => 'error',
+            'mess' => $nv_Lang->getGlobal('error_checkss')
+        ]);
+    }
     $id = $nv_Request->get_int('id', 'post', 0);
     if (empty($id)) {
         nv_jsonOutput([
@@ -162,6 +176,12 @@ if ($nv_Request->isset_request('renewal,id', 'post')) {
 
 // Upload len Zalo
 if ($nv_Request->isset_request('zalo_upload', 'get')) {
+    if (!csrf_check($checkss, $csrf_key)) {
+        nv_jsonOutput([
+            'status' => 'error',
+            'mess' => $nv_Lang->getGlobal('error_checkss')
+        ]);
+    }
     $type = $nv_Request->get_title('type', 'post', '');
     $description = $nv_Request->get_title('description', 'post', '');
     $description = nv_nl2br($description, ' ');
@@ -299,6 +319,7 @@ if (!empty($type)) {
 $xtpl = new XTemplate('upload.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
 $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
 $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
+$xtpl->assign('CHECKSS', csrf_create($csrf_key));
 $xtpl->assign('FORM_ACTION', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=upload');
 $xtpl->assign('FORM_UPLOAD_ACTION', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=upload&zalo_upload=1');
 

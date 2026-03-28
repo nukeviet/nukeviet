@@ -28,6 +28,7 @@
                         <tr>
                             <td colspan="3">
                                 <input type="hidden" name="zalo_events" value="1">
+                                <input type="hidden" name="checkss" value="{CHECKSS}">
                                 <button type="submit" class="btn btn-primary">{GLANG.save}</button>
                             </td>
                         </tr>
@@ -83,6 +84,7 @@
                             <tr>
                                 <td colspan="3">
                                     <input type="hidden" name="command_keywords" value="1">
+                                    <input type="hidden" name="checkss" value="{CHECKSS}">
                                     <button type="submit" class="btn btn-primary">{GLANG.save}</button>
                                 </td>
                             </tr>

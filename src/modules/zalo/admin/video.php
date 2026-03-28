@@ -17,6 +17,8 @@ if (!$myZalo->isValid()) {
     nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=settings');
 }
 
+$checkss = $nv_Request->get_string('checkss', 'post');
+
 $base_url = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=video';
 $popup = $nv_Request->get_bool('popup', 'get', false);
 $idfield = $nv_Request->get_title('idfield', 'get', '');
@@ -37,6 +39,12 @@ if (!empty($thumbfield)) {
 
 // Sua thong tin video
 if ($nv_Request->isset_request('edit,id,view,thumb,description', 'post')) {
+    if (!csrf_check($checkss, $csrf_key)) {
+        nv_jsonOutput([
+            'status' => 'error',
+            'mess' => $nv_Lang->getGlobal('error_checkss')
+        ]);
+    }
     $id = $nv_Request->get_int('id', 'post', 0);
     $view = $nv_Request->get_title('view', 'post', 'horizontal');
     $thumb = $nv_Request->get_title('thumb', 'post', '');
@@ -77,6 +85,12 @@ if ($nv_Request->isset_request('edit,id,view,thumb,description', 'post')) {
 
 // Xoa video
 if ($nv_Request->isset_request('file_delete,id', 'post')) {
+    if (!csrf_check($checkss, $csrf_key)) {
+        nv_jsonOutput([
+            'status' => 'error',
+            'mess' => $nv_Lang->getGlobal('error_checkss')
+        ]);
+    }
     $id = $nv_Request->get_int('id', 'post', 0);
     if (empty($id)) {
         nv_jsonOutput([
@@ -95,6 +109,12 @@ if ($nv_Request->isset_request('file_delete,id', 'post')) {
 
 // Kiem tra trang thai video
 if ($nv_Request->isset_request('check,id', 'post')) {
+    if (!csrf_check($checkss, $csrf_key)) {
+        nv_jsonOutput([
+            'status' => 'error',
+            'mess' => $nv_Lang->getGlobal('error_checkss')
+        ]);
+    }
     $id = $nv_Request->get_int('id', 'post', 0);
     if (empty($id)) {
         nv_jsonOutput([
@@ -132,6 +152,12 @@ if ($nv_Request->isset_request('check,id', 'post')) {
 
 // Them video
 if ($nv_Request->isset_request('add', 'post')) {
+    if (!csrf_check($checkss, $csrf_key)) {
+        nv_jsonOutput([
+            'status' => 'error',
+            'mess' => $nv_Lang->getGlobal('error_checkss')
+        ]);
+    }
     $token = $nv_Request->get_string('token', 'post', '');
     $video_name = $nv_Request->get_title('filename', 'post', '');
     $description = $nv_Request->get_title('description', 'post', '');
@@ -222,6 +248,7 @@ $page_title = $nv_Lang->getModule('video');
 $xtpl = new XTemplate('video.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
 $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
 $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
+$xtpl->assign('CHECKSS', csrf_create($csrf_key));
 $xtpl->assign('FORM_ACTION', $base_url);
 $xtpl->assign('ZALO_URL', $myZalo::VIDEOUPLOAD_URL);
 $xtpl->assign('DEL_LINK', $base_url);

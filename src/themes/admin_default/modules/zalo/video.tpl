@@ -27,12 +27,12 @@
                     <td>{FILE.video_name}<br/>({FILE.description})<br/>{LANG.video_view}: {FILE.view_format}<br/>{LANG.file_size}: {FILE.size_format}</td>
                     <td class="text-nowrap text-center" style="width:1%">
                         <div class="m-bottom">{FILE.status_message}</div>
-                        <!-- BEGIN: status_check --><button type="button" class="btn btn-danger btn-block btn-sm" data-toggle="video_check" data-url="{FORM_ACTION}" data-id="{FILE.id}">{LANG.status_check}</button><!-- END: status_check -->
+                        <!-- BEGIN: status_check --><button type="button" class="btn btn-danger btn-block btn-sm" data-toggle="video_check" data-url="{FORM_ACTION}" data-id="{FILE.id}" data-checkss="{CHECKSS}">{LANG.status_check}</button><!-- END: status_check -->
                     </td>
                     <td class="text-nowrap text-center" style="width:1%">
                         <div class="m-bottom">
                             <button type="button" class="btn btn-default btn-sm" data-toggle="video_edit_btn" data-id="{FILE.id}" data-view="{FILE.view}" data-thumb="{FILE.thumb}" data-description="{FILE.description}">{GLANG.edit}</button>
-                            <button type="button" class="btn btn-default btn-sm" data-toggle="file_delete" data-confirm="{LANG.delete_confirm}" data-url="{FORM_ACTION}" data-id="{FILE.id}">{LANG.delete}</button>
+                            <button type="button" class="btn btn-default btn-sm" data-toggle="file_delete" data-confirm="{LANG.delete_confirm}" data-url="{FORM_ACTION}" data-id="{FILE.id}" data-checkss="{CHECKSS}">{LANG.delete}</button>
                         </div>
                         <!-- BEGIN: select --><div class="text-right"><button type="button" class="btn btn-primary btn-sm select-zalo-file" data-toggle="select_zalo_video" data-video-id="{FILE.video_id}" data-view="{FILE.view}" data-thumb="{FILE.thumb}"{FILE.disabled}>{LANG.file_select}</button></div><!-- END: select -->
                     </td>
@@ -51,7 +51,7 @@
       </div>
       <div class="modal-body">{STATUS_CHECK.note}</div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-danger" data-toggle="video_check" data-url="{FORM_ACTION}" data-id="{STATUS_CHECK.id}">{LANG.status_check}</button>
+        <button type="button" class="btn btn-danger" data-toggle="video_check" data-url="{FORM_ACTION}" data-id="{STATUS_CHECK.id}" data-checkss="{CHECKSS}">{LANG.status_check}</button>
         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
       </div>
     </div>
@@ -69,6 +69,7 @@ $(function() {
     <div class="row">
         <div class="col-sm-12">
             <form method="POST" action="{FORM_ACTION}" enctype="multipart/form-data" data-toggle="zalo_video" data-url="{ZALO_URL}">
+                <input type="hidden" name="checkss" value="{CHECKSS}" />
                 <div class="panel panel-primary">
                     <div class="panel-heading">{LANG.video_add}</div>
                     <table class="table table-striped table-bordered">
@@ -141,6 +142,7 @@ $(function() {
                 <form method="POST" action="{FORM_ACTION}" data-toggle="video_edit">
                     <input type="hidden" name="edit" value="1" />
                     <input type="hidden" name="id" value="" />
+                    <input type="hidden" name="checkss" value="{CHECKSS}" />
                     <table class="table table-striped table-bordered">
                         <tbody>
                             <tr>

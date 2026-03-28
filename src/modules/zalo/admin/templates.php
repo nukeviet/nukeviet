@@ -17,6 +17,8 @@ if (!$myZalo->isValid()) {
     nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=settings');
 }
 
+$checkss = $nv_Request->get_string('checkss', 'post');
+
 $templates = [
     'plaintext' => $nv_Lang->getModule('plaintext'),
     'request' => $nv_Lang->getModule('info_request')
@@ -96,6 +98,12 @@ $page_url = $base_url;
 if ($type == 'plaintext') {
     // Xóa mẫu
     if ($nv_Request->isset_request('delete,id', 'post')) {
+        if (!csrf_check($checkss, $csrf_key)) {
+            nv_jsonOutput([
+                'status' => 'error',
+                'mess' => $nv_Lang->getGlobal('error_checkss')
+            ]);
+        }
         $id = $nv_Request->get_int('id', 'post', 0);
         if (empty($id)) {
             nv_jsonOutput([
@@ -159,6 +167,12 @@ if ($type == 'plaintext') {
         }
 
         if ($is_save) {
+            if (!csrf_check($checkss, $csrf_key)) {
+                nv_jsonOutput([
+                    'status' => 'error',
+                    'mess' => $nv_Lang->getGlobal('error_checkss')
+                ]);
+            }
             $title = $nv_Request->get_title('title', 'post', '');
             $content = $nv_Request->get_title('content', 'post', '');
             $content = nv_nl2br($content, '<br/>');
@@ -197,6 +211,7 @@ if ($type == 'plaintext') {
         $xtpl = new XTemplate('plaintext.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
         $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
         $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
+        $xtpl->assign('CHECKSS', csrf_create($csrf_key));
         $xtpl->assign('LIST_LINK', $base_url);
         $xtpl->assign('ADD_LINK', $base_url . '&amp;add=1');
         $xtpl->assign('FORM_ACTION', $form_action);
@@ -305,6 +320,12 @@ elseif ($type == 'request') {
     }
 
     if ($action == 'delete') {
+        if (!csrf_check($checkss, $csrf_key)) {
+            nv_jsonOutput([
+                'status' => 'error',
+                'mess' => $nv_Lang->getGlobal('error_checkss')
+            ]);
+        }
         template_delete($id);
 
         nv_jsonOutput([
@@ -314,6 +335,12 @@ elseif ($type == 'request') {
     }
 
     if ($action == 'add' or $action == 'update') {
+        if (!csrf_check($checkss, $csrf_key)) {
+            nv_jsonOutput([
+                'status' => 'error',
+                'mess' => $nv_Lang->getGlobal('error_checkss')
+            ]);
+        }
         $image_url = $nv_Request->get_string('image_url', 'post', '');
         if (empty($image_url)) {
             nv_jsonOutput([

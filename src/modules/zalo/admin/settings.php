@@ -68,6 +68,13 @@ if ($nv_Request->get_string('func', 'get', '') == 'accesstoken' and $nv_Request-
 }
 
 if ($nv_Request->isset_request('callingcodesSave', 'post')) {
+    if (!csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
+        nv_jsonOutput([
+            'status' => 'error',
+            'mess' => $nv_Lang->getGlobal('error_checkss')
+        ]);
+    }
+
     $callingcodes = [];
     $db_callingcodes2 = [];
 
@@ -116,6 +123,13 @@ if ($nv_Request->isset_request('callingcodesSave', 'post')) {
 }
 
 if ($nv_Request->isset_request('vnsubdivisionsSave, parent', 'post')) {
+    if (!csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
+        nv_jsonOutput([
+            'status' => 'error',
+            'mess' => $nv_Lang->getGlobal('error_checkss')
+        ]);
+    }
+
     require_once NV_ROOTDIR . '/' . NV_DATADIR . '/vnsubdivisions.php';
     $db_provinces = $provinces;
     $db_districts = $districts;
@@ -230,16 +244,19 @@ if ($nv_Request->isset_request('callingcodesLoad', 'post')) {
     exit;
 }
 
-$checkss = md5(NV_CHECK_SESSION . '_' . $module_name . '_' . $op . '_' . $admin_info['userid']);
 $errormess = '';
 $array_config_site = [];
+$checkss = $nv_Request->get_string('checkss', 'post');
 
-if ($checkss == $nv_Request->get_string('checkss', 'post') and $nv_Request->get_string('func', 'post', '') == 'webhook') {
+if ($nv_Request->isset_request('func', 'post') and $nv_Request->get_string('func', 'post', '') == 'webhook') {
+    if (!csrf_check($checkss, $csrf_key)) {
+        nv_info_die($nv_Lang->getGlobal('error_page_title'), $nv_Lang->getGlobal('error_checkss'), $nv_Lang->getGlobal('error_checkss'));
+    }
     $array_config_site['zaloOASecretKey'] = $nv_Request->get_title('zaloOASecretKey', 'post', '');
     $sth = $db->prepare('UPDATE ' . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = 'sys' AND module = 'site' AND config_name = :config_name");
     foreach ($array_config_site as $config_name => $config_value) {
-        $sth->bindParam(':config_name', $config_name, PDO::PARAM_STR, 30);
-        $sth->bindParam(':config_value', $config_value, PDO::PARAM_STR);
+        $sth->bindValue(':config_name', $config_name, PDO::PARAM_STR);
+        $sth->bindValue(':config_value', $config_value, PDO::PARAM_STR);
         $sth->execute();
     }
 
@@ -249,7 +266,13 @@ if ($checkss == $nv_Request->get_string('checkss', 'post') and $nv_Request->get_
     }
 }
 
-if ($checkss == $nv_Request->get_string('checkss', 'post') and $nv_Request->get_string('func', 'post', '') == 'access_token_copy') {
+if ($nv_Request->isset_request('func', 'post') and $nv_Request->get_string('func', 'post', '') == 'access_token_copy') {
+    if (!csrf_check($checkss, $csrf_key)) {
+        nv_jsonOutput([
+            'status' => 'error',
+            'mess' => $nv_Lang->getGlobal('error_checkss')
+        ]);
+    }
     $result = [
         'access_token' => $nv_Request->get_title('new_access_token', 'post', ''),
         'refresh_token' => $nv_Request->get_title('new_refresh_token', 'post', '')
@@ -263,7 +286,13 @@ if ($checkss == $nv_Request->get_string('checkss', 'post') and $nv_Request->get_
     ]);
 }
 
-if ($checkss == $nv_Request->get_string('checkss', 'post') and $nv_Request->get_string('func', 'post', '') == 'webhookIPs') {
+if ($nv_Request->isset_request('func', 'post') and $nv_Request->get_string('func', 'post', '') == 'webhookIPs') {
+    if (!csrf_check($checkss, $csrf_key)) {
+        nv_jsonOutput([
+            'status' => 'error',
+            'mess' => $nv_Lang->getGlobal('error_checkss')
+        ]);
+    }
     $zaloWebhookIPs = $nv_Request->get_textarea('zaloWebhookIPs', 'post', '');
     $zaloWebhookIPs = !empty($zaloWebhookIPs) ? array_map('trim', explode("\n", $zaloWebhookIPs)) : [];
     if (!empty($zaloWebhookIPs)) {
@@ -277,7 +306,7 @@ if ($checkss == $nv_Request->get_string('checkss', 'post') and $nv_Request->get_
     }
 
     $sth = $db->prepare('UPDATE ' . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = 'sys' AND module = 'global' AND config_name = 'zaloWebhookIPs'");
-    $sth->bindParam(':config_value', $zaloWebhookIPs, PDO::PARAM_STR);
+    $sth->bindValue(':config_value', $zaloWebhookIPs, PDO::PARAM_STR);
     $sth->execute();
 
     nv_save_file_config_global();
@@ -287,7 +316,13 @@ if ($checkss == $nv_Request->get_string('checkss', 'post') and $nv_Request->get_
     ]);
 }
 
-if ($checkss == $nv_Request->get_string('checkss', 'post') and $nv_Request->get_string('func', 'post', '') == 'zalowebhook_ip_update') {
+if ($nv_Request->isset_request('func', 'post') and $nv_Request->get_string('func', 'post', '') == 'zalowebhook_ip_update') {
+    if (!csrf_check($checkss, $csrf_key)) {
+        nv_jsonOutput([
+            'status' => 'error',
+            'mess' => $nv_Lang->getGlobal('error_checkss')
+        ]);
+    }
     $_long = nv_scandir(NV_ROOTDIR . '/' . NV_LOGS_DIR . '/zalo_logs', '/^[0-9]+\.' . nv_preg_quote(NV_LOGS_EXT) . '$/');
     if (!empty($_long)) {
         foreach ($_long as $l) {
@@ -303,7 +338,7 @@ if ($checkss == $nv_Request->get_string('checkss', 'post') and $nv_Request->get_
     }
 
     $sth = $db->prepare('UPDATE ' . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = 'sys' AND module = 'global' AND config_name = 'zaloWebhookIPs'");
-    $sth->bindParam(':config_value', $zaloWebhookIPs, PDO::PARAM_STR);
+    $sth->bindValue(':config_value', $zaloWebhookIPs, PDO::PARAM_STR);
     $sth->execute();
 
     nv_save_file_config_global();
@@ -313,17 +348,26 @@ if ($checkss == $nv_Request->get_string('checkss', 'post') and $nv_Request->get_
     ]);
 }
 
-if ($checkss == $nv_Request->get_string('checkss', 'post') and $nv_Request->get_string('func', 'post', '') == 'check_zaloip') {
+if ($nv_Request->isset_request('func', 'post') and $nv_Request->get_string('func', 'post', '') == 'check_zaloip') {
+    if (!csrf_check($checkss, $csrf_key)) {
+        nv_jsonOutput([
+            'status' => 'error',
+            'mess' => $nv_Lang->getGlobal('error_checkss')
+        ]);
+    }
     $expired = NV_CURRENTTIME + 600;
     $sth = $db->prepare('UPDATE ' . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = 'sys' AND module = 'global' AND config_name = 'check_zaloip_expired'");
-    $sth->bindParam(':config_value', $expired, PDO::PARAM_STR);
+    $sth->bindValue(':config_value', $expired, PDO::PARAM_STR);
     $sth->execute();
     nv_save_file_config_global();
     echo 'OK';
     exit();
 }
 
-if ($checkss == $nv_Request->get_string('checkss', 'post') and $nv_Request->get_string('func', 'post', '') == 'settings') {
+if ($nv_Request->isset_request('func', 'post') and $nv_Request->get_string('func', 'post', '') == 'settings') {
+    if (!csrf_check($checkss, $csrf_key)) {
+        nv_info_die($nv_Lang->getGlobal('error_page_title'), $nv_Lang->getGlobal('error_checkss'), $nv_Lang->getGlobal('error_checkss'));
+    }
     $array_config_site['zaloOfficialAccountID'] = $nv_Request->get_title('zaloOfficialAccountID', 'post', '');
     $array_config_site['zaloOfficialAccountID'] = preg_replace('/[^0-9]/', '', $array_config_site['zaloOfficialAccountID']);
     $array_config_site['zaloAppID'] = $nv_Request->get_title('zaloAppID', 'post', '');
@@ -333,8 +377,8 @@ if ($checkss == $nv_Request->get_string('checkss', 'post') and $nv_Request->get_
 
     $sth = $db->prepare('UPDATE ' . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = 'sys' AND module = 'site' AND config_name = :config_name");
     foreach ($array_config_site as $config_name => $config_value) {
-        $sth->bindParam(':config_name', $config_name, PDO::PARAM_STR, 30);
-        $sth->bindParam(':config_value', $config_value, PDO::PARAM_STR);
+        $sth->bindValue(':config_name', $config_name, PDO::PARAM_STR);
+        $sth->bindValue(':config_value', $config_value, PDO::PARAM_STR);
         $sth->execute();
     }
 
@@ -344,7 +388,6 @@ if ($checkss == $nv_Request->get_string('checkss', 'post') and $nv_Request->get_
     }
 }
 
-$global_config['checkss'] = $checkss;
 
 require_once NV_ROOTDIR . '/' . NV_DATADIR . '/vnsubdivisions.php';
 
@@ -367,6 +410,7 @@ $nv_Lang->setModule('webhook_note', $nv_Lang->getModule('webhook_note', NV_BASE_
 $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
 $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
 $xtpl->assign('DATA', $global_config);
+$xtpl->assign('CHECKSS', csrf_create($csrf_key));
 $xtpl->assign('MODULE_NAME', $module_name);
 $xtpl->assign('PAGE_LINK', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op);
 $xtpl->assign('SUBDIV_PARENT', $subdiv_parent);

@@ -52,6 +52,7 @@
                     <td>
                         <form method="POST" action="{FORM_ACTION}&amp;file_desc_change=1" data-toggle="file_desc">
                             <input type="hidden" name="id" value="{FILE.id}" />
+                            <input type="hidden" name="checkss" value="{CHECKSS}" />
                             <input type="text" name="description" value="{FILE.description}" class="form-control" style="min-width: 150px;" maxlength="250" data-toggle="file_desc_change" data-default="{FILE.description}">
                         </form>
                     </td>
@@ -62,7 +63,7 @@
                         {FILE.exptime}
                     </td>
                     <td class="text-nowrap text-center" style="1%">
-                        <select class="form-control" style="width:100px;" data-toggle="file_action_change" data-url="{FORM_ACTION}" data-id="{FILE.id}" data-confirm="{LANG.delete_confirm}">
+                        <select class="form-control" style="width:100px;" data-toggle="file_action_change" data-url="{FORM_ACTION}" data-id="{FILE.id}" data-confirm="{LANG.delete_confirm}" data-checkss="{CHECKSS}">
                             <option value=""></option>
                             <!-- BEGIN: select -->
                             <option value="selfile">{LANG.file_select}</option>
@@ -103,6 +104,7 @@
     <div class="row">
         <div class="col-sm-12">
             <form method="POST" action="{FORM_UPLOAD_ACTION}" enctype="multipart/form-data" data-toggle="zalo_upload" data-store-on-server="{STORE_ON_SERVER}">
+                <input type="hidden" name="checkss" value="{CHECKSS}" />
                 <!-- BEGIN: type_hide -->
                 <input type="hidden" name="type" value="{TYPE}" data-url="{ZALO_URL}"/>
                 <!-- END: type_hide -->

@@ -17,6 +17,8 @@ if (!$myZalo->isValid()) {
     nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=settings');
 }
 
+$checkss = $nv_Request->get_string('checkss', 'post');
+
 $page_url = $base_url = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=article';
 
 // Cap nhat danh sach bai viet tu Zalo
@@ -41,19 +43,27 @@ if ($nv_Request->isset_request('getlist,type', 'get')) {
     }
 
     $total = (int) $result['data']['total'];
-    $values = [];
     if (!empty($result['data']['medias'])) {
+        $sql = 'INSERT INTO ' . NV_MOD_TABLE . "_article
+                (zalo_id, token, type, title, description, body, related_medias, status, create_date, update_date, total_view, total_share, is_sync)
+            VALUES
+                (:zalo_id, '', :type, :title, '', '', '', :status, :create_date, :update_date, :total_view, :total_share, 0)
+            ON DUPLICATE KEY UPDATE
+                status=VALUES(status), create_date=VALUES(create_date), update_date=VALUES(update_date), total_view=VALUES(total_view), total_share=VALUES(total_share)
+            ";
+        $stmt = $db->prepare($sql);
         foreach ($result['data']['medias'] as $article) {
             ++$offset;
-            $values[] = '(' . $db->quote($article['id']) . ", '', " . $db->quote($article['type']) . ', ' . $db->quote($article['title']) . ", '', '', '', " . $db->quote($article['status']) . ', ' . floor((int) $article['create_date'] / 1000) . ', ' . floor((int) $article['update_date'] / 1000) . ', ' . (int) $article['total_view'] . ', ' . (int) $article['total_share'] . ', 0)';
+            $stmt->bindValue(':zalo_id', $article['id'], PDO::PARAM_STR);
+            $stmt->bindValue(':type', $article['type'], PDO::PARAM_STR);
+            $stmt->bindValue(':title', $article['title'], PDO::PARAM_STR);
+            $stmt->bindValue(':status', $article['status'], PDO::PARAM_STR);
+            $stmt->bindValue(':create_date', floor((int) $article['create_date'] / 1000), PDO::PARAM_INT);
+            $stmt->bindValue(':update_date', floor((int) $article['update_date'] / 1000), PDO::PARAM_INT);
+            $stmt->bindValue(':total_view', (int) $article['total_view'], PDO::PARAM_INT);
+            $stmt->bindValue(':total_share', (int) $article['total_share'], PDO::PARAM_INT);
+            $stmt->execute();
         }
-    }
-    if (!empty($values)) {
-        $values = implode(', ', $values);
-        $sql = 'INSERT INTO ' . NV_MOD_TABLE . '_article (zalo_id, token, type, title, description, body, related_medias, status, create_date, update_date, total_view, total_share, is_sync)
-            VALUES ' . $values . '
-            ON DUPLICATE KEY UPDATE status=VALUES(status), create_date=VALUES(create_date), update_date=VALUES(update_date), total_view=VALUES(total_view), total_share=VALUES(total_share)';
-        $db->query($sql);
     }
 
     if ($offset < $total) {
@@ -89,6 +99,12 @@ if ($nv_Request->isset_request('getlist,type', 'get')) {
 
 // Xoa bai viet
 if ($nv_Request->isset_request('delete,id', 'post')) {
+    if (!csrf_check($checkss, $csrf_key)) {
+        nv_jsonOutput([
+            'status' => 'error',
+            'mess' => $nv_Lang->getGlobal('error_checkss')
+        ]);
+    }
     $id = $nv_Request->get_int('id', 'post', 0);
     if (empty($id)) {
         nv_jsonOutput([
@@ -127,6 +143,12 @@ if ($nv_Request->isset_request('delete,id', 'post')) {
 
 // Dong bo bai viet
 if ($nv_Request->isset_request('sync,id', 'post')) {
+    if (!csrf_check($checkss, $csrf_key)) {
+        nv_jsonOutput([
+            'status' => 'error',
+            'mess' => $nv_Lang->getGlobal('error_checkss')
+        ]);
+    }
     $id = $nv_Request->get_int('id', 'post', 0);
     if (empty($id)) {
         nv_jsonOutput([
@@ -162,6 +184,12 @@ if ($nv_Request->isset_request('sync,id', 'post')) {
 
 // Lay Zalo_id
 if ($nv_Request->isset_request('get_zalo_id,id', 'post')) {
+    if (!csrf_check($checkss, $csrf_key)) {
+        nv_jsonOutput([
+            'status' => 'error',
+            'mess' => $nv_Lang->getGlobal('error_checkss')
+        ]);
+    }
     $id = $nv_Request->get_int('id', 'post', 0);
     if (empty($id)) {
         nv_jsonOutput([
@@ -315,6 +343,12 @@ if ($action == 'edit') {
 
 if ($action == 'add' or $action == 'edit') {
     if ($nv_Request->isset_request('save', 'post')) {
+        if (!csrf_check($checkss, $csrf_key)) {
+            nv_jsonOutput([
+                'status' => 'error',
+                'mess' => $nv_Lang->getGlobal('error_checkss')
+            ]);
+        }
         $is_localhost = is_localhost();
 
         $save_article = [
@@ -678,6 +712,7 @@ if ($action == 'add' or $action == 'edit') {
     $xtpl = new XTemplate('article.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
     $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
     $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
+    $xtpl->assign('CHECKSS', csrf_create($csrf_key));
     $xtpl->assign('FORM_ACTION', $base_url);
     $xtpl->assign('LIST_LINK', $list_url);
     $xtpl->assign('COVER_VIDEO_GET_URL', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=video&amp;popup=1&amp;idfield=cover_video_id&amp;viewfield=cover_view');
@@ -827,8 +862,13 @@ if ($action == 'add' or $action == 'edit') {
 $page = $nv_Request->get_page('page', 'get', 1);
 $per_page = 10;
 
-$where_type = !empty($type) ? " WHERE type=" . $db->quote($type) : '';
-$num_items = $db->query('SELECT COUNT(*) FROM ' . NV_MOD_TABLE . '_article' . $where_type)->fetchColumn();
+$where_type = !empty($type) ? " WHERE type = :type" : '';
+$stmt = $db->prepare('SELECT COUNT(*) FROM ' . NV_MOD_TABLE . '_article' . $where_type);
+if (!empty($type)) {
+    $stmt->bindValue(':type', $type, PDO::PARAM_STR);
+}
+$stmt->execute();
+$num_items = $stmt->fetchColumn();
 
 if ($page < 1 or ($page > 1 and $page > ceil($num_items / $per_page))) {
     nv_redirect_location($base_url);
@@ -845,6 +885,7 @@ $generate_page = nv_generate_page($base_url, $num_items, $per_page, $page);
 $xtpl = new XTemplate('article.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
 $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
 $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
+$xtpl->assign('CHECKSS', csrf_create($csrf_key));
 $xtpl->assign('FORM_ACTION', $page_url);
 $xtpl->assign('ADD_LINK', $base_url . '&amp;action=add');
 $xtpl->assign('IDFIELD', $idfield);
@@ -909,6 +950,7 @@ if ($num_items) {
 
         $xtpl->parse('main.isArticles.article');
     }
+    $result->closeCursor();
 
     if (!empty($get_zalo_id)) {
         $xtpl->assign('GET_ZALO_ID', $get_zalo_id);

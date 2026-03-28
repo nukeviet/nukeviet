@@ -146,14 +146,15 @@ function playerToggle(obj, audio) {
     }
 }
 
-function conv_refresh(url, user_id, silent) {
+function conv_refresh(url, user_id, silent, checkss) {
     $.ajax({
         type: 'POST',
         cache: !1,
         url: url,
         data: {
             'conversation_refresh': 1,
-            'user_id': user_id
+            'user_id': user_id,
+            'checkss': checkss
         },
         dataType: "json",
         success: function(b) {
@@ -210,7 +211,7 @@ function wait_modal_hide() {
     $('.wait_modal').modal('hide')
 }
 
-function follower_getprofile(url, user_id) {
+function follower_getprofile(url, user_id, checkss) {
     wait_modal_show();
     $.ajax({
         type: 'POST',
@@ -218,7 +219,8 @@ function follower_getprofile(url, user_id) {
         url: url,
         data: {
             'get_follower_profile': 1,
-            'user_id': user_id
+            'user_id': user_id,
+            'checkss': checkss
         },
         dataType: "json",
         success: function(b) {
@@ -307,14 +309,14 @@ $(function() {
         var that = $(this).parents('.follower'),
             user_id = that.data('user-id'),
             url = $(this).parents('.followers').data('form-action');
-        follower_getprofile(url, user_id)
+        follower_getprofile(url, user_id, $(this).data('checkss'))
     });
 
     $('[data-toggle=follower_getprofile2]').on('click', function(e) {
         e.preventDefault();
         var user_id = $(this).data('user-id'),
             url = $(this).data('url');
-        follower_getprofile(url, user_id)
+        follower_getprofile(url, user_id, $(this).data('checkss'))
     });
 
     $('[data-toggle=oa_info_update]').on('click', function(e) {
@@ -345,7 +347,8 @@ $(function() {
             url: url,
             data: {
                 'get_districts': 1,
-                'city_id': city_id
+                'city_id': city_id,
+                'checkss': $('[name="checkss"]', form).val()
             },
             dataType: "html",
             success: function(b) {
@@ -370,7 +373,8 @@ $(function() {
         ajax_json(url, {
             'remove_ftag': 1,
             'user_id': user_id,
-            'tag_alias': tag_alias
+            'tag_alias': tag_alias,
+            'checkss': $(this).data('checkss')
         })
     });
 
@@ -382,7 +386,8 @@ $(function() {
         if (r == true) {
             ajax_json(url, {
                 'delete_tag': 1,
-                'tag_alias': tag_alias
+                'tag_alias': tag_alias,
+                'checkss': $(this).data('checkss')
             })
         }
     });
@@ -438,12 +443,12 @@ $(function() {
             clfield = fr.data('clfield');
         if (val == 'delete') {
             if (confirm($(this).data('confirm')) == true) {
-                ajax_json(url, 'file_delete=1&id=' + id)
+                ajax_json(url, 'file_delete=1&id=' + id + '&checkss=' + $(this).data('checkss'))
             } else {
                 $(this).val('')
             }
         } else if (val == 'renewal') {
-            ajax_json(url, 'renewal=1&id=' + id)
+            ajax_json(url, 'renewal=1&id=' + id + '&checkss=' + $(this).data('checkss'))
         } else if (val == 'selfile' || val == 'selfiledesc') {
             $("#" + idfield, opener.document).val(id);
             if (val == 'selfiledesc') {
@@ -645,7 +650,7 @@ $(function() {
         var url = $(this).data('url'),
             user_id = $(this).data('user-id');
 
-        conv_refresh(url, user_id, false)
+        conv_refresh(url, user_id, false, $(this).data('checkss'))
     });
 
     $('#fi_actions [data-toggle="collapse"], #settings [data-toggle="collapse"]').on('click', function() {
@@ -695,7 +700,8 @@ $(function() {
             cache: !1,
             url: url,
             data: {
-                'get_proactive_messages_quota': 1
+                'get_proactive_messages_quota': 1,
+                'checkss': $(this).data('checkss')
             },
             dataType: "json",
             success: function(b) {
@@ -760,7 +766,7 @@ $(function() {
                     type: 'POST',
                     cache: !1,
                     url: url,
-                    data: 'alias=' + alias + '&new_name=' + new_name,
+                    data: 'alias=' + alias + '&new_name=' + new_name + '&checkss=' + $(that).data('checkss'),
                     dataType: "json",
                     success: function(b) {
                         if (b.status == 'success') {

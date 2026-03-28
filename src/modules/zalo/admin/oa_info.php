@@ -19,8 +19,16 @@ if (!$myZalo->isValid()) {
     nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=settings');
 }
 
+$checkss = $nv_Request->get_string('checkss', 'post');
+
 // Lay thong tin QUOTA tin nhan chu dong
 if ($nv_Request->isset_request('get_proactive_messages_quota', 'post')) {
+    if (!csrf_check($checkss, $csrf_key)) {
+        nv_jsonOutput([
+            'status' => 'error',
+            'mess' => $nv_Lang->getGlobal('error_checkss')
+        ]);
+    }
     get_accesstoken($accesstoken, true);
     $result = $myZalo->getquota($accesstoken);
     if (empty($result)) {
@@ -35,6 +43,9 @@ if ($nv_Request->isset_request('get_proactive_messages_quota', 'post')) {
 
 // Xoa du lieu cu
 if ($nv_Request->isset_request('oa_clear', 'post')) {
+    if (!csrf_check($checkss, $csrf_key)) {
+        nv_info_die($nv_Lang->getGlobal('error_page_title'), $nv_Lang->getGlobal('error_checkss'), $nv_Lang->getGlobal('error_checkss'));
+    }
     oa_truncate();
     nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=oa_info');
 }
@@ -61,6 +72,11 @@ $oa_info = get_oa_info();
 
 // Nếu empty $oa_info hoặc không có $oa_info['oa_id'] => lấy thông tin về
 if (empty($oa_info) or empty($oa_info['oa_id']) or $nv_Request->isset_request('oa_info_update', 'post')) {
+    if ($nv_Request->isset_request('oa_info_update', 'post')) {
+        if (!csrf_check($checkss, $csrf_key)) {
+            nv_info_die($nv_Lang->getGlobal('error_page_title'), $nv_Lang->getGlobal('error_checkss'), $nv_Lang->getGlobal('error_checkss'));
+        }
+    }
     $get_accesstoken_info = $myZalo->oa_accesstoken_info($client_info['selfurl']);
     if ($get_accesstoken_info['result'] == 'ok') {
         $accesstoken = $get_accesstoken_info['access_token'];
@@ -86,7 +102,6 @@ if (empty($oa_info) or empty($oa_info['oa_id']) or $nv_Request->isset_request('o
     }
 
     $oa_info = $result['data'];
-    $oa_info = $oa_info;
     if (empty($oa_info['qrcode'])) {
         $qrcode = oa_qrcode_create();
         if (!empty($qrcode)) {
@@ -103,6 +118,7 @@ if (empty($oa_info) or empty($oa_info['oa_id']) or $nv_Request->isset_request('o
 $xtpl = new XTemplate('oa_info.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
 $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
 $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
+$xtpl->assign('CHECKSS', csrf_create($csrf_key));
 $xtpl->assign('FORM_ACTION', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=oa_info');
 
 if ($oa_info['oa_id'] != $global_config['zaloOfficialAccountID']) {

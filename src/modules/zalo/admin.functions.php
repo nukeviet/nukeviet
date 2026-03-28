@@ -51,6 +51,7 @@ while ($row = $result->fetch()) {
     !isset($module_configs[$row['type']]) && $module_configs[$row['type']] = [];
     $module_configs[$row['type']][$row['skey']] = $row['svalue'];
 }
+$result->closeCursor();
 
 /**
  * Kiểm tra có lưu file trên máy chủ của site hay không
@@ -172,8 +173,8 @@ function accessTokenUpdate($result)
 
     $sth = $db->prepare('UPDATE ' . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = 'sys' AND module = 'site' AND config_name = :config_name");
     foreach ($array_config_site as $config_name => $config_value) {
-        $sth->bindParam(':config_name', $config_name, PDO::PARAM_STR, 30);
-        $sth->bindParam(':config_value', $config_value, PDO::PARAM_STR);
+        $sth->bindValue(':config_name', $config_name, PDO::PARAM_STR);
+        $sth->bindValue(':config_value', $config_value, PDO::PARAM_STR);
         $sth->execute();
     }
 
@@ -328,15 +329,21 @@ function get_followers_not_sync($limit = 0)
     global $db, $global_config;
 
     $list = [];
-    $sql = 'SELECT user_id FROM ' . NV_MOD_TABLE . '_followers WHERE is_sync = 0 and app_id = ' . $db->quote($global_config['zaloAppID']);
+    $sql = 'SELECT user_id FROM ' . NV_MOD_TABLE . '_followers WHERE is_sync = 0 and app_id = :app_id';
     if ($limit) {
-        $sql .= ' LIMIT ' . $limit;
+        $sql .= ' LIMIT :limit';
     }
-    $result = $db->query($sql);
+    $stmt = $db->prepare($sql);
+    $stmt->bindValue(':app_id', $global_config['zaloAppID'], PDO::PARAM_STR);
+    if ($limit) {
+        $stmt->bindValue(':limit', $limit, PDO::PARAM_INT);
+    }
+    $stmt->execute();
 
-    while ($row = $result->fetch()) {
+    while ($row = $stmt->fetch()) {
         $list[] = $row['user_id'];
     }
+    $stmt->closeCursor();
 
     return $list;
 }
@@ -354,8 +361,11 @@ function follower_profile_save($user_id, $follower_profile)
 {
     global $db, $global_config;
 
-    $query = 'SELECT * FROM ' . NV_MOD_TABLE . '_followers WHERE user_id=' . $db->quote($user_id);
-    $row = $db->query($query)->fetch();
+    $stmt = $db->prepare('SELECT * FROM ' . NV_MOD_TABLE . '_followers WHERE user_id = :user_id');
+    $stmt->bindValue(':user_id', $user_id, PDO::PARAM_STR);
+    $stmt->execute();
+    $row = $stmt->fetch();
+    $stmt->closeCursor();
 
     if (!empty($follower_profile['avatars'][120])) {
         $row['avatar120'] = $follower_profile['avatars'][120];
@@ -401,21 +411,22 @@ function follower_profile_save($user_id, $follower_profile)
         district_id = :district_id,
         is_sync = 1,
         updatetime = ' . NV_CURRENTTIME . '
-        WHERE user_id = ' . $db->quote($user_id));
-    $sth->bindParam(':user_id_by_app', $row['user_id_by_app'], PDO::PARAM_STR);
-    $sth->bindParam(':display_name', $row['display_name'], PDO::PARAM_STR);
-    $sth->bindParam(':is_sensitive', $row['is_sensitive'], PDO::PARAM_INT);
-    $sth->bindParam(':avatar120', $row['avatar120'], PDO::PARAM_STR);
-    $sth->bindParam(':avatar240', $row['avatar240'], PDO::PARAM_STR);
-    $sth->bindParam(':user_gender', $row['user_gender'], PDO::PARAM_STR);
-    $sth->bindParam(':tags_info', $row['tags_info'], PDO::PARAM_STR);
-    $sth->bindParam(':notes_info', $row['notes_info'], PDO::PARAM_STR);
-    $sth->bindParam(':name', $row['name'], PDO::PARAM_STR);
-    $sth->bindParam(':phone_code', $row['phone_code'], PDO::PARAM_STR);
-    $sth->bindParam(':phone_number', $row['phone_number'], PDO::PARAM_STR);
-    $sth->bindParam(':address', $row['address'], PDO::PARAM_STR);
-    $sth->bindParam(':city_id', $row['city_id'], PDO::PARAM_STR);
-    $sth->bindParam(':district_id', $row['district_id'], PDO::PARAM_STR);
+        WHERE user_id = :user_id');
+    $sth->bindValue(':user_id', $user_id, PDO::PARAM_STR);
+    $sth->bindValue(':user_id_by_app', $row['user_id_by_app'], PDO::PARAM_STR);
+    $sth->bindValue(':display_name', $row['display_name'], PDO::PARAM_STR);
+    $sth->bindValue(':is_sensitive', $row['is_sensitive'], PDO::PARAM_INT);
+    $sth->bindValue(':avatar120', $row['avatar120'], PDO::PARAM_STR);
+    $sth->bindValue(':avatar240', $row['avatar240'], PDO::PARAM_STR);
+    $sth->bindValue(':user_gender', $row['user_gender'], PDO::PARAM_STR);
+    $sth->bindValue(':tags_info', $row['tags_info'], PDO::PARAM_STR);
+    $sth->bindValue(':notes_info', $row['notes_info'], PDO::PARAM_STR);
+    $sth->bindValue(':name', $row['name'], PDO::PARAM_STR);
+    $sth->bindValue(':phone_code', $row['phone_code'], PDO::PARAM_STR);
+    $sth->bindValue(':phone_number', $row['phone_number'], PDO::PARAM_STR);
+    $sth->bindValue(':address', $row['address'], PDO::PARAM_STR);
+    $sth->bindValue(':city_id', $row['city_id'], PDO::PARAM_STR);
+    $sth->bindValue(':district_id', $row['district_id'], PDO::PARAM_STR);
     $sth->execute();
 
     remove_follower_alltags($user_id);
@@ -470,6 +481,7 @@ function get_tags()
     while ($row = $result->fetch()) {
         $tags[$row['alias']] = $row['name'];
     }
+    $result->closeCursor();
 
     return $tags;
 }
@@ -491,15 +503,15 @@ function video_add($video)
         (:video_id, :token, :video_name, :video_size, :description, :view, :thumb, :status, :status_message, :convert_percent, :convert_error_code, ' . NV_CURRENTTIME . ')');
     $sth->bindValue(':video_id', $video['video_id'], PDO::PARAM_STR);
     $sth->bindValue(':token', $video['token'], PDO::PARAM_STR);
-    $sth->bindParam(':video_name', $video['video_name'], PDO::PARAM_STR);
-    $sth->bindParam(':video_size', $video['video_size'], PDO::PARAM_INT);
-    $sth->bindParam(':description', $video['description'], PDO::PARAM_STR);
-    $sth->bindParam(':view', $video['view'], PDO::PARAM_STR);
-    $sth->bindParam(':thumb', $video['thumb'], PDO::PARAM_STR);
-    $sth->bindParam(':status', $video['status'], PDO::PARAM_INT);
-    $sth->bindParam(':status_message', $video['status_message'], PDO::PARAM_STR);
-    $sth->bindParam(':convert_percent', $video['convert_percent'], PDO::PARAM_INT);
-    $sth->bindParam(':convert_error_code', $video['convert_error_code'], PDO::PARAM_INT);
+    $sth->bindValue(':video_name', $video['video_name'], PDO::PARAM_STR);
+    $sth->bindValue(':video_size', $video['video_size'], PDO::PARAM_INT);
+    $sth->bindValue(':description', $video['description'], PDO::PARAM_STR);
+    $sth->bindValue(':view', $video['view'], PDO::PARAM_STR);
+    $sth->bindValue(':thumb', $video['thumb'], PDO::PARAM_STR);
+    $sth->bindValue(':status', $video['status'], PDO::PARAM_INT);
+    $sth->bindValue(':status_message', $video['status_message'], PDO::PARAM_STR);
+    $sth->bindValue(':convert_percent', $video['convert_percent'], PDO::PARAM_INT);
+    $sth->bindValue(':convert_error_code', $video['convert_error_code'], PDO::PARAM_INT);
     $sth->execute();
 }
 
@@ -518,15 +530,16 @@ function video_update($id, $video)
 
     $sth = $db->prepare('UPDATE ' . NV_MOD_TABLE . '_video SET
     token = :token, status_message = :status_message, video_name = :video_name, video_size = :video_size, convert_percent = :convert_percent, convert_error_code = :convert_error_code, video_id = :video_id, status = :status
-    WHERE id = ' . $id);
-    $sth->bindParam(':token', $video['token'], PDO::PARAM_STR);
-    $sth->bindParam(':status_message', $video['status_message'], PDO::PARAM_STR);
-    $sth->bindParam(':video_name', $video['video_name'], PDO::PARAM_STR);
-    $sth->bindParam(':video_size', $video['video_size'], PDO::PARAM_INT);
-    $sth->bindParam(':convert_percent', $video['convert_percent'], PDO::PARAM_INT);
-    $sth->bindParam(':convert_error_code', $video['convert_error_code'], PDO::PARAM_INT);
-    $sth->bindParam(':video_id', $video['video_id'], PDO::PARAM_STR);
-    $sth->bindParam(':status', $video['status'], PDO::PARAM_INT);
+    WHERE id = :id');
+    $sth->bindValue(':id', $id, PDO::PARAM_INT);
+    $sth->bindValue(':token', $video['token'], PDO::PARAM_STR);
+    $sth->bindValue(':status_message', $video['status_message'], PDO::PARAM_STR);
+    $sth->bindValue(':video_name', $video['video_name'], PDO::PARAM_STR);
+    $sth->bindValue(':video_size', $video['video_size'], PDO::PARAM_INT);
+    $sth->bindValue(':convert_percent', $video['convert_percent'], PDO::PARAM_INT);
+    $sth->bindValue(':convert_error_code', $video['convert_error_code'], PDO::PARAM_INT);
+    $sth->bindValue(':video_id', $video['video_id'], PDO::PARAM_STR);
+    $sth->bindValue(':status', $video['status'], PDO::PARAM_INT);
     $sth->execute();
 }
 
@@ -547,10 +560,11 @@ function video_edit_save($id, $view, $thumb, $description)
 
     $sth = $db->prepare('UPDATE ' . NV_MOD_TABLE . '_video SET
     view = :view, thumb = :thumb, description = :description
-    WHERE id = ' . $id);
-    $sth->bindParam(':view', $view, PDO::PARAM_STR);
-    $sth->bindParam(':thumb', $thumb, PDO::PARAM_STR);
-    $sth->bindParam(':description', $description, PDO::PARAM_STR);
+    WHERE id = :id');
+    $sth->bindValue(':id', $id, PDO::PARAM_INT);
+    $sth->bindValue(':view', $view, PDO::PARAM_STR);
+    $sth->bindValue(':thumb', $thumb, PDO::PARAM_STR);
+    $sth->bindValue(':description', $description, PDO::PARAM_STR);
     $sth->execute();
 }
 
@@ -570,6 +584,7 @@ function video_get_list()
     while ($row = $result->fetch()) {
         $files[$row['id']] = $row;
     }
+    $result->closeCursor();
 
     return $files;
 }
@@ -586,7 +601,10 @@ function video_get_token($id)
 {
     global $db;
 
-    $token = $db->query('SELECT token FROM ' . NV_MOD_TABLE . '_video WHERE id = ' . $id)->fetchColumn();
+    $stmt = $db->prepare('SELECT token FROM ' . NV_MOD_TABLE . '_video WHERE id = :id');
+    $stmt->bindValue(':id', $id, PDO::PARAM_INT);
+    $stmt->execute();
+    $token = $stmt->fetchColumn();
 
     return $token;
 }
@@ -603,7 +621,10 @@ function video_check($video_id)
 {
     global $db;
 
-    $isExists = $db->query('SELECT COUNT(*) FROM ' . NV_MOD_TABLE . '_video WHERE video_id = ' . $db->quote($video_id) . ' AND status=1')->fetchColumn();
+    $stmt = $db->prepare('SELECT COUNT(*) FROM ' . NV_MOD_TABLE . '_video WHERE video_id = :video_id AND status=1');
+    $stmt->bindValue(':video_id', $video_id, PDO::PARAM_STR);
+    $stmt->execute();
+    $isExists = $stmt->fetchColumn();
 
     return $isExists;
 }
@@ -619,7 +640,9 @@ function video_delete($id)
 {
     global $db;
 
-    $db->query('DELETE FROM ' . NV_MOD_TABLE . '_video WHERE id=' . $id);
+    $stmt = $db->prepare('DELETE FROM ' . NV_MOD_TABLE . '_video WHERE id = :id');
+    $stmt->bindValue(':id', $id, PDO::PARAM_INT);
+    $stmt->execute();
 }
 
 /**
@@ -635,7 +658,10 @@ function get_upload($type)
     global $db, $nv_Lang;
 
     if (!empty($type)) {
-        $result = $db->query('SELECT * FROM ' . NV_MOD_TABLE . '_upload WHERE type=' . $db->quote($type) . ' ORDER BY addtime ASC');
+        $stmt = $db->prepare('SELECT * FROM ' . NV_MOD_TABLE . '_upload WHERE type = :type ORDER BY addtime ASC');
+        $stmt->bindValue(':type', $type, PDO::PARAM_STR);
+        $stmt->execute();
+        $result = $stmt;
     } else {
         $result = $db->query('SELECT * FROM ' . NV_MOD_TABLE . '_upload ORDER BY addtime ASC');
     }
@@ -650,6 +676,7 @@ function get_upload($type)
         $row['fullname'] = !empty($row['localfile']) ? NV_BASE_SITEURL . NV_UPLOADS_DIR . '/zalo/' . $row['localfile'] : '';
         $files[] = $row;
     }
+    $result->closeCursor();
 
     return $files;
 }
@@ -680,8 +707,8 @@ function upload_save($type, $file, $localfile, $extension, $width, $height, $zal
     $sth->bindValue(':extension', $extension, PDO::PARAM_STR);
     $sth->bindValue(':file', $file, PDO::PARAM_STR);
     $sth->bindValue(':localfile', $localfile, PDO::PARAM_STR);
-    $sth->bindParam(':zalo_id', $zalo_id, PDO::PARAM_STR);
-    $sth->bindParam(':description', $description, PDO::PARAM_STR);
+    $sth->bindValue(':zalo_id', $zalo_id, PDO::PARAM_STR);
+    $sth->bindValue(':description', $description, PDO::PARAM_STR);
     $sth->execute();
 }
 
@@ -699,8 +726,10 @@ function upload_update($id, $zalo_id, $addtime)
 {
     global $db;
 
-    $sth = $db->prepare('UPDATE ' . NV_MOD_TABLE . '_upload SET zalo_id = :zalo_id, addtime=' . $addtime . ' WHERE id = ' . $id);
-    $sth->bindParam(':zalo_id', $zalo_id, PDO::PARAM_STR);
+    $sth = $db->prepare('UPDATE ' . NV_MOD_TABLE . '_upload SET zalo_id = :zalo_id, addtime = :addtime WHERE id = :id');
+    $sth->bindValue(':id', $id, PDO::PARAM_INT);
+    $sth->bindValue(':addtime', $addtime, PDO::PARAM_INT);
+    $sth->bindValue(':zalo_id', $zalo_id, PDO::PARAM_STR);
     $sth->execute();
 }
 
@@ -715,7 +744,9 @@ function upload_delete($id)
 {
     global $db;
 
-    $db->query('DELETE FROM ' . NV_MOD_TABLE . '_upload WHERE id=' . $id);
+    $stmt = $db->prepare('DELETE FROM ' . NV_MOD_TABLE . '_upload WHERE id = :id');
+    $stmt->bindValue(':id', $id, PDO::PARAM_INT);
+    $stmt->execute();
 }
 
 /**
@@ -731,8 +762,9 @@ function file_desc_update($id, $description)
 {
     global $db;
 
-    $sth = $db->prepare('UPDATE ' . NV_MOD_TABLE . '_upload SET description = :description WHERE id = ' . $id);
-    $sth->bindParam(':description', $description, PDO::PARAM_STR);
+    $sth = $db->prepare('UPDATE ' . NV_MOD_TABLE . '_upload SET description = :description WHERE id = :id');
+    $sth->bindValue(':id', $id, PDO::PARAM_INT);
+    $sth->bindValue(':description', $description, PDO::PARAM_STR);
     $sth->execute();
 }
 
@@ -748,9 +780,13 @@ function get_file_upload_info($id)
 {
     global $db;
 
-    $result = $db->query('SELECT * FROM ' . NV_MOD_TABLE . '_upload WHERE id=' . $id);
+    $stmt = $db->prepare('SELECT * FROM ' . NV_MOD_TABLE . '_upload WHERE id = :id');
+    $stmt->bindValue(':id', $id, PDO::PARAM_INT);
+    $stmt->execute();
+    $row = $stmt->fetch();
+    $stmt->closeCursor();
 
-    return $result->fetch();
+    return $row;
 }
 
 /**
@@ -765,7 +801,10 @@ function get_file_by_id($id)
 {
     global $db;
 
-    $file = $db->query('SELECT localfile FROM ' . NV_MOD_TABLE . '_upload WHERE id = ' . $id)->fetchColumn();
+    $stmt = $db->prepare('SELECT localfile FROM ' . NV_MOD_TABLE . '_upload WHERE id = :id');
+    $stmt->bindValue(':id', $id, PDO::PARAM_INT);
+    $stmt->execute();
+    $file = $stmt->fetchColumn();
 
     return $file;
 }
@@ -782,7 +821,10 @@ function get_zalo_id_by_id($id)
 {
     global $db;
 
-    $file = $db->query('SELECT zalo_id FROM ' . NV_MOD_TABLE . '_upload WHERE id = ' . $id)->fetchColumn();
+    $stmt = $db->prepare('SELECT zalo_id FROM ' . NV_MOD_TABLE . '_upload WHERE id = :id');
+    $stmt->bindValue(':id', $id, PDO::PARAM_INT);
+    $stmt->execute();
+    $file = $stmt->fetchColumn();
 
     return $file;
 }
@@ -799,11 +841,14 @@ function get_follower_tags($user_id)
 {
     global $db;
 
-    $result = $db->query('SELECT tag FROM ' . NV_MOD_TABLE . '_tags_follower WHERE user_id=' . $db->quote($user_id) . ' ORDER BY tag DESC');
+    $stmt = $db->prepare('SELECT tag FROM ' . NV_MOD_TABLE . '_tags_follower WHERE user_id = :user_id ORDER BY tag DESC');
+    $stmt->bindValue(':user_id', $user_id, PDO::PARAM_STR);
+    $stmt->execute();
     $ftags = [];
-    while ($row = $result->fetch()) {
+    while ($row = $stmt->fetch()) {
         $ftags[] = $row['tag'];
     }
+    $stmt->closeCursor();
 
     return $ftags;
 }
@@ -819,8 +864,10 @@ function add_tag($new_tag)
 {
     global $db;
 
-    $sql = 'INSERT  IGNORE INTO ' . NV_MOD_TABLE . '_tags (alias, name) VALUES (' . $db->quote($new_tag['alias']) . ', ' . $db->quote($new_tag['name']) . ')';
-    $db->query($sql);
+    $stmt = $db->prepare('INSERT IGNORE INTO ' . NV_MOD_TABLE . '_tags (alias, name) VALUES (:alias, :name)');
+    $stmt->bindValue(':alias', $new_tag['alias'], PDO::PARAM_STR);
+    $stmt->bindValue(':name', $new_tag['name'], PDO::PARAM_STR);
+    $stmt->execute();
 }
 
 /**
@@ -838,8 +885,8 @@ function update_tag($alias, $new_name)
 
     $sth = $db->prepare('UPDATE ' . NV_MOD_TABLE . '_tags SET
     name = :name WHERE alias = :alias');
-    $sth->bindParam(':name', $new_name, PDO::PARAM_STR);
-    $sth->bindParam(':alias', $alias, PDO::PARAM_STR);
+    $sth->bindValue(':name', $new_name, PDO::PARAM_STR);
+    $sth->bindValue(':alias', $alias, PDO::PARAM_STR);
     $sth->execute();
 }
 
@@ -854,8 +901,10 @@ function add_follower_tag($user_id, $post_tag)
 {
     global $db;
 
-    $sql = 'INSERT  IGNORE INTO ' . NV_MOD_TABLE . '_tags_follower (tag, user_id) VALUES (' . $db->quote($post_tag) . ', ' . $db->quote($user_id) . ')';
-    $db->query($sql);
+    $stmt = $db->prepare('INSERT IGNORE INTO ' . NV_MOD_TABLE . '_tags_follower (tag, user_id) VALUES (:tag, :user_id)');
+    $stmt->bindValue(':tag', $post_tag, PDO::PARAM_STR);
+    $stmt->bindValue(':user_id', $user_id, PDO::PARAM_STR);
+    $stmt->execute();
 }
 
 /**
@@ -869,7 +918,9 @@ function remove_follower_alltags($user_id)
 {
     global $db;
 
-    $db->query('DELETE FROM ' . NV_MOD_TABLE . '_tags_follower WHERE user_id=' . $db->quote($user_id));
+    $stmt = $db->prepare('DELETE FROM ' . NV_MOD_TABLE . '_tags_follower WHERE user_id = :user_id');
+    $stmt->bindValue(':user_id', $user_id, PDO::PARAM_STR);
+    $stmt->execute();
 }
 
 /**
@@ -884,7 +935,10 @@ function remove_follower_tag($user_id, $tag_alias)
 {
     global $db;
 
-    $db->query('DELETE FROM ' . NV_MOD_TABLE . '_tags_follower WHERE tag=' . $db->quote($tag_alias) . ' AND user_id=' . $db->quote($user_id));
+    $stmt = $db->prepare('DELETE FROM ' . NV_MOD_TABLE . '_tags_follower WHERE tag = :tag AND user_id = :user_id');
+    $stmt->bindValue(':tag', $tag_alias, PDO::PARAM_STR);
+    $stmt->bindValue(':user_id', $user_id, PDO::PARAM_STR);
+    $stmt->execute();
 }
 
 /**
@@ -898,7 +952,9 @@ function delete_tag($tag_alias)
 {
     global $db;
 
-    $db->query('DELETE FROM ' . NV_MOD_TABLE . '_tags WHERE alias=' . $db->quote($tag_alias));
+    $stmt = $db->prepare('DELETE FROM ' . NV_MOD_TABLE . '_tags WHERE alias = :alias');
+    $stmt->bindValue(':alias', $tag_alias, PDO::PARAM_STR);
+    $stmt->execute();
 }
 
 /**
@@ -913,9 +969,12 @@ function get_user_count_by_tag($tag)
 {
     global $db;
 
-    $sql = 'SELECT COUNT(*) FROM ' . NV_MOD_TABLE . '_tags_follower WHERE tag=' . $db->quote($tag);
+    $stmt = $db->prepare('SELECT COUNT(*) FROM ' . NV_MOD_TABLE . '_tags_follower WHERE tag = :tag');
+    $stmt->bindValue(':tag', $tag, PDO::PARAM_STR);
+    $stmt->execute();
+    $count = $stmt->fetchColumn();
 
-    return $db->query($sql)->fetchColumn();
+    return $count;
 }
 
 /**
@@ -1192,23 +1251,29 @@ function save_last_conversation($contents, $user_id)
     foreach ($contents as $content) {
         if (!empty($content['message_id'])) {
             $sth->bindValue(':message_id', $content['message_id'], PDO::PARAM_STR);
-            $sth->bindParam(':user_id', $user_id, PDO::PARAM_STR);
-            $sth->bindParam(':src', $content['src'], PDO::PARAM_INT);
-            $sth->bindParam(':time', $content['time'], PDO::PARAM_INT);
-            $sth->bindParam(':type', $content['type'], PDO::PARAM_STR);
-            $sth->bindParam(':message', $content['message'], PDO::PARAM_STR);
-            $sth->bindParam(':links', $content['links'], PDO::PARAM_STR);
-            $sth->bindParam(':thumb', $content['thumb'], PDO::PARAM_STR);
-            $sth->bindParam(':url', $content['url'], PDO::PARAM_STR);
-            $sth->bindParam(':description', $content['description'], PDO::PARAM_STR);
-            $sth->bindParam(':location', $content['location'], PDO::PARAM_STR);
+            $sth->bindValue(':user_id', $user_id, PDO::PARAM_STR);
+            $sth->bindValue(':src', $content['src'], PDO::PARAM_INT);
+            $sth->bindValue(':time', $content['time'], PDO::PARAM_INT);
+            $sth->bindValue(':type', $content['type'], PDO::PARAM_STR);
+            $sth->bindValue(':message', $content['message'], PDO::PARAM_STR);
+            $sth->bindValue(':links', $content['links'], PDO::PARAM_STR);
+            $sth->bindValue(':thumb', $content['thumb'], PDO::PARAM_STR);
+            $sth->bindValue(':url', $content['url'], PDO::PARAM_STR);
+            $sth->bindValue(':description', $content['description'], PDO::PARAM_STR);
+            $sth->bindValue(':location', $content['location'], PDO::PARAM_STR);
             $sth->execute();
         }
     }
 
-    $oldtime = $db->query('SELECT time FROM ' . NV_MOD_TABLE . '_conversation WHERE user_id = ' . $db->quote($user_id) . ' ORDER BY time DESC LIMIT 100, 1')->fetchColumn();
+    $stmt = $db->prepare('SELECT time FROM ' . NV_MOD_TABLE . '_conversation WHERE user_id = :user_id ORDER BY time DESC LIMIT 100, 1');
+    $stmt->bindValue(':user_id', $user_id, PDO::PARAM_STR);
+    $stmt->execute();
+    $oldtime = $stmt->fetchColumn();
     if (!empty($oldtime)) {
-        $db->query('DELETE FROM ' . NV_MOD_TABLE . '_conversation WHERE user_id = ' . $db->quote($user_id) . ' AND time <= ' . $oldtime);
+        $stmt_del = $db->prepare('DELETE FROM ' . NV_MOD_TABLE . '_conversation WHERE user_id = :user_id AND time <= :time');
+        $stmt_del->bindValue(':user_id', $user_id, PDO::PARAM_STR);
+        $stmt_del->bindValue(':time', $oldtime, PDO::PARAM_INT);
+        $stmt_del->execute();
     }
 }
 
@@ -1232,14 +1297,20 @@ function save_conversation($user_id, $message_id, $note)
         (:message_id, :user_id, 0, ' . NV_CURRENTTIME . ", '', '', '', :note)");
 
         $sth->bindValue(':message_id', $message_id, PDO::PARAM_STR);
-        $sth->bindParam(':user_id', $user_id, PDO::PARAM_STR);
-        $sth->bindParam(':note', $note, PDO::PARAM_STR);
+        $sth->bindValue(':user_id', $user_id, PDO::PARAM_STR);
+        $sth->bindValue(':note', $note, PDO::PARAM_STR);
         $sth->execute();
     }
 
-    $oldtime = $db->query('SELECT time FROM ' . NV_MOD_TABLE . '_conversation WHERE user_id = ' . $db->quote($user_id) . ' ORDER BY time DESC LIMIT 100, 1')->fetchColumn();
+    $stmt = $db->prepare('SELECT time FROM ' . NV_MOD_TABLE . '_conversation WHERE user_id = :user_id ORDER BY time DESC LIMIT 100, 1');
+    $stmt->bindValue(':user_id', $user_id, PDO::PARAM_STR);
+    $stmt->execute();
+    $oldtime = $stmt->fetchColumn();
     if (!empty($oldtime)) {
-        $db->query('DELETE FROM ' . NV_MOD_TABLE . '_conversation WHERE user_id = ' . $db->quote($user_id) . ' AND time <= ' . $oldtime);
+        $stmt_del = $db->prepare('DELETE FROM ' . NV_MOD_TABLE . '_conversation WHERE user_id = :user_id AND time <= :time');
+        $stmt_del->bindValue(':user_id', $user_id, PDO::PARAM_STR);
+        $stmt_del->bindValue(':time', $oldtime, PDO::PARAM_INT);
+        $stmt_del->execute();
     }
 }
 
@@ -1255,17 +1326,23 @@ function get_conversation($user_id)
 {
     global $db;
 
-    $result = $db->query('SELECT * FROM ' . NV_MOD_TABLE . '_conversation WHERE user_id = ' . $db->quote($user_id) . ' ORDER BY time DESC LIMIT 50');
+    $stmt = $db->prepare('SELECT * FROM ' . NV_MOD_TABLE . '_conversation WHERE user_id = :user_id ORDER BY time DESC LIMIT 50');
+    $stmt->bindValue(':user_id', $user_id, PDO::PARAM_STR);
+    $stmt->execute();
     $contents = [];
     $updated = false;
-    while ($row = $result->fetch()) {
+    while ($row = $stmt->fetch()) {
         $contents[$row['message_id']] = $row;
         if (empty($row['displayed'])) {
             $updated = true;
         }
     }
+    $stmt->closeCursor();
+
     if ($updated) {
-        $db->query('UPDATE ' . NV_MOD_TABLE . '_conversation SET displayed=1 WHERE user_id = ' . $db->quote($user_id));
+        $stmt_upd = $db->prepare('UPDATE ' . NV_MOD_TABLE . '_conversation SET displayed=1 WHERE user_id = :user_id');
+        $stmt_upd->bindValue(':user_id', $user_id, PDO::PARAM_STR);
+        $stmt_upd->execute();
     }
 
     return [
@@ -1286,9 +1363,13 @@ function get_follower_info($user_id)
 {
     global $db;
 
-    $query = 'SELECT * FROM ' . NV_MOD_TABLE . '_followers WHERE user_id=' . $db->quote($user_id);
+    $stmt = $db->prepare('SELECT * FROM ' . NV_MOD_TABLE . '_followers WHERE user_id = :user_id');
+    $stmt->bindValue(':user_id', $user_id, PDO::PARAM_STR);
+    $stmt->execute();
+    $row = $stmt->fetch();
+    $stmt->closeCursor();
 
-    return $db->query($query)->fetch();
+    return $row;
 }
 
 /**
@@ -1347,7 +1428,7 @@ function webhook_actions_save($action, $parameter)
         if (!empty($act) and !empty($par)) {
             $val = json_encode([$act, $par], NV_JSON_ENCODE);
             $sth->bindValue(':skey', $key, PDO::PARAM_STR);
-            $sth->bindParam(':svalue', $val, PDO::PARAM_STR);
+            $sth->bindValue(':svalue', $val, PDO::PARAM_STR);
             $sth->execute();
         }
     }
@@ -1428,7 +1509,7 @@ function keyword_actions_save($title, $keyword, $action, $parameter)
             $keys[] = $key;
             $val = json_encode([$act, $par, $ttl], NV_JSON_ENCODE);
             $sth->bindValue(':skey', $key, PDO::PARAM_STR);
-            $sth->bindParam(':svalue', $val, PDO::PARAM_STR);
+            $sth->bindValue(':svalue', $val, PDO::PARAM_STR);
             $sth->execute();
         }
     }
@@ -1447,14 +1528,16 @@ function template_getlist($type)
     global $db;
 
     $list = [];
-    $sql = 'SELECT * FROM ' . NV_MOD_TABLE . '_template WHERE type = ' . $db->quote($type);
-    $result = $db->query($sql);
+    $stmt = $db->prepare('SELECT * FROM ' . NV_MOD_TABLE . '_template WHERE type = :type');
+    $stmt->bindValue(':type', $type, PDO::PARAM_STR);
+    $stmt->execute();
 
-    while ($row = $result->fetch()) {
+    while ($row = $stmt->fetch()) {
         $content = json_decode($row['content'], true);
         $content['id'] = $row['id'];
         $list[$row['id']] = $content;
     }
+    $stmt->closeCursor();
 
     return $list;
 }
@@ -1477,7 +1560,7 @@ function template_save($type, $content)
         (:type, :content)');
 
     $sth->bindValue(':type', $type, PDO::PARAM_STR);
-    $sth->bindParam(':content', $content, PDO::PARAM_STR);
+    $sth->bindValue(':content', $content, PDO::PARAM_STR);
     $sth->execute();
 }
 
@@ -1495,8 +1578,9 @@ function template_update($id, $content)
     global $db;
 
     $sth = $db->prepare('UPDATE ' . NV_MOD_TABLE . '_template SET
-    content = :content WHERE id = ' . $id);
-    $sth->bindParam(':content', $content, PDO::PARAM_STR);
+    content = :content WHERE id = :id');
+    $sth->bindValue(':id', $id, PDO::PARAM_INT);
+    $sth->bindValue(':content', $content, PDO::PARAM_STR);
     $sth->execute();
 }
 
@@ -1511,7 +1595,9 @@ function template_delete($id)
 {
     global $db;
 
-    $db->query('DELETE FROM ' . NV_MOD_TABLE . '_template WHERE id =' . $id);
+    $stmt = $db->prepare('DELETE FROM ' . NV_MOD_TABLE . '_template WHERE id = :id');
+    $stmt->bindValue(':id', $id, PDO::PARAM_INT);
+    $stmt->execute();
 }
 
 /**
@@ -1527,9 +1613,11 @@ function template_getinfo($id)
     global $db;
 
     $content = [];
-    $sql = 'SELECT * FROM ' . NV_MOD_TABLE . '_template WHERE id=' . $id;
-    $result = $db->query($sql);
-    $row = $result->fetch();
+    $stmt = $db->prepare('SELECT * FROM ' . NV_MOD_TABLE . '_template WHERE id = :id');
+    $stmt->bindValue(':id', $id, PDO::PARAM_INT);
+    $stmt->execute();
+    $row = $stmt->fetch();
+    $stmt->closeCursor();
     if ($row) {
         $content = json_decode($row['content'], true);
         $content['type'] = $row['type'];
@@ -1556,6 +1644,7 @@ function get_articles()
     while ($row = $result->fetch()) {
         $list[$row['id']] = $row;
     }
+    $result->closeCursor();
 
     return $list;
 }
@@ -1571,7 +1660,9 @@ function article_delete($id)
 {
     global $db;
 
-    $db->query('DELETE FROM ' . NV_MOD_TABLE . '_article WHERE id =' . $id);
+    $stmt = $db->prepare('DELETE FROM ' . NV_MOD_TABLE . '_article WHERE id = :id');
+    $stmt->bindValue(':id', $id, PDO::PARAM_INT);
+    $stmt->execute();
 }
 
 /**
@@ -1586,9 +1677,11 @@ function get_article_info($id)
 {
     global $db;
 
-    $sql = 'SELECT * FROM ' . NV_MOD_TABLE . '_article WHERE id=' . $id;
-    $result = $db->query($sql);
-    $row = $result->fetch();
+    $stmt = $db->prepare('SELECT * FROM ' . NV_MOD_TABLE . '_article WHERE id = :id');
+    $stmt->bindValue(':id', $id, PDO::PARAM_INT);
+    $stmt->execute();
+    $row = $stmt->fetch();
+    $stmt->closeCursor();
     if ($row) {
         $row['body'] = json_decode($row['body'], true);
         $row['related_medias'] = json_decode($row['related_medias'], true);
@@ -1610,12 +1703,15 @@ function get_article_title_by_zalo_id($ids)
     global $db;
 
     $list = [];
-    $in = "'" . implode("','", $ids) . "'";
-    $sql = 'SELECT zalo_id, title FROM ' . NV_MOD_TABLE . '_article WHERE zalo_id IN (' . $in . ')';
-    $result = $db->query($sql);
+    if (!empty($ids)) {
+        $in = trim(str_repeat('?, ', count($ids)), ', ');
+        $stmt = $db->prepare('SELECT zalo_id, title FROM ' . NV_MOD_TABLE . '_article WHERE zalo_id IN (' . $in . ')');
+        $stmt->execute(array_values($ids));
 
-    while ($row = $result->fetch()) {
-        $list[$row['zalo_id']] = $row['title'];
+        while ($row = $stmt->fetch()) {
+            $list[$row['zalo_id']] = $row['title'];
+        }
+        $stmt->closeCursor();
     }
 
     return $list;
@@ -1633,7 +1729,11 @@ function get_article_token_by_id($id)
 {
     global $db;
 
-    return $db->query('SELECT token FROM ' . NV_MOD_TABLE . '_article WHERE id = ' . $id)->fetchColumn();
+    $stmt = $db->prepare('SELECT token FROM ' . NV_MOD_TABLE . '_article WHERE id = :id');
+    $stmt->bindValue(':id', $id, PDO::PARAM_INT);
+    $stmt->execute();
+
+    return $stmt->fetchColumn();
 }
 
 /**
@@ -1648,7 +1748,11 @@ function get_article_zalo_id($id)
 {
     global $db;
 
-    return $db->query('SELECT zalo_id FROM ' . NV_MOD_TABLE . '_article WHERE id = ' . $id)->fetchColumn();
+    $stmt = $db->prepare('SELECT zalo_id FROM ' . NV_MOD_TABLE . '_article WHERE id = :id');
+    $stmt->bindValue(':id', $id, PDO::PARAM_INT);
+    $stmt->execute();
+
+    return $stmt->fetchColumn();
 }
 
 /**
@@ -1665,8 +1769,9 @@ function zalo_id_update($id, $zalo_id)
     global $db;
 
     $sth = $db->prepare('UPDATE ' . NV_MOD_TABLE . "_article SET
-    zalo_id = :zalo_id, token = '' WHERE id = " . $id);
-    $sth->bindParam(':zalo_id', $zalo_id, PDO::PARAM_STR);
+    zalo_id = :zalo_id, token = '' WHERE id = :id");
+    $sth->bindValue(':id', $id, PDO::PARAM_INT);
+    $sth->bindValue(':zalo_id', $zalo_id, PDO::PARAM_STR);
     $sth->execute();
 }
 
@@ -1775,22 +1880,23 @@ function update_article($id, $save_article)
     title = :title, author = :author, cover_type = :cover_type, cover_photo_url = :cover_photo_url,
     cover_video_id = :cover_video_id, cover_view = :cover_view, cover_status = :cover_status, description = :description,
     body = :body, related_medias = :related_medias, tracking_link = :tracking_link, video_id = :video_id,
-    video_avatar = :video_avatar, status = :status, comment = :comment, update_date = ' . NV_CURRENTTIME . ', is_sync = 1 WHERE id = ' . $id);
-    $sth->bindParam(':title', $data['title'], PDO::PARAM_STR);
-    $sth->bindParam(':author', $data['author'], PDO::PARAM_STR);
-    $sth->bindParam(':cover_type', $data['cover_type'], PDO::PARAM_STR);
-    $sth->bindParam(':cover_photo_url', $data['cover_photo_url'], PDO::PARAM_STR);
-    $sth->bindParam(':cover_video_id', $data['cover_video_id'], PDO::PARAM_STR);
-    $sth->bindParam(':cover_view', $data['cover_view'], PDO::PARAM_STR);
-    $sth->bindParam(':cover_status', $data['cover_status'], PDO::PARAM_STR);
-    $sth->bindParam(':description', $data['description'], PDO::PARAM_STR);
-    $sth->bindParam(':body', $data['body'], PDO::PARAM_STR);
-    $sth->bindParam(':related_medias', $data['related_medias'], PDO::PARAM_STR);
-    $sth->bindParam(':tracking_link', $data['tracking_link'], PDO::PARAM_STR);
-    $sth->bindParam(':video_id', $data['video_id'], PDO::PARAM_STR);
-    $sth->bindParam(':video_avatar', $data['video_avatar'], PDO::PARAM_STR);
-    $sth->bindParam(':status', $data['status'], PDO::PARAM_STR);
-    $sth->bindParam(':comment', $data['comment'], PDO::PARAM_STR);
+    video_avatar = :video_avatar, status = :status, comment = :comment, update_date = ' . NV_CURRENTTIME . ', is_sync = 1 WHERE id = :id');
+    $sth->bindValue(':id', $id, PDO::PARAM_INT);
+    $sth->bindValue(':title', $data['title'], PDO::PARAM_STR);
+    $sth->bindValue(':author', $data['author'], PDO::PARAM_STR);
+    $sth->bindValue(':cover_type', $data['cover_type'], PDO::PARAM_STR);
+    $sth->bindValue(':cover_photo_url', $data['cover_photo_url'], PDO::PARAM_STR);
+    $sth->bindValue(':cover_video_id', $data['cover_video_id'], PDO::PARAM_STR);
+    $sth->bindValue(':cover_view', $data['cover_view'], PDO::PARAM_STR);
+    $sth->bindValue(':cover_status', $data['cover_status'], PDO::PARAM_STR);
+    $sth->bindValue(':description', $data['description'], PDO::PARAM_STR);
+    $sth->bindValue(':body', $data['body'], PDO::PARAM_STR);
+    $sth->bindValue(':related_medias', $data['related_medias'], PDO::PARAM_STR);
+    $sth->bindValue(':tracking_link', $data['tracking_link'], PDO::PARAM_STR);
+    $sth->bindValue(':video_id', $data['video_id'], PDO::PARAM_STR);
+    $sth->bindValue(':video_avatar', $data['video_avatar'], PDO::PARAM_STR);
+    $sth->bindValue(':status', $data['status'], PDO::PARAM_STR);
+    $sth->bindValue(':comment', $data['comment'], PDO::PARAM_STR);
     $sth->execute();
 }
 
@@ -1812,6 +1918,7 @@ function get_article_not_sync()
     while ($row = $result->fetch()) {
         $list[$row['id']] = $row['zalo_id'];
     }
+    $result->closeCursor();
 
     return $list;
 }
@@ -1828,9 +1935,11 @@ function userExists($user_id)
 {
     global $db;
 
-    $sql = 'SELECT COUNT(*) FROM ' . NV_MOD_TABLE . '_followers WHERE user_id=' . $db->quote($user_id);
+    $stmt = $db->prepare('SELECT COUNT(*) FROM ' . NV_MOD_TABLE . '_followers WHERE user_id = :user_id');
+    $stmt->bindValue(':user_id', $user_id, PDO::PARAM_STR);
+    $stmt->execute();
 
-    return $db->query($sql)->fetchColumn();
+    return $stmt->fetchColumn();
 }
 
 /**
@@ -1848,9 +1957,12 @@ function messExists($message_id, $src)
 
     $src = !empty($src) ? 1 : 0;
 
-    $sql = 'SELECT COUNT(*) FROM ' . NV_MOD_TABLE . '_conversation WHERE message_id=' . $db->quote($message_id) . ' AND src=' . $src;
+    $stmt = $db->prepare('SELECT COUNT(*) FROM ' . NV_MOD_TABLE . '_conversation WHERE message_id = :message_id AND src = :src');
+    $stmt->bindValue(':message_id', $message_id, PDO::PARAM_STR);
+    $stmt->bindValue(':src', $src, PDO::PARAM_INT);
+    $stmt->execute();
 
-    return $db->query($sql)->fetchColumn();
+    return $stmt->fetchColumn();
 }
 
 /**
