@@ -842,12 +842,10 @@ foreach ($params as $key => $val) {
 $stmt->bindValue(':limit', $per_page, PDO::PARAM_INT);
 $stmt->bindValue(':offset', ($page - 1) * $per_page, PDO::PARAM_INT);
 $stmt->execute();
-$array_data = $stmt->fetchAll();
-$stmt->closeCursor();
 
 // Chuẩn bị danh sách user cho Smarty
 $users_list_for_tpl = [];
-while ($row = $result->fetch()) {
+while ($row = $stmt->fetch()) {
     $users_list_for_tpl[] = [
         'userid' => $row['userid'],
         'username' => $row['username'],
@@ -858,6 +856,7 @@ while ($row = $result->fetch()) {
         'activate_url' => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=user_waiting&amp;userid=' . $row['userid']
     ];
 }
+$stmt->closeCursor();
 
 $generate_page = nv_generate_page($base_url, $num_items, $per_page, $page);
 
