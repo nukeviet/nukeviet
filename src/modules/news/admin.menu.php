@@ -116,7 +116,6 @@ if ($NV_IS_ADMIN_MODULE) {
     $allow_func[] = 'admins';
     $allow_func[] = 'topicsnews';
     $allow_func[] = 'topics';
-    $allow_func[] = 'topicdelnews';
     $allow_func[] = 'addtotopics';
 
     $allow_func[] = 'sources';

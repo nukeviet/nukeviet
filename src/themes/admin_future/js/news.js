@@ -2642,6 +2642,54 @@ $(function () {
             });
         });
     }
+
+    if (nv_func_name === 'topicsnews') {
+        // Xóa bài viết khỏi dòng sự kiện
+        $('#topicsnews-delbtn').on('click', function (e) {
+            e.preventDefault();
+            const btn = $(this);
+            const icon = $('i', btn);
+
+            const listid = [];
+            $('[data-toggle="checkSingle"]:checked').each(function () {
+                listid.push($(this).val());
+            });
+
+            if (listid.length < 1) {
+                nvAlert(btn.data('msgnocheck'));
+                return;
+            }
+
+            nvConfirm(btn.data('msgconfirm'), function () {
+                if (icon.is('.fa-spinner')) return;
+                icon.removeClass(icon.data('icon')).addClass('fa-spinner fa-spin-pulse');
+                $.ajax({
+                    type: 'POST',
+                    dataType: 'json',
+                    url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=topicsnews&nocache=' + new Date().getTime(),
+                    data: {
+                        action: 'delnews',
+                        topicid: btn.data('topicid'),
+                        list: listid.join(','),
+                        checkss: btn.data('tokend')
+                    },
+                    success: function (respon) {
+                        icon.removeClass('fa-spinner fa-spin-pulse').addClass(icon.data('icon'));
+                        if (respon.status !== 'OK') {
+                            nvToast(respon.mess || nv_is_del_confirm[2], 'error');
+                            return;
+                        }
+                        location.reload();
+                    },
+                    error: function (xhr, text, err) {
+                        icon.removeClass('fa-spinner fa-spin-pulse').addClass(icon.data('icon'));
+                        nvToast(text, 'error');
+                        console.log(xhr, text, err);
+                    }
+                });
+            });
+        });
+    }
 });
 
 $(window).on('load', function() {
