@@ -210,68 +210,6 @@ function nv_news_fix_block($bid)
 }
 
 /**
- * nv_show_block_list()
- *
- * @param mixed $bid
- */
-function nv_show_block_list($bid)
-{
-    global $db_slave, $nv_Lang, $module_name, $module_data, $op, $global_array_cat, $module_file, $global_config;
-
-    $xtpl = new XTemplate('block_list.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-    $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
-    $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
-    $xtpl->assign('NV_BASE_ADMINURL', NV_BASE_ADMINURL);
-    $xtpl->assign('NV_NAME_VARIABLE', NV_NAME_VARIABLE);
-    $xtpl->assign('NV_OP_VARIABLE', NV_OP_VARIABLE);
-    $xtpl->assign('MODULE_NAME', $module_name);
-    $xtpl->assign('OP', $op);
-    $xtpl->assign('BID', $bid);
-
-    $global_array_cat[0] = ['alias' => 'Other'];
-
-    $sql = 'SELECT t1.id, t1.catid, t1.title, t1.alias, t1.publtime, t1.status, t1.hitstotal, t1.hitscm, t2.weight FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows t1 INNER JOIN ' . NV_PREFIXLANG . '_' . $module_data . '_block t2 ON t1.id = t2.id WHERE t2.bid= ' . $bid . ' AND t1.status=1 ORDER BY t2.weight ASC';
-    $array_block = $db_slave->query($sql)->fetchAll();
-    $num = count($array_block);
-    if ($num > 0) {
-        foreach ($array_block as $row) {
-            $xtpl->assign('ROW', [
-                'publtime' => nv_datetime_format($row['publtime'], 1),
-                'status' => $nv_Lang->getModule('status_' . $row['status']),
-                'hitstotal' => nv_number_format($row['hitstotal']),
-                'hitscm' => nv_number_format($row['hitscm']),
-                'id' => $row['id'],
-                'link' => NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $global_array_cat[$row['catid']]['alias'] . '/' . $row['alias'] . '-' . $row['id'] . $global_config['rewrite_exturl'],
-                'title' => $row['title']
-            ]);
-
-            for ($i = 1; $i <= $num; ++$i) {
-                $xtpl->assign('WEIGHT', [
-                    'key' => $i,
-                    'title' => $i,
-                    'selected' => $i == $row['weight'] ? ' selected="selected"' : ''
-                ]);
-                $xtpl->parse('main.loop.weight');
-            }
-
-            $xtpl->parse('main.loop');
-        }
-
-        if (defined('NV_IS_SPADMIN')) {
-            $xtpl->assign('ORDER_PUBLTIME', md5($bid . NV_CHECK_SESSION));
-            $xtpl->parse('main.order_publtime');
-        }
-
-        $xtpl->parse('main');
-        $contents = $xtpl->text('main');
-    } else {
-        $contents = '&nbsp;';
-    }
-
-    return $contents;
-}
-
-/**
  * GetCatidInParent()
  *
  * @param mixed $catid

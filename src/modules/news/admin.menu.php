@@ -123,8 +123,6 @@ if ($NV_IS_ADMIN_MODULE) {
 
     $allow_func[] = 'block';
     $allow_func[] = 'groups';
-    $allow_func[] = 'change_block';
-    $allow_func[] = 'list_block';
 
     $allow_func[] = 'authors';
 

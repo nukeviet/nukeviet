@@ -2453,6 +2453,195 @@ $(function () {
             });
         });
     }
+
+    if (nv_func_name === 'block') {
+        // Chọn/bỏ chọn tất cả checkbox
+        $('#check-all-block').on('change', function () {
+            $('.block-item-check').prop('checked', this.checked);
+        });
+        $(document).on('change', '.block-item-check', function () {
+            if (!this.checked) {
+                $('#check-all-block').prop('checked', false);
+            } else if ($('.block-item-check:not(:checked)').length === 0) {
+                $('#check-all-block').prop('checked', true);
+            }
+        });
+
+        // Xác nhận và chuyển hướng sắp xếp theo thời gian đăng
+        $('[data-toggle="confirm-order-publtime"]').on('click', function (e) {
+            e.preventDefault();
+            const href = $(this).data('href');
+            nvConfirm(nv_is_change_act_confirm[0], function () {
+                location.href = href;
+            });
+        });
+
+        // Thay đổi thứ tự bài viết trong nhóm tin bằng popover
+        const blockWeightTplEl = document.getElementById('block-weight-tpl');
+        if (blockWeightTplEl) {
+            $('[data-toggle="change-block-weight"]').each(function () {
+                const btn = $(this);
+                new bootstrap.Popover(this, {
+                    html: true,
+                    sanitize: false,
+                    trigger: 'click',
+                    placement: 'bottom',
+                    title: btn.attr('data-bs-title'),
+                    content: function () {
+                        const clone = $(blockWeightTplEl).clone().removeClass('d-none');
+                        clone.find('.block-new-weight').attr('value', btn.data('current-weight'));
+                        clone.find('.block-weight-ok')
+                            .attr('data-id', btn.data('id'))
+                            .attr('data-current-weight', btn.data('current-weight'));
+                        return clone.html();
+                    }
+                });
+            });
+
+            // Đóng popover khi click ra ngoài
+            $(document).on('click.blockWeight', function (e) {
+                if (!$(e.target).closest('[data-toggle="change-block-weight"], .popover').length) {
+                    $('[data-toggle="change-block-weight"]').each(function () {
+                        const pop = bootstrap.Popover.getInstance(this);
+                        if (pop) pop.hide();
+                    });
+                }
+            });
+
+            // Tăng/giảm giá trị
+            $(document).on('click', '.block-weight-up, .block-weight-down', function () {
+                const ipt = $(this).closest('.block-weight-item').find('.block-new-weight');
+                const max = parseInt(ipt.attr('max'));
+                let val = parseInt(ipt.val()) || 1;
+                val = $(this).is('.block-weight-up') ? Math.min(val + 1, max) : Math.max(val - 1, 1);
+                ipt.val(val).removeClass('is-invalid');
+            });
+
+            // Xác nhận thay đổi thứ tự
+            $(document).on('click', '.block-weight-ok', function () {
+                const okBtn = $(this);
+                const ipt = okBtn.closest('.block-weight-item').find('.block-new-weight');
+                const id = okBtn.attr('data-id');
+                const currentWeight = parseInt(okBtn.attr('data-current-weight'));
+                const newWeight = parseInt(ipt.val());
+                const max = parseInt(ipt.attr('max'));
+                const card = $('[data-bid]').first();
+                const bid = card.data('bid');
+                const checkss = $('[data-toggle="change-block-weight"][data-id="' + id + '"]').data('tokend');
+
+                if (!newWeight || newWeight < 1 || newWeight > max) {
+                    ipt.addClass('is-invalid');
+                    return;
+                }
+
+                $('[data-toggle="change-block-weight"]').each(function () {
+                    const pop = bootstrap.Popover.getInstance(this);
+                    if (pop) pop.hide();
+                });
+
+                if (newWeight !== currentWeight) {
+                    $.ajax({
+                        type: 'POST',
+                        dataType: 'json',
+                        url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=' + nv_func_name + '&bid=' + bid + '&nocache=' + new Date().getTime(),
+                        data: {
+                            changeweight: 1,
+                            checkss: checkss,
+                            id: id,
+                            new_weight: newWeight
+                        },
+                        success: function (respon) {
+                            if (respon.status !== 'OK') {
+                                nvToast(nv_is_change_act_confirm[2], 'error');
+                            }
+                            location.reload();
+                        },
+                        error: function (xhr, text) {
+                            nvToast(text, 'error');
+                        }
+                    });
+                }
+            });
+        }
+
+        // Xóa một bài viết khỏi nhóm tin
+        $('[data-toggle="delete-block-item"]').on('click', function (e) {
+            e.preventDefault();
+            const btn = $(this);
+            const icon = $('i', btn);
+            const card = btn.closest('[data-bid]');
+            const bid = card.data('bid');
+
+            nvConfirm(nv_is_del_confirm[0], function () {
+                if (icon.is('.fa-spinner')) return;
+                icon.removeClass(icon.data('icon')).addClass('fa-spinner fa-spin-pulse');
+                $.ajax({
+                    type: 'POST',
+                    dataType: 'json',
+                    url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=' + nv_func_name + '&bid=' + bid + '&nocache=' + new Date().getTime(),
+                    data: {
+                        delete_items: 1,
+                        checkss: btn.data('tokend'),
+                        'ids[]': btn.data('id')
+                    },
+                    success: function (respon) {
+                        icon.removeClass('fa-spinner fa-spin-pulse').addClass(icon.data('icon'));
+                        if (respon.status !== 'OK') {
+                            nvToast(nv_is_del_confirm[2], 'error');
+                        } else {
+                            location.reload();
+                        }
+                    },
+                    error: function (xhr, text) {
+                        icon.removeClass('fa-spinner fa-spin-pulse').addClass(icon.data('icon'));
+                        nvToast(text, 'error');
+                    }
+                });
+            });
+        });
+
+        // Xóa các bài viết được chọn khỏi nhóm tin
+        $('[data-toggle="delete-block-selected"]').on('click', function (e) {
+            e.preventDefault();
+            const btn = $(this);
+            const card = btn.closest('[data-bid]');
+            const bid = card.data('bid');
+            const checkss = btn.data('tokend');
+            const ids = [];
+
+            $('.block-item-check:checked').each(function () {
+                ids.push($(this).val());
+            });
+
+            if (ids.length === 0) {
+                nvToast(nv_is_del_confirm[1], 'warning');
+                return;
+            }
+
+            nvConfirm(nv_is_del_confirm[0], function () {
+                $.ajax({
+                    type: 'POST',
+                    dataType: 'json',
+                    url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=' + nv_func_name + '&bid=' + bid + '&nocache=' + new Date().getTime(),
+                    data: {
+                        delete_items: 1,
+                        checkss: checkss,
+                        'ids[]': ids
+                    },
+                    success: function (respon) {
+                        if (respon.status !== 'OK') {
+                            nvToast(nv_is_del_confirm[2], 'error');
+                        } else {
+                            location.reload();
+                        }
+                    },
+                    error: function (xhr, text) {
+                        nvToast(text, 'error');
+                    }
+                });
+            });
+        });
+    }
 });
 
 $(window).on('load', function() {
