@@ -21,15 +21,22 @@ if ($nv_Request->isset_request('getUser, q', 'post')) {
 
     $page = $nv_Request->get_page('page', 'post', 1);
 
-    $where = '(tb1.username LIKE :q OR tb1.email LIKE :q OR tb1.first_name LIKE :q OR tb1.last_name LIKE :q) AND tb1.userid IN (SELECT tb2.userid FROM ' . $db_config['prefix'] . '_api_role_logs tb2)';
+    $where = '(tb1.username LIKE :q0 OR tb1.email LIKE :q1 OR tb1.first_name LIKE :q2 OR tb1.last_name LIKE :q3) AND tb1.userid IN (SELECT tb2.userid FROM ' . $db_config['prefix'] . '_api_role_logs tb2)';
 
     $stmt = $db->prepare('SELECT COUNT(*) FROM ' . NV_USERS_GLOBALTABLE . ' tb1 WHERE ' . $where);
-    $stmt->bindValue(':q', '%' . $q . '%', PDO::PARAM_STR);
+    $q_val = '%' . $q . '%';
+    $stmt->bindValue(':q0', $q_val, PDO::PARAM_STR);
+    $stmt->bindValue(':q1', $q_val, PDO::PARAM_STR);
+    $stmt->bindValue(':q2', $q_val, PDO::PARAM_STR);
+    $stmt->bindValue(':q3', $q_val, PDO::PARAM_STR);
     $stmt->execute();
     $total_count = $stmt->fetchColumn();
 
     $stmt = $db->prepare('SELECT tb1.userid, tb1.username FROM ' . NV_USERS_GLOBALTABLE . ' tb1 WHERE ' . $where . ' ORDER BY tb1.username ASC LIMIT ' . (int) ($page - 1) * 30 . ', 30');
-    $stmt->bindValue(':q', '%' . $q . '%', PDO::PARAM_STR);
+    $stmt->bindValue(':q0', $q_val, PDO::PARAM_STR);
+    $stmt->bindValue(':q1', $q_val, PDO::PARAM_STR);
+    $stmt->bindValue(':q2', $q_val, PDO::PARAM_STR);
+    $stmt->bindValue(':q3', $q_val, PDO::PARAM_STR);
     $stmt->execute();
 
     $array_data = [
