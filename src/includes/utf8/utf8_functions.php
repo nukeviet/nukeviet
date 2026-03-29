@@ -253,7 +253,7 @@ function nv_EncString($string)
 
     include NV_ROOTDIR . '/includes/utf8/lookup.php';
 
-    return strtr($string, $utf8_lookup['romanize']);
+    return strtr($string, $utf8_lookup_romanize);
 }
 
 /**

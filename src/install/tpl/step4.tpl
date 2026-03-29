@@ -48,6 +48,11 @@
         <td class="alt"><span class="{DATA_REQUEST.class_session_support}">{DATA_REQUEST.session_support}</span></td>
     </tr>
     <tr>
+        <th scope="row" class="spec">Extension Mbstring Support</th>
+        <td>{LANG.request}</td>
+        <td><span class="{DATA_REQUEST.class_mb_support}">{DATA_REQUEST.mb_support}</span></td>
+    </tr>
+    <tr>
         <th scope="row" class="spec">{LANG.fileuploads_support}</th>
         <td>{LANG.request}</td>
         <td><span class="{DATA_REQUEST.class_fileuploads_support}">{DATA_REQUEST.fileuploads_support}</span></td>
@@ -68,11 +73,6 @@
         <th scope="row" class="spec">{LANG.supports_rewrite}</th>
         <td>{LANG.is_support}</td>
         <td><span class="{DATA_SUPPORT.class_supports_rewrite}">{DATA_SUPPORT.supports_rewrite}</span></td>
-    </tr>
-    <tr>
-        <th scope="row" class="specalt">Extension Mbstring Support</th>
-        <td class="alt">{LANG.is_support}</td>
-        <td class="alt"><span class="{DATA_SUPPORT.class_mbstring_support}">{DATA_SUPPORT.mbstring_support}</span></td>
     </tr>
     <tr>
         <th scope="row" class="spec">Output Buffering</th>

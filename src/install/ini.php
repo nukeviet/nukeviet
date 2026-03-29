@@ -17,7 +17,7 @@ if (headers_sent() or connection_status() != 0 or connection_aborted()) {
     trigger_error('Warning: Headers already sent', E_USER_WARNING);
 }
 
-$nv_resquest_serverext_key = ['php_support', 'opendir_support', 'curl_support', 'gd_support', 'xml_support', 'openssl_support', 'session_support', 'fileuploads_support', 'json_support'];
+$nv_resquest_serverext_key = ['php_support', 'opendir_support', 'mb_support', 'curl_support', 'gd_support', 'xml_support', 'openssl_support', 'session_support', 'fileuploads_support', 'json_support'];
 
 if ($sys_info['ini_set_support']) {
     ini_set('session.use_trans_sid', 0);
@@ -56,7 +56,6 @@ $sys_info['fileuploads_support'] = (ini_get('file_uploads')) ? 1 : 0;
 $sys_info['zlib_support'] = (extension_loaded('zlib')) ? 1 : 0;
 $sys_info['session_support'] = (extension_loaded('session')) ? 1 : 0;
 $sys_info['mb_support'] = (extension_loaded('mbstring')) ? 1 : 0;
-$sys_info['iconv_support'] = (extension_loaded('iconv')) ? 1 : 0;
 $sys_info['json_support'] = (extension_loaded('json')) ? 1 : 0;
 $sys_info['curl_support'] = (extension_loaded('curl') and function_exists('curl_init') and !in_array('curl_init', $sys_info['disable_functions'], true)) ? 1 : 0;
 $sys_info['allowed_set_time_limit'] = (function_exists('set_time_limit') and !in_array('set_time_limit', $sys_info['disable_functions'], true)) ? 1 : 0;
@@ -67,9 +66,6 @@ $sys_info['openssl_support'] = (function_exists('openssl_encrypt')) ? 1 : 0;
 if (!$sys_info['openssl_support']) {
     exit('Openssl library not available');
 }
-
-//Xac dinh tien ich mo rong lam viec voi string
-$sys_info['string_handler'] = $sys_info['mb_support'] ? 'mb' : ($sys_info['iconv_support'] ? 'iconv' : 'php');
 
 //Kiem tra ho tro rewrite
 $_server_software = explode('/', $_SERVER['SERVER_SOFTWARE']);

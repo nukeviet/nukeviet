@@ -854,9 +854,8 @@ class Upload
         }
 
         if (file_exists(NV_ROOTDIR . '/includes/utf8/lookup.php')) {
-            $utf8_lookup = [];
             include NV_ROOTDIR . '/includes/utf8/lookup.php';
-            $word = strtr($word, $utf8_lookup['romanize']);
+            $word = strtr($word, $utf8_lookup_romanize);
         }
 
         $word = rawurldecode($word);

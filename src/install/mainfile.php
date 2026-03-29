@@ -95,7 +95,7 @@ $ErrorHandler = new NukeViet\Core\Error($global_config);
 
 // Ket noi voi cac file cau hinh, function va template
 require NV_ROOTDIR . '/install/ini.php';
-require NV_ROOTDIR . '/includes/utf8/' . $sys_info['string_handler'] . '_string_handler.php';
+require NV_ROOTDIR . '/includes/utf8/mb_string_handler.php';
 require NV_ROOTDIR . '/includes/utf8/utf8_functions.php';
 require NV_ROOTDIR . '/includes/core/filesystem_functions.php';
 require NV_ROOTDIR . '/includes/functions.php';

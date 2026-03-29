@@ -184,10 +184,6 @@ function set_ini_file(&$sys_info)
     $sys_info['mb_support'] = (extension_loaded('mbstring')) ? true : false;
     $content_config .= "\$sys_info['mb_support'] = " . ($sys_info['mb_support'] ? 'true' : 'false') . ";\n";
 
-    //iconv_support
-    $sys_info['iconv_support'] = (extension_loaded('iconv')) ? true : false;
-    $content_config .= "\$sys_info['iconv_support'] = " . ($sys_info['iconv_support'] ? 'true' : 'false') . ";\n";
-
     //allowed_set_time_limit
     $sys_info['allowed_set_time_limit'] = (function_exists('set_time_limit') and !in_array('set_time_limit', $sys_info['disable_functions'], true)) ? true : false;
     $content_config .= "\$sys_info['allowed_set_time_limit'] = " . ($sys_info['allowed_set_time_limit'] ? 'true' : 'false') . ";\n";
@@ -207,10 +203,6 @@ function set_ini_file(&$sys_info)
     //ftp_support
     $sys_info['ftp_support'] = (function_exists('ftp_connect') and !in_array('ftp_connect', $sys_info['disable_functions'], true) and function_exists('ftp_chmod') and !in_array('ftp_chmod', $sys_info['disable_functions'], true) and function_exists('ftp_mkdir') and !in_array('ftp_mkdir', $sys_info['disable_functions'], true) and function_exists('ftp_chdir') and !in_array('ftp_chdir', $sys_info['disable_functions'], true) and function_exists('ftp_nlist') and !in_array('ftp_nlist', $sys_info['disable_functions'], true)) ? true : false;
     $content_config .= "\$sys_info['ftp_support'] = " . ($sys_info['ftp_support'] ? 'true' : 'false') . ";\n";
-
-    //Xac dinh tien ich mo rong lam viec voi string
-    $sys_info['string_handler'] = $sys_info['mb_support'] ? 'mb' : ($sys_info['iconv_support'] ? 'iconv' : 'php');
-    $content_config .= "\$sys_info['string_handler'] = '" . $sys_info['string_handler'] . "';\n";
 
     //support_cache
     $sys_info['support_cache'] = [];
@@ -444,4 +436,9 @@ $session_save_handler = ini_get('session.save_handler');
 $session_save_path = ini_get('session.save_path');
 if (!extension_loaded('session') or empty($session_save_handler) or ($session_save_handler != 'files' and empty($session_save_path))) {
     throw new \NukeViet\Http\HttpException('Session object not supported', 500);
+}
+
+//Neu he thong khong ho tro mbstring se bao loi
+if (!extension_loaded('mbstring')) {
+    throw new \NukeViet\Http\HttpException('Mbstring library not available', 500);
 }
