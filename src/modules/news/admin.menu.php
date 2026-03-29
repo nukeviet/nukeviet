@@ -111,7 +111,6 @@ if ($NV_IS_ADMIN_MODULE) {
 
     $allow_func[] = 'cat';
     $allow_func[] = 'change_cat';
-    $allow_func[] = 'list_cat';
     $allow_func[] = 'del_cat';
 
     $allow_func[] = 'admins';

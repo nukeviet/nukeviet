@@ -710,6 +710,11 @@ $(function() {
         var that = $(this),
             data = new FormData(that[0]),
             callback = that.data('callback');
+        const submitter = e.originalEvent?.submitter;
+        if (submitter && submitter.name) {
+            data.append(submitter.name, submitter.value);
+        }
+
         $('input, textarea, select, button', that).prop('disabled', true);
         $.ajax({
             url: that.attr('action'),

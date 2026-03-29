@@ -20,7 +20,7 @@ if (defined('NV_EDITOR')) {
 }
 
 $currentpath = NV_UPLOADS_DIR . '/' . $module_upload;
-$error = $admins = '';
+$admins = '';
 $savecat = 0;
 [$catid, $parentid, $title, $titlesite, $alias, $description, $descriptionhtml, $keywords, $groups_view, $image, $viewdescription, $featured, $ad_block_cat, $layout_func] = [
     0,
@@ -134,11 +134,23 @@ if (!empty($savecat)) {
 
     if (!defined('NV_IS_ADMIN_MODULE')) {
         if (!(isset($array_cat_admin[$admin_id][$parentid]) and $array_cat_admin[$admin_id][$parentid]['admin'] == 1)) {
-            nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&parentid=' . $parentid);
+            nv_jsonOutput([
+                'status' => 'error',
+                'mess' => $nv_Lang->getModule('errorsave')
+            ]);
         }
     }
 
-    if ($catid == 0 and $title != '') {
+    if (empty($title)) {
+        nv_jsonOutput([
+            'status' => 'error',
+            'mess' => $nv_Lang->getModule('error_name'),
+            'input' => 'title',
+            'input_parent' => '#idtitle_parent'
+        ]);
+    }
+
+    if ($catid == 0) {
         $weight = $db->query('SELECT max(weight) FROM ' . NV_PREFIXLANG . '_' . $module_data . '_cat WHERE parentid=' . $parentid)->fetchColumn();
         $weight = (int) $weight + 1;
         $viewcat = 'viewcat_page_new';
@@ -191,11 +203,16 @@ if (!empty($savecat)) {
 
             $nv_Cache->delMod($module_name);
             nv_insert_logs(NV_LANG_DATA, $module_name, $nv_Lang->getModule('add_cat'), $title, $admin_info['userid']);
-            nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&parentid=' . $parentid);
-        } else {
-            $error = $nv_Lang->getModule('errorsave');
+            nv_jsonOutput([
+                'status' => 'OK',
+                'redirect' => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&parentid=' . $parentid
+            ]);
         }
-    } elseif ($catid > 0 and $title != '') {
+        nv_jsonOutput([
+            'status' => 'error',
+            'mess' => $nv_Lang->getModule('errorsave')
+        ]);
+    } else {
         $stmt = $db->prepare('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_cat SET
             parentid= :parentid, title= :title, titlesite=:titlesite, alias = :alias,
             description = :description, descriptionhtml = :descriptionhtml,
@@ -227,7 +244,6 @@ if (!empty($savecat)) {
                 $db->query($sql);
 
                 nv_fix_cat_order();
-                nv_insert_logs(NV_LANG_DATA, $module_name, $nv_Lang->getModule('edit_cat'), $title, $admin_info['userid']);
             }
 
             // Kiểm tra đăng kí, hủy đăng kí các khối block tùy chỉnh
@@ -243,12 +259,16 @@ if (!empty($savecat)) {
             }
 
             $nv_Cache->delMod($module_name);
-            nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&parentid=' . $parentid);
-        } else {
-            $error = $nv_Lang->getModule('errorsave');
+            nv_insert_logs(NV_LANG_DATA, $module_name, $nv_Lang->getModule('edit_cat'), $title, $admin_info['userid']);
+            nv_jsonOutput([
+                'status' => 'OK',
+                'redirect' => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&parentid=' . $parentid
+            ]);
         }
-    } else {
-        $error = $nv_Lang->getModule('error_name');
+        nv_jsonOutput([
+            'status' => 'error',
+            'mess' => $nv_Lang->getModule('errorsave')
+        ]);
     }
 }
 
@@ -275,39 +295,48 @@ foreach ($global_array_cat as $catid_i => $array_value) {
     }
 }
 
-if (!empty($array_cat_list)) {
-    $cat_listsub = [];
-    foreach ($array_cat_list as $catid_i => $title_i) {
-        if (!in_array((int) $catid_i, array_map('intval', $array_in_cat), true)) {
-            $cat_listsub[] = [
-                'value' => $catid_i,
-                'selected' => ($catid_i == $parentid) ? ' selected="selected"' : '',
-                'title' => $title_i
-            ];
-        }
-    }
-
-    $groups_views = [];
-    foreach ($groups_list as $group_id => $grtl) {
-        $groups_views[] = [
-            'value' => $group_id,
-            'checked' => in_array((int) $group_id, $groups_view, true) ? ' checked="checked"' : '',
-            'title' => $grtl
+// Build danh sách chuyên mục cha
+$cat_listsub = [];
+foreach ($array_cat_list as $catid_i => $title_i) {
+    if (!in_array((int) $catid_i, array_map('intval', $array_in_cat), true)) {
+        $cat_listsub[] = [
+            'value' => $catid_i,
+            'title' => $title_i
         ];
     }
+}
 
-    $ad_block_cats = [];
-    $ad_block_list = [
-        1 => $nv_Lang->getModule('ad_block_top'),
-        2 => $nv_Lang->getModule('ad_block_bot')
+// Build danh sách nhóm người dùng
+$groups_views = [];
+foreach ($groups_list as $group_id => $grtl) {
+    $groups_views[] = [
+        'value' => $group_id,
+        'is_checked' => in_array((int) $group_id, $groups_view, true),
+        'title' => $grtl
     ];
-    foreach ($ad_block_list as $ad_block_id => $ad_block_tl) {
-        $ad_block_cats[] = [
-            'value' => $ad_block_id,
-            'checked' => in_array((int) $ad_block_id, $ad_block_cat, true) ? ' checked="checked"' : '',
-            'title' => $ad_block_tl
-        ];
-    }
+}
+
+// Build danh sách khối quảng cáo
+$ad_block_list = [
+    1 => $nv_Lang->getModule('ad_block_top'),
+    2 => $nv_Lang->getModule('ad_block_bot')
+];
+$ad_block_cats = [];
+foreach ($ad_block_list as $ad_block_id => $ad_block_tl) {
+    $ad_block_cats[] = [
+        'value' => $ad_block_id,
+        'is_checked' => in_array((int) $ad_block_id, $ad_block_cat, true),
+        'title' => $ad_block_tl
+    ];
+}
+
+// Build tùy chọn hiển thị mô tả
+$viewdescription_options = [];
+for ($i = 0; $i <= 2; ++$i) {
+    $viewdescription_options[] = [
+        'value' => $i,
+        'title' => $nv_Lang->getModule('viewdescription_' . $i)
+    ];
 }
 
 $nv_Lang->setGlobal('title_suggest_max', $nv_Lang->getGlobal('length_suggest_max', 65));
@@ -318,112 +347,216 @@ if (!empty($image) and file_exists(NV_UPLOADS_REAL_DIR . '/' . $module_upload . 
     $currentpath = dirname($image);
 }
 
-$xtpl = new XTemplate('cat.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-$xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
-$xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
-$xtpl->assign('NV_BASE_ADMINURL', NV_BASE_ADMINURL);
-$xtpl->assign('NV_NAME_VARIABLE', NV_NAME_VARIABLE);
-$xtpl->assign('MODULE_NAME', $module_name);
-$xtpl->assign('OP', $op);
-
-$xtpl->assign('caption', $caption);
-$xtpl->assign('catid', $catid);
-$xtpl->assign('title', $title);
-$xtpl->assign('titlesite', $titlesite);
-$xtpl->assign('alias', $alias);
-$xtpl->assign('parentid', $parentid);
-$xtpl->assign('keywords', $keywords);
-$xtpl->assign('description', nv_htmlspecialchars(nv_br2nl($description)));
-$xtpl->assign('CAT_LIST', nv_show_cat_list($parentid));
-$xtpl->assign('UPLOAD_CURRENT', $currentpath);
-$xtpl->assign('UPLOAD_PATH', NV_UPLOADS_DIR . '/' . $module_upload);
-$xtpl->assign('image', $image);
-
-for ($i = 0; $i <= 2; ++$i) {
-    $data = [
-        'value' => $i,
-        'selected' => ($viewdescription == $i) ? ' checked="checked"' : '',
-        'title' => $nv_Lang->getModule('viewdescription_' . $i)
-    ];
-    $xtpl->assign('VIEWDESCRIPTION', $data);
-    $xtpl->parse('main.content.viewdescription');
-}
+// Build danh sách bài viết nổi bật (chỉ khi sửa chuyên mục)
+$featured_news = [];
 if ($catid > 0) {
     $sql = 'SELECT id FROM ' . NV_PREFIXLANG . '_' . $module_data . '_' . $catid . ' WHERE status=1 ORDER BY ' . $order_articles_by . ' DESC LIMIT 100';
     $result = $db->query($sql);
-    $array_id = [];
-    $array_id[] = $featured;
+    $array_id = [$featured];
     while ($row = $result->fetch()) {
         $array_id[] = $row['id'];
     }
 
     $sql1 = 'SELECT id, title FROM ' . NV_PREFIXLANG . '_' . $module_data . '_' . $catid . ' WHERE id IN (' . implode(',', $array_id) . ') ORDER BY ' . $order_articles_by . ' DESC';
     $result = $db->query($sql1);
-
     while ($row = $result->fetch()) {
-        $row = [
+        $featured_news[] = [
             'id' => $row['id'],
-            'selected' => ($featured == $row['id']) ? ' selected="selected"' : '',
             'title' => $row['title']
         ];
-        $xtpl->assign('FEATURED_NEWS', $row);
-        $xtpl->parse('main.content.featured.featured_loop');
     }
-    $xtpl->parse('main.content.featured');
 }
 
-if (!empty($error)) {
-    $xtpl->assign('ERROR', $error);
-    $xtpl->parse('main.error');
+// Build danh sách bố cục tùy chỉnh
+$layout_opts = [];
+foreach ($layout_array as $value) {
+    $layout_opts[] = preg_replace($global_config['check_op_layout'], '\\1', $value);
 }
 
-if (!empty($array_cat_list)) {
-    if (empty($alias)) {
-        $xtpl->parse('main.content.getalias');
-    }
+$descriptionhtml = nv_htmlspecialchars(nv_editor_br2nl($descriptionhtml));
+if (defined('NV_EDITOR') and nv_function_exists('nv_aleditor')) {
+    $_uploads_dir = NV_UPLOADS_DIR . '/' . $module_upload;
+    $descriptionhtml = nv_aleditor('descriptionhtml', '100%', '200px', $descriptionhtml, 'Basic', $_uploads_dir, $_uploads_dir);
+} else {
+    $descriptionhtml = '<textarea style="width: 100%" name="descriptionhtml" id="descriptionhtml" cols="20" rows="15">' . $descriptionhtml . '</textarea>';
+}
 
-    foreach ($cat_listsub as $data) {
-        $xtpl->assign('cat_listsub', $data);
-        $xtpl->parse('main.content.cat_listsub');
+// Build danh sách chuyên mục hiển thị theo quyền hạn
+$array_cat_check_content = [];
+foreach ($global_array_cat as $catid_i => $array_value) {
+    if (defined('NV_IS_ADMIN_MODULE')) {
+        $array_cat_check_content[] = $catid_i;
+    } elseif (isset($array_cat_admin[$admin_id][$catid_i])) {
+        if (
+            $array_cat_admin[$admin_id][$catid_i]['admin'] == 1
+            || $array_cat_admin[$admin_id][$catid_i]['add_content'] == 1
+            || $array_cat_admin[$admin_id][$catid_i]['pub_content'] == 1
+            || $array_cat_admin[$admin_id][$catid_i]['edit_content'] == 1
+        ) {
+            $array_cat_check_content[] = $catid_i;
+        }
     }
+}
 
-    foreach ($groups_views as $data) {
-        $xtpl->assign('groups_views', $data);
-        $xtpl->parse('main.content.groups_views');
+// Build breadcrumb điều hướng chuyên mục cha
+$cat_title = [];
+if ($parentid > 0) {
+    $parentid_nav = $parentid;
+    $array_cat_title = [];
+    $stt = 0;
+    while ($parentid_nav > 0) {
+        $array_cat_title[] = [
+            'active' => ($stt++ == 0),
+            'link'   => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=cat&amp;parentid=' . $parentid_nav,
+            'title'  => $global_array_cat[$parentid_nav]['title']
+        ];
+        $parentid_nav = $global_array_cat[$parentid_nav]['parentid'];
     }
+    $array_cat_title[] = [
+        'active' => false,
+        'link'   => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=cat',
+        'title'  => $nv_Lang->getModule('cat_parent')
+    ];
+    krsort($array_cat_title, SORT_NUMERIC);
+    $cat_title = array_values($array_cat_title);
+}
 
-    foreach ($ad_block_cats as $ads) {
-        $xtpl->assign('ad_block_cats', $ads);
-        $xtpl->parse('main.content.ad_block_cats');
-    }
-    if ($catid > 0 and !empty($ad_block_cat_old)) {
-        $xtpl->parse('main.content.ad_block_note');
-    }
+// Truy vấn danh sách chuyên mục con trực tiếp
+$sql_cat_list = 'SELECT catid, parentid, title, alias, weight, viewcat, numsubcat, numlinks, newday, status FROM ' . NV_PREFIXLANG . '_' . $module_data . '_cat WHERE parentid = ' . $parentid . ' ORDER BY weight ASC';
+$rowall_cat = $db->query($sql_cat_list)->fetchAll(3);
+$num_cats = count($rowall_cat);
+$array_status = [
+    $nv_Lang->getModule('cat_status_0'),
+    $nv_Lang->getModule('cat_status_1'),
+    $nv_Lang->getModule('cat_status_2')
+];
+$is_large_system = (nv_get_mod_countrows() > NV_MIN_MEDIUM_SYSTEM_ROWS);
 
-    $descriptionhtml = nv_htmlspecialchars(nv_editor_br2nl($descriptionhtml));
-    if (defined('NV_EDITOR') and nv_function_exists('nv_aleditor')) {
-        $_uploads_dir = NV_UPLOADS_DIR . '/' . $module_upload;
-        $descriptionhtml = nv_aleditor('descriptionhtml', '100%', '200px', $descriptionhtml, 'Basic', $_uploads_dir, $_uploads_dir);
+$status_list = [];
+foreach ($array_status as $_key => $_val) {
+    if (!$is_large_system || $_key != 0) {
+        $status_list[] = ['key' => $_key, 'value' => $_val];
+    }
+}
+
+$cat_rows = [];
+$cat_weight_idx = 1;
+foreach ($rowall_cat as $row_r) {
+    [$catid_r, $parentid_r, $title_r, $alias_r, $weight_r, $viewcat_r, $numsubcat_r, $numlinks_r, $newday_r, $status_r] = $row_r;
+
+    if (defined('NV_IS_ADMIN_MODULE')) {
+        $check_show = 1;
     } else {
-        $descriptionhtml = '<textarea style="width: 100%" name="descriptionhtml" id="descriptionhtml" cols="20" rows="15">' . $descriptionhtml . '</textarea>';
-    }
-    $xtpl->assign('DESCRIPTIONHTML', $descriptionhtml);
-
-    // Xuất hiển thị các layout
-    foreach ($layout_array as $value) {
-        $value = preg_replace($global_config['check_op_layout'], '\\1', $value);
-        $xtpl->assign('LAYOUT_FUNC', [
-            'key' => $value,
-            'selected' => ($layout_func == $value) ? ' selected="selected"' : ''
-        ]);
-        $xtpl->parse('main.content.layout_func');
+        $array_cat_r = GetCatidInParent($catid_r);
+        $check_show = array_intersect($array_cat_r, $array_cat_check_content);
     }
 
-    $xtpl->parse('main.content');
+    if (empty($check_show)) {
+        continue;
+    }
+
+    $array_viewcat_r = ($numsubcat_r > 0) ? $array_viewcat_full : $array_viewcat_nosub;
+    if (!array_key_exists($viewcat_r, $array_viewcat_r)) {
+        $viewcat_r = 'viewcat_page_new';
+        $stmt_vc = $db->prepare('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_cat SET viewcat= :viewcat WHERE catid=' . (int) $catid_r);
+        $stmt_vc->bindParam(':viewcat', $viewcat_r, PDO::PARAM_STR);
+        $stmt_vc->execute();
+    }
+
+    $admin_funcs = [];
+    $weight_disabled = $func_cat_disabled = true;
+
+    if (!empty($module_config[$module_name]['instant_articles_active'])) {
+        $admin_funcs['instant_articles'] = urlRewriteWithDomain(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=instant-rss/' . $alias_r, NV_MY_DOMAIN);
+    }
+    if (defined('NV_IS_ADMIN_MODULE') || (isset($array_cat_admin[$admin_id][$catid_r]) && $array_cat_admin[$admin_id][$catid_r]['add_content'] == 1)) {
+        $func_cat_disabled = false;
+        $admin_funcs['add'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=content&amp;catid=' . $catid_r . '&amp;parentid=' . $parentid_r;
+    }
+    if (defined('NV_IS_ADMIN_MODULE') || ($parentid_r > 0 && isset($array_cat_admin[$admin_id][$parentid_r]) && $array_cat_admin[$admin_id][$parentid_r]['admin'] == 1)) {
+        $func_cat_disabled = false;
+        $admin_funcs['edit'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=cat&amp;catid=' . $catid_r . '&amp;parentid=' . $parentid_r;
+    }
+    if (defined('NV_IS_ADMIN_MODULE') || ($parentid_r > 0 && isset($array_cat_admin[$admin_id][$parentid_r]) && $array_cat_admin[$admin_id][$parentid_r]['admin'] == 1)) {
+        $weight_disabled = false;
+        $admin_funcs['delete'] = 1;
+    }
+
+    if ($status_r > $global_code_defined['cat_locked_status']) {
+        $status_text_r = $nv_Lang->getModule('cat_locked_byparent');
+        $status_can_change_r = false;
+    } elseif ($func_cat_disabled || ($is_large_system && $status_r == 0)) {
+        $status_text_r = $array_status[$status_r];
+        $status_can_change_r = false;
+    } else {
+        $status_text_r = $array_status[$status_r];
+        $status_can_change_r = true;
+    }
+
+    $cat_rows[] = [
+        'catid'               => $catid_r,
+        'title'               => $title_r,
+        'link'                => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=cat&amp;parentid=' . $catid_r,
+        'numsubcat'           => $numsubcat_r,
+        'weight'              => $cat_weight_idx,
+        'weight_can_change'   => !$weight_disabled,
+        'numlinks'            => $numlinks_r,
+        'numlinks_can_change' => !$func_cat_disabled,
+        'newday'              => $newday_r,
+        'newday_can_change'   => !$func_cat_disabled,
+        'viewcat_text'        => $array_viewcat_r[$viewcat_r],
+        'viewcat_val'         => $viewcat_r,
+        'viewcat_mode'        => ($numsubcat_r > 0) ? 'full' : 'nosub',
+        'viewcat_can_change'  => !$func_cat_disabled,
+        'status_text'         => $status_text_r,
+        'status_val'          => $status_r,
+        'status_can_change'   => $status_can_change_r,
+        'adminfuncs'          => $admin_funcs,
+        'checkss'             => csrf_create($admin_info['admin_id'] . '_' . $module_name . '_cat' . $catid_r)
+    ];
+    ++$cat_weight_idx;
 }
 
-$xtpl->parse('main');
-$contents .= $xtpl->text('main');
+
+$tpl = new \NukeViet\Template\NVSmarty();
+$tpl->setTemplateDir(get_module_tpl_dir('cat.tpl'));
+
+$tpl->assign('LANG', $nv_Lang);
+$tpl->assign('MODULE_NAME', $module_name);
+$tpl->assign('OP', $op);
+$tpl->assign('CHECKSS', csrf_create($csrf_key));
+$tpl->assign('MODULE_UPLOAD', $module_upload);
+$tpl->assign('IS_EDIT', $catid > 0);
+$tpl->assign('CAPTION', $caption);
+$tpl->assign('CATID', $catid);
+$tpl->assign('PARENTID', $parentid);
+$tpl->assign('TITLE', $title);
+$tpl->assign('TITLESITE', $titlesite);
+$tpl->assign('ALIAS', $alias);
+$tpl->assign('KEYWORDS', $keywords);
+$tpl->assign('DESCRIPTION', nv_htmlspecialchars(nv_br2nl($description)));
+$tpl->assign('CAT_TITLE', $cat_title);
+$tpl->assign('ROWS', $cat_rows);
+$tpl->assign('MAX_WEIGHT', $num_cats);
+$tpl->assign('VIEWCAT_FULL', $array_viewcat_full);
+$tpl->assign('VIEWCAT_NOSUB', $array_viewcat_nosub);
+$tpl->assign('STATUS_LIST', $status_list);
+$tpl->assign('UPLOAD_CURRENT', $currentpath);
+$tpl->assign('IMAGE', $image);
+$tpl->assign('CAT_LISTSUB', $cat_listsub);
+$tpl->assign('GROUPS_VIEWS', $groups_views);
+$tpl->assign('AD_BLOCK_CATS', $ad_block_cats);
+$tpl->assign('AD_BLOCK_NOTE', $catid > 0 && !empty($ad_block_cat_old));
+$tpl->assign('VIEWDESCRIPTION', (int) $viewdescription);
+$tpl->assign('VIEWDESCRIPTION_OPTIONS', $viewdescription_options);
+$tpl->assign('FEATURED', (int) $featured);
+$tpl->assign('FEATURED_NEWS', $featured_news);
+$tpl->assign('LAYOUT_FUNC', $layout_func);
+$tpl->assign('LAYOUT_OPTS', $layout_opts);
+$tpl->assign('DESCRIPTIONHTML', $descriptionhtml);
+$tpl->assign('HAS_CAT_LIST', !empty($array_cat_list));
+
+$contents = $tpl->fetch('cat.tpl');
 
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_admin_theme($contents);

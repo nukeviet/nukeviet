@@ -61,6 +61,11 @@ $(function () {
         });
     }
 
+    // Chọn toàn bộ khi focus
+    $(document).on('focus', '[data-toggle="selectall"]', function () {
+        this.select();
+    });
+
     // Xóa 1 bài viết
     $('[data-toggle="delArticle"]').on('click', function (e) {
         e.preventDefault();
@@ -1607,11 +1612,6 @@ $(function () {
             }
         });
 
-        // Chọn toàn bộ URL feed khi focus để sao chép nhanh.
-        $(document).on('focus', '[data-toggle="selectall"]', function () {
-            this.select();
-        });
-
         // Tạo mật khẩu ngẫu nhiên cho nguồn cấp Instant Articles.
         $('[data-toggle="setting-genpass"]').on('click', function (e) {
             e.preventDefault();
@@ -1993,6 +1993,251 @@ $(function () {
             nvConfirm(nv_is_del_confirm[0], function () {
                 doDeleteTopic(btn.data('id'), btn.data('tokend'), false);
             });
+        });
+    }
+
+    if (nv_func_name === 'cat') {
+        // Cuộn đến form khi đang ở chế độ sửa
+        const catForm = $('#cat-form');
+        if (catForm.length && catForm.data('is-edit')) {
+            $('html, body').animate({ scrollTop: catForm.offset().top - 60 }, 400);
+        }
+
+        // Đếm ký tự tiêu đề
+        $('#titlelength').text($('#idtitle').val().length);
+        $('#idtitle').on('keyup paste', function () {
+            $('#titlelength').text($(this).val().length);
+        });
+
+        // Đếm ký tự tiêu đề trang
+        $('#titlesitelength').text($('#titlesite').val().length);
+        $('#titlesite').on('keyup paste', function () {
+            $('#titlesitelength').text($(this).val().length);
+        });
+
+        // Đếm ký tự mô tả
+        $('#descriptionlength').text($('#description').val().length);
+        $('#description').on('keyup paste', function () {
+            $('#descriptionlength').text($(this).val().length);
+        });
+
+        // Tự động lấy alias khi tiêu đề thay đổi và alias đang trống
+        $('#idtitle').on('change', function () {
+            if ($('#idalias').val() === '') {
+                get_alias('cat', $('[name="catid"]', catForm).val() || '0');
+            }
+        });
+
+        // Nút làm mới alias thủ công
+        $('[data-toggle="refresh-alias"]').on('click', function () {
+            get_alias('cat', $(this).data('catid') || '0');
+        });
+
+        // Khởi tạo select2 cho danh sách chuyên mục cha
+        $('#parentid').select2({
+            language: nv_lang_interface,
+            dir: $('html').attr('dir'),
+            width: '100%'
+        });
+
+        // Quản lý Popover cho thay đổi weight / numlinks / newday chuyên mục
+        let catPopOverAll = [];
+
+        function destroyCatPop() {
+            catPopOverAll.forEach(function(pop) {
+                $(pop._element).data('havepop', false);
+                pop.dispose();
+            });
+            catPopOverAll = [];
+        }
+
+        function getCatPopoverContent(e) {
+            const sourceID = $(e).data('source');
+            let listHtml;
+            if (sourceID) {
+                // Lấy nội dung từ hidden list trong DOM
+                listHtml = $('#' + sourceID).html();
+            } else {
+                // Sinh danh sách số từ min đến max, có cache
+                const keyID = '#tmpcatmod_' + $(e).data('mod');
+                let tmpcatmod = $(keyID);
+                if (tmpcatmod.length && tmpcatmod.data('num') != $(e).data('num')) {
+                    tmpcatmod.remove();
+                    tmpcatmod = $(keyID);
+                }
+                if (!tmpcatmod.length) {
+                    $('body').append('<ul id="tmpcatmod_' + $(e).data('mod') + '" class="d-none" data-num="' + $(e).data('num') + '"></ul>');
+                    tmpcatmod = $(keyID);
+                    for (let i = $(e).data('min'); i <= $(e).data('num'); i++) {
+                        tmpcatmod.append('<li><a href="#" data-value="' + i + '">' + i + '</a></li>');
+                    }
+                }
+                listHtml = tmpcatmod.html();
+            }
+            return '<div class="dropdown-tool-ctn"><ul class="dropdown-tool" data-mod="' + $(e).data('mod') + '" data-id="' + $(e).data('id') + '" data-checkss="' + $(e).data('checkss') + '">' + listHtml + '</ul></div>';
+        }
+
+        // Xử lý sự kiện mở popover, active current item và cuộn tới nó
+        $(document).on('shown.bs.popover', '[data-toggle="changecatnum"]', function() {
+            const ctn = $('#' + $(this).attr('aria-describedby'));
+            const wrapArea = ctn.find('.dropdown-tool-ctn');
+            const wrapContent = ctn.find('.dropdown-tool');
+            wrapContent.find('[data-value="' + $(this).data('current') + '"]').addClass('active');
+            if (wrapArea.height() < wrapContent.height()) {
+                const item = wrapContent.find('li:first');
+                const scrollTop = ($(this).data('current') - $(this).data('min')) * item.height();
+                wrapArea.scrollTop(scrollTop);
+            }
+        });
+
+        // Xử lý khi click nút thay đổi dạng dropdown ở danh sách chuyên mục
+        $(document).on('click', '[data-toggle="changecatnum"]', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            const btn = $(this);
+            if (btn.data('havepop')) {
+                return;
+            }
+            destroyCatPop();
+            btn.data('havepop', true);
+            btn.attr('data-bs-toggle', 'popover');
+            btn.attr('data-bs-trigger', 'manual');
+            btn.attr('data-bs-content', '');
+
+            const popover = new bootstrap.Popover(btn[0], {
+                content: getCatPopoverContent(this),
+                html: true,
+                sanitize: false,
+                placement: 'bottom'
+            });
+            popover.show();
+            catPopOverAll.push(popover);
+        });
+
+        // Xử lý khi click vào item trong popover chuyên mục
+        $(document).on('click', '.dropdown-tool a', function(e) {
+            e.preventDefault();
+            destroyCatPop();
+            const $this = $(this);
+            const ctn = $this.parent().parent();
+            const mod = ctn.data('mod');
+            const btn = $('#cat_' + mod + '_' + ctn.data('id'));
+            const newVal = $this.data('value').toString();
+            const newText = $this.html();
+
+            function doPost() {
+                const prevText = btn.find('span.text').html();
+                btn.find('span.text').html('<i class="fa-solid fa-spinner fa-spin"></i>');
+                btn.prop('disabled', true);
+
+                $.post(
+                    script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=change_cat&nocache=' + new Date().getTime(),
+                    { catid: ctn.data('id'), mod: mod, new_vid: newVal, checkss: ctn.data('checkss') },
+                    function (res) {
+                        btn.prop('disabled', false);
+
+                        if (res.status == 'error') {
+                            nvToast(res.mess || nv_is_change_act_confirm[2], 'error');
+                            btn.find('span.text').html(prevText);
+                            return;
+                        }
+
+                        btn.find('span.text').html(newText);
+                        btn.data('current', newVal);
+
+                        if (mod === 'weight') {
+                            location.reload();
+                        }
+                    }
+                ).fail(function(xhr, text) {
+                    nvToast(text, 'error');
+                    btn.find('span.text').html(prevText);
+                    btn.prop('disabled', false);
+                });
+            }
+
+            // Status = 0: yêu cầu xác nhận trước khi tắt
+            if (mod === 'status' && newVal === '0') {
+                nvConfirm(btn.data('msgconfirm'), doPost);
+                return;
+            }
+
+            doPost();
+        });
+
+        // Tắt hết popover cat khi click ra ngoài
+        $(document).on('click', function(e) {
+            if (!$(e.target).closest('.popover').length) {
+                destroyCatPop();
+            }
+        });
+
+        $('a.viewinstantrss').click(function(e) {
+            e.preventDefault();
+            modalShow($(this).data('modaltitle'), '<div><input type="text" class="form-control" value="' + $(this).attr('href') + '" data-toggle="selectall"/></div>');
+        });
+
+        // Xóa chuyên mục
+        $(document).on('click', '[data-toggle="delete-cat"]', function (e) {
+            e.preventDefault();
+            const btn = $(this);
+            const icon = $('i', btn);
+            if (icon.is('.fa-spinner')) {
+                return;
+            }
+
+            function doDelCat(catid, checkss, submitconfirm) {
+                const postData = {
+                    catid: catid,
+                    checkss: checkss
+                };
+                if (submitconfirm) {
+                    postData.submitconfirm = submitconfirm;
+                }
+                icon.removeClass(icon.data('icon')).addClass('fa-spinner fa-spin-pulse');
+                $.ajax({
+                    type: 'POST',
+                    dataType: 'json',
+                    url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=del_cat&nocache=' + new Date().getTime(),
+                    data: postData,
+                    success: function (res) {
+                        if (res.status === 'OK') {
+                            location.reload();
+                            return;
+                        }
+
+                        icon.removeClass('fa-spinner fa-spin-pulse').addClass(icon.data('icon'));
+                        if (res.status === 'error') {
+                            return nvToast(res.mess || nv_is_del_confirm[2], 'error');
+                        }
+
+                        // Xác nhận xóa
+                        if (res.status === 'confirm_rows' || res.status === 'confirm_delcat') {
+                            nvConfirm(res.mess || nv_is_del_confirm[0], () => {
+                                doDelCat(catid, checkss, 1);
+                            });
+                            return;
+                        }
+
+                        // Modal xử lý bài viết con
+                        if (res.status === 'html') {
+                            const modal = $('#mdDelCat');
+                            modal.find('.modal-body').html(res.html);
+                            modal.find('form').each(function () {
+                                initFormAjKeyboard($(this));
+                            });
+                            bootstrap.Modal.getOrCreateInstance(modal[0]).show();
+                            return;
+                        }
+                    },
+                    error: function (xhr, text) {
+                        icon.removeClass('fa-spinner fa-spin-pulse').addClass(icon.data('icon'));
+                        nvToast(text, 'error');
+                    }
+                });
+            }
+
+            doDelCat(btn.data('id'), btn.data('checkss'), null);
         });
     }
 
