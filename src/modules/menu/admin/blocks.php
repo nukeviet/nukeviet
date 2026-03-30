@@ -73,7 +73,7 @@ if ($action == 'block') {
             nv_insert_logs(NV_LANG_DATA, $module_name, 'Edit menu-block', 'Menu-block id: ' . $arr['id'], $admin_info['userid']);
         }
 
-        $action_menu = $nv_Request->get_title('action_menu', 'post', '', 1);
+        $action_menu = $nv_Request->get_title('action_menu', 'post', '');
         $weight = 0;
         $sort = 0;
         $mid = $arr['id'];

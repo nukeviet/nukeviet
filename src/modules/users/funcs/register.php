@@ -126,7 +126,7 @@ $checkss = $nv_Request->get_title('checkss', 'post', '');
 
 // Check email address for AJAX
 if ($nv_Request->isset_request('checkMail', 'post') and $checkss == $array_register['checkss']) {
-    $email = nv_strtolower(nv_substr($nv_Request->get_title('email', 'post', '', 1), 0, 100));
+    $email = nv_strtolower($nv_Request->get_title('email', 'post', '', 100));
     $check_email = nv_check_email_reg($email);
     if (!empty($check_email)) {
         nv_jsonOutput([
@@ -142,7 +142,7 @@ if ($nv_Request->isset_request('checkMail', 'post') and $checkss == $array_regis
 
 // Check Login for AJAX
 if ($nv_Request->isset_request('checkLogin', 'post') and $checkss == $array_register['checkss']) {
-    $login = $nv_Request->get_title('login', 'post', '', 1);
+    $login = $nv_Request->get_title('login', 'post', '');
     $check_login = nv_check_username_reg($login);
     if (!empty($check_login)) {
         nv_jsonOutput([
@@ -200,14 +200,14 @@ require_once NV_ROOTDIR . '/' . NV_EDITORSDIR . '/' . NV_EDITOR . '/nv.php';
 $custom_fields = $nv_Request->get_array('custom_fields', 'post');
 
 if ($checkss == $array_register['checkss']) {
-    $array_register['first_name'] = nv_substr($nv_Request->get_title('first_name', 'post', '', 1), 0, 255);
-    $array_register['last_name'] = nv_substr($nv_Request->get_title('last_name', 'post', '', 1), 0, 255);
-    $array_register['username'] = $nv_Request->get_title('username', 'post', '', 1);
+    $array_register['first_name'] = $nv_Request->get_title('first_name', 'post', '', 255);
+    $array_register['last_name'] = $nv_Request->get_title('last_name', 'post', '', 255);
+    $array_register['username'] = $nv_Request->get_title('username', 'post', '');
     $array_register['password'] = $nv_Request->get_title('password', 'post', '');
     $array_register['re_password'] = $nv_Request->get_title('re_password', 'post', '');
-    $array_register['email'] = nv_strtolower(nv_substr($nv_Request->get_title('email', 'post', '', 1), 0, 100));
-    $array_register['question'] = $nv_Request->get_title('question', 'post', '', 1);
-    $array_register['answer'] = nv_substr($nv_Request->get_title('answer', 'post', '', 1), 0, 255);
+    $array_register['email'] = nv_strtolower($nv_Request->get_title('email', 'post', '', 100));
+    $array_register['question'] = $nv_Request->get_title('question', 'post', '');
+    $array_register['answer'] = $nv_Request->get_title('answer', 'post', '', 255);
     $array_register['agreecheck'] = $nv_Request->get_int('agreecheck', 'post', 0);
     $array_register['gender'] = $nv_Request->get_title('gender', 'post', '');
     $array_register['birthday'] = $nv_Request->get_title('birthday', 'post', '');

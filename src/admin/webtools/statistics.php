@@ -28,7 +28,7 @@ if ($nv_Request->isset_request('checkss', 'post')) {
     $array_config_global['stat_excl_bot'] = (int) $nv_Request->get_bool('stat_excl_bot', 'post', false);
     $array_config_global['referer_blocker'] = $nv_Request->get_int('referer_blocker', 'post', 0);
 
-    $statistics_timezone = nv_substr($nv_Request->get_title('statistics_timezone', 'post', '', 0), 0, 255);
+    $statistics_timezone = $nv_Request->get_title('statistics_timezone', 'post', '', 255);
 
     if (!empty($statistics_timezone) and in_array($statistics_timezone, $timezone_array, true)) {
         $array_config_global['statistics_timezone'] = $statistics_timezone;
@@ -36,8 +36,8 @@ if ($nv_Request->isset_request('checkss', 'post')) {
         $array_config_global['statistics_timezone'] = NV_SITE_TIMEZONE_NAME;
     }
 
-    $array_config_global['googleAnalyticsID'] = nv_substr($nv_Request->get_title('googleAnalyticsID', 'post', '', 1), 0, 20);
-    $array_config_global['googleAnalytics4ID'] = nv_substr($nv_Request->get_title('googleAnalytics4ID', 'post', '', 1), 0, 20);
+    $array_config_global['googleAnalyticsID'] = $nv_Request->get_title('googleAnalyticsID', 'post', '', 20);
+    $array_config_global['googleAnalytics4ID'] = $nv_Request->get_title('googleAnalytics4ID', 'post', '', 20);
 
     if (!preg_match('/^UA\-\d{4,}\-\d+$/', $array_config_global['googleAnalyticsID'])) {
         $array_config_global['googleAnalyticsID'] = '';
@@ -46,7 +46,7 @@ if ($nv_Request->isset_request('checkss', 'post')) {
         $array_config_global['googleAnalytics4ID'] = '';
     }
 
-    $array_config_global['google_tag_manager'] = nv_substr($nv_Request->get_title('google_tag_manager', 'post', '', 1), 0, 20);
+    $array_config_global['google_tag_manager'] = $nv_Request->get_title('google_tag_manager', 'post', '', 20);
 
     $sth = $db->prepare('UPDATE ' . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = 'sys' AND module = 'site' AND config_name = :config_name");
     foreach ($array_config_global as $config_name => $config_value) {

@@ -148,7 +148,7 @@ if (!empty($catid)) {
 }
 
 if ($nv_Request->isset_request('saveform', 'post')) {
-    $data['title'] = $nv_Request->get_title('title', 'post', '', true);
+    $data['title'] = $nv_Request->get_title('title', 'post', '');
     $data['status'] = (int) $nv_Request->get_bool('status', 'post', false);
 
     if (!csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {

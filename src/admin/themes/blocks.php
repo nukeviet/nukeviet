@@ -55,7 +55,7 @@ if (!in_array($selectthemes, $select_options, true)) {
 $page_url = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=blocks';
 
 // Xác định module và function
-$selectedmodule = $nv_Request->get_title('module', 'get', '', 1);
+$selectedmodule = $nv_Request->get_title('module', 'get', '');
 $func_id = $nv_Request->get_int('func', 'get', 0);
 $set_by_func = false;
 if ($func_id > 0) {

@@ -18,7 +18,7 @@ if (defined('NV_IS_USER_FORUM')) {
 }
 
 $userid = $nv_Request->get_int('userid', 'get', '', 1);
-$checknum = $nv_Request->get_title('checknum', 'get', '', 1);
+$checknum = $nv_Request->get_title('checknum', 'get', '');
 
 if (empty($userid) or empty($checknum)) {
     nv_redirect_location(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);

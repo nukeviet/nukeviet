@@ -159,7 +159,7 @@ if ($nv_Request->get_int('save', 'post', 0)) {
         nv_jsonOutput($respon);
     }
 
-    $position = $nv_Request->get_title('position', 'post', '', 1);
+    $position = $nv_Request->get_title('position', 'post', '');
     if (empty($position)) {
         $respon['input'] = 'position';
         $respon['mess'] = $nv_Lang->getModule('position_incorrect');

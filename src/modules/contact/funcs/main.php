@@ -117,7 +117,7 @@ if ($nv_Request->isset_request('checkss', 'post')) {
         ]);
     }
 
-    $feedback['title'] = nv_substr($nv_Request->get_title('ftitle', 'post', '', 1), 0, 255);
+    $feedback['title'] = $nv_Request->get_title('ftitle', 'post', '', 255);
     if (empty($feedback['title'])) {
         nv_jsonOutput([
             'status' => 'error',
@@ -127,8 +127,8 @@ if ($nv_Request->isset_request('checkss', 'post')) {
     }
 
     if (!defined('NV_IS_USER')) {
-        $feedback['sender_name'] = nv_substr($nv_Request->get_title('fname', 'post', ''), 0, 100);
-        $feedback['sender_email'] = nv_substr($nv_Request->get_title('femail', 'post', '', 1), 0, 100);
+        $feedback['sender_name'] = $nv_Request->get_title('fname', 'post', '', 100);
+        $feedback['sender_email'] = $nv_Request->get_title('femail', 'post', '', 100);
     }
 
     if (empty($feedback['sender_name']) or !preg_match('/^([\p{L}\p{Mn}\p{Pd}\'][\p{L}\p{Mn}\p{Pd}\',\s]*)*$/u', str_replace('&#039;', "'", $feedback['sender_name']))) {
@@ -149,7 +149,7 @@ if ($nv_Request->isset_request('checkss', 'post')) {
         ]);
     }
 
-    $feedback['sender_phone'] = nv_substr($nv_Request->get_title('fphone', 'post', '', 1), 0, 100);
+    $feedback['sender_phone'] = $nv_Request->get_title('fphone', 'post', '', 100);
     if ($feedback['sender_phone_required'] and empty($feedback['sender_phone'])) {
         nv_jsonOutput([
             'status' => 'error',
@@ -158,7 +158,7 @@ if ($nv_Request->isset_request('checkss', 'post')) {
         ]);
     }
 
-    $feedback['sender_address'] = nv_substr($nv_Request->get_title('faddress', 'post', '', 1), 0, 250);
+    $feedback['sender_address'] = $nv_Request->get_title('faddress', 'post', '', 250);
     if ($feedback['sender_address_required'] and empty($feedback['sender_address'])) {
         nv_jsonOutput([
             'status' => 'error',

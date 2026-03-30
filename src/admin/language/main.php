@@ -129,8 +129,8 @@ if (defined('NV_IS_GODADMIN') or ($global_config['idsite'] > 0 and defined('NV_I
     }
 
     $checksess = $nv_Request->get_title('checksess', 'get', '');
-    $keylang = $nv_Request->get_title('keylang', 'get', '', 1);
-    $deletekeylang = $nv_Request->get_title('deletekeylang', 'get', '', 1);
+    $keylang = $nv_Request->get_title('keylang', 'get', '');
+    $deletekeylang = $nv_Request->get_title('deletekeylang', 'get', '');
 
     if ($nv_Request->isset_request('activelang', 'get') and csrf_check($checksess, $admin_info['admin_id'] . '_' . $module_name . '_activelang_' . $keylang) and preg_match('/^[a-z]{2}$/', $keylang)) {
         // Kích hoạt hiển thị ngoài site một ngôn ngữ

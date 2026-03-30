@@ -24,7 +24,7 @@ if ($nv_Request->isset_request('checkss', 'post')) {
             'mess' => $nv_Lang->getGlobal('error_checkss')
         ]);
     }
-    $pageTitleMode = $nv_Request->get_title('pageTitleMode', 'post', '', 1);
+    $pageTitleMode = $nv_Request->get_title('pageTitleMode', 'post', '');
     if (isset($global_config['pageTitleMode'])) {
         $sth = $db->prepare('UPDATE ' . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = 'sys' AND module = 'site' AND config_name = 'pageTitleMode'");
     } else {

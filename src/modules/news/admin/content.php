@@ -700,7 +700,7 @@ if ($is_submit_form) {
             $rowcontent['topicid'] = $stmt->fetchColumn();
         }
     }
-    $rowcontent['author'] = $nv_Request->get_title('author', 'post', '', 1);
+    $rowcontent['author'] = $nv_Request->get_title('author', 'post', '');
     $rowcontent['internal_authors'] = $nv_Request->get_typed_array('internal_authors', 'post', 'int', []);
     $rowcontent['sourcetext'] = $nv_Request->get_title('sourcetext', 'post', '');
     $rowcontent['publtime'] = nv_d2u_post($nv_Request->get_title('publ_date', 'post', ''));
@@ -710,7 +710,7 @@ if ($is_submit_form) {
     if ($rowcontent['archive'] > 0) {
         $rowcontent['archive'] = ($rowcontent['exptime'] > NV_CURRENTTIME) ? 1 : 2;
     }
-    $rowcontent['title'] = $nv_Request->get_title('title', 'post', '', 1);
+    $rowcontent['title'] = $nv_Request->get_title('title', 'post', '');
     // Xử lý file đính kèm
     $rowcontent['files'] = [];
     $fileupload = $nv_Request->get_array('files', 'post');
@@ -770,7 +770,7 @@ if ($is_submit_form) {
     }
 
     $rowcontent['homeimgfile'] = $nv_Request->get_title('homeimg', 'post', '');
-    $rowcontent['homeimgalt'] = $nv_Request->get_title('homeimgalt', 'post', '', 1);
+    $rowcontent['homeimgalt'] = $nv_Request->get_title('homeimgalt', 'post', '');
     $rowcontent['imgposition'] = $nv_Request->get_int('imgposition', 'post', 0);
     if (!array_key_exists($rowcontent['imgposition'], $array_imgposition)) {
         $rowcontent['imgposition'] = 1;

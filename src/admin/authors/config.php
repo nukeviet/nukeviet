@@ -145,9 +145,9 @@ if ($nv_Request->isset_request('submituser', 'post')) {
         $error_user[] = $nv_Lang->getGlobal('error_checkss');
     } else {
         $uid = $nv_Request->get_int('uid', 'post', 0);
-        $username = $nv_Request->get_title('username', 'post', '', 1);
-        $password = $nv_Request->get_title('password', 'post', '', 1);
-        $password2 = $nv_Request->get_title('password2', 'post', '', 1);
+        $username = $nv_Request->get_title('username', 'post', '');
+        $password = $nv_Request->get_title('password', 'post', '');
+        $password2 = $nv_Request->get_title('password2', 'post', '');
         $begintime1 = nv_d2u_post($nv_Request->get_title('begintime1', 'post', ''));
         $endtime1 = nv_d2u_post($nv_Request->get_title('endtime1', 'post', ''));
 
@@ -254,7 +254,7 @@ if ($nv_Request->isset_request('submitip', 'post')) {
             $endtime = 0;
         }
 
-        $notice = $nv_Request->get_title('notice', 'post', '', 1);
+        $notice = $nv_Request->get_title('notice', 'post', '');
         $ipmask = $ip_version == 4 ? $mask : $mask6;
 
         if (empty($error_ip)) {

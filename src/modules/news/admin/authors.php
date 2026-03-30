@@ -204,7 +204,7 @@ if ($nv_Request->isset_request('save', 'post')) {
     }
 
     $aid = $nv_Request->get_int('aid', 'post', 0);
-    $pseudonym = $nv_Request->get_title('pseudonym', 'post', '', 1);
+    $pseudonym = $nv_Request->get_title('pseudonym', 'post', '');
     $uid = $nv_Request->get_int('uid', 'post', 0);
     if ($aid == $my_author_detail['id']) {
         $uid = $my_author_detail['uid'];

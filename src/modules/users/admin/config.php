@@ -203,7 +203,7 @@ if ($nv_Request->isset_request('save', 'post')) {
         $stmt->bindParam(':content', $array_config['active_user_logs'], PDO::PARAM_STR);
         $stmt->execute();
 
-        $array_config['deny_email'] = $nv_Request->get_title('deny_email', 'post', '', 1);
+        $array_config['deny_email'] = $nv_Request->get_title('deny_email', 'post', '');
 
         if (!empty($array_config['deny_email'])) {
             $array_config['deny_email'] = valid_name_config(explode(',', $array_config['deny_email']));
@@ -214,7 +214,7 @@ if ($nv_Request->isset_request('save', 'post')) {
         $stmt->bindParam(':content', $array_config['deny_email'], PDO::PARAM_STR, strlen($array_config['deny_email']));
         $stmt->execute();
 
-        $array_config['deny_name'] = $nv_Request->get_title('deny_name', 'post', '', 1);
+        $array_config['deny_name'] = $nv_Request->get_title('deny_name', 'post', '');
         if (!empty($array_config['deny_name'])) {
             $array_config['deny_name'] = valid_name_config(explode(',', $array_config['deny_name']));
             $array_config['deny_name'] = implode('|', $array_config['deny_name']);
@@ -223,7 +223,7 @@ if ($nv_Request->isset_request('save', 'post')) {
         $stmt->bindParam(':content', $array_config['deny_name'], PDO::PARAM_STR, strlen($array_config['deny_name']));
         $stmt->execute();
 
-        $array_config['password_simple'] = $nv_Request->get_title('password_simple', 'post', '', 1);
+        $array_config['password_simple'] = $nv_Request->get_title('password_simple', 'post', '');
         if (!empty($array_config['password_simple'])) {
             $array_config['password_simple'] = array_map('trim', explode(',', $array_config['password_simple']));
             $array_config['password_simple'] = array_unique($array_config['password_simple']);

@@ -394,7 +394,7 @@ if ($nv_Request->isset_request('edit', 'post')) {
         ]);
     }
 
-    $nickname = nv_substr($nv_Request->get_title('nickname', 'post', ''), 0, 100);
+    $nickname = $nv_Request->get_title('nickname', 'post', '', 100);
     if (empty($nickname)) {
         nv_jsonOutput([
             'status' => 'error',

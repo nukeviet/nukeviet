@@ -182,11 +182,11 @@ if ($nv_Request->isset_request('submit', 'post')) {
     $message = '';
 
     $data['id'] = $nv_Request->get_int('id', 'post', 0);
-    $data['title'] = nv_substr($nv_Request->get_title('title', 'post', ''), 0, 255);
+    $data['title'] = $nv_Request->get_title('title', 'post', '', 255);
     $data['description'] = $nv_Request->get_editor('description', '', NV_ALLOWED_HTML_TAGS);
     $data['link'] = nv_substr($nv_Request->get_string('link', 'post', ''), 0, 255);
-    $data['target'] = nv_substr($nv_Request->get_title('target', 'post', ''), 0, 10);
-    $data['image'] = nv_substr($nv_Request->get_title('image', 'post', ''), 0, 255);
+    $data['target'] = $nv_Request->get_title('target', 'post', '', 10);
+    $data['image'] = $nv_Request->get_title('image', 'post', '', 255);
     $data['status'] = ($nv_Request->get_int('status', 'post', 0) == 0) ? 0 : 1;
     $data['exptime'] = $nv_Request->get_int('exptime', 'post', 0);
 

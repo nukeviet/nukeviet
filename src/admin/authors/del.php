@@ -89,7 +89,7 @@ if (!csrf_check($nv_Request->get_string('checkss', 'post'), $_csrf_key)) {
     ];
 
     $sendmail = $nv_Request->get_int('sendmail', 'post', 0);
-    $reason = $nv_Request->get_title('reason', 'post', '', 1);
+    $reason = $nv_Request->get_title('reason', 'post', '');
     $adminpass = $nv_Request->get_title('adminpass_iavim', 'post');
 
     if (empty($adminpass)) {

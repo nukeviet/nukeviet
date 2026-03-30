@@ -227,7 +227,7 @@ if (!empty($upload_info['complete'])) {
         $info = nv_getFileInfo($path, $upload_info['basename']);
         $info['userid'] = $admin_info['userid'];
 
-        $newalt = $nv_Request->get_title('filealt', 'post', '', true);
+        $newalt = $nv_Request->get_title('filealt', 'post', '');
 
         if (empty($newalt)) {
             $newalt = preg_replace('/(.*)(\.[a-zA-Z0-9]+)$/', '\1', $upload_info['basename']);

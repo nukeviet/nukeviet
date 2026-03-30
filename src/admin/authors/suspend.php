@@ -68,7 +68,7 @@ if ($allow_change and $nv_Request->get_int('save', 'post', 0)) {
         ]);
     }
 
-    $new_reason = (!empty($new_suspend)) ? $nv_Request->get_title('new_reason', 'post', '', 1) : '';
+    $new_reason = (!empty($new_suspend)) ? $nv_Request->get_title('new_reason', 'post', '') : '';
     if (!empty($new_suspend) and empty($new_reason)) {
         nv_jsonOutput([
             'input' => 'new_reason',

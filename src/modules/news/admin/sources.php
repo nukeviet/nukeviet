@@ -121,7 +121,7 @@ if ($nv_Request->isset_request('savecat', 'post')) {
     }
 
     $sourceid = $nv_Request->get_int('sourceid', 'post', 0);
-    $title = $nv_Request->get_title('title', 'post', '', 1);
+    $title = $nv_Request->get_title('title', 'post', '');
     $link = strtolower($nv_Request->get_title('link', 'post', ''));
 
     $url_info = parse_url($link);

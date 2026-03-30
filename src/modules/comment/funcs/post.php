@@ -103,7 +103,7 @@ if (defined('NV_IS_USER')) {
     $email = $user_info['email'];
 } else {
     $userid = 0;
-    $name = $nv_Request->get_title('name', 'post', '', 1);
+    $name = $nv_Request->get_title('name', 'post', '');
     $email = $nv_Request->get_title('email', 'post', '');
 
     if (empty($name)) {
@@ -130,7 +130,7 @@ if (defined('NV_IS_USER')) {
 if (!empty($module_config[$module]['alloweditorcomm'])) {
     $content = nv_editor_nl2br($nv_Request->get_editor('content', '', NV_ALLOWED_HTML_TAGS));
 } else {
-    $content = $nv_Request->get_title('content', 'post', '', 1);
+    $content = $nv_Request->get_title('content', 'post', '');
     $content = nv_nl2br($content);
 }
 if (empty($content)) {

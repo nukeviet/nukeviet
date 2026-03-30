@@ -24,7 +24,7 @@ $array_config_global['dump_autobackup'] = $global_config['dump_autobackup'];
 
 if (csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
     $array_config_global = [];
-    $array_config_global['dump_backup_ext'] = $nv_Request->get_title('dump_backup_ext', 'post', '', 1);
+    $array_config_global['dump_backup_ext'] = $nv_Request->get_title('dump_backup_ext', 'post', '');
     $array_config_global['dump_autobackup'] = $nv_Request->get_int('dump_autobackup', 'post');
     $array_config_global['dump_backup_day'] = $nv_Request->get_int('dump_backup_day', 'post');
     $array_config_global['dump_interval'] = $nv_Request->get_int('dump_interval', 'post', 1);

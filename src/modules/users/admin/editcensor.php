@@ -330,9 +330,9 @@ if (!empty($reviewuid)) {
         $custom_fields = array_merge($row_basic, $row_info, $nv_Request->get_array('custom_fields', 'post'));
         if (!empty($info_basic)) {
             $_user = [];
-            $_user['first_name'] = nv_substr($nv_Request->get_title('first_name', 'post', '', 1), 0, 255);
-            $_user['last_name'] = nv_substr($nv_Request->get_title('last_name', 'post', '', 1), 0, 255);
-            $_user['gender'] = nv_substr($nv_Request->get_title('gender', 'post', '', 1), 0, 1);
+            $_user['first_name'] = $nv_Request->get_title('first_name', 'post', '', 255);
+            $_user['last_name'] = $nv_Request->get_title('last_name', 'post', '', 255);
+            $_user['gender'] = nv_substr($nv_Request->get_title('gender', 'post', ''), 0, 1);
             $_user['view_mail'] = $nv_Request->get_int('view_mail', 'post', 0);
             $_user['sig'] = $nv_Request->get_textarea('sig', '', NV_ALLOWED_HTML_TAGS);
             $_user['birthday'] = $nv_Request->get_title('birthday', 'post');

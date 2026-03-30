@@ -165,8 +165,8 @@ if (!empty($id)) {
 }
 
 if ($nv_Request->isset_request('save', 'post')) {
-    $item['title'] = nv_substr($nv_Request->get_title('title', 'post', ''), 0, 250);
-    $item['voice_key'] = nv_substr($nv_Request->get_title('voice_key', 'post', ''), 0, 250);
+    $item['title'] = $nv_Request->get_title('title', 'post', '', 250);
+    $item['voice_key'] = $nv_Request->get_title('voice_key', 'post', '', 250);
     $item['description'] = $nv_Request->get_string('description', 'post', '');
 
     // Xử lý dữ liệu

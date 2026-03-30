@@ -124,7 +124,7 @@ if ($checkss == $data['checkss']) {
         ]);
     }
 
-    $data['userField'] = nv_substr($nv_Request->get_title('userField', 'post', '', 1), 0, 100);
+    $data['userField'] = $nv_Request->get_title('userField', 'post', '', 100);
     if (empty($data['userField'])) {
         $nv_Request->set_Session('lostpass_seccode', '');
         nv_jsonOutput([
@@ -217,7 +217,7 @@ if ($checkss == $data['checkss']) {
     }
 
     if ($global_config['allowquestion']) {
-        $data['answer'] = $nv_Request->get_title('answer', 'post', '', 1);
+        $data['answer'] = $nv_Request->get_title('answer', 'post', '');
         if ($data['answer'] != $row['answer']) {
             nv_jsonOutput([
                 'status' => 'error',
@@ -240,7 +240,7 @@ if ($checkss == $data['checkss']) {
         }
     }
 
-    $data['verifykey'] = strtoupper($nv_Request->get_title('verifykey', 'post', '', 1));
+    $data['verifykey'] = strtoupper($nv_Request->get_title('verifykey', 'post', ''));
 
     unset($matches);
     $passlostkey = (!empty($row['passlostkey']) and preg_match("/^([0-9]{10,15})\|([a-z0-9]{32})$/i", $row['passlostkey'], $matches)) ? [

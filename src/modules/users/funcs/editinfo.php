@@ -388,7 +388,7 @@ if ((int) $row['safemode'] > 0) {
             ]);
         }
 
-        $safe_key = nv_substr($nv_Request->get_title('safe_key', 'post', '', 1), 0, 32);
+        $safe_key = $nv_Request->get_title('safe_key', 'post', '', 32);
 
         if (empty($row['safekey']) or $safe_key != $row['safekey']) {
             nv_jsonOutput([
@@ -640,10 +640,10 @@ if (in_array('passkey', $types, true) and $array_data['confirmed_pass']) {
 
 // Basic
 if ($checkss == $array_data['checkss'] and $array_data['type'] == 'basic') {
-    $array_data['first_name'] = isset($array_field_config['first_name']) ? nv_substr($nv_Request->get_title('first_name', 'post', '', 1), 0, 255) : $row['first_name'];
-    $array_data['last_name'] = isset($array_field_config['last_name']) ? nv_substr($nv_Request->get_title('last_name', 'post', '', 1), 0, 255) : $row['last_name'];
-    $array_data['gender'] = isset($array_field_config['gender']) ? nv_substr($nv_Request->get_title('gender', 'post', '', 1), 0, 1) : $row['gender'];
-    $array_data['birthday'] = isset($array_field_config['birthday']) ? nv_substr($nv_Request->get_title('birthday', 'post', '', 0), 0, 10) : $row['birthday'];
+    $array_data['first_name'] = isset($array_field_config['first_name']) ? $nv_Request->get_title('first_name', 'post', '', 255) : $row['first_name'];
+    $array_data['last_name'] = isset($array_field_config['last_name']) ? $nv_Request->get_title('last_name', 'post', '', 255) : $row['last_name'];
+    $array_data['gender'] = isset($array_field_config['gender']) ? nv_substr($nv_Request->get_title('gender', 'post', ''), 0, 1) : $row['gender'];
+    $array_data['birthday'] = isset($array_field_config['birthday']) ? $nv_Request->get_title('birthday', 'post', '', 10) : $row['birthday'];
     $array_data['view_mail'] = (int) $nv_Request->get_bool('view_mail', 'post', false);
     $array_data['sig'] = isset($array_field_config['sig']) ? $nv_Request->get_title('sig', 'post', '') : $row['sig'];
 
@@ -750,7 +750,7 @@ if ($checkss == $array_data['checkss'] and $array_data['type'] == 'basic') {
     ]);
 } elseif ($checkss == $array_data['checkss'] and $array_data['type'] == 'username') {
     // Username
-    $nv_username = nv_substr($nv_Request->get_title('username', 'post', '', 1), 0, $global_config['nv_unickmax']);
+    $nv_username = $nv_Request->get_title('username', 'post', '', $global_config['nv_unickmax']);
     $nv_password = $nv_Request->get_title('password', 'post', '');
 
     if (empty($nv_password) or !$crypt->validate_password($nv_password, $row['password'])) {
@@ -810,7 +810,7 @@ if ($checkss == $array_data['checkss'] and $array_data['type'] == 'basic') {
     ]);
 } elseif ($checkss == $array_data['checkss'] and $array_data['type'] == 'email') {
     // Email
-    $nv_email = nv_strtolower(nv_substr($nv_Request->get_title('email', 'post', '', 1), 0, 100));
+    $nv_email = nv_strtolower($nv_Request->get_title('email', 'post', '', 100));
     $nv_password = $nv_Request->get_title('password', 'post', '');
     $nv_verikeysend = (int) $nv_Request->get_bool('vsend', 'post', false);
     if (empty($nv_password) or !$nv_Request->get_bool('verikey', 'session')) {
@@ -1062,8 +1062,8 @@ if ($checkss == $array_data['checkss'] and $array_data['type'] == 'basic') {
     require NV_ROOTDIR . '/modules/' . $module_file . '/edit/passkey.php';
 } elseif ($checkss == $array_data['checkss'] and $array_data['type'] == 'question') {
     // Question
-    $array_data['question'] = isset($array_field_config['question']) ? nv_substr($nv_Request->get_title('question', 'post', '', 1), 0, 255) : $row['question'];
-    $array_data['answer'] = isset($array_field_config['answer']) ? nv_substr($nv_Request->get_title('answer', 'post', '', 1), 0, 255) : $row['answer'];
+    $array_data['question'] = isset($array_field_config['question']) ? $nv_Request->get_title('question', 'post', '', 255) : $row['question'];
+    $array_data['answer'] = isset($array_field_config['answer']) ? $nv_Request->get_title('answer', 'post', '', 255) : $row['answer'];
     $nv_password = $nv_Request->get_title('nv_password', 'post', '');
 
     $custom_fields = [];
@@ -1389,7 +1389,7 @@ if ($checkss == $array_data['checkss'] and $array_data['type'] == 'basic') {
         ]);
     }
 
-    $safe_key = nv_substr($nv_Request->get_title('safe_key', 'post', '', 1), 0, 32);
+    $safe_key = $nv_Request->get_title('safe_key', 'post', '', 32);
 
     if (empty($row['safekey']) or $safe_key != $row['safekey']) {
         nv_jsonOutput([

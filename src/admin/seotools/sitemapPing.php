@@ -187,7 +187,7 @@ if (!empty($searchEngines['searchEngine']) and $nv_Request->isset_request('ping'
         ]);
     }
     $searchEngine = $nv_Request->get_string('searchEngine', 'post');
-    $module = nv_substr($nv_Request->get_title('in_module', 'post', '', 1), 0, 255);
+    $module = $nv_Request->get_title('in_module', 'post', '', 255);
 
     if (empty($searchEngine)) {
         nv_jsonOutput([

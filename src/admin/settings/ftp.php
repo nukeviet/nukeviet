@@ -30,10 +30,10 @@ if ($nv_Request->isset_request('autodetect', 'post')) {
             'mess' => $nv_Lang->getGlobal('error_checkss')
         ]);
     }
-    $ftp_server = nv_unhtmlspecialchars($nv_Request->get_title('ftp_server', 'post', '', 1));
+    $ftp_server = nv_unhtmlspecialchars($nv_Request->get_title('ftp_server', 'post', ''));
     $ftp_port = $nv_Request->get_int('ftp_port', 'post');
-    $ftp_user_name = nv_unhtmlspecialchars($nv_Request->get_title('ftp_user_name', 'post', '', 1));
-    $ftp_user_pass = nv_unhtmlspecialchars($nv_Request->get_title('ftp_user_pass', 'post', '', 0));
+    $ftp_user_name = nv_unhtmlspecialchars($nv_Request->get_title('ftp_user_name', 'post', ''));
+    $ftp_user_pass = nv_unhtmlspecialchars($nv_Request->get_title('ftp_user_pass', 'post', ''));
     $ftp_user_pass == '******' && $ftp_user_pass = $global_config['ftp_user_pass'];
 
     if (empty($ftp_server) or empty($ftp_user_name) or empty($ftp_user_pass)) {
@@ -80,11 +80,11 @@ if ($nv_Request->isset_request('ftp_server', 'post')) {
     }
 
     $post = [
-        'ftp_server' => $nv_Request->get_title('ftp_server', 'post', '', 1),
+        'ftp_server' => $nv_Request->get_title('ftp_server', 'post', ''),
         'ftp_port' => $nv_Request->get_int('ftp_port', 'post'),
-        'ftp_user_name' => $nv_Request->get_title('ftp_user_name', 'post', '', 1),
-        'ftp_user_pass' => $nv_Request->get_title('ftp_user_pass', 'post', '', 0),
-        'ftp_path' => $nv_Request->get_title('ftp_path', 'post', '', 1)
+        'ftp_user_name' => $nv_Request->get_title('ftp_user_name', 'post', ''),
+        'ftp_user_pass' => $nv_Request->get_title('ftp_user_pass', 'post', ''),
+        'ftp_path' => $nv_Request->get_title('ftp_path', 'post', '')
     ];
 
     $post['ftp_user_pass'] == '******' && $post['ftp_user_pass'] = $global_config['ftp_user_pass'];

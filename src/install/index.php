@@ -50,10 +50,10 @@ if ($step == 1) {
 } elseif ($step == 2) {
     // Tu dong nhan dang Remove Path
     if ($nv_Request->isset_request('tetectftp', 'post')) {
-        $ftp_server = nv_unhtmlspecialchars($nv_Request->get_title('ftp_server', 'post', '', 1));
-        $ftp_port = (int) ($nv_Request->get_title('ftp_port', 'post', '21', 1));
-        $ftp_user_name = nv_unhtmlspecialchars($nv_Request->get_title('ftp_user_name', 'post', '', 1));
-        $ftp_user_pass = nv_unhtmlspecialchars($nv_Request->get_title('ftp_user_pass', 'post', '', 1));
+        $ftp_server = nv_unhtmlspecialchars($nv_Request->get_title('ftp_server', 'post', ''));
+        $ftp_port = (int) ($nv_Request->get_title('ftp_port', 'post', '21'));
+        $ftp_user_name = nv_unhtmlspecialchars($nv_Request->get_title('ftp_user_name', 'post', ''));
+        $ftp_user_pass = nv_unhtmlspecialchars($nv_Request->get_title('ftp_user_pass', 'post', ''));
 
         if (!$ftp_server or !$ftp_user_name or !$ftp_user_pass) {
             exit('ERROR|' . $nv_Lang->getModule('ftp_error_empty'));
@@ -783,8 +783,8 @@ if ($step == 1) {
     $error = '';
 
     define('NV_USERS_GLOBALTABLE', $db_config['prefix'] . '_users');
-    $array_data['site_name'] = $nv_Request->get_title('site_name', 'post', $array_data['site_name'], 1);
-    $array_data['nv_login'] = nv_substr($nv_Request->get_title('nv_login', 'post', $array_data['nv_login'], 1), 0, $global_config['nv_unickmax']);
+    $array_data['site_name'] = $nv_Request->get_title('site_name', 'post', $array_data['site_name']);
+    $array_data['nv_login'] = $nv_Request->get_title('nv_login', 'post', $array_data['nv_login'], $global_config['nv_unickmax']);
     $array_data['nv_email'] = $nv_Request->get_title('nv_email', 'post', $array_data['nv_email']);
     $array_data['nv_password'] = $nv_Request->get_title('nv_password', 'post', $array_data['nv_password']);
     $array_data['re_password'] = $nv_Request->get_title('re_password', 'post', $array_data['re_password']);
@@ -795,8 +795,8 @@ if ($step == 1) {
     $array_data['nv_email'] = $check_email[1];
 
     try {
-        $array_data['question'] = $nv_Request->get_title('question', 'post', $array_data['question'], 1);
-        $array_data['answer_question'] = $nv_Request->get_title('answer_question', 'post', $array_data['answer_question'], 1);
+        $array_data['question'] = $nv_Request->get_title('question', 'post', $array_data['question']);
+        $array_data['answer_question'] = $nv_Request->get_title('answer_question', 'post', $array_data['answer_question']);
 
         if (isset($_SERVER['SERVER_ADMIN']) and !empty($_SERVER['SERVER_ADMIN']) and filter_var($_SERVER['SERVER_ADMIN'], FILTER_VALIDATE_EMAIL)) {
             $global_config['site_email'] = $_SERVER['SERVER_ADMIN'];

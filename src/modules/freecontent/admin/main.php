@@ -74,7 +74,7 @@ if ($nv_Request->isset_request('submit', 'post')) {
     $message = '';
 
     $data['bid'] = $nv_Request->get_int('bid', 'post', 0);
-    $data['title'] = nv_substr($nv_Request->get_title('title', 'post', ''), 0, 255);
+    $data['title'] = $nv_Request->get_title('title', 'post', '', 255);
     $data['description'] = $nv_Request->get_title('description', 'post', '');
 
     if (empty($data['title'])) {

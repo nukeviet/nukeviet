@@ -670,7 +670,7 @@ if (!empty($admin_pre_data) and $nv_Request->isset_request('submit2spasskey', 'p
 
 // Login bước 1
 if (empty($admin_pre_data) and $nv_Request->isset_request('nv_login,nv_password', 'post') and csrf_check($nv_Request->get_title('checkss', 'post'), $csrf_key)) {
-    $nv_username = $nv_Request->get_title('nv_login', 'post', '', 1);
+    $nv_username = $nv_Request->get_title('nv_login', 'post', '');
     $nv_password = $nv_Request->get_title('nv_password', 'post', '');
 
     unset($nv_seccode);
@@ -724,7 +724,7 @@ if (empty($admin_pre_data) and $nv_Request->isset_request('nv_login,nv_password'
         define('NV_IS_MOD_USER', true);
         require_once NV_ROOTDIR . '/' . $global_config['dir_forum'] . '/nukeviet/login.php';
         if (empty($nv_username)) {
-            $nv_username = $nv_Request->get_title('nv_login', 'post', '', 1);
+            $nv_username = $nv_Request->get_title('nv_login', 'post', '');
         }
         if (empty($nv_password)) {
             $nv_password = $nv_Request->get_title('nv_password', 'post', '');

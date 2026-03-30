@@ -284,7 +284,7 @@ if ($action == 'role') {
         }
         $save = $nv_Request->get_title('save', 'post', '');
         $data = [
-            'role_title' => nv_substr($nv_Request->get_title('role_title', 'post', ''), 0, 250),
+            'role_title' => $nv_Request->get_title('role_title', 'post', '', 250),
             'role_description' => nv_substr($nv_Request->get_textarea('role_description', '', ''), 0, 250),
             'role_type' => $nv_Request->get_title('role_type', 'post', ''),
             'role_object' => $nv_Request->get_title('role_object', 'post', ''),

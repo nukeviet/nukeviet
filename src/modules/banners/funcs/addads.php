@@ -21,10 +21,10 @@ if (!defined('NV_IS_BANNER_CLIENT')) {
 
 if ($nv_Request->isset_request('confirm', 'post')) {
     $post = [
-        'title' => $nv_Request->get_title('title', 'post', '', 1),
-        'blockid' => $nv_Request->get_title('block', 'post', '', 1),
-        'description' => $nv_Request->get_title('description', 'post', '', 1),
-        'url' => $nv_Request->get_title('url', 'post', '', 0)
+        'title' => $nv_Request->get_title('title', 'post', ''),
+        'blockid' => $nv_Request->get_title('block', 'post', ''),
+        'description' => $nv_Request->get_title('description', 'post', ''),
+        'url' => $nv_Request->get_title('url', 'post', '')
     ];
 
     if ($module_captcha == 'recaptcha') {

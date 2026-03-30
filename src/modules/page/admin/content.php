@@ -63,7 +63,7 @@ if ($nv_Request->isset_request('checkss', 'post')) {
         'status' => 'error',
         'mess' => '',
     ];
-    $row['title'] = nv_substr($nv_Request->get_title('title', 'post', ''), 0, 250);
+    $row['title'] = $nv_Request->get_title('title', 'post', '', 250);
     $row['alias'] = $nv_Request->get_title('alias', 'post', '');
     $row['alias'] = empty($row['alias']) ? change_alias($row['title']) : change_alias($row['alias']);
     if (!empty($page_config['alias_lower'])) {
@@ -77,12 +77,12 @@ if ($nv_Request->isset_request('checkss', 'post')) {
     } else {
         $row['image'] = '';
     }
-    $row['imagealt'] = $nv_Request->get_title('imagealt', 'post', '', 1);
+    $row['imagealt'] = $nv_Request->get_title('imagealt', 'post', '');
     $row['imageposition'] = $nv_Request->get_int('imageposition', 'post', 0);
 
     $row['description'] = $nv_Request->get_textarea('description', '', 'br', 1);
     $row['bodytext'] = $nv_Request->get_editor('bodytext', '', NV_ALLOWED_HTML_TAGS);
-    $row['keywords'] = nv_strtolower($nv_Request->get_title('keywords', 'post', '', 0));
+    $row['keywords'] = nv_strtolower($nv_Request->get_title('keywords', 'post', ''));
 
     $row['socialbutton'] = $nv_Request->get_int('socialbutton', 'post', 0);
 
@@ -97,7 +97,7 @@ if ($nv_Request->isset_request('checkss', 'post')) {
     $row['activecomm'] = !empty($_groups_post) ? implode(',', nv_groups_post(array_intersect($_groups_post, array_keys($groups_list)))) : '';
 
     $row['schema_type'] = $nv_Request->get_title('schema_type', 'post', '');
-    $row['schema_about'] = nv_substr($nv_Request->get_title('schema_about', 'post', ''), 0, 50);
+    $row['schema_about'] = $nv_Request->get_title('schema_about', 'post', '', 50);
     if (!array_key_exists($row['schema_type'], $schema_types)) {
         $row['schema_type'] = 'newsarticle';
     }

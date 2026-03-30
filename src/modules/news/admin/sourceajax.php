@@ -13,7 +13,7 @@ if (!defined('NV_IS_FILE_ADMIN')) {
     exit('Stop!!!');
 }
 
-$q = $nv_Request->get_title('term', 'get', '', 1);
+$q = $nv_Request->get_title('term', 'get', '');
 if (empty($q)) {
     return;
 }

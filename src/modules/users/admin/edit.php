@@ -277,22 +277,22 @@ if ($nv_Request->isset_request('confirm', 'post')) {
             'mess' => 'Error Session, Please close the browser and try again'
         ]);
     }
-    $_user['username'] = $nv_Request->get_title('username', 'post', '', 1);
-    $_user['email'] = nv_strtolower($nv_Request->get_title('email', 'post', '', 1));
+    $_user['username'] = $nv_Request->get_title('username', 'post', '');
+    $_user['email'] = nv_strtolower($nv_Request->get_title('email', 'post', ''));
     if ($access_passus) {
-        $_user['password1'] = $nv_Request->get_title('password1', 'post', '', 0);
-        $_user['password2'] = $nv_Request->get_title('password2', 'post', '', 0);
+        $_user['password1'] = $nv_Request->get_title('password1', 'post', '');
+        $_user['password2'] = $nv_Request->get_title('password2', 'post', '');
     } else {
         $_user['password1'] = $_user['password2'] = '';
     }
     $_user['pass_reset_request'] = $nv_Request->get_int('pass_reset_request', 'post', 0);
     $_user['email_reset_request'] = $nv_Request->get_int('email_reset_request', 'post', 0);
-    $_user['question'] = nv_substr($nv_Request->get_title('question', 'post', '', 1), 0, 255);
-    $_user['answer'] = nv_substr($nv_Request->get_title('answer', 'post', '', 1), 0, 255);
-    $_user['first_name'] = nv_substr($nv_Request->get_title('first_name', 'post', '', 1), 0, 255);
-    $_user['last_name'] = nv_substr($nv_Request->get_title('last_name', 'post', '', 1), 0, 255);
-    $_user['gender'] = nv_substr($nv_Request->get_title('gender', 'post', '', 1), 0, 1);
-    $_user['photo'] = nv_substr($nv_Request->get_title('photo', 'post', '', 1), 0, 255);
+    $_user['question'] = $nv_Request->get_title('question', 'post', '', 255);
+    $_user['answer'] = $nv_Request->get_title('answer', 'post', '', 255);
+    $_user['first_name'] = $nv_Request->get_title('first_name', 'post', '', 255);
+    $_user['last_name'] = $nv_Request->get_title('last_name', 'post', '', 255);
+    $_user['gender'] = nv_substr($nv_Request->get_title('gender', 'post', ''), 0, 1);
+    $_user['photo'] = $nv_Request->get_title('photo', 'post', '', 255);
     $_user['view_mail'] = $nv_Request->get_int('view_mail', 'post', 0);
     $_user['sig'] = $nv_Request->get_textarea('sig', '', NV_ALLOWED_HTML_TAGS);
     $_user['birthday'] = $nv_Request->get_title('birthday', 'post');

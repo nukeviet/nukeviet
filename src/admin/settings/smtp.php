@@ -491,15 +491,15 @@ foreach ($themelist as $theme) {
 $array_config = [];
 // Lưu cấu hình gửi mail
 if ($nv_Request->isset_request('submitsave', 'post') and csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
-    $array_config['mailer_mode'] = nv_substr($nv_Request->get_title('mailer_mode', 'post', '', 1), 0, 255);
-    $array_config['smtp_host'] = nv_substr($nv_Request->get_title('smtp_host', 'post', '', 1), 0, 255);
-    $array_config['smtp_port'] = nv_substr($nv_Request->get_title('smtp_port', 'post', '', 1), 0, 255);
-    $array_config['smtp_username'] = nv_substr($nv_Request->get_title('smtp_username', 'post', ''), 0, 255);
-    $array_config['smtp_password'] = nv_substr($nv_Request->get_title('smtp_password', 'post', ''), 0, 255);
-    $array_config['sender_name'] = nv_substr($nv_Request->get_title('sender_name', 'post', ''), 0, 250);
-    $array_config['sender_email'] = nv_substr($nv_Request->get_title('sender_email', 'post', ''), 0, 250);
-    $array_config['reply_name'] = nv_substr($nv_Request->get_title('reply_name', 'post', ''), 0, 250);
-    $array_config['reply_email'] = nv_substr($nv_Request->get_title('reply_email', 'post', ''), 0, 250);
+    $array_config['mailer_mode'] = $nv_Request->get_title('mailer_mode', 'post', '', 255);
+    $array_config['smtp_host'] = $nv_Request->get_title('smtp_host', 'post', '', 255);
+    $array_config['smtp_port'] = $nv_Request->get_title('smtp_port', 'post', '', 255);
+    $array_config['smtp_username'] = $nv_Request->get_title('smtp_username', 'post', '', 255);
+    $array_config['smtp_password'] = $nv_Request->get_title('smtp_password', 'post', '', 255);
+    $array_config['sender_name'] = $nv_Request->get_title('sender_name', 'post', '', 250);
+    $array_config['sender_email'] = $nv_Request->get_title('sender_email', 'post', '', 250);
+    $array_config['reply_name'] = $nv_Request->get_title('reply_name', 'post', '', 250);
+    $array_config['reply_email'] = $nv_Request->get_title('reply_email', 'post', '', 250);
     $array_config['force_sender'] = (int) ($nv_Request->get_bool('force_sender', 'post', false));
     $array_config['force_reply'] = (int) ($nv_Request->get_bool('force_reply', 'post', false));
     $array_config['notify_email_error'] = (int) ($nv_Request->get_bool('notify_email_error', 'post', false));

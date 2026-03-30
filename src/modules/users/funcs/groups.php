@@ -583,7 +583,7 @@ if (count($array_op) == 3 and $array_op[0] == 'groups' and $array_op[1] and $arr
 
     if ($nv_Request->isset_request('save', 'post')) {
         $rowcontent = [];
-        $rowcontent['group_title'] = $nv_Request->get_title('group_title', 'post', '', 1);
+        $rowcontent['group_title'] = $nv_Request->get_title('group_title', 'post', '');
         if (empty($rowcontent['group_title'])) {
             nv_jsonOutput([
                 'status' => 'error',
@@ -591,7 +591,7 @@ if (count($array_op) == 3 and $array_op[0] == 'groups' and $array_op[1] and $arr
                 'mess' => $nv_Lang->getModule('group_title_empty')
             ]);
         }
-        $rowcontent['group_desc'] = $nv_Request->get_title('group_desc', 'post', '', 1);
+        $rowcontent['group_desc'] = $nv_Request->get_title('group_desc', 'post', '');
         $group_content = $nv_Request->get_string('group_content', 'post', '');
         $rowcontent['group_content'] = defined('NV_EDITOR') ? nv_nl2br($group_content, '') : nv_nl2br(nv_htmlspecialchars(strip_tags($group_content)), '<br />');
 

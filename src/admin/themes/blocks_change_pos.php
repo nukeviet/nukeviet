@@ -14,7 +14,7 @@ if (!defined('NV_IS_FILE_THEMES')) {
 }
 
 $bid = $nv_Request->get_int('bid', 'post');
-$pos_new = nv_unhtmlspecialchars($nv_Request->get_title('pos', 'post', '', 0));
+$pos_new = $nv_Request->get_title('pos', 'post', '');
 
 $stmt = $db->prepare('SELECT bid, theme, position FROM ' . NV_BLOCKS_TABLE . '_groups WHERE bid= :bid');
 $stmt->bindValue(':bid', $bid, PDO::PARAM_INT);

@@ -238,9 +238,8 @@ if ($nv_Request->isset_request('save', 'post')) {
         $dataform['show_profile'] = (int) $nv_Request->get_bool('show_profile', 'post', false);
     }
 
-    $dataform['class'] = nv_substr($nv_Request->get_title('class', 'post', '', 0, $validatefieldCss), 0, 50);
-
-    $dataform['field_type'] = nv_substr($nv_Request->get_title('field_type', 'post', '', 0, $preg_replace), 0, 50);
+    $dataform['class'] = $nv_Request->get_title('class', 'post', '', 50, $validatefieldCss);
+    $dataform['field_type'] = $nv_Request->get_title('field_type', 'post', '', 50, $preg_replace);
 
     $save = 0;
     $language = [];
@@ -261,7 +260,7 @@ if ($nv_Request->isset_request('save', 'post')) {
         $dataform['field'] = $dataform['fieldid'] = $dataform_old['field'];
     } else {
         // Thêm mới field
-        $dataform['field'] = $dataform['fieldid'] = nv_strtolower(nv_substr($nv_Request->get_title('field', 'post', '', 0, $validatefield), 0, 50));
+        $dataform['field'] = $dataform['fieldid'] = nv_strtolower($nv_Request->get_title('field', 'post', '', 50, $validatefield));
 
         require_once NV_ROOTDIR . '/includes/field_not_allow.php';
 
@@ -299,7 +298,7 @@ if ($nv_Request->isset_request('save', 'post')) {
     ];
     if ($dataform['field_type'] == 'textbox' or $dataform['field_type'] == 'textarea' or $dataform['field_type'] == 'editor') {
         $text_fields = 1;
-        $dataform['match_type'] = nv_substr($nv_Request->get_title('match_type', 'post', '', 0, $preg_replace), 0, 50);
+        $dataform['match_type'] = $nv_Request->get_title('match_type', 'post', '', 50, $preg_replace);
         $dataform['match_regex'] = ($dataform['match_type'] == 'regex') ? $nv_Request->get_string('match_regex', 'post', '', false) : '';
         $dataform['func_callback'] = ($dataform['match_type'] == 'callback') ? $nv_Request->get_string('match_callback', 'post', '', false) : '';
         if ($dataform['func_callback'] != '' and !function_exists($dataform['func_callback'])) {

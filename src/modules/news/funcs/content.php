@@ -111,7 +111,7 @@ if (defined('NV_IS_USER') and $nv_Request->isset_request('author_info', 'get')) 
     $page_title = $nv_Lang->getModule('author_info');
 
     if ($nv_Request->isset_request('save', 'post')) {
-        $pseudonym = $nv_Request->get_title('pseudonym', 'post', '', 1);
+        $pseudonym = $nv_Request->get_title('pseudonym', 'post', '');
         if (empty($pseudonym)) {
             nv_jsonOutput([
                 'status' => 'error',
@@ -354,15 +354,15 @@ if ($nv_Request->isset_request('contentid,checkss', 'get')) {
 
         $catids = array_unique($nv_Request->get_typed_array('catids', 'post', 'int', []));
         $rowcontent['listcatid'] = implode(',', $catids);
-        $rowcontent['author'] = $nv_Request->get_title('author', 'post', '', 1);
-        $rowcontent['title'] = $nv_Request->get_title('title', 'post', '', 1);
+        $rowcontent['author'] = $nv_Request->get_title('author', 'post', '');
+        $rowcontent['title'] = $nv_Request->get_title('title', 'post', '');
         $rowcontent['alias'] = strtolower(change_alias($rowcontent['title']));
         if ($module_config[$module_name]['frontend_edit_alias'] == 1 and $contentid == 0) {
             $alias = $nv_Request->get_title('alias', 'post', '');
             !empty($alias) && $rowcontent['alias'] = strtolower(change_alias($alias));
         }
         $rowcontent['hometext'] = $nv_Request->get_title('hometext', 'post', '');
-        $rowcontent['homeimgalt'] = $nv_Request->get_title('homeimgalt', 'post', '', 1);
+        $rowcontent['homeimgalt'] = $nv_Request->get_title('homeimgalt', 'post', '');
         $rowcontent['sourcetext'] = $nv_Request->get_title('sourcetext', 'post', '');
         if ($module_config[$module_name]['frontend_edit_layout'] == 1) {
             $rowcontent['layout_func'] = $nv_Request->get_title('layout_func', 'post', '');

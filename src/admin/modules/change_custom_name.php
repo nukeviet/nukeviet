@@ -40,7 +40,7 @@ if (empty($row)) {
 }
 
 if ($nv_Request->get_int('save', 'post') == '1') {
-    $func_custom_name = $nv_Request->get_title('newvalue', 'post', '', 1);
+    $func_custom_name = $nv_Request->get_title('newvalue', 'post', '');
 
     if (empty($func_custom_name)) {
         $func_custom_name = ucfirst($row['func_name']);

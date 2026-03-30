@@ -23,8 +23,8 @@ if ($nv_Request->isset_request('checkss', 'post') and csrf_check($nv_Request->ge
     $preg_replace = ['pattern' => '/[^a-zA-Z0-9\_]/', 'replacement' => ''];
 
     $array_config_global = [];
-    $array_config_global['cookie_prefix'] = nv_substr($nv_Request->get_title('cookie_prefix', 'post', '', 0, $preg_replace), 0, 255);
-    $array_config_global['session_prefix'] = nv_substr($nv_Request->get_title('session_prefix', 'post', '', 0, $preg_replace), 0, 255);
+    $array_config_global['cookie_prefix'] = $nv_Request->get_title('cookie_prefix', 'post', '', 255, $preg_replace);
+    $array_config_global['session_prefix'] = $nv_Request->get_title('session_prefix', 'post', '', 255, $preg_replace);
     $array_config_global['cookie_secure'] = (int) $nv_Request->get_bool('cookie_secure', 'post', false);
     $array_config_global['cookie_httponly'] = (int) $nv_Request->get_bool('cookie_httponly', 'post', false);
     $array_config_global['cookie_share'] = (int) $nv_Request->get_bool('cookie_share', 'post', false);

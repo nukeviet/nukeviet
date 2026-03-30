@@ -234,7 +234,7 @@ $cookie_themetype = $nv_Request->get_string(CURRENT_THEMETYPE_COOKIE_NAME . NV_L
 // Xử lý yêu cầu thay đổi kiểu giao diện (r, d, m)
 if ($nv_Request->isset_request('nv' . NV_LANG_DATA . 'themever', 'get')) {
     $nv_BotManager->setNoIndex()->printToHeaders();
-    $themetype = $nv_Request->get_title('nv' . NV_LANG_DATA . 'themever', 'get', '', 1);
+    $themetype = $nv_Request->get_title('nv' . NV_LANG_DATA . 'themever', 'get', '');
     if ($themetype != $cookie_themetype and in_array($themetype, $global_config['array_theme_type'], true)) {
         $nv_Request->set_Cookie(CURRENT_THEMETYPE_COOKIE_NAME . NV_LANG_DATA, $themetype, NV_LIVE_COOKIE_TIME);
     }

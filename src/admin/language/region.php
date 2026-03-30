@@ -45,24 +45,24 @@ if (csrf_check($nv_Request->get_string('saveform', 'post'), $csrf_key)) {
     $array['leading_zero'] = (int) $nv_Request->get_bool('leading_zero', 'post', false);
     $array['trailing_zero'] = (int) $nv_Request->get_bool('trailing_zero', 'post', false);
 
-    $array['currency_symbol'] = nv_substr($nv_Request->get_title('currency_symbol', 'post', ''), 0, 10);
+    $array['currency_symbol'] = $nv_Request->get_title('currency_symbol', 'post', '', 10);
     $array['currency_display'] = $nv_Request->get_absint('currency_display', 'post', 0);
     $array['currency_decimal_symbol'] = nv_substr($nv_Request->get_title('currency_decimal_symbol', 'post', ''), 0, 1);
     $array['currency_thousand_symbol'] = nv_substr($nv_Request->get_title('currency_thousand_symbol', 'post', ''), 0, 1);
     $array['currency_decimal_length'] = $nv_Request->get_absint('currency_decimal_length', 'post', 0);
     $array['currency_trailing_zero'] = (int) $nv_Request->get_bool('currency_trailing_zero', 'post', false);
 
-    $array['date_short'] = nv_substr($nv_Request->get_title('date_short', 'post', ''), 0, 50);
-    $array['date_long'] = nv_substr($nv_Request->get_title('date_long', 'post', ''), 0, 50);
+    $array['date_short'] = $nv_Request->get_title('date_short', 'post', '', 50);
+    $array['date_long'] = $nv_Request->get_title('date_long', 'post', '', 50);
     $array['first_day_of_week'] = (int) $nv_Request->get_bool('first_day_of_week', 'post', false);
 
-    $array['time_short'] = nv_substr($nv_Request->get_title('time_short', 'post', ''), 0, 50);
-    $array['time_long'] = nv_substr($nv_Request->get_title('time_long', 'post', ''), 0, 50);
-    $array['am_char'] = nv_substr($nv_Request->get_title('am_char', 'post', ''), 0, 50);
-    $array['pm_char'] = nv_substr($nv_Request->get_title('pm_char', 'post', ''), 0, 50);
+    $array['time_short'] = $nv_Request->get_title('time_short', 'post', '', 50);
+    $array['time_long'] = $nv_Request->get_title('time_long', 'post', '', 50);
+    $array['am_char'] = $nv_Request->get_title('am_char', 'post', '', 50);
+    $array['pm_char'] = $nv_Request->get_title('pm_char', 'post', '', 50);
 
-    $array['date_get'] = nv_substr($nv_Request->get_title('date_get', 'post', ''), 0, 50);
-    $array['date_post'] = nv_substr($nv_Request->get_title('date_post', 'post', ''), 0, 50);
+    $array['date_get'] = $nv_Request->get_title('date_get', 'post', '', 50);
+    $array['date_post'] = $nv_Request->get_title('date_post', 'post', '', 50);
 
     if ($array['decimal_length'] > 9) {
         $array['decimal_length'] = 9;
