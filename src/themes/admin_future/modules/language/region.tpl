@@ -16,6 +16,9 @@
                     <li class="nav-item">
                         <a class="nav-link text-truncate{$TAB eq 'time' ? ' active' : ''}" data-bs-toggle="tab" id="link-time" data-tab="time" data-bs-target="#tab-time" aria-current="{$TAB eq 'time' ? 'true' : 'false'}" role="tab" aria-controls="tab-time" aria-selected="{$TAB eq 'time' ? 'true' : 'false'}" href="#" data-location="{$smarty.const.NV_BASE_ADMINURL}index.php?{$smarty.const.NV_LANG_VARIABLE}={$smarty.const.NV_LANG_DATA}&amp;{$smarty.const.NV_NAME_VARIABLE}={$MODULE_NAME}&amp;{$smarty.const.NV_OP_VARIABLE}={$OP}&amp;tab=time">{$LANG->getModule('region_time')}</a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-truncate{$TAB eq 'text' ? ' active' : ''}" data-bs-toggle="tab" id="link-text" data-tab="text" data-bs-target="#tab-text" aria-current="{$TAB eq 'text' ? 'true' : 'false'}" role="tab" aria-controls="tab-text" aria-selected="{$TAB eq 'text' ? 'true' : 'false'}" href="#" data-location="{$smarty.const.NV_BASE_ADMINURL}index.php?{$smarty.const.NV_LANG_VARIABLE}={$smarty.const.NV_LANG_DATA}&amp;{$smarty.const.NV_NAME_VARIABLE}={$MODULE_NAME}&amp;{$smarty.const.NV_OP_VARIABLE}={$OP}&amp;tab=text">{$LANG->getModule('tab_dir')}</a>
+                    </li>
                 </ul>
             </div>
             <div class="card-body">
@@ -260,6 +263,30 @@
                                 </div>
                                 <div class="row">
                                     <div class="col-12 col-sm-8 col-lg-6 col-xxl-5 offset-sm-3">
+                                        <button type="submit" class="btn btn-primary">{$LANG->getGlobal('submit')}</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tab-pane fade{$TAB eq 'text' ? ' show active' : ''}" id="tab-text" role="tabpanel" aria-labelledby="link-text" tabindex="0">
+                            <div class="form-contents">
+                                <div class="row mb-3">
+                                    <div class="col-sm-3 col-form-label text-sm-end">{$LANG->getModule('dir')}</div>
+                                    <div class="col-sm-9">
+                                        {assign var="dir" value=$DATA.dir|default:'ltr' nocache}
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio" name="dir" value="ltr" id="element_dir_ltr"{if $dir eq 'ltr'} checked{/if}>
+                                            <label class="form-check-label" for="element_dir_ltr">{$LANG->getModule('ltr')}</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio" name="dir" value="rtl" id="element_dir_rtl"{if $dir eq 'rtl'} checked{/if}>
+                                            <label class="form-check-label" for="element_dir_rtl">{$LANG->getModule('rtl')}</label>
+                                        </div>
+                                        <div class="form-text">{$LANG->getModule('dir_note')}.</div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-8 col-lg-6 col-xxl-5 offset-sm-3">
                                         <button type="submit" class="btn btn-primary">{$LANG->getGlobal('submit')}</button>
                                     </div>
                                 </div>

@@ -219,6 +219,8 @@ $nv_Lang = new \NukeViet\Core\Language();
 $nv_Lang->loadGlobal();
 require NV_ROOTDIR . '/includes/language/' . NV_LANG_INTERFACE . '/functions.php';
 
+NukeViet\Template\Config::setRtl(nv_region_config('dir') == 'rtl');
+
 // Class ma hoa du lieu
 $crypt = new NukeViet\Core\Encryption($global_config['sitekey']);
 
@@ -436,7 +438,7 @@ if (!empty($global_config['openid_servers'])) {
 }
 
 if (empty($global_config['site_logo'])) {
-    $global_config['site_logo'] = NV_ASSETS_DIR . '/images/logo.png';
+    $global_config['site_logo'] = NV_ASSETS_DIR . '/images/logo.svg';
 }
 
 $global_config['array_theme_type'] = !empty($global_config['theme_type']) ? explode(',', $global_config['theme_type']) : [];

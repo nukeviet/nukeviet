@@ -3,10 +3,10 @@
     <div class="header-inner d-flex">
         <div class="site-brand text-center ms-2 ms-md-0">
             <a class="logo" href="{$smarty.const.NV_BASE_ADMINURL}index.php?{$smarty.const.NV_LANG_VARIABLE}={$smarty.const.NV_LANG_DATA}">
-                <img src="{$smarty.const.NV_BASE_SITEURL}themes/{$ADMIN_INFO.admin_theme}/images/logo.png" alt="{$GCONFIG.site_name}">
+                <img src="{$smarty.const.ASSETS_STATIC_URL}/images/logo.svg" alt="{$GCONFIG.site_name}">
             </a>
             <a class="logo-sm" href="{$smarty.const.NV_BASE_ADMINURL}index.php?{$smarty.const.NV_LANG_VARIABLE}={$smarty.const.NV_LANG_DATA}">
-                <img src="{$smarty.const.NV_BASE_SITEURL}themes/{$ADMIN_INFO.admin_theme}/images/logo-sm.png" alt="{$GCONFIG.site_name}">
+                <img src="{$smarty.const.ASSETS_STATIC_URL}/images/logo-xs.svg" alt="{$GCONFIG.site_name}">
             </a>
         </div>
         <div class="site-header flex-grow-1 flex-shrink-1 d-flex align-items-center justify-content-between px-2 px-sm-4">

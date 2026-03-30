@@ -1558,7 +1558,7 @@ function nv_sendmail($from, $to, $subject, $message, $files = '', $AddEmbeddedIm
             }
             if ($row['config_name'] == 'site_logo') {
                 if (empty($row['config_value'])) {
-                    $row['config_value'] = NV_ASSETS_DIR . '/images/logo.png';
+                    $row['config_value'] = NV_ASSETS_DIR . '/images/logo.svg';
                 }
             }
             $gconfigs[$row['config_name']] = $row['config_value'];

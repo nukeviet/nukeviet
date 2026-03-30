@@ -64,6 +64,8 @@ if (csrf_check($nv_Request->get_string('saveform', 'post'), $csrf_key)) {
     $array['date_get'] = $nv_Request->get_title('date_get', 'post', '', 50);
     $array['date_post'] = $nv_Request->get_title('date_post', 'post', '', 50);
 
+    $array['dir'] = $nv_Request->get_title('dir', 'post', '');
+
     if ($array['decimal_length'] > 9) {
         $array['decimal_length'] = 9;
     }
@@ -72,6 +74,9 @@ if (csrf_check($nv_Request->get_string('saveform', 'post'), $csrf_key)) {
     }
     if ($array['currency_display'] < 0 or $array['currency_display'] > 3) {
         $array['currency_display'] = 0;
+    }
+    if (!in_array($array['dir'], ['ltr', 'rtl'])) {
+        $array['dir'] = 'ltr';
     }
 
     if (empty($array['decimal_symbol'])) {
@@ -186,7 +191,7 @@ if (csrf_check($nv_Request->get_string('saveform', 'post'), $csrf_key)) {
 
 $array = isset($global_config['region'], $global_config['region'][NV_LANG_DATA]) ? $global_config['region'][NV_LANG_DATA] : ($nv_default_regions[NV_LANG_DATA] ?? $nv_default_regions['en']);
 
-$tabs = ['numbers', 'currency', 'date', 'time'];
+$tabs = ['numbers', 'currency', 'date', 'time', 'text'];
 $tab = $nv_Request->get_title('tab', 'get', '');
 if (!in_array($tab, $tabs)) {
     $tab = $tabs[0];

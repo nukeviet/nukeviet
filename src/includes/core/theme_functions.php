@@ -99,7 +99,7 @@ function nv_info_die($page_title, $info_title, $info_content, $error_code = 200,
     !empty($global_config['site_theme']) && $dir_basenames[] = $global_config['site_theme'];
 
     empty($global_config['site_url']) && $global_config['site_url'] = NV_SERVER_PROTOCOL . '://' . $global_config['my_domains'][0] . NV_SERVER_PORT;
-    empty($global_config['site_logo']) && $global_config['site_logo'] = NV_ASSETS_DIR . '/images/logo.png';
+    empty($global_config['site_logo']) && $global_config['site_logo'] = NV_ASSETS_DIR . '/images/logo.svg';
 
     $php_dir = get_tpl_dir($dir_basenames, NV_DEFAULT_SITE_THEME, '/theme_info_die.php');
 
