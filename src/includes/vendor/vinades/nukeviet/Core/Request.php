@@ -1489,21 +1489,15 @@ class Request
      * _get_title()
      *
      * @param string $value
-     * @param bool   $specialchars
+     * @param integer   $maxlength
      * @param array  $preg_replace
      * @return string
      */
-    private function _get_title($value, $specialchars, $preg_replace)
+    private function _get_title($value, $maxlength, $preg_replace)
     {
         $value = strip_tags($value);
-        if ((bool) $specialchars == true) {
-            $search = ['&', '\'', '"', '<', '>', '\\', '/', '(', ')', '*', '[', ']', '!', '=', '%', '^', ':', '{', '}', '`', '~'];
-            $replace = ['&amp;', '&#039;', '&quot;', '&lt;', '&gt;', '&#x005C;', '&#x002F;', '&#40;', '&#41;', '&#42;', '&#91;', '&#93;', '&#33;', '&#x3D;', '&#x25;', '&#x5E;', '&#x3A;', '&#x7B;', '&#x7D;', '&#x60;', '&#x7E;'];
-
-            $value = str_replace($replace, $search, $value);
-            $value = str_replace('&#x23;', '#', $value);
-            $value = str_replace($search, $replace, $value);
-            $value = preg_replace("/([^\&]+)\#/", '\\1&#x23;', $value);
+        if($maxlength > 1){
+            $value = mb_substr($value, 0, $maxlength);
         }
 
         if (!empty($preg_replace)) {
@@ -1521,16 +1515,16 @@ class Request
      * @param string      $name
      * @param string|null $mode
      * @param mixed|null  $default
-     * @param bool        $specialchars
+     * @param integer     $maxlength
      * @param array       $preg_replace
      * @param bool        $filter
      * @return string
      */
-    public function get_title($name, $mode = null, $default = null, $specialchars = false, $preg_replace = [], $filter = true)
+    public function get_title($name, $mode = null, $default = null, $maxlength = 0, $preg_replace = [], $filter = true)
     {
         $value = (string) $this->get_value($name, $mode, $default, true, $filter);
 
-        return $this->_get_title($value, $specialchars, $preg_replace);
+        return $this->_get_title($value, $maxlength, $preg_replace);
     }
 
     /**
@@ -1632,14 +1626,14 @@ class Request
      * @param string|null $mode
      * @param string|null $type
      * @param mixed|null  $default
-     * @param bool        $specialchars
+     * @param integer     $maxlength
      * @param array       $preg_replace
      * @param string      $allowed_html_tags
      * @param bool        $save
      * @param bool        $filter
      * @return array
      */
-    public function get_typed_array($name, $mode = null, $type = null, $default = null, $specialchars = false, $preg_replace = [], $allowed_html_tags = '', $save = false, $filter = true)
+    public function get_typed_array($name, $mode = null, $type = null, $default = null, $maxlength = 0, $preg_replace = [], $allowed_html_tags = '', $save = false, $filter = true)
     {
         $arr = $this->get_array($name, $mode, $default, true, $filter);
         $array_keys = array_keys($arr);
@@ -1661,7 +1655,7 @@ class Request
                     $arr[$key] = (array) $arr[$key];
                     break;
                 case 'title':
-                    $arr[$key] = (string) $this->_get_title($arr[$key], $specialchars, $preg_replace);
+                    $arr[$key] = (string) $this->_get_title($arr[$key], $maxlength, $preg_replace);
                     break;
                 case 'textarea':
                     $arr[$key] = (string) $this->_get_textarea($arr[$key], $allowed_html_tags, $save);

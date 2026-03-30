@@ -189,9 +189,9 @@ $value = $nv_Request->get_title('input_name', 'post', '');
 
 Lấy từ POST hoặc GET và lọc HTML
 ```php
-$value = $nv_Request->get_title('input_name', 'post,get', "", 1);
+$value = $nv_Request->get_title('input_name', 'post,get', '');
 ```
-Giá trị sẽ được lọc bởi `nv_htmlspecialchars()`.
+Giá trị sẽ được loại bỏ các thẻ HTML (strip_tags). Dữ liệu tự động escape, bạn KHÔNG cần dùng `nv_htmlspecialchars()` trước khi xuất ra HTML để chống XSS.
 
 
 Lấy từ REQUEST và thay thế ký tự
@@ -202,8 +202,9 @@ $preg_replace = array(
     'pattern' => "/[^a-zA-Z0-9]/",
     'replacement' => "_"
 );
-$value = $nv_Request->get_title('input_name', 'request', $default, 0, $preg_replace);
+$value = $nv_Request->get_title('input_name', 'request', $default, 100, $preg_replace);
 ```
+Trong đó, tham số thứ 4 (`100`) là `$maxlength` (độ dài tối đa của chuỗi).
 
 #### Lấy giá trị biến từ textarea
 
