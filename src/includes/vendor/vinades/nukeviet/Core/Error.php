@@ -54,6 +54,7 @@ class Error
     private $errfile = false;
     private $errline = false;
     private $errid = false;
+    private $errtrace = [];
     private static $errortype = [
         2048 => 'Strict Notice', // Backward compatible with PHP versions below 8.4 (E_STRICT removed in PHP 8.4)
         E_ERROR => 'Error',
@@ -231,6 +232,20 @@ class Error
     }
 
     /**
+     * format_trace()
+     *
+     * @param string $trace
+     * @return array
+     */
+    private static function format_trace($trace)
+    {
+        $trace = explode("\n", self::format_str($trace));
+        $trace = array_map('trim', $trace);
+
+        return array_values(array_filter($trace));
+    }
+
+    /**
      * _log_content()
      *
      * @return string
@@ -267,6 +282,8 @@ class Error
         }
         if (!empty($errstr)) {
             $content['backtrace'] = array_map('trim', $errstr);
+        } elseif (!empty($this->errtrace)) {
+            $content['backtrace'] = $this->errtrace;
         }
 
         return $content;
@@ -434,6 +451,7 @@ class Error
         $this->errstr = self::format_str($errstr);
         !empty($errfile) && $this->errfile = self::format_str($errfile);
         !empty($errline) && $this->errline = $errline;
+        $this->errtrace = [];
         $this->errid = md5(($this->errfile ?: '') . ($this->errline ?: '') . $this->errno);
 
         if ($this->errfile and isset($this->unreported_errors[$this->errfile])) {
@@ -468,6 +486,7 @@ class Error
             $this->errstr = $error['message'];
             $this->errfile = $error['file'];
             $this->errline = $error['line'];
+            $this->errtrace = [];
             $this->errid = md5(($this->errfile ?: '') . ($this->errline ?: '') . $this->errno);
 
             $this->log_control();
@@ -501,6 +520,7 @@ class Error
         $this->errstr = self::format_str($exception->getMessage());
         $this->errfile = self::format_str($exception->getFile());
         $this->errline = $exception->getLine();
+        $this->errtrace = self::format_trace($exception->getTraceAsString());
         $this->errid = md5(($this->errfile ?: '') . ($this->errline ?: '') . $this->errno);
 
         $this->log_control();
