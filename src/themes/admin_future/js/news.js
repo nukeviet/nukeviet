@@ -2643,6 +2643,60 @@ $(function () {
         });
     }
 
+    if (nv_func_name === 'move') {
+        const moveForm = $('form.ajax-submit');
+
+        // Checkbox chuyên mục: hiện/ẩn radio chuyên mục chính
+        $('[data-toggle="catCheckbox"]', moveForm).on('change', function () {
+            const checkedCats = $('[data-toggle="catCheckbox"]:checked', moveForm);
+            const count = checkedCats.length;
+            const currentRadioVal = $('[name="catid"]:checked', moveForm).val();
+
+            // Ẩn hết radio trước
+            $('[name="catid"]', moveForm).hide();
+
+            if (count > 1) {
+                // Hiện radio cho các chuyên mục đang được chọn
+                checkedCats.each(function () {
+                    $('#catright_' + $(this).val()).show();
+                });
+
+                // Nếu radio đang chọn bị bỏ check: bỏ chọn radio đó
+                const currentCatChecked = $('[data-toggle="catCheckbox"][value="' + currentRadioVal + '"]', moveForm).is(':checked');
+                if (!currentCatChecked) {
+                    $('[name="catid"]', moveForm).prop('checked', false);
+                }
+
+                // Nếu không có radio nào được chọn: tự chọn radio đầu tiên
+                if (!$('[name="catid"]:checked', moveForm).length) {
+                    $('[name="catid"]', moveForm).filter(':visible').first().prop('checked', true);
+                }
+            } else {
+                // Chỉ 1 hoặc 0 chuyên mục: không cần chọn chuyên mục chính
+                $('[name="catid"]', moveForm).prop('checked', false);
+            }
+        });
+
+        // Validate trước khi submit (chặn core ajax-submit nếu không hợp lệ)
+        moveForm.on('submit', function (e) {
+            const listid = $('[name="idcheck[]"]:checked', moveForm);
+            if (listid.length < 1) {
+                e.stopImmediatePropagation();
+                e.preventDefault();
+                nvAlert(moveForm.data('msgnocheck'));
+                return false;
+            }
+
+            const catids = $('[name="catids[]"]:checked', moveForm);
+            if (catids.length < 1) {
+                e.stopImmediatePropagation();
+                e.preventDefault();
+                nvAlert(moveForm.data('msgnocat'));
+                return false;
+            }
+        });
+    }
+
     if (nv_func_name === 'topicsnews') {
         // Xóa bài viết khỏi dòng sự kiện
         $('#topicsnews-delbtn').on('click', function (e) {
