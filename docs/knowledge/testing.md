@@ -12,7 +12,7 @@ NukeViet 5 sử dụng **Codeception** làm framework kiểm thử chính, hỗ 
     selenium-standalone start
     ```
 - **Hệ điều hành**: Unix/Linux khuyến khích (Windows hỗ trợ qua Selenium).
-- **Environment**: File `.env` cần được cấu hình đúng URL và DB.
+- **Environment**: File `.env` cần được cấu hình đúng URL và DB. Bạn có thể sao chép từ `.env.example`.
 
 cd vào thư mục gốc của dự án (có file .env) chạy
 ```
@@ -32,8 +32,13 @@ composer install
 ### Chạy theo Nhóm (Group)
 Bạn có thể dùng annotation `@group [name]` trong code và chạy:
 - `php vendor/bin/codecept run -g install` (Cài đặt hệ thống)
+- `php vendor/bin/codecept run -g install-only` (Chỉ kiểm tra cài đặt)
 - `php vendor/bin/codecept run -g users` (Chức năng thành viên)
 - `php vendor/bin/codecept run -g news` (Module tin tức)
+- `php vendor/bin/codecept run -g stat` (Thống kê truy cập)
+- `php vendor/bin/codecept run -g sendmail` (Gửi mail)
+- `php vendor/bin/codecept run -g smtp` (Cấu hình SMTP)
+- `php vendor/bin/codecept run -g all` (Chạy tất cả các nhóm)
 
 ---
 
@@ -77,4 +82,4 @@ Luôn thêm annotation `@group` để phân loại test:
 1. **Database dọn dẹp**: Luôn `DROP TABLE` hoặc xóa dữ liệu rác trong `_after()` để đảm bảo môi trường sạch cho test sau.
 2. **Wait hợp lý**: Dùng `$I->waitForElement` hoặc `$I->waitForText` thay vì `$I->wait(fixed_time)` để tối ưu tốc độ test.
 3. **Môi trường Test**: Nên dùng một database riêng cho testing để tránh mất dữ liệu thực tế.
-4. **.env file**: Đảm bảo tệp `.env` nằm ở thư mục gốc của dự án.
+4. **.env file**: Đảm bảo tệp `.env` nằm ở thư mục gốc của dự án và trỏ đúng vào URL/DB của môi trường test.
