@@ -48,7 +48,7 @@ $sql_create_module[] = 'CREATE TABLE ' . $db_config['prefix'] . "_zalo_article (
  PRIMARY KEY (id),
  UNIQUE KEY zalo_id (zalo_id),
  KEY is_sync (is_sync)
-) ENGINE=MyISAM";
+) ENGINE=InnoDB";
 
 $sql_create_module[] = 'CREATE TABLE ' . $db_config['prefix'] . "_zalo_conversation (
  message_id CHAR(50) NOT NULL,
@@ -65,7 +65,7 @@ $sql_create_module[] = 'CREATE TABLE ' . $db_config['prefix'] . "_zalo_conversat
  note TEXT NOT NULL,
  displayed TINYINT(1) NOT NULL DEFAULT '0',
  PRIMARY KEY (message_id)
-) ENGINE=MyISAM";
+) ENGINE=InnoDB";
 
 $sql_create_module[] = 'CREATE TABLE ' . $db_config['prefix'] . "_zalo_followers (
  user_id CHAR(30) NOT NULL,
@@ -89,33 +89,33 @@ $sql_create_module[] = 'CREATE TABLE ' . $db_config['prefix'] . "_zalo_followers
  is_sync TINYINT(1) NOT NULL DEFAULT '0',
  updatetime INT(11) NOT NULL DEFAULT '0',
  UNIQUE KEY user_id (user_id)
-) ENGINE=MyISAM";
+) ENGINE=InnoDB";
 
 $sql_create_module[] = 'CREATE TABLE ' . $db_config['prefix'] . "_zalo_settings (
  skey CHAR(100) NOT NULL,
  type CHAR(20) NOT NULL DEFAULT '',
  svalue TEXT NOT NULL,
  UNIQUE KEY info_key (skey, type)
-) ENGINE=MyISAM";
+) ENGINE=InnoDB";
 
 $sql_create_module[] = 'CREATE TABLE ' . $db_config['prefix'] . '_zalo_tags (
  alias CHAR(50) NOT NULL,
  name CHAR(100) NOT NULL,
  UNIQUE KEY alias (alias)
-) ENGINE=MyISAM';
+) ENGINE=InnoDB';
 
 $sql_create_module[] = 'CREATE TABLE ' . $db_config['prefix'] . '_zalo_tags_follower (
  tag CHAR(50) NOT NULL,
  user_id CHAR(30) NOT NULL,
  UNIQUE KEY tag (tag, user_id)
-) ENGINE=MyISAM';
+) ENGINE=InnoDB';
 
 $sql_create_module[] = 'CREATE TABLE ' . $db_config['prefix'] . '_zalo_template (
  id SMALLINT(4) NOT NULL AUTO_INCREMENT,
  type CHAR(10) NOT NULL,
  content TEXT NOT NULL,
  PRIMARY KEY (id)
-) ENGINE=MyISAM';
+) ENGINE=InnoDB';
 
 $sql_create_module[] = 'CREATE TABLE ' . $db_config['prefix'] . "_zalo_upload (
  id TINYINT(8) NOT NULL AUTO_INCREMENT,
@@ -130,7 +130,7 @@ $sql_create_module[] = 'CREATE TABLE ' . $db_config['prefix'] . "_zalo_upload (
  addtime INT(11) NOT NULL DEFAULT '0',
  PRIMARY KEY (id),
  KEY type (type)
-) ENGINE=MyISAM";
+) ENGINE=InnoDB";
 
 $sql_create_module[] = 'CREATE TABLE ' . $db_config['prefix'] . "_zalo_video (
  id MEDIUMINT(8) NOT NULL AUTO_INCREMENT,
@@ -147,7 +147,7 @@ $sql_create_module[] = 'CREATE TABLE ' . $db_config['prefix'] . "_zalo_video (
  convert_error_code INT(11) NOT NULL DEFAULT '0',
  addtime INT(11) NOT NULL DEFAULT '0',
  PRIMARY KEY (id)
-) ENGINE=MyISAM";
+) ENGINE=InnoDB";
 
 $sql_create_module[] = 'DELETE FROM ' . NV_CONFIG_GLOBALTABLE . " WHERE  config_name IN ('zaloOfficialAccountID', 'zaloAppID', 'zaloAppSecretKey', 'zaloOAAccessToken', 'zaloOARefreshToken', 'zaloOAAccessTokenTime', 'zaloOASecretKey', 'zaloWebhookIPs', 'check_zaloip_expired')";
 

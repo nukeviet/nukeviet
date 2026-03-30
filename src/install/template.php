@@ -263,10 +263,6 @@ function nv_step_5($db_config, $nextstep)
         $xtpl->parse('step.dbtype');
     }
 
-    if ($db_config['num_table'] > 0) {
-        $xtpl->parse('step.db_detete');
-    }
-
     if (!empty($db_config['error'])) {
         $xtpl->parse('step.errordata');
     }

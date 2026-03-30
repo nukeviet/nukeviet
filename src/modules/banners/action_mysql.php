@@ -72,7 +72,7 @@ $sql_create_module[] = 'CREATE TABLE IF NOT EXISTS ' . $db_config['prefix'] . "_
   KEY click_browse_key (click_browse_key),
   KEY click_os_key (click_os_key),
   PRIMARY KEY (id)
-) ENGINE=MyISAM";
+) ENGINE=InnoDB";
 
 $sql_create_module[] = 'CREATE TABLE IF NOT EXISTS ' . $db_config['prefix'] . "_banners_plans (
   id smallint(5) unsigned NOT NULL AUTO_INCREMENT,
@@ -89,7 +89,7 @@ $sql_create_module[] = 'CREATE TABLE IF NOT EXISTS ' . $db_config['prefix'] . "_
   exp_time int(11) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (id),
   KEY title (title)
-) ENGINE=MyISAM";
+) ENGINE=InnoDB";
 
 $sql_create_module[] = 'CREATE TABLE IF NOT EXISTS ' . $db_config['prefix'] . "_banners_rows (
   id mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
@@ -115,7 +115,7 @@ $sql_create_module[] = 'CREATE TABLE IF NOT EXISTS ' . $db_config['prefix'] . "_
   PRIMARY KEY (id),
   KEY pid (pid),
   KEY clid (clid)
-) ENGINE=MyISAM";
+) ENGINE=InnoDB";
 
 if (defined('NV_IS_INSTALL') or defined('NV_MODULE_RECREATE') or defined('NV_MODULE_ADD')) {
     $sql_create_module[] = 'INSERT IGNORE INTO ' . $db_config['prefix'] . "_banners_plans (id, blang, title, description, form, width, height, act, require_image, uploadtype) VALUES

@@ -82,7 +82,7 @@ $sql_create_module[] = 'CREATE TABLE ' . $db_config['prefix'] . '_' . $lang . '_
   UNIQUE KEY alias (alias),
   KEY parentid (parentid),
   KEY status (status)
-) ENGINE=MyISAM";
+) ENGINE=InnoDB";
 
 $sql_create_module[] = 'CREATE TABLE ' . $db_config['prefix'] . '_' . $lang . '_' . $module_data . "_sources (
   sourceid mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
@@ -94,7 +94,7 @@ $sql_create_module[] = 'CREATE TABLE ' . $db_config['prefix'] . '_' . $lang . '_
   edit_time int(11) unsigned NOT NULL,
   PRIMARY KEY (sourceid),
   UNIQUE KEY title (title)
-) ENGINE=MyISAM";
+) ENGINE=InnoDB";
 
 $sql_create_module[] = 'CREATE TABLE ' . $db_config['prefix'] . '_' . $lang . '_' . $module_data . "_topics (
   topicid smallint(5) unsigned NOT NULL AUTO_INCREMENT,
@@ -109,7 +109,7 @@ $sql_create_module[] = 'CREATE TABLE ' . $db_config['prefix'] . '_' . $lang . '_
   PRIMARY KEY (topicid),
   UNIQUE KEY title (title),
   UNIQUE KEY alias (alias)
-) ENGINE=MyISAM";
+) ENGINE=InnoDB";
 
 $sql_create_module[] = 'CREATE TABLE ' . $db_config['prefix'] . '_' . $lang . '_' . $module_data . "_block_cat (
   bid smallint(5) unsigned NOT NULL AUTO_INCREMENT,
@@ -126,14 +126,14 @@ $sql_create_module[] = 'CREATE TABLE ' . $db_config['prefix'] . '_' . $lang . '_
   PRIMARY KEY (bid),
   UNIQUE KEY title (title),
   UNIQUE KEY alias (alias)
-) ENGINE=MyISAM";
+) ENGINE=InnoDB";
 
 $sql_create_module[] = 'CREATE TABLE ' . $db_config['prefix'] . '_' . $lang . '_' . $module_data . '_block (
   bid smallint(5) unsigned NOT NULL,
   id int(11) unsigned NOT NULL,
   weight int(11) unsigned NOT NULL,
   UNIQUE KEY bid (bid,id)
-) ENGINE=MyISAM';
+) ENGINE=InnoDB';
 
 $sql_create_module[] = 'CREATE TABLE ' . $db_config['prefix'] . '_' . $lang . '_' . $module_data . "_rows (
   id int(11) unsigned NOT NULL auto_increment,
@@ -180,7 +180,7 @@ $sql_create_module[] = 'CREATE TABLE ' . $db_config['prefix'] . '_' . $lang . '_
   KEY status (status),
   KEY instant_active (instant_active),
   KEY instant_creatauto (instant_creatauto)
-) ENGINE=MyISAM";
+) ENGINE=InnoDB";
 
 $sql_create_module[] = 'CREATE TABLE ' . $db_config['prefix'] . '_' . $lang . '_' . $module_data . "_row_histories (
   id int(11) unsigned NOT NULL AUTO_INCREMENT,
@@ -230,7 +230,7 @@ $sql_create_module[] = 'CREATE TABLE ' . $db_config['prefix'] . '_' . $lang . '_
   KEY new_id (new_id),
   KEY historytime (historytime),
   KEY admin_id (admin_id)
-) ENGINE=MyISAM COMMENT 'Lịch sử bài viết'";
+) ENGINE=InnoDB COMMENT 'Lịch sử bài viết'";
 
 $sql_create_module[] = 'CREATE TABLE IF NOT EXISTS ' . $db_config['prefix'] . '_' . $lang . '_' . $module_data . "_detail (
   id int(11) unsigned NOT NULL,
@@ -255,7 +255,7 @@ $sql_create_module[] = 'CREATE TABLE IF NOT EXISTS ' . $db_config['prefix'] . '_
   related_pos tinyint(1) NOT NULL DEFAULT '2' COMMENT 'Vị trí bài liên quan: 0 tắt, 1 dưới mô tả ngắn gọn, 2 dưới cùng bài đăng',
   schema_type varchar(20) NOT NULL DEFAULT 'newsarticle' COMMENT 'Loại dữ liệu có cấu trúc',
   PRIMARY KEY (id)
-) ENGINE=MyISAM";
+) ENGINE=InnoDB";
 
 $sql_create_module[] = 'CREATE TABLE IF NOT EXISTS ' . $db_config['prefix'] . '_' . $lang . '_' . $module_data . "_logs (
   id mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
@@ -270,7 +270,7 @@ $sql_create_module[] = 'CREATE TABLE IF NOT EXISTS ' . $db_config['prefix'] . '_
   KEY log_key (log_key),
   KEY status (status),
   KEY userid (userid)
-) ENGINE=MyISAM";
+) ENGINE=InnoDB";
 
 $sql_create_module[] = 'CREATE TABLE IF NOT EXISTS ' . $db_config['prefix'] . '_' . $lang . '_' . $module_data . '_config_post (
   group_id smallint(5) NOT NULL,
@@ -279,7 +279,7 @@ $sql_create_module[] = 'CREATE TABLE IF NOT EXISTS ' . $db_config['prefix'] . '_
   editcontent tinyint(4) NOT NULL,
   delcontent tinyint(4) NOT NULL,
   PRIMARY KEY (group_id)
-) ENGINE=MyISAM';
+) ENGINE=InnoDB';
 
 $sql_create_module[] = 'CREATE TABLE ' . $db_config['prefix'] . '_' . $lang . '_' . $module_data . "_admins (
   userid mediumint(8) unsigned NOT NULL default '0',
@@ -291,7 +291,7 @@ $sql_create_module[] = 'CREATE TABLE ' . $db_config['prefix'] . '_' . $lang . '_
   del_content tinyint(4) NOT NULL default '0',
   app_content tinyint(4) NOT NULL default '0',
   UNIQUE KEY userid (userid,catid)
-) ENGINE=MyISAM";
+) ENGINE=InnoDB";
 
 $sql_create_module[] = 'CREATE TABLE ' . $db_config['prefix'] . '_' . $lang . '_' . $module_data . "_tags (
   tid mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
@@ -303,7 +303,7 @@ $sql_create_module[] = 'CREATE TABLE ' . $db_config['prefix'] . '_' . $lang . '_
   keywords varchar(255) DEFAULT '',
   PRIMARY KEY (tid),
   UNIQUE KEY alias (alias)
-) ENGINE=MyISAM";
+) ENGINE=InnoDB";
 
 $sql_create_module[] = 'CREATE TABLE ' . $db_config['prefix'] . '_' . $lang . '_' . $module_data . '_tags_id (
   id int(11) NOT NULL,
@@ -311,7 +311,7 @@ $sql_create_module[] = 'CREATE TABLE ' . $db_config['prefix'] . '_' . $lang . '_
   keyword varchar(65) NOT NULL,
   UNIQUE KEY id_tid (id,tid),
   KEY tid (tid)
-) ENGINE=MyISAM';
+) ENGINE=InnoDB';
 
 $sql_create_module[] = 'CREATE TABLE ' . $db_config['prefix'] . '_' . $lang . '_' . $module_data . "_tmp (
   id int(11) unsigned NOT NULL AUTO_INCREMENT,
@@ -327,7 +327,7 @@ $sql_create_module[] = 'CREATE TABLE ' . $db_config['prefix'] . '_' . $lang . '_
   KEY tmp_id (new_id, type, admin_id),
   KEY draft_id (admin_id, type),
   KEY uuid (uuid)
-) ENGINE=MyISAM COMMENT 'Bản nháp và ghi nhận sửa bài'";
+) ENGINE=InnoDB COMMENT 'Bản nháp và ghi nhận sửa bài'";
 
 $sql_create_module[] = 'CREATE TABLE ' . $db_config['prefix'] . '_' . $lang . '_' . $module_data . "_author (
   id MEDIUMINT(8) UNSIGNED NOT NULL AUTO_INCREMENT,
@@ -343,7 +343,7 @@ $sql_create_module[] = 'CREATE TABLE ' . $db_config['prefix'] . '_' . $lang . '_
   PRIMARY KEY (id),
   UNIQUE KEY uid (uid),
   UNIQUE KEY alias (alias)
-) ENGINE=MyISAM";
+) ENGINE=InnoDB";
 
 $sql_create_module[] = 'CREATE TABLE ' . $db_config['prefix'] . '_' . $lang . '_' . $module_data . "_authorlist (
   id INT(11) NOT NULL,
@@ -353,7 +353,7 @@ $sql_create_module[] = 'CREATE TABLE ' . $db_config['prefix'] . '_' . $lang . '_
   UNIQUE KEY id_aid (id, aid),
   KEY aid (aid),
   KEY alias (alias)
-) ENGINE=MyISAM";
+) ENGINE=InnoDB";
 
 $sql_create_module[] = 'CREATE TABLE ' . $db_config['prefix'] . '_' . $lang . '_' . $module_data . "_voices (
   id smallint(4) unsigned NOT NULL AUTO_INCREMENT,
@@ -368,7 +368,7 @@ $sql_create_module[] = 'CREATE TABLE ' . $db_config['prefix'] . '_' . $lang . '_
   KEY weight (weight),
   KEY status (status),
   UNIQUE KEY title (title)
-) ENGINE=MyISAM";
+) ENGINE=InnoDB";
 
 $sql_create_module[] = 'CREATE TABLE ' . $db_config['prefix'] . '_' . $lang . '_' . $module_data . "_report (
   id INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
@@ -381,7 +381,7 @@ $sql_create_module[] = 'CREATE TABLE ' . $db_config['prefix'] . '_' . $lang . '_
   repl_content VARCHAR(255) NOT NULL DEFAULT '',
   PRIMARY KEY (id),
   UNIQUE KEY newsid_md5content_post_ip (newsid, md5content, post_ip)
-) ENGINE=MyISAM";
+) ENGINE=InnoDB";
 
 $sql_create_module[] = 'INSERT INTO ' . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES
 ('" . $lang . "', '" . $module_name . "', 'schema_type', 'newsarticle'),

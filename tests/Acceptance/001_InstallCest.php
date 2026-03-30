@@ -109,18 +109,24 @@ class InstallCest
         $I->fillField(['name' => 'dbpass'], $_ENV['DB_UPASS']);
         $I->fillField(['name' => 'dbname'], $_ENV['DB_NAME']);
 
+        // JS sẽ intercept form submit và chạy AJAX tuần tự
         $I->click('[type="submit"]');
-        $I->waitForElement('body', 5);
-        $I->wait(0.3);
 
-        // Db đã có thì xóa nó rồi click next
+        // Đợi AJAX system phản hồi (progress bar hiện ra)
+        $I->waitForElement('#nv_install_progress', 10);
+
+        // Nếu DB đã tồn tại → dialog xác nhận xóa xuất hiện
+        // JS sẽ show lại form với checkbox #db_detete khi server trả has_table=true
+        $I->wait(2);
         if ($I->tryToSeeElement('#db_detete')) {
             $I->checkOption('#db_detete');
             $I->click('[type="submit"]');
+            $I->waitForElement('#nv_install_progress', 10);
         }
 
-        // Step 6 nhập cấu hình site
-        $I->waitForElement('#site_config', 10);
+        // Đợi AJAX hoàn tất toàn bộ (cài tất cả module) và redirect sang step 6
+        // Timeout 120s để đủ thời gian cài nhiều module
+        $I->waitForElement('#site_config', 120);
 
         $I->fillField(['name' => 'site_name'], $_ENV['NV_SITE_NAME']);
         $I->fillField(['name' => 'nv_login'], $_ENV['NV_USERNAME']);

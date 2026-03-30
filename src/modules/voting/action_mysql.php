@@ -35,7 +35,7 @@ $sql_create_module[] = 'CREATE TABLE ' . $db_config['prefix'] . '_' . $lang . '_
  vote_one tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '0 cho phép vote nhiều lần 1 cho phép vote 1 lần',
  PRIMARY KEY (vid),
  UNIQUE KEY question (question)
-) ENGINE=MyISAM";
+) ENGINE=InnoDB";
 
 $sql_create_module[] = 'CREATE TABLE ' . $db_config['prefix'] . '_' . $lang . '_' . $module_data . "_rows (
  id mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
@@ -45,13 +45,13 @@ $sql_create_module[] = 'CREATE TABLE ' . $db_config['prefix'] . '_' . $lang . '_
  hitstotal int(11) unsigned NOT NULL DEFAULT '0',
  PRIMARY KEY (id),
  UNIQUE KEY vid (vid,title)
-) ENGINE=MyISAM";
+) ENGINE=InnoDB";
 
 $sql_create_module[] = 'CREATE TABLE ' . $db_config['prefix'] . '_' . $lang . '_' . $module_data . '_voted (
  vid SMALLINT(5) UNSIGNED NOT NULL,
  voted TEXT,
  UNIQUE KEY vid (vid)
-) ENGINE=MyISAM';
+) ENGINE=InnoDB';
 
 $sql_create_module[] = 'INSERT INTO ' . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES
 ('" . $lang . "', '" . $module_name . "', 'difftimeout', '3600'),

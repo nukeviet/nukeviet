@@ -44,13 +44,13 @@ $sql_create_module[] = 'CREATE TABLE ' . $db_config['prefix'] . '_' . $lang . '_
  schema_about varchar(50) NOT NULL DEFAULT 'Organization' COMMENT 'Trang viết về gì nếu dữ liệu có cấu trúc là WebPage',
  PRIMARY KEY (id),
  UNIQUE KEY alias (alias)
-) ENGINE=MyISAM";
+) ENGINE=InnoDB";
 
 $sql_create_module[] = 'CREATE TABLE ' . $db_config['prefix'] . '_' . $lang . '_' . $module_data . '_config (
  config_name varchar(30) NOT NULL,
  config_value varchar(255) NOT NULL,
  UNIQUE KEY config_name (config_name)
-)ENGINE=MyISAM';
+)ENGINE=InnoDB';
 
 $sql_create_module[] = 'INSERT INTO ' . $db_config['prefix'] . '_' . $lang . '_' . $module_data . "_config VALUES
 ('schema_type', 'article'),

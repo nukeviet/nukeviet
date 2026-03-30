@@ -334,6 +334,9 @@ if ($step == 1) {
 
     $PDODrivers = PDO::getAvailableDrivers();
 
+    // AJAX action
+    $ajax_action = $nv_Request->get_string('ajax_action', 'post', '');
+
     // Check dbtype
     if ($nv_Request->isset_request('checkdbtype', 'post')) {
         $dbtype = $nv_Request->get_title('checkdbtype', 'post');
@@ -388,23 +391,10 @@ if ($step == 1) {
         nv_jsonOutput($respon);
     }
 
-    if (in_array($db_config['dbtype'], $PDODrivers, true) and !empty($db_config['dbhost']) and preg_match('#[a-z]#ui', $db_config['dbname']) and !empty($db_config['dbuname']) and !empty($db_config['prefix'])) {
-        $db_config['dbuname'] = preg_replace(['/[^a-z0-9]/i', '/[\_]+/', '/^[\_]+/', '/[\_]+$/'], ['_', '_', '', ''], $db_config['dbuname']);
-        $db_config['dbname'] = preg_replace(['/[^a-z0-9]/i', '/[\_]+/', '/^[\_]+/', '/[\_]+$/'], ['_', '_', '', ''], $db_config['dbname']);
-        $db_config['prefix'] = preg_replace(['/[^a-z0-9]/', '/[\_]+/', '/^[\_]+/', '/[\_]+$/'], ['_', '_', '', ''], strtolower($db_config['prefix']));
-
-        if (substr($sys_info['os'], 0, 3) == 'WIN' and $db_config['dbhost'] == 'localhost') {
-            $db_config['dbhost'] = '127.0.0.1';
-        }
-
-        if ($db_config['dbtype'] == 'mysql') {
-            $db_config['dbsystem'] = $db_config['dbname'];
-        } elseif ($db_config['dbtype'] == 'oci' and empty($db_config['dbport'])) {
-            $db_config['dbport'] = 1521;
-            $db_config['dbsystem'] = $db_config['dbuname'];
-        }
-
-        // Bat dau phien lam viec cua MySQL
+    // -------------------------------------------------------------------
+    // Hàm nội bộ: kết nối CSDL và thiết lập charset (dùng cho cả 3 ajax action)
+    // -------------------------------------------------------------------
+    $nv_install_db_connect = function () use (&$db, &$db_slave, &$db_config, $sys_info, $nv_Lang) {
         $db_config['autosetcollation'] = false;
         if (empty($db_config['collation'])) {
             $db_config['collation'] = 'utf8_general_ci';
@@ -419,9 +409,11 @@ if ($step == 1) {
             trigger_error($e);
             $connect = 0;
         }
+
         if (!$connect) {
             $db_config['error'] = 'Could not connect to data server';
             if ($db_config['dbtype'] == 'mysql') {
+                $saved_name = $db_config['dbname'];
                 $db_config['dbname'] = '';
                 try {
                     $db = $db_slave = new NukeViet\Core\Database($db_config);
@@ -430,28 +422,32 @@ if ($step == 1) {
                     trigger_error($e);
                     $connect = 0;
                 }
-                $db_config['dbname'] = $db_config['dbsystem'];
+                $db_config['dbname'] = $saved_name;
                 if ($connect) {
                     try {
                         $db->query('CREATE DATABASE ' . $db_config['dbname']);
                         $db->exec('USE ' . $db_config['dbname']);
-
                         $db_config['error'] = '';
                         $connect = 1;
                     } catch (Throwable $e) {
                         trigger_error($e);
+                        $connect = 0;
                     }
                 }
             }
         }
 
-        if ($connect and $db_config['dbtype'] == 'mysql') {
+        if (!$connect) {
+            return false;
+        }
+
+        if ($db_config['dbtype'] == 'mysql') {
             if ($db_config['autosetcollation']) {
                 $mysql_server_version = $db->getAttribute(PDO::ATTR_SERVER_VERSION);
-                if (version_compare($mysql_server_version, '5.5.3') >= 0 and $db_config['charset'] != 'utf8mb4') {
+                if (version_compare($mysql_server_version, '5.5.3') >= 0 && $db_config['charset'] != 'utf8mb4') {
                     $db_config['charset'] = 'utf8mb4';
                     $db_config['collation'] = 'utf8mb4_unicode_ci';
-                } elseif (version_compare($mysql_server_version, '5.5.3') < 0 and $db_config['charset'] != 'utf8') {
+                } elseif (version_compare($mysql_server_version, '5.5.3') < 0 && $db_config['charset'] != 'utf8') {
                     $db_config['charset'] = 'utf8';
                     $db_config['collation'] = 'utf8_general_ci';
                 }
@@ -463,229 +459,320 @@ if ($step == 1) {
                 trigger_error($e);
             }
 
-            $row = $db->query('SELECT @@session.character_set_database AS character_set_database,  @@session.collation_database AS collation_database')->fetch();
-            if ($row['character_set_database'] != $db_config['charset'] or $row['collation_database'] != $db_config['collation']) {
+            $row = $db->query('SELECT @@session.character_set_database AS character_set_database, @@session.collation_database AS collation_database')->fetch();
+            if ($row['character_set_database'] != $db_config['charset'] || $row['collation_database'] != $db_config['collation']) {
                 $db_config['error'] = 'Error character set database';
-                $connect = 0;
+                return false;
             }
         }
 
-        if ($connect) {
-            // Kiểm tra lại kết nối MySQL nếu charset = utf8mb4
-            if ($db_config['charset'] == 'utf8mb4') {
+        if ($db_config['charset'] == 'utf8mb4') {
+            $db = $db_slave = new NukeViet\Core\Database($db_config);
+            if (empty($db->connect)) {
+                $db_config['charset'] = 'utf8';
+                $db_config['collation'] = 'utf8_general_ci';
                 $db = $db_slave = new NukeViet\Core\Database($db_config);
-                if (empty($db->connect)) {
-                    $db_config['charset'] = 'utf8';
-                    $db_config['collation'] = 'utf8_general_ci';
-                    $db = $db_slave = new NukeViet\Core\Database($db_config);
-                    try {
-                        $db->exec('ALTER DATABASE ' . $db_config['dbname'] . ' DEFAULT CHARACTER SET ' . $db_config['charset'] . ' COLLATE ' . $db_config['collation']);
-                    } catch (Throwable $e) {
-                        trigger_error($e);
-                    }
+                try {
+                    $db->exec('ALTER DATABASE ' . $db_config['dbname'] . ' DEFAULT CHARACTER SET ' . $db_config['charset'] . ' COLLATE ' . $db_config['collation']);
+                } catch (Throwable $e) {
+                    trigger_error($e);
                 }
             }
+        }
 
-            $tables = [];
-            if ($sys_info['allowed_set_time_limit']) {
-                set_time_limit(0);
+        return true;
+    };
+
+    $nv_install_define_constants = function () use ($db_config) {
+        $constants = [
+            'NV_AUTHORS_GLOBALTABLE'  => $db_config['prefix'] . '_authors',
+            'NV_USERS_GLOBALTABLE'    => $db_config['prefix'] . '_users',
+            'NV_GROUPS_GLOBALTABLE'   => $db_config['prefix'] . '_users_groups',
+            'NV_CONFIG_GLOBALTABLE'   => $db_config['prefix'] . '_config',
+            'NV_LANGUAGE_GLOBALTABLE' => $db_config['prefix'] . '_language',
+            'NV_SESSIONS_GLOBALTABLE' => $db_config['prefix'] . '_sessions',
+            'NV_COOKIES_GLOBALTABLE'  => $db_config['prefix'] . '_cookies',
+            'NV_CRONJOBS_GLOBALTABLE' => $db_config['prefix'] . '_cronjobs',
+            'NV_UPLOAD_GLOBALTABLE'   => $db_config['prefix'] . '_upload',
+            'NV_IS_MODADMIN'          => true,
+        ];
+        foreach ($constants as $name => $value) {
+            if (!defined($name)) {
+                define($name, $value);
             }
+        }
+    };
 
-            // Cai dat du lieu cho he thong
-            $db_config['error'] = '';
-            $sql_create_table = [];
-            $sql_drop_table = [];
+    $filesavedata = NV_LANG_DATA;
+    $lang_data    = NV_LANG_DATA;
+    if (!file_exists(NV_ROOTDIR . '/install/data_' . $lang_data . '.php')) {
+        $filesavedata = 'en';
+    }
 
-            define('NV_AUTHORS_GLOBALTABLE', $db_config['prefix'] . '_authors');
-            define('NV_USERS_GLOBALTABLE', $db_config['prefix'] . '_users');
-            define('NV_GROUPS_GLOBALTABLE', $db_config['prefix'] . '_users_groups');
-            define('NV_CONFIG_GLOBALTABLE', $db_config['prefix'] . '_config');
-            define('NV_LANGUAGE_GLOBALTABLE', $db_config['prefix'] . '_language');
-            define('NV_SESSIONS_GLOBALTABLE', $db_config['prefix'] . '_sessions');
-            define('NV_COOKIES_GLOBALTABLE', $db_config['prefix'] . '_cookies');
-            define('NV_CRONJOBS_GLOBALTABLE', $db_config['prefix'] . '_cronjobs');
+    $install_lang    = []; //DO NOT DELETE THIS LINE
+    $menu_rows_lev0  = []; //DO NOT DELETE THIS LINE
+    $menu_rows_lev1  = []; //DO NOT DELETE THIS LINE
+    include_once NV_ROOTDIR . '/install/data_' . $filesavedata . '.php';
 
-            require_once NV_ROOTDIR . '/install/action_' . $db_config['dbtype'] . '.php';
+    // -------------------------------------------------------------------
+    // AJAX: Bước A - Khởi tạo CSDL hệ thống + trả về danh sách module
+    // -------------------------------------------------------------------
+    if ($ajax_action === 'system') {
+        $respon = ['status' => 'error', 'message' => '', 'modules' => []];
 
-            $num_table = count($sql_drop_table);
+        if (!in_array($db_config['dbtype'], $PDODrivers, true) || empty($db_config['dbhost']) || !preg_match('#[a-z]#ui', $db_config['dbname']) || empty($db_config['dbuname']) || empty($db_config['prefix'])) {
+            $respon['message'] = 'Vui lòng điền đầy đủ thông tin cơ sở dữ liệu.';
+            nv_jsonOutput($respon);
+        }
 
-            if ($num_table > 0) {
-                if ($db_config['db_detete'] == 1) {
-                    foreach ($sql_drop_table as $_sql) {
-                        try {
-                            $db->query($_sql);
-                        } catch (Throwable $e) {
-                            $nv_Request->set_Session('maxstep', 4);
-                            $db_config['error'] = $e->getMessage();
-                            trigger_error($e);
-                            break;
-                        }
-                    }
-                    $num_table = 0;
-                } else {
-                    $db_config['error'] = $nv_Lang->getModule('db_err_prefix');
-                }
-            }
+        $db_config['dbuname'] = preg_replace(['/[^a-z0-9]/i', '/[\_]+/', '/^[\_]+/', '/[\_]+$/'], ['_', '_', '', ''], $db_config['dbuname']);
+        $db_config['dbname']  = preg_replace(['/[^a-z0-9]/i', '/[\_]+/', '/^[\_]+/', '/[\_]+$/'], ['_', '_', '', ''], $db_config['dbname']);
+        $db_config['prefix']  = preg_replace(['/[^a-z0-9]/', '/[\_]+/', '/^[\_]+/', '/[\_]+$/'], ['_', '_', '', ''], strtolower($db_config['prefix']));
 
-            $db_config['num_table'] = $num_table;
+        if (substr($sys_info['os'], 0, 3) == 'WIN' && $db_config['dbhost'] == 'localhost') {
+            $db_config['dbhost'] = '127.0.0.1';
+        }
 
-            if ($num_table == 0) {
-                nv_save_file_config();
-                require_once NV_ROOTDIR . '/install/data.php';
+        if ($db_config['dbtype'] == 'mysql') {
+            $db_config['dbsystem'] = $db_config['dbname'];
+        } elseif ($db_config['dbtype'] == 'oci' && empty($db_config['dbport'])) {
+            $db_config['dbport'] = 1521;
+            $db_config['dbsystem'] = $db_config['dbuname'];
+        }
 
-                foreach ($sql_create_table as $_sql) {
+        if (!$nv_install_db_connect()) {
+            $respon['message'] = empty($db_config['error']) ? 'Could not connect to data server' : $db_config['error'];
+            nv_jsonOutput($respon);
+        }
+
+        if ($sys_info['allowed_set_time_limit']) {
+            set_time_limit(0);
+        }
+
+        $nv_install_define_constants();
+
+        $sql_create_table = [];
+        $sql_drop_table   = [];
+        require_once NV_ROOTDIR . '/install/action_' . $db_config['dbtype'] . '.php';
+
+        $num_table = count($sql_drop_table);
+        if ($num_table > 0) {
+            if ($db_config['db_detete'] == 1) {
+                foreach ($sql_drop_table as $_sql) {
                     try {
                         $db->query($_sql);
                     } catch (Throwable $e) {
                         $nv_Request->set_Session('maxstep', 4);
-                        $db_config['error'] = $e->getMessage();
+                        $respon['message'] = $e->getMessage();
                         trigger_error($e);
-                        break;
+                        nv_jsonOutput($respon);
                     }
                 }
-
-                // Cai dat du lieu cho cac module
-                if (empty($db_config['error'])) {
-                    define('NV_IS_MODADMIN', true);
-
-                    $module_name = 'modules';
-                    $nv_Lang->setModule('modules', '');
-                    $nv_Lang->setModule('vmodule_add', '');
-                    $nv_Lang->setModule('autoinstall', '');
-                    $nv_Lang->setGlobal('mod_modules', '');
-
-                    define('NV_UPLOAD_GLOBALTABLE', $db_config['prefix'] . '_upload');
-                    require_once NV_ROOTDIR . '/' . NV_ADMINDIR . '/modules/functions.php';
-
-                    $module_name = '';
-                    $modules_exit = nv_scandir(NV_ROOTDIR . '/modules', $global_config['check_module']);
-
-                    // Cai dat du lieu cho ngon ngu
-                    require_once NV_ROOTDIR . '/includes/action_' . $db_config['dbtype'] . '.php';
-
-                    $sql_create_table = nv_create_table_sys(NV_LANG_DATA, $array_data);
-                    foreach ($sql_create_table as $_sql) {
-                        try {
-                            $db->query($_sql);
-                        } catch (Throwable $e) {
-                            $nv_Request->set_Session('maxstep', 4);
-                            $db_config['error'] = $e->getMessage();
-                            trigger_error($e);
-                            break;
-                        }
-                    }
-                    unset($sql_create_table);
-
-                    $filesavedata = NV_LANG_DATA;
-                    $lang_data = NV_LANG_DATA;
-                    $lang = NV_LANG_DATA;
-
-                    if (!file_exists(NV_ROOTDIR . '/install/data_' . $lang_data . '.php')) {
-                        $filesavedata = 'en';
-                    }
-
-                    $install_lang = []; //DO NOT DELETE THIS LINE
-                    $menu_rows_lev0 = []; //DO NOT DELETE THIS LINE
-                    $menu_rows_lev1 = []; //DO NOT DELETE THIS LINE
-                    include_once NV_ROOTDIR . '/install/data_' . $filesavedata . '.php';
-
-                    $sql = 'SELECT * FROM ' . $db_config['prefix'] . '_' . NV_LANG_DATA . '_modules ORDER BY weight ASC';
-                    $result = $db->query($sql);
-                    $modules = $result->fetchAll();
-
-                    foreach ($modules as $key => $row) {
-                        $setmodule = $row['title'];
-
-                        if (in_array($row['module_file'], $modules_exit, true)) {
-                            $sm = nv_setup_data_module(NV_LANG_DATA, $setmodule);
-                            if (!$sm['success']) {
-                                exit('error set module: ' . $setmodule);
-                            }
-                        } else {
-                            unset($modules[$key]);
-                            $stmt = $db->prepare('DELETE FROM ' . $db_config['prefix'] . '_' . NV_LANG_DATA . '_modules WHERE title = :title');
-                            $stmt->bindValue(':title', $setmodule, PDO::PARAM_STR);
-                            $stmt->execute();
-                        }
-                    }
-
-                    // Cai dat du lieu mau he thong
-                    try {
-                        $values       = array_values($modules_exit);
-                        $placeholders = implode(', ', array_map(fn($k) => ':v' . $k, array_keys($values)));
-
-                        // Xoa du lieu tai bang nvx_vi_modules
-                        $stmt = $db->prepare('DELETE FROM ' . $db_config['prefix'] . '_' . $lang_data . '_modules WHERE module_file NOT IN (' . $placeholders . ')');
-                        foreach ($values as $k => $v) {
-                            $stmt->bindValue(':v' . $k, $v, PDO::PARAM_STR);
-                        }
-                        $stmt->execute();
-
-                        // Xoa du lieu tai bang nvx_setup_extensions
-                        $stmt = $db->prepare('DELETE FROM ' . $db_config['prefix'] . "_setup_extensions WHERE type='module' AND basename NOT IN (" . $placeholders . ")");
-                        foreach ($values as $k => $v) {
-                            $stmt->bindValue(':v' . $k, $v, PDO::PARAM_STR);
-                        }
-                        $stmt->execute();
-
-                        // Xoa du lieu tai bang nvx_vi_blocks_groups
-                        $db->query('DELETE FROM ' . $db_config['prefix'] . '_' . $lang_data . "_blocks_groups WHERE module!='theme' AND module NOT IN (SELECT title FROM " . $db_config['prefix'] . '_' . $lang_data . '_modules)');
-
-                        // Xoa du lieu tai bang nvx_vi_blocks
-                        $db->query('DELETE FROM ' . $db_config['prefix'] . '_' . $lang_data . '_blocks_weight WHERE bid NOT IN (SELECT bid FROM ' . $db_config['prefix'] . '_' . $lang_data . '_blocks_groups)');
-
-                        // Xoa du lieu tai bang nvx_vi_modthemes
-                        $db->query('DELETE FROM ' . $db_config['prefix'] . '_' . $lang_data . '_modthemes WHERE func_id in (SELECT func_id FROM ' . $db_config['prefix'] . '_' . $lang_data . '_modfuncs WHERE in_module NOT IN (SELECT title FROM ' . $db_config['prefix'] . '_' . $lang_data . '_modules))');
-
-                        // Xoa du lieu tai bang nvx_vi_modfuncs
-                        $db->query('DELETE FROM ' . $db_config['prefix'] . '_' . $lang_data . '_modfuncs WHERE in_module NOT IN (SELECT title FROM ' . $db_config['prefix'] . '_' . $lang_data . '_modules)');
-
-                        // Xoa du lieu tai bang nvx_menu
-                        $db->query('DELETE FROM ' . $db_config['prefix'] . '_' . $lang_data . '_menu_rows WHERE module_name NOT IN (SELECT title FROM ' . $db_config['prefix'] . '_' . $lang_data . '_modules)');
-                    } catch (Throwable $e) {
-                        $nv_Request->set_Session('maxstep', 4);
-                        $db_config['error'] = $e->getMessage();
-                        trigger_error($e);
-                    }
-
-                    // Cai dat du lieu mau module
-                    include_once NV_ROOTDIR . '/install/data_by_lang.php';
-                    try {
-                        foreach ($modules as $row) {
-                            $module_name = $row['title'];
-                            $module_file = $row['module_file'];
-                            $module_data = $row['module_data'];
-                            $module_upload = $row['module_upload'];
-
-                            if (file_exists(NV_ROOTDIR . '/modules/' . $module_file . '/language/data_' . NV_LANG_DATA . '.php')) {
-                                include NV_ROOTDIR . '/modules/' . $module_file . '/language/data_' . NV_LANG_DATA . '.php';
-                            } elseif (file_exists(NV_ROOTDIR . '/modules/' . $module_file . '/language/data_en.php')) {
-                                include NV_ROOTDIR . '/modules/' . $module_file . '/language/data_en.php';
-                            }
-
-                            if (empty($array_data['socialbutton'])) {
-                                if ($module_file == 'news') {
-                                    $stmt = $db->prepare('UPDATE ' . NV_CONFIG_GLOBALTABLE . " SET config_value = '0' WHERE module = :module AND config_name = 'socialbutton' AND lang = :lang");
-                                    $stmt->bindValue(':module', $module_name, PDO::PARAM_STR);
-                                    $stmt->bindValue(':lang', $lang, PDO::PARAM_STR);
-                                    $stmt->execute();
-                                }
-                            }
-                        }
-                    } catch (Throwable $e) {
-                        $db_config['error'] = $e->getMessage();
-                        trigger_error($e);
-                    }
-
-                    if (empty($db_config['error'])) {
-                        ++$step;
-                        $nv_Request->set_Session('maxstep', $step);
-
-                        nv_redirect_location(NV_BASE_SITEURL . 'install/index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&step=' . $step);
-                    }
-                }
+                $num_table = 0;
+            } else {
+                $respon['has_table'] = true;
+                $respon['message'] = $nv_Lang->getModule('db_err_prefix');
+                nv_jsonOutput($respon);
             }
         }
+
+        nv_save_file_config();
+        require_once NV_ROOTDIR . '/install/data.php';
+
+        foreach ($sql_create_table as $_sql) {
+            try {
+                $db->query($_sql);
+            } catch (Throwable $e) {
+                $nv_Request->set_Session('maxstep', 4);
+                $respon['message'] = $e->getMessage();
+                trigger_error($e);
+                nv_jsonOutput($respon);
+            }
+        }
+
+        $module_name = 'modules';
+        $nv_Lang->setModule('modules', '');
+        $nv_Lang->setModule('vmodule_add', '');
+        $nv_Lang->setModule('autoinstall', '');
+        $nv_Lang->setGlobal('mod_modules', '');
+        require_once NV_ROOTDIR . '/' . NV_ADMINDIR . '/modules/functions.php';
+        $module_name   = '';
+        $modules_exit  = nv_scandir(NV_ROOTDIR . '/modules', $global_config['check_module']);
+
+        require_once NV_ROOTDIR . '/includes/action_' . $db_config['dbtype'] . '.php';
+        $sql_create_table = nv_create_table_sys(NV_LANG_DATA, $array_data);
+        foreach ($sql_create_table as $_sql) {
+            try {
+                $db->query($_sql);
+            } catch (Throwable $e) {
+                $nv_Request->set_Session('maxstep', 4);
+                $respon['message'] = $e->getMessage();
+                trigger_error($e);
+                nv_jsonOutput($respon);
+            }
+        }
+        unset($sql_create_table);
+
+        $result      = $db->query('SELECT * FROM ' . $db_config['prefix'] . '_' . NV_LANG_DATA . '_modules ORDER BY weight ASC');
+        $modules_list = $result->fetchAll();
+
+        $valid_modules = [];
+        foreach ($modules_list as $row) {
+            if (in_array($row['module_file'], $modules_exit, true)) {
+                $valid_modules[] = [
+                    'title'         => $row['title'],
+                    'module_file'   => $row['module_file'],
+                    'module_data'   => $row['module_data'],
+                    'module_upload' => $row['module_upload'],
+                ];
+            } else {
+                $stmt = $db->prepare('DELETE FROM ' . $db_config['prefix'] . '_' . NV_LANG_DATA . '_modules WHERE title = :title');
+                $stmt->bindValue(':title', $row['title'], PDO::PARAM_STR);
+                $stmt->execute();
+            }
+        }
+
+        // Cleanup module list: chỉ giữ các module có folder thực tế
+        $values       = array_values($modules_exit);
+        $placeholders = implode(', ', array_map(fn ($k) => ':v' . $k, array_keys($values)));
+
+        try {
+            $stmt = $db->prepare('DELETE FROM ' . $db_config['prefix'] . '_' . $lang_data . '_modules WHERE module_file NOT IN (' . $placeholders . ')');
+            foreach ($values as $k => $v) {
+                $stmt->bindValue(':v' . $k, $v, PDO::PARAM_STR);
+            }
+            $stmt->execute();
+
+            $stmt = $db->prepare('DELETE FROM ' . $db_config['prefix'] . "_setup_extensions WHERE type='module' AND basename NOT IN (" . $placeholders . ')');
+            foreach ($values as $k => $v) {
+                $stmt->bindValue(':v' . $k, $v, PDO::PARAM_STR);
+            }
+            $stmt->execute();
+        } catch (Throwable $e) {
+            $nv_Request->set_Session('maxstep', 4);
+            $respon['message'] = $e->getMessage();
+            trigger_error($e);
+            nv_jsonOutput($respon);
+        }
+        // Lưu ý: Các bảng module (blocks_groups, modfuncs, menu_rows...) sẽ được dọn dẹp
+        // trong action 'finish' sau khi tất cả module đã được cài đặt.
+
+        nv_save_file_config();
+
+        $respon['status']  = 'success';
+        $respon['modules'] = $valid_modules;
+        nv_jsonOutput($respon);
+    }
+
+    // -------------------------------------------------------------------
+    // AJAX: Bước B - Cài đặt 1 module
+    // -------------------------------------------------------------------
+    if ($ajax_action === 'module') {
+        $respon = ['status' => 'error', 'message' => ''];
+
+        $module_title = $nv_Request->get_string('module_title', 'post', '');
+        if (empty($module_title)) {
+            $respon['message'] = 'Missing module_title';
+            nv_jsonOutput($respon);
+        }
+
+        if (!$nv_install_db_connect()) {
+            $respon['message'] = empty($db_config['error']) ? 'Could not connect to data server' : $db_config['error'];
+            nv_jsonOutput($respon);
+        }
+
+        $nv_install_define_constants();
+
+        $module_name = 'modules';
+        $nv_Lang->setModule('modules', '');
+        $nv_Lang->setModule('vmodule_add', '');
+        $nv_Lang->setModule('autoinstall', '');
+        $nv_Lang->setGlobal('mod_modules', '');
+        require_once NV_ROOTDIR . '/' . NV_ADMINDIR . '/modules/functions.php';
+        $module_name = '';
+
+        $sm = nv_setup_data_module(NV_LANG_DATA, $module_title);
+        if (!$sm['success']) {
+            $respon['message'] = 'error set module: ' . $module_title;
+            nv_jsonOutput($respon);
+        }
+
+        $respon['status']       = 'success';
+        $respon['module_title'] = $module_title;
+        nv_jsonOutput($respon);
+    }
+
+    // -------------------------------------------------------------------
+    // AJAX: Bước C - Hoàn tất: dữ liệu mẫu module + chuyển bước 6
+    // -------------------------------------------------------------------
+    if ($ajax_action === 'finish') {
+        $respon = ['status' => 'error', 'message' => ''];
+
+        if (!$nv_install_db_connect()) {
+            $respon['message'] = empty($db_config['error']) ? 'Could not connect to data server' : $db_config['error'];
+            nv_jsonOutput($respon);
+        }
+
+        $nv_install_define_constants();
+
+        $lang = NV_LANG_DATA;
+        $result  = $db->query('SELECT * FROM ' . $db_config['prefix'] . '_' . NV_LANG_DATA . '_modules ORDER BY weight ASC');
+        $modules = $result->fetchAll();
+
+        // Dọn dẹp các bảng module sau khi đã cài đặt xong tất cả module
+        try {
+            $lang_data = NV_LANG_DATA;
+            $db->query('DELETE FROM ' . $db_config['prefix'] . '_' . $lang_data . "_blocks_groups WHERE module!='theme' AND module NOT IN (SELECT title FROM " . $db_config['prefix'] . '_' . $lang_data . '_modules)');
+            $db->query('DELETE FROM ' . $db_config['prefix'] . '_' . $lang_data . '_blocks_weight WHERE bid NOT IN (SELECT bid FROM ' . $db_config['prefix'] . '_' . $lang_data . '_blocks_groups)');
+            $db->query('DELETE FROM ' . $db_config['prefix'] . '_' . $lang_data . '_modthemes WHERE func_id in (SELECT func_id FROM ' . $db_config['prefix'] . '_' . $lang_data . '_modfuncs WHERE in_module NOT IN (SELECT title FROM ' . $db_config['prefix'] . '_' . $lang_data . '_modules))');
+            $db->query('DELETE FROM ' . $db_config['prefix'] . '_' . $lang_data . '_modfuncs WHERE in_module NOT IN (SELECT title FROM ' . $db_config['prefix'] . '_' . $lang_data . '_modules)');
+            $db->query('DELETE FROM ' . $db_config['prefix'] . '_' . $lang_data . '_menu_rows WHERE module_name NOT IN (SELECT title FROM ' . $db_config['prefix'] . '_' . $lang_data . '_modules)');
+        } catch (Throwable $e) {
+            // Bỏ qua lỗi dọn dẹp (một số bảng có thể chưa tồn tại)
+            trigger_error($e);
+        }
+
+        include_once NV_ROOTDIR . '/install/data_by_lang.php';
+        try {
+            foreach ($modules as $row) {
+                $module_name   = $row['title'];
+                $module_file   = $row['module_file'];
+                $module_data   = $row['module_data'];
+                $module_upload = $row['module_upload'];
+
+                if (file_exists(NV_ROOTDIR . '/modules/' . $module_file . '/language/data_' . NV_LANG_DATA . '.php')) {
+                    include NV_ROOTDIR . '/modules/' . $module_file . '/language/data_' . NV_LANG_DATA . '.php';
+                } elseif (file_exists(NV_ROOTDIR . '/modules/' . $module_file . '/language/data_en.php')) {
+                    include NV_ROOTDIR . '/modules/' . $module_file . '/language/data_en.php';
+                }
+
+                if (empty($array_data['socialbutton']) && $module_file == 'news') {
+                    $stmt = $db->prepare('UPDATE ' . NV_CONFIG_GLOBALTABLE . " SET config_value = '0' WHERE module = :module AND config_name = 'socialbutton' AND lang = :lang");
+                    $stmt->bindValue(':module', $module_name, PDO::PARAM_STR);
+                    $stmt->bindValue(':lang', $lang, PDO::PARAM_STR);
+                    $stmt->execute();
+                }
+            }
+        } catch (Throwable $e) {
+            $respon['message'] = $e->getMessage();
+            trigger_error($e);
+            nv_jsonOutput($respon);
+        }
+
+        ++$step;
+        $nv_Request->set_Session('maxstep', $step);
+        nv_save_file_config();
+
+        $respon['status']   = 'success';
+        $respon['redirect'] = NV_BASE_SITEURL . 'install/index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&step=' . $step;
+        nv_jsonOutput($respon);
+    }
+
+    // -------------------------------------------------------------------
+    // Hiển thị form bình thường (không phải AJAX)
+    // -------------------------------------------------------------------
+    if (in_array($db_config['dbtype'], $PDODrivers, true) && !empty($db_config['dbhost']) && preg_match('#[a-z]#ui', $db_config['dbname']) && !empty($db_config['dbuname']) && !empty($db_config['prefix'])) {
+        $nextstep = 1;
     }
 
     $title = $nv_Lang->getModule('config_database');

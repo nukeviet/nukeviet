@@ -278,3 +278,11 @@ $lang_module['spdata_incompatible'] = 'This sample package is built into the% s 
 $lang_module['spdata_root'] = 'Root';
 $lang_module['spdata_note'] = 'Select the sample data plan by clicking on the corresponding cell and then clicking the <strong /> Settings  button';
 $lang_module['spdata_choose'] = 'Settings';
+
+// AJAX Install Progress
+$lang_module['installing_db'] = 'Initializing system database...';
+$lang_module['installing_modules'] = 'Installing modules';
+$lang_module['installing_module'] = 'Installing module: %s';
+$lang_module['finalizing'] = 'Finalizing installation...';
+$lang_module['install_done'] = 'Installation complete! Redirecting...';
+$lang_module['install_error'] = 'Installation error';

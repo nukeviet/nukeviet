@@ -156,14 +156,14 @@ $sql_create_module[] = 'CREATE TABLE IF NOT EXISTS ' . $db_config['prefix'] . '_
     UNIQUE KEY md5username (md5username),
     UNIQUE KEY email (email),
     KEY idsite (idsite)
-) ENGINE=MyISAM";
+) ENGINE=InnoDB";
 
 $sql_create_module[] = 'CREATE TABLE IF NOT EXISTS ' . $db_config['prefix'] . '_' . $module_data . "_config (
     config varchar(100) NOT NULL,
     content text,
     edit_time int(11) unsigned NOT NULL DEFAULT '0',
     PRIMARY KEY (config)
-) ENGINE=MyISAM";
+) ENGINE=InnoDB";
 
 $sql_create_module[] = 'CREATE TABLE IF NOT EXISTS ' . $db_config['prefix'] . '_' . $module_data . "_question (
     qid smallint(5) unsigned NOT NULL AUTO_INCREMENT,
@@ -174,7 +174,7 @@ $sql_create_module[] = 'CREATE TABLE IF NOT EXISTS ' . $db_config['prefix'] . '_
     edit_time int(11) unsigned NOT NULL DEFAULT '0',
     PRIMARY KEY (qid),
     UNIQUE KEY title (title,lang)
-) ENGINE=MyISAM";
+) ENGINE=InnoDB";
 
 $sql_create_module[] = 'CREATE TABLE IF NOT EXISTS ' . $db_config['prefix'] . '_' . $module_data . "_backupcodes (
     userid mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
@@ -183,7 +183,7 @@ $sql_create_module[] = 'CREATE TABLE IF NOT EXISTS ' . $db_config['prefix'] . '_
     time_used int(11) unsigned NOT NULL DEFAULT '0',
     time_creat int(11) unsigned NOT NULL DEFAULT '0',
     UNIQUE KEY userid (userid, code)
-) ENGINE=MyISAM";
+) ENGINE=InnoDB";
 
 $sql_create_module[] = 'CREATE TABLE IF NOT EXISTS ' . $db_config['prefix'] . '_' . $module_data . "_groups (
     group_id smallint(5) unsigned NOT NULL AUTO_INCREMENT,
@@ -206,7 +206,7 @@ $sql_create_module[] = 'CREATE TABLE IF NOT EXISTS ' . $db_config['prefix'] . '_
     PRIMARY KEY (group_id),
     UNIQUE KEY kalias (alias,idsite),
     KEY exp_time (exp_time)
-) ENGINE=MyISAM AUTO_INCREMENT=10";
+) ENGINE=InnoDB AUTO_INCREMENT=10";
 
 $sql_create_module[] = 'CREATE TABLE IF NOT EXISTS ' . $db_config['prefix'] . '_' . $module_data . "_groups_detail (
     group_id SMALLINT(5) unsigned NOT NULL DEFAULT '0',
@@ -215,7 +215,7 @@ $sql_create_module[] = 'CREATE TABLE IF NOT EXISTS ' . $db_config['prefix'] . '_
     description VARCHAR(240) NOT NULL DEFAULT '',
     content TEXT,
     UNIQUE KEY group_id_lang (lang,group_id)
-) ENGINE=MyISAM";
+) ENGINE=InnoDB";
 
 $sql_create_module[] = 'CREATE TABLE IF NOT EXISTS ' . $db_config['prefix'] . '_' . $module_data . "_groups_users (
     group_id smallint(5) unsigned NOT NULL DEFAULT '0',
@@ -226,14 +226,14 @@ $sql_create_module[] = 'CREATE TABLE IF NOT EXISTS ' . $db_config['prefix'] . '_
     time_requested int(11) unsigned NOT NULL DEFAULT '0' COMMENT 'Thời gian yêu cầu tham gia',
     time_approved int(11) unsigned NOT NULL DEFAULT '0' COMMENT 'Thời gian duyệt yêu cầu tham gia',
     PRIMARY KEY (group_id,userid)
-) ENGINE=MyISAM";
+) ENGINE=InnoDB";
 
 $sql_create_module[] = 'CREATE TABLE IF NOT EXISTS ' . $db_config['prefix'] . '_' . $module_data . "_oldpass (
     userid mediumint(8) unsigned NOT NULL DEFAULT '0',
     password varchar(150) NOT NULL DEFAULT '',
     pass_creation_time INT(11) NOT NULL DEFAULT '0',
     UNIQUE KEY pass_creation_time (userid, pass_creation_time)
-) ENGINE=MyISAM";
+) ENGINE=InnoDB";
 
 $sql_create_module[] = 'CREATE TABLE IF NOT EXISTS ' . $db_config['prefix'] . '_' . $module_data . "_reg (
     userid mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
@@ -258,7 +258,7 @@ $sql_create_module[] = 'CREATE TABLE IF NOT EXISTS ' . $db_config['prefix'] . '_
     UNIQUE KEY login (username),
     UNIQUE KEY md5username (md5username),
     UNIQUE KEY email (email)
-) ENGINE=MyISAM";
+) ENGINE=InnoDB";
 
 $sql_create_module[] = 'CREATE TABLE IF NOT EXISTS ' . $db_config['prefix'] . '_' . $module_data . "_openid (
     userid mediumint(8) unsigned NOT NULL DEFAULT '0',
@@ -269,7 +269,7 @@ $sql_create_module[] = 'CREATE TABLE IF NOT EXISTS ' . $db_config['prefix'] . '_
     UNIQUE KEY opid (openid, opid),
     KEY userid (userid),
     KEY email (email)
-) ENGINE=MyISAM";
+) ENGINE=InnoDB";
 
 $sql_create_module[] = 'CREATE TABLE IF NOT EXISTS ' . $db_config['prefix'] . '_' . $module_data . "_passkey (
     id int(11) unsigned NOT NULL AUTO_INCREMENT,
@@ -289,7 +289,7 @@ $sql_create_module[] = 'CREATE TABLE IF NOT EXISTS ' . $db_config['prefix'] . '_
     UNIQUE KEY uid (userid, keyid),
     UNIQUE KEY ukeyid (userhandle(40), keyid(151)),
     KEY userhandle (userhandle)
-) ENGINE=MyISAM COMMENT 'Passkey của thành viên để đăng nhập/xác thực 2 bước'";
+) ENGINE=InnoDB COMMENT 'Passkey của thành viên để đăng nhập/xác thực 2 bước'";
 
 $sql_create_module[] = 'CREATE TABLE IF NOT EXISTS ' . $db_config['prefix'] . '_' . $module_data . "_field (
     fid mediumint(8) NOT NULL AUTO_INCREMENT,
@@ -315,14 +315,14 @@ $sql_create_module[] = 'CREATE TABLE IF NOT EXISTS ' . $db_config['prefix'] . '_
     is_system TINYINT(1) UNSIGNED NOT NULL DEFAULT '0',
     PRIMARY KEY (fid),
     UNIQUE KEY field (field)
-) ENGINE=MyISAM";
+) ENGINE=InnoDB";
 
 $sql_create_module[] = 'CREATE TABLE IF NOT EXISTS ' . $db_config['prefix'] . '_' . $module_data . "_info (
     userid mediumint(8) unsigned NOT NULL,
     inform CHAR(30) NOT NULL DEFAULT '',
     deletion_checkcode varchar(25) NOT NULL DEFAULT '' COMMENT 'Mã xác nhận yêu cầu xóa dữ liệu cá nhân',
     PRIMARY KEY (userid)
-) ENGINE=MyISAM";
+) ENGINE=InnoDB";
 
 $sql_create_module[] = 'CREATE TABLE IF NOT EXISTS ' . $db_config['prefix'] . '_' . $module_data . "_edit (
     userid mediumint(8) unsigned NOT NULL,
@@ -330,7 +330,7 @@ $sql_create_module[] = 'CREATE TABLE IF NOT EXISTS ' . $db_config['prefix'] . '_
     info_basic text NOT NULL,
     info_custom text NOT NULL,
     PRIMARY KEY (userid)
-) ENGINE=MyISAM";
+) ENGINE=InnoDB";
 
 $sql_create_module[] = 'CREATE TABLE IF NOT EXISTS ' . $db_config['prefix'] . '_' . $module_data . "_login (
     id int(11) unsigned NOT NULL AUTO_INCREMENT,
@@ -343,7 +343,7 @@ $sql_create_module[] = 'CREATE TABLE IF NOT EXISTS ' . $db_config['prefix'] . '_
     mode_extra varchar(255) NOT NULL DEFAULT '',
     PRIMARY KEY (id),
     UNIQUE KEY userid (userid, clid)
-) ENGINE=MyISAM";
+) ENGINE=InnoDB";
 
 $sql_create_module[] = 'CREATE TABLE IF NOT EXISTS ' . $db_config['prefix'] . '_' . $module_data . "_deleted (
     id int(11) unsigned NOT NULL AUTO_INCREMENT,
@@ -362,7 +362,7 @@ $sql_create_module[] = 'CREATE TABLE IF NOT EXISTS ' . $db_config['prefix'] . '_
     KEY request_time (request_time),
     KEY uniqid (uniqid),
     KEY md5username (md5username)
-) ENGINE=MyISAM COMMENT 'Lưu trữ thông tin thành viên đã yêu cầu xóa dữ liệu cá nhân'";
+) ENGINE=InnoDB COMMENT 'Lưu trữ thông tin thành viên đã yêu cầu xóa dữ liệu cá nhân'";
 
 $sql_create_module[] = 'INSERT IGNORE INTO ' . $db_config['prefix'] . '_' . $module_data . "_config (config, content, edit_time) VALUES
 ('access_admin', 'a:8:{s:15:\"access_viewlist\";a:3:{i:1;b:1;i:2;b:1;i:3;b:1;}s:12:\"access_addus\";a:3:{i:1;b:1;i:2;b:1;i:3;b:1;}s:14:\"access_waiting\";a:3:{i:1;b:1;i:2;b:1;i:3;b:1;}s:17:\"access_editcensor\";a:3:{i:1;b:1;i:2;b:1;i:3;b:1;}s:13:\"access_editus\";a:3:{i:1;b:1;i:2;b:1;i:3;b:1;}s:12:\"access_delus\";a:3:{i:1;b:1;i:2;b:1;i:3;b:1;}s:13:\"access_passus\";a:3:{i:1;b:1;i:2;b:1;i:3;b:1;}s:13:\"access_groups\";a:3:{i:1;b:1;i:2;b:1;i:3;b:1;}}', " . NV_CURRENTTIME . "),

@@ -278,3 +278,11 @@ $lang_module['spdata_incompatible'] = 'Gói dữ liệu mẫu này được xây
 $lang_module['spdata_root'] = 'gốc';
 $lang_module['spdata_note'] = 'Chọn gói dữ liệu mẫu bằng cách nhấp vào ô tương ứng bên phải sau đó nhấp nút <strong>Cài đặt</strong>';
 $lang_module['spdata_choose'] = 'Cài đặt';
+
+// AJAX Install Progress
+$lang_module['installing_db'] = 'Khởi tạo cơ sở dữ liệu hệ thống...';
+$lang_module['installing_modules'] = 'Cài đặt các module';
+$lang_module['installing_module'] = 'Cài đặt module: %s';
+$lang_module['finalizing'] = 'Hoàn tất cài đặt...';
+$lang_module['install_done'] = 'Cài đặt thành công! Đang chuyển tiếp...';
+$lang_module['install_error'] = 'Lỗi cài đặt';

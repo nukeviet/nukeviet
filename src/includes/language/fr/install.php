@@ -278,3 +278,11 @@ $lang_module['spdata_incompatible'] = 'Cet exemple de package est intégré au r
 $lang_module['spdata_root'] = 'Original';
 $lang_module['spdata_note'] = 'Sélectionnez l\'exemple de package en cliquant sur la cellule correspondante, puis en cliquant sur le bouton <strong /> Paramètres';
 $lang_module['spdata_choose'] = 'Installation';
+
+// AJAX Install Progress
+$lang_module['installing_db'] = 'Initialisation de la base de données système...';
+$lang_module['installing_modules'] = 'Installation des modules';
+$lang_module['installing_module'] = 'Installation du module: %s';
+$lang_module['finalizing'] = 'Finalisation de l\'installation...';
+$lang_module['install_done'] = 'Installation réussie! Redirection en cours...';
+$lang_module['install_error'] = 'Erreur d\'installation';
