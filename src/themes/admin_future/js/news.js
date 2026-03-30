@@ -2744,6 +2744,57 @@ $(function () {
             });
         });
     }
+
+    if (nv_func_name === 'addtotopics') {
+        // Lưu bài viết vào dòng sự kiện
+        $('[data-toggle="addtotopics-save"]').on('click', function (e) {
+            e.preventDefault();
+            const btn = $(this);
+            const icon = $('i', btn);
+            if (icon.is('.fa-spinner')) return;
+
+            const listid = [];
+            $('[data-toggle="checkSingle"]:checked').each(function () {
+                listid.push($(this).val());
+            });
+
+            if (listid.length < 1) {
+                nvAlert(btn.data('msgnocheck'));
+                return;
+            }
+
+            const topicsid = $('#topicsid').val();
+            icon.removeClass(icon.data('icon')).addClass('fa-spinner fa-spin-pulse');
+            $.ajax({
+                type: 'POST',
+                dataType: 'json',
+                url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=addtotopics',
+                data: {
+                    listid: listid.join(','),
+                    topicsid: topicsid,
+                    checkss: btn.data('tokend')
+                },
+                success: function (respon) {
+                    icon.removeClass('fa-spinner fa-spin-pulse').addClass(icon.data('icon'));
+                    if (respon.status !== 'OK') {
+                        nvToast(respon.mess || '', 'error');
+                        return;
+                    }
+                    nvToast(respon.mess, 'success');
+                    if (respon.redirect) {
+                        setTimeout(function () {
+                            window.location = respon.redirect;
+                        }, 1500);
+                    }
+                },
+                error: function (xhr, text, err) {
+                    icon.removeClass('fa-spinner fa-spin-pulse').addClass(icon.data('icon'));
+                    nvToast(text, 'error');
+                    console.log(xhr, text, err);
+                }
+            });
+        });
+    }
 });
 
 $(window).on('load', function() {

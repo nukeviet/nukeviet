@@ -19,10 +19,18 @@ $id_array = [];
 $listid = $nv_Request->get_string('listid', 'get,post', '');
 
 if ($nv_Request->isset_request('topicsid', 'post')) {
-    nv_insert_logs(NV_LANG_DATA, $module_name, 'log_add_topic', 'listid ' . $listid, $admin_info['userid']);
+    $checkss = $nv_Request->get_title('checkss', 'post', '');
+    if (!csrf_check($checkss, $csrf_key)) {
+        nv_jsonOutput([
+            'status' => 'error',
+            'mess' => $nv_Lang->getGlobal('error_checkss')
+        ]);
+    }
 
     $topicsid = $nv_Request->get_int('topicsid', 'post');
     $listid = array_filter(array_unique(array_map('intval', explode(',', $listid))));
+
+    nv_insert_logs(NV_LANG_DATA, $module_name, 'log_add_topic', 'listid ' . implode(',', $listid), $admin_info['userid']);
 
     foreach ($listid as $_id) {
         $db->query('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_rows SET topicid=' . $topicsid . ' WHERE id=' . $_id);
@@ -38,7 +46,11 @@ if ($nv_Request->isset_request('topicsid', 'post')) {
 
     $nv_Cache->delMod($module_name);
 
-    exit($nv_Lang->getModule('topic_update_success'));
+    nv_jsonOutput([
+        'status' => 'OK',
+        'mess' => $nv_Lang->getModule('topic_update_success'),
+        'redirect' => nv_url_rewrite(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=topicsnews&topicid=' . $topicsid, true)
+    ]);
 }
 
 $db->sqlreset()
@@ -54,33 +66,35 @@ if ($listid == '') {
 
 $result = $db->query($db->sql());
 
-$xtpl = new XTemplate('addtotopics.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-$xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
-$xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
-
+$rows = [];
 while ($_scratch = $result->fetch(3)) {
     [$id, $title] = $_scratch;
-    unset($_scratch);
-    $xtpl->assign('ROW', [
+    $rows[] = [
         'id' => $id,
         'title' => $title,
-        'checked' => in_array((int) $id, $id_array, true) ? ' checked="checked"' : ''
-    ]);
-
-    $xtpl->parse('main.loop');
+        'checked' => in_array((int) $id, $id_array, true)
+    ];
 }
 
+$topics = [];
 $result = $db->query('SELECT topicid, title FROM ' . NV_PREFIXLANG . '_' . $module_data . '_topics ORDER BY weight ASC');
 while ($row = $result->fetch()) {
-    $xtpl->assign('TOPICSID', [
+    $topics[] = [
         'key' => $row['topicid'],
         'title' => $row['title']
-    ]);
-    $xtpl->parse('main.topicsid');
+    ];
 }
 
-$xtpl->parse('main');
-$contents = $xtpl->text('main');
+$tpl = new \NukeViet\Template\NVSmarty();
+$tpl->setTemplateDir(get_module_tpl_dir('addtotopics.tpl'));
+$tpl->assign('LANG', $nv_Lang);
+$tpl->assign('MODULE_NAME', $module_name);
+$tpl->assign('OP', $op);
+$tpl->assign('CHECKSS', csrf_create($csrf_key));
+$tpl->assign('ROWS', $rows);
+$tpl->assign('TOPICS', $topics);
+
+$contents = $tpl->fetch('addtotopics.tpl');
 
 $set_active_op = 'topics';
 
