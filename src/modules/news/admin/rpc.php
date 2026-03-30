@@ -42,29 +42,29 @@ if (nv_function_exists('curl_init') and nv_function_exists('curl_exec')) {
                     $getdata = $nv_Request->get_int('getdata', 'post,get', '0');
                     if (empty($getdata)) {
                         $page_title = $nv_Lang->getModule('rpc') . ': ' . $news_contents['title'];
-                        $xtpl = new XTemplate('rpc_ping.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/seotools');
-                        $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
-                        $xtpl->assign('MODULE_NAME', $module_name);
-                        $xtpl->assign('OP', $op);
-                        $xtpl->assign('LOAD_DATA', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&id=' . $id . '&checkss=' . md5($id . NV_CHECK_SESSION) . '&getdata=1');
 
-                        $xtpl->assign('HOME', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
+                        $tpl = new \NukeViet\Template\NVSmarty();
+
+                        [$template, $dir] = get_module_tpl_dir('rpc_ping.tpl', true, 'seotools');
+                        $tpl->setTemplateDir($dir);
+
+                        $tpl->assign('LANG', $nv_Lang);
+                        $tpl->assign('MODULE_NAME', $module_name);
+                        $tpl->assign('OP', $op);
+                        $tpl->assign('LOAD_DATA', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&id=' . $id . '&checkss=' . md5($id . NV_CHECK_SESSION) . '&getdata=1');
+                        $tpl->assign('IMGPATH', NV_STATIC_URL . 'themes/' . $template . '/images/seotools');
+
+                        $servicesData = [];
                         foreach ($services_active as $key => $service) {
-                            $xtpl->assign('SERVICE', [
+                            $servicesData[] = [
                                 'id' => $key,
                                 'title' => $service[1],
                                 'icon' => ($service[3] ?? '')
-                            ]);
-
-                            if (isset($service[3]) and !empty($service[3])) {
-                                $xtpl->parse('main.service.icon');
-                            } else {
-                                $xtpl->parse('main.service.noticon');
-                            }
-                            $xtpl->parse('main.service');
+                            ];
                         }
-                        $xtpl->parse('main');
-                        $contents = $xtpl->text('main');
+                        $tpl->assign('SERVICES', $servicesData);
+
+                        $contents = $tpl->fetch('rpc_ping.tpl');
                     } else {
                         $xml2 = new DOMDocument('1.0', 'UTF-8');
                         $xml2->formatOutput = true;
@@ -155,16 +155,15 @@ if (nv_function_exists('curl_init') and nv_function_exists('curl_exec')) {
                         exit();
                     }
                 } else {
-                    $msg1 = $nv_Lang->getModule('content_saveok');
-                    $msg2 = $nv_Lang->getModule('content_main') . ' ' . $module_info['custom_title'];
+                    $tpl = new \NukeViet\Template\NVSmarty();
+                    $tpl->setTemplateDir(get_module_tpl_dir('rpc.tpl'));
 
-                    $contents .= '<div align="center">';
-                    $contents .= '<strong>' . $msg1 . "</strong><br /><br />\n";
-                    $contents .= '<img border="0" src="' . NV_STATIC_URL . NV_ASSETS_DIR . "/images/load_bar.gif\" /><br /><br />\n";
-                    $contents .= '<strong><a href="' . $nv_redirect2 . '">' . $nv_Lang->getModule('rpc_ping_page') . '</a></strong>';
-                    $contents .= ' - <strong><a href="' . $nv_redirect . '">' . $msg2 . '</a></strong>';
-                    $contents .= '</div>';
-                    $contents .= '<meta http-equiv="refresh" content="3;url=' . $nv_redirect2 . '" />';
+                    $tpl->assign('LANG', $nv_Lang);
+                    $tpl->assign('REDIRECT_URL', $nv_redirect2);
+                    $tpl->assign('MODULE_URL', $nv_redirect);
+                    $tpl->assign('CUSTOM_TITLE', $module_info['custom_title']);
+
+                    $contents = $tpl->fetch('rpc.tpl');
                 }
             } else {
                 $contents = '<meta http-equiv="refresh" content="1;url=' . $nv_redirect . '" />';

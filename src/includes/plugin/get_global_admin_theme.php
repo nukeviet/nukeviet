@@ -23,13 +23,10 @@ nv_add_hook($module_name, 'get_global_admin_theme', $priority, function ($vars) 
     $new_theme = 'admin_future';
     $module_file = $module_info['module_file'] ?? '';
 
-    if (in_array($module_file, ['users', 'banners', 'contact', 'inform', 'menu', 'voting'], true)) {
+    if (in_array($module_file, ['users', 'banners', 'contact', 'inform', 'menu', 'voting', 'news'], true)) {
         return $new_theme;
     }
     if (in_array($module_name, ['upload', 'themes', 'emailtemplates', 'settings', 'seotools', 'modules', 'extensions', 'webtools', 'language', 'siteinfo', 'authors', 'database', 'comment', 'myapi'])) {
-        return $new_theme;
-    }
-    if ($module_file == 'news' and in_array($op, ['drafts', 'report', 'content', 'tags', 'main', 'voices', 'sources', 'topics', 'topicsnews', 'groups', 'authors', 'admins', 'setting', 'cat', 'del_cat', 'block', 'move', 'addtotopics'])) {
         return $new_theme;
     }
     if ($module_file == 'page' and in_array($op, ['main', 'config', 'content'])) {

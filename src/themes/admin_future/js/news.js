@@ -2795,6 +2795,50 @@ $(function () {
             });
         });
     }
+
+    if (nv_func_name === 'rpc') {
+        const rpcContainer = document.getElementById('rpc');
+        if (rpcContainer) {
+            const loadUrl = rpcContainer.dataset.loadUrl;
+            const finishMsg = rpcContainer.dataset.msgFinish;
+
+            function sload(c) {
+                $.ajax({
+                    type: 'POST',
+                    url: loadUrl,
+                    dataType: 'xml',
+                    data: 'total=' + c + '&rand=' + nv_randomPassword(8),
+                    success: function(xml) {
+                        $(xml).find('service').each(function() {
+                            const id = $(this).find('id').text();
+                            const code = $(this).find('flerrorCode').text();
+                            const msg = $(this).find('message').text();
+                            if (code === '0') {
+                                $('#res' + id).html('<i class="fa-solid fa-check text-success"></i>');
+                            } else {
+                                $('#res' + id).html('<i class="fa-solid fa-xmark text-danger"></i>');
+                            }
+                            $('#mes' + id).text(msg);
+                        });
+                        const breakVal = $(xml).find('break').text();
+                        const finishVal = $(xml).find('finish').text();
+                        if (finishVal === 'OK') {
+                            nvConfirm(finishMsg, function() {
+                                window.location.href = script_name + '?' + nv_name_variable + '=' + nv_module_name;
+                            });
+                        } else if (finishVal === 'WAIT') {
+                            sload(breakVal);
+                        } else {
+                            const parts = finishVal.split('|');
+                            nvAlert(parts[1] || finishVal);
+                        }
+                    }
+                });
+            }
+
+            sload(0);
+        }
+    }
 });
 
 $(window).on('load', function() {

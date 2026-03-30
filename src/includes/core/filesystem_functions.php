@@ -1194,11 +1194,23 @@ function module_file_exists($file)
  *
  * @param string $filename
  * @param bool   $array
+ * @param string $module Module name (nếu muốn lấy thư mục của module khác với module đang xem)
  * @return array|string|void
  */
-function get_module_tpl_dir($filename, $array = false)
+function get_module_tpl_dir($filename, $array = false, string $module = '')
 {
-    global $global_config, $module_info, $module_file;
+    global $global_config, $module_info, $module_file, $site_mods, $admin_mods;
+
+    if (!empty($module)) {
+        $m_info = $site_mods[$module] ?? $admin_mods[$module] ?? [];
+        $m_file = $m_info['module_file'] ?? $module;
+        if (empty($m_info)) {
+            throw new \NukeViet\Http\HttpException('Module not found!', 500);
+        }
+    } else {
+        $m_info = $module_info;
+        $m_file = $module_file;
+    }
 
     $themes_check = [];
     $themes_check[$global_config['module_theme']] = $global_config['module_theme'];
@@ -1219,10 +1231,10 @@ function get_module_tpl_dir($filename, $array = false)
     }
 
     $dirs_check = [];
-    $module_theme = $module_info['module_theme'] ?? $module_file;
+    $module_theme = $m_info['module_theme'] ?? $m_file;
     $dirs_check[$module_theme] = $module_theme;
-    if ($module_theme != $module_file) {
-        $dirs_check[$module_file] = $module_file;
+    if ($module_theme != $m_file) {
+        $dirs_check[$m_file] = $m_file;
     }
 
     foreach ($dirs_check as $dir) {
