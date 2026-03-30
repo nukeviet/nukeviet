@@ -1539,10 +1539,10 @@ if ($nv_update_config['step'] == 1) {
 
         // Tu dong nhan dien remove_path
         if ($nv_Request->isset_request('tetectftp', 'post')) {
-            $ftp_server = nv_unhtmlspecialchars($nv_Request->get_title('ftp_server', 'post', '', 1));
-            $ftp_port = (int) ($nv_Request->get_title('ftp_port', 'post', '21', 1));
-            $ftp_user_name = nv_unhtmlspecialchars($nv_Request->get_title('ftp_user_name', 'post', '', 1));
-            $ftp_user_pass = nv_unhtmlspecialchars($nv_Request->get_title('ftp_user_pass', 'post', '', 1));
+            $ftp_server = nv_unhtmlspecialchars($nv_Request->get_title('ftp_server', 'post', ''));
+            $ftp_port = (int) ($nv_Request->get_title('ftp_port', 'post', '21'));
+            $ftp_user_name = nv_unhtmlspecialchars($nv_Request->get_title('ftp_user_name', 'post', ''));
+            $ftp_user_pass = nv_unhtmlspecialchars($nv_Request->get_title('ftp_user_pass', 'post', ''));
 
             if (!$ftp_server or !$ftp_user_name or !$ftp_user_pass) {
                 exit('ERROR|' . $nv_Lang->getModule('ftp_error_empty'));

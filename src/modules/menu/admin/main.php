@@ -110,7 +110,7 @@ if ($nv_Request->get_title('action', 'post') == 'row') {
     }
 
     $post = [];
-    $post['title'] = nv_substr($nv_Request->get_title('title', 'post', '', 1), 0, 250);
+    $post['title'] = nv_substr($nv_Request->get_title('title', 'post', ''), 0, 250);
     if (empty($post['title'])) {
         nv_jsonOutput([
             'status' => 'error',
@@ -125,12 +125,12 @@ if ($nv_Request->get_title('action', 'post') == 'row') {
     $post['parentid'] = $nv_Request->get_int('parentid', 'post', 0);
     $post['mid'] = $nv_Request->get_int('item_menu', 'post', 0);
     $post['link'] = $nv_Request->get_string('link', 'post', '', 0, 250);
-    $post['note'] = nv_substr($nv_Request->get_title('note', 'post', '', 1), 0, 250);
-    $post['module_name'] = nv_substr($nv_Request->get_title('module_name', 'post', '', 1), 0, 250);
-    $post['op'] = nv_substr($nv_Request->get_title('func', 'post', '', 1), 0, 250);
+    $post['note'] = nv_substr($nv_Request->get_title('note', 'post', ''), 0, 250);
+    $post['module_name'] = nv_substr($nv_Request->get_title('module_name', 'post', ''), 0, 250);
+    $post['op'] = nv_substr($nv_Request->get_title('func', 'post', ''), 0, 250);
     $post['target'] = $nv_Request->get_int('target', 'post', 0);
     $post['active_type'] = $nv_Request->get_int('active_type', 'post', 0);
-    $post['css'] = nv_substr($nv_Request->get_title('css', 'post', '', 1), 0, 250);
+    $post['css'] = nv_substr($nv_Request->get_title('css', 'post', ''), 0, 250);
 
     $post['icon'] = $nv_Request->get_string('icon', 'post', '');
     if (nv_is_file($post['icon'], NV_UPLOADS_DIR . '/' . $module_upload)) {

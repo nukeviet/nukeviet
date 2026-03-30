@@ -27,8 +27,8 @@ if ($global_config['idsite']) {
 $contents = '';
 
 // Thiet lap module moi
-$setmodule = $nv_Request->get_title('setmodule', 'get', '', 1);
-$autosetup = $nv_Request->get_title('autosetup', 'get', '', 1);
+$setmodule = $nv_Request->get_title('setmodule', 'get', '');
+$autosetup = $nv_Request->get_title('autosetup', 'get', '');
 
 if (!empty($setmodule) and preg_match($global_config['check_module'], $setmodule)) {
     if (csrf_check($nv_Request->get_title('checkss', 'get'), $csrf_key . '_setup_mod_' . $setmodule)) {

@@ -44,7 +44,7 @@ function getAlias($alias, $id, $num = 0)
 // Lấy alias nhóm
 if ($nv_Request->isset_request('getAlias, id, title', 'post')) {
     $id = $nv_Request->get_title('id', 'post', 0);
-    $title = $nv_Request->get_title('title', 'post', '', 1);
+    $title = $nv_Request->get_title('title', 'post', '');
 
     $alias = '';
     if (!empty($title)) {
@@ -868,7 +868,7 @@ if ($nv_Request->isset_request('add', 'get') or $nv_Request->isset_request('edit
 
             // Sửa / Thêm full thông tin
             if (empty($post['id']) or $post['id'] > 9) {
-                $post['title'] = $nv_Request->get_title('title', 'post', '', 1);
+                $post['title'] = $nv_Request->get_title('title', 'post', '');
                 if (empty($post['title'])) {
                     nv_jsonOutput([
                         'status' => 'error',
@@ -894,7 +894,7 @@ if ($nv_Request->isset_request('add', 'get') or $nv_Request->isset_request('edit
                     ]);
                 }
 
-                $post['description'] = $nv_Request->get_title('description', 'post', '', 1);
+                $post['description'] = $nv_Request->get_title('description', 'post', '');
                 $post['content'] = $nv_Request->get_editor('content', '', NV_ALLOWED_HTML_TAGS);
                 $post['exp_time'] = nv_d2u_post($nv_Request->get_title('exp_time', 'post', ''), 23, 59, 59);
 
@@ -915,7 +915,7 @@ if ($nv_Request->isset_request('add', 'get') or $nv_Request->isset_request('edit
             }
 
             if (empty($post['id']) or $post['id'] > 9 or $post['id'] == 1 or $post['id'] == 2 or $post['id'] == 3 or $post['id'] == 4 or $post['id'] == 7) {
-                $post['email'] = $nv_Request->get_title('email', 'post', '', 1);
+                $post['email'] = $nv_Request->get_title('email', 'post', '');
                 $check_email = nv_check_valid_email($post['email'], true);
                 if (!empty($post['email']) and $check_email[0] != '') {
                     nv_jsonOutput([
@@ -942,7 +942,7 @@ if ($nv_Request->isset_request('add', 'get') or $nv_Request->isset_request('edit
             }
 
             // Thông tin của tất cả các nhóm kể cả các nhóm hệ thống
-            $post['group_color'] = nv_substr($nv_Request->get_title('group_color', 'post', '', 1), 0, 10);
+            $post['group_color'] = nv_substr($nv_Request->get_title('group_color', 'post', ''), 0, 10);
 
             if (preg_match('/^([0-9a-fA-F]{6})$/i', $post['group_color']) or preg_match('/^([0-9a-fA-F]{3})$/i', $post['group_color'])) {
                 $post['group_color'] = '#' . $post['group_color'];

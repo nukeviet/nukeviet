@@ -29,7 +29,7 @@ if ($nv_Request->isset_request('edit', 'post')) {
     }
 
     $qid = $nv_Request->get_int('qid', 'post', 0);
-    $title = $nv_Request->get_title('title', 'post', '', 1);
+    $title = $nv_Request->get_title('title', 'post', '');
 
     if (empty($title)) {
         nv_jsonOutput([
@@ -72,7 +72,7 @@ if ($nv_Request->isset_request('add', 'post')) {
         ]);
     }
 
-    $title = $nv_Request->get_title('title', 'post', '', 1);
+    $title = $nv_Request->get_title('title', 'post', '');
     if (empty($title)) {
         nv_jsonOutput([
             'status' => 'error',

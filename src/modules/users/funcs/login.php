@@ -671,7 +671,7 @@ if (defined('NV_OPENID_ALLOWED') and $nv_Request->isset_request('server', 'get')
      * Neu gan OpenID nay vao 1 tai khoan da co
      */
     if (isset($op_process['connect']) and $nv_Request->isset_request('nv_login', 'post')) {
-        $nv_username = $nv_Request->get_title('login', 'post', '', 1);
+        $nv_username = $nv_Request->get_title('login', 'post', '');
         $nv_password = $nv_Request->get_title('password', 'post', '');
 
         if (empty($nv_username)) {
@@ -744,7 +744,7 @@ if (defined('NV_OPENID_ALLOWED') and $nv_Request->isset_request('server', 'get')
      * Gui ma xac minh email do nguoi dung khai bao
      */
     if ($global_config['allowuserreg'] != 0 and $nv_Request->isset_request('verify_send, reg_email', 'post')) {
-        $reg_email = nv_strtolower(nv_substr($nv_Request->get_title('reg_email', 'post', '', 1), 0, 100));
+        $reg_email = nv_strtolower(nv_substr($nv_Request->get_title('reg_email', 'post', ''), 0, 100));
         $check_reg_email = nv_check_email_reg($reg_email);
         if (!empty($check_reg_email)) {
             nv_jsonOutput([
@@ -802,7 +802,7 @@ if (defined('NV_OPENID_ALLOWED') and $nv_Request->isset_request('server', 'get')
      * Neu dang ky moi
      */
     if (isset($op_process['create']) and $nv_Request->isset_request('nv_reg', 'post')) {
-        $reg_username = $nv_Request->get_title('reg_username', 'post', '', 1);
+        $reg_username = $nv_Request->get_title('reg_username', 'post', '');
         if (($check_reg_username = nv_check_username_reg($reg_username)) != '') {
             opidr_login([
                 'status' => 'error',
@@ -811,7 +811,7 @@ if (defined('NV_OPENID_ALLOWED') and $nv_Request->isset_request('server', 'get')
         }
 
         if (empty($email)) {
-            $reg_email = nv_strtolower(nv_substr($nv_Request->get_title('reg_email', 'post', '', 1), 0, 100));
+            $reg_email = nv_strtolower(nv_substr($nv_Request->get_title('reg_email', 'post', ''), 0, 100));
             $check_reg_email = nv_check_email_reg($reg_email);
             if (!empty($check_reg_email)) {
                 opidr_login([
@@ -883,7 +883,7 @@ if ($nv_Request->isset_request('_csrf, nv_login', 'post')) {
         exit('Stop!!!');
     }
 
-    $nv_username = nv_substr($nv_Request->get_title('nv_login', 'post', '', 1), 0, 100);
+    $nv_username = nv_substr($nv_Request->get_title('nv_login', 'post', ''), 0, 100);
     $nv_password = $nv_Request->get_title('nv_password', 'post', '');
     $nv_totppin = $nv_Request->get_title('nv_totppin', 'post', '');
     $nv_backupcodepin = $nv_Request->get_title('nv_backupcodepin', 'post', '');

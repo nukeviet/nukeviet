@@ -77,12 +77,12 @@ if ($nv_Request->isset_request('checkss', 'post')) {
     } else {
         $row['image'] = '';
     }
-    $row['imagealt'] = $nv_Request->get_title('imagealt', 'post', '', 1);
+    $row['imagealt'] = $nv_Request->get_title('imagealt', 'post', '');
     $row['imageposition'] = $nv_Request->get_int('imageposition', 'post', 0);
 
     $row['description'] = $nv_Request->get_textarea('description', '', 'br', 1);
     $row['bodytext'] = $nv_Request->get_editor('bodytext', '', NV_ALLOWED_HTML_TAGS);
-    $row['keywords'] = nv_strtolower($nv_Request->get_title('keywords', 'post', '', 0));
+    $row['keywords'] = nv_strtolower($nv_Request->get_title('keywords', 'post', ''));
 
     $row['socialbutton'] = $nv_Request->get_int('socialbutton', 'post', 0);
 

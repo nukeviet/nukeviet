@@ -491,9 +491,9 @@ foreach ($themelist as $theme) {
 $array_config = [];
 // Lưu cấu hình gửi mail
 if ($nv_Request->isset_request('submitsave', 'post') and csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
-    $array_config['mailer_mode'] = nv_substr($nv_Request->get_title('mailer_mode', 'post', '', 1), 0, 255);
-    $array_config['smtp_host'] = nv_substr($nv_Request->get_title('smtp_host', 'post', '', 1), 0, 255);
-    $array_config['smtp_port'] = nv_substr($nv_Request->get_title('smtp_port', 'post', '', 1), 0, 255);
+    $array_config['mailer_mode'] = nv_substr($nv_Request->get_title('mailer_mode', 'post', ''), 0, 255);
+    $array_config['smtp_host'] = nv_substr($nv_Request->get_title('smtp_host', 'post', ''), 0, 255);
+    $array_config['smtp_port'] = nv_substr($nv_Request->get_title('smtp_port', 'post', ''), 0, 255);
     $array_config['smtp_username'] = nv_substr($nv_Request->get_title('smtp_username', 'post', ''), 0, 255);
     $array_config['smtp_password'] = nv_substr($nv_Request->get_title('smtp_password', 'post', ''), 0, 255);
     $array_config['sender_name'] = nv_substr($nv_Request->get_title('sender_name', 'post', ''), 0, 250);

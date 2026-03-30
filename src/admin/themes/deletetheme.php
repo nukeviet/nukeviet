@@ -13,7 +13,7 @@ if (!defined('NV_IS_FILE_THEMES')) {
     exit('Stop!!!');
 }
 
-$theme = $nv_Request->get_title('theme', 'post', '', 1);
+$theme = $nv_Request->get_title('theme', 'post', '');
 if (!csrf_check($nv_Request->get_string('checkss', 'post'), $admin_info['admin_id'] . '_' . $module_name . '_' . $theme) or empty($theme) or !(preg_match($global_config['check_theme'], $theme) or preg_match($global_config['check_theme_mobile'], $theme))) {
     exit();
 }

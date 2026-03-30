@@ -40,7 +40,7 @@ if (!isset($row['func_title']) or $row['func_title'] == 'main') {
 }
 
 if ($nv_Request->get_int('save', 'post') == '1') {
-    $fun_alias = $nv_Request->get_title('newvalue', 'post', '', 1);
+    $fun_alias = $nv_Request->get_title('newvalue', 'post', '');
 
     if (empty($fun_alias)) {
         $fun_alias = $row['func_title'];

@@ -148,7 +148,7 @@ if (!empty($catid)) {
     $base_url .= '&catid=' . $catid;
     $is_search = true;
 }
-$from_date = $nv_Request->get_title('from_date', 'get', '', 0);
+$from_date = $nv_Request->get_title('from_date', 'get', '');
 $date_array['from_date'] = $from_date;
 $from_date = nv_d2u_get($from_date);
 if (!empty($from_date)) {
@@ -158,7 +158,7 @@ if (!empty($from_date)) {
     $date_array['from_date'] = '';
 }
 
-$to_date = $nv_Request->get_title('to_date', 'get', '', 0);
+$to_date = $nv_Request->get_title('to_date', 'get', '');
 $date_array['to_date'] = $to_date;
 $to_date = nv_d2u_get($to_date, 23, 59, 59);
 if (!empty($to_date)) {

@@ -112,8 +112,8 @@ if ($nv_Request->isset_request('savesetting', 'post')) {
     }
 
     $array_config = [];
-    $array_config['indexfile'] = $nv_Request->get_title('indexfile', 'post', '', 1);
-    $array_config['mobile_indexfile'] = $nv_Request->get_title('mobile_indexfile', 'post', '', 1);
+    $array_config['indexfile'] = $nv_Request->get_title('indexfile', 'post', '');
+    $array_config['mobile_indexfile'] = $nv_Request->get_title('mobile_indexfile', 'post', '');
     $array_config['per_page'] = $nv_Request->get_page('per_page', 'post', 20);
     $array_config['st_links'] = $nv_Request->get_int('st_links', 'post', 0);
     $array_config['homewidth'] = $nv_Request->get_int('homewidth', 'post', 0);
@@ -133,8 +133,8 @@ if ($nv_Request->isset_request('savesetting', 'post')) {
     $array_config['report_limit'] = max(1, $nv_Request->get_int('report_limit', 'post', 0));
     $array_config['facebookappid'] = $nv_Request->get_title('facebookappid', 'post', '');
     $array_config['socialbutton'] = $nv_Request->get_typed_array('socialbutton', 'post', 'title', []);
-    $array_config['show_no_image'] = $nv_Request->get_title('show_no_image', 'post', '', 0);
-    $array_config['structure_upload'] = $nv_Request->get_title('structure_upload', 'post', '', 0);
+    $array_config['show_no_image'] = $nv_Request->get_title('show_no_image', 'post', '');
+    $array_config['structure_upload'] = $nv_Request->get_title('structure_upload', 'post', '');
     $array_config['config_source'] = $nv_Request->get_int('config_source', 'post', 0);
     $array_config['hide_author'] = (int) $nv_Request->get_bool('hide_author', 'post', false);
     $array_config['hide_inauthor'] = (int) $nv_Request->get_bool('hide_inauthor', 'post', false);

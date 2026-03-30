@@ -36,7 +36,7 @@ if ($nv_Request->isset_request('save', 'post')) {
         ]);
     }
 
-    $question = $nv_Request->get_title('question', 'post', '', 1);
+    $question = $nv_Request->get_title('question', 'post', '');
     $link = $nv_Request->get_title('link', 'post', '');
     if (!empty($link) and !nv_is_url($link, true)) {
         $link = '';

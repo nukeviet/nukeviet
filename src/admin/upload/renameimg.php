@@ -51,7 +51,7 @@ if (empty($newname)) {
     ]);
 }
 
-$newalt = $nv_Request->get_title('newalt', 'post', $newname, 1);
+$newalt = $nv_Request->get_title('newalt', 'post', $newname);
 if (empty($newalt)) {
     nv_jsonOutput([
         'status' => 'error',

@@ -114,7 +114,7 @@ $groups_list = nv_groups_list();
 
 $checkss = md5(NV_CHECK_SESSION . '_' . $module_name . '_' . $op . '_' . $row['bid']);
 if ($checkss == $nv_Request->get_string('checkss', 'post')) {
-    $list_file_name = $nv_Request->get_title('file_name', 'post', '', 0);
+    $list_file_name = $nv_Request->get_title('file_name', 'post', '');
     $array_file_name = explode('|', $list_file_name);
     if (!isset($array_file_name[1])) {
         nv_jsonOutput([
@@ -124,8 +124,8 @@ if ($checkss == $nv_Request->get_string('checkss', 'post')) {
     }
 
     $file_name = $row['file_name'] = trim($array_file_name[0]);
-    $module = $row['module'] = nv_substr($nv_Request->get_title('module_type', 'post', '', 0), 0, 55);
-    $row['title'] = nv_substr($nv_Request->get_title('title', 'post', '', 1), 0, 255);
+    $module = $row['module'] = nv_substr($nv_Request->get_title('module_type', 'post', ''), 0, 55);
+    $row['title'] = nv_substr($nv_Request->get_title('title', 'post', ''), 0, 255);
 
     unset($matches);
     if ($module == 'theme') {
@@ -158,9 +158,9 @@ if ($checkss == $nv_Request->get_string('checkss', 'post')) {
     }
 
     $row['link'] = $nv_Request->get_title('link', 'post', '');
-    $row['template'] = nv_substr($nv_Request->get_title('template', 'post', '', 0), 0, 55);
+    $row['template'] = nv_substr($nv_Request->get_title('template', 'post', ''), 0, 55);
     $row['heading'] = $nv_Request->get_int('heading', 'post', 0);
-    $row['position'] = $nv_Request->get_title('position', 'post', '', 0);
+    $row['position'] = $nv_Request->get_title('position', 'post', '');
     $row['position'] = nv_substr(nv_unhtmlspecialchars($row['position']), 0, 55);
     $row['act'] = (int) $nv_Request->get_bool('act', 'post', false);
     $row['dtime_type'] = $nv_Request->get_title('dtime_type', 'post', 'regular');

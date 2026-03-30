@@ -28,10 +28,10 @@ if ($global_config['idsite']) {
 $modules_site = nv_scandir(NV_ROOTDIR . '/modules', $global_config['check_module']);
 
 if (csrf_check($nv_Request->get_title('checkss', 'post'), $csrf_key)) {
-    $title = $nv_Request->get_title('title', 'post', '', 1);
+    $title = $nv_Request->get_title('title', 'post', '');
     $title = strtolower(change_alias($title));
-    $modfile = $nv_Request->get_title('m_file', 'post', '', 1);
-    $note = $nv_Request->get_title('note', 'post', '', 1);
+    $modfile = $nv_Request->get_title('m_file', 'post', '');
+    $note = $nv_Request->get_title('note', 'post', '');
 
     if (empty($title)) {
         nv_jsonOutput([

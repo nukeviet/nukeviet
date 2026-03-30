@@ -381,7 +381,7 @@ if (defined('NV_IS_GODADMIN') and ($action == 'fip' or $action == 'bip')) {
             ($post['mask'] < 1 or $post['mask'] > 128) && $post['mask'] = 128;
         }
 
-        $post['notice'] = $nv_Request->get_title('notice', 'post', '', 1);
+        $post['notice'] = $nv_Request->get_title('notice', 'post', '');
 
         if ($id) {
             $stmt = $db->prepare('DELETE FROM ' . $db_config['prefix'] . '_ips WHERE type = :type AND ip = :ip AND id != :id');

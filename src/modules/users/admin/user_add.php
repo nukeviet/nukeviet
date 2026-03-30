@@ -66,23 +66,23 @@ if ($nv_Request->isset_request('confirm', 'post')) {
             'mess' => $nv_Lang->getGlobal('error_checkss')
         ]);
     }
-    $_user['username'] = $nv_Request->get_title('username', 'post', '', 1);
-    $_user['email'] = nv_strtolower($nv_Request->get_title('email', 'post', '', 1));
-    $_user['password1'] = $nv_Request->get_title('password1', 'post', '', 0);
-    $_user['password2'] = $nv_Request->get_title('password2', 'post', '', 0);
+    $_user['username'] = $nv_Request->get_title('username', 'post', '');
+    $_user['email'] = nv_strtolower($nv_Request->get_title('email', 'post', ''));
+    $_user['password1'] = $nv_Request->get_title('password1', 'post', '');
+    $_user['password2'] = $nv_Request->get_title('password2', 'post', '');
     $_user['pass_reset_request'] = $nv_Request->get_int('pass_reset_request', 'post', 0);
     $_user['email_reset_request'] = $nv_Request->get_int('email_reset_request', 'post', 0);
-    $_user['question'] = nv_substr($nv_Request->get_title('question', 'post', '', 1), 0, 255);
-    $_user['answer'] = nv_substr($nv_Request->get_title('answer', 'post', '', 1), 0, 255);
-    $_user['first_name'] = nv_substr($nv_Request->get_title('first_name', 'post', '', 1), 0, 255);
-    $_user['last_name'] = nv_substr($nv_Request->get_title('last_name', 'post', '', 1), 0, 255);
-    $_user['gender'] = nv_substr($nv_Request->get_title('gender', 'post', '', 1), 0, 1);
+    $_user['question'] = nv_substr($nv_Request->get_title('question', 'post', ''), 0, 255);
+    $_user['answer'] = nv_substr($nv_Request->get_title('answer', 'post', ''), 0, 255);
+    $_user['first_name'] = nv_substr($nv_Request->get_title('first_name', 'post', ''), 0, 255);
+    $_user['last_name'] = nv_substr($nv_Request->get_title('last_name', 'post', ''), 0, 255);
+    $_user['gender'] = nv_substr($nv_Request->get_title('gender', 'post', ''), 0, 1);
     $_user['view_mail'] = $nv_Request->get_int('view_mail', 'post', 0);
     $_user['sig'] = $nv_Request->get_textarea('sig', '', NV_ALLOWED_HTML_TAGS);
     $_user['birthday'] = $nv_Request->get_title('birthday', 'post');
     $_user['in_groups'] = $nv_Request->get_typed_array('group', 'post', 'int');
     $_user['in_groups_default'] = $nv_Request->get_int('group_default', 'post', 0);
-    $_user['photo'] = nv_substr($nv_Request->get_title('photo', 'post', '', 1), 0, 255);
+    $_user['photo'] = nv_substr($nv_Request->get_title('photo', 'post', ''), 0, 255);
     $_user['is_official'] = $nv_Request->get_int('is_official', 'post', 0);
     $_user['adduser_email'] = $nv_Request->get_int('adduser_email', 'post', 0);
     $_user['is_email_verified'] = (int) $nv_Request->get_bool('is_email_verified', 'post', false);

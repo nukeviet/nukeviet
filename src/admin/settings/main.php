@@ -41,7 +41,7 @@ if ($nv_Request->isset_request('checkss', 'post')) {
         ]);
     }
     $array_config = [];
-    $array_config['site_name'] = nv_substr($nv_Request->get_title('site_name', 'post', '', 1), 0, 255);
+    $array_config['site_name'] = nv_substr($nv_Request->get_title('site_name', 'post', ''), 0, 255);
     if (empty($array_config['site_name'])) {
         nv_jsonOutput([
             'status' => 'error',
@@ -49,7 +49,7 @@ if ($nv_Request->isset_request('checkss', 'post')) {
         ]);
     }
 
-    $array_config['site_description'] = nv_substr($nv_Request->get_title('site_description', 'post', '', 1), 0, 255);
+    $array_config['site_description'] = nv_substr($nv_Request->get_title('site_description', 'post', ''), 0, 255);
     if (empty($array_config['site_description'])) {
         nv_jsonOutput([
             'status' => 'error',
@@ -59,9 +59,9 @@ if ($nv_Request->isset_request('checkss', 'post')) {
 
     $site_domain = $nv_Request->get_title('site_domain', 'post', '');
     $array_config['site_domain'] = (!empty($global_config['my_domains']) and in_array($site_domain, $global_config['my_domains'], true)) ? $site_domain : '';
-    $array_config['site_theme'] = nv_substr($nv_Request->get_title('site_theme', 'post', '', 1), 0, 255);
+    $array_config['site_theme'] = nv_substr($nv_Request->get_title('site_theme', 'post', ''), 0, 255);
     !in_array($array_config['site_theme'], $theme_array, true) && $array_config['site_theme'] = $global_config['site_theme'];
-    $array_config['mobile_theme'] = nv_substr($nv_Request->get_title('mobile_theme', 'post', '', 1), 0, 255);
+    $array_config['mobile_theme'] = nv_substr($nv_Request->get_title('mobile_theme', 'post', ''), 0, 255);
     (!empty($array_config['mobile_theme']) and !in_array($array_config['mobile_theme'], $mobile_theme_array, true)) && $array_config['mobile_theme'] = $global_config['mobile_theme'];
     $array_config['switch_mobi_des'] = $nv_Request->get_int('switch_mobi_des', 'post', 0);
     $_array_theme_type = $nv_Request->get_typed_array('theme_type', 'post', 'title');
@@ -77,7 +77,7 @@ if ($nv_Request->isset_request('checkss', 'post')) {
     }
     $array_config['theme_type'] = implode(',', $_array_theme_type);
 
-    $array_config['site_keywords'] = nv_substr($nv_Request->get_title('site_keywords', 'post', '', 1), 0, 255);
+    $array_config['site_keywords'] = nv_substr($nv_Request->get_title('site_keywords', 'post', ''), 0, 255);
     if (!empty($array_config['site_keywords'])) {
         $array_config['site_keywords'] = array_map('trim', explode(',', nv_strtolower($array_config['site_keywords'])));
         $array_config['site_keywords'] = array_unique($array_config['site_keywords']);
@@ -122,7 +122,7 @@ if ($nv_Request->isset_request('checkss', 'post')) {
         }
     }
 
-    $array_config['site_home_module'] = nv_substr($nv_Request->get_title('site_home_module', 'post', '', 1), 0, 255);
+    $array_config['site_home_module'] = nv_substr($nv_Request->get_title('site_home_module', 'post', ''), 0, 255);
     if (!isset($site_mods[$array_config['site_home_module']])) {
         $array_config['site_home_module'] = $global_config['site_home_module'];
     }

@@ -144,7 +144,7 @@ if (csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key . '_' . $mo
         'mess' => '',
     ];
 
-    $custom_title = $nv_Request->get_title('custom_title', 'post', '', 1);
+    $custom_title = $nv_Request->get_title('custom_title', 'post', '');
     if (empty($custom_title)) {
         $respon['input'] = 'custom_title';
         $respon['mess'] = $nv_Lang->getGlobal('required_invalid');
@@ -152,13 +152,13 @@ if (csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key . '_' . $mo
     }
 
     $site_title = $nv_Request->get_title('site_title', 'post', '');
-    $admin_title = $nv_Request->get_title('admin_title', 'post', '', 1);
-    $theme = $nv_Request->get_title('theme', 'post', '', 1);
-    $module_theme = $nv_Request->get_title('module_theme', 'post', '', 1);
-    $mobile = $nv_Request->get_title('mobile', 'post', '', 0);
-    $description = $nv_Request->get_title('description', 'post', '', 1);
+    $admin_title = $nv_Request->get_title('admin_title', 'post', '');
+    $theme = $nv_Request->get_title('theme', 'post', '');
+    $module_theme = $nv_Request->get_title('module_theme', 'post', '');
+    $mobile = $nv_Request->get_title('mobile', 'post', '');
+    $description = $nv_Request->get_title('description', 'post', '');
     $description = nv_substr($description, 0, 255);
-    $keywords = $nv_Request->get_title('keywords', 'post', '', 1);
+    $keywords = $nv_Request->get_title('keywords', 'post', '');
     $act = $nv_Request->get_int('act', 'post', 0);
     $rss = $nv_Request->get_int('rss', 'post', 0);
     $sitemap = $nv_Request->get_int('sitemap', 'post', 0);

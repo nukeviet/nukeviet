@@ -169,7 +169,7 @@ if ($nv_Request->isset_request('crontabcontent', 'post')) {
 
     $array = [];
     $array['id'] = $nv_Request->get_absint('id', 'post', 0);
-    $array['cron_name'] = $nv_Request->get_title('cron_name', 'post', '', 1);
+    $array['cron_name'] = $nv_Request->get_title('cron_name', 'post', '');
     $array['run_file'] = $nv_Request->get_title('run_file', 'post', '');
     $array['run_func'] = $nv_Request->get_title('run_func_iavim', 'post', '');
     $array['params'] = $nv_Request->get_title('params_iavim', 'post', '');

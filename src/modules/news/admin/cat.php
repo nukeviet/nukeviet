@@ -80,9 +80,9 @@ if (!empty($savecat)) {
     $catid = $nv_Request->get_int('catid', 'post', 0);
     $parentid_old = $nv_Request->get_int('parentid_old', 'post', 0);
     $parentid = $nv_Request->get_int('parentid', 'post', 0);
-    $title = $nv_Request->get_title('title', 'post', '', 1);
-    $titlesite = $nv_Request->get_title('titlesite', 'post', '', 1);
-    $keywords = $nv_Request->get_title('keywords', 'post', '', 1);
+    $title = $nv_Request->get_title('title', 'post', '');
+    $titlesite = $nv_Request->get_title('titlesite', 'post', '');
+    $keywords = $nv_Request->get_title('keywords', 'post', '');
     $description = $nv_Request->get_string('description', 'post', '');
     $description = nv_nl2br(nv_htmlspecialchars(strip_tags($description)), '<br />');
     $descriptionhtml = $nv_Request->get_editor('descriptionhtml', '', NV_ALLOWED_HTML_TAGS);

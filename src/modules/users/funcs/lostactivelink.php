@@ -52,8 +52,8 @@ $gfx_chk = (!empty($array_gfx_chk) and in_array('m', $array_gfx_chk, true)) ? 1 
 
 $data = [];
 $data['checkss'] = md5(NV_CHECK_SESSION . '_' . $module_name . '_' . $op);
-$data['userField'] = nv_substr($nv_Request->get_title('userField', 'post', '', 1), 0, 100);
-$data['answer'] = nv_substr($nv_Request->get_title('answer', 'post', '', 1), 0, 255);
+$data['userField'] = nv_substr($nv_Request->get_title('userField', 'post', ''), 0, 100);
+$data['answer'] = nv_substr($nv_Request->get_title('answer', 'post', ''), 0, 255);
 $data['send'] = $nv_Request->get_bool('send', 'post', false);
 $data['autosubmit'] = $nv_Request->get_int('autosubmit', 'get,post', 0);
 

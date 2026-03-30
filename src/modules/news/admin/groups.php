@@ -141,8 +141,8 @@ if ($nv_Request->isset_request('savecat', 'post')) {
     }
 
     $bid = $nv_Request->get_int('bid', 'post', 0);
-    $title = $nv_Request->get_title('title', 'post', '', 1);
-    $keywords = $nv_Request->get_title('keywords', 'post', '', 1);
+    $title = $nv_Request->get_title('title', 'post', '');
+    $keywords = $nv_Request->get_title('keywords', 'post', '');
     $alias = $nv_Request->get_title('alias', 'post', '');
     $description = $nv_Request->get_string('description', 'post', '');
     $description = nv_nl2br(nv_htmlspecialchars(strip_tags($description)), '<br />');

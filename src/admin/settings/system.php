@@ -87,7 +87,7 @@ if ($nv_Request->isset_request('checkss', 'post') and csrf_check($nv_Request->ge
     $admin_theme = $nv_Request->get_string('admin_theme', 'post');
     $array_config_site['admin_theme'] = (!empty($admin_theme) and in_array($admin_theme, $adminThemes, true)) ? $admin_theme : '';
 
-    $site_email = nv_substr($nv_Request->get_title('site_email', 'post', '', 1), 0, 255);
+    $site_email = nv_substr($nv_Request->get_title('site_email', 'post', ''), 0, 255);
     $check = nv_check_valid_email($site_email, true);
     if ($check[0] == '') {
         $array_config_site['site_email'] = $check[1];
@@ -123,7 +123,7 @@ if ($nv_Request->isset_request('checkss', 'post') and csrf_check($nv_Request->ge
 
     if (defined('NV_IS_GODADMIN')) {
         $array_config_global = [];
-        $site_timezone = $nv_Request->get_title('site_timezone', 'post', '', 0);
+        $site_timezone = $nv_Request->get_title('site_timezone', 'post', '');
         if (empty($site_timezone) or (!empty($site_timezone) and (in_array($site_timezone, $timezone_array, true) or $site_timezone == 'byCountry'))) {
             $array_config_global['site_timezone'] = $site_timezone;
         }
@@ -170,7 +170,7 @@ if ($nv_Request->isset_request('checkss', 'post') and csrf_check($nv_Request->ge
             $stmt->execute();
         }
 
-        $site_lang = $nv_Request->get_title('site_lang', 'post', '', 1);
+        $site_lang = $nv_Request->get_title('site_lang', 'post', '');
         if (!empty($site_lang) and in_array($site_lang, $allow_sitelangs, true)) {
             $array_config_global['site_lang'] = $site_lang;
         }
@@ -196,7 +196,7 @@ if ($nv_Request->isset_request('checkss', 'post') and csrf_check($nv_Request->ge
 
         $array_config_global['error_set_logs'] = $nv_Request->get_int('error_set_logs', 'post', 0);
         $array_config_global['error_separate_file'] = $nv_Request->get_int('error_separate_file', 'post', 0);
-        $error_send_email = nv_substr($nv_Request->get_title('error_send_email', 'post', '', 1), 0, 255);
+        $error_send_email = nv_substr($nv_Request->get_title('error_send_email', 'post', ''), 0, 255);
         $check = nv_check_valid_email($error_send_email, true);
         if ($check[0] == '') {
             $array_config_global['error_send_email'] = $check[1];
@@ -222,7 +222,7 @@ if ($nv_Request->isset_request('checkss', 'post') and csrf_check($nv_Request->ge
             }
         }
 
-        $array_config_global['memcached_host'] = nv_unhtmlspecialchars($nv_Request->get_title('memcached_host', 'post', '127.0.0.1', 1));
+        $array_config_global['memcached_host'] = nv_unhtmlspecialchars($nv_Request->get_title('memcached_host', 'post', '127.0.0.1'));
         $array_config_global['memcached_port'] = nv_unhtmlspecialchars($nv_Request->get_int('memcached_port', 'post', 11211));
         if ($array_config_global['cached'] == 'memcached' && (empty($array_config_global['memcached_host']) || empty($array_config_global['memcached_port']))) {
             nv_jsonOutput([
@@ -232,9 +232,9 @@ if ($nv_Request->isset_request('checkss', 'post') and csrf_check($nv_Request->ge
             ]);
         }
 
-        $array_config_global['redis_host'] = nv_unhtmlspecialchars($nv_Request->get_title('redis_host', 'post', '127.0.0.1', 1));
+        $array_config_global['redis_host'] = nv_unhtmlspecialchars($nv_Request->get_title('redis_host', 'post', '127.0.0.1'));
         $array_config_global['redis_port'] = $nv_Request->get_int('redis_port', 'post', 6379);
-        $redis_password = nv_unhtmlspecialchars($nv_Request->get_title('redis_password', 'post', '', 0));
+        $redis_password = nv_unhtmlspecialchars($nv_Request->get_title('redis_password', 'post', ''));
         $redis_password == '******' && $redis_password = $global_config['redis_password'];
         $array_config_global['redis_password'] = $crypt->encrypt($redis_password);
         $array_config_global['redis_db_index'] = $nv_Request->get_int('redis_db_index', 'post', 0);
