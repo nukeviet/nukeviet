@@ -1,0 +1,189 @@
+.article-headline {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: .5rem;
+
+  @include media-breakpoint-down($theme-layout-breakpoint) {
+    flex-wrap: wrap;
+  }
+
+  >div {
+    flex: 0 0 calc(100% / 2 - .5rem);
+    max-width: calc(100% / 2 - .5rem);
+
+    @include media-breakpoint-down($theme-layout-breakpoint) {
+      flex: 0 0 100%;
+      max-width: 100%;
+    }
+  }
+
+  .item-small {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-bottom: 1rem;
+
+    .item {
+      flex: 0 0 calc(100% / 2 - .5rem);
+      max-width: calc(100% / 2 - .5rem);
+
+      .item-inner {
+        height: 0;
+        position: relative;
+
+        @include media-breakpoint-up($theme-layout-breakpoint) {
+          padding-bottom: 75.47%;
+        }
+        @include media-breakpoint-down($theme-layout-breakpoint) {
+          padding-bottom: 57.97%;
+        }
+        @include media-breakpoint-down(sm) {
+          padding-bottom: 76.92%;
+        }
+      }
+    }
+
+    .cat-link {
+      display: inline-block;
+      background-color: $orange;
+      color: $white;
+      padding: .1rem .5rem .15rem .5rem;
+      border-radius: .25rem;
+      margin-bottom: .5rem;
+      font-size: $font-size-sm;
+    }
+
+    .article-link {
+      line-height: 1.4;
+      max-height: calc($h5-font-size * 1.4 * 3);
+      -webkit-line-clamp: 3;
+      line-clamp: 3;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+      font-size: $h5-font-size;
+
+      @include media-breakpoint-down(sm) {
+        max-height: calc($h5-font-size * 1.4 * 2);
+        -webkit-line-clamp: 2;
+        line-clamp: 2;
+      }
+    }
+  }
+
+  .item-big {
+    @include media-breakpoint-up($theme-layout-breakpoint) {
+      margin-bottom: 1rem;
+    }
+
+    .item {
+      height: 100%;
+      position: relative;
+    }
+
+    .item-inner {
+      position: relative;
+      @include media-breakpoint-up($theme-layout-breakpoint) {
+        height: 100%;
+      }
+      @include media-breakpoint-down($theme-layout-breakpoint) {
+        height: 0;
+        padding-bottom: 40.43%;
+      }
+      @include media-breakpoint-down(sm) {
+        height: 0;
+        padding-bottom: 60.43%;
+      }
+    }
+
+    .cat-link {
+      display: inline-block;
+      background-color: $primary;
+      color: color-contrast($primary);
+      padding: .1rem .5rem .15rem .5rem;
+      border-radius: .25rem;
+      margin-bottom: .5rem;
+      font-size: $font-size-sm;
+    }
+
+    .article-link {
+      line-height: 1.4;
+      max-height: calc($h3-font-size * 1.4 * 3);
+      -webkit-line-clamp: 3;
+      line-clamp: 3;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+      font-size: $h3-font-size;
+    }
+  }
+
+  .item-big-only {
+    .item-inner {
+      height: 0;
+      position: relative;
+      padding-bottom: 77.49%;
+    }
+  }
+
+  .item-content {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+
+    &::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 1;
+    }
+
+    .item-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .item-texts {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      padding: 1rem;
+      z-index: 2;
+    }
+  }
+}
+
+// Box chuyên mục tin tức
+.catbox {
+  .thumbnail-lg {
+    display: block;
+    height: 0;
+    padding-bottom: var(--nv-aspect-ratio, 75.47%);
+    position: relative;
+
+    span {
+      display: block;
+      position: absolute;
+      top: 0;
+      left: 0;
+      bottom: 0;
+      right: 0;
+
+      img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+    }
+  }
+}

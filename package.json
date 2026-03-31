@@ -28,6 +28,12 @@
     "core-css-minify": "bash scripts/core-css-minify.sh",
     "core-compile": "sass --style expanded --source-map --embed-sources scss/core/:src/assets/css/",
     "watch-core-css": "nodemon --watch scss/ --ext scss --exec \"npm-run-all core-compile core-css-prefix core-css-rtl core-css-minify\"",
-    "watch-core": "npm-run-all --parallel watch-core-*"
+    "watch-core": "npm-run-all --parallel watch-core-*",
+    "site-css": "npm-run-all site-compile site-css-prefix site-css-rtl",
+    "site-css-prefix": "postcss --config build/postcss.config.mjs --replace \"src/themes/future/css/*.css\" \"!src/themes/future/css/*.rtl*.css\" \"!src/themes/future/css/*.min.css\"",
+    "site-css-rtl": "cross-env NODE_ENV=RTL postcss --config build/postcss.config.mjs --dir \"src/themes/future/css\" --ext \".rtl.css\" \"src/themes/future/css/*.css\" \"!src/themes/future/css/*.rtl*.css\" \"!src/themes/future/css/*.min.css\"",
+    "site-compile": "sass --style expanded --source-map --embed-sources scss/future/:src/themes/future/css/",
+    "watch-site-css": "nodemon --watch scss/ --ext scss --exec \"npm-run-all site-compile site-css-prefix site-css-rtl\"",
+    "watch-site": "npm-run-all --parallel watch-site-*"
   }
 }

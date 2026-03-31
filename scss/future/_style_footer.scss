@@ -1,0 +1,29 @@
+// Fontawesome all
+@import "../../node_modules/@fortawesome/fontawesome-free/scss/fontawesome";
+@import "../../node_modules/@fortawesome/fontawesome-free/scss/brands";
+@import "../../node_modules/@fortawesome/fontawesome-free/scss/regular";
+@import "../../node_modules/@fortawesome/fontawesome-free/scss/solid";
+@import "../../node_modules/@fortawesome/fontawesome-free/scss/v4-shims";
+
+@import "../show_pass";
+@import "../standalone/alert";
+
+@import "../standalone/polyfill";
+
+@import "root";
+@import "common";
+@import "header";
+@import "main";
+@import "main-nav";
+@import "admin";
+@import "blocks";
+@import "footer";
+@import "banners";
+@import "perfect_scrollbar";
+@import "inform";
+@import "forms";
+@import "transitions";
+@import "../ckeditor5";
+
+// Giữ ở cuối
+@import "override";

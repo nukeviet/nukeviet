@@ -1,0 +1,31 @@
+@if $enable-grid-classes {
+  .main-content {
+    @include media-breakpoint-up($theme-layout-breakpoint, $grid-breakpoints) {
+      @each $key, $value in $main-columns {
+        .main-#{$key} {
+          flex: 0 0 auto;
+          width: #{$value};
+        }
+      }
+
+      @each $key, $value in $main-columns-lg {
+        .main-#{$key}-lg {
+          flex: 0 0 auto;
+          width: #{$value};
+        }
+      }
+    }
+
+    @include media-breakpoint-down($theme-layout-breakpoint, $grid-breakpoints) {
+      @each $key, $value in $main-mobile-columns-order {
+        .main-#{$key} {
+          order: #{$value};
+        }
+
+        .main-#{$key}-lg {
+          order: #{$value};
+        }
+      }
+    }
+  }
+}

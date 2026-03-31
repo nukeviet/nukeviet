@@ -1,0 +1,73 @@
+@if $enable-grid-classes {
+  .footer-top {
+    @include media-breakpoint-up($theme-layout-breakpoint, $grid-breakpoints) {
+      @each $key, $value in $footer-columns {
+        .footer-#{$key} {
+          flex: 0 0 auto;
+          width: #{$value};
+        }
+      }
+    }
+  }
+}
+
+.site-footer {
+  color: var(--nv-footer-color);
+
+  a:not(.dropdown-item) {
+    color: var(--nv-footer-link-color);
+
+    &:hover {
+      color: var(--nv-footer-link-color-hover);
+    }
+  }
+
+  .nv-block {
+    .block-title {
+      @include font-size($h1-font-size);
+      font-weight: $font-weight-medium;
+      text-transform: uppercase;
+      margin-bottom: $grid-gutter-width;
+    }
+  }
+
+  .socal-icons-title {
+    display: none;
+  }
+
+  .socal-icons {
+    flex-wrap: wrap;
+
+    a {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 2.5rem;
+      height: 2.5rem;
+      background-color: $secondary;
+      border-radius: 50%;
+      color: color-contrast($secondary);
+      transition: color .15s ease-in-out, opacity .15s ease-in-out;
+
+      &:hover {
+        color: var(--hover-color);
+        background-color: tint-color($secondary, 70%);
+      }
+    }
+  }
+}
+
+.footer-top {
+  background-color: var(--nv-footer-bg);
+}
+
+.footer-bar {
+  background-color: var(--nv-footer-emphasis);
+}
+
+.site-qrcode {
+  img {
+    width: 11.25rem;
+    height: 11.25rem;
+  }
+}

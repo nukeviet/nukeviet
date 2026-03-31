@@ -1,0 +1,143 @@
+.vstack-blocks {
+  gap: $block-spacer;
+}
+
+.nv-block {
+  >.block-body {
+    >p:last-child {
+      // Ckeditor 5 luôn có thẻ p, do đó nếu block html
+      // chỉ có 1 dòng thì đừng cho nó cách dưới
+      margin-bottom: 0;
+    }
+  }
+}
+
+.nv-block-default {
+  >.block-heading {
+    border-bottom: .25rem solid var(--#{$prefix}border-color);
+    position: relative;
+    margin-bottom: 1rem;
+    padding-bottom: .25rem;
+
+    &::after {
+      content: "";
+      position: absolute;
+      display: block;
+      height: .25rem;
+      width: 3rem;
+      background-color: $orange;
+      bottom: -.25rem;
+      left: 0;
+    }
+  }
+}
+
+.block-news {
+  .thumbnail {
+    span {
+      display: block;
+      width: var(--nv-width, 70px);
+      height: var(--nv-height, 50px);
+
+      img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+    }
+  }
+}
+
+.block-hits {
+  counter-reset: block-hits;
+
+  >li {
+    counter-increment: block-hits;
+  }
+
+  .hit-indicate {
+    display: flex;
+    width: 2.5rem;
+    height: 2.5rem;
+    justify-content: center;
+    align-items: center;
+    background-color: var(--#{$prefix}secondary-bg-subtle);
+    border-radius: 50%;
+
+    &::before {
+      content: counter(block-hits);
+      font-weight: 700;
+      font-style: italic;
+    }
+  }
+}
+
+// Tooltip chung dạng ảnh các block
+.tooltip-block-articles {
+  --#{$prefix}tooltip-opacity: 1;
+  --#{$prefix}tooltip-padding-x: 0;
+  --#{$prefix}tooltip-padding-y: 0;
+
+  .tip-body {
+    padding: $tooltip-padding-y $tooltip-padding-x;
+  }
+
+  .img {
+    position: relative;
+    height: 0;
+    padding-bottom: 66.66%;
+    border-top-left-radius: calc($tooltip-border-radius - 1px);
+    border-top-right-radius: calc($tooltip-border-radius - 1px);
+    border: 1px solid $tooltip-bg;
+    border-bottom: 0;
+
+    .img-inner {
+      position: absolute;
+      top: 0;
+      left: 0;
+      bottom: 0;
+      right: 0;
+    }
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+  }
+}
+
+// Tạo padding các cấp menu con
+$indent-step: 0.75rem;
+$max-depth: 10;
+@mixin nested-menu($level) {
+  $padding: $level * $indent-step;
+
+  @if $level > 0 {
+    > .menu-item {
+      padding-left: $padding;
+    }
+  }
+  @if $level < $max-depth {
+    >ul>li {
+      @include nested-menu($level + 1);
+    }
+  }
+}
+
+// Danh mục tin. Collapse mặc định của bootstrap
+.news-menu-cats {
+  >li{
+    @include nested-menu(0);
+  }
+
+  .bi {
+    transition: transform .15s ease-in-out;
+  }
+
+  a:not(.collapsed) {
+    >.bi {
+      transform: rotate(-180deg);
+    }
+  }
+}

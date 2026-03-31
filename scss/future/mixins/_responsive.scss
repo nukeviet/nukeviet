@@ -1,0 +1,11 @@
+@mixin responsive($responsive: $enable-responsive) {
+  @if $responsive {
+    @content;
+  }
+}
+
+@mixin non-responsive($responsive: $enable-responsive) {
+  @if not $responsive {
+    @content;
+  }
+}

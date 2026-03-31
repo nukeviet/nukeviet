@@ -1,0 +1,356 @@
+// Tạo padding các cấp menu con
+$indent-step: 0.75rem;
+$max-depth: 20;
+@mixin nested-menu($level) {
+  $padding: $level * $indent-step;
+
+  @if $level > 0 {
+    > .menu-item {
+      padding-left: $padding;
+    }
+  }
+  @if $level < $max-depth {
+    >ul>li {
+      @include nested-menu($level + 1);
+    }
+  }
+}
+
+.main-nav {
+  z-index: $zindex-main-nav;
+
+  @include media-breakpoint-up($theme-layout-breakpoint) {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .nav-expanded {
+    visibility: hidden;
+    @include media-breakpoint-down($theme-layout-breakpoint) {
+      display: none;
+    }
+  }
+
+  .nav-loader {
+    position: absolute;
+    z-index: 1;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    color: color-contrast($primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    .loader-mask {
+      width: 2.5rem;
+      background: linear-gradient(to left, rgba(var(--#{$prefix}primary-rgb), 1) 0%, rgba(var(--#{$prefix}primary-rgb), 0) 100%);
+    }
+
+    .loader-icon {
+      background-color: $primary;
+    }
+  }
+
+  @include media-breakpoint-down($theme-layout-breakpoint) {
+    font-weight: $font-weight-medium;
+
+    .nav-loader {
+      display: none;
+    }
+  }
+
+  &.processed {
+    overflow: visible;
+
+    .nav-loader {
+      display: none;
+    }
+
+    &.has-expanded {
+      .nav-expanded {
+        visibility: visible;
+      }
+    }
+
+    &.no-expanded {
+      .nav-expanded {
+        display: none;
+      }
+    }
+  }
+
+  ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+
+    li {
+      position: relative;
+
+      @include media-breakpoint-up($theme-layout-breakpoint) {
+        &:hover {
+          >ul {
+            visibility: visible;
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+      }
+
+      @include media-breakpoint-down($theme-layout-breakpoint) {
+        >.menu-item {
+          >.item-arrow i {
+            transition: transform 0.15s ease-in-out;
+          }
+        }
+
+        &.open,
+        &.opening {
+          >.menu-item {
+            >.item-arrow i {
+              transform: rotate(180deg);
+            }
+          }
+        }
+
+        &.active {
+          >.menu-item {
+            >.item-link:not(:hover) {
+              color: var(--#{$prefix}primary);
+            }
+
+            >.item-arrow {
+              color: var(--#{$prefix}primary);
+
+              &:hover {
+                opacity: .75;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .menu-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    @include media-breakpoint-down($theme-layout-breakpoint) {
+      justify-content: space-between;
+      border-bottom: var(--#{$prefix}border-width) var(--#{$prefix}border-style) var(--#{$prefix}border-color);
+    }
+
+    .item-link {
+      display: flex;
+      align-items: center;
+      gap: 0.25rem;
+      min-width: 0; // Fix elipsis issue
+      @include media-breakpoint-down($theme-layout-breakpoint) {
+        flex-grow: 1;
+
+        &:not(:hover) {
+          color: var(--#{$prefix}body-color);
+        }
+
+        .item-name {
+          padding-top: .5rem;
+          padding-bottom: .5rem;
+          word-wrap: break-word;
+          word-break: break-word;
+        }
+      }
+
+      .item-icon {
+        flex: 0 0 $main-nav-icon-min-width;
+
+        img {
+          max-width: $main-nav-icon-min-width;
+          max-height: $main-nav-height;
+          object-fit: contain;
+          height: auto;
+        }
+      }
+    }
+
+    @include media-breakpoint-down($theme-layout-breakpoint) {
+      .item-arrow {
+        padding: .5rem .75rem;
+        cursor: pointer;
+      }
+    }
+  }
+
+  >ul{
+    @include media-breakpoint-up($theme-layout-breakpoint) {
+      display: flex;
+      align-items: center;
+    }
+
+    // Lev1 không được xuống dòng
+    >li {
+      @include media-breakpoint-up($theme-layout-breakpoint) {
+        padding-left: .8125rem;
+        padding-right: .8125rem;
+
+        &.active {
+          background-color: tint-color($primary, 15%);
+        }
+
+        &:hover,
+        &.active:hover {
+          background-color: tint-color($primary, 20%);
+        }
+      }
+
+      @include media-breakpoint-up($theme-layout-breakpoint) {
+        >.menu-item {
+          white-space: nowrap;
+          color: color-contrast($primary);
+
+          .item-link {
+            color: color-contrast($primary);
+          }
+
+          .item-icon,
+          .item-name,
+          .item-arrow {
+            padding-top: calc(($main-nav-height - $line-height-base * $font-size-base) / 2);
+            padding-bottom: calc(($main-nav-height - $line-height-base * $font-size-base) / 2);
+          }
+        }
+      }
+
+      // Lev2 đổ xuống
+      @include media-breakpoint-up($theme-layout-breakpoint) {
+        >ul {
+          top: 100%;
+          left: 0;
+
+          &.submenu-end {
+            left: auto;
+            right: 0;
+          }
+
+          // Lev3 trở đi đổ sang phải (hoặc trái)
+          >li ul {
+            top: 0;
+            left: 100%;
+
+            &.submenu-end {
+              left: auto;
+              right: 100%;
+            }
+          }
+        }
+      }
+
+      @include media-breakpoint-down($theme-layout-breakpoint) {
+        @include nested-menu(0);
+      }
+    }
+
+    // CSS cho submenu nói chung
+    ul {
+      @include media-breakpoint-up($theme-layout-breakpoint) {
+        position: absolute;
+        visibility: hidden;
+        opacity: 0;
+        transition: opacity 0.15s ease-in-out, transform 0.15s ease-in-out, visibility 0.15s ease-in-out;
+        box-shadow: #{$dropdown-box-shadow};
+        transform: translateY(-10px);
+        background-color: $dropdown-bg;
+        background-clip: padding-box;
+        width: $main-nav-submenu-width;
+        padding: $dropdown-padding-y $dropdown-padding-x;
+        z-index: 1;
+
+        li {
+          .menu-item {
+            padding-left: $dropdown-item-padding-x;
+            justify-content: space-between;
+            border-bottom: var(--#{$prefix}border-width) var(--#{$prefix}border-style) var(--#{$prefix}border-color);
+
+            .item-link {
+              color: $dropdown-link-color;
+            }
+
+            &:not(.has-submenu) {
+              padding-right: $dropdown-item-padding-x;
+            }
+
+            .item-name {
+              padding-top: $dropdown-item-padding-y;
+              padding-bottom: $dropdown-item-padding-y;
+              word-wrap: break-word;
+              word-break: break-word;
+            }
+
+            .item-arrow {
+              padding-right: $dropdown-item-padding-x;
+              padding-left: .5rem;
+
+              i {
+                transform: rotate(-90deg);
+              }
+            }
+          }
+
+          &:last-child {
+            .menu-item {
+              border-bottom: 0;
+            }
+          }
+
+          &:hover,
+          &:focus {
+            >.menu-item {
+              background-color: $dropdown-link-hover-bg;
+
+              .item-link,
+              .item-arrow {
+                color: $dropdown-link-hover-color;
+              }
+            }
+          }
+
+          &.active,
+          &:active {
+            >.menu-item {
+              @include gradient-bg(#{$dropdown-link-active-bg});
+
+              .item-link,
+              .item-arrow {
+                color: $dropdown-link-active-color;
+              }
+            }
+          }
+        }
+      }
+
+      @include media-breakpoint-down($theme-layout-breakpoint) {
+        overflow: hidden;
+        transition: height 0.15s ease-in-out;
+      }
+    }
+
+    @include media-breakpoint-down($theme-layout-breakpoint) {
+      li:not(.open) {
+        >ul {
+          height: 0;
+        }
+      }
+    }
+  }
+
+  @include media-breakpoint-up($theme-layout-breakpoint) {
+    .main-nav-home {
+      .item-link {
+        .item-name {
+          display: none;
+        }
+      }
+    }
+  }
+}

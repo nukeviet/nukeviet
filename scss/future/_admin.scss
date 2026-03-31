@@ -1,0 +1,207 @@
+// Bật kéo thả block
+.column {
+  position: relative;
+  outline: 2px dashed var(--#{$prefix}danger);
+  min-height: 0.5rem;
+  min-width: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: $block-spacer;
+
+  .ic::before {
+    -moz-osx-font-smoothing: grayscale;
+    -webkit-font-smoothing: antialiased;
+    display: $fa-display;
+    font-style: normal;
+    font-variant: normal;
+    line-height: 1;
+    text-rendering: auto;
+    font-family: $fa-style-family;
+    font-weight: $fa-style;
+  }
+
+  >.add {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    transform: translate(50%, 50%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    height: 1.625rem;
+    width: 1.625rem;
+    z-index: 10;
+    background-color: $orange;
+    color: color-contrast($orange);
+
+    .ic::before {
+      content: unquote("\"#{ $fa-var-plus }\"");
+    }
+  }
+
+  &:hover {
+    >.add {
+      background-color: shade-color($orange, 10%);
+      color: color-contrast(shade-color($orange, 10%));
+    }
+  }
+}
+
+.portlet {
+  position: relative;
+
+  &.ui-sortable-placeholder {
+    outline: 2px dashed var(--#{$prefix}border-color);
+    visibility: visible !important;
+    outline-offset: -2px;
+  }
+
+  >.blockct {
+    cursor: move;
+
+    &.act0 {
+      opacity: .5;
+    }
+  }
+
+  >.tool {
+    position: absolute;
+    top: 0;
+    left: 0;
+    max-width: 100%;
+    z-index: 10;
+    opacity: 0;
+    background: rgba(tint-color($primary, 50%), 0.9);
+
+    a {
+      width: 1.875rem;
+      height: 1.875rem;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      color: color-contrast($primary);
+      font-size: $btn-font-size-sm;
+      border-radius: $btn-border-radius-sm;
+      background-color: $primary;
+      margin: 3px 1px;
+
+      &:hover {
+        background-color: shade-color($primary, 15%);
+      }
+
+      &:first-child {
+        margin-left: 3px;
+      }
+
+      &:last-child {
+        margin-right: 3px;
+      }
+    }
+
+    >.block_content:not(.add) .ic::before {
+      content: unquote("\"#{ $fa-var-wrench }\"");
+    }
+
+    >.delblock .ic::before {
+      content: unquote("\"#{ $fa-var-trash }\"");
+    }
+
+    >.actblock .ic::before {
+      content: unquote("\"#{ $fa-var-square-check }\"");
+    }
+
+    >.actblock .ic.act0::before {
+      content: unquote("\"#{ $fa-var-square }\"");
+    }
+
+    >.outgroupblock .ic::before {
+      content: unquote("\"#{ $fa-var-arrow-up-right-from-square }\"");
+    }
+  }
+
+  &:hover {
+    >.tool {
+      opacity: 1;
+    }
+  }
+}
+
+// Thanh công cụ của quản trị
+#admintoolbar {
+  position: fixed;
+  left: 0;
+  top: 3rem;
+  box-shadow: var(--#{$prefix}box-shadow);
+  z-index: $zindex-admintoolbar;
+  opacity: 0.5;
+  width: 2rem;
+  transition: width 0.15s ease-in-out;
+
+  .text {
+    opacity: 0;
+    transform: translateX(-20px);
+    overflow: hidden;
+    transition: all 0.15s ease-in-out;
+    text-overflow: ellipsis;
+  }
+
+  .icon {
+    width: 2rem;
+    height: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  &:hover {
+    opacity: 1;
+    width: 15rem;
+
+    .text {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+
+  a {
+    display: flex;
+    background-color: $primary;
+    color: color-contrast($primary);
+    white-space: nowrap;
+    padding: 0.125rem .5rem 0.125rem 0;
+    text-decoration: none;
+    border-bottom: 1px solid shade-color($primary, 15%);
+    align-items: center;
+    transition: background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, color 0.15s ease-in-out;
+  }
+
+  ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+
+    li {
+      &:hover {
+        a {
+          background-color: shade-color($primary, 10%);
+          border-bottom: 1px solid shade-color($primary, 25%);
+        }
+      }
+
+      &:last-child {
+        a {
+          border-bottom: 0;
+          border-bottom-right-radius: var(--#{$prefix}border-radius);
+        }
+      }
+
+      &:first-child {
+        a {
+          border-top-right-radius: var(--#{$prefix}border-radius);
+        }
+      }
+    }
+  }
+}

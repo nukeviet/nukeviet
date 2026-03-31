@@ -1,0 +1,25 @@
+{
+    "info": {
+        "name": "QR_code",
+        "author": "VINADES.,JSC",
+        "website": "https://vinades.vn",
+        "description": ""
+    },
+    "i18n": {
+        "en": {
+            "info": {
+                "name": "Change theme mode for mobile, computer, responsive"
+            }
+        },
+        "fr": {
+            "info": {
+                "name": "Changer le mode de thème pour mobile, ordinateur, réactif"
+            }
+        },
+        "vi": {
+            "info": {
+                "name": "Đổi chế độ giao diện điện thoại, máy tính, đáp ứng"
+            }
+        }
+    }
+}

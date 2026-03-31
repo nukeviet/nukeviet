@@ -1,0 +1,10 @@
+.page-img-wrap {
+  display: block;
+  overflow: hidden;
+  position: relative;
+  --bs-aspect-ratio: 75%;
+
+  @include media-breakpoint-up(md) {
+    --bs-aspect-ratio: 66.67%;
+  }
+}

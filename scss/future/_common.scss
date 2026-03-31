@@ -1,0 +1,138 @@
+// Giao diện desktop đưa kích thước nhỏ nhất của site về kích thước lớn nhất của container
+@include non-responsive() {
+  html,
+  body {
+    min-width: map-get($container-max-widths, xxl);
+  }
+}
+
+// Thông báo thu thập cookie
+.cookie-notice {
+  position: fixed;
+  bottom: 1rem;
+  left: 1rem;
+  width: 22rem;
+
+  @include responsive() {
+    max-width: calc(100vw - 2rem);
+  }
+
+  z-index: $zindex-cookie-notice;
+  background-color: var(--#{$prefix}secondary-bg);
+  border: var(--#{$prefix}border-width) var(--#{$prefix}border-style) var(--#{$prefix}border-color);
+  border-radius: var(--#{$prefix}border-radius);
+  box-shadow: var(--#{$prefix}box-shadow);
+  padding: 1rem;
+
+  .btn-close {
+    float: right;
+    margin-left: .5rem;
+    margin-bottom: .5rem;
+  }
+}
+
+// Thông báo phiên đăng nhập hết hạn
+.timeoutsess {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: $zindex-timeoutsess;
+  display: none;
+}
+
+// Width in px
+@for $i from 1 through 20 {
+  .fw-#{$i * 25} {
+    width: #{$i * 25}px !important;
+  }
+
+  .fh-#{$i * 25} {
+    height: #{$i * 25}px !important;
+  }
+
+  .maxw-#{$i * 25} {
+    max-width: #{$i * 25}px !important;
+  }
+
+  .maxh-#{$i * 25} {
+    max-height: #{$i * 25}px !important;
+  }
+
+  .fw-#{$i * 20} {
+    width: #{$i * 20}px !important;
+  }
+
+  .fh-#{$i * 20} {
+    height: #{$i * 20}px !important;
+  }
+
+  .maxw-#{$i * 20} {
+    max-width: #{$i * 20}px !important;
+  }
+
+  .maxh-#{$i * 20} {
+    max-height: #{$i * 20}px !important;
+  }
+}
+
+.ps-with-fw-icon {
+  padding-left: calc(1.25em + 1rem - 2px);
+}
+
+.ps-with-icon {
+  padding-left: calc(1em + 1rem - 2px);
+}
+
+// Block ellipsis: Chú ý class này chỉ dùng khi không thiết lập font-size, line-height mà dùng mặc định của body
+@for $i from 2 through 4 {
+  .text-truncate-#{$i} {
+    max-height: calc($font-size-base * $line-height-base * $i);
+    -webkit-line-clamp: #{$i};
+    line-clamp: #{$i};
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+  }
+}
+
+.badge-new {
+  --#{$prefix}badge-font-size: .7em;
+
+  svg {
+    display: inline-block;
+    vertical-align: -.125em;
+    fill: currentcolor;
+    width: 1em;
+    height: 1em;
+    margin: 0 -3px;
+    animation: badge-new-shake 1s infinite ease-in-out;
+  }
+}
+
+@keyframes badge-new-shake {
+  0% { transform: rotate(0deg); }
+  25% { transform: rotate(20deg); }
+  50% { transform: rotate(-20deg); }
+  75% { transform: rotate(20deg); }
+  100% { transform: rotate(0deg); }
+}
+
+.col-hide-empty:empty {
+  display: none;
+}
+
+.align-baseline {
+  transform: translateY(calc(var(--#{$prefix}body-line-height) * 1rem / 4));
+}
+
+.align-baseline-xs {
+  transform: translateY(calc(var(--#{$prefix}body-line-height) * 1rem / 18));
+}
+
+.richtext-container {
+  >p:last-child {
+    margin-bottom: 0;
+  }
+}

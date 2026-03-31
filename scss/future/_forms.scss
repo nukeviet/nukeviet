@@ -1,0 +1,42 @@
+.form-control-required {
+  background-image: #{escape-svg($input-required-bg-icon)};
+  background-position: calc(100% - .5rem) center;
+  background-repeat: no-repeat;
+  padding-right: 1.375rem;
+}
+
+.btn-input {
+  @include button-variant($border-color, $border-color);
+}
+
+.btn-outline-input {
+  @include button-outline-variant(
+    $color: $body-color,
+    $color-hover: $body-color,
+    $active-background: $border-color,
+    $active-border: $border-color,
+    $active-color: color-contrast($border-color)
+  );
+  --#{$prefix}btn-border-color: #{$border-color};
+}
+
+@if $enable-dark-mode {
+  @include color-mode(dark, true) {
+    color-scheme: dark;
+
+    .btn-input {
+      @include button-variant($border-color, $border-color);
+    }
+
+    .btn-outline-input {
+      @include button-outline-variant(
+        $color: $body-color-dark,
+        $color-hover: $body-color-dark,
+        $active-background: $border-color-dark,
+        $active-border: $border-color-dark,
+        $active-color: color-contrast($border-color-dark)
+      );
+      --#{$prefix}btn-border-color: #{$border-color-dark};
+    }
+  }
+}

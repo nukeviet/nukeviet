@@ -1,0 +1,17 @@
+.user-bldropdown {
+  width: calc(250px + 2rem);
+  max-width: calc(100vw - 1rem);
+  padding: 1rem 1rem 0 1rem;
+
+  .no-avatar {
+    width: 80px;
+    height: 80px;
+  }
+}
+
+// Các nút Oauth
+@each $color, $value in $oauth-branches {
+  .btn-#{$color} {
+    @include button-variant($value, $value);
+  }
+}

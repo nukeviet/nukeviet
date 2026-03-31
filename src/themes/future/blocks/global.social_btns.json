@@ -1,0 +1,33 @@
+{
+    "info": {
+        "name": "Config Menu",
+        "author": "VINADES.,JSC",
+        "website": "https://vinades.vn",
+        "description": ""
+    },
+    "config": {
+        "name": "facebook,youtube,x",
+        "url": "https://www.facebook.com/nukeviet,https://www.youtube.com/user/nukeviet,https://x.com/nukeviet",
+        "icon": "fa-brands fa-facebook,fa-brands fa-youtube,fa-brands fa-x-twitter",
+        "color": "1877F2,FF0000,000000"
+    },
+    "datafunction": "nv_menu_theme_social_btns_config",
+    "submitfunction": "nv_menu_theme_social_btns_submit",
+    "i18n": {
+        "en": {
+            "info": {
+                "name": "Customizable social media buttons"
+            }
+        },
+        "fr": {
+            "info": {
+                "name": "Boutons de réseaux sociaux personnalisables"
+            }
+        },
+        "vi": {
+            "info": {
+                "name": "Các nút mạng xã hội tùy biến"
+            }
+        }
+    }
+}

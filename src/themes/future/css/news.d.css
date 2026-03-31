@@ -1,0 +1,142 @@
+/**
+ * NukeViet Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2025 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
+ */
+.article-headline {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 0.5rem;
+}
+.article-headline > div {
+  flex: 0 0 calc(50% - 0.5rem);
+  max-width: calc(50% - 0.5rem);
+}
+.article-headline .item-small {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+.article-headline .item-small .item {
+  flex: 0 0 calc(50% - 0.5rem);
+  max-width: calc(50% - 0.5rem);
+}
+.article-headline .item-small .item .item-inner {
+  height: 0;
+  position: relative;
+  padding-bottom: 75.47%;
+}
+.article-headline .item-small .cat-link {
+  display: inline-block;
+  background-color: #f7651e;
+  color: #fff;
+  padding: 0.1rem 0.5rem 0.15rem 0.5rem;
+  border-radius: 0.25rem;
+  margin-bottom: 0.5rem;
+  font-size: 0.875rem;
+}
+.article-headline .item-small .article-link {
+  line-height: 1.4;
+  max-height: 4.725rem;
+  -webkit-line-clamp: 3;
+  line-clamp: 3;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  font-size: 1.125rem;
+}
+.article-headline .item-big {
+  margin-bottom: 1rem;
+}
+.article-headline .item-big .item {
+  height: 100%;
+  position: relative;
+}
+.article-headline .item-big .item-inner {
+  position: relative;
+  height: 100%;
+}
+.article-headline .item-big .cat-link {
+  display: inline-block;
+  background-color: #0d6efd;
+  color: #fff;
+  padding: 0.1rem 0.5rem 0.15rem 0.5rem;
+  border-radius: 0.25rem;
+  margin-bottom: 0.5rem;
+  font-size: 0.875rem;
+}
+.article-headline .item-big .article-link {
+  line-height: 1.4;
+  max-height: 5.775rem;
+  -webkit-line-clamp: 3;
+  line-clamp: 3;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  font-size: 1.375rem;
+}
+.article-headline .item-big-only .item-inner {
+  height: 0;
+  position: relative;
+  padding-bottom: 77.49%;
+}
+.article-headline .item-content {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+.article-headline .item-content::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 1;
+}
+.article-headline .item-content .item-img {
+  width: 100%;
+  height: 100%;
+  -o-object-fit: cover;
+  object-fit: cover;
+}
+.article-headline .item-content .item-texts {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 1rem;
+  z-index: 2;
+}
+
+.catbox .thumbnail-lg {
+  display: block;
+  height: 0;
+  padding-bottom: var(--nv-aspect-ratio, 75.47%);
+  position: relative;
+}
+.catbox .thumbnail-lg span {
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+}
+.catbox .thumbnail-lg span img {
+  width: 100%;
+  height: 100%;
+  -o-object-fit: cover;
+  object-fit: cover;
+}
+
+/*# sourceMappingURL=news.d.css.map */
