@@ -144,10 +144,43 @@ if ($checkss == $nv_Request->get_string('checkss', 'post')) {
     } elseif (isset($site_mods[$module])) {
         $mod_file = $site_mods[$module]['module_file'];
 
-        if (file_exists(NV_ROOTDIR . '/modules/' . $mod_file . '/blocks/' . $file_name)) {
-            $path_file_php = NV_ROOTDIR . '/modules/' . $mod_file . '/blocks/' . $file_name;
-            $path_file_ini = NV_ROOTDIR . '/modules/' . $mod_file . '/blocks/' . $matches[1] . '.' . $matches[2] . '.ini';
-            $path_file_json = NV_ROOTDIR . '/modules/' . $mod_file . '/blocks/' . $matches[1] . '.' . $matches[2] . '.json';
+        // Cho phép lấy cả block trong giao diện
+        $checks = [
+            'php' => NV_ROOTDIR . '/themes/' . $global_config['site_theme'] . '/modules/' . $mod_file . '/' . $file_name,
+            'ini' => NV_ROOTDIR . '/themes/' . $global_config['site_theme'] . '/modules/' . $mod_file . '/' . $matches[1] . '.' . $matches[2] . '.ini',
+            'json' => NV_ROOTDIR . '/themes/' . $global_config['site_theme'] . '/modules/' . $mod_file . '/' . $matches[1] . '.' . $matches[2] . '.json'
+        ];
+        foreach ($checks as $check_type => $path) {
+            if (!file_exists($path)) {
+                continue;
+            }
+            if ($check_type == 'php') {
+                $path_file_php = $path;
+            } elseif ($check_type == 'ini') {
+                $path_file_ini = $path;
+            } elseif ($check_type == 'json') {
+                $path_file_json = $path;
+            }
+        }
+        // Trong giao diện không có thì lấy trong module
+        $checks = [
+            'php' => NV_ROOTDIR . '/modules/' . $mod_file . '/blocks/' . $file_name,
+            'ini' => NV_ROOTDIR . '/modules/' . $mod_file . '/blocks/' . $matches[1] . '.' . $matches[2] . '.ini',
+            'json' => NV_ROOTDIR . '/modules/' . $mod_file . '/blocks/' . $matches[1] . '.' . $matches[2] . '.json'
+        ];
+        foreach ($checks as $check_type => $path) {
+            if (!file_exists($path)) {
+                continue;
+            }
+            if ($check_type == 'php' and empty($path_file_php)) {
+                $path_file_php = $path;
+            } elseif ($check_type == 'ini' and empty($path_file_ini)) {
+                $path_file_ini = $path;
+            } elseif ($check_type == 'json' and empty($path_file_json)) {
+                $path_file_json = $path;
+            }
+        }
+        if (!empty($path_file_php)) {
             $block_type = 'module';
             $block_dir = $mod_file;
         }

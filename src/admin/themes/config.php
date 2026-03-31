@@ -48,13 +48,13 @@ if ($selectthemes_old != $selectthemes) {
 }
 
 if (file_exists(NV_ROOTDIR . '/themes/' . $selectthemes . '/config.php')) {
-    // Connect with file language interface configuration
+    // Kết nối với ngôn ngữ của giao diện
     $nv_Lang->loadTheme($selectthemes);
 
-    // Connect with file theme configuration
+    // Kết nối với tệp xử lý của giao diện
     require NV_ROOTDIR . '/themes/' . $selectthemes . '/config.php';
 } else {
-    $contents = '<h2 class="center vcenter" style="margin: 50px;">' . $nv_Lang->getModule('config_not_exit', $selectthemes) . '</h2>';
+    $contents = nv_theme_alert('', $nv_Lang->getModule('config_not_exit', $selectthemes));
 }
 
 $page_title = $nv_Lang->getModule('config') . ':' . $selectthemes;

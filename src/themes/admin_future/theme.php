@@ -13,7 +13,6 @@ if (!defined('NV_MAINFILE')) {
     exit('Stop!!!');
 }
 
-use NukeViet\Client\Browser;
 use NukeViet\Template\Config;
 
 // Thiết lập config riêng của giao diện
@@ -88,7 +87,7 @@ function nv_admin_theme(?string $contents, $head_site = 1)
     $tpl->assign('MODULE_NAME', $module_name);
     $tpl->assign('OP', $op);
     $tpl->assign('ADMIN_INFO', $admin_info);
-    $tpl->assign('IS_IE', $browser->isBrowser(Browser::BROWSER_IE));
+    $tpl->assign('OUTDATED_BROWSER', nv_outdated_browser());
     $tpl->assign('CLIENT_INFO', $client_info);
     $tpl->assign('SITE_MODS', $site_mods);
     $tpl->assign('ADMIN_MODS', $admin_mods);

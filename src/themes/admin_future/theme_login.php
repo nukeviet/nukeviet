@@ -18,8 +18,6 @@ if (!defined('NV_MAINFILE')) {
  * Giữ tệp này, chỉnh sửa nó nếu muốn phát triển giao diện đăng nhập riêng
  */
 
-use NukeViet\Client\Browser;
-
 $dir_tpl = get_tpl_dir($global_config['admin_theme'], NV_DEFAULT_ADMIN_THEME, '/system/login.tpl');
 $tpl = new \NukeViet\Template\NVSmarty();
 $tpl->setTemplateDir(NV_ROOTDIR . '/themes/' . $dir_tpl . '/system');
@@ -27,7 +25,7 @@ $tpl->setTemplateDir(NV_ROOTDIR . '/themes/' . $dir_tpl . '/system');
 $tpl->assign('LANG', $nv_Lang);
 $tpl->assign('GCONFIG', $global_config);
 $tpl->assign('PAGE_TITLE', $nv_Lang->getGlobal('admin_page'));
-$tpl->assign('IS_IE', $browser->isBrowser(Browser::BROWSER_IE));
+$tpl->assign('OUTDATED_BROWSER', nv_outdated_browser());
 $tpl->assign('ADMIN_THEME', $dir_tpl);
 $tpl->assign('PASSKEY_ALLOWED', $passkey_allowed);
 $tpl->assign('CHECKSS', csrf_create($csrf_key));

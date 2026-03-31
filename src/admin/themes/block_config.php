@@ -46,11 +46,47 @@ if ($module == 'theme' and (preg_match($global_config['check_theme'], $selectthe
 } elseif (isset($site_mods[$module]) and preg_match($global_config['check_block_module'], $file_name, $matches)) {
     // Block module
     $module_file = $site_mods[$module]['module_file'];
-    $path_file_php = NV_ROOTDIR . '/modules/' . $module_file . '/blocks/' . $file_name;
-    $path_file_ini = NV_ROOTDIR . '/modules/' . $module_file . '/blocks/' . $matches[1] . '.' . $matches[2] . '.ini';
-    $path_file_json = NV_ROOTDIR . '/modules/' . $module_file . '/blocks/' . $matches[1] . '.' . $matches[2] . '.json';
-    $block_type = 'module';
-    $block_dir = $module_file;
+
+    // Cho phép lấy cả block trong giao diện
+    $checks = [
+        'php' => NV_ROOTDIR . '/themes/' . $global_config['site_theme'] . '/modules/' . $module_file . '/' . $file_name,
+        'ini' => NV_ROOTDIR . '/themes/' . $global_config['site_theme'] . '/modules/' . $module_file . '/' . $matches[1] . '.' . $matches[2] . '.ini',
+        'json' => NV_ROOTDIR . '/themes/' . $global_config['site_theme'] . '/modules/' . $module_file . '/' . $matches[1] . '.' . $matches[2] . '.json'
+    ];
+    foreach ($checks as $check_type => $path) {
+        if (!file_exists($path)) {
+            continue;
+        }
+        if ($check_type == 'php') {
+            $path_file_php = $path;
+        } elseif ($check_type == 'ini') {
+            $path_file_ini = $path;
+        } elseif ($check_type == 'json') {
+            $path_file_json = $path;
+        }
+    }
+    // Trong giao diện không có thì lấy trong module
+    $checks = [
+        'php' => NV_ROOTDIR . '/modules/' . $module_file . '/blocks/' . $file_name,
+        'ini' => NV_ROOTDIR . '/modules/' . $module_file . '/blocks/' . $matches[1] . '.' . $matches[2] . '.ini',
+        'json' => NV_ROOTDIR . '/modules/' . $module_file . '/blocks/' . $matches[1] . '.' . $matches[2] . '.json'
+    ];
+    foreach ($checks as $check_type => $path) {
+        if (!file_exists($path)) {
+            continue;
+        }
+        if ($check_type == 'php' and empty($path_file_php)) {
+            $path_file_php = $path;
+        } elseif ($check_type == 'ini' and empty($path_file_ini)) {
+            $path_file_ini = $path;
+        } elseif ($check_type == 'json' and empty($path_file_json)) {
+            $path_file_json = $path;
+        }
+    }
+    if (!empty($path_file_php)) {
+        $block_type = 'module';
+        $block_dir = $module_file;
+    }
 } else {
     $respon['text'] = 'Block not exists!';
     nv_jsonOutput($respon);
@@ -165,5 +201,5 @@ $contents = call_user_func($function_name, $module, $data_block);
 $nv_Lang->changeLang();
 
 $respon['error'] = 0;
-$respon['html'] = $contents;
+$respon['html'] = nv_url_rewrite($contents, true);
 nv_jsonOutput($respon);

@@ -15,12 +15,14 @@ use NukeViet\Http\Http;
 
 /**
  * NukeViet\Client\Gfonts
+ * Google Fonts version 1. Font phụ thuộc vào Agent của trình duyệt
  *
  * @package NukeViet\Client
  * @author VINADES.,JSC <contact@vinades.vn>
  * @copyright (C) 2009-2025 VINADES.,JSC. All rights reserved
  * @version 5.x
  * @access public
+ * @deprecated Đã lỗi thời trên NukeViet 5.0, sẽ bị xóa bỏ trên NukeViet 6.0
  */
 class Gfonts
 {

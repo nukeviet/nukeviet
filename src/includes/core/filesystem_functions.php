@@ -1251,3 +1251,66 @@ function get_module_tpl_dir($filename, $array = false, string $module = '')
     trigger_error('Template file not found: ' . $filename . ', module: ' . $module_theme);
     throw new \NukeViet\Http\HttpException('Template file not found!', 500);
 }
+
+/**
+ * Lấy thư mục chứa tệp tpl $filename của block module ngoài site bất kì. Thứ tự ưu tiên như sau
+ * - Thư mục module_theme của giao diện module hiện đang xem
+ * - Thư mục module_theme của giao diện module chứa block
+ * - Thư mục module_theme của giao diện site
+ * - Thư mục module_theme của giao diện mặc định
+ * - Thư mục module_file của giao diện module hiện đang xem
+ * - Thư mục module_file của giao diện module chứa block
+ * - Thư mục module_file của giao diện site
+ * - Thư mục module_file của giao diện mặc định
+ *
+ * @param string $filename
+ * @param bool   $array
+ * @param string $module
+ * @return array|string
+ */
+function get_block_tpl_dir(string $filename, bool $array = false, string $module = '')
+{
+    global $site_mods, $global_config;
+    if (!isset($site_mods[$module])) {
+        return $array ? ['', ''] : '';
+    }
+
+    $themes_check = [];
+    // Admin bật kéo thả block, dùng trong block config sẽ không có module_theme hoặc module_theme là theme admin
+    if (!defined('NV_ADMIN')) {
+        $themes_check[$global_config['module_theme']] = $global_config['module_theme'];
+    }
+    // Giao diện cố định của module chứa block nếu có thiết lập
+    if (!empty($site_mods[$module]['theme']) and !isset($themes_check[$site_mods[$module]['theme']])) {
+        $themes_check[$site_mods[$module]['theme']] = $site_mods[$module]['theme'];
+    }
+    // Giao diện của site
+    if (!isset($themes_check[$global_config['site_theme']])) {
+        $themes_check[$global_config['site_theme']] = $global_config['site_theme'];
+    }
+    // Giao diện mặc định
+    if (!isset($themes_check[NV_DEFAULT_SITE_THEME])) {
+        $themes_check[NV_DEFAULT_SITE_THEME] = NV_DEFAULT_SITE_THEME;
+    }
+
+    $dirs_check = [];
+    $module_theme = $site_mods[$module]['module_theme'];
+    $module_file = $site_mods[$module]['module_file'];
+    $dirs_check[$module_theme] = $module_theme;
+    if ($module_theme != $module_file) {
+        $dirs_check[$module_file] = $module_file;
+    }
+
+    foreach ($dirs_check as $dir) {
+        foreach ($themes_check as $theme) {
+            if (theme_file_exists($theme . '/modules/' . $dir . '/' . $filename)) {
+                if ($array) {
+                    return [$theme, NV_ROOTDIR . '/themes/' . $theme . '/modules/' . $dir];
+                }
+                return NV_ROOTDIR . '/themes/' . $theme . '/modules/' . $dir;
+            }
+        }
+    }
+
+    return $array ? ['', ''] : '';
+}

@@ -32,13 +32,14 @@ if (csrf_check($nv_Request->get_string('checkss', 'post'), $check_key)) {
                 $modulearray[] = $_module_file;
                 $allowfolder[] = NV_ROOTDIR . '/themes/' . $themename . '/modules/' . $_module_file . '/';
 
-                if (file_exists(NV_ROOTDIR . '/themes/' . $themename . '/css/' . $_module_file . '.css')) {
-                    $allowfolder[] = NV_ROOTDIR . '/themes/' . $themename . '/css/' . $_module_file . '.css';
+                $files_css = nv_scandir(NV_ROOTDIR . '/themes/' . $themename . '/css', '/^' . nv_preg_quote($_module_file) . '(?:\.\*|_.*)?\.css$/');
+                foreach ($files_css as $file) {
+                    $allowfolder[] = NV_ROOTDIR . '/themes/' . $themename . '/css/' . $file;
                 }
 
-                $_files = glob(NV_ROOTDIR . '/themes/' . $themename . '/js/' . $_module_file . '*.js');
-                foreach ($_files as $_file) {
-                    $allowfolder[] = $_file;
+                $files_js = nv_scandir(NV_ROOTDIR . '/themes/' . $themename . '/js', '/^' . nv_preg_quote($_module_file) . '(?:\.\*|_.*)?\.js$/');
+                foreach ($files_js as $file) {
+                    $allowfolder[] = NV_ROOTDIR . '/themes/' . $themename . '/js/' . $file;
                 }
 
                 if (file_exists(NV_ROOTDIR . '/themes/' . $themename . '/images/' . $_module_file . '/')) {

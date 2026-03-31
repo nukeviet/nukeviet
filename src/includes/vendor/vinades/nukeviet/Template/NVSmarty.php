@@ -15,7 +15,7 @@ use Smarty\Smarty;
 
 /**
  * Class này mặc định sửa dụng sau khi core được load
- * Các hằng, tài nguyên nghiễm phiên dùng được
+ * Các hằng, tài nguyên nghiễm nhiên dùng được
  */
 class NVSmarty extends Smarty
 {

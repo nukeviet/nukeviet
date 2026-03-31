@@ -9,9 +9,6 @@
     <meta name="generator" content="{$GCONFIG.site_name}">
     <meta name="robots" content="noindex, nofollow">
     <meta http-equiv="content-type" content="text/html; charset={$GCONFIG.site_charset}">
-    <!--[if IE]>
-    <meta http-equiv="X-UA-Compatible" content="IE=9; IE=8; IE=EmulateIE8; IE=EDGE" />
-    <![endif]-->
 
     <link rel="shortcut icon" href="{$FAVICON}">
     <link rel="stylesheet" href="{$smarty.const.NV_BASE_SITEURL}themes/{$ADMIN_THEME}/css/nv.style{if not empty($TCONFIG) and $TCONFIG.dir eq 'rtl'}.rtl{/if}.css">
@@ -51,15 +48,14 @@
     <script type="text/javascript" src="{$smarty.const.ASSETS_LANG_STATIC_URL}/js/language/{$smarty.const.NV_LANG_INTERFACE}{$smarty.const.AUTO_MINIFIED}.js"></script>
     <script type="text/javascript" src="{$smarty.const.ASSETS_STATIC_URL}/js/global{$smarty.const.AUTO_MINIFIED}.js"></script>
     {if $GCONFIG.admin_XSSsanitize}
-    <script type="text/javascript" src="{$smarty.const.ASSETS_STATIC_URL}/js/DOMPurify/purify{$IS_IE ? 2 : 3}.js"></script>
+    <script type="text/javascript" src="{$smarty.const.ASSETS_STATIC_URL}/js/DOMPurify/purify{$OUTDATED_BROWSER ? 2 : 3}.js"></script>
     {/if}
     <script type="text/javascript" src="{$smarty.const.ASSETS_STATIC_URL}/js/admin{$smarty.const.AUTO_MINIFIED}.js"></script>
     {if not empty($JS_MODULE)}
     <script type="text/javascript" src="{$JS_MODULE}"></script>
     {/if}
     {if not empty($GCONFIG.passshow_button)}
-    <link rel="stylesheet" href="{$smarty.const.ASSETS_STATIC_URL}/js/show-pass-btn/bootstrap3-show-pass.css">
-    <script type="text/javascript" src="{$smarty.const.ASSETS_STATIC_URL}/js/show-pass-btn/bootstrap3-show-pass.js"></script>
+    <script type="text/javascript" src="{$smarty.const.ASSETS_STATIC_URL}/js/show-pass-btn/bootstrap5-show-pass.js"></script>
     {/if}
     <link rel="stylesheet" href="{$smarty.const.ASSETS_STATIC_URL}/js/perfect-scrollbar/style.css">
     <script type="text/javascript" src="{$smarty.const.ASSETS_STATIC_URL}/js/perfect-scrollbar/min.js"></script>

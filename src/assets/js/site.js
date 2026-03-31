@@ -7,13 +7,19 @@
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
+/**
+ * Code ở tệp này cần không phụ thuộc vào thư viện làm giao diện
+ * giả sử bootstrap 3, 4, 5 hoặc fontawesome. Nếu phụ thuộc hãy đặt code
+ * ở riêng giao diện đó.
+ */
+
 var myTimerPage = '', myTimersecField = '';
 
 /**
  * Dừng bộ đếm thời gian không dùng site và chạy lại
  */
 function timeoutsesscancel() {
-    $("#timeoutsess").slideUp("slow", function() {
+    $("#timeoutsess").slideUp(200, function() {
         clearInterval(myTimersecField);
         myTimerPage = setTimeout(function() {
             timeoutsessrun()

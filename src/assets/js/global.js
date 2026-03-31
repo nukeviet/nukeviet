@@ -304,36 +304,36 @@ function nv_is_dst() {
     return (now > dst_start && now < dst_end);
 }
 
-function nv_DigitalClock(div_id) {
-    if (document.getElementById(div_id)) {
-        nv_my_dst && nv_is_dst() && (nv_my_ofs += 1);
+/**
+ * @param {string} format
+ * @param {Date} date
+ * @returns
+ */
+function nv_format_date(format, date = new Date()) {
+    const replacements = {
+        'Y': date.getFullYear(),
+        'y': String(date.getFullYear()).slice(-2),
+        'm': String(date.getMonth() + 1).padStart(2, '0'),
+        'n': date.getMonth() + 1,
+        'F': nv_aryMonth[date.getMonth()],
+        'M': nv_aryMS[date.getMonth()],
+        'd': String(date.getDate()).padStart(2, '0'),
+        'j': date.getDate(),
+        'l': nv_aryDayName[date.getDay()],
+        'D': nv_aryDayNS[date.getDay()],
+        'H': String(date.getHours()).padStart(2, '0'),
+        'G': date.getHours(),
+        'h': String(date.getHours() % 12 || 12).padStart(2, '0'),
+        'g': date.getHours() % 12 || 12,
+        'A': date.getHours() >= 12 ? nv_js_pm.toUpperCase() : nv_js_am.toUpperCase(),
+        'a': date.getHours() >= 12 ? nv_js_pm.toLowerCase() : nv_js_am.toLowerCase(),
+        'i': String(date.getMinutes()).padStart(2, '0'),
+        's': String(date.getSeconds()).padStart(2, '0'),
+    };
 
-        var newDate = new Date();
-        newDate.setHours(newDate.getHours() + (newDate.getTimezoneOffset() / 60) + nv_my_ofs);
-
-        var intMinutes = newDate.getMinutes(),
-            intSeconds = newDate.getSeconds();
-
-        if (intMinutes != nv_old_Minute) {
-            nv_old_Minute = intMinutes;
-            var intHours = newDate.getHours(),
-                intDay = newDate.getDay(),
-                intMonth = newDate.getMonth(),
-                intWeekday = newDate.getDate(),
-                intYear = newDate.getYear();
-
-            200 > intYear && (intYear += 1900);
-            var strDayName = new String(nv_aryDayName[intDay]);
-            var strMonthNumber = intMonth + 1;
-            9 >= intHours && (intHours = "0" + intHours);
-            9 >= intMinutes && (intMinutes = "0" + intMinutes);
-            9 >= strMonthNumber && (strMonthNumber = "0" + strMonthNumber);
-            9 >= intWeekday && (intWeekday = "0" + intWeekday);
-
-            document.getElementById(div_id).innerHTML = intHours + ':' + intMinutes + ' ' + nv_my_abbr + ' &nbsp; ' + strDayName + ', ' + intWeekday + '/' + strMonthNumber + '/' + intYear;
-        }
-        setTimeout('nv_DigitalClock("' + div_id + '")', (60 - intSeconds) * 1000);
-    }
+    return format.replace(/\\?([YymnFdjlDGHgAais])/g, (match, key) => {
+        return replacements[key] !== undefined ? replacements[key] : key;
+    });
 }
 
 function nv_checkAll(oForm, cbName, caName, check_value) {

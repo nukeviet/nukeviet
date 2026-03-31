@@ -56,6 +56,9 @@ var nv_aryDayName = "Dimanche Lundi Mardi Mercredi Jeudi Vendredi Samedi".split(
     nv_range = "Merci d'entrer une valeur entre {0} et {1}.",
     nv_max = "Merci d'entrer une valeur moins ou égale à {0}.",
     nv_min = "Merci d'entrer une valeur plus ou égal à {0}.",
+    nv_maxcheck = "Veuillez sélectionner au maximum {0} valeurs.",
+    nv_mincheck = "Veuillez sélectionner au minimum {0} valeurs.",
+    nv_rangecheck = "Veuillez sélectionner entre {0} et {1} valeurs.",
     //contact
     nv_fullname = "Nom complet entré n'est pas valide.",
     nv_title = "Titre invalide.",

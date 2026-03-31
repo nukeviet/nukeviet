@@ -1,0 +1,36 @@
+/* eye btn */
+.btn-eye {
+    padding-left: 8px !important;
+    padding-right: 8px !important;
+    --bs-btn-color: #666;
+    --bs-btn-bg: #ffffff;
+    --bs-btn-border-color: #ced4da;
+    --bs-btn-hover-color: #000;
+    --bs-btn-hover-bg: white;
+    --bs-btn-hover-border-color: #d3d8de;
+    --bs-btn-focus-shadow-rgb: 175, 180, 185;
+    --bs-btn-active-color: #000;
+    --bs-btn-active-bg: white;
+    --bs-btn-active-border-color: #d3d8de;
+    --bs-btn-active-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
+    --bs-btn-disabled-color: #000;
+    --bs-btn-disabled-bg: #ffffff;
+    --bs-btn-disabled-border-color: #ced4da;
+}
+
+.btn-eye::before {
+    display: inline-block;
+    content: "";
+    height: 16px;
+    width: 16px;
+    vertical-align: middle;
+    line-height: 16px;
+    background-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%20256%20256%22%3E%3Cpath%20d%3D%22M234.35254%2C160.8125a12.00024%2C12.00024%2C0%2C1%2C1-20.78516%2C12l-16.2771-28.19189a127.01451%2C127.01451%2C0%2C0%2C1-29.36694%2C13.47021l5.18994%2C29.43164a11.99973%2C11.99973%2C0%2C1%2C1-23.63476%2C4.168l-5.053-28.6543a140.4304%2C140.4304%2C0%2C0%2C1-32.94116-.01074l-5.05176%2C28.65234a11.99973%2C11.99973%2C0%2C0%2C1-23.63477-4.168l5.19165-29.44483A127.0154%2C127.0154%2C0%2C0%2C1%2C58.665%2C144.59326L42.28125%2C172.9707a12.00024%2C12.00024%2C0%2C0%2C1-20.78516-12l17.85523-30.92578A153.16947%2C153.16947%2C0%2C0%2C1%2C22.665%2C112.416%2C11.99959%2C11.99959%2C0%2C0%2C1%2C41.333%2C97.334C57.05859%2C116.79785%2C84.8584%2C140%2C128%2C140c43.14063%2C0%2C70.94043-23.20215%2C86.666-42.666a11.99959%2C11.99959%2C0%2C1%2C1%2C18.668%2C15.082%2Ca153.08978%2C153.08978%2C0%2C0%2C1-16.72509%2C17.66406Z%22/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    margin-top: -2px;
+}
+
+[data-nv-type=password] + .btn-eye::before {
+    background-image: url("data:image/svg+xml,%3Csvg%20viewBox%3D%220%200%20576%20512%22%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%3E%3Cpath%20d%3D%22m572.52%20241.4c-54.23-105.81-161.59-177.4-284.52-177.4s-230.32%2071.64-284.52%20177.41a32.35%2032.35%200%200%200%200%2029.19c54.23%20105.81%20161.59%20177.4%20284.52%20177.4s230.32-71.64%20284.52-177.41a32.35%2032.35%200%200%200%200-29.19zm-284.52%20158.6a144%20144%200%201%201%20144-144%20143.93%20143.93%200%200%201-144%20144zm0-240a95.31%2095.31%200%200%200-25.31%203.79%2047.85%2047.85%200%200%201-66.9%2066.9%2095.78%2095.78%200%201%200%2092.21-70.69z%22%20fill%3D%22currentColor%22/%3E%3C/svg%3E");
+    margin-top: 0;
+}

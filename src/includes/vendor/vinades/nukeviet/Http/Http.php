@@ -853,8 +853,11 @@ class Http extends Server
             return false;
         }
 
-        // @since 15/10/2025 Chấp nhận * trong query ví dụ https://domain.com/?_gl=1*jliqjs*_gcl_au*MzI1MjU1Mjg1Lj GA4
-        if (isset($parts['query']) and !preg_match('/^[0-9a-z\+\-\_\/\?\&\=\#\.\,\;\%\\s\!\*]*$/i', $parts['query'])) {
+        /**
+         * @since 11/12/2024 chấp nhận @ và : trong query ví dụ link: https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,600;1,600;1,900
+         * @since 15/10/2025 Chấp nhận * trong query ví dụ https://domain.com/?_gl=1*jliqjs*_gcl_au*MzI1MjU1Mjg1Lj GA4
+         */
+        if (isset($parts['query']) and !preg_match('/^[0-9a-z\+\-\_\/\?\&\@\=\#\.\,\;\%\\s\!\:\*]*$/i', $parts['query'])) {
             return false;
         }
 

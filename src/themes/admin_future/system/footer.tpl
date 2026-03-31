@@ -1,6 +1,6 @@
     {* Thao tác với tệp này cần chú ý nó được gọi ở cả theme_login.php nên cần kiểm soát các biến cùng nhau *}
     [THEME_ERROR_INFO]
-    {if $IS_IE}
+    {if $OUTDATED_BROWSER}
     <div class="nv-offcanvas text-bg-warning p-3 show">
         {$LANG->getGlobal('chromeframe')}
     </div>

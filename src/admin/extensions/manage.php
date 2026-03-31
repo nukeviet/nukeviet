@@ -121,13 +121,14 @@ if (!empty($request['checkss']) and csrf_check($request['checkss'], $csrf_key . 
             if (!empty($theme_package)) {
                 $files_folders[] = NV_ROOTDIR . '/themes/' . $theme_package . '/modules/' . $row['basename'] . '/';
 
-                if (file_exists(NV_ROOTDIR . '/themes/' . $theme_package . '/css/' . $row['basename'] . '.css')) {
-                    $files_folders[] = NV_ROOTDIR . '/themes/' . $theme_package . '/css/' . $row['basename'] . '.css';
+                $files_css = nv_scandir(NV_ROOTDIR . '/themes/' . $theme_package . '/css', '/^' . nv_preg_quote($row['basename']) . '(?:\.\*|_.*)?\.css$/');
+                foreach ($files_css as $file_css) {
+                    $files_folders[] = NV_ROOTDIR . '/themes/' . $theme_package . '/css/' . $file_css;
                 }
 
-                $_files = glob(NV_ROOTDIR . '/themes/' . $theme_package . '/js/' . $row['basename'] . '*.js');
-                foreach ($_files as $_file) {
-                    $files_folders[] = $_file;
+                $files_js = nv_scandir(NV_ROOTDIR . '/themes/' . $theme_package . '/js', '/^' . nv_preg_quote($row['basename']) . '(?:\.\*|_.*)?\.js$/');
+                foreach ($files_js as $file_js) {
+                    $files_folders[] = NV_ROOTDIR . '/themes/' . $theme_package . '/js/' . $file_js;
                 }
 
                 if (file_exists(NV_ROOTDIR . '/themes/' . $theme_package . '/images/' . $row['basename'] . '/')) {
@@ -137,13 +138,14 @@ if (!empty($request['checkss']) and csrf_check($request['checkss'], $csrf_key . 
 
             // Admin default theme
             if (file_exists(NV_ROOTDIR . '/themes/admin_default')) {
-                if (file_exists(NV_ROOTDIR . '/themes/admin_default/css/' . $row['basename'] . '.css')) {
-                    $files_folders[] = NV_ROOTDIR . '/themes/admin_default/css/' . $row['basename'] . '.css';
+                $files_css = nv_scandir(NV_ROOTDIR . '/themes/admin_default/css', '/^' . nv_preg_quote($row['basename']) . '(?:\.\*|_.*)?\.css$/');
+                foreach ($files_css as $file_css) {
+                    $files_folders[] = NV_ROOTDIR . '/themes/admin_default/css/' . $file_css;
                 }
 
-                $_files = glob(NV_ROOTDIR . '/themes/admin_default/js/' . $row['basename'] . '*.js');
-                foreach ($_files as $_file) {
-                    $files_folders[] = $_file;
+                $files_js = nv_scandir(NV_ROOTDIR . '/themes/admin_default/js', '/^' . nv_preg_quote($row['basename']) . '(?:\.\*|_.*)?\.js$/');
+                foreach ($files_js as $file_js) {
+                    $files_folders[] = NV_ROOTDIR . '/themes/admin_default/js/' . $file_js;
                 }
 
                 if (file_exists(NV_ROOTDIR . '/themes/admin_default/images/' . $row['basename'] . '/')) {

@@ -56,6 +56,9 @@ var nv_aryDayName = "Sunday Monday Tuesday Wednesday Thursday Friday Saturday".s
     nv_range = "Please enter a value between {0} and {1}.",
     nv_max = "Please enter a value less than or equal to {0}.",
     nv_min = "Please enter a value greater than or equal to {0}.",
+    nv_maxcheck = "Please select at most {0} values.",
+    nv_mincheck = "Please select at least {0} values.",
+    nv_rangecheck = "Please select between {0} and {1} values.",
     // Contact
     nv_fullname = "Full name entered is not valid.",
     nv_title = "Title not valid.",

@@ -56,6 +56,9 @@ var nv_aryDayName = "Chủ nhật;Thứ Hai;Thứ Ba;Thứ Tư;Thứ Năm;Thứ 
     nv_range = "Xin vui lòng nhập một giá trị giữa {0} và {1}.",
     nv_max = "Xin vui lòng nhập một giá trị nhỏ hơn hoặc bằng {0}.",
     nv_min = "Xin vui lòng nhập một giá trị lớn hơn hoặc bằng {0}.",
+    nv_maxcheck = "Xin vui lòng chọn nhiều nhất {0} giá trị.",
+    nv_mincheck = "Xin vui lòng chọn ít nhất {0} giá trị.",
+    nv_rangecheck = "Xin vui lòng chọn từ {0} đến {1} giá trị.",
     // Contact
     nv_fullname = "Họ tên nhập không hợp lệ.",
     nv_title = "Bạn chưa nhập tiêu đề.",

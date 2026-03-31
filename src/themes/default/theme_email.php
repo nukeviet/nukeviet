@@ -31,7 +31,7 @@ $xtpl->assign('LANG', Language::$tmplang_global ?: Language::$lang_global);
 $xtpl->assign('MESSAGE_TITLE', $subject);
 $xtpl->assign('MESSAGE_CONTENT', $body);
 
-if (!empty($gconfigs['phonenumber'])) {
+if (!empty($gconfigs['site_phone'])) {
     $xtpl->parse('main.phonenumber');
 }
 
