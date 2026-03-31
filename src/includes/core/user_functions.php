@@ -14,6 +14,7 @@ if (!defined('NV_MAINFILE')) {
 }
 
 use NukeViet\Client\Browser;
+use NukeViet\Template\Config;
 
 /**
  * is_current_url()
@@ -298,14 +299,14 @@ function nv_blocks_content($sitecontent)
                         $act_icon = $_row['act'] ? 'ic' : 'ic act0';
                         $checkss = md5(NV_CHECK_SESSION . '_' . $_row['bid']);
                         $content = '<div class="portlet" id="bl_' . ($_row['bid']) . '">
-                             <div class="tool">
-                                 <a href="#" class="block_content" name="' . $_row['bid'] . '" alt="' . $nv_Lang->getGlobal('edit_block') . '" title="' . $nv_Lang->getGlobal('edit_block') . '"><em class="ic"></em></a>
-                                 <a href="#" class="delblock" name="' . $_row['bid'] . '"  data-checkss="' . $checkss . '" alt="' . $nv_Lang->getGlobal('delete_block') . '" title="' . $nv_Lang->getGlobal('delete_block') . '"><em class="ic"></em></a>
-                                 <a href="#" class="actblock" name="' . $_row['bid'] . '"  data-checkss="' . $checkss . '" alt="' . $act_title . '" title="' . $act_title . '" data-act="' . $nv_Lang->getGlobal('act_block') . '" data-deact="' . $nv_Lang->getGlobal('deact_block') . '"><em class="' . $act_icon . '" data-act="ic" data-deact="ic act0"></em></a>
-                                 <a href="#" class="outgroupblock" name="' . $_row['bid'] . '"  data-checkss="' . $checkss . '" alt="' . $nv_Lang->getGlobal('outgroup_block') . '" title="' . $nv_Lang->getGlobal('outgroup_block') . '"><em class="ic"></em></a>
-                             </div>
-                             <div class="blockct' . $act_class . '">' . $content . '</div>
-                             </div>';
+                            <div class="tool">
+                                <a href="#" class="block_content" name="' . $_row['bid'] . '" alt="' . $nv_Lang->getGlobal('edit_block') . '" title="' . $nv_Lang->getGlobal('edit_block') . '" aria-label="' . $nv_Lang->getGlobal('edit_block') . '"><em class="ic"></em></a>
+                                <a href="#" class="delblock" name="' . $_row['bid'] . '"  data-checkss="' . $checkss . '" alt="' . $nv_Lang->getGlobal('delete_block') . '" title="' . $nv_Lang->getGlobal('delete_block') . '" aria-label="' . $nv_Lang->getGlobal('delete_block') . '"><em class="ic"></em></a>
+                                <a href="#" class="actblock" name="' . $_row['bid'] . '"  data-checkss="' . $checkss . '" alt="' . $act_title . '" title="' . $act_title . '" aria-label="' . $act_title . '" data-act="' . $nv_Lang->getGlobal('act_block') . '" data-deact="' . $nv_Lang->getGlobal('deact_block') . '"><em class="' . $act_icon . '" data-act="ic" data-deact="ic act0"></em></a>
+                                <a href="#" class="outgroupblock" name="' . $_row['bid'] . '"  data-checkss="' . $checkss . '" alt="' . $nv_Lang->getGlobal('outgroup_block') . '" title="' . $nv_Lang->getGlobal('outgroup_block') . '" aria-label="' . $nv_Lang->getGlobal('outgroup_block') . '"><em class="ic"></em></a>
+                            </div>
+                            <div class="blockct' . $act_class . '">' . $content . '</div>
+                        </div>';
                     }
 
                     $_posReal[$_row['position']] .= $content;
@@ -321,15 +322,9 @@ function nv_blocks_content($sitecontent)
     if (defined('NV_IS_DRAG_BLOCK')) {
         $array_keys = array_keys($_posReal);
         foreach ($array_keys as $__pos) {
-            $__pos_name = str_replace([
-                '[',
-                ']'
-            ], [
-                '',
-                ''
-            ], $__pos);
+            $__pos_name = str_replace(['[', ']'], ['', ''], $__pos);
             $_posReal[$__pos] = '<div class="column" data-id="' . $__pos_name . '" data-checkss="' . md5(NV_CHECK_SESSION . '_' . $__pos_name) . '">' . $_posReal[$__pos];
-            $_posReal[$__pos] .= '<a href="#" class="add block_content" id="' . $__pos . '" title="' . $nv_Lang->getGlobal('add_block') . ' ' . $__pos_name . '" alt="' . $nv_Lang->getGlobal('add_block') . '"><em class="ic"></em></a>';
+            $_posReal[$__pos] .= '<a href="#" class="add block_content" id="' . $__pos . '" title="' . $nv_Lang->getGlobal('add_block') . ' ' . $__pos_name . '" aria-label="' . $nv_Lang->getGlobal('add_block') . ' ' . $__pos_name . '" alt="' . $nv_Lang->getGlobal('add_block') . '"><em class="ic"></em></a>';
             $_posReal[$__pos] .= '</div>';
         }
     }
@@ -748,38 +743,65 @@ function nv_html_page_title($html = true)
 }
 
 /**
- * nv_html_css()
+ * Thêm CSS của module vào trang
  *
  * @param bool $html
  * @return array|string
  */
 function nv_html_css($html = true)
 {
-    global $module_info, $module_file;
+    global $module_info, $module_file, $global_config;
 
-    if (theme_file_exists($module_info['template'] . '/css/' . $module_info['module_theme'] . '.css')) {
-        if ($html) {
-            return '<link rel="StyleSheet" href="' . NV_STATIC_URL . 'themes/' . $module_info['template'] . '/css/' . $module_info['module_theme'] . '.css" type="text/css" />' . PHP_EOL;
+    $css = [];
+    if ($global_config['current_theme_type'] != 'd') {
+        // Responsive
+        if (Config::isRtl()) {
+            $css[] = $module_info['module_theme'] . '.r.rtl.css';
         }
-
-        return [
-            [
-                'rel' => 'StyleSheet',
-                'href' => NV_STATIC_URL . 'themes/' . $module_info['template'] . '/css/' . $module_info['module_theme'] . '.css'
-            ]
-        ];
+        $css[] = $module_info['module_theme'] . '.r.css';
+    } else {
+        // Non-responsive
+        if (Config::isRtl()) {
+            $css[] = $module_info['module_theme'] . '.d.rtl.css';
+        }
+        $css[] = $module_info['module_theme'] . '.d.css';
     }
-    if (theme_file_exists($module_info['template'] . '/css/' . $module_file . '.css')) {
+    if (Config::isRtl()) {
+        $css[] = $module_info['module_theme'] . '.rtl.css';
+    }
+    $css[] = $module_info['module_theme'] . '.css';
+    if ($module_info['module_theme'] != $module_file) {
+        // Tùy biến module_theme
+        if ($global_config['current_theme_type'] != 'd') {
+            // Responsive
+            if (Config::isRtl()) {
+                $css[] = $module_file . '.r.rtl.css';
+            }
+            $css[] = $module_file . '.r.css';
+        } else {
+            // Non-responsive
+            if (Config::isRtl()) {
+                $css[] = $module_file . '.d.rtl.css';
+            }
+            $css[] = $module_file . '.d.css';
+        }
+        if (Config::isRtl()) {
+            $css[] = $module_file . '.rtl.css';
+        }
+        $css[] = $module_file . '.css';
+    }
+    foreach ($css as $css_i) {
+        if (!theme_file_exists($module_info['template'] . '/css/' . $css_i)) {
+            continue;
+        }
         if ($html) {
-            return '<link rel="StyleSheet" href="' . NV_STATIC_URL . 'themes/' . $module_info['template'] . '/css/' . $module_file . '.css" type="text/css" />' . PHP_EOL;
+            return '<link rel="stylesheet" href="' . NV_STATIC_URL . 'themes/' . $module_info['template'] . '/css/' . $css_i . '" type="text/css" />' . PHP_EOL;
         }
 
-        return [
-            [
-                'rel' => 'StyleSheet',
-                'href' => NV_STATIC_URL . 'themes/' . $module_info['template'] . '/css/' . $module_file . '.css'
-            ]
-        ];
+        return [[
+            'rel' => 'stylesheet',
+            'href' => NV_STATIC_URL . 'themes/' . $module_info['template'] . '/css/' . $css_i
+        ]];
     }
 
     return $html ? '' : [];
@@ -847,6 +869,8 @@ function nv_html_site_js($html = true, $other_js = [], $language_js = true, $glo
     $jsDef .= ',XSSsanitize=' . ($global_config['XSSsanitize'] ? 1 : 0);
     $jsDef .= ',nv_jsdate_get="' . nv_region_config('jsdate_get') . '"';
     $jsDef .= ',nv_jsdate_post="' . nv_region_config('jsdate_post') . '"';
+    $jsDef .= ',nv_js_am="' . nv_region_config('am_char') . '"';
+    $jsDef .= ',nv_js_pm="' . nv_region_config('pm_char') . '"';
     $jsDef .= ',nv_gfx_width="' . NV_GFX_WIDTH . '"';
     $jsDef .= ',nv_gfx_height="' . NV_GFX_HEIGHT . '"';
     $jsDef .= ',nv_gfx_num="' . NV_GFX_NUM . '"';

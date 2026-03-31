@@ -13,6 +13,8 @@ if (!defined('NV_MAINFILE')) {
     exit('Stop!!!');
 }
 
+use NukeViet\Template\Config;
+
 /**
  * Hàm lấy thông báo lỗi
  *
@@ -210,7 +212,6 @@ function nv_htmlOutput($html, $type = 'html', $custom_headers = [])
  *
  * @param array $array_data
  * @param int   $flags
- * @return never
  */
 function nv_jsonOutput($array_data, $flags = 0)
 {
@@ -629,10 +630,11 @@ function nv_css_setproperties($tag, $property_array)
  */
 function nv_theme_alert($message_title, $message_content, $type = 'info', $url_back = '', $lang_back = '', $time_back = 5)
 {
-    global $global_config, $module_info, $page_title;
+    global $global_config, $module_info, $page_title, $admin_info;
 
     $dir_basenames = [];
     if (defined('NV_ADMIN')) {
+        !empty($admin_info['admin_theme']) && $dir_basenames[] = $admin_info['admin_theme'];
         !empty($global_config['admin_theme']) && $dir_basenames[] = $global_config['admin_theme'];
         $dir_basenames[] = 'admin_default';
     }
@@ -668,6 +670,123 @@ function nv_disable_site()
     }
 
     nv_info_die($nv_Lang->getGlobal('disable_site_title'), $nv_Lang->getGlobal('disable_site_title'), $disable_site_content, $disable_site_code, '', '', '', '', $disable_site_headers);
+}
+
+/**
+ * Thêm js, css của module vào trang hiện tại của các module khác
+ *
+ * @param string $module Biến $module_name
+ * @param "js"|"css"|"both" $type
+ * @param bool $direct Nếu là true thì đưa vào luôn $my_head và $my_footer.
+ * @return array
+ */
+function addition_module_assets(string $module, string $type, $direct = true): array
+{
+    global $global_config, $site_mods, $my_head, $my_footer, $module_name;
+
+    $return = [
+        'css' => '',
+        'js' => ''
+    ];
+
+    if (!isset($site_mods[$module]) or ($module_name == $module and $direct)) {
+        return $return;
+    }
+
+    // Thứ tự load các giao diện của mỗi file
+    $dir_allowed = [];
+
+    // Nếu module của block này chọn cố định giao diện mobile và đang chế độ mobile thì ưu tiên nó
+    if ($global_config['current_theme_type'] == 'm' and !empty($site_mods[$module]['mobile']) and
+        !str_starts_with($site_mods[$module]['mobile'], ':')
+    ) {
+        $dir_allowed[$site_mods[$module]['mobile']] = $site_mods[$module]['mobile'];
+    }
+    /**
+     * Ưu tiên tiếp theo dành cho giao diện nếu cấu hình của module
+     * với điều kiện không ở chế độ mobile và giao diện mobile không được chọn là  "Giao diện PC theo cấu hình site"
+     */
+    if (!empty($site_mods[$module]['theme']) and !(
+        $global_config['current_theme_type'] == 'm' and $site_mods[$module]['mobile'] == ':pcsite'
+    )) {
+        $dir_allowed[$site_mods[$module]['theme']] = $site_mods[$module]['theme'];
+    }
+    // Ưu tiên giao diện của site
+    $dir_allowed[$global_config['site_theme']] = $global_config['site_theme'];
+    // Rồi đến giao diện của module mà block đặt vào
+    $dir_allowed[$global_config['module_theme']] = $global_config['module_theme'];
+    // Cuối cùng lấy ở giao diện mặc định
+    if (!isset($dir_allowed[NV_DEFAULT_SITE_THEME])) {
+        $dir_allowed[NV_DEFAULT_SITE_THEME] = NV_DEFAULT_SITE_THEME;
+    }
+
+    // Xác định các module. Nếu có tùy biến module_theme thì ưu tiên, không có thì tìm tiếp vào module_file gốc
+    $names = [];
+    $names[] = $site_mods[$module]['module_theme'];
+    if ($site_mods[$module]['module_theme'] != $site_mods[$module]['module_file']) {
+        $names[] = $site_mods[$module]['module_file'];
+    }
+
+    if ($type == 'js' or $type == 'both') {
+        // Lặp tên các module
+        foreach ($names as $name) {
+            $fileLoad = $name . '.js';
+            $fileIgnore = $name . '.nojs';
+
+            // Lặp các giao diện
+            foreach ($dir_allowed as $dir) {
+                if (theme_file_exists('/' . $dir . '/js/' . $fileLoad)) {
+                    $src = NV_STATIC_URL . 'themes/' . $dir . '/js/' . $fileLoad;
+                    $direct && $my_footer .= '<script src="' . $src . '"></script>' . PHP_EOL;
+                    $return['js'] = $src;
+                    break 2;
+                }
+                if (theme_file_exists('/' . $dir . '/js/' . $fileIgnore)) {
+                    break 2;
+                }
+            }
+        }
+    }
+
+    if ($type == 'css' or $type == 'both') {
+        // Lặp tên các module
+        foreach ($names as $name) {
+            $files = [];
+            if ($global_config['current_theme_type'] != 'd') {
+                // Responsive
+                if (Config::isRtl()) {
+                    $files[] = $name . '.r.rtl.css';
+                }
+                $files[] = $name . '.r.css';
+            } else {
+                // Non-responsive
+                if (Config::isRtl()) {
+                    $files[] = $name . '.d.rtl.css';
+                }
+                $files[] = $name . '.d.css';
+            }
+            // Nếu ở chế độ RTL thì load file css có dạng .rtl.css không có tìm sang tệp .css gốc
+            if (Config::isRtl()) {
+                $files[] = $name . '.rtl.css';
+            }
+            $files[] = $name . '.css';
+
+            // Lặp các giao diện
+            foreach ($dir_allowed as $dir) {
+                // Lặp các tệp css
+                foreach ($files as $file) {
+                    if (theme_file_exists('/' . $dir . '/css/' . $file)) {
+                        $href = NV_STATIC_URL . 'themes/' . $dir . '/css/' . $file;
+                        $direct && $my_head .= '<link rel="stylesheet" type="text/css" href="' . $href . '">' . PHP_EOL;
+                        $return['css'] .= $href;
+                        break 3;
+                    }
+                }
+            }
+        }
+    }
+
+    return $return;
 }
 
 /**
@@ -846,4 +965,34 @@ function nv_get_blocks(string $theme, bool $cache = true)
     }
 
     return $positions;
+}
+
+/**
+ * Lấy thuộc tính định nghĩa captcha cho form HTML
+ *
+ * @param string $code_ipt Name của ô input captcha hình truyền thống
+ * @param string $captcha Để trống thì lấy $module_captcha
+ * @return string Có dạng data-recaptcha3="1" data-recaptcha2="1" data-turnstile="1" data-captcha="secode"
+ */
+function nv_captcha_form_attrs(string $code_ipt, string $captcha = ''): string
+{
+    global $module_captcha, $global_config;
+    empty($captcha) && $captcha = $module_captcha;
+
+    $attrs = [];
+    if ($captcha == 'recaptcha' and $global_config['recaptcha_ver'] == 3) {
+        // Nếu dùng reCaptcha v3
+        $attrs[] = ' data-recaptcha3="1"';
+    } elseif ($captcha == 'recaptcha' and $global_config['recaptcha_ver'] == 2) {
+        // Nếu dùng reCaptcha v2
+        $attrs[] = ' data-recaptcha2="1"';
+    } elseif ($captcha == 'turnstile') {
+        // Nếu dùng Cloudflare Turnstile
+        $attrs[] = ' data-turnstile="1"';
+    } elseif ($captcha == 'captcha') {
+        // Nếu dùng Captcha hình truyền thống
+        $attrs[] = ' data-captcha="' . $code_ipt . '"';
+    }
+
+    return implode(' ', $attrs);
 }
