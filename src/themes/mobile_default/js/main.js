@@ -153,14 +153,6 @@ function ctbtLoad(a) {
     })
 }
 
-function openID_result() {
-    var a = $("#openidResult");
-    a.fadeIn();
-    setTimeout(function() {
-        "" != a.data("redirect") ? window.location.href = a.data("redirect") : "success" == a.data("result") ? location.reload() : a.hide(0).html("").data("result", "").data("redirect", "")
-    }, 5E3)
-}
-
 // QR-code
 function qrcodeLoad(a) {
     var b = new Image,
@@ -317,12 +309,6 @@ $(function() {
     // Change site lang
     $(".nv_change_site_lang").change(function() {
         document.location = $(this).val();
-    });
-
-    //OpenID
-    $("#openidBt").on("click", function() {
-        openID_result();
-        return !1
     });
 
     // Google map

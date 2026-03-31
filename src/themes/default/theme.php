@@ -392,13 +392,6 @@ function nv_site_theme($contents, $full = true)
         }
     }
 
-    if (defined('SSO_REGISTER_DOMAIN')) {
-        /** @disregard P1011 */
-        // phpcs:ignore
-        $xtpl->assign('SSO_REGISTER_ORIGIN', SSO_REGISTER_DOMAIN);
-        $xtpl->parse('main.crossdomain_listener');
-    }
-
     if ($global_config['cookie_notice_popup'] and !isset($_COOKIE[$global_config['cookie_prefix'] . '_cn'])) {
         $xtpl->assign('COOKIE_NOTICE', $nv_Lang->getGlobal('cookie_notice', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=siteterms&amp;' . NV_OP_VARIABLE . '=privacy' . $global_config['rewrite_exturl']));
         $xtpl->parse('main.cookie_notice');

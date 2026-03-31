@@ -710,6 +710,20 @@ var reCaptcha3ApiLoad = function() {
     }
 }
 
+function openID_result() {
+    var resElement = $("#openidResult");
+    resElement.fadeIn();
+    setTimeout(function() {
+        if (resElement.data('redirect') != '') {
+            window.location.href = resElement.data('redirect');
+        } else if (resElement.data('result') == 'success') {
+            location.reload();
+        } else {
+            resElement.hide(0).html('').data('result', '').data('redirect', '');
+        }
+    }, 5000);
+}
+
 /**
  * Tải API Turnstile
  */
@@ -1047,6 +1061,28 @@ $(function() {
             c = "click" == i.type ? !c || (this.checked = !1) : this.checked
         }
     }());
+
+    // OpenID
+    $("#openidBt").on("click", function(e) {
+        e.preventDefault();
+        openID_result();
+    });
+
+    // Xử lý các trường hợp Oauth cross-domain
+    const oauthRes = document.querySelector('#openidResult');
+    if (oauthRes) {
+        const ssoDomain = oauthRes.getAttribute('data-sso-domain');
+        if (!!ssoDomain) {
+            window.addEventListener('message', (event) => {
+                if (event.origin !== ssoDomain) {
+                    return false;
+                }
+                if (event.data == 'nv.reload') {
+                    location.reload();
+                }
+            }, false);
+        }
+    }
 
     // Đăng nhập bằng OpenID
     $('body').on('click', '[data-toggle=openID_load]', function(e) {

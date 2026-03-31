@@ -107,20 +107,6 @@ function ftipShow(a, b, callback) {
     ftip_active = true;
 };
 
-function openID_result() {
-    var resElement = $("#openidResult");
-    resElement.fadeIn();
-    setTimeout(function() {
-        if (resElement.data('redirect') != '') {
-            window.location.href = resElement.data('redirect');
-        } else if (resElement.data('result') == 'success') {
-            location.reload();
-        } else {
-            resElement.hide(0).html('').data('result', '').data('redirect', '');
-        }
-    }, 5000);
-}
-
 // QR-code
 function qrcodeLoad(a) {
     var b = new Image,
@@ -333,12 +319,6 @@ $(function() {
                 "tip" == b ? tipShow(this, a) : ftipShow(this, a)
             }
         }
-    });
-
-    //OpenID
-    $("#openidBt").on("click", function() {
-        openID_result();
-        return !1
     });
 
     // Chọn giao diện
