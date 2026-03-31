@@ -1,0 +1,39 @@
+$icon_btn_show_pass_color_light: color-contrast($secondary) !default;
+$icon_btn_show_pass_color_dark: color-contrast($secondary) !default;
+
+$icon_btn_show_pass: url("data:image/svg+xml,<svg viewBox='0 0 576 512' xmlns='http://www.w3.org/2000/svg'><path d='m572.52 241.4c-54.23-105.81-161.59-177.4-284.52-177.4s-230.32 71.64-284.52 177.41a32.35 32.35 0 0 0 0 29.19c54.23 105.81 161.59 177.4 284.52 177.4s230.32-71.64 284.52-177.41a32.35 32.35 0 0 0 0-29.19zm-284.52 158.6a144 144 0 1 1 144-144 143.93 143.93 0 0 1 -144 144zm0-240a95.31 95.31 0 0 0 -25.31 3.79 47.85 47.85 0 0 1 -66.9 66.9 95.78 95.78 0 1 0 92.21-70.69z' fill='#{$icon_btn_show_pass_color_light}'/></svg>") !default;
+$icon_btn_hide_pass: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 256 256'><path d='M234.35254,160.8125a12.00024,12.00024,0,1,1-20.78516,12l-16.2771-28.19189a127.01451,127.01451,0,0,1-29.36694,13.47021l5.18994,29.43164a11.99973,11.99973,0,1,1-23.63476,4.168l-5.053-28.6543a140.4304,140.4304,0,0,1-32.94116-.01074l-5.05176,28.65234a11.99973,11.99973,0,0,1-23.63477-4.168l5.19165-29.44483A127.0154,127.0154,0,0,1,58.665,144.59326L42.28125,172.9707a12.00024,12.00024,0,0,1-20.78516-12l17.85523-30.92578A153.16947,153.16947,0,0,1,22.665,112.416,11.99959,11.99959,0,0,1,41.333,97.334C57.05859,116.79785,84.8584,140,128,140c43.14063,0,70.94043-23.20215,86.666-42.666a11.99959,11.99959,0,1,1,18.668,15.082,153.08978,153.08978,0,0,1-16.72509,17.66406Z' fill='#{$icon_btn_show_pass_color_light}'/></svg>") !default;
+
+$icon_btn_show_pass_dark: url("data:image/svg+xml,<svg viewBox='0 0 576 512' xmlns='http://www.w3.org/2000/svg'><path d='m572.52 241.4c-54.23-105.81-161.59-177.4-284.52-177.4s-230.32 71.64-284.52 177.41a32.35 32.35 0 0 0 0 29.19c54.23 105.81 161.59 177.4 284.52 177.4s230.32-71.64 284.52-177.41a32.35 32.35 0 0 0 0-29.19zm-284.52 158.6a144 144 0 1 1 144-144 143.93 143.93 0 0 1 -144 144zm0-240a95.31 95.31 0 0 0 -25.31 3.79 47.85 47.85 0 0 1 -66.9 66.9 95.78 95.78 0 1 0 92.21-70.69z' fill='#{$icon_btn_show_pass_color_dark}'/></svg>") !default;
+$icon_btn_hide_pass_dark: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 256 256'><path d='M234.35254,160.8125a12.00024,12.00024,0,1,1-20.78516,12l-16.2771-28.19189a127.01451,127.01451,0,0,1-29.36694,13.47021l5.18994,29.43164a11.99973,11.99973,0,1,1-23.63476,4.168l-5.053-28.6543a140.4304,140.4304,0,0,1-32.94116-.01074l-5.05176,28.65234a11.99973,11.99973,0,0,1-23.63477-4.168l5.19165-29.44483A127.0154,127.0154,0,0,1,58.665,144.59326L42.28125,172.9707a12.00024,12.00024,0,0,1-20.78516-12l17.85523-30.92578A153.16947,153.16947,0,0,1,22.665,112.416,11.99959,11.99959,0,0,1,41.333,97.334C57.05859,116.79785,84.8584,140,128,140c43.14063,0,70.94043-23.20215,86.666-42.666a11.99959,11.99959,0,1,1,18.668,15.082,153.08978,153.08978,0,0,1-16.72509,17.66406Z' fill='#{$icon_btn_show_pass_color_dark}'/></svg>") !default;
+
+.input-group-password {
+  .btn::before {
+    display: inline-block;
+    content: "";
+    height: 1rem;
+    width: 1rem;
+    vertical-align: middle;
+    line-height: 1rem;
+    background-image: #{escape-svg($icon_btn_hide_pass)};
+    background-repeat: no-repeat;
+    margin-top: -2px;
+  }
+
+  [data-nv-type=password]+.btn::before {
+    background-image: #{escape-svg($icon_btn_show_pass)};
+    margin-top: 0;
+  }
+}
+
+[data-#{$prefix}theme=dark] {
+  .input-group-password {
+    .btn::before {
+      background-image: #{escape-svg($icon_btn_hide_pass_dark)};
+    }
+  }
+
+  [data-nv-type=password]+.btn::before {
+    background-image: #{escape-svg($icon_btn_show_pass_dark)};
+  }
+}

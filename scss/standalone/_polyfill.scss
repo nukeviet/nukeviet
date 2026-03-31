@@ -1,0 +1,64 @@
+.hide, .hidden {
+    display: none!important;
+}
+
+// Ckeditor 4
+/* NV Iframe */
+.nvck-iframe {
+  position: relative;
+  width: 100%;
+  margin-bottom: 10px;
+}
+
+.nvck-iframe>.nvck-iframe-inner>.nvck-iframe-element {
+  border: none;
+  margin: 0 auto;
+  display: block;
+}
+
+.nvck-iframe.nvck-iframe-responsive {
+  height: 0;
+}
+
+.nvck-iframe.nvck-iframe-responsive>.nvck-iframe-inner {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.nvck-iframe.nvck-iframe-responsive>.nvck-iframe-inner>.nvck-iframe-element {
+  width: 100%;
+  height: 100%;
+}
+
+/* NV Docs */
+.nvck-docs {
+  position: relative;
+  width: 100%;
+  margin-bottom: 10px;
+}
+
+.nvck-docs>.nvck-docs-inner>.nvck-docs-element {
+  border: none;
+  margin: 0 auto;
+  display: block;
+}
+
+.nvck-docs.nvck-docs-responsive {
+  height: 0;
+}
+
+.nvck-docs.nvck-docs-responsive>.nvck-docs-inner {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.nvck-docs.nvck-docs-responsive>.nvck-docs-inner>.nvck-docs-element {
+  width: 100%;
+  height: 100%;
+}

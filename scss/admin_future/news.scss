@@ -15,44 +15,44 @@
 @import "../../node_modules/bootstrap/scss/variables";
 
 $article-indicators: (
-    'deactive': '--bs-tertiary-color',
-    'draft': '--bs-secondary-color',
-    'expired': '--bs-emphasis-color',
-    'locking': '--bs-warning-bg-subtle',
-    'publish': '--bs-success',
-    'publish-checking': '--bs-success-bg-subtle',
-    'publish-reject': '--bs-warning-bg-subtle',
-    'publish-transfer': '--bs-info-bg-subtle',
-    'review-reject': '--bs-warning',
-    'review-transfer': '--bs-info',
-    'reviewing': '--bs-primary',
-    'waiting': '--bs-primary-bg-subtle'
+  'deactive': '--#{$prefix}tertiary-color',
+  'draft': '--#{$prefix}secondary-color',
+  'expired': '--#{$prefix}emphasis-color',
+  'locking': '--#{$prefix}warning-bg-subtle',
+  'publish': '--#{$prefix}success',
+  'publish-checking': '--#{$prefix}success-bg-subtle',
+  'publish-reject': '--#{$prefix}warning-bg-subtle',
+  'publish-transfer': '--#{$prefix}info-bg-subtle',
+  'review-reject': '--#{$prefix}warning',
+  'review-transfer': '--#{$prefix}info',
+  'reviewing': '--#{$prefix}primary',
+  'waiting': '--#{$prefix}primary-bg-subtle'
 );
 
 #list-news-items {
-    --indicator-start-width: 0.125rem;
+  --indicator-start-width: 0.125rem;
 
-    tr > td:first-child {
-        position: relative;
+  tr>td:first-child {
+    position: relative;
 
-        &:before {
-            content: "";
-            display: block;
-            width: var(--indicator-start-width);
-            height: 100%;
-            position: absolute;
-            left: 0;
-            top: 0;
-        }
-
-        @each $key, $value in $article-indicators {
-            &.indicator-#{$key}:before {
-                background-color: var(#{$value});
-            }
-        }
-
-        &.indicator-publish:before {
-            display: none;
-        }
+    &:before {
+      content: "";
+      display: block;
+      width: var(--indicator-start-width);
+      height: 100%;
+      position: absolute;
+      left: 0;
+      top: 0;
     }
+
+    @each $key, $value in $article-indicators {
+      &.indicator-#{$key}:before {
+        background-color: var(#{$value});
+      }
+    }
+
+    &.indicator-publish:before {
+      display: none;
+    }
+  }
 }

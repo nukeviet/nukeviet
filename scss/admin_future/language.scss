@@ -15,14 +15,14 @@
 @import "../../node_modules/bootstrap/scss/variables";
 
 .counter {
-    list-style-type: none;
-    counter-reset: css-counter 0;
+  list-style-type: none;
+  counter-reset: css-counter 0;
 
-    > tr {
-        counter-increment: css-counter 1;
+  >tr {
+    counter-increment: css-counter 1;
 
-            td:first-child::before {
-            content: counter(css-counter);
-        }
+    td:first-child::before {
+      content: counter(css-counter);
     }
+  }
 }

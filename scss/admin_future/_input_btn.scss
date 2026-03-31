@@ -1,36 +1,44 @@
 // Tùy chỉnh lại các thành phần của bootstrap mà không thể can thiệp bằng biến scss
 // Chỉ giao diện light, dark lấy của bootstrap
-html:not([data-bs-theme="dark"]) {
-    .btn-secondary,
-    .btn-default {
-        --bs-btn-color: #{$body-color};
-        --bs-btn-bg: #{$light};
+html:not([data-#{$prefix}theme="dark"]) {
 
-        --bs-btn-border-color: #{$gray-300};
-        --bs-btn-hover-color: #{$body-color};
-        --bs-btn-hover-bg: #{$gray-200};
-        --bs-btn-hover-border-color: #{$gray-300};
+  .btn-secondary,
+  .btn-default {
+    --#{$prefix}btn-color: #{$body-color};
+    --#{$prefix}btn-bg: #{$light};
 
-        --bs-btn-active-color: #{$body-color};
-        --bs-btn-active-bg: #{$gray-300};
-        --bs-btn-active-border-color: #{$gray-400};
+    --#{$prefix}btn-border-color: #{$gray-300};
+    --#{$prefix}btn-hover-color: #{$body-color};
+    --#{$prefix}btn-hover-bg: #{$gray-200};
+    --#{$prefix}btn-hover-border-color: #{$gray-300};
 
-        --bs-btn-active-shadow: inset 0 1px 3px #{rgba($black, .06)};
+    --#{$prefix}btn-active-color: #{$body-color};
+    --#{$prefix}btn-active-bg: #{$gray-300};
+    --#{$prefix}btn-active-border-color: #{$gray-400};
 
-        --bs-btn-disabled-color: #{$gray-700};
-        --bs-btn-disabled-bg: #{$gray-300};
-        --bs-btn-disabled-border-color: #{$gray-400};
-    }
+    --#{$prefix}btn-active-shadow: inset 0 1px 3px #{rgba($black, .06)};
+
+    --#{$prefix}btn-disabled-color: #{$gray-700};
+    --#{$prefix}btn-disabled-bg: #{$gray-300};
+    --#{$prefix}btn-disabled-border-color: #{$gray-400};
+  }
+
+  .input-group .btn-secondary {
+    --#{$prefix}btn-border-color: var(--#{$prefix}border-color);
+    --#{$prefix}btn-hover-border-color: var(--#{$prefix}border-color);
+  }
 }
 
+$icon_btn_show_pass_color_light: #{$body-color};
+
 .form-check-input:not(:checked):disabled {
-    background-color: var(--nv-form-check-input-disabled-bg);
-    border-color: var(--nv-form-check-input-disabled-border-color);
+  background-color: var(--nv-form-check-input-disabled-bg);
+  border-color: var(--nv-form-check-input-disabled-border-color);
 }
 
 // Các nút màu sắc thương hiệu
 @each $color, $value in $brand-colors {
-    .btn-#{$color} {
-        @include button-variant($value, $value);
-    }
+  .btn-#{$color} {
+    @include button-variant($value, $value);
+  }
 }

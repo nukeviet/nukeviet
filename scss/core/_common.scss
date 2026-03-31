@@ -55,7 +55,7 @@
   }
 }
 
-[data-bs-theme=dark],
+[data-#{$prefix}theme=dark],
 [data-theme=dark] {
   .cr-btn-close {
     filter: var(--cr-btn-close-white-filter);

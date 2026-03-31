@@ -65,7 +65,7 @@
 }
 
 // Giao diện sáng
-:root, [data-bs-theme=light], [data-theme=light] {
+:root, [data-#{$prefix}theme=light], [data-theme=light] {
   --cr-md-content-bg: #{$body-bg};
 
   --cr-cap-content-bg: #{$body-bg};
@@ -98,7 +98,7 @@
 }
 
 // Giao diện tối
-[data-bs-theme=dark], [data-theme=dark] {
+[data-#{$prefix}theme=dark], [data-theme=dark] {
   --cr-md-content-bg: #{$body-bg-dark};
 
   --cr-cap-content-bg: #{$body-bg-dark};

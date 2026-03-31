@@ -1,27 +1,27 @@
 .main-content {
-    .apexcharts-canvas {
-        text {
-            fill: var(--bs-body-color);
-            font-family: var(--bs-font-sans-serif);
-        }
-
-        .apexcharts-gridline {
-            opacity: var(--nv-chart-grid-border-opacity);
-        }
+  .apexcharts-canvas {
+    text {
+      fill: var(--#{$prefix}body-color);
+      font-family: var(--#{$prefix}font-sans-serif);
     }
 
-    .apexcharts-tooltip {
-        box-shadow: var(--bs-box-shadow);
-        border-radius: var(--bs-border-radius);
+    .apexcharts-gridline {
+      opacity: var(--nv-chart-grid-border-opacity);
     }
+  }
 
-    .apexcharts-tooltip.apexcharts-theme-light {
-        border-width: 0;
-        background-color: var(--bs-body-bg);
+  .apexcharts-tooltip {
+    box-shadow: var(--#{$prefix}box-shadow);
+    border-radius: var(--#{$prefix}border-radius);
+  }
 
-        .apexcharts-tooltip-title {
-            background-color: var(--bs-card-cap-bg);
-            border-bottom-color: var(--bs-border-color);
-        }
+  .apexcharts-tooltip.apexcharts-theme-light {
+    border-width: 0;
+    background-color: var(--#{$prefix}body-bg);
+
+    .apexcharts-tooltip-title {
+      background-color: var(--#{$prefix}card-cap-bg);
+      border-bottom-color: var(--#{$prefix}border-color);
     }
+  }
 }

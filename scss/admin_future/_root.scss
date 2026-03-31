@@ -1,5 +1,5 @@
 :root,
-[data-bs-theme="light"],
+[data-#{$prefix}theme="light"],
 [data-theme="light"] {
   --cr-md-content-border-radius: #{$border-radius-lg};
   --cr-md-content-inner-border-radius: #{calc($border-radius-lg - 1px)};
@@ -52,7 +52,7 @@
   --nv-form-check-input-disabled-border-color: #{$gray-300};
 }
 
-[data-bs-theme="dark"],
+[data-#{$prefix}theme="dark"],
 [data-theme="dark"] {
   --nv-header-bg-color: #{$header-bg-dark};
   --nv-header-active-bg-color: #{$header-active-bg-dark};

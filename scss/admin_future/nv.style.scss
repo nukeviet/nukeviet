@@ -34,13 +34,17 @@
 @import "breadcrumb";
 @import "notifications";
 @import "input_btn";
-@import "../error_info";
-@import "apexcharts";
+
 @import "../ckeditor5";
 @import "../select2";
 @import "../uidatepicker";
+@import "../show_pass";
+@import "../standalone/polyfill";
 @import "../uiautocomplete";
 @import "../flatpickr";
+
+@import "error_info";
+@import "apexcharts";
 @import "file_manager";
 @import "login";
 @import "dropdown_tool";

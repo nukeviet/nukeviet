@@ -1,0 +1,83 @@
+$enable-responsive: true;
+
+@import "../functions";
+@import "../future/mixins/responsive";
+//@import "fonts";
+@import "../future/variables";
+//@import "variables-dark";
+
+@import "../../node_modules/bootstrap/scss/functions";
+@import "../../node_modules/bootstrap/scss/variables";
+@import "../../node_modules/bootstrap/scss/variables-dark";
+@import "../../node_modules/bootstrap/scss/maps";
+@import "../../node_modules/bootstrap/scss/mixins";
+@import "../../node_modules/bootstrap/scss/utilities";
+
+$body-bg: $gray-200;
+$card-bg: $white;
+
+@import "../../node_modules/bootstrap/scss/root";
+@import "../../node_modules/bootstrap/scss/reboot";
+@import "../../node_modules/bootstrap/scss/card";
+
+body {
+  padding-top: 1.5rem;
+}
+
+.wrap {
+  display: flex;
+  justify-content: center
+}
+
+.card {
+  text-align: center;
+  width: 90%;
+  max-width: 32rem;
+
+  @include media-breakpoint-up('md') {
+    width: 28rem;
+  }
+}
+
+.card-footer a {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  padding: .5rem 1rem
+}
+
+.img {
+  margin-bottom: .5rem;
+}
+
+.title {
+  font-size: $h5-font-size;
+  margin-bottom: .5rem;
+}
+
+.img-color-1 {
+  fill: $red;
+  fill-rule: nonzero
+}
+
+.img-color-2 {
+  fill: $gray-700;
+  fill-rule: nonzero
+}
+
+.img-color-3 {
+  fill: $orange;
+  fill-rule: nonzero
+}
+
+.img-color-4 {
+  fill: $blue;
+  fill-rule: nonzero
+}
+
+.icon {
+  display: inline-block;
+  width: 1rem;
+  height: 1rem;
+  margin-right: .25rem;
+}

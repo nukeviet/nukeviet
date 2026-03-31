@@ -1,0 +1,33 @@
+@import "../../node_modules/@simonwep/pickr/src/scss/themes/nano";
+
+[data-#{$prefix}theme="dark"] {
+  .pcr-app {
+    background-color: var(--#{$prefix}secondary-bg);
+
+    .pcr-interaction {
+      .pcr-result {
+        background-color: var(--#{$prefix}body-bg);
+        color: var(--#{$prefix}body-color);
+      }
+
+      input:focus {
+        @if $enable-shadows {
+          @include box-shadow($input-box-shadow, $input-focus-box-shadow);
+        }
+
+        @else {
+          box-shadow: $input-focus-box-shadow;
+        }
+      }
+    }
+  }
+}
+
+// Ngăn không chuyển left thành right để đảm bảo xác định vị trí đúng
+/* rtl:begin:ignore */
+.pcr-app {
+  left: 0;
+  right: inherit;
+}
+
+/* rtl:end:ignore */
