@@ -29,26 +29,20 @@ if ($nv_Request->isset_request('get_topic_json', 'post')) {
     $page = $nv_Request->get_page('page', 'post', 1);
     $per_page = 20;
 
-    if (nv_strlen($q) < 2 or $nv_Request->get_title('checkss', 'post', '') != NV_CHECK_SESSION) {
+    if (nv_strlen($q) < 2 or !csrf_check($nv_Request->get_string('checkss', 'post', ''), $csrf_key)) {
         nv_jsonOutput($respon);
     }
 
-    $db->sqlreset()
-        ->select('COUNT(topicid)')
-        ->from(NV_PREFIXLANG . '_' . $module_data . '_topics')
-        ->where('title LIKE :q_title');
+    $stmt = $db->prepare('SELECT COUNT(topicid) FROM ' . NV_PREFIXLANG . '_' . $module_data . '_topics WHERE title LIKE :q_title');
+    $stmt->bindValue(':q_title', '%' . $q . '%', PDO::PARAM_STR);
+    $stmt->execute();
+    $num_items = $stmt->fetchColumn();
 
-    $sth = $db_slave->prepare($db_slave->sql());
-    $sth->bindValue(':q_title', '%' . $q . '%', PDO::PARAM_STR);
-    $sth->execute();
-    $num_items = $sth->fetchColumn();
-    $sth->closeCursor();
-
-    $db_slave->select('topicid, title')->order('weight ASC')->limit($per_page)->offset(($page - 1) * $per_page);
-
-    $sth = $db->prepare($db->sql());
-    $sth->bindValue(':q_title', '%' . $q . '%', PDO::PARAM_STR);
-    $sth->execute();
+    $stmt = $db->prepare('SELECT topicid, title FROM ' . NV_PREFIXLANG . '_' . $module_data . '_topics WHERE title LIKE :q_title ORDER BY weight ASC LIMIT :limit OFFSET :offset');
+    $stmt->bindValue(':q_title', '%' . $q . '%', PDO::PARAM_STR);
+    $stmt->bindValue(':limit', $per_page, PDO::PARAM_INT);
+    $stmt->bindValue(':offset', ($page - 1) * $per_page, PDO::PARAM_INT);
+    $stmt->execute();
 
     if ($page == 1) {
         $respon['results'][] = [
@@ -56,14 +50,13 @@ if ($nv_Request->isset_request('get_topic_json', 'post')) {
             'text' => $nv_Lang->getModule('admin_topic_slnone')
         ];
     }
-    while ($_scratch = $sth->fetch(3)) {
-        [$topicid, $title] = $_scratch;
-        unset($_scratch);
+    while ($_row = $stmt->fetch()) {
         $respon['results'][] = [
-            'id' => $topicid,
-            'text' => nv_unhtmlspecialchars($title)
+            'id' => (int) $_row['topicid'],
+            'text' => nv_unhtmlspecialchars($_row['title'])
         ];
     }
+    $stmt->closeCursor();
 
     $respon['pagination']['more'] = ($page * $per_page) < $num_items;
     nv_jsonOutput($respon);
@@ -83,64 +76,67 @@ if ($nv_Request->isset_request('get_article_json', 'post')) {
     $page = $nv_Request->get_page('page', 'post', 1);
     $per_page = 20;
 
-    if (nv_strlen($q) < 2 or $nv_Request->get_title('checkss', 'post', '') != NV_CHECK_SESSION) {
+    if (nv_strlen($q) < 2 or !csrf_check($nv_Request->get_string('checkss', 'post', ''), $csrf_key)) {
         nv_jsonOutput($respon);
     }
 
-    $db->sqlreset()
-        ->select('COUNT(id)')
-        ->from(NV_PREFIXLANG . '_' . $module_data . '_rows')
-        ->where('title LIKE :q_title AND id!=' . $id);
+    $stmt = $db->prepare('SELECT COUNT(id) FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE title LIKE :q_title AND id != :id');
+    $stmt->bindValue(':q_title', '%' . $q . '%', PDO::PARAM_STR);
+    $stmt->bindValue(':id', $id, PDO::PARAM_INT);
+    $stmt->execute();
+    $num_items = $stmt->fetchColumn();
 
-    $sth = $db_slave->prepare($db_slave->sql());
-    $sth->bindValue(':q_title', '%' . $q . '%', PDO::PARAM_STR);
-    $sth->execute();
-    $num_items = $sth->fetchColumn();
-    $sth->closeCursor();
+    $stmt = $db->prepare('SELECT id, title FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE title LIKE :q_title AND id != :id ORDER BY ' . $order_articles_by . ' DESC LIMIT :limit OFFSET :offset');
+    $stmt->bindValue(':q_title', '%' . $q . '%', PDO::PARAM_STR);
+    $stmt->bindValue(':id', $id, PDO::PARAM_INT);
+    $stmt->bindValue(':limit', $per_page, PDO::PARAM_INT);
+    $stmt->bindValue(':offset', ($page - 1) * $per_page, PDO::PARAM_INT);
+    $stmt->execute();
 
-    $db_slave->select('id, title')->order($order_articles_by . ' DESC')->limit($per_page)->offset(($page - 1) * $per_page);
-
-    $sth = $db->prepare($db->sql());
-    $sth->bindValue(':q_title', '%' . $q . '%', PDO::PARAM_STR);
-    $sth->execute();
-
-    while ($_scratch = $sth->fetch(3)) {
-        [$id, $title] = $_scratch;
-        unset($_scratch);
+    while ($_row = $stmt->fetch()) {
         $respon['results'][] = [
-            'id' => $id,
-            'text' => nv_unhtmlspecialchars($title)
+            'id' => (int) $_row['id'],
+            'text' => nv_unhtmlspecialchars($_row['title'])
         ];
     }
+    $stmt->closeCursor();
 
     $respon['pagination']['more'] = ($page * $per_page) < $num_items;
     nv_jsonOutput($respon);
 }
 
-$is_submit_form = (($nv_Request->get_int('save', 'post') == 1 and $nv_Request->get_title('checkss', 'post', '') === NV_CHECK_SESSION) ? true : false);
+$is_submit_form = (($nv_Request->get_int('save', 'post') == 1 and csrf_check($nv_Request->get_string('checkss', 'post', ''), $csrf_key)) ? true : false);
 $is_auto_save = ($is_submit_form and $nv_Request->get_int('ajax_content', 'post', 0) == 1) ? true : false;
 
 // Kiểm tra xem đang sửa có bị cướp quyền hay không, cập nhật thêm thời gian chỉnh sửa
 if ($nv_Request->isset_request('id', 'post') and $nv_Request->isset_request('check_edit', 'post') and $is_submit_form) {
     $id = $nv_Request->get_int('id', 'post', 0);
-    $_query = $db->query('SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_tmp WHERE new_id=' . $id . ' AND type=0');
-    if ($row_tmp = $_query->fetch()) {
+    $stmt = $db->prepare('SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_tmp WHERE new_id = :id AND type = 0');
+    $stmt->bindValue(':id', $id, PDO::PARAM_INT);
+    $stmt->execute();
+    if ($row_tmp = $stmt->fetch()) {
         if ($row_tmp['admin_id'] == $admin_info['admin_id']) {
-            $db->query('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_tmp SET
-                time_late=' . NV_CURRENTTIME . ', ip=' . $db->quote($client_info['ip']) . '
-            WHERE id=' . $row_tmp['id']);
+            $stmt_up = $db->prepare('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_tmp SET time_late = :time, ip = :ip WHERE id = :tmp_id');
+            $stmt_up->bindValue(':time', NV_CURRENTTIME, PDO::PARAM_INT);
+            $stmt_up->bindValue(':ip', $client_info['ip'], PDO::PARAM_STR);
+            $stmt_up->bindValue(':tmp_id', $row_tmp['id'], PDO::PARAM_INT);
+            $stmt_up->execute();
         } else {
-            $_username = $db->query('SELECT username FROM ' . NV_USERS_GLOBALTABLE . ' WHERE userid =' . $row_tmp['admin_id'])->fetchColumn();
+            $stmt_user = $db->prepare('SELECT username FROM ' . NV_USERS_GLOBALTABLE . ' WHERE userid = :uid');
+            $stmt_user->bindValue(':uid', $row_tmp['admin_id'], PDO::PARAM_INT);
+            $stmt_user->execute();
+            $_username = $stmt_user->fetchColumn();
             nv_jsonOutput([
                 'status' => 'compromised',
                 'mess' => $nv_Lang->getModule('dulicate_edit_takeover', $_username, nv_datetime_format($row_tmp['time_edit']))
             ]);
         }
     }
+    $stmt->closeCursor();
 }
 
 // Lấy keywords từ nội dung bài viết
-if ($nv_Request->isset_request('getKeywordsFromContent', 'post') and $nv_Request->get_title('checkss', 'post') === NV_CHECK_SESSION) {
+if ($nv_Request->isset_request('getKeywordsFromContent', 'post') and csrf_check($nv_Request->get_string('checkss', 'post', ''), $csrf_key)) {
     $content = $nv_Request->get_title('content', 'post', '');
     $keywords = nv_get_mod_tags($content);
     $size = count($keywords);
@@ -196,7 +192,9 @@ if (file_exists(NV_UPLOADS_REAL_DIR . '/' . $currentpath)) {
                 if ($mk[0] > 0) {
                     $upload_real_dir_page = $mk[2];
                     try {
-                        $db->query('INSERT INTO ' . NV_UPLOAD_GLOBALTABLE . "_dir (dirname, time) VALUES ('" . NV_UPLOADS_DIR . '/' . $cp . $p . "', 0)");
+                        $stmt = $db->prepare('INSERT INTO ' . NV_UPLOAD_GLOBALTABLE . ' (dirname, time) VALUES (:dirname, 0)');
+                        $stmt->bindValue(':dirname', NV_UPLOADS_DIR . '/' . $cp . $p, PDO::PARAM_STR);
+                        $stmt->execute();
                     } catch (Throwable $e) {
                         trigger_error($e);
                     }
@@ -222,16 +220,15 @@ if (!defined('NV_IS_SPADMIN') and str_contains($structure_upload, 'username')) {
 // Danh sách các nhóm tin
 $array_block_cat_module = [];
 $id_block_content = [];
-$sql = 'SELECT bid, adddefault, title FROM ' . NV_PREFIXLANG . '_' . $module_data . '_block_cat ORDER BY weight ASC';
-$result = $db->query($sql);
-while ($_scratch = $result->fetch(3)) {
-    [$bid_i, $adddefault_i, $title_i] = $_scratch;
-    unset($_scratch);
-    $array_block_cat_module[$bid_i] = $title_i;
-    if ($adddefault_i) {
-        $id_block_content[] = $bid_i;
+$stmt = $db->prepare('SELECT bid, adddefault, title FROM ' . NV_PREFIXLANG . '_' . $module_data . '_block_cat ORDER BY weight ASC');
+$stmt->execute();
+while ($_row = $stmt->fetch()) {
+    $array_block_cat_module[$_row['bid']] = $_row['title'];
+    if ($_row['adddefault']) {
+        $id_block_content[] = (int) $_row['bid'];
     }
 }
+$stmt->closeCursor();
 
 $catid = $nv_Request->get_int('catid', 'get', 0);
 $parentid = $nv_Request->get_int('parentid', 'get', 0);
@@ -327,7 +324,12 @@ if ($rowcontent['id'] == 0) {
     ];
 } else {
     $check_permission = false;
-    $rowcontent = $db->query('SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE id=' . $rowcontent['id'])->fetch();
+    $stmt = $db->prepare('SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE id = :id');
+    $stmt->bindValue(':id', $rowcontent['id'], PDO::PARAM_INT);
+    $stmt->execute();
+    $rowcontent = $stmt->fetch();
+    $stmt->closeCursor();
+
     if (!empty($rowcontent['id'])) {
         $rowcontent['old_status'] = $rowcontent['status'];
         // Nếu bài viết đang bị đình chỉ thì trả lại trang thái ban đầu để thao tác, trước khi lưu vào CSDL sẽ căn cứ vào chuyên mục có bị khóa hay không mà build lại trạng thái
@@ -392,24 +394,34 @@ if ($rowcontent['id'] == 0) {
     $rowcontent['files'] = '';
 
     // Lấy các file đính kèm
-    $body_contents = $db->query('SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_detail WHERE id=' . $rowcontent['id'])->fetch();
+    $stmt = $db->prepare('SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_detail WHERE id = :id');
+    $stmt->bindValue(':id', $rowcontent['id'], PDO::PARAM_INT);
+    $stmt->execute();
+    $body_contents = $stmt->fetch();
+    $stmt->closeCursor();
+
     $body_contents['localversions'] = !empty($body_contents['localization']) ? json_decode($body_contents['localization'], true) : [];
     $rowcontent = array_merge($rowcontent, $body_contents);
     unset($body_contents);
 
     // Lấy các tag của bài viết
-    $_query = $db->query('SELECT tid, keyword FROM ' . NV_PREFIXLANG . '_' . $module_data . '_tags_id WHERE id=' . $rowcontent['id'] . ' ORDER BY keyword ASC');
-    while ($row = $_query->fetch()) {
+    $stmt = $db->prepare('SELECT tid, keyword FROM ' . NV_PREFIXLANG . '_' . $module_data . '_tags_id WHERE id = :id ORDER BY keyword ASC');
+    $stmt->bindValue(':id', $rowcontent['id'], PDO::PARAM_INT);
+    $stmt->execute();
+    while ($row = $stmt->fetch()) {
         $array_tags_old[$row['tid']] = $row['keyword'];
     }
     $rowcontent['tags'] = implode(',', $array_tags_old);
     $rowcontent['tags_old'] = $rowcontent['tags'];
+    $stmt->closeCursor();
 
     // Lấy danh sach tac gia của bài viết
     $rowcontent['internal_authors'] = [];
     $rowcontent['internal_authors_old'] = [];
-    $_query = $db->query('SELECT aid, pseudonym FROM ' . NV_PREFIXLANG . '_' . $module_data . '_authorlist WHERE id=' . $rowcontent['id'] . ' ORDER BY alias ASC');
-    while ($row = $_query->fetch()) {
+    $stmt = $db->prepare('SELECT aid, pseudonym FROM ' . NV_PREFIXLANG . '_' . $module_data . '_authorlist WHERE id = :id ORDER BY alias ASC');
+    $stmt->bindValue(':id', $rowcontent['id'], PDO::PARAM_INT);
+    $stmt->execute();
+    while ($row = $stmt->fetch()) {
         $rowcontent['internal_authors'][] = $row['aid'];
         if (!$copy) {
             $rowcontent['internal_authors_old'][] = $row['aid'];
@@ -419,13 +431,19 @@ if ($rowcontent['id'] == 0) {
             'pseudonym' => $row['pseudonym']
         ];
     }
+    $stmt->closeCursor();
 
     // Lấy và đè lại thông tin sẽ khôi phục
     $restore_data = [];
     if ($restore_id) {
-        $sql = 'SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_row_histories WHERE new_id=' . $rowcontent['id'] . ' AND id=' . $restore_id;
-        $restore_data = $db->query($sql)->fetch();
-        if (empty($restore_data) or $restore_hash !== md5(NV_CHECK_SESSION . $admin_info['admin_id'] . $rowcontent['id'] . $restore_id . $restore_data['historytime'])) {
+        $stmt = $db->prepare('SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_row_histories WHERE new_id = :new_id AND id = :restore_id');
+        $stmt->bindValue(':new_id', $rowcontent['id'], PDO::PARAM_INT);
+        $stmt->bindValue(':restore_id', $restore_id, PDO::PARAM_INT);
+        $stmt->execute();
+        $restore_data = $stmt->fetch();
+        $stmt->closeCursor();
+
+        if (empty($restore_data) or $restore_hash !== md5($csrf_key . $admin_info['admin_id'] . $rowcontent['id'] . $restore_id . $restore_data['historytime'])) {
             nv_error404();
         }
         unset($restore_data['id'], $restore_data['new_id'], $restore_data['admin_id'], $restore_data['changed_fields']);
@@ -437,8 +455,14 @@ if ($rowcontent['id'] == 0) {
         $internal_authors = $rowcontent['internal_authors'];
         $rowcontent['internal_authors'] = [];
         if (!empty($internal_authors)) {
-            $_query = $db->query('SELECT id, pseudonym FROM ' . NV_PREFIXLANG . '_' . $module_data . '_author WHERE id IN(' . $internal_authors . ') ORDER BY alias ASC');
-            while ($row = $_query->fetch()) {
+            $internal_authors_ids = array_map('intval', explode(',', $internal_authors));
+            $placeholders = implode(',', array_fill(0, count($internal_authors_ids), '?'));
+            $stmt = $db->prepare('SELECT id, pseudonym FROM ' . NV_PREFIXLANG . '_' . $module_data . '_author WHERE id IN (' . $placeholders . ') ORDER BY alias ASC');
+            foreach ($internal_authors_ids as $k => $id) {
+                $stmt->bindValue(($k + 1), $id, PDO::PARAM_INT);
+            }
+            $stmt->execute();
+            while ($row = $stmt->fetch()) {
                 $rowcontent['internal_authors'][] = $row['id'];
                 if (!$copy) {
                     $rowcontent['internal_authors_old'][] = $row['id'];
@@ -448,6 +472,7 @@ if ($rowcontent['id'] == 0) {
                     'pseudonym' => $row['pseudonym']
                 ];
             }
+            $stmt->closeCursor();
         }
         unset($internal_authors);
     }
@@ -456,13 +481,13 @@ if ($rowcontent['id'] == 0) {
 
     // Các nhóm tin của bài viết
     $id_block_content = [];
-    $sql = 'SELECT bid FROM ' . NV_PREFIXLANG . '_' . $module_data . '_block WHERE id=' . $rowcontent['id'];
-    $result = $db->query($sql);
-    while ($_scratch = $result->fetch(3)) {
-        [$bid_i] = $_scratch;
-        unset($_scratch);
-        $id_block_content[] = $bid_i;
+    $stmt = $db->prepare('SELECT bid FROM ' . NV_PREFIXLANG . '_' . $module_data . '_block WHERE id = :id');
+    $stmt->bindValue(':id', $rowcontent['id'], PDO::PARAM_INT);
+    $stmt->execute();
+    while ($_row = $stmt->fetch()) {
+        $id_block_content[] = (int) $_row['bid'];
     }
+    $stmt->closeCursor();
 
     // Xóa thông báo của hệ thống về bài viết
     if (empty($rowcontent['status'])) {
@@ -479,14 +504,22 @@ if ($rowcontent['id'] == 0) {
 // Tiếp tục từ bản nháp
 $draft_id = $nv_Request->get_absint('draft_id', 'get', 0);
 if ($draft_id) {
-    $sql = "SELECT * FROM " . NV_PREFIXLANG . "_" . $module_data . "_tmp
-    WHERE id=" . $draft_id . " AND type=1 AND admin_id=" . $admin_info['admin_id'];
-    if ($rowcontent['mode'] == 'add') {
-        $sql .= " AND new_id=0";
+    $sql = 'SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_tmp WHERE id = :draft_id AND type = 1 AND admin_id = :admin_id';
+    if ($rowcontent['mode'] === 'add') {
+        $sql .= ' AND new_id = 0';
     } else {
-        $sql .= " AND new_id=" . $rowcontent['id'];
+        $sql .= ' AND new_id = :new_id';
     }
-    $draft = $db->query($sql)->fetch() ?: [];
+    $stmt = $db->prepare($sql);
+    $stmt->bindValue(':draft_id', $draft_id, PDO::PARAM_INT);
+    $stmt->bindValue(':admin_id', $admin_info['admin_id'], PDO::PARAM_INT);
+    if ($rowcontent['mode'] !== 'add') {
+        $stmt->bindValue(':new_id', $rowcontent['id'], PDO::PARAM_INT);
+    }
+    $stmt->execute();
+    $draft = $stmt->fetch() ?: [];
+    $stmt->closeCursor();
+
     $draft['properties'] = !empty($draft['properties']) ? json_decode($draft['properties'], true) : [];
     if (empty($draft['properties']) or !is_array($draft['properties'])) {
         nv_error404();
@@ -572,43 +605,60 @@ $tpl->assign('OP', $op);
  * sau đó tiếp tục nhấn submit thì dữ liệu vẫn được lưu
  */
 if ($rowcontent['mode'] == 'edit') {
-    $row_tmp = $db->query('SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_tmp WHERE new_id=' . $rowcontent['id'] . ' AND type=0')->fetch();
+    $stmt = $db->prepare('SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_tmp WHERE new_id = :id AND type = 0');
+    $stmt->bindValue(':id', $rowcontent['id'], PDO::PARAM_INT);
+    $stmt->execute();
+    $row_tmp = $stmt->fetch();
+    $stmt->closeCursor();
+
     if ($row_tmp) {
         // Xác định người đang sửa
-        $_username = $db->query('SELECT username FROM ' . NV_USERS_GLOBALTABLE . ' WHERE userid =' . $row_tmp['admin_id'])->fetchColumn();
+        $stmt_user = $db->prepare('SELECT username FROM ' . NV_USERS_GLOBALTABLE . ' WHERE userid = :uid');
+        $stmt_user->bindValue(':uid', $row_tmp['admin_id'], PDO::PARAM_INT);
+        $stmt_user->execute();
+        $_username = $stmt_user->fetchColumn();
+        $stmt_user->closeCursor();
 
         // Kiểm tra nếu có người đang sửa
         if ($row_tmp['admin_id'] == $admin_info['admin_id']) {
             // Cập nhật thời gian sửa cuối
-            $db->query('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_tmp SET
-                time_late=' . NV_CURRENTTIME . ',
-                ip=' . $db->quote($client_info['ip']) . '
-            WHERE id=' . $row_tmp['id']);
+            $stmt_up = $db->prepare('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_tmp SET time_late = :time, ip = :ip WHERE id = :tmp_id');
+            $stmt_up->bindValue(':time', NV_CURRENTTIME, PDO::PARAM_INT);
+            $stmt_up->bindValue(':ip', $client_info['ip'], PDO::PARAM_STR);
+            $stmt_up->bindValue(':tmp_id', $row_tmp['id'], PDO::PARAM_INT);
+            $stmt_up->execute();
         } elseif ($row_tmp['time_late'] < (NV_CURRENTTIME - $global_code_defined['edit_timeout']) or empty($_username)) {
             /*
              * Cho phép sửa nếu:
              * - Người đang sửa 3 phút không thao tác đến
              * - Không tồn tại thành viên nữa (có thể bị xóa tài khoản)
              */
-            $db->query('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_tmp SET
-                admin_id=' . $admin_info['admin_id'] . ',
-                time_edit=' . NV_CURRENTTIME . ',
-                time_late=' . NV_CURRENTTIME . ',
-                ip=' . $db->quote($client_info['ip']) . '
-            WHERE id=' . $row_tmp['id']);
+            $stmt_up = $db->prepare('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_tmp SET admin_id = :admin_id, time_edit = :time_edit, time_late = :time_late, ip = :ip WHERE id = :tmp_id');
+            $stmt_up->bindValue(':admin_id', $admin_info['admin_id'], PDO::PARAM_INT);
+            $stmt_up->bindValue(':time_edit', NV_CURRENTTIME, PDO::PARAM_INT);
+            $stmt_up->bindValue(':time_late', NV_CURRENTTIME, PDO::PARAM_INT);
+            $stmt_up->bindValue(':ip', $client_info['ip'], PDO::PARAM_STR);
+            $stmt_up->bindValue(':tmp_id', $row_tmp['id'], PDO::PARAM_INT);
+            $stmt_up->execute();
         } else {
             $link_takeover = '';
-            $_authors_lev = $db->query('SELECT lev FROM ' . NV_AUTHORS_GLOBALTABLE . ' WHERE admin_id =' . $row_tmp['admin_id'])->fetchColumn();
+            $stmt_lev = $db->prepare('SELECT lev FROM ' . NV_AUTHORS_GLOBALTABLE . ' WHERE admin_id = :admin_id');
+            $stmt_lev->bindValue(':admin_id', $row_tmp['admin_id'], PDO::PARAM_INT);
+            $stmt_lev->execute();
+            $_authors_lev = $stmt_lev->fetchColumn();
+            $stmt_lev->closeCursor();
+
             if ($admin_info['level'] < $_authors_lev) {
                 // Có quyền chiếm
-                $takeover = md5($rowcontent['id'] . '_takeover_' . NV_CHECK_SESSION);
+                $takeover = md5($rowcontent['id'] . '_takeover_' . $csrf_key);
                 if ($takeover == $nv_Request->get_title('takeover', 'get', '')) {
-                    $db->query('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_tmp SET
-                        admin_id=' . $admin_info['admin_id'] . ',
-                        time_edit=' . NV_CURRENTTIME . ',
-                        time_late=' . NV_CURRENTTIME . ',
-                        ip=' . $db->quote($client_info['ip']) . '
-                    WHERE id=' . $row_tmp['id']);
+                    $stmt_up = $db->prepare('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_tmp SET admin_id = :admin_id, time_edit = :time_edit, time_late = :time_late, ip = :ip WHERE id = :tmp_id');
+                    $stmt_up->bindValue(':admin_id', $admin_info['admin_id'], PDO::PARAM_INT);
+                    $stmt_up->bindValue(':time_edit', NV_CURRENTTIME, PDO::PARAM_INT);
+                    $stmt_up->bindValue(':time_late', NV_CURRENTTIME, PDO::PARAM_INT);
+                    $stmt_up->bindValue(':ip', $client_info['ip'], PDO::PARAM_STR);
+                    $stmt_up->bindValue(':tmp_id', $row_tmp['id'], PDO::PARAM_INT);
+                    $stmt_up->execute();
                     nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&id=' . $rowcontent['id'] . '&rand=' . nv_genpass());
                 }
                 $message = $nv_Lang->getModule('dulicate_edit_admin', $rowcontent['title'], $_username, date('H:i d/m/Y', $row_tmp['time_edit']));
@@ -630,12 +680,13 @@ if ($rowcontent['mode'] == 'edit') {
     } elseif (!$is_submit_form) {
         // Khi bắt đầu sửa bài thì lưu thông tin người sửa
         // Không lưu nếu submit
-        $db->query('INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . '_tmp (
-            type, new_id, admin_id, time_edit, time_late, ip
-        ) VALUES (
-            0, ' . $rowcontent['id'] . ', ' . $admin_info['admin_id'] . ', ' . NV_CURRENTTIME . ',
-            ' . NV_CURRENTTIME . ', ' . $db->quote($client_info['ip']) . '
-        )');
+        $stmt_ins = $db->prepare('INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . '_tmp (type, new_id, admin_id, time_edit, time_late, ip) VALUES (0, :id, :admin_id, :time_edit, :time_late, :ip)');
+        $stmt_ins->bindValue(':id', $rowcontent['id'], PDO::PARAM_INT);
+        $stmt_ins->bindValue(':admin_id', $admin_info['admin_id'], PDO::PARAM_INT);
+        $stmt_ins->bindValue(':time_edit', NV_CURRENTTIME, PDO::PARAM_INT);
+        $stmt_ins->bindValue(':time_late', NV_CURRENTTIME, PDO::PARAM_INT);
+        $stmt_ins->bindValue(':ip', $client_info['ip'], PDO::PARAM_STR);
+        $stmt_ins->execute();
     }
 }
 
@@ -694,10 +745,11 @@ if ($is_submit_form) {
     if ($rowcontent['topicid'] == 0) {
         $rowcontent['topictext'] = $nv_Request->get_title('topictext', 'post', '');
         if (!empty($rowcontent['topictext'])) {
-            $stmt = $db->prepare('SELECT topicid FROM ' . NV_PREFIXLANG . '_' . $module_data . '_topics WHERE title= :title');
-            $stmt->bindParam(':title', $rowcontent['topictext'], PDO::PARAM_STR);
+            $stmt = $db->prepare('SELECT topicid FROM ' . NV_PREFIXLANG . '_' . $module_data . '_topics WHERE title = :title');
+            $stmt->bindValue(':title', $rowcontent['topictext'], PDO::PARAM_STR);
             $stmt->execute();
-            $rowcontent['topicid'] = $stmt->fetchColumn();
+            $rowcontent['topicid'] = (int) $stmt->fetchColumn();
+            $stmt->closeCursor();
         }
     }
     $rowcontent['author'] = $nv_Request->get_title('author', 'post', '');
@@ -865,8 +917,13 @@ if ($is_submit_form) {
         $related_ids = array_diff($related_ids, [$rowcontent['id']]);
     }
     if (!empty($related_ids)) {
-        $sql = "SELECT id FROM " . NV_PREFIXLANG . "_" . $module_data . "_rows WHERE id IN(" . implode(',', $related_ids) . ")";
-        $related_ids = array_intersect($related_ids, $db->query($sql)->fetchAll(PDO::FETCH_COLUMN));
+        $placeholders = implode(',', array_fill(0, count($related_ids), '?'));
+        $stmt = $db->prepare('SELECT id FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE id IN (' . $placeholders . ')');
+        foreach ($related_ids as $k => $r_id) {
+            $stmt->bindValue(($k + 1), $r_id, PDO::PARAM_INT);
+        }
+        $stmt->execute();
+        $related_ids = $stmt->fetchAll(PDO::FETCH_COLUMN);
     }
     $rowcontent['related_ids'] = empty($related_ids) ? '' : implode(',', $related_ids);
 
@@ -906,45 +963,56 @@ if ($is_submit_form) {
 
         if ($rowcontent['mode'] == 'add') {
             // Lưu mới
-            $sql = "SELECT * FROM " . NV_PREFIXLANG . "_" . $module_data . "_tmp WHERE uuid=" . $db->quote($uuid) . " AND type=1 AND new_id=0 AND admin_id=" . $admin_info['admin_id'];
-            $tmp = $db->query($sql)->fetch();
+            $stmt = $db->prepare('SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_tmp WHERE uuid = :uuid AND type = 1 AND new_id = 0 AND admin_id = :admin_id');
+            $stmt->bindValue(':uuid', $uuid, PDO::PARAM_STR);
+            $stmt->bindValue(':admin_id', $admin_info['admin_id'], PDO::PARAM_INT);
+            $stmt->execute();
+            $tmp = $stmt->fetch();
+            $stmt->closeCursor();
+
             if (empty($tmp)) {
-                $stmt = $db->prepare('INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . '_tmp (
-                    type, new_id, admin_id, time_edit, time_late, ip, uuid, properties
-                ) VALUES (
-                    1, 0, ' . $admin_info['admin_id'] . ', ' . NV_CURRENTTIME . ', ' . NV_CURRENTTIME . ', ' . $db->quote($client_info['ip']) . ', :uuid, :properties
-                )');
-                $stmt->bindParam(':uuid', $uuid, PDO::PARAM_STR);
+                $stmt = $db->prepare('INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . '_tmp (type, new_id, admin_id, time_edit, time_late, ip, uuid, properties) VALUES (1, 0, :admin_id, :time_edit, :time_late, :ip, :uuid, :properties)');
+                $stmt->bindValue(':admin_id', $admin_info['admin_id'], PDO::PARAM_INT);
+                $stmt->bindValue(':time_edit', NV_CURRENTTIME, PDO::PARAM_INT);
+                $stmt->bindValue(':time_late', NV_CURRENTTIME, PDO::PARAM_INT);
+                $stmt->bindValue(':ip', $client_info['ip'], PDO::PARAM_STR);
+                $stmt->bindValue(':uuid', $uuid, PDO::PARAM_STR);
                 $stmt->bindValue(':properties', json_encode($rowcontent, NV_JSON_ENCODE), PDO::PARAM_STR);
                 $stmt->execute();
             } else {
-                $stmt = $db->prepare('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_tmp SET
-                    time_late=' . NV_CURRENTTIME . ',
-                    ip=' . $db->quote($client_info['ip']) . ',
-                    properties= :properties
-                WHERE uuid=' . $db->quote($uuid) . ' AND type=1 AND new_id=0 AND admin_id=' . $admin_info['admin_id']);
+                $stmt = $db->prepare('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_tmp SET time_late = :time_late, ip = :ip, properties = :properties WHERE uuid = :uuid AND type = 1 AND new_id = 0 AND admin_id = :admin_id');
+                $stmt->bindValue(':time_late', NV_CURRENTTIME, PDO::PARAM_INT);
+                $stmt->bindValue(':ip', $client_info['ip'], PDO::PARAM_STR);
                 $stmt->bindValue(':properties', json_encode($rowcontent, NV_JSON_ENCODE), PDO::PARAM_STR);
+                $stmt->bindValue(':uuid', $uuid, PDO::PARAM_STR);
+                $stmt->bindValue(':admin_id', $admin_info['admin_id'], PDO::PARAM_INT);
                 $stmt->execute();
             }
         } else {
             // Sửa bài
-            $sql = "SELECT * FROM " . NV_PREFIXLANG . "_" . $module_data . "_tmp WHERE new_id=" . $rowcontent['id'] . " AND type=1 AND admin_id=" . $admin_info['admin_id'];
-            $tmp = $db->query($sql)->fetch();
+            $stmt = $db->prepare('SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_tmp WHERE new_id = :id AND type = 1 AND admin_id = :admin_id');
+            $stmt->bindValue(':id', $rowcontent['id'], PDO::PARAM_INT);
+            $stmt->bindValue(':admin_id', $admin_info['admin_id'], PDO::PARAM_INT);
+            $stmt->execute();
+            $tmp = $stmt->fetch();
+            $stmt->closeCursor();
+
             if (empty($tmp)) {
-                $stmt = $db->prepare('INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . '_tmp (
-                    type, new_id, admin_id, time_edit, time_late, ip, properties
-                ) VALUES (
-                    1, ' . $rowcontent['id'] . ', ' . $admin_info['admin_id'] . ', ' . NV_CURRENTTIME . ', ' . NV_CURRENTTIME . ', ' . $db->quote($client_info['ip']) . ', :properties
-                )');
+                $stmt = $db->prepare('INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . '_tmp (type, new_id, admin_id, time_edit, time_late, ip, properties) VALUES (1, :id, :admin_id, :time_edit, :time_late, :ip, :properties)');
+                $stmt->bindValue(':id', $rowcontent['id'], PDO::PARAM_INT);
+                $stmt->bindValue(':admin_id', $admin_info['admin_id'], PDO::PARAM_INT);
+                $stmt->bindValue(':time_edit', NV_CURRENTTIME, PDO::PARAM_INT);
+                $stmt->bindValue(':time_late', NV_CURRENTTIME, PDO::PARAM_INT);
+                $stmt->bindValue(':ip', $client_info['ip'], PDO::PARAM_STR);
                 $stmt->bindValue(':properties', json_encode($rowcontent, NV_JSON_ENCODE), PDO::PARAM_STR);
                 $stmt->execute();
             } else {
-                $stmt = $db->prepare('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_tmp SET
-                    time_late=' . NV_CURRENTTIME . ',
-                    ip=' . $db->quote($client_info['ip']) . ',
-                    properties= :properties
-                WHERE new_id=' . $rowcontent['id'] . ' AND type=1 AND admin_id=' . $admin_info['admin_id']);
+                $stmt = $db->prepare('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_tmp SET time_late = :time_late, ip = :ip, properties = :properties WHERE new_id = :id AND type = 1 AND admin_id = :admin_id');
+                $stmt->bindValue(':time_late', NV_CURRENTTIME, PDO::PARAM_INT);
+                $stmt->bindValue(':ip', $client_info['ip'], PDO::PARAM_STR);
                 $stmt->bindValue(':properties', json_encode($rowcontent, NV_JSON_ENCODE), PDO::PARAM_STR);
+                $stmt->bindValue(':id', $rowcontent['id'], PDO::PARAM_INT);
+                $stmt->bindValue(':admin_id', $admin_info['admin_id'], PDO::PARAM_INT);
                 $stmt->execute();
             }
         }
@@ -966,17 +1034,22 @@ if ($is_submit_form) {
 
     if (empty($error)) {
         if (!empty($rowcontent['topictext']) and empty($rowcontent['topicid'])) {
-            $weightopic = $db->query('SELECT max(weight) FROM ' . NV_PREFIXLANG . '_' . $module_data . '_topics')->fetchColumn();
-            $weightopic = (int) $weightopic + 1;
+            $stmt = $db->prepare('SELECT max(weight) FROM ' . NV_PREFIXLANG . '_' . $module_data . '_topics');
+            $stmt->execute();
+            $weightopic = (int) $stmt->fetchColumn() + 1;
             $aliastopic = get_mod_alias($rowcontent['topictext'], 'topics');
-            $_sql = 'INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . "_topics (title, alias, description, image, weight, keywords, add_time, edit_time) VALUES ( :title, :alias, :description, '', :weight, :keywords, " . NV_CURRENTTIME . ', ' . NV_CURRENTTIME . ')';
-            $data_insert = [];
-            $data_insert['title'] = $rowcontent['topictext'];
-            $data_insert['alias'] = $aliastopic;
-            $data_insert['description'] = $rowcontent['topictext'];
-            $data_insert['weight'] = $weightopic;
-            $data_insert['keywords'] = $rowcontent['topictext'];
-            $rowcontent['topicid'] = $db->insert_id($_sql, 'topicid', $data_insert);
+
+            $stmt = $db->prepare('INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . '_topics (title, alias, description, image, weight, keywords, add_time, edit_time) VALUES (:title, :alias, :description, :image, :weight, :keywords, :add_time, :edit_time)');
+            $stmt->bindValue(':title', $rowcontent['topictext'], PDO::PARAM_STR);
+            $stmt->bindValue(':alias', $aliastopic, PDO::PARAM_STR);
+            $stmt->bindValue(':description', $rowcontent['topictext'], PDO::PARAM_STR);
+            $stmt->bindValue(':image', '', PDO::PARAM_STR);
+            $stmt->bindValue(':weight', $weightopic, PDO::PARAM_INT);
+            $stmt->bindValue(':keywords', $rowcontent['topictext'], PDO::PARAM_STR);
+            $stmt->bindValue(':add_time', NV_CURRENTTIME, PDO::PARAM_INT);
+            $stmt->bindValue(':edit_time', NV_CURRENTTIME, PDO::PARAM_INT);
+            $stmt->execute();
+            $rowcontent['topicid'] = (int) $db->lastInsertId();
         }
 
         $rowcontent['sourceid'] = 0;
@@ -984,39 +1057,48 @@ if ($is_submit_form) {
             $url_info = parse_url($rowcontent['sourcetext']);
             if (isset($url_info['scheme']) and isset($url_info['host'])) {
                 $sourceid_link = $url_info['scheme'] . '://' . $url_info['host'];
-                $stmt = $db->prepare('SELECT sourceid FROM ' . NV_PREFIXLANG . '_' . $module_data . '_sources WHERE link= :link');
-                $stmt->bindParam(':link', $sourceid_link, PDO::PARAM_STR);
+                $stmt = $db->prepare('SELECT sourceid FROM ' . NV_PREFIXLANG . '_' . $module_data . '_sources WHERE link = :link');
+                $stmt->bindValue(':link', $sourceid_link, PDO::PARAM_STR);
                 $stmt->execute();
-                $rowcontent['sourceid'] = $stmt->fetchColumn();
+                $rowcontent['sourceid'] = (int) $stmt->fetchColumn();
 
                 if (empty($rowcontent['sourceid'])) {
-                    $weight = $db->query('SELECT max(weight) FROM ' . NV_PREFIXLANG . '_' . $module_data . '_sources')->fetchColumn();
-                    $weight = (int) $weight + 1;
-                    $_sql = 'INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . "_sources (title, link, logo, weight, add_time, edit_time) VALUES ( :title ,:sourceid_link, '', :weight, " . NV_CURRENTTIME . ', ' . NV_CURRENTTIME . ')';
+                    $stmt = $db->prepare('SELECT max(weight) FROM ' . NV_PREFIXLANG . '_' . $module_data . '_sources');
+                    $stmt->execute();
+                    $weight = (int) $stmt->fetchColumn() + 1;
 
-                    $data_insert = [];
-                    $data_insert['title'] = $url_info['host'];
-                    $data_insert['sourceid_link'] = $sourceid_link;
-                    $data_insert['weight'] = $weight;
-
-                    $rowcontent['sourceid'] = $db->insert_id($_sql, 'sourceid', $data_insert);
+                    $stmt = $db->prepare('INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . '_sources (title, link, logo, weight, add_time, edit_time) VALUES (:title, :link, :logo, :weight, :add_time, :edit_time)');
+                    $stmt->bindValue(':title', $url_info['host'], PDO::PARAM_STR);
+                    $stmt->bindValue(':link', $sourceid_link, PDO::PARAM_STR);
+                    $stmt->bindValue(':logo', '', PDO::PARAM_STR);
+                    $stmt->bindValue(':weight', $weight, PDO::PARAM_INT);
+                    $stmt->bindValue(':add_time', NV_CURRENTTIME, PDO::PARAM_INT);
+                    $stmt->bindValue(':edit_time', NV_CURRENTTIME, PDO::PARAM_INT);
+                    $stmt->execute();
+                    $rowcontent['sourceid'] = (int) $db->lastInsertId();
                 }
 
                 $rowcontent['external_link'] = $rowcontent['external_link'] ? 1 : 0;
             } else {
-                $stmt = $db->prepare('SELECT sourceid FROM ' . NV_PREFIXLANG . '_' . $module_data . '_sources WHERE title= :title');
-                $stmt->bindParam(':title', $rowcontent['sourcetext'], PDO::PARAM_STR);
+                $stmt = $db->prepare('SELECT sourceid FROM ' . NV_PREFIXLANG . '_' . $module_data . '_sources WHERE title = :title');
+                $stmt->bindValue(':title', $rowcontent['sourcetext'], PDO::PARAM_STR);
                 $stmt->execute();
-                $rowcontent['sourceid'] = $stmt->fetchColumn();
+                $rowcontent['sourceid'] = (int) $stmt->fetchColumn();
 
                 if (empty($rowcontent['sourceid'])) {
-                    $weight = $db->query('SELECT max(weight) FROM ' . NV_PREFIXLANG . '_' . $module_data . '_sources')->fetchColumn();
-                    $weight = (int) $weight + 1;
-                    $_sql = 'INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . "_sources (title, link, logo, weight, add_time, edit_time) VALUES ( :title, '', '', " . $weight . ' , ' . NV_CURRENTTIME . ', ' . NV_CURRENTTIME . ')';
-                    $data_insert = [];
-                    $data_insert['title'] = $rowcontent['sourcetext'];
+                    $stmt = $db->prepare('SELECT max(weight) FROM ' . NV_PREFIXLANG . '_' . $module_data . '_sources');
+                    $stmt->execute();
+                    $weight = (int) $stmt->fetchColumn() + 1;
 
-                    $rowcontent['sourceid'] = $db->insert_id($_sql, 'sourceid', $data_insert);
+                    $stmt = $db->prepare('INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . '_sources (title, link, logo, weight, add_time, edit_time) VALUES (:title, :link, :logo, :weight, :add_time, :edit_time)');
+                    $stmt->bindValue(':title', $rowcontent['sourcetext'], PDO::PARAM_STR);
+                    $stmt->bindValue(':link', '', PDO::PARAM_STR);
+                    $stmt->bindValue(':logo', '', PDO::PARAM_STR);
+                    $stmt->bindValue(':weight', $weight, PDO::PARAM_INT);
+                    $stmt->bindValue(':add_time', NV_CURRENTTIME, PDO::PARAM_INT);
+                    $stmt->bindValue(':edit_time', NV_CURRENTTIME, PDO::PARAM_INT);
+                    $stmt->execute();
+                    $rowcontent['sourceid'] = (int) $db->lastInsertId();
                 }
 
                 $rowcontent['external_link'] = 0;
@@ -1090,50 +1172,70 @@ if ($is_submit_form) {
                 homeimgfile, homeimgalt, homeimgthumb, inhome, allowed_comm, allowed_rating, external_link, hitstotal, hitscm, total_rating, click_rating, instant_active, instant_template,
                 instant_creatauto
             ) VALUES (
-                 ' . (int) ($rowcontent['catid']) . ',
+                 :catid,
                  :listcatid,
-                 ' . $rowcontent['topicid'] . ',
-                 ' . (int) ($rowcontent['admin_id']) . ',
+                 :topicid,
+                 :admin_id,
                  :author,
-                 ' . (int) ($rowcontent['sourceid']) . ',
-                 ' . (int) ($rowcontent['addtime']) . ',
-                 ' . (int) ($rowcontent['edittime']) . ',
-                 ' . (int) ($rowcontent['status']) . ',
-                 ' . $_weight . ',
-                 ' . (int) ($rowcontent['publtime']) . ',
-                 ' . (int) ($rowcontent['exptime']) . ',
-                 ' . (int) ($rowcontent['archive']) . ',
+                 :sourceid,
+                 :addtime,
+                 :edittime,
+                 :status,
+                 :weight,
+                 :publtime,
+                 :exptime,
+                 :archive,
                  :title,
                  :alias,
                  :hometext,
                  :homeimgfile,
                  :homeimgalt,
                  :homeimgthumb,
-                 ' . (int) ($rowcontent['inhome']) . ',
+                 :inhome,
                  :allowed_comm,
-                 ' . (int) ($rowcontent['allowed_rating']) . ',
-                 ' . (int) ($rowcontent['external_link']) . ',
-                 ' . (int) ($rowcontent['hitstotal']) . ',
-                 ' . (int) ($rowcontent['hitscm']) . ',
-                 ' . (int) ($rowcontent['total_rating']) . ',
-                 ' . (int) ($rowcontent['click_rating']) . ',
-                 ' . (int) ($rowcontent['instant_active']) . ',
+                 :allowed_rating,
+                 :external_link,
+                 :hitstotal,
+                 :hitscm,
+                 :total_rating,
+                 :click_rating,
+                 :instant_active,
                  :instant_template,
-                 ' . (int) ($rowcontent['instant_creatauto']) . ')';
+                 :instant_creatauto)';
 
-            $data_insert = [];
-            $data_insert['listcatid'] = $rowcontent['listcatid'];
-            $data_insert['author'] = $rowcontent['author'];
-            $data_insert['title'] = $rowcontent['title'];
-            $data_insert['alias'] = $rowcontent['alias'];
-            $data_insert['hometext'] = $rowcontent['hometext'];
-            $data_insert['homeimgfile'] = $rowcontent['homeimgfile'];
-            $data_insert['homeimgalt'] = $rowcontent['homeimgalt'];
-            $data_insert['homeimgthumb'] = $rowcontent['homeimgthumb'];
-            $data_insert['allowed_comm'] = $rowcontent['allowed_comm'];
-            $data_insert['instant_template'] = $rowcontent['instant_template'];
-
-            $rowcontent['id'] = $db->insert_id($sql, 'id', $data_insert);
+            $stmt = $db->prepare($sql);
+            $stmt->bindValue(':catid', $rowcontent['catid'], PDO::PARAM_INT);
+            $stmt->bindValue(':listcatid', $rowcontent['listcatid'], PDO::PARAM_STR);
+            $stmt->bindValue(':topicid', $rowcontent['topicid'], PDO::PARAM_INT);
+            $stmt->bindValue(':admin_id', $rowcontent['admin_id'], PDO::PARAM_INT);
+            $stmt->bindValue(':author', $rowcontent['author'], PDO::PARAM_STR);
+            $stmt->bindValue(':sourceid', $rowcontent['sourceid'], PDO::PARAM_INT);
+            $stmt->bindValue(':addtime', $rowcontent['addtime'], PDO::PARAM_INT);
+            $stmt->bindValue(':edittime', $rowcontent['edittime'], PDO::PARAM_INT);
+            $stmt->bindValue(':status', $rowcontent['status'], PDO::PARAM_INT);
+            $stmt->bindValue(':weight', $_weight, PDO::PARAM_INT);
+            $stmt->bindValue(':publtime', $rowcontent['publtime'], PDO::PARAM_INT);
+            $stmt->bindValue(':exptime', $rowcontent['exptime'], PDO::PARAM_INT);
+            $stmt->bindValue(':archive', $rowcontent['archive'], PDO::PARAM_INT);
+            $stmt->bindValue(':title', $rowcontent['title'], PDO::PARAM_STR);
+            $stmt->bindValue(':alias', $rowcontent['alias'], PDO::PARAM_STR);
+            $stmt->bindValue(':hometext', $rowcontent['hometext'], PDO::PARAM_STR);
+            $stmt->bindValue(':homeimgfile', $rowcontent['homeimgfile'], PDO::PARAM_STR);
+            $stmt->bindValue(':homeimgalt', $rowcontent['homeimgalt'], PDO::PARAM_STR);
+            $stmt->bindValue(':homeimgthumb', $rowcontent['homeimgthumb'], PDO::PARAM_INT);
+            $stmt->bindValue(':inhome', $rowcontent['inhome'], PDO::PARAM_INT);
+            $stmt->bindValue(':allowed_comm', $rowcontent['allowed_comm'], PDO::PARAM_STR);
+            $stmt->bindValue(':allowed_rating', $rowcontent['allowed_rating'], PDO::PARAM_INT);
+            $stmt->bindValue(':external_link', $rowcontent['external_link'], PDO::PARAM_INT);
+            $stmt->bindValue(':hitstotal', $rowcontent['hitstotal'], PDO::PARAM_INT);
+            $stmt->bindValue(':hitscm', $rowcontent['hitscm'], PDO::PARAM_INT);
+            $stmt->bindValue(':total_rating', $rowcontent['total_rating'], PDO::PARAM_INT);
+            $stmt->bindValue(':click_rating', $rowcontent['click_rating'], PDO::PARAM_INT);
+            $stmt->bindValue(':instant_active', $rowcontent['instant_active'], PDO::PARAM_INT);
+            $stmt->bindValue(':instant_template', $rowcontent['instant_template'], PDO::PARAM_STR);
+            $stmt->bindValue(':instant_creatauto', $rowcontent['instant_creatauto'], PDO::PARAM_INT);
+            $stmt->execute();
+            $rowcontent['id'] = (int) $db->lastInsertId();
             if ($rowcontent['id'] > 0) {
                 nv_insert_logs(NV_LANG_DATA, $module_name, $nv_Lang->getModule('content_add'), $rowcontent['title'], $admin_info['userid']);
                 $ct_query = [];
@@ -1144,7 +1246,7 @@ if ($is_submit_form) {
                     allowed_send, allowed_print, allowed_save, auto_nav, group_view, localization,
                     related_ids, related_pos, schema_type
                 ) VALUES (
-                    ' . $rowcontent['id'] . ',
+                    :id,
                     :titlesite,
                     :description,
                     :bodyhtml,
@@ -1153,38 +1255,51 @@ if ($is_submit_form) {
                     :sourcetext,
                     :files,
                     :reject_reason,
-                    ' . $rowcontent['imgposition'] . ',
+                    :imgposition,
                     :layout_func,
-                    ' . $rowcontent['copyright'] . ',
-                    ' . $rowcontent['allowed_send'] . ',
-                    ' . $rowcontent['allowed_print'] . ',
-                    ' . $rowcontent['allowed_save'] . ',
-                    ' . $rowcontent['auto_nav'] . ',
+                    :copyright,
+                    :allowed_send,
+                    :allowed_print,
+                    :allowed_save,
+                    :auto_nav,
                     :group_view,
                     :localization,
-                    ' . $db->quote($rowcontent['related_ids']) . ',
-                    ' . $rowcontent['related_pos'] . ',
-                    ' . $db->quote($rowcontent['schema_type']) . '
+                    :related_ids,
+                    :related_pos,
+                    :schema_type
                 )');
 
                 $voicedata = empty($rowcontent['voicedata']) ? '' : json_encode($rowcontent['voicedata'], NV_JSON_ENCODE);
                 $localization = empty($rowcontent['localversions']) ? '' : json_encode($rowcontent['localversions'], NV_JSON_ENCODE);
 
-                $stmt->bindParam(':files', $rowcontent['files'], PDO::PARAM_STR);
-                $stmt->bindParam(':reject_reason', $rowcontent['reject_reason'], PDO::PARAM_STR, strlen($rowcontent['reject_reason']));
-                $stmt->bindParam(':titlesite', $rowcontent['titlesite'], PDO::PARAM_STR);
-                $stmt->bindParam(':layout_func', $rowcontent['layout_func'], PDO::PARAM_STR);
-                $stmt->bindParam(':description', $rowcontent['description'], PDO::PARAM_STR, strlen($rowcontent['description']));
-                $stmt->bindParam(':bodyhtml', $rowcontent['bodyhtml'], PDO::PARAM_STR, strlen($rowcontent['bodyhtml']));
-                $stmt->bindParam(':voicedata', $voicedata, PDO::PARAM_STR, strlen($voicedata));
-                $stmt->bindParam(':keywords', $rowcontent['keywords'], PDO::PARAM_STR, strlen($rowcontent['keywords']));
-                $stmt->bindParam(':sourcetext', $rowcontent['sourcetext'], PDO::PARAM_STR, strlen($rowcontent['sourcetext']));
-                $stmt->bindParam(':group_view', $rowcontent['group_view'], PDO::PARAM_STR, strlen($rowcontent['group_view']));
-                $stmt->bindParam(':localization', $localization, PDO::PARAM_STR, strlen($localization));
+                $stmt->bindValue(':id', $rowcontent['id'], PDO::PARAM_INT);
+                $stmt->bindValue(':files', $rowcontent['files'], PDO::PARAM_STR);
+                $stmt->bindValue(':reject_reason', $rowcontent['reject_reason'], PDO::PARAM_STR);
+                $stmt->bindValue(':titlesite', $rowcontent['titlesite'], PDO::PARAM_STR);
+                $stmt->bindValue(':layout_func', $rowcontent['layout_func'], PDO::PARAM_STR);
+                $stmt->bindValue(':description', $rowcontent['description'], PDO::PARAM_STR);
+                $stmt->bindValue(':bodyhtml', $rowcontent['bodyhtml'], PDO::PARAM_STR);
+                $stmt->bindValue(':voicedata', $voicedata, PDO::PARAM_STR);
+                $stmt->bindValue(':keywords', $rowcontent['keywords'], PDO::PARAM_STR);
+                $stmt->bindValue(':sourcetext', $rowcontent['sourcetext'], PDO::PARAM_STR);
+                $stmt->bindValue(':group_view', $rowcontent['group_view'], PDO::PARAM_STR);
+                $stmt->bindValue(':localization', $localization, PDO::PARAM_STR);
+                $stmt->bindValue(':imgposition', $rowcontent['imgposition'], PDO::PARAM_INT);
+                $stmt->bindValue(':copyright', $rowcontent['copyright'], PDO::PARAM_INT);
+                $stmt->bindValue(':allowed_send', $rowcontent['allowed_send'], PDO::PARAM_INT);
+                $stmt->bindValue(':allowed_print', $rowcontent['allowed_print'], PDO::PARAM_INT);
+                $stmt->bindValue(':allowed_save', $rowcontent['allowed_save'], PDO::PARAM_INT);
+                $stmt->bindValue(':auto_nav', $rowcontent['auto_nav'], PDO::PARAM_INT);
+                $stmt->bindValue(':related_ids', $rowcontent['related_ids'], PDO::PARAM_STR);
+                $stmt->bindValue(':related_pos', $rowcontent['related_pos'], PDO::PARAM_INT);
+                $stmt->bindValue(':schema_type', $rowcontent['schema_type'], PDO::PARAM_STR);
                 $ct_query[] = (int) $stmt->execute();
 
                 foreach ($catids as $catid) {
-                    $ct_query[] = (int) $db->exec('INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . '_' . $catid . ' SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE id=' . $rowcontent['id']);
+                    $stmt_cp = $db->prepare('INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . '_' . $catid . ' SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE id = :id');
+                    $stmt_cp->bindValue(':id', $rowcontent['id'], PDO::PARAM_INT);
+                    $stmt_cp->execute();
+                    $ct_query[] = $stmt_cp->rowCount();
                 }
 
                 if (array_sum($ct_query) != count($ct_query)) {
@@ -1193,7 +1308,11 @@ if ($is_submit_form) {
                 unset($ct_query);
                 if ($module_config[$module_name]['elas_use'] == 1) {
                     /* connect to elasticsearch */
-                    $body_contents = $db_slave->query('SELECT bodyhtml, sourcetext, reject_reason, imgposition, copyright, allowed_send, allowed_print, allowed_save, auto_nav FROM ' . NV_PREFIXLANG . '_' . $module_data . '_detail where id=' . $rowcontent['id'])->fetch();
+                    $stmt_es = $db->prepare('SELECT bodyhtml, sourcetext, reject_reason, imgposition, copyright, allowed_send, allowed_print, allowed_save, auto_nav FROM ' . NV_PREFIXLANG . '_' . $module_data . '_detail WHERE id= :id');
+                    $stmt_es->bindValue(':id', $rowcontent['id'], PDO::PARAM_INT);
+                    $stmt_es->execute();
+                    $body_contents = $stmt_es->fetch();
+                    $stmt_es->closeCursor();
                     $rowcontent = array_merge($rowcontent, $body_contents);
 
                     $rowcontent['unsigned_title'] = nv_EncString($rowcontent['title']);
@@ -1208,7 +1327,11 @@ if ($is_submit_form) {
                 $error[] = $nv_Lang->getModule('errorsave');
             }
         } else {
-            $rowcontent_old = $db->query('SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows where id=' . $rowcontent['id'])->fetch();
+            $stmt = $db->prepare('SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE id= :id');
+            $stmt->bindValue(':id', $rowcontent['id'], PDO::PARAM_INT);
+            $stmt->execute();
+            $rowcontent_old = $stmt->fetch();
+            $stmt->closeCursor();
             if ($rowcontent_old['status'] > $global_code_defined['row_locked_status']) {
                 $rowcontent_old['status'] -= ($global_code_defined['row_locked_status'] + 1);
             }
@@ -1236,42 +1359,57 @@ if ($is_submit_form) {
             }
 
             // Cập nhật bảng rows
-            $sth = $db->prepare('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_rows SET
-                catid=' . (int) ($rowcontent['catid']) . ',
+            $sql = 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_rows SET
+                catid=:catid,
                 listcatid=:listcatid,
-                topicid=' . $rowcontent['topicid'] . ',
+                topicid=:topicid,
                 author=:author,
-                sourceid=' . (int) ($rowcontent['sourceid']) . ',
-                status=' . (int) ($rowcontent['status']) . ',
-                publtime=' . (int) ($rowcontent['publtime']) . ',
-                exptime=' . (int) ($rowcontent['exptime']) . ',
-                archive=' . (int) ($rowcontent['archive']) . ',
+                sourceid=:sourceid,
+                status=:status,
+                publtime=:publtime,
+                exptime=:exptime,
+                archive=:archive,
                 title=:title,
                 alias=:alias,
                 hometext=:hometext,
                 homeimgfile=:homeimgfile,
                 homeimgalt=:homeimgalt,
                 homeimgthumb=:homeimgthumb,
-                inhome=' . (int) ($rowcontent['inhome']) . ',
+                inhome=:inhome,
                 allowed_comm=:allowed_comm,
-                allowed_rating=' . (int) ($rowcontent['allowed_rating']) . ',
-                external_link=' . (int) ($rowcontent['external_link']) . ',
-                instant_active=' . (int) ($rowcontent['instant_active']) . ',
+                allowed_rating=:allowed_rating,
+                external_link=:external_link,
+                instant_active=:instant_active,
                 instant_template=:instant_template,
-                instant_creatauto=' . (int) ($rowcontent['instant_creatauto']) . ',
-                edittime=' . ($restore_id ? $rowcontent['historytime'] : NV_CURRENTTIME) . '
-            WHERE id =' . $rowcontent['id']);
+                instant_creatauto=:instant_creatauto,
+                edittime=:edittime
+            WHERE id = :id';
+            $sth = $db->prepare($sql);
 
-            $sth->bindParam(':listcatid', $rowcontent['listcatid'], PDO::PARAM_STR);
-            $sth->bindParam(':author', $rowcontent['author'], PDO::PARAM_STR);
-            $sth->bindParam(':title', $rowcontent['title'], PDO::PARAM_STR);
-            $sth->bindParam(':alias', $rowcontent['alias'], PDO::PARAM_STR);
-            $sth->bindParam(':hometext', $rowcontent['hometext'], PDO::PARAM_STR, strlen($rowcontent['hometext']));
-            $sth->bindParam(':homeimgfile', $rowcontent['homeimgfile'], PDO::PARAM_STR);
-            $sth->bindParam(':homeimgalt', $rowcontent['homeimgalt'], PDO::PARAM_STR);
-            $sth->bindParam(':homeimgthumb', $rowcontent['homeimgthumb'], PDO::PARAM_STR);
-            $sth->bindParam(':allowed_comm', $rowcontent['allowed_comm'], PDO::PARAM_STR);
-            $sth->bindParam(':instant_template', $rowcontent['instant_template'], PDO::PARAM_STR);
+            $sth->bindValue(':catid', $rowcontent['catid'], PDO::PARAM_INT);
+            $sth->bindValue(':listcatid', $rowcontent['listcatid'], PDO::PARAM_STR);
+            $sth->bindValue(':topicid', $rowcontent['topicid'], PDO::PARAM_INT);
+            $sth->bindValue(':author', $rowcontent['author'], PDO::PARAM_STR);
+            $sth->bindValue(':sourceid', $rowcontent['sourceid'], PDO::PARAM_INT);
+            $sth->bindValue(':status', $rowcontent['status'], PDO::PARAM_INT);
+            $sth->bindValue(':publtime', $rowcontent['publtime'], PDO::PARAM_INT);
+            $sth->bindValue(':exptime', $rowcontent['exptime'], PDO::PARAM_INT);
+            $sth->bindValue(':archive', $rowcontent['archive'], PDO::PARAM_INT);
+            $sth->bindValue(':title', $rowcontent['title'], PDO::PARAM_STR);
+            $sth->bindValue(':alias', $rowcontent['alias'], PDO::PARAM_STR);
+            $sth->bindValue(':hometext', $rowcontent['hometext'], PDO::PARAM_STR);
+            $sth->bindValue(':homeimgfile', $rowcontent['homeimgfile'], PDO::PARAM_STR);
+            $sth->bindValue(':homeimgalt', $rowcontent['homeimgalt'], PDO::PARAM_STR);
+            $sth->bindValue(':homeimgthumb', $rowcontent['homeimgthumb'], PDO::PARAM_INT);
+            $sth->bindValue(':inhome', $rowcontent['inhome'], PDO::PARAM_INT);
+            $sth->bindValue(':allowed_comm', $rowcontent['allowed_comm'], PDO::PARAM_STR);
+            $sth->bindValue(':allowed_rating', $rowcontent['allowed_rating'], PDO::PARAM_INT);
+            $sth->bindValue(':external_link', $rowcontent['external_link'], PDO::PARAM_INT);
+            $sth->bindValue(':instant_active', $rowcontent['instant_active'], PDO::PARAM_INT);
+            $sth->bindValue(':instant_template', $rowcontent['instant_template'], PDO::PARAM_STR);
+            $sth->bindValue(':instant_creatauto', $rowcontent['instant_creatauto'], PDO::PARAM_INT);
+            $sth->bindValue(':edittime', $restore_id ? $rowcontent['historytime'] : NV_CURRENTTIME, PDO::PARAM_INT);
+            $sth->bindValue(':id', $rowcontent['id'], PDO::PARAM_INT);
 
             if ($sth->execute()) {
                 nv_insert_logs(NV_LANG_DATA, $module_name, $nv_Lang->getModule('content_edit'), $rowcontent['title'], $admin_info['userid']);
@@ -1288,34 +1426,44 @@ if ($is_submit_form) {
                     sourcetext=:sourcetext,
                     files=:files,
                     reject_reason=:reject_reason,
-                    imgposition=' . (int) ($rowcontent['imgposition']) . ',
+                    imgposition=:imgposition,
                     layout_func=:layout_func,
-                    copyright=' . (int) ($rowcontent['copyright']) . ',
-                    allowed_send=' . (int) ($rowcontent['allowed_send']) . ',
-                    allowed_print=' . (int) ($rowcontent['allowed_print']) . ',
-                    allowed_save=' . (int) ($rowcontent['allowed_save']) . ',
-                    auto_nav=' . (int) ($rowcontent['auto_nav']) . ',
+                    copyright=:copyright,
+                    allowed_send=:allowed_send,
+                    allowed_print=:allowed_print,
+                    allowed_save=:allowed_save,
+                    auto_nav=:auto_nav,
                     group_view=:group_view,
                     localization=:localization,
-                    related_ids=' . $db->quote($rowcontent['related_ids']) . ',
-                    related_pos=' . $rowcontent['related_pos'] . ',
-                    schema_type=' . $db->quote($rowcontent['schema_type']) . '
-                WHERE id =' . $rowcontent['id']);
+                    related_ids=:related_ids,
+                    related_pos=:related_pos,
+                    schema_type=:schema_type
+                WHERE id = :id');
 
                 $voicedata = empty($rowcontent['voicedata']) ? '' : json_encode($rowcontent['voicedata'], NV_JSON_ENCODE);
                 $localization = empty($rowcontent['localversions']) ? '' : json_encode($rowcontent['localversions'], NV_JSON_ENCODE);
 
-                $sth->bindParam(':files', $rowcontent['files'], PDO::PARAM_STR);
-                $sth->bindParam(':reject_reason', $rowcontent['reject_reason'], PDO::PARAM_STR, strlen($rowcontent['reject_reason']));
-                $sth->bindParam(':titlesite', $rowcontent['titlesite'], PDO::PARAM_STR);
-                $sth->bindParam(':layout_func', $rowcontent['layout_func'], PDO::PARAM_STR, strlen($rowcontent['layout_func']));
-                $sth->bindParam(':description', $rowcontent['description'], PDO::PARAM_STR, strlen($rowcontent['description']));
-                $sth->bindParam(':bodyhtml', $rowcontent['bodyhtml'], PDO::PARAM_STR, strlen($rowcontent['bodyhtml']));
-                $sth->bindParam(':voicedata', $voicedata, PDO::PARAM_STR, strlen($voicedata));
-                $sth->bindParam(':keywords', $rowcontent['keywords'], PDO::PARAM_STR, strlen($rowcontent['keywords']));
-                $sth->bindParam(':sourcetext', $rowcontent['sourcetext'], PDO::PARAM_STR, strlen($rowcontent['sourcetext']));
-                $sth->bindParam(':group_view', $rowcontent['group_view'], PDO::PARAM_STR, strlen($rowcontent['group_view']));
-                $sth->bindParam(':localization', $localization, PDO::PARAM_STR, strlen($localization));
+                $sth->bindValue(':titlesite', $rowcontent['titlesite'], PDO::PARAM_STR);
+                $sth->bindValue(':description', $rowcontent['description'], PDO::PARAM_STR);
+                $sth->bindValue(':bodyhtml', $rowcontent['bodyhtml'], PDO::PARAM_STR);
+                $sth->bindValue(':voicedata', $voicedata, PDO::PARAM_STR);
+                $sth->bindValue(':keywords', $rowcontent['keywords'], PDO::PARAM_STR);
+                $sth->bindValue(':sourcetext', $rowcontent['sourcetext'], PDO::PARAM_STR);
+                $sth->bindValue(':files', $rowcontent['files'], PDO::PARAM_STR);
+                $sth->bindValue(':reject_reason', $rowcontent['reject_reason'], PDO::PARAM_STR);
+                $sth->bindValue(':imgposition', $rowcontent['imgposition'], PDO::PARAM_INT);
+                $sth->bindValue(':layout_func', $rowcontent['layout_func'], PDO::PARAM_STR);
+                $sth->bindValue(':copyright', $rowcontent['copyright'], PDO::PARAM_INT);
+                $sth->bindValue(':allowed_send', $rowcontent['allowed_send'], PDO::PARAM_INT);
+                $sth->bindValue(':allowed_print', $rowcontent['allowed_print'], PDO::PARAM_INT);
+                $sth->bindValue(':allowed_save', $rowcontent['allowed_save'], PDO::PARAM_INT);
+                $sth->bindValue(':auto_nav', $rowcontent['auto_nav'], PDO::PARAM_INT);
+                $sth->bindValue(':group_view', $rowcontent['group_view'], PDO::PARAM_STR);
+                $sth->bindValue(':localization', $localization, PDO::PARAM_STR);
+                $sth->bindValue(':related_ids', $rowcontent['related_ids'], PDO::PARAM_STR);
+                $sth->bindValue(':related_pos', $rowcontent['related_pos'], PDO::PARAM_INT);
+                $sth->bindValue(':schema_type', $rowcontent['schema_type'], PDO::PARAM_STR);
+                $sth->bindValue(':id', $rowcontent['id'], PDO::PARAM_INT);
 
                 $ct_query[] = (int) $sth->execute();
 
@@ -1326,7 +1474,10 @@ if ($is_submit_form) {
                     $array_cat_diff = array_diff($array_cat_old, $array_cat_new);
                     foreach ($array_cat_diff as $catid) {
                         if (!empty($catid)) {
-                            $ct_query[] = $db->exec('DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_' . $catid . ' WHERE id = ' . (int) ($rowcontent['id']));
+                            $stmt_del = $db->prepare('DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_' . $catid . ' WHERE id = :id');
+                            $stmt_del->bindValue(':id', $rowcontent['id'], PDO::PARAM_INT);
+                            $stmt_del->execute();
+                            $ct_query[] = $stmt_del->rowCount();
                         }
                     }
                 }
@@ -1334,8 +1485,14 @@ if ($is_submit_form) {
                 // Xóa bảng cat và thêm lại
                 foreach ($catids as $catid) {
                     if (!empty($catid)) {
-                        $db->exec('DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_' . $catid . ' WHERE id = ' . $rowcontent['id']);
-                        $ct_query[] = $db->exec('INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . '_' . $catid . ' SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE id=' . $rowcontent['id']);
+                        $stmt_del = $db->prepare('DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_' . $catid . ' WHERE id = :id');
+                        $stmt_del->bindValue(':id', $rowcontent['id'], PDO::PARAM_INT);
+                        $stmt_del->execute();
+
+                        $stmt_cp = $db->prepare('INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . '_' . $catid . ' SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE id = :id');
+                        $stmt_cp->bindValue(':id', $rowcontent['id'], PDO::PARAM_INT);
+                        $stmt_cp->execute();
+                        $ct_query[] = $stmt_cp->rowCount();
                     }
                 }
 
@@ -1345,7 +1502,11 @@ if ($is_submit_form) {
 
                 // Cập nhật bên ES
                 if ($module_config[$module_name]['elas_use'] == 1) {
-                    $body_contents = $db_slave->query('SELECT bodyhtml, sourcetext, imgposition, copyright, allowed_send, allowed_print, allowed_save, auto_nav FROM ' . NV_PREFIXLANG . '_' . $module_data . '_detail where id=' . $rowcontent['id'])->fetch();
+                    $stmt_es = $db->prepare('SELECT bodyhtml, sourcetext, imgposition, copyright, allowed_send, allowed_print, allowed_save, auto_nav FROM ' . NV_PREFIXLANG . '_' . $module_data . '_detail WHERE id = :id');
+                    $stmt_es->bindValue(':id', $rowcontent['id'], PDO::PARAM_INT);
+                    $stmt_es->execute();
+                    $body_contents = $stmt_es->fetch();
+                    $stmt_es->closeCursor();
                     $rowcontent = array_merge($rowcontent, $body_contents);
 
                     $rowcontent['unsigned_title'] = nv_EncString($rowcontent['title']);
@@ -1358,15 +1519,19 @@ if ($is_submit_form) {
                 }
 
                 // Sau khi sửa, tiến hành xóa bản ghi lưu trạng thái sửa trong csdl
-                $db->exec('DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_tmp WHERE new_id=' . $rowcontent['id'] . ' AND type=0');
+                $stmt_tmp = $db->prepare('DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_tmp WHERE new_id = :new_id AND type = 0');
+                $stmt_tmp->bindValue(':new_id', $rowcontent['id'], PDO::PARAM_INT);
+                $stmt_tmp->execute();
 
                 // Lưu lịch sử sửa bài viết nếu bật và đây không phải là hành động khôi phục
                 if (!empty($module_config[$module_name]['active_history']) and empty($restore_id)) {
                     $change_field = nv_save_history($old_rowcontent, $rowcontent);
                     if (empty($change_field)) {
                         // Trường hợp ấn sửa mà không thay đổi gì thì không cập nhật edittime mới lên
-                        $sql = 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_rows SET edittime=' . $old_rowcontent['edittime'] . ' WHERE id=' . $rowcontent['id'];
-                        $db->query($sql);
+                        $stmt_up = $db->prepare('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_rows SET edittime = :edittime WHERE id = :id');
+                        $stmt_up->bindValue(':edittime', $old_rowcontent['edittime'], PDO::PARAM_INT);
+                        $stmt_up->bindValue(':id', $rowcontent['id'], PDO::PARAM_INT);
+                        $stmt_up->execute();
                     }
                 }
             } else {
@@ -1380,12 +1545,19 @@ if ($is_submit_form) {
             $id_block_content_del = $rowcontent['mode'] == 'edit' ? array_diff($id_block_content, $id_block_content_post) : [];
 
             $array_block_fix = [];
+            $stmt_ins = $db->prepare('INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . '_block (bid, id, weight) VALUES (:bid, :id, 0)');
             foreach ($id_block_content_new as $bid_i) {
-                $db->query('INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . '_block (bid, id, weight) VALUES (' . $bid_i . ', ' . $rowcontent['id'] . ', 0)');
+                $stmt_ins->bindValue(':bid', $bid_i, PDO::PARAM_INT);
+                $stmt_ins->bindValue(':id', $rowcontent['id'], PDO::PARAM_INT);
+                $stmt_ins->execute();
                 $array_block_fix[] = $bid_i;
             }
+
+            $stmt_del = $db->prepare('DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_block WHERE id = :id AND bid = :bid');
             foreach ($id_block_content_del as $bid_i) {
-                $db->query('DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_block WHERE id = ' . $rowcontent['id'] . ' AND bid = ' . $bid_i);
+                $stmt_del->bindValue(':id', $rowcontent['id'], PDO::PARAM_INT);
+                $stmt_del->bindValue(':bid', $bid_i, PDO::PARAM_INT);
+                $stmt_del->execute();
                 $array_block_fix[] = $bid_i;
             }
 
@@ -1400,18 +1572,22 @@ if ($is_submit_form) {
                     if (!in_array($_tag, $array_tags_old, true)) {
                         $alias_i = ($module_config[$module_name]['tags_alias']) ? get_mod_alias($_tag) : change_alias_tags($_tag);
                         $alias_i = nv_strtolower($alias_i);
-                        $sth = $db->prepare('SELECT tid, alias, description, keywords FROM ' . NV_PREFIXLANG . '_' . $module_data . '_tags where alias= :alias OR FIND_IN_SET(:keyword, keywords)>0');
-                        $sth->bindParam(':alias', $alias_i, PDO::PARAM_STR);
-                        $sth->bindParam(':keyword', $_tag, PDO::PARAM_STR);
+                        $sth = $db->prepare('SELECT tid, alias, description, keywords FROM ' . NV_PREFIXLANG . '_' . $module_data . '_tags WHERE alias= :alias OR FIND_IN_SET(:keyword, keywords) > 0');
+                        $sth->bindValue(':alias', $alias_i, PDO::PARAM_STR);
+                        $sth->bindValue(':keyword', $_tag, PDO::PARAM_STR);
                         $sth->execute();
 
-                        [$tid, $alias, $tag_i] = $sth->fetch(3);
+                        $_row_tag = $sth->fetch();
+                        $sth->closeCursor();
+                        $tid = empty($_row_tag) ? 0 : (int) $_row_tag['tid'];
+                        $alias = empty($_row_tag) ? '' : $_row_tag['alias'];
+                        $tag_i = empty($_row_tag) ? '' : $_row_tag['keywords'];
                         if (empty($tid)) {
-                            $array_insert = [];
-                            $array_insert['alias'] = $alias_i;
-                            $array_insert['keyword'] = $_tag;
-
-                            $tid = $db->insert_id('INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . "_tags (numnews, alias, description, image, keywords) VALUES (1, :alias, '', '', :keyword)", 'tid', $array_insert);
+                            $stmt_ins = $db->prepare('INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . '_tags (numnews, alias, description, image, keywords) VALUES (1, :alias, \'\', \'\', :keyword)');
+                            $stmt_ins->bindValue(':alias', $alias_i, PDO::PARAM_STR);
+                            $stmt_ins->bindValue(':keyword', $_tag, PDO::PARAM_STR);
+                            $stmt_ins->execute();
+                            $tid = (int) $db->lastInsertId();
                         } else {
                             if ($alias != $alias_i) {
                                 if (!empty($tag_i)) {
@@ -1422,33 +1598,46 @@ if ($is_submit_form) {
                                     $tag_i2 = $_tag;
                                 }
                                 if ($tag_i != $tag_i2) {
-                                    $sth = $db->prepare('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_tags SET keywords= :keywords WHERE tid =' . $tid);
-                                    $sth->bindParam(':keywords', $tag_i2, PDO::PARAM_STR);
+                                    $sth = $db->prepare('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_tags SET keywords = :keywords WHERE tid = :tid');
+                                    $sth->bindValue(':keywords', $tag_i2, PDO::PARAM_STR);
+                                    $sth->bindValue(':tid', $tid, PDO::PARAM_INT);
                                     $sth->execute();
                                 }
                             }
-                            $db->query('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_tags SET numnews = numnews+1 WHERE tid = ' . $tid);
+                            $stmt_up = $db->prepare('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_tags SET numnews = numnews+1 WHERE tid = :tid');
+                            $stmt_up->bindValue(':tid', $tid, PDO::PARAM_INT);
+                            $stmt_up->execute();
                         }
 
                         // insert keyword for table _tags_id
                         try {
-                            $sth = $db->prepare('INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . '_tags_id (id, tid, keyword) VALUES (' . $rowcontent['id'] . ', ' . (int) $tid . ', :keyword)');
-                            $sth->bindParam(':keyword', $_tag, PDO::PARAM_STR);
+                            $sth = $db->prepare('INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . '_tags_id (id, tid, keyword) VALUES (:id, :tid, :keyword)');
+                            $sth->bindValue(':id', $rowcontent['id'], PDO::PARAM_INT);
+                            $sth->bindValue(':tid', $tid, PDO::PARAM_INT);
+                            $sth->bindValue(':keyword', $_tag, PDO::PARAM_STR);
                             $sth->execute();
                         } catch (Throwable $e) {
                             trigger_error($e);
-                            $sth = $db->prepare('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_tags_id SET keyword = :keyword WHERE id = ' . $rowcontent['id'] . ' AND tid=' . (int) $tid);
-                            $sth->bindParam(':keyword', $_tag, PDO::PARAM_STR);
+                            $sth = $db->prepare('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_tags_id SET keyword = :keyword WHERE id = :id AND tid = :tid');
+                            $sth->bindValue(':keyword', $_tag, PDO::PARAM_STR);
+                            $sth->bindValue(':id', $rowcontent['id'], PDO::PARAM_INT);
+                            $sth->bindValue(':tid', $tid, PDO::PARAM_INT);
                             $sth->execute();
                         }
                         unset($array_tags_old[$tid]);
                     }
                 }
 
+                $stmt_up = $db->prepare('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_tags SET numnews = numnews-1 WHERE tid = :tid');
+                $stmt_del = $db->prepare('DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_tags_id WHERE id = :id AND tid = :tid');
                 foreach ($array_tags_old as $tid => $_tag_i) {
                     if (!in_array($_tag_i, $tags, true)) {
-                        $db->query('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_tags SET numnews = numnews-1 WHERE tid = ' . $tid);
-                        $db->query('DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_tags_id WHERE id = ' . $rowcontent['id'] . ' AND tid=' . $tid);
+                        $stmt_up->bindValue(':tid', $tid, PDO::PARAM_INT);
+                        $stmt_up->execute();
+
+                        $stmt_del->bindValue(':id', $rowcontent['id'], PDO::PARAM_INT);
+                        $stmt_del->bindValue(':tid', $tid, PDO::PARAM_INT);
+                        $stmt_del->execute();
                     }
                 }
             }
@@ -1460,18 +1649,22 @@ if ($is_submit_form) {
             if (!empty($internal_authors_new)) {
                 $internal_authors_new = implode(',', $internal_authors_new);
                 $_query = $db->query('SELECT id, alias, pseudonym FROM ' . NV_PREFIXLANG . '_' . $module_data . '_author WHERE id IN (' . $internal_authors_new . ')');
-                $sth = $db->prepare('INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . '_authorlist (id, aid, alias, pseudonym) VALUES (' . $rowcontent['id'] . ', :aid, :alias, :pseudonym)');
-                while ($row = $_query->fetch()) {
-                    $sth->bindParam(':aid', $row['id'], PDO::PARAM_INT);
-                    $sth->bindParam(':alias', $row['alias'], PDO::PARAM_STR);
-                    $sth->bindParam(':pseudonym', $row['pseudonym'], PDO::PARAM_STR);
+                $sth = $db->prepare('INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . '_authorlist (id, aid, alias, pseudonym) VALUES (:id, :aid, :alias, :pseudonym)');
+                while ($_row = $_query->fetch()) {
+                    $sth->bindValue(':id', $rowcontent['id'], PDO::PARAM_INT);
+                    $sth->bindValue(':aid', $_row['id'], PDO::PARAM_INT);
+                    $sth->bindValue(':alias', $_row['alias'], PDO::PARAM_STR);
+                    $sth->bindValue(':pseudonym', $_row['pseudonym'], PDO::PARAM_STR);
                     $sth->execute();
                 }
+                $_query->closeCursor();
                 $db->query('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_author SET numnews = numnews+1 WHERE id IN (' . $internal_authors_new . ')');
             }
             if (!empty($internal_authors_del)) {
                 $internal_authors_del = implode(',', $internal_authors_del);
-                $db->query('DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_authorlist WHERE aid IN (' . $internal_authors_del . ') AND id = ' . $rowcontent['id']);
+                $stmt_del = $db->prepare('DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_authorlist WHERE aid IN (' . $internal_authors_del . ') AND id = :id');
+                $stmt_del->bindValue(':id', $rowcontent['id'], PDO::PARAM_INT);
+                $stmt_del->execute();
                 $db->query('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_author SET numnews = numnews-1 WHERE id IN (' . $internal_authors_del . ')');
             }
 
@@ -1479,9 +1672,11 @@ if ($is_submit_form) {
             Logs::saveLogStatusPost($rowcontent['id'], $rowcontent['status']);
 
             // Xóa trạng thái nháp
-            $sql = "DELETE FROM " . NV_PREFIXLANG . "_" . $module_data . "_tmp
-            WHERE type=1 AND admin_id=" . $admin_info['admin_id'] . " AND (new_id=" . $rowcontent['id'] . " OR uuid=" . $db->quote($rowcontent['uuid']) . ")";
-            $db->query($sql);
+            $stmt_tmp = $db->prepare('DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_tmp WHERE type = 1 AND admin_id = :admin_id AND (new_id = :new_id OR uuid = :uuid)');
+            $stmt_tmp->bindValue(':admin_id', $admin_info['admin_id'], PDO::PARAM_INT);
+            $stmt_tmp->bindValue(':new_id', $rowcontent['id'], PDO::PARAM_INT);
+            $stmt_tmp->bindValue(':uuid', $rowcontent['uuid'], PDO::PARAM_STR);
+            $stmt_tmp->execute();
 
             if (!empty($error_data)) {
                 $url = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&id=' . $rowcontent['id'];
@@ -1542,28 +1737,24 @@ $array_catid_in_row = explode(',', $rowcontent['listcatid']);
 $array_topic_module = [];
 $array_topic_module[0] = $nv_Lang->getModule('admin_topic_slnone');
 if (!empty($rowcontent['topicid'])) {
-    $db->sqlreset()
-        ->select('topicid, title')
-        ->from(NV_PREFIXLANG . '_' . $module_data . '_topics')
-        ->where('topicid=' . $rowcontent['topicid']);
-    $result = $db->query($db->sql());
+    $stmt = $db->prepare('SELECT topicid, title FROM ' . NV_PREFIXLANG . '_' . $module_data . '_topics WHERE topicid = :topicid');
+    $stmt->bindValue(':topicid', $rowcontent['topicid'], PDO::PARAM_INT);
+    $stmt->execute();
 
-    while ($_scratch = $result->fetch(3)) {
-        [$topicid_i, $title_i] = $_scratch;
-        unset($_scratch);
-        $array_topic_module[$topicid_i] = $title_i;
+    while ($_row = $stmt->fetch()) {
+        $array_topic_module[$_row['topicid']] = $_row['title'];
     }
+    $stmt->closeCursor();
 }
 
 $sql = 'SELECT sourceid, title FROM ' . NV_PREFIXLANG . '_' . $module_data . '_sources ORDER BY weight ASC';
 $result = $db->query($sql);
 $array_source_module = [];
 $array_source_module[0] = $nv_Lang->getModule('sources_sl');
-while ($_scratch = $result->fetch(3)) {
-    [$sourceid_i, $title_i] = $_scratch;
-    unset($_scratch);
-    $array_source_module[$sourceid_i] = $title_i;
+while ($_row = $result->fetch()) {
+    $array_source_module[$_row['sourceid']] = $_row['title'];
 }
+$result->closeCursor();
 
 if ($rowcontent['status'] == 1 and $rowcontent['publtime'] > NV_CURRENTTIME) {
     $array_cat_check_content = $array_cat_pub_content;
@@ -1590,12 +1781,14 @@ $nv_Lang->setGlobal('description_suggest_max', $nv_Lang->getGlobal('length_sugge
 $rowcontent['style_content_bodytext_required'] = $rowcontent['external_link'] ? 'hidden' : '';
 
 // Lấy danh sách báo lỗi
-$sql = 'SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_report WHERE newsid = ' . $rowcontent['id'] . ' ORDER BY post_time DESC';
-$result = $db->query($sql);
+$stmt = $db->prepare('SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_report WHERE newsid = :newsid ORDER BY post_time DESC');
+$stmt->bindValue(':newsid', $rowcontent['id'], PDO::PARAM_INT);
+$stmt->execute();
 $reportlist = [];
-while ($reportrow = $result->fetch()) {
+while ($reportrow = $stmt->fetch()) {
     $reportlist[$reportrow['id']] = $reportrow;
 }
+$stmt->closeCursor();
 
 $rid = $nv_Request->get_int('rid', 'get', 0);
 if (empty($reportlist) or !isset($reportlist[$rid])) {
@@ -1651,7 +1844,8 @@ $tpl->assign('TOTAL_NEWS_CURRENT', $total_news_current);
 $tpl->assign('REPORT_ID', $rid);
 $tpl->assign('REPORTLIST', $reportlist);
 $tpl->assign('SCHEMA_TYPES', $schema_types);
-$tpl->assign('AUTHORS_CHECKSS', csrf_create($csrf_key_author));
+$tpl->assign('CHECKSS', csrf_create($csrf_key));
+$tpl->assign('AUTHORS_CHECKSS', csrf_create($admin_info['admin_id'] . '_' . $module_name . '_authors'));
 
 // Xử lý bước đầu cho chuyên mục
 $list_cats = [];

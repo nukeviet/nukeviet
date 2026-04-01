@@ -24,34 +24,26 @@ $q = $nv_Request->get_title('q', 'post', '');
 $page = $nv_Request->get_page('page', 'post', 1);
 $per_page = 20;
 
-if (nv_strlen($q) < 2 or $nv_Request->get_title('checkss', 'post', '') != NV_CHECK_SESSION) {
+if (nv_strlen($q) < 2 or !csrf_check($nv_Request->get_string('checkss', 'post', ''), $csrf_key)) {
     nv_jsonOutput($respon);
 }
 
-$db_slave->sqlreset()
-    ->select('COUNT(tid)')
-    ->from(NV_PREFIXLANG . '_' . $module_data . '_tags')
-    ->where('alias LIKE :alias OR keywords LIKE :keywords');
+$sth_count = $db->prepare('SELECT COUNT(tid) FROM ' . NV_PREFIXLANG . '_' . $module_data . '_tags WHERE alias LIKE :alias OR keywords LIKE :keywords');
+$sth_count->bindValue(':alias', '%' . $q . '%', PDO::PARAM_STR);
+$sth_count->bindValue(':keywords', '%' . $q . '%', PDO::PARAM_STR);
+$sth_count->execute();
+$num_items = $sth_count->fetchColumn();
 
-$sth = $db_slave->prepare($db_slave->sql());
+$sth = $db->prepare('SELECT keywords FROM ' . NV_PREFIXLANG . '_' . $module_data . '_tags WHERE alias LIKE :alias OR keywords LIKE :keywords ORDER BY alias ASC LIMIT :limit OFFSET :offset');
 $sth->bindValue(':alias', '%' . $q . '%', PDO::PARAM_STR);
 $sth->bindValue(':keywords', '%' . $q . '%', PDO::PARAM_STR);
-$sth->execute();
-$num_items = $sth->fetchColumn();
-$sth->closeCursor();
-
-$db_slave->select('keywords')->order('alias ASC')->limit($per_page)->offset(($page - 1) * $per_page);
-
-$sth = $db_slave->prepare($db_slave->sql());
-$sth->bindValue(':alias', '%' . $q . '%', PDO::PARAM_STR);
-$sth->bindValue(':keywords', '%' . $q . '%', PDO::PARAM_STR);
+$sth->bindValue(':limit', $per_page, PDO::PARAM_INT);
+$sth->bindValue(':offset', ($page - 1) * $per_page, PDO::PARAM_INT);
 $sth->execute();
 
 $array_data = [];
-while ($_scratch = $sth->fetch(3)) {
-    [$keywords] = $_scratch;
-    unset($_scratch);
-    $keywords = explode(',', $keywords);
+while ($_row = $sth->fetch()) {
+    $keywords = explode(',', $_row['keywords']);
     foreach ($keywords as $_keyword) {
         $_keyword = nv_unhtmlspecialchars(str_replace('-', ' ', $_keyword));
         $respon['results'][] = [
@@ -60,6 +52,7 @@ while ($_scratch = $sth->fetch(3)) {
         ];
     }
 }
+$sth->closeCursor();
 
 $respon['pagination']['more'] = ($page * $per_page) < $num_items;
 nv_jsonOutput($respon);

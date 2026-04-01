@@ -14,9 +14,13 @@ if (!defined('NV_IS_FILE_ADMIN')) {
 }
 
 $check_permission = false;
-$rowcontent['id'] = $nv_Request->get_int('id', 'get,post', 0);
-if ($rowcontent['id'] > 0) {
-    $rowcontent = $db_slave->query('SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows where id=' . $rowcontent['id'])->fetch();
+$id = $nv_Request->get_int('id', 'get,post', 0);
+if ($id > 0) {
+    $stmt = $db->prepare('SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE id = :id');
+    $stmt->bindValue(':id', $id, PDO::PARAM_INT);
+    $stmt->execute();
+    $rowcontent = $stmt->fetch();
+    $stmt->closeCursor();
     if (!empty($rowcontent['id'])) {
         $arr_catid = explode(',', $rowcontent['listcatid']);
         if (defined('NV_IS_ADMIN_MODULE')) {

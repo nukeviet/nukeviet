@@ -16,7 +16,7 @@ if (!defined('NV_IS_FILE_ADMIN')) {
 $page_title = $nv_Lang->getModule('tags_manage');
 
 // Lấy tags từ nội dung bài viết
-if ($nv_Request->isset_request('getTagsFromContent', 'post') and $nv_Request->get_title('checkss', 'post', '') === NV_CHECK_SESSION) {
+if ($nv_Request->isset_request('getTagsFromContent', 'post') and csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
     $content = $nv_Request->get_title('content', 'post', '');
     $tags = nv_get_mod_tags($content);
     nv_jsonOutput($tags);
@@ -34,14 +34,23 @@ if ($nv_Request->isset_request('tagsIdDel', 'post')) {
         'text' => 'Error session!!!'
     ];
 
-    if (!empty($ids) and !empty($tid) and $checkss === NV_CHECK_SESSION) {
+    if (!empty($ids) and !empty($tid) and csrf_check($checkss, $csrf_key)) {
         nv_insert_logs(NV_LANG_DATA, $module_name, 'DEL_TAG_IDS', $tid . ': ' . $ids, $admin_info['userid']);
 
         $ids = preg_replace('/[^0-9\,]+/', '', $ids);
-        $db->query('DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_tags_id WHERE tid = ' . $tid . ' AND id IN (' . $ids . ')');
+        $stmt_del = $db->prepare('DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_tags_id WHERE tid = :tid AND id IN (' . $ids . ')');
+        $stmt_del->bindValue(':tid', $tid, PDO::PARAM_INT);
+        $stmt_del->execute();
 
-        $num = $db->query('SELECT COUNT(*) FROM ' . NV_PREFIXLANG . '_' . $module_data . '_tags_id where tid=' . $tid)->fetchColumn();
-        $db->query('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_tags SET numnews=' . $num . ' WHERE tid=' . $tid);
+        $stmt = $db->prepare('SELECT COUNT(*) FROM ' . NV_PREFIXLANG . '_' . $module_data . '_tags_id WHERE tid= :tid');
+        $stmt->bindValue(':tid', $tid, PDO::PARAM_INT);
+        $stmt->execute();
+        $num = $stmt->fetchColumn();
+
+        $stmt2 = $db->prepare('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_tags SET numnews= :numnews WHERE tid= :tid');
+        $stmt2->bindValue(':numnews', $num, PDO::PARAM_INT);
+        $stmt2->bindValue(':tid', $tid, PDO::PARAM_INT);
+        $stmt2->execute();
 
         $respon['success'] = 1;
     }
@@ -59,11 +68,13 @@ if ($nv_Request->isset_request('keywordEdit', 'post')) {
     $id = $nv_Request->get_int('id', 'post', 0);
     $tid = $nv_Request->get_int('tid', 'post', 0);
     $keyword = $nv_Request->get_title('keyword', 'post', '');
-    if (!empty($keyword) and $checkss === NV_CHECK_SESSION) {
+    if (!empty($keyword) and csrf_check($checkss, $csrf_key)) {
         nv_insert_logs(NV_LANG_DATA, $module_name, 'EDIT_TAGID_KEYWORD', $tid . '-' . $id . ': ' . $keyword, $admin_info['userid']);
 
-        $sth = $db->prepare('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_tags_id SET keyword = :keyword WHERE id=' . $id . ' AND tid =' . $tid);
-        $sth->bindParam(':keyword', $keyword, PDO::PARAM_STR);
+        $sth = $db->prepare('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_tags_id SET keyword = :keyword WHERE id= :id AND tid = :tid');
+        $sth->bindValue(':keyword', $keyword, PDO::PARAM_STR);
+        $sth->bindValue(':id', $id, PDO::PARAM_INT);
+        $sth->bindValue(':tid', $tid, PDO::PARAM_INT);
         $sth->execute();
 
         $respon['success'] = 1;
@@ -79,12 +90,14 @@ if ($nv_Request->isset_request('del_listid', 'post')) {
     $del_listid = $nv_Request->get_string('del_listid', 'post', '');
     $del_listid = array_map('intval', explode(',', $del_listid));
     $del_listid = array_filter($del_listid);
-    if (!empty($del_listid) and NV_CHECK_SESSION == $checkss) {
+    if (!empty($del_listid) and csrf_check($checkss, $csrf_key)) {
         $del_listid = implode(',', $del_listid);
         nv_insert_logs(NV_LANG_DATA, $module_name, 'DEL_TAGS', $del_listid, $admin_info['userid']);
 
-        $db->query('DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_tags WHERE tid IN (' . $del_listid . ')');
-        $db->query('DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_tags_id WHERE tid IN (' . $del_listid . ')');
+        $stmt_del1 = $db->prepare('DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_tags WHERE tid IN (' . $del_listid . ')');
+        $stmt_del1->execute();
+        $stmt_del2 = $db->prepare('DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_tags_id WHERE tid IN (' . $del_listid . ')');
+        $stmt_del2->execute();
 
         nv_jsonOutput([
             'success' => 1,
@@ -102,11 +115,16 @@ if ($nv_Request->isset_request('del_listid', 'post')) {
 if ($nv_Request->isset_request('del_tid', 'post')) {
     $tid = $nv_Request->get_int('del_tid', 'post', 0);
 
-    if (!empty($tid) and NV_CHECK_SESSION == $checkss) {
+    if (!empty($tid) and csrf_check($checkss, $csrf_key)) {
         nv_insert_logs(NV_LANG_DATA, $module_name, 'DEL_TAG', $tid, $admin_info['userid']);
 
-        $db->query('DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_tags WHERE tid=' . $tid);
-        $db->query('DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_tags_id WHERE tid=' . $tid);
+        $stmt = $db->prepare('DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_tags WHERE tid= :tid');
+        $stmt->bindValue(':tid', $tid, PDO::PARAM_INT);
+        $stmt->execute();
+
+        $stmt_id = $db->prepare('DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_tags_id WHERE tid= :tid');
+        $stmt_id->bindValue(':tid', $tid, PDO::PARAM_INT);
+        $stmt_id->execute();
 
         nv_jsonOutput([
             'success' => 1,
@@ -127,6 +145,11 @@ if ($nv_Request->isset_request('savetag', 'post')) {
         'mess' => 'Error!!!',
     ];
 
+    if (!csrf_check($checkss, $csrf_key)) {
+        $respon['mess'] = $nv_Lang->getGlobal('error_checkss');
+        nv_jsonOutput($respon);
+    }
+
     $title = $nv_Request->get_textarea('mtitle', '', NV_ALLOWED_HTML_TAGS, true);
     $list_tag = explode('<br />', strip_tags($title, '<br>'));
     $added = [];
@@ -140,9 +163,9 @@ if ($nv_Request->isset_request('savetag', 'post')) {
             if (!$dbexist) {
                 $title = nv_ucfirst($keywords);
                 $sth = $db->prepare('INSERT IGNORE INTO ' . NV_PREFIXLANG . '_' . $module_data . "_tags (title, alias, description, keywords) VALUES (:title, :alias, '', :keywords)");
-                $sth->bindParam(':title', $title, PDO::PARAM_STR);
-                $sth->bindParam(':alias', $alias, PDO::PARAM_STR);
-                $sth->bindParam(':keywords', $keywords, PDO::PARAM_STR);
+                $sth->bindValue(':title', $title, PDO::PARAM_STR);
+                $sth->bindValue(':alias', $alias, PDO::PARAM_STR);
+                $sth->bindValue(':keywords', $keywords, PDO::PARAM_STR);
                 $sth->execute();
                 $added[] = $keywords;
                 $aliases[] = $alias;
@@ -166,9 +189,19 @@ if ($nv_Request->isset_request('savetag', 'post')) {
 
 // Thêm tag hoặc sửa tag
 if ($nv_Request->isset_request('savecat', 'post')) {
+    if (!csrf_check($checkss, $csrf_key)) {
+        nv_jsonOutput([
+            'status' => 'error',
+            'mess' => $nv_Lang->getGlobal('error_checkss')
+        ]);
+    }
+
     $tid = $nv_Request->get_int('tid', 'post', 0);
     if (!empty($tid)) {
-        $num = $db->query('SELECT COUNT(*) FROM ' . NV_PREFIXLANG . '_' . $module_data . '_tags where tid=' . $tid)->fetchColumn();
+        $stmt = $db->prepare('SELECT COUNT(*) FROM ' . NV_PREFIXLANG . '_' . $module_data . '_tags WHERE tid= :tid');
+        $stmt->bindValue(':tid', $tid, PDO::PARAM_INT);
+        $stmt->execute();
+        $num = $stmt->fetchColumn();
         if (!$num) {
             nv_jsonOutput([
                 'status' => 'error',
@@ -221,16 +254,17 @@ if ($nv_Request->isset_request('savecat', 'post')) {
         $sth = $db->prepare('INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . '_tags (title, alias, description, image, keywords) VALUES (:title, :alias, :description, :image, :keywords)');
         $msg_lg = 'add_tags';
     } else {
-        $sth = $db->prepare('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_tags SET title = :title, alias = :alias, description = :description, image = :image, keywords = :keywords WHERE tid =' . $tid);
+        $sth = $db->prepare('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_tags SET title = :title, alias = :alias, description = :description, image = :image, keywords = :keywords WHERE tid = :tid');
+        $sth->bindValue(':tid', $tid, PDO::PARAM_INT);
         $msg_lg = 'edit_tags';
     }
 
     try {
-        $sth->bindParam(':title', $title, PDO::PARAM_STR);
-        $sth->bindParam(':alias', $alias, PDO::PARAM_STR);
-        $sth->bindParam(':description', $description, PDO::PARAM_STR);
-        $sth->bindParam(':image', $image, PDO::PARAM_STR);
-        $sth->bindParam(':keywords', $keywords, PDO::PARAM_STR);
+        $sth->bindValue(':title', $title, PDO::PARAM_STR);
+        $sth->bindValue(':alias', $alias, PDO::PARAM_STR);
+        $sth->bindValue(':description', $description, PDO::PARAM_STR);
+        $sth->bindValue(':image', $image, PDO::PARAM_STR);
+        $sth->bindValue(':keywords', $keywords, PDO::PARAM_STR);
         $sth->execute();
 
         nv_insert_logs(NV_LANG_DATA, $module_name, $msg_lg, $alias, $admin_info['userid']);
@@ -255,29 +289,39 @@ if ($nv_Request->isset_request('tagLinks', 'post')) {
         'text' => 'Error!!!',
         'html' => ''
     ];
-    if (NV_CHECK_SESSION !== $checkss) {
-        $respon['text'] = 'Wrong session!!!';
+    if (!csrf_check($checkss, $csrf_key)) {
+        $respon['text'] = $nv_Lang->getGlobal('error_checkss');
         nv_jsonOutput($respon);
     }
 
     $tid = $nv_Request->get_int('tid', 'post', 0);
-    [$tid, $keywords] = $db_slave->query('SELECT tid, keywords FROM ' . NV_PREFIXLANG . '_' . $module_data . '_tags where tid=' . $tid)->fetch(3);
-    if (empty($tid)) {
+    $stmt = $db->prepare('SELECT tid, keywords FROM ' . NV_PREFIXLANG . '_' . $module_data . '_tags WHERE tid= :tid');
+    $stmt->bindValue(':tid', $tid, PDO::PARAM_INT);
+    $stmt->execute();
+    $_rowtag = $stmt->fetch();
+
+    if (empty($_rowtag)) {
         $respon['text'] = 'Tag not exists!!!';
         nv_jsonOutput($respon);
     }
+    $tid = $_rowtag['tid'];
+    $keywords = $_rowtag['keywords'];
+    $stmt->closeCursor();
+
     $keywords = explode(',', $keywords);
     $keywords = array_map('trim', $keywords);
 
-    $sql = 'SELECT a.id, a.keyword, b.catid, b.title, b.alias FROM ' . NV_PREFIXLANG . '_' . $module_data . '_tags_id a,
-    ' . NV_PREFIXLANG . '_' . $module_data . '_rows b WHERE a.tid=' . $tid . ' AND a.id=b.id';
-    $result = $db_slave->query($sql);
+    $stmt2 = $db->prepare('SELECT a.id, a.keyword, b.catid, b.title, b.alias FROM ' . NV_PREFIXLANG . '_' . $module_data . '_tags_id a,
+    ' . NV_PREFIXLANG . '_' . $module_data . '_rows b WHERE a.tid= :tid AND a.id=b.id');
+    $stmt2->bindValue(':tid', $tid, PDO::PARAM_INT);
+    $stmt2->execute();
 
     $array = [];
-    while ($row = $result->fetch()) {
-        $row['url'] = nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $global_array_cat[$row['catid']]['alias'] . '/' . $row['alias'] . '-' . $row['id'] . $global_config['rewrite_exturl'], true);
-        $array[] = $row;
+    while ($_row = $stmt2->fetch()) {
+        $_row['url'] = nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $global_array_cat[$_row['catid']]['alias'] . '/' . $_row['alias'] . '-' . $_row['id'] . $global_config['rewrite_exturl'], true);
+        $array[] = $_row;
     }
+    $stmt2->closeCursor();
 
     $tpl = new \NukeViet\Template\NVSmarty();
     $tpl->setTemplateDir(get_module_tpl_dir('tags-link.tpl'));
@@ -289,6 +333,7 @@ if ($nv_Request->isset_request('tagLinks', 'post')) {
 
     $tpl->assign('TID', $tid);
     $tpl->assign('KEYWORDS', $keywords);
+    $tpl->assign('CHECKSS', csrf_create($csrf_key));
 
     $respon['success'] = 1;
     $respon['html'] = $tpl->fetch('tags-link.tpl');
@@ -301,17 +346,28 @@ if ($nv_Request->isset_request('loadEditTag', 'post')) {
         'success' => 0,
         'text' => 'Error!!!'
     ];
-    if (NV_CHECK_SESSION !== $checkss) {
-        $respon['text'] = 'Wrong session!!!';
+    if (!csrf_check($checkss, $csrf_key)) {
+        $respon['text'] = $nv_Lang->getGlobal('error_checkss');
         nv_jsonOutput($respon);
     }
 
     $tid = $nv_Request->get_int('tid', 'post', 0);
-    [$tid, $title, $description, $image, $keywords] = $db_slave->query('SELECT tid, title, description, image, keywords FROM ' . NV_PREFIXLANG . '_' . $module_data . '_tags where tid=' . $tid)->fetch(3);
-    if (empty($tid)) {
+    $stmt = $db->prepare('SELECT tid, title, description, image, keywords FROM ' . NV_PREFIXLANG . '_' . $module_data . '_tags WHERE tid= :tid');
+    $stmt->bindValue(':tid', $tid, PDO::PARAM_INT);
+    $stmt->execute();
+    $_rowtag = $stmt->fetch();
+
+    if (empty($_rowtag)) {
         $respon['text'] = 'Tag not exists!!!';
         nv_jsonOutput($respon);
     }
+
+    $tid = $_rowtag['tid'];
+    $title = $_rowtag['title'];
+    $description = $_rowtag['description'];
+    $image = $_rowtag['image'];
+    $keywords = $_rowtag['keywords'];
+    $stmt->closeCursor();
 
     $currentpath = NV_UPLOADS_DIR . '/' . $module_upload;
     if (!empty($image) and file_exists(NV_UPLOADS_REAL_DIR . '/' . $module_upload . '/' . $image)) {
@@ -348,43 +404,49 @@ if ($incomplete === true) {
 
 $q = $nv_Request->get_title('q', 'get', '');
 if (nv_strlen($q) >= 2) {
-    $where[] = "keywords LIKE '%" . $db_slave->dblikeescape($q) . "%'";
+    $where[] = 'keywords LIKE :q';
     $base_url .= '&amp;q=' . urlencode($q);
 }
 
 $where = !empty($where) ? implode(' AND ', $where) : '';
 
-$db_slave->sqlreset()
-    ->select('COUNT(tid)')
-    ->from(NV_PREFIXLANG . '_' . $module_data . '_tags')
-    ->where($where);
+$sql1 = 'SELECT COUNT(*) FROM ' . NV_PREFIXLANG . '_' . $module_data . '_tags';
+if (!empty($where)) {
+    $sql1 .= ' WHERE ' . $where;
+}
+$stmt1 = $db->prepare($sql1);
+if (nv_strlen($q) >= 2) {
+    $stmt1->bindValue(':q', '%' . $q . '%', PDO::PARAM_STR);
+}
+$stmt1->execute();
+$num_items = $stmt1->fetchColumn();
 
-$sth = $db_slave->prepare($db_slave->sql());
-$sth->execute();
-$num_items = $sth->fetchColumn();
 
-$db_slave->sqlreset()
-->select('*')
-->from(NV_PREFIXLANG . '_' . $module_data . '_tags')
-->where($where)
-->order('title ASC')
-->limit($per_page)
-->offset(($page - 1) * $per_page);
-
-$sth = $db_slave->prepare($db_slave->sql());
+$sql2 = 'SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_tags';
+if (!empty($where)) {
+    $sql2 .= ' WHERE ' . $where;
+}
+$sql2 .= ' ORDER BY title ASC LIMIT :limit OFFSET :offset';
+$sth = $db->prepare($sql2);
+if (nv_strlen($q) >= 2) {
+    $sth->bindValue(':q', '%' . $q . '%', PDO::PARAM_STR);
+}
+$sth->bindValue(':limit', $per_page, PDO::PARAM_INT);
+$sth->bindValue(':offset', ($page - 1) * $per_page, PDO::PARAM_INT);
 $sth->execute();
 
 $array = [];
-while ($row = $sth->fetch()) {
-    $row['link'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $module_info['alias']['tag'] . '/' . $row['alias'];
+$sths = $db->prepare('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_tags SET title = :title WHERE tid = :tid');
+while ($_row = $sth->fetch()) {
+    $_row['link'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $module_info['alias']['tag'] . '/' . $_row['alias'];
 
-    if (empty($row['title'])) {
-        $row['title'] = nv_ucfirst($row['keywords']);
-        $sths = $db_slave->prepare('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_tags SET title = :title WHERE tid =' . $row['tid']);
-        $sths->bindParam(':title', $row['title'], PDO::PARAM_STR);
+    if (empty($_row['title'])) {
+        $_row['title'] = nv_ucfirst($_row['keywords']);
+        $sths->bindValue(':title', $_row['title'], PDO::PARAM_STR);
+        $sths->bindValue(':tid', $_row['tid'], PDO::PARAM_INT);
         $sths->execute();
     }
-    $array[] = $row;
+    $array[] = $_row;
 }
 $sth->closeCursor();
 
@@ -407,6 +469,7 @@ $tpl->assign('NUM_ITEMS', $num_items);
 $tpl->assign('DATA', $array);
 $tpl->assign('PAGINATION', $generate_page);
 $tpl->assign('UPLOAD_PATH', NV_UPLOADS_DIR . '/' . $module_upload);
+$tpl->assign('CHECKSS', csrf_create($csrf_key));
 
 $contents = $tpl->fetch('tags.tpl');
 

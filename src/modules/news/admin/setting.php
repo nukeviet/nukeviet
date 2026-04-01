@@ -38,11 +38,11 @@ $buildSelectOptions = static function (array $source, $selected, ?callable $titl
 
 $updateConfigValues = static function (array $configValues) use ($db, $module_name): void {
     $sth = $db->prepare('UPDATE ' . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = '" . NV_LANG_DATA . "' AND module = :module_name AND config_name = :config_name");
-    $sth->bindParam(':module_name', $module_name, PDO::PARAM_STR);
+    $sth->bindValue(':module_name', $module_name, PDO::PARAM_STR);
 
     foreach ($configValues as $config_name => $config_value) {
-        $sth->bindParam(':config_name', $config_name, PDO::PARAM_STR);
-        $sth->bindParam(':config_value', $config_value, PDO::PARAM_STR);
+        $sth->bindValue(':config_name', $config_name, PDO::PARAM_STR);
+        $sth->bindValue(':config_value', $config_value, PDO::PARAM_STR);
         $sth->execute();
     }
 };
@@ -267,7 +267,13 @@ if ($can_config_post and $nv_Request->isset_request('savepost', 'post')) {
                 $delcontent = 0;
             }
 
-            $db->query('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_config_post SET addcontent = ' . $addcontent . ', postcontent = ' . $postcontent . ', editcontent = ' . $editcontent . ', delcontent = ' . $delcontent . ' WHERE group_id = ' . $group_id);
+            $stmt = $db->prepare('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_config_post SET addcontent = :addcontent, postcontent = :postcontent, editcontent = :editcontent, delcontent = :delcontent WHERE group_id = :group_id');
+            $stmt->bindValue(':addcontent', $addcontent, PDO::PARAM_INT);
+            $stmt->bindValue(':postcontent', $postcontent, PDO::PARAM_INT);
+            $stmt->bindValue(':editcontent', $editcontent, PDO::PARAM_INT);
+            $stmt->bindValue(':delcontent', $delcontent, PDO::PARAM_INT);
+            $stmt->bindValue(':group_id', $group_id, PDO::PARAM_INT);
+            $stmt->execute();
         }
 
         $nv_Cache->delMod('settings');
@@ -392,24 +398,25 @@ if ($can_config_post) {
     unset($groups_list[1], $groups_list[2], $groups_list[3], $groups_list[6]);
 
     $array_post_data = [];
-    $sql = 'SELECT group_id, addcontent, postcontent, editcontent, delcontent FROM ' . NV_PREFIXLANG . '_' . $module_data . '_config_post ORDER BY group_id ASC';
-    $result = $db->query($sql);
-    while ($_scratch = $result->fetch(3)) {
-        [$group_id, $addcontent, $postcontent, $editcontent, $delcontent] = $_scratch;
-        unset($_scratch);
-
+    $stmt = $db->prepare('SELECT group_id, addcontent, postcontent, editcontent, delcontent FROM ' . NV_PREFIXLANG . '_' . $module_data . '_config_post ORDER BY group_id ASC');
+    $stmt->execute();
+    while ($_row = $stmt->fetch()) {
+        $group_id = (int) $_row['group_id'];
         if (isset($groups_list[$group_id])) {
             $array_post_data[$group_id] = [
                 'group_id' => $group_id,
-                'addcontent' => (int) $addcontent,
-                'postcontent' => (int) $postcontent,
-                'editcontent' => (int) $editcontent,
-                'delcontent' => (int) $delcontent
+                'addcontent' => (int) $_row['addcontent'],
+                'postcontent' => (int) $_row['postcontent'],
+                'editcontent' => (int) $_row['editcontent'],
+                'delcontent' => (int) $_row['delcontent']
             ];
         } else {
-            $db->query('DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_config_post WHERE group_id = ' . (int) $group_id);
+            $stmt_del = $db->prepare('DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_config_post WHERE group_id = :group_id');
+            $stmt_del->bindValue(':group_id', $group_id, PDO::PARAM_INT);
+            $stmt_del->execute();
         }
     }
+    $stmt->closeCursor();
 
     foreach ($groups_list as $group_id => $group_title) {
         if (isset($array_post_data[$group_id])) {
@@ -422,7 +429,9 @@ if ($can_config_post) {
                 'editcontent' => 0,
                 'delcontent' => 0
             ];
-            $db->query('INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . "_config_post (group_id, addcontent, postcontent, editcontent, delcontent) VALUES ('" . $group_id . "', '0', '0', '0', '0')");
+            $stmt_ins = $db->prepare('INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . '_config_post (group_id, addcontent, postcontent, editcontent, delcontent) VALUES (:group_id, 0, 0, 0, 0)');
+            $stmt_ins->bindValue(':group_id', $group_id, PDO::PARAM_INT);
+            $stmt_ins->execute();
         }
 
         $post_config_rows[] = [

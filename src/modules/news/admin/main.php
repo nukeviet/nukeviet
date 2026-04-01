@@ -131,53 +131,82 @@ if ($NV_IS_ADMIN_MODULE and $module_config[$module_name]['order_articles'] and e
     // Sắp xếp bài đăng theo con số tự nhập
     $_weight_new = $nv_Request->get_int('order_articles_new', 'post', 0);
     $_id = $nv_Request->get_int('order_articles_id', 'post', 0);
-    $_order_articles = $nv_Request->get_title('order_articles_checkss', 'post', '');
-    if ($_id > 0 and $_weight_new > 0 and $_order_articles == md5($_id . NV_CHECK_SESSION)) {
-        $sql = 'SELECT weight, listcatid FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE id=' . $_id;
-        $_row1 = $db->query($sql)->fetch();
-        if (!empty($_row1)) {
-            nv_insert_logs(NV_LANG_DATA, $module_name, $nv_Lang->getModule('order_articles'), 'id ' . $_id . ' ' . $_row1['weight'] . ':' . $_weight_new, $admin_info['admin_id']);
+    
+    if ($_id > 0 and $_weight_new > 0) {
+        if (!csrf_check($nv_Request->get_title('order_articles_checkss', 'post', ''), $admin_info['admin_id'] . '_' . $module_name . '_' . $_id)) {
+            die($nv_Lang->getGlobal('error_checkss'));
+        }
 
-            $_weight1 = min($_weight_new, $_row1['weight']);
-            $_weight2 = max($_weight_new, $_row1['weight']);
-            if ($_weight_new > $_row1['weight']) {
-                // Kiểm tra không cho set weight lơn hơn maxweight
-                $maxweight = $db->query('SELECT max(weight) FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows')->fetchColumn();
-                if ($_weight_new > $maxweight) {
-                    $_weight_new = $maxweight;
+        $stmt = $db->prepare('SELECT weight, listcatid FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE id = :id');
+        $stmt->bindValue(':id', $_id, PDO::PARAM_INT);
+        $stmt->execute();
+        $_row1 = $stmt->fetch();
+        $stmt->closeCursor();
+            if (!empty($_row1)) {
+                nv_insert_logs(NV_LANG_DATA, $module_name, $nv_Lang->getModule('order_articles'), 'id ' . $_id . ' ' . $_row1['weight'] . ':' . $_weight_new, $admin_info['admin_id']);
+
+                $_weight1 = min($_weight_new, $_row1['weight']);
+                $_weight2 = max($_weight_new, $_row1['weight']);
+
+                if ($_weight_new > $_row1['weight']) {
+                    // Kiểm tra không cho set weight lơn hơn maxweight
+                    $maxweight = $db->query('SELECT max(weight) FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows')->fetchColumn();
+                    if ($_weight_new > $maxweight) {
+                        $_weight_new = $maxweight;
+                    }
                 }
-            }
 
-            $sql = 'SELECT id, listcatid FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE weight BETWEEN ' . $_weight1 . '  AND ' . $_weight2 . ' AND id!=' . $_id . ' ORDER BY weight ASC, publtime ASC';
-            $result = $db->query($sql);
-            $weight = $_weight1;
-            while ($_row2 = $result->fetch()) {
-                if ($weight == $_weight_new) {
+                $stmt = $db->prepare('SELECT id, listcatid FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE weight BETWEEN :weight1 AND :weight2 AND id != :id ORDER BY weight ASC, publtime ASC');
+                $stmt->bindValue(':weight1', $_weight1, PDO::PARAM_INT);
+                $stmt->bindValue(':weight2', $_weight2, PDO::PARAM_INT);
+                $stmt->bindValue(':id', $_id, PDO::PARAM_INT);
+                $stmt->execute();
+
+                $weight = $_weight1;
+                $stmt_update_rows = $db->prepare('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_rows SET weight = :weight WHERE id = :id');
+
+                while ($_row2 = $stmt->fetch()) {
+                    if ($weight == $_weight_new) {
+                        ++$weight;
+                    }
+                    $stmt_update_rows->bindValue(':weight', $weight, PDO::PARAM_INT);
+                    $stmt_update_rows->bindValue(':id', $_row2['id'], PDO::PARAM_INT);
+                    $stmt_update_rows->execute();
+
+                    $_array_catid = explode(',', $_row2['listcatid']);
+                    foreach ($_array_catid as $_catid) {
+                        try {
+                            $stmt_update_cat = $db->prepare('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_' . (int) $_catid . ' SET weight = :weight WHERE id = :id');
+                            $stmt_update_cat->bindValue(':weight', $weight, PDO::PARAM_INT);
+                            $stmt_update_cat->bindValue(':id', $_row2['id'], PDO::PARAM_INT);
+                            $stmt_update_cat->execute();
+                        } catch (Throwable $e) {
+                            trigger_error($e);
+                        }
+                    }
                     ++$weight;
                 }
-                $db->query('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_rows SET weight=' . $weight . ' WHERE id=' . $_row2['id']);
-                $_array_catid = explode(',', $_row2['listcatid']);
+                $stmt->closeCursor();
+
+                $stmt_update = $db->prepare('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_rows SET weight = :weight WHERE id = :id');
+                $stmt_update->bindValue(':weight', $_weight_new, PDO::PARAM_INT);
+                $stmt_update->bindValue(':id', $_id, PDO::PARAM_INT);
+                $stmt_update->execute();
+
+                $_array_catid = explode(',', $_row1['listcatid']);
                 foreach ($_array_catid as $_catid) {
                     try {
-                        $db->query('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_' . (int) $_catid . ' SET weight=' . $weight . ' WHERE id=' . $_row2['id']);
+                        $stmt_update_cat = $db->prepare('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_' . (int) $_catid . ' SET weight = :weight WHERE id = :id');
+                        $stmt_update_cat->bindValue(':weight', $_weight_new, PDO::PARAM_INT);
+                        $stmt_update_cat->bindValue(':id', $_id, PDO::PARAM_INT);
+                        $stmt_update_cat->execute();
                     } catch (Throwable $e) {
                         trigger_error($e);
                     }
                 }
-                ++$weight;
+                $nv_Cache->delMod($module_name);
+                nv_htmlOutput('OK');
             }
-            $db->query('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_rows SET weight=' . $_weight_new . ' WHERE id=' . $_id);
-            $_array_catid = explode(',', $_row1['listcatid']);
-            foreach ($_array_catid as $_catid) {
-                try {
-                    $db->query('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_' . (int) $_catid . ' SET weight=' . $_weight_new . ' WHERE id=' . $_id);
-                } catch (Throwable $e) {
-                    trigger_error($e);
-                }
-            }
-            $nv_Cache->delMod($module_name);
-            nv_htmlOutput('OK');
-        }
     }
 }
 
@@ -304,7 +333,7 @@ $array_list_action = [
 if (defined('NV_IS_ADMIN_MODULE')) {
     $array_list_action['declined'] = $nv_Lang->getModule('declined');
     $array_list_action['block'] = $nv_Lang->getModule('addtoblock');
-    $array_list_action['addtotopics'] = $nv_Lang->getModule('addtotopics');
+    $array_list_action['topics-add'] = $nv_Lang->getModule('topics-add');
     $array_list_action['move'] = $nv_Lang->getModule('move');
 } elseif ($check_declined) { // Neu co quyen duyet bai thi
     $array_list_action['declined'] = $nv_Lang->getModule('declined');
@@ -318,7 +347,7 @@ if (!empty($module_config[$module_name]['elas_use'])) {
 
     $search_elastic = [];
     // Tim kiem theo bodytext,author,title
-    $key_elastic_search = nv_EncString($db_slave->dblikeescape($array_search['q']));
+    $key_elastic_search = nv_EncString($db->dblikeescape($array_search['q']));
 
     if ($array_search['stype'] == 'bodytext' or $array_search['stype'] == 'author' or $array_search['stype'] == 'title') {
         if ($array_search['stype'] == 'bodytext') {
@@ -339,23 +368,20 @@ if (!empty($module_config[$module_name]['elas_use'])) {
                 ]
             ];
             // Tim bai viet co internal author trung voi ket qua tim kiem
-            $db->sqlreset()
-            ->select('id')
-            ->from(NV_PREFIXLANG . '_' . $module_data . '_authorlist')
-            ->where('alias LIKE :q_alias OR pseudonym LIKE :q_pseudonym');
-
-            $sth = $db->prepare($db->sql());
-            $sth->bindValue(':q_alias', '%' . $db_slave->dblikeescape($array_search['qhtml']) . '%', PDO::PARAM_STR);
-            $sth->bindValue(':q_pseudonym', '%' . $db_slave->dblikeescape($array_search['qhtml']) . '%', PDO::PARAM_STR);
+            $sql = "SELECT id FROM " . NV_PREFIXLANG . "_" . $module_data . "_authorlist WHERE alias LIKE :q_alias OR pseudonym LIKE :q_pseudonym";
+            $sth = $db->prepare($sql);
+            $sth->bindValue(':q_alias', '%' . $db->dblikeescape($array_search['qhtml']) . '%', PDO::PARAM_STR);
+            $sth->bindValue(':q_pseudonym', '%' . $db->dblikeescape($array_search['qhtml']) . '%', PDO::PARAM_STR);
             $sth->execute();
             $match = [];
-            while ($id_search = $sth->fetch(3)) {
+            while ($_id_search = $sth->fetch()) {
                 $match[] = [
                     'match' => [
-                        'id' => $id_search[0]
+                        'id' => $_id_search['id']
                     ]
                 ];
             }
+            $sth->closeCursor();
             if (empty($match)) {
                 $match[] = [
                     'match' => [
@@ -383,29 +409,25 @@ if (!empty($module_config[$module_name]['elas_use'])) {
         $search_elastic = [
             'should' => [
                 'match' => [
-                    'sourcetext' => $db_slave->dblikeescape($qurl)
+                    'sourcetext' => $db->dblikeescape($qurl)
                 ]
             ]
         ];
     } elseif ($array_search['stype'] == 'admin_id') {
-        $db->sqlreset()
-        ->select('userid')
-        ->from(NV_USERS_GLOBALTABLE)
-        ->where('username LIKE :q_username OR first_name LIKE :q_first_name');
-
-        $sth = $db->prepare($db->sql());
-        $sth->bindValue(':q_username', '%' . $db_slave->dblikeescape($array_search['qhtml']) . '%', PDO::PARAM_STR);
-        $sth->bindValue(':q_first_name', '%' . $db_slave->dblikeescape($array_search['qhtml']) . '%', PDO::PARAM_STR);
+        $sql = "SELECT userid FROM " . NV_USERS_GLOBALTABLE . " WHERE username LIKE :q_username OR first_name LIKE :q_first_name";
+        $sth = $db->prepare($sql);
+        $sth->bindValue(':q_username', '%' . $db->dblikeescape($array_search['qhtml']) . '%', PDO::PARAM_STR);
+        $sth->bindValue(':q_first_name', '%' . $db->dblikeescape($array_search['qhtml']) . '%', PDO::PARAM_STR);
         $sth->execute();
-        $admin_id_search = [];
         $match = [];
-        while ($admin_id_search = $sth->fetch(3)) {
+        while ($_admin_id_search = $sth->fetch()) {
             $match[] = [
                 'match' => [
-                    'admin_id' => $admin_id_search[0]
+                    'admin_id' => $_admin_id_search['userid']
                 ]
             ];
         }
+        $sth->closeCursor();
         $result = count($match);
         if ($result == 0) {
             $match[] = [
@@ -417,7 +439,7 @@ if (!empty($module_config[$module_name]['elas_use'])) {
         $search_elastic_user['filter']['or'] = $match;
         $search_elastic = array_merge($search_elastic, $search_elastic_user);
     } else {
-        $key_search = nv_EncString($db_slave->dblikeescape($array_search['q']));
+        $key_search = nv_EncString($db->dblikeescape($array_search['q']));
         $search_elastic = [
             'should' => [
                 'multi_match' => [
@@ -437,47 +459,40 @@ if (!empty($module_config[$module_name]['elas_use'])) {
             ]
         ];
         // Tim bai viet co internal author trung voi ket qua tim kiem
-        $db->sqlreset()
-        ->select('id')
-        ->from(NV_PREFIXLANG . '_' . $module_data . '_authorlist')
-        ->where('alias LIKE :q_alias OR pseudonym LIKE :q_pseudonym');
-
-        $sth = $db->prepare($db->sql());
-        $sth->bindValue(':q_alias', '%' . $db_slave->dblikeescape($array_search['qhtml']) . '%', PDO::PARAM_STR);
-        $sth->bindValue(':q_pseudonym', '%' . $db_slave->dblikeescape($array_search['qhtml']) . '%', PDO::PARAM_STR);
+        $sql = "SELECT id FROM " . NV_PREFIXLANG . "_" . $module_data . "_authorlist WHERE alias LIKE :q_alias OR pseudonym LIKE :q_pseudonym";
+        $sth = $db->prepare($sql);
+        $sth->bindValue(':q_alias', '%' . $db->dblikeescape($array_search['qhtml']) . '%', PDO::PARAM_STR);
+        $sth->bindValue(':q_pseudonym', '%' . $db->dblikeescape($array_search['qhtml']) . '%', PDO::PARAM_STR);
         $sth->execute();
         $match = [];
-        while ($id_search = $sth->fetch(3)) {
+        while ($_id_search = $sth->fetch()) {
             $match[] = [
                 'match' => [
-                    'id' => $id_search[0]
+                    'id' => $_id_search['id']
                 ]
             ];
         }
+        $sth->closeCursor();
         if (!empty($match)) {
             $search_elastic_user['filter']['or'] = $match;
             $search_elastic = array_merge($search_elastic, $search_elastic_user);
         }
-        // tim tat ca cac admin_id c� username=$db_slave->dblikeescape($array_search['qhtml']) ho?c first_name=$db_slave->dblikeescape($array_search['qhtml'])
-        $db->sqlreset()
-        ->select('userid')
-        ->from(NV_USERS_GLOBALTABLE)
-        ->where('username LIKE :q_username OR first_name LIKE :q_first_name');
-
-        $sth = $db->prepare($db->sql());
-        $sth->bindValue(':q_username', '%' . $db_slave->dblikeescape($array_search['qhtml']) . '%', PDO::PARAM_STR);
-        $sth->bindValue(':q_first_name', '%' . $db_slave->dblikeescape($array_search['qhtml']) . '%', PDO::PARAM_STR);
+        // tim tat ca cac admin_id c username=$db->dblikeescape($array_search['qhtml']) ho?c first_name=$db->dblikeescape($array_search['qhtml'])
+        $sql = "SELECT userid FROM " . NV_USERS_GLOBALTABLE . " WHERE username LIKE :q_username OR first_name LIKE :q_first_name";
+        $sth = $db->prepare($sql);
+        $sth->bindValue(':q_username', '%' . $db->dblikeescape($array_search['qhtml']) . '%', PDO::PARAM_STR);
+        $sth->bindValue(':q_first_name', '%' . $db->dblikeescape($array_search['qhtml']) . '%', PDO::PARAM_STR);
         $sth->execute();
-        $admin_id_search = [];
-        // search elastic theo admin_id v?a t�m dc
+        // search elastic theo admin_id v?a tm dc
         $match = [];
-        while ($admin_id_search = $sth->fetch(3)) {
+        while ($_admin_id_search = $sth->fetch()) {
             $match[] = [
                 'match' => [
-                    'admin_id' => $admin_id_search[0]
+                    'admin_id' => $_admin_id_search['userid']
                 ]
             ];
         }
+        $sth->closeCursor();
         $result = count($match);
 
         if ($result > 0) {
@@ -692,17 +707,23 @@ if (!empty($module_config[$module_name]['elas_use'])) {
 } else {
     $where = [];
     $search_user = $search_author = false;
+    $db_binds = [];
 
     if (!empty($array_search['q'])) {
         if ($array_search['stype'] == 'bodytext') {
             $from .= ' INNER JOIN ' . NV_PREFIXLANG . '_' . $module_data . '_detail c ON (r.id=c.id)';
-            $where[] = "c.bodyhtml LIKE '%" . $db_slave->dblikeescape($array_search['q']) . "%'";
+            $where[] = "c.bodyhtml LIKE :q";
+            $db_binds[':q'] = '%' . $array_search['q'] . '%';
         } elseif ($array_search['stype'] == 'title') {
-            $where[] = "r.title LIKE '%" . $db_slave->dblikeescape($array_search['qhtml']) . "%'";
+            $where[] = "r.title LIKE :qhtml";
+            $db_binds[':qhtml'] = '%' . $array_search['qhtml'] . '%';
         } elseif ($array_search['stype'] == 'author') {
-            $where[] = "(r.author LIKE '%" . $db_slave->dblikeescape($array_search['qhtml']) . "%'
-            OR a.alias LIKE '%" . $db_slave->dblikeescape($array_search['qhtml']) . "%'
-            OR a.pseudonym LIKE '%" . $db_slave->dblikeescape($array_search['qhtml']) . "%')";
+            $where[] = "(r.author LIKE :qhtml
+            OR a.alias LIKE :qhtml_alias
+            OR a.pseudonym LIKE :qhtml_pseudo)";
+            $db_binds[':qhtml'] = '%' . $array_search['qhtml'] . '%';
+            $db_binds[':qhtml_alias'] = '%' . $array_search['qhtml'] . '%';
+            $db_binds[':qhtml_pseudo'] = '%' . $array_search['qhtml'] . '%';
             $search_author = true;
         } elseif ($array_search['stype'] == 'sourcetext') {
             $qurl = $array_search['q'];
@@ -710,19 +731,30 @@ if (!empty($module_config[$module_name]['elas_use'])) {
             if (isset($url_info['scheme']) and isset($url_info['host'])) {
                 $qurl = $url_info['scheme'] . '://' . $url_info['host'];
             }
-            $where[] = 'r.sourceid IN (SELECT sourceid FROM ' . NV_PREFIXLANG . '_' . $module_data . "_sources WHERE title like '%" . $db_slave->dblikeescape($array_search['q']) . "%' OR link like '%" . $db_slave->dblikeescape($qurl) . "%')";
+            $where[] = 'r.sourceid IN (SELECT sourceid FROM ' . NV_PREFIXLANG . '_' . $module_data . "_sources WHERE title LIKE :q OR link LIKE :qurl)";
+            $db_binds[':q'] = '%' . $array_search['q'] . '%';
+            $db_binds[':qurl'] = '%' . $qurl . '%';
         } elseif ($array_search['stype'] == 'admin_id') {
-            $where[] = "(u.username LIKE '%" . $db_slave->dblikeescape($array_search['qhtml']) . "%' OR u.first_name LIKE '%" . $db_slave->dblikeescape($array_search['qhtml']) . "%')";
+            $where[] = "(u.username LIKE :qhtml_user OR u.first_name LIKE :qhtml_first)";
+            $db_binds[':qhtml_user'] = '%' . $array_search['qhtml'] . '%';
+            $db_binds[':qhtml_first'] = '%' . $array_search['qhtml'] . '%';
             $search_user = true;
         } else {
             $from .= ' INNER JOIN ' . NV_PREFIXLANG . '_' . $module_data . '_detail c ON (r.id=c.id)';
-            $where[] = "(r.author LIKE '%" . $db_slave->dblikeescape($array_search['qhtml']) . "%'
-            OR r.title LIKE '%" . $db_slave->dblikeescape($array_search['qhtml']) . "%'
-            OR c.bodyhtml LIKE '%" . $db_slave->dblikeescape($array_search['q']) . "%'
-            OR u.username LIKE '%" . $db_slave->dblikeescape($array_search['qhtml']) . "%'
-            OR u.first_name LIKE '%" . $db_slave->dblikeescape($array_search['qhtml']) . "%'
-            OR a.alias LIKE '%" . $db_slave->dblikeescape($array_search['qhtml']) . "%'
-            OR a.pseudonym LIKE '%" . $db_slave->dblikeescape($array_search['qhtml']) . "%')";
+            $where[] = "(r.author LIKE :qhtml_author
+            OR r.title LIKE :qhtml_title
+            OR c.bodyhtml LIKE :q
+            OR u.username LIKE :qhtml_user
+            OR u.first_name LIKE :qhtml_first
+            OR a.alias LIKE :qhtml_alias
+            OR a.pseudonym LIKE :qhtml_pseudo)";
+            $db_binds[':qhtml_author'] = '%' . $array_search['qhtml'] . '%';
+            $db_binds[':qhtml_title'] = '%' . $array_search['qhtml'] . '%';
+            $db_binds[':q'] = '%' . $array_search['q'] . '%';
+            $db_binds[':qhtml_user'] = '%' . $array_search['qhtml'] . '%';
+            $db_binds[':qhtml_first'] = '%' . $array_search['qhtml'] . '%';
+            $db_binds[':qhtml_alias'] = '%' . $array_search['qhtml'] . '%';
+            $db_binds[':qhtml_pseudo'] = '%' . $array_search['qhtml'] . '%';
             $search_user = true;
             $search_author = true;
         }
@@ -730,31 +762,38 @@ if (!empty($module_config[$module_name]['elas_use'])) {
 
     // Thời gian từ
     if (!empty($array_search['t_addtime_from'])) {
-        $where[] = 'r.addtime >= ' . $array_search['t_addtime_from'];
+        $where[] = 'r.addtime >= :t_addtime_from';
+        $db_binds[':t_addtime_from'] = $array_search['t_addtime_from'];
     }
     if (!empty($array_search['t_publtime_from'])) {
-        $where[] = 'r.publtime >= ' . $array_search['t_publtime_from'];
+        $where[] = 'r.publtime >= :t_publtime_from';
+        $db_binds[':t_publtime_from'] = $array_search['t_publtime_from'];
     }
     if (!empty($array_search['t_exptime_from'])) {
-        $where[] = 'r.exptime >= ' . $array_search['t_exptime_from'];
+        $where[] = 'r.exptime >= :t_exptime_from';
+        $db_binds[':t_exptime_from'] = $array_search['t_exptime_from'];
     }
 
     // Thời gian đến
     if (!empty($array_search['t_addtime_to'])) {
-        $where[] = 'r.addtime <= ' . $array_search['t_addtime_to'];
+        $where[] = 'r.addtime <= :t_addtime_to';
+        $db_binds[':t_addtime_to'] = $array_search['t_addtime_to'];
     }
     if (!empty($array_search['t_publtime_to'])) {
-        $where[] = 'r.publtime <= ' . $array_search['t_publtime_to'];
+        $where[] = 'r.publtime <= :t_publtime_to';
+        $db_binds[':t_publtime_to'] = $array_search['t_publtime_to'];
     }
     if (!empty($array_search['t_exptime_to'])) {
-        $where[] = 'r.exptime <= ' . $array_search['t_exptime_to'];
+        $where[] = 'r.exptime <= :t_exptime_to';
+        $db_binds[':t_exptime_to'] = $array_search['t_exptime_to'];
     }
 
     if ($array_search['sstatus'] != -1) {
         if ($array_search['sstatus'] > $global_code_defined['row_locked_status']) {
             $where[] = 'r.status > ' . $global_code_defined['row_locked_status'];
         } else {
-            $where[] = 'r.status = ' . $array_search['sstatus'];
+            $where[] = 'r.status = :sstatus';
+            $db_binds[':sstatus'] = $array_search['sstatus'];
         }
     }
     if ($search_user) {
@@ -791,16 +830,22 @@ if (!empty($module_config[$module_name]['elas_use'])) {
         'keywords' => ''
     ];
 
-    $db_slave->sqlreset()->select('COUNT(*)')->from($from);
+    $sql_count = 'SELECT COUNT(*) FROM ' . $from;
+    $sql_conditions = '';
     if (!empty($where)) {
-        $db_slave->where(implode(' AND ', $where));
+        $sql_conditions = ' WHERE ' . implode(' AND ', $where);
     }
+    $sql_count .= $sql_conditions;
 
-    $_sql = $db_slave->sql();
-    $num_checkss = md5($num_items . NV_CHECK_SESSION . $_sql);
+    $num_checkss = md5($num_items . $csrf_key . $sql_count . json_encode($db_binds));
     if ($num_checkss != $nv_Request->get_string('num_checkss', 'get', '')) {
-        $num_items = $db_slave->query($_sql)->fetchColumn();
-        $num_checkss = md5($num_items . NV_CHECK_SESSION . $_sql);
+        $stmt_count = $db->prepare($sql_count);
+        foreach ($db_binds as $key => $val) {
+            $stmt_count->bindValue($key, $val, is_int($val) ? PDO::PARAM_INT : PDO::PARAM_STR);
+        }
+        $stmt_count->execute();
+        $num_items = $stmt_count->fetchColumn();
+        $num_checkss = md5($num_items . $csrf_key . $sql_count . json_encode($db_binds));
     }
     $base_url .= '&amp;num_items=' . $num_items . '&amp;num_checkss=' . $num_checkss;
 
@@ -810,20 +855,21 @@ if (!empty($module_config[$module_name]['elas_use'])) {
         $order = ($module_config[$module_name]['order_articles'] == 1 ? 'r.weight' : 'r.publtime') . ' DESC';
     }
 
-    $db_slave->select('r.id, r.catid, r.listcatid, r.admin_id, r.title, r.alias, r.status, r.weight, r.addtime, r.edittime, r.publtime, r.exptime, r.hitstotal, r.hitscm, r.admin_id, r.author')
-    ->order($order)
-    ->limit($per_page)
-    ->offset(($page - 1) * $per_page);
-    $result = $db_slave->query($db_slave->sql());
+    $sql_select = 'SELECT r.id, r.catid, r.listcatid, r.admin_id as post_id, r.title, r.alias, r.status, r.weight, r.addtime, r.edittime, r.publtime, r.exptime, r.hitstotal, r.hitscm, r.admin_id as _userid, r.author FROM ' . $from . $sql_conditions . ' ORDER BY ' . $order . ' LIMIT :limit OFFSET :offset';
+    $stmt = $db->prepare($sql_select);
+    foreach ($db_binds as $key => $val) {
+        $stmt->bindValue($key, $val, is_int($val) ? PDO::PARAM_INT : PDO::PARAM_STR);
+    }
+    $stmt->bindValue(':limit', $per_page, PDO::PARAM_INT);
+    $stmt->bindValue(':offset', ($page - 1) * $per_page, PDO::PARAM_INT);
+    $stmt->execute();
 
     $data = $array_ids = $array_userid = [];
-    while ($_scratch = $result->fetch(3)) {
-        [$id, $catid_i, $listcatid, $post_id, $title, $alias, $status, $weight, $addtime, $edittime, $publtime, $exptime, $hitstotal, $hitscm, $_userid, $author] = $_scratch;
-        unset($_scratch);
-        $publtime = nv_datetime_format($publtime, 1);
+    while ($_row = $stmt->fetch()) {
+        $_row['publtime_format'] = nv_datetime_format($_row['publtime'], 1);
 
         if ($array_search['catid'] > 0) {
-            $catid_i = $array_search['catid'];
+            $_row['catid'] = $array_search['catid'];
         }
 
         $check_permission_edit = $check_permission_delete = false;
@@ -831,7 +877,7 @@ if (!empty($module_config[$module_name]['elas_use'])) {
         if (defined('NV_IS_ADMIN_MODULE')) {
             $check_permission_edit = $check_permission_delete = true;
         } else {
-            $array_temp = explode(',', $listcatid);
+            $array_temp = explode(',', $_row['listcatid']);
             $check_edit = $check_del = 0;
 
             foreach ($array_temp as $catid_i) {
@@ -846,18 +892,18 @@ if (!empty($module_config[$module_name]['elas_use'])) {
                     } else {
                         if ($array_cat_admin[$admin_id][$catid_i]['edit_content'] == 1) {
                             ++$check_edit;
-                            if ($status) {
+                            if ($_row['status']) {
                                 $_permission_action['exptime'] = true;
                             }
-                        } elseif ($array_cat_admin[$admin_id][$catid_i]['pub_content'] == 1 and ($status == 0 or $status == 8 or $status == 9 or $status == 2)) {
+                        } elseif ($array_cat_admin[$admin_id][$catid_i]['pub_content'] == 1 and ($_row['status'] == 0 or $_row['status'] == 8 or $_row['status'] == 9 or $_row['status'] == 2)) {
                             // Quyền đăng bài và bài đang dừng, chuyển đăng, từ chối đăng, hẹn đăng
                             ++$check_edit;
                             $_permission_action['publtime'] = true;
                             $_permission_action['re-published'] = true;
-                        } elseif ($array_cat_admin[$admin_id][$catid_i]['app_content'] == 1 and ($status == 5 or $status == 6)) {
+                        } elseif ($array_cat_admin[$admin_id][$catid_i]['app_content'] == 1 and ($_row['status'] == 5 or $_row['status'] == 6)) {
                             // Bài chờ duyệt thì được xử lý trong quá trình duyệt
                             ++$check_edit;
-                        } elseif (($status == 0 or $status == 4 or $status == 5 or $status == 6) and $post_id == $admin_id) {
+                        } elseif (($_row['status'] == 0 or $_row['status'] == 4 or $_row['status'] == 5 or $_row['status'] == 6) and $_row['post_id'] == $admin_id) {
                             // Bài của mình đăng, đang đình chỉ chờ duyệt, đã duyệt thì được sửa và chuyển lại chờ duyệt
                             ++$check_edit;
                             $_permission_action['waiting'] = true;
@@ -865,7 +911,7 @@ if (!empty($module_config[$module_name]['elas_use'])) {
 
                         if ($array_cat_admin[$admin_id][$catid_i]['del_content'] == 1) {
                             ++$check_del;
-                        } elseif (($status == 0 or $status == 4 or $status == 5 or $status == 6) and $post_id == $admin_id) {
+                        } elseif (($_row['status'] == 0 or $_row['status'] == 4 or $_row['status'] == 5 or $_row['status'] == 6) and $_row['post_id'] == $admin_id) {
                             ++$check_del;
                             $_permission_action['waiting'] = true;
                         }
@@ -885,109 +931,96 @@ if (!empty($module_config[$module_name]['elas_use'])) {
         $admin_funcs = [];
         if ($check_permission_edit) {
             $admin_funcs['edit'] = nv_link_edit_page([
-                'id' => $id,
-                'listcatid' => $listcatid
+                'id' => $_row['id'],
+                'listcatid' => $_row['listcatid']
             ]);
         }
         if ($check_permission_delete) {
             $admin_funcs['delete'] = nv_link_delete_page([
-                'id' => $id,
-                'listcatid' => $listcatid
+                'id' => $_row['id'],
+                'listcatid' => $_row['listcatid']
             ]);
             $_permission_action['delete'] = true;
         }
 
-        $data[$id] = [
-            'id' => $id,
-            'link' => NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $global_array_cat[$catid_i]['alias'] . '/' . $alias . '-' . $id . $global_config['rewrite_exturl'],
-            'title' => $title,
-            'title_clean' => nv_clean60($title),
-            'addtime' => $addtime,
-            'edittime' => $edittime,
-            'publtime' => $publtime,
-            'status_id' => $status,
-            'weight' => $weight,
-            'status' => $status > $global_code_defined['row_locked_status'] ? $nv_Lang->getModule('content_locked_bycat') : $nv_Lang->getModule('status_' . $status),
-            'status_num' => $status,
-            'userid' => $_userid,
-            'hitstotal' => nv_number_format($hitstotal),
-            'hitscm' => nv_number_format($hitscm),
+        $data[$_row['id']] = [
+            'id' => $_row['id'],
+            'link' => NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $global_array_cat[$_row['catid']]['alias'] . '/' . $_row['alias'] . '-' . $_row['id'] . $global_config['rewrite_exturl'],
+            'title' => $_row['title'],
+            'title_clean' => nv_clean60($_row['title']),
+            'addtime' => $_row['addtime'],
+            'edittime' => $_row['edittime'],
+            'publtime' => $_row['publtime_format'],
+            'status_id' => $_row['status'],
+            'weight' => $_row['weight'],
+            'status' => $_row['status'] > $global_code_defined['row_locked_status'] ? $nv_Lang->getModule('content_locked_bycat') : $nv_Lang->getModule('status_' . $_row['status']),
+            'status_num' => $_row['status'],
+            'userid' => $_row['_userid'],
+            'hitstotal' => nv_number_format($_row['hitstotal']),
+            'hitscm' => nv_number_format($_row['hitscm']),
             'numtags' => 0,
             'feature' => $admin_funcs,
-            'author' => $author
+            'author' => $_row['author']
         ];
 
-        $array_ids[$id] = $id;
-        $array_userid[$_userid] = $_userid;
+        $array_ids[$_row['id']] = $_row['id'];
+        $array_userid[$_row['_userid']] = $_row['_userid'];
     }
+    $stmt->closeCursor();
 }
 
 if (!empty($array_ids)) {
     // Lấy số tags
-    $db_slave->sqlreset()
-    ->select('COUNT(*) AS numtags, id')
-    ->from(NV_PREFIXLANG . '_' . $module_data . '_tags_id')
-    ->where('id IN( ' . implode(',', $array_ids) . ' )')
-    ->group('id');
-    $result = $db_slave->query($db_slave->sql());
-    while ($_scratch = $result->fetch(3)) {
-        [$numtags, $id] = $_scratch;
-        unset($_scratch);
-        $data[$id]['numtags'] = nv_number_format($numtags);
+    $ids = implode(', ', array_map('intval', $array_ids));
+    $sql = "SELECT COUNT(*) AS numtags, id FROM " . NV_PREFIXLANG . "_" . $module_data . "_tags_id WHERE id IN (" . $ids . ") GROUP BY id";
+    $result = $db->query($sql);
+    while ($_row = $result->fetch()) {
+        $data[$_row['id']]['numtags'] = nv_number_format($_row['numtags']);
     }
+    $result->closeCursor();
 
     // Xác định người đang sửa bài viết
-    $db_slave->sqlreset()
-    ->select('*')
-    ->from(NV_PREFIXLANG . '_' . $module_data . '_tmp')
-    ->where('new_id IN( ' . implode(',', $array_ids) . ') AND type=0');
-    $result = $db_slave->query($db_slave->sql());
+    $sql = "SELECT * FROM " . NV_PREFIXLANG . "_" . $module_data . "_tmp WHERE new_id IN (" . $ids . ") AND type=0";
+    $result = $db->query($sql);
     while ($_row = $result->fetch()) {
         $array_editdata[$_row['new_id']] = $_row;
         $array_userid[$_row['admin_id']] = $_row['admin_id'];
     }
+    $result->closeCursor();
 
     // Tim cac author noi bo
-    $db_slave->sqlreset()
-    ->select('*')
-    ->from(NV_PREFIXLANG . '_' . $module_data . '_authorlist')
-    ->where('id IN (' . implode(',', $array_ids) . ')');
-    $result = $db_slave->query($db_slave->sql());
+    $sql = "SELECT * FROM " . NV_PREFIXLANG . "_" . $module_data . "_authorlist WHERE id IN (" . $ids . ")";
+    $result = $db->query($sql);
     while ($_row = $result->fetch()) {
         !isset($internal_authors[$_row['id']]) and $internal_authors[$_row['id']] = [];
         $internal_authors[$_row['id']][] = [
-            'href' => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;q=' . urlencode($_row['alias']) . '&amp;stype=author&amp;checkss=' . NV_CHECK_SESSION,
+            'href' => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;q=' . urlencode($_row['alias']) . '&amp;stype=author&amp;checkss=' . csrf_create($csrf_key),
             'pseudonym' => $_row['pseudonym']
         ];
     }
+    $result->closeCursor();
 
     // Xác định lý do từ chối bài viết
-    $db_slave->sqlreset()
-        ->select('id, reject_reason')
-        ->from(NV_PREFIXLANG . '_' . $module_data . '_detail')
-        ->where('id IN (' . implode(',', $array_ids) . ')');
-    $result = $db_slave->query($db_slave->sql());
+        $sql = "SELECT id, reject_reason FROM " . NV_PREFIXLANG . "_" . $module_data . "_detail WHERE id IN (" . $ids . ")";
+    $result = $db->query($sql);
     while ($_row = $result->fetch()) {
         $data[$_row['id']]['reject_reason'] = $_row['reject_reason'];
     }
+    $result->closeCursor();
 }
 
 if (!empty($array_userid)) {
-    $db_slave->sqlreset()
-    ->select('tb1.userid, tb1.username, tb2.lev admin_lev')
-    ->from(NV_USERS_GLOBALTABLE . ' tb1')
-    ->join('LEFT JOIN ' . NV_AUTHORS_GLOBALTABLE . ' tb2 ON tb1.userid=tb2.admin_id')
-    ->where('tb1.userid IN( ' . implode(',', $array_userid) . ' )');
+    $uids = implode(', ', array_map('intval', $array_userid));
+    $sql = "SELECT tb1.userid, tb1.username, tb2.lev admin_lev FROM " . NV_USERS_GLOBALTABLE . " tb1 LEFT JOIN " . NV_AUTHORS_GLOBALTABLE . " tb2 ON tb1.userid=tb2.admin_id WHERE tb1.userid IN (" . $uids . ")";
     $array_userid = [];
-    $result = $db_slave->query($db_slave->sql());
-    while ($_scratch = $result->fetch(3)) {
-        [$_userid, $_username, $admin_lev] = $_scratch;
-        unset($_scratch);
-        $array_userid[$_userid] = [
-            'username' => $_username,
-            'admin_lev' => $admin_lev
+    $result = $db->query($sql);
+    while ($_row = $result->fetch()) {
+        $array_userid[$_row['userid']] = [
+            'username' => $_row['username'],
+            'admin_lev' => $_row['admin_lev']
         ];
     }
+    $result->closeCursor();
 }
 
 // Cập nhật lại trạng thái sửa bài nếu timeout hoặc không có người sửa bài
@@ -1004,19 +1037,21 @@ foreach ($array_editdata as $_id => $_row) {
 }
 
 if (!empty($array_removeid)) {
-    $db->query('DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_tmp WHERE id IN(' . implode(',', $array_removeid) . ')');
+    $rids = implode(', ', array_map('intval', $array_removeid));
+    $db->exec("DELETE FROM " . NV_PREFIXLANG . "_" . $module_data . "_tmp WHERE id IN (" . $rids . ")");
     nv_redirect_location($client_info['selfurl']);
 }
 
 // Lấy số lịch sử trong các bài đăng hiển thị
 $array_histories = [];
 if (!empty($data) and !empty($module_config[$module_name]['active_history'])) {
-    $sql = 'SELECT COUNT(id) numhis, new_id FROM ' . NV_PREFIXLANG . '_' . $module_data . '_row_histories
-    WHERE new_id IN(' . implode(',', array_keys($data)) . ') GROUP BY new_id';
+    $ids = implode(', ', array_map('intval', array_keys($data)));
+    $sql = "SELECT COUNT(id) numhis, new_id FROM " . NV_PREFIXLANG . "_" . $module_data . "_row_histories WHERE new_id IN (" . $ids . ") GROUP BY new_id";
     $result = $db->query($sql);
     while ($row = $result->fetch()) {
         $array_histories[$row['new_id']] = $row['numhis'];
     }
+    $result->closeCursor();
 }
 
 $base_url_order = $base_url;
@@ -1088,7 +1123,7 @@ foreach ($data as $row) {
     $row['feature_text'] = implode(' ', $row['feature']);
 
     if ($global_config['idsite'] > 0 and isset($site_mods['excdata']) and isset($push_content['module'][$module_name]) and $row['status_id'] == 1) {
-        $count = $db_slave->query('SELECT COUNT(*) FROM ' . NV_PREFIXLANG . '_' . $site_mods['excdata']['module_data'] . '_sended WHERE id_content=' . $row['id'] . ' AND module=' . $db_slave->quote($module_name))
+        $count = $db->query('SELECT COUNT(*) FROM ' . NV_PREFIXLANG . '_' . $site_mods['excdata']['module_data'] . '_sended WHERE id_content=' . $row['id'] . ' AND module=' . $db->quote($module_name))
         ->fetchColumn();
         if ($count == 0) {
             $is_excdata = 1;
@@ -1118,7 +1153,7 @@ foreach ($data as $row) {
     $row['user_editing'] = $is_editing_row ? $array_userid[$array_editdata[$row['id']]['admin_id']]['username'] : '';
     $row['is_locked'] = $is_locked_row;
     $row['show_history'] = false;
-    $row['checksess'] = md5($row['id'] . NV_CHECK_SESSION);
+    $row['checkss'] = csrf_create($admin_info['admin_id'] . '_' . $module_name . '_' . $row['id']);
     $row['abs_link'] = urlRewriteWithDomain($row['link'], NV_MY_DOMAIN);
 
     if (isset($row['feature']['edit']) and isset($array_histories[$row['id']])) {
@@ -1183,9 +1218,10 @@ if ($loadhistory) {
     ];
 
     $array_userids = $array_users = [];
-    $sql = 'SELECT id, historytime, admin_id, changed_fields FROM ' . NV_PREFIXLANG . '_' . $module_data . '_row_histories
-    WHERE new_id=' . $loadhistory_id . ' ORDER BY historytime DESC';
-    $result = $db->query($sql);
+    $stmt = $db->prepare('SELECT id, historytime, admin_id, changed_fields FROM ' . NV_PREFIXLANG . '_' . $module_data . '_row_histories WHERE new_id = :new_id ORDER BY historytime DESC');
+    $stmt->bindValue(':new_id', $loadhistory_id, PDO::PARAM_INT);
+    $stmt->execute();
+    $result = $stmt;
 
     $array_histories = [];
     while ($row = $result->fetch()) {
@@ -1202,14 +1238,21 @@ if ($loadhistory) {
                 $array_userids[$row['admin_id']] = $row['admin_id'];
             }
     }
+    $result->closeCursor();
 
     // Khôi phục 1 phiên bản
-    if ($nv_Request->get_title('restorehistory', 'post', '') === NV_CHECK_SESSION) {
+    $restorehistory = $nv_Request->get_title('restorehistory', 'post', '');
+    if ($restorehistory) {
         $respon = [
             'success' => false,
             'text' => '',
             'url' => ''
         ];
+        
+        if (!csrf_check($restorehistory, $admin_info['admin_id'] . '_' . $module_name . '_' . $loadhistory_id)) {
+            $respon['text'] = $nv_Lang->getGlobal('error_checkss');
+            nv_jsonOutput($respon);
+        }
 
         $history_id = $nv_Request->get_absint('id', 'post', 0);
         if (!isset($array_histories[$history_id])) {
@@ -1218,9 +1261,12 @@ if ($loadhistory) {
         }
 
         // Lấy full lịch sử
-        $sql = 'SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_row_histories WHERE
-        new_id=' . $loadhistory_id . ' AND id=' . $history_id;
-        $post_new = $db->query($sql)->fetch();
+        $stmt = $db->prepare('SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_row_histories WHERE new_id = :new_id AND id = :id');
+        $stmt->bindValue(':new_id', $loadhistory_id, PDO::PARAM_INT);
+        $stmt->bindValue(':id', $history_id, PDO::PARAM_INT);
+        $stmt->execute();
+        $post_new = $stmt->fetch();
+        $stmt->closeCursor();
         if (empty($post_new)) {
             $respon['text'] = 'Error detail history!';
             nv_jsonOutput($respon);
@@ -1230,34 +1276,51 @@ if ($loadhistory) {
 
         // Kiểm tra xem có lưu phiên bản hiện thời không (nếu chưa lưu)
         $history_time = $data[$loadhistory_id]['edittime'] ?: $data[$loadhistory_id]['addtime'];
-        $sql = 'SELECT id FROM ' . NV_PREFIXLANG . '_' . $module_data . '_row_histories WHERE
-        new_id=' . $loadhistory_id . ' AND historytime=' . $history_time;
-        if (!$db->query($sql)->fetchColumn()) {
+        $stmt = $db->prepare('SELECT id FROM ' . NV_PREFIXLANG . '_' . $module_data . '_row_histories WHERE new_id = :new_id AND historytime = :history_time');
+        $stmt->bindValue(':new_id', $loadhistory_id, PDO::PARAM_INT);
+        $stmt->bindValue(':history_time', $history_time, PDO::PARAM_INT);
+        $stmt->execute();
+        $history_check = $stmt->fetchColumn();
+        if (!$history_check) {
             // Lấy phiên bản hiện thời
-            $post_old = $db->query('SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE id=' . $loadhistory_id)->fetch();
+            $stmt = $db->prepare('SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE id = :id');
+            $stmt->bindValue(':id', $loadhistory_id, PDO::PARAM_INT);
+            $stmt->execute();
+            $post_old = $stmt->fetch();
+            $stmt->closeCursor();
             if (empty($post_old)) {
                 nv_htmlOutput('Error row now!');
             }
 
             // Lấy chi tiết bài viết
-            $body_contents = $db->query('SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_detail WHERE id=' . $loadhistory_id)->fetch();
+            $stmt = $db->prepare('SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_detail WHERE id = :id');
+            $stmt->bindValue(':id', $loadhistory_id, PDO::PARAM_INT);
+            $stmt->execute();
+            $body_contents = $stmt->fetch();
+            $stmt->closeCursor();
             $post_old = array_merge($post_old, $body_contents);
             unset($body_contents);
 
             // Lấy các tag của bài viết
             $array_tags_old = [];
-            $_query = $db->query('SELECT tid, keyword FROM ' . NV_PREFIXLANG . '_' . $module_data . '_tags_id WHERE id=' . $loadhistory_id . ' ORDER BY keyword ASC');
+            $_query = $db->prepare('SELECT tid, keyword FROM ' . NV_PREFIXLANG . '_' . $module_data . '_tags_id WHERE id = :id ORDER BY keyword ASC');
+            $_query->bindValue(':id', $loadhistory_id, PDO::PARAM_INT);
+            $_query->execute();
             while ($row = $_query->fetch()) {
                 $array_tags_old[$row['tid']] = $row['keyword'];
             }
+            $_query->closeCursor();
             $post_old['tags'] = implode(', ', $array_tags_old);
 
             // Lấy danh sach tac gia của bài viết
             $post_old['internal_authors'] = [];
-            $_query = $db->query('SELECT aid, pseudonym FROM ' . NV_PREFIXLANG . '_' . $module_data . '_authorlist WHERE id=' . $loadhistory_id . ' ORDER BY alias ASC');
+            $_query = $db->prepare('SELECT aid, pseudonym FROM ' . NV_PREFIXLANG . '_' . $module_data . '_authorlist WHERE id = :id ORDER BY alias ASC');
+            $_query->bindValue(':id', $loadhistory_id, PDO::PARAM_INT);
+            $_query->execute();
             while ($row = $_query->fetch()) {
                 $post_old['internal_authors'][] = $row['aid'];
             }
+            $_query->closeCursor();
 
             nv_save_history($post_old, $post_new);
         }
@@ -1265,13 +1328,13 @@ if ($loadhistory) {
 
         // Đẩy qua trang content để sử dụng lại cái form đó cho chuẩn
         $respon['success'] = true;
-        $respon['url'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=content&id=' . $loadhistory_id . '&restore=' . $history_id . '&restorehash=' . md5(NV_CHECK_SESSION . $admin_info['admin_id'] . $loadhistory_id . $history_id . $post_new['historytime']);
+        $respon['url'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=content&id=' . $loadhistory_id . '&restore=' . $history_id . '&restorehash=' . md5($csrf_key . $admin_info['admin_id'] . $loadhistory_id . $history_id . $post_new['historytime']);
         nv_jsonOutput($respon);
     }
 
     if (!empty($array_userids)) {
-        $sql = 'SELECT userid, username, first_name, last_name, email
-        FROM ' . NV_USERS_GLOBALTABLE . ' WHERE userid IN(' . implode(',', $array_userids) . ')';
+        $uids_str = implode(', ', array_map('intval', $array_userids));
+        $sql = 'SELECT userid, username, first_name, last_name, email FROM ' . NV_USERS_GLOBALTABLE . ' WHERE userid IN (' . $uids_str . ')';
         $result = $db->query($sql);
 
         while ($row = $result->fetch()) {
@@ -1283,11 +1346,13 @@ if ($loadhistory) {
             }
             $array_users[$row['userid']] = $row;
         }
+        $result->closeCursor();
     }
 
     $tpl->assign('USERS', $array_users);
     $tpl->assign('NEW_ID', $loadhistory_id);
     $tpl->assign('HISTORIES', $array_histories);
+    $tpl->assign('CHECKSS', csrf_create($admin_info['admin_id'] . '_' . $module_name . '_' . $loadhistory_id));
 
     $contents = $tpl->fetch('history.tpl');
 
@@ -1304,17 +1369,17 @@ $array_drafts = [
 $array_others = [];
 $array_others_count = 0;
 if (!$is_search) {
-    $db->sqlreset()->select('COUNT(id)')->from(NV_PREFIXLANG . '_' . $module_data . '_tmp')
-        ->where('admin_id=' . $admin_info['admin_id'] . ' AND type=1');
-    $array_drafts['count'] = $db->query($db->sql())->fetchColumn();
+    $stmt = $db->prepare('SELECT COUNT(id) FROM ' . NV_PREFIXLANG . '_' . $module_data . '_tmp WHERE admin_id = :admin_id AND type = 1');
+    $stmt->bindValue(':admin_id', $admin_info['admin_id'], PDO::PARAM_INT);
+    $stmt->execute();
+    $array_drafts['count'] = $stmt->fetchColumn();
 
-    $db->select('id, new_id, time_edit, time_late, properties')->order('time_late DESC')
-        ->limit(10)
-        ->offset(0);
-    $result = $db->query($db->sql());
+    $stmt = $db->prepare('SELECT id, new_id, time_edit, time_late, properties FROM ' . NV_PREFIXLANG . '_' . $module_data . '_tmp WHERE admin_id = :admin_id AND type = 1 ORDER BY time_late DESC LIMIT 10 OFFSET 0');
+    $stmt->bindValue(':admin_id', $admin_info['admin_id'], PDO::PARAM_INT);
+    $stmt->execute();
 
     $new_ids = [];
-    while ($row = $result->fetch()) {
+    while ($row = $stmt->fetch()) {
         if (!empty($row['new_id'])) {
             $new_ids[$row['new_id']] = $row['new_id'];
         }
@@ -1329,19 +1394,20 @@ if (!$is_search) {
 
         $array_drafts['list'][$row['id']] = $row;
     }
+    $stmt->closeCursor();
 
     // Trong số các bài sửa tạm này tìm tiêu đề
     $new_titles = [];
     if (!empty($new_ids)) {
-        $db->sqlreset()->select('id, title, listcatid')->from(NV_PREFIXLANG . '_' . $module_data . '_rows')
-            ->where('id IN (' . implode(',', $new_ids) . ')');
-        $result = $db->query($db->sql());
-        while ($row = $result->fetch()) {
+        $stmt_draft = $db->prepare('SELECT id, title, listcatid FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE id IN (' . implode(',', $new_ids) . ')');
+        $stmt_draft->execute();
+        while ($row = $stmt_draft->fetch()) {
             $new_titles[$row['id']] = [
                 'title' => $row['title'],
                 'catids' => array_filter(explode(',', $row['listcatid']))
             ];
         }
+        $stmt_draft->closeCursor();
 
         foreach ($array_drafts['list'] as $id => $row) {
             if (isset($new_titles[$row['new_id']])) {
@@ -1366,8 +1432,12 @@ if (!$is_search) {
     } else {
         // Đếm số bài lưu nháp do tôi đăng và còn quyền xem
         $where = [];
-        $where[] = "status=" . Posts::STATUS_DRAFT;
-        $where[] = "admin_id=" . $admin_info['admin_id'];
+        $where[] = "status = :status";
+        $where[] = "admin_id = :admin_id";
+        $binds = [
+            ':status' => Posts::STATUS_DRAFT,
+            ':admin_id' => $admin_info['admin_id']
+        ];
         if (!defined('NV_IS_ADMIN_MODULE')) {
             $from_catid = [];
             foreach ($array_cat_edit as $catid_i) {
@@ -1377,11 +1447,15 @@ if (!$is_search) {
                 $where[] = '(' . implode(' OR ', $from_catid) . ')';
             } else {
                 // Không còn edit bài trong chuyên mục nào nữa thì khỏi xem
-                $where[] = 'id=0';
+                $where[] = 'id = 0';
             }
         }
-        $sql = "SELECT COUNT(id) FROM " . NV_PREFIXLANG . "_" . $module_data . "_rows WHERE " . implode(' AND ', $where);
-        $number = $db->query($sql)->fetchColumn();
+        $stmt_draft = $db->prepare("SELECT COUNT(id) FROM " . NV_PREFIXLANG . "_" . $module_data . "_rows WHERE " . implode(' AND ', $where));
+        foreach ($binds as $key => $val) {
+            $stmt_draft->bindValue($key, $val, is_int($val) ? PDO::PARAM_INT : PDO::PARAM_STR);
+        }
+        $stmt_draft->execute();
+        $number = $stmt_draft->fetchColumn();
         if ($number > 0) {
             $array_others[] = [
                 'title' => $nv_Lang->getModule('queue_draft', nv_number_format($number)),
@@ -1393,7 +1467,8 @@ if (!$is_search) {
 
         // Đếm số bài chờ duyệt trong các chuyên mục tôi quản lý
         $where = [];
-        $where[] = "status=" . Posts::STATUS_REVIEW_TRANSFER;
+        $where[] = "status = :status";
+        $binds = [':status' => Posts::STATUS_REVIEW_TRANSFER];
         if (!defined('NV_IS_ADMIN_MODULE')) {
             $from_catid = [];
             foreach ($array_cat_app as $catid_i) {
@@ -1402,11 +1477,15 @@ if (!$is_search) {
             if (!empty($from_catid)) {
                 $where[] = '(' . implode(' OR ', $from_catid) . ')';
             } else {
-                $where[] = 'id=0';
+                $where[] = 'id = 0';
             }
         }
-        $sql = "SELECT COUNT(id) FROM " . NV_PREFIXLANG . "_" . $module_data . "_rows WHERE " . implode(' AND ', $where);
-        $number = $db->query($sql)->fetchColumn();
+        $stmt_app = $db->prepare("SELECT COUNT(id) FROM " . NV_PREFIXLANG . "_" . $module_data . "_rows WHERE " . implode(' AND ', $where));
+        foreach ($binds as $key => $val) {
+            $stmt_app->bindValue($key, $val, is_int($val) ? PDO::PARAM_INT : PDO::PARAM_STR);
+        }
+        $stmt_app->execute();
+        $number = $stmt_app->fetchColumn();
         if ($number > 0) {
             $array_others[] = [
                 'title' => $nv_Lang->getModule('queue_approval', nv_number_format($number)),
@@ -1418,7 +1497,8 @@ if (!$is_search) {
 
         // Đếm số bài chờ đăng trong các chuyên mục tôi quản lý
         $where = [];
-        $where[] = "status=" . Posts::STATUS_PUBLISH_TRANSFER;
+        $where[] = "status = :status";
+        $binds = [':status' => Posts::STATUS_PUBLISH_TRANSFER];
         if (!defined('NV_IS_ADMIN_MODULE')) {
             $from_catid = [];
             foreach ($array_cat_pub as $catid_i) {
@@ -1427,11 +1507,15 @@ if (!$is_search) {
             if (!empty($from_catid)) {
                 $where[] = '(' . implode(' OR ', $from_catid) . ')';
             } else {
-                $where[] = 'id=0';
+                $where[] = 'id = 0';
             }
         }
-        $sql = "SELECT COUNT(id) FROM " . NV_PREFIXLANG . "_" . $module_data . "_rows WHERE " . implode(' AND ', $where);
-        $number = $db->query($sql)->fetchColumn();
+        $stmt_pub = $db->prepare("SELECT COUNT(id) FROM " . NV_PREFIXLANG . "_" . $module_data . "_rows WHERE " . implode(' AND ', $where));
+        foreach ($binds as $key => $val) {
+            $stmt_pub->bindValue($key, $val, is_int($val) ? PDO::PARAM_INT : PDO::PARAM_STR);
+        }
+        $stmt_pub->execute();
+        $number = $stmt_pub->fetchColumn();
         if ($number > 0) {
             $array_others[] = [
                 'title' => $nv_Lang->getModule('queue_public', nv_number_format($number)),

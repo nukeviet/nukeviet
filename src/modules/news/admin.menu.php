@@ -67,6 +67,10 @@ if (defined('NV_IS_SPADMIN')) {
 
 $allow_func = [
     'main',
+    'tags-ajax',
+    'topics-ajax',
+    'sources-ajax',
+
     'drafts',
     'view',
     'stop',
@@ -75,13 +79,10 @@ $allow_func = [
     'declined',
     're-published',
     'content',
+    'content-del',
     'rpc',
-    'del_content',
     'alias',
     'keywordsajax',
-    'topicajax',
-    'sourceajax',
-    'tagsajax'
 ];
 
 if (!isset($site_mods['cms'])) {
@@ -95,10 +96,24 @@ if (!isset($site_mods['cms'])) {
 
 if ($NV_IS_ADMIN_MODULE) {
     $submenu['cat'] = $nv_Lang->getModule('categories');
+    $allow_func[] = 'cat';
+    $allow_func[] = 'cat-change';
+    $allow_func[] = 'cat-del';
+
     $submenu['tags'] = $nv_Lang->getModule('tags_manage');
+    $allow_func[] = 'tags';
+
     $submenu['groups'] = $nv_Lang->getModule('block');
+    $allow_func[] = 'groups';
+
     $submenu['topics'] = $nv_Lang->getModule('topics');
+	$allow_func[] = 'topics';
+    $allow_func[] = 'topics-add';
+	$allow_func[] = 'topics-news';
+
     $submenu['sources'] = $nv_Lang->getModule('sources');
+    $allow_func[] = 'sources';
+
     $submenu['authors'] = $nv_Lang->getModule('author_manage');
     $submenu['admins'] = $nv_Lang->getModule('admin');
     $submenu['report'] = $nv_Lang->getModule('report');
@@ -108,24 +123,12 @@ if ($NV_IS_ADMIN_MODULE) {
             'voices' => $nv_Lang->getModule('voice_manager')
         ]
     ];
-
-    $allow_func[] = 'cat';
-    $allow_func[] = 'change_cat';
-    $allow_func[] = 'del_cat';
-
     $allow_func[] = 'admins';
-    $allow_func[] = 'topicsnews';
-    $allow_func[] = 'topics';
-    $allow_func[] = 'addtotopics';
-
-    $allow_func[] = 'sources';
 
     $allow_func[] = 'block';
-    $allow_func[] = 'groups';
 
     $allow_func[] = 'authors';
 
-    $allow_func[] = 'tags';
     $allow_func[] = 'setting';
     $allow_func[] = 'voices';
     $allow_func[] = 'move';

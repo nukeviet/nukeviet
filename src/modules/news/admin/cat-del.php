@@ -27,15 +27,23 @@ if (!csrf_check($nv_Request->get_string('checkss', 'post'), $_csrf_key)) {
     ]);
 }
 
-$row = $db->query('SELECT catid, parentid, title, ad_block_cat FROM ' . NV_PREFIXLANG . '_' . $module_data . '_cat WHERE catid=' . $catid)->fetch(3);
-if (empty($row)) {
+$stmt = $db->prepare('SELECT catid, parentid, title, ad_block_cat FROM ' . NV_PREFIXLANG . '_' . $module_data . '_cat WHERE catid = :catid');
+$stmt->bindValue(':catid', $catid, PDO::PARAM_INT);
+$stmt->execute();
+$_row = $stmt->fetch();
+$stmt->closeCursor();
+
+if (empty($_row)) {
     nv_jsonOutput([
         'status' => 'error',
         'mess' => 'Category not found!'
     ]);
 }
 
-[$catid, $parentid, $title, $ad_block_cat] = $row;
+$catid = (int) $_row['catid'];
+$parentid = (int) $_row['parentid'];
+$title = $_row['title'];
+$ad_block_cat = $_row['ad_block_cat'];
 
 // Check quyền xóa chuyên mục
 if (!(defined('NV_IS_ADMIN_MODULE') or ($parentid > 0 and isset($array_cat_admin[$admin_id][$parentid]) and $array_cat_admin[$admin_id][$parentid]['admin'] == 1))) {
@@ -49,7 +57,10 @@ $ad_block_cat = array_filter(array_unique(array_map('intval', explode(',', $ad_b
 $submitconfirm = (int) $nv_Request->get_bool('submitconfirm', 'post', false);
 
 // Kiểm tra chuyên mục con
-$check_parentid = $db->query('SELECT COUNT(*) FROM ' . NV_PREFIXLANG . '_' . $module_data . '_cat WHERE parentid = ' . $catid)->fetchColumn();
+$stmt = $db->prepare('SELECT COUNT(*) FROM ' . NV_PREFIXLANG . '_' . $module_data . '_cat WHERE parentid = :parentid');
+$stmt->bindValue(':parentid', $catid, PDO::PARAM_INT);
+$stmt->execute();
+$check_parentid = $stmt->fetchColumn();
 if ((int) $check_parentid > 0) {
     nv_jsonOutput([
         'status' => 'error',
@@ -76,31 +87,48 @@ if ((int) $check_rows > 0) {
         $weight_min = 0;
         nv_insert_logs(NV_LANG_DATA, $module_name, $nv_Lang->getModule('delcatandrows'), $title, $admin_info['userid']);
 
+        $stmt_upd_rows = $db->prepare('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_rows SET catid= :catid, listcatid = :listcatid WHERE id= :id');
+
         $sql = $db->query('SELECT id, catid, listcatid, weight FROM ' . NV_PREFIXLANG . '_' . $module_data . '_' . $catid . ' ORDER BY weight DESC');
-        while ($row = $sql->fetch()) {
-            if ($row['catid'] == $row['listcatid']) {
-                nv_del_content_module($row['id']);
-                $weight_min = $row['weight'];
+        while ($_row = $sql->fetch()) {
+            if ($_row['catid'] == $_row['listcatid']) {
+                nv_del_content_module($_row['id']);
+                $weight_min = $_row['weight'];
             } else {
-                $arr_catid_old = explode(',', $row['listcatid']);
+                $arr_catid_old = explode(',', $_row['listcatid']);
                 $arr_catid_i = [
                     $catid
                 ];
                 $arr_catid_news = array_diff($arr_catid_old, $arr_catid_i);
-                if ($catid == $row['catid']) {
-                    $row['catid'] = $arr_catid_news[0];
+                if ($catid == $_row['catid']) {
+                    $_row['catid'] = $arr_catid_news[0];
                 }
+                $listcatid_new = implode(',', $arr_catid_news);
                 foreach ($arr_catid_news as $catid_i) {
                     if (isset($global_array_cat[$catid_i])) {
-                        $db->query('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_' . $catid_i . ' SET catid=' . $row['catid'] . ", listcatid = '" . implode(',', $arr_catid_news) . "' WHERE id =" . $row['id']);
+                        $stmt_upd_cat_i = $db->prepare('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_' . $catid_i . ' SET catid= :catid, listcatid = :listcatid WHERE id= :id');
+                        $stmt_upd_cat_i->bindValue(':catid', $_row['catid'], PDO::PARAM_INT);
+                        $stmt_upd_cat_i->bindValue(':listcatid', $listcatid_new, PDO::PARAM_STR);
+                        $stmt_upd_cat_i->bindValue(':id', $_row['id'], PDO::PARAM_INT);
+                        $stmt_upd_cat_i->execute();
                     }
                 }
-                $db->query('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_rows SET catid=' . $row['catid'] . ", listcatid = '" . implode(',', $arr_catid_news) . "' WHERE id =" . $row['id']);
+                $stmt_upd_rows->bindValue(':catid', $_row['catid'], PDO::PARAM_INT);
+                $stmt_upd_rows->bindValue(':listcatid', $listcatid_new, PDO::PARAM_STR);
+                $stmt_upd_rows->bindValue(':id', $_row['id'], PDO::PARAM_INT);
+                $stmt_upd_rows->execute();
             }
         }
-        $db->query('DROP TABLE ' . NV_PREFIXLANG . '_' . $module_data . '_' . $catid);
-        $db->query('DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_cat WHERE catid=' . $catid);
-        $db->query('DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_admins WHERE catid=' . $catid);
+        $sql->closeCursor();
+        $db->exec('DROP TABLE ' . NV_PREFIXLANG . '_' . $module_data . '_' . $catid);
+
+        $stmt_del = $db->prepare('DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_cat WHERE catid= :catid');
+        $stmt_del->bindValue(':catid', $catid, PDO::PARAM_INT);
+        $stmt_del->execute();
+
+        $stmt_del = $db->prepare('DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_admins WHERE catid= :catid');
+        $stmt_del->bindValue(':catid', $catid, PDO::PARAM_INT);
+        $stmt_del->execute();
 
         foreach ($ad_block_cat as $ad_block_id) {
             nv_unregister_block(nv_get_blcat_tag($catid, $ad_block_id));
@@ -121,7 +149,15 @@ if ((int) $check_rows > 0) {
          * vẫn đang bị đình chỉ, do đó phải kiểm tra sau khi di chuyển có còn ở trong
          * chuyên mục bị đình chỉ không nếu không mới trả lại status ban đầu
          */
-        [$catidnews, $newstitle] = $db->query('SELECT catid, title FROM ' . NV_PREFIXLANG . '_' . $module_data . '_cat WHERE status IN(' . implode(',', $global_code_defined['cat_visible_status']) . ') AND catid =' . $catidnews)->fetch(3);
+        $stmt_sel = $db->prepare('SELECT catid, title FROM ' . NV_PREFIXLANG . '_' . $module_data . '_cat WHERE status IN(' . implode(',', $global_code_defined['cat_visible_status']) . ') AND catid = :catid');
+        $stmt_sel->bindValue(':catid', $catidnews, PDO::PARAM_INT);
+        $stmt_sel->execute();
+        $_row_sel = $stmt_sel->fetch();
+        $stmt_sel->closeCursor();
+
+        $catidnews = (int) ($_row_sel['catid'] ?? 0);
+        $newstitle = $_row_sel['title'] ?? '';
+
         if (empty($catidnews)) {
             nv_jsonOutput([
                 'status' => 'error',
@@ -139,10 +175,12 @@ if ((int) $check_rows > 0) {
             }
         }
 
+        $stmt_ins = $db->prepare('INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . '_' . $catidnews . ' SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE id= :id');
+
         $sql = $db->query('SELECT id, catid, listcatid, status FROM ' . NV_PREFIXLANG . '_' . $module_data . '_' . $catid);
 
-        while ($row = $sql->fetch()) {
-            $arr_catid_old = explode(',', $row['listcatid']);
+        while ($_row = $sql->fetch()) {
+            $arr_catid_old = explode(',', $_row['listcatid']);
             $arr_catid_i = [
                 $catid
             ];
@@ -150,31 +188,49 @@ if ((int) $check_rows > 0) {
             // Chép vào bảng catid nếu tin này trước đó chưa thuộc chuyên mục được chuyển tới
             if (!in_array((int) $catidnews, array_map('intval', $arr_catid_news), true)) {
                 try {
-                    $db->query('INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . '_' . $catidnews . ' SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE id=' . $row['id']);
+                    $stmt_ins->bindValue(':id', $_row['id'], PDO::PARAM_INT);
+                    $stmt_ins->execute();
                     $arr_catid_news[] = $catidnews;
                 } catch (Throwable $e) {
                     trigger_error($e);
                 }
             }
-            if ($catid == $row['catid']) {
-                $row['catid'] = $catidnews;
+            if ($catid == $_row['catid']) {
+                $_row['catid'] = $catidnews;
             }
 
             $sql_status = '';
-            if (array_intersect($arr_catid_news, $array_cat_locked) == [] and $row['status'] > $global_code_defined['row_locked_status']) {
-                $sql_status = ', status=' . ($row['status'] - ($global_code_defined['row_locked_status'] + 1));
+            if (array_intersect($arr_catid_news, $array_cat_locked) == [] and $_row['status'] > $global_code_defined['row_locked_status']) {
+                $sql_status = ', status=' . ($_row['status'] - ($global_code_defined['row_locked_status'] + 1));
             }
 
+            $listcatid_new = implode(',', $arr_catid_news);
             foreach ($arr_catid_news as $catid_i) {
                 if (isset($global_array_cat[$catid_i])) {
-                    $db->query('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_' . $catid_i . ' SET catid=' . $row['catid'] . ", listcatid = '" . implode(',', $arr_catid_news) . "'" . $sql_status . ' WHERE id =' . $row['id']);
+                    $stmt_upd_cat_i = $db->prepare('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_' . $catid_i . ' SET catid= :catid, listcatid= :listcatid' . $sql_status . ' WHERE id= :id');
+                    $stmt_upd_cat_i->bindValue(':catid', $_row['catid'], PDO::PARAM_INT);
+                    $stmt_upd_cat_i->bindValue(':listcatid', $listcatid_new, PDO::PARAM_STR);
+                    $stmt_upd_cat_i->bindValue(':id', $_row['id'], PDO::PARAM_INT);
+                    $stmt_upd_cat_i->execute();
                 }
             }
-            $db->query('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_rows SET catid=' . $row['catid'] . ", listcatid = '" . implode(',', $arr_catid_news) . "'" . $sql_status . ' WHERE id =' . $row['id']);
+            $stmt_upd_rows = $db->prepare('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_rows SET catid= :catid, listcatid= :listcatid' . $sql_status . ' WHERE id= :id');
+            $stmt_upd_rows->bindValue(':catid', $_row['catid'], PDO::PARAM_INT);
+            $stmt_upd_rows->bindValue(':listcatid', $listcatid_new, PDO::PARAM_STR);
+            $stmt_upd_rows->bindValue(':id', $_row['id'], PDO::PARAM_INT);
+            $stmt_upd_rows->execute();
         }
-        $db->query('DROP TABLE ' . NV_PREFIXLANG . '_' . $module_data . '_' . $catid);
-        $db->query('DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_cat WHERE catid=' . $catid);
-        $db->query('DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_admins WHERE catid=' . $catid);
+        $sql->closeCursor();
+
+        $db->exec('DROP TABLE ' . NV_PREFIXLANG . '_' . $module_data . '_' . $catid);
+
+        $stmt_del = $db->prepare('DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_cat WHERE catid= :catid');
+        $stmt_del->bindValue(':catid', $catid, PDO::PARAM_INT);
+        $stmt_del->execute();
+
+        $stmt_del = $db->prepare('DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_admins WHERE catid= :catid');
+        $stmt_del->bindValue(':catid', $catid, PDO::PARAM_INT);
+        $stmt_del->execute();
 
         foreach ($ad_block_cat as $ad_block_id) {
             nv_unregister_block(nv_get_blcat_tag($catid, $ad_block_id));
@@ -197,23 +253,22 @@ if ((int) $check_rows > 0) {
         $sql = 'SELECT catid, title, lev FROM ' . NV_PREFIXLANG . '_' . $module_data . '_cat WHERE catid !=' . $catid . ' AND status IN(' . implode(',', $global_code_defined['cat_visible_status']) . ') ORDER BY sort ASC';
         $result = $db->query($sql);
         $cat_list = [0 => '&nbsp;'];
-        while ($_scratch = $result->fetch(3)) {
-            [$catid_i, $title_i, $lev_i] = $_scratch;
-            unset($_scratch);
+        while ($_row_cat = $result->fetch()) {
             $xtitle_i = '';
-            if ($lev_i > 0) {
+            if ($_row_cat['lev'] > 0) {
                 $xtitle_i .= '&nbsp;&nbsp;&nbsp;|';
-                for ($i = 1; $i <= $lev_i; ++$i) {
+                for ($i = 1; $i <= $_row_cat['lev']; ++$i) {
                     $xtitle_i .= '---';
                 }
                 $xtitle_i .= '>&nbsp;';
             }
-            $xtitle_i .= $title_i;
-            $cat_list[$catid_i] = $xtitle_i;
+            $xtitle_i .= $_row_cat['title'];
+            $cat_list[$_row_cat['catid']] = $xtitle_i;
         }
+        $result->closeCursor();
 
         $tpl = new \NukeViet\Template\NVSmarty();
-        $tpl->setTemplateDir(get_module_tpl_dir('del_cat.tpl'));
+        $tpl->setTemplateDir(get_module_tpl_dir('cat-del.tpl'));
         $tpl->assign('LANG', $nv_Lang);
         $tpl->assign('MODULE_NAME', $module_name);
         $tpl->assign('OP', $op);
@@ -224,7 +279,7 @@ if ((int) $check_rows > 0) {
 
         nv_jsonOutput([
             'status' => 'html',
-            'html' => $tpl->fetch('del_cat.tpl')
+            'html' => $tpl->fetch('cat-del.tpl')
         ]);
     }
 }
@@ -236,8 +291,10 @@ if (!$submitconfirm) {
     ]);
 }
 
-$sql = 'DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_cat WHERE catid=' . $catid;
-if ($db->exec($sql)) {
+$stmt = $db->prepare('DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_cat WHERE catid = :catid');
+$stmt->bindValue(':catid', $catid, PDO::PARAM_INT);
+$stmt->execute();
+if ($stmt->rowCount() > 0) {
     nv_insert_logs(NV_LANG_DATA, $module_name, $nv_Lang->getModule('delcatandrows'), $title, $admin_info['userid']);
 
     foreach ($ad_block_cat as $ad_block_id) {
@@ -245,9 +302,11 @@ if ($db->exec($sql)) {
     }
 
     nv_fix_cat_order();
-    $db->query('DROP TABLE ' . NV_PREFIXLANG . '_' . $module_data . '_' . $catid);
+    $db->exec('DROP TABLE ' . NV_PREFIXLANG . '_' . $module_data . '_' . $catid);
 }
-$db->query('DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_admins WHERE catid=' . $catid);
+$stmt = $db->prepare('DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_admins WHERE catid = :catid');
+$stmt->bindValue(':catid', $catid, PDO::PARAM_INT);
+$stmt->execute();
 $nv_Cache->delMod($module_name);
 
 nv_jsonOutput([

@@ -301,7 +301,7 @@
                 <div class="card-header py-2">
                     <div class="d-flex gap-2 justify-content-between align-items-center">
                         <div class="fw-medium fs-5 text-truncate">{$LANG->getModule('content_keyword')}</div>
-                        <button type="button" class="btn btn-secondary btn-sm" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-title="{$LANG->getModule('keywords_auto_create')}" aria-label="{$LANG->getModule('keywords_auto_create')}" data-toggle="keywords_auto_create"><i class="fa-solid fa-key" data-icon="fa-key"></i></button>
+                        <button type="button" class="btn btn-secondary btn-sm" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-title="{$LANG->getModule('keywords_auto_create')}" aria-label="{$LANG->getModule('keywords_auto_create')}" data-toggle="keywords_auto_create" data-checkss="{$CHECKSS}"><i class="fa-solid fa-key" data-icon="fa-key"></i></button>
                     </div>
                 </div>
                 <div class="card-body">
@@ -316,7 +316,7 @@
                 <div class="card-header py-2">
                     <div class="d-flex gap-2 justify-content-between align-items-center">
                         <div class="fw-medium fs-5 text-truncate">{$LANG->getModule('content_tag')}</div>
-                        <button type="button" class="btn btn-secondary btn-sm" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-title="{$LANG->getModule('tags_auto_create')}" aria-label="{$LANG->getModule('tags_auto_create')}" data-toggle="tags_auto_create"><i class="fa-solid fa-tags" data-icon="fa-tags"></i></button>
+                        <button type="button" class="btn btn-secondary btn-sm" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-title="{$LANG->getModule('tags_auto_create')}" aria-label="{$LANG->getModule('tags_auto_create')}" data-toggle="tags_auto_create" data-checkss="{$CHECKSS}"><i class="fa-solid fa-tags" data-icon="fa-tags"></i></button>
                     </div>
                 </div>
                 <div class="card-body">
@@ -569,7 +569,7 @@
         </div>
     </div>
     <input type="hidden" value="1" name="save">
-    <input type="hidden" value="{$smarty.const.NV_CHECK_SESSION}" name="checkss">
+    <input type="hidden" value="{$CHECKSS}" name="checkss">
     <input type="hidden" value="{$ISCOPY}" name="copy">
     <input type="hidden" value="{$DATA.id}" name="id">
     <input type="hidden" value="{$DATA.referer}" name="referer">

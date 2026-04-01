@@ -25,8 +25,8 @@
                         </td>
                         <td>{$row.post_time_format}</td>
                         <td class="text-nowrap">
-                            <button type="button" class="btn btn-secondary btn-sm" data-toggle="report_del_action" data-send-mail="no" data-id="{$row.id}" title="{$LANG->getGlobal('delete')}" aria-label="{$LANG->getGlobal('delete')}" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-title="{$LANG->getGlobal('delete')}"><i class="fa-solid fa-trash-can text-danger fa-fw" data-icon="fa-trash-can"></i></button>
-                            <button type="button" class="btn btn-secondary btn-sm" data-toggle="report_del_action" data-send-mail="yes" data-id="{$row.id}" title="{$LANG->getModule('report_delete')}" aria-label="{$LANG->getModule('report_delete')}" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-title="{$LANG->getModule('report_delete')}"><i class="fa-solid fa-trash-can-arrow-up text-danger fa-fw" data-icon="fa-trash-can-arrow-up"></i></button>
+                            <button type="button" class="btn btn-secondary btn-sm" data-toggle="report_del_action" data-send-mail="no" data-id="{$row.id}" data-checkss="{$CHECKSS}" title="{$LANG->getGlobal('delete')}" aria-label="{$LANG->getGlobal('delete')}" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-title="{$LANG->getGlobal('delete')}"><i class="fa-solid fa-trash-can text-danger fa-fw" data-icon="fa-trash-can"></i></button>
+                            <button type="button" class="btn btn-secondary btn-sm" data-toggle="report_del_action" data-send-mail="yes" data-id="{$row.id}" data-checkss="{$CHECKSS}" title="{$LANG->getModule('report_delete')}" aria-label="{$LANG->getModule('report_delete')}" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-title="{$LANG->getModule('report_delete')}"><i class="fa-solid fa-trash-can-arrow-up text-danger fa-fw" data-icon="fa-trash-can-arrow-up"></i></button>
                         </td>
                     </tr>
                     {/foreach}
@@ -40,7 +40,7 @@
                 <div class="me-2">
                     <input type="checkbox" data-toggle="checkAll" name="checkAll[]" class="form-check-input m-0 align-middle" aria-label="{$LANG->getGlobal('toggle_checkall')}">
                 </div>
-                <button type="button" class="btn btn-secondary text-nowrap text-truncate me-1 my-1 mw-100" data-toggle="report_del_check_action" data-not-checked="{$LANG->getModule('report_not_checked')}"><i class="fa-solid fa-trash text-danger" data-icon="fa-trash"></i> {$LANG->getModule('report_del_checked')}</button>
+                <button type="button" class="btn btn-secondary text-nowrap text-truncate me-1 my-1 mw-100" data-toggle="report_del_check_action" data-checkss="{$CHECKSS}" data-not-checked="{$LANG->getModule('report_not_checked')}"><i class="fa-solid fa-trash text-danger" data-icon="fa-trash"></i> {$LANG->getModule('report_del_checked')}</button>
             </div>
             <div class="pagination-wrap">
                 {$GENERATE_PAGE}

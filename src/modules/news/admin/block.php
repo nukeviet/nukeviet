@@ -22,15 +22,13 @@ $page_title = $nv_Lang->getModule('block');
 
 // Lấy danh sách nhóm tin
 $sql = 'SELECT bid, title FROM ' . NV_PREFIXLANG . '_' . $module_data . '_block_cat ORDER BY weight ASC';
-$result = $db_slave->query($sql);
+$result = $db->query($sql);
 
 $array_block = [];
-while ($_scratch = $result->fetch(3)) {
-    [$bid_i, $title_i] = $_scratch;
-    unset($_scratch);
-    $bid_i = (int) $bid_i;
-    $array_block[$bid_i] = $title_i;
+while ($_row = $result->fetch()) {
+    $array_block[(int) $_row['bid']] = $_row['title'];
 }
+$result->closeCursor();
 if (empty($array_block)) {
     nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=blockcat');
 }
@@ -53,27 +51,30 @@ $page_title = $array_block[$bid];
 
 // Thêm bài viết vào nhóm tin
 if ($nv_Request->isset_request('addtoblock', 'post')) {
-    if (!csrf_check($nv_Request->get_title('checkss', 'post', ''), $csrf_key)) {
+    if (!csrf_check($nv_Request->get_string('checkss', 'post', ''), $csrf_key)) {
         nv_jsonOutput([
             'status' => 'error',
             'mess' => $nv_Lang->getGlobal('error_checkss')
         ]);
     }
 
-    $sql = 'SELECT id FROM ' . NV_PREFIXLANG . '_' . $module_data . '_block WHERE bid=' . $bid;
-    $result = $db_slave->query($sql);
+    $stmt = $db->prepare('SELECT id FROM ' . NV_PREFIXLANG . '_' . $module_data . '_block WHERE bid = :bid');
+    $stmt->bindValue(':bid', $bid, PDO::PARAM_INT);
+    $stmt->execute();
     $_id_array_exit = [];
-    while ($_scratch = $result->fetch(3)) {
-        [$_id] = $_scratch;
-        unset($_scratch);
-        $_id_array_exit[] = (int) $_id;
+    while ($_row = $stmt->fetch()) {
+        $_id_array_exit[] = (int) $_row['id'];
     }
+    $stmt->closeCursor();
 
     $id_array = array_map('intval', $nv_Request->get_array('idcheck', 'post'));
+    $stmt_insert = $db->prepare('INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . '_block (bid, id, weight) VALUES (:bid, :id, 0)');
     foreach ($id_array as $id) {
         if (!in_array($id, $_id_array_exit, true)) {
             try {
-                $db->query('INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . '_block (bid, id, weight) VALUES (' . $bid . ', ' . $id . ', 0)');
+                $stmt_insert->bindValue(':bid', $bid, PDO::PARAM_INT);
+                $stmt_insert->bindValue(':id', $id, PDO::PARAM_INT);
+                $stmt_insert->execute();
             } catch (Throwable $e) {
                 trigger_error($e);
             }
@@ -89,22 +90,28 @@ if ($nv_Request->isset_request('addtoblock', 'post')) {
 }
 
 // Sắp xếp lại theo thời gian đăng
-if ($bid > 0 and defined('NV_IS_SPADMIN') and $nv_Request->get_string('order_publtime', 'get') == md5($bid . NV_CHECK_SESSION)) {
-    $_result = $db->query('SELECT t1.id FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows t1 INNER JOIN ' . NV_PREFIXLANG . '_' . $module_data . '_block t2 ON t1.id = t2.id WHERE t2.bid= ' . $bid . ' ORDER BY t1.' . $order_articles_by . ' DESC, t2.weight ASC');
+if ($bid > 0 and defined('NV_IS_SPADMIN') and csrf_check($nv_Request->get_string('order_publtime', 'get'), $csrf_key . '_block_order_' . $bid)) {
+    $stmt = $db->prepare('SELECT t1.id FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows t1 INNER JOIN ' . NV_PREFIXLANG . '_' . $module_data . '_block t2 ON t1.id = t2.id WHERE t2.bid = :bid ORDER BY t1.' . $order_articles_by . ' DESC, t2.weight ASC');
+    $stmt->bindValue(':bid', $bid, PDO::PARAM_INT);
+    $stmt->execute();
+    
+    $stmt_update = $db->prepare('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_block SET weight = :weight WHERE bid = :bid AND id = :id');
     $weight = 0;
-    while ($_row = $_result->fetch()) {
+    while ($_row = $stmt->fetch()) {
         ++$weight;
-        $sql = 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_block SET weight=' . $weight . ' WHERE bid=' . $bid . ' AND id=' . $_row['id'];
-        $db->query($sql);
+        $stmt_update->bindValue(':weight', $weight, PDO::PARAM_INT);
+        $stmt_update->bindValue(':bid', $bid, PDO::PARAM_INT);
+        $stmt_update->bindValue(':id', $_row['id'], PDO::PARAM_INT);
+        $stmt_update->execute();
     }
-    $_result->closeCursor();
+    $stmt->closeCursor();
     $nv_Cache->delMod($module_name);
     nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&bid=' . $bid);
 }
 
 // Thay đổi thứ tự bài viết trong nhóm tin
 if ($nv_Request->isset_request('changeweight', 'post')) {
-    if (!csrf_check($nv_Request->get_title('checkss', 'post', ''), $csrf_key)) {
+    if (!csrf_check($nv_Request->get_string('checkss', 'post', ''), $csrf_key)) {
         nv_jsonOutput([
             'status' => 'error',
             'mess' => $nv_Lang->getGlobal('error_checkss')
@@ -115,17 +122,30 @@ if ($nv_Request->isset_request('changeweight', 'post')) {
     $new_weight = $nv_Request->get_int('new_weight', 'post', 0);
 
     if ($bid > 0 and $id > 0 and $new_weight > 0) {
-        $result = $db->query('SELECT id FROM ' . NV_PREFIXLANG . '_' . $module_data . '_block WHERE bid=' . $bid . ' AND id!=' . $id . ' ORDER BY weight ASC');
+        $stmt = $db->prepare('SELECT id FROM ' . NV_PREFIXLANG . '_' . $module_data . '_block WHERE bid = :bid AND id != :id ORDER BY weight ASC');
+        $stmt->bindValue(':bid', $bid, PDO::PARAM_INT);
+        $stmt->bindValue(':id', $id, PDO::PARAM_INT);
+        $stmt->execute();
+        
+        $stmt_update = $db->prepare('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_block SET weight = :weight WHERE bid = :bid AND id = :id');
         $weight = 0;
-        while ($row = $result->fetch()) {
+        while ($_row = $stmt->fetch()) {
             ++$weight;
             if ($weight == $new_weight) {
                 ++$weight;
             }
-            $db->query('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_block SET weight=' . $weight . ' WHERE bid=' . $bid . ' AND id=' . (int) $row['id']);
+            $stmt_update->bindValue(':weight', $weight, PDO::PARAM_INT);
+            $stmt_update->bindValue(':bid', $bid, PDO::PARAM_INT);
+            $stmt_update->bindValue(':id', $_row['id'], PDO::PARAM_INT);
+            $stmt_update->execute();
         }
-        $result->closeCursor();
-        $db->query('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_block SET weight=' . $new_weight . ' WHERE bid=' . $bid . ' AND id=' . $id);
+        $stmt->closeCursor();
+        
+        $stmt_update->bindValue(':weight', $new_weight, PDO::PARAM_INT);
+        $stmt_update->bindValue(':bid', $bid, PDO::PARAM_INT);
+        $stmt_update->bindValue(':id', $id, PDO::PARAM_INT);
+        $stmt_update->execute();
+        
         nv_news_fix_block($bid);
         $nv_Cache->delMod($module_name);
     }
@@ -138,7 +158,7 @@ if ($nv_Request->isset_request('changeweight', 'post')) {
 
 // Xóa bài viết khỏi nhóm tin
 if ($nv_Request->isset_request('delete_items', 'post')) {
-    if (!csrf_check($nv_Request->get_title('checkss', 'post', ''), $csrf_key)) {
+    if (!csrf_check($nv_Request->get_string('checkss', 'post', ''), $csrf_key)) {
         nv_jsonOutput([
             'status' => 'error',
             'mess' => $nv_Lang->getGlobal('error_checkss')
@@ -146,9 +166,12 @@ if ($nv_Request->isset_request('delete_items', 'post')) {
     }
 
     $ids = array_map('intval', $nv_Request->get_array('ids', 'post'));
+    $stmt_delete = $db->prepare('DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_block WHERE bid = :bid AND id = :id');
     foreach ($ids as $id) {
         if ($id > 0) {
-            $db->query('DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_block WHERE bid=' . $bid . ' AND id=' . $id);
+            $stmt_delete->bindValue(':bid', $bid, PDO::PARAM_INT);
+            $stmt_delete->bindValue(':id', $id, PDO::PARAM_INT);
+            $stmt_delete->execute();
         }
     }
     nv_news_fix_block($bid);
@@ -179,50 +202,46 @@ $tpl->assign('BID', $bid);
 if ($tplFile === 'group-articles.tpl') {
     $global_array_cat[0] = ['alias' => 'Other'];
 
-    $sql = 'SELECT t1.id, t1.catid, t1.title, t1.alias, t1.publtime, t1.status, t1.hitstotal, t1.hitscm, t2.weight FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows t1 INNER JOIN ' . NV_PREFIXLANG . '_' . $module_data . '_block t2 ON t1.id = t2.id WHERE t2.bid= ' . $bid . ' AND t1.status=1 ORDER BY t2.weight ASC';
-    $array_block_rows = $db_slave->query($sql)->fetchAll();
+    $stmt = $db->prepare('SELECT t1.id, t1.catid, t1.title, t1.alias, t1.publtime, t1.status, t1.hitstotal, t1.hitscm, t2.weight FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows t1 INNER JOIN ' . NV_PREFIXLANG . '_' . $module_data . '_block t2 ON t1.id = t2.id WHERE t2.bid = :bid AND t1.status=1 ORDER BY t2.weight ASC');
+    $stmt->bindValue(':bid', $bid, PDO::PARAM_INT);
+    $stmt->execute();
+    $array_block_rows = $stmt->fetchAll();
     $num = count($array_block_rows);
 
     $block_rows = [];
-    foreach ($array_block_rows as $row) {
+    foreach ($array_block_rows as $_row) {
         $block_rows[] = [
-            'id' => (int) $row['id'],
-            'title' => $row['title'],
-            'link' => NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . ($global_array_cat[$row['catid']]['alias'] ?? 'Other') . '/' . $row['alias'] . '-' . $row['id'] . $global_config['rewrite_exturl'],
-            'publtime' => nv_datetime_format($row['publtime'], 1),
-            'status' => $nv_Lang->getModule('status_' . $row['status']),
-            'hitstotal' => nv_number_format($row['hitstotal']),
-            'hitscm' => nv_number_format($row['hitscm']),
-            'weight' => (int) $row['weight']
+            'id' => (int) $_row['id'],
+            'title' => $_row['title'],
+            'link' => NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . ($global_array_cat[$_row['catid']]['alias'] ?? 'Other') . '/' . $_row['alias'] . '-' . $_row['id'] . $global_config['rewrite_exturl'],
+            'publtime' => nv_datetime_format($_row['publtime'], 1),
+            'status' => $nv_Lang->getModule('status_' . $_row['status']),
+            'hitstotal' => nv_number_format($_row['hitstotal']),
+            'hitscm' => nv_number_format($_row['hitscm']),
+            'weight' => (int) $_row['weight']
         ];
     }
 
     $tpl->assign('BLOCK_ROWS', $block_rows);
     $tpl->assign('NUM_ROWS', $num);
     $tpl->assign('IS_SPADMIN', defined('NV_IS_SPADMIN'));
-    $tpl->assign('ORDER_PUBLTIME_KEY', defined('NV_IS_SPADMIN') ? md5($bid . NV_CHECK_SESSION) : '');
+    $tpl->assign('ORDER_PUBLTIME_KEY', defined('NV_IS_SPADMIN') ? csrf_create($csrf_key . '_block_order_' . $bid) : '');
 } else {
     $page_title = $nv_Lang->getModule('addtoblock');
     $id_array = array_map('intval', explode(',', $listid));
 
-    $db_slave->sqlreset()
-        ->select('id, title')
-        ->from(NV_PREFIXLANG . '_' . $module_data . '_rows')
-        ->order($order_articles_by . ' DESC')
-        ->where('status=1 AND id IN (' . implode(',', $id_array) . ')');
-
-    $result = $db_slave->query($db_slave->sql());
+    $sql_rows = 'SELECT id, title FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE status = 1 AND id IN (' . implode(',', $id_array) . ') ORDER BY ' . $order_articles_by . ' DESC';
+    $result = $db->query($sql_rows);
 
     $news_rows = [];
-    while ($_scratch = $result->fetch(3)) {
-        [$id, $title] = $_scratch;
-        unset($_scratch);
+    while ($_row = $result->fetch()) {
         $news_rows[] = [
-            'id' => (int) $id,
-            'title' => $title,
-            'checked' => in_array((int) $id, $id_array, true)
+            'id' => (int) $_row['id'],
+            'title' => $_row['title'],
+            'checked' => in_array((int) $_row['id'], $id_array, true)
         ];
     }
+    $result->closeCursor();
 
     $block_options = [];
     foreach ($array_block as $xbid => $blockname) {

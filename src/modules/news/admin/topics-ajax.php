@@ -18,23 +18,15 @@ if (empty($q)) {
     return;
 }
 
-$db_slave->sqlreset()
-    ->select('title')
-    ->from(NV_PREFIXLANG . '_' . $module_data . '_topics')
-    ->where('title LIKE :title OR keywords LIKE :keywords')
-    ->order('weight ASC')
-    ->limit(50);
-
-$sth = $db_slave->prepare($db_slave->sql());
+$sth = $db->prepare('SELECT title FROM ' . NV_PREFIXLANG . '_' . $module_data . '_topics WHERE title LIKE :title OR keywords LIKE :keywords ORDER BY weight ASC LIMIT 50');
 $sth->bindValue(':title', '%' . $q . '%', PDO::PARAM_STR);
 $sth->bindValue(':keywords', '%' . $q . '%', PDO::PARAM_STR);
 $sth->execute();
 
 $array_data = [];
-while ($_scratch = $sth->fetch(3)) {
-    [$title] = $_scratch;
-    unset($_scratch);
-    $array_data[] = $title;
+while ($_row = $sth->fetch()) {
+    $array_data[] = $_row['title'];
 }
+$sth->closeCursor();
 
 nv_jsonOutput($array_data);

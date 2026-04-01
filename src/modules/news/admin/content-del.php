@@ -18,9 +18,9 @@ $checkss = $nv_Request->get_string('checkss', 'post', '');
 $listid = $nv_Request->get_string('listid', 'post', '');
 $contents = 'NO_' . $id;
 
-if ($listid != '' and NV_CHECK_SESSION == $checkss) {
+if ($listid != '' and csrf_check($checkss, $csrf_key)) {
     $del_array = array_map('intval', explode(',', $listid));
-} elseif (md5($id . NV_CHECK_SESSION) == $checkss) {
+} elseif (csrf_check($checkss, $admin_info['admin_id'] . '_' . $module_name . '_' . $id)) {
     $del_array = [
         $id
     ];
@@ -31,14 +31,12 @@ if (!empty($del_array)) {
     $result = $db->query($sql);
     $del_array = $no_del_array = [];
     $artitle = [];
-    while ($_scratch = $result->fetch(3)) {
-        [$id, $listcatid, $post_id, $title, $alias, $status, $weight] = $_scratch;
-        unset($_scratch);
+    while ($_row = $result->fetch()) {
         $check_permission = false;
         if (defined('NV_IS_ADMIN_MODULE')) {
             $check_permission = true;
         } else {
-            $arr_catid = explode(',', $listcatid);
+            $arr_catid = explode(',', $_row['listcatid']);
             $check_del = 0;
             foreach ($arr_catid as $catid_i) {
                 if (isset($array_cat_admin[$admin_id][$catid_i])) {
@@ -47,7 +45,7 @@ if (!empty($del_array)) {
                     } else {
                         if ($array_cat_admin[$admin_id][$catid_i]['del_content'] == 1) {
                             ++$check_del;
-                        } elseif (($status == 0 or $status == 4 or $status == 5 or $status == 6) and $post_id == $admin_id) {
+                        } elseif (($_row['status'] == 0 or $_row['status'] == 4 or $_row['status'] == 5 or $_row['status'] == 6) and $_row['admin_id'] == $admin_id) {
                             // Xoá chính bài mình đăng khi nó bị đình chỉ hoặc nháp, chuyển duyệt, từ chối duyệt
                             ++$check_del;
                         }
@@ -63,14 +61,15 @@ if (!empty($del_array)) {
         }
 
         if ($check_permission > 0) {
-            $contents = nv_del_content_module($id);
-            $artitle[] = $title;
-            $del_array[] = $id;
-            $weight_min = $weight;
+            $contents = nv_del_content_module($_row['id']);
+            $artitle[] = $_row['title'];
+            $del_array[] = $_row['id'];
+            $weight_min = $_row['weight'];
         } else {
-            $no_del_array[] = $id;
+            $no_del_array[] = $_row['id'];
         }
     }
+    $result->closeCursor();
     $count = count($del_array);
     if ($count) {
         nv_insert_logs(NV_LANG_DATA, $module_name, $nv_Lang->getModule('permissions_del_content'), implode(', ', $artitle), $admin_info['userid']);

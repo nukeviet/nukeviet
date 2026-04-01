@@ -17,7 +17,7 @@
                 </td>
                 <td>{$row.changed_fields}</td>
                 <td class="text-center text-nowrap">
-                    <a data-toggle="restoreHistory" href="{$BASE_URL}&amp;loadhistory={$NEW_ID}" data-id="{$row.id}" data-msg="{$LANG->getModule('history_restore_confirm')}" class="btn btn-sm btn-info text-nowrap">
+                    <a data-toggle="restoreHistory" href="{$BASE_URL}&amp;loadhistory={$NEW_ID}" data-id="{$row.id}" data-checkss="{$CHECKSS}" data-msg="{$LANG->getModule('history_restore_confirm')}" class="btn btn-sm btn-info text-nowrap">
                         <i class="fa-solid fa-fw text-center fa-database" data-icon="fa-database"></i> {$LANG->getModule('history_restore')}
                     </a>
                 </td>

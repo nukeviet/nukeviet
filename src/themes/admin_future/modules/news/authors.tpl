@@ -42,7 +42,7 @@
                                        role="switch"
                                        data-toggle="change-author-status"
                                        data-id="{$row.id}"
-                                       data-tokend="{$CHECKSS}"
+                                       data-checkss="{$CHECKSS}"
                                        aria-label="{$row.pseudonym}"
                                        {if $row.is_active}checked{/if}>
                             </div>
@@ -55,7 +55,7 @@
                             <button type="button" class="btn btn-sm btn-danger"
                                     data-toggle="delete-author"
                                     data-id="{$row.id}"
-                                    data-tokend="{$CHECKSS}">
+                                    data-checkss="{$CHECKSS}">
                                 <i class="fa-solid fa-trash" data-icon="fa-trash"></i> {$LANG->getGlobal('delete')}
                             </button>
                             {/if}

@@ -17,7 +17,7 @@ $page_title = $nv_Lang->getModule('voice_manager');
 
 // Thay đổi thứ tự
 if ($nv_Request->isset_request('changeweight', 'post')) {
-    if (!csrf_check($nv_Request->get_title('checkss', 'post', ''), $csrf_key)) {
+    if (!csrf_check($nv_Request->get_string('checkss', 'post', ''), $csrf_key)) {
         nv_jsonOutput([
             'status' => 'error',
             'mess' => $nv_Lang->getGlobal('error_checkss')
@@ -27,8 +27,11 @@ if ($nv_Request->isset_request('changeweight', 'post')) {
     $new_weight = $nv_Request->get_int('new_weight', 'post', 0);
 
     // Kiểm tra tồn tại
-    $sql = 'SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_voices WHERE id=' . $id;
-    $array = $db->query($sql)->fetch();
+    $stmt = $db->prepare('SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_voices WHERE id = :id');
+    $stmt->bindValue(':id', $id, PDO::PARAM_INT);
+    $stmt->execute();
+    $array = $stmt->fetch();
+    $stmt->closeCursor();
     if (empty($array)) {
         nv_jsonOutput([
             'status' => 'error',
@@ -42,21 +45,27 @@ if ($nv_Request->isset_request('changeweight', 'post')) {
         ]);
     }
 
-    $sql = 'SELECT id FROM ' . NV_PREFIXLANG . '_' . $module_data . '_voices WHERE id!=' . $id . ' ORDER BY weight ASC';
-    $result = $db->query($sql);
+    $stmt2 = $db->prepare('SELECT id FROM ' . NV_PREFIXLANG . '_' . $module_data . '_voices WHERE id != :id ORDER BY weight ASC');
+    $stmt2->bindValue(':id', $id, PDO::PARAM_INT);
+    $stmt2->execute();
+    
+    $stmt_update = $db->prepare('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_voices SET weight = :weight WHERE id = :id');
 
     $weight = 0;
-    while ($row = $result->fetch()) {
+    while ($_row = $stmt2->fetch()) {
         ++$weight;
         if ($weight == $new_weight) {
             ++$weight;
         }
-        $sql = 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_voices SET weight=' . $weight . ' WHERE id=' . $row['id'];
-        $db->query($sql);
+        $stmt_update->bindValue(':weight', $weight, PDO::PARAM_INT);
+        $stmt_update->bindValue(':id', $_row['id'], PDO::PARAM_INT);
+        $stmt_update->execute();
     }
+    $stmt2->closeCursor();
 
-    $sql = 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_voices SET weight=' . $new_weight . ' WHERE id=' . $id;
-    $db->query($sql);
+    $stmt_update->bindValue(':weight', $new_weight, PDO::PARAM_INT);
+    $stmt_update->bindValue(':id', $id, PDO::PARAM_INT);
+    $stmt_update->execute();
 
     nv_insert_logs(NV_LANG_DATA, $module_name, 'LOG_CHANGE_WEIGHT_VOICE', $id . ': ' . $array['title'], $admin_info['admin_id']);
     $nv_Cache->delMod($module_name);
@@ -68,7 +77,7 @@ if ($nv_Request->isset_request('changeweight', 'post')) {
 
 // Thay đổi trạng thái hoạt động
 if ($nv_Request->isset_request('changestatus', 'post')) {
-    if (!csrf_check($nv_Request->get_title('checkss', 'post', ''), $csrf_key)) {
+    if (!csrf_check($nv_Request->get_string('checkss', 'post', ''), $csrf_key)) {
         nv_jsonOutput([
             'status' => 'error',
             'mess' => $nv_Lang->getGlobal('error_checkss')
@@ -77,8 +86,11 @@ if ($nv_Request->isset_request('changestatus', 'post')) {
     $id = $nv_Request->get_int('id', 'post', 0);
 
     // Kiểm tra tồn tại
-    $sql = 'SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_voices WHERE id=' . $id;
-    $array = $db->query($sql)->fetch();
+    $stmt = $db->prepare('SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_voices WHERE id = :id');
+    $stmt->bindValue(':id', $id, PDO::PARAM_INT);
+    $stmt->execute();
+    $array = $stmt->fetch();
+    $stmt->closeCursor();
     if (empty($array)) {
         nv_jsonOutput([
             'status' => 'error',
@@ -88,8 +100,10 @@ if ($nv_Request->isset_request('changestatus', 'post')) {
 
     $status = empty($array['status']) ? 1 : 0;
 
-    $sql = 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_voices SET status = ' . $status . ' WHERE id = ' . $id;
-    $db->query($sql);
+    $stmt_update = $db->prepare('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_voices SET status = :status WHERE id = :id');
+    $stmt_update->bindValue(':status', $status, PDO::PARAM_INT);
+    $stmt_update->bindValue(':id', $id, PDO::PARAM_INT);
+    $stmt_update->execute();
 
     nv_insert_logs(NV_LANG_DATA, $module_name, 'LOG_CHANGE_STATUS_VOICE', $id . ': ' . $array['title'], $admin_info['admin_id']);
     $nv_Cache->delMod($module_name);
@@ -102,7 +116,7 @@ if ($nv_Request->isset_request('changestatus', 'post')) {
 
 // Xóa
 if ($nv_Request->isset_request('delete', 'post')) {
-    if (!csrf_check($nv_Request->get_title('checkss', 'post', ''), $csrf_key)) {
+    if (!csrf_check($nv_Request->get_string('checkss', 'post', ''), $csrf_key)) {
         nv_jsonOutput([
             'status' => 'error',
             'mess' => $nv_Lang->getGlobal('error_checkss')
@@ -111,8 +125,11 @@ if ($nv_Request->isset_request('delete', 'post')) {
     $id = $nv_Request->get_int('id', 'post', 0);
 
     // Kiểm tra tồn tại
-    $sql = 'SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_voices WHERE id=' . $id;
-    $array = $db->query($sql)->fetch();
+    $stmt = $db->prepare('SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_voices WHERE id = :id');
+    $stmt->bindValue(':id', $id, PDO::PARAM_INT);
+    $stmt->execute();
+    $array = $stmt->fetch();
+    $stmt->closeCursor();
     if (empty($array)) {
         nv_jsonOutput([
             'status' => 'error',
@@ -121,19 +138,24 @@ if ($nv_Request->isset_request('delete', 'post')) {
     }
 
     // Xóa
-    $sql = 'DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_voices WHERE id=' . $id;
-    $db->query($sql);
+    $stmt_delete = $db->prepare('DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_voices WHERE id = :id');
+    $stmt_delete->bindValue(':id', $id, PDO::PARAM_INT);
+    $stmt_delete->execute();
 
     // Cập nhật thứ tự
     $sql = 'SELECT id FROM ' . NV_PREFIXLANG . '_' . $module_data . '_voices ORDER BY weight ASC';
     $result = $db->query($sql);
     $weight = 0;
+    
+    $stmt_update = $db->prepare('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_voices SET weight = :weight WHERE id = :id');
 
-    while ($row = $result->fetch()) {
+    while ($_row = $result->fetch()) {
         ++$weight;
-        $sql = 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_voices SET weight=' . $weight . ' WHERE id=' . $row['id'];
-        $db->query($sql);
+        $stmt_update->bindValue(':weight', $weight, PDO::PARAM_INT);
+        $stmt_update->bindValue(':id', $_row['id'], PDO::PARAM_INT);
+        $stmt_update->execute();
     }
+    $result->closeCursor();
 
     nv_insert_logs(NV_LANG_DATA, $module_name, 'LOG_DELETE_VOICE', $id . ': ' . $array['title'], $admin_info['admin_id']);
     $nv_Cache->delMod($module_name);
@@ -154,8 +176,11 @@ $item = [
 $id = $nv_Request->get_int('id', 'get', 0);
 
 if (!empty($id)) {
-    $sql = 'SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_voices WHERE id = ' . $id;
-    $row = $db->query($sql)->fetch();
+    $stmt = $db->prepare('SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_voices WHERE id = :id');
+    $stmt->bindValue(':id', $id, PDO::PARAM_INT);
+    $stmt->execute();
+    $row = $stmt->fetch();
+    $stmt->closeCursor();
 
     if (empty($row)) {
         nv_info_die($nv_Lang->getGlobal('error_404_title'), $nv_Lang->getGlobal('error_404_title'), $nv_Lang->getGlobal('error_404_content'));
@@ -174,9 +199,9 @@ if ($nv_Request->isset_request('save', 'post')) {
 
     // Kiểm tra trùng
     $is_exists = false;
-    $sql = 'SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_voices WHERE title = :title' . ($id ? ' AND id != ' . $id : '');
+    $sql = 'SELECT 1 FROM ' . NV_PREFIXLANG . '_' . $module_data . '_voices WHERE title = :title' . ($id ? ' AND id != ' . $id : '');
     $sth = $db->prepare($sql);
-    $sth->bindParam(':title', $item['title'], PDO::PARAM_STR);
+    $sth->bindValue(':title', $item['title'], PDO::PARAM_STR);
     $sth->execute();
     if ($sth->fetchColumn()) {
         $is_exists = true;
@@ -209,14 +234,17 @@ if ($nv_Request->isset_request('save', 'post')) {
     } else {
         $sql = 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_voices SET
             voice_key=:voice_key, title = :title, description = :description, edit_time = ' . NV_CURRENTTIME . '
-        WHERE id = ' . $id;
+        WHERE id = :id';
     }
 
     try {
         $sth = $db->prepare($sql);
-        $sth->bindParam(':voice_key', $item['voice_key'], PDO::PARAM_STR);
-        $sth->bindParam(':title', $item['title'], PDO::PARAM_STR);
-        $sth->bindParam(':description', $item['description'], PDO::PARAM_STR, strlen($item['description']));
+        $sth->bindValue(':voice_key', $item['voice_key'], PDO::PARAM_STR);
+        $sth->bindValue(':title', $item['title'], PDO::PARAM_STR);
+        $sth->bindValue(':description', $item['description'], PDO::PARAM_STR);
+        if ($id) {
+            $sth->bindValue(':id', $id, PDO::PARAM_INT);
+        }
         $sth->execute();
 
         if ($sth->rowCount()) {

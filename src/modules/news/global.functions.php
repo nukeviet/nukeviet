@@ -55,33 +55,35 @@ function nv_set_status_module()
     file_put_contents($check_run_cronjobs, '');
 
     // Dang cai bai cho kich hoat theo thoi gian
-    $query = $db->query('SELECT id, listcatid FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE status=2 AND publtime < ' . NV_CURRENTTIME . ' ORDER BY publtime ASC');
-    while ($_scratch = $query->fetch(3)) {
-        [$id, $listcatid] = $_scratch;
-        unset($_scratch);
-        $array_catid = explode(',', $listcatid);
+    $stmt = $db->query('SELECT id, listcatid FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE status=2 AND publtime < ' . NV_CURRENTTIME . ' ORDER BY publtime ASC');
+    while ($_row = $stmt->fetch()) {
+        $array_catid = explode(',', $_row['listcatid']);
         foreach ($array_catid as $catid_i) {
             $catid_i = (int) $catid_i;
             if ($catid_i > 0) {
-                $db->query('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_' . $catid_i . ' SET status=1 WHERE id=' . $id);
+                $stmt_update = $db->prepare('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_' . $catid_i . ' SET status=1 WHERE id= :id');
+                $stmt_update->bindValue(':id', $_row['id'], PDO::PARAM_INT);
+                $stmt_update->execute();
             }
         }
-        $db->query('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_rows SET status=1 WHERE id=' . $id);
+        $stmt_update2 = $db->prepare('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_rows SET status=1 WHERE id= :id');
+        $stmt_update2->bindValue(':id', $_row['id'], PDO::PARAM_INT);
+        $stmt_update2->execute();
     }
+    $stmt->closeCursor();
 
     // Ngung hieu luc cac bai da het han
     $weight_min = 0;
-    $query = $db->query('SELECT id, listcatid, archive, weight FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE status=1 AND exptime > 0 AND exptime <= ' . NV_CURRENTTIME . ' ORDER BY weight DESC, exptime ASC');
-    while ($_scratch = $query->fetch(3)) {
-        [$id, $listcatid, $archive, $weight] = $_scratch;
-        unset($_scratch);
-        if ((int) $archive == 0) {
-            nv_del_content_module($id);
-            $weight_min = $weight;
+    $stmt = $db->query('SELECT id, listcatid, archive, weight FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE status=1 AND exptime > 0 AND exptime <= ' . NV_CURRENTTIME . ' ORDER BY weight DESC, exptime ASC');
+    while ($_row = $stmt->fetch()) {
+        if ((int) $_row['archive'] == 0) {
+            nv_del_content_module($_row['id']);
+            $weight_min = $_row['weight'];
         } else {
-            nv_archive_content_module($id, $listcatid);
+            nv_archive_content_module($_row['id'], $_row['listcatid']);
         }
     }
+    $stmt->closeCursor();
 
     // Tim kiem thoi gian chay lan ke tiep
     $time_publtime = $db->query('SELECT min(publtime) FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE status=2 AND publtime > ' . NV_CURRENTTIME)->fetchColumn();
@@ -116,35 +118,49 @@ function nv_del_content_module($id)
     global $db, $module_name, $module_data, $title, $nv_Lang, $module_config;
     $content_del = 'NO_' . $id;
     $title = '';
-    [$id, $listcatid, $title] = $db->query('SELECT id, listcatid, title FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE id=' . (int) $id)->fetch(3);
-    if ($id > 0) {
+    
+    $stmt = $db->prepare('SELECT id, listcatid, title FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE id= :id');
+    $stmt->bindValue(':id', $id, PDO::PARAM_INT);
+    $stmt->execute();
+    $_row = $stmt->fetch();
+    if ($_row) {
+        $id = $_row['id'];
+        $listcatid = $_row['listcatid'];
+        $title = $_row['title'];
+        $stmt->closeCursor();
+
         $number_no_del = 0;
         $array_catid = explode(',', $listcatid);
         foreach ($array_catid as $catid_i) {
             $catid_i = (int) $catid_i;
             if ($catid_i > 0) {
-                $_sql = 'DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_' . $catid_i . ' WHERE id=' . $id;
-                if (!$db->exec($_sql)) {
+                $_sql = 'DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_' . $catid_i . ' WHERE id= :id';
+                $stmt_delete_cat_item = $db->prepare($_sql);
+                $stmt_delete_cat_item->bindValue(':id', $id, PDO::PARAM_INT);
+                if (!$stmt_delete_cat_item->execute()) {
                     ++$number_no_del;
                 }
             }
         }
 
         // Xóa bảng rows
-        $_sql = 'DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE id=' . $id;
-        if (!$db->exec($_sql)) {
+        $stmt_delete_row = $db->prepare('DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE id= :id');
+        $stmt_delete_row->bindValue(':id', $id, PDO::PARAM_INT);
+        if (!$stmt_delete_row->execute()) {
             ++$number_no_del;
         }
 
         // Xóa bảng detail
-        $_sql = 'DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_detail WHERE id = ' . $id;
-        if (!$db->exec($_sql)) {
+        $stmt_delete_detail = $db->prepare('DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_detail WHERE id = :id');
+        $stmt_delete_detail->bindValue(':id', $id, PDO::PARAM_INT);
+        if (!$stmt_delete_detail->execute()) {
             ++$number_no_del;
         }
 
         // Xóa lịch sử bài viết
-        $_sql = 'DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_row_histories WHERE new_id = ' . $id;
-        $db->exec($_sql);
+        $stmt_delete_histories = $db->prepare('DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_row_histories WHERE new_id = :id');
+        $stmt_delete_histories->bindValue(':id', $id, PDO::PARAM_INT);
+        $stmt_delete_histories->execute();
 
         // Xóa log thay đổi trạng thái bài viết
         $_sql = 'DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_logs WHERE sid=' . $id . ' AND log_key=\'' . Logs::KEY_CHANGE_STATUS . '\'';
@@ -190,21 +206,30 @@ function nv_fix_weight_content($weight_min)
     global $db, $module_data;
     if ($weight_min > 0) {
         $weight_min -= 1;
-        $sql = 'SELECT id, listcatid FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE weight >= ' . $weight_min . ' ORDER BY weight ASC, publtime ASC';
-        $result = $db->query($sql);
+        $stmt = $db->prepare('SELECT id, listcatid FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE weight >= :weight_min ORDER BY weight ASC, publtime ASC');
+        $stmt->bindValue(':weight_min', $weight_min, PDO::PARAM_INT);
+        $stmt->execute();
         $weight = $weight_min;
-        while ($_row2 = $result->fetch()) {
-            $db->query('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_rows SET weight=' . $weight . ' WHERE id=' . $_row2['id']);
-            $_array_catid = explode(',', $_row2['listcatid']);
+        
+        $stmt_update_row = $db->prepare('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_rows SET weight= :weight WHERE id= :id');
+        while ($_row = $stmt->fetch()) {
+            $stmt_update_row->bindValue(':weight', $weight, PDO::PARAM_INT);
+            $stmt_update_row->bindValue(':id', $_row['id'], PDO::PARAM_INT);
+            $stmt_update_row->execute();
+            $_array_catid = explode(',', $_row['listcatid']);
             foreach ($_array_catid as $_catid) {
                 try {
-                    $db->query('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_' . (int) $_catid . ' SET weight=' . $weight . ' WHERE id=' . $_row2['id']);
+                    $stmt_update_cat = $db->prepare('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_' . (int) $_catid . ' SET weight= :weight WHERE id= :id');
+                    $stmt_update_cat->bindValue(':weight', $weight, PDO::PARAM_INT);
+                    $stmt_update_cat->bindValue(':id', $_row['id'], PDO::PARAM_INT);
+                    $stmt_update_cat->execute();
                 } catch (Throwable $e) {
                     trigger_error($e);
                 }
             }
             ++$weight;
         }
+        $stmt->closeCursor();
     }
 }
 
@@ -312,9 +337,9 @@ function get_pseudonym_alias($pseudonym, $aid)
 
     $alias = change_alias($pseudonym);
 
-    $tab = NV_PREFIXLANG . '_' . $module_data . '_author';
-    $stmt = $db_slave->prepare('SELECT COUNT(*) FROM ' . $tab . ' WHERE id!=' . $aid . ' AND alias= :alias');
-    $stmt->bindParam(':alias', $alias, PDO::PARAM_STR);
+    $stmt = $db_slave->prepare('SELECT COUNT(*) FROM ' . NV_PREFIXLANG . '_' . $module_data . '_author WHERE id != :id AND alias = :alias');
+    $stmt->bindValue(':id', (int) $aid, PDO::PARAM_INT);
+    $stmt->bindValue(':alias', $alias, PDO::PARAM_STR);
     $stmt->execute();
     $nb = $stmt->fetchColumn();
     if (!empty($nb)) {
@@ -334,13 +359,19 @@ function my_author_detail($userid)
 {
     global $db, $module_data;
 
-    $sql = 'SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_author WHERE uid =' . $userid;
-    $result = $db->query($sql);
-    $detail = $result->fetch();
+    $stmt = $db->prepare('SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_author WHERE uid = :uid');
+    $stmt->bindValue(':uid', (int) $userid, PDO::PARAM_INT);
+    $stmt->execute();
+    $detail = $stmt->fetch();
+    $stmt->closeCursor();
+
     if (!$detail) {
-        $sql = 'SELECT * FROM ' . NV_USERS_GLOBALTABLE . ' WHERE userid =' . $userid;
-        $result = $db->query($sql);
-        $row = $result->fetch();
+        $stmt = $db->prepare('SELECT * FROM ' . NV_USERS_GLOBALTABLE . ' WHERE userid = :userid');
+        $stmt->bindValue(':userid', (int) $userid, PDO::PARAM_INT);
+        $stmt->execute();
+        $row = $stmt->fetch();
+        $stmt->closeCursor();
+
         $pseudonym = '';
         if (!empty($row['first_name'])) {
             $pseudonym .= $row['first_name'];
@@ -357,11 +388,11 @@ function my_author_detail($userid)
             $alias = change_alias($pseudonym) . '-' . $userid;
         }
 
-        $sql = 'INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . '_author (uid, alias, pseudonym, image, description, add_time) VALUES ( ' . $userid . ", :alias, :pseudonym, '', '', " . NV_CURRENTTIME . ')';
-        $data_insert = [];
-        $data_insert['alias'] = $alias;
-        $data_insert['pseudonym'] = $pseudonym;
-        $id = $db->insert_id($sql, 'id', $data_insert);
+        $stmt = $db->prepare("INSERT INTO " . NV_PREFIXLANG . '_' . $module_data . "_author (uid, alias, pseudonym, image, description, add_time) VALUES (" . $userid . ", :alias, :pseudonym, '', '', " . NV_CURRENTTIME . ')');
+        $stmt->bindValue(':alias', $alias, PDO::PARAM_STR);
+        $stmt->bindValue(':pseudonym', $pseudonym, PDO::PARAM_STR);
+        $stmt->execute();
+        $id = (int) $db->lastInsertId();
 
         $detail = [
             'id' => $id,

@@ -36,7 +36,7 @@
                         </select>
                     </div>
                     <div>
-                        <button type="button" class="btn btn-primary" data-toggle="keyword_change" data-id="{$row.id}" data-tid="{$TID}"><i class="fa-solid fa-floppy-disk" data-icon="fa-floppy-disk"></i> {$LANG->getModule('save')}</button>
+                        <button type="button" class="btn btn-primary" data-toggle="keyword_change" data-id="{$row.id}" data-tid="{$TID}" data-checkss="{$CHECKSS}"><i class="fa-solid fa-floppy-disk" data-icon="fa-floppy-disk"></i> {$LANG->getModule('save')}</button>
                     </div>
                     <div>
                         <button type="button" class="btn btn-link" data-toggle="tag_keyword_close" data-id="{$row.id}" aria-label="{$LANG->getGlobal('close')}" title="{$LANG->getGlobal('close')}"><i class="fa-regular fa-circle-xmark"></i></button>

@@ -25,7 +25,7 @@ $catids = array_unique($nv_Request->get_typed_array('catids', 'post', 'int', [])
 $catid = $nv_Request->get_int('catid', 'get,post', 0);
 
 if ($nv_Request->isset_request('idcheck', 'post')) {
-    if (!csrf_check($nv_Request->get_title('checkss', 'post', ''), $csrf_key)) {
+    if (!csrf_check($nv_Request->get_string('checkss', 'post', ''), $csrf_key)) {
         nv_jsonOutput([
             'status' => 'error',
             'mess' => $nv_Lang->getGlobal('error_checkss')
@@ -62,32 +62,59 @@ if ($nv_Request->isset_request('idcheck', 'post')) {
     }
 
     $result = $db->query('SELECT id, listcatid, status FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE id IN (' . implode(',', $id_array) . ')');
-    while ($_scratch = $result->fetch(3)) {
-        [$id, $listcatid_old, $status] = $_scratch;
-        unset($_scratch);
+    
+    $stmt_update_row = $db->prepare('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_rows SET catid = :catid, listcatid = :listcatid, status = :status WHERE id = :id');
+    $stmt_update_row_no_status = $db->prepare('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_rows SET catid = :catid, listcatid = :listcatid WHERE id = :id');
+
+    // Chuẩn bị sẵn các statement DELETE cho từng chuyên mục đích (table name động)
+    $stmt_insert_map = [];
+    $stmt_del_new_map = [];
+    foreach ($catids as $catid_i) {
+        $catid_i_int = intval($catid_i);
+        $stmt_insert_map[$catid_i_int] = $db->prepare('INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . '_' . $catid_i_int . ' SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE id = :id');
+        $stmt_del_new_map[$catid_i_int] = $db->prepare('DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_' . $catid_i_int . ' WHERE id = :id');
+    }
+
+    while ($_row = $result->fetch()) {
         // Xóa hết các chuyên mục cũ đi
-        $array_catid_old = explode(',', $listcatid_old);
-        foreach ($array_catid_old as $catid_i) {
-            $db->exec('DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_' . $catid_i . ' WHERE id=' . $id);
+        $array_catid_old = explode(',', $_row['listcatid']);
+        foreach ($array_catid_old as $catid_old_i) {
+            $stmt_del_old = $db->prepare('DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_' . intval($catid_old_i) . ' WHERE id = :id');
+            $stmt_del_old->bindValue(':id', $_row['id'], PDO::PARAM_INT);
+            $stmt_del_old->execute();
         }
 
         // Nếu bài viết đang bị khóa bởi chuyên mục thì sau khi di chuyển sẽ trở lại trạng thái ban đầu
-        $sql_status = '';
-        if ($status > $global_code_defined['row_locked_status']) {
-            $sql_status = ', status=' . ($status - ($global_code_defined['row_locked_status'] + 1));
+        if ($_row['status'] > $global_code_defined['row_locked_status']) {
+            $new_status = $_row['status'] - ($global_code_defined['row_locked_status'] + 1);
+            $stmt_update_row->bindValue(':catid', $catid, PDO::PARAM_INT);
+            $stmt_update_row->bindValue(':listcatid', $listcatid, PDO::PARAM_STR);
+            $stmt_update_row->bindValue(':status', $new_status, PDO::PARAM_INT);
+            $stmt_update_row->bindValue(':id', $_row['id'], PDO::PARAM_INT);
+            $stmt_update_row->execute();
+        } else {
+            $stmt_update_row_no_status->bindValue(':catid', $catid, PDO::PARAM_INT);
+            $stmt_update_row_no_status->bindValue(':listcatid', $listcatid, PDO::PARAM_STR);
+            $stmt_update_row_no_status->bindValue(':id', $_row['id'], PDO::PARAM_INT);
+            $stmt_update_row_no_status->execute();
         }
-        $db->exec('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_rows SET catid=' . $catid . ', listcatid=' . $db->quote($listcatid) . $sql_status . ' WHERE id=' . $id);
 
         foreach ($catids as $catid_i) {
+            $catid_i_int = intval($catid_i);
             try {
-                $db->exec('INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . '_' . $catid_i . ' SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE id=' . $id);
+                $stmt_insert_map[$catid_i_int]->bindValue(':id', $_row['id'], PDO::PARAM_INT);
+                $stmt_insert_map[$catid_i_int]->execute();
             } catch (Throwable $e) {
                 trigger_error($e);
-                $db->exec('DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_' . $catid_i . ' WHERE id=' . $id);
-                $db->exec('INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . '_' . $catid_i . ' SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE id=' . $id);
+                $stmt_del_new_map[$catid_i_int]->bindValue(':id', $_row['id'], PDO::PARAM_INT);
+                $stmt_del_new_map[$catid_i_int]->execute();
+
+                $stmt_insert_map[$catid_i_int]->bindValue(':id', $_row['id'], PDO::PARAM_INT);
+                $stmt_insert_map[$catid_i_int]->execute();
             }
         }
     }
+    $result->closeCursor();
 
     $nv_Cache->delMod($module_name);
     nv_insert_logs(NV_LANG_DATA, $module_name, $nv_Lang->getModule('move'), 'ids: ' . implode(', ', $id_array) . ' --> catid: ' . $catid, $admin_info['userid']);
@@ -104,19 +131,18 @@ if (empty($id_array)) {
     nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
 }
 
-$db->sqlreset()->select('id, title')->from(NV_PREFIXLANG . '_' . $module_data . '_rows')->where('id IN (' . implode(',', $id_array) . ')')->order('id DESC');
-$result = $db->query($db->sql());
+$sql_rows = 'SELECT id, title FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE id IN (' . implode(',', $id_array) . ') ORDER BY id DESC';
+$result = $db->query($sql_rows);
 
 $rows = [];
-while ($_scratch = $result->fetch(3)) {
-    [$id, $title] = $_scratch;
-    unset($_scratch);
+while ($_row = $result->fetch()) {
     $rows[] = [
-        'id' => $id,
-        'title' => $title,
-        'checked' => in_array((int) $id, $id_array, true)
+        'id' => (int) $_row['id'],
+        'title' => $_row['title'],
+        'checked' => in_array((int) $_row['id'], $id_array, true)
     ];
 }
+$result->closeCursor();
 
 $catids_int = array_map('intval', $catids);
 $cats = [];

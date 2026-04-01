@@ -72,12 +72,11 @@ $array_url_instruction['setting'] = 'https://wiki.nukeviet.vn/nukeviet4:admin:ne
 global $global_array_cat;
 $global_array_cat = [];
 $sql = 'SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_cat ORDER BY sort ASC';
-$result = $db_slave->query($sql);
+$result = $db->query($sql);
 while ($row = $result->fetch()) {
     $global_array_cat[$row['catid']] = $row;
 }
-
-$csrf_key_author = $admin_info['admin_id'] . '_' . $module_name . '_authors';
+$result->closeCursor();
 
 /**
  * nv_fix_cat_order()
@@ -90,42 +89,57 @@ function nv_fix_cat_order($parentid = 0, $order = 0, $lev = 0)
 {
     global $db, $module_data;
 
-    $sql = 'SELECT catid, parentid FROM ' . NV_PREFIXLANG . '_' . $module_data . '_cat WHERE parentid=' . $parentid . ' ORDER BY weight ASC';
-    $result = $db->query($sql);
+    $stmt = $db->prepare('SELECT catid, parentid FROM ' . NV_PREFIXLANG . '_' . $module_data . '_cat WHERE parentid=:parentid ORDER BY weight ASC');
+    $stmt->bindValue(':parentid', $parentid, PDO::PARAM_INT);
+    $stmt->execute();
     $array_cat_order = [];
-    while ($row = $result->fetch()) {
+    while ($row = $stmt->fetch()) {
         $array_cat_order[] = $row['catid'];
     }
-    $result->closeCursor();
+    $stmt->closeCursor();
+
     $weight = 0;
     if ($parentid > 0) {
         ++$lev;
     } else {
         $lev = 0;
     }
+
     foreach ($array_cat_order as $catid_i) {
         ++$order;
         ++$weight;
-        $sql = 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_cat SET weight=' . $weight . ', sort=' . $order . ', lev=' . $lev . ' WHERE catid=' . (int) $catid_i;
-        $db->query($sql);
+        $stmt_update = $db->prepare('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_cat SET weight=:weight, sort=:sort, lev=:lev WHERE catid=:catid');
+        $stmt_update->bindValue(':weight', $weight, PDO::PARAM_INT);
+        $stmt_update->bindValue(':sort', $order, PDO::PARAM_INT);
+        $stmt_update->bindValue(':lev', $lev, PDO::PARAM_INT);
+        $stmt_update->bindValue(':catid', $catid_i, PDO::PARAM_INT);
+        $stmt_update->execute();
+
         $order = nv_fix_cat_order($catid_i, $order, $lev);
     }
     $numsubcat = $weight;
     if ($parentid > 0) {
-        $sql = 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_cat SET numsubcat=' . $numsubcat;
+        $sql = 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_cat SET numsubcat=:numsubcat';
         if ($numsubcat == 0) {
             // Chuyên mục cha không có chuyên mục con
-            $sql .= ",subcatid='', viewcat=CASE
+            $sql .= ", subcatid='', viewcat=CASE
             WHEN viewcat='viewcat_main_left' THEN 'viewcat_page_new'
             WHEN viewcat='viewcat_main_right' THEN 'viewcat_page_new'
             WHEN viewcat='viewcat_main_bottom' THEN 'viewcat_page_new'
             WHEN viewcat='viewcat_two_column' THEN 'viewcat_page_new'
             ELSE viewcat END";
         } else {
-            $sql .= ",subcatid='" . implode(',', $array_cat_order) . "'";
+            $sql .= ", subcatid=:subcatid";
         }
-        $sql .= ' WHERE catid=' . (int) $parentid;
-        $db->query($sql);
+        $sql .= " WHERE catid=:catid";
+        
+        $stmt = $db->prepare($sql);
+        $stmt->bindValue(':numsubcat', $numsubcat, PDO::PARAM_INT);
+        if ($numsubcat > 0) {
+            $stmt->bindValue(':subcatid', implode(',', $array_cat_order), PDO::PARAM_STR);
+        }
+        $stmt->bindValue(':catid', $parentid, PDO::PARAM_INT);
+        $stmt->execute();
     }
 
     return $order;
@@ -137,15 +151,16 @@ function nv_fix_cat_order($parentid = 0, $order = 0, $lev = 0)
 function nv_fix_topic()
 {
     global $db, $module_data;
-    $sql = 'SELECT topicid FROM ' . NV_PREFIXLANG . '_' . $module_data . '_topics ORDER BY weight ASC';
-    $result = $db->query($sql);
+    $stmt = $db->query('SELECT topicid FROM ' . NV_PREFIXLANG . '_' . $module_data . '_topics ORDER BY weight ASC');
     $weight = 0;
-    while ($row = $result->fetch()) {
+    while ($_row_topic = $stmt->fetch()) {
         ++$weight;
-        $sql = 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_topics SET weight=' . $weight . ' WHERE topicid=' . (int) ($row['topicid']);
-        $db->query($sql);
+        $stmt_update = $db->prepare('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_topics SET weight= :weight WHERE topicid= :topicid');
+        $stmt_update->bindValue(':weight', $weight, PDO::PARAM_INT);
+        $stmt_update->bindValue(':topicid', $_row_topic['topicid'], PDO::PARAM_INT);
+        $stmt_update->execute();
     }
-    $result->closeCursor();
+    $stmt->closeCursor();
 }
 
 /**
@@ -154,15 +169,16 @@ function nv_fix_topic()
 function nv_fix_block_cat()
 {
     global $db, $module_data;
-    $sql = 'SELECT bid FROM ' . NV_PREFIXLANG . '_' . $module_data . '_block_cat ORDER BY weight ASC';
+    $stmt = $db->query('SELECT bid FROM ' . NV_PREFIXLANG . '_' . $module_data . '_block_cat ORDER BY weight ASC');
     $weight = 0;
-    $result = $db->query($sql);
-    while ($row = $result->fetch()) {
+    while ($_row_bcat = $stmt->fetch()) {
         ++$weight;
-        $sql = 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_block_cat SET weight=' . $weight . ' WHERE bid=' . (int) ($row['bid']);
-        $db->query($sql);
+        $stmt_update = $db->prepare('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_block_cat SET weight= :weight WHERE bid= :bid');
+        $stmt_update->bindValue(':weight', $weight, PDO::PARAM_INT);
+        $stmt_update->bindValue(':bid', $_row_bcat['bid'], PDO::PARAM_INT);
+        $stmt_update->execute();
     }
-    $result->closeCursor();
+    $stmt->closeCursor();
 }
 
 /**
@@ -171,15 +187,16 @@ function nv_fix_block_cat()
 function nv_fix_source()
 {
     global $db, $module_data;
-    $sql = 'SELECT sourceid FROM ' . NV_PREFIXLANG . '_' . $module_data . '_sources ORDER BY weight ASC';
-    $result = $db->query($sql);
+    $stmt = $db->query('SELECT sourceid FROM ' . NV_PREFIXLANG . '_' . $module_data . '_sources ORDER BY weight ASC');
     $weight = 0;
-    while ($row = $result->fetch()) {
+    while ($_row_src = $stmt->fetch()) {
         ++$weight;
-        $sql = 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_sources SET weight=' . $weight . ' WHERE sourceid=' . (int) ($row['sourceid']);
-        $db->query($sql);
+        $stmt_update = $db->prepare('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_sources SET weight= :weight WHERE sourceid= :sourceid');
+        $stmt_update->bindValue(':weight', $weight, PDO::PARAM_INT);
+        $stmt_update->bindValue(':sourceid', $_row_src['sourceid'], PDO::PARAM_INT);
+        $stmt_update->execute();
     }
-    $result->closeCursor();
+    $stmt->closeCursor();
 }
 
 /**
@@ -193,19 +210,27 @@ function nv_news_fix_block($bid)
     global $db, $module_data;
     $bid = (int) $bid;
     if ($bid > 0) {
-        $sql = 'SELECT id FROM ' . NV_PREFIXLANG . '_' . $module_data . '_block where bid=' . $bid . ' ORDER BY weight ASC';
-        $result = $db->query($sql);
+        $stmt = $db->prepare('SELECT id FROM ' . NV_PREFIXLANG . '_' . $module_data . '_block WHERE bid = :bid ORDER BY weight ASC');
+        $stmt->bindValue(':bid', $bid, PDO::PARAM_INT);
+        $stmt->execute();
         $weight = 0;
-        while ($row = $result->fetch()) {
+
+        $stmt_update = $db->prepare('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_block SET weight= :weight WHERE bid= :bid AND id= :id');
+        $stmt_delete = $db->prepare('DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_block WHERE bid= :bid AND id= :id');
+        while ($_row_blk = $stmt->fetch()) {
             ++$weight;
             if ($weight <= 100) {
-                $sql = 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_block SET weight=' . $weight . ' WHERE bid=' . $bid . ' AND id=' . $row['id'];
+                $stmt_update->bindValue(':weight', $weight, PDO::PARAM_INT);
+                $stmt_update->bindValue(':bid', $bid, PDO::PARAM_INT);
+                $stmt_update->bindValue(':id', $_row_blk['id'], PDO::PARAM_INT);
+                $stmt_update->execute();
             } else {
-                $sql = 'DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_block WHERE bid=' . $bid . ' AND id=' . $row['id'];
+                $stmt_delete->bindValue(':bid', $bid, PDO::PARAM_INT);
+                $stmt_delete->bindValue(':id', $_row_blk['id'], PDO::PARAM_INT);
+                $stmt_delete->execute();
             }
-            $db->query($sql);
         }
-        $result->closeCursor();
+        $stmt->closeCursor();
     }
 }
 
@@ -377,20 +402,20 @@ function nv_get_mod_tags($content)
     }, $ts);
     $ts = implode('|', $ts);
 
-    $db->sqlreset()
-        ->select('keywords')
-        ->from(NV_PREFIXLANG . '_' . $module_data . '_tags')
-        ->where("keywords REGEXP " . $db->quote('^' . $ts . '$')  . " OR keywords REGEXP " . $db->quote('^' . $ts . ',')   . " OR keywords REGEXP " . $db->quote(',' . $ts . ',')   . " OR keywords REGEXP " . $db->quote(',' . $ts . '$'));
-
-    $result = $db->query($db->sql());
+    $stmt = $db->prepare("SELECT keywords FROM " . NV_PREFIXLANG . "_" . $module_data . "_tags WHERE keywords REGEXP :p1 OR keywords REGEXP :p2 OR keywords REGEXP :p3 OR keywords REGEXP :p4");
+    $stmt->bindValue(':p1', '^' . $ts . '$', PDO::PARAM_STR);
+    $stmt->bindValue(':p2', '^' . $ts . ',', PDO::PARAM_STR);
+    $stmt->bindValue(':p3', ',' . $ts . ',', PDO::PARAM_STR);
+    $stmt->bindValue(':p4', ',' . $ts . '$', PDO::PARAM_STR);
+    $stmt->execute();
+    
     $ts = [];
-    while ($_scratch = $result->fetch(3)) {
-        [$keyword] = $_scratch;
-        unset($_scratch);
-        $keyword = array_map('trim', explode(',', $keyword));
+    while ($_row_tag = $stmt->fetch()) {
+        $keyword = array_map('trim', explode(',', $_row_tag['keywords']));
         $keyword = array_map('nv_preg_quote', $keyword);
         $ts = array_merge($ts, $keyword);
     }
+    $stmt->closeCursor();
 
     $tags = [];
     if (!empty($ts)) {
@@ -419,7 +444,11 @@ function setTagAlias($keywords, $tid = 0, &$dbexist = 0)
     global $db, $module_data, $module_config, $module_name;
 
     $alias = ($module_config[$module_name]['tags_alias']) ? get_mod_alias($keywords) : change_alias_tags($keywords);
-    $dbexist = (bool) $db->query('SELECT COUNT(*) FROM ' . NV_PREFIXLANG . '_' . $module_data . '_tags WHERE alias=' . $db->quote($alias) . ' AND tid!=' . $tid)->fetchColumn();
+    $stmt = $db->prepare('SELECT COUNT(*) FROM ' . NV_PREFIXLANG . '_' . $module_data . '_tags WHERE alias= :alias AND tid!= :tid');
+    $stmt->bindValue(':alias', $alias, PDO::PARAM_STR);
+    $stmt->bindValue(':tid', $tid, PDO::PARAM_INT);
+    $stmt->execute();
+    $dbexist = (bool) $stmt->fetchColumn();
 
     return $alias;
 }

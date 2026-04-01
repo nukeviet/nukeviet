@@ -25,7 +25,7 @@ if ($nv_Request->isset_request('searchAjax', 'post')) {
         ]
     ];
 
-    if (!csrf_check($nv_Request->get_string('checkss', 'post', ''), $csrf_key_author)) {
+    if (!csrf_check($nv_Request->get_string('checkss', 'post', ''), $csrf_key)) {
         nv_jsonOutput($respon);
     }
 
@@ -37,39 +37,35 @@ if ($nv_Request->isset_request('searchAjax', 'post')) {
         nv_jsonOutput($respon);
     }
 
-    $db_slave->sqlreset()
-        ->select('COUNT(id)')
-        ->from(NV_PREFIXLANG . '_' . $module_data . '_author')
-        ->where('(alias LIKE :alias OR pseudonym LIKE :pseudonym)');
-    $sth = $db_slave->prepare($db_slave->sql());
-    $sth->bindValue(':alias', '%' . $q . '%', PDO::PARAM_STR);
-    $sth->bindValue(':pseudonym', '%' . $q . '%', PDO::PARAM_STR);
-    $sth->execute();
-    $num_items = $sth->fetchColumn();
-    $sth->closeCursor();
+    $stmt = $db->prepare('SELECT COUNT(id) FROM ' . NV_PREFIXLANG . '_' . $module_data . '_author WHERE (alias LIKE :alias OR pseudonym LIKE :pseudonym)');
+    $stmt->bindValue(':alias', '%' . $q . '%', PDO::PARAM_STR);
+    $stmt->bindValue(':pseudonym', '%' . $q . '%', PDO::PARAM_STR);
+    $stmt->execute();
+    $num_items = $stmt->fetchColumn();
 
-    $db_slave->select('id, pseudonym')->order('alias ASC')->limit($per_page)->offset(($page - 1) * $per_page);
+    $offset = ($page - 1) * $per_page;
+    $stmt = $db->prepare('SELECT id, pseudonym FROM ' . NV_PREFIXLANG . '_' . $module_data . '_author WHERE (alias LIKE :alias OR pseudonym LIKE :pseudonym) ORDER BY alias ASC LIMIT :limit OFFSET :offset');
+    $stmt->bindValue(':alias', '%' . $q . '%', PDO::PARAM_STR);
+    $stmt->bindValue(':pseudonym', '%' . $q . '%', PDO::PARAM_STR);
+    $stmt->bindValue(':limit', $per_page, PDO::PARAM_INT);
+    $stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
+    $stmt->execute();
 
-    $sth = $db_slave->prepare($db_slave->sql());
-    $sth->bindValue(':alias', '%' . $q . '%', PDO::PARAM_STR);
-    $sth->bindValue(':pseudonym', '%' . $q . '%', PDO::PARAM_STR);
-    $sth->execute();
-
-    while ($_scratch = $sth->fetch(3)) {
-        [$id, $pseudonym] = $_scratch;
-        unset($_scratch);
+    while ($_row = $stmt->fetch()) {
         $respon['results'][] = [
-            'id' => $id,
-            'text' => $pseudonym
+            'id' => $_row['id'],
+            'text' => $_row['pseudonym']
         ];
     }
+    $stmt->closeCursor();
+
     $respon['pagination']['more'] = ($page * $per_page) < $num_items;
     nv_jsonOutput($respon);
 }
 
 // Xoa tac gia
 if ($nv_Request->isset_request('authordel', 'post')) {
-    if (!csrf_check($nv_Request->get_string('checkss', 'post', ''), $csrf_key_author)) {
+    if (!csrf_check($nv_Request->get_string('checkss', 'post', ''), $csrf_key)) {
         nv_jsonOutput([
             'status' => 'error',
             'mess' => $nv_Lang->getGlobal('error_checkss')
@@ -77,7 +73,12 @@ if ($nv_Request->isset_request('authordel', 'post')) {
     }
 
     $aid = $nv_Request->get_int('aid', 'post', 0);
-    $author = $db->query('SELECT id, pseudonym FROM ' . NV_PREFIXLANG . '_' . $module_data . '_author WHERE id=' . $aid)->fetch();
+    $stmt = $db->prepare('SELECT id, pseudonym FROM ' . NV_PREFIXLANG . '_' . $module_data . '_author WHERE id = :id');
+    $stmt->bindValue(':id', $aid, PDO::PARAM_INT);
+    $stmt->execute();
+    $author = $stmt->fetch();
+    $stmt->closeCursor();
+
     if (empty($author) or $aid == $my_author_detail['id']) {
         nv_jsonOutput([
             'status' => 'error',
@@ -85,8 +86,13 @@ if ($nv_Request->isset_request('authordel', 'post')) {
         ]);
     }
 
-    $db->query('DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_authorlist WHERE aid=' . $aid);
-    $db->query('DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_author WHERE id=' . $aid);
+    $stmt = $db->prepare('DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_authorlist WHERE aid = :aid');
+    $stmt->bindValue(':aid', $aid, PDO::PARAM_INT);
+    $stmt->execute();
+
+    $stmt = $db->prepare('DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_author WHERE id = :id');
+    $stmt->bindValue(':id', $aid, PDO::PARAM_INT);
+    $stmt->execute();
 
     nv_insert_logs(NV_LANG_DATA, $module_name, 'log_del_author', $author['pseudonym'], $admin_info['userid']);
     $nv_Cache->delMod($module_name);
@@ -99,7 +105,7 @@ if ($nv_Request->isset_request('authordel', 'post')) {
 
 // Vo hieu/Kich hoat tac gia
 if ($nv_Request->isset_request('changeStatus', 'post')) {
-    if (!csrf_check($nv_Request->get_string('checkss', 'post', ''), $csrf_key_author)) {
+    if (!csrf_check($nv_Request->get_string('checkss', 'post', ''), $csrf_key)) {
         nv_jsonOutput([
             'status' => 'error',
             'mess' => $nv_Lang->getGlobal('error_checkss')
@@ -107,7 +113,12 @@ if ($nv_Request->isset_request('changeStatus', 'post')) {
     }
 
     $aid = $nv_Request->get_int('aid', 'post', 0);
-    $author = $db->query('SELECT id, active, pseudonym FROM ' . NV_PREFIXLANG . '_' . $module_data . '_author WHERE id =' . $aid)->fetch();
+    $stmt = $db->prepare('SELECT id, active, pseudonym FROM ' . NV_PREFIXLANG . '_' . $module_data . '_author WHERE id = :id');
+    $stmt->bindValue(':id', $aid, PDO::PARAM_INT);
+    $stmt->execute();
+    $author = $stmt->fetch();
+    $stmt->closeCursor();
+
     if (empty($author)) {
         nv_jsonOutput([
             'status' => 'error',
@@ -116,7 +127,11 @@ if ($nv_Request->isset_request('changeStatus', 'post')) {
     }
 
     $status = empty($author['active']) ? 1 : 0;
-    $db->query('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_author SET active=' . $status . ', edit_time=' . NV_CURRENTTIME . ' WHERE id=' . $aid);
+    $stmt = $db->prepare('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_author SET active = :active, edit_time = :edit_time WHERE id = :id');
+    $stmt->bindValue(':active', $status, PDO::PARAM_INT);
+    $stmt->bindValue(':edit_time', NV_CURRENTTIME, PDO::PARAM_INT);
+    $stmt->bindValue(':id', $aid, PDO::PARAM_INT);
+    $stmt->execute();
 
     nv_insert_logs(NV_LANG_DATA, $module_name, 'log_change_author_status', 'id ' . $aid . ': ' . $author['pseudonym'], $admin_info['userid']);
     $nv_Cache->delMod($module_name);
@@ -138,7 +153,7 @@ if ($nv_Request->isset_request('get_account_json', 'post, get')) {
         'total_count' => 0
     ];
 
-    if (!csrf_check($nv_Request->get_string('checkss', 'post', ''), $csrf_key_author)) {
+    if (!csrf_check($nv_Request->get_string('checkss', 'post', ''), $csrf_key)) {
         nv_jsonOutput($respon);
     }
 
@@ -155,40 +170,33 @@ if ($nv_Request->isset_request('get_account_json', 'post, get')) {
     $keyword = '%' . $q . '%';
     $where = '(username LIKE :username OR email LIKE :email OR first_name LIKE :first_name OR last_name LIKE :last_name) AND userid NOT IN (SELECT uid FROM ' . NV_PREFIXLANG . '_' . $module_data . '_author)';
 
-    $db->sqlreset()
-        ->select('COUNT(*)')
-        ->from(NV_USERS_GLOBALTABLE)
-        ->where($where);
-    $sth = $db->prepare($db->sql());
-    $sth->bindValue(':username', $keyword, PDO::PARAM_STR);
-    $sth->bindValue(':email', $keyword, PDO::PARAM_STR);
-    $sth->bindValue(':first_name', $keyword, PDO::PARAM_STR);
-    $sth->bindValue(':last_name', $keyword, PDO::PARAM_STR);
-    $sth->execute();
-    $respon['total_count'] = (int) $sth->fetchColumn();
-    $sth->closeCursor();
+    $stmt = $db->prepare('SELECT COUNT(*) FROM ' . NV_USERS_GLOBALTABLE . ' WHERE ' . $where);
+    $stmt->bindValue(':username', $keyword, PDO::PARAM_STR);
+    $stmt->bindValue(':email', $keyword, PDO::PARAM_STR);
+    $stmt->bindValue(':first_name', $keyword, PDO::PARAM_STR);
+    $stmt->bindValue(':last_name', $keyword, PDO::PARAM_STR);
+    $stmt->execute();
+    $respon['total_count'] = (int) $stmt->fetchColumn();
 
-    $db->select('userid, username')
-        ->order('username ASC')
-        ->limit($per_page)
-        ->offset(($page - 1) * $per_page);
-    $sth = $db->prepare($db->sql());
-    $sth->bindValue(':username', $keyword, PDO::PARAM_STR);
-    $sth->bindValue(':email', $keyword, PDO::PARAM_STR);
-    $sth->bindValue(':first_name', $keyword, PDO::PARAM_STR);
-    $sth->bindValue(':last_name', $keyword, PDO::PARAM_STR);
-    $sth->execute();
+    $offset = ($page - 1) * $per_page;
+    $stmt = $db->prepare('SELECT userid, username FROM ' . NV_USERS_GLOBALTABLE . ' WHERE ' . $where . ' ORDER BY username ASC LIMIT :limit OFFSET :offset');
+    $stmt->bindValue(':username', $keyword, PDO::PARAM_STR);
+    $stmt->bindValue(':email', $keyword, PDO::PARAM_STR);
+    $stmt->bindValue(':first_name', $keyword, PDO::PARAM_STR);
+    $stmt->bindValue(':last_name', $keyword, PDO::PARAM_STR);
+    $stmt->bindValue(':limit', $per_page, PDO::PARAM_INT);
+    $stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
+    $stmt->execute();
 
-    while ($_scratch = $sth->fetch(3)) {
-        [$userid, $username] = $_scratch;
-        unset($_scratch);
+    while ($_row = $stmt->fetch()) {
         $respon['results'][] = [
-            'id' => $userid,
-            'title' => $username,
-            'text' => $username
+            'id' => $_row['userid'],
+            'title' => $_row['username'],
+            'text' => $_row['username']
         ];
     }
-    $sth->closeCursor();
+    $stmt->closeCursor();
+
     $respon['pagination']['more'] = ($page * $per_page) < $respon['total_count'];
 
     nv_jsonOutput($respon);
@@ -196,7 +204,7 @@ if ($nv_Request->isset_request('get_account_json', 'post, get')) {
 
 // Them/Sua tac gia
 if ($nv_Request->isset_request('save', 'post')) {
-    if (!csrf_check($nv_Request->get_string('checkss', 'post', ''), $csrf_key_author)) {
+    if (!csrf_check($nv_Request->get_string('checkss', 'post', ''), $csrf_key)) {
         nv_jsonOutput([
             'status' => 'error',
             'mess' => $nv_Lang->getGlobal('error_checkss')
@@ -235,7 +243,12 @@ if ($nv_Request->isset_request('save', 'post')) {
         ]);
     }
 
-    $is_exists = $db->query('SELECT COUNT(*) FROM ' . NV_PREFIXLANG . '_' . $module_data . '_author WHERE id !=' . $aid . ' AND uid = ' . $uid)->fetchColumn();
+    $stmt = $db->prepare('SELECT COUNT(*) FROM ' . NV_PREFIXLANG . '_' . $module_data . '_author WHERE id != :id AND uid = :uid');
+    $stmt->bindValue(':id', $aid, PDO::PARAM_INT);
+    $stmt->bindValue(':uid', $uid, PDO::PARAM_INT);
+    $stmt->execute();
+    $is_exists = $stmt->fetchColumn();
+
     if (!empty($is_exists)) {
         nv_jsonOutput([
             'status' => 'error',
@@ -244,7 +257,13 @@ if ($nv_Request->isset_request('save', 'post')) {
         ]);
     }
 
-    $image_old = $aid ? $db->query('SELECT image FROM ' . NV_PREFIXLANG . '_' . $module_data . '_author WHERE id =' . $aid)->fetchColumn() : '';
+    $image_old = '';
+    if ($aid) {
+        $stmt = $db->prepare('SELECT image FROM ' . NV_PREFIXLANG . '_' . $module_data . '_author WHERE id = :id');
+        $stmt->bindValue(':id', $aid, PDO::PARAM_INT);
+        $stmt->execute();
+        $image_old = $stmt->fetchColumn();
+    }
 
     $image = $nv_Request->get_string('image', 'post', '');
     if (!nv_is_url($image) and nv_is_file($image, NV_UPLOADS_DIR . '/' . $module_upload . '/authors')) {
@@ -257,15 +276,25 @@ if ($nv_Request->isset_request('save', 'post')) {
     }
 
     if (($image != $image_old) and !empty($image_old)) {
-        $_count = $db->query('SELECT COUNT(*) FROM ' . NV_PREFIXLANG . '_' . $module_data . '_author WHERE id != ' . $aid . ' AND image =' . $db->quote(basename($image_old)))
-            ->fetchColumn();
+        $stmt = $db->prepare('SELECT COUNT(*) FROM ' . NV_PREFIXLANG . '_' . $module_data . '_author WHERE id != :id AND image = :image');
+        $stmt->bindValue(':id', $aid, PDO::PARAM_INT);
+        $stmt->bindValue(':image', basename($image_old), PDO::PARAM_STR);
+        $stmt->execute();
+        $_count = $stmt->fetchColumn();
+
         if (empty($_count)) {
             @unlink(NV_ROOTDIR . '/' . NV_UPLOADS_DIR . '/' . $module_upload . '/authors/' . $image_old);
             @unlink(NV_ROOTDIR . '/' . NV_FILES_DIR . '/' . $module_upload . '/authors/' . $image_old);
 
-            $_did = $db->query('SELECT did FROM ' . NV_UPLOAD_GLOBALTABLE . '_dir WHERE dirname=' . $db->quote(dirname(NV_UPLOADS_DIR . '/' . $module_upload . '/authors/' . $image_old)))
-                ->fetchColumn();
-            $db->query('DELETE FROM ' . NV_UPLOAD_GLOBALTABLE . '_file WHERE did = ' . $_did . ' AND title=' . $db->quote(basename($image_old)));
+            $stmt = $db->prepare('SELECT did FROM ' . NV_UPLOAD_GLOBALTABLE . '_dir WHERE dirname = :dirname');
+            $stmt->bindValue(':dirname', dirname(NV_UPLOADS_DIR . '/' . $module_upload . '/authors/' . $image_old), PDO::PARAM_STR);
+            $stmt->execute();
+            $_did = $stmt->fetchColumn();
+
+            $stmt = $db->prepare('DELETE FROM ' . NV_UPLOAD_GLOBALTABLE . '_file WHERE did = :did AND title = :title');
+            $stmt->bindValue(':did', $_did, PDO::PARAM_INT);
+            $stmt->bindValue(':title', basename($image_old), PDO::PARAM_STR);
+            $stmt->execute();
         }
     }
 
@@ -273,14 +302,13 @@ if ($nv_Request->isset_request('save', 'post')) {
     $description = nv_nl2br(nv_htmlspecialchars(strip_tags($description)), '<br />');
 
     if ($aid == 0) {
-        $sql = 'INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . '_author (uid, alias, pseudonym, image, description, add_time) VALUES ( ' . $uid . ', :alias, :pseudonym, :image, :description, ' . NV_CURRENTTIME . ')';
-        $data_insert = [];
-        $data_insert['alias'] = $alias;
-        $data_insert['pseudonym'] = $pseudonym;
-        $data_insert['image'] = $image;
-        $data_insert['description'] = $description;
-
-        if ($db->insert_id($sql, 'id', $data_insert)) {
+        $stmt = $db->prepare('INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . '_author (uid, alias, pseudonym, image, description, add_time) VALUES (' . $uid . ', :alias, :pseudonym, :image, :description, ' . NV_CURRENTTIME . ')');
+        $stmt->bindValue(':alias', $alias, PDO::PARAM_STR);
+        $stmt->bindValue(':pseudonym', $pseudonym, PDO::PARAM_STR);
+        $stmt->bindValue(':image', $image, PDO::PARAM_STR);
+        $stmt->bindValue(':description', $description, PDO::PARAM_STR);
+        $stmt->execute();
+        if ($db->lastInsertId()) {
             nv_insert_logs(NV_LANG_DATA, $module_name, 'log_add_author', ' ', $admin_info['userid']);
             $nv_Cache->delMod($module_name);
             nv_jsonOutput([
@@ -295,15 +323,19 @@ if ($nv_Request->isset_request('save', 'post')) {
             ]);
         }
     } else {
-        $stmt = $db->prepare('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_author SET uid=' . $uid . ', alias= :alias, pseudonym = :pseudonym, image= :image, description= :description, edit_time=' . NV_CURRENTTIME . ' WHERE id =' . $aid);
-        $stmt->bindParam(':alias', $alias, PDO::PARAM_STR);
-        $stmt->bindParam(':pseudonym', $pseudonym, PDO::PARAM_STR);
-        $stmt->bindParam(':image', $image, PDO::PARAM_STR);
-        $stmt->bindParam(':description', $description, PDO::PARAM_STR);
+        $stmt = $db->prepare('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_author SET uid = :uid, alias = :alias, pseudonym = :pseudonym, image = :image, description = :description, edit_time = :edit_time WHERE id = :id');
+        $stmt->bindValue(':uid', $uid, PDO::PARAM_INT);
+        $stmt->bindValue(':alias', $alias, PDO::PARAM_STR);
+        $stmt->bindValue(':pseudonym', $pseudonym, PDO::PARAM_STR);
+        $stmt->bindValue(':image', $image, PDO::PARAM_STR);
+        $stmt->bindValue(':description', $description, PDO::PARAM_STR);
+        $stmt->bindValue(':edit_time', NV_CURRENTTIME, PDO::PARAM_INT);
+        $stmt->bindValue(':id', $aid, PDO::PARAM_INT);
         if ($stmt->execute()) {
-            $stmt = $db->prepare('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_authorlist SET alias= :alias, pseudonym = :pseudonym WHERE aid =' . $aid);
-            $stmt->bindParam(':alias', $alias, PDO::PARAM_STR);
-            $stmt->bindParam(':pseudonym', $pseudonym, PDO::PARAM_STR);
+            $stmt = $db->prepare('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_authorlist SET alias = :alias, pseudonym = :pseudonym WHERE aid = :aid');
+            $stmt->bindValue(':alias', $alias, PDO::PARAM_STR);
+            $stmt->bindValue(':pseudonym', $pseudonym, PDO::PARAM_STR);
+            $stmt->bindValue(':aid', $aid, PDO::PARAM_INT);
             $stmt->execute();
 
             nv_insert_logs(NV_LANG_DATA, $module_name, 'log_edit_author', 'id ' . $aid, $admin_info['userid']);
@@ -322,7 +354,7 @@ if ($nv_Request->isset_request('save', 'post')) {
     }
 }
 
-$num = $db_slave->query('SELECT COUNT(*) FROM ' . NV_PREFIXLANG . '_' . $module_data . '_author')->fetchColumn();
+$num = $db->query('SELECT COUNT(*) FROM ' . NV_PREFIXLANG . '_' . $module_data . '_author')->fetchColumn();
 $base_url = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=authors';
 $num_items = ($num > 1) ? $num : 1;
 $per_page = 20;
@@ -330,34 +362,27 @@ $page = $nv_Request->get_page('page', 'get', 1);
 $authors = [];
 $uids = [];
 if ($num) {
-    $db_slave->sqlreset()
-        ->select('*')
-        ->from(NV_PREFIXLANG . '_' . $module_data . '_author')
-        ->order('alias')
-        ->limit($per_page)
-        ->offset(($page - 1) * $per_page);
-    $result = $db_slave->query($db_slave->sql());
-    while ($row = $result->fetch()) {
+    $offset = ($page - 1) * $per_page;
+    $stmt = $db->prepare('SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_author ORDER BY alias LIMIT :limit OFFSET :offset');
+    $stmt->bindValue(':limit', $per_page, PDO::PARAM_INT);
+    $stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
+    $stmt->execute();
+    while ($row = $stmt->fetch()) {
         $authors[] = $row;
         $uids[] = $row['uid'];
     }
+    $stmt->closeCursor();
 }
 
 if (!empty($uids)) {
-    $uids = implode(',', $uids);
-    $db_slave->sqlreset()
-        ->select('userid, username, email, md5username')
-        ->from(NV_USERS_GLOBALTABLE)
-        ->where('userid IN (' . $uids . ')');
-    $result = $db_slave->query($db_slave->sql());
+    $uids_str = implode(',', array_map('intval', $uids));
+    $result = $db->query('SELECT userid, username, email, md5username FROM ' . NV_USERS_GLOBALTABLE . ' WHERE userid IN (' . $uids_str . ')');
     $uids = [];
-    while ($_scratch = $result->fetch(3)) {
-        [$userid, $username, $email, $md5username] = $_scratch;
-        unset($_scratch);
-        $uids[$userid] = [
-            'username' => $username,
-            'email' => $email,
-            'md5username' => $md5username
+    while ($_row = $result->fetch()) {
+        $uids[$_row['userid']] = [
+            'username' => $_row['username'],
+            'email' => $_row['email'],
+            'md5username' => $_row['md5username']
         ];
     }
 }
@@ -376,12 +401,26 @@ $can_change_uid = true;
 if ($nv_Request->isset_request('aid', 'get')) {
     $item['aid'] = $nv_Request->get_int('aid', 'get', 0);
     if ($item['aid']) {
-        [$item['uid'], $item['pseudonym'], $item['image'], $item['description']] = $db->query('SELECT uid, pseudonym, image, description FROM ' . NV_PREFIXLANG . '_' . $module_data . '_author where id=' . $item['aid'])->fetch(3);
-        if (empty($item['uid'])) {
+        $stmt = $db->prepare('SELECT uid, pseudonym, image, description FROM ' . NV_PREFIXLANG . '_' . $module_data . '_author WHERE id = :id');
+        $stmt->bindValue(':id', $item['aid'], PDO::PARAM_INT);
+        $stmt->execute();
+        $row_author = $stmt->fetch();
+        $stmt->closeCursor();
+
+        if (empty($row_author)) {
             nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op);
         }
 
-        $item['u_account'] = $db->query('SELECT username FROM ' . NV_USERS_GLOBALTABLE . ' WHERE userid =' . $item['uid'])->fetchColumn();
+        $item['uid'] = $row_author['uid'];
+        $item['pseudonym'] = $row_author['pseudonym'];
+        $item['image'] = $row_author['image'];
+        $item['description'] = $row_author['description'];
+
+        $stmt = $db->prepare('SELECT username FROM ' . NV_USERS_GLOBALTABLE . ' WHERE userid = :userid');
+        $stmt->bindValue(':userid', $item['uid'], PDO::PARAM_INT);
+        $stmt->execute();
+        $item['u_account'] = $stmt->fetchColumn();
+
         if (!empty($item['image'])) {
             $item['image'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/authors/' . $item['image'];
         }
@@ -408,7 +447,7 @@ if (!empty($authors)) {
             'numnews' => (int) $row['numnews'],
             'account' => $user_info['username'],
             'email' => $user_info['email'],
-            'newslist_link' => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;q=' . urlencode($row['alias']) . '&amp;stype=author&amp;checkss=' . NV_CHECK_SESSION,
+            'newslist_link' => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;q=' . urlencode($row['alias']) . '&amp;stype=author&amp;checkss=' . csrf_create($csrf_key),
             'has_news' => !empty($row['numnews']),
             'account_link' => !empty($user_info['username']) ? NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=users&amp;' . NV_OP_VARIABLE . '=memberlist/' . change_alias($user_info['username']) . '-' . $user_info['md5username'] : '',
             'add_time_format' => nv_date_format(1, $row['add_time']),
@@ -430,7 +469,7 @@ $tpl->assign('LANG', $nv_Lang);
 $tpl->assign('MODULE_NAME', $module_name);
 $tpl->assign('MODULE_UPLOAD', $module_upload);
 $tpl->assign('OP', $op);
-$tpl->assign('CHECKSS', csrf_create($csrf_key_author));
+$tpl->assign('CHECKSS', csrf_create($csrf_key));
 $tpl->assign('ROWS', $rows);
 $tpl->assign('ITEM', $item);
 $tpl->assign('IS_EDIT', $is_edit);

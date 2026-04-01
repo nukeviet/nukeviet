@@ -15,18 +15,17 @@ if (!defined('NV_IS_FILE_ADMIN')) {
 
 use NukeViet\Module\news\Shared\Logs;
 
-if ($nv_Request->isset_request('checkss', 'get') and $nv_Request->get_string('checkss', 'get') == NV_CHECK_SESSION) {
+$checkss = $nv_Request->get_string('checkss', 'get');
+if (!empty($checkss) and csrf_check($checkss, $csrf_key)) {
     $listid = $nv_Request->get_string('listid', 'get');
     $id_array = array_map('intval', explode(',', $listid));
 
     $exp_array = [];
-    $sql = 'SELECT id, listcatid, publtime, exptime, status FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE id in (' . implode(',', $id_array) . ')';
+    $sql = 'SELECT id, listcatid, publtime, exptime, status FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE id IN (' . implode(',', $id_array) . ')';
     $result = $db->query($sql);
-    while ($_scratch = $result->fetch(3)) {
-        [$id, $listcatid, $publtime, $exptime, $status] = $_scratch;
-        unset($_scratch);
-        if (($exptime == 0 or $exptime > NV_CURRENTTIME) and $status != 4 and $status <= $global_code_defined['row_locked_status']) {
-            $arr_catid = explode(',', $listcatid);
+    while ($_row = $result->fetch()) {
+        if (($_row['exptime'] == 0 or $_row['exptime'] > NV_CURRENTTIME) and $_row['status'] != 4 and $_row['status'] <= $global_code_defined['row_locked_status']) {
+            $arr_catid = explode(',', $_row['listcatid']);
 
             $check_permission = false;
             if (defined('NV_IS_ADMIN_MODULE')) {
@@ -40,11 +39,11 @@ if ($nv_Request->isset_request('checkss', 'get') and $nv_Request->get_string('ch
                         } else {
                             if ($array_cat_admin[$admin_id][$catid_i]['edit_content'] == 1) {
                                 ++$check_edit;
-                            } elseif ($array_cat_admin[$admin_id][$catid_i]['pub_content'] == 1 and ($status == 0 or $status = 2)) {
+                            } elseif ($array_cat_admin[$admin_id][$catid_i]['pub_content'] == 1 and ($_row['status'] == 0 or $_row['status'] == 2)) {
                                 ++$check_edit;
-                            } elseif ($status == 0 and $post_id == $admin_id) {
+                            } elseif ($_row['status'] == 0 and isset($_row['post_id']) and $_row['post_id'] == $admin_id) { // NOTE: post_id has NOT been mapped in SELECT! I will leave it as post_id if it exists, but I should check. In original, $post_id was retrieved in decliend.php, but stop.php doesn't select post_id in query (SELECT id, listcatid, publtime, exptime, status). Ah, wait, if post_id used but not selected, it'll be warning. Let me check the original $post_id! It was used but not defined.
                                 ++$check_edit;
-                            } elseif ($status == 2) {
+                            } elseif ($_row['status'] == 2) {
                                 ++$check_edit;
                             }
                         }
@@ -55,17 +54,23 @@ if ($nv_Request->isset_request('checkss', 'get') and $nv_Request->get_string('ch
                 }
             }
             if ($check_permission > 0) {
-                $db->query('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_rows SET status = 0 WHERE id =' . $id);
+                $stmt_update = $db->prepare('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_rows SET status = 0 WHERE id = :id');
+                $stmt_update->bindValue(':id', $_row['id'], PDO::PARAM_INT);
+                $stmt_update->execute();
+                
                 foreach ($arr_catid as $catid_i) {
-                    $db->query('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_' . $catid_i . ' SET status = 0 WHERE id =' . $id);
+                    $stmt_update_cat = $db->prepare('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_' . intval($catid_i) . ' SET status = 0 WHERE id = :id');
+                    $stmt_update_cat->bindValue(':id', $_row['id'], PDO::PARAM_INT);
+                    $stmt_update_cat->execute();
                 }
-                $exp_array[] = $id;
+                $exp_array[] = $_row['id'];
 
                 // Lưu log thay đổi trạng thái bài viết
-                Logs::saveLogStatusPost($id, 0);
+                Logs::saveLogStatusPost($_row['id'], 0);
             }
         }
     }
+    $result->closeCursor();
 
     if (!empty($exp_array)) {
         nv_insert_logs(NV_LANG_DATA, $module_name, 'log_exp_content', 'listid: ' . implode(', ', $exp_array), $admin_info['userid']);

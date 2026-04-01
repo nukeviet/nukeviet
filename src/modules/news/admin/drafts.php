@@ -16,25 +16,40 @@ if (!defined('NV_IS_FILE_ADMIN')) {
 $page_title = $nv_Lang->getModule('draft_list');
 
 // Xóa bỏ 1 hoặc nhiều
-if ($nv_Request->get_title('delete', 'post', '') === NV_CHECK_SESSION) {
+if ($nv_Request->isset_request('delete', 'post')) {
+    if (!csrf_check($nv_Request->get_title('delete', 'post', ''), $csrf_key)) {
+        nv_jsonOutput([
+            'success' => 0,
+            'text' => $nv_Lang->getGlobal('error_checkss')
+        ]);
+    }
     $id = $nv_Request->get_int('id', 'post', 0);
     $listid = $nv_Request->get_title('listid', 'post', '');
     $listid = $listid . ',' . $id;
     $listid = array_filter(array_unique(array_map('intval', explode(',', $listid))));
 
+    $sql = "SELECT id FROM " . NV_PREFIXLANG . "_" . $module_data . "_tmp WHERE id = :id AND type = 1";
+    if (!$NV_IS_ADMIN_FULL_MODULE) {
+        $sql .= " AND admin_id = :admin_id";
+    }
+    $stmt_check = $db->prepare($sql);
+    $stmt_delete = $db->prepare("DELETE FROM " . NV_PREFIXLANG . "_" . $module_data . "_tmp WHERE id = :id");
+
     foreach ($listid as $id) {
         // Kiểm tra tồn tại
-        $sql = "SELECT * FROM " . NV_PREFIXLANG . "_" . $module_data . "_tmp WHERE id=" . $id . " AND type=1";
-        if ($NV_IS_ADMIN_FULL_MODULE) {
-            $sql .= " AND admin_id=" . $admin_info['admin_id'];
+        $stmt_check->bindValue(':id', $id, PDO::PARAM_INT);
+        if (!$NV_IS_ADMIN_FULL_MODULE) {
+            $stmt_check->bindValue(':admin_id', $admin_info['admin_id'], PDO::PARAM_INT);
         }
-        $array = $db->query($sql)->fetch();
-        if (!empty($array)) {
+        $stmt_check->execute();
+        $exists_id = $stmt_check->fetchColumn();
+        
+        if ($exists_id) {
             nv_insert_logs(NV_LANG_DATA, $module_name, 'LOG_DELETE_DRAFT', $id, $admin_info['admin_id']);
 
             // Xóa
-            $sql = "DELETE FROM " . NV_PREFIXLANG . "_" . $module_data . "_tmp WHERE id=" . $id;
-            $db->query($sql);
+            $stmt_delete->bindValue(':id', $id, PDO::PARAM_INT);
+            $stmt_delete->execute();
         }
     }
     nv_jsonOutput([
@@ -78,61 +93,77 @@ $array_search = [];
 $array_search['from'] = nv_d2u_get($nv_Request->get_title('f', 'get', ''));
 $array_search['to'] = nv_d2u_get($nv_Request->get_title('t', 'get', ''));
 
-$db->sqlreset()->select('COUNT(*)')->from(NV_PREFIXLANG . '_' . $module_data . '_tmp');
-
 $search_count = 0;
 $where = [];
+$db_binds = [];
 if (!$NV_IS_ADMIN_FULL_MODULE) {
-    $where[] = 'admin_id=' . $admin_info['admin_id'];
+    $where[] = 'admin_id = :admin_id';
+    $db_binds[':admin_id'] = $admin_info['admin_id'];
 }
-$where[] = 'type=1';
+$where[] = 'type = 1';
 if (!empty($array_search['from'])) {
     $base_url .= '&amp;f=' . nv_u2d_get($array_search['from']);
-    $where[] = "time_late>=" . $array_search['from'];
+    $where[] = "time_late >= :from";
+    $db_binds[':from'] = $array_search['from'];
     $search_count++;
 }
 if (!empty($array_search['to'])) {
     $base_url .= '&amp;t=' . nv_u2d_get($array_search['to']);
-    $where[] = "time_late<=" . $array_search['to'];
+    $where[] = "time_late <= :to";
+    $db_binds[':to'] = $array_search['to'];
     $search_count++;
 }
 
-$db->where(implode(' AND ', $where));
-$num_items = $db->query($db->sql())->fetchColumn();
-$db->select('*')->order('time_late DESC')->limit($per_page)->offset(($page - 1) * $per_page);
-$result = $db->query($db->sql());
+$sql_condition = !empty($where) ? ' WHERE ' . implode(' AND ', $where) : '';
+$sql_count = 'SELECT COUNT(*) FROM ' . NV_PREFIXLANG . '_' . $module_data . '_tmp' . $sql_condition;
+
+$stmt = $db->prepare($sql_count);
+foreach ($db_binds as $key => $val) {
+    $stmt->bindValue($key, $val, PDO::PARAM_INT);
+}
+$stmt->execute();
+$num_items = $stmt->fetchColumn();
+
+$sql_data = 'SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_tmp' . $sql_condition . ' ORDER BY time_late DESC LIMIT :limit OFFSET :offset';
+$stmt = $db->prepare($sql_data);
+foreach ($db_binds as $key => $val) {
+    $stmt->bindValue($key, $val, PDO::PARAM_INT);
+}
+$stmt->bindValue(':limit', $per_page, PDO::PARAM_INT);
+$stmt->bindValue(':offset', ($page - 1) * $per_page, PDO::PARAM_INT);
+$stmt->execute();
 
 $array = $new_ids = [];
-while ($row = $result->fetch()) {
-    if (!empty($row['new_id'])) {
-        $new_ids[$row['new_id']] = $row['new_id'];
+while ($_row = $stmt->fetch()) {
+    if (!empty($_row['new_id'])) {
+        $new_ids[$_row['new_id']] = $_row['new_id'];
     }
-    $row['allowed_edit'] = true;
-    $row['my_draft'] = $admin_info['admin_id'] == $row['admin_id'];
+    $_row['allowed_edit'] = true;
+    $_row['my_draft'] = $admin_info['admin_id'] == $_row['admin_id'];
 
-    $row['properties'] = json_decode($row['properties'], true);
-    if (!is_array($row['properties'])) {
-        $row['properties'] = [];
+    $_row['properties'] = json_decode($_row['properties'], true);
+    if (!is_array($_row['properties'])) {
+        $_row['properties'] = [];
     }
-    $row['title'] = $row['properties']['title'] ?? '';
-    unset($row['properties']);
+    $_row['title'] = $_row['properties']['title'] ?? '';
+    unset($_row['properties']);
 
-    $array[$row['id']] = $row;
+    $array[$_row['id']] = $_row;
 }
-$result->closeCursor();
+$stmt->closeCursor();
 
 // Trong số các bài sửa tạm này tìm tiêu đề
 $new_titles = [];
 if (!empty($new_ids)) {
-    $db->sqlreset()->select('id, title, listcatid')->from(NV_PREFIXLANG . '_' . $module_data . '_rows')
-        ->where('id IN (' . implode(',', $new_ids) . ')');
-    $result = $db->query($db->sql());
-    while ($row = $result->fetch()) {
-        $new_titles[$row['id']] = [
-            'title' => $row['title'],
-            'catids' => array_filter(explode(',', $row['listcatid']))
+    $sql_rows = 'SELECT id, title, listcatid FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE id IN (' . implode(',', $new_ids) . ')';
+    $stmt_rows = $db->query($sql_rows);
+    while ($_row_rows = $stmt_rows->fetch()) {
+        $new_titles[$_row_rows['id']] = [
+            'title' => $_row_rows['title'],
+            'catids' => array_filter(explode(',', $_row_rows['listcatid']))
         ];
     }
+    $stmt_rows->closeCursor();
 
     foreach ($array as $id => $row) {
         if (isset($new_titles[$row['new_id']])) {

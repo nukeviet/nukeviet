@@ -17,7 +17,7 @@ $page_title = $nv_Lang->getModule('sources');
 
 // Thay đổi thứ tự nguồn tin
 if ($nv_Request->isset_request('changeweight', 'post')) {
-    if (!csrf_check($nv_Request->get_title('checkss', 'post', ''), $csrf_key)) {
+    if (!csrf_check($nv_Request->get_string('checkss', 'post', ''), $csrf_key)) {
         nv_jsonOutput([
             'status' => 'error',
             'mess' => $nv_Lang->getGlobal('error_checkss')
@@ -26,7 +26,10 @@ if ($nv_Request->isset_request('changeweight', 'post')) {
     $sourceid = $nv_Request->get_int('sourceid', 'post', 0);
     $new_weight = $nv_Request->get_int('new_weight', 'post', 0);
 
-    $numrows = $db->query('SELECT COUNT(*) FROM ' . NV_PREFIXLANG . '_' . $module_data . '_sources WHERE sourceid=' . $sourceid)->fetchColumn();
+    $stmt = $db->prepare('SELECT COUNT(*) FROM ' . NV_PREFIXLANG . '_' . $module_data . '_sources WHERE sourceid= :sourceid');
+    $stmt->bindValue(':sourceid', $sourceid, PDO::PARAM_INT);
+    $stmt->execute();
+    $numrows = $stmt->fetchColumn();
     if ($numrows != 1 || $new_weight < 1) {
         nv_jsonOutput([
             'status' => 'error',
@@ -34,16 +37,26 @@ if ($nv_Request->isset_request('changeweight', 'post')) {
         ]);
     }
 
-    $result = $db->query('SELECT sourceid FROM ' . NV_PREFIXLANG . '_' . $module_data . '_sources WHERE sourceid!=' . $sourceid . ' ORDER BY weight ASC');
+    $stmt_result = $db->prepare('SELECT sourceid FROM ' . NV_PREFIXLANG . '_' . $module_data . '_sources WHERE sourceid!= :sourceid ORDER BY weight ASC');
+    $stmt_result->bindValue(':sourceid', $sourceid, PDO::PARAM_INT);
+    $stmt_result->execute();
+
+    $stmt_update = $db->prepare('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_sources SET weight= :weight WHERE sourceid= :sourceid');
     $weight = 0;
-    while ($row = $result->fetch()) {
+    while ($row = $stmt_result->fetch()) {
         ++$weight;
         if ($weight == $new_weight) {
             ++$weight;
         }
-        $db->query('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_sources SET weight=' . $weight . ' WHERE sourceid=' . $row['sourceid']);
+        $stmt_update->bindValue(':weight', $weight, PDO::PARAM_INT);
+        $stmt_update->bindValue(':sourceid', $row['sourceid'], PDO::PARAM_INT);
+        $stmt_update->execute();
     }
-    $db->query('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_sources SET weight=' . $new_weight . ' WHERE sourceid=' . $sourceid);
+    $stmt_result->closeCursor();
+
+    $stmt_update->bindValue(':weight', $new_weight, PDO::PARAM_INT);
+    $stmt_update->bindValue(':sourceid', $sourceid, PDO::PARAM_INT);
+    $stmt_update->execute();
 
     $nv_Cache->delMod($module_name);
     nv_jsonOutput([
@@ -54,7 +67,7 @@ if ($nv_Request->isset_request('changeweight', 'post')) {
 
 // Xóa nguồn tin
 if ($nv_Request->isset_request('delete', 'post')) {
-    if (!csrf_check($nv_Request->get_title('checkss', 'post', ''), $csrf_key)) {
+    if (!csrf_check($nv_Request->get_string('checkss', 'post', ''), $csrf_key)) {
         nv_jsonOutput([
             'status' => 'error',
             'mess' => $nv_Lang->getGlobal('error_checkss')
@@ -62,7 +75,10 @@ if ($nv_Request->isset_request('delete', 'post')) {
     }
     $sourceid = $nv_Request->get_int('sourceid', 'post', 0);
 
-    $row = $db->query('SELECT sourceid, title, logo FROM ' . NV_PREFIXLANG . '_' . $module_data . '_sources WHERE sourceid=' . $sourceid)->fetch();
+    $stmt = $db->prepare('SELECT sourceid, title, logo FROM ' . NV_PREFIXLANG . '_' . $module_data . '_sources WHERE sourceid= :sourceid');
+    $stmt->bindValue(':sourceid', $sourceid, PDO::PARAM_INT);
+    $stmt->execute();
+    $row = $stmt->fetch();
     if (empty($row)) {
         nv_jsonOutput([
             'status' => 'error',
@@ -73,32 +89,51 @@ if ($nv_Request->isset_request('delete', 'post')) {
     $logo_old = $row['logo'];
 
     // Cập nhật bài viết tham chiếu đến nguồn này
-    $result = $db->query('SELECT id, listcatid FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE sourceid = ' . $sourceid);
-    while ($art = $result->fetch()) {
+    $stmt_arts = $db->prepare('SELECT id, listcatid FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE sourceid= :sourceid');
+    $stmt_arts->bindValue(':sourceid', $sourceid, PDO::PARAM_INT);
+    $stmt_arts->execute();
+
+    $stmt_update_rows = $db->prepare('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_rows SET sourceid=0 WHERE id= :id');
+    while ($art = $stmt_arts->fetch()) {
         $arr_catid = explode(',', $art['listcatid']);
         foreach ($arr_catid as $catid_i) {
             // Sử dụng try/catch để đảm bảo có vấn đề vẫn xóa thành công
             try {
-            $db->query('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_' . $catid_i . ' SET sourceid = 0 WHERE id =' . $art['id']);
+                $stmt_update_cat = $db->prepare('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_' . $catid_i . ' SET sourceid=0 WHERE id= :id');
+                $stmt_update_cat->bindValue(':id', $art['id'], PDO::PARAM_INT);
+                $stmt_update_cat->execute();
             } catch (Throwable $e) {
                 trigger_error($e);
             }
         }
-        $db->query('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_rows SET sourceid = 0 WHERE id =' . $art['id']);
+        $stmt_update_rows->bindValue(':id', $art['id'], PDO::PARAM_INT);
+        $stmt_update_rows->execute();
     }
-    $result->closeCursor();
+    $stmt_arts->closeCursor();
 
-    $db->exec('DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_sources WHERE sourceid=' . $sourceid);
+    $stmt_del = $db->prepare('DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_sources WHERE sourceid= :sourceid');
+    $stmt_del->bindValue(':sourceid', $sourceid, PDO::PARAM_INT);
+    $stmt_del->execute();
 
     // Xóa logo nếu không còn nguồn nào khác dùng
     if (!empty($logo_old)) {
-        $_count = $db->query('SELECT COUNT(*) FROM ' . NV_PREFIXLANG . '_' . $module_data . '_sources WHERE logo =' . $db->quote(basename($logo_old)))->fetchColumn();
+        $stmt_logo_check = $db->prepare('SELECT COUNT(*) FROM ' . NV_PREFIXLANG . '_' . $module_data . '_sources WHERE logo= :logo');
+        $stmt_logo_check->bindValue(':logo', basename($logo_old), PDO::PARAM_STR);
+        $stmt_logo_check->execute();
+        $_count = $stmt_logo_check->fetchColumn();
         if (empty($_count)) {
             @unlink(NV_ROOTDIR . '/' . NV_UPLOADS_DIR . '/' . $module_upload . '/source/' . $logo_old);
             @unlink(NV_ROOTDIR . '/' . NV_FILES_DIR . '/' . $module_upload . '/source/' . $logo_old);
 
-            $_did = $db->query('SELECT did FROM ' . NV_UPLOAD_GLOBALTABLE . '_dir WHERE dirname=' . $db->quote(dirname(NV_UPLOADS_DIR . '/' . $module_upload . '/source/' . $logo_old)))->fetchColumn();
-            $db->query('DELETE FROM ' . NV_UPLOAD_GLOBALTABLE . '_file WHERE did = ' . $_did . ' AND title=' . $db->quote(basename($logo_old)));
+            $stmt_did = $db->prepare('SELECT did FROM ' . NV_UPLOAD_GLOBALTABLE . '_dir WHERE dirname= :dirname');
+            $stmt_did->bindValue(':dirname', dirname(NV_UPLOADS_DIR . '/' . $module_upload . '/source/' . $logo_old), PDO::PARAM_STR);
+            $stmt_did->execute();
+            $_did = $stmt_did->fetchColumn();
+
+            $stmt_del_file = $db->prepare('DELETE FROM ' . NV_UPLOAD_GLOBALTABLE . '_file WHERE did= :did AND title= :title');
+            $stmt_del_file->bindValue(':did', $_did, PDO::PARAM_INT);
+            $stmt_del_file->bindValue(':title', basename($logo_old), PDO::PARAM_STR);
+            $stmt_del_file->execute();
         }
     }
 
@@ -113,7 +148,7 @@ if ($nv_Request->isset_request('delete', 'post')) {
 
 // Lưu nguồn tin (thêm mới hoặc cập nhật)
 if ($nv_Request->isset_request('savecat', 'post')) {
-    if (!csrf_check($nv_Request->get_title('checkss', 'post', ''), $csrf_key)) {
+    if (!csrf_check($nv_Request->get_string('checkss', 'post', ''), $csrf_key)) {
         nv_jsonOutput([
             'status' => 'error',
             'mess' => $nv_Lang->getGlobal('error_checkss')
@@ -140,7 +175,14 @@ if ($nv_Request->isset_request('savecat', 'post')) {
     }
 
     // Xử lý logo
-    $logo_old = $sourceid > 0 ? $db->query('SELECT logo FROM ' . NV_PREFIXLANG . '_' . $module_data . '_sources WHERE sourceid =' . $sourceid)->fetchColumn() : '';
+    if ($sourceid > 0) {
+        $stmt_logo = $db->prepare('SELECT logo FROM ' . NV_PREFIXLANG . '_' . $module_data . '_sources WHERE sourceid= :sourceid');
+        $stmt_logo->bindValue(':sourceid', $sourceid, PDO::PARAM_INT);
+        $stmt_logo->execute();
+        $logo_old = $stmt_logo->fetchColumn();
+    } else {
+        $logo_old = '';
+    }
 
     $logo = $nv_Request->get_title('logo', 'post', '');
     if (!nv_is_url($logo) and nv_is_file($logo, NV_UPLOADS_DIR . '/' . $module_upload . '/source')) {
@@ -153,26 +195,37 @@ if ($nv_Request->isset_request('savecat', 'post')) {
     }
 
     if (($logo != $logo_old) and !empty($logo_old)) {
-        $_count = $db->query('SELECT COUNT(*) FROM ' . NV_PREFIXLANG . '_' . $module_data . '_sources WHERE sourceid != ' . $sourceid . ' AND logo =' . $db->quote(basename($logo_old)))->fetchColumn();
+        $stmt_logo_check = $db->prepare('SELECT COUNT(*) FROM ' . NV_PREFIXLANG . '_' . $module_data . '_sources WHERE sourceid!= :sourceid AND logo= :logo');
+        $stmt_logo_check->bindValue(':sourceid', $sourceid, PDO::PARAM_INT);
+        $stmt_logo_check->bindValue(':logo', basename($logo_old), PDO::PARAM_STR);
+        $stmt_logo_check->execute();
+        $_count = $stmt_logo_check->fetchColumn();
         if (empty($_count)) {
             @unlink(NV_ROOTDIR . '/' . NV_UPLOADS_DIR . '/' . $module_upload . '/source/' . $logo_old);
             @unlink(NV_ROOTDIR . '/' . NV_FILES_DIR . '/' . $module_upload . '/source/' . $logo_old);
 
-            $_did = $db->query('SELECT did FROM ' . NV_UPLOAD_GLOBALTABLE . '_dir WHERE dirname=' . $db->quote(dirname(NV_UPLOADS_DIR . '/' . $module_upload . '/source/' . $logo_old)))->fetchColumn();
-            $db->query('DELETE FROM ' . NV_UPLOAD_GLOBALTABLE . '_file WHERE did = ' . $_did . ' AND title=' . $db->quote(basename($logo_old)));
+            $stmt_did = $db->prepare('SELECT did FROM ' . NV_UPLOAD_GLOBALTABLE . '_dir WHERE dirname= :dirname');
+            $stmt_did->bindValue(':dirname', dirname(NV_UPLOADS_DIR . '/' . $module_upload . '/source/' . $logo_old), PDO::PARAM_STR);
+            $stmt_did->execute();
+            $_did = $stmt_did->fetchColumn();
+
+            $stmt_del_file = $db->prepare('DELETE FROM ' . NV_UPLOAD_GLOBALTABLE . '_file WHERE did= :did AND title= :title');
+            $stmt_del_file->bindValue(':did', $_did, PDO::PARAM_INT);
+            $stmt_del_file->bindValue(':title', basename($logo_old), PDO::PARAM_STR);
+            $stmt_del_file->execute();
         }
     }
 
     if ($sourceid == 0) {
         $weight = (int) $db->query('SELECT MAX(weight) FROM ' . NV_PREFIXLANG . '_' . $module_data . '_sources')->fetchColumn() + 1;
-        $sql = 'INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . '_sources (title, link, logo, weight, add_time, edit_time) VALUES (:title, :link, :logo, :weight, ' . NV_CURRENTTIME . ', ' . NV_CURRENTTIME . ')';
-        $data_insert = [
-            'title' => $title,
-            'link' => $link,
-            'logo' => $logo,
-            'weight' => $weight
-        ];
-        if ($db->insert_id($sql, 'sourceid', $data_insert)) {
+        $stmt = $db->prepare('INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . '_sources (title, link, logo, weight, add_time, edit_time) VALUES (:title, :link, :logo, :weight, ' . NV_CURRENTTIME . ', ' . NV_CURRENTTIME . ')');
+        $stmt->bindValue(':title', $title, PDO::PARAM_STR);
+        $stmt->bindValue(':link', $link, PDO::PARAM_STR);
+        $stmt->bindValue(':logo', $logo, PDO::PARAM_STR);
+        $stmt->bindValue(':weight', $weight, PDO::PARAM_INT);
+        $stmt->execute();
+        
+        if ($db->lastInsertId()) {
             nv_insert_logs(NV_LANG_DATA, $module_name, 'log_add_source', ' ', $admin_info['userid']);
             $nv_Cache->delMod($module_name);
             nv_jsonOutput([
@@ -182,10 +235,11 @@ if ($nv_Request->isset_request('savecat', 'post')) {
             ]);
         }
     } else {
-        $stmt = $db->prepare('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_sources SET title=:title, link=:link, logo=:logo, edit_time=' . NV_CURRENTTIME . ' WHERE sourceid=' . $sourceid);
-        $stmt->bindParam(':title', $title, PDO::PARAM_STR);
-        $stmt->bindParam(':link', $link, PDO::PARAM_STR);
-        $stmt->bindParam(':logo', $logo, PDO::PARAM_STR);
+        $stmt = $db->prepare('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_sources SET title=:title, link=:link, logo=:logo, edit_time=' . NV_CURRENTTIME . ' WHERE sourceid= :sourceid');
+        $stmt->bindValue(':title', $title, PDO::PARAM_STR);
+        $stmt->bindValue(':link', $link, PDO::PARAM_STR);
+        $stmt->bindValue(':logo', $logo, PDO::PARAM_STR);
+        $stmt->bindValue(':sourceid', $sourceid, PDO::PARAM_INT);
         if ($stmt->execute()) {
             nv_insert_logs(NV_LANG_DATA, $module_name, 'log_edit_source', 'sourceid ' . $sourceid, $admin_info['userid']);
             $nv_Cache->delMod($module_name);
@@ -213,7 +267,10 @@ $is_edit = false;
 
 $sourceid = $nv_Request->get_int('sourceid', 'get', 0);
 if ($sourceid > 0) {
-    $row = $db->query('SELECT sourceid, title, link, logo FROM ' . NV_PREFIXLANG . '_' . $module_data . '_sources WHERE sourceid=' . $sourceid)->fetch();
+    $stmt = $db->prepare('SELECT sourceid, title, link, logo FROM ' . NV_PREFIXLANG . '_' . $module_data . '_sources WHERE sourceid= :sourceid');
+    $stmt->bindValue(':sourceid', $sourceid, PDO::PARAM_INT);
+    $stmt->execute();
+    $row = $stmt->fetch();
     if (!empty($row)) {
         $item = $row;
         if (!empty($item['logo'])) {
@@ -226,22 +283,18 @@ if ($sourceid > 0) {
 // Query danh sách nguồn tin
 $per_page = 20;
 $page = $nv_Request->get_page('page', 'get', 1);
-$num = (int) $db_slave->query('SELECT COUNT(*) FROM ' . NV_PREFIXLANG . '_' . $module_data . '_sources')->fetchColumn();
+$num = (int) $db->query('SELECT COUNT(*) FROM ' . NV_PREFIXLANG . '_' . $module_data . '_sources')->fetchColumn();
 
 $array = [];
 if ($num > 0) {
-    $db_slave->sqlreset()
-        ->select('*')
-        ->from(NV_PREFIXLANG . '_' . $module_data . '_sources')
-        ->order('weight')
-        ->limit($per_page)
-        ->offset(($page - 1) * $per_page);
-
-    $result = $db_slave->query($db_slave->sql());
-    while ($row = $result->fetch()) {
+    $stmt_list = $db->prepare('SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_sources ORDER BY weight ASC LIMIT :limit OFFSET :offset');
+    $stmt_list->bindValue(':limit', $per_page, PDO::PARAM_INT);
+    $stmt_list->bindValue(':offset', ($page - 1) * $per_page, PDO::PARAM_INT);
+    $stmt_list->execute();
+    while ($row = $stmt_list->fetch()) {
         $array[] = $row;
     }
-    $result->closeCursor();
+    $stmt_list->closeCursor();
 }
 
 $base_url = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op;

@@ -28,6 +28,7 @@ if (!function_exists('nv_array_cat_admin')) {
         while ($row = $result->fetch()) {
             $array_cat_admin[$row['userid']][$row['catid']] = $row;
         }
+        $result->closeCursor();
 
         return $array_cat_admin;
     }
@@ -41,7 +42,10 @@ $module_admin = array_values(array_filter(array_map('intval', explode(',', (stri
 // Xoa cac dieu hanh vien khong co quyen tai module
 foreach ($array_cat_admin as $userid_i => $value) {
     if (!in_array((int) $userid_i, $module_admin, true)) {
-        $db->query('DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_admins WHERE userid = ' . $userid_i);
+        $stmt = $db->prepare('DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_admins WHERE userid = :userid');
+        $stmt->bindValue(':userid', (int) $userid_i, PDO::PARAM_INT);
+        $stmt->execute();
+
         $is_refresh = true;
     }
 }
@@ -50,10 +54,16 @@ foreach ($module_admin as $userid_i) {
     $userid_i = (int) $userid_i;
     if ($userid_i > 0 and !isset($array_cat_admin[$userid_i])) {
         // Them nguoi dieu hanh chung, voi quyen han Quan ly module
-        $sql = 'SELECT userid FROM ' . NV_PREFIXLANG . '_' . $module_data . '_admins WHERE userid=' . $userid_i . ' AND catid=0';
-        $numrows = $db->query($sql)->fetchColumn();
-        if ($numrows == 0) {
-            $db->query('INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . "_admins (userid, catid, admin, add_content, pub_content, edit_content, del_content, app_content) VALUES ('" . $userid_i . "', '0', '1', '1', '1', '1', '1', '1')");
+        $stmt = $db->prepare('SELECT userid FROM ' . NV_PREFIXLANG . '_' . $module_data . '_admins WHERE userid = :userid AND catid = 0');
+        $stmt->bindValue(':userid', $userid_i, PDO::PARAM_INT);
+        $stmt->execute();
+        $num_exists = $stmt->fetchColumn();
+
+        if (empty($num_exists)) {
+            $stmt = $db->prepare('INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . '_admins (userid, catid, admin, add_content, pub_content, edit_content, del_content, app_content) VALUES (:userid, 0, 1, 1, 1, 1, 1, 1)');
+            $stmt->bindValue(':userid', $userid_i, PDO::PARAM_INT);
+            $stmt->execute();
+
             $is_refresh = true;
         }
     }
@@ -122,10 +132,20 @@ if ($view_mode === 'full') {
             if (!defined('NV_IS_SPADMIN')) {
                 $admin_module = 1;
             }
-            $db->query('DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_admins WHERE userid = ' . $userid);
-            $db->query('INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . "_admins (userid, catid, admin, add_content, pub_content, edit_content, del_content, app_content) VALUES ('" . $userid . "', '0', '" . $admin_module . "', '1', '1', '1', '1', '1')");
+
+            $stmt = $db->prepare('DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_admins WHERE userid = :userid');
+            $stmt->bindValue(':userid', $userid, PDO::PARAM_INT);
+            $stmt->execute();
+
+            $stmt = $db->prepare('INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . '_admins (userid, catid, admin, add_content, pub_content, edit_content, del_content, app_content) VALUES (:userid, 0, :admin_module, 1, 1, 1, 1, 1)');
+            $stmt->bindValue(':userid', $userid, PDO::PARAM_INT);
+            $stmt->bindValue(':admin_module', $admin_module, PDO::PARAM_INT);
+            $stmt->execute();
         } else {
-            $db->query('DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_admins WHERE userid = ' . $userid);
+            $stmt = $db->prepare('DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_admins WHERE userid = :userid');
+            $stmt->bindValue(':userid', $userid, PDO::PARAM_INT);
+            $stmt->execute();
+
             $array_admin = $nv_Request->get_typed_array('admin_content', 'post', 'int', []);
             $array_add_content = $nv_Request->get_typed_array('add_content', 'post', 'int', []);
             $array_pub_content = $nv_Request->get_typed_array('pub_content', 'post', 'int', []);
@@ -135,6 +155,9 @@ if ($view_mode === 'full') {
 
             $sql = 'SELECT catid, title, subcatid FROM ' . NV_PREFIXLANG . '_' . $module_data . '_cat ORDER BY sort ASC';
             $result_cat = $db->query($sql);
+            
+            $stmt_insert = $db->prepare('INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . '_admins (userid, catid, admin, add_content, pub_content, edit_content, del_content, app_content) VALUES (:userid, :catid, :admin, :add_content, :pub_content, :edit_content, :del_content, :app_content)');
+            
             while ($row = $result_cat->fetch()) {
                 $admin_i = (in_array((int) $row['catid'], $array_admin, true)) ? 1 : 0;
                 if ($admin_i) {
@@ -142,7 +165,7 @@ if ($view_mode === 'full') {
                     if (!empty($row['subcatid'])) {
                         $array_subcatid_i = explode(',', $row['subcatid']);
                         foreach ($array_subcatid_i as $value) {
-                            $array_admin[] = $value;
+                            $array_admin[] = (int) $value;
                         }
                     }
                 } else {
@@ -154,6 +177,7 @@ if ($view_mode === 'full') {
                     if (!empty($row['subcatid'])) {
                         $array_subcatid_i = explode(',', $row['subcatid']);
                         foreach ($array_subcatid_i as $value) {
+                            $value = (int) $value;
                             if (!empty($add_content_i)) {
                                 $array_add_content[] = $value;
                             }
@@ -172,8 +196,18 @@ if ($view_mode === 'full') {
                         }
                     }
                 }
-                $db->query('INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . "_admins (userid, catid, admin, add_content, pub_content, edit_content, del_content, app_content) VALUES ('" . $userid . "', '" . $row['catid'] . "', '" . $admin_i . "', '" . $add_content_i . "', '" . $pub_content_i . "', '" . $edit_content_i . "', '" . $del_content_i . "', '" . $app_content_i . "')");
+                
+                $stmt_insert->bindValue(':userid', $userid, PDO::PARAM_INT);
+                $stmt_insert->bindValue(':catid', (int) $row['catid'], PDO::PARAM_INT);
+                $stmt_insert->bindValue(':admin', $admin_i, PDO::PARAM_INT);
+                $stmt_insert->bindValue(':add_content', $add_content_i, PDO::PARAM_INT);
+                $stmt_insert->bindValue(':pub_content', $pub_content_i, PDO::PARAM_INT);
+                $stmt_insert->bindValue(':edit_content', $edit_content_i, PDO::PARAM_INT);
+                $stmt_insert->bindValue(':del_content', $del_content_i, PDO::PARAM_INT);
+                $stmt_insert->bindValue(':app_content', $app_content_i, PDO::PARAM_INT);
+                $stmt_insert->execute();
             }
+            $result_cat->closeCursor();
         }
 
         nv_insert_logs(NV_LANG_DATA, $module_name, 'log_update_admin_permissions', 'userid ' . $userid, $admin_info['userid']);
@@ -187,17 +221,16 @@ if ($view_mode === 'full') {
     }
 
     if (!empty($module_info['admins'])) {
-        $sql = 'SELECT userid, username, first_name, last_name, email FROM ' . NV_USERS_GLOBALTABLE . ' WHERE userid IN (' . implode(',', $module_admin) . ')';
-        if (!empty($orderby)) {
-            $orderby_sql = $orderby != 'full_name' ? $orderby : ($global_config['name_show'] == 0 ? "concat(first_name,' ',last_name)" : "concat(last_name,' ',first_name)");
-            $sql .= ' ORDER BY ' . $orderby_sql . ' ' . $ordertype;
-        }
+        $uids_sql = implode(',', array_map('intval', $module_admin));
+        $orderby_sql = $orderby != 'full_name' ? $orderby : ($global_config['name_show'] == 0 ? "concat(first_name,' ',last_name)" : "concat(last_name,' ',first_name)");
+        
+        $sql = 'SELECT userid, username, first_name, last_name, email FROM ' . NV_USERS_GLOBALTABLE . ' WHERE userid IN (' . $uids_sql . ') ORDER BY ' . $orderby_sql . ' ' . $ordertype;
 
         $result = $db->query($sql);
         while ($row = $result->fetch()) {
             $userid_i = (int) $row['userid'];
             $admin_module = (isset($array_cat_admin[$userid_i][0])) ? (int) ($array_cat_admin[$userid_i][0]['admin']) : 0;
-            $admin_module_cat = $array_permissions_mod[$admin_module];
+            $admin_module_cat = $array_permissions_mod[$admin_module] ?? $nv_Lang->getGlobal('unknown');
             $is_edit = true;
             if ($admin_module == 2 and !defined('NV_IS_SPADMIN')) {
                 $is_edit = false;
@@ -212,6 +245,7 @@ if ($view_mode === 'full') {
                 'is_edit' => $is_edit
             ];
         }
+        $result->closeCursor();
     }
 
     $table_headers = [
@@ -254,9 +288,12 @@ if ($view_mode === 'full') {
             }
 
             $sql = 'SELECT catid, title, lev FROM ' . NV_PREFIXLANG . '_' . $module_data . '_cat ORDER BY sort ASC';
-            if ($db->query($sql)->fetchColumn() == 0) {
+            $result_count = $db->query($sql);
+            if ($result_count->fetchColumn() == 0) {
+                $result_count->closeCursor();
                 nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=cat');
             }
+            $result_count->closeCursor();
 
             $result_cat = $db->query($sql);
             while ($row = $result_cat->fetch()) {
@@ -272,6 +309,7 @@ if ($view_mode === 'full') {
                     'app_content' => (isset($array_cat_admin[$userid][$row['catid']]) and $array_cat_admin[$userid][$row['catid']]['app_content'] == 1)
                 ];
             }
+            $result_cat->closeCursor();
 
             $edit_user = [
                 'userid' => $userid,
@@ -284,9 +322,12 @@ if ($view_mode === 'full') {
 } elseif ($view_mode === 'readonly') {
     $sql = 'SELECT catid, title, lev FROM ' . NV_PREFIXLANG . '_' . $module_data . '_cat ORDER BY sort ASC';
 
-    if ($db->query($sql)->fetchColumn() == 0) {
+    $result_count = $db->query($sql);
+    if ($result_count->fetchColumn() == 0) {
+        $result_count->closeCursor();
         nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=cat');
     }
+    $result_count->closeCursor();
 
     $result_cat = $db->query($sql);
     while ($row = $result_cat->fetch()) {
@@ -321,6 +362,7 @@ if ($view_mode === 'full') {
             }
         }
     }
+    $result_cat->closeCursor();
 }
 
 $tpl = new \NukeViet\Template\NVSmarty();

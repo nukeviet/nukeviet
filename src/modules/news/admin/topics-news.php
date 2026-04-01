@@ -30,8 +30,10 @@ if ($nv_Request->isset_request('action', 'post')) {
         $id = $nv_Request->get_string('list', 'post');
         $arr_id = array_map('intval', array_unique(array_filter(explode(',', $id))));
 
+        $stmt_upd = $db->prepare('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_rows SET topicid = 0 WHERE id = :id');
         foreach ($arr_id as $id) {
-            $db->query('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_rows SET topicid=0 WHERE id = ' . $id);
+            $stmt_upd->bindValue(':id', $id, PDO::PARAM_INT);
+            $stmt_upd->execute();
         }
 
         nv_insert_logs(NV_LANG_DATA, $module_name, 'log_topic_del', 'topicid: ' . $topicid_post . ', ids: ' . implode(',', $arr_id), $admin_info['userid']);
@@ -47,7 +49,7 @@ if ($nv_Request->isset_request('action', 'post')) {
 $topicid = $nv_Request->get_int('topicid', 'get');
 $page = $nv_Request->get_page('page', 'get', 1);
 
-$topictitle = $db_slave->query('SELECT title FROM ' . NV_PREFIXLANG . '_' . $module_data . '_topics WHERE topicid =' . $topicid)->fetchColumn();
+$topictitle = $db->query('SELECT title FROM ' . NV_PREFIXLANG . '_' . $module_data . '_topics WHERE topicid =' . $topicid)->fetchColumn();
 if (empty($topictitle)) {
     nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=topics');
 }
@@ -57,22 +59,21 @@ $page_title = $nv_Lang->getModule('topic_page') . ': ' . $topictitle;
 $global_array_cat = [];
 
 $sql = 'SELECT catid, alias FROM ' . NV_PREFIXLANG . '_' . $module_data . '_cat ORDER BY sort ASC';
-$result = $db_slave->query($sql);
-while ($_scratch = $result->fetch(3)) {
-    [$catid_i, $alias_i] = $_scratch;
-    unset($_scratch);
-    $global_array_cat[$catid_i] = [
-        'alias' => $alias_i
+$result = $db->query($sql);
+while ($_row_cat = $result->fetch()) {
+    $global_array_cat[$_row_cat['catid']] = [
+        'alias' => $_row_cat['alias']
     ];
 }
+$result->closeCursor();
 $per_page = 50;
 
 $sql = 'SELECT count(*) FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE topicid=' . $topicid;
-$num_items = (int) $db_slave->query($sql)->fetchColumn();
+$num_items = (int) $db->query($sql)->fetchColumn();
 
 $sql = 'SELECT id, catid, listcatid, alias, title, publtime, status, hitstotal, hitscm FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows
 WHERE topicid=' . $topicid . ' ORDER BY ' . $order_articles_by . ' DESC LIMIT ' . $per_page . ' OFFSET ' . (($page - 1) * $per_page);
-$result = $db_slave->query($sql);
+$result = $db->query($sql);
 
 $pagination = nv_generate_page(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;topicid=' . $topicid, $num_items, $per_page, $page);
 
@@ -99,7 +100,7 @@ while ($row = $result->fetch()) {
 $result->closeCursor();
 
 $tpl = new \NukeViet\Template\NVSmarty();
-$tpl->setTemplateDir(get_module_tpl_dir('topicsnews.tpl'));
+$tpl->setTemplateDir(get_module_tpl_dir('topics-news.tpl'));
 
 $tpl->assign('LANG', $nv_Lang);
 $tpl->assign('MODULE_NAME', $module_name);
@@ -111,7 +112,7 @@ $tpl->assign('ARRAY', $array);
 $tpl->assign('PAGINATION', $pagination);
 $tpl->assign('NUM_ITEMS', $num_items);
 
-$contents = $tpl->fetch('topicsnews.tpl');
+$contents = $tpl->fetch('topics-news.tpl');
 
 $set_active_op = 'topics';
 include NV_ROOTDIR . '/includes/header.php';

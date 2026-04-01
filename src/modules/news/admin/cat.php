@@ -77,6 +77,13 @@ if ($catid > 0) {
 $savecat = $nv_Request->get_int('savecat', 'post', 0);
 
 if (!empty($savecat)) {
+    if (!csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
+        nv_jsonOutput([
+            'status' => 'error',
+            'mess' => $nv_Lang->getGlobal('error_checkss')
+        ]);
+    }
+
     $catid = $nv_Request->get_int('catid', 'post', 0);
     $parentid_old = $nv_Request->get_int('parentid_old', 'post', 0);
     $parentid = $nv_Request->get_int('parentid', 'post', 0);
@@ -151,41 +158,47 @@ if (!empty($savecat)) {
     }
 
     if ($catid == 0) {
-        $weight = $db->query('SELECT max(weight) FROM ' . NV_PREFIXLANG . '_' . $module_data . '_cat WHERE parentid=' . $parentid)->fetchColumn();
+        $stmt = $db->prepare('SELECT max(weight) FROM ' . NV_PREFIXLANG . '_' . $module_data . '_cat WHERE parentid= :parentid');
+        $stmt->bindValue(':parentid', $parentid, PDO::PARAM_INT);
+        $stmt->execute();
+        $weight = $stmt->fetchColumn();
         $weight = (int) $weight + 1;
         $viewcat = 'viewcat_page_new';
         $subcatid = '';
 
-        $sql = 'INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . "_cat (
+        $stmt = $db->prepare('INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . "_cat (
             parentid, title, titlesite, alias, description, descriptionhtml,
             image, viewdescription, weight, sort, lev, viewcat, numsubcat,
             subcatid, numlinks, newday, featured, ad_block_cat, layout_func, keywords,
             admins, add_time, edit_time, groups_view, status
         ) VALUES (
             :parentid, :title, :titlesite, :alias, :description, :descriptionhtml,
-            '', '" . $viewdescription . "', :weight, '0', '0', :viewcat, '0',
+            '', :viewdescription, :weight, '0', '0', :viewcat, '0',
             :subcatid, '3', '2', :featured, :ad_block_cat, :layout_func, :keywords, :admins,
-            " . NV_CURRENTTIME . ', ' . NV_CURRENTTIME . ', :groups_view, 1
-        )';
+            :add_time, :edit_time, :groups_view, 1
+        )");
 
-        $data_insert = [];
-        $data_insert['parentid'] = $parentid;
-        $data_insert['title'] = $title;
-        $data_insert['titlesite'] = $titlesite;
-        $data_insert['alias'] = $alias;
-        $data_insert['description'] = $description;
-        $data_insert['descriptionhtml'] = $descriptionhtml;
-        $data_insert['weight'] = $weight;
-        $data_insert['viewcat'] = $viewcat;
-        $data_insert['subcatid'] = $subcatid;
-        $data_insert['keywords'] = $keywords;
-        $data_insert['admins'] = $admins;
-        $data_insert['groups_view'] = $groups_view;
-        $data_insert['featured'] = $featured;
-        $data_insert['ad_block_cat'] = $ad_block_cat;
-        $data_insert['layout_func'] = $layout_func;
+        $stmt->bindValue(':parentid', $parentid, PDO::PARAM_INT);
+        $stmt->bindValue(':title', $title, PDO::PARAM_STR);
+        $stmt->bindValue(':titlesite', $titlesite, PDO::PARAM_STR);
+        $stmt->bindValue(':alias', $alias, PDO::PARAM_STR);
+        $stmt->bindValue(':description', $description, PDO::PARAM_STR);
+        $stmt->bindValue(':descriptionhtml', $descriptionhtml, PDO::PARAM_STR);
+        $stmt->bindValue(':viewdescription', $viewdescription, PDO::PARAM_INT);
+        $stmt->bindValue(':weight', $weight, PDO::PARAM_INT);
+        $stmt->bindValue(':viewcat', $viewcat, PDO::PARAM_STR);
+        $stmt->bindValue(':subcatid', $subcatid, PDO::PARAM_STR);
+        $stmt->bindValue(':featured', $featured, PDO::PARAM_INT);
+        $stmt->bindValue(':ad_block_cat', $ad_block_cat, PDO::PARAM_STR);
+        $stmt->bindValue(':layout_func', $layout_func, PDO::PARAM_STR);
+        $stmt->bindValue(':keywords', $keywords, PDO::PARAM_STR);
+        $stmt->bindValue(':admins', $admins, PDO::PARAM_STR);
+        $stmt->bindValue(':add_time', NV_CURRENTTIME, PDO::PARAM_INT);
+        $stmt->bindValue(':edit_time', NV_CURRENTTIME, PDO::PARAM_INT);
+        $stmt->bindValue(':groups_view', $groups_view, PDO::PARAM_STR);
+        $stmt->execute();
 
-        $newcatid = $db->insert_id($sql, 'catid', $data_insert);
+        $newcatid = $db->lastInsertId();
         if ($newcatid > 0) {
             require_once NV_ROOTDIR . '/includes/action_' . $db->dbtype . '.php';
 
@@ -193,7 +206,10 @@ if (!empty($savecat)) {
             nv_fix_cat_order();
 
             if (!defined('NV_IS_ADMIN_MODULE')) {
-                $db->query('INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . '_admins (userid, catid, admin, add_content, pub_content, edit_content, del_content) VALUES (' . $admin_id . ', ' . $newcatid . ', 1, 1, 1, 1, 1)');
+                $stmt = $db->prepare('INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . '_admins (userid, catid, admin, add_content, pub_content, edit_content, del_content) VALUES (:userid, :catid, 1, 1, 1, 1, 1)');
+                $stmt->bindValue(':userid', $admin_id, PDO::PARAM_INT);
+                $stmt->bindValue(':catid', $newcatid, PDO::PARAM_INT);
+                $stmt->execute();
             }
 
             // Đăng kí các khối block tùy chỉnh
@@ -219,29 +235,35 @@ if (!empty($savecat)) {
             image= :image, viewdescription= :viewdescription,featured=:featured,
             ad_block_cat=:ad_block_cat, layout_func=:layout_func, keywords= :keywords, groups_view= :groups_view,
             edit_time=' . NV_CURRENTTIME . '
-        WHERE catid =' . $catid);
-        $stmt->bindParam(':parentid', $parentid, PDO::PARAM_INT);
-        $stmt->bindParam(':title', $title, PDO::PARAM_STR);
-        $stmt->bindParam(':titlesite', $titlesite, PDO::PARAM_STR);
-        $stmt->bindParam(':alias', $alias, PDO::PARAM_STR);
-        $stmt->bindParam(':image', $image, PDO::PARAM_STR);
-        $stmt->bindParam(':viewdescription', $viewdescription, PDO::PARAM_STR);
-        $stmt->bindParam(':keywords', $keywords, PDO::PARAM_STR);
-        $stmt->bindParam(':description', $description, PDO::PARAM_STR, strlen($description));
-        $stmt->bindParam(':descriptionhtml', $descriptionhtml, PDO::PARAM_STR, strlen($descriptionhtml));
-        $stmt->bindParam(':groups_view', $groups_view, PDO::PARAM_STR);
-        $stmt->bindParam(':featured', $featured, PDO::PARAM_INT);
-        $stmt->bindParam(':ad_block_cat', $ad_block_cat, PDO::PARAM_STR);
-        $stmt->bindParam(':layout_func', $layout_func, PDO::PARAM_STR);
+        WHERE catid = :catid');
+        $stmt->bindValue(':parentid', $parentid, PDO::PARAM_INT);
+        $stmt->bindValue(':title', $title, PDO::PARAM_STR);
+        $stmt->bindValue(':titlesite', $titlesite, PDO::PARAM_STR);
+        $stmt->bindValue(':alias', $alias, PDO::PARAM_STR);
+        $stmt->bindValue(':image', $image, PDO::PARAM_STR);
+        $stmt->bindValue(':viewdescription', $viewdescription, PDO::PARAM_STR);
+        $stmt->bindValue(':keywords', $keywords, PDO::PARAM_STR);
+        $stmt->bindValue(':description', $description, PDO::PARAM_STR);
+        $stmt->bindValue(':descriptionhtml', $descriptionhtml, PDO::PARAM_STR);
+        $stmt->bindValue(':groups_view', $groups_view, PDO::PARAM_STR);
+        $stmt->bindValue(':featured', $featured, PDO::PARAM_INT);
+        $stmt->bindValue(':ad_block_cat', $ad_block_cat, PDO::PARAM_STR);
+        $stmt->bindValue(':layout_func', $layout_func, PDO::PARAM_STR);
+        $stmt->bindValue(':catid', $catid, PDO::PARAM_INT);
         $stmt->execute();
 
         if ($stmt->rowCount()) {
             if ($parentid != $parentid_old) {
-                $weight = $db->query('SELECT max(weight) FROM ' . NV_PREFIXLANG . '_' . $module_data . '_cat WHERE parentid=' . $parentid)->fetchColumn();
+                $stmt = $db->prepare('SELECT max(weight) FROM ' . NV_PREFIXLANG . '_' . $module_data . '_cat WHERE parentid= :parentid');
+                $stmt->bindValue(':parentid', $parentid, PDO::PARAM_INT);
+                $stmt->execute();
+                $weight = $stmt->fetchColumn();
                 $weight = (int) $weight + 1;
 
-                $sql = 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_cat SET weight=' . $weight . ' WHERE catid=' . (int) $catid;
-                $db->query($sql);
+                $stmt = $db->prepare('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_cat SET weight= :weight WHERE catid= :catid');
+                $stmt->bindValue(':weight', $weight, PDO::PARAM_INT);
+                $stmt->bindValue(':catid', $catid, PDO::PARAM_INT);
+                $stmt->execute();
 
                 nv_fix_cat_order();
             }
@@ -350,20 +372,25 @@ if (!empty($image) and file_exists(NV_UPLOADS_REAL_DIR . '/' . $module_upload . 
 // Build danh sách bài viết nổi bật (chỉ khi sửa chuyên mục)
 $featured_news = [];
 if ($catid > 0) {
-    $sql = 'SELECT id FROM ' . NV_PREFIXLANG . '_' . $module_data . '_' . $catid . ' WHERE status=1 ORDER BY ' . $order_articles_by . ' DESC LIMIT 100';
-    $result = $db->query($sql);
+    $stmt1 = $db->prepare('SELECT id FROM ' . NV_PREFIXLANG . '_' . $module_data . '_' . $catid . ' WHERE status=1 ORDER BY ' . $order_articles_by . ' DESC LIMIT 100');
+    $stmt1->execute();
     $array_id = [$featured];
-    while ($row = $result->fetch()) {
-        $array_id[] = $row['id'];
+    while ($_row = $stmt1->fetch()) {
+        $array_id[] = $_row['id'];
     }
+    $stmt1->closeCursor();
 
-    $sql1 = 'SELECT id, title FROM ' . NV_PREFIXLANG . '_' . $module_data . '_' . $catid . ' WHERE id IN (' . implode(',', $array_id) . ') ORDER BY ' . $order_articles_by . ' DESC';
-    $result = $db->query($sql1);
-    while ($row = $result->fetch()) {
-        $featured_news[] = [
-            'id' => $row['id'],
-            'title' => $row['title']
-        ];
+    if (!empty($array_id)) {
+        $ids = implode(',', array_map('intval', $array_id));
+        $stmt2 = $db->prepare('SELECT id, title FROM ' . NV_PREFIXLANG . '_' . $module_data . '_' . $catid . ' WHERE id IN (' . $ids . ') ORDER BY ' . $order_articles_by . ' DESC');
+        $stmt2->execute();
+        while ($_row = $stmt2->fetch()) {
+            $featured_news[] = [
+                'id' => $_row['id'],
+                'title' => $_row['title']
+            ];
+        }
+        $stmt2->closeCursor();
     }
 }
 
@@ -373,7 +400,7 @@ foreach ($layout_array as $value) {
     $layout_opts[] = preg_replace($global_config['check_op_layout'], '\\1', $value);
 }
 
-$descriptionhtml = nv_htmlspecialchars(nv_editor_br2nl($descriptionhtml));
+$descriptionhtml = nv_htmlspecialchars(nv_editor_br2nl((string) $descriptionhtml));
 if (defined('NV_EDITOR') and nv_function_exists('nv_aleditor')) {
     $_uploads_dir = NV_UPLOADS_DIR . '/' . $module_upload;
     $descriptionhtml = nv_aleditor('descriptionhtml', '100%', '200px', $descriptionhtml, 'Basic', $_uploads_dir, $_uploads_dir);
@@ -422,9 +449,9 @@ if ($parentid > 0) {
 }
 
 // Truy vấn danh sách chuyên mục con trực tiếp
-$sql_cat_list = 'SELECT catid, parentid, title, alias, weight, viewcat, numsubcat, numlinks, newday, status FROM ' . NV_PREFIXLANG . '_' . $module_data . '_cat WHERE parentid = ' . $parentid . ' ORDER BY weight ASC';
-$rowall_cat = $db->query($sql_cat_list)->fetchAll(3);
-$num_cats = count($rowall_cat);
+$stmt_cat = $db->prepare('SELECT catid, parentid, title, alias, weight, viewcat, numsubcat, numlinks, newday, status FROM ' . NV_PREFIXLANG . '_' . $module_data . '_cat WHERE parentid = :parentid ORDER BY weight ASC');
+$stmt_cat->bindValue(':parentid', $parentid, PDO::PARAM_INT);
+$stmt_cat->execute();
 $array_status = [
     $nv_Lang->getModule('cat_status_0'),
     $nv_Lang->getModule('cat_status_1'),
@@ -441,13 +468,13 @@ foreach ($array_status as $_key => $_val) {
 
 $cat_rows = [];
 $cat_weight_idx = 1;
-foreach ($rowall_cat as $row_r) {
-    [$catid_r, $parentid_r, $title_r, $alias_r, $weight_r, $viewcat_r, $numsubcat_r, $numlinks_r, $newday_r, $status_r] = $row_r;
+$stmt_vc = $db->prepare('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_cat SET viewcat= :viewcat WHERE catid= :catid');
 
+while ($_row_cat = $stmt_cat->fetch()) {
     if (defined('NV_IS_ADMIN_MODULE')) {
         $check_show = 1;
     } else {
-        $array_cat_r = GetCatidInParent($catid_r);
+        $array_cat_r = GetCatidInParent($_row_cat['catid']);
         $check_show = array_intersect($array_cat_r, $array_cat_check_content);
     }
 
@@ -455,11 +482,11 @@ foreach ($rowall_cat as $row_r) {
         continue;
     }
 
-    $array_viewcat_r = ($numsubcat_r > 0) ? $array_viewcat_full : $array_viewcat_nosub;
-    if (!array_key_exists($viewcat_r, $array_viewcat_r)) {
-        $viewcat_r = 'viewcat_page_new';
-        $stmt_vc = $db->prepare('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_cat SET viewcat= :viewcat WHERE catid=' . (int) $catid_r);
-        $stmt_vc->bindParam(':viewcat', $viewcat_r, PDO::PARAM_STR);
+    $array_viewcat_r = ($_row_cat['numsubcat'] > 0) ? $array_viewcat_full : $array_viewcat_nosub;
+    if (!array_key_exists($_row_cat['viewcat'], $array_viewcat_r)) {
+        $_row_cat['viewcat'] = 'viewcat_page_new';
+        $stmt_vc->bindValue(':viewcat', $_row_cat['viewcat'], PDO::PARAM_STR);
+        $stmt_vc->bindValue(':catid', $_row_cat['catid'], PDO::PARAM_INT);
         $stmt_vc->execute();
     }
 
@@ -467,55 +494,56 @@ foreach ($rowall_cat as $row_r) {
     $weight_disabled = $func_cat_disabled = true;
 
     if (!empty($module_config[$module_name]['instant_articles_active'])) {
-        $admin_funcs['instant_articles'] = urlRewriteWithDomain(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=instant-rss/' . $alias_r, NV_MY_DOMAIN);
+        $admin_funcs['instant_articles'] = urlRewriteWithDomain(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=instant-rss/' . $_row_cat['alias'], NV_MY_DOMAIN);
     }
-    if (defined('NV_IS_ADMIN_MODULE') || (isset($array_cat_admin[$admin_id][$catid_r]) && $array_cat_admin[$admin_id][$catid_r]['add_content'] == 1)) {
+    if (defined('NV_IS_ADMIN_MODULE') || (isset($array_cat_admin[$admin_id][$_row_cat['catid']]) && $array_cat_admin[$admin_id][$_row_cat['catid']]['add_content'] == 1)) {
         $func_cat_disabled = false;
-        $admin_funcs['add'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=content&amp;catid=' . $catid_r . '&amp;parentid=' . $parentid_r;
+        $admin_funcs['add'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=content&amp;catid=' . $_row_cat['catid'] . '&amp;parentid=' . $_row_cat['parentid'];
     }
-    if (defined('NV_IS_ADMIN_MODULE') || ($parentid_r > 0 && isset($array_cat_admin[$admin_id][$parentid_r]) && $array_cat_admin[$admin_id][$parentid_r]['admin'] == 1)) {
+    if (defined('NV_IS_ADMIN_MODULE') || ($_row_cat['parentid'] > 0 && isset($array_cat_admin[$admin_id][$_row_cat['parentid']]) && $array_cat_admin[$admin_id][$_row_cat['parentid']]['admin'] == 1)) {
         $func_cat_disabled = false;
-        $admin_funcs['edit'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=cat&amp;catid=' . $catid_r . '&amp;parentid=' . $parentid_r;
+        $admin_funcs['edit'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=cat&amp;catid=' . $_row_cat['catid'] . '&amp;parentid=' . $_row_cat['parentid'];
     }
-    if (defined('NV_IS_ADMIN_MODULE') || ($parentid_r > 0 && isset($array_cat_admin[$admin_id][$parentid_r]) && $array_cat_admin[$admin_id][$parentid_r]['admin'] == 1)) {
+    if (defined('NV_IS_ADMIN_MODULE') || ($_row_cat['parentid'] > 0 && isset($array_cat_admin[$admin_id][$_row_cat['parentid']]) && $array_cat_admin[$admin_id][$_row_cat['parentid']]['admin'] == 1)) {
         $weight_disabled = false;
         $admin_funcs['delete'] = 1;
     }
 
-    if ($status_r > $global_code_defined['cat_locked_status']) {
+    if ($_row_cat['status'] > $global_code_defined['cat_locked_status']) {
         $status_text_r = $nv_Lang->getModule('cat_locked_byparent');
         $status_can_change_r = false;
-    } elseif ($func_cat_disabled || ($is_large_system && $status_r == 0)) {
-        $status_text_r = $array_status[$status_r];
+    } elseif ($func_cat_disabled || ($is_large_system && $_row_cat['status'] == 0)) {
+        $status_text_r = $array_status[$_row_cat['status']];
         $status_can_change_r = false;
     } else {
-        $status_text_r = $array_status[$status_r];
+        $status_text_r = $array_status[$_row_cat['status']];
         $status_can_change_r = true;
     }
 
     $cat_rows[] = [
-        'catid'               => $catid_r,
-        'title'               => $title_r,
-        'link'                => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=cat&amp;parentid=' . $catid_r,
-        'numsubcat'           => $numsubcat_r,
+        'catid'               => $_row_cat['catid'],
+        'title'               => $_row_cat['title'],
+        'link'                => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=cat&amp;parentid=' . $_row_cat['catid'],
+        'numsubcat'           => $_row_cat['numsubcat'],
         'weight'              => $cat_weight_idx,
         'weight_can_change'   => !$weight_disabled,
-        'numlinks'            => $numlinks_r,
+        'numlinks'            => $_row_cat['numlinks'],
         'numlinks_can_change' => !$func_cat_disabled,
-        'newday'              => $newday_r,
+        'newday'              => $_row_cat['newday'],
         'newday_can_change'   => !$func_cat_disabled,
-        'viewcat_text'        => $array_viewcat_r[$viewcat_r],
-        'viewcat_val'         => $viewcat_r,
-        'viewcat_mode'        => ($numsubcat_r > 0) ? 'full' : 'nosub',
+        'viewcat_text'        => $array_viewcat_r[$_row_cat['viewcat']],
+        'viewcat_val'         => $_row_cat['viewcat'],
+        'viewcat_mode'        => ($_row_cat['numsubcat'] > 0) ? 'full' : 'nosub',
         'viewcat_can_change'  => !$func_cat_disabled,
         'status_text'         => $status_text_r,
-        'status_val'          => $status_r,
+        'status_val'          => $_row_cat['status'],
         'status_can_change'   => $status_can_change_r,
         'adminfuncs'          => $admin_funcs,
-        'checkss'             => csrf_create($admin_info['admin_id'] . '_' . $module_name . '_cat' . $catid_r)
+        'checkss'             => csrf_create($admin_info['admin_id'] . '_' . $module_name . '_cat' . $_row_cat['catid'])
     ];
     ++$cat_weight_idx;
 }
+$stmt_cat->closeCursor();
 
 
 $tpl = new \NukeViet\Template\NVSmarty();
@@ -537,7 +565,7 @@ $tpl->assign('KEYWORDS', $keywords);
 $tpl->assign('DESCRIPTION', nv_htmlspecialchars(nv_br2nl($description)));
 $tpl->assign('CAT_TITLE', $cat_title);
 $tpl->assign('ROWS', $cat_rows);
-$tpl->assign('MAX_WEIGHT', $num_cats);
+$tpl->assign('MAX_WEIGHT', count($cat_rows));
 $tpl->assign('VIEWCAT_FULL', $array_viewcat_full);
 $tpl->assign('VIEWCAT_NOSUB', $array_viewcat_nosub);
 $tpl->assign('STATUS_LIST', $status_list);

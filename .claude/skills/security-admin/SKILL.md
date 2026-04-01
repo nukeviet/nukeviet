@@ -21,6 +21,13 @@ Respond in **Vietnamese**.
 
 ---
 
+### 🛠️ Tool Usage Rules (Windows — terminal may hang)
+- **Search/inspect code** → use `grep_search` + `view_file`. Never use `run_command` for grep/find/cat/ls.
+- **`run_command` only** for operations with no alternative (e.g. `php src/private/ClearCache.php`).
+- If `grep_search` returns empty but file visually has content → encoding issue. Use `view_file` with known line numbers from audit report instead.
+
+---
+
 ## [PHASE 1] Scope Identification
 
 ### 1. Identify the target

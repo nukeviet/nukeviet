@@ -75,13 +75,13 @@
                         <td>
                             <div class="row g-1 flex-nowrap">
                                 <div class="col-auto">
-                                    <button type="button" class="btn btn-secondary btn-sm"{if empty($row.numnews)} disabled{/if} data-toggle="link_tags" data-tid="{$row.tid}"><i class="fa-solid fa-tags" data-icon="fa-tags"></i> {$LANG->getModule('tag_links')}: <strong>{$row.numnews|nv_number_format}</strong></button>
+                                    <button type="button" class="btn btn-secondary btn-sm"{if empty($row.numnews)} disabled{/if} data-toggle="link_tags" data-tid="{$row.tid}" data-checkss="{$CHECKSS}"><i class="fa-solid fa-tags" data-icon="fa-tags"></i> {$LANG->getModule('tag_links')}: <strong>{$row.numnews|nv_number_format}</strong></button>
                                 </div>
                                 <div class="col-auto">
-                                    <button type="button" class="btn btn-secondary btn-sm" data-toggle="add_tags" data-fc="editTag" data-mtitle="{$LANG->getModule('edit_tags')}" data-tid="{$row.tid}"><i class="fa-solid fa-pen" data-icon="fa-pen"></i> {$LANG->getGlobal('edit')}</button>
+                                    <button type="button" class="btn btn-secondary btn-sm" data-toggle="add_tags" data-fc="editTag" data-mtitle="{$LANG->getModule('edit_tags')}" data-tid="{$row.tid}" data-checkss="{$CHECKSS}"><i class="fa-solid fa-pen" data-icon="fa-pen"></i> {$LANG->getGlobal('edit')}</button>
                                 </div>
                                 <div class="col-auto">
-                                    <button type="button" class="btn btn-danger btn-sm" data-toggle="nv_del_tag" data-tid="{$row.tid}"><i class="fa-solid fa-trash" data-icon="fa-trash"></i> {$LANG->getGlobal('delete')}</button>
+                                    <button type="button" class="btn btn-danger btn-sm" data-toggle="nv_del_tag" data-tid="{$row.tid}" data-checkss="{$CHECKSS}"><i class="fa-solid fa-trash" data-icon="fa-trash"></i> {$LANG->getGlobal('delete')}</button>
                                 </div>
                             </div>
                         </td>
@@ -98,7 +98,7 @@
                     <input type="checkbox" data-toggle="checkAll" data-type="tag" class="form-check-input m-0 align-middle" aria-label="{$LANG->getGlobal('toggle_checkall')}">
                 </div>
                 <div class="input-group me-1 my-1">
-                    <button type="button" class="btn btn-danger" data-toggle="nv_del_check_tags"><i class="fa-solid fa-trash" data-icon="fa-trash"></i> {$LANG->getGlobal('delete')}</button>
+                    <button type="button" class="btn btn-danger" data-toggle="nv_del_check_tags" data-checkss="{$CHECKSS}"><i class="fa-solid fa-trash" data-icon="fa-trash"></i> {$LANG->getGlobal('delete')}</button>
                 </div>
             </div>
             <div class="pagination-wrap">
@@ -119,6 +119,7 @@
             <div class="modal-body">
                 <form action="{$smarty.const.NV_BASE_ADMINURL}index.php?{$smarty.const.NV_LANG_VARIABLE}={$smarty.const.NV_LANG_DATA}&amp;{$smarty.const.NV_NAME_VARIABLE}={$MODULE_NAME}&amp;{$smarty.const.NV_OP_VARIABLE}={$OP}" method="post" class="ajax-submit">
                     <input name="savetag" type="hidden" value="1">
+                    <input name="checkss" type="hidden" value="{$CHECKSS}">
                     <div class="mb-3">
                         <label for="element_mtag_mtitle" class="form-label">{$LANG->getModule('note_tags')}:</label>
                         <textarea class="form-control" name="mtitle" id="element_mtag_mtitle" rows="5" maxlength="2000"></textarea>
@@ -143,6 +144,7 @@
                 <form action="{$smarty.const.NV_BASE_ADMINURL}index.php?{$smarty.const.NV_LANG_VARIABLE}={$smarty.const.NV_LANG_DATA}&amp;{$smarty.const.NV_NAME_VARIABLE}={$MODULE_NAME}&amp;{$smarty.const.NV_OP_VARIABLE}={$OP}" method="post" class="ajax-submit">
                     <input name="savecat" type="hidden" value="1">
                     <input name="tid" type="hidden" value="0">
+                    <input name="checkss" type="hidden" value="{$CHECKSS}">
                     <div class="row mb-3">
                         <label for="element_stag_keywords" class="col-12 col-sm-3 col-form-label text-sm-end">{$LANG->getModule('keywords')} <span class="text-danger">(*)</span></label>
                         <div class="col-12 col-sm-8">
@@ -201,7 +203,7 @@
                             <input type="checkbox" data-toggle="checkAll" data-type="link" class="form-check-input m-0 d-block" aria-label="{$LANG->getGlobal('toggle_checkall')}">
                         </div>
                         <div>
-                            <button type="button" class="btn btn-danger" data-toggle="tags_id_check_del" data-tid="0"><i class="fa-solid fa-trash" data-icon="fa-trash"></i> {$LANG->getGlobal('delete')}</button>
+                            <button type="button" class="btn btn-danger" data-toggle="tags_id_check_del" data-tid="0" data-checkss="{$CHECKSS}"><i class="fa-solid fa-trash" data-icon="fa-trash"></i> {$LANG->getGlobal('delete')}</button>
                         </div>
                     </div>
                 </div>

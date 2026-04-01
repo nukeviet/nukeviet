@@ -78,9 +78,9 @@ $(function () {
             icon.removeClass(icon.data('icon')).addClass('fa-spinner fa-spin-pulse');
             $.ajax({
                 type: 'POST',
-                url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=del_content&nocache=' + new Date().getTime(),
+                url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=content-del&nocache=' + new Date().getTime(),
                 data: {
-                    checkss: btn.data('checksess'),
+                    checkss: btn.data('checkss'),
                     id: btn.data('id')
                 },
                 success: function (res) {
@@ -126,9 +126,9 @@ $(function () {
                 $('#element_action').prop('disabled', true);
                 $.ajax({
                     type: 'POST',
-                    url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=del_content&nocache=' + new Date().getTime(),
+                    url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=content-del&nocache=' + new Date().getTime(),
                     data: {
-                        checkss: $('body').data('checksess'),
+                        checkss: $('body').data('checkss'),
                         listid: listid.join(',')
                     },
                     success: function (res) {
@@ -152,7 +152,7 @@ $(function () {
                 });
             });
         } else {
-            window.location.href = script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=' + action + '&listid=' + listid.join(',') + '&checkss=' + $('body').data('checksess');
+            window.location.href = script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=' + action + '&listid=' + listid.join(',') + '&checkss=' + $('body').data('checkss');
         }
     });
 
@@ -167,7 +167,7 @@ $(function () {
         $('#sortArticleNew').val(btn.data('weight'));
 
         mdSortArt.data('id', btn.data('id'));
-        mdSortArt.data('checksess', btn.data('checksess'));
+        mdSortArt.data('checkss', btn.data('checkss'));
         mdSortArt.data('weight', btn.data('weight'));
         const md = bootstrap.Modal.getOrCreateInstance(mdSortArt[0]);
         md.show();
@@ -192,7 +192,7 @@ $(function () {
                 data: {
                     order_articles_new: $('#sortArticleNew').val(),
                     order_articles_id: mdSortArt.data('id'),
-                    order_articles_checkss: mdSortArt.data('checksess')
+                    order_articles_checkss: mdSortArt.data('checkss')
                 },
                 success: function (res) {
                     icon.removeClass('fa-spinner fa-spin-pulse').addClass(icon.data('icon'));
@@ -246,7 +246,7 @@ $(function () {
                 type: 'POST',
                 url: btn.attr('href') + '&nocache=' + new Date().getTime(),
                 data: {
-                    restorehistory: $('body').data('checksess'),
+                    restorehistory: btn.data('checkss'),
                     id: btn.data('id')
                 },
                 dataType: 'json',
@@ -282,7 +282,7 @@ $(function () {
                 type: 'POST',
                 url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=' + nv_func_name + '&nocache=' + new Date().getTime(),
                 data: {
-                    checkss: $('body').data('checksess'),
+                    checkss: btn.data('checkss'),
                     del_tid: btn.data('tid')
                 },
                 dataType: 'json',
@@ -329,7 +329,7 @@ $(function () {
                 type: 'POST',
                 url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=' + nv_func_name + '&nocache=' + new Date().getTime(),
                 data: {
-                    checkss: $('body').data('checksess'),
+                    checkss: btn.data('checkss'),
                     del_listid: listid
                 },
                 dataType: 'json',
@@ -402,7 +402,7 @@ $(function () {
                     type: 'POST',
                     url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=' + nv_func_name + '&nocache=' + new Date().getTime(),
                     data: {
-                        checkss: $('body').data('checksess'),
+                        checkss: btn.data('checkss'),
                         loadEditTag: 1,
                         tid: btn.data('tid')
                     },
@@ -461,7 +461,7 @@ $(function () {
                 type: 'POST',
                 url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=' + nv_func_name + '&nocache=' + new Date().getTime(),
                 data: {
-                    checkss: $('body').data('checksess'),
+                    checkss: btn.data('checkss'),
                     tid: btn.data('tid'),
                     tagLinks: 1
                 },
@@ -513,7 +513,7 @@ $(function () {
                 type: 'POST',
                 url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=' + nv_func_name + '&nocache=' + new Date().getTime(),
                 data: {
-                    checkss: $('body').data('checksess'),
+                    checkss: btn.data('checkss'),
                     id: btn.data('id'),
                     tid: btn.data('tid'),
                     keyword: $('[name="keyword"]', item).val(),
@@ -564,7 +564,7 @@ $(function () {
                     type: 'POST',
                     url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=' + nv_func_name + '&nocache=' + new Date().getTime(),
                     data: {
-                        checkss: $('body').data('checksess'),
+                        checkss: btn.data('checkss'),
                         tagsIdDel: 1,
                         ids: listid,
                         tid: btn.data('tid')
@@ -634,7 +634,7 @@ $(function () {
                     return {
                         q: params.term,
                         page: params.page || 1,
-                        checkss: $('body').data('checksess')
+                        checkss: $('body').data('checkss')
                     };
                 },
                 cache: false
@@ -654,7 +654,7 @@ $(function () {
             tags: true,
             tokenSeparators: [',', ';'],
             ajax: {
-                url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=tagsajax&nocache=' + new Date().getTime(),
+                url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=tags-ajax&nocache=' + new Date().getTime(),
                 dataType: 'json',
                 delay: 250,
                 type: 'POST',
@@ -662,7 +662,7 @@ $(function () {
                     return {
                         q: params.term,
                         page: params.page || 1,
-                        checkss: $('body').data('checksess')
+                        checkss: $('body').data('checkss')
                     };
                 },
                 cache: false
@@ -715,7 +715,7 @@ $(function () {
                 url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=tags&nocache=' + new Date().getTime(),
                 data: {
                     getTagsFromContent: 1,
-                    checkss: $('body').data('checksess'),
+                    checkss: btn.data('checkss'),
                     content: text
                 },
                 dataType: 'json',
@@ -779,7 +779,7 @@ $(function () {
                 url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=content&nocache=' + new Date().getTime(),
                 data: {
                     getKeywordsFromContent: 1,
-                    checkss: $('body').data('checksess'),
+                    checkss: btn.data('checkss'),
                     content: text
                 },
                 dataType: 'json',
@@ -904,7 +904,7 @@ $(function () {
                         q: params.term,
                         get_topic_json: 1,
                         page: params.page || 1,
-                        checkss: $('body').data('checksess')
+                        checkss: $('body').data('checkss')
                     };
                 }
             },
@@ -925,7 +925,7 @@ $(function () {
                     response(cachesource[term]);
                     return;
                 }
-                $.getJSON(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=sourceajax&nocache=' + new Date().getTime(), request, function (data) {
+                $.getJSON(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=sources-ajax&nocache=' + new Date().getTime(), request, function (data) {
                     cachesource[term] = data;
                     response(data);
                 });
@@ -1294,35 +1294,25 @@ $(function () {
         }
     }
 
-    // Xóa hàng loạt báo cáo lỗi
-    $('[data-toggle="report_del_check_action"]').on('click', function(e) {
-        e.preventDefault();
 
+    // Xóa 1 báo cáo lỗi
+    $('[data-toggle="report_del_action"]').on('click', function(e) {
+        e.preventDefault();
         const btn = $(this);
         const icon = $('i', btn);
         if (icon.is('.fa-spinner')) {
             return;
         }
-
-        let listid = [];
-        $('[data-toggle="checkSingle"]:checked').each(function () {
-            listid.push($(this).val());
-        });
-        if (listid.length < 1) {
-            nvAlert(btn.data('not-checked'));
-            return;
-        }
         const ctn = btn.closest('.list-report');
-
         nvConfirm(ctn.data('del-confirm'), () => {
             icon.removeClass(icon.data('icon')).addClass('fa-spinner fa-spin-pulse');
             $.ajax({
                 type: 'POST',
                 url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=report&nocache=' + new Date().getTime(),
                 data: {
-                    checkss: $('body').data('checksess'),
-                    action: 'multidel',
-                    list: listid
+                    checkss: btn.data('checkss'),
+                    action: btn.data('send-mail') == 'yes' ? 'del_mail_action' : 'del_action',
+                    rid: btn.data('id')
                 },
                 dataType: 'json',
                 cache: false,
@@ -1343,8 +1333,8 @@ $(function () {
         });
     });
 
-    // Xóa 1 báo cáo lỗi
-    $('[data-toggle="report_del_action"]').on('click', function(e) {
+    // Xóa hàng loạt báo cáo lỗi
+    $('[data-toggle="report_del_check_action"]').on('click', function(e) {
         e.preventDefault();
         const btn = $(this);
         const icon = $('i', btn);
@@ -1352,15 +1342,24 @@ $(function () {
             return;
         }
         const ctn = btn.closest('.list-report');
+        let listid = [];
+        $('[data-toggle="checkSingle"]:checked', ctn).each(function () {
+            listid.push($(this).val());
+        });
+        if (listid.length < 1) {
+            nvAlert(btn.data('not-checked'));
+            return;
+        }
+
         nvConfirm(ctn.data('del-confirm'), () => {
             icon.removeClass(icon.data('icon')).addClass('fa-spinner fa-spin-pulse');
             $.ajax({
                 type: 'POST',
                 url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=report&nocache=' + new Date().getTime(),
                 data: {
-                    checkss: $('body').data('checksess'),
-                    action: btn.data('send-mail') == 'yes' ? 'del_mail_action' : 'del_action',
-                    rid: btn.data('id')
+                    checkss: btn.data('checkss'),
+                    action: 'multidel',
+                    list: listid
                 },
                 dataType: 'json',
                 cache: false,
@@ -1397,7 +1396,7 @@ $(function () {
                         id: iptRelated.data('id'),
                         q: params.term,
                         page: params.page || 1,
-                        checkss: $('body').data('checksess'),
+                        checkss: $('body').data('checkss'),
                         get_article_json: 1
                     };
                 },
@@ -1423,7 +1422,7 @@ $(function () {
                 type: 'POST',
                 url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=drafts&nocache=' + new Date().getTime(),
                 data: {
-                    delete: $('body').data('checksess'),
+                    delete: $('body').data('checkss'),
                     id: btn.data('id')
                 },
                 dataType: 'json',
@@ -1471,7 +1470,7 @@ $(function () {
                     type: 'POST',
                     url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=drafts&nocache=' + new Date().getTime(),
                     data: {
-                        delete: $('body').data('checksess'),
+                        delete: $('body').data('checkss'),
                         listid: listid.join(',')
                     },
                     success: function (respon) {
@@ -2131,7 +2130,7 @@ $(function () {
                 btn.prop('disabled', true);
 
                 $.post(
-                    script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=change_cat&nocache=' + new Date().getTime(),
+                    script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=cat-change&nocache=' + new Date().getTime(),
                     { catid: ctn.data('id'), mod: mod, new_vid: newVal, checkss: ctn.data('checkss') },
                     function (res) {
                         btn.prop('disabled', false);
@@ -2198,7 +2197,7 @@ $(function () {
                 $.ajax({
                     type: 'POST',
                     dataType: 'json',
-                    url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=del_cat&nocache=' + new Date().getTime(),
+                    url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=cat-del&nocache=' + new Date().getTime(),
                     data: postData,
                     success: function (res) {
                         if (res.status === 'OK') {
@@ -2697,9 +2696,9 @@ $(function () {
         });
     }
 
-    if (nv_func_name === 'topicsnews') {
+    if (nv_func_name === 'topics-news') {
         // Xóa bài viết khỏi dòng sự kiện
-        $('#topicsnews-delbtn').on('click', function (e) {
+        $('#topics-news-delbtn').on('click', function (e) {
             e.preventDefault();
             const btn = $(this);
             const icon = $('i', btn);
@@ -2720,7 +2719,7 @@ $(function () {
                 $.ajax({
                     type: 'POST',
                     dataType: 'json',
-                    url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=topicsnews&nocache=' + new Date().getTime(),
+                    url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=topics-news&nocache=' + new Date().getTime(),
                     data: {
                         action: 'delnews',
                         topicid: btn.data('topicid'),
@@ -2745,7 +2744,7 @@ $(function () {
         });
     }
 
-    if (nv_func_name === 'addtotopics') {
+    if (nv_func_name === 'topics-add') {
         // Lưu bài viết vào dòng sự kiện
         $('[data-toggle="addtotopics-save"]').on('click', function (e) {
             e.preventDefault();
@@ -2768,7 +2767,7 @@ $(function () {
             $.ajax({
                 type: 'POST',
                 dataType: 'json',
-                url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=addtotopics',
+                url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=topics-add',
                 data: {
                     listid: listid.join(','),
                     topicsid: topicsid,
