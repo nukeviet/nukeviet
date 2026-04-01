@@ -43,8 +43,7 @@ rm -rf src/data/cache/*/*.cache && rm -rf src/data/cache/smarty-compile/*.php
 
 ### Database Pattern
 
-- `$db` → WRITE (master)
-- `$db_slave` → READ (frontend)
+- `$db` → READ + WRITE ($db_slave đã bỏ)
 - `$nv_Cache->db()` → cached READ (ưu tiên dùng khi không cần real-time)
 
 ## Quy tắc Bảo mật (KHÔNG được vi phạm)

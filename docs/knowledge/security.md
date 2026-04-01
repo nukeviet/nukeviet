@@ -57,7 +57,7 @@
 - `nv_redirect_encrypt()` / `nv_redirect_decrypt()`: Cấu trúc redirect an toàn.
 - `nv_check_valid_email()`: Hàm hệ thống dùng để validate email.
 
-> **Lưu ý:** Các kiến thức chung về Code Convention (PSR-12), tối ưu hiệu năng (Cache, N+1 Queries), `$db_slave`, cấu trúc file/module, và chi tiết `$nv_Request` đã được chuẩn hóa tại `docs/knowledge/module.md` và `docs/knowledge/mysql.md`. Vui lòng tham khảo các file tương ứng trong quá trình review/code.
+> **Lưu ý:** Các kiến thức chung về Code Convention (PSR-12), tối ưu hiệu năng (Cache, N+1 Queries), cấu trúc file/module, và chi tiết `$nv_Request` đã được chuẩn hóa tại `docs/knowledge/module.md` và `docs/knowledge/mysql.md`. Vui lòng tham khảo các file tương ứng trong quá trình review/code.
 
 ---
 
@@ -66,5 +66,5 @@
 Ngoài đánh giá bảo mật, AI bắt buộc phải ghi nhận và gợi ý sửa lại các điểm mã nguồn (code) chưa tốt. Vui lòng chia báo cáo rà soát thành 3 chuyên mục:
 
 - 🔴 **LỖI BẢO MẬT NGHIÊM TRỌNG (CHẶN MERGE)** — SQLi, XSS rõ ràng, thiếu CSRF token, thiếu kiểm tra phân quyền, `unserialize` không giới hạn class, vòng lặp chứa câu truy vấn ác ý.
-- 🟡 **CÁC ĐIỂM CODE CHƯA TỐT (CODE SMELLS)** — Lỗi Logic, chưa chuẩn Convention (PSR-12), truy vấn SQL chưa tối ưu (vòng lặp chứa SQL, không dùng `$nv_Cache`, sử dụng sai `$db_slave` cho tác vụ READ ở frontend), thiếu comments, code rườm rà.
+- 🟡 **CÁC ĐIỂM CODE CHƯA TỐT (CODE SMELLS)** — Lỗi Logic, chưa chuẩn Convention (PSR-12), truy vấn SQL chưa tối ưu (vòng lặp chứa SQL, không dùng `$nv_Cache`), thiếu comments, code rườm rà.
 - 💡 **GỢI Ý CẢI THIỆN (REFACTOR)** — Đề xuất giải pháp và viết đoạn code gợi ý để cấu trúc lại, cải thiện tính tái sử dụng, khử code thừa.

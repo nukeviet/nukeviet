@@ -10,16 +10,14 @@ NV_TABLEPREFIX . '_ten_bang'   // bảng dùng chung   → nv5_users
 
 ---
 
-## $db và $db_slave
+## Kết nối Database: $db
 
-NukeViet cung cấp **hai** biến database:
+Trong NukeViet 5.x, bạn sẽ chủ yếu làm việc với đối tượng `$db`. Đây là một thể hiện (instance) của lớp `PDO` được mở rộng, quản lý kết nối chính đến cơ sở dữ liệu.
 
-| Biến | Dùng cho |
-|---|---|
-| `$db` | WRITE — INSERT, UPDATE, DELETE, và SELECT cần fresh data |
-| `$db_slave` | READ — SELECT thông thường (tối ưu cho slave DB hoặc caching) |
-
-Trong thực tế môi trường single-server, `$db_slave` trỏ cùng server với `$db`. Tuy nhiên **luôn dùng `$db_slave` cho SELECT** ở frontend/block để code sẵn sàng scale, không bắt buộc ở admin.
+### Lưu ý về $db_slave trong NukeViet 5
+Khác với các phiên bản trước (v4.x), **NukeViet 5 đã loại bỏ cơ chế tự động điều hướng truy vấn sang Slave thông qua biến `$db_slave`**.
+*   **Lý do:** Việc điều hướng ở tầng ứng dụng thiếu tính ổn định (không có Failover). Nếu Slave sập, PHP sẽ gặp lỗi kết nối mà không tự quay lại Master được.
+*   **Cách giải quyết:** Nếu bạn cần mở rộng Master-Slave, hãy sử dụng giải pháp ở tầng hệ thống như **ProxySQL**, **MariaDB MaxScale** hoặc **Load Balancer**. Khi đó, bạn chỉ cần cấu hình NukeViet kết nối đến một IP duy nhất của thiết bị Proxy/LB đó.
 
 ---
 

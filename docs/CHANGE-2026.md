@@ -1,5 +1,19 @@
 # Các thay đổi lớn trong NukeViet 5.0
 
+## Tháng 5 năm 2026
+
+### Refactor gọi nv_local_api
+nv_local_api giờ trả về array  (đã json_decode sẵn). Nên cần loại bỏ đoạn json_decode sau khi gọi nv_local_api
+
+Ví dụ
+```php
+// Trước khi refactor
+$result = json_decode(nv_local_api('ClearCache', null, 'vuthao27'), true);
+
+// Sau khi refactor
+$result = nv_local_api('ClearCache', null, 'vuthao27');
+```
+
 ## Tháng 3 năm 2026
 
 ### Refactor Request::get_title (Không bắt buộc)
@@ -11,6 +25,9 @@ dùng tools\refactor_get_title.php để thực hiện
 - Bỏ ->sqlreset khỏi codebase
 - Bỏ ->insert_id khỏi codebase
 - Bỏ ->affected_rows_count
+- Bỏ $db_slave
+- Chuyển $nv_Request->get_title('checkss' -> $nv_Request->get_string('checkss'
+- Chuyển ->bindParam ->bindValue
 - Tối ưu biến tạm khi dùng ->fetch(3)
 - Tối ưu code theo Skill db-refactor
 
