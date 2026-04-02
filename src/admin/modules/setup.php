@@ -31,7 +31,8 @@ $setmodule = $nv_Request->get_title('setmodule', 'get', '');
 $autosetup = $nv_Request->get_title('autosetup', 'get', '');
 
 if (!empty($setmodule) and preg_match($global_config['check_module'], $setmodule)) {
-    if (csrf_check($nv_Request->get_title('checkss', 'get'), $csrf_key . '_setup_mod_' . $setmodule)) {
+    $checkss = $nv_Request->get_string('checkss', 'get', '');
+    if (csrf_check($checkss, $admin_info['admin_id'] . '_' . $module_name . '_setup_' . $setmodule)) {
         $sample = $nv_Request->get_int('sample', 'get', 0);
         $hook_files = $nv_Request->get_title('hook_files', 'get', '');
         $hook_mods = $nv_Request->get_title('hook_mods', 'get', '');
@@ -299,6 +300,7 @@ if ($check_addnews_modules) {
     while ($row = $result->fetch()) {
         $modules_data[$row['title']] = $row;
     }
+    $result->closeCursor();
 }
 
 // Lay danh sach cac module co trong ngon ngu
@@ -312,6 +314,7 @@ while ($row = $result->fetch()) {
         $modules_for_file[$row['module_file']] = $row;
     }
 }
+$result->closeCursor();
 
 // Kiem tra module moi
 $news_modules_for_file = array_diff_key($modules_data, $modules_for_file);
@@ -333,7 +336,7 @@ foreach ($modules_data as $row) {
             $mod['addtime'] = nv_datetime_format($row['addtime'], 1);
             $mod['author'] = nv_htmlspecialchars($row['author']);
             $mod['note'] = $row['note'];
-            $mod['url_setup'] = array_key_exists($row['title'], $modules_for_title) ? '' : NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;setmodule=' . $row['title'] . '&amp;checkss=' . csrf_create($csrf_key . '_setup_mod_' . $row['title']);
+            $mod['url_setup'] = array_key_exists($row['title'], $modules_for_title) ? '' : NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;setmodule=' . $row['title'] . '&amp;checkss=' . csrf_create($admin_info['admin_id'] . '_' . $module_name . '_setup_' . $row['title']);
 
             if ($mod['module_file'] == $mod['title']) {
                 $array_modules[] = $mod;
@@ -356,7 +359,8 @@ $tpl->setTemplateDir(get_module_tpl_dir('setup.tpl'));
 $tpl->assign('LANG', $nv_Lang);
 $tpl->assign('MODULE_NAME', $module_name);
 $tpl->assign('OP', $op);
-$tpl->assign('CHECKSS', csrf_create($admin_info['admin_id'] . '_' . $module_name . '_main'));
+$_csrf_key = $admin_info['admin_id'] . '_' . $module_name . '_main';
+$tpl->assign('CHECKSS', csrf_create($_csrf_key));
 $tpl->assign('AUTOSETUP', $autosetup);
 $tpl->assign('MODULES', $array_modules);
 $tpl->assign('VMODULES', $array_virtual_modules);

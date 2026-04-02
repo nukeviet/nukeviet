@@ -21,7 +21,7 @@ if ($nv_Request->isset_request('changeweight', 'post')) {
     if (!defined('NV_IS_AJAX')) {
         exit('Wrong URL!!!');
     }
-    if (!csrf_check($nv_Request->get_title('checkss', 'post', ''), $csrf_key)) {
+    if (!csrf_check($nv_Request->get_string('checkss', 'post', ''), $csrf_key)) {
         nv_jsonOutput([
             'success' => 0,
             'text' => $nv_Lang->getGlobal('error_checkss')
@@ -84,7 +84,7 @@ if ($nv_Request->isset_request('del', 'post')) {
     if (!defined('NV_IS_AJAX')) {
         exit('Wrong URL!!!');
     }
-    if (!csrf_check($nv_Request->get_title('checkss', 'post', ''), $csrf_key)) {
+    if (!csrf_check($nv_Request->get_string('checkss', 'post', ''), $csrf_key)) {
         nv_jsonOutput([
             'success' => 0,
             'text' => $nv_Lang->getGlobal('error_checkss')
@@ -225,6 +225,7 @@ while ($row = $result->fetch()) {
         $array[] = $row;
     }
 }
+$stmt->closeCursor();
 
 // Quét các plugin khả dụng chưa thêm
 $file_plugins = nv_scandir(NV_ROOTDIR . '/includes/plugin', $pattern_plugin);
@@ -260,7 +261,7 @@ foreach ($file_plugins as $file_name) {
 
 // Data cho modal chọn module nguồn, đích
 if ($nv_Request->isset_request('loadform', 'post')) {
-    if (!csrf_check($nv_Request->get_title('checkss', 'post', ''), $csrf_key)) {
+    if (!csrf_check($nv_Request->get_string('checkss', 'post', ''), $csrf_key)) {
         nv_jsonOutput([
             'message' => $nv_Lang->getGlobal('error_checkss')
         ]);
@@ -332,7 +333,7 @@ if ($nv_Request->isset_request('loadform', 'post')) {
 
 // Tích hợp plugin mới
 if ($nv_Request->isset_request('integrate', 'post')) {
-    if (!csrf_check($nv_Request->get_title('checkss', 'post', ''), $csrf_key)) {
+    if (!csrf_check($nv_Request->get_string('checkss', 'post', ''), $csrf_key)) {
         nv_jsonOutput([
             'message' => $nv_Lang->getGlobal('error_checkss')
         ]);

@@ -22,7 +22,14 @@ $array_config_global['dump_backup_ext'] = $global_config['dump_backup_ext'];
 $array_config_global['dump_interval'] = $global_config['dump_interval'];
 $array_config_global['dump_autobackup'] = $global_config['dump_autobackup'];
 
-if (csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
+if ($nv_Request->isset_request('checkss', 'post')) {
+    if (!csrf_check($nv_Request->get_string('checkss', 'post', ''), $csrf_key)) {
+        nv_jsonOutput([
+            'status' => 'error',
+            'mess' => $nv_Lang->getGlobal('error_checkss')
+        ]);
+    }
+
     $array_config_global = [];
     $array_config_global['dump_backup_ext'] = $nv_Request->get_title('dump_backup_ext', 'post', '');
     $array_config_global['dump_autobackup'] = $nv_Request->get_int('dump_autobackup', 'post');
@@ -32,8 +39,8 @@ if (csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
 
     $sth = $db->prepare('UPDATE ' . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = 'sys' AND module = 'global' AND config_name = :config_name");
     foreach ($array_config_global as $config_name => $config_value) {
-        $sth->bindParam(':config_name', $config_name, PDO::PARAM_STR, 30);
-        $sth->bindParam(':config_value', $config_value, PDO::PARAM_STR);
+        $sth->bindValue(':config_name', $config_name, PDO::PARAM_STR);
+        $sth->bindValue(':config_value', $config_value, PDO::PARAM_STR);
         $sth->execute();
     }
 

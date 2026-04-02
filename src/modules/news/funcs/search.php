@@ -21,11 +21,11 @@ if (!defined('NV_IS_MOD_NEWS')) {
  */
 function GetSourceNews($sourceid)
 {
-    global $db_slave, $module_data;
+    global $db, $module_data;
 
     if ($sourceid > 0) {
         $sql = 'SELECT title FROM ' . NV_PREFIXLANG . '_' . $module_data . '_sources WHERE sourceid = ' . $sourceid;
-        $re = $db_slave->query($sql);
+        $re = $db->query($sql);
 
         if ($_scratch = $re->fetch(3)) {
             [$title] = $_scratch;
@@ -196,8 +196,8 @@ if (empty($key) and ($catid == 0) and empty($from_date) and empty($to_date)) {
 } elseif (!empty($catid) and !isset($array_cat_search[$catid])) {
     $contents .= '<script' . (defined('NV_SCRIPT_NONCE') ? ' nonce="' . NV_SCRIPT_NONCE . '"' : '') . '>$(function(){alert(\'' . $nv_Lang->getModule('search_catid_error') . '\')})</script>';
 } else {
-    $dbkey = $db_slave->dblikeescape($key);
-    $dbkeyhtml = $db_slave->dblikeescape($keyhtml);
+    $dbkey = $db->dblikeescape($key);
+    $dbkeyhtml = $db->dblikeescape($keyhtml);
     $internal_authors = [];
 
     if ($module_config[$module_name]['elas_use'] == 1) {
@@ -278,7 +278,7 @@ if (empty($key) and ($catid == 0) and empty($from_date) and empty($to_date)) {
             $search_elastic = [
                 'should' => [
                     'match' => [
-                        'sourcetext' => $db_slave->dblikeescape($qurl)
+                        'sourcetext' => $db->dblikeescape($qurl)
                     ]
                 ]
             ];
@@ -447,7 +447,7 @@ if (empty($key) and ($catid == 0) and empty($from_date) and empty($to_date)) {
                 if (isset($url_info['scheme']) and isset($url_info['host'])) {
                     $qurl = $url_info['scheme'] . '://' . $url_info['host'];
                 }
-                $where .= ' AND (tb1.sourceid IN (SELECT sourceid FROM ' . NV_PREFIXLANG . '_' . $module_data . "_sources WHERE title LIKE '%" . $db_slave->dblikeescape($dbkey) . "%' OR link LIKE '%" . $db_slave->dblikeescape($qurl) . "%'))";
+                $where .= ' AND (tb1.sourceid IN (SELECT sourceid FROM ' . NV_PREFIXLANG . '_' . $module_data . "_sources WHERE title LIKE '%" . $db->dblikeescape($dbkey) . "%' OR link LIKE '%" . $db->dblikeescape($qurl) . "%'))";
             } else {
                 $qurl = $key;
                 $url_info = parse_url($qurl);
@@ -463,7 +463,7 @@ if (empty($key) and ($catid == 0) and empty($from_date) and empty($to_date)) {
                         OR tb2.bodyhtml REGEXP '" . $_dbkey . "'
                         OR a.alias REGEXP '" . $_dbkeyhtml . "'
                         OR a.pseudonym REGEXP '" . $_dbkeyhtml . "')
-                        OR (tb1.sourceid IN (SELECT sourceid FROM " . NV_PREFIXLANG . '_' . $module_data . "_sources WHERE title LIKE '%" . $db_slave->dblikeescape($dbkey) . "%' OR link LIKE '%" . $db_slave->dblikeescape($qurl) . "%')))";
+                        OR (tb1.sourceid IN (SELECT sourceid FROM " . NV_PREFIXLANG . '_' . $module_data . "_sources WHERE title LIKE '%" . $db->dblikeescape($dbkey) . "%' OR link LIKE '%" . $db->dblikeescape($qurl) . "%')))";
                 } else {
                     $_dbkey = '%' . $dbkey . '%';
                     $_dbkeyhtml = '%' . $dbkeyhtml . '%';
@@ -473,7 +473,7 @@ if (empty($key) and ($catid == 0) and empty($from_date) and empty($to_date)) {
                         OR tb2.bodyhtml LIKE '" . $_dbkey . "'
                         OR a.alias LIKE '" . $_dbkeyhtml . "'
                         OR a.pseudonym LIKE '" . $_dbkeyhtml . "')
-                        OR (tb1.sourceid IN (SELECT sourceid FROM " . NV_PREFIXLANG . '_' . $module_data . "_sources WHERE title LIKE '%" . $db_slave->dblikeescape($dbkey) . "%' OR link LIKE '%" . $db_slave->dblikeescape($qurl) . "%')))";
+                        OR (tb1.sourceid IN (SELECT sourceid FROM " . NV_PREFIXLANG . '_' . $module_data . "_sources WHERE title LIKE '%" . $db->dblikeescape($dbkey) . "%' OR link LIKE '%" . $db->dblikeescape($qurl) . "%')))";
                 }
                 $tbl_src .= ' LEFT JOIN ' . NV_PREFIXLANG . '_' . $module_data . '_authorlist a ON (tb1.id = a.id)';
             }
@@ -491,22 +491,22 @@ if (empty($key) and ($catid == 0) and empty($from_date) and empty($to_date)) {
             $table_search = NV_PREFIXLANG . '_' . $module_data . '_rows';
         }
 
-        $db_slave->sqlreset()
+        $db->sqlreset()
             ->select('COUNT(*)')
             ->from($table_search . ' as tb1 LEFT JOIN ' . NV_PREFIXLANG . '_' . $module_data . '_detail tb2 ON ( tb1.id = tb2.id )' . $tbl_src)
             ->where('tb1.status=1' . $where);
 
-        $numRecord = $db_slave->query($db_slave->sql())
+        $numRecord = $db->query($db->sql())
             ->fetchColumn();
         // Không cho tùy ý đánh số page + xác định trang trước, trang sau
         betweenURLs($page, ceil($numRecord / $per_page), $base_url, '&page=', $prevPage, $nextPage);
 
-        $db_slave->select('tb1.id,tb1.title,tb1.alias,tb1.catid,tb1.hometext,tb2.bodyhtml,tb1.author,tb1.publtime,tb1.homeimgfile, tb1.homeimgthumb,tb1.sourceid,tb1.external_link')
+        $db->select('tb1.id,tb1.title,tb1.alias,tb1.catid,tb1.hometext,tb2.bodyhtml,tb1.author,tb1.publtime,tb1.homeimgfile, tb1.homeimgthumb,tb1.sourceid,tb1.external_link')
             ->order('tb1.' . $order_articles_by . ' DESC')
             ->limit($per_page)
             ->offset(($page - 1) * $per_page);
 
-        $result = $db_slave->query($db_slave->sql());
+        $result = $db->query($db->sql());
 
         $array_content = [];
         $show_no_image = $module_config[$module_name]['show_no_image'];

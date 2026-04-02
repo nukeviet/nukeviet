@@ -20,8 +20,7 @@ if (empty($tables)) {
 } else {
     $tables = explode(',', $tables);
 }
-$checkss = $nv_Request->get_title('checkss', 'post', '');
-if (!csrf_check($checkss, $admin_info['admin_id'] . '_' . $module_name . '_main')) {
+if (!csrf_check($nv_Request->get_string('checkss', 'post', ''), $admin_info['admin_id'] . '_' . $module_name . '_main')) {
     nv_htmlOutput($nv_Lang->getGlobal('error_checkss'));
 }
 

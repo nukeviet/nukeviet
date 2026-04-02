@@ -40,14 +40,14 @@ $db->regexpescape($value)         // escape ký tự đặc biệt trong REGEXP
 $db->quote($value)                // PDO quote — dùng khi không thể dùng bindValue (ví dụ: query() trực tiếp)
 
 // closeCursor — giải phóng connection sau while-loop (quan trọng khi có nhiều query song song)
-$result = $db_slave->query($sql);
+$result = $db->query($sql);
 while ($row = $result->fetch()) {
     // xử lý
 }
 $result->closeCursor();
 
 // fetchAll với numeric index — dùng với list() destructuring
-$rows = $db_slave->query($sql)->fetchAll(PDO::FETCH_NUM);
+$rows = $db->query($sql)->fetchAll(PDO::FETCH_NUM);
 foreach ($rows as [$id, $title, $alias]) {
     // truy cập theo thứ tự cột SELECT
 }
@@ -75,17 +75,17 @@ NukeViet 5.0 không còn sử dụng Query Builder. Mọi truy vấn có tham s�
 ## Pattern: SELECT
 
 ```php
-// Nhiều dòng — dùng $db_slave
+// Nhiều dòng
 $sql  = 'SELECT id, title FROM ' . NV_PREFIXLANG . '_items WHERE status = 1 ORDER BY weight ASC';
-$rows = $db_slave->query($sql)->fetchAll();
+$rows = $db->query($sql)->fetchAll();
 
-// 1 dòng — dùng $db_slave
+// 1 dòng
 $sql = 'SELECT * FROM ' . NV_PREFIXLANG . '_items WHERE id = ' . (int) $id . ' LIMIT 1';
-$row = $db_slave->query($sql)->fetch();
+$row = $db->query($sql)->fetch();
 
-// 1 giá trị (COUNT, MAX...) — dùng $db_slave
-$total = (int) $db_slave->query('SELECT COUNT(*) FROM ' . NV_PREFIXLANG . '_items')->fetchColumn();
-$max   = (int) $db_slave->query('SELECT MAX(weight) FROM ' . NV_PREFIXLANG . '_items')->fetchColumn();
+// 1 giá trị (COUNT, MAX...)
+$total = (int) $db->query('SELECT COUNT(*) FROM ' . NV_PREFIXLANG . '_items')->fetchColumn();
+$max   = (int) $db->query('SELECT MAX(weight) FROM ' . NV_PREFIXLANG . '_items')->fetchColumn();
 ```
 
 ## Pattern: phân trang
@@ -109,7 +109,7 @@ $max   = (int) $db_slave->query('SELECT MAX(weight) FROM ' . NV_PREFIXLANG . '_i
 
 ## $nv_Cache — cache kết quả query
 
-Dùng `$nv_Cache->db()` thay cho `$db_slave->query()` trực tiếp khi dữ liệu ít thay đổi (config, danh sách tĩnh, block):
+Dùng `$nv_Cache->db()` thay cho `$db->query()` trực tiếp khi dữ liệu ít thay đổi (config, danh sách tĩnh, block):
 
 ```php
 // Signature: $nv_Cache->db($sql, $key_field, $module_name)

@@ -20,11 +20,11 @@ if (!function_exists('nv_news_array_cat_admin')) {
      */
     function nv_news_array_cat_admin($module_data)
     {
-        global $db_slave;
+        global $db;
 
         $array_cat_admin = [];
         $sql = 'SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_admins ORDER BY userid ASC';
-        $result = $db_slave->query($sql);
+        $result = $db->query($sql);
 
         while ($row = $result->fetch()) {
             $array_cat_admin[$row['userid']][$row['catid']] = $row;

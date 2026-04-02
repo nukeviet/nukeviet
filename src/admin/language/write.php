@@ -16,7 +16,7 @@ if (!defined('NV_IS_FILE_LANG')) {
 $include_lang = '';
 $page_title = $language_array[$dirlang]['name'];
 
-if ($nv_Request->isset_request('idfile,checksess', 'get') and csrf_check($nv_Request->get_string('checksess', 'get'), $admin_info['admin_id'] . '_' . $module_name . '_write_' . $nv_Request->get_int('idfile', 'get'))) {
+if ($nv_Request->isset_request('idfile,checkss', 'get') and csrf_check($nv_Request->get_string('checkss', 'get'), $admin_info['admin_id'] . '_' . $module_name . '_write_' . $nv_Request->get_int('idfile', 'get'))) {
     $idfile = $nv_Request->get_int('idfile', 'get');
     nv_mkdir(NV_ROOTDIR . '/includes/language/', $dirlang);
     $content = nv_admin_write_lang($dirlang, $idfile);
@@ -39,7 +39,7 @@ if ($nv_Request->isset_request('idfile,checksess', 'get') and csrf_check($nv_Req
     ]);
 }
 
-if ($nv_Request->isset_request('checksess', 'get') and csrf_check($nv_Request->get_string('checksess', 'get'), $admin_info['admin_id'] . '_' . $module_name . '_writeallfile')) {
+if ($nv_Request->isset_request('checkss', 'get') and csrf_check($nv_Request->get_string('checkss', 'get'), $admin_info['admin_id'] . '_' . $module_name . '_writeallfile')) {
     $dirlang = $nv_Request->get_string('dirlang', 'get', '');
 
     if ($dirlang != '' and preg_match('/^([a-z]{2})$/', $dirlang)) {

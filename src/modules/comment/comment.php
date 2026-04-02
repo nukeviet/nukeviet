@@ -32,7 +32,7 @@ if (theme_file_exists($global_config['module_theme'] . '/modules/comment/tpl.php
  */
 function nv_comment_data($module, $area, $id, $page, $sortcomm, $base_url)
 {
-    global $db_slave, $module_config;
+    global $db, $module_config;
 
     $per_page_comment = empty($module_config[$module]['perpagecomm']) ? 5 : $module_config[$module]['perpagecomm'];
 
@@ -45,7 +45,7 @@ function nv_comment_data($module, $area, $id, $page, $sortcomm, $base_url)
     $_where .= ' AND a.id = :id AND a.status = 1 AND a.pid = 0';
     $params[':id'] = [$id, PDO::PARAM_INT];
 
-    $stmt = $db_slave->prepare('SELECT COUNT(*) FROM ' . NV_PREFIXLANG . '_comment a LEFT JOIN ' . NV_USERS_GLOBALTABLE . ' b ON a.userid = b.userid WHERE ' . $_where);
+    $stmt = $db->prepare('SELECT COUNT(*) FROM ' . NV_PREFIXLANG . '_comment a LEFT JOIN ' . NV_USERS_GLOBALTABLE . ' b ON a.userid = b.userid WHERE ' . $_where);
     foreach ($params as $p => $v) {
         $stmt->bindValue($p, $v[0], $v[1]);
     }
@@ -79,7 +79,7 @@ function nv_comment_data($module, $area, $id, $page, $sortcomm, $base_url)
             ORDER BY ' . $order . '
             LIMIT :limit OFFSET :offset';
 
-    $stmt = $db_slave->prepare($sql);
+    $stmt = $db->prepare($sql);
     foreach ($params as $p => $v) {
         $stmt->bindValue($p, $v[0], $v[1]);
     }
@@ -131,9 +131,9 @@ function nv_comment_data($module, $area, $id, $page, $sortcomm, $base_url)
  */
 function nv_comment_get_reply($cid, $module, $session_id, $sortcomm)
 {
-    global $db_slave, $module_config;
+    global $db, $module_config;
 
-    $stmt = $db_slave->prepare('SELECT COUNT(*) FROM ' . NV_PREFIXLANG . '_comment WHERE pid = :pid AND status = 1');
+    $stmt = $db->prepare('SELECT COUNT(*) FROM ' . NV_PREFIXLANG . '_comment WHERE pid = :pid AND status = 1');
     $stmt->bindValue(':pid', $cid, PDO::PARAM_INT);
     $stmt->execute();
     $num_items_sub = $stmt->fetchColumn();
@@ -158,7 +158,7 @@ function nv_comment_get_reply($cid, $module, $session_id, $sortcomm)
             WHERE a.pid = :pid AND a.status = 1
             ORDER BY ' . $order;
 
-    $stmt = $db_slave->prepare($sql);
+    $stmt = $db->prepare($sql);
     $stmt->bindValue(':pid', $cid, PDO::PARAM_INT);
     $stmt->execute();
 

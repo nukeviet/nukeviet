@@ -394,7 +394,7 @@ if ($step == 1) {
     // -------------------------------------------------------------------
     // Hàm nội bộ: kết nối CSDL và thiết lập charset (dùng cho cả 3 ajax action)
     // -------------------------------------------------------------------
-    $nv_install_db_connect = function () use (&$db, &$db_slave, &$db_config, $sys_info, $nv_Lang) {
+    $nv_install_db_connect = function () use (&$db, &$db_config, $sys_info, $nv_Lang) {
         $db_config['autosetcollation'] = false;
         if (empty($db_config['collation'])) {
             $db_config['collation'] = 'utf8_general_ci';
@@ -403,7 +403,7 @@ if ($step == 1) {
         $db_config['charset'] = strstr($db_config['collation'], '_', true);
 
         try {
-            $db = $db_slave = new NukeViet\Core\Database($db_config);
+            $db = new NukeViet\Core\Database($db_config);
             $connect = $db->connect;
         } catch (Throwable $e) {
             trigger_error($e);
@@ -416,7 +416,7 @@ if ($step == 1) {
                 $saved_name = $db_config['dbname'];
                 $db_config['dbname'] = '';
                 try {
-                    $db = $db_slave = new NukeViet\Core\Database($db_config);
+                    $db = new NukeViet\Core\Database($db_config);
                     $connect = $db->connect;
                 } catch (Throwable $e) {
                     trigger_error($e);
@@ -467,11 +467,11 @@ if ($step == 1) {
         }
 
         if ($db_config['charset'] == 'utf8mb4') {
-            $db = $db_slave = new NukeViet\Core\Database($db_config);
+            $db = new NukeViet\Core\Database($db_config);
             if (empty($db->connect)) {
                 $db_config['charset'] = 'utf8';
                 $db_config['collation'] = 'utf8_general_ci';
-                $db = $db_slave = new NukeViet\Core\Database($db_config);
+                $db = new NukeViet\Core\Database($db_config);
                 try {
                     $db->exec('ALTER DATABASE ' . $db_config['dbname'] . ' DEFAULT CHARACTER SET ' . $db_config['charset'] . ' COLLATE ' . $db_config['collation']);
                 } catch (Throwable $e) {

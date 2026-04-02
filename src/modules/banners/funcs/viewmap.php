@@ -44,7 +44,7 @@ foreach ($types_map as $chart_type => $db_field) {
     $data = [];
     $title = '';
 
-    $stmt = $db_slave->prepare('SELECT a.' . $db_field . ', b.title FROM ' . NV_BANNERS_GLOBALTABLE . '_click a
+    $stmt = $db->prepare('SELECT a.' . $db_field . ', b.title FROM ' . NV_BANNERS_GLOBALTABLE . '_click a
     INNER JOIN ' . NV_BANNERS_GLOBALTABLE . '_rows b ON a.bid = b.id
     WHERE b.clid = :clid AND a.click_time <= :enddate AND a.click_time >= :firstdate
     AND a.bid = :bid ORDER BY click_time ASC');

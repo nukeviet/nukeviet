@@ -27,9 +27,9 @@ $filename = NV_ROOTDIR . '/' . NV_TEMP_DIR . '/' . NV_TEMPNAM_PREFIX . 'auto_' .
 
 // Giải nén gói ứng dụng
 if ($nv_Request->isset_request('extract', 'get')) {
-    $extract = $nv_Request->get_title('extract', 'get', '');
+    $extract = $nv_Request->get_string('extract', 'get', '');
 
-    if ($extract == md5($filename . NV_CHECK_SESSION) and csrf_check($nv_Request->get_title('checkss', 'get'), $admin_info['userid'] . '_extract')) {
+    if ($extract == md5($filename . NV_CHECK_SESSION) and csrf_check($nv_Request->get_string('checkss', 'get'), $admin_info['userid'] . '_extract')) {
         if (!file_exists($filename)) {
             nv_htmlOutput(nv_theme_alert($nv_Lang->getGlobal('danger_level'), $nv_Lang->getModule('autoinstall_error_downloaded'), 'danger'));
         }
@@ -172,7 +172,7 @@ if ($nv_Request->isset_request('extract', 'get')) {
             $error_create_folder = array_unique($error_create_folder);
             $array_cute_files = [];
             $array_exists_files = [];
-            $dimiss_mime = csrf_check($nv_Request->get_title('dismiss', 'get'), $admin_info['userid'] . '_dismiss') ? true : false;
+            $dimiss_mime = csrf_check($nv_Request->get_string('dismiss', 'get'), $admin_info['userid'] . '_dismiss') ? true : false;
 
             // Kiểm tra mime các tệp
             if (!$dimiss_mime and empty($global_config['extension_upload_mode'])) {
@@ -404,7 +404,7 @@ if ($nv_Request->isset_request('uploaded', 'get')) {
         $error = $nv_Lang->getGlobal('error_zlib_support');
     } elseif (!empty($_FILES['extfile']['error'])) {
         $error = $nv_Lang->getModule('autoinstall_error_uploadfile1', nv_convertfromBytes(NV_UPLOAD_MAX_FILESIZE));
-    } elseif (is_uploaded_file($_FILES['extfile']['tmp_name']) and csrf_check($nv_Request->get_title('checkss', 'post'), $admin_info['userid'] . '_submit_ext')) {
+    } elseif (is_uploaded_file($_FILES['extfile']['tmp_name']) and csrf_check($nv_Request->get_string('checkss', 'post'), $admin_info['userid'] . '_submit_ext')) {
         if (file_exists($filename)) {
             nv_deletefile($filename);
         }

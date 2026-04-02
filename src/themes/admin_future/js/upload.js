@@ -54,7 +54,7 @@ $(function() {
                 w: thumbW,
                 h: thumbH,
                 q: thumbQuality,
-                checkss: $('body').data('checksess')
+                checkss: btn.data('checkss')
             },
             success: function(res) {
                 icon.removeClass('fa-spinner fa-spin-pulse').addClass(icon.data('icon'));

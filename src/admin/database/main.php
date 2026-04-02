@@ -25,7 +25,7 @@ if ($nv_Request->get_bool('show_tabs', 'post')) {
         'error' => 1,
         'message' => 'Error!!!',
     ];
-    if (!csrf_check($nv_Request->get_title('checkss', 'post', ''), $csrf_key)) {
+    if (!csrf_check($nv_Request->get_string('checkss', 'post', ''), $csrf_key)) {
         $respon['message'] = $nv_Lang->getGlobal('error_checkss');
         nv_jsonOutput($respon);
     }
@@ -91,9 +91,10 @@ if ($nv_Request->isset_request('tab', 'get') and preg_match('/^(' . $db_config['
     $tab = $nv_Request->get_title('tab', 'get');
 
     $sth = $db->prepare('SHOW TABLE STATUS WHERE name= :tab');
-    $sth->bindParam(':tab', $tab, PDO::PARAM_STR);
+    $sth->bindValue(':tab', $tab, PDO::PARAM_STR);
     $sth->execute();
     $item = $sth->fetch();
+    $sth->closeCursor();
 
     if (empty($item)) {
         nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
@@ -159,7 +160,9 @@ $database['server'] = $db->server;
 $database['db_dbname'] = $db->dbname;
 $database['db_uname'] = $db->user;
 if ($db->dbtype == 'mysql') {
-    $row = $db->query('SELECT @@session.time_zone AS db_time_zone, @@session.character_set_database AS db_charset, @@session.collation_database AS db_collation')->fetch();
+    $stmt = $db->query('SELECT @@session.time_zone AS db_time_zone, @@session.character_set_database AS db_charset, @@session.collation_database AS db_collation');
+    $row = $stmt->fetch();
+    $stmt->closeCursor();
     $database['db_charset'] = $row['db_charset'];
     $database['db_collation'] = $row['db_collation'];
     $database['db_time_zone'] = $row['db_time_zone'];

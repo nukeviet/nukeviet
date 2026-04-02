@@ -15,7 +15,8 @@ if (!defined('NV_IS_FILE_MODULES')) {
 
 if ($nv_Request->isset_request('module', 'post')) {
     $modulename = $nv_Request->get_title('module', 'post');
-    if (!csrf_check($nv_Request->get_string('checkss', 'post'), $admin_info['admin_id'] . '_' . $module_name . '_main')) {
+    $_csrf_key = $admin_info['admin_id'] . '_' . $module_name . '_main';
+    if (!csrf_check($nv_Request->get_string('checkss', 'post'), $_csrf_key)) {
         nv_jsonOutput([
             'status' => 'error',
             'module' => $modulename,

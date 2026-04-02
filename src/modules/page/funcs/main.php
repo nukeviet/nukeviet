@@ -144,7 +144,7 @@ if ($page_config['viewtype'] == 2) {
 
     $related_articles = (int) ($page_config['related_articles']);
     if ($related_articles) {
-        $stmt = $db_slave->prepare('SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . ' WHERE status = 1 AND id != :id ORDER BY weight ASC LIMIT :limit');
+        $stmt = $db->prepare('SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . ' WHERE status = 1 AND id != :id ORDER BY weight ASC LIMIT :limit');
         $stmt->bindValue(':id', $id, PDO::PARAM_INT);
         $stmt->bindValue(':limit', $related_articles, PDO::PARAM_INT);
         $stmt->execute();
@@ -196,14 +196,14 @@ if ($page_config['viewtype'] == 2) {
     $per_page = $page_config['per_page'];
 
     $array_data = [];
-    $stmt = $db_slave->query('SELECT COUNT(*) FROM ' . NV_PREFIXLANG . '_' . $module_data . ' WHERE status = 1');
+    $stmt = $db->query('SELECT COUNT(*) FROM ' . NV_PREFIXLANG . '_' . $module_data . ' WHERE status = 1');
     $num_items = $stmt->fetchColumn();
     $stmt->closeCursor();
 
     // Không cho tùy ý đánh số page + xác định trang trước, trang sau
     betweenURLs($page, ceil($num_items / $per_page), $base_url, '/page-', $prevPage, $nextPage);
 
-    $stmt = $db_slave->query('SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . ' WHERE status = 1 ORDER BY weight ASC LIMIT ' . (int) ($page - 1) * $per_page . ', ' . (int) $per_page);
+    $stmt = $db->query('SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . ' WHERE status = 1 ORDER BY weight ASC LIMIT ' . (int) ($page - 1) * $per_page . ', ' . (int) $per_page);
 
     while ($row = $stmt->fetch()) {
         empty($row['description']) && $row['description'] = strip_tags(trim($row['bodytext']));

@@ -27,11 +27,12 @@ if ($nv_Request->isset_request('checkss', 'post')) {
     
         $sth = $db->prepare('UPDATE ' . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = 'sys' AND module = 'global' AND config_name = :config_name");
         foreach ($array_config_global as $config_name => $config_value) {
-            $sth->bindParam(':config_name', $config_name, PDO::PARAM_STR, 30);
-            $sth->bindParam(':config_value', $config_value, PDO::PARAM_STR);
+            $sth->bindValue(':config_name', $config_name, PDO::PARAM_STR);
+            $sth->bindValue(':config_value', (string) $config_value, PDO::PARAM_STR);
             $sth->execute();
         }
         nv_save_file_config_global();
+        nv_insert_logs(NV_LANG_DATA, $module_name, 'Edit config', 'remote_api_access: ' . $array_config_global['remote_api_access'] . ', api_check_time: ' . $array_config_global['api_check_time'], $admin_info['userid']);
         nv_jsonOutput(
             [
                 'status' => 'OK',
@@ -41,7 +42,7 @@ if ($nv_Request->isset_request('checkss', 'post')) {
     } else {
         nv_jsonOutput(
             [
-                'status' => 'NO',
+                'status' => 'error',
                 'mess' => $nv_Lang->getGlobal('error_checkss')
             ]
         );

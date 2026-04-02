@@ -75,7 +75,7 @@ if ($nv_Request->isset_request('delete', 'post')) {
 
 // Tiến trình quét bằng AJAX
 if ($nv_Request->isset_request('startwrite', 'get')) {
-    if (!csrf_check($nv_Request->get_title('checkss', 'post'), $csrf_key)) {
+    if (!csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
         nv_jsonOutput([
             'message' => $nv_Lang->getGlobal('error_checkss')
         ]);
@@ -98,7 +98,7 @@ if ($nv_Request->isset_request('startwrite', 'get')) {
     $array_request['delifexists'] = $nv_Request->get_int('delifexists', 'post', 0);
     $array_request['offsettable'] = $nv_Request->get_int('offsettable', 'post', 0);
     $array_request['offsetrow'] = $nv_Request->get_int('offsetrow', 'post', 0);
-    $array_request['checkss'] = $nv_Request->get_title('checkss', 'post', '');
+    $array_request['checkss'] = $nv_Request->get_string('checkss', 'post', '');
 
     if (empty($array_request['sample_name'])) {
         $json['message'] = $nv_Lang->getModule('sampledata_error_name');
@@ -181,8 +181,8 @@ if ($nv_Request->isset_request('startwrite', 'get')) {
                     $maxi = ceil($table['numrow'] / $table['limit']);
                     $from = 0;
                     $a = 0;
+                    $stmt = $db->prepare('SELECT * FROM ' . $table['name'] . ' LIMIT :limit OFFSET :offset');
                     for ($i = 0; $i < $maxi; ++$i) {
-                        $stmt = $db->prepare('SELECT * FROM ' . $table['name'] . ' LIMIT :limit OFFSET :offset');
                         $stmt->bindValue(':limit', $table['limit'], PDO::PARAM_INT);
                         $stmt->bindValue(':offset', $from, PDO::PARAM_INT);
                         $stmt->execute();

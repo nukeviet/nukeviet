@@ -44,13 +44,20 @@ If `$ARGUMENTS` is empty or has no `/`, ask the user for input in `{module}/{fil
 **PHP files — lazy-load strategy:**
 
 **Step 1 — Read the main file first:**
-- `src/modules/$0/admin/$1.php` — main file
+- `src/modules/$0/admin/$1.php` — main file (primary path)
+- If not found → fallback: `src/admin/$0/$1.php`
 
 **Step 2 — Read additional files only if needed:**
 After reading file #1, check whether any called functions or logic are **not defined within file #1** (e.g. helper functions, shared queries):
-- If missing → read `src/modules/$0/admin.functions.php` (file #2)
-- If still missing → read `src/modules/$0/global.functions.php` (file #3)
-- If file #1 is self-contained → **skip** file #2 and #3, do not read them
+
+- **If main file came from `src/modules/$0/admin/$1.php` (primary):**
+  - If missing → read `src/modules/$0/admin.functions.php` (file #2)
+  - If still missing → read `src/modules/$0/global.functions.php` (file #3)
+
+- **If main file came from `src/admin/$0/$1.php` (fallback):**
+  - If missing → read `src/admin/$0/functions.php` (file #2)
+
+- If file #1 is self-contained → **skip** additional files, do not read them
 
 **Function Discovery Best Practices (Crucial):**
 - **No Early Exit**: If a function is called but its definition is not in the current file, you **must** find where it is defined. Do not conclude it is "missing" or "deleted" based on a single failed search
@@ -425,15 +432,14 @@ Look for `include`, `require`, `file_get_contents` calls where the path contains
 
 ## Cache Clearing
 
-> **MANDATORY — Run automatically after Phase 5 completes. Do NOT ask the user for permission**
+**MANDATORY — Notify the user after Phase 5 completes. Do NOT use run_command**
 
-After completing the refactor, clear the system cache to ensure changes take effect immediately:
+> 🧹 **Xóa cache:** Vui lòng chạy lệnh sau để áp dụng thay đổi:
+> ```bash
+> php src/private/ClearCache.php
+> ```
 
-```bash
-php src/private/ClearCache.php
-```
-
-> After cache clear succeeds, immediately write the Summary & Final Report
+After displaying the cache instruction, immediately write the Summary & Final Report
 
 ---
 
@@ -466,5 +472,4 @@ Before submitting the final Summary & Report, confirm ALL items below are done:
 - [ ] **PHASE 3** — All CSRF tokens standardized in PHP + TPL + JS; cross-file handlers verified
 - [ ] **PHASE 4** — Error handling, `json_encode`, `unserialize`, dead code cleaned up
 - [ ] **PHASE 5** — OWASP Top 10 reviewed, secrets scanned, dependencies noted
-- [ ] **CACHE** — `php src/private/ClearCache.php` executed successfully
 - [ ] **REPORT** — Final Summary written with only unresolved issues

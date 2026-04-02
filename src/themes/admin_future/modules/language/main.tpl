@@ -32,7 +32,7 @@
                             {$LANG->getModule('site_lang')}
                             {elseif $smarty.const.NV_IS_GODADMIN or ($GCONFIG.idsite gt 0 and $smarty.const.NV_IS_SPADMIN and $linfo.setup eq 1)}
                             <div class="form-check form-switch mb-0 d-inline-block">
-                                <input data-toggle="activelang" data-url="{$smarty.const.NV_BASE_ADMINURL}index.php?{$smarty.const.NV_LANG_VARIABLE}={$smarty.const.NV_LANG_DATA}&amp;{$smarty.const.NV_NAME_VARIABLE}={$MODULE_NAME}&amp;keylang={$keylang}&amp;checksess={"`$ADMIN_ID`_`$MODULE_NAME`_activelang_`$keylang`"|csrf_create}&amp;activelang=" class="form-check-input" type="checkbox" role="switch" aria-label="{$LANG->getModule('nv_lang_slsite')}"{if in_array($keylang, $GCONFIG.allow_sitelangs, true)} checked data-current="1"{else} data-current="0"{/if}>
+                                <input data-toggle="activelang" data-url="{$smarty.const.NV_BASE_ADMINURL}index.php?{$smarty.const.NV_LANG_VARIABLE}={$smarty.const.NV_LANG_DATA}&amp;{$smarty.const.NV_NAME_VARIABLE}={$MODULE_NAME}&amp;keylang={$keylang}&amp;checkss={"`$ADMIN_ID`_`$MODULE_NAME`_activelang_`$keylang`"|csrf_create}&amp;activelang=" class="form-check-input" type="checkbox" role="switch" aria-label="{$LANG->getModule('nv_lang_slsite')}"{if in_array($keylang, $GCONFIG.allow_sitelangs, true)} checked data-current="1"{else} data-current="0"{/if}>
                             </div>
                             {/if}
                         </td>
@@ -41,7 +41,7 @@
                             {if in_array($keylang, $GCONFIG.allow_sitelangs, true)}
                             <i class="fa-solid fa-check text-success" title="{$LANG->getModule('nv_setup')}" aria-label="{$LANG->getModule('nv_setup')}"></i>
                             {else}
-                            <button type="button" class="btn btn-secondary btn-sm" data-toggle="setup_delete" data-url="{$smarty.const.NV_BASE_ADMINURL}index.php?{$smarty.const.NV_LANG_VARIABLE}={$smarty.const.NV_LANG_DATA}&amp;{$smarty.const.NV_NAME_VARIABLE}={$MODULE_NAME}&amp;deletekeylang={$keylang}&amp;checksess={"`$ADMIN_ID`_`$MODULE_NAME`_delete_`$keylang`"|csrf_create}" data-bs-toggle="tooltip" data-bs-trigger="hover" title="{$LANG->getModule('nv_setup_delete')}" aria-label="{$LANG->getModule('nv_setup_delete')}"><i class="fa-solid fa-trash text-danger" data-icon="fa-trash"></i></button>
+                            <button type="button" class="btn btn-secondary btn-sm" data-toggle="setup_delete" data-url="{$smarty.const.NV_BASE_ADMINURL}index.php?{$smarty.const.NV_LANG_VARIABLE}={$smarty.const.NV_LANG_DATA}&amp;{$smarty.const.NV_NAME_VARIABLE}={$MODULE_NAME}&amp;deletekeylang={$keylang}&amp;checkss={"`$ADMIN_ID`_`$MODULE_NAME`_delete_`$keylang`"|csrf_create}" data-bs-toggle="tooltip" data-bs-trigger="hover" title="{$LANG->getModule('nv_setup_delete')}" aria-label="{$LANG->getModule('nv_setup_delete')}"><i class="fa-solid fa-trash text-danger" data-icon="fa-trash"></i></button>
                             {/if}
                             {/if}
                         </td>
@@ -76,7 +76,7 @@
                         <td class="text-center">{$LANGUAGE_ARRAY[$keylang].name}</td>
                         <td class="text-center">
                             {if $smarty.const.NV_IS_GODADMIN or ($GCONFIG.idsite gt 0 and $smarty.const.NV_IS_SPADMIN)}
-                            <button type="button" data-toggle="setup_new" data-url="{$smarty.const.NV_BASE_ADMINURL}index.php?{$smarty.const.NV_LANG_VARIABLE}={$smarty.const.NV_LANG_DATA}&amp;{$smarty.const.NV_NAME_VARIABLE}={$MODULE_NAME}&amp;keylang={$keylang}&amp;checksess={"`$ADMIN_ID`_`$MODULE_NAME`_setup_`$keylang`"|csrf_create}" class="btn btn-primary btn-sm"><i class="fa-solid fa-sun" data-icon="fa-sun"></i> {$LANG->getModule('nv_setup_new')}</button>
+                            <button type="button" data-toggle="setup_new" data-url="{$smarty.const.NV_BASE_ADMINURL}index.php?{$smarty.const.NV_LANG_VARIABLE}={$smarty.const.NV_LANG_DATA}&amp;{$smarty.const.NV_NAME_VARIABLE}={$MODULE_NAME}&amp;keylang={$keylang}&amp;checkss={"`$ADMIN_ID`_`$MODULE_NAME`_setup_`$keylang`"|csrf_create}" class="btn btn-primary btn-sm"><i class="fa-solid fa-sun" data-icon="fa-sun"></i> {$LANG->getModule('nv_setup_new')}</button>
                             {/if}
                         </td>
                     </tr>

@@ -162,16 +162,16 @@ if ($nv_Request->isset_request('saveform', 'post')) {
             foreach ($global_config['setup_langs'] as $lang) {
                 $sql_or[] = $lang . '_title = :' . $lang . '_title';
             }
-            $sql = 'SELECT * FROM ' . NV_EMAILTEMPLATES_GLOBALTABLE . '_categories WHERE ' . implode(' OR ', $sql_or);
+            $sql = 'SELECT COUNT(*) FROM ' . NV_EMAILTEMPLATES_GLOBALTABLE . '_categories WHERE ' . implode(' OR ', $sql_or);
             $sth = $db->prepare($sql);
             foreach ($global_config['setup_langs'] as $lang) {
-                $sth->bindParam(':' . $lang . '_title', $data['title'], PDO::PARAM_STR);
+                $sth->bindValue(':' . $lang . '_title', $data['title'], PDO::PARAM_STR);
             }
         } else {
             // Kiểm tra trùng lặp trên ngôn ngữ hiện tại khi sửa
-            $sql = 'SELECT * FROM ' . NV_EMAILTEMPLATES_GLOBALTABLE . '_categories WHERE ' . NV_LANG_DATA . '_title = :title AND catid != ' . $catid;
+            $sql = 'SELECT COUNT(*) FROM ' . NV_EMAILTEMPLATES_GLOBALTABLE . '_categories WHERE ' . NV_LANG_DATA . '_title = :title AND catid != ' . $catid;
             $sth = $db->prepare($sql);
-            $sth->bindParam(':title', $data['title'], PDO::PARAM_STR);
+            $sth->bindValue(':title', $data['title'], PDO::PARAM_STR);
         }
         $sth->execute();
         $num = $sth->fetchColumn();
@@ -209,10 +209,10 @@ if ($nv_Request->isset_request('saveform', 'post')) {
                 $sth = $db->prepare($sql);
                 if (!$catid) {
                     foreach ($global_config['setup_langs'] as $lang) {
-                        $sth->bindParam(':' . $lang . '_title', $data['title'], PDO::PARAM_STR);
+                        $sth->bindValue(':' . $lang . '_title', $data['title'], PDO::PARAM_STR);
                     }
                 } else {
-                    $sth->bindParam(':' . NV_LANG_DATA . '_title', $data['title'], PDO::PARAM_STR);
+                    $sth->bindValue(':' . NV_LANG_DATA . '_title', $data['title'], PDO::PARAM_STR);
                 }
                 $sth->execute();
 

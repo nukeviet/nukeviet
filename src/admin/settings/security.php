@@ -862,8 +862,8 @@ if ($nv_Request->isset_request('ppsave', 'post') and csrf_check($nv_Request->get
 
     $sth = $db->prepare('UPDATE ' . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = 'sys' AND module = 'site' AND config_name = :config_name");
     foreach ($post as $config_name => $config_value) {
-        $sth->bindParam(':config_value', $config_value, PDO::PARAM_STR);
-        $sth->bindParam(':config_name', $config_name, PDO::PARAM_STR, 30);
+        $sth->bindValue(':config_value', $config_value, PDO::PARAM_STR);
+        $sth->bindValue(':config_name', $config_name, PDO::PARAM_STR);
         $sth->execute();
     }
 

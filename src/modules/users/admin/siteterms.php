@@ -41,8 +41,7 @@ if ($nv_Request->get_int('save', 'post') == 1) {
         'mess' => ''
     ];
 
-    $post_checkss = $nv_Request->get_title('checkss', 'post', '');
-    if (!csrf_check($post_checkss, $csrf_key)) {
+    if (!csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
         $respon['mess'] = $nv_Lang->getGlobal('error_checkss');
         nv_jsonOutput($respon);
     }

@@ -166,24 +166,24 @@ if (empty($contents)) {
     } elseif ($viewcat == 'viewcat_page_new' or $viewcat == 'viewcat_page_old') {
         $show_schema = true;
         $order_by = ($viewcat == 'viewcat_page_new') ? $order_articles_by . ' DESC, addtime DESC' : $order_articles_by . ' ASC, addtime ASC';
-        $db_slave->sqlreset()
+        $db->sqlreset()
             ->select('COUNT(*)')
             ->from(NV_PREFIXLANG . '_' . $module_data . '_rows')
             ->where('status= 1 AND inhome=1');
 
-        $num_items = $db_slave->query($db_slave->sql())
+        $num_items = $db->query($db->sql())
             ->fetchColumn();
 
         // Không cho tùy ý đánh số page + xác định trang trước, trang sau
         betweenURLs($page, ceil($num_items / $per_page), $base_url, '&amp;' . NV_OP_VARIABLE . '=page-', $prevPage, $nextPage);
 
-        $db_slave->select('id, catid, listcatid, topicid, admin_id, author, sourceid, addtime, edittime, weight, publtime, title, alias, hometext, homeimgfile, homeimgalt, homeimgthumb, allowed_rating, external_link, hitstotal, hitscm, total_rating, click_rating')
+        $db->select('id, catid, listcatid, topicid, admin_id, author, sourceid, addtime, edittime, weight, publtime, title, alias, hometext, homeimgfile, homeimgalt, homeimgthumb, allowed_rating, external_link, hitstotal, hitscm, total_rating, click_rating')
             ->order($order_by)
             ->limit($per_page)
             ->offset(($page - 1) * $per_page);
 
         $weight_publtime = 0;
-        $result = $db_slave->query($db_slave->sql());
+        $result = $db->query($db->sql());
         $i = 0;
         while ($item = $result->fetch()) {
             $item['imghome'] = $item['imgmobile'] = '';
@@ -202,18 +202,18 @@ if (empty($contents)) {
         }
 
         if ($st_links > 0) {
-            $db_slave->sqlreset()
+            $db->sqlreset()
                 ->select('id, catid, listcatid, addtime, edittime, publtime, title, alias, external_link, hitstotal')
                 ->from(NV_PREFIXLANG . '_' . $module_data . '_rows');
 
             if ($viewcat == 'viewcat_page_new') {
-                $db_slave->where('status= 1 AND inhome=1 AND ' . $order_articles_by . ' < ' . $weight_publtime);
+                $db->where('status= 1 AND inhome=1 AND ' . $order_articles_by . ' < ' . $weight_publtime);
             } else {
-                $db_slave->where('status= 1 AND inhome=1 AND ' . $order_articles_by . ' > ' . $weight_publtime);
+                $db->where('status= 1 AND inhome=1 AND ' . $order_articles_by . ' > ' . $weight_publtime);
             }
-            $db_slave->order($order_by)->limit($st_links);
+            $db->order($order_by)->limit($st_links);
 
-            $result = $db_slave->query($db_slave->sql());
+            $result = $db->query($db->sql());
             while ($item = $result->fetch()) {
                 $item['newday'] = $global_array_cat[$item['catid']]['newday'];
                 $item['link'] = $global_array_cat[$item['catid']]['link'] . '/' . $item['alias'] . '-' . $item['id'] . $global_config['rewrite_exturl'];
@@ -228,7 +228,7 @@ if (empty($contents)) {
         $array_cat = [];
 
         $key = 0;
-        $db_slave->sqlreset()
+        $db->sqlreset()
             ->select('id, listcatid, topicid, admin_id, author, sourceid, addtime, edittime, publtime, title, alias, hometext, homeimgfile, homeimgalt, homeimgthumb, allowed_rating, external_link, hitstotal, hitscm, total_rating, click_rating')
             ->order($order_articles_by . ' DESC');
 
@@ -237,7 +237,7 @@ if (empty($contents)) {
                 $array_cat[$key] = $array_cat_i;
                 $featured = 0;
                 if ($array_cat_i['featured'] != 0) {
-                    $result = $db_slave->query($db_slave->from(NV_PREFIXLANG . '_' . $module_data . '_' . $_catid)
+                    $result = $db->query($db->from(NV_PREFIXLANG . '_' . $module_data . '_' . $_catid)
                         ->where('id=' . $array_cat_i['featured'] . ' and status= 1 AND inhome=1')
                         ->sql());
                     if ($item = $result->fetch()) {
@@ -252,16 +252,16 @@ if (empty($contents)) {
                 }
 
                 if ($featured) {
-                    $db_slave->from(NV_PREFIXLANG . '_' . $module_data . '_' . $_catid)
+                    $db->from(NV_PREFIXLANG . '_' . $module_data . '_' . $_catid)
                         ->where('status= 1 AND inhome=1 AND id!=' . $featured)
                         ->limit($array_cat_i['numlinks'] - 1);
                 } else {
-                    $db_slave->from(NV_PREFIXLANG . '_' . $module_data . '_' . $_catid)
+                    $db->from(NV_PREFIXLANG . '_' . $module_data . '_' . $_catid)
                         ->where('status= 1 AND inhome=1')
                         ->limit($array_cat_i['numlinks']);
                 }
 
-                $result = $db_slave->query($db_slave->sql());
+                $result = $db->query($db->sql());
                 while ($item = $result->fetch()) {
                     $item['imghome'] = $item['imgmobile'] = '';
                     get_homeimgfile($item);
@@ -286,7 +286,7 @@ if (empty($contents)) {
         // cac bai viet cua cac chu de con
         $key = 0;
 
-        $db_slave->sqlreset()
+        $db->sqlreset()
             ->select('id, listcatid, topicid, admin_id, author, sourceid, addtime, edittime, publtime, title, alias, hometext, homeimgfile, homeimgalt, homeimgthumb, allowed_rating, external_link, hitstotal, hitscm, total_rating, click_rating')
             ->where('status= 1 AND inhome=1')
             ->order($order_articles_by . ' DESC');
@@ -295,7 +295,7 @@ if (empty($contents)) {
                 $array_catpage[$key] = $array_cat_i;
                 $featured = 0;
                 if ($array_cat_i['featured'] != 0) {
-                    $result = $db_slave->query($db_slave->from(NV_PREFIXLANG . '_' . $module_data . '_' . $_catid)
+                    $result = $db->query($db->from(NV_PREFIXLANG . '_' . $module_data . '_' . $_catid)
                         ->where('id=' . $array_cat_i['featured'] . ' and status= 1 AND inhome=1')
                         ->limit($array_cat_i['numlinks'])
                         ->sql());
@@ -310,15 +310,15 @@ if (empty($contents)) {
                     }
                 }
                 if ($featured) {
-                    $db_slave->from(NV_PREFIXLANG . '_' . $module_data . '_' . $_catid)
+                    $db->from(NV_PREFIXLANG . '_' . $module_data . '_' . $_catid)
                         ->where('status= 1 AND inhome=1 AND id!=' . $featured)
                         ->limit($array_cat_i['numlinks'] - 1);
                 } else {
-                    $db_slave->from(NV_PREFIXLANG . '_' . $module_data . '_' . $_catid)
+                    $db->from(NV_PREFIXLANG . '_' . $module_data . '_' . $_catid)
                         ->where('status= 1 AND inhome=1')
                         ->limit($array_cat_i['numlinks']);
                 }
-                $result = $db_slave->query($db_slave->sql());
+                $result = $db->query($db->sql());
 
                 while ($item = $result->fetch()) {
                     $item['imghome'] = $item['imgmobile'] = '';
@@ -341,23 +341,23 @@ if (empty($contents)) {
     } elseif ($viewcat == 'viewcat_grid_new' or $viewcat == 'viewcat_grid_old') {
         $show_schema = true;
         $order_by = ($viewcat == 'viewcat_grid_new') ? $order_articles_by . '  DESC' : $order_articles_by . '  ASC';
-        $db_slave->sqlreset()
+        $db->sqlreset()
             ->select('COUNT(*) ')
             ->from(NV_PREFIXLANG . '_' . $module_data . '_rows')
             ->where('status= 1 AND inhome=1');
 
-        $num_items = $db_slave->query($db_slave->sql())
+        $num_items = $db->query($db->sql())
             ->fetchColumn();
 
         // Không cho tùy ý đánh số page + xác định trang trước, trang sau
         betweenURLs($page, ceil($num_items / $per_page), $base_url, '&amp;' . NV_OP_VARIABLE . '=page-', $prevPage, $nextPage);
 
-        $db_slave->select('id, catid, listcatid, topicid, admin_id, author, sourceid, addtime, edittime, publtime, title, alias, hometext, homeimgfile, homeimgalt, homeimgthumb, allowed_rating, external_link, hitstotal, hitscm, total_rating, click_rating')
+        $db->select('id, catid, listcatid, topicid, admin_id, author, sourceid, addtime, edittime, publtime, title, alias, hometext, homeimgfile, homeimgalt, homeimgthumb, allowed_rating, external_link, hitstotal, hitscm, total_rating, click_rating')
             ->order($order_by)
             ->limit($per_page)
             ->offset(($page - 1) * $per_page);
 
-        $result = $db_slave->query($db_slave->sql());
+        $result = $db->query($db->sql());
         $i = 0;
         while ($item = $result->fetch()) {
             $item['imghome'] = $item['imgmobile'] = '';
@@ -382,23 +382,23 @@ if (empty($contents)) {
         $order_by = ($viewcat == 'viewcat_list_new') ? $order_articles_by . ' DESC, addtime DESC' : $order_articles_by . ' ASC, addtime ASC';
         $show_schema = true;
 
-        $db_slave->sqlreset()
+        $db->sqlreset()
             ->select('COUNT(*) ')
             ->from(NV_PREFIXLANG . '_' . $module_data . '_rows')
             ->where('status= 1 AND inhome=1');
 
-        $num_items = $db_slave->query($db_slave->sql())
+        $num_items = $db->query($db->sql())
             ->fetchColumn();
 
         // Không cho tùy ý đánh số page + xác định trang trước, trang sau
         betweenURLs($page, ceil($num_items / $per_page), $base_url, '&amp;' . NV_OP_VARIABLE . '=page-', $prevPage, $nextPage);
 
-        $db_slave->select('id, catid, listcatid, topicid, admin_id, author, sourceid, addtime, edittime, publtime, title, alias, hometext, homeimgfile, homeimgalt, homeimgthumb, allowed_rating, external_link, hitstotal, hitscm, total_rating, click_rating')
+        $db->select('id, catid, listcatid, topicid, admin_id, author, sourceid, addtime, edittime, publtime, title, alias, hometext, homeimgfile, homeimgalt, homeimgthumb, allowed_rating, external_link, hitstotal, hitscm, total_rating, click_rating')
             ->order($order_by)
             ->limit($per_page)
             ->offset(($page - 1) * $per_page);
 
-        $result = $db_slave->query($db_slave->sql());
+        $result = $db->query($db->sql());
         $i = 0;
         while ($item = $result->fetch()) {
             $item['imghome'] = $item['imgmobile'] = '';

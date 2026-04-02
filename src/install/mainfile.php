@@ -203,7 +203,7 @@ if (file_exists(NV_ROOTDIR . '/' . NV_CONFIG_FILENAME) and $step < 8) {
 
 // Bắt đầu từ step 6 trở đi bắt buộc kết nối CSDL nếu không quay về từ đầu
 if ($step >= 6) {
-    $db = $db_slave = new NukeViet\Core\Database($db_config);
+    $db = new NukeViet\Core\Database($db_config);
     if (empty($db->connect)) {
         $url = NV_BASE_SITEURL . 'install/index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;step=1';
         echo 'Sorry! Could not connect to data server. Please try the installation again.';

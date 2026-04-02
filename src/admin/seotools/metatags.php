@@ -109,11 +109,11 @@ if ($nv_Request->isset_request('checkss', 'post')) {
         $array_config['ogp_image'] = substr($ogp_image, strlen(NV_BASE_SITEURL));
     }
 
-    $sth = $db->prepare('UPDATE ' . NV_CONFIG_GLOBALTABLE . " SET config_value= :config_value WHERE config_name = :config_name AND lang = 'sys' AND module='site'");
+    $stmt = $db->prepare("UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE config_name = :config_name AND lang = 'sys' AND module = 'site'");
     foreach ($array_config as $config_name => $config_value) {
-        $sth->bindParam(':config_name', $config_name, PDO::PARAM_STR, 30);
-        $sth->bindParam(':config_value', $config_value, PDO::PARAM_STR);
-        $sth->execute();
+        $stmt->bindValue(':config_name', $config_name, PDO::PARAM_STR);
+        $stmt->bindValue(':config_value', $config_value, PDO::PARAM_STR);
+        $stmt->execute();
     }
 
     $nv_Cache->delAll(false);

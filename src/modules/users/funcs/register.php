@@ -45,7 +45,7 @@ if ($global_config['max_user_number'] > 0) {
     if ($global_config['idsite'] > 0) {
         $sql .= ' WHERE idsite = :idsite';
     }
-    $stmt = $db_slave->prepare($sql);
+    $stmt = $db->prepare($sql);
     if ($global_config['idsite'] > 0) {
         $stmt->bindValue(':idsite', $global_config['idsite'], PDO::PARAM_INT);
     }
@@ -103,7 +103,7 @@ function reg_result($array)
 
 // Cau hoi lay lai mat khau
 $data_questions = [];
-$sth = $db_slave->prepare('SELECT qid, title FROM ' . NV_MOD_TABLE . '_question WHERE lang = :lang ORDER BY weight ASC');
+$sth = $db->prepare('SELECT qid, title FROM ' . NV_MOD_TABLE . '_question WHERE lang = :lang ORDER BY weight ASC');
 $sth->bindValue(':lang', NV_LANG_DATA, PDO::PARAM_STR);
 $sth->execute();
 
@@ -166,7 +166,7 @@ $page_title = $nv_Lang->getModule('register');
 $key_words = $module_info['keywords'];
 
 $array_field_config = [];
-$result_field = $db_slave->query('SELECT * FROM ' . NV_MOD_TABLE . '_field ORDER BY weight ASC');
+$result_field = $db->query('SELECT * FROM ' . NV_MOD_TABLE . '_field ORDER BY weight ASC');
 while ($row_field = $result_field->fetch()) {
     $language = unserialize($row_field['language'], NV_UNSERIALIZE_SAFE);
     $row_field['title'] = (isset($language[NV_LANG_DATA])) ? $language[NV_LANG_DATA][0] : $row['field'];
@@ -181,7 +181,7 @@ while ($row_field = $result_field->fetch()) {
             $query .= ' ORDER BY ' . $row_field['sql_choices'][4] . ' ' . $row_field['sql_choices'][5];
         }
 
-        $sth = $db_slave->query($query);
+        $sth = $db->query($query);
         while ($row = $sth->fetch()) {
             $row_field['field_choices'][$row['field_key']] = $row['field_value'];
         }

@@ -125,40 +125,40 @@ if ($nv_Request->isset_request('save', 'post')) {
     }
     $sth = $db->prepare('UPDATE ' . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = 'sys' AND module = 'site' AND config_name = :config_name");
     foreach ($array_config as $config_name => $config_value) {
-        $sth->bindParam(':config_name', $config_name, PDO::PARAM_STR, 30);
-        $sth->bindParam(':config_value', $config_value, PDO::PARAM_STR);
+        $sth->bindValue(':config_name', $config_name, PDO::PARAM_STR);
+        $sth->bindValue(':config_value', $config_value, PDO::PARAM_STR);
         $sth->execute();
     }
 
     $array_config['name_show'] = $nv_Request->get_int('name_show', 'post', 0);
     $sth = $db->prepare('UPDATE ' . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = '" . NV_LANG_DATA . "' AND module = 'global' AND config_name = :config_name");
     $sth->bindValue(':config_name', 'name_show', PDO::PARAM_STR);
-    $sth->bindParam(':config_value', $array_config['name_show'], PDO::PARAM_INT);
+    $sth->bindValue(':config_value', $array_config['name_show'], PDO::PARAM_INT);
     $sth->execute();
 
     // Tự động gán oauth vào tài khoản đã tồn tại
     $array_config['auto_assign_oauthuser'] = (int) $nv_Request->get_bool('auto_assign_oauthuser', 'post', false);
     $stmt = $db->prepare('UPDATE ' . NV_MOD_TABLE . '_config SET content= :content, edit_time=' . NV_CURRENTTIME . " WHERE config='auto_assign_oauthuser'");
-    $stmt->bindParam(':content', $array_config['auto_assign_oauthuser'], PDO::PARAM_STR);
+    $stmt->bindValue(':content', $array_config['auto_assign_oauthuser'], PDO::PARAM_STR);
     $stmt->execute();
 
     // Gửi email cho người dùng khi admin thao tác tới tài khoản
     $array_config['admin_email'] = (int) $nv_Request->get_bool('admin_email', 'post', false);
     $stmt = $db->prepare('UPDATE ' . NV_MOD_TABLE . '_config SET content= :content, edit_time=' . NV_CURRENTTIME . " WHERE config='admin_email'");
-    $stmt->bindParam(':content', $array_config['admin_email'], PDO::PARAM_STR);
+    $stmt->bindValue(':content', $array_config['admin_email'], PDO::PARAM_STR);
     $stmt->execute();
 
     if (defined('NV_IS_GODADMIN') and empty($global_config['idsite'])) {
         // Thời gian tài khoản chờ kích hoạt bị xóa
         $array_config['register_active_time'] = 3600 * $nv_Request->get_int('register_active_time', 'post', 0);
         $stmt = $db->prepare('UPDATE ' . NV_MOD_TABLE . '_config SET content= :content, edit_time=' . NV_CURRENTTIME . " WHERE config='register_active_time'");
-        $stmt->bindParam(':content', $array_config['register_active_time'], PDO::PARAM_STR);
+        $stmt->bindValue(':content', $array_config['register_active_time'], PDO::PARAM_STR);
         $stmt->execute();
 
         // Cau hinh kich thuoc avatar
         $array_config['avatar_width'] = $nv_Request->get_int('avatar_width', 'post', 120);
         $stmt = $db->prepare('UPDATE ' . NV_MOD_TABLE . '_config SET content= :content, edit_time=' . NV_CURRENTTIME . " WHERE config='avatar_width'");
-        $stmt->bindParam(':content', $array_config['avatar_width'], PDO::PARAM_STR);
+        $stmt->bindValue(':content', $array_config['avatar_width'], PDO::PARAM_STR);
         $stmt->execute();
 
         $array_config['min_old_user'] = $nv_Request->get_int('min_old_user', 'post', 0);
@@ -166,7 +166,7 @@ if ($nv_Request->isset_request('save', 'post')) {
             $array_config['min_old_user'] = 0;
         }
         $stmt = $db->prepare('UPDATE ' . NV_MOD_TABLE . '_config SET content= :content, edit_time=' . NV_CURRENTTIME . " WHERE config='min_old_user'");
-        $stmt->bindParam(':content', $array_config['min_old_user'], PDO::PARAM_STR);
+        $stmt->bindValue(':content', $array_config['min_old_user'], PDO::PARAM_STR);
         $stmt->execute();
 
         // Chặn đăng ký lại username đã xóa
@@ -177,30 +177,30 @@ if ($nv_Request->isset_request('save', 'post')) {
             $array_config['hold_deleted_username'] = 1000;
         }
         $stmt = $db->prepare('UPDATE ' . NV_MOD_TABLE . '_config SET content= :content, edit_time=' . NV_CURRENTTIME . " WHERE config='hold_deleted_username'");
-        $stmt->bindParam(':content', $array_config['hold_deleted_username'], PDO::PARAM_STR);
+        $stmt->bindValue(':content', $array_config['hold_deleted_username'], PDO::PARAM_STR);
         $stmt->execute();
 
         // Cấu hình số tuổi nhỏ nhất để thành viên có thể tham gia
         $array_config['avatar_height'] = $nv_Request->get_int('avatar_height', 'post', 16);
         $stmt = $db->prepare('UPDATE ' . NV_MOD_TABLE . '_config SET content= :content, edit_time=' . NV_CURRENTTIME . " WHERE config='avatar_height'");
-        $stmt->bindParam(':content', $array_config['avatar_height'], PDO::PARAM_STR);
+        $stmt->bindValue(':content', $array_config['avatar_height'], PDO::PARAM_STR);
         $stmt->execute();
 
         // Kich hoat chuc nang xet duyet thanh vien moi dang ky
         $array_config['active_group_newusers'] = ($nv_Request->get_int('active_group_newusers', 'post', 0) ? 1 : 0);
         $stmt = $db->prepare('UPDATE ' . NV_MOD_TABLE . '_config SET content= :content, edit_time=' . NV_CURRENTTIME . " WHERE config='active_group_newusers'");
-        $stmt->bindParam(':content', $array_config['active_group_newusers'], PDO::PARAM_STR);
+        $stmt->bindValue(':content', $array_config['active_group_newusers'], PDO::PARAM_STR);
         $stmt->execute();
 
         // Chức năng kiểm duyệt chỉnh sửa
         $array_config['active_editinfo_censor'] = ($nv_Request->get_int('active_editinfo_censor', 'post', 0) ? 1 : 0);
         $stmt = $db->prepare('UPDATE ' . NV_MOD_TABLE . '_config SET content= :content, edit_time=' . NV_CURRENTTIME . " WHERE config='active_editinfo_censor'");
-        $stmt->bindParam(':content', $array_config['active_editinfo_censor'], PDO::PARAM_STR);
+        $stmt->bindValue(':content', $array_config['active_editinfo_censor'], PDO::PARAM_STR);
         $stmt->execute();
 
         $array_config['active_user_logs'] = ($nv_Request->get_int('active_user_logs', 'post', 0) ? 1 : 0);
         $stmt = $db->prepare('UPDATE ' . NV_MOD_TABLE . '_config SET content= :content, edit_time=' . NV_CURRENTTIME . " WHERE config='active_user_logs'");
-        $stmt->bindParam(':content', $array_config['active_user_logs'], PDO::PARAM_STR);
+        $stmt->bindValue(':content', $array_config['active_user_logs'], PDO::PARAM_STR);
         $stmt->execute();
 
         $array_config['deny_email'] = $nv_Request->get_title('deny_email', 'post', '');
@@ -211,7 +211,7 @@ if ($nv_Request->isset_request('save', 'post')) {
         }
 
         $stmt = $db->prepare('UPDATE ' . NV_MOD_TABLE . '_config SET content= :content, edit_time=' . NV_CURRENTTIME . " WHERE config='deny_email'");
-        $stmt->bindParam(':content', $array_config['deny_email'], PDO::PARAM_STR, strlen($array_config['deny_email']));
+        $stmt->bindValue(':content', $array_config['deny_email'], PDO::PARAM_STR);
         $stmt->execute();
 
         $array_config['deny_name'] = $nv_Request->get_title('deny_name', 'post', '');
@@ -220,7 +220,7 @@ if ($nv_Request->isset_request('save', 'post')) {
             $array_config['deny_name'] = implode('|', $array_config['deny_name']);
         }
         $stmt = $db->prepare('UPDATE ' . NV_MOD_TABLE . '_config SET content= :content, edit_time=' . NV_CURRENTTIME . " WHERE config='deny_name'");
-        $stmt->bindParam(':content', $array_config['deny_name'], PDO::PARAM_STR, strlen($array_config['deny_name']));
+        $stmt->bindValue(':content', $array_config['deny_name'], PDO::PARAM_STR);
         $stmt->execute();
 
         $array_config['password_simple'] = $nv_Request->get_title('password_simple', 'post', '');
@@ -231,7 +231,7 @@ if ($nv_Request->isset_request('save', 'post')) {
             $array_config['password_simple'] = implode('|', $array_config['password_simple']);
         }
         $stmt = $db->prepare('UPDATE ' . NV_MOD_TABLE . '_config SET content= :content, edit_time=' . NV_CURRENTTIME . " WHERE config='password_simple'");
-        $stmt->bindParam(':content', $array_config['password_simple'], PDO::PARAM_STR, strlen($array_config['password_simple']));
+        $stmt->bindValue(':content', $array_config['password_simple'], PDO::PARAM_STR);
         $stmt->execute();
 
         $access_admin = [];
@@ -277,10 +277,9 @@ foreach ($configs as $k => $config) {
     $stmt->bindValue(($k + 1), $config, PDO::PARAM_STR);
 }
 $stmt->execute();
-while ($_scratch = $stmt->fetch(PDO::FETCH_NUM)) {
-    [$config, $content] = $_scratch;
-    $content = array_map('trim', explode('|', $content));
-    $array_config[$config] = implode(', ', $content);
+while ($_row = $stmt->fetch()) {
+    $content = array_map('trim', explode('|', $_row['content']));
+    $array_config[$_row['config']] = implode(', ', $content);
 }
 $stmt->closeCursor();
 
@@ -315,7 +314,7 @@ $ignorefolders = [
     'index.html',
     '.htaccess'
 ];
-$array_config['checkss'] = csrf_create($csrf_key);
+
 $array_config['whoviewuser'] = array_map('intval', explode(',', $array_config['whoviewuser']));
 
 $tpl = new \NukeViet\Template\NVSmarty();
@@ -326,6 +325,7 @@ $tpl->assign('OP', $op);
 $tpl->assign('GCONFIG', $global_config);
 
 $tpl->assign('DATA', $array_config);
+$tpl->assign('CHECKSS', csrf_create($csrf_key));
 $tpl->assign('ACCESS_ADMIN', $access_admin);
 $tpl->assign('REGISTER_TYPES', $array_registertype);
 $tpl->assign('NAMES_SHOW', $array_name_show);

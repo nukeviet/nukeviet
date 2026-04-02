@@ -23,7 +23,7 @@ $atomlink = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DA
 
 if ($module_info['rss']) {
     $sql = 'SELECT id, title, alias, image, imagealt, description, bodytext, add_time FROM ' . NV_PREFIXLANG . '_' . $module_data . ' WHERE status=1 ORDER BY weight ASC LIMIT 20';
-    $result = $db_slave->query($sql);
+    $result = $db->query($sql);
     while ($row = $result->fetch()) {
         $rimages = (!empty($row['image'])) ? '<img src="' . NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $row['image'] . '" width="100" align="left" border="0">' : '';
         $description = !empty($row['description']) ? $row['description'] : strip_tags($row['bodytext']);

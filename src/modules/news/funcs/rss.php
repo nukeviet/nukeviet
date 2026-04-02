@@ -33,7 +33,7 @@ if (isset($array_op[1])) {
     }
 }
 
-$db_slave->sqlreset()
+$db->sqlreset()
     ->select('id, catid, publtime, title, alias, hometext, homeimgthumb, homeimgfile')
     ->order($order_articles_by . ' DESC')
     ->limit(30);
@@ -44,12 +44,12 @@ if (!empty($catid)) {
     $channel['description'] = $global_array_cat[$catid]['description'];
     $atomlink .= '/' . $alias_cat_url;
 
-    $db_slave->from(NV_PREFIXLANG . '_' . $module_data . '_' . $catid)->where('status=1');
+    $db->from(NV_PREFIXLANG . '_' . $module_data . '_' . $catid)->where('status=1');
 } else {
-    $db_slave->from(NV_PREFIXLANG . '_' . $module_data . '_rows')->where('status=1 AND inhome=1');
+    $db->from(NV_PREFIXLANG . '_' . $module_data . '_rows')->where('status=1 AND inhome=1');
 }
 if ($module_info['rss']) {
-    $result = $db_slave->query($db_slave->sql());
+    $result = $db->query($db->sql());
     while ($_scratch = $result->fetch(3)) {
         [$id, $catid_i, $publtime, $title, $alias, $hometext, $homeimgthumb, $homeimgfile] = $_scratch;
         unset($_scratch);

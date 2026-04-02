@@ -13,7 +13,7 @@ if (!defined('NV_IS_FILE_DATABASE')) {
     exit('Stop!!!');
 }
 
-$checkss = $nv_Request->get_title('checkss', 'post,get');
+$checkss = $nv_Request->get_string('checkss', 'post,get');
 
 if (csrf_check($checkss, $admin_info['admin_id'] . '_' . $module_name . '_main') or csrf_check($checkss, $admin_info['admin_id'] . '_' . $module_name . '_file')) {
     $tables = $nv_Request->get_array('tables', 'post', []);
@@ -31,8 +31,8 @@ if (csrf_check($checkss, $admin_info['admin_id'] . '_' . $module_name . '_main')
     $tab_list = [];
 
     $result = $db->query("SHOW TABLES LIKE '" . $db_config['prefix'] . "_%'");
-    while ($item = $result->fetch(3)) {
-        $tab_list[] = $item[0];
+    while ($_row = $result->fetch()) {
+        $tab_list[] = current($_row);
     }
     $result->closeCursor();
 

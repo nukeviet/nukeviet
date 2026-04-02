@@ -13,7 +13,7 @@ if (!defined('NV_IS_FILE_LANG')) {
     exit('Stop!!!');
 }
 
-if (csrf_check($nv_Request->get_string('checksess', 'get'), $admin_info['admin_id'] . '_' . $module_name . '_deleteallfile')) {
+if (csrf_check($nv_Request->get_string('checkss', 'get'), $admin_info['admin_id'] . '_' . $module_name . '_deleteallfile')) {
     $dirlang = $nv_Request->get_title('dirlang', 'get', '');
     $type = $nv_Request->get_string('type', 'get', 'db');
     $type != 'files' && $type = 'db';

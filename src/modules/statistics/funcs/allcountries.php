@@ -19,7 +19,7 @@ $page_url = NV_BASE_MOD_URL . '&amp;' . NV_OP_VARIABLE . '=' . $module_info['ali
 $contents = '';
 
 $sql = 'SELECT COUNT(*) as num_items, MAX(c_count) as max FROM ' . NV_COUNTER_GLOBALTABLE . " WHERE c_type = 'country' AND c_count != 0";
-$result = $db_slave->query($sql);
+$result = $db->query($sql);
 $row_meta = $result->fetch();
 $result->closeCursor();
 

@@ -51,7 +51,7 @@ if (isset($array_op[1])) {
     }
 }
 
-$db_slave->sqlreset()
+$db->sqlreset()
     ->select('id, catid, author, publtime, edittime, title, alias, hometext, homeimgfile, homeimgalt, instant_template, instant_creatauto')
     ->order($order_articles_by . ' DESC')
     ->limit(1000);
@@ -62,9 +62,9 @@ if (!empty($catid)) {
     $channel['description'] = $global_array_cat[$catid]['description'];
     $atomlink .= '/' . $alias_cat_url;
 
-    $db_slave->from(NV_PREFIXLANG . '_' . $module_data . '_' . $catid)->where('status=1 AND instant_active=1' . ($gettime ? ' AND (publtime>= ' . $gettime . ' OR edittime >= ' . $gettime . ')' : ''));
+    $db->from(NV_PREFIXLANG . '_' . $module_data . '_' . $catid)->where('status=1 AND instant_active=1' . ($gettime ? ' AND (publtime>= ' . $gettime . ' OR edittime >= ' . $gettime . ')' : ''));
 } else {
-    $db_slave->from(NV_PREFIXLANG . '_' . $module_data . '_rows')->where('status=1 AND inhome=1 AND instant_active=1' . ($gettime ? ' AND (publtime>= ' . $gettime . ' OR edittime >= ' . $gettime . ')' : ''));
+    $db->from(NV_PREFIXLANG . '_' . $module_data . '_rows')->where('status=1 AND inhome=1 AND instant_active=1' . ($gettime ? ' AND (publtime>= ' . $gettime . ' OR edittime >= ' . $gettime . ')' : ''));
 }
 
 // Lấy RSS từ cache
@@ -76,7 +76,7 @@ $FBIA = new \NukeViet\Facebook\InstantArticles(\NukeViet\Core\Language::$lang_mo
 if (!defined('NV_IS_MODADMIN') and ($cache = $nv_Cache->getItem($module_name, $cacheFile, ttl: $cacheTTL)) != false) {
     $items = unserialize($cache, NV_UNSERIALIZE_SAFE);
 } else {
-    $result = $db_slave->query($db_slave->sql());
+    $result = $db->query($db->sql());
     while ($row = $result->fetch()) {
         $row['catalias'] = $global_array_cat[$row['catid']]['alias'];
         $row['hometext'] = strip_tags($row['hometext']);

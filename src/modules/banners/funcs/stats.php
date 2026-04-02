@@ -18,7 +18,7 @@ if (!defined('NV_IS_BANNER_CLIENT')) {
 }
 
 // Các quảng cáo của khách hàng
-$stmt = $db_slave->prepare('SELECT id, title FROM ' . NV_BANNERS_GLOBALTABLE . '_rows WHERE act = 1 AND clid = :clid ORDER BY id ASC');
+$stmt = $db->prepare('SELECT id, title FROM ' . NV_BANNERS_GLOBALTABLE . '_rows WHERE act = 1 AND clid = :clid ORDER BY id ASC');
 $stmt->bindValue(':clid', $user_info['userid'], PDO::PARAM_INT);
 $stmt->execute();
 

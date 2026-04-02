@@ -26,7 +26,7 @@ $tpl->assign('OP', $op);
 $tpl->assign('GCONFIG', $global_config);
 
 // Giải nén và kiểm tra gói cập nhật
-if (csrf_check($nv_Request->get_title('checkss', 'get', ''), $csrf_key . '_unzip' . $eid . '_' . $fid)) {
+if (csrf_check($nv_Request->get_string('checkss', 'get', ''), $csrf_key . '_unzip' . $eid . '_' . $fid)) {
     $filename = NV_TEMPNAM_PREFIX . 'extupd_' . NV_CHECK_SESSION . '.zip';
     if (!file_exists(NV_ROOTDIR . '/' . NV_TEMP_DIR . '/' . $filename)) {
         nv_htmlOutput('File not exists!!!');
@@ -177,7 +177,7 @@ if (csrf_check($nv_Request->get_title('checkss', 'get', ''), $csrf_key . '_unzip
 }
 
 // Tải gói cập nhật
-if (csrf_check($nv_Request->get_title('checkss', 'get', ''), $csrf_key . '_download' . $eid . '_' . $fid)) {
+if (csrf_check($nv_Request->get_string('checkss', 'get', ''), $csrf_key . '_download' . $eid . '_' . $fid)) {
     $NV_Http = new NukeViet\Http\Http($global_config, NV_TEMP_DIR);
     $stored_cookies = nv_get_cookies();
 
@@ -238,7 +238,7 @@ if (csrf_check($nv_Request->get_title('checkss', 'get', ''), $csrf_key . '_downl
 }
 
 // Lấy thông tin
-if (csrf_check($nv_Request->get_title('checkss', 'get', ''), $csrf_key . '_check' . $eid . '_' . $fid)) {
+if (csrf_check($nv_Request->get_string('checkss', 'get', ''), $csrf_key . '_check' . $eid . '_' . $fid)) {
     $NV_Http = new NukeViet\Http\Http($global_config, NV_TEMP_DIR);
     $stored_cookies = nv_get_cookies();
 
@@ -297,7 +297,7 @@ if (csrf_check($nv_Request->get_title('checkss', 'get', ''), $csrf_key . '_check
 }
 
 // Load thông tin chậm
-if (csrf_check($nv_Request->get_title('checkss', 'get', ''), $csrf_key . '_' . $eid . '_' . $fid)) {
+if (csrf_check($nv_Request->get_string('checkss', 'get', ''), $csrf_key . '_' . $eid . '_' . $fid)) {
     $tpl->assign('EID', $eid);
     $tpl->assign('FID', $fid);
     $tpl->assign('CHECKSS', csrf_create($csrf_key . '_check' . $eid . '_' . $fid));

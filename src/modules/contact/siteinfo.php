@@ -14,7 +14,7 @@ if (!defined('NV_IS_FILE_SITEINFO')) {
 }
 
 // So lien he chua doc
-$number = $db_slave->query('SELECT COUNT(*) FROM ' . NV_PREFIXLANG . '_' . $mod_data . '_send where is_read= 0')->fetchColumn();
+$number = $db->query('SELECT COUNT(*) FROM ' . NV_PREFIXLANG . '_' . $mod_data . '_send where is_read= 0')->fetchColumn();
 if ($number > 0) {
     $pendinginfo[] = [
         'key' => $nv_Lang->getModule('siteinfo_new'),

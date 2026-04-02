@@ -75,7 +75,7 @@ if ($nv_Request->get_title('checkss', 'post', '') === NV_CHECK_SESSION) {
                     }
                 } elseif ($types['type'] == 'text') {
                     // Text thuần, cần chuyển ' (&#039;) và " (&quot;) bị mã hóa trước khi đưa ra CSS
-                    $value = nv_substr($nv_Request->get_title($var_group . '_' . $var, 'post', ''), 0, 500);
+                    $value = $nv_Request->get_title($var_group . '_' . $var, 'post', '', 500);
                     if (!empty($value)) {
                         $config_theme['variables'][$var_group][$var] = $value;
                     }

@@ -94,7 +94,7 @@ Viết hàm test PHP tuân thủ các quy tắc sau:
 
 - **Khai báo:** `public function testInsertSampleDataFor{PascalCase}()`
 - **Group tag:** `@group sample-data` trong PHPDoc
-- **DB ops:** luôn sử dụng biến `$db` cho mọi thao tác (NukeViet 5 không còn phân biệt `$db_slave` trong code)
+- **DB ops:** luôn sử dụng biến `$db` cho mọi thao tác (NukeViet 5 không còn dùng `$db_slave`)
 - **Tên bảng:**
   - Bảng dùng chung: `$db_config['prefix'] . '_ten_bang'`
   - Bảng đa ngôn ngữ: `$db_config['prefix'] . '_' . $db_config['lang'] . '_ten_bang'` (nếu module có multilang)

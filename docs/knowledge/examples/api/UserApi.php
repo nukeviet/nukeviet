@@ -50,7 +50,7 @@ class GetInfo implements UiApi
      */
     public function execute()
     {
-        global $nv_Request, $db_slave;
+        global $nv_Request;
 
         // Lấy thông tin user nếu có
         $userid = Uapi::getUserId();

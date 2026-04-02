@@ -27,7 +27,14 @@ if ($global_config['idsite']) {
 
 $modules_site = nv_scandir(NV_ROOTDIR . '/modules', $global_config['check_module']);
 
-if (csrf_check($nv_Request->get_title('checkss', 'post'), $csrf_key)) {
+if ($nv_Request->isset_request('checkss', 'post')) {
+    if (!csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
+        nv_jsonOutput([
+            'status' => 'error',
+            'mess' => $nv_Lang->getGlobal('error_checkss')
+        ]);
+    }
+
     $title = $nv_Request->get_title('title', 'post', '');
     $title = strtolower(change_alias($title));
     $modfile = $nv_Request->get_title('m_file', 'post', '');

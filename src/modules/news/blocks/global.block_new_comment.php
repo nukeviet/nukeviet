@@ -64,13 +64,13 @@ if (!nv_function_exists('nv_comment_new')) {
      */
     function nv_comment_new($block_config)
     {
-        global $db, $site_mods, $db_slave, $module_info, $global_config;
+        global $db, $site_mods, $module_info, $global_config;
 
         $module = $block_config['module'];
         $mod_data = $site_mods[$module]['module_data'];
 
         $sql = 'SELECT * FROM ' . NV_PREFIXLANG . '_comment WHERE module = ' . $db->quote($module) . ' AND status=1 ORDER BY post_time DESC LIMIT ' . $block_config['numrow'];
-        $result = $db_slave->query($sql);
+        $result = $db->query($sql);
         $array_comment = [];
         $array_news_id = [];
         while ($comment = $result->fetch()) {
@@ -79,7 +79,7 @@ if (!nv_function_exists('nv_comment_new')) {
         }
 
         if (!empty($array_news_id)) {
-            $result = $db_slave->query('SELECT t1.id, t1.alias AS alias_id, t2.alias AS alias_cat FROM ' . NV_PREFIXLANG . '_' . $mod_data . '_rows t1 INNER JOIN ' . NV_PREFIXLANG . '_' . $mod_data . '_cat t2 ON t1.catid = t2.catid WHERE t1.id IN (' . implode(',', array_unique($array_news_id)) . ') AND t1.status = 1');
+            $result = $db->query('SELECT t1.id, t1.alias AS alias_id, t2.alias AS alias_cat FROM ' . NV_PREFIXLANG . '_' . $mod_data . '_rows t1 INNER JOIN ' . NV_PREFIXLANG . '_' . $mod_data . '_cat t2 ON t1.catid = t2.catid WHERE t1.id IN (' . implode(',', array_unique($array_news_id)) . ') AND t1.status = 1');
             $array_news_id = [];
             while ($row = $result->fetch()) {
                 $array_news_id[$row['id']] = $row;

@@ -1,12 +1,13 @@
 <?php
 
 /**
- * Script to scan and refactor get_title calls in NukeViet 5.0
+ * Script to scan and refactor get_title calls and $db_slave in NukeViet 5.0
  * 1. Scans 'src' directory.
  * 2. Identifies $nv_Request->get_title calls.
  * 3. Removes the 4th parameter if it's exactly 0, 1, true, or false.
  * 4. Extracts $maxlength from nv_substr($nv_Request->get_title(...), 0, $maxlength) and appends it to get_title.
- * 5. Reports findings to refactor_get_title.md
+ * 5. Replaces $db_slave-> with $db-> and handles global declarations.
+ * 6. Reports findings to refactor_get_title.md
  */
 
 $searchDir = realpath(__DIR__ . '/../src');
@@ -36,6 +37,8 @@ $stats = [
 $results = [
     'fixed_params' => [],
     'fixed_substr' => [],
+    'db_slave_ref' => [],
+    'db_slave_global' => [],
     'more_than_4' => [],
     'errors' => []
 ];
@@ -52,7 +55,7 @@ foreach ($files as $file) {
     $filePath = $file->getRealPath();
     $content = file_get_contents($filePath);
 
-    if (strpos($content, '->get_title') === false) {
+    if (strpos($content, '->get_title') === false && strpos($content, '$db_slave') === false) {
         continue;
     }
 
@@ -139,10 +142,38 @@ foreach ($files as $file) {
         $results['errors'][] = ['file' => $relativeFileUnix, 'msg' => 'PCRE Error in Step 2: ' . preg_last_error_msg()];
     }
 
-    if ($count1 > 0 || $count2 > 0) {
-        file_put_contents($filePath, $newContent2);
+    // STEP 3: Replace $db_slave-> with $db->
+    $count3 = 0;
+    $newContent3 = preg_replace_callback('/\$db_slave\s*->/', function($matches) use (&$results, $relativeFileUnix) {
+        $results['db_slave_ref'][] = ['file' => $relativeFileUnix];
+        return '$db->';
+    }, $newContent2, -1, $count3);
+
+    // STEP 4: Handle global $db_slave
+    $count4 = 0;
+    $newContent4 = preg_replace_callback('/(global\s+)([^;]+)(;)/i', function($matches) use (&$results, $relativeFileUnix, &$count4) {
+        $vars = explode(',', $matches[2]);
+        $vars = array_map('trim', $vars);
+        $changed = false;
+        foreach ($vars as &$v) {
+            if ($v === '$db_slave') {
+                $v = '$db';
+                $changed = true;
+            }
+        }
+        if ($changed) {
+            $vars = array_unique($vars);
+            $count4++;
+            $results['db_slave_global'][] = ['file' => $relativeFileUnix];
+            return $matches[1] . implode(', ', $vars) . $matches[3];
+        }
+        return $matches[0];
+    }, $newContent3);
+
+    if ($count1 > 0 || $count2 > 0 || $count3 > 0 || $count4 > 0) {
+        file_put_contents($filePath, $newContent4);
         $stats['changed']++;
-        $content = $newContent2;
+        $content = $newContent4;
     }
 
     // Token scanner to find any get_title with MORE than 4 arguments left
@@ -225,6 +256,18 @@ foreach ($results['fixed_substr'] as $item) {
     logMd("- Fixed: {$item['file']} (Extracted maxlen `{$item['maxlen']}` to 4th param)", $md);
 }
 
+logMd("\n## 3. AUTO-REFACTORED: \$db_slave-> TO \$db->", $md);
+$db_ref_files = array_unique(array_column($results['db_slave_ref'], 'file'));
+foreach ($db_ref_files as $file) {
+    logMd("- Fixed property access: $file", $md);
+}
+
+logMd("\n## 4. AUTO-REFACTORED: global \$db_slave TO global \$db", $md);
+$db_global_files = array_unique(array_column($results['db_slave_global'], 'file'));
+foreach ($db_global_files as $file) {
+    logMd("- Fixed global declaration: $file", $md);
+}
+
 logMd("\n## WARNING: MORE THAN 4 PARAMETERS (Requires manual check)", $md);
 foreach ($results['more_than_4'] as $row) {
     logMd("- " . $row['link'], $md);
@@ -236,6 +279,8 @@ logMd("- Total files modified: " . $stats['changed'], $md);
 if (!empty($results['errors'])) logMd("- Total errors: " . count($results['errors']), $md);
 logMd("- Total removed 4th param (0/1): " . count($results['fixed_params']), $md);
 logMd("- Total extracted nv_substr: " . count($results['fixed_substr']), $md);
+logMd("- Total \$db_slave refactored: " . count($results['db_slave_ref']), $md);
+logMd("- Total global \$db_slave refactored: " . count($results['db_slave_global']), $md);
 logMd("- Total calls with >4 params: " . count($results['more_than_4']), $md);
 
 fclose($md);

@@ -30,7 +30,7 @@ $topicid = 0;
 if (!empty($alias)) {
     $page = (isset($array_op[2]) and substr($array_op[2], 0, 5) == 'page-') ? (int) (substr($array_op[2], 5)) : 1;
 
-    $sth = $db_slave->prepare('SELECT topicid, title, alias, image, description, keywords FROM ' . NV_PREFIXLANG . '_' . $module_data . '_topics WHERE alias= :alias');
+    $sth = $db->prepare('SELECT topicid, title, alias, image, description, keywords FROM ' . NV_PREFIXLANG . '_' . $module_data . '_topics WHERE alias= :alias');
     $sth->bindParam(':alias', $alias, PDO::PARAM_STR);
     $sth->execute();
     $row = $sth->fetch(3);
@@ -55,24 +55,24 @@ if (!empty($alias)) {
         'link' => $base_url
     ];
 
-    $db_slave->sqlreset()
+    $db->sqlreset()
         ->select('COUNT(*)')
         ->from(NV_PREFIXLANG . '_' . $module_data . '_rows')
         ->where('status=1 AND topicid = ' . $topicid);
 
-    $num_items = $db_slave->query($db_slave->sql())
+    $num_items = $db->query($db->sql())
         ->fetchColumn();
     // Không cho tùy ý đánh số page + xác định trang trước, trang sau
     betweenURLs($page, ceil($num_items / $per_page), $base_url, '/page-', $prevPage, $nextPage);
 
-    $db_slave->select('id, catid, listcatid, topicid, admin_id, author, sourceid, addtime, edittime, weight, publtime, title, alias, hometext, homeimgfile, homeimgalt, homeimgthumb, allowed_rating, external_link, hitstotal, hitscm, total_rating, click_rating')
+    $db->select('id, catid, listcatid, topicid, admin_id, author, sourceid, addtime, edittime, weight, publtime, title, alias, hometext, homeimgfile, homeimgalt, homeimgthumb, allowed_rating, external_link, hitstotal, hitscm, total_rating, click_rating')
         ->order($order_articles_by . ' DESC')
         ->limit($per_page)
         ->offset(($page - 1) * $per_page);
 
     $weight_publtime = 0;
 
-    $result = $db_slave->query($db_slave->sql());
+    $result = $db->query($db->sql());
     while ($item = $result->fetch()) {
         $item['src'] = $item['imgmobile'] = '';
         get_homeimgfile($item, 'src', 'imgmobile');
@@ -90,14 +90,14 @@ if (!empty($alias)) {
 
     $topic_other_array = [];
     if ($st_links > 0) {
-        $db_slave->sqlreset()
+        $db->sqlreset()
             ->select('id, catid, listcatid, addtime, edittime, publtime, title, alias, hitstotal, external_link')
             ->from(NV_PREFIXLANG . '_' . $module_data . '_rows')
             ->where('status=1 AND topicid = ' . $topicid . ' AND ' . $order_articles_by . ' < ' . $weight_publtime)
             ->order($order_articles_by . ' DESC')
             ->limit($st_links);
 
-        $result = $db_slave->query($db_slave->sql());
+        $result = $db->query($db->sql());
         while ($item = $result->fetch()) {
             $item['link'] = $global_array_cat[$item['catid']]['link'] . '/' . $item['alias'] . '-' . $item['id'] . $global_config['rewrite_exturl'];
             $topic_other_array[] = $item;
@@ -120,7 +120,7 @@ if (!empty($alias)) {
     $page_title = $module_info['funcs'][$op]['func_site_title'];
     $key_words = $module_info['keywords'];
 
-    $result = $db_slave->query('SELECT topicid as id, title, alias, image, description as hometext, keywords, add_time as publtime FROM ' . NV_PREFIXLANG . '_' . $module_data . '_topics ORDER BY weight ASC');
+    $result = $db->query('SELECT topicid as id, title, alias, image, description as hometext, keywords, add_time as publtime FROM ' . NV_PREFIXLANG . '_' . $module_data . '_topics ORDER BY weight ASC');
     while ($item = $result->fetch()) {
         if (!empty($item['image']) and file_exists(NV_ROOTDIR . '/' . NV_FILES_DIR . '/' . $module_upload . '/topics/' . $item['image'])) {
             // image thumb

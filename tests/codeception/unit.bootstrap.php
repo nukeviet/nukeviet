@@ -27,7 +27,7 @@ if (!defined('NV_MAINFILE')) {
 }
 define('NV_SITE_TIMEZONE_GMT_NAME', preg_replace('/^([\+|\-]{1}\d{2})(\d{2})$/', '$1:$2', date('O')));
 
-global $db, $db_slave, $global_config, $meta_property, $nv_parse_ini_timezone, $language_array, $nv_plugins, $db_config;
+global $db, $global_config, $meta_property, $nv_parse_ini_timezone, $language_array, $nv_plugins, $db_config;
 global $nv_default_regions, $nv_Lang;
 
 $global_config = [];
@@ -72,9 +72,9 @@ define('NV_SERVER_PORT', $nv_Server->getServerPort());
 define('NV_CACHE_PREFIX', md5(($global_config['sitekey'] ?? '') . NV_SERVER_NAME));
 
 if ($path_config) {
-    $db = $db_slave = new NukeViet\Core\Database($db_config);
+    $db = new NukeViet\Core\Database($db_config);
 } else {
-    $db = $db_slave = null;
+    $db = null;
 }
 
 $nv_Lang = new NukeViet\Core\Language();

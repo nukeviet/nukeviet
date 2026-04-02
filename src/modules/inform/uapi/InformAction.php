@@ -59,7 +59,7 @@ class InformAction implements UiApi
      */
     public function execute()
     {
-        global $db, $db_slave, $nv_Request, $nv_Lang;
+        global $db, $nv_Request, $nv_Lang;
 
         $module_name = Uapi::getModuleName();
         $module_info = Uapi::getModuleInfo();
@@ -101,7 +101,7 @@ class InformAction implements UiApi
             $where_str .= " AND (mtb.sender_role != 'group')";
         }
 
-        $sth = $db_slave->prepare('SELECT mtb.id, IFNULL(jtb.shown_time, 0) AS shown_time, IFNULL(jtb.viewed_time, 0) AS viewed_time, IFNULL(jtb.favorite_time, 0) AS favorite_time, IFNULL(jtb.hidden_time, 0) AS hidden_time
+        $sth = $db->prepare('SELECT mtb.id, IFNULL(jtb.shown_time, 0) AS shown_time, IFNULL(jtb.viewed_time, 0) AS viewed_time, IFNULL(jtb.favorite_time, 0) AS favorite_time, IFNULL(jtb.hidden_time, 0) AS hidden_time
             FROM ' . NV_INFORM_GLOBALTABLE . ' AS mtb
             LEFT JOIN ' . NV_INFORM_STATUS_GLOBALTABLE . ' AS jtb ON (jtb.pid = mtb.id AND jtb.userid = :userid)
             WHERE ' . $where_str . ' AND mtb.id = :id');

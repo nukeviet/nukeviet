@@ -72,9 +72,9 @@ if ($nv_Request->isset_request('opensearch', 'post')) {
     nv_insert_logs(NV_LANG_DATA, $module_name, 'CHANGE_OPENSEARCH', '', $admin_info['userid']);
 
     $config_value = !empty($config_value) ? json_encode($config_value, NV_JSON_ENCODE) : '';
-    $sth = $db->prepare('UPDATE ' . NV_CONFIG_GLOBALTABLE . " SET config_value= :config_value WHERE config_name = 'opensearch_link' AND lang = '" . NV_LANG_DATA . "' AND module='global'");
-    $sth->bindParam(':config_value', $config_value, PDO::PARAM_STR);
-    $sth->execute();
+    $stmt = $db->prepare("UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE config_name = 'opensearch_link' AND lang = '" . NV_LANG_DATA . "' AND module='global'");
+    $stmt->bindValue(':config_value', $config_value, PDO::PARAM_STR);
+    $stmt->execute();
     $nv_Cache->delAll();
 
     nv_jsonOutput([

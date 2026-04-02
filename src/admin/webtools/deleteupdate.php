@@ -13,7 +13,7 @@ if (!defined('NV_IS_FILE_WEBTOOLS')) {
     exit('Stop!!!');
 }
 
-if (csrf_check($nv_Request->get_title('checkss', 'post'), $csrf_key) and file_exists(NV_ROOTDIR . '/install/update_data.php')) {
+if (csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key) and file_exists(NV_ROOTDIR . '/install/update_data.php')) {
     $respon = [
         'success' => 0,
         'error' => []

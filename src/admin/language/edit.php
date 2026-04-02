@@ -125,7 +125,7 @@ if (csrf_check($nv_Request->get_string('savedata', 'get'), $csrf_key)) {
     ]);
 }
 
-if (!$nv_Request->isset_request('checksess', 'get') or !csrf_check($nv_Request->get_string('checksess', 'get'), $admin_info['admin_id'] . '_' . $module_name . '_edit_' . $idfile)) {
+if (!$nv_Request->isset_request('checkss', 'get') or !csrf_check($nv_Request->get_string('checkss', 'get'), $admin_info['admin_id'] . '_' . $module_name . '_edit_' . $idfile)) {
     nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=interface');
 }
 

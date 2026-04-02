@@ -21,7 +21,7 @@ if (($cache = $nv_Cache->getItem($module_name, $cacheFile, ttl: $cacheTTL)) != f
     $url = unserialize($cache, NV_UNSERIALIZE_SAFE);
 } else {
     $sql = 'SELECT alias, add_time FROM ' . NV_PREFIXLANG . '_' . $module_data . ' WHERE status=1';
-    $result = $db_slave->query($sql);
+    $result = $db->query($sql);
     while ($row = $result->fetch()) {
         $url[] = [
             'link' => NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $row['alias'] . $global_config['rewrite_exturl'],

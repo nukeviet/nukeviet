@@ -352,7 +352,6 @@ if (empty($db->connect)) {
         throw new \NukeViet\Http\HttpException('Sorry! Could not connect to data server', 500);
     }
 }
-$db_slave = nv_apply_hook('', 'db_slave_connect', [$db, $db_config], $db);
 unset($db_config['dbpass']);
 $nv_Cache->SetDb($db);
 

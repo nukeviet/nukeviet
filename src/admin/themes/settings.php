@@ -42,7 +42,7 @@ $array_config = [];
 
 // Submit form
 if ($nv_Request->isset_request('checkss', 'post')) {
-    if (!csrf_check($nv_Request->get_title('checkss', 'post', ''), $csrf_key)) {
+    if (!csrf_check($nv_Request->get_string('checkss', 'post', ''), $csrf_key)) {
         nv_jsonOutput([
             'status' => 'error',
             'mess' => $nv_Lang->getGlobal('error_checkss')
@@ -57,10 +57,11 @@ if ($nv_Request->isset_request('checkss', 'post')) {
 
     $sth = $db->prepare('UPDATE ' . NV_CONFIG_GLOBALTABLE . " SET config_value= :config_value WHERE config_name = :config_name AND lang = '" . NV_LANG_DATA . "' AND module='global'");
     foreach ($array_config as $config_name => $config_value) {
-        $sth->bindValue(':config_name', $config_name, PDO::PARAM_STR, 30);
+        $sth->bindValue(':config_name', $config_name, PDO::PARAM_STR);
         $sth->bindValue(':config_value', $config_value, PDO::PARAM_STR);
         $sth->execute();
     }
+    nv_insert_logs(NV_LANG_DATA, $module_name, $page_title, '', $admin_info['userid']);
 
     $nv_Cache->delAll();
     nv_jsonOutput([

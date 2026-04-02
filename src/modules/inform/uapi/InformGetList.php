@@ -59,7 +59,7 @@ class InformGetList implements UiApi
      */
     public function execute()
     {
-        global $db_slave, $nv_Request;
+        global $db, $nv_Request;
 
         $module_name = Uapi::getModuleName();
         $module_info = Uapi::getModuleInfo();
@@ -106,7 +106,7 @@ class InformGetList implements UiApi
             $where_str .= ' AND mtb.id NOT IN (SELECT exc.pid FROM ' . NV_INFORM_STATUS_GLOBALTABLE . ' AS exc WHERE exc.userid = :userid AND exc.hidden_time != 0)';
         }
 
-        $sth = $db_slave->prepare('SELECT COUNT(*) FROM ' . NV_INFORM_GLOBALTABLE . ' AS mtb WHERE ' . $where_str);
+        $sth = $db->prepare('SELECT COUNT(*) FROM ' . NV_INFORM_GLOBALTABLE . ' AS mtb WHERE ' . $where_str);
         foreach ($params as $key => $val) {
             $sth->bindValue($key, $val[0], $val[1]);
         }
@@ -114,7 +114,7 @@ class InformGetList implements UiApi
         $num_items = $sth->fetchColumn();
         $this->result->set('total', $num_items);
 
-        $sth = $db_slave->prepare('SELECT mtb.id, mtb.sender_role, mtb.sender_group, mtb.sender_admin, mtb.message, mtb.link, mtb.add_time, IFNULL(jtb.shown_time, 0) AS shown_time, IFNULL(jtb.viewed_time, 0) AS viewed_time, IFNULL(jtb.favorite_time, 0) AS favorite_time
+        $sth = $db->prepare('SELECT mtb.id, mtb.sender_role, mtb.sender_group, mtb.sender_admin, mtb.message, mtb.link, mtb.add_time, IFNULL(jtb.shown_time, 0) AS shown_time, IFNULL(jtb.viewed_time, 0) AS viewed_time, IFNULL(jtb.favorite_time, 0) AS favorite_time
             FROM ' . NV_INFORM_GLOBALTABLE . ' AS mtb
             LEFT JOIN ' . NV_INFORM_STATUS_GLOBALTABLE . ' AS jtb ON (jtb.pid = mtb.id AND jtb.userid = :userid)
             WHERE ' . $where_str . '

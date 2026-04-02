@@ -22,7 +22,7 @@ $author_info['is_guest'] = ($author_info['alias'] == 'guests') ? true : false;
 $page = (isset($array_op[2]) and preg_match('/^page\-([0-9]+)$/', $array_op[2], $m)) ? (int) ($m[1]) : 1;
 
 if (!$author_info['is_guest']) {
-    $stmt = $db_slave->prepare('SELECT id, uid, pseudonym, image, description, add_time, numnews FROM ' . NV_PREFIXLANG . '_' . $module_data . '_author WHERE alias= :alias AND active=1');
+    $stmt = $db->prepare('SELECT id, uid, pseudonym, image, description, add_time, numnews FROM ' . NV_PREFIXLANG . '_' . $module_data . '_author WHERE alias= :alias AND active=1');
     $stmt->bindParam(':alias', $author_info['alias'], PDO::PARAM_STR);
     $stmt->execute();
     [$author_info['id'], $author_info['uid'], $author_info['pseudonym'], $author_info['image'], $author_info['description'], $author_info['add_time'], $author_info['numnews']] = $stmt->fetch(3);
@@ -71,21 +71,21 @@ $item_array = [];
 $end_publtime = 0;
 $show_no_image = $module_config[$module_name]['show_no_image'];
 
-$db_slave->sqlreset()
+$db->sqlreset()
     ->select('COUNT(*)')
     ->from(NV_PREFIXLANG . '_' . $module_data . '_rows')
     ->where($where);
-$num_items = $db_slave->query($db_slave->sql())
+$num_items = $db->query($db->sql())
     ->fetchColumn();
 
 // Không cho tùy ý đánh số page + xác định trang trước, trang sau
 betweenURLs($page, ceil($num_items / $per_page), $base_url, '/page-', $prevPage, $nextPage);
 
-$db_slave->select('id, catid, listcatid, topicid, admin_id, author, sourceid, addtime, edittime, publtime, title, alias, hometext, homeimgfile, homeimgalt, homeimgthumb, allowed_rating, external_link, hitstotal, hitscm, total_rating, click_rating')
+$db->select('id, catid, listcatid, topicid, admin_id, author, sourceid, addtime, edittime, publtime, title, alias, hometext, homeimgfile, homeimgalt, homeimgthumb, allowed_rating, external_link, hitstotal, hitscm, total_rating, click_rating')
     ->order($order_articles_by . ' DESC')
     ->limit($per_page)
     ->offset(($page - 1) * $per_page);
-$result = $db_slave->query($db_slave->sql());
+$result = $db->query($db->sql());
 while ($item = $result->fetch()) {
     $item['imghome'] = $item['imgmobile'] = '';
     get_homeimgfile($item, 'src');
@@ -103,13 +103,13 @@ unset($query, $row);
 
 $item_array_other = [];
 if ($st_links > 0) {
-    $db_slave->sqlreset()
+    $db->sqlreset()
         ->select('id, catid, listcatid, addtime, edittime, publtime, title, alias, hitstotal, external_link')
         ->from(NV_PREFIXLANG . '_' . $module_data . '_rows')
         ->where($where . ' AND publtime < ' . $end_publtime)
         ->order($order_articles_by . ' DESC')
         ->limit($st_links);
-    $result = $db_slave->query($db_slave->sql());
+    $result = $db->query($db->sql());
     while ($item = $result->fetch()) {
         $item['link'] = $global_array_cat[$item['catid']]['link'] . '/' . $item['alias'] . '-' . $item['id'] . $global_config['rewrite_exturl'];
         $item_array_other[] = $item;

@@ -28,12 +28,12 @@ foreach ($global_array_cat as $catid_i => $array_cat_i) {
 
 if ($id > 0 and $catid > 0) {
     $sql = 'SELECT id, title, alias, hometext FROM ' . NV_PREFIXLANG . '_' . $module_data . '_' . $catid . ' WHERE id =' . $id . ' AND status=1';
-    $result = $db_slave->query($sql);
+    $result = $db->query($sql);
     [$id, $title, $alias, $hometext] = $result->fetch(3);
     if ($id > 0) {
         $checkss = $nv_Request->get_string('checkss', 'post', '');
         if ($checkss == md5($id . NV_CHECK_SESSION)) {
-            $allowed_send = $db_slave->query('SELECT allowed_send FROM ' . NV_PREFIXLANG . '_' . $module_data . '_detail WHERE id=' . $id)->fetchColumn();
+            $allowed_send = $db->query('SELECT allowed_send FROM ' . NV_PREFIXLANG . '_' . $module_data . '_detail WHERE id=' . $id)->fetchColumn();
             if ($allowed_send == 1) {
                 $your_name = $your_email = '';
                 if (defined('NV_IS_ADMIN')) {
@@ -132,7 +132,7 @@ if ($id > 0 and $catid > 0) {
                     !empty($your_message) && $your_message = nv_autoLinkDisable($your_message);
 
                     if (empty($hometext)) {
-                        $hometext = $db_slave->query('SELECT bodyhtml FROM ' . NV_PREFIXLANG . '_' . $module_data . '_detail WHERE id =' . $id)->fetchColumn();
+                        $hometext = $db->query('SELECT bodyhtml FROM ' . NV_PREFIXLANG . '_' . $module_data . '_detail WHERE id =' . $id)->fetchColumn();
                         $hometext = nv_clean60(strip_tags(str_replace(["\r\n", "\r", "\n"], ' ', $hometext)), 300);
                     }
 

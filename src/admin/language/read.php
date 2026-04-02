@@ -17,10 +17,9 @@ if (!defined('NV_IS_FILE_LANG')) {
  * nv_admin_read_lang()
  *
  * @param mixed $dirlang
- * @param mixed $idfile
  * @param mixed $module
  * @param mixed $admin_file
- * @return error read file
+ * @return string error read file
  */
 function nv_admin_read_lang($dirlang, $module, $admin_file = 1)
 {
@@ -63,6 +62,7 @@ function nv_admin_read_lang($dirlang, $module, $admin_file = 1)
         $stmt->execute();
 
         $_row = $stmt->fetch();
+        $stmt->closeCursor();
         $idfile = $_row ? $_row['idfile'] : 0;
         $langtype = $_row ? $_row['langtype'] : '';
 
@@ -196,7 +196,7 @@ function nv_admin_read_lang($dirlang, $module, $admin_file = 1)
 $dirlang = $nv_Request->get_title('dirlang', 'get', '');
 $page_title = $language_array[$dirlang]['name'] . ': ' . $nv_Lang->getModule('nv_admin_read');
 
-if (csrf_check($nv_Request->get_string('checksess', 'get'), $admin_info['admin_id'] . '_' . $module_name . '_readallfile') and preg_match('/^([a-z]{2})$/', $dirlang) and is_dir(NV_ROOTDIR . '/includes/language/' . $dirlang)) {
+if (csrf_check($nv_Request->get_string('checkss', 'get'), $admin_info['admin_id'] . '_' . $module_name . '_readallfile') and preg_match('/^([a-z]{2})$/', $dirlang) and is_dir(NV_ROOTDIR . '/includes/language/' . $dirlang)) {
     $array_filename = [];
 
     nv_admin_add_field_lang($dirlang);

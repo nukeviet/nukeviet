@@ -42,22 +42,26 @@ if ($is_setactive) {
 
         $stmt_check_admin->bindValue(':userid', $userid, PDO::PARAM_INT);
         $stmt_check_admin->execute();
-        $row = $stmt_check_admin->fetch(3);
+        $row = $stmt_check_admin->fetch();
         $stmt_check_admin->closeCursor();
 
         if (empty($row)) {
             $level = 0;
             $stmt_get_user->bindValue(':userid', $userid, PDO::PARAM_INT);
             $stmt_get_user->execute();
-            $res = $stmt_get_user->fetch(3);
+            $res = $stmt_get_user->fetch();
             $stmt_get_user->closeCursor();
             if (empty($res)) {
                 continue;
             }
-            [$username, $active, $idsite] = $res;
+            $username = $res['username'];
+            $active   = $res['active'];
+            $idsite   = $res['idsite'];
         } else {
-            [$level, $username, $active, $idsite] = $row;
-            $level = (int) $level;
+            $level    = (int) $row['lev'];
+            $username = $row['username'];
+            $active   = $row['active'];
+            $idsite   = $row['idsite'];
         }
 
         // Chỉ cho thao tác với thành viên thường hoặc quản trị dưới cấp

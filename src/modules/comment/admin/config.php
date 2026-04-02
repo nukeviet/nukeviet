@@ -17,7 +17,7 @@ $mod_name = $nv_Request->get_title('mod_name', 'post,get', '');
 
 $groups_list = nv_groups_list();
 if ($nv_Request->isset_request('save', 'post') and isset($site_mod_comm[$mod_name])) {
-    if (!csrf_check($nv_Request->get_title('checkss', 'post', ''), $csrf_key)) {
+    if (!csrf_check($nv_Request->get_string('checkss', 'post', ''), $csrf_key)) {
         nv_jsonOutput(['status' => 'error', 'mess' => $nv_Lang->getGlobal('error_checkss')]);
     }
     $array_config = [];
@@ -59,14 +59,15 @@ if ($nv_Request->isset_request('save', 'post') and isset($site_mod_comm[$mod_nam
     $adminscomm = array_intersect($adminscomm, $admins_module_name);
     $array_config['adminscomm'] = implode(',', $adminscomm);
 
-    $sth = $db->prepare('UPDATE ' . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = '" . NV_LANG_DATA . "' and module = :module_name and config_name = :config_name");
-    $sth->bindParam(':module_name', $mod_name, PDO::PARAM_STR);
+    $sth = $db->prepare("UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = '" . NV_LANG_DATA . "' AND module = :module_name AND config_name = :config_name");
+    $sth->bindValue(':module_name', $mod_name, PDO::PARAM_STR);
     foreach ($array_config as $config_name => $config_value) {
-        $sth->bindParam(':config_name', $config_name, PDO::PARAM_STR);
-        $sth->bindParam(':config_value', $config_value, PDO::PARAM_STR);
+        $sth->bindValue(':config_name', $config_name, PDO::PARAM_STR);
+        $sth->bindValue(':config_value', (string) $config_value, PDO::PARAM_STR);
         $sth->execute();
     }
     $nv_Cache->delMod('settings');
+    nv_insert_logs(NV_LANG_DATA, $module_name, 'Edit comment config', 'Module: ' . $mod_name, $admin_info['userid']);
     nv_jsonOutput([
         'status' => 'ok',
         'mess' => $nv_Lang->getModule('update_success'),
@@ -92,9 +93,7 @@ if (!empty($mod_name)) {
         $admins_module_name = array_map('intval', $admins_module_name);
         $_sql = 'SELECT userid, username, first_name, last_name FROM ' . NV_USERS_GLOBALTABLE . ' WHERE userid IN (' . implode(',', $admins_module_name) . ')';
         $_query = $db->query($_sql);
-        $_adminscom = $_query->fetchAll();
-        $_query->closeCursor();
-        $tpl->assign('ADMINSCOM', $_adminscom);
+        $tpl->assign('ADMINSCOM', $_query->fetchAll());
     }
 
     $page_title = $nv_Lang->getModule('config_mod_name', $site_mod_comm[$mod_name]['custom_title']);

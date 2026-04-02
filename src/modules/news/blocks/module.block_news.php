@@ -97,7 +97,7 @@ if (!nv_function_exists('nv_news_block_news')) {
      */
     function nv_news_block_news($block_config, $mod_data)
     {
-        global $nv_Cache, $module_array_cat, $module_info, $db_slave, $module_config, $global_config, $site_mods;
+        global $nv_Cache, $module_array_cat, $module_info, $db, $module_config, $global_config, $site_mods;
 
         $module = $block_config['module'];
         $blockwidth = $module_config[$module]['blockwidth'];
@@ -112,13 +112,13 @@ if (!nv_function_exists('nv_news_block_news')) {
         } else {
             $array_block_news = [];
 
-            $db_slave->sqlreset()
+            $db->sqlreset()
                 ->select('id, catid, publtime, exptime, title, alias, homeimgthumb, homeimgfile, hometext, external_link')
                 ->from(NV_PREFIXLANG . '_' . $mod_data . '_rows')
                 ->where('status= 1')
                 ->order($order_articles_by . ' DESC')
                 ->limit($numrow);
-            $result = $db_slave->query($db_slave->sql());
+            $result = $db->query($db->sql());
 
             while ($_scratch = $result->fetch(3)) {
                 [$id, $catid, $publtime, $exptime, $title, $alias, $homeimgthumb, $homeimgfile, $hometext, $external_link] = $_scratch;

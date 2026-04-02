@@ -36,14 +36,14 @@ if ($page_config['viewtype'] != 2) {
         $id = 0;
         $alias = '';
     } elseif (empty($alias) and empty($page_config['viewtype'])) {
-        $stmt = $db_slave->query('SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . ' WHERE status = 1 ORDER BY weight ASC LIMIT 1');
+        $stmt = $db->query('SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . ' WHERE status = 1 ORDER BY weight ASC LIMIT 1');
         $rowdetail = $stmt->fetch();
         $stmt->closeCursor();
         if (!empty($rowdetail)) {
             $id = $rowdetail['id'];
         }
     } elseif (!empty($alias)) {
-        $sth = $db_slave->prepare('SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . ' WHERE alias = :alias');
+        $sth = $db->prepare('SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . ' WHERE alias = :alias');
         $sth->bindValue(':alias', $alias, PDO::PARAM_STR);
         $sth->execute();
         $rowdetail = $sth->fetch();

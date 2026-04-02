@@ -24,9 +24,8 @@ if ($nv_Request->isset_request('changeweight', 'post')) {
 
     $fid = $nv_Request->get_int('fid', 'post', 0);
     $new_vid = $nv_Request->get_int('new_vid', 'post', 0);
-    $checkss = $nv_Request->get_title('checkss', 'post', '');
 
-    if (!csrf_check($nv_Request->get_title('checkss', 'post', ''), $csrf_key)) {
+    if (!csrf_check($nv_Request->get_string('checkss', 'post', ''), $csrf_key)) {
         nv_jsonOutput([
             'status' => 'error',
             'mess' => $nv_Lang->getGlobal('error_checkss')
@@ -37,12 +36,10 @@ if ($nv_Request->isset_request('changeweight', 'post')) {
     $stmt->bindValue(':fid', $fid, PDO::PARAM_INT);
     $stmt->execute();
     $numrows = $stmt->fetchColumn();
-    $stmt->closeCursor();
 
     $stmt = $db->prepare('SELECT MAX(weight) FROM ' . NV_MOD_TABLE . '_field WHERE is_system = 1');
     $stmt->execute();
     $weightsystem = (int) $stmt->fetchColumn();
-    $stmt->closeCursor();
 
     if ($numrows != 1 or $new_vid <= $weightsystem) {
         nv_jsonOutput([
@@ -127,7 +124,6 @@ if ($nv_Request->isset_request('choicesql', 'post')) {
         $stmt->bindValue(':module', '%\_' . $module . '%', PDO::PARAM_STR);
         $stmt->execute();
         $_items = $stmt->fetchAll();
-        $stmt->closeCursor();
         $num_table = count($_items);
 
         $array_table_module = [];
@@ -196,9 +192,7 @@ $text_fields = $number_fields = $date_fields = $choice_fields = $file_fields = $
 $error = $error_input = $error_input_parent = '';
 $field_choices = [];
 if ($nv_Request->isset_request('save', 'post')) {
-    $checkss = $nv_Request->get_title('checkss', 'post', '');
-
-    if (!csrf_check($checkss, $csrf_key)) {
+    if (!csrf_check($nv_Request->get_string('checkss', 'post', ''), $csrf_key)) {
         nv_jsonOutput([
             'status' => 'error',
             'mess' => $nv_Lang->getGlobal('error_session')
@@ -694,9 +688,8 @@ if ($nv_Request->isset_request('del', 'post')) {
     }
 
     $fid = $nv_Request->get_int('fid', 'post', 0);
-    $checkss = $nv_Request->get_title('checkss', 'post', '');
 
-    if (!csrf_check($checkss, $csrf_key)) {
+    if (!csrf_check($nv_Request->get_string('checkss', 'post', ''), $csrf_key)) {
         nv_jsonOutput([
             'status' => 'error',
             'mess' => $nv_Lang->getGlobal('error_checkss')
@@ -714,11 +707,11 @@ if ($nv_Request->isset_request('del', 'post')) {
         $field  = $res['field'];
         $weight = $res['weight'];
         $system = $res['is_system'];
-        if (!empty($field) and empty($system)) {
+        if (!empty($field) and empty($system) and preg_match('/^[a-z0-9\_]+$/', $field)) {
             $stmt_del = $db->prepare('DELETE FROM ' . NV_MOD_TABLE . '_field WHERE fid = :fid');
             $stmt_del->bindValue(':fid', $fid, PDO::PARAM_INT);
             if ($stmt_del->execute()) {
-                // ALTER TABLE DROP field - name validated via regex/whitelist above
+                // ALTER TABLE DROP field - name validated via regex above
                 $db->query('ALTER TABLE ' . NV_MOD_TABLE . '_info DROP ' . $field);
 
                 $stmt = $db->prepare('SELECT fid FROM ' . NV_MOD_TABLE . '_field WHERE weight > :weight ORDER BY weight ASC');

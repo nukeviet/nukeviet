@@ -30,7 +30,7 @@ $current_month_str = $monthlist[((int) $current_month_num - 1)];
 // Thống kê theo năm
 $total = 0;
 $year_list = [];
-$stmt = $db_slave->prepare('SELECT c_val, c_count FROM ' . NV_COUNTER_GLOBALTABLE . " WHERE c_type = 'year' ORDER BY c_val");
+$stmt = $db->prepare('SELECT c_val, c_count FROM ' . NV_COUNTER_GLOBALTABLE . " WHERE c_type = 'year' ORDER BY c_val");
 $stmt->execute();
 
 while ($row = $stmt->fetch()) {
@@ -65,7 +65,7 @@ $month_list2 = $month_list2[0];
 $month_list2 = "'" . implode("','", array_keys($month_list2)) . "'";
 
 $total = 0;
-$stmt = $db_slave->prepare('SELECT c_val, c_count FROM ' . NV_COUNTER_GLOBALTABLE . " WHERE c_type = 'month' AND c_val IN (" . $month_list2 . ')');
+$stmt = $db->prepare('SELECT c_val, c_count FROM ' . NV_COUNTER_GLOBALTABLE . " WHERE c_type = 'month' AND c_val IN (" . $month_list2 . ')');
 $stmt->execute();
 
 while ($row = $stmt->fetch()) {
@@ -90,7 +90,7 @@ $ctsm['dataValue'] = implode('_', $data_value);
 // Thống kê theo ngày trong tháng
 $total = 0;
 $day_list = [];
-$stmt = $db_slave->prepare('SELECT c_val, c_count FROM ' . NV_COUNTER_GLOBALTABLE . " WHERE c_type = 'day' AND c_val <= :current_number_of_days ORDER BY c_val");
+$stmt = $db->prepare('SELECT c_val, c_count FROM ' . NV_COUNTER_GLOBALTABLE . " WHERE c_type = 'day' AND c_val <= :current_number_of_days ORDER BY c_val");
 $stmt->bindValue(':current_number_of_days', $current_number_of_days, PDO::PARAM_INT);
 $stmt->execute();
 
@@ -117,7 +117,7 @@ $dayofweek_list['Friday'] = ['fullname' => $nv_Lang->getGlobal('friday'), 'count
 $dayofweek_list['Saturday'] = ['fullname' => $nv_Lang->getGlobal('saturday'), 'count' => 0];
 
 $dayofweek_list2 = "'" . implode("','", array_keys($dayofweek_list)) . "'";
-$stmt = $db_slave->prepare('SELECT c_val, c_count FROM ' . NV_COUNTER_GLOBALTABLE . " WHERE c_type = 'dayofweek' AND c_val IN (" . $dayofweek_list2 . ')');
+$stmt = $db->prepare('SELECT c_val, c_count FROM ' . NV_COUNTER_GLOBALTABLE . " WHERE c_type = 'dayofweek' AND c_val IN (" . $dayofweek_list2 . ')');
 $stmt->execute();
 
 $total = 0;
@@ -144,7 +144,7 @@ $ctsdw['dataValue'] = implode('_', $data_value);
 $total = 0;
 $hour_list = [];
 
-$stmt = $db_slave->prepare('SELECT c_val, c_count FROM ' . NV_COUNTER_GLOBALTABLE . " WHERE c_type = 'hour' ORDER BY c_val");
+$stmt = $db->prepare('SELECT c_val, c_count FROM ' . NV_COUNTER_GLOBALTABLE . " WHERE c_type = 'hour' ORDER BY c_val");
 $stmt->execute();
 
 while ($row = $stmt->fetch()) {
@@ -160,7 +160,7 @@ $ctsh['dataLabel'] = implode('_', array_keys($hour_list));
 $ctsh['dataValue'] = implode('_', $hour_list);
 
 // Theo quốc gia
-$stmt = $db_slave->prepare('SELECT c_val, c_count, last_update FROM ' . NV_COUNTER_GLOBALTABLE . " WHERE c_type = 'country' AND c_count != 0 ORDER BY c_count DESC LIMIT 10");
+$stmt = $db->prepare('SELECT c_val, c_count, last_update FROM ' . NV_COUNTER_GLOBALTABLE . " WHERE c_type = 'country' AND c_count != 0 ORDER BY c_count DESC LIMIT 10");
 $stmt->execute();
 
 $total = 0;
@@ -178,7 +178,7 @@ while ($row = $stmt->fetch()) {
 }
 $stmt->closeCursor();
 
-$stmt = $db_slave->prepare('SELECT SUM(c_count) as total_sum, MAX(c_count) as max_count FROM ' . NV_COUNTER_GLOBALTABLE . " WHERE c_type = 'country'");
+$stmt = $db->prepare('SELECT SUM(c_count) as total_sum, MAX(c_count) as max_count FROM ' . NV_COUNTER_GLOBALTABLE . " WHERE c_type = 'country'");
 $stmt->execute();
 $row_meta = $stmt->fetch();
 $all = $row_meta['total_sum'] ?? 0;
@@ -193,7 +193,7 @@ $ctsc['others'] = nv_number_format($others);
 $ctsc['others_url'] = NV_BASE_MOD_URL . '&amp;' . NV_OP_VARIABLE . '=' . $module_info['alias']['allcountries'];
 
 // Theo trình duyệt
-$stmt = $db_slave->prepare('SELECT c_val, c_count, last_update FROM ' . NV_COUNTER_GLOBALTABLE . " WHERE c_type = 'browser' AND c_count != 0 ORDER BY c_count DESC");
+$stmt = $db->prepare('SELECT c_val, c_count, last_update FROM ' . NV_COUNTER_GLOBALTABLE . " WHERE c_type = 'browser' AND c_count != 0 ORDER BY c_count DESC");
 $stmt->execute();
 
 $total = 0;
@@ -211,7 +211,7 @@ while ($row = $stmt->fetch()) {
 }
 $stmt->closeCursor();
 
-$stmt = $db_slave->prepare('SELECT SUM(c_count) as total_sum, MAX(c_count) as max_count FROM ' . NV_COUNTER_GLOBALTABLE . " WHERE c_type = 'browser'");
+$stmt = $db->prepare('SELECT SUM(c_count) as total_sum, MAX(c_count) as max_count FROM ' . NV_COUNTER_GLOBALTABLE . " WHERE c_type = 'browser'");
 $stmt->execute();
 $row_meta = $stmt->fetch();
 $all = $row_meta['total_sum'] ?? 0;
@@ -226,7 +226,7 @@ $ctsb['others'] = nv_number_format($others);
 $ctsb['others_url'] = NV_BASE_MOD_URL . '&amp;' . NV_OP_VARIABLE . '=' . $module_info['alias']['allbrowsers'];
 
 // Theo hệ điều hành
-$stmt = $db_slave->prepare('SELECT c_val, c_count, last_update FROM ' . NV_COUNTER_GLOBALTABLE . " WHERE c_type = 'os' AND c_count != 0 ORDER BY c_count DESC LIMIT 10");
+$stmt = $db->prepare('SELECT c_val, c_count, last_update FROM ' . NV_COUNTER_GLOBALTABLE . " WHERE c_type = 'os' AND c_count != 0 ORDER BY c_count DESC LIMIT 10");
 $stmt->execute();
 
 $total = 0;
@@ -245,7 +245,7 @@ while ($row = $stmt->fetch()) {
 }
 $stmt->closeCursor();
 
-$stmt = $db_slave->prepare('SELECT SUM(c_count) as total_sum, MAX(c_count) as max_count FROM ' . NV_COUNTER_GLOBALTABLE . " WHERE c_type = 'os'");
+$stmt = $db->prepare('SELECT SUM(c_count) as total_sum, MAX(c_count) as max_count FROM ' . NV_COUNTER_GLOBALTABLE . " WHERE c_type = 'os'");
 $stmt->execute();
 $row_meta = $stmt->fetch();
 $all = $row_meta['total_sum'] ?? 0;

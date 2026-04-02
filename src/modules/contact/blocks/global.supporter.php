@@ -45,7 +45,7 @@ if (!function_exists('block_supporter_get_list')) {
      */
     function block_supporter_get_list($module, $departments)
     {
-        global $db_slave, $nv_Cache, $site_mods;
+        global $db, $nv_Cache, $site_mods;
 
         $mod_table = NV_PREFIXLANG . '_' . $site_mods[$module]['module_data'];
         $cache_file = 'supporterlist' . NV_CACHE_PREFIX . '.cache';
@@ -54,7 +54,7 @@ if (!function_exists('block_supporter_get_list')) {
         }
 
         $supporter_list = [];
-        $result = $db_slave->query('SELECT * FROM ' . $mod_table . '_supporter WHERE act = 1 ORDER BY departmentid, weight');
+        $result = $db->query('SELECT * FROM ' . $mod_table . '_supporter WHERE act = 1 ORDER BY departmentid, weight');
         while ($row = $result->fetch()) {
             !isset($supporter_list[$row['departmentid']]) && $supporter_list[$row['departmentid']] = [];
             $supporter_list[$row['departmentid']][$row['id']] = [

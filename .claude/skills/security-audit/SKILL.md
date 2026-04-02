@@ -86,7 +86,7 @@ grep -EIrn '\$\.ajax|\$\.post|fetch\(' "${DIRS[@]}" --include="*.js" | grep -vEi
 - Code fix chuẩn NukeViet 5
 
 **🟡 CODE CHƯA TỐT:**
-- Vi phạm PSR-12, N+1 Query, bỏ qua `$db_slave`/`$nv_Cache`
+- Vi phạm PSR-12, N+1 Query, bỏ qua `$nv_Cache`
 
 **💡 GỢI Ý CẢI THIỆN:**
 - Đề xuất refactor với code mẫu

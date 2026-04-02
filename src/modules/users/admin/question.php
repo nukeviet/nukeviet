@@ -21,7 +21,7 @@ if ($nv_Request->isset_request('edit', 'post')) {
         exit('Wrong URL');
     }
 
-    if (!csrf_check($nv_Request->get_title('checkss', 'post', ''), $csrf_key)) {
+    if (!csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
         nv_jsonOutput([
             'status' => 'error',
             'mess' => $nv_Lang->getGlobal('error_checkss')
@@ -45,7 +45,7 @@ if ($nv_Request->isset_request('edit', 'post')) {
     $stmt->bindValue(':lang', NV_LANG_DATA, PDO::PARAM_STR);
 
     if ($stmt->execute()) {
-        nv_insert_logs(NV_LANG_DATA, $module_name, $nv_Lang->getModule('savequestion'), 'id: ' . $qid . '; ' . $title);
+        nv_insert_logs(NV_LANG_DATA, $module_name, $nv_Lang->getModule('savequestion'), 'id: ' . $qid . '; ' . $title, $admin_info['userid']);
         nv_jsonOutput([
             'status' => 'success',
             'mess' => $nv_Lang->getGlobal('save_success'),
@@ -65,7 +65,7 @@ if ($nv_Request->isset_request('add', 'post')) {
         exit('Wrong URL');
     }
 
-    if (!csrf_check($nv_Request->get_title('checkss', 'post', ''), $csrf_key)) {
+    if (!csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
         nv_jsonOutput([
             'status' => 'error',
             'mess' => $nv_Lang->getGlobal('error_checkss')
@@ -94,7 +94,7 @@ if ($nv_Request->isset_request('add', 'post')) {
     $stmt->bindValue(':edit_time', NV_CURRENTTIME, PDO::PARAM_INT);
 
     if ($stmt->execute()) {
-        nv_insert_logs(NV_LANG_DATA, $module_name, $nv_Lang->getModule('addquestion'), $title);
+        nv_insert_logs(NV_LANG_DATA, $module_name, $nv_Lang->getModule('addquestion'), $title, $admin_info['userid']);
         nv_jsonOutput([
             'status' => 'success',
             'mess' => $nv_Lang->getGlobal('add_success'),
@@ -114,7 +114,7 @@ if ($nv_Request->isset_request('changeweight', 'post')) {
         exit('Wrong URL');
     }
 
-    if (!csrf_check($nv_Request->get_title('checkss', 'post', ''), $csrf_key)) {
+    if (!csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
         nv_jsonOutput([
             'status' => 'error',
             'mess' => $nv_Lang->getGlobal('error_checkss')
@@ -157,7 +157,7 @@ if ($nv_Request->isset_request('changeweight', 'post')) {
     $stmt_update->bindValue(':qid', $qid, PDO::PARAM_INT);
     $stmt_update->execute();
 
-    nv_insert_logs(NV_LANG_DATA, $module_name, $nv_Lang->getGlobal('changeweight'), 'qid: ' . $qid);
+    nv_insert_logs(NV_LANG_DATA, $module_name, $nv_Lang->getGlobal('changeweight'), 'qid: ' . $qid, $admin_info['userid']);
     nv_jsonOutput([
         'status' => 'success',
         'mess' => '',
@@ -171,7 +171,7 @@ if ($nv_Request->isset_request('del', 'post')) {
         exit('Wrong URL');
     }
 
-    if (!csrf_check($nv_Request->get_title('checkss', 'post', ''), $csrf_key)) {
+    if (!csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
         nv_jsonOutput([
             'status' => 'error',
             'mess' => $nv_Lang->getGlobal('error_checkss')
@@ -192,7 +192,7 @@ if ($nv_Request->isset_request('del', 'post')) {
         $stmt = $db->prepare('DELETE FROM ' . NV_MOD_TABLE . '_question WHERE qid = :qid');
         $stmt->bindValue(':qid', $qid, PDO::PARAM_INT);
         if ($stmt->execute()) {
-            nv_insert_logs(NV_LANG_DATA, $module_name, $nv_Lang->getModule('deletequestion'), 'id: ' . $qid . '; ' . $title);
+            nv_insert_logs(NV_LANG_DATA, $module_name, $nv_Lang->getModule('deletequestion'), 'id: ' . $qid . '; ' . $title, $admin_info['userid']);
 
             // fix weight question
             $stmt = $db->prepare('SELECT qid FROM ' . NV_MOD_TABLE . '_question WHERE lang = :lang ORDER BY weight ASC');

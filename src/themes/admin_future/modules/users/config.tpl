@@ -518,7 +518,7 @@
             </div>
         </div>
     </div>
-    <input type="hidden" name="checkss" value="{$DATA.checkss}">
+    <input type="hidden" name="checkss" value="{$CHECKSS}">
     <input type="hidden" name="save" value="1">
 </form>
 <script type="text/javascript" src="{$smarty.const.ASSETS_STATIC_URL}/js/clipboard/clipboard.min.js"></script>

@@ -60,8 +60,8 @@ if (!empty($request['checkss']) and csrf_check($request['checkss'], $csrf_key . 
     } else {
         $sql = 'SELECT * FROM ' . $db_config['prefix'] . '_setup_extensions WHERE type = :type AND title = :title';
         $sth = $db->prepare($sql);
-        $sth->bindValue(':type', $request['type']);
-        $sth->bindValue(':title', $request['title']);
+        $sth->bindValue(':type', $request['type'], PDO::PARAM_STR);
+        $sth->bindValue(':title', $request['title'], PDO::PARAM_STR);
         $sth->execute();
         $row = $sth->fetchAll();
     }
@@ -89,8 +89,8 @@ if (!empty($request['checkss']) and csrf_check($request['checkss'], $csrf_key . 
         // Lay danh sach file
         $sql = 'SELECT path FROM ' . $db_config['prefix'] . '_extension_files WHERE type = :type AND title = :title';
         $sth = $db->prepare($sql);
-        $sth->bindValue(':type', $request['type']);
-        $sth->bindValue(':title', $request['title']);
+        $sth->bindValue(':type', $request['type'], PDO::PARAM_STR);
+        $sth->bindValue(':title', $request['title'], PDO::PARAM_STR);
         $sth->execute();
         $files = $sth->fetchAll();
 
@@ -227,9 +227,9 @@ if (!empty($request['checkss']) and csrf_check($request['checkss'], $csrf_key . 
                     if (!empty($array_layout_block)) {
                         $array_block_func = [];
                         if (!empty($array_not_all_func)) {
-                            $placeholders = implode(',', array_fill(0, count($array_not_all_func), '?'));
-                            $stmt_res = $db->prepare('SELECT bid, func_name, in_module FROM ' . NV_BLOCKS_TABLE . '_weight t1, ' . NV_MODFUNCS_TABLE . ' t2 WHERE t1.bid IN (' . $placeholders . ') AND t1.func_id = t2.func_id');
-                            $stmt_res->execute(array_values($array_not_all_func));
+                            $bids = implode(', ', array_map('intval', $array_not_all_func));
+                            $stmt_res = $db->prepare('SELECT bid, func_name, in_module FROM ' . NV_BLOCKS_TABLE . '_weight t1, ' . NV_MODFUNCS_TABLE . ' t2 WHERE t1.bid IN (' . $bids . ') AND t1.func_id = t2.func_id');
+                            $stmt_res->execute();
                             while ($_row = $stmt_res->fetch()) {
                                 $array_block_func[$_row['bid']][$_row['in_module']][] = $_row['func_name'];
                             }
@@ -345,8 +345,8 @@ if (!empty($request['checkss']) and csrf_check($request['checkss'], $csrf_key . 
 if (!empty($request['checkss']) and csrf_check($request['checkss'], $csrf_key . '_delete_' . $request['type'] . '_' . $request['title'])) {
     $sql = 'SELECT * FROM ' . $db_config['prefix'] . '_setup_extensions WHERE type = :type AND title = :title';
     $sth = $db->prepare($sql);
-    $sth->bindValue(':type', $request['type']);
-    $sth->bindValue(':title', $request['title']);
+    $sth->bindValue(':type', $request['type'], PDO::PARAM_STR);
+    $sth->bindValue(':title', $request['title'], PDO::PARAM_STR);
     $sth->execute();
     $row = $sth->fetchAll();
 
@@ -356,8 +356,8 @@ if (!empty($request['checkss']) and csrf_check($request['checkss'], $csrf_key . 
         // Lay danh sach file
         $sql = 'SELECT path, duplicate FROM ' . $db_config['prefix'] . '_extension_files WHERE type = :type AND title = :title';
         $sth = $db->prepare($sql);
-        $sth->bindValue(':type', $request['type']);
-        $sth->bindValue(':title', $request['title']);
+        $sth->bindValue(':type', $request['type'], PDO::PARAM_STR);
+        $sth->bindValue(':title', $request['title'], PDO::PARAM_STR);
         $sth->execute();
         $files = $sth->fetchAll();
 
@@ -516,7 +516,7 @@ if (!empty($request['checkss']) and csrf_check($request['checkss'], $csrf_key . 
                     if ($file['duplicate'] > 0) {
                         $sql = 'UPDATE ' . $db_config['prefix'] . '_extension_files SET duplicate = duplicate - 1 WHERE path = :path';
                         $sth = $db->prepare($sql);
-                        $sth->bindValue(':path', $file['path']);
+                        $sth->bindValue(':path', $file['path'], PDO::PARAM_STR);
                         $sth->execute();
                     } else {
                         @nv_deletefile(NV_ROOTDIR . '/' . $file['path']);
@@ -524,7 +524,7 @@ if (!empty($request['checkss']) and csrf_check($request['checkss'], $csrf_key . 
                 } else {
                     $sql = 'DELETE FROM ' . $db_config['prefix'] . '_extension_files WHERE path = :path';
                     $sth = $db->prepare($sql);
-                    $sth->bindValue(':path', $file['path']);
+                    $sth->bindValue(':path', $file['path'], PDO::PARAM_STR);
                     $sth->execute();
                 }
             }
@@ -539,14 +539,14 @@ if (!empty($request['checkss']) and csrf_check($request['checkss'], $csrf_key . 
         // Delete from table
         $sql = 'DELETE FROM ' . $db_config['prefix'] . '_extension_files WHERE type = :type AND title = :title';
         $sth = $db->prepare($sql);
-        $sth->bindValue(':type', $request['type']);
-        $sth->bindValue(':title', $request['title']);
+        $sth->bindValue(':type', $request['type'], PDO::PARAM_STR);
+        $sth->bindValue(':title', $request['title'], PDO::PARAM_STR);
         $sth->execute();
 
         $sql = 'DELETE FROM ' . $db_config['prefix'] . '_setup_extensions WHERE type = :type AND title = :title';
         $sth = $db->prepare($sql);
-        $sth->bindValue(':type', $request['type']);
-        $sth->bindValue(':title', $request['title']);
+        $sth->bindValue(':type', $request['type'], PDO::PARAM_STR);
+        $sth->bindValue(':title', $request['title'], PDO::PARAM_STR);
         $sth->execute();
 
         nv_jsonOutput([

@@ -25,7 +25,7 @@ if (isset($array_op[1])) {
     }
 }
 
-$stmt = $db_slave->prepare('SELECT tid, numnews, title, alias, image, description, keywords FROM ' . NV_PREFIXLANG . '_' . $module_data . '_tags WHERE alias= :alias');
+$stmt = $db->prepare('SELECT tid, numnews, title, alias, image, description, keywords FROM ' . NV_PREFIXLANG . '_' . $module_data . '_tags WHERE alias= :alias');
 $stmt->bindParam(':alias', $alias, PDO::PARAM_STR);
 $stmt->execute();
 $row = $stmt->fetch(3);
@@ -34,7 +34,7 @@ if (!empty($row)) {
     if (empty($page_title)) {
         $page_title = nv_ucfirst($key_words);
 
-        $sths = $db_slave->prepare('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_tags SET title = :title WHERE alias = :alias');
+        $sths = $db->prepare('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_tags SET title = :title WHERE alias = :alias');
         $sths->bindParam(':title', $page_title, PDO::PARAM_STR);
         $sths->bindParam(':alias', $alias, PDO::PARAM_STR);
         $sths->execute();
@@ -58,12 +58,12 @@ if (!empty($row)) {
     $end_publtime = 0;
     $show_no_image = $module_config[$module_name]['show_no_image'];
 
-    $db_slave->sqlreset()
+    $db->sqlreset()
         ->select('COUNT(*)')
         ->from(NV_PREFIXLANG . '_' . $module_data . '_rows')
         ->where('status=1 AND id IN (SELECT id FROM ' . NV_PREFIXLANG . '_' . $module_data . '_tags_id WHERE tid=' . $tid . ')');
 
-    $num_items = $db_slave->query($db_slave->sql())
+    $num_items = $db->query($db->sql())
         ->fetchColumn();
     // Không cho tùy ý đánh số page + xác định trang trước, trang sau
     betweenURLs($page, ceil($num_items / $per_page), $base_url, '/page-', $prevPage, $nextPage);
@@ -73,12 +73,12 @@ if (!empty($row)) {
         $db->query($query);
     }
 
-    $db_slave->select('id, catid, topicid, admin_id, author, sourceid, addtime, edittime, publtime, title, alias, hometext, homeimgfile, homeimgalt, homeimgthumb, allowed_rating, external_link, hitstotal, hitscm, total_rating, click_rating')
+    $db->select('id, catid, topicid, admin_id, author, sourceid, addtime, edittime, publtime, title, alias, hometext, homeimgfile, homeimgalt, homeimgthumb, allowed_rating, external_link, hitstotal, hitscm, total_rating, click_rating')
         ->order($order_articles_by . ' DESC')
         ->limit($per_page)
         ->offset(($page - 1) * $per_page);
 
-    $result = $db_slave->query($db_slave->sql());
+    $result = $db->query($db->sql());
     while ($item = $result->fetch()) {
         $item['src'] = $item['imgmobile'] = '';
         get_homeimgfile($item, 'src', 'imgmobile');
@@ -96,13 +96,13 @@ if (!empty($row)) {
 
     $item_array_other = [];
     if ($st_links > 0) {
-        $db_slave->sqlreset()
+        $db->sqlreset()
             ->select('id, catid, addtime, edittime, publtime, title, alias, hitstotal, external_link')
             ->from(NV_PREFIXLANG . '_' . $module_data . '_rows')
             ->where('status=1 AND id IN (SELECT id FROM ' . NV_PREFIXLANG . '_' . $module_data . '_tags_id WHERE tid=' . $tid . ') and publtime < ' . $end_publtime)
             ->order($order_articles_by . ' DESC')
             ->limit($st_links);
-        $result = $db_slave->query($db_slave->sql());
+        $result = $db->query($db->sql());
         while ($item = $result->fetch()) {
             $item['link'] = $global_array_cat[$item['catid']]['link'] . '/' . $item['alias'] . '-' . $item['id'] . $global_config['rewrite_exturl'];
             $item_array_other[] = $item;

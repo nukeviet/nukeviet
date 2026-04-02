@@ -333,11 +333,11 @@ function nv_get_firstimage($contents)
  */
 function get_pseudonym_alias($pseudonym, $aid)
 {
-    global $db_slave, $module_data;
+    global $db, $module_data;
 
     $alias = change_alias($pseudonym);
 
-    $stmt = $db_slave->prepare('SELECT COUNT(*) FROM ' . NV_PREFIXLANG . '_' . $module_data . '_author WHERE id != :id AND alias = :alias');
+    $stmt = $db->prepare('SELECT COUNT(*) FROM ' . NV_PREFIXLANG . '_' . $module_data . '_author WHERE id != :id AND alias = :alias');
     $stmt->bindValue(':id', (int) $aid, PDO::PARAM_INT);
     $stmt->bindValue(':alias', $alias, PDO::PARAM_STR);
     $stmt->execute();

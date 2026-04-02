@@ -45,7 +45,7 @@
                             </td>
                             <td class="text-start">
                                 <div class="hstack gap-2">
-                                    <button type="button" data-toggle="thumbCfgViewEx" data-did="{$dir.did}" data-errmsg="{$LANG->getModule('prViewExampleError')}" class="btn btn-secondary text-nowrap"><i class="fa-solid fa-magnifying-glass" data-icon="fa-magnifying-glass"></i> {$LANG->getModule('prViewExample')}</button>
+                                    <button type="button" data-toggle="thumbCfgViewEx" data-did="{$dir.did}" data-errmsg="{$LANG->getModule('prViewExampleError')}" class="btn btn-secondary text-nowrap" data-checkss="{$CHECKSS}"><i class="fa-solid fa-magnifying-glass" data-icon="fa-magnifying-glass"></i> {$LANG->getModule('prViewExample')}</button>
                                     {if not empty($dir.did)}
                                     <button type="button" class="btn btn-secondary text-nowrap" data-toggle="remove_config" title="{$LANG->getGlobal('delete')}" aria-label="{$LANG->getGlobal('delete')}"><i class="fa-solid fa-xmark"></i></button>
                                     {/if}
@@ -85,7 +85,7 @@
                                 </select>
                             </td>
                             <td class="text-start">
-                                <button type="button" data-toggle="thumbCfgViewEx" data-did="-1" data-errmsg="{$LANG->getModule('prViewExampleError')}" class="btn btn-secondary"><i class="fa-solid fa-magnifying-glass" data-icon="fa-magnifying-glass"></i> {$LANG->getModule('prViewExample')}</button>
+                                <button type="button" data-toggle="thumbCfgViewEx" data-did="-1" data-errmsg="{$LANG->getModule('prViewExampleError')}" class="btn btn-secondary" data-checkss="{$CHECKSS}"><i class="fa-solid fa-magnifying-glass" data-icon="fa-magnifying-glass"></i> {$LANG->getModule('prViewExample')}</button>
                             </td>
                         </tr>
                     </tbody>

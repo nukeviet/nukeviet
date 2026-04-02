@@ -313,11 +313,14 @@ function nv_setup_data_module($lang, $module_name, $sample = 0)
             } else {
                 $sth_ins = $db->prepare("INSERT INTO " . $db_config['prefix'] . "_" . $lang . "_modfuncs
                     (func_name, alias, func_custom_name, in_module, show_func, in_submenu, subweight, setting) VALUES
-                     (:func_name, :alias, :func_custom_name, :in_module, $show_func, $in_submenu, $weight, '')");
+                     (:func_name, :alias, :func_custom_name, :in_module, :show_func, :in_submenu, :subweight, '')");
                 $sth_ins->bindValue(':func_name', $func, PDO::PARAM_STR);
                 $sth_ins->bindValue(':alias', $func, PDO::PARAM_STR);
                 $sth_ins->bindValue(':func_custom_name', ucfirst($func), PDO::PARAM_STR);
                 $sth_ins->bindValue(':in_module', $module_name, PDO::PARAM_STR);
+                $sth_ins->bindValue(':show_func', $show_func, PDO::PARAM_INT);
+                $sth_ins->bindValue(':in_submenu', $in_submenu, PDO::PARAM_INT);
+                $sth_ins->bindValue(':subweight', $weight, PDO::PARAM_INT);
                 $sth_ins->execute();
                 $arr_func_id[$func] = $db->lastInsertId();
                 if ($arr_func_id[$func]) {
@@ -466,15 +469,22 @@ function nv_setup_data_module($lang, $module_name, $sample = 0)
                         send_cc, send_bcc, attachments, is_system, is_plaintext, is_disabled,
                         is_selftemplate, default_subject, default_content' . $field_title . '
                     ) VALUES (
-                        ' . $db->quote($lang) . ', ' . $db->quote($module_file) . ', ' . $db->quote($module_name) . ',
-                        ' . $key . ', ' . intval($value['catid'] ?? EmailCat::CAT_MODULE) . ',
-                        ' . $db->quote($value['sys_pids'] ?? $value['pids'] ?? '') . ', ' . NV_CURRENTTIME . ',
-                        :send_name, :send_email, :send_cc, :send_bcc, :attachments, ' . intval($value['is_system'] ?? 0) . ',
-                        ' . intval($value['is_plaintext'] ?? 0) . ', ' . intval($value['is_disabled'] ?? 0) . ',
-                        ' . intval($value['is_selftemplate'] ?? 0) . ', :default_subject, :default_content' . $field_value . '
+                        :lang, :module_file, :module_name, :id, :catid, :sys_pids, ' . NV_CURRENTTIME . ',
+                        :send_name, :send_email, :send_cc, :send_bcc, :attachments, :is_system, :is_plaintext, :is_disabled,
+                        :is_selftemplate, :default_subject, :default_content' . $field_value . '
                     )';
 
                     $sth = $db->prepare($sql);
+                    $sth->bindValue(':lang', $lang, PDO::PARAM_STR);
+                    $sth->bindValue(':module_file', $module_file, PDO::PARAM_STR);
+                    $sth->bindValue(':module_name', $module_name, PDO::PARAM_STR);
+                    $sth->bindValue(':id', $key, PDO::PARAM_STR);
+                    $sth->bindValue(':catid', intval($value['catid'] ?? EmailCat::CAT_MODULE), PDO::PARAM_INT);
+                    $sth->bindValue(':sys_pids', $value['sys_pids'] ?? $value['pids'] ?? '', PDO::PARAM_STR);
+                    $sth->bindValue(':is_system', intval($value['is_system'] ?? 0), PDO::PARAM_INT);
+                    $sth->bindValue(':is_plaintext', intval($value['is_plaintext'] ?? 0), PDO::PARAM_INT);
+                    $sth->bindValue(':is_disabled', intval($value['is_disabled'] ?? 0), PDO::PARAM_INT);
+                    $sth->bindValue(':is_selftemplate', intval($value['is_selftemplate'] ?? 0), PDO::PARAM_INT);
                     $sth->bindValue(':send_name', $value['send_name'] ?? '', PDO::PARAM_STR);
                     $sth->bindValue(':send_email', $value['send_email'] ?? '', PDO::PARAM_STR);
                     $sth->bindValue(':send_cc', $value['send_cc'] ?? '', PDO::PARAM_STR);

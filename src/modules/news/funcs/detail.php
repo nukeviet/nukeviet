@@ -18,10 +18,10 @@ $publtime = 0;
 
 if (empty($module_config[$module_name]['identify_cat_change'])) {
     // Không hỗ trợ đổi chuyên mục lấy thẳng bảng cat sẽ nhanh hơn
-    $query = $db_slave->query('SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_' . $catid . ' WHERE id = ' . $id);
+    $query = $db->query('SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_' . $catid . ' WHERE id = ' . $id);
 } else {
     // Hỗ trợ đổi chuyên mục => Lấy bảng rows để xác định catid mới
-    $query = $db_slave->query('SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE id = ' . $id);
+    $query = $db->query('SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE id = ' . $id);
 }
 $news_contents = $query->fetch();
 
@@ -30,7 +30,7 @@ if (empty($news_contents)) {
     nv_info_die($nv_Lang->getGlobal('error_404_title'), $nv_Lang->getGlobal('error_404_title'), $nv_Lang->getGlobal('error_404_content') . $redirect, 404);
 }
 
-$body_contents = $db_slave->query('SELECT
+$body_contents = $db->query('SELECT
     titlesite, description, bodyhtml, voicedata, keywords, sourcetext, files, layout_func, imgposition,
     copyright, allowed_send, allowed_print, allowed_save, auto_nav,
     group_view, localization, related_ids, related_pos, schema_type
@@ -241,7 +241,7 @@ if (!empty($news_contents['files'])) {
     }
 }
 
-[$post_username, $post_first_name, $post_last_name] = $db_slave->query('SELECT username, first_name, last_name FROM ' . NV_USERS_GLOBALTABLE . ' WHERE userid = ' . $news_contents['admin_id'])->fetch(3);
+[$post_username, $post_first_name, $post_last_name] = $db->query('SELECT username, first_name, last_name FROM ' . NV_USERS_GLOBALTABLE . ' WHERE userid = ' . $news_contents['admin_id'])->fetch(3);
 $news_contents['post_name'] = nv_show_name_user($post_first_name, $post_last_name, $post_username);
 
 $publtime = (int) ($news_contents['publtime']);
@@ -299,7 +299,7 @@ $news_contents['url_savefile'] = nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' .
 $news_contents['source'] = '';
 if ($news_contents['sourceid']) {
     $sql = 'SELECT title, link, logo FROM ' . NV_PREFIXLANG . '_' . $module_data . '_sources WHERE sourceid = ' . $news_contents['sourceid'];
-    $result = $db_slave->query($sql);
+    $result = $db->query($sql);
     [$sourcetext, $source_link, $source_logo] = $result->fetch(3);
     unset($sql, $result);
     if ($module_config[$module_name]['config_source'] == 0) {
@@ -372,14 +372,14 @@ $news_contents['newscheckss'] = md5($news_contents['id'] . NV_CHECK_SESSION);
 $related_new_array = [];
 $related_array = [];
 if ($st_links > 0) {
-    $db_slave->sqlreset()
+    $db->sqlreset()
         ->select('id, title, alias, publtime, homeimgfile, homeimgthumb, hometext, external_link')
         ->from(NV_PREFIXLANG . '_' . $module_data . '_' . $catid)
         ->where('status=1 AND publtime > ' . $publtime)
         ->order('publtime ASC')
         ->limit($st_links);
 
-    $related = $db_slave->query($db_slave->sql());
+    $related = $db->query($db->sql());
     while ($row = $related->fetch()) {
         $row['imghome'] = $row['imgmobile'] = '';
         get_homeimgfile($row);
@@ -399,14 +399,14 @@ if ($st_links > 0) {
 
     sort($related_new_array, SORT_NUMERIC);
 
-    $db_slave->sqlreset()
+    $db->sqlreset()
         ->select('id, title, alias, publtime, homeimgfile, homeimgthumb, hometext, external_link')
         ->from(NV_PREFIXLANG . '_' . $module_data . '_' . $catid)
         ->where('status=1 AND publtime < ' . $publtime)
         ->order('publtime DESC')
         ->limit($st_links);
 
-    $related = $db_slave->query($db_slave->sql());
+    $related = $db->query($db->sql());
     while ($row = $related->fetch()) {
         $row['imghome'] = $row['imgmobile'] = '';
         get_homeimgfile($row);
@@ -429,17 +429,17 @@ if ($st_links > 0) {
 
 $topic_array = [];
 if ($news_contents['topicid'] > 0 & $st_links > 0) {
-    [$topic_title, $topic_alias] = $db_slave->query('SELECT title, alias FROM ' . NV_PREFIXLANG . '_' . $module_data . '_topics WHERE topicid = ' . $news_contents['topicid'])->fetch(3);
+    [$topic_title, $topic_alias] = $db->query('SELECT title, alias FROM ' . NV_PREFIXLANG . '_' . $module_data . '_topics WHERE topicid = ' . $news_contents['topicid'])->fetch(3);
 
     $topiclink = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $module_info['alias']['topic'] . '/' . $topic_alias;
 
-    $db_slave->sqlreset()
+    $db->sqlreset()
         ->select('id, catid, title, alias, publtime, homeimgfile, homeimgthumb, hometext, external_link')
         ->from(NV_PREFIXLANG . '_' . $module_data . '_rows t1')
         ->where('status=1 AND topicid = ' . $news_contents['topicid'] . ' AND id != ' . $id)
         ->order($order_articles_by . ' DESC')
         ->limit($st_links);
-    $topic = $db_slave->query($db_slave->sql());
+    $topic = $db->query($db->sql());
     while ($row = $topic->fetch()) {
         if ($row['homeimgthumb'] == 1) {
             // image thumb
@@ -528,7 +528,7 @@ if ($news_contents['allowed_rating']) {
 
 $array_keyword = [];
 $key_words = [];
-$_query = $db_slave->query('SELECT a1.keyword, a2.alias FROM ' . NV_PREFIXLANG . '_' . $module_data . '_tags_id a1 INNER JOIN ' . NV_PREFIXLANG . '_' . $module_data . '_tags a2 ON a1.tid=a2.tid WHERE a1.id=' . $news_contents['id']);
+$_query = $db->query('SELECT a1.keyword, a2.alias FROM ' . NV_PREFIXLANG . '_' . $module_data . '_tags_id a1 INNER JOIN ' . NV_PREFIXLANG . '_' . $module_data . '_tags a2 ON a1.tid=a2.tid WHERE a1.id=' . $news_contents['id']);
 while ($row = $_query->fetch()) {
     $array_keyword[] = $row;
     $key_words[] = $row['keyword'];
@@ -632,13 +632,13 @@ if (!empty($news_contents['auto_nav']) and !empty($news_contents['bodyhtml'])) {
 // Tin liên quan cố định do người đăng bài viết chọn
 $news_contents['related_articles'] = [];
 if ($news_contents['related_pos'] != 0 and !empty($news_contents['related_ids'])) {
-    $db_slave->sqlreset()
+    $db->sqlreset()
         ->select('id, catid, title, alias, publtime, homeimgfile, homeimgthumb, hometext, external_link')
         ->from(NV_PREFIXLANG . '_' . $module_data . '_rows')
         ->where('id IN(' . $news_contents['related_ids'] . ') AND status=1')
         ->order($order_articles_by . ' DESC');
 
-    $result = $db_slave->query($db_slave->sql());
+    $result = $db->query($db->sql());
     while ($row = $result->fetch()) {
         $row['imghome'] = $row['imgmobile'] = '';
         get_homeimgfile($row);

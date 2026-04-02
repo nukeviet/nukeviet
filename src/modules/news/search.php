@@ -50,7 +50,7 @@ if ($module_config[$m_values['module_name']]['elas_use'] == 1) {
         $array_cat_alias[0] = 'other';
 
         $sql_cat = 'SELECT catid, alias FROM ' . NV_PREFIXLANG . '_' . $m_values['module_data'] . '_cat';
-        $re_cat = $db_slave->query($sql_cat);
+        $re_cat = $db->query($sql_cat);
         while ($_scratch = $re_cat->fetch(3)) {
             [$catid, $alias] = $_scratch;
             unset($_scratch);
@@ -69,13 +69,13 @@ if ($module_config[$m_values['module_name']]['elas_use'] == 1) {
         }
     }
 } else {
-    $db_slave->sqlreset()
+    $db->sqlreset()
         ->select('COUNT(*)')
         ->from(NV_PREFIXLANG . '_' . $m_values['module_data'] . '_rows r')
         ->join('INNER JOIN ' . NV_PREFIXLANG . '_' . $m_values['module_data'] . '_detail c ON (r.id=c.id)')
         ->where('(' . nv_like_logic('r.title', $dbkeywordhtml, $logic) . ' OR ' . nv_like_logic('r.hometext', $dbkeyword, $logic) . ' OR ' . nv_like_logic('c.bodyhtml', $dbkeyword, $logic) . ')	AND r.status= 1');
 
-    $num_items = $db_slave->query($db_slave->sql())
+    $num_items = $db->query($db->sql())
         ->fetchColumn();
 
     if ($num_items) {
@@ -83,7 +83,7 @@ if ($module_config[$m_values['module_name']]['elas_use'] == 1) {
         $array_cat_alias[0] = 'other';
 
         $sql_cat = 'SELECT catid, alias FROM ' . NV_PREFIXLANG . '_' . $m_values['module_data'] . '_cat';
-        $re_cat = $db_slave->query($sql_cat);
+        $re_cat = $db->query($sql_cat);
         while ($_scratch = $re_cat->fetch(3)) {
             [$catid, $alias] = $_scratch;
             unset($_scratch);
@@ -92,11 +92,11 @@ if ($module_config[$m_values['module_name']]['elas_use'] == 1) {
 
         $link = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $m_values['module_name'] . '&amp;' . NV_OP_VARIABLE . '=';
 
-        $db_slave->select('r.id, r.title, r.alias, r.catid, r.hometext, c.bodyhtml')
+        $db->select('r.id, r.title, r.alias, r.catid, r.hometext, c.bodyhtml')
             ->order('publtime DESC')
             ->limit($limit)
             ->offset(($page - 1) * $limit);
-        $result = $db_slave->query($db_slave->sql());
+        $result = $db->query($db->sql());
         while ($_scratch = $result->fetch(3)) {
             [$id, $tilterow, $alias, $catid, $hometext, $bodytext] = $_scratch;
             unset($_scratch);

@@ -182,7 +182,7 @@ if (empty($vid)) {
         $acceptcm = (int) $row['acceptcm'];
         if (!empty($row['vote_one'])) {
             $is_voted = false;
-            $stmt = $db_slave->prepare('SELECT voted FROM ' . NV_PREFIXLANG . '_' . $module_data . '_voted WHERE vid = :vid');
+            $stmt = $db->prepare('SELECT voted FROM ' . NV_PREFIXLANG . '_' . $module_data . '_voted WHERE vid = :vid');
             $stmt->bindValue(':vid', $vid, PDO::PARAM_INT);
             $stmt->execute();
             $userlist = $stmt->fetchColumn();
@@ -242,7 +242,7 @@ if (empty($vid)) {
         }
     }
 
-    $stmt = $db_slave->prepare('SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE vid = :vid ORDER BY id ASC');
+    $stmt = $db->prepare('SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE vid = :vid ORDER BY id ASC');
     $stmt->bindValue(':vid', $vid, PDO::PARAM_INT);
     $stmt->execute();
 

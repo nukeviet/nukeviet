@@ -15,15 +15,20 @@ if (!defined('NV_IS_FILE_ADMIN')) {
 
 $page_title = $nv_Lang->getModule('edit_title');
 $cid = $nv_Request->get_int('cid', 'get,post');
-$sql = 'SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . ' WHERE cid=' . $cid;
-$row = $db->query($sql)->fetch();
+$stmt = $db->prepare('SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . ' WHERE cid = :cid');
+$stmt->bindValue(':cid', $cid, PDO::PARAM_INT);
+$stmt->execute();
+$row = $stmt->fetch();
+$stmt->closeCursor();
 
 $dir = date('Y_m');
 if (!is_dir(NV_UPLOADS_REAL_DIR . '/' . $module_upload . '/' . $dir)) {
     $mk = nv_mkdir(NV_UPLOADS_REAL_DIR . '/' . $module_upload, $dir);
     if ($mk[0] > 0) {
         try {
-            $db->query('INSERT INTO ' . NV_UPLOAD_GLOBALTABLE . "_dir (dirname, time) VALUES ('" . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $dir . "', 0)");
+            $sth = $db->prepare('INSERT INTO ' . NV_UPLOAD_GLOBALTABLE . '_dir (dirname, time) VALUES (:dirname, 0)');
+            $sth->bindValue(':dirname', NV_UPLOADS_DIR . '/' . $module_upload . '/' . $dir, PDO::PARAM_STR);
+            $sth->execute();
         } catch (Throwable $e) {
             trigger_error($e);
         }
@@ -31,7 +36,7 @@ if (!is_dir(NV_UPLOADS_REAL_DIR . '/' . $module_upload . '/' . $dir)) {
 }
 
 if ($nv_Request->isset_request('save', 'post')) {
-    if (!csrf_check($nv_Request->get_title('checkss', 'post'), $csrf_key) or empty($row) or !isset($site_mod_comm[$row['module']])) {
+    if (!csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key) or empty($row) or !isset($site_mod_comm[$row['module']])) {
         nv_jsonOutput(['status' => 'error', 'mess' => $nv_Lang->getGlobal('error_checkss')]);
     }
     $delete = $nv_Request->get_int('delete', 'post', 0);
@@ -39,7 +44,10 @@ if ($nv_Request->isset_request('save', 'post')) {
         if (!empty($row['attach'])) {
             nv_deletefile(NV_UPLOADS_REAL_DIR . '/' . $module_upload . '/' . $row['attach']);
         }
-        $count = $db->exec('DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . ' WHERE cid=' . $cid);
+        $stmt = $db->prepare('DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . ' WHERE cid = :cid');
+        $stmt->bindValue(':cid', $cid, PDO::PARAM_INT);
+        $stmt->execute();
+        $count = $stmt->rowCount();
     } else {
         $content = nv_editor_nl2br($nv_Request->get_editor('content', '', NV_ALLOWED_HTML_TAGS));
         $active = $nv_Request->get_int('active', 'post', 0);
@@ -49,9 +57,11 @@ if ($nv_Request->isset_request('save', 'post')) {
             $attach = substr($attach, strlen(NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/'));
         }
 
-        $stmt = $db->prepare('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . ' SET content= :content, attach=:attach, status=' . $active . ' WHERE cid=' . $cid);
-        $stmt->bindParam(':content', $content, PDO::PARAM_STR);
-        $stmt->bindParam(':attach', $attach, PDO::PARAM_STR);
+        $stmt = $db->prepare('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . ' SET content = :content, attach = :attach, status = :status WHERE cid = :cid');
+        $stmt->bindValue(':content', $content, PDO::PARAM_STR);
+        $stmt->bindValue(':attach', $attach, PDO::PARAM_STR);
+        $stmt->bindValue(':status', $active, PDO::PARAM_INT);
+        $stmt->bindValue(':cid', $cid, PDO::PARAM_INT);
         $stmt->execute();
         $count = $stmt->rowCount();
 

@@ -43,7 +43,7 @@ function getAlias($alias, $id, $num = 0)
 
 // Lấy alias nhóm
 if ($nv_Request->isset_request('getAlias, id, title', 'post')) {
-    $id = $nv_Request->get_title('id', 'post', 0);
+    $id = $nv_Request->get_int('id', 'post', 0);
     $title = $nv_Request->get_title('title', 'post', '');
 
     $alias = '';
@@ -101,7 +101,7 @@ if (!$checkEmptyGroup and !$nv_Request->isset_request('add', 'get')) {
     nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&add');
 }
 
-$checkss = $nv_Request->get_title('checkss', 'post', '');
+$checkss = $nv_Request->get_string('checkss', 'post');
 
 // Thay đổi thứ tự nhóm
 if ($nv_Request->isset_request('cWeight, id', 'post')) {
@@ -1112,7 +1112,6 @@ if ($nv_Request->isset_request('add', 'get') or $nv_Request->isset_request('edit
         if (!empty($post['group_avatar']) and is_file(NV_UPLOADS_REAL_DIR . '/' . $module_upload . '/' . $post['group_avatar'])) {
             $post['group_avatar'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $post['group_avatar'];
         }
-        $post['checkss'] = csrf_create($csrf_key);
 
         // Chuẩn bị dữ liệu cho template
         $tpl->assign('PAGE_TITLE', $page_title);

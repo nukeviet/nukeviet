@@ -26,12 +26,12 @@ if ($nv_Request->isset_request('checkss', 'post')) {
     }
     $pageTitleMode = $nv_Request->get_title('pageTitleMode', 'post', '');
     if (isset($global_config['pageTitleMode'])) {
-        $sth = $db->prepare('UPDATE ' . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = 'sys' AND module = 'site' AND config_name = 'pageTitleMode'");
+        $stmt = $db->prepare("UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = 'sys' AND module = 'site' AND config_name = 'pageTitleMode'");
     } else {
-        $sth = $db->prepare('INSERT INTO ' . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('sys', 'site', 'pageTitleMode', :config_value)");
+        $stmt = $db->prepare("INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('sys', 'site', 'pageTitleMode', :config_value)");
     }
-    $sth->bindParam(':config_value', $pageTitleMode, PDO::PARAM_STR, 255);
-    $sth->execute();
+    $stmt->bindValue(':config_value', $pageTitleMode, PDO::PARAM_STR);
+    $stmt->execute();
 
     $nv_Cache->delAll(false);
     nv_jsonOutput([

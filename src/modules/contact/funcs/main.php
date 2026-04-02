@@ -248,7 +248,7 @@ if ($nv_Request->isset_request('checkss', 'post')) {
             if (!empty($departments[$feedback['department']]['admins']['obt_level'])) {
                 $obt_level = array_map('intval', $departments[$feedback['department']]['admins']['obt_level']);
                 $placeholders = implode(',', array_fill(0, count($obt_level), '?'));
-                $stmt = $db_slave->prepare('SELECT t1.admin_id, t2.email as admin_email FROM ' . NV_AUTHORS_GLOBALTABLE . ' t1 INNER JOIN ' . NV_USERS_GLOBALTABLE . ' t2 ON t1.admin_id = t2.userid WHERE t1.lev!=0 AND t1.is_suspend=0 AND t2.active=1 AND t1.admin_id IN (' . $placeholders . ')');
+                $stmt = $db->prepare('SELECT t1.admin_id, t2.email as admin_email FROM ' . NV_AUTHORS_GLOBALTABLE . ' t1 INNER JOIN ' . NV_USERS_GLOBALTABLE . ' t2 ON t1.admin_id = t2.userid WHERE t1.lev!=0 AND t1.is_suspend=0 AND t2.active=1 AND t1.admin_id IN (' . $placeholders . ')');
                 $stmt->execute($obt_level);
                 while ($row = $stmt->fetch()) {
                     if (nv_check_valid_email($row['admin_email']) == '') {

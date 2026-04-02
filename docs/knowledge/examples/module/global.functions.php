@@ -1,5 +1,5 @@
 <?php
- 
+
 /**
  * NukeViet Content Management System
  * @version 5.x
@@ -22,7 +22,7 @@ use NukeViet\Module\tenmodule\Shared\Helper;
  */
 function nv_tenmodule_get_item($id)
 {
-    global $db_slave;
+    global $db;
     $sql = 'SELECT * FROM ' . NV_PREFIXLANG . '_tenmodule WHERE id = ' . (int) $id;
-    return $db_slave->query($sql)->fetch();
+    return $db->query($sql)->fetch();
 }

@@ -174,8 +174,7 @@ if ($nv_Request->isset_request('lbinf_delete', 'post')) {
         nv_deletefile(NV_ROOTDIR . '/' . NV_DATADIR . '/localbusiness.json');
     }
 
-    $sth = $db->prepare('UPDATE ' . NV_CONFIG_GLOBALTABLE . " SET config_value = '0' WHERE lang = 'sys' AND module = 'site' AND config_name = 'localbusiness'");
-    $sth->execute();
+    $db->exec("UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value = '0' WHERE lang = 'sys' AND module = 'site' AND config_name = 'localbusiness'");
     $nv_Cache->delAll(false);
     nv_htmlOutput(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op);
 }
@@ -229,9 +228,9 @@ if ($nv_Request->isset_request('logoupload', 'get')) {
                     }
 
                     $photo = NV_ASSETS_DIR . '/' . $basename;
-                    $sth = $db->prepare('UPDATE ' . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = 'sys' AND module = 'site' AND config_name = 'organization_logo'");
-                    $sth->bindParam(':config_value', $photo, PDO::PARAM_STR);
-                    $sth->execute();
+                    $stmt = $db->prepare("UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = 'sys' AND module = 'site' AND config_name = 'organization_logo'");
+                    $stmt->bindValue(':config_value', $photo, PDO::PARAM_STR);
+                    $stmt->execute();
                     $nv_Cache->delAll(false);
 
                     $array['filename'] = NV_BASE_SITEURL . $photo;
@@ -270,7 +269,7 @@ if ($nv_Request->isset_request('logodel', 'post')) {
     if (!empty($global_config['organization_logo']) and file_exists(NV_ROOTDIR . '/' . $global_config['organization_logo'])) {
         nv_deletefile(NV_ROOTDIR . '/' . $global_config['organization_logo']);
     }
-    $db->query("UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value = '' WHERE lang = 'sys' AND module = 'site' AND config_name = 'organization_logo'");
+    $db->exec("UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value = '' WHERE lang = 'sys' AND module = 'site' AND config_name = 'organization_logo'");
     $nv_Cache->delAll(false);
     nv_jsonOutput([
         'status' => 'OK'
@@ -298,10 +297,10 @@ if ($nv_Request->isset_request('checkss', 'post')) {
         }
     }
 
-    $sth = $db->prepare('UPDATE ' . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = 'sys' AND module = 'site' AND config_name = :config_name");
-    $sth->bindParam(':config_name', $name, PDO::PARAM_STR, 30);
-    $sth->bindParam(':config_value', $val, PDO::PARAM_STR);
-    $sth->execute();
+    $stmt = $db->prepare("UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = 'sys' AND module = 'site' AND config_name = :config_name");
+    $stmt->bindValue(':config_name', $name, PDO::PARAM_STR);
+    $stmt->bindValue(':config_value', $val, PDO::PARAM_INT);
+    $stmt->execute();
 
     $nv_Cache->delAll(false);
     nv_jsonOutput([

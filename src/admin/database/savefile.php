@@ -19,8 +19,8 @@ $tables = $nv_Request->get_array('tables', 'post', []);
 $type = $nv_Request->get_title('type', 'post', '');
 $ext = $nv_Request->get_title('ext', 'post', '');
 
-if (!csrf_check($nv_Request->get_string('checkss', 'post'), $admin_info['admin_id'] . '_' . $module_name . '_main')) {
-    nv_info_die($nv_Lang->getGlobal('error_404_title'), $nv_Lang->getGlobal('error_404_title'), $nv_Lang->getGlobal('error_checkss'));
+if (!csrf_check($nv_Request->get_string('checkss', 'post', ''), $admin_info['admin_id'] . '_' . $module_name . '_main')) {
+    nv_info_die($nv_Lang->getGlobal('error_checkss'), $nv_Lang->getGlobal('error_checkss'), $nv_Lang->getGlobal('error_checkss'), 403);
 }
 
 if (empty($tables)) {
@@ -32,8 +32,8 @@ if (empty($tables)) {
 $tab_list = [];
 
 $result = $db->query("SHOW TABLES LIKE '" . $db_config['prefix'] . "_%'");
-while ($item = $result->fetch(3)) {
-    $tab_list[] = $item[0];
+while ($_row = $result->fetch()) {
+    $tab_list[] = current($_row);
 }
 $result->closeCursor();
 

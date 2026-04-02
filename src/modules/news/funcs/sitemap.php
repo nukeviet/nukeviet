@@ -34,13 +34,13 @@ $cacheTTL = 7200;
 if (($cache = $nv_Cache->getItem($module_name, $cacheFile, ttl: $cacheTTL)) != false) {
     $url = unserialize($cache, NV_UNSERIALIZE_SAFE);
 } else {
-    $db_slave->sqlreset()
+    $db->sqlreset()
         ->select('id, catid, publtime, alias')
         ->from(NV_PREFIXLANG . '_' . $module_data . '_rows')
         ->where('status=1')
         ->order($order_articles_by . ' DESC')
         ->limit(1000);
-    $result = $db_slave->query($db_slave->sql());
+    $result = $db->query($db->sql());
 
     $url = [];
 

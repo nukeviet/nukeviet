@@ -40,10 +40,10 @@ $global_array_genders = [
  */
 function nv_get_users_field_config()
 {
-    global $db_slave;
+    global $db;
 
     $array_field_config = [];
-    $result_field = $db_slave->query('SELECT * FROM ' . NV_MOD_TABLE . '_field ORDER BY weight ASC');
+    $result_field = $db->query('SELECT * FROM ' . NV_MOD_TABLE . '_field ORDER BY weight ASC');
     while ($row_field = $result_field->fetch()) {
         $language = unserialize($row_field['language'], NV_UNSERIALIZE_SAFE);
         $row_field['title'] = isset($language[NV_LANG_DATA]) ? $language[NV_LANG_DATA][0] : $row_field['field'];
@@ -58,7 +58,7 @@ function nv_get_users_field_config()
                 $query .= ' ORDER BY ' . $row_field['sql_choices'][4] . ' ' . $row_field['sql_choices'][5];
             }
 
-            $result = $db_slave->query($query);
+            $result = $db->query($query);
             while ($_row_choice = $result->fetch()) {
                 $row_field['field_choices'][$_row_choice['field_key']] = $_row_choice['field_value'];
             }

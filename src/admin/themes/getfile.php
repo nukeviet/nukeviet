@@ -14,19 +14,23 @@ if (!defined('NV_IS_FILE_THEMES')) {
 }
 
 $filename = $nv_Request->get_title('filename', 'get', '');
-$checkss = $nv_Request->get_title('checkss', 'get', '');
+$checkss = $nv_Request->get_string('checkss', 'get', '');
 $mod = $nv_Request->get_title('mod', 'get', '');
 
-$path_filename = NV_BASE_SITEURL . NV_TEMP_DIR . '/' . $filename;
+if (!csrf_check($checkss, $admin_info['admin_id'] . '_' . $module_name . '_' . $filename)) {
+    $contents = $nv_Lang->getGlobal('error_checkss');
+} else {
+    $path_filename = NV_BASE_SITEURL . NV_TEMP_DIR . '/' . $filename;
 
-if (!empty($mod) and nv_is_file($path_filename, NV_TEMP_DIR) and csrf_check($checkss, $admin_info['admin_id'] . '_' . $module_name . '_' . $filename)) {
-    //Download file
-    $download = new NukeViet\Files\Download(NV_DOCUMENT_ROOT . $path_filename, NV_ROOTDIR . '/' . NV_TEMP_DIR, $mod);
-    $download->download_file();
-    exit();
+    if (!empty($mod) and nv_is_file($path_filename, NV_TEMP_DIR)) {
+        //Download file
+        $download = new NukeViet\Files\Download(NV_DOCUMENT_ROOT . $path_filename, NV_ROOTDIR . '/' . NV_TEMP_DIR, $mod);
+        $download->download_file();
+        exit();
+    }
+
+    $contents = 'file not exist !';
 }
-
-$contents = 'file not exist !';
 
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_admin_theme($contents);

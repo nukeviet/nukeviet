@@ -20,7 +20,7 @@ if (!$global_config['lang_multi']) {
     $nv_Lang->setModule('nv_data_note', $nv_Lang->getModule('nv_data_note2', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&lang_multi=' . $_md5_lang_multi) . ' ' . $nv_Lang->getModule('nv_data_note'));
 }
 
-$_lang_multi = $nv_Request->get_title('lang_multi', 'get', '');
+$_lang_multi = $nv_Request->get_string('lang_multi', 'get', '');
 
 if (csrf_check($_lang_multi, $_csrf_key_lang_multi)) {
     $errormess = '';
@@ -68,6 +68,8 @@ while ($row = $result->fetch()) {
         $array_lang_installed[$row['lang']] = $row['lang'];
     }
 }
+$result->closeCursor();
+
 $lang_can_install = [];
 foreach ($lang_array_exit as $lang) {
     if (!isset($array_lang_installed[$lang])) {
@@ -128,11 +130,11 @@ if (defined('NV_IS_GODADMIN') or ($global_config['idsite'] > 0 and defined('NV_I
         ]);
     }
 
-    $checksess = $nv_Request->get_title('checksess', 'get', '');
+    $checkss = $nv_Request->get_string('checkss', 'get', '');
     $keylang = $nv_Request->get_title('keylang', 'get', '');
     $deletekeylang = $nv_Request->get_title('deletekeylang', 'get', '');
 
-    if ($nv_Request->isset_request('activelang', 'get') and csrf_check($checksess, $admin_info['admin_id'] . '_' . $module_name . '_activelang_' . $keylang) and preg_match('/^[a-z]{2}$/', $keylang)) {
+    if ($nv_Request->isset_request('activelang', 'get') and csrf_check($checkss, $admin_info['admin_id'] . '_' . $module_name . '_activelang_' . $keylang) and preg_match('/^[a-z]{2}$/', $keylang)) {
         // Kích hoạt hiển thị ngoài site một ngôn ngữ
         if (empty($global_config['idsite'])) {
             $activelang = $nv_Request->get_int('activelang', 'get', 0);
@@ -162,7 +164,7 @@ if (defined('NV_IS_GODADMIN') or ($global_config['idsite'] > 0 and defined('NV_I
             'success' => 0,
             'text' => 'Wrong request data!!!'
         ]);
-    } elseif (csrf_check($checksess, $admin_info['admin_id'] . '_' . $module_name . '_setup_' . $keylang) and in_array($keylang, $lang_array_exit, true)) {
+    } elseif (csrf_check($checkss, $admin_info['admin_id'] . '_' . $module_name . '_setup_' . $keylang) and in_array($keylang, $lang_array_exit, true)) {
         // Cài đặt ngôn ngữ data mới
         if (isset($array_lang_setup[$keylang]) and $array_lang_setup[$keylang]['setup'] == 1) {
             nv_jsonOutput([
@@ -243,6 +245,7 @@ if (defined('NV_IS_GODADMIN') or ($global_config['idsite'] > 0 and defined('NV_I
                         $stmt_del->execute();
                     }
                 }
+                $result->closeCursor();
 
                 // Cai dat du lieu mau
                 $global_config['site_home_module'] = 'users';
@@ -334,6 +337,7 @@ if (defined('NV_IS_GODADMIN') or ($global_config['idsite'] > 0 and defined('NV_I
                             include NV_ROOTDIR . '/modules/' . $module_file . '/language/data_en.php';
                         }
                     }
+                    $result->closeCursor();
                 } catch (PDOException $e) {
                     trigger_error($e);
                     nv_jsonOutput([
@@ -408,7 +412,7 @@ if (defined('NV_IS_GODADMIN') or ($global_config['idsite'] > 0 and defined('NV_I
                 'mess' => $nv_Lang->getModule('nv_data_note')
             ]);
         }
-    } elseif (csrf_check($checksess, $admin_info['admin_id'] . '_' . $module_name . '_delete_' . $deletekeylang) and !in_array($deletekeylang, $global_config['allow_sitelangs'], true)) {
+    } elseif (csrf_check($checkss, $admin_info['admin_id'] . '_' . $module_name . '_delete_' . $deletekeylang) and !in_array($deletekeylang, $global_config['allow_sitelangs'], true)) {
         // Xóa ngôn ngữ data
         define('NV_IS_FILE_MODULES', true);
 
@@ -471,6 +475,7 @@ if (defined('NV_IS_GODADMIN') or ($global_config['idsite'] > 0 and defined('NV_I
                         $stmt_plugin_upd->bindValue(':pid', $row['pid'], PDO::PARAM_INT);
                         $stmt_plugin_upd->execute();
                     }
+                    $stmt_plugin_sel->closeCursor();
                 }
             }
 
@@ -480,6 +485,7 @@ if (defined('NV_IS_GODADMIN') or ($global_config['idsite'] > 0 and defined('NV_I
             $stmt_del_email->bindValue(':title', $title, PDO::PARAM_STR);
             $stmt_del_email->execute();
         }
+        $result_del_module->closeCursor();
 
         $db->query('ALTER TABLE ' . NV_COUNTER_GLOBALTABLE . ' DROP ' . $deletekeylang . '_count');
 
@@ -514,6 +520,7 @@ if (defined('NV_IS_GODADMIN') or ($global_config['idsite'] > 0 and defined('NV_I
             $stmt_weight_upd->bindValue(':lang', $row['lang'], PDO::PARAM_STR);
             $stmt_weight_upd->execute();
         }
+        $result->closeCursor();
 
         nv_deletefile(NV_ROOTDIR . '/' . NV_DATADIR . '/disable_site_content.' . $deletekeylang . '.txt');
         $nv_Cache->delAll();

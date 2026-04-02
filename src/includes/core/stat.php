@@ -20,9 +20,9 @@ if (!defined('NV_MAINFILE')) {
  */
 function nv_stat_update()
 {
-    global $db, $db_slave, $client_info, $global_config;
+    global $db, $client_info, $global_config;
 
-    $last_update = $db_slave->query("SELECT c_count FROM " . NV_COUNTER_GLOBALTABLE . " WHERE c_type = 'c_time' AND c_val = 'last'")->fetchColumn();
+    $last_update = $db->query("SELECT c_count FROM " . NV_COUNTER_GLOBALTABLE . " WHERE c_type = 'c_time' AND c_val = 'last'")->fetchColumn();
 
     NV_SITE_TIMEZONE_NAME != $global_config['statistics_timezone'] && date_default_timezone_set($global_config['statistics_timezone']);
     [$last_year, $last_month, $last_day] = explode('|', date('Y|M|d', $last_update));
@@ -31,7 +31,7 @@ function nv_stat_update()
 
     // Bắt đầu vào giai đoạn thống kê mới thì reset lại số liệu
     if ($last_year != $current_year) {
-        $stmt = $db_slave->prepare("SELECT COUNT(*) FROM " . NV_COUNTER_GLOBALTABLE . " WHERE c_type = 'year' AND c_val = :year");
+        $stmt = $db->prepare("SELECT COUNT(*) FROM " . NV_COUNTER_GLOBALTABLE . " WHERE c_type = 'year' AND c_val = :year");
         $stmt->bindValue(':year', $current_year, PDO::PARAM_STR);
         $stmt->execute();
         $year_exists = $stmt->fetchColumn();

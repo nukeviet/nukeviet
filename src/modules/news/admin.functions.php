@@ -315,7 +315,7 @@ function redriect($msg1, $msg2, $nv_redirect, $autoSaveKey = '', $go_back = '')
  */
 function get_mod_alias($title, $mod = '', $id = 0)
 {
-    global $module_data, $module_config, $module_name, $db_slave;
+    global $module_data, $module_config, $module_name, $db;
 
     if (empty($title)) {
         return '';
@@ -329,34 +329,34 @@ function get_mod_alias($title, $mod = '', $id = 0)
 
     if ($mod == 'cat') {
         $tab = NV_PREFIXLANG . '_' . $module_data . '_cat';
-        $stmt = $db_slave->prepare('SELECT COUNT(*) FROM ' . $tab . ' WHERE catid!=' . $id . ' AND alias= :alias');
+        $stmt = $db->prepare('SELECT COUNT(*) FROM ' . $tab . ' WHERE catid!=' . $id . ' AND alias= :alias');
         $stmt->bindParam(':alias', $alias, PDO::PARAM_STR);
         $stmt->execute();
         $nb = $stmt->fetchColumn();
         if (!empty($nb)) {
-            $nb = $db_slave->query('SELECT MAX(catid) FROM ' . $tab)->fetchColumn();
+            $nb = $db->query('SELECT MAX(catid) FROM ' . $tab)->fetchColumn();
 
             $alias .= '-' . ((int) $nb + 1);
         }
     } elseif ($mod == 'topics') {
         $tab = NV_PREFIXLANG . '_' . $module_data . '_topics';
-        $stmt = $db_slave->prepare('SELECT COUNT(*) FROM ' . $tab . ' WHERE topicid!=' . $id . ' AND alias= :alias');
+        $stmt = $db->prepare('SELECT COUNT(*) FROM ' . $tab . ' WHERE topicid!=' . $id . ' AND alias= :alias');
         $stmt->bindParam(':alias', $alias, PDO::PARAM_STR);
         $stmt->execute();
         $nb = $stmt->fetchColumn();
         if (!empty($nb)) {
-            $nb = $db_slave->query('SELECT MAX(topicid) FROM ' . $tab)->fetchColumn();
+            $nb = $db->query('SELECT MAX(topicid) FROM ' . $tab)->fetchColumn();
 
             $alias .= '-' . ((int) $nb + 1);
         }
     } elseif ($mod == 'blockcat') {
         $tab = NV_PREFIXLANG . '_' . $module_data . '_block_cat';
-        $stmt = $db_slave->prepare('SELECT COUNT(*) FROM ' . $tab . ' WHERE bid!=' . $id . ' AND alias= :alias');
+        $stmt = $db->prepare('SELECT COUNT(*) FROM ' . $tab . ' WHERE bid!=' . $id . ' AND alias= :alias');
         $stmt->bindParam(':alias', $alias, PDO::PARAM_STR);
         $stmt->execute();
         $nb = $stmt->fetchColumn();
         if (!empty($nb)) {
-            $nb = $db_slave->query('SELECT MAX(bid) FROM ' . $tab)->fetchColumn();
+            $nb = $db->query('SELECT MAX(bid) FROM ' . $tab)->fetchColumn();
 
             $alias .= '-' . ((int) $nb + 1);
         }

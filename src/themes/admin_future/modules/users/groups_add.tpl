@@ -180,7 +180,7 @@
     </div>
     {/if}
 
-    <input type="hidden" name="checkss" value="{$DATA.checkss}">
+    <input type="hidden" name="checkss" value="{$CHECKSS}">
     <input type="hidden" name="save" value="1">
     <div class="text-center"><button name="submit" type="submit" class="btn btn-primary" style="min-width: 150px">{$LANG->getModule('save')}</button></div>
 </form>

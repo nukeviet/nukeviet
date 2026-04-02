@@ -26,6 +26,7 @@ $result = $db->query($sql);
 while ($row = $result->fetch()) {
     $array_mplugins[$row['pid']] = $row;
 }
+$result->closeCursor();
 
 // Đọc mẫu email
 $array_mailtpl = [];
@@ -336,9 +337,9 @@ if ($nv_Request->isset_request('saveform', 'post') and csrf_check($nv_Request->g
             $error[] = $nv_Lang->getModule('tpl_error_title', $language_array[$lang]['name']);
         } elseif (!empty($default_title)) {
             // Kiểm tra trùng
-            $sql = 'SELECT * FROM ' . NV_EMAILTEMPLATES_GLOBALTABLE . ' WHERE ' . NV_LANG_DATA . '_title = :title AND module_name=\'\' AND emailid != ' . $array['emailid'];
+            $sql = 'SELECT COUNT(*) FROM ' . NV_EMAILTEMPLATES_GLOBALTABLE . ' WHERE ' . NV_LANG_DATA . '_title = :title AND module_name=\'\' AND emailid != ' . $array['emailid'];
             $sth = $db->prepare($sql);
-            $sth->bindParam(':title', $array['title'][$lang], PDO::PARAM_STR);
+            $sth->bindValue(':title', $array['title'][$lang], PDO::PARAM_STR);
             $sth->execute();
             if ($sth->fetchColumn()) {
                 $error[] = $nv_Lang->getModule('tpl_error_exists', $language_array[$lang]['name']);
@@ -430,14 +431,14 @@ if ($nv_Request->isset_request('saveform', 'post') and csrf_check($nv_Request->g
             $sth->bindValue(':is_disabled', $array['is_disabled'], PDO::PARAM_INT);
             $sth->bindValue(':is_selftemplate', $array['is_selftemplate'], PDO::PARAM_INT);
             
-            $sth->bindParam(':send_name', $array['send_name'], PDO::PARAM_STR);
-            $sth->bindParam(':send_email', $array['send_email'], PDO::PARAM_STR);
-            $sth->bindParam(':send_cc', $send_cc, PDO::PARAM_STR, strlen($send_cc));
-            $sth->bindParam(':send_bcc', $send_bcc, PDO::PARAM_STR, strlen($send_bcc));
-            $sth->bindParam(':attachments', $attachments, PDO::PARAM_STR, strlen($attachments));
-            $sth->bindParam(':mailtpl', $array['mailtpl'], PDO::PARAM_STR);
-            $sth->bindParam(':default_subject', $array['default_subject'], PDO::PARAM_STR);
-            $sth->bindParam(':default_content', $default_content, PDO::PARAM_STR, strlen($default_content));
+            $sth->bindValue(':send_name', $array['send_name'], PDO::PARAM_STR);
+            $sth->bindValue(':send_email', $array['send_email'], PDO::PARAM_STR);
+            $sth->bindValue(':send_cc', $send_cc, PDO::PARAM_STR);
+            $sth->bindValue(':send_bcc', $send_bcc, PDO::PARAM_STR);
+            $sth->bindValue(':attachments', $attachments, PDO::PARAM_STR);
+            $sth->bindValue(':mailtpl', $array['mailtpl'], PDO::PARAM_STR);
+            $sth->bindValue(':default_subject', $array['default_subject'], PDO::PARAM_STR);
+            $sth->bindValue(':default_content', $default_content, PDO::PARAM_STR);
 
             foreach ($global_config['setup_langs'] as $lang) {
                 $sth->bindValue(':' . $lang . '_title', $array['title'][$lang] ?? '', PDO::PARAM_STR);

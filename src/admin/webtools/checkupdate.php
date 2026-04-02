@@ -52,7 +52,7 @@ if ($nv_Request->isset_request('i', 'get')) {
             'info' => (string) $new_version->message,
             'need_update' => (nv_version_compare($global_config['version'], (string) $new_version->version) < 0),
             'updateable' => $updateable,
-            'link_update' => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=getupdate&amp;version=' . $updateable . '&amp;package=' . $updatepackage . '&amp;checksess=' . csrf_create($admin_info['admin_id'] . '_' . $module_name . '_getupdate_' . $updateable . '_' . $updatepackage),
+            'link_update' => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=getupdate&amp;version=' . $updateable . '&amp;package=' . $updatepackage . '&amp;checkss=' . csrf_create($admin_info['admin_id'] . '_' . $module_name . '_getupdate_' . $updateable . '_' . $updatepackage),
             'link' => (string) $new_version->link,
             'updatepackage' => $updatepackage
         ];
