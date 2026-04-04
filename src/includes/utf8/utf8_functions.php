@@ -13,6 +13,8 @@ if (!defined('NV_MAINFILE')) {
     exit('Stop!!!');
 }
 
+include NV_ROOTDIR . '/includes/utf8/lookup.php';
+
 /**
  * utf8_to_unicode()
  * Vie^.t Nam => Array ([0] => 86 [1] => 105 [2] => 7879 [3] => 116 [4] => 32 [5] => 78 [6] => 97 [7] => 109)
@@ -246,12 +248,12 @@ function nv_trim($str, $charlist = false)
  */
 function nv_EncString($string)
 {
+    global $utf8_lookup_romanize;
+
     if (file_exists(NV_ROOTDIR . '/includes/utf8/lookup_' . NV_LANG_DATA . '.php')) {
         include NV_ROOTDIR . '/includes/utf8/lookup_' . NV_LANG_DATA . '.php';
         $string = strtr($string, $utf8_lookup_lang);
     }
-
-    include NV_ROOTDIR . '/includes/utf8/lookup.php';
 
     return strtr($string, $utf8_lookup_romanize);
 }
