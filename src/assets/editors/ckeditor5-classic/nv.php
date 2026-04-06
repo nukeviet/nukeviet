@@ -127,7 +127,7 @@ function nv_aleditor($textareaname, $width = '100%', $height = '450px', string $
 
         if (!empty($admin_info['allow_files_type'])) {
             $create[] = 'simpleUpload: {
-                uploadUrl: "' . (NV_BASE_SITEURL . NV_ADMINDIR . '/index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=upload&' . NV_OP_VARIABLE . '=upload&editor=ckeditor5-classic&path=' . $currentpath) . '",
+                uploadUrl: "' . (NV_BASE_SITEURL . NV_ADMINDIR . '/index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=upload&' . NV_OP_VARIABLE . '=upload&editor=ckeditor5-classic&path=' . $currentpath . '&checkss=' . csrf_create($admin_info['admin_id'] . '_upload')) . '",
                 withCredentials: true
             }';
         }

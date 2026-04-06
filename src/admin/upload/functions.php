@@ -43,7 +43,7 @@ if (defined('NV_IS_SPADMIN')) {
 }
 
 // Cần có isset($admin_info['admin_id']) để khi cài đặt không báo lỗi
-$_csrf_key = isset($admin_info['admin_id']) ? $admin_info['admin_id'] . '_' . $module_name . '_main' : '';
+$_csrf_key = isset($admin_info['admin_id']) ? $admin_info['admin_id'] . '_' . $module_name : '';
 
 // Các module trong quản trị
 $sql = 'SELECT module FROM ' . NV_AUTHORS_GLOBALTABLE . '_module';
@@ -711,7 +711,7 @@ if ($nv_Request->isset_request('dirListRefresh', 'post') and csrf_check($nv_Requ
     foreach ($result_no_exit as $dirname) {
         // Xóa CSDL thư mục không còn tồn tại
         $did = $array_dirname[$dirname];
-        
+
         $stmt_del_f = $db->prepare('DELETE FROM ' . NV_UPLOAD_GLOBALTABLE . '_file WHERE did = :did');
         $stmt_del_f->bindValue(':did', $did, PDO::PARAM_INT);
         $stmt_del_f->execute();

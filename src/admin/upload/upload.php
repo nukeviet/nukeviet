@@ -13,7 +13,7 @@ if (!defined('NV_IS_FILE_ADMIN')) {
     exit('Stop!!!');
 }
 
-if (!csrf_check($nv_Request->get_string('checkss', 'post'), $_csrf_key)) {
+if (!csrf_check($nv_Request->get_string('checkss', 'post,get'), $_csrf_key)) {
     nv_jsonOutput([
         'status' => 'error',
         'error' => [
