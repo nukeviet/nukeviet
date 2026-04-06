@@ -1,3 +1,5 @@
+- Sau khi dev xong giao diện admin_future tìm trong thư mục src các đoạn FIXME để xóa hoặc thay đổi
+
 Block module có thể đặt tệp php ở giao diện
 Có thể dùng hàm nv_format_date trong js
 Dùng get_block_tpl_dir để xác định giao điện tương tự get_module_tpl_dir
