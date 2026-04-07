@@ -40,6 +40,7 @@ $results = [
     'db_slave_ref' => [],
     'db_slave_global' => [],
     'more_than_4' => [],
+    'unused_globals' => [],
     'errors' => []
 ];
 
@@ -176,10 +177,140 @@ foreach ($files as $file) {
         $content = $newContent4;
     }
 
-    // Token scanner to find any get_title with MORE than 4 arguments left
+    // STEP 5: Remove unused global variables
     $tokens = token_get_all($content);
     $tokenCount = count($tokens);
+    
+    $braceLevel = 0;
+    $funcs = [];
+    $activeFuncs = [];
+    $inGlobalStmt = false;
 
+    for ($i = 0; $i < $tokenCount; $i++) {
+        $t = $tokens[$i];
+        
+        if ($inGlobalStmt && $t === ';') {
+            $inGlobalStmt = false;
+        }
+        
+        if ($t === '{' || (is_array($t) && in_array($t[0], [T_CURLY_OPEN, T_DOLLAR_OPEN_CURLY_BRACES]))) {
+            $braceLevel++;
+        } elseif ($t === '}') {
+            $braceLevel--;
+            while (!empty($activeFuncs) && $activeFuncs[count($activeFuncs) - 1]['braceLevel'] === $braceLevel) {
+                $funcs[] = array_pop($activeFuncs);
+            }
+        } elseif (is_array($t)) {
+            if ($t[0] === T_FUNCTION) {
+                $j = $i + 1;
+                $foundBrace = false;
+                while ($j < $tokenCount) {
+                    if ($tokens[$j] === '{') {
+                        $foundBrace = true;
+                        break;
+                    } elseif ($tokens[$j] === ';') {
+                        break;
+                    }
+                    $j++;
+                }
+                if ($foundBrace) {
+                    $activeFuncs[] = [
+                        'start' => $i,
+                        'braceLevel' => $braceLevel,
+                        'globals' => [],
+                        'vars_used' => [],
+                        'has_include' => false
+                    ];
+                }
+            }
+            
+            if (!empty($activeFuncs)) {
+                $currIdx = count($activeFuncs) - 1;
+                if ($t[0] === T_GLOBAL) {
+                    $inGlobalStmt = true;
+                    $j = $i + 1;
+                    $globalVars = [];
+                    while ($j < $tokenCount && $tokens[$j] !== ';') {
+                        if (is_array($tokens[$j]) && $tokens[$j][0] === T_VARIABLE) {
+                            $globalVars[] = $tokens[$j][1];
+                        }
+                        $j++;
+                    }
+                    if ($tokens[$j] === ';') {
+                        $activeFuncs[$currIdx]['globals'][] = [
+                            'start_token' => $i,
+                            'end_token' => $j,
+                            'vars' => $globalVars
+                        ];
+                    }
+                } elseif ($t[0] === T_INCLUDE || $t[0] === T_INCLUDE_ONCE || $t[0] === T_REQUIRE || $t[0] === T_REQUIRE_ONCE) {
+                    $activeFuncs[$currIdx]['has_include'] = true;
+                } elseif ($t[0] === T_VARIABLE && !$inGlobalStmt) {
+                    $activeFuncs[$currIdx]['vars_used'][] = $t[1];
+                }
+            }
+        }
+    }
+    
+    $changedGlobals = false;
+    foreach ($funcs as $func) {
+        if ($func['has_include']) {
+            continue;
+        }
+        
+        foreach ($func['globals'] as $g) {
+            $unusedVars = [];
+            foreach ($g['vars'] as $v) {
+                if (!in_array($v, $func['vars_used'], true)) {
+                    $unusedVars[] = $v;
+                }
+            }
+            
+            if (!empty($unusedVars)) {
+                $results['unused_globals'][] = [
+                    'file' => $relativeFileUnix,
+                    'vars' => implode(', ', $unusedVars)
+                ];
+                
+                $usedVars = array_diff($g['vars'], $unusedVars);
+                if (empty($usedVars)) {
+                    for ($idx = $g['start_token']; $idx <= $g['end_token']; $idx++) {
+                        $tokens[$idx] = '';
+                    }
+                    if (isset($tokens[$g['end_token'] + 1]) && is_array($tokens[$g['end_token'] + 1]) && $tokens[$g['end_token'] + 1][0] === T_WHITESPACE) {
+                        $ws = $tokens[$g['end_token'] + 1][1];
+                        $ws = preg_replace('/(\r\n|\n)[ \t]*/', '', $ws, 1);
+                        $tokens[$g['end_token'] + 1] = [T_WHITESPACE, $ws, $tokens[$g['end_token'] + 1][2]];
+                    }
+                } else {
+                    $newGlobalStr = 'global ' . implode(', ', $usedVars) . ';';
+                    for ($idx = $g['start_token']; $idx <= $g['end_token']; $idx++) {
+                        $tokens[$idx] = '';
+                    }
+                    $tokens[$g['start_token']] = $newGlobalStr;
+                }
+                $changedGlobals = true;
+            }
+        }
+    }
+    
+    if ($changedGlobals) {
+        if ($count1 == 0 && $count2 == 0 && $count3 == 0 && $count4 == 0) {
+            $stats['changed']++;
+        }
+        $newContent5 = '';
+        foreach ($tokens as $t) {
+            $newContent5 .= is_array($t) ? $t[1] : $t;
+        }
+        $content = $newContent5;
+        file_put_contents($filePath, $content);
+        
+        // Re-generate tokens for the next step so offsets are correct
+        $tokens = token_get_all($content);
+        $tokenCount = count($tokens);
+    }
+
+    // Token scanner to find any get_title with MORE than 4 arguments left
     for ($i = 0; $i < $tokenCount; $i++) {
         if (is_array($tokens[$i]) && $tokens[$i][0] === T_OBJECT_OPERATOR) {
             if (isset($tokens[$i + 1]) && is_array($tokens[$i + 1]) && $tokens[$i + 1][1] === 'get_title') {
@@ -268,6 +399,11 @@ foreach ($db_global_files as $file) {
     logMd("- Fixed global declaration: $file", $md);
 }
 
+logMd("\n## 5. AUTO-REFACTORED: REMOVED UNUSED GLOBAL VARIABLES", $md);
+foreach ($results['unused_globals'] as $item) {
+    logMd("- Fixed: {$item['file']} (Removed unused variables: {$item['vars']})", $md);
+}
+
 logMd("\n## WARNING: MORE THAN 4 PARAMETERS (Requires manual check)", $md);
 foreach ($results['more_than_4'] as $row) {
     logMd("- " . $row['link'], $md);
@@ -281,6 +417,7 @@ logMd("- Total removed 4th param (0/1): " . count($results['fixed_params']), $md
 logMd("- Total extracted nv_substr: " . count($results['fixed_substr']), $md);
 logMd("- Total \$db_slave refactored: " . count($results['db_slave_ref']), $md);
 logMd("- Total global \$db_slave refactored: " . count($results['db_slave_global']), $md);
+logMd("- Total unused globals removed: " . count($results['unused_globals']), $md);
 logMd("- Total calls with >4 params: " . count($results['more_than_4']), $md);
 
 fclose($md);
