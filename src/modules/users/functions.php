@@ -338,7 +338,7 @@ function nv_check_username_reg($login)
  */
 function nv_del_user($userid)
 {
-    global $db, $global_config, $module_name, $user_info, $nv_Lang;
+    global $db, $global_config, $module_name, $user_info;
 
     $sql = 'SELECT group_id, username, first_name, last_name, gender, email, photo, in_groups, idsite, language
     FROM ' . NV_MOD_TABLE . ' WHERE userid=' . $userid;

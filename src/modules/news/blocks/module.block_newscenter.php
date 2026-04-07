@@ -161,7 +161,7 @@ if (!nv_function_exists('nv_news_block_newscenter')) {
      */
     function nv_news_block_newscenter($block_config)
     {
-        global $nv_Cache, $module_data, $module_name, $module_upload, $global_array_cat, $global_config, $db, $module_config, $module_info, $nv_Lang;
+        global $nv_Cache, $module_data, $module_name, $module_upload, $global_array_cat, $global_config, $db, $module_config;
 
         $order_articles_by = ($module_config[$module_name]['order_articles']) ? 'weight' : 'publtime';
 

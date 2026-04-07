@@ -22,7 +22,7 @@ $page_title = $nv_Lang->getModule('sitemapPing');
  */
 function nv_sitemapPing($module, $link)
 {
-    global $sys_info, $nv_Lang, $global_config;
+    global $nv_Lang, $global_config;
 
     $md5 = md5($link . $module . NV_LANG_DATA);
     $cacheFile = NV_ROOTDIR . '/' . NV_CACHEDIR . '/sitemapPing_' . $md5 . '.cache';

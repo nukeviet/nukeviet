@@ -77,7 +77,7 @@ function nv_check_username_change($login, $edit_userid)
  */
 function nv_check_email_change(&$email, $edit_userid)
 {
-    global $db, $nv_Lang, $user_info, $global_users_config, $global_config, $module_name;
+    global $db, $nv_Lang, $global_users_config, $global_config, $module_name;
 
     $error = nv_check_valid_email($email, true);
     if ($error[0] != '') {

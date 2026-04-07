@@ -127,7 +127,7 @@ function nv_update_config_allow_sitelangs($allow_sitelangs = [])
  */
 function nv_admin_write_lang($dirlang, $idfile)
 {
-    global $db, $language_array, $global_config, $include_lang, $nv_Lang;
+    global $db, $global_config, $include_lang, $nv_Lang;
 
     $stmt = $db->prepare('SELECT module, admin_file, langtype, author_' . $dirlang . ' FROM ' . NV_LANGUAGE_GLOBALTABLE . '_file WHERE idfile = :idfile');
     $stmt->bindValue(':idfile', $idfile, PDO::PARAM_INT);

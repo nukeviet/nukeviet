@@ -552,8 +552,7 @@ class NvUpdate
      */
     public function step2($array, $substep)
     {
-        global $global_config;
-
+        
         $xtpl = new XTemplate('updatestep2.tpl', NV_ROOTDIR . '/install/tpl');
         $xtpl->assign('LANG', NukeViet\Core\Language::$lang_module);
         $xtpl->assign('CONFIG', $this->config);
@@ -734,8 +733,7 @@ class NvUpdate
      */
     public function step3($array)
     {
-        global $global_config;
-
+        
         $xtpl = new XTemplate('updatestep3.tpl', NV_ROOTDIR . '/install/tpl');
         $xtpl->assign('LANG', NukeViet\Core\Language::$lang_module);
         $xtpl->assign('CONFIG', $this->config);
@@ -758,8 +756,7 @@ class NvUpdate
      */
     public function PackageErrorTheme()
     {
-        global $global_config;
-
+        
         $xtpl = new XTemplate('packageerror.tpl', NV_ROOTDIR . '/install/tpl');
         $xtpl->assign('LANG', NukeViet\Core\Language::$lang_module);
         $xtpl->assign('CONFIG', $this->config);
@@ -797,8 +794,7 @@ class NvUpdate
      */
     public function module_info($exts)
     {
-        global $global_config;
-
+        
         $xtpl = new XTemplate('updatestep3.tpl', NV_ROOTDIR . '/install/tpl');
         $xtpl->assign('LANG', NukeViet\Core\Language::$lang_module);
         $xtpl->assign('CONFIG', $this->config);
@@ -831,8 +827,7 @@ class NvUpdate
      */
     public function module_com_info($onlineModules)
     {
-        global $global_config;
-
+        
         $xtpl = new XTemplate('updatestep3.tpl', NV_ROOTDIR . '/install/tpl');
         $xtpl->assign('LANG', NukeViet\Core\Language::$lang_module);
         $xtpl->assign('CONFIG', $this->config);

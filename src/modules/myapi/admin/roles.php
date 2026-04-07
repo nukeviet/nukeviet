@@ -107,7 +107,7 @@ function apiTrees($role_object, $array_post, $lang)
 // Lấy nội dung HTML của cây APIs
 function apicheck($role_object, $array_post, $lang)
 {
-    global $global_config, $module_file, $nv_Lang;
+    global $nv_Lang;
 
     [$array_api_trees, $array_api_contents, $total_api_enabled] = apiTrees($role_object, $array_post, $lang);
 
