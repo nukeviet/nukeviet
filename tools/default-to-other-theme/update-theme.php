@@ -58,7 +58,7 @@ $system_modules = [
 ];
 
 // Quét giao diện hiện có
-$themes = array_diff(nv_scandir(NV_ROOTDIR . '/themes', '/^(?!(admin_|mobile_))\w+/'), ['default']);
+$themes = array_diff(nv_scandir(NV_ROOTDIR . '/themes', '/^(?!(admin_|mobile_))\w+/'), ['default', 'future']);
 if (empty($themes)) {
     echo "<span style='color: red;'>Không có giao diện thêm nào</span>\n";
     exit(1);
