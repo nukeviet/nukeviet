@@ -576,7 +576,6 @@ if (defined('NV_IS_AJAX') or $nv_Request->isset_request('ajax', 'get')) {
         }
 
         $sth = $db->prepare('SELECT COUNT(*) FROM ' . NV_INFORM_GLOBALTABLE . ' AS mtb WHERE ' . $where_inform);
-        $sth->bindValue(':userid', $user_info['userid'], PDO::PARAM_INT);
         foreach ($params as $key => $val) {
             $sth->bindValue($key, $val[0], $val[1]);
         }
@@ -596,7 +595,6 @@ if (defined('NV_IS_AJAX') or $nv_Request->isset_request('ajax', 'get')) {
             LIMIT :limit OFFSET :offset');
         $sth->bindValue(':limit', $per_page, PDO::PARAM_INT);
         $sth->bindValue(':offset', ($page - 1) * $per_page, PDO::PARAM_INT);
-        $sth->bindValue(':userid', $user_info['userid'], PDO::PARAM_INT);
         foreach ($params as $key => $val) {
             $sth->bindValue($key, $val[0], $val[1]);
         }
