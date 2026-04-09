@@ -1,0 +1,25 @@
+{
+    "info": {
+        "name": "Counter",
+        "author": "VINADES.,JSC",
+        "website": "https://vinades.vn",
+        "description": ""
+    },
+    "i18n": {
+        "en": {
+            "info": {
+                "name": "Statistical information"
+            }
+        },
+        "fr": {
+            "info": {
+                "name": "Informations statistiques"
+            }
+        },
+        "vi": {
+            "info": {
+                "name": "Thông tin thống kê"
+            }
+        }
+    }
+}

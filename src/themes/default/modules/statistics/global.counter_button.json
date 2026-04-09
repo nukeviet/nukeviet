@@ -1,0 +1,25 @@
+{
+    "info": {
+        "name": "Counter_button",
+        "author": "VINADES.,JSC",
+        "website": "https://vinades.vn",
+        "description": ""
+    },
+    "i18n": {
+        "en": {
+            "info": {
+                "name": "Button-style statistics"
+            }
+        },
+        "fr": {
+            "info": {
+                "name": "Statistiques sous forme de bouton"
+            }
+        },
+        "vi": {
+            "info": {
+                "name": "Thống kê dạng nút"
+            }
+        }
+    }
+}

@@ -1,0 +1,31 @@
+{
+    "info": {
+        "name": "Site terms",
+        "author": "VINADES.,JSC",
+        "website": "https://vinades.vn",
+        "description": ""
+    },
+    "config": {
+        "term_names": "",
+        "term_queries": ""
+    },
+    "datafunction": "site_terms_config",
+    "submitfunction": "site_terms_submit",
+    "i18n": {
+        "en": {
+            "info": {
+                "name": "Terms and Conditions of Use"
+            }
+        },
+        "fr": {
+            "info": {
+                "name": "Termes et conditions d'utilisation"
+            }
+        },
+        "vi": {
+            "info": {
+                "name": "Điều khoản và điều kiện sử dụng"
+            }
+        }
+    }
+}

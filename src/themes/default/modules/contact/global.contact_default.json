@@ -1,0 +1,25 @@
+{
+    "info": {
+        "name": "Contact_default",
+        "author": "VINADES.,JSC",
+        "website": "https://vinades.vn",
+        "description": ""
+    },
+    "i18n": {
+        "en": {
+            "info": {
+                "name": "Default department contact information"
+            }
+        },
+        "fr": {
+            "info": {
+                "name": "Informations de contact du département par défaut"
+            }
+        },
+        "vi": {
+            "info": {
+                "name": "Thông tin liên hệ bộ phận mặc định"
+            }
+        }
+    }
+}

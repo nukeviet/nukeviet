@@ -1,0 +1,35 @@
+{
+    "info": {
+        "name": "Block Groups",
+        "author": "VINADES.,JSC",
+        "website": "https://vinades.vn",
+        "description": ""
+    },
+    "config": {
+        "blockid": "0",
+        "numrow": "5",
+        "title_length": "0",
+        "showtooltip": "1",
+        "tooltip_position": "bottom",
+        "tooltip_length": "0"
+    },
+    "datafunction": "nv_block_config_news_groups",
+    "submitfunction": "nv_block_config_news_groups_submit",
+    "i18n": {
+        "en": {
+            "info": {
+                "name": "Articles within group"
+            }
+        },
+        "fr": {
+            "info": {
+                "name": "Articles dans un groupe de nouvelles"
+            }
+        },
+        "vi": {
+            "info": {
+                "name": "Tin bài trong nhóm tin"
+            }
+        }
+    }
+}

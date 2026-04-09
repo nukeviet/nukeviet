@@ -1,0 +1,31 @@
+{
+    "info": {
+        "name": "Block Menu Styles",
+        "author": "VINADES.,JSC",
+        "website": "https://vinades.vn",
+        "description": ""
+    },
+    "config": {
+        "menuid": "1",
+        "title_length": "0"
+    },
+    "datafunction": "nv_block_config_menu",
+    "submitfunction": "nv_block_config_menu_submit",
+    "i18n": {
+        "en": {
+            "info": {
+                "name": "Slimmenu"
+            }
+        },
+        "fr": {
+            "info": {
+                "name": "Slimmenu"
+            }
+        },
+        "vi": {
+            "info": {
+                "name": "Slimmenu"
+            }
+        }
+    }
+}

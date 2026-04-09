@@ -1,0 +1,32 @@
+{
+    "info": {
+        "name": "Block Headline",
+        "author": "VINADES.,JSC",
+        "website": "https://vinades.vn",
+        "description": ""
+    },
+    "config": {
+        "showtooltip": "1",
+        "tooltip_position": "bottom",
+        "tooltip_length": "0"
+    },
+    "datafunction": "nv_block_config_news_headline",
+    "submitfunction": "nv_block_config_news_headline_submit",
+    "i18n": {
+        "en": {
+            "info": {
+                "name": "Display as headline news"
+            }
+        },
+        "fr": {
+            "info": {
+                "name": "Afficher comme nouvelles principales"
+            }
+        },
+        "vi": {
+            "info": {
+                "name": "Hiển thị dạng tin tiêu điểm"
+            }
+        }
+    }
+}

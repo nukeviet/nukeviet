@@ -1,0 +1,31 @@
+{
+    "info": {
+        "name": "Config Menu",
+        "author": "VINADES.,JSC",
+        "website": "https://vinades.vn",
+        "description": ""
+    },
+    "config": {
+        "title_length": "0",
+        "module_in_menu": ""
+    },
+    "datafunction": "nv_menu_site_mods_config",
+    "submitfunction": "nv_menu_site_mods_submit",
+    "i18n": {
+        "en": {
+            "info": {
+                "name": "Menu automatically generated from modules"
+            }
+        },
+        "fr": {
+            "info": {
+                "name": "Menu généré automatiquement à partir des modules"
+            }
+        },
+        "vi": {
+            "info": {
+                "name": "Menu lập tự động từ các module"
+            }
+        }
+    }
+}

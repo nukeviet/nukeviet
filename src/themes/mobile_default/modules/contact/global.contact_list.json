@@ -1,0 +1,25 @@
+{
+    "info": {
+        "name": "Contact_list",
+        "author": "VINADES.,JSC",
+        "website": "https://vinades.vn",
+        "description": ""
+    },
+    "i18n": {
+        "en": {
+            "info": {
+                "name": "List of departments"
+            }
+        },
+        "fr": {
+            "info": {
+                "name": "Liste des départements"
+            }
+        },
+        "vi": {
+            "info": {
+                "name": "Danh sách các bộ phận"
+            }
+        }
+    }
+}

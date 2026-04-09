@@ -1,0 +1,51 @@
+{
+    "info": {
+        "name": "Block Banners",
+        "author": "VINADES.,JSC",
+        "website": "https://vinades.vn",
+        "description": ""
+    },
+    "config": {
+        "idplanbanner": ""
+    },
+    "datafunction": "nv_block_data_config_banners",
+    "submitfunction": "nv_block_data_config_banners_submit",
+    "i18n": {
+        "en": {
+            "language": {
+                "idplanbanner": "Select banner",
+                "blang_all": "All language"
+            },
+            "info": {
+                "name": "Display ads"
+            }
+        },
+        "vi": {
+            "language": {
+                "idplanbanner": "Chọn khối quảng cáo",
+                "blang_all": "Tất cả ngôn ngữ"
+            },
+            "info": {
+                "name": "Hiển thị quảng cáo"
+            }
+        },
+        "fr": {
+            "language": {
+                "idplanbanner": "Sélectionnez le fichier",
+                "blang_all": "Toutes les langues"
+            },
+            "info": {
+                "name": "Afficher des publicités"
+            }
+        },
+        "cz": {
+            "language": {
+                "idplanbanner": "Vyberte soubor",
+                "blang_all": "Všech jazyků"
+            },
+            "info": {
+                "name": "Zobrazit reklamy"
+            }
+        }
+    }
+}

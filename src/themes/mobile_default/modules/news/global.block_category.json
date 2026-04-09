@@ -1,0 +1,31 @@
+{
+    "info": {
+        "name": "Block Categories",
+        "author": "VINADES.,JSC",
+        "website": "https://vinades.vn",
+        "description": ""
+    },
+    "config": {
+        "catid": "22",
+        "title_length": "0"
+    },
+    "datafunction": "nv_block_config_news_category",
+    "submitfunction": "nv_block_config_news_category_submit",
+    "i18n": {
+        "en": {
+            "info": {
+                "name": "News category"
+            }
+        },
+        "fr": {
+            "info": {
+                "name": "Catégorie de nouvelles"
+            }
+        },
+        "vi": {
+            "info": {
+                "name": "Danh mục tin"
+            }
+        }
+    }
+}

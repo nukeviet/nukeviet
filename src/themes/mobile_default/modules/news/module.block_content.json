@@ -1,0 +1,25 @@
+{
+    "info": {
+        "name": "Block_content",
+        "author": "VINADES.,JSC",
+        "website": "https://vinades.vn",
+        "description": ""
+    },
+    "i18n": {
+        "en": {
+            "info": {
+                "name": "Tools for content creators"
+            }
+        },
+        "fr": {
+            "info": {
+                "name": "Outils pour les créateurs de contenu"
+            }
+        },
+        "vi": {
+            "info": {
+                "name": "Công cụ dành cho người đăng bài"
+            }
+        }
+    }
+}
