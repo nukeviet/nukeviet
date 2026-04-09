@@ -11,7 +11,7 @@
         "showtooltip": "1",
         "tooltip_position": "bottom",
         "tooltip_length": "0",
-        "nocatid": ""
+        "nocatid": []
     },
     "datafunction": "nv_block_config_tophits_blocks",
     "submitfunction": "nv_block_config_tophits_blocks_submit",

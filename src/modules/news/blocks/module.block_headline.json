@@ -6,9 +6,7 @@
         "description": ""
     },
     "config": {
-        "showtooltip": "1",
-        "tooltip_position": "bottom",
-        "tooltip_length": "0"
+        "group_id": 0
     },
     "datafunction": "nv_block_config_news_headline",
     "submitfunction": "nv_block_config_news_headline_submit",

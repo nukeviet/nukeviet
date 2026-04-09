@@ -15,8 +15,6 @@ if (!defined('NV_MAINFILE')) {
 
 if (!nv_function_exists('nv_block_data_config_banners')) {
     /**
-     * nv_block_data_config_banners()
-     *
      * @param string $module
      * @param array  $data_block
      * @return string
@@ -25,32 +23,34 @@ if (!nv_function_exists('nv_block_data_config_banners')) {
     {
         global $db, $language_array, $nv_Lang;
 
-        $html = "<select name=\"config_idplanbanner\" class=\"form-select\">\n";
-        $html .= '<option value="">' . $nv_Lang->getModule('idplanbanner') . "</option>\n";
-        $stmt = $db->prepare("SELECT * FROM " . NV_BANNERS_GLOBALTABLE . "_plans WHERE (blang = :lang OR blang = '') ORDER BY title ASC");
-        $stmt->bindValue(':lang', NV_LANG_DATA, PDO::PARAM_STR);
-        $stmt->execute();
+        [$block_theme, $dir] = get_block_tpl_dir('global.banners.config.tpl', true, $module);
+        $tpl = new \NukeViet\Template\NVSmarty();
+        $tpl->setTemplateDir($dir);
+        $tpl->assign('LANG', $nv_Lang);
+        $tpl->assign('TEMPLATE', $block_theme);
+        $tpl->assign('CONFIG', $data_block);
 
-        while ($row_bpn = $stmt->fetch()) {
-            $value = $row_bpn['title'] . ' (';
-            $value .= ((!empty($row_bpn['blang']) and isset($language_array[$row_bpn['blang']])) ? $language_array[$row_bpn['blang']]['name'] : $nv_Lang->getModule('blang_all')) . ', ';
-            $value .= $row_bpn['form'] . ', ';
-            $value .= $row_bpn['width'] . 'x' . $row_bpn['height'] . 'px';
-            $value .= ')';
-            $sel = ($data_block['idplanbanner'] == $row_bpn['id']) ? ' selected' : '';
+        $sql = 'SELECT * FROM ' . NV_BANNERS_GLOBALTABLE . "_plans WHERE (blang='" . NV_LANG_DATA . "' OR blang='') ORDER BY title ASC";
+        $result = $db->query($sql);
 
-            $html .= '<option value="' . $row_bpn['id'] . '" ' . $sel . '>' . $value . "</option>\n";
+        $plans = [];
+        while ($row = $result->fetch()) {
+            $row['show_title'] = $row['title'] . ' (';
+            $row['show_title'] .= ((!empty($row['blang']) and isset($language_array[$row['blang']])) ? $language_array[$row['blang']]['name'] : $nv_Lang->getModule('blang_all')) . ', ';
+            $row['show_title'] .= $row['form'] . ', ';
+            $row['show_title'] .= $row['width'] . 'x' . $row['height'] . 'px';
+            $row['show_title'] .= ')';
+
+            $plans[$row['id']] = $row;
         }
-        $stmt->closeCursor();
+        $result->closeCursor();
 
-        $html .= "</select>\n";
+        $tpl->assign('PLANS', $plans);
 
-        return '<div class="row mb-3"><label class="col-sm-3 col-form-label text-sm-end text-truncate fw-medium">' . $nv_Lang->getModule('idplanbanner') . ':</label><div class="col-sm-5">' . $html . '</div></div>';
+        return $tpl->fetch('global.banners.config.tpl');
     }
 
     /**
-     * nv_block_data_config_banners_submit()
-     *
      * @param string $module
      * @return array
      */
@@ -71,14 +71,12 @@ if (!nv_function_exists('nv_block_data_config_banners')) {
     }
 
     /**
-     * nv_block_global_banners()
-     *
      * @param array $block_config
      * @return string|void
      */
     function nv_block_global_banners($block_config)
     {
-        global $global_config, $client_info;
+        global $global_config, $client_info, $site_mods;
 
         if ($global_config['idsite']) {
             $xmlfile = NV_ROOTDIR . '/' . NV_DATADIR . '/site_' . $global_config['idsite'] . '_bpl_' . $block_config['idplanbanner'] . '.xml';
@@ -97,7 +95,6 @@ if (!nv_function_exists('nv_block_data_config_banners')) {
         }
 
         $width_banners = (int) ($xml->width);
-        $height_banners = (int) ($xml->height);
         $array_banners = $xml->banners->banners_item;
 
         $array_banners_content = [];
@@ -120,39 +117,22 @@ if (!nv_function_exists('nv_block_data_config_banners')) {
                 $array_banners_content[] = $banners;
             }
         }
-
-        if (!empty($array_banners_content)) {
-            if ($xml->form == 'random') {
-                shuffle($array_banners_content);
-            } elseif ($xml->form == 'random_one') {
-                $array_banners_content = [$array_banners_content[array_rand($array_banners_content)]];
-            }
-            unset($xml, $array_banners);
-
-            $block_theme = get_tpl_dir([$global_config['module_theme'], $global_config['site_theme']], 'default', '/modules/banners/global.banners.tpl');
-            $xtpl = new XTemplate('global.banners.tpl', NV_ROOTDIR . '/themes/' . $block_theme . '/modules/banners');
-
-            foreach ($array_banners_content as $banners) {
-                $xtpl->assign('DATA', $banners);
-
-                if ($banners['file_name'] != 'no_image') {
-                    if (!empty($banners['file_click'])) {
-                        $xtpl->parse('main.loop.type_image_link');
-                    } else {
-                        $xtpl->parse('main.loop.type_image');
-                    }
-                }
-
-                if (!empty($banners['bannerhtml'])) {
-                    $xtpl->parse('main.loop.bannerhtml');
-                }
-
-                $xtpl->parse('main.loop');
-            }
-            $xtpl->parse('main');
-
-            return $xtpl->text('main');
+        if (empty($array_banners_content)) {
+            return '';
         }
+
+        if ($xml->form == 'random') {
+            shuffle($array_banners_content);
+        } elseif ($xml->form == 'random_one') {
+            $array_banners_content = [$array_banners_content[array_rand($array_banners_content)]];
+        }
+        unset($xml, $array_banners);
+
+        $tpl = new \NukeViet\Template\NVSmarty();
+        $tpl->setTemplateDir(get_block_tpl_dir('global.banners.tpl', module: $block_config['module']));
+        $tpl->assign('DATA', $array_banners_content);
+
+        return $tpl->fetch('global.banners.tpl');
     }
 }
 

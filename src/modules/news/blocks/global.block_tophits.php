@@ -15,8 +15,6 @@ if (!defined('NV_MAINFILE')) {
 
 if (!nv_function_exists('nv_news_block_tophits')) {
     /**
-     * nv_block_config_tophits_blocks()
-     *
      * @param string $module
      * @param array  $data_block
      * @return string
@@ -25,80 +23,33 @@ if (!nv_function_exists('nv_news_block_tophits')) {
     {
         global $nv_Cache, $site_mods, $nv_Lang;
 
+        [$block_theme, $dir] = get_block_tpl_dir('block_tophits.config.tpl', true, $module);
+        $tpl = new \NukeViet\Template\NVSmarty();
+        $tpl->setTemplateDir($dir);
+        $tpl->assign('LANG', $nv_Lang);
+        $tpl->assign('TEMPLATE', $block_theme);
+        $tpl->assign('CONFIG', $data_block);
+        $tpl->assign('MODULE', $module);
+        $tpl->assign('SITE_MODS', $site_mods);
+
+        // Vị trí tooltip
         $tooltip_position = [
             'top' => $nv_Lang->getModule('tooltip_position_top'),
             'bottom' => $nv_Lang->getModule('tooltip_position_bottom'),
             'left' => $nv_Lang->getModule('tooltip_position_left'),
             'right' => $nv_Lang->getModule('tooltip_position_right')
         ];
-        $html = '';
-        $html .= '<div class="row mb-3">';
-        $html .= '	<label class="col-sm-3 col-form-label text-sm-end text-truncate fw-medium">' . $nv_Lang->getModule('number_day') . ':</label>';
-        $html .= '	<div class="col-sm-9"><input type="text" name="config_number_day" class="form-control w100" size="5" value="' . $data_block['number_day'] . '"/></div>';
-        $html .= '</div>';
-        $html .= '<div class="row mb-3">';
-        $html .= '	<label class="col-sm-3 col-form-label text-sm-end text-truncate fw-medium">' . $nv_Lang->getModule('numrow') . ':</label>';
-        $html .= '	<div class="col-sm-9"><input type="text" name="config_numrow" class="form-control w100" size="5" value="' . $data_block['numrow'] . '"/></div>';
-        $html .= '</div>';
-        $html .= '<div class="row mb-3">';
-        $html .= '<label class="col-sm-3 col-form-label text-sm-end text-truncate fw-medium">' . $nv_Lang->getModule('showtooltip') . ':</label>';
-        $html .= '<div class="col-sm-9">';
-        $html .= '<div class="row g-2 align-items-center">';
-        $html .= '<div class="col-sm-2">';
-        $html .= '<input class="form-check-input" type="checkbox" value="1" name="config_showtooltip" ' . ($data_block['showtooltip'] == 1 ? 'checked="checked"' : '') . ' /></div>';
-        $html .= '<div class="col-sm-5">';
-        $html .= '<div class="input-group">';
-        $html .= '<div class="input-group-text">' . $nv_Lang->getModule('tooltip_position') . '</div>';
-        $html .= '<select name="config_tooltip_position" class="form-select">';
+        $tpl->assign('TOOLTIP_POSITION', $tooltip_position);
 
-        foreach ($tooltip_position as $key => $value) {
-            $html .= '<option value="' . $key . '" ' . ($data_block['tooltip_position'] == $key ? 'selected="selected"' : '') . '>' . $value . '</option>';
-        }
-
-        $html .= '</select>';
-        $html .= '</div>';
-        $html .= '</div>';
-        $html .= '<div class="col-sm-5">';
-        $html .= '<div class="input-group">';
-        $html .= '<div class="input-group-text">' . $nv_Lang->getModule('tooltip_length') . '</div>';
-        $html .= '<input type="text" class="form-control" name="config_tooltip_length" value="' . $data_block['tooltip_length'] . '"/>';
-        $html .= '</div>';
-        $html .= '</div>';
-        $html .= '</div>';
-        $html .= '</div>';
-        $html .= '</div>';
-        $html .= '</div>';
-        $html .= '<div class="row mb-3">';
-        $html .= '<label class="col-sm-3 col-form-label text-sm-end text-truncate fw-medium">' . $nv_Lang->getModule('nocatid') . ':</label>';
+        // Chuyên mục
         $sql = 'SELECT * FROM ' . NV_PREFIXLANG . '_' . $site_mods[$module]['module_data'] . '_cat ORDER BY sort ASC';
         $list = $nv_Cache->db($sql, '', $module);
-        $html .= '<div class="col-sm-9">';
-        $html .= '<div style="max-height: 200px; overflow: auto">';
-        if (!is_array($data_block['nocatid'])) {
-            $data_block['nocatid'] = explode(',', $data_block['nocatid']);
-        }
-        foreach ($list as $l) {
-            if ($l['status'] == 1 or $l['status'] == 2) {
-                $xtitle_i = '';
+        $tpl->assign('CATS', $list);
 
-                if ($l['lev'] > 0) {
-                    for ($i = 1; $i <= $l['lev']; ++$i) {
-                        $xtitle_i .= '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
-                    }
-                }
-                $html .= '<div class="form-check"><input class="form-check-input" type="checkbox" name="config_nocatid[]" value="' . $l['catid'] . '" ' . ((in_array((int) $l['catid'], array_map('intval', $data_block['nocatid']), true)) ? ' checked="checked"' : '') . ' id="config_nocatid_' . $l['catid'] . '"><label class="form-check-label" for="config_nocatid_' . $l['catid'] . '">' . $xtitle_i . $l['title'] . '</label></div>';
-            }
-        }
-        $html .= '</div>';
-        $html .= '</div>';
-        $html .= '</div>';
-
-        return $html;
+        return $tpl->fetch('block_tophits.config.tpl');
     }
 
     /**
-     * nv_block_config_tophits_blocks_submit()
-     *
      * @param string $module
      * @return array
      */
@@ -111,109 +62,95 @@ if (!nv_function_exists('nv_news_block_tophits')) {
         $return['config']['number_day'] = $nv_Request->get_int('config_number_day', 'post', 0);
         $return['config']['numrow'] = $nv_Request->get_int('config_numrow', 'post', 0);
         $return['config']['showtooltip'] = $nv_Request->get_int('config_showtooltip', 'post', 0);
-        $return['config']['tooltip_position'] = $nv_Request->get_string('config_tooltip_position', 'post', 0);
-        $return['config']['tooltip_length'] = $nv_Request->get_string('config_tooltip_length', 'post', 0);
+        $return['config']['tooltip_position'] = $nv_Request->get_title('config_tooltip_position', 'post', 0);
+        $return['config']['tooltip_length'] = $nv_Request->get_absint('config_tooltip_length', 'post', 0);
         $return['config']['nocatid'] = $nv_Request->get_typed_array('config_nocatid', 'post', 'int', []);
 
         return $return;
     }
 
     /**
-     * nv_news_block_tophits()
-     *
      * @param array  $block_config
      * @param string $mod_data
      * @return string
      */
     function nv_news_block_tophits($block_config, $mod_data)
     {
-        global $module_array_cat, $site_mods, $db, $module_config, $global_config;
+        global $module_array_cat, $site_mods, $db_slave, $module_config, $global_config, $nv_Lang;
 
         $module = $block_config['module'];
-        $mod_file = $site_mods[$module]['module_file'];
-
         $blockwidth = $module_config[$module]['blockwidth'];
         $show_no_image = $module_config[$module]['show_no_image'];
         $publtime = NV_CURRENTTIME - $block_config['number_day'] * 86400;
 
         $array_block_news = [];
-        $db->sqlreset()
-            ->select('id, catid, publtime, title, alias, homeimgthumb, homeimgfile, hometext, external_link')
+        $db_slave->sqlreset()
+            ->select('id, catid, publtime, title, alias, homeimgthumb, homeimgfile, homeimgalt, hometext, external_link')
             ->from(NV_PREFIXLANG . '_' . $mod_data . '_rows')
             ->order('hitstotal DESC')
             ->limit($block_config['numrow']);
         if (empty($block_config['nocatid'])) {
-            $db->where('status= 1 AND publtime > ' . $publtime);
+            $db_slave->where('status= 1 AND publtime > ' . $publtime);
         } else {
-            $db->where('status= 1 AND publtime > ' . $publtime . ' AND catid NOT IN (' . implode(',', $block_config['nocatid']) . ')');
+            $db_slave->where('status= 1 AND publtime > ' . $publtime . ' AND catid NOT IN (' . implode(',', $block_config['nocatid']) . ')');
         }
 
-        $result = $db->query($db->sql());
+        $result = $db_slave->query($db_slave->sql());
         while ($_scratch = $result->fetch(3)) {
-            [$id, $catid, $publtime, $title, $alias, $homeimgthumb, $homeimgfile, $hometext, $external_link] = $_scratch;
+            [$id, $catid, $publtime, $title, $alias, $homeimgthumb, $homeimgfile, $homeimgalt, $hometext, $external_link] = $_scratch;
             unset($_scratch);
+            $link = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module . '&amp;' . NV_OP_VARIABLE . '=' . $module_array_cat[$catid]['alias'] . '/' . $alias . '-' . $id . $global_config['rewrite_exturl'];
+
+            // Ảnh nhỏ
             if ($homeimgthumb == 1) {
-                // image thumb
                 $imgurl = NV_BASE_SITEURL . NV_FILES_DIR . '/' . $site_mods[$module]['module_upload'] . '/' . $homeimgfile;
             } elseif ($homeimgthumb == 2) {
-                // image file
                 $imgurl = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $site_mods[$module]['module_upload'] . '/' . $homeimgfile;
             } elseif ($homeimgthumb == 3) {
-                // image url
                 $imgurl = $homeimgfile;
             } elseif (!empty($show_no_image)) {
-                // no image
                 $imgurl = NV_BASE_SITEURL . $show_no_image;
             } else {
                 $imgurl = '';
             }
-            $link = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module . '&amp;' . NV_OP_VARIABLE . '=' . $module_array_cat[$catid]['alias'] . '/' . $alias . '-' . $id . $global_config['rewrite_exturl'];
+
+            // Ảnh lớn
+            if (!empty($homeimgfile) and file_exists(NV_UPLOADS_REAL_DIR . '/' . $site_mods[$module]['module_upload'] . '/' . $homeimgfile)) {
+                $imgsource = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $site_mods[$module]['module_upload'] . '/' . $homeimgfile;
+            } elseif (nv_is_url($homeimgfile)) {
+                $imgsource = $homeimgfile;
+            } elseif (!empty($show_no_image)) {
+                $imgsource = NV_BASE_SITEURL . $show_no_image;
+            } else {
+                $imgsource = '';
+            }
 
             $array_block_news[] = [
                 'id' => $id,
                 'title' => $title,
+                'homeimgalt' => empty($homeimgalt) ? $title : $homeimgalt,
                 'link' => $link,
-                'imgurl' => $imgurl,
+                'thumb' => $imgurl,
+                'imgsource' => $imgsource,
                 'width' => $blockwidth,
                 'hometext' => $hometext,
                 'hometext_clean' => nv_clean60(strip_tags($hometext), $block_config['tooltip_length'], true),
-                'external_link' => $external_link,
-                'target_blank' => $external_link ? ' target="_blank"' : ''
+                'external_link' => $external_link
             ];
         }
-
-        $block_theme = get_tpl_dir($global_config['module_theme'], 'default', '/modules/' . $mod_file . '/block_tophits.tpl');
-        $xtpl = new XTemplate('block_tophits.tpl', NV_ROOTDIR . '/themes/' . $block_theme . '/modules/' . $mod_file);
-        $xtpl->assign('TEMPLATE', $block_theme);
-
-        foreach ($array_block_news as $array_news) {
-            $xtpl->assign('blocknews', $array_news);
-
-            if (!empty($array_news['imgurl'])) {
-                $xtpl->parse('main.newloop.imgblock');
-            }
-
-            if (!$block_config['showtooltip']) {
-                $xtpl->assign('TITLE', 'title="' . $array_news['title'] . '"');
-            }
-
-            // Bootstrap 4/5
-            if ($block_config['showtooltip']) {
-                $xtpl->assign('TOOLTIP_POSITION', $block_config['tooltip_position']);
-                $xtpl->parse('main.newloop.tooltip');
-            }
-
-            $xtpl->parse('main.newloop');
+        if (empty($array_block_news)) {
+            return '';
         }
+        [$block_theme, $dir] = get_block_tpl_dir('block_tophits.tpl', true, $module);
+        $tpl = new \NukeViet\Template\NVSmarty();
+        $tpl->setTemplateDir($dir);
+        $tpl->assign('LANG', $nv_Lang);
+        $tpl->assign('TEMPLATE', $block_theme);
+        $tpl->assign('MCONFIG', $module_config[$module]);
+        $tpl->assign('CONFIG', $block_config);
+        $tpl->assign('LIST', $array_block_news);
 
-        if ($block_config['showtooltip']) {
-            $xtpl->assign('TOOLTIP_POSITION', $block_config['tooltip_position']);
-            $xtpl->parse('main.tooltip');
-        }
-
-        $xtpl->parse('main');
-
-        return $xtpl->text('main');
+        return $tpl->fetch('block_tophits.tpl');
     }
 }
 
