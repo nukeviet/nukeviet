@@ -266,16 +266,12 @@
 
             {* Hình đại diện *}
             <div class="row mb-3">
-                <label for="avatar_field" class="col-sm-3 col-form-label text-sm-end">{$LANG->getModule('avatar')}</label>
+                <label for="avatar" class="col-sm-3 col-form-label text-sm-end">{$LANG->getModule('avatar')}</label>
                 <div class="col-sm-8 col-lg-6 col-xxl-5">
                     <div class="input-group">
-                        <input type="text" class="form-control" id="avatar_field" name="photo" value="" readonly autocomplete="off">
+                        <input type="text" class="form-control" id="avatar" name="photo" value="" readonly autocomplete="off">
                         <button class="btn btn-outline-secondary" type="button"
-                            data-toggle="selectfile"
-                            data-target="avatar_field"
-                            data-path="{$AVATAR_UPLOAD_PATH}"
-                            data-currentpath="{$AVATAR_UPLOAD_PATH}"
-                            data-type="image"
+                            data-toggle="pick-user-photo"
                             aria-label="{$LANG->getModule('avatar')}"
                             title="{$LANG->getModule('avatar')}">
                             <i class="fa-solid fa-folder-open"></i>
