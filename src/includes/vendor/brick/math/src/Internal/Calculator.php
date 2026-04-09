@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Brick\Math\Internal;
 
-use Brick\Math\Exception\RoundingNecessaryException;
 use Brick\Math\RoundingMode;
 
 use function chr;
@@ -30,11 +29,6 @@ use function substr;
  */
 abstract readonly class Calculator
 {
-    /**
-     * The maximum exponent value allowed for the pow() method.
-     */
-    public const MAX_POWER = 1_000_000;
-
     /**
      * The alphabet for converting from and to base 2 to 36, lowercase.
      */
@@ -164,7 +158,7 @@ abstract readonly class Calculator
      * Exponentiates a number.
      *
      * @param string $a The base number.
-     * @param int    $e The exponent, validated as an integer between 0 and MAX_POWER.
+     * @param int    $e The exponent, validated as a non-negative integer.
      *
      * @return string The power.
      *
@@ -407,17 +401,16 @@ abstract readonly class Calculator
     /**
      * Performs a rounded division.
      *
-     * Rounding is performed when the remainder of the division is not zero.
+     * When the remainder of the division is not zero, rounding is performed according to the rounding mode provided,
+     * unless RoundingMode::Unnecessary is used, in which case the method returns null.
      *
      * @param string       $a            The dividend.
      * @param string       $b            The divisor, must not be zero.
      * @param RoundingMode $roundingMode The rounding mode.
      *
-     * @throws RoundingNecessaryException If RoundingMode::Unnecessary is provided but rounding is necessary.
-     *
      * @pure
      */
-    final public function divRound(string $a, string $b, RoundingMode $roundingMode): string
+    final public function divRound(string $a, string $b, RoundingMode $roundingMode): ?string
     {
         [$quotient, $remainder] = $this->divQR($a, $b);
 
@@ -436,7 +429,7 @@ abstract readonly class Calculator
         switch ($roundingMode) {
             case RoundingMode::Unnecessary:
                 if ($hasDiscardedFraction) {
-                    throw RoundingNecessaryException::roundingNecessary();
+                    return null;
                 }
 
                 break;
