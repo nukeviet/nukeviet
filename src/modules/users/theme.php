@@ -363,29 +363,16 @@ function user_register($gfx_chk, $checkss, $data_questions, $array_field_config,
 }
 
 /**
- * user_login()
+ * Giao diện đăng nhập
  *
  * @param bool $is_ajax
  * @return string
  */
-function user_login($is_ajax = false)
+function user_login(bool $is_ajax = false): string
 {
     global $module_info, $global_config, $nv_Lang, $module_name, $module_captcha, $op, $nv_header, $nv_redirect, $page_url;
 
-    if ($is_ajax) {
-        [$template, $dir] = get_module_tpl_dir('ajax_login.tpl', true);
-        $xtpl = new XTemplate('ajax_login.tpl', $dir);
-    } else {
-        [$template, $dir] = get_module_tpl_dir('login.tpl', true);
-        $xtpl = new XTemplate('login.tpl', $dir);
-    }
-
-    if (defined('NV_OPENID_ALLOWED')) {
-        if (in_array('google-identity', $global_config['openid_servers'], true)) {
-            $xtpl->parse('main.google_identity_js');
-        }
-    }
-
+    // Lấy lang phù hợp với kiểu đăng nhập
     $method = (preg_match('/^([^0-9]+[a-z0-9\_]+)$/', $global_config['login_name_type']) and module_file_exists('users/methods/' . $global_config['login_name_type'] . '.php')) ? $global_config['login_name_type'] : 'username';
     if ($nv_Lang->existsGlobal('login_name_type_' . $method)) {
         $nv_Lang->setGlobal('username_email', $nv_Lang->getGlobal('login_name_type_' . $method));
@@ -395,89 +382,30 @@ function user_login($is_ajax = false)
         $nv_Lang->setGlobal('username_email', $nv_Lang->getModule($method));
     }
 
-    $xtpl->assign('USER_LOGIN', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=login');
-    $xtpl->assign('USER_LOSTPASS', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=lostpass');
-    $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
-    $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
-    $xtpl->assign('TEMPLATE', $template);
-    $xtpl->assign('CSRF', md5(NV_CHECK_SESSION . '_' . $module_name . '_' . $op));
+    $tpl = new \NukeViet\Template\NVSmarty();
+    $tpl_file = $is_ajax ? 'login_ajax.tpl' : 'login.tpl';
+    [$template, $dir] = get_module_tpl_dir($tpl_file, true);
+    $tpl->setTemplateDir($dir);
+    $tpl->assign('LANG', $nv_Lang);
+    $tpl->assign('TEMPLATE', $template);
+    $tpl->assign('GCONFIG', $global_config);
+    $tpl->assign('MODULE_NAME', $module_name);
+    $tpl->assign('CSS_JS', addition_module_assets($module_name, 'both', false));
+    $tpl->assign('CSRF', md5(NV_CHECK_SESSION . '_' . $module_name . '_' . $op));
 
     $array_gfx_chk = !empty($global_config['captcha_area']) ? explode(',', $global_config['captcha_area']) : [];
     $gfx_chk = (!empty($array_gfx_chk) and in_array('l', $array_gfx_chk, true)) ? 1 : 0;
 
-    if ($gfx_chk) {
-        // Nếu dùng reCaptcha v3
-        if ($module_captcha == 'recaptcha' and $global_config['recaptcha_ver'] == 3) {
-            $xtpl->parse('main.recaptcha3');
-        }
-        // Nếu dùng reCaptcha v2
-        elseif ($module_captcha == 'recaptcha' and $global_config['recaptcha_ver'] == 2) {
-            $xtpl->assign('RECAPTCHA_ELEMENT', 'recaptcha' . nv_genpass(8));
-            $xtpl->parse('main.recaptcha.default');
-            $xtpl->parse('main.recaptcha');
-        } elseif ($module_captcha == 'turnstile') {
-            $xtpl->parse('main.turnstile');
-        } elseif ($module_captcha == 'captcha') {
-            $xtpl->assign('N_CAPTCHA', $nv_Lang->getGlobal('securitycode'));
-            $xtpl->parse('main.captcha');
-        }
-    }
+    $tpl->assign('CAPTCHA_ATTRS', $gfx_chk ? nv_captcha_form_attrs('nv_seccode') : '');
+    $tpl->assign('NV_REDIRECT', $nv_redirect);
+    $tpl->assign('DEFAULT_REDIRECT', nv_redirect_encrypt(empty($page_url) ? NV_MY_DOMAIN : urlRewriteWithDomain($page_url, NV_MY_DOMAIN)));
+    $tpl->assign('NV_HEADER', $nv_header);
+    $tpl->assign('OAUTH_CHECKSS', csrf_create($module_name . '_oauth'));
 
-    $xtpl->assign('REDIRECT', $nv_redirect);
-    if (!empty($nv_redirect)) {
-        $xtpl->parse('main.redirect');
-    } else {
-        $xtpl->parse('main.not_redirect');
-    }
-
-    if (!empty($nv_header)) {
-        $xtpl->assign('NV_HEADER', $nv_header);
-        $xtpl->parse('main.header');
-
-        // Hiển thị logo tại login box
-        $xtpl->assign('SITE_NAME', $global_config['site_name']);
-        $xtpl->assign('THEME_SITE_HREF', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA);
-        $xtpl->assign('LOGO_SRC', NV_BASE_SITEURL . $global_config['site_logo']);
-        $xtpl->parse('main.redirect2');
-    }
-
-    if (defined('NV_OPENID_ALLOWED')) {
-        if (in_array('google-identity', $global_config['openid_servers'], true)) {
-            $xtpl->assign('GOOGLE_CLIENT_ID', $global_config['google_client_id']);
-            $xtpl->assign('GOOGLE_IDENTITY_URL', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=oauth&amp;server=google-identity');
-            $xtpl->assign('CHECKSS', csrf_create($module_name . '_oauth'));
-            $xtpl->parse('main.openid.google_identity_onload');
-        }
-        $assigns = [];
-        $icons = [
-            'single-sign-on' => 'lock',
-            'google' => 'google-plus',
-            'facebook' => 'facebook',
-            'zalo' => 'zalo'
-        ];
-        $default_redirect = nv_redirect_encrypt(empty($page_url) ? NV_MY_DOMAIN : urlRewriteWithDomain($page_url, NV_MY_DOMAIN));
-        foreach ($global_config['openid_servers'] as $server) {
-            if ($server != 'google-identity') {
-                $assigns['href'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=oauth&amp;server=' . $server;
-                if (!empty($nv_redirect)) {
-                    $assigns['href'] .= '&nv_redirect=' . $nv_redirect;
-                } else {
-                    $assigns['href'] .= '&nv_redirect=' . $default_redirect;
-                }
-                $assigns['server'] = $server;
-                $assigns['title'] = ucfirst($server);
-                $assigns['icon'] = $icons[$server];
-
-                $xtpl->assign('OPENID', $assigns);
-                $xtpl->parse('main.openid.server');
-            }
-        }
-
-        $xtpl->parse('main.openid');
-    }
-
+    // Xử lý giao diện nav cuối form
     $_lis = \NukeViet\Module\users\Shared\Navs::getNavs($module_info['funcs']);
     $_alias = $module_info['alias'];
+    $navs = [];
     foreach ($_lis as $_li) {
         if ($_li['func_name'] == $op) {
             continue;
@@ -487,17 +415,14 @@ function user_login($is_ajax = false)
         if (!empty($nv_redirect)) {
             $href .= '&nv_redirect=' . $nv_redirect;
         }
-        $li = [
+        $navs[] = [
             'href' => $href,
             'title' => $_li['func_name'] == 'main' ? $module_info['custom_title'] : $_li['func_custom_name']
         ];
-        $xtpl->assign('NAVBAR', $li);
-        $xtpl->parse('main.navbar');
     }
+    $tpl->assign('NAVS', $navs);
 
-    $xtpl->parse('main');
-
-    return $xtpl->text('main');
+    return $tpl->fetch($tpl_file);
 }
 
 /**

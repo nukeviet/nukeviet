@@ -22,12 +22,22 @@ if (!empty($global_config['inform_active']) and defined('NV_IS_USER') and !defin
     define('NV_IS_BLOCK_INFORM', true);
 
     $filters = [
-        'all' => $nv_Lang->getGlobal('all'),
-        'unviewed' => $nv_Lang->getGlobal('unviewed'),
-        'favorite' => $nv_Lang->getGlobal('favorite')
+        'all' => [
+            'name' => $nv_Lang->getGlobal('all'),
+            'is_active' => false
+        ],
+        'unviewed' => [
+            'name' => $nv_Lang->getGlobal('unviewed'),
+            'is_active' => false
+        ],
+        'favorite' => [
+            'name' => $nv_Lang->getGlobal('favorite'),
+            'is_active' => false
+        ]
     ];
     $inform_filter_default = $nv_Request->get_title('inform_filter', 'session', 'unviewed');
     !isset($filters[$inform_filter_default]) && $inform_filter_default = 'all';
+    $filters[$inform_filter_default]['is_active'] = true;
 
     $u_groups = array_values(array_unique(array_filter(array_map(function ($gr) {
         return $gr >= 10 ? (int) $gr : 0;
@@ -38,39 +48,19 @@ if (!empty($global_config['inform_active']) and defined('NV_IS_USER') and !defin
     $viewall_url = nv_apply_hook('inform', 'get_all_inform_link', [], $module_url);
     $csrf = md5($user_info['userid'] . $u_groups . NV_CHECK_SESSION);
 
-    $block_theme = get_tpl_dir([$global_config['module_theme'], $global_config['site_theme']], 'default', '/modules/inform/block.inform.tpl');
-    $block_js = get_tpl_dir([$global_config['module_theme'], $global_config['site_theme']], 'default', '/js/block.inform.js');
+    $tpl = new \NukeViet\Template\NVSmarty();
+    $tpl->setTemplateDir(get_block_tpl_dir('block.inform.tpl', module: $block_config['module']));
+    $tpl->assign('LANG', $nv_Lang);
+    $tpl->assign('JS_DIR', get_tpl_dir([$global_config['module_theme'], $global_config['site_theme']], 'default', '/js/block.inform.js'));
+    $tpl->assign('REFRESH_TIME', $global_config['inform_refresh_time']);
+    $tpl->assign('INFORM_MODULE_URL', $module_url);
+    $tpl->assign('INFORM_VIEWALL_URL', $viewall_url);
+    $tpl->assign('CHECK_INFORM_URL', NV_BASE_SITEURL . 'sload.php');
+    $tpl->assign('USERID', $user_info['userid']);
+    $tpl->assign('USERGROUPS', $u_groups);
+    $tpl->assign('CSRF', $csrf);
+    $tpl->assign('FILTERS', $filters);
+    $tpl->assign('FILTER_DEFAULT', $inform_filter_default);
 
-    $xtpl = new XTemplate('block.inform.tpl', NV_ROOTDIR . '/themes/' . $block_theme . '/modules/inform');
-
-    $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
-    $xtpl->assign('BLOCKID', $blockID);
-    $xtpl->assign('BLOCK_THEME', $block_theme);
-    $xtpl->assign('BLOCK_JS', $block_js);
-    $xtpl->assign('REFRESH_TIME', $global_config['inform_refresh_time']);
-    $xtpl->assign('FILTER_DEFAULT', $inform_filter_default);
-
-    $url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=inform';
-    $xtpl->assign('INFORM_MODULE_URL', $module_url);
-    $xtpl->assign('INFORM_VIEWALL_URL', $viewall_url);
-    $xtpl->assign('CHECK_INFORM_URL', NV_BASE_SITEURL . 'sload.php');
-
-    $xtpl->assign('USERID', $user_info['userid']);
-    $xtpl->assign('USERGROUPS', $u_groups);
-    $xtpl->assign('CSRF', $csrf);
-
-    foreach ($filters as $key => $name) {
-        $xtpl->assign('FILTER', [
-            'key' => $key,
-            'name' => $name
-        ]);
-
-        if ($key == $inform_filter_default) {
-            $xtpl->parse('main.filter.default');
-        }
-        $xtpl->parse('main.filter');
-    }
-
-    $xtpl->parse('main');
-    $content = $xtpl->text('main');
+    $content = $tpl->fetch('block.inform.tpl');
 }
