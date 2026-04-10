@@ -3,7 +3,23 @@
     "allow": [
       "Bash(php -l *)",
       "Bash(php vendor/bin/codecept *)",
-      "Bash(composer *)"
+      "Bash(composer *)",
+      "Bash(rm -rf src/data/cache/*)"
+    ]
+  },
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write|NotebookEdit|Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "rm -rf src/data/cache/*/*.cache && rm -rf src/data/cache/smarty-compile/*.php 2>/dev/null || true",
+            "statusMessage": "Xóa cache NukeViet...",
+            "async": true
+          }
+        ]
+      }
     ]
   }
 }
