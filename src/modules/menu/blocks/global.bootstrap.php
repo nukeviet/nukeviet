@@ -20,8 +20,6 @@ if (defined('NV_IS_FILE_THEMES')) {
 
 if (!nv_function_exists('nv_menu_bootstrap')) {
     /**
-     * nv_menu_bootstrap_getdata()
-     *
      * @param array $list
      * @param int   $parentid
      * @param array $block_config
@@ -29,136 +27,89 @@ if (!nv_function_exists('nv_menu_bootstrap')) {
      */
     function nv_menu_bootstrap_getdata($list, $parentid, $block_config)
     {
-        global $site_mods;
+        global $site_mods, $global_config, $home;
 
         $search = ['&amp;', '&lt;', '&gt;', '&#x005C;', '&#x002F;', '&#40;', '&#41;', '&#42;', '&#91;', '&#93;', '&#33;', '&#x3D;', '&#x23;', '&#x25;', '&#x5E;', '&#x3A;', '&#x7B;', '&#x7D;', '&#x60;', '&#x7E;'];
         $replace = ['&', '<', '>', '\\', '/', '(', ')', '*', '[', ']', '!', '=', '#', '%', '^', ':', '{', '}', '`', '~'];
 
         $menus = [];
         foreach ($list as $row) {
-            if ($row['parentid'] == $parentid) {
-                if ((empty($row['module_name']) or (!empty($row['module_name']) and !empty($site_mods[$row['module_name']]))) and nv_user_in_groups($row['groups_view'])) {
-                    $row['link'] = nv_url_rewrite(str_replace($search, $replace, $row['link']), true);
-                    switch ($row['target']) {
-                        case 1:
-                            $row['target'] = '';
-                            break;
-                        case 3:
-                            $row['target'] = ' data-toggle="winCMD" data-cmd="open" data-url="' . $row['link'] . '" data-win-name="targetWindow" data-win-opts="toolbar=no,location=no,status=no,menubar=no,scrollbars=yes,resizable=yes"';
-                            break;
-                        default:
-                            $row['target'] = ' data-target="_blank"';
+            if ($row['parentid'] != $parentid or !(
+                (empty($row['module_name']) or (!empty($row['module_name']) and !empty($site_mods[$row['module_name']]))) and nv_user_in_groups($row['groups_view'])
+            )) {
+                continue;
+            }
+
+            $row['link'] = nv_url_rewrite(str_replace($search, $replace, $row['link']), true);
+            switch ($row['target']) {
+                case 1:
+                    $row['target'] = '';
+                    break;
+                case 3:
+                    $row['target'] = ' data-toggle="winCMD" data-cmd="open" data-url="' . $row['link'] . '" data-win-name="targetWindow" data-win-opts="toolbar=no,location=no,status=no,menubar=no,scrollbars=yes,resizable=yes"';
+                    break;
+                default:
+                    $row['target'] = ' data-target="_blank"';
+            }
+            $row['title_trim'] = nv_clean60($row['title'], $block_config['title_length']);
+            $row['is_active'] = is_current_url($row['link'], $row['active_type']);
+            $row['sub'] = nv_menu_bootstrap_getdata($list, $row['id'], $block_config);
+
+            empty($row['note']) && $row['note'] = $row['title'];
+            !empty($row['icon']) && $row['icon'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/menu/' . $row['icon'];
+
+            // Menu con active thì active ngược ra menu cha
+            if (!$row['is_active'] and !empty($row['sub'])) {
+                foreach ($row['sub'] as $subrow) {
+                    if ($subrow['is_active']) {
+                        $row['is_active'] = true;
+                        break;
                     }
-                    $row['title_trim'] = nv_clean60($row['title'], $block_config['title_length']);
-                    $row['current'] = empty($parentid) ? $row['css'] : '';
-                    $row['liclass'] = $row['css'];
-                    $row['aclass'] = '';
-                    $row['is_active'] = is_current_url($row['link'], $row['active_type']);
-                    $row['sub'] = nv_menu_bootstrap_getdata($list, $row['id'], $block_config);
-                    empty($row['note']) && $row['note'] = $row['title'];
-                    !empty($row['icon']) && $row['icon'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/menu/' . $row['icon'];
-                    if (!empty($row['sub'])) {
-                        empty($parentid) && ($row['current'] = 'dropdown' . (!empty($row['current']) ? ' ' . $row['current'] : ''));
-                        $row['liclass'] = 'dropdown' . ($parentid ? ' dropend' : '') . (!empty($row['liclass']) ? ' ' . $row['liclass'] : '');
-                        $row['aclass'] = 'dropdown-toggle';
-                    }
-                    if (!$row['is_active'] and !empty($row['sub'])) {
-                        foreach ($row['sub'] as $subrow) {
-                            if ($subrow['is_active']) {
-                                $row['is_active'] = true;
-                                break;
-                            }
-                        }
-                    }
-                    if ($row['is_active']) {
-                        $row['aclass'] .= (!empty($row['aclass']) ? ' ' : '') . 'active';
-                        empty($parentid) && ($row['current'] .= (!empty($row['current']) ? ' ' : '') . 'active');
-                    }
-                    $menus[] = $row;
                 }
             }
+            // Lược bỏ tên module khỏi url thì không active menu có link main của module ở trang home
+            if (
+                !empty($block_config['show_home']) and !empty($home) and
+                !empty($row['module_name']) and $global_config['rewrite_op_mod'] == $row['module_name'] and
+                $row['link'] == nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $row['module_name'], true)
+            ) {
+                $row['is_active'] = false;
+            }
+            $menus[] = $row;
         }
 
         return $menus;
     }
 
     /**
-     * nv_menu_bootstrap_getsub()
-     *
-     * @param array  $smenus
-     * @param string $block_theme
-     * @return string
-     */
-    function nv_menu_bootstrap_getsub($smenus, $block_theme)
-    {
-        $xtpl = new XTemplate('global.bootstrap.tpl', NV_ROOTDIR . '/themes/' . $block_theme . '/modules/menu');
-
-        foreach ($smenus as $smenu) {
-            !empty($smenu['liclass']) && $smenu['liclass'] = ' class="' . $smenu['liclass'] . '"';
-            !empty($smenu['aclass']) && $smenu['aclass'] = ' ' . $smenu['aclass'];
-            $xtpl->assign('SUBMENU', $smenu);
-            if (!empty($smenu['icon'])) {
-                $xtpl->parse('submenu.loop.icon');
-            }
-            if (!empty($smenu['sub'])) {
-                $submenu = nv_menu_bootstrap_getsub($smenu['sub'], $block_theme);
-                $xtpl->assign('SUB', $submenu);
-                $xtpl->parse('submenu.loop.submenu');
-                $xtpl->parse('submenu.loop.item');
-                $xtpl->parse('submenu.loop.has_sub');
-                $xtpl->parse('submenu.loop.sub');
-            }
-            $xtpl->parse('submenu.loop');
-        }
-
-        $xtpl->parse('submenu');
-
-        return $xtpl->text('submenu');
-    }
-
-    /**
-     * nv_menu_bootstrap()
-     *
      * @param array $block_config
      * @return string
      */
     function nv_menu_bootstrap($block_config)
     {
-        global $nv_Cache, $global_config, $nv_Lang;
+        global $nv_Cache, $nv_Lang, $home;
 
-        $sql = 'SELECT id, parentid, title, link, icon, note, subitem, groups_view, module_name, op, target, css, active_type FROM ' . NV_PREFIXLANG . '_menu_rows WHERE status=1 AND mid = ' . $block_config['menuid'] . ' ORDER BY parentid, weight ASC';
-        $list = $nv_Cache->db($sql, 'id', $block_config['module']);
+        if (defined('NV_ADDED_MENU_BOOTSTRAP')) {
+            // Chỉ thêm block này 1 lần
+            return '';
+        }
+        define('NV_ADDED_MENU_BOOTSTRAP', true);
 
+        $sql = 'SELECT id, parentid, title, link, icon, note, subitem, groups_view, module_name, op, target, css, active_type
+        FROM ' . NV_PREFIXLANG . '_menu_rows WHERE status=1 AND mid = ' . $block_config['menuid'] . ' ORDER BY parentid, weight ASC';
+        $list = $nv_Cache->db($sql, 'id', 'menu');
         $menulist = nv_menu_bootstrap_getdata($list, 0, $block_config);
 
-        $block_theme = get_tpl_dir([$global_config['module_theme'], $global_config['site_theme']], 'default', '/modules/menu/global.bootstrap.tpl');
-        $xtpl = new XTemplate('global.bootstrap.tpl', NV_ROOTDIR . '/themes/' . $block_theme . '/modules/menu');
-        $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_global);
-        $xtpl->assign('BLOCK_THEME', $block_theme);
-        $xtpl->assign('THEME_SITE_HREF', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA);
+        [$block_theme, $dir] = get_block_tpl_dir('global.bootstrap.tpl', true, 'menu');
+        $tpl = new \NukeViet\Template\NVSmarty();
+        $tpl->assign('LANG', $nv_Lang);
+        $tpl->assign('BLOCK_THEME', $block_theme);
+        $tpl->assign('CONFIG', $block_config);
+        $tpl->assign('MENUS', $menulist);
+        $tpl->assign('HOME', $home);
+        $tpl->setTemplateDir($dir);
 
-        if (!empty($menulist)) {
-            foreach ($menulist as $menu) {
-                !empty($menu['liclass']) && $menu['liclass'] = ' ' . $menu['liclass'];
-                !empty($menu['aclass']) && $menu['aclass'] = ' ' . $menu['aclass'];
-                !empty($menu['current']) && $menu['current'] = ' class="' . $menu['current'] . '"';
-                $xtpl->assign('TOP_MENU', $menu);
-                if (!empty($menu['icon'])) {
-                    $xtpl->parse('main.top_menu.icon');
-                }
-                if (!empty($menu['sub'])) {
-                    $submenu = nv_menu_bootstrap_getsub($menu['sub'], $block_theme);
-                    $xtpl->assign('SUB', $submenu);
-                    $xtpl->parse('main.top_menu.sub');
-                    $xtpl->parse('main.top_menu.has_sub');
-                }
-                $xtpl->parse('main.top_menu');
-            }
-        }
-
-        $xtpl->parse('main');
-
-        return $xtpl->text('main');
+        return $tpl->fetch('global.bootstrap.tpl');
     }
 }
 

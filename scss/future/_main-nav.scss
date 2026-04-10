@@ -165,6 +165,10 @@ $max-depth: 20;
       .item-icon {
         flex: 0 0 $main-nav-icon-min-width;
 
+        @include media-breakpoint-up($theme-layout-breakpoint) {
+          text-align: center;
+        }
+
         img {
           max-width: $main-nav-icon-min-width;
           max-height: $main-nav-height;

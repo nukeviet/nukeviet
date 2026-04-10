@@ -59,6 +59,8 @@
 
   >.blockct {
     cursor: move;
+    position: relative;
+    z-index: 1;
 
     &.act0 {
       opacity: .5;
