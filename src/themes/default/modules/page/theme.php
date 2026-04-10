@@ -72,8 +72,8 @@ function nv_page_main($row, $ab_links, $content_comment)
     }
 
     if (defined('NV_IS_MODADMIN')) {
-        $xtpl->assign('ADMIN_CHECKSS', md5($row['id'] . NV_CHECK_SESSION));
-        $xtpl->assign('ADMIN_EDIT', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=content&amp;id=' . $row['id']);
+        $xtpl->assign('ADMIN_CHECKSS', $row['admin_checkss']);
+        $xtpl->assign('ADMIN_EDIT', $row['admin_edit']);
         $xtpl->parse('main.adminlink');
 
         // Hiển thị cảnh báo cho người quản trị nếu bài ngưng hoạt động
@@ -118,25 +118,14 @@ function nv_page_main_list($array_data, $generate_page)
 
     if (!empty($array_data)) {
         foreach ($array_data as $row) {
-            if (!empty($row['image'])) {
-                if (file_exists(NV_ROOTDIR . '/' . NV_ASSETS_DIR . '/' . $module_upload . '/' . $row['image'])) {
-                    $row['image'] = NV_BASE_SITEURL . NV_ASSETS_DIR . '/' . $module_upload . '/' . $row['image'];
-                } elseif (file_exists(NV_ROOTDIR . '/' . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $row['image'])) {
-                    $row['image'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $row['image'];
-                } else {
-                    $row['image'] = '';
-                }
-                $row['imagealt'] = !empty($row['imagealt']) ? $row['imagealt'] : $row['title'];
-            }
-
             $xtpl->assign('DATA', $row);
 
             if (!empty($row['image'])) {
                 $xtpl->parse('main.loop.image');
             }
             if (defined('NV_IS_MODADMIN')) {
-                $xtpl->assign('ADMIN_CHECKSS', md5($row['id'] . NV_CHECK_SESSION));
-                $xtpl->assign('ADMIN_EDIT', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=content&amp;id=' . $row['id']);
+                $xtpl->assign('ADMIN_CHECKSS', $row['admin_checkss']);
+                $xtpl->assign('ADMIN_EDIT', $row['admin_edit']);
                 $xtpl->parse('main.loop.adminlink');
             }
             $xtpl->parse('main.loop');

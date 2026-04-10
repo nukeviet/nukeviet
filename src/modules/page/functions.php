@@ -54,3 +54,21 @@ if ($page_config['viewtype'] != 2) {
         $id = $rowdetail['id'];
     }
 }
+
+/**
+ * Bổ sung các thuộc tính thêm cho bài đăng nói chung
+ *
+ * @param array $row
+ * @return void
+ */
+function extend_row_data(array &$row): void {
+    if (defined('NV_IS_MODADMIN')) {
+        global $admin_info, $module_name;
+
+        $row['admin_checkss'] = csrf_create($admin_info['admin_id'] . '_' . $module_name . '_' . $row['id']);
+        $row['admin_edit'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=content&amp;id=' . $row['id'];
+    } else {
+        $row['admin_checkss'] = '';
+        $row['admin_edit'] = '';
+    }
+}

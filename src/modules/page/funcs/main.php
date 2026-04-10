@@ -16,6 +16,7 @@ if (!defined('NV_IS_MOD_PAGE')) {
 $page_url = $base_url;
 
 if ($page_config['viewtype'] == 2) {
+    // Không hiển thị nội dung
     $canonicalUrl = getCanonicalUrl($page_url);
 
     $page_title = $module_info['site_title'];
@@ -179,6 +180,7 @@ if ($page_config['viewtype'] == 2) {
         $stmt->bindValue(':id', $id, PDO::PARAM_INT);
         $stmt->execute();
     }
+    extend_row_data($rowdetail);
     [$rowdetail, $other_links, $content_comment] = nv_apply_hook($module_name, 'before_detail_theme', [$rowdetail, $other_links, $content_comment], [$rowdetail, $other_links, $content_comment]);
     $nv_schemas[] = $schema;
 
@@ -209,6 +211,19 @@ if ($page_config['viewtype'] == 2) {
         empty($row['description']) && $row['description'] = strip_tags(trim($row['bodytext']));
         $row['description'] = nv_clean60($row['description'], 300);
         $row['link'] = $base_url . '&amp;' . NV_OP_VARIABLE . '=' . $row['alias'] . $global_config['rewrite_exturl'];
+
+        if (!empty($row['image'])) {
+            if (file_exists(NV_ROOTDIR . '/' . NV_ASSETS_DIR . '/' . $module_upload . '/' . $row['image'])) {
+                $row['image'] = NV_BASE_SITEURL . NV_ASSETS_DIR . '/' . $module_upload . '/' . $row['image'];
+            } elseif (file_exists(NV_ROOTDIR . '/' . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $row['image'])) {
+                $row['image'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $row['image'];
+            } else {
+                $row['image'] = '';
+            }
+        }
+        $row['imagealt'] = !empty($row['imagealt']) ? $row['imagealt'] : $row['title'];
+
+        extend_row_data($row);
         $array_data[$row['id']] = $row;
     }
     $stmt->closeCursor();

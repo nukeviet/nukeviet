@@ -6,7 +6,7 @@
             <i class="fa-solid fa-screwdriver-wrench"></i> <span class="visually-hidden">{$LANG->getModule('admtools')}</span>
         </a>
         <ul class="dropdown-menu">
-            <li><a class="dropdown-item" href="{$smarty.const.NV_BASE_ADMINURL}index.php?{$smarty.const.NV_LANG_VARIABLE}={$smarty.const.NV_LANG_DATA}&amp;{$smarty.const.NV_NAME_VARIABLE}={$MODULE_NAME}&amp;{$smarty.const.NV_OP_VARIABLE}=content&amp;id={$DATA.id}"><i class="fa-solid fa-pencil fa-fw text-center"></i> {$LANG->getGlobal('edit')}</a></li>
+            <li><a class="dropdown-item" href="{$DATA.admin_edit}"><i class="fa-solid fa-pencil fa-fw text-center"></i> {$LANG->getGlobal('edit')}</a></li>
             <li><a class="dropdown-item" href="#" data-toggle="nv_del_content" data-id="{$DATA.id}" data-checkss="{$DATA.admin_checkss}" data-adminurl="{$smarty.const.NV_BASE_ADMINURL}" data-detail="true"><i class="fa-solid fa-trash fa-fw text-center text-danger" data-icon="fa-trash"></i> {$LANG->getGlobal('delete')}</a></li>
         </ul>
     </span>
