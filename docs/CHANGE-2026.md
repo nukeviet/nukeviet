@@ -26,11 +26,6 @@ $result = nv_local_api('ClearCache', null, 'vuthao27');
 
 ## Tháng 3 năm 2026
 
-### Refactor Request::get_title (Không bắt buộc)
-bỏ tham số thứ 4 (specialchars) và chuyển sang tham số thứ 4 (maxlength)
-
-dùng tools\refactor_get_title.php để thực hiện
-
 ### db-refactor
 - Bỏ ->sqlreset khỏi codebase
 - Bỏ ->insert_id khỏi codebase
@@ -41,72 +36,39 @@ dùng tools\refactor_get_title.php để thực hiện
 - Tối ưu biến tạm khi dùng ->fetch(3)
 - Tối ưu code theo Skill db-refactor
 
-### Thống nhất dùng try catch
-```php
-try {
+### Refactor Request::get_title (Không bắt buộc)
+bỏ tham số thứ 4 (specialchars) và chuyển sang tham số thứ 4 (maxlength)
 
-} catch (Throwable $e) {
-    trigger_error($e);
-}
-```
+dùng tools\refactor_get_title.php để thực hiện
+
+### Thống nhất dùng try catch, json_encode, unserialize
 Chạy tool tools\try_catch_audit.php để quét tất cả các file và sửa lại, sau đó nhờ AI sửa dựa trên file report
-
-### Thêm đối số NV_JSON_ENCODE cho hàm json_encode
-
-Đã định nghĩa trong src/includes/constants.php
-
-```php
-// JSON encode cho API response và lưu DB
-define('NV_JSON_ENCODE', JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
-
-// JSON encode nhúng trong <script> tag HTML
-define('NV_JSON_ENCODE_SCRIPT', JSON_HEX_TAG | JSON_HEX_AMP | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
 ```
+Dựa vào danh sách cần sửa tools\try_catch_audit_report.md bạn hãy mở cửa sổ ra sửa, không dùng cách viết file thay thế do đã làm nhưng ko được
 
-Ví dụ
-```php
-// JSON cho API response
-header('Content-Type: application/json; charset=utf-8');
-echo json_encode($data, NV_JSON_ENCODE);
+## Hàm unserialize, thêm đối số NV_UNSERIALIZE_SAFE nếu chưa có đối số
 
-// JSON lưu DB / Cache
-$cache = json_encode($data, NV_JSON_ENCODE);
-
-// JSON nhúng trong <script> tag HTML
-echo json_encode($data, NV_JSON_ENCODE_SCRIPT);
-```
-
-Lệnh yêu cầu AI thực hiện
-```
-Tìm tất cả các file php dùng json_encode, thêm hoặc thay đối số $flags (json_encode(mixed $value, int $flags = 0, int $depth = 512)) bằng:
+## Hàm json_encode, thêm hoặc thay đối số $flags (json_encode(mixed $value, int $flags = 0, int $depth = 512)) bằng:
 - NV_JSON_ENCODE_SCRIPT, nếu JSON encode nhúng trong <script> tag HTML
 - Còn lại dùng biến NV_JSON_ENCODE
 
-Loại trừ thư mục src/includes/vendor
-nhưng vẫn thực hiện cho thư mục: src/includes/vendor/vinades
+## Sửa lại try catch thống nhất dùng
+try {
+ // code ...
+} catch (Throwable $e) {
+    trigger_error($e);
+}
+
+Chú ý nếu Throwable
+- Có logic khác dữ nguyên
+- Nếu trigger_error('....', 256) hoặc trigger_error('....', E_USER_ERROR) thì dùng throw new \NukeViet\Core\HttpException('error checksess', 403); Số 403 thay tùy ngữ cảnh
+- Các loại khác trigger_error thống nhất dùng trigger_error($e);
+- Các chỗ ->setMessage(print_r($e, true) ) thì sửa lại thành ->setMessage($e->getMessage())
+- Chú ý Nếu thừa use Exception; use PDOException; bỏ đi
+- Chú ý formatcode trong đoạn catch
 ```
 
-### Thêm đối số NV_UNSERIALIZE_SAFE cho hàm unserialize
-
-Đã định nghĩa trong src/includes/constants.php
-
-```php
-// Option an toàn cho unserialize — chỉ cho phép array/scalar, không cho phép object
-define('NV_UNSERIALIZE_SAFE', ['allowed_classes' => false]);
-```
-
-Ví dụ
-```php
-// Unserialize an toàn
-$data = unserialize($cache, NV_UNSERIALIZE_SAFE);
-```
-
-Lệnh yêu cầu AI thực hiện
-```
-Tìm tất cả các file php cò hàm unserialize, thêm đối số NV_UNSERIALIZE_SAFE nếu chưa có đối số
-Loại trừ thư mục src/includes/vendor
-nhưng vẫn thực hiện cho thư mục: src/includes/vendor/vinades
-```
+Sau đó kiểm tra lại từng đoạn có thể AI xác định sai
 
 ### CSRF — Kiểm tra token trước khi xử lý POST
 
