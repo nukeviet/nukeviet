@@ -110,7 +110,7 @@
                                     <tr>
                                         <td></td>
                                         <td>
-                                            <input type="hidden" name="checkss" value="{DATA.checkss}" />
+                                            <input type="hidden" name="checkss" value="{CHECKSS}" />
                                             <input type="hidden" name="func" value="access_token_copy" />
                                             <button type="submit" class="btn btn-primary">{GLANG.save}</button>
                                         </td>
