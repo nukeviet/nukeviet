@@ -114,6 +114,7 @@
         "file": [
             "[\\.(.*)]",
             "[composer\\.json]",
+            "[composer\\.lock]",
             "[default\\.(htaccess\\.txt|web\\.config\\.txt|php)]",
             "[mainfile\\.php]",
             "[modules/[^/]+/blocks/[^/]+\\.json]",

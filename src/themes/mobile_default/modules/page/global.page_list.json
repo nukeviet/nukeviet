@@ -1,0 +1,43 @@
+{
+    "info": {
+        "name": "Block page list",
+        "author": "VINADES.,JSC",
+        "website": "https://vinades.vn",
+        "description": ""
+    },
+    "config": {
+        "title_length": "0",
+        "numrow": "5"
+    },
+    "datafunction": "nv_block_config_page_list",
+    "submitfunction": "nv_block_config_page_list_submit",
+    "i18n": {
+        "vi": {
+            "language": {
+                "title_length": "Số ký tự cắt tiêu đề",
+                "numrow": "Số dòng hiển thị"
+            },
+            "info": {
+                "name": "Danh sách bài viết"
+            }
+        },
+        "en": {
+            "language": {
+                "title_length": "Number of characters to cut the title",
+                "numrow": "Number of rows to display"
+            },
+            "info": {
+                "name": "List of posts"
+            }
+        },
+        "fr": {
+            "language": {
+                "title_length": "Nombre de caractères à couper le titre",
+                "numrow": "Nombre de lignes à afficher"
+            },
+            "info": {
+                "name": "Liste des articles"
+            }
+        }
+    }
+}

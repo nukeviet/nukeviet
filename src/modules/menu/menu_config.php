@@ -14,8 +14,6 @@ if (!defined('NV_MAINFILE')) {
 }
 
 /**
- * nv_block_config_menu()
- *
  * @param string $module
  * @param array  $data_block
  * @return string
@@ -23,36 +21,27 @@ if (!defined('NV_MAINFILE')) {
 function nv_block_config_menu($module, $data_block)
 {
     global $nv_Cache, $nv_Lang;
-    $html = '';
-    $html .= '<div class="row mb-3">';
-    $html .= '	<label class="col-sm-3 col-form-label text-sm-end text-truncate fw-medium">' . $nv_Lang->getModule('menu') . ':</label>';
-    $html .= "	<div class=\"col-sm-5\"><select name=\"menuid\" class=\"form-select\">\n";
 
-    $sql = 'SELECT * FROM ' . NV_PREFIXLANG . '_menu ORDER BY id DESC';
+    $nv_Lang->loadModule('menu', false, true);
+
+    $tpl = new \NukeViet\Template\NVSmarty();
+    $tpl->setTemplateDir(get_block_tpl_dir('block.menu_config.tpl', module: $module));
+    $tpl->assign('LANG', $nv_Lang);
+    $tpl->assign('DATA', $data_block);
+
     // Module menu của hệ thống không ảo hóa, do đó chỉ định cache trực tiếp vào module tránh lỗi khi gọi file từ giao diện
+    $sql = 'SELECT * FROM ' . NV_PREFIXLANG . '_menu ORDER BY id DESC';
     $list = $nv_Cache->db($sql, 'id', 'menu');
-    foreach ($list as $l) {
-        $sel = ($data_block['menuid'] == $l['id']) ? ' selected' : '';
-        $html .= '<option value="' . $l['id'] . '" ' . $sel . '>' . $l['title'] . "</option>\n";
-    }
 
-    $html .= "	</select></div>\n";
-    $html .= '</div>';
-    $html .= '<div class="row mb-3">';
-    $html .= '<label class="col-sm-3 col-form-label text-sm-end text-truncate fw-medium">';
-    $html .= $nv_Lang->getModule('title_length');
-    $html .= ':</label>';
-    $html .= '<div class="col-sm-9">';
-    $html .= '<input type="text" class="form-control" name="config_title_length" value="' . $data_block['title_length'] . '"/>';
-    $html .= '</div>';
-    $html .= '</div>';
+    $tpl->assign('MENUS', $list);
 
-    return $html;
+    $content = $tpl->fetch('block.menu_config.tpl');
+    $nv_Lang->changeLang();
+
+    return $content;
 }
 
 /**
- * nv_block_config_menu_submit()
- *
  * @param string $module
  * @return array
  */
@@ -64,6 +53,8 @@ function nv_block_config_menu_submit($module)
     $return['config'] = [];
     $return['config']['menuid'] = $nv_Request->get_int('menuid', 'post', 0);
     $return['config']['title_length'] = $nv_Request->get_int('config_title_length', 'post', 24);
+    $return['config']['show_home'] = (int) $nv_Request->get_bool('config_show_home', 'post', false);
+    $return['config']['show_icon'] = (int) $nv_Request->get_bool('config_show_icon', 'post', false);
 
     return $return;
 }

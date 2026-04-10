@@ -1,0 +1,39 @@
+{
+    "info": {
+        "name": "Block Groups",
+        "author": "VINADES.,JSC",
+        "website": "https://vinades.vn",
+        "description": ""
+    },
+    "config": {
+        "departmentid": "1"
+    },
+    "datafunction": "nv_block_config_contact_department",
+    "submitfunction": "nv_block_config_contact_department_submit",
+    "i18n": {
+        "vi": {
+            "language": {
+                "departmentid": "Chọn bộ phận"
+            },
+            "info": {
+                "name": "Chi tiết một bộ phận"
+            }
+        },
+        "en": {
+            "language": {
+                "departmentid": "Select department"
+            },
+            "info": {
+                "name": "Details of a part"
+            }
+        },
+        "fr": {
+            "language": {
+                "departmentid": "Sélectionnez un département"
+            },
+            "info": {
+                "name": "Détails d'une pièce"
+            }
+        }
+    }
+}

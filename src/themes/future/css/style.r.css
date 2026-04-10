@@ -26757,6 +26757,11 @@ readers do not read off random characters that represent icons */
 .main-nav .menu-item .item-link .item-icon {
   flex: 0 0 1.25rem;
 }
+@media (min-width: 992px) {
+  .main-nav .menu-item .item-link .item-icon {
+    text-align: center;
+  }
+}
 .main-nav .menu-item .item-link .item-icon img {
   max-width: 1.25rem;
   max-height: 3.125rem;
@@ -27011,6 +27016,8 @@ readers do not read off random characters that represent icons */
 }
 .portlet > .blockct {
   cursor: move;
+  position: relative;
+  z-index: 1;
 }
 .portlet > .blockct.act0 {
   opacity: 0.5;

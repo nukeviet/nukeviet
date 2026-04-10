@@ -1,0 +1,25 @@
+{
+    "info": {
+        "name": "Inform",
+        "author": "VINADES.,JSC",
+        "website": "https://vinades.vn",
+        "description": ""
+    },
+    "i18n": {
+        "en": {
+            "info": {
+                "name": "Notification button"
+            }
+        },
+        "fr": {
+            "info": {
+                "name": "Bouton de notification"
+            }
+        },
+        "vi": {
+            "info": {
+                "name": "Nút thông báo"
+            }
+        }
+    }
+}

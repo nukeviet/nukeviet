@@ -1,0 +1,33 @@
+{
+    "info": {
+        "name": "Block News",
+        "author": "VINADES.,JSC",
+        "website": "https://vinades.vn",
+        "description": ""
+    },
+    "config": {
+        "numrow": "20",
+        "showtooltip": "1",
+        "tooltip_position": "bottom",
+        "tooltip_length": "0"
+    },
+    "datafunction": "nv_block_config_news",
+    "submitfunction": "nv_block_config_news_submit",
+    "i18n": {
+        "en": {
+            "info": {
+                "name": "Latest news"
+            }
+        },
+        "fr": {
+            "info": {
+                "name": "Dernières nouvelles"
+            }
+        },
+        "vi": {
+            "info": {
+                "name": "Tin mới nhất"
+            }
+        }
+    }
+}

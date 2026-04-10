@@ -1,0 +1,30 @@
+{
+    "info": {
+        "name": "Block HTML",
+        "author": "VINADES.,JSC",
+        "website": "https://vinades.vn",
+        "description": ""
+    },
+    "config": {
+        "htmlcontent": ""
+    },
+    "datafunction": "nv_block_data_config_html",
+    "submitfunction": "nv_block_data_config_html_submit",
+    "i18n": {
+        "en": {
+            "info": {
+                "name": "Compose content to display"
+            }
+        },
+        "fr": {
+            "info": {
+                "name": "Rédiger le contenu à afficher"
+            }
+        },
+        "vi": {
+            "info": {
+                "name": "Tự soạn thảo nội dung hiển thị"
+            }
+        }
+    }
+}

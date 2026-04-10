@@ -1,0 +1,46 @@
+{
+    "info": {
+        "name": "Block News Comment",
+        "author": "VINADES.,JSC",
+        "website": "https://vinades.vn",
+        "description": ""
+    },
+    "config": {
+        "titlelength": "0",
+        "numrow": "10"
+    },
+    "datafunction": "nv_block_comment_new",
+    "submitfunction": "nv_block_comment_new_submit",
+    "i18n": {
+        "vi": {
+            "language": {
+                "titlelength": "Số ký tự cắt tiêu đề",
+                "titlenote": "Điền 0 nếu không cắt",
+                "numrow": "Bản ghi hiển thị"
+            },
+            "info": {
+                "name": "Bình luận mới nhất"
+            }
+        },
+        "en": {
+            "language": {
+                "titlelength": "Number of characters to cut the title",
+                "titlenote": "Enter 0 if no cut",
+                "numrow": "Records to display"
+            },
+            "info": {
+                "name": "Latest comments"
+            }
+        },
+        "fr": {
+            "language": {
+                "titlelength": "Nombre de caractères à couper le titre",
+                "titlenote": "Entrez 0 si aucune coupure",
+                "numrow": "Enregistrements à afficher"
+            },
+            "info": {
+                "name": "Derniers commentaires"
+            }
+        }
+    }
+}

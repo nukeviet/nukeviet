@@ -1,0 +1,25 @@
+{
+    "info": {
+        "name": "Contact_form",
+        "author": "VINADES.,JSC",
+        "website": "https://vinades.vn",
+        "description": ""
+    },
+    "i18n": {
+        "en": {
+            "info": {
+                "name": "Contact submission form"
+            }
+        },
+        "fr": {
+            "info": {
+                "name": "Formulaire d'envoi de contact"
+            }
+        },
+        "vi": {
+            "info": {
+                "name": "Biểu mẫu gửi liên hệ"
+            }
+        }
+    }
+}

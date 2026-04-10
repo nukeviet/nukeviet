@@ -14,6 +14,16 @@ $result = json_decode(nv_local_api('ClearCache', null, 'vuthao27'), true);
 $result = nv_local_api('ClearCache', null, 'vuthao27');
 ```
 
+## Tháng 4 năm 2026
+
+- Block của module có thể đặt ở giao diện ví dụ themes/ten-theme/modules/news/global.block_category.(php|json|ini). Điều kiện là tệp global.block_category.php phải tồn tại ở modules/news/blocks/. Việc này phục vụ giai đoạn phát triển, không nên làm cho giao diện production của bạn.
+- Để định dạng ngày tháng trong js dùng hàm `nv_format_date`.
+- Xóa bỏ hàm js `nv_DigitalClock`
+- Để xác định tpl của block dùng hàm `get_block_tpl_dir`, tương tự như `get_module_tpl_dir` thường dùng trong theme.php
+- Khi muốn gọi js, css của 1 module A đó khi đang đứng ở module B chỉ cần dùng hàm `addition_module_assets` thay vì phải viết tệp js, css vào trong tpl qua thẻ script hay là link
+- Trước đây 1 form có captcha phải if/ else nhiều lần để parse ra tpl các attrs thì bây giờ chỉ cần dùng `nv_captcha_form_attrs`
+- Để phát hiện trình duyệt lỗi thời, không còn chạy được website một cách bình thường thì dùng hàm `nv_outdated_browser`
+
 ## Tháng 3 năm 2026
 
 ### Refactor Request::get_title (Không bắt buộc)

@@ -1,0 +1,28 @@
+/**
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
+ */
+
+.statistics-responsive {
+    width: 100%;
+    overflow-x: auto;
+}
+
+.statistics .data {
+    vertical-align: bottom;
+    text-align: center;
+}
+
+.statistics caption {
+    margin-bottom: 10px;
+    text-transform: uppercase;
+    font-weight: bold;
+}
+
+.statistics .w250 {
+    width: 250px;
+}

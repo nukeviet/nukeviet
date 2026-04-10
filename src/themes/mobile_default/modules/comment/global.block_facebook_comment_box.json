@@ -1,0 +1,52 @@
+{
+    "info": {
+        "name": "Block Block Facebook Comment Box",
+        "author": "VINADES.,JSC",
+        "website": "https://vinades.vn",
+        "description": "Block Facebook Like Comment for NukeViet 4"
+    },
+    "config": {
+        "width": "100%",
+        "numpost": "5",
+        "scheme": "light",
+        "facebookappid": "",
+        "url": ""
+    },
+    "datafunction": "nv_block_config_facebook_comment_box_blocks",
+    "submitfunction": "nv_block_config_facebook_comment_box_blocks_submit",
+    "i18n": {
+        "en": {
+            "language": {
+                "width": "Width",
+                "numpost": "Num posts",
+                "scheme": "Color Scheme",
+                "facebookappid": "Facebook Appid"
+            },
+            "info": {
+                "name": "Facebook comment box"
+            }
+        },
+        "vi": {
+            "language": {
+                "width": "Chiều rộng",
+                "numpost": "Số bình luận",
+                "scheme": "Giao diện",
+                "facebookappid": "AppID"
+            },
+            "info": {
+                "name": "Hộp bình luận Facebook"
+            }
+        },
+        "fr": {
+            "language": {
+                "width": "Largeur",
+                "numpost": "Nombre de publications",
+                "scheme": "Schéma de couleurs",
+                "facebookappid": "ID de l'application Facebook"
+            },
+            "info": {
+                "name": "Boîte de commentaires Facebook"
+            }
+        }
+    }
+}

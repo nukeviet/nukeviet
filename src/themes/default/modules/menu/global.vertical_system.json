@@ -1,0 +1,29 @@
+{
+    "info": {
+        "name": "Block Menu Styles",
+        "author": "VINADES.,JSC",
+        "website": "https://vinades.vn",
+        "description": ""
+    },
+    "config": {
+        "note": ""
+    },
+    "datafunction": "nv_block_vertica_menu_note",
+    "i18n": {
+        "en": {
+            "info": {
+                "name": "Vertical menu based on specific modules"
+            }
+        },
+        "fr": {
+            "info": {
+                "name": "Menu vertical selon les modules spécifiques"
+            }
+        },
+        "vi": {
+            "info": {
+                "name": "Menu dọc tùy theo module cụ thể"
+            }
+        }
+    }
+}

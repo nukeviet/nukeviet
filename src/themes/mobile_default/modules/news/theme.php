@@ -14,6 +14,42 @@ if (!defined('NV_IS_MOD_NEWS')) {
 }
 
 /**
+ * Lấy nút sửa bài viết
+ *
+ * @param array $info cần có ít nhất id, và listcatid
+ * @return string
+ */
+function nv_link_edit_page(array $info)
+{
+    global $nv_Lang, $module_name;
+
+    if (!nv_check_edit_page($info)) {
+        return '';
+    }
+    $link = '<a class="btn btn-primary btn-xs btn_edit" href="' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=content&amp;id=' . $info['id'] . '"><i class="fa fa-edit fa-fw"></i> ' . $nv_Lang->getGlobal('edit') . '</a>';
+    return $link;
+}
+
+/**
+ * Lấy nút xóa bài viết
+ *
+ * @param array $info cần có ít nhất id, và listcatid
+ * @param int $detail
+ * @return string
+ */
+function nv_link_delete_page(array $info, int $detail = 0)
+{
+    global $nv_Lang, $admin_info, $module_name;
+
+    if (!nv_check_delete_page($info)) {
+        return '';
+    }
+
+    $link = '<a class="btn btn-danger btn-xs" href="#" data-toggle="nv_del_content" data-id="' . $info['id'] . '" data-checkss="' . csrf_create($admin_info['admin_id'] . '_' . $module_name . '_' . $info['id']) . '" data-adminurl="' . NV_BASE_ADMINURL . '" data-detail="' . $detail . '"><em class="fa fa-trash-o margin-right"></em> ' . $nv_Lang->getGlobal('delete') . '</a>';
+    return $link;
+}
+
+/**
  * viewcat_grid_new()
  *
  * @param array  $array_catpage

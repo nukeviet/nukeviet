@@ -1,0 +1,25 @@
+{
+    "info": {
+        "name": "About",
+        "author": "VINADES.,JSC",
+        "website": "https://vinades.vn",
+        "description": ""
+    },
+    "i18n": {
+        "en": {
+            "info": {
+                "name": "Display article"
+            }
+        },
+        "fr": {
+            "info": {
+                "name": "Afficher le post"
+            }
+        },
+        "vi": {
+            "info": {
+                "name": "Hiển thị bài viết"
+            }
+        }
+    }
+}

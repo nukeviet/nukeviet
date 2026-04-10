@@ -1,0 +1,25 @@
+{
+    "info": {
+        "name": "Supporter",
+        "author": "VINADES.,JSC",
+        "website": "https://vinades.vn",
+        "description": ""
+    },
+    "i18n": {
+        "en": {
+            "info": {
+                "name": "Support staff"
+            }
+        },
+        "fr": {
+            "info": {
+                "name": "Personnel de support"
+            }
+        },
+        "vi": {
+            "info": {
+                "name": "Nhân viên hỗ trợ"
+            }
+        }
+    }
+}

@@ -1,0 +1,39 @@
+{
+    "info": {
+        "name": "Block Select Voting",
+        "author": "VINADES.,JSC",
+        "website": "https://vinades.vn",
+        "description": ""
+    },
+    "config": {
+        "vid": "0"
+    },
+    "datafunction": "nv_block_voting_select_config",
+    "submitfunction": "nv_block_voting_select_config_submit",
+    "i18n": {
+        "vi": {
+            "language": {
+                "vid": "Bình chọn"
+            },
+            "info": {
+                "name": "Fixed poll"
+            }
+        },
+        "en": {
+            "language": {
+                "vid": "Select Voting"
+            },
+            "info": {
+                "name": "Thăm dò cố định"
+            }
+        },
+        "fr": {
+            "language": {
+                "vid": "Sondage"
+            },
+            "info": {
+                "name": "Sondage fixe"
+            }
+        }
+    }
+}

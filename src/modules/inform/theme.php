@@ -50,74 +50,32 @@ function user_getlist_theme($items, $generate_page, $filter, $page_url)
 {
     global $global_config, $nv_Lang, $module_info;
 
-    $xtpl = new XTemplate('main.tpl', get_module_tpl_dir('main.tpl'));
-    $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
-    $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
-    $xtpl->assign('PAGE_URL', nv_url_rewrite($page_url, true));
+    $tpl = new \NukeViet\Template\NVSmarty();
+    $tpl->setTemplateDir(get_module_tpl_dir('list.tpl'));
+    $tpl->assign('LANG', $nv_Lang);
 
     if (!empty($items)) {
-        foreach ($items as $item) {
-            if (!empty($item['message'])) {
-                if ($item['sender_avatar'] == 'group') {
-                    $xtpl->parse('user_get_list.main_cont.loop.sender_group');
-                } elseif ($item['sender_avatar'] == 'admin') {
-                    $xtpl->parse('user_get_list.main_cont.loop.sender_admin');
-                } else {
-                    $xtpl->parse('user_get_list.main_cont.loop.sender_system');
-                }
-
-                $item['title'] = $nv_Lang->getModule('notification_title', $item['title']);
-                $item['is_hidden'] = $filter == 'hidden' ? 1 : 0;
-                $item['is_viewed'] = !empty($item['viewed_time']) ? 1 : 0;
-                $item['is_favorite'] = !empty($item['favorite_time']) ? 1 : 0;
-                $item['add_time'] = nv_datetime_format($item['add_time']);
-                if (!empty($item['link']) and !preg_match('#^https?\:\/\/#', $item['link'])) {
-                    $item['link'] = nv_url_rewrite(NV_BASE_SITEURL . $item['link'], true);
-                }
-
-                $xtpl->assign('LOOP', $item);
-
-                if (!empty($item['message'][1])) {
-                    $xtpl->parse('user_get_list.main_cont.loop.message_1');
-                }
-
-                if (!empty($item['link'])) {
-                    $xtpl->parse('user_get_list.main_cont.loop.is_link');
-                }
-
-                if ($filter == 'hidden') {
-                    $xtpl->parse('user_get_list.main_cont.loop.set_unhidden');
-                } else {
-                    $xtpl->parse('user_get_list.main_cont.loop.set_hidden');
-
-                    if (empty($item['viewed_time'])) {
-                        $xtpl->parse('user_get_list.main_cont.loop.set_viewed');
-                    } else {
-                        $xtpl->parse('user_get_list.main_cont.loop.set_unviewed');
-                    }
-
-                    if (empty($item['favorite_time'])) {
-                        $xtpl->parse('user_get_list.main_cont.loop.set_favorite');
-                    } else {
-                        $xtpl->parse('user_get_list.main_cont.loop.set_unfavorite');
-                    }
-                }
-                $xtpl->parse('user_get_list.main_cont.loop');
+        $keys = array_keys($items);
+        foreach ($keys as $key) {
+            if (empty($items[$key]['message'])) {
+                unset($items[$key]);
+                continue;
+            }
+            $items[$key]['is_hidden'] = $filter == 'hidden' ? 1 : 0;
+            $items[$key]['is_viewed'] = !empty($items[$key]['viewed_time']) ? 1 : 0;
+            $items[$key]['is_favorite'] = !empty($items[$key]['favorite_time']) ? 1 : 0;
+            $items[$key]['add_time'] = nv_datetime_format($items[$key]['add_time']);
+            if (!empty($items[$key]['link']) and !preg_match('#^https?\:\/\/#', $items[$key]['link'])) {
+                $items[$key]['link'] = nv_url_rewrite(NV_BASE_SITEURL . $items[$key]['link'], true);
             }
         }
-
-        $xtpl->parse('user_get_list.main_cont');
-    } else {
-        $xtpl->parse('user_get_list.main_empty');
     }
 
-    if (!empty($generate_page)) {
-        $xtpl->assign('GENERATE_PAGE', $generate_page);
-        $xtpl->parse('user_get_list.generate_page');
-    }
-    $xtpl->parse('user_get_list');
+    $tpl->assign('PAGE_URL', nv_url_rewrite($page_url, true));
+    $tpl->assign('ITEMS', $items);
+    $tpl->assign('GENERATE_PAGE', $generate_page);
 
-    return $xtpl->text('user_get_list');
+    return $tpl->fetch('list.tpl');
 }
 
 function getlist_theme($items, $generate_page, $group_id, $members)

@@ -186,8 +186,7 @@ if (empty($contents)) {
         $result = $db->query($db->sql());
         $i = 0;
         while ($item = $result->fetch()) {
-            $item['imghome'] = $item['imgmobile'] = '';
-            get_homeimgfile($item);
+            extend_articles($item);
 
             $item['newday'] = $global_array_cat[$item['catid']]['newday'];
             $item['link'] = $global_array_cat[$item['catid']]['link'] . '/' . $item['alias'] . '-' . $item['id'] . $global_config['rewrite_exturl'];
@@ -234,6 +233,8 @@ if (empty($contents)) {
 
         foreach ($global_array_cat as $_catid => $array_cat_i) {
             if ($array_cat_i['parentid'] == 0 and $array_cat_i['status'] == 1) {
+                extend_categories($array_cat_i);
+
                 $array_cat[$key] = $array_cat_i;
                 $featured = 0;
                 if ($array_cat_i['featured'] != 0) {
@@ -241,8 +242,7 @@ if (empty($contents)) {
                         ->where('id=' . $array_cat_i['featured'] . ' and status= 1 AND inhome=1')
                         ->sql());
                     if ($item = $result->fetch()) {
-                        $item['imghome'] = $item['imgmobile'] = '';
-                        get_homeimgfile($item);
+                        extend_articles($item);
 
                         $item['newday'] = $array_cat_i['newday'];
                         $item['link'] = $array_cat_i['link'] . '/' . $item['alias'] . '-' . $item['id'] . $global_config['rewrite_exturl'];
@@ -263,11 +263,11 @@ if (empty($contents)) {
 
                 $result = $db->query($db->sql());
                 while ($item = $result->fetch()) {
-                    $item['imghome'] = $item['imgmobile'] = '';
-                    get_homeimgfile($item);
+                    extend_articles($item);
 
                     $item['newday'] = $array_cat_i['newday'];
                     $item['link'] = $array_cat_i['link'] . '/' . $item['alias'] . '-' . $item['id'] . $global_config['rewrite_exturl'];
+                    $item['hometext_clean'] = nv_clean60(strip_tags($item['hometext']), $module_config[$module_name]['tooltip_length'], true);
                     $array_cat[$key]['content'][] = $item;
                 }
 
@@ -280,63 +280,74 @@ if (empty($contents)) {
 
         $contents = viewsubcat_main($viewcat, $array_cat);
     } elseif ($viewcat == 'viewcat_two_column') {
-        // Cac bai viet phan dau
-        $array_content = $array_catpage = [];
+        // Trang chủ không có bài viết thuộc chuyên mục nên để trống
+        $array_content = [];
 
-        // cac bai viet cua cac chu de con
+        // Các chuyên mục con
         $key = 0;
-
+        $array_catpage = [];
         $db->sqlreset()
             ->select('id, listcatid, topicid, admin_id, author, sourceid, addtime, edittime, publtime, title, alias, hometext, homeimgfile, homeimgalt, homeimgthumb, allowed_rating, external_link, hitstotal, hitscm, total_rating, click_rating')
             ->where('status= 1 AND inhome=1')
             ->order($order_articles_by . ' DESC');
+
         foreach ($global_array_cat as $_catid => $array_cat_i) {
-            if ($array_cat_i['parentid'] == 0 and $array_cat_i['status'] == 1) {
-                $array_catpage[$key] = $array_cat_i;
-                $featured = 0;
-                if ($array_cat_i['featured'] != 0) {
-                    $result = $db->query($db->from(NV_PREFIXLANG . '_' . $module_data . '_' . $_catid)
-                        ->where('id=' . $array_cat_i['featured'] . ' and status= 1 AND inhome=1')
-                        ->limit($array_cat_i['numlinks'])
-                        ->sql());
-                    while ($item = $result->fetch()) {
-                        $item['imghome'] = $item['imgmobile'] = '';
-                        get_homeimgfile($item);
+            if ($array_cat_i['parentid'] != 0 or $array_cat_i['status'] != 1) {
+                continue;
+            }
 
-                        $item['newday'] = $array_cat_i['newday'];
-                        $item['link'] = $array_cat_i['link'] . '/' . $item['alias'] . '-' . $item['id'] . $global_config['rewrite_exturl'];
-                        $array_catpage[$key]['content'][] = $item;
-                        $featured = $item['id'];
-                    }
-                }
-                if ($featured) {
-                    $db->from(NV_PREFIXLANG . '_' . $module_data . '_' . $_catid)
-                        ->where('status= 1 AND inhome=1 AND id!=' . $featured)
-                        ->limit($array_cat_i['numlinks'] - 1);
-                } else {
-                    $db->from(NV_PREFIXLANG . '_' . $module_data . '_' . $_catid)
-                        ->where('status= 1 AND inhome=1')
-                        ->limit($array_cat_i['numlinks']);
-                }
-                $result = $db->query($db->sql());
+            extend_categories($array_cat_i);
+            $array_catpage[$key] = $array_cat_i;
 
+            $featured = 0;
+            if ($array_cat_i['featured'] != 0) {
+                // Bài viết ghim cố định
+                $result = $db->query($db->from(NV_PREFIXLANG . '_' . $module_data . '_' . $_catid)
+                    ->where('id=' . $array_cat_i['featured'] . ' and status= 1 AND inhome=1')
+                    ->limit($array_cat_i['numlinks'])
+                    ->sql());
                 while ($item = $result->fetch()) {
-                    $item['imghome'] = $item['imgmobile'] = '';
-                    get_homeimgfile($item);
+                    extend_articles($item);
 
                     $item['newday'] = $array_cat_i['newday'];
                     $item['link'] = $array_cat_i['link'] . '/' . $item['alias'] . '-' . $item['id'] . $global_config['rewrite_exturl'];
                     $array_catpage[$key]['content'][] = $item;
+                    $featured = $item['id'];
                 }
-
-                $desc[] = $array_cat_i['title'];
-                $kw[] = $array_cat_i['title'];
             }
 
-            ++$key;
+            // Các bài viết thông thường thuộc chuyên mục
+            if ($featured) {
+                $db->from(NV_PREFIXLANG . '_' . $module_data . '_' . $_catid)
+                    ->where('status= 1 AND inhome=1 AND id!=' . $featured)
+                    ->limit($array_cat_i['numlinks'] - 1);
+            } else {
+                $db->from(NV_PREFIXLANG . '_' . $module_data . '_' . $_catid)
+                    ->where('status= 1 AND inhome=1')
+                    ->limit($array_cat_i['numlinks']);
+            }
+            $result = $db->query($db->sql());
+
+            while ($item = $result->fetch()) {
+                extend_articles($item);
+
+                $item['newday'] = $array_cat_i['newday'];
+                $item['link'] = $array_cat_i['link'] . '/' . $item['alias'] . '-' . $item['id'] . $global_config['rewrite_exturl'];
+                $array_catpage[$key]['content'][] = $item;
+            }
+
+            $desc[] = $array_cat_i['title'];
+            $kw[] = $array_cat_i['title'];
+
+            // Chuyên mục không có bài viết nào thì không lấy
+            if (empty($array_catpage[$key]['content'])) {
+                unset($array_catpage[$key]);
+            } else {
+                ++$key;
+            }
         }
+
         unset($sql, $result);
-        //Het cac bai viet cua cac chu de con
         $contents = viewcat_two_column($array_content, '', $array_catpage);
     } elseif ($viewcat == 'viewcat_grid_new' or $viewcat == 'viewcat_grid_old') {
         $show_schema = true;
@@ -360,8 +371,7 @@ if (empty($contents)) {
         $result = $db->query($db->sql());
         $i = 0;
         while ($item = $result->fetch()) {
-            $item['imghome'] = $item['imgmobile'] = '';
-            get_homeimgfile($item);
+            extend_articles($item);
 
             $item['newday'] = $global_array_cat[$item['catid']]['newday'];
             $item['link'] = $global_array_cat[$item['catid']]['link'] . '/' . $item['alias'] . '-' . $item['id'] . $global_config['rewrite_exturl'];
@@ -401,8 +411,7 @@ if (empty($contents)) {
         $result = $db->query($db->sql());
         $i = 0;
         while ($item = $result->fetch()) {
-            $item['imghome'] = $item['imgmobile'] = '';
-            get_homeimgfile($item);
+            extend_articles($item);
 
             $item['newday'] = $global_array_cat[$item['catid']]['newday'];
             $item['link'] = $global_array_cat[$item['catid']]['link'] . '/' . $item['alias'] . '-' . $item['id'] . $global_config['rewrite_exturl'];

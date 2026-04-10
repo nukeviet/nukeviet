@@ -7,7 +7,9 @@
     },
     "config": {
         "menuid": "1",
-        "title_length": "0"
+        "title_length": "0",
+        "show_home": "1",
+        "show_icon": "0"
     },
     "datafunction": "nv_block_config_menu",
     "submitfunction": "nv_block_config_menu_submit",

@@ -1,0 +1,31 @@
+{
+    "info": {
+        "name": "Block Free Content",
+        "author": "VINADES.,JSC",
+        "website": "https://vinades.vn",
+        "description": ""
+    },
+    "config": {
+        "blockid": "0",
+        "numrows": "2"
+    },
+    "datafunction": "nv_block_config_freecontent",
+    "submitfunction": "nv_block_config_freecontent_submit",
+    "i18n": {
+        "en": {
+            "info": {
+                "name": "Display random content in the block"
+            }
+        },
+        "fr": {
+            "info": {
+                "name": "Afficher du contenu aléatoire dans le bloc"
+            }
+        },
+        "vi": {
+            "info": {
+                "name": "Hiển thị ngẫu nhiên nội dung trong khối"
+            }
+        }
+    }
+}

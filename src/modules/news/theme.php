@@ -14,6 +14,58 @@ if (!defined('NV_IS_MOD_NEWS')) {
 }
 
 /**
+ * Lấy nút xóa bài viết
+ *
+ * @param array $info cần có ít nhất id, và listcatid
+ * @param int $detail
+ * @param bool $link_only
+ * @return string|array
+ */
+function nv_link_delete_page(array $info, int $detail = 0, bool $link_only = false)
+{
+    global $nv_Lang, $admin_info, $module_name;
+
+    if (!nv_check_delete_page($info)) {
+        return $link_only ? [] : '';
+    }
+    $link_info = [
+        'id' => $info['id'],
+        'checkss' => csrf_create($admin_info['admin_id'] . '_' . $module_name . '_' . $info['id']),
+        'detail' => $detail
+    ];
+    if ($link_only) {
+        return $link_info;
+    }
+
+    $link = '<a class="btn btn-danger" href="#" data-toggle="nv_del_content" data-id="' . $info['id'] . '" data-checkss="' . $link_info['checkss'] . '" data-adminurl="' . NV_BASE_ADMINURL . '" data-detail="' . $detail . '"><i class="fa-solid fa-trash"></i> ' . $nv_Lang->getGlobal('delete') . '</a>';
+    return $link;
+}
+
+/**
+ * Lấy HTML nút sửa bài viết hoặc link sửa bài viết nếu có quyền
+ * không có quyền trả về chuỗi rỗng
+ *
+ * @param array $info cần có ít nhất id, và listcatid
+ * @param bool $link_only
+ * @return string
+ */
+function nv_link_edit_page(array $info, bool $link_only = false)
+{
+    global $nv_Lang, $module_name;
+
+    if (!nv_check_edit_page($info)) {
+        return '';
+    }
+
+    $link = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=content&amp;id=' . $info['id'];
+    if ($link_only) {
+        return $link;
+    }
+
+    return '<a class="btn btn-primary" href="' . $link . '"><i class="fa-solid fa-pencil"></i> ' . $nv_Lang->getGlobal('edit') . '</a>';
+}
+
+/**
  * viewcat_grid_new()
  *
  * @param array  $array_catpage
@@ -358,7 +410,8 @@ function viewcat_page_new($array_catpage, $array_cat_other, $generate_page)
 }
 
 /**
- * viewcat_top()
+ * Phần mở đầu của chuyên mục đối với kiểu hiển thị theo chuyên mục, tin khác
+ * nằm phải (end), trái (start), dưới
  *
  * @param array  $array_catcontent
  * @param string $generate_page
@@ -440,9 +493,12 @@ function viewcat_top($array_catcontent, $generate_page)
 }
 
 /**
- * viewsubcat_main()
+ * Giao diện tin theo chuyên mục, tin khác nằm phải (end), trái (start), dưới
  *
- * @param string $viewcat
+ * @param string $viewcat Một trong các giá trị sau:
+ *   - "viewcat_main_left"
+ *   - "viewcat_main_right"
+ *   - "viewcat_main_bottom"
  * @param array  $array_cat
  * @param array  $array_articles
  * @param string  $generate_page
@@ -450,238 +506,80 @@ function viewcat_top($array_catcontent, $generate_page)
  */
 function viewsubcat_main($viewcat, $array_cat, $array_articles = [], $generate_page = '')
 {
-    global $module_name, $site_mods, $global_array_cat, $nv_Lang, $module_config, $module_info, $home;
+    global $module_name, $site_mods, $nv_Lang, $module_config, $home, $op, $catid, $global_array_cat, $page, $module_upload;
 
-    $xtpl = new XTemplate($viewcat . '.tpl', get_module_tpl_dir($viewcat . '.tpl'));
-    $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
-    $xtpl->assign('TOOLTIP_POSITION', $module_config[$module_name]['tooltip_position']);
-    $xtpl->assign('IMGWIDTH', $module_config[$module_name]['homewidth']);
-    $xtpl->assign('PAGE_TITLE', nv_html_page_title(false));
+    $tpl = new \NukeViet\Template\NVSmarty();
+    $tpl->setTemplateDir(get_module_tpl_dir($viewcat . '.tpl'));
+    $tpl->registerPlugin('modifier', 'ddate', 'nv_date_format');
+    $tpl->registerPlugin('modifier', 'ddatetime', 'nv_datetime_format');
+    $tpl->registerPlugin('modifier', 'dnumber', 'nv_number_format');
+    $tpl->registerPlugin('modifier', 'editAllowed', 'nv_link_edit_page');
+    $tpl->registerPlugin('modifier', 'deleteAllowed', 'nv_link_delete_page');
+    $tpl->assign('LANG', $nv_Lang);
+    $tpl->assign('HOME', $home);
+    $tpl->assign('PAGE_TITLE', nv_html_page_title(false));
+    $tpl->assign('OP', $op);
+    $tpl->assign('MODULE_UPLOAD', $module_upload);
+    $tpl->assign('MCONFIG', $module_config[$module_name]);
+    $tpl->assign('COMMENT_ENABLED', (isset($site_mods['comment']) and isset($module_config[$module_name]['activecomm']) and $module_config[$module_name]['activecomm']));
 
-    if (!empty($array_articles)) {
-        $xtpl->assign('CATCONTENT_HTML', viewcat_top($array_articles, $generate_page));
-        $xtpl->parse('main.catcontent');
-    } elseif (!$home) {
-        $xtpl->parse('main.h1');
+    $imgratio = round(($module_config[$module_name]['homewidth'] / ($module_config[$module_name]['homeheight'] ?: $module_config[$module_name]['homewidth'])) * 100, 2);
+    $tpl->assign('IMGRATIO', $imgratio);
+
+    $tpl->assign('ARRAY_CATS', $array_cat);
+    $tpl->assign('HTML_POSTS', empty($array_articles) ? '' : viewcat_top($array_articles, $generate_page));
+
+    // Hiển thị mô tả chuyên mục
+    $show_description = ($catid and (($global_array_cat[$catid]['viewdescription'] and $page == 1) or $global_array_cat[$catid]['viewdescription'] == 2));
+    $tpl->assign('SHOW_DESCRIPTION', $show_description);
+    if ($show_description) {
+        $tpl->assign('INFO_CAT', $global_array_cat[$catid]);
     }
 
-    // Hien thi cac chu de con
-    foreach ($array_cat as $key => $array_row_i) {
-        if (isset($array_cat[$key]['content'])) {
-            $array_row_i['rss'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $module_info['alias']['rss'] . '/' . $array_row_i['alias'];
-            $xtpl->assign('CAT', $array_row_i);
-            $catid = (int) ($array_row_i['catid']);
-            $array_row_i['ad_block_cat'] = isset($array_row_i['ad_block_cat']) ? explode(',', $array_row_i['ad_block_cat']) : [];
-
-            if (in_array('1', $array_row_i['ad_block_cat'], true)) {
-                $xtpl->assign('BLOCK_TOPCAT', nv_tag2pos_block(nv_get_blcat_tag($array_row_i['catid'], 1)));
-                $xtpl->parse('main.listcat.block_topcat');
-            }
-            if (in_array('2', $array_row_i['ad_block_cat'], true)) {
-                $xtpl->assign('BLOCK_BOTTOMCAT', nv_tag2pos_block(nv_get_blcat_tag($array_row_i['catid'], 2)));
-                $xtpl->parse('main.listcat.block_bottomcat');
-            }
-
-            if ($array_row_i['subcatid'] != '') {
-                $_arr_subcat = explode(',', $array_row_i['subcatid']);
-                $limit = 0;
-                foreach ($_arr_subcat as $catid_i) {
-                    if ($global_array_cat[$catid_i]['status'] == 1) {
-                        $xtpl->assign('SUBCAT', $global_array_cat[$catid_i]);
-                        $xtpl->parse('main.listcat.subcatloop');
-                        ++$limit;
-                    }
-                    if ($limit >= 3) {
-                        $more = [
-                            'title' => $nv_Lang->getModule('more'),
-                            'link' => $global_array_cat[$catid]['link']
-                        ];
-                        $xtpl->assign('MORE', $more);
-                        $xtpl->parse('main.listcat.subcatmore');
-                        break;
-                    }
-                }
-            }
-
-            $a = 0;
-            foreach ($array_cat[$key]['content'] as $array_row_i) {
-                $newday = isset($array_row_i['newday']) ? $array_row_i['publtime'] + (86400 * $array_row_i['newday']) : 0;
-                $array_row_i['publtime'] = nv_datetime_format($array_row_i['publtime']);
-                ++$a;
-
-                if ($array_row_i['external_link']) {
-                    $array_row_i['target_blank'] = 'target="_blank"';
-                }
-
-                if ($a == 1) {
-                    if ($newday >= NV_CURRENTTIME) {
-                        $xtpl->parse('main.listcat.newday');
-                    }
-                    $xtpl->assign('CONTENT', $array_row_i);
-
-                    if ($array_row_i['imghome'] != '') {
-                        $xtpl->assign('HOMEIMG', $array_row_i['imghome']);
-                        $xtpl->assign('HOMEIMGALT', !empty($array_row_i['homeimgalt']) ? $array_row_i['homeimgalt'] : $array_row_i['title']);
-                        $xtpl->parse('main.listcat.image');
-                    }
-
-                    if (defined('NV_IS_MODADMIN')) {
-                        $adminlink = trim(nv_link_edit_page($array_row_i) . ' ' . nv_link_delete_page($array_row_i));
-                        if (!empty($adminlink)) {
-                            $xtpl->assign('ADMINLINK', $adminlink);
-                            $xtpl->parse('main.listcat.adminlink');
-                        }
-                    }
-                } else {
-                    if ($newday >= NV_CURRENTTIME) {
-                        $xtpl->assign('CLASS', 'icon_new_small');
-                    } else {
-                        $xtpl->assign('CLASS', 'icon_list');
-                    }
-                    $array_row_i['hometext_clean'] = nv_clean60(strip_tags($array_row_i['hometext']), $module_config[$module_name]['tooltip_length'], true);
-                    $xtpl->assign('OTHER', $array_row_i);
-                    if ($module_config[$module_name]['showtooltip']) {
-                        $xtpl->parse('main.listcat.related.loop.tooltip');
-                    }
-                    $xtpl->parse('main.listcat.related.loop');
-                }
-
-                if ($a > 1) {
-                    $xtpl->assign('WCT', 'col-md-16 ');
-                } else {
-                    $xtpl->assign('WCT', 'col-md-24');
-                }
-
-                $xtpl->set_autoreset();
-            }
-
-            if ($a > 1) {
-                $xtpl->parse('main.listcat.related');
-            }
-
-            if (isset($site_mods['comment']) and isset($module_config[$module_name]['activecomm']) and $module_config[$module_name]['activecomm']) {
-                $xtpl->parse('main.listcat.comment');
-            }
-
-            $xtpl->parse('main.listcat');
-        }
-    }
-    $xtpl->parse('main');
-
-    return $xtpl->text('main');
+    return $tpl->fetch($viewcat . '.tpl');
 }
 
 /**
- * viewcat_two_column()
+ * Xem theo chuyên mục thành 2 cột
  *
- * @param array $array_content
+ * @param array $array_content Danh sách bài viết thuộc chuyên mục nếu có
  * @param string $generate_page
- * @param array $array_catpage
+ * @param array $array_catpage Danh sách chuyên mục con
  * @return string
  */
 function viewcat_two_column($array_content, $generate_page, $array_catpage)
 {
-    global $site_mods, $module_name, $module_config, $module_info, $home;
+    global $site_mods, $module_name, $module_config, $nv_Lang, $home, $op, $module_upload, $catid, $global_array_cat, $page;
 
-    $xtpl = new XTemplate('viewcat_two_column.tpl', get_module_tpl_dir('viewcat_two_column.tpl'));
-    $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
-    $xtpl->assign('IMGWIDTH0', $module_config[$module_name]['homewidth']);
+    $tpl = new \NukeViet\Template\NVSmarty();
+    $tpl->setTemplateDir(get_module_tpl_dir('viewcat_two_column.tpl'));
+    $tpl->registerPlugin('modifier', 'ddate', 'nv_date_format');
+    $tpl->registerPlugin('modifier', 'ddatetime', 'nv_datetime_format');
+    $tpl->registerPlugin('modifier', 'dnumber', 'nv_number_format');
+    $tpl->registerPlugin('modifier', 'editAllowed', 'nv_link_edit_page');
+    $tpl->registerPlugin('modifier', 'deleteAllowed', 'nv_link_delete_page');
+    $tpl->assign('LANG', $nv_Lang);
+    $tpl->assign('HOME', $home);
+    $tpl->assign('PAGE_TITLE', nv_html_page_title(false));
+    $tpl->assign('OP', $op);
+    $tpl->assign('MODULE_UPLOAD', $module_upload);
+    $tpl->assign('MCONFIG', $module_config[$module_name]);
+    $tpl->assign('COMMENT_ENABLED', (isset($site_mods['comment']) and isset($module_config[$module_name]['activecomm']) and $module_config[$module_name]['activecomm']));
 
-    if (!empty($array_content)) {
-        $xtpl->assign('CATCONTENT_HTML', viewcat_top($array_content, $generate_page));
-        $xtpl->parse('main.catcontent');
-    } elseif (!$home) {
-        $xtpl->parse('main.h1');
+    $imgratio = round(($module_config[$module_name]['homewidth'] / ($module_config[$module_name]['homeheight'] ?: $module_config[$module_name]['homewidth'])) * 100, 2);
+    $tpl->assign('IMGRATIO', $imgratio);
+
+    $tpl->assign('ARRAY_CATS', $array_catpage);
+    $tpl->assign('HTML_POSTS', empty($array_content) ? '' : viewcat_top($array_content, $generate_page));
+
+    // Hiển thị mô tả chuyên mục
+    $show_description = ($catid and (($global_array_cat[$catid]['viewdescription'] and $page == 1) or $global_array_cat[$catid]['viewdescription'] == 2));
+    $tpl->assign('SHOW_DESCRIPTION', $show_description);
+    if ($show_description) {
+        $tpl->assign('INFO_CAT', $global_array_cat[$catid]);
     }
 
-    // Theo chu de
-    $a = 0;
-
-    foreach ($array_catpage as $key => $array_catpage_i) {
-        $number_content = isset($array_catpage[$key]['content']) ? count($array_catpage[$key]['content']) : 0;
-        if ($number_content > 0) {
-            $array_catpage_i['rss'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $module_info['alias']['rss'] . '/' . $array_catpage_i['alias'];
-            $xtpl->assign('CAT', $array_catpage_i);
-            $xtpl->assign('ID', ($a + 1));
-
-            $array_content_i = $array_catpage_i['content'][0];
-            $newday = $array_content_i['publtime'] + (86400 * $array_content_i['newday']);
-            $array_content_i['hometext'] = nv_clean60(strip_tags($array_content_i['hometext']), 200);
-            $array_content_i['publtime'] = nv_datetime_format($array_content_i['publtime']);
-
-            if ($array_content_i['external_link']) {
-                $array_content_i['target_blank'] = 'target="_blank"';
-            }
-
-            $xtpl->assign('CONTENT', $array_content_i);
-
-            if ($array_content_i['imghome'] != '') {
-                $xtpl->assign('HOMEIMG01', $array_content_i['imghome']);
-                $xtpl->assign('HOMEIMGALT01', !empty($array_content_i['homeimgalt']) ? $array_content_i['homeimgalt'] : $array_content_i['title']);
-                $xtpl->parse('main.loopcat.content.image');
-            }
-
-            if (defined('NV_IS_MODADMIN')) {
-                $adminlink = trim(nv_link_edit_page($array_content_i) . ' ' . nv_link_delete_page($array_content_i));
-                if (!empty($adminlink)) {
-                    $xtpl->assign('ADMINLINK', $adminlink);
-                    $xtpl->parse('main.loopcat.content.adminlink');
-                }
-            }
-
-            if ($newday >= NV_CURRENTTIME) {
-                $xtpl->parse('main.loopcat.content.newday');
-            }
-
-            if (isset($site_mods['comment']) and isset($module_config[$module_name]['activecomm']) and $module_config[$module_name]['activecomm']) {
-                $xtpl->parse('main.loopcat.content.comment');
-            }
-
-            $xtpl->parse('main.loopcat.content');
-
-            if ($number_content > 1) {
-                for ($index = 1; $index < $number_content; ++$index) {
-                    if ($newday >= NV_CURRENTTIME) {
-                        $xtpl->parse('main.loopcat.other.newday');
-                        $xtpl->assign('CLASS', 'icon_new_small');
-                    } else {
-                        $xtpl->assign('CLASS', 'icon_list');
-                    }
-
-                    $array_catpage_i['content'][$index]['hometext_clean'] = nv_clean60(strip_tags($array_catpage_i['content'][$index]['hometext']), $module_config[$module_name]['tooltip_length'], true);
-                    $xtpl->assign('CONTENT', $array_catpage_i['content'][$index]);
-
-                    if ($module_config[$module_name]['showtooltip']) {
-                        $xtpl->assign('TOOLTIP_POSITION', $module_config[$module_name]['tooltip_position']);
-                        $xtpl->parse('main.loopcat.other.tooltip');
-                    }
-
-                    $xtpl->parse('main.loopcat.other');
-                }
-            }
-
-            // Block Top
-            $array_catpage_i['ad_block_cat'] = isset($array_catpage_i['ad_block_cat']) ? explode(',', $array_catpage_i['ad_block_cat']) : [];
-            if (($a + 1) % 2 and in_array('1', $array_catpage_i['ad_block_cat'], true)) {
-                $xtpl->assign('BLOCK_TOPCAT', nv_tag2pos_block(nv_get_blcat_tag($array_catpage_i['catid'], 1)));
-                $xtpl->parse('main.loopcat.block_topcat');
-            }
-
-            // Block Bottom
-            if ($a % 2 and in_array('2', $array_catpage_i['ad_block_cat'], true)) {
-                $xtpl->assign('BLOCK_BOTTOMCAT', nv_tag2pos_block(nv_get_blcat_tag($array_catpage_i['catid'], 2)));
-                $xtpl->parse('main.loopcat.block_bottomcat');
-            }
-
-            $xtpl->parse('main.loopcat');
-            ++$a;
-        }
-    }
-
-    // Theo chu de
-    $xtpl->parse('main');
-
-    return $xtpl->text('main');
+    return $tpl->fetch('viewcat_two_column.tpl');
 }
 
 /**

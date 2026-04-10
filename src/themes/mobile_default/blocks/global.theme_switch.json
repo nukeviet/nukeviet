@@ -1,0 +1,25 @@
+{
+    "info": {
+        "name": "Theme_switch",
+        "author": "VINADES.,JSC",
+        "website": "https://vinades.vn",
+        "description": ""
+    },
+    "i18n": {
+        "en": {
+            "info": {
+                "name": "Change theme"
+            }
+        },
+        "fr": {
+            "info": {
+                "name": "Changer l'interface"
+            }
+        },
+        "vi": {
+            "info": {
+                "name": "Chuyển đổi giao diện"
+            }
+        }
+    }
+}

@@ -217,13 +217,9 @@
                     {/if}
                     <div id="change-photo"{if $PHOTO.src} class="d-none"{/if}>
                         <div class="input-group">
-                            <input type="text" class="form-control" id="avatar_field" name="photo" value="" readonly autocomplete="off">
+                            <input type="text" class="form-control" id="avatar" name="photo" value="" readonly autocomplete="off">
                             <button class="btn btn-outline-secondary" type="button"
-                                data-toggle="selectfile"
-                                data-target="avatar_field"
-                                data-path="{$AVATAR_UPLOAD_PATH}"
-                                data-currentpath="{$AVATAR_UPLOAD_PATH}"
-                                data-type="image"
+                                data-toggle="pick-user-photo"
                                 aria-label="{$LANG->getModule('avatar')}"
                                 title="{$LANG->getModule('avatar')}">
                                 <i class="fa-solid fa-folder-open"></i>
