@@ -15,7 +15,7 @@ if (!defined('NV_MAINFILE')) {
 
 if (defined('NV_IS_FILE_THEMES')) {
     //include config theme
-    require NV_ROOTDIR . '/modules/menu/menu_config.php';
+    require pathinfo(str_replace(DIRECTORY_SEPARATOR, '/', __FILE__), PATHINFO_DIRNAME) . '/menu_config.php';
 }
 
 if (defined('NV_SYSTEM')) {
