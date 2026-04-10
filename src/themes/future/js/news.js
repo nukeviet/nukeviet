@@ -25,7 +25,7 @@ $(function() {
             $.ajax({
                 type: 'POST',
                 cache: false,
-                url: btn.data('adminurl') + 'index.php?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=del_content&nocache=' + new Date().getTime(),
+                url: btn.data('adminurl') + 'index.php?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=content-del&nocache=' + new Date().getTime(),
                 data: {
                     id: btn.data('id'),
                     checkss: btn.data('checkss')

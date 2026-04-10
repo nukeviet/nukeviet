@@ -71,7 +71,7 @@ function sendrating(id, point, newscheckss) {
 
 function nv_del_content(id, checkss, base_adminurl, detail) {
     if (confirm(nv_is_del_confirm[0])) {
-        $.post(base_adminurl + 'index.php?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=del_content&nocache=' + new Date().getTime(), 'id=' + id + '&checkss=' + checkss, function(res) {
+        $.post(base_adminurl + 'index.php?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=content-del&nocache=' + new Date().getTime(), 'id=' + id + '&checkss=' + checkss, function(res) {
             var r_split = res.split('_');
             if (r_split[0] == 'OK') {
                 if (detail) {
