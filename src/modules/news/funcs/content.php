@@ -677,8 +677,7 @@ if ($num_items) {
     while ($item = $result->fetch()) {
         $item['publtime'] = nv_datetime_format($item['publtime'], 0, 0);
         $item['status_note'] = $item['status'] != 1 ? $nv_Lang->getModule('status_alert', $nv_Lang->getModule('status_' . $item['status'])) : '';
-        $item['imghome'] = $item['imgmobile'] = '';
-        get_homeimgfile($item);
+        extend_articles($item);
 
         $item['is_edit_content'] = ($item['status'] != 1 or $post_level['editcontent']) ? true : false;
         $item['is_del_content'] = ($item['status'] != 1 or $post_level['delcontent']) ? true : false;

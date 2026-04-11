@@ -22,7 +22,7 @@
 <div class="news_column panel panel-default">
     <div class="panel-body">
         <!-- BEGIN: homethumb -->
-        <a href="{TOPIC.link}" title="{TOPIC.title}" {TOPIC.target_blank}><img alt="{TOPIC.alt}" src="{TOPIC.src}" width="{TOPIC.width}" class="img-thumbnail pull-left imghome" /></a>
+        <a href="{TOPIC.link}" title="{TOPIC.title}" {TOPIC.target_blank}><img alt="{TOPIC.alt}" src="{TOPIC.imghome}" width="{TOPIC.width}" class="img-thumbnail pull-left imghome" /></a>
         <!-- END: homethumb -->
         <!-- BEGIN: h2 -->
         <h2 class="h3"><a href="{TOPIC.link}" title="{TOPIC.title}" {TOPIC.target_blank}>{TOPIC.title}</a></h2>

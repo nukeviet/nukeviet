@@ -79,8 +79,7 @@ if (empty($contents)) {
             $db->where('status=1 AND id=' . $global_array_cat[$catid]['featured']);
             $result = $db->query($db->sql());
             if ($item = $result->fetch()) {
-                $item['imghome'] = $item['imgmobile'] = '';
-                get_homeimgfile($item);
+                extend_articles($item);
 
                 $item['newday'] = $global_array_cat[$catid]['newday'];
                 $item['link'] = $global_array_cat[$catid]['link'] . '/' . $item['alias'] . '-' . $item['id'] . $global_config['rewrite_exturl'];
@@ -96,8 +95,7 @@ if (empty($contents)) {
         $result = $db->query($db->sql());
         $weight_publtime = 0;
         while ($item = $result->fetch()) {
-            $item['imghome'] = $item['imgmobile'] = '';
-            get_homeimgfile($item);
+            extend_articles($item);
 
             $item['newday'] = $global_array_cat[$catid]['newday'];
             $item['link'] = $global_array_cat[$catid]['link'] . '/' . $item['alias'] . '-' . $item['id'] . $global_config['rewrite_exturl'];
@@ -146,8 +144,7 @@ if (empty($contents)) {
             $db->where('status=1 AND id=' . $global_array_cat[$catid]['featured']);
             $result = $db->query($db->sql());
             if ($item = $result->fetch()) {
-                $item['imghome'] = $item['imgmobile'] = '';
-                get_homeimgfile($item);
+                extend_articles($item);
 
                 $item['newday'] = $global_array_cat[$catid]['newday'];
                 $item['link'] = $global_array_cat[$catid]['link'] . '/' . $item['alias'] . '-' . $item['id'] . $global_config['rewrite_exturl'];
@@ -163,8 +160,7 @@ if (empty($contents)) {
 
         $result = $db->query($db->sql());
         while ($item = $result->fetch()) {
-            $item['imghome'] = $item['imgmobile'] = '';
-            get_homeimgfile($item);
+            extend_articles($item);
 
             $item['newday'] = $global_array_cat[$catid]['newday'];
             $item['link'] = $global_array_cat[$catid]['link'] . '/' . $item['alias'] . '-' . $item['id'] . $global_config['rewrite_exturl'];
@@ -189,8 +185,7 @@ if (empty($contents)) {
                     $db->where('status=1 and id=' . $global_array_cat[$catid_i]['featured']);
                     $result = $db->query($db->sql());
                     if ($item = $result->fetch()) {
-                        $item['imghome'] = $item['imgmobile'] = '';
-                        get_homeimgfile($item);
+                        extend_articles($item);
 
                         $item['newday'] = $global_array_cat[$catid_i]['newday'];
                         $item['link'] = $global_array_cat[$catid_i]['link'] . '/' . $item['alias'] . '-' . $item['id'] . $global_config['rewrite_exturl'];
@@ -207,8 +202,7 @@ if (empty($contents)) {
                 $db->order($order_articles_by . ' DESC');
                 $result = $db->query($db->sql());
                 while ($item = $result->fetch()) {
-                    $item['imghome'] = $item['imgmobile'] = '';
-                    get_homeimgfile($item);
+                    extend_articles($item);
 
                     $item['newday'] = $global_array_cat[$catid_i]['newday'];
                     $item['link'] = $global_array_cat[$catid_i]['link'] . '/' . $item['alias'] . '-' . $item['id'] . $global_config['rewrite_exturl'];
@@ -245,8 +239,7 @@ if (empty($contents)) {
             $db->where('id=' . $global_array_cat[$catid]['featured'] . ' and status= 1');
             $result = $db->query($db->sql());
             while ($item = $result->fetch()) {
-                $item['imghome'] = $item['imgmobile'] = '';
-                get_homeimgfile($item);
+                extend_articles($item);
 
                 $item['newday'] = $global_array_cat[$catid]['newday'];
                 $item['link'] = $global_array_cat[$catid]['link'] . '/' . $item['alias'] . '-' . $item['id'] . $global_config['rewrite_exturl'];
@@ -263,8 +256,7 @@ if (empty($contents)) {
         $db->order($order_articles_by . ' DESC')->offset(($page - 1) * $per_page);
         $result = $db->query($db->sql());
         while ($item = $result->fetch()) {
-            $item['imghome'] = $item['imgmobile'] = '';
-            get_homeimgfile($item);
+            extend_articles($item);
 
             $item['newday'] = $global_array_cat[$catid]['newday'];
             $item['link'] = $global_array_cat[$catid]['link'] . '/' . $item['alias'] . '-' . $item['id'] . $global_config['rewrite_exturl'];
@@ -289,8 +281,7 @@ if (empty($contents)) {
                 $db->where('id=' . $global_array_cat[$catid_i]['featured'] . ' and status= 1');
                 $result = $db->query($db->sql());
                 while ($item = $result->fetch()) {
-                    $item['imghome'] = $item['imgmobile'] = '';
-                    get_homeimgfile($item);
+                    extend_articles($item);
 
                     $item['newday'] = $global_array_cat[$catid_i]['newday'];
                     $item['link'] = $global_array_cat[$catid_i]['link'] . '/' . $item['alias'] . '-' . $item['id'] . $global_config['rewrite_exturl'];
@@ -311,8 +302,7 @@ if (empty($contents)) {
 
             $result = $db->query($db->sql());
             while ($item = $result->fetch()) {
-                $item['imghome'] = $item['imgmobile'] = '';
-                get_homeimgfile($item);
+                extend_articles($item);
 
                 $item['newday'] = $global_array_cat[$catid_i]['newday'];
                 $item['link'] = $global_array_cat[$catid_i]['link'] . '/' . $item['alias'] . '-' . $item['id'] . $global_config['rewrite_exturl'];
@@ -347,8 +337,7 @@ if (empty($contents)) {
 
         $result = $db->query($db->sql());
         while ($item = $result->fetch()) {
-            $item['imghome'] = $item['imgmobile'] = '';
-            get_homeimgfile($item);
+            extend_articles($item);
 
             $item['newday'] = $global_array_cat[$catid]['newday'];
             $item['link'] = $global_array_cat[$catid]['link'] . '/' . $item['alias'] . '-' . $item['id'] . $global_config['rewrite_exturl'];
@@ -379,8 +368,7 @@ if (empty($contents)) {
             $db->select('id, listcatid, topicid, admin_id, author, sourceid, addtime, edittime, publtime, title, alias, hometext, homeimgfile, homeimgalt, homeimgthumb, allowed_rating, external_link, hitstotal, hitscm, total_rating, click_rating')->where('id=' . $global_array_cat[$catid]['featured']);
             $result = $db->query($db->sql());
             while ($item = $result->fetch()) {
-                $item['imghome'] = $item['imgmobile'] = '';
-                get_homeimgfile($item);
+                extend_articles($item);
 
                 $item['newday'] = $global_array_cat[$catid]['newday'];
                 $item['link'] = $global_array_cat[$catid]['link'] . '/' . $item['alias'] . '-' . $item['id'] . $global_config['rewrite_exturl'];
@@ -399,8 +387,7 @@ if (empty($contents)) {
             ->offset(($page - 1) * $per_page);
         $results = $db->query($db->sql());
         while ($item = $results->fetch()) {
-            $item['imghome'] = $item['imgmobile'] = '';
-            get_homeimgfile($item);
+            extend_articles($item);
 
             $item['newday'] = $global_array_cat[$catid]['newday'];
             $item['link'] = $global_array_cat[$catid]['link'] . '/' . $item['alias'] . '-' . $item['id'] . $global_config['rewrite_exturl'];

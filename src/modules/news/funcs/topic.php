@@ -74,8 +74,7 @@ if (!empty($alias)) {
 
     $result = $db->query($db->sql());
     while ($item = $result->fetch()) {
-        $item['src'] = $item['imgmobile'] = '';
-        get_homeimgfile($item, 'src', 'imgmobile');
+        extend_articles($item);
 
         $item['alt'] = !empty($item['homeimgalt']) ? $item['homeimgalt'] : $item['title'];
         $item['width'] = $module_config[$module_name]['homewidth'];
@@ -124,15 +123,15 @@ if (!empty($alias)) {
     while ($item = $result->fetch()) {
         if (!empty($item['image']) and file_exists(NV_ROOTDIR . '/' . NV_FILES_DIR . '/' . $module_upload . '/topics/' . $item['image'])) {
             // image thumb
-            $item['src'] = NV_BASE_SITEURL . NV_FILES_DIR . '/' . $module_upload . '/topics/' . $item['image'];
+            $item['imghome'] = NV_BASE_SITEURL . NV_FILES_DIR . '/' . $module_upload . '/topics/' . $item['image'];
         } elseif (!empty($item['image'])) {
             // image file
-            $item['src'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/topics/' . $item['image'];
+            $item['imghome'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/topics/' . $item['image'];
         } elseif (!empty($show_no_image)) {
             // no image
-            $item['src'] = NV_BASE_SITEURL . $show_no_image;
+            $item['imghome'] = NV_BASE_SITEURL . $show_no_image;
         } else {
-            $item['src'] = '';
+            $item['imghome'] = '';
         }
         $item['alt'] = !empty($item['homeimgalt']) ? $item['homeimgalt'] : $item['title'];
         $item['width'] = $module_config[$module_name]['homewidth'];

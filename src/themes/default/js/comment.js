@@ -151,6 +151,18 @@ function nv_comment_sort_change(sel) {
     });
 }
 
+var cmtEditorCallback = (editor) => {
+    let eventInited = false;
+    editor.model.document.on('change', () => {
+        if (!eventInited) {
+            eventInited = true;
+            return;
+        }
+        const commentform = $('#formcomment form');
+        $('.confirm', commentform).slideDown();
+    });
+};
+
 $(function() {
     var commentform = $('#formcomment form');
     if (commentform.length) {
@@ -174,12 +186,6 @@ $(function() {
     $('input[type=text], input[type=email], input[type=file], textarea', commentform).on('keyup change', function() {
         $('.confirm', commentform).slideDown()
     });
-
-    if (window.nveditor && window.nveditor['commentcontent']) {
-        window.nveditor['commentcontent'].model.document.on('change', () => {
-            $('.confirm', commentform).slideDown();
-        });
-    }
 
     // Sắp xếp comments
     $('[data-toggle=nv_comment_sort_change]').on('change', function(e) {

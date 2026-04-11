@@ -953,7 +953,7 @@ function topic_theme($topic_array, $topic_other_array, $generate_page, $page_tit
             $xtpl->assign('TIME', date('H:i', $topic_array_i['publtime']));
             $xtpl->assign('DATE', date('d/m/Y', $topic_array_i['publtime']));
 
-            if (!empty($topic_array_i['src'])) {
+            if (!empty($topic_array_i['imghome'])) {
                 $xtpl->parse('main.topic.homethumb');
             }
 
@@ -1027,7 +1027,7 @@ function author_theme($author_info, $topic_array, $topic_other_array, $generate_
             $xtpl->assign('TIME', date('H:i', $topic_array_i['publtime']));
             $xtpl->assign('DATE', date('d/m/Y', $topic_array_i['publtime']));
 
-            if (!empty($topic_array_i['src'])) {
+            if (!empty($topic_array_i['imghome'])) {
                 $xtpl->parse('main.topic.homethumb');
             }
 

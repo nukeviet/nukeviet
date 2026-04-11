@@ -67,21 +67,7 @@ if (isset($array_op[1])) {
 
     $result = $db->query($db->sql());
     while ($item = $result->fetch()) {
-        if ($item['homeimgthumb'] == 1) {
-            // image thumb
-            $item['src'] = NV_BASE_SITEURL . NV_FILES_DIR . '/' . $module_upload . '/' . $item['homeimgfile'];
-        } elseif ($item['homeimgthumb'] == 2) {
-            // image file
-            $item['src'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $item['homeimgfile'];
-        } elseif ($item['homeimgthumb'] == 3) {
-            // image url
-            $item['src'] = $item['homeimgfile'];
-        } elseif (!empty($show_no_image)) {
-            // no image
-            $item['src'] = NV_BASE_SITEURL . $show_no_image;
-        } else {
-            $item['src'] = '';
-        }
+        extend_articles($item);
 
         $item['alt'] = !empty($item['homeimgalt']) ? $item['homeimgalt'] : $item['title'];
         $item['width'] = $module_config[$module_name]['homewidth'];
@@ -134,12 +120,17 @@ if (isset($array_op[1])) {
             'catid' => $bid,
             'alias' => '',
             'subcatid' => '',
+            'numsubcat' => 0,
             'title' => $btitle,
-            'link' => NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $module_info['alias']['groups'] . '/' . $balias
+            'link' => NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $module_info['alias']['groups'] . '/' . $balias,
+            'subcats' => [],
+            'block_arrs' => [],
+            'block_top' => '',
+            'block_bottom' => ''
         ];
 
         $db->sqlreset()
-            ->select('t1.id, t1.catid, t1.admin_id, t1.author, t1.sourceid, t1.addtime, t1.edittime, t1.publtime, t1.title, t1.alias, t1.hometext, t1.homeimgfile, t1.homeimgalt, t1.homeimgthumb, t1.allowed_rating, t1.external_link, t1.hitstotal, t1.hitscm, t1.total_rating, t1.click_rating')
+            ->select('t1.id, t1.catid, t1.listcatid, t1.admin_id, t1.author, t1.sourceid, t1.addtime, t1.edittime, t1.publtime, t1.title, t1.alias, t1.hometext, t1.homeimgfile, t1.homeimgalt, t1.homeimgthumb, t1.allowed_rating, t1.external_link, t1.hitstotal, t1.hitscm, t1.total_rating, t1.click_rating')
             ->from(NV_PREFIXLANG . '_' . $module_data . '_rows t1')
             ->join('INNER JOIN ' . NV_PREFIXLANG . '_' . $module_data . '_block t2 ON t1.id = t2.id')
             ->where('t2.bid= ' . $bid . ' AND t1.status= 1')
@@ -147,13 +138,13 @@ if (isset($array_op[1])) {
             ->limit($numberlink);
         $result = $db->query($db->sql());
         while ($item = $result->fetch()) {
-            $item['imghome'] = $item['imgmobile'] = '';
-            get_homeimgfile($item);
+            extend_articles($item);
 
+            $item['newday'] = 3;
             $item['alt'] = !empty($item['homeimgalt']) ? $item['homeimgalt'] : $item['title'];
             $item['width'] = $module_config[$module_name]['homewidth'];
-
             $item['link'] = $global_array_cat[$item['catid']]['link'] . '/' . $item['alias'] . '-' . $item['id'];
+            $item['hometext_clean'] = nv_clean60(strip_tags($item['hometext']), $module_config[$module_name]['tooltip_length'], true);
             $array_cat[$key]['content'][] = $item;
         }
         ++$key;
