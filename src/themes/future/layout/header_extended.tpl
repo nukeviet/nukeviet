@@ -25,14 +25,15 @@
                                     <input type="hidden" name="{$smarty.const.NV_NAME_VARIABLE}" value="seek">
                                     {/if}
                                     <label for="site-search-ipt" class="fw-medium form-label">{$LANG->getGlobal('search_all')}:</label>
-                                    <div class="input-group has-validation flex-nowrap">
-                                        <input type="text" class="form-control fw-175" name="q" placeholder="{$LANG->getGlobal('keyword')}" id="site-search-ipt"
-                                            minlength="{$smarty.const.NV_MIN_SEARCH_LENGTH}"
-                                            maxlength="{$smarty.const.NV_MAX_SEARCH_LENGTH}"
-                                            data-valid data-error-mess="{$LANG->getGlobal('search_keyword_rule', $smarty.const.NV_MIN_SEARCH_LENGTH, $smarty.const.NV_MAX_SEARCH_LENGTH)}"
-                                        >
-                                        <div class="invalid-tooltip"></div>
-                                        <button class="btn btn-secondary text-nowrap" type="submit" id="site-search-btn"><i class="fa-solid fa-magnifying-glass-arrow-right"></i> {$LANG->getGlobal('search')}</button>
+                                    <div class="position-relative">
+                                        <div class="input-group flex-nowrap">
+                                            <input type="text" class="form-control fw-175" name="q" placeholder="{$LANG->getGlobal('keyword')}" id="site-search-ipt"
+                                                minlength="{$smarty.const.NV_MIN_SEARCH_LENGTH}"
+                                                maxlength="{$smarty.const.NV_MAX_SEARCH_LENGTH}"
+                                                data-valid data-error-mess="{$LANG->getGlobal('search_keyword_rule', $smarty.const.NV_MIN_SEARCH_LENGTH, $smarty.const.NV_MAX_SEARCH_LENGTH)}"
+                                            >
+                                            <button class="btn btn-secondary text-nowrap" type="submit" id="site-search-btn"><i class="fa-solid fa-magnifying-glass-arrow-right"></i> {$LANG->getGlobal('search')}</button>
+                                        </div>
                                     </div>
                                 </form>
                             </div>
