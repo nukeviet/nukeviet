@@ -80,8 +80,7 @@ if (!empty($row)) {
 
     $result = $db->query($db->sql());
     while ($item = $result->fetch()) {
-        $item['src'] = $item['imgmobile'] = '';
-        get_homeimgfile($item, 'src', 'imgmobile');
+        extend_articles($item);
 
         $item['alt'] = !empty($item['homeimgalt']) ? $item['homeimgalt'] : $item['title'];
         $item['width'] = $module_config[$module_name]['homewidth'];

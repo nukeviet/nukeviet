@@ -1890,7 +1890,7 @@ function betweenURLs($page, $total, $base_url, $urlappend, &$prevPage, &$nextPag
 /**
  * nv_generate_page()
  *
- * @param string $base_url
+ * @param string|array $base_url
  * @param int    $num_items
  * @param int    $per_page
  * @param int    $on_page
