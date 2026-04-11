@@ -71,6 +71,7 @@ if (defined('NV_IS_USER')) {
 // Nhận phản hồi
 if ($nv_Request->isset_request('checkss', 'post')) {
     $checkss = $nv_Request->get_title('checkss', 'post', '');
+    $is_reqform = ($nv_Request->get_title('request_form', 'post', '') === md5($module_name . '_request_form_' . NV_CHECK_SESSION));
     if ($checkss != NV_CHECK_SESSION) {
         exit();
     }
@@ -118,12 +119,15 @@ if ($nv_Request->isset_request('checkss', 'post')) {
     }
 
     $feedback['title'] = $nv_Request->get_title('ftitle', 'post', '', 255);
-    if (empty($feedback['title'])) {
+    if (empty($feedback['title']) and !$is_reqform) {
         nv_jsonOutput([
             'status' => 'error',
             'input' => 'ftitle',
             'mess' => $nv_Lang->getModule('error_title')
         ]);
+    }
+    if (empty($feedback['title'])) {
+        $feedback['title'] = $nv_Lang->getModule('requestform_ftitle');
     }
 
     if (!defined('NV_IS_USER')) {
@@ -150,7 +154,7 @@ if ($nv_Request->isset_request('checkss', 'post')) {
     }
 
     $feedback['sender_phone'] = $nv_Request->get_title('fphone', 'post', '', 100);
-    if ($feedback['sender_phone_required'] and empty($feedback['sender_phone'])) {
+    if ($feedback['sender_phone_required'] and empty($feedback['sender_phone']) and !$is_reqform) {
         nv_jsonOutput([
             'status' => 'error',
             'input' => 'fphone',
@@ -159,7 +163,7 @@ if ($nv_Request->isset_request('checkss', 'post')) {
     }
 
     $feedback['sender_address'] = $nv_Request->get_title('faddress', 'post', '', 250);
-    if ($feedback['sender_address_required'] and empty($feedback['sender_address'])) {
+    if ($feedback['sender_address_required'] and empty($feedback['sender_address']) and !$is_reqform) {
         nv_jsonOutput([
             'status' => 'error',
             'input' => 'fphone',
@@ -168,7 +172,7 @@ if ($nv_Request->isset_request('checkss', 'post')) {
     }
 
     $feedback['content'] = $nv_Request->get_editor('fcon', '', NV_ALLOWED_HTML_TAGS);
-    if ((trim(strip_tags($feedback['content']))) == '') {
+    if ((trim(strip_tags($feedback['content']))) == '' and !$is_reqform) {
         nv_jsonOutput([
             'status' => 'error',
             'input' => 'fcon',
@@ -178,7 +182,7 @@ if ($nv_Request->isset_request('checkss', 'post')) {
 
     $data_permission_confirm = !empty($global_config['data_warning']) ? (int) $nv_Request->get_bool('data_permission_confirm', 'post', false) : -1;
     $antispam_confirm = !empty($global_config['antispam_warning']) ? (int) $nv_Request->get_bool('antispam_confirm', 'post', false) : -1;
-    if ($data_permission_confirm === 0) {
+    if ($data_permission_confirm === 0 and !$is_reqform) {
         nv_jsonOutput([
             'status' => 'error',
             'input' => 'data_permission_confirm',
@@ -186,7 +190,7 @@ if ($nv_Request->isset_request('checkss', 'post')) {
         ]);
     }
 
-    if ($antispam_confirm === 0) {
+    if ($antispam_confirm === 0 and !$is_reqform) {
         nv_jsonOutput([
             'status' => 'error',
             'input' => 'antispam_confirm',
@@ -295,6 +299,7 @@ if ($nv_Request->isset_request('checkss', 'post')) {
         nv_jsonOutput([
             'status' => 'success',
             'input' => '',
+            'refresh' => $is_reqform,
             'mess' => $nv_Lang->getModule('sendcontactok')
         ]);
     }

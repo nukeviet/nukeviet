@@ -15,20 +15,21 @@ if (!defined('NV_MAINFILE')) {
 
 if (!nv_function_exists('nv_block_counter')) {
     /**
-     * nv_block_counter()
-     *
+     * @param array $block_config
      * @return string
      */
-    function nv_block_counter()
+    function nv_block_counter(array $block_config)
     {
-        global $global_config, $db;
+        global $db, $nv_Lang;
 
         $sql = 'SELECT c_type, c_count FROM ' . NV_COUNTER_GLOBALTABLE . " WHERE (c_type='day' AND c_val='" . date('d', NV_CURRENTTIME) . "') OR (c_type='month' AND c_val='" . date('M', NV_CURRENTTIME) . "') OR (c_type='total' AND c_val='hits')";
         $query = $db->query($sql);
         $count_data = [];
-        while ($row = $query->fetch()) {
-            $key = ($row['c_type'] == 'total') ? 'all' : $row['c_type'];
-            $count_data[$key] = $row['c_count'];
+        while ($_scratch = $query->fetch(3)) {
+            [$c_type, $c_count] = $_scratch;
+            unset($_scratch);
+            $c_type == 'total' && $c_type = 'all';
+            $count_data[$c_type] = $c_count;
         }
 
         $sql = 'SELECT userid, username FROM ' . NV_SESSIONS_GLOBALTABLE . ' WHERE onl_time >= ' . (NV_CURRENTTIME - NV_ONLINE_UPD_TIME);
@@ -51,38 +52,20 @@ if (!nv_function_exists('nv_block_counter')) {
             return !empty($number) ? nv_number_format($number) : 0;
         }, $count_data);
 
-        $block_theme = get_tpl_dir([$global_config['module_theme'], $global_config['site_theme']], 'default', '/modules/statistics/global.counter.tpl');
-        $xtpl = new XTemplate('global.counter.tpl', NV_ROOTDIR . '/themes/' . $block_theme . '/modules/statistics');
+        [$block_theme, $dir] = get_block_tpl_dir('global.counter.tpl', true, $block_config['module']);
+        $tpl = new \NukeViet\Template\NVSmarty();
+        $tpl->setTemplateDir($dir);
+        $tpl->assign('LANG', $nv_Lang);
+        $tpl->assign('TEMPLATE', $block_theme);
+        $tpl->assign('DATA', $count_data);
 
-        $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_global);
-        $xtpl->assign('IMG_PATH', NV_STATIC_URL . 'themes/' . $block_theme . '/');
-
-        foreach ($count_data as $key => $value) {
-            $xtpl->assign('COUNT_' . strtoupper($key), $value);
-        }
-
-        if ($count_data['users']) {
-            $xtpl->parse('main.users');
-        }
-
-        if ($count_data['bots']) {
-            $xtpl->parse('main.bots');
-        }
-
-        if ($count_data['guests'] and $count_data['guests'] != $count_data['online']) {
-            $xtpl->parse('main.guests');
-        }
-
-        $xtpl->parse('main');
-        $content = $xtpl->text('main');
-
-        return $content;
+        return $tpl->fetch('global.counter.tpl');
     }
 }
 
 if (defined('NV_SYSTEM')) {
     global $global_config;
     if ($global_config['online_upd']) {
-        $content = nv_block_counter();
+        $content = nv_block_counter($block_config);
     }
 }

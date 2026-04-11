@@ -13,21 +13,23 @@ if (!defined('NV_MAINFILE')) {
     exit('Stop!!!');
 }
 
-global $module_name, $site_mods, $global_config, $nv_Lang;
+global $module_name, $nv_Lang, $site_mods;
 
 $content = '';
-if ($module_name != $block_config['module'] and defined('NV_SYSTEM')) {
-    $block_theme = get_tpl_dir([$global_config['module_theme'], $global_config['site_theme']], 'default', '/modules/contact/block.contact_form.tpl');
-    $blockJs = theme_file_exists($block_theme . '/js/contact.js') ? $block_theme : 'default';
-    $blockCss = theme_file_exists($block_theme . '/css/contact.css') ? $block_theme : 'default';
+if ($module_name != $block_config['module'] and defined('NV_SYSTEM') and isset($site_mods[$block_config['module']])) {
+    addition_module_assets($block_config['module'], 'both');
+    [$block_theme, $dir] = get_block_tpl_dir('block.contact_form.tpl', true, $block_config['module']);
 
-    $xtpl = new XTemplate('block.contact_form.tpl', NV_ROOTDIR . '/themes/' . $block_theme . '/modules/contact');
-    $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
-    $xtpl->assign('JS', NV_STATIC_URL . 'themes/' . $blockJs . '/js/contact.js');
-    $xtpl->assign('CSS', NV_STATIC_URL . 'themes/' . $blockJs . '/css/contact.css');
-    $xtpl->assign('TEMPLATE', $block_theme);
-    $xtpl->assign('MODULE', $block_config['module']);
+    $nv_Lang->loadModule($site_mods[$block_config['module']]['module_file'], false, true);
 
-    $xtpl->parse('main');
-    $content = $xtpl->text('main');
+    $tpl = new \NukeViet\Template\NVSmarty();
+    $tpl->setTemplateDir($dir);
+    $tpl->assign('LANG', $nv_Lang);
+    $tpl->assign('TEMPLATE', $block_theme);
+    $tpl->assign('CONFIG', $block_config);
+    $tpl->assign('REQUEST_FORM', md5($block_config['module'] . '_request_form_' . NV_CHECK_SESSION));
+    $tpl->assign('CAPTCHA_ATTRS', nv_captcha_form_attrs('fcode', nv_module_captcha($block_config['module'])));
+
+    $content = $tpl->fetch('block.contact_form.tpl');
+    $nv_Lang->changeLang();
 }
