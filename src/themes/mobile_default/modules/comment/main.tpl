@@ -106,7 +106,8 @@
                             shouldNotGroupWhenFull: false
                         },
                         nukeviet: {
-                            editorId: 'commentcontent'
+                            editorId: 'commentcontent',
+                            initCallback: 'cmtEditorCallback'
                         }
                     }).then(editor => {
                         editor.editing.view.document.on('keydown', (event, data) => {
