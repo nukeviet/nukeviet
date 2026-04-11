@@ -275,6 +275,25 @@ foreach ($values as $k => $v) {
 $stmt->execute();
 ```
 
+### Warning: "Invalid parameter number" error with array_diff / unset / array_filter
+When using a `foreach ($array as $k => $val)` loop to calculate `bindValue` indexes (e.g., `$k + 1`), you **MUST** call `$array = array_values($array);` if the array was previously filtered by `array_diff`, `array_filter`, or `unset`.
+**Reason:** These functions **preserve original keys**, resulting in an array with missing indexes (e.g., from `0, 1, 2` to `[1 => 1, 2 => 2]`). Adding `$k` with an integer inside the loop will be misaligned, pointing to non-sequential parameter indexes like `3, 4` (missing `2`), causing an `SQLSTATE[HY093]: Invalid parameter number` error.
+
+```php
+// ❌ Wrong: Old keys (1, 2...) are preserved -> (k + 2) binds to wrong positions
+$array_id = array_diff($array_id, [0]);
+foreach ($array_id as $k => $id_val) {
+    $stmt->bindValue(($k + 2), $id_val, PDO::PARAM_INT); // Bug!
+}
+
+// ✅ Correct: Reset all keys to standard sequential 0, 1, 2...
+$array_id = array_diff($array_id, [0]);
+$array_id = array_values($array_id); 
+foreach ($array_id as $k => $id_val) {
+    $stmt->bindValue(($k + 2), $id_val, PDO::PARAM_INT);
+}
+```
+
 ### Notes
 - **Reusing prepared statements in a loop:** Call `prepare()` OUTSIDE the loop, then use `bindValue()` + `execute()` INSIDE the loop. Never use `bindParam` inside loops — references may be altered by inner loop logic causing hard-to-detect bugs
 - Prefer `bindValue` in all cases
