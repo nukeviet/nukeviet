@@ -23,7 +23,7 @@ if (!nv_function_exists('nv_block_voting')) {
     {
         global $nv_Cache, $site_mods, $nv_Lang;
 
-        [$block_theme, $dir] = get_block_tpl_dir('global.voting.config.tpl', $module, true);
+        [$block_theme, $dir] = get_block_tpl_dir('global.voting.config.tpl', true, $module);
         $tpl = new \NukeViet\Template\NVSmarty();
         $tpl->setTemplateDir($dir);
         $tpl->assign('LANG', $nv_Lang);
@@ -112,7 +112,7 @@ if (!nv_function_exists('nv_block_voting')) {
         $nv_Lang->loadModule($site_mods[$module]['module_file'], false, true);
         addition_module_assets($module, 'js');
 
-        [$block_theme, $dir] = get_block_tpl_dir('global.voting.tpl', $module, true);
+        [$block_theme, $dir] = get_block_tpl_dir('global.voting.tpl', true, $module);
         $tpl = new \NukeViet\Template\NVSmarty();
         $tpl->setTemplateDir($dir);
         $tpl->assign('TEMPLATE', $block_theme);

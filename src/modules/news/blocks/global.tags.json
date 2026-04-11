@@ -1,0 +1,31 @@
+{
+    "info": {
+        "name": "Block news tags",
+        "author": "VINADES.,JSC",
+        "website": "https://vinades.vn",
+        "description": ""
+    },
+    "config": {
+        "show_type": 0,
+        "numrow": 20
+    },
+    "datafunction": "nv_block_config_news_tags",
+    "submitfunction": "nv_block_config_news_tags_submit",
+    "i18n": {
+        "en": {
+            "info": {
+                "name": "Featured Tag"
+            }
+        },
+        "fr": {
+            "info": {
+                "name": "Tag en vedette"
+            }
+        },
+        "vi": {
+            "info": {
+                "name": "Tag nổi bật"
+            }
+        }
+    }
+}

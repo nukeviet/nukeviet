@@ -10,6 +10,7 @@
 /.php-cs-fixer.php
 /.vscode
 /.agents
+/.claude/settings.local.json
 /ANTIGRAVITY.md
 /.github/copilot-instructions.md
 /src/.jsbeautifyrc
