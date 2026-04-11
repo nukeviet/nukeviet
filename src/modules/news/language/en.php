@@ -229,6 +229,7 @@ $lang_module['numlinks'] = 'Number of link';
 $lang_module['numcomments'] = 'Number comments';
 $lang_module['numtags'] = 'Number tags';
 $lang_module['newday'] = 'Show new icon (day)';
+$lang_module['newpost'] = 'New';
 $lang_module['hitstotal'] = 'Number view';
 $lang_module['checkall'] = 'Check all';
 $lang_module['uncheckall'] = 'Uncheck all';

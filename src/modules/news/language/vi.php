@@ -229,6 +229,7 @@ $lang_module['numlinks'] = 'Số liên kết';
 $lang_module['numcomments'] = 'Số bình luận';
 $lang_module['numtags'] = 'Số tags';
 $lang_module['newday'] = 'Icon tin mới (ngày)';
+$lang_module['newpost'] = 'Mới';
 $lang_module['hitstotal'] = 'Số lượt xem';
 $lang_module['checkall'] = 'Chọn tất cả';
 $lang_module['uncheckall'] = 'Bỏ chọn tất cả';
