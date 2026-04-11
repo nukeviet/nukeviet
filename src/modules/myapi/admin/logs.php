@@ -180,18 +180,24 @@ if (!empty($get_data['userid'])) {
     }
 }
 
-$get_data['fromdate'] = nv_d2u_get($nv_Request->get_title('fromdate', 'get', ''));
-if ($get_data['fromdate'] !== false) {
-    $page_url .= '&amp;fromdate=' . nv_u2d_get($get_data['fromdate']);
-    $where[] = 'tb1.log_time >= :fromdate';
-    $params[':fromdate'] = [$get_data['fromdate'], PDO::PARAM_INT];
+$get_data['fromdate'] = $nv_Request->get_title('fromdate', 'get', '');
+if (!empty($get_data['fromdate'])) {
+    $fromdate = nv_d2u_get($get_data['fromdate']);
+    if ($fromdate !== false) {
+        $page_url .= '&amp;fromdate=' . nv_u2d_get($fromdate);
+        $where[] = 'tb1.log_time >= :fromdate';
+        $params[':fromdate'] = [$fromdate, PDO::PARAM_INT];
+    }
 }
 
-$get_data['todate'] = nv_d2u_get($nv_Request->get_title('todate', 'get', ''), 23, 59, 59);
-if ($get_data['todate'] !== false) {
-    $page_url .= '&amp;todate=' . nv_u2d_get($get_data['todate']);
-    $where[] = 'tb1.log_time <= :todate';
-    $params[':todate'] = [$get_data['todate'], PDO::PARAM_INT];
+$get_data['todate'] = $nv_Request->get_title('todate', 'get', '');
+if (!empty($get_data['todate'])) {
+    $todate = nv_d2u_get($get_data['todate'], 23, 59, 59);
+    if ($todate !== false) {
+        $page_url .= '&amp;todate=' . nv_u2d_get($todate);
+        $where[] = 'tb1.log_time <= :todate';
+        $params[':todate'] = [$todate, PDO::PARAM_INT];
+    }
 }
 
 $page = $nv_Request->get_page('page', 'get', 1);
@@ -228,8 +234,6 @@ if ($all_pages) {
 }
 
 $page_title = $nv_Lang->getModule('logs');
-$get_data['fromdate'] = nv_u2d_get($get_data['fromdate']);
-$get_data['todate'] = nv_u2d_get($get_data['todate']);
 $tpl = new \NukeViet\Template\NVSmarty();
 $tpl->setTemplateDir(get_module_tpl_dir('logs.tpl'));
 $tpl->assign('LANG', $nv_Lang);
