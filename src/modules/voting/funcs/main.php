@@ -166,6 +166,7 @@ if (empty($vid)) {
     $array_id = array_diff($array_id, [
         0
     ]);
+    $array_id = array_values($array_id);
 
     $count = count($array_id);
     $note = '';
