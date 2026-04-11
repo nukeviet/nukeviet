@@ -70,14 +70,41 @@ Nằm trong `tests/Acceptance/`. Sử dụng định dạng **Cest** của Codec
 
 ---
 
-## 5. Metadata và Groups
+## 5. API Testing
 
+Chạy test API ngầm qua HTTP/cURL (rất nhanh, không cần Selenium) bằng cấu hình tại `tests/Api.suite.dist.yml`.
+
+**Lệnh thực thi:**
+```bash
+# Chạy toàn bộ API test của module content (Khuyên dùng)
+php vendor/bin/codecept run Api tests/modules/content/API/
+```
+
+### Helper `$I->sendApiRequest()`
+Hỗ trợ gửi ngay dữ liệu và tự động trộn `API_KEY`, `NV_SECRET` (từ file `.env`) thành mã băm chuẩn của NukeViet CMS. Không cần viết lặp lại code xác thực!
+
+```php
+public function testGetCatList(ApiTester $I) {
+    // Tự động hash, sinh timestamp và request API
+    $I->sendApiRequest('content', 'CatGetList', ['page' => 1]);
+    
+    // Kiểm tra kết quả
+    $I->seeResponseCodeIs(200);
+    $I->seeResponseContainsJson(['status' => 'success']);
+}
+```
+
+> **⚡ Chú ý:** Để test API NukeViet, website bắt buộc phải: Bật Remote API, Cấu hình file `.env` chuẩn, và cấp Quyền API Roles ứng với mỗi App Credential trong CMS.
+
+---
+
+## 6. Metadata và Groups
 Luôn thêm annotation `@group` để phân loại test:
 > **Tham khảo chú thích @group:** `docs/knowledge/examples/testing/MetaGroups.php`
 
 ---
 
-## 6. Best Practices
+## 7. Best Practices
 
 1. **Database dọn dẹp**: Luôn `DROP TABLE` hoặc xóa dữ liệu rác trong `_after()` để đảm bảo môi trường sạch cho test sau.
 2. **Wait hợp lý**: Dùng `$I->waitForElement` hoặc `$I->waitForText` thay vì `$I->wait(fixed_time)` để tối ưu tốc độ test.
