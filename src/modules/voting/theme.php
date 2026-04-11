@@ -14,58 +14,41 @@ if (!defined('NV_IS_MOD_VOTING')) {
 }
 
 /**
- * voting_result()
+ * Danh sách các thăm dò ý kiến
+ *
+ * @param array $votings
+ * @return string
+ */
+function voting_main(array $votings): string
+{
+    global $module_captcha, $nv_Lang, $global_config, $module_name;
+
+    $tpl = new \NukeViet\Template\NVSmarty();
+    $tpl->setTemplateDir(get_module_tpl_dir('main.tpl'));
+    $tpl->assign('LANG', $nv_Lang);
+    $tpl->assign('ITEMS', $votings);
+    $tpl->assign('UNIQUEID', 'main');
+    $tpl->assign('MODULE', $module_name);
+    $tpl->assign('CAPTCHA_ATTRS', nv_captcha_form_attrs('fcode'));
+
+    return $tpl->fetch('main.tpl');
+}
+
+/**
+ * Chi tiết kết quả một thăm dò ý kiến
  *
  * @param array $voting
  * @return string
  */
-function voting_result($voting)
+function voting_result(array $voting): string
 {
-    global $module_info, $nv_Lang;
+    global $nv_Lang;
 
-    $xtpl = new XTemplate('result.voting.tpl', get_module_tpl_dir('result.voting.tpl'));
-    $xtpl->assign('PUBLTIME', $voting['pubtime']);
-    $xtpl->assign('LANG', $voting['lang']);
-    $xtpl->assign('VOTINGQUESTION', $voting['question']);
+    $tpl = new \NukeViet\Template\NVSmarty();
+    $tpl->setTemplateDir(get_module_tpl_dir('detail.tpl'));
+    $tpl->registerPlugin('modifier', 'dnumber', 'nv_number_format');
+    $tpl->assign('LANG', $nv_Lang);
+    $tpl->assign('VOTING', $voting);
 
-    if (!empty($voting['note'])) {
-        $xtpl->assign('VOTINGNOTE', $voting['note']);
-        $xtpl->assign('VOTINGVID', $voting['row'][0]['vid']);
-        if ($voting['is_error']) {
-            $xtpl->parse('main.note.error');
-        } else {
-            $xtpl->parse('main.note.info');
-        }
-        $xtpl->parse('main.note');
-    }
-    if (isset($voting['row'])) {
-        $a = 1;
-        $b = 0;
-        foreach ($voting['row'] as $voting_i) {
-            if ($voting['total']) {
-                $width = ($voting_i['hitstotal'] / $voting['total']) * 100;
-                $width = round($width, 2);
-            } else {
-                $width = 0;
-            }
-
-            if ($width) {
-                ++$b;
-            }
-
-            $xtpl->assign('VOTING', $voting_i);
-            $xtpl->assign('BG', (($b % 2 == 1) ? 'background-color: rgb(0, 102, 204);' : ''));
-            $xtpl->assign('ID', $a);
-            $xtpl->assign('WIDTH', $width);
-            $xtpl->assign('TOTAL', $voting['total']);
-            $xtpl->assign('TOTAL_TITLE', $nv_Lang->getModule('voting_total2', $voting['pubtime']));
-            if ($voting_i['title']) {
-                $xtpl->parse('main.result');
-            }
-            ++$a;
-        }
-    }
-    $xtpl->parse('main');
-
-    return $xtpl->text('main');
+    return $tpl->fetch($voting['ajax'] ? 'voting.result.tpl' : 'detail.tpl');
 }

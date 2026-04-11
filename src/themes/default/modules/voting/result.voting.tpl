@@ -1,4 +1,3 @@
-<!-- BEGIN: main -->
 <div class="margin">
     <!-- BEGIN: note -->
     <div class="alert alert-info">{VOTINGNOTE}</div>
@@ -15,7 +14,6 @@
     </div>
     <!-- END: result -->
     <p class="text-center">
-        <strong>{LANG.total}</strong>: {TOTAL} {LANG.counter} - <strong>{LANG.publtime}: </strong>{PUBLTIME}
+        <strong>{LANG.voting_total}</strong>: {TOTAL} {LANG.voting_counter} - <strong>{LANG.voting_pubtime}: </strong>{PUBLTIME}
     </p>
 </div>
-<!-- END: main -->

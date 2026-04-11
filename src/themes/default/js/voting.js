@@ -18,45 +18,37 @@ function votingAcceptNumber(obj) {
     }
 }
 
-//Voting functions
-function votingSend(form) {
-    var id = $(form).data('id'),
-        checkss = $(form).data('checkss'),
-        num = parseInt($(form).data('accept')),
-        errmsg = $(form).data('errmsg'),
-        vals = "0";
+// Kiểm tra chọn đáp án trước khi submit form
+function votingPrecheck(form) {
+    let vals = "0";
+    let num = parseInt($(form).data('accept'));
     $('[name*=option]:checked', form).each(function() {
         vals = (num == 1) ? $(this).val() : vals + ("," + $(this).val())
     });
     if ("0" === vals) {
-        alert(errmsg);
-    } else if ($("[data-recaptcha2],[data-recaptcha3]", $(form).parent()).length) {
-        votingSendSubmit(id, checkss, vals, $('[name=g-recaptcha-response]', form).val());
-    } else if ($("[data-turnstile]", $(form).parent()).length) {
-        votingSendSubmit(id, checkss, vals, $('[name=cf-turnstile-response]', form).val());
-    } else if ($("[data-captcha]", $(form).parent()).length) {
-        votingSendSubmit(id, checkss, vals, $('[name=' + $(form).data('captcha') + ']', form).val());
-    } else {
-        votingSendSubmit(id, checkss, vals)
+        nukeviet.toast($(form).data('errmsg'), 'error');
+        return 0;
     }
+    return 1;
 }
 
-function votingSendSubmit(id, checkss, vals, capt) {
+// Voting functions
+function votingSend(form) {
     $.ajax({
         type: "POST",
         cache: !1,
-        url: nv_base_siteurl + "index.php?" + nv_lang_variable + "=" + nv_lang_data + "&" + nv_name_variable + "=voting&" + nv_fc_variable + "=main&vid=" + id + "&checkss=" + checkss + "&lid=" + vals + ('undefined' != typeof capt ? '&captcha=' + capt : ''),
-        data: "nv_ajax_voting=1",
-        dataType: "html",
+        url: $(form).attr("action"),
+        data: $(form).serialize(),
+        dataType: "json",
         success: function(res) {
-            if ("0" != vals && "undefined" != typeof capt && "" != capt) {
-                change_captcha()
+            if (res.status !== 'ok') {
+                nukeviet.toast(res.mess, 'error');
+                return 0;
             }
-            if (res.match(/^ERROR\|/g)) {
-                alert(res.substring(6));
-            } else {
-                modalShow('', res)
+            if ($(form).data('related-btn')) {
+                $(`#${$(form).data('related-btn')}`).prop('disabled', false);
             }
+            modalShow($(form).data('result-title'), res.html);
         }
     });
 }
@@ -65,17 +57,46 @@ $(function() {
     // Voting form submit
     $('body').on('submit', '[data-toggle=votingSend]', function(e) {
         e.preventDefault();
-        votingSend(this)
+        votingSend(this);
     });
 
     // Xem kết quả bình chọn
     $('body').on('click', '[data-toggle=votingResult]', function(e) {
         e.preventDefault();
-        votingSendSubmit($(this).parents('form').data('id'), $(this).parents('form').data('checkss'), '0')
+        const btn = $(this);
+        btn.prop('disabled', true);
+        setTimeout(() => {
+            btn.prop('disabled', false);
+        }, 5000);
+        const oForm = btn.closest('form');
+        const cFormID = `${oForm.attr('id')}-tmp`;
+        const existingClone = document.getElementById(cFormID);
+        if (existingClone) {
+            existingClone.remove();
+        }
+
+        // Tạo 1 form mới từ form cũ. Bỏ đi phần bắt buộc chọn đáp án
+        const cForm = oForm[0].cloneNode(true);
+        cForm.id = cFormID;
+        cForm.style.display = 'none';
+        cForm.removeAttribute('data-precheck');
+        cForm.querySelectorAll('[id]').forEach(el => el.removeAttribute('id'));
+        cForm.dataset.relatedBtn = btn.attr('id');
+
+        // Đánh dấu chỉ xem đáp án
+        let hIpt = document.createElement('input');
+        hIpt.type = 'hidden';
+        hIpt.name = 'viewresult';
+        hIpt.value = '1';
+        cForm.appendChild(hIpt);
+
+        // Submit form mới
+        document.body.appendChild(cForm);
+        $('[type=submit]', $(`#${cFormID}`)).click();
     });
 
     // Giới hạn số phương án bình chọn
     $('body').on('click', '[data-toggle=votingAcceptNumber]', function() {
         votingAcceptNumber(this)
     });
-})
+});

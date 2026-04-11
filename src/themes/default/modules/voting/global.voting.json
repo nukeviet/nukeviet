@@ -6,33 +6,46 @@
         "description": ""
     },
     "config": {
-        "vid": "0"
+        "vid": 0,
+        "show_type": "random"
     },
-    "datafunction": "nv_block_voting_select_config",
-    "submitfunction": "nv_block_voting_select_config_submit",
+    "datafunction": "nv_block_voting_config",
+    "submitfunction": "nv_block_voting_config_submit",
     "i18n": {
         "vi": {
             "language": {
-                "vid": "Bình chọn"
+                "vid": "Chọn thăm dò",
+                "show_type": "Hiển thị kiểu",
+                "show_type_fixed": "Cố định",
+                "show_type_random": "Ngẫu nhiên",
+                "vid_help": "Chọn thăm dò, bắt buộc nếu hiển thị kiểu cố định"
             },
             "info": {
-                "name": "Fixed poll"
+                "name": "Hiển thị thăm dò"
             }
         },
         "en": {
             "language": {
-                "vid": "Select Voting"
+                "vid": "Select poll",
+                "show_type": "Display type",
+                "show_type_fixed": "Fixed",
+                "show_type_random": "Random",
+                "vid_help": "Select poll, required if display type is fixed"
             },
             "info": {
-                "name": "Thăm dò cố định"
+                "name": "Display Poll"
             }
         },
         "fr": {
             "language": {
-                "vid": "Sondage"
+                "vid": "Choisir le sondage",
+                "show_type": "Type d'affichage",
+                "show_type_fixed": "Fixé",
+                "show_type_random": "Aléatoire",
+                "vid_help": "Choisir le sondage, obligatoire si le type d'affichage est fixé"
             },
             "info": {
-                "name": "Sondage fixe"
+                "name": "Afficher le sondage"
             }
         }
     }
