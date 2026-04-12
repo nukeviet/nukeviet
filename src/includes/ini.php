@@ -392,7 +392,7 @@ $iniSaveTime = 0;
 
 @include_once $config_ini_file;
 
-if ($iniSaveTime + 86400 < NV_CURRENTTIME) {
+if (empty($iniSaveTime)) {
     set_ini_file($sys_info);
 }
 
