@@ -337,21 +337,17 @@ function nv_getCountry_from_cookie($ip)
     }
 
     $cookie_path = '/';
-    if (version_compare(PHP_VERSION, '7.3.0', '>=')) {
-        $options = [
-            'expires' => $livecookietime,
-            'path' => $cookie_path,
-            'domain' => $cookie_domain,
-            'secure' => (bool) $global_config['cookie_secure'],
-            'httponly' => (bool) $global_config['cookie_httponly']
-        ];
-        if (!empty($global_config['cookie_SameSite']) and ('Lax' == $global_config['cookie_SameSite'] or 'Strict' == $global_config['cookie_SameSite'] or ('None' == $global_config['cookie_SameSite'] and $global_config['cookie_secure']))) {
-            $options['samesite'] = $global_config['cookie_SameSite'];
-        }
-        setcookie($global_config['cookie_prefix'] . '_ctr', $codecountry, $options);
-    } else {
-        setcookie($global_config['cookie_prefix'] . '_ctr', $codecountry, $livecookietime, $cookie_path, $cookie_domain, (bool) $global_config['cookie_secure'], (bool) $global_config['cookie_httponly']);
+    $options = [
+        'expires' => $livecookietime,
+        'path' => $cookie_path,
+        'domain' => $cookie_domain,
+        'secure' => (bool) $global_config['cookie_secure'],
+        'httponly' => (bool) $global_config['cookie_httponly']
+    ];
+    if (!empty($global_config['cookie_SameSite']) and ('Lax' == $global_config['cookie_SameSite'] or 'Strict' == $global_config['cookie_SameSite'] or ('None' == $global_config['cookie_SameSite'] and $global_config['cookie_secure']))) {
+        $options['samesite'] = $global_config['cookie_SameSite'];
     }
+    setcookie($global_config['cookie_prefix'] . '_ctr', $codecountry, $options);
 
     return $country;
 }

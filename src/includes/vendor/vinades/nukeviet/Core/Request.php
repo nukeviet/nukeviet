@@ -119,8 +119,6 @@ class Request
 
     private $cookie_share = false;
 
-    private $set_cookie_by_options = false;
-
     private $remote_ip;
 
     private $str_referer_blocker = false;
@@ -267,7 +265,7 @@ class Request
         ], true)) {
             $this->SameSite = $config['cookie_SameSite'];
         }
-        $this->set_cookie_by_options = version_compare(PHP_VERSION, '7.3.0', '>=');
+
         if (!empty($config['cookie_prefix'])) {
             $this->cookie_prefix = preg_replace('/[^a-zA-Z0-9\_]+/', '', $config['cookie_prefix']);
         }
@@ -635,21 +633,17 @@ class Request
         }
 
         $_secure = ($this->server_protocol == 'https' and $https_only) ? 1 : 0;
-        if ($this->set_cookie_by_options) {
-            $options = [
-                'lifetime' => NV_LIVE_SESSION_TIME,
-                'path' => $this->cookie_path,
-                'domain' => $this->cookie_domain,
-                'secure' => $_secure,
-                'httponly' => 1
-            ];
-            if ($this->SameSite == 'Lax' or $this->SameSite == 'Strict') {
-                $options['samesite'] = $this->SameSite;
-            }
-            session_set_cookie_params($options);
-        } else {
-            session_set_cookie_params(NV_LIVE_SESSION_TIME, $this->cookie_path, $this->cookie_domain, $_secure, 1);
+        $options = [
+            'lifetime' => NV_LIVE_SESSION_TIME,
+            'path' => $this->cookie_path,
+            'domain' => $this->cookie_domain,
+            'secure' => $_secure,
+            'httponly' => 1
+        ];
+        if ($this->SameSite == 'Lax' or $this->SameSite == 'Strict') {
+            $options['samesite'] = $this->SameSite;
         }
+        session_set_cookie_params($options);
 
         session_name($this->cookie_prefix . '_sess');
         ini_set('session.use_strict_mode', 1);
@@ -1192,25 +1186,21 @@ class Request
             $expire += NV_CURRENTTIME;
         }
 
-        if ($this->set_cookie_by_options) {
-            $options = [
-                'expires' => $expire,
-                'path' => $this->cookie_path,
-                'domain' => $this->cookie_domain,
-                'secure' => $this->secure,
-                'httponly' => $this->httponly
-            ];
-            if (!empty($this->SameSite) and (in_array($this->SameSite, [
-                'Lax',
-                'Strict'
-            ], true) or ($this->SameSite == 'None' and !empty($this->secure)))) {
-                $options['samesite'] = $this->SameSite;
-            }
-
-            return setcookie($name, $value, $options);
+        $options = [
+            'expires' => $expire,
+            'path' => $this->cookie_path,
+            'domain' => $this->cookie_domain,
+            'secure' => $this->secure,
+            'httponly' => $this->httponly
+        ];
+        if (!empty($this->SameSite) and (in_array($this->SameSite, [
+            'Lax',
+            'Strict'
+        ], true) or ($this->SameSite == 'None' and !empty($this->secure)))) {
+            $options['samesite'] = $this->SameSite;
         }
 
-        return setcookie($name, $value, $expire, $this->cookie_path, $this->cookie_domain, $this->secure, $this->httponly);
+        return setcookie($name, $value, $options);
     }
 
     /**
