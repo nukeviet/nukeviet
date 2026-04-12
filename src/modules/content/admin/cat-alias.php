@@ -31,5 +31,5 @@ if ($repo->isAliasExists($alias, $catid)) {
 }
 
 include NV_ROOTDIR . '/includes/header.php';
-echo $alias;
+echo nv_htmlspecialchars($alias);
 include NV_ROOTDIR . '/includes/footer.php';

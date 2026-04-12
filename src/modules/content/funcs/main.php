@@ -102,13 +102,13 @@ if ($route['mode'] === 'none') {
             ];
 
             $srcset = '';
-            if (file_exists(NV_ROOTDIR . '/' . NV_MOBILE_FILES_DIR . '/' . $module_upload . '/' . $rowdetail->image)) {
+            if (nv_is_file(NV_BASE_SITEURL . '/' . NV_MOBILE_FILES_DIR . '/' . $module_upload . '/' . $rowdetail->image, NV_MOBILE_FILES_DIR . '/' . $module_upload)) {
                 $srcset = NV_BASE_SITEURL . NV_MOBILE_FILES_DIR . '/' . $module_upload . '/' . $rowdetail->image . ' ' . NV_MOBILE_MODE_IMG . 'w, ';
                 $srcset .= NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $rowdetail->image . ' ' . $imagesize[0] . 'w';
             }
 
             $rowdetail->thumb = [
-                'src' => file_exists(NV_ROOTDIR . '/' . NV_FILES_DIR . '/' . $module_upload . '/' . $rowdetail->image)
+                'src' => nv_is_file(NV_BASE_SITEURL . '/' . NV_FILES_DIR . '/' . $module_upload . '/' . $rowdetail->image, NV_FILES_DIR . '/' . $module_upload)
                     ? NV_BASE_SITEURL . NV_FILES_DIR . '/' . $module_upload . '/' . $rowdetail->image
                     : NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $rowdetail->image,
                 'width' => 100
@@ -233,7 +233,7 @@ if ($route['mode'] === 'none') {
     if ($page > 1) {
         $page_title .= NV_TITLEBAR_DEFIS . $nv_Lang->getGlobal('page') . ' ' . $page;
     }
-    
+
     // Gán relationship chủ đề cho mảng danh sách
     foreach ($array_data as $item) {
         if ($item->catid > 0) {

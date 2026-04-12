@@ -53,7 +53,7 @@ $(function () {
             icon.addClass('fa-spin');
             $.ajax({
                 type: 'POST',
-                url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=alias',
+                url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=content-alias',
                 data: {
                     title: title,
                     checkss: btn.data('checkss'),
@@ -207,7 +207,7 @@ $(function () {
         var title = $(this).val();
         if (title !== "") {
             var catid = $(this).data('catid') || 0;
-            var checkss = $('input[name="checkss"]').val() || '';
+            var checkss = $(this).data('checkss') || '';
             clearTimeout(cat_alias_timer);
             cat_alias_timer = setTimeout(function() {
                 $.post(script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=cat-alias&' + nv_lang_variable + '=' + nv_lang_data, {

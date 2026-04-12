@@ -20,7 +20,7 @@
                     <div class="mb-3">
                         <label for="cat_title" class="form-label">{$LANG->getModule('cat_title')} <span class="text-danger">(*)</span>:</label>
                         <div class="position-relative">
-                            <input type="text" class="form-control required" id="cat_title" name="title" value="{if $EDIT_DATA}{$EDIT_DATA.title}{/if}" maxlength="250" data-catid="{$EDIT_CATID}">
+                            <input type="text" class="form-control required" id="cat_title" name="title" value="{if $EDIT_DATA}{$EDIT_DATA.title}{/if}" maxlength="250" data-catid="{$EDIT_CATID}" data-checkss="{$CHECKSS}">
                             <div class="invalid-tooltip">{$LANG->getModule('cat_empty_title')}</div>
                         </div>
                     </div>

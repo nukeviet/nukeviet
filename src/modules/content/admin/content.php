@@ -91,7 +91,7 @@ if ($nv_Request->isset_request('checkss', 'post')) {
     try {
         $saveId = ($id and !$copy) ? $id : 0;
         $validator = new \NukeViet\Module\content\Shared\ContentValidator($repo);
-        
+
         // 1. Kiểm lỗi logic nghiệp vụ
         $validator->validateSave($row, $saveId);
 
@@ -168,7 +168,7 @@ if (defined('NV_EDITOR') and nv_function_exists('nv_aleditor')) {
     $row_data['bodytext'] = '<textarea class="form-control" name="bodytext" id="bodytext" rows="15">' . $row_data['bodytext'] . '</textarea>';
 }
 
-if (!empty($row_data['image']) and is_file(NV_UPLOADS_REAL_DIR . '/' . $module_upload . '/' . $row_data['image'])) {
+if (!empty($row_data['image']) and nv_is_file(NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $row_data['image'], NV_UPLOADS_DIR . '/' . $module_upload)) {
     $row_data['image'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $row_data['image'];
 }
 

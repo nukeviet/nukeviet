@@ -74,9 +74,9 @@ function nv_content_list(array $array_data, string $generate_page): string
     foreach ($array_data as $entity) {
         $row = $entity->toArray();
         if (!empty($row['image'])) {
-            if (file_exists(NV_ROOTDIR . '/' . NV_ASSETS_DIR . '/' . $module_upload . '/' . $row['image'])) {
+            if (nv_is_file(NV_BASE_SITEURL . '/' . NV_ASSETS_DIR . '/' . $module_upload . '/' . $row['image'], NV_UPLOADS_DIR . '/' . $module_upload)) {
                 $row['image'] = NV_BASE_SITEURL . NV_ASSETS_DIR . '/' . $module_upload . '/' . $row['image'];
-            } elseif (file_exists(NV_ROOTDIR . '/' . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $row['image'])) {
+            } elseif (nv_is_file(NV_BASE_SITEURL . '/' . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $row['image'], NV_UPLOADS_DIR . '/' . $module_upload)) {
                 $row['image'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $row['image'];
             } else {
                 $row['image'] = '';

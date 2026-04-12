@@ -24,7 +24,7 @@ $allow_func = [
     'cat-del',
     'cat-change-status',
     'cat-change-weight',
-    'alias'
+    'content-alias'
 ];
 
 define('NV_IS_FILE_ADMIN', true);

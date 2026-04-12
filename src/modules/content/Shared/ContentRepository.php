@@ -253,11 +253,13 @@ class ContentRepository
     }
 
     /**
-     * Sắp xếp lại weight sau khi xóa hoặc đổi vị trí
+     * Sắp xếp lại weight sau khi xóa hoặc đổi vị trí.
+     * Dùng bulk UPDATE (CASE WHEN) thay vì UPDATE từng dòng trong vòng lặp.
+     * Chỉ cập nhật những row có weight thực sự thay đổi.
      */
     public function reorderWeight(int $movedId = 0, int $newWeight = 0): void
     {
-        $sql = 'SELECT id FROM ' . $this->table;
+        $sql = 'SELECT id, weight FROM ' . $this->table;
         $params = [];
         if ($movedId > 0) {
             $sql .= ' WHERE id != :id';
@@ -270,25 +272,40 @@ class ContentRepository
             $stmt->bindValue($k, $v, PDO::PARAM_INT);
         }
         $stmt->execute();
-
-        $weight = 0;
-        $stmtUpdate = $this->db->prepare('UPDATE ' . $this->table . ' SET weight = :weight WHERE id = :id');
-        while ($row = $stmt->fetch()) {
-            ++$weight;
-            if ($movedId > 0 && $weight == $newWeight) {
-                ++$weight;
-            }
-            $stmtUpdate->bindValue(':weight', $weight, PDO::PARAM_INT);
-            $stmtUpdate->bindValue(':id', $row['id'], PDO::PARAM_INT);
-            $stmtUpdate->execute();
-        }
+        $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
         $stmt->closeCursor();
 
-        if ($movedId > 0 && $newWeight > 0) {
-            $stmtUpdate->bindValue(':weight', $newWeight, PDO::PARAM_INT);
-            $stmtUpdate->bindValue(':id', $movedId, PDO::PARAM_INT);
-            $stmtUpdate->execute();
+        $cases = [];
+        $ids = [];
+        $calcWeight = 0;
+
+        foreach ($rows as $row) {
+            ++$calcWeight;
+            if ($movedId > 0 && $calcWeight == $newWeight) {
+                ++$calcWeight;
+            }
+            // Chỉ đưa vào bulk UPDATE nếu weight thực sự thay đổi
+            if ($calcWeight !== (int) $row['weight']) {
+                $cases[] = 'WHEN ' . (int) $row['id'] . ' THEN ' . $calcWeight;
+                $ids[] = (int) $row['id'];
+            }
         }
+
+        // Cập nhật weight của bài được di chuyển
+        if ($movedId > 0 && $newWeight > 0) {
+            $cases[] = 'WHEN ' . $movedId . ' THEN ' . $newWeight;
+            $ids[] = $movedId;
+        }
+
+        if (empty($ids)) {
+            return;
+        }
+
+        $this->db->exec(
+            'UPDATE ' . $this->table
+            . ' SET weight = CASE id ' . implode(' ', $cases) . ' END'
+            . ' WHERE id IN (' . implode(',', $ids) . ')'
+        );
     }
 
     /**
@@ -350,25 +367,37 @@ class ContentRepository
     }
 
     /**
-     * Tự động sửa lại weight nếu sai lệch cho toàn bộ mảng dữ liệu
+     * Tự động sửa lại weight nếu sai lệch cho toàn bộ mảng dữ liệu.
+     * Dùng bulk UPDATE (CASE WHEN) thay vì UPDATE từng dòng trong vòng lặp.
+     * Chỉ cập nhật những row có weight thực sự thay đổi.
      * Trả về true nếu CÓ update
      */
     public function autoCorrectWeight(array &$entities): bool
     {
+        $cases = [];
+        $ids = [];
         $iw = 0;
-        $is_updated = false;
-        $stmt = $this->db->prepare('UPDATE ' . $this->table . ' SET weight = :weight WHERE id = :id');
+
         foreach ($entities as $entity) {
             ++$iw;
             if ($iw != $entity->weight) {
                 $entity->weight = $iw;
-                $stmt->bindValue(':weight', $iw, PDO::PARAM_INT);
-                $stmt->bindValue(':id', $entity->id, PDO::PARAM_INT);
-                $stmt->execute();
-                $is_updated = true;
+                $cases[] = 'WHEN ' . (int) $entity->id . ' THEN ' . $iw;
+                $ids[] = (int) $entity->id;
             }
         }
-        return $is_updated;
+
+        if (empty($ids)) {
+            return false;
+        }
+
+        $this->db->exec(
+            'UPDATE ' . $this->table
+            . ' SET weight = CASE id ' . implode(' ', $cases) . ' END'
+            . ' WHERE id IN (' . implode(',', $ids) . ')'
+        );
+
+        return true;
     }
 
     /**
