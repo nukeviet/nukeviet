@@ -66,21 +66,18 @@ if (!defined('NV_CLIENT_TIMEZONE_NAME') and isset($_COOKIE[$global_config['cooki
 
     $secure = NV_SERVER_PROTOCOL == 'https' ? true : false;
     $cookie_domain = !empty($global_config['cookie_share']) ? $matches2[5] : '';
-    if (version_compare(PHP_VERSION, '7.3.0', '>=')) {
-        $options = [
-            'expires' => 0,
-            'path' => $matches2[4],
-            'domain' => $cookie_domain,
-            'secure' => $secure,
-            'httponly' => true
-        ];
-        if (!empty($global_config['cookie_SameSite']) and ('Lax' == $global_config['cookie_SameSite'] or 'Strict' == $global_config['cookie_SameSite'] or ('None' == $global_config['cookie_SameSite'] and $secure))) {
-            $options['samesite'] = $global_config['cookie_SameSite'];
-        }
-        setcookie($global_config['cookie_prefix'] . '_cltn', $client_timezone_name, $options);
-    } else {
-        setcookie($global_config['cookie_prefix'] . '_cltn', $client_timezone_name, 0, $matches2[4], $cookie_domain, $secure, true);
+
+    $options = [
+        'expires' => 0,
+        'path' => $matches2[4],
+        'domain' => $cookie_domain,
+        'secure' => $secure,
+        'httponly' => true
+    ];
+    if (!empty($global_config['cookie_SameSite']) and ('Lax' == $global_config['cookie_SameSite'] or 'Strict' == $global_config['cookie_SameSite'] or ('None' == $global_config['cookie_SameSite'] and $secure))) {
+        $options['samesite'] = $global_config['cookie_SameSite'];
     }
+    setcookie($global_config['cookie_prefix'] . '_cltn', $client_timezone_name, $options);
 
     unset($client_timezone_name, $sd);
 }

@@ -97,23 +97,13 @@ class UrlGetContents
         $allow_url_fopen = (ini_get('allow_url_fopen') == '1' or strtolower(ini_get('allow_url_fopen')) == 'on') ? 1 : 0;
 
         if (Site::function_exists('get_headers') and $allow_url_fopen == 1) {
-            if (version_compare(PHP_VERSION, '7.1.0', '>=')) {
-                $context = stream_context_create([
-                    'ssl' => [
-                        'verify_peer' => false,
-                        'verify_peer_name' => false,
-                    ],
-                ]);
-                $res = get_headers($this->url_info['uri'], 0, $context);
-            } else {
-                stream_context_set_default([
-                    'ssl' => [
-                        'verify_peer' => false,
-                        'verify_peer_name' => false,
-                    ],
-                ]);
-                $res = get_headers($this->url_info['uri']);
-            }
+            $context = stream_context_create([
+                'ssl' => [
+                    'verify_peer' => false,
+                    'verify_peer_name' => false,
+                ],
+            ]);
+            $res = get_headers($this->url_info['uri'], 0, $context);
         } elseif (Site::function_exists('curl_init') and Site::function_exists('curl_exec')) {
             $url_info = parse_url($this->url_info['uri']);
             $port = isset($url_info['port']) ? (int) ($url_info['port']) : 80;

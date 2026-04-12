@@ -266,11 +266,6 @@ function set_ini_file(&$sys_info)
     $ini_set = [];
     if ($sys_info['ini_set_support']) {
         check_ini($ini_set, 'display_startup_errors', 0);
-
-        if (version_compare(PHP_VERSION, '8.0.0', '<')) {
-            check_ini($ini_set, 'track_errors', 1);
-        }
-
         check_ini($ini_set, 'log_errors', 0);
         check_ini($ini_set, 'display_errors', 0);
 
@@ -397,8 +392,8 @@ if (empty($iniSaveTime)) {
 }
 
 //Neu he thong khong ho tro php se bao loi
-if (version_compare(PHP_VERSION, '5.6.0') < 0) {
-    throw new \NukeViet\Http\HttpException('You are running an unsupported PHP version. Please upgrade to PHP 5.6 or higher before trying to install Nukeviet Portal', 500);
+if (version_compare(PHP_VERSION, '8.2.0') < 0) {
+    throw new \NukeViet\Http\HttpException('You are running an unsupported PHP version. Please upgrade to PHP 8.2 or higher before trying to install Nukeviet Portal', 500);
 }
 
 //Neu he thong khong ho tro curl se bao loi

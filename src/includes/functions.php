@@ -3504,13 +3504,10 @@ function post_async($url, $params = [], $headers = [])
         CURLOPT_POSTFIELDS => $post_string,
         CURLOPT_NOSIGNAL => 1,
         CURLOPT_HTTPHEADER => $_headers,
+        CURLOPT_TIMEOUT_MS => NV_POST_ASYNC_TIMEOUT_MS,
         CURLOPT_FRESH_CONNECT => true
     ];
-    if (version_compare(PHP_VERSION, '7.16.2', '<')) {
-        $options[CURLOPT_TIMEOUT] = NV_POST_ASYNC_TIMEOUT;
-    } else {
-        $options[CURLOPT_TIMEOUT_MS] = NV_POST_ASYNC_TIMEOUT_MS;
-    }
+
     // Bỏ comment 2 dòng dưới nếu muốn kiểm tra tiến trình chạy curl
     // $options[CURLOPT_VERBOSE] = true;
     // $options[CURLOPT_STDERR] = fopen(NV_ROOTDIR . '/curl.txt', 'a+');
