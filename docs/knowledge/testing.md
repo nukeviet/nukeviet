@@ -77,7 +77,7 @@ Chạy test API ngầm qua HTTP/cURL (rất nhanh, không cần Selenium) bằng
 **Lệnh thực thi:**
 ```bash
 # Chạy toàn bộ API test của module content (Khuyên dùng)
-php vendor/bin/codecept run Api tests/modules/content/API/
+php vendor/bin/codecept run Api tests/modules/Content/API/
 ```
 
 ### Helper `$I->sendApiRequest()`
