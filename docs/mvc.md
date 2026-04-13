@@ -3,7 +3,7 @@
 Dành cho developer đã biết chuẩn MVC, tài liệu này tập trung vào các **thay đổi quan trọng** và cách triển khai thực tế trên NukeViet 5 dựa trên kiến trúc **Entity + Service Layer + PSR-4**.
 
 > [!TIP]
-> Luôn tham khảo module mẫu: `src/modules/content/` để xem code thực tế.
+> Luôn tham khảo module mẫu: `src/modules/Content/` để xem code thực tế.
 
 ---
 
