@@ -22,7 +22,7 @@ Controller (Thin) ──▶ Service::prepareSaveData() ──▶ Validator ─�
 | **Entity** | 1 bản ghi = 1 object. `toArray()` + `fromArray()` | Luôn dùng `FETCH_ASSOC` + `fromArray()`, KHÔNG dùng `FETCH_CLASS` |
 | **Repository** | Toàn bộ SQL | Controller/Service KHÔNG viết SQL |
 | **Validator** | Kiểm tra input, ném `InvalidArgumentException` kèm error code | Tách riêng khỏi Service |
-| **Service** | Business logic + cache + hook | KHÔNG có SQL, KHÔNG parse Request |
+| **Service** | Business logic + cache + hook | KHÔNG có SQL, **Thu thập dữ liệu từ Request** (DRY) |
 | **Controller** | Nhận Request → Validator → Service → View | Thin Controller |
 | **View** | Chỉ nhận Array từ `toArray()` | Cấm viết logic/SQL trong `.tpl` |
 
@@ -722,54 +722,7 @@ $repo->getContentList($filter_catid, -1);
 
 ---
 
-## Bước 5 — Validator
-
-Ném `InvalidArgumentException` kèm **error code** → Controller map về đúng field lỗi trên UI.
-
-```php
-<?php
-namespace NukeViet\Module\{mymod}\Shared;
-
-if (!defined('NV_MAINFILE')) {
-    exit('Stop!!!');
-}
-
-class {Item}Validator
-{
-    private {Item}Repository $repo;
-
-    public function __construct({Item}Repository $repo)
-    {
-        $this->repo = $repo;
-    }
-
-    /**
-     * @throws \InvalidArgumentException code=1 title, code=2 bodytext, code=3 alias
-     */
-    public function validateSave(array $data, int $excludeId = 0): void
-    {
-        if (empty($data['title'])) {
-            throw new \InvalidArgumentException('empty_title', 1);
-        }
-
-        if (trim($data['bodytext'] ?? '') === '') {
-            throw new \InvalidArgumentException('empty_bodytext', 2);
-        }
-
-        if (!empty($data['alias']) && $this->repo->isAliasExists($data['alias'], $excludeId)) {
-            throw new \InvalidArgumentException('erroralias', 3);
-        }
-    }
-}
-```
-
-**Quy ước error code:** `1`=title, `2`=bodytext, `3`=alias. Mở rộng tùy module. Message (`empty_title`) phải khớp key trong `language/vi.php`.
-
-> 📎 `src/modules/content/Shared/ContentValidator.php` · `src/modules/content/Shared/CatValidator.php`
-
----
-
-## Bước 6 — Service
+## Bước 5 — Service
 
 Business logic thuần. Hai trách nhiệm chính:
 
@@ -1009,9 +962,9 @@ Controller/API:
 
 > **Quy ước đặt tên method save/delete:** Dùng tên đối tượng cụ thể thay vì generic: `saveContent()`, `saveCat()`, `deleteContent()`, `deleteCat()`. Giúp phân biệt rõ ràng khi module có nhiều đối tượng.
 
-> **Tại sao tách `collectRequestData` và `prepareSaveData`?** 
+> **Tại sao tách `collectRequestData` và `prepareSaveData`?**
 > - `collectRequestData`: Chỉ làm việc với `$nv_Request` (HTTP).
-> - `prepareSaveData`: Làm việc với `array` thuần. 
+> - `prepareSaveData`: Làm việc với `array` thuần.
 > => Việc tách này cho phép bạn tái sử dụng logic chuẩn hóa cho các tính năng không có Request như: **Sao chép bài viết (Copy)**, **Import bài viết từ file**, hoặc **Cronjob**.
 
 > **Sao chép bài viết (Copy):** Service nên có method `duplicate{Item}Data()` để chuẩn bị dữ liệu sao chép từ Entity có sẵn:
@@ -1033,6 +986,53 @@ Controller/API:
 
 > 📎 Service phức tạp hơn (có `resolveRoute` với `viewtype`, config, duplicate): `src/modules/content/Shared/ContentService.php`
 > 📎 Service ngắn gọn: `src/modules/content/Shared/CatService.php`
+
+---
+
+## Bước 6 — Validator
+
+Ném `InvalidArgumentException` kèm **error code** → Controller map về đúng field lỗi trên UI.
+
+```php
+<?php
+namespace NukeViet\Module\{mymod}\Shared;
+
+if (!defined('NV_MAINFILE')) {
+    exit('Stop!!!');
+}
+
+class {Item}Validator
+{
+    private {Item}Repository $repo;
+
+    public function __construct({Item}Repository $repo)
+    {
+        $this->repo = $repo;
+    }
+
+    /**
+     * @throws \InvalidArgumentException code=1 title, code=2 bodytext, code=3 alias
+     */
+    public function validateSave(array $data, int $excludeId = 0): void
+    {
+        if (empty($data['title'])) {
+            throw new \InvalidArgumentException('empty_title', 1);
+        }
+
+        if (trim($data['bodytext'] ?? '') === '') {
+            throw new \InvalidArgumentException('empty_bodytext', 2);
+        }
+
+        if (!empty($data['alias']) && $this->repo->isAliasExists($data['alias'], $excludeId)) {
+            throw new \InvalidArgumentException('erroralias', 3);
+        }
+    }
+}
+```
+
+**Quy ước error code:** `1`=title, `2`=bodytext, `3`=alias. Mở rộng tùy module. Message (`empty_title`) phải khớp key trong `language/vi.php`.
+
+> 📎 `src/modules/content/Shared/ContentValidator.php` · `src/modules/content/Shared/CatValidator.php`
 
 ---
 
@@ -1509,8 +1509,8 @@ $this->assertInstanceOf({Item}Entity::class, $service->getDetail(1));
 - [ ] **Bước 2 — Hệ thống:** `version.php`, `functions.php`, `admin.functions.php`, `admin.menu.php`, `action_mysql.php`, `language/vi.php`
 - [ ] **Bước 3 — Entity:** `{Item}Entity.php` (properties + `toArray` + `fromArray`)
 - [ ] **Bước 4 — Repository:** `{Item}Repository.php` (CRUD + weight + config + cache)
-- [ ] **Bước 5 — Validator:** `{Item}Validator.php` (validate + ném `ValidationException`) · `ValidationException.php`
-- [ ] **Bước 6 — Service:** `{Item}Service.php` (`prepareSaveData` + save/delete/status/weight + hook)
+- [ ] **Bước 5 — Service:** `{Item}Service.php` (`prepareSaveData` + save/delete/status/weight + hook)
+- [ ] **Bước 6 — Validator:** `{Item}Validator.php` (validate + ném `InvalidArgumentException`)
 - [ ] **Bước 7 — Controller:** `admin/main.php` · `admin/{item}.php` · 3 AJAX handlers · `funcs/main.php` · `theme.php`
 - [ ] **Bước 8 — API:** `Api/{Item}GetList.php` · `uapi/{Item}GetList.php`
 - [ ] **Hook:** 5 events · **Cache:** `invalidateCache()` sau mọi CUD · **Log:** `nv_insert_logs()`
