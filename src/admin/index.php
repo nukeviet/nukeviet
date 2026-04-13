@@ -48,7 +48,7 @@ $site_mods = nv_site_mods();
 if (!isset($admin_mods[$admin_info['main_module']]) and !isset($site_mods[$admin_info['main_module']])) {
     $admin_info['main_module'] = 'siteinfo';
 }
-$module_name = strtolower($nv_Request->get_title(NV_NAME_VARIABLE, 'post,get', $admin_info['main_module']));
+$module_name = $nv_Request->get_title(NV_NAME_VARIABLE, 'post,get', $admin_info['main_module']);
 if (preg_match($global_config['check_module'], $module_name)) {
     $include_functions = $include_file = $include_menu = $lang_file = $mod_theme_file = '';
     $module_data = $module_file = $module_name;

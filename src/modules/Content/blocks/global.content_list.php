@@ -13,8 +13,8 @@ if (!defined('NV_MAINFILE')) {
     exit('Stop!!!');
 }
 
-use NukeViet\Module\Content\Shared\CatRepository;
-use NukeViet\Module\Content\Shared\CatService;
+use NukeViet\Module\Content\Cat\CatRepository;
+use NukeViet\Module\Content\Cat\CatService;
 
 if (!nv_function_exists('nv_block_config_content_list')) {
     /**

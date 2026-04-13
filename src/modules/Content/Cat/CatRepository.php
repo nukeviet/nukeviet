@@ -9,13 +9,14 @@
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
-namespace NukeViet\Module\Content\Shared;
+namespace NukeViet\Module\Content\Cat;
 
 if (!defined('NV_MAINFILE')) {
     exit('Stop!!!');
 }
 
 use PDO;
+use NukeViet\Module\Content\Shared\ConfigRepositoryTrait;
 
 /**
  * CatRepository — Tầng truy vấn dữ liệu cho Chủ đề

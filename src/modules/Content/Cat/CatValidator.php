@@ -9,11 +9,13 @@
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
-namespace NukeViet\Module\Content\Shared;
+namespace NukeViet\Module\Content\Cat;
 
 if (!defined('NV_MAINFILE')) {
     exit('Stop!!!');
 }
+
+use NukeViet\Module\Content\Shared\ValidationException;
 
 /**
  * CatValidator — Request Validator kiểm duyệt dữ liệu cho Chủ đề

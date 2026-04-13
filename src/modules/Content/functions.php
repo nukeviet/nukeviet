@@ -15,7 +15,7 @@ if (!defined('NV_SYSTEM')) {
 
 define('NV_IS_MOD_CONTENT', true);
 
-use NukeViet\Module\Content\Shared\ContentRepository;
+use NukeViet\Module\Content\Content\ContentRepository;
 
 // Khởi tạo ContentRepository để lấy config
 // Chỉ load repo tối thiểu nhất tại đây để tránh phình bộ nhớ

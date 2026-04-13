@@ -12,7 +12,7 @@ namespace NukeViet\Module\Content\uapi;
 use NukeViet\Uapi\Uapi;
 use NukeViet\Uapi\UapiResult;
 use NukeViet\Uapi\UiApi;
-use NukeViet\Module\Content\Shared\CatRepository;
+use NukeViet\Module\Content\Cat\CatRepository;
 
 if (!defined('NV_MAINFILE')) {
     exit('Stop!!!');

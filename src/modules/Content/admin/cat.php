@@ -13,8 +13,8 @@ if (!defined('NV_IS_FILE_ADMIN')) {
     exit('Stop!!!');
 }
 
-use NukeViet\Module\Content\Shared\CatRepository;
-use NukeViet\Module\Content\Shared\CatService;
+use NukeViet\Module\Content\Cat\CatRepository;
+use NukeViet\Module\Content\Cat\CatService;
 
 // File này cần CatRepository nên khởi tạo tại chỗ
 $catRepo = new CatRepository($db, NV_PREFIXLANG . '_' . $module_data, $nv_Cache, $module_name);
@@ -43,7 +43,7 @@ if ($nv_Request->isset_request('save', 'post')) {
     $saveId = $edit_catid ?: 0;
 
     try {
-        $validator = new \NukeViet\Module\Content\Shared\CatValidator($catRepo);
+        $validator = new \NukeViet\Module\Content\Cat\CatValidator($catRepo);
         
         // 1. Validator bắt lỗi (Exception văng ra nếu Invalid)
         $validator->validateSave($data, $saveId);

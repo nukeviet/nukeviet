@@ -12,9 +12,9 @@ namespace NukeViet\Module\Content\Api;
 use NukeViet\Api\Api;
 use NukeViet\Api\ApiResult;
 use NukeViet\Api\IApi;
-use NukeViet\Module\Content\Shared\CatRepository;
-use NukeViet\Module\Content\Shared\CatValidator;
-use NukeViet\Module\Content\Shared\CatService;
+use NukeViet\Module\Content\Cat\CatRepository;
+use NukeViet\Module\Content\Cat\CatValidator;
+use NukeViet\Module\Content\Cat\CatService;
 
 if (!defined('NV_ADMIN') or !defined('NV_MAINFILE')) {
     exit('Stop!!!');

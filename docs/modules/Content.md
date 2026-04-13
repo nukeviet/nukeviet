@@ -50,12 +50,15 @@ Controller (Thin) ──▶ Service::prepareSaveData() ──▶ Validator ─�
 │   │   │   ├── {item}-del.php       # AJAX xóa
 │   │   │   ├── {item}-change-status.php
 │   │   │   └── {item}-change-weight.php
-│   │   ├── Shared/                  # PSR-4: NukeViet\Module\{mymod}\Shared\
-│   │   │   ├── ConfigRepositoryTrait.php  # Trait cấu hình dùng chung
+│   │   ├── {Item}/                  # PSR-4: NukeViet\Module\{mymod}\{Item}\
 │   │   │   ├── {Item}Entity.php
 │   │   │   ├── {Item}Repository.php
 │   │   │   ├── {Item}Validator.php
 │   │   │   └── {Item}Service.php
+│   │   ├── Shared/                  # Các Class dùng chung của module
+│   │   │   ├── ConfigRepositoryTrait.php
+│   │   │   ├── ValidationException.php
+│   │   │   └── SchemaHelper.php
 │   │   ├── Api/                     # Admin API (implements IApi)
 │   │   │   └── {Item}GetList.php
 │   │   ├── uapi/                    # Public API (implements UiApi)
@@ -115,7 +118,7 @@ if (!defined('NV_SYSTEM')) {
 
 define('NV_IS_MOD_{MYMOD}', true);
 
-use NukeViet\Module\{mymod}\Shared\{Item}Repository;
+use NukeViet\Module\{mymod}\{Item}\{Item}Repository;
 
 // CHỈ load repo tối thiểu — file này chạy MỌI request tới module
 $repo = new {Item}Repository($db, NV_PREFIXLANG . '_' . $module_data, $nv_Cache, $module_name);
@@ -143,7 +146,7 @@ if (defined('NV_IS_SPADMIN')) {
     $allow_func[] = 'config';
 }
 
-use NukeViet\Module\{mymod}\Shared\{Item}Repository;
+use NukeViet\Module\{mymod}\{Item}\{Item}Repository;
 $repo = new {Item}Repository($db, NV_PREFIXLANG . '_' . $module_data, $nv_Cache, $module_name);
 ${mymod}_config = $repo->getConfig();
 ```
@@ -251,7 +254,7 @@ Mỗi bảng DB = 1 Entity. Typed Properties với giá trị mặc định.
 
 ```php
 <?php
-namespace NukeViet\Module\{mymod}\Shared;
+namespace NukeViet\Module\{mymod}\{Item};
 
 if (!defined('NV_MAINFILE')) {
     exit('Stop!!!');
@@ -332,8 +335,8 @@ class {Item}Entity
 
 **4 lưu ý:** (1) Typed Properties BẮT BUỘC có `= ''` hoặc `= 0` (2) Không dùng `?string` trừ Relationship (3) `fromArray()` lọc NULL an toàn — không cần `?string` cho cột DB (4) **Khóa chính linh hoạt:** PK mặc định là `id`, nhưng bảng phụ có thể dùng PK khác (VD: `catid` cho bảng `_cat`). Gộp PK vào `VIEW_FIELDS` luôn để `getDbColumns()` chỉ cần 1 lần `array_diff`.
 
-> 📎 Entity có Relationship: `src/modules/Content/Shared/ContentEntity.php`
-> 📎 Entity đơn giản: `src/modules/Content/Shared/CatEntity.php`
+> 📎 Entity có Relationship: `src/modules/Content/Content/ContentEntity.php`
+> 📎 Entity đơn giản: `src/modules/Content/Cat/CatEntity.php`
 
 ---
 
@@ -347,7 +350,7 @@ Logic đọc/ghi bảng `_config` **hoàn toàn giống nhau** giữa các Repos
 
 ```php
 <?php
-namespace NukeViet\Module\{mymod}\Shared;
+namespace NukeViet\Module\{mymod}\{Item};
 
 if (!defined('NV_MAINFILE')) {
     exit('Stop!!!');
@@ -398,7 +401,7 @@ trait ConfigRepositoryTrait
 
 ```php
 <?php
-namespace NukeViet\Module\{mymod}\Shared;
+namespace NukeViet\Module\{mymod}\{Item};
 
 if (!defined('NV_MAINFILE')) {
     exit('Stop!!!');
@@ -716,8 +719,8 @@ $repo->getContentList($filter_catid, -1);
 
 > **Lưu ý:** `use ConfigRepositoryTrait;` thay thế cho việc copy-paste `getConfig()` / `saveConfig()`. Module có nhiều Repository (VD: `CatRepository` + `ContentRepository`) chỉ cần khai báo `use ConfigRepositoryTrait;` — tất cả đều dùng chung bảng `{$table}_config`.
 
-> 📎 Repository đầy đủ hơn (có `getRelated`, `incrementHits`, `countByCatid`): `src/modules/Content/Shared/ContentRepository.php`
-> 📎 Repository cho bảng phụ (PK là `catid`): `src/modules/Content/Shared/CatRepository.php`
+> 📎 Repository đầy đủ hơn (có `getRelated`, `incrementHits`, `countByCatid`): `src/modules/Content/Content/ContentRepository.php`
+> 📎 Repository cho bảng phụ (PK là `catid`): `src/modules/Content/Cat/CatRepository.php`
 > 📎 Trait config: `src/modules/Content/Shared/ConfigRepositoryTrait.php`
 
 ---
@@ -731,7 +734,7 @@ Business logic thuần. Hai trách nhiệm chính:
 
 ```php
 <?php
-namespace NukeViet\Module\{mymod}\Shared;
+namespace NukeViet\Module\{mymod}\{Item};
 
 if (!defined('NV_MAINFILE')) {
     exit('Stop!!!');
@@ -984,8 +987,8 @@ Controller/API:
 
 > **Module có trang Cấu hình (Config)?** Service nên có thêm 3 method: `collectConfigData($nv_Request)` (thu thập), `prepareConfigData($config, ...)` (chuẩn hóa/validate), `formatConfigForView($config)` (định dạng trước khi đẩy ra Smarty). Xem mẫu: `ContentService::collectConfigData()`.
 
-> 📎 Service phức tạp hơn (có `resolveRoute` với `viewtype`, config, duplicate): `src/modules/Content/Shared/ContentService.php`
-> 📎 Service ngắn gọn: `src/modules/Content/Shared/CatService.php`
+> 📎 Service phức tạp hơn (có `resolveRoute` với `viewtype`, config, duplicate): `src/modules/Content/Content/ContentService.php`
+> 📎 Service ngắn gọn: `src/modules/Content/Cat/CatService.php`
 
 ---
 
@@ -995,7 +998,7 @@ Ném `InvalidArgumentException` kèm **error code** → Controller map về đú
 
 ```php
 <?php
-namespace NukeViet\Module\{mymod}\Shared;
+namespace NukeViet\Module\{mymod}\{Item};
 
 if (!defined('NV_MAINFILE')) {
     exit('Stop!!!');
@@ -1032,7 +1035,7 @@ class {Item}Validator
 
 **Quy ước error code:** `1`=title, `2`=bodytext, `3`=alias. Mở rộng tùy module. Message (`empty_title`) phải khớp key trong `language/vi.php`.
 
-> 📎 `src/modules/Content/Shared/ContentValidator.php` · `src/modules/Content/Shared/CatValidator.php`
+> 📎 `src/modules/Content/Content/ContentValidator.php` · `src/modules/Content/Cat/CatValidator.php`
 
 ---
 
@@ -1048,7 +1051,7 @@ if (!defined('NV_IS_FILE_ADMIN')) {
     exit('Stop!!!');
 }
 
-use NukeViet\Module\{mymod}\Shared\{Item}Service;
+use NukeViet\Module\{mymod}\{Item}\{Item}Service;
 
 $service = new {Item}Service($repo);  // $repo từ admin.functions.php
 
@@ -1083,7 +1086,7 @@ if ($nv_Request->isset_request('checkss', 'post')) {
     // 3. Validate → Save → Log
     try {
         $saveId = $id ?: 0;
-        $validator = new \NukeViet\Module\{mymod}\Shared\{Item}Validator($repo);
+        $validator = new \NukeViet\Module\{mymod}\{Item}\{Item}Validator($repo);
         $validator->validateSave($row, $saveId);
         $savedId = $service->save{Item}($row, $saveId, $module_name, ${mymod}_config, $admin_info['admin_id']);
         nv_insert_logs(NV_LANG_DATA, $module_name, $saveId ? 'Edit' : 'Add', 'ID: ' . $savedId, $admin_info['userid']);
@@ -1157,7 +1160,7 @@ if (!csrf_check($nv_Request->get_string('checkss', 'post'),
 }
 
 if ($id > 0) {
-    $service = new \NukeViet\Module\{mymod}\Shared\{Item}Service($repo);
+    $service = new \NukeViet\Module\{mymod}\{Item}\{Item}Service($repo);
 
     // Cho delete:
     nv_insert_logs(NV_LANG_DATA, $module_name, 'Del', 'id ' . $id, $admin_info['userid']);
@@ -1187,7 +1190,7 @@ nv_jsonOutput(['success' => 0, 'text' => 'Error']);
 <?php
 if (!defined('NV_IS_MOD_{MYMOD}')) { exit('Stop!!!'); }
 
-use NukeViet\Module\{mymod}\Shared\{Item}Service;
+use NukeViet\Module\{mymod}\{Item}\{Item}Service;
 
 $service = new {Item}Service($repo);
 
@@ -1310,8 +1313,8 @@ namespace NukeViet\Module\{mymod}\Api;
 use NukeViet\Api\Api;
 use NukeViet\Api\ApiResult;
 use NukeViet\Api\IApi;
-use NukeViet\Module\{mymod}\Shared\{Item}Repository;
-use NukeViet\Module\{mymod}\Shared\{Item}Service;
+use NukeViet\Module\{mymod}\{Item}\{Item}Repository;
+use NukeViet\Module\{mymod}\{Item}\{Item}Service;
 
 if (!defined('NV_ADMIN') or !defined('NV_MAINFILE')) { exit('Stop!!!'); }
 
@@ -1359,8 +1362,8 @@ namespace NukeViet\Module\{mymod}\uapi;                     // ① namespace
 use NukeViet\Uapi\Uapi;                                    // ② Uapi thay Api
 use NukeViet\Uapi\UapiResult;                               // ③ UapiResult
 use NukeViet\Uapi\UiApi;                                    // ④ UiApi
-use NukeViet\Module\{mymod}\Shared\{Item}Repository;
-use NukeViet\Module\{mymod}\Shared\{Item}Service;
+use NukeViet\Module\{mymod}\{Item}\{Item}Repository;
+use NukeViet\Module\{mymod}\{Item}\{Item}Service;
 
 if (!defined('NV_MAINFILE')) { exit('Stop!!!'); }            // ⑤ Guard
 

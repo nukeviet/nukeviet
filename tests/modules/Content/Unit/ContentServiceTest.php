@@ -7,11 +7,11 @@
  * @license GNU/GPL version 2 or any later version
  */
 
-namespace Tests\modules\content\Unit;
+namespace Tests\modules\Content\Unit;
 
-use NukeViet\Module\content\Shared\ContentEntity;
-use NukeViet\Module\content\Shared\ContentRepository;
-use NukeViet\Module\content\Shared\ContentService;
+use NukeViet\Module\Content\Content\ContentEntity;
+use NukeViet\Module\Content\Content\ContentRepository;
+use NukeViet\Module\Content\Content\ContentService;
 use Tests\Support\UnitTester;
 
 class ContentServiceTest extends \Codeception\Test\Unit

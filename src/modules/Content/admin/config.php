@@ -27,7 +27,7 @@ if ($nv_Request->isset_request('save', 'post')) {
         ]);
     }
 
-    $service = new \NukeViet\Module\Content\Shared\ContentService($repo);
+    $service = new \NukeViet\Module\Content\Content\ContentService($repo);
     $array_config = $service->collectConfigData($nv_Request);
     $array_config = $service->prepareConfigData($array_config, $global_config, $socialbuttons);
 
@@ -58,7 +58,7 @@ $array_config = [
 ];
 
 if (!isset($service)) {
-    $service = new \NukeViet\Module\Content\Shared\ContentService($repo);
+    $service = new \NukeViet\Module\Content\Content\ContentService($repo);
 }
 $saved_config = $repo->getConfig();
 $array_config = array_merge($array_config, $saved_config);

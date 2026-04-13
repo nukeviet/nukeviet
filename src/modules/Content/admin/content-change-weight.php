@@ -13,7 +13,7 @@ if (!defined('NV_IS_FILE_ADMIN')) {
     exit('Stop!!!');
 }
 
-use NukeViet\Module\Content\Shared\ContentService;
+use NukeViet\Module\Content\Content\ContentService;
 
 $id = $nv_Request->get_int('id', 'post', 0);
 

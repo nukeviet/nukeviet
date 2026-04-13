@@ -13,8 +13,8 @@ if (!defined('NV_IS_FILE_ADMIN')) {
     exit('Stop!!!');
 }
 
-use NukeViet\Module\Content\Shared\CatRepository;
-use NukeViet\Module\Content\Shared\CatService;
+use NukeViet\Module\Content\Cat\CatRepository;
+use NukeViet\Module\Content\Cat\CatService;
 
 $catid = $nv_Request->get_int('catid', 'post', 0);
 
@@ -30,7 +30,7 @@ if ($catid > 0) {
     $catService = new CatService($catRepo);
 
     // Kiểm tra xem chủ đề có bài viết không
-    $repo = new \NukeViet\Module\Content\Shared\ContentRepository($db, NV_PREFIXLANG . '_' . $module_data, $nv_Cache, $module_name);
+    $repo = new \NukeViet\Module\Content\Content\ContentRepository($db, NV_PREFIXLANG . '_' . $module_data, $nv_Cache, $module_name);
     $count_content = $repo->countByCatid($catid);
 
     if ($count_content > 0) {

@@ -25,7 +25,7 @@ $title = $nv_Request->get_title('title', 'post', '');
 $alias = change_alias($title);
 $alias = !empty($content_config['alias_lower']) ? strtolower($alias) : $alias;
 
-$repo = new \NukeViet\Module\Content\Shared\ContentRepository($db, NV_PREFIXLANG . '_' . $module_data, $nv_Cache, $module_name);
+$repo = new \NukeViet\Module\Content\Content\ContentRepository($db, NV_PREFIXLANG . '_' . $module_data, $nv_Cache, $module_name);
 
 if ($repo->isAliasExists($alias, $id)) {
     $weight = $repo->getMaxId() + 1;

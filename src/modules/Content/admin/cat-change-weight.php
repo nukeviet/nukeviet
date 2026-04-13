@@ -13,8 +13,8 @@ if (!defined('NV_IS_FILE_ADMIN')) {
     exit('Stop!!!');
 }
 
-use NukeViet\Module\Content\Shared\CatRepository;
-use NukeViet\Module\Content\Shared\CatService;
+use NukeViet\Module\Content\Cat\CatRepository;
+use NukeViet\Module\Content\Cat\CatService;
 
 $catid = $nv_Request->get_int('catid', 'post', 0);
 

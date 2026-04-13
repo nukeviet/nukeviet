@@ -9,7 +9,7 @@
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
-namespace Tests\modules\content\API;
+namespace Tests\modules\Content\API;
 
 use Tests\Support\ApiTester;
 
@@ -21,7 +21,7 @@ class AdminCatApiCest
 
     public function _inject()
     {
-        $this->module = getenv('NV_MODULE') ?: 'content';
+        $this->module = getenv('NV_MODULE') ?: 'Content';
     }
 
 

@@ -24,7 +24,7 @@ $title = $nv_Request->get_title('title', 'post', '');
 $alias = change_alias($title);
 $alias = !empty($content_config['alias_lower']) ? strtolower($alias) : $alias;
 
-$repo = new \NukeViet\Module\Content\Shared\CatRepository($db, NV_PREFIXLANG . '_' . $module_data, $nv_Cache, $module_name);
+$repo = new \NukeViet\Module\Content\Cat\CatRepository($db, NV_PREFIXLANG . '_' . $module_data, $nv_Cache, $module_name);
 
 if ($repo->isAliasExists($alias, $catid)) {
     $alias .= '-' . (time() % 1000); // Simple suffix for category alias collision

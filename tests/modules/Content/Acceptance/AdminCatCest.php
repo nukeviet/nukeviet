@@ -9,7 +9,7 @@
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
-namespace Tests\modules\content\Acceptance;
+namespace Tests\modules\Content\Acceptance;
 
 use Tests\Support\AcceptanceTester;
 
@@ -19,7 +19,7 @@ class AdminCatCest
 
     public function _inject()
     {
-        $this->module = getenv('NV_MODULE') ?: 'content';
+        $this->module = getenv('NV_MODULE') ?: 'Content';
     }
 
 

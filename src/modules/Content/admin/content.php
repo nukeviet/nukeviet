@@ -13,9 +13,9 @@ if (!defined('NV_IS_FILE_ADMIN')) {
     exit('Stop!!!');
 }
 
-use NukeViet\Module\Content\Shared\ContentService;
-use NukeViet\Module\Content\Shared\CatRepository;
-use NukeViet\Module\Content\Shared\CatService;
+use NukeViet\Module\Content\Content\ContentService;
+use NukeViet\Module\Content\Cat\CatRepository;
+use NukeViet\Module\Content\Cat\CatService;
 use NukeViet\Module\Content\Shared\SchemaHelper;
 
 // Kiểm tra dung lượng upload
@@ -90,7 +90,7 @@ if ($nv_Request->isset_request('checkss', 'post')) {
     // Luồng chuẩn: Controller nhận Request -> Đóng gói gửi Validator -> Gọi Service -> Đưa ra Template
     try {
         $saveId = ($id and !$copy) ? $id : 0;
-        $validator = new \NukeViet\Module\Content\Shared\ContentValidator($repo);
+        $validator = new \NukeViet\Module\Content\Content\ContentValidator($repo);
 
         // 1. Kiểm lỗi logic nghiệp vụ
         $validator->validateSave($row, $saveId);

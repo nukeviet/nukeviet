@@ -20,10 +20,10 @@ if (!defined('NV_IS_MOD_CONTENT')) {
     exit('Stop!!!');
 }
 
-use NukeViet\Module\Content\Shared\ContentService;
+use NukeViet\Module\Content\Content\ContentService;
 use NukeViet\Module\Content\Shared\SchemaHelper;
-use NukeViet\Module\Content\Shared\CatRepository;
-use NukeViet\Module\Content\Shared\CatService;
+use NukeViet\Module\Content\Cat\CatRepository;
+use NukeViet\Module\Content\Cat\CatService;
 
 $service = new ContentService($repo);
 $catService = new CatService(new CatRepository($db, NV_PREFIXLANG . '_' . $module_data, $nv_Cache, $module_name));

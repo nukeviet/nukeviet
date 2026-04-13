@@ -7,10 +7,10 @@
  * @license GNU/GPL version 2 or any later version
  */
 
-namespace Tests\modules\content\Unit;
+namespace Tests\modules\Content\Unit;
 
-use NukeViet\Module\content\Shared\ContentRepository;
-use NukeViet\Module\content\Shared\ContentValidator;
+use NukeViet\Module\Content\Content\ContentRepository;
+use NukeViet\Module\Content\Content\ContentValidator;
 use Tests\Support\UnitTester;
 
 class ContentValidatorTest extends \Codeception\Test\Unit

@@ -9,7 +9,7 @@
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
-namespace NukeViet\Module\Content\Shared;
+namespace NukeViet\Module\Content\Content;
 
 use NukeViet\Core\Database;
 use NukeViet\Module\Content\Shared\SchemaHelper;

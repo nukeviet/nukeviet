@@ -9,10 +9,10 @@
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
-namespace Tests\modules\content\Unit;
+namespace Tests\modules\Content\Unit;
 
-use NukeViet\Module\content\Shared\CatRepository;
-use NukeViet\Module\content\Shared\CatValidator;
+use NukeViet\Module\Content\Cat\CatRepository;
+use NukeViet\Module\Content\Cat\CatValidator;
 use Tests\Support\UnitTester;
 
 class CatValidatorTest extends \Codeception\Test\Unit

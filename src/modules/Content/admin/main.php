@@ -13,8 +13,8 @@ if (!defined('NV_IS_FILE_ADMIN')) {
     exit('Stop!!!');
 }
 
-use NukeViet\Module\Content\Shared\CatRepository;
-use NukeViet\Module\Content\Shared\ContentService;
+use NukeViet\Module\Content\Cat\CatRepository;
+use NukeViet\Module\Content\Content\ContentService;
 
 $page_title = $nv_Lang->getModule('list');
 $service = new ContentService($repo);

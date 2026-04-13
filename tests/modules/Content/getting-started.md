@@ -1,6 +1,6 @@
-# Hướng dẫn Kiểm thử Module `content` (NukeViet 5)
+# Hướng dẫn Kiểm thử Module `Content` (NukeViet 5)
 
-Tài liệu này hướng dẫn cách chạy bộ kiểm thử (Test Suite) đã được quy hoạch cho module `content`.
+Tài liệu này hướng dẫn cách chạy bộ kiểm thử (Test Suite) đã được quy hoạch cho module `Content`.
 
 ---
 
@@ -29,7 +29,7 @@ Trước khi chạy, hãy đảm bảo:
 
 **Cách chạy:**
 ```bash
-php vendor/bin/codecept run Unit tests/modules/content/Unit/ --steps
+php vendor/bin/codecept run Unit tests/modules/Content/Unit/ --steps
 ```
 
 **Cách đọc kết quả (Quan trọng):**
@@ -81,7 +81,7 @@ Số **assertions** càng cao mà vẫn báo `OK` thì bạn càng có thể "ng
 ### 2.2. Acceptance Test (Kiểm thử Giao diện)
 Mô phỏng hành động của người dùng trên trình duyệt (Admin/Frontend). Yêu cầu Selenium Server đang chạy.
 ```bash
-php vendor/bin/codecept run Acceptance tests/modules/content/Acceptance/
+php vendor/bin/codecept run Acceptance tests/modules/Content/Acceptance/
 ```
 
 ### 2.3. API Test (Kiểm thử Endpoint)
@@ -89,30 +89,30 @@ Kiểm tra các phản hồi JSON từ hệ thống API. Suite `Api` đã đư�
 
 **Cách chạy:**
 ```bash
-# Chạy toàn bộ các API test của riêng module content
-php vendor/bin/codecept run Api tests/modules/content/API/
+# Chạy toàn bộ các API test của riêng module Content
+php vendor/bin/codecept run Api tests/modules/Content/API/
 
-# Chạy một file cụ thể trong module content
-php vendor/bin/codecept run Api tests/modules/content/API/AdminCatApiCest.php
+# Chạy một file cụ thể trong module Content
+php vendor/bin/codecept run Api tests/modules/Content/API/AdminCatApiCest.php
 
 # Chạy một hàm (kịch bản) cụ thể bên trong file
-php vendor/bin/codecept run Api tests/modules/content/API/AdminCatApiCest.php:testGetCatDetailSuccess
+php vendor/bin/codecept run Api tests/modules/Content/API/AdminCatApiCest.php:testGetCatDetailSuccess
 ```
 
 ### 2.4. Kiểm thử cho Module ảo (Virtual Module)
-Nếu bạn có một module ảo (ví dụ: `content-virtual`) được clone từ module `content`, bạn có thể chạy lại chính bộ test này cho module ảo đó bằng cách sử dụng biến môi trường `NV_MODULE`.
+Nếu bạn có một module ảo (ví dụ: `content-virtual`) được clone từ module `Content`, bạn có thể chạy lại chính bộ test này cho module ảo đó bằng cách sử dụng biến môi trường `NV_MODULE`.
 
 **Trên Bash (Git Bash, Linux, macOS):**
 ```bash
-NV_MODULE="content-virtual" php vendor/bin/codecept run Api tests/modules/content/API/
-NV_MODULE="content-virtual" php vendor/bin/codecept run Acceptance tests/modules/content/Acceptance/
+NV_MODULE="content-virtual" php vendor/bin/codecept run Api tests/modules/Content/API/
+NV_MODULE="content-virtual" php vendor/bin/codecept run Acceptance tests/modules/Content/Acceptance/
 
 ```
 
 **Trên PowerShell (Windows):**
 ```powershell
-$env:NV_MODULE="content-virtual"; php vendor/bin/codecept run Api tests/modules/content/API/
-$env:NV_MODULE="content-virtual"; php vendor/bin/codecept run Acceptance tests/modules/content/Acceptance/
+$env:NV_MODULE="content-virtual"; php vendor/bin/codecept run Api tests/modules/Content/API/
+$env:NV_MODULE="content-virtual"; php vendor/bin/codecept run Acceptance tests/modules/Content/Acceptance/
 ```
 
 ---

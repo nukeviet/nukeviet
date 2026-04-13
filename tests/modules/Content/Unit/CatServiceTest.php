@@ -9,11 +9,11 @@
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
-namespace Tests\modules\content\Unit;
+namespace Tests\modules\Content\Unit;
 
-use NukeViet\Module\content\Shared\CatEntity;
-use NukeViet\Module\content\Shared\CatRepository;
-use NukeViet\Module\content\Shared\CatService;
+use NukeViet\Module\Content\Cat\CatEntity;
+use NukeViet\Module\Content\Cat\CatRepository;
+use NukeViet\Module\Content\Cat\CatService;
 use Tests\Support\UnitTester;
 
 class CatServiceTest extends \Codeception\Test\Unit

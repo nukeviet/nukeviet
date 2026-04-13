@@ -5,6 +5,15 @@ Dành cho developer đã biết chuẩn MVC, tài liệu này tập trung vào c
 > [!TIP]
 > Luôn tham khảo module mẫu: `src/modules/Content/` để xem code thực tế.
 
+
+---
+
+## 0. Thay đổi cách đặt tên module và file
+Với PSR-4, Tên Class = Tên File, và Namespace = Cấu trúc Thư mục. Cả hai đều phải dùng PascalCase (viết hoa chữ cái đầu của mỗi từ, ví dụ: UserRegistration):
+- Tên Module : Viết hoa chữ cái đầu của mỗi từ, ví dụ: Content (Không dùng gạch ngang, gạch dưới, dấu chấm)
+- Tên file đặt các chức năng của Module vẫn đặt bình thường, ví dụ đường dẫn: src\modules\Content\funcs\view-report.php để tiện làm url friendly
+- Các tiêu chuẩn này áp dụng cho module mới, module và các chức năng cũ để nguyên, do sửa sẽ ảnh hưởng đến các site đang chạy
+
 ---
 
 ## 1. Kiến Trúc Tổng Quan (The Shift)
@@ -115,5 +124,4 @@ Việc áp dụng chuẩn MVC + Service Layer thay vì viết tất cả logic v
 | **Độ phức tạp ban đầu**: Phải tạo nhiều file (Entity, Repo, Service...) dù chỉ là tính năng nhỏ. | Sử dụng các công cụ Generator + AI làm khung để copy-paste nhanh các thành phần cơ bản. |
 | **Đường cong học tập (Learning Curve)**: Developer mới sẽ thấy khó hiểu khi luồng dữ liệu đi qua quá nhiều lớp. | Tập trung vào quy trình 4 giai đoạn (Bước 3). Một khi đã hiểu luồng Service, việc viết code sẽ trở nên rất máy móc và nhanh chóng. |
 | **Thời gian triển khai lâu hơn**: Viết theo kiểu NV4 "mỳ ăn liền" thường nhanh hơn ở giai đoạn đầu. | Chấp nhận "chậm ở đầu nhưng nhanh ở cuối". Việc bảo trì và nâng cấp sau này sẽ tiết kiệm hàng tuần làm việc so với code cũ. |
-| **Quản lý tệp tin**: Một module lớn có thể có hàng chục lớp Repo/Service. | Tuân thủ tuyệt đối quy tắc đặt tên (`{Item}Service.php`, `{Item}Repository.php`) và sắp xếp trong thư mục `Shared/` để dễ quản lý. |
-
+| **Quản lý tệp tin**: Một module lớn có thể có hàng chục lớp Repo/Service. | Tuân thủ tuyệt đối quy tắc đặt tên (`{Item}Service.php`, `{Item}Repository.php`) và sắp xếp trong thư mục riêng của đối tượng (VD: `Cat/`, `Content/`) để dễ quản lý. |
