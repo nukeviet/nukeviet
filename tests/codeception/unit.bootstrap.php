@@ -28,7 +28,7 @@ if (!defined('NV_MAINFILE')) {
 define('NV_SITE_TIMEZONE_GMT_NAME', preg_replace('/^([\+|\-]{1}\d{2})(\d{2})$/', '$1:$2', date('O')));
 
 global $db, $global_config, $meta_property, $nv_parse_ini_timezone, $language_array, $nv_plugins, $db_config;
-global $nv_default_regions, $nv_Lang;
+global $nv_default_regions, $nv_Lang, $nv_Request, $nv_Server;
 
 $global_config = [];
 $db_config = [
@@ -79,6 +79,10 @@ if ($path_config) {
 
 $nv_Lang = new NukeViet\Core\Language();
 $nv_Lang->loadGlobal();
+
+// Khởi tạo class Request
+$global_config['allowed_html_tags'] = array_map('trim', explode(',', NV_ALLOWED_HTML_TAGS));
+$nv_Request = new NukeViet\Core\Request($global_config + ['https_only' => true], '127.0.0.1', $nv_Server);
 
 require NV_ROOTDIR . '/includes/functions.php';
 require NV_ROOTDIR . '/includes/core/filesystem_functions.php';
