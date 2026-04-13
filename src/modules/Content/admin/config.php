@@ -14,10 +14,14 @@ if (!defined('NV_IS_FILE_ADMIN')) {
 }
 
 use NukeViet\Module\Content\Shared\SchemaHelper;
+use NukeViet\Module\Content\Content\ContentRepository;
+use NukeViet\Module\Content\Content\ContentService;
 
 $page_title = $nv_Lang->getModule('config');
 
 $socialbuttons = ['facebook', 'twitter', 'zalo'];
+
+$contentRepo = new ContentRepository($db, NV_PREFIXLANG . '_' . $module_data, $nv_Cache, $module_name);
 
 if ($nv_Request->isset_request('save', 'post')) {
     if (!csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
@@ -27,13 +31,13 @@ if ($nv_Request->isset_request('save', 'post')) {
         ]);
     }
 
-    $service = new \NukeViet\Module\Content\Content\ContentService($repo);
+    $service = new ContentService($contentRepo);
     $array_config = $service->collectConfigData($nv_Request);
     $array_config = $service->prepareConfigData($array_config, $global_config, $socialbuttons);
 
     nv_insert_logs(NV_LANG_DATA, $module_name, 'Change config', '', $admin_info['userid']);
 
-    $repo->saveConfig($array_config);
+    $contentRepo->saveConfig($array_config);
     $nv_Cache->delMod($module_name);
 
     nv_jsonOutput([
@@ -58,9 +62,9 @@ $array_config = [
 ];
 
 if (!isset($service)) {
-    $service = new \NukeViet\Module\Content\Content\ContentService($repo);
+    $service = new ContentService($contentRepo);
 }
-$saved_config = $repo->getConfig();
+$saved_config = $contentRepo->getConfig();
 $array_config = array_merge($array_config, $saved_config);
 $array_config = $service->formatConfigForView($array_config);
 

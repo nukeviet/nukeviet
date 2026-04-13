@@ -61,8 +61,10 @@ $(function () {
                 },
                 success: function(res) {
                     icon.removeClass('fa-spin');
-                    if (res !== '') {
-                        $('#idalias').val(res);
+                    if (res.status === 'success') {
+                        $('#idalias').val(res.alias);
+                    } else if (res.mess) {
+                        alert(res.mess);
                     }
                 }
             });
@@ -88,10 +90,10 @@ $(function () {
                 success: function (res) {
                     icon.removeClass('fa-spinner fa-spin-pulse').addClass('fa-trash');
                     var r = typeof res === 'string' ? res.split('_') : [];
-                    if ((r.length && r[0] === 'OK') || res.success == 1) {
+                    if ((r.length && r[0] === 'OK') || res.status === 'success') {
                         window.location.reload();
                     } else {
-                        alert(res.text ? res.text : (r[1] ? r[1] : 'Error'));
+                        alert(res.mess ? res.mess : (r[1] ? r[1] : 'Error'));
                     }
                 }
             });
@@ -107,8 +109,8 @@ $(function () {
             url: script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=content-change-status',
             data: { id: id, checkss: checkss },
             success: function(res) {
-                if (res.success !== 1) {
-                    alert(res.text || 'Error');
+                if (res.status !== 'success') {
+                    alert(res.mess || 'Error');
                     window.location.reload();
                 }
             }
@@ -125,10 +127,10 @@ $(function () {
             url: script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=content-change-weight',
             data: { id: id, new_weight: weight, checkss: checkss },
             success: function(res) {
-                if (res.success === 1) {
+                if (res.status === 'success') {
                     window.location.reload();
                 } else {
-                    alert(res.text || 'Error');
+                    alert(res.mess || 'Error');
                     window.location.reload();
                 }
             }
@@ -149,10 +151,10 @@ $(function () {
             url: script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=cat-change-weight',
             data: { catid: catid, new_weight: weight, checkss: checkss },
             success: function(res) {
-                if (res.success === 1) {
+                if (res.status === 'success') {
                     window.location.reload();
                 } else {
-                    alert(res.text || 'Error');
+                    alert(res.mess || 'Error');
                     window.location.reload();
                 }
             }
@@ -168,8 +170,8 @@ $(function () {
             url: script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=cat-change-status',
             data: { catid: catid, checkss: checkss },
             success: function(res) {
-                if (res.success !== 1) {
-                    alert(res.text || 'Error');
+                if (res.status !== 'success') {
+                    alert(res.mess || 'Error');
                     window.location.reload();
                 }
             }
@@ -191,10 +193,10 @@ $(function () {
                 },
                 success: function(res) {
                     var r = typeof res === 'string' ? res.split('_') : [];
-                    if ((r.length && r[0] === 'OK') || res.success == 1) {
+                    if ((r.length && r[0] === 'OK') || res.status === 'success') {
                         window.location.reload();
                     } else {
-                        alert(res.text ? res.text : (r[1] ? r[1] : 'Error'));
+                        alert(res.mess ? res.mess : (r[1] ? r[1] : 'Error'));
                     }
                 }
             });
@@ -215,8 +217,8 @@ $(function () {
                     checkss: checkss,
                     catid: catid
                 }, function(res) {
-                    if (res !== "") {
-                        $("#cat_alias").val(res);
+                    if (res.status === 'success') {
+                        $("#cat_alias").val(res.alias);
                     }
                 });
             }, 500);

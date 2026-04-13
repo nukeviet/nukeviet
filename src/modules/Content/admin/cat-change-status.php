@@ -20,8 +20,8 @@ $catid = $nv_Request->get_int('catid', 'post', 0);
 
 if (!csrf_check($nv_Request->get_string('checkss', 'post'), $admin_info['admin_id'] . '_' . $module_name . '_cat_' . $catid)) {
     nv_jsonOutput([
-        'success' => 0,
-        'text' => $nv_Lang->getGlobal('error_checkss')
+        'status' => 'error',
+        'mess' => $nv_Lang->getGlobal('error_checkss')
     ]);
 }
 
@@ -33,13 +33,13 @@ if ($catid > 0) {
     if ($newStatus >= 0) {
         nv_insert_logs(NV_LANG_DATA, $module_name, 'Change Cat Status', 'catid ' . $catid . ' status ' . $newStatus, $admin_info['userid']);
         nv_jsonOutput([
-            'success' => 1,
-            'text' => 'Success!'
+            'status' => 'success',
+            'mess' => 'Success!'
         ]);
     }
 }
 
 nv_jsonOutput([
-    'success' => 0,
-    'text' => 'Wrong data!'
+    'status' => 'error',
+    'mess' => 'Wrong data!'
 ]);

@@ -13,7 +13,9 @@ if (!defined('NV_IS_FILE_ADMIN')) {
     exit('Stop!!!');
 }
 
+use NukeViet\Module\Content\Content\ContentRepository;
 use NukeViet\Module\Content\Content\ContentService;
+use NukeViet\Module\Content\Content\ContentValidator;
 use NukeViet\Module\Content\Cat\CatRepository;
 use NukeViet\Module\Content\Cat\CatService;
 use NukeViet\Module\Content\Shared\SchemaHelper;
@@ -26,8 +28,11 @@ if (!empty($global_config['over_capacity']) and !defined('NV_IS_GODADMIN')) {
     include NV_ROOTDIR . '/includes/footer.php';
 }
 
+$contentRepo = new ContentRepository($db, NV_PREFIXLANG . '_' . $module_data, $nv_Cache, $module_name);
+$content_config = $contentRepo->getConfig();
+
 // File này cần dùng tới Cat + Content Service nên khởi tạo tận nơi
-$service = new ContentService($repo);
+$service = new ContentService($contentRepo);
 $catRepo = new CatRepository($db, NV_PREFIXLANG . '_' . $module_data, $nv_Cache, $module_name);
 $catService = new CatService($catRepo);
 
@@ -36,7 +41,7 @@ $copy = $nv_Request->get_int('copy', 'get,post', 0);
 $entity = null;
 
 if ($id) {
-    $entity = $repo->findById($id);
+    $entity = $contentRepo->findById($id);
     if (empty($entity)) {
         nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA
             . '&' . NV_NAME_VARIABLE . '=' . $module_name);
@@ -77,7 +82,7 @@ if ($nv_Request->isset_request('checkss', 'post')) {
     $_groups_post = $nv_Request->get_array('activecomm', 'post', []);
     $row['activecomm'] = !empty($_groups_post) ? implode(',', nv_groups_post(array_intersect($_groups_post, array_keys($groups_list)))) : '';
 
-    if (!array_key_exists($row['schema_type'], \NukeViet\Module\Content\Shared\SchemaHelper::$schema_types)) {
+    if (!array_key_exists($row['schema_type'], SchemaHelper::$schema_types)) {
         $row['schema_type'] = 'newsarticle';
     }
     if ($row['schema_type'] == 'webpage' and empty($row['schema_about'])) {
@@ -90,7 +95,7 @@ if ($nv_Request->isset_request('checkss', 'post')) {
     // Luồng chuẩn: Controller nhận Request -> Đóng gói gửi Validator -> Gọi Service -> Đưa ra Template
     try {
         $saveId = ($id and !$copy) ? $id : 0;
-        $validator = new \NukeViet\Module\Content\Content\ContentValidator($repo);
+        $validator = new ContentValidator($contentRepo);
 
         // 1. Kiểm lỗi logic nghiệp vụ
         $validator->validateSave($row, $saveId);
@@ -117,8 +122,9 @@ if ($nv_Request->isset_request('checkss', 'post')) {
             }
         }
         nv_jsonOutput($respon);
-    } catch (\Exception $e) {
-        $respon['mess'] = $e->getMessage();
+    } catch (\Throwable $e) {
+        trigger_error($e);
+        $respon['mess'] = $nv_Lang->getGlobal('error_system');
         nv_jsonOutput($respon);
     }
 
@@ -128,7 +134,7 @@ if ($nv_Request->isset_request('checkss', 'post')) {
         . '&' . NV_NAME_VARIABLE . '=' . $module_name;
     nv_jsonOutput($respon);
 } elseif ($copy) {
-    $sourceEntity = $repo->findById($copy);
+    $sourceEntity = $contentRepo->findById($copy);
     if ($sourceEntity) {
         $row = $service->duplicateContentData($sourceEntity);
         $id = 0;

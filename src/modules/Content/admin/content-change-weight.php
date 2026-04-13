@@ -13,14 +13,15 @@ if (!defined('NV_IS_FILE_ADMIN')) {
     exit('Stop!!!');
 }
 
+use NukeViet\Module\Content\Content\ContentRepository;
 use NukeViet\Module\Content\Content\ContentService;
 
 $id = $nv_Request->get_int('id', 'post', 0);
 
 if (!csrf_check($nv_Request->get_string('checkss', 'post'), $admin_info['admin_id'] . '_' . $module_name . '_' . $id)) {
     nv_jsonOutput([
-        'success' => 0,
-        'text' => $nv_Lang->getGlobal('error_checkss')
+        'status' => 'error',
+        'mess' => $nv_Lang->getGlobal('error_checkss')
     ]);
 }
 
@@ -28,29 +29,30 @@ $new_weight = $nv_Request->get_int('new_weight', 'post', 0);
 
 if (empty($id) || empty($new_weight)) {
     nv_jsonOutput([
-        'success' => 0,
-        'text' => 'Wrong data!'
+        'status' => 'error',
+        'mess' => 'Wrong data!'
     ]);
 }
 
-$row_data = $repo->findById($id);
+$contentRepo = new ContentRepository($db, NV_PREFIXLANG . '_' . $module_data, $nv_Cache, $module_name);
+$row_data = $contentRepo->findById($id);
 if (empty($row_data)) {
     nv_jsonOutput([
-        'success' => 0,
-        'text' => 'Not exists!'
+        'status' => 'error',
+        'mess' => 'Not exists!'
     ]);
 }
 
-$service = new ContentService($repo);
+$service = new ContentService($contentRepo);
 if ($service->changeWeight($id, $new_weight, $module_name)) {
     nv_insert_logs(NV_LANG_DATA, $module_name, 'Change weight ID: ' . $row_data->id . ': ' . $row_data->title, $row_data->weight . ' -> ' . $new_weight, $admin_info['userid']);
     nv_jsonOutput([
-        'success' => 1,
-        'text' => 'Success!'
+        'status' => 'success',
+        'mess' => 'Success!'
     ]);
 }
 
 nv_jsonOutput([
-    'success' => 0,
-    'text' => 'Wrong data!'
+    'status' => 'error',
+    'mess' => 'Wrong data!'
 ]);

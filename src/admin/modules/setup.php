@@ -98,6 +98,7 @@ if (!empty($setmodule) and preg_match($global_config['check_module'], $setmodule
             $_main_file = (file_exists(NV_ROOTDIR . '/modules/' . $modrow['basename'] . '/functions.php') and file_exists(NV_ROOTDIR . '/modules/' . $modrow['basename'] . '/funcs/main.php')) ? 1 : 0;
             $_module_data = (strlen($modrow['table_prefix']) > 30) ? trim(substr($modrow['table_prefix'], 0, 20), '_') . '_' . NV_CURRENTTIME : $modrow['table_prefix'];
             $_module_data = strtolower($_module_data);
+
             try {
                 $stmt = $db->prepare('INSERT INTO ' . NV_MODULES_TABLE . " (
                     title, module_file, module_data, module_upload, module_theme, custom_title, admin_title,
@@ -112,7 +113,7 @@ if (!empty($setmodule) and preg_match($global_config['check_module'], $setmodule
                 $stmt->bindValue(':title', $setmodule, PDO::PARAM_STR);
                 $stmt->bindValue(':module_file', $modrow['basename'], PDO::PARAM_STR);
                 $stmt->bindValue(':module_data', $_module_data, PDO::PARAM_STR);
-                $stmt->bindValue(':module_upload', $setmodule, PDO::PARAM_STR);
+                $stmt->bindValue(':module_upload', strtolower($setmodule), PDO::PARAM_STR);
                 $stmt->bindValue(':module_theme', $modrow['basename'], PDO::PARAM_STR);
                 $stmt->bindValue(':custom_title', $custom_title, PDO::PARAM_STR);
                 $stmt->bindValue(':weight', $weight, PDO::PARAM_INT);

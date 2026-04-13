@@ -11,6 +11,8 @@
 
 namespace NukeViet\Module\Content\Cat;
 
+use NukeViet\Module\Content\Shared\AbstractEntity;
+
 if (!defined('NV_MAINFILE')) {
     exit('Stop!!!');
 }
@@ -18,13 +20,18 @@ if (!defined('NV_MAINFILE')) {
 /**
  * CatEntity — Đại diện cho 1 bản ghi chủ đề (category)
  */
-class CatEntity
+class CatEntity extends AbstractEntity
 {
     /**
      * Danh sách các thuộc tính chỉ dùng cho hiển thị (không có trong DB).
      * Mọi thuộc tính public khác mặc định được coi là cột Database.
      */
-    private const VIEW_FIELDS = ['link', 'url_edit', 'checkss', 'url_copy'];
+    protected const VIEW_FIELDS = ['link', 'url_edit', 'checkss', 'url_copy'];
+
+    /**
+     * Tên cột khóa chính (không nằm trong VIEW_FIELDS).
+     */
+    protected const PRIMARY_KEY = 'catid';
 
     public int $catid = 0;
     public string $title = '';
@@ -44,34 +51,6 @@ class CatEntity
     public string $checkss = '';
 
     /**
-     * Lấy danh sách các cột thực tế trong Database.
-     * Tự động lọc bỏ các trường View và Khóa chính (catid).
-     */
-    public static function getDbColumns(): array
-    {
-        $allFields = array_keys(get_class_vars(self::class));
-        return array_values(array_diff($allFields, self::VIEW_FIELDS, ['catid']));
-    }
-
-    /**
-     * Lấy tập hợp tên các cột kiểu int (dùng để bind PDO::PARAM_INT).
-     * @return array<string, true>
-     */
-    public static function getIntColumns(): array
-    {
-        static $cache = null;
-        if ($cache === null) {
-            $cache = [];
-            foreach (get_class_vars(self::class) as $field => $default) {
-                if ($default !== null && is_int($default)) {
-                    $cache[$field] = true;
-                }
-            }
-        }
-        return $cache;
-    }
-
-    /**
      * Chuyển Entity thành Array tương thích Hooks / Smarty NV5
      */
     public function toArray(): array
@@ -79,25 +58,5 @@ class CatEntity
         // Loại bỏ giá trị Null (nếu có) thành chuỗi/số rỗng tương ứng nếu cần
         // nhưng thông thường Smarty vẫn hiển thị Null bình thường.
         return get_object_vars($this);
-    }
-
-    /**
-     * Tạo Entity từ array dữ liệu
-     */
-    public static function fromArray(array $data): self
-    {
-        $entity = new self();
-        foreach ($data as $key => $value) {
-            if (!property_exists($entity, $key) || $value === null) {
-                continue;
-            }
-            $default = $entity->$key;
-            if ($default === null) {
-                continue;
-            }
-            // Ép kiểu theo giá trị mặc định: int → (int), còn lại → (string)
-            $entity->$key = is_int($default) ? (int) $value : (string) $value;
-        }
-        return $entity;
     }
 }

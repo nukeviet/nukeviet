@@ -77,14 +77,7 @@ Nếu **tất cả 16 lời khẳng định** này đều đúng thực tế so 
 Số **assertions** càng cao mà vẫn báo `OK` thì bạn càng có thể "ngủ ngon" vì code của mình đã được máy tính bảo vệ cực kỳ chặt chẽ!
 
 
-
-### 2.2. Acceptance Test (Kiểm thử Giao diện)
-Mô phỏng hành động của người dùng trên trình duyệt (Admin/Frontend). Yêu cầu Selenium Server đang chạy.
-```bash
-php vendor/bin/codecept run Acceptance tests/modules/Content/Acceptance/
-```
-
-### 2.3. API Test (Kiểm thử Endpoint)
+### 2.2. API Test (Kiểm thử Endpoint)
 Kiểm tra các phản hồi JSON từ hệ thống API. Suite `Api` đã được cấu hình chuyên dụng để chạy qua CURL (PhpBrowser), **không cần mở trình duyệt**, giúp tốc độ kiểm thử cực nhanh.
 
 **Cách chạy:**
@@ -99,6 +92,12 @@ php vendor/bin/codecept run Api tests/modules/Content/API/AdminCatApiCest.php
 php vendor/bin/codecept run Api tests/modules/Content/API/AdminCatApiCest.php:testGetCatDetailSuccess
 ```
 
+### 2.3. Acceptance Test (Kiểm thử Giao diện)
+Mô phỏng hành động của người dùng trên trình duyệt (Admin/Frontend). Yêu cầu Selenium Server đang chạy.
+```bash
+php vendor/bin/codecept run Acceptance tests/modules/Content/Acceptance/
+```
+
 ### 2.4. Kiểm thử cho Module ảo (Virtual Module)
 Nếu bạn có một module ảo (ví dụ: `content-virtual`) được clone từ module `Content`, bạn có thể chạy lại chính bộ test này cho module ảo đó bằng cách sử dụng biến môi trường `NV_MODULE`.
 
@@ -106,7 +105,6 @@ Nếu bạn có một module ảo (ví dụ: `content-virtual`) được clone t
 ```bash
 NV_MODULE="content-virtual" php vendor/bin/codecept run Api tests/modules/Content/API/
 NV_MODULE="content-virtual" php vendor/bin/codecept run Acceptance tests/modules/Content/Acceptance/
-
 ```
 
 **Trên PowerShell (Windows):**

@@ -37,10 +37,11 @@ Khi cần thêm một tính năng mới (ví dụ: Quản lý Sản phẩm), hã
 ### Bước 1: Database & Entity
 1. Định nghĩa bảng trong `action_mysql.php`.
 2. Tạo `{Item}Entity.php`: Khai báo các thuộc tính (public properties) tương ứng các cột DB.
+   - **Kế thừa**: Nên kế thừa từ `AbstractEntity` để dùng chung các phương thức hệ thống.
    - **Lưu ý**: Typed Properties BẮT BUỘC phải có giá trị mặc định (Ví dụ: `public string $title = '';`).
-   - Dùng `toArray()` để đẩy sang View.
-   - Dùng `fromArray()` để nhận dữ liệu từ Repository.
-   - 📎 [Mẫu Entity](modules/content.md#L252)
+   - Dùng `toArray()` (override) để đẩy sang View.
+   - Dùng `fromArray()`, `getDbColumns()`, `getIntColumns()` (kế thừa từ lớp cha).
+   - 📎 [Mẫu Entity chuẩn](modules/content.md#L252)
 
 ### Bước 2: Truy vấn dữ liệu (Repository)
 - Viết các hàm `findById`, `save`, `delete`, `getList`.
@@ -100,8 +101,13 @@ Mỗi chức năng mới bắt buộc phải có testcase đi kèm trong thư m�
 4. **Thin Controller**: Nếu file controller của bạn > 200 dòng, hãy chuyển logic vào Service.
 5. **Chuẩn PascalCase**: NukeViet 5 dùng PSR-4. Tuyệt đối tuân thủ tên file/class (VD: `NewsService.php`). Nếu sai hoa/thường, code sẽ **lỗi trên Linux**.
 6. **Nguyên tắc "O-R-S" (One Repository - One Service)**: Mỗi bảng dữ liệu chính nên có một cặp Repo/Service riêng để dễ bảo trì.
-7. **Log là bắt buộc**: Đừng quên `nv_insert_logs()` để theo dõi lịch sử thay đổi của quản trị viên.
-8. **Luôn dùng toArray() cho View**: TPL chỉ nhận mảng thuần để nhẹ và bảo mật hơn.
+7. **Khởi tạo tại chỗ (Local Initialization)**: Tuyệt đối không khởi tạo Repository ở phạm vi toàn cục (`admin.functions.php` hoặc `functions.php`). Mỗi Controller phải tự khởi tạo Repository và đọc config khi cần để đảm bảo tính độc lập và giúp IDE nhận diện kiểu dữ liệu tốt nhất.
+8. **Quy tắc đặt tên biến Repo**: Đặt tên biến rõ ràng theo đối tượng để tránh xung đột (Ví dụ: `$contentRepo`, `$catRepo` thay vì `$repo` chung chung).
+9. **Trật tự `use` chuẩn**: Sắp xếp các câu lệnh `use` theo nhóm đối tượng trước (Domain objects), sau đó mới đến Helper. Trong mỗi nhóm đối tượng, sắp xếp theo thứ tự: Repository -> Service -> Validator.
+10. **Log là bắt buộc**: Đừng quên `nv_insert_logs()` để theo dõi lịch sử thay đổi của quản trị viên.
+11. **Luôn dùng toArray() cho View**: TPL chỉ nhận mảng thuần để nhẹ và bảo mật hơn.
+12. **Kế thừa AbstractEntity**: Giúp giảm lặp code (DRY) cho các phương thức xử lý Entity cơ bản.
+13. **Bắt Throwable & ghi Log**: Mọi try-catch phải kết thúc bằng `catch (\Throwable $e)` + `trigger_error($e)`. Chỉ dùng 2 tầng catch: `InvalidArgumentException` (lỗi validation chủ động) và `Throwable` (mọi lỗi còn lại). **KHÔNG** trả `$e->getMessage()` ra ngoài ở tầng Throwable — chỉ trả lỗi chung `error_system`.
 
 ---
 

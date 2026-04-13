@@ -13,25 +13,32 @@ if (!defined('NV_IS_FILE_ADMIN')) {
     exit('Stop!!!');
 }
 
+use NukeViet\Module\Content\Content\ContentRepository;
+
 // Dùng $content_config['alias_lower'] để auto-generate alias giống page.admin/alias.php
 $id = $nv_Request->get_int('id', 'post', 0);
 
 if (!csrf_check($nv_Request->get_string('checkss', 'post', ''), $admin_info['admin_id'] . '_' . $module_name . '_content')) {
-    exit($nv_Lang->getGlobal('error_checkss'));
+    nv_jsonOutput([
+        'status' => 'error',
+        'mess' => $nv_Lang->getGlobal('error_checkss')
+    ]);
 }
 
 $title = $nv_Request->get_title('title', 'post', '');
 
+$contentRepo = new ContentRepository($db, NV_PREFIXLANG . '_' . $module_data, $nv_Cache, $module_name);
+$content_config = $contentRepo->getConfig();
+
 $alias = change_alias($title);
 $alias = !empty($content_config['alias_lower']) ? strtolower($alias) : $alias;
 
-$repo = new \NukeViet\Module\Content\Content\ContentRepository($db, NV_PREFIXLANG . '_' . $module_data, $nv_Cache, $module_name);
-
-if ($repo->isAliasExists($alias, $id)) {
-    $weight = $repo->getMaxId() + 1;
+if ($contentRepo->isAliasExists($alias, $id)) {
+    $weight = $contentRepo->getMaxId() + 1;
     $alias = $alias . '-' . $weight;
 }
 
-include NV_ROOTDIR . '/includes/header.php';
-echo nv_htmlspecialchars($alias);
-include NV_ROOTDIR . '/includes/footer.php';
+nv_jsonOutput([
+    'status' => 'success',
+    'alias' => $alias
+]);

@@ -13,23 +13,33 @@ if (!defined('NV_IS_FILE_ADMIN')) {
     exit('Stop!!!');
 }
 
+use NukeViet\Module\Content\Content\ContentRepository;
+use NukeViet\Module\Content\Cat\CatRepository;
+
 $catid = $nv_Request->get_int('catid', 'post', 0);
 
 if (!csrf_check($nv_Request->get_string('checkss', 'post', ''), $admin_info['admin_id'] . '_' . $module_name . '_cat')) {
-    exit($nv_Lang->getGlobal('error_checkss'));
+    nv_jsonOutput([
+        'status' => 'error',
+        'mess' => $nv_Lang->getGlobal('error_checkss')
+    ]);
 }
 
 $title = $nv_Request->get_title('title', 'post', '');
 
+$contentRepo = new ContentRepository($db, NV_PREFIXLANG . '_' . $module_data, $nv_Cache, $module_name);
+$content_config = $contentRepo->getConfig();
+
 $alias = change_alias($title);
 $alias = !empty($content_config['alias_lower']) ? strtolower($alias) : $alias;
 
-$repo = new \NukeViet\Module\Content\Cat\CatRepository($db, NV_PREFIXLANG . '_' . $module_data, $nv_Cache, $module_name);
+$catRepo = new CatRepository($db, NV_PREFIXLANG . '_' . $module_data, $nv_Cache, $module_name);
 
-if ($repo->isAliasExists($alias, $catid)) {
+if ($catRepo->isAliasExists($alias, $catid)) {
     $alias .= '-' . (time() % 1000); // Simple suffix for category alias collision
 }
 
-include NV_ROOTDIR . '/includes/header.php';
-echo nv_htmlspecialchars($alias);
-include NV_ROOTDIR . '/includes/footer.php';
+nv_jsonOutput([
+    'status' => 'success',
+    'alias' => $alias
+]);

@@ -7,7 +7,7 @@
  * @license GNU/GPL version 2 or any later version
  */
 
-namespace NukeViet\Module\Content\uapi;
+namespace NukeViet\Module\Content\Uapi;
 
 use NukeViet\Uapi\Uapi;
 use NukeViet\Uapi\UapiResult;

@@ -32,10 +32,3 @@ define('NV_IS_FILE_ADMIN', true);
 if (defined('NV_IS_SPADMIN')) {
     $allow_func[] = 'config';
 }
-
-// Khởi tạo ContentRepository để lấy config admin
-// TUYỆT ĐỐI KHÔNG load tất cả Repository/Service ở file này.
-use NukeViet\Module\Content\Content\ContentRepository;
-
-$repo = new ContentRepository($db, NV_PREFIXLANG . '_' . $module_data, $nv_Cache, $module_name);
-$content_config = $repo->getConfig();

@@ -11,6 +11,9 @@
 
 namespace NukeViet\Module\Content\Content;
 
+use NukeViet\Module\Content\Cat\CatEntity;
+use NukeViet\Module\Content\Shared\AbstractEntity;
+
 if (!defined('NV_MAINFILE')) {
     exit('Stop!!!');
 }
@@ -18,12 +21,12 @@ if (!defined('NV_MAINFILE')) {
 /**
  * ContentEntity — Đại diện cho 1 bản ghi bài viết
  */
-class ContentEntity
+class ContentEntity extends AbstractEntity
 {
     /**
      * Danh sách các thuộc tính chỉ dùng cho hiển thị (không có trong DB).
      */
-    private const VIEW_FIELDS = ['id', 'category', 'link', 'url_view', 'url_edit', 'url_copy', 'checkss', 'url_copy_edit'];
+    protected const VIEW_FIELDS = ['id', 'category', 'link', 'url_view', 'url_edit', 'url_copy', 'checkss', 'url_copy_edit'];
 
     public int $id = 0;
     public int $catid = 0;
@@ -58,34 +61,8 @@ class ContentEntity
     public string $checkss = '';
 
     /**
-     * Lấy danh sách các cột thực tế trong Database.
+     * Chuyển Entity thành Array — xử lý nested CatEntity
      */
-    public static function getDbColumns(): array
-    {
-        $allFields = array_keys(get_class_vars(self::class));
-        return array_values(array_diff($allFields, self::VIEW_FIELDS));
-    }
-
-    /**
-     * Lấy tập hợp tên các cột kiểu int (dùng để bind PDO::PARAM_INT).
-     * Kết quả được cache static — chỉ tạo Entity prototype 1 lần/request.
-     * @return array<string, true>
-     */
-    public static function getIntColumns(): array
-    {
-        static $cache = null;
-        if ($cache === null) {
-            $proto = new self();
-            $cache = [];
-            foreach (get_class_vars(self::class) as $field => $default) {
-                if ($default !== null && is_int($default)) {
-                    $cache[$field] = true;
-                }
-            }
-        }
-        return $cache;
-    }
-
     public function toArray(): array
     {
         $arr = get_object_vars($this);
@@ -93,26 +70,5 @@ class ContentEntity
             $arr['category'] = $this->category->toArray();
         }
         return $arr;
-    }
-
-    /**
-     * Tạo Entity từ array dữ liệu
-     */
-    public static function fromArray(array $data): self
-    {
-        $entity = new self();
-        foreach ($data as $key => $value) {
-            if (!property_exists($entity, $key) || $value === null) {
-                continue;
-            }
-            $default = $entity->$key;
-            if ($default === null) {
-                // Bỏ qua Relationship (nullable, VD: ?CatEntity $category = null)
-                continue;
-            }
-            // Ép kiểu theo giá trị mặc định: int → (int), còn lại → (string)
-            $entity->$key = is_int($default) ? (int) $value : (string) $value;
-        }
-        return $entity;
     }
 }

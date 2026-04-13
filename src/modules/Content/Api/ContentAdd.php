@@ -51,15 +51,15 @@ class ContentAdd implements IApi
         $module_info = Api::getModuleInfo();
         $module_data = $module_info['module_data'];
 
-        $repo = new ContentRepository(
+        $contentRepo = new ContentRepository(
             $db,
             NV_PREFIXLANG . '_' . $module_data,
             $nv_Cache,
             $module_name
         );
 
-        $service = new ContentService($repo);
-        $moduleConfig = $repo->getConfig();
+        $service = new ContentService($contentRepo);
+        $moduleConfig = $contentRepo->getConfig();
 
         // Parse request qua Service
         $data = $service->collectRequestData($nv_Request);
@@ -69,7 +69,7 @@ class ContentAdd implements IApi
 
         // Validate
         try {
-            $validator = new ContentValidator($repo);
+            $validator = new ContentValidator($contentRepo);
             $validator->validateSave($data);
         } catch (\InvalidArgumentException $e) {
             $this->result->setCode(ApiResult::CODE_UNKONW)
@@ -87,7 +87,7 @@ class ContentAdd implements IApi
         );
 
         // Lấy entity vừa tạo để trả về
-        $entity = $repo->findById($savedId);
+        $entity = $contentRepo->findById($savedId);
 
         $this->result->set('item', $entity->toArray());
         $this->result->setSuccess();

@@ -13,12 +13,17 @@ if (!defined('NV_IS_FILE_ADMIN')) {
     exit('Stop!!!');
 }
 
+use NukeViet\Module\Content\Content\ContentRepository;
 use NukeViet\Module\Content\Cat\CatRepository;
 use NukeViet\Module\Content\Cat\CatService;
+use NukeViet\Module\Content\Cat\CatValidator;
 
 // File này cần CatRepository nên khởi tạo tại chỗ
 $catRepo = new CatRepository($db, NV_PREFIXLANG . '_' . $module_data, $nv_Cache, $module_name);
 $catService = new CatService($catRepo);
+
+$contentRepo = new ContentRepository($db, NV_PREFIXLANG . '_' . $module_data, $nv_Cache, $module_name);
+$content_config = $contentRepo->getConfig();
 
 $page_title = $nv_Lang->getModule('cat_list');
 
@@ -43,8 +48,8 @@ if ($nv_Request->isset_request('save', 'post')) {
     $saveId = $edit_catid ?: 0;
 
     try {
-        $validator = new \NukeViet\Module\Content\Cat\CatValidator($catRepo);
-        
+        $validator = new CatValidator($catRepo);
+
         // 1. Validator bắt lỗi (Exception văng ra nếu Invalid)
         $validator->validateSave($data, $saveId);
 
@@ -74,8 +79,9 @@ if ($nv_Request->isset_request('save', 'post')) {
             }
         }
         nv_jsonOutput($respon);
-    } catch (\Exception $e) {
-        $respon['mess'] = $e->getMessage();
+    } catch (\Throwable $e) {
+        trigger_error($e);
+        $respon['mess'] = $nv_Lang->getGlobal('error_system');
         nv_jsonOutput($respon);
     }
 
