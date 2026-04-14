@@ -26,7 +26,7 @@ if (!csrf_check($nv_Request->get_string('checkss', 'post'), $admin_info['admin_i
 }
 
 if ($catid > 0) {
-    $catRepo = new CatRepository($db, NV_PREFIXLANG . '_' . $module_data, $nv_Cache, $module_name);
+    $catRepo = new CatRepository($db, $config['table_cat'], $nv_Cache, $module_name);
     $catService = new CatService($catRepo);
 
     $newStatus = $catService->changeStatus($catid, $module_name);

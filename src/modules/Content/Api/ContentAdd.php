@@ -45,27 +45,27 @@ class ContentAdd implements IApi
 
     public function execute()
     {
-        global $db, $nv_Cache, $nv_Request, $nv_Lang, $admin_info;
+        global $db, $nv_Cache, $nv_Request, $nv_Lang, $module_config;
 
         $module_name = Api::getModuleName();
-        $module_info = Api::getModuleInfo();
-        $module_data = $module_info['module_data'];
+        $admin_id = Api::getAdminId();
+        $config = $module_config[$module_name];
 
         $contentRepo = new ContentRepository(
             $db,
-            NV_PREFIXLANG . '_' . $module_data,
+            $config['table_row'],
             $nv_Cache,
             $module_name
         );
 
+
         $service = new ContentService($contentRepo);
-        $moduleConfig = $contentRepo->getConfig();
 
         // Parse request qua Service
         $data = $service->collectRequestData($nv_Request);
 
         // Chuẩn hóa dữ liệu qua Service
-        $data = $service->prepareSaveData($data, $moduleConfig);
+        $data = $service->prepareSaveData($data, $config);
 
         // Validate
         try {
@@ -79,11 +79,11 @@ class ContentAdd implements IApi
 
         // Lưu qua Service
         $savedId = $service->saveContent(
-            $data, 
-            0, 
-            $module_name, 
-            $moduleConfig, 
-            $admin_info['admin_id'] ?? 0
+            $data,
+            0,
+            $module_name,
+            $config,
+            $admin_id
         );
 
         // Lấy entity vừa tạo để trả về

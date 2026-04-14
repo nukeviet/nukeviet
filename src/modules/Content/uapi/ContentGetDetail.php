@@ -34,15 +34,14 @@ class ContentGetDetail implements UiApi
 
     public function execute()
     {
-        global $db, $nv_Cache, $nv_Request, $nv_Lang;
+        global $db, $nv_Cache, $nv_Request, $nv_Lang, $module_config;
 
         $module_name = Uapi::getModuleName();
-        $module_info = Uapi::getModuleInfo();
-        $module_data = $module_info['module_data'];
+        $config = $module_config[$module_name];
 
         $repo = new ContentRepository(
             $db,
-            NV_PREFIXLANG . '_' . $module_data,
+           $config['table_row'],
             $nv_Cache,
             $module_name
         );

@@ -39,15 +39,14 @@ class ContentGetList implements IApi
 
     public function execute()
     {
-        global $db, $nv_Cache, $nv_Request;
+        global $db, $nv_Cache, $nv_Request, $module_config;
 
         $module_name = Api::getModuleName();
-        $module_info = Api::getModuleInfo();
-        $module_data = $module_info['module_data'];
+        $config = $module_config[$module_name];
 
         $repo = new ContentRepository(
             $db,
-            NV_PREFIXLANG . '_' . $module_data,
+            $config['table_row'],
             $nv_Cache,
             $module_name
         );

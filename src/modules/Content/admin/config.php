@@ -21,7 +21,7 @@ $page_title = $nv_Lang->getModule('config');
 
 $socialbuttons = ['facebook', 'twitter', 'zalo'];
 
-$contentRepo = new ContentRepository($db, NV_PREFIXLANG . '_' . $module_data, $nv_Cache, $module_name);
+$contentRepo = new ContentRepository($db, $config['table_row'], $nv_Cache, $module_name);
 
 if ($nv_Request->isset_request('save', 'post')) {
     if (!csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
@@ -34,11 +34,9 @@ if ($nv_Request->isset_request('save', 'post')) {
     $service = new ContentService($contentRepo);
     $array_config = $service->collectConfigData($nv_Request);
     $array_config = $service->prepareConfigData($array_config, $global_config, $socialbuttons);
+    $contentRepo->saveConfig($array_config);
 
     nv_insert_logs(NV_LANG_DATA, $module_name, 'Change config', '', $admin_info['userid']);
-
-    $contentRepo->saveConfig($array_config);
-    $nv_Cache->delMod($module_name);
 
     nv_jsonOutput([
         'status' => 'success',
@@ -47,26 +45,12 @@ if ($nv_Request->isset_request('save', 'post')) {
     ]);
 }
 
-// Load config hiện tại từ DB
-$array_config = [
-    'viewtype' => 0,
-    'facebookapi' => '',
-    'socialbutton' => '',
-    'per_page' => 20,
-    'related_articles' => 5,
-    'news_first' => 0,
-    'copy_page' => 0,
-    'alias_lower' => 1,
-    'schema_type' => 'newsarticle',
-    'schema_about' => 'organization'
-];
 
 if (!isset($service)) {
     $service = new ContentService($contentRepo);
 }
-$saved_config = $contentRepo->getConfig();
-$array_config = array_merge($array_config, $saved_config);
-$array_config = $service->formatConfigForView($array_config);
+
+$array_config = $service->formatConfigForView($config);
 
 $tpl = new \NukeViet\Template\NVSmarty();
 $tpl->setTemplateDir(get_module_tpl_dir('config.tpl'));

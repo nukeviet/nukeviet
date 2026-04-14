@@ -243,7 +243,11 @@ function set_reg_attribs($attribs, $username)
 
                 if ($check[0] == 1) {
                     $reg_attribs['photo'] = NV_UPLOADS_DIR . '/' . $module_upload . '/' . $newname;
+                } else {
+                    $reg_attribs['photo'] = '';
                 }
+            } else {
+                $reg_attribs['photo'] = '';
             }
         }
     }

@@ -13,17 +13,13 @@ if (!defined('NV_IS_FILE_ADMIN')) {
     exit('Stop!!!');
 }
 
-use NukeViet\Module\Content\Content\ContentRepository;
 use NukeViet\Module\Content\Cat\CatRepository;
 use NukeViet\Module\Content\Cat\CatService;
 use NukeViet\Module\Content\Cat\CatValidator;
 
 // File này cần CatRepository nên khởi tạo tại chỗ
-$catRepo = new CatRepository($db, NV_PREFIXLANG . '_' . $module_data, $nv_Cache, $module_name);
+$catRepo = new CatRepository($db, $config['table_cat'], $nv_Cache, $module_name);
 $catService = new CatService($catRepo);
-
-$contentRepo = new ContentRepository($db, NV_PREFIXLANG . '_' . $module_data, $nv_Cache, $module_name);
-$content_config = $contentRepo->getConfig();
 
 $page_title = $nv_Lang->getModule('cat_list');
 
@@ -43,7 +39,7 @@ if ($nv_Request->isset_request('save', 'post')) {
     $data = $catService->collectRequestData($nv_Request);
 
     // Chuẩn hóa dữ liệu (alias, keywords, image) qua Service — DRY
-    $data = $catService->prepareSaveData($data, $content_config, $module_upload);
+    $data = $catService->prepareSaveData($data, $config, $module_upload);
 
     $saveId = $edit_catid ?: 0;
 

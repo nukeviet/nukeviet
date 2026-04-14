@@ -34,7 +34,7 @@ if (empty($catid) || empty($new_weight)) {
     ]);
 }
 
-$catRepo = new CatRepository($db, NV_PREFIXLANG . '_' . $module_data, $nv_Cache, $module_name);
+$catRepo = new CatRepository($db, $config['table_cat'], $nv_Cache, $module_name);
 $catService = new CatService($catRepo);
 
 $cat = $catRepo->findById($catid);

@@ -4,10 +4,10 @@
 
 NukeViet tách biệt rõ ràng 2 tầng ngôn ngữ:
 
-| Biến | Nguồn | Phạm vi |
-|---|---|---|
-| `$lang_global` | `src/includes/language/{locale}/global.php` | Toàn hệ thống (nút, thông báo, quốc gia...) |
-| `$lang_module` | `modules/{module}/language/{locale}.php` | Riêng module đó |
+| Biến | Nguồn | Truy xuất (NukeViet 5) | Phạm vi |
+|---|---|---|---|
+| `$lang_global` | `src/includes/language/{locale}/global.php` | `$nv_Lang->getGlobal('key')` | Toàn hệ thống (nút, thông báo...) |
+| `$lang_module` | `modules/{module}/language/{locale}.php` | `$nv_Lang->getModule('key')` | Riêng module đó |
 
 > `$lang_translator` là metadata dịch thuật, không dùng trong code logic.
 
@@ -104,7 +104,9 @@ echo $nv_Lang->getModule('hello');
 ---
 
 ## 6. Sử dụng chuỗi ngôn ngữ trong PHP
-> **Tham khảo cách sử dụng biến `$lang_module`, `$lang_global` trong PHP:** `docs/knowledge/examples/language/UseInPhp.php`
+> **Lưu ý:** NukeViet 5 khuyến khích sử dụng `$nv_Lang->getModule('key')` và `$nv_Lang->getGlobal('key')` thay vì truy cập mảng trực tiếp.
+
+> **Tham khảo cách sử dụng trong PHP:** `docs/knowledge/examples/language/UseInPhp.php`
 
 ---
 
@@ -153,19 +155,19 @@ Lang block dùng chung với lang module, ngoài ra có thể có thêm file JSO
 
 ## 12. Các chuỗi $lang_global hay dùng
 
-| Key | Giá trị (vi) | Dùng khi |
-|---|---|---|
-| `$lang_global['save']` | Lưu thay đổi | Nút submit form |
-| `$lang_global['cancel']` | Hủy bỏ | Nút hủy |
-| `$lang_global['edit']` | Sửa | Nút sửa |
-| `$lang_global['delete']` | Xóa | Nút xóa |
-| `$lang_global['add']` | Thêm | Nút thêm mới |
-| `$lang_global['yes']` | Có | Confirm dialog |
-| `$lang_global['no']` | Không | Confirm dialog |
-| `$lang_global['ok']` | OK | Thông báo |
-| `$lang_global['confirm']` | Xác nhận | Nút confirm |
-| `$lang_global['required']` | Chú ý... (*) | Ghi chú form |
-| `$lang_global['status']` | Trạng thái | Header cột |
-| `$lang_global['actions']` | Thao tác | Header cột |
-| `$lang_global['search']` | Tìm kiếm | Label tìm kiếm |
-| `$lang_global['save_success']` | Các thay đổi đã được ghi nhận | Toast thành công |
+| Key | Truy xuất (PHP) | Giá trị (vi) | Dùng khi |
+|---|---|---|---|
+| `save` | `$nv_Lang->getGlobal('save')` | Lưu thay đổi | Nút submit form |
+| `cancel` | `$nv_Lang->getGlobal('cancel')` | Hủy bỏ | Nút hủy |
+| `edit` | `$nv_Lang->getGlobal('edit')` | Sửa | Nút sửa |
+| `delete` | `$nv_Lang->getGlobal('delete')` | Xóa | Nút xóa |
+| `add` | `$nv_Lang->getGlobal('add')` | Thêm | Nút thêm mới |
+| `yes` | `$nv_Lang->getGlobal('yes')` | Có | Confirm dialog |
+| `no` | `$nv_Lang->getGlobal('no')` | Không | Confirm dialog |
+| `ok` | `$nv_Lang->getGlobal('ok')` | OK | Thông báo |
+| `confirm` | `$nv_Lang->getGlobal('confirm')` | Xác nhận | Nút confirm |
+| `required` | `$nv_Lang->getGlobal('required')` | Chú ý... (*) | Ghi chú form |
+| `status` | `$nv_Lang->getGlobal('status')` | Trạng thái | Header cột |
+| `actions` | `$nv_Lang->getGlobal('actions')` | Thao tác | Header cột |
+| `search` | `$nv_Lang->getGlobal('search')` | Tìm kiếm | Label tìm kiếm |
+| `save_success` | `$nv_Lang->getGlobal('save_success')` | Các thay đổi đã được ghi nhận | Toast thành công |

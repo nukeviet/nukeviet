@@ -23,7 +23,7 @@ if (!defined('NV_IS_MOD_CONTENT')) {
  */
 function nv_content_detail($row, array $other_links, string $content_comment): string
 {
-    global $module_name, $module_info, $meta_property, $content_config, $global_config;
+    global $module_name, $config;
 
     // Gọi toArray() để biến Entity thành Array, tương thích Smarty
     $row_array = $row->toArray();
@@ -48,7 +48,7 @@ function nv_content_detail($row, array $other_links, string $content_comment): s
     $tpl->assign('CONTENT', $row_array);
     $tpl->assign('OTHER_LINKS', array_map(fn($e) => $e->toArray(), $other_links));
     $tpl->assign('CONTENT_COMMENT', $content_comment);
-    $tpl->assign('SOCIAL_CONFIG', $content_config['socialbutton'] ?? '');
+    $tpl->assign('SOCIAL_CONFIG', $config['socialbutton'] ?? '');
 
     return $tpl->fetch('detail.tpl');
 }
@@ -62,7 +62,7 @@ function nv_content_detail($row, array $other_links, string $content_comment): s
  */
 function nv_content_list(array $array_data, string $generate_page): string
 {
-    global $module_upload, $module_info, $module_name;
+    global $module_upload;
 
     $tpl = new \NukeViet\Template\NVSmarty();
     $tpl->setTemplateDir(get_module_tpl_dir('main_list.tpl'));

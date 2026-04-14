@@ -16,7 +16,6 @@ if (!defined('NV_MAINFILE')) {
 }
 
 use PDO;
-use NukeViet\Module\Content\Shared\ConfigRepositoryTrait;
 
 /**
  * ContentRepository — Tầng truy vấn dữ liệu cho bài viết
@@ -24,8 +23,6 @@ use NukeViet\Module\Content\Shared\ConfigRepositoryTrait;
  */
 class ContentRepository
 {
-    use ConfigRepositoryTrait;
-
     private PDO $db;
     private string $table;
     private $cache;
@@ -37,6 +34,20 @@ class ContentRepository
         $this->table = $table;
         $this->cache = $cache;
         $this->module_name = $module_name;
+    }
+
+    public function saveConfig(array $config): void
+    {
+        $sth = $this->db->prepare("UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = '" . NV_LANG_DATA . "' AND module = :module_name AND config_name = :config_name");
+        $sth->bindValue(':module_name', $this->module_name, PDO::PARAM_STR);
+        foreach ($config as $config_name => $config_value) {
+            $sth->bindValue(':config_name', $config_name, PDO::PARAM_STR);
+            $sth->bindValue(':config_value', $config_value, PDO::PARAM_STR);
+            $sth->execute();
+        }
+
+        $this->cache->delMod('settings');
+        $this->cache->delMod($this->module_name);
     }
 
     /**
@@ -304,8 +315,8 @@ class ContentRepository
 
         $this->db->exec(
             'UPDATE ' . $this->table
-            . ' SET weight = CASE id ' . implode(' ', $cases) . ' END'
-            . ' WHERE id IN (' . implode(',', $ids) . ')'
+                . ' SET weight = CASE id ' . implode(' ', $cases) . ' END'
+                . ' WHERE id IN (' . implode(',', $ids) . ')'
         );
     }
 
@@ -394,8 +405,8 @@ class ContentRepository
 
         $this->db->exec(
             'UPDATE ' . $this->table
-            . ' SET weight = CASE id ' . implode(' ', $cases) . ' END'
-            . ' WHERE id IN (' . implode(',', $ids) . ')'
+                . ' SET weight = CASE id ' . implode(' ', $cases) . ' END'
+                . ' WHERE id IN (' . implode(',', $ids) . ')'
         );
 
         return true;
