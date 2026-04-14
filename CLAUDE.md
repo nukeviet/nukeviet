@@ -33,6 +33,12 @@ rm -rf src/data/cache/*/*.cache && rm -rf src/data/cache/smarty-compile/*.php
 - URL pattern: `?lang=vi&nv=ten-module&op=ten-func`
 - Auth: `NV_IS_ADMIN` (mọi level) · `NV_IS_MODADMIN` (quyền module) · `NV_IS_SPADMIN` (super admin)
 
+### Ngôn ngữ (Language)
+
+- Sử dụng đối tượng `$nv_Lang` để truy xuất ngôn ngữ. **KHÔNG** dùng mảng `$lang_module` hay `$lang_global` (cách cũ của NV 4.5).
+- Truy xuất ngôn ngữ module: `$nv_Lang->getModule('key')`
+- Truy xuất ngôn ngữ toàn cục: `$nv_Lang->getGlobal('key')`
+
 ### Kiến trúc & Conventions
 
 - Code style: 4 spaces, `camelCase` (biến/hàm), `PascalCase` (Class/PSR-4), PHPDoc + comment tiếng Việt

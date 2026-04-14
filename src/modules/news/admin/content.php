@@ -192,7 +192,7 @@ if (file_exists(NV_UPLOADS_REAL_DIR . '/' . $currentpath)) {
                 if ($mk[0] > 0) {
                     $upload_real_dir_page = $mk[2];
                     try {
-                        $stmt = $db->prepare('INSERT INTO ' . NV_UPLOAD_GLOBALTABLE . ' (dirname, time) VALUES (:dirname, 0)');
+                        $stmt = $db->prepare('INSERT INTO ' . NV_UPLOAD_GLOBALTABLE . '_dir (dirname, time) VALUES (:dirname, 0)');
                         $stmt->bindValue(':dirname', NV_UPLOADS_DIR . '/' . $cp . $p, PDO::PARAM_STR);
                         $stmt->execute();
                     } catch (Throwable $e) {
