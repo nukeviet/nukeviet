@@ -19,15 +19,14 @@ use NukeViet\Module\Content\Cat\CatRepository;
 
 $page_title = $nv_Lang->getModule('list');
 
-$contentRepo = new ContentRepository($db, NV_PREFIXLANG . '_' . $module_data, $nv_Cache, $module_name);
-$content_config = $contentRepo->getConfig();
+$contentRepo = new ContentRepository($db, $config['table_row'], $nv_Cache, $module_name);
 
 $service = new ContentService($contentRepo);
 
 // Filter theo chuyên mục
 $filter_catid = $nv_Request->get_int('catid', 'get', 0);
 
-$catRepo = new CatRepository($db, NV_PREFIXLANG . '_' . $module_data, $nv_Cache, $module_name);
+$catRepo = new CatRepository($db, $config['table_cat'], $nv_Cache, $module_name);
 $cats_all = $catRepo->getAll();
 
 $_rows = $contentRepo->getContentList($filter_catid, -1);
@@ -68,7 +67,7 @@ $tpl->registerPlugin('modifier', 'ddatetime', 'nv_datetime_format');
 $tpl->setTemplateDir(get_module_tpl_dir('main.tpl'));
 $tpl->assign('LANG', $nv_Lang);
 $tpl->assign('MODULE_NAME', $module_name);
-$tpl->assign('PCONFIG', $content_config);
+$tpl->assign('PCONFIG', $config);
 $tpl->assign('DATA', $array_row);
 $tpl->assign('CATS', $cat_map);
 $tpl->assign('FILTER_CATID', $filter_catid);

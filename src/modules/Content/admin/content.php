@@ -28,12 +28,11 @@ if (!empty($global_config['over_capacity']) and !defined('NV_IS_GODADMIN')) {
     include NV_ROOTDIR . '/includes/footer.php';
 }
 
-$contentRepo = new ContentRepository($db, NV_PREFIXLANG . '_' . $module_data, $nv_Cache, $module_name);
-$content_config = $contentRepo->getConfig();
+$contentRepo = new ContentRepository($db, $config['table_row'], $nv_Cache, $module_name);
 
 // File này cần dùng tới Cat + Content Service nên khởi tạo tận nơi
 $service = new ContentService($contentRepo);
-$catRepo = new CatRepository($db, NV_PREFIXLANG . '_' . $module_data, $nv_Cache, $module_name);
+$catRepo = new CatRepository($db, $config['table_cat'], $nv_Cache, $module_name);
 $catService = new CatService($catRepo);
 
 $id = $nv_Request->get_int('id', 'post,get', 0);
@@ -90,7 +89,7 @@ if ($nv_Request->isset_request('checkss', 'post')) {
     }
 
     // Chuẩn hóa dữ liệu (alias, keywords, image) qua Service — DRY
-    $row = $service->prepareSaveData($row, $content_config, $module_upload);
+    $row = $service->prepareSaveData($row, $config, $module_upload);
 
     // Luồng chuẩn: Controller nhận Request -> Đóng gói gửi Validator -> Gọi Service -> Đưa ra Template
     try {
@@ -101,7 +100,7 @@ if ($nv_Request->isset_request('checkss', 'post')) {
         $validator->validateSave($row, $saveId);
 
         // 2. Chuyển cho Service chuyên lưu trữ DB (Đã được giao quản lý hệ thống weight, timestamps)
-        $savedId = $service->saveContent($row, $saveId, $module_name, $content_config, $admin_info['admin_id']);
+        $savedId = $service->saveContent($row, $saveId, $module_name, $config, $admin_info['admin_id']);
 
         // 3. Log hành động
         nv_insert_logs(NV_LANG_DATA, $module_name, $saveId ? 'Edit' : 'Add', 'ID: ' . $savedId, $admin_info['userid']);
@@ -155,8 +154,8 @@ if ($nv_Request->isset_request('checkss', 'post')) {
         'hot_post' => 0,
         'layout_func' => '',
         'activecomm' => $module_config[$module_name]['setcomm'] ?? '',
-        'schema_type' => $content_config['schema_type'] ?? 'article',
-        'schema_about' => SchemaHelper::$schema_abouts[$content_config['schema_about'] ?? 'organization'] ?? 'Organization'
+        'schema_type' => $config['schema_type'] ?? 'article',
+        'schema_about' => SchemaHelper::$schema_abouts[$config['schema_about'] ?? 'organization'] ?? 'Organization'
     ];
 }
 

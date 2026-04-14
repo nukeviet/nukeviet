@@ -68,15 +68,17 @@ $sql_create_module[] = 'CREATE TABLE ' . $db_config['prefix'] . '_' . $lang . '_
     UNIQUE KEY config_name (config_name)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci";
 
-$sql_create_module[] = 'INSERT INTO ' . $db_config['prefix'] . '_' . $lang . '_' . $module_data . "_config VALUES
-    ('schema_type', 'article'),
-    ('schema_about', 'organization'),
-    ('viewtype', '0'),
-    ('per_page', '20'),
-    ('alias_lower', '1'),
-    ('socialbutton', 'facebook,twitter'),
-    ('facebookapi', ''),
-    ('related_articles', '5'),
-    ('news_first', '0'),
-    ('copy_page', '0')
+$sql_create_module[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES
+    ('" . $lang . "', '" . $module_name . "', 'table_row', '" . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "'),
+    ('" . $lang . "', '" . $module_name . "', 'table_cat', '" . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_cat'),
+    ('" . $lang . "', '" . $module_name . "', 'schema_type', 'article'),
+    ('" . $lang . "', '" . $module_name . "', 'schema_about', 'organization'),
+    ('" . $lang . "', '" . $module_name . "', 'viewtype', '0'),
+    ('" . $lang . "', '" . $module_name . "', 'per_page', '20'),
+    ('" . $lang . "', '" . $module_name . "', 'alias_lower', '1'),
+    ('" . $lang . "', '" . $module_name . "', 'socialbutton', 'facebook,twitter'),
+    ('" . $lang . "', '" . $module_name . "', 'facebookapi', ''),
+    ('" . $lang . "', '" . $module_name . "', 'related_articles', '5'),
+    ('" . $lang . "', '" . $module_name . "', 'news_first', '0'),
+    ('" . $lang . "', '" . $module_name . "', 'copy_page', '0')
 ";

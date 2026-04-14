@@ -27,14 +27,13 @@ use NukeViet\Module\Content\Cat\CatService;
 use NukeViet\Module\Content\Shared\SchemaHelper;
 
 $contentRepo = new ContentRepository($db, NV_PREFIXLANG . '_' . $module_data, $nv_Cache, $module_name);
-$content_config = $contentRepo->getConfig();
 
 $service = new ContentService($contentRepo);
 $catService = new CatService(new CatRepository($db, NV_PREFIXLANG . '_' . $module_data, $nv_Cache, $module_name));
 $page_url = $base_url;
 
 // 1. Nhận Request — Service xử lý URL parsing
-$viewtype = (int) ($content_config['viewtype'] ?? 0);
+$viewtype = (int) ($config['viewtype'] ?? 0);
 $route = $service->resolveRoute($array_op, $viewtype);
 
 if ($route['mode'] === 'none') {
@@ -169,7 +168,7 @@ if ($route['mode'] === 'none') {
 
     // Bài liên quan
     $other_links = [];
-    $related_articles = (int) ($content_config['related_articles'] ?? 0);
+    $related_articles = (int) ($config['related_articles'] ?? 0);
     if ($related_articles) {
         $related = $contentRepo->getRelated($id, $related_articles, $rowdetail->catid);
         foreach ($related as $other) {
@@ -222,7 +221,7 @@ if ($route['mode'] === 'none') {
 
     $page_title = $module_info['site_title'];
     $key_words = $module_info['keywords'];
-    $per_page = (int) ($content_config['per_page'] ?? 20);
+    $per_page = (int) ($config['per_page'] ?? 20);
 
     // 2. Gọi Service
     $result = $service->getList($page, $per_page);

@@ -11,9 +11,7 @@
 
 namespace NukeViet\Module\Content\Content;
 
-use NukeViet\Core\Database;
 use NukeViet\Module\Content\Shared\SchemaHelper;
-use PDO;
 
 if (!defined('NV_MAINFILE')) {
     exit('Stop!!!');

@@ -16,7 +16,6 @@ if (!defined('NV_MAINFILE')) {
 }
 
 use PDO;
-use NukeViet\Module\Content\Shared\ConfigRepositoryTrait;
 
 /**
  * CatRepository — Tầng truy vấn dữ liệu cho Chủ đề
@@ -24,8 +23,6 @@ use NukeViet\Module\Content\Shared\ConfigRepositoryTrait;
  */
 class CatRepository
 {
-    use ConfigRepositoryTrait;
-
     private PDO $db;
     private string $table;
     private $cache;
@@ -65,7 +62,7 @@ class CatRepository
      */
     public function getAll(): array
     {
-        $stmt = $this->db->query('SELECT * FROM ' . $this->table . '_cat ORDER BY weight ASC');
+        $stmt = $this->db->query('SELECT * FROM ' . $this->table . ' ORDER BY weight ASC');
         return $this->fetchEntities($stmt);
     }
 
@@ -75,7 +72,7 @@ class CatRepository
      */
     public function getAllActive(): array
     {
-        $stmt = $this->db->query('SELECT * FROM ' . $this->table . '_cat WHERE status = 1 ORDER BY weight ASC');
+        $stmt = $this->db->query('SELECT * FROM ' . $this->table . ' WHERE status = 1 ORDER BY weight ASC');
         return $this->fetchEntities($stmt);
     }
 
@@ -84,7 +81,7 @@ class CatRepository
      */
     public function findById(int $catid): ?CatEntity
     {
-        $stmt = $this->db->prepare('SELECT * FROM ' . $this->table . '_cat WHERE catid = :catid');
+        $stmt = $this->db->prepare('SELECT * FROM ' . $this->table . ' WHERE catid = :catid');
         $stmt->bindValue(':catid', $catid, PDO::PARAM_INT);
         $stmt->execute();
         $data = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -97,7 +94,7 @@ class CatRepository
      */
     public function findByAlias(string $alias): ?CatEntity
     {
-        $stmt = $this->db->prepare('SELECT * FROM ' . $this->table . '_cat WHERE alias = :alias');
+        $stmt = $this->db->prepare('SELECT * FROM ' . $this->table . ' WHERE alias = :alias');
         $stmt->bindValue(':alias', $alias, PDO::PARAM_STR);
         $stmt->execute();
         $data = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -110,7 +107,7 @@ class CatRepository
      */
     public function countAll(): int
     {
-        $stmt = $this->db->query('SELECT COUNT(*) FROM ' . $this->table . '_cat');
+        $stmt = $this->db->query('SELECT COUNT(*) FROM ' . $this->table);
         return (int) $stmt->fetchColumn();
     }
 
@@ -119,7 +116,7 @@ class CatRepository
      */
     public function isAliasExists(string $alias, int $excludeId = 0): bool
     {
-        $sql = 'SELECT COUNT(*) FROM ' . $this->table . '_cat WHERE alias = :alias';
+        $sql = 'SELECT COUNT(*) FROM ' . $this->table . ' WHERE alias = :alias';
         if ($excludeId > 0) {
             $sql .= ' AND catid != :catid';
         }
@@ -149,7 +146,7 @@ class CatRepository
                 $fields[] = $key . ' = :' . $key;
                 $params[':' . $key] = [$value, $this->pdoType($key)];
             }
-            $stmt = $this->db->prepare('UPDATE ' . $this->table . '_cat SET ' . implode(', ', $fields) . ' WHERE catid = :catid');
+            $stmt = $this->db->prepare('UPDATE ' . $this->table . ' SET ' . implode(', ', $fields) . ' WHERE catid = :catid');
             foreach ($params as $k => $v) {
                 $stmt->bindValue($k, $v[0], $v[1]);
             }
@@ -161,7 +158,7 @@ class CatRepository
         $columns = array_keys($data);
         $placeholders = array_map(fn($k) => ':' . $k, $columns);
         $stmt = $this->db->prepare(
-            'INSERT INTO ' . $this->table . '_cat (' . implode(', ', $columns) . ') VALUES (' . implode(', ', $placeholders) . ')'
+            'INSERT INTO ' . $this->table . ' (' . implode(', ', $columns) . ') VALUES (' . implode(', ', $placeholders) . ')'
         );
         foreach ($data as $key => $value) {
             $stmt->bindValue(':' . $key, $value, $this->pdoType($key));
@@ -175,7 +172,7 @@ class CatRepository
      */
     public function delete(int $catid): bool
     {
-        $stmt = $this->db->prepare('DELETE FROM ' . $this->table . '_cat WHERE catid = :catid');
+        $stmt = $this->db->prepare('DELETE FROM ' . $this->table . ' WHERE catid = :catid');
         $stmt->bindValue(':catid', $catid, PDO::PARAM_INT);
         return $stmt->execute();
     }
@@ -190,7 +187,7 @@ class CatRepository
             return -1;
         }
         $newStatus = $row->status ? 0 : 1;
-        $stmt = $this->db->prepare('UPDATE ' . $this->table . '_cat SET status = :status WHERE catid = :catid');
+        $stmt = $this->db->prepare('UPDATE ' . $this->table . ' SET status = :status WHERE catid = :catid');
         $stmt->bindValue(':status', $newStatus, PDO::PARAM_INT);
         $stmt->bindValue(':catid', $catid, PDO::PARAM_INT);
         $stmt->execute();
@@ -202,7 +199,7 @@ class CatRepository
      */
     public function reorderWeight(int $movedId = 0, int $newWeight = 0): void
     {
-        $sql = 'SELECT catid FROM ' . $this->table . '_cat';
+        $sql = 'SELECT catid FROM ' . $this->table;
         $params = [];
         if ($movedId > 0) {
             $sql .= ' WHERE catid != :catid';
@@ -217,7 +214,7 @@ class CatRepository
         $stmt->execute();
 
         $weight = 0;
-        $stmtUpdate = $this->db->prepare('UPDATE ' . $this->table . '_cat SET weight = :weight WHERE catid = :catid');
+        $stmtUpdate = $this->db->prepare('UPDATE ' . $this->table . ' SET weight = :weight WHERE catid = :catid');
         while ($row = $stmt->fetch()) {
             ++$weight;
             if ($movedId > 0 && $weight == $newWeight) {
@@ -244,7 +241,7 @@ class CatRepository
     {
         $iw = 0;
         $is_updated = false;
-        $stmt = $this->db->prepare('UPDATE ' . $this->table . '_cat SET weight = :weight WHERE catid = :catid');
+        $stmt = $this->db->prepare('UPDATE ' . $this->table . ' SET weight = :weight WHERE catid = :catid');
         foreach ($cats as $cat) {
             ++$iw;
             if ($iw != $cat->weight) {
@@ -263,7 +260,7 @@ class CatRepository
      */
     public function getMaxWeight(): int
     {
-        $stmt = $this->db->query('SELECT MAX(weight) FROM ' . $this->table . '_cat');
+        $stmt = $this->db->query('SELECT MAX(weight) FROM ' . $this->table);
         return (int) $stmt->fetchColumn();
     }
 

@@ -27,11 +27,11 @@ if (!csrf_check($nv_Request->get_string('checkss', 'post'), $admin_info['admin_i
 }
 
 if ($catid > 0) {
-    $catRepo = new CatRepository($db, NV_PREFIXLANG . '_' . $module_data, $nv_Cache, $module_name);
+    $catRepo = new CatRepository($db, $config['table_cat'], $nv_Cache, $module_name);
     $catService = new CatService($catRepo);
 
     // Kiểm tra xem chủ đề có bài viết không
-    $contentRepo = new ContentRepository($db, NV_PREFIXLANG . '_' . $module_data, $nv_Cache, $module_name);
+    $contentRepo = new ContentRepository($db, $config['table_row'], $nv_Cache, $module_name);
     $count_content = $contentRepo->countByCatid($catid);
 
     if ($count_content > 0) {

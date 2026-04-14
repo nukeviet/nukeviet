@@ -16,3 +16,6 @@ if (!defined('NV_SYSTEM')) {
 define('NV_IS_MOD_CONTENT', true);
 
 $base_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name;
+
+// Lấy cấu hình module từ biến hệ thống
+$config = $module_config[$module_name];

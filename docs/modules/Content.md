@@ -26,7 +26,7 @@ Controller (Thin) ──▶ Service::prepareSaveData() ──▶ Validator ─�
 | **Controller** | Nhận Request → Validator → Service → View | Thin Controller |
 | **View** | Chỉ nhận Array từ `toArray()` | Cấm viết logic/SQL trong `.tpl` |
 
-**8 quy tắc bắt buộc:** (1) Cấm hardcode tên bảng — dùng `NV_PREFIXLANG . '_' . $module_data` (2) Input qua `$nv_Request` (3) CSRF cho mọi write: `csrf_check()` / `csrf_create()` (4) Cache: gọi `invalidateCache()` sau mọi CUD (5) Log: `nv_insert_logs()` cho mọi CUD (6) Hook: `nv_apply_hook()` phát event (7) JS file riêng `themes/[theme]/js/[module].js` — cấm `<script>` trong `.tpl` (8) Frontend render qua `theme.php`
+**8 quy tắc bắt buộc:** (1) Cấm hardcode tên bảng — dùng tên bảng từ cấu hình `$config['table_xxx']` (2) Input qua `$nv_Request` (3) CSRF cho mọi write: `csrf_check()` / `csrf_create()` (4) Cache: gọi `invalidateCache()` sau mọi CUD (5) Log: `nv_insert_logs()` cho mọi CUD (6) Hook: `nv_apply_hook()` phát event (7) JS file riêng `themes/[theme]/js/[module].js` — cấm `<script>` trong `.tpl` (8) Frontend render qua `theme.php`
 
 ---
 
@@ -56,7 +56,6 @@ Controller (Thin) ──▶ Service::prepareSaveData() ──▶ Validator ─�
 │   │   │   ├── {Item}Validator.php
 │   │   │   └── {Item}Service.php
 │   │   ├── Shared/                  # Các Class dùng chung của module
-│   │   │   ├── ConfigRepositoryTrait.php
 │   │   │   ├── ValidationException.php
 │   │   │   └── SchemaHelper.php
 │   │   ├── Api/                     # Admin API (implements IApi)
@@ -118,8 +117,8 @@ if (!defined('NV_SYSTEM')) {
 
 define('NV_IS_MOD_{MYMOD}', true);
 
-// Các file funcs sẽ tự khởi tạo Repository khi cần để hỗ trợ IDE tốt nhất
-// Không khởi tạo biến $repo hoặc $config toàn cục tại đây
+// Lấy cấu hình module từ biến hệ thống
+$config = $module_config[$module_name];
 
 $base_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA
     . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name;
@@ -143,7 +142,8 @@ if (defined('NV_IS_SPADMIN')) {
     $allow_func[] = 'config';
 }
 
-// Khởi tạo Repository và Config trong từng file admin/{op}.php cụ thể
+// Lấy cấu hình module từ biến hệ thống
+$config = $module_config[$module_name];
 ```
 
 ### `admin.menu.php`
@@ -163,7 +163,7 @@ if (defined('NV_IS_SPADMIN')) {
 
 ### `action_mysql.php`
 
-Quy ước: DROP trước → CREATE. Tên bảng = `prefix_lang_moduledata[_suffix]`. Luôn có bảng `_config`.
+Quy ước: DROP trước → CREATE. Tên bảng = `prefix_lang_moduledata[_suffix]`. Cấu hình module được lưu vào bảng cấu hình dùng chung `NV_CONFIG_GLOBALTABLE`.
 
 ```php
 <?php
@@ -173,7 +173,6 @@ if (!defined('NV_IS_FILE_MODULES')) {
 
 $sql_drop_module = [];
 $sql_drop_module[] = 'DROP TABLE IF EXISTS ' . $db_config['prefix'] . '_' . $lang . '_' . $module_data . ';';
-$sql_drop_module[] = 'DROP TABLE IF EXISTS ' . $db_config['prefix'] . '_' . $lang . '_' . $module_data . '_config;';
 
 $sql_create_module = $sql_drop_module;
 
@@ -194,15 +193,11 @@ $sql_create_module[] = 'CREATE TABLE ' . $db_config['prefix'] . '_' . $lang . '_
     UNIQUE KEY alias (alias)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci";
 
-$sql_create_module[] = 'CREATE TABLE ' . $db_config['prefix'] . '_' . $lang . '_' . $module_data . "_config (
-    config_name varchar(30) NOT NULL,
-    config_value varchar(255) NOT NULL,
-    UNIQUE KEY config_name (config_name)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci";
-
-$sql_create_module[] = 'INSERT INTO ' . $db_config['prefix'] . '_' . $lang . '_' . $module_data . "_config VALUES
-    ('per_page', '20'),
-    ('alias_lower', '1')
+$sql_create_module[] = 'INSERT INTO ' . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES
+    ('" . $lang . "', '" . $module_name . "', 'table_row', '" . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "'),
+    ('" . $lang . "', '" . $module_name . "', 'table_cat', '" . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_cat'),
+    ('" . $lang . "', '" . $module_name . "', 'per_page', '20'),
+    ('" . $lang . "', '" . $module_name . "', 'alias_lower', '1')
 ";
 ```
 
@@ -235,10 +230,12 @@ $lang_module['deactive'] = 'Ngưng hoạt động';
 $lang_module['empty_title'] = 'Vui lòng nhập tiêu đề';
 $lang_module['empty_bodytext'] = 'Vui lòng nhập nội dung';
 $lang_module['erroralias'] = 'Liên kết tĩnh đã tồn tại';
+$lang_module['error_system'] = 'Lỗi hệ thống';
 
 // Delete
 $lang_module['{item}_delete_confirm'] = 'Bạn có chắc chắn muốn xóa?';
 $lang_module['{item}_delete_unsuccess'] = 'Xóa không thành công';
+$lang_module['save_success'] = 'Lưu thành công';
 ```
 
 ---
@@ -323,62 +320,9 @@ class {Item}Entity extends AbstractEntity
 
 ## Bước 4 — Repository
 
-Tập trung **toàn bộ SQL**. Constructor nhận 4 tham số: `$db`, `$table`, `$cache`, `$module_name`.
+Tập trung **toàn bộ SQL**. Constructor nhận 4 tham số: `$db`, `$table`, `$cache`, `$module_name`. Cấu hình module được quản lý tập trung thông qua bảng `NV_CONFIG_GLOBALTABLE`.
 
-### 4.1 — ConfigRepositoryTrait (dùng chung)
-
-Logic đọc/ghi bảng `_config` **hoàn toàn giống nhau** giữa các Repository trong cùng module. Thay vì copy-paste, dùng Trait:
-
-```php
-<?php
-namespace NukeViet\Module\{mymod}\{Item};
-
-if (!defined('NV_MAINFILE')) {
-    exit('Stop!!!');
-}
-
-use PDO;
-
-/**
- * ConfigRepositoryTrait — Trait dùng chung cho các Repository cần quản lý cấu hình module.
- *
- * Yêu cầu class sử dụng phải có các property: $db (PDO), $table (string), $cache, $module_name (string).
- * Bảng config có dạng: {$table}_config (config_name, config_value).
- */
-trait ConfigRepositoryTrait
-{
-    /**
-     * Đọc cấu hình module từ DB (có cache)
-     */
-    public function getConfig(): array
-    {
-        $sql = 'SELECT config_name, config_value FROM ' . $this->table . '_config';
-        $list = $this->cache->db($sql, '', $this->module_name);
-        $config = [];
-        foreach ($list as $values) {
-            $config[$values['config_name']] = $values['config_value'];
-        }
-        return $config;
-    }
-
-    /**
-     * Lưu cấu hình module
-     */
-    public function saveConfig(array $config): void
-    {
-        $sth = $this->db->prepare('UPDATE ' . $this->table . '_config SET config_value = :config_value WHERE config_name = :config_name');
-        foreach ($config as $config_name => $config_value) {
-            $sth->bindValue(':config_name', $config_name, PDO::PARAM_STR);
-            $sth->bindValue(':config_value', $config_value, PDO::PARAM_STR);
-            $sth->execute();
-        }
-    }
-}
-```
-
-> 📎 Trait thực tế: `src/modules/Content/Shared/ConfigRepositoryTrait.php`
-
-### 4.2 — Repository Skeleton
+### 4.1 — Repository Skeleton
 
 ```php
 <?php
@@ -392,8 +336,6 @@ use PDO;
 
 class {Item}Repository
 {
-    use ConfigRepositoryTrait;
-
     private PDO $db;
     private string $table;
     private $cache;
@@ -408,12 +350,42 @@ class {Item}Repository
     }
 
     /**
+     * Lưu cấu hình module vào bảng dùng chung
+     */
+    public function saveConfig(array $config): void
+    {
+        $sth = $this->db->prepare('UPDATE ' . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = '" . NV_LANG_DATA . "' AND module = :module_name AND config_name = :config_name");
+        $sth->bindValue(':module_name', $this->module_name, PDO::PARAM_STR);
+        foreach ($config as $config_name => $config_value) {
+            $sth->bindValue(':config_name', $config_name, PDO::PARAM_STR);
+            $sth->bindValue(':config_value', $config_value, PDO::PARAM_STR);
+            $sth->execute();
+        }
+
+        $this->cache->delMod('settings');
+        $this->cache->delMod($this->module_name);
+    }
+
+    /**
      * Helper: fetchAll + map thành Entity[]
      * Gom logic FETCH_ASSOC + fromArray() vào 1 chỗ duy nhất
      */
     private function fetchEntities(\PDOStatement $stmt): array
     {
         return array_map([{Item}Entity::class, 'fromArray'], $stmt->fetchAll(PDO::FETCH_ASSOC));
+    }
+
+    /**
+     * Xác định PDO type cho 1 cột dựa theo khai báo Entity.
+     * Tránh dùng is_int() trực tiếp trên value vì data từ Request có thể là string.
+     */
+    private function pdoType(string $field): int
+    {
+        static $intFields = null;
+        if ($intFields === null) {
+            $intFields = {Item}Entity::getIntColumns();
+        }
+        return isset($intFields[$field]) ? PDO::PARAM_INT : PDO::PARAM_STR;
     }
 
     // ═══════════════════════════════════════
@@ -426,7 +398,7 @@ class {Item}Repository
         $stmt->bindValue(':id', $id, PDO::PARAM_INT);
         $stmt->execute();
         $data = $stmt->fetch(PDO::FETCH_ASSOC);
-        $stmt->closeCursor();
+        $stmt->closeCursor(); // Quan trọng: Query trả về row đơn lẻ cần close cursor
         return $data ? {Item}Entity::fromArray($data) : null;
     }
 
@@ -532,7 +504,7 @@ class {Item}Repository
             $params = [':id' => [$id, PDO::PARAM_INT]];
             foreach ($data as $key => $value) {
                 $fields[] = $key . ' = :' . $key;
-                $params[':' . $key] = [$value, is_int($value) ? PDO::PARAM_INT : PDO::PARAM_STR];
+                $params[':' . $key] = [$value, $this->pdoType($key)];
             }
             $stmt = $this->db->prepare('UPDATE ' . $this->table . ' SET ' . implode(', ', $fields) . ' WHERE id = :id');
             foreach ($params as $k => $v) {
@@ -548,7 +520,7 @@ class {Item}Repository
             'INSERT INTO ' . $this->table . ' (' . implode(', ', $columns) . ') VALUES (' . implode(', ', $placeholders) . ')'
         );
         foreach ($data as $key => $value) {
-            $stmt->bindValue(':' . $key, $value, is_int($value) ? PDO::PARAM_INT : PDO::PARAM_STR);
+            $stmt->bindValue(':' . $key, $value, $this->pdoType($key));
         }
         $stmt->execute();
         return (int) $this->db->lastInsertId();
@@ -588,11 +560,11 @@ class {Item}Repository
     }
 
     /**
-     * Sắp xếp lại weight (copy y nguyên cho mọi module có cột weight)
+     * Sắp xếp lại weight dùng Bulk UPDATE (CASE WHEN)
      */
     public function reorderWeight(int $movedId = 0, int $newWeight = 0): void
     {
-        $sql = 'SELECT id FROM ' . $this->table;
+        $sql = 'SELECT id, weight FROM ' . $this->table;
         $params = [];
         if ($movedId > 0) {
             $sql .= ' WHERE id != :id';
@@ -605,46 +577,68 @@ class {Item}Repository
             $stmt->bindValue($k, $v, PDO::PARAM_INT);
         }
         $stmt->execute();
-
-        $weight = 0;
-        $stmtUpdate = $this->db->prepare('UPDATE ' . $this->table . ' SET weight = :weight WHERE id = :id');
-        while ($row = $stmt->fetch()) {
-            ++$weight;
-            if ($movedId > 0 && $weight == $newWeight) {
-                ++$weight;
-            }
-            $stmtUpdate->bindValue(':weight', $weight, PDO::PARAM_INT);
-            $stmtUpdate->bindValue(':id', $row['id'], PDO::PARAM_INT);
-            $stmtUpdate->execute();
-        }
+        $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
         $stmt->closeCursor();
 
-        if ($movedId > 0 && $newWeight > 0) {
-            $stmtUpdate->bindValue(':weight', $newWeight, PDO::PARAM_INT);
-            $stmtUpdate->bindValue(':id', $movedId, PDO::PARAM_INT);
-            $stmtUpdate->execute();
+        $cases = [];
+        $ids = [];
+        $calcWeight = 0;
+
+        foreach ($rows as $row) {
+            ++$calcWeight;
+            if ($movedId > 0 && $calcWeight == $newWeight) {
+                ++$calcWeight;
+            }
+            // Chỉ cập nhật nếu thực sự thay đổi
+            if ($calcWeight !== (int) $row['weight']) {
+                $cases[] = 'WHEN ' . (int) $row['id'] . ' THEN ' . $calcWeight;
+                $ids[] = (int) $row['id'];
+            }
         }
+
+        if ($movedId > 0 && $newWeight > 0) {
+            $cases[] = 'WHEN ' . $movedId . ' THEN ' . $newWeight;
+            $ids[] = $movedId;
+        }
+
+        if (empty($ids)) {
+            return;
+        }
+
+        $this->db->exec(
+            'UPDATE ' . $this->table
+                . ' SET weight = CASE id ' . implode(' ', $cases) . ' END'
+                . ' WHERE id IN (' . implode(',', $ids) . ')'
+        );
     }
 
     /**
-     * Tự sửa weight sai lệch. Trả true nếu có thay đổi.
+     * Tự sửa weight sai lệch hàng loạt (Bulk UPDATE).
      */
     public function autoCorrectWeight(array &$entities): bool
     {
+        $cases = [];
+        $ids = [];
         $iw = 0;
-        $is_updated = false;
-        $stmt = $this->db->prepare('UPDATE ' . $this->table . ' SET weight = :weight WHERE id = :id');
+
         foreach ($entities as $entity) {
             ++$iw;
             if ($iw != $entity->weight) {
                 $entity->weight = $iw;
-                $stmt->bindValue(':weight', $iw, PDO::PARAM_INT);
-                $stmt->bindValue(':id', $entity->id, PDO::PARAM_INT);
-                $stmt->execute();
-                $is_updated = true;
+                $cases[] = 'WHEN ' . (int) $entity->id . ' THEN ' . $iw;
+                $ids[] = (int) $entity->id;
             }
         }
-        return $is_updated;
+
+        if (empty($ids)) {
+            return false;
+        }
+
+        return (bool) $this->db->exec(
+            'UPDATE ' . $this->table
+                . ' SET weight = CASE id ' . implode(' ', $cases) . ' END'
+                . ' WHERE id IN (' . implode(',', $ids) . ')'
+        );
     }
 
     public function getMaxWeight(): int
@@ -698,11 +692,10 @@ $repo->getContentList($catid, 1, $page, $per_page);
 $repo->getContentList($filter_catid, -1);
 ```
 
-> **Lưu ý:** `use ConfigRepositoryTrait;` thay thế cho việc copy-paste `getConfig()` / `saveConfig()`. Module có nhiều Repository (VD: `CatRepository` + `ContentRepository`) chỉ cần khai báo `use ConfigRepositoryTrait;` — tất cả đều dùng chung bảng `{$table}_config`.
+> **Lưu ý:** Việc quản lý cấu hình tập trung giúp đồng bộ dữ liệu với hệ thống NukeViet tốt hơn và giảm số lượng bảng cần quản lý. Để đọc cấu hình, hãy sử dụng biến `$module_config[$module_name]` đã được hệ thống nạp sẵn.
 
 > 📎 Repository đầy đủ hơn (có `getRelated`, `incrementHits`, `countByCatid`): `src/modules/Content/Content/ContentRepository.php`
 > 📎 Repository cho bảng phụ (PK là `catid`): `src/modules/Content/Cat/CatRepository.php`
-> 📎 Trait config: `src/modules/Content/Shared/ConfigRepositoryTrait.php`
 
 ---
 
@@ -881,6 +874,7 @@ class {Item}Service
             $data['admin_id'] = $admin_id;
             $data['add_time'] = NV_CURRENTTIME;
             $data['edit_time'] = NV_CURRENTTIME;
+            $data['status'] = $data['status'] ?? 1;
         }
 
         $data = nv_apply_hook($module_name, 'before_{item}_save', [$data], $data);
@@ -888,7 +882,8 @@ class {Item}Service
         $this->repo->invalidateCache();
 
         nv_apply_hook($module_name, '{item}_saved', [
-            'id' => $savedId, 'title' => $data['title'],
+            'id' => $savedId,
+            'title' => $data['title'],
             'action' => $id ? 'edit' : 'add',
         ]);
 
@@ -995,20 +990,26 @@ class {Item}Validator
     }
 
     /**
-     * @throws \InvalidArgumentException code=1 title, code=2 bodytext, code=3 alias
+     * @throws ValidationException
      */
     public function validateSave(array $data, int $excludeId = 0): void
     {
+        $errors = [];
+
         if (empty($data['title'])) {
-            throw new \InvalidArgumentException('empty_title', 1);
+            $errors[1] = 'empty_title';
         }
 
         if (trim($data['bodytext'] ?? '') === '') {
-            throw new \InvalidArgumentException('empty_bodytext', 2);
+            $errors[2] = 'empty_bodytext';
         }
 
         if (!empty($data['alias']) && $this->repo->isAliasExists($data['alias'], $excludeId)) {
-            throw new \InvalidArgumentException('erroralias', 3);
+            $errors[3] = 'erroralias';
+        }
+
+        if (!empty($errors)) {
+            throw new \NukeViet\Module\Content\Shared\ValidationException($errors);
         }
     }
 }
@@ -1036,8 +1037,7 @@ use NukeViet\Module\{mymod}\{Item}\{Item}Repository;
 use NukeViet\Module\{mymod}\{Item}\{Item}Service;
 use NukeViet\Module\{mymod}\{Item}\{Item}Validator;
 
-$itemRepo = new {Item}Repository($db, NV_PREFIXLANG . '_' . $module_data, $nv_Cache, $module_name);
-$itemConfig = $itemRepo->getConfig();
+$itemRepo = new {Item}Repository($db, $config['table_row'], $nv_Cache, $module_name);
 
 $service = new {Item}Service($itemRepo);
 
@@ -1067,21 +1067,20 @@ if ($nv_Request->isset_request('checkss', 'post')) {
     $row = $service->collectRequestData($nv_Request);
 
     // 2. Chuẩn hóa dữ liệu qua Service (Alias, Keywords, Image)
-    $row = $service->prepareSaveData($row, ${mymod}_config, $module_upload);
+    $row = $service->prepareSaveData($row, $config, $module_upload);
 
     // 3. Validate → Save → Log
     try {
         $saveId = $id ?: 0;
         $validator = new {Item}Validator($itemRepo);
         $validator->validateSave($row, $saveId);
-        $savedId = $service->save{Item}($row, $saveId, $module_name, $itemConfig, $admin_info['admin_id']);
+        $savedId = $service->save{Item}($row, $saveId, $module_name, $config, $admin_info['admin_id']);
         nv_insert_logs(NV_LANG_DATA, $module_name, $saveId ? 'Edit' : 'Add', 'ID: ' . $savedId, $admin_info['userid']);
 
-    } catch (\InvalidArgumentException $e) {
-        // Lỗi validation (chủ động throw) → trả chi tiết field cho JS
-        $fieldMap = [1 => 'title', 2 => 'bodytext', 3 => 'alias'];
-        $respon['input'] = $fieldMap[$e->getCode()] ?? 'title';
-        $respon['mess'] = $nv_Lang->getModule($e->getMessage());
+    } catch (\NukeViet\Module\Content\Shared\ValidationException $e) {
+        // Lỗi validation gom nhiều lỗi → trả về mảng cho JS highlight từng field
+        $respon['errors'] = $e->getErrors();
+        $respon['mess'] = $nv_Lang->getModule(reset($respon['errors'])); // Lấy lỗi đầu tiên làm message
         nv_jsonOutput($respon);
     } catch (\Throwable $e) {
         // Lỗi không mong đợi → ghi log + trả lỗi chung (không lộ chi tiết nội bộ)
@@ -1149,7 +1148,7 @@ if (!csrf_check($nv_Request->get_string('checkss', 'post'),
 }
 
 if ($id > 0) {
-    $itemRepo = new \NukeViet\Module\{mymod}\{Item}\{Item}Repository($db, NV_PREFIXLANG . '_' . $module_data, $nv_Cache, $module_name);
+    $itemRepo = new \NukeViet\Module\{mymod}\{Item}\{Item}Repository($db, $config['table_row'], $nv_Cache, $module_name);
     $service = new \NukeViet\Module\{mymod}\{Item}\{Item}Service($itemRepo);
 
     // Cho delete:
@@ -1183,7 +1182,7 @@ if (!defined('NV_IS_MOD_{MYMOD}')) { exit('Stop!!!'); }
 use NukeViet\Module\{mymod}\{Item}\{Item}Repository;
 use NukeViet\Module\{mymod}\{Item}\{Item}Service;
 
-$itemRepo = new {Item}Repository($db, NV_PREFIXLANG . '_' . $module_data, $nv_Cache, $module_name);
+$itemRepo = new {Item}Repository($db, $config['table_row'], $nv_Cache, $module_name);
 $service = new {Item}Service($itemRepo);
 
 try {
@@ -1201,7 +1200,7 @@ try {
         $contents = nv_{mymod}_detail($row);
     } else {
         $page = $route['page'];
-        $per_page = (int) (${mymod}_config['per_page'] ?? 20);
+        $per_page = (int) ($config['per_page'] ?? 20);
         $result = $service->getList($page, $per_page);
         $array_data = $service->buildItemLinks($result['items'], $base_url, $global_config['rewrite_exturl']);
         $generate_page = nv_alias_page($page_title, $base_url, $result['total'], $per_page, $page);
@@ -1323,7 +1322,8 @@ class {Item}GetDetail implements IApi
         global $db, $nv_Cache, $nv_Request, $nv_Lang;
 
         $module_info = Api::getModuleInfo();
-        $repo = new {Item}Repository($db, NV_PREFIXLANG . '_' . $module_info['module_data'], $nv_Cache, Api::getModuleName());
+        $config = $module_config[Api::getModuleName()];
+        $repo = new {Item}Repository($db, $config['table_row'], $nv_Cache, Api::getModuleName());
         $service = new {Item}Service($repo);
 
         $id = $nv_Request->get_int('id', 'post', 0);
@@ -1371,7 +1371,8 @@ class {Item}GetDetail implements UiApi
         global $db, $nv_Cache, $nv_Request, $nv_Lang;
 
         $module_info = Uapi::getModuleInfo();               // Uapi thay Api
-        $repo = new {Item}Repository($db, NV_PREFIXLANG . '_' . $module_info['module_data'], $nv_Cache, Uapi::getModuleName());
+        $config = $module_config[Uapi::getModuleName()];
+        $repo = new {Item}Repository($db, $config['table_row'], $nv_Cache, Uapi::getModuleName());
         $service = new {Item}Service($repo);
 
         $id = $nv_Request->get_int('id', 'post', 0);
@@ -1517,20 +1518,20 @@ $this->assertInstanceOf({Item}Entity::class, $service->getDetail(1));
 
 | Cần gì | File | Dòng |
 |--------|------|------|
-| Entity đơn giản | `Shared/CatEntity.php` | 80 dòng |
-| Entity + Relationship | `Shared/ContentEntity.php` | 94 dòng |
-| Repository đầy đủ | `Shared/ContentRepository.php` | 368 dòng |
-| Validator | `Shared/ContentValidator.php` | 51 dòng |
-| Exception gom nhiều lỗi | `Shared/ValidationException.php` | — |
-| Service đầy đủ (config, duplicate, viewtype) | `Shared/ContentService.php` | 377 dòng |
-| Service ngắn gọn | `Shared/CatService.php` | 209 dòng |
-| Admin form phức tạp | `admin/content.php` | 218 dòng |
+| Entity đơn giản | `Cat/CatEntity.php` | 80 dòng |
+| Entity + Relationship | `Content/ContentEntity.php` | 94 dòng |
+| Repository đầy đủ | `Content/ContentRepository.php` | 423 dòng |
+| Validator | `Content/ContentValidator.php` | 61 dòng |
+| Exception gom nhiều lỗi | `Shared/ValidationException.php` | 32 dòng |
+| Service đầy đủ (config, duplicate, viewtype) | `Content/ContentService.php` | 376 dòng |
+| Service ngắn gọn | `Cat/CatService.php` | 209 dòng |
+| Admin form phức tạp | `admin/content.php` | 240 dòng |
 | Admin list + form cùng file | `admin/cat.php` | 133 dòng |
-| Admin danh sách đơn giản | `admin/main.php` | 76 dòng |
+| Admin danh sách đơn giản | `admin/main.php` | 81 dòng |
 | AJAX xóa | `admin/content-del.php` | 54 dòng |
 | AJAX xóa có ràng buộc | `admin/cat-del.php` | 58 dòng |
 | AJAX status | `admin/cat-change-status.php` | 46 dòng |
-| Frontend controller | `funcs/main.php` | 259 dòng |
+| Frontend controller | `funcs/main.php` | 253 dòng |
 | Theme render | `theme.php` | 99 dòng |
 | Admin API | `Api/CatGetList.php` | 64 dòng |
 | Public API | `uapi/ContentGetList.php` | 64 dòng |

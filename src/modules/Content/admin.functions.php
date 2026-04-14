@@ -32,3 +32,6 @@ define('NV_IS_FILE_ADMIN', true);
 if (defined('NV_IS_SPADMIN')) {
     $allow_func[] = 'config';
 }
+
+// Lấy cấu hình module từ biến hệ thống
+$config = $module_config[$module_name];

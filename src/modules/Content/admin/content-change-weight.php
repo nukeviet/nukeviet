@@ -34,7 +34,7 @@ if (empty($id) || empty($new_weight)) {
     ]);
 }
 
-$contentRepo = new ContentRepository($db, NV_PREFIXLANG . '_' . $module_data, $nv_Cache, $module_name);
+$contentRepo = new ContentRepository($db, $config['table_row'], $nv_Cache, $module_name);
 $row_data = $contentRepo->findById($id);
 if (empty($row_data)) {
     nv_jsonOutput([
