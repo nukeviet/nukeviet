@@ -16,7 +16,6 @@ if (!defined('NV_IS_FILE_MODULES')) {
 $sql_drop_module = [];
 $sql_drop_module[] = 'DROP TABLE IF EXISTS ' . $db_config['prefix'] . '_' . $lang . '_' . $module_data . ';';
 $sql_drop_module[] = 'DROP TABLE IF EXISTS ' . $db_config['prefix'] . '_' . $lang . '_' . $module_data . '_cat;';
-$sql_drop_module[] = 'DROP TABLE IF EXISTS ' . $db_config['prefix'] . '_' . $lang . '_' . $module_data . '_config;';
 
 $sql_create_module = $sql_drop_module;
 
