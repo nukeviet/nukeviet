@@ -113,6 +113,26 @@ class MvcCodeGenerator
 
                 $this->addMetadataFiles($files, $entity, $mod, $item, $itemLc, $nvRootDir, false);
             }
+
+            if (in_array($entity->layout_type, ['list_and_form', 'form_only'])) {
+                // Thêm APIs
+                $this->addFile($files, "modules/{$mod}/Api/{$item}GetList.php",
+                    $this->buildApiGetList($entity, $mod, $item), $nvRootDir);
+                $this->addFile($files, "modules/{$mod}/Api/{$item}GetDetail.php",
+                    $this->buildApiGetDetail($entity, $mod, $item), $nvRootDir);
+                $this->addFile($files, "modules/{$mod}/Api/{$item}Add.php",
+                    $this->buildApiAdd($entity, $mod, $item, $itemLc), $nvRootDir);
+
+                // Thêm Tests
+                $this->addFile($files, "../tests/modules/{$mod}/Acceptance/Admin{$item}Cest.php",
+                    $this->buildAcceptanceTest($entity, $mod, $item, $itemLc), $nvRootDir);
+                $this->addFile($files, "../tests/modules/{$mod}/Unit/{$item}ServiceTest.php",
+                    $this->buildUnitServiceTest($entity, $mod, $item), $nvRootDir);
+                $this->addFile($files, "../tests/modules/{$mod}/Unit/{$item}ValidatorTest.php",
+                    $this->buildUnitValidatorTest($entity, $mod, $item), $nvRootDir);
+                $this->addFile($files, "../tests/modules/{$mod}/API/002_Admin{$item}ApiCest.php",
+                    $this->buildApiTest($entity, $mod, $item, $itemLc), $nvRootDir);
+            }
         }
 
         return $files;
@@ -276,18 +296,31 @@ class MvcCodeGenerator
         $uniques = [];
         foreach ($entity->columns as $field => $col) {
             $sqlType = $col['sql_type'] ?? 'varchar(255)';
-            $isNull = !empty($col['required']) ? 'NOT NULL' : 'NULL';
-            $defaultVal = $col['default'] ?? '';
+            $sqlTypeLower = strtolower($sqlType);
+            $isDateField = (str_contains($sqlTypeLower, 'date') || str_contains($sqlTypeLower, 'time') || str_contains($sqlTypeLower, 'year'));
+            $isPrimary = !empty($col['primary']) || $field === 'id';
             
+            $isNull = ($isPrimary || !empty($col['required'])) ? 'NOT NULL' : 'NULL';
+            // Ưu tiên cho phép NULL đối với các trường ngày tháng để tránh lỗi Strict Mode khi bỏ trống
+            if ($isDateField && empty($col['required'])) {
+                $isNull = 'NULL';
+            }
+
+            $defaultVal = $col['default'] ?? '';
             $default = '';
-            if ($defaultVal !== '') {
+            
+            if ($isPrimary && $field === 'id') {
+                $default = "AUTO_INCREMENT";
+            } elseif ($defaultVal !== '') {
                 if (strtoupper($defaultVal) === 'NULL') {
                     $default = "DEFAULT NULL";
-                } elseif (strtoupper($defaultVal) === 'CURRENT_TIMESTAMP') {
+                } elseif (preg_match('/^CURRENT_TIMESTAMP(\(\))?$/i', $defaultVal)) {
                     $default = "DEFAULT CURRENT_TIMESTAMP";
                 } else {
-                    $default = "DEFAULT '" . addslashes($defaultVal) . "'";
+                    $default = "DEFAULT '" . addslashes((string)$defaultVal) . "'";
                 }
+            } elseif ($isNull === 'NULL') {
+                $default = "DEFAULT NULL";
             }
 
             $line = "    `{$field}` {$sqlType} {$isNull} {$default}";
@@ -432,18 +465,6 @@ class MvcCodeGenerator
     private function buildEntity(SchemaEntity $entity, string $mod, string $item): string
     {
         $ns    = "NukeViet\\Module\\{$mod}\\{$item}";
-        $props = '';
-
-        foreach ($entity->columns as $field => $col) {
-            if ($field === 'id') {
-                continue;
-            }
-            $phpType = $this->phpType($col['sql_type'] ?? 'varchar(255)');
-            $default = $this->phpDefault($phpType, $col);
-            $label   = $col['label_vi'] ?? $field;
-            $comment = (strtolower((string) $label) !== strtolower((string) $field)) ? " // {$label}" : '';
-            $props  .= "    public {$phpType} \${$field} = {$default};{$comment}\n";
-        }
 
         $c  = "<?php\n\n";
         $c .= $this->copyright() . "\n\n";
@@ -456,7 +477,27 @@ class MvcCodeGenerator
         $c .= "    protected const VIEW_FIELDS = ['link', 'url_edit', 'checkss'];\n";
         $c .= "    protected const PRIMARY_KEY = 'id';\n\n";
         $c .= "    public int \$id = 0; // Khóa chính\n";
-        $c .= $props;
+
+        foreach ($entity->columns as $field => $col) {
+            if ($field === 'id') {
+                continue;
+            }
+            $phpType = $this->phpType($col['sql_type'] ?? 'varchar(255)');
+            
+            // Nếu là kiểu SQL Date/Time/Timestamp/Year thì cho phép null (nullable)
+            $sqlTypeLower = strtolower($col['sql_type'] ?? '');
+            if (str_contains($sqlTypeLower, 'date') || str_contains($sqlTypeLower, 'time') || str_contains($sqlTypeLower, 'year')) {
+                if ($phpType === 'string') {
+                    $phpType = '?' . $phpType;
+                }
+            }
+
+            $default = $this->phpDefault($phpType, $col);
+            $label   = $col['label_vi'] ?? $field;
+            $comment = (strtolower((string) $label) !== strtolower((string) $field)) ? " // {$label}" : '';
+            $c  .= "    public {$phpType} \${$field} = {$default};{$comment}\n";
+        }
+
         $c .= "\n    // ── Thuộc tính View (không có trong DB) ──\n";
         $c .= "    public string \$link = '';\n";
         $c .= "    public string \$url_edit = '';\n";
@@ -564,11 +605,11 @@ class MvcCodeGenerator
         $c .= "            \$params = [':id' => [\$id, PDO::PARAM_INT]];\n";
         $c .= "            foreach (\$data as \$key => \$value) {\n";
         $c .= "                \$fields[] = \$key . ' = :' . \$key;\n";
-        $c .= "                \$params[':' . \$key] = [\$value, \$this->pdoType(\$key)];\n";
+        $c .= "                \$params[':' . \$key] = [\$value, \$key];\n";
         $c .= "            }\n";
         $c .= "            \$stmt = \$this->db->prepare('UPDATE ' . \$this->tables->{$tableProp} . ' SET ' . implode(', ', \$fields) . ' WHERE id = :id');\n";
         $c .= "            foreach (\$params as \$k => \$v) {\n";
-        $c .= "                \$stmt->bindValue(\$k, \$v[0], \$v[1]);\n";
+        $c .= "                \$this->bindNullable(\$stmt, \$k, \$v[0], \$v[1]);\n";
         $c .= "            }\n";
         $c .= "            \$stmt->execute();\n";
         $c .= "            return \$id;\n";
@@ -579,7 +620,7 @@ class MvcCodeGenerator
         $c .= "            'INSERT INTO ' . \$this->tables->{$tableProp} . ' (' . implode(', ', \$columns) . ') VALUES (' . implode(', ', \$placeholders) . ')'\n";
         $c .= "        );\n";
         $c .= "        foreach (\$data as \$key => \$value) {\n";
-        $c .= "            \$stmt->bindValue(':' . \$key, \$value, \$this->pdoType(\$key));\n";
+        $c .= "            \$this->bindNullable(\$stmt, ':' . \$key, \$value, \$key);\n";
         $c .= "        }\n";
         $c .= "        \$stmt->execute();\n";
         $c .= "        return (int) \$this->db->lastInsertId();\n";
@@ -688,11 +729,12 @@ class MvcCodeGenerator
         $c .= "            return false;\n";
         $c .= "        }\n\n";
         $c .= "        return (bool) \$this->db->exec(\n";
-        $c .= "            'UPDATE ' . \$this->tables->{$tableProp}\n";
+        $c .= "            'UPDATE ' . \$this->tables->{\$tableProp}\n";
         $c .= "                . ' SET ' . \$weightField . ' = CASE id ' . implode(' ', \$cases) . ' END'\n";
         $c .= "                . ' WHERE id IN (' . implode(',', \$ids) . ')'\n";
         $c .= "        );\n";
-        $c .= "    }\n}\n";
+        $c .= "    }\n";
+        $c .= "}\n";
 
         return $c;
     }
@@ -702,7 +744,17 @@ class MvcCodeGenerator
         $ns = "NukeViet\\Module\\{$mod}\\{$item}";
 
         $collectLines = '';
+        $dateFields = [];
         foreach ($entity->columns as $field => $col) {
+            $sqlType = strtolower($col['sql_type'] ?? '');
+            $fieldLower = strtolower((string)$field);
+            if (
+                str_contains($sqlType, 'date') || str_contains($sqlType, 'time') || 
+                str_contains($sqlType, 'year') || str_contains($sqlType, 'timestamp') ||
+                str_ends_with($fieldLower, '_time') || str_ends_with($fieldLower, '_date')
+            ) {
+                $dateFields[] = (string) $field;
+            }
             if ($field === 'id' || $this->isSpecialField((string) $field, $entity, $col)) {
                 continue;
             }
@@ -739,15 +791,30 @@ class MvcCodeGenerator
         $c .= "                \$data['alias'] = strtolower(\$data['alias']);\n";
         $c .= "            }\n";
         $c .= "        }\n\n";
+
         $c .= "        if (isset(\$data['keywords']) && empty(\$data['keywords']) && isset(\$data['title'])) {\n";
         $c .= "            \$data['keywords'] = nv_get_keywords(\$data['title']);\n";
         $c .= "        }\n\n";
+
         $c .= "        if (!empty(\$moduleUpload) && !empty(\$data['image'])) {\n";
         $c .= "            \$imagePath = NV_UPLOADS_DIR . '/' . \$moduleUpload;\n";
         $c .= "            if (nv_is_file(\$data['image'], \$imagePath)) {\n";
         $c .= "                \$data['image'] = substr(\$data['image'], strlen(NV_BASE_SITEURL . \$imagePath . '/'));\n";
         $c .= "            }\n";
         $c .= "        }\n\n";
+
+        $dateFieldsStr = implode(', ', array_map(function($f) { return "'$f'"; }, $dateFields));
+        if (!empty($dateFields)) {
+            $c .= "        // Xử lý các trường ngày tháng nếu rỗng (tránh lỗi SQL Invalid datetime format khi gán '')\n";
+            $c .= "        foreach ([{$dateFieldsStr}] as \$df) {\n";
+            $c .= "            if (isset(\$data[\$df]) && (string)\$data[\$df] === '') {\n";
+            $c .= "                // Phân biệt: Trường INT (add_time, edit_time) -> 0, Trường SQL Date -> null\n";
+            $c .= "                \$is_int_field = in_array(\$df, ['add_time', 'edit_time', 'weight', 'status', 'admin_id', 'hitstotal']);\n";
+            $c .= "                \$data[\$df] = \$is_int_field ? 0 : null;\n";
+            $c .= "            }\n";
+            $c .= "        }\n\n";
+        }
+
         $c .= "        return \$data;\n";
         $c .= "    }\n\n";
 
@@ -874,8 +941,9 @@ class MvcCodeGenerator
 
         $c  = "<?php\n\n";
         $c .= $this->copyright() . "\n\n";
-        $c .= "global \$db, \$db_config, \$tables, \$nv_Cache, \$nv_Request, \$nv_Lang, \$module_name, \$module_data, \$module_info, \$module_upload, \$op, \$csrf_key;\n\n";
+        $c .= "global \$db, \$db_config, \$tables, \$nv_Cache, \$nv_Request, \$nv_Lang, \$module_name, \$module_data, \$module_info, \$module_upload, \$op, \$csrf_key, \$admin_info, \$module_config;\n\n";
         $c .= "if (!defined('NV_IS_FILE_ADMIN')) {\n    exit('Stop!!!');\n}\n\n";
+        $c .= "\$config = \$module_config[\$module_name];\n";
         $c .= "use {$ns}\\{$item}Repository;\n";
         $c .= "use {$ns}\\{$item}Service;\n";
         $c .= "use {$ns}\\{$item}Validator;\n";
@@ -1309,9 +1377,16 @@ class MvcCodeGenerator
             $c .= "    public static function fromArray(array \$data): static\n    {\n";
             $c .= "        \$entity = new static();\n";
             $c .= "        foreach (\$data as \$key => \$value) {\n";
-            $c .= "            if (!property_exists(\$entity, \$key) || \$value === null) continue;\n";
+            $c .= "            if (!property_exists(\$entity, \$key)) continue;\n";
+            $c .= "            if (\$value === null) {\n";
+            $c .= "                \$entity->\$key = null;\n";
+            $c .= "                continue;\n";
+            $c .= "            }\n";
             $c .= "            \$default = \$entity->\$key;\n";
-            $c .= "            if (\$default === null) continue;\n";
+            $c .= "            if (\$default === null) {\n";
+            $c .= "                \$entity->\$key = \$value;\n";
+            $c .= "                continue;\n";
+            $c .= "            }\n";
             $c .= "            \$entity->\$key = is_int(\$default) ? (int) \$value : (string) \$value;\n";
             $c .= "        }\n";
             $c .= "        return \$entity;\n";
@@ -1353,6 +1428,12 @@ class MvcCodeGenerator
             $c .= "        \$class = \$this->entityClass();\n";
             $c .= "        if (!isset(\$cache[\$class])) \$cache[\$class] = \$class::getIntColumns();\n";
             $c .= "        return isset(\$cache[\$class][\$field]) ? PDO::PARAM_INT : PDO::PARAM_STR;\n";
+            $c .= "    }\n\n";
+            $c .= "    /**\n     * Bind giá trị hỗ trợ NULL\n     */\n";
+            $c .= "    protected function bindNullable(\$stmt, string \$param, \$value, string \$field): void\n";
+            $c .= "    {\n";
+            $c .= "        \$type = (\$value === null) ? PDO::PARAM_NULL : \$this->pdoType(\$field);\n";
+            $c .= "        \$stmt->bindValue(\$param, \$value, \$type);\n";
             $c .= "    }\n\n";
             $c .= "    protected function fetchEntities(\\PDOStatement \$stmt): array\n    {\n";
             $c .= "        return array_map([\$this->entityClass(), 'fromArray'], \$stmt->fetchAll(PDO::FETCH_ASSOC));\n";
@@ -1437,8 +1518,9 @@ class MvcCodeGenerator
 
         $c  = "<?php\n\n";
         $c .= $this->copyright() . "\n\n";
-        $c .= "global \$db, \$db_config, \$tables, \$nv_Cache, \$nv_Request, \$nv_Lang, \$module_name, \$module_data, \$module_info, \$module_upload, \$op, \$csrf_key;\n\n";
+        $c .= "global \$db, \$db_config, \$tables, \$nv_Cache, \$nv_Request, \$nv_Lang, \$module_name, \$module_data, \$module_info, \$module_upload, \$op, \$csrf_key, \$admin_info, \$module_config;\n\n";
         $c .= "if (!defined('NV_IS_FILE_ADMIN')) {\n    exit('Stop!!!');\n}\n\n";
+        $c .= "\$config = \$module_config[\$module_name];\n";
         $c .= "use {$ns}\\{$item}Repository;\n";
         $c .= "use {$ns}\\{$item}Service;\n\n";
         $c .= "\$itemRepo = new {$item}Repository(\$db, \$tables, \$nv_Cache, \$module_name);\n";
@@ -1736,5 +1818,496 @@ class MvcCodeGenerator
             }
         }
         return $mapping;
+    }
+
+    private function buildApiGetList(SchemaEntity $entity, string $mod, string $item): string
+    {
+        $nsLc = strtolower($mod);
+        $c  = "<?php\n\n";
+        $c .= $this->copyright() . "\n\n";
+        $c .= "namespace NukeViet\\Module\\{$mod}\\Api;\n\n";
+        $c .= "use NukeViet\\Api\\Api;\n";
+        $c .= "use NukeViet\\Module\\{$mod}\\{$item}\\{$item}Repository;\n";
+        $c .= "use NukeViet\\Module\\{$mod}\\Shared\\BaseApi;\n\n";
+        $c .= "if (!defined('NV_ADMIN') or !defined('NV_MAINFILE')) {\n    exit('Stop!!!');\n}\n\n";
+        $c .= "class {$item}GetList extends BaseApi\n{\n";
+        $c .= "    public static function getAdminLev()\n    {\n";
+        $c .= "        return Api::ADMIN_LEV_MOD;\n    }\n\n";
+        $c .= "    public static function getCat()\n    {\n";
+        $c .= "        return '{$nsLc}';\n    }\n\n";
+        $c .= "    public function execute()\n    {\n";
+        $c .= "        global \$nv_Request;\n";
+        $c .= "        \$this->bootstrap();\n\n";
+        $c .= "        \$repo = new {$item}Repository(\n";
+        $c .= "            \$this->db,\n";
+        $c .= "            \$this->tables,\n";
+        $c .= "            \$this->cache,\n";
+        $c .= "            \$this->module_name\n";
+        $c .= "        );\n\n";
+        $c .= "        \$page = \$nv_Request->get_int('page', 'post', 1);\n";
+        $c .= "        \$per_page = \$nv_Request->get_int('per_page', 'post', 20);\n\n";
+        $c .= "        \$entities = \$repo->getList(\$page, \$per_page);\n";
+        $c .= "        \$items = array_map(fn(\$e) => \$e->toArray(), \$entities);\n";
+        $c .= "        \$total = \$repo->count();\n\n";
+        $c .= "        \$this->result->set('total', \$total);\n";
+        $c .= "        \$this->result->set('items', \$items);\n";
+        $c .= "        \$this->result->setSuccess();\n\n";
+        $c .= "        return \$this->result->getResult();\n";
+        $c .= "    }\n}\n";
+        return $c;
+    }
+
+    private function buildApiGetDetail(SchemaEntity $entity, string $mod, string $item): string
+    {
+        $nsLc = strtolower($mod);
+        $c  = "<?php\n\n";
+        $c .= $this->copyright() . "\n\n";
+        $c .= "namespace NukeViet\\Module\\{$mod}\\Api;\n\n";
+        $c .= "use NukeViet\\Api\\Api;\n";
+        $c .= "use NukeViet\\Api\\ApiResult;\n";
+        $c .= "use NukeViet\\Module\\{$mod}\\{$item}\\{$item}Repository;\n";
+        $c .= "use NukeViet\\Module\\{$mod}\\Shared\\BaseApi;\n\n";
+        $c .= "if (!defined('NV_ADMIN') or !defined('NV_MAINFILE')) {\n    exit('Stop!!!');\n}\n\n";
+        $c .= "class {$item}GetDetail extends BaseApi\n{\n";
+        $c .= "    public static function getAdminLev()\n    {\n";
+        $c .= "        return Api::ADMIN_LEV_MOD;\n    }\n\n";
+        $c .= "    public static function getCat()\n    {\n";
+        $c .= "        return '{$nsLc}';\n    }\n\n";
+        $c .= "    public function execute()\n    {\n";
+        $c .= "        global \$nv_Request, \$nv_Lang;\n";
+        $c .= "        \$this->bootstrap();\n\n";
+        $c .= "        \$repo = new {$item}Repository(\n";
+        $c .= "            \$this->db,\n";
+        $c .= "            \$this->tables,\n";
+        $c .= "            \$this->cache,\n";
+        $c .= "            \$this->module_name\n";
+        $c .= "        );\n\n";
+        $c .= "        \$id = \$nv_Request->get_int('id', 'post', 0);\n";
+        $c .= "        if (\$id <= 0) {\n";
+        $c .= "            \$this->result->setCode(ApiResult::CODE_UNKONW)\n";
+        $c .= "                ->setMessage(\$nv_Lang->getGlobal('error_data'));\n";
+        $c .= "            return \$this->result->getResult();\n";
+        $c .= "        }\n\n";
+        $c .= "        \$entity = \$repo->findById(\$id);\n";
+        $c .= "        if (empty(\$entity)) {\n";
+        $c .= "            \$this->result->setCode(ApiResult::CODE_UNKONW)\n";
+        $c .= "                ->setMessage(\$nv_Lang->getGlobal('error_no_data'));\n";
+        $c .= "            return \$this->result->getResult();\n";
+        $c .= "        }\n\n";
+        $c .= "        \$this->result->set('item', \$entity->toArray());\n";
+        $c .= "        \$this->result->setSuccess();\n\n";
+        $c .= "        return \$this->result->getResult();\n";
+        $c .= "    }\n}\n";
+        return $c;
+    }
+
+    private function buildApiAdd(SchemaEntity $entity, string $mod, string $item, string $itemLc): string
+    {
+        $nsLc = strtolower($mod);
+        $c  = "<?php\n\n";
+        $c .= $this->copyright() . "\n\n";
+        $c .= "namespace NukeViet\\Module\\{$mod}\\Api;\n\n";
+        $c .= "use NukeViet\\Api\\Api;\n";
+        $c .= "use NukeViet\\Api\\ApiResult;\n";
+        $c .= "use NukeViet\\Module\\{$mod}\\{$item}\\{$item}Repository;\n";
+        $c .= "use NukeViet\\Module\\{$mod}\\{$item}\\{$item}Validator;\n";
+        $c .= "use NukeViet\\Module\\{$mod}\\{$item}\\{$item}Service;\n";
+        $c .= "use NukeViet\\Module\\{$mod}\\Shared\\BaseApi;\n\n";
+        $c .= "if (!defined('NV_ADMIN') or !defined('NV_MAINFILE')) {\n    exit('Stop!!!');\n}\n\n";
+        $c .= "class {$item}Add extends BaseApi\n{\n";
+        $c .= "    public static function getAdminLev()\n    {\n";
+        $c .= "        return Api::ADMIN_LEV_MOD;\n    }\n\n";
+        $c .= "    public static function getCat()\n    {\n";
+        $c .= "        return '{$nsLc}';\n    }\n\n";
+        $c .= "    public function execute()\n    {\n";
+        $c .= "        global \$nv_Request, \$nv_Lang;\n";
+        $c .= "        \$this->bootstrap();\n\n";
+        $c .= "        \$admin_id = Api::getAdminId();\n\n";
+        $c .= "        \$repo = new {$item}Repository(\n";
+        $c .= "            \$this->db,\n";
+        $c .= "            \$this->tables,\n";
+        $c .= "            \$this->cache,\n";
+        $c .= "            \$this->module_name\n";
+        $c .= "        );\n\n";
+        $c .= "        \$service = new {$item}Service(\$repo);\n\n";
+        $c .= "        \$data = \$service->collectRequestData(\$nv_Request);\n";
+        $c .= "        \$data = \$service->prepareSaveData(\$data, \$this->config, \$this->module_upload);\n\n";
+        $c .= "        try {\n";
+        $c .= "            \$validator = new {$item}Validator(\$repo);\n";
+        $c .= "            \$validator->validateSave(\$data);\n";
+        $c .= "        } catch (\\InvalidArgumentException \$e) {\n";
+        $c .= "            \$this->result->setCode(ApiResult::CODE_UNKONW)\n";
+        $c .= "                ->setMessage(\$nv_Lang->getModule(\$e->getMessage()));\n";
+        $c .= "            return \$this->result->getResult();\n";
+        $c .= "        }\n\n";
+        $c .= "        \$savedId = \$service->save{$item}(\n";
+        $c .= "            \$data,\n";
+        $c .= "            0,\n";
+        $c .= "            \$this->module_name,\n";
+        $c .= "            \$this->config,\n";
+        $c .= "            \$admin_id\n";
+        $c .= "        );\n\n";
+        $c .= "        \$entity = \$repo->findById(\$savedId);\n\n";
+        $c .= "        \$this->result->set('item', \$entity->toArray());\n";
+        $c .= "        \$this->result->setSuccess();\n\n";
+        $c .= "        return \$this->result->getResult();\n";
+        $c .= "    }\n}\n";
+        return $c;
+    }
+
+    private function buildAcceptanceTest(SchemaEntity $entity, string $mod, string $item, string $itemLc): string
+    {
+        $nsLc = strtolower($mod);
+        $titleField = $entity->alias_source_field ?: '';
+        $formOp = ($entity->layout_type === 'list_and_form') ? "{$itemLc}-form" : $itemLc;
+        
+        $c  = "<?php\n\n";
+        $c .= $this->copyright() . "\n\n";
+        $c .= "namespace Tests\modules\\{$mod}\\Acceptance;\n\n";
+        $c .= "use Tests\Support\AcceptanceTester;\n\n";
+        $c .= "class Admin{$item}Cest\n{\n";
+        $c .= "    private \$module;\n\n";
+        $c .= "    public function _inject()\n    {\n";
+        $c .= "        \$this->module = getenv('NV_MODULE') ?: '{$mod}';\n    }\n\n";
+        $c .= "    public function _before(AcceptanceTester \$I)\n    {\n";
+        $c .= "        \$I->login();\n    }\n\n";
+        
+        $c .= "    /**\n     * @group {$nsLc}\n     * @group {$nsLc}-{$itemLc}\n     */\n";
+        $c .= "    public function testAdd{$item}Success(AcceptanceTester \$I)\n    {\n";
+        $c .= "        \$I->wantTo('Thêm mới {$itemLc} thành công');\n";
+        $c .= "        \$I->amOnUrl(\$I->getDomain() . '/admin/vi/' . \$this->module . '/{$formOp}/');\n";
+        $c .= "        \$I->wait(1);\n";
+        
+        if ($titleField) {
+            $c .= "        \$I->waitForElement('input[name=\"{$titleField}\"]', 10);\n";
+            $c .= "        \$I->scrollTo('input[name=\"{$titleField}\"]');\n";
+            $c .= "        \$I->wait(0.5);\n";
+            $c .= "        \$title = 'Auto Test ' . time();\n";
+            $c .= "        \$I->fillField('input[name=\"{$titleField}\"]', \$title);\n";
+        }
+        
+        foreach ($entity->columns as $f => $col) {
+            if ($f === $titleField || $f === 'id' || $this->isSpecialField((string) $f, $entity, $col)) {
+                continue;
+            }
+            
+            $vt = $col['view_type'] ?? 'textbox';
+            $valExpr = $this->getMockValuePHP($f, $col, true);
+
+            if ($vt === 'editor') {
+                $c .= "        \$I->executeJS(\"var el = document.querySelector('label[for=\\\"{$f}\\\"]') || document.querySelector('textarea[name=\\\"{$f}\\\"]'); if (el) el.scrollIntoView({block: 'center'});\");\n";
+                $c .= "        \$I->wait(0.5);\n";
+                $c .= "        \$I->executeJS(\"for (var key in window.nveditor) { if (key.endsWith('_{$f}')) { window.nveditor[key].setData('Auto content ' + Math.floor(Date.now() / 1000)); } }\");\n";
+            } elseif ($vt === 'textarea') {
+                $c .= "        \$I->executeJS(\"var el = document.querySelector('textarea[name=\\\"{$f}\\\"]'); if (el) el.scrollIntoView({block: 'center'});\");\n";
+                $c .= "        \$I->wait(0.5);\n";
+                $c .= "        \$I->fillField('textarea[name=\"{$f}\"]', {$valExpr});\n";
+            } elseif ($vt === 'checkbox') {
+                $c .= "        \$I->executeJS(\"var el = document.querySelector('input[name=\\\"{$f}\\\"]'); if (el) el.scrollIntoView({block: 'center'});\");\n";
+                $c .= "        \$I->wait(0.5);\n";
+                $c .= "        \$I->checkOption('input[name=\"{$f}\"]');\n";
+            } elseif (in_array($vt, ['select', 'radio'])) {
+                $c .= "        \$I->executeJS(\"var el = document.querySelector('select[name=\\\"{$f}\\\"], input[name=\\\"{$f}\\\"]'); if (el) el.scrollIntoView({block: 'center'});\");\n";
+                $c .= "        \$I->wait(0.5);\n";
+                $c .= "        \$I->selectOption('input[name=\"{$f}\"], select[name=\"{$f}\"]', '1');\n";
+            } elseif ($vt === 'textfile') {
+                $c .= "        // Skip file upload field {$f}\n";
+            } else {
+                $c .= "        \$I->executeJS(\"var el = document.querySelector('input[name=\\\"{$f}\\\"]'); if (el) el.scrollIntoView({block: 'center'});\");\n";
+                $c .= "        \$I->wait(0.5);\n";
+                $c .= "        \$I->fillField('input[name=\"{$f}\"]', {$valExpr});\n";
+            }
+            $c .= "        \$I->wait(0.5);\n";
+            $c .= "\n";
+        }
+        
+        $c .= "        \$I->scrollTo('button[type=\"submit\"]');\n";
+        $c .= "        \$I->wait(1);\n";
+        $c .= "        \$I->click('button[type=\"submit\"]');\n";
+        $c .= "        // Chờ thông báo thành công hoặc chuyển hướng về danh sách\n";
+        $c .= "        \$I->wait(2);\n";
+        $c .= "        \$I->seeCurrentUrlMatches('/' . \$this->module . '\/(\$|{$itemLc})/i');\n";
+        $c .= "        \$I->wait(1);\n";
+        if ($titleField) {
+            $c .= "        \$I->see(\$title, 'table');\n";
+        }
+        $c .= "    }\n\n";
+
+        foreach ($entity->columns as $f => $col) {
+            if ($col['required'] && $f !== 'id' && !in_array($f, ['alias', 'status', 'weight', 'add_time', 'edit_time'])) {
+                $fUc = ucfirst(preg_replace('/[^a-zA-Z0-9]/', '', $f));
+                $c .= "    public function testAdd{$item}FailureEmpty{$fUc}(AcceptanceTester \$I)\n    {\n";
+                $c .= "        \$I->wantTo('Kiểm tra lỗi khi để trống {$f}');\n";
+                $c .= "        \$I->amOnUrl(\$I->getDomain() . '/admin/vi/' . \$this->module . '/{$formOp}/');\n";
+                $c .= "        \$I->wait(1);\n";
+                if ($titleField && $f !== $titleField) {
+                    $c .= "        \$I->waitForElement('input[name=\"{$titleField}\"]', 10);\n";
+                }
+                
+                $c .= "        \$I->scrollTo('button[type=\"submit\"]');\n";
+                $c .= "        \$I->wait(1);\n";
+                $c .= "        \$I->click('button[type=\"submit\"]');\n";
+                $c .= "    }\n\n";
+            }
+        }
+
+        $c .= "}\n";
+        return $c;
+    }
+
+    private function buildUnitServiceTest(SchemaEntity $entity, string $mod, string $item): string
+    {
+        $c  = "<?php\n\n";
+        $c .= $this->copyright() . "\n\n";
+        $c .= "namespace Tests\modules\\{$mod}\\Unit;\n\n";
+        $c .= "use NukeViet\\Module\\{$mod}\\{$item}\\{$item}Entity;\n";
+        $c .= "use NukeViet\\Module\\{$mod}\\{$item}\\{$item}Repository;\n";
+        $c .= "use NukeViet\\Module\\{$mod}\\{$item}\\{$item}Service;\n";
+        $c .= "use Tests\Support\UnitTester;\n\n";
+        $c .= "class {$item}ServiceTest extends \Codeception\Test\Unit\n{\n";
+        $c .= "    protected UnitTester \$tester;\n";
+        $c .= "    private \$repo;\n";
+        $c .= "    private \$service;\n\n";
+        $c .= "    protected function _before()\n    {\n";
+        $c .= "        if (!defined('NV_MAINFILE')) { define('NV_MAINFILE', true); }\n\n";
+        $c .= "        \$this->repo = \$this->makeEmpty({$item}Repository::class, [\n";
+        $c .= "            'findById' => function (\$id) { return null; },\n";
+        $c .= "            'save' => function(\$data, \$id) { return \$id > 0 ? \$id : 999; }\n";
+        $c .= "        ]);\n";
+        $c .= "        \$this->service = new {$item}Service(\$this->repo);\n";
+        $c .= "    }\n\n";
+        $c .= "    public function testCollectRequestData()\n    {\n";
+        $c .= "        \$requestMock = \$this->makeEmpty(\NukeViet\Core\Request::class, [\n";
+        $c .= "            'get_int' => function(\$key) { return 1; },\n";
+        $c .= "            'get_string' => function(\$key) { return 'test'; },\n";
+        $c .= "            'get_typed_array' => function() { return []; },\n";
+        $c .= "            'get_page' => function() { return 20; },\n";
+        $c .= "            'get_title' => function(\$key) { return 'test'; },\n";
+        $c .= "            'get_editor' => function(\$key) { return 'test'; },\n";
+        $c .= "            'get_textarea' => function(\$key) { return 'test'; }\n";
+        $c .= "        ]);\n";
+        $c .= "        \$data = \$this->service->collectRequestData(\$requestMock);\n";
+        $c .= "        \$this->assertIsArray(\$data);\n";
+        $c .= "    }\n}\n";
+        return $c;
+    }
+
+    private function buildUnitValidatorTest(SchemaEntity $entity, string $mod, string $item): string
+    {
+        $nsLc = strtolower($mod);
+        $c  = "<?php\n\n";
+        $c .= $this->copyright() . "\n\n";
+        $c .= "namespace Tests\modules\\{$mod}\\Unit;\n\n";
+        $c .= "use NukeViet\\Module\\{$mod}\\{$item}\\{$item}Repository;\n";
+        $c .= "use NukeViet\\Module\\{$mod}\\{$item}\\{$item}Validator;\n";
+        $c .= "use Tests\Support\UnitTester;\n\n";
+        $c .= "class {$item}ValidatorTest extends \Codeception\Test\Unit\n{\n";
+        $c .= "    protected UnitTester \$tester;\n";
+        $c .= "    private \$repo;\n";
+        $c .= "    private \$validator;\n\n";
+        $c .= "    protected function _before()\n    {\n";
+        $c .= "        if (!defined('NV_MAINFILE')) { define('NV_MAINFILE', true); }\n\n";
+        $c .= "        \$this->repo = \$this->makeEmpty({$item}Repository::class, [\n";
+        $c .= "            'isAliasExists' => function (\$alias, \$excludeId) { return \$alias === 'existing-alias'; }\n";
+        $c .= "        ]);\n";
+        $c .= "        \$this->validator = new {$item}Validator(\$this->repo);\n";
+        $c .= "    }\n\n";
+        
+        $c .= "    /**\n     * @group {$nsLc}\n     */\n";
+        $c .= "    public function testValidateSaveSuccess()\n    {\n";
+        $c .= "        \$data = [\n";
+        $c .= $this->buildMockDataLines($entity->columns) . "\n        ];\n";
+        $c .= "        \$this->validator->validateSave(\$data);\n";
+        $c .= "        \$this->assertTrue(true);\n";
+        $c .= "    }\n\n";
+
+        foreach ($entity->columns as $f => $col) {
+            if ($col['required'] && $f !== 'id' && !in_array($f, ['alias', 'status', 'weight', 'add_time', 'edit_time'])) {
+                $fUc = ucfirst(preg_replace('/[^a-zA-Z0-9]/', '', $f));
+                $langKey = "empty_{$f}";
+                $phpType = $this->phpType($col['sql_type'] ?? 'varchar(255)');
+                $emptyVal = $phpType === 'int' ? 0 : "''";
+
+                $c .= "    /**\n     * @group {$nsLc}\n     */\n";
+                $c .= "    public function testValidateSaveEmpty{$fUc}()\n    {\n";
+                $c .= "        \$this->expectException(\InvalidArgumentException::class);\n";
+                $c .= "        \$this->expectExceptionMessage('{$langKey}');\n\n";
+                
+                $c .= "        \$data = [\n";
+                $c .= $this->buildMockDataLines($entity->columns, $f) . "\n        ];\n";
+                $c .= "        \$this->validator->validateSave(\$data);\n";
+                $c .= "    }\n\n";
+            }
+        }
+
+        $hasAlias = in_array('alias', array_keys($entity->columns));
+        if ($hasAlias) {
+            $c .= "    /**\n     * @group {$nsLc}\n     */\n";
+            $c .= "    public function testValidateSaveDuplicateAlias()\n    {\n";
+            $c .= "        \$this->expectException(\InvalidArgumentException::class);\n";
+            $c .= "        \$this->expectExceptionMessage('erroralias');\n\n";
+            
+            $c .= "        \$data = [\n";
+            $c .= $this->buildMockDataLines($entity->columns, '', ['id', 'add_time', 'edit_time', 'weight', 'status', 'admin_id', 'alias']);
+            $c .= ",\n            'alias' => 'existing-alias'\n        ];\n";
+            $c .= "        \$this->validator->validateSave(\$data, 0);\n";
+            $c .= "    }\n";
+        }
+
+        $c .= "}\n";
+        return $c;
+    }
+    /**
+     * Trả về biểu thức PHP cho giá trị mẫu (Mock Value).
+     * Dùng chung cho API Test và Acceptance Test để đảm bảo đồng bộ dữ liệu.
+     */
+    private function getMockValuePHP(string $f, array $col, bool $forAcceptance = false): string
+    {
+        $sqlType = strtolower($col['sql_type'] ?? 'varchar');
+        $fieldLower = strtolower($f);
+
+        // Alias xử lý riêng
+        if ($fieldLower === 'alias') {
+            return "'alias-' . time()";
+        }
+
+        // Ngày tháng năm
+        if (str_contains($sqlType, 'datetime') || str_contains($sqlType, 'timestamp')) {
+            return $forAcceptance ? "date('d/m/Y H:i', strtotime('+1 day'))" : "date('Y-m-d H:i:s', strtotime('+1 day'))";
+        }
+        if (str_contains($sqlType, 'date')) {
+             return $forAcceptance ? "date('d/m/Y', strtotime('+1 day'))" : "date('Y-m-d', strtotime('+1 day'))";
+        }
+        if (str_contains($sqlType, 'time')) {
+            return "date('H:i:s')";
+        }
+        if (str_contains($sqlType, 'year')) {
+            return "date('Y')";
+        }
+
+        // Số
+        if (str_contains($sqlType, 'int') || str_contains($sqlType, 'tinyint')) {
+            return "1";
+        }
+        if (str_contains($sqlType, 'decimal') || str_contains($sqlType, 'float') || str_contains($sqlType, 'double')) {
+            return "1.5";
+        }
+
+        // String / Text
+        $len = 255;
+        if (preg_match('/\((\d+)\)/', $sqlType, $m)) {
+            $len = (int)$m[1];
+        }
+
+        $prefix = (str_contains($fieldLower, 'title') || str_contains($fieldLower, 'name')) ? 'Auto Test ' : 'Data ';
+        if ($len < 20) {
+            return "substr('{$prefix}' . time(), 0, {$len})";
+        }
+
+        return "'{$prefix}' . time()";
+    }
+
+    private function genMockDataLine(string $f, array $col, string $emptyField = ''): string
+    {
+        if ($f === $emptyField) {
+            $phpType = $this->phpType($col['sql_type'] ?? 'varchar(255)');
+            $val = $phpType === 'int' ? 0 : "''";
+            return "            '{$f}' => {$val}";
+        }
+        $val = $this->getMockValuePHP($f, $col, false);
+        return "            '{$f}' => {$val}";
+    }
+
+    private function buildMockDataLines(array $columns, string $emptyField = '', array $exclude = []): string
+    {
+        if (empty($exclude)) {
+            $exclude = ['id', 'add_time', 'edit_time', 'weight', 'status', 'admin_id'];
+        }
+        $lines = [];
+        $hasAlias = false;
+        foreach ($columns as $f => $col) {
+            if ($f === 'alias') $hasAlias = true;
+            if (in_array($f, $exclude)) continue;
+            $lines[] = $this->genMockDataLine($f, $col, $emptyField);
+        }
+        if ($hasAlias && $emptyField !== 'alias' && !preg_grep("/'alias'/", $lines)) {
+            $lines[] = "            'alias' => 'alias-' . time()";
+        }
+        return implode(",\n", $lines);
+    }
+
+    private function buildApiTest(SchemaEntity $entity, string $mod, string $item, string $itemLc): string
+    {
+        $nsLc = strtolower($mod);
+        $titleField = $entity->alias_source_field ?: '';
+
+        $c  = "<?php\n\n";
+        $c .= $this->copyright() . "\n\n";
+        $c .= "namespace Tests\modules\\{$mod}\\API;\n\n";
+        $c .= "use Tests\Support\ApiTester;\n\n";
+        $c .= "class Admin{$item}ApiCest\n{\n";
+        $c .= "    private \$itemId;\n";
+        $c .= "    private \$module;\n\n";
+        $c .= "    public function _inject()\n    {\n";
+        $c .= "        \$this->module = getenv('NV_MODULE') ?: '{$mod}';\n    }\n\n";
+        
+        $c .= "    /**\n     * @group {$nsLc}\n     * @group {$nsLc}-api\n     */\n";
+        $c .= "    public function testGet{$item}List(ApiTester \$I)\n    {\n";
+        $c .= "        \$I->wantTo('Lấy danh sách {$itemLc} qua API');\n";
+        $c .= "        \$I->sendApiRequest(\$this->module, '{$item}GetList');\n";
+        $c .= "        \$I->seeResponseCodeIs(200);\n";
+        $c .= "        \$I->seeResponseIsJson();\n";
+        $c .= "        \$I->seeResponseContainsJson(['status' => 'success', 'code' => '0000']);\n";
+        $c .= "        \$I->seeResponseJsonMatchesJsonPath('$.items');\n";
+        $c .= "    }\n\n";
+
+        foreach ($entity->columns as $f => $col) {
+            if ($col['required'] && $f !== 'id' && !in_array($f, ['alias', 'status', 'weight', 'add_time', 'edit_time'])) {
+                $fUc = ucfirst(preg_replace('/[^a-zA-Z0-9]/', '', $f));
+                $phpType = $this->phpType($col['sql_type'] ?? 'varchar(255)');
+                $emptyVal = $phpType === 'int' ? 0 : "''";
+
+                $c .= "    /**\n     * @group {$nsLc}\n     * @group {$nsLc}-api\n     */\n";
+                $c .= "    public function testAdd{$item}Empty{$fUc}(ApiTester \$I)\n    {\n";
+                $c .= "        \$I->wantTo('Thêm {$itemLc} với {$f} rỗng — phải báo lỗi');\n";
+                $c .= "        \$I->sendApiRequest(\$this->module, '{$item}Add', [\n";
+                $c .= $this->buildMockDataLines($entity->columns, $f) . "\n        ]);\n";
+                
+                $c .= "        \$I->seeResponseCodeIs(200);\n";
+                $c .= "        \$I->seeResponseIsJson();\n";
+                $c .= "        \$I->seeResponseContainsJson(['status' => 'error']);\n";
+                $c .= "    }\n\n";
+            }
+        }
+
+        $c .= "    /**\n     * @group {$nsLc}\n     * @group {$nsLc}-api\n     */\n";
+        $c .= "    public function testAdd{$item}Success(ApiTester \$I)\n    {\n";
+        $c .= "        \$I->wantTo('Thêm mới {$itemLc} qua API');\n";
+        $c .= "        \$I->sendApiRequest(\$this->module, '{$item}Add', [\n";
+        $c .= $this->buildMockDataLines($entity->columns) . "\n        ]);\n";
+        
+        $c .= "        \$I->seeResponseCodeIs(200);\n";
+        $c .= "        \$I->seeResponseIsJson();\n";
+        $c .= "        \$I->seeResponseContainsJson(['status' => 'success', 'code' => '0000']);\n";
+        $c .= "        \$I->seeResponseJsonMatchesJsonPath('$.item.id');\n";
+        $c .= "        \$this->itemId = \$I->grabDataFromResponseByJsonPath('$.item.id')[0];\n";
+        $c .= "    }\n\n";
+
+        $c .= "    /**\n     * @group {$nsLc}\n     * @group {$nsLc}-api\n     */\n";
+        $c .= "    public function testGet{$item}DetailSuccess(ApiTester \$I)\n    {\n";
+        $c .= "        \$I->wantTo('Lấy chi tiết {$itemLc} vừa tạo qua API');\n";
+        $c .= "        \$I->sendApiRequest(\$this->module, '{$item}GetDetail', [\n";
+        $c .= "            'id' => \$this->itemId\n";
+        $c .= "        ]);\n";
+        $c .= "        \$I->seeResponseCodeIs(200);\n";
+        $c .= "        \$I->seeResponseIsJson();\n";
+        $c .= "        \$I->seeResponseContainsJson([\n";
+        $c .= "            'status' => 'success',\n";
+        $c .= "            'code' => '0000'\n";
+        $c .= "        ]);\n";
+        $c .= "    }\n";
+        
+        $c .= "}\n";
+        return $c;
     }
 }
