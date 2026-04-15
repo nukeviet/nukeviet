@@ -541,7 +541,7 @@ function nv_server_config_change($array_config)
         $config_contents .= "  </IfModule>\n\n";
         $config_contents .= "  RewriteEngine On\n";
         $config_contents .= "  RewriteBase " . NV_BASE_SITEURL . "\n";
-        $config_contents .= "  RewriteCond %{REQUEST_FILENAME} /(\.(.*)|composer\.json|default\.(htaccess\.txt|web\.config\.txt|php)|mainfile\.php|web\.config|config\.php)$ [NC]\n";
+        $config_contents .= "  RewriteCond %{REQUEST_FILENAME} /(\.(.*)|composer\.json|composer\.lock|default\.(htaccess\.txt|web\.config\.txt|php)|mainfile\.php|web\.config|config\.php)$ [NC]\n";
         $config_contents .= "  RewriteRule ^.* - [L,R=404]\n";
         $config_contents .= "  RewriteCond %{REQUEST_URI} ^/(data/ip6?|includes|install/tpl|vendor|assets/tpl|data/cache|data/certs|data/logs)/.* [NC]\n";
         $config_contents .= "  RewriteRule ^.* - [L,R=404]\n";

@@ -7,7 +7,7 @@
         'aliases' => array(),
         'reference' => null,
         'name' => 'nukeviet/nukeviet',
-        'dev' => true,
+        'dev' => false,
     ),
     'versions' => array(
         'guzzlehttp/guzzle' => array(

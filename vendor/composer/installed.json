@@ -1214,6 +1214,6 @@
             "install-path": "../tecnickcom/tc-lib-color"
         }
     ],
-    "dev": true,
+    "dev": false,
     "dev-package-names": []
 }
