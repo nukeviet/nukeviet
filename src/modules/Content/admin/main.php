@@ -19,14 +19,14 @@ use NukeViet\Module\Content\Cat\CatRepository;
 
 $page_title = $nv_Lang->getModule('list');
 
-$contentRepo = new ContentRepository($db, $config['table_row'], $nv_Cache, $module_name);
+$contentRepo = new ContentRepository($db, $tables, $nv_Cache, $module_name);
 
 $service = new ContentService($contentRepo);
 
 // Filter theo chuyên mục
 $filter_catid = $nv_Request->get_int('catid', 'get', 0);
 
-$catRepo = new CatRepository($db, $config['table_cat'], $nv_Cache, $module_name);
+$catRepo = new CatRepository($db, $tables, $nv_Cache, $module_name);
 $cats_all = $catRepo->getAll();
 
 $_rows = $contentRepo->getContentList($filter_catid, -1);

@@ -21,7 +21,7 @@ $page_title = $nv_Lang->getModule('config');
 
 $socialbuttons = ['facebook', 'twitter', 'zalo'];
 
-$contentRepo = new ContentRepository($db, $config['table_row'], $nv_Cache, $module_name);
+$contentRepo = new ContentRepository($db, $tables, $nv_Cache, $module_name);
 
 if ($nv_Request->isset_request('save', 'post')) {
     if (!csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {

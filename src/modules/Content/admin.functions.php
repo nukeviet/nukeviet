@@ -35,3 +35,7 @@ if (defined('NV_IS_SPADMIN')) {
 
 // Lấy cấu hình module từ biến hệ thống
 $config = $module_config[$module_name];
+
+// Khởi tạo danh sách bảng DB cho module — dùng chung cho mọi Repository
+use NukeViet\Module\Content\Shared\Tables;
+$tables = new Tables(NV_PREFIXLANG, $module_data);

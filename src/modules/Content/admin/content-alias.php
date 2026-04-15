@@ -13,6 +13,10 @@ if (!defined('NV_IS_FILE_ADMIN')) {
     exit('Stop!!!');
 }
 
+use NukeViet\Module\Content\Content\ContentRepository;
+
+$contentRepo = new ContentRepository($db, $tables, $nv_Cache, $module_name);
+
 // Dùng $config['alias_lower'] để auto-generate alias giống page.admin/alias.php
 $id = $nv_Request->get_int('id', 'post', 0);
 
