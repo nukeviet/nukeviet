@@ -23,7 +23,7 @@ Thay vì viết logic hỗn hợp trong các file `.php` lẻ, NukeViet 5 tách 
 | Thành phần | Vai trò & Thay đổi | Tài liệu gốc |
 | :--- | :--- | :--- |
 | **Entity** | Ánh xạ 1 dòng DB thành 1 đối tượng có kiểu dữ liệu (Typed). | [Bước 3](modules/Content.md#L248) |
-| **Repository** | **Nơi duy nhất chứa SQL.** Tuyệt đối không viết SQL ở Service/Controller. | [Bước 4](modules/Content.md#L340) |
+| **Repository** | **Nơi duy nhất chứa SQL.** Kế thừa `BaseRepository` và dùng đối tượng `$tables` để truy xuất tên bảng. | [Bước 4](modules/Content.md#L340) |
 | **Service** | Chứa Business Logic + **Thu thập & Chuẩn hóa dữ liệu từ Request**. Đây là nơi duy nhất chịu trách nhiệm **phát Hook** (`nv_apply_hook`) sau khi xử lý nghiệp vụ thành công. | [Bước 5](modules/Content.md#L725) |
 | **Validator** | Kiểm tra tính hợp lệ của Input, ném Exception kèm Error Code. | [Bước 6](modules/Content.md#L992) |
 | **Controller** | Chính là các file `.php` trong thư mục `admin/` hoặc `funcs/`, Điều phối luồng (Entry Point): Gọi Service để xử lý và trả về View/JSON. | [Bước 7](modules/Content.md#L1039) |
@@ -44,6 +44,8 @@ Khi cần thêm một tính năng mới (ví dụ: Quản lý Sản phẩm), hã
    - 📎 [Mẫu Entity chuẩn](modules/Content.md#L252)
 
 ### Bước 2: Truy vấn dữ liệu (Repository)
+- Khởi tạo đối tượng `$tables = new Tables(NV_PREFIXLANG, $module_data)` tại `functions.php` hoặc `admin.functions.php`. Đối tượng này chứa toàn bộ tên các bảng thực tế (VD: `$tables->content`, `$tables->cat`).
+- Tạo `{Item}Repository.php` kế thừa từ `BaseRepository`.
 - Viết các hàm `findById`, `save`, `delete`, `getList`.
 - Quản lý cấu hình module tập trung tại `NV_CONFIG_GLOBALTABLE`. Sử dụng `$module_config[$module_name]` để lấy cấu hình và hàm `saveConfig` trong Repository để cập nhật vào DB.
 - 📎 [Mẫu Repository Skeleton](modules/Content.md#L399)
@@ -99,19 +101,20 @@ Mỗi chức năng mới bắt buộc phải có testcase đi kèm trong thư m�
 
 ## 5. Quy Tắc "Vàng" & Kinh Nghiệm Thực Tế
 
-1. **Cấm Hardcode**: Luôn dùng tên bảng từ cấu hình `$config['table_xxx']` hoặc tạo từ `NV_PREFIXLANG . '_' . $module_data` trong Controller.
+1. **Cấm Hardcode**: Tuyệt đối không viết trực tiếp tên bảng vào SQL. Phải dùng đối tượng `$tables` đã được khởi tạo sẵn (VD: `$this->tables->content`).
 2. **CSRF Protection**: Mọi thao tác Ghi (Add/Edit/Del) phải qua `csrf_check()`. Với Ajax xóa, dùng query string `checkss`.
 3. **Invalidate Cache**: Luôn gọi `$repo->invalidateCache()` trong Service sau khi thay đổi dữ liệu (CUD). Repository không tự xóa cache để đảm bảo tính linh hoạt (ví dụ khi cần bulk update).
 4. **Thin Controller**: Nếu file controller của bạn > 200 dòng, hãy chuyển logic vào Service. Controller chỉ nên chứa code điều phối và render.
 5. **Tiêu chuẩn PSR-4**: Tên file và Class phải trùng khớp tuyệt đối (PascalCase). Sai hoa/thường sẽ gây lỗi trên hệ điều hành Linux.
 6. **Nguyên tắc "O-R-S" (One Repository - One Service)**: Mỗi bảng dữ liệu chính nên có một cặp Repo/Service riêng để dễ bảo trì và phân tách trách nhiệm.
-7. **Khởi tạo tại chỗ (Local Initialization)**: Tuyệt đối không khởi tạo Repository ở phạm vi toàn cục. Mỗi Controller phải tự khởi tạo Repo/Service và đọc config khi cần để đảm bảo tính độc lập.
-8. **Quy tắc đặt tên biến Repo**: Đặt tên rõ ràng theo đối tượng (Ví dụ: `$contentRepo`, `$catRepo` thay vì `$repo` chung chung) giúp code dễ đọc và tránh xung đột khi dùng nhiều Repo.
+7. **Khởi tạo tập trung Table Name**: Khởi tạo `$tables = new Tables(...)` DUY NHẤT một lần tại functions của module. Toàn bộ Repository nạp chung đối tượng này để đảm bảo tính nhất quán.
+8. **Kế thừa BaseRepository**: Luôn kế thừa `BaseRepository` để sử dụng các helper có sẵn như `fetchEntities()`, `pdoType()` (xác định PDO bind type tự động từ Entity) và `invalidateCache()`.
 9. **Sử dụng AbstractEntity**: Luôn kế thừa `AbstractEntity` cho các Entity để tận dụng các method tự động hóa (`getDbColumns`, `getIntColumns`, `fromArray`).
 10. **Log hành động**: Đừng quên `nv_insert_logs()` hoặc `nv_apply_hook` cho các hành động thay đổi dữ liệu để phục vụ việc audit sau này.
 11. **toArray() cho View**: Controller chỉ đẩy mảng thuần (`toArray()`) sang Smarty để đảm bảo hiệu năng và tính đóng gói.
 12. **Bắt Throwable & ghi Log**: Mọi khối xử lý quan trọng trong Controller nên dùng try-catch. Bắt `ValidationException` để hiển thị lỗi UI, và bắt `\Throwable` cho các lỗi hệ thống nghiêm trọng.
 13. **Bulk Update cho Repository**: Sử dụng cú pháp `CASE WHEN` (Bulk Update) cho các hàm như `reorderWeight` hoặc `autoCorrectWeight` thay vì lặp từng câu lệnh UPDATE để tối ưu hiệu suất Database.
+14. **BaseApi & BaseUapi**: Sử dụng các lớp API cha để tập trung logic `bootstrap()` (DB, Cache, Tables, Config), giúp code API Clean và tập trung vào nghiệp vụ.
 
 ---
 
