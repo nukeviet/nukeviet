@@ -18,8 +18,8 @@ $module_version = [
     'modfuncs' => 'main',
     'is_sysmod' => 0,
     'virtual' => 0,
-    'version' => '4.5.07',
-    'date' => 'Friday, October 24, 2025 4:00:00 PM GMT+07:00',
+    'version' => '4.5.08',
+    'date' => 'Friday, May 8, 2026 at 4:00:00 PM GMT+07:00',
     'author' => 'VINADES.,JSC <contact@vinades.vn>',
     'note' => ''
 ];
