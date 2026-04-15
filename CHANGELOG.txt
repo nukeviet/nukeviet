@@ -5,6 +5,14 @@ NUKEVIET 4.5.08
 - Remove the and/oauth package, which has long been unmaintained, and replace it with league/oauth2-client
 - Remove SDK of social network like/share button tools and replace with pure HTML/JS
 - Fix XSS bug. Thanks Nguyễn Quang Bằng from WhiteHub#4394
+- Support PHP 8.5
+- Add a strict permission-checking mode for uploading application packages #3910
+- Prevent CKEditor 5 UI buttons from triggering parent form submission #3916
+- Fix CSS content conflicts between CKEditor 4 and CKEditor 5
+- Fix voting popup
+- Ckeditor 5 v47.6.2
+- Jquery UI v1.14.2
+- DOMPurify 2.5.9 and 3.4.0
 
 NUKEVIET 4.5.07
 - CKEditor 5 v47.0.0 and remove CKEditor 4
