@@ -60,6 +60,15 @@ function htmlspecialchars_decode(string, quote_style) {
     return string;
 }
 
+function htmlspecialchars(string) {
+    return String(string)
+        .replace(/&/g, '&amp;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;');
+}
+
 function nv_filename_alt(fileAlt) {
     var lastChar = fileAlt.charAt(fileAlt.length - 1);
 
@@ -263,7 +272,7 @@ function preview() {
     if (selFileData[3] == "image" || selFileData[2] == "swf") {
         var size = calSize(selFileData[0], selFileData[1], 188, 120);
         html += selFileData[0] + " x " + selFileData[1] + " pixels (" + selFileData[4] + ")<br />";
-        selFileData[3] == "image" ? $("div#fileView").html('<img width="' + size[0] + '" height="' + size[1] + '" src="' + nv_base_siteurl + fullPath + "/" + selFile + '?' + selFileData[8] + '" />') : $("#fileView").flash({
+        selFileData[3] == "image" ? $("div#fileView").html('<img width="' + size[0] + '" height="' + size[1] + '" src="' + nv_base_siteurl + fullPath + "/" + htmlspecialchars(selFile) + '?' + selFileData[8] + '" />') : $("#fileView").flash({
             src: nv_base_siteurl + fullPath + "/" + selFile,
             width: size[0],
             height: size[1]
@@ -273,8 +282,8 @@ function preview() {
         if (selFileData[3] == "image") {
             $("div#fileView").addClass("zoomin");
             $("div#fileView img").click(function() {
-                $("#sitemodal").find(".modal-title").html(selFile);
-                $("#sitemodal").find(".modal-body").html('<div class="text-center"><img class="img-responsive" src="' + nv_base_siteurl + fullPath + "/" + selFile + '?' + selFileData[8] + '" /></div>');
+                $("#sitemodal").find(".modal-title").text(selFile);
+                $("#sitemodal").find(".modal-body").html('<div class="text-center"><img class="img-responsive" src="' + nv_base_siteurl + fullPath + "/" + htmlspecialchars(selFile) + '?' + selFileData[8] + '" /></div>');
                 $("#sitemodal").modal();
             });
         }
@@ -285,9 +294,9 @@ function preview() {
 
     html += LANG.pubdate + ": " + selFileData[6];
 
-    $("#fileInfoAlt").html($("img[title='" + selFile + "']").attr("alt"));
+    $("#fileInfoAlt").text($("img[title='" + selFile + "']").attr("alt") || '');
     $("#fileInfoDetail").html(html);
-    $("#fileInfoName").html(selFile);
+    $("#fileInfoName").text(selFile);
     $("#FileRelativePath").val(nv_base_siteurl + fullPath + "/" + selFile);
     $("#FileAbsolutePath").val(nv_my_domain + nv_base_siteurl + fullPath + "/" + selFile);
 
@@ -354,7 +363,7 @@ function create() {
 
         $("img[name=myFile2]").width(DisSize[0]).height(DisSize[1]).attr("src", nv_base_siteurl + path + "/" + selFile + "?" + selFileData[8]);
         $("#fileInfoDetail2").html(LANG.origSize + ": " + selFileData[0] + " x " + selFileData[1] + " pixels");
-        $("#fileInfoName2").html(selFile);
+        $("#fileInfoName2").text(selFile);
 
         $("div#imgcreate").dialog({
             autoOpen: false,
@@ -725,7 +734,7 @@ function cropfile() {
     $('#cropContent').css({
         'width': size[0] + 4,
         'height': size[1] + 4
-    }).html('<img class="crop-image" src="' + nv_base_siteurl + path + "/" + selFile + '?' + selFileData[8] + '"  width="' + size[0] + '" height="' + size[1] + '"/>');
+    }).html('<img class="crop-image" src="' + nv_base_siteurl + path + "/" + htmlspecialchars(selFile) + '?' + selFileData[8] + '"  width="' + size[0] + '" height="' + size[1] + '"/>');
 
     // Check size
     if (selFileData[0] < 10 || selFileData[1] < 10 || (selFileData[0] < 16 && selFileData[1] < 16)) {
@@ -821,7 +830,7 @@ function addlogo() {
     $('#addlogoContent').css({
         'width': size[0] + 4,
         'height': size[1] + 4
-    }).html('<img class="addlogo-image" src="' + nv_base_siteurl + path + "/" + selFile + '?' + selFileData[8] + '"  width="' + size[0] + '" height="' + size[1] + '"/>');
+    }).html('<img class="addlogo-image" src="' + nv_base_siteurl + path + "/" + htmlspecialchars(selFile) + '?' + selFileData[8] + '"  width="' + size[0] + '" height="' + size[1] + '"/>');
 
     // Check size
     if (selFileData[0] < 10 || selFileData[1] < 10 || (selFileData[0] < 16 && selFileData[1] < 16)) {
@@ -957,7 +966,7 @@ function rotatefile() {
     var path = (selFileData[7] == "") ? $("span#foldervalue").attr("title") : selFileData[7];
     var size = calSize(selFileData[0], selFileData[1], 360, 230);
 
-    $('#rorateimageName').html(selFile);
+    $('#rorateimageName').text(selFile);
     $('[name="rorateFile"]').val(selFile);
     $('[name="roratePath"]').val(path);
 
@@ -968,7 +977,7 @@ function rotatefile() {
         'height': size[1],
         'margin-top': contentMargin,
         'margin-bottom': contentMargin + 10
-    }).html('<img src="' + nv_base_siteurl + path + "/" + selFile + '?' + selFileData[8] + '"  width="' + size[0] + '" height="' + size[1] + '"/>');
+    }).html('<img src="' + nv_base_siteurl + path + "/" + htmlspecialchars(selFile) + '?' + selFileData[8] + '"  width="' + size[0] + '" height="' + size[1] + '"/>');
 
     $("div#rorateimage").dialog({
         autoOpen: false,
@@ -2175,7 +2184,7 @@ var NVUPLOAD = {
             if (!nv_alt_require) {
                 fileList.append(
                     '<div id="' + file.id + '" class="row file-item">' +
-                    '<div class="col-sm-14 file-name"><span>' + file.name + '</span></div>' +
+                    '<div class="col-sm-14 file-name"><span>' + htmlspecialchars(file.name) + '</span></div>' +
                     '<div class="col-sm-4 file-size">' + plupload.formatSize(file.size) + '</div>' +
                     '<div class="col-sm-4 file-status">' + file.percent + '%</div>' +
                     '<div class="col-sm-2 file-action text-right"></div>' +
@@ -2193,8 +2202,8 @@ var NVUPLOAD = {
 
                 fileList.append(
                     '<div id="' + file.id + '" class="row file-item">' +
-                    '<div class="col-sm-8 file-name"><span>' + file.name + '</span></div>' +
-                    '<div class="col-sm-6 file-alt"><input type="text" value="' + fileAlt + '" onkeyup="NVLDATA.setValue( \'' + file.id + '\', this.value);" class="form-control upload-file-alt dynamic"/></div>' +
+                    '<div class="col-sm-8 file-name"><span>' + htmlspecialchars(file.name) + '</span></div>' +
+                    '<div class="col-sm-6 file-alt"><input type="text" value="' + htmlspecialchars(fileAlt) + '" onkeyup="NVLDATA.setValue( \'' + file.id + '\', this.value);" class="form-control upload-file-alt dynamic"/></div>' +
                     '<div class="col-sm-4 file-size">' + plupload.formatSize(file.size) + '</div>' +
                     '<div class="col-sm-4 file-status">' + file.percent + '%</div>' +
                     '<div class="col-sm-2 file-action text-right"></div>' +
