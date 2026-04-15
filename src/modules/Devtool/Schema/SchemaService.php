@@ -117,21 +117,17 @@ class SchemaService
 
             if (empty($existingConfig)) {
                 if ($field === 'status') {
-                    $existingConfig['note'] = 'Trạng thái (Active)';
                     $existingConfig['view_type'] = 'checkbox';
                     $existingConfig['label_vi'] = 'Trạng thái';
                 } elseif (in_array($field, ['weight', 'sort'], true)) {
-                    $existingConfig['note'] = 'Sắp xếp (Weight)';
                     $existingConfig['view_type'] = 'number_int';
                     $existingConfig['label_vi'] = 'Sắp xếp';
                 } elseif (in_array($field, ['title', 'name'], true)) {
-                    $existingConfig['note'] = 'Nguồn tạo Alias';
                     $existingConfig['label_vi'] = ($field === 'title') ? 'Tiêu đề' : 'Tên gọi';
-                } elseif (in_array($field, ['bodytext', 'mediumtext'], true)) {
+                } elseif (in_array($field, ['mediumtext', 'longtext'], true)) {
                     $existingConfig['view_type'] = 'editor';
                     $existingConfig['label_vi'] = 'Nội dung';
                 } elseif (in_array($field, ['admin_id', 'add_time', 'edit_time', 'hitstotal'], true)) {
-                    $existingConfig['note'] = 'Ẩn để schemas-mvc tự động sinh';
                     $existingConfig['hidden'] = true;
                 }
             }

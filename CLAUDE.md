@@ -72,3 +72,8 @@ rm -rf src/data/cache/*/*.cache && rm -rf src/data/cache/smarty-compile/*.php
 - PR target: feature branch → `nukeviet5.0`
 - Commit format: `feat|fix|refactor|docs: mô tả [AI-assisted]`
 - Mọi MR cần 1 Peer Review trước khi merge
+
+## Quy tắc AI Artifacts
+
+- Luôn sử dụng **đường dẫn tương đối** (relative paths) khi liên kết đến các file trong project bên trong các file `.md` (như implementation_plan.md, walkthrough.md).
+- Ví dụ: `[main.php](../admin/main.php)` thay vì `[main.php](file:///d:/...)`.
