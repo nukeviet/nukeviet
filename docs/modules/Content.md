@@ -55,7 +55,11 @@ Controller (Thin) ──▶ Service::prepareSaveData() ──▶ Validator ─�
 │   │   │   ├── {Item}Repository.php
 │   │   │   ├── {Item}Validator.php
 │   │   │   └── {Item}Service.php
-│   │   ├── Shared/                  # Các Class dùng chung của module
+│   │   ├── Shared/                  # Các Class dùng chung của module (Dùng cho kiến trúc Zero-Config)
+│   │   │   ├── Tables.php           # Định nghĩa tên bảng DUY NHẤT 1 chỗ
+│   │   │   ├── BaseRepository.php   # Lớp cha cho mọi Repository
+│   │   │   ├── BaseApi.php          # Lớp cha cho Admin API
+│   │   │   ├── BaseUapi.php         # Lớp cha cho Public API
 │   │   │   ├── ValidationException.php
 │   │   │   └── SchemaHelper.php
 │   │   ├── Api/                     # Admin API (implements IApi)
@@ -117,11 +121,15 @@ if (!defined('NV_SYSTEM')) {
 
 define('NV_IS_MOD_{MYMOD}', true);
 
+$base_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA
+    . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name;
+
 // Lấy cấu hình module từ biến hệ thống
 $config = $module_config[$module_name];
 
-$base_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA
-    . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name;
+// Khởi tạo danh sách bảng DB cho module — dùng chung cho mọi Repository
+use NukeViet\Module\{MyMod}\Shared\Tables;
+$tables = new Tables(NV_PREFIXLANG, $module_data);
 ```
 
 ### `admin.functions.php`
@@ -144,6 +152,10 @@ if (defined('NV_IS_SPADMIN')) {
 
 // Lấy cấu hình module từ biến hệ thống
 $config = $module_config[$module_name];
+
+// Khởi tạo danh sách bảng DB cho module — dùng chung cho mọi Repository
+use NukeViet\Module\{MyMod}\Shared\Tables;
+$tables = new Tables(NV_PREFIXLANG, $module_data);
 ```
 
 ### `admin.menu.php`
@@ -320,34 +332,102 @@ class {Item}Entity extends AbstractEntity
 
 ## Bước 4 — Repository
 
-Tập trung **toàn bộ SQL**. Constructor nhận 4 tham số: `$db`, `$table`, `$cache`, `$module_name`. Cấu hình module được quản lý tập trung thông qua bảng `NV_CONFIG_GLOBALTABLE`.
+Tập trung **toàn bộ SQL**. Mọi Repository cần kế thừa `BaseRepository` để tận dụng các helper xử lý Entity và Cache. Constructor nhận đối tượng `$tables` thay vì tên bảng thô.
 
-### 4.1 — Repository Skeleton
+### 4.1 — Tables Value Object (`Shared/Tables.php`)
+
+Nơi duy nhất định nghĩa suffix cho các bảng. Giúp module "Zero-Configuration" — chỉ cần cài đặt là tự nhận diện bảng theo ngôn ngữ và tên module.
 
 ```php
-<?php
-namespace NukeViet\Module\{mymod}\{Item};
+namespace NukeViet\Module\{mymod}\Shared;
 
-if (!defined('NV_MAINFILE')) {
-    exit('Stop!!!');
+readonly class Tables
+{
+    public string $content;
+    public string $cat;
+
+    public function __construct(string $tablePrefix, string $moduleData)
+    {
+        $this->content = $tablePrefix . '_' . $moduleData;
+        $this->cat     = $tablePrefix . '_' . $moduleData . '_cat';
+    }
 }
+```
+
+### 4.2 — BaseRepository Skeleton (`Shared/BaseRepository.php`)
+
+Gom các logic PDO helper (`pdoType`, `fetchEntities`) và Cache (`invalidateCache`) lên lớp cha.
+
+```php
+namespace NukeViet\Module\{mymod}\Shared;
 
 use PDO;
 
-class {Item}Repository
+abstract class BaseRepository
 {
-    private PDO $db;
-    private string $table;
-    private $cache;
-    private string $module_name;
+    protected PDO $db;
+    protected Tables $tables;
+    protected $cache;
+    protected string $module_name;
 
-    public function __construct(PDO $db, string $table, $cache, string $module_name)
+    public function __construct(PDO $db, Tables $tables, $cache, string $module_name)
     {
         $this->db = $db;
-        $this->table = $table;
+        $this->tables = $tables;
         $this->cache = $cache;
         $this->module_name = $module_name;
     }
+
+    abstract protected function entityClass(): string;
+
+    protected function pdoType(string $field): int { ... }
+    protected function fetchEntities(\PDOStatement $stmt): array { ... }
+    public function invalidateCache(): void { ... }
+}
+```
+
+### 4.3 — Repository Implementation
+
+```php
+namespace NukeViet\Module\{mymod}\{Item};
+
+use NukeViet\Module\{mymod}\Shared\BaseRepository;
+use PDO;
+
+class {Item}Repository extends BaseRepository
+{
+    protected function entityClass(): string
+    {
+        return {Item}Entity::class;
+    }
+
+    public function findById(int $id): ?{Item}Entity
+    {
+        // Sử dụng $this->tables->content thay vì hardcode
+        $stmt = $this->db->prepare('SELECT * FROM ' . $this->tables->content . ' WHERE id = :id');
+        $stmt->bindValue(':id', $id, PDO::PARAM_INT);
+        $stmt->execute();
+        $data = $stmt->fetch(PDO::FETCH_ASSOC);
+        $stmt->closeCursor();
+        return $data ? {Item}Entity::fromArray($data) : null;
+    }
+
+    public function save(array $data, int $id = 0): int
+    {
+        $data = array_intersect_key($data, array_flip({Item}Entity::getDbColumns()));
+        if ($id > 0) {
+            // ... Logic Update ...
+            $stmt = $this->db->prepare('UPDATE ' . $this->tables->content . ' SET ... WHERE id = :id');
+            // ...
+            return $id;
+        }
+        // ... Logic Insert ...
+        $stmt = $this->db->prepare('INSERT INTO ' . $this->tables->content . ' ...');
+        // ...
+        return (int) $this->db->lastInsertId();
+    }
+}
+```
 
     /**
      * Lưu cấu hình module vào bảng dùng chung
@@ -1182,7 +1262,7 @@ if (!defined('NV_IS_MOD_{MYMOD}')) { exit('Stop!!!'); }
 use NukeViet\Module\{mymod}\{Item}\{Item}Repository;
 use NukeViet\Module\{mymod}\{Item}\{Item}Service;
 
-$itemRepo = new {Item}Repository($db, $config['table_row'], $nv_Cache, $module_name);
+$itemRepo = new {Item}Repository($db, $tables, $nv_Cache, $module_name);
 $service = new {Item}Service($itemRepo);
 
 try {
@@ -1262,73 +1342,45 @@ function nv_{mymod}_list(array $array_data, string $generate_page): string
 
 ---
 
-## Bước 8 — API
+### Bước 8 — API
 
 ### Chiến lược giảm code trùng lặp giữa Admin API và Public API
 
-Admin API (`Api/`, implements `IApi`) và Public API (`uapi/`, implements `UiApi`) có **hai interface khác type** nên không thể kế thừa class. Nhưng business logic bên trong lại gần như giống nhau.
-
-**Nguyên tắc:** Đưa mọi business logic vào **Service** (Bước 6). API file chỉ là **thin wrapper** ~30 dòng: init repo → gọi Service → trả result.
-
-```
-Admin API  ──┐
-             ├──▶ Service (chứa toàn bộ logic)  ──▶ Repository ──▶ DB
-Public API ──┘
-```
-
-### Quy trình triển khai
-
-**Bước 1 — Service trước:** Viết method trong Service cho mỗi nghiệp vụ.
+Sử dụng `BaseApi` và `BaseUapi` nằm trong thư mục `Shared/` để tập trung logic khởi tạo hệ thống (`bootstrap`).
 
 ```php
-// Shared/{Item}Service.php
-public function getDetail(int $id): {Item}Entity
+// Shared/BaseApi.php
+abstract class BaseApi implements IApi 
 {
-    if ($id <= 0) {
-        throw new \InvalidArgumentException('ID không hợp lệ');
+    protected function bootstrap(): void
+    {
+        global $db, $nv_Cache, $module_config;
+        $this->db = $db;
+        $this->cache = $nv_Cache;
+        $this->module_name = Api::getModuleName();
+        $module_info = Api::getModuleInfo();
+        $this->tables = new Tables(NV_PREFIXLANG, $module_info['module_data']);
+        $this->config = $module_config[$this->module_name];
     }
-    $row = $this->repo->findById($id);
-    if (!$row) {
-        throw new \RuntimeException('Không tìm thấy dữ liệu', 404);
-    }
-    return $row;
 }
 ```
 
-**Bước 2 — Admin API:** Thin wrapper gọi Service, bắt Exception, set result.
+**Nguyên tắc:** 
+1. Đưa mọi business logic vào **Service**. 
+2. API file kế thừa `BaseApi`/`BaseUapi` và gọi `$this->bootstrap()` ngay đầu hàm `execute()`.
 
 ```php
-<?php
-namespace NukeViet\Module\{mymod}\Api;
-
-use NukeViet\Api\Api;
-use NukeViet\Api\ApiResult;
-use NukeViet\Api\IApi;
-use NukeViet\Module\{mymod}\{Item}\{Item}Repository;
-use NukeViet\Module\{mymod}\{Item}\{Item}Service;
-
-if (!defined('NV_ADMIN') or !defined('NV_MAINFILE')) { exit('Stop!!!'); }
-
-class {Item}GetDetail implements IApi
+class {Item}GetDetail extends BaseApi
 {
-    private $result;
-
-    public static function getAdminLev() { return Api::ADMIN_LEV_MOD; }
-    public static function getCat() { return '{mymod}'; }
-    public function setResultHander(ApiResult $result) { $this->result = $result; }
-
     public function execute()
     {
-        global $db, $nv_Cache, $nv_Request, $nv_Lang;
-
-        $module_info = Api::getModuleInfo();
-        $config = $module_config[Api::getModuleName()];
-        $repo = new {Item}Repository($db, $config['table_row'], $nv_Cache, Api::getModuleName());
+        $this->bootstrap(); // Tự động nạp $this->db, $this->tables, $this->config...
+        
+        $repo = new {Item}Repository($this->db, $this->tables, $this->cache, $this->module_name);
         $service = new {Item}Service($repo);
-
+        
         $id = $nv_Request->get_int('id', 'post', 0);
 
-        // ── Gọi Service — logic chung duy nhất 1 chỗ ──
         try {
             $entity = $service->getDetail($id);
         } catch (\Exception $e) {
@@ -1337,13 +1389,14 @@ class {Item}GetDetail implements IApi
             return $this->result->getResult();
         }
 
-        // Admin: trả cả item inactive
         $this->result->set('item', $entity->toArray());
         $this->result->setSuccess();
         return $this->result->getResult();
     }
 }
 ```
+
+### 5 điểm khác nhau cố định giữa Admin API và Public API
 
 **Bước 3 — Public API:** Copy boilerplate, đổi 5 điểm cố định, thêm logic riêng (nếu có).
 
