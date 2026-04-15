@@ -10,18 +10,15 @@
 namespace NukeViet\Module\Content\Api;
 
 use NukeViet\Api\Api;
-use NukeViet\Api\ApiResult;
-use NukeViet\Api\IApi;
 use NukeViet\Module\Content\Cat\CatRepository;
+use NukeViet\Module\Content\Shared\BaseApi;
 
 if (!defined('NV_ADMIN') or !defined('NV_MAINFILE')) {
     exit('Stop!!!');
 }
 
-class CatGetList implements IApi
+class CatGetList extends BaseApi
 {
-    private $result;
-
     public static function getAdminLev()
     {
         return Api::ADMIN_LEV_MOD;
@@ -32,23 +29,15 @@ class CatGetList implements IApi
         return 'content';
     }
 
-    public function setResultHander(ApiResult $result)
-    {
-        $this->result = $result;
-    }
-
     public function execute()
     {
-        global $db, $nv_Cache, $module_config;
-
-        $module_name = Api::getModuleName();
-        $config = $module_config[$module_name];
+        $this->bootstrap();
 
         $repo = new CatRepository(
-            $db,
-            $config['table_row'],
-            $nv_Cache,
-            $module_name
+            $this->db,
+            $this->tables,
+            $this->cache,
+            $this->module_name
         );
 
         $entities = $repo->getAll();

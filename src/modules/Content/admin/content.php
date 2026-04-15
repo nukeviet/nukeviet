@@ -28,11 +28,11 @@ if (!empty($global_config['over_capacity']) and !defined('NV_IS_GODADMIN')) {
     include NV_ROOTDIR . '/includes/footer.php';
 }
 
-$contentRepo = new ContentRepository($db, $config['table_row'], $nv_Cache, $module_name);
+$contentRepo = new ContentRepository($db, $tables, $nv_Cache, $module_name);
 
 // File này cần dùng tới Cat + Content Service nên khởi tạo tận nơi
 $service = new ContentService($contentRepo);
-$catRepo = new CatRepository($db, $config['table_cat'], $nv_Cache, $module_name);
+$catRepo = new CatRepository($db, $tables, $nv_Cache, $module_name);
 $catService = new CatService($catRepo);
 
 $id = $nv_Request->get_int('id', 'post,get', 0);

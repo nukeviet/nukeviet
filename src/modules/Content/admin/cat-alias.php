@@ -29,7 +29,7 @@ $title = $nv_Request->get_title('title', 'post', '');
 $alias = change_alias($title);
 $alias = !empty($config['alias_lower']) ? strtolower($alias) : $alias;
 
-$catRepo = new CatRepository($db, $config['table_row'], $nv_Cache, $module_name);
+$catRepo = new CatRepository($db, $tables, $nv_Cache, $module_name);
 
 if ($catRepo->isAliasExists($alias, $catid)) {
     $alias .= '-' . (time() % 1000); // Simple suffix for category alias collision

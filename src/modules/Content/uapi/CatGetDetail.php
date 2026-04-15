@@ -9,41 +9,31 @@
 
 namespace NukeViet\Module\Content\Uapi;
 
-use NukeViet\Uapi\Uapi;
 use NukeViet\Uapi\UapiResult;
-use NukeViet\Uapi\UiApi;
 use NukeViet\Module\Content\Cat\CatRepository;
+use NukeViet\Module\Content\Shared\BaseUapi;
 
 if (!defined('NV_MAINFILE')) {
     exit('Stop!!!');
 }
 
-class CatGetDetail implements UiApi
+class CatGetDetail extends BaseUapi
 {
-    private $result;
-
     public static function getCat()
     {
         return 'content';
     }
 
-    public function setResultHander(UapiResult $result)
-    {
-        $this->result = $result;
-    }
-
     public function execute()
     {
-        global $db, $nv_Cache, $nv_Request, $nv_Lang, $module_config;
-
-        $module_name = Uapi::getModuleName();
-        $config = $module_config[$module_name];
+        global $nv_Request, $nv_Lang;
+        $this->bootstrap();
 
         $repo = new CatRepository(
-            $db,
-            $config['table_cat'],
-            $nv_Cache,
-            $module_name
+            $this->db,
+            $this->tables,
+            $this->cache,
+            $this->module_name
         );
 
         $catid = $nv_Request->get_int('catid', 'post', 0);

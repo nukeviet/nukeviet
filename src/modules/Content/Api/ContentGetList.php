@@ -10,18 +10,15 @@
 namespace NukeViet\Module\Content\Api;
 
 use NukeViet\Api\Api;
-use NukeViet\Api\ApiResult;
-use NukeViet\Api\IApi;
 use NukeViet\Module\Content\Content\ContentRepository;
+use NukeViet\Module\Content\Shared\BaseApi;
 
 if (!defined('NV_ADMIN') or !defined('NV_MAINFILE')) {
     exit('Stop!!!');
 }
 
-class ContentGetList implements IApi
+class ContentGetList extends BaseApi
 {
-    private $result;
-
     public static function getAdminLev()
     {
         return Api::ADMIN_LEV_MOD;
@@ -32,23 +29,16 @@ class ContentGetList implements IApi
         return 'content';
     }
 
-    public function setResultHander(ApiResult $result)
-    {
-        $this->result = $result;
-    }
-
     public function execute()
     {
-        global $db, $nv_Cache, $nv_Request, $module_config;
-
-        $module_name = Api::getModuleName();
-        $config = $module_config[$module_name];
+        global $nv_Request;
+        $this->bootstrap();
 
         $repo = new ContentRepository(
-            $db,
-            $config['table_row'],
-            $nv_Cache,
-            $module_name
+            $this->db,
+            $this->tables,
+            $this->cache,
+            $this->module_name
         );
 
         $page = $nv_Request->get_int('page', 'post', 1);

@@ -9,41 +9,30 @@
 
 namespace NukeViet\Module\Content\Uapi;
 
-use NukeViet\Uapi\Uapi;
-use NukeViet\Uapi\UapiResult;
-use NukeViet\Uapi\UiApi;
 use NukeViet\Module\Content\Content\ContentRepository;
+use NukeViet\Module\Content\Shared\BaseUapi;
 
 if (!defined('NV_MAINFILE')) {
     exit('Stop!!!');
 }
 
-class ContentGetList implements UiApi
+class ContentGetList extends BaseUapi
 {
-    private $result;
-
     public static function getCat()
     {
         return 'content';
     }
 
-    public function setResultHander(UapiResult $result)
-    {
-        $this->result = $result;
-    }
-
     public function execute()
     {
-        global $db, $nv_Cache, $nv_Request, $module_config;
-
-        $module_name = Uapi::getModuleName();
-        $config = $module_config[$module_name];
+        global $nv_Request;
+        $this->bootstrap();
 
         $repo = new ContentRepository(
-            $db,
-            $config['table_row'],
-            $nv_Cache,
-            $module_name
+            $this->db,
+            $this->tables,
+            $this->cache,
+            $this->module_name
         );
 
         $page = $nv_Request->get_int('page', 'post', 1);

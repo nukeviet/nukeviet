@@ -11,10 +11,10 @@ namespace NukeViet\Module\Content\Api;
 
 use NukeViet\Api\Api;
 use NukeViet\Api\ApiResult;
-use NukeViet\Api\IApi;
 use NukeViet\Module\Content\Content\ContentRepository;
 use NukeViet\Module\Content\Content\ContentValidator;
 use NukeViet\Module\Content\Content\ContentService;
+use NukeViet\Module\Content\Shared\BaseApi;
 
 if (!defined('NV_ADMIN') or !defined('NV_MAINFILE')) {
     exit('Stop!!!');
@@ -24,10 +24,8 @@ if (!defined('NV_ADMIN') or !defined('NV_MAINFILE')) {
  * ContentAdd API - Thêm bài viết mới qua API
  * Cho phép các ứng dụng/site khác kết nối và đẩy nội dung bài viết
  */
-class ContentAdd implements IApi
+class ContentAdd extends BaseApi
 {
-    private $result;
-
     public static function getAdminLev()
     {
         return Api::ADMIN_LEV_MOD;
@@ -38,24 +36,18 @@ class ContentAdd implements IApi
         return 'content';
     }
 
-    public function setResultHander(ApiResult $result)
-    {
-        $this->result = $result;
-    }
-
     public function execute()
     {
-        global $db, $nv_Cache, $nv_Request, $nv_Lang, $module_config;
+        global $nv_Request, $nv_Lang;
+        $this->bootstrap();
 
-        $module_name = Api::getModuleName();
         $admin_id = Api::getAdminId();
-        $config = $module_config[$module_name];
 
         $contentRepo = new ContentRepository(
-            $db,
-            $config['table_row'],
-            $nv_Cache,
-            $module_name
+            $this->db,
+            $this->tables,
+            $this->cache,
+            $this->module_name
         );
 
 
@@ -65,7 +57,7 @@ class ContentAdd implements IApi
         $data = $service->collectRequestData($nv_Request);
 
         // Chuẩn hóa dữ liệu qua Service
-        $data = $service->prepareSaveData($data, $config);
+        $data = $service->prepareSaveData($data, $this->config);
 
         // Validate
         try {
@@ -81,8 +73,8 @@ class ContentAdd implements IApi
         $savedId = $service->saveContent(
             $data,
             0,
-            $module_name,
-            $config,
+            $this->module_name,
+            $this->config,
             $admin_id
         );
 
