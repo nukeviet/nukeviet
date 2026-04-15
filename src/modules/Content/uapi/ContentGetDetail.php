@@ -13,6 +13,7 @@ use NukeViet\Uapi\Uapi;
 use NukeViet\Uapi\UapiResult;
 use NukeViet\Uapi\UiApi;
 use NukeViet\Module\Content\Content\ContentRepository;
+use NukeViet\Module\Content\Shared\Tables;
 
 if (!defined('NV_MAINFILE')) {
     exit('Stop!!!');
@@ -34,14 +35,14 @@ class ContentGetDetail implements UiApi
 
     public function execute()
     {
-        global $db, $nv_Cache, $nv_Request, $nv_Lang, $module_config;
+        global $db, $nv_Cache, $nv_Request, $nv_Lang, $module_config, $site_mods;
 
         $module_name = Uapi::getModuleName();
-        $config = $module_config[$module_name];
+        $tables = new Tables(NV_PREFIXLANG, $site_mods[$module_name]['module_data']);
 
         $repo = new ContentRepository(
             $db,
-           $config['table_row'],
+            $tables,
             $nv_Cache,
             $module_name
         );

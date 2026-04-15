@@ -26,7 +26,7 @@ if (!csrf_check($nv_Request->get_string('checkss', 'post'), $admin_info['admin_i
 }
 
 if ($id > 0) {
-    $contentRepo = new ContentRepository($db, $config['table_row'], $nv_Cache, $module_name);
+    $contentRepo = new ContentRepository($db, $tables, $nv_Cache, $module_name);
     $service = new ContentService($contentRepo);
     $newStatus = $service->changeStatus($id, $module_name);
     if ($newStatus >= 0) {

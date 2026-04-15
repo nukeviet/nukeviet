@@ -19,3 +19,7 @@ $base_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DA
 
 // Lấy cấu hình module từ biến hệ thống
 $config = $module_config[$module_name];
+
+// Khởi tạo danh sách bảng DB cho module — dùng chung cho mọi Repository
+use NukeViet\Module\Content\Shared\Tables;
+$tables = new Tables(NV_PREFIXLANG, $module_data);

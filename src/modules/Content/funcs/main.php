@@ -26,10 +26,10 @@ use NukeViet\Module\Content\Cat\CatRepository;
 use NukeViet\Module\Content\Cat\CatService;
 use NukeViet\Module\Content\Shared\SchemaHelper;
 
-$contentRepo = new ContentRepository($db, NV_PREFIXLANG . '_' . $module_data, $nv_Cache, $module_name);
+$contentRepo = new ContentRepository($db, $tables, $nv_Cache, $module_name);
 
 $service = new ContentService($contentRepo);
-$catService = new CatService(new CatRepository($db, NV_PREFIXLANG . '_' . $module_data, $nv_Cache, $module_name));
+$catService = new CatService(new CatRepository($db, $tables, $nv_Cache, $module_name));
 $page_url = $base_url;
 
 // 1. Nhận Request — Service xử lý URL parsing

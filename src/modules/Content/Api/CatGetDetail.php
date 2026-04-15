@@ -13,6 +13,7 @@ use NukeViet\Api\Api;
 use NukeViet\Api\ApiResult;
 use NukeViet\Api\IApi;
 use NukeViet\Module\Content\Cat\CatRepository;
+use NukeViet\Module\Content\Shared\Tables;
 
 if (!defined('NV_ADMIN') or !defined('NV_MAINFILE')) {
     exit('Stop!!!');
@@ -39,14 +40,14 @@ class CatGetDetail implements IApi
 
     public function execute()
     {
-        global $db, $nv_Cache, $nv_Request, $nv_Lang, $module_config;
+        global $db, $nv_Cache, $nv_Request, $nv_Lang, $module_config, $site_mods;
 
         $module_name = Api::getModuleName();
-        $config = $module_config[$module_name];
+        $tables = new Tables(NV_PREFIXLANG, $site_mods[$module_name]['module_data']);
 
         $repo = new CatRepository(
             $db,
-            $config['table_cat'],
+            $tables,
             $nv_Cache,
             $module_name
         );

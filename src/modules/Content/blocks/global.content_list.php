@@ -28,7 +28,8 @@ if (!nv_function_exists('nv_block_config_content_list')) {
     {
         global $db, $nv_Cache, $nv_Lang, $site_mods;
 
-        $catRepo = new CatRepository($db, NV_PREFIXLANG . '_' . $site_mods[$module]['module_data'], $nv_Cache, $module);
+        $tables = new \NukeViet\Module\Content\Shared\Tables(NV_PREFIXLANG, $site_mods[$module]['module_data']);
+        $catRepo = new CatRepository($db, $tables, $nv_Cache, $module);
         $catService = new CatService($catRepo);
 
         $tpl = new \NukeViet\Template\NVSmarty();

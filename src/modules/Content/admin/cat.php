@@ -18,7 +18,7 @@ use NukeViet\Module\Content\Cat\CatService;
 use NukeViet\Module\Content\Cat\CatValidator;
 
 // File này cần CatRepository nên khởi tạo tại chỗ
-$catRepo = new CatRepository($db, $config['table_cat'], $nv_Cache, $module_name);
+$catRepo = new CatRepository($db, $tables, $nv_Cache, $module_name);
 $catService = new CatService($catRepo);
 
 $page_title = $nv_Lang->getModule('cat_list');
