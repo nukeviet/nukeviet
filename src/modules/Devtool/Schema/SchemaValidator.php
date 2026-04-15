@@ -34,7 +34,7 @@ class SchemaValidator
      *
      * @throws ValidationException nếu có ít nhất 1 lỗi
      */
-    public function validateSave(string $table, array $columns): void
+    public function validateSave(string $table, array $columns, array $pageSettings = []): void
     {
         $errors = [];
 
@@ -44,6 +44,22 @@ class SchemaValidator
 
         if (empty($columns)) {
             $errors[2] = 'error_empty_columns';
+        }
+
+        $listCount = 0;
+        foreach ($columns as $col) {
+            if (!empty($col['list'])) {
+                $listCount++;
+            }
+        }
+        if ($listCount > 10) {
+            $errors[3] = 'error_max_list_columns';
+        }
+
+        // Bắt buộc phải có cột tiêu đề
+        $aliasSource = (string) ($pageSettings['features']['alias_source_field'] ?? '');
+        if (empty($aliasSource) || !isset($columns[$aliasSource])) {
+            $errors[4] = 'error_missing_title_column';
         }
 
         if (!empty($errors)) {

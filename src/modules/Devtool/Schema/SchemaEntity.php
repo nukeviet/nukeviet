@@ -32,6 +32,8 @@ class SchemaEntity
     // --- Features (nằm trong page_settings.features ở JSON) ---
     public bool $pagination = true;
     public bool $search = true;
+    public string $menu_label = '';
+    public bool $has_detail_view = false;
     public string $active_field = '';
     public string $weight_field = '';
     public string $alias_source_field = '';
@@ -52,11 +54,13 @@ class SchemaEntity
         $entity->module = (string) ($ps['module'] ?? '');
         $entity->table = (string) ($ps['table'] ?? '');
         $entity->function_name = (string) ($ps['function_name'] ?? 'main');
+        $entity->menu_label = (string) ($ps['menu_label'] ?? '');
         $entity->layout_type = (string) ($ps['layout_type'] ?? 'list_and_form');
         $entity->area = (string) ($ps['area'] ?? 'admin');
         $entity->note = (string) ($ps['note'] ?? '');
         $entity->pagination = (bool) ($features['pagination'] ?? true);
         $entity->search = (bool) ($features['search'] ?? true);
+        $entity->has_detail_view = (bool) ($features['has_detail_view'] ?? false);
         $entity->active_field = (string) ($features['active_field'] ?? '');
         $entity->weight_field = (string) ($features['weight_field'] ?? '');
         $entity->alias_source_field = (string) ($features['alias_source_field'] ?? '');
@@ -75,12 +79,14 @@ class SchemaEntity
                 'module' => $this->module,
                 'table' => $this->table,
                 'function_name' => $this->function_name,
+                'menu_label' => $this->menu_label,
                 'layout_type' => $this->layout_type,
                 'area' => $this->area,
                 'note' => $this->note,
                 'features' => [
                     'pagination' => $this->pagination,
                     'search' => $this->search,
+                    'has_detail_view' => $this->has_detail_view,
                     'active_field' => $this->active_field,
                     'weight_field' => $this->weight_field,
                     'alias_source_field' => $this->alias_source_field,
@@ -97,12 +103,14 @@ class SchemaEntity
     {
         return [
             'function_name' => $this->function_name,
+            'menu_label' => $this->menu_label,
             'layout_type' => $this->layout_type,
             'area' => $this->area,
             'note' => $this->note,
             'features' => [
                 'pagination' => $this->pagination,
                 'search' => $this->search,
+                'has_detail_view' => $this->has_detail_view,
                 'active_field' => $this->active_field,
                 'weight_field' => $this->weight_field,
                 'alias_source_field' => $this->alias_source_field,

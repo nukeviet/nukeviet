@@ -70,6 +70,9 @@ class MvcCodeGenerator
         // Đảm bảo có thư mục Shared và các file nền tảng
         $this->addSharedFiles($files, $mod, $nvRootDir);
 
+        // Cập nhật/tạo Tables.php với bảng của entity hiện tại
+        $this->updateTablesFile($files, $entity, $mod, $nvRootDir);
+
         $this->addFile($files, "modules/{$mod}/{$item}/{$item}Service.php",
             $this->buildService($entity, $mod, $item, $itemLc), $nvRootDir);
 
@@ -93,6 +96,15 @@ class MvcCodeGenerator
                 // Metadata: List có menu, Form thì KHÔNG có menu
                 $this->addMetadataFiles($files, $entity, $mod, $item, $itemLc, $nvRootDir, false);
                 $this->addMetadataFiles($files, $entity, $mod, $item, $itemLc . '-form', $nvRootDir, true);
+
+                if ($entity->has_detail_view) {
+                    $viewOp = $itemLc . '-view';
+                    $this->addFile($files, "modules/{$mod}/admin/{$viewOp}.php",
+                        $this->buildViewController($entity, $mod, $item, $viewOp, $itemLc), $nvRootDir);
+                    $this->addFile($files, "themes/admin_future/modules/{$mod}/{$viewOp}.tpl",
+                        $this->buildViewTemplate($entity, $mod, $item, $viewOp, $itemLc), $nvRootDir);
+                    $this->addMetadataFiles($files, $entity, $mod, $item, $viewOp, $nvRootDir, true);
+                }
             } else {
                 $this->addFile($files, "modules/{$mod}/admin/{$itemLc}.php",
                     $this->buildController($entity, $mod, $item, $itemLc, $itemLc), $nvRootDir);
@@ -115,7 +127,17 @@ class MvcCodeGenerator
         $funcFile = "modules/{$mod}/admin.functions.php";
         $fullFuncPath = rtrim($nvRootDir, '/\\') . '/' . $funcFile;
         if (file_exists($fullFuncPath)) {
-            $content = file_get_contents($fullFuncPath);
+            // Đọc từ $files nếu đã được sửa bởi lần gọi trước (VD: list_and_form gọi 2 lần)
+            $content = null;
+            foreach ($files as $f) {
+                if ($f['path'] === $funcFile) {
+                    $content = $f['content'];
+                    break;
+                }
+            }
+            if ($content === null) {
+                $content = file_get_contents($fullFuncPath);
+            }
             $changed = false;
 
             // Regex kiểm tra xem 'func' đã có trong mảng chưa (chính xác từng ký tự)
@@ -136,12 +158,25 @@ class MvcCodeGenerator
                 $changed = true;
             }
 
+            // Kiểm tra và nạp Tables nếu chưa có
+            if (strpos($content, 'new Tables(') === false) {
+                $tablesLines = "\n// Khởi tạo danh sách bảng DB cho module — dùng chung cho mọi Repository\nuse NukeViet\\Module\\{$mod}\\Shared\\Tables;\n\$tables = new Tables(NV_PREFIXLANG, \$module_data);\n";
+                $content .= $tablesLines;
+                $changed = true;
+            }
+
             if ($changed) {
                 $this->addFile($files, $funcFile, $content, $nvRootDir);
             }
         }
 
-        // 2. admin.menu.php
+        $title = $entity->menu_label;
+        if (empty($title)) {
+            $title = "\$nv_Lang->getModule('{$itemLc}')";
+        } else {
+            $title = "'" . addslashes($title) . "'";
+        }
+
         if (!$skipMenu) {
             $menuFile = "modules/{$mod}/admin.menu.php";
             $fullMenuPath = rtrim($nvRootDir, '/\\') . '/' . $menuFile;
@@ -149,7 +184,7 @@ class MvcCodeGenerator
                 $content = file_get_contents($fullMenuPath);
                 // Kiểm tra chính xác key của submenu [ 'op' ] hoặc ["op"]
                 if (!preg_match("/\\\$submenu\s*\[\s*['\"]" . preg_quote($itemLc) . "['\"]\s*\]/i", $content)) {
-                    $inject = "\$submenu['{$itemLc}'] = \$nv_Lang->getModule('{$itemLc}');\n";
+                    $inject = "\$submenu['{$itemLc}'] = {$title};\n";
                     $lines = explode("\n", $content);
                     $lastSubmenuIndex = -1;
                     $firstIfIndex = -1;
@@ -191,7 +226,8 @@ class MvcCodeGenerator
             $content = file_get_contents($fullLangPath);
             // Kiểm tra chính xác key ngôn ngữ
             if (!preg_match("/\\\$lang_module\s*\[\s*['\"]" . preg_quote($itemLc) . "['\"]\s*\]/i", $content)) {
-                $inject = "\$lang_module['{$itemLc}'] = '{$item}';\n";
+                $langTitle = $entity->menu_label ?: $item;
+                $inject = "\$lang_module['{$itemLc}'] = '" . addslashes($langTitle) . "';\n";
                 // Chèn vào sau $lang_module['cat'] hoặc ở cuối
                 if (strpos($content, '$lang_module') !== false) {
                     $newContent = preg_replace('/(\$lang_module\[[^\]]+\]\s*=\s*[^;]+;)(?!\s*\$lang_module)/', "$1\n$inject", $content);
@@ -204,96 +240,87 @@ class MvcCodeGenerator
             }
         }
 
-        // 4. action_mysql.php
-        $actionFile = "modules/{$mod}/action_mysql.php";
-        $fullActionPath = rtrim($nvRootDir, '/\\') . '/' . $actionFile;
-        if (file_exists($fullActionPath)) {
-            $content = file_get_contents($fullActionPath);
-
-            $tableSuffix = '';
-            $modLc = strtolower($mod);
-            if (preg_match('/_' . $modLc . '(_.*)$/i', $entity->table, $matches)) {
-                $tableSuffix = $matches[1];
-            }
-            $configKey = 'table_row';
-            if ($tableSuffix === '_cat') {
-                $configKey = 'table_cat';
-            } elseif (!empty($tableSuffix)) {
-                $configKey = 'table' . $tableSuffix;
-            }
-
-            // 4.1 Chèn DROP TABLE
-            if (!str_contains($content, "DROP TABLE IF EXISTS ' . \$db_config['prefix'] . '_' . \$lang . '_' . \$module_data . '{$tableSuffix};'")) {
-                $dropLine = "\$sql_drop_module[] = 'DROP TABLE IF EXISTS ' . \$db_config['prefix'] . '_' . \$lang . '_' . \$module_data . '{$tableSuffix};';";
-                $pattern = "/^\\\$sql_drop_module\\[\\]\\s*=\\s*['\"].*?DROP TABLE IF EXISTS.*?['\"];/im";
-                if (preg_match_all($pattern, $content, $matches, PREG_OFFSET_CAPTURE)) {
-                    $last = end($matches[0]);
-                    $pos = $last[1] + strlen($last[0]);
-                    $content = substr($content, 0, $pos) . "\n" . $dropLine . substr($content, $pos);
-                }
-            }
-
-            // 4.2 Chèn CREATE TABLE
-            if (!str_contains($content, "CREATE TABLE ' . \$db_config['prefix'] . '_' . \$lang . '_' . \$module_data . '{$tableSuffix}")) {
-                $colSql = [];
-                $pks = [];
-                $uniques = [];
-                foreach ($entity->columns as $field => $col) {
-                    $line = "    {$field} " . ($col['sql_type'] ?? 'varchar(255)');
-                    if (!empty($col['required'])) {
-                        $line .= " NOT NULL";
-                    }
-                    if (isset($col['default']) && (string) $col['default'] !== '') {
-                        if (strtoupper((string) $col['default']) === 'AUTO_INCREMENT') {
-                            $line .= " AUTO_INCREMENT";
-                        } else {
-                            $line .= " DEFAULT '" . $col['default'] . "'";
-                        }
-                    }
-                    $colSql[] = $line;
-                    if (!empty($col['primary'])) {
-                        $pks[] = $field;
-                    }
-                    if (!empty($col['unique'])) {
-                        $uniques[] = "    UNIQUE KEY {$field} ({$field})";
-                    }
-                }
-                if (!empty($pks)) {
-                    $colSql[] = "    PRIMARY KEY (" . implode(', ', $pks) . ")";
-                }
-                $colSql = array_merge($colSql, $uniques);
-
-                $createSql = "\n\$sql_create_module[] = 'CREATE TABLE ' . \$db_config['prefix'] . '_' . \$lang . '_' . \$module_data . \"{$tableSuffix} (\n";
-                $createSql .= implode(",\n", $colSql) . "\n";
-                $createSql .= ") ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci\";\n";
-
-                $pattern = "/^\\\$sql_create_module\\[\\]\\s*=\\s*['\"]CREATE TABLE.*?[\"'];/ism";
-                if (preg_match_all($pattern, $content, $matches, PREG_OFFSET_CAPTURE)) {
-                    $last = end($matches[0]);
-                    $pos = $last[1] + strlen($last[0]);
-                    $content = substr($content, 0, $pos) . "\n" . $createSql . substr($content, $pos);
-                }
-            }
-
-            // 4.3 Chèn cấu hình bảng vào INSERT block
-            if ($configKey !== 'table_row' && $configKey !== 'table_cat' && !str_contains($content, "'{$configKey}'")) {
-                $inject = "    ('\" . \$lang . \"', '\" . \$module_name . \"', '{$configKey}', '\" . \$db_config['prefix'] . \"_\" . \$lang . \"_\" . \$module_data . \"{$tableSuffix}'),";
-                if (preg_match("/(['\"]table_row['\"].*?,\n)/i", $content, $m)) {
-                    $content = str_replace($m[1], $m[1] . $inject . "\n", $content);
-                } elseif (preg_match("/(['\"]table_cat['\"].*?,\n)/i", $content, $m)) {
-                    $content = str_replace($m[1], $m[1] . $inject . "\n", $content);
-                }
-            }
-            $this->addFile($files, $actionFile, $content, $nvRootDir);
+        // 4. Sinh file nháp action_mysql_{table_suffix}.php
+        $tableSuffix = '';
+        $modLc = strtolower($mod);
+        if (preg_match('/_' . $modLc . '(_.*)$/i', $entity->table, $matches)) {
+            $tableSuffix = $matches[1];
         }
+        $configKey = 'table_row';
+        if ($tableSuffix === '_cat') {
+            $configKey = 'table_cat';
+        } elseif (!empty($tableSuffix)) {
+            $configKey = 'table' . $tableSuffix;
+        }
+
+        $suffixName = ltrim($tableSuffix, '_');
+        if (empty($suffixName)) {
+            $suffixName = 'main';
+        }
+
+        $this->buildActionDraft($files, $entity, $mod, $nvRootDir);
     }
 
-    // ─────────────────────────────────────────────────
-    // Helper nội bộ
-    // ─────────────────────────────────────────────────
+    private function buildActionDraft(array &$files, SchemaEntity $entity, string $mod, string $nvRootDir): void
+    {
+        $tableSuffix = $this->getTableSuffix($entity, $mod);
+        $suffixName = ltrim($tableSuffix, '_') ?: 'main';
+        $actionFile = "modules/{$mod}/action_mysql_{$suffixName}.php";
+        
+        $content = "<?php\n\n";
+        $content .= "/**\n * Bản nháp \$sql_drop_module và \$sql_create_module cho bảng {$entity->table}\n */\n\n";
+        $content .= "\$sql_drop_module[] = \"DROP TABLE IF EXISTS \" . \$db_config['prefix'] . \"_\" . \$lang . \"_\" . \$module_data . \"{$tableSuffix};\";\n\n";
+
+        $colSql = [];
+        $pks = [];
+        $uniques = [];
+        foreach ($entity->columns as $field => $col) {
+            $sqlType = $col['sql_type'] ?? 'varchar(255)';
+            $isNull = !empty($col['required']) ? 'NOT NULL' : 'NULL';
+            $defaultVal = $col['default'] ?? '';
+            
+            $default = '';
+            if ($defaultVal !== '') {
+                if (strtoupper($defaultVal) === 'NULL') {
+                    $default = "DEFAULT NULL";
+                } elseif (strtoupper($defaultVal) === 'CURRENT_TIMESTAMP') {
+                    $default = "DEFAULT CURRENT_TIMESTAMP";
+                } else {
+                    $default = "DEFAULT '" . addslashes($defaultVal) . "'";
+                }
+            }
+
+            $line = "    `{$field}` {$sqlType} {$isNull} {$default}";
+            $label = $col['label_vi'] ?? '';
+            if (!empty($label)) {
+                $line .= " COMMENT '" . addslashes($label) . "'";
+            }
+            $colSql[] = $line;
+            if (!empty($col['primary'])) $pks[] = "`{$field}`";
+            if (!empty($col['unique'])) $uniques[] = "    UNIQUE KEY `{$field}` (`{$field}`)";
+        }
+        if (empty($pks) && isset($entity->columns['id'])) $pks[] = "`id`";
+        if (!empty($pks)) $colSql[] = "    PRIMARY KEY (" . implode(', ', $pks) . ")";
+        $colSql = array_merge($colSql, $uniques);
+
+        $content .= "\$sql_create_module[] = \"CREATE TABLE \" . \$db_config['prefix'] . \"_\" . \$lang . \"_\" . \$module_data . \"{$tableSuffix} (\n";
+        $content .= implode(",\n", $colSql) . "\n";
+        $content .= ") ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci\";\n";
+
+        $this->addFile($files, $actionFile, $content, $nvRootDir);
+    }
+
+
 
     private function addFile(array &$files, string $path, string $content, string $nvRootDir): void
     {
+        foreach ($files as &$f) {
+            if ($f['path'] === $path) {
+                $f['content'] = $content;
+                return;
+            }
+        }
+
         $fullPath = str_replace('\\', '/', rtrim($nvRootDir, '/\\') . '/' . $path);
 
         $files[] = [
@@ -304,22 +331,36 @@ class MvcCodeGenerator
         ];
     }
 
-    /** Lấy kiểu SQL cơ bản từ chuỗi như "int(11) unsigned", "varchar(255)". */
     private function getBaseType(string $sqlType): string
     {
         return strtolower((string) preg_replace('/[\s(].*$/', '', $sqlType));
     }
 
-    /** Chuyển kiểu SQL → kiểu PHP. */
     private function phpType(string $sqlType): string
     {
         $base = $this->getBaseType($sqlType);
         return self::BASE_TYPE_MAP[$base] ?? 'string';
     }
 
-    /** Giá trị mặc định cho property PHP. */
-    private function phpDefault(string $phpType): string
+    private function phpDefault(string $phpType, array $col = []): string
     {
+        $defaultVal = (string) ($col['default'] ?? '');
+        if ($defaultVal !== '') {
+            if (strtoupper($defaultVal) === 'NULL') {
+                return 'null';
+            }
+            if ($phpType === 'int') {
+                return (string) (int) $defaultVal;
+            }
+            if ($phpType === 'float') {
+                return (string) (float) $defaultVal;
+            }
+            if (strtoupper($defaultVal) === 'CURRENT_TIMESTAMP' && str_contains($col['view_type'] ?? '', 'time')) {
+                return 'NV_CURRENTTIME';
+            }
+            return "'" . addslashes($defaultVal) . "'";
+        }
+
         return match ($phpType) {
             'int'   => '0',
             'float' => '0.0',
@@ -327,10 +368,24 @@ class MvcCodeGenerator
         };
     }
 
-    /**
-     * Chọn phương thức $nv_Request phù hợp theo view_type và sql_type.
-     * Trả về tên method (get_title | get_int | get_float | get_textarea | get_editor).
-     */
+    private function getTableSuffix(SchemaEntity $entity, string $mod): string
+    {
+        $modLc = strtolower($mod);
+        if (preg_match('/_' . preg_quote($modLc, '/') . '(_.+)$/i', $entity->table, $matches)) {
+            return $matches[1];
+        }
+        return '';
+    }
+
+    private function getTablePropertyName(SchemaEntity $entity, string $mod): string
+    {
+        $suffix = $this->getTableSuffix($entity, $mod);
+        if (empty($suffix)) {
+            return strtolower($entity->function_name);
+        }
+        return ltrim($suffix, '_');
+    }
+
     private function requestMethod(array $colConfig): string
     {
         $vt      = $colConfig['view_type'] ?? 'textbox';
@@ -346,7 +401,6 @@ class MvcCodeGenerator
         };
     }
 
-    /** Tiêu đề bản quyền chuẩn NukeViet 5. */
     private function copyright(): string
     {
         return <<<'PHP'
@@ -359,14 +413,8 @@ class MvcCodeGenerator
         PHP;
     }
 
-    // ─────────────────────────────────────────────────
-    // Sinh từng file
-    // ─────────────────────────────────────────────────
-
-    /** Kiểm tra xem một field có phải là field đặc biệt (hệ thống/tự động) cần ẩn khỏi form/request hay không. */
     private function isSpecialField(string $field, SchemaEntity $entity, array $col): bool
     {
-        // Các trường hệ thống quản lý ngầm
         if (in_array($field, ['add_time', 'edit_time', 'admin_id', 'hitstotal'])) {
             return true;
         }
@@ -381,9 +429,6 @@ class MvcCodeGenerator
         return false;
     }
 
-    /**
-     * Sinh {Item}Entity.php
-     */
     private function buildEntity(SchemaEntity $entity, string $mod, string $item): string
     {
         $ns    = "NukeViet\\Module\\{$mod}\\{$item}";
@@ -391,10 +436,10 @@ class MvcCodeGenerator
 
         foreach ($entity->columns as $field => $col) {
             if ($field === 'id') {
-                continue; // PK khai báo riêng bên dưới
+                continue;
             }
             $phpType = $this->phpType($col['sql_type'] ?? 'varchar(255)');
-            $default = $this->phpDefault($phpType);
+            $default = $this->phpDefault($phpType, $col);
             $label   = $col['label_vi'] ?? $field;
             $comment = (strtolower((string) $label) !== strtolower((string) $field)) ? " // {$label}" : '';
             $props  .= "    public {$phpType} \${$field} = {$default};{$comment}\n";
@@ -423,15 +468,11 @@ class MvcCodeGenerator
         return $c;
     }
 
-    /**
-     * Sinh {Item}Repository.php
-     */
     private function buildRepository(SchemaEntity $entity, string $mod, string $item): string
     {
         $ns          = "NukeViet\\Module\\{$mod}\\{$item}";
         $activeField = $entity->active_field ?: 'id';
 
-        // Xác định cột weight
         $weightCol = $entity->weight_field;
         if (empty($weightCol)) {
             foreach ($entity->columns as $f => $col) {
@@ -442,71 +483,36 @@ class MvcCodeGenerator
             }
         }
 
-        // Tính toán suffix của bảng dựa vào module name
-        $tableSuffix = '';
-        $modLc = strtolower($mod);
-        if (preg_match('/_' . $modLc . '(_.*)$/i', $entity->table, $matches)) {
-            $tableSuffix = $matches[1];
-        }
+        $tableProp = $this->getTablePropertyName($entity, $mod);
 
         $c  = "<?php\n\n";
         $c .= $this->copyright() . "\n\n";
         $c .= "declare(strict_types=1);\n\n";
         $c .= "namespace {$ns};\n\n";
-        $c .= "use PDO;\n\n";
+        $c .= "use PDO;\n";
+        $c .= "use NukeViet\\Module\\{$mod}\\Shared\\BaseRepository;\n\n";
         $c .= "if (!defined('NV_MAINFILE')) {\n    exit('Stop!!!');\n}\n\n";
-        $c .= "class {$item}Repository\n{\n";
-        $c .= "    private PDO \$db;\n";
-        $c .= "    private string \$table;\n";
-        $c .= "    private \$cache;\n";
-        $c .= "    private string \$module_name;\n";
-        $c .= "    private string \$weightField = '{$weightCol}';\n\n";
-        $c .= "    public function __construct(PDO \$db, string \$table, \$cache, string \$module_name)\n    {\n";
-        $c .= "        \$this->db          = \$db;\n";
-        $c .= "        \$this->table       = \$table;\n";
-        $c .= "        \$this->cache       = \$cache;\n";
-        $c .= "        \$this->module_name = \$module_name;\n";
-        $c .= "    }\n\n";
-        $c .= "    /**\n     * Lưu cấu hình module vào bảng dùng chung\n     */\n";
-        $c .= "    public function saveConfig(array \$config): void\n    {\n";
-        $c .= "        \$sth = \$this->db->prepare('UPDATE ' . NV_CONFIG_GLOBALTABLE . \" SET config_value = :config_value WHERE lang = '\" . NV_LANG_DATA . \"' AND module = :module_name AND config_name = :config_name\");\n";
-        $c .= "        \$sth->bindValue(':module_name', \$this->module_name, PDO::PARAM_STR);\n";
-        $c .= "        foreach (\$config as \$config_name => \$config_value) {\n";
-        $c .= "            \$sth->bindValue(':config_name', \$config_name, PDO::PARAM_STR);\n";
-        $c .= "            \$sth->bindValue(':config_value', (string) \$config_value, PDO::PARAM_STR);\n";
-        $c .= "            \$sth->execute();\n";
-        $c .= "        }\n\n";
-        $c .= "        \$this->cache->delMod('settings');\n";
-        $c .= "        \$this->cache->delMod(\$this->module_name);\n";
+        $c .= "class {$item}Repository extends BaseRepository\n{\n";
+        if (!empty($weightCol)) {
+            $c .= "    private string \$weightField = '{$weightCol}';\n\n";
+        }
+        $c .= "    protected function entityClass(): string\n    {\n";
+        $c .= "        return {$item}Entity::class;\n";
         $c .= "    }\n\n";
 
-        // fetchEntities helper
-        $c .= "    /** Helper: fetchAll → Entity[] */\n";
-        $c .= "    private function fetchEntities(\\PDOStatement \$stmt): array\n    {\n";
-        $c .= "        return array_map([{$item}Entity::class, 'fromArray'], \$stmt->fetchAll(PDO::FETCH_ASSOC));\n";
-        $c .= "    }\n\n";
-
-        $c .= "    /**\n     * Xác định PDO type cho 1 cột dựa theo khai báo Entity.\n     */\n";
-        $c .= "    private function pdoType(string \$field): int\n    {\n";
-        $c .= "        static \$intFields = null;\n";
-        $c .= "        if (\$intFields === null) {\n";
-        $c .= "            \$intFields = {$item}Entity::getIntColumns();\n";
-        $c .= "        }\n";
-        $c .= "        return isset(\$intFields[\$field]) ? PDO::PARAM_INT : PDO::PARAM_STR;\n";
-        $c .= "    }\n\n";
-
-        // ═══ READ ═══
         $c .= "    // ═══ READ ═══\n\n";
         $c .= "    public function findById(int \$id): ?{$item}Entity\n    {\n";
-        $c .= "        \$stmt = \$this->db->prepare('SELECT * FROM ' . \$this->table . ' WHERE id = :id');\n";
+        $c .= "        \$stmt = \$this->db->prepare('SELECT * FROM ' . \$this->tables->{$tableProp} . ' WHERE id = :id');\n";
         $c .= "        \$stmt->bindValue(':id', \$id, PDO::PARAM_INT);\n";
         $c .= "        \$stmt->execute();\n";
         $c .= "        \$data = \$stmt->fetch(PDO::FETCH_ASSOC);\n";
         $c .= "        \$stmt->closeCursor();\n";
         $c .= "        return \$data ? {$item}Entity::fromArray(\$data) : null;\n";
         $c .= "    }\n\n";
+        $c .= "    public function getAll(): array\n    {\n";
+        $c .= "        return array_map(fn(\$e) => \$e->toArray(), \$this->getList(1, 0));\n";
+        $c .= "    }\n\n";
 
-        // getList
         $c .= "    /**\n     * @param int \$status  -1 = tất cả, 0 = ẩn, 1 = hiển thị\n     */\n";
         $c .= "    public function getList(int \$page = 1, int \$perPage = 20, int \$status = -1, string \$q = ''): array\n    {\n";
         $c .= "        \$where = [];\n";
@@ -516,7 +522,7 @@ class MvcCodeGenerator
         $c .= "        if (!empty(\$q)) {\n";
         $c .= "            \$where[] = \"(title LIKE \" . \$this->db->quote('%' . \$q . '%') . \" OR alias LIKE \" . \$this->db->quote('%' . \$q . '%') . \")\";\n";
         $c .= "        }\n";
-        $c .= "        \$sql = 'SELECT * FROM ' . \$this->table;\n";
+        $c .= "        \$sql = 'SELECT * FROM ' . \$this->tables->{$tableProp};\n";
         $c .= "        if (!empty(\$where)) {\n";
         $c .= "            \$sql .= ' WHERE ' . implode(' AND ', \$where);\n";
         $c .= "        }\n";
@@ -528,7 +534,6 @@ class MvcCodeGenerator
         $c .= "        return \$this->fetchEntities(\$stmt);\n";
         $c .= "    }\n\n";
 
-        // count
         $c .= "    public function count(int \$status = -1, string \$q = ''): int\n    {\n";
         $c .= "        \$where = [];\n";
         $c .= "        if (!empty(\$this->weightField) && \$status >= 0) {\n";
@@ -537,24 +542,21 @@ class MvcCodeGenerator
         $c .= "        if (!empty(\$q)) {\n";
         $c .= "            \$where[] = \"(title LIKE \" . \$this->db->quote('%' . \$q . '%') . \" OR alias LIKE \" . \$this->db->quote('%' . \$q . '%') . \")\";\n";
         $c .= "        }\n";
-        $c .= "        \$sql = 'SELECT COUNT(*) FROM ' . \$this->table;\n";
+        $c .= "        \$sql = 'SELECT COUNT(*) FROM ' . \$this->tables->{$tableProp};\n";
         $c .= "        if (!empty(\$where)) {\n";
         $c .= "            \$sql .= ' WHERE ' . implode(' AND ', \$where);\n";
         $c .= "        }\n";
         $c .= "        return (int) \$this->db->query(\$sql)->fetchColumn();\n";
         $c .= "    }\n\n";
 
-        // getNewWeight
         if (!empty($weightCol)) {
             $c .= "    public function getNewWeight(): int\n    {\n";
-            $c .= "        \$sql = 'SELECT MAX({$weightCol}) FROM ' . \$this->table;\n";
+            $c .= "        \$sql = 'SELECT MAX({$weightCol}) FROM ' . \$this->tables->{$tableProp};\n";
             $c .= "        return (int) \$this->db->query(\$sql)->fetchColumn() + 1;\n";
             $c .= "    }\n\n";
         }
 
-        // ═══ WRITE ═══
         $c .= "    // ═══ WRITE ═══\n\n";
-        $c .= "    /**\n     * INSERT (\$id=0) hoặc UPDATE (\$id>0).\n     * @return int ID bản ghi\n     */\n";
         $c .= "    public function save(array \$data, int \$id = 0): int\n    {\n";
         $c .= "        \$data = array_intersect_key(\$data, array_flip({$item}Entity::getDbColumns()));\n\n";
         $c .= "        if (\$id > 0) {\n";
@@ -564,7 +566,7 @@ class MvcCodeGenerator
         $c .= "                \$fields[] = \$key . ' = :' . \$key;\n";
         $c .= "                \$params[':' . \$key] = [\$value, \$this->pdoType(\$key)];\n";
         $c .= "            }\n";
-        $c .= "            \$stmt = \$this->db->prepare('UPDATE ' . \$this->table . ' SET ' . implode(', ', \$fields) . ' WHERE id = :id');\n";
+        $c .= "            \$stmt = \$this->db->prepare('UPDATE ' . \$this->tables->{$tableProp} . ' SET ' . implode(', ', \$fields) . ' WHERE id = :id');\n";
         $c .= "            foreach (\$params as \$k => \$v) {\n";
         $c .= "                \$stmt->bindValue(\$k, \$v[0], \$v[1]);\n";
         $c .= "            }\n";
@@ -574,7 +576,7 @@ class MvcCodeGenerator
         $c .= "        \$columns      = array_keys(\$data);\n";
         $c .= "        \$placeholders = array_map(fn(\$k) => ':' . \$k, \$columns);\n";
         $c .= "        \$stmt = \$this->db->prepare(\n";
-        $c .= "            'INSERT INTO ' . \$this->table . ' (' . implode(', ', \$columns) . ') VALUES (' . implode(', ', \$placeholders) . ')'\n";
+        $c .= "            'INSERT INTO ' . \$this->tables->{$tableProp} . ' (' . implode(', ', \$columns) . ') VALUES (' . implode(', ', \$placeholders) . ')'\n";
         $c .= "        );\n";
         $c .= "        foreach (\$data as \$key => \$value) {\n";
         $c .= "            \$stmt->bindValue(':' . \$key, \$value, \$this->pdoType(\$key));\n";
@@ -583,20 +585,18 @@ class MvcCodeGenerator
         $c .= "        return (int) \$this->db->lastInsertId();\n";
         $c .= "    }\n\n";
 
-        // delete
         $c .= "    public function delete(int \$id): bool\n    {\n";
-        $c .= "        \$stmt = \$this->db->prepare('DELETE FROM ' . \$this->table . ' WHERE id = :id');\n";
+        $c .= "        \$stmt = \$this->db->prepare('DELETE FROM ' . \$this->tables->{$tableProp} . ' WHERE id = :id');\n";
         $c .= "        \$stmt->bindValue(':id', \$id, PDO::PARAM_INT);\n";
         $c .= "        return \$stmt->execute();\n";
         $c .= "    }\n\n";
 
-        // toggleStatus nếu có active_field
         if (!empty($entity->active_field)) {
             $c .= "    public function toggleStatus(int \$id): int\n    {\n";
             $c .= "        \$row = \$this->findById(\$id);\n";
             $c .= "        if (!\$row) { return -1; }\n";
             $c .= "        \$newStatus = \$row->{$activeField} ? 0 : 1;\n";
-            $c .= "        \$stmt = \$this->db->prepare('UPDATE ' . \$this->table . ' SET {$activeField} = :s WHERE id = :id');\n";
+            $c .= "        \$stmt = \$this->db->prepare('UPDATE ' . \$this->tables->{$tableProp} . ' SET {$activeField} = :s WHERE id = :id');\n";
             $c .= "        \$stmt->bindValue(':s', \$newStatus, PDO::PARAM_INT);\n";
             $c .= "        \$stmt->bindValue(':id', \$id, PDO::PARAM_INT);\n";
             $c .= "        \$stmt->execute();\n";
@@ -605,9 +605,8 @@ class MvcCodeGenerator
         }
 
         if (!empty($weightCol)) {
-            $c .= "    /**\n     * Sắp xếp lại weight dùng Bulk UPDATE (CASE WHEN)\n     */\n";
             $c .= "    public function reorderWeight(int \$movedId = 0, int \$newWeight = 0): void\n    {\n";
-            $c .= "        \$sql = 'SELECT id, {$weightCol} FROM ' . \$this->table;\n";
+            $c .= "        \$sql = 'SELECT id, {$weightCol} FROM ' . \$this->tables->{$tableProp};\n";
             $c .= "        \$params = [];\n";
             $c .= "        if (\$movedId > 0) {\n";
             $c .= "            \$sql .= ' WHERE id != :id';\n";
@@ -629,7 +628,6 @@ class MvcCodeGenerator
             $c .= "            if (\$movedId > 0 && \$calcWeight == \$newWeight) {\n";
             $c .= "                ++\$calcWeight;\n";
             $c .= "            }\n";
-            $c .= "            // Chỉ cập nhật nếu thực sự thay đổi\n";
             $c .= "            if (\$calcWeight !== (int) \$row['{$weightCol}']) {\n";
             $c .= "                \$cases[] = 'WHEN ' . (int) \$row['id'] . ' THEN ' . \$calcWeight;\n";
             $c .= "                \$ids[] = (int) \$row['id'];\n";
@@ -643,23 +641,17 @@ class MvcCodeGenerator
             $c .= "            return;\n";
             $c .= "        }\n\n";
             $c .= "        \$this->db->exec(\n";
-            $c .= "            'UPDATE ' . \$this->table\n";
+            $c .= "            'UPDATE ' . \$this->tables->{$tableProp}\n";
             $c .= "                . ' SET {$weightCol} = CASE id ' . implode(' ', \$cases) . ' END'\n";
             $c .= "                . ' WHERE id IN (' . implode(',', \$ids) . ')'\n";
             $c .= "        );\n";
             $c .= "    }\n\n";
         }
 
-        // invalidateCache
-        $c .= "    public function invalidateCache(): void\n    {\n";
-        $c .= "        \$this->cache->delMod(\$this->module_name);\n";
-        $c .= "    }\n\n";
-
         $hasAlias = in_array('alias', array_keys($entity->columns), true);
         if ($hasAlias) {
-            $c .= "    /**\n     * Kiểm tra Alias đã tồn tại chưa\n     */\n";
             $c .= "    public function isAliasExists(string \$alias, int \$excludeId = 0): bool\n    {\n";
-            $c .= "        \$sql = 'SELECT COUNT(*) FROM ' . \$this->table . ' WHERE alias = :alias';\n";
+            $c .= "        \$sql = 'SELECT COUNT(*) FROM ' . \$this->tables->{$tableProp} . ' WHERE alias = :alias';\n";
             $c .= "        if (\$excludeId > 0) {\n";
             $c .= "            \$sql .= ' AND id != ' . \$excludeId;\n";
             $c .= "        }\n";
@@ -669,19 +661,16 @@ class MvcCodeGenerator
             $c .= "    }\n\n";
         }
 
-        $c .= "    /**\n     * Lấy weight lớn nhất\n     */\n";
         $c .= "    public function getMaxWeight(): int\n    {\n";
-        $c .= "        \$sql = 'SELECT MAX(' . (\$this->weightField ?: 'weight') . ') FROM ' . \$this->table;\n";
+        $c .= "        \$sql = 'SELECT MAX(' . (\$this->weightField ?: 'weight') . ') FROM ' . \$this->tables->{$tableProp};\n";
         $c .= "        return (int) \$this->db->query(\$sql)->fetchColumn();\n";
         $c .= "    }\n\n";
 
-        $c .= "    /**\n     * Tăng weight của tất cả bản ghi lên 1 (Dùng cho tính năng Tin mới lên đầu)\n     */\n";
         $c .= "    public function incrementOthersWeight(): void\n    {\n";
-        $c .= "        \$sql = 'UPDATE ' . \$this->table . ' SET ' . (\$this->weightField ?: 'weight') . ' = ' . (\$this->weightField ?: 'weight') . ' + 1';\n";
+        $c .= "        \$sql = 'UPDATE ' . \$this->tables->{$tableProp} . ' SET ' . (\$this->weightField ?: 'weight') . ' = ' . (\$this->weightField ?: 'weight') . ' + 1';\n";
         $c .= "        \$this->db->prepare(\$sql)->execute();\n";
         $c .= "    }\n\n";
 
-        $c .= "    /**\n     * Tự động sửa lại weight nếu sai lệch (Bulk UPDATE CASE WHEN)\n     */\n";
         $c .= "    public function autoCorrectWeight(array &\$entities): bool\n    {\n";
         $c .= "        \$weightField = \$this->weightField ?: 'weight';\n";
         $c .= "        \$cases = [];\n";
@@ -699,7 +688,7 @@ class MvcCodeGenerator
         $c .= "            return false;\n";
         $c .= "        }\n\n";
         $c .= "        return (bool) \$this->db->exec(\n";
-        $c .= "            'UPDATE ' . \$this->table\n";
+        $c .= "            'UPDATE ' . \$this->tables->{$tableProp}\n";
         $c .= "                . ' SET ' . \$weightField . ' = CASE id ' . implode(' ', \$cases) . ' END'\n";
         $c .= "                . ' WHERE id IN (' . implode(',', \$ids) . ')'\n";
         $c .= "        );\n";
@@ -708,14 +697,10 @@ class MvcCodeGenerator
         return $c;
     }
 
-    /**
-     * Sinh {Item}Service.php
-     */
     private function buildService(SchemaEntity $entity, string $mod, string $item, string $itemLc): string
     {
         $ns = "NukeViet\\Module\\{$mod}\\{$item}";
 
-        // Sinh các dòng collectRequestData()
         $collectLines = '';
         foreach ($entity->columns as $field => $col) {
             if ($field === 'id' || $this->isSpecialField((string) $field, $entity, $col)) {
@@ -739,17 +724,13 @@ class MvcCodeGenerator
         $c .= "class {$item}Service\n{\n";
         $c .= "    public function __construct(private {$item}Repository \$repo) {}\n\n";
 
-        // collectRequestData
-        $c .= "    /**\n     * Thu thập dữ liệu từ Request (Admin & API dùng chung)\n     */\n";
         $c .= "    public function collectRequestData(\$nv_Request): array\n    {\n";
         $c .= "        \$row = [];\n";
         $c .= $collectLines;
         $c .= "        return \$row;\n";
         $c .= "    }\n\n";
 
-        $c .= "    /**\n     * Chuẩn hóa dữ liệu trước khi validate/save (Alias, Keywords, Image)\n     */\n";
         $c .= "    public function prepareSaveData(array \$data, array \$moduleConfig = [], string \$moduleUpload = ''): array\n    {\n";
-        $c .= "        // Alias\n";
         $c .= "        \$aliasSource = '{$entity->alias_source_field}';\n";
         $c .= "        if (!empty(\$aliasSource) && isset(\$data[\$aliasSource])) {\n";
         $c .= "            \$alias = !empty(\$data['alias']) ? \$data['alias'] : \$data[\$aliasSource];\n";
@@ -758,11 +739,9 @@ class MvcCodeGenerator
         $c .= "                \$data['alias'] = strtolower(\$data['alias']);\n";
         $c .= "            }\n";
         $c .= "        }\n\n";
-        $c .= "        // Keywords\n";
         $c .= "        if (isset(\$data['keywords']) && empty(\$data['keywords']) && isset(\$data['title'])) {\n";
         $c .= "            \$data['keywords'] = nv_get_keywords(\$data['title']);\n";
         $c .= "        }\n\n";
-        $c .= "        // Image cleanup\n";
         $c .= "        if (!empty(\$moduleUpload) && !empty(\$data['image'])) {\n";
         $c .= "            \$imagePath = NV_UPLOADS_DIR . '/' . \$moduleUpload;\n";
         $c .= "            if (nv_is_file(\$data['image'], \$imagePath)) {\n";
@@ -772,8 +751,6 @@ class MvcCodeGenerator
         $c .= "        return \$data;\n";
         $c .= "    }\n\n";
 
-        // save{Item}
-        $c .= "    /**\n     * Lưu item (INSERT hoặc UPDATE). Data đã được Validator kiểm tra.\n     */\n";
         $c .= "    public function save{$item}(array \$data, int \$id, string \$module_name, array \$config = [], int \$admin_id = 0): int\n    {\n";
         $c .= "        if (\$id > 0) {\n";
         $c .= "            \$data['edit_time'] = NV_CURRENTTIME;\n";
@@ -797,8 +774,6 @@ class MvcCodeGenerator
         $c .= "        return \$savedId;\n";
         $c .= "    }\n\n";
 
-        // delete{Item}
-        $c .= "    /**\n     * Xóa item.\n     */\n";
         $c .= "    public function delete{$item}(int \$id, string \$module_name): bool\n    {\n";
         $c .= "        \$row = \$this->repo->findById(\$id);\n";
         $c .= "        if (!\$row) { return false; }\n";
@@ -831,9 +806,6 @@ class MvcCodeGenerator
         return $c;
     }
 
-    /**
-     * Sinh {Item}Validator.php
-     */
     private function buildValidator(SchemaEntity $entity, string $mod, string $item): string
     {
         $ns = "NukeViet\\Module\\{$mod}\\{$item}";
@@ -878,11 +850,8 @@ class MvcCodeGenerator
         $c .= "namespace {$ns};\n\n";
         $c .= "use NukeViet\\Module\\{$mod}\\Shared\\ValidationException;\n\n";
         $c .= "if (!defined('NV_MAINFILE')) {\n    exit('Stop!!!');\n}\n\n";
-        $c .= "/**\n * {$item}Validator — Request Validator kiểm duyệt dữ liệu.\n";
-        $c .= " * Gom nhiều lỗi vào một ValidationException duy nhất.\n */\n";
         $c .= "class {$item}Validator\n{\n";
         $c .= "    public function __construct(private {$item}Repository \$repo) {}\n\n";
-        $c .= "    /**\n     * @throws ValidationException\n     */\n";
         $c .= "    public function validateSave(array \$data, int \$excludeId = 0): void\n    {\n";
         $c .= "        \$errors = [];\n\n";
         $c .= $checks;
@@ -894,9 +863,6 @@ class MvcCodeGenerator
         return $c;
     }
 
-    /**
-     * Sinh admin/{item}.php (Controller)
-     */
     private function buildController(SchemaEntity $entity, string $mod, string $item, string $opName, string $listOp = ''): string
     {
         $itemLc = strtolower($item);
@@ -908,13 +874,14 @@ class MvcCodeGenerator
 
         $c  = "<?php\n\n";
         $c .= $this->copyright() . "\n\n";
+        $c .= "global \$db, \$db_config, \$tables, \$nv_Cache, \$nv_Request, \$nv_Lang, \$module_name, \$module_data, \$module_info, \$module_upload, \$op, \$csrf_key;\n\n";
         $c .= "if (!defined('NV_IS_FILE_ADMIN')) {\n    exit('Stop!!!');\n}\n\n";
         $c .= "use {$ns}\\{$item}Repository;\n";
         $c .= "use {$ns}\\{$item}Service;\n";
         $c .= "use {$ns}\\{$item}Validator;\n";
         $c .= "use NukeViet\\Module\\{$mod}\\Shared\\ValidationException;\n\n";
 
-        $c .= "\$itemRepo = new {$item}Repository(\$db, \$config['table_{$itemLc}'], \$nv_Cache, \$module_name);\n";
+        $c .= "\$itemRepo = new {$item}Repository(\$db, \$tables, \$nv_Cache, \$module_name);\n";
         $c .= "\$service  = new {$item}Service(\$itemRepo);\n\n";
         
         $c .= "\$id = \$nv_Request->get_int('id', 'get,post', 0);\n";
@@ -930,7 +897,6 @@ class MvcCodeGenerator
         $c .= "    \$page_title = \$nv_Lang->getModule('add');\n";
         $c .= "}\n\n";
 
-        // Xây dựng map error code -> field name
         $fieldMapLines = "        \$fieldMap = [\n";
         $errorCode     = 0;
         foreach ($entity->columns as $field => $col) {
@@ -950,14 +916,13 @@ class MvcCodeGenerator
         }
         $fieldMapLines .= "        ];";
 
-        // Sinh mảng $row mặc định cho form thêm mới
         $defaultRowLines = "    \$row = [\n";
         foreach ($entity->columns as $field => $col) {
             if ($field === 'id' || $this->isSpecialField((string) $field, $entity, $col)) {
                 continue;
             }
             $phpType = $this->phpType($col['sql_type'] ?? 'varchar(255)');
-            $default = $phpType === 'int' ? '0' : "''";
+            $default = $this->phpDefault($phpType, $col);
             $defaultRowLines .= "        '{$field}' => {$default},\n";
         }
         $defaultRowLines .= "    ];";
@@ -968,7 +933,6 @@ class MvcCodeGenerator
         $c .= "        nv_jsonOutput(['status' => 'error', 'mess' => \$nv_Lang->getGlobal('error_checkss')]);\n";
         $c .= "    }\n\n";
 
-        $c .= "    // Lấy alias qua AJAX\n";
         $c .= "    if (\$nv_Request->isset_request('get_alias', 'post')) {\n";
         $c .= "        \$title = \$nv_Request->get_title('title', 'post', '');\n";
         $c .= "        \$alias = change_alias(\$title);\n";
@@ -978,7 +942,6 @@ class MvcCodeGenerator
         $c .= "        nv_jsonOutput(['status' => 'success', 'alias' => \$alias]);\n";
         $c .= "    }\n\n";
 
-        $c .= "    // Xóa bản ghi\n";
         $c .= "    if (\$nv_Request->isset_request('delete', 'post')) {\n";
         $c .= "        \$itemRepo->delete(\$id);\n";
         $c .= "        nv_jsonOutput(['status' => 'success']);\n";
@@ -1016,7 +979,6 @@ class MvcCodeGenerator
         $c .= "        . '&' . NV_NAME_VARIABLE . '=' . \$module_name . '&' . NV_OP_VARIABLE . '={$listOp}';\n";
         $c .= "    nv_jsonOutput(\$respon);\n\n";
         $c .= "} elseif (empty(\$id)) {\n";
-        $c .= "    // Dữ liệu mặc định form thêm mới\n";
         $c .= $defaultRowLines . "\n";
         $c .= "}\n\n";
         $c .= "// ══════ RENDER FORM ══════\n";
@@ -1052,20 +1014,95 @@ class MvcCodeGenerator
         $c .= "\$tpl->assign('URL_LIST', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . \$module_name . '&' . NV_OP_VARIABLE . '={$listOp}');\n";
         $c .= "\$tpl->assign('UPLOADS_DIR_USER', NV_UPLOADS_DIR . '/' . \$module_upload);\n\n";
 
-        // SQL Choices
+        // Chuẩn bị mapping bảng của module
+        $nvRootDir = defined('NV_ROOTDIR') ? NV_ROOTDIR : '.';
+        $tablesMap = $this->getTablesMapping($mod, $nvRootDir);
+
+        // Phân loại cột SQL Choice
+        $moduleChoices = [];
+        $externalChoices = [];
+        $neededRepos = [];
+        
         foreach ($entity->columns as $field => $col) {
-            if (($col['view_type'] ?? '') === 'select' && ($col['choice_type'] ?? '') === 'sql') {
-                $table   = $col['choice_table'] ?? '';
-                $idCol   = $col['choice_id_col'] ?? 'id';
-                $textCol = $col['choice_text_col'] ?? 'name';
-                if (!empty($table)) {
-                    $c .= "// Lấy danh sách lựa chọn cho {$field} từ bảng {$table}\n";
-                    $c .= "\$sql_table = (strpos('{$table}', \$db_config['prefix'] . '_') === 0) ? '{$table}' : \$db_config['prefix'] . '_{$table}';\n";
-                    $c .= "\$choices_{$field} = \$db->query('SELECT {$idCol}, {$textCol} FROM ' . \$sql_table)->fetchAll(PDO::FETCH_ASSOC);\n";
-                    $c .= "\$tpl->assign('CHOICES_{$field}', \$choices_{$field});\n\n";
+            $vt = $col['view_type'] ?? '';
+            if (($vt === 'select' || $vt === 'radio') && ($col['choice_type'] ?? '') === 'sql') {
+                $table = $col['choice_table'] ?? '';
+                $isModuleTable = false;
+                foreach ($tablesMap as $suffix => $prop) {
+                    if (str_ends_with($table, '_' . $suffix) || $table === $suffix) {
+                        $feature = ucfirst($prop);
+                        $repoClass = "{$feature}Repository";
+                        $moduleChoices[$field] = [
+                            'col' => $col, 
+                            'prop' => $prop,
+                            'feature' => $feature,
+                            'repoClass' => $repoClass,
+                            'repoVar' => strtolower($feature) . 'Repo'
+                        ];
+                        $neededRepos[$feature] = [
+                            'ns' => "NukeViet\\Module\\{$mod}\\{$feature}\\{$repoClass}",
+                            'class' => $repoClass,
+                            'var' => strtolower($feature) . 'Repo'
+                        ];
+                        $isModuleTable = true;
+                        break;
+                    }
+                }
+                if (!$isModuleTable) {
+                    $externalChoices[$field] = ['col' => $col];
                 }
             }
         }
+
+        // Chèn các câu lệnh use cho Repository bổ sung
+        $useStatements = "";
+        foreach ($neededRepos as $repo) {
+            if ($repo['class'] !== "{$item}Repository") {
+                $useStatements .= "use {$repo['ns']};\n";
+            }
+        }
+        if (!empty($useStatements)) {
+            $c = str_replace("use NukeViet\\Module\\{$mod}\\Shared\\ValidationException;\n", "use NukeViet\\Module\\{$mod}\\Shared\\ValidationException;\n" . $useStatements, $c);
+        }
+
+        // Khởi tạo các Repository bổ sung
+        $repoInits = "";
+        foreach ($neededRepos as $repo) {
+            if ($repo['class'] !== "{$item}Repository") {
+                $repoInits .= "\${$repo['var']} = new {$repo['class']}(\$db, \$tables, \$nv_Cache, \$module_name);\n";
+            }
+        }
+        if (!empty($repoInits)) {
+            $c = str_replace("\$service  = new {$item}Service(\$itemRepo);\n", "\$service  = new {$item}Service(\$itemRepo);\n" . $repoInits, $c);
+        }
+
+        $allChoices = array_merge($moduleChoices, $externalChoices);
+        $tablePrefixPattern = '/^nv5_[a-z]{2}_/';
+
+        foreach ($allChoices as $field => $data) {
+            $col     = $data['col'];
+            $idCol   = $col['choice_id_col'] ?? 'id';
+            $textCol = $col['choice_text_col'] ?? 'name';
+            $table   = $col['choice_table'] ?? '';
+
+            if (isset($data['prop'])) {
+                // Dùng Repository của module
+                $repoVar = $data['repoVar'];
+                $c .= "\$choices_{$field} = \${$repoVar}->getAll();\n";
+                $c .= "if (!empty(\$choices_{$field}) && is_object(reset(\$choices_{$field}))) {\n";
+                $c .= "    \$choices_{$field} = array_map(fn(\$e) => \$e->toArray(), \$choices_{$field});\n";
+                $c .= "}\n";
+                $c .= "\$tpl->assign('CHOICES_{$field}', \$choices_{$field});\n\n";
+            } elseif (!empty($table)) {
+                // Bảng bên ngoài - Chuẩn hóa tiền tố hệ thống sang NV_PREFIXLANG
+                $cleanTable = preg_replace($tablePrefixPattern, '', $table);
+                $c .= "\$sql_table = NV_PREFIXLANG . '_{$cleanTable}';\n";
+                $c .= "\$choices_{$field} = \$db->query('SELECT {$idCol}, {$textCol} FROM ' . \$sql_table)->fetchAll(PDO::FETCH_ASSOC);\n";
+                $c .= "\$tpl->assign('CHOICES_{$field}', \$choices_{$field});\n\n";
+            }
+        }
+
+        $c .= "\n";
 
         $c .= "\$contents = \$tpl->fetch('{$opName}.tpl');\n\n";
         $c .= "include NV_ROOTDIR . '/includes/header.php';\n";
@@ -1075,21 +1112,18 @@ class MvcCodeGenerator
         return $c;
     }
 
-    /**
-     * Sinh admin template {item}.tpl (Smarty)
-     */
     private function buildTemplate(SchemaEntity $entity, string $mod, string $item, string $opName, string $listOp = ''): string
     {
         $itemLc = strtolower($item);
         $formFields = '';
         foreach ($entity->columns as $field => $col) {
             if ($field === 'id' || !empty($col['hidden']) || $this->isSpecialField((string) $field, $entity, $col)) {
-                continue; // ID, Cột ẩn hoặc Cột AI tự động sinh thì ẩn khỏi Form
+                continue;
             }
 
             $label     = htmlspecialchars($col['label_vi'] ?? $field, ENT_QUOTES);
             $req       = !empty($col['required']) ? ' <span class="text-danger">*</span>' : '';
-            $fieldHtml = $this->buildFormField($field, $col, $entity, $itemLc);
+            $fieldHtml = $this->buildFormField($field, $col, $entity, $itemLc, $opName);
 
             $formFields .= "            <div class=\"mb-3\">\n";
             $formFields .= "                <label class=\"form-label fw-semibold\">{$label}{$req}</label>\n";
@@ -1151,19 +1185,19 @@ class MvcCodeGenerator
         return $c;
     }
 
-    /**
-     * Sinh HTML cho 1 form field theo view_type.
-     */
-    private function buildFormField(string $field, array $col, SchemaEntity $entity, string $itemLc): string
+    private function buildFormField(string $field, array $col, SchemaEntity $entity, string $itemLc, string $opName = ''): string
     {
         $vt = $col['view_type'] ?? 'textbox';
+        if (empty($opName)) {
+            $opName = $itemLc;
+        }
 
         return match ($vt) {
             'textarea'     => "<textarea name=\"{$field}\" id=\"id{$field}\" class=\"form-control\" rows=\"5\">{\$DATA.{$field}}</textarea>",
             'editor'       => "{\$DATA.{$field}}",
-            'textalias'    => (function() use ($field, $entity, $itemLc) {
+            'textalias'    => (function() use ($field, $entity, $opName) {
                 $source = !empty($entity->alias_source_field) ? $entity->alias_source_field : 'title';
-                return "<div class=\"input-group\"><input type=\"text\" class=\"form-control\" name=\"{$field}\" id=\"id{$field}\" value=\"{\$DATA.{$field}}\" maxlength=\"250\"><button class=\"btn btn-secondary\" type=\"button\" data-toggle=\"getaliaspage-{$itemLc}\" data-source=\"#id{$source}\" data-auto-alias=\"{if empty(\$DATA.{$field})}1{else}0{/if}\" data-checkss=\"{\$CHECKSS}\" data-id=\"{\$ID}\"><i class=\"fa-solid fa-rotate\"></i></button></div>";
+                return "<div class=\"input-group\"><input type=\"text\" class=\"form-control\" name=\"{$field}\" id=\"id{$field}\" value=\"{\$DATA.{$field}}\" maxlength=\"250\"><button class=\"btn btn-secondary\" type=\"button\" data-toggle=\"getaliaspage-{$opName}\" data-source=\"#id{$source}\" data-auto-alias=\"{if empty(\$DATA.{$field})}1{else}0{/if}\" data-checkss=\"{\$CHECKSS}\" data-id=\"{\$ID}\"><i class=\"fa-solid fa-rotate\"></i></button></div>";
             })(),
             'textfile'     => "<div class=\"input-group\"><input class=\"form-control\" type=\"text\" name=\"{$field}\" id=\"id{$field}\" value=\"{\$DATA.{$field}}\"><button type=\"button\" class=\"btn btn-secondary\" data-toggle=\"selectfile\" data-target=\"id{$field}\" data-path=\"{\$UPLOADS_DIR_USER}\" data-type=\"all\"><i class=\"fa-solid fa-folder-open\"></i></button></div>",
             'number_int'   => "<input type=\"number\" name=\"{$field}\" id=\"id{$field}\" class=\"form-control\" value=\"{\$DATA.{$field}}\">",
@@ -1195,14 +1229,11 @@ class MvcCodeGenerator
                 . "                </select>";
         }
 
-        // Static: parse choice_values (mỗi dòng: key:Nhãn)
         $values  = $col['choice_values'] ?? '';
         $options = "<option value=\"\">-- Chọn --</option>\n";
         foreach (explode("\n", $values) as $line) {
             $line = trim($line);
-            if ($line === '') {
-                continue;
-            }
+            if ($line === '') continue;
             $parts = explode(':', $line, 2);
             $k     = htmlspecialchars(trim($parts[0]), ENT_QUOTES);
             $v     = htmlspecialchars(trim($parts[1] ?? $k), ENT_QUOTES);
@@ -1219,11 +1250,9 @@ class MvcCodeGenerator
         $choiceType = $col['choice_type'] ?? 'static';
 
         if ($choiceType === 'sql') {
-            $table   = htmlspecialchars($col['choice_table'] ?? '', ENT_QUOTES);
             $idCol   = htmlspecialchars($col['choice_id_col'] ?? 'id', ENT_QUOTES);
             $textCol = htmlspecialchars($col['choice_text_col'] ?? 'name', ENT_QUOTES);
-            return "{* TODO: Gán \$CHOICES_{$field} trong Controller từ bảng {$table} (id={$idCol}, text={$textCol}) *}\n"
-                . "                {foreach from=\$CHOICES_{$field} item=opt}\n"
+            return "{foreach from=\$CHOICES_{$field} item=opt}\n"
                 . "                <div class=\"form-check form-check-inline\">\n"
                 . "                    <input type=\"radio\" name=\"{$field}\" class=\"form-check-input\" value=\"{\$opt.{$idCol}}\" {if \$DATA.{$field}==\$opt.{$idCol}}checked{/if}>\n"
                 . "                    <label class=\"form-check-label\">{\$opt.{$textCol}}</label>\n"
@@ -1235,9 +1264,7 @@ class MvcCodeGenerator
         $radios = '';
         foreach (explode("\n", $values) as $line) {
             $line = trim($line);
-            if ($line === '') {
-                continue;
-            }
+            if ($line === '') continue;
             $parts  = explode(':', $line, 2);
             $k      = htmlspecialchars(trim($parts[0]), ENT_QUOTES);
             $v      = htmlspecialchars(trim($parts[1] ?? $k), ENT_QUOTES);
@@ -1250,38 +1277,30 @@ class MvcCodeGenerator
         return $radios ?: "<div class=\"text-muted small\">Chưa cấu hình giá trị cho {$field}</div>";
     }
 
-    /**
-     * Tự động sinh các file Shared nếu chưa tồn tại.
-     */
     private function addSharedFiles(array &$files, string $mod, string $nvRootDir): void
     {
         $sharedDir = "modules/{$mod}/Shared";
 
-        // 1. AbstractEntity.php
         $file = "{$sharedDir}/AbstractEntity.php";
         if (!file_exists($nvRootDir . '/' . $file)) {
             $c = "<?php\n\nnamespace NukeViet\\Module\\{$mod}\\Shared;\n\n";
-            $c .= "if (!defined('NV_MAINFILE')) {\n    exit('Stop!!!');\n}\n\n";
+            $c .= "if (!defined('NV_MAINFILE')) exit('Stop!!!');\n\n";
             $c .= "abstract class AbstractEntity\n{\n";
             $c .= "    protected const VIEW_FIELDS = [];\n";
             $c .= "    protected const PRIMARY_KEY = '';\n\n";
             $c .= "    public static function getDbColumns(): array\n    {\n";
             $c .= "        \$allFields = array_keys(get_class_vars(static::class));\n";
             $c .= "        \$exclude = static::VIEW_FIELDS;\n";
-            $c .= "        if (static::PRIMARY_KEY !== '') {\n";
-            $c .= "            \$exclude[] = static::PRIMARY_KEY;\n";
-            $c .= "        }\n";
+            $c .= "        if (static::PRIMARY_KEY !== '') \$exclude[] = static::PRIMARY_KEY;\n";
             $c .= "        return array_values(array_diff(\$allFields, \$exclude));\n";
             $c .= "    }\n\n";
             $c .= "    public static function getIntColumns(): array\n    {\n";
-            $c .= "        \$cache = [];\n";
+            $c .= "        static \$cache = [];\n";
             $c .= "        \$class = static::class;\n";
             $c .= "        if (!isset(\$cache[\$class])) {\n";
             $c .= "            \$cache[\$class] = [];\n";
             $c .= "            foreach (get_class_vars(\$class) as \$field => \$default) {\n";
-            $c .= "                if (\$default !== null && is_int(\$default)) {\n";
-            $c .= "                    \$cache[\$class][\$field] = true;\n";
-            $c .= "                }\n";
+            $c .= "                if (\$default !== null && is_int(\$default)) \$cache[\$class][\$field] = true;\n";
             $c .= "            }\n";
             $c .= "        }\n";
             $c .= "        return \$cache[\$class];\n";
@@ -1290,13 +1309,9 @@ class MvcCodeGenerator
             $c .= "    public static function fromArray(array \$data): static\n    {\n";
             $c .= "        \$entity = new static();\n";
             $c .= "        foreach (\$data as \$key => \$value) {\n";
-            $c .= "            if (!property_exists(\$entity, \$key) || \$value === null) {\n";
-            $c .= "                continue;\n";
-            $c .= "            }\n";
+            $c .= "            if (!property_exists(\$entity, \$key) || \$value === null) continue;\n";
             $c .= "            \$default = \$entity->\$key;\n";
-            $c .= "            if (\$default === null) {\n";
-            $c .= "                continue;\n";
-            $c .= "            }\n";
+            $c .= "            if (\$default === null) continue;\n";
             $c .= "            \$entity->\$key = is_int(\$default) ? (int) \$value : (string) \$value;\n";
             $c .= "        }\n";
             $c .= "        return \$entity;\n";
@@ -1304,11 +1319,10 @@ class MvcCodeGenerator
             $this->addFile($files, $file, $c, $nvRootDir);
         }
 
-        // 2. ValidationException.php
         $file = "{$sharedDir}/ValidationException.php";
         if (!file_exists($nvRootDir . '/' . $file)) {
             $c = "<?php\n\nnamespace NukeViet\\Module\\{$mod}\\Shared;\n\n";
-            $c .= "if (!defined('NV_MAINFILE')) {\n    exit('Stop!!!');\n}\n\n";
+            $c .= "if (!defined('NV_MAINFILE')) exit('Stop!!!');\n\n";
             $c .= "class ValidationException extends \\InvalidArgumentException\n{\n";
             $c .= "    private array \$errors;\n\n";
             $c .= "    public function __construct(array \$errors)\n    {\n";
@@ -1316,8 +1330,99 @@ class MvcCodeGenerator
             $c .= "        parent::__construct(\$errors[\$firstCode], \$firstCode);\n";
             $c .= "        \$this->errors = \$errors;\n";
             $c .= "    }\n\n";
-            $c .= "    public function getErrors(): array\n    {\n";
-            $c .= "        return \$this->errors;\n";
+            $c .= "    public function getErrors(): array { return \$this->errors; }\n}\n";
+            $this->addFile($files, $file, $c, $nvRootDir);
+        }
+
+        $file = "{$sharedDir}/BaseRepository.php";
+        if (!file_exists($nvRootDir . '/' . $file)) {
+            $c = "<?php\n\n" . $this->copyright() . "\n\nnamespace NukeViet\\Module\\{$mod}\\Shared;\n\n";
+            $c .= "if (!defined('NV_MAINFILE')) exit('Stop!!!');\n\n";
+            $c .= "use PDO;\n\n";
+            $c .= "abstract class BaseRepository\n{\n";
+            $c .= "    protected PDO \$db;\n";
+            $c .= "    protected Tables \$tables;\n";
+            $c .= "    protected \$cache;\n";
+            $c .= "    protected string \$module_name;\n\n";
+            $c .= "    public function __construct(PDO \$db, Tables \$tables, \$cache, string \$module_name)\n    {\n";
+            $c .= "        \$this->db = \$db; \$this->tables = \$tables; \$this->cache = \$cache; \$this->module_name = \$module_name;\n";
+            $c .= "    }\n\n";
+            $c .= "    abstract protected function entityClass(): string;\n\n";
+            $c .= "    protected function pdoType(string \$field): int\n    {\n";
+            $c .= "        static \$cache = [];\n";
+            $c .= "        \$class = \$this->entityClass();\n";
+            $c .= "        if (!isset(\$cache[\$class])) \$cache[\$class] = \$class::getIntColumns();\n";
+            $c .= "        return isset(\$cache[\$class][\$field]) ? PDO::PARAM_INT : PDO::PARAM_STR;\n";
+            $c .= "    }\n\n";
+            $c .= "    protected function fetchEntities(\\PDOStatement \$stmt): array\n    {\n";
+            $c .= "        return array_map([\$this->entityClass(), 'fromArray'], \$stmt->fetchAll(PDO::FETCH_ASSOC));\n";
+            $c .= "    }\n\n";
+            $c .= "    public function invalidateCache(): void { \$this->cache->delMod(\$this->module_name); }\n}\n";
+            $this->addFile($files, $file, $c, $nvRootDir);
+        }
+    }
+
+    private function updateTablesFile(array &$files, SchemaEntity $entity, string $mod, string $nvRootDir): void
+    {
+        $file = "modules/{$mod}/Shared/Tables.php";
+        $fullPath = rtrim($nvRootDir, '/\\') . '/' . $file;
+        $tableProp = $this->getTablePropertyName($entity, $mod);
+        $tableSuffix = $this->getTableSuffix($entity, $mod);
+        $suffixStr = !empty($tableSuffix) ? " . '{$tableSuffix}'" : '';
+
+        if (file_exists($fullPath)) {
+            $content = file_get_contents($fullPath);
+            if (!preg_match('/public\s+string\s+\$' . preg_quote($tableProp, '/') . '\s*;/', $content)) {
+                $propDoc = "    /** Bảng {$tableProp}: {prefix}_{lang}_{module_data}{$tableSuffix} */\n";
+                $propLine = "    public string \${$tableProp};\n\n";
+                $content = preg_replace('/(\s*public\s+function\s+__construct)/', "\n" . $propDoc . $propLine . '$1', $content);
+                $assignLine = "        \$this->{$tableProp} = \$tablePrefix . '_' . \$moduleData{$suffixStr};\n";
+                $lines = explode("\n", $content);
+                $inConstructor = false;
+                $lastAssignIndex = -1;
+                foreach ($lines as $i => $line) {
+                    if (str_contains($line, 'public function __construct')) {
+                        $inConstructor = true;
+                    }
+                    if ($inConstructor && str_contains($line, '$this->')) {
+                        $lastAssignIndex = $i;
+                    }
+                    if ($inConstructor && trim($line) === '}') {
+                        break;
+                    }
+                }
+                if ($lastAssignIndex >= 0) {
+                    array_splice($lines, $lastAssignIndex + 1, 0, rtrim($assignLine));
+                    $content = implode("\n", $lines);
+                }
+
+                $this->addFile($files, $file, $content, $nvRootDir);
+            }
+        } else {
+            // T\u1ea1o m\u1edbi Tables.php
+            $modLc = strtolower($mod);
+            $c  = "<?php\n\n";
+            $c .= $this->copyright() . "\n\n";
+            $c .= "namespace NukeViet\\Module\\{$mod}\\Shared;\n\n";
+            $c .= "if (!defined('NV_MAINFILE')) {\n    exit('Stop!!!');\n}\n\n";
+            $c .= "/**\n";
+            $c .= " * Tables \u2014 Value Object ch\u1ee9a t\u00ean c\u00e1c b\u1ea3ng DB c\u1ee7a module {$mod}.\n";
+            $c .= " *\n";
+            $c .= " * T\u00ean b\u1ea3ng \u0111\u01b0\u1ee3c gh\u00e9p t\u1ef1 \u0111\u1ed9ng t\u1eeb \$tablePrefix + \$moduleData + suffix hard-code.\n";
+            $c .= " * \u0110\u00e2y l\u00e0 n\u01a1i DUY NH\u1ea4T khai b\u00e1o suffix c\u1ee7a t\u1eebng b\u1ea3ng \u2014 th\u00eam b\u1ea3ng m\u1edbi ch\u1ec9 c\u1ea7n th\u00eam 1 property.\n";
+            $c .= " *\n";
+            $c .= " * C\u00e1ch d\u00f9ng:\n";
+            $c .= " *   \$tables = new Tables(NV_PREFIXLANG, \$module_data);\n";
+            $c .= " */\n";
+            $c .= "readonly class Tables\n{\n";
+            $c .= "    /** B\u1ea3ng {$tableProp}: {prefix}_{lang}_{module_data}{$tableSuffix} */\n";
+            $c .= "    public string \${$tableProp};\n\n";
+            $c .= "    /**\n";
+            $c .= "     * @param string \$tablePrefix Ti\u1ec1n t\u1ed1 + ng\u00f4n ng\u1eef (VD: NV_PREFIXLANG = 'nv5_vi')\n";
+            $c .= "     * @param string \$moduleData  T\u00ean d\u1eef li\u1ec7u module (VD: '{$modLc}')\n";
+            $c .= "     */\n";
+            $c .= "    public function __construct(string \$tablePrefix, string \$moduleData)\n    {\n";
+            $c .= "        \$this->{$tableProp} = \$tablePrefix . '_' . \$moduleData{$suffixStr};\n";
             $c .= "    }\n}\n";
             $this->addFile($files, $file, $c, $nvRootDir);
         }
@@ -1332,10 +1437,11 @@ class MvcCodeGenerator
 
         $c  = "<?php\n\n";
         $c .= $this->copyright() . "\n\n";
+        $c .= "global \$db, \$db_config, \$tables, \$nv_Cache, \$nv_Request, \$nv_Lang, \$module_name, \$module_data, \$module_info, \$module_upload, \$op, \$csrf_key;\n\n";
         $c .= "if (!defined('NV_IS_FILE_ADMIN')) {\n    exit('Stop!!!');\n}\n\n";
         $c .= "use {$ns}\\{$item}Repository;\n";
         $c .= "use {$ns}\\{$item}Service;\n\n";
-        $c .= "\$itemRepo = new {$item}Repository(\$db, \$config['table_{$itemLc}'], \$nv_Cache, \$module_name);\n";
+        $c .= "\$itemRepo = new {$item}Repository(\$db, \$tables, \$nv_Cache, \$module_name);\n";
         $c .= "\$service  = new {$item}Service(\$itemRepo);\n\n";
         
         $c .= "if (\$nv_Request->isset_request('checkss', 'post')) {\n";
@@ -1359,16 +1465,26 @@ class MvcCodeGenerator
             $c .= "        nv_jsonOutput(['status' => 'success']);\n";
             $c .= "    }\n\n";
         }
+
+        // Xóa bản ghi
+        $c .= "    if (\$nv_Request->isset_request('delete', 'post')) {\n";
+        $c .= "        \$id = \$nv_Request->get_int('id', 'post', 0);\n";
+        $c .= "        \$itemRepo->delete(\$id);\n";
+        $c .= "        \$itemRepo->invalidateCache();\n";
+        $c .= "        nv_jsonOutput(['status' => 'success']);\n";
+        $c .= "    }\n";
         $c .= "}\n\n";
 
         $c .= "\$page  = \$nv_Request->get_int('page', 'get', 1);\n";
         $c .= "\$per_page = 20;\n";
         $c .= "\$q = \$nv_Request->get_title('q', 'get', '');\n\n";
         $c .= "\$items = \$itemRepo->getList(\$page, \$per_page, -1, \$q);\n";
-        $c .= "\$all_count = \$itemRepo->count(-1, \$q);\n\n";
+        $c .= "\$all_count = \$itemRepo->count(-1, \$q);\n";
+        $c .= "\$total_items = \$itemRepo->count();\n\n";
         $c .= "\$base_url = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . \$module_name . '&' . NV_OP_VARIABLE . '=' . \$op;\n";
         $c .= "if (!empty(\$q)) {\n    \$base_url .= '&q=' . urlencode(\$q);\n}\n";
         $c .= "\$generate_page = nv_generate_page(\$base_url, \$all_count, \$per_page, \$page);\n\n";
+
         $c .= "\$tpl = new \\NukeViet\\Template\\NVSmarty();\n";
         $c .= "\$tpl->setTemplateDir(get_module_tpl_dir('{$opName}.tpl'));\n";
         $c .= "\$tpl->assign('LANG', \$nv_Lang);\n";
@@ -1378,9 +1494,15 @@ class MvcCodeGenerator
         $c .= "\$tpl->assign('Q', \$q);\n";
         $c .= "\$tpl->assign('PAGES', \$generate_page);\n";
         $c .= "\$tpl->assign('CHECKSS', csrf_create(\$csrf_key));\n";
+        $c .= "\$tpl->assign('ALL_COUNT', \$total_items);\n";
         $c .= "\$tpl->assign('URL_ADD', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . \$module_name . '&' . NV_OP_VARIABLE . '={$formOpName}');\n";
-        $c .= "\$tpl->assign('URL_EDIT', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . \$module_name . '&' . NV_OP_VARIABLE . '={$formOpName}&id=');\n\n";
-        $c .= "\$contents = \$tpl->fetch('{$opName}.tpl');\n\n";
+        $c .= "\$tpl->assign('URL_EDIT', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . \$module_name . '&' . NV_OP_VARIABLE . '={$formOpName}&id=');\n";
+        
+        if ($entity->has_detail_view) {
+            $c .= "\$tpl->assign('URL_VIEW', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . \$module_name . '&' . NV_OP_VARIABLE . '={$opName}-view&id=');\n";
+        }
+
+        $c .= "\n\$contents = \$tpl->fetch('{$opName}.tpl');\n\n";
         $c .= "include NV_ROOTDIR . '/includes/header.php';\n";
         $c .= "echo nv_admin_theme(\$contents);\n";
         $c .= "include NV_ROOTDIR . '/includes/footer.php';\n";
@@ -1391,6 +1513,8 @@ class MvcCodeGenerator
     {
         $activeField = $entity->active_field;
         $weightField = $entity->weight_field;
+        $titleField  = $entity->alias_source_field;
+        $viewOp      = $entity->has_detail_view ? $opName . '-view' : '';
 
         $c = "<div class=\"d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2\">\n";
         $c .= "    <form action=\"{\$NV_BASE_ADMINURL}index.php\" method=\"get\" class=\"hstack gap-2\">\n";
@@ -1405,33 +1529,59 @@ class MvcCodeGenerator
         $c .= "    </a>\n";
         $c .= "</div>\n\n";
 
-        $c .= "<div class=\"card layer-1\">\n";
-        $c .= "    <div class=\"card-body\">\n";
-        $c .= "        <div class=\"table-responsive-lg table-card pb-1\">\n";
-        $c .= "            <table class=\"table table-striped align-middle table-sticky mb-0\">\n";
+        $c .= "<div class=\"card border-0 shadow-sm\">\n";
+        $c .= "    <div class=\"card-body p-0\">\n";
+        $c .= "        <div class=\"table-responsive\">\n";
+        $c .= "            <table class=\"table table-striped table-hover align-middle mb-0\">\n";
         $c .= "                <thead>\n                    <tr>\n";
+        
         if (!empty($weightField)) {
-            $c .= "                        <th class=\"text-nowrap text-center\" style=\"width:80px\">{\$LANG->getModule('weight')}</th>\n";
+            $c .= "                        <th class=\"text-center\" style=\"width:80px\">{\$LANG->getModule('weight')}</th>\n";
         }
-        $c .= "                        <th class=\"text-nowrap\">{\$LANG->getModule('title')}</th>\n";
+
+        // Loop qua c\u00e1c c\u1ed9t \u0111\u01b0\u1ee3c ch\u1ecdn hi\u1ec3n th\u1ecb \u1edf List
+        foreach ($entity->columns as $field => $col) {
+            if (!empty($col['list']) && $field !== $weightField && $field !== $activeField) {
+                $label = htmlspecialchars($col['label_vi'] ?? $field, ENT_QUOTES);
+                $c .= "                        <th class=\"text-nowrap\">{$label}</th>\n";
+            }
+        }
+
         if (!empty($activeField)) {
-            $c .= "                        <th class=\"text-nowrap text-center\" style=\"width:100px\">{\$LANG->getModule('active')}</th>\n";
+            $c .= "                        <th class=\"text-center\" style=\"width:100px\">{\$LANG->getModule('active')}</th>\n";
         }
-        $c .= "                        <th class=\"text-nowrap text-center\" style=\"width:150px\">{\$LANG->getGlobal('actions')}</th>\n";
+        $c .= "                        <th class=\"text-center\" style=\"width:150px\">{\$LANG->getGlobal('actions')}</th>\n";
         $c .= "                    </tr>\n                </thead>\n";
         $c .= "                <tbody>\n";
         $c .= "                    {foreach from=\$ITEMS item=row}\n";
         $c .= "                    <tr>\n";
+
         if (!empty($weightField)) {
             $c .= "                        <td class=\"text-center\">\n";
-            $c .= "                            <select class=\"form-select form-select-sm fw-semibold mb-0\" onchange=\"nv_change_weight('{\$row->id}', this.value);\">\n";
-            $c .= "                                {for \$i=1 to (\$ITEMS|@count + 10)}\n";
+            $c .= "                            <select class=\"form-select form-select-sm\" onchange=\"nv_change_weight('{\$row->id}', this.value);\">\n";
+            $c .= "                                {for \$i=1 to \$ALL_COUNT}\n";
             $c .= "                                <option value=\"{\$i}\" {if \$row->{$weightField} == \$i}selected{/if}>{\$i}</option>\n";
             $c .= "                                {/for}\n";
             $c .= "                            </select>\n";
             $c .= "                        </td>\n";
         }
-        $c .= "                        <td><a href=\"{\$URL_EDIT}{\$row->id}\" class=\"text-decoration-none fw-bold\">{\$row->title}</a></td>\n";
+
+        foreach ($entity->columns as $field => $col) {
+            if (!empty($col['list']) && $field !== $weightField && $field !== $activeField) {
+                if ($field === $titleField) {
+                    $c .= "                        <td><a href=\"{\$URL_EDIT}{\$row->id}\" class=\"text-decoration-none fw-bold text-primary\">{\$row->{$field}}</a></td>\n";
+                } else {
+                    $vt = $col['view_type'] ?? 'textbox';
+                    if ($vt === 'date' || $vt === 'time') {
+                        $format = ($vt === 'date') ? 'd/m/Y' : 'H:i d/m/Y';
+                        $c .= "                        <td class=\"text-nowrap\">{if \$row->{$field}}{\$row->{$field}|date_format:\"{$format}\"}{else}-{/if}</td>\n";
+                    } else {
+                        $c .= "                        <td>{\$row->{$field}}</td>\n";
+                    }
+                }
+            }
+        }
+
         if (!empty($activeField)) {
             $c .= "                        <td class=\"text-center\">\n";
             $c .= "                            <div class=\"form-check form-switch d-inline-block mb-0\">\n";
@@ -1439,8 +1589,12 @@ class MvcCodeGenerator
             $c .= "                            </div>\n";
             $c .= "                        </td>\n";
         }
+
         $c .= "                        <td class=\"text-center\">\n";
-        $c .= "                            <div class=\"hstack gap-1 justify-content-center\">\n";
+        $c .= "                            <div class=\"hstack gap-2 justify-content-center\">\n";
+        if (!empty($viewOp)) {
+            $c .= "                                <a href=\"{\$URL_VIEW}{\$row->id}\" class=\"btn btn-sm btn-outline-info\" title=\"{\$LANG->getGlobal('view')}\"><i class=\"fa-solid fa-eye\"></i></a>\n";
+        }
         $c .= "                                <a href=\"{\$URL_EDIT}{\$row->id}\" class=\"btn btn-sm btn-outline-primary\" title=\"{\$LANG->getGlobal('edit')}\"><i class=\"fa-solid fa-pen-to-square\"></i></a>\n";
         $c .= "                                <a href=\"javascript:void(0);\" onclick=\"nv_delete_item('{\$row->id}');\" class=\"btn btn-sm btn-outline-danger\" title=\"{\$LANG->getGlobal('delete')}\"><i class=\"fa-solid fa-trash\"></i></a>\n";
         $c .= "                            </div>\n";
@@ -1451,9 +1605,14 @@ class MvcCodeGenerator
         $c .= "            </table>\n";
         $c .= "        </div>\n";
         $c .= "    </div>\n";
+        $c .= "    {if \$PAGES}\n";
+        $c .= "    <div class=\"card-footer bg-body-tertiary border-top-0\">\n";
+        $c .= "        {\$PAGES}\n";
+        $c .= "    </div>\n";
+        $c .= "    {/if}\n";
         $c .= "</div>\n\n";
 
-        $c .= "<div class=\"mt-4 d-flex justify-content-center\">\n    {\$PAGES}\n</div>\n\n";
+
 
         $c .= "<script>\n{literal}\n";
         $c .= "function nv_change_status(id) {\n";
@@ -1469,11 +1628,113 @@ class MvcCodeGenerator
         $c .= "}\n";
         $c .= "function nv_delete_item(id) {\n";
         $c .= "    if (confirm('{/literal}{\$LANG->getGlobal('delete_confirm')}{literal}')) {\n";
-        $c .= "        $.post('{/literal}{\$URL_EDIT}{literal}' + id, {delete: 1, checkss: '{/literal}{\$CHECKSS}{literal}'}, function(res) {\n";
+        $c .= "        $.post(location.href, {id: id, delete: 1, checkss: '{/literal}{\$CHECKSS}{literal}'}, function(res) {\n";
         $c .= "            if (res.status == 'success') location.reload();\n";
         $c .= "            else alert(res.mess);\n";
         $c .= "        }, 'json');\n";
         $c .= "    }\n}\n{/literal}\n</script>\n";
         return $c;
+    }
+    private function buildViewController(SchemaEntity $entity, string $mod, string $item, string $opName, string $listOp): string
+    {
+        $ns = "NukeViet\\Module\\{$mod}\\{$item}";
+        $itemLc = strtolower($item);
+
+        $c  = "<?php\n\n";
+        $c .= $this->copyright() . "\n\n";
+        $c .= "if (!defined('NV_IS_FILE_ADMIN')) {\n    exit('Stop!!!');\n}\n\n";
+        $c .= "use {$ns}\\{$item}Repository;\n";
+        $c .= "use {$ns}\\{$item}Service;\n\n";
+        $c .= "\$itemRepo = new {$item}Repository(\$db, \$tables, \$nv_Cache, \$module_name);\n";
+        $c .= "\$service  = new {$item}Service(\$itemRepo);\n\n";
+        $c .= "\$id = \$nv_Request->get_int('id', 'get', 0);\n";
+        $c .= "\$row_data = \$itemRepo->find(\$id);\n\n";
+        $c .= "if (!\$row_data) {\n";
+        $c .= "    header('location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . \$module_name . '&' . NV_OP_VARIABLE . '={$listOp}');\n";
+        $c .= "    exit();\n";
+        $c .= "}\n\n";
+
+        $c .= "\$page_title = \$nv_Lang->getModule('view') . ': ' . \$row_data->{$entity->alias_source_field};\n\n";
+
+        $c .= "\$tpl = new \\NukeViet\\Template\\NVSmarty();\n";
+        $c .= "\$tpl->setTemplateDir(get_module_tpl_dir('{$opName}.tpl'));\n";
+        $c .= "\$tpl->assign('LANG', \$nv_Lang);\n";
+        $c .= "\$tpl->assign('DATA', \$row_data);\n";
+        $c .= "\$tpl->assign('URL_LIST', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . \$module_name . '&' . NV_OP_VARIABLE . '={$listOp}');\n";
+        $c .= "\$tpl->assign('URL_EDIT', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . \$module_name . '&' . NV_OP_VARIABLE . '={$listOp}-form&id=' . \$id);\n\n";
+
+        $c .= "\$contents = \$tpl->fetch('{$opName}.tpl');\n\n";
+        $c .= "include NV_ROOTDIR . '/includes/header.php';\n";
+        $c .= "echo nv_admin_theme(\$contents);\n";
+        $c .= "include NV_ROOTDIR . '/includes/footer.php';\n";
+
+        return $c;
+    }
+
+    private function buildViewTemplate(SchemaEntity $entity, string $mod, string $item, string $opName, string $listOp): string
+    {
+        $rows = "";
+        foreach ($entity->columns as $field => $col) {
+            if (!empty($col['hidden'])) continue;
+            $label = htmlspecialchars($col['label_vi'] ?? $field, ENT_QUOTES);
+            $vt = $col['view_type'] ?? 'textbox';
+            
+            $val = "{\$DATA->{$field}}";
+            if ($vt === 'date' || $vt === 'time') {
+                $format = ($vt === 'date') ? 'd/m/Y' : 'H:i d/m/Y';
+                $val = "{if \$DATA->{$field}}{\$DATA->{$field}|date_format:\"{$format}\"}{else}-{/if}";
+            } elseif ($vt === 'checkbox') {
+                $val = "{if \$DATA->{$field}}{\$LANG->getGlobal('yes')}{else}{\$LANG->getGlobal('no')}{/if}";
+            }
+
+            $rows .= "                <tr>\n";
+            $rows .= "                    <th style=\"width: 200px\" class=\"bg-body-tertiary text-nowrap\">{$label}</th>\n";
+            $rows .= "                    <td>{$val}</td>\n";
+            $rows .= "                </tr>\n";
+        }
+
+        $c  = "<div class=\"card border-0 shadow-sm\">\n";
+        $c .= "    <div class=\"card-header bg-primary text-white d-flex justify-content-between align-items-center mb-0\">\n";
+        $c .= "        <h5 class=\"mb-0\">{\$LANG->getModule('view_detail')}</h5>\n";
+        $c .= "        <div class=\"hstack gap-2\">\n";
+        $c .= "            <a href=\"{\$URL_EDIT}\" class=\"btn btn-sm btn-light\"><i class=\"fa-solid fa-pen-to-square me-1\"></i> {\$LANG->getGlobal('edit')}</a>\n";
+        $c .= "            <a href=\"{\$URL_LIST}\" class=\"btn btn-sm btn-light\"><i class=\"fa-solid fa-arrow-left me-1\"></i> {\$LANG->getModule('back')}</a>\n";
+        $c .= "        </div>\n";
+        $c .= "    </div>\n";
+        $c .= "    <div class=\"card-body p-0\">\n";
+        $c .= "        <div class=\"table-responsive\">\n";
+        $c .= "            <table class=\"table table-bordered mb-0\">\n";
+        $c .= "                <tbody>\n{$rows}                </tbody>\n";
+        $c .= "            </table>\n";
+        $c .= "        </div>\n";
+        $c .= "    </div>\n";
+        $c .= "</div>\n";
+
+        return $c;
+    }
+
+    /**
+     * Lấy map bảng từ Tables.php của module.
+     * Trả về mảng: ['tên_bảng_thật' => 'tên_thuộc_tính']
+     */
+    private function getTablesMapping(string $mod, string $nvRootDir): array
+    {
+        $file = rtrim($nvRootDir, '/\\') . "/modules/{$mod}/Shared/Tables.php";
+        if (!file_exists($file)) return [];
+
+        $content = file_get_contents($file);
+        $mapping = [];
+        $modLc = strtolower($mod);
+
+        // Regex bắt: $this->{prop} = $tablePrefix . '_' . $moduleData . '_{suffix}';
+        // Hoặc $this->{prop} = $tablePrefix . '_' . $moduleData;
+        if (preg_match_all('/\$this->([a-zA-Z0-9_]+)\s*=\s*\$tablePrefix\s*\.\s*\'_\'\s*\.\s*\$moduleData(\s*\.\s*\'_([^\']+)\')?/', $content, $matches)) {
+            foreach ($matches[1] as $i => $prop) {
+                $suffix = $matches[3][$i];
+                $fullSuffix = !empty($suffix) ? $modLc . '_' . $suffix : $modLc;
+                $mapping[$fullSuffix] = $prop;
+            }
+        }
+        return $mapping;
     }
 }

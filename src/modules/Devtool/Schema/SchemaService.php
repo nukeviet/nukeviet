@@ -116,20 +116,29 @@ class SchemaService
             $existingConfig = $existing?->columns[$field] ?? [];
 
             if (empty($existingConfig)) {
-                if ($field === 'status') {
+                if ($field === 'status' || $field === 'active') {
                     $existingConfig['view_type'] = 'checkbox';
                     $existingConfig['label_vi'] = 'Trạng thái';
+                    $existingConfig['list'] = true;
                 } elseif (in_array($field, ['weight', 'sort'], true)) {
                     $existingConfig['view_type'] = 'number_int';
-                    $existingConfig['label_vi'] = 'Sắp xếp';
-                } elseif (in_array($field, ['title', 'name'], true)) {
-                    $existingConfig['label_vi'] = ($field === 'title') ? 'Tiêu đề' : 'Tên gọi';
-                } elseif (in_array($field, ['mediumtext', 'longtext'], true)) {
+                    $existingConfig['label_vi'] = 'Thứ tự';
+                    $existingConfig['list'] = true;
+                } elseif (in_array($field, ['title', 'name', 'subject'], true)) {
+                    $existingConfig['label_vi'] = ($field === 'title') ? 'Tiêu đề' : (($field === 'name') ? 'Tên gọi' : 'Tiêu đề');
+                    $existingConfig['list'] = true;
+                } elseif (in_array($baseType, ['mediumtext', 'longtext'], true)) {
                     $existingConfig['view_type'] = 'editor';
                     $existingConfig['label_vi'] = 'Nội dung';
+                    $existingConfig['list'] = false;
                 } elseif (in_array($field, ['admin_id', 'add_time', 'edit_time', 'hitstotal'], true)) {
                     $existingConfig['hidden'] = true;
+                    $existingConfig['list'] = ($field === 'add_time'); // Mặc định hiện thời gian tạo
+                } else {
+                    $existingConfig['list'] = false;
                 }
+            } else {
+                $existingConfig['list'] = !empty($existingConfig['list']);
             }
 
             // Cột có select/radio → cần thêm panel "Nguồn dữ liệu"
@@ -141,6 +150,7 @@ class SchemaService
                 'base_type' => $baseType,
                 'view_options' => $viewOptions,
                 'default_view' => $this->suggestDefaultView($baseType, $field),
+                'db_default' => $info['default'],
                 'comment' => $info['comment'],
                 'config' => $existingConfig,
                 'has_choice' => $hasChoice,
@@ -198,10 +208,10 @@ class SchemaService
                 'hidden' => isset($config['hidden']),
                 'list' => isset($config['list']),
                 'label_vi' => (string) ($config['label_vi'] ?? $field),
+                'default' => (string) ($config['default'] ?? ''),
                 'note' => (string) ($config['note'] ?? ''),
             ];
 
-            // Lưu choice config chỉ khi view_type là select hoặc radio
             if (in_array($viewType, ['select', 'radio'], true) && $choiceType !== '') {
                 $col['choice_type'] = $choiceType;
                 if ($choiceType === 'sql') {
@@ -220,11 +230,13 @@ class SchemaService
         $entity->module = (string) ($rawData['target_module'] ?? $module_name);
         $entity->table = (string) ($rawData['table'] ?? '');
         $entity->function_name = (string) ($ps['function_name'] ?? 'main');
+        $entity->menu_label = (string) ($ps['menu_label'] ?? '');
         $entity->layout_type = (string) ($ps['layout_type'] ?? 'list_and_form');
         $entity->area = (string) ($ps['area'] ?? 'admin');
         $entity->note = (string) ($ps['note'] ?? '');
         $entity->pagination = isset($features['pagination']);
         $entity->search = isset($features['search']);
+        $entity->has_detail_view = isset($features['has_detail_view']);
         $entity->active_field = (string) ($features['active_field'] ?? '');
         $entity->weight_field = (string) ($features['weight_field'] ?? '');
         $entity->alias_source_field = (string) ($features['alias_source_field'] ?? '');
@@ -308,8 +320,8 @@ class SchemaService
             return [
                 'number_int' => 'Số nguyên',
                 'number_float' => 'Số thực',
-                'date' => 'Ngày/Tháng/Năm (Unix timestamp)',
-                'time' => 'Giờ:Phút Ngày/Tháng/Năm (Unix timestamp)',
+                'date' => 'Ngày/Tháng/Năm',
+                'time' => 'Giờ:Phút Ngày/Tháng/Năm',
                 'checkbox' => 'Checkbox (0/1)',
                 'select' => 'Selectbox (Load mảng)',
                 'radio' => 'Radio (Load mảng)',

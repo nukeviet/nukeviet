@@ -78,6 +78,7 @@ class SchemaRepository
                 'field' => $field,
                 'sql_type_full' => $typeFull,
                 'base_type' => $baseType,
+                'default' => $row['default'],
                 'comment' => $row['comment'] ?? '',
             ];
         }

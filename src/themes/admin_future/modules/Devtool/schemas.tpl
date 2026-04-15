@@ -22,12 +22,13 @@
                         <tr>
                             <th style="width: 9%">Tên cột</th>
                             <th style="width: 7%">Loại SQL</th>
-                            <th style="width: 18%">Kiểu hiển thị Form</th>
+                            <th style="width: 11%">Mặc định</th>
+                            <th style="width: 15%">Kiểu hiển thị Form</th>
                             <th style="width: 4%">Buộc</th>
                             <th style="width: 4%">Ẩn</th>
                             <th style="width: 4%">List</th>
-                            <th style="width: 13%">Tiêu đề hiển thị</th>
-                            <th style="width: 41%">Ghi chú AI (Logic riêng)</th>
+                            <th style="width: 15%">Tiêu đề hiển thị</th>
+                            <th style="width: 30%">Ghi chú cho AI</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -40,6 +41,9 @@
                         <tr>
                             <td class="fw-bold text-body px-3">{$col.field}</td>
                             <td class="text-center"><span class="badge bg-info-subtle text-info-emphasis border border-info-subtle">{$col.sql_type}</span></td>
+                            <td class="px-2">
+                                <input type="text" name="columns[{$col.field}][default]" value="{$col.config.default|default:$col.db_default}" class="form-control form-control-sm font-monospace" placeholder="NULL">
+                            </td>
                             <td>
                                 <select name="columns[{$col.field}][view_type]" class="form-select select2 view-type-select" data-field="{$col.field}">
                                     {foreach from=$col.view_options key=opt_val item=opt_name}
@@ -122,13 +126,13 @@
                             </td>
                             <td class="text-center">
                                 <div class="form-check form-check-inline m-0">
-                                    <input class="form-check-input" type="checkbox" name="columns[{$col.field}][list]" value="1" {if ($col.config.list|default:true)}checked{/if}>
+                                    <input class="form-check-input list-checkbox" type="checkbox" name="columns[{$col.field}][list]" value="1" {if ($col.config.list|default:true)}checked{/if}>
                                 </div>
                             </td>
-                            <td class="px-3">
+                            <td class="px-2">
                                 <input type="text" name="columns[{$col.field}][label_vi]" value="{$col.config.label_vi|default:$col.comment|default:$col.field}" class="form-control">
                             </td>
-                            <td class="px-3">
+                            <td class="px-2">
                                 <input type="text" name="columns[{$col.field}][note]" value="{$col.config.note|default:''}" class="form-control" placeholder="Ví dụ: Chỉ hiện cho SuperAdmin">
                             </td>
                         </tr>
@@ -149,8 +153,16 @@
             <div class="row mb-4">
                 <label class="col-sm-3 col-form-label text-sm-end fw-bold">Tên Function (OP)</label>
                 <div class="col-sm-8 col-lg-6 col-xxl-5">
-                    <input type="text" name="page_settings[function_name]" value="{$PAGE_SETTINGS.function_name|default:'main'}" class="form-control">
+                    <input type="text" name="page_settings[function_name]" value="{$PAGE_SETTINGS.function_name|default:'main'}" class="form-control font-monospace">
                     <div class="form-text">Tên file PHP trong thư mục admin (ví dụ: main.php)</div>
+                </div>
+            </div>
+
+            <div class="row mb-4">
+                <label class="col-sm-3 col-form-label text-sm-end fw-bold">Tên hiển thị ở Menu</label>
+                <div class="col-sm-8 col-lg-6 col-xxl-5">
+                    <input type="text" name="page_settings[menu_label]" value="{$PAGE_SETTINGS.menu_label|default:''}" class="form-control" placeholder="Ví dụ: Quản lý bài viết">
+                    <div class="form-text">Để trống nếu không muốn hiện trong menu module</div>
                 </div>
             </div>
 
@@ -167,6 +179,18 @@
             </div>
 
             <hr class="my-4 opacity-50">
+
+            <div class="row mb-4">
+                <label class="col-sm-3 col-form-label text-sm-end fw-bold">Cột Tiêu đề bài viết</label>
+                <div class="col-sm-8 col-lg-6 col-xxl-5">
+                    <select name="page_settings[features][alias_source_field]" class="form-select select2">
+                        {foreach from=$COLUMNS item=col}
+                        <option value="{$col.field}" {if $PAGE_SETTINGS.features.alias_source_field==$col.field}selected{/if}>{$col.field}</option>
+                        {/foreach}
+                    </select>
+                    <div class="form-text text-danger"><i class="fa-solid fa-triangle-exclamation me-1"></i>Bắt buộc phải chọn: Dùng làm nhãn chính ở danh sách và tạo link alias</div>
+                </div>
+            </div>
 
             <div class="row mb-4">
                 <label class="col-sm-3 col-form-label text-sm-end fw-bold">Trạng thái (Active)</label>
@@ -195,19 +219,6 @@
             </div>
 
             <div class="row mb-4">
-                <label class="col-sm-3 col-form-label text-sm-end fw-bold">Nguồn tạo Alias</label>
-                <div class="col-sm-8 col-lg-6 col-xxl-5">
-                    <select name="page_settings[features][alias_source_field]" class="form-select select2">
-                        <option value="">-- Không sử dụng --</option>
-                        {foreach from=$COLUMNS item=col}
-                        <option value="{$col.field}" {if $PAGE_SETTINGS.features.alias_source_field==$col.field}selected{/if}>{$col.field}</option>
-                        {/foreach}
-                    </select>
-                    <div class="form-text">Gợi ý: Cột <code>title</code> hoặc <code>name</code></div>
-                </div>
-            </div>
-
-            <div class="row mb-4">
                 <label class="col-sm-3 col-form-label text-sm-end fw-bold">Khu vực sinh mã</label>
                 <div class="col-sm-8 col-lg-6 col-xxl-5">
                     <select name="page_settings[area]" class="form-select select2">
@@ -227,6 +238,10 @@
                         <div class="form-check form-switch custom-switch-lg">
                             <input class="form-check-input" type="checkbox" name="page_settings[features][search]" value="1" id="search_enable" {if ($PAGE_SETTINGS.features.search|default:true)}checked{/if}>
                             <label class="form-check-label fw-bold ml-2" for="search_enable">Tìm kiếm</label>
+                        </div>
+                        <div class="form-check form-switch custom-switch-lg">
+                            <input class="form-check-input" type="checkbox" name="page_settings[features][has_detail_view]" value="1" id="detail_view_enable" {if ($PAGE_SETTINGS.features.has_detail_view|default:false)}checked{/if}>
+                            <label class="form-check-label fw-bold ml-2" for="detail_view_enable">Trang xem chi tiết (view.php)</label>
                         </div>
                     </div>
                 </div>
@@ -379,6 +394,14 @@
             var field = $(this).data('field');
             var table = $(this).val();
             loadTableColumns(field, table, '', '');
+        });
+
+        // Giới hạn 10 cột hiển thị ở trang List
+        $(document).on('change', '.list-checkbox', function() {
+            var checkedCount = $('.list-checkbox:checked').length;
+            if (checkedCount > 10) {
+                alert('Cảnh báo: Bạn đã chọn ' + checkedCount + ' cột cho trang Danh sách. Tối đa nên chọn 10 cột để đảm bảo giao diện hiển thị tốt nhất.');
+            }
         });
 
         // Khởi tạo: load columns cho các field đang ở chế độ sql và đã có bảng chọn

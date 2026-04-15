@@ -37,7 +37,7 @@ if ($nv_Request->isset_request('submit', 'post')) {
         $entity = $schemaService->prepareEntity($rawData, $module_name);
 
         // 4. Validate (ném ValidationException nếu sai)
-        $validator->validateSave($entity->table, $rawData['columns']);
+        $validator->validateSave($entity->table, $rawData['columns'], $rawData['page_settings']);
 
         // 5. Lưu schema + sinh mã action_mysql
         $sqlCode = $schemaService->saveSchema($entity, $db_config);
