@@ -219,8 +219,9 @@ class ContentService
         $row['schema_type'] = $nv_Request->get_title('schema_type', 'post', 'newsarticle');
         $row['schema_about'] = $nv_Request->get_title('schema_about', 'post', 'Organization', 50);
 
-        // Layout
+        // Layout & Phân quyền
         $row['layout_func'] = $nv_Request->get_title('layout_func', 'post', '');
+        $row['activecomm'] = $nv_Request->get_array('activecomm', 'post', []);
 
         return array_merge($defaultData, $row);
     }
@@ -245,9 +246,10 @@ class ContentService
      * @param array $data Dữ liệu thô từ controller (title, alias, description, keywords, image, status, ...)
      * @param array $moduleConfig Config module (alias_lower, ...)
      * @param string $moduleUpload Thư mục upload của module (VD: 'content')
+     * @param array $layoutArray Mảng các layout có sẵn để check hợp lệ
      * @return array Dữ liệu đã chuẩn hóa
      */
-    public function prepareSaveData(array $data, array $moduleConfig = [], string $moduleUpload = ''): array
+    public function prepareSaveData(array $data, array $moduleConfig = [], string $moduleUpload = '', array $layoutArray = []): array
     {
         // Alias: tự sinh từ title nếu rỗng
         $alias = $data['alias'] ?? '';
@@ -269,6 +271,29 @@ class ContentService
                 $data['image'] = substr($image, strlen(NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $moduleUpload . '/'));
             } else {
                 $data['image'] = '';
+            }
+        }
+
+        // Xử lý Layout
+        if (!empty($data['layout_func']) && !empty($layoutArray)) {
+            if (!in_array('layout.' . $data['layout_func'] . '.tpl', $layoutArray, true)) {
+                $data['layout_func'] = '';
+            }
+        }
+
+        // Xử lý Phân quyền xem (Activecomm)
+        if (isset($data['activecomm']) && is_array($data['activecomm'])) {
+            $groups_list = nv_groups_list();
+            $data['activecomm'] = !empty($data['activecomm']) ? implode(',', nv_groups_post(array_intersect($data['activecomm'], array_keys($groups_list)))) : '';
+        }
+
+        // Xử lý Schema
+        if (isset($data['schema_type'])) {
+            if (!array_key_exists($data['schema_type'], SchemaHelper::$schema_types)) {
+                $data['schema_type'] = 'newsarticle';
+            }
+            if ($data['schema_type'] == 'webpage' && empty($data['schema_about'])) {
+                $data['schema_about'] = 'Organization';
             }
         }
 

@@ -57,7 +57,7 @@ class ContentAdd extends BaseApi
         $data = $service->collectRequestData($nv_Request);
 
         // Chuẩn hóa dữ liệu qua Service
-        $data = $service->prepareSaveData($data, $this->config);
+        $data = $service->prepareSaveData($data, $this->config, $this->module_upload);
 
         // Validate
         try {
