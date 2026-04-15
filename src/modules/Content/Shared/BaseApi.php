@@ -33,12 +33,13 @@ abstract class BaseApi implements IApi
 
     protected function bootstrap(): void
     {
-        global $db, $nv_Cache, $module_config, $site_mods;
+        global $db, $nv_Cache, $module_config;
 
         $this->db = $db;
         $this->cache = $nv_Cache;
         $this->module_name = Api::getModuleName();
-        $this->tables = new Tables(NV_PREFIXLANG, $site_mods[$this->module_name]['module_data']);
+        $module_info = Api::getModuleInfo();
+        $this->tables = new Tables(NV_PREFIXLANG, $module_info['module_data']);
         $this->config = $module_config[$this->module_name];
     }
 }
