@@ -73,23 +73,8 @@ if ($nv_Request->isset_request('checkss', 'post')) {
 
     $row = $service->collectRequestData($nv_Request);
 
-    // Xử lý các trường đặc thù Admin
-    if (!empty($row['layout_func']) and !in_array('layout.' . $row['layout_func'] . '.tpl', $layout_array, true)) {
-        $row['layout_func'] = '';
-    }
-
-    $_groups_post = $nv_Request->get_array('activecomm', 'post', []);
-    $row['activecomm'] = !empty($_groups_post) ? implode(',', nv_groups_post(array_intersect($_groups_post, array_keys($groups_list)))) : '';
-
-    if (!array_key_exists($row['schema_type'], SchemaHelper::$schema_types)) {
-        $row['schema_type'] = 'newsarticle';
-    }
-    if ($row['schema_type'] == 'webpage' and empty($row['schema_about'])) {
-        $row['schema_about'] = 'Organization';
-    }
-
-    // Chuẩn hóa dữ liệu (alias, keywords, image) qua Service — DRY
-    $row = $service->prepareSaveData($row, $config, $module_upload);
+    // Chuẩn hóa toàn bộ dữ liệu (alias, keywords, image, layout, schema, activecomm...) qua Service — DRY
+    $row = $service->prepareSaveData($row, $config, $module_upload, $layout_array);
 
     // Luồng chuẩn: Controller nhận Request -> Đóng gói gửi Validator -> Gọi Service -> Đưa ra Template
     try {

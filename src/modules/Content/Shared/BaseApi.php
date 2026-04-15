@@ -24,6 +24,7 @@ abstract class BaseApi implements IApi
     protected Tables $tables;
     protected $cache;
     protected string $module_name;
+    protected string $module_upload;
     protected array $config;
 
     public function setResultHander(ApiResult $result)
@@ -33,12 +34,14 @@ abstract class BaseApi implements IApi
 
     protected function bootstrap(): void
     {
-        global $db, $nv_Cache, $module_config, $site_mods;
+        global $db, $nv_Cache, $module_config;
 
         $this->db = $db;
         $this->cache = $nv_Cache;
         $this->module_name = Api::getModuleName();
-        $this->tables = new Tables(NV_PREFIXLANG, $site_mods[$this->module_name]['module_data']);
+        $module_info = Api::getModuleInfo();
+        $this->tables = new Tables(NV_PREFIXLANG, $module_info['module_data']);
+        $this->module_upload = $module_info['module_upload'];
         $this->config = $module_config[$this->module_name];
     }
 }
