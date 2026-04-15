@@ -11,20 +11,17 @@ namespace NukeViet\Module\Content\Api;
 
 use NukeViet\Api\Api;
 use NukeViet\Api\ApiResult;
-use NukeViet\Api\IApi;
 use NukeViet\Module\Content\Cat\CatRepository;
 use NukeViet\Module\Content\Cat\CatValidator;
 use NukeViet\Module\Content\Cat\CatService;
-use NukeViet\Module\Content\Shared\Tables;
+use NukeViet\Module\Content\Shared\BaseApi;
 
 if (!defined('NV_ADMIN') or !defined('NV_MAINFILE')) {
     exit('Stop!!!');
 }
 
-class CatAdd implements IApi
+class CatAdd extends BaseApi
 {
-    private $result;
-
     public static function getAdminLev()
     {
         return Api::ADMIN_LEV_MOD;
@@ -35,24 +32,16 @@ class CatAdd implements IApi
         return 'content';
     }
 
-    public function setResultHander(ApiResult $result)
-    {
-        $this->result = $result;
-    }
-
     public function execute()
     {
-        global $db, $nv_Cache, $nv_Request, $nv_Lang, $module_config, $site_mods;
-
-        $module_name = Api::getModuleName();
-        $config = $module_config[$module_name];
-        $tables = new Tables(NV_PREFIXLANG, $site_mods[$module_name]['module_data']);
+        global $nv_Request, $nv_Lang;
+        $this->bootstrap();
 
         $repo = new CatRepository(
-            $db,
-            $tables,
-            $nv_Cache,
-            $module_name
+            $this->db,
+            $this->tables,
+            $this->cache,
+            $this->module_name
         );
 
         $catService = new CatService($repo);
@@ -61,7 +50,7 @@ class CatAdd implements IApi
         $data = $catService->collectRequestData($nv_Request);
 
         // Chuẩn hóa dữ liệu (alias, keywords, image) qua Service — DRY
-        $data = $catService->prepareSaveData($data, $config);
+        $data = $catService->prepareSaveData($data, $this->config);
 
         // Validate
         try {
@@ -74,7 +63,7 @@ class CatAdd implements IApi
         }
 
         // Lưu qua Service (weight + timestamps tự động)
-        $savedId = $catService->saveCat($data, 0, $module_name);
+        $savedId = $catService->saveCat($data, 0, $this->module_name);
 
         // Lấy entity vừa tạo để trả về
         $entity = $repo->findById($savedId);
