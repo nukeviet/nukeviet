@@ -28,7 +28,6 @@
 /uploads/logo_*
 /install/default.php
 
-composer.lock
 #vendor test ignore 
 /vendor/**/demo/
 /vendor/**/example/
