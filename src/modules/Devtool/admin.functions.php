@@ -18,4 +18,4 @@ if (!defined('NV_IS_SPADMIN')) {
 
 define('NV_IS_FILE_ADMIN', true);
 
-$allow_func = ['main', 'schemas', 'schemas-save', 'schemas-columns', 'schemas-mvc'];
+$allow_func = ['main', 'schemas', 'schemas-save', 'schemas-columns', 'schemas-mvc', 'config-step1', 'config-step2'];

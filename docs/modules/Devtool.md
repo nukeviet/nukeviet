@@ -187,3 +187,80 @@ Dựa trên Ghi chú AI, trình sinh mã (Code Generator) thực hiện các log
     - `edit_time`: Gán `NV_CURRENTTIME` mỗi khi lưu.
     - `hitstotal`: Khởi tạo bằng 0.
 - **Hỗ trợ Repository**: Tự động sinh hàm `getNewWeight()` trong lớp Repository nếu phát hiện bảng có cấu hình `Weight`.
+- **Hỗ trợ Nullable Data**: Tự động nhận diện các cột Ngày/Tháng/Năm không bắt buộc để thiết lập `Nullable` trong Entity và `bindNullable` trong Repository, giúp tránh lỗi MySQL Strict Mode.
+
+---
+
+## 7. Hướng dẫn thiết kế CSDL tối ưu cho Tự động hóa
+
+Để bộ sinh mã **Devtool** đạt hiệu quả cao nhất (Zero Configuration), bạn nên tuân thủ các quy tắc đặt tên và cấu trúc sau khi thiết kế bảng:
+
+### 7.1. Sử dụng Comment cho Nhãn (Labels)
+- Hãy viết mô tả tiếng Việt vào phần **COMMENT** của mỗi cột trong MySQL.
+- **Devtool** sẽ tự động lấy Comment này làm tiêu đề hiển thị trên Form và Bảng danh sách, giúp bạn không cần sửa lại giao diện.
+
+### 7.2. Tên cột chuẩn hóa (System Fields)
+Nếu bảng có các cột sau, hệ thống sẽ tự động sinh mã xử lý ngầm:
+- `id`: Khóa chính (Primary Key), nên để `mediumint(8) unsigned NOT NULL AUTO_INCREMENT`.
+- `status`: Trạng thái bật/tắt. Hệ thống tự sinh nút thay đổi nhanh trên danh sách.
+- `weight`: Thứ tự sắp xếp. Hệ thống tự sinh logic kéo thả hoặc đổi vị trí.
+- `admin_id`, `add_time`, `edit_time`: Thông tin người tạo và thời gian. Hệ thống tự gán giá trị, tự ẩn khỏi Form.
+
+### 7.3. Thiết kế các trường Ngày/Tháng/Giờ
+Để đảm bảo bài test Acceptance chạy mượt và không bị lỗi Database khi để trống ngày tháng:
+- **Kiểu dữ liệu**: Sử dụng `DATE`, `DATETIME`, `TIMESTAMP`, `TIME`, `YEAR`.
+- **Mặc định (Default)**: Nên để `NULL DEFAULT NULL` cho các trường không bắt buộc.
+- **Tự động hóa**: Bộ sinh mã sẽ tự động:
+    - Sinh Entity với kiểu dữ liệu `?string` (Nullable).
+    - Sinh Repository với hàm `bindNullable` sử dụng `PDO::PARAM_NULL`.
+    - Sinh Validator bỏ qua kiểm tra định dạng nếu dữ liệu rỗng (và không bắt buộc).
+
+---
+
+## 8. Quy trình sử dụng và Tiếp tục phát triển
+
+Sau khi đã có file cấu hình Schema (`.json`), bạn thực hiện các bước sau:
+
+### Bước 1: Sinh mã nguồn (Generate MVC)
+- Nhấn nút **"Sinh MVC"** trong giao diện Devtool. Hệ thống sẽ sinh ra đầy đủ Entity, Repository, Service, Validator, Controller, và Template.
+- Hệ thống cũng sinh ra file `action_mysql_{table}.php` chứa câu lệnh `CREATE TABLE` chuẩn để bạn sử dụng khi đóng gói module.
+
+### Bước 2: Chạy Acceptance Test
+- NukeViet đã tích hợp sẵn hệ thống test ổn định.
+- Sử dụng Skill `acceptance-test` để chạy file test vừa sinh ra (ví dụ: `AdminDemoCest.php`).
+- **Lưu ý**: Mã test được sinh ra đã được tối ưu hóa với lệnh `scrollIntoView({block: 'center'})` và thời gian chờ ổn định để vượt qua các header cố định.
+
+### Bước 3: Tinh chỉnh logic (Customization)
+- **Service Layer**: Nếu cần xử lý dữ liệu phức tạp trước khi lưu (ví dụ: tính toán giá, upload file đặc thù), hãy sửa trong class `Service`.
+- **Repository Layer**: Nếu cần các câu lệnh SQL truy vấn đặc biệt, hãy bổ sung hàm vào class `Repository`.
+- **Giao diện (TPL)**: Bạn có thể thay đổi các class Bootstrap hoặc cấu trúc HTML trong file `.tpl` mà không ảnh hưởng đến logic PHP backend.
+
+---
+
+## 9. Cách dùng "Ghi chú cho AI" để phát triển chức năng cao cấp
+
+Trong giao diện **Devtool**, bạn sẽ thấy các ô "Ghi chú cho AI" ở từng cột và "Ghi chú cho AI (Tổng quát)" ở cuối form. Đây là cách bạn truyền đạt "ý đồ thiết kế" cho AI (như Antigravity) để tôi có thể sinh mã nguồn tùy biến cao hơn các mẫu chuẩn.
+
+### 9.1. Ghi chú cho từng cột (Column AI Notes)
+Hãy nhập vào đây các quy tắc logic đặc thù cho từng trường dữ liệu.
+- **Xác thực (Validation)**: "Chỉ cho phép định dạng số điện thoại Việt Nam", "Email phải thuộc tên miền @vinades.vn", "Giá trị phải lớn hơn 0".
+- **Biến đổi dữ liệu (Transformation)**: "Tự động viết hoa chữ cái đầu khi lưu", "Cắt bỏ khoảng trắng dư thừa".
+- **Gợi ý giao diện**: "Sử dụng Select2 thay cho Selectbox thường", "Ẩn cột này trên giao diện di động".
+
+### 9.2. Ghi chú tổng quát cho AI (Global AI Notes)
+Dùng để mô tả logic nghiệp vụ của cả màn hình hoặc mối quan hệ giữa các trường.
+- **Nghiệp vụ phức tạp**: "Sau khi lưu thành công, hãy tự động gọi API gửi thông báo sang Telegram", "Nếu trường A > 100 thì bắt buộc phải nhập trường B".
+- **Cấu trúc màn hình**: "Thiết kế Form theo dạng chia 2 cột dọc", "Thêm nút 'Sao chép' bên cạnh mỗi dòng trong danh sách".
+- **Quyền hạn**: "Chỉ cho phép sửa, không cho phép xóa dữ liệu cấp hệ thống".
+
+### 9.3. Lợi ích
+Khi bạn nhấn **"Sinh MVC"** hoặc nhờ AI chỉnh sở code, AI sẽ đọc file JSON cấu hình này. Những ghi chú này sẽ đóng vai trò là "Instruction" ưu tiên, giúp AI viết các hàm `Validator`, `Service` hoặc `Template` chính xác theo nghiệp vụ riêng biệt của bạn mà không cần bạn phải mô tả lại nhiều lần.
+
+---
+
+## 10. Cách ra lệnh (Prompting) cho AI dựa trên Schema
+
+Sau khi đã lưu cấu hình ra file JSON (ví dụ: `data/devtool/nv5_vi_content_demo.json`), bạn có thể ra lệnh cho AI (Antigravity) thực hiện các bước tiếp theo bằng cách sử dụng cú pháp Prompt đi kèm với việc **@ nhắc tên file**.
+
+- **Khi muốn sinh mã nguồn lần đầu**:
+  > "Dựa vào cấu hình trong @nv5_vi_content_demo.json, hãy sinh đầy đủ mã nguồn MVC cho module Content, bao gồm cả các hàm Service xử lý theo ghi chú AI."

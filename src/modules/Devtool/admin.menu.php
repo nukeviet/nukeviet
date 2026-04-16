@@ -13,3 +13,4 @@ if (!defined('NV_ADMIN') or !defined('NV_MAINFILE') or !defined('NV_IS_MODADMIN'
 
 $submenu['main'] = $nv_Lang->getModule('main');
 $submenu['schemas'] = $nv_Lang->getModule('schemas');
+$submenu['config-step1'] = $nv_Lang->getModule('config_step1_title');

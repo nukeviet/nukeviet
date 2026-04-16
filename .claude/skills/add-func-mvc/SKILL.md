@@ -1,211 +1,91 @@
 ---
 name: add-func-mvc
-description: Khởi tạo đầy đủ các lớp (Entity, Repository, Service, Validator, Controller) cho một chức năng mới dựa trên bảng CSLD. Dùng khi cần xây dựng nhanh CRUD cho một table mới trong module.
-argument-hint: modules/ten-module/admin/op.php --table ten_bang_vach_duoi
+description: Scaffold trọn bộ MVC (Entity, Repository, Service, Validator, Controller) cho NukeViet 5.0 dựa trên JSON Schema. Tự động khởi tạo thư mục Shared nếu chưa tồn tại.
+argument-hint: src/data/devtool/ten_file_config.json
 ---
 
-# Skill: add-func-mvc — Siêu khởi tạo CRUD (Entity + Service Layer)
+# Skill: add-func-mvc — NukeViet 5.0 MVC Scaffolding
 
-Skill này dùng để tự động xây dựng toàn bộ các lớp nghiệp vụ và giao diện cho một đối tượng (table) mới trong module NukeViet 5, tuân thủ tuyệt đối chuẩn MVC và kiến trúc Service Layer.
+Skill này thực hiện sinh mã nguồn chuẩn MVC + Service Layer cho NukeViet 5.0. AI sử dụng JSON Schema làm cấu hình đầu vào để build Entity, Repository, Service, Validator và Controller.
 
-## 1. Phân tích và Thiết kế
-- **Input**: Mã SQL `CREATE TABLE` hoặc danh sách cột + Tên Module.
-- **Tên Đối Tượng ({Item})**: Chuyển PascalCase từ tên bảng. Ví dụ: `news_tags` -> `Tag`.
-- **Cấu trúc thư mục**: 
-  - **Logic**: `src/modules/{Module}/{Item}/`
-- **Admin Controller**: `src/modules/{Module}/admin/{op}.php`
-- **Frontend Controller**: `src/modules/{Module}/funcs/{op}.php` (Dành cho chức năng ngoài site)
+## 1. Workflow (Quy trình thực thi)
 
-## 2. Chi tiết các lớp mã nguồn (Templates)
+1. **Schema Parsing**: AI phân tích file JSON (Mapping columns, View types, AI Instructions).
+2. **Architecture Check**: Kiểm tra thư mục `Shared/` tại module đích. Nếu chưa tồn tại, AI sử dụng mẫu mã nguồn (Core Templates) dưới đây để khởi tạo.
+3. **MVC Generation**: Sinh mã nguồn theo thứ tự: Entity -> Repository -> Validator -> Service -> Controller -> Template -> Acceptance Test.
 
-### A. Entity (`{Item}Entity.php`)
-- **Mục tiêu**: Ánh xạ 1 dòng DB thành Object có kiểu dữ liệu.
+## 2. Core Templates (Lớp cơ sở)
+
+AI sử dụng các mẫu này để thiết lập nền tảng cho Module nếu không có sẵn nguồn tham chiếu:
+
+````carousel
 ```php
-namespace NukeViet\Module\{Module}\{Item};
-class {Item}Entity extends \NukeViet\Module\Content\Shared\AbstractEntity {
-    public int $id = 0;
-    public string $title = '';
-    // ... các thuộc tính khác có Type Hint và giá trị mặc định
-    
-    public function toArray(): array {
-        return [
-            'id' => $this->id,
-            'title' => $this->title,
-        ];
+// Shared/Tables.php — Table name resolution
+namespace NukeViet\Module\{Module}\Shared;
+readonly class Tables {
+    public string $main;
+    public function __construct(string $tablePrefix, string $moduleData) {
+        $this->main = $tablePrefix . '_' . $moduleData . '_{suffix}';
     }
 }
 ```
-
-### B. Repository (`{Item}Repository.php`)
-- **Mục tiêu**: Tập trung toàn bộ truy vấn SQL.
-- **Yêu cầu**: Sử dụng PDO, FETCH_ASSOC, cache, getDbColumns().
+<!-- slide -->
 ```php
-namespace NukeViet\Module\{Module}\{Item};
+// Shared/BaseRepository.php — PDO & Cache common logic
+namespace NukeViet\Module\{Module}\Shared;
 use PDO;
-
-class {Item}Repository {
-    private PDO $db;
-    private string $table;
-    private $cache;
-    private string $module;
-
-    public function __construct(PDO $db, string $table, $cache, string $module) {
-        $this->db = $db; $this->table = $table; $this->cache = $cache; $this->module = $module;
+abstract class BaseRepository {
+    protected PDO $db; protected Tables $tables; protected $cache; protected string $module_name;
+    public function __construct(PDO $db, Tables $tables, $cache, string $module_name) {
+        $this->db = $db; $this->tables = $tables; $this->cache = $cache; $this->module_name = $module_name;
     }
-
-    public function findById(int $id): ?{Item}Entity {
-        $sql = "SELECT * FROM " . $this->table . " WHERE id = :id";
-        $stmt = $this->db->prepare($sql);
-        $stmt->bindValue(':id', $id, PDO::PARAM_INT);
-        $stmt->execute();
-        $row = $stmt->fetch(PDO::FETCH_ASSOC);
-        $stmt->closeCursor();
-        return $row ? {Item}Entity::fromArray($row) : null;
+    abstract protected function entityClass(): string;
+    protected function bindNullable(\PDOStatement $stmt, string $param, $value, ?string $field = null): void {
+        if ($value === null || $value === '') { $stmt->bindValue($param, null, PDO::PARAM_NULL); return; }
+        $type = $field ? $this->pdoType($field) : PDO::PARAM_STR;
+        $stmt->bindValue($param, $value, $type);
     }
-
-    public function save(array $data, int $id = 0): int {
-        // Lọc dữ liệu chuẩn trước khi lưu DB
-        $data = array_intersect_key($data, array_flip({Item}Entity::getDbColumns()));
-        // ... Xử lý INSERT hoặc UPDATE dùng PDO prepare
-        $this->invalidateCache();
-        return $id ?: (int) $this->db->lastInsertId();
-    }
-
-    public function invalidateCache(): void {
-        $this->cache->delMod($this->module);
+    public function invalidateCache(): void { $this->cache->delMod($this->module_name); }
+    protected function fetchEntities(\PDOStatement $stmt): array {
+        return array_map([$this->entityClass(), 'fromArray'], $stmt->fetchAll(PDO::FETCH_ASSOC));
     }
 }
 ```
-
-### C. Validator (`{Item}Validator.php`)
-- **Mục tiêu**: Kiểm tra tính hợp lệ, ném Exception kèm Error Code đại diện cho input.
+<!-- slide -->
 ```php
-namespace NukeViet\Module\{Module}\{Item};
-class {Item}Validator {
-    public function validateSave(array $data, int $excludeId = 0): void {
-        if (empty($data['title'])) {
-            throw new \InvalidArgumentException('empty_title', 1);
+// Shared/AbstractEntity.php — Data mapping & Hydration
+namespace NukeViet\Module\{Module}\Shared;
+abstract class AbstractEntity {
+    public static function getDbColumns(): array {
+        $allFields = array_keys(get_class_vars(static::class));
+        return array_values(array_diff($allFields, static::VIEW_FIELDS, [static::PRIMARY_KEY]));
+    }
+    public static function fromArray(array $data): static {
+        $entity = new static();
+        foreach ($data as $key => $value) {
+            if (!property_exists($entity, $key)) continue;
+            if ($value === null) { $entity->$key = null; continue; }
+            $entity->$key = is_int($entity->$key) ? (int)$value : (string)$value;
         }
+        return $entity;
     }
 }
 ```
+````
 
-### D. Service (`{Item}Service.php`)
-- **Mục tiêu**: Business Logic, chuẩn hóa dữ liệu, phát Hook.
-```php
-namespace NukeViet\Module\{Module}\{Item};
-class {Item}Service {
-    private {Item}Repository $repo;
-    public function __construct({Item}Repository $repo) { $this->repo = $repo; }
+## 3. Technical Standards (Tiêu chuẩn kỹ thuật)
 
-    public function collectRequestData($nv_Request): array {
-        return [
-            'title' => $nv_Request->get_title('title', 'post', ''),
-        ];
-    }
+1. **Zero Configuration**: Tự động xử lý các cột hệ thống (`status`, `weight`, `admin_id`, `add_time`, `edit_time`).
+2. **Nullable Types**: Sử dụng `?string` cho dữ liệu ngày tháng không bắt buộc trong Entity.
+3. **PDO Binding**: Sử dụng `bindNullable` trong Repository để tương thích MySQL Strict Mode.
+4. **Service Layer Workflow**:
+   - `collectRequestData`: Chuyển Request sang Mảng thô.
+   - `prepareSaveData`: Chuẩn hóa dữ liệu (0/null handling, alias generation).
+   - `Validator::validateSave`: Kiểm tra tính hợp lệ.
+   - `saveItem`: Thực thi SQL & Dispatch Hooks.
+5. **Acceptance Testing**: Sử dụng `scrollIntoView({block: 'center'})` và `wait(0.5)` để đảm bảo độ ổn định của UI tests.
 
-    public function prepareSaveData(array $data): array {
-        $data['alias'] = change_alias($data['title'] ?? '');
-        return $data; // Luôn chạy trước khi Validator nhận dữ liệu
-    }
+## 4. Prompting Instruction
 
-    public function save{Item}(array $data, int $id, string $module_name): int {
-        // Xử lý auto set weight, add_time, edit_time...
-        $savedId = $this->repo->save($data, $id);
-        nv_apply_hook($module_name, '{item}_saved', [
-            'id' => $savedId, 
-            'title' => $data['title'],
-            'action' => $id ? 'edit' : 'add'
-        ]);
-        return $savedId;
-    }
-}
-```
-
-### E. Giao diện Quản trị (`admin/{op}.php`)
-- **Mục tiêu**: Entry point cho admin.
-- **Yêu cầu**: Tuân thủ thứ tự `use` và 2 tầng try-catch (`InvalidArgumentException` và `Throwable`).
-```php
-if (!defined('NV_IS_FILE_ADMIN')) exit('Stop!!!');
-
-use NukeViet\Module\{Module}\{Item}\{Item}Repository;
-use NukeViet\Module\{Module}\{Item}\{Item}Service;
-use NukeViet\Module\{Module}\{Item}\{Item}Validator;
-
-$repo = new {Item}Repository($db, NV_PREFIXLANG . '_' . $module_data, $nv_Cache, $module_name);
-$service = new {Item}Service($repo);
-
-if ($nv_Request->isset_request('submit', 'post')) { // Xử lý submit
-    // 1. Thu thập
-    $data = $service->collectRequestData($nv_Request);
-    // 2. Chuẩn hóa
-    $data = $service->prepareSaveData($data);
-    
-    try {
-        $saveId = $id ?: 0;
-        // 3. Validate
-        $validator = new {Item}Validator($repo);
-        $validator->validateSave($data, $saveId);
-        
-        // 4. Save
-        $savedId = $service->save{Item}($data, $saveId, $module_name);
-        nv_insert_logs(NV_LANG_DATA, $module_name, $saveId ? 'Edit' : 'Add', 'ID: ' . $savedId, $admin_info['userid']);
-        
-        nv_jsonOutput(['status' => 'success', 'mess' => $nv_Lang->getGlobal('save_success')]);
-    } catch (\InvalidArgumentException $e) {
-        $fieldMap = [1 => 'title']; // Map error code to input field
-        nv_jsonOutput([
-            'status' => 'error', 
-            'mess' => $nv_Lang->getModule($e->getMessage()), 
-            'input' => $fieldMap[$e->getCode()] ?? ''
-        ]);
-    } catch (\Throwable $e) {
-        trigger_error($e);
-        nv_jsonOutput(['status' => 'error', 'mess' => $nv_Lang->getGlobal('error_system')]);
-    }
-}
-```
-
-### F. Giao diện Ngoài site (`funcs/{op}.php`)
-- **Mục tiêu**: Phục vụ người dùng cuối. Đăng ký `op` vào `version.php`. Khởi tạo repo dạng local.
-```php
-if (!defined('NV_IS_MOD_{MODULE}')) exit('Stop!!!');
-
-use NukeViet\Module\{Module}\{Item}\{Item}Repository;
-use NukeViet\Module\{Module}\{Item}\{Item}Service;
-
-$repo = new {Item}Repository($db, NV_PREFIXLANG . '_' . $module_data, $nv_Cache, $module_name);
-$service = new {Item}Service($repo);
-
-// Xử lý logic...
-$contents = nv_theme_{module}_{op}($data); // Gọi hàm render trong theme.php
-
-include NV_ROOTDIR . '/includes/header.php';
-echo nv_site_theme($contents);
-include NV_ROOTDIR . '/includes/footer.php';
-```
-
-## 3. Quy trình thực hiện (Checklist)
-1. [ ] **DB**: Chốt schema bảng.
-2. [ ] **Layers**: Tạo Entity -> Repository -> Validator -> Service.
-3. [ ] **Controller**: Tạo file admin hoặc funcs. Áp dụng 2 tầng `try-catch`.
-4. [ ] **Menu/Route**:
-    - **Admin**: Cập nhật `$submenu` trong `admin.menu.php`.
-    - **Frontend**: Thêm tên `op` vào mảng `function` trong `version.php`.
-5. [ ] **Language**: Thêm các thông báo lỗi Validation vào `language/vi.php`.
-6. [ ] **View**: Tạo `.tpl` Smarty trong theme (Bootstrap 5).
-7. [ ] **Testing**: Bổ sung Unit Test cho Validator và Service, Acceptance Test CRUD AdminUI.
-8. [ ] **Syntax & Cache**:
-    - Kiểm tra lỗi cú pháp: `php -l {đường/dẫn/file}`
-    - Xóa cache: `rm -rf src/data/cache/*/*.cache`
-
-## 4. Nguyên tắc "Vàng"
-1. **No Hardcode**: Sử dụng `NV_PREFIXLANG . '_' . $module_data` cho tên bảng.
-2. **Order of Use**: `use` list sắp xếp theo: `Repository` -> `Service` -> `Validator`.
-3. **Local Init**: Khởi tạo Repo/Service ngay trong Controller. Cấm khởi tạo global.
-4. **Validation Error Code**: Hàm Validator nén `InvalidArgumentException` kèm Error code tương ứng với field, key mess khớp với `language/vi.php`.
-5. **Two-Tier Try Catch**: Controller cần bắt lỗi Validation trả thẳng thông báo cho user, nhưng với những lỗi không báo trước `Throwable` thì phải ghi log `trigger_error($e)` rồi báo lỗi chung.
-6. **Data Flow**: `prepareSaveData` TRƯỚC KHI `validateSave` để kiểm tra các field tự sinh (như alias) chính xác hơn.
-
-## 5. Báo cáo kết quả
-Sau khi hoàn thành, liệt kê tất cả file mới, các file đã cập nhật và cung cấp URL test để kiểm tra nhanh.
+Dựa trên cấu hình JSON Schema tại @src/data/devtool/nv5_vi_content_demo.json, hãy sử dụng skill add-func-mvc để sinh trọn bộ mã nguồn MVC (Entity, Repository, Service, Validator, Controller, Template và Acceptance Test).
+Lưu ý triển khai chi tiết dựa trên các "Ghi chú cho AI" trong schema, đặc biệt là phần giao diện đẹp cho các trường chuyên mục và xử lý đầy đủ các trường ngày tháng (fdate, fdatetime, ftimestamp, ftime, fyear)
