@@ -73,6 +73,13 @@ if (defined('NV_IS_USER_FORUM') or defined('SSO_SERVER')) {
 } else {
     $db->query('DELETE FROM ' . NV_MOD_TABLE . '_login WHERE userid=' . $user_info['userid'] . ' AND clid=' . $db->quote($client_info['clid']));
     NukeViet\Core\User::unset_userlogin_hash();
+
+    if (!empty($nv_custom_session_clean)) {
+        nv_apply_hook($module_name, 'clean_custom_session_key', [[
+            'keys' => $nv_custom_session_clean
+        ]]);
+    }
+
     if ($user_info['current_mode'] == 4 and module_file_exists('users/login/cas-' . $user_info['openid_server'] . '.php')) {
         define('CAS_LOGOUT_URL_REDIRECT', $url_redirect);
         include NV_ROOTDIR . '/modules/users/login/cas-' . $user_info['openid_server'] . '.php';
