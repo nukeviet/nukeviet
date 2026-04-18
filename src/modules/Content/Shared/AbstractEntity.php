@@ -22,6 +22,7 @@ if (!defined('NV_MAINFILE')) {
  * - Hằng VIEW_FIELDS: danh sách thuộc tính chỉ dùng cho hiển thị (không có trong DB)
  * - Hằng PRIMARY_KEY: tên khóa chính nếu không nằm trong VIEW_FIELDS (VD: 'catid')
  *   Nếu khóa chính đã nằm trong VIEW_FIELDS thì không cần khai báo PRIMARY_KEY.
+ * - Hằng RELATIONS: danh sách thuộc tính là nested Entity (nullable, dùng cho toArray())
  */
 abstract class AbstractEntity
 {
@@ -37,6 +38,14 @@ abstract class AbstractEntity
      * VD: CatEntity có PRIMARY_KEY = 'catid'
      */
     protected const PRIMARY_KEY = '';
+
+    /**
+     * Danh sách thuộc tính là nested Entity (nullable relationship).
+     * Mỗi phần tử: tên thuộc tính → tên class Entity tương ứng.
+     * VD: ['category' => CatEntity::class]
+     * Dùng bởi toArray() để tự động expand nested Entity thành array.
+     */
+    protected const RELATIONS = [];
 
     /**
      * Lấy danh sách các cột thực tế trong Database.
@@ -73,10 +82,34 @@ abstract class AbstractEntity
     }
 
     /**
-     * Chuyển Entity thành Array tương thích Hooks / Smarty NV5.
-     * Mỗi class con tự override nếu cần xử lý đặc biệt (VD: nested Entity).
+     * Kiểm tra Entity có implement một Marker Interface cụ thể không.
+     * Dùng để Repository/Service tự detect khả năng của Entity (HasAlias, HasWeight, HasStatus).
+     *
+     * VD: CatEntity::supports(HasWeight::class) → true
+     *     ContentEntity::supports(HasAlias::class) → true
      */
-    abstract public function toArray(): array;
+    public static function supports(string $interface): bool
+    {
+        return is_a(static::class, $interface, true);
+    }
+
+    /**
+     * Chuyển Entity thành Array tương thích Hooks / Smarty NV5.
+     * Tự động expand nested Entity theo khai báo RELATIONS.
+     * Class con chỉ cần override nếu có logic đặc biệt ngoài nested Entity.
+     */
+    public function toArray(): array
+    {
+        $arr = get_object_vars($this);
+
+        foreach (static::RELATIONS as $field => $entityClass) {
+            if (isset($arr[$field]) && $arr[$field] instanceof AbstractEntity) {
+                $arr[$field] = $arr[$field]->toArray();
+            }
+        }
+
+        return $arr;
+    }
 
     /**
      * Tạo Entity từ array dữ liệu.

@@ -15,13 +15,13 @@ if (!defined('NV_MAINFILE')) {
     exit('Stop!!!');
 }
 
-use NukeViet\Module\Content\Shared\ValidationException;
+use NukeViet\Module\Content\Shared\BaseValidator;
 
 /**
- * CatValidator — Request Validator kiểm duyệt dữ liệu cho Chủ đề
- * Tách biệt việc kiểm tra tính đúng đắn của dữ liệu khỏi Service
+ * CatValidator — Kiểm duyệt dữ liệu cho Chủ đề.
+ * Kế thừa BaseValidator để tái sử dụng requireNotEmpty, requireUniqueAlias, throwIfErrors.
  */
-class CatValidator
+class CatValidator extends BaseValidator
 {
     private CatRepository $repo;
 
@@ -31,26 +31,21 @@ class CatValidator
     }
 
     /**
-     * Validate dữ liệu chủ đề (title, alias...).
+     * Validate dữ liệu chủ đề.
      * Kiểm tra toàn bộ trước khi ném — trả đủ lỗi trong 1 lần.
-     * @param array $data Dữ liệu cần kiểm duyệt
-     * @param int $excludeId Bỏ qua id khi check alias trùng lặp
-     * @throws ValidationException Nếu có ít nhất 1 lỗi
+     *
+     * @param array $data      Dữ liệu cần kiểm duyệt (đã qua prepareSaveData)
+     * @param int   $excludeId Bỏ qua ID khi check alias trùng (0 = thêm mới)
+     * @throws \NukeViet\Module\Content\Shared\ValidationException nếu có lỗi
      */
     public function validateSave(array $data, int $excludeId = 0): void
     {
-        $errors = [];
+        // Field 1: title không được rỗng
+        $this->requireNotEmpty($data['title'] ?? '', 1, 'cat_empty_title');
 
-        if (empty($data['title'])) {
-            $errors[1] = 'cat_empty_title';
-        }
+        // Field 2: alias không được trùng
+        $this->requireUniqueAlias($this->repo, $data['alias'] ?? '', 2, 'erroralias', $excludeId);
 
-        if (!empty($data['alias']) && $this->repo->isAliasExists($data['alias'], $excludeId)) {
-            $errors[2] = 'erroralias';
-        }
-
-        if (!empty($errors)) {
-            throw new ValidationException($errors);
-        }
+        $this->throwIfErrors();
     }
 }

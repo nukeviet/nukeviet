@@ -15,13 +15,13 @@ if (!defined('NV_MAINFILE')) {
     exit('Stop!!!');
 }
 
-use NukeViet\Module\Content\Shared\ValidationException;
+use NukeViet\Module\Content\Shared\BaseValidator;
 
 /**
- * ContentValidator — Request Validator kiểm duyệt dữ liệu
- * Tách biệt việc kiểm tra tính đúng đắn của dữ liệu khỏi Service
+ * ContentValidator — Kiểm duyệt dữ liệu cho Bài viết.
+ * Kế thừa BaseValidator để tái sử dụng requireNotEmpty, requireUniqueAlias, throwIfErrors.
  */
-class ContentValidator
+class ContentValidator extends BaseValidator
 {
     private ContentRepository $repo;
 
@@ -31,30 +31,26 @@ class ContentValidator
     }
 
     /**
-     * Validate dữ liệu bài viết (title, bodytext, alias...).
+     * Validate dữ liệu bài viết.
      * Kiểm tra toàn bộ trước khi ném — trả đủ lỗi trong 1 lần.
-     * @param array $data Dữ liệu cần kiểm duyệt
-     * @param int $excludeId Bỏ qua id khi check alias trùng
-     * @throws ValidationException Nếu có ít nhất 1 lỗi
+     *
+     * @param array $data      Dữ liệu cần kiểm duyệt (đã qua prepareSaveData)
+     * @param int   $excludeId Bỏ qua ID khi check alias trùng (0 = thêm mới)
+     * @throws \NukeViet\Module\Content\Shared\ValidationException nếu có lỗi
      */
     public function validateSave(array $data, int $excludeId = 0): void
     {
-        $errors = [];
+        // Field 1: title không được rỗng
+        $this->requireNotEmpty($data['title'] ?? '', 1, 'empty_title');
 
-        if (empty($data['title'])) {
-            $errors[1] = 'empty_title';
-        }
-
+        // Field 2: bodytext không được rỗng
         if (trim($data['bodytext'] ?? '') === '') {
-            $errors[2] = 'empty_bodytext';
+            $this->addError(2, 'empty_bodytext');
         }
 
-        if (!empty($data['alias']) && $this->repo->isAliasExists($data['alias'], $excludeId)) {
-            $errors[3] = 'erroralias';
-        }
+        // Field 3: alias không được trùng
+        $this->requireUniqueAlias($this->repo, $data['alias'] ?? '', 3, 'erroralias', $excludeId);
 
-        if (!empty($errors)) {
-            throw new ValidationException($errors);
-        }
+        $this->throwIfErrors();
     }
 }

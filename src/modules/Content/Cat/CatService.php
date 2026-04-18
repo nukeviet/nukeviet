@@ -15,11 +15,14 @@ if (!defined('NV_MAINFILE')) {
     exit('Stop!!!');
 }
 
+use NukeViet\Module\Content\Shared\BaseCrudService;
+use NukeViet\Module\Content\Shared\BaseRepository;
+
 /**
- * CatService — Tầng nghiệp vụ cho Chủ đề
- * Xử lý validation, business logic; không chứa SQL
+ * CatService — Tầng nghiệp vụ cho Chủ đề.
+ * Kế thừa BaseCrudService để tái sử dụng saveEntity, deleteEntity, changeStatus, changeWeight.
  */
-class CatService
+class CatService extends BaseCrudService
 {
     private CatRepository $repo;
 
@@ -28,14 +31,27 @@ class CatService
         $this->repo = $repo;
     }
 
+    protected function entityName(): string
+    {
+        return 'cat';
+    }
+
+    protected function repo(): BaseRepository
+    {
+        return $this->repo;
+    }
+
+    // ═══════════════════════════════════════
+    // READ Operations
+    // ═══════════════════════════════════════
+
     /**
-     * Lấy danh sách tất cả chủ đề (dùng cho dropdown select)
-     * @return array Array dạng [catid => title] hoặc CatEntity[]
+     * Lấy danh sách tất cả chủ đề
+     * @return CatEntity[]
      */
     public function getList(bool $activeOnly = false): array
     {
-        $cats = $activeOnly ? $this->repo->getAllActive() : $this->repo->getAll();
-        return $cats;
+        return $activeOnly ? $this->repo->getAllActive() : $this->repo->getAll();
     }
 
     /**
@@ -43,7 +59,7 @@ class CatService
      */
     public function getSelectList(bool $activeOnly = false): array
     {
-        $cats = $this->getList($activeOnly);
+        $cats   = $this->getList($activeOnly);
         $result = [];
         foreach ($cats as $cat) {
             $result[$cat->catid] = $cat->title;
@@ -53,6 +69,8 @@ class CatService
 
     /**
      * Lấy chi tiết chủ đề
+     * @throws \InvalidArgumentException nếu catid không hợp lệ
+     * @throws \RuntimeException nếu không tìm thấy
      */
     public function getDetail(int $catid): CatEntity
     {
@@ -66,23 +84,23 @@ class CatService
         return $row;
     }
 
+    // ═══════════════════════════════════════
+    // WRITE Operations (CUD) — dùng chung BaseCrudService
+    // ═══════════════════════════════════════
+
     /**
-     * Thu thập dữ liệu từ Request (Admin & API dùng chung)
+     * Thu thập dữ liệu từ Request (Admin & API dùng chung).
      * Gom toàn bộ các hàm nv_Request->get_xxx về một nơi để dễ bảo trì.
-     *
-     * @param \NukeViet\Core\Request $nv_Request
-     * @param array $defaultData Dữ liệu mặc định nếu cần gộp
-     * @return array
      */
     public function collectRequestData($nv_Request, array $defaultData = []): array
     {
-        $row = [];
-        $row['title'] = $nv_Request->get_title('title', 'post', '', 250);
-        $row['alias'] = $nv_Request->get_title('alias', 'post', '');
+        $row             = [];
+        $row['title']    = $nv_Request->get_title('title', 'post', '', 250);
+        $row['alias']    = $nv_Request->get_title('alias', 'post', '');
         $row['description'] = $nv_Request->get_textarea('description', '', 'br', 1);
         $row['keywords'] = nv_strtolower($nv_Request->get_title('keywords', 'post', ''));
-        $row['image'] = $nv_Request->get_string('image', 'post', '');
-        $row['status'] = $nv_Request->get_int('status', 'post', 1);
+        $row['image']    = $nv_Request->get_string('image', 'post', '');
+        $row['status']   = $nv_Request->get_int('status', 'post', 1);
 
         return array_merge($defaultData, $row);
     }
@@ -90,16 +108,11 @@ class CatService
     /**
      * Chuẩn hóa dữ liệu chủ đề trước khi validate/save.
      * Gom logic alias, keywords, image — tránh lặp code giữa admin controller và API.
-     *
-     * @param array $data Dữ liệu thô từ controller (title, alias, description, keywords, image, status)
-     * @param array $moduleConfig Config module (alias_lower, ...)
-     * @param string $moduleUpload Thư mục upload của module (VD: 'content')
-     * @return array Dữ liệu đã chuẩn hóa
      */
     public function prepareSaveData(array $data, array $moduleConfig = [], string $moduleUpload = ''): array
     {
         // Alias: tự sinh từ title nếu rỗng
-        $alias = $data['alias'] ?? '';
+        $alias       = $data['alias'] ?? '';
         $data['alias'] = empty($alias) ? change_alias($data['title']) : change_alias($alias);
         if (!empty($moduleConfig['alias_lower'])) {
             $data['alias'] = strtolower($data['alias']);
@@ -125,84 +138,20 @@ class CatService
     }
 
     /**
-     * Lưu chủ đề (save + weight/timestamps + clear cache + hook)
-     * Yêu cầu: dữ liệu phải được chuẩn hóa qua prepareSaveData() và
-     * thẩm định bởi CatValidator từ vòng ngoài trước khi vào đây
-     * @return int CatID của bản ghi vừa lưu
+     * Lưu chủ đề — wrapper cho BaseCrudService::saveEntity()
+     * Giữ tên phương thức cũ để Controller không phải thay đổi.
+     * @return int catid của bản ghi vừa lưu
      */
     public function saveCat(array $data, int $catid, string $module_name): int
     {
-        // Tự động gắn weight + timestamps
-        if ($catid > 0) {
-            $data['edit_time'] = NV_CURRENTTIME;
-        } else {
-            $data['weight'] = $this->repo->getMaxWeight() + 1;
-            $data['add_time'] = NV_CURRENTTIME;
-            $data['edit_time'] = NV_CURRENTTIME;
-        }
-
-        $savedId = $this->repo->save($data, $catid);
-        $this->repo->invalidateCache();
-
-        nv_apply_hook($module_name, 'cat_saved', [
-            'catid' => $savedId,
-            'title' => $data['title'],
-            'action' => $catid ? 'edit' : 'add',
-        ]);
-
-        return $savedId;
+        return $this->saveEntity($data, $catid, $module_name);
     }
 
     /**
-     * Xóa chủ đề (delete + reorder + clear cache)
+     * Xóa chủ đề — wrapper cho BaseCrudService::deleteEntity()
      */
     public function deleteCat(int $catid, string $module_name): bool
     {
-        $row = $this->repo->findById($catid);
-        if (!$row) {
-            return false;
-        }
-
-        $result = $this->repo->delete($catid);
-        if ($result) {
-            $this->repo->reorderWeight();
-            $this->repo->invalidateCache();
-            nv_apply_hook($module_name, 'cat_deleted', [
-                'catid' => $catid,
-                'title' => $row->title,
-            ]);
-        }
-        return $result;
-    }
-
-    /**
-     * Đổi trạng thái chủ đề
-     * @return int Trạng thái mới (-1 nếu lỗi)
-     */
-    public function changeStatus(int $catid, string $module_name): int
-    {
-        $newStatus = $this->repo->toggleStatus($catid);
-        if ($newStatus >= 0) {
-            $this->repo->invalidateCache();
-            nv_apply_hook($module_name, 'cat_status_changed', [
-                'catid' => $catid,
-                'new_status' => $newStatus,
-            ]);
-        }
-        return $newStatus;
-    }
-
-    /**
-     * Đổi vị trí (weight) chủ đề
-     */
-    public function changeWeight(int $catid, int $newWeight, string $module_name): bool
-    {
-        $row = $this->repo->findById($catid);
-        if (!$row) {
-            return false;
-        }
-        $this->repo->reorderWeight($catid, $newWeight);
-        $this->repo->invalidateCache();
-        return true;
+        return $this->deleteEntity($catid, $module_name);
     }
 }

@@ -17,16 +17,38 @@ if (!defined('NV_MAINFILE')) {
 
 use PDO;
 use NukeViet\Module\Content\Shared\BaseRepository;
+use NukeViet\Module\Content\Shared\Traits\AliasRepositoryTrait;
+use NukeViet\Module\Content\Shared\Traits\StatusRepositoryTrait;
+use NukeViet\Module\Content\Shared\Traits\WeightRepositoryTrait;
 
 /**
  * ContentRepository — Tầng truy vấn dữ liệu cho bài viết
  * Tập trung mọi SQL vào đây, Controller không viết SQL trực tiếp
+ *
+ * Traits được nạp tự động theo interface Entity implement:
+ * - AliasRepositoryTrait  → ContentEntity implements HasAlias  → findByAlias(), isAliasExists()
+ * - WeightRepositoryTrait → ContentEntity implements HasWeight → getMaxWeight(), reorderWeight(), autoCorrectWeight()
+ * - StatusRepositoryTrait → ContentEntity implements HasStatus → toggleStatus()
  */
 class ContentRepository extends BaseRepository
 {
+    use AliasRepositoryTrait;
+    use WeightRepositoryTrait;
+    use StatusRepositoryTrait;
+
     protected function entityClass(): string
     {
         return ContentEntity::class;
+    }
+
+    protected function tableName(): string
+    {
+        return $this->tables->content;
+    }
+
+    protected function primaryKey(): string
+    {
+        return 'id';
     }
 
     public function saveConfig(array $config): void
@@ -50,19 +72,6 @@ class ContentRepository extends BaseRepository
     {
         $stmt = $this->db->prepare('SELECT * FROM ' . $this->tables->content . ' WHERE id = :id');
         $stmt->bindValue(':id', $id, PDO::PARAM_INT);
-        $stmt->execute();
-        $data = $stmt->fetch(PDO::FETCH_ASSOC);
-        $stmt->closeCursor();
-        return $data ? ContentEntity::fromArray($data) : null;
-    }
-
-    /**
-     * Tìm bài viết theo alias
-     */
-    public function findByAlias(string $alias): ?ContentEntity
-    {
-        $stmt = $this->db->prepare('SELECT * FROM ' . $this->tables->content . ' WHERE alias = :alias');
-        $stmt->bindValue(':alias', $alias, PDO::PARAM_STR);
         $stmt->execute();
         $data = $stmt->fetch(PDO::FETCH_ASSOC);
         $stmt->closeCursor();
@@ -108,7 +117,7 @@ class ContentRepository extends BaseRepository
      */
     public function getContentList(int $catid = 0, int $status = 1, int $page = 1, int $per_page = 0): array
     {
-        $sql = 'SELECT * FROM ' . $this->tables->content;
+        $sql   = 'SELECT * FROM ' . $this->tables->content;
         $where = [];
 
         if ($status >= 0) {
@@ -143,25 +152,6 @@ class ContentRepository extends BaseRepository
     }
 
     /**
-     * Kiểm tra alias trùng
-     */
-    public function isAliasExists(string $alias, int $excludeId = 0): bool
-    {
-        $sql = 'SELECT COUNT(*) FROM ' . $this->tables->content . ' WHERE alias = :alias';
-        if ($excludeId > 0) {
-            $sql .= ' AND id != :id';
-        }
-        $stmt = $this->db->prepare($sql);
-        $stmt->bindValue(':alias', $alias, PDO::PARAM_STR);
-        if ($excludeId > 0) {
-            $stmt->bindValue(':id', $excludeId, PDO::PARAM_INT);
-        }
-        $stmt->execute();
-
-        return (bool) $stmt->fetchColumn();
-    }
-
-    /**
      * Lưu bài viết (INSERT hoặc UPDATE)
      * @return int ID bài viết
      */
@@ -187,9 +177,9 @@ class ContentRepository extends BaseRepository
         }
 
         // INSERT
-        $columns = array_keys($data);
+        $columns      = array_keys($data);
         $placeholders = array_map(fn($k) => ':' . $k, $columns);
-        $stmt = $this->db->prepare(
+        $stmt         = $this->db->prepare(
             'INSERT INTO ' . $this->tables->content . ' (' . implode(', ', $columns) . ') VALUES (' . implode(', ', $placeholders) . ')'
         );
         foreach ($data as $key => $value) {
@@ -215,80 +205,6 @@ class ContentRepository extends BaseRepository
             $stmt->execute();
         }
         return $result;
-    }
-
-    /**
-     * Toggle trạng thái bài viết
-     * @return int Trạng thái mới, -1 nếu lỗi
-     */
-    public function toggleStatus(int $id): int
-    {
-        $row = $this->findById($id);
-        if (!$row) {
-            return -1;
-        }
-        $newStatus = $row->status ? 0 : 1;
-        $stmt = $this->db->prepare('UPDATE ' . $this->tables->content . ' SET status = :status WHERE id = :id');
-        $stmt->bindValue(':status', $newStatus, PDO::PARAM_INT);
-        $stmt->bindValue(':id', $id, PDO::PARAM_INT);
-        $stmt->execute();
-        return $newStatus;
-    }
-
-    /**
-     * Sắp xếp lại weight sau khi xóa hoặc đổi vị trí.
-     * Dùng bulk UPDATE (CASE WHEN) thay vì UPDATE từng dòng trong vòng lặp.
-     * Chỉ cập nhật những row có weight thực sự thay đổi.
-     */
-    public function reorderWeight(int $movedId = 0, int $newWeight = 0): void
-    {
-        $sql = 'SELECT id, weight FROM ' . $this->tables->content;
-        $params = [];
-        if ($movedId > 0) {
-            $sql .= ' WHERE id != :id';
-            $params[':id'] = $movedId;
-        }
-        $sql .= ' ORDER BY weight ASC';
-
-        $stmt = $this->db->prepare($sql);
-        foreach ($params as $k => $v) {
-            $stmt->bindValue($k, $v, PDO::PARAM_INT);
-        }
-        $stmt->execute();
-        $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
-        $stmt->closeCursor();
-
-        $cases = [];
-        $ids = [];
-        $calcWeight = 0;
-
-        foreach ($rows as $row) {
-            ++$calcWeight;
-            if ($movedId > 0 && $calcWeight == $newWeight) {
-                ++$calcWeight;
-            }
-            // Chỉ đưa vào bulk UPDATE nếu weight thực sự thay đổi
-            if ($calcWeight !== (int) $row['weight']) {
-                $cases[] = 'WHEN ' . (int) $row['id'] . ' THEN ' . $calcWeight;
-                $ids[] = (int) $row['id'];
-            }
-        }
-
-        // Cập nhật weight của bài được di chuyển
-        if ($movedId > 0 && $newWeight > 0) {
-            $cases[] = 'WHEN ' . $movedId . ' THEN ' . $newWeight;
-            $ids[] = $movedId;
-        }
-
-        if (empty($ids)) {
-            return;
-        }
-
-        $this->db->exec(
-            'UPDATE ' . $this->tables->content
-                . ' SET weight = CASE id ' . implode(' ', $cases) . ' END'
-                . ' WHERE id IN (' . implode(',', $ids) . ')'
-        );
     }
 
     /**
@@ -333,53 +249,10 @@ class ContentRepository extends BaseRepository
     }
 
     /**
-     * Lấy weight lớn nhất
-     */
-    public function getMaxWeight(): int
-    {
-        $stmt = $this->db->query('SELECT MAX(weight) FROM ' . $this->tables->content);
-        return (int) $stmt->fetchColumn();
-    }
-
-    /**
-     * Tăng weight của tất cả bài viết lên 1
+     * Tăng weight của tất cả bài viết lên 1 (dùng khi thêm bài mới lên đầu)
      */
     public function incrementOthersWeight(): void
     {
         $this->db->prepare('UPDATE ' . $this->tables->content . ' SET weight = weight + 1')->execute();
-    }
-
-    /**
-     * Tự động sửa lại weight nếu sai lệch cho toàn bộ mảng dữ liệu.
-     * Dùng bulk UPDATE (CASE WHEN) thay vì UPDATE từng dòng trong vòng lặp.
-     * Chỉ cập nhật những row có weight thực sự thay đổi.
-     * Trả về true nếu CÓ update
-     */
-    public function autoCorrectWeight(array &$entities): bool
-    {
-        $cases = [];
-        $ids = [];
-        $iw = 0;
-
-        foreach ($entities as $entity) {
-            ++$iw;
-            if ($iw != $entity->weight) {
-                $entity->weight = $iw;
-                $cases[] = 'WHEN ' . (int) $entity->id . ' THEN ' . $iw;
-                $ids[] = (int) $entity->id;
-            }
-        }
-
-        if (empty($ids)) {
-            return false;
-        }
-
-        $this->db->exec(
-            'UPDATE ' . $this->tables->content
-                . ' SET weight = CASE id ' . implode(' ', $cases) . ' END'
-                . ' WHERE id IN (' . implode(',', $ids) . ')'
-        );
-
-        return true;
     }
 }

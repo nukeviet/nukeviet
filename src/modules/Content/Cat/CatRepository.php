@@ -17,16 +17,38 @@ if (!defined('NV_MAINFILE')) {
 
 use PDO;
 use NukeViet\Module\Content\Shared\BaseRepository;
+use NukeViet\Module\Content\Shared\Traits\AliasRepositoryTrait;
+use NukeViet\Module\Content\Shared\Traits\StatusRepositoryTrait;
+use NukeViet\Module\Content\Shared\Traits\WeightRepositoryTrait;
 
 /**
  * CatRepository — Tầng truy vấn dữ liệu cho Chủ đề
  * Tập trung mọi SQL vào đây, Controller không viết SQL trực tiếp
+ *
+ * Traits được nạp tự động theo interface Entity implement:
+ * - AliasRepositoryTrait  → CatEntity implements HasAlias  → findByAlias(), isAliasExists()
+ * - WeightRepositoryTrait → CatEntity implements HasWeight → getMaxWeight(), reorderWeight(), autoCorrectWeight()
+ * - StatusRepositoryTrait → CatEntity implements HasStatus → toggleStatus()
  */
 class CatRepository extends BaseRepository
 {
+    use AliasRepositoryTrait;
+    use WeightRepositoryTrait;
+    use StatusRepositoryTrait;
+
     protected function entityClass(): string
     {
         return CatEntity::class;
+    }
+
+    protected function tableName(): string
+    {
+        return $this->tables->cat;
+    }
+
+    protected function primaryKey(): string
+    {
+        return 'catid';
     }
 
     /**
@@ -63,43 +85,12 @@ class CatRepository extends BaseRepository
     }
 
     /**
-     * Tìm chủ đề theo alias
-     */
-    public function findByAlias(string $alias): ?CatEntity
-    {
-        $stmt = $this->db->prepare('SELECT * FROM ' . $this->tables->cat . ' WHERE alias = :alias');
-        $stmt->bindValue(':alias', $alias, PDO::PARAM_STR);
-        $stmt->execute();
-        $data = $stmt->fetch(PDO::FETCH_ASSOC);
-        $stmt->closeCursor();
-        return $data ? CatEntity::fromArray($data) : null;
-    }
-
-    /**
      * Đếm tổng chủ đề
      */
     public function countAll(): int
     {
         $stmt = $this->db->query('SELECT COUNT(*) FROM ' . $this->tables->cat);
         return (int) $stmt->fetchColumn();
-    }
-
-    /**
-     * Kiểm tra alias trùng
-     */
-    public function isAliasExists(string $alias, int $excludeId = 0): bool
-    {
-        $sql = 'SELECT COUNT(*) FROM ' . $this->tables->cat . ' WHERE alias = :alias';
-        if ($excludeId > 0) {
-            $sql .= ' AND catid != :catid';
-        }
-        $stmt = $this->db->prepare($sql);
-        $stmt->bindValue(':alias', $alias, PDO::PARAM_STR);
-        if ($excludeId > 0) {
-            $stmt->bindValue(':catid', $excludeId, PDO::PARAM_INT);
-        }
-        $stmt->execute();
-        return (bool) $stmt->fetchColumn();
     }
 
     /**
@@ -128,9 +119,9 @@ class CatRepository extends BaseRepository
         }
 
         // INSERT
-        $columns = array_keys($data);
+        $columns      = array_keys($data);
         $placeholders = array_map(fn($k) => ':' . $k, $columns);
-        $stmt = $this->db->prepare(
+        $stmt         = $this->db->prepare(
             'INSERT INTO ' . $this->tables->cat . ' (' . implode(', ', $columns) . ') VALUES (' . implode(', ', $placeholders) . ')'
         );
         foreach ($data as $key => $value) {
@@ -149,92 +140,4 @@ class CatRepository extends BaseRepository
         $stmt->bindValue(':catid', $catid, PDO::PARAM_INT);
         return $stmt->execute();
     }
-
-    /**
-     * Toggle trạng thái chủ đề
-     */
-    public function toggleStatus(int $catid): int
-    {
-        $row = $this->findById($catid);
-        if (!$row) {
-            return -1;
-        }
-        $newStatus = $row->status ? 0 : 1;
-        $stmt = $this->db->prepare('UPDATE ' . $this->tables->cat . ' SET status = :status WHERE catid = :catid');
-        $stmt->bindValue(':status', $newStatus, PDO::PARAM_INT);
-        $stmt->bindValue(':catid', $catid, PDO::PARAM_INT);
-        $stmt->execute();
-        return $newStatus;
-    }
-
-    /**
-     * Sắp xếp lại weight sau khi xóa hoặc đổi vị trí
-     */
-    public function reorderWeight(int $movedId = 0, int $newWeight = 0): void
-    {
-        $sql = 'SELECT catid FROM ' . $this->tables->cat;
-        $params = [];
-        if ($movedId > 0) {
-            $sql .= ' WHERE catid != :catid';
-            $params[':catid'] = $movedId;
-        }
-        $sql .= ' ORDER BY weight ASC';
-
-        $stmt = $this->db->prepare($sql);
-        foreach ($params as $k => $v) {
-            $stmt->bindValue($k, $v, PDO::PARAM_INT);
-        }
-        $stmt->execute();
-
-        $weight = 0;
-        $stmtUpdate = $this->db->prepare('UPDATE ' . $this->tables->cat . ' SET weight = :weight WHERE catid = :catid');
-        while ($row = $stmt->fetch()) {
-            ++$weight;
-            if ($movedId > 0 && $weight == $newWeight) {
-                ++$weight;
-            }
-            $stmtUpdate->bindValue(':weight', $weight, PDO::PARAM_INT);
-            $stmtUpdate->bindValue(':catid', $row['catid'], PDO::PARAM_INT);
-            $stmtUpdate->execute();
-        }
-        $stmt->closeCursor();
-
-        if ($movedId > 0 && $newWeight > 0) {
-            $stmtUpdate->bindValue(':weight', $newWeight, PDO::PARAM_INT);
-            $stmtUpdate->bindValue(':catid', $movedId, PDO::PARAM_INT);
-            $stmtUpdate->execute();
-        }
-    }
-
-    /**
-     * Tự động sửa lại weight cho mảng object nếu có sai lệch
-     * Trả về true nếu CÓ thay đổi
-     */
-    public function autoCorrectWeight(array &$cats): bool
-    {
-        $iw = 0;
-        $is_updated = false;
-        $stmt = $this->db->prepare('UPDATE ' . $this->tables->cat . ' SET weight = :weight WHERE catid = :catid');
-        foreach ($cats as $cat) {
-            ++$iw;
-            if ($iw != $cat->weight) {
-                $cat->weight = $iw;
-                $stmt->bindValue(':weight', $iw, PDO::PARAM_INT);
-                $stmt->bindValue(':catid', $cat->catid, PDO::PARAM_INT);
-                $stmt->execute();
-                $is_updated = true;
-            }
-        }
-        return $is_updated;
-    }
-
-    /**
-     * Lấy weight lớn nhất hiện có
-     */
-    public function getMaxWeight(): int
-    {
-        $stmt = $this->db->query('SELECT MAX(weight) FROM ' . $this->tables->cat);
-        return (int) $stmt->fetchColumn();
-    }
-
 }

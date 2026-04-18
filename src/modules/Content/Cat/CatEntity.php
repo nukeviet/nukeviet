@@ -12,6 +12,9 @@
 namespace NukeViet\Module\Content\Cat;
 
 use NukeViet\Module\Content\Shared\AbstractEntity;
+use NukeViet\Module\Content\Shared\Contracts\HasAlias;
+use NukeViet\Module\Content\Shared\Contracts\HasStatus;
+use NukeViet\Module\Content\Shared\Contracts\HasWeight;
 
 if (!defined('NV_MAINFILE')) {
     exit('Stop!!!');
@@ -19,8 +22,12 @@ if (!defined('NV_MAINFILE')) {
 
 /**
  * CatEntity — Đại diện cho 1 bản ghi chủ đề (category)
+ *
+ * Implement HasAlias → AliasRepositoryTrait (isAliasExists, findByAlias)
+ * Implement HasWeight → WeightRepositoryTrait (getMaxWeight, reorderWeight, autoCorrectWeight)
+ * Implement HasStatus → StatusRepositoryTrait (toggleStatus)
  */
-class CatEntity extends AbstractEntity
+class CatEntity extends AbstractEntity implements HasAlias, HasWeight, HasStatus
 {
     /**
      * Danh sách các thuộc tính chỉ dùng cho hiển thị (không có trong DB).
@@ -49,14 +56,4 @@ class CatEntity extends AbstractEntity
     public string $url_edit = '';
     public string $url_copy = '';
     public string $checkss = '';
-
-    /**
-     * Chuyển Entity thành Array tương thích Hooks / Smarty NV5
-     */
-    public function toArray(): array
-    {
-        // Loại bỏ giá trị Null (nếu có) thành chuỗi/số rỗng tương ứng nếu cần
-        // nhưng thông thường Smarty vẫn hiển thị Null bình thường.
-        return get_object_vars($this);
-    }
 }

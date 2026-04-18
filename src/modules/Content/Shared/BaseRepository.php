@@ -25,8 +25,12 @@ use PDO;
  * - invalidateCache()
  * - pdoType() — xác định PDO bind type theo khai báo Entity
  * - fetchEntities() — hydrate PDOStatement → mảng Entity
+ * - entitySupports() — kiểm tra Entity có implement Marker Interface không
  *
- * Mỗi class con PHẢI khai báo entityClass() để trả về tên Entity class của mình.
+ * Mỗi class con PHẢI khai báo:
+ * - entityClass(): tên Entity class
+ * - tableName(): tên bảng DB chính
+ * - primaryKey(): tên cột khóa chính
  */
 abstract class BaseRepository
 {
@@ -48,6 +52,27 @@ abstract class BaseRepository
      * VD: return CatEntity::class;
      */
     abstract protected function entityClass(): string;
+
+    /**
+     * Tên bảng DB chính của Repository này.
+     * VD: return $this->tables->cat;
+     */
+    abstract protected function tableName(): string;
+
+    /**
+     * Tên cột khóa chính của bảng.
+     * VD: return 'catid';
+     */
+    abstract protected function primaryKey(): string;
+
+    /**
+     * Kiểm tra Entity của Repository này có implement một Marker Interface không.
+     * Dùng để Service/Trait tự detect tính năng (HasAlias, HasWeight, HasStatus).
+     */
+    public function entitySupports(string $interface): bool
+    {
+        return $this->entityClass()::supports($interface);
+    }
 
     /**
      * Xác định PDO bind type cho 1 cột dựa theo khai báo Entity.

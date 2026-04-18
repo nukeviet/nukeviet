@@ -18,17 +18,20 @@ if (!defined('NV_MAINFILE')) {
 /**
  * Tables — Value Object chứa tên các bảng DB của module Content.
  *
- * Tên bảng được ghép tự động từ $tablePrefix + $moduleData + suffix hard-code.
- * Đây là nơi DUY NHẤT khai báo suffix của từng bảng — thêm bảng mới chỉ cần thêm 1 property.
+ * Kế thừa BaseTables để có magic getter __get() cho bảng chưa khai báo.
+ * Các property dưới đây khai báo tường minh để IDE có autocomplete.
  *
  * Cách dùng:
  *   $tables = new Tables(NV_PREFIXLANG, $module_data);
- *   // → $tables->content = 'nv5_vi_content'
- *   // → $tables->cat     = 'nv5_vi_content_cat'
+ *   $tables->content → 'nv5_vi_content_content'  (property khai báo)
+ *   $tables->cat     → 'nv5_vi_content_cat'       (property khai báo)
+ *   $tables->tag     → 'nv5_vi_content_tag'       (magic getter từ BaseTables)
+ *
+ * Thêm bảng mới: chỉ cần thêm 1 public property và gán trong __construct().
  */
-readonly class Tables
+class Tables extends BaseTables
 {
-    /** Bảng bài viết: {prefix}_{lang}_{module_data} */
+    /** Bảng bài viết: {prefix}_{lang}_{module_data}_content */
     public string $content;
 
     /** Bảng chủ đề: {prefix}_{lang}_{module_data}_cat */
@@ -40,7 +43,9 @@ readonly class Tables
      */
     public function __construct(string $tablePrefix, string $moduleData)
     {
-        $this->content = $tablePrefix . '_' . $moduleData;
-        $this->cat     = $tablePrefix . '_' . $moduleData . '_cat';
+        parent::__construct($tablePrefix, $moduleData);
+
+        $this->content = $this->prefix . '_content';
+        $this->cat     = $this->prefix . '_cat';
     }
 }

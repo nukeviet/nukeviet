@@ -14,7 +14,7 @@ if (!defined('NV_IS_FILE_MODULES')) {
 }
 
 $sql_drop_module = [];
-$sql_drop_module[] = 'DROP TABLE IF EXISTS ' . $db_config['prefix'] . '_' . $lang . '_' . $module_data . ';';
+$sql_drop_module[] = 'DROP TABLE IF EXISTS ' . $db_config['prefix'] . '_' . $lang . '_' . $module_data . '_content;';
 $sql_drop_module[] = 'DROP TABLE IF EXISTS ' . $db_config['prefix'] . '_' . $lang . '_' . $module_data . '_cat;';
 
 $sql_create_module = $sql_drop_module;
@@ -32,9 +32,9 @@ $sql_create_module[] = 'CREATE TABLE ' . $db_config['prefix'] . '_' . $lang . '_
   status smallint(4) NOT NULL DEFAULT '1',
   PRIMARY KEY (catid),
   UNIQUE KEY alias (alias)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci";
+) ENGINE=InnoDB";
 
-$sql_create_module[] = 'CREATE TABLE ' . $db_config['prefix'] . '_' . $lang . '_' . $module_data . " (
+$sql_create_module[] = 'CREATE TABLE ' . $db_config['prefix'] . '_' . $lang . '_' . $module_data . "_content (
     id mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
     catid smallint(5) unsigned NOT NULL DEFAULT '0',
     title varchar(250) NOT NULL,
@@ -59,13 +59,7 @@ $sql_create_module[] = 'CREATE TABLE ' . $db_config['prefix'] . '_' . $lang . '_
     schema_about varchar(50) NOT NULL DEFAULT 'Organization',
     PRIMARY KEY (id),
     UNIQUE KEY alias (alias)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci";
-
-$sql_create_module[] = 'CREATE TABLE ' . $db_config['prefix'] . '_' . $lang . '_' . $module_data . "_config (
-    config_name varchar(30) NOT NULL,
-    config_value varchar(255) NOT NULL,
-    UNIQUE KEY config_name (config_name)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci";
+) ENGINE=InnoDB";
 
 $sql_create_module[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES
     ('" . $lang . "', '" . $module_name . "', 'schema_type', 'article'),

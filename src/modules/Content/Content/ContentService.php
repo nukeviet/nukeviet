@@ -11,6 +11,8 @@
 
 namespace NukeViet\Module\Content\Content;
 
+use NukeViet\Module\Content\Shared\BaseCrudService;
+use NukeViet\Module\Content\Shared\BaseRepository;
 use NukeViet\Module\Content\Shared\SchemaHelper;
 
 if (!defined('NV_MAINFILE')) {
@@ -18,9 +20,10 @@ if (!defined('NV_MAINFILE')) {
 }
 
 /**
- * ContentService — Tầng nghiệp vụ xử lý Bài viết
+ * ContentService — Tầng nghiệp vụ xử lý Bài viết.
+ * Kế thừa BaseCrudService để tái sử dụng saveEntity, deleteEntity, changeStatus, changeWeight.
  */
-class ContentService
+class ContentService extends BaseCrudService
 {
     private ContentRepository $repo;
 
@@ -29,22 +32,36 @@ class ContentService
         $this->repo = $repo;
     }
 
+    protected function entityName(): string
+    {
+        return 'content';
+    }
+
+    protected function repo(): BaseRepository
+    {
+        return $this->repo;
+    }
+
+    // ═══════════════════════════════════════
+    // Config Operations
+    // ═══════════════════════════════════════
+
     /**
      * Thu thập dữ liệu Cấu hình từ Request (DRY)
      */
     public function collectConfigData($nv_Request): array
     {
-        $config = [];
-        $config['viewtype'] = $nv_Request->get_int('viewtype', 'post', 0);
-        $config['facebookapi'] = $nv_Request->get_string('facebookapi', 'post', '');
-        $config['per_page'] = $nv_Request->get_page('per_page', 'post', 20);
+        $config                     = [];
+        $config['viewtype']         = $nv_Request->get_int('viewtype', 'post', 0);
+        $config['facebookapi']      = $nv_Request->get_string('facebookapi', 'post', '');
+        $config['per_page']         = $nv_Request->get_page('per_page', 'post', 20);
         $config['related_articles'] = $nv_Request->get_int('related_articles', 'post', 0);
-        $config['news_first'] = $nv_Request->get_int('news_first', 'post', 0);
-        $config['copy_page'] = $nv_Request->get_int('copy_page', 'post', 0);
-        $config['alias_lower'] = $nv_Request->get_int('alias_lower', 'post', 0);
-        $config['socialbutton'] = $nv_Request->get_typed_array('socialbutton', 'post', 'title', []);
-        $config['schema_type'] = $nv_Request->get_string('schema_type', 'post', '');
-        $config['schema_about'] = $nv_Request->get_string('schema_about', 'post', '');
+        $config['news_first']       = $nv_Request->get_int('news_first', 'post', 0);
+        $config['copy_page']        = $nv_Request->get_int('copy_page', 'post', 0);
+        $config['alias_lower']      = $nv_Request->get_int('alias_lower', 'post', 0);
+        $config['socialbutton']     = $nv_Request->get_typed_array('socialbutton', 'post', 'title', []);
+        $config['schema_type']      = $nv_Request->get_string('schema_type', 'post', '');
+        $config['schema_about']     = $nv_Request->get_string('schema_about', 'post', '');
 
         return $config;
     }
@@ -90,7 +107,6 @@ class ContentService
 
     /**
      * Phân tích URL frontend → xác định chi tiết hay danh sách
-     * Gom logic URL parsing ra khỏi controller (Thin Controller)
      *
      * @return array ['mode' => 'detail'|'list', 'id' => int, 'alias' => string, 'page' => int, 'row' => ?ContentEntity]
      */
@@ -106,11 +122,11 @@ class ContentService
         // Trang danh sách phân trang
         if (substr($alias, 0, 5) === 'page-') {
             return [
-                'mode' => 'list',
-                'id' => 0,
+                'mode'  => 'list',
+                'id'    => 0,
                 'alias' => '',
-                'page' => max(1, (int) substr($alias, 5)),
-                'row' => null,
+                'page'  => max(1, (int) substr($alias, 5)),
+                'row'   => null,
             ];
         }
 
@@ -120,11 +136,11 @@ class ContentService
             if (!empty($items)) {
                 $row = $items[0];
                 return [
-                    'mode' => 'detail',
-                    'id' => $row->id,
+                    'mode'  => 'detail',
+                    'id'    => $row->id,
                     'alias' => $row->alias,
-                    'page' => 1,
-                    'row' => $row,
+                    'page'  => 1,
+                    'row'   => $row,
                 ];
             }
         }
@@ -134,11 +150,11 @@ class ContentService
             $row = $this->repo->findByAlias($alias);
             if ($row) {
                 return [
-                    'mode' => 'detail',
-                    'id' => $row->id,
+                    'mode'  => 'detail',
+                    'id'    => $row->id,
                     'alias' => $alias,
-                    'page' => 1,
-                    'row' => $row,
+                    'page'  => 1,
+                    'row'   => $row,
                 ];
             }
         }
@@ -181,47 +197,42 @@ class ContentService
     {
         $result = [];
         foreach ($items as $entity) {
-            $entity->link = $base_url . '&amp;' . NV_OP_VARIABLE . '=' . $entity->alias . $rewrite_exturl;
+            $entity->link      = $base_url . '&amp;' . NV_OP_VARIABLE . '=' . $entity->alias . $rewrite_exturl;
             $result[$entity->id] = $entity;
         }
         return $result;
     }
 
     // ═══════════════════════════════════════
-    // WRITE Operations (CUD)
+    // WRITE Operations (CUD) — dùng chung BaseCrudService
     // ═══════════════════════════════════════
 
     /**
      * Thu thập dữ liệu từ Request (Admin & API dùng chung)
-     * Gom toàn bộ các hàm nv_Request->get_xxx về một nơi để dễ bảo trì.
-     *
-     * @param \NukeViet\Core\Request $nv_Request
-     * @param array $defaultData Dữ liệu mặc định nếu cần gộp
-     * @return array
      */
     public function collectRequestData($nv_Request, array $defaultData = []): array
     {
-        $row = [];
-        $row['catid'] = $nv_Request->get_int('catid', 'post', 0);
-        $row['title'] = $nv_Request->get_title('title', 'post', '', 250);
-        $row['alias'] = $nv_Request->get_title('alias', 'post', '');
-        $row['image'] = $nv_Request->get_string('image', 'post', '');
-        $row['imagealt'] = $nv_Request->get_title('imagealt', 'post', '');
+        $row                  = [];
+        $row['catid']         = $nv_Request->get_int('catid', 'post', 0);
+        $row['title']         = $nv_Request->get_title('title', 'post', '', 250);
+        $row['alias']         = $nv_Request->get_title('alias', 'post', '');
+        $row['image']         = $nv_Request->get_string('image', 'post', '');
+        $row['imagealt']      = $nv_Request->get_title('imagealt', 'post', '');
         $row['imageposition'] = $nv_Request->get_int('imageposition', 'post', 0);
-        $row['description'] = $nv_Request->get_textarea('description', '', 'br', 1);
-        $row['bodytext'] = $nv_Request->get_editor('bodytext', '', NV_ALLOWED_HTML_TAGS);
-        $row['keywords'] = nv_strtolower($nv_Request->get_title('keywords', 'post', ''));
-        $row['socialbutton'] = $nv_Request->get_int('socialbutton', 'post', 1);
-        $row['hot_post'] = $nv_Request->get_int('hot_post', 'post', 0);
-        $row['status'] = $nv_Request->get_int('status', 'post', 1);
+        $row['description']   = $nv_Request->get_textarea('description', '', 'br', 1);
+        $row['bodytext']      = $nv_Request->get_editor('bodytext', '', NV_ALLOWED_HTML_TAGS);
+        $row['keywords']      = nv_strtolower($nv_Request->get_title('keywords', 'post', ''));
+        $row['socialbutton']  = $nv_Request->get_int('socialbutton', 'post', 1);
+        $row['hot_post']      = $nv_Request->get_int('hot_post', 'post', 0);
+        $row['status']        = $nv_Request->get_int('status', 'post', 1);
 
         // Các trường Schema
-        $row['schema_type'] = $nv_Request->get_title('schema_type', 'post', 'newsarticle');
+        $row['schema_type']  = $nv_Request->get_title('schema_type', 'post', 'newsarticle');
         $row['schema_about'] = $nv_Request->get_title('schema_about', 'post', 'Organization', 50);
 
         // Layout & Phân quyền
         $row['layout_func'] = $nv_Request->get_title('layout_func', 'post', '');
-        $row['activecomm'] = $nv_Request->get_array('activecomm', 'post', []);
+        $row['activecomm']  = $nv_Request->get_array('activecomm', 'post', []);
 
         return array_merge($defaultData, $row);
     }
@@ -231,8 +242,8 @@ class ContentService
      */
     public function duplicateContentData(ContentEntity $source): array
     {
-        $data = $source->toArray();
-        $data['id'] = 0;
+        $data          = $source->toArray();
+        $data['id']    = 0;
         $data['title'] = $data['title'] . ' (Copy)';
         $data['alias'] = ''; // Để sinh alias mới
         $data['status'] = 0; // Mặc định tắt để an toàn
@@ -241,18 +252,11 @@ class ContentService
 
     /**
      * Chuẩn hóa dữ liệu bài viết trước khi validate/save.
-     * Gom logic alias, keywords, image — tránh lặp code giữa admin controller và API.
-     *
-     * @param array $data Dữ liệu thô từ controller (title, alias, description, keywords, image, status, ...)
-     * @param array $moduleConfig Config module (alias_lower, ...)
-     * @param string $moduleUpload Thư mục upload của module (VD: 'content')
-     * @param array $layoutArray Mảng các layout có sẵn để check hợp lệ
-     * @return array Dữ liệu đã chuẩn hóa
      */
     public function prepareSaveData(array $data, array $moduleConfig = [], string $moduleUpload = '', array $layoutArray = []): array
     {
         // Alias: tự sinh từ title nếu rỗng
-        $alias = $data['alias'] ?? '';
+        $alias         = $data['alias'] ?? '';
         $data['alias'] = empty($alias) ? change_alias($data['title']) : change_alias($alias);
         if (!empty($moduleConfig['alias_lower'])) {
             $data['alias'] = strtolower($data['alias']);
@@ -283,7 +287,7 @@ class ContentService
 
         // Xử lý Phân quyền xem (Activecomm)
         if (isset($data['activecomm']) && is_array($data['activecomm'])) {
-            $groups_list = nv_groups_list();
+            $groups_list       = nv_groups_list();
             $data['activecomm'] = !empty($data['activecomm']) ? implode(',', nv_groups_post(array_intersect($data['activecomm'], array_keys($groups_list)))) : '';
         }
 
@@ -301,100 +305,28 @@ class ContentService
     }
 
     /**
-     * Lưu bài viết (validate + save + clear cache)
-     * Yêu cầu: dữ liệu phải được chuẩn hóa qua prepareSaveData() và
-     * thẩm định bởi ContentValidator từ vòng ngoài trước khi vào đây
+     * Lưu bài viết — wrapper cho BaseCrudService::saveEntity()
+     * Giữ tên phương thức cũ để Controller không phải thay đổi.
      * @return int ID của bản ghi vừa lưu
      */
     public function saveContent(array $data, int $id, string $module_name, array $config = [], int $admin_id = 0): int
     {
-        // 1. Quản lý các trường hệ thống (System Fields) tự động
-        if ($id > 0) {
-            // Update bài viết
-            $data['edit_time'] = NV_CURRENTTIME;
-        } else {
-            // Thêm mới hoặc copy bài viết
-            if (!isset($data['weight']) || $data['weight'] <= 0) {
-                if (!empty($config['news_first'])) {
-                    $data['weight'] = 1;
-                    $this->repo->incrementOthersWeight();
-                } else {
-                    $data['weight'] = $this->repo->getMaxWeight() + 1;
-                }
-            }
-            $data['admin_id'] = $admin_id;
-            $data['add_time'] = NV_CURRENTTIME;
-            $data['edit_time'] = NV_CURRENTTIME;
-            $data['status'] = $data['status'] ?? 1;
-        }
-
-        // 2. Chạy hooks nếu có
-        $data = nv_apply_hook($module_name, 'before_content_save', [$data], $data);
-
-        // 3. Thực thi lưu và xóa cache
-        $savedId = $this->repo->save($data, $id);
-        $this->repo->invalidateCache();
-
-        // 4. Hook hành động thành công
-        nv_apply_hook($module_name, 'content_saved', [
-            'id' => $savedId,
-            'title' => $data['title'],
-            'action' => $id ? 'edit' : 'add',
-        ]);
-
-        return $savedId;
+        $options = [
+            'news_first' => !empty($config['news_first']),
+            'admin_id'   => $admin_id,
+        ];
+        return $this->saveEntity($data, $id, $module_name, $options);
     }
 
     /**
-     * Xóa bài viết (delete + reorder + clear cache)
+     * Xóa bài viết — wrapper cho BaseCrudService::deleteEntity()
      */
     public function deleteContent(int $id, string $module_name, string $commentTable = ''): bool
     {
-        $row = $this->repo->findById($id);
-        if (!$row) {
-            return false;
+        $options = [];
+        if (!empty($commentTable)) {
+            $options['comment_table'] = $commentTable;
         }
-
-        $result = $this->repo->delete($id, $commentTable);
-        if ($result) {
-            $this->repo->reorderWeight();
-            $this->repo->invalidateCache();
-            nv_apply_hook($module_name, 'content_deleted', [
-                'id' => $id,
-                'title' => $row->title,
-            ]);
-        }
-        return $result;
-    }
-
-    /**
-     * Đổi trạng thái bài viết
-     * @return int Trạng thái mới (-1 nếu lỗi)
-     */
-    public function changeStatus(int $id, string $module_name): int
-    {
-        $newStatus = $this->repo->toggleStatus($id);
-        if ($newStatus >= 0) {
-            $this->repo->invalidateCache();
-            nv_apply_hook($module_name, 'content_status_changed', [
-                'id' => $id,
-                'new_status' => $newStatus,
-            ]);
-        }
-        return $newStatus;
-    }
-
-    /**
-     * Đổi vị trí (weight) bài viết
-     */
-    public function changeWeight(int $id, int $newWeight, string $module_name): bool
-    {
-        $row = $this->repo->findById($id);
-        if (!$row) {
-            return false;
-        }
-        $this->repo->reorderWeight($id, $newWeight);
-        $this->repo->invalidateCache();
-        return true;
+        return $this->deleteEntity($id, $module_name, $options);
     }
 }
