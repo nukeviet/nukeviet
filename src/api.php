@@ -223,7 +223,7 @@ if (empty($api_request['module'])) {
     }
 
     $testObject = NV_LANG_DATA . '|' . $api_request['module'] . '|' . $api_request['action'];
-    $apidir = 'uapi';
+    $apidir = 'Uapi';
     if (!empty($forAdmin) and in_array($testObject, $forAdmin, true)) {
         if ((int) $credential_data['lev'] <= 0) {
             $apiresults->setCode(ApiResult::CODE_NO_ADMIN_FOUND)

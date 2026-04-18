@@ -9,7 +9,7 @@
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
-namespace NukeViet\Module\banners\uapi;
+namespace NukeViet\Module\banners\Uapi;
 
 use NukeViet\Uapi\UapiResult;
 use NukeViet\Uapi\UiApi;

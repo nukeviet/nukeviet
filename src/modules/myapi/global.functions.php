@@ -61,7 +61,7 @@ function nv_get_api_actions($object)
     // Các API của module cung cấp
     foreach ($sys_mods as $module_name => $module_info) {
         $module_file = $module_info['module_file'];
-        $module_api_dir = $object == 'admin' ? 'Api' : 'uapi';
+        $module_api_dir = $object == 'admin' ? 'Api' : 'Uapi';
         if (module_file_exists($module_file . '/' . $module_api_dir)) {
             // Đọc ngôn ngữ tạm của module
             if ($object == 'admin') {
