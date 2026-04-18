@@ -59,6 +59,11 @@ class DoApi
     protected $rewrite_support;
 
     /**
+     * @var boolean xác thực SSL khi gọi API
+     */
+    protected $ssl_verify = true;
+
+    /**
      * @param string $apiurl
      * @param string $apikey
      * @param string $apisecret
@@ -117,6 +122,17 @@ class DoApi
     }
 
     /**
+     * @param bool $ssl_verify
+     * @return \NukeViet\Api\DoApi
+     */
+    public function setSslVerify(bool $ssl_verify)
+    {
+        $this->ssl_verify = $ssl_verify;
+
+        return $this;
+    }
+
+    /**
      * @return string
      */
     public function getError()
@@ -145,14 +161,14 @@ class DoApi
             'body' => array_merge($request, $this->data),
             'timeout' => 0,
             'decompress' => false,
-            'sslverify' => false
+            'sslverify' => $this->ssl_verify
         ];
 
         // Xử lý nếu gọi API rewrite
         $api_url = $this->apiurl;
-        if ($this->rewrite_support and !empty($args['body']['action'])) {
+        if ($this->rewrite_support and !empty($args['body']['action']) and preg_match('/^[a-z0-9\_]+$/i', $args['body']['action'])) {
             $url_info = parse_url($api_url);
-            if (!isset($url_info['scheme'], $url_info['host'], $url_info['path']) and substr($url_info['path'], -7) != 'api.php') {
+            if (!isset($url_info['scheme'], $url_info['host'], $url_info['path']) or substr(($url_info['path'] ?? ''), -7) != 'api.php') {
                 throw new \Exception('Wrong apiurl!!!');
             }
             $api_url = $url_info['scheme'] . '://' . $url_info['host'];
@@ -161,11 +177,11 @@ class DoApi
             }
             $api_url .= substr($url_info['path'], 0, -7);
             $getVars = ['api'];
-            if (!empty($args['body']['language'])) {
+            if (!empty($args['body']['language']) and preg_match('/^[a-z]{2}$/', $args['body']['language'])) {
                 $getVars[] = $args['body']['language'];
                 unset($args['body']['language']);
             }
-            if (!empty($args['body']['module'])) {
+            if (!empty($args['body']['module']) and preg_match('/^[a-z0-9\_\-]+$/i', $args['body']['module'])) {
                 $getVars[] = $args['body']['module'];
                 unset($args['body']['module']);
             }
