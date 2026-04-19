@@ -39,7 +39,7 @@ Khi cần thêm một tính năng mới (ví dụ: Quản lý Sản phẩm), hã
 2. Tạo `{Item}Entity.php`: Khai báo các thuộc tính (public properties) tương ứng các cột DB.
    - **Kế thừa**: Nên kế thừa từ `AbstractEntity` để dùng chung các phương thức hệ thống.
    - **Lưu ý**: Typed Properties BẮT BUỘC phải có giá trị mặc định (Ví dụ: `public string $title = '';`).
-   - Dùng `toArray()` (override) để đẩy sang View.
+   - Khai báo `protected const RELATIONS` để liên kết nested Entity (VD: `['category' => CatEntity::class]`). `toArray()` lớp cha tự động expand — không cần override thủ công.
    - Dùng `fromArray()`, `getDbColumns()`, `getIntColumns()` (kế thừa từ lớp cha).
    - 📎 [Mẫu Entity chuẩn](modules/Content.md#L252)
 

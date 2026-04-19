@@ -50,13 +50,4 @@ class CatEntity extends AbstractEntity
     public string $url_copy = '';
     public string $checkss = '';
 
-    /**
-     * Chuyển Entity thành Array tương thích Hooks / Smarty NV5
-     */
-    public function toArray(): array
-    {
-        // Loại bỏ giá trị Null (nếu có) thành chuỗi/số rỗng tương ứng nếu cần
-        // nhưng thông thường Smarty vẫn hiển thị Null bình thường.
-        return get_object_vars($this);
-    }
 }

@@ -282,6 +282,13 @@ class {Item}Entity extends AbstractEntity
      */
     protected const PRIMARY_KEY = 'id';
 
+    /**
+     * Khai báo nested Entity (Relationship). toArray() lớp cha tự động expand theo danh sách này.
+     * Entity đơn giản (không có Relationship) để mảng rỗng hoặc bỏ qua.
+     * VD có Relationship: ['category' => CatEntity::class]
+     */
+    protected const RELATIONS = [];
+
     public int $id = 0;
     public string $title = '';
     public string $alias = '';
@@ -300,29 +307,19 @@ class {Item}Entity extends AbstractEntity
     public string $url_edit = '';
     public string $url_copy = '';
     public string $checkss = '';
-
-    /**
-     * Chuyển Entity thành Array cho Smarty/Hook.
-     * Cần override để xử lý các dữ liệu đặc biệt hoặc Relationship lồng nhau.
-     */
-    public function toArray(): array
-    {
-        $arr = get_object_vars($this);
-        // Relationship lồng nhau (nếu có):
-        // if ($this->category instanceof CatEntity) {
-        //     $arr['category'] = $this->category->toArray();
-        // }
-        return $arr;
-    }
 }
 ```
 
-**Các phương thức được kế thừa từ `AbstractEntity`:**
+**Các hằng số và phương thức được kế thừa từ `AbstractEntity`:**
+- `VIEW_FIELDS`: Khai báo các thuộc tính chỉ dùng để hiển thị (không gửi vào DB).
+- `PRIMARY_KEY`: Tên cột khóa chính (mặc định `''` — nếu PK đã nằm trong `VIEW_FIELDS` thì không cần override).
+- `RELATIONS`: Map nested Entity — `toArray()` tự động expand theo danh sách này. VD: `['category' => CatEntity::class]`.
+- `toArray()`: **Có sẵn từ AbstractEntity** — tự động expand nested Entity theo `RELATIONS`. Chỉ override nếu có logic đặc biệt ngoài expand nested Entity.
 - `getDbColumns()`: Tự động trả về danh sách các cột trong DB bằng cách lấy toàn bộ thuộc tính public trừ `VIEW_FIELDS` và `PRIMARY_KEY`.
 - `getIntColumns()`: Tự động trả về danh sách các cột kiểu số (dựa trên giá trị mặc định là `int`).
-- `fromArray(array $data)`: Tạo object Entity từ mảng dữ liệu, tự động ép kiểu và bỏ qua các trường không tồn tại hoặc Relationship.
+- `fromArray(array $data)`: Tạo object Entity từ mảng dữ liệu, tự động ép kiểu và bỏ qua các trường không tồn tại hoặc Relationship (nullable).
 
-**4 lưu ý:** (1) Typed Properties BẮT BUỘC có `= ''` hoặc `= 0` (2) Dùng `protected const VIEW_FIELDS` để lớp cha có thể truy cập qua Late Static Binding (3) `PRIMARY_KEY` giúp xác định khóa chính để loại bỏ khi lưu DB (4) **toArray() là bắt buộc override** (theo khai báo `abstract` ở lớp cha).
+**4 lưu ý:** (1) Typed Properties BẮT BUỘC có `= ''` hoặc `= 0` (2) Dùng `protected const VIEW_FIELDS` để lớp cha có thể truy cập qua Late Static Binding (3) `PRIMARY_KEY` giúp xác định khóa chính để loại bỏ khi lưu DB (4) **`toArray()` đã có sẵn từ lớp cha** — chỉ cần khai báo `RELATIONS` để tự expand nested Entity, không cần override thủ công.
 
 > 📎 Entity có Relationship: `src/modules/Content/Content/ContentEntity.php`
 > 📎 Entity đơn giản: `src/modules/Content/Cat/CatEntity.php`

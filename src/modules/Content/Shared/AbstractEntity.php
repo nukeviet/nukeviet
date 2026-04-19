@@ -39,6 +39,14 @@ abstract class AbstractEntity
     protected const PRIMARY_KEY = '';
 
     /**
+     * Danh sách thuộc tính là nested Entity (nullable relationship).
+     * Mỗi phần tử: tên thuộc tính → tên class Entity tương ứng.
+     * VD: ['category' => CatEntity::class]
+     * Dùng bởi toArray() để tự động expand nested Entity thành array.
+     */
+    protected const RELATIONS = [];
+
+    /**
      * Lấy danh sách các cột thực tế trong Database.
      * Tự động lọc bỏ các trường View và Khóa chính.
      */
@@ -74,9 +82,21 @@ abstract class AbstractEntity
 
     /**
      * Chuyển Entity thành Array tương thích Hooks / Smarty NV5.
-     * Mỗi class con tự override nếu cần xử lý đặc biệt (VD: nested Entity).
+     * Tự động expand nested Entity theo khai báo RELATIONS.
+     * Class con chỉ cần override nếu có logic đặc biệt ngoài nested Entity.
      */
-    abstract public function toArray(): array;
+    public function toArray(): array
+    {
+        $arr = get_object_vars($this);
+
+        foreach (static::RELATIONS as $field => $entityClass) {
+            if (isset($arr[$field]) && $arr[$field] instanceof AbstractEntity) {
+                $arr[$field] = $arr[$field]->toArray();
+            }
+        }
+
+        return $arr;
+    }
 
     /**
      * Tạo Entity từ array dữ liệu.
