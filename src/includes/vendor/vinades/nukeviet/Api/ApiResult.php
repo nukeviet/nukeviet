@@ -11,6 +11,8 @@
 
 namespace NukeViet\Api;
 
+use \Exception;
+
 /**
  * NukeViet\Api\ApiResult
  *
@@ -163,7 +165,6 @@ class ApiResult
     /**
      * returnResult()
      *
-     * @return never
      * @throws Exception
      */
     public function returnResult()

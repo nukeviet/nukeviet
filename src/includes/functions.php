@@ -3922,11 +3922,12 @@ function mload_url_generate($module, $op, $amp = '&amp;', $checkuser = false, $o
  * Hàm tạo mã CSRF
  *
  * @param string $key
+ * @param string $prefix
  * @return string
  */
-function csrf_create($key)
+function csrf_create($key, $prefix = NV_CHECK_SESSION)
 {
-    return hash_hmac('sha256', NV_CHECK_SESSION . '_' . $key . '_' . NV_CURRENTTIME, NV_CACHE_PREFIX) . NV_CURRENTTIME;
+    return hash_hmac('sha256', $prefix . '_' . $key . '_' . NV_CURRENTTIME, NV_CACHE_PREFIX) . NV_CURRENTTIME;
 }
 
 /**
@@ -3935,9 +3936,10 @@ function csrf_create($key)
  *
  * @param string $csrf
  * @param string $key
+ * @param string $prefix
  * @return bool
  */
-function csrf_check($csrf, $key)
+function csrf_check($csrf, $key, $prefix = NV_CHECK_SESSION)
 {
     $timestamp = substr($csrf, -10, 10);
     $timestamp = (int) $timestamp;
@@ -3945,7 +3947,7 @@ function csrf_check($csrf, $key)
     if ($timestamp < (NV_CURRENTTIME - $lifetime) or $timestamp > NV_CURRENTTIME) {
         return false;
     }
-    $expected = hash_hmac('sha256', NV_CHECK_SESSION . '_' . $key . '_' . $timestamp, NV_CACHE_PREFIX) . $timestamp;
+    $expected = hash_hmac('sha256', $prefix . '_' . $key . '_' . $timestamp, NV_CACHE_PREFIX) . $timestamp;
 
     return hash_equals($expected, $csrf);
 }
