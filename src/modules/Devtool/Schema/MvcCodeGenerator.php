@@ -388,8 +388,10 @@ class MvcCodeGenerator
             if ($phpType === 'float') {
                 return (string) (float) $defaultVal;
             }
-            if (strtoupper($defaultVal) === 'CURRENT_TIMESTAMP' && str_contains($col['view_type'] ?? '', 'time')) {
-                return 'NV_CURRENTTIME';
+            if (preg_match('/^CURRENT_TIMESTAMP(\(\))?$/i', $defaultVal)) {
+                // Trường int (add_time, edit_time) → dùng hằng NV_CURRENTTIME
+                // Trường SQL Date/Timestamp (nullable string) → null (MySQL tự gán default)
+                return ($phpType === 'int') ? 'NV_CURRENTTIME' : 'null';
             }
             return "'" . addslashes($defaultVal) . "'";
         }
@@ -605,11 +607,11 @@ class MvcCodeGenerator
         $c .= "            \$params = [':id' => [\$id, PDO::PARAM_INT]];\n";
         $c .= "            foreach (\$data as \$key => \$value) {\n";
         $c .= "                \$fields[] = \$key . ' = :' . \$key;\n";
-        $c .= "                \$params[':' . \$key] = [\$value, \$key];\n";
+        $c .= "                \$params[':' . \$key] = [\$value, \$value === null ? PDO::PARAM_NULL : \$this->pdoType(\$key)];\n";
         $c .= "            }\n";
         $c .= "            \$stmt = \$this->db->prepare('UPDATE ' . \$this->tables->{$tableProp} . ' SET ' . implode(', ', \$fields) . ' WHERE id = :id');\n";
         $c .= "            foreach (\$params as \$k => \$v) {\n";
-        $c .= "                \$this->bindNullable(\$stmt, \$k, \$v[0], \$v[1]);\n";
+        $c .= "                \$stmt->bindValue(\$k, \$v[0], \$v[1]);\n";
         $c .= "            }\n";
         $c .= "            \$stmt->execute();\n";
         $c .= "            return \$id;\n";
@@ -620,7 +622,7 @@ class MvcCodeGenerator
         $c .= "            'INSERT INTO ' . \$this->tables->{$tableProp} . ' (' . implode(', ', \$columns) . ') VALUES (' . implode(', ', \$placeholders) . ')'\n";
         $c .= "        );\n";
         $c .= "        foreach (\$data as \$key => \$value) {\n";
-        $c .= "            \$this->bindNullable(\$stmt, ':' . \$key, \$value, \$key);\n";
+        $c .= "            \$stmt->bindValue(':' . \$key, \$value, \$value === null ? PDO::PARAM_NULL : \$this->pdoType(\$key));\n";
         $c .= "        }\n";
         $c .= "        \$stmt->execute();\n";
         $c .= "        return (int) \$this->db->lastInsertId();\n";
@@ -631,6 +633,13 @@ class MvcCodeGenerator
         $c .= "        \$stmt->bindValue(':id', \$id, PDO::PARAM_INT);\n";
         $c .= "        return \$stmt->execute();\n";
         $c .= "    }\n\n";
+
+        if (isset($entity->columns['hitstotal'])) {
+            $c .= "    public function incrementHits(int \$id): void\n    {\n";
+            $c .= "        \$this->db->prepare('UPDATE ' . \$this->tables->{$tableProp} . ' SET hitstotal = hitstotal + 1 WHERE id = :id')\n";
+            $c .= "            ->execute([':id' => \$id]);\n";
+            $c .= "    }\n\n";
+        }
 
         if (!empty($entity->active_field)) {
             $c .= "    public function toggleStatus(int \$id): int\n    {\n";
@@ -729,7 +738,7 @@ class MvcCodeGenerator
         $c .= "            return false;\n";
         $c .= "        }\n\n";
         $c .= "        return (bool) \$this->db->exec(\n";
-        $c .= "            'UPDATE ' . \$this->tables->{\$tableProp}\n";
+        $c .= "            'UPDATE ' . \$this->tables->{$tableProp}\n";
         $c .= "                . ' SET ' . \$weightField . ' = CASE id ' . implode(' ', \$cases) . ' END'\n";
         $c .= "                . ' WHERE id IN (' . implode(',', \$ids) . ')'\n";
         $c .= "        );\n";
@@ -745,11 +754,16 @@ class MvcCodeGenerator
 
         $collectLines = '';
         $dateFields = [];
+        $intFields = [];
         foreach ($entity->columns as $field => $col) {
             $sqlType = strtolower($col['sql_type'] ?? '');
             $fieldLower = strtolower((string)$field);
+            $fieldPhpType = $this->phpType($col['sql_type'] ?? 'varchar(255)');
+            if ($fieldPhpType === 'int') {
+                $intFields[] = (string) $field;
+            }
             if (
-                str_contains($sqlType, 'date') || str_contains($sqlType, 'time') || 
+                str_contains($sqlType, 'date') || str_contains($sqlType, 'time') ||
                 str_contains($sqlType, 'year') || str_contains($sqlType, 'timestamp') ||
                 str_ends_with($fieldLower, '_time') || str_ends_with($fieldLower, '_date')
             ) {
@@ -804,13 +818,14 @@ class MvcCodeGenerator
         $c .= "        }\n\n";
 
         $dateFieldsStr = implode(', ', array_map(function($f) { return "'$f'"; }, $dateFields));
+        $intFieldsStr = implode(', ', array_map(function($f) { return "'$f'"; }, $intFields));
         if (!empty($dateFields)) {
             $c .= "        // Xử lý các trường ngày tháng nếu rỗng (tránh lỗi SQL Invalid datetime format khi gán '')\n";
+            $c .= "        \$intFields = [{$intFieldsStr}];\n";
             $c .= "        foreach ([{$dateFieldsStr}] as \$df) {\n";
             $c .= "            if (isset(\$data[\$df]) && (string)\$data[\$df] === '') {\n";
-            $c .= "                // Phân biệt: Trường INT (add_time, edit_time) -> 0, Trường SQL Date -> null\n";
-            $c .= "                \$is_int_field = in_array(\$df, ['add_time', 'edit_time', 'weight', 'status', 'admin_id', 'hitstotal']);\n";
-            $c .= "                \$data[\$df] = \$is_int_field ? 0 : null;\n";
+            $c .= "                // Trường INT (add_time, edit_time, year...) -> 0, Trường SQL Date/Time -> null\n";
+            $c .= "                \$data[\$df] = in_array(\$df, \$intFields) ? 0 : null;\n";
             $c .= "            }\n";
             $c .= "        }\n\n";
         }
@@ -1011,7 +1026,7 @@ class MvcCodeGenerator
         $c .= "    }\n\n";
 
         $c .= "    if (\$nv_Request->isset_request('delete', 'post')) {\n";
-        $c .= "        \$itemRepo->delete(\$id);\n";
+        $c .= "        \$service->delete{$item}(\$id, \$module_name);\n";
         $c .= "        nv_jsonOutput(['status' => 'success']);\n";
         $c .= "    }\n\n";
 
@@ -1534,7 +1549,7 @@ class MvcCodeGenerator
         if (!empty($activeField)) {
             $c .= "    if (\$nv_Request->isset_request('toggle_status', 'post')) {\n";
             $c .= "        \$id = \$nv_Request->get_int('toggle_status', 'post', 0);\n";
-            $c .= "        \$newStatus = \$itemRepo->toggleStatus(\$id);\n";
+            $c .= "        \$newStatus = \$service->changeStatus(\$id, \$module_name);\n";
             $c .= "        nv_jsonOutput(['status' => 'success', 'new_status' => \$newStatus]);\n";
             $c .= "    }\n\n";
         }
@@ -1543,7 +1558,7 @@ class MvcCodeGenerator
             $c .= "    if (\$nv_Request->isset_request('change_weight', 'post')) {\n";
             $c .= "        \$id = \$nv_Request->get_int('id', 'post', 0);\n";
             $c .= "        \$newWeight = \$nv_Request->get_int('change_weight', 'post', 0);\n";
-            $c .= "        \$itemRepo->reorderWeight(\$id, \$newWeight);\n";
+            $c .= "        \$service->changeWeight(\$id, \$newWeight, \$module_name);\n";
             $c .= "        nv_jsonOutput(['status' => 'success']);\n";
             $c .= "    }\n\n";
         }
@@ -1551,21 +1566,37 @@ class MvcCodeGenerator
         // Xóa bản ghi
         $c .= "    if (\$nv_Request->isset_request('delete', 'post')) {\n";
         $c .= "        \$id = \$nv_Request->get_int('id', 'post', 0);\n";
-        $c .= "        \$itemRepo->delete(\$id);\n";
-        $c .= "        \$itemRepo->invalidateCache();\n";
+        $c .= "        \$service->delete{$item}(\$id, \$module_name);\n";
         $c .= "        nv_jsonOutput(['status' => 'success']);\n";
         $c .= "    }\n";
         $c .= "}\n\n";
 
-        $c .= "\$page  = \$nv_Request->get_int('page', 'get', 1);\n";
-        $c .= "\$per_page = 20;\n";
-        $c .= "\$q = \$nv_Request->get_title('q', 'get', '');\n\n";
+        if ($entity->search) {
+            $c .= "\$q = \$nv_Request->get_title('q', 'get', '');\n";
+        } else {
+            $c .= "\$q = '';\n";
+        }
+        if ($entity->pagination) {
+            $c .= "\$page  = \$nv_Request->get_int('page', 'get', 1);\n";
+            $c .= "\$per_page = 20;\n";
+        } else {
+            $c .= "\$page = 1;\n";
+            $c .= "\$per_page = 0;\n";
+        }
+        $c .= "\n";
         $c .= "\$items = \$itemRepo->getList(\$page, \$per_page, -1, \$q);\n";
         $c .= "\$all_count = \$itemRepo->count(-1, \$q);\n";
         $c .= "\$total_items = \$itemRepo->count();\n\n";
-        $c .= "\$base_url = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . \$module_name . '&' . NV_OP_VARIABLE . '=' . \$op;\n";
-        $c .= "if (!empty(\$q)) {\n    \$base_url .= '&q=' . urlencode(\$q);\n}\n";
-        $c .= "\$generate_page = nv_generate_page(\$base_url, \$all_count, \$per_page, \$page);\n\n";
+
+        if ($entity->pagination) {
+            $c .= "\$base_url = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . \$module_name . '&' . NV_OP_VARIABLE . '=' . \$op;\n";
+            if ($entity->search) {
+                $c .= "if (!empty(\$q)) {\n    \$base_url .= '&q=' . urlencode(\$q);\n}\n";
+            }
+            $c .= "\$generate_page = nv_generate_page(\$base_url, \$all_count, \$per_page, \$page);\n\n";
+        } else {
+            $c .= "\$generate_page = '';\n\n";
+        }
 
         $c .= "\$tpl = new \\NukeViet\\Template\\NVSmarty();\n";
         $c .= "\$tpl->setTemplateDir(get_module_tpl_dir('{$opName}.tpl'));\n";
@@ -1573,7 +1604,9 @@ class MvcCodeGenerator
         $c .= "\$tpl->assign('MODULE_NAME', \$module_name);\n";
         $c .= "\$tpl->assign('OP', \$op);\n";
         $c .= "\$tpl->assign('ITEMS', \$items);\n";
-        $c .= "\$tpl->assign('Q', \$q);\n";
+        if ($entity->search) {
+            $c .= "\$tpl->assign('Q', \$q);\n";
+        }
         $c .= "\$tpl->assign('PAGES', \$generate_page);\n";
         $c .= "\$tpl->assign('CHECKSS', csrf_create(\$csrf_key));\n";
         $c .= "\$tpl->assign('ALL_COUNT', \$total_items);\n";
@@ -1599,13 +1632,15 @@ class MvcCodeGenerator
         $viewOp      = $entity->has_detail_view ? $opName . '-view' : '';
 
         $c = "<div class=\"d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2\">\n";
-        $c .= "    <form action=\"{\$NV_BASE_ADMINURL}index.php\" method=\"get\" class=\"hstack gap-2\">\n";
-        $c .= "        <input type=\"hidden\" name=\"{\$NV_LANG_VARIABLE}\" value=\"{\$NV_LANG_DATA}\" />\n";
-        $c .= "        <input type=\"hidden\" name=\"{\$NV_NAME_VARIABLE}\" value=\"{\$MODULE_NAME}\" />\n";
-        $c .= "        <input type=\"hidden\" name=\"{\$NV_OP_VARIABLE}\" value=\"{\$OP}\" />\n";
-        $c .= "        <input type=\"text\" name=\"q\" value=\"{\$Q}\" class=\"form-control form-control-sm\" placeholder=\"{\$LANG->getGlobal('search')}...\" style=\"min-width: 200px\" />\n";
-        $c .= "        <button type=\"submit\" class=\"btn btn-primary btn-sm text-nowrap\">{\$LANG->getGlobal('search')}</button>\n";
-        $c .= "    </form>\n";
+        if ($entity->search) {
+            $c .= "    <form action=\"{\$NV_BASE_ADMINURL}index.php\" method=\"get\" class=\"hstack gap-2\">\n";
+            $c .= "        <input type=\"hidden\" name=\"{\$NV_LANG_VARIABLE}\" value=\"{\$NV_LANG_DATA}\" />\n";
+            $c .= "        <input type=\"hidden\" name=\"{\$NV_NAME_VARIABLE}\" value=\"{\$MODULE_NAME}\" />\n";
+            $c .= "        <input type=\"hidden\" name=\"{\$NV_OP_VARIABLE}\" value=\"{\$OP}\" />\n";
+            $c .= "        <input type=\"text\" name=\"q\" value=\"{\$Q}\" class=\"form-control form-control-sm\" placeholder=\"{\$LANG->getGlobal('search')}...\" style=\"min-width: 200px\" />\n";
+            $c .= "        <button type=\"submit\" class=\"btn btn-primary btn-sm text-nowrap\">{\$LANG->getGlobal('search')}</button>\n";
+            $c .= "    </form>\n";
+        }
         $c .= "    <a href=\"{\$URL_ADD}\" class=\"btn btn-primary btn-sm\">\n";
         $c .= "        <i class=\"fa-solid fa-plus\"></i> {\$LANG->getModule('add')}\n";
         $c .= "    </a>\n";
@@ -1651,7 +1686,9 @@ class MvcCodeGenerator
         foreach ($entity->columns as $field => $col) {
             if (!empty($col['list']) && $field !== $weightField && $field !== $activeField) {
                 if ($field === $titleField) {
-                    $c .= "                        <td><a href=\"{\$URL_EDIT}{\$row->id}\" class=\"text-decoration-none fw-bold text-primary\">{\$row->{$field}}</a></td>\n";
+                    // Có detail view → link tiêu đề trỏ vào view; không có → trỏ vào form sửa
+                    $titleHref = !empty($viewOp) ? "{\$URL_VIEW}{\$row->id}" : "{\$URL_EDIT}{\$row->id}";
+                    $c .= "                        <td><a href=\"{$titleHref}\" class=\"text-decoration-none fw-bold text-primary\">{\$row->{$field}}</a></td>\n";
                 } else {
                     $vt = $col['view_type'] ?? 'textbox';
                     if ($vt === 'date' || $vt === 'time') {
@@ -1674,9 +1711,6 @@ class MvcCodeGenerator
 
         $c .= "                        <td class=\"text-center\">\n";
         $c .= "                            <div class=\"hstack gap-2 justify-content-center\">\n";
-        if (!empty($viewOp)) {
-            $c .= "                                <a href=\"{\$URL_VIEW}{\$row->id}\" class=\"btn btn-sm btn-outline-info\" title=\"{\$LANG->getGlobal('view')}\"><i class=\"fa-solid fa-eye\"></i></a>\n";
-        }
         $c .= "                                <a href=\"{\$URL_EDIT}{\$row->id}\" class=\"btn btn-sm btn-outline-primary\" title=\"{\$LANG->getGlobal('edit')}\"><i class=\"fa-solid fa-pen-to-square\"></i></a>\n";
         $c .= "                                <a href=\"javascript:void(0);\" onclick=\"nv_delete_item('{\$row->id}');\" class=\"btn btn-sm btn-outline-danger\" title=\"{\$LANG->getGlobal('delete')}\"><i class=\"fa-solid fa-trash\"></i></a>\n";
         $c .= "                            </div>\n";
@@ -1725,16 +1759,19 @@ class MvcCodeGenerator
         $c  = "<?php\n\n";
         $c .= $this->copyright() . "\n\n";
         $c .= "if (!defined('NV_IS_FILE_ADMIN')) {\n    exit('Stop!!!');\n}\n\n";
-        $c .= "use {$ns}\\{$item}Repository;\n";
-        $c .= "use {$ns}\\{$item}Service;\n\n";
-        $c .= "\$itemRepo = new {$item}Repository(\$db, \$tables, \$nv_Cache, \$module_name);\n";
-        $c .= "\$service  = new {$item}Service(\$itemRepo);\n\n";
+        $c .= "use {$ns}\\{$item}Repository;\n\n";
+        $c .= "\$itemRepo = new {$item}Repository(\$db, \$tables, \$nv_Cache, \$module_name);\n\n";
         $c .= "\$id = \$nv_Request->get_int('id', 'get', 0);\n";
-        $c .= "\$row_data = \$itemRepo->find(\$id);\n\n";
+        $c .= "\$row_data = \$itemRepo->findById(\$id);\n\n";
         $c .= "if (!\$row_data) {\n";
         $c .= "    header('location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . \$module_name . '&' . NV_OP_VARIABLE . '={$listOp}');\n";
         $c .= "    exit();\n";
         $c .= "}\n\n";
+
+        if (isset($entity->columns['hitstotal'])) {
+            $c .= "\$itemRepo->incrementHits(\$id);\n";
+            $c .= "\$row_data->hitstotal++;\n\n";
+        }
 
         $c .= "\$page_title = \$nv_Lang->getModule('view') . ': ' . \$row_data->{$entity->alias_source_field};\n\n";
 

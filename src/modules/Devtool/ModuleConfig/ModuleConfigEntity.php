@@ -19,70 +19,45 @@ namespace NukeViet\Module\Devtool\ModuleConfig;
 class ModuleConfigEntity
 {
     private string $module;
+    private string $op;
     private array $groups = [];
 
     /**
      * ModuleConfigEntity constructor.
      * @param string $module
+     * @param string $op   Tên op (tương ứng tên file: admin/{op}.php, {op}.tpl)
      * @param array $groups
      */
-    public function __construct(string $module = '', array $groups = [])
+    public function __construct(string $module = '', string $op = 'config', array $groups = [])
     {
         $this->module = $module;
+        $this->op     = $op ?: 'config';
         $this->groups = $groups;
     }
 
-    /**
-     * @return string
-     */
-    public function getModule(): string
-    {
-        return $this->module;
-    }
+    public function getModule(): string { return $this->module; }
+    public function setModule(string $module): void { $this->module = $module; }
 
-    /**
-     * @param string $module
-     */
-    public function setModule(string $module): void
-    {
-        $this->module = $module;
-    }
+    public function getOp(): string { return $this->op; }
+    public function setOp(string $op): void { $this->op = $op ?: 'config'; }
 
-    /**
-     * @return array
-     */
-    public function getGroups(): array
-    {
-        return $this->groups;
-    }
+    public function getGroups(): array { return $this->groups; }
+    public function setGroups(array $groups): void { $this->groups = $groups; }
 
-    /**
-     * @param array $groups
-     */
-    public function setGroups(array $groups): void
-    {
-        $this->groups = $groups;
-    }
-
-    /**
-     * @return array
-     */
     public function toArray(): array
     {
         return [
             'module' => $this->module,
-            'groups' => $this->groups
+            'op'     => $this->op,
+            'groups' => $this->groups,
         ];
     }
 
-    /**
-     * @param array $data
-     * @return self
-     */
     public static function fromArray(array $data): self
     {
         return new self(
             $data['module'] ?? '',
+            $data['op']     ?? 'config',
             $data['groups'] ?? []
         );
     }

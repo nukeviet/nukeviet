@@ -170,10 +170,10 @@
                 <label class="col-sm-3 col-form-label text-sm-end fw-bold">Loại Giao diện</label>
                 <div class="col-sm-8 col-lg-6 col-xxl-5">
                     <select name="page_settings[layout_type]" class="form-select select2">
-                        <option value="list_and_form" {if $PAGE_SETTINGS.layout_type=='list_and_form' }selected{/if}>Cả Danh sách và Form</option>
-                        <option value="list_only" {if $PAGE_SETTINGS.layout_type=='list_only' }selected{/if}>Chỉ Danh sách</option>
-                        <option value="form_only" {if $PAGE_SETTINGS.layout_type=='form_only' }selected{/if}>Chỉ Form</option>
-                        <option value="mvc_only" {if $PAGE_SETTINGS.layout_type=='mvc_only' }selected{/if}>Chỉ tạo MVC (không sinh giao diện)</option>
+                        <option value="list_and_form" {if $PAGE_SETTINGS.layout_type=='list_and_form' }selected{/if}>MVC + Danh sách + Form</option>
+                        <option value="list_only" {if $PAGE_SETTINGS.layout_type=='list_only' }selected{/if}>MVC + Danh sách</option>
+                        <option value="form_only" {if $PAGE_SETTINGS.layout_type=='form_only' }selected{/if}>MVC + Form</option>
+                        <option value="mvc_only" {if $PAGE_SETTINGS.layout_type=='mvc_only' }selected{/if}>Chỉ tạo MVC</option>
                     </select>
                 </div>
             </div>

@@ -12,24 +12,49 @@ Module này được thiết kế để hỗ trợ quá trình lập trình tự
 
 ## 2. Kiến trúc Module `Devtool`
 
-### Cấu trúc thư mục dự kiến
+### Cấu trúc thư mục
 ```text
 src/
 └── modules/Devtool/
     ├── version.php              # Metadata của module
+    ├── functions.php            # Khởi tạo constant module
+    ├── action_mysql.php         # Virtual module (không có bảng DB)
     ├── admin.functions.php      # Khai báo quyền Super Admin (NV_IS_SPADMIN)
-    ├── admin.menu.php           # Menu quản trị: "Quản lý Schema"
+    ├── admin.menu.php           # Menu quản trị: main, schemas, config-step1
     ├── admin/
     │   ├── main.php             # Danh sách bảng hệ thống
     │   ├── schemas.php          # Xử lý Logic Builder & Xuất JSON
-    │   └── schemas-save.php     # AJAX xử lý lưu file
+    │   ├── schemas-save.php     # AJAX xử lý lưu cấu hình Schema
+    │   ├── schemas-columns.php  # AJAX trả về danh sách cột của bảng
+    │   ├── schemas-mvc.php      # Xem trước và sinh mã MVC từ Schema
+    │   ├── config-step1.php     # Bước 1: Trích xuất metadata cấu hình module
+    │   └── config-step2.php     # Bước 2: Sinh mã config.php và config.tpl
+    ├── Schema/
+    │   ├── SchemaEntity.php     # Entity cho cấu hình Schema
+    │   ├── SchemaRepository.php # Đọc cấu trúc DB & quản lý file JSON
+    │   ├── SchemaService.php    # Nghiệp vụ Schema (collect, prepare, save)
+    │   ├── SchemaValidator.php  # Kiểm tra tính hợp lệ của Schema
+    │   └── MvcCodeGenerator.php # Sinh đầy đủ file MVC từ Schema
+    ├── ModuleConfig/
+    │   ├── ModuleConfigEntity.php     # Entity cho metadata cấu hình module
+    │   ├── ModuleConfigRepository.php # Đọc/ghi file config JSON
+    │   ├── ModuleConfigService.php    # Nghiệp vụ cấu hình module
+    │   └── ModuleConfigGenerator.php  # Sinh mã config.php và config.tpl
+    ├── Shared/
+    │   └── ValidationException.php    # Exception dùng chung cho Validator
     └── language/
         └── vi.php
-themes/admin_default/modules/Devtool/
+src/themes/admin_future/modules/Devtool/
     ├── main.tpl                 # UI chọn bảng
-    └── schemas.tpl              # UI cấu hình Mapping (Grid Table)
-data/Devtool/                    # Nơi lưu trữ các file cấu hình JSON sinh ra
+    ├── schemas.tpl              # UI cấu hình Mapping (Grid Table)
+    ├── schemas-mvc.tpl          # UI xem trước và sinh mã MVC
+    ├── config-step1.tpl         # UI định nghĩa metadata cấu hình
+    └── config-step2.tpl         # UI xem trước mã và áp dụng
+src/data/devtool/                # Nơi lưu trữ các file cấu hình JSON sinh ra
 ```
+
+> **Ghi chú**: Module sử dụng theme `admin_future` (Smarty/Bootstrap 5), không có template `admin_default`.
+> Chi tiết tính năng Config Generator xem tại [Devtool-config.md](Devtool-config.md).
 
 ---
 

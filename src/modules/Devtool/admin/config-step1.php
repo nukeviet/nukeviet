@@ -24,6 +24,8 @@ $schemaRepository = new SchemaRepository($db, NV_ROOTDIR . '/' . NV_DATADIR . '/
 $service = new ModuleConfigService($repository, $schemaRepository);
 
 $target_module = $nv_Request->get_string('target_module', 'get,post', '');
+$op_raw        = $nv_Request->get_string('op_name', 'get,post', 'config');
+$op_name       = preg_replace('/[^a-z0-9\-]/', '', strtolower(trim($op_raw))) ?: 'config';
 
 // Xử lý AJAX lấy danh sách bảng
 if ($nv_Request->get_string('mode', 'get') === 'get_tables') {
@@ -57,7 +59,7 @@ if ($nv_Request->isset_request('save', 'post')) {
         ];
         
         if ($nv_Request->get_int('continue', 'post', 0) === 1) {
-            $res['redirect'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=config-step2&target_module=' . $target_module;
+            $res['redirect'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=config-step2&target_module=' . $target_module . '&op_name=' . $entity->getOp();
         }
         
         nv_jsonOutput($res);
@@ -72,10 +74,12 @@ if ($nv_Request->isset_request('save', 'post')) {
 
 $module_list = $service->getInstalledModules($db);
 
-$data = [];
+$data         = [];
+$existing_ops = [];
 if (!empty($target_module)) {
-    $entity = $service->prepareInitialMetadata($target_module, NV_LANG_DATA);
-    $data = $entity->toArray();
+    $existing_ops = $repository->listOps($target_module);
+    $entity       = $service->prepareInitialMetadata($target_module, NV_LANG_DATA, $op_name);
+    $data         = $entity->toArray();
 }
 
 $tpl = new \NukeViet\Template\NVSmarty();
@@ -85,6 +89,8 @@ $tpl->assign('MODULE_NAME', $module_name);
 $tpl->assign('OP', $op);
 $tpl->assign('MODULE_LIST', $module_list);
 $tpl->assign('TARGET_MODULE', $target_module);
+$tpl->assign('OP_NAME', $op_name);
+$tpl->assign('EXISTING_OPS', $existing_ops);
 $tpl->assign('DATA', $data);
 $tpl->assign('CHECKSS', csrf_create($csrf_key));
 

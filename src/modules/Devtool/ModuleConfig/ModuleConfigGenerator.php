@@ -26,11 +26,13 @@ class ModuleConfigGenerator
      */
     public function generatePHP(string $target_module, ModuleConfigEntity $entity): string
     {
-        $groups = $entity->getGroups();
+        $groups  = $entity->getGroups();
+        $op      = $entity->getOp();
         
         $php = "<?php\n\n";
         $php .= "/**\n * @author Devtool Generator\n */\n\n";
         $php .= "if (!defined('NV_IS_FILE_ADMIN')) {\n    exit('Stop!!!');\n}\n\n";
+        $php .= "global \$db, \$db_config, \$tables, \$nv_Cache, \$nv_Request, \$nv_Lang, \$module_name, \$module_data, \$module_info, \$module_upload, \$op, \$csrf_key, \$admin_info, \$module_config;\n\n";
         $php .= "\$page_title = \$nv_Lang->getModule('config');\n\n";
         
         // Xử lý lưu cấu hình
@@ -45,7 +47,7 @@ class ModuleConfigGenerator
                 $type = $field['type'] ?? 'textbox';
                 if ($type === 'checkbox_single') {
                     $php .= "    \$config_data['$key'] = \$nv_Request->get_int('$key', 'post', 0);\n";
-                } elseif ($type === 'checkbox' || $type === 'multiselectbox') {
+                } elseif ($type === 'checkbox' || $type === 'multiselectbox' || $type === 'multiselect') {
                     $php .= "    \$values = \$nv_Request->get_array('$key', 'post', []);\n";
                     $php .= "    \$config_data['$key'] = implode(',', \$values);\n";
                 } elseif ($type === 'number') {
@@ -70,22 +72,25 @@ class ModuleConfigGenerator
         foreach ($groups as $group) {
             foreach ($group['fields'] as $key => $field) {
                 $type = $field['type'] ?? '';
-                if (in_array($type, ['selectbox', 'radio', 'checkbox', 'multiselectbox']) && ($field['source'] ?? '') === 'db') {
+                if (in_array($type, ['selectbox', 'radio', 'checkbox', 'multiselectbox', 'multiselect']) && ($field['source'] ?? '') === 'db') {
                     $db_opts = $field['options_db'] ?? [];
                     if (!empty($db_opts['table'])) {
-                        $php .= "\$data['options']['$key'] = \$db->prepare(\"SELECT {$db_opts['key_col']}, {$db_opts['val_col']} FROM {$db_opts['table']} ORDER BY {$db_opts['val_col']} ASC\")->execute()->fetchAll(\\PDO::FETCH_KEY_PAIR);\n";
+                        $php .= "\$stmt = \$db->prepare(\"SELECT {$db_opts['key_col']}, {$db_opts['val_col']} FROM {$db_opts['table']} ORDER BY {$db_opts['val_col']} ASC\");\n";
+                        $php .= "\$stmt->execute();\n";
+                        $php .= "\$data['options']['$key'] = \$stmt->fetchAll(\\PDO::FETCH_KEY_PAIR);\n";
                     }
                 }
             }
         }
         
         $php .= "\n\$tpl = new \\NukeViet\\Template\\NVSmarty();\n";
+        $php .= "\$tpl->setTemplateDir(get_module_tpl_dir('$op.tpl'));\n";
         $php .= "\$tpl->assign('LANG', \$nv_Lang);\n";
         $php .= "\$tpl->assign('MODULE_NAME', '$target_module');\n";
         $php .= "\$tpl->assign('CONFIG', \$module_config['$target_module']);\n";
         $php .= "\$tpl->assign('DATA', \$data);\n";
         $php .= "\$tpl->assign('CHECKSS', csrf_create(\$csrf_key));\n\n";
-        $php .= "\$contents = \$tpl->fetch('config.tpl');\n\n";
+        $php .= "\$contents = \$tpl->fetch('$op.tpl');\n\n";
         $php .= "include NV_ROOTDIR . '/includes/header.php';\n";
         $php .= "echo nv_admin_theme(\$contents);\n";
         $php .= "include NV_ROOTDIR . '/includes/footer.php';\n";
@@ -107,27 +112,47 @@ class ModuleConfigGenerator
         $tpl .= "    <input type=\"hidden\" name=\"checkss\" value=\"{\$CHECKSS}\">\n\n";
         
         foreach ($groups as $group) {
+            $cols  = max(1, min(3, (int)($group['cols'] ?? 1)));
+            $title = htmlspecialchars($group['title'] ?? '', ENT_QUOTES);
+
             $tpl .= "    <div class=\"card mb-4 border-0 shadow-sm\">\n";
             $tpl .= "        <div class=\"card-header bg-primary-subtle py-3\">\n";
-            $tpl .= "            <h5 class=\"mb-0 text-primary fw-bold\">{\$LANG->getModule('" . $group['title'] . "')}</h5>\n";
+            $tpl .= "            <h5 class=\"mb-0 text-primary fw-bold\">" . $title . "</h5>\n";
             $tpl .= "        </div>\n";
             $tpl .= "        <div class=\"card-body\">\n";
-            
-            foreach ($group['fields'] as $key => $field) {
-                $tpl .= "            <div class=\"row mb-4 align-items-center\">\n";
-                $tpl .= "                <label class=\"col-sm-3 col-form-label fw-bold\">{\$LANG->getModule('" . $field['label'] . "')}</label>\n";
-                $tpl .= "                <div class=\"col-sm-9\">\n";
-                
-                $tpl .= $this->renderField($key, $field);
-                
-                if (!empty($field['note'])) {
-                    $tpl .= "                    <div class=\"form-text mt-1 text-muted\">{\$LANG->getModule('" . $field['note'] . "')}</div>\n";
+
+            if ($cols === 1) {
+                // Layout 1 cột: label trái, input phải (horizontal)
+                foreach ($group['fields'] as $key => $field) {
+                    $label = htmlspecialchars($field['label'] ?? '', ENT_QUOTES);
+                    $tpl .= "            <div class=\"row mb-3 align-items-center\">\n";
+                    $tpl .= "                <label class=\"col-sm-3 col-form-label fw-bold\">" . $label . "</label>\n";
+                    $tpl .= "                <div class=\"col-sm-9\">\n";
+                    $tpl .= $this->renderField($key, $field);
+                    if (!empty($field['note'])) {
+                        $tpl .= "                    <div class=\"form-text mt-1 text-muted\">" . htmlspecialchars($field['note'], ENT_QUOTES) . "</div>\n";
+                    }
+                    $tpl .= "                </div>\n";
+                    $tpl .= "            </div>\n";
                 }
-                
-                $tpl .= "                </div>\n";
+            } else {
+                // Layout 2-3 cột: Bootstrap grid, label trên input (responsive)
+                $colClass = ($cols === 3) ? 'col-12 col-md-6 col-xl-4' : 'col-12 col-md-6';
+                $tpl .= "            <div class=\"row g-3\">\n";
+                foreach ($group['fields'] as $key => $field) {
+                    $label   = htmlspecialchars($field['label'] ?? '', ENT_QUOTES);
+                    $divCols = ($field['span'] ?? '') === 'full' ? 'col-12' : $colClass;
+                    $tpl .= "                <div class=\"" . $divCols . "\">\n";
+                    $tpl .= "                    <label class=\"form-label fw-bold\">" . $label . "</label>\n";
+                    $tpl .= $this->renderField($key, $field);
+                    if (!empty($field['note'])) {
+                        $tpl .= "                    <div class=\"form-text mt-1 text-muted\">" . htmlspecialchars($field['note'], ENT_QUOTES) . "</div>\n";
+                    }
+                    $tpl .= "                </div>\n";
+                }
                 $tpl .= "            </div>\n";
             }
-            
+
             $tpl .= "        </div>\n";
             $tpl .= "    </div>\n";
         }
@@ -149,7 +174,8 @@ class ModuleConfigGenerator
     {
         $type = $field['type'] ?? 'textbox';
         $name = $key;
-        $val = '{$CONFIG.' . $key . '}';
+        $val      = '{$CONFIG.' . $key . '}';  // Dùng trong text context HTML
+        $bare_var = '$CONFIG.' . $key;          // Dùng bên trong Smarty tag
         
         switch ($type) {
             case 'number':
@@ -185,7 +211,7 @@ class ModuleConfigGenerator
                 $html = '                    <select name="' . $name . '" class="form-select">' . "\n";
                 if (($field['source'] ?? 'static') === 'static') {
                     foreach ($field['options_static'] ?? [] as $opt) {
-                        $html .= '                        <option value="' . $opt['key'] . '" {if ' . $val . ' eq \'' . $opt['key'] . '\'}selected{/if}>{$LANG->getModule(\'' . $opt['val'] . '\')}</option>' . "\n";
+                        $html .= '                        <option value="' . $opt['key'] . '" {if ' . $val . ' eq \'' . $opt['key'] . '\'}selected{/if}>' . htmlspecialchars($opt['val'], ENT_QUOTES) . '</option>' . "\n";
                     }
                 } else {
                     $html .= '                        {foreach from=$DATA.options.' . $key . ' key=opt_k item=opt_v}' . "\n";
@@ -201,7 +227,7 @@ class ModuleConfigGenerator
                     foreach ($field['options_static'] ?? [] as $opt) {
                         $html .= '                        <div class="form-check">
                             <input type="radio" name="' . $name . '" id="' . $name . '_' . $opt['key'] . '" value="' . $opt['key'] . '" {if ' . $val . ' eq \'' . $opt['key'] . '\'}checked{/if} class="form-check-input">
-                            <label class="form-check-label" for="' . $name . '_' . $opt['key'] . '">{$LANG->getModule(\'' . $opt['val'] . '\')}</label>
+                            <label class="form-check-label" for="' . $name . '_' . $opt['key'] . '">' . htmlspecialchars($opt['val'], ENT_QUOTES) . '</label>
                         </div>' . "\n";
                     }
                 } else {
@@ -217,12 +243,12 @@ class ModuleConfigGenerator
 
             case 'checkbox':
                 $html = '                    <div class="d-flex flex-wrap gap-3 mt-1">' . "\n";
-                $html .= '                        {assign var="current_vals" value=","|explode:' . $val . '}' . "\n";
+                $html .= '                        {assign var="current_vals" value=' . $bare_var . '|split:","}' . "\n";
                 if (($field['source'] ?? 'static') === 'static') {
                     foreach ($field['options_static'] ?? [] as $opt) {
                         $html .= '                        <div class="form-check">
                             <input type="checkbox" name="' . $name . '[]" id="' . $name . '_' . $opt['key'] . '" value="' . $opt['key'] . '" {if in_array(\'' . $opt['key'] . '\', $current_vals)}checked{/if} class="form-check-input">
-                            <label class="form-check-label" for="' . $name . '_' . $opt['key'] . '">{$LANG->getModule(\'' . $opt['val'] . '\')}</label>
+                            <label class="form-check-label" for="' . $name . '_' . $opt['key'] . '">' . htmlspecialchars($opt['val'], ENT_QUOTES) . '</label>
                         </div>' . "\n";
                     }
                 } else {
@@ -235,7 +261,23 @@ class ModuleConfigGenerator
                 }
                 $html .= "                    </div>\n";
                 return $html;
-            
+
+            case 'multiselect':
+            case 'multiselectbox':
+                $html = '                    <select multiple name="' . $name . '[]" class="form-select">' . "\n";
+                $html .= '                        {assign var="current_vals" value=' . $bare_var . '|split:","}' . "\n";
+                if (($field['source'] ?? 'static') === 'static') {
+                    foreach ($field['options_static'] ?? [] as $opt) {
+                        $html .= '                        <option value="' . $opt['key'] . '" {if in_array(\'' . $opt['key'] . '\', $current_vals)}selected{/if}>' . htmlspecialchars($opt['val'], ENT_QUOTES) . '</option>' . "\n";
+                    }
+                } else {
+                    $html .= '                        {foreach from=$DATA.options.' . $key . ' key=opt_k item=opt_v}' . "\n";
+                    $html .= '                        <option value="{$opt_k}" {if in_array($opt_k, $current_vals)}selected{/if}>{$opt_v}</option>' . "\n";
+                    $html .= '                        {/foreach}' . "\n";
+                }
+                $html .= "                    </select>\n";
+                return $html;
+
             case 'file':
                 return '                    <div class="input-group">
                         <input type="text" name="' . $name . '" id="' . $name . '" value="' . $val . '" class="form-control">
@@ -245,5 +287,76 @@ class ModuleConfigGenerator
             default:
                 return '                    <input type="text" name="' . $name . '" value="' . $val . '" class="form-control">' . "\n";
         }
+    }
+
+    /**
+     * Cập nhật admin.functions.php và admin.menu.php của module mục tiêu.
+     * Config ops chỉ dành cho NV_IS_SPADMIN — thêm vào block đó, không phải $allow_func chính.
+     *
+     * @param string $nvRootDir   NV_ROOTDIR
+     * @param string $module      Tên module (vd: Content)
+     * @param string $op          Tên op (vd: config-seo)
+     * @param string $menuLabel   Nhãn menu (nếu để trống dùng op name)
+     * @return array              Danh sách các file đã được patch
+     */
+    public function patchAdminFiles(string $nvRootDir, string $module, string $op, string $menuLabel = ''): array
+    {
+        $patched = [];
+        $root    = rtrim($nvRootDir, '/\\');
+
+        // ── 1. admin.functions.php ───────────────────────────────────────────
+        $funcPath = $root . '/modules/' . $module . '/admin.functions.php';
+        if (file_exists($funcPath)) {
+            $content = file_get_contents($funcPath);
+
+            // Bỏ qua nếu op đã tồn tại trong file
+            if (!preg_match("/['\"]" . preg_quote($op, '/') . "['\"]/", $content)) {
+                $newLine = "    \$allow_func[] = '{$op}';\n";
+
+                if (preg_match('/if\s*\(\s*defined\s*\(\s*[\'"]NV_IS_SPADMIN[\'"]\s*\)\s*\)/i', $content)) {
+                    // Chèn vào trước dấu } cuối của block NV_IS_SPADMIN
+                    $content = preg_replace_callback(
+                        '/(if\s*\(\s*defined\s*\(\s*[\'"]NV_IS_SPADMIN[\'"]\s*\)\s*\)\s*\{)(.*?)(\})/is',
+                        fn($m) => $m[1] . $m[2] . $newLine . $m[3],
+                        $content
+                    );
+                } else {
+                    // Tạo block mới cuối file
+                    $content = rtrim($content) . "\n\nif (defined('NV_IS_SPADMIN')) {\n{$newLine}}\n";
+                }
+
+                file_put_contents($funcPath, $content);
+                $patched[] = 'modules/' . $module . '/admin.functions.php';
+            }
+        }
+
+        // ── 2. admin.menu.php ────────────────────────────────────────────────
+        $menuPath = $root . '/modules/' . $module . '/admin.menu.php';
+        if (file_exists($menuPath)) {
+            $content = file_get_contents($menuPath);
+
+            // Bỏ qua nếu submenu[op] đã tồn tại
+            if (!preg_match("/\\\$submenu\s*\[\s*['\"]" . preg_quote($op, '/') . "['\"]\s*\]/i", $content)) {
+                $label   = !empty($menuLabel)
+                    ? "'" . addslashes($menuLabel) . "'"
+                    : "'" . addslashes($op) . "'";
+                $newLine = "    \$submenu['{$op}'] = {$label};\n";
+
+                if (preg_match('/if\s*\(\s*defined\s*\(\s*[\'"]NV_IS_SPADMIN[\'"]\s*\)\s*\)/i', $content)) {
+                    $content = preg_replace_callback(
+                        '/(if\s*\(\s*defined\s*\(\s*[\'"]NV_IS_SPADMIN[\'"]\s*\)\s*\)\s*\{)(.*?)(\})/is',
+                        fn($m) => $m[1] . $m[2] . $newLine . $m[3],
+                        $content
+                    );
+                } else {
+                    $content = rtrim($content) . "\n\nif (defined('NV_IS_SPADMIN')) {\n{$newLine}}\n";
+                }
+
+                file_put_contents($menuPath, $content);
+                $patched[] = 'modules/' . $module . '/admin.menu.php';
+            }
+        }
+
+        return $patched;
     }
 }

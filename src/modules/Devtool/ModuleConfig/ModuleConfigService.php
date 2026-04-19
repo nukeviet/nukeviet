@@ -41,7 +41,7 @@ class ModuleConfigService
      */
     public function getInstalledModules($db): array
     {
-        $sql = "SELECT title, custom_title FROM " . NV_MODULES_TABLE . " ORDER BY title ASC";
+        $sql = "SELECT title, custom_title FROM " . NV_MODULES_TABLE . " ORDER BY weight ASC";
         $stmt = $db->prepare($sql);
         $stmt->execute();
         return $stmt->fetchAll(\PDO::FETCH_KEY_PAIR);
@@ -82,30 +82,91 @@ class ModuleConfigService
      * @param string $lang
      * @return ModuleConfigEntity
      */
-    public function prepareInitialMetadata(string $module, string $lang): ModuleConfigEntity
+    public function prepareInitialMetadata(string $module, string $lang, string $op = 'config'): ModuleConfigEntity
     {
-        $existing = $this->repository->loadMetadata($module);
+        $existing = $this->repository->loadMetadata($module, $op);
         if ($existing) {
+            $existing->setGroups($this->normalizeGroups($existing->getGroups()));
             return $existing;
         }
 
         $keys = $this->repository->getModuleConfigKeys($module, $lang);
         $fields = [];
         foreach ($keys as $key) {
-            $fields[$key] = [
-                'type' => 'textbox',
-                'label' => $key,
-                'note' => '',
+            $fields[$key] = $this->normalizeFieldForDisplay([
+                'type'    => 'textbox',
+                'label'   => $key,
+                'note'    => '',
                 'default' => ''
-            ];
+            ]);
         }
 
-        return new ModuleConfigEntity($module, [
+        return new ModuleConfigEntity($module, $op, [
             [
-                'title' => 'config_common',
+                'title'  => 'config_common',
+                'cols'   => 1,
                 'fields' => $fields
             ]
         ]);
+    }
+
+    /**
+     * Chuẩn hoá toàn bộ groups (thêm default cho các key có thể thiếu khi load từ JSON)
+     */
+    private function normalizeGroups(array $groups): array
+    {
+        foreach ($groups as &$group) {
+            if (!isset($group['cols'])) {
+                $group['cols'] = 1;
+            }
+            foreach ($group['fields'] as &$field) {
+                $field = $this->normalizeFieldForDisplay($field);
+            }
+            unset($field);
+        }
+        unset($group);
+        return $groups;
+    }
+
+    /**
+     * Đảm bảo field có đủ tất cả key cần thiết cho template hiển thị
+     */
+    private function normalizeFieldForDisplay(array $field): array
+    {
+        $defaults = [
+            'type'           => 'textbox',
+            'label'          => '',
+            'default'        => '',
+            'note'           => '',
+            'min'            => '',
+            'max'            => '',
+            'display'        => 'datepicker',
+            'validate'       => '',
+            'source'         => 'static',
+            'span'           => '',
+            'options_static' => [],
+            'options_db'     => ['module' => '', 'table' => '', 'key_col' => '', 'val_col' => ''],
+        ];
+
+        $result = array_merge($defaults, $field);
+
+        // Xử lý nested options_db
+        $result['options_db'] = array_merge(
+            $defaults['options_db'],
+            is_array($result['options_db']) ? $result['options_db'] : []
+        );
+
+        // Đảm bảo mỗi option tĩnh có key 'default'
+        if (!empty($result['options_static'])) {
+            foreach ($result['options_static'] as &$opt) {
+                if (!isset($opt['default'])) {
+                    $opt['default'] = 0;
+                }
+            }
+            unset($opt);
+        }
+
+        return $result;
     }
 
     /**
@@ -116,12 +177,15 @@ class ModuleConfigService
     public function collectFromRequest(Request $request): ModuleConfigEntity
     {
         $module = $request->get_string('target_module', 'post', '');
+        $op_raw = $request->get_string('op_name', 'post', 'config');
+        $op     = preg_replace('/[^a-z0-9\-]/', '', strtolower(trim($op_raw))) ?: 'config';
         $groups_raw = $request->get_array('groups', 'post', []);
         
         $groups = [];
         foreach ($groups_raw as $g_idx => $g_data) {
             $group = [
-                'title' => $g_data['title'] ?? '',
+                'title'  => $g_data['title'] ?? '',
+                'cols'   => max(1, min(3, (int)($g_data['cols'] ?? 1))),
                 'fields' => []
             ];
             if (!empty($g_data['fields']) && is_array($g_data['fields'])) {
@@ -138,7 +202,7 @@ class ModuleConfigService
             $groups[] = $group;
         }
         
-        return new ModuleConfigEntity($module, $groups);
+        return new ModuleConfigEntity($module, $op, $groups);
     }
 
     /**
@@ -151,7 +215,7 @@ class ModuleConfigService
         $type = $data['type'] ?? 'textbox';
         
         // Các trường cơ bản luôn giữ
-        $base_keys = ['type', 'label', 'default', 'note'];
+        $base_keys = ['type', 'label', 'default', 'note', 'span'];
         $relevant_keys = [];
 
         switch ($type) {

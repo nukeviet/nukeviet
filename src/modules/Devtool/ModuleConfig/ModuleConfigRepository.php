@@ -58,11 +58,12 @@ class ModuleConfigRepository
     public function saveMetadata(ModuleConfigEntity $entity): bool
     {
         $module = $entity->getModule();
+        $op     = $entity->getOp();
         if (empty($module)) {
             return false;
         }
-        $filename = $this->dataPath . 'config_' . $module . '.json';
-        $content = json_encode($entity->toArray(), JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
+        $filename = $this->dataPath . 'config_' . $module . '_' . $op . '.json';
+        $content  = json_encode($entity->toArray(), JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
 
         if (!is_dir($this->dataPath)) {
             nv_mkdir($this->dataPath, 0755, true);
@@ -79,18 +80,40 @@ class ModuleConfigRepository
     /**
      * Đọc metadata cấu hình từ file JSON
      * @param string $module
+     * @param string $op
      * @return ModuleConfigEntity|null
      */
-    public function loadMetadata(string $module): ?ModuleConfigEntity
+    public function loadMetadata(string $module, string $op = 'config'): ?ModuleConfigEntity
     {
-        $filename = $this->dataPath . 'config_' . $module . '.json';
+        $filename = $this->dataPath . 'config_' . $module . '_' . $op . '.json';
         if (file_exists($filename)) {
             $content = file_get_contents($filename);
-            $data = json_decode($content, true);
+            $data    = json_decode($content, true);
             if (is_array($data)) {
                 return ModuleConfigEntity::fromArray($data);
             }
         }
         return null;
+    }
+
+    /**
+     * Liệt kê các op đã có metadata cho một module
+     * @param string $module
+     * @return array
+     */
+    public function listOps(string $module): array
+    {
+        $prefix  = 'config_' . $module . '_';
+        $pattern = $this->dataPath . $prefix . '*.json';
+        $files   = glob($pattern) ?: [];
+        $ops     = [];
+        foreach ($files as $file) {
+            $basename = basename($file, '.json');
+            if (str_starts_with($basename, $prefix)) {
+                $ops[] = substr($basename, strlen($prefix));
+            }
+        }
+        sort($ops);
+        return $ops;
     }
 }

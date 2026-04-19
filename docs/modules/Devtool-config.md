@@ -1,4 +1,4 @@
-# Bộ tạo cấu hình Module (Devtool Config Generator)
+ok# Bộ tạo cấu hình Module (Devtool Config Generator)
 
 ## Tổng quan
 Tài liệu này trình bày chiến lược tổng quát hóa và tự động hóa việc tạo giao diện cấu hình module (admin config) trong NukeViet 5.0.

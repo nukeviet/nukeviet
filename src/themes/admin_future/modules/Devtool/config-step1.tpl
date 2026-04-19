@@ -17,6 +17,32 @@
                 </select>
             </div>
         </form>
+
+        {if !empty($TARGET_MODULE)}
+        <div class="mt-3 pt-3 border-top">
+            <div class="d-flex align-items-center gap-2 flex-wrap mb-2">
+                <span class="small fw-bold text-muted text-nowrap"><i class="fa-solid fa-file-code me-1 text-primary"></i>Config pages [{$TARGET_MODULE}]:</span>
+                {foreach from=$EXISTING_OPS item=eop}
+                <a href="{$smarty.const.NV_BASE_ADMINURL}index.php?{$smarty.const.NV_LANG_VARIABLE}={$smarty.const.NV_LANG_DATA}&amp;{$smarty.const.NV_NAME_VARIABLE}={$MODULE_NAME}&amp;{$smarty.const.NV_OP_VARIABLE}={$OP}&amp;target_module={$TARGET_MODULE}&amp;op_name={$eop}"
+                   class="badge text-decoration-none py-2 px-3 {if $eop eq $OP_NAME}bg-primary{else}bg-body-secondary text-body border{/if}">
+                    <i class="fa-solid fa-file-code me-1"></i>{$eop}
+                </a>
+                {/foreach}
+                {if !in_array($OP_NAME, $EXISTING_OPS)}
+                <span class="badge bg-success-subtle text-success border border-success-subtle py-2 px-3">
+                    <i class="fa-solid fa-plus me-1"></i>{$OP_NAME} <small class="opacity-75">(mới)</small>
+                </span>
+                {/if}
+            </div>
+            <div class="input-group input-group-sm" style="max-width:360px;">
+                <span class="input-group-text text-muted small">admin/<span class="fw-bold text-primary" id="op_preview">{$OP_NAME}</span>.php</span>
+                <input type="text" id="new_op_input" value="" class="form-control" placeholder="Tên op mới (vd: config-seo)" pattern="[a-z0-9\-]+">
+                <a href="#" id="btn-open-op" class="btn btn-outline-primary btn-sm">
+                    <i class="fa-solid fa-arrow-right me-1"></i>Mở/Tạo
+                </a>
+            </div>
+        </div>
+        {/if}
     </div>
 </div>
 
@@ -24,12 +50,21 @@
 <form action="{$smarty.const.NV_BASE_ADMINURL}index.php?{$smarty.const.NV_LANG_VARIABLE}={$smarty.const.NV_LANG_DATA}&amp;{$smarty.const.NV_NAME_VARIABLE}={$MODULE_NAME}&amp;{$smarty.const.NV_OP_VARIABLE}={$OP}" method="post" class="ajax-submit">
     <input type="hidden" name="save" value="1">
     <input type="hidden" name="target_module" value="{$TARGET_MODULE}">
+    <input type="hidden" name="op_name" value="{$OP_NAME}">
     <input type="hidden" name="checkss" value="{$CHECKSS}">
 
     <input type="hidden" name="continue" id="continue_flag" value="0">
 
     <div class="d-flex justify-content-between align-items-center mb-3">
-        <h3 class="fw-bold mb-0">{$LANG->getModule('groups_list')}</h3>
+        <div>
+            <h3 class="fw-bold mb-0">{$LANG->getModule('groups_list')}</h3>
+            <div class="small text-muted mt-1">
+                <i class="fa-solid fa-file-code me-1 text-primary"></i>
+                <code>admin/<strong class="text-primary">{$OP_NAME}</strong>.php</code>
+                <span class="mx-2 opacity-50">|</span>
+                <code><strong class="text-primary">{$OP_NAME}</strong>.tpl</code>
+            </div>
+        </div>
         <button type="button" class="btn btn-success shadow-sm btn-add-group px-4">
             <i class="fa-solid fa-folder-plus me-2"></i>{$LANG->getModule('add_group')}
         </button>
@@ -43,6 +78,17 @@
                     <div class="group-handle cursor-move me-3 text-primary opacity-50"><i class="fa-solid fa-grip-vertical fs-3"></i></div>
                     <i class="fa-solid fa-layer-group me-3 fs-3 text-primary"></i>
                     <input type="text" name="groups[{$g_idx}][title]" value="{$group.title}" class="form-control form-control-lg border-0 bg-transparent fw-bold text-primary p-0" placeholder="Group Label Key" style="box-shadow: none;">
+                </div>
+                <div class="d-flex align-items-center gap-2 me-3 flex-shrink-0">
+                    <span class="x-small fw-bold text-primary opacity-75 text-nowrap">Cols:</span>
+                    <div class="btn-group btn-group-sm" role="group">
+                        <input type="radio" class="btn-check" name="groups[{$g_idx}][cols]" id="cols_{$g_idx}_1" value="1" {if $group.cols eq 1}checked{/if}>
+                        <label class="btn btn-outline-primary" for="cols_{$g_idx}_1" title="1 cột"><i class="fa-solid fa-square"></i></label>
+                        <input type="radio" class="btn-check" name="groups[{$g_idx}][cols]" id="cols_{$g_idx}_2" value="2" {if $group.cols eq 2}checked{/if}>
+                        <label class="btn btn-outline-primary" for="cols_{$g_idx}_2" title="2 cột"><i class="fa-solid fa-table-columns"></i></label>
+                        <input type="radio" class="btn-check" name="groups[{$g_idx}][cols]" id="cols_{$g_idx}_3" value="3" {if $group.cols eq 3}checked{/if}>
+                        <label class="btn btn-outline-primary" for="cols_{$g_idx}_3" title="3 cột"><i class="fa-solid fa-table-cells"></i></label>
+                    </div>
                 </div>
                 <div class="d-flex gap-2">
                     <button type="button" class="btn btn-primary btn-add-field" data-gidx="{$g_idx}">
@@ -64,7 +110,11 @@
                                 <span class="badge bg-primary-subtle text-primary me-2">KEY</span>
                                 <input type="text" name="groups[{$g_idx}][fields][{$f_name}][key]" value="{$f_name}" class="form-control form-control-sm border-0 fw-bold text-primary p-0 bg-transparent text-truncate" placeholder="Key">
                             </div>
-                            <div class="d-flex align-items-center">
+                            <div class="d-flex align-items-center gap-2">
+                                <div class="form-check form-switch mb-0" title="Chiếm full width">
+                                    <input type="checkbox" class="form-check-input" name="groups[{$g_idx}][fields][{$f_name}][span]" value="full" {if $field.span eq 'full'}checked{/if} id="span_{$g_idx}_{$f_name}" style="cursor:pointer;">
+                                    <label class="form-check-label x-small text-muted" for="span_{$g_idx}_{$f_name}">Full</label>
+                                </div>
                                 <button type="button" class="btn btn-link link-danger p-0 btn-remove-field" title="Remove"><i class="fa-solid fa-circle-xmark fs-5"></i></button>
                             </div>
                         </div>
@@ -240,6 +290,17 @@
                 <i class="fa-solid fa-layer-group me-3 fs-3 text-primary"></i>
                 <input type="text" name="groups[G_IDX][title]" value="" class="form-control form-control-lg border-0 bg-transparent fw-bold text-primary p-0" placeholder="New Group Label Key" style="box-shadow: none;">
             </div>
+            <div class="d-flex align-items-center gap-2 me-3 flex-shrink-0">
+                <span class="x-small fw-bold text-primary opacity-75 text-nowrap">Cols:</span>
+                <div class="btn-group btn-group-sm" role="group">
+                    <input type="radio" class="btn-check" name="groups[G_IDX][cols]" id="cols_G_IDX_1" value="1" checked>
+                    <label class="btn btn-outline-primary" for="cols_G_IDX_1" title="1 cột"><i class="fa-solid fa-square"></i></label>
+                    <input type="radio" class="btn-check" name="groups[G_IDX][cols]" id="cols_G_IDX_2" value="2">
+                    <label class="btn btn-outline-primary" for="cols_G_IDX_2" title="2 cột"><i class="fa-solid fa-table-columns"></i></label>
+                    <input type="radio" class="btn-check" name="groups[G_IDX][cols]" id="cols_G_IDX_3" value="3">
+                    <label class="btn btn-outline-primary" for="cols_G_IDX_3" title="3 cột"><i class="fa-solid fa-table-cells"></i></label>
+                </div>
+            </div>
             <div class="d-flex gap-2">
                 <button type="button" class="btn btn-primary btn-add-field" data-gidx="G_IDX">
                     <i class="fa-solid fa-plus me-1"></i>{$LANG->getModule('add_field')}
@@ -263,7 +324,11 @@
                     <span class="badge bg-primary-subtle text-primary me-2">KEY</span>
                     <input type="text" name="groups[G_IDX][fields][F_IDX][key]" value="" class="form-control form-control-sm border-0 fw-bold text-primary p-0 bg-transparent text-truncate" placeholder="Key">
                 </div>
-                <div class="d-flex align-items-center">
+                <div class="d-flex align-items-center gap-2">
+                    <div class="form-check form-switch mb-0" title="Chiếm full width">
+                        <input type="checkbox" class="form-check-input" name="groups[G_IDX][fields][F_IDX][span]" value="full" id="span_G_IDX_F_IDX" style="cursor:pointer;">
+                        <label class="form-check-label x-small text-muted" for="span_G_IDX_F_IDX">Full</label>
+                    </div>
                     <button type="button" class="btn btn-link link-danger p-0 btn-remove-field" title="Remove"><i class="fa-solid fa-circle-xmark fs-5"></i></button>
                 </div>
             </div>
@@ -620,6 +685,21 @@ $(function() {
         if (confirm('{$LANG->getGlobal('delete_confirm')}')) {
             $(this).closest('.field-row').fadeOut(200, function() { $(this).remove(); });
         }
+    });
+
+    // --- OP SELECTOR ---
+    $('#new_op_input').on('input', function() {
+        var val = $(this).val().trim().toLowerCase().replace(/[^a-z0-9\-]/g, '');
+        $('#op_preview').text(val || '{$OP_NAME}');
+    });
+    $('#btn-open-op').on('click', function(e) {
+        e.preventDefault();
+        var newOp = $('#new_op_input').val().trim().toLowerCase().replace(/[^a-z0-9\-]/g, '');
+        if (!newOp) { $('#new_op_input').focus(); return; }
+        window.location.href = '{$smarty.const.NV_BASE_ADMINURL}index.php?{$smarty.const.NV_LANG_VARIABLE}={$smarty.const.NV_LANG_DATA}&{$smarty.const.NV_NAME_VARIABLE}={$MODULE_NAME}&{$smarty.const.NV_OP_VARIABLE}={$OP}&target_module={$TARGET_MODULE}&op_name=' + encodeURIComponent(newOp);
+    });
+    $('#new_op_input').on('keydown', function(e) {
+        if (e.key === 'Enter') { e.preventDefault(); $('#btn-open-op').trigger('click'); }
     });
 
     // --- INITIALIZATION ---
