@@ -28,6 +28,11 @@ class ContentEntity extends AbstractEntity
      */
     protected const VIEW_FIELDS = ['id', 'category', 'link', 'url_view', 'url_edit', 'url_copy', 'checkss', 'url_copy_edit'];
 
+    /**
+     * Khai báo nested Entity — toArray() lớp cha tự động expand theo danh sách này.
+     */
+    protected const RELATIONS = ['category' => CatEntity::class];
+
     public int $id = 0;
     public int $catid = 0;
     public ?CatEntity $category = null;
@@ -60,15 +65,4 @@ class ContentEntity extends AbstractEntity
     public string $url_copy_edit = '';
     public string $checkss = '';
 
-    /**
-     * Chuyển Entity thành Array — xử lý nested CatEntity
-     */
-    public function toArray(): array
-    {
-        $arr = get_object_vars($this);
-        if ($this->category instanceof CatEntity) {
-            $arr['category'] = $this->category->toArray();
-        }
-        return $arr;
-    }
 }

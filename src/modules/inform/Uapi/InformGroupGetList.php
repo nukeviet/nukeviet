@@ -9,7 +9,7 @@
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
-namespace NukeViet\Module\inform\uapi;
+namespace NukeViet\Module\inform\Uapi;
 
 use NukeViet\Uapi\Uapi;
 use NukeViet\Uapi\UapiResult;
@@ -21,10 +21,10 @@ if (!defined('NV_MAINFILE')) {
 }
 
 /**
- * NukeViet\Module\inform\uapi\InformGroupGetList
+ * NukeViet\Module\inform\Uapi\InformGroupGetList
  * API dùng để lấy danh sách thông báo do nhóm gửi đi
  *
- * @package NukeViet\Module\inform\uapi
+ * @package NukeViet\Module\inform\Uapi
  * @author VINADES.,JSC <contact@vinades.vn>
  * @copyright (C) 2009-2025 VINADES.,JSC. All rights reserved
  * @version 5.x

@@ -18,7 +18,7 @@ if ($nv_Request->isset_request('save', 'post')) {
         // Không hợp lệ → báo lỗi hoặc redirect (tùy định dạng trả về)
         nv_jsonOutput([
             'status' => 'error',
-            'mess' => 'Error session!!!'
+            'mess' => $nv_Lang->getGlobal('error_checkss')
         ]);
     }
     // Thực hiện xử lý dữ liệu tiếp theo...
