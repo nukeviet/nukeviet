@@ -184,11 +184,11 @@ if (!defined('NV_IS_FILE_MODULES')) {
 }
 
 $sql_drop_module = [];
-$sql_drop_module[] = 'DROP TABLE IF EXISTS ' . $db_config['prefix'] . '_' . $lang . '_' . $module_data . ';';
+$sql_drop_module[] = 'DROP TABLE IF EXISTS ' . $db_config['prefix'] . '_' . $lang . '_' . $module_data . '_content;';
 
 $sql_create_module = $sql_drop_module;
 
-$sql_create_module[] = 'CREATE TABLE ' . $db_config['prefix'] . '_' . $lang . '_' . $module_data . " (
+$sql_create_module[] = 'CREATE TABLE ' . $db_config['prefix'] . '_' . $lang . '_' . $module_data . "_content (
     id mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
     title varchar(250) NOT NULL,
     alias varchar(250) NOT NULL,
@@ -206,7 +206,7 @@ $sql_create_module[] = 'CREATE TABLE ' . $db_config['prefix'] . '_' . $lang . '_
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci";
 
 $sql_create_module[] = 'INSERT INTO ' . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES
-    ('" . $lang . "', '" . $module_name . "', 'table_row', '" . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "'),
+    ('" . $lang . "', '" . $module_name . "', 'table_row', '" . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_content'),
     ('" . $lang . "', '" . $module_name . "', 'table_cat', '" . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_cat'),
     ('" . $lang . "', '" . $module_name . "', 'per_page', '20'),
     ('" . $lang . "', '" . $module_name . "', 'alias_lower', '1')
@@ -348,8 +348,9 @@ readonly class Tables
 
     public function __construct(string $tablePrefix, string $moduleData)
     {
-        $this->content = $tablePrefix . '_' . $moduleData;
-        $this->cat     = $tablePrefix . '_' . $moduleData . '_cat';
+        $prefix = $tablePrefix . '_' . $moduleData;
+        $this->content = $prefix . '_content';  // nv5_vi_{moduleData}_content
+        $this->cat     = $prefix . '_cat';      // nv5_vi_{moduleData}_cat
     }
 }
 ```

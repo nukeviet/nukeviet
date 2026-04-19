@@ -44,7 +44,7 @@ Khi cần thêm một tính năng mới (ví dụ: Quản lý Sản phẩm), hã
    - 📎 [Mẫu Entity chuẩn](modules/Content.md#L252)
 
 ### Bước 2: Truy vấn dữ liệu (Repository)
-- Khởi tạo đối tượng `$tables = new Tables(NV_PREFIXLANG, $module_data)` tại `functions.php` hoặc `admin.functions.php`. Đối tượng này chứa toàn bộ tên các bảng thực tế (VD: `$tables->content`, `$tables->cat`).
+- Khởi tạo đối tượng `$tables = new Tables(NV_PREFIXLANG, $module_data)` tại `functions.php` hoặc `admin.functions.php`. Đối tượng này chứa toàn bộ tên các bảng thực tế (VD: `$tables->content` = `nv5_vi_content_content`, `$tables->cat` = `nv5_vi_content_cat`).
 - Tạo `{Item}Repository.php` kế thừa từ `BaseRepository`.
 - Viết các hàm `findById`, `save`, `delete`, `getList`.
 - Quản lý cấu hình module tập trung tại `NV_CONFIG_GLOBALTABLE`. Sử dụng `$module_config[$module_name]` để lấy cấu hình và hàm `saveConfig` trong Repository để cập nhật vào DB.
@@ -85,7 +85,76 @@ Mọi dữ liệu đi vào hệ thống phải trải qua quy trình 4 giai đo�
 
 ---
 
-## 4. Kiểm Thử (Testing)
+## 4. Giao Tiếp Giữa Các Module (Cross-module)
+
+Mỗi module có bộ `Shared/Tables.php` riêng. Khi module **A** cần dữ liệu của module **B**, có 3 cơ chế tùy mục đích:
+
+| Kịch bản | Cơ chế | Khi nào dùng |
+| :--- | :--- | :--- |
+| Đọc dữ liệu realtime | Dùng thẳng `Repository` của module B | Cần join/query trực tiếp |
+| Phản ứng khi B thay đổi | **Hook** (`nv_add_hook`) | Event-driven, loose coupling |
+| Hiển thị trong Block/Widget | Gọi **Public API** của module B | Không muốn phụ thuộc class |
+
+### Kịch bản 1 — Đọc dữ liệu qua Repository
+
+Module News đọc bài của Content bằng cách khởi tạo `ContentTables` + `ContentRepository`:
+
+```php
+// src/modules/News/News/NewsService.php
+use NukeViet\Module\Content\Shared\Tables as ContentTables;
+use NukeViet\Module\Content\Content\ContentRepository;
+
+$contentTables = new ContentTables(NV_PREFIXLANG, 'content');
+// → $contentTables->content = 'nv5_vi_content_content'
+
+$contentRepo = new ContentRepository($this->db, $contentTables, $this->cache, 'content');
+$entity = $contentRepo->findById($contentId);
+```
+
+> [!TIP]
+> Mỗi module có `Tables` và `Repository` của riêng mình. Cross-module chỉ là **khởi tạo thêm** đối tượng của module kia — không hardcode tên bảng, không truy cập `$module_config` của module khác.
+
+### Kịch bản 2 — Phản ứng sự kiện qua Hook
+
+News lắng nghe event của Content — hai module **không biết nhau**, không import class của nhau:
+
+```php
+// src/modules/News/hooks/content.php
+
+// Khi bài Content được lưu → News cập nhật index của mình
+nv_add_hook('content', 'content_saved', 10, function($args, $from, $receive) {
+    // $args['id'], $args['title'], $args['action'] ('add'|'edit')
+    return null;
+}, 'news', $pid);
+
+// Khi bài Content bị xóa → News dọn liên kết
+nv_add_hook('content', 'content_deleted', 10, function($args, $from, $receive) {
+    // $args['id']
+    return null;
+}, 'news', $pid);
+```
+
+### Kịch bản 3 — Hiển thị qua Public API
+
+```php
+// Gọi API của Content từ News Block
+$response = nv_api_call('content', 'ContentGetList', ['per_page' => 5]);
+// $response['items'] → danh sách bài Content
+```
+
+> [!CAUTION]
+> **Tuyệt đối không làm:**
+> ```php
+> // ❌ Hardcode tên bảng của module khác
+> $db->query("SELECT * FROM nv5_vi_content_content WHERE id = 1");
+>
+> // ❌ Đọc thẳng config của module khác
+> $table = $module_config['content']['table_row'];
+> ```
+
+---
+
+## 5. Kiểm Thử (Testing)
 
 Mỗi chức năng mới bắt buộc phải có testcase đi kèm trong thư mục `tests/modules/{module}/`:
 
@@ -99,7 +168,7 @@ Mỗi chức năng mới bắt buộc phải có testcase đi kèm trong thư m�
 
 ---
 
-## 5. Quy Tắc "Vàng" & Kinh Nghiệm Thực Tế
+## 6. Quy Tắc "Vàng" & Kinh Nghiệm Thực Tế
 
 1. **Cấm Hardcode**: Tuyệt đối không viết trực tiếp tên bảng vào SQL. Phải dùng đối tượng `$tables` đã được khởi tạo sẵn (VD: `$this->tables->content`).
 2. **CSRF Protection**: Mọi thao tác Ghi (Add/Edit/Del) phải qua `csrf_check()`. Với Ajax xóa, dùng query string `checkss`.
@@ -118,7 +187,7 @@ Mỗi chức năng mới bắt buộc phải có testcase đi kèm trong thư m�
 
 ---
 
-## 6. Lợi ích so với cách viết cũ (NukeViet 4)
+## 7. Lợi ích so với cách viết cũ (NukeViet 4)
 
 Việc áp dụng chuẩn MVC + Service Layer thay vì viết tất cả logic vào một file PHP (kiểu NV4) mang lại những lợi ích chìa khóa:
 
@@ -130,7 +199,7 @@ Việc áp dụng chuẩn MVC + Service Layer thay vì viết tất cả logic v
 
 ---
 
-## 7. Nhược điểm & Cách khắc phục
+## 8. Nhược điểm & Cách khắc phục
 
 | Nhược điểm | Cách khắc phục |
 | :--- | :--- |

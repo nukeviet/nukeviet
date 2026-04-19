@@ -28,10 +28,7 @@ if (!defined('NV_MAINFILE')) {
  */
 readonly class Tables
 {
-    /** Bảng bài viết: {prefix}_{lang}_{module_data} */
     public string $content;
-
-    /** Bảng chủ đề: {prefix}_{lang}_{module_data}_cat */
     public string $cat;
 
     /**
@@ -40,7 +37,9 @@ readonly class Tables
      */
     public function __construct(string $tablePrefix, string $moduleData)
     {
-        $this->content = $tablePrefix . '_' . $moduleData;
-        $this->cat     = $tablePrefix . '_' . $moduleData . '_cat';
+        $prefix = $tablePrefix . '_' . $moduleData;
+
+        $this->content = $prefix . '_content';  // nv5_vi_content_content
+        $this->cat     = $prefix . '_cat';      // nv5_vi_content_cat
     }
 }
