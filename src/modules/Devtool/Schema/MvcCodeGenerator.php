@@ -284,22 +284,19 @@ class MvcCodeGenerator
     private function buildActionDraft(array &$files, SchemaEntity $entity, string $mod, string $nvRootDir): void
     {
         $tableSuffix = $this->getTableSuffix($entity, $mod);
-        $suffixName = ltrim($tableSuffix, '_') ?: 'main';
-        $actionFile = "modules/{$mod}/action_mysql_{$suffixName}.php";
-        
-        $content = "<?php\n\n";
-        $content .= "/**\n * Bản nháp \$sql_drop_module và \$sql_create_module cho bảng {$entity->table}\n */\n\n";
-        $content .= "\$sql_drop_module[] = \"DROP TABLE IF EXISTS \" . \$db_config['prefix'] . \"_\" . \$lang . \"_\" . \$module_data . \"{$tableSuffix};\";\n\n";
+        $marker      = $tableSuffix !== '' ? $tableSuffix : '_main';
+        $actionFile  = "modules/{$mod}/action_mysql.php";
 
-        $colSql = [];
-        $pks = [];
+        // Xây dựng danh sách cột
+        $colSql  = [];
+        $pks     = [];
         $uniques = [];
         foreach ($entity->columns as $field => $col) {
-            $sqlType = $col['sql_type'] ?? 'varchar(255)';
+            $sqlType      = $col['sql_type'] ?? 'varchar(255)';
             $sqlTypeLower = strtolower($sqlType);
-            $isDateField = (str_contains($sqlTypeLower, 'date') || str_contains($sqlTypeLower, 'time') || str_contains($sqlTypeLower, 'year'));
-            $isPrimary = !empty($col['primary']) || $field === 'id';
-            
+            $isDateField  = (str_contains($sqlTypeLower, 'date') || str_contains($sqlTypeLower, 'time') || str_contains($sqlTypeLower, 'year'));
+            $isPrimary    = !empty($col['primary']) || $field === 'id';
+
             $isNull = ($isPrimary || !empty($col['required'])) ? 'NOT NULL' : 'NULL';
             // Ưu tiên cho phép NULL đối với các trường ngày tháng để tránh lỗi Strict Mode khi bỏ trống
             if ($isDateField && empty($col['required'])) {
@@ -307,8 +304,8 @@ class MvcCodeGenerator
             }
 
             $defaultVal = $col['default'] ?? '';
-            $default = '';
-            
+            $default    = '';
+
             if ($isPrimary && $field === 'id') {
                 $default = "AUTO_INCREMENT";
             } elseif ($defaultVal !== '') {
@@ -323,24 +320,97 @@ class MvcCodeGenerator
                 $default = "DEFAULT NULL";
             }
 
-            $line = "    `{$field}` {$sqlType} {$isNull} {$default}";
+            $line  = "    `{$field}` {$sqlType} {$isNull} {$default}";
             $label = $col['label_vi'] ?? '';
             if (!empty($label)) {
                 $line .= " COMMENT '" . addslashes($label) . "'";
             }
             $colSql[] = $line;
             if (!empty($col['primary'])) $pks[] = "`{$field}`";
-            if (!empty($col['unique'])) $uniques[] = "    UNIQUE KEY `{$field}` (`{$field}`)";
+            if (!empty($col['unique']))  $uniques[] = "    UNIQUE KEY `{$field}` (`{$field}`)";
         }
         if (empty($pks) && isset($entity->columns['id'])) $pks[] = "`id`";
         if (!empty($pks)) $colSql[] = "    PRIMARY KEY (" . implode(', ', $pks) . ")";
         $colSql = array_merge($colSql, $uniques);
 
-        $content .= "\$sql_create_module[] = \"CREATE TABLE \" . \$db_config['prefix'] . \"_\" . \$lang . \"_\" . \$module_data . \"{$tableSuffix} (\n";
-        $content .= implode(",\n", $colSql) . "\n";
-        $content .= ") ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci\";\n";
+        // Xây dựng 2 block marker riêng: DROP và CREATE
+        $dropStmt   = "\"DROP TABLE IF EXISTS \" . \$db_config['prefix'] . '_' . \$lang . '_' . \$module_data . \"{$tableSuffix};\"";
+        $createStmt = "\"CREATE TABLE \" . \$db_config['prefix'] . '_' . \$lang . '_' . \$module_data . \"{$tableSuffix} (\n"
+                    . implode(",\n", $colSql) . "\n"
+                    . ") ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci\"";
+
+        $dropBlock  = "// [DROP:{$marker}] Tự động sinh bởi Devtool — sẽ bị ghi đè ở lần sinh sau\n";
+        $dropBlock .= "\$sql_drop_module[] = {$dropStmt};\n";
+        $dropBlock .= "// [/DROP:{$marker}]";
+
+        $createBlock  = "// [CREATE:{$marker}] Tự động sinh bởi Devtool — sẽ bị ghi đè ở lần sinh sau\n";
+        $createBlock .= "\$sql_create_module[] = {$createStmt};\n";
+        $createBlock .= "// [/CREATE:{$marker}]";
+
+        // Lấy nội dung hiện tại: ưu tiên trong $files (entity khác vừa sinh trong cùng lần), sau đó đến disk
+        $existing = null;
+        foreach ($files as $f) {
+            if ($f['path'] === $actionFile) {
+                $existing = $f['content'];
+                break;
+            }
+        }
+        if ($existing === null) {
+            $fullPath = rtrim($nvRootDir, '/\\') . '/' . $actionFile;
+            if (file_exists($fullPath)) {
+                $existing = file_get_contents($fullPath);
+            }
+        }
+
+        if ($existing === null || $existing === false || trim($existing) === '') {
+            // File chưa tồn tại — sinh skeleton chuẩn với anchor
+            $content  = "<?php\n\n";
+            $content .= "/**\n * @Project NUKEVIET 5.0\n * @Author VINADES.,JSC <contact@vinades.vn>\n * @Copyright (C) " . date('Y') . " VINADES.,JSC. All rights reserved\n * @License: GNU/GPL version 2 or any later version\n */\n\n";
+            $content .= "if (!defined('NV_IS_FILE_MODULES')) {\n    exit('Stop!!!');\n}\n\n";
+            $content .= "\$sql_drop_module = [];\n\n";
+            $content .= $dropBlock . "\n\n";
+            $content .= "\$sql_create_module = \$sql_drop_module;\n\n";
+            $content .= $createBlock . "\n";
+        } else {
+            $content = $this->upsertMarkerBlock($existing, 'DROP', $marker, $dropBlock, 'before_anchor');
+            $content = $this->upsertMarkerBlock($content, 'CREATE', $marker, $createBlock, 'append');
+        }
 
         $this->addFile($files, $actionFile, $content, $nvRootDir);
+    }
+
+    /**
+     * Chèn hoặc ghi đè block có marker `// [TAG:marker] ... // [/TAG:marker]` trong nội dung PHP.
+     *
+     * @param string $content    Nội dung file hiện tại
+     * @param string $tag        Loại marker: "DROP" | "CREATE"
+     * @param string $marker     Định danh entity (VD: "_cat", "_demo", "_main")
+     * @param string $block      Block mới (đã bao gồm cả 2 dòng marker)
+     * @param string $insertMode "before_anchor" → chèn trước dòng `$sql_create_module = $sql_drop_module;` | "append" → nối cuối file
+     */
+    private function upsertMarkerBlock(string $content, string $tag, string $marker, string $block, string $insertMode): string
+    {
+        $pattern = '/\/\/\s*\[' . $tag . ':' . preg_quote($marker, '/') . '\].*?\/\/\s*\[\/' . $tag . ':' . preg_quote($marker, '/') . '\]/s';
+
+        if (preg_match($pattern, $content)) {
+            $new = preg_replace_callback($pattern, static fn() => $block, $content, 1);
+            return $new ?? $content;
+        }
+
+        if ($insertMode === 'before_anchor') {
+            $anchorPattern = '/^[ \t]*\$sql_create_module\s*=\s*\$sql_drop_module\s*;[ \t]*\r?\n/m';
+            if (preg_match($anchorPattern, $content)) {
+                return preg_replace_callback(
+                    $anchorPattern,
+                    static fn($m) => $block . "\n\n" . $m[0],
+                    $content,
+                    1
+                ) ?? $content;
+            }
+            // Không tìm thấy anchor → fallback: append
+        }
+
+        return rtrim($content) . "\n\n" . $block . "\n";
     }
 
 
@@ -476,8 +546,19 @@ class MvcCodeGenerator
         $c .= "if (!defined('NV_MAINFILE')) {\n    exit('Stop!!!');\n}\n\n";
         $c .= "/**\n * {$item}Entity — Đại diện cho 1 bản ghi bảng {$entity->table}\n */\n";
         $c .= "class {$item}Entity extends AbstractEntity\n{\n";
-        $c .= "    protected const VIEW_FIELDS = ['link', 'url_edit', 'checkss'];\n";
+        $c .= "    // Tên cột khóa chính (không nằm trong VIEW_FIELDS).\n";
         $c .= "    protected const PRIMARY_KEY = 'id';\n\n";
+        $c .= "    // Khai báo nested Entity — toArray() lớp cha tự động expand theo danh sách này.\n";
+        $c .= "    protected const RELATIONS = [];\n\n";
+        $c .= "    // Danh sách các thuộc tính chỉ dùng cho hiển thị (không có trong DB).\n";
+        $c .= "    protected const VIEW_FIELDS = ['link', 'url_edit', 'checkss'];\n\n";
+
+        $c .= "    // Thuộc tính bổ sung cho View (không có trong DB)\n";
+        $c .= "    public string \$link = '';\n";
+        $c .= "    public string \$url_edit = '';\n";
+        $c .= "    public string \$checkss = '';\n\n";
+
+        $c .= "    // Các thuộc tính (trường) trong CSDL\n";
         $c .= "    public int \$id = 0; // Khóa chính\n";
 
         foreach ($entity->columns as $field => $col) {
@@ -499,14 +580,7 @@ class MvcCodeGenerator
             $comment = (strtolower((string) $label) !== strtolower((string) $field)) ? " // {$label}" : '';
             $c  .= "    public {$phpType} \${$field} = {$default};{$comment}\n";
         }
-
-        $c .= "\n    // ── Thuộc tính View (không có trong DB) ──\n";
-        $c .= "    public string \$link = '';\n";
-        $c .= "    public string \$url_edit = '';\n";
-        $c .= "    public string \$checkss = '';\n\n";
-        $c .= "    public function toArray(): array\n    {\n";
-        $c .= "        return get_object_vars(\$this);\n";
-        $c .= "    }\n}\n";
+        $c .= "}\n";
 
         return $c;
     }
@@ -1368,9 +1442,11 @@ class MvcCodeGenerator
         if (!file_exists($nvRootDir . '/' . $file)) {
             $c = "<?php\n\nnamespace NukeViet\\Module\\{$mod}\\Shared;\n\n";
             $c .= "if (!defined('NV_MAINFILE')) exit('Stop!!!');\n\n";
+            $c .= "/**\n * AbstractEntity — Lớp trừu tượng chứa các phương thức chung cho mọi Entity\n */\n";
             $c .= "abstract class AbstractEntity\n{\n";
-            $c .= "    protected const VIEW_FIELDS = [];\n";
+            $c .= "    protected const VIEW_FIELDS = [];\n\n";
             $c .= "    protected const PRIMARY_KEY = '';\n\n";
+            $c .= "    protected const RELATIONS = [];\n\n";
             $c .= "    public static function getDbColumns(): array\n    {\n";
             $c .= "        \$allFields = array_keys(get_class_vars(static::class));\n";
             $c .= "        \$exclude = static::VIEW_FIELDS;\n";
@@ -1388,20 +1464,21 @@ class MvcCodeGenerator
             $c .= "        }\n";
             $c .= "        return \$cache[\$class];\n";
             $c .= "    }\n\n";
-            $c .= "    abstract public function toArray(): array;\n\n";
+            $c .= "    public function toArray(): array\n    {\n";
+            $c .= "        \$arr = get_object_vars(\$this);\n";
+            $c .= "        foreach (static::RELATIONS as \$field => \$entityClass) {\n";
+            $c .= "            if (isset(\$arr[\$field]) && \$arr[\$field] instanceof AbstractEntity) {\n";
+            $c .= "                \$arr[\$field] = \$arr[\$field]->toArray();\n";
+            $c .= "            }\n";
+            $c .= "        }\n";
+            $c .= "        return \$arr;\n";
+            $c .= "    }\n\n";
             $c .= "    public static function fromArray(array \$data): static\n    {\n";
             $c .= "        \$entity = new static();\n";
             $c .= "        foreach (\$data as \$key => \$value) {\n";
-            $c .= "            if (!property_exists(\$entity, \$key)) continue;\n";
-            $c .= "            if (\$value === null) {\n";
-            $c .= "                \$entity->\$key = null;\n";
-            $c .= "                continue;\n";
-            $c .= "            }\n";
+            $c .= "            if (!property_exists(\$entity, \$key) || \$value === null) continue;\n";
             $c .= "            \$default = \$entity->\$key;\n";
-            $c .= "            if (\$default === null) {\n";
-            $c .= "                \$entity->\$key = \$value;\n";
-            $c .= "                continue;\n";
-            $c .= "            }\n";
+            $c .= "            if (\$default === null) continue;\n";
             $c .= "            \$entity->\$key = is_int(\$default) ? (int) \$value : (string) \$value;\n";
             $c .= "        }\n";
             $c .= "        return \$entity;\n";
@@ -1429,6 +1506,7 @@ class MvcCodeGenerator
             $c = "<?php\n\n" . $this->copyright() . "\n\nnamespace NukeViet\\Module\\{$mod}\\Shared;\n\n";
             $c .= "if (!defined('NV_MAINFILE')) exit('Stop!!!');\n\n";
             $c .= "use PDO;\n\n";
+            $c .= "/**\n * BaseRepository — Lớp cha trừu tượng cho mọi Repository của module {$mod}.\n */\n";
             $c .= "abstract class BaseRepository\n{\n";
             $c .= "    protected PDO \$db;\n";
             $c .= "    protected Tables \$tables;\n";
@@ -1444,9 +1522,7 @@ class MvcCodeGenerator
             $c .= "        if (!isset(\$cache[\$class])) \$cache[\$class] = \$class::getIntColumns();\n";
             $c .= "        return isset(\$cache[\$class][\$field]) ? PDO::PARAM_INT : PDO::PARAM_STR;\n";
             $c .= "    }\n\n";
-            $c .= "    /**\n     * Bind giá trị hỗ trợ NULL\n     */\n";
-            $c .= "    protected function bindNullable(\$stmt, string \$param, \$value, string \$field): void\n";
-            $c .= "    {\n";
+            $c .= "    protected function bindNullable(\$stmt, string \$param, \$value, string \$field): void\n    {\n";
             $c .= "        \$type = (\$value === null) ? PDO::PARAM_NULL : \$this->pdoType(\$field);\n";
             $c .= "        \$stmt->bindValue(\$param, \$value, \$type);\n";
             $c .= "    }\n\n";
@@ -1468,57 +1544,76 @@ class MvcCodeGenerator
 
         if (file_exists($fullPath)) {
             $content = file_get_contents($fullPath);
-            if (!preg_match('/public\s+string\s+\$' . preg_quote($tableProp, '/') . '\s*;/', $content)) {
-                $propDoc = "    /** Bảng {$tableProp}: {prefix}_{lang}_{module_data}{$tableSuffix} */\n";
-                $propLine = "    public string \${$tableProp};\n\n";
-                $content = preg_replace('/(\s*public\s+function\s+__construct)/', "\n" . $propDoc . $propLine . '$1', $content);
-                $assignLine = "        \$this->{$tableProp} = \$tablePrefix . '_' . \$moduleData{$suffixStr};\n";
-                $lines = explode("\n", $content);
-                $inConstructor = false;
-                $lastAssignIndex = -1;
-                foreach ($lines as $i => $line) {
-                    if (str_contains($line, 'public function __construct')) {
-                        $inConstructor = true;
-                    }
-                    if ($inConstructor && str_contains($line, '$this->')) {
-                        $lastAssignIndex = $i;
-                    }
-                    if ($inConstructor && trim($line) === '}') {
-                        break;
-                    }
+            $propRegex = '/public\s+string\s+\$' . preg_quote($tableProp, '/') . '\s*;/';
+            $assignRegex = '/\$this->' . preg_quote($tableProp, '/') . '\s*=/';
+
+            $propExists = preg_match($propRegex, $content);
+            $assignExists = preg_match($assignRegex, $content);
+
+            if (!$propExists || !$assignExists) {
+                if (!$propExists) {
+                    $propLine = "    public string \${$tableProp};\n";
+                    $content = preg_replace('/(class\s+Tables\s*\{)/', "$1\n" . $propLine, $content);
                 }
-                if ($lastAssignIndex >= 0) {
-                    array_splice($lines, $lastAssignIndex + 1, 0, rtrim($assignLine));
-                    $content = implode("\n", $lines);
+
+                if (!$assignExists) {
+                    $hasPrefixVar = str_contains($content, '$prefix = $tablePrefix');
+                    $assignTarget = $hasPrefixVar ? '$prefix' : "\$tablePrefix . '_' . \$moduleData";
+                    $assignLine = "        \$this->{$tableProp} = {$assignTarget}{$suffixStr};\n";
+
+                    $lines = explode("\n", $content);
+                    $inConstructor = false;
+                    $lastAssignIndex = -1;
+                    $constructorEndIndex = -1;
+                    foreach ($lines as $i => $line) {
+                        if (str_contains($line, 'public function __construct')) {
+                            $inConstructor = true;
+                        }
+                        if ($inConstructor) {
+                            if (str_contains($line, '$this->')) {
+                                $lastAssignIndex = $i;
+                            }
+                            if (trim($line) === '}') {
+                                $constructorEndIndex = $i;
+                                break;
+                            }
+                        }
+                    }
+                    
+                    $insertIndex = ($lastAssignIndex >= 0) ? $lastAssignIndex + 1 : (($constructorEndIndex >= 0) ? $constructorEndIndex : -1);
+                    if ($insertIndex >= 0) {
+                        array_splice($lines, $insertIndex, 0, rtrim($assignLine));
+                        $content = implode("\n", $lines);
+                    }
                 }
 
                 $this->addFile($files, $file, $content, $nvRootDir);
             }
         } else {
-            // T\u1ea1o m\u1edbi Tables.php
+            // Tạo mới Tables.php
             $modLc = strtolower($mod);
             $c  = "<?php\n\n";
             $c .= $this->copyright() . "\n\n";
             $c .= "namespace NukeViet\\Module\\{$mod}\\Shared;\n\n";
             $c .= "if (!defined('NV_MAINFILE')) {\n    exit('Stop!!!');\n}\n\n";
             $c .= "/**\n";
-            $c .= " * Tables \u2014 Value Object ch\u1ee9a t\u00ean c\u00e1c b\u1ea3ng DB c\u1ee7a module {$mod}.\n";
+            $c .= " * Tables — Value Object chứa tên các bảng DB của module {$mod}.\n";
             $c .= " *\n";
-            $c .= " * T\u00ean b\u1ea3ng \u0111\u01b0\u1ee3c gh\u00e9p t\u1ef1 \u0111\u1ed9ng t\u1eeb \$tablePrefix + \$moduleData + suffix hard-code.\n";
-            $c .= " * \u0110\u00e2y l\u00e0 n\u01a1i DUY NH\u1ea4T khai b\u00e1o suffix c\u1ee7a t\u1eebng b\u1ea3ng \u2014 th\u00eam b\u1ea3ng m\u1edbi ch\u1ec9 c\u1ea7n th\u00eam 1 property.\n";
+            $c .= " * Tên bảng được ghép tự động từ \$tablePrefix + \$moduleData + suffix hard-code.\n";
+            $c .= " * Đây là nơi DUY NHẤT khai báo suffix của từng bảng — thêm bảng mới chỉ cần thêm 1 property.\n";
             $c .= " *\n";
-            $c .= " * C\u00e1ch d\u00f9ng:\n";
+            $c .= " * Cách dùng:\n";
             $c .= " *   \$tables = new Tables(NV_PREFIXLANG, \$module_data);\n";
             $c .= " */\n";
             $c .= "readonly class Tables\n{\n";
-            $c .= "    /** B\u1ea3ng {$tableProp}: {prefix}_{lang}_{module_data}{$tableSuffix} */\n";
             $c .= "    public string \${$tableProp};\n\n";
             $c .= "    /**\n";
-            $c .= "     * @param string \$tablePrefix Ti\u1ec1n t\u1ed1 + ng\u00f4n ng\u1eef (VD: NV_PREFIXLANG = 'nv5_vi')\n";
-            $c .= "     * @param string \$moduleData  T\u00ean d\u1eef li\u1ec7u module (VD: '{$modLc}')\n";
+            $c .= "     * @param string \$tablePrefix Tiền tố + ngôn ngữ (VD: NV_PREFIXLANG = 'nv5_vi')\n";
+            $c .= "     * @param string \$moduleData  Tên dữ liệu module (VD: '{$modLc}')\n";
             $c .= "     */\n";
             $c .= "    public function __construct(string \$tablePrefix, string \$moduleData)\n    {\n";
-            $c .= "        \$this->{$tableProp} = \$tablePrefix . '_' . \$moduleData{$suffixStr};\n";
+            $c .= "        \$prefix = \$tablePrefix . '_' . \$moduleData;\n\n";
+            $c .= "        \$this->{$tableProp} = \$prefix{$suffixStr};\n";
             $c .= "    }\n}\n";
             $this->addFile($files, $file, $c, $nvRootDir);
         }
