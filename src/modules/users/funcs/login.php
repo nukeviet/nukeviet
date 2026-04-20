@@ -352,11 +352,11 @@ function new_openid_user_save($reg_username, $reg_email, $reg_password, $attribs
         $send_data = [[
             'to' => $reg_email,
             'data' => [
-                'first_name' => $data_insert['first_name'],
-                'last_name' => $data_insert['last_name'],
-                'username' => $data_insert['username'],
+                'first_name' => $reg_attribs['first_name'],
+                'last_name' => $reg_attribs['last_name'],
+                'username' => $reg_username,
                 'email' => $reg_email,
-                'gender' => $data_insert['gender'],
+                'gender' => $gender,
                 'link' => urlRewriteWithDomain(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name, NV_MY_DOMAIN),
                 'oauth_name' => ucfirst($reg_attribs['server']),
                 'lang' => NV_LANG_INTERFACE
