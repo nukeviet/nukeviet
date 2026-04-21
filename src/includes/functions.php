@@ -3937,14 +3937,14 @@ function csrf_create($key, $prefix = NV_CHECK_SESSION)
  * @param string $csrf
  * @param string $key
  * @param string $prefix
+ * @param int    $lifetime
  * @return bool
  */
-function csrf_check($csrf, $key, $prefix = NV_CHECK_SESSION)
+function csrf_check($csrf, $key, $prefix = NV_CHECK_SESSION, $lifetime = 3600)
 {
     $timestamp = substr($csrf, -10, 10);
     $timestamp = (int) $timestamp;
-    $lifetime = 3600; // Thời lượng sống của mã CSRF, mặc định 60 phút
-    if ($timestamp < (NV_CURRENTTIME - $lifetime) or $timestamp > NV_CURRENTTIME) {
+    if (($lifetime > 0 && $timestamp < (NV_CURRENTTIME - $lifetime)) || $timestamp > NV_CURRENTTIME) {
         return false;
     }
     $expected = hash_hmac('sha256', $prefix . '_' . $key . '_' . $timestamp, NV_CACHE_PREFIX) . $timestamp;
