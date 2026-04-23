@@ -13,9 +13,7 @@ if (!defined('NV_MAINFILE')) {
     exit('Stop!!!');
 }
 
-mt_srand(microtime(true) * 1000000);
-$maxran = 1000000;
-$random_num = random_int(1, $maxran);
+$random_num = random_int(1, 1000000);
 
 $nv_Request->set_Session('random_num', $random_num);
 

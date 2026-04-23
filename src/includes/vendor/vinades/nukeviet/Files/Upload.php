@@ -151,9 +151,7 @@ class Upload
             'Mozilla/4.8 [en] (Windows NT 6.0; U)',
             'Opera/9.25 (Windows NT 6.0; U; en)'
         ];
-        mt_srand(microtime(true) * 1000000);
-        $rand = array_rand($userAgents);
-        $this->user_agent = $userAgents[$rand];
+        $this->user_agent = $userAgents[array_rand($userAgents)];
 
         if (Site::function_exists('set_time_limit')) {
             set_time_limit(120);
@@ -1172,9 +1170,7 @@ class Upload
             ];
             $open_basedir = (ini_get('open_basedir') == '1' or strtolower(ini_get('open_basedir')) == 'on') ? 1 : 0;
 
-            mt_srand(microtime(true) * 1000000);
-            $rand = array_rand($userAgents);
-            $agent = $userAgents[$rand];
+            $agent = $userAgents[array_rand($userAgents)];
 
             $curl = curl_init($this->url_info['uri']);
             curl_setopt($curl, CURLOPT_HEADER, true);

@@ -204,10 +204,7 @@ if (!empty($module_config[$module]['allowattachcomm']) and isset($_FILES['fileat
         ]);
     }
 
-    mt_srand(microtime(true) * 1000000);
-    $maxran = 1000000;
-    $random_num = random_int(0, $maxran);
-    $random_num = md5($random_num);
+    $random_num = md5(random_bytes(16));
     $nv_pathinfo_filename = nv_pathinfo_filename($upload_info['name']);
     $new_name = NV_UPLOADS_REAL_DIR . '/' . $module_upload . '/' . $dir . '/' . $nv_pathinfo_filename . '.' . $random_num . '.' . $upload_info['ext'];
 

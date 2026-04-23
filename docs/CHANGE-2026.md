@@ -24,6 +24,10 @@ $result = nv_local_api('ClearCache', null, 'vuthao27');
 - Trước đây 1 form có captcha phải if/ else nhiều lần để parse ra tpl các attrs thì bây giờ chỉ cần dùng `nv_captcha_form_attrs`
 - Để phát hiện trình duyệt lỗi thời, không còn chạy được website một cách bình thường thì dùng hàm `nv_outdated_browser`
 
+Xóa mt_srand() thừa:
+- trước random_int() (dùng CSPRNG, không liên quan mt_srand)
+- trước array_rand() (PHP tự seed tốt hơn từ 7.1+
+
 ## Tháng 3 năm 2026
 
 ### db-refactor

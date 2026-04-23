@@ -50,8 +50,7 @@ class UrlGetContents
             'Mozilla/4.8 [en] (Windows NT 6.0; U)',
             'Opera/9.25 (Windows NT 6.0; U; en)'
         ];
-        $rand = array_rand($userAgents);
-        self::$user_agent = $userAgents[$rand];
+        self::$user_agent = $userAgents[array_rand($userAgents)];
 
         self::$open_basedir = (ini_get('open_basedir') == '1' or strtolower(ini_get('open_basedir')) == 'on') ? true : false;
         $this->time_limit = (int) $time_limit;
@@ -115,9 +114,7 @@ class UrlGetContents
                 'Mozilla/4.8 [en] (Windows NT 6.0; U)',
                 'Opera/9.25 (Windows NT 6.0; U; en)'
             ];
-            mt_srand(microtime(true) * 1000000);
-            $rand = array_rand($userAgents);
-            $agent = $userAgents[$rand];
+            $agent = $userAgents[array_rand($userAgents)];
 
             $curl = curl_init($this->url_info['uri']);
             curl_setopt($curl, CURLOPT_HEADER, true);

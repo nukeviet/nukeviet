@@ -570,9 +570,7 @@ function nv_capcha_txt($seccode, $type = 'captcha')
         return false;
     }
 
-    mt_srand(microtime(true) * 1000000);
-    $maxran = 1000000;
-    $random = random_int(0, $maxran);
+    $random = random_int(0, 1000000);
 
     $seccode = strtoupper($seccode);
     $random_num = $nv_Request->get_string('random_num', 'session', 0);
@@ -581,7 +579,7 @@ function nv_capcha_txt($seccode, $type = 'captcha')
 
     $nv_Request->set_Session('random_num', $random);
 
-    return preg_match('/^[a-zA-Z0-9]{' . NV_GFX_NUM . '}$/', $seccode) and $seccode == substr($rcode, 2, NV_GFX_NUM);
+    return preg_match('/^[a-zA-Z0-9]{' . NV_GFX_NUM . '}$/', $seccode) and hash_equals(substr($rcode, 2, NV_GFX_NUM), $seccode);
 }
 
 /**
@@ -1470,15 +1468,16 @@ function mailAddHtml($subject, $body, $gconfigs, $lang)
     $mail_tpl = NV_ROOTDIR . '/' . NV_ASSETS_DIR . '/tpl/mail.tpl';
     $template_tpl = 'default';
     if (!empty($gconfigs['mail_tpl'])) {
+        // Chỉ chấp nhận 2 dạng path tương đối hợp lệ, chặn absolute path
+        // và path traversal nhằm tránh include file PHP/template ngoài ý muốn.
         $path_tpl = '';
-        if (file_exists(NV_ROOTDIR . '/' . $gconfigs['mail_tpl'])) {
+        $allowed = preg_match('#^' . preg_quote(NV_ASSETS_DIR, '#') . '/tpl/[a-zA-Z0-9\-\_]+\.tpl$#', $gconfigs['mail_tpl'])
+            || preg_match('#^themes/[a-zA-Z0-9\-\_]+/system/[a-zA-Z0-9\-\_\.]+\.tpl$#', $gconfigs['mail_tpl']);
+        if ($allowed and file_exists(NV_ROOTDIR . '/' . $gconfigs['mail_tpl'])) {
             $mail_tpl = NV_ROOTDIR . '/' . $gconfigs['mail_tpl'];
             $path_tpl = $gconfigs['mail_tpl'];
-        } elseif (file_exists($gconfigs['mail_tpl'])) {
-            $mail_tpl = $gconfigs['mail_tpl'];
-            $path_tpl = substr($gconfigs['mail_tpl'], strlen(NV_ROOTDIR . '/'));
         }
-        if (preg_match('/\/([a-zA-Z0-9\-\_]+)\/system\//', $path_tpl, $m)) {
+        if (preg_match('/^themes\/([a-zA-Z0-9\-\_]+)\/system\//', $path_tpl, $m)) {
             $template_tpl = get_tpl_dir($m[1], $template_tpl, 'theme_email.php');
         }
     }
@@ -2434,9 +2433,7 @@ function url_get_contents($url)
         'Mozilla/4.8 [en] (Windows NT 6.0; U)',
         'Opera/9.25 (Windows NT 6.0; U; en)'
     ];
-    mt_srand(microtime(true) * 1000000);
-    $rand = array_rand($userAgents);
-    $agent = $userAgents[$rand];
+    $agent = $userAgents[array_rand($userAgents)];
 
     $args = [
         'headers' => [
@@ -3176,7 +3173,21 @@ function nv_delete_notification($language, $module, $type, $obid)
 {
     global $db, $global_config;
 
-    $in = is_array($obid) ? implode(',', $obid) : $obid;
+    // Chuẩn hóa $obid về danh sách số nguyên dương để tránh SQL Injection.
+    // Hỗ trợ 3 kiểu đầu vào: int, mảng int, chuỗi CSV (vd từ GROUP_CONCAT).
+    if (is_array($obid)) {
+        $obid_list = $obid;
+    } elseif (is_string($obid) and str_contains($obid, ',')) {
+        $obid_list = explode(',', $obid);
+    } else {
+        $obid_list = [$obid];
+    }
+    $obid_list = array_map('intval', $obid_list);
+    if (empty($obid_list)) {
+        return true;
+    }
+    $in = implode(',', $obid_list);
+
     if ($global_config['notification_active']) {
         try {
             $sth = $db->prepare('DELETE FROM ' . NV_NOTIFICATION_GLOBALTABLE . ' WHERE language = :language AND module = :module AND obid IN (' . $in . ') AND type = :type');
@@ -3270,9 +3281,9 @@ function add_notification($args)
         return false;
     }
 
-    $data['receiver_grs'] = !empty($data['receiver_grs']) ? implode(',', $data['receiver_grs']) : '';
+    $data['receiver_grs'] = !empty($data['receiver_grs']) ? implode(',', array_map('intval', $data['receiver_grs'])) : '';
     $data['sender_role'] == 'group' && $data['receiver_grs'] = '';
-    $data['receiver_ids'] = !empty($data['receiver_ids']) ? implode(',', $data['receiver_ids']) : '';
+    $data['receiver_ids'] = !empty($data['receiver_ids']) ? implode(',', array_map('intval', $data['receiver_ids'])) : '';
 
     $contents = [];
     foreach ($data['message'] as $lang => $message) {
@@ -3662,6 +3673,16 @@ function nv_local_api($cmd, $params, $adminidentity = '', $module = '')
  */
 function DKIM_verify($domain, $selector)
 {
+    // Chặn Path Traversal: chuẩn hóa tên miền (kể cả IDN tiếng Việt) sang Punycode ASCII
+    // và validate DKIM selector hợp lệ (RFC 6376 §3.1).
+    $domain = NukeViet\Http\Http::filter_domain($domain);
+    if (empty($domain)) {
+        return false;
+    }
+    if (!preg_match('/^[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?)*$/', $selector)) {
+        return false;
+    }
+
     $publickeyfile = NV_ROOTDIR . '/' . NV_CERTS_DIR . '/' . $selector . '_dkim.' . $domain . '.public.pem';
     $publickey = file_get_contents($publickeyfile);
     $publickey = preg_replace('/^-+.*?-+$/m', '', $publickey);
