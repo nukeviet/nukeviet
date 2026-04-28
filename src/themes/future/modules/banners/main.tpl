@@ -12,9 +12,9 @@
 <div class="alert alert-warning" role="alert">{$LANG->getModule('no_permission')}.</div>
 {/if}
 
-{if not empty($CONTENT) }
+{if not empty($ARRAY) }
 <div class="mb-3">{$LANG->getModule('main_page_info')}</div>
-{foreach from=$CONTENT item=row}
+{foreach from=$ARRAY item=row}
 <div class="card border-primary mb-3">
     <div class="card-header text-bg-primary">
         {$LANG->getModule('plan_title')}: <strong>{$row.title}</strong>

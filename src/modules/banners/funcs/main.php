@@ -17,7 +17,12 @@ $page_title = $module_info['site_title'];
 $page_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name;
 $canonicalUrl = getCanonicalUrl($page_url);
 
-$contents = nv_banner_theme_main($global_array_plans);
+$array = $global_array_plans;
+foreach ($array as $pl_id => $row) {
+    $array[$pl_id]['allowed'] = isset($global_array_uplans[$row['id']]);
+}
+
+$contents = nv_banner_theme_main($array);
 
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_site_theme($contents);
