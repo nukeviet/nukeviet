@@ -20,7 +20,7 @@ if (!nv_function_exists('nv_message_page')) {
      * @param array $block_config
      * @return string
      */
-    function nv_message_page($block_config)
+    function nv_message_page(array $block_config): string
     {
         global $nv_Cache, $global_config, $site_mods, $db, $module_name;
         $module = $block_config['module'];
@@ -68,17 +68,15 @@ if (!nv_function_exists('nv_message_page')) {
             return '';
         }
 
-        $block_theme = get_tpl_dir([$global_config['module_theme'], $global_config['site_theme']], 'default', '/modules/page/block.about.tpl');
-        $xtpl = new XTemplate('block.about.tpl', NV_ROOTDIR . '/themes/' . $block_theme . '/modules/page');
-        $xtpl->assign('LINK', $link);
-        $xtpl->assign('TITLE', $title);
-        $xtpl->assign('BODYTEXT', $bodytext);
+        [$block_theme, $dir] = get_block_tpl_dir('block.about.tpl', true, $module);
+        $tpl = new \NukeViet\Template\NVSmarty();
+        $tpl->setTemplateDir($dir);
+        $tpl->assign('TEMPLATE', $block_theme);
+        $tpl->assign('LINK', $link);
+        $tpl->assign('TITLE', $title);
+        $tpl->assign('BODYTEXT', $bodytext);
 
-        $xtpl->parse('main');
-
-        return $xtpl->text('main');
-
-        return '';
+        return $tpl->fetch('block.about.tpl');
     }
 }
 
