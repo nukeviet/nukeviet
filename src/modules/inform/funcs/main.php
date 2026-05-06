@@ -508,7 +508,6 @@ if ($nv_Request->isset_request('setStatus', 'post')) {
             LEFT JOIN ' . NV_INFORM_STATUS_GLOBALTABLE . ' AS jtb ON (jtb.pid = mtb.id AND jtb.userid = :userid)
             WHERE ' . $where_str . ' AND mtb.id = :id');
         $sth->bindValue(':id', $id, PDO::PARAM_INT);
-        $sth->bindValue(':userid', $user_info['userid'], PDO::PARAM_INT);
         foreach ($params as $key => $val) {
             $sth->bindValue($key, $val[0], $val[1]);
         }
