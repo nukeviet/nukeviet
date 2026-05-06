@@ -108,7 +108,7 @@ if (!nv_function_exists('nv_block_news_cat')) {
         $return = [];
         $return['error'] = [];
         $return['config'] = [];
-        $return['config']['catid'] = $nv_Request->get_array('config_catid', 'post', []);
+        $return['config']['catid'] = $nv_Request->get_typed_array('config_catid', 'post', 'int');
         $return['config']['numrow'] = $nv_Request->get_int('config_numrow', 'post', 0);
         $return['config']['title_length'] = $nv_Request->get_int('config_title_length', 'post', 20);
         $return['config']['showtooltip'] = $nv_Request->get_int('config_showtooltip', 'post', 0);
@@ -137,7 +137,7 @@ if (!nv_function_exists('nv_block_news_cat')) {
             return '';
         }
 
-        $catid = implode(',', $block_config['catid']);
+        $catid = implode(',', array_map('intval', $block_config['catid']));
 
         $db->sqlreset()
             ->select('id, catid, title, alias, homeimgfile, homeimgthumb, hometext, publtime, external_link')

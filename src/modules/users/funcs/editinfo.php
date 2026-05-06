@@ -1115,14 +1115,14 @@ if ($checkss == $array_data['checkss'] and $array_data['type'] == 'basic') {
     foreach ($openid_del as $o) {
         [$opid, $server] = explode('_', $o, 2);
         if (!(!empty($user_info['openid_server']) and $user_info['openid_server'] == $server and !empty($user_info['current_openid'] and $user_info['current_openid'] == $opid))) {
-            nv_insert_logs(NV_LANG_DATA, $module_name, 'Delete oauth', $client_info['ip'] . ' | ' . $edit_userid . ' | ' . $server, $user_info['userid']);
-
-            $stmt = $db->prepare('DELETE FROM ' . NV_MOD_TABLE . '_openid WHERE openid=:openid AND opid=:opid');
-            $stmt->bindParam(':openid', $server, PDO::PARAM_STR);
-            $stmt->bindParam(':opid', $opid, PDO::PARAM_STR);
-            $stmt->execute();
-
             if (isset($data_openid_key[$o])) {
+                nv_insert_logs(NV_LANG_DATA, $module_name, 'Delete oauth', $client_info['ip'] . ' | ' . $edit_userid . ' | ' . $server, $user_info['userid']);
+
+                $stmt = $db->prepare('DELETE FROM ' . NV_MOD_TABLE . '_openid WHERE openid=:openid AND opid=:opid');
+                $stmt->bindParam(':openid', $server, PDO::PARAM_STR);
+                $stmt->bindParam(':opid', $opid, PDO::PARAM_STR);
+                $stmt->execute();
+
                 $openid_mess[] = nv_ucfirst($data_openid_key[$o]['openid']);
             }
         }
