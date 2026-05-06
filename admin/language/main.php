@@ -314,7 +314,7 @@ if (defined('NV_IS_GODADMIN') or ($global_config['idsite'] > 0 and defined('NV_I
             echo nv_admin_theme($lang_module['nv_data_note']);
             include NV_ROOTDIR . '/includes/footer.php';
         }
-    } elseif ($checksess == md5($deletekeylang . NV_CHECK_SESSION . 'deletekeylang') and !in_array($deletekeylang, $global_config['allow_sitelangs'], true)) {
+    } elseif ($checksess == md5($deletekeylang . NV_CHECK_SESSION . 'deletekeylang') and !in_array($deletekeylang, $global_config['allow_sitelangs'], true) and in_array($deletekeylang, $lang_array_exit, true)) {
         define('NV_IS_FILE_MODULES', true);
 
         $lang = $deletekeylang;

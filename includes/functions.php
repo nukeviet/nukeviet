@@ -3089,3 +3089,39 @@ function post_async($url, $params, $headers = [])
     }
     fclose($fp);
 }
+
+
+/**
+ * csrf_create()
+ * Hàm tạo mã CSRF
+ *
+ * @param string $key
+ * @param string $prefix
+ * @return string
+ */
+function csrf_create($key, $prefix = NV_CHECK_SESSION)
+{
+    return hash_hmac('sha256', $prefix . '_' . $key . '_' . NV_CURRENTTIME, NV_CACHE_PREFIX) . NV_CURRENTTIME;
+}
+
+/**
+ * csrf_check()
+ * Hàm kiểm tra mã CSRF
+ *
+ * @param string $csrf
+ * @param string $key
+ * @param string $prefix
+ * @param int    $lifetime
+ * @return bool
+ */
+function csrf_check($csrf, $key, $prefix = NV_CHECK_SESSION, $lifetime = 3600)
+{
+    $timestamp = substr($csrf, -10, 10);
+    $timestamp = (int) $timestamp;
+    if (($lifetime > 0 && $timestamp < (NV_CURRENTTIME - $lifetime)) || $timestamp > NV_CURRENTTIME) {
+        return false;
+    }
+    $expected = hash_hmac('sha256', $prefix . '_' . $key . '_' . $timestamp, NV_CACHE_PREFIX) . $timestamp;
+
+    return hash_equals($expected, $csrf);
+}

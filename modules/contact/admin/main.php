@@ -17,7 +17,7 @@ $mark = $nv_Request->get_title('mark', 'post', '');
 
 if (!empty($mark) and ($mark == 'read' or $mark == 'unread')) {
     $mark = $mark == 'read' ? 1 : 0;
-    $sends = $nv_Request->get_array('sends', 'post', []);
+    $sends = $nv_Request->get_typed_array('sends', 'post', 'int', []);
     if (empty($sends)) {
         nv_jsonOutput([
             'status' => 'error',

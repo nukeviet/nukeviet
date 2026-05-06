@@ -931,11 +931,11 @@ if ($checkss == $array_data['checkss'] and $array_data['type'] == 'basic') {
     $openid_mess = [];
     foreach ($openid_del as $opid) {
         if (!empty($opid) and (empty($user_info['current_openid']) or (!empty($user_info['current_openid']) and $user_info['current_openid'] != $opid))) {
-            $stmt = $db->prepare('DELETE FROM ' . NV_MOD_TABLE . '_openid WHERE opid= :opid');
-            $stmt->bindParam(':opid', $opid, PDO::PARAM_STR);
-            $stmt->execute();
-
             if (isset($data_openid_key[$opid])) {
+                $stmt = $db->prepare('DELETE FROM ' . NV_MOD_TABLE . '_openid WHERE opid= :opid');
+                $stmt->bindParam(':opid', $opid, PDO::PARAM_STR);
+                $stmt->execute();
+
                 $openid_mess[] = nv_ucfirst($data_openid_key[$opid]['openid']);
             }
         }
