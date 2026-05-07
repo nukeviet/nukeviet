@@ -325,7 +325,7 @@ function nv_geVersion($updatetime = 3600)
                 'Referer' => NV_MY_DOMAIN,
             ],
             'body' => [
-                'lang' > NV_LANG_INTERFACE,
+                'lang' => NV_LANG_INTERFACE,
                 'basever' => $global_config['version'],
                 'mode' => 'getsysver'
             ]
@@ -608,7 +608,7 @@ function nv_getExtVersion($updatetime = 3600)
                     'Referer' => NV_MY_DOMAIN,
                 ],
                 'body' => [
-                    'lang' > NV_LANG_INTERFACE,
+                    'lang' => NV_LANG_INTERFACE,
                     'basever' => $global_config['version'],
                     'mode' => 'checkextver',
                     'ids' => implode(',', $array_ext_ids),
