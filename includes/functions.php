@@ -598,9 +598,8 @@ function nv_capcha_txt($seccode, $type = 'captcha')
 
         return false;
     }
-    mt_srand(microtime(true) * 1000000);
-    $maxran = 1000000;
-    $random = mt_rand(0, $maxran);
+
+    $random = random_int(0, 1000000);
 
     $seccode = strtoupper($seccode);
     $random_num = $nv_Request->get_string('random_num', 'session', 0);
@@ -2218,6 +2217,9 @@ function nv_check_url($url, $isTriggerError = true, $is_200 = 0)
         curl_setopt($curl, CURLOPT_USERAGENT, $agent);
 
         $response = curl_exec($curl);
+
+        $curlError = ($response === false) ? curl_error($curl) : '';
+
         if (version_compare(PHP_VERSION, '8.0.0', '<')) {
             curl_close($curl);
         } else {
@@ -2226,7 +2228,7 @@ function nv_check_url($url, $isTriggerError = true, $is_200 = 0)
 
         if ($response === false) {
             if ($isTriggerError) {
-                trigger_error(curl_error($curl), E_USER_WARNING);
+                trigger_error($curlError, E_USER_WARNING);
             }
 
             return false;
@@ -2671,7 +2673,7 @@ function nv_delete_notification($language, $module, $type, $obid)
             $sth->bindParam(':type', $type, PDO::PARAM_STR);
             $sth->execute();
         } catch (PDOException $e) {
-            trigger_error(print_r($e, true));
+            trigger_error($e);
         }
     }
 

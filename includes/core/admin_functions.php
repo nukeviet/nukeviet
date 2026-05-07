@@ -21,12 +21,11 @@ if (!defined('NV_ADMIN') or !defined('NV_MAINFILE')) {
  */
 function nv_groups_list($mod_data = 'users')
 {
-    global $nv_Cache;
+    global $nv_Cache, $db, $db_config, $global_config, $lang_global;
     $cache_file = NV_LANG_DATA . '_groups_list_' . NV_CACHE_PREFIX . '.cache';
     if (($cache = $nv_Cache->getItem($mod_data, $cache_file)) != false) {
-        return unserialize($cache);
+        return unserialize($cache, ['allowed_classes' => false]);
     }
-    global $db, $db_config, $global_config, $lang_global;
 
     $groups = [];
     $_mod_table = ($mod_data == 'users') ? NV_USERS_GLOBALTABLE : $db_config['prefix'] . '_' . $mod_data;
@@ -277,14 +276,14 @@ function nv_geVersion($updatetime = 3600)
                 'Referer' => NV_MY_DOMAIN,
             ],
             'body' => [
-                'lang' > NV_LANG_INTERFACE,
+                'lang' => NV_LANG_INTERFACE,
                 'basever' => $global_config['version'],
                 'mode' => 'getsysver'
             ]
         ];
 
         $array = $NV_Http->post(NUKEVIET_STORE_APIURL, $args);
-        $array = (is_array($array) and !empty($array['body'])) ? @unserialize($array['body']) : [];
+        $array = (is_array($array) and !empty($array['body'])) ? @unserialize($array['body'], ['allowed_classes' => false]) : [];
 
         $error = '';
         if (!empty(NukeViet\Http\Http::$error)) {
@@ -753,7 +752,7 @@ function nv_getExtVersion($updatetime = 3600)
                     'Referer' => NV_MY_DOMAIN,
                 ],
                 'body' => [
-                    'lang' > NV_LANG_INTERFACE,
+                    'lang' => NV_LANG_INTERFACE,
                     'basever' => $global_config['version'],
                     'mode' => 'checkextver',
                     'ids' => implode(',', $array_ext_ids),
@@ -761,7 +760,7 @@ function nv_getExtVersion($updatetime = 3600)
             ];
 
             $apidata = $NV_Http->post(NUKEVIET_STORE_APIURL, $args);
-            $apidata = (is_array($apidata) and !empty($apidata['body'])) ? @unserialize($apidata['body']) : [];
+            $apidata = (is_array($apidata) and !empty($apidata['body'])) ? @unserialize($apidata['body'], ['allowed_classes' => false]) : [];
 
             $error = '';
             if (!empty(NukeViet\Http\Http::$error)) {
@@ -899,6 +898,9 @@ function nv_save_file_ips($type = 0)
     while ($_scratch = $result->fetch(3)) {
         list($dbip, $dbmask, $dbarea, $dbbegintime, $dbendtime) = $_scratch;
         unset($_scratch);
+        if (!filter_var($dbip, FILTER_VALIDATE_IP)) {
+            continue;
+        }
         $dbendtime = (int) $dbendtime;
         $dbarea = (int) $dbarea;
 
