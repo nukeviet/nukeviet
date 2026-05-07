@@ -32,13 +32,13 @@ if ($d[0]) {
         @nv_deletefile(NV_ROOTDIR . '/' . NV_MOBILE_FILES_DIR . '/' . $m[1], true);
     }
 
-    $result = $db->query('SELECT did FROM ' . NV_UPLOAD_GLOBALTABLE . "_dir WHERE dirname='" . $path . "' OR dirname LIKE '" . $path . "/%'");
-    while ($_scratch = $result->fetch(3)) {
-        list($did) = $_scratch;
-        unset($_scratch);
-        $db->query('DELETE FROM ' . NV_UPLOAD_GLOBALTABLE . '_file WHERE did = ' . $did);
-        $db->query('DELETE FROM ' . NV_UPLOAD_GLOBALTABLE . '_dir WHERE did = ' . $did);
+    $result = $db->query('SELECT did FROM ' . NV_UPLOAD_GLOBALTABLE . "_dir WHERE dirname=" . $db->quote($path) . " OR dirname LIKE " . $db->quote($path . '/%'));
+    while ($_row = $result->fetch()) {
+        $db->query('DELETE FROM ' . NV_UPLOAD_GLOBALTABLE . '_file WHERE did = ' . $_row['did']);
+        $db->query('DELETE FROM ' . NV_UPLOAD_GLOBALTABLE . '_dir WHERE did = ' . $_row['did']);
     }
+    $result->closeCursor();
+
     nv_dirListRefreshSize();
 
     nv_insert_logs(NV_LANG_DATA, $module_name, $lang_module['deletefolder'], $path, $admin_info['userid']);

@@ -99,11 +99,10 @@ if ($checknum == $row['checknum']) {
                     continue;
                 }
                 if ($row_f['field_type'] == 'number' or $row_f['field_type'] == 'date') {
-                    $default_value = (float) ($row_f['default_value']);
+                    $query_field[$row_f['field']] = (isset($users_info[$row_f['field']])) ? (float)$users_info[$row_f['field']] : (float) ($row_f['default_value']);
                 } else {
-                    $default_value = $db->quote($row_f['default_value']);
+                    $query_field[$row_f['field']] = (isset($users_info[$row_f['field']])) ? $db->quote($users_info[$row_f['field']]) : $db->quote($row_f['default_value']);
                 }
-                $query_field[$row_f['field']] = (isset($users_info[$row_f['field']])) ? $users_info[$row_f['field']] : $default_value;
             }
 
             if ($db->exec('INSERT INTO ' . NV_MOD_TABLE . '_info (' . implode(', ', array_keys($query_field)) . ') VALUES (' . implode(', ', array_values($query_field)) . ')')) {

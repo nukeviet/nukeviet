@@ -1342,10 +1342,11 @@ function search_result_theme($key, $numRecord, $per_pages, $page, $array_content
         } elseif (strpos($url_link, '?page=') > 0) {
             $url_link = substr($url_link, 0, strpos($url_link, '?page='));
         }
+        $url_link = htmlspecialchars(strip_tags(urldecode($url_link)), ENT_QUOTES);
 
         $_array_url = [
             'link' => $url_link,
-            'amp' => '&page='
+            'amp' => '&amp;page='
         ];
 
         $generate_page = nv_generate_page($_array_url, $numRecord, $per_pages, $page);

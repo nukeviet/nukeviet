@@ -25,6 +25,9 @@ $socialbuttons = [
 ];
 $savesetting = $nv_Request->get_int('savesetting', 'post', 0);
 if (!empty($savesetting)) {
+    if (!csrf_check($nv_Request->get_title('csrf', 'post', ''), 'news_savesetting')) {
+        nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op);
+    }
     $array_config = [];
     $array_config['indexfile'] = $nv_Request->get_title('indexfile', 'post', '', 1);
     $array_config['mobile_indexfile'] = $nv_Request->get_title('mobile_indexfile', 'post', '', 1);
@@ -130,6 +133,8 @@ $xtpl->assign('NV_OP_VARIABLE', NV_OP_VARIABLE);
 $xtpl->assign('MODULE_NAME', $module_name);
 $xtpl->assign('OP', $op);
 $xtpl->assign('DATA', $module_config[$module_name]);
+$xtpl->assign('CSRF_SAVESETTING', csrf_create('news_savesetting'));
+$xtpl->assign('CSRF_SAVEPOST', csrf_create('news_savepost'));
 if (!empty($error)) {
     $xtpl->assign('error', $error);
     $xtpl->parse('main.error');
@@ -330,6 +335,9 @@ if (defined('NV_IS_ADMIN_FULL_MODULE') or !in_array('admins', $allow_func, true)
 
     $savepost = $nv_Request->get_int('savepost', 'post', 0);
     if (!empty($savepost)) {
+        if (!csrf_check($nv_Request->get_title('csrf', 'post', ''), 'news_savepost')) {
+            nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op);
+        }
         $array_config = [];
         $array_group_id = $nv_Request->get_typed_array('array_group_id', 'post', 'int', []);
         $array_addcontent = $nv_Request->get_typed_array('array_addcontent', 'post', 'int', []);

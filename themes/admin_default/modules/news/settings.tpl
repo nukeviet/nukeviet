@@ -304,6 +304,7 @@
                     <td class="text-center" colspan="2">
                         <input class="btn btn-primary" type="submit" value="{LANG.save}" name="Submit1" />
                         <input type="hidden" value="1" name="savesetting" />
+                        <input type="hidden" name="csrf" value="{CSRF_SAVESETTING}" />
                     </td>
                 </tr>
             </tfoot>
@@ -362,7 +363,7 @@ $(document).ready(function() {
             </tbody>
             <tfoot>
                 <tr>
-                    <td style="text-align: center;" colspan="5"><input class="btn btn-primary" type="submit" value="{LANG.save}" name="Submit1" /><input type="hidden" value="1" name="savepost" /></td>
+                    <td style="text-align: center;" colspan="5"><input class="btn btn-primary" type="submit" value="{LANG.save}" name="Submit1" /><input type="hidden" value="1" name="savepost" /><input type="hidden" name="csrf" value="{CSRF_SAVEPOST}" /></td>
                 </tr>
             </tfoot>
         </table>

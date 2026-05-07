@@ -25,7 +25,7 @@ if (empty($access_admin['access_viewlist'][$admin_info['level']])) {
 $usactive = ($global_config['idsite']) ? 3 : -1;
 $usactive_old = $nv_Request->get_int('usactive', 'cookie', $usactive);
 $usactive = $nv_Request->get_int('usactive', 'post,get', $usactive_old);
-$method = $nv_Request->isset_request('method', 'post') ? $nv_Request->get_string('method', 'post', '') : ($nv_Request->isset_request('method', 'get') ? urldecode($nv_Request->get_string('method', 'get', '')) : '');
+$method = $nv_Request->get_string('method', 'post,get', '');
 
 if ($usactive_old != $usactive) {
     $nv_Request->set_Cookie('usactive', $usactive);
@@ -73,7 +73,7 @@ $methods = [
     ]
 ];
 
-$methodvalue = $nv_Request->isset_request('value', 'post') ? $nv_Request->get_string('value', 'post') : ($nv_Request->isset_request('value', 'get') ? urldecode($nv_Request->get_string('value', 'get', '')) : '');
+$methodvalue = $nv_Request->get_string('value', 'post,get', '');
 
 $orders = ['userid', 'username', 'full_name', 'email', 'regdate'];
 $orderby = $nv_Request->get_string('sortby', 'get', 'userid');
@@ -81,6 +81,7 @@ $ordertype = $nv_Request->get_string('sorttype', 'get', 'DESC');
 if ($ordertype != 'ASC') {
     $ordertype = 'DESC';
 }
+
 $method = (!empty($method) and isset($methods[$method])) ? $method : '';
 
 if (!empty($methodvalue)) {

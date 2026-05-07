@@ -89,6 +89,8 @@ function nv_fix_cat_order($parentid = 0, $order = 0, $lev = 0)
 {
     global $db, $module_data;
 
+    $parentid = (int) $parentid;
+
     $sql = 'SELECT catid, parentid FROM ' . NV_PREFIXLANG . '_' . $module_data . '_cat WHERE parentid=' . $parentid . ' ORDER BY weight ASC';
     $result = $db->query($sql);
     $array_cat_order = [];
@@ -227,6 +229,8 @@ function nv_news_fix_block($bid, $repairtable = true)
 function nv_show_cat_list($parentid = 0)
 {
     global $db, $lang_module, $lang_global, $module_name, $module_data, $array_viewcat_full, $array_viewcat_nosub, $array_cat_admin, $global_array_cat, $admin_id, $global_config, $module_file, $module_config, $global_code_defined;
+
+    $parentid = (int) $parentid;
 
     $xtpl = new XTemplate('cat_list.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
     $xtpl->assign('LANG', $lang_module);
@@ -603,6 +607,8 @@ function nv_show_sources_list()
 function nv_show_block_list($bid)
 {
     global $db_slave, $lang_module, $lang_global, $module_name, $module_data, $op, $global_array_cat, $module_file, $global_config;
+
+    $bid = (int) $bid;
 
     $xtpl = new XTemplate('block_list.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
     $xtpl->assign('LANG', $lang_module);
