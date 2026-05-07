@@ -950,4 +950,120 @@ class SampleDataTest extends \Codeception\Test\Unit
 
         $this->assertTrue(true);
     }
+
+    /**
+     * Dữ liệu mẫu thống kê click cho trang stats của module banners (site/client)
+     *
+     * Sinh click data cho các banner đã có clid > 0 trong _banners_rows,
+     * rải đều trong 3 tháng gần nhất với đa dạng quốc gia, trình duyệt, OS và referrer —
+     * đủ để trang stats hiển thị đồ thị theo ngày/tháng/quốc gia/browser/OS cho khách hàng.
+     *
+     * @group sample-data
+     */
+    public function testInsertSampleDataForBannersClientStats()
+    {
+        global $db, $db_config;
+
+        $rowsTable = $db_config['prefix'] . '_banners_rows';
+        $clickTable = $db_config['prefix'] . '_banners_click';
+
+        // Lấy các banner đã gán cho khách hàng (clid > 0)
+        $bannerIds = $db->query(
+            'SELECT id FROM ' . $rowsTable . ' WHERE clid > 0 ORDER BY id ASC'
+        )->fetchAll(\PDO::FETCH_COLUMN);
+
+        // Fallback: lấy tất cả banner nếu không có banner nào có clid
+        if (empty($bannerIds)) {
+            $bannerIds = $db->query(
+                'SELECT id FROM ' . $rowsTable . ' ORDER BY id ASC'
+            )->fetchAll(\PDO::FETCH_COLUMN);
+        }
+
+        if (empty($bannerIds)) {
+            $this->markTestSkipped('Không có banner nào trong bảng ' . $rowsTable . '.');
+        }
+
+        $countries   = ['VN', 'US', 'JP', 'KR', 'DE', 'FR', 'SG'];
+        $oses        = [
+            'windows' => 'Windows',
+            'android' => 'Android',
+            'ios'     => 'iOS',
+            'linux'   => 'Linux',
+            'macos'   => 'macOS',
+        ];
+        $browsers    = [
+            'chrome'  => 'Google Chrome',
+            'firefox' => 'Firefox',
+            'edge'    => 'Microsoft Edge',
+            'safari'  => 'Safari',
+            'opera'   => 'Opera',
+        ];
+        $refs = [
+            'https://google.com/search?q=banner',
+            'https://facebook.com/',
+            'https://zalo.me/',
+            'https://example.com/',
+            '',
+        ];
+
+        $randomIp = function (): string {
+            return rand(1, 255) . '.' . rand(0, 255) . '.' . rand(0, 255) . '.' . rand(0, 255);
+        };
+
+        // Tạo danh sách 3 tháng gần nhất
+        $months = [];
+        $now = time();
+        for ($m = 0; $m < 3; $m++) {
+            $year  = (int) date('Y', strtotime("-$m months", $now));
+            $month = (int) date('n', strtotime("-$m months", $now));
+            $months[] = [
+                'start' => mktime(0, 0, 0, $month, 1, $year),
+                'end'   => mktime(23, 59, 59, $month, (int) date('t', mktime(0, 0, 0, $month, 1, $year)), $year),
+            ];
+        }
+
+        $countryKeys = array_values($countries);
+        $osKeys      = array_keys($oses);
+        $browserKeys = array_keys($browsers);
+
+        foreach ($bannerIds as $bid) {
+            $bid    = (int) $bid;
+            $values = [];
+
+            // ~150 click/tháng × 3 tháng = ~450 click/banner
+            foreach ($months as $range) {
+                for ($i = 0; $i < 150; $i++) {
+                    $time    = rand($range['start'], $range['end']);
+                    $day     = (int) date('j', $time);
+                    $country = $countryKeys[array_rand($countryKeys)];
+                    $osKey   = $osKeys[array_rand($osKeys)];
+                    $brKey   = $browserKeys[array_rand($browserKeys)];
+                    $ref     = $refs[array_rand($refs)];
+
+                    $values[] = sprintf(
+                        "(%d,%d,%d,'%s','%s','%s','%s','%s','%s','%s')",
+                        $bid,
+                        $time,
+                        $day,
+                        $randomIp(),
+                        $country,
+                        $brKey,
+                        $browsers[$brKey],
+                        $osKey,
+                        $oses[$osKey],
+                        str_replace(["\\", "'"], ["\\\\", "\\'"], $ref)
+                    );
+                }
+            }
+
+            $db->exec(
+                'INSERT INTO ' . $clickTable
+                . ' (bid, click_time, click_day, click_ip, click_country,'
+                . ' click_browse_key, click_browse_name, click_os_key, click_os_name, click_ref)'
+                . ' VALUES ' . implode(',', $values)
+            );
+        }
+
+        $this->assertTrue(true);
+    }
 }

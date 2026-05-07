@@ -14,6 +14,8 @@ if (!defined('NV_SYSTEM')) {
 }
 
 /**
+ * Giao diện chính của module
+ *
  * @param array $array
  * @return string
  */
@@ -34,7 +36,7 @@ function nv_banner_theme_main($array)
 }
 
 /**
- * nv_banner_theme_addads()
+ * Giao diện thêm quảng cáo
  *
  * @param array  $global_array_uplans
  * @param string $page_url
@@ -69,33 +71,23 @@ function nv_banner_theme_addads($global_array_uplans, $page_url)
 }
 
 /**
- * nv_banner_theme_stats()
+ * Giao diện thống kê quảng cáo
  *
  * @param array $ads
  * @return string
  */
 function nv_banner_theme_stats($ads)
 {
-    global $module_info, $manament;
+    global $module_name, $nv_Lang, $manament;
 
-    $xtpl = new XTemplate('stats.tpl', get_module_tpl_dir('stats.tpl'));
-    $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
-    $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
-    $xtpl->assign('MANAGEMENT', $manament);
-    $xtpl->parse('main.management');
+    $tpl = new \NukeViet\Template\NVSmarty();
+    $tpl->setTemplateDir(get_module_tpl_dir('stats.tpl'));
 
-    if (!empty($ads)) {
-        foreach ($ads as $row) {
-            $xtpl->assign('ads', $row);
-            $xtpl->parse('main.ads');
-        }
-    }
+    $tpl->assign('LANG', $nv_Lang);
+    $tpl->assign('MODULE_NAME', $module_name);
+    $tpl->assign('MANAGEMENT', $manament);
+    $tpl->assign('ADS', $ads);
+    $tpl->assign('MONTHS', range(1, 12));
 
-    for ($i = 1; $i <= 12; ++$i) {
-        $xtpl->assign('month', $i);
-        $xtpl->parse('main.month');
-    }
-
-    $xtpl->parse('main');
-    return $xtpl->text('main');
+    return $tpl->fetch('stats.tpl');
 }
