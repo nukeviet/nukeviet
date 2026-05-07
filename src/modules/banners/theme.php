@@ -42,43 +42,30 @@ function nv_banner_theme_main($array)
  */
 function nv_banner_theme_addads($global_array_uplans, $page_url)
 {
-    global $global_config, $module_info, $module_captcha, $nv_Lang, $lang_array, $manament;
+    global $module_name, $nv_Lang, $lang_array, $manament;
 
-    $xtpl = new XTemplate('addads.tpl', get_module_tpl_dir('addads.tpl'));
-    $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
-    $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
-    $xtpl->assign('FORM_ACTION', $page_url);
+    $tpl = new \NukeViet\Template\NVSmarty();
+    $tpl->setTemplateDir(get_module_tpl_dir('addads.tpl'));
 
-    $xtpl->assign('MANAGEMENT', $manament);
-    $xtpl->parse('main.management');
-
+    $plans = [];
     foreach ($global_array_uplans as $row) {
         $row['title'] .= ' (' . (empty($row['blang']) ? $nv_Lang->getModule('addads_block_lang_all') : $lang_array[$row['blang']]) . ')';
-        $row['typeimage'] = $row['require_image'] ? 'true' : 'false';
+        $row['typeimage'] = (bool) $row['require_image'];
         $row['uploadtype'] = str_replace(',', ', ', $row['uploadtype']);
-        $xtpl->assign('blockitem', $row);
-        $xtpl->parse('main.blockitem');
+        $plans[] = $row;
     }
 
-    // Nếu dùng reCaptcha v3
-    if ($module_captcha == 'recaptcha' and $global_config['recaptcha_ver'] == 3) {
-        $xtpl->parse('main.recaptcha3');
-    }
-    // Nếu dùng reCaptcha v2
-    elseif ($module_captcha == 'recaptcha' and $global_config['recaptcha_ver'] == 2) {
-        $xtpl->assign('N_CAPTCHA', $nv_Lang->getGlobal('securitycode1'));
-        $xtpl->assign('RECAPTCHA_ELEMENT', 'recaptcha' . nv_genpass(8));
-        $xtpl->parse('main.recaptcha');
-    } elseif ($module_captcha == 'turnstile') {
-        $xtpl->parse('main.turnstile');
-    } elseif ($module_captcha == 'captcha') {
-        $xtpl->assign('N_CAPTCHA', $nv_Lang->getGlobal('securitycode'));
-        $xtpl->parse('main.captcha');
-    }
+    $current_plan = !empty($plans) ? $plans[0] : ['id' => 0, 'typeimage' => false];
 
-    $xtpl->parse('main');
+    $tpl->assign('LANG', $nv_Lang);
+    $tpl->assign('MODULE_NAME', $module_name);
+    $tpl->assign('FORM_ACTION', $page_url);
+    $tpl->assign('MANAGEMENT', $manament);
+    $tpl->assign('PLANS', $plans);
+    $tpl->assign('CURRENT_PLAN', $current_plan);
+    $tpl->assign('CAPTCHA_ATTRS', nv_captcha_form_attrs('captcha'));
 
-    return $xtpl->text('main');
+    return $tpl->fetch('addads.tpl');
 }
 
 /**

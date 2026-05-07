@@ -34,7 +34,7 @@ $(function () {
             const inactiveInput = isImage ? urlInput : imgInput;
 
             activeInput.attr('data-valid', '');
-            nv_resetInputValid(inactiveInput); // Gỡ trạng thái valid cũ
+            nv_validate_reset(inactiveInput); // Gỡ trạng thái valid cũ
             inactiveInput.removeAttr('data-valid');
 
             if (!isImage) {
