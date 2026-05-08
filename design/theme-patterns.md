@@ -153,6 +153,36 @@ unknown tag 'BLOCK_TITLE' in /themes/default/layout/block.primary.tpl
 
 ⚠️ **TRAP module fallback** (theo Note.md <theme-name>): Theme đang fallback về `themes/default/modules/news/` (XTemplate). Khi build theme MỚI, **PHẢI copy module templates từ future** (Smarty) vào `themes/<theme>/modules/news/` — nếu để fallback default → Smarty parse fail tương tự `block.primary.tpl`.
 
+### §3.1 Engine TPL module gốc — bảng đối chiếu (verify từ source)
+
+⚠️ TPL nào dùng Smarty hay XTemplate **KHÔNG đoán bừa** — phụ thuộc vào file `theme.php` hoặc `funcs/*.php` của module gốc. Verify trước khi viết / override TPL theme.
+
+| File | Engine | Bằng chứng (line trong source) |
+|---|---|---|
+| `news/viewcat_main_left.tpl` | **NVSmarty** | `src/modules/news/theme.php:511` `viewsubcat_main()` dùng `new \NukeViet\Template\NVSmarty()` |
+| `news/viewcat_main_right.tpl` `viewcat_main_bottom.tpl` `viewcat_two_column.tpl` | **NVSmarty** | Cùng `viewsubcat_main()` |
+| `news/detail.tpl` | **XTemplate** | `news/theme.php:601` `detail_theme()` dùng `new XTemplate('detail.tpl', $dir)` |
+| `news/topic.tpl` | **XTemplate** | `news/theme.php:986`, `:1066` |
+| `news/viewcat_grid.tpl` `viewcat_list.tpl` `viewcat_page.tpl` `viewcat_top.tpl` | **XTemplate** | `news/theme.php:80, 194, 275, 424` |
+| `news/print.tpl` `sendmail.tpl` `search.tpl` | **XTemplate** | `news/theme.php:1141, 1195, 1253` |
+| `news/block_groups.tpl` (cho `global.block_news_cat`) | **XTemplate** | `news/blocks/global.block_news_cat.php:152` `new XTemplate('block_groups.tpl')` |
+| `news/block_news.tpl` (cho `module.block_news`) | **XTemplate** | `news/blocks/module.block_news.php` |
+| `news/block_tophits.tpl` `block_tags.tpl` `block_category.tpl` `block_headline.tpl` | **NVSmarty** | qua `get_block_tpl_dir` |
+| `banners/global.banners.tpl` | **NVSmarty** | `banners/blocks/global.banners.php:131` |
+| `menu/global.bootstrap.tpl` | **NVSmarty** | `menu/blocks/global.bootstrap.php` |
+| `menu/global.metismenu.tpl` `slimmenu.tpl` `superfish.tpl` `treeview.tpl` `vertmenu.tpl` | **XTemplate** | qua `nv_menu_blocks()` từ `menu_blocks.php` |
+| `contact/main.tpl` `form.tpl` | **NVSmarty** | `contact/funcs/main.php` |
+
+⚠️ **Hệ quả khi override TPL ở `themes/<theme>/modules/<m>/`**:
+- File override **PHẢI cùng engine** với source. Nhầm engine → render text raw `{$VAR}` (XTemplate dùng `{VAR}`) hoặc Smarty parse fail (`unknown tag 'VAR'`).
+- Smarty syntax: `{$VAR}` `{foreach}` `{if}` `{$smarty.const.X}` `{$LANG->getModule('k')}`
+- XTemplate syntax: `{VAR}` `<!-- BEGIN: x -->` `<!-- END: x -->` `{LANG.k}` (PHP `assign('LANG', $lang_module)` array, KHÔNG object)
+
+**Quy trình verify nhanh** trước khi viết TPL theme override:
+```bash
+grep -n "new XTemplate.*<file>.tpl\|NVSmarty.*<file>.tpl" src/modules/<m>/{theme.php,blocks/*.php,funcs/*.php}
+```
+
 ---
 
 ## §4. Bootstrap-first cho UI tương tác
@@ -605,6 +635,73 @@ Main session (orchestrator) phải:
 2. **Test integration**: copy serialize config agent đã tính vào `<setblocks>` của `config.ini`
 3. **Verify XML**: `php -r "simplexml_load_file(...)"`
 4. **Clear cache + active theme** → block tự gắn → kiểm Quản trị → Khối
+
+---
+
+## §10. Smarty syntax traps trên PHP 8+
+
+NukeViet 5 chạy PHP 8.x (8.2-8.5). 2 trap khi viết Smarty TPL gây runtime error / warning rác log mà compile-time KHÔNG báo:
+
+### §10.1 BẮT BUỘC dùng `!empty()` cho biến/property mảng — tránh `Undefined array key`
+
+**Quy luật**: KHÔNG dùng `{if $var}` hoặc `{if $obj.prop}` trực tiếp khi biến / khóa mảng có thể chưa được khởi tạo. PHẢI dùng `{if !empty(...)}`.
+
+| Sai (PHP 8+ ném Warning) | Đúng |
+|---|---|
+| `{if $TABS}` | `{if !empty($TABS)}` |
+| `{if $HERO.imgurl}` | `{if !empty($HERO.imgurl)}` |
+| `{if $row.external_link}` | `{if !empty($row.external_link)}` |
+| `{if $node.subs}` | `{if !empty($node.subs)}` |
+| `{if $DATA.label}` | `{if !empty($DATA.label)}` |
+
+**Lý do**: Smarty compile `{if $var}` → PHP `if ($_smarty_tpl->tpl_vars['var']->value)`. Trên PHP 8+, nếu khóa không tồn tại trong mảng → **`Warning: Undefined array key`** → write rác file `data/logs/error_logs/<today>_notice_log.log` + có thể display_errors trong dev. `!empty()` xử lý triệt để.
+
+**Khi nào CÓ THỂ bỏ `!empty()` (an toàn không cần wrap):**
+- Biến boolean global của core đảm bảo set: `{if $HOME}`, `{if $OUTDATED_BROWSER}`, `{if $COOKIE_NOTICE}`, `{if $MODULE_CONTENT}` (assigned bởi `theme.php`)
+- Smarty constant: `{if $smarty.const.NV_IS_USER}`, `{if $smarty.const.NV_IS_MODADMIN}` (constant luôn defined)
+- Smarty special property: `{if $item@last}`, `{if $item@first}` (loop iterator)
+- Biến vừa được `{assign}` ngay trong scope: `{assign var="x" value=...}{if $x}`
+
+**Pattern aliases cũng đúng**: Smarty hỗ trợ `{if not empty($x)}` ↔ `{if !empty($x)}` ↔ `{if isset($x) and $x}`. Khuyến nghị unify dùng `!empty(...)` cho ngắn gọn và rõ.
+
+### §10.2 BẮT BUỘC dùng format `date()` cho `date_format` — tránh `strftime() deprecated`
+
+**Quy luật**: Modifier `date_format` KHÔNG được chứa ký tự `%` trong format string. Phải dùng ký tự format chuẩn của hàm PHP `date()`.
+
+| Sai (PHP 8.1+ Deprecated) | Đúng |
+|---|---|
+| `\|date_format:"%d/%m/%Y"` | `\|date_format:"d/m/Y"` |
+| `\|date_format:"%H:%M %d/%m/%Y"` | `\|date_format:"H:i d/m/Y"` |
+| `\|date_format:"%Y-%m-%d"` | `\|date_format:"Y-m-d"` |
+
+**Lý do**: Smarty modifier `date_format` detect ký tự `%` → fallback `strftime()`. PHP 8.1 đánh dấu `strftime()` là **Deprecated**, sẽ remove tương lai. Nếu KHÔNG có `%`, Smarty dùng `date()` chuẩn (`d`=ngày, `m`=tháng, `Y`=năm 4 chữ số, `H`=giờ 24h, `i`=phút...).
+
+**Mapping nhanh strftime → date**:
+
+| `strftime` | `date()` | Ý nghĩa |
+|---|---|---|
+| `%d` | `d` | Ngày 2 chữ số |
+| `%m` | `m` | Tháng 2 chữ số |
+| `%Y` | `Y` | Năm 4 chữ số |
+| `%y` | `y` | Năm 2 chữ số |
+| `%H` | `H` | Giờ 24h |
+| `%M` | `i` | ⚠️ Phút (không phải `M`) |
+| `%S` | `s` | Giây |
+| `%A` | `l` | Tên thứ đầy đủ |
+
+⚠️ Trap đặc biệt: `%M` (strftime = phút) ≠ `M` (date = tên tháng viết tắt). Khi convert phải đổi `%M` → `i`.
+
+### §10.3 Audit nhanh khi build / fix theme
+
+```bash
+# Tìm if không dùng !empty (cần review thủ công - một số case OK như $HOME)
+grep -rn "{if \$[A-Za-z_][A-Za-z0-9_.]*}" src/themes/<theme>/blocks src/themes/<theme>/modules
+
+# Tìm date_format dùng strftime syntax (PHẢI fix hết)
+grep -rn 'date_format:"%' src/themes/<theme>
+```
+
+→ Sau khi fix, clear cache Smarty: `find src/data/cache/smarty-compile -name "*.php" -delete`.
 
 ---
 

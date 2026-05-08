@@ -65,7 +65,7 @@ Tải tất cả vào **1 thư mục**, ví dụ `~/Desktop/nv-theme-v2-source/`
 
 ### 1.2. Thu thập thông tin metadata
 
-Ghi ra một file `_release-notes.md`:
+Ghi ra một file `release-notes.md`:
 
 ```markdown
 # Thông tin phát hành
@@ -106,7 +106,7 @@ Chụp 5–7 ảnh các trang thật trên staging / demo site để AI có grou
 3. **Đính kèm làm context** toàn bộ file đã chuẩn bị ở mục 1:
    - Toàn bộ `.scss` trong mục 1.1
    - Toàn bộ `.tpl` trong mục 1.1
-   - File `_release-notes.md`
+   - File `release-notes.md`
    - Thư mục `screenshots/` (nếu có)
 
 Đính kèm càng đầy đủ, AI sinh càng chính xác. **Không cần upload ảnh binary nặng** — chỉ cần file text `.scss` + `.tpl`.
@@ -249,7 +249,7 @@ Gửi cho team frontend / agency:
 ```
 INPUT (collect):
 [ ] bash design/design-system.sh → tự động thu thập SCSS + TPL future
-[ ] Điền design/design-system/_release-notes.md (version + changelog)
+[ ] Điền design/design-system/release-notes.md (version + changelog)
 [ ] Chụp screenshot 5-7 trang thật → design/design-system/screenshots/
 [ ] Nén design/design-system/ → design/design-system.zip
 

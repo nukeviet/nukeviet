@@ -38,7 +38,8 @@ Bundle có:
 Build theme `<theme-name>` cho NukeViet 5 theo workflow dưới. Tuân thủ:
 - [CLAUDE.md](../../CLAUDE.md) — quy tắc chung NV5
 - [docs/knowledge/theme.md](../../docs/knowledge/theme.md) — convention theme NV5
-- [design/theme-patterns.md](../theme-patterns.md) — knowledge base patterns/traps generic
+- [design/theme-patterns.md](../theme-patterns.md) — knowledge base patterns/traps generic (10 sections)
+- [design/Block.md](../Block.md) — inventory 30 block sẵn có ở 5 thư mục + mapping + phương án (BẮT BUỘC đọc trước Phase E để chọn module reuse phù hợp)
 - [design/<theme-name>/Plan.md](<theme-name>/Plan.md) — plan cụ thể decision (token, block, seed) — ví dụ `design/news2026/Plan.md`
 
 ### PHASE 0 — ĐỌC + LẬP KẾ HOẠCH (BẮT BUỘC, chờ Dev OK trước khi sang Phase A)
@@ -49,7 +50,8 @@ Build theme `<theme-name>` cho NukeViet 5 theo workflow dưới. Tuân thủ:
    - design/<theme-name>/output/partials/nv-theme.css (đếm component, ước CSS size)
    - design/<theme-name>/output/release-notes.md (version, theme name)
    - 1-2 file blocks bất kỳ trong partials/blocks/ để hiểu data-nv-* convention
-   - design/theme-patterns.md (knowledge base — đọc 1 lần)
+   - design/theme-patterns.md (knowledge base — đọc 1 lần, đặc biệt §3.1 engine TPL module + §10 Smarty PHP 8+ traps)
+   - design/Block.md — biết file tồn tại (inventory 30 block module sẵn có); CHƯA cần đọc kỹ ở Phase 0 — Phase E sẽ tham chiếu
 
 2. NẾU file `design/<theme-name>/Plan.md` chưa tồn tại, **TỰ ĐỘNG TẠO Plan.md**
    với các section bắt buộc:
@@ -74,19 +76,24 @@ Build theme `<theme-name>` cho NukeViet 5 theo workflow dưới. Tuân thủ:
 
 4. **CHỜ Dev gõ "OK"** trước khi sang Phase A.
 
-### TỔNG QUAN 5 PHASE (gate sau mỗi phase)
+### TỔNG QUAN 6 PHASE (gate sau mỗi phase)
 
 | Phase | Tên | Output verify |
 |-------|-----|---------------|
 | **A** | Skeleton + tất cả block hardcode HTML + setblocks + Build CSS từ scss/<theme-name> | Active theme → trang chủ render giống mockup ≥ 95%, KHÔNG cần DB |
-| **B** | Module TPL viết mới (`viewcat_main_left.tpl`, `detail.tpl`…) cho category/article page | Click vào chuyên mục/bài viết → render khớp mockup |
-| **C** | Seed manifest (`src/data/seeder/<theme-name>/`: categories, articles, banners, menus, users, theme-config) | Admin → Seeder chạy hết step, DB có data demo |
-| **D** | Setblocks tinh chỉnh per-route (theo data đã seed) | Mỗi route hiện đúng block đặc thù (vd home khác category) |
-| **E** | Convert block hardcode → reuse module block / data thật | Block load data thật từ DB, KHÔNG còn HTML hardcode |
+| **B** | Module TPL viết mới (`viewcat_main_left.tpl` Smarty, `detail.tpl` **XTemplate**) cho category/article page | Click vào chuyên mục/bài viết → render khớp mockup |
+| **C** | Seed manifest (`src/data/seeder/<theme-name>/`: categories, articles ≥10/cat, banners, menus, users, theme-config) | Admin → Seeder chạy hết step, DB có data demo |
+| **D** | Setblocks tinh chỉnh per-route (theo data đã seed) — `funcs` per route | Mỗi route hiện đúng block đặc thù (vd home khác category) |
+| **E** | Convert block hardcode → reuse module / theme block với data thật (4 strategy — xem E.1) | Block load data thật, hardcode còn lại chỉ ở UI tĩnh |
+| **F** | Polish — override TPL module (Smarty/XTemplate) cho khớp mockup CSS class · fix Smarty PHP 8+ traps · audit/fix lỗi runtime | Trang render khớp mockup với data thật, log notice rỗng |
 
 ⚠️ **GATE BẮT BUỘC**: Sau khi Claude Code làm xong 1 phase, **BÁO CÁO + DỪNG**.
-Dev kiểm tra trên trình duyệt + gõ `OK chuyển B/C/D/E` mới chạy phase kế.
+Dev kiểm tra trên trình duyệt + gõ `OK chuyển B/C/D/E/F` mới chạy phase kế.
 KHÔNG chạy liền 2 phase mà không có confirm.
+
+⚠️ Exception: nếu **Plan.md đã có sẵn** (Dev đã làm planning trước), main agent
+có thể chạy A→F liền mạch mà không chờ confirm — Dev review cuối tại Phase F.
+Đây là cách build news2026 (verify 2026-05-08).
 
 ### PHASE A — Skeleton + Block hardcode + setblocks + Build CSS
 
@@ -174,12 +181,20 @@ Phase E sẽ thay logic data thật.
 
 #### A.4. Layout TPL
 
-| File | Thay đổi |
-|------|----------|
-| `header_extended.tpl` | Hardcode HTML từ `partials/site-header.html` + `site-nav.html` (topbar + logo + 16 chuyên mục). Thêm position `[TOPBAR]` `[USER_BUTTON]` `[MAIN_NAV]` để mở rộng |
-| `footer_extended.tpl` | Hardcode HTML từ `partials/site-footer.html` (footer-top 5 cột chuyên mục + col-apps hotline/social + footer-bar copyright). Thêm position `[FOOTER_INFO]` `[FOOTER_MENU]` `[FOOTER_SOCIAL]` `[FOOTER_COPYRIGHT]` |
-| `layout.content-esbar.tpl` | Khung: `[BANNER_TOP]` → `[TICKER]` → `[HERO]` → wrapper `.hero-with-rail` chứa `[HERO_MAIN]+[HERO_RAIL]` → row 8/4 cột với `[CONTENT_TOP/MID/BOTTOM]` + `[SIDEBAR_RIGHT]` |
-| `layout.content.tpl` | Bổ sung `[BANNER_TOP]` `[TICKER]` cho contact page |
+⚠️ Khuyến nghị (verified news2026): tách `header_extended` + `footer_extended`
+thành **wrapper mỏng chứa position**, mỗi mảng UI lớn (topbar / logo / nav /
+footer-info / footer-bar) là **1 block riêng** ở Phase A. Cách này:
+- Phase E dễ thay từng phần (vd nav → reuse `menu/global.bootstrap`, footer_info
+  → reuse `themes/future/global.company_info`)
+- Admin có thể tắt từng phần qua giao diện không cần sửa code
+- Dev dễ quản lý từng đoạn HTML độc lập
+
+| File | Pattern khuyến nghị |
+|------|---------------------|
+| `header_extended.tpl` | Wrapper chứa **3 position riêng**: `[HEADER_TOPBAR]` (topbar mỏng) + `[HEADER_LOGO]` (logo + search + leaderboard) + `[HEADER_NAV]` (main navigation). Bootstrap Modal search + offcanvas menu mobile đặt cuối |
+| `footer_extended.tpl` | Wrapper `<footer>` chứa **2 position**: `[FOOTER_INFO]` (cho 1-3 block info+categories+contact) + `[FOOTER_BAR]` (copyright bottom bar). Container Bootstrap đã wrap sẵn |
+| `layout.content-esbar.tpl` | Khung: `[BANNER_TOP]` → `[TICKER]` → `[HERO]` → row 8/4 cột — col-8: `[CONTENT_TOP]` `{$MODULE_CONTENT}` `[CONTENT_MID]` `[CONTENT_BOTTOM]` + col-4: `[SIDEBAR_RIGHT]` |
+| `layout.content.tpl` | Layout đơn cho contact: `[BANNER_TOP]` + `{$MODULE_CONTENT}` (không sidebar) |
 
 ⚠️ ANTI-PATTERN bắt buộc tránh (theme-patterns.md §4.2):
 - KHÔNG copy/link `chrome.js` (hoặc bất kỳ JS render header/footer của mockup) vào theme
@@ -247,30 +262,49 @@ Mục tiêu: click vào chuyên mục / bài viết phải render khớp mockup.
 chỉ lo trang chủ; Phase B lo các route module/news/*.
 
 ⚠️ Cảnh báo: future không override `viewcat_main_left.tpl`, `detail.tpl` →
-nếu không viết mới, NV5 fallback `default/` (XTemplate) → Smarty fail
+nếu không viết mới, NV5 fallback `default/` → có thể parse fail
 (xem theme-patterns.md §3).
+
+#### B.0. ⚠️ TRAP — Engine TPL khác nhau giữa các file (Smarty vs XTemplate)
+
+**Nguyên tắc**: TPL nào dùng Smarty hay XTemplate phụ thuộc vào file
+`theme.php` / `funcs/*.php` của module gốc — KHÔNG đoán bừa.
+
+→ **Đọc theme-patterns.md §3.1** để xem bảng engine đầy đủ + lệnh verify nhanh.
+
+**Quan trọng cho Phase B (highlight nhanh)**:
+- `viewcat_main_left.tpl` → **NVSmarty** (`{$VAR}`)
+- `detail.tpl` → **XTemplate** (`{VAR}` + `<!-- BEGIN: x -->`) — KHÔNG phải Smarty
+
+⚠️ Tài liệu cũ có thể ghi sai "viết Smarty cho detail.tpl" — verify từ source
+hiện tại bằng `grep "new XTemplate\|NVSmarty.*detail.tpl" src/modules/news/theme.php`.
 
 #### B.1. Đối chiếu nv-routes.md
 
 - Đọc cột "Layout" + "TPL target" trong `nv-routes.md`
-- Liệt kê các TPL VIẾT MỚI Smarty (thường là):
-  - `modules/news/viewcat_main_left.tpl` (category page)
-  - `modules/news/detail.tpl` (article detail)
+- Liệt kê các TPL VIẾT MỚI:
+  - `modules/news/viewcat_main_left.tpl` (Smarty — category page)
+  - `modules/news/detail.tpl` (**XTemplate** — article detail)
   - `modules/news/main.tpl` (nếu mockup home có khác future)
-  - `modules/contact/main.tpl` (nếu mockup contact đặc thù)
-  - … (theo nv-routes.md cụ thể)
+  - `modules/contact/main.tpl` (Smarty, nếu mockup contact đặc thù)
+  - … (theo nv-routes.md cụ thể, kèm engine confirmed từ B.0)
 
-#### B.2. Convert mockup → TPL Smarty
+#### B.2. Convert mockup → TPL
 
 Với MỖI mockup trong `mockups/*.html` cần convert:
 
 1. Tách main content (giữa header/footer) — header/footer đã ở layout
-2. Convert biến:
-   - `<a href="#">` → `<a href="{$smarty.const.NV_BASE_SITEURL}…">`
-   - Text label → `{$LANG->getModule('key')}` hoặc `{$LANG->getGlobal('key')}`
-   - List item → `{foreach $items as $item}…{/foreach}`
-3. Sanitize output: `{$var|escape:'html'}` cho raw, KHÔNG escape `get_title()`
-4. Lưu vào đúng path TPL theo nv-routes.md
+2. Convert biến **theo engine** đã xác nhận ở B.0:
+   - **Smarty**: `{$row.title}`, `{foreach $items as $item}…{/foreach}`,
+     `{if !empty($x)}` (xem theme-patterns.md §10)
+   - **XTemplate**: `{ROW.title}`, `<!-- BEGIN: loop -->...<!-- END: loop -->`,
+     không có if (dùng `parse('main.X')` từ PHP để tách flow)
+3. Constant: `{$smarty.const.NV_BASE_SITEURL}` (Smarty) hoặc PHP-side build URL
+   rồi assign vào XTemplate
+4. LANG: `{$LANG->getModule('key')}` (Smarty) hoặc `{LANG.key}` (XTemplate
+   lưu ý PHP assign `$xtpl->assign('LANG', $lang_module)` chứ KHÔNG phải object)
+5. Sanitize: `{$var|escape:'html'}` (Smarty) cho raw, KHÔNG escape `get_title()`
+6. Lưu vào đúng path TPL theo nv-routes.md
 
 ⚠️ Nếu mockup có block (partials/blocks/* include qua `data-include`) →
 KHÔNG inline lại trong TPL. Block đã có ở Phase A, sẽ tự gắn qua position
@@ -278,10 +312,12 @@ trong layout TPL.
 
 #### B.3. Verify Phase B
 
-- Syntax pass: `find src/themes/<theme-name> -name "*.tpl"` (Smarty không
-  có CLI lint, dựa vào fetch test)
+- Smarty: `grep -n '{[A-Z][A-Z_]*' <file>.tpl` — phát hiện sót XTemplate syntax
+- XTemplate: `grep -n '{\$' <file>.tpl` — phát hiện sót Smarty syntax
+- Cân đối block markers XTemplate: `grep -c "<!-- BEGIN:" <file>.tpl` =
+  `grep -c "<!-- END:" <file>.tpl`
 - **BÁO CÁO + DỪNG**:
-  - Danh sách TPL đã viết mới
+  - Danh sách TPL đã viết mới (kèm engine từng file)
   - Risk còn lại
 - **Hướng dẫn Dev verify**:
   > Click 1 chuyên mục bất kỳ + 1 bài bất kỳ. So với mockup category.html /
@@ -306,8 +342,71 @@ src/modules/seeder/README.md):
 | `banner-positions.json` | Vị trí banner (banners_plans) |
 | `users.json` | User demo (password trong `_default_password`) |
 | `theme-config.json` | Logo, hotline, schema.org info — `_target_theme: '<theme>'` |
-| `articles.sample.json` | Bài viết mẫu (set `homeimgthumb=2` vì lưu uploads/) |
+| `articles.sample.json` | Bài viết mẫu (set `homeimgthumb=2` vì lưu uploads/) — **BẮT BUỘC ≥ 10 bài/cat** cho mọi cat hiển thị ở mockup home (xem C.1.1) |
 | `banners.sample.json` | Banner mẫu (`plan_title` trỏ tới banner-positions) |
+
+#### C.1.1. Quy chuẩn số lượng bài viết mẫu
+
+**BẮT BUỘC: tối thiểu 10 bài/cat** cho mọi cat xuất hiện ở mockup home/category/article.
+Lý do: block `news-cat` (cat-hero-grid) cần ≥ 7 bài/cat (1 hero card + 6 bullets).
+Block `headline_hero` (1 hero + 4 rail) + `tophits` + `newest` còn cần thêm bài.
+Nếu < 10 bài/cat, render trang chủ sẽ vỡ giao diện (block trống hoặc thiếu hero/bullets).
+
+**Phân bổ chuẩn (vd 9 cat → 90 bài):**
+- Cat `tin-noi-bat` (hero source): **10 bài tất cả `hometop: 1`** — feed cho headline_hero + ticker
+- Các cat khác: 10 bài/cat, **1-2 bài có `hometop: 1`** để ticker fallback có data
+
+**Trap nội dung:**
+- KHÔNG dùng "Lorem ipsum" — phải tiếng Việt thực tế (tin tức giả lập có số liệu, tên tổ chức, địa điểm)
+- `image_seed` phải UNIQUE giữa tất cả bài (format: `<catalias>-<keyword>-<index>`)
+- Title đa dạng theo cat — cat `the-thao` không có bài về VN-Index, cat `cong-nghe` không có bài về bóng đá
+- `bodyhtml` 2-3 đoạn `<p>...</p>`, ~400-600 ký tự (cô đọng, đủ render UI; KHÔNG cần dài hơn)
+
+#### C.1.2. Pattern sinh `articles.sample.json` — 1 cat / 1 sub-agent / model Haiku
+
+⚠️ **KHÔNG spawn 1 sub-agent monolithic generate cả 90 bài cùng lúc** —
+agent stuck (đã verify Phase C build news2026: agent generate ~90 KB content
+trong nội bộ KHÔNG flush ra Write file, kill sau 10+ phút không có output).
+
+**Pattern đã verify hoạt động** (build news2026, ~3 phút tổng):
+
+1. **Spawn N sub-agent song song** (N = số cat — vd 9 cat → 9 agent), trong **CÙNG 1 message** với nhiều `Agent` tool calls (parallelism = 9). Mỗi agent:
+   - `subagent_type: "general-purpose"`
+   - `model: "haiku"` ← **dùng Haiku cho task seed manifest** (text generation đơn giản, rẻ và nhanh hơn Sonnet ~3-4×; chỉ giao Sonnet cho task code/khảo sát phức tạp)
+   - `run_in_background: true` (parallel với main session)
+   - Phụ trách **đúng 1 cat** → ghi 1 file JSON tạm `src/data/seeder/<theme>/_articles_parts/<catalias>.json` chứa **MẢNG JSON 10 items** (KHÔNG có wrapper top-level — chỉ là `[{...}, {...}, ...]`)
+   - Prompt self-contained: schema item, bảng chủ đề 10 bài cho cat đó (KHÔNG lặp với cat khác), anti-pattern (no Lorem, image_seed unique, no PowerShell cmdlet trong Bash)
+
+2. **Đợi tất cả agent xong** — runtime tự thông báo, KHÔNG poll/tail file output.
+
+3. **Merge bằng PHP script** `tools/merge_articles.php` (mẫu đã có ở repo nukeviet5.0):
+   ```php
+   $cats = ['tin-noi-bat', 'the-gioi', 'chinh-tri-xa-hoi', ...];
+   $all = [];
+   foreach ($cats as $cat) {
+       $items = json_decode(file_get_contents($dir . '/' . $cat . '.json'), true);
+       $all = array_merge($all, $items);
+   }
+   $wrapper = [
+       '_comment' => '...',
+       '_natural_key' => ['catalias', 'alias_hint'],
+       '_image_size' => ['default' => [800, 500], 'hometop' => [1200, 630]],
+       'items' => $all,
+   ];
+   file_put_contents($out, json_encode($wrapper, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES));
+   ```
+
+   Script tự verify trong cùng 1 chạy: count items mỗi cat, count `hometop=1`, count `homeimgthumb=2`, check `image_seed` uniqueness.
+
+4. **Cleanup**: xóa thư mục tạm `_articles_parts/` sau khi merge (`find _articles_parts -type f -delete && find _articles_parts -type d -empty -delete`).
+
+**Vì sao Haiku đủ cho task này:**
+- Sinh title/sapo/bodyhtml đơn giản — không cần reasoning sâu
+- Mỗi agent chỉ generate ~10 items (~5-7 KB) — Haiku xử lý dư sức
+- Cost rẻ × 9 agent = vẫn rẻ hơn 1 Sonnet monolithic
+- Nhanh hơn Sonnet ~3× → 9 agent parallel xong trong 2-3 phút
+
+**Khi nào VẪN dùng Sonnet:** task migrate XTemplate→Smarty, rewrite block PHP query DB, override TPL phức tạp — mọi task có CODE (không phải text content). Xem theme-patterns.md §9.1 model selection table.
 
 #### C.2. Reset DB sạch trước khi seed
 
@@ -388,23 +487,44 @@ find src/data/cache/smarty-compile -name "*.php" -delete
   > Click 5 route (home, category, article, contact, login) → block đặc thù
   > hiện đúng. Nếu OK → gõ `OK chuyển E`.
 
-### PHASE E — Convert block hardcode → reuse module block / data thật
+### PHASE E — Convert block hardcode → reuse module / data thật
+
+> **Trước Phase E: ĐỌC `design/Block.md`** — file này có inventory 30 block sẵn
+> ở 5 thư mục (`themes/future/blocks`, `modules/{news,banners,contact,menu}/blocks`)
+> kèm function name, type field config, engine TPL. Block.md là source of truth
+> để chọn block module reuse phù hợp + biết template engine override (Smarty
+> hay XTemplate) — TRÁNH đoán bừa.
 
 Mục tiêu: rút HTML hardcode trong block TPL Phase A, chuyển sang:
-- Reuse module block (`global.news.cat.php`, `global.menu.simple.php`…) nếu phù hợp
+- Reuse module block (vd `news/global.block_tophits.php`) nếu phù hợp
 - HOẶC giữ theme block nhưng rewrite PHP để query DB thật
 
-#### E.1. Phân loại block
+#### E.1. Phân loại block — 4 strategy (KHÔNG phải 3)
 
 Với mỗi block ở `themes/<theme-name>/blocks/`, quyết định:
 
 | Strategy | Khi nào | Hành động |
 |----------|---------|-----------|
-| **Reuse module block** | Block giống module sẵn có (vd "tin mới nhất" giống `news/global.news.cat.php`) | Trong setblocks: đổi `module` từ `"theme"` → `"news"`, `file_name` → `"global.news.cat.php"`. Xóa block ở `themes/<name>/blocks/` |
-| **Rewrite theme block** | Block đặc thù theme (vd ticker custom) | Giữ file PHP nhưng thay logic minimal bằng query DB + render TPL với data thật |
-| **Giữ hardcode** | Block UI tĩnh không cần DB (vd footer copyright, hotline) | Giữ nguyên |
+| **(1) Reuse module — KHÔNG override TPL** | Block module có TPL Smarty default vừa đủ + module ASSIGN đầy đủ biến cần thiết | setblocks đổi `module="theme"` → `module="<m>"`, `file_name="global.X.php"` + serialize config với ID seed. Xóa file theme block. |
+| **(2) Reuse module — CÓ override TPL** | Block module dùng được PHP nhưng TPL default KHÔNG khớp mockup | Như (1) + tạo override TPL ở `themes/<theme>/modules/<m>/<X>.tpl` (engine theo Block.md §1.2 — có thể XTemplate vd `block_groups.tpl`, không phải Smarty) |
+| **(3) Theme block thay reuse** | Module có PHP nhưng **ASSIGN THIẾU BIẾN** (vd `nv_block_news_cat()` không assign `CATNAME`/`CATLINK` → không render được heading section) | Giữ file `themes/<theme>/blocks/global.X.php`, rewrite query DB + assign đủ biến + render Smarty TPL khớp mockup |
+| **(4) Giữ hardcode** | Block UI tĩnh không cần DB (footer copyright, hotline, header logo) | Giữ nguyên Phase A |
 
-#### E.2. Rewrite theme block (nếu cần)
+⚠️ **Trap (2) — engine TPL override**: phải đọc PHP module block xem nó dùng
+`new XTemplate(...)` hay `new \NukeViet\Template\NVSmarty(...)`. Nhầm engine
+khi override → render text raw `{$VAR}` hoặc parse fail. Vd `news/global.block_news_cat.php`
+dùng `XTemplate('block_groups.tpl')` — file override phải XTemplate syntax.
+
+⚠️ **Trap (3) — module ASSIGN thiếu biến**: news2026 phát hiện
+`nv_block_news_cat()` chỉ assign `ROW` trong loop — không có `CATNAME`/`CATLINK`/
+`SUBCATS`. Nếu mockup yêu cầu heading "Kinh doanh" + tabs sub-cat, KHÔNG thể
+render bằng (2) override TPL. Phải dùng (3): tạo theme block riêng query DB,
+tách HERO+BULLETS+TABS, assign vào Smarty TPL khớp mockup.
+
+→ Verify trước khi chọn (1)/(2)/(3): `grep "\$xtpl->assign\|\$tpl->assign"
+src/modules/<m>/blocks/<X>.php` để liệt kê biến module assign.
+
+#### E.2. Rewrite theme block (nếu chọn strategy 3)
 
 Với block "Rewrite theme block" — viết đầy đủ 4 hàm chuẩn (xem
 docs/knowledge/theme.md §"Block global" + theme-patterns.md §9):
@@ -419,7 +539,11 @@ JSON manifest: đầy đủ key default config (nếu thiếu → render lỗi
 
 ⚠️ Block phức tạp (>100 dòng PHP, multi-query) → spawn sub-agent với
 `subagent_type="general-purpose"`, `model="sonnet"` (theme-patterns.md §9.2).
-**BẮT BUỘC** truyền `model: "sonnet"` cho mọi sub-agent task NV5.
+**BẮT BUỘC** truyền `model: "sonnet"` cho sub-agent CODE/khảo sát NV5.
+
+⚠️ Riêng sub-agent generate **text content** (vd `articles.sample.json` —
+xem C.1.2): dùng `model="haiku"` (rẻ + nhanh hơn ~3×, đủ năng lực cho
+title/sapo/bodyhtml tiếng Việt đơn giản).
 
 #### E.3. Update TPL block
 
@@ -447,10 +571,80 @@ Block đã rewrite — TPL convert hardcode HTML → Smarty:
   - Risk còn lại / TODO
 - **Hướng dẫn Dev verify**:
   > 5 route render khớp mockup ≥ 95% với data THẬT từ DB.
-  > Log notice RỖNG. Nếu OK → kết thúc build, commit + tạo MR.
+  > Log notice RỖNG. Nếu OK → gõ `OK chuyển F` (polish cuối).
+
+### PHASE F — Polish: override TPL module + fix Smarty traps + audit lỗi
+
+Mục tiêu: sau Phase E setblocks reuse module hoạt động, giao diện có thể chưa
+khớp mockup 100% vì TPL module gốc render style khác. Phase F polish:
+
+#### F.1. Override TPL module (Smarty/XTemplate theo source)
+
+Với mỗi block chọn strategy (2) "Reuse + override TPL" ở Phase E:
+
+1. Đọc PHP source `src/modules/<m>/blocks/<X>.php` xác định:
+   - Engine: `new \NukeViet\Template\NVSmarty()` hay `new XTemplate()`
+   - Biến assign: `$tpl->assign('VAR', ...)` hoặc `$xtpl->assign('VAR', ...)`
+2. Tạo file override ở `src/themes/<theme>/modules/<m>/<X>.tpl` (engine khớp)
+3. Render HTML khớp mockup CSS class (vd `.cat-hero-grid`, `.block-hits`,
+   `.block-tags .tag`, `.partner-sidebar`)
+4. Spawn N sub-agent song song nếu có nhiều TPL (model `sonnet`):
+   - Group A: TPL Smarty (đã sẵn engine match nhau)
+   - Group B: TPL XTemplate (engine khác — prompt phải nhấn mạnh)
+
+#### F.2. Rewrite block PHP với data thật (strategy 3)
+
+Block module gốc không assign đủ biến → rewrite theme block riêng:
+- Query DB tương tự module nhưng tách theo cấu trúc mockup (vd HERO + BULLETS)
+- Assign biến rõ ràng vào Smarty TPL: `CAT`, `TABS`, `HERO`, `BULLETS`...
+- Vd `news_cat` của news2026: `nv_block_news_cat()` của module gốc không assign
+  CATNAME → tạo theme block `global.news_cat.php` riêng query DB + tách
+  HERO/BULLETS
+
+Spawn sub-agent `model="sonnet"` cho rewrite này (code+query+TPL).
+
+#### F.3. Fix Smarty PHP 8+ traps
+
+→ Quy luật canonical + bảng mapping ở **theme-patterns.md §10** (đọc kỹ §10.1
+`!empty()`, §10.2 `date_format` không `%`, §10.3 lệnh audit grep).
+
+**Audit nhanh + fix** (chạy ở Phase F):
+
+```bash
+grep -rn '{if \$[A-Za-z_][A-Za-z0-9_.]*}' src/themes/<theme>/blocks src/themes/<theme>/modules
+grep -rn 'date_format:"%' src/themes/<theme>
+```
+
+→ File theo theme đang build (tự tay tạo) phải clean. File copy từ future
+(layout/, modules/ khác) có thể tạm bỏ qua — fix upstream ở `themes/future/`.
+
+#### F.4. Verify Phase F
+
+```bash
+# Smarty syntax check
+grep -rn '{if \$[A-Za-z_][A-Za-z0-9_.]*}' src/themes/<theme>/blocks  # nên = 0 với file tự build
+grep -rn 'date_format:"%' src/themes/<theme>                          # phải = 0
+# PHP + JSON
+find src/themes/<theme> -name "*.php" -exec php -l {} \;
+find src/themes/<theme>/blocks -name "*.json" -exec python -m json.tool {} \;
+# Cache
+find src/data/cache -name "*.cache" -delete
+find src/data/cache/smarty-compile -name "*.php" -delete
+```
+
+- **BÁO CÁO CUỐI**:
+  - Số TPL override đã tạo (chia: Smarty / XTemplate)
+  - Số block rewrite (strategy 3)
+  - Smarty trap đã fix (count if và date_format)
+  - Render diff so mockup (5 route) — % match
+- **Hướng dẫn Dev verify**:
+  > 5 route khớp mockup 100% với data thật.
+  > `data/logs/error_logs/<today>_notice_log.log` rỗng.
+  > Nếu OK → kết thúc build, commit + tạo MR.
 
 ### RÀNG BUỘC TUÂN THỦ (áp dụng mọi phase)
 
+**Code NV5 PHP**:
 - CLAUDE.md: PSR-12, camelCase, `$nv_Lang->getModule/getGlobal`
   (KHÔNG `$lang_module`)
 - `$nv_Request` (KHÔNG `$_GET/$_POST` trực tiếp)
@@ -459,25 +653,51 @@ Block đã rewrite — TPL convert hardcode HTML → Smarty:
 - CSRF: `csrf_create()` + `csrf_check()` khi nhận POST
 - `nv_is_file()` KHÔNG `is_file()` với path từ user
 - `defined('NV_IS_ADMIN')` trước khi ghi data
+
+**Smarty TPL (PHP 8+)**:
+- BẮT BUỘC `{if !empty($var)}` thay `{if $var}` cho biến/property mảng — chi tiết theme-patterns.md §10.1
+- BẮT BUỘC `date_format:"d/m/Y"` (không `%`) — chi tiết §10.2
+
+**TPL engine theo source** (Smarty vs XTemplate):
+- BẮT BUỘC verify từ source trước khi viết/override TPL — bảng đầy đủ ở theme-patterns.md §3.1
+- Highlight: `viewcat_main_left.tpl` Smarty · `detail.tpl` **XTemplate** (KHÔNG Smarty) · `block_groups.tpl` `block_news.tpl` (override cho block_news_cat / module.block_news) **XTemplate**
+
+**SCSS**:
 - Sass 1.71+: KHÔNG `lighten()/darken()/mix()` — dùng `color.adjust()`
-- Sub-agent: `model="sonnet"` BẮT BUỘC
+
+**Sub-agent**:
+- CODE / khảo sát / convert mockup → `model="sonnet"` BẮT BUỘC
+- Generate **text content** (seed manifest articles/banners) → `model="haiku"`
+  (xem C.1.2 — pattern 1 cat/1 agent song song, KHÔNG monolithic)
+
+**Tool/CLI**:
 - Mọi tool description tiếng Việt
 - **Pattern verify**: dùng `find -exec php -l` + `python -m json.tool` thay
-  vì `php -r "..."` để tránh permission prompt
-- **Quy trình NV5**: Phân tích → Plan → CHỜ "OK" → Thực thi
-  - Phase 0 dừng chờ Dev OK
-  - Sau MỖI Phase A/B/C/D dừng chờ Dev gõ `OK chuyển <phase kế>`
-  - KHÔNG chạy 2 phase liền nhau khi chưa có confirm
+  vì `php -r "..."` (kích permission prompt). XML config dùng
+  `tools/check_xml.php`. Serialize dùng `tools/serialize_check.php`.
+
+**Knowledge base reference** (đọc theo nhu cầu, KHÔNG đọc tất cả ở Phase 0):
+- `design/theme-patterns.md` — patterns/traps generic NV5 (10 sections). Đọc tổng quan ở Phase 0; ref cụ thể ở từng phase: §1 setblocks (A.5/D.1) · §3 Smarty fallback (A.0) · §3.1 engine TPL (B.0/F.1) · §5 URL ảnh news (E.2/F.2) · §7 seeder (C) · §8 verify (mọi phase) · §9 sub-agents (mọi phase) · §10 Smarty PHP 8+ (F.3)
+- `design/Block.md` — inventory 30 block module sẵn có. **Phase E.1** BẮT BUỘC đọc Phần 1 + 2 trước khi chọn strategy reuse. **Phase F.1** ref Phần 3 (phương án) khi override TPL. Phase 0/A/B/C/D KHÔNG cần đọc.
+- `design/<theme>/Plan.md` — plan cụ thể từng theme (token, block, seed). Phase 0 tạo nếu chưa có; mọi phase tham chiếu.
+
+**Quy trình NV5**: Phân tích → Plan → CHỜ "OK" → Thực thi
+- Phase 0 dừng chờ Dev OK
+- Sau MỖI Phase A/B/C/D dừng chờ Dev gõ `OK chuyển <phase kế>`
+- KHÔNG chạy 2 phase liền nhau khi chưa có confirm
+- Plan Dev đã làm sẵn (Plan.md tồn tại) → cứ chạy, Dev check cuối phase
 ```
 
 ---
 
 ## Khi nào cần chạy riêng 1 phase
 
-Không phải lúc nào cũng phải chạy 5 phase từ đầu. Ví dụ:
+Không phải lúc nào cũng phải chạy 6 phase từ đầu. Ví dụ:
 - **Đổi tokens (đã có theme)**: "Chạy lại Phase A.1 với token mới trong design-system.html"
 - **Thêm 1 block mới**: "Đọc partials/blocks/<new>.html, làm Phase A.2-A.3 cho block này + Phase E nếu cần data thật"
 - **Convert thêm 1 mockup**: "mockups/new-page.html, làm Phase B + cập nhật nv-routes.md"
 - **Reseed lại dữ liệu**: "Reset DB + chạy Phase C lại + Phase D update ID"
+- **Override TPL module mới**: "Phase F.1 cho `<m>/<X>.tpl` — đọc Block.md §1.2 + theme-patterns.md §3.1 trước"
+- **Fix Smarty PHP 8+ traps**: "Phase F.3 audit + fix theo theme-patterns.md §10"
 
 Cú pháp: "Đọc nv-routes.md + chạy Phase X cho `<file>`".

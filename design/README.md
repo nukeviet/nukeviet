@@ -48,8 +48,8 @@ design/
 
 ### STAGE 2 — Kích hoạt Claude Code (Có gate xác nhận sau mỗi phase)
 
-Mở terminal Claude Code tại project root. Gõ 1 câu duy nhất:
-> `"Hãy đọc hướng dẫn trong file design/prompt-claude-code.md và thực hiện build theme news2026. Bundle đã có ở design/news2026/output/."`
+Mở terminal Claude Code, dùng model Opus (do Sonnet ko đủ Context window) tại project root. Gõ 1 câu duy nhất:
+> `Hãy đọc hướng dẫn trong file design/prompt-claude-code.md và thực hiện build theme news2026. Bundle đã có ở design/news2026/output`
 
 **Claude Code sẽ tự động chạy theo từng phase, dừng chờ bạn confirm:**
 
