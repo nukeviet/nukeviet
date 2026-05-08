@@ -12,14 +12,15 @@ Chuyển block NukeViet 5 từ XTemplate → NVSmarty cho theme future.
 
 Ví dụ: `/migrate2future-block contact/contact_list` → migrate:
 - PHP shared: `src/modules/contact/blocks/global.contact_list.php`
-- Template future (tạo mới): `src/themes/future/modules/contact/block.contact_list.tpl`
+- Template future (tạo mới): `src/themes/future/modules/contact/global.contact_list.tpl`
 
 ## Quy tắc chung áp dụng xuyên suốt
 
 ### Phạm vi thay đổi
 
 - **Được sửa:** `src/modules/{MODULE}/blocks/global.{BLOCK}.php`
-- **Được tạo/sửa:** `src/themes/future/modules/{MODULE}/block.{BLOCK}.tpl`
+- **Được tạo/sửa:** `src/themes/future/modules/{MODULE}/global.{BLOCK}.tpl`
+- **Được tạo/sửa (nếu có config function):** `src/themes/future/modules/{MODULE}/global.{BLOCK}.config.tpl`
 - **KHÔNG ĐƯỢC đụng vào:** bất kỳ file nào trong `src/themes/default/` hoặc `src/themes/mobile_default/` — các theme đó có override riêng.
 
 ### Code style
@@ -36,8 +37,9 @@ Ví dụ: `/migrate2future-block contact/contact_list` → migrate:
 
 **Tên file xác định:**
 - PHP shared: `global.{BLOCK}.php`
-- Template future: `block.{BLOCK}.tpl`
-- (Giữ nguyên dấu gạch dưới, không cần chuyển đổi.)
+- Template future: `global.{BLOCK}.tpl`
+- Config template (nếu có): `global.{BLOCK}.config.tpl`
+- Quy tắc: tên tpl **khớp với tên PHP** — giúp các file nằm gần nhau khi sắp xếp theo tên, dễ quản lý sau khi copy sang theme mới.
 
 ## Bước 2 — Đọc tài liệu bắt buộc
 
@@ -63,20 +65,26 @@ Ví dụ: `/migrate2future-block contact/contact_list` → migrate:
    - Mục đích: hiểu cấu trúc loop, section, dữ liệu cần render.
 
 4. **Template future hiện có (nếu đã có):**
-   `src/themes/future/modules/{MODULE}/block.{BLOCK}.tpl`
+   `src/themes/future/modules/{MODULE}/global.{BLOCK}.tpl`
 
 5. **Một vài block future đã migrate** trong cùng module để học pattern UI:
-   - Glob: `src/themes/future/modules/{MODULE}/block.*.tpl`
+   - Glob: `src/themes/future/modules/{MODULE}/global.*.tpl`
    - Ưu tiên block cùng module vì dùng chung UI component.
+   - Nếu tồn tại `global.*.config.tpl` → đọc để học pattern config template.
 
 6. **Language file:** `src/modules/{MODULE}/language/vi.php` (nếu block dùng lang key)
+
+7. **Kiểm tra config function:** trong PHP shared block, tìm hàm `nv_block_config_{MODULE}_{BLOCK}()`.
+   - Nếu hàm đó **hardcode HTML** (nối chuỗi `$html .= ...`) → cần migrate sang NVSmarty (xem Bước 5C).
+   - Nếu đã dùng NVSmarty → bỏ qua bước 5C.
 
 ## Bước 4 — Lập kế hoạch & xác nhận
 
 Trình bày ngắn gọn:
-- **Tên hàm** sẽ sửa trong shared PHP
+- **Tên hàm** sẽ sửa trong shared PHP (info + config nếu có)
 - **Cấu trúc dữ liệu** sẽ build (array nào, field nào)
 - **Template future**: layout chính, icon map nếu có
+- **Config template** (nếu có config function hardcode HTML): cấu trúc form config
 - **Rủi ro**: encoding, icon, theme override...
 
 **Dừng lại và chờ Dev phản hồi "OK" trước khi viết code.**
@@ -99,7 +107,7 @@ function nv_{BLOCK}_info($block_config)
         return '';
     }
 
-    [$block_theme, $dir] = get_block_tpl_dir('block.{BLOCK}.tpl', true, $module);
+    [$block_theme, $dir] = get_block_tpl_dir('global.{BLOCK}.tpl', true, $module);
     if (empty($dir)) {
         return '';
     }
@@ -126,7 +134,7 @@ function nv_{BLOCK}_info($block_config)
     $tpl->assign('MODULE', $module);
     $tpl->assign('ITEMS', $items);  // hoặc tên phù hợp
 
-    $content = $tpl->fetch('block.{BLOCK}.tpl');
+    $content = $tpl->fetch('global.{BLOCK}.tpl');
     $nv_Lang->changeLang();  // chỉ gọi khi đã gọi loadModule() ở trên
     return $content;
 }
@@ -156,7 +164,7 @@ function nv_{BLOCK}_info($block_config)
 
 ### 5B. Tạo template future
 
-**File:** `src/themes/future/modules/{MODULE}/block.{BLOCK}.tpl`
+**File:** `src/themes/future/modules/{MODULE}/global.{BLOCK}.tpl`
 
 Tuân thủ Smarty/Bootstrap 5. Các điểm cụ thể cho block:
 
@@ -222,6 +230,59 @@ Lookup với fallback về icon mặc định:
 | youtube | `fa-brands fa-youtube` |
 | unknown/default | `fa-solid fa-address-book` |
 
+### 5C. Migrate config function (nếu có)
+
+Áp dụng khi hàm `nv_block_config_{MODULE}_{BLOCK}()` đang hardcode HTML thay vì dùng NVSmarty.
+
+**Pattern chuẩn:**
+
+```php
+function nv_block_config_{MODULE}_{BLOCK}($module, $data_block)
+{
+    global $site_mods, $nv_Cache, $nv_Lang;
+
+    [$block_theme, $dir] = get_block_tpl_dir('global.{BLOCK}.config.tpl', true, $module);
+    $tpl = new \NukeViet\Template\NVSmarty();
+    $tpl->setTemplateDir($dir);
+    $tpl->assign('LANG', $nv_Lang);
+    $tpl->assign('TEMPLATE', $block_theme);
+    $tpl->assign('CONFIG', $data_block);
+
+    // Assign thêm data cần thiết cho form config (VD: danh sách phòng ban)
+    $rows = $nv_Cache->db('SELECT * FROM ...', 'id', $module);
+    $tpl->assign('DEPARTMENTS', array_filter($rows, fn($d) => $d['act']));
+
+    return $tpl->fetch('global.{BLOCK}.config.tpl');
+}
+```
+
+**File template config:** `src/themes/future/modules/{MODULE}/global.{BLOCK}.config.tpl`
+
+- Là HTML fragment (không có thẻ wrapper ngoài cùng) — được inject vào form cấu hình block của admin.
+- Dùng `name="config_{field}"` cho mọi input — hệ thống đọc qua `nv_block_config_{MODULE}_{BLOCK}_submit()`.
+- `{$CONFIG.field}` để pre-fill giá trị đã lưu.
+- Cú pháp `selected` / `checked` dùng `{if}` trong tpl, không từ PHP.
+
+**Ví dụ config template đơn giản (chọn phòng ban):**
+
+```smarty
+<div class="row mb-3">
+    <label for="config_departmentid" class="col-sm-3 col-form-label text-sm-end text-truncate fw-medium">{$LANG->getModule('departmentid')}:</label>
+    <div class="col-sm-5">
+        <select name="config_departmentid" id="config_departmentid" class="form-select">
+            {foreach from=$DEPARTMENTS item=dept}
+            <option value="{$dept.id}"{if $dept.id eq $CONFIG.departmentid} selected{/if}>{$dept.full_name}</option>
+            {/foreach}
+        </select>
+    </div>
+</div>
+```
+
+**Lưu ý:**
+- Hàm `nv_block_config_{MODULE}_{BLOCK}_submit()` giữ nguyên — không cần sửa.
+- Không gọi `loadModule()` trong config function trừ khi cần lang key của module mà `$nv_Lang` chưa load.
+- Tham chiếu thực tế: `src/modules/contact/blocks/global.department.php` + `src/themes/future/modules/contact/global.department.config.tpl`.
+
 ---
 
 ## Bước 6 — Xóa cache & kiểm tra
@@ -262,6 +323,13 @@ Báo cáo:
 - [ ] Bootstrap 5: `list-unstyled`, `d-flex`, `gap-2`, `flex-shrink-0`, `fa-fw`
 - [ ] Không có thẻ `<h1>`–`<h6>` — thay bằng `<div class="h1">` … `<div class="h6">`
 - [ ] Không còn class Bootstrap 3 (`col-xs-*`, `pull-right`, `hidden`, ...)
+
+**Config function (nếu có):**
+- [ ] Hàm `nv_block_config_*` đã chuyển sang NVSmarty, không còn hardcode `$html .= ...`
+- [ ] File `global.{BLOCK}.config.tpl` đã tạo tại `src/themes/future/modules/{MODULE}/`
+- [ ] `{$CONFIG.field}` pre-fill đúng giá trị đã lưu
+- [ ] `selected` / `checked` dùng `{if}` trong tpl
+- [ ] Hàm `nv_block_config_{MODULE}_{BLOCK}_submit()` giữ nguyên, không sửa
 
 **Cache:**
 - [ ] Cache đã xóa: `rm -rf src/data/cache/*/*.cache && rm -rf src/data/cache/smarty-compile/*.php`
