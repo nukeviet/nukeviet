@@ -1,6 +1,6 @@
 ---
 name: migrate2future-block
-description: Chuyển một block NukeViet 5 từ XTemplate sang NVSmarty/Bootstrap 5 cho theme future. Sửa PHP shared block + tạo template future, không đụng đến override của default/mobile_default.
+description: Chuyển một block NukeViet 5 từ XTemplate sang NVSmarty/Bootstrap 5 cho theme future. Hỗ trợ cả block `global.*` và `module.*`. Sửa PHP shared block + tạo template future, không đụng đến override của default/mobile_default.
 argument-hint: <module/block_name>
 disable-model-invocation: false
 allowed-tools: Read, Grep, Glob, Edit, Write, Bash
@@ -10,17 +10,17 @@ Chuyển block NukeViet 5 từ XTemplate → NVSmarty cho theme future.
 
 **Mục tiêu:** `$ARGUMENTS` (format: `{module}/{block_name}`)
 
-Ví dụ: `/migrate2future-block contact/contact_list` → migrate:
-- PHP shared: `src/modules/contact/blocks/global.contact_list.php`
-- Template future (tạo mới): `src/themes/future/modules/contact/global.contact_list.tpl`
+Ví dụ: `/migrate2future-block contact/contact_list` → tự phát hiện prefix (`global` hoặc `module`), rồi migrate:
+- PHP shared: `src/modules/contact/blocks/{PREFIX}.contact_list.php`
+- Template future (tạo mới): `src/themes/future/modules/contact/{PREFIX}.contact_list.tpl`
 
 ## Quy tắc chung áp dụng xuyên suốt
 
 ### Phạm vi thay đổi
 
-- **Được sửa:** `src/modules/{MODULE}/blocks/global.{BLOCK}.php`
-- **Được tạo/sửa:** `src/themes/future/modules/{MODULE}/global.{BLOCK}.tpl`
-- **Được tạo/sửa (nếu có config function):** `src/themes/future/modules/{MODULE}/global.{BLOCK}.config.tpl`
+- **Được sửa:** `src/modules/{MODULE}/blocks/{PREFIX}.{BLOCK}.php`
+- **Được tạo/sửa:** `src/themes/future/modules/{MODULE}/{PREFIX}.{BLOCK}.tpl`
+- **Được tạo/sửa (nếu có config function):** `src/themes/future/modules/{MODULE}/{PREFIX}.{BLOCK}.config.tpl`
 - **KHÔNG ĐƯỢC đụng vào:** bất kỳ file nào trong `src/themes/default/` hoặc `src/themes/mobile_default/` — các theme đó có override riêng.
 
 ### Code style
@@ -35,10 +35,19 @@ Ví dụ: `/migrate2future-block contact/contact_list` → migrate:
   - `MODULE` = phần trước `/` đầu tiên (VD: `contact`)
   - `BLOCK` = phần sau `/` đầu tiên (VD: `contact_list`)
 
-**Tên file xác định:**
-- PHP shared: `global.{BLOCK}.php`
-- Template future: `global.{BLOCK}.tpl`
-- Config template (nếu có): `global.{BLOCK}.config.tpl`
+**Phát hiện PREFIX (`global` hoặc `module`):**
+- Kiểm tra sự tồn tại của cả hai file:
+  - `src/modules/{MODULE}/blocks/global.{BLOCK}.php`
+  - `src/modules/{MODULE}/blocks/module.{BLOCK}.php`
+- Nếu chỉ có `global.{BLOCK}.php` → `PREFIX = global`
+- Nếu chỉ có `module.{BLOCK}.php` → `PREFIX = module`
+- Nếu cả hai cùng tồn tại → hỏi Dev muốn migrate file nào rồi dừng chờ.
+- Nếu không tìm thấy file nào → báo lỗi và dừng.
+
+**Tên file xác định (sau khi biết PREFIX):**
+- PHP shared: `{PREFIX}.{BLOCK}.php`
+- Template future: `{PREFIX}.{BLOCK}.tpl`
+- Config template (nếu có): `{PREFIX}.{BLOCK}.config.tpl`
 - Quy tắc: tên tpl **khớp với tên PHP** — giúp các file nằm gần nhau khi sắp xếp theo tên, dễ quản lý sau khi copy sang theme mới.
 
 ## Bước 2 — Đọc tài liệu bắt buộc
@@ -50,14 +59,14 @@ Ví dụ: `/migrate2future-block contact/contact_list` → migrate:
 
 Đọc theo thứ tự, **BẮT BUỘC đọc hết trước khi viết bất kỳ code nào**:
 
-1. **PHP shared block:** `src/modules/{MODULE}/blocks/global.{BLOCK}.php`
+1. **PHP shared block:** `src/modules/{MODULE}/blocks/{PREFIX}.{BLOCK}.php`
    - Xác định tên hàm chính (VD: `nv_{BLOCK}_info()`), signature, và biến `$block_config`.
    - Grep tìm tất cả `new XTemplate(` trong file.
    - Nếu không có XTemplate → **DỪNG LẠI**, hỏi Dev có muốn tiếp tục không.
 
 2. **PHP override theo theme (chỉ ĐỌC, không sửa):**
-   - `src/themes/default/modules/{MODULE}/global.{BLOCK}.php` (nếu tồn tại)
-   - `src/themes/mobile_default/modules/{MODULE}/global.{BLOCK}.php` (nếu tồn tại)
+   - `src/themes/default/modules/{MODULE}/{PREFIX}.{BLOCK}.php` (nếu tồn tại)
+   - `src/themes/mobile_default/modules/{MODULE}/{PREFIX}.{BLOCK}.php` (nếu tồn tại)
    - Mục đích: hiểu cấu trúc dữ liệu, icon class, các assign `CD`/`OTHER` đang dùng.
 
 3. **Template cũ (chỉ ĐỌC):**
@@ -65,12 +74,12 @@ Ví dụ: `/migrate2future-block contact/contact_list` → migrate:
    - Mục đích: hiểu cấu trúc loop, section, dữ liệu cần render.
 
 4. **Template future hiện có (nếu đã có):**
-   `src/themes/future/modules/{MODULE}/global.{BLOCK}.tpl`
+   `src/themes/future/modules/{MODULE}/{PREFIX}.{BLOCK}.tpl`
 
 5. **Một vài block future đã migrate** trong cùng module để học pattern UI:
-   - Glob: `src/themes/future/modules/{MODULE}/global.*.tpl`
+   - Glob: `src/themes/future/modules/{MODULE}/*.tpl` (trừ `*.config.tpl`)
    - Ưu tiên block cùng module vì dùng chung UI component.
-   - Nếu tồn tại `global.*.config.tpl` → đọc để học pattern config template.
+   - Nếu tồn tại `*.config.tpl` → đọc để học pattern config template.
 
 6. **Language file:** `src/modules/{MODULE}/language/vi.php` (nếu block dùng lang key)
 
@@ -93,7 +102,7 @@ Trình bày ngắn gọn:
 
 ### 5A. Sửa PHP shared block
 
-**File:** `src/modules/{MODULE}/blocks/global.{BLOCK}.php`
+**File:** `src/modules/{MODULE}/blocks/{PREFIX}.{BLOCK}.php`
 
 **Pattern chuẩn** thay thế XTemplate:
 
@@ -107,7 +116,7 @@ function nv_{BLOCK}_info($block_config)
         return '';
     }
 
-    [$block_theme, $dir] = get_block_tpl_dir('global.{BLOCK}.tpl', true, $module);
+    [$block_theme, $dir] = get_block_tpl_dir('{PREFIX}.{BLOCK}.tpl', true, $module);
     if (empty($dir)) {
         return '';
     }
@@ -134,7 +143,7 @@ function nv_{BLOCK}_info($block_config)
     $tpl->assign('MODULE', $module);
     $tpl->assign('ITEMS', $items);  // hoặc tên phù hợp
 
-    $content = $tpl->fetch('global.{BLOCK}.tpl');
+    $content = $tpl->fetch('{PREFIX}.{BLOCK}.tpl');
     $nv_Lang->changeLang();  // chỉ gọi khi đã gọi loadModule() ở trên
     return $content;
 }
@@ -164,7 +173,7 @@ function nv_{BLOCK}_info($block_config)
 
 ### 5B. Tạo template future
 
-**File:** `src/themes/future/modules/{MODULE}/global.{BLOCK}.tpl`
+**File:** `src/themes/future/modules/{MODULE}/{PREFIX}.{BLOCK}.tpl`
 
 Tuân thủ Smarty/Bootstrap 5. Các điểm cụ thể cho block:
 
@@ -241,7 +250,7 @@ function nv_block_config_{MODULE}_{BLOCK}($module, $data_block)
 {
     global $site_mods, $nv_Cache, $nv_Lang;
 
-    [$block_theme, $dir] = get_block_tpl_dir('global.{BLOCK}.config.tpl', true, $module);
+    [$block_theme, $dir] = get_block_tpl_dir('{PREFIX}.{BLOCK}.config.tpl', true, $module);
     $tpl = new \NukeViet\Template\NVSmarty();
     $tpl->setTemplateDir($dir);
     $tpl->assign('LANG', $nv_Lang);
@@ -252,11 +261,11 @@ function nv_block_config_{MODULE}_{BLOCK}($module, $data_block)
     $rows = $nv_Cache->db('SELECT * FROM ...', 'id', $module);
     $tpl->assign('DEPARTMENTS', array_filter($rows, fn($d) => $d['act']));
 
-    return $tpl->fetch('global.{BLOCK}.config.tpl');
+    return $tpl->fetch('{PREFIX}.{BLOCK}.config.tpl');
 }
 ```
 
-**File template config:** `src/themes/future/modules/{MODULE}/global.{BLOCK}.config.tpl`
+**File template config:** `src/themes/future/modules/{MODULE}/{PREFIX}.{BLOCK}.config.tpl`
 
 - Là HTML fragment (không có thẻ wrapper ngoài cùng) — được inject vào form cấu hình block của admin.
 - Dùng `name="config_{field}"` cho mọi input — hệ thống đọc qua `nv_block_config_{MODULE}_{BLOCK}_submit()`.
@@ -326,7 +335,7 @@ Báo cáo:
 
 **Config function (nếu có):**
 - [ ] Hàm `nv_block_config_*` đã chuyển sang NVSmarty, không còn hardcode `$html .= ...`
-- [ ] File `global.{BLOCK}.config.tpl` đã tạo tại `src/themes/future/modules/{MODULE}/`
+- [ ] File `{PREFIX}.{BLOCK}.config.tpl` đã tạo tại `src/themes/future/modules/{MODULE}/`
 - [ ] `{$CONFIG.field}` pre-fill đúng giá trị đã lưu
 - [ ] `selected` / `checked` dùng `{if}` trong tpl
 - [ ] Hàm `nv_block_config_{MODULE}_{BLOCK}_submit()` giữ nguyên, không sửa
