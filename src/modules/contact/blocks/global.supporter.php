@@ -91,18 +91,23 @@ if (!nv_function_exists('nv_contact_supporter')) {
      * nv_contact_supporter()
      *
      * @param string $module
-     * @return string|void
+     * @return string
      * @throws PDOException
      */
     function nv_contact_supporter($module)
     {
-        global $nv_Cache, $site_mods, $global_config, $nv_Lang, $module_name;
+        global $nv_Cache, $site_mods, $nv_Lang, $module_name;
 
         if (!isset($site_mods[$module])) {
             return '';
         }
 
         if ($module_name == $module) {
+            return '';
+        }
+
+        [$block_theme, $dir] = get_block_tpl_dir('global.supporter.tpl', true, $module);
+        if (empty($dir)) {
             return '';
         }
 
@@ -113,137 +118,94 @@ if (!nv_function_exists('nv_contact_supporter')) {
             return '';
         }
 
-        $block_theme = get_tpl_dir([$global_config['module_theme'], $global_config['site_theme']], 'default', '/modules/' . $site_mods[$module]['module_file'] . '/block.supporter.tpl');
-        $xtpl = new XTemplate('block.supporter.tpl', NV_ROOTDIR . '/themes/' . $block_theme . '/modules/' . $site_mods[$module]['module_file']);
-        $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_global);
-        $xtpl->assign('TEMPLATE', $block_theme);
-        $xtpl->assign('MODULE', $module);
-        $active = false;
+        $deps_data = [];
         foreach ($supporters as $depid => $sps) {
-            if ($depid == 0) {
-                $dep = [
-                    'id' => 0,
-                    'sel' => !$active ? ' selected="selected"' : '',
-                    'full_name' => $nv_Lang->getGlobal('general_support')
-                ];
-            } else {
-                $dep = $departments[$depid];
-                $dep['sel'] = !$active ? ' selected="selected"' : '';
-            }
-            $xtpl->assign('DEP', $dep);
-            $xtpl->parse('main.deps_tab.option');
+            $dep_name = $depid == 0
+                ? $nv_Lang->getGlobal('general_support')
+                : $departments[$depid]['full_name'];
 
-            if (!$active) {
-                $xtpl->parse('main.deps_content.active');
-            }
+            $supporters_list = [];
+            foreach ($sps as $sp) {
+                $contacts = [];
 
-            $sp_count = count($sps) - 1;
-            $i = 0;
-            foreach ($sps as $supporter) {
-                $xtpl->assign('SUPPORTER', $supporter);
-
-                $items = [];
-                foreach ($supporter['phone'] as $num) {
-                    if (count($num) == 2) {
-                        $items[] = '<a href="tel:' . $num[1] . '">' . $num[0] . '</a>';
-                    } else {
-                        $items[] = $num[0];
-                    }
-                }
-                $xtpl->assign('CD', [
-                    'icon' => 'fa-phone',
-                    'name' => $nv_Lang->getGlobal('phonenumber'),
-                    'value' => implode(', ', $items)
-                ]);
-                $xtpl->parse('main.deps_content.supporter.cd');
-
-                if (!empty($supporter['email'])) {
-                    $xtpl->assign('CD', [
-                        'icon' => 'fa-envelope',
-                        'name' => $nv_Lang->getGlobal('email'),
-                        'value' => '<a href="' . $supporter['email'] . '">' . $supporter['email'] . '</a>'
-                    ]);
-                    $xtpl->parse('main.deps_content.supporter.cd');
+                // Điện thoại — $num[0] đã nv_htmlspecialchars() bởi nv_parse_phone()
+                foreach ($sp['phone'] as $num) {
+                    $contacts[] = [
+                        'type'    => 'phone',
+                        'display' => $num[0],
+                        'link'    => count($num) === 2 ? 'tel:' . $num[1] : '',
+                    ];
                 }
 
-                if (!empty($supporter['others'])) {
-                    foreach ($supporter['others'] as $key => $value) {
-                        if (!empty($value)) {
-                            if (strtolower($key) == 'skype') {
-                                $items = array_map(function ($item) {
-                                    $item = trim($item);
+                // Email
+                if (!empty($sp['email'])) {
+                    $contacts[] = [
+                        'type'    => 'email',
+                        'display' => nv_htmlspecialchars($sp['email']),
+                        'link'    => 'mailto:' . $sp['email'],
+                    ];
+                }
 
-                                    return '<a href="skype:' . $item . '?call">' . $item . '</a>';
-                                }, explode(',', $value));
-                                $xtpl->assign('CD', [
-                                    'icon' => 'fa-skype',
-                                    'name' => 'Skype',
-                                    'value' => implode(', ', $items)
-                                ]);
-                            } elseif (strtolower($key) == 'viber') {
-                                $items = array_map(function ($item) {
-                                    $item = trim($item);
-
-                                    return '<a href="viber://pa?chatURI=' . $item . '">' . $item . '</a>';
-                                }, explode(',', $value));
-                                $xtpl->assign('CD', [
-                                    'icon' => 'icon-viber',
-                                    'name' => 'Viber',
-                                    'value' => implode(', ', $items)
-                                ]);
-                            } elseif (strtolower($key) == 'whatsapp') {
-                                $items = array_map(function ($item) {
-                                    $item = trim($item);
-
-                                    return '<a href="https://wa.me/' . $item . '">' . $item . '</a>';
-                                }, explode(',', $value));
-                                $xtpl->assign('CD', [
-                                    'icon' => 'fa-whatsapp',
-                                    'name' => 'WhatsApp',
-                                    'value' => implode(', ', $items)
-                                ]);
-                            } elseif (strtolower($key) == 'zalo') {
-                                $items = array_map(function ($item) {
-                                    $item = trim($item);
-
-                                    return '<a href="https://zalo.me/' . $item . '">' . $item . '</a>';
-                                }, explode(',', $value));
-                                $xtpl->assign('CD', [
-                                    'icon' => 'icon-zalo',
-                                    'name' => 'Zalo',
-                                    'value' => implode(', ', $items)
-                                ]);
-                            } else {
-                                $xtpl->assign('CD', [
-                                    'icon' => '',
-                                    'name' => ucfirst($key),
-                                    'value' => nv_is_url($value) ? '<a href="' . $value . '">' . $value . '</a>' : $value
-                                ]);
+                // Mạng xã hội và liên hệ khác
+                $others_list = [];
+                if (!empty($sp['others'])) {
+                    foreach ($sp['others'] as $key => $value) {
+                        if (empty($value)) {
+                            continue;
+                        }
+                        $lkey = strtolower($key);
+                        if (in_array($lkey, ['skype', 'viber', 'whatsapp', 'zalo'], true)) {
+                            foreach (array_map('trim', explode(',', $value)) as $s) {
+                                if (empty($s)) {
+                                    continue;
+                                }
+                                $link = match ($lkey) {
+                                    'skype'    => 'skype:' . $s . '?call',
+                                    'viber'    => 'viber://pa?chatURI=' . $s,
+                                    'whatsapp' => 'https://wa.me/' . $s,
+                                    'zalo'     => 'https://zalo.me/' . $s,
+                                };
+                                $contacts[] = [
+                                    'type'    => $lkey,
+                                    'display' => nv_htmlspecialchars($s),
+                                    'link'    => $link,
+                                ];
                             }
-                            $xtpl->parse('main.deps_content.supporter.cd');
+                        } else {
+                            $others_list[] = [
+                                'name'  => nv_htmlspecialchars(ucfirst($key)),
+                                'value' => nv_htmlspecialchars($value),
+                                'link'  => nv_is_url($value) ? $value : '',
+                            ];
                         }
                     }
                 }
 
-                if ($i < $sp_count) {
-                    $xtpl->parse('main.deps_content.supporter.hr');
-                }
-
-                $xtpl->parse('main.deps_content.supporter');
-                ++$i;
+                $supporters_list[] = [
+                    'full_name' => $sp['full_name'],
+                    'image'     => $sp['image'],
+                    'contacts'  => $contacts,
+                    'others'    => $others_list,
+                ];
             }
 
-            $xtpl->parse('main.deps_content');
-            $active = true;
+            $deps_data[] = [
+                'id'         => $depid,
+                'full_name'  => $dep_name,
+                'supporters' => $supporters_list,
+            ];
         }
 
-        $dep_count = count($supporters);
-        if ($dep_count > 1) {
-            $xtpl->parse('main.deps_tab');
-        }
-        $xtpl->parse('main');
+        addition_module_assets($module, 'js');
 
-        return $xtpl->text('main');
+        $tpl = new \NukeViet\Template\NVSmarty();
+        $tpl->setTemplateDir($dir);
+        $tpl->assign('LANG', $nv_Lang);
+        $tpl->assign('TEMPLATE', $block_theme);
+        $tpl->assign('MODULE', $module);
+        $tpl->assign('DEPARTMENTS', $deps_data);
+
+        return $tpl->fetch('global.supporter.tpl');
     }
 }
 

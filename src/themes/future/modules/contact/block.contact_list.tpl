@@ -9,7 +9,7 @@
 {foreach from=$DEPARTMENTS item=dept}
 <div class="card{if not $dept@last} mb-3{/if}">
     {if not empty($dept.image)}
-    <img src="{$dept.image}" class="card-img-top object-fit-cover" style="max-height:140px" alt="{$dept.full_name}" />
+    <img src="{$dept.image}" class="card-img-top object-fit-cover maxh-140" alt="{$dept.full_name}">
     {/if}
     <div class="card-body py-2">
         <div class="h6 card-title text-center mb-2">{$dept.full_name}</div>

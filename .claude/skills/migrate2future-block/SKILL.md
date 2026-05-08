@@ -182,6 +182,7 @@ Tuân thủ Smarty/Bootstrap 5. Các điểm cụ thể cho block:
 - Language: `{$LANG->getModule('key')}` / `{$LANG->getGlobal('key')}`
 - Bootstrap 5: `list-unstyled`, `d-flex`, `gap-2`, `fw-semibold`, `mb-1`, `flex-shrink-0`
 - **Không dùng thẻ heading `<h1>`–`<h6>` trong block** — block được nhúng vào sidebar/footer, heading làm rối cấu trúc SEO của trang. Thay bằng class tương đương: `<div class="h6 ...">`, `<p class="h5 ...">`, v.v.
+- **Không viết `<script>` inline trong template** — nếu block cần JS tương tác, gọi `addition_module_assets($module, 'js')` trong PHP shared block rồi viết JS vào `src/themes/future/js/{module_file}.js`. Dùng `data-*` attribute trên HTML element làm hook để JS ngoài bắt sự kiện (không dùng ID hardcode phụ thuộc vào `{$MODULE}`).
 
 **Icon map — định nghĩa trong tpl, không trong PHP:**
 
@@ -332,6 +333,7 @@ Báo cáo:
 - [ ] Bootstrap 5: `list-unstyled`, `d-flex`, `gap-2`, `flex-shrink-0`, `fa-fw`
 - [ ] Không có thẻ `<h1>`–`<h6>` — thay bằng `<div class="h1">` … `<div class="h6">`
 - [ ] Không còn class Bootstrap 3 (`col-xs-*`, `pull-right`, `hidden`, ...)
+- [ ] Không có `<script>` inline — JS tương tác nằm trong `src/themes/future/js/{module_file}.js`, hook qua `data-*` attribute; PHP gọi `addition_module_assets($module, 'js')`
 
 **Config function (nếu có):**
 - [ ] Hàm `nv_block_config_*` đã chuyển sang NVSmarty, không còn hardcode `$html .= ...`
