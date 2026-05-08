@@ -188,7 +188,7 @@ function loadblock($module, $bid, $selectthemes = '')
                 }
 
                 $block_name = nv_ucfirst($matches[1]) . ': ' . ($block_info['name'] ?: $matches[2]);
-                $return .= '<option value="' . $file_name . '|' . $block_info['config'] . '|' . implode('.', $load_mod_array) . '" ' . $sel . '>' . $block_name . ' </option>';
+                $return .= '<option value="' . $file_name . '|' . $block_info['config'] . '|' . implode('.', $load_mod_array) . '" data-filename="' . $file_name . '" ' . $sel . '>' . $block_name . ' </option>';
             }
         }
     } elseif (isset($site_mods[$module]['module_file'])) {
@@ -208,7 +208,7 @@ function loadblock($module, $bid, $selectthemes = '')
                 $block_info = get_block_info($file_ini, $file_json);
 
                 $block_name = nv_ucfirst($matches[1]) . ': ' . ($block_info['name'] ?: $matches[2]);
-                $return .= '<option value="' . $file_name . '|' . $block_info['config'] . '|" ' . $sel . '>' . $block_name . ' </option>';
+                $return .= '<option value="' . $file_name . '|' . $block_info['config'] . '|" data-filename="' . $file_name . '" ' . $sel . '>' . $block_name . ' </option>';
             }
         }
     }

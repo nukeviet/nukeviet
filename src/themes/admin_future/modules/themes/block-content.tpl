@@ -16,7 +16,7 @@
                 <div class="col-sm-3 col-form-label text-sm-end text-truncate fw-medium" title="{$LANG->getModule('of_module')}">{$LANG->getModule('of_module')}:</div>
                 <div class="col-sm-9">
                     <div class="row g-2">
-                        <div class="col-6">
+                        <div class="col-sm-6">
                             <select name="module_type" class="form-select" aria-label="{$LANG->getModule('of_module')}">
                                 <option value="">{$LANG->getModule('block_select_type')}</option>
                                 <option value="theme"{if $ROW.module eq 'theme'} selected{/if}>{$LANG->getModule('block_type_theme')}</option>
@@ -25,7 +25,7 @@
                                 {/foreach}
                             </select>
                         </div>
-                        <div class="col-6">
+                        <div class="col-sm-6">
                             <select name="file_name" class="form-select" aria-label="{$LANG->getModule('block_select')}" data-default="{$LANG->getModule('block_select')}">
                                 {$BLOCKLIST}
                             </select>
