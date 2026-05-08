@@ -239,21 +239,10 @@ function contact_main_theme($array_content, $is_specific, $departments, $cats, $
  */
 function contact_form_theme($array_content, $departments, $cats, $base_url, $checkss)
 {
-    global $nv_Lang, $module_info, $global_config, $module_config, $module_name, $module_captcha;
+    global $nv_Lang, $global_config, $module_config, $module_name;
 
     $tpl = new \NukeViet\Template\NVSmarty();
     $tpl->setTemplateDir(get_module_tpl_dir('form.tpl'));
-
-    $captcha_attrs = '';
-    if ($module_captcha === 'recaptcha' and $global_config['recaptcha_ver'] == 3) {
-        $captcha_attrs = ' data-recaptcha3="1"';
-    } elseif ($module_captcha === 'recaptcha') {
-        $captcha_attrs = ' data-recaptcha2="1"';
-    } elseif ($module_captcha === 'turnstile') {
-        $captcha_attrs = ' data-turnstile="1"';
-    } elseif ($module_captcha === 'captcha') {
-        $captcha_attrs = ' data-captcha="fcode"';
-    }
 
     $cats_list = [];
     if (!empty($cats)) {
@@ -277,7 +266,7 @@ function contact_form_theme($array_content, $departments, $cats, $base_url, $che
     $tpl->assign('MODULE_NAME', $module_name);
     $tpl->assign('ACTION_FILE', $base_url);
     $tpl->assign('CHECKSS', $checkss);
-    $tpl->assign('CAPTCHA_ATTRS', $captcha_attrs);
+    $tpl->assign('CAPTCHA_ATTRS', nv_captcha_form_attrs('fcode'));
     $tpl->assign('CONTENT', $array_content);
     $tpl->assign('MCONFIG', $module_config[$module_name]);
     $tpl->assign('GCONFIG', $global_config);
