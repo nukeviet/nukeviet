@@ -13,46 +13,25 @@ if (!defined('NV_IS_MOD_RSS')) {
     exit('Stop!!!');
 }
 
-function nv_get_rss_link($rss_contents, $type, $id = 0)
+/**
+ * nv_build_rss_subtree()
+ * Xây dựng mảng cây đệ quy từ dữ liệu subcategory của rssdata.php
+ */
+function nv_build_rss_subtree($rss_contents, $id = 0)
 {
-    global $db, $nv_Cache, $module_data, $global_config;
-
-    $contents = '';
-    if ($type == 'mod') {
-        foreach ($rss_contents as $mod_name => $mod_info) {
-            $contents .= '<li>';
-            $contents .= '<div class="item"><span>' . $mod_info['custom_title'] . '</span><span class="text-nowrap"><a class="rss" rel="nofollow" title="RSS" href="' . NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $mod_name . '&amp;' . NV_OP_VARIABLE . '=' . $mod_info['alias']['rss'] . '">&nbsp;</a><a class="atom" rel="nofollow" title="ATOM" href="' . NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $mod_name . '&amp;' . NV_OP_VARIABLE . '=' . $mod_info['alias']['rss'] . '&amp;type=atom">&nbsp;</a></span></div>';
-
-            $mod_file = $mod_info['module_file'];
-            $mod_data = $mod_info['module_data'];
-            if (module_file_exists($mod_file . '/rssdata.php')) {
-                $rssarray = [];
-                include NV_ROOTDIR . '/modules/' . $mod_file . '/rssdata.php';
-                if (!empty($rssarray)) {
-                    $contents .= nv_get_rss_link($rssarray, 'sub', 0);
-                }
-            }
-
-            $contents .= '</li>';
-        }
-    } else {
-        foreach ($rss_contents as $value) {
-            $parentid = $value['parentid'] ?? 0;
-            if ($parentid == $id) {
-                $contents .= '<li>';
-                $contents .= '<div class="item"><span>' . $value['title'] . '</span><span class="text-nowrap"><a class="rss" rel="nofollow" title="RSS" href="' . $value['link'] . '">&nbsp;</a><a class="atom" rel="nofollow" title="ATOM" href="' . $value['link'] . '&amp;type=atom">&nbsp;</a></span></div>';
-
-                $catid = $value['catid'] ?? 0;
-                if ($catid > 0) {
-                    $contents .= nv_get_rss_link($rss_contents, 'sub', $catid);
-                }
-
-                $contents .= '</li>';
-            }
+    $nodes = [];
+    foreach ($rss_contents as $value) {
+        if (($value['parentid'] ?? 0) == $id) {
+            $catid = $value['catid'] ?? 0;
+            $nodes[] = [
+                'title' => $value['title'],
+                'rss_url' => $value['link'],
+                'atom_url' => $value['link'] . '&amp;type=atom',
+                'children' => $catid > 0 ? nv_build_rss_subtree($rss_contents, $catid) : []
+            ];
         }
     }
-
-    return '<ul>' . $contents . '</ul>';
+    return $nodes;
 }
 
 /**
@@ -63,21 +42,48 @@ function nv_get_rss_link($rss_contents, $type, $id = 0)
  */
 function nv_rss_main_theme($rsscontents)
 {
-    global $site_mods, $module_name;
+    global $site_mods, $module_name, $nv_Lang;
 
-    $rss_array = [];
+    // Không xóa biến global này vì dùng ở rssdata.php
+    global $db, $nv_Cache, $module_data, $global_config;
+
     $rss_array = nv_apply_hook($module_name, 'before_generate_rss', [$rsscontents], []);
     if (empty($rss_array)) {
         foreach ($site_mods as $mod_name => $mod_info) {
-            if ($mod_info['rss'] == 1 and isset($mod_info['alias']['rss']) and module_file_exists($mod_info['module_file'] . '/funcs/rss.php')) {
+            if ($mod_info['rss'] == 1 && isset($mod_info['alias']['rss']) && module_file_exists($mod_info['module_file'] . '/funcs/rss.php')) {
                 $rss_array[$mod_name] = $mod_info;
             }
         }
     }
 
-    if (!empty($rss_array)) {
-        $rsscontents .= '<div class="tree">' . nv_get_rss_link($rss_array, 'mod') . '</div>';
+    $rss_tree = [];
+    foreach ($rss_array as $mod_name => $mod_info) {
+        $mod_file = $mod_info['module_file'];
+        $mod_data = $mod_info['module_data'];
+
+        $children = [];
+        if (module_file_exists($mod_file . '/rssdata.php')) {
+            $rssarray = [];
+            include NV_ROOTDIR . '/modules/' . $mod_file . '/rssdata.php';
+            if (!empty($rssarray)) {
+                $children = nv_build_rss_subtree($rssarray, 0);
+            }
+        }
+
+        $rss_tree[] = [
+            'title' => $mod_info['custom_title'],
+            'rss_url' => NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $mod_name . '&amp;' . NV_OP_VARIABLE . '=' . $mod_info['alias']['rss'],
+            'atom_url' => NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $mod_name . '&amp;' . NV_OP_VARIABLE . '=' . $mod_info['alias']['rss'] . '&amp;type=atom',
+            'children' => $children
+        ];
     }
 
-    return $rsscontents;
+    $tpl = new \NukeViet\Template\NVSmarty();
+    $tpl->setTemplateDir(get_module_tpl_dir('main.tpl'));
+    $tpl->assign('LANG', $nv_Lang);
+    $tpl->assign('MODULE_NAME', $module_name);
+    $tpl->assign('INTRO', $rsscontents);
+    $tpl->assign('RSS_TREE', $rss_tree);
+
+    return $tpl->fetch('main.tpl');
 }

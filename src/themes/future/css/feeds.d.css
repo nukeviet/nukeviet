@@ -1,0 +1,62 @@
+/**
+ * NukeViet Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2025 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
+ */
+/**
+ * NukeViet Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2025 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
+ */
+.tree > ul {
+  padding-left: 0;
+}
+.tree > ul > li::before, .tree > ul > li::after {
+  border: 0;
+  width: 0;
+}
+.tree li {
+  list-style-type: none;
+  margin: 0;
+  padding: 10px 0 0 5px;
+  position: relative;
+}
+.tree li::before, .tree li::after {
+  content: "";
+  left: -20px;
+  position: absolute;
+  right: auto;
+}
+.tree li::before {
+  border-left: 1px solid var(--bs-border-color);
+  bottom: 50px;
+  height: 100%;
+  top: 0;
+  width: 1px;
+}
+.tree li::after {
+  border-top: 1px solid var(--bs-border-color);
+  height: 20px;
+  top: 29px;
+  width: 25px;
+}
+.tree li:last-child::before {
+  height: 30px;
+}
+.tree li .item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 5px 8px;
+}
+.tree li .btn-group {
+  white-space: nowrap;
+}
+
+/*# sourceMappingURL=feeds.d.css.map */
