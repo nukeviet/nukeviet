@@ -58,4 +58,9 @@
 .tree li .btn-group {
   white-space: nowrap;
 }
+
+.list-rss-feeds .item-description img {
+  float: right;
+  margin-left: 0.5rem;
+}
 /*# sourceMappingURL=feeds.d.rtl.css.map */

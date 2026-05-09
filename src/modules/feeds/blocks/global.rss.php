@@ -25,45 +25,16 @@ if (!nv_function_exists('nv_block_data_config_rss')) {
     {
         global $nv_Lang;
 
-        $return = '';
+        $data_block['title_length'] = isset($data_block['title_length']) ? (int) $data_block['title_length'] : 0;
 
-        $html = '<input class="form-control" name="config_url" type="text" value="' . $data_block['url'] . '"/>';
-        $return .= '<div class="row mb-3"><label class="col-sm-3 col-form-label text-sm-end text-truncate fw-medium">' . $nv_Lang->getModule('url') . ':</label><div class="col-sm-9">' . $html . '</div></div>';
+        [$block_theme, $dir] = get_block_tpl_dir('global.rss.config.tpl', true, $module);
+        $tpl = new \NukeViet\Template\NVSmarty();
+        $tpl->setTemplateDir($dir);
+        $tpl->assign('LANG', $nv_Lang);
+        $tpl->assign('TEMPLATE', $block_theme);
+        $tpl->assign('CONFIG', $data_block);
 
-        $html = "<select class=\"form-select\" name=\"config_number\">\n";
-        for ($index = 1; $index <= 50; ++$index) {
-            $sel = ($index == $data_block['number']) ? ' selected' : '';
-            $html .= '<option value="' . $index . '" ' . $sel . '>' . $index . "</option>\n";
-        }
-        $html .= "</select>\n";
-        $return .= '<div class="row mb-3"><label class="col-sm-3 col-form-label text-sm-end text-truncate fw-medium">' . $nv_Lang->getModule('number') . ':</label><div class="col-sm-9">' . $html . '</div></div>';
-
-        $data_block['title_length'] = isset($data_block['title_length']) ? (int) ($data_block['title_length']) : 0;
-        $html = "<select class=\"form-select\" name=\"config_title_length\">\n";
-        for ($index = 0; $index <= 255; ++$index) {
-            $sel = ($index == $data_block['title_length']) ? ' selected' : '';
-            $html .= '<option value="' . $index . '" ' . $sel . '>' . $index . "</option>\n";
-        }
-        $html .= "</select>\n";
-        $return .= '<div class="row mb-3"><label class="col-sm-3 col-form-label text-sm-end text-truncate fw-medium">' . $nv_Lang->getModule('title_length') . ':</label><div class="col-sm-9">' . $html . '</div></div>';
-
-        $sel = ((int) ($data_block['isdescription']) == 1) ? 'checked="checked"' : '';
-        $html = '<input class="form-check-input" type="checkbox" id="config_isdescription" name="config_isdescription" value="1" ' . $sel . ' /><label for="config_isdescription" class="form-check-label">' . $nv_Lang->getModule('block_yes') . "</label>\n";
-        $return .= '<div class="row mb-3"><label class="col-sm-3 col-form-label py-0 text-sm-end text-truncate fw-medium">' . $nv_Lang->getModule('isdescription') . '</label><div class="col-sm-9"><div class="form-check">' . $html . '</div></div></div>';
-
-        $sel = ((int) ($data_block['ishtml']) == 1) ? 'checked="checked"' : '';
-        $html = '<input class="form-check-input" type="checkbox" id="config_ishtml" name="config_ishtml" value="1" ' . $sel . ' /><label for="config_ishtml" class="form-check-label">' . $nv_Lang->getModule('block_yes') . "</label>\n";
-        $return .= '<div class="row mb-3"><label class="col-sm-3 col-form-label py-0 text-sm-end text-truncate fw-medium">' . $nv_Lang->getModule('ishtml') . ':</label><div class="col-sm-9"><div class="form-check">' . $html . '</div></div></div>';
-
-        $sel = ((int) ($data_block['ispubdate']) == 1) ? 'checked="checked"' : '';
-        $html = '<input class="form-check-input" type="checkbox" id="config_ispubdate" name="config_ispubdate" value="1" ' . $sel . ' /><label for="config_ispubdate" class="form-check-label">' . $nv_Lang->getModule('block_yes') . "</label>\n";
-        $return .= '<div class="row mb-3"><label class="col-sm-3 col-form-label py-0 text-sm-end text-truncate fw-medium">' . $nv_Lang->getModule('ispubdate') . ':</label><div class="col-sm-9"><div class="form-check">' . $html . '</div></div></div>';
-
-        $sel = ((int) ($data_block['istarget']) == 1) ? 'checked="checked"' : '';
-        $html = '<input class="form-check-input" type="checkbox" id="config_istarget" name="config_istarget" value="1" ' . $sel . ' /><label for="config_istarget" class="form-check-label">' . $nv_Lang->getModule('block_yes') . "</label>\n";
-        $return .= '<div class="row mb-3"><label class="col-sm-3 col-form-label py-0 text-sm-end text-truncate fw-medium">' . $nv_Lang->getModule('istarget') . ':</label><div class="col-sm-9"><div class="form-check">' . $html . '</div></div></div>';
-
-        return $return;
+        return $tpl->fetch('global.rss.config.tpl');
     }
 
     /**
@@ -92,7 +63,12 @@ if (!nv_function_exists('nv_block_data_config_rss')) {
         return $return;
     }
 
-    function change_description($description, $alt = '')
+    /**
+     * @param string $description
+     * @param string $alt
+     * @return bool|string
+     */
+    function change_description(string $description, string $alt = ''): string
     {
         if (!empty($description)) {
             $img_src = '';
@@ -111,7 +87,11 @@ if (!nv_function_exists('nv_block_data_config_rss')) {
         return $description;
     }
 
-    function change_link($link)
+    /**
+     * @param string $link
+     * @return string
+     */
+    function change_link(string $link)
     {
         if (!empty($link)) {
             $link = trim(strip_tags($link));
@@ -164,6 +144,7 @@ if (!nv_function_exists('nv_block_data_config_rss')) {
                             foreach ($feed->getElementsByTagName('entry') as $item) {
                                 $links = $item->getElementsByTagName('link');
                                 $itemlLink = $links->item(0)->getAttribute('href');
+                                $description = '';
                                 if ($item->getElementsByTagName('content')->length) {
                                     $description = $item->getElementsByTagName('content')->item(0)->nodeValue;
                                 } elseif ($item->getElementsByTagName('summary')->length) {
@@ -219,41 +200,56 @@ if (!nv_function_exists('nv_block_data_config_rss')) {
      */
     function nv_block_global_rss($block_config)
     {
-        global $global_config;
+        [$block_theme, $dir] = get_block_tpl_dir('global.rss.tpl', true, $block_config['module']);
+        if (empty($dir)) {
+            return '';
+        }
 
-        $block_theme = get_tpl_dir([$global_config['module_theme'], $global_config['site_theme']], 'default', '/modules/feeds/global.rss.tpl');
+        $array_rss = nv_get_rss($block_config['url']);
+        if (empty($array_rss)) {
+            return '';
+        }
 
-        $a = 1;
-        $xtpl = new XTemplate('global.rss.tpl', NV_ROOTDIR . '/themes/' . $block_theme . '/modules/feeds');
-        $array_rrs = nv_get_rss($block_config['url']);
-        $title_length = isset($block_config['title_length']) ? (int) ($block_config['title_length']) : 0;
-        foreach ($array_rrs as $item) {
-            if ($a <= $block_config['number']) {
-                $item['description'] = ($block_config['ishtml']) ? $item['description'] : (!empty($item['description']) ? strip_tags($item['description']) : '');
-                $item['target'] = ($block_config['istarget']) ? ' data-target="_blank"' : '';
-                $item['class'] = ($a % 2 == 0) ? 'second' : '';
-                if ($title_length > 0) {
-                    $item['text'] = nv_clean60($item['title'], $title_length);
-                } else {
-                    $item['text'] = $item['title'];
-                }
-                $item['pubDate'] = !empty($item['pubtime']) ? nv_datetime_format($item['pubtime'], 0, 0) : '';
-                $xtpl->assign('DATA', $item);
-                if (!empty($item['description']) and $block_config['isdescription']) {
-                    $xtpl->parse('main.loop.description');
-                }
-                if (!empty($item['pubDate']) and $block_config['ispubdate']) {
-                    $xtpl->parse('main.loop.pubDate');
-                }
-                $xtpl->parse('main.loop');
-                ++$a;
-            } else {
+        $title_length = isset($block_config['title_length']) ? (int) $block_config['title_length'] : 0;
+        $istarget = !empty($block_config['istarget']);
+        $ishtml = !empty($block_config['ishtml']);
+        $isdescription = !empty($block_config['isdescription']);
+        $ispubdate = !empty($block_config['ispubdate']);
+        $number = (int) $block_config['number'];
+
+        $items = [];
+        $count = 0;
+        foreach ($array_rss as $item) {
+            if ($count >= $number) {
                 break;
             }
+            $description = '';
+            if ($isdescription && !empty($item['description'])) {
+                $description = $ishtml ? $item['description'] : strip_tags($item['description']);
+            }
+            $items[] = [
+                'title' => $item['title'],
+                'text' => $title_length > 0 ? nv_clean60($item['title'], $title_length) : $item['title'],
+                'link' => $item['link'],
+                'description' => $description,
+                'pubDate' => ($ispubdate && !empty($item['pubtime'])) ? nv_datetime_format($item['pubtime'], 0, 0) : '',
+            ];
+            ++$count;
         }
-        $xtpl->parse('main');
 
-        return $xtpl->text('main');
+        if (empty($items)) {
+            return '';
+        }
+
+        addition_module_assets($block_config['module'], 'css');
+
+        $tpl = new \NukeViet\Template\NVSmarty();
+        $tpl->setTemplateDir($dir);
+        $tpl->assign('TEMPLATE', $block_theme);
+        $tpl->assign('ISTARGET', $istarget);
+        $tpl->assign('ITEMS', $items);
+
+        return $tpl->fetch('global.rss.tpl');
     }
 }
 

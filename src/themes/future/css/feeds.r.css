@@ -59,4 +59,9 @@
   white-space: nowrap;
 }
 
+.list-rss-feeds .item-description img {
+  float: left;
+  margin-right: 0.5rem;
+}
+
 /*# sourceMappingURL=feeds.r.css.map */
