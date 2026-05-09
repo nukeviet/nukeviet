@@ -285,44 +285,25 @@ function contact_form_theme($array_content, $departments, $cats, $base_url, $che
  */
 function contact_sendcontact($feedback, $departments, $sendinfo = true)
 {
-    global $global_config, $module_info, $client_info;
+    global $nv_Lang, $global_config, $client_info;
 
-    $xtpl = new XTemplate('sendcontact.tpl', get_module_tpl_dir('sendcontact.tpl'));
-    $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
-    $xtpl->assign('SITE_NAME', $global_config['site_name']);
-    $xtpl->assign('SITE_URL', $global_config['site_url']);
-    $xtpl->assign('FULLNAME', $feedback['sender_name']);
-    $xtpl->assign('EMAIL', $feedback['sender_email']);
-    $xtpl->assign('PART', $departments[$feedback['department']]['full_name']);
-    $xtpl->assign('IP', $client_info['ip']);
-    $xtpl->assign('TITLE', $feedback['filter_title']);
-    $xtpl->assign('CONTENT', nv_htmlspecialchars($feedback['filter_content']));
+    $tpl = new \NukeViet\Template\NVSmarty();
+    $tpl->setTemplateDir(get_module_tpl_dir('sendcontact.tpl'));
 
-    if ($sendinfo) {
-        if (!empty($feedback['category'])) {
-            $xtpl->assign('CAT', $feedback['category']);
-            $xtpl->parse('main.sendinfo.cat');
-        }
+    $tpl->assign('LANG', $nv_Lang);
+    $tpl->assign('SITE_NAME', $global_config['site_name']);
+    $tpl->assign('SITE_URL', $global_config['site_url']);
+    $tpl->assign('SENDINFO', $sendinfo);
+    $tpl->assign('FEEDBACK', [
+        'sender_name' => $feedback['sender_name'],
+        'sender_email' => $feedback['sender_email'],
+        'filter_sender_phone' => $feedback['filter_sender_phone'] ?? '',
+        'category' => $feedback['category'] ?? '',
+        'filter_title' => $feedback['filter_title'],
+        'filter_content' => nv_htmlspecialchars($feedback['filter_content']),
+    ]);
+    $tpl->assign('PART', $departments[$feedback['department']]['full_name']);
+    $tpl->assign('IP', $client_info['ip']);
 
-        if (!empty($feedback['filter_sender_phone'])) {
-            $xtpl->assign('PHONE', $feedback['filter_sender_phone']);
-            $xtpl->parse('main.sendinfo.phone');
-        }
-        $xtpl->parse('main.sendinfo');
-    } else {
-        if (!empty($feedback['category'])) {
-            $xtpl->assign('CAT', $feedback['category']);
-            $xtpl->parse('main.mysendinfo.cat');
-        }
-
-        if (!empty($feedback['filter_sender_phone'])) {
-            $xtpl->assign('PHONE', $feedback['filter_sender_phone']);
-            $xtpl->parse('main.mysendinfo.phone');
-        }
-        $xtpl->parse('main.mysendinfo');
-    }
-
-    $xtpl->parse('main');
-
-    return $xtpl->text('main');
+    return $tpl->fetch('sendcontact.tpl');
 }
