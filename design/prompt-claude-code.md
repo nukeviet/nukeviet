@@ -23,6 +23,74 @@ Lý do hardcode HTML ở Phase A: Dev nhìn thấy ngay UI giống mockup mà KH
 
 ---
 
+## Plan.md — Schema canonical (mọi theme tuân thủ)
+
+Mọi theme NV5 PHẢI có file `design/<theme>/Plan.md` chứa decision cụ thể. Đây là contract giữa Dev và Claude Code: sau khi có Plan, Code chạy A→F không cần hỏi lại.
+
+Schema bắt buộc (11 section, theo thứ tự):
+
+| # | Section | Nội dung tối thiểu |
+|---|---------|--------------------|
+| 1 | **Phase tổng quan** | Bảng phase A→F + gate sau mỗi phase. Nếu dùng Stage 1C → thêm Phase 0' đầu bảng |
+| 2 | **Phase 0' chi tiết** (chỉ Stage 1C) | 9 sub-step sinh bundle từ screenshot — đọc input → Design Brief → foundation → partials → blocks HTML → mockups → design-system.html + nv-tokens → nv-routes.md → verify |
+| 3 | **Token override** | Block SCSS `_variables.scss` cho `scss/<theme>/`: 10-15 biến Bootstrap-overrides + 10-20 biến theme-overrides. Color HEX cụ thể, KHÔNG để placeholder |
+| 4 | **Block list** | Bảng N block: file prefix, HTML source, position, funcs, **Phase E strategy** (1/2/3/4 — đọc theme-patterns.md §9). Strategy phải chốt sớm để Phase E không phải quyết định lại |
+| 5 | **Layout list** | Bảng file `layout/*.tpl`: Copy future / Chỉnh / Viết mới. Kèm khung `layout.content-esbar.tpl` (hoặc layout default) dạng Smarty |
+| 6 | **Positions `config.ini`** | XML đầy đủ `<positions>` — mọi `data-nv-position` từ partials + blocks |
+| 7 | **Module TPL viết mới** (Phase B) | Bảng file: engine (**Smarty / XTemplate** — BẮT BUỘC verify từ source, KHÔNG đoán), mockup nguồn, action (viết mới / copy future) |
+| 8 | **Seed manifest** (Phase C) | Bảng file JSON: số lượng (≥10 bài/cat cho mọi cat hiện ở home), mô tả. Pattern sinh articles song song với sub-agent Haiku |
+| 9 | **Setblocks per-route** (Phase D) | Bảng route → layout → block hiện. Note type trap (vd `catid` là array, không string) |
+| 10 | **ID Map deterministic** | Bảng category/topic/menu/banner-plan với ID expected (auto_increment từ 1 sau reset DB). Phase C fill, Phase D dùng |
+| 11 | **Risk + Tham chiếu** | Trap đặc thù theme + link file canonical (theme-patterns, Block.md, prompt-claude-code…) |
+
+> **Nguyên tắc**: schema GIỮ NGUYÊN cho mọi theme. Chỉ NỘI DUNG mỗi section khác (token màu, block list, cat list…). Code sinh Plan PHẢI tuân thủ schema này — sai schema = sai contract.
+
+---
+
+## Stage 1C — Code tự sinh bundle từ screenshot (KHÔNG dùng claude.ai/design)
+
+Stage 1 hiện có 2 nhánh (xem README): A = qua claude.ai/design, B = designer đã có mockup HTML/SCSS. Nhánh C là phương án thứ 3: **Code tự sinh bundle từ screenshot + theme cha**.
+
+### Khi nào chọn 1C
+
+- Dev có sẵn screenshot UI (chụp / vẽ Figma export PNG / tham chiếu site khác)
+- Không muốn upload zip sang claude.ai/design (privacy, tốc độ, hoặc không có account)
+- Đã có theme cha `future` làm baseline → Code đọc trực tiếp scss/future/_variables.scss + design/future/output/ thay vì đoán
+
+### Khi nào KHÔNG nên chọn 1C
+
+- Theme phong cách KHÁC HẲN future (vd theme dark cyberpunk, theme print/magazine, theme RTL Ả Rập) — Code thiếu reference, dễ sai
+- Theme cần iterate UI nhiều lần với Dev → claude.ai/design UI sandbox tốt hơn
+- Dev chưa quen workflow NV5 → nên dùng 1A để có bundle chuẩn rồi học
+
+### Phase 0' — 9 sub-step (Code chạy sau khi có Plan với section §2)
+
+| Step | Action | Gate |
+|------|--------|------|
+| 0'.1 | Đọc input: screenshot, design/future/output/, scss/future/_variables.scss, prompt-claude-design.md (convention), theme-patterns.md §3.1 + §10 | (không) |
+| 0'.2 | Sinh Design Brief 5-7 dòng (phong cách, color, typography, component mới so future) | **DỪNG chờ Dev `OK chuyển 0'.3`** |
+| 0'.3 | Sinh `partials/include.js` (copy future) + `partials/nv-theme.css` (viết mới component .nv-*) | (không) |
+| 0'.4 | Sinh `partials/site-{header,footer,nav}.html` | (không) |
+| 0'.5 | Sinh `partials/blocks/<name>.html` (mỗi block 1 file, data-nv-* đầy đủ) | (không) |
+| 0'.6 | Sinh `mockups/{home,category,article,contact,login}.html` (data-include header/footer/nav, KHÔNG inline) | (không) |
+| 0'.7 | Sinh `design-system.html` + `<script id="nv-tokens">` JSON (parse từ scss/future, KHÔNG bịa) | (không) |
+| 0'.8 | Sinh `nv-routes.md` mapping mockup → route + TPL target + engine TPL | (không) |
+| 0'.9 | Verify: count file ~25-30, mở mockup local trong browser | **DỪNG chờ Dev verify ≥ 90% khớp screenshot → `OK chuyển A`** |
+
+### Convention output GIỮ NGUYÊN
+
+Bundle sinh ra ở Stage 1C phải khớp convention trong `design/prompt-claude-design.md` (data-nv-* attribute, nv-tokens JSON schema, shared components via `data-include`, prefix `.nv-*`, Sass 1.71+ compat). Stage 1C chỉ thay **người tạo bundle** (Code thay vì claude.ai/design), KHÔNG thay convention.
+
+### Câu lệnh chuẩn Stage 1C (xem README.md "Câu lệnh chuẩn" cho 4 mẫu đầy đủ)
+
+```text
+Build theme <theme> NV5 từ screenshot tại design/<theme>/screenshot/.
+Tự sinh design/<theme>/Plan.md theo schema canonical (11 section trong prompt-claude-code.md),
+DỪNG chờ Dev OK, rồi chạy Phase 0' → F theo workflow.
+```
+
+---
+
 ## Chi tiết Workflow (Claude Code sẽ tự đọc phần này)
 
 ```text
@@ -78,8 +146,11 @@ Build theme `<theme-name>` cho NukeViet 5 theo workflow dưới. Tuân thủ:
 
 ### TỔNG QUAN 6 PHASE (gate sau mỗi phase)
 
+> **Stage 1C** (Code tự sinh bundle từ screenshot) thêm **Phase 0'** trước Phase A — xem section "## Stage 1C" phía trên. Stage 1A/1B bỏ qua Phase 0' vì bundle đã có sẵn.
+
 | Phase | Tên | Output verify |
 |-------|-----|---------------|
+| **0'** (Stage 1C only) | Code sinh bundle từ screenshot → design/<theme>/output/ | Dev mở mockup local → khớp screenshot ≥ 90% |
 | **A** | Skeleton + tất cả block hardcode HTML + setblocks + Build CSS từ scss/<theme-name> | Active theme → trang chủ render giống mockup ≥ 95%, KHÔNG cần DB |
 | **B** | Module TPL viết mới (`viewcat_main_left.tpl` Smarty, `detail.tpl` **XTemplate**) cho category/article page | Click vào chuyên mục/bài viết → render khớp mockup |
 | **C** | Seed manifest (`src/data/seeder/<theme-name>/`: categories, articles ≥10/cat, banners, menus, users, theme-config) | Admin → Seeder chạy hết step, DB có data demo |

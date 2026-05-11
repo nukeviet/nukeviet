@@ -29,9 +29,9 @@ design/
 
 ## Quy trình build theme NV5 (5 stage)
 
-Áp dụng cho mọi theme. Stage 1 có 2 nhánh tùy thuộc đã có mockup designer chưa.
+Áp dụng cho mọi theme. Stage 1 có 3 nhánh tùy thuộc input có sẵn.
 
-### STAGE 1 — Chuẩn bị input (chọn 1 trong 2 nhánh)
+### STAGE 1 — Chuẩn bị input (chọn 1 trong 3 nhánh)
 
 **Nhánh A — CHƯA có mockup → tự sinh qua claude.ai/design**
 1. Chạy `bash design/design-system.sh` → sinh thư mục `design/design-system/` (bundle SCSS + TPL future).
@@ -43,6 +43,38 @@ design/
 1. Tạo thư mục: `mkdir -p design/<theme-name>/{scss,assets,uploads}`
 2. Đặt mockup HTML, `_variables.scss`, `_override.scss`, `theme.css` (làm reference), và screenshot vào thư mục trên.
 *(Lưu ý: KHÔNG copy chrome.js/JS riêng — sẽ ưu tiên dùng Bootstrap Modal/Collapse nguyên bản).*
+
+**Nhánh C — CHỈ có screenshot → Claude Code tự sinh bundle (KHÔNG cần claude.ai/design)**
+1. Tạo thư mục: `mkdir -p design/<theme-name>/screenshot/`
+2. Đặt screenshot UI (PNG/JPG) vào: tối thiểu `home.png`, khuyến nghị thêm `category.png`, `article.png`, `contact.png`, `login.png`.
+3. Gõ câu lệnh Stage 1C (xem bảng "Câu lệnh chuẩn" dưới) → Code tự đọc screenshot + `design/future/output/` + `scss/future/` + `design/prompt-claude-design.md` (convention), sinh bundle vào `design/<theme-name>/output/`.
+4. Có 2 gate: sau Design Brief (Code trình bày → Dev OK), sau verify bundle (Dev mở mockup local → khớp screenshot ≥ 90% → Dev OK).
+
+> **Khi nào dùng nhánh nào**:
+> - **A**: theme phong cách rất khác future, cần iterate UI nhiều, Dev có account claude.ai/design
+> - **B**: designer đã làm xong mockup HTML+SCSS (case ngoài luồng AI)
+> - **C**: chỉ có screenshot, theme tương đồng future (90% case news/blog/corporate), không muốn upload zip ngoài
+
+---
+
+## Câu lệnh chuẩn (cho Claude Code)
+
+Mọi command đều tham chiếu file canonical, KHÔNG phụ thuộc theme nào đã build trước đó.
+
+| Mẫu | Tình huống | Câu lệnh |
+|---|---|---|
+| **🅐** | Có Plan.md + bundle output đầy đủ | `Đọc design/<theme>/Plan.md rồi chạy Phase A → F. Bundle ở design/<theme>/output/.` |
+| **🅑** | Có Plan.md + screenshot (chưa có bundle, dùng Nhánh C) | `Đọc design/<theme>/Plan.md rồi chạy Phase 0' → F. Screenshot ở design/<theme>/screenshot/, bundle theme cha tại design/future/output/.` |
+| **🅒** | Chỉ có screenshot, chưa có Plan + chưa có bundle | `Build theme <theme> NV5 từ screenshot tại design/<theme>/screenshot/. Đọc design/prompt-claude-code.md (Plan schema canonical + Stage 1C). Tự sinh design/<theme>/Plan.md theo schema, DỪNG chờ Dev OK, rồi chạy Phase 0' → F.` |
+| **🅓** | Theme đã build, chạy lại 1 phase | `Đọc design/<theme>/Plan.md §<X>, chạy lại Phase <X> cho <file/block cụ thể>.` |
+
+**Cấu trúc câu lệnh chuẩn (3 thành phần):**
+- `[NGUỒN tham chiếu]` — Plan.md / prompt-claude-code.md / screenshot / bundle
+- `[PHẠM VI thực hiện]` — Phase nào / file nào
+- `[GATE / RÀNG BUỘC]` — dừng ở đâu / output kỳ vọng
+
+→ KHÔNG viết "build giúp tôi theme X kiểu Y" — Code phải đoán nhiều, dễ chệch.
+→ NÊN viết "Đọc <file> rồi chạy <Phase>, dừng sau <gate>" — Plan là contract, Code chỉ thực thi.
 
 ---
 
@@ -84,8 +116,8 @@ Sau Phase E:
 | Lần đầu làm theme NV5 — đọc trap/convention generic trước | [theme-patterns.md](theme-patterns.md) |
 | Lần đầu rebuild theme mới — đọc tổng quan workflow | [guide-rebuild-design-system.md](guide-rebuild-design-system.md) |
 | Đã quen workflow, cần prompt cho claude.ai/design (Stage 1A) | [prompt-claude-design.md](prompt-claude-design.md) |
-| Build theme NV5 (mọi theme — Stage 2) | [prompt-claude-code.md](prompt-claude-code.md) |
-| Cần plan cụ thể theme `<theme-name>` (Phase 0 sẽ auto-sinh) | `<theme-name>/Plan.md` (vd `news2026/Plan.md`) |
+| Build theme NV5 (mọi theme — Stage 2) + **Plan.md schema canonical** + **Stage 1C** | [prompt-claude-code.md](prompt-claude-code.md) |
+| Cần plan cụ thể theme `<theme-name>` (Phase 0 sẽ auto-sinh theo schema canonical) | `<theme-name>/Plan.md` (vd `news2026/Plan.md`, `news2027/Plan.md`) |
 | Cần seed dữ liệu demo (categories, menus, banners…) | [theme-patterns.md §7](theme-patterns.md) + [src/modules/seeder/README.md](../src/modules/seeder/README.md) |
 
 ---
