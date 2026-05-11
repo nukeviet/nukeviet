@@ -46,9 +46,6 @@ cd "$DIR_PATH"
 rm -f "${DIR_PATH}/update/update.tar"
 
 # Xóa đi các file/thư mục không đưa lên
-if [ -d "$DIR_PATH/update/src/assets/freecontent" ]; then
-  rm -rf "$DIR_PATH/update/src/assets/freecontent"
-fi
 if [ -d "$DIR_PATH/update/src/assets/news" ]; then
   rm -rf "$DIR_PATH/update/src/assets/news"
 fi

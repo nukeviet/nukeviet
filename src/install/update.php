@@ -552,7 +552,7 @@ class NvUpdate
      */
     public function step2($array, $substep)
     {
-        
+
         $xtpl = new XTemplate('updatestep2.tpl', NV_ROOTDIR . '/install/tpl');
         $xtpl->assign('LANG', NukeViet\Core\Language::$lang_module);
         $xtpl->assign('CONFIG', $this->config);
@@ -733,7 +733,7 @@ class NvUpdate
      */
     public function step3($array)
     {
-        
+
         $xtpl = new XTemplate('updatestep3.tpl', NV_ROOTDIR . '/install/tpl');
         $xtpl->assign('LANG', NukeViet\Core\Language::$lang_module);
         $xtpl->assign('CONFIG', $this->config);
@@ -756,7 +756,7 @@ class NvUpdate
      */
     public function PackageErrorTheme()
     {
-        
+
         $xtpl = new XTemplate('packageerror.tpl', NV_ROOTDIR . '/install/tpl');
         $xtpl->assign('LANG', NukeViet\Core\Language::$lang_module);
         $xtpl->assign('CONFIG', $this->config);
@@ -794,7 +794,7 @@ class NvUpdate
      */
     public function module_info($exts)
     {
-        
+
         $xtpl = new XTemplate('updatestep3.tpl', NV_ROOTDIR . '/install/tpl');
         $xtpl->assign('LANG', NukeViet\Core\Language::$lang_module);
         $xtpl->assign('CONFIG', $this->config);
@@ -802,7 +802,7 @@ class NvUpdate
 
         $i = 0;
         foreach ($exts as $mod) {
-            if (($mod['type'] == 'module' and in_array($mod['name'], ['banners', 'comment', 'contact', 'feeds', 'freecontent', 'menu', 'news', 'page', 'seek', 'statistics', 'users', 'voting', 'two-step-verification'], true)) or ($mod['type'] == 'theme' and in_array($mod['name'], ['default', 'mobile_default'], true))) {
+            if (($mod['type'] == 'module' and in_array($mod['name'], ['banners', 'comment', 'contact', 'feeds', 'menu', 'news', 'page', 'seek', 'statistics', 'users', 'voting', 'two-step-verification'], true)) or ($mod['type'] == 'theme' and in_array($mod['name'], ['default', 'mobile_default'], true))) {
                 $mod['note'] = $this->lang->getModule('update_mod_uptodate');
             } else {
                 $mod['note'] = $this->lang->getModule('update_mod_othermod');
@@ -827,7 +827,7 @@ class NvUpdate
      */
     public function module_com_info($onlineModules)
     {
-        
+
         $xtpl = new XTemplate('updatestep3.tpl', NV_ROOTDIR . '/install/tpl');
         $xtpl->assign('LANG', NukeViet\Core\Language::$lang_module);
         $xtpl->assign('CONFIG', $this->config);

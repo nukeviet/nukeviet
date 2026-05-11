@@ -87,7 +87,6 @@
 /src/assets/*.jpg
 /src/assets/about/*.png
 /src/assets/banners/*.jpg
-/src/assets/freecontent/*.jpg
 /src/assets/news/**/*.jpg
 
 /src/uploads/download

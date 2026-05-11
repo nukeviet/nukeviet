@@ -13,7 +13,7 @@ if (!defined('NV_MAINFILE')) {
     exit('Stop!!!');
 }
 
-define('NV_MODULE_SETUP_DEFAULT', 'users,inform,statistics,banners,zalo,seek,news,contact,about,siteterms,voting,feeds,menu,page,comment,freecontent,two-step-verification,myapi');
+define('NV_MODULE_SETUP_DEFAULT', 'users,inform,statistics,banners,zalo,seek,news,contact,about,siteterms,voting,feeds,menu,page,comment,two-step-verification,myapi');
 
 /**
  * @param string $table_des
@@ -214,7 +214,6 @@ function nv_create_table_sys($lang, $init = [])
          ('page', 'page', 'page', 'page', 'page', 'Page', '', 1626512400, 1, 1, '', '', '', '', '0', 13, 1, '', 1, 0, 'fa-solid fa-file-pen'),
          ('comment', 'comment', 'comment', 'comment', 'comment', 'Comment', '', 1626512400, 1, 1, '', '', '', '', '0', 14, 1, '', 0, 1, 'fa-solid fa-comments'),
          ('siteterms', 'page', 'siteterms', 'siteterms', 'page', 'Siteterms', '', 1626512400, 1, 1, '', '', '', '', '0', 15, 1, '', 1, 1, 'fa-solid fa-gavel'),
-         ('freecontent', 'freecontent', 'freecontent', 'freecontent', 'freecontent', 'Free Content', '', 1626512400, 0, 1, '', '', '', '', '0', 16, 1, '', 0, 1, 'fa-solid fa-cube'),
          ('two-step-verification', 'two-step-verification', 'two_step_verification', 'two-step-verification', 'two_step_verification', 'Two-Step Verification', '', 1626512400, 1, 0, '', '', '', '', '0', 17, 1, '', 0, 1, 'fa-solid fa-shield-halved')";
 
     $sql_create_table[] = 'INSERT INTO ' . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES

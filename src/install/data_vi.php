@@ -43,8 +43,6 @@ $install_lang['modules']['siteterms_for_acp'] = '';
 $install_lang['modules']['feeds'] = 'RSS-feeds';
 $install_lang['modules']['Page'] = 'Page';
 $install_lang['modules']['Page_for_acp'] = '';
-$install_lang['modules']['freecontent'] = 'Giới thiệu sản phẩm';
-$install_lang['modules']['freecontent_for_acp'] = '';
 $install_lang['modules']['two_step_verification'] = 'Xác thực hai bước';
 $install_lang['modules']['two_step_verification_for_acp'] = '';
 
@@ -96,8 +94,6 @@ $install_lang['blocks_groups']['users']['global.user_button'] = 'Đăng nhập n
 $install_lang['blocks_groups']['theme'] = [];
 $install_lang['blocks_groups']['theme']['global.company_info'] = 'Công ty chủ quản';
 $install_lang['blocks_groups']['theme']['global.menu_footer'] = 'Các chuyên mục chính';
-$install_lang['blocks_groups']['freecontent'] = [];
-$install_lang['blocks_groups']['freecontent']['global.free_content'] = 'Sản phẩm';
 
 $install_lang['cron'] = [];
 $install_lang['cron']['cron_online_expired_del'] = 'Xóa các dòng ghi trạng thái online đã cũ trong CSDL';

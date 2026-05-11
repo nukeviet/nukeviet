@@ -43,8 +43,6 @@ $install_lang['modules']['siteterms_for_acp'] = '';
 $install_lang['modules']['feeds'] = 'RSS-feeds';
 $install_lang['modules']['Page'] = 'Page';
 $install_lang['modules']['Page_for_acp'] = '';
-$install_lang['modules']['freecontent'] = 'Introduction';
-$install_lang['modules']['freecontent_for_acp'] = '';
 $install_lang['modules']['two_step_verification'] = '2-Step Verification';
 $install_lang['modules']['two_step_verification_for_acp'] = '';
 
@@ -96,8 +94,6 @@ $install_lang['blocks_groups']['users']['global.user_button'] = 'Member login';
 $install_lang['blocks_groups']['theme'] = [];
 $install_lang['blocks_groups']['theme']['global.company_info'] = 'Managing company';
 $install_lang['blocks_groups']['theme']['global.menu_footer'] = 'Main categories';
-$install_lang['blocks_groups']['freecontent'] = [];
-$install_lang['blocks_groups']['freecontent']['global.free_content'] = 'Introduction';
 
 $install_lang['cron'] = [];
 $install_lang['cron']['cron_online_expired_del'] = 'Delete expired online status';

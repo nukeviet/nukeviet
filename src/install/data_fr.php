@@ -43,8 +43,6 @@ $install_lang['modules']['siteterms_for_acp'] = '';
 $install_lang['modules']['feeds'] = 'Rss Feeds';
 $install_lang['modules']['Page'] = 'Page';
 $install_lang['modules']['Page_for_acp'] = '';
-$install_lang['modules']['freecontent'] = 'Introduction';
-$install_lang['modules']['freecontent_for_acp'] = '';
 $install_lang['modules']['two_step_verification'] = '2-Step Vérification';
 $install_lang['modules']['two_step_verification_for_acp'] = '';
 
@@ -96,8 +94,6 @@ $install_lang['blocks_groups']['users']['global.user_button'] = 'Se connecter';
 $install_lang['blocks_groups']['theme'] = [];
 $install_lang['blocks_groups']['theme']['global.company_info'] = 'Management Company';
 $install_lang['blocks_groups']['theme']['global.menu_footer'] = 'Menu';
-$install_lang['blocks_groups']['freecontent'] = [];
-$install_lang['blocks_groups']['freecontent']['global.free_content'] = 'Produits';
 
 $install_lang['cron'] = [];
 $install_lang['cron']['cron_online_expired_del'] = 'Supprimer les anciens registres du status en ligne dans la base de données';

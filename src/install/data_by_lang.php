@@ -518,15 +518,6 @@ $installMods['siteterms'] = [
     'icon' => 'fa-solid fa-gavel'
 ];
 
-$installMods['freecontent'] = [
-    'custom_title' => $install_lang['modules']['freecontent'],
-    'admin_title' => $install_lang['modules']['freecontent_for_acp'],
-    'admin_file' => 1,
-    'groups_view' => '6',
-    'sitemap' => 1,
-    'icon' => 'fa-solid fa-cube'
-];
-
 $installMods['two-step-verification'] = [
     'module_data' => 'two_step_verification',
     'module_upload' => 'two_step_verification',
@@ -885,19 +876,6 @@ $blockGroups = [
                 'groups_view' => '6',
                 'all_func' => 1,
                 'config' => 'a:1:{s:14:"module_in_menu";a:8:{i:0;s:5:"about";i:1;s:4:"news";i:2;s:5:"users";i:3;s:7:"contact";i:4;s:6:"voting";i:5;s:7:"banners";i:6;s:4:"seek";i:7;s:5:"feeds";}}'
-            ]
-        ],
-        'FEATURED_PRODUCT' => [
-            [
-                'module' => 'freecontent',
-                'file_name' => 'global.free_content.php',
-                'title' => $install_lang['blocks_groups']['freecontent']['global.free_content'],
-                'template' => 'no_title',
-                'active' => '1',
-                'bot_visible' => '1',
-                'groups_view' => '6',
-                'all_func' => 1,
-                'config' => 'a:2:{s:7:"blockid";i:1;s:7:"numrows";i:2;}'
             ]
         ]
     ],
