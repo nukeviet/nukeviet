@@ -20,23 +20,20 @@ function main_theme()
 {
     global $nv_Lang, $module_info, $module_name;
 
-    $xtpl = new XTemplate('main.tpl', get_module_tpl_dir('main.tpl'));
-    $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
-    $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
-    $xtpl->assign('PAGE_URL', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name);
+    $tpl = new \NukeViet\Template\NVSmarty();
+    $tpl->setTemplateDir(get_module_tpl_dir('main.tpl'));
+    $tpl->assign('LANG', $nv_Lang);
+    $tpl->assign('MODULE_NAME', $module_name);
+    $tpl->assign('PAGE_URL', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name);
 
-    $filters = ['unviewed' => $nv_Lang->getModule('filter_unviewed'), 'favorite' => $nv_Lang->getModule('filter_favorite'), 'hidden' => $nv_Lang->getModule('filter_hidden')];
-    foreach ($filters as $key => $title) {
-        $xtpl->assign('FILTER', [
-            'key' => $key,
-            'title' => $title
-        ]);
-        $xtpl->parse('main.filter');
-    }
+    $filters = [
+        ['key' => 'unviewed', 'title' => $nv_Lang->getModule('filter_unviewed')],
+        ['key' => 'favorite', 'title' => $nv_Lang->getModule('filter_favorite')],
+        ['key' => 'hidden', 'title' => $nv_Lang->getModule('filter_hidden')]
+    ];
+    $tpl->assign('FILTERS', $filters);
 
-    $xtpl->parse('main');
-
-    return $xtpl->text('main');
+    return $tpl->fetch('main.tpl');
 }
 
 /**
@@ -78,162 +75,119 @@ function user_getlist_theme($items, $generate_page, $filter, $page_url)
     return $tpl->fetch('list.tpl');
 }
 
+/**
+ * @param array $items
+ * @param string $generate_page
+ * @param int $group_id
+ * @param array $members
+ * @return string
+ */
 function getlist_theme($items, $generate_page, $group_id, $members)
 {
-    global $module_info;
+    global $nv_Lang;
 
-    $xtpl = new XTemplate('main.tpl', get_module_tpl_dir('main.tpl'));
-    $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
-    $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
+    $tpl = new \NukeViet\Template\NVSmarty();
+    $tpl->setTemplateDir(get_module_tpl_dir('notifications_list.tpl'));
+    $tpl->assign('LANG', $nv_Lang);
+    $tpl->assign('ITEMS', $items);
+    $tpl->assign('MEMBERS', $members);
+    $tpl->assign('GENERATE_PAGE', $generate_page);
 
-    if (!empty($items)) {
-        foreach ($items as $item) {
-            $xtpl->assign('ITEM', $item);
-
-            if ($item['status'] == 'waiting') {
-                $xtpl->parse('notifications_list.loop.waiting');
-            } elseif ($item['status'] == 'expired') {
-                $xtpl->parse('notifications_list.loop.expired');
-            } else {
-                $xtpl->parse('notifications_list.loop.active');
-            }
-
-            if (empty($item['receiver_ids'])) {
-                $xtpl->parse('notifications_list.loop.to_all');
-            } else {
-                foreach ($item['receiver_ids'] as $mid) {
-                    $xtpl->assign('MEMBER', $members[$mid]);
-                    $xtpl->parse('notifications_list.loop.to_member');
-                }
-            }
-
-            if (!empty($item['message'][1])) {
-                $xtpl->parse('notifications_list.loop.message_1');
-            }
-
-            if (!empty($item['link'])) {
-                $xtpl->parse('notifications_list.loop.link');
-            }
-
-            $xtpl->parse('notifications_list.loop');
-        }
-
-        if (!empty($generate_page)) {
-            $xtpl->assign('GENERATE_PAGE', $generate_page);
-            $xtpl->parse('notifications_list.generate_page');
-        }
-    }
-
-    $xtpl->parse('notifications_list');
-
-    return $xtpl->text('notifications_list');
+    return $tpl->fetch('notifications_list.tpl');
 }
 
+/**
+ * @param string $contents
+ * @param string $page_url
+ * @param string $filter
+ * @param string $checkss
+ * @return string
+ */
 function notifications_manager_theme($contents, $page_url, $filter, $checkss)
 {
-    global $nv_Lang, $module_info;
+    global $global_config, $nv_Lang;
 
-    [$template, $dir] = get_module_tpl_dir('main.tpl', true);
-    $xtpl = new XTemplate('main.tpl', $dir);
-    $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
-    $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
-    $xtpl->assign('TEMPLATE', $template);
-    $xtpl->assign('PAGE_CONTENT', $contents);
-    $xtpl->assign('MANAGER_PAGE_URL', $page_url);
-    $xtpl->assign('CHECKSS', $checkss);
+    $tpl = new \NukeViet\Template\NVSmarty();
+    $tpl->setTemplateDir(get_module_tpl_dir('notifications_manager.tpl'));
+    $tpl->assign('LANG', $nv_Lang);
+    $tpl->assign('PAGE_CONTENT', $contents);
+    $tpl->assign('MANAGER_PAGE_URL', $page_url);
+    $tpl->assign('CHECKSS', $checkss);
+    $tpl->assign('CURRENT_FILTER', $filter);
+    $tpl->assign('INFORM_MANAGER_THEME', get_tpl_dir([$global_config['module_theme'], $global_config['site_theme']], 'future', 'js/inform-manager.js'));
 
     $filters = [
-        'active' => $nv_Lang->getModule('active'),
-        'waiting' => $nv_Lang->getModule('waiting'),
-        'expired' => $nv_Lang->getModule('expired'),
-        '' => $nv_Lang->getModule('filter_all')
+        ['key' => 'active', 'name' => $nv_Lang->getModule('active')],
+        ['key' => 'waiting', 'name' => $nv_Lang->getModule('waiting')],
+        ['key' => 'expired', 'name' => $nv_Lang->getModule('expired')],
+        ['key' => '', 'name' => $nv_Lang->getModule('filter_all')]
     ];
+    $tpl->assign('FILTERS', $filters);
 
-    foreach ($filters as $key => $name) {
-        $xtpl->assign('FILTER', [
-            'key' => $key,
-            'sel' => $key == $filter ? ' selected="selected"' : '',
-            'name' => $name
-        ]);
-        $xtpl->parse('notifications_manager.filter');
-    }
-
-    $xtpl->parse('notifications_manager');
-
-    return $xtpl->text('notifications_manager');
+    return $tpl->fetch('notifications_manager.tpl');
 }
 
+/**
+ * @param array $data
+ * @param string $page_url
+ * @param string $checkss
+ * @return string
+ */
 function notification_action_theme($data, $page_url, $checkss)
 {
-    global $global_config, $language_array, $module_info;
+    global $global_config, $language_array, $nv_Lang;
 
-    $xtpl = new XTemplate('main.tpl', get_module_tpl_dir('main.tpl'));
-    $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
-    $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
-    $xtpl->assign('MANAGER_PAGE_URL', $page_url);
-    $xtpl->assign('DATA', $data);
-    $xtpl->assign('CHECKSS', $checkss);
+    $tpl = new \NukeViet\Template\NVSmarty();
+    $tpl->setTemplateDir(get_module_tpl_dir('notification_action.tpl'));
+    $tpl->assign('LANG', $nv_Lang);
+    $tpl->assign('MANAGER_PAGE_URL', $page_url);
+    $tpl->assign('DATA', $data);
+    $tpl->assign('CHECKSS', $checkss);
 
+    $receiver_ids = [];
     if (!empty($data['receiver_ids'])) {
         foreach ($data['receiver_ids'] as $id => $fullname) {
-            $xtpl->assign('MEMBER', [
+            $receiver_ids[] = [
                 'id' => $id,
                 'fullname' => $fullname
-            ]);
-            $xtpl->parse('notification_action.receiver_ids');
+            ];
         }
     }
+    $tpl->assign('RECEIVER_IDS', $receiver_ids);
 
+    $messages = [];
+    $links = [];
     foreach ($global_config['setup_langs'] as $lang) {
-        $xtpl->assign('MESS', [
+        $messages[] = [
             'lang' => $lang,
             'langname' => $language_array[$lang]['name'],
-            'content' => !empty($data['message'][$lang]) ? nv_br2nl($data['message'][$lang]) : '',
-            'checked' => $lang == $data['isdef'] ? ' checked="checked"' : ''
-        ]);
-        $xtpl->parse('notification_action.message');
-
-        $xtpl->assign('LINK', [
+            'content' => !empty($data['message'][$lang]) ? nv_br2nl($data['message'][$lang]) : ''
+        ];
+        $links[] = [
             'lang' => $lang,
             'langname' => $language_array[$lang]['name'],
-            'content' => !empty($data['link'][$lang]) ? $data['link'][$lang] : '',
-        ]);
-        $xtpl->parse('notification_action.link');
+            'content' => !empty($data['link'][$lang]) ? $data['link'][$lang] : ''
+        ];
     }
+    $tpl->assign('MESSAGES', $messages);
+    $tpl->assign('LINKS', $links);
 
+    $hours = [];
+    $minutes = [];
     for ($i = 0; $i < 24; ++$i) {
-        $xtpl->assign('ADD_HOUR', [
+        $hours[] = [
             'val' => $i,
-            'sel' => $i == $data['add_hour'] ? ' selected="selected"' : '',
             'name' => str_pad($i, 2, '0', STR_PAD_LEFT)
-        ]);
-        $xtpl->parse('notification_action.add_hour');
-
-        $xtpl->assign('EXP_HOUR', [
-            'val' => $i,
-            'sel' => $i == $data['exp_hour'] ? ' selected="selected"' : '',
-            'name' => str_pad($i, 2, '0', STR_PAD_LEFT)
-        ]);
-        $xtpl->parse('notification_action.exp_hour');
+        ];
     }
-
     for ($i = 0; $i < 60; ++$i) {
-        $xtpl->assign('ADD_MIN', [
+        $minutes[] = [
             'val' => $i,
-            'sel' => $i == $data['add_min'] ? ' selected="selected"' : '',
             'name' => str_pad($i, 2, '0', STR_PAD_LEFT)
-        ]);
-        $xtpl->parse('notification_action.add_min');
-
-        $xtpl->assign('EXP_MIN', [
-            'val' => $i,
-            'sel' => $i == $data['exp_min'] ? ' selected="selected"' : '',
-            'name' => str_pad($i, 2, '0', STR_PAD_LEFT)
-        ]);
-        $xtpl->parse('notification_action.exp_min');
+        ];
     }
+    $tpl->assign('HOURS', $hours);
+    $tpl->assign('MINUTES', $minutes);
 
-    $xtpl->parse('notification_action');
-
-    return $xtpl->text('notification_action');
+    return $tpl->fetch('notification_action.tpl');
 }

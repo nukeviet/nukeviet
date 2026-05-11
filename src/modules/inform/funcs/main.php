@@ -22,7 +22,10 @@ $u_groups = array_unique(array_filter(array_map(function ($gr) {
     return $gr >= 10 ? (int) $gr : 0;
 }, $user_info['in_groups'])));
 
-// Khu vực quản lý thông báo của trưởng nhóm
+/**
+ * Khu vực quản lý thông báo của trưởng nhóm
+ * Truy cập từ khu vực users/groups/ID/ ngoài site
+ */
 if ($nv_Request->isset_request('manager', 'get')) {
     $group_id = $nv_Request->get_int('manager', 'get', 0);
 
@@ -505,9 +508,10 @@ if ($nv_Request->isset_request('setStatus', 'post')) {
 
         $sth = $db->prepare('SELECT mtb.id, IFNULL(jtb.shown_time, 0) AS shown_time, IFNULL(jtb.viewed_time, 0) AS viewed_time, IFNULL(jtb.favorite_time, 0) AS favorite_time, IFNULL(jtb.hidden_time, 0) AS hidden_time
             FROM ' . NV_INFORM_GLOBALTABLE . ' AS mtb
-            LEFT JOIN ' . NV_INFORM_STATUS_GLOBALTABLE . ' AS jtb ON (jtb.pid = mtb.id AND jtb.userid = :userid)
+            LEFT JOIN ' . NV_INFORM_STATUS_GLOBALTABLE . ' AS jtb ON (jtb.pid = mtb.id AND jtb.userid = :jtb_userid)
             WHERE ' . $where_str . ' AND mtb.id = :id');
         $sth->bindValue(':id', $id, PDO::PARAM_INT);
+        $sth->bindValue(':jtb_userid', $user_info['userid'], PDO::PARAM_INT);
         foreach ($params as $key => $val) {
             $sth->bindValue($key, $val[0], $val[1]);
         }
