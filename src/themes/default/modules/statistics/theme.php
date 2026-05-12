@@ -27,7 +27,27 @@ function nv_theme_statistics_referer($cts)
     $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
     $xtpl->assign('TEMPLATE', $template);
 
-    // Thống kê ngày của tháng
+    $glang = \NukeViet\Core\Language::$lang_global;
+    $monthLabels = [
+        'Jan' => $glang['january'] ?? 'Jan',   'Feb' => $glang['february'] ?? 'Feb',
+        'Mar' => $glang['march'] ?? 'Mar',     'Apr' => $glang['april'] ?? 'Apr',
+        'May' => $glang['may'] ?? 'May',       'Jun' => $glang['june'] ?? 'Jun',
+        'Jul' => $glang['july'] ?? 'Jul',      'Aug' => $glang['august'] ?? 'Aug',
+        'Sep' => $glang['september'] ?? 'Sep', 'Oct' => $glang['october'] ?? 'Oct',
+        'Nov' => $glang['november'] ?? 'Nov',  'Dec' => $glang['december'] ?? 'Dec',
+    ];
+
+    $keys = $cts['keys'] ?? [];
+    $values = $cts['values'] ?? [];
+    $labels = array_map(fn($k) => $monthLabels[$k] ?? $k, $keys);
+    $total = array_sum(array_map('intval', $values));
+
+    $cts = array_merge($cts, [
+        'dataLabel' => implode('_', $labels),
+        'dataValue' => implode('_', $values),
+        'total'     => $total ? nv_number_format($total) : 0,
+    ]);
+
     $xtpl->assign('CTS', $cts);
 
     $xtpl->parse('main');

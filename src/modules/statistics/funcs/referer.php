@@ -34,35 +34,16 @@ $key_words = $module_info['keywords'];
 $page_url = NV_BASE_MOD_URL . '&' . NV_OP_VARIABLE . '=' . $op . '&host=' . $host;
 $canonicalUrl = getCanonicalUrl($page_url);
 
-$cts = [];
-$cts['caption'] = $page_title;
-$cts['rows'] = [];
-$cts['rows']['Jan'] = ['fullname' => $nv_Lang->getGlobal('january'), 'count' => $row['month01']];
-$cts['rows']['Feb'] = ['fullname' => $nv_Lang->getGlobal('february'), 'count' => $row['month02']];
-$cts['rows']['Mar'] = ['fullname' => $nv_Lang->getGlobal('march'), 'count' => $row['month03']];
-$cts['rows']['Apr'] = ['fullname' => $nv_Lang->getGlobal('april'), 'count' => $row['month04']];
-$cts['rows']['May'] = ['fullname' => $nv_Lang->getGlobal('may'), 'count' => $row['month05']];
-$cts['rows']['Jun'] = ['fullname' => $nv_Lang->getGlobal('june'), 'count' => $row['month06']];
-$cts['rows']['Jul'] = ['fullname' => $nv_Lang->getGlobal('july'), 'count' => $row['month07']];
-$cts['rows']['Aug'] = ['fullname' => $nv_Lang->getGlobal('august'), 'count' => $row['month08']];
-$cts['rows']['Sep'] = ['fullname' => $nv_Lang->getGlobal('september'), 'count' => $row['month09']];
-$cts['rows']['Oct'] = ['fullname' => $nv_Lang->getGlobal('october'), 'count' => $row['month10']];
-$cts['rows']['Nov'] = ['fullname' => $nv_Lang->getGlobal('november'), 'count' => $row['month11']];
-$cts['rows']['Dec'] = ['fullname' => $nv_Lang->getGlobal('december'), 'count' => $row['month12']];
-
-$total = 0;
-$data_label = [];
-$data_value = [];
-foreach ($cts['rows'] as $key => $month) {
-    $data_label[] = $month['fullname'];
-    $data_value[] = $month['count'];
-
-    $total += $month['count'];
-}
-
-$cts['total'] = $total ? nv_number_format($total) : 0;
-$cts['dataLabel'] = implode('_', $data_label);
-$cts['dataValue'] = implode('_', $data_value);
+$cts = [
+    'caption' => $page_title,
+    'keys'    => ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+    'values'  => [
+        (int) $row['month01'], (int) $row['month02'], (int) $row['month03'],
+        (int) $row['month04'], (int) $row['month05'], (int) $row['month06'],
+        (int) $row['month07'], (int) $row['month08'], (int) $row['month09'],
+        (int) $row['month10'], (int) $row['month11'], (int) $row['month12'],
+    ],
+];
 
 $contents = nv_theme_statistics_referer($cts);
 

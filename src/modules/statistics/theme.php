@@ -21,18 +21,38 @@ if (!defined('NV_IS_MOD_STATISTICS')) {
  */
 function nv_theme_statistics_referer($cts)
 {
-    [$template, $dir] = get_module_tpl_dir('referer.tpl', true);
-    $xtpl = new XTemplate('referer.tpl', $dir);
-    $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
-    $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
-    $xtpl->assign('TEMPLATE', $template);
+    global $nv_Lang;
 
-    // Thống kê ngày của tháng
-    $xtpl->assign('CTS', $cts);
+    $tpl = new \NukeViet\Template\NVSmarty();
+    $tpl->setTemplateDir(get_module_tpl_dir('referer.tpl'));
 
-    $xtpl->parse('main');
+    $monthLabels = [
+        'Jan' => $nv_Lang->getGlobal('jan'),  'Feb' => $nv_Lang->getGlobal('feb'),
+        'Mar' => $nv_Lang->getGlobal('mar'),  'Apr' => $nv_Lang->getGlobal('apr'),
+        'May' => $nv_Lang->getGlobal('may2'), 'Jun' => $nv_Lang->getGlobal('jun'),
+        'Jul' => $nv_Lang->getGlobal('jul'),  'Aug' => $nv_Lang->getGlobal('aug'),
+        'Sep' => $nv_Lang->getGlobal('sep'),  'Oct' => $nv_Lang->getGlobal('oct'),
+        'Nov' => $nv_Lang->getGlobal('nov'),  'Dec' => $nv_Lang->getGlobal('dec'),
+    ];
 
-    return $xtpl->text('main');
+    $keys = $cts['keys'] ?? [];
+    $rawValues = $cts['values'] ?? [];
+
+    $values = array_map(fn($v) => (int) $v, $rawValues);
+    $total = array_sum($values);
+
+    $chart = [
+        'caption'          => $cts['caption'] ?? '',
+        'labels'           => array_map(fn($k) => $monthLabels[$k] ?? $k, $keys),
+        'values'           => $values,
+        'values_formatted' => array_map(fn($v) => nv_number_format($v), $values),
+        'total'            => $total > 0 ? nv_number_format($total) : '0',
+    ];
+
+    $tpl->assign('LANG', $nv_Lang);
+    $tpl->assign('CHART', $chart);
+
+    return $tpl->fetch('referer.tpl');
 }
 
 /**
@@ -122,31 +142,16 @@ function nv_theme_statistics_allos($os_list, $generate_page)
  */
 function nv_theme_statistics_allbrowsers($browsers_list, $generate_page)
 {
-    [$template, $dir] = get_module_tpl_dir('allbrowsers.tpl', true);
-    $xtpl = new XTemplate('allbrowsers.tpl', $dir);
-    $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
-    $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
-    $xtpl->assign('TEMPLATE', $template);
+    global $nv_Lang;
 
-    if (!empty($browsers_list)) {
-        foreach ($browsers_list as $value) {
-            $xtpl->assign('LOOP', $value);
+    $tpl = new \NukeViet\Template\NVSmarty();
+    $tpl->setTemplateDir(get_module_tpl_dir('allbrowsers.tpl'));
 
-            if (!empty($value['count'])) {
-                $xtpl->parse('main.loop.progress');
-            }
-            $xtpl->parse('main.loop');
-        }
+    $tpl->assign('LANG', $nv_Lang);
+    $tpl->assign('BROWSER_LIST', $browsers_list ?? []);
+    $tpl->assign('PAGINATION', $generate_page ?? '');
 
-        if (!empty($generate_page)) {
-            $xtpl->assign('GENERATE_PAGE', $generate_page);
-            $xtpl->parse('main.gp');
-        }
-    }
-
-    $xtpl->parse('main');
-
-    return $xtpl->text('main');
+    return $tpl->fetch('allbrowsers.tpl');
 }
 
 /**
