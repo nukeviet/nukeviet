@@ -42,50 +42,33 @@ $stmt->closeCursor();
 $ctsy = [];
 $ctsy['caption'] = $nv_Lang->getModule('statbyyear');
 $ctsy['total'] = nv_number_format($total);
-$ctsy['dataLabel'] = implode('_', array_keys($year_list));
-$ctsy['dataValue'] = implode('_', $year_list);
+$ctsy['labels'] = array_keys($year_list);
+$ctsy['values'] = array_values($year_list);
 
 // Thống kê theo tháng của năm
-$month_list = [];
-$month_list['Jan'] = ['fullname' => $nv_Lang->getGlobal('january'), 'count' => 0];
-$month_list['Feb'] = ['fullname' => $nv_Lang->getGlobal('february'), 'count' => $current_month_num < 2 ? null : 0];
-$month_list['Mar'] = ['fullname' => $nv_Lang->getGlobal('march'), 'count' => $current_month_num < 3 ? null : 0];
-$month_list['Apr'] = ['fullname' => $nv_Lang->getGlobal('april'), 'count' => $current_month_num < 4 ? null : 0];
-$month_list['May'] = ['fullname' => $nv_Lang->getGlobal('may'), 'count' => $current_month_num < 5 ? null : 0];
-$month_list['Jun'] = ['fullname' => $nv_Lang->getGlobal('june'), 'count' => $current_month_num < 6 ? null : 0];
-$month_list['Jul'] = ['fullname' => $nv_Lang->getGlobal('july'), 'count' => $current_month_num < 7 ? null : 0];
-$month_list['Aug'] = ['fullname' => $nv_Lang->getGlobal('august'), 'count' => $current_month_num < 8 ? null : 0];
-$month_list['Sep'] = ['fullname' => $nv_Lang->getGlobal('september'), 'count' => $current_month_num < 9 ? null : 0];
-$month_list['Oct'] = ['fullname' => $nv_Lang->getGlobal('october'), 'count' => $current_month_num < 10 ? null : 0];
-$month_list['Nov'] = ['fullname' => $nv_Lang->getGlobal('november'), 'count' => $current_month_num < 11 ? null : 0];
-$month_list['Dec'] = ['fullname' => $nv_Lang->getGlobal('december'), 'count' => $current_month_num < 12 ? null : 0];
+$month_abbrs = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+$month_values = [];
+foreach ($month_abbrs as $i => $abbr) {
+    $month_values[$abbr] = $i + 1 > $current_month_num ? null : 0;
+}
 
-$month_list2 = array_chunk($month_list, $current_month_num, true);
-$month_list2 = $month_list2[0];
-$month_list2 = "'" . implode("','", array_keys($month_list2)) . "'";
-
+$month_in = "'" . implode("','", array_slice($month_abbrs, 0, $current_month_num)) . "'";
 $total = 0;
-$stmt = $db->prepare('SELECT c_val, c_count FROM ' . NV_COUNTER_GLOBALTABLE . " WHERE c_type = 'month' AND c_val IN (" . $month_list2 . ')');
+$stmt = $db->prepare('SELECT c_val, c_count FROM ' . NV_COUNTER_GLOBALTABLE . " WHERE c_type = 'month' AND c_val IN (" . $month_in . ')');
 $stmt->execute();
 
 while ($row = $stmt->fetch()) {
-    $month_list[$row['c_val']]['count'] = $row['c_count'];
+    $month_values[$row['c_val']] = $row['c_count'];
     $total += $row['c_count'];
 }
 $stmt->closeCursor();
 
-$data_label = [];
-$data_value = [];
-foreach ($month_list as $m) {
-    $data_label[] = $m['fullname'];
-    $data_value[] = $m['count'];
-}
-
-$ctsm = [];
-$ctsm['caption'] = $nv_Lang->getModule('statbymonth', $current_year);
-$ctsm['total'] = nv_number_format($total);
-$ctsm['dataLabel'] = implode('_', $data_label);
-$ctsm['dataValue'] = implode('_', $data_value);
+$ctsm = [
+    'caption' => $nv_Lang->getModule('statbymonth', $current_year),
+    'total'   => nv_number_format($total),
+    'keys'    => $month_abbrs,
+    'values'  => array_values($month_values),
+];
 
 // Thống kê theo ngày trong tháng
 $total = 0;
@@ -103,42 +86,29 @@ $stmt->closeCursor();
 $ctsdm = [];
 $ctsdm['caption'] = $nv_Lang->getModule('statbyday', $current_month_str, $current_year);
 $ctsdm['total'] = nv_number_format($total);
-$ctsdm['dataLabel'] = implode('_', array_keys($day_list));
-$ctsdm['dataValue'] = implode('_', $day_list);
+$ctsdm['labels'] = array_keys($day_list);
+$ctsdm['values'] = array_values($day_list);
 
 // Ngày trong tuần
-$dayofweek_list = [];
-$dayofweek_list['Sunday'] = ['fullname' => $nv_Lang->getGlobal('sunday'), 'count' => 0];
-$dayofweek_list['Monday'] = ['fullname' => $nv_Lang->getGlobal('monday'), 'count' => 0];
-$dayofweek_list['Tuesday'] = ['fullname' => $nv_Lang->getGlobal('tuesday'), 'count' => 0];
-$dayofweek_list['Wednesday'] = ['fullname' => $nv_Lang->getGlobal('wednesday'), 'count' => 0];
-$dayofweek_list['Thursday'] = ['fullname' => $nv_Lang->getGlobal('thursday'), 'count' => 0];
-$dayofweek_list['Friday'] = ['fullname' => $nv_Lang->getGlobal('friday'), 'count' => 0];
-$dayofweek_list['Saturday'] = ['fullname' => $nv_Lang->getGlobal('saturday'), 'count' => 0];
+$dow_keys = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+$dow_values = array_fill_keys($dow_keys, 0);
 
-$dayofweek_list2 = "'" . implode("','", array_keys($dayofweek_list)) . "'";
-$stmt = $db->prepare('SELECT c_val, c_count FROM ' . NV_COUNTER_GLOBALTABLE . " WHERE c_type = 'dayofweek' AND c_val IN (" . $dayofweek_list2 . ')');
+$stmt = $db->prepare('SELECT c_val, c_count FROM ' . NV_COUNTER_GLOBALTABLE . " WHERE c_type = 'dayofweek' AND c_val IN ('" . implode("','", $dow_keys) . "')");
 $stmt->execute();
 
 $total = 0;
 while ($row = $stmt->fetch()) {
-    $dayofweek_list[$row['c_val']]['count'] = $row['c_count'];
+    $dow_values[$row['c_val']] = $row['c_count'];
     $total += $row['c_count'];
 }
 $stmt->closeCursor();
 
-$data_label = [];
-$data_value = [];
-foreach ($dayofweek_list as $m) {
-    $data_label[] = $m['fullname'];
-    $data_value[] = $m['count'];
-}
-
-$ctsdw = [];
-$ctsdw['caption'] = $nv_Lang->getModule('statbydayofweek');
-$ctsdw['total'] = nv_number_format($total);
-$ctsdw['dataLabel'] = implode('_', $data_label);
-$ctsdw['dataValue'] = implode('_', $data_value);
+$ctsdw = [
+    'caption' => $nv_Lang->getModule('statbydayofweek'),
+    'total'   => nv_number_format($total),
+    'keys'    => $dow_keys,
+    'values'  => array_values($dow_values),
+];
 
 // Giờ trong ngày
 $total = 0;
@@ -156,8 +126,8 @@ $stmt->closeCursor();
 $ctsh = [];
 $ctsh['caption'] = $nv_Lang->getModule('statbyhour') . ' (' . date('d/m/Y', NV_CURRENTTIME) . ')';
 $ctsh['total'] = nv_number_format($total);
-$ctsh['dataLabel'] = implode('_', array_keys($hour_list));
-$ctsh['dataValue'] = implode('_', $hour_list);
+$ctsh['labels'] = array_keys($hour_list);
+$ctsh['values'] = array_values($hour_list);
 
 // Theo quốc gia
 $stmt = $db->prepare('SELECT c_val, c_count, last_update FROM ' . NV_COUNTER_GLOBALTABLE . " WHERE c_type = 'country' AND c_count != 0 ORDER BY c_count DESC LIMIT 10");
@@ -171,7 +141,7 @@ while ($row = $stmt->fetch()) {
         'name' => ($row['c_val'] != 'ZZ' and isset($countries[$row['c_val']])) ? ($nv_Lang->existsGlobal('country_' . $row['c_val']) ? $nv_Lang->getGlobal('country_' . $row['c_val']) : $countries[$row['c_val']][1]) : $nv_Lang->getGlobal('unknown'),
         'count' => $row['c_count'],
         'count_format' => !empty($row['c_count']) ? nv_number_format($row['c_count']) : 0,
-        'last_visit' => !empty($row['last_update']) ? nv_datetime_format($row['last_update'], 0, 0) : ''
+        'last_visit' => !empty($row['last_update']) ? nv_datetime_format($row['last_update'], 0, 1) : ''
     ];
 
     $total += $row['c_count'];
@@ -204,7 +174,7 @@ while ($row = $stmt->fetch()) {
         'name' => $row['c_val'] != 'Unknown' ? (defined($const) ? constant($const) : ucfirst($row['c_val'])) : $nv_Lang->getGlobal('unknown'),
         'count' => $row['c_count'],
         'count_format' => !empty($row['c_count']) ? nv_number_format($row['c_count']) : 0,
-        'last_visit' => !empty($row['last_update']) ? nv_datetime_format($row['last_update'], 0, 0) : ''
+        'last_visit' => !empty($row['last_update']) ? nv_datetime_format($row['last_update'], 0, 1) : ''
     ];
 
     $total += $row['c_count'];
@@ -238,7 +208,7 @@ while ($row = $stmt->fetch()) {
         'name' => $row['c_val'] != 'unknown' ? (defined($const) ? constant($const) : ucfirst($row['c_val'])) : $nv_Lang->getGlobal('unknown'),
         'count' => $row['c_count'],
         'count_format' => !empty($row['c_count']) ? nv_number_format($row['c_count']) : 0,
-        'last_visit' => !empty($row['last_update']) ? nv_datetime_format($row['last_update'], 0, 0) : ''
+        'last_visit' => !empty($row['last_update']) ? nv_datetime_format($row['last_update'], 0, 1) : ''
     ];
 
     $total += $row['c_count'];
@@ -257,7 +227,7 @@ $ctso = [];
 $ctso['rows'] = $os_list;
 $ctso['max'] = $max;
 $ctso['others'] = nv_number_format($others);
-$ctsb['others_url'] = NV_BASE_MOD_URL . '&amp;' . NV_OP_VARIABLE . '=' . $module_info['alias']['allos'];
+$ctso['others_url'] = NV_BASE_MOD_URL . '&amp;' . NV_OP_VARIABLE . '=' . $module_info['alias']['allos'];
 
 $contents = nv_theme_statistics_main($ctsy, $ctsm, $ctsdm, $ctsdw, $ctsc, $ctsb, $ctso, $ctsh);
 

@@ -201,9 +201,9 @@ function nv_theme_statistics_allcountries($countries_list, $generate_page)
 }
 
 /**
- * nv_theme_statistics_main()
+ * Giao diện main module thống kê
  *
- * @param array $ctsy
+ * @param array $ctsy Theo các năm
  * @param array $ctsm
  * @param array $ctsdm
  * @param array $ctsdw
@@ -215,79 +215,78 @@ function nv_theme_statistics_allcountries($countries_list, $generate_page)
  */
 function nv_theme_statistics_main($ctsy, $ctsm, $ctsdm, $ctsdw, $ctsc, $ctsb, $ctso, $ctsh)
 {
-    [$template, $dir] = get_module_tpl_dir('main.tpl', true);
-    $xtpl = new XTemplate('main.tpl', $dir);
-    $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
-    $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
-    $xtpl->assign('TEMPLATE', $template);
+    global $nv_Lang;
 
-    // Thống kê theo giờ trong ngày
-    $xtpl->assign('CTSH', $ctsh);
+    $tpl = new \NukeViet\Template\NVSmarty();
+    $tpl->setTemplateDir(get_module_tpl_dir('main.tpl'));
 
-    // Thống kê theo ngày trong tuần
-    $xtpl->assign('CTSDW', $ctsdw);
+    $monthLabels = [
+        'Jan' => $nv_Lang->getGlobal('jan'),   'Feb' => $nv_Lang->getGlobal('feb'),
+        'Mar' => $nv_Lang->getGlobal('mar'),     'Apr' => $nv_Lang->getGlobal('apr'),
+        'May' => $nv_Lang->getGlobal('may2'),       'Jun' => $nv_Lang->getGlobal('jun'),
+        'Jul' => $nv_Lang->getGlobal('jul'),      'Aug' => $nv_Lang->getGlobal('aug'),
+        'Sep' => $nv_Lang->getGlobal('sep'), 'Oct' => $nv_Lang->getGlobal('oct'),
+        'Nov' => $nv_Lang->getGlobal('nov'),  'Dec' => $nv_Lang->getGlobal('dec'),
+    ];
+    $dowLabels = [
+        'Sunday'    => $nv_Lang->getGlobal('sunday'),    'Monday'    => $nv_Lang->getGlobal('monday'),
+        'Tuesday'   => $nv_Lang->getGlobal('tuesday'),   'Wednesday' => $nv_Lang->getGlobal('wednesday'),
+        'Thursday'  => $nv_Lang->getGlobal('thursday'),  'Friday'    => $nv_Lang->getGlobal('friday'),
+        'Saturday'  => $nv_Lang->getGlobal('saturday'),
+    ];
 
-    // Thống kê ngày của tháng
-    $xtpl->assign('CTSDM', $ctsdm);
-
-    // Thống kê tháng của năm
-    $xtpl->assign('CTSM', $ctsm);
-
-    // Thống kê theo năm
-    $xtpl->assign('CTSY', $ctsy);
-
-    //Thong ke theo quoc gia
-    $xtpl->assign('CTSC', $ctsc);
-
-    foreach ($ctsc['rows'] as $value) {
-        $value['proc'] = !empty($value['count']) ? ceil(($value['count'] / $ctsc['max']) * 100) : 0;
-        $xtpl->assign('CTLOOP', $value);
-
-        if (!empty($value['count'])) {
-            $xtpl->parse('main.ctloop.progress');
+    $resolveLabels = function (array $cts) use ($monthLabels, $dowLabels): array {
+        if (isset($cts['keys'])) {
+            $map = count($cts['keys']) === 12 ? $monthLabels : $dowLabels;
+            return array_map(fn ($k) => $map[$k] ?? $k, $cts['keys']);
         }
-        $xtpl->parse('main.ctloop');
-    }
+        return $cts['labels'] ?? [];
+    };
 
-    if (!empty($ctsc['others'])) {
-        $xtpl->parse('main.ctot');
-    }
+    $parseChartData = fn (array $cts): array => [
+        'caption'          => $cts['caption'] ?? '',
+        'total'            => $cts['total'] ?? 0,
+        'labels'           => $resolveLabels($cts),
+        'values'           => $cts['values'] ?? [],
+        'values_formatted' => array_map(
+            fn ($v) => $v !== null ? nv_number_format((int) $v) : null,
+            $cts['values'] ?? []
+        ),
+    ];
 
-    //Thong ke theo trinh duyet
-    $xtpl->assign('CTSB', $ctsb);
+    // Tính phần trăm progress bar cho mỗi nhóm
+    $buildRows = fn (array $rows, int $max): array => array_map(
+        fn ($row) => [...$row, 'proc' => ($max > 0 && !empty($row['count'])) ? (int) ceil(($row['count'] / $max) * 100) : 0],
+        $rows
+    );
 
-    foreach ($ctsb['rows'] as $value) {
-        $value['proc'] = !empty($value['count']) ? ceil(($value['count'] / $ctsc['max']) * 100) : 0;
-        $xtpl->assign('BRLOOP', $value);
+    $tpl->assign('LANG', $nv_Lang);
 
-        if (!empty($value['count'])) {
-            $xtpl->parse('main.brloop.progress');
-        }
-        $xtpl->parse('main.brloop');
-    }
+    // Dữ liệu biểu đồ (theo thứ tự thực-tế → lịch sử)
+    $tpl->assign('CTSH', $parseChartData($ctsh));
+    $tpl->assign('CTSDW', $parseChartData($ctsdw));
+    $tpl->assign('CTSDM', $parseChartData($ctsdm));
+    $tpl->assign('CTSM', $parseChartData($ctsm));
+    $tpl->assign('CTSY', $parseChartData($ctsy));
 
-    if (!empty($ctsb['others'])) {
-        $xtpl->parse('main.brot');
-    }
+    // Dữ liệu danh sách
+    $tpl->assign('CTSC', [
+        'rows' => $buildRows($ctsc['rows'] ?? [], (int) ($ctsc['max'] ?? 0)),
+        'others' => $ctsc['others'] ?? '',
+        'others_url' => $ctsc['others_url'] ?? '',
+    ]);
 
-    //Thong ke theo he dieu hanh
-    $xtpl->assign('CTSO', $ctso);
+    $tpl->assign('CTSB', [
+        'rows' => $buildRows($ctsb['rows'] ?? [], (int) ($ctsb['max'] ?? 0)),
+        'others' => $ctsb['others'] ?? '',
+        'others_url' => $ctsb['others_url'] ?? '',
+    ]);
 
-    foreach ($ctso['rows'] as $value) {
-        $value['proc'] = !empty($value['count']) ? ceil(($value['count'] / $ctsc['max']) * 100) : 0;
-        $xtpl->assign('OSLOOP', $value);
+    $tpl->assign('CTSO', [
+        'rows' => $buildRows($ctso['rows'] ?? [], (int) ($ctso['max'] ?? 0)),
+        'others' => $ctso['others'] ?? '',
+        'others_url' => $ctso['others_url'] ?? '',
+    ]);
 
-        if (!empty($value['count'])) {
-            $xtpl->parse('main.osloop.progress');
-        }
-        $xtpl->parse('main.osloop');
-    }
-
-    if ($ctso['others']) {
-        $xtpl->parse('main.osot');
-    }
-
-    $xtpl->parse('main');
-
-    return $xtpl->text('main');
+    return $tpl->fetch('main.tpl');
 }

@@ -238,20 +238,50 @@ function nv_theme_statistics_main($ctsy, $ctsm, $ctsdm, $ctsdw, $ctsc, $ctsb, $c
     $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
     $xtpl->assign('TEMPLATE', $template);
 
+    // Chuyển mảng keys/values sang chuỗi phân cách '_' cho ChartJS
+    $glang = \NukeViet\Core\Language::$lang_global;
+    $monthLabels = [
+        'Jan' => $glang['january'] ?? 'Jan',   'Feb' => $glang['february'] ?? 'Feb',
+        'Mar' => $glang['march'] ?? 'Mar',     'Apr' => $glang['april'] ?? 'Apr',
+        'May' => $glang['may'] ?? 'May',       'Jun' => $glang['june'] ?? 'Jun',
+        'Jul' => $glang['july'] ?? 'Jul',      'Aug' => $glang['august'] ?? 'Aug',
+        'Sep' => $glang['september'] ?? 'Sep', 'Oct' => $glang['october'] ?? 'Oct',
+        'Nov' => $glang['november'] ?? 'Nov',  'Dec' => $glang['december'] ?? 'Dec',
+    ];
+    $dowLabels = [
+        'Sunday'    => $glang['sunday'] ?? 'Sunday',    'Monday'    => $glang['monday'] ?? 'Monday',
+        'Tuesday'   => $glang['tuesday'] ?? 'Tuesday',  'Wednesday' => $glang['wednesday'] ?? 'Wednesday',
+        'Thursday'  => $glang['thursday'] ?? 'Thursday', 'Friday'   => $glang['friday'] ?? 'Friday',
+        'Saturday'  => $glang['saturday'] ?? 'Saturday',
+    ];
+    $toChartJs = function (array $cts) use ($monthLabels, $dowLabels): array {
+        if (isset($cts['keys'])) {
+            $map = count($cts['keys']) === 12 ? $monthLabels : $dowLabels;
+            $labels = array_map(fn ($k) => $map[$k] ?? $k, $cts['keys']);
+        } else {
+            $labels = $cts['labels'] ?? [];
+        }
+        return [
+            ...$cts,
+            'dataLabel' => implode('_', $labels),
+            'dataValue' => implode('_', array_map(fn ($v) => $v ?? '', $cts['values'] ?? [])),
+        ];
+    };
+
     // Thống kê theo giờ trong ngày
-    $xtpl->assign('CTSH', $ctsh);
+    $xtpl->assign('CTSH', $toChartJs($ctsh));
 
     // Thống kê theo ngày trong tuần
-    $xtpl->assign('CTSDW', $ctsdw);
+    $xtpl->assign('CTSDW', $toChartJs($ctsdw));
 
     // Thống kê ngày của tháng
-    $xtpl->assign('CTSDM', $ctsdm);
+    $xtpl->assign('CTSDM', $toChartJs($ctsdm));
 
     // Thống kê tháng của năm
-    $xtpl->assign('CTSM', $ctsm);
+    $xtpl->assign('CTSM', $toChartJs($ctsm));
 
     // Thống kê theo năm
-    $xtpl->assign('CTSY', $ctsy);
+    $xtpl->assign('CTSY', $toChartJs($ctsy));
 
     //Thong ke theo quoc gia
     $xtpl->assign('CTSC', $ctsc);
