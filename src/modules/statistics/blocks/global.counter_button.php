@@ -15,13 +15,12 @@ if (!defined('NV_MAINFILE')) {
 
 if (!nv_function_exists('nv_block_counter_button')) {
     /**
-     * nv_block_counter_button()
-     *
+     * @param array $block_config
      * @return string
      */
-    function nv_block_counter_button()
+    function nv_block_counter_button(array $block_config)
     {
-        global $global_config, $db, $nv_Lang;
+        global $db, $nv_Lang;
 
         $sql = 'SELECT c_type, c_count FROM ' . NV_COUNTER_GLOBALTABLE . " WHERE (c_type='day' AND c_val='" . date('d', NV_CURRENTTIME) . "') OR (c_type='month' AND c_val='" . date('M', NV_CURRENTTIME) . "') OR (c_type='total' AND c_val='hits')";
         $query = $db->query($sql);
@@ -51,38 +50,23 @@ if (!nv_function_exists('nv_block_counter_button')) {
             return !empty($number) ? nv_number_format($number) : 0;
         }, $count_data);
 
-        $block_theme = get_tpl_dir([$global_config['module_theme'], $global_config['site_theme']], 'default', '/modules/statistics/global.counter_button.tpl');
-        $xtpl = new XTemplate('global.counter_button.tpl', NV_ROOTDIR . '/themes/' . $block_theme . '/modules/statistics');
+        addition_module_assets($block_config['module'], 'js');
 
-        $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_global);
-        $xtpl->assign('IMG_PATH', NV_STATIC_URL . 'themes/' . $block_theme . '/');
+        [$block_theme, $dir] = get_block_tpl_dir('global.counter_button.tpl', true, $block_config['module']);
+        $tpl = new \NukeViet\Template\NVSmarty();
+        $tpl->setTemplateDir($dir);
+        $tpl->assign('LANG', $nv_Lang);
+        $tpl->assign('TEMPLATE', $block_theme);
+        $tpl->assign('MODULE', $block_config['module']);
+        $tpl->assign('DATA', $count_data);
 
-        foreach ($count_data as $key => $value) {
-            $xtpl->assign('COUNT_' . strtoupper($key), $value);
-        }
-
-        if ($count_data['users']) {
-            $xtpl->parse('main.users');
-        }
-
-        if ($count_data['bots']) {
-            $xtpl->parse('main.bots');
-        }
-
-        if ($count_data['guests'] and $count_data['guests'] != $count_data['online']) {
-            $xtpl->parse('main.guests');
-        }
-
-        $xtpl->parse('main');
-        $content = $xtpl->text('main');
-
-        return $content;
+        return $tpl->fetch('global.counter_button.tpl');
     }
 }
 
 if (defined('NV_SYSTEM')) {
     global $global_config;
     if ($global_config['online_upd']) {
-        $content = nv_block_counter_button();
+        $content = nv_block_counter_button($block_config);
     }
 }
