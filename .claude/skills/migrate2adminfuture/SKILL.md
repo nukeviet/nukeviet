@@ -226,13 +226,9 @@ if (($module_info['module_file'] ?? '') == '{MODULE}' and in_array($op, ['{FILE}
 
 ---
 
-## Bước 6 — Xóa cache & kiểm tra
+## Bước 6 — Kiểm tra
 
-```bash
-rm -rf src/data/cache/*/*.cache && rm -rf src/data/cache/smarty-compile/*.php
-```
-
-Sau đó báo cáo:
+Báo cáo:
 - Các file đã tạo/sửa
 - URL để kiểm tra: `?lang=vi&{NV_NAME_VARIABLE}={MODULE}&{NV_OP_VARIABLE}={FILE}`
 - Những điểm cần Dev kiểm tra thủ công (JS, form submit, phân trang...)
@@ -278,6 +274,5 @@ Sau đó báo cáo:
 - [ ] Form submit dùng `class="ajax-submit"` + PHP trả `nv_jsonOutput([...])`
 - [ ] Dùng `let`/`const`, không dùng `var`; cú pháp JS hợp lệ sau khi port từ tpl
 
-**Routing & cache:**
+**Routing:**
 - [ ] Đã cập nhật `get_module_admin_theme.php` **VÀ** `get_global_admin_theme.php`
-- [ ] Cache đã xóa: `rm -rf src/data/cache/*/*.cache && rm -rf src/data/cache/smarty-compile/*.php`

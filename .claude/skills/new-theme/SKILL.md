@@ -34,11 +34,5 @@ npm install
 npm run core-css
 ```
 
-### 6. Xóa cache
-```bash
-rm -rf src/data/cache/*/*.cache
-rm -rf src/data/cache/smarty-compile/*.php
-```
-
-### 7. Báo cáo
+### 6. Báo cáo
 Hướng dẫn kích hoạt tại **Admin > Giao diện > Quản lý giao diện**.

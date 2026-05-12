@@ -423,11 +423,69 @@ if ($action == 'credential') {
 $base_url = $page_url;
 if (!empty($role_id)) {
     $base_url .= '&role_id=' . $role_id;
+}
 
+// Tham số tìm kiếm
+$search = [];
+$search['q'] = $nv_Request->get_title('q', 'get', '');
+$search['qhtml'] = nv_htmlspecialchars($search['q']);
+$search['adv'] = (int) $nv_Request->get_bool('adv', 'get', false);
+$search['addtime_from'] = $nv_Request->get_title('add_from', 'get', '');
+$search['addtime_to'] = $nv_Request->get_title('add_to', 'get', '');
+$search['endtime_from'] = $nv_Request->get_title('end_from', 'get', '');
+$search['endtime_to'] = $nv_Request->get_title('end_to', 'get', '');
+$search['last_access_from'] = $nv_Request->get_title('last_from', 'get', '');
+$search['last_access_to'] = $nv_Request->get_title('last_to', 'get', '');
+
+$search['t_addtime_from'] = nv_d2u_get($search['addtime_from']);
+$search['t_addtime_to'] = nv_d2u_get($search['addtime_to'], 23, 59, 59);
+$search['t_endtime_from'] = nv_d2u_get($search['endtime_from']);
+$search['t_endtime_to'] = nv_d2u_get($search['endtime_to'], 23, 59, 59);
+$search['t_last_access_from'] = nv_d2u_get($search['last_access_from']);
+$search['t_last_access_to'] = nv_d2u_get($search['last_access_to'], 23, 59, 59);
+
+if (empty($search['t_addtime_from'])) {
+    $search['addtime_from'] = '';
+}
+if (empty($search['t_addtime_to'])) {
+    $search['addtime_to'] = '';
+}
+if (empty($search['t_endtime_from'])) {
+    $search['endtime_from'] = '';
+}
+if (empty($search['t_endtime_to'])) {
+    $search['endtime_to'] = '';
+}
+if (empty($search['t_last_access_from'])) {
+    $search['last_access_from'] = '';
+}
+if (empty($search['t_last_access_to'])) {
+    $search['last_access_to'] = '';
+}
+
+if (!empty($search['q'])) {
+    $base_url .= '&amp;q=' . urlencode($search['q']);
+}
+$adv_keys = [
+    'addtime_from' => 'add_from',
+    'addtime_to' => 'add_to',
+    'endtime_from' => 'end_from',
+    'endtime_to' => 'end_to',
+    'last_access_from' => 'last_from',
+    'last_access_to' => 'last_to',
+];
+foreach ($adv_keys as $sk => $gk) {
+    if (!empty($search[$sk])) {
+        $base_url .= '&amp;' . $gk . '=' . urlencode($search[$sk]);
+        $search['adv'] = 1;
+    }
+}
+
+if (!empty($role_id)) {
     $page = $nv_Request->get_page('page', 'get', 1);
     $per_page = 30;
 
-    [$credentialcount, $credentiallist] = getCredentialList($role_id, $rolelist[$role_id]['role_object'] == 'admin', $page, $per_page);
+    [$credentialcount, $credentiallist] = getCredentialList($role_id, $rolelist[$role_id]['role_object'] == 'admin', $page, $per_page, $search);
     $generate_page = nv_generate_page($base_url, $credentialcount, $per_page, $page);
 } else {
     $credentialcount = 0;
@@ -450,6 +508,7 @@ $tpl->assign('CREDENTIAL_COUNT', $credentialcount);
 $tpl->assign('GENERATE_PAGE', $generate_page);
 $tpl->assign('CREDENTIAL_LIST', $credentiallist);
 $tpl->assign('CHECKSS', csrf_create($csrf_key));
+$tpl->assign('SEARCH', $search);
 $tpl->registerPlugin('modifier', 'ddatetime', 'nv_datetime_format');
 $tpl->registerPlugin('modifier', 'nnum_format', 'nv_number_format');
 

@@ -47,13 +47,7 @@ Thêm key `$lang_module[]` cần thiết vào `modules/{module}/language/vi.php`
 php -l src/$ARGUMENTS
 ```
 
-### 8. Xóa cache
-```bash
-rm -rf src/data/cache/*/*.cache
-rm -rf src/data/cache/smarty-compile/*.php
-```
-
-### 9. Báo cáo kết quả
+### 8. Báo cáo kết quả
 - File đã tạo: `src/$ARGUMENTS`
 - Các file đã cập nhật: `admin.menu.php` hoặc `version.php`, `language/vi.php`
 - Hướng dẫn bước tiếp theo: URL test (`?lang=vi&nv={module}&op={func}`) hoặc Admin menu

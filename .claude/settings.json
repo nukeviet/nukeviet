@@ -8,18 +8,6 @@
     ]
   },
   "hooks": {
-    "PostToolUse": [
-      {
-        "matcher": "Edit|Write|NotebookEdit|Bash",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "rm -rf src/data/cache/*/*.cache && rm -rf src/data/cache/smarty-compile/*.php 2>/dev/null || true",
-            "statusMessage": "Xóa cache NukeViet...",
-            "async": true
-          }
-        ]
-      }
-    ]
+    "PostToolUse": []
   }
 }

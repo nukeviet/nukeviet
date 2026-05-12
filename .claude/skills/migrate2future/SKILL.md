@@ -172,13 +172,9 @@ $tpl->assign('MCONFIG', $module_config[$module_name]);
 
 ---
 
-## Bước 6 — Xóa cache & kiểm tra
+## Bước 6 — Kiểm tra
 
-```bash
-rm -rf src/data/cache/*/*.cache && rm -rf src/data/cache/smarty-compile/*.php
-```
-
-Sau đó báo cáo:
+Báo cáo:
 - Các file đã tạo/sửa
 - URL để kiểm tra: `?lang=vi&{NV_NAME_VARIABLE}={MODULE}&{NV_OP_VARIABLE}={FILE}`
 - Những điểm cần Dev kiểm tra thủ công (JS, form submit, phân trang...)
@@ -214,4 +210,3 @@ Sau đó báo cáo:
 
 **Routing & cache:**
 - [ ] **Không** cần sửa plugin routing — `get_module_tpl_dir()` tự xử lý
-- [ ] Cache đã xóa: `rm -rf src/data/cache/*/*.cache && rm -rf src/data/cache/smarty-compile/*.php`

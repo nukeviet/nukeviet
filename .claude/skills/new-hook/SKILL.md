@@ -34,13 +34,7 @@ Dựa trên `TemplateHook.php`:
 - Logic xử lý với `$tag` tương ứng
 - Gọi `nv_add_hook()` ở cuối file
 
-### 5. Xóa cache
-```bash
-rm -rf src/data/cache/*/*.cache
-rm -rf src/data/cache/smarty-compile/*.php
-```
-
-### 6. Báo cáo
+### 5. Báo cáo
 - Đường dẫn file: `modules/{RECEIVE_MODULE}/hooks/{HOOK_FILE}.php`
 - Nhắc đăng ký tại: **Admin > Công cụ web > Plugin > Thêm plugin mới**
 - Cảnh báo xóa cache sau khi kích hoạt

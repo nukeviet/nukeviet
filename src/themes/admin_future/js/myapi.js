@@ -150,6 +150,32 @@ $(function() {
     if ($('#credentiallist').length) {
         var credentiallist = $('#credentiallist'),
             credential_page_url = credentiallist.data('page-url'); ;
+        var credFmt = nv_jsdate_post.replace(/dd/g, 'd').replace(/mm/g, 'm').replace(/yyyy/g, 'Y').replace(/\//g, '-');
+        $('.cred-filter-date', credentiallist).flatpickr({
+            enableTime: false,
+            dateFormat: credFmt,
+            ariaDateFormat: credFmt,
+            locale: nv_lang_interface,
+            onOpen: function(selectedDates, dateStr, instance) {
+                if (instance.input.value.length == 0) {
+                    instance.setDate(new Date());
+                }
+            }
+        });
+        $('[data-toggle="focusDate"]', credentiallist).on('click', function() {
+            $(this).prev('input').trigger('focus');
+        });
+        // Mở rộng/thu gọn tìm kiếm nâng cao
+        const credAdvEl = document.getElementById('credential-search-adv');
+        if (credAdvEl) {
+            const credAdvForm = $('form', credentiallist);
+            credAdvEl.addEventListener('hide.bs.collapse', () => {
+                $('[name="adv"]', credAdvForm).val('0');
+            });
+            credAdvEl.addEventListener('show.bs.collapse', () => {
+                $('[name="adv"]', credAdvForm).val('1');
+            });
+        }
         // Lọc quyền truy cập API-role
         $('.role-id', credentiallist).on('change', function() {
             var role_id = parseInt($(this).val());

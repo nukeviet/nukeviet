@@ -116,7 +116,6 @@ Skills và Project Instructions tương thích với Claude nên không cần l�
 ### Best Practices
 
 - **Luôn backup** code trước khi chạy skill lớn
-- **Xóa cache** sau khi thay đổi cấu trúc: `rm -rf src/data/cache/*/*.cache`
 - **Kiểm tra syntax:** `php -l filename.php`
 - **Test bảo mật:** Dùng `/security-audit` trước khi commit
 - **Đọc changelog:** Khi upgrade module/theme

@@ -42,11 +42,5 @@ npm install
 npm run core-css
 ```
 
-### 7. Xóa cache
-```bash
-rm -rf src/data/cache/*/*.cache
-rm -rf src/data/cache/smarty-compile/*.php
-```
-
-### 8. Báo cáo
+### 7. Báo cáo
 Tóm tắt thay đổi và template cần kiểm tra thủ công sau nâng cấp.

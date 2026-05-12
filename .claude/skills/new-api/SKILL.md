@@ -36,11 +36,5 @@ Dựa trên examples đã đọc, tạo `modules/{module}/{Api|Uapi}/{ActionName
 ### 5. Tạo mẫu gọi Local API (nếu cần)
 Nếu user chọn **Local** hoặc **Cả hai**, hiển thị đoạn code mẫu `nv_local_api()`.
 
-### 6. Xóa cache
-```bash
-rm -rf src/data/cache/*/*.cache
-rm -rf src/data/cache/smarty-compile/*.php
-```
-
-### 7. Báo cáo
+### 6. Báo cáo
 Thông báo đường dẫn file và URL test nếu là Remote API.

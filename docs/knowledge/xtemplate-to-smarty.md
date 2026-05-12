@@ -657,6 +657,5 @@ $(function() {
 - [ ] Mọi form element có `name`; `checked`/`selected` dùng `{if}` trong tpl
 - [ ] Thead có `text-nowrap`; độ rộng cột dùng `%`
 
-### Routing & cache
+### Routing
 - [ ] Thêm op vào `src/includes/plugin/get_module_admin_theme.php` **VÀ** `get_global_admin_theme.php`
-- [ ] Xóa cache: `rm -rf src/data/cache/*/*.cache && rm -rf src/data/cache/smarty-compile/*.php`

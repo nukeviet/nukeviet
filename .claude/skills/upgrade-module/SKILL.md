@@ -37,11 +37,5 @@ Liệt kê từng file và từng dòng cần sửa trước khi thực hiện.
 find $ARGUMENTS -name "*.php" -type f | xargs -n1 php -l | grep -v "No syntax errors"
 ```
 
-### 7. Xóa cache
-```bash
-rm -rf src/data/cache/*/*.cache
-rm -rf src/data/cache/smarty-compile/*.php
-```
-
-### 8. Báo cáo
+### 7. Báo cáo
 Tóm tắt thay đổi và các mục còn cần kiểm tra thủ công.

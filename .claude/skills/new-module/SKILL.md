@@ -49,11 +49,5 @@ Dựa trên examples đã đọc, tạo nội dung cho:
 find src/modules/$ARGUMENTS -name "*.php" -type f | xargs -n1 php -l | grep -v "No syntax errors"
 ```
 
-### 6. Xóa cache
-```bash
-rm -rf src/data/cache/*/*.cache
-rm -rf src/data/cache/smarty-compile/*.php
-```
-
-### 7. Báo cáo kết quả
+### 6. Báo cáo kết quả
 Liệt kê tất cả file đã tạo và hướng dẫn bước tiếp theo (cài module qua Admin > Modules).

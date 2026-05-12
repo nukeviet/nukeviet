@@ -17,9 +17,6 @@ Với mọi task không trivial: **Phân tích → Lập kế hoạch → Xác n
 ```bash
 npm run admin-css  # Build CSS Admin
 npm run core-css   # Build CSS Core
-
-# Xóa cache (chạy sau mọi thay đổi PHP/template):
-rm -rf src/data/cache/*/*.cache && rm -rf src/data/cache/smarty-compile/*.php
 ```
 
 ## Kiến trúc NukeViet 5

@@ -295,11 +295,7 @@ function nv_block_config_{MODULE}_{BLOCK}($module, $data_block)
 
 ---
 
-## Bước 6 — Xóa cache & kiểm tra
-
-```bash
-rm -rf src/data/cache/*/*.cache && rm -rf src/data/cache/smarty-compile/*.php
-```
+## Bước 6 — Kiểm tra
 
 Báo cáo:
 - Các file đã tạo/sửa
@@ -341,6 +337,3 @@ Báo cáo:
 - [ ] `{$CONFIG.field}` pre-fill đúng giá trị đã lưu
 - [ ] `selected` / `checked` dùng `{if}` trong tpl
 - [ ] Hàm `nv_block_config_{MODULE}_{BLOCK}_submit()` giữ nguyên, không sửa
-
-**Cache:**
-- [ ] Cache đã xóa: `rm -rf src/data/cache/*/*.cache && rm -rf src/data/cache/smarty-compile/*.php`

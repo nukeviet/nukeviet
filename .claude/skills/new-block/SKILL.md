@@ -44,11 +44,5 @@ Dựa trên examples đã đọc:
 - JSON: khai báo tham số block — **bắt buộc lấy schema từ examples**, không dùng `{}`
 - TPL: XTemplate (Module Block) hoặc Smarty (Theme Block)
 
-### 5. Xóa cache
-```bash
-rm -rf src/data/cache/*/*.cache
-rm -rf src/data/cache/smarty-compile/*.php
-```
-
-### 6. Báo cáo
+### 5. Báo cáo
 Liệt kê file đã tạo và nhắc kích hoạt tại **Admin > Giao diện > Quản lý Block**.

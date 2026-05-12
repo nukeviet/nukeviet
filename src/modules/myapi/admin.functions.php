@@ -98,36 +98,79 @@ function checkRoleExist($id)
 }
 
 /**
- * getCredentialList()
- *
- * @param mixed $role_id
- * @param mixed $page
- * @param mixed $per_page
- * @param mixed $for_admin
- * @return array
+ * @param int $role_id
+ * @param bool $for_admin
+ * @param int $page
+ * @param int $per_page
+ * @param array $search
+ * @return array{0: string, 1: array}
  */
-function getCredentialList($role_id, $for_admin, $page, $per_page)
+function getCredentialList($role_id, $for_admin, $page, $per_page, $search = [])
 {
-    global $db, $db_config;
+    global $db, $db_config, $global_config;
 
     $join = 'INNER JOIN ' . NV_USERS_GLOBALTABLE . ' tb2 ON (tb1.userid = tb2.userid)';
-    $select = 'tb1.*, tb2.username, tb2.first_name, tb2.last_name';
+    $select = 'tb1.*, tb2.username, tb2.email, tb2.first_name, tb2.last_name';
     if ($for_admin) {
         $join .= ' INNER JOIN ' . NV_AUTHORS_GLOBALTABLE . ' tb3 ON tb1.userid = tb3.admin_id';
         $select .= ', tb3.lev AS level';
     }
 
-    $stmt = $db->prepare('SELECT COUNT(*) FROM ' . $db_config['prefix'] . '_api_role_credential tb1 ' . $join . ' WHERE tb1.role_id = :role_id');
-    $stmt->bindValue(':role_id', $role_id, PDO::PARAM_INT);
+    $where_parts = ['tb1.role_id = :role_id'];
+    $params = [':role_id' => [$role_id, PDO::PARAM_INT]];
+
+    if (!empty($search['q'])) {
+        $q_val = '%' . $search['q'] . '%';
+        $name_concat = $global_config['name_show'] == 0
+            ? "CONCAT(tb2.last_name, ' ', tb2.first_name)"
+            : "CONCAT(tb2.first_name, ' ', tb2.last_name)";
+        $where_parts[] = "(tb2.username LIKE :q0 OR tb2.email LIKE :q1 OR {$name_concat} LIKE :q2)";
+        $params[':q0'] = [$q_val, PDO::PARAM_STR];
+        $params[':q1'] = [$q_val, PDO::PARAM_STR];
+        $params[':q2'] = [$q_val, PDO::PARAM_STR];
+    }
+    if (!empty($search['t_addtime_from'])) {
+        $where_parts[] = 'tb1.addtime >= :t_addtime_from';
+        $params[':t_addtime_from'] = [$search['t_addtime_from'], PDO::PARAM_INT];
+    }
+    if (!empty($search['t_addtime_to'])) {
+        $where_parts[] = 'tb1.addtime <= :t_addtime_to';
+        $params[':t_addtime_to'] = [$search['t_addtime_to'], PDO::PARAM_INT];
+    }
+    if (!empty($search['t_endtime_from'])) {
+        $where_parts[] = 'tb1.endtime >= :t_endtime_from';
+        $params[':t_endtime_from'] = [$search['t_endtime_from'], PDO::PARAM_INT];
+    }
+    if (!empty($search['t_endtime_to'])) {
+        $where_parts[] = 'tb1.endtime > 0 AND tb1.endtime <= :t_endtime_to';
+        $params[':t_endtime_to'] = [$search['t_endtime_to'], PDO::PARAM_INT];
+    }
+    if (!empty($search['t_last_access_from'])) {
+        $where_parts[] = 'tb1.last_access >= :t_last_access_from';
+        $params[':t_last_access_from'] = [$search['t_last_access_from'], PDO::PARAM_INT];
+    }
+    if (!empty($search['t_last_access_to'])) {
+        $where_parts[] = 'tb1.last_access > 0 AND tb1.last_access <= :t_last_access_to';
+        $params[':t_last_access_to'] = [$search['t_last_access_to'], PDO::PARAM_INT];
+    }
+
+    $where_str = implode(' AND ', $where_parts);
+
+    $stmt = $db->prepare('SELECT COUNT(*) FROM ' . $db_config['prefix'] . '_api_role_credential tb1 ' . $join . ' WHERE ' . $where_str);
+    foreach ($params as $key => $val) {
+        $stmt->bindValue($key, $val[0], $val[1]);
+    }
     $stmt->execute();
     $all_pages = $stmt->fetchColumn();
 
-    $sql = 'SELECT ' . $select . ' FROM ' . $db_config['prefix'] . '_api_role_credential tb1 ' . $join . ' WHERE tb1.role_id = :role_id ORDER BY tb1.addtime DESC';
+    $sql = 'SELECT ' . $select . ' FROM ' . $db_config['prefix'] . '_api_role_credential tb1 ' . $join . ' WHERE ' . $where_str . ' ORDER BY tb1.addtime DESC';
     if (!empty($page)) {
         $sql .= ' LIMIT ' . (int) ($page - 1) * $per_page . ',' . (int) $per_page;
     }
     $stmt = $db->prepare($sql);
-    $stmt->bindValue(':role_id', $role_id, PDO::PARAM_INT);
+    foreach ($params as $key => $val) {
+        $stmt->bindValue($key, $val[0], $val[1]);
+    }
     $stmt->execute();
 
     $array = [];
