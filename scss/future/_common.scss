@@ -31,6 +31,13 @@
   }
 }
 
+// Pagination
+.pagination-wrap {
+  .pagination {
+    margin-bottom: 0;
+  }
+}
+
 // Thông báo phiên đăng nhập hết hạn
 .timeoutsess {
   position: fixed;

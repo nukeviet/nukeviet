@@ -38,39 +38,22 @@ function nv_theme_statistics_referer($cts)
 /**
  * nv_theme_statistics_allreferers()
  *
- * @param int   $num_items
- * @param array $cts
  * @param mixed $host_list
  * @param mixed $generate_page
  * @return string
  */
 function nv_theme_statistics_allreferers($host_list, $generate_page)
 {
-    [$template, $dir] = get_module_tpl_dir('allreferers.tpl', true);
-    $xtpl = new XTemplate('allreferers.tpl', $dir);
-    $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
-    $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
-    $xtpl->assign('TEMPLATE', $template);
+    global $nv_Lang;
 
-    if (!empty($host_list)) {
-        foreach ($host_list as $value) {
-            $xtpl->assign('LOOP', $value);
+    $tpl = new \NukeViet\Template\NVSmarty();
+    $tpl->setTemplateDir(get_module_tpl_dir('allreferers.tpl'));
 
-            if (!empty($value['count'])) {
-                $xtpl->parse('main.loop.progress');
-            }
-            $xtpl->parse('main.loop');
-        }
+    $tpl->assign('LANG', $nv_Lang);
+    $tpl->assign('HOST_LIST', $host_list ?? []);
+    $tpl->assign('PAGINATION', $generate_page ?? '');
 
-        if (!empty($generate_page)) {
-            $xtpl->assign('GENERATE_PAGE', $generate_page);
-            $xtpl->parse('main.gp');
-        }
-    }
-
-    $xtpl->parse('main');
-
-    return $xtpl->text('main');
+    return $tpl->fetch('allreferers.tpl');
 }
 
 /**

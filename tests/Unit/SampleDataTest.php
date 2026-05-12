@@ -1066,4 +1066,89 @@ class SampleDataTest extends \Codeception\Test\Unit
 
         $this->assertTrue(true);
     }
+
+    /**
+     * Dữ liệu mẫu thống kê nguồn truy cập (referer) cho bảng nv5_vi_referer_stats
+     *
+     * Mỗi host referer được gán số lượt truy cập ngẫu nhiên cho từng tháng
+     * trong năm, cùng tổng cộng và thời gian cập nhật cuối.
+     *
+     * @group sample-data
+     */
+    public function testInsertSampleDataForStatisticsRefererStats()
+    {
+        global $db, $db_config;
+
+        $table = $db_config['prefix'] . '_vi_referer_stats';
+
+        // Danh sách referer host thực tế
+        $hosts = [
+            'google.com',
+            'google.com.vn',
+            'facebook.com',
+            'zalo.me',
+            'bing.com',
+            'yahoo.com',
+            't.co',
+            'youtube.com',
+            'vnexpress.net',
+            'dantri.com.vn',
+            'tuoitre.vn',
+            'baidu.com',
+            'reddit.com',
+            'linkedin.com',
+            'tiktok.com',
+            'instagram.com',
+            'news.ycombinator.com',
+            'stackoverflow.com',
+        ];
+
+        $now    = time();
+        $values = [];
+        $esc    = fn (string $s) => str_replace(["\\", "'"], ["\\\\", "\\'"], $s);
+
+        // Các host có traffic cao hơn
+        $topHosts = ['google.com', 'google.com.vn', 'facebook.com', 'zalo.me'];
+
+        foreach ($hosts as $host) {
+            $isTop     = in_array($host, $topHosts, true);
+            $monthData = [];
+            $total     = 0;
+
+            for ($m = 0; $m < 12; $m++) {
+                $count       = $isTop ? rand(500, 3000) : rand(10, 400);
+                $monthData[] = $count;
+                $total      += $count;
+            }
+
+            $values[] = sprintf(
+                "('%s',%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d)",
+                $esc($host),
+                $total,
+                $monthData[0],
+                $monthData[1],
+                $monthData[2],
+                $monthData[3],
+                $monthData[4],
+                $monthData[5],
+                $monthData[6],
+                $monthData[7],
+                $monthData[8],
+                $monthData[9],
+                $monthData[10],
+                $monthData[11],
+                $now - rand(0, 86400 * 30)
+            );
+        }
+
+        // Cột: host, total, month01..month12, last_update
+        $db->exec(
+            'INSERT IGNORE INTO ' . $table
+            . ' (host, total, month01, month02, month03, month04, month05, month06,'
+            . '  month07, month08, month09, month10, month11, month12, last_update)'
+            . ' VALUES ' . implode(',', $values)
+        );
+
+        $this->assertTrue(true);
+    }
 }

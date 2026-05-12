@@ -25525,6 +25525,10 @@ readers do not read off random characters that represent icons */
   margin-bottom: 0.5rem;
 }
 
+.pagination-wrap .pagination {
+  margin-bottom: 0;
+}
+
 .timeoutsess {
   position: fixed;
   top: 0;
