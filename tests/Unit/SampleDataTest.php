@@ -1151,4 +1151,62 @@ class SampleDataTest extends \Codeception\Test\Unit
 
         $this->assertTrue(true);
     }
+
+    /**
+     * Sinh dữ liệu mẫu bot visits cho bảng _counter (c_type='bot')
+     * Dùng cho trang allbots hiển thị danh sách bot đã crawl site
+     *
+     * @group sample-data
+     */
+    public function testInsertSampleDataForStatisticsBots()
+    {
+        global $db, $db_config;
+
+        $table = $db_config['prefix'] . '_counter';
+        $now   = time();
+
+        // Danh sách bot thực tế thường gặp kèm lượng request mẫu
+        $bots = [
+            ['googlebot',           rand(5000, 20000)],
+            ['bingbot',             rand(2000, 8000)],
+            ['ahrefsbot',           rand(1000, 5000)],
+            ['semrushbot',          rand(800,  4000)],
+            ['msnbot',              rand(600,  3000)],
+            ['yandexbot',           rand(400,  2000)],
+            ['dotbot',              rand(300,  1500)],
+            ['coccocbot',           rand(200,  1000)],
+            ['baiduspider',         rand(150,  800)],
+            ['duckduckbot',         rand(100,  600)],
+            ['facebookexternalhit', rand(80,   400)],
+            ['twitterbot',          rand(60,   300)],
+            ['sogou',               rand(50,   200)],
+            ['applebot',            rand(40,   150)],
+            ['yahooslurp',          rand(30,   100)],
+            ['petalbot',            rand(20,   80)],
+            ['bytespider',          rand(15,   60)],
+            ['gptbot',              rand(10,   50)],
+            ['claudebot',           rand(8,    40)],
+            ['amazonbot',           rand(5,    20)],
+        ];
+
+        $values = [];
+        foreach ($bots as [$name, $count]) {
+            $values[] = sprintf(
+                "('bot','%s',%d,%d,0)",
+                str_replace(["\\", "'"], ["\\\\", "\\'"], $name),
+                $now - rand(0, 86400 * 60),
+                $count
+            );
+        }
+
+        // c_type + c_val là PK — ON DUPLICATE KEY UPDATE để ghi đè c_count nếu row đã tồn tại
+        $db->exec(
+            'INSERT INTO ' . $table
+            . ' (c_type, c_val, last_update, c_count, vi_count) VALUES '
+            . implode(',', $values)
+            . ' ON DUPLICATE KEY UPDATE c_count = VALUES(c_count), last_update = VALUES(last_update)'
+        );
+
+        $this->assertTrue(true);
+    }
 }
