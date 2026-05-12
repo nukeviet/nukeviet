@@ -106,31 +106,16 @@ function nv_theme_statistics_allbots($bot_list, $generate_page)
  */
 function nv_theme_statistics_allos($os_list, $generate_page)
 {
-    [$template, $dir] = get_module_tpl_dir('allos.tpl', true);
-    $xtpl = new XTemplate('allos.tpl', $dir);
-    $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
-    $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
-    $xtpl->assign('TEMPLATE', $template);
+    global $nv_Lang;
 
-    if (!empty($os_list)) {
-        foreach ($os_list as $value) {
-            $xtpl->assign('LOOP', $value);
+    $tpl = new \NukeViet\Template\NVSmarty();
+    $tpl->setTemplateDir(get_module_tpl_dir('allos.tpl'));
 
-            if (!empty($value['count'])) {
-                $xtpl->parse('main.loop.progress');
-            }
-            $xtpl->parse('main.loop');
-        }
+    $tpl->assign('LANG', $nv_Lang);
+    $tpl->assign('OS_LIST', $os_list ?? []);
+    $tpl->assign('PAGINATION', $generate_page ?? '');
 
-        if (!empty($generate_page)) {
-            $xtpl->assign('GENERATE_PAGE', $generate_page);
-            $xtpl->parse('main.gp');
-        }
-    }
-
-    $xtpl->parse('main');
-
-    return $xtpl->text('main');
+    return $tpl->fetch('allos.tpl');
 }
 
 /**
@@ -163,31 +148,16 @@ function nv_theme_statistics_allbrowsers($browsers_list, $generate_page)
  */
 function nv_theme_statistics_allcountries($countries_list, $generate_page)
 {
-    [$template, $dir] = get_module_tpl_dir('allcountries.tpl', true);
-    $xtpl = new XTemplate('allcountries.tpl', $dir);
-    $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
-    $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
-    $xtpl->assign('TEMPLATE', $template);
+    global $nv_Lang;
 
-    if (!empty($countries_list)) {
-        foreach ($countries_list as $value) {
-            $xtpl->assign('LOOP', $value);
+    $tpl = new \NukeViet\Template\NVSmarty();
+    $tpl->setTemplateDir(get_module_tpl_dir('allcountries.tpl'));
 
-            if (!empty($value['count'])) {
-                $xtpl->parse('main.loop.progress');
-            }
-            $xtpl->parse('main.loop');
-        }
+    $tpl->assign('LANG', $nv_Lang);
+    $tpl->assign('COUNTRIES_LIST', $countries_list ?? []);
+    $tpl->assign('PAGINATION', $generate_page ?? '');
 
-        if (!empty($generate_page)) {
-            $xtpl->assign('GENERATE_PAGE', $generate_page);
-            $xtpl->parse('main.gp');
-        }
-    }
-
-    $xtpl->parse('main');
-
-    return $xtpl->text('main');
+    return $tpl->fetch('allcountries.tpl');
 }
 
 /**
