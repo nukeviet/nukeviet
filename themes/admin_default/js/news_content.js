@@ -348,6 +348,7 @@ $(document).ready(function() {
 
     $("#topicid").select2({
         language: "vi",
+        width: '100%',
         ajax: {
             url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=content&get_topic_json=1',
             dataType: 'json',

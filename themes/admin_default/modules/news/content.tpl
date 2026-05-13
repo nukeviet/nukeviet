@@ -27,24 +27,32 @@
                 <tbody>
                     <tr>
                         <td><strong>{LANG.name}</strong>: <sup class="required">(∗)</sup></td>
-                        <td><input type="text" maxlength="250" value="{rowcontent.title}" id="idtitle" name="title" class="form-control require" data-mess="{LANG.error_title}" onkeypress="nv_validErrorHidden(this);" style="width:350px"/><span class="text-middle"> {GLANG.length_characters}: <span id="titlelength" class="red">0</span>. {GLANG.title_suggest_max} </span></td>
+                        <td><input type="text" maxlength="250" value="{rowcontent.title}" id="idtitle" name="title" class="form-control require" data-mess="{LANG.error_title}" onkeypress="nv_validErrorHidden(this);" style="width:350px;max-width: 100%;"/><span class="text-middle"> {GLANG.length_characters}: <span id="titlelength" class="red">0</span>. {GLANG.title_suggest_max} </span></td>
                     </tr>
                     <tr>
                         <td><strong>{LANG.alias}: </strong></td>
-                        <td><input class="form-control" name="alias" id="idalias" type="text" value="{rowcontent.alias}" maxlength="250"  style="width:350px"/>&nbsp; <em class="fa fa-refresh fa-lg fa-pointer" onclick="get_alias();">&nbsp;</em></td>
+                        <td><input class="form-control" name="alias" id="idalias" type="text" value="{rowcontent.alias}" maxlength="250"  style="width:350px;max-width: 100%;"/>&nbsp; <em class="fa fa-refresh fa-lg fa-pointer" onclick="get_alias();">&nbsp;</em></td>
                     </tr>
                     <tr>
                         <td><strong>{LANG.content_topic}: </strong></td>
                         <td>
-                        <select class="form-control w300" name="topicid" id="topicid">
-                            <!-- BEGIN: rowstopic -->
-                            <option value="{topicid}" {sl}>{topic_title}</option>
-                            <!-- END: rowstopic -->
-                        </select><input class="form-control w200" type="text" maxlength="255" id="AjaxTopicText" value="{rowcontent.topictext}" name="topictext"/></td>
+                            <div class="news-col2input">
+                                <div class="news-col2input-coll">
+                                    <select class="form-control" name="topicid" id="topicid">
+                                        <!-- BEGIN: rowstopic -->
+                                        <option value="{topicid}" {sl}>{topic_title}</option>
+                                        <!-- END: rowstopic -->
+                                    </select>
+                                </div>
+                                <div class="news-col2input-coll">
+                                    <input class="form-control" type="text" maxlength="255" id="AjaxTopicText" value="{rowcontent.topictext}" name="topictext"/>
+                                </div>
+                            </div>
+                        </td>
                     </tr>
                     <tr>
                         <td><strong>{LANG.content_homeimg}</strong></td>
-                        <td><input class="form-control" style="width:380px" type="text" name="homeimg" id="homeimg" value="{rowcontent.homeimgfile}"/><input id="select-img-post" type="button" value="{GLANG.browse_image}" name="selectimg" class="btn btn-info" /></td>
+                        <td><input class="form-control" style="width:380px;max-width: 100%;" type="text" name="homeimg" id="homeimg" value="{rowcontent.homeimgfile}"/><input id="select-img-post" type="button" value="{GLANG.browse_image}" name="selectimg" class="btn btn-info" /></td>
                     </tr>
                     <tr>
                         <td>{LANG.content_homeimgalt}</td>
@@ -76,7 +84,7 @@
                             <div id="filearea">
                                 <!-- BEGIN: files -->
                                 <div id="fileitem_{FILEUPL.id}" style="margin-bottom: 5px">
-                                    <input title="{LANG.fileupload}" class="form-control w400 pull-left" type="text" name="files[]" id="fileupload_{FILEUPL.id}" value="{FILEUPL.value}" style="margin-right: 5px" />
+                                    <input title="{LANG.fileupload}" class="form-control w400 pull-left" type="text" name="files[]" id="fileupload_{FILEUPL.id}" value="{FILEUPL.value}" style="margin-right: 5px;max-width: 100%;" />
                                     <input onclick="nv_open_browse('{NV_BASE_ADMINURL}index.php?{NV_NAME_VARIABLE}=upload&popup=1&area=fileupload_{FILEUPL.id}&path={UPLOAD_CURRENT}&type=file', 'NVImg', '850', '500', 'resizable=no,scrollbars=no,toolbar=no,location=no,status=no');return false;" type="button" value="{GLANG.browse_file}" class="selectfile btn btn-primary" />
                                     <input onclick="nv_delete_datacontent('fileitem_{FILEUPL.id}');return false;" type="button" value="{GLANG.delete}" class="selectfile btn btn-danger" />
                                 </div>
@@ -277,7 +285,7 @@
                         <tbody>
                             <tr>
                                 <td><strong>{LANG.titlesite}</strong>:</td>
-                                <td><input type="text" maxlength="250" value="{rowcontent.titlesite}" id="idtitlesite" name="titlesite" class="form-control"  style="width:350px"/><span class="text-middle"> {GLANG.length_characters}: <span id="titlesitelength" class="red">0</span>. {GLANG.title_suggest_max} </span></td>
+                                <td><input type="text" maxlength="250" value="{rowcontent.titlesite}" id="idtitlesite" name="titlesite" class="form-control"  style="width:350px;max-width: 100%;"/><span class="text-middle"> {GLANG.length_characters}: <span id="titlesitelength" class="red">0</span>. {GLANG.title_suggest_max} </span></td>
                             </tr>
                             <tr>
                                 <td><strong>{LANG.content_description}: </strong></td>

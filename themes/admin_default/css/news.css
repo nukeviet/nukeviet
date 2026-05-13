@@ -352,3 +352,31 @@ input {
 .witdh-100p {
     width: 100%;
 }
+
+.news-col2input {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.news-col2input-coll {
+    flex: 0 0 calc(50% - 5px);
+    max-width: calc(50% - 5px);
+    min-width: 0;
+}
+
+.news-col2input-coll .form-control {
+    width: 100%;
+    max-width: 100%;
+}
+
+@media (max-width: 767.98px) {
+    .news-col2input {
+        flex-wrap: wrap;
+    }
+
+    .news-col2input-coll {
+        flex: 0 0 100%;
+        max-width: 100%;
+    }
+}

@@ -548,3 +548,7 @@ img.previewimg {
     border-right: 1px solid #dadada;
     padding-right: 10px;
 }
+
+.accept-touch-action {
+    touch-action: pan-y!important;
+}
