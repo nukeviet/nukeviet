@@ -16,7 +16,7 @@ if (!defined('NV_IS_MOD_STATISTICS')) {
 $page_title = $module_info['site_title'];
 $key_words = $module_info['keywords'];
 $page_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name;
-$canonicalUrl = getCanonicalUrl($page_url);
+!defined('NV_ADMIN') && $canonicalUrl = getCanonicalUrl($page_url);
 
 $current_month_num = date('n', NV_CURRENTTIME);
 $current_year = date('Y', NV_CURRENTTIME);

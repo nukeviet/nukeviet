@@ -31,20 +31,29 @@ $array_url_instruction['allos'] = 'https://wiki.nukeviet.vn/nukeviet4:admin:stat
 $array_url_instruction['allreferers'] = 'https://wiki.nukeviet.vn/nukeviet4:admin:statistics:allreferers';
 
 define('NV_BASE_MOD_URL', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
+$global_config['current_theme_type'] = 'r';
 
-$module_info['template'] = 'default';
-if (file_exists(NV_ROOTDIR . '/themes/' . $module_info['template'] . '/css/' . $module_file . '.css')) {
-    $my_head = '<link rel="StyleSheet" href="' . NV_STATIC_URL . 'themes/' . $module_info['template'] . '/css/' . $module_file . ".css\" type=\"text/css\" />\n";
-}
+if ($op != 'cleardata') {
+    // FIXME Xóa 3 dòng này sau khi đã hoàn thiện.
+    $module_info['module_theme'] = 'future';
+    $global_config['module_theme'] = 'future';
+    $global_config['site_theme'] = 'future';
 
-require NV_ROOTDIR . '/modules/' . $module_file . '/theme.php';
+    // Xử lý đoạn này để ép load js, css ngoài site
+    $_module_name = $module_name;
+    $module_name = 'admin_statistics';
+    addition_module_assets($_module_name, 'both');
+    $module_name = $_module_name;
 
-/**
- * nv_site_theme()
- *
- * @param mixed $contents
- */
-function nv_site_theme($contents)
-{
-    return nv_admin_theme($contents);
+    require NV_ROOTDIR . '/modules/' . $module_file . '/theme.php';
+
+    /**
+     * nv_site_theme()
+     *
+     * @param mixed $contents
+     */
+    function nv_site_theme($contents)
+    {
+        return nv_admin_theme($contents);
+    }
 }

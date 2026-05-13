@@ -64,7 +64,7 @@ if ($num_items) {
     $contents = nv_theme_statistics_allreferers($host_list, $generate_page);
 }
 
-$canonicalUrl = getCanonicalUrl($page_url);
+!defined('NV_ADMIN') && $canonicalUrl = getCanonicalUrl($page_url);
 
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_site_theme($contents);

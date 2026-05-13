@@ -32,7 +32,7 @@ $contents = '';
 $page_title = $nv_Lang->getModule('refererbysite', $host);
 $key_words = $module_info['keywords'];
 $page_url = NV_BASE_MOD_URL . '&' . NV_OP_VARIABLE . '=' . $op . '&host=' . $host;
-$canonicalUrl = getCanonicalUrl($page_url);
+!defined('NV_ADMIN') && $canonicalUrl = getCanonicalUrl($page_url);
 
 $cts = [
     'caption' => $page_title,
