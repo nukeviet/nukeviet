@@ -12,7 +12,8 @@
 $(function() {
     if ($('#my-role-api').length) {
         const myroleapi = $('#my-role-api'),
-            myroleapi_url = myroleapi.data('page-url');
+            myroleapi_url = myroleapi.data('page-url'),
+            myroleapi_checkss = myroleapi.data('checkss');
 
         // Kích hoạt / hủy kích hoạt quyền
         $('.credential-activate, .credential-deactivate', myroleapi).on('click', function(e) {
@@ -34,7 +35,8 @@ $(function() {
                 url: myroleapi_url,
                 cache: false,
                 data: {
-                    changeActivate: role_id
+                    changeActivate: role_id,
+                    checkss: myroleapi_checkss
                 },
                 dataType: 'json',
                 success: function(res) {
@@ -92,7 +94,8 @@ $(function() {
                 url: myroleapi_url,
                 cache: false,
                 data: {
-                    createAuth: method
+                    createAuth: method,
+                    checkss: myroleapi_checkss
                 },
                 dataType: 'json',
                 success: function(res) {
@@ -132,7 +135,8 @@ $(function() {
                     url: myroleapi_url,
                     cache: false,
                     data: {
-                        delAuth: method
+                        delAuth: method,
+                        checkss: myroleapi_checkss
                     },
                     dataType: 'json',
                     success: function(res) {
@@ -183,7 +187,8 @@ $(function() {
                 cache: false,
                 data: {
                     ipsUpdate: ips,
-                    method: method
+                    method: method,
+                    checkss: myroleapi_checkss
                 },
                 dataType: 'json',
                 success: function(res) {

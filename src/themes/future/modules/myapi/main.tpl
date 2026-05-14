@@ -87,7 +87,7 @@
 </div>
 {/function}
 
-<div id="my-role-api" data-page-url="{$PAGE_URL}">
+<div id="my-role-api" data-page-url="{$PAGE_URL}" data-checkss="{$CHECKSS}">
     <div class="d-flex align-items-end">
         <div class="mb-2">
             <ul class="nav nav-pills" role="tablist">
