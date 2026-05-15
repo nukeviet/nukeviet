@@ -25,54 +25,28 @@ function search_main_theme($is_search, $search, $array_modul)
 {
     global $module_info, $global_config, $nv_Lang, $module_name;
 
-    $xtpl = new XTemplate('form.tpl', get_module_tpl_dir('form.tpl'));
-    $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
-    $xtpl->assign('NV_MIN_SEARCH_LENGTH', NV_MIN_SEARCH_LENGTH);
-    $xtpl->assign('NV_MAX_SEARCH_LENGTH', NV_MAX_SEARCH_LENGTH);
-    $xtpl->assign('PAGE', $search['page']);
-    $xtpl->assign('NV_LANG_VARIABLE', NV_LANG_VARIABLE);
-    $xtpl->assign('NV_LANG_DATA', NV_LANG_DATA);
-    $xtpl->assign('NV_NAME_VARIABLE', NV_NAME_VARIABLE);
-    $xtpl->assign('MODULE_NAME', $module_name);
-    $xtpl->assign('INVALID_KEY_MESS', $nv_Lang->getModule('searchQueryError', NV_MIN_SEARCH_LENGTH));
+    $tpl = new \NukeViet\Template\NVSmarty();
+    $tpl->setTemplateDir(get_module_tpl_dir('form.tpl'));
 
-    $search['action'] = NV_BASE_SITEURL . 'index.php';
-    $search['full_action'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name;
-    $search['andChecked'] = $search['logic'] == 1 ? ' checked="checked"' : '';
-    $search['orChecked'] = $search['logic'] == 1 ? '' : ' checked="checked"';
-
-    $xtpl->assign('DATA', $search);
-
-    if (!empty($array_modul)) {
-        foreach ($array_modul as $m_name => $m_info) {
-            $m_info['value'] = $m_name;
-            $m_info['selected'] = ($m_name == $search['mod']) ? ' selected="selected"' : '';
-            $m_info['adv_search'] = $m_info['adv_search'] ? 'true' : 'false';
-            $m_info['url'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $m_name . '&' . NV_OP_VARIABLE . '=search';
-
-            $xtpl->assign('MOD', $m_info);
-            $xtpl->parse('main.select_option');
-        }
+    $mods = [];
+    foreach ($array_modul as $m_name => $m_info) {
+        $mods[] = [
+            'value' => $m_name,
+            'custom_title' => $m_info['custom_title'],
+            'adv_search' => (bool) $m_info['adv_search'],
+            'url' => NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $m_name . '&' . NV_OP_VARIABLE . '=search',
+            'is_selected' => ($m_name == $search['mod']),
+        ];
     }
 
-    if (isset($global_config['searchEngineUniqueID']) and !empty($global_config['searchEngineUniqueID'])) {
-        $xtpl->assign('SEARCH_ENGINE_UNIQUE_ID', $global_config['searchEngineUniqueID']);
-        $xtpl->parse('main.search_engine_unique_ID');
-    }
+    $tpl->assign('LANG', $nv_Lang);
+    $tpl->assign('MODULE_NAME', $module_name);
+    $tpl->assign('DATA', $search);
+    $tpl->assign('MODS', $mods);
+    $tpl->assign('IS_SEARCH', $is_search);
+    $tpl->assign('SEARCH_ENGINE_ID', $global_config['searchEngineUniqueID'] ?? '');
 
-    if ($is_search) {
-        if ($search['is_error']) {
-            $xtpl->assign('SEARCH_RESULT', '<span class="red">' . $search['errorInfo'] . '</span>');
-            $xtpl->parse('main.is_invalid');
-        } else {
-            $xtpl->assign('SEARCH_RESULT', $search['content']);
-            $xtpl->parse('main.is_valid');
-        }
-    }
-
-    $xtpl->parse('main');
-
-    return $xtpl->text('main');
+    return $tpl->fetch('form.tpl');
 }
 
 /**
@@ -103,17 +77,10 @@ function urlencode_rfc_3986($string)
  */
 function search_result_theme($result_array, $mod, $mod_custom_title, $search, $is_generate_page, $limit, $num_items)
 {
-    global $module_info, $db, $module_name;
-    $xtpl = new XTemplate('result.tpl', get_module_tpl_dir('result.tpl'));
-    $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
-    $xtpl->assign('SEARCH_RESULT_NUM', $num_items);
-    $xtpl->assign('MODULE_CUSTOM_TITLE', $mod_custom_title);
-    $xtpl->assign('HIDDEN_KEY', $search['key']);
+    global $module_name, $nv_Lang;
 
-    foreach ($result_array as $result) {
-        $xtpl->assign('RESULT', $result);
-        $xtpl->parse('main.result');
-    }
+    $tpl = new \NukeViet\Template\NVSmarty();
+    $tpl->setTemplateDir(get_module_tpl_dir('result.tpl'));
 
     $base_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&q=' . urlencode_rfc_3986($search['key']);
     if ($mod != 'all') {
@@ -123,20 +90,22 @@ function search_result_theme($result_array, $mod, $mod_custom_title, $search, $i
         $base_url .= '&l=' . $search['logic'];
     }
 
+    $pagination = '';
+    $more = '';
     if ($is_generate_page) {
-        $generate_page = nv_generate_page($base_url, $num_items, $limit, $search['page']);
-        if (!empty($generate_page)) {
-            $xtpl->assign('GENERATE_PAGE', $generate_page);
-            $xtpl->parse('main.generate_page');
-        }
-    } else {
-        if ($num_items > $limit) {
-            $xtpl->assign('MORE', $base_url);
-            $xtpl->parse('main.more');
-        }
+        $pagination = nv_generate_page($base_url, $num_items, $limit, $search['page']) ?? '';
+    } elseif ($num_items > $limit) {
+        $more = $base_url;
     }
 
-    $xtpl->parse('main');
+    $tpl->assign('LANG', $nv_Lang);
+    $tpl->assign('MODULE_NAME', $module_name);
+    $tpl->assign('SEARCH_RESULT_NUM', $num_items);
+    $tpl->assign('MODULE_CUSTOM_TITLE', $mod_custom_title);
+    $tpl->assign('HIDDEN_KEY', $search['key']);
+    $tpl->assign('RESULTS', $result_array);
+    $tpl->assign('PAGINATION', $pagination);
+    $tpl->assign('MORE', $more);
 
-    return $xtpl->text('main');
+    return $tpl->fetch('result.tpl');
 }
