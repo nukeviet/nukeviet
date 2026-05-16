@@ -92,6 +92,14 @@ $tokend_key = md5($user_info['username'] . '_' . $user_info['current_login'] . '
 $tokend_confirm_password = $nv_Request->get_title($tokend_key, 'session', '');
 $tokend = md5(NV_BRIDGE_USER_MODULE . '_confirm_pass_' . NV_CHECK_SESSION);
 
-if ($tokend_confirm_password != $tokend and $op != 'confirm') {
+if (!hash_equals($tokend, $tokend_confirm_password) and $op != 'confirm') {
     nv_redirect_location(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $module_info['alias']['confirm'] . '&nv_redirect=' . nv_redirect_encrypt($client_info['selfurl']));
+}
+
+/**
+ * Đồng bộ trạng thái xác nhận mật khẩu sang endpoint users/editinfo/passkey
+ * (checkss khớp với modules/users/funcs/editinfo.php thay đổi cần cập nhật)
+ */
+if (hash_equals($tokend, $tokend_confirm_password) and !is_verified_password('passkey', NV_BRIDGE_USER_MODULE)) {
+    set_verified_password('passkey', NV_BRIDGE_USER_MODULE);
 }

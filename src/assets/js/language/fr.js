@@ -53,6 +53,7 @@ var nv_aryDayName = "Dimanche Lundi Mardi Mercredi Jeudi Vendredi Samedi".split(
     nv_maxlength = "Merci de ne pas entrer plus de {0} caractères.",
     nv_minlength = "Merci d'entrer au minimum {0} caractères.",
     nv_rangelength = "Merci d'entrer une valeur entre {0} et {1} caractères.",
+    nv_exactlength = "Merci d'entrer exactement {0} caractères.",
     nv_range = "Merci d'entrer une valeur entre {0} et {1}.",
     nv_max = "Merci d'entrer une valeur moins ou égale à {0}.",
     nv_min = "Merci d'entrer une valeur plus ou égal à {0}.",

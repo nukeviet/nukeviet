@@ -53,6 +53,7 @@ var nv_aryDayName = "Chủ nhật;Thứ Hai;Thứ Ba;Thứ Tư;Thứ Năm;Thứ 
     nv_maxlength = "Xin vui lòng nhập không quá {0} ký tự.",
     nv_minlength = "Xin vui lòng nhập ít nhất {0} ký tự.",
     nv_rangelength = "Xin vui lòng nhập một giá trị giữa {0} và {1} ký tự.",
+    nv_exactlength = "Xin vui lòng nhập {0} ký tự.",
     nv_range = "Xin vui lòng nhập một giá trị giữa {0} và {1}.",
     nv_max = "Xin vui lòng nhập một giá trị nhỏ hơn hoặc bằng {0}.",
     nv_min = "Xin vui lòng nhập một giá trị lớn hơn hoặc bằng {0}.",

@@ -114,7 +114,11 @@ function _check_invalid(ipt, customMess, specialType) {
     )) {
         let mess = nv_required;
         if (valid.minLen >=0 && valid.maxLen >= 0) {
-            mess = nv_rangelength.replace('{0}', valid.minLen).replace('{1}', valid.maxLen);
+            if (valid.minLen == valid.maxLen) {
+                mess = nv_exactlength.replace('{0}', valid.minLen);
+            } else {
+                mess = nv_rangelength.replace('{0}', valid.minLen).replace('{1}', valid.maxLen);
+            }
         } else if (valid.minLen >= 0) {
             mess = nv_minlength.replace('{0}', valid.minLen);
         } else if (valid.maxLen >= 0) {

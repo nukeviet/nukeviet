@@ -104,6 +104,11 @@ Tuân thủ toàn bộ quy tắc trong `docs/knowledge/xtemplate-to-smarty.md` (
   - `{$timestamp|ddatetime}` → `nv_datetime_format()`
   - `{$number|dnumber}` → `nv_number_format()`
 - **CSRF** chỉ dùng khi tpl có form POST thực sự (VD: bình luận, đăng ký). Không thêm CSRF vào tpl chỉ hiển thị nội dung.
+- **Form submit AJAX** trong frontend dùng `data-toggle="ajax-form"` — **KHÔNG** dùng `class="ajax-submit"` (class đó chỉ dành cho admin_future):
+  ```html
+  <form action="..." method="post" data-toggle="ajax-form" novalidate>
+  ```
+- **Form submit AJAX cần validation**: sử dụng `data-precheck="nv_precheck_form"` để kiểm tra trước khi gửi form.
 
 ### 5B. Cập nhật hàm theme trong `theme.php`
 
@@ -202,6 +207,7 @@ Báo cáo:
 - [ ] Tất cả hằng dùng `{$smarty.const.*}`
 - [ ] Icons dùng Font Awesome 6 (`fa-solid fa-*`)
 - [ ] CSRF chỉ có trong tpl có form POST thực sự; không thêm thừa vào tpl chỉ hiển thị
+- [ ] Form submit AJAX dùng `data-toggle="ajax-form"` — không dùng `class="ajax-submit"`
 
 **JavaScript:**
 - [ ] Không có JS inline (`onclick=`, `onchange=`, `javascript:`)

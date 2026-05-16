@@ -1,0 +1,55 @@
+.step-bar {
+  display: flex;
+  justify-content: space-between;
+  margin: 1.25rem auto;
+  max-width: 600px;
+
+  .step {
+    text-align: center;
+    position: relative;
+    flex: 1;
+
+    &::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      right: 0;
+      transform: translateY(-50%);
+      width: 100%;
+      height: 2px;
+      background-color: var(--#{$prefix}border-color);
+      z-index: 1;
+    }
+
+    .circle {
+      display: inline-block;
+      width: 2.5rem;
+      height: 2.5rem;
+      line-height: 2.5rem;
+      border-radius: 50%;
+      background-color: var(--#{$prefix}border-color);
+      font-weight: $font-weight-bold;
+      z-index: 2;
+      position: relative;
+    }
+
+    &.active .circle {
+      background-color: $primary;
+      color: $white;
+    }
+
+    &.completed .circle {
+      background-color: $success;
+      color: $white;
+    }
+  }
+}
+
+.recovery-code {
+  padding: .4375rem 0;
+  letter-spacing: .3125rem;
+
+  span {
+    font-family: 'Courier New', monospace;
+  }
+}

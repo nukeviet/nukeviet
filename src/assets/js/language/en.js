@@ -53,6 +53,7 @@ var nv_aryDayName = "Sunday Monday Tuesday Wednesday Thursday Friday Saturday".s
     nv_maxlength = "Please enter no more than {0} characters.",
     nv_minlength = "Please enter at least {0} characters.",
     nv_rangelength = "Please enter a value between {0} and {1} characters long.",
+    nv_exactlength = "Please enter exactly {0} characters.",
     nv_range = "Please enter a value between {0} and {1}.",
     nv_max = "Please enter a value less than or equal to {0}.",
     nv_min = "Please enter a value greater than or equal to {0}.",
