@@ -25,37 +25,36 @@ if (!nv_function_exists('nv_menu_site_mods')) {
     {
         global $site_mods, $nv_Lang;
 
-        $html = '<div class="row mb-3">';
-        $html .= '	<div class="col-sm-9 offset-sm-3"><div class="alert alert-info mb-0" role="alert">' . $nv_Lang->getModule('menu_note_auto') . '</div></div>';
-        $html .= '</div>';
-        $html .= '<div class="row mb-3">';
-        $html .= '<label class="col-sm-3 col-form-label text-sm-end text-truncate fw-medium">';
-        $html .= $nv_Lang->getModule('title_length');
-        $html .= ':</label>';
-        $html .= '<div class="col-sm-7">';
-        $html .= '<input type="text" class="form-control" name="config_title_length" value="' . $data_block['title_length'] . '"/>';
-        $html .= '</div>';
-        $html .= '</div>';
-        $html .= '<div class="row mb-3"><label class="col-sm-3 col-form-label text-sm-end text-truncate fw-medium">' . $nv_Lang->getModule('module_display') . ':</label><div class="col-sm-7"><ul id="sortable" class="list-group">';
+        [$block_theme, $dir] = get_block_tpl_dir('global.site_mods.config.tpl', true, 'menu');
+        $tpl = new \NukeViet\Template\NVSmarty();
+        $tpl->setTemplateDir($dir);
+        $tpl->assign('LANG', $nv_Lang);
+        $tpl->assign('TEMPLATE', $block_theme);
+        $tpl->assign('CONFIG', $data_block);
 
         if (empty($data_block['module_in_menu']) or !is_array($data_block['module_in_menu'])) {
             $data_block['module_in_menu'] = [];
         }
 
         $array_no_show = ['comment', 'menu'];
-        $modlist = !empty($data_block['module_in_menu']) ? ($data_block['module_in_menu'] + array_diff(array_keys($site_mods), $data_block['module_in_menu'])) : array_keys($site_mods);
+        $modlist = !empty($data_block['module_in_menu'])
+            ? ($data_block['module_in_menu'] + array_diff(array_keys($site_mods), $data_block['module_in_menu']))
+            : array_keys($site_mods);
         $modlist = array_diff($modlist, $array_no_show);
+
+        $mods = [];
         foreach ($modlist as $modname) {
             if (isset($site_mods[$modname])) {
-                $modvalues = $site_mods[$modname];
-                $checked = in_array($modname, $data_block['module_in_menu'], true) ? ' checked="checked"' : '';
-                $html .= '<li class="list-group-item"><div class="d-flex align-items-center justify-content-between"><div class="form-check"><input class="form-check-input" type="checkbox" ' . $checked . ' value="' . $modname . '" name="module_in_menu[]" id="module_in_menu_' . $modname . '"><label class="form-check-label" for="module_in_menu_' . $modname . '">' . $modvalues['custom_title'] . '</label></div><i class="fa-solid fa-sort"></i></li>';
+                $mods[] = [
+                    'name' => $modname,
+                    'title' => $site_mods[$modname]['custom_title'],
+                    'checked' => in_array($modname, $data_block['module_in_menu'], true),
+                ];
             }
         }
-        $html .= '</ul></div></div>';
-        $html .= '<script>$( function() {$( "#sortable" ).sortable().disableSelection()});</script>';
+        $tpl->assign('MODS', $mods);
 
-        return $html;
+        return $tpl->fetch('global.site_mods.config.tpl');
     }
 
     /**
@@ -83,9 +82,14 @@ if (!nv_function_exists('nv_menu_site_mods')) {
      */
     function nv_menu_site_mods($block_config)
     {
-        global $nv_Cache, $db, $db_config, $global_config, $site_mods, $module_name, $module_file, $module_data, $nv_Lang, $catid, $home, $op, $array_op;
+        global $nv_Cache, $db_config, $site_mods, $module_name, $nv_Lang, $home, $op, $array_op;
 
         if (empty($block_config['module_in_menu'])) {
+            return '';
+        }
+
+        [$block_theme, $dir] = get_block_tpl_dir('global.site_mods.tpl', true, 'menu');
+        if (empty($dir)) {
             return '';
         }
 
@@ -96,165 +100,116 @@ if (!nv_function_exists('nv_menu_site_mods')) {
                 $array_menu = [
                     'title' => $modvalues['custom_title'],
                     'title_trim' => nv_clean60($modvalues['custom_title'], $block_config['title_length']),
-                    'class' => $modname,
-                    'current' => '',
-                    'liclass' => '',
-                    'aclass' => '',
+                    'note' => $modvalues['custom_title'],
+                    'css' => $modname,
                     'link' => NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $modname,
                     'is_active' => ($modname == $module_name and empty($home)),
-                    'sub' => []
+                    'sub' => [],
                 ];
 
                 $sub_is_active = false;
-                // Get submenu
                 if (!empty($modvalues['funcs'])) {
                     if ($modvalues['module_file'] == 'news' or $modvalues['module_file'] == 'weblinks') {
                         $sql = 'SELECT title, alias FROM ' . NV_PREFIXLANG . '_' . $modvalues['module_data'] . '_cat WHERE parentid=0 AND ' . ($modvalues['module_file'] == 'news' ? 'status=1' : 'inhome=1') . ' ORDER BY weight ASC LIMIT 10';
                         $list = $nv_Cache->db($sql, '', $modname);
                         foreach ($list as $l) {
-                            $is_active = ($modname == $module_name and !empty($array_op) and $l['alias'] == $array_op[0]) ? true : false;
-                            $is_active && $sub_is_active = true;
+                            $is_active = ($modname == $module_name and !empty($array_op) and $l['alias'] == $array_op[0]);
+                            if ($is_active) {
+                                $sub_is_active = true;
+                            }
                             $array_menu['sub'][] = [
-                                'note' => $l['title'],
+                                'title' => $l['title'],
                                 'title_trim' => nv_clean60($l['title'], $block_config['title_length']),
+                                'note' => $l['title'],
                                 'is_active' => $is_active,
-                                'link' => NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $modname . '&amp;' . NV_OP_VARIABLE . '=' . $l['alias']
+                                'link' => NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $modname . '&amp;' . NV_OP_VARIABLE . '=' . $l['alias'],
+                                'sub' => [],
                             ];
                         }
                     } elseif ($modvalues['module_file'] == 'shops') {
                         $sql = 'SELECT ' . NV_LANG_DATA . '_title as title, ' . NV_LANG_DATA . '_alias as alias FROM ' . $db_config['prefix'] . '_' . $modvalues['module_data'] . '_catalogs WHERE parentid=0 AND inhome=1 ORDER BY weight ASC LIMIT 10';
                         $list = $nv_Cache->db($sql, '', $modname);
                         foreach ($list as $l) {
-                            $is_active = ($modname == $module_name and $l['alias'] == $array_op[0]) ? true : false;
-                            $is_active && $sub_is_active = true;
+                            $is_active = ($modname == $module_name and $l['alias'] == $array_op[0]);
+                            if ($is_active) {
+                                $sub_is_active = true;
+                            }
                             $array_menu['sub'][] = [
-                                'note' => $l['title'],
+                                'title' => $l['title'],
                                 'title_trim' => nv_clean60($l['title'], $block_config['title_length']),
+                                'note' => $l['title'],
                                 'is_active' => $is_active,
-                                'link' => NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $modname . '&amp;' . NV_OP_VARIABLE . '=' . $l['alias']
+                                'link' => NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $modname . '&amp;' . NV_OP_VARIABLE . '=' . $l['alias'],
+                                'sub' => [],
                             ];
                         }
                     } elseif ($modvalues['module_file'] == 'message') {
                         if (defined('NV_IS_USER')) {
-                            $is_active = ($modname == $module_name and 'config' == $op) ? true : false;
-                            $is_active && $sub_is_active = true;
+                            $is_active = ($modname == $module_name and 'config' == $op);
+                            if ($is_active) {
+                                $sub_is_active = true;
+                            }
                             $array_menu['sub'][] = [
-                                'note' => $nv_Lang->getGlobal('your_account'),
+                                'title' => $nv_Lang->getGlobal('your_account'),
                                 'title_trim' => nv_clean60($nv_Lang->getGlobal('your_account'), $block_config['title_length']),
+                                'note' => $nv_Lang->getGlobal('your_account'),
                                 'is_active' => $is_active,
-                                'link' => NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $modname . '&amp;' . NV_OP_VARIABLE . '=config'
+                                'link' => NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $modname . '&amp;' . NV_OP_VARIABLE . '=config',
+                                'sub' => [],
                             ];
                         }
                     } elseif ($modvalues['module_file'] == 'download' or $modvalues['module_file'] == 'faq' or $modvalues['module_file'] == 'saas') {
                         $sql = 'SELECT title, alias FROM ' . NV_PREFIXLANG . '_' . $modvalues['module_data'] . '_categories WHERE parentid=0 AND status=1 ORDER BY weight ASC LIMIT 10';
                         $list = $nv_Cache->db($sql, '', $modname);
                         foreach ($list as $l) {
-                            $is_active = ($modname == $module_name and $l['alias'] == $array_op[0]) ? true : false;
-                            $is_active && $sub_is_active = true;
+                            $is_active = ($modname == $module_name and $l['alias'] == $array_op[0]);
+                            if ($is_active) {
+                                $sub_is_active = true;
+                            }
                             $array_menu['sub'][] = [
-                                'note' => $l['title'],
+                                'title' => $l['title'],
                                 'title_trim' => nv_clean60($l['title'], $block_config['title_length']),
+                                'note' => $l['title'],
                                 'is_active' => $is_active,
-                                'link' => NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $modname . '&amp;' . NV_OP_VARIABLE . '=' . $l['alias']
+                                'link' => NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $modname . '&amp;' . NV_OP_VARIABLE . '=' . $l['alias'],
+                                'sub' => [],
                             ];
                         }
                     } else {
                         foreach ($modvalues['funcs'] as $key => $sub_item) {
                             if ($sub_item['in_submenu'] == 1) {
-                                $is_active = ($modname == $module_name and $key == $op) ? true : false;
-                                $is_active && $sub_is_active = true;
+                                $is_active = ($modname == $module_name and $key == $op);
+                                if ($is_active) {
+                                    $sub_is_active = true;
+                                }
                                 $array_menu['sub'][] = [
-                                    'note' => $sub_item['func_custom_name'],
+                                    'title' => $sub_item['func_custom_name'],
                                     'title_trim' => nv_clean60($sub_item['func_custom_name'], $block_config['title_length']),
+                                    'note' => $sub_item['func_custom_name'],
                                     'is_active' => $is_active,
-                                    'link' => NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $modname . '&amp;' . NV_OP_VARIABLE . '=' . $key
+                                    'link' => NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $modname . '&amp;' . NV_OP_VARIABLE . '=' . $key,
+                                    'sub' => [],
                                 ];
                             }
                         }
                     }
                 }
 
-                if (!empty($array_menu['sub'])) {
-                    $array_menu['current'] = 'dropdown';
-                    $array_menu['liclass'] = 'dropdown';
-                    $array_menu['aclass'] = 'dropdown-toggle';
-
-                    if (!$array_menu['is_active'] and $sub_is_active) {
-                        $array_menu['is_active'] = true;
-                    }
-                }
-
-                if ($array_menu['is_active']) {
-                    $array_menu['aclass'] .= (!empty($array_menu['aclass']) ? ' ' : '') . 'active';
-                    $array_menu['current'] .= (!empty($array_menu['current']) ? ' ' : '') . 'active';
+                if (!$array_menu['is_active'] and $sub_is_active) {
+                    $array_menu['is_active'] = true;
                 }
 
                 $menulist[] = $array_menu;
             }
         }
 
-        $block_theme = get_tpl_dir([$global_config['module_theme'], $global_config['site_theme']], 'default', '/modules/menu/global.bootstrap.tpl');
-        $xtpl = new XTemplate('global.bootstrap.tpl', NV_ROOTDIR . '/themes/' . $block_theme . '/modules/menu');
-        $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_global);
-        $xtpl->assign('BLOCK_THEME', $block_theme);
-        $xtpl->assign('THEME_SITE_HREF', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA);
+        $tpl = new \NukeViet\Template\NVSmarty();
+        $tpl->setTemplateDir($dir);
+        $tpl->assign('LANG', $nv_Lang);
+        $tpl->assign('TEMPLATE', $block_theme);
+        $tpl->assign('MENULIST', $menulist);
 
-        if (!empty($menulist)) {
-            foreach ($menulist as $menu) {
-                !empty($menu['liclass']) && $menu['liclass'] = ' ' . $menu['liclass'];
-                !empty($menu['aclass']) && $menu['aclass'] = ' ' . $menu['aclass'];
-                !empty($menu['current']) && $menu['current'] = ' class="' . $menu['current'] . '"';
-                $xtpl->assign('TOP_MENU', $menu);
-                if (!empty($menu['icon'])) {
-                    $xtpl->parse('main.top_menu.icon');
-                }
-                if (!empty($menu['sub'])) {
-                    $submenu = nv_menu_site_mods_submenu($menu['sub'], $block_theme);
-                    $xtpl->assign('SUB', $submenu);
-                    $xtpl->parse('main.top_menu.sub');
-                    $xtpl->parse('main.top_menu.has_sub');
-                }
-                $xtpl->parse('main.top_menu');
-            }
-        }
-
-        $xtpl->parse('main');
-
-        return $xtpl->text('main');
-    }
-
-    /**
-     * nv_menu_site_mods_submenu()
-     *
-     * @param array  $smenus
-     * @param string $block_theme
-     * @return string
-     */
-    function nv_menu_site_mods_submenu($smenus, $block_theme)
-    {
-        $xtpl = new XTemplate('global.bootstrap.tpl', NV_ROOTDIR . '/themes/' . $block_theme . '/modules/menu');
-
-        foreach ($smenus as $smenu) {
-            !empty($smenu['liclass']) && $smenu['liclass'] = ' class="' . $smenu['liclass'] . '"';
-            !empty($smenu['aclass']) && $smenu['aclass'] = ' ' . $smenu['aclass'];
-            $xtpl->assign('SUBMENU', $smenu);
-            if (!empty($smenu['icon'])) {
-                $xtpl->parse('submenu.loop.icon');
-            }
-            if (!empty($smenu['sub'])) {
-                $submenu = nv_menu_site_mods_submenu($smenu['sub'], $block_theme);
-                $xtpl->assign('SUB', $submenu);
-                $xtpl->parse('submenu.loop.submenu');
-                $xtpl->parse('submenu.loop.item');
-                $xtpl->parse('submenu.loop.has_sub');
-                $xtpl->parse('submenu.loop.sub');
-            }
-            $xtpl->parse('submenu.loop');
-        }
-
-        $xtpl->parse('submenu');
-
-        return $xtpl->text('submenu');
+        return $tpl->fetch('global.site_mods.tpl');
     }
 }
 
