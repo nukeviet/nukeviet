@@ -536,13 +536,13 @@ if (empty($error)) {
         $sizeLists = sizeof($listFiles);
         $iniIndex = -1;
 
-        // Kiem tra ZIP bomb: tong kich thuoc giai nen khong duoc vuot qua 50MB
+        // Kiểm tra ZIP bomb: Tổng dung lượng giải nén của tất cả file phải nhỏ hơn NV_UPLOAD_MAX_FILESIZE
         $totalUncompressedSize = 0;
         foreach ($listFiles as $_lf) {
             $totalUncompressedSize += (int) $_lf['size'];
         }
-        if ($totalUncompressedSize > 52428800) {
-            $error = $lang_module['autoinstall_error_invalidfile'];
+        if ($totalUncompressedSize > NV_UPLOAD_MAX_FILESIZE) {
+            $error = sprintf($lang_global['error_upload_max_user_size'], nv_convertfromBytes(NV_UPLOAD_MAX_FILESIZE));
         }
         unset($totalUncompressedSize, $_lf);
 
