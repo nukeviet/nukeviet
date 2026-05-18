@@ -37,6 +37,7 @@ if ($nv_Request->isset_request('extract', 'get')) {
             $xtpl->assign('ERROR', $lang_module['autoinstall_error_downloaded']);
             $xtpl->parse('extract.error');
         } else {
+            // phpcs:ignore
             $zip = new PclZip($filename);
             $ziplistContent = $zip->listContent();
 
@@ -48,7 +49,7 @@ if ($nv_Request->isset_request('extract', 'get')) {
             $extConfig = [];
             $fileConfig = [];
 
-            if (NV_ROOTDIR . '/' . $temp_extract_dir) {
+            if (is_dir(NV_ROOTDIR . '/' . $temp_extract_dir)) {
                 nv_deletefile(NV_ROOTDIR . '/' . $temp_extract_dir, true);
             }
 
@@ -100,7 +101,12 @@ if ($nv_Request->isset_request('extract', 'get')) {
             }
 
             // Giai nen vao thuc muc tam
-            $extract = $zip->extract(PCLZIP_OPT_PATH, NV_ROOTDIR . '/' . $temp_extract_dir);
+            // phpcs:disable
+            $extract = $zip->extract(
+                PCLZIP_OPT_PATH, NV_ROOTDIR . '/' . $temp_extract_dir,
+                PCLZIP_OPT_EXTRACT_DIR_RESTRICTION, NV_ROOTDIR . '/' . $temp_extract_dir
+            );
+            // phpcs:enable
 
             foreach ($extract as $extract_i) {
                 if ($extract_i['status'] != 'ok' and $extract_i['status'] != 'already_a_directory') {
@@ -111,20 +117,28 @@ if ($nv_Request->isset_request('extract', 'get')) {
                     $extConfig = nv_parse_ini_file($extract_i['filename'], true);
                 }
 
-                // Xac dinh ung dung he thong hoac module
+                // Xác định ứng dụng hệ thống hoặc module (đọc bằng regex, không include để tránh RCE)
                 if (preg_match("/^modules\/[a-zA-Z0-9\-]+\/version\.php$/", $extract_i['stored_filename'])) {
-                    $module_version = [];
-                    include $extract_i['filename'];
-
-                    if (isset($module_version['is_sysmod'])) {
-                        $fileConfig['sys'] = $module_version['is_sysmod'];
+                    $_ver_content = file_get_contents($extract_i['filename']);
+                    if (
+                        $_ver_content === false
+                        or !preg_match('/(?:\$module_version\s*\[\s*[\'"]is_sysmod[\'"]\s*\]\s*=|[\'"]is_sysmod[\'"]\s*=>)\s*(0|1|true|false)\s*[;,]/', $_ver_content, $_vm_sys)
+                        or !preg_match('/(?:\$module_version\s*\[\s*[\'"]virtual[\'"]\s*\]\s*=|[\'"]virtual[\'"]\s*=>)\s*(0|1|true|false)\s*[;,]/', $_ver_content, $_vm_virt)
+                    ) {
+                        unset($_ver_content, $_vm_sys, $_vm_virt);
+                        nv_deletefile($filename);
+                        nv_deletefile(NV_ROOTDIR . '/' . $temp_extract_dir, true);
+                        $xtpl->assign('ERROR', $lang_module['autoinstall_error_downloaded']);
+                        $xtpl->parse('extract.error');
+                        $xtpl->parse('extract');
+                        $contents = $xtpl->text('extract');
+                        include NV_ROOTDIR . '/includes/header.php';
+                        echo $contents;
+                        include NV_ROOTDIR . '/includes/footer.php';
                     }
-
-                    if (isset($module_version['virtual'])) {
-                        $fileConfig['virtual'] = $module_version['virtual'];
-                    }
-
-                    unset($module_version);
+                    $fileConfig['sys'] = in_array($_vm_sys[1], ['1', 'true'], true) ? 1 : 0;
+                    $fileConfig['virtual'] = in_array($_vm_virt[1], ['1', 'true'], true) ? 1 : 0;
+                    unset($_ver_content, $_vm_sys, $_vm_virt);
                 }
 
                 // Delete .htaccess file
@@ -154,7 +168,7 @@ if ($nv_Request->isset_request('extract', 'get')) {
                 $error_create_folder = array_unique($error_create_folder);
                 $array_cute_files = [];
                 $array_exists_files = [];
-                $dimiss_mime = $nv_Request->get_title('dismiss', 'get', '') == md5('dismiss' . $filename . NV_CHECK_SESSION) ? true : false;
+                $dimiss_mime = $nv_Request->get_title('dismiss', 'get', '') == md5('dismiss' . $filename . NV_CHECK_SESSION . $admin_info['userid']) ? true : false;
 
                 // Kiem tra mime
                 if (!$dimiss_mime) {
@@ -208,7 +222,15 @@ if ($nv_Request->isset_request('extract', 'get')) {
 
                             if (empty($mime_check)) {
                                 if (preg_match("/\.(ini)$/i", $array_file['stored_filename'])) {
-                                    if ($_xml = @simplexml_load_file(NV_ROOTDIR . '/' . $temp_extract_dir . '/' . $array_file['filename'])) {
+                                    if (PHP_VERSION_ID < 80000 && function_exists('libxml_disable_entity_loader')) {
+                                        $_prev_loader = libxml_disable_entity_loader(true);
+                                    }
+                                    $_xml = @simplexml_load_file(NV_ROOTDIR . '/' . $temp_extract_dir . '/' . $array_file['filename'], 'SimpleXMLElement', LIBXML_NONET);
+                                    if (isset($_prev_loader)) {
+                                        libxml_disable_entity_loader($_prev_loader);
+                                        unset($_prev_loader);
+                                    }
+                                    if ($_xml) {
                                         continue;
                                     }
                                 }
@@ -257,10 +279,20 @@ if ($nv_Request->isset_request('extract', 'get')) {
 
                     // Di chuyen cac file vao thu muc trong site
                     if (empty($error_create_folder)) {
+                        $temp_base = realpath(NV_ROOTDIR . '/' . $temp_extract_dir);
                         foreach ($ziplistContent as $array_file) {
-                            $array_name_i = explode('/', $extract_i['stored_filename']);
+                            $array_name_i = explode('/', $array_file['filename']);
 
                             if (empty($array_file['folder']) and $array_file['filename'] != 'config.ini' and $array_name_i[sizeof($array_name_i) - 1] != '.htaccess') {
+                                // Từ chối tệp tin nếu nó nằm ngoài thư mục tạm
+                                $src_real = realpath(NV_ROOTDIR . '/' . $temp_extract_dir . '/' . $array_file['filename']);
+                                if ($src_real === false or $temp_base === false or strpos($src_real, $temp_base . DIRECTORY_SEPARATOR) !== 0) {
+                                    $error_move_folder[] = $array_file['filename'];
+                                    continue;
+                                }
+
+                                $dest_path = $extract_dir . '/' . $array_file['filename'];
+
                                 // Xoa file neu ton tai
                                 if (file_exists(NV_ROOTDIR . '/' . $array_file['filename'])) {
                                     if (!($ftp_check_login == 1 and ftp_delete($conn_id, $array_file['filename']))) {
@@ -272,11 +304,11 @@ if ($nv_Request->isset_request('extract', 'get')) {
 
                                 // Di chuyen file
                                 if (!($ftp_check_login == 1 and ftp_rename($conn_id, $temp_extract_dir . '/' . $array_file['filename'], $array_file['filename']))) {
-                                    @rename(NV_ROOTDIR . '/' . $temp_extract_dir . '/' . $array_file['filename'], $extract_dir . '/' . $array_file['filename']);
+                                    @rename($src_real, $dest_path);
                                 }
 
                                 // Di chuyen that bai
-                                if (file_exists(NV_ROOTDIR . '/' . $temp_extract_dir . '/' . $array_file['filename'])) {
+                                if (file_exists($src_real)) {
                                     $error_move_folder[] = $array_file['filename'];
                                 }
 
@@ -384,7 +416,7 @@ if ($nv_Request->isset_request('extract', 'get')) {
                     }
                     $xtpl->parse('extract.complete.error_move_folder');
                 } elseif (!empty($array_error_mine)) {
-                    $xtpl->assign('DISMISS_LINK', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&extract=' . md5($filename . NV_CHECK_SESSION) . '&dismiss=' . md5('dismiss' . $filename . NV_CHECK_SESSION));
+                    $xtpl->assign('DISMISS_LINK', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&extract=' . md5($filename . NV_CHECK_SESSION) . '&dismiss=' . md5('dismiss' . $filename . NV_CHECK_SESSION . $admin_info['userid']));
 
                     $i = 0;
                     asort($array_error_mine);
@@ -428,12 +460,13 @@ if ($nv_Request->isset_request('extract', 'get')) {
 
 $error = '';
 $info = [];
+$setup_ips = (isset($global_config['extension_setup_ips']) and is_array($global_config['extension_setup_ips'])) ? $global_config['extension_setup_ips'] : [];
 
 if ($nv_Request->isset_request('uploaded', 'get')) {
     if (!file_exists($filename)) {
         $error = $lang_module['autoinstall_error_downloaded'];
     }
-} elseif (($global_config['extension_setup'] == 1 or $global_config['extension_setup'] == 3) and in_array(NV_CLIENT_IP, ($global_config['extension_setup_ips'] ?? []), true)) {
+} elseif (($global_config['extension_setup'] == 1 or $global_config['extension_setup'] == 3) and in_array(NV_CLIENT_IP, $setup_ips, true)) {
     if (!isset($_FILES, $_FILES['extfile'], $_FILES['extfile']['tmp_name'])) {
         $error = $lang_module['autoinstall_error_downloaded'];
     } elseif (!$sys_info['zlib_support']) {
@@ -494,6 +527,7 @@ if (empty($error)) {
         ],
     ];
 
+    // phpcs:ignore
     $zip = new PclZip($filename);
     $status = $zip->properties();
 
@@ -501,6 +535,16 @@ if (empty($error)) {
         $listFiles = $zip->listContent();
         $sizeLists = sizeof($listFiles);
         $iniIndex = -1;
+
+        // Kiem tra ZIP bomb: tong kich thuoc giai nen khong duoc vuot qua 50MB
+        $totalUncompressedSize = 0;
+        foreach ($listFiles as $_lf) {
+            $totalUncompressedSize += (int) $_lf['size'];
+        }
+        if ($totalUncompressedSize > 52428800) {
+            $error = $lang_module['autoinstall_error_invalidfile'];
+        }
+        unset($totalUncompressedSize, $_lf);
 
         // Tim ra vi tri file config.ini
         for ($i = $sizeLists - 1; $i >= 0; --$i) {
@@ -522,7 +566,16 @@ if (empty($error)) {
                 @nv_deletefile(NV_ROOTDIR . '/' . $temp_extract_dir . '/config.ini');
             }
 
-            $extract = $zip->extractByIndex($iniIndex, PCLZIP_OPT_PATH, NV_ROOTDIR . '/' . $temp_extract_dir);
+            /**
+             * @var array<int, array<string, string>>|int $extract
+             */
+            // phpcs:disable
+            $extract = $zip->extractByIndex(
+                $iniIndex,
+                PCLZIP_OPT_PATH, NV_ROOTDIR . '/' . $temp_extract_dir,
+                PCLZIP_OPT_EXTRACT_DIR_RESTRICTION, NV_ROOTDIR . '/' . $temp_extract_dir
+            );
+            // phpcs:enable
 
             if (empty($extract) or !isset($extract[0]['status']) or $extract[0]['status'] != 'ok' or !file_exists(NV_ROOTDIR . '/' . $temp_extract_dir . '/config.ini')) {
                 $error = $lang_module['autoinstall_cantunzip'];
