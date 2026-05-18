@@ -45,7 +45,7 @@ if ($nv_Request->isset_request('extract', 'get')) {
         $extConfig = [];
         $fileConfig = [];
 
-        if (NV_ROOTDIR . '/' . $temp_extract_dir) {
+        if (is_dir(NV_ROOTDIR . '/' . $temp_extract_dir)) {
             nv_deletefile(NV_ROOTDIR . '/' . $temp_extract_dir, true);
         }
 
@@ -109,7 +109,11 @@ if ($nv_Request->isset_request('extract', 'get')) {
         ];
 
         // Giải nén vào thư mục tạm
-        $extract = $zip->extract(PCLZIP_OPT_PATH, NV_ROOTDIR . '/' . $temp_extract_dir);
+        $extract = $zip->extract(
+            PCLZIP_OPT_PATH, NV_ROOTDIR . '/' . $temp_extract_dir,
+            PCLZIP_OPT_EXTRACT_DIR_RESTRICTION, NV_ROOTDIR . '/' . $temp_extract_dir
+        );
+
         foreach ($extract as $extract_i) {
             if ($extract_i['status'] != 'ok' and $extract_i['status'] != 'already_a_directory') {
                 $no_extract[] = $extract_i['stored_filename'];
@@ -275,10 +279,20 @@ if ($nv_Request->isset_request('extract', 'get')) {
 
                 // Di chuyen cac file vao thu muc trong site
                 if (empty($error_create_folder)) {
+                    $temp_base = realpath(NV_ROOTDIR . '/' . $temp_extract_dir);
                     foreach ($ziplistContent as $array_file) {
-                        $array_name_i = explode('/', $extract_i['stored_filename']);
+                        $array_name_i = explode('/', $array_file['filename']);
 
                         if (empty($array_file['folder']) and $array_file['filename'] != 'config.ini' and $array_name_i[count($array_name_i) - 1] != '.htaccess') {
+                            // Từ chối tệp tin nếu nó nằm ngoài thư mục tạm
+                            $src_real = realpath(NV_ROOTDIR . '/' . $temp_extract_dir . '/' . $array_file['filename']);
+                            if ($src_real === false or $temp_base === false or strpos($src_real, $temp_base . DIRECTORY_SEPARATOR) !== 0) {
+                                $error_move_folder[] = $array_file['filename'];
+                                continue;
+                            }
+
+                            $dest_path = $extract_dir . '/' . $array_file['filename'];
+
                             // Xoa file neu ton tai
                             if (file_exists(NV_ROOTDIR . '/' . $array_file['filename'])) {
                                 if (!($ftp_check_login == 1 and ftp_delete($conn_id, $array_file['filename']))) {
@@ -290,11 +304,11 @@ if ($nv_Request->isset_request('extract', 'get')) {
 
                             // Di chuyen file
                             if (!($ftp_check_login == 1 and ftp_rename($conn_id, $temp_extract_dir . '/' . $array_file['filename'], $array_file['filename']))) {
-                                @rename(NV_ROOTDIR . '/' . $temp_extract_dir . '/' . $array_file['filename'], $extract_dir . '/' . $array_file['filename']);
+                                @rename($src_real, $dest_path);
                             }
 
                             // Di chuyen that bai
-                            if (file_exists(NV_ROOTDIR . '/' . $temp_extract_dir . '/' . $array_file['filename'])) {
+                            if (file_exists($src_real)) {
                                 $error_move_folder[] = $array_file['filename'];
                             }
 
@@ -465,6 +479,16 @@ if (empty($error)) {
         $sizeLists = count($listFiles);
         $iniIndex = -1;
 
+        // Kiểm tra ZIP bomb: Tổng dung lượng giải nén của tất cả file phải nhỏ hơn NV_UPLOAD_MAX_FILESIZE
+        $totalUncompressedSize = 0;
+        foreach ($listFiles as $_lf) {
+            $totalUncompressedSize += (int) $_lf['size'];
+        }
+        if ($totalUncompressedSize > NV_UPLOAD_MAX_FILESIZE) {
+            $error = $nv_Lang->getGlobal('error_upload_max_user_size', nv_convertfromBytes(NV_UPLOAD_MAX_FILESIZE));
+        }
+        unset($totalUncompressedSize, $_lf);
+
         // Tìm vị trí file config.ini
         for ($i = $sizeLists - 1; $i >= 0; --$i) {
             if (!$listFiles[$i]['folder'] and trim($listFiles[$i]['filename']) == 'config.ini') {
@@ -485,7 +509,14 @@ if (empty($error)) {
                 @nv_deletefile(NV_ROOTDIR . '/' . $temp_extract_dir . '/config.ini');
             }
 
-            $extract = $zip->extractByIndex($iniIndex, PCLZIP_OPT_PATH, NV_ROOTDIR . '/' . $temp_extract_dir);
+            /**
+             * @var array<int, array<string, string>>|int $extract
+             */
+            $extract = $zip->extractByIndex(
+                $iniIndex,
+                PCLZIP_OPT_PATH, NV_ROOTDIR . '/' . $temp_extract_dir,
+                PCLZIP_OPT_EXTRACT_DIR_RESTRICTION, NV_ROOTDIR . '/' . $temp_extract_dir
+            );
 
             if (empty($extract) or !isset($extract[0]['status']) or $extract[0]['status'] != 'ok' or !file_exists(NV_ROOTDIR . '/' . $temp_extract_dir . '/config.ini')) {
                 $error = $nv_Lang->getModule('autoinstall_cantunzip');
