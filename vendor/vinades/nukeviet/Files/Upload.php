@@ -1236,6 +1236,46 @@ class Upload
     }
 
     /**
+     * Chặn SSRF bằng cách cho phép các scheme và từ chối các dải IP riêng/dành riêng.
+     *
+     * @param string $url
+     * @return bool
+     */
+    private function is_safe_url_target($url)
+    {
+        $parts = parse_url($url);
+
+        if (!isset($parts['scheme']) || !in_array(strtolower($parts['scheme']), ['http', 'https'], true)) {
+            return false;
+        }
+
+        if (!isset($parts['host'])) {
+            return false;
+        }
+
+        $host = strtolower($parts['host']);
+
+        if (filter_var($host, FILTER_VALIDATE_IP)) {
+            $ip = $host;
+        } else {
+            $ip = gethostbyname($host);
+            if ($ip === $host && !filter_var($ip, FILTER_VALIDATE_IP)) {
+                return false;
+            }
+        }
+
+        /*
+         * Chặn các dải IP riêng (10/8, 172.16/12, 192.168/16, fc00/7, fe80/10)
+         * và các dải IP dành riêng (127/8, 169.254/16 cloud-metadata, ::1, v.v.)
+         */
+        if (!defined('NV_DEVELOPER_MODE') && !filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE)) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
      * url_get_info()
      *
      * @param string $url
@@ -1341,10 +1381,10 @@ class Upload
             curl_setopt($curl, CURLOPT_PORT, $port);
 
             if ($open_basedir) {
-                curl_setopt($curl, CURLOPT_FOLLOWLOCATION, true);
+                curl_setopt($curl, CURLOPT_FOLLOWLOCATION, false);
             }
 
-            curl_setopt($curl, CURLOPT_FOLLOWLOCATION, true);
+            curl_setopt($curl, CURLOPT_FOLLOWLOCATION, false);
             curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
 
             curl_setopt($curl, CURLOPT_TIMEOUT, 15);
@@ -1429,6 +1469,10 @@ class Upload
                         return false;
                     }
 
+                    if (!$this->is_safe_url_target($location)) {
+                        return false;
+                    }
+
                     return $this->check_url($is_200);
                 }
             }
@@ -1498,7 +1542,7 @@ class Upload
             CURLOPT_USERAGENT => $this->user_agent,
             CURLOPT_AUTOREFERER => true,
             CURLOPT_COOKIEFILE => '',
-            CURLOPT_FOLLOWLOCATION => true
+            CURLOPT_FOLLOWLOCATION => false
         ];
 
         $cainfo = ini_get('curl.cainfo');
@@ -1527,8 +1571,6 @@ class Upload
         if (!empty($cainfo)) {
             curl_setopt($curlHandle, CURLOPT_CAINFO, $cainfo);
         }
-        curl_setopt($curlHandle, CURLOPT_BINARYTRANSFER, true);
-
         if (curl_exec($curlHandle) === false) {
             fclose($fp);
             if (version_compare(PHP_VERSION, '8.0.0', '<')) {
@@ -1556,7 +1598,8 @@ class Upload
      */
     private function fopen_Download()
     {
-        if (($fp = fopen($this->url_info['uri'], 'rb')) === false) {
+        $ctx = stream_context_create(['http' => ['follow_location' => 0]]);
+        if (($fp = fopen($this->url_info['uri'], 'rb', false, $ctx)) === false) {
             return false;
         }
         if (($fp2 = fopen($this->temp_file, 'wb')) === false) {
@@ -1587,7 +1630,8 @@ class Upload
      */
     private function file_get_contents_Download()
     {
-        $content = file_get_contents($this->url_info['uri']);
+        $ctx = stream_context_create(['http' => ['follow_location' => 0]]);
+        $content = file_get_contents($this->url_info['uri'], false, $ctx);
         if ($content === false) {
             return false;
         }
@@ -1602,7 +1646,8 @@ class Upload
      */
     private function file_Download()
     {
-        $lines = @file($this->url_info['uri']);
+        $ctx = stream_context_create(['http' => ['follow_location' => 0]]);
+        $lines = @file($this->url_info['uri'], 0, $ctx);
         if ($lines === false) {
             return false;
         }
@@ -1652,6 +1697,12 @@ class Upload
         }
         $this->url_info = $this->url_get_info($urlfile);
         if (empty($this->url_info) or !isset($this->url_info['scheme'])) {
+            $return['error'] = $this->lang['error_upload_urlfile'];
+
+            return $return;
+        }
+
+        if (!$this->is_safe_url_target($urlfile)) {
             $return['error'] = $this->lang['error_upload_urlfile'];
 
             return $return;
