@@ -1945,7 +1945,7 @@ class Upload
      *
      * @param string $file
      *                     Path to the file to measure
-     * @return int
+     * @return int|false
      */
     protected function filesize($file)
     {
@@ -1962,10 +1962,11 @@ class Upload
         }
         // Try a shell command
         if ($exec_works) {
-            $cmd = ($iswin) ? "for %F in (\"$file\") do @echo %~zF" : "stat -c%s \"$file\"";
+            $escaped = escapeshellarg($file);
+            $cmd = ($iswin) ? "for %F in (" . $escaped . ") do @echo %~zF" : "stat -c%s " . $escaped;
             @exec($cmd, $output);
             if (is_array($output) and is_numeric($size = trim(implode("\n", $output)))) {
-                return $size;
+                return (int) $size;
             }
         }
         // Try the Windows COM interface
@@ -1978,7 +1979,7 @@ class Upload
                 $size = null;
             }
             if (ctype_digit($size)) {
-                return $size;
+                return (int) $size;
             }
         }
         // If everything else fails
