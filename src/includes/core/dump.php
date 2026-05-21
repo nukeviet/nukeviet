@@ -84,7 +84,7 @@ class dumpsave
         if ($this->fp) {
             $return = @call_user_func(($this->savetype == 'gz') ? 'gzclose' : 'fclose', $this->fp);
             if ($return) {
-                @chmod($this->filesavename, 0666);
+                @chmod($this->filesavename, 0600);
 
                 return true;
             }

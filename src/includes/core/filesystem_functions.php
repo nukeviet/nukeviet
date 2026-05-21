@@ -436,7 +436,7 @@ function nv_mkdir($path, $dir_name)
     }
     if (!is_dir($path . $dir_name)) {
         if (!is_writable($path)) {
-            @chmod($path, 0777);
+            @chmod($path, 0755);
         }
         if (!is_writable($path)) {
             return [0, $nv_Lang->getGlobal('error_directory_can_not_write', $path)];
