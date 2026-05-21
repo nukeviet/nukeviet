@@ -51,7 +51,11 @@ Vui lòng sử dụng kênh riêng tư trước. Không tạo issue công khai c
 
 We follow Coordinated Vulnerability Disclosure (CVD).
 
+For the full operational process, see: https://github.com/nukeviet/nukeviet/blob/nukeviet5.0/docs/knowledge/security-vulnerability-process.md
+
 Chúng tôi áp dụng mô hình Coordinated Vulnerability Disclosure (CVD).
+
+Quy trình vận hành chi tiết xem tại: https://github.com/nukeviet/nukeviet/blob/nukeviet5.0/docs/knowledge/security-vulnerability-process.md
 
 | Step | Target time | Details |
 | --- | --- | --- |
