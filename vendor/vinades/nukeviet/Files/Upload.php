@@ -661,6 +661,9 @@ class Upload
         if (preg_match("#([a-z]*)=([\'\"]*)vbscript:#iU", $txt)) {
             return false;
         }
+        if (preg_match('#\bon[a-z]+\s*=#i', $txt)) {
+            return false;
+        }
         if (preg_match("#(<[^>]+)style=([\`\'\"]*).*expression\([^>]*>#iU", $txt)) {
             return false;
         }
@@ -809,7 +812,7 @@ class Upload
     }
 
     /**
-     * check_svg_tmpfile()
+     * Kiểm tra tệp upload dạng SVG
      *
      * @param string $tmp_name
      * @return string
@@ -818,27 +821,47 @@ class Upload
     {
         $this->img_info = [];
 
-        if (($xml = @simplexml_load_file($tmp_name)) === false) {
+        $dom = new \DOMDocument();
+        $prev_use_errors = libxml_use_internal_errors(true);
+        if (PHP_MAJOR_VERSION < 8) {
+            $prev_loader = libxml_disable_entity_loader(true);
+        }
+        $loaded = $dom->load($tmp_name, LIBXML_NONET);
+        if (PHP_MAJOR_VERSION < 8) {
+            libxml_disable_entity_loader($prev_loader);
+        }
+        libxml_clear_errors();
+        libxml_use_internal_errors($prev_use_errors);
+
+        if (!$loaded) {
             return $this->lang['error_upload_not_image'];
         }
 
-        $attr = $xml->attributes();
-        if (!isset($attr['width']) and !isset($attr['height']) and !isset($attr['viewBox'])) {
+        $root = $dom->documentElement;
+        if (!$root || strtolower($root->localName) !== 'svg') {
+            return $this->lang['error_upload_not_image'];
+        }
+
+        $width = $root->getAttribute('width');
+        $height = $root->getAttribute('height');
+        $viewBox = $root->getAttribute('viewBox');
+
+        if (empty($width) and empty($height) and empty($viewBox)) {
             return $this->lang['error_upload_not_image'];
         }
 
         $this->img_info['maxWidth'] = $this->img_info['maxHeight'] = 0;
-        if (isset($attr['viewBox'])) {
-            $viewBox = explode(' ', (string) $attr['viewBox']);
-            if (!isset($viewBox[3])) {
+        if (!empty($viewBox)) {
+            $parts = preg_split('/[\s,]+/', trim($viewBox));
+            if (count($parts) < 4) {
                 return $this->lang['error_upload_not_image'];
             }
-            $this->img_info['maxWidth'] = (int) ($viewBox[2]);
-            $this->img_info['maxHeight'] = (int) ($viewBox[3]);
+            $this->img_info['maxWidth'] = (int) $parts[2];
+            $this->img_info['maxHeight'] = (int) $parts[3];
         }
-        if (isset($attr['width']) and isset($attr['height'])) {
-            $this->img_info[0] = (int) ($attr['width']);
-            $this->img_info[1] = (int) ($attr['height']);
+        if (!empty($width) and !empty($height)) {
+            $this->img_info[0] = (int) $width;
+            $this->img_info[1] = (int) $height;
         } else {
             $this->img_info[0] = $this->img_info['maxWidth'];
             $this->img_info[1] = $this->img_info['maxHeight'];
@@ -848,11 +871,121 @@ class Upload
             return $this->lang['error_upload_not_image'];
         }
 
-        if (!$this->verify_image($tmp_name, true)) {
+        if (!$this->sanitize_svg_dom($dom)) {
             return $this->lang['error_upload_image_failed'];
         }
 
         return '';
+    }
+
+    /**
+     * Kiểm tra SVG bằng whitelist tag/attribute
+     *
+     * @param \DOMDocument $dom
+     * @return bool
+     */
+    private function sanitize_svg_dom($dom)
+    {
+        static $allowed_tags = [
+            'svg', 'g', 'defs', 'symbol', 'use', 'desc', 'title', 'metadata',
+            'rect', 'circle', 'ellipse', 'line', 'polyline', 'polygon', 'path',
+            'text', 'tspan', 'textpath',
+            'image', 'pattern', 'marker', 'switch',
+            'lineargradient', 'radialgradient', 'stop',
+            'clippath', 'mask', 'filter',
+            'feblend', 'fecolormatrix', 'fecomponenttransfer', 'fecomposite',
+            'feconvolvematrix', 'fediffuselighting', 'fedisplacementmap', 'fedistantlight',
+            'feflood', 'fefunca', 'fefuncb', 'fefuncg', 'fefuncr', 'fegaussianblur', 'feimage',
+            'femerge', 'femergenode', 'femorphology', 'feoffset', 'fepointlight',
+            'fespecularlighting', 'fespotlight', 'fetile', 'feturbulence',
+            'animate', 'animatetransform', 'animatemotion', 'set', 'mpath',
+            'style',
+        ];
+
+        static $animate_tags = ['animate', 'animatetransform', 'animatemotion', 'set'];
+        static $url_attrs = ['href', 'src', 'action'];
+
+        $xpath = new \DOMXPath($dom);
+
+        // Chặn processing instructions (vd: <?xml-stylesheet) có thể load CSS/JS ngoài
+        if ($xpath->query('//processing-instruction()')->length > 0) {
+            return false;
+        }
+
+        foreach ($xpath->query('//*') as $node) {
+            $tag = strtolower($node->localName);
+
+            if (!in_array($tag, $allowed_tags, true)) {
+                return false;
+            }
+
+            if ($node->hasAttributes()) {
+                foreach ($node->attributes as $attr) {
+                    $name = strtolower($attr->localName);
+                    $value = $attr->value;
+
+                    // Chặn event handler attributes (on*)
+                    if (strncmp($name, 'on', 2) === 0) {
+                        return false;
+                    }
+
+                    // animate/set không được trỏ attributeName vào event handler
+                    if (in_array($tag, $animate_tags, true) && $name === 'attributename' && strncasecmp(trim($value), 'on', 2) === 0) {
+                        return false;
+                    }
+
+                    // href/src/action: chặn scheme nguy hiểm và external URL
+                    if (in_array($name, $url_attrs, true)) {
+                        $normalized = preg_replace('/[\x00-\x20\x7f]+/', '', strtolower($value));
+                        if (preg_match('#^(javascript|vbscript|data|https?|ftp)\s*:#', $normalized)) {
+                            return false;
+                        }
+                        if (strncmp($normalized, '//', 2) === 0) {
+                            return false;
+                        }
+                    }
+
+                    // style attribute
+                    if ($name === 'style' && $this->svg_css_is_dangerous($value)) {
+                        return false;
+                    }
+                }
+            }
+
+            // Nội dung inline <style>
+            if ($tag === 'style' && $this->svg_css_is_dangerous($node->textContent)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * Kiểm tra chuỗi CSS (từ style attribute hoặc thẻ <style>) có chứa pattern nguy hiểm không.
+     *
+     * @param string $css
+     * @return bool
+     */
+    private function svg_css_is_dangerous($css)
+    {
+        // expression(), javascript:, behaviour:, vbscript:
+        if (preg_match('#(expression|javascript|behaviour|vbscript)\s*[\(:]#i', $css)) {
+            return true;
+        }
+        // Firefox XBL binding
+        if (preg_match('#-moz-binding\s*:#i', $css)) {
+            return true;
+        }
+        // @import tải CSS ngoài
+        if (preg_match('#@import\b#i', $css)) {
+            return true;
+        }
+        // url() trỏ tới scheme nguy hiểm hoặc external URL
+        if (preg_match('#url\s*\(\s*[\'"]?\s*(https?:|//|data:|javascript:|vbscript:)#i', $css)) {
+            return true;
+        }
+        return false;
     }
 
     /**
