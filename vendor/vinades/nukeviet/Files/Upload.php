@@ -1195,7 +1195,7 @@ class Upload
         if ($chunkComplete) {
             if (substr(PHP_OS, 0, 3) != 'WIN') {
                 $oldumask = umask(0);
-                chmod($savepath . $filename, 0777);
+                chmod($savepath . $filename, 0644);
                 umask($oldumask);
             }
 
@@ -1879,7 +1879,7 @@ class Upload
 
         if (substr(PHP_OS, 0, 3) != 'WIN') {
             $oldumask = umask(0);
-            chmod($savepath . $filename, 0777);
+            chmod($savepath . $filename, 0644);
             umask($oldumask);
         }
 
