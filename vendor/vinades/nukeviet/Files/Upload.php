@@ -1179,8 +1179,10 @@ class Upload
             }
 
             $chunkComplete = true;
-            if (!@copy($userfile['tmp_name'], $savepath . $filename)) {
-                @move_uploaded_file($userfile['tmp_name'], $savepath . $filename);
+            if (!@move_uploaded_file($userfile['tmp_name'], $savepath . $filename)) {
+                if (@is_uploaded_file($userfile['tmp_name'])) {
+                    @copy($userfile['tmp_name'], $savepath . $filename);
+                }
             }
 
             if (!file_exists($savepath . $filename)) {
