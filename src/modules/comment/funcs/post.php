@@ -37,7 +37,7 @@ $area = $nv_Request->get_title('area', 'post', '');
 $id = $nv_Request->get_title('id', 'post', '');
 $allowed_comm = $nv_Request->get_title('allowed', 'post');
 $checkss = $nv_Request->get_title('checkss', 'post');
-if (empty($id) or $module_config[$module]['activecomm'] != 1 or $checkss != md5($module . '-' . $area . '-' . $id . '-' . $allowed_comm . '-' . NV_CACHE_PREFIX)) {
+if (empty($id) or $module_config[$module]['activecomm'] != 1 or $checkss != md5($module . '-' . $area . '-' . $id . '-' . $allowed_comm . '-' . NV_CHECK_SESSION)) {
     _loadContents(['status' => 'ERR', 'mess' => $nv_Lang->getModule('comment_unsuccess')]);
 }
 

@@ -198,7 +198,7 @@ function nv_comment_load($module, $checkss, $area, $id, $allowed, $page, $status
     if (empty($module) or !isset($module_config[$module]) or empty($id) or empty($module_config[$module]['activecomm'])) {
         return '';
     }
-    if ($checkss !== md5($module . '-' . $area . '-' . $id . '-' . $allowed . '-' . NV_CACHE_PREFIX)) {
+    if ($checkss !== md5($module . '-' . $area . '-' . $id . '-' . $allowed . '-' . NV_CHECK_SESSION)) {
         return '';
     }
 
@@ -261,7 +261,7 @@ function nv_comment_module($module, $checkss, $area, $id, $allowed, $page, $stat
     if (empty($module) or !isset($module_config[$module]) or empty($id) or empty($module_config[$module]['activecomm'])) {
         return '';
     }
-    if ($checkss !== md5($module . '-' . $area . '-' . $id . '-' . $allowed . '-' . NV_CACHE_PREFIX)) {
+    if ($checkss !== md5($module . '-' . $area . '-' . $id . '-' . $allowed . '-' . NV_CHECK_SESSION)) {
         return '';
     }
 
