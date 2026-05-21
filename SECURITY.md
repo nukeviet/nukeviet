@@ -25,8 +25,8 @@ Vui lòng sử dụng kênh riêng tư trước. Không tạo issue công khai c
 ### Preferred Channel / Kênh ưu tiên
 
 1. GitHub Security Advisories
-   - Go to the repository Security tab and choose Report a vulnerability.
-   - Truy cập tab Security của repository và chọn Report a vulnerability.
+   - Go to the repository Security and quality tab, open Advisories, then choose Report a vulnerability.
+   - Truy cập tab Security and quality của repository, vào Advisories, sau đó chọn Report a vulnerability.
 
 ### Alternative Channel / Kênh thay thế
 
