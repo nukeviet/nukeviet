@@ -1302,24 +1302,6 @@ function search_result_theme($key, $numRecord, $per_pages, $page, $array_content
 }
 
 /**
- * nv_theme_viewpdf()
- *
- * @param string $file_url
- * @return string
- */
-function nv_theme_viewpdf($file_url)
-{
-    $xtpl = new XTemplate('viewer.tpl', NV_ROOTDIR . '/' . NV_ASSETS_DIR . '/js/pdf.js');
-    $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
-    $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
-    $xtpl->assign('PDF_JS_DIR', NV_STATIC_URL . NV_ASSETS_DIR . '/js/pdf.js/');
-    $xtpl->assign('PDF_URL', $file_url);
-    $xtpl->parse('main');
-
-    return $xtpl->text('main');
-}
-
-/**
  * content_refresh()
  *
  * @param mixed $data

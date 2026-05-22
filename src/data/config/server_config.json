@@ -12,6 +12,9 @@
         "application/rss+xml": [
             "rss"
         ],
+        "application/wasm": [
+            "wasm"
+        ],
         "font/eot": [
             "eot"
         ],

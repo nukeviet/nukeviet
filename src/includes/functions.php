@@ -4540,3 +4540,24 @@ function nv_outdated_browser()
 
     return false;
 }
+
+/**
+ * Lấy đầy đủ giao diện xem trực tuyến một tệp js.
+ * Được dùng để trả về page content cho một iframe xem PDF trực tuyến.
+ *
+ * @param string $file_url
+ * @return string
+ */
+function nv_theme_viewpdf(string $file_url): string
+{
+    global $global_config;
+
+    $pdf_js_dir = NV_STATIC_URL . NV_ASSETS_DIR . '/js/pdf.js/';
+    $pdf_url = $file_url;
+    $nv_lang_interface = NV_LANG_INTERFACE;
+    $nv_html_dir = nv_region_config('dir');
+
+    ob_start();
+    include NV_ROOTDIR . '/' . NV_ASSETS_DIR . '/js/pdf.js/web/viewer.php';
+    return (string) ob_get_clean();
+}

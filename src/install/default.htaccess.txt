@@ -41,6 +41,7 @@ ErrorDocument 504 /error.php?code=504
   AddType application/manifest+json .webmanifest
   AddType application/rss+xml .rss
   AddType application/xml .xml
+  AddType application/wasm .wasm
   AddType font/eot .eot
   AddType font/otf .otf
   AddType font/ttf .ttf
