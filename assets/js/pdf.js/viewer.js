@@ -780,7 +780,8 @@ const PDFViewerApplication = {
     const params = {
       canvasMaxAreaInBytes: this.externalServices.canvasMaxAreaInBytes,
       ...apiParams,
-      ...args
+      ...args,
+      isEvalSupported: false
     };
     const loadingTask = (0, _pdfjsLib.getDocument)(params);
     this.pdfLoadingTask = loadingTask;
