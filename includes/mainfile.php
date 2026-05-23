@@ -424,9 +424,9 @@ if (($cache = $nv_Cache->getItem('modules', $cache_file)) != false) {
     try {
         $result = $db->query('SELECT * FROM ' . NV_MODULES_TABLE . ' m LEFT JOIN ' . NV_MODFUNCS_TABLE . ' f ON m.title=f.in_module WHERE m.act = 1 ORDER BY m.weight, f.subweight');
         while ($row = $result->fetch()) {
-            $m_title = $row['title'];
-            $f_name = $row['func_name'];
-            $f_alias = $row['alias'];
+            $m_title = isset($row['title']) ? $row['title'] : '';
+            $f_name = isset($row['func_name']) ? $row['func_name'] : '';
+            $f_alias = isset($row['alias']) ? $row['alias'] : '';
             if (!isset($sys_mods[$m_title])) {
                 $sys_mods[$m_title] = [
                     'module_file' => $row['module_file'],

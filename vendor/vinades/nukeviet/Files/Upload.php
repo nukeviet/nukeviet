@@ -661,6 +661,9 @@ class Upload
         if (preg_match("#([a-z]*)=([\'\"]*)vbscript:#iU", $txt)) {
             return false;
         }
+        if (preg_match('#\bon[a-z]+\s*=#i', $txt)) {
+            return false;
+        }
         if (preg_match("#(<[^>]+)style=([\`\'\"]*).*expression\([^>]*>#iU", $txt)) {
             return false;
         }
@@ -809,7 +812,7 @@ class Upload
     }
 
     /**
-     * check_svg_tmpfile()
+     * Kiểm tra tệp upload dạng SVG
      *
      * @param string $tmp_name
      * @return string
@@ -818,27 +821,47 @@ class Upload
     {
         $this->img_info = [];
 
-        if (($xml = @simplexml_load_file($tmp_name)) === false) {
+        $dom = new \DOMDocument();
+        $prev_use_errors = libxml_use_internal_errors(true);
+        if (PHP_MAJOR_VERSION < 8) {
+            $prev_loader = libxml_disable_entity_loader(true);
+        }
+        $loaded = $dom->load($tmp_name, LIBXML_NONET);
+        if (PHP_MAJOR_VERSION < 8) {
+            libxml_disable_entity_loader($prev_loader);
+        }
+        libxml_clear_errors();
+        libxml_use_internal_errors($prev_use_errors);
+
+        if (!$loaded) {
             return $this->lang['error_upload_not_image'];
         }
 
-        $attr = $xml->attributes();
-        if (!isset($attr['width']) and !isset($attr['height']) and !isset($attr['viewBox'])) {
+        $root = $dom->documentElement;
+        if (!$root || strtolower($root->localName) !== 'svg') {
+            return $this->lang['error_upload_not_image'];
+        }
+
+        $width = $root->getAttribute('width');
+        $height = $root->getAttribute('height');
+        $viewBox = $root->getAttribute('viewBox');
+
+        if (empty($width) and empty($height) and empty($viewBox)) {
             return $this->lang['error_upload_not_image'];
         }
 
         $this->img_info['maxWidth'] = $this->img_info['maxHeight'] = 0;
-        if (isset($attr['viewBox'])) {
-            $viewBox = explode(' ', (string) $attr['viewBox']);
-            if (!isset($viewBox[3])) {
+        if (!empty($viewBox)) {
+            $parts = preg_split('/[\s,]+/', trim($viewBox));
+            if (count($parts) < 4) {
                 return $this->lang['error_upload_not_image'];
             }
-            $this->img_info['maxWidth'] = (int) ($viewBox[2]);
-            $this->img_info['maxHeight'] = (int) ($viewBox[3]);
+            $this->img_info['maxWidth'] = (int) $parts[2];
+            $this->img_info['maxHeight'] = (int) $parts[3];
         }
-        if (isset($attr['width']) and isset($attr['height'])) {
-            $this->img_info[0] = (int) ($attr['width']);
-            $this->img_info[1] = (int) ($attr['height']);
+        if (!empty($width) and !empty($height)) {
+            $this->img_info[0] = (int) $width;
+            $this->img_info[1] = (int) $height;
         } else {
             $this->img_info[0] = $this->img_info['maxWidth'];
             $this->img_info[1] = $this->img_info['maxHeight'];
@@ -848,11 +871,121 @@ class Upload
             return $this->lang['error_upload_not_image'];
         }
 
-        if (!$this->verify_image($tmp_name, true)) {
+        if (!$this->sanitize_svg_dom($dom)) {
             return $this->lang['error_upload_image_failed'];
         }
 
         return '';
+    }
+
+    /**
+     * Kiểm tra SVG bằng whitelist tag/attribute
+     *
+     * @param \DOMDocument $dom
+     * @return bool
+     */
+    private function sanitize_svg_dom($dom)
+    {
+        static $allowed_tags = [
+            'svg', 'g', 'defs', 'symbol', 'use', 'desc', 'title', 'metadata',
+            'rect', 'circle', 'ellipse', 'line', 'polyline', 'polygon', 'path',
+            'text', 'tspan', 'textpath',
+            'image', 'pattern', 'marker', 'switch',
+            'lineargradient', 'radialgradient', 'stop',
+            'clippath', 'mask', 'filter',
+            'feblend', 'fecolormatrix', 'fecomponenttransfer', 'fecomposite',
+            'feconvolvematrix', 'fediffuselighting', 'fedisplacementmap', 'fedistantlight',
+            'feflood', 'fefunca', 'fefuncb', 'fefuncg', 'fefuncr', 'fegaussianblur', 'feimage',
+            'femerge', 'femergenode', 'femorphology', 'feoffset', 'fepointlight',
+            'fespecularlighting', 'fespotlight', 'fetile', 'feturbulence',
+            'animate', 'animatetransform', 'animatemotion', 'set', 'mpath',
+            'style',
+        ];
+
+        static $animate_tags = ['animate', 'animatetransform', 'animatemotion', 'set'];
+        static $url_attrs = ['href', 'src', 'action'];
+
+        $xpath = new \DOMXPath($dom);
+
+        // Chặn processing instructions (vd: <?xml-stylesheet) có thể load CSS/JS ngoài
+        if ($xpath->query('//processing-instruction()')->length > 0) {
+            return false;
+        }
+
+        foreach ($xpath->query('//*') as $node) {
+            $tag = strtolower($node->localName);
+
+            if (!in_array($tag, $allowed_tags, true)) {
+                return false;
+            }
+
+            if ($node->hasAttributes()) {
+                foreach ($node->attributes as $attr) {
+                    $name = strtolower($attr->localName);
+                    $value = $attr->value;
+
+                    // Chặn event handler attributes (on*)
+                    if (strncmp($name, 'on', 2) === 0) {
+                        return false;
+                    }
+
+                    // animate/set không được trỏ attributeName vào event handler
+                    if (in_array($tag, $animate_tags, true) && $name === 'attributename' && strncasecmp(trim($value), 'on', 2) === 0) {
+                        return false;
+                    }
+
+                    // href/src/action: chặn scheme nguy hiểm và external URL
+                    if (in_array($name, $url_attrs, true)) {
+                        $normalized = preg_replace('/[\x00-\x20\x7f]+/', '', strtolower($value));
+                        if (preg_match('#^(javascript|vbscript|data|https?|ftp)\s*:#', $normalized)) {
+                            return false;
+                        }
+                        if (strncmp($normalized, '//', 2) === 0) {
+                            return false;
+                        }
+                    }
+
+                    // style attribute
+                    if ($name === 'style' && $this->svg_css_is_dangerous($value)) {
+                        return false;
+                    }
+                }
+            }
+
+            // Nội dung inline <style>
+            if ($tag === 'style' && $this->svg_css_is_dangerous($node->textContent)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * Kiểm tra chuỗi CSS (từ style attribute hoặc thẻ <style>) có chứa pattern nguy hiểm không.
+     *
+     * @param string $css
+     * @return bool
+     */
+    private function svg_css_is_dangerous($css)
+    {
+        // expression(), javascript:, behaviour:, vbscript:
+        if (preg_match('#(expression|javascript|behaviour|vbscript)\s*[\(:]#i', $css)) {
+            return true;
+        }
+        // Firefox XBL binding
+        if (preg_match('#-moz-binding\s*:#i', $css)) {
+            return true;
+        }
+        // @import tải CSS ngoài
+        if (preg_match('#@import\b#i', $css)) {
+            return true;
+        }
+        // url() trỏ tới scheme nguy hiểm hoặc external URL
+        if (preg_match('#url\s*\(\s*[\'"]?\s*(https?:|//|data:|javascript:|vbscript:)#i', $css)) {
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -1046,8 +1179,10 @@ class Upload
             }
 
             $chunkComplete = true;
-            if (!@copy($userfile['tmp_name'], $savepath . $filename)) {
-                @move_uploaded_file($userfile['tmp_name'], $savepath . $filename);
+            if (!@move_uploaded_file($userfile['tmp_name'], $savepath . $filename)) {
+                if (@is_uploaded_file($userfile['tmp_name'])) {
+                    @copy($userfile['tmp_name'], $savepath . $filename);
+                }
             }
 
             if (!file_exists($savepath . $filename)) {
@@ -1062,7 +1197,7 @@ class Upload
         if ($chunkComplete) {
             if (substr(PHP_OS, 0, 3) != 'WIN') {
                 $oldumask = umask(0);
-                chmod($savepath . $filename, 0777);
+                chmod($savepath . $filename, 0644);
                 umask($oldumask);
             }
 
@@ -1100,6 +1235,46 @@ class Upload
         }
 
         return $return;
+    }
+
+    /**
+     * Chặn SSRF bằng cách cho phép các scheme và từ chối các dải IP riêng/dành riêng.
+     *
+     * @param string $url
+     * @return bool
+     */
+    private function is_safe_url_target($url)
+    {
+        $parts = parse_url($url);
+
+        if (!isset($parts['scheme']) || !in_array(strtolower($parts['scheme']), ['http', 'https'], true)) {
+            return false;
+        }
+
+        if (!isset($parts['host'])) {
+            return false;
+        }
+
+        $host = strtolower($parts['host']);
+
+        if (filter_var($host, FILTER_VALIDATE_IP)) {
+            $ip = $host;
+        } else {
+            $ip = gethostbyname($host);
+            if ($ip === $host && !filter_var($ip, FILTER_VALIDATE_IP)) {
+                return false;
+            }
+        }
+
+        /*
+         * Chặn các dải IP riêng (10/8, 172.16/12, 192.168/16, fc00/7, fe80/10)
+         * và các dải IP dành riêng (127/8, 169.254/16 cloud-metadata, ::1, v.v.)
+         */
+        if (!defined('NV_DEVELOPER_MODE') && !filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE)) {
+            return false;
+        }
+
+        return true;
     }
 
     /**
@@ -1208,10 +1383,10 @@ class Upload
             curl_setopt($curl, CURLOPT_PORT, $port);
 
             if ($open_basedir) {
-                curl_setopt($curl, CURLOPT_FOLLOWLOCATION, true);
+                curl_setopt($curl, CURLOPT_FOLLOWLOCATION, false);
             }
 
-            curl_setopt($curl, CURLOPT_FOLLOWLOCATION, true);
+            curl_setopt($curl, CURLOPT_FOLLOWLOCATION, false);
             curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
 
             curl_setopt($curl, CURLOPT_TIMEOUT, 15);
@@ -1296,6 +1471,10 @@ class Upload
                         return false;
                     }
 
+                    if (!$this->is_safe_url_target($location)) {
+                        return false;
+                    }
+
                     return $this->check_url($is_200);
                 }
             }
@@ -1365,7 +1544,7 @@ class Upload
             CURLOPT_USERAGENT => $this->user_agent,
             CURLOPT_AUTOREFERER => true,
             CURLOPT_COOKIEFILE => '',
-            CURLOPT_FOLLOWLOCATION => true
+            CURLOPT_FOLLOWLOCATION => false
         ];
 
         $cainfo = ini_get('curl.cainfo');
@@ -1394,8 +1573,6 @@ class Upload
         if (!empty($cainfo)) {
             curl_setopt($curlHandle, CURLOPT_CAINFO, $cainfo);
         }
-        curl_setopt($curlHandle, CURLOPT_BINARYTRANSFER, true);
-
         if (curl_exec($curlHandle) === false) {
             fclose($fp);
             if (version_compare(PHP_VERSION, '8.0.0', '<')) {
@@ -1423,7 +1600,8 @@ class Upload
      */
     private function fopen_Download()
     {
-        if (($fp = fopen($this->url_info['uri'], 'rb')) === false) {
+        $ctx = stream_context_create(['http' => ['follow_location' => 0]]);
+        if (($fp = fopen($this->url_info['uri'], 'rb', false, $ctx)) === false) {
             return false;
         }
         if (($fp2 = fopen($this->temp_file, 'wb')) === false) {
@@ -1454,7 +1632,8 @@ class Upload
      */
     private function file_get_contents_Download()
     {
-        $content = file_get_contents($this->url_info['uri']);
+        $ctx = stream_context_create(['http' => ['follow_location' => 0]]);
+        $content = file_get_contents($this->url_info['uri'], false, $ctx);
         if ($content === false) {
             return false;
         }
@@ -1469,7 +1648,8 @@ class Upload
      */
     private function file_Download()
     {
-        $lines = @file($this->url_info['uri']);
+        $ctx = stream_context_create(['http' => ['follow_location' => 0]]);
+        $lines = @file($this->url_info['uri'], 0, $ctx);
         if ($lines === false) {
             return false;
         }
@@ -1519,6 +1699,12 @@ class Upload
         }
         $this->url_info = $this->url_get_info($urlfile);
         if (empty($this->url_info) or !isset($this->url_info['scheme'])) {
+            $return['error'] = $this->lang['error_upload_urlfile'];
+
+            return $return;
+        }
+
+        if (!$this->is_safe_url_target($urlfile)) {
             $return['error'] = $this->lang['error_upload_urlfile'];
 
             return $return;
@@ -1695,7 +1881,7 @@ class Upload
 
         if (substr(PHP_OS, 0, 3) != 'WIN') {
             $oldumask = umask(0);
-            chmod($savepath . $filename, 0777);
+            chmod($savepath . $filename, 0644);
             umask($oldumask);
         }
 
@@ -1761,7 +1947,7 @@ class Upload
      *
      * @param string $file
      *                     Path to the file to measure
-     * @return int
+     * @return int|false
      */
     protected function filesize($file)
     {
@@ -1778,10 +1964,11 @@ class Upload
         }
         // Try a shell command
         if ($exec_works) {
-            $cmd = ($iswin) ? "for %F in (\"$file\") do @echo %~zF" : "stat -c%s \"$file\"";
+            $escaped = escapeshellarg($file);
+            $cmd = ($iswin) ? "for %F in (" . $escaped . ") do @echo %~zF" : "stat -c%s " . $escaped;
             @exec($cmd, $output);
             if (is_array($output) and is_numeric($size = trim(implode("\n", $output)))) {
-                return $size;
+                return (int) $size;
             }
         }
         // Try the Windows COM interface
@@ -1794,7 +1981,7 @@ class Upload
                 $size = null;
             }
             if (ctype_digit($size)) {
-                return $size;
+                return (int) $size;
             }
         }
         // If everything else fails

@@ -564,7 +564,7 @@ function nv_server_config_change($array_config)
         $config_contents .= "  </FilesMatch>\n";
         $config_contents .= "</IfModule>\n\n";
         $config_contents .= "<IfModule mod_headers.c>\n";
-        $config_contents .= "  <FilesMatch \"\.(js|css|xml|ttf|pdf)$\">\n";
+        $config_contents .= "  <FilesMatch \"\.(js|css|xml|ttf|pdf|svg)$\">\n";
         $config_contents .= "    Header append Vary Accept-Encoding\n";
         $config_contents .= "    Header set Access-Control-Allow-Origin \"*\"\n";
         if (!empty($array_config['nv_anti_iframe'])) {
