@@ -133,7 +133,6 @@ function nv_admin_theme($contents, $head_site = 1)
     $xtpl->assign('NV_COOKIE_PREFIX', $global_config['cookie_prefix']);
 
     if ($global_config['admin_XSSsanitize']) {
-        $xtpl->assign('PURIFY_VERSION', $browser->isBrowser(Browser::BROWSER_IE) ? '2' : '3');
         $xtpl->parse('main.XSSsanitize');
     }
 

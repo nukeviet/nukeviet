@@ -899,7 +899,7 @@ function nv_html_site_js($html = true, $other_js = [], $language_js = true, $glo
         if ($global_config['XSSsanitize']) {
             $return[] = [
                 'ext' => 1,
-                'content' => ASSETS_STATIC_URL . '/js/DOMPurify/purify' . ($browser->isBrowser(Browser::BROWSER_IE) ? '2' : '3') . '.js'
+                'content' => ASSETS_STATIC_URL . '/js/DOMPurify/purify.min.js'
             ];
         }
 

@@ -48,7 +48,7 @@
     <script type="text/javascript" src="{$smarty.const.ASSETS_LANG_STATIC_URL}/js/language/{$smarty.const.NV_LANG_INTERFACE}{$smarty.const.AUTO_MINIFIED}.js"></script>
     <script type="text/javascript" src="{$smarty.const.ASSETS_STATIC_URL}/js/global{$smarty.const.AUTO_MINIFIED}.js"></script>
     {if $GCONFIG.admin_XSSsanitize}
-    <script type="text/javascript" src="{$smarty.const.ASSETS_STATIC_URL}/js/DOMPurify/purify{$OUTDATED_BROWSER ? 2 : 3}.js"></script>
+    <script type="text/javascript" src="{$smarty.const.ASSETS_STATIC_URL}/js/DOMPurify/purify.min.js"></script>
     {/if}
     <script type="text/javascript" src="{$smarty.const.ASSETS_STATIC_URL}/js/admin{$smarty.const.AUTO_MINIFIED}.js"></script>
     {if not empty($JS_MODULE)}
