@@ -307,6 +307,9 @@ class Database extends PDO
 
     /**
      * dblikeescape()
+     * Escape ký tự đặc biệt trong LIKE (%, _).
+     * Hàm này chỉ phù hợp và bắt buộc khi ghép chuỗi SQL trực tiếp.
+     * Còn nếu dùng Prepared Statement (bindValue), hãy dùng: addcslashes($value, '\_%') để tránh lỗi double-escaping.
      *
      * @param string $value
      * @return array|string

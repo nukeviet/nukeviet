@@ -73,14 +73,14 @@ Antigravity sử dụng `.agents` folder. Tạo symlink/junction từ `.claude`:
 ```cmd
 cd d:\nukeviet\
 mklink /J ".agents" ".claude"
-mklink /H "ANTIGRAVITY.md" "CLAUDE.md"
+mklink /H "AGENTS.md" "CLAUDE.md"
 ```
 
 #### Linux/macOS
 ```bash
 cd /path/to/nukeviet
 ln -sf ".claude" ".agents"
-ln "CLAUDE.md" "ANTIGRAVITY.md"
+ln "CLAUDE.md" "AGENTS.md"
 ```
 
 ### Cách sử dụng

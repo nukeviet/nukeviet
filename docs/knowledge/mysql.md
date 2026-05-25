@@ -35,7 +35,7 @@ $db->prepare($sql)                // chuẩn bị statement, trả về PDOState
 $db->lastInsertId()               // ID vừa INSERT
 
 // Escape helpers
-$db->dblikeescape($value)         // escape ký tự đặc biệt trong LIKE (%, _)
+$db->dblikeescape($value)         // Escape ký tự đặc biệt trong LIKE (%, _). Hàm này chỉ phù hợp và bắt buộc khi ghép chuỗi SQL trực tiếp. Còn nếu dùng Prepared Statement (bindValue), hãy dùng: addcslashes($value, '\_%') để tránh lỗi double-escaping.
 $db->regexpescape($value)         // escape ký tự đặc biệt trong REGEXP
 $db->quote($value)                // PDO quote — dùng khi không thể dùng bindValue (ví dụ: query() trực tiếp)
 
