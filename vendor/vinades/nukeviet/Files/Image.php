@@ -473,7 +473,6 @@ class Image
 
         $res = imagecreatetruecolor($BMP['width'], $BMP['height']);
         if ($res === false) {
-            imagedestroy($res);
             fclose($f1);
             return false;
         }
@@ -1279,7 +1278,7 @@ class Image
             defined('IMAGETYPE_WEBP') && $mimeMap[IMAGETYPE_WEBP] = 'image/webp';
 
             // Lấy mime theo type hiện tại, fallback về fileinfo nếu không có trong map
-            $mime = $mimeMap[$this->create_Image_info['type']] ?? $this->create_Image_info['mime'];
+            $mime = isset($mimeMap[$this->create_Image_info['type']]) ? $mimeMap[$this->create_Image_info['type']] : $this->create_Image_info['mime'];
 
             $this->close();
             ob_end_clean();
@@ -1305,7 +1304,6 @@ class Image
     /**
      * createFilename()
      *
-     * @param mixed  $path
      * @param mixed  $name
      * @param string $ext
      * @return string
