@@ -290,9 +290,6 @@ $rowcontent = [
     'tags' => '',
     'tags_old' => '',
     'keywords' => '',
-    'instant_active' => $module_config[$module_name]['instant_articles_auto'] ?? 0,
-    'instant_template' => '',
-    'instant_creatauto' => 0,
     'mode' => 'add',
     'voicedata' => [],
     'group_view' => '',
@@ -308,7 +305,6 @@ $page_title = $nv_Lang->getModule('content_add');
 $error = [];
 $groups_list = nv_groups_list();
 $array_tags_old = [];
-$FBIA = new \NukeViet\Facebook\InstantArticles(\NukeViet\Core\Language::$lang_module);
 $internal_authors_list = [];
 
 // ID của bài viết cần sửa hoặc cần copy
@@ -443,7 +439,7 @@ if ($rowcontent['id'] == 0) {
         $restore_data = $stmt->fetch();
         $stmt->closeCursor();
 
-        if (empty($restore_data) or $restore_hash !== md5($csrf_key . $admin_info['admin_id'] . $rowcontent['id'] . $restore_id . $restore_data['historytime'])) {
+        if (empty($restore_data) or !csrf_check($restore_hash, get_article_restore_csrf_key($rowcontent['id'], $restore_id, $restore_data['historytime']))) {
             nv_error404();
         }
         unset($restore_data['id'], $restore_data['new_id'], $restore_data['admin_id'], $restore_data['changed_fields']);
@@ -886,27 +882,6 @@ if ($is_submit_form) {
         $error[] = $nv_Lang->getModule('error_bodytext');
     }
 
-    // Thao tác xử lý bài viết tức thời
-    if (!empty($module_config[$module_name]['instant_articles_active'])) {
-        $rowcontent['instant_active'] = (int) $nv_Request->get_bool('instant_active', 'post');
-        $rowcontent['instant_template'] = $nv_Request->get_title('instant_template', 'post', '');
-        $rowcontent['instant_creatauto'] = (int) $nv_Request->get_bool('instant_creatauto', 'post');
-    } else {
-        $rowcontent['instant_active'] = 0;
-        $rowcontent['instant_template'] = '';
-        $rowcontent['instant_creatauto'] = 0;
-    }
-    if (empty($rowcontent['instant_active'])) {
-        $rowcontent['instant_template'] = '';
-    }
-    if ($rowcontent['instant_active'] and !$rowcontent['instant_creatauto']) {
-        $FBIA->setArticle($rowcontent['bodyhtml']);
-        $checkArt = $FBIA->checkArticle();
-        if ($checkArt !== true) {
-            $error[] = $checkArt;
-        }
-    }
-
     // Tin liên quan
     $rowcontent['related_pos'] = $nv_Request->get_int('related_pos', 'post', 0);
     if (!in_array($rowcontent['related_pos'], [0, 1, 2], true)) {
@@ -1169,8 +1144,7 @@ if ($is_submit_form) {
 
             $sql = 'INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . '_rows (
                 catid, listcatid, topicid, admin_id, author, sourceid, addtime, edittime, status, weight, publtime, exptime, archive, title, alias, hometext,
-                homeimgfile, homeimgalt, homeimgthumb, inhome, allowed_comm, allowed_rating, external_link, hitstotal, hitscm, total_rating, click_rating, instant_active, instant_template,
-                instant_creatauto
+                homeimgfile, homeimgalt, homeimgthumb, inhome, allowed_comm, allowed_rating, external_link, hitstotal, hitscm, total_rating, click_rating
             ) VALUES (
                  :catid,
                  :listcatid,
@@ -1198,10 +1172,8 @@ if ($is_submit_form) {
                  :hitstotal,
                  :hitscm,
                  :total_rating,
-                 :click_rating,
-                 :instant_active,
-                 :instant_template,
-                 :instant_creatauto)';
+                 :click_rating
+            )';
 
             $stmt = $db->prepare($sql);
             $stmt->bindValue(':catid', $rowcontent['catid'], PDO::PARAM_INT);
@@ -1231,9 +1203,6 @@ if ($is_submit_form) {
             $stmt->bindValue(':hitscm', $rowcontent['hitscm'], PDO::PARAM_INT);
             $stmt->bindValue(':total_rating', $rowcontent['total_rating'], PDO::PARAM_INT);
             $stmt->bindValue(':click_rating', $rowcontent['click_rating'], PDO::PARAM_INT);
-            $stmt->bindValue(':instant_active', $rowcontent['instant_active'], PDO::PARAM_INT);
-            $stmt->bindValue(':instant_template', $rowcontent['instant_template'], PDO::PARAM_STR);
-            $stmt->bindValue(':instant_creatauto', $rowcontent['instant_creatauto'], PDO::PARAM_INT);
             $stmt->execute();
             $rowcontent['id'] = (int) $db->lastInsertId();
             if ($rowcontent['id'] > 0) {
@@ -1379,9 +1348,6 @@ if ($is_submit_form) {
                 allowed_comm=:allowed_comm,
                 allowed_rating=:allowed_rating,
                 external_link=:external_link,
-                instant_active=:instant_active,
-                instant_template=:instant_template,
-                instant_creatauto=:instant_creatauto,
                 edittime=:edittime
             WHERE id = :id';
             $sth = $db->prepare($sql);
@@ -1405,9 +1371,6 @@ if ($is_submit_form) {
             $sth->bindValue(':allowed_comm', $rowcontent['allowed_comm'], PDO::PARAM_STR);
             $sth->bindValue(':allowed_rating', $rowcontent['allowed_rating'], PDO::PARAM_INT);
             $sth->bindValue(':external_link', $rowcontent['external_link'], PDO::PARAM_INT);
-            $sth->bindValue(':instant_active', $rowcontent['instant_active'], PDO::PARAM_INT);
-            $sth->bindValue(':instant_template', $rowcontent['instant_template'], PDO::PARAM_STR);
-            $sth->bindValue(':instant_creatauto', $rowcontent['instant_creatauto'], PDO::PARAM_INT);
             $sth->bindValue(':edittime', $restore_id ? $rowcontent['historytime'] : NV_CURRENTTIME, PDO::PARAM_INT);
             $sth->bindValue(':id', $rowcontent['id'], PDO::PARAM_INT);
 

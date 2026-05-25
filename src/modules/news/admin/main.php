@@ -131,7 +131,7 @@ if ($NV_IS_ADMIN_MODULE and $module_config[$module_name]['order_articles'] and e
     // Sắp xếp bài đăng theo con số tự nhập
     $_weight_new = $nv_Request->get_int('order_articles_new', 'post', 0);
     $_id = $nv_Request->get_int('order_articles_id', 'post', 0);
-    
+
     if ($_id > 0 and $_weight_new > 0) {
         if (!csrf_check($nv_Request->get_title('order_articles_checkss', 'post', ''), $admin_info['admin_id'] . '_' . $module_name . '_' . $_id)) {
             die($nv_Lang->getGlobal('error_checkss'));
@@ -1193,9 +1193,6 @@ if ($loadhistory) {
         'allowed_comm' => $nv_Lang->getModule('content_allowed_comm'),
         'allowed_rating' => $nv_Lang->getModule('content_allowed_rating'),
         'external_link' => $nv_Lang->getModule('content_external_link1'),
-        'instant_active' => $nv_Lang->getModule('content_insart'),
-        'instant_template' => $nv_Lang->getModule('content_instant_template1'),
-        'instant_creatauto' => $nv_Lang->getModule('content_instant_creatauto'),
         'titlesite' => $nv_Lang->getModule('titlesite'),
         'description' => $nv_Lang->getModule('description'),
         'bodyhtml' => $nv_Lang->getModule('content_bodytext'),
@@ -1248,7 +1245,7 @@ if ($loadhistory) {
             'text' => '',
             'url' => ''
         ];
-        
+
         if (!csrf_check($restorehistory, $admin_info['admin_id'] . '_' . $module_name . '_' . $loadhistory_id)) {
             $respon['text'] = $nv_Lang->getGlobal('error_checkss');
             nv_jsonOutput($respon);
@@ -1328,7 +1325,7 @@ if ($loadhistory) {
 
         // Đẩy qua trang content để sử dụng lại cái form đó cho chuẩn
         $respon['success'] = true;
-        $respon['url'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=content&id=' . $loadhistory_id . '&restore=' . $history_id . '&restorehash=' . md5($csrf_key . $admin_info['admin_id'] . $loadhistory_id . $history_id . $post_new['historytime']);
+        $respon['url'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=content&id=' . $loadhistory_id . '&restore=' . $history_id . '&restorehash=' . csrf_create(get_article_restore_csrf_key($loadhistory_id, $history_id, $post_new['historytime']));
         nv_jsonOutput($respon);
     }
 

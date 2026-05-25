@@ -112,10 +112,7 @@ $installMods['news'] = [
         'print' => [],
         'rating' => [],
         'savefile' => [],
-        'sendmail' => [],
-        'instant-rss' => [
-            'func_custom_name' => 'Instant Articles RSS'
-        ]
+        'sendmail' => []
     ],
     'icon' => 'fa-solid fa-newspaper'
 ];

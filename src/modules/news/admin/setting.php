@@ -89,14 +89,6 @@ $item = array_merge([
     'elas_host' => '',
     'elas_port' => 0,
     'elas_index' => '',
-    'instant_articles_active' => 0,
-    'instant_articles_template' => 'default',
-    'instant_articles_httpauth' => 0,
-    'instant_articles_username' => '',
-    'instant_articles_password' => '',
-    'instant_articles_livetime' => 0,
-    'instant_articles_gettime' => 0,
-    'instant_articles_auto' => 0,
     'frontend_edit_alias' => 0,
     'frontend_edit_layout' => 0,
     'report_group' => '',
@@ -153,21 +145,6 @@ if ($nv_Request->isset_request('savesetting', 'post')) {
     $array_config['elas_host'] = $nv_Request->get_title('elas_host', 'post', '');
     $array_config['elas_port'] = $nv_Request->get_int('elas_port', 'post', 0);
     $array_config['elas_index'] = $nv_Request->get_title('elas_index', 'post', '');
-    $array_config['instant_articles_active'] = $nv_Request->get_int('instant_articles_active', 'post', 0);
-    $array_config['instant_articles_template'] = $nv_Request->get_title('instant_articles_template', 'post', 'default');
-    $array_config['instant_articles_httpauth'] = $nv_Request->get_int('instant_articles_httpauth', 'post', 0);
-    $array_config['instant_articles_username'] = $nv_Request->get_title('instant_articles_username', 'post', '');
-    $array_config['instant_articles_password'] = $nv_Request->get_title('instant_articles_password', 'post', '');
-    $array_config['instant_articles_livetime'] = $nv_Request->get_int('instant_articles_livetime', 'post', 0);
-    $array_config['instant_articles_gettime'] = $nv_Request->get_int('instant_articles_gettime', 'post', 0);
-    $array_config['instant_articles_auto'] = $nv_Request->get_int('instant_articles_auto', 'post', 0);
-
-    if (!empty($array_config['instant_articles_httpauth']) and (empty($array_config['instant_articles_username']) or empty($array_config['instant_articles_password']))) {
-        $array_config['instant_articles_httpauth'] = 0;
-    }
-    if (!empty($array_config['instant_articles_password'])) {
-        $array_config['instant_articles_password'] = $crypt->encrypt($array_config['instant_articles_password']);
-    }
 
     if ($array_config['elas_use']) {
         $fp = @fsockopen($array_config['elas_host'], $array_config['elas_port'], $errno, $errstr, 30);
@@ -479,8 +456,6 @@ $tpl->assign('ORDER_ARTICLES_OPTIONS', $order_articles_options);
 $tpl->assign('SCHEMA_TYPE_OPTIONS', $schema_type_options);
 $tpl->assign('COPYRIGHTHTML', $copyright);
 $tpl->assign('SHOW_NO_IMAGE', !empty($item['show_no_image']) ? NV_BASE_SITEURL . $item['show_no_image'] : '');
-$tpl->assign('INSTANT_ARTICLES_PASSWORD', !empty($item['instant_articles_password']) ? $crypt->decrypt($item['instant_articles_password']) : '');
-$tpl->assign('INSTANT_ARTICLES_URL_DEFAULT', urlRewriteWithDomain(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=instant-rss', NV_MY_DOMAIN));
 $tpl->assign('UPLOAD_PATH', defined('NV_IS_SPADMIN') ? '' : NV_UPLOADS_DIR . '/' . $module_upload);
 $tpl->assign('UPLOAD_CURRENT', defined('NV_IS_SPADMIN') ? 'images' : NV_UPLOADS_DIR . '/' . $module_upload);
 $tpl->assign('CAN_CONFIG_POST', $can_config_post);
