@@ -25,35 +25,40 @@ $provider = new Facebook([
     'graphApiVersion' => Facebook::API_VERSION
 ]);
 
-// Chuyển hướng đến trang đăng nhập Facebook
-if (!$nv_Request->isset_request('code', 'get')) {
+if ($nv_Request->isset_request('error', 'get')) {
+    $error = $nv_Request->get_title('error', 'get', '');
+} elseif (!$nv_Request->isset_request('code', 'get')) {
+    // Chuyển hướng đến trang đăng nhập Facebook
     $authorizationUrl = $provider->getAuthorizationUrl();
     $nv_Request->set_Session('oauth2state', $provider->getState());
     nv_redirect_location($authorizationUrl);
-}
-
-// Kiểm tra CSRF
-if ($nv_Request->get_title('state', 'get', '') !== $nv_Request->get_title('oauth2state', 'session', '')) {
-    $nv_Request->unset_request('oauth2state', 'session');
-    $error = 'Invalid state!';
 } else {
-    try {
-        $token = $provider->getAccessToken('authorization_code', [
-            'code' => $nv_Request->get_title('code', 'get', '')
-        ]);
-        /**
-         * @var \NukeViet\OAuth\OAuth2\FacebookUser $ownerDetails
-         */
-        $ownerDetails = $provider->getResourceOwner($token);
-        $attribs = [
-            'identity' => $ownerDetails->getId(),
-            'full_identity' => $crypt->hash($ownerDetails->getId()),
-            'email' => $ownerDetails->getEmail(),
-            'name' => $ownerDetails->getName(),
-            'first_name' => $ownerDetails->getFirstName(),
-            'last_name' => $ownerDetails->getLastName()
-        ];
-    } catch (Exception $e) {
-        $error = $e->getMessage();
+    $state = $nv_Request->get_title('state', 'get', '');
+    $oauth2state = $nv_Request->get_title('oauth2state', 'session', '');
+
+    // Kiểm tra CSRF
+    if (empty($oauth2state) || $state !== $oauth2state) {
+        $nv_Request->unset_request('oauth2state', 'session');
+        $error = 'Invalid state!';
+    } else {
+        try {
+            $token = $provider->getAccessToken('authorization_code', [
+                'code' => $nv_Request->get_title('code', 'get', '')
+            ]);
+            /**
+             * @var \NukeViet\OAuth\OAuth2\FacebookUser $ownerDetails
+             */
+            $ownerDetails = $provider->getResourceOwner($token);
+            $attribs = [
+                'identity' => $ownerDetails->getId(),
+                'full_identity' => $crypt->hash($ownerDetails->getId()),
+                'email' => $ownerDetails->getEmail(),
+                'name' => $ownerDetails->getName(),
+                'first_name' => $ownerDetails->getFirstName(),
+                'last_name' => $ownerDetails->getLastName()
+            ];
+        } catch (Exception $e) {
+            $error = $e->getMessage();
+        }
     }
 }

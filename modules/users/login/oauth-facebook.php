@@ -30,9 +30,11 @@ if (!$nv_Request->isset_request('code', 'get') and !$nv_Request->isset_request('
 }
 
 $attribs = ['server' => $server];
+$state = $nv_Request->get_title('state', 'get', '');
+$oauth2state = $nv_Request->get_title('oauth2state', 'session', '');
 
-if ($nv_Request->get_title('state', 'get', '') !== $nv_Request->get_title('oauth2state', 'session', '')) {
-    // Kiểm tra CSRF
+// Kiểm tra CSRF
+if (empty($oauth2state) || $state !== $oauth2state) {
     $nv_Request->unset_request('oauth2state', 'session');
     $nv_Request->unset_request('openid_attribs', 'session');
     $attribs['result'] = 'notlogin';

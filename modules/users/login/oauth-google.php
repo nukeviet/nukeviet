@@ -22,17 +22,22 @@ $provider = new Google([
 ]);
 
 // Chuyển hướng đến trang đăng nhập Google
-if (!$nv_Request->isset_request('code', 'get')) {
+if (!$nv_Request->isset_request('code', 'get') and !$nv_Request->isset_request('error', 'get')) {
     $authorizationUrl = $provider->getAuthorizationUrl();
     $nv_Request->set_Session('oauth2state', $provider->getState());
     nv_redirect_location($authorizationUrl);
 }
 
+$state = $nv_Request->get_title('state', 'get', '');
+$oauth2state = $nv_Request->get_title('oauth2state', 'session', '');
+
 // Kiểm tra CSRF
-if ($nv_Request->get_title('state', 'get', '') !== $nv_Request->get_title('oauth2state', 'session', '')) {
+if (empty($oauth2state) || $state !== $oauth2state) {
     $nv_Request->unset_request('oauth2state', 'session');
     $nv_Request->unset_request('openid_attribs', 'session');
     $attribs = ['result' => 'notlogin'];
+} elseif ($nv_Request->isset_request('error', 'get')) {
+    $attribs = ['result' => 'cancel'];
 } else {
     try {
         $token = $provider->getAccessToken('authorization_code', [
