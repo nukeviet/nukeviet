@@ -493,9 +493,6 @@ while ($_row_cat = $stmt_cat->fetch()) {
     $admin_funcs = [];
     $weight_disabled = $func_cat_disabled = true;
 
-    if (!empty($module_config[$module_name]['instant_articles_active'])) {
-        $admin_funcs['instant_articles'] = urlRewriteWithDomain(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=instant-rss/' . $_row_cat['alias'], NV_MY_DOMAIN);
-    }
     if (defined('NV_IS_ADMIN_MODULE') || (isset($array_cat_admin[$admin_id][$_row_cat['catid']]) && $array_cat_admin[$admin_id][$_row_cat['catid']]['add_content'] == 1)) {
         $func_cat_disabled = false;
         $admin_funcs['add'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=content&amp;catid=' . $_row_cat['catid'] . '&amp;parentid=' . $_row_cat['parentid'];

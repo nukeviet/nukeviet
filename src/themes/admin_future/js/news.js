@@ -1595,36 +1595,6 @@ $(function () {
         });
     });
 
-    if (nv_func_name === 'setting') {
-        // Ẩn/hiện mật khẩu Instant Articles.
-        $(document).on('click', '.btn-eye', function (e) {
-            e.preventDefault();
-            const fieldId = $(this).data('field');
-            const field = $(fieldId);
-            const icon = $('i', this);
-            if (field.attr('type') === 'password') {
-                field.attr('type', 'text');
-                icon.removeClass('fa-eye').addClass('fa-eye-slash');
-            } else {
-                field.attr('type', 'password');
-                icon.removeClass('fa-eye-slash').addClass('fa-eye');
-            }
-        });
-
-        // Tạo mật khẩu ngẫu nhiên cho nguồn cấp Instant Articles.
-        $('[data-toggle="setting-genpass"]').on('click', function (e) {
-            e.preventDefault();
-            const btn = $(this);
-            const field = $(btn.data('field'));
-            if (!field.length) {
-                return;
-            }
-
-            field.prop('type', 'text').val(nv_randomPassword(10)).trigger('input').focus().select();
-            field.closest('.input-group').find('.btn-eye i').removeClass('fa-eye').addClass('fa-eye-slash');
-        });
-    }
-
     if (nv_func_name === 'admins') {
         // Cuộn xuống form khi đang sửa quyền hạn của người dùng.
         const adminPermissionForm = $('#admin-permission-form');
@@ -2169,11 +2139,6 @@ $(function () {
             if (!$(e.target).closest('.popover').length) {
                 destroyCatPop();
             }
-        });
-
-        $('a.viewinstantrss').click(function(e) {
-            e.preventDefault();
-            modalShow($(this).data('modaltitle'), '<div><input type="text" class="form-control" value="' + $(this).attr('href') + '" data-toggle="selectall"/></div>');
         });
 
         // Xóa chuyên mục

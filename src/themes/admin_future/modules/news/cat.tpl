@@ -128,9 +128,6 @@
                                 {/if}
                             </td>
                             <td class="text-center text-nowrap">
-                                {if isset($row.adminfuncs.instant_articles)}
-                                <a href="{$row.adminfuncs.instant_articles}" class="btn btn-sm btn-secondary viewinstantrss" data-bs-toggle="tooltip" title="{$LANG->getModule('cat_instant_view')}" data-modaltitle="{$LANG->getModule('cat_instant_title')}" aria-label="{$LANG->getModule('cat_instant_view')}"><i class="fa-solid fa-rss"></i></a>
-                                {/if}
                                 {if isset($row.adminfuncs.add)}
                                 <a href="{$row.adminfuncs.add}" class="btn btn-sm btn-success" data-bs-toggle="tooltip" title="{$LANG->getModule('content_add')}" aria-label="{$LANG->getModule('content_add')}"><i class="fa-solid fa-plus"></i></a>
                                 {/if}

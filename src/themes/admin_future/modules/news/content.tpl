@@ -425,33 +425,6 @@
                     </div>
                 </div>
             </div>
-            {if not empty($MCONFIG.instant_articles_active)}
-            <div class="card mb-3">
-                <div class="card-header fw-medium fs-5">
-                    {$LANG->getModule('content_insart')}
-                </div>
-                <div class="card-body">
-                    <div class="mb-2">
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" value="1" id="instant_active" name="instant_active"{if not empty($DATA.instant_active)} checked{/if}>
-                            <label class="form-check-label" for="instant_active">
-                                {$LANG->getModule('content_instant_active')}
-                            </label>
-                        </div>
-                    </div>
-                    <div class="mb-3">
-                        <label for="instant_template" class="form-label">{$LANG->getModule('content_instant_template')}:</label>
-                        <input type="text" class="form-control" id="instant_template" name="instant_template" value="{$DATA.instant_template}" maxlength="255" placeholder="{$LANG->getModule('content_instant_templatenote')}">
-                    </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="1" id="instant_creatauto" name="instant_creatauto"{if not empty($DATA.instant_creatauto)} checked{/if}>
-                        <label class="form-check-label" for="instant_creatauto">
-                            {$LANG->getModule('content_instant_creatauto')}
-                        </label>
-                    </div>
-                </div>
-            </div>
-            {/if}
         </div>
     </div>
     <div class="accordion mb-3" id="newcontent-advanced-options">
