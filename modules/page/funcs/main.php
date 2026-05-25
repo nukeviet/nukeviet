@@ -119,7 +119,7 @@ if ($page_config['viewtype'] == 2) {
         }
         require_once NV_ROOTDIR . '/modules/comment/comment.php';
         $area = (defined('NV_COMM_AREA')) ? NV_COMM_AREA : 0;
-        $checkss = md5($module_name . '-' . $area . '-' . NV_COMM_ID . '-' . $allowed . '-' . NV_CACHE_PREFIX);
+        $checkss = md5($module_name . '-' . $area . '-' . NV_COMM_ID . '-' . $allowed . '-' . NV_CHECK_SESSION);
 
         $content_comment = nv_comment_module($module_name, $checkss, $area, NV_COMM_ID, $allowed, 1);
     } else {
