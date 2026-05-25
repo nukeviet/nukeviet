@@ -268,13 +268,13 @@ if ($nv_Request->isset_request('ajaxqueryusername', 'post')) {
             $stmt = $db->prepare('SELECT username, first_name, last_name, photo FROM ' . NV_USERS_GLOBALTABLE . ' WHERE active = 1 AND username = :username ORDER BY username ASC LIMIT 10');
             $stmt->bindValue(':username', $username, PDO::PARAM_STR);
         } else {
-            $username = addcslashes($username, '\_%');
+            $username_escape = $db->dblikeescape($username, true);
             $stmt = $db->prepare('SELECT username, first_name, last_name, photo FROM ' . NV_USERS_GLOBALTABLE . ' WHERE active = 1 AND (
                 username LIKE :username OR CONCAT(first_name, :space, last_name) LIKE :fullname
             ) ORDER BY username ASC LIMIT 10');
-            $stmt->bindValue(':username', '%' . $username . '%', PDO::PARAM_STR);
+            $stmt->bindValue(':username', '%' . $username_escape . '%', PDO::PARAM_STR);
             $stmt->bindValue(':space', ' ', PDO::PARAM_STR);
-            $stmt->bindValue(':fullname', '%' . $username . '%', PDO::PARAM_STR);
+            $stmt->bindValue(':fullname', '%' . $username_escape . '%', PDO::PARAM_STR);
         }
         $stmt->execute();
 
