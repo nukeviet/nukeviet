@@ -77,12 +77,15 @@ $bind_params = [];
 $where = [];
 if (!empty($array_search['q'])) {
     $base_url .= '&amp;q=' . urlencode($array_search['q']);
-    $dblikekey = $db->dblikeescape($array_search['q']);
+    $dblikekey = $db->dblikeescape($array_search['q'], true);
 
     $where_or = [];
     foreach ($global_config['setup_langs'] as $lang) {
-        $where_or[] = $lang . "_title LIKE '%" . $dblikekey . "%'";
-        $where_or[] = $lang . "_subject LIKE '%" . $dblikekey . "%'";
+        $where_or[] = $lang . "_title LIKE :q_" . $lang . "_title";
+        $where_or[] = $lang . "_subject LIKE :q_" . $lang . "_subject";
+
+        $bind_params[':q_' . $lang . '_title'] = '%' . $dblikekey . '%';
+        $bind_params[':q_' . $lang . '_subject'] = '%' . $dblikekey . '%';
     }
     $where[] = "(" . implode(' OR ', $where_or) . ")";
     $is_search++;

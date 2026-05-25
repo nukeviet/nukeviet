@@ -347,7 +347,7 @@ if (!empty($module_config[$module_name]['elas_use'])) {
 
     $search_elastic = [];
     // Tim kiem theo bodytext,author,title
-    $key_elastic_search = nv_EncString($db->dblikeescape($array_search['q']));
+    $key_elastic_search = nv_EncString($array_search['q']);
 
     if ($array_search['stype'] == 'bodytext' or $array_search['stype'] == 'author' or $array_search['stype'] == 'title') {
         if ($array_search['stype'] == 'bodytext') {
@@ -370,8 +370,8 @@ if (!empty($module_config[$module_name]['elas_use'])) {
             // Tim bai viet co internal author trung voi ket qua tim kiem
             $sql = "SELECT id FROM " . NV_PREFIXLANG . "_" . $module_data . "_authorlist WHERE alias LIKE :q_alias OR pseudonym LIKE :q_pseudonym";
             $sth = $db->prepare($sql);
-            $sth->bindValue(':q_alias', '%' . $db->dblikeescape($array_search['qhtml']) . '%', PDO::PARAM_STR);
-            $sth->bindValue(':q_pseudonym', '%' . $db->dblikeescape($array_search['qhtml']) . '%', PDO::PARAM_STR);
+            $sth->bindValue(':q_alias', '%' . $db->dblikeescape($array_search['qhtml'], true) . '%', PDO::PARAM_STR);
+            $sth->bindValue(':q_pseudonym', '%' . $db->dblikeescape($array_search['qhtml'], true) . '%', PDO::PARAM_STR);
             $sth->execute();
             $match = [];
             while ($_id_search = $sth->fetch()) {
@@ -409,15 +409,15 @@ if (!empty($module_config[$module_name]['elas_use'])) {
         $search_elastic = [
             'should' => [
                 'match' => [
-                    'sourcetext' => $db->dblikeescape($qurl)
+                    'sourcetext' => $qurl
                 ]
             ]
         ];
     } elseif ($array_search['stype'] == 'admin_id') {
         $sql = "SELECT userid FROM " . NV_USERS_GLOBALTABLE . " WHERE username LIKE :q_username OR first_name LIKE :q_first_name";
         $sth = $db->prepare($sql);
-        $sth->bindValue(':q_username', '%' . $db->dblikeescape($array_search['qhtml']) . '%', PDO::PARAM_STR);
-        $sth->bindValue(':q_first_name', '%' . $db->dblikeescape($array_search['qhtml']) . '%', PDO::PARAM_STR);
+        $sth->bindValue(':q_username', '%' . $db->dblikeescape($array_search['qhtml'], true) . '%', PDO::PARAM_STR);
+        $sth->bindValue(':q_first_name', '%' . $db->dblikeescape($array_search['qhtml'], true) . '%', PDO::PARAM_STR);
         $sth->execute();
         $match = [];
         while ($_admin_id_search = $sth->fetch()) {
@@ -439,7 +439,7 @@ if (!empty($module_config[$module_name]['elas_use'])) {
         $search_elastic_user['filter']['or'] = $match;
         $search_elastic = array_merge($search_elastic, $search_elastic_user);
     } else {
-        $key_search = nv_EncString($db->dblikeescape($array_search['q']));
+        $key_search = nv_EncString($array_search['q']);
         $search_elastic = [
             'should' => [
                 'multi_match' => [
@@ -461,8 +461,8 @@ if (!empty($module_config[$module_name]['elas_use'])) {
         // Tim bai viet co internal author trung voi ket qua tim kiem
         $sql = "SELECT id FROM " . NV_PREFIXLANG . "_" . $module_data . "_authorlist WHERE alias LIKE :q_alias OR pseudonym LIKE :q_pseudonym";
         $sth = $db->prepare($sql);
-        $sth->bindValue(':q_alias', '%' . $db->dblikeescape($array_search['qhtml']) . '%', PDO::PARAM_STR);
-        $sth->bindValue(':q_pseudonym', '%' . $db->dblikeescape($array_search['qhtml']) . '%', PDO::PARAM_STR);
+        $sth->bindValue(':q_alias', '%' . $db->dblikeescape($array_search['qhtml'], true) . '%', PDO::PARAM_STR);
+        $sth->bindValue(':q_pseudonym', '%' . $db->dblikeescape($array_search['qhtml'], true) . '%', PDO::PARAM_STR);
         $sth->execute();
         $match = [];
         while ($_id_search = $sth->fetch()) {
@@ -480,8 +480,8 @@ if (!empty($module_config[$module_name]['elas_use'])) {
         // tim tat ca cac admin_id c username=$db->dblikeescape($array_search['qhtml']) ho?c first_name=$db->dblikeescape($array_search['qhtml'])
         $sql = "SELECT userid FROM " . NV_USERS_GLOBALTABLE . " WHERE username LIKE :q_username OR first_name LIKE :q_first_name";
         $sth = $db->prepare($sql);
-        $sth->bindValue(':q_username', '%' . $db->dblikeescape($array_search['qhtml']) . '%', PDO::PARAM_STR);
-        $sth->bindValue(':q_first_name', '%' . $db->dblikeescape($array_search['qhtml']) . '%', PDO::PARAM_STR);
+        $sth->bindValue(':q_username', '%' . $db->dblikeescape($array_search['qhtml'], true) . '%', PDO::PARAM_STR);
+        $sth->bindValue(':q_first_name', '%' . $db->dblikeescape($array_search['qhtml'], true) . '%', PDO::PARAM_STR);
         $sth->execute();
         // search elastic theo admin_id v?a tm dc
         $match = [];

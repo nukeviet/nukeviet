@@ -799,7 +799,7 @@ if (!empty($method) and isset($methods[$method]) and !empty($methodvalue)) {
     $methods[$method]['selected'] = true;
     $table_caption = $nv_Lang->getModule('search_page_title');
     $ar_where[] = $methods[$method]['sql'] . ' LIKE :methodvalue';
-    $params[':methodvalue'] = ['%' . $db->dblikeescape($methodvalue) . '%', PDO::PARAM_STR];
+    $params[':methodvalue'] = ['%' . $db->dblikeescape($methodvalue, true) . '%', PDO::PARAM_STR];
 }
 
 $page = $nv_Request->get_page('page', 'get', 1);

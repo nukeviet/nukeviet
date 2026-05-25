@@ -198,20 +198,20 @@ if (empty($key) and ($catid == 0) and empty($from_date) and empty($to_date)) {
 } else {
     $dbkey = $db->dblikeescape($key);
     $dbkeyhtml = $db->dblikeescape($keyhtml);
+    $dbkeyhtml_elas = nv_EncString($keyhtml);
     $internal_authors = [];
 
     if ($module_config[$module_name]['elas_use'] == 1) {
         // Kết nối đến CSDL elastic
         $nukeVietElasticSearh = new NukeViet\ElasticSearch\Functions($module_config[$module_name]['elas_host'], $module_config[$module_name]['elas_port'], $module_config[$module_name]['elas_index']);
 
-        $dbkeyhtml = nv_EncString($dbkeyhtml);
         if ($choose == 1) {
             $search_elastic = [
                 'should' => [
                     // dùng multi_match: tìm kiếm theo nhiều trường
                     'multi_match' => [
                         // tìm kiếm theo từ khóa
-                        'query' => $dbkeyhtml,
+                        'query' => $dbkeyhtml_elas,
                         'type' => [
                             'cross_fields'
                         ],
@@ -239,10 +239,10 @@ if (empty($key) and ($catid == 0) and empty($from_date) and empty($to_date)) {
             // Tìm bài viết có internal author trùng với kết quả tìm kiếm
             if ($db->dbtype == 'mysql' and function_exists('searchKeywordforSQL')) {
                 $where = 'alias REGEXP :q_alias OR pseudonym REGEXP :q_pseudonym';
-                $_dbkeyhtml = searchKeywordforSQL($dbkeyhtml);
+                $_dbkeyhtml = searchKeywordforSQL($dbkeyhtml_elas);
             } else {
                 $where = 'alias LIKE :q_alias OR pseudonym LIKE :q_pseudonym';
-                $_dbkeyhtml = '%' . $dbkeyhtml . '%';
+                $_dbkeyhtml = '%' . $db->dblikeescape($keyhtml, true) . '%';
             }
             $db->sqlreset()
                 ->select('id')
@@ -278,7 +278,7 @@ if (empty($key) and ($catid == 0) and empty($from_date) and empty($to_date)) {
             $search_elastic = [
                 'should' => [
                     'match' => [
-                        'sourcetext' => $db->dblikeescape($qurl)
+                        'sourcetext' => $qurl
                     ]
                 ]
             ];
@@ -288,7 +288,7 @@ if (empty($key) and ($catid == 0) and empty($from_date) and empty($to_date)) {
                     // Dùng multi_match: Tìm kiếm theo nhiều trường
                     'multi_match' => [
                         // Tìm kiếm theo từ khóa
-                        'query' => $dbkeyhtml,
+                        'query' => $dbkeyhtml_elas,
                         'type' => [
                             'cross_fields'
                         ],
@@ -308,10 +308,10 @@ if (empty($key) and ($catid == 0) and empty($from_date) and empty($to_date)) {
             // Tìm bài viết có internal author trùng với kết quả tìm kiếm
             if ($db->dbtype == 'mysql' and function_exists('searchKeywordforSQL')) {
                 $where = 'alias REGEXP :q_alias OR pseudonym REGEXP :q_pseudonym';
-                $_dbkeyhtml = searchKeywordforSQL($dbkeyhtml);
+                $_dbkeyhtml = searchKeywordforSQL($dbkeyhtml_elas);
             } else {
                 $where = 'alias LIKE :q_alias OR pseudonym LIKE :q_pseudonym';
-                $_dbkeyhtml = '%' . $dbkeyhtml . '%';
+                $_dbkeyhtml = '%' . $db->dblikeescape($keyhtml, true) . '%';
             }
             $db->sqlreset()
                 ->select('id')
@@ -447,7 +447,7 @@ if (empty($key) and ($catid == 0) and empty($from_date) and empty($to_date)) {
                 if (isset($url_info['scheme']) and isset($url_info['host'])) {
                     $qurl = $url_info['scheme'] . '://' . $url_info['host'];
                 }
-                $where .= ' AND (tb1.sourceid IN (SELECT sourceid FROM ' . NV_PREFIXLANG . '_' . $module_data . "_sources WHERE title LIKE '%" . $db->dblikeescape($dbkey) . "%' OR link LIKE '%" . $db->dblikeescape($qurl) . "%'))";
+                $where .= ' AND (tb1.sourceid IN (SELECT sourceid FROM ' . NV_PREFIXLANG . '_' . $module_data . "_sources WHERE title LIKE '%" . $dbkey . "%' OR link LIKE '%" . $db->dblikeescape($qurl) . "%'))";
             } else {
                 $qurl = $key;
                 $url_info = parse_url($qurl);
