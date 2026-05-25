@@ -23,14 +23,16 @@ function nv_comment_reset(event, form) {
     }
 }
 
-function nv_commment_feedback(event, cid, post_name) {
+function nv_commment_feedback(event, cid) {
     event.preventDefault();
+    var post_name = $(event.currentTarget).data('post-name') || '';
     if ($('#formcomment form').length) {
         $("#formcomment form [name=pid]").val(cid);
         var data = $('#formcomment form').data();
         if (data.editor) {
+            var safe_name = post_name.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
             window.nveditor['commentcontent'].model.change(() => {
-                window.nveditor['commentcontent'].model.insertContent(window.nveditor['commentcontent'].data.toModel(window.nveditor['commentcontent'].data.processor.toView("@" + post_name + "&nbsp;")), window.nveditor['commentcontent'].model.document.selection);
+                window.nveditor['commentcontent'].model.insertContent(window.nveditor['commentcontent'].data.toModel(window.nveditor['commentcontent'].data.processor.toView("@" + safe_name + "&nbsp;")), window.nveditor['commentcontent'].model.document.selection);
             });
             window.nveditor['commentcontent'].editing.view.focus();
         } else {

@@ -24,7 +24,7 @@
                     <li><em class="fa fa-trash-o fa-lg">&nbsp;</em> <a href="javascript:void(0);" onclick="nv_commment_delete({COMMENT.cid}, '{COMMENT.check_like}')">{LANG.delete}</a></li>
                     <!-- END: delete -->
                     <!-- BEGIN: allowed_comm -->
-                    <li><em class="fa fa-reply">&nbsp;</em> <a href="javascript:void(0);" onclick="nv_commment_feedback(event, {COMMENT.cid}, '{COMMENT.post_name}')">{LANG.feedback}</a></li>
+                    <li><em class="fa fa-reply">&nbsp;</em> <a href="javascript:void(0);" data-post-name="{COMMENT.post_name}" onclick="nv_commment_feedback(event, {COMMENT.cid})">{LANG.feedback}</a></li>
                     <!-- END: allowed_comm -->
                     <li><em class="fa fa-thumbs-o-up">&nbsp;</em> <a href="javascript:void(0);" onclick="nv_commment_like(event, {COMMENT.cid}, '{COMMENT.check_like}', '1')">{LANG.like}</a> <span id="like{COMMENT.cid}">{COMMENT.likes}</span></li>
                     <li><em class="fa fa-thumbs-o-down">&nbsp;</em> <a href="javascript:void(0);" onclick="nv_commment_like(event, {COMMENT.cid}, '{COMMENT.check_like}', '-1')">{LANG.dislike}</a> <span id="dislike{COMMENT.cid}">{COMMENT.dislikes}</span></li>
@@ -61,7 +61,7 @@
                     <li><em class="fa fa-trash-o fa-lg">&nbsp;</em> <a href="javascript:void(0);" onclick="nv_commment_delete({COMMENT.cid}, '{COMMENT.check_like}')">{LANG.delete}</a></li>
                     <!-- END: delete -->
                     <!-- BEGIN: allowed_comm -->
-                    <li><em class="fa fa-reply">&nbsp;</em> <a href="javascript:void(0);" onclick="nv_commment_feedback(event, {COMMENT.cid}, '{COMMENT.post_name}')">{LANG.feedback}</a></li>
+                    <li><em class="fa fa-reply">&nbsp;</em> <a href="javascript:void(0);" data-post-name="{COMMENT.post_name}" onclick="nv_commment_feedback(event, {COMMENT.cid})">{LANG.feedback}</a></li>
                     <!-- END: allowed_comm -->
                     <li><em class="fa fa-thumbs-o-up">&nbsp;</em> <a href="javascript:void(0);" onclick="nv_commment_like(event, {COMMENT.cid}, '{COMMENT.check_like}', '1')">{LANG.like}</a> <span id="like{COMMENT.cid}">{COMMENT.likes}</span></li>
                     <li><em class="fa fa-thumbs-o-down">&nbsp;</em> <a href="javascript:void(0);" onclick="nv_commment_like(event, {COMMENT.cid}, '{COMMENT.check_like}', '-1')">{LANG.dislike}</a> <span id="dislike{COMMENT.cid}">{COMMENT.dislikes}</span></li>
