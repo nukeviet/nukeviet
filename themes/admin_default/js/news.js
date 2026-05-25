@@ -591,10 +591,6 @@ $(document).ready(function() {
         nv_open_browse(script_name + "?" + nv_name_variable + "=upload&popup=1&area=" + area + "&path=" + path + "&type=" + type + "&currentpath=" + currentpath, "NVImg", 850, 420, "resizable=no,scrollbars=no,toolbar=no,location=no,status=no");
         return false;
     });
-    $('a.viewinstantrss').click(function(e) {
-        e.preventDefault();
-        modalShow($(this).data('modaltitle'), '<div><input type="text" class="form-control w500" value="' + $(this).attr('href') + '" data-toggle="selectall"/></div>');
-    });
     var popOverALl = new Array();
     // Thay đổi thứ tự số chuyên mục: Thứ tự, số liên kết, ngày mới
     $(document).delegate('[data-toggle="changecat"]', 'click', function(e) {
@@ -662,25 +658,6 @@ $(document).ready(function() {
         });
         popOverALl = new Array();
     }
-
-    // Setting Instant Articles
-    $(document).delegate('[data-toggle="selectall"]', 'focus', function() {
-        $(this).select();
-    });
-    $('.showhidepass').click(function(e) {
-        e.preventDefault();
-        var tg = $($(this).data('target'));
-        if (tg.prop('type') == 'text') {
-            tg.prop('type', 'password');
-        } else {
-            tg.prop('type', 'text');
-        }
-    });
-    $('.genrandpass').click(function(e) {
-        e.preventDefault();
-        $($(this).data('target')).prop('type', 'text');
-        $($(this).data('target')).val(nv_randomPassword(10));
-    });
 
     // Từ ngày, đến ngày ở trang chủ
     if ($.fn.datepicker) {

@@ -1,5 +1,8 @@
 CHANGE LOG: NUKEVIET CMS
 http://nukeviet.vn
+NUKEVIET 4.5.09
+- Remove Facebook Instant Article feature
+
 NUKEVIET 4.5.08
 - Remove abandoned package true/punycode
 - Remove the and/oauth package, which has long been unmaintained, and replace it with league/oauth2-client

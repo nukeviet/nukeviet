@@ -611,9 +611,6 @@ function nv_save_history($post_old, $post_new)
         'allowed_comm',
         'allowed_rating',
         'external_link',
-        'instant_active',
-        'instant_template',
-        'instant_creatauto',
         'titlesite',
         'description',
         'bodyhtml',
@@ -677,16 +674,16 @@ function nv_save_history($post_old, $post_new)
             new_id, historytime, catid, listcatid, topicid, admin_id,
             author, sourceid, publtime, exptime, archive, title, alias,
             hometext, homeimgfile, homeimgalt, inhome, allowed_comm,
-            allowed_rating, external_link, instant_active, instant_template,
-            instant_creatauto, titlesite, description, bodyhtml, voicedata, keywords, sourcetext,
+            allowed_rating, external_link,
+            titlesite, description, bodyhtml, voicedata, keywords, sourcetext,
             files, tags, internal_authors, imgposition, layout_func, copyright,
             allowed_send, allowed_print, allowed_save, changed_fields
         ) VALUES (
             :new_id, :historytime, :catid, :listcatid, :topicid, :admin_id,
             :author, :sourceid, :publtime, :exptime, :archive, :title, :alias,
             :hometext, :homeimgfile, :homeimgalt, :inhome, :allowed_comm,
-            :allowed_rating, :external_link, :instant_active, :instant_template,
-            :instant_creatauto, :titlesite, :description, :bodyhtml, :voicedata, :keywords, :sourcetext,
+            :allowed_rating, :external_link,
+            :titlesite, :description, :bodyhtml, :voicedata, :keywords, :sourcetext,
             :files, :tags, :internal_authors, :imgposition, :layout_func,
             :copyright, :allowed_send, :allowed_print, :allowed_save, :changed_fields
         )";
@@ -711,9 +708,6 @@ function nv_save_history($post_old, $post_new)
         $array_insert['allowed_comm'] = $post_old['allowed_comm'];
         $array_insert['allowed_rating'] = $post_old['allowed_rating'];
         $array_insert['external_link'] = $post_old['external_link'];
-        $array_insert['instant_active'] = $post_old['instant_active'];
-        $array_insert['instant_template'] = $post_old['instant_template'];
-        $array_insert['instant_creatauto'] = $post_old['instant_creatauto'];
         $array_insert['titlesite'] = $post_old['titlesite'];
         $array_insert['description'] = $post_old['description'];
         $array_insert['bodyhtml'] = $post_old['bodyhtml'];

@@ -71,22 +71,6 @@ if (!empty($savesetting)) {
     $array_config['elas_port'] = $nv_Request->get_int('elas_port', 'post', 0);
     $array_config['elas_index'] = $nv_Request->get_title('elas_index', 'post', '');
 
-    $array_config['instant_articles_active'] = $nv_Request->get_int('instant_articles_active', 'post', 0);
-    $array_config['instant_articles_template'] = $nv_Request->get_title('instant_articles_template', 'post', 'default');
-    $array_config['instant_articles_httpauth'] = $nv_Request->get_int('instant_articles_httpauth', 'post', 0);
-    $array_config['instant_articles_username'] = $nv_Request->get_title('instant_articles_username', 'post', '');
-    $array_config['instant_articles_password'] = $nv_Request->get_title('instant_articles_password', 'post', '');
-    $array_config['instant_articles_livetime'] = $nv_Request->get_int('instant_articles_livetime', 'post', 0);
-    $array_config['instant_articles_gettime'] = $nv_Request->get_int('instant_articles_gettime', 'post', 0);
-    $array_config['instant_articles_auto'] = $nv_Request->get_int('instant_articles_auto', 'post', 0);
-
-    if (!empty($array_config['instant_articles_httpauth']) and (empty($array_config['instant_articles_username']) or empty($array_config['instant_articles_password']))) {
-        $array_config['instant_articles_httpauth'] = 0;
-    }
-    if (!empty($array_config['instant_articles_password'])) {
-        $array_config['instant_articles_password'] = $crypt->encrypt($array_config['instant_articles_password']);
-    }
-
     if ($array_config['elas_use']) {
         $fp = fsockopen($array_config['elas_host'], $array_config['elas_port'], $errno, $errstr, 30);
         if (!$fp) {
@@ -233,22 +217,12 @@ $xtpl->assign('ELAS_USE', $module_config[$module_name]['elas_use'] ? ' checked="
 $xtpl->assign('HIDE_AUTHOR', $module_config[$module_name]['hide_author'] ? ' checked="checked"' : '');
 $xtpl->assign('HIDE_INAUTHOR', $module_config[$module_name]['hide_inauthor'] ? ' checked="checked"' : '');
 $xtpl->assign('SHOW_NO_IMAGE', (!empty($module_config[$module_name]['show_no_image'])) ? NV_BASE_SITEURL . $module_config[$module_name]['show_no_image'] : '');
-$xtpl->assign('INSTANT_ARTICLES_URL_DEFAULT', NV_MY_DOMAIN . nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=instant-rss', true));
-$xtpl->assign('INSTANT_ARTICLES_ACTIVE', $module_config[$module_name]['instant_articles_active'] ? ' checked="checked"' : '');
-$xtpl->assign('INSTANT_ARTICLES_HTTPAUTH', $module_config[$module_name]['instant_articles_httpauth'] ? ' checked="checked"' : '');
-$xtpl->assign('INSTANT_ARTICLES_AUTO', $module_config[$module_name]['instant_articles_auto'] ? ' checked="checked"' : '');
 $xtpl->assign('IDENTIFY_CAT_CHANGE', $module_config[$module_name]['identify_cat_change'] ? ' checked="checked"' : '');
 $xtpl->assign('ALLOWED_RATING', $module_config[$module_name]['allowed_rating'] ? ' checked="checked"' : '');
 $xtpl->assign('ACTIVE_HISTORY', !empty($module_config[$module_name]['active_history']) ? ' checked="checked"' : '');
 
 $xtpl->assign('FRONTEND_EDIT_ALIAS', $module_config[$module_name]['frontend_edit_alias'] ? ' checked="checked"' : '');
 $xtpl->assign('FRONTEND_EDIT_LAYOUT', $module_config[$module_name]['frontend_edit_layout'] ? ' checked="checked"' : '');
-
-if (!empty($module_config[$module_name]['instant_articles_password'])) {
-    $xtpl->assign('INSTANT_ARTICLES_PASSWORD', $crypt->decrypt($module_config[$module_name]['instant_articles_password']));
-} else {
-    $xtpl->assign('INSTANT_ARTICLES_PASSWORD', '');
-}
 
 $array_structure_image = [];
 $array_structure_image[''] = NV_UPLOADS_DIR . '/' . $module_upload;

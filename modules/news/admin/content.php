@@ -198,9 +198,6 @@ $rowcontent = [
     'tags' => '',
     'tags_old' => '',
     'keywords' => '',
-    'instant_active' => isset($module_config[$module_name]['instant_articles_auto']) ? $module_config[$module_name]['instant_articles_auto'] : 0,
-    'instant_template' => '',
-    'instant_creatauto' => 0,
     'mode' => 'add',
     'voicedata' => [],
     'reject_reason' => ''
@@ -211,7 +208,6 @@ $page_title = $lang_module['content_add'];
 $error = [];
 $groups_list = nv_groups_list();
 $array_tags_old = [];
-$FBIA = new \NukeViet\Facebook\InstantArticles($lang_module);
 $internal_authors_list = [];
 
 // ID của bài viết cần sửa hoặc cần copy
@@ -742,27 +738,6 @@ if ($is_submit_form) {
         $error = [];
     }
 
-    // Thao tác xử lý bài viết tức thời
-    if (!empty($module_config[$module_name]['instant_articles_active'])) {
-        $rowcontent['instant_active'] = (int) $nv_Request->get_bool('instant_active', 'post');
-        $rowcontent['instant_template'] = $nv_Request->get_title('instant_template', 'post', '');
-        $rowcontent['instant_creatauto'] = (int) $nv_Request->get_bool('instant_creatauto', 'post');
-    } else {
-        $rowcontent['instant_active'] = 0;
-        $rowcontent['instant_template'] = '';
-        $rowcontent['instant_creatauto'] = 0;
-    }
-    if (empty($rowcontent['instant_active'])) {
-        $rowcontent['instant_template'] = '';
-    }
-    if ($rowcontent['instant_active'] and !$rowcontent['instant_creatauto']) {
-        $FBIA->setArticle($rowcontent['bodyhtml']);
-        $checkArt = $FBIA->checkArticle();
-        if ($checkArt !== true) {
-            $error[] = $checkArt;
-        }
-    }
-
     if (empty($error)) {
         if (!empty($rowcontent['topictext']) and empty($rowcontent['topicid'])) {
             $weightopic = $db->query('SELECT max(weight) FROM ' . NV_PREFIXLANG . '_' . $module_data . '_topics')->fetchColumn();
@@ -868,8 +843,7 @@ if ($is_submit_form) {
 
             $sql = 'INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . '_rows (
                 catid, listcatid, topicid, admin_id, author, sourceid, addtime, edittime, status, weight, publtime, exptime, archive, title, alias, hometext,
-                homeimgfile, homeimgalt, homeimgthumb, inhome, allowed_comm, allowed_rating, external_link, hitstotal, hitscm, total_rating, click_rating, instant_active, instant_template,
-                instant_creatauto
+                homeimgfile, homeimgalt, homeimgthumb, inhome, allowed_comm, allowed_rating, external_link, hitstotal, hitscm, total_rating, click_rating
             ) VALUES (
                  ' . (int) ($rowcontent['catid']) . ',
                  :listcatid,
@@ -897,10 +871,8 @@ if ($is_submit_form) {
                  ' . (int) ($rowcontent['hitstotal']) . ',
                  ' . (int) ($rowcontent['hitscm']) . ',
                  ' . (int) ($rowcontent['total_rating']) . ',
-                 ' . (int) ($rowcontent['click_rating']) . ',
-                 ' . (int) ($rowcontent['instant_active']) . ',
-                 :instant_template,
-                 ' . (int) ($rowcontent['instant_creatauto']) . ')';
+                 ' . (int) ($rowcontent['click_rating']) . '
+            )';
 
             $data_insert = [];
             $data_insert['listcatid'] = $rowcontent['listcatid'];
@@ -912,7 +884,6 @@ if ($is_submit_form) {
             $data_insert['homeimgalt'] = $rowcontent['homeimgalt'];
             $data_insert['homeimgthumb'] = $rowcontent['homeimgthumb'];
             $data_insert['allowed_comm'] = $rowcontent['allowed_comm'];
-            $data_insert['instant_template'] = $rowcontent['instant_template'];
 
             $rowcontent['id'] = $db->insert_id($sql, 'id', $data_insert);
             if ($rowcontent['id'] > 0) {
@@ -1027,9 +998,6 @@ if ($is_submit_form) {
                 allowed_comm=:allowed_comm,
                 allowed_rating=' . (int) ($rowcontent['allowed_rating']) . ',
                 external_link=' . (int) ($rowcontent['external_link']) . ',
-                instant_active=' . (int) ($rowcontent['instant_active']) . ',
-                instant_template=:instant_template,
-                instant_creatauto=' . (int) ($rowcontent['instant_creatauto']) . ',
                 edittime=' . ($restore_id ? $rowcontent['historytime'] : NV_CURRENTTIME) . '
             WHERE id =' . $rowcontent['id']);
 
@@ -1042,7 +1010,6 @@ if ($is_submit_form) {
             $sth->bindParam(':homeimgalt', $rowcontent['homeimgalt'], PDO::PARAM_STR);
             $sth->bindParam(':homeimgthumb', $rowcontent['homeimgthumb'], PDO::PARAM_STR);
             $sth->bindParam(':allowed_comm', $rowcontent['allowed_comm'], PDO::PARAM_STR);
-            $sth->bindParam(':instant_template', $rowcontent['instant_template'], PDO::PARAM_STR);
 
             if ($sth->execute()) {
                 nv_insert_logs(NV_LANG_DATA, $module_name, $lang_module['content_edit'], $rowcontent['title'], $admin_info['userid']);
@@ -1583,9 +1550,6 @@ $allowed_print_checked = ($rowcontent['allowed_print']) ? ' checked="checked"' :
 $xtpl->assign('allowed_print_checked', $allowed_print_checked);
 $allowed_save_checked = ($rowcontent['allowed_save']) ? ' checked="checked"' : '';
 $xtpl->assign('allowed_save_checked', $allowed_save_checked);
-$instant_active_checked = ($rowcontent['instant_active']) ? ' checked="checked"' : '';
-$xtpl->assign('instant_active_checked', $instant_active_checked);
-$xtpl->assign('instant_creatauto_checked', empty($rowcontent['instant_creatauto']) ? '' : ' checked="checked"');
 
 $xtpl->assign('edit_bodytext', $edits);
 $xtpl->assign('edit_hometext', $editshometext);
@@ -1655,9 +1619,6 @@ if (empty($rowcontent['alias'])) {
 
 if ($module_config[$module_name]['auto_tags']) {
     $xtpl->parse('main.auto_tags');
-}
-if (!empty($module_config[$module_name]['instant_articles_active'])) {
-    $xtpl->parse('main.instant_articles_active');
 }
 
 if ($rowcontent['mode'] == 'edit') {

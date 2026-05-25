@@ -163,9 +163,6 @@ $sql_create_module[] = 'CREATE TABLE ' . $db_config['prefix'] . '_' . $lang . '_
   hitscm mediumint(8) unsigned NOT NULL default '0',
   total_rating int(11) NOT NULL default '0',
   click_rating int(11) NOT NULL default '0',
-  instant_active tinyint(1) NOT NULL default '0',
-  instant_template varchar(100) NOT NULL default '',
-  instant_creatauto tinyint(1) NOT NULL default '0',
   PRIMARY KEY (id),
   KEY catid (catid),
   KEY topicid (topicid),
@@ -176,9 +173,7 @@ $sql_create_module[] = 'CREATE TABLE ' . $db_config['prefix'] . '_' . $lang . '_
   KEY edittime (edittime),
   KEY publtime (publtime),
   KEY exptime (exptime),
-  KEY status (status),
-  KEY instant_active (instant_active),
-  KEY instant_creatauto (instant_creatauto)
+  KEY status (status)
 ) ENGINE=MyISAM";
 
 $sql_create_module[] = 'CREATE TABLE ' . $db_config['prefix'] . '_' . $lang . '_' . $module_data . "_row_histories (
@@ -203,9 +198,6 @@ $sql_create_module[] = 'CREATE TABLE ' . $db_config['prefix'] . '_' . $lang . '_
   allowed_comm varchar(255) DEFAULT '',
   allowed_rating tinyint(1) unsigned NOT NULL DEFAULT '0',
   external_link tinyint(1) unsigned NOT NULL DEFAULT '0',
-  instant_active tinyint(1) NOT NULL DEFAULT '0',
-  instant_template varchar(100) NOT NULL DEFAULT '',
-  instant_creatauto tinyint(1) NOT NULL DEFAULT '0',
   titlesite varchar(255) NOT NULL DEFAULT '',
   description text NOT NULL,
   bodyhtml longtext NOT NULL,
@@ -394,16 +386,6 @@ $sql_create_module[] = 'INSERT INTO ' . NV_CONFIG_GLOBALTABLE . " (lang, module,
 $sql_create_module[] = 'INSERT INTO ' . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('" . $lang . "', '" . $module_name . "', 'elas_host', '')";
 $sql_create_module[] = 'INSERT INTO ' . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('" . $lang . "', '" . $module_name . "', 'elas_port', '9200')";
 $sql_create_module[] = 'INSERT INTO ' . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('" . $lang . "', '" . $module_name . "', 'elas_index', '')";
-
-// Bai viet tuc thoi
-$sql_create_module[] = 'INSERT INTO ' . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('" . $lang . "', '" . $module_name . "', 'instant_articles_active', '0')";
-$sql_create_module[] = 'INSERT INTO ' . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('" . $lang . "', '" . $module_name . "', 'instant_articles_template', 'default')";
-$sql_create_module[] = 'INSERT INTO ' . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('" . $lang . "', '" . $module_name . "', 'instant_articles_httpauth', '0')";
-$sql_create_module[] = 'INSERT INTO ' . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('" . $lang . "', '" . $module_name . "', 'instant_articles_username', '')";
-$sql_create_module[] = 'INSERT INTO ' . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('" . $lang . "', '" . $module_name . "', 'instant_articles_password', '')";
-$sql_create_module[] = 'INSERT INTO ' . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('" . $lang . "', '" . $module_name . "', 'instant_articles_livetime', '60')";
-$sql_create_module[] = 'INSERT INTO ' . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('" . $lang . "', '" . $module_name . "', 'instant_articles_gettime', '120')";
-$sql_create_module[] = 'INSERT INTO ' . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('" . $lang . "', '" . $module_name . "', 'instant_articles_auto', '1')";
 
 // Comments
 $sql_create_module[] = 'INSERT INTO ' . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('" . $lang . "', '" . $module_name . "', 'auto_postcomm', '1')";
