@@ -31,7 +31,10 @@ if (!$nv_Request->isset_request('code', 'get') and !$nv_Request->isset_request('
 
 $attribs = ['server' => $server];
 
-if ($nv_Request->get_title('state', 'get', '') !== $nv_Request->get_title('oauth2state', 'session', '')) {
+$state = $nv_Request->get_title('state', 'get', '');
+$oauth2state = $nv_Request->get_title('oauth2state', 'session', '');
+
+if (empty($oauth2state) || $state !== $oauth2state) {
     // Kiểm tra CSRF
     $nv_Request->unset_request('oauth2state', 'session');
     $nv_Request->unset_request('openid_attribs', 'session');
