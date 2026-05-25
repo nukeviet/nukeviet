@@ -84,6 +84,8 @@ function oldPassSave($userid, $oldpass, $oldpass_creation_time)
     global $db, $global_config;
 
     empty($global_config['oldpass_num']) && $global_config['oldpass_num'] = 5;
+    $userid = (int) $userid;
+    $oldpass_creation_time = (int) $oldpass_creation_time;
 
     try {
         $db->query('INSERT INTO ' . NV_MOD_TABLE . '_oldpass VALUES (' . $userid . ', ' . $db->quote($oldpass) . ', ' . $oldpass_creation_time . ') ON DUPLICATE KEY UPDATE password=VALUES(password)');
@@ -114,7 +116,7 @@ function passCmp($newpass, $currentpass, $userid)
         return false;
     }
 
-    $sql = 'SELECT * FROM ' . NV_MOD_TABLE . '_oldpass WHERE userid=' . $userid;
+    $sql = 'SELECT * FROM ' . NV_MOD_TABLE . '_oldpass WHERE userid=' . (int) $userid;
     $query = $db->query($sql);
     while ($row = $query->fetch()) {
         if ($crypt->validate_password($newpass, $row['password'])) {
@@ -136,7 +138,7 @@ function forcedrelogin($userid)
     global $db;
 
     $checknum = md5(nv_genpass(10));
-    $stmt = $db->prepare('UPDATE ' . NV_MOD_TABLE . ' SET checknum=:checknum WHERE userid=' . $userid);
+    $stmt = $db->prepare('UPDATE ' . NV_MOD_TABLE . ' SET checknum=:checknum WHERE userid=' . (int) $userid);
     $stmt->bindParam(':checknum', $checknum, PDO::PARAM_STR);
     $stmt->execute();
 }
@@ -188,11 +190,19 @@ function delete_userfile($file_save_info)
 {
     global $module_upload;
 
-    @unlink(NV_UPLOADS_REAL_DIR . '/' . $module_upload . '/userfiles/' . $file_save_info['dir'] . '/' . $file_save_info['basename']);
-    $files = scandir(NV_UPLOADS_REAL_DIR . '/' . $module_upload . '/userfiles/' . $file_save_info['dir'] . '/');
-    $files = array_diff($files, ['.', '..', '.htaccess', 'index.html']);
-    if (!count($files)) {
-        nv_deletefile(NV_UPLOADS_REAL_DIR . '/' . $module_upload . '/userfiles/' . $file_save_info['dir'] . '/');
+    $dir_path = NV_UPLOADS_REAL_DIR . '/' . $module_upload . '/userfiles/' . $file_save_info['dir'] . '/';
+    if (is_dir($dir_path)) {
+        if (!empty($file_save_info['basename']) && file_exists($dir_path . $file_save_info['basename'])) {
+            @unlink($dir_path . $file_save_info['basename']);
+        }
+
+        $files = @scandir($dir_path);
+        if (is_array($files)) {
+            $files = array_diff($files, ['.', '..', '.htaccess', 'index.html']);
+            if (empty($files)) {
+                nv_deletefile($dir_path);
+            }
+        }
     }
 }
 
@@ -292,7 +302,7 @@ function fieldsCheck(&$custom_fields, &$array_data, &$query_field, &$valid_field
                     }
                 } elseif ($row_f['match_type'] == 'email') {
                     [$errorContent, $value] = nv_check_valid_email($value, true);
-                    if (!empty($isError)) {
+                    if (!empty($errorContent)) {
                         return [
                             'status' => 'error',
                             'input' => $field_input_name,
@@ -480,7 +490,19 @@ function userInfoTabDb($data, $userid = 0)
 {
     global $db, $array_field_config, $module_upload;
 
-    if ($userid) {
+    $userid = (int) $userid;
+    // Lọc an toàn các keys của mảng $data
+    $safe_data = [];
+    foreach ($data as $k => $v) {
+        if (preg_match('/^[a-zA-Z0-9_]+$/', $k)) {
+            $safe_data[$k] = $v;
+        }
+    }
+    $data = $safe_data;
+
+    if (empty($data)) return false;
+
+    if ($userid > 0) {
         if (empty($array_field_config)) {
             $array_field_config = get_other_fields(nv_get_users_field_config());
         }

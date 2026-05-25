@@ -640,7 +640,7 @@ class Upload
             return false;
         }
 
-        return !(preg_match("#<\?php(.*)\?>#ms", $txt))
+        return !(preg_match('#<\?(=|php\b|[^x])#i', $txt))
         ;
     }
 
@@ -1043,7 +1043,10 @@ class Upload
         // Xác định tên file tải lên
         unset($f);
         preg_match('/^(.*)\.[a-zA-Z0-9]+$/', $userfile['name'], $f);
-        $fn = $this->string_to_filename($f[1]);
+        $fn = $this->string_to_filename($f[1] ?? '');
+        if ($fn === '' || $fn[0] === '.') {
+            $fn = md5(uniqid(mt_rand(), true));
+        }
         $filename = $fn . '.' . $this->file_extension;
         if (!preg_match('/\/$/', $savepath)) {
             $savepath .= '/';
@@ -1790,7 +1793,10 @@ class Upload
 
         unset($f);
         if (isset($this->url_info['file']) and preg_match("/^(.*)\.[a-zA-Z0-9]+$/", $this->url_info['file'], $f)) {
-            $fn = $this->string_to_filename($f[1]);
+            $fn = $this->string_to_filename($f[1] ?? '');
+            if ($fn === '' || $fn[0] === '.') {
+                $fn = md5(uniqid(mt_rand(), true));
+            }
             $filename = $fn . '.' . $this->file_extension;
         } else {
             $filename = time() . '.' . $this->file_extension;

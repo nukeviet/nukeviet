@@ -48,7 +48,12 @@ class FileCache extends Cache
     public function __construct(string $cacheDir, string $lang, string $cachePrefix, string $keySuffix)
     {
         parent::__construct($lang, $cachePrefix, $keySuffix);
-        $this->cacheDir = $cacheDir;
+
+        $realDir = realpath($cacheDir);
+        if ($realDir === false || !is_dir($realDir)) {
+            throw new Exception('Invalid cache directory: ' . $cacheDir);
+        }
+        $this->cacheDir = $realDir;
 
         if (defined('NV_CURRENTTIME')) {
             $this->currentTime = NV_CURRENTTIME;
@@ -123,7 +128,7 @@ class FileCache extends Cache
      */
     public function getItem(string $moduleName, string $fileName, string $lang = '', int $ttl = 0): false|string
     {
-        if (!preg_match('/^([a-zA-Z0-9\_\-]+)\.cache/', $fileName)) {
+        if (!preg_match('/^([a-zA-Z0-9\_\-]+)\.cache$/', $fileName)) {
             return false;
         }
 
@@ -156,7 +161,7 @@ class FileCache extends Cache
      */
     public function setItem(string $moduleName, string $fileName, string $content, string $lang = '', int $ttl = 0): bool|int
     {
-        if (!preg_match('/^([a-zA-Z0-9\_\-]+)\.cache/', $fileName)) {
+        if (!preg_match('/^([a-zA-Z0-9\_\-]+)\.cache$/', $fileName)) {
             return false;
         }
 

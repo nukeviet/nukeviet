@@ -697,7 +697,8 @@ function addition_module_assets(string $module, string $type, $direct = true): a
     $dir_allowed = [];
 
     // Nếu module của block này chọn cố định giao diện mobile và đang chế độ mobile thì ưu tiên nó
-    if ($global_config['current_theme_type'] == 'm' and !empty($site_mods[$module]['mobile']) and
+    if (
+        $global_config['current_theme_type'] == 'm' and !empty($site_mods[$module]['mobile']) and
         !str_starts_with($site_mods[$module]['mobile'], ':')
     ) {
         $dir_allowed[$site_mods[$module]['mobile']] = $site_mods[$module]['mobile'];
@@ -927,6 +928,10 @@ function nv_purge_blocks(string $module = '')
 function nv_get_blocks(string $theme, bool $cache = true)
 {
     global $nv_Cache, $db;
+
+    if (!preg_match('/^[a-zA-Z0-9_\-]+$/', $theme)) {
+        throw new \NukeViet\Http\HttpException('Invalid theme name ' . nv_htmlspecialchars($theme), 500);
+    }
 
     $cache_file = $theme . '_configposition_' . NV_CACHE_PREFIX . '.cache';
     if ($cache and ($cache_data = $nv_Cache->getItem('themes', $cache_file)) != false) {

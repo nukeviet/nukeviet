@@ -452,7 +452,7 @@ function nv_html_meta_tags($html = true)
         $mt = simplexml_load_string($mt);
         $mt = nv_object2array($mt);
 
-        if ($mt['meta_item']) {
+        if (isset($mt['meta_item'])) {
             if (isset($mt['meta_item'][0])) {
                 $metatags = $mt['meta_item'];
             } else {

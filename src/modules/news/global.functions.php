@@ -242,6 +242,7 @@ function nv_fix_weight_content($weight_min)
 function nv_archive_content_module($id, $listcatid)
 {
     global $db, $module_data;
+    $id = (int) $id;
     $array_catid = explode(',', $listcatid);
     foreach ($array_catid as $catid_i) {
         $catid_i = (int) $catid_i;
@@ -350,15 +351,16 @@ function my_author_detail($userid)
 {
     global $db, $module_data;
 
+    $userid = (int) $userid;
     $stmt = $db->prepare('SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_author WHERE uid = :uid');
-    $stmt->bindValue(':uid', (int) $userid, PDO::PARAM_INT);
+    $stmt->bindValue(':uid', $userid, PDO::PARAM_INT);
     $stmt->execute();
     $detail = $stmt->fetch();
     $stmt->closeCursor();
 
     if (!$detail) {
         $stmt = $db->prepare('SELECT * FROM ' . NV_USERS_GLOBALTABLE . ' WHERE userid = :userid');
-        $stmt->bindValue(':userid', (int) $userid, PDO::PARAM_INT);
+        $stmt->bindValue(':userid', $userid, PDO::PARAM_INT);
         $stmt->execute();
         $row = $stmt->fetch();
         $stmt->closeCursor();
@@ -379,7 +381,8 @@ function my_author_detail($userid)
             $alias = change_alias($pseudonym) . '-' . $userid;
         }
 
-        $stmt = $db->prepare("INSERT INTO " . NV_PREFIXLANG . '_' . $module_data . "_author (uid, alias, pseudonym, image, description, add_time) VALUES (" . $userid . ", :alias, :pseudonym, '', '', " . NV_CURRENTTIME . ')');
+        $stmt = $db->prepare("INSERT INTO " . NV_PREFIXLANG . '_' . $module_data . "_author (uid, alias, pseudonym, image, description, add_time) VALUES (:userid, :alias, :pseudonym, '', '', " . NV_CURRENTTIME . ')');
+        $stmt->bindValue(':userid', $userid, PDO::PARAM_INT);
         $stmt->bindValue(':alias', $alias, PDO::PARAM_STR);
         $stmt->bindValue(':pseudonym', $pseudonym, PDO::PARAM_STR);
         $stmt->execute();
@@ -594,7 +597,7 @@ function get_schema_colpage_items(array $articles): array
         if (!isset($article['id'])) {
             throw new Exception('Article ID is missing for function get_schema_collectionpage');
         }
-        $ids[] = $article['id'];
+        $ids[] = (int) $article['id'];
     }
     $ids = implode(',', $ids);
     if (empty($ids)) {
@@ -612,10 +615,10 @@ function get_schema_colpage_items(array $articles): array
 
     // Lấy tác giả thuộc quyền quản lý của các bài viết này
     $db->sqlreset()
-    ->select('l.id, l.alias, l.pseudonym')
-    ->from(NV_PREFIXLANG . '_' . $module_data . '_authorlist l
+        ->select('l.id, l.alias, l.pseudonym')
+        ->from(NV_PREFIXLANG . '_' . $module_data . '_authorlist l
     LEFT JOIN ' . NV_PREFIXLANG . '_' . $module_data . '_author a ON l.aid=a.id')
-    ->where('l.id IN(' . $ids . ') AND a.active=1');
+        ->where('l.id IN(' . $ids . ') AND a.active=1');
     $result = $db->query($db->sql());
 
     $articles_authors = [];

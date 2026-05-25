@@ -101,6 +101,10 @@ function if_store_on_server()
  */
 function filename_create($name, $ext, $dir)
 {
+    $dir = preg_replace('/[^a-zA-Z0-9_\-]/', '', $dir);
+    $name = preg_replace('/[^a-zA-Z0-9_\-]/', '', $name);
+    $ext = preg_replace('/[^a-zA-Z0-9]/', '', $ext);
+
     $finished = '';
     $i = 0;
     while (empty($finished)) {
@@ -668,11 +672,12 @@ function get_upload($type)
 
     $files = [];
     while ($row = $result->fetch()) {
-        $exptime = $row['addtime'] + (604800 - 60);
-        $row['addtime'] = nv_datetime_format($row['addtime'], true);
+        $addtime_int = (int) $row['addtime'];
+        $exptime = $addtime_int + (7 * 86400 - 60);
+        $row['addtime'] = nv_datetime_format($addtime_int, true);
         $row['exptime'] = nv_datetime_format($exptime, 1);
         $row['type_name'] = $nv_Lang->getModule('type_' . $row['type']);
-        $row['isexpired'] = ((NV_CURRENTTIME - (int) $row['addtime']) < 604800);
+        $row['isexpired'] = ((NV_CURRENTTIME - $addtime_int) > 7 * 86400);
         $row['fullname'] = !empty($row['localfile']) ? NV_BASE_SITEURL . NV_UPLOADS_DIR . '/zalo/' . $row['localfile'] : '';
         $files[] = $row;
     }
@@ -702,11 +707,13 @@ function upload_save($type, $file, $localfile, $extension, $width, $height, $zal
 
     $sth = $db->prepare('INSERT INTO ' . NV_MOD_TABLE . '_upload
         (type, extension, file, localfile, width, height, zalo_id, description, addtime) VALUES
-        (:type, :extension, :file, :localfile, ' . $width . ', ' . $height . ', :zalo_id, :description, ' . NV_CURRENTTIME . ')');
+        (:type, :extension, :file, :localfile, :width, :height, :zalo_id, :description, ' . NV_CURRENTTIME . ')');
     $sth->bindValue(':type', $type, PDO::PARAM_STR);
     $sth->bindValue(':extension', $extension, PDO::PARAM_STR);
     $sth->bindValue(':file', $file, PDO::PARAM_STR);
     $sth->bindValue(':localfile', $localfile, PDO::PARAM_STR);
+    $sth->bindValue(':width', (int)$width, PDO::PARAM_INT);
+    $sth->bindValue(':height', (int)$height, PDO::PARAM_INT);
     $sth->bindValue(':zalo_id', $zalo_id, PDO::PARAM_STR);
     $sth->bindValue(':description', $description, PDO::PARAM_STR);
     $sth->execute();
@@ -2009,7 +2016,26 @@ function get_error_image($image_url)
     }
 
     if ($isURL) {
-        $data = file_get_contents($image_url);
+        if (!preg_match('/^https?:\/\//i', $image_url)) {
+            return $nv_Lang->getModule('image_url_invalid');
+        }
+
+        // Sử dụng cURL thay cho file_get_contents để chống SSRF và DoS
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $image_url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($ch, CURLOPT_TIMEOUT, 10);
+        curl_setopt($ch, CURLOPT_MAXFILESIZE, 1048576); // Giới hạn 1MB
+        curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+        $data = curl_exec($ch);
+        $http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        curl_close($ch);
+
+        // Chống crash ứng dụng trên PHP 8 nếu lấy file thất bại (trả về false)
+        if ($data === false || $http_code >= 400) {
+            return $nv_Lang->getModule('image_url_invalid');
+        }
+
         $imginfo = @getimagesizefromstring($data);
         $size = strlen($data);
     } else {

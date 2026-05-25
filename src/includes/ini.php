@@ -28,7 +28,7 @@ function server_info_update($config_ini_file)
 
     $proto = $nv_Server->getOriginalProtocol();
     $proto2 = ($proto == 'https') ? 'http' : 'https';
-    $host = $nv_Server->getOriginalHost();
+    $host = NV_SERVER_NAME;
     if (filter_var($host, FILTER_VALIDATE_IP, FILTER_FLAG_IPV6) !== false) {
         $host = '[' . $host . ']';
     }
@@ -272,7 +272,7 @@ function set_ini_file(&$sys_info)
         $session_save_handler = ini_get('session.save_handler');
         $session_save_path = ini_get('session.save_path');
         if (strcasecmp($global_config['session_handler'], $session_save_handler) != 0) {
-            if ($global_config['session_handler'] == 'memcached' and in_array('memcached', $sys_info['support_cache'], true) and !empty($global_config['memcached_host']) and !empty($global_config['memcached_port']) ) {
+            if ($global_config['session_handler'] == 'memcached' and in_array('memcached', $sys_info['support_cache'], true) and !empty($global_config['memcached_host']) and !empty($global_config['memcached_port'])) {
                 ini_set('session.save_handler', 'memcached');
                 $session_save_path != $global_config['memcached_host'] . ':' . $global_config['memcached_port'] && ini_set('session.save_path', $global_config['memcached_host'] . ':' . $global_config['memcached_port']);
                 $new_session_save_handler = ini_get('session.save_handler');

@@ -158,9 +158,12 @@ class Ftp
             }
         }
 
-        // Ket noi den FTP server
+        // Ket noi den FTP server (uu tien SSL/TLS neu duoc yeu cau va he thong ho tro)
         if ($this->conn_id === false) {
-            $this->conn_id = ftp_connect($this->host, $this->port);
+            $useSSL = !empty($config['ssl']) && function_exists('ftp_ssl_connect');
+            $this->conn_id = $useSSL
+                ? ftp_ssl_connect($this->host, $this->port)
+                : ftp_connect($this->host, $this->port);
 
             if ($this->conn_id === false) {
                 $this->error = NV_FTP_ERR_CONNECT;
@@ -247,10 +250,18 @@ class Ftp
 
         if ($read_buffer === true) {
             $return_path = false;
-            $check_value = md5_file($path_root . '/' . $read_file);
+            // Chuan hoa separator va ngan path traversal (../) de tranh LFI
+            // Dung cach kiem tra '..' thay vi basename() de khong lam hong truong hop
+            // $read_file chua thu muc con, vi du: 'subdir/index.php'
+            $safeReadFile = str_replace('\\', '/', $read_file);
+            if (str_contains($safeReadFile, '..')) {
+                return false;
+            }
+
+            $check_value = md5_file($path_root . '/' . $safeReadFile);
 
             foreach ($paths as $tmp) {
-                $filePath = rtrim($tmp, '/') . '/' . $read_file;
+                $filePath = rtrim($tmp, '/') . '/' . $safeReadFile;
                 $buffer = null;
 
                 $this->read($filePath, $buffer);
@@ -461,9 +472,12 @@ class Ftp
             stream_wrapper_register('nvbuffer', 'NukeViet\Ftp\Buffer');
         }
 
-        $tmp = fopen('nvbuffer://tmp', 'br+');
+        // Tao ten buffer duy nhat de tranh xung dot du lieu khi goi dong thoi trong cung request
+        $bufferKey = uniqid('nvbuf_', true);
+        $tmp = fopen('nvbuffer://' . $bufferKey, 'br+');
         if (ftp_fget($this->conn_id, $tmp, $remote, $mode) === false) {
             fclose($tmp);
+            Buffer::releaseBuffer($bufferKey);
             $this->error = NV_FTP_ERR_FGET;
 
             return false;
@@ -477,6 +491,8 @@ class Ftp
         }
 
         fclose($tmp);
+        // Giai phong bo nho buffer sau khi doc xong
+        Buffer::releaseBuffer($bufferKey);
 
         return true;
     }
@@ -595,10 +611,11 @@ class Ftp
     protected function DetectedMode($fileName)
     {
         if ($this->config['type'] == FTP_AUTOASCII) {
-            $dot = strrpos($fileName, '.') + 1;
-            $ext = substr($fileName, $dot);
+            // Kiem tra strrpos tra ve false (file khong co extension) de tranh tinh toan sai
+            $dotPos = strrpos($fileName, '.');
+            $ext = ($dotPos !== false) ? substr($fileName, $dotPos + 1) : '';
 
-            if (in_array($ext, $this->AutoAscii, true)) {
+            if ($ext !== '' && in_array($ext, $this->AutoAscii, true)) {
                 $mode = FTP_ASCII;
             } else {
                 $mode = FTP_BINARY;

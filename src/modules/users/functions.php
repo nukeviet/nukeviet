@@ -34,7 +34,7 @@ function get_checknum($userid)
     global $db, $global_config;
 
     if (!empty($global_config['allowuserloginmulti'])) {
-        $checknum = $db->query('SELECT checknum FROM ' . NV_MOD_TABLE . ' WHERE userid = ' . $userid)->fetchColumn();
+        $checknum = $db->query('SELECT checknum FROM ' . NV_MOD_TABLE . ' WHERE userid = ' . (int) $userid)->fetchColumn();
         if (!empty($checknum)) {
             return $checknum;
         }
@@ -57,6 +57,7 @@ function validUserLog($array_user, $remember, $mode_data = [], $current_mode = 0
     global $db, $global_config, $nv_Lang, $global_users_config, $module_name, $module_file, $client_info;
 
     $remember = (int) $remember;
+    $array_user['userid'] = (int) $array_user['userid'];
     $checknum = get_checknum($array_user['userid']);
     $opid = $passkey = $mode_extra = '';
     if (!empty($mode_data)) {
@@ -174,7 +175,7 @@ function updateUserCookie($newValues)
             }
         }
         if ($isUpdate) {
-            $remember = (int) $db->query('SELECT remember FROM ' . NV_MOD_TABLE . ' WHERE userid=' . $user_info['userid'] . ' AND active=1')->fetchColumn();
+            $remember = (int) $db->query('SELECT remember FROM ' . NV_MOD_TABLE . ' WHERE userid=' . (int) $user_info['userid'] . ' AND active=1')->fetchColumn();
             NukeViet\Core\User::set_userlogin_hash($user_cookie, $remember);
         }
     }
@@ -338,8 +339,9 @@ function nv_check_username_reg($login)
  */
 function nv_del_user($userid)
 {
-    global $db, $global_config, $module_name, $user_info;
+    global $db, $global_config, $module_name, $user_info, $module_upload;
 
+    $userid = (int) $userid;
     $sql = 'SELECT group_id, username, first_name, last_name, gender, email, photo, in_groups, idsite, language
     FROM ' . NV_MOD_TABLE . ' WHERE userid=' . $userid;
     $row = $db->query($sql)->fetch(3);
@@ -375,7 +377,7 @@ function nv_del_user($userid)
 
     nv_insert_logs(NV_LANG_DATA, $module_name, 'log_del_user', 'userid ' . $userid, $user_info['userid']);
 
-    if (!empty($photo) and is_file(NV_ROOTDIR . '/' . $photo)) {
+    if (!empty($photo) and nv_is_file(NV_ROOTDIR . '/' . $photo, SYSTEM_UPLOADS_DIR . '/' . $module_upload)) {
         @nv_deletefile(NV_ROOTDIR . '/' . $photo);
     }
 

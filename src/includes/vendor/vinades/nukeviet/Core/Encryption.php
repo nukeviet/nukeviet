@@ -49,6 +49,10 @@ class Encryption
     /**
      * hash()
      *
+     * WARNING: Thuật toán sha1 và PBKDF2 với 4 vòng lặp không còn an toàn trước các cuộc tấn công brute-force.
+     * @deprecated Chỉ giữ lại cho mục đích tương thích ngược với dữ liệu cũ.
+     * @todo Cần thêm cờ cấu hình để dần loại bỏ và bắt buộc chuyển đổi sang thuật toán hiện đại (bcrypt/argon2).
+     * 
      * @param mixed $data
      * @param bool  $is_salt
      * @return string
@@ -71,6 +75,10 @@ class Encryption
     /**
      * hash_password()
      *
+     * WARNING: Vẫn hỗ trợ khởi tạo mã băm MD5 và SHA1 đã lỗi thời.
+     * @deprecated Khuyến nghị không sử dụng cho các hệ thống tạo mới. Thay thế bằng password_hash() gốc của PHP.
+     * @todo Thêm cấu hình vô hiệu hóa việc tạo mới mật khẩu bằng thuật toán cũ, ép buộc dùng SSHA512 hoặc thuật toán an toàn hơn.
+     * 
      * @param string $password
      * @param string $hashprefix
      * @return string
@@ -105,6 +113,10 @@ class Encryption
     /**
      * validate_password()
      *
+     * Xác thực mật khẩu hỗ trợ các chuẩn băm cũ (MD5, SHA, SSHA).
+     * @deprecated Quá trình kiểm tra phụ thuộc vào các thuật toán băm yếu.
+     * @todo Thêm cơ chế "needs_rehash" (tương tự password_needs_rehash của PHP) để tự động nâng cấp mật khẩu cũ (MD5/SHA) sang chuẩn mới khi người dùng đăng nhập thành công.
+     * 
      * @param string $password
      * @param string $hash
      * @return bool
@@ -186,6 +198,9 @@ class Encryption
 
     /**
      * decodeJwt()
+     * 
+     * WARNING: Hàm này chỉ thực hiện giải mã (decode) chuỗi JWT để trích xuất dữ liệu (header và payload) mà KHÔNG HỀ XÁC THỰC (verify) chữ ký.
+     * TUYỆT ĐỐI KHÔNG dùng hàm này để kiểm tra quyền hạn hay tính hợp lệ của token do kẻ tấn công có thể dễ dàng làm giả payload.
      *
      * @param mixed $token
      * @return array
