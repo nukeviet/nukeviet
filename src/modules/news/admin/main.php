@@ -1325,7 +1325,7 @@ if ($loadhistory) {
 
         // Đẩy qua trang content để sử dụng lại cái form đó cho chuẩn
         $respon['success'] = true;
-        $respon['url'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=content&id=' . $loadhistory_id . '&restore=' . $history_id . '&restorehash=' . md5($csrf_key . $admin_info['admin_id'] . $loadhistory_id . $history_id . $post_new['historytime']);
+        $respon['url'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=content&id=' . $loadhistory_id . '&restore=' . $history_id . '&restorehash=' . csrf_create(get_article_restore_csrf_key($loadhistory_id, $history_id, $post_new['historytime']));
         nv_jsonOutput($respon);
     }
 

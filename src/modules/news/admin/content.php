@@ -439,7 +439,7 @@ if ($rowcontent['id'] == 0) {
         $restore_data = $stmt->fetch();
         $stmt->closeCursor();
 
-        if (empty($restore_data) or $restore_hash !== md5($csrf_key . $admin_info['admin_id'] . $rowcontent['id'] . $restore_id . $restore_data['historytime'])) {
+        if (empty($restore_data) or !csrf_check($restore_hash, get_article_restore_csrf_key($rowcontent['id'], $restore_id, $restore_data['historytime']))) {
             nv_error404();
         }
         unset($restore_data['id'], $restore_data['new_id'], $restore_data['admin_id'], $restore_data['changed_fields']);

@@ -200,10 +200,7 @@ function nv_fix_source()
 }
 
 /**
- * nv_news_fix_block()
- *
  * @param mixed $bid
- * @param bool  $repairtable
  */
 function nv_news_fix_block($bid)
 {
@@ -510,4 +507,16 @@ function nv_link_delete_page(array $info, int $detail = 0)
 
     $link = '<a class="btn btn-danger btn-xs" href="#" data-toggle="nv_del_content" data-id="' . $info['id'] . '" data-checkss="' . csrf_create($admin_info['admin_id'] . '_' . $module_name . '_' . $info['id']) . '" data-adminurl="' . NV_BASE_ADMINURL . '" data-detail="' . $detail . '"><em class="fa fa-trash-o margin-right"></em> ' . $nv_Lang->getGlobal('delete') . '</a>';
     return $link;
+}
+
+/**
+ * @param int $article_id
+ * @param int $history_id
+ * @param int $history_time
+ * @return string
+ */
+function get_article_restore_csrf_key(int $article_id, int $history_id, int $history_time): string
+{
+    global $admin_info, $module_name;
+    return $admin_info['admin_id'] . '_' . $module_name . '_' . $article_id . '_' . $history_id . '_' . $history_time;
 }
