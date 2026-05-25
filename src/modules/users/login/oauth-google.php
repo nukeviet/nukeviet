@@ -21,45 +21,50 @@ $provider = new Google([
     'redirectUri' => NV_MY_DOMAIN . NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=oauth&server=google',
 ]);
 
-// Chuyển hướng đến trang đăng nhập Google
-if (!$nv_Request->isset_request('code', 'get')) {
+if ($nv_Request->isset_request('error', 'get')) {
+    $attribs = ['result' => 'notlogin'];
+} elseif (!$nv_Request->isset_request('code', 'get')) {
+    // Chuyển hướng đến trang đăng nhập Google
     $authorizationUrl = $provider->getAuthorizationUrl();
     $nv_Request->set_Session('oauth2state', $provider->getState());
     nv_redirect_location($authorizationUrl);
-}
-
-// Kiểm tra CSRF
-if ($nv_Request->get_title('state', 'get', '') !== $nv_Request->get_title('oauth2state', 'session', '')) {
-    $nv_Request->unset_request('oauth2state', 'session');
-    $nv_Request->unset_request('openid_attribs', 'session');
-    $attribs = ['result' => 'notlogin'];
 } else {
-    try {
-        $token = $provider->getAccessToken('authorization_code', [
-            'code' => $nv_Request->get_title('code', 'get', '')
-        ]);
-        /**
-         *
-         * @var \NukeViet\OAuth\OAuth2\GoogleUser $ownerDetails
-         */
-        $ownerDetails = $provider->getResourceOwner($token);
-        $attribs = [
-            'identity' => $ownerDetails->getId(),
-            'result' => 'is_res',
-            'id' => $ownerDetails->getId(),
-            'contact/email' => $ownerDetails->getEmail(),
-            'namePerson/first' => $ownerDetails->getFirstName(),
-            'namePerson/last' => $ownerDetails->getLastName(),
-            'namePerson' => $ownerDetails->getName(),
-            'person/gender' => '', // Google không cung cấp giới tính
-            'server' => $server,
-            'picture_url' => $ownerDetails->getAvatar(),
-            'picture_mode' => 0, // 0: Remote picture
-            'current_mode' => 3
-        ];
-    } catch (Throwable $e) {
+    // Kiểm tra CSRF
+    $state = $nv_Request->get_title('state', 'get', '');
+    $oauth2state = $nv_Request->get_title('oauth2state', 'session', '');
+
+    if (empty($oauth2state) || $state !== $oauth2state) {
+        $nv_Request->unset_request('oauth2state', 'session');
+        $nv_Request->unset_request('openid_attribs', 'session');
         $attribs = ['result' => 'notlogin'];
-        trigger_error($e);
+    } else {
+        try {
+            $token = $provider->getAccessToken('authorization_code', [
+                'code' => $nv_Request->get_title('code', 'get', '')
+            ]);
+            /**
+             *
+             * @var \NukeViet\OAuth\OAuth2\GoogleUser $ownerDetails
+             */
+            $ownerDetails = $provider->getResourceOwner($token);
+            $attribs = [
+                'identity' => $ownerDetails->getId(),
+                'result' => 'is_res',
+                'id' => $ownerDetails->getId(),
+                'contact/email' => $ownerDetails->getEmail(),
+                'namePerson/first' => $ownerDetails->getFirstName(),
+                'namePerson/last' => $ownerDetails->getLastName(),
+                'namePerson' => $ownerDetails->getName(),
+                'person/gender' => '', // Google không cung cấp giới tính
+                'server' => $server,
+                'picture_url' => $ownerDetails->getAvatar(),
+                'picture_mode' => 0, // 0: Remote picture
+                'current_mode' => 3
+            ];
+        } catch (Throwable $e) {
+            $attribs = ['result' => 'notlogin'];
+            trigger_error($e);
+        }
     }
 }
 
