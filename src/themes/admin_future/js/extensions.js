@@ -97,8 +97,7 @@ $(function() {
 
     // Kiểm tra gói ứng dụng trước khi tải lên
     function checkext(myArray, myValue) {
-        var type = eval(myArray).join().indexOf(myValue) >= 0;
-        return type;
+        return myArray.indexOf(myValue) >= 0;
     }
     $('#formSubmitExt').on('submit', function(e) {
         let form = $(this);
