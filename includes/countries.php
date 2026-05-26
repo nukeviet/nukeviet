@@ -289,7 +289,7 @@ function nv_getCountry_from_file($ip)
                 include NV_ROOTDIR . '/' . NV_IP_DIR . '6/' . $numbers[0] . '.php';
 
                 foreach ($ranges as $cidrnet => $country) {
-                    [$net, $maskbits] = explode('/', $cidrnet);
+                    list($net, $maskbits) = explode('/', $cidrnet);
                     $net_pton = inet_pton($net);
 
                     // Kiểm tra kết quả IP Net để tránh lỗi tương tự khi lấy từ DB
