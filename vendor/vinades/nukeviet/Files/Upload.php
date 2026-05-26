@@ -1960,7 +1960,7 @@ class Upload
         }
         static $exec_works;
         if (!isset($exec_works)) {
-            $exec_works = ($this->func_exists('exec') and !ini_get('safe_mode') and @exec('echo EXEC') == 'EXEC');
+            $exec_works = ($this->func_exists('exec') and @exec('echo EXEC') == 'EXEC');
         }
         // Try a shell command
         if ($exec_works) {

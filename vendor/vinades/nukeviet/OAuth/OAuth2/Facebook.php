@@ -25,7 +25,7 @@ class Facebook extends AbstractProvider
     /**
      * @var string phiên bản API
      */
-    public const API_VERSION = 'v2.10';
+    const API_VERSION = 'v2.10';
 
     /**
      * Graph API URL.

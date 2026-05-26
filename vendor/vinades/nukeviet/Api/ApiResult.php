@@ -47,7 +47,7 @@ class ApiResult
     const CODE_MISSING_IP = '0019';
     const CODE_MISSING_TIME = '0020';
 
-    private const CODE_PATTERN = '/^[0-9]{4}$/';
+    const CODE_PATTERN = '/^[0-9]{4}$/';
 
     private $result = [];
 

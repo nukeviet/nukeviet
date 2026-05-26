@@ -250,9 +250,8 @@ if (empty($admin_pre_data) and $nv_Request->isset_request('nv_login,nv_password'
     // Xác định giá trị của captcha nhập vào nếu sử dụng reCaptcha
     if ($captcha_type == 'recaptcha') {
         $nv_seccode = $nv_Request->get_title('g-recaptcha-response', 'post', '');
-    }
-    // Xác định giá trị của captcha nhập vào nếu sử dụng captcha hình
-    elseif ($captcha_type == 'captcha') {
+    } elseif ($captcha_type == 'captcha') {
+        // Xác định giá trị của captcha nhập vào nếu sử dụng captcha hình
         $nv_seccode = $nv_Request->get_title('nv_seccode', 'post', '');
     }
 
@@ -262,9 +261,8 @@ if (empty($admin_pre_data) and $nv_Request->isset_request('nv_login,nv_password'
         $error = sprintf($lang_global['userlogin_blocked'], $global_config['login_number_tracking'], nv_date('H:i d/m/Y', $blocker->login_block_end));
     } elseif (empty($nv_password)) {
         $error = $lang_global['password_empty'];
-    }
-    // Kiểm tra tính hợp lệ của captcha nhập vào, nếu không hợp lệ => thông báo lỗi
-    elseif ($gfx_chk and isset($nv_seccode) and !nv_capcha_txt($nv_seccode, $captcha_type)) {
+    } elseif ($gfx_chk and isset($nv_seccode) and !nv_capcha_txt($nv_seccode, $captcha_type)) {
+        // Kiểm tra tính hợp lệ của captcha nhập vào, nếu không hợp lệ => thông báo lỗi
         $error = ($captcha_type == 'recaptcha') ? $lang_global['securitycodeincorrect1'] : $lang_global['securitycodeincorrect'];
     } else {
         // Đăng nhập khi kích hoạt diễn đàn
@@ -310,10 +308,7 @@ if (empty($admin_pre_data) and $nv_Request->isset_request('nv_login,nv_password'
             if (!defined('ADMIN_LOGIN_MODE')) {
                 define('ADMIN_LOGIN_MODE', 3);
             }
-            if (ADMIN_LOGIN_MODE == 2 and !in_array($row['admin_lev'], [
-                1,
-                2
-            ], true)) {
+            if (ADMIN_LOGIN_MODE == 2 and !in_array($row['admin_lev'], [1, 2], true)) {
                 // Điều hành chung + Tối cao được đăng nhập
                 $error = $lang_global['admin_access_denied2'];
             } elseif (ADMIN_LOGIN_MODE == 1 and $row['admin_lev'] != 1) {
@@ -329,15 +324,10 @@ if (empty($admin_pre_data) and $nv_Request->isset_request('nv_login,nv_password'
              * Nếu có lưu lại thông tin xác thực bước 1 và load lại trang để kiểm tra xử lý tiếp
              */
             // Kiểm tra cấu hình toàn hệ thống
-            $_2step_require = in_array((int) $global_config['two_step_verification'], [
-                1,
-                3
-            ], true);
+            $_2step_require = in_array((int) $global_config['two_step_verification'], [1, 3], true);
             if (!$_2step_require) {
                 // Nếu toàn hệ thống không bắt buộc thì kiểm tra nhóm thành viên
-                $manual_groups = [
-                    3
-                ];
+                $manual_groups = [3];
                 if ($row['admin_lev'] == 1 or $row['admin_lev'] == 2) {
                     $manual_groups[] = 2;
                 }

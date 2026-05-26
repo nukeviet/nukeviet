@@ -262,7 +262,6 @@ function nv_admin_check_predata($adm_session_value)
 /**
  * Xóa dữ liệu đăng nhập của admin
  * nv_admin_logout()
- * 
  */
 function nv_admin_logout()
 {

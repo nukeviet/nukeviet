@@ -41,9 +41,8 @@ $stored_cookies = nv_get_cookies();
 // Find file
 if (empty($request['fid'])) {
     $request['mode'] = 'getfile';
-}
-// Download file
-else {
+} else {
+    // Download file
     $request['mode'] = 'install';
     $request['getfile'] = $nv_Request->get_int('getfile', 'get', 0);
 }

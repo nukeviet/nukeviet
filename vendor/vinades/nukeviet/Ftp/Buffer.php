@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2025 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -27,19 +27,34 @@ class Buffer extends \stdClass
     public $varname;
 
     /**
+     * @var array<string, string> Lưu trữ các buffer thay vì sử dụng $GLOBALS
+     */
+    protected static $buffers = [];
+
+    /**
      * stream_open()
      *
      * @param string $path
      * @param mixed  $mode
      * @param mixed  $options
      * @param mixed  $opened_path
-     * @return true
+     * @return bool
      */
     public function stream_open($path, $mode, $options, &$opened_path)
     {
         $url = parse_url($path);
+        // Ngăn TypeError crash khi URL không hợp lệ hoặc thiếu host
+        if (!is_array($url) || empty($url['host'])) {
+            return false;
+        }
+
         $this->varname = $url['host'];
         $this->position = 0;
+
+        // Đảm bảo buffer được khởi tạo trước khi đọc/ghi
+        if (!isset(self::$buffers[$this->varname])) {
+            self::$buffers[$this->varname] = '';
+        }
 
         return true;
     }
@@ -52,7 +67,8 @@ class Buffer extends \stdClass
      */
     public function stream_read($count)
     {
-        $ret = substr($GLOBALS[$this->varname], $this->position, $count);
+        $buffer = isset(self::$buffers[$this->varname]) ? self::$buffers[$this->varname] : '';
+        $ret = substr($buffer, $this->position, $count);
         $this->position += strlen($ret);
 
         return $ret;
@@ -66,13 +82,13 @@ class Buffer extends \stdClass
      */
     public function stream_write($data)
     {
-        if (!isset($GLOBALS[$this->varname])) {
-            $GLOBALS[$this->varname] = '';
+        if (!isset(self::$buffers[$this->varname])) {
+            self::$buffers[$this->varname] = '';
         }
 
-        $left = substr($GLOBALS[$this->varname], 0, $this->position);
-        $right = substr($GLOBALS[$this->varname], $this->position + strlen($data));
-        $GLOBALS[$this->varname] = $left . $data . $right;
+        $left  = substr(self::$buffers[$this->varname], 0, $this->position);
+        $right = substr(self::$buffers[$this->varname], $this->position + strlen($data));
+        self::$buffers[$this->varname] = $left . $data . $right;
         $this->position += strlen($data);
 
         return strlen($data);
@@ -95,7 +111,9 @@ class Buffer extends \stdClass
      */
     public function stream_eof()
     {
-        return $this->position >= strlen($GLOBALS[$this->varname]);
+        $buffer = isset(self::$buffers[$this->varname]) ? self::$buffers[$this->varname] : '';
+
+        return $this->position >= strlen($buffer);
     }
 
     /**
@@ -107,16 +125,19 @@ class Buffer extends \stdClass
      */
     public function stream_seek($offset, $whence)
     {
+        $buffer = isset(self::$buffers[$this->varname]) ? self::$buffers[$this->varname] : '';
+        $len = strlen($buffer);
+
         switch ($whence) {
             case SEEK_SET:
-                if ($offset < strlen($GLOBALS[$this->varname]) and $offset >= 0) {
+                if ($offset <= $len && $offset >= 0) {
                     $this->position = $offset;
 
                     return true;
                 }
 
-                    return false;
-                break;
+                return false;
+
             case SEEK_CUR:
                 if ($offset >= 0) {
                     $this->position += $offset;
@@ -124,17 +145,17 @@ class Buffer extends \stdClass
                     return true;
                 }
 
-                    return false;
-                break;
+                return false;
+
             case SEEK_END:
-                if (strlen($GLOBALS[$this->varname]) + $offset >= 0) {
-                    $this->position = strlen($GLOBALS[$this->varname]) + $offset;
+                if ($len + $offset >= 0) {
+                    $this->position = $len + $offset;
 
                     return true;
                 }
 
-                    return false;
-                break;
+                return false;
+
             default:
                 return false;
         }
@@ -152,15 +173,33 @@ class Buffer extends \stdClass
     {
         if ($option == STREAM_META_TOUCH) {
             $url = parse_url($path);
+            // Ngăn TypeError crash khi URL không hợp lệ hoặc thiếu host
+            if (!is_array($url) || empty($url['host'])) {
+                return false;
+            }
+
             $varname = $url['host'];
 
-            if (!isset($GLOBALS[$varname])) {
-                $GLOBALS[$varname] = '';
+            if (!isset(self::$buffers[$varname])) {
+                self::$buffers[$varname] = '';
             }
 
             return true;
         }
 
         return false;
+    }
+
+    /**
+     * releaseBuffer()
+     * Giải phóng bộ nhớ buffer sau khi sử dụng xong.
+     * Được gọi bởi Ftp::read() để tránh rò rỉ bộ nhớ.
+     *
+     * @param string $key
+     * @return void
+     */
+    public static function releaseBuffer($key)
+    {
+        unset(self::$buffers[$key]);
     }
 }

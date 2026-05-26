@@ -599,7 +599,7 @@ function nv_capcha_txt($seccode, $type = 'captcha')
         return false;
     }
 
-    $random = random_int(0, 1000000);
+    $random = (PHP_VERSION_ID >= 70000) ? random_int(0, 1000000) : mt_rand(0, 1000000);
 
     $seccode = strtoupper($seccode);
     $random_num = $nv_Request->get_string('random_num', 'session', 0);
@@ -2204,7 +2204,9 @@ function nv_check_url($url, $isTriggerError = true, $is_200 = 0)
         curl_setopt($curl, CURLOPT_PORT, $port);
 
         if ($isHttps) {
-            curl_setopt($curl, CURLOPT_SSL_VERIFYSTATUS, false);
+            if (defined('CURLOPT_SSL_VERIFYSTATUS')) {
+                curl_setopt($curl, CURLOPT_SSL_VERIFYSTATUS, false);
+            }
             curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
         }
 
@@ -2234,7 +2236,7 @@ function nv_check_url($url, $isTriggerError = true, $is_200 = 0)
             return false;
         }
         $res = explode(PHP_EOL, $response);
-    } elseif (nv_function_exists('get_headers') and $allow_url_fopen) {
+    } elseif (nv_function_exists('get_headers') and $allow_url_fopen and PHP_VERSION_ID >= 70100) {
         if ($isHttps) {
             $context = stream_context_create([
                 'ssl' => [

@@ -179,10 +179,7 @@ function nv_show_tab()
         nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
     }
 
-    if (in_array($nv_Request->get_title('show_highlight', 'post'), [
-        'php',
-        'sql'
-    ], true)) {
+    if (in_array($nv_Request->get_title('show_highlight', 'post'), ['php', 'sql'], true)) {
         $content = nv_highlight_string($tab, $nv_Request->get_title('show_highlight', 'post'));
         include NV_ROOTDIR . '/includes/header.php';
         echo $content;
