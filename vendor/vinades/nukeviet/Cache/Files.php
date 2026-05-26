@@ -43,6 +43,10 @@ class Files
      */
     public function __construct($CacheDir, $Lang, $Cache_Prefix)
     {
+        $realDir = realpath($CacheDir);
+        if ($realDir === false || !is_dir($realDir)) {
+            throw new \NukeViet\Http\HttpException('Invalid cache directory: ' . $CacheDir, 500);
+        }
         $this->_CacheDir = $CacheDir;
         $this->_Lang = $Lang;
         $this->_Cache_Prefix = $Cache_Prefix;
@@ -62,6 +66,11 @@ class Files
      */
     private function _delete($modname, $pattern)
     {
+        // Validate module name to prevent path traversal or invalid names
+        if (!preg_match('/^([a-z0-9\_\-]+)$/', $modname)) {
+            return;
+        }
+
         $dir = $this->_CacheDir . '/' . $modname;
 
         if (is_dir($dir) and $dh = opendir($dir)) {
@@ -89,9 +98,7 @@ class Files
             }
 
             while (($modname = readdir($dh)) !== false) {
-                if (preg_match('/^([a-z0-9\_\-]+)$/', $modname)) {
-                    $this->_Delete($modname, $pattern);
-                }
+                $this->_Delete($modname, $pattern);
             }
             closedir($dh);
         }
@@ -124,7 +131,7 @@ class Files
      */
     public function getItem($module_name, $filename, $ttl = 0)
     {
-        if (!preg_match('/^([a-z0-9\_\-]+)\.cache/', $filename)) {
+        if (!preg_match('/^([a-z0-9\_\-]+)\.cache$/', $filename)) {
             return false;
         }
 
@@ -134,7 +141,7 @@ class Files
             return false;
         }
 
-        if($ttl > 0) {
+        if ($ttl > 0) {
             $ttl += rand(1, 10);
         }
 
@@ -159,7 +166,7 @@ class Files
     public function setItem($module_name, $filename, $content, $ttl = 0)
     {
         // Note: $ttl not use in Files cache
-        if (!preg_match('/^([a-z0-9\_\-]+)\.cache/', $filename)) {
+        if (!preg_match('/^([a-z0-9\_\-]+)\.cache$/', $filename)) {
             return false;
         }
 
