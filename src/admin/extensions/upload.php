@@ -37,6 +37,27 @@ if ($nv_Request->isset_request('extract', 'get')) {
         $zip = new PclZip($filename);
         $ziplistContent = $zip->listContent();
 
+        // Kiểm tra file ZIP hợp lệ
+        if ($ziplistContent === 0 || empty($ziplistContent)) {
+            nv_htmlOutput(nv_theme_alert($nv_Lang->getGlobal('danger_level'), $nv_Lang->getModule('autoinstall_error_downloaded'), 'danger'));
+        }
+
+        // Kiểm tra dung lượng file ZIP gốc
+        $zipFileSize = filesize($filename);
+        if ($zipFileSize > NV_UPLOAD_MAX_FILESIZE) {
+            nv_htmlOutput(nv_theme_alert($nv_Lang->getGlobal('danger_level'), $nv_Lang->getModule('autoinstall_error_uploadfile1', nv_convertfromBytes(NV_UPLOAD_MAX_FILESIZE)), 'danger'));
+        }
+
+        // Phòng chống Zip Bomb (tỉ lệ giải nén tối đa 10:1)
+        $totalUncompressedSize = 0;
+        foreach ($ziplistContent as $lf) {
+            $totalUncompressedSize += (int) $lf['size'];
+        }
+        if ($totalUncompressedSize > $zipFileSize * 10) {
+            nv_htmlOutput(nv_theme_alert($nv_Lang->getGlobal('danger_level'), 'Security Error: Zip Bomb detected (abnormal compression ratio).', 'danger'));
+        }
+        unset($totalUncompressedSize, $lf, $zipFileSize);
+
         $temp_extract_dir = NV_TEMP_DIR . '/' . md5($filename . NV_CHECK_SESSION);
 
         $no_extract = [];
@@ -487,7 +508,13 @@ if (empty($error)) {
         if ($totalUncompressedSize > NV_UPLOAD_MAX_FILESIZE) {
             $error = $nv_Lang->getGlobal('error_upload_max_user_size', nv_convertfromBytes(NV_UPLOAD_MAX_FILESIZE));
         }
-        unset($totalUncompressedSize, $_lf);
+
+        // Phòng chống Zip Bomb (tỉ lệ giải nén tối đa 10:1)
+        $zipFileSize = filesize($filename);
+        if ($zipFileSize > 0 && $totalUncompressedSize > $zipFileSize * 10) {
+            $error = 'Security Error: Zip Bomb detected (abnormal compression ratio).';
+        }
+        unset($totalUncompressedSize, $_lf, $zipFileSize);
 
         // Tìm vị trí file config.ini
         for ($i = $sizeLists - 1; $i >= 0; --$i) {

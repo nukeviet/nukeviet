@@ -32,11 +32,26 @@ if (csrf_check($nv_Request->get_string('checkss', 'get', ''), $admin_info['admin
         $zip = new PclZip(NV_ROOTDIR . '/' . NV_TEMP_DIR . '/' . $filename);
         $ziplistContent = $zip->listContent();
 
-        foreach ($ziplistContent as $array_file) {
-            if (strpos($array_file['filename'], '..') !== false or strpos($array_file['filename'], './') !== false or strpos($array_file['filename'], ':') !== false) {
-                $no_extract[] = $array_file['filename'];
-            }
+        // Kiểm tra file ZIP hợp lệ
+        if ($ziplistContent === 0 || empty($ziplistContent)) {
+            nv_htmlOutput(nv_theme_alert($page_title, 'Error: Invalid or corrupted ZIP file.', 'danger'));
         }
+
+        // Kiểm tra dung lượng file ZIP gốc
+        $zipFileSize = filesize(NV_ROOTDIR . '/' . NV_TEMP_DIR . '/' . $filename);
+        if ($zipFileSize > NV_UPLOAD_MAX_FILESIZE) {
+            nv_htmlOutput(nv_theme_alert($page_title, 'Error: ZIP file size exceeds the maximum allowed (' . nv_convertfromBytes(NV_UPLOAD_MAX_FILESIZE) . ').', 'danger'));
+        }
+
+        // Phòng chống Zip Bomb (tỉ lệ giải nén tối đa 10:1)
+        $totalUncompressedSize = 0;
+        foreach ($ziplistContent as $lf) {
+            $totalUncompressedSize += (int) $lf['size'];
+        }
+        if ($totalUncompressedSize > $zipFileSize * 10) {
+            nv_htmlOutput(nv_theme_alert($page_title, 'Error: Zip Bomb detected (abnormal compression ratio).', 'danger'));
+        }
+        unset($totalUncompressedSize, $lf, $zipFileSize);
 
         $temp_extract_dir = NV_TEMP_DIR . '/' . md5($filename . NV_CHECK_SESSION);
 
@@ -96,7 +111,10 @@ if (csrf_check($nv_Request->get_string('checkss', 'get', ''), $admin_info['admin
             }
         }
 
-        $extract = $zip->extract(PCLZIP_OPT_PATH, NV_ROOTDIR . '/' . $temp_extract_dir);
+        $extract = $zip->extract(
+            PCLZIP_OPT_PATH, NV_ROOTDIR . '/' . $temp_extract_dir,
+            PCLZIP_OPT_EXTRACT_DIR_RESTRICTION, NV_ROOTDIR . '/' . $temp_extract_dir
+        );
 
         foreach ($extract as $extract_i) {
             $filename_i = str_replace(NV_ROOTDIR, '', str_replace('\\', '/', $extract_i['filename']));
@@ -139,8 +157,16 @@ if (csrf_check($nv_Request->get_string('checkss', 'get', ''), $admin_info['admin
             $error_create_folder = array_unique($error_create_folder);
 
             if (empty($error_create_folder)) {
+                $temp_base = realpath(NV_ROOTDIR . '/' . $temp_extract_dir);
                 foreach ($ziplistContent as $array_file) {
                     if (empty($array_file['folder'])) {
+                        // Kiểm tra realpath để ngăn chặn Symlink Traversal
+                        $src_real = realpath(NV_ROOTDIR . '/' . $temp_extract_dir . '/' . $array_file['filename']);
+                        if ($src_real === false || $temp_base === false || strpos($src_real, $temp_base . DIRECTORY_SEPARATOR) !== 0) {
+                            $error_move_folder[] = $array_file['filename'];
+                            continue;
+                        }
+
                         if (file_exists(NV_ROOTDIR . '/' . $array_file['filename'])) {
                             if (!($ftp_check_login == 1 and ftp_delete($conn_id, $array_file['filename']))) {
                                 nv_deletefile(NV_ROOTDIR . '/' . $array_file['filename']);
@@ -148,10 +174,10 @@ if (csrf_check($nv_Request->get_string('checkss', 'get', ''), $admin_info['admin
                         }
 
                         if (!($ftp_check_login == 1 and ftp_rename($conn_id, $temp_extract_dir . '/' . $array_file['filename'], $array_file['filename']))) {
-                            @rename(NV_ROOTDIR . '/' . $temp_extract_dir . '/' . $array_file['filename'], NV_ROOTDIR . '/' . $array_file['filename']);
+                            @rename($src_real, NV_ROOTDIR . '/' . $array_file['filename']);
                         }
 
-                        if (file_exists(NV_ROOTDIR . '/' . $temp_extract_dir . '/' . $array_file['filename'])) {
+                        if (file_exists($src_real)) {
                             $error_move_folder[] = $array_file['filename'];
                         }
                     }
