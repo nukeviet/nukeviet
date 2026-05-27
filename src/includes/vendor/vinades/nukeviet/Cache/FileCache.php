@@ -69,6 +69,10 @@ class FileCache extends Cache
      */
     private function delete(string $moduleName, string $pattern): void
     {
+        if (!preg_match('/^([a-zA-Z0-9\_\-]+)$/', $moduleName)) {
+            return;
+        }
+
         $dir = $this->cacheDir . '/' . $moduleName;
 
         if (is_dir($dir) and $dh = opendir($dir)) {
@@ -95,9 +99,7 @@ class FileCache extends Cache
             }
 
             while (($modname = readdir($dh)) !== false) {
-                if (preg_match('/^([a-zA-Z0-9\_\-]+)$/', $modname)) {
-                    $this->delete($modname, $pattern);
-                }
+                $this->delete($modname, $pattern);
             }
             closedir($dh);
         }

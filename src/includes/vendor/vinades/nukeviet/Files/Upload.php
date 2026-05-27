@@ -640,8 +640,7 @@ class Upload
             return false;
         }
 
-        return !(preg_match('#<\?(=|php\b|[^x])#i', $txt))
-        ;
+        return !(preg_match('#<\?(=|php\b|[^x])#i', $txt));
     }
 
     /**
@@ -841,6 +840,7 @@ class Upload
      */
     private function sanitize_svg_dom($dom)
     {
+        // @formatter:off
         static $allowed_tags = [
             'svg', 'g', 'defs', 'symbol', 'use', 'desc', 'title', 'metadata',
             'rect', 'circle', 'ellipse', 'line', 'polyline', 'polygon', 'path',
@@ -854,8 +854,9 @@ class Upload
             'femerge', 'femergenode', 'femorphology', 'feoffset', 'fepointlight',
             'fespecularlighting', 'fespotlight', 'fetile', 'feturbulence',
             'animate', 'animatetransform', 'animatemotion', 'set', 'mpath',
-            'style',
+            'style'
         ];
+        // @formatter:on
 
         static $animate_tags = ['animate', 'animatetransform', 'animatemotion', 'set'];
         static $url_attrs = ['href', 'src', 'action'];
@@ -1177,7 +1178,7 @@ class Upload
                     if (isset($exifProp['exif:Orientation'])) {
                         $orientation = (int) $exifProp['exif:Orientation'];
                     }
-                } elseif (Site::function_exists('exif_read_data') and in_array($this->file_extension, ['jpg','jpeg'], true) and IMAGETYPE_JPEG === exif_imagetype($savepath . $filename)) {
+                } elseif (Site::function_exists('exif_read_data') and in_array($this->file_extension, ['jpg', 'jpeg'], true) and IMAGETYPE_JPEG === exif_imagetype($savepath . $filename)) {
                     $exif = exif_read_data($savepath . $filename);
                     if (!empty($exif['Orientation'])) {
                         $orientation = (int) $exif['Orientation'];
@@ -1908,7 +1909,7 @@ class Upload
         }
         static $exec_works;
         if (!isset($exec_works)) {
-            $exec_works = (Site::function_exists('exec') and !ini_get('safe_mode') and @exec('echo EXEC') == 'EXEC');
+            $exec_works = (Site::function_exists('exec') and @exec('echo EXEC') == 'EXEC');
         }
         // Try a shell command
         if ($exec_works) {
