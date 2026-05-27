@@ -463,7 +463,9 @@ function nv_getFileInfo($pathimg, $file)
         }
     } elseif ($ext == 'svg') {
         $info['type'] = 'image';
-        if (($xml = @simplexml_load_file(NV_ROOTDIR . '/' . $pathimg . '/' . $file)) !== false) {
+        // Đọc nội dung file SVG và phân tích an toàn, chặn XXE attack
+        $svgContent = @file_get_contents(NV_ROOTDIR . '/' . $pathimg . '/' . $file);
+        if ($svgContent !== false && ($xml = @simplexml_load_string($svgContent, 'SimpleXMLElement', LIBXML_NONET | LIBXML_NOERROR | LIBXML_NOWARNING)) !== false) {
             $attr = $xml->attributes();
             $maxWidth = $maxHeight = $width = $height = 0;
 

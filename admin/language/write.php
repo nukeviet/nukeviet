@@ -81,15 +81,12 @@ function nv_admin_write_lang($dirlang, $idfile)
                 $content_lang .= "\nif (!defined('NV_MAINFILE')) {";
             }
 
-            $content_lang .= "\n    die('Stop!!!');\n}\n\n";
+            $content_lang .= "\n    exit('Stop!!!');\n}\n\n";
 
             $array_translator['info'] = (isset($array_translator['info'])) ? $array_translator['info'] : '';
-
-            $content_lang .= "\$lang_translator['author'] = '" . $array_translator['author'] . "';\n";
-            $content_lang .= "\$lang_translator['createdate'] = '" . $array_translator['createdate'] . "';\n";
-            $content_lang .= "\$lang_translator['copyright'] = '" . $array_translator['copyright'] . "';\n";
-            $content_lang .= "\$lang_translator['info'] = '" . $array_translator['info'] . "';\n";
-            $content_lang .= "\$lang_translator['langtype'] = '" . $array_translator['langtype'] . "';\n";
+            foreach (['author', 'createdate', 'copyright', 'info', 'langtype'] as $key) {
+                $content_lang .= "\$lang_translator['" . $key . "'] = '" . addcslashes($array_translator[$key] ?? '', "'\\") . "';\n";
+            }
             $content_lang .= "\n";
         } else {
             $content_lang .= "\n";
@@ -101,17 +98,18 @@ function nv_admin_write_lang($dirlang, $idfile)
         while ($_scratch = $result->fetch(3)) {
             list($langtype_row, $lang_key, $lang_value) = $_scratch;
             unset($_scratch);
-            ++$numrows;
-            $lang_value = nv_unhtmlspecialchars($lang_value);
-            $lang_value = str_replace("\'", "'", $lang_value);
-            $lang_value = str_replace("'", "\'", $lang_value);
-            $lang_value = nv_nl2br($lang_value);
-            $lang_value = str_replace('<br />', '<br />', $lang_value);
-            if ($current_langtype != '' and $current_langtype != $langtype_row) {
-                $content_lang .= "\n";
+            if (preg_match('/^[a-z0-9\_]{3,30}$/', $langtype_row) and preg_match('/^[a-zA-Z0-9\_]{1,100}$/', $lang_key)) {
+                ++$numrows;
+                $lang_value = nv_unhtmlspecialchars($lang_value);
+                $lang_value = addcslashes($lang_value, "'\\");
+                $lang_value = nv_nl2br($lang_value);
+                $lang_value = str_replace('<br />', '<br />', $lang_value);
+                if ($current_langtype != '' and $current_langtype != $langtype_row) {
+                    $content_lang .= "\n";
+                }
+                $content_lang .= '$' . $langtype_row . "['" . $lang_key . "'] = '" . $lang_value . "';\n";
+                $current_langtype = $langtype_row;
             }
-            $content_lang .= '$' . $langtype_row . "['" . $lang_key . "'] = '" . $lang_value . "';\n";
-            $current_langtype = $langtype_row;
         }
 
         if ($numrows) {

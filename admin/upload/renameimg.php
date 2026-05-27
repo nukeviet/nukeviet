@@ -59,15 +59,22 @@ if ($file != $newname) {
     if (isset($array_dirname[$path])) {
         $info = nv_getFileInfo($path, $newname);
 
-        $sth = $db->prepare('UPDATE ' . NV_UPLOAD_GLOBALTABLE . "_file SET name = '" . $info['name'] . "', src = '" . $info['src'] . "', title = '" . $newname . "', alt = :newalt WHERE did = " . $array_dirname[$path] . " AND title = '" . $file . "'");
-        $sth->bindParam(':newalt', $newalt, PDO::PARAM_STR);
-        $sth->execute();
+        $stmt = $db->prepare('UPDATE ' . NV_UPLOAD_GLOBALTABLE . '_file SET name = :name, src = :src, title = :newtitle, alt = :newalt WHERE did = :did AND title = :title');
+        $stmt->bindValue(':name', $info['name'], PDO::PARAM_STR);
+        $stmt->bindValue(':src', $info['src'], PDO::PARAM_STR);
+        $stmt->bindValue(':newtitle', $newname, PDO::PARAM_STR);
+        $stmt->bindValue(':newalt', $newalt, PDO::PARAM_STR);
+        $stmt->bindValue(':did', $array_dirname[$path], PDO::PARAM_INT);
+        $stmt->bindValue(':title', $file, PDO::PARAM_STR);
+        $stmt->execute();
     }
     nv_insert_logs(NV_LANG_DATA, $module_name, $lang_module['rename'], $path . '/' . $file . ' -> ' . $path . '/' . $newname, $admin_info['userid']);
 } else {
-    $sth = $db->prepare('UPDATE ' . NV_UPLOAD_GLOBALTABLE . '_file SET alt = :newalt WHERE did = ' . $array_dirname[$path] . " AND title = '" . $file . "'");
-    $sth->bindParam(':newalt', $newalt, PDO::PARAM_STR);
-    $sth->execute();
+    $stmt_alt = $db->prepare('UPDATE ' . NV_UPLOAD_GLOBALTABLE . '_file SET alt = :newalt WHERE did = :did AND title = :title');
+    $stmt_alt->bindValue(':newalt', $newalt, PDO::PARAM_STR);
+    $stmt_alt->bindValue(':did', $array_dirname[$path], PDO::PARAM_INT);
+    $stmt_alt->bindValue(':title', $file, PDO::PARAM_STR);
+    $stmt_alt->execute();
 
     nv_insert_logs(NV_LANG_DATA, $module_name, $lang_module['rename'], $path . '/' . $file . ' -> ' . $path . '/' . $newname, $admin_info['userid']);
 }

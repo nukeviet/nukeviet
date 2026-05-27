@@ -43,7 +43,11 @@ foreach ($files as $file) {
     }
 
     if (isset($array_dirname[$path])) {
-        $db->query('DELETE FROM ' . NV_UPLOAD_GLOBALTABLE . '_file WHERE did = ' . $array_dirname[$path] . " AND title='" . $file . "'");
+        $sth = $db->prepare('DELETE FROM ' . NV_UPLOAD_GLOBALTABLE . '_file WHERE did = :did AND title = :title');
+        $sth->bindValue(':did', $array_dirname[$path], PDO::PARAM_INT);
+        $sth->bindValue(':title', $file, PDO::PARAM_STR);
+        $sth->execute();
+
         nv_dirListRefreshSize();
     }
 

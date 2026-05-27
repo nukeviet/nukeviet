@@ -48,7 +48,7 @@ if (isset($language_array[$dirlang]) and isset($language_array[$dirlang]) and $n
     } else {
         $lang_translator_save['author'] = $authorSubmit;
     }
-    $lang_translator_save['createdate'] = isset($lang_translator['createdate']) ? nv_unhtmlspecialchars(strip_tags($lang_translator['createdate'])) : date('d/m/Y, H:i');
+    $lang_translator_save['createdate'] = isset($lang_translator['createdate']) ? strip_tags(nv_unhtmlspecialchars($lang_translator['createdate'])) : date('d/m/Y, H:i');
     $lang_translator_save['copyright'] = isset($lang_translator['copyright']) ? nv_htmlspecialchars(strip_tags($lang_translator['copyright'])) : '@Copyright (C) ' . date('Y') . ' VINADES.,JSC. All rights reserved';
     $lang_translator_save['info'] = isset($lang_translator['info']) ? nv_htmlspecialchars(strip_tags($lang_translator['info'])) : '';
     $lang_translator_save['langtype'] = $langtype;

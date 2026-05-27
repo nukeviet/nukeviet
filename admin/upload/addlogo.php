@@ -72,7 +72,19 @@ if ($nv_Request->isset_request('path', 'post') and $nv_Request->isset_request('x
             $info = nv_getFileInfo($path, $file);
 
             $did = $array_dirname[$path];
-            $db->query('UPDATE ' . NV_UPLOAD_GLOBALTABLE . '_file SET filesize=' . $info['filesize'] . ", src='" . $info['src'] . "', srcwidth=" . $info['srcwidth'] . ', srcheight=' . $info['srcheight'] . ", sizes='" . $info['size'] . "', userid=" . $admin_info['userid'] . ', mtime=' . $info['mtime'] . ' WHERE did = ' . $did . " AND title = '" . $file . "'");
+            
+            $sth = $db->prepare('UPDATE ' . NV_UPLOAD_GLOBALTABLE . '_file SET filesize = :filesize, src = :src, srcwidth = :srcwidth, srcheight = :srcheight, sizes = :sizes, userid = :userid, mtime = :mtime WHERE did = :did AND title = :title');
+            $sth->bindValue(':filesize', $info['filesize'], PDO::PARAM_INT);
+            $sth->bindValue(':src', $info['src'], PDO::PARAM_STR);
+            $sth->bindValue(':srcwidth', $info['srcwidth'], PDO::PARAM_INT);
+            $sth->bindValue(':srcheight', $info['srcheight'], PDO::PARAM_INT);
+            $sth->bindValue(':sizes', $info['size'], PDO::PARAM_STR);
+            $sth->bindValue(':userid', $admin_info['userid'], PDO::PARAM_INT);
+            $sth->bindValue(':mtime', $info['mtime'], PDO::PARAM_INT);
+            $sth->bindValue(':did', $did, PDO::PARAM_INT);
+            $sth->bindValue(':title', $file, PDO::PARAM_STR);
+            $sth->execute();
+
             nv_dirListRefreshSize();
         }
 

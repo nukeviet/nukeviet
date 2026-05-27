@@ -23,6 +23,7 @@ function GetSourceNews($sourceid)
 {
     global $db_slave, $module_data;
 
+    $sourceid = intval($sourceid);
     if ($sourceid > 0) {
         $sql = 'SELECT title FROM ' . NV_PREFIXLANG . '_' . $module_data . '_sources WHERE sourceid = ' . $sourceid;
         $re = $db_slave->query($sql);
@@ -69,7 +70,7 @@ function BoldKeywordInStr($str, $keyword)
 {
     $str = nv_br2nl($str);
     $str = nv_nl2br($str, ' ');
-    $str = nv_unhtmlspecialchars(strip_tags(trim($str)));
+    $str = strip_tags(nv_unhtmlspecialchars(trim($str)));
 
     if (empty($keyword)) {
         return nv_clean60($str, 300);
