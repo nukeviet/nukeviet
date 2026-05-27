@@ -75,7 +75,7 @@ function BoldKeywordInStr($str, $keyword, $logic)
 {
     $str = nv_br2nl($str);
     $str = nv_nl2br($str, ' ');
-    $str = nv_unhtmlspecialchars(strip_tags(trim($str)));
+    $str = strip_tags(nv_unhtmlspecialchars(trim($str)));
 
     if ($logic == 'AND') {
         $array_keyword = [

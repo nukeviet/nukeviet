@@ -165,7 +165,7 @@ if ($nv_Request->isset_request('startwrite', 'get')) {
                     $content = preg_replace('/[\s]+COLLATE[\s]+([a-zA-Z0-9\_]+)/i', '', $content);
                     $content = preg_replace('/(KEY[^\(]+)(\([^\)]+\))[\s\r\n\t]+(USING BTREE)/i', '\\1\\3 \\2', $content);
                     $content = preg_replace('/(default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP|DEFAULT CHARSET=\w+|COLLATE=\w+|character set \w+|collate \w+|AUTO_INCREMENT=\w+)/i', ' \\1', $content);
-                    $content = '$sql_create_table[] = "' . str_replace('"', '\"', $content) . "\";\n";
+                    $content = '$sql_create_table[] = "' . str_replace(['"', '$'], ['\"', '\$'], $content) . "\";\n";
                     $content = "\n\$sql_create_table[] = \"DROP TABLE IF EXISTS `" . $store_table_name . "`\";\n" . $content;
                     $content = str_replace('`' . $table['name'] . '`', '`' . $store_table_name . '`', $content);
                 }
@@ -253,7 +253,7 @@ if ($nv_Request->isset_request('startwrite', 'get')) {
                                     // Các bảng chực hiện thực hiện REPLACE
                                     $row2 = [];
                                     foreach ($columns as $key => $kt) {
-                                        $row2[] = isset($row[$key]) ? (($kt == 'int') ? $row[$key] : "'" . addslashes($row[$key]) . "'") : 'NULL';
+                                        $row2[] = isset($row[$key]) ? (($kt == 'int') ? $row[$key] : "'" . str_replace('$', '\$', addslashes($row[$key])) . "'") : 'NULL';
                                     }
                                     $row2 = implode(', ', $row2);
                                     $row2 = str_replace('{{NV_BASE_SITEURL}}', '" . NV_BASE_SITEURL . "', $row2);
@@ -263,7 +263,7 @@ if ($nv_Request->isset_request('startwrite', 'get')) {
                                 // Các bảng chực hiện thực hiện Insert
                                 $row2 = [];
                                 foreach ($columns as $key => $kt) {
-                                    $row2[] = isset($row[$key]) ? (($kt == 'int') ? $row[$key] : "'" . addslashes($row[$key]) . "'") : 'NULL';
+                                    $row2[] = isset($row[$key]) ? (($kt == 'int') ? $row[$key] : "'" . str_replace('$', '\$', addslashes($row[$key])) . "'") : 'NULL';
                                 }
                                 $row2 = implode(', ', $row2);
                                 $row2 = str_replace('{{NV_BASE_SITEURL}}', '" . NV_BASE_SITEURL . "', $row2);
