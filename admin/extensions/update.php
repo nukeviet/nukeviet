@@ -25,8 +25,39 @@ if ($nv_Request->get_title('checksess', 'get', '') == md5('unzip' . $eid . $fid 
     $filename = NV_TEMPNAM_PREFIX . 'extupd_' . NV_CHECK_SESSION . '.zip';
 
     if (file_exists(NV_ROOTDIR . '/' . NV_TEMP_DIR . '/' . $filename)) {
+        // Bước 1: Kiểm tra dung lượng file ZIP <= NV_UPLOAD_MAX_FILESIZE
+        $zipFileSize = filesize(NV_ROOTDIR . '/' . NV_TEMP_DIR . '/' . $filename);
+        if ($zipFileSize > NV_UPLOAD_MAX_FILESIZE) {
+            $xtpl->assign('ERROR', $lang_module['extUpdErrorDownload']);
+            $xtpl->parse('error');
+            echo $xtpl->text('error');
+            exit();
+        }
+
         $zip = new PclZip(NV_ROOTDIR . '/' . NV_TEMP_DIR . '/' . $filename);
         $ziplistContent = $zip->listContent();
+
+        // Bước 2: Kiểm tra file ZIP hợp lệ
+        if ($ziplistContent === 0 || empty($ziplistContent)) {
+            $xtpl->assign('ERROR', $lang_module['extUpdErrorDownload']);
+            $xtpl->parse('error');
+            echo $xtpl->text('error');
+            exit();
+        }
+
+        // Bước 3: Kiểm tra ZIP bomb — tổng giải nén <= 10 lần dung lượng file ZIP
+        // NOTE: ZIP bomb ratio limit = 10. Tỉ lệ nén thông thường 2:1~5:1, ZIP bomb 1000:1+
+        $totalUncompressedSize = 0;
+        foreach ($ziplistContent as $_lf) {
+            $totalUncompressedSize += (int) $_lf['size'];
+        }
+        if ($totalUncompressedSize > $zipFileSize * 10) {
+            $xtpl->assign('ERROR', $lang_module['extUpdErrorDownload']);
+            $xtpl->parse('error');
+            echo $xtpl->text('error');
+            exit();
+        }
+        unset($totalUncompressedSize, $_lf, $zipFileSize);
 
         $temp_extract_dir = NV_TEMP_DIR . '/' . md5($filename . NV_CHECK_SESSION);
 
@@ -86,7 +117,10 @@ if ($nv_Request->get_title('checksess', 'get', '') == md5('unzip' . $eid . $fid 
             }
         }
 
-        $extract = $zip->extract(PCLZIP_OPT_PATH, NV_ROOTDIR . '/' . $temp_extract_dir);
+        $extract = $zip->extract(
+            PCLZIP_OPT_PATH, NV_ROOTDIR . '/' . $temp_extract_dir,
+            PCLZIP_OPT_EXTRACT_DIR_RESTRICTION, NV_ROOTDIR . '/' . $temp_extract_dir
+        );
 
         foreach ($extract as $extract_i) {
             $filename_i = str_replace(NV_ROOTDIR, '', str_replace('\\', '/', $extract_i['filename']));
@@ -129,8 +163,16 @@ if ($nv_Request->get_title('checksess', 'get', '') == md5('unzip' . $eid . $fid 
             $error_create_folder = array_unique($error_create_folder);
 
             if (empty($error_create_folder)) {
+                $temp_base = realpath(NV_ROOTDIR . '/' . $temp_extract_dir);
                 foreach ($ziplistContent as $array_file) {
                     if (empty($array_file['folder'])) {
+                        // Từ chối tệp tin nếu nó nằm ngoài thư mục tạm
+                        $src_real = realpath(NV_ROOTDIR . '/' . $temp_extract_dir . '/' . $array_file['filename']);
+                        if ($src_real === false or $temp_base === false or strpos($src_real, $temp_base . DIRECTORY_SEPARATOR) !== 0) {
+                            $error_move_folder[] = $array_file['filename'];
+                            continue;
+                        }
+
                         if (file_exists(NV_ROOTDIR . '/' . $array_file['filename'])) {
                             if (!($ftp_check_login == 1 and ftp_delete($conn_id, $array_file['filename']))) {
                                 nv_deletefile(NV_ROOTDIR . '/' . $array_file['filename']);
@@ -138,10 +180,10 @@ if ($nv_Request->get_title('checksess', 'get', '') == md5('unzip' . $eid . $fid 
                         }
 
                         if (!($ftp_check_login == 1 and ftp_rename($conn_id, $temp_extract_dir . '/' . $array_file['filename'], $array_file['filename']))) {
-                            @rename(NV_ROOTDIR . '/' . $temp_extract_dir . '/' . $array_file['filename'], NV_ROOTDIR . '/' . $array_file['filename']);
+                            @rename($src_real, NV_ROOTDIR . '/' . $array_file['filename']);
                         }
 
-                        if (file_exists(NV_ROOTDIR . '/' . $temp_extract_dir . '/' . $array_file['filename'])) {
+                        if (file_exists($src_real)) {
                             $error_move_folder[] = $array_file['filename'];
                         }
                     }

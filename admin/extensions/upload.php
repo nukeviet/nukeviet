@@ -543,6 +543,8 @@ if (empty($error)) {
         }
         if ($totalUncompressedSize > NV_UPLOAD_MAX_FILESIZE) {
             $error = sprintf($lang_global['error_upload_max_user_size'], nv_convertfromBytes(NV_UPLOAD_MAX_FILESIZE));
+        } elseif ($totalUncompressedSize > filesize($filename) * 10) {
+            $error = sprintf($lang_global['error_upload_max_user_size'], nv_convertfromBytes(NV_UPLOAD_MAX_FILESIZE));
         }
         unset($totalUncompressedSize, $_lf);
 

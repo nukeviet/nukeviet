@@ -3786,7 +3786,7 @@ class PclZip
         $v_result = 1;
 
         // ----- Creates a temporary file
-        $v_gzip_temp_name = PCLZIP_TEMPORARY_DIR . uniqid('pclzip-') . '.gz';
+        $v_gzip_temp_name = PCLZIP_TEMPORARY_DIR . 'pclzip-' . (function_exists('random_bytes') ? bin2hex(random_bytes(16)) : md5(uniqid(mt_rand(), true))) . '.gz';
         if (($v_dest_file = @fopen($v_gzip_temp_name, "wb")) == 0) {
             fclose($v_file);
             PclZip::privErrorLog(PCLZIP_ERR_WRITE_OPEN_FAIL, 'Unable to open temporary file \'' . $v_gzip_temp_name . '\' in binary write mode');
