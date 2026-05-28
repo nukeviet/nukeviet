@@ -7,7 +7,7 @@
         'type' => 'library',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
-        'dev' => false,
+        'dev' => true,
     ),
     'versions' => array(
         '__root__' => array(
@@ -287,9 +287,9 @@
             'dev_requirement' => false,
         ),
         'symfony/polyfill-intl-idn' => array(
-            'pretty_version' => 'v1.33.0',
-            'version' => '1.33.0.0',
-            'reference' => '9614ac4d8061dc257ecc64cba1b140873dce8ad3',
+            'pretty_version' => 'v1.38.1',
+            'version' => '1.38.1.0',
+            'reference' => 'dc21118016c039a66235cf93d96b435ffb282412',
             'type' => 'library',
             'install_path' => __DIR__ . '/../symfony/polyfill-intl-idn',
             'aliases' => array(),
