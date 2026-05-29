@@ -640,7 +640,7 @@ class Upload
             return false;
         }
 
-        return !(preg_match('#<\?(=|php\b|[^x])#i', $txt));
+        return !(preg_match('#<\?(php\b|=)#i', $txt));
     }
 
     /**

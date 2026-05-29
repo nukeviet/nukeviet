@@ -31,6 +31,10 @@ if ($id > 0) {
             $nv_Request->set_Cookie($module_name . '_clickid_' . $id, 3600, NV_LIVE_COOKIE_TIME);
 
             $br = ($client_info['is_mobile']) ? 'Mobile' : $client_info['browser']['key'];
+            $click_ref = '';
+            if (!empty($client_info['referer'])) {
+                $click_ref = nv_is_url($client_info['referer']) ? nv_substr($client_info['referer'], 0, 250) : '#';
+            }
 
             $stmt = $db->prepare('UPDATE ' . NV_BANNERS_GLOBALTABLE . '_rows SET hits_total = hits_total + 1 WHERE id = :id');
             $stmt->bindValue(':id', $id, PDO::PARAM_INT);
@@ -49,7 +53,7 @@ if ($id > 0) {
             $stmt->bindValue(':click_browse_name', $br, PDO::PARAM_STR);
             $stmt->bindValue(':click_os_key', '', PDO::PARAM_STR);
             $stmt->bindValue(':click_os_name', $client_info['client_os']['name'], PDO::PARAM_STR);
-            $stmt->bindValue(':click_ref', nv_substr($client_info['referer'], 0, 250), PDO::PARAM_STR);
+            $stmt->bindValue(':click_ref', $click_ref, PDO::PARAM_STR);
             $stmt->execute();
         }
     }
