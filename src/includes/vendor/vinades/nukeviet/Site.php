@@ -64,13 +64,13 @@ class Site
         $value = preg_replace('/%3A%2F%2F/', '', $value); // :// to empty
 
         // Gom class đúng cú pháp: Loại bỏ các Control Characters (Null Byte, Vertical Tab...) an toàn
-        $value = preg_replace('/([\x00-\x08\x0b-\x0c\x0e-\x20])/', '', $value);
+        $value = preg_replace('/([\x00-\x08\x0b-\x0c\x0e-\x1f])/', '', $value);
 
         $value = preg_replace('/%u0([a-z0-9]{3})/i', '&#x\1;', $value);
         $value = preg_replace('/%([a-z0-9]{2})/i', '&#x\1;', $value);
 
         // Loại bỏ các comment và ký tự ngắt dòng
-        $value = str_ireplace(['/*', '*/', '<!--', '-->', '<!-- -->', '&#x0A;', '&#x0D;', '&#x09;', ' '], '', $value);
+        $value = str_ireplace(['/*', '*/', '<!--', '-->', '<!-- -->', '&#x0A;', '&#x0D;', '&#x09;'], '', $value);
         $value = str_replace(['&colon;', '&lpar;', '&rpar;', '&Tab;', '&NewLine;'], [':', '(', ')', '', ''], $value);
 
         // Ngăn chặn mã hóa SCRIPT/JAVASCRIPT với regex linh hoạt: Bắt tùy chọn dấu chấm phẩy và không giới hạn số 0
