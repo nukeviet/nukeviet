@@ -149,12 +149,14 @@ $stmt_update_act = $db->prepare('UPDATE ' . NV_BANNERS_GLOBALTABLE . '_rows SET 
 
 $array = [];
 $array_userids = $array_users = [];
+$had_expiry_update = false;
 
 while ($row = $stmt->fetch()) {
     if ($row['exp_time'] != 0 && $row['exp_time'] <= NV_CURRENTTIME) {
         $stmt_update_act->bindValue(':id', $row['id'], PDO::PARAM_INT);
         $stmt_update_act->execute();
         $row['act'] = 2;
+        $had_expiry_update = true;
     }
 
     $item = [
@@ -181,6 +183,10 @@ while ($row = $stmt->fetch()) {
     }
 }
 $stmt->closeCursor();
+
+if ($had_expiry_update) {
+    nv_CreateXML_bannerPlan();
+}
 
 // Xác định người đăng
 if (!empty($array_userids)) {
