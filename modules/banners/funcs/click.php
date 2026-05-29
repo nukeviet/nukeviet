@@ -26,7 +26,11 @@ if ($id > 0) {
             $nv_Request->set_Cookie($module_name . '_clickid_' . $id, 3600, NV_LIVE_COOKIE_TIME);
 
             $br = ($client_info['is_mobile']) ? 'Mobile' : $client_info['browser']['key'];
-
+            $click_ref = '';
+            if (!empty($client_info['referer'])) {
+                $click_ref = nv_is_url($client_info['referer']) ? nv_substr($client_info['referer'], 0, 250) : '#';
+            }
+            
             $db->query('UPDATE ' . NV_BANNERS_GLOBALTABLE . '_rows SET hits_total=hits_total+1 WHERE id=' . $id);
             $sql = 'INSERT INTO ' . NV_BANNERS_GLOBALTABLE . '_click (
                 bid, click_time, click_day, click_ip, click_country, click_browse_key, click_browse_name, click_os_key, click_os_name, click_ref
@@ -34,19 +38,21 @@ if ($id > 0) {
                 ' . $id . ', ' . NV_CURRENTTIME . ', 0, ' . $db->quote($client_info['ip']) . ',
                 ' . $db->quote($client_info['country']) . ", '', " . $db->quote($br) . ", '',
                 " . $db->quote($client_info['client_os']['name']) . ',
-                ' . $db->quote(nv_substr($client_info['referer'], 0, 250)) . '
+                ' . $db->quote($click_ref) . '
             );';
             $db->query($sql);
         }
     }
+if (!empty($links) and !nv_is_url($links)) {
+    $links = NV_MY_DOMAIN;
 }
 
 include NV_ROOTDIR . '/includes/header.php';
 
 echo '<script type="text/javascript">';
-echo '		window.location.href="' . $links . '";';
+echo '		window.location.href = ' . nv_htmlspecialchars($links, 'js') . ';';
 echo '</script>';
 echo '<noscript>';
-echo '		<meta http-equiv="refresh" content="0;url=' . $links . '" />';
+echo '		<meta http-equiv="refresh" content="0;url=' . nv_htmlspecialchars($links, 'url') . '" />';
 echo '</noscript>';
 include NV_ROOTDIR . '/includes/footer.php';

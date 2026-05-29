@@ -389,8 +389,11 @@ if ($nv_Request->isset_request('contentid', 'get,post') and $fcheckss == $checks
             $rowcontent['topicid'] = 0;
         }
 
-        $bodyhtml = $nv_Request->get_string('bodyhtml', 'post', '');
-        $rowcontent['bodyhtml'] = defined('NV_EDITOR') ? nv_nl2br($bodyhtml, '') : nv_nl2br(nv_htmlspecialchars(strip_tags($bodyhtml)), '<br />');
+        if (defined('NV_EDITOR') and nv_function_exists('nv_aleditor')) {
+            $rowcontent['bodyhtml'] = $nv_Request->get_editor('bodyhtml', '', NV_ALLOWED_HTML_TAGS);
+        } else {
+            $rowcontent['bodyhtml'] = $nv_Request->get_textarea('bodyhtml', '', NV_ALLOWED_HTML_TAGS);
+        }
 
         if (empty($rowcontent['title'])) {
             $error = $lang_module['error_title'];
@@ -639,10 +642,11 @@ if ($nv_Request->isset_request('contentid', 'get,post') and $fcheckss == $checks
         $rowcontent['homeimgfile'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $rowcontent['homeimgfile'];
     }
 
-    $rowcontent['bodyhtml'] = htmlspecialchars(nv_editor_br2nl($rowcontent['bodyhtml']));
     if (defined('NV_EDITOR') and nv_function_exists('nv_aleditor')) {
+        $rowcontent['bodyhtml'] = htmlspecialchars(nv_editor_br2nl($rowcontent['bodyhtml']));
         $htmlbodyhtml = nv_aleditor('bodyhtml', '100%', '300px', $rowcontent['bodyhtml']);
     } else {
+        $rowcontent['bodyhtml'] = nv_htmlspecialchars(nv_br2nl($rowcontent['bodyhtml']));
         $htmlbodyhtml .= '<textarea class="textareaform" name="bodyhtml" id="bodyhtml" cols="60" rows="15">' . $rowcontent['bodyhtml'] . '</textarea>';
     }
 

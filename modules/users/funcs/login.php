@@ -112,9 +112,7 @@ function set_reg_attribs($attribs, $username)
     $reg_attribs['first_name'] = '';
     $reg_attribs['last_name'] = '';
     $reg_attribs['gender'] = '';
-    $reg_attribs['photo'] = (!empty($attribs['picture_url']) and empty($attribs['picture_mode'])) ? $attribs['picture_url'] : '';
     $reg_attribs['openid'] = $attribs['id'];
-    $reg_attribs['opid'] = $crypt->hash($attribs['id']);
 
     if (isset($attribs['namePerson/first']) and !empty($attribs['namePerson/first'])) {
         $reg_attribs['first_name'] = $attribs['namePerson/first'];
@@ -131,6 +129,13 @@ function set_reg_attribs($attribs, $username)
     if (isset($attribs['person/gender']) and !empty($attribs['person/gender'])) {
         $reg_attribs['gender'] = $attribs['person/gender'];
     }
+
+    $reg_attribs = array_map('strip_tags', $reg_attribs);
+    $reg_attribs = array_map('nv_htmlspecialchars', $reg_attribs);
+
+    $photo = (!empty($attribs['picture_url']) and empty($attribs['picture_mode'])) ? $attribs['picture_url'] : '';
+    $reg_attribs['photo'] = str_replace(['"', "'", '<', '>'], '', strip_tags($photo));
+    $reg_attribs['opid'] = $crypt->hash($attribs['id']);
 
     if ($global_config['allowuserreg'] == 1 or $global_config['allowuserreg'] == 2) {
         if (!empty($reg_attribs['photo'])) {

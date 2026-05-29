@@ -27,8 +27,30 @@ function formatRepoSelection(repo) {
 }
 
 function nv_add_element(idElment, key, value) {
-    var html = "<span title=\"" + value + "\" class=\"uiToken removable\" ondblclick=\"$(this).remove();\">" + value + "<input type=\"hidden\" value=\"" + key + "\" name=\"" + idElment + "[]\" autocomplete=\"off\"><a onclick=\"$(this).parent().remove();\" href=\"javascript:void(0);\" class=\"remove uiCloseButton uiCloseButtonSmall\"></a></span>";
-    $("#" + idElment).append(html);
+    var span = $('<span/>')
+        .attr('title', value)
+        .addClass('uiToken removable')
+        .text(value)
+        .on('dblclick', function() {
+            $(this).remove();
+        });
+
+    var input = $('<input/>')
+        .attr('type', 'hidden')
+        .attr('value', key)
+        .attr('name', idElment + '[]')
+        .attr('autocomplete', 'off');
+
+    var a = $('<a/>')
+        .attr('href', 'javascript:void(0);')
+        .addClass('remove uiCloseButton uiCloseButtonSmall')
+        .on('click', function(e) {
+            e.preventDefault();
+            $(this).parent().remove();
+        });
+
+    span.append(input).append(a);
+    $("#" + idElment).append(span);
     return false;
 }
 

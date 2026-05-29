@@ -99,15 +99,19 @@ if (!nv_function_exists('nv_block_data_config_rss')) {
      * nv_get_rss()
      *
      * @param string $url
+     * @param int    $ishtml
      * @return array
      */
-    function nv_get_rss($url)
+    function nv_get_rss($url, $ishtml)
     {
-        global $global_config, $nv_Cache;
+        global $global_config, $nv_Cache, $nv_Request;
         $array_data = [];
-        $cache_file = NV_LANG_DATA . '_' . md5($url) . '_' . NV_CACHE_PREFIX . '.cache';
+        $cache_file = NV_LANG_DATA . '_' . md5($ishtml . '_' . $url) . '_' . NV_CACHE_PREFIX . '.cache';
         if (($cache = $nv_Cache->getItem('rss', $cache_file, 3600)) != false) {
-            $array_data = unserialize($cache);
+            $array_data = json_decode($cache, true);
+            if (!is_array($array_data)) {
+                $array_data = [];
+            }
         } else {
             $getContent = new NukeViet\Client\UrlGetContents($global_config);
             $xml_source = $getContent->get($url);
@@ -117,25 +121,40 @@ if (!nv_function_exists('nv_block_data_config_rss')) {
                 $a = 0;
                 if (isset($xml->channel)) {
                     foreach ($xml->channel->item as $item) {
-                        $array_data[$a]['title'] = strip_tags($item->title);
-                        $array_data[$a]['description'] = strip_tags($item->description, $allowed_html_tags);
-                        $array_data[$a]['link'] = strip_tags($item->link);
+                        $link = strip_tags($item->link);
+                        if (!nv_is_url($link)) {
+                            $link = '';
+                        }
+                        $array_data[$a]['title'] = nv_htmlspecialchars(strip_tags($item->title));
+                        if ($ishtml) {
+                            $array_data[$a]['description'] = $nv_Request->security_post(strip_tags($item->description, $allowed_html_tags));
+                        } else {
+                            $array_data[$a]['description'] = nv_htmlspecialchars(strip_tags($item->description));
+                        }
+                        $array_data[$a]['link'] = nv_htmlspecialchars($link);
                         $array_data[$a]['pubDate'] = nv_date('l - d/m/Y H:i', strtotime($item->pubDate));
                         ++$a;
                     }
                 } elseif (isset($xml->entry)) {
                     foreach ($xml->entry as $item) {
                         $urlAtt = $item->link->attributes();
-                        $url = $urlAtt['href'];
-                        $array_data[$a]['title'] = strip_tags($item->title);
-                        $array_data[$a]['description'] = strip_tags($item->content, $allowed_html_tags);
-                        $array_data[$a]['link'] = strip_tags($urlAtt['href']);
+                        $link = strip_tags($urlAtt['href']);
+                        if (!nv_is_url($link)) {
+                            $link = '';
+                        }
+                        $array_data[$a]['title'] = nv_htmlspecialchars(strip_tags($item->title));
+                        if ($ishtml) {
+                            $array_data[$a]['description'] = $nv_Request->security_post(strip_tags($item->content, $allowed_html_tags));
+                        } else {
+                            $array_data[$a]['description'] = nv_htmlspecialchars(strip_tags($item->content));
+                        }
+                        $array_data[$a]['link'] = nv_htmlspecialchars($link);
                         $array_data[$a]['pubDate'] = nv_date('l - d/m/Y H:i', strtotime($item->updated));
                         ++$a;
                     }
                 }
             }
-            $cache = serialize($array_data);
+            $cache = json_encode($array_data);
             $nv_Cache->setItem('rss', $cache_file, $cache);
         }
 
@@ -162,11 +181,10 @@ if (!nv_function_exists('nv_block_data_config_rss')) {
 
         $a = 1;
         $xtpl = new XTemplate('global.rss.tpl', NV_ROOTDIR . '/themes/' . $block_theme . '/modules/feeds');
-        $array_rrs = nv_get_rss($block_config['url']);
+        $array_rrs = nv_get_rss($block_config['url'], $block_config['ishtml']);
         $title_length = isset($block_config['title_length']) ? (int) ($block_config['title_length']) : 0;
         foreach ($array_rrs as $item) {
             if ($a <= $block_config['number']) {
-                $item['description'] = ($block_config['ishtml']) ? $item['description'] : strip_tags($item['description']);
                 $item['target'] = ($block_config['istarget']) ? " onclick=\"this.target='_blank'\" " : '';
                 $item['class'] = ($a % 2 == 0) ? 'second' : '';
                 if ($title_length > 0) {

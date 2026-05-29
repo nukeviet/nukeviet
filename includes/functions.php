@@ -1057,10 +1057,11 @@ function nv_unhtmlspecialchars($string)
 /**
  * nv_htmlspecialchars()
  *
- * @param string $string
- * @return string
+ * @param mixed  $string
+ * @param string $type   Hỗ trợ 'url', 'attribute', 'js' hoặc mặc định
+ * @return string|array
  */
-function nv_htmlspecialchars($string)
+function nv_htmlspecialchars($string, $type = '')
 {
     if (empty($string)) {
         return $string;
@@ -1070,8 +1071,14 @@ function nv_htmlspecialchars($string)
         $array_keys = array_keys($string);
 
         foreach ($array_keys as $key) {
-            $string[$key] = nv_htmlspecialchars($string[$key]);
+            $string[$key] = nv_htmlspecialchars($string[$key], $type);
         }
+    } elseif ($type === 'url') {
+        $string = htmlspecialchars($string, ENT_QUOTES, 'UTF-8');
+    } elseif ($type === 'js') {
+        $string = json_encode($string, JSON_HEX_TAG | JSON_HEX_AMP | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+    } elseif ($type === 'attribute') {
+        $string = htmlspecialchars($string, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
     } else {
         $search = ['&', '\'', '"', '<', '>', '\\', '/', '(', ')', '*', '[', ']', '!', '=', '%', '^', ':', '{', '}', '`', '~'];
         $replace = ['&amp;', '&#039;', '&quot;', '&lt;', '&gt;', '&#x005C;', '&#x002F;', '&#40;', '&#41;', '&#42;', '&#91;', '&#93;', '&#33;', '&#x3D;', '&#x25;', '&#x5E;', '&#x3A;', '&#x7B;', '&#x7D;', '&#x60;', '&#x7E;'];
