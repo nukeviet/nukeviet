@@ -17,6 +17,7 @@
 /src/.php-cs-fixer.php
 /src/.vscode
 .mcp.json
+/scripts/composer-audit.txt
 
 /composer.lock
 /vendor
