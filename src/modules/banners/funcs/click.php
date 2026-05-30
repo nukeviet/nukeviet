@@ -18,7 +18,7 @@ $nv_BotManager->setPrivate();
 $links = NV_MY_DOMAIN;
 $id = $nv_Request->get_int('id', 'get', 0);
 if ($id > 0) {
-    $stmt = $db->prepare('SELECT click_url, exp_time FROM ' . NV_BANNERS_GLOBALTABLE . '_rows WHERE id = :id AND act IN (1, 2)');
+    $stmt = $db->prepare('SELECT click_url, exp_time, act, publ_time FROM ' . NV_BANNERS_GLOBALTABLE . '_rows WHERE id = :id AND act IN (0, 1, 2)');
     $stmt->bindValue(':id', $id, PDO::PARAM_INT);
     $stmt->execute();
     $row_banner = $stmt->fetch();
@@ -26,7 +26,8 @@ if ($id > 0) {
 
     if (!empty($row_banner['click_url'])) {
         $exp_time = (int) $row_banner['exp_time'];
-        $is_active = ($exp_time === 0 || $exp_time > NV_CURRENTTIME);
+        $in_schedule = ($row_banner['act'] === 0 && (int) $row_banner['publ_time'] > NV_CURRENTTIME);
+        $is_active = !$in_schedule && ($exp_time === 0 || $exp_time > NV_CURRENTTIME);
 
         // Cho phép redirect trong vòng 2 giờ sau khi hết hạn nhưng không đếm click
         $in_grace = (!$is_active && $exp_time >= NV_CURRENTTIME - 7200);
