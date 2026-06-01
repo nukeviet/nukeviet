@@ -14,10 +14,11 @@ if (!defined('NV_IS_FILE_ADMIN')) {
 }
 
 $page_title = $nv_Lang->getModule('draft_list');
+$draft_csrf_key = $admin_info['admin_id'] . '_' . $module_name . '_drafts';
 
 // Xóa bỏ 1 hoặc nhiều
 if ($nv_Request->isset_request('delete', 'post')) {
-    if (!csrf_check($nv_Request->get_title('delete', 'post', ''), $csrf_key)) {
+    if (!csrf_check($nv_Request->get_title('delete', 'post', ''), $draft_csrf_key)) {
         nv_jsonOutput([
             'success' => 0,
             'text' => $nv_Lang->getGlobal('error_checkss')
@@ -43,7 +44,7 @@ if ($nv_Request->isset_request('delete', 'post')) {
         }
         $stmt_check->execute();
         $exists_id = $stmt_check->fetchColumn();
-        
+
         if ($exists_id) {
             nv_insert_logs(NV_LANG_DATA, $module_name, 'LOG_DELETE_DRAFT', $id, $admin_info['admin_id']);
 
@@ -182,6 +183,7 @@ $tpl->assign('ARRAY', $array);
 $tpl->assign('SEARCH_COUNT', $search_count);
 $tpl->assign('SEARCH', $array_search);
 $tpl->assign('PAGINATION', nv_generate_page($base_url, $num_items, $per_page, $page));
+$tpl->assign('DRAFTS_CHECKSS', csrf_create($draft_csrf_key));
 
 $contents = $tpl->fetch('drafts.tpl');
 

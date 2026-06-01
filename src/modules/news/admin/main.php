@@ -1525,6 +1525,7 @@ if (!$is_search) {
     }
 }
 $tpl->assign('DRAFTS', $array_drafts);
+$tpl->assign('DRAFTS_CHECKSS', csrf_create($admin_info['admin_id'] . '_' . $module_name . '_drafts'));
 $tpl->assign('ARRAY_OTHERS', $array_others);
 $tpl->assign('ARRAY_OTHERS_COUNT', $array_others_count);
 

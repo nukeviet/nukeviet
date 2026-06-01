@@ -1422,7 +1422,7 @@ $(function () {
                 type: 'POST',
                 url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=drafts&nocache=' + new Date().getTime(),
                 data: {
-                    delete: $('body').data('checkss'),
+                    delete: btn.data('checkss'),
                     id: btn.data('id')
                 },
                 dataType: 'json',
