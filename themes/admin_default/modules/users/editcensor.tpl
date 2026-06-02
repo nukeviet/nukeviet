@@ -46,8 +46,8 @@
                 <td> {CONTENT_TD.lastedit} </td>
                 <td class="text-center">
                     <!-- BEGIN: allowed -->
-                    <a href="javascript:void(0);" class="btn btn-xs btn-success" onclick="nv_editcensor_row_accept({CONTENT_TD.userid}, '{LANG.editcensor_confirm_approval}');"><i class="fa fa-check"></i> {LANG.approved}</a>
-                    <a href="javascript:void(0);" class="btn btn-xs btn-danger" onclick="nv_editcensor_row_del({CONTENT_TD.userid}, '{LANG.editcensor_confirm_denied}');"><i class="fa fa-trash"></i> {LANG.denied}</a>
+                    <a href="javascript:void(0);" class="btn btn-xs btn-success" onclick="nv_editcensor_row_accept({CONTENT_TD.userid}, '{LANG.editcensor_confirm_approval}', '{CONTENT_TD.checkss}');"><i class="fa fa-check"></i> {LANG.approved}</a>
+                    <a href="javascript:void(0);" class="btn btn-xs btn-danger" onclick="nv_editcensor_row_del({CONTENT_TD.userid}, '{LANG.editcensor_confirm_denied}', '{CONTENT_TD.checkss}');"><i class="fa fa-trash"></i> {LANG.denied}</a>
                     <!-- END: allowed -->
                 </td>
             </tr>

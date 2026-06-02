@@ -144,8 +144,9 @@
     <!-- END: custom -->
     <div class="text-center">
         <input type="hidden" name="confirm" value="1">
+        <input type="hidden" name="checkss" value="{CHECKSS}">
         <button type="submit" name="submit" value="submit" class="btn btn-success"><i class="fa fa-check"></i> {LANG.approved}</button>
-        <a href="javascript:void(0);" class="btn btn-danger" onclick="nv_editcensor_row_del({REVIEWUID}, '{LANG.editcensor_confirm_denied}');"><i class="fa fa-trash"></i> {LANG.denied}</a>
+        <a href="javascript:void(0);" class="btn btn-danger" onclick="nv_editcensor_row_del({REVIEWUID}, '{LANG.editcensor_confirm_denied}', '{CHECKSS}');"><i class="fa fa-trash"></i> {LANG.denied}</a>
     </div>
 </form>
 <!-- END: main -->

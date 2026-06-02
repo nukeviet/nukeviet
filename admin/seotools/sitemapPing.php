@@ -14,6 +14,52 @@ if (!defined('NV_IS_FILE_SEOTOOLS')) {
 }
 
 /**
+ * nv_is_safe_url()
+ *
+ * @param string $url
+ * @return bool
+ */
+function nv_is_safe_url($url)
+{
+    if (!nv_is_url($url)) {
+        return false;
+    }
+
+    $parts = parse_url($url);
+    if (empty($parts) or !isset($parts['scheme']) or !isset($parts['host'])) {
+        return false;
+    }
+
+    // Only allow http and https
+    if (!in_array(strtolower($parts['scheme']), ['http', 'https'], true)) {
+        return false;
+    }
+
+    $host = strtolower($parts['host']);
+
+    // Prevent CRLF in host
+    if (strpbrk($host, "\r\n") !== false) {
+        return false;
+    }
+
+    if (filter_var($host, FILTER_VALIDATE_IP)) {
+        $ip = $host;
+    } else {
+        $ip = gethostbyname($host);
+        if ($ip === $host && !filter_var($ip, FILTER_VALIDATE_IP)) {
+            return false;
+        }
+    }
+
+    // Block private and reserved IP ranges (unless in developer mode)
+    if (!defined('NV_DEVELOPER_MODE') && !filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE)) {
+        return false;
+    }
+
+    return true;
+}
+
+/**
  * nv_sitemapPing()
  *
  * @param string $module
@@ -23,6 +69,10 @@ if (!defined('NV_IS_FILE_SEOTOOLS')) {
 function nv_sitemapPing($module, $link)
 {
     global $sys_info, $lang_module, $global_config;
+
+    if (!nv_is_safe_url($link)) {
+        return $lang_module['searchEngineFailed'];
+    }
 
     $md5 = md5($link . $module . NV_LANG_DATA);
     $cacheFile = NV_ROOTDIR . '/' . NV_CACHEDIR . '/sitemapPing_' . $md5 . '.cache';
@@ -73,6 +123,11 @@ function nv_sitemapPing($module, $link)
         }
         if (!isset($url_parts['path'])) {
             $url_parts['path'] = '/';
+        }
+
+        // Prevent CRLF injection in fsockopen request
+        if (strpbrk($url_parts['path'], "\r\n") !== false or (isset($url_parts['query']) and strpbrk($url_parts['query'], "\r\n") !== false)) {
+            return $lang_module['searchEngineFailed'];
         }
 
         $sock = fsockopen($url_parts['host'], (isset($url_parts['port']) ? (int) $url_parts['port'] : 80), $errno, $errstr, 3);
@@ -144,7 +199,8 @@ if ($checkss == $nv_Request->get_string('checkss2', 'post') and empty($global_co
         $value = trim(strip_tags($searchEngineValue[$key]));
         $active = (int) ($searchEngineActive[$key]);
 
-        if (!empty($name) and !empty($value)) {
+        // Kiểm tra URL hợp lệ (chống SSRF) và chỉ cho phép http/https
+        if (!empty($name) and !empty($value) and nv_is_safe_url($value)) {
             $searchEngines['searchEngine'][] = [
                 'name' => $name,
                 'value' => $value,
@@ -206,6 +262,7 @@ if (!empty($searchEngines['searchEngine'])) {
         foreach ($searchEngines['searchEngine'] as $value) {
             if ($value['active']) {
                 $value['selected'] = $value['name'] == $searchEngine ? ' selected="selected"' : '';
+                $value['name'] = nv_htmlspecialchars($value['name']);
                 $xtpl->assign('ENGINE', $value);
                 $xtpl->parse('main.is_ping.Engine');
             }
@@ -228,6 +285,8 @@ if (!empty($searchEngines['searchEngine'])) {
 
     foreach ($searchEngines['searchEngine'] as $value) {
         $value['selected'] = $value['active'] ? ' selected="selected"' : '';
+        $value['name'] = nv_htmlspecialchars($value['name']);
+        $value['value'] = nv_htmlspecialchars($value['value']);
         $xtpl->assign('DATA', $value);
         $xtpl->parse('main.searchEngineList.loop');
     }

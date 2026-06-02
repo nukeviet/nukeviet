@@ -49,7 +49,7 @@ $(document).ready(function() {
                     $this.find('i').removeClass('fa-spin');
                     $this.find('i').addClass('fa-search');
                     if (res.status != 'success') {
-                        $('#thumbprewiew').html(res.message);
+                        $('#thumbprewiew').text(res.message);
                         return false;
                     }
                     $('#thumbprewiewtmp .imgorg').attr('src', res.src);

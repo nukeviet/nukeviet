@@ -210,6 +210,7 @@ if ($checkss == $data['checkss']) {
     if ($global_config['allowquestion']) {
         $data['answer'] = $nv_Request->get_title('answer', 'post', '', 1);
         if ($data['answer'] != $row['answer']) {
+            $nv_Request->set_Session('lostpass_seccode', '');
             nv_jsonOutput([
                 'status' => 'error',
                 'input' => 'answer',
@@ -251,6 +252,7 @@ if ($checkss == $data['checkss']) {
     }
 
     if (empty($data['verifykey']) or $passlostkey[1] != md5($row['userid'] . $data['verifykey'] . $global_config['sitekey'])) {
+        $nv_Request->set_Session('lostpass_seccode', '');
         nv_jsonOutput([
             'status' => 'error',
             'input' => 'verifykey',
@@ -309,7 +311,7 @@ if ($checkss == $data['checkss']) {
     $name = array_filter($name);
     $name = implode(' ', $name);
     $sitename = '<a href="' . NV_MY_DOMAIN . NV_BASE_SITEURL . '">' . $global_config['site_name'] . '</a>';
-    $message = sprintf($lang_module['edit_mail_content'], $name, $sitename, $lang_global['password'], $new_password);
+    $message = sprintf($lang_module['edit_mail_content'], $name, $sitename, $lang_global['password'], '********');
     @nv_sendmail([
         $global_config['site_name'],
         $global_config['site_email']

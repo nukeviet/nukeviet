@@ -111,7 +111,7 @@ $xtpl->assign('alias', $alias);
 $xtpl->assign('keywords', $keywords);
 $xtpl->assign('description', nv_htmlspecialchars(nv_br2nl($description)));
 
-if (!empty($image) and file_exists(NV_UPLOADS_REAL_DIR . '/' . $module_upload . '/' . $image)) {
+if (!empty($image) and nv_is_file(NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $image, NV_UPLOADS_DIR . '/' . $module_upload)) {
     $image = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $image;
     $currentpath = dirname($image);
 }

@@ -28,6 +28,10 @@ if ($module == 'theme') {
         $row['theme'] = $nv_Request->get_string('selectthemes', 'post,get', $global_config['site_theme']);
     }
 
+    if (!preg_match($global_config['check_theme'], $row['theme']) and !preg_match($global_config['check_theme_mobile'], $row['theme'])) {
+        $row['theme'] = $global_config['site_theme'];
+    }
+
     $block_file_list = nv_scandir(NV_ROOTDIR . '/themes/' . $row['theme'] . '/blocks', $global_config['check_block_theme']);
     foreach ($block_file_list as $file_name) {
         if (preg_match($global_config['check_block_theme'], $file_name, $matches)) {

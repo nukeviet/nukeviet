@@ -115,9 +115,15 @@ if (!nv_function_exists('nv_block_data_config_rss')) {
         } else {
             $getContent = new NukeViet\Client\UrlGetContents($global_config);
             $xml_source = $getContent->get($url);
+
+            // Chống XXE: Từ chối XML có DOCTYPE declaration (RSS hợp lệ không cần DOCTYPE)
+            if (preg_match('/<!DOCTYPE/i', $xml_source)) {
+                $xml_source = '';
+            }
+
             $allowed_html_tags = array_map('trim', explode(',', NV_ALLOWED_HTML_TAGS));
             $allowed_html_tags = '<' . implode('><', $allowed_html_tags) . '>';
-            if ($xml = simplexml_load_string($xml_source)) {
+            if ($xml = simplexml_load_string($xml_source, 'SimpleXMLElement', LIBXML_NONET | LIBXML_NOCDATA)) {
                 $a = 0;
                 if (isset($xml->channel)) {
                     foreach ($xml->channel->item as $item) {

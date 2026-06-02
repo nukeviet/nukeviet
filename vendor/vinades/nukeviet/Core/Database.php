@@ -306,17 +306,25 @@ class Database extends PDO
 
     /**
      * dblikeescape()
+     * Escape ký tự đặc biệt trong LIKE (%, _).
      *
-     * @param string $value
+     * @param array|string $value
+     * @param bool         $is_prepared True nếu dùng cho Prepared Statement (bindValue), False (mặc định) nếu dùng ghép chuỗi SQL trực tiếp.
      * @return array|string
      */
-    public function dblikeescape($value)
+    public function dblikeescape($value, $is_prepared = false)
     {
         if (is_array($value)) {
-            $value = array_map([$this, __FUNCTION__], $value);
+            $value = array_map(function ($val) use ($is_prepared) {
+                return $this->dblikeescape($val, $is_prepared);
+            }, $value);
         } else {
-            $value = trim($this->quote($value), "'");
-            $value = addcslashes($value, '_%');
+            if ($is_prepared) {
+                $value = addcslashes($value, '\_%');
+            } else {
+                $value = trim($this->quote($value), "'");
+                $value = addcslashes($value, '_%');
+            }
         }
 
         return $value;

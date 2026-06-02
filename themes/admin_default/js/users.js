@@ -196,18 +196,18 @@ function nv_waiting_row_del(uid, checkss) {
 }
 
 // Xóa thông tin chỉnh sửa
-function nv_editcensor_row_del(uid, msg) {
+function nv_editcensor_row_del(uid, msg, checkss) {
     if (confirm(msg)) {
-        $.post(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=editcensor&nocache=' + new Date().getTime(), 'del=1&userid=' + uid, function(res) {
+        $.post(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=editcensor&nocache=' + new Date().getTime(), 'del=1&userid=' + uid + '&checkss=' + checkss, function(res) {
             location.reload();
         });
     }
 }
 
 // Xác nhận thông tin chỉnh sửa
-function nv_editcensor_row_accept(uid, msg) {
+function nv_editcensor_row_accept(uid, msg, checkss) {
     if (confirm(msg)) {
-        $.post(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=editcensor&nocache=' + new Date().getTime(), 'approved=1&userid=' + uid, function(res) {
+        $.post(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=editcensor&nocache=' + new Date().getTime(), 'approved=1&userid=' + uid + '&checkss=' + checkss, function(res) {
             if (res.status != 'SUCCESS') {
                 alert(res.mess);
             } else {

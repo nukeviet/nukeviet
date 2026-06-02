@@ -871,7 +871,7 @@ if ($checkss == $array_data['checkss'] and $array_data['type'] == 'basic') {
     $name = array_filter($name);
     $name = implode(' ', $name);
     $sitename = '<a href="' . NV_MY_DOMAIN . NV_BASE_SITEURL . '">' . $global_config['site_name'] . '</a>';
-    $message = sprintf($lang_module['edit_mail_content'], $name, $sitename, $lang_global['password'], $new_password);
+    $message = sprintf($lang_module['edit_mail_content'], $name, $sitename, $lang_global['password'], '********');
     @nv_sendmail([
         $global_config['site_name'],
         $global_config['site_email']

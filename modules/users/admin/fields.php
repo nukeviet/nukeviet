@@ -368,25 +368,43 @@ if ($nv_Request->isset_request('save', 'post')) {
                 $weight = $db->query('SELECT MAX(weight) FROM ' . NV_MOD_TABLE . '_field')->fetchColumn();
                 $weight = (int) $weight + 1;
 
-                $sql = 'INSERT INTO ' . NV_MOD_TABLE . "_field (
+                $sql = 'INSERT INTO ' . NV_MOD_TABLE . '_field (
                     field, weight, field_type, field_choices, sql_choices, match_type,
                     match_regex, func_callback, min_length, max_length,
                     required, show_register, user_editable,
                     show_profile, class, language, default_value
                 ) VALUES (
-                    '" . $dataform['field'] . "', " . $weight . ", '" . $dataform['field_type'] . "', '" . $dataform['field_choices'] . "', " . $db->quote($dataform['sql_choices']) . ", '" . $dataform['match_type'] . "',
-                    :match_regex, :func_callback,
-                    " . $dataform['min_length'] . ', ' . $dataform['max_length'] . ',
-                    ' . $dataform['required'] . ', ' . $dataform['show_register'] . ", '" . $dataform['user_editable'] . "',
-                    " . $dataform['show_profile'] . ", :class, '" . serialize($language) . "', :default_value
-                )";
+                    :field, :weight, :field_type, :field_choices, :sql_choices, :match_type,
+                    :match_regex, :func_callback, :min_length, :max_length,
+                    :required, :show_register, :user_editable,
+                    :show_profile, :class, :language, :default_value
+                )';
 
-                $data_insert = [];
-                $data_insert['match_regex'] = nv_unhtmlspecialchars($dataform['match_regex']);
-                $data_insert['func_callback'] = nv_unhtmlspecialchars($dataform['func_callback']);
-                $data_insert['class'] = $dataform['class'];
-                $data_insert['default_value'] = $dataform['default_value'];
-                $dataform['fid'] = $db->insert_id($sql, 'fid', $data_insert);
+                $stmt = $db->prepare($sql);
+                $stmt->bindValue(':field', $dataform['field'], PDO::PARAM_STR);
+                $stmt->bindValue(':weight', $weight, PDO::PARAM_INT);
+                $stmt->bindValue(':field_type', $dataform['field_type'], PDO::PARAM_STR);
+                $stmt->bindValue(':field_choices', $dataform['field_choices'], PDO::PARAM_STR);
+                $stmt->bindValue(':sql_choices', $dataform['sql_choices'], PDO::PARAM_STR);
+                $stmt->bindValue(':match_type', $dataform['match_type'], PDO::PARAM_STR);
+
+                $dataform['match_regex'] = nv_unhtmlspecialchars($dataform['match_regex']);
+                $dataform['func_callback'] = nv_unhtmlspecialchars($dataform['func_callback']);
+                $stmt->bindValue(':match_regex', $dataform['match_regex'], PDO::PARAM_STR);
+                $stmt->bindValue(':func_callback', $dataform['func_callback'], PDO::PARAM_STR);
+
+                $stmt->bindValue(':min_length', $dataform['min_length'], PDO::PARAM_INT);
+                $stmt->bindValue(':max_length', $dataform['max_length'], PDO::PARAM_INT);
+                $stmt->bindValue(':required', $dataform['required'], PDO::PARAM_INT);
+                $stmt->bindValue(':show_register', $dataform['show_register'], PDO::PARAM_INT);
+                $stmt->bindValue(':user_editable', $dataform['user_editable'], PDO::PARAM_INT);
+                $stmt->bindValue(':show_profile', $dataform['show_profile'], PDO::PARAM_INT);
+                $stmt->bindValue(':class', $dataform['class'], PDO::PARAM_STR);
+                $stmt->bindValue(':language', serialize($language), PDO::PARAM_STR);
+                $stmt->bindValue(':default_value', $dataform['default_value'], PDO::PARAM_STR);
+
+                $stmt->execute();
+                $dataform['fid'] = $db->lastInsertId();
                 if ($dataform['fid']) {
                     $type_date = '';
                     if ($dataform['field_type'] == 'number' or $dataform['field_type'] == 'date') {
@@ -409,30 +427,40 @@ if ($nv_Request->isset_request('save', 'post')) {
         } elseif ($dataform['max_length'] <= 4294967296) {
             $query = 'UPDATE ' . NV_MOD_TABLE . '_field SET';
             if ($text_fields == 1) {
-                $query .= " match_type='" . $dataform['match_type'] . "',
-                match_regex=:match_regex, func_callback=:func_callback, ";
+                $query .= ' match_type = :match_type, match_regex = :match_regex, func_callback = :func_callback, ';
             }
-            $query .= ' max_length=' . $dataform['max_length'] . ', min_length=' . $dataform['min_length'] . ",
-                required = '" . $dataform['required'] . "',
-                field_choices='" . $dataform['field_choices'] . "',
-                sql_choices = '" . $dataform['sql_choices'] . "',
-                show_register = '" . $dataform['show_register'] . "',
-                user_editable = '" . $dataform['user_editable'] . "',
-                show_profile = '" . $dataform['show_profile'] . "',
+            $query .= ' max_length = :max_length, min_length = :min_length,
+                required = :required,
+                field_choices = :field_choices,
+                sql_choices = :sql_choices,
+                show_register = :show_register,
+                user_editable = :user_editable,
+                show_profile = :show_profile,
                 class = :class,
-                language='" . serialize($language) . "',
-                default_value= :default_value
-                WHERE fid = " . $dataform['fid'];
+                language = :language,
+                default_value = :default_value
+                WHERE fid = :fid';
 
             $stmt = $db->prepare($query);
             if ($text_fields == 1) {
                 $dataform['match_regex'] = nv_unhtmlspecialchars($dataform['match_regex']);
                 $dataform['func_callback'] = nv_unhtmlspecialchars($dataform['func_callback']);
-                $stmt->bindParam(':match_regex', $dataform['match_regex'], PDO::PARAM_STR);
-                $stmt->bindParam(':func_callback', $dataform['func_callback'], PDO::PARAM_STR);
+                $stmt->bindValue(':match_type', $dataform['match_type'], PDO::PARAM_STR);
+                $stmt->bindValue(':match_regex', $dataform['match_regex'], PDO::PARAM_STR);
+                $stmt->bindValue(':func_callback', $dataform['func_callback'], PDO::PARAM_STR);
             }
-            $stmt->bindParam(':class', $dataform['class'], PDO::PARAM_STR);
-            $stmt->bindParam(':default_value', $dataform['default_value'], PDO::PARAM_STR, strlen($dataform['default_value']));
+            $stmt->bindValue(':max_length', $dataform['max_length'], PDO::PARAM_INT);
+            $stmt->bindValue(':min_length', $dataform['min_length'], PDO::PARAM_INT);
+            $stmt->bindValue(':required', $dataform['required'], PDO::PARAM_INT);
+            $stmt->bindValue(':field_choices', $dataform['field_choices'], PDO::PARAM_STR);
+            $stmt->bindValue(':sql_choices', $dataform['sql_choices'], PDO::PARAM_STR);
+            $stmt->bindValue(':show_register', $dataform['show_register'], PDO::PARAM_INT);
+            $stmt->bindValue(':user_editable', $dataform['user_editable'], PDO::PARAM_INT);
+            $stmt->bindValue(':show_profile', $dataform['show_profile'], PDO::PARAM_INT);
+            $stmt->bindValue(':class', $dataform['class'], PDO::PARAM_STR);
+            $stmt->bindValue(':language', serialize($language), PDO::PARAM_STR);
+            $stmt->bindValue(':default_value', $dataform['default_value'], PDO::PARAM_STR);
+            $stmt->bindValue(':fid', $dataform['fid'], PDO::PARAM_INT);
             $save = $stmt->execute();
 
             if (empty($dataform['system'])) {
@@ -742,7 +770,7 @@ if ($nv_Request->isset_request('qlist', 'get')) {
         $xtpl->assign('MATCH_TYPE', [
             'key' => $key,
             'value' => $value,
-            'match_value' => ($key == 'regex') ? $dataform['match_regex'] : $dataform['func_callback'],
+            'match_value' => nv_htmlspecialchars(($key == 'regex') ? $dataform['match_regex'] : $dataform['func_callback']),
             'checked' => ($dataform['match_type'] == $key) ? ' checked="checked"' : '',
             'match_disabled' => ($dataform['match_type'] != $key) ? ' disabled="disabled"' : ''
         ]);

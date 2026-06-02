@@ -67,6 +67,7 @@ if ($popup) {
     $xtpl->assign('EDITOR_ID', $nv_Request->get_title('editor_id', 'get', ''));
     $xtpl->assign('NV_CHUNK_SIZE', $global_config['upload_chunk_size']);
     $xtpl->assign('SELFILE', $selectfile);
+    $xtpl->assign('NV_CHECK_SESSION', NV_CHECK_SESSION);
 
     $sfile = ($type == 'file') ? ' selected="selected"' : '';
     $simage = ($type == 'image') ? ' selected="selected"' : '';

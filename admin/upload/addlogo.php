@@ -26,7 +26,7 @@ $file = htmlspecialchars(trim($nv_Request->get_string('file', 'post,get')), ENT_
 $file = basename($file);
 
 if (empty($file) or !nv_is_file(NV_BASE_SITEURL . $path . '/' . $file, $path)) {
-    exit('ERROR#' . $lang_module['errorNotSelectFile'] . NV_ROOTDIR . '/' . $path . '/' . $file);
+    exit('ERROR#' . $lang_module['errorNotSelectFile'] . ' ' . $path . '/' . $file);
 }
 
 if ($nv_Request->isset_request('path', 'post') and $nv_Request->isset_request('x', 'post') and $nv_Request->isset_request('y', 'post')) {
@@ -72,7 +72,7 @@ if ($nv_Request->isset_request('path', 'post') and $nv_Request->isset_request('x
             $info = nv_getFileInfo($path, $file);
 
             $did = $array_dirname[$path];
-            
+
             $sth = $db->prepare('UPDATE ' . NV_UPLOAD_GLOBALTABLE . '_file SET filesize = :filesize, src = :src, srcwidth = :srcwidth, srcheight = :srcheight, sizes = :sizes, userid = :userid, mtime = :mtime WHERE did = :did AND title = :title');
             $sth->bindValue(':filesize', $info['filesize'], PDO::PARAM_INT);
             $sth->bindValue(':src', $info['src'], PDO::PARAM_STR);

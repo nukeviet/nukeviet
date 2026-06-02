@@ -392,7 +392,7 @@ if ($nv_Request->isset_request('extract', 'get')) {
                 if (!empty($no_extract)) {
                     $i = 0;
                     foreach ($no_extract as $tmp) {
-                        $xtpl->assign('FILENAME', $tmp);
+                        $xtpl->assign('FILENAME', nv_htmlspecialchars($tmp));
                         $xtpl->parse('extract.complete.no_extract.loop');
                         ++$i;
                     }
@@ -401,7 +401,7 @@ if ($nv_Request->isset_request('extract', 'get')) {
                     $i = 0;
                     asort($error_create_folder);
                     foreach ($error_create_folder as $tmp) {
-                        $xtpl->assign('FILENAME', $tmp);
+                        $xtpl->assign('FILENAME', nv_htmlspecialchars($tmp));
                         $xtpl->parse('extract.complete.error_create_folder.loop');
                         ++$i;
                     }
@@ -410,7 +410,7 @@ if ($nv_Request->isset_request('extract', 'get')) {
                     $i = 0;
                     asort($error_move_folder);
                     foreach ($error_move_folder as $tmp) {
-                        $xtpl->assign('FILENAME', $tmp);
+                        $xtpl->assign('FILENAME', nv_htmlspecialchars($tmp));
                         $xtpl->parse('extract.complete.error_move_folder.loop');
                         ++$i;
                     }
@@ -421,8 +421,8 @@ if ($nv_Request->isset_request('extract', 'get')) {
                     $i = 0;
                     asort($array_error_mine);
                     foreach ($array_error_mine as $tmp) {
-                        $xtpl->assign('FILENAME', $tmp['filename']);
-                        $xtpl->assign('MIME', $tmp['mime']);
+                        $xtpl->assign('FILENAME', nv_htmlspecialchars($tmp['filename']));
+                        $xtpl->assign('MIME', nv_htmlspecialchars($tmp['mime']));
                         $xtpl->parse('extract.complete.error_mine.loop');
                         ++$i;
                     }
@@ -522,7 +522,7 @@ if (empty($error)) {
         'checkName' => [
             'module' => $global_config['check_module'],
             'block' => [$global_config['check_block_module'], $global_config['check_block_theme']],
-            'theme' => $global_config['check_theme'],
+            'theme' => [$global_config['check_theme'], $global_config['check_theme_mobile'], $global_config['check_theme_admin']],
             'cron' => $global_config['check_cron'],
         ],
     ];
@@ -593,10 +593,15 @@ if (empty($error)) {
                 } elseif (!preg_match($global_config['check_version'], $extConfig['extension']['version'])) {
                     $error = $lang_module['autoinstall_error_cfg_version'];
                 } elseif (is_array($arraySysOption['checkName'][$extConfig['extension']['type']])) {
+                    $is_match = false;
                     foreach ($arraySysOption['checkName'][$extConfig['extension']['type']] as $check) {
-                        if (!preg_match($check, $extConfig['extension']['name'])) {
-                            $error = $lang_module['autoinstall_error_cfg_name'];
+                        if (preg_match($check, $extConfig['extension']['name'])) {
+                            $is_match = true;
+                            break;
                         }
+                    }
+                    if (!$is_match) {
+                        $error = $lang_module['autoinstall_error_cfg_name'];
                     }
                 } elseif (!preg_match($arraySysOption['checkName'][$extConfig['extension']['type']], $extConfig['extension']['name'])) {
                     $error = $lang_module['autoinstall_error_cfg_name'];
@@ -631,7 +636,7 @@ if (empty($error)) {
                 }
 
                 $info['filelist'][$j] = [
-                    'title' => '[' . $j . '] ' . ($info['exttype'] == 'theme' ? 'themes/' : '') . $listFiles[$i]['filename'] . ' ' . $bytes,
+                    'title' => '[' . $j . '] ' . ($info['exttype'] == 'theme' ? 'themes/' : '') . nv_htmlspecialchars($listFiles[$i]['filename']) . ' ' . $bytes,
                     'class' => [],
                 ];
 

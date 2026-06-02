@@ -115,12 +115,12 @@ class Error
         $this->error_send_mail = (string) $config['error_send_email'];
         $this->error_set_logs = $config['error_set_logs'];
 
-        if (isset($config['error_log_filename']) and preg_match('/[a-z0-9\_]+/i', $config['error_log_filename'])) {
+        if (isset($config['error_log_filename']) and preg_match('/^[a-z0-9\_]+$/i', $config['error_log_filename'])) {
             $this->error_log_filename = $config['error_log_filename'];
         } else {
             $this->error_log_filename = Error::LOG_FILE_NAME_DEFAULT;
         }
-        if (isset($config['error_log_fileext']) and preg_match('/[a-z]+/i', $config['error_log_fileext'])) {
+        if (isset($config['error_log_fileext']) and preg_match('/^[a-z]+$/i', $config['error_log_fileext'])) {
             $this->error_log_fileext = $config['error_log_fileext'];
         } else {
             $this->error_log_fileext = Error::LOG_FILE_EXT_DEFAULT;
@@ -396,7 +396,7 @@ class Error
         $_info .= "</head>\n\n";
         $_info .= "<body>\n";
         $_info .= '	<div style="width: 400px; margin-right: auto; margin-left: auto; margin-top: 20px; margin-bottom: 20px; color: #dd3e31; text-align: center;"><span style="font-weight: bold;">' . $this->errortype[$this->errno] . "</span><br />\n";
-        $_info .= '	<span style="color: #1a264e;font-weight: bold;">' . $this->errstr . "</span><br />\n";
+        $_info .= '	<span style="color: #1a264e;font-weight: bold;">' . htmlspecialchars($this->errstr, ENT_QUOTES, 'UTF-8') . "</span><br />\n";
         $_info .= '	<span style="color: #1a264e;">(Code: ' . $error_code2 . ")</span></div>\n";
         $_info .= "	<div style=\"width: 400px; margin-right: auto; margin-left: auto;text-align:center\">\n";
         $_info .= '	If you have any questions about this site,<br />please <a href="mailto:' . $strEncodedEmail . "\">contact</a> the site administrator for more information</div>\n";

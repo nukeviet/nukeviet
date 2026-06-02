@@ -24,7 +24,7 @@ $file = htmlspecialchars(trim($nv_Request->get_string('file', 'post,get')), ENT_
 $file = basename($file);
 
 if (empty($file) or !nv_is_file(NV_BASE_SITEURL . $path . '/' . $file, $path)) {
-    exit('ERROR#' . $lang_module['errorNotSelectFile'] . NV_ROOTDIR . '/' . $path . '/' . $file);
+    exit('ERROR#' . $lang_module['errorNotSelectFile'] . ' ' . $path . '/' . $file);
 }
 
 if ($nv_Request->isset_request('path', 'post') and $nv_Request->isset_request('direction', 'post')) {
@@ -66,7 +66,18 @@ if ($nv_Request->isset_request('path', 'post') and $nv_Request->isset_request('d
             $info = nv_getFileInfo($path, $file);
 
             $did = $array_dirname[$path];
-            $db->query('UPDATE ' . NV_UPLOAD_GLOBALTABLE . '_file SET filesize=' . $info['filesize'] . ", src='" . $info['src'] . "', srcwidth=" . $info['srcwidth'] . ', srcheight=' . $info['srcheight'] . ", sizes='" . $info['size'] . "', userid=" . $admin_info['userid'] . ', mtime=' . $info['mtime'] . ' WHERE did = ' . $did . " AND title = '" . $file . "'");
+            $stmt = $db->prepare('UPDATE ' . NV_UPLOAD_GLOBALTABLE . '_file SET filesize= :filesize, src= :src, srcwidth= :srcwidth, srcheight= :srcheight, sizes= :sizes, userid= :userid, mtime= :mtime WHERE did = :did AND title = :title');
+            $stmt->execute([
+                ':filesize' => $info['filesize'],
+                ':src' => $info['src'],
+                ':srcwidth' => $info['srcwidth'],
+                ':srcheight' => $info['srcheight'],
+                ':sizes' => $info['size'],
+                ':userid' => $admin_info['userid'],
+                ':mtime' => $info['mtime'],
+                ':did' => $did,
+                ':title' => $file
+            ]);
             nv_dirListRefreshSize();
         }
     }

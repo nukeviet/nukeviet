@@ -376,6 +376,10 @@ var nv_namecheck = /^([a-zA-Z0-9_-])+$/;
 var array_images = ["gif", "jpg", "jpeg", "pjpeg", "png", "webp"];
 var nv_loading_data = '<p class="upload-loading"><em class="fa fa-spin fa-spinner fa-2x m-bottom"></em><br />{LANG.waiting}...</p>';
 
+if (typeof nv_check_pass === 'undefined') {
+    var nv_check_pass = '{NV_CHECK_SESSION}';
+}
+
 // Resize images on clientside if we can
 var nv_resize = {
     width : {NV_MAX_WIDTH},

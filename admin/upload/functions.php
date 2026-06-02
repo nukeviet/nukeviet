@@ -406,6 +406,9 @@ function nv_getFileInfo($pathimg, $file)
     $info['type'] = 'file';
 
     $stat = @stat(NV_ROOTDIR . '/' . $pathimg . '/' . $file);
+    if (!$stat) {
+        return [];
+    }
     $info['filesize'] = $stat['size'];
 
     $info['src'] = NV_ASSETS_DIR . '/images/file.gif';
@@ -416,28 +419,30 @@ function nv_getFileInfo($pathimg, $file)
 
     if (in_array($ext, $array_images, true)) {
         $size = @getimagesize(NV_ROOTDIR . '/' . $pathimg . '/' . $file);
-        $info['type'] = 'image';
-        $info['src'] = $pathimg . '/' . $file;
-        $info['srcwidth'] = (int) ($size[0]);
-        $info['srcheight'] = (int) ($size[1]);
-        $info['size'] = (int) ($size[0]) . '|' . (int) ($size[1]);
+        if ($size) {
+            $info['type'] = 'image';
+            $info['src'] = $pathimg . '/' . $file;
+            $info['srcwidth'] = (int) ($size[0]);
+            $info['srcheight'] = (int) ($size[1]);
+            $info['size'] = (int) ($size[0]) . '|' . (int) ($size[1]);
 
-        if (preg_match('/^' . nv_preg_quote(NV_UPLOADS_DIR) . '\/([a-z0-9\-\_\.\/]+)$/i', $pathimg . '/' . $file)) {
-            if (($thub_src = nv_get_viewImage($pathimg . '/' . $file)) !== false) {
-                $info['src'] = $thub_src[0];
-                $info['srcwidth'] = $thub_src[1];
-                $info['srcheight'] = $thub_src[2];
+            if (preg_match('/^' . nv_preg_quote(NV_UPLOADS_DIR) . '\/([a-z0-9\-\_\.\/]+)$/i', $pathimg . '/' . $file)) {
+                if (($thub_src = nv_get_viewImage($pathimg . '/' . $file)) !== false) {
+                    $info['src'] = $thub_src[0];
+                    $info['srcwidth'] = $thub_src[1];
+                    $info['srcheight'] = $thub_src[2];
+                }
             }
-        }
 
-        if ($info['srcwidth'] > 80) {
-            $info['srcheight'] = round(80 / $info['srcwidth'] * $info['srcheight']);
-            $info['srcwidth'] = 80;
-        }
+            if ($info['srcwidth'] > 80) {
+                $info['srcheight'] = round(80 / $info['srcwidth'] * $info['srcheight']);
+                $info['srcwidth'] = 80;
+            }
 
-        if ($info['srcheight'] > 80) {
-            $info['srcwidth'] = round(80 / $info['srcheight'] * $info['srcwidth']);
-            $info['srcheight'] = 80;
+            if ($info['srcheight'] > 80) {
+                $info['srcwidth'] = round(80 / $info['srcheight'] * $info['srcwidth']);
+                $info['srcheight'] = 80;
+            }
         }
     } elseif (in_array($ext, $array_flash, true)) {
         $info['type'] = 'flash';
@@ -463,42 +468,58 @@ function nv_getFileInfo($pathimg, $file)
         }
     } elseif ($ext == 'svg') {
         $info['type'] = 'image';
-        // Đọc nội dung file SVG và phân tích an toàn, chặn XXE attack
-        $svgContent = @file_get_contents(NV_ROOTDIR . '/' . $pathimg . '/' . $file);
-        if ($svgContent !== false && ($xml = @simplexml_load_string($svgContent, 'SimpleXMLElement', LIBXML_NONET | LIBXML_NOERROR | LIBXML_NOWARNING)) !== false) {
-            $attr = $xml->attributes();
-            $maxWidth = $maxHeight = $width = $height = 0;
 
-            if (isset($attr['viewBox'])) {
-                $viewBox = explode(' ', (string) $attr['viewBox']);
-                if (isset($viewBox[3])) {
-                    $maxWidth = (int) ($viewBox[2]);
-                    $maxHeight = (int) ($viewBox[3]);
-                }
-            }
+        $dom = new \DOMDocument();
+        $prev_use_errors = libxml_use_internal_errors(true);
+        if (PHP_MAJOR_VERSION < 8) {
+            $prev_loader = libxml_disable_entity_loader(true);
+        }
+        $loaded = $dom->load(NV_ROOTDIR . '/' . $pathimg . '/' . $file, LIBXML_NONET);
+        if (PHP_MAJOR_VERSION < 8) {
+            libxml_disable_entity_loader($prev_loader);
+        }
+        libxml_clear_errors();
+        libxml_use_internal_errors($prev_use_errors);
 
-            if (isset($attr['width']) and isset($attr['height'])) {
-                $width = (int) ($attr['width']);
-                $height = (int) ($attr['height']);
-            } else {
-                $width = $maxWidth;
-                $height = $maxHeight;
-            }
+        if ($loaded) {
+            $root = $dom->documentElement;
+            if ($root and strtolower($root->localName) === 'svg') {
+                $width = $root->getAttribute('width');
+                $height = $root->getAttribute('height');
+                $viewBox = $root->getAttribute('viewBox');
 
-            if ($width > 0 and $height > 0) {
-                $info['src'] = $pathimg . '/' . $file;
-                $info['srcwidth'] = $width;
-                $info['srcheight'] = $height;
-                $info['size'] = (int) $width . '|' . (int) $height;
-
-                if ($info['srcwidth'] > 80) {
-                    $info['srcheight'] = round(80 / $info['srcwidth'] * $info['srcheight']);
-                    $info['srcwidth'] = 80;
+                $maxWidth = $maxHeight = 0;
+                if (!empty($viewBox)) {
+                    $parts = preg_split('/[\s,]+/', trim($viewBox));
+                    if (isset($parts[3])) {
+                        $maxWidth = (int) $parts[2];
+                        $maxHeight = (int) $parts[3];
+                    }
                 }
 
-                if ($info['srcheight'] > 80) {
-                    $info['srcwidth'] = round(80 / $info['srcheight'] * $info['srcwidth']);
-                    $info['srcheight'] = 80;
+                if (!empty($width) and !empty($height)) {
+                    $width = (int) $width;
+                    $height = (int) $height;
+                } else {
+                    $width = $maxWidth;
+                    $height = $maxHeight;
+                }
+
+                if ($width > 0 and $height > 0) {
+                    $info['src'] = $pathimg . '/' . $file;
+                    $info['srcwidth'] = $width;
+                    $info['srcheight'] = $height;
+                    $info['size'] = (int) $width . '|' . (int) $height;
+
+                    if ($info['srcwidth'] > 80) {
+                        $info['srcheight'] = round(80 / $info['srcwidth'] * $info['srcheight']);
+                        $info['srcwidth'] = 80;
+                    }
+
+                    if ($info['srcheight'] > 80) {
+                        $info['srcwidth'] = round(80 / $info['srcheight'] * $info['srcwidth']);
+                        $info['srcheight'] = 80;
+                    }
                 }
             }
         }

@@ -19,6 +19,12 @@ $page_title = $table_caption = $lang_module['editcensor'];
 if ($nv_Request->isset_request('del', 'post')) {
     $userid = $nv_Request->get_int('userid', 'post', 0);
 
+    // Kiểm tra CSRF Token
+    $checkss = md5(NV_CHECK_SESSION . '_' . $module_name . '_' . $op . '_' . $userid);
+    if ($checkss != $nv_Request->get_string('checkss', 'post')) {
+        nv_htmlOutput('ERROR CSRF Token');
+    }
+
     // Kiểm tra quyền
     $allow = false;
 
@@ -32,7 +38,11 @@ if ($nv_Request->isset_request('del', 'post')) {
         }
     }
 
-    if ($global_config['idsite'] > 0 and $row['idsite'] != $global_config['idsite'] and $admin_info['admin_id'] != $userid) {
+    // Lấy idsite của yêu cầu chỉnh sửa cần xóa
+    $sql_edit = 'SELECT tb2.idsite FROM ' . NV_MOD_TABLE . '_edit tb1 INNER JOIN ' . NV_MOD_TABLE . ' tb2 ON tb1.userid=tb2.userid WHERE tb1.userid=' . $userid;
+    $row_edit = $db->query($sql_edit)->fetch();
+
+    if ($global_config['idsite'] > 0 and !empty($row_edit) and $row_edit['idsite'] != $global_config['idsite'] and $admin_info['admin_id'] != $userid) {
         $allow = false;
     }
 
@@ -51,6 +61,15 @@ if ($nv_Request->isset_request('del', 'post')) {
 if ($nv_Request->isset_request('approved', 'post')) {
     $userid = $nv_Request->get_int('userid', 'post', 0);
 
+    // Kiểm tra CSRF Token
+    $checkss = md5(NV_CHECK_SESSION . '_' . $module_name . '_' . $op . '_' . $userid);
+    if ($checkss != $nv_Request->get_string('checkss', 'post')) {
+        nv_jsonOutput([
+            'status' => 'ERROR',
+            'mess' => 'CSRF token invalid',
+        ]);
+    }
+
     // Kiểm tra quyền
     $allow = false;
 
@@ -64,7 +83,11 @@ if ($nv_Request->isset_request('approved', 'post')) {
         }
     }
 
-    if ($global_config['idsite'] > 0 and $row['idsite'] != $global_config['idsite'] and $admin_info['admin_id'] != $userid) {
+    // Lấy dữ liệu yêu cầu chỉnh sửa (cần thiết cho kiểm tra idsite)
+    $sql = 'SELECT * FROM ' . NV_MOD_TABLE . '_edit tb1, ' . NV_MOD_TABLE . ' tb2 WHERE tb1.userid=tb2.userid AND tb1.userid=' . $userid;
+    $row = $db->query($sql)->fetch();
+
+    if ($global_config['idsite'] > 0 and !empty($row) and $row['idsite'] != $global_config['idsite'] and $admin_info['admin_id'] != $userid) {
         $allow = false;
     }
 
@@ -74,9 +97,6 @@ if ($nv_Request->isset_request('approved', 'post')) {
             'mess' => 'Not allowed!!!',
         ]);
     }
-
-    $sql = 'SELECT * FROM ' . NV_MOD_TABLE . '_edit tb1, ' . NV_MOD_TABLE . ' tb2 WHERE tb1.userid=tb2.userid AND tb1.userid=' . $userid;
-    $row = $db->query($sql)->fetch();
 
     $sql = 'SELECT * FROM ' . NV_MOD_TABLE . '_info WHERE userid=' . $userid;
     $row_info = $db->query($sql)->fetch();
@@ -132,7 +152,7 @@ if ($nv_Request->isset_request('approved', 'post')) {
             gender=' . $db->quote($custom_fields['gender']) . ',
             birthday=' . (int) ($custom_fields['birthday']) . ',
             sig=' . $db->quote($custom_fields['sig']) . ',
-            view_mail=' . $custom_fields['view_mail'] . ',
+            view_mail=' . (int)($custom_fields['view_mail']) . ',
             last_update=' . NV_CURRENTTIME . '
         WHERE userid=' . $userid);
 
@@ -171,7 +191,7 @@ if (!empty($reviewuid)) {
         }
     }
 
-    if ($global_config['idsite'] > 0 and $row['idsite'] != $global_config['idsite'] and $admin_info['admin_id'] != $reviewuid) {
+    if ($global_config['idsite'] > 0 and !empty($row_basic) and $row_basic['idsite'] != $global_config['idsite'] and $admin_info['admin_id'] != $reviewuid) {
         $allow = false;
     }
 
@@ -209,6 +229,16 @@ if (!empty($reviewuid)) {
 
     // Xác nhận duyệt thông tin chỉnh sửa
     if ($nv_Request->isset_request('confirm', 'post')) {
+        // Kiểm tra CSRF Token
+        $checkss = md5(NV_CHECK_SESSION . '_' . $module_name . '_' . $op . '_' . $reviewuid);
+        if ($checkss != $nv_Request->get_string('checkss', 'post')) {
+            nv_jsonOutput([
+                'status' => 'error',
+                'mess' => 'CSRF token invalid',
+                'input' => '',
+            ]);
+        }
+
         $custom_fields = array_merge($row_basic, $row_info, $nv_Request->get_array('custom_fields', 'post'));
         if (!empty($info_basic)) {
             $_user = [];
@@ -244,7 +274,7 @@ if (!empty($reviewuid)) {
                 gender=' . $db->quote($_user['gender']) . ',
                 birthday=' . (int) ($_user['birthday']) . ',
                 sig=' . $db->quote($_user['sig']) . ',
-                view_mail=' . $_user['view_mail'] . ',
+                view_mail=' . (int)($_user['view_mail']) . ',
                 last_update=' . NV_CURRENTTIME . '
             WHERE userid=' . $reviewuid);
         }
@@ -271,6 +301,7 @@ if (!empty($reviewuid)) {
     $xtpl->assign('LANG', $lang_module);
     $xtpl->assign('GLANG', $lang_global);
     $xtpl->assign('REVIEWUID', $reviewuid);
+    $xtpl->assign('CHECKSS', md5(NV_CHECK_SESSION . '_' . $module_name . '_' . $op . '_' . $reviewuid));
     $xtpl->assign('FORM_ACTION', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;reviewuid=' . $reviewuid);
 
     $page_title .= ': ' . $row_basic['username'];
@@ -459,8 +490,8 @@ $methods = [
         'selected' => ''
     ]
 ];
-$method = $nv_Request->isset_request('method', 'post') ? $nv_Request->get_string('method', 'post', '') : ($nv_Request->isset_request('method', 'get') ? urldecode($nv_Request->get_string('method', 'get', '')) : '');
-$methodvalue = $nv_Request->isset_request('value', 'post') ? $nv_Request->get_string('value', 'post') : ($nv_Request->isset_request('value', 'get') ? urldecode($nv_Request->get_string('value', 'get', '')) : '');
+$method = $nv_Request->isset_request('method', 'post') ? $nv_Request->get_string('method', 'post', '') : ($nv_Request->isset_request('method', 'get') ? $nv_Request->get_string('method', 'get', '') : '');
+$methodvalue = $nv_Request->isset_request('value', 'post') ? $nv_Request->get_string('value', 'post') : ($nv_Request->isset_request('value', 'get') ? $nv_Request->get_string('value', 'get', '') : '');
 
 $orders = [
     'userid',
@@ -575,6 +606,7 @@ foreach ($head_tds as $head_td) {
 }
 
 foreach ($users_list as $u) {
+    $u['checkss'] = md5(NV_CHECK_SESSION . '_' . $module_name . '_' . $op . '_' . $u['userid']);
     $xtpl->assign('CONTENT_TD', $u);
 
     // Kiểm duyệt tài khoản thành viên hoặc chính bản thân hoặc admin cấp thấp hơn

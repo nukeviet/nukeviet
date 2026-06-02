@@ -149,9 +149,9 @@ if ($nv_Request->isset_request('act', 'get')) {
                 $query_field[$row_f['field']] = $db->quote($users_info[$row_f['field']]);
             } else {
                 if ($row_f['field_type'] == 'number' or $row_f['field_type'] == 'date') {
-                    $$query_field[$row_f['field']] = (float) ($row_f['default_value']);
+                    $query_field[$row_f['field']] = (float) ($row_f['default_value']);
                 } else {
-                    $$query_field[$row_f['field']] = $db->quote($row_f['default_value']);
+                    $query_field[$row_f['field']] = $db->quote($row_f['default_value']);
                 }
             }
         }

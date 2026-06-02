@@ -125,12 +125,12 @@ if (!empty($linktags['link'])) {
     foreach ($linktags['link'] as $key => $val) {
         $title = [];
         foreach ($val as $attribute => $v) {
-            $title[] = $attribute . (!empty($v) ? '=&quot;' . $v . '&quot;' : '');
+            $title[] = $attribute . (!empty($v) ? '=&quot;' . nv_htmlspecialchars($v, 'attribute') . '&quot;' : '');
 
             if ($attribute != 'rel') {
                 $xtpl->assign('ATTRIBUTE', [
                     'k' => $attribute,
-                    'v' => $v
+                    'v' => nv_htmlspecialchars($v, 'attribute')
                 ]);
                 $xtpl->parse('main.if_links.item.attr');
             }
@@ -139,7 +139,7 @@ if (!empty($linktags['link'])) {
         $item = [
             'key' => $key,
             'title' => $title,
-            'rel' => $val['rel']
+            'rel' => nv_htmlspecialchars($val['rel'], 'attribute')
         ];
         $xtpl->assign('LINK_TAGS', $item);
         $xtpl->parse('main.if_links.item');

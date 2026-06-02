@@ -210,11 +210,41 @@ function nv_store_cookies($cookies = [], $currCookies = [])
  * @param mixed $extConfig
  * @return
  */
-function nv_check_ext_config_filecontent($extConfig)
+function nv_check_ext_config_filecontent(&$extConfig)
 {
     if (!isset($extConfig['extension']) or !isset($extConfig['author']) or !isset($extConfig['note']) or !isset($extConfig['extension']['id']) or !isset($extConfig['extension']['type']) or !isset($extConfig['extension']['name']) or !isset($extConfig['extension']['version']) or !isset($extConfig['author']['name']) or !isset($extConfig['author']['email']) or !isset($extConfig['note']['text'])) {
         return false;
     }
+
+    // Lọc bỏ HTML tags
+    $extConfig['extension']['name'] = strip_tags(trim($extConfig['extension']['name']));
+    $extConfig['extension']['type'] = strip_tags(trim($extConfig['extension']['type']));
+    $extConfig['extension']['version'] = strip_tags(trim($extConfig['extension']['version']));
+    $extConfig['author']['name'] = strip_tags(trim($extConfig['author']['name']));
+    $extConfig['author']['email'] = strip_tags(trim($extConfig['author']['email']));
+    $extConfig['note']['text'] = strip_tags(trim($extConfig['note']['text']));
+
+    // Kiểm tra kiểu dữ liệu và định dạng hợp lệ
+    if (!preg_match('/^[0-9]+$/', $extConfig['extension']['id'])) {
+        return false;
+    }
+
+    if (!preg_match('/^[a-z0-9]+$/i', $extConfig['extension']['type'])) {
+        return false;
+    }
+
+    if (!preg_match('/^[a-z0-9\.]+$/i', $extConfig['extension']['version'])) {
+        return false;
+    }
+
+    if (!filter_var($extConfig['author']['email'], FILTER_VALIDATE_EMAIL)) {
+        return false;
+    }
+
+    // Các trường còn lại không biết cấu trúc chính xác mới dùng nv_htmlspecialchars
+    $extConfig['extension']['name'] = nv_htmlspecialchars($extConfig['extension']['name']);
+    $extConfig['author']['name'] = nv_htmlspecialchars($extConfig['author']['name']);
+    $extConfig['note']['text'] = nv_htmlspecialchars($extConfig['note']['text']);
 
     return true;
 }

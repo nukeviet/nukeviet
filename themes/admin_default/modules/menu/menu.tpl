@@ -7,7 +7,8 @@
 <!-- END: error -->
 
 <form action="{NV_BASE_ADMINURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&amp;{NV_NAME_VARIABLE}={MODULE_NAME}&amp;{NV_OP_VARIABLE}={OP}" method="post">
-	<input type="hidden" name ="id" value="{DATAFORM.id}" />
+	<input type="hidden" name="id" value="{DATAFORM.id}" />
+	<input type="hidden" name="checkss" value="{CHECKSS}" />
 	<input name="save" type="hidden" value="1" />
 	<div class="table-responsive">
 		<table class="table table-striped table-bordered table-hover">

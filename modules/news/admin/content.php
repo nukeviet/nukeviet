@@ -587,6 +587,7 @@ if ($is_submit_form) {
         $rowcontent['archive'] = ($rowcontent['exptime'] > NV_CURRENTTIME) ? 1 : 2;
     }
     $rowcontent['title'] = $nv_Request->get_title('title', 'post', '', 1);
+
     // Xử lý file đính kèm
     $rowcontent['files'] = [];
     $fileupload = $nv_Request->get_array('files', 'post');
@@ -594,13 +595,9 @@ if ($is_submit_form) {
         $fileupload = array_map('trim', $fileupload);
         $fileupload = array_unique($fileupload);
         foreach ($fileupload as $_file) {
-            if (preg_match('/^' . str_replace('/', "\/", NV_BASE_SITEURL . NV_UPLOADS_DIR) . "\//", $_file)) {
-                $_file = substr($_file, strlen(NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/'));
-
-                if (file_exists(NV_UPLOADS_REAL_DIR . '/' . $module_upload . '/' . $_file)) {
-                    $rowcontent['files'][] = $_file;
-                }
-            } elseif (preg_match('/^http*/', $_file)) {
+            if (nv_is_file($_file, NV_UPLOADS_DIR . '/' . $module_upload)) {
+                $rowcontent['files'][] =  substr($_file, strlen(NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/'));
+            } elseif (nv_is_url($_file)) {
                 $rowcontent['files'][] = $_file;
             }
         }

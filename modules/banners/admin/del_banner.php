@@ -12,17 +12,21 @@
 if (!defined('NV_IS_FILE_ADMIN')) {
     exit('Stop!!!');
 }
+
 $id = $nv_Request->get_int('id', 'post,get');
+if ($nv_Request->get_title('checkss', 'post,get') != md5($id . NV_CHECK_SESSION)) {
+    nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=banners_list');
+}
 
 $sql = 'SELECT * FROM ' . NV_BANNERS_GLOBALTABLE . '_rows WHERE id=' . $id;
 $row = $db->query($sql)->fetch();
 
 if (!empty($row)) {
-    if (!empty($row['file_name']) and file_exists(NV_UPLOADS_REAL_DIR . '/' . NV_BANNER_DIR . '/' . $row['file_name'])) {
+    if (!empty($row['file_name']) and nv_is_file(NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . NV_BANNER_DIR . '/' . $row['file_name'], NV_UPLOADS_DIR . '/' . NV_BANNER_DIR)) {
         nv_deletefile(NV_UPLOADS_REAL_DIR . '/' . NV_BANNER_DIR . '/' . $row['file_name'], false);
     }
 
-    if (!empty($row['imageforswf']) and file_exists(NV_UPLOADS_REAL_DIR . '/' . NV_BANNER_DIR . '/' . $row['imageforswf'])) {
+    if (!empty($row['imageforswf']) and nv_is_file(NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . NV_BANNER_DIR . '/' . $row['imageforswf'], NV_UPLOADS_DIR . '/' . NV_BANNER_DIR)) {
         nv_deletefile(NV_UPLOADS_REAL_DIR . '/' . NV_BANNER_DIR . '/' . $row['imageforswf'], false);
     }
     $sql = 'DELETE FROM ' . NV_BANNERS_GLOBALTABLE . '_rows WHERE id=' . $id;

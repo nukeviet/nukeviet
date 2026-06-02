@@ -156,11 +156,10 @@ if ($nv_Request->isset_request('gid, getuserid', 'post, get')) {
                     continue;
                 }
                 if ($row_f['field_type'] == 'number' or $row_f['field_type'] == 'date') {
-                    $default_value = (float) ($row_f['default_value']);
+                    $query_field[$row_f['field']] = (isset($users_info[$row_f['field']])) ? (float) $users_info[$row_f['field']] : (float) $row_f['default_value'];
                 } else {
-                    $default_value = $db->quote($row_f['default_value']);
+                    $query_field[$row_f['field']] = (isset($users_info[$row_f['field']])) ? $db->quote($users_info[$row_f['field']]) : $db->quote($row_f['default_value']);
                 }
-                $query_field[$row_f['field']] = (isset($users_info[$row_f['field']])) ? $users_info[$row_f['field']] : $default_value;
             }
 
             if ($db->exec('INSERT INTO ' . NV_MOD_TABLE . '_info (' . implode(', ', array_keys($query_field)) . ') VALUES (' . implode(', ', array_values($query_field)) . ')')) {
@@ -203,7 +202,7 @@ if ($nv_Request->isset_request('gid, getuserid', 'post, get')) {
         $array_user = [];
         $generate_page = '';
 
-        $array['user_id'] = $nv_Request->get_title('user_id', 'get', '');
+        $array['user_id'] = $nv_Request->get_int('user_id', 'get', 0);
         $array['username'] = $nv_Request->get_title('username', 'get', '');
         $array['full_name'] = $nv_Request->get_title('full_name', 'get', '');
         $array['email'] = $nv_Request->get_title('email', 'get', '');
@@ -515,8 +514,13 @@ if (sizeof($array_op) == 3 and $array_op[0] == 'groups' and $array_op[1] and $ar
             ]);
         }
         $rowcontent['group_desc'] = $nv_Request->get_title('group_desc', 'post', '', 1);
-        $group_content = $nv_Request->get_string('group_content', 'post', '');
-        $rowcontent['group_content'] = defined('NV_EDITOR') ? nv_nl2br($group_content, '') : nv_nl2br(nv_htmlspecialchars(strip_tags($group_content)), '<br />');
+
+        if (defined('NV_EDITOR') and nv_function_exists('nv_aleditor')) {
+            $rowcontent['group_content'] = $nv_Request->get_editor('group_content', '', NV_ALLOWED_HTML_TAGS);
+            $rowcontent['group_content'] = nv_nl2br($rowcontent['group_content'], '');
+        } else {
+            $rowcontent['group_content'] = $nv_Request->get_textarea('group_content', '', NV_ALLOWED_HTML_TAGS, true);
+        }
 
         $stmt = $db->prepare('UPDATE ' . NV_MOD_TABLE . '_groups_detail
             SET title = :title, description = :description, content = :content
@@ -536,10 +540,11 @@ if (sizeof($array_op) == 3 and $array_op[0] == 'groups' and $array_op[1] and $ar
         ]);
     }
 
-    $htmlbodyhtml = htmlspecialchars(nv_editor_br2nl($groupsList[$group_id]['content']));
     if (defined('NV_EDITOR') and nv_function_exists('nv_aleditor')) {
+        $htmlbodyhtml = htmlspecialchars(nv_editor_br2nl($groupsList[$group_id]['content']));
         $htmlbodyhtml = nv_aleditor('group_content', '100%', '300px', $htmlbodyhtml, 'Basic');
     } else {
+        $htmlbodyhtml = nv_htmlspecialchars(nv_br2nl($groupsList[$group_id]['content']));
         $htmlbodyhtml = '<textarea class="textareaform" name="group_content" id="group_content" cols="60" rows="15">' . $htmlbodyhtml . '</textarea>';
     }
 

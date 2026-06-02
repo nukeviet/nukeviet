@@ -70,7 +70,7 @@ if ($nv_Request->get_int('save', 'post') == '1') {
     $note = $nv_Request->get_editor('note', '', NV_ALLOWED_HTML_TAGS);
 
     $image = $nv_Request->get_string('image', 'post', '', 1);
-    if (is_file(NV_DOCUMENT_ROOT . $image)) {
+    if (nv_is_file($image, NV_UPLOADS_DIR . '/' . $module_upload)) {
         $lu = strlen(NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/');
         $image = substr($image, $lu);
     } else {

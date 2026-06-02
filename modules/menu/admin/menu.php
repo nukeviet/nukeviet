@@ -19,7 +19,11 @@ $arr['id'] = $nv_Request->get_int('id', 'post,get', 0);
 $error = '';
 
 // Add/Edit menu
-if ($nv_Request->get_int('save', 'post')) {
+if ($nv_Request->isset_request('save', 'post')) {
+    if (!csrf_check($nv_Request->get_string('checkss', 'post'), 'menu_save')) {
+        nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
+    }
+
     $arr['title'] = $nv_Request->get_title('title', 'post', '', 1);
     if (empty($arr['title'])) {
         $error = $lang_module['error_menu_block'];
@@ -149,6 +153,7 @@ if (!empty($error)) {
 }
 
 $xtpl->assign('DATAFORM', $arr);
+$xtpl->assign('CHECKSS', csrf_create('menu_save'));
 unset($site_mods['menu'], $site_mods['comment']);
 foreach ($site_mods as $mod_name => $modvalues) {
     $xtpl->assign('OPTIONVALUE', $mod_name);
