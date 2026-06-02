@@ -272,15 +272,19 @@ function nv_get_viewImage($fileName, $refresh = 0)
 
         if (file_exists(NV_ROOTDIR . '/' . $viewFile)) {
             if ($refresh) {
-                @nv_deletefile(NV_ROOTDIR . '/' . $viewFile);
+                nv_deletefile(NV_ROOTDIR . '/' . $viewFile);
             } else {
-                $size = @getimagesize(NV_ROOTDIR . '/' . $viewFile);
+                $size = getimagesize(NV_ROOTDIR . '/' . $viewFile);
+                if (is_array($size)) {
+                    return [
+                        $viewFile,
+                        $size[0],
+                        $size[1]
+                    ];
+                }
 
-                return [
-                    $viewFile,
-                    $size[0],
-                    $size[1]
-                ];
+                // Thumbnail file bị hỏng, xóa để tạo lại
+                nv_deletefile(NV_ROOTDIR . '/' . $viewFile);
             }
         }
 
@@ -368,13 +372,12 @@ function nv_get_viewImage($fileName, $refresh = 0)
             return false;
         }
     } else {
-        $size = @getimagesize(NV_ROOTDIR . '/' . $fileName);
-
-        return [
+        $size = getimagesize(NV_ROOTDIR . '/' . $fileName);
+        return is_array($size) ? [
             $fileName,
             $size[0],
             $size[1]
-        ];
+        ] : false;
     }
 
     return false;
