@@ -30,7 +30,7 @@ if ($id > 0) {
             if (!empty($client_info['referer'])) {
                 $click_ref = nv_is_url($client_info['referer']) ? nv_substr($client_info['referer'], 0, 250) : '#';
             }
-            
+
             $db->query('UPDATE ' . NV_BANNERS_GLOBALTABLE . '_rows SET hits_total=hits_total+1 WHERE id=' . $id);
             $sql = 'INSERT INTO ' . NV_BANNERS_GLOBALTABLE . '_click (
                 bid, click_time, click_day, click_ip, click_country, click_browse_key, click_browse_name, click_os_key, click_os_name, click_ref
@@ -42,9 +42,11 @@ if ($id > 0) {
             );';
             $db->query($sql);
         }
+
+        if (!empty($links) and !nv_is_url($links)) {
+            $links = NV_MY_DOMAIN;
+        }
     }
-if (!empty($links) and !nv_is_url($links)) {
-    $links = NV_MY_DOMAIN;
 }
 
 include NV_ROOTDIR . '/includes/header.php';
