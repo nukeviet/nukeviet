@@ -118,6 +118,7 @@ if (defined('NV_BANNER_WEIGHT')) {
 
 $rows = $db->query($sql)->fetchAll();
 $array_userids = $array_users = [];
+$had_expiry_update = false;
 
 if (defined('NV_BANNER_WEIGHT')) {
     $num = $db->query('SELECT COUNT(*) FROM ' . NV_BANNERS_GLOBALTABLE . '_rows WHERE act IN(0,1,3) AND pid=' . $pid)->fetchColumn();
@@ -127,6 +128,11 @@ foreach ($rows as $row) {
     if ($row['exp_time'] != 0 and $row['exp_time'] <= NV_CURRENTTIME) {
         $db->exec('UPDATE ' . NV_BANNERS_GLOBALTABLE . '_rows SET act=2 WHERE id=' . $row['id']);
         $row['act'] = 2;
+        $had_expiry_update = true;
+    } elseif ($row['act'] == 0 && $row['publ_time'] <= NV_CURRENTTIME) {
+        $db->exec('UPDATE ' . NV_BANNERS_GLOBALTABLE . '_rows SET act=1 WHERE id=' . $row['id']);
+        $row['act'] = 1;
+        $had_expiry_update = true;
     }
 
     $weight_banner = '';
@@ -170,6 +176,10 @@ foreach ($rows as $row) {
     if (!empty($row['clid'])) {
         $array_userids[$row['clid']] = $row['clid'];
     }
+}
+
+if ($had_expiry_update) {
+    nv_CreateXML_bannerPlan();
 }
 
 // Xác định người đăng
