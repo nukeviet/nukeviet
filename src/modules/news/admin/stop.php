@@ -21,7 +21,7 @@ if (!empty($checkss) and csrf_check($checkss, $csrf_key)) {
     $id_array = array_map('intval', explode(',', $listid));
 
     $exp_array = [];
-    $sql = 'SELECT id, listcatid, publtime, exptime, status FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE id IN (' . implode(',', $id_array) . ')';
+    $sql = 'SELECT id, listcatid, admin_id, publtime, exptime, status FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE id IN (' . implode(',', $id_array) . ')';
     $result = $db->query($sql);
     while ($_row = $result->fetch()) {
         if (($_row['exptime'] == 0 or $_row['exptime'] > NV_CURRENTTIME) and $_row['status'] != 4 and $_row['status'] <= $global_code_defined['row_locked_status']) {
@@ -41,7 +41,7 @@ if (!empty($checkss) and csrf_check($checkss, $csrf_key)) {
                                 ++$check_edit;
                             } elseif ($array_cat_admin[$admin_id][$catid_i]['pub_content'] == 1 and ($_row['status'] == 0 or $_row['status'] == 2)) {
                                 ++$check_edit;
-                            } elseif ($_row['status'] == 0 and isset($_row['post_id']) and $_row['post_id'] == $admin_id) { // NOTE: post_id has NOT been mapped in SELECT! I will leave it as post_id if it exists, but I should check. In original, $post_id was retrieved in decliend.php, but stop.php doesn't select post_id in query (SELECT id, listcatid, publtime, exptime, status). Ah, wait, if post_id used but not selected, it'll be warning. Let me check the original $post_id! It was used but not defined.
+                            } elseif ($_row['status'] == 0 and $_row['admin_id'] == $admin_id) {
                                 ++$check_edit;
                             } elseif ($_row['status'] == 2) {
                                 ++$check_edit;
@@ -57,7 +57,7 @@ if (!empty($checkss) and csrf_check($checkss, $csrf_key)) {
                 $stmt_update = $db->prepare('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_rows SET status = 0 WHERE id = :id');
                 $stmt_update->bindValue(':id', $_row['id'], PDO::PARAM_INT);
                 $stmt_update->execute();
-                
+
                 foreach ($arr_catid as $catid_i) {
                     $stmt_update_cat = $db->prepare('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_' . intval($catid_i) . ' SET status = 0 WHERE id = :id');
                     $stmt_update_cat->bindValue(':id', $_row['id'], PDO::PARAM_INT);
