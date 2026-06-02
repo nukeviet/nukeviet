@@ -48,7 +48,7 @@ if (preg_match('/^([a-z0-9\-\_]+)$/', $oauth_config, $m) and file_exists(NV_ROOT
         }
         $array_config['is_user_forum'] = $nv_Request->get_int('is_user_forum', 'post', 0);
         $array_config['dir_forum'] = $nv_Request->get_string('dir_forum', 'post');
-        if (!is_dir(NV_ROOTDIR . '/' . $array_config['dir_forum'] . '/nukeviet')) {
+        if (!is_dir(NV_ROOTDIR . '/' . $array_config['dir_forum'] . '/nukeviet') or !preg_match('/^[a-zA-Z0-9\-\_]+$/', $array_config['dir_forum'])) {
             $array_config['dir_forum'] = '';
         }
 
@@ -194,8 +194,12 @@ if (preg_match('/^([a-z0-9\-\_]+)$/', $oauth_config, $m) and file_exists(NV_ROOT
             $access_admin['access_delus'] = $nv_Request->get_typed_array('access_delus', 'post', 'bool');
             $access_admin['access_passus'] = $nv_Request->get_typed_array('access_passus', 'post', 'bool');
             $access_admin['access_groups'] = $nv_Request->get_typed_array('access_groups', 'post', 'bool');
-            $sql = 'UPDATE ' . NV_MOD_TABLE . "_config SET content='" . serialize($access_admin) . "', edit_time=" . NV_CURRENTTIME . " WHERE config='access_admin'";
-            $db->query($sql);
+
+            $stmt = $db->prepare('UPDATE ' . NV_MOD_TABLE . '_config SET content = :content, edit_time = :edit_time WHERE config = \'access_admin\'');
+            $stmt->bindValue(':content', serialize($access_admin), PDO::PARAM_STR);
+            $stmt->bindValue(':edit_time', NV_CURRENTTIME, PDO::PARAM_INT);
+            $stmt->execute();
+
             nv_save_file_config_global();
         }
         nv_insert_logs(NV_LANG_DATA, $module_name, $lang_module['ChangeConfigModule'], '', $admin_info['userid']);

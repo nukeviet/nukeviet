@@ -1378,7 +1378,7 @@ $("input[name=newPathOK]").click(function() {
         $.ajax({
             type: "POST",
             url: nv_module_url + "moveimg&num=" + nv_randomNum(10),
-            data: "path=" + currentFolder + "&newpath=" + newPath + "&file=" + selFile + "&mirror=" + mirrorFile,
+            data: "path=" + currentFolder + "&newpath=" + newPath + "&file=" + selFile + "&mirror=" + mirrorFile + "&checkss=" + nv_check_pass,
             success: function(e) {
                 var e = e.split("#");
 

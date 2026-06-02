@@ -25,11 +25,18 @@ $height = $nv_Request->get_int('height', 'post');
 $imagename = htmlspecialchars(trim($nv_Request->get_string('img', 'post')), ENT_QUOTES);
 $imagename = basename($imagename);
 
-$file = preg_replace('/^(.*)(\.[a-zA-Z]+)$/', '\1_' . $width . '_' . $height . '\2', $imagename);
+if (preg_match('/^(.*)(\.[a-zA-Z]+)$/', $imagename, $matches)) {
+    $file_old = $matches[1];
+    $file_ext = $matches[2];
+} else {
+    $file_old = $imagename;
+    $file_ext = '';
+}
 
 $i = 1;
+$file = $file_old . '_' . $width . '_' . $height . $file_ext;
 while (file_exists(NV_ROOTDIR . '/' . $path . '/' . $file)) {
-    $file = preg_replace('/^(.*)(\.[a-zA-Z]+)$/', '\1_' . $width . '_' . $height . '_' . $i . '\2', $imagename);
+    $file = $file_old . '_' . $width . '_' . $height . '_' . $i . $file_ext;
     ++$i;
 }
 
@@ -57,14 +64,26 @@ if (isset($array_dirname[$path])) {
     $did = $array_dirname[$path];
     $info = nv_getFileInfo($path, $file);
     $info['userid'] = $admin_info['userid'];
-    $db->query('INSERT INTO ' . NV_UPLOAD_GLOBALTABLE . "_file (
+
+    $sth = $db->prepare('INSERT INTO ' . NV_UPLOAD_GLOBALTABLE . '_file (
         name, ext, type, filesize, src, srcwidth, srcheight, sizes, userid, mtime, did, title
     ) VALUES (
-        '" . $info['name'] . "', '" . $info['ext'] . "', '" . $info['type'] . "', " . $info['filesize'] . ",
-        '" . $info['src'] . "', " . $info['srcwidth'] . ', ' . $info['srcheight'] . ",
-        '" . $info['size'] . "', " . $info['userid'] . ', ' . $info['mtime'] . ',
-        ' . $did . ", '" . $file . "'
-    )");
+        :name, :ext, :type, :filesize, :src, :srcwidth, :srcheight, :sizes, :userid, :mtime, :did, :title
+    )');
+    $sth->bindValue(':name', $info['name'], PDO::PARAM_STR);
+    $sth->bindValue(':ext', $info['ext'], PDO::PARAM_STR);
+    $sth->bindValue(':type', $info['type'], PDO::PARAM_STR);
+    $sth->bindValue(':filesize', $info['filesize'], PDO::PARAM_INT);
+    $sth->bindValue(':src', $info['src'], PDO::PARAM_STR);
+    $sth->bindValue(':srcwidth', $info['srcwidth'], PDO::PARAM_INT);
+    $sth->bindValue(':srcheight', $info['srcheight'], PDO::PARAM_INT);
+    $sth->bindValue(':sizes', $info['size'], PDO::PARAM_STR);
+    $sth->bindValue(':userid', $info['userid'], PDO::PARAM_INT);
+    $sth->bindValue(':mtime', $info['mtime'], PDO::PARAM_INT);
+    $sth->bindValue(':did', $did, PDO::PARAM_INT);
+    $sth->bindValue(':title', $file, PDO::PARAM_STR);
+    $sth->execute();
+
     nv_dirListRefreshSize();
 }
 
