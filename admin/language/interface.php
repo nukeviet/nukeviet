@@ -15,6 +15,9 @@ if (!defined('NV_IS_FILE_LANG')) {
 
 $dirlang_old = $nv_Request->get_string('dirlang', 'cookie', NV_LANG_DATA);
 $dirlang = $nv_Request->get_string('dirlang', 'get', $dirlang_old);
+if (!preg_match('/^([a-z]{2})$/', $dirlang)) {
+    $dirlang = '';
+}
 
 $page_title = $lang_module['nv_lang_interface'] . ': ' . $language_array[$dirlang]['name'];
 

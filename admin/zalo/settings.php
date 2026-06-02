@@ -13,6 +13,26 @@ if (!defined('NV_IS_FILE_ZALO')) {
     exit('Stop!!!');
 }
 
+/**
+ * zalo_escape_js()
+ * Escape chuỗi an toàn để nhúng trực tiếp vào dấu nháy đơn của JavaScript trong HTML/TPL
+ *
+ * @param string $str Chuỗi đầu vào
+ * @return string Chuỗi đã được escape an toàn
+ */
+function zalo_escape_js($str)
+{
+    if (empty($str)) {
+        return '';
+    }
+
+    // Tìm kiếm các ký tự đặc biệt và thay thế bằng định dạng an toàn cho JS nháy đơn
+    $search = ['\\', "'", "\r", "\n", '<', '>', '&'];
+    $replace = ['\\\\', "\\'", '\r', '\n', '\u003c', '\u003e', '\u0026'];
+
+    return str_replace($search, $replace, $str);
+}
+
 if ($nv_Request->get_string('func', 'get', '') == 'access_token_create') {
     $zalo = new NukeViet\Zalo\Zalo($global_config);
     $result = $zalo->oa_accesstoken_create(NV_MY_DOMAIN . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=settings&func=accesstoken');
@@ -20,7 +40,7 @@ if ($nv_Request->get_string('func', 'get', '') == 'access_token_create') {
     $xtpl = new XTemplate('settings.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
     if (empty($result)) {
         $err = $zalo->getError();
-        $xtpl->assign('ERROR', isset($lang_module[$err]) ? $lang_module[$err] : $err);
+        $xtpl->assign('ERROR', zalo_escape_js(isset($lang_module[$err]) ? $lang_module[$err] : $err));
         $xtpl->parse('isError');
         $contents = $xtpl->text('isError');
         include NV_ROOTDIR . '/includes/header.php';
@@ -28,7 +48,11 @@ if ($nv_Request->get_string('func', 'get', '') == 'access_token_create') {
         include NV_ROOTDIR . '/includes/footer.php';
     } elseif (isset($result['access_token'])) {
         accessTokenUpdate($result);
-        $xtpl->assign('RESULT', $result);
+        $result_safe = [
+            'access_token' => zalo_escape_js($result['access_token']),
+            'refresh_token' => zalo_escape_js($result['refresh_token'])
+        ];
+        $xtpl->assign('RESULT', $result_safe);
         $xtpl->parse('isSuccess');
         $contents = $xtpl->text('isSuccess');
         include NV_ROOTDIR . '/includes/header.php';
@@ -52,7 +76,7 @@ if ($nv_Request->get_string('func', 'get', '') == 'accesstoken' and $nv_Request-
     $xtpl = new XTemplate('settings.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
     if (empty($result)) {
         $err = $zalo->getError();
-        $xtpl->assign('ERROR', isset($lang_module[$err]) ? $lang_module[$err] : $err);
+        $xtpl->assign('ERROR', zalo_escape_js(isset($lang_module[$err]) ? $lang_module[$err] : $err));
         $xtpl->parse('isError');
         $contents = $xtpl->text('isError');
         include NV_ROOTDIR . '/includes/header.php';
@@ -60,7 +84,11 @@ if ($nv_Request->get_string('func', 'get', '') == 'accesstoken' and $nv_Request-
         include NV_ROOTDIR . '/includes/footer.php';
     } else {
         accessTokenUpdate($result);
-        $xtpl->assign('RESULT', $result);
+        $result_safe = [
+            'access_token' => zalo_escape_js($result['access_token']),
+            'refresh_token' => zalo_escape_js($result['refresh_token'])
+        ];
+        $xtpl->assign('RESULT', $result_safe);
         $xtpl->parse('isSuccess');
         $contents = $xtpl->text('isSuccess');
         include NV_ROOTDIR . '/includes/header.php';
@@ -106,7 +134,7 @@ $xtpl->assign('MODULE_NAME', $module_name);
 $xtpl->assign('OP', $op);
 
 if ($errormess != '') {
-    $xtpl->assign('ERROR', $errormess);
+    $xtpl->assign('ERROR', nv_htmlspecialchars($errormess));
     $xtpl->parse('main.error');
 }
 
