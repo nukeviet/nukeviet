@@ -20,10 +20,10 @@ if ($nv_Request->isset_request('checkss', 'get') and $nv_Request->get_string('ch
     $id_array = array_map('intval', explode(',', $listid));
 
     $exp_array = [];
-    $sql = 'SELECT id, listcatid, publtime, exptime, status FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE id in (' . implode(',', $id_array) . ')';
+    $sql = 'SELECT id, listcatid, admin_id, publtime, exptime, status FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE id in (' . implode(',', $id_array) . ')';
     $result = $db->query($sql);
     while ($_scratch = $result->fetch(3)) {
-        list($id, $listcatid, $publtime, $exptime, $status) = $_scratch;
+        list($id, $listcatid, $post_id, $publtime, $exptime, $status) = $_scratch;
         unset($_scratch);
         if (($exptime == 0 or $exptime > NV_CURRENTTIME) and $status != 4 and $status <= $global_code_defined['row_locked_status']) {
             $arr_catid = explode(',', $listcatid);
