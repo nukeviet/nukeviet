@@ -15,6 +15,9 @@ if (!defined('NV_IS_FILE_LANG')) {
 
 $dirlang_old = $nv_Request->get_string('drlg', 'cookie', NV_LANG_DATA);
 $dirlang = $nv_Request->get_string('dirlang', 'get', $dirlang_old);
+if (!preg_match('/^([a-z]{2})$/', $dirlang)) {
+    $dirlang = '';
+}
 
 $tpl = new \NukeViet\Template\NVSmarty();
 $tpl->setTemplateDir(get_module_tpl_dir('interface.tpl'));

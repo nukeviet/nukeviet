@@ -109,7 +109,7 @@ function nv_is_myreferer($referer = '')
         '/^[w]+\./'
     ], '', $referer);
 
-    if (preg_match('/^' . nv_preg_quote(NV_SERVER_NAME) . '/', $referer)) {
+    if (preg_match('/^' . nv_preg_quote(NV_SERVER_NAME) . '(\/|:|$)/', $referer)) {
         return 1;
     }
 

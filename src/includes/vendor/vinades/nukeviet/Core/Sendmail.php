@@ -102,11 +102,34 @@ class Sendmail extends PHPMailer
      * addFile()
      *
      * @param string $file
-     * @return true
+     * @return bool
      * @throws Exception
      */
     public function addFile($file)
     {
+        if (empty($file) || !is_file($file) || !is_readable($file)) {
+            return false;
+        }
+
+        $realpath = realpath($file);
+        if ($realpath === false) {
+            return false;
+        }
+        $realpath = str_replace('\\', '/', $realpath);
+
+        if (defined('NV_ROOTDIR')) {
+            $rootdir = str_replace('\\', '/', NV_ROOTDIR);
+            if (strpos($realpath, $rootdir) !== 0) {
+                return false;
+            }
+        }
+
+        $ext = strtolower(pathinfo($realpath, PATHINFO_EXTENSION));
+        $forbidden_exts = ['php', 'php3', 'php4', 'php5', 'php7', 'php8', 'phtml', 'phar', 'inc', 'htaccess', 'ini', 'env'];
+        if (in_array($ext, $forbidden_exts, true)) {
+            return false;
+        }
+
         $this->addAttachment($file);
 
         return true;

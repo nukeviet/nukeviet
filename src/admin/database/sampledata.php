@@ -253,7 +253,7 @@ if ($nv_Request->isset_request('startwrite', 'get')) {
                                     // Các bảng chực hiện thực hiện REPLACE
                                     $row2 = [];
                                     foreach ($columns as $key => $kt) {
-                                        $row2[] = isset($row[$key]) ? (($kt == 'int') ? $row[$key] : "'" . str_replace('$', '\$', addslashes($row[$key])) . "'") : 'NULL';
+                                        $row2[] = isset($row[$key]) ? (($kt == 'int') ? $row[$key] : "'" . str_replace(['\\', '"', '$'], ['\\\\', '\\"', '\\$'], addslashes($row[$key])) . "'") : 'NULL';
                                     }
                                     $row2 = implode(', ', $row2);
                                     $row2 = str_replace('{{NV_BASE_SITEURL}}', '" . NV_BASE_SITEURL . "', $row2);
@@ -263,7 +263,7 @@ if ($nv_Request->isset_request('startwrite', 'get')) {
                                 // Các bảng chực hiện thực hiện Insert
                                 $row2 = [];
                                 foreach ($columns as $key => $kt) {
-                                    $row2[] = isset($row[$key]) ? (($kt == 'int') ? $row[$key] : "'" . str_replace('$', '\$', addslashes($row[$key])) . "'") : 'NULL';
+                                    $row2[] = isset($row[$key]) ? (($kt == 'int') ? $row[$key] : "'" . str_replace(['\\', '"', '$'], ['\\\\', '\\"', '\\$'], addslashes($row[$key])) . "'") : 'NULL';
                                 }
                                 $row2 = implode(', ', $row2);
                                 $row2 = str_replace('{{NV_BASE_SITEURL}}', '" . NV_BASE_SITEURL . "', $row2);

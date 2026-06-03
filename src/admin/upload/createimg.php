@@ -35,11 +35,18 @@ $height = $nv_Request->get_int('height', 'post');
 $imagename = htmlspecialchars(trim($nv_Request->get_string('img', 'post')), ENT_QUOTES);
 $imagename = basename($imagename);
 
-$file = preg_replace('/^(.*)(\.[a-zA-Z]+)$/', '\1_' . $width . '_' . $height . '\2', $imagename);
+if (preg_match('/^(.*)(\.[a-zA-Z]+)$/', $imagename, $matches)) {
+    $file_old = $matches[1];
+    $file_ext = $matches[2];
+} else {
+    $file_old = $imagename;
+    $file_ext = '';
+}
 
 $i = 1;
+$file = $file_old . '_' . $width . '_' . $height . $file_ext;
 while (file_exists(NV_ROOTDIR . '/' . $path . '/' . $file)) {
-    $file = preg_replace('/^(.*)(\.[a-zA-Z]+)$/', '\1_' . $width . '_' . $height . '_' . $i . '\2', $imagename);
+    $file = $file_old . '_' . $width . '_' . $height . '_' . $i . $file_ext;
     ++$i;
 }
 

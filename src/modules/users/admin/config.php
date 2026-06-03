@@ -69,7 +69,7 @@ if ($nv_Request->isset_request('save', 'post')) {
 
     $array_config['is_user_forum'] = $nv_Request->get_int('is_user_forum', 'post', 0);
     $array_config['dir_forum'] = $nv_Request->get_string('dir_forum', 'post');
-    if (!is_dir(NV_ROOTDIR . '/' . $array_config['dir_forum'] . '/nukeviet')) {
+    if (!is_dir(NV_ROOTDIR . '/' . $array_config['dir_forum'] . '/nukeviet') or !preg_match('/^[a-zA-Z0-9\-\_]+$/', $array_config['dir_forum'])) {
         $array_config['dir_forum'] = '';
     }
 

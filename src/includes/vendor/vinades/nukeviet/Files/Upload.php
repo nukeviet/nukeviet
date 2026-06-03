@@ -1328,43 +1328,46 @@ class Upload
     private function check_url($is_200 = 0)
     {
         $allow_url_fopen = (ini_get('allow_url_fopen') == '1' or strtolower(ini_get('allow_url_fopen')) == 'on') ? 1 : 0;
-        if (Site::function_exists('get_headers') and $allow_url_fopen == 1) {
-            $res = get_headers($this->url_info['uri']);
-        } elseif (Site::function_exists('curl_init') and Site::function_exists('curl_exec')) {
-            $url_info = parse_url($this->url_info['uri']);
-            $port = isset($url_info['port']) ? (int) ($url_info['port']) : 80;
-
-            $userAgents = [
-                'Mozilla/5.0 (Windows; U; Windows NT 5.1; pl; rv:1.9) Gecko/2008052906 Firefox/3.0',
-                'Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)',
-                'Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 6.0)',
-                'Mozilla/4.8 [en] (Windows NT 6.0; U)',
-                'Opera/9.25 (Windows NT 6.0; U; en)'
-            ];
-
-            $agent = $userAgents[array_rand($userAgents)];
-
+        if (Site::function_exists('curl_init') and Site::function_exists('curl_exec')) {
             $curl = curl_init($this->url_info['uri']);
-            curl_setopt($curl, CURLOPT_HEADER, true);
-            curl_setopt($curl, CURLOPT_NOBODY, true);
-            curl_setopt($curl, CURLOPT_PORT, $port);
-            curl_setopt($curl, CURLOPT_FOLLOWLOCATION, false);
+            curl_setopt($curl, CURLOPT_HEADER, false);
             curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
             curl_setopt($curl, CURLOPT_TIMEOUT, 15);
-            curl_setopt($curl, CURLOPT_USERAGENT, $agent);
+            curl_setopt($curl, CURLOPT_USERAGENT, $this->user_agent);
+            curl_setopt($curl, CURLOPT_FOLLOWLOCATION, false);
 
-            $response = curl_exec($curl);
+            $headers = [];
+            curl_setopt($curl, CURLOPT_HEADERFUNCTION, function($curl, $header) use (&$headers) {
+                $headers[] = $header;
+                return strlen($header);
+            });
+
+            curl_setopt($curl, CURLOPT_WRITEFUNCTION, function($curl, $data) {
+                return 0; // Abort download once headers are received
+            });
+
+            curl_exec($curl);
             unset($curl);
 
-            if ($response === false) {
+            if (empty($headers)) {
                 return false;
             }
-            $res = explode("\n", $response);
+
+            $res = array_map(function($h) {
+                return rtrim($h, "\r\n");
+            }, $headers);
+        } elseif (Site::function_exists('get_headers') and $allow_url_fopen == 1) {
+            $context = stream_context_create(['http' => ['follow_location' => 0]]);
+            $res = get_headers($this->url_info['uri'], 0, $context);
         } elseif (Site::function_exists('fsockopen') and Site::function_exists('fgets')) {
             $res = [];
             $url_info = parse_url($this->url_info['uri']);
-            $port = isset($url_info['port']) ? (int) ($url_info['port']) : 80;
-            $fp = fsockopen($url_info['host'], $port, $errno, $errstr, 15);
+            $port = isset($url_info['port']) ? (int) ($url_info['port']) : ((isset($url_info['scheme']) && strtolower($url_info['scheme']) == 'https') ? 443 : 80);
+            $host = $url_info['host'];
+            if ($port == 443 || (isset($url_info['scheme']) && strtolower($url_info['scheme']) == 'https')) {
+                $host = 'ssl://' . $host;
+            }
+            $fp = @fsockopen($host, $port, $errno, $errstr, 15);
             if ($fp) {
                 $path = !empty($url_info['path']) ? $url_info['path'] : '/';
                 $path .= !empty($url_info['query']) ? '?' . $url_info['query'] : '';

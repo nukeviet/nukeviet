@@ -412,7 +412,9 @@ function nv_getFileInfo($pathimg, $file)
     clearstatcache();
 
     unset($matches);
-    preg_match("/([a-zA-Z0-9\.\-\_\\s\(\)]+)\.([a-zA-Z0-9]+)$/", $file, $matches);
+    if (!preg_match("/^([a-zA-Z0-9\.\-\_\\s\(\)]+)\.([a-zA-Z0-9]+)$/", $file, $matches)) {
+        return [];
+    }
 
     $info = [];
     $info['name'] = $file;
@@ -546,7 +548,7 @@ function nv_filesListRefresh($pathimg)
                     continue;
                 }
 
-                if (preg_match('/([a-zA-Z0-9\.\-\_\\s\(\)]+)\.([a-zA-Z0-9]+)$/', $title)) {
+                if (preg_match('/^([a-zA-Z0-9\.\-\_\\s\(\)]+)\.([a-zA-Z0-9]+)$/', $title)) {
                     $info = nv_getFileInfo($pathimg, $title);
                     $info['did'] = $did;
                     $info['title'] = $title;
