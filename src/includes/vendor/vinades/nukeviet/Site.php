@@ -67,9 +67,11 @@ class Site
         $value = preg_replace('/([\x00-\x08\x0b-\x0c\x0e-\x1f])/', '', $value);
 
         // Loại bỏ HTML entity thập phân của ký tự điều khiển ASCII (0–31)
-        $value = preg_replace('/&#0*(?:3[01]|[12][0-9]|[0-9]);?/', '', $value);
+        // Negative lookahead ngăn việc khớp một phần của entity dài hơn (ví dụ: &#300;).
+        $value = preg_replace('/&#0*(?:3[01]|[12][0-9]|[0-9])(?![0-9]);?/', '', $value);
         // Loại bỏ HTML entity hex của ký tự điều khiển ASCII (0x00–0x1F)
-        $value = preg_replace('/&#[xX]0*(?:1[0-9a-fA-F]|[0-9a-fA-F]);?/', '', $value);
+        // Negative lookahead đảm bảo chỉ khớp entity hoàn chỉnh, tránh nhầm một phần của giá trị dài hơn (ví dụ: &#x3c;).
+        $value = preg_replace('/&#[xX]0*(?:1[0-9a-fA-F]|[0-9a-fA-F])(?![0-9a-fA-F]);?/i', '', $value);
 
         $value = preg_replace('/%u0([a-z0-9]{3})/i', '&#x\1;', $value);
         $value = preg_replace('/%([a-z0-9]{2})/i', '&#x\1;', $value);

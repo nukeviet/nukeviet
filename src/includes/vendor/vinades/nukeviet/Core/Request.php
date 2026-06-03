@@ -694,8 +694,18 @@ class Request
             }
             $attrSubSet = array_map('trim', explode('=', trim($attrSet[$i]), 2));
 
-            // Chuẩn hóa tên thuộc tính bằng cách loại bỏ ký tự điều khiển ASCII để ngăn kỹ thuật né tránh bộ lọc XSS.
-            $attrSubSet[0] = preg_replace('/[\x00-\x20]/', '', strtolower($attrSubSet[0]));
+            /*
+            * Chuẩn hóa tên thuộc tính bằng cách loại bỏ các entity hex/decimal của ký tự
+            * điều khiển ASCII (0–31), kể cả khi thiếu dấu ";" ở cuối. Sau đó giải mã các
+            * entity còn lại và loại bỏ các ký tự điều khiển thực trong chuỗi.
+            *
+            * Việc này giúp ngăn các kỹ thuật che giấu tên thuộc tính bằng ký tự điều khiển
+            * nhằm vượt qua cơ chế phát hiện các thuộc tính bắt đầu bằng "on".
+            */
+            $attrSubSet[0] = strtolower($attrSubSet[0]);
+            $attrSubSet[0] = preg_replace('/&#[xX]0*(?:1[0-9a-fA-F]|[0-9a-fA-F])(?![0-9a-fA-F]);?/i', '', $attrSubSet[0]);
+            $attrSubSet[0] = preg_replace('/&#0*(?:3[01]|[12][0-9]|[0-9])(?![0-9]);?/', '', $attrSubSet[0]);
+            $attrSubSet[0] = preg_replace('/[\x00-\x20]/', '', html_entity_decode($attrSubSet[0], ENT_QUOTES | ENT_HTML5, 'UTF-8'));
 
             if (!preg_match('/[a-z]+/i', $attrSubSet[0]) or in_array($attrSubSet[0], $this->disabledattributes, true) or preg_match('/^on/i', $attrSubSet[0])) {
                 continue;
