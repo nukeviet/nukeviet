@@ -761,8 +761,20 @@ class Request
         $value = preg_replace('/%([a-z0-9]{2})/i', '&#x\\1;', $value);
         $value = str_ireplace(['&#x53;&#x43;&#x52;&#x49;&#x50;&#x54;', '&#x26;&#x23;&#x78;&#x36;&#x41;&#x3B;&#x26;&#x23;&#x78;&#x36;&#x31;&#x3B;&#x26;&#x23;&#x78;&#x37;&#x36;&#x3B;&#x26;&#x23;&#x78;&#x36;&#x31;&#x3B;&#x26;&#x23;&#x78;&#x37;&#x33;&#x3B;&#x26;&#x23;&#x78;&#x36;&#x33;&#x3B;&#x26;&#x23;&#x78;&#x37;&#x32;&#x3B;&#x26;&#x23;&#x78;&#x36;&#x39;&#x3B;&#x26;&#x23;&#x78;&#x37;&#x30;&#x3B;&#x26;&#x23;&#x78;&#x37;&#x34;&#x3B;', '/*', '*/', '<!--', '-->', '<!-- -->', '&#x0A;', '&#x0D;', '&#x09;', ''], '', $value);
 
-        // Loại bỏ các HTML entity thập phân của ký tự điều khiển ASCII (0–31)
-        $value = preg_replace('/&#0*(?:3[01]|[12][0-9]|[0-9]);/', '', $value);
+        /*
+        * Loại bỏ các hex entity biểu diễn ký tự điều khiển ASCII (U+0000–U+001F),
+        * ví dụ: &#x9;, &#x09;, &#x1F;.
+        *
+        * Negative lookahead được dùng để bảo đảm chỉ khớp một entity hoàn chỉnh,
+        * tránh trường hợp khớp nhầm một phần của giá trị dài hơn (ví dụ: &#x3c;).
+        */
+        $value = preg_replace('/&#[xX]0*(?:1[0-9a-fA-F]|[0-9a-fA-F])(?![0-9a-fA-F]);?/i', '', $value);
+
+        /*
+        * Loại bỏ các decimal entity của ký tự điều khiển ASCII (0–31).
+        * Negative lookahead ngăn việc khớp một phần của entity dài hơn.
+        */
+        $value = preg_replace('/&#0*(?:3[01]|[12][0-9]|[0-9])(?![0-9]);?/', '', $value);
         $value = str_replace(['&colon;', '&lpar;', '&rpar;', '&Tab;', '&NewLine;'], [':', '(', ')', '', ''], $value);
 
         $search = '/&#[xX]0{0,8}(21|22|23|24|25|26|27|28|29|2a|2b|2d|2f|30|31|32|33|34|35|36|37|38|39|3a|3b|3d|3f|40|41|42|43|44|45|46|47|48|49|4a|4b|4c|4d|4e|4f|50|51|52|53|54|55|56|57|58|59|5a|5b|5c|5d|5e|5f|60|61|62|63|64|65|66|67|68|69|6a|6b|6c|6d|6e|6f|70|71|72|73|74|75|76|77|78|79|7a|7b|7c|7d|7e);?/i';
@@ -794,8 +806,18 @@ class Request
             }
             $attrSubSet = array_map('trim', explode('=', trim($attrSet[$i]), 2));
 
-            // Chuẩn hóa tên thuộc tính bằng cách loại bỏ ký tự điều khiển ASCII để ngăn kỹ thuật né tránh bộ lọc XSS.
-            $attrSubSet[0] = preg_replace('/[\x00-\x20]/', '', strtolower($attrSubSet[0]));
+            /*
+            * Chuẩn hóa tên thuộc tính bằng cách loại bỏ các entity hex/decimal của ký tự
+            * điều khiển ASCII (0–31), kể cả khi thiếu dấu ";" ở cuối. Sau đó giải mã các
+            * entity còn lại và loại bỏ các ký tự điều khiển thực trong chuỗi.
+            *
+            * Việc này giúp ngăn các kỹ thuật che giấu tên thuộc tính bằng ký tự điều khiển
+            * nhằm vượt qua cơ chế phát hiện các thuộc tính bắt đầu bằng "on".
+            */
+            $attrSubSet[0] = strtolower($attrSubSet[0]);
+            $attrSubSet[0] = preg_replace('/&#[xX]0*(?:1[0-9a-fA-F]|[0-9a-fA-F])(?![0-9a-fA-F]);?/i', '', $attrSubSet[0]);
+            $attrSubSet[0] = preg_replace('/&#0*(?:3[01]|[12][0-9]|[0-9])(?![0-9]);?/', '', $attrSubSet[0]);
+            $attrSubSet[0] = preg_replace('/[\x00-\x20]/', '', html_entity_decode($attrSubSet[0], ENT_QUOTES | ENT_HTML5, 'UTF-8'));
 
             if (!preg_match('/[a-z]+/i', $attrSubSet[0]) or in_array($attrSubSet[0], $this->disabledattributes, true) or preg_match('/^on/i', $attrSubSet[0])) {
                 continue;
