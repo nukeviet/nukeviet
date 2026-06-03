@@ -676,7 +676,7 @@ class Upload
         if ($svg and preg_match('#</*(applet|link|script|iframe|frame|frameset)[^>]*>#i', $txt)) {
             return false;
         }
-        if (preg_match("#<\?php(.*)\?>#ms", $txt)) {
+        if (preg_match('#<\?(php\b|=)#i', $txt)) {
             return false;
         }
 
@@ -1357,57 +1357,57 @@ class Upload
     private function check_url($is_200 = 0)
     {
         $allow_url_fopen = (ini_get('allow_url_fopen') == '1' or strtolower(ini_get('allow_url_fopen')) == 'on') ? 1 : 0;
-        if (function_exists('get_headers') and !in_array('get_headers', $this->disable_functions, true) and $allow_url_fopen == 1) {
-            $res = get_headers($this->url_info['uri']);
-        } elseif (function_exists('curl_init') and !in_array('curl_init', $this->disable_functions, true) and function_exists('curl_exec') and !in_array('curl_exec', $this->disable_functions, true)) {
-            $url_info = parse_url($this->url_info['uri']);
-            $port = isset($url_info['port']) ? (int) ($url_info['port']) : 80;
 
-            $userAgents = [
-                'Mozilla/5.0 (Windows; U; Windows NT 5.1; pl; rv:1.9) Gecko/2008052906 Firefox/3.0',
-                'Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)',
-                'Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 6.0)',
-                'Mozilla/4.8 [en] (Windows NT 6.0; U)',
-                'Opera/9.25 (Windows NT 6.0; U; en)'
-            ];
-            $open_basedir = (ini_get('open_basedir') == '1' or strtolower(ini_get('open_basedir')) == 'on') ? 1 : 0;
-
-            mt_srand(microtime(true) * 1000000);
-            $rand = array_rand($userAgents);
-            $agent = $userAgents[$rand];
-
+        if (function_exists('curl_init') and !in_array('curl_init', $this->disable_functions, true) and function_exists('curl_exec') and !in_array('curl_exec', $this->disable_functions, true)) {
             $curl = curl_init($this->url_info['uri']);
-            curl_setopt($curl, CURLOPT_HEADER, true);
-            curl_setopt($curl, CURLOPT_NOBODY, true);
-
-            curl_setopt($curl, CURLOPT_PORT, $port);
-
-            if ($open_basedir) {
-                curl_setopt($curl, CURLOPT_FOLLOWLOCATION, false);
-            }
-
-            curl_setopt($curl, CURLOPT_FOLLOWLOCATION, false);
+            curl_setopt($curl, CURLOPT_HEADER, false);
             curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-
             curl_setopt($curl, CURLOPT_TIMEOUT, 15);
-            curl_setopt($curl, CURLOPT_USERAGENT, $agent);
+            curl_setopt($curl, CURLOPT_USERAGENT, $this->user_agent);
+            curl_setopt($curl, CURLOPT_FOLLOWLOCATION, false);
 
-            $response = curl_exec($curl);
+            $headers = [];
+            curl_setopt($curl, CURLOPT_HEADERFUNCTION, function($curl, $header) use (&$headers) {
+                $headers[] = $header;
+                return strlen($header);
+            });
+
+            curl_setopt($curl, CURLOPT_WRITEFUNCTION, function($curl, $data) {
+                return 0; // Abort download once headers are received
+            });
+
+            curl_exec($curl);
             if (version_compare(PHP_VERSION, '8.0.0', '<')) {
                 curl_close($curl);
             } else {
                 unset($curl);
             }
 
-            if ($response === false) {
+            if (empty($headers)) {
                 return false;
             }
-            $res = explode("\n", $response);
+
+            $res = array_map(function($h) {
+                return rtrim($h, "\r\n");
+            }, $headers);
+        } elseif (function_exists('get_headers') and !in_array('get_headers', $this->disable_functions, true) and $allow_url_fopen == 1) {
+            if (version_compare(PHP_VERSION, '7.1.0', '>=')) {
+                $context = stream_context_create(['http' => ['follow_location' => 0]]);
+                $res = get_headers($this->url_info['uri'], 0, $context);
+            } else {
+                stream_context_set_default(['http' => ['follow_location' => 0]]);
+                $res = get_headers($this->url_info['uri']);
+                stream_context_set_default(['http' => ['follow_location' => 1]]);
+            }
         } elseif (function_exists('fsockopen') and !in_array('fsockopen', $this->disable_functions, true) and function_exists('fgets') and !in_array('fgets', $this->disable_functions, true)) {
             $res = [];
             $url_info = parse_url($this->url_info['uri']);
-            $port = isset($url_info['port']) ? (int) ($url_info['port']) : 80;
-            $fp = fsockopen($url_info['host'], $port, $errno, $errstr, 15);
+            $port = isset($url_info['port']) ? (int) ($url_info['port']) : ((isset($url_info['scheme']) && strtolower($url_info['scheme']) == 'https') ? 443 : 80);
+            $host = $url_info['host'];
+            if ($port == 443 || (isset($url_info['scheme']) && strtolower($url_info['scheme']) == 'https')) {
+                $host = 'ssl://' . $host;
+            }
+            $fp = @fsockopen($host, $port, $errno, $errstr, 15);
             if ($fp) {
                 $path = !empty($url_info['path']) ? $url_info['path'] : '/';
                 $path .= !empty($url_info['query']) ? '?' . $url_info['query'] : '';

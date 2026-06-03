@@ -97,7 +97,10 @@ foreach ($images as $image) {
 
         if (isset($array_dirname[$path])) {
             $did = $array_dirname[$path];
-            $db->query('DELETE FROM ' . NV_UPLOAD_GLOBALTABLE . '_file WHERE did = ' . $did . " AND title='" . $image . "'");
+            $sth = $db->prepare('DELETE FROM ' . NV_UPLOAD_GLOBALTABLE . '_file WHERE did = :did AND title = :title');
+            $sth->bindValue(':did', $did, PDO::PARAM_INT);
+            $sth->bindValue(':title', $image, PDO::PARAM_STR);
+            $sth->execute();
         }
     }
     nv_dirListRefreshSize();

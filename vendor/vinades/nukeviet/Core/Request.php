@@ -169,6 +169,16 @@ class Request
      */
     private $disabledattributes = [
         'action',
+        'formaction',
+        'formmethod',
+        'formenctype',
+        'formtarget',
+        'formnovalidate',
+        'poster',
+        'usemap',
+        'data',
+        'classid',
+        'referrerpolicy',
         'background',
         'codebase',
         'dynsrc',
