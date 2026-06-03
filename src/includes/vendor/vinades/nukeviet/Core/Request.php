@@ -693,7 +693,9 @@ class Request
                 continue;
             }
             $attrSubSet = array_map('trim', explode('=', trim($attrSet[$i]), 2));
-            $attrSubSet[0] = strtolower($attrSubSet[0]);
+
+            // Chuẩn hóa tên thuộc tính bằng cách loại bỏ ký tự điều khiển ASCII để ngăn kỹ thuật né tránh bộ lọc XSS.
+            $attrSubSet[0] = preg_replace('/[\x00-\x20]/', '', strtolower($attrSubSet[0]));
 
             if (!preg_match('/[a-z]+/i', $attrSubSet[0]) or in_array($attrSubSet[0], $this->disabledattributes, true) or preg_match('/^on/i', $attrSubSet[0])) {
                 continue;

@@ -66,11 +66,16 @@ class Site
         // Gom class đúng cú pháp: Loại bỏ các Control Characters (Null Byte, Vertical Tab...) an toàn
         $value = preg_replace('/([\x00-\x08\x0b-\x0c\x0e-\x1f])/', '', $value);
 
+        // Loại bỏ HTML entity thập phân của ký tự điều khiển ASCII (0–31)
+        $value = preg_replace('/&#0*(?:3[01]|[12][0-9]|[0-9]);?/', '', $value);
+        // Loại bỏ HTML entity hex của ký tự điều khiển ASCII (0x00–0x1F)
+        $value = preg_replace('/&#[xX]0*(?:1[0-9a-fA-F]|[0-9a-fA-F]);?/', '', $value);
+
         $value = preg_replace('/%u0([a-z0-9]{3})/i', '&#x\1;', $value);
         $value = preg_replace('/%([a-z0-9]{2})/i', '&#x\1;', $value);
 
         // Loại bỏ các comment và ký tự ngắt dòng
-        $value = str_ireplace(['/*', '*/', '<!--', '-->', '<!-- -->', '&#x0A;', '&#x0D;', '&#x09;'], '', $value);
+        $value = str_ireplace(['/*', '*/', '<!--', '-->', '<!-- -->'], '', $value);
         $value = str_replace(['&colon;', '&lpar;', '&rpar;', '&Tab;', '&NewLine;'], [':', '(', ')', '', ''], $value);
 
         // Ngăn chặn mã hóa SCRIPT/JAVASCRIPT với regex linh hoạt: Bắt tùy chọn dấu chấm phẩy và không giới hạn số 0
