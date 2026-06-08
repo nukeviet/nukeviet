@@ -1,13 +1,31 @@
 CHANGE LOG: NUKEVIET CMS
 http://nukeviet.vn
 NUKEVIET 4.5.09
-- Remove Facebook Instant Article feature
+- Enhanced XSS prevention: strip hex/decimal ASCII control character entities from HTML attributes and entity names
+- Fixed security vulnerabilities in comment functionality and SVG file upload
+- Added SSRF protection: validate URL schemes and block private IP ranges
+- Reduced file permissions in dump and upload functions
+- Refactored upload/extension validation for improved security
+- Fixed CVE-2024-6485 and CVE-2025-1647 (Bootstrap)
+- Refactored OAuth login flow with better error handling and CSRF validation
+- Fixed minor news logic bug and 2FA permission handling
+- Fixed banner click handling for scheduled, active, and expired banners
+- Fixed syntax issues in banner click functionality
+- Fixed nv_get_viewImage error handling, removed warning suppression
+- Fixed file saving to prioritize move_uploaded_file over copy
+- Fixed filesize() return type and file size retrieval
+- Fixed ZIP bomb check to use NV_UPLOAD_MAX_FILESIZE
+- Fixed PDF.js bug
+- Fixed CSS upload and news display on mobile
+- Updated version pclzip, FileCache, ChartJS
+- PHP 5.6–8.5 compatibility fixes (Image class and general)
+- Removed Facebook Instant Articles feature
 
 NUKEVIET 4.5.08
 - Remove abandoned package true/punycode
 - Remove the and/oauth package, which has long been unmaintained, and replace it with league/oauth2-client
 - Remove SDK of social network like/share button tools and replace with pure HTML/JS
-- Fix XSS bug. Thanks Nguyễn Quang Bằng from WhiteHub#4394
+- Fix XSS bug (CVE-2026-41147). Thanks Nguyễn Quang Bằng from WhiteHub#4394
 - Support PHP 8.5
 - Add a strict permission-checking mode for uploading application packages #3910
 - Prevent CKEditor 5 UI buttons from triggering parent form submission #3916
