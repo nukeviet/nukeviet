@@ -20,6 +20,7 @@ NUKEVIET 4.5.09
 - Updated version pclzip, FileCache, ChartJS
 - PHP 5.6–8.5 compatibility fixes (Image class and general)
 - Removed Facebook Instant Articles feature
+- Ckeditor 5 v48.2.0, Jquery validate v1.22.1, DOMPurify 3.4.8
 
 NUKEVIET 4.5.08
 - Remove abandoned package true/punycode
