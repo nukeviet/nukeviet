@@ -23,9 +23,9 @@ if (!defined('NV_MAINFILE')) {
  */
 class dumpsave
 {
-    public $savetype;
-    public $filesavename;
-    public $mode;
+    public string $savetype;
+    public string $filesavename;
+    public string $mode;
     public $comp_level = 9;
     public $fp = false;
 
@@ -54,6 +54,10 @@ class dumpsave
      */
     public function open()
     {
+        if (!nv_check_dump_path($this->filesavename, true)) {
+            return false;
+        }
+
         $this->fp = call_user_func_array(($this->savetype == 'gz') ? 'gzopen' : 'fopen', [$this->filesavename, $this->mode]);
 
         return $this->fp;
@@ -92,6 +96,43 @@ class dumpsave
 
         return false;
     }
+}
+
+/**
+ * nv_check_dump_path()
+ *
+ * @param string $file
+ * @param bool $is_new
+ * @return bool
+ */
+function nv_check_dump_path($file, $is_new = false)
+{
+    if (defined('NV_ROOTDIR') && defined('NV_LOGS_DIR')) {
+        $log_dir = realpath(NV_ROOTDIR . '/' . NV_LOGS_DIR . '/dump_backup');
+        if ($log_dir === false) {
+            return false;
+        }
+        $log_dir = str_replace('\\', '/', $log_dir);
+
+        $path_to_check = $is_new ? dirname($file) : $file;
+        $real_dir = realpath($path_to_check);
+        if ($real_dir === false) {
+            return false;
+        }
+        $real_dir = str_replace('\\', '/', $real_dir);
+
+        if (strpos($real_dir, $log_dir) !== 0) {
+            return false;
+        }
+    }
+
+    $arr_file = explode('/', str_replace('\\', '/', $file));
+    $ext = nv_getextension(end($arr_file));
+    if (!in_array($ext, ['sql', 'gz'], true)) {
+        return false;
+    }
+
+    return true;
 }
 
 /**
@@ -249,8 +290,12 @@ function nv_dump_restore($file)
         set_time_limit(1200);
     }
 
+    if (!nv_check_dump_path($file, false)) {
+        return false;
+    }
+
     //kiem tra file
-    if (!file_exists($file)) {
+    if (!is_readable($file)) {
         return false;
     }
 
