@@ -23,10 +23,29 @@ if (!defined('NV_MAINFILE')) {
  */
 class dumpsave
 {
+    /**
+     * @var string
+     */
     public $savetype;
+
+    /**
+     * @var string
+     */
     public $filesavename;
+
+    /**
+     * @var string
+     */
     public $mode;
+
+    /**
+     * @var int
+     */
     public $comp_level = 9;
+
+    /**
+     * @var resource|false
+     */
     public $fp = false;
 
     /**
@@ -54,6 +73,10 @@ class dumpsave
      */
     public function open()
     {
+        if (!nv_check_dump_path($this->filesavename, true)) {
+            return false;
+        }
+
         $this->fp = call_user_func_array(($this->savetype == 'gz') ? 'gzopen' : 'fopen', [$this->filesavename, $this->mode]);
 
         return $this->fp;
@@ -95,6 +118,43 @@ class dumpsave
 }
 
 /**
+ * nv_check_dump_path()
+ *
+ * @param string $file
+ * @param bool $is_new
+ * @return bool
+ */
+function nv_check_dump_path($file, $is_new = false)
+{
+    if (defined('NV_ROOTDIR') && defined('NV_LOGS_DIR')) {
+        $log_dir = realpath(NV_ROOTDIR . '/' . NV_LOGS_DIR . '/dump_backup');
+        if ($log_dir === false) {
+            return false;
+        }
+        $log_dir = str_replace('\\', '/', $log_dir);
+
+        $path_to_check = $is_new ? dirname($file) : $file;
+        $real_dir = realpath($path_to_check);
+        if ($real_dir === false) {
+            return false;
+        }
+        $real_dir = str_replace('\\', '/', $real_dir);
+
+        if (strpos($real_dir, $log_dir) !== 0) {
+            return false;
+        }
+    }
+
+    $arr_file = explode('/', str_replace('\\', '/', $file));
+    $ext = nv_getextension(end($arr_file));
+    if (!in_array($ext, ['sql', 'gz'], true)) {
+        return false;
+    }
+
+    return true;
+}
+
+/**
  * nv_dump_save()
  *
  * @param array $params
@@ -129,7 +189,7 @@ function nv_dump_save($params)
             $tables[$a]['limit'] = 1 + round(1048576 / ($item['avg_row_length'] + 1));
             $tables[$a]['numrow'] = $item['rows'];
             $tables[$a]['charset'] = (preg_match('/^([a-z0-9]+)_/i', $item['collation'], $m)) ? $m[1] : '';
-            $tables[$a]['type'] = isset($item['engine']) ? $item['engine'] : $item['t'];
+            $tables[$a]['type'] = isset($item['engine']) ? $item['engine'] : (isset($item['t']) ? $item['t'] : '');
             ++$a;
             $dbsize += (int) ($item['data_length']) + (int) ($item['index_length']);
         }
@@ -190,12 +250,7 @@ function nv_dump_save($params)
             $from = 0;
             $a = 0;
             for ($i = 0; $i < $maxi; ++$i) {
-                $db->sqlreset()
-                    ->select('*')
-                    ->from($table['name'])
-                    ->limit($table['limit'])
-                    ->offset($from);
-                $result = $db->query($db->sql());
+                $result = $db->query('SELECT * FROM ' . $table['name'] . ' LIMIT ' . (int) $table['limit'] . ' OFFSET ' . (int) $from);
                 while ($row = $result->fetch()) {
                     if (isset($row['bodyhtml'])) {
                         $row['bodyhtml'] = strtr($row['bodyhtml'], [
@@ -254,8 +309,12 @@ function nv_dump_restore($file)
         set_time_limit(1200);
     }
 
+    if (!nv_check_dump_path($file, false)) {
+        return false;
+    }
+
     //kiem tra file
-    if (!file_exists($file)) {
+    if (!is_readable($file)) {
         return false;
     }
 
@@ -305,7 +364,8 @@ function nv_dump_restore($file)
                 $sql = preg_replace(["/\{\|prefix\|\}/", "/\{\|lang\|\}/"], [$db_config['prefix'], NV_LANG_DATA], $sql);
                 try {
                     $db->query($sql);
-                } catch (PDOException $e) {
+                } catch (Throwable $e) {
+                    trigger_error($e);
                     return false;
                 }
 
