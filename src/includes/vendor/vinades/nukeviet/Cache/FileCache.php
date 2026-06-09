@@ -210,7 +210,9 @@ class FileCache extends Cache
 
         if (($cache = $this->getItem($moduleName, $cache_file, $lang, $ttl)) !== false) {
             $data = unserialize($cache, NV_UNSERIALIZE_SAFE);
-            return is_array($data) ? $data : [];
+            if (is_array($data)) {
+                return $data;
+            }
         }
 
         $list = parent::getList($sql, $key, $bind);
