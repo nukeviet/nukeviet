@@ -1,11 +1,12 @@
 CHANGE LOG: NUKEVIET CMS
 http://nukeviet.vn
 NUKEVIET 4.5.09
-- Enhanced XSS prevention: strip hex/decimal ASCII control character entities from HTML attributes and entity names
-- Fixed security vulnerabilities in comment functionality and SVG file upload
+- Fix Path Traversal to Arbitrary File. Thanks g03m0n from WhiteHub#4529
+- Enhanced XSS prevention: strip hex/decimal ASCII control character entities from HTML attributes and entity names. Thanks g03m0n from WhiteHub#4521
+- Fixed security vulnerabilities in comment functionality and SVG file upload. Thanks Nguyen Hung (Mitchell) from WhiteHub#4445
 - Added SSRF protection: validate URL schemes and block private IP ranges
 - Reduced file permissions in dump and upload functions
-- Refactored upload/extension validation for improved security
+- Refactored upload/extension validation for improved security. Thanks Dung.nhv from WhiteHub#4436
 - Fixed CVE-2024-6485 and CVE-2025-1647 (Bootstrap)
 - Refactored OAuth login flow with better error handling and CSRF validation
 - Fixed minor news logic bug and 2FA permission handling
@@ -18,7 +19,7 @@ NUKEVIET 4.5.09
 - Fixed PDF.js bug
 - Fixed CSS upload and news display on mobile
 - Updated version pclzip, FileCache, ChartJS
-- PHP 5.6–8.5 compatibility fixes (Image class and general)
+- PHP 5.6 – 8.5 compatibility fixes (Image class and general)
 - Removed Facebook Instant Articles feature
 - Ckeditor 5 v48.2.0, Jquery validate v1.22.1, DOMPurify 3.4.8
 
