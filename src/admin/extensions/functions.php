@@ -26,11 +26,6 @@ $menu_top = [
 
 $allow_func = ['main', 'newest', 'popular', 'featured', 'downloaded', 'favorites', 'detail', 'login', 'update', 'manage'];
 
-// Cho phep upload ung dung
-if (!empty($global_config['extension_setup']) and in_array(NV_CLIENT_IP, ($global_config['extension_setup_ips'] ?? []), true)) {
-    $allow_func[] = 'upload';
-}
-
 // Cho phep cai ung dung tu NukeViet Store
 if ($global_config['extension_setup'] == 2 or $global_config['extension_setup'] == 3) {
     $allow_func[] = 'install';

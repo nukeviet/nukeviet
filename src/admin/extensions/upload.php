@@ -428,11 +428,13 @@ if ($nv_Request->isset_request('extract', 'get')) {
 }
 
 $error = '';
+$setup_ips = (isset($global_config['extension_setup_ips']) and is_array($global_config['extension_setup_ips'])) ? $global_config['extension_setup_ips'] : [];
+
 if ($nv_Request->isset_request('uploaded', 'get')) {
     if (!file_exists($filename)) {
         $error = $nv_Lang->getModule('autoinstall_error_downloaded');
     }
-} elseif ($global_config['extension_setup'] == 1 or $global_config['extension_setup'] == 3) {
+} elseif (($global_config['extension_setup'] == 1 or $global_config['extension_setup'] == 3) and in_array(NV_CLIENT_IP, $setup_ips, true)) {
     if (!isset($_FILES, $_FILES['extfile'], $_FILES['extfile']['tmp_name'])) {
         $error = $nv_Lang->getModule('autoinstall_error_downloaded');
     } elseif (!$sys_info['zlib_support']) {
