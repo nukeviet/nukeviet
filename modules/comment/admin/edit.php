@@ -45,9 +45,11 @@ if ($nv_Request->isset_request('save', 'post')) {
         $content = nv_editor_nl2br($nv_Request->get_editor('content', '', NV_ALLOWED_HTML_TAGS));
         $active = $nv_Request->get_int('active', 'post', 0);
         $active = ($active == 1) ? 1 : 0;
-        $attach = $nv_Request->get_string('attach', 'post', '', true);
-        if (!empty($attach)) {
+        $attach = $nv_Request->get_string('attach', 'post', '');
+        if (!empty($attach) and nv_is_file($attach, NV_UPLOADS_DIR . '/' . $module_upload)) {
             $attach = substr($attach, strlen(NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/'));
+        } else {
+            $attach = '';
         }
 
         $stmt = $db->prepare('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . ' SET content= :content, attach=:attach, status=' . $active . ' WHERE cid=' . $cid);
