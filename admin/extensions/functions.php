@@ -24,13 +24,7 @@ $menu_top = [
     'custom_title' => $lang_global['mod_extensions']
 ];
 
-$allow_func = ['main', 'newest', 'popular', 'featured', 'downloaded', 'favorites', 'detail', 'login', 'update', 'manage'];
-
-// Cho phep upload ung dung
-$ips_allowed = (!empty($global_config['extension_setup_ips']) and is_array($global_config['extension_setup_ips'])) ? $global_config['extension_setup_ips'] : [];
-if (!empty($global_config['extension_setup']) and in_array(NV_CLIENT_IP, $ips_allowed, true)) {
-    $allow_func[] = 'upload';
-}
+$allow_func = ['main', 'newest', 'popular', 'featured', 'downloaded', 'favorites', 'detail', 'login', 'update', 'manage', 'upload'];
 
 // Cho phep cai ung dung tu NukeViet Store
 if ($global_config['extension_setup'] == 2 or $global_config['extension_setup'] == 3) {
