@@ -24,11 +24,16 @@ if (headers_sent() or connection_status() != 0 or connection_aborted()) {
  */
 function server_info_update($config_ini_file)
 {
-    global $nv_Server;
+    global $nv_Server, $global_config;
 
     $proto = $nv_Server->getOriginalProtocol();
     $proto2 = ($proto == 'https') ? 'http' : 'https';
     $host = $nv_Server->getOriginalHost();
+
+    if (!in_array($host, $global_config['my_domains'], true)) {
+        $host = $global_config['my_domains'][0];
+    }
+
     if (filter_var($host, FILTER_VALIDATE_IP, FILTER_FLAG_IPV6) !== false) {
         $host = '[' . $host . ']';
     }
@@ -374,8 +379,7 @@ function set_ini_file(&$sys_info)
 
     if (file_put_contents($config_ini_file, $content_config . "\n", LOCK_EX)) {
         if ($sys_info['curl_support']) {
-            $url = NV_BASE_SITEURL . 'index.php';
-            strpos($url, NV_MY_DOMAIN) !== 0 && $url = NV_MY_DOMAIN . $url;
+            $url = NV_SERVER_PROTOCOL . '://' . NV_SERVER_NAME . NV_SERVER_PORT . NV_BASE_SITEURL . 'index.php';
             $ch = curl_init($url);
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
             curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
@@ -399,7 +403,10 @@ function set_ini_file(&$sys_info)
 
 $config_ini_file = NV_ROOTDIR . '/' . NV_DATADIR . '/config_ini.' . NV_SERVER_PROTOCOL . '.' . preg_replace('/[^a-zA-Z0-9\.\_]/', '', NV_SERVER_NAME) . '.php';
 if (isset($_POST['__serverInfoUpdate'])) {
-    server_info_update($config_ini_file);
+    @include $config_ini_file;
+    if (empty($serverInfoUpdated)) {
+        server_info_update($config_ini_file);
+    }
     exit(0);
 }
 
@@ -412,7 +419,7 @@ $iniSaveTime = 0;
 
 @include_once $config_ini_file;
 
-if ($iniSaveTime + 86400 < NV_CURRENTTIME) {
+if (empty($iniSaveTime)) {
     set_ini_file($sys_info);
 }
 

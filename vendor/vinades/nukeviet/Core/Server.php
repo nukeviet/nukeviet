@@ -202,7 +202,7 @@ class Server
      */
     protected function standardizeHost($host)
     {
-        return preg_replace('/(\:[0-9]+)$/', '', preg_replace('/^[a-z]+\:\/\//i', '', trim($host)));
+        return preg_replace('/(\:[0-9]+).*$/', '', preg_replace('/^[a-z]+\:\/\//i', '', trim($host)));
     }
 
     /**

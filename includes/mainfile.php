@@ -36,8 +36,6 @@ $nv_Server = new NukeViet\Core\Server();
 define('NV_SERVER_NAME', $nv_Server->getServerHost());
 define('NV_SERVER_PROTOCOL', $nv_Server->getServerProtocol());
 define('NV_SERVER_PORT', $nv_Server->getServerPort());
-
-define('NV_MY_DOMAIN', $nv_Server->getOriginalDomain());
 define('NV_BASE_SITEURL', $nv_Server->getWebsitePath() . '/');
 
 if (file_exists(NV_ROOTDIR . '/' . NV_CONFIG_FILENAME)) {
@@ -68,6 +66,11 @@ if (empty($global_config['my_domains'])) {
     }
 }
 
+$_original_host = $nv_Server->getOriginalHost();
+if (!in_array($_original_host, $global_config['my_domains'], true)) {
+    $_original_host = NV_SERVER_PROTOCOL . '://' . NV_SERVER_NAME . NV_SERVER_PORT;
+}
+define('NV_MY_DOMAIN', $_original_host);
 define('NV_STATIC_URL', !empty($global_config['nv_static_url']) ? '//' . $global_config['nv_static_url'] . '/' : NV_BASE_SITEURL);
 
 require NV_ROOTDIR . '/includes/ini.php';
