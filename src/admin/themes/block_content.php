@@ -22,7 +22,7 @@ if ($nv_Request->isset_request('loadBlocks, bid', 'post')) {
         'error' => 1,
         'text' => 'Wrong session!!!'
     ];
-    if ($nv_Request->get_title('checkss', 'post', '') !== NV_CHECK_SESSION) {
+    if (!csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
         nv_jsonOutput($respon);
     }
 
@@ -97,7 +97,7 @@ if ($nv_Request->isset_request('get_dtime_details', 'post')) {
         'error' => 1,
         'text' => 'Wrong session!!!'
     ];
-    if ($nv_Request->get_title('checkss', 'post', '') !== NV_CHECK_SESSION) {
+    if (!csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
         nv_jsonOutput($respon);
     }
 
@@ -112,8 +112,14 @@ if ($nv_Request->isset_request('get_dtime_details', 'post')) {
 
 $groups_list = nv_groups_list();
 
-$checkss = md5(NV_CHECK_SESSION . '_' . $module_name . '_' . $op . '_' . $row['bid']);
-if ($checkss == $nv_Request->get_string('checkss', 'post')) {
+if ($nv_Request->isset_request('checkss', 'post')) {
+    if (!csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
+        nv_jsonOutput([
+            'status' => 'error',
+            'mess' => $nv_Lang->getGlobal('error_checkss')
+        ]);
+    }
+
     $list_file_name = $nv_Request->get_title('file_name', 'post', '');
     $array_file_name = explode('|', $list_file_name);
     if (!isset($array_file_name[1])) {
@@ -660,7 +666,7 @@ $tpl->assign('OP', $op);
 $tpl->assign('TEMPLATE', $template);
 
 $row['link'] = nv_htmlspecialchars($row['link']);
-$row['checkss'] = $checkss;
+$row['checkss'] = csrf_create($csrf_key);
 $row['active_device'] = !empty($row['active']) ? array_map('intval', explode(',', $row['active'])) : [];
 $row['groups_view'] = array_map('intval', explode(',', $row['groups_view']));
 $row['block_global'] = preg_match('/^global\.([a-zA-Z0-9\-\_\.]+)\.php$/', $row['file_name']);

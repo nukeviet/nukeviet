@@ -21,7 +21,7 @@ if (!(defined('NV_IS_GODADMIN') or (defined('NV_IS_SPADMIN') and $global_config[
 
 // Trang chuyển tiếp kết quả
 if ($nv_Request->get_int('result', 'get', 0)) {
-    if (!csrf_check($nv_Request->get_title('checksess', 'get', ''), $csrf_key)) {
+    if (!csrf_check($nv_Request->get_title('checkss', 'get', ''), $csrf_key)) {
         nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
     }
 
@@ -300,7 +300,7 @@ if ($nv_Request->get_int('save', 'post', 0)) {
         }
         nv_insert_logs(NV_LANG_DATA, $module_name, $nv_Lang->getModule('menuadd'), $inf, $admin_info['userid']);
 
-        $respon['redirect'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=add&result=1&checksess=' . csrf_create($csrf_key);
+        $respon['redirect'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=add&result=1&checkss=' . csrf_create($csrf_key);
         $respon['status'] = 'OK';
         nv_jsonOutput($respon);
     }

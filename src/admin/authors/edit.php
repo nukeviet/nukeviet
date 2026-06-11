@@ -47,7 +47,7 @@ if (empty($allowed)) {
 
 // Trang chuyển tiếp kết quả
 if ($nv_Request->get_int('result', 'get', 0)) {
-    if (!csrf_check($nv_Request->get_title('checksess', 'get', ''), $csrf_key)) {
+    if (!csrf_check($nv_Request->get_title('checkss', 'get', ''), $csrf_key)) {
         nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
     }
 
@@ -445,7 +445,7 @@ if ($nv_Request->get_int('save', 'post', 0)) {
     if (empty($result['change'])) {
         $redirect = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&id=' . $admin_id;
     } else {
-        $redirect = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&admin_id=' . $admin_id . '&result=1&checksess=' . csrf_create($csrf_key);
+        $redirect = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&admin_id=' . $admin_id . '&result=1&checkss=' . csrf_create($csrf_key);
         $nv_Request->set_Session('nv_admin_profile', json_encode($result, NV_JSON_ENCODE));
     }
 

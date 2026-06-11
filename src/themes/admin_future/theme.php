@@ -25,8 +25,8 @@ if (!empty($nv_Request) and $nv_Request->isset_request('store_theme_config', 'po
         $respon['message'] = 'Wrong ajax!!!';
         nv_jsonOutput($respon);
     }
-    if ($nv_Request->get_title('store_theme_config', 'post', '') !== NV_CHECK_SESSION) {
-        $respon['message'] = 'Wrong checksess!!!';
+    if (!csrf_check($nv_Request->get_string('store_theme_config', 'post'), $admin_info['admin_id'] . '_' . $admin_info['admin_theme'] . '_config')) {
+        $respon['message'] = 'Wrong session!!!';
         nv_jsonOutput($respon);
     }
 
@@ -55,7 +55,7 @@ if (!empty($nv_Request) and $nv_Request->isset_request('store_theme_config', 'po
 
 /**
  * @param string $contents
- * @param number $head_site
+ * @param int $head_site
  * @return string
  */
 function nv_admin_theme(?string $contents, $head_site = 1)
@@ -95,6 +95,7 @@ function nv_admin_theme(?string $contents, $head_site = 1)
     $tpl->assign('LANG_ADMIN', $array_lang_admin);
     $tpl->assign('SELECT_OPTIONS', $select_options);
     $tpl->assign('HELP_URLS', $array_url_instruction);
+    $tpl->assign('CONFIG_CHECKSS', csrf_create($admin_info['admin_id'] . '_' . $admin_info['admin_theme'] . '_config'));
 
     // Biến này để sử dụng trên các tệp khác gọi tpl
     $tpl->assign('ADMIN_THEME', $admin_info['admin_theme']);
