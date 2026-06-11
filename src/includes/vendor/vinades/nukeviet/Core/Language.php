@@ -335,6 +335,6 @@ class Language
      */
     public function existsTmpModule($langkey)
     {
-        return isset($this->tmplang_module[$langkey]);
+        return isset(self::$tmplang_module[$langkey]);
     }
 }
