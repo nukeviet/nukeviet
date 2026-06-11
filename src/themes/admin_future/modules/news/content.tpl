@@ -156,7 +156,7 @@
                         <div class="card-body">
                             <div class="mb-3">
                                 <label for="newcontent_topicid" class="form-label">{$LANG->getModule('admin_topic_sl')}:</label>
-                                <select class="form-select" id="newcontent_topicid" name="topicid">
+                                <select class="form-select" id="newcontent_topicid" name="topicid" data-checkss="{$CHECKSS}">
                                     {foreach from=$DATA_TOPICS key=key item=value}
                                     <option value="{$key}"{if $key eq $DATA.topicid} selected{/if}>{$value}</option>
                                     {/foreach}
@@ -305,7 +305,7 @@
                     </div>
                 </div>
                 <div class="card-body">
-                    <select id="newcontent_keywords" class="form-control" aria-label="{$LANG->getModule('content_keyword')}" name="keywords[]" multiple data-placeholder="{$LANG->getModule('input_keyword')}">
+                    <select id="newcontent_keywords" data-checkss="{$AJ_KEYWORDS_CHECKSS}" class="form-control" aria-label="{$LANG->getModule('content_keyword')}" name="keywords[]" multiple data-placeholder="{$LANG->getModule('input_keyword')}">
                         {foreach from=$DATA.keywords item=value}
                         <option value="{$value}" selected>{$value}</option>
                         {/foreach}
@@ -320,7 +320,7 @@
                     </div>
                 </div>
                 <div class="card-body">
-                    <select id="newcontent_tags" class="form-control" aria-label="{$LANG->getModule('content_tag')}" name="tags[]" multiple data-placeholder="{$LANG->getModule('input_tag')}">
+                    <select id="newcontent_tags" data-checkss="{$AJ_TAGS_CHECKSS}" class="form-control" aria-label="{$LANG->getModule('content_tag')}" name="tags[]" multiple data-placeholder="{$LANG->getModule('input_tag')}">
                         {foreach from=$DATA.tags item=value}
                         <option value="{$value}" selected>{$value}</option>
                         {/foreach}
@@ -352,7 +352,7 @@
                 </div>
                 <div class="card-body">
                     <div class="mb-3">
-                        <select id="newcontent_related_ids" data-id="{$DATA.id}" class="form-control" aria-label="{$LANG->getModule('related_articles')}" name="related_ids[]" multiple data-placeholder="{$LANG->getModule('related_articles_ph')}">
+                        <select id="newcontent_related_ids" data-id="{$DATA.id}" data-checkss="{$CHECKSS}" class="form-control" aria-label="{$LANG->getModule('related_articles')}" name="related_ids[]" multiple data-placeholder="{$LANG->getModule('related_articles_ph')}">
                             {foreach from=$RELATED_NEWS item=news}
                             <option value="{$news.id}" selected>{$news.title}</option>
                             {/foreach}

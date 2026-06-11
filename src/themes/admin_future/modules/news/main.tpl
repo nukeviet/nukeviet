@@ -297,7 +297,7 @@
                         <option value="{$action.value}">{$action.title}</option>
                         {/foreach}
                     </select>
-                    <button class="btn btn-primary" type="button" id="element_action_btn" data-toggle="actionArticle" data-ctn="#list-news-items">{$LANG->getModule('action')}</button>
+                    <button class="btn btn-primary" type="button" id="element_action_btn" data-toggle="actionArticle" data-ctn="#list-news-items" data-action-checkss="{$ACTION_CHECKSS}" data-delete-list-checkss="{$DELETE_LIST_CHECKSS}">{$LANG->getModule('action')}</button>
                 </div>
             </div>
             <div class="pagination-wrap">

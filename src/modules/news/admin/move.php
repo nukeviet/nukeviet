@@ -18,6 +18,7 @@ if (!defined('NV_IS_FILE_ADMIN')) {
  * đang bị đình chỉ thì chúng sẽ được trả lại trạng thái trước đó.
  */
 $page_title = $nv_Lang->getModule('move');
+$action_csrf_key = $admin_info['admin_id'] . '_' . $module_name . '_action';
 
 $id_array = [];
 $listid = $nv_Request->get_string('listid', 'get,post', '');
@@ -25,7 +26,7 @@ $catids = array_unique($nv_Request->get_typed_array('catids', 'post', 'int', [])
 $catid = $nv_Request->get_int('catid', 'get,post', 0);
 
 if ($nv_Request->isset_request('idcheck', 'post')) {
-    if (!csrf_check($nv_Request->get_string('checkss', 'post', ''), $csrf_key)) {
+    if (!csrf_check($nv_Request->get_string('checkss', 'post', ''), $action_csrf_key)) {
         nv_jsonOutput([
             'status' => 'error',
             'mess' => $nv_Lang->getGlobal('error_checkss')
@@ -62,7 +63,7 @@ if ($nv_Request->isset_request('idcheck', 'post')) {
     }
 
     $result = $db->query('SELECT id, listcatid, status FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE id IN (' . implode(',', $id_array) . ')');
-    
+
     $stmt_update_row = $db->prepare('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_rows SET catid = :catid, listcatid = :listcatid, status = :status WHERE id = :id');
     $stmt_update_row_no_status = $db->prepare('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_rows SET catid = :catid, listcatid = :listcatid WHERE id = :id');
 
@@ -165,7 +166,7 @@ $tpl->setTemplateDir(get_module_tpl_dir('move.tpl'));
 $tpl->assign('LANG', $nv_Lang);
 $tpl->assign('MODULE_NAME', $module_name);
 $tpl->assign('OP', $op);
-$tpl->assign('CHECKSS', csrf_create($csrf_key));
+$tpl->assign('CHECKSS', csrf_create($action_csrf_key));
 $tpl->assign('ROWS', $rows);
 $tpl->assign('CATS', $cats);
 $contents = $tpl->fetch('move.tpl');

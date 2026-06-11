@@ -333,7 +333,7 @@ $array_list_action = [
 if (defined('NV_IS_ADMIN_MODULE')) {
     $array_list_action['declined'] = $nv_Lang->getModule('declined');
     $array_list_action['block'] = $nv_Lang->getModule('addtoblock');
-    $array_list_action['topics-add'] = $nv_Lang->getModule('topics-add');
+    $array_list_action['topics-add'] = $nv_Lang->getModule('topics_add');
     $array_list_action['move'] = $nv_Lang->getModule('move');
 } elseif ($check_declined) { // Neu co quyen duyet bai thi
     $array_list_action['declined'] = $nv_Lang->getModule('declined');
@@ -1526,6 +1526,8 @@ if (!$is_search) {
 }
 $tpl->assign('DRAFTS', $array_drafts);
 $tpl->assign('DRAFTS_CHECKSS', csrf_create($admin_info['admin_id'] . '_' . $module_name . '_drafts'));
+$tpl->assign('DELETE_LIST_CHECKSS', csrf_create($admin_info['admin_id'] . '_' . $module_name . '_content-del'));
+$tpl->assign('ACTION_CHECKSS', csrf_create($admin_info['admin_id'] . '_' . $module_name . '_action'));
 $tpl->assign('ARRAY_OTHERS', $array_others);
 $tpl->assign('ARRAY_OTHERS_COUNT', $array_others_count);
 

@@ -17,10 +17,11 @@ $page_title = $nv_Lang->getModule('topics_add');
 
 $id_array = [];
 $listid = $nv_Request->get_string('listid', 'get,post', '');
+$action_csrf_key = $admin_info['admin_id'] . '_' . $module_name . '_action';
 
 if ($nv_Request->isset_request('topicsid', 'post')) {
     $checkss = $nv_Request->get_string('checkss', 'post', '');
-    if (!csrf_check($checkss, $csrf_key)) {
+    if (!csrf_check($checkss, $action_csrf_key)) {
         nv_jsonOutput([
             'status' => 'error',
             'mess' => $nv_Lang->getGlobal('error_checkss')
@@ -94,7 +95,7 @@ $tpl->setTemplateDir(get_module_tpl_dir('topics-add.tpl'));
 $tpl->assign('LANG', $nv_Lang);
 $tpl->assign('MODULE_NAME', $module_name);
 $tpl->assign('OP', $op);
-$tpl->assign('CHECKSS', csrf_create($csrf_key));
+$tpl->assign('CHECKSS', csrf_create($action_csrf_key));
 $tpl->assign('ROWS', $rows);
 $tpl->assign('TOPICS', $topics);
 

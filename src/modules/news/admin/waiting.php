@@ -16,7 +16,9 @@ if (!defined('NV_IS_FILE_ADMIN')) {
 use NukeViet\Module\news\Shared\Logs;
 
 $checkss = $nv_Request->get_string('checkss', 'get');
-if (!empty($checkss) and csrf_check($checkss, $csrf_key)) {
+$action_csrf_key = $admin_info['admin_id'] . '_' . $module_name . '_action';
+
+if (!empty($checkss) and csrf_check($checkss, $action_csrf_key)) {
     $listid = $nv_Request->get_string('listid', 'get');
     $id_array = array_map('intval', explode(',', $listid));
 
@@ -57,7 +59,7 @@ if (!empty($checkss) and csrf_check($checkss, $csrf_key)) {
                 $stmt_update = $db->prepare('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_rows SET status = 5 WHERE id = :id');
                 $stmt_update->bindValue(':id', $_row['id'], PDO::PARAM_INT);
                 $stmt_update->execute();
-                
+
                 foreach ($arr_catid as $catid_i) {
                     $stmt_update_cat = $db->prepare('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_' . intval($catid_i) . ' SET status = 5 WHERE id = :id');
                     $stmt_update_cat->bindValue(':id', $_row['id'], PDO::PARAM_INT);

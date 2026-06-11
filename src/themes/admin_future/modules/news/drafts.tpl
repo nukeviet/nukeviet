@@ -85,7 +85,7 @@
                     <select id="element_action" class="form-select fw-150" aria-label="{$LANG->getGlobal('select_actions')}" aria-describedby="element_action_btn">
                         <option value="cancel">{$LANG->getGlobal('cancel')}</option>
                     </select>
-                    <button class="btn btn-primary" type="button" id="element_action_btn" data-toggle="actionDrafts">{$LANG->getModule('action')}</button>
+                    <button class="btn btn-primary" type="button" id="element_action_btn" data-toggle="actionDrafts" data-checkss="{$DRAFTS_CHECKSS}">{$LANG->getModule('action')}</button>
                 </div>
             </div>
             <div class="pagination-wrap">
