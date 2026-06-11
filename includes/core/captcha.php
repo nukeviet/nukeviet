@@ -62,10 +62,10 @@ if ($len > 0) {
         // Chữ màu tối để nổi bật trên nền sáng
         $text_color = imagecolorallocate($image, mt_rand(0, 100), mt_rand(0, 100), mt_rand(0, 100));
 
-        // Góc xoay mạnh hơn để dễ dính nét
-        $angle = mt_rand(-30, 30);
-        // Kích thước chữ lớn hơn một chút để dễ chạm nhau
-        $size = mt_rand(15, 20);
+        // Góc xoay vừa phải để dễ đọc hơn
+        $angle = mt_rand(-15, 15);
+        // Kích thước chữ vừa phải
+        $size = mt_rand(14, 18);
         // Vị trí Y ngẫu nhiên
         $y = mt_rand(22, NV_GFX_HEIGHT - 2);
 
@@ -75,18 +75,17 @@ if ($len > 0) {
             imagestring($image, 5, $x, mt_rand(4, 10), $code[$i], $text_color);
         }
 
-        // Cập nhật tọa độ X cho ký tự tiếp theo với bước ngắn hơn
-        // Việc dùng mt_rand(-5, -2) sẽ ép các chữ đè lên nhau rõ rệt hơn
-        $x += $char_step + mt_rand(-6, -1);
+        // Cập nhật tọa độ X cho ký tự tiếp theo với khoảng cách vừa phải
+        $x += $char_step + mt_rand(-2, 2);
     }
 }
 
 // Lớp nhiễu 3: Kẻ các đường xuyên qua chữ (Cực kỳ hiệu quả chống OCR)
 // Bước này phải làm SAU khi vẽ chữ để đường line đè lên chữ.
-$num_lines = mt_rand(3, 5);
+$num_lines = mt_rand(2, 4);
 for ($i = 0; $i < $num_lines; $i++) {
-    imagesetthickness($image, mt_rand(1, 2));
-    $line_color = imagecolorallocate($image, mt_rand(0, 120), mt_rand(0, 120), mt_rand(0, 120));
+    imagesetthickness($image, 1);
+    $line_color = imagecolorallocate($image, mt_rand(100, 150), mt_rand(100, 150), mt_rand(100, 150));
     $y1 = mt_rand(5, NV_GFX_HEIGHT - 5);
     $y2 = mt_rand(5, NV_GFX_HEIGHT - 5);
     imageline($image, 0, $y1, NV_GFX_WIDTH, $y2, $line_color);
