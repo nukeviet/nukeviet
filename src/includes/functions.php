@@ -4133,7 +4133,7 @@ function nv_get_email_template($emailid, $lang = '')
     $attachments = [];
     $email_data['attachments'] = explode(',', $email_data['attachments']);
     foreach ($email_data['attachments'] as $attachment) {
-        if (is_file(NV_UPLOADS_REAL_DIR . '/emailtemplates/' . $attachment)) {
+        if (strpos($attachment, '..') === false and is_file(NV_UPLOADS_REAL_DIR . '/emailtemplates/' . $attachment)) {
             $attachments[] = NV_UPLOADS_REAL_DIR . '/emailtemplates/' . $attachment;
         }
     }

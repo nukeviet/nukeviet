@@ -26,7 +26,7 @@ nv_add_hook($module_name, 'zalo_webhook', $priority, function (): void {
                     $json = @file_get_contents('php://input');
                     $params = json_decode($json, true, 512, JSON_BIGINT_AS_STRING);
                     $my_signature = hash('sha256', $params['app_id'] . mb_convert_encoding($json, 'UTF-8') . $params['timestamp'] . $global_config['zaloOASecretKey']);
-                    if (strcmp($my_signature, $signature) === 0) {
+                    if (hash_equals($my_signature, $signature)) {
                         $params['zalo'] = $global_config['zaloAppID'];
                         $parts = parse_url(NV_MY_DOMAIN . NV_BASE_SITEURL);
 
@@ -90,7 +90,7 @@ nv_add_hook($module_name, 'zalo_webhook', $priority, function (): void {
                     $webhook_data = $_POST;
                     ksort($webhook_data);
                     $my_signature = hash('sha256', mb_convert_encoding(http_build_query($webhook_data), 'UTF-8') . $global_config['zaloOASecretKey'] . $global_config['sitekey']);
-                    if (strcmp($my_signature, $signature) === 0) {
+                    if (hash_equals($my_signature, $signature)) {
                         !empty($webhook_data['event_name']) && $webhook_data['event_name'] = preg_replace('/[^a-z0-9\_]+/', '', $webhook_data['event_name']);
                         if (!empty($webhook_data['app_id']) and $webhook_data['app_id'] == $global_config['zaloAppID'] and !empty($webhook_data['event_name'])) {
                             require NV_ROOTDIR . '/modules/zalo/inc.php';
