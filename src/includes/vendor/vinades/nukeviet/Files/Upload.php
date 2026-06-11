@@ -640,7 +640,25 @@ class Upload
             return false;
         }
 
-        return !(preg_match('#<\?(php\b|=)#i', $txt));
+        if (preg_match_all('#<\?(php\b|=)(.*?)(\?>|$)#is', $txt, $matches)) {
+            foreach ($matches[0] as $match) {
+                $snippet = substr($match, 0, 10000); // Giới hạn 10KB để tối ưu bộ nhớ
+                $tokens = @token_get_all($snippet);
+                $is_bad = true; // Giả định đoạn text này là mã độc PHP hợp lệ
+                foreach ($tokens as $token) {
+                    // Dữ liệu nhị phân ngẫu nhiên sẽ sinh ra T_BAD_CHARACTER. Mã PHP hợp lệ thì không.
+                    if (is_array($token) && $token[0] === T_BAD_CHARACTER) {
+                        $is_bad = false; // Phát hiện rác nhị phân -> Đây là file ảnh an toàn bị nhận nhầm
+                        break;
+                    }
+                }
+                if ($is_bad) {
+                    return false; // Trả về false để chặn upload mã độc
+                }
+            }
+        }
+
+        return true;
     }
 
     /**
