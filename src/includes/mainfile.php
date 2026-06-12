@@ -56,6 +56,10 @@ define('NV_SERVER_NAME', $nv_Server->getServerHost());
 define('NV_SERVER_PROTOCOL', $nv_Server->getServerProtocol());
 define('NV_SERVER_PORT', $nv_Server->getServerPort());
 
+define('NV_CLIENT_HOST', $nv_Server->getOriginalHost());
+define('NV_CLIENT_PROTOCOL', $nv_Server->getOriginalProtocol());
+define('NV_CLIENT_PORT', $nv_Server->getOriginalPort());
+
 define('NV_MY_DOMAIN', $nv_Server->getOriginalDomain());
 define('NV_BASE_SITEURL', $nv_Server->getWebsitePath() . '/');
 define('NV_BASE_ADMINURL', NV_BASE_SITEURL . NV_ADMINDIR . '/');
@@ -70,20 +74,21 @@ if (file_exists(NV_ROOTDIR . '/' . NV_CONFIG_FILENAME)) {
 }
 
 if (empty($global_config['my_domains'])) {
-    $global_config['my_domains'] = [NV_SERVER_NAME];
-} else {
-    $global_config['my_domains'] = array_map('trim', explode(',', strtolower($global_config['my_domains'])));
-    // Nếu domain truy cập không đúng sẽ chuyển đến domain đúng (Báo mã 301)
-    if (!in_array(NV_SERVER_NAME, $global_config['my_domains'], true)) {
-        $location = $nv_Server->getOriginalProtocol() . '://' . $global_config['my_domains'][0] . $_SERVER['REQUEST_URI'];
-        if (in_array(substr(php_sapi_name(), 0, 3), ['cgi', 'fpm'], true)) {
-            header('Location: ' . $location);
-            header('Status: 301 Moved Permanently');
-        } else {
-            header('Location: ' . $location, true, 301);
-        }
-        exit(0);
+    http_response_code(500);
+    exit('No valid domain found. Please check the site configuration!');
+}
+
+$global_config['my_domains'] = array_map('trim', explode(',', strtolower($global_config['my_domains'])));
+// Nếu domain truy cập không đúng sẽ chuyển đến domain đúng (Báo mã 301)
+if (!in_array(NV_CLIENT_HOST, $global_config['my_domains'], true)) {
+    $location = $nv_Server->getOriginalProtocol() . '://' . $global_config['my_domains'][0] . $_SERVER['REQUEST_URI'];
+    if (in_array(substr(php_sapi_name(), 0, 3), ['cgi', 'fpm'], true)) {
+        header('Location: ' . $location);
+        header('Status: 301 Moved Permanently');
+    } else {
+        header('Location: ' . $location, true, 301);
     }
+    exit(0);
 }
 
 // The Mozilla CA certificate store in PEM format
