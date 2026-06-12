@@ -120,15 +120,12 @@ class Server
                 $this->original_host = $this->standardizeHost($original_host);
             }
             if ($original_protocol !== false) {
-                $this->original_protocol = strtolower($original_protocol);
+                $original_protocol = strtolower($original_protocol);
+                $this->original_protocol = in_array($original_protocol, ['http', 'https'], true) ? $original_protocol : $this->server_protocol;
             }
             if ($original_port !== false) {
-                if ($original_port != 80 and $original_port != 443) {
-                    $original_port = ':' . $original_port;
-                } else {
-                    $original_port = '';
-                }
-                $this->original_port = $original_port;
+                $port = ctype_digit((string) $original_port) ? (int) $original_port : 0;
+                $this->original_port = ($port > 0 && $port <= 65535 && $port !== 80 && $port !== 443) ? (':' . $port) : '';
             }
 
             if (filter_var($this->original_host, FILTER_VALIDATE_IP, FILTER_FLAG_IPV6) === false) {
@@ -202,7 +199,20 @@ class Server
      */
     protected function standardizeHost($host)
     {
-        return preg_replace('/(\:[0-9]+).*$/', '', preg_replace('/^[a-z]+\:\/\//i', '', trim($host)));
+        $host = trim($host);
+
+        if ($host === '') {
+            return '';
+        }
+
+        $host = (strpos($host, '://') !== false) ? $host : '//' . $host;
+        $host = parse_url($host, PHP_URL_HOST);
+
+        if (!is_string($host) || $host === '') {
+            return '';
+        }
+
+        return rtrim(strtolower($host), '.');
     }
 
     /**

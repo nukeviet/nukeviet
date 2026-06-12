@@ -1,6 +1,7 @@
 CHANGE LOG: NUKEVIET CMS
 http://nukeviet.vn
 NUKEVIET 4.5.09
+- Improve the strict domain checking mechanism. Thanks g03m0n from WhiteHub#4533
 - Fix Path Traversal to Arbitrary File. Thanks g03m0n from WhiteHub#4529
 - Enhanced XSS prevention: strip hex/decimal ASCII control character entities from HTML attributes and entity names. Thanks g03m0n from WhiteHub#4521
 - Fixed security vulnerabilities in comment functionality and SVG file upload. Thanks Nguyen Hung (Mitchell) from WhiteHub#4445
