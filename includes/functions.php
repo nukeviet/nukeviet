@@ -2007,6 +2007,10 @@ function nv_check_domain($domain)
             $domain = Idn::idn_to_ascii($domain, Idn::IDNA_DEFAULT, Idn::INTL_IDNA_VARIANT_UTS46);
         }
 
+        if ($domain === false) {
+            return '';
+        }
+
         if (preg_match('/^xn\-\-([a-z0-9\-\.]+)\.([a-z0-9\-]+)$/', $domain)) {
             return $domain;
         }
