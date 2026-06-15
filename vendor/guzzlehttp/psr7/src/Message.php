@@ -190,6 +190,15 @@ final class Message
         }
 
         $host = $headers[reset($hostKey)][0];
+
+        // NukeViet backport CVE-2026-48998 (guzzle/psr7 2.10.2):
+        // Reject malformed Host headers (control chars, whitespace, DEL and authority
+        // delimiters / ? # @ \) before building the request URI, to prevent host confusion
+        // via authority reinterpretation.
+        if (!is_string($host) || 1 === preg_match('/[\x00-\x20\x7F\/\?#@\\\\]/', $host)) {
+            throw new \InvalidArgumentException('Invalid request string');
+        }
+
         $scheme = substr($host, -4) === ':443' ? 'https' : 'http';
 
         return $scheme . '://' . $host . '/' . ltrim($path, '/');

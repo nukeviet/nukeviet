@@ -356,6 +356,15 @@ final class Idn
                     continue;
                 }
 
+                // NukeViet backport CVE-2026-46644 (symfony/polyfill upstream commit 1be936e):
+                // Per UTS #46 revision 33, if the Punycode decode succeeds but the result is empty
+                // or contains only ASCII code points, record an error and continue with the next label.
+                if ('' === $label || 1 !== preg_match('/[^\x00-\x7F]/', $label)) {
+                    $info->errors |= self::ERROR_INVALID_ACE_LABEL;
+
+                    continue;
+                }
+
                 $validationOptions['Transitional_Processing'] = false;
                 $labels[$i] = $label;
             }

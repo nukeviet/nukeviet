@@ -2005,6 +2005,24 @@ function nv_check_domain($domain)
             $domain = idn_to_ascii($domain, IDNA_DEFAULT, INTL_IDNA_VARIANT_UTS46);
         } else {
             $domain = Idn::idn_to_ascii($domain, Idn::IDNA_DEFAULT, Idn::INTL_IDNA_VARIANT_UTS46);
+
+            /*
+             * CVE-2026-46644: polyfill-intl-idn (< 1.38.1) nhận nhầm các nhãn "xn--" có phần
+             * Punycode rỗng hoặc giải mã ra chuỗi chỉ gồm ASCII (vd: "xn--", "xn--kc1zs4-"),
+             * trong khi ext-intl gốc loại bỏ chúng. Tự loại để hai môi trường hành xử như nhau:
+             * mỗi nhãn "xn--" hợp lệ bắt buộc giải mã ra ít nhất một ký tự non-ASCII.
+             */
+            if (is_string($domain)) {
+                foreach (explode('.', $domain) as $label) {
+                    if (strncasecmp($label, 'xn--', 4) === 0 and !preg_match('/[^\x00-\x7F]/', (string) Idn::idn_to_utf8($label, Idn::IDNA_DEFAULT, Idn::INTL_IDNA_VARIANT_UTS46))) {
+                        return '';
+                    }
+                }
+            }
+        }
+
+        if ($domain === false) {
+            return '';
         }
 
         if (preg_match('/^xn\-\-([a-z0-9\-\.]+)\.([a-z0-9\-]+)$/', $domain)) {

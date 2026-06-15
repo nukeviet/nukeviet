@@ -661,7 +661,16 @@ class Uri implements UriInterface
             throw new \InvalidArgumentException('Host must be a string');
         }
 
-        return \strtr($host, 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz');
+        $host = \strtr($host, 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz');
+
+        // NukeViet backport CVE-2026-49214 (guzzle/psr7 2.10.2):
+        // Reject ASCII control characters, whitespace and DEL in the host component to prevent
+        // CRLF injection when the host is later copied into the Host header.
+        if ($host !== '' && 1 === preg_match('/[\x00-\x20\x7F]/', $host)) {
+            throw new \InvalidArgumentException(sprintf('Invalid host: "%s"', $host));
+        }
+
+        return $host;
     }
 
     /**
