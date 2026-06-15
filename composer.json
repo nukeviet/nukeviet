@@ -1,6 +1,6 @@
 {
     "name" : "nukeviet/nukeviet",
-    "version" : "4.4.01",
+    "version" : "4.6.00",
     "type" : "project",
     "description" : "NukeViet is the first opensource CMS in Vietnam.",
     "keywords" : [
@@ -14,15 +14,14 @@
     "authors" : [{
             "name" : "VINADES.,JSC",
             "email" : "contact@vinades.vn",
-            "homepage" : "http://vinades.vn",
+            "homepage" : "https://vinades.vn",
             "role" : "Developer"
         }
     ],
     "support" : {
         "email" : "admin@nukeviet.vn",
         "issues" : "https://github.com/nukeviet/nukeviet/issues",
-        "forum" : "http://forum.nukeviet.vn",
-        "wiki" : "http://wiki.nukeviet.vn",
+        "wiki" : "https://wiki.nukeviet.vn",
         "source" : "https://github.com/nukeviet/nukeviet/releases"
     },
     "autoload" : {
@@ -36,12 +35,14 @@
         ]
     },
     "require" : {
-        "php" : ">=5.6.0",
+        "php" : ">=7.4.0",
         "ext-mbstring" : "*",
         "ext-gd" : "*",
         "ext-json" : "*",
         "ext-xml" : "*",
         "ext-session" : "*",
+        "ext-curl" : "*",
+        "ext-openssl" : "*",
         "tecnickcom/tc-lib-barcode" : "^1.15",
         "symfony/polyfill-mbstring": "<1.19.0",
         "phpmailer/phpmailer": "^6.11",

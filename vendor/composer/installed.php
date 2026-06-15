@@ -1,8 +1,8 @@
 <?php return array(
     'root' => array(
         'name' => 'nukeviet/nukeviet',
-        'pretty_version' => '4.4.01',
-        'version' => '4.4.01.0',
+        'pretty_version' => '4.6.00',
+        'version' => '4.6.00.0',
         'reference' => null,
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
@@ -47,8 +47,8 @@
             'dev_requirement' => false,
         ),
         'nukeviet/nukeviet' => array(
-            'pretty_version' => '4.4.01',
-            'version' => '4.4.01.0',
+            'pretty_version' => '4.6.00',
+            'version' => '4.6.00.0',
             'reference' => null,
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',

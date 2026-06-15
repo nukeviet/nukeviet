@@ -1,5 +1,8 @@
 CHANGE LOG: NUKEVIET CMS
 http://nukeviet.vn
+NUKEVIET 4.6.00
+- Require PHP >=7.4.00
+
 NUKEVIET 4.5.09
 - Improve the strict domain checking mechanism. Thanks g03m0n from WhiteHub#4533
 - Fix Path Traversal to Arbitrary File. Thanks g03m0n from WhiteHub#4529
