@@ -45,6 +45,7 @@
         "tecnickcom/tc-lib-barcode" : "^1.15",
         "symfony/polyfill-mbstring": "<1.19.0",
         "phpmailer/phpmailer": "^6.11",
-        "league/oauth2-client": "^2.7"
+        "league/oauth2-client": "^2.7",
+        "symfony/polyfill-intl-idn": "^1.38"
     }
 }
