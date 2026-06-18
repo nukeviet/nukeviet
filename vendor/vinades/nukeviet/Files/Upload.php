@@ -661,7 +661,8 @@ class Upload
         if (preg_match("#([a-z]*)=([\'\"]*)vbscript:#iU", $txt)) {
             return false;
         }
-        if (preg_match('#\bon[a-z]+\s*=#i', $txt)) {
+        if (preg_match('#<\w+[^>]*\bon[a-z]+\s*=#i', $txt)) {
+            // Phát hiện các payload XSS sử dụng các thuộc tính sự kiện của HTML như onload=, onerror=, onclick=,... được chèn lén vào file ảnh
             return false;
         }
         if (preg_match("#(<[^>]+)style=([\`\'\"]*).*expression\([^>]*>#iU", $txt)) {
@@ -676,8 +677,23 @@ class Upload
         if ($svg and preg_match('#</*(applet|link|script|iframe|frame|frameset)[^>]*>#i', $txt)) {
             return false;
         }
-        if (preg_match('#<\?(php\b|=)#i', $txt)) {
-            return false;
+
+        if (preg_match_all('#<\?(php\b|=)(.*?)(\?>|$)#is', $txt, $matches)) {
+            foreach ($matches[0] as $match) {
+                $snippet = substr($match, 0, 10000); // Giới hạn 10KB để tối ưu bộ nhớ
+                $tokens = @token_get_all($snippet);
+                $is_bad = true; // Giả định đoạn text này là mã độc PHP hợp lệ
+                foreach ($tokens as $token) {
+                    // Dữ liệu nhị phân ngẫu nhiên sẽ sinh ra T_BAD_CHARACTER. Mã PHP hợp lệ thì không.
+                    if (is_array($token) && $token[0] === T_BAD_CHARACTER) {
+                        $is_bad = false; // Phát hiện rác nhị phân -> Đây là file ảnh an toàn bị nhận nhầm
+                        break;
+                    }
+                }
+                if ($is_bad) {
+                    return false; // Trả về false để chặn upload mã độc
+                }
+            }
         }
 
         return true;
