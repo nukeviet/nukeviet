@@ -118,7 +118,7 @@ class dumpsave
 }
 
 /**
- * nv_check_dump_path()
+ * Kiểm tra đường dẫn file dump có hợp lệ hay không
  *
  * @param string $file
  * @param bool $is_new
@@ -126,13 +126,10 @@ class dumpsave
  */
 function nv_check_dump_path($file, $is_new = false)
 {
-    if (defined('NV_ROOTDIR') && defined('NV_LOGS_DIR')) {
-        $log_dir = realpath(NV_ROOTDIR . '/' . NV_LOGS_DIR . '/dump_backup');
-        if ($log_dir === false) {
-            return false;
-        }
-        $log_dir = str_replace('\\', '/', $log_dir);
+    $arr_file = explode('/', str_replace('\\', '/', $file));
+    $ext = nv_getextension((string) end($arr_file));
 
+    if (defined('NV_ROOTDIR') && defined('NV_LOGS_DIR')) {
         $path_to_check = $is_new ? dirname($file) : $file;
         $real_dir = realpath($path_to_check);
         if ($real_dir === false) {
@@ -140,13 +137,36 @@ function nv_check_dump_path($file, $is_new = false)
         }
         $real_dir = str_replace('\\', '/', $real_dir);
 
-        if (strpos($real_dir, $log_dir) !== 0) {
+        $allowed = false;
+
+        // Thư mục backup mặc định
+        $log_dir = realpath(NV_ROOTDIR . '/' . NV_LOGS_DIR . '/dump_backup');
+        if ($log_dir !== false) {
+            $log_dir = str_replace('\\', '/', $log_dir);
+            if (strpos($real_dir, $log_dir) === 0 && in_array($ext, ['sql', 'gz'], true)) {
+                $allowed = true;
+            }
+        }
+
+        // Thư mục cho phép khác
+        if (!$allowed && defined('NV_CONFIG_DIR') && $ext === 'sql') {
+            $config_data_dir = realpath(NV_ROOTDIR . '/' . NV_CONFIG_DIR . '/data');
+            if ($config_data_dir !== false) {
+                $config_data_dir = str_replace('\\', '/', $config_data_dir);
+                $parent_dir = $is_new ? $real_dir : dirname($real_dir);
+                if (preg_match('#^' . preg_quote($config_data_dir, '#') . '/[a-zA-Z0-9_\-]+$#', $parent_dir)) {
+                    $allowed = true;
+                }
+            }
+        }
+
+        if (!$allowed) {
             return false;
         }
+
+        return true;
     }
 
-    $arr_file = explode('/', str_replace('\\', '/', $file));
-    $ext = nv_getextension(end($arr_file));
     if (!in_array($ext, ['sql', 'gz'], true)) {
         return false;
     }
