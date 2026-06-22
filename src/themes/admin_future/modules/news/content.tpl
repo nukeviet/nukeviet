@@ -316,11 +316,11 @@
                 <div class="card-header py-2">
                     <div class="d-flex gap-2 justify-content-between align-items-center">
                         <div class="fw-medium fs-5 text-truncate">{$LANG->getModule('content_tag')}</div>
-                        <button type="button" class="btn btn-secondary btn-sm" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-title="{$LANG->getModule('tags_auto_create')}" aria-label="{$LANG->getModule('tags_auto_create')}" data-toggle="tags_auto_create" data-checkss="{$CHECKSS}"><i class="fa-solid fa-tags" data-icon="fa-tags"></i></button>
+                        <button type="button" class="btn btn-secondary btn-sm" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-title="{$LANG->getModule('tags_auto_create')}" aria-label="{$LANG->getModule('tags_auto_create')}" data-toggle="tags_auto_create" data-checkss="{$AJ_TAGS_CHECKSS}"><i class="fa-solid fa-tags" data-icon="fa-tags"></i></button>
                     </div>
                 </div>
                 <div class="card-body">
-                    <select id="newcontent_tags" data-checkss="{$AJ_TAGS_CHECKSS}" class="form-control" aria-label="{$LANG->getModule('content_tag')}" name="tags[]" multiple data-placeholder="{$LANG->getModule('input_tag')}">
+                    <select id="newcontent_tags" data-checkss="{$AJ_TAGSAJ_CHECKSS}" class="form-control" aria-label="{$LANG->getModule('content_tag')}" name="tags[]" multiple data-placeholder="{$LANG->getModule('input_tag')}">
                         {foreach from=$DATA.tags item=value}
                         <option value="{$value}" selected>{$value}</option>
                         {/foreach}
