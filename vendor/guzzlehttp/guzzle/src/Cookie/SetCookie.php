@@ -405,6 +405,13 @@ class SetCookie
             return 'The cookie domain must not be empty';
         }
 
+        // Fix CVE-2026-55767: reject dot-only / whitespace-padded domains such
+        // as ".", "..", " . " which normalize to an empty domain and would
+        // otherwise be treated as matching any request host.
+        if (ltrim(trim(strtolower((string) $domain)), '.') === '') {
+            return 'The cookie domain must not be empty';
+        }
+
         return true;
     }
 }

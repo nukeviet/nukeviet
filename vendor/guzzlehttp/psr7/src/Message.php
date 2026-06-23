@@ -17,17 +17,23 @@ final class Message
      */
     public static function toString(MessageInterface $message)
     {
+        // Fix CVE-2026-55766: reject CR/LF in HTTP start-line fields to
+        // prevent CRLF injection / response splitting during serialization.
+        $protocolVersion = self::assertNoCrlf($message->getProtocolVersion(), 'protocol version');
+
         if ($message instanceof RequestInterface) {
-            $msg = trim($message->getMethod() . ' '
-                    . $message->getRequestTarget())
-                . ' HTTP/' . $message->getProtocolVersion();
+            $method = self::assertNoCrlf($message->getMethod(), 'method');
+            $requestTarget = self::assertNoCrlf($message->getRequestTarget(), 'request target');
+            $msg = trim($method . ' ' . $requestTarget)
+                . ' HTTP/' . $protocolVersion;
             if (!$message->hasHeader('host')) {
                 $msg .= "\r\nHost: " . $message->getUri()->getHost();
             }
         } elseif ($message instanceof ResponseInterface) {
-            $msg = 'HTTP/' . $message->getProtocolVersion() . ' '
+            $reasonPhrase = self::assertNoCrlf($message->getReasonPhrase(), 'reason phrase');
+            $msg = 'HTTP/' . $protocolVersion . ' '
                 . $message->getStatusCode() . ' '
-                . $message->getReasonPhrase();
+                . $reasonPhrase;
         } else {
             throw new \InvalidArgumentException('Unknown message type');
         }
@@ -43,6 +49,29 @@ final class Message
         }
 
         return "{$msg}\r\n\r\n" . $message->getBody();
+    }
+
+    /**
+     * Ensures a value used in an HTTP start-line contains no CR/LF characters.
+     *
+     * Fix for CVE-2026-55766 (CRLF injection in HTTP start-line serialization).
+     *
+     * @param string $value The value to validate.
+     * @param string $field Name of the field, used in the error message.
+     *
+     * @return string The validated value.
+     *
+     * @throws \InvalidArgumentException If the value contains CR or LF.
+     */
+    private static function assertNoCrlf($value, $field)
+    {
+        if (strpbrk((string) $value, "\r\n") !== false) {
+            throw new \InvalidArgumentException(
+                "Invalid HTTP {$field}: CR/LF characters are not allowed."
+            );
+        }
+
+        return (string) $value;
     }
 
     /**

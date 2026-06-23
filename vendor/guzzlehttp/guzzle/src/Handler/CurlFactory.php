@@ -425,6 +425,7 @@ class CurlFactory implements CurlFactoryInterface
 
         if (isset($options['proxy'])) {
             if (!is_array($options['proxy'])) {
+                self::assertHttpsProxySupported($options['proxy']);
                 $conf[CURLOPT_PROXY] = $options['proxy'];
             } else {
                 $scheme = $easy->request->getUri()->getScheme();
@@ -433,6 +434,7 @@ class CurlFactory implements CurlFactoryInterface
                     if (!isset($options['proxy']['no']) ||
                         !\GuzzleHttp\is_host_in_noproxy($host, $options['proxy']['no'])
                     ) {
+                        self::assertHttpsProxySupported($options['proxy'][$scheme]);
                         $conf[CURLOPT_PROXY] = $options['proxy'][$scheme];
                     }
                 }
@@ -581,5 +583,35 @@ class CurlFactory implements CurlFactoryInterface
             }
             return strlen($h);
         };
+    }
+
+    /**
+     * Fix CVE-2026-55568: reject an https:// proxy when the installed libcurl
+     * cannot establish a TLS connection to the proxy (libcurl < 7.50.2).
+     *
+     * Older libcurl silently downgrades an https:// proxy to a plaintext
+     * http:// proxy, leaving the proxy leg in cleartext with no warning. We
+     * fail loudly instead of leaking data over an unencrypted proxy hop.
+     *
+     * @param mixed $proxy The proxy value (expected to be a string URL).
+     *
+     * @throws \InvalidArgumentException
+     */
+    private static function assertHttpsProxySupported($proxy)
+    {
+        if (!is_string($proxy) || stripos($proxy, 'https://') !== 0) {
+            return;
+        }
+
+        $version = curl_version();
+        // 0x073202 == 7.50.2, the first libcurl with HTTPS-proxy support.
+        if (!isset($version['version_number']) || $version['version_number'] < 0x073202) {
+            throw new \InvalidArgumentException(
+                'Cannot use an https:// proxy: the installed libcurl ('
+                . (isset($version['version']) ? $version['version'] : 'unknown')
+                . ') does not support HTTPS proxies (requires libcurl >= 7.50.2). '
+                . 'Refusing to silently downgrade the proxy connection to cleartext (CVE-2026-55568).'
+            );
+        }
     }
 }
