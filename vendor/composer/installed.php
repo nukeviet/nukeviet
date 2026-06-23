@@ -11,9 +11,9 @@
     ),
     'versions' => array(
         'guzzlehttp/guzzle' => array(
-            'pretty_version' => '7.11.1',
-            'version' => '7.11.1.0',
-            'reference' => '5af96f374e0ab4ebd747b8310888c99d3adb0a8c',
+            'pretty_version' => '7.12.1',
+            'version' => '7.12.1.0',
+            'reference' => 'd34627490fbc03bf5c5d7cfed81f2faa19519425',
             'type' => 'library',
             'install_path' => __DIR__ . '/../guzzlehttp/guzzle',
             'aliases' => array(),
@@ -29,9 +29,9 @@
             'dev_requirement' => false,
         ),
         'guzzlehttp/psr7' => array(
-            'pretty_version' => '2.11.0',
-            'version' => '2.11.0.0',
-            'reference' => 'bbb5e61349fa5cb822b3e87842b951088b76b81f',
+            'pretty_version' => '2.12.1',
+            'version' => '2.12.1.0',
+            'reference' => '172ef2f4e9824c1e058b7f30be8ae25a02c0f2b7',
             'type' => 'library',
             'install_path' => __DIR__ . '/../guzzlehttp/psr7',
             'aliases' => array(),
