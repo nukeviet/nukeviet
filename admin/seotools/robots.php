@@ -16,14 +16,30 @@ if (!defined('NV_IS_FILE_SEOTOOLS')) {
 $checkss = md5(NV_CHECK_SESSION . '_' . $module_name . '_' . $op . '_' . $admin_info['userid']);
 $cache_file = NV_ROOTDIR . '/' . NV_DATADIR . '/robots.php';
 if ($checkss == $nv_Request->get_string('checkss', 'post')) {
-    $robots_data = $nv_Request->get_array('filename', 'post');
+    // Có dạng filename[/COPYRIGHT.txt] = 0|1|2
+    $robots_data = [];
+    $_robots_data = $nv_Request->get_array('filename', 'post');
+    foreach ($_robots_data as $key => $value) {
+        $key = (string) $key;
+        if (!is_numeric($value) or !in_array((int) $value, [0, 1, 2], true)) {
+            continue;
+        }
+        // Loại ký tự phá literal trong file cache hoặc chèn dòng vào robots.txt
+        if ($key === '' or preg_match('/[\'"\\\\\x00-\x1F]/', $key)) {
+            continue;
+        }
+        $robots_data[$key] = (int) $value;
+    }
+
     $fileother = $nv_Request->get_array('fileother', 'post');
     $optionother = $nv_Request->get_array('optionother', 'post');
     $robots_other = [];
     foreach ($fileother as $key => $value) {
-        if (!empty($value)) {
-            $robots_other[$value] = (int) ($optionother[$key]);
+        $value = trim((string) $value);
+        if ($value === '' or preg_match('/[\'"\\\\\x00-\x1F]/', $value)) {
+            continue;
         }
+        $robots_other[$value] = (int) ($optionother[$key]);
     }
 
     $content_config = "<?php\n\n";
