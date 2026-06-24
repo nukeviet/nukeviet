@@ -64,7 +64,12 @@
 </div>
 <script>
 $(function() {
-    //Thay d?i th? t?
+    const whiteList = $.fn.tooltip.Constructor.DEFAULTS.whiteList;
+    whiteList['*'].push(/^data-[\w-]*$/i);
+    whiteList['input'] = [];
+    whiteList['button'] = [];
+
+    // Thay đổi thứ tự
     if (parseInt($('#item-total').text()) > 1) {
         var pp = $('#module_show_list [data-toggle=popover]'),
             ppc = $('.popover-content').clone();
@@ -78,7 +83,8 @@ $(function() {
             })
         }).popover({
             html: true,
-            sanitize: false,
+            sanitize: true,
+            whiteList: whiteList,
             content: function() {
                 $('.topic_change_weight', ppc).attr('data-bid', $(this).data('bid')).attr('data-current-weight', $(this).data('current-weight'));
                 $('.new-weight', ppc).attr('value', $(this).data('current-weight'));
