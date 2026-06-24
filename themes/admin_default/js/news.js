@@ -597,6 +597,10 @@ $(document).ready(function() {
         e.preventDefault();
         e.stopPropagation();
         popOverALl.push(this);
+
+        const whiteList = $.fn.tooltip.Constructor.DEFAULTS.whiteList;
+        whiteList['*'].push(/^data-[\w-]*$/i);
+
         if (!$(this).data('havepop')) {
             $(this).data('havepop', true);
             $(this).popover({
@@ -605,7 +609,8 @@ $(document).ready(function() {
                 placement: "bottom",
                 content: getPopoverContent(this),
                 trigger: "manual",
-                sanitize: false
+                sanitize: true,
+                whiteList: whiteList
             });
             $(this).popover('show');
             $(this).on('shown.bs.popover', function() {
