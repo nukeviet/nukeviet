@@ -129,7 +129,7 @@ $num_rows = $result->rowCount();
 while ($data = $result->fetch()) {
     if (isset($admin_mods[$data['module']]) or isset($site_mods[$data['module']])) {
         $mod = $data['module'];
-        $data['content'] = !empty($data['content']) ? unserialize($data['content']) : '';
+        $data['content'] = !empty($data['content']) ? unserialize($data['content'], NV_UNSERIALIZE_SAFE) : '';
 
         // Hien thi thong bao tu cac module he thong
         if ($data['module'] == 'modules') {

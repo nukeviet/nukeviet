@@ -30,7 +30,7 @@ while ($row = $result->fetch()) {
     if ($row['group_id'] < 10) {
         $row['title'] = $lang_global['level' . $row['group_id']];
     }
-    $row['config'] = unserialize($row['config']);
+    $row['config'] = unserialize($row['config'], NV_UNSERIALIZE_SAFE);
     $groupsList[$row['group_id']] = $row;
 }
 if (empty($groupsList)) {
@@ -132,7 +132,7 @@ if ($nv_Request->isset_request('gid, getuserid', 'post, get')) {
         if ($userid) {
             // Luu vao bang OpenID
             if (!empty($row['openid_info'])) {
-                $reg_attribs = unserialize(nv_base64_decode($row['openid_info']));
+                $reg_attribs = unserialize(nv_base64_decode($row['openid_info']), NV_UNSERIALIZE_SAFE);
                 $stmt = $db->prepare('INSERT INTO ' . NV_MOD_TABLE . '_openid VALUES (' . $userid . ', :server, :opid , :email)');
                 $stmt->bindParam(':server', $reg_attribs['server'], PDO::PARAM_STR);
                 $stmt->bindParam(':opid', $reg_attribs['opid'], PDO::PARAM_STR);
@@ -147,7 +147,7 @@ if ($nv_Request->isset_request('gid, getuserid', 'post, get')) {
             )');
             $db->query('UPDATE ' . NV_MOD_TABLE . '_groups SET numbers = numbers+1 WHERE group_id=4 or group_id=' . $gid);
             $db->query('UPDATE ' . NV_MOD_TABLE . ' SET group_id = ' . $gid . ', in_groups=' . $gid . ' WHERE userid=' . $userid);
-            $users_info = unserialize(nv_base64_decode($row['users_info']));
+            $users_info = unserialize(nv_base64_decode($row['users_info']), NV_UNSERIALIZE_SAFE);
             $query_field = [];
             $query_field['userid'] = $userid;
             $result_field = $db->query('SELECT * FROM ' . NV_MOD_TABLE . '_field ORDER BY fid ASC');

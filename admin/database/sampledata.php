@@ -133,7 +133,7 @@ if ($nv_Request->isset_request('startwrite', 'get')) {
                 $error = true;
             }
         } else {
-            $array_tables = unserialize(file_get_contents($file_data_tmp));
+            $array_tables = unserialize(file_get_contents($file_data_tmp), NV_UNSERIALIZE_SAFE);
         }
 
         // Kiểm tra và xuất file dump

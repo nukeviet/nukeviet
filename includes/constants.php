@@ -124,6 +124,15 @@ define('NUKEVIET_STORE_APIURL', 'https://api.nukeviet.vn/store/');
 // Nó sẽ được gán cho biến $sys_info['supports_rewrite'] nếu hệ thông không thể tự xác định
 define('NV_MY_REWRITE_SUPPORTER', '');
 
+// Option an toàn cho unserialize — chỉ cho phép array/scalar, không cho phép object
+define('NV_UNSERIALIZE_SAFE', ['allowed_classes' => false]);
+
+// JSON encode cho API response và lưu DB
+define('NV_JSON_ENCODE', JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+
+// JSON encode nhúng trong <script> tag HTML
+define('NV_JSON_ENCODE_SCRIPT', JSON_HEX_TAG | JSON_HEX_AMP | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+
 //Browser Names
 define('BROWSER_OPERA', 'Opera');
 define('BROWSER_OPERAMINI', 'Opera Mini');

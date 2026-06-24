@@ -33,7 +33,7 @@ if (!nv_function_exists('nv_contact_supporter')) {
             $_array_department = $nv_Cache->db($sql, 'id', $module);
 
             if (($cache = $nv_Cache->getItem($module, $cache_file)) != false) {
-                $array_data = unserialize($cache);
+                $array_data = unserialize($cache, NV_UNSERIALIZE_SAFE);
             } else {
                 foreach ($_array_department as $array_department) {
                     $db->sqlreset()
@@ -136,7 +136,7 @@ if (!nv_function_exists('nv_contact_supporter')) {
                         }
 
                         if (!empty($row['others'])) {
-                            $others = unserialize($row['others']);
+                            $others = unserialize($row['others'], NV_UNSERIALIZE_SAFE);
                             if (!empty($others)) {
                                 foreach ($others as $key => $value) {
                                     $key = $value['name'];

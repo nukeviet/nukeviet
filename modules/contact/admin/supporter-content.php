@@ -132,7 +132,7 @@ if (empty($row['others'])) {
     $row['others'] = [];
     $row['others'][] = ['name' => '', 'value' => ''];
 } else {
-    $row['others'] = unserialize($row['others']);
+    $row['others'] = unserialize($row['others'], NV_UNSERIALIZE_SAFE);
 }
 
 foreach ($row['others'] as $index => $others) {

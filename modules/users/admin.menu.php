@@ -21,7 +21,7 @@ $sql = 'SELECT config, content FROM ' . $_mod_table . "_config WHERE config IN('
 $_config_module = $nv_Cache->db($sql, 'config', $module_name);
 
 $access_admin = $_config_module['access_admin']['content'];
-$access_admin = unserialize($access_admin);
+$access_admin = unserialize($access_admin, NV_UNSERIALIZE_SAFE);
 $active_editinfo_censor = $_config_module['active_editinfo_censor']['content'];
 
 $allow_func = [

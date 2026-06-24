@@ -599,8 +599,7 @@ function nv_capcha_txt($seccode, $type = 'captcha')
         return false;
     }
 
-    $random = (PHP_VERSION_ID >= 70000) ? random_int(0, 1000000) : mt_rand(0, 1000000);
-
+    $random = random_int(0, 1000000);
     $seccode = strtoupper($seccode);
     $random_num = $nv_Request->get_string('random_num', 'session', 0);
     $datekey = date('F j');
@@ -2198,6 +2197,10 @@ function nv_check_url($url, $isTriggerError = true, $is_200 = 0)
 
     $allow_url_fopen = ini_get('allow_url_fopen') == '1' or strtolower(ini_get('allow_url_fopen')) == 'on';
     $isHttps = $url_info['scheme'] == 'https';
+    $cainfo = ini_get('curl.cainfo');
+    if (empty($cainfo)) {
+        $cainfo = NV_ROOTDIR . '/' . NV_CERTS_DIR . '/cacert.pem';
+    }
 
     if (nv_function_exists('curl_init') and nv_function_exists('curl_exec')) {
         $port = isset($url_info['port']) ? (int) $url_info['port'] : ($isHttps ? 443 : 80);
@@ -2225,7 +2228,11 @@ function nv_check_url($url, $isTriggerError = true, $is_200 = 0)
             if (defined('CURLOPT_SSL_VERIFYSTATUS')) {
                 curl_setopt($curl, CURLOPT_SSL_VERIFYSTATUS, false);
             }
-            curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
+            curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, true);
+            curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 2);
+            if (!empty($cainfo)) {
+                curl_setopt($curl, CURLOPT_CAINFO, $cainfo);
+            }
         }
 
         if ($open_basedir) {
@@ -2254,13 +2261,17 @@ function nv_check_url($url, $isTriggerError = true, $is_200 = 0)
             return false;
         }
         $res = explode(PHP_EOL, $response);
-    } elseif (nv_function_exists('get_headers') and $allow_url_fopen and PHP_VERSION_ID >= 70100) {
+    } elseif (nv_function_exists('get_headers') and $allow_url_fopen) {
         if ($isHttps) {
+            $ssl_context = [
+                'verify_peer' => true,
+                'verify_peer_name' => true
+            ];
+            if (!empty($cainfo)) {
+                $ssl_context['cafile'] = $cainfo;
+            }
             $context = stream_context_create([
-                'ssl' => [
-                    'verify_peer' => false,
-                    'verify_peer_name' => false
-                ]
+                'ssl' => $ssl_context
             ]);
         } else {
             $context = stream_context_create([
@@ -2277,11 +2288,15 @@ function nv_check_url($url, $isTriggerError = true, $is_200 = 0)
         if ($isHttps) {
             $scheme = 'ssl://';
             $port = isset($url_info['port']) ? (int) $url_info['port'] : 443;
+            $ssl_context = [
+                'verify_peer' => true,
+                'verify_peer_name' => true
+            ];
+            if (!empty($cainfo)) {
+                $ssl_context['cafile'] = $cainfo;
+            }
             $context = stream_context_create([
-                'ssl' => [
-                    'verify_peer' => false,
-                    'verify_peer_name' => false
-                ]
+                'ssl' => $ssl_context
             ]);
         } else {
             $scheme = '';

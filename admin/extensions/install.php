@@ -61,7 +61,7 @@ if (empty($error) and empty($message)) {
 
     if (is_array($array)) {
         $cookies = $array['cookies'];
-        $array = !empty($array['body']) ? @unserialize($array['body']) : [];
+        $array = !empty($array['body']) ? @unserialize($array['body'], NV_UNSERIALIZE_SAFE) : [];
     } else {
         // Do post có thể trả về object
         $array = [];

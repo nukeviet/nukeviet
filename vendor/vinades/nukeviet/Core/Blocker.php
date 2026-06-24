@@ -232,7 +232,7 @@ class Blocker
         $info = [];
         $logfile = $this->_get_logfile();
         if (file_exists($logfile)) {
-            $info = unserialize(file_get_contents($logfile));
+            $info = unserialize(file_get_contents($logfile), ['allowed_classes' => false]);
         }
 
         return $info;

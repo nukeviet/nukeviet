@@ -300,11 +300,11 @@ if (!nv_function_exists('nv_block_login')) {
                         $array_field_config = [];
                         $result_field = $db->query('SELECT * FROM ' . $_mod_data . '_field ORDER BY weight ASC');
                         while ($row_field = $result_field->fetch()) {
-                            $language = unserialize($row_field['language']);
+                            $language = unserialize($row_field['language'], NV_UNSERIALIZE_SAFE);
                             $row_field['title'] = (isset($language[NV_LANG_DATA])) ? $language[NV_LANG_DATA][0] : $row['field'];
                             $row_field['description'] = (isset($language[NV_LANG_DATA])) ? nv_htmlspecialchars($language[NV_LANG_DATA][1]) : '';
                             if (!empty($row_field['field_choices'])) {
-                                $row_field['field_choices'] = unserialize($row_field['field_choices']);
+                                $row_field['field_choices'] = unserialize($row_field['field_choices'], NV_UNSERIALIZE_SAFE);
                             } elseif (!empty($row_field['sql_choices'])) {
                                 $row_field['sql_choices'] = explode('|', $row_field['sql_choices']);
                                 $row_field['field_choices'] = [];

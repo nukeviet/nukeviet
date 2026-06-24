@@ -100,8 +100,8 @@ $robots_other = [];
 
 if (file_exists($cache_file)) {
     include $cache_file;
-    $robots_data = unserialize($cache);
-    $robots_other = unserialize($cache_other);
+    $robots_data = unserialize($cache, NV_UNSERIALIZE_SAFE);
+    $robots_other = unserialize($cache_other, NV_UNSERIALIZE_SAFE);
 } else {
     $robots_data['/' . NV_DATADIR . '/'] = 0;
     $robots_data['/includes/'] = 0;

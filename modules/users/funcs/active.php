@@ -90,7 +90,7 @@ if ($checknum == $row['checknum']) {
 
         $userid = $db->insert_id($sql, 'userid', $data_insert);
         if ($userid) {
-            $users_info = unserialize(nv_base64_decode($row['users_info']));
+            $users_info = unserialize(nv_base64_decode($row['users_info']), NV_UNSERIALIZE_SAFE);
             $query_field = [];
             $query_field['userid'] = $userid;
             $result_field = $db->query('SELECT * FROM ' . NV_MOD_TABLE . '_field ORDER BY fid ASC');

@@ -110,7 +110,7 @@ if (!nv_function_exists('nv_news_block_news')) {
 
         $cache_file = NV_LANG_DATA . '__block_news_' . $numrow . '_' . NV_CACHE_PREFIX . '.cache';
         if (($cache = $nv_Cache->getItem($module, $cache_file)) != false) {
-            $array_block_news = unserialize($cache);
+            $array_block_news = unserialize($cache, NV_UNSERIALIZE_SAFE);
         } else {
             $array_block_news = [];
 

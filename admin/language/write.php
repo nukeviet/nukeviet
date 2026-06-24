@@ -35,7 +35,7 @@ function nv_admin_write_lang($dirlang, $idfile)
             $array_translator['info'] = '';
             $array_translator['langtype'] = $langtype;
         } else {
-            $array_translator = unserialize($author_lang);
+            $array_translator = unserialize($author_lang, NV_UNSERIALIZE_SAFE);
         }
 
         $include_lang = '';

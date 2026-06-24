@@ -48,7 +48,7 @@ function nv_checkAdmpass($adminpass)
 }
 
 $access_admin = $db->query('SELECT content FROM ' . NV_USERS_GLOBALTABLE . "_config WHERE config='access_admin'")->fetchColumn();
-$access_admin = unserialize($access_admin);
+$access_admin = unserialize($access_admin, NV_UNSERIALIZE_SAFE);
 $level = $admin_info['level'];
 
 $array_action_account = [];

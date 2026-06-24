@@ -280,7 +280,7 @@ if (preg_match($global_config['check_module'], $module_name)) {
             // Xac dinh layout funcs cua module
             $cache_file = NV_LANG_DATA . '_' . md5($module_name . '_' . $global_config['module_theme']) . '_' . NV_CACHE_PREFIX . '.cache';
             if (($cache = $nv_Cache->getItem('modules', $cache_file)) != false) {
-                $module_info['layout_funcs'] = unserialize($cache);
+                $module_info['layout_funcs'] = unserialize($cache, NV_UNSERIALIZE_SAFE);
             } else {
                 $module_info['layout_funcs'] = [];
                 $sth = $db->prepare('SELECT f.func_name, t.layout FROM ' . NV_MODFUNCS_TABLE . ' f

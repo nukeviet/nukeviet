@@ -24,7 +24,7 @@ function nv_groups_list($mod_data = 'users')
     global $nv_Cache, $db, $db_config, $global_config, $lang_global;
     $cache_file = NV_LANG_DATA . '_groups_list_' . NV_CACHE_PREFIX . '.cache';
     if (($cache = $nv_Cache->getItem($mod_data, $cache_file)) != false) {
-        return (PHP_VERSION_ID >= 70000) ? unserialize($cache, ['allowed_classes' => false]) : unserialize($cache);
+        return unserialize($cache, NV_UNSERIALIZE_SAFE);
     }
 
     $groups = [];
@@ -283,7 +283,7 @@ function nv_geVersion($updatetime = 3600)
         ];
 
         $array = $NV_Http->post(NUKEVIET_STORE_APIURL, $args);
-        $array = (is_array($array) and !empty($array['body'])) ? ((PHP_VERSION_ID >= 70000) ? @unserialize($array['body'], ['allowed_classes' => false]) : @unserialize($array['body'])) : [];
+        $array = (is_array($array) and !empty($array['body'])) ? @unserialize($array['body'], NV_UNSERIALIZE_SAFE) : [];
 
         $error = '';
         if (!empty(NukeViet\Http\Http::$error)) {
@@ -760,7 +760,7 @@ function nv_getExtVersion($updatetime = 3600)
             ];
 
             $apidata = $NV_Http->post(NUKEVIET_STORE_APIURL, $args);
-            $apidata = (is_array($apidata) and !empty($apidata['body'])) ? ((PHP_VERSION_ID >= 70000) ? @unserialize($apidata['body'], ['allowed_classes' => false]) : @unserialize($apidata['body'])) : [];
+            $apidata = (is_array($apidata) and !empty($apidata['body'])) ? @unserialize($apidata['body'], NV_UNSERIALIZE_SAFE) : [];
 
             $error = '';
             if (!empty(NukeViet\Http\Http::$error)) {

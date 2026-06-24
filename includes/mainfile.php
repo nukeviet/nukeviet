@@ -423,7 +423,7 @@ unset($nv_check_update);
 
 $cache_file = NV_LANG_DATA . '_sitemods_' . NV_CACHE_PREFIX . '.cache';
 if (($cache = $nv_Cache->getItem('modules', $cache_file)) != false) {
-    $sys_mods = unserialize($cache);
+    $sys_mods = unserialize($cache, NV_UNSERIALIZE_SAFE);
 } else {
     $sys_mods = [];
     try {

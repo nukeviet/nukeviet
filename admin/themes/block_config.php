@@ -91,7 +91,7 @@ if (!empty($file_name)) {
                     if ($bid > 0) {
                         $row_config = $db->query('SELECT module, file_name, config FROM ' . NV_BLOCKS_TABLE . '_groups WHERE bid=' . $bid)->fetch();
                         if ($row_config['file_name'] == $file_name and $row_config['module'] == $module) {
-                            $data_block = unserialize($row_config['config']);
+                            $data_block = unserialize($row_config['config'], NV_UNSERIALIZE_SAFE);
                         }
                     }
 
