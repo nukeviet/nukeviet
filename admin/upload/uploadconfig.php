@@ -76,6 +76,7 @@ if ($nv_Request->isset_request('save', 'post')) {
         $ext[] = 'php5';
         $ext[] = 'phtml';
         $ext[] = 'inc';
+        $ext[] = 'htaccess';
         $ext = array_unique($ext);
         $ext = implode(',', $ext);
 
