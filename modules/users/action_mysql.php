@@ -70,7 +70,7 @@ if (in_array($lang, $array_lang_module_setup, true) and $num_module_exists > 1) 
             $sql = 'SELECT fid, language FROM ' . $db_config['prefix'] . '_' . $module_data . '_field';
             $_result = $db->query($sql);
             while ($_row = $_result->fetch()) {
-                $_row['language'] = unserialize($_row['language']);
+                $_row['language'] = unserialize($_row['language'], NV_UNSERIALIZE_SAFE);
                 if (isset($_row['language'][$lang])) {
                     unset($_row['language'][$lang]);
                     $_row['language'] = empty($_row['language']) ? '' : serialize($_row['language']);
@@ -379,7 +379,7 @@ if ($module_data != 'users' or $op != 'recreate_mod') {
         $sql = 'SELECT fid, field, language, is_system FROM ' . $db_config['prefix'] . '_' . $module_data . '_field';
         $_result = $db->query($sql);
         while ($_row = $_result->fetch()) {
-            $_row['language'] = unserialize($_row['language']);
+            $_row['language'] = unserialize($_row['language'], NV_UNSERIALIZE_SAFE);
             if (!isset($_row['language'][$lang])) {
                 if (!empty($_row['is_system'])) {
                     $_row['language'][$lang] = [

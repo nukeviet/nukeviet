@@ -66,7 +66,7 @@ if ($nv_Request->isset_request('save', 'post')) {
     }
     nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&oauth_config=' . $oauth_config . '&rand=' . nv_genpass());
 } elseif (isset($global_config['config_sso'])) {
-    $_cas_config = unserialize($global_config['config_sso']);
+    $_cas_config = unserialize($global_config['config_sso'], NV_UNSERIALIZE_SAFE);
 } else {
     // Thiết lập các giá trị mặc định.
     $_cas_config = [
@@ -122,7 +122,7 @@ $xtpl->assign('FIELD_LOCK', $field_lock);
 $sql = 'SELECT * FROM ' . NV_MOD_TABLE . '_field ORDER BY weight ASC';
 $_query = $db->query($sql);
 foreach ($_query as $row) {
-    $_language = unserialize($row['language']);
+    $_language = unserialize($row['language'], NV_UNSERIALIZE_SAFE);
     $_field_lock = (isset($_cas_config['config_field_lock'][$row['field']])) ? $_cas_config['config_field_lock'][$row['field']] : '';
     $xtpl->assign('FIELD', [
         'field' => $row['field'],

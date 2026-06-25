@@ -33,7 +33,7 @@ $global_users_config = [];
 $cacheFile = NV_LANG_DATA . '_' . $module_data . '_config_' . NV_CACHE_PREFIX . '.cache';
 $cacheTTL = 3600;
 if (($cache = $nv_Cache->getItem($module_name, $cacheFile, $cacheTTL)) != false) {
-    $global_users_config = unserialize($cache);
+    $global_users_config = unserialize($cache, NV_UNSERIALIZE_SAFE);
 } else {
     $sql = 'SELECT config, content FROM ' . NV_MOD_TABLE . '_config';
     $result = $db->query($sql);

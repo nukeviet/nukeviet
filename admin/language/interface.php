@@ -85,7 +85,7 @@ while ($_scratch = $result->fetch(3)) {
         $array_translator['info'] = '';
         $array_translator['langtype'] = '';
     } else {
-        $array_translator = unserialize($author_lang);
+        $array_translator = unserialize($author_lang, NV_UNSERIALIZE_SAFE);
     }
 
     $xtpl->assign('ROW', [

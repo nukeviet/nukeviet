@@ -26,7 +26,7 @@ $result = $db->query($sql);
 
 $array = [];
 while ($row = $result->fetch()) {
-    $row['role_data'] = empty($row['role_data']) ? [] : unserialize($row['role_data']);
+    $row['role_data'] = empty($row['role_data']) ? [] : unserialize($row['role_data'], NV_UNSERIALIZE_SAFE);
 
     // Xử lý các API theo cat
     $row['apis'] = [];

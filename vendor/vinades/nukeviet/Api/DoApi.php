@@ -134,7 +134,7 @@ class DoApi
             'body' => array_merge($request, $this->data),
             'timeout' => 0,
             'decompress' => false,
-            'sslverify' => false
+            'sslverify' => true
         ];
 
         $http = new Http($global_config, NV_TEMP_DIR);

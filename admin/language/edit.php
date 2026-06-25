@@ -114,7 +114,7 @@ if ($nv_Request->isset_request('idfile,checksess', 'get') and $nv_Request->get_s
             $array_translator['info'] = '';
             $array_translator['langtype'] = '';
         } else {
-            $array_translator = unserialize($author_lang);
+            $array_translator = unserialize($author_lang, NV_UNSERIALIZE_SAFE);
         }
 
         $xtpl->assign('ALLOWED_HTML_LANG', ALLOWED_HTML_LANG);

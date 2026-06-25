@@ -118,7 +118,7 @@ if (!empty($credential_data['api_roles'])) {
     $sql = 'SELECT role_data FROM ' . NV_AUTHORS_GLOBALTABLE . '_api_role WHERE role_id IN(' . implode(',', $credential_data['api_roles']) . ')';
     $result = $db->query($sql);
     while ($row = $result->fetch()) {
-        $row['role_data'] = unserialize($row['role_data']);
+        $row['role_data'] = unserialize($row['role_data'], NV_UNSERIALIZE_SAFE);
         foreach ($row['role_data'] as $sysormod => $sdata) {
             if ($sysormod == 'sys') {
                 $credential_data['api_allowed'][''] = array_unique(array_merge_recursive($credential_data['api_allowed'][''], $sdata));

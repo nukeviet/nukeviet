@@ -18,7 +18,7 @@ $lang_siteinfo = nv_get_lang_module($mod);
 $_arr_siteinfo = [];
 $cacheFile = NV_LANG_DATA . '_siteinfo_' . NV_CACHE_PREFIX . '.cache';
 if (($cache = $nv_Cache->getItem($mod, $cacheFile)) != false) {
-    $_arr_siteinfo = unserialize($cache);
+    $_arr_siteinfo = unserialize($cache, NV_UNSERIALIZE_SAFE);
 } else {
     // Tong so bai viet
     $_arr_siteinfo['number_publtime'] = $db_slave->query('SELECT COUNT(*) FROM ' . NV_PREFIXLANG . '_' . $mod_data . '_rows WHERE status= 1')->fetchColumn();

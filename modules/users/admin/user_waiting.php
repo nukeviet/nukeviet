@@ -58,7 +58,7 @@ if ($nv_Request->isset_request('act', 'get')) {
     }
     $row['photo'] = '';
 
-    $reg_attribs = !empty($row['openid_info']) ? unserialize(nv_base64_decode($row['openid_info'])) : [];
+    $reg_attribs = !empty($row['openid_info']) ? unserialize(nv_base64_decode($row['openid_info']), NV_UNSERIALIZE_SAFE) : [];
     if (!empty($reg_attribs['photo'])) {
         $upload = new NukeViet\Files\Upload([
             'images'
@@ -137,7 +137,7 @@ if ($nv_Request->isset_request('act', 'get')) {
             $stmt->execute();
         }
 
-        $users_info = unserialize(nv_base64_decode($row['users_info']));
+        $users_info = unserialize(nv_base64_decode($row['users_info']), NV_UNSERIALIZE_SAFE);
         $query_field = [];
         $query_field['userid'] = $userid;
         $result_field = $db->query('SELECT * FROM ' . NV_MOD_TABLE . '_field ORDER BY fid ASC');

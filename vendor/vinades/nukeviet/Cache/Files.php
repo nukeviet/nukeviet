@@ -209,7 +209,7 @@ class Files
 
         $cache_file = $lang . '_' . md5($sql) . '_' . $this->_Cache_Prefix . '.cache';
         if (($cache = $this->getItem($modname, $cache_file)) !== false) {
-            $data = unserialize($cache);
+            $data = unserialize($cache, ['allowed_classes' => false]);
             if (is_array($data)) {
                 return $data;
             }

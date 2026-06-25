@@ -177,7 +177,7 @@ function nv_site_theme($contents, $full = true)
 
     // Customs Style
     if (isset($module_config['themes'][$global_config['module_theme']]) and !empty($module_config['themes'][$global_config['module_theme']])) {
-        $config_theme = unserialize($module_config['themes'][$global_config['module_theme']]);
+        $config_theme = unserialize($module_config['themes'][$global_config['module_theme']], NV_UNSERIALIZE_SAFE);
 
         if (isset($config_theme['css_content']) and !empty($config_theme['css_content'])) {
             $customFileName = $global_config['module_theme'] . '.' . NV_LANG_DATA . '.' . $global_config['idsite'];

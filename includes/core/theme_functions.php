@@ -985,7 +985,7 @@ function nv_get_blocks($theme, $cache = true)
 
     $cache_file = NV_LANG_DATA . '_' . $theme . '_configposition_' . NV_CACHE_PREFIX . '.cache';
     if ($cache and ($cache_data = $nv_Cache->getItem('themes', $cache_file)) != false) {
-        return unserialize($cache_data) ?: [];
+        return unserialize($cache_data, NV_UNSERIALIZE_SAFE) ?: [];
     }
 
     $positions = [];

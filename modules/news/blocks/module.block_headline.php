@@ -100,7 +100,7 @@ if (!nv_function_exists('nv_block_headline')) {
         $cache_file = NV_LANG_DATA . '_block_headline_' . NV_CACHE_PREFIX . '.cache';
 
         if (($cache = $nv_Cache->getItem($module_name, $cache_file)) != false) {
-            $array_bid_content = unserialize($cache);
+            $array_bid_content = unserialize($cache, NV_UNSERIALIZE_SAFE);
         } else {
             $id = 0;
             $db_slave->sqlreset()->select('bid, title, numbers')->from(NV_PREFIXLANG . '_' . $module_data . '_block_cat')->order('weight ASC')->limit(2);

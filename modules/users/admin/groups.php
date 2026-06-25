@@ -787,7 +787,7 @@ if ($nv_Request->isset_request('add', 'get') or $nv_Request->isset_request('edit
                 $post['config']['access_groups_add'] = $post['config']['access_groups_del'] = 1;
                 $post['config']['access_addus'] = $post['config']['access_waiting'] = $post['config']['access_editus'] = $post['config']['access_delus'] = $post['config']['access_passus'] = $post['config']['access_passus'] = 0;
             } else {
-                $post['config'] = unserialize($post['config']);
+                $post['config'] = unserialize($post['config'], NV_UNSERIALIZE_SAFE);
             }
         } else {
             $post['title'] = $post['email'] = $post['description'] = $post['content'] = $post['exp_time'] = '';

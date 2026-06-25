@@ -1184,7 +1184,7 @@ if ($step == 1) {
             $cache_file = NV_ROOTDIR . '/' . NV_DATADIR . '/robots.php';
             if (file_exists($cache_file)) {
                 include $cache_file;
-                $robots_data = unserialize($cache);
+                $robots_data = unserialize($cache, NV_UNSERIALIZE_SAFE);
             } else {
                 $robots_data['/' . NV_DATADIR . '/'] = 0;
                 $robots_data['/includes/'] = 0;
