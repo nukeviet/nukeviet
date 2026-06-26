@@ -628,19 +628,19 @@ function nv_genpass($length = 8, $type = 0)
     $_arr_m = [];
     $_arr_m[] = 0; // Chữ
     $_arr_m[] = 2; // 1. Số
-    $_arr_m[] = ($type == 2 or $type == 4) ? 3 : mt_rand(0, 2); // 2. Đặc biệt
-    $_arr_m[] = ($type == 3 or $type == 4) ? 1 : mt_rand(0, 2); // 3. HOA
+    $_arr_m[] = ($type == 2 or $type == 4) ? 3 : random_int(0, 2); // 2. Đặc biệt
+    $_arr_m[] = ($type == 3 or $type == 4) ? 1 : random_int(0, 2); // 3. HOA
 
     $length = $length - 4;
     for ($k = 0; $k < $length; ++$k) {
-        $_arr_m[] = ($type == 2 or $type == 4) ? mt_rand(0, 3) : mt_rand(0, 2);
+        $_arr_m[] = ($type == 2 or $type == 4) ? random_int(0, 3) : random_int(0, 2);
     }
 
     $pass = '';
     foreach ($_arr_m as $m) {
         $chars = $array_chars[$m];
         $max = strlen($chars) - 1;
-        $pass .= $chars[mt_rand(0, $max)];
+        $pass .= $chars[random_int(0, $max)];
     }
 
     return $pass;
@@ -2215,8 +2215,7 @@ function nv_check_url($url, $isTriggerError = true, $is_200 = 0)
 
         $open_basedir = (ini_get('open_basedir') == '1' or strtolower(ini_get('open_basedir')) == 'on') ? 1 : 0;
 
-        mt_srand(microtime(true) * 1000000);
-        $rand = array_rand($userAgents);
+        $rand = random_int(0, count($userAgents) - 1);
         $agent = $userAgents[$rand];
         $curl = curl_init($url);
 
