@@ -663,7 +663,8 @@
         <!-- BEGIN: tab_edit_others -->
         <div id="edit_others" class="well-lg tab-pane fade {TAB_OTHERS_ACTIVE}">
             <form action="{EDITINFO_FORM}/others" method="post" role="form" class="form-horizontal" data-toggle="reg_validForm" autocomplete="off" novalidate>
-                <div class="nv-info" style="margin-bottom:30px" data-default="{GLANG.required}">{GLANG.required}</div>
+                <div class="nv-info" style="margin-bottom:30px">{GLANG.required}</div>
+                <div class="nv-info-default hidden">{GLANG.required}</div>
                 <div class="form-detail">
                     <!-- BEGIN: loop -->
                     <!-- BEGIN: textbox -->
