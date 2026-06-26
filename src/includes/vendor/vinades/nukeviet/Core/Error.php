@@ -300,7 +300,7 @@ class Error
         $error_file = $this->cfg['error_log_256'] . '/' . $this->cl['month'] . '_' . $error_code . '.' . $this->cfg['error_log_fileext'];
 
         if ($this->cfg['error_set_logs'] and !file_exists($error_file)) {
-            $content = json_encode($this->_log_content(), NV_JSON_ENCODE);
+            $content = json_encode($this->_log_content(), JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT);
             file_put_contents($error_file, $content, FILE_APPEND);
         }
 
@@ -359,7 +359,7 @@ class Error
             $content['backtrace'] = $trace;
         }
 
-        $content = json_encode($content, NV_JSON_ENCODE);
+        $content = json_encode($content, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT);
         $content .= "\n";
         if (!$this->cfg['error_separate_file']) {
             $content .= self::LOG_DELIMITER . "\n";
@@ -379,7 +379,7 @@ class Error
      */
     private function _send()
     {
-        $content = json_encode($this->_log_content(), NV_JSON_ENCODE) . "\n";
+        $content = json_encode($this->_log_content(), JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT) . "\n";
         $content .= self::LOG_DELIMITER . "\n";
         $error_log_file = $this->cfg['error_log_path'] . '/sendmail.' . $this->cfg['error_log_fileext'];
         error_log($content, 3, $error_log_file);

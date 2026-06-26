@@ -288,9 +288,9 @@
                 <table class="table table-bordered mb-0">
                     <thead>
                         <tr>
-                            <th class="text-nowrap">{$LANG->getModule('field_options_choicesql_module')}</th>
-                            <th class="text-nowrap">{$LANG->getModule('field_options_choicesql_table')}</th>
-                            <th class="text-nowrap">{$LANG->getModule('field_options_choicesql_column')}</th>
+                            <th class="text-nowrap" style="width: 20%;">{$LANG->getModule('field_options_choicesql_module')}</th>
+                            <th class="text-nowrap" style="width: 30%;">{$LANG->getModule('field_options_choicesql_table')}</th>
+                            <th class="text-nowrap" style="width: 50%;">{$LANG->getModule('field_options_choicesql_column')}</th>
                         </tr>
                     </thead>
                     <tbody>
