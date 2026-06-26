@@ -76,8 +76,10 @@ class GoogleAuthenticator
         $validChars = $this->getTable();
         unset($validChars[32]);
 
+        $validKeys = array_keys($validChars);
+        $maxKey = count($validKeys) - 1;
         for ($i = 0; $i < $this->secretLength; ++$i) {
-            $secret .= $validChars[array_rand($validChars)];
+            $secret .= $validChars[$validKeys[random_int(0, $maxKey)]];
         }
 
         return $secret;
