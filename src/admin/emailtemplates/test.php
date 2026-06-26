@@ -128,6 +128,7 @@ if ($nv_Request->isset_request('checkss', 'post') and csrf_check($nv_Request->ge
 
         try {
             $tpl_string = new \NukeViet\Template\NVSmarty();
+            $tpl_string->enableSecurity(new \NukeViet\Template\NVSmartyMailSecurity($tpl_string));
             foreach ($merge_fields as $field_key => $field_value) {
                 $tpl_string->assign($field_key, $field_data[$field_key]);
             }

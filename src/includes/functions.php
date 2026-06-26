@@ -4257,6 +4257,7 @@ function nv_sendmail_from_template($emailid, $data = [], $lang = '', $attachment
             }
 
             $tpl = new \NukeViet\Template\NVSmarty();
+            $tpl->enableSecurity(new \NukeViet\Template\NVSmartyMailSecurity($tpl));
             foreach ($merge_fields as $field_key => $field_value) {
                 $tpl->assign($field_key, $simple_value ? $field_value : $field_value['data']);
             }
