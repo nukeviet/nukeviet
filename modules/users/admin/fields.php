@@ -206,6 +206,9 @@ if ($nv_Request->isset_request('save', 'post')) {
 
         require_once NV_ROOTDIR . '/includes/field_not_allow.php';
 
+        /**
+         * @var array $field_not_allow
+         */
         if (in_array($dataform['field'], $field_not_allow, true)) {
             $error = $lang_module['field_error_not_allow'];
         } elseif (empty($dataform['field'])) {
@@ -348,8 +351,26 @@ if ($nv_Request->isset_request('save', 'post')) {
             $choicesql_column_order = $nv_Request->get_string('choicesql_column_order', 'post', '');
             // Kiểu sắp xếp
             $choicesql_sort_type = $nv_Request->get_string('choicesql_sort_type', 'post', '');
-            if (!isset($choicesql_sort_type)) {
-                $choicesql_sort_type = current(array_keys($array_sqlchoice_order));
+            $sort_type_allowed = array_keys($array_sqlchoice_order);
+            if (!in_array($choicesql_sort_type, $sort_type_allowed, true)) {
+                $choicesql_sort_type = $sort_type_allowed[0];
+            }
+
+            // Chuẩn hóa dữ liệu đầu vào
+            if (!preg_match($global_config['check_module_data'], $choicesql_module)) {
+                $choicesql_module = '';
+            }
+            if (!preg_match($global_config['check_module_data'], $choicesql_table)) {
+                $choicesql_table = '';
+            }
+            if (!preg_match($global_config['check_module_data'], $choicesql_column_key)) {
+                $choicesql_column_key = '';
+            }
+            if (!preg_match($global_config['check_module_data'], $choicesql_column_val)) {
+                $choicesql_column_val = '';
+            }
+            if (!preg_match($global_config['check_module_data'], $choicesql_column_order)) {
+                $choicesql_column_order = '';
             }
 
             if ($choicesql_module != '' and $choicesql_table != '' and $choicesql_column_key != '' and $choicesql_column_val != '') {
@@ -483,7 +504,7 @@ if ($nv_Request->isset_request('save', 'post')) {
                     $save = false;
                     try {
                         $save = $db->exec('ALTER TABLE ' . NV_MOD_TABLE . '_info CHANGE ' . $dataform_old['field'] . ' ' . $dataform_old['field'] . ' ' . $type_date . ' COMMENT ' . $db->quote($dataform['title']));
-                    } catch (PDOException $e) {
+                    } catch (Exception $e) {
                         trigger_error($e->getMessage());
                     }
                 }

@@ -167,16 +167,28 @@ while ($row_field = $result_field->fetch()) {
         $row_field['field_choices'] = unserialize($row_field['field_choices']);
     } elseif (!empty($row_field['sql_choices'])) {
         $row_field['sql_choices'] = explode('|', $row_field['sql_choices']);
-        $row_field['field_choices'] = [];
-        $query = 'SELECT ' . $row_field['sql_choices'][2] . ', ' . $row_field['sql_choices'][3] . ' FROM ' . $row_field['sql_choices'][1];
-        if (!empty($row_field['sql_choices'][4]) and !empty($row_field['sql_choices'][5])) {
-            $query .= ' ORDER BY ' . $row_field['sql_choices'][4] . ' ' . $row_field['sql_choices'][5];
+        foreach ($row_field['sql_choices'] as $key => $val) {
+            if ($key >= 0 and $key <= 3 and !preg_match($global_config['check_module_data'], $val)) {
+                $row_field['sql_choices'] = [];
+                break;
+            } elseif ($key == 4 and !preg_match($global_config['check_module_data'], $val)) {
+                $row_field['sql_choices'][$key] = '';
+            } elseif ($key == 5 and !in_array($val, ['ASC', 'DESC'], true)) {
+                $row_field['sql_choices'][$key] = '';
+            }
         }
-        $result = $db->query($query);
-        while ($_scratch = $result->fetch(3)) {
-            list($key, $val) = $_scratch;
-            unset($_scratch);
-            $row_field['field_choices'][$key] = $val;
+        $row_field['field_choices'] = [];
+        if (!empty($row_field['sql_choices'])) {
+            $query = 'SELECT ' . $row_field['sql_choices'][2] . ', ' . $row_field['sql_choices'][3] . ' FROM ' . $row_field['sql_choices'][1];
+            if (!empty($row_field['sql_choices'][4]) and !empty($row_field['sql_choices'][5])) {
+                $query .= ' ORDER BY ' . $row_field['sql_choices'][4] . ' ' . $row_field['sql_choices'][5];
+            }
+            $result = $db->query($query);
+            while ($_scratch = $result->fetch(3)) {
+                list($key, $val) = $_scratch;
+                unset($_scratch);
+                $row_field['field_choices'][$key] = $val;
+            }
         }
     }
     $row_field['system'] = $row_field['is_system'];
@@ -478,6 +490,8 @@ if ($checkss == $array_register['checkss']) {
 
             // Callback sau khi đăng ký
             if (nv_function_exists('nv_user_register_callback')) {
+                /** @disregard P1010 */
+                // phpcs:ignore
                 nv_user_register_callback($userid);
             }
 
