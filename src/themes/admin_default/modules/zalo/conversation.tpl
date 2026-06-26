@@ -1,6 +1,6 @@
 <!-- BEGIN: messages -->
 <!-- BEGIN: message -->
-<div class="message" id="mess-{MESSAGE.message_id}">
+<div class="message" id="mess-{MESSAGE.message_id}" data-message-id="{MESSAGE.message_id}" data-checkss="{CHECKSS}">
     <div class="message-{MESSAGE.src}">
         <div class="avatar">
             <!-- BEGIN: avatar -->
@@ -78,7 +78,7 @@
             <!-- END: location -->
             <!-- BEGIN: voice -->
             <div class="voice">
-                <button type="button" data-toggle="voice_play" data-file="{MESSAGE.playfile}"><i class="fa fa-play fa-fw"></i> {LANG.voice} <span class="playing"><span class="playing_bar playing_bar1"></span><span class="playing_bar playing_bar2"></span><span class="playing_bar playing_bar3"></span></span></button>
+                <button type="button" data-toggle="voice_play"><i class="fa fa-play fa-fw"></i> {LANG.voice} <span class="playing"><span class="playing_bar playing_bar1"></span><span class="playing_bar playing_bar2"></span><span class="playing_bar playing_bar3"></span></span></button>
                 <div class="time">{MESSAGE.time_format}</div>
             </div>
             <!-- END: voice -->

@@ -1209,4 +1209,300 @@ class SampleDataTest extends \Codeception\Test\Unit
 
         $this->assertTrue(true);
     }
+
+    /**
+     * Dữ liệu mẫu người quan tâm (followers) cho màn quản trị followers của module zalo
+     *
+     * Sinh 50 follower vào _zalo_followers với app_id khớp zaloAppID đang cấu hình
+     * (để hiển thị đúng trên trang), kèm 6 nhãn ở _zalo_tags và gán nhãn cho ~một nửa
+     * follower (đồng bộ cả cột tags_info dạng CSV lẫn bảng _zalo_tags_follower).
+     *
+     * @group sample-data
+     */
+    public function testInsertSampleDataForZaloFollowers()
+    {
+        global $db, $db_config;
+
+        $followersTable = $db_config['prefix'] . '_zalo_followers';
+        $tagsTable = $db_config['prefix'] . '_zalo_tags';
+        $tagsFollowerTable = $db_config['prefix'] . '_zalo_tags_follower';
+
+        $esc = fn (string $s) => str_replace(["\\", "'"], ["\\\\", "\\'"], $s);
+
+        // Lấy zaloAppID đang cấu hình để follower seed khớp bộ lọc app_id của trang.
+        // Trang followers lọc: WHERE isfollow=1 AND app_id=:app_id
+        $appId = (string) $db->query(
+            "SELECT config_value FROM " . $db_config['prefix'] . "_config"
+            . " WHERE config_name = 'zaloAppID' LIMIT 1"
+        )->fetchColumn();
+        if ($appId === '') {
+            // Fallback khi site chưa cấu hình Zalo: dùng app_id mẫu cố định
+            $appId = 'sample-zalo-app';
+        }
+
+        // 6 nhãn mẫu (alias => name) cho người quan tâm
+        $tags = [
+            'khach-tiem-nang' => 'Khách tiềm năng',
+            'da-mua-hang'     => 'Đã mua hàng',
+            'cham-soc'        => 'Đang chăm sóc',
+            'vip'             => 'Khách VIP',
+            'khieu-nai'       => 'Có khiếu nại',
+            'doi-tac'         => 'Đối tác',
+        ];
+
+        $tagValues = [];
+        foreach ($tags as $alias => $name) {
+            $tagValues[] = sprintf("('%s','%s')", $esc($alias), $esc($name));
+        }
+        $db->exec(
+            'INSERT IGNORE INTO ' . $tagsTable . ' (alias, name) VALUES ' . implode(',', $tagValues)
+        );
+
+        $tagAliases = array_keys($tags);
+
+        // Họ tên người Việt ngẫu nhiên
+        $ho   = ['Nguyễn', 'Trần', 'Lê', 'Phạm', 'Hoàng', 'Huỳnh', 'Phan', 'Vũ', 'Đặng', 'Bùi', 'Đỗ', 'Hồ', 'Ngô', 'Dương'];
+        $dem  = ['Văn', 'Thị', 'Hữu', 'Đức', 'Ngọc', 'Minh', 'Quang', 'Thanh', 'Gia', 'Khánh'];
+        $ten  = ['An', 'Bình', 'Cường', 'Dung', 'Em', 'Phương', 'Giang', 'Hà', 'Hùng', 'Lan', 'Long', 'Minh', 'Nam', 'Phúc', 'Quân', 'Thành', 'Tuấn', 'Uyên', 'Việt', 'Yến'];
+
+        // Một vài city_id/district_id hợp lệ theo data/vnsubdivisions.php (HN=01, HCM=79)
+        $cities = [
+            ['01', '001'], // Hà Nội - Ba Đình
+            ['79', '760'], // TP.HCM - Quận 1
+            ['48', '490'], // Đà Nẵng - Hải Châu
+            ['', ''],      // không khai báo địa chỉ
+        ];
+
+        $maxWeight = (int) $db->query('SELECT MAX(weight) FROM ' . $followersTable)->fetchColumn();
+        $now = time();
+
+        $followerValues = [];
+        $tagFollowerValues = [];
+
+        for ($i = 1; $i <= 50; ++$i) {
+            // user_id: chuỗi số duy nhất (Zalo user_id dạng numeric, CHAR 30)
+            $userId = (string) (rand(1000000000, 9999999999) . str_pad((string) $i, 4, '0', STR_PAD_LEFT));
+
+            $name = $ho[array_rand($ho)] . ' ' . $dem[array_rand($dem)] . ' ' . $ten[array_rand($ten)];
+            $displayName = $name;
+            $gender = (string) rand(1, 2);
+            $avatar = 'https://s120-ava-talk.zadn.vn/sample/' . $userId . '.jpg';
+            $avatar240 = 'https://s240-ava-talk.zadn.vn/sample/' . $userId . '.jpg';
+
+            // phone_code lưu theo khóa của $callingcodes (parse_phone trả $callingcodes2['84'][0] = 'VN84'),
+            // KHÔNG phải số gọi '84' — nếu lưu '84' sẽ gây Undefined array key tại followers.php khi hiển thị.
+            $phoneCode = 'VN84';
+            $phoneNumber = '9' . str_pad((string) rand(10000000, 99999999), 8, '0', STR_PAD_LEFT);
+            [$cityId, $districtId] = $cities[array_rand($cities)];
+            $address = $cityId !== '' ? ('Số ' . rand(1, 200) . ' đường mẫu') : '';
+
+            $weight = $maxWeight + $i;
+            $updatetime = $now - rand(0, 90 * 86400);
+
+            // ~50% follower được gán 1-2 nhãn
+            $tagsInfo = '';
+            if ($i % 2 === 0) {
+                $shuffled = $tagAliases;
+                shuffle($shuffled);
+                $picked = array_slice($shuffled, 0, rand(1, 2));
+                $tagsInfo = implode(',', $picked);
+
+                foreach ($picked as $alias) {
+                    $tagFollowerValues[] = sprintf("('%s','%s')", $esc($alias), $esc($userId));
+                }
+            }
+
+            $followerValues[] = sprintf(
+                "('%s','%s','%s','%s',0,'%s','%s','%s','%s','',1,%d,'%s','%s','%s','%s','%s','%s',1,%d)",
+                $esc($userId),
+                $esc($appId),
+                $esc($userId), // user_id_by_app
+                $esc($displayName),
+                $esc($avatar),
+                $esc($avatar240),
+                $esc($gender),
+                $esc($tagsInfo),
+                $weight,
+                $esc($name),
+                $esc($phoneCode),
+                $esc($phoneNumber),
+                $esc($address),
+                $esc($cityId),
+                $esc($districtId),
+                $updatetime
+            );
+        }
+
+        $this->assertCount(50, $followerValues, 'Số follower mẫu tạo ra không đúng 50 bản ghi.');
+
+        // Cột tags_info đặt trước notes_info(''); is_sync=1
+        $db->exec(
+            'INSERT IGNORE INTO ' . $followersTable
+            . ' (user_id, app_id, user_id_by_app, display_name, is_sensitive, avatar120, avatar240,'
+            . ' user_gender, tags_info, notes_info, isfollow, weight, name, phone_code, phone_number,'
+            . ' address, city_id, district_id, is_sync, updatetime) VALUES '
+            . implode(',', $followerValues)
+        );
+
+        // Gán nhãn vào bảng quan hệ để bộ lọc theo tag hoạt động
+        if (!empty($tagFollowerValues)) {
+            $db->exec(
+                'INSERT IGNORE INTO ' . $tagsFollowerTable
+                . ' (tag, user_id) VALUES ' . implode(',', $tagFollowerValues)
+            );
+        }
+
+        $this->assertTrue(true);
+    }
+
+    /**
+     * Dữ liệu mẫu hội thoại (conversation) cho màn quản trị followers của module zalo
+     *
+     * Với mỗi follower (tối đa 10) sinh 8-15 tin nhắn vào _zalo_conversation, xen kẽ
+     * src=1 (người quan tâm gửi) và src=0 (OA gửi). Đa dạng type: text, photo, voice,
+     * link, location, sticker để các nhánh hiển thị của conversation_to_html() đều có
+     * dữ liệu. Phụ thuộc dữ liệu follower nên skip nếu _zalo_followers trống.
+     *
+     * @group sample-data
+     */
+    public function testInsertSampleDataForZaloConversation()
+    {
+        global $db, $db_config;
+
+        $followersTable = $db_config['prefix'] . '_zalo_followers';
+        $conversationTable = $db_config['prefix'] . '_zalo_conversation';
+
+        $esc = fn (string $s) => str_replace(["\\", "'"], ["\\\\", "\\'"], $s);
+
+        // Conversation phụ thuộc follower có sẵn. Lấy đúng tập follower hiển thị trên trang
+        // (cùng bộ lọc isfollow=1 + app_id, ORDER BY weight ASC như followers.php) để bất kỳ
+        // follower nào mở ra cũng có hội thoại — tránh trường hợp chỉ vài follower có dữ liệu.
+        $appId = (string) $db->query(
+            "SELECT config_value FROM " . $db_config['prefix'] . "_config WHERE config_name = 'zaloAppID' LIMIT 1"
+        )->fetchColumn();
+        $sql = 'SELECT user_id FROM ' . $followersTable . ' WHERE isfollow = 1';
+        if ($appId !== '') {
+            $sql .= ' AND app_id = ' . $db->quote($appId);
+        }
+        $sql .= ' ORDER BY weight ASC LIMIT 50';
+        $userIds = $db->query($sql)->fetchAll(\PDO::FETCH_COLUMN);
+
+        if (empty($userIds)) {
+            $this->markTestSkipped('Chưa có follower trong ' . $followersTable . '; chạy testInsertSampleDataForZaloFollowers trước.');
+        }
+
+        // Tin nhắn dạng text mẫu (tiếng Việt) cho cả hai chiều OA <-> follower
+        $textsFromUser = [
+            'Chào shop, sản phẩm này còn hàng không ạ?',
+            'Cho mình hỏi giá bao nhiêu vậy?',
+            'Mình muốn đặt 2 cái, ship về Hà Nội nhé.',
+            'Bao giờ thì giao hàng được ạ?',
+            'Cảm ơn shop nhiều nha!',
+            'Có size lớn hơn không shop?',
+            'Mình chuyển khoản rồi nhé.',
+            'Shop tư vấn giúp mình mẫu nào bền hơn với.',
+        ];
+        $textsFromOA = [
+            'Dạ chào anh/chị, sản phẩm còn hàng ạ.',
+            'Dạ giá sản phẩm là 350.000đ ạ.',
+            'Dạ shop đã ghi nhận đơn, giao trong 2-3 ngày ạ.',
+            'Dạ anh/chị cho shop xin số điện thoại để lên đơn ạ.',
+            'Cảm ơn anh/chị đã ủng hộ shop ạ!',
+            'Dạ bên em có đủ size từ S đến XXL ạ.',
+            'Dạ shop đã nhận được thanh toán, cảm ơn anh/chị ạ.',
+        ];
+
+        // Sticker id mẫu của Zalo
+        $stickerIds = ['46101', '46102', '46103', '46104'];
+
+        $values = [];
+        $now = time();
+        $seq = 0;
+
+        foreach ($userIds as $userId) {
+            $msgCount = rand(8, 15);
+            // Tin cũ nhất cách hiện tại tối đa ~7 ngày, mỗi tin cách nhau vài phút
+            $baseTime = $now - rand(86400, 7 * 86400);
+
+            for ($i = 0; $i < $msgCount; ++$i) {
+                ++$seq;
+                $src = $i % 2; // 1 = follower gửi, 0 = OA gửi
+                $time = $baseTime + $i * rand(60, 600);
+                // message_id tất định theo (user_id, i) để chạy lại seed không nhân đôi tin nhắn
+                $messageId = sprintf('sample_conv_%s_%d', $userId, $i);
+
+                $type = 'text';
+                $message = '';
+                $links = '';
+                $thumb = '';
+                $url = '';
+                $description = '';
+                $location = '';
+
+                // Phần lớn là text; chèn xen vài loại đặc biệt theo vị trí
+                if ($i === 2 && $src === 1) {
+                    // Ảnh từ follower
+                    $type = 'photo';
+                    $url = 'https://f' . rand(1, 9) . '-zpg.zdn.vn/sample/photo_' . $seq . '.jpg';
+                    $thumb = $url;
+                    $description = 'Ảnh sản phẩm khách gửi';
+                } elseif ($i === 4 && $src === 1) {
+                    // Tin nhắn thoại từ follower (để hiện nút play trong giao diện)
+                    $type = 'voice';
+                    $url = 'https://sample-zalo-cdn.zadn.vn/voice/' . $seq . '.amr';
+                } elseif ($i === 5 && $src === 0) {
+                    // Link sản phẩm từ OA
+                    $type = 'link';
+                    $links = json_encode([[
+                        'type' => 'link',
+                        'url' => 'https://shop.example.com/sp/' . $seq,
+                        'title' => 'Sản phẩm mẫu #' . $seq,
+                        'thumb' => 'https://shop.example.com/thumb/' . $seq . '.jpg',
+                        'description' => 'Mô tả ngắn sản phẩm mẫu số ' . $seq,
+                    ]], NV_JSON_ENCODE);
+                } elseif ($i === 6 && $src === 1) {
+                    // Vị trí từ follower
+                    $type = 'location';
+                    $location = json_encode([
+                        'latitude' => 21.027763 + (rand(-500, 500) / 10000),
+                        'longitude' => 105.834160 + (rand(-500, 500) / 10000),
+                    ], NV_JSON_ENCODE);
+                } elseif ($i === 7) {
+                    // Sticker
+                    $type = 'sticker';
+                    $url = 'https://zalo-api.zadn.vn/sticker/' . $stickerIds[array_rand($stickerIds)] . '.png';
+                } else {
+                    $message = $src === 1
+                        ? $textsFromUser[array_rand($textsFromUser)]
+                        : $textsFromOA[array_rand($textsFromOA)];
+                }
+
+                $values[] = sprintf(
+                    "('%s','%s',%d,%d,'%s','%s','%s','%s','%s','%s','%s','',1)",
+                    $esc($messageId),
+                    $esc((string) $userId),
+                    $src,
+                    $time,
+                    $esc($type),
+                    $esc($message),
+                    $esc($links),
+                    $esc($thumb),
+                    $esc($url),
+                    $esc($description),
+                    $esc($location)
+                );
+            }
+        }
+
+        $this->assertNotEmpty($values, 'Không sinh được tin nhắn hội thoại mẫu nào.');
+
+        // displayed=1 (đã hiển thị), note='' — bulk insert, bỏ qua nếu trùng message_id
+        $db->exec(
+            'INSERT IGNORE INTO ' . $conversationTable
+            . ' (message_id, user_id, src, time, type, message, links, thumb, url, description, location, note, displayed) VALUES '
+            . implode(',', $values)
+        );
+
+        $this->assertTrue(true);
+    }
 }
