@@ -53,11 +53,16 @@ class GoogleAuthenticator
      */
     public function verifyOpt($secretkey, $opt)
     {
+        if (empty($secretkey) or empty($opt)) {
+            return false;
+        }
+
+        $opt = (string) $opt;
         $timeSlice = floor(time() / 30);
         // Check realtime code and 30sec code before
         for ($i = -1; $i <= 0; ++$i) {
             $trueCode = $this->getTrueCode($secretkey, $timeSlice + $i);
-            if ($trueCode === $opt) {
+            if (hash_equals($trueCode, $opt)) {
                 return true;
             }
         }
