@@ -8,7 +8,8 @@
         "symfony/polyfill-intl-idn": "^1.31",
         "zaloplatform/zalo-php-sdk": "^4.0",
         "smarty/smarty": "^5.4",
-        "web-auth/webauthn-lib": "^5.0"
+        "web-auth/webauthn-lib": "^5.0",
+        "firebase/php-jwt": "^7.1"
     },
     "autoload": {
         "psr-4": {

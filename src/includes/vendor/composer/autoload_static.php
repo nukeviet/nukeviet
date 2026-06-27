@@ -88,6 +88,10 @@ class ComposerStaticInitc9c15c1354161bfabc370743d4a6d93f
             'GuzzleHttp\\Promise\\' => 19,
             'GuzzleHttp\\' => 11,
         ),
+        'F' => 
+        array (
+            'Firebase\\JWT\\' => 13,
+        ),
         'D' => 
         array (
             'Doctrine\\Deprecations\\' => 22,
@@ -264,6 +268,10 @@ class ComposerStaticInitc9c15c1354161bfabc370743d4a6d93f
         'GuzzleHttp\\' => 
         array (
             0 => __DIR__ . '/..' . '/guzzlehttp/guzzle/src',
+        ),
+        'Firebase\\JWT\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/firebase/php-jwt/src',
         ),
         'Doctrine\\Deprecations\\' => 
         array (
