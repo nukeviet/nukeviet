@@ -9,12 +9,186 @@
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
+use NukeViet\Http\Http;
+use Firebase\JWT\JWT;
+use Firebase\JWT\JWK;
+use Firebase\JWT\ExpiredException;
+use Firebase\JWT\BeforeValidException;
+use Firebase\JWT\SignatureInvalidException;
+
 if (!defined('NV_IS_MOD_USER')) {
     exit('Stop!!!');
 }
 
 if (!defined('NV_OPENID_ALLOWED') or !in_array('google-identity', $global_config['openid_servers'], true)) {
-    exit('This method to login is not supported');
+    nv_htmlOutput('This method to login is not supported');
+}
+
+if (!defined('NV_GOOGLE_IDENTITY_CERTS_URL')) {
+    define('NV_GOOGLE_IDENTITY_CERTS_URL', 'https://www.googleapis.com/oauth2/v3/certs');
+}
+
+/**
+ * Lấy bộ khóa công khai (JWKS) của Google để xác thực chữ ký ID token.
+ * Khóa của Google được xoay vòng định kỳ nên kết quả được cache theo chỉ thị
+ * "Cache-Control: max-age" trong response; khi token mang "kid" chưa có trong
+ * cache (vừa xoay khóa) thì gọi với $force = true để fetch lại một lần.
+ *
+ * @link https://developers.google.com/identity/gsi/web/guides/verify-google-id-token?hl=vi
+ * @param bool $force Bỏ qua cache, fetch mới (dùng khi không tìm thấy kid)
+ * @return array|false Mảng JWKS dạng ['keys' => [...]] hoặc false nếu thất bại
+ */
+function nv_google_identity_get_certs(bool $force = false)
+{
+    global $global_config, $nv_Cache, $module_name;
+
+    $cache_file = 'oauth_google_identity_jwks_' . NV_CACHE_PREFIX . '.cache';
+
+    // Cache tối thiểu 5 phút, tối đa 24 giờ
+    $ttl_min = 300;
+    $ttl_max = 86400;
+
+    /**
+     * 2 lần fetch sang Google phải có thời hạn, kể cả $force
+     * tránh kẻ tấn công truyền token có kid ngẫu nhiên ép server gọi Google liên tục
+     */
+    $refetch_min = 60;
+
+    // Cache lưu dạng envelope {fetched, expires, jwks} để tự quản lý hạn theo Cache-Control
+    $cached_envelope = null;
+    $cache = $nv_Cache->getItem($module_name, $cache_file, ttl: $ttl_max);
+    if ($cache !== false) {
+        $envelope = json_decode($cache, true);
+        if (is_array($envelope) && !empty($envelope['jwks']['keys'])) {
+            $cached_envelope = $envelope;
+        }
+    }
+
+    if ($cached_envelope !== null) {
+        // Cache còn hạn logic (theo Cache-Control) thì dùng luôn
+        if (!$force && !empty($cached_envelope['expires']) && $cached_envelope['expires'] > NV_CURRENTTIME) {
+            return $cached_envelope['jwks'];
+        }
+        // Giới hạn tần suất refetch: vừa fetch trong $refetch_min giây qua thì không gọi lại Google
+        if ($force && !empty($cached_envelope['fetched']) && $cached_envelope['fetched'] + $refetch_min > NV_CURRENTTIME) {
+            return $cached_envelope['jwks'];
+        }
+    }
+
+    // Fetch mới key từ Google
+    $http = new Http($global_config, NV_TEMP_DIR);
+    $result = $http->get(NV_GOOGLE_IDENTITY_CERTS_URL, [
+        'headers' => ['Accept' => 'application/json'],
+        'timeout' => 10
+    ]);
+
+    if (!empty(Http::$error) || empty($result['response']['code']) || $result['response']['code'] != 200 || empty($result['body'])) {
+        /**
+         * Fetch lỗi nhưng còn cache cũ thì vẫn dùng tạm (kể cả quá hạn) để sự cố mạng
+         * trong chớp nhoáng không khóa toàn bộ đăng nhập Google
+         */
+        if ($cached_envelope !== null) {
+            return $cached_envelope['jwks'];
+        }
+        return false;
+    }
+
+    $jwks = json_decode($result['body'], true);
+    if (!is_array($jwks) || empty($jwks['keys'])) {
+        return false;
+    }
+
+    // Xác định hạn cache từ "Cache-Control: max-age=..."
+    $max_age = 0;
+    if (!empty($result['headers']) && is_array($result['headers'])) {
+        foreach ($result['headers'] as $h_name => $h_value) {
+            if (strtolower($h_name) === 'cache-control') {
+                $h_value = is_array($h_value) ? implode(',', $h_value) : $h_value;
+                if (preg_match('/max-age\s*=\s*(\d+)/i', $h_value, $m)) {
+                    $max_age = (int) $m[1];
+                }
+                break;
+            }
+        }
+    }
+    $max_age = max($ttl_min, min($ttl_max, $max_age ?: $ttl_min));
+
+    $nv_Cache->setItem($module_name, $cache_file, json_encode([
+        'fetched' => NV_CURRENTTIME,
+        'expires' => NV_CURRENTTIME + $max_age,
+        'jwks' => $jwks
+    ], NV_JSON_ENCODE), ttl: $ttl_max);
+
+    return $jwks;
+}
+
+/**
+ * Xác thực $credential chuẩn:
+ * - Chữ ký RS256 đối chiếu JWKS công khai của Google
+ * - iss thuộc {accounts.google.com, https://accounts.google.com}
+ * - aud trùng google_client_id của site
+ * - exp/iat/nbf còn hiệu lực do Firebase\JWT tự kiểm tra
+ *
+ * @link https://developers.google.com/identity/gsi/web/guides/verify-google-id-token?hl=vi
+ * @param string $credential Chuỗi JWT nhận từ Google Identity
+ * @param string $client_id  google_client_id cấu hình của site
+ * @return array|false Payload đã xác thực hoặc false nếu không hợp lệ
+ */
+function nv_google_identity_verify_token(string $credential, string $client_id)
+{
+    if ($credential === '' or $client_id === '') {
+        return false;
+    }
+
+    $jwks = nv_google_identity_get_certs();
+    if ($jwks === false) {
+        return false;
+    }
+
+    // Thời gian sai lệch tối đa giữa server và Google
+    JWT::$leeway = 60;
+
+    $decoded = null;
+    for ($attempt = 0; $attempt < 2; $attempt++) {
+        try {
+            // parseKeySet pin thuật toán theo "alg" trong JWK (RS256); mặc định RS256 nếu thiếu
+            $keys = JWK::parseKeySet($jwks, 'RS256');
+            $decoded = JWT::decode($credential, $keys);
+            break;
+        } catch (SignatureInvalidException | ExpiredException | BeforeValidException) {
+            // Chữ ký sai, hết hạn hoặc chưa hiệu lực thì từ chối
+            return false;
+        } catch (Throwable) {
+            // Thất bại do Google xoay khóa thì fetch lại 1 lần
+            if ($attempt === 0) {
+                $jwks = nv_google_identity_get_certs(true);
+                if ($jwks === false) {
+                    return false;
+                }
+                continue;
+            }
+            return false;
+        }
+    }
+
+    if ($decoded === null) {
+        return false;
+    }
+
+    $payload = (array) $decoded;
+
+    // Giá trị của iss trong mã thông báo nhận dạng bằng accounts.google.com hoặc https://accounts.google.com
+    $iss = $payload['iss'] ?? '';
+    if ($iss !== 'accounts.google.com' and $iss !== 'https://accounts.google.com') {
+        return false;
+    }
+
+    // Giá trị của aud trong mã thông báo phải đúng client_id của site
+    if (empty($payload['aud']) or !hash_equals($client_id, (string) $payload['aud'])) {
+        return false;
+    }
+
+    return $payload;
 }
 
 if ($nv_Request->isset_request('credential', 'post')) {
@@ -22,14 +196,14 @@ if ($nv_Request->isset_request('credential', 'post')) {
     if ($is_edit) {
         $csrf_token_cookie = $_COOKIE['g_csrf_token'];
         if (!$csrf_token_cookie) {
-            exit('No CSRF token in Cookie.');
+            nv_htmlOutput('No CSRF token in Cookie.');
         }
         $csrf_token_body = $nv_Request->get_title('g_csrf_token', 'post', '');
         if (!$csrf_token_body) {
-            exit('No CSRF token in post body.');
+            nv_htmlOutput('No CSRF token in post body.');
         }
         if (!hash_equals($csrf_token_cookie, $csrf_token_body)) {
-            exit('Failed to verify double submit cookie.');
+            nv_htmlOutput('Failed to verify double submit cookie.');
         }
     } else {
         $csrf = $nv_Request->get_title('_csrf', 'post', '');
@@ -41,11 +215,13 @@ if ($nv_Request->isset_request('credential', 'post')) {
             ]);
         }
     }
-    $credential = $nv_Request->get_title('credential', 'post', '');
-    $credential = $crypt->decodeJwt($credential);
-    if (!$credential) {
+    $raw_credential = $nv_Request->get_title('credential', 'post', '');
+
+    // Xác thực credential chuẩn khuyến nghị của Google
+    $payload = nv_google_identity_verify_token($raw_credential, (string) $global_config['google_client_id']);
+    if ($payload === false) {
         if ($is_edit) {
-            exit('Invalid ID token.');
+            nv_htmlOutput('Invalid ID token.');
         }
         nv_jsonOutput([
             'status' => 'error',
@@ -53,19 +229,12 @@ if ($nv_Request->isset_request('credential', 'post')) {
         ]);
     }
 
-    if (empty($credential[1]['aud']) or strcmp($credential[1]['aud'], $global_config['google_client_id']) !== 0) {
-        if ($is_edit) {
-            exit('Invalid ID token.');
-        }
-        nv_jsonOutput([
-            'status' => 'error',
-            'mess' => 'Invalid ID token.'
-        ]);
-    }
+    // Chuyển credential sang cấu trúc chuẩn
+    $credential = [null, $payload];
 
     if (empty($credential[1]['email_verified'])) {
         if ($is_edit) {
-            exit('Your email is not verified.');
+            nv_htmlOutput('Your email is not verified.');
         }
         nv_jsonOutput([
             'status' => 'error',
@@ -79,6 +248,7 @@ if ($nv_Request->isset_request('credential', 'post')) {
     }
 
     if (!$is_edit) {
+        // Case đăng nhập bằng Oauth Google Identity
         $server = 'google-identity';
         $custom_method = nv_apply_hook($module_name, 'find_oauth_google_identity', [$credential]);
 
@@ -130,6 +300,7 @@ if ($nv_Request->isset_request('credential', 'post')) {
         }
     }
 
+    // Case thêm Oauth vào tài khoản tại trang editinfo/openid
     $attribs = [
         'identity' => $credential[1]['sub'],
         'result' => 'is_res',
@@ -144,6 +315,17 @@ if ($nv_Request->isset_request('credential', 'post')) {
         'picture_mode' => 0, // 0: Remote picture
         'current_mode' => 3
     ];
+    /**
+     * Khi email là Gmail hoặc đã xác minh và thuộc Workspace Google quản lý
+     * thì mới đủ tin cậy, còn lại nếu muốn liên kết với tài khoản có sẵn
+     * thì phải nhập mật khẩu của tài khoản để xác thực. Trường hợp tài khoản
+     * không có mật khẩu thì từ chối liên kết. Lúc này để liên kết phải đăng nhập tài khoản
+     * vào khu vực editinfo/openid, rồi nhấn nút "Thêm" để liên kết với Google Identity.
+     */
+    $attribs['email_trusted'] = (
+        str_ends_with(strtolower((string) $credential[1]['email']), '@gmail.com')
+        || (!empty($credential[1]['email_verified']) && !empty($credential[1]['hd']))
+    );
 
     nv_apply_hook($module_name, 'prehandling_oauth_google_identity', [$is_edit, $attribs]);
     $nv_Request->set_Session('openid_attribs', json_encode($attribs, NV_JSON_ENCODE));

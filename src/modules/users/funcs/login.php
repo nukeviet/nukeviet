@@ -117,7 +117,7 @@ $gfx_chk = (!empty($array_gfx_chk) and in_array('l', $array_gfx_chk, true)) ? 1 
 
 /**
  * @param mixed $array
- * @return never
+ * @return void
  */
 function signin_result($array)
 {
@@ -566,11 +566,21 @@ if (defined('NV_OPENID_ALLOWED') and $nv_Request->isset_request('server', 'get')
                 ]);
             }
 
+            // Email không tin cậy mà tài khoản không có mật khẩu thì từ chối gắn tự động vào tài khoản
+            $email_untrusted = isset($attribs['email_trusted']) && !$attribs['email_trusted'];
+            if ($email_untrusted and empty($nv_row['password'])) {
+                opidr_login([
+                    'status' => 'error',
+                    'mess' => $nv_Lang->getModule('openid_email_not_trusted')
+                ]);
+            }
+
             /*
-             * Nếu tài khoản trùng email này có mật khẩu và chức năng tự động gán Oauh bị tắt
-             * thì yêu cầu nhập mật khẩu xác nhận
+             * Yêu cầu nhập mật khẩu xác nhận khi:
+             * - Tài khoản có mật khẩu và chức năng tự động gán Oauth bị tắt hoặc
+             * - Email không đáng tin
              */
-            if (!empty($nv_row['password']) and empty($global_users_config['auto_assign_oauthuser'])) {
+            if (!empty($nv_row['password']) and (empty($global_users_config['auto_assign_oauthuser']) or $email_untrusted)) {
                 if ($nv_Request->isset_request('openid_account_confirm', 'post')) {
                     $password = $nv_Request->get_string('password', 'post', '');
 

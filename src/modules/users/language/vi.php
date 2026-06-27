@@ -163,6 +163,7 @@ $lang_module['not_logged_in'] = 'Bạn Chưa đăng nhập bằng bên thứ ba'
 $lang_module['logged_in_failed'] = 'Rất tiếc là bên thứ ba này không cung cấp đủ các thông tin cần thiết để có thể đăng nhập vào website của chúng tôi';
 $lang_module['logged_no_email'] = 'Rất tiếc là ứng dụng này không cung cấp email. Vui lòng kiểm tra email cho ứng dụng và thử lại';
 $lang_module['openid_confirm_failed'] = 'Rất tiếc là bạn đã khai báo sai';
+$lang_module['openid_email_not_trusted'] = 'Không thể tự động liên kết tài khoản qua địa chỉ email này. Vui lòng đăng nhập bằng mật khẩu hoặc dùng chức năng quên mật khẩu để truy cập tài khoản.';
 $lang_module['openid_confirm_info'] = 'Địa chỉ email vừa được %1$s cung cấp (<strong>%2$s</strong>) đã được sử dụng cho một tài khoản nào đó. Nếu đây là tài khoản của bạn, vui lòng xác nhận bằng cách khai báo mật khẩu. Chúng tôi sẽ kết nối nó với tài khoản %1$s sau khi bạn xác nhận thành công.';
 $lang_module['openid_lostpass_info'] = 'Vì tài khoản của bạn chỉ được phép đăng nhập thông qua tài khoản bên thứ ba nên chúng tôi không thể cung cấp mật khẩu tài khoản mới cho bạn. Hãy đăng nhập tài khoản thông qua tài khoản bên thứ ba mà bạn đã đăng ký, sau đó vào khu vực thiết lập tài khoản để thêm mật khẩu.';
 $lang_module['lostpass_no_info1'] = 'Bạn chưa khai báo tên đăng nhập hoặc e-mail';

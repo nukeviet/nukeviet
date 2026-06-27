@@ -163,6 +163,7 @@ $lang_module['not_logged_in'] = 'Vous ne vous identifiez pas encore par OpenID';
 $lang_module['logged_in_failed'] = 'Désolé! Serveur de OpenID ne fournit pas les infos nécessaires pour vous identifier sur notre site';
 $lang_module['logged_no_email'] = 'Malheureusement, cette application ne propose pas de e-mail, s\'il vous plaît vérifier que vous avez déclaré à l\'application e-mail puis essayez à nouveau';
 $lang_module['openid_confirm_failed'] = 'Désolé, infos incorrectes.';
+$lang_module['openid_email_not_trusted'] = 'Cette adresse e-mail ne peut pas être utilisée pour lier automatiquement le compte. Veuillez vous connecter avec votre mot de passe ou utiliser la fonction de mot de passe oublié pour accéder au compte.';
 $lang_module['openid_confirm_info'] = 'L\'adresse e-mail que %1$s vient de fournir (<strong>%2$s</strong>) a été utilisée pour un certain compte. S\'il s\'agit de votre compte, veuillez confirmer en déclarant le mot de passe. Nous le connecterons à votre compte %1$s une fois que vous l\'aurez confirmé avec succès.';
 $lang_module['openid_lostpass_info'] = 'Étant donné que votre compte n\'est autorisé à se connecter que via un compte tiers, nous ne pouvons pas vous fournir un nouveau mot de passe de compte. Connectez-vous à votre compte via votre compte tiers enregistré, puis accédez à la zone des paramètres du compte pour ajouter un mot de passe.';
 $lang_module['lostpass_no_info1'] = 'Manque d\'identifiant ou d\'e-mail';
