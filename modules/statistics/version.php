@@ -22,7 +22,7 @@ $module_version = [
     'is_sysmod' => 0,
     'virtual' => 2,
     'version' => '4.6.00',
-    'date' => 'Friday, June 26, 2026 at 4:00:00 PM UTC+07:00',
+    'date' => 'Wednesday, July 1, 2026 at 4:00:00 PM UTC+07:00',
     'author' => 'VINADES.,JSC <contact@vinades.vn>',
     'note' => ''
 ];
