@@ -1159,11 +1159,17 @@ class Request
     /**
      * encryptData()
      *
-     * @param string $string
+     * @param array|string $string
      * @return string
      */
     private function encryptData($string)
     {
+        $prefix = '';
+        if (is_array($string)) {
+            $string = json_encode($string, NV_JSON_ENCODE);
+            $prefix = 'jsn.';
+        }
+
         if (function_exists('random_bytes')) {
             $iv = random_bytes(16);
         } elseif (function_exists('openssl_random_pseudo_bytes')) {
@@ -1185,17 +1191,23 @@ class Request
         $hmac = hash_hmac('sha256', $iv . $ciphertext, $this->cookie_key, true);
         $packed = $hmac . $iv . $ciphertext;
 
-        return strtr(base64_encode($packed), '+/=', '-_,');
+        return $prefix . strtr(base64_encode($packed), '+/=', '-_,');
     }
 
     /**
      * decryptData()
      *
      * @param string $string
-     * @return false|string
+     * @return array|false|string
      */
     private function decryptData($string)
     {
+        $isJsonDecode = false;
+        if (substr($string, 0, 4) == 'jsn.') {
+            $string = substr($string, 4);
+            $isJsonDecode = true;
+        }
+
         $packed = base64_decode(strtr($string, '-_,', '+/='));
         if ($packed === false || strlen($packed) < 48) {
             return false;
@@ -1210,7 +1222,12 @@ class Request
             return false;
         }
 
-        return openssl_decrypt($ciphertext, 'aes-256-cbc', $this->cookie_key, OPENSSL_RAW_DATA, $iv);
+        $string = openssl_decrypt($ciphertext, 'aes-256-cbc', $this->cookie_key, OPENSSL_RAW_DATA, $iv);
+        if ($isJsonDecode) {
+            return json_decode($string, true);
+        }
+
+        return $string;
     }
 
     /**
