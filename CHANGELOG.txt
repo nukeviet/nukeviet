@@ -1,6 +1,16 @@
 CHANGE LOG: NUKEVIET CMS
 http://nukeviet.vn
 NUKEVIET 4.6.00
+- Fixed an issue where figure tags were removed from tables in the editor.
+- Updated the password hashing and cookie encryption mechanisms
+- Use CSPRNG (random_int) for TOTP and nv_genpass security tokens
+- Fix second-order SQL injection in users sql_choices custom field
+- Harden deserialization and TLS verification across the system
+- Fixed issues related to HTML popovers
+- Fix PHP code injection in robots.php via unfiltered filename keys
+- Update guzzlehttp/guzzle 7.12.1, guzzlehttp/psr7 2.12.1
+- Refactor nv_check_dump_path function to enhance file extension validation and improve directory checks
+- Fixed an issue where some valid uploaded images were incorrectly blocked
 - Require PHP >=7.4.00
 
 NUKEVIET 4.5.09
