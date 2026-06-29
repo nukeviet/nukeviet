@@ -127,7 +127,7 @@ if ($sender == 'facebook') {
 
     // Kiểm tra chữ ký
     $expected_sig = hash_hmac('sha256', $payload, $global_config['facebook_client_secret'], true);
-    if ($sig !== $expected_sig) {
+    if (!hash_equals($expected_sig, $sig)) {
         http_response_code(400);
         nv_jsonOutput([
             'error' => 'invalid_signature',
