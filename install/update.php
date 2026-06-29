@@ -691,6 +691,15 @@ class NvUpdate
                 $xtpl->parse('main.step4.next_step');
             } else {
                 $xtpl->assign('PROCESS_MESSAGE', sprintf($this->lang['update_move_num'], sizeof($array['file_list']), sizeof($nv_update_config['updatelog']['file_list'])));
+
+                if (
+                    !empty($nv_update_config['note_move_file']) and is_array($nv_update_config['note_move_file']) and
+                    !empty($nv_update_config['note_move_file'][NV_LANG_UPDATE])
+                ) {
+                    $xtpl->assign('NOTE_MESSAGE', $nv_update_config['note_move_file'][NV_LANG_UPDATE]);
+                    $xtpl->parse('main.step4.process.note');
+                }
+
                 $xtpl->parse('main.step4.process');
             }
 
