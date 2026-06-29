@@ -1,5 +1,8 @@
 # Các thay đổi lớn trong NukeViet 5.0
 
+## Tháng 6 năm 2026
+ALTER TABLE `nv5_users` CHANGE `birthday` `birthday` BIGINT NOT NULL DEFAULT '0';
+
 ## Tháng 5 năm 2026
 
 ### Refactor gọi nv_local_api

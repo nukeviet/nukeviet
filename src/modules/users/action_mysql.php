@@ -119,7 +119,7 @@ $sql_create_module[] = 'CREATE TABLE IF NOT EXISTS ' . $db_config['prefix'] . '_
     last_name varchar(100) NOT NULL DEFAULT '',
     gender char(1) DEFAULT '',
     photo varchar(255) DEFAULT '',
-    birthday int(11) NOT NULL,
+    birthday BIGINT NOT NULL DEFAULT '0',
     sig text,
     regdate int(11) NOT NULL DEFAULT '0',
     question varchar(255) NOT NULL,
