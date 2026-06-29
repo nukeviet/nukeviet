@@ -75,10 +75,13 @@ class Encryption
      * @param string $hashprefix
      * @return string
      */
-    public function hash_password($password, $hashprefix = '{SSHA}')
+    public function hash_password($password, $hashprefix = '{CRYPT}')
     {
+        if ($hashprefix == '{CRYPT}') {
+            return '{CRYPT}' . password_hash($password, PASSWORD_BCRYPT);
+        }
         if ($hashprefix == '{SSHA512}') {
-            $salt = substr(sha1(microtime() . $this->_key), 0, 4);
+            $salt = random_bytes(16);
 
             return '{SSHA512}' . base64_encode(hash('sha512', $password . $salt, true) . $salt);
         }
@@ -111,7 +114,9 @@ class Encryption
      */
     public function validate_password($password, $hash)
     {
-        if (substr($hash, 0, 9) == '{SSHA512}') {
+        if (substr($hash, 0, 7) == '{CRYPT}') {
+            return password_verify($password, substr($hash, 7));
+        } elseif (substr($hash, 0, 9) == '{SSHA512}') {
             $salt = substr(base64_decode(substr($hash, 9), true), 64);
             $validate_hash = '{SSHA512}' . base64_encode(hash('sha512', $password . $salt, true) . $salt);
         } elseif (substr($hash, 0, 9) == '{SSHA256}') {
