@@ -201,6 +201,8 @@ class Streams
 
         if (is_array($args['headers'])) {
             foreach ((array) $args['headers'] as $header => $headerValue) {
+                $header = str_replace(["\r", "\n", "\0"], '', $header);
+                $headerValue = str_replace(["\r", "\n", "\0"], '', $headerValue);
                 $strHeaders .= $header . ': ' . $headerValue . "\r\n";
             }
         } else {

@@ -217,6 +217,8 @@ class Curl
             // cURL expects full header strings in each element
             $headers = [];
             foreach ($args['headers'] as $name => $value) {
+                $name = str_replace(["\r", "\n", "\0"], '', $name);
+                $value = str_replace(["\r", "\n", "\0"], '', $value);
                 $headers[] = "{$name}: $value";
             }
 
