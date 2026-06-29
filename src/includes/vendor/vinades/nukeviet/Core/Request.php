@@ -577,7 +577,7 @@ class Request
                 if (substr($ref['host'], 0, 1) == '[' and substr($ref['host'], -1) == ']') {
                     $ref['host'] = substr($ref['host'], 1, -1);
                 }
-                if (preg_match('/^' . preg_quote($ref['host'], '/') . '/', $this->server_name)) {
+                if ($ref['host'] === $this->server_name) {
                     $this->referer_key = 1;
                 } else {
                     $this->referer_key = 0;
