@@ -1,3 +1,5 @@
+@use "../node_modules/@fortawesome/fontawesome-free/scss/variables" as fav;
+
 [data-#{$prefix}theme="light"],
 [data-#{$prefix}theme="dark"] {
   .ui-widget.ui-widget-content {
@@ -85,9 +87,9 @@
       transform: translate(0, -50%);
 
       &::after {
-        font-family: $fa-style-family;
-        font-weight: $fa-style;
-        display: $fa-display;
+        font-family: "#{fav.$family}";
+        font-weight: #{fav.$style};
+        display: #{fav.$display};
         position: absolute;
         font-style: normal;
         font-variant: normal;
@@ -107,7 +109,7 @@
       left: 3px;
 
       &::after {
-        content: "#{$fa-var-chevron-left}";
+        content: "#{fav.$var-chevron-left}";
       }
     }
 
@@ -115,7 +117,7 @@
       right: 3px;
 
       &::after {
-        content: "#{$fa-var-chevron-right}";
+        content: "#{fav.$var-chevron-right}";
       }
     }
 
@@ -185,13 +187,13 @@
     &.ui-datepicker-rtl {
       .ui-datepicker-next {
         &::after {
-          content: "#{$fa-var-chevron-left}";
+          content: "#{fav.$var-chevron-left}";
         }
       }
 
       .ui-datepicker-prev {
         &::after {
-          content: "#{$fa-var-chevron-right}";
+          content: "#{fav.$var-chevron-right}";
         }
       }
 

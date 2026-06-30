@@ -1,3 +1,5 @@
+@use "../../node_modules/@fortawesome/fontawesome-free/scss/variables" as fav;
+
 // Bật kéo thả block
 .column {
   position: relative;
@@ -11,13 +13,13 @@
   .ic::before {
     -moz-osx-font-smoothing: grayscale;
     -webkit-font-smoothing: antialiased;
-    display: $fa-display;
+    display: #{fav.$display};
     font-style: normal;
     font-variant: normal;
     line-height: 1;
     text-rendering: auto;
-    font-family: $fa-style-family;
-    font-weight: $fa-style;
+    font-family: "#{fav.$family}";
+    font-weight: #{fav.$style};
   }
 
   >.add {
@@ -36,7 +38,7 @@
     color: color-contrast($orange);
 
     .ic::before {
-      content: unquote("\"#{ $fa-var-plus }\"");
+      content: unquote("\"#{ fav.$var-plus }\"");
     }
   }
 
@@ -102,23 +104,23 @@
     }
 
     >.block_content:not(.add) .ic::before {
-      content: unquote("\"#{ $fa-var-wrench }\"");
+      content: unquote("\"#{ fav.$var-wrench }\"");
     }
 
     >.delblock .ic::before {
-      content: unquote("\"#{ $fa-var-trash }\"");
+      content: unquote("\"#{ fav.$var-trash }\"");
     }
 
     >.actblock .ic::before {
-      content: unquote("\"#{ $fa-var-square-check }\"");
+      content: unquote("\"#{ fav.$var-square-check }\"");
     }
 
     >.actblock .ic.act0::before {
-      content: unquote("\"#{ $fa-var-square }\"");
+      content: unquote("\"#{ fav.$var-square }\"");
     }
 
     >.outgroupblock .ic::before {
-      content: unquote("\"#{ $fa-var-arrow-up-right-from-square }\"");
+      content: unquote("\"#{ fav.$var-arrow-up-right-from-square }\"");
     }
   }
 
