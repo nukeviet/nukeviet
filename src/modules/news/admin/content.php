@@ -1809,7 +1809,8 @@ $tpl->assign('REPORTLIST', $reportlist);
 $tpl->assign('SCHEMA_TYPES', $schema_types);
 $tpl->assign('CHECKSS', csrf_create($csrf_key));
 $tpl->assign('AUTHORS_CHECKSS', csrf_create($admin_info['admin_id'] . '_' . $module_name . '_authors'));
-$tpl->assign('AJ_TAGS_CHECKSS', csrf_create($admin_info['admin_id'] . '_' . $module_name . '_tags-ajax'));
+$tpl->assign('AJ_TAGSAJ_CHECKSS', csrf_create($admin_info['admin_id'] . '_' . $module_name . '_tags-ajax'));
+$tpl->assign('AJ_TAGS_CHECKSS', csrf_create($admin_info['admin_id'] . '_' . $module_name . '_tags'));
 $tpl->assign('AJ_KEYWORDS_CHECKSS', csrf_create($admin_info['admin_id'] . '_' . $module_name . '_keywordsajax'));
 
 // Xử lý bước đầu cho chuyên mục

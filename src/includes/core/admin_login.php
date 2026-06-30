@@ -75,6 +75,7 @@ if ($captcha_type == 'recaptcha' and (empty($global_config['recaptcha_sitekey'])
 $csrf_key = 'admin_login';
 $admin_login_success = false;
 /** @disregard P1011 */
+// phpcs:ignore
 $passkey_allowed = !(defined('SSO_SERVER') and (defined('NV_IS_USER_FORUM') or NV_MY_DOMAIN != SSO_REGISTER_DOMAIN));
 
 // Tạo thử thách đăng nhập passkey
@@ -496,11 +497,27 @@ if (!empty($admin_pre_data) and $nv_Request->isset_request('submit2scode', 'post
     $nv_totppin = $nv_Request->get_title('nv_totppin', 'post', '');
     $nv_backupcodepin = $nv_Request->get_title('nv_backupcodepin', 'post', '');
 
+    // Chống brute-force cho bước xác thực 2 bước
+    $tfa_blocker_key = '2fa_uid_' . $admin_pre_data['userid'];
+
+    // Giới hạn brute-force mã xác thực 2 bước
+    if ($global_config['login_number_tracking'] and $blocker->is_blocklogin($tfa_blocker_key)) {
+        nv_jsonOutput([
+            'status' => 'error',
+            'input' => '',
+            'mess' => $nv_Lang->getGlobal('userlogin_blocked', $global_config['login_number_tracking'], nv_datetime_format($blocker->login_block_end, 1))
+        ]);
+    }
+
     $step2_isvalid = false;
     $GoogleAuthenticator = new \NukeViet\Core\GoogleAuthenticator();
 
     if (!empty($nv_totppin)) {
         if (!$GoogleAuthenticator->verifyOpt($admin_pre_data['user_2s_secretkey'], $nv_totppin)) {
+            // Ghi nhận lần thử sai để giới hạn brute-force mã 2 bước
+            if ($global_config['login_number_tracking']) {
+                $blocker->set_loginFailed($tfa_blocker_key, NV_CURRENTTIME);
+            }
             nv_jsonOutput([
                 'status' => 'error',
                 'input' => 'nv_totppin',
@@ -517,6 +534,10 @@ if (!empty($admin_pre_data) and $nv_Request->isset_request('submit2scode', 'post
         $sth->execute();
 
         if ($sth->rowCount() != 1) {
+            // Ghi nhận lần thử sai để giới hạn brute-force mã dự phòng
+            if ($global_config['login_number_tracking']) {
+                $blocker->set_loginFailed($tfa_blocker_key, NV_CURRENTTIME);
+            }
             nv_jsonOutput([
                 'status' => 'error',
                 'input' => 'nv_backupcodepin',
@@ -535,6 +556,7 @@ if (!empty($admin_pre_data) and $nv_Request->isset_request('submit2scode', 'post
     }
 
     if ($step2_isvalid) {
+        $blocker->reset_trackLogin($tfa_blocker_key);
         $row = $admin_pre_data;
         $admin_login_success = true;
     }

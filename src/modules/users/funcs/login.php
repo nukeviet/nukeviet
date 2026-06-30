@@ -117,7 +117,7 @@ $gfx_chk = (!empty($array_gfx_chk) and in_array('l', $array_gfx_chk, true)) ? 1 
 
 /**
  * @param mixed $array
- * @return never
+ * @return void
  */
 function signin_result($array)
 {
@@ -566,11 +566,21 @@ if (defined('NV_OPENID_ALLOWED') and $nv_Request->isset_request('server', 'get')
                 ]);
             }
 
+            // Email không tin cậy mà tài khoản không có mật khẩu thì từ chối gắn tự động vào tài khoản
+            $email_untrusted = isset($attribs['email_trusted']) && !$attribs['email_trusted'];
+            if ($email_untrusted and empty($nv_row['password'])) {
+                opidr_login([
+                    'status' => 'error',
+                    'mess' => $nv_Lang->getModule('openid_email_not_trusted')
+                ]);
+            }
+
             /*
-             * Nếu tài khoản trùng email này có mật khẩu và chức năng tự động gán Oauh bị tắt
-             * thì yêu cầu nhập mật khẩu xác nhận
+             * Yêu cầu nhập mật khẩu xác nhận khi:
+             * - Tài khoản có mật khẩu và chức năng tự động gán Oauth bị tắt hoặc
+             * - Email không đáng tin
              */
-            if (!empty($nv_row['password']) and empty($global_users_config['auto_assign_oauthuser'])) {
+            if (!empty($nv_row['password']) and (empty($global_users_config['auto_assign_oauthuser']) or $email_untrusted)) {
                 if ($nv_Request->isset_request('openid_account_confirm', 'post')) {
                     $password = $nv_Request->get_string('password', 'post', '');
 
@@ -1072,9 +1082,23 @@ if ($nv_Request->isset_request('_csrf, nv_login', 'post')) {
             ]);
         }
 
+        // Chống brute-force cho bước xác thực 2 bước
+        $tfa_blocker_key = '2fa_uid_' . $row['userid'];
+        if ($global_config['login_number_tracking'] and $blocker->is_blocklogin($tfa_blocker_key)) {
+            signin_result([
+                'status' => 'error',
+                'input' => '',
+                'mess' => $nv_Lang->getGlobal('userlogin_blocked', $global_config['login_number_tracking'], nv_datetime_format($blocker->login_block_end, 1))
+            ]);
+        }
+
         // Nếu mã từ app nhập vào không chính xác
         $GoogleAuthenticator = new \NukeViet\Core\GoogleAuthenticator();
         if (!empty($nv_totppin) and !$GoogleAuthenticator->verifyOpt($row['secretkey'], $nv_totppin)) {
+            // Ghi nhận lần thử sai để giới hạn brute-force mã 2 bước
+            if ($global_config['login_number_tracking']) {
+                $blocker->set_loginFailed($tfa_blocker_key, NV_CURRENTTIME);
+            }
             signin_result([
                 'status' => 'error',
                 'input' => 'nv_totppin',
@@ -1090,6 +1114,10 @@ if ($nv_Request->isset_request('_csrf, nv_login', 'post')) {
 
             // Nếu không tìm thấy trong CSDL mã dự phòng
             if ($sth->rowCount() != 1) {
+                // Ghi nhận lần thử sai để giới hạn brute-force mã dự phòng
+                if ($global_config['login_number_tracking']) {
+                    $blocker->set_loginFailed($tfa_blocker_key, NV_CURRENTTIME);
+                }
                 signin_result([
                     'status' => 'error',
                     'input' => 'nv_backupcodepin',
@@ -1213,6 +1241,7 @@ if ($nv_Request->isset_request('_csrf, nv_login', 'post')) {
     }
 
     $blocker->reset_trackLogin($nv_username);
+    $blocker->reset_trackLogin('2fa_uid_' . $row['userid']);
 
     // Xác nhận đăng nhập thành công
     if (defined('SSO_SERVER')) {

@@ -118,10 +118,9 @@ if ($nv_Request->isset_request('choicesql', 'post')) {
         // Đây là trên bảng dữ liệu không phải tên module do đó chỉ chấp nhận ký tự thường, số và dấu gạch dưới
         $module = $nv_Request->get_string('module', 'post', '');
         if (!preg_match('/^[a-z0-9\_]+$/', $module)) {
-            exit();
+            nv_htmlOutput('Wrong module!');
         }
-        $stmt = $db->prepare('SHOW TABLE STATUS LIKE :module');
-        $stmt->bindValue(':module', '%\_' . $module . '%', PDO::PARAM_STR);
+        $stmt = $db->prepare("SHOW TABLE STATUS LIKE " . $db->quote('%_' . $module . '%'));
         $stmt->execute();
         $_items = $stmt->fetchAll();
         $num_table = count($_items);
@@ -489,8 +488,26 @@ if ($nv_Request->isset_request('save', 'post')) {
             $choicesql_column_order = $nv_Request->get_string('choicesql_column_order', 'post', '');
             // Kiểu sắp xếp
             $choicesql_sort_type = $nv_Request->get_string('choicesql_sort_type', 'post', '');
-            if (!isset($choicesql_sort_type)) {
-                $choicesql_sort_type = current(array_keys($array_sqlchoice_order));
+            $sort_type_allowed = array_keys($array_sqlchoice_order);
+            if (!in_array($choicesql_sort_type, $sort_type_allowed, true)) {
+                $choicesql_sort_type = $sort_type_allowed[0];
+            }
+
+            // Chuẩn hóa dữ liệu đầu vào
+            if (!preg_match($global_config['check_module_data'], $choicesql_module)) {
+                $choicesql_module = '';
+            }
+            if (!preg_match($global_config['check_module_data'], $choicesql_table)) {
+                $choicesql_table = '';
+            }
+            if (!preg_match($global_config['check_module_data'], $choicesql_column_key)) {
+                $choicesql_column_key = '';
+            }
+            if (!preg_match($global_config['check_module_data'], $choicesql_column_val)) {
+                $choicesql_column_val = '';
+            }
+            if (!preg_match($global_config['check_module_data'], $choicesql_column_order)) {
+                $choicesql_column_order = '';
             }
 
             if ($choicesql_module != '' and $choicesql_table != '' and $choicesql_column_key != '' and $choicesql_column_val != '') {

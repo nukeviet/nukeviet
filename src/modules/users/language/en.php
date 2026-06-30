@@ -163,6 +163,7 @@ $lang_module['not_logged_in'] = 'You still not login by OpenID';
 $lang_module['logged_in_failed'] = 'OpenID server doesn\'t provide some required information to login to our website';
 $lang_module['logged_no_email'] = 'Unfortunately, this app does not offer e-mail, please check that you have declared for the application email then try again';
 $lang_module['openid_confirm_failed'] = 'You provided wrong infomation';
+$lang_module['openid_email_not_trusted'] = 'This email address cannot be used to automatically link the account. Please sign in with your password or use the forgot password feature to access the account.';
 $lang_module['openid_confirm_info'] = 'The email address just provided by %1$s (<strong>%2$s</strong>) has been used for a certain account. If this is your account, please confirm by declaring the password. We will connect it to your %1$s account after you confirm it successfully.';
 $lang_module['openid_lostpass_info'] = 'Because your account is only allowed to log in through a third-party account, we can\'t provide you with a new account password. Log in to your account through your registered third-party account, then go to the account settings area to add a password.';
 $lang_module['lostpass_no_info1'] = 'Empty user name or email';

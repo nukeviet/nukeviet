@@ -320,6 +320,7 @@ define('STATISTIC_COOKIE_NAME', 'st'); // Tên cookie chứa thông tin thời g
 
 $global_config['site_charset'] = 'utf-8';
 $global_config['check_module'] = '/^[a-zA-Z0-9\-]+$/';
+$global_config['check_module_data'] = '/^[a-z0-9_]+$/';
 $global_config['check_op'] = '/^[a-zA-Z0-9\-]+$/';
 $global_config['check_op_file'] = '/^([a-zA-Z0-9\-\_]+)\.php$/';
 $global_config['check_block_module'] = '/^(global|module)\.([a-zA-Z0-9\-\_]+)\.php$/';

@@ -995,11 +995,14 @@ function get_user_count_by_tag($tag)
  */
 function conversation_to_html($contents, $user_id)
 {
-    global $global_config, $module_name, $module_file, $nv_Lang;
+    global $global_config, $module_name, $module_file, $nv_Lang, $admin_info;
 
     $xtpl = new XTemplate('conversation.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
     $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
     $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
+
+    $_csrf_key = $admin_info['admin_id'] . '_' . $module_name . '_conversation';
+    $xtpl->assign('CHECKSS', csrf_create($_csrf_key));
 
     $count = count($contents);
 
@@ -1075,10 +1078,6 @@ function conversation_to_html($contents, $user_id)
             $message['url'] = '//www.google.com/maps/place/' . $coordinates['latitude'] . ',' . $coordinates['longitude'];
             $message['latitude'] = $coordinates['latitude'];
             $message['longitude'] = $coordinates['longitude'];
-        }
-
-        if ($message['type'] == 'voice') {
-            $message['playfile'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=conversation&amp;player=1&amp;url=' . urlencode($message['url']);
         }
 
         unset($matches);

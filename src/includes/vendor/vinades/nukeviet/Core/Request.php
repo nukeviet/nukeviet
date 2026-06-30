@@ -577,7 +577,7 @@ class Request
                 if (substr($ref['host'], 0, 1) == '[' and substr($ref['host'], -1) == ']') {
                     $ref['host'] = substr($ref['host'], 1, -1);
                 }
-                if (preg_match('/^' . preg_quote($ref['host'], '/') . '/', $this->server_name)) {
+                if ($ref['host'] === $this->server_name) {
                     $this->referer_key = 1;
                 } else {
                     $this->referer_key = 0;
@@ -1065,40 +1065,72 @@ class Request
     }
 
     /**
-     * encodeCookie()
+     * encryptData()
      *
      * @param array|string $string
      * @return string
      */
-    private function encodeCookie($string)
+    private function encryptData($string)
     {
         $prefix = '';
         if (is_array($string)) {
             $string = json_encode($string, NV_JSON_ENCODE);
             $prefix = 'jsn.';
         }
-        $iv = substr($this->cookie_key, 0, 16);
-        $string = openssl_encrypt($string, 'aes-256-cbc', $this->cookie_key, 0, $iv);
 
-        return $prefix . strtr($string, '+/=', '-_,');
+        if (function_exists('random_bytes')) {
+            $iv = random_bytes(16);
+        } elseif (function_exists('openssl_random_pseudo_bytes')) {
+            $iv = openssl_random_pseudo_bytes(16, $crypto_strong);
+            if ($iv === false || !$crypto_strong) {
+                $iv = hash_hmac('sha256', uniqid(mt_rand(), true), $this->cookie_key, true);
+                $iv = substr($iv, 0, 16);
+            }
+        } else {
+            $iv = hash_hmac('sha256', uniqid(mt_rand(), true), $this->cookie_key, true);
+            $iv = substr($iv, 0, 16);
+        }
+
+        $ciphertext = openssl_encrypt($string, 'aes-256-cbc', $this->cookie_key, OPENSSL_RAW_DATA, $iv);
+        if ($ciphertext === false) {
+            return '';
+        }
+
+        $hmac = hash_hmac('sha256', $iv . $ciphertext, $this->cookie_key, true);
+        $packed = $hmac . $iv . $ciphertext;
+
+        return $prefix . strtr(base64_encode($packed), '+/=', '-_,');
     }
 
     /**
-     * decodeCookie()
+     * decryptData()
      *
      * @param string $string
      * @return array|false|string
      */
-    private function decodeCookie($string)
+    private function decryptData($string)
     {
         $isJsonDecode = false;
         if (substr($string, 0, 4) == 'jsn.') {
             $string = substr($string, 4);
             $isJsonDecode = true;
         }
-        $string = strtr($string, '-_,', '+/=');
-        $iv = substr($this->cookie_key, 0, 16);
-        $string = openssl_decrypt($string, 'aes-256-cbc', $this->cookie_key, 0, $iv);
+
+        $packed = base64_decode(strtr($string, '-_,', '+/='));
+        if ($packed === false || strlen($packed) < 48) {
+            return false;
+        }
+
+        $hmac = substr($packed, 0, 32);
+        $iv = substr($packed, 32, 16);
+        $ciphertext = substr($packed, 48);
+
+        $calculated_hmac = hash_hmac('sha256', $iv . $ciphertext, $this->cookie_key, true);
+        if (!hash_equals($hmac, $calculated_hmac)) {
+            return false;
+        }
+
+        $string = openssl_decrypt($ciphertext, 'aes-256-cbc', $this->cookie_key, OPENSSL_RAW_DATA, $iv);
         if ($isJsonDecode) {
             return json_decode($string, true);
         }
@@ -1146,7 +1178,7 @@ class Request
                     if (array_key_exists($this->cookie_prefix . '_' . $name, $_COOKIE)) {
                         $value = $_COOKIE[$this->cookie_prefix . '_' . $name];
                         if ($decode) {
-                            $value = $this->decodeCookie($value);
+                            $value = $this->decryptData($value);
                         }
                         if (empty($value) or is_numeric($value)) {
                             return $value;
@@ -1224,7 +1256,7 @@ class Request
         }
         $name = $this->cookie_prefix . '_' . $name;
         if ($encode) {
-            $value = $this->encodeCookie($value);
+            $value = $this->encryptData($value);
         }
         $expire = (int) $expire;
         if (!empty($expire)) {

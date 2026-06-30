@@ -39,6 +39,10 @@ foreach ($comments as $row) {
         'id' => $row['id']
     ];
 
+    if (!defined('NV_IS_SPADMIN') && !isset($site_mod_comm[$row['module']])) {
+        continue;
+    }
+
     // Xóa đính kèm
     if (!empty($row['attach'])) {
         nv_deletefile(NV_UPLOADS_REAL_DIR . '/' . $module_upload . '/' . $row['attach']);

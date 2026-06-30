@@ -53,11 +53,16 @@ class GoogleAuthenticator
      */
     public function verifyOpt($secretkey, $opt)
     {
+        if (empty($secretkey) or empty($opt)) {
+            return false;
+        }
+
+        $opt = (string) $opt;
         $timeSlice = floor(time() / 30);
         // Check realtime code and 30sec code before
         for ($i = -1; $i <= 0; ++$i) {
             $trueCode = $this->getTrueCode($secretkey, $timeSlice + $i);
-            if ($trueCode === $opt) {
+            if (hash_equals($trueCode, $opt)) {
                 return true;
             }
         }
@@ -76,8 +81,10 @@ class GoogleAuthenticator
         $validChars = $this->getTable();
         unset($validChars[32]);
 
+        $validKeys = array_keys($validChars);
+        $maxKey = count($validKeys) - 1;
         for ($i = 0; $i < $this->secretLength; ++$i) {
-            $secret .= $validChars[array_rand($validChars)];
+            $secret .= $validChars[$validKeys[random_int(0, $maxKey)]];
         }
 
         return $secret;

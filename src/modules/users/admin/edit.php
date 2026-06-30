@@ -598,7 +598,7 @@ if ($nv_Request->isset_request('confirm', 'post')) {
     $stmt->bindValue(':last_name', $_user['last_name'], PDO::PARAM_STR);
     $stmt->bindValue(':gender', $_user['gender'], PDO::PARAM_STR);
     $stmt->bindValue(':photo', nv_unhtmlspecialchars($_user['photo']), PDO::PARAM_STR);
-    $stmt->bindValue(':birthday', !empty($_user['birthday']) ? nv_d2u_post($_user['birthday']) : 0, PDO::PARAM_INT);
+    $stmt->bindValue(':birthday', is_string($_user['birthday']) ? nv_d2u_post($_user['birthday']) : $_user['birthday'], PDO::PARAM_INT);
     $stmt->bindValue(':sig', $_user['sig'], PDO::PARAM_STR);
     $stmt->bindValue(':question', $_user['question'], PDO::PARAM_STR);
     $stmt->bindValue(':answer', $_user['answer'], PDO::PARAM_STR);

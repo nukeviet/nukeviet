@@ -23,14 +23,16 @@ window.nv_show_list_field = () => {
 };
 
 // Load SQL choice data
-window.nv_load_sqlchoice = function(choice_name_select, choice_seltected) {
+window.nv_load_sqlchoice = function(choice_name_select, choice_seltected, callback) {
     let getval = "";
     if (choice_name_select == "table") {
+        // Load danh sách các bảng khi chọn module
         let choicesql_module = $("select[name=choicesql_module]").val();
         let module_selected = (choicesql_module == "" || choicesql_module == undefined) ? '' : choicesql_module;
         getval = "&module=" + module_selected;
         $("#choicesql_column").html("");
     } else if (choice_name_select == "column") {
+        // Load danh sách các cột khi chọn bảng
         let choicesql_module = $("select[name=choicesql_module]").val();
         let module_selected = (choicesql_module == "" || choicesql_module == undefined) ? '' : choicesql_module;
         let choicesql_table = $("select[name=choicesql_table]").val();
@@ -41,12 +43,19 @@ window.nv_load_sqlchoice = function(choice_name_select, choice_seltected) {
         $('#choicesql_' + choice_name_select).html(res);
 
         // Gắn sự kiện change cho select mới tạo
-        $('#choicesql_' + choice_name_select + ' select').on('change', function() {
+        const selectElement = $('#choicesql_' + choice_name_select + ' select');
+        selectElement.on('change', function() {
             let next = $(this).data('next');
             if (next) {
                 window.nv_load_sqlchoice(next, '');
             }
         });
+
+        if (typeof callback === 'function') {
+            callback();
+        } else {
+            selectElement.trigger('change');
+        }
     });
 };
 
@@ -182,9 +191,11 @@ $(function () {
             let orderVal = sqlDataChoice.data('column-order');
             let sortVal = sqlDataChoice.data('column-sort');
 
-            window.nv_load_sqlchoice('module', moduleVal);
-            window.nv_load_sqlchoice('table', tableVal);
-            window.nv_load_sqlchoice('column', keyVal + '|' + valVal + '|' + orderVal + '|' + sortVal);
+            window.nv_load_sqlchoice('module', moduleVal, () => {
+                window.nv_load_sqlchoice('table', tableVal, () => {
+                    window.nv_load_sqlchoice('column', keyVal + '|' + valVal + '|' + orderVal + '|' + sortVal);
+                });
+            });
         }
 
         // Initialize field choice items count
@@ -234,6 +245,7 @@ $(function () {
                 } else {
                     $('#choiceitems').removeClass('d-none');
                 }
+                $('select[name="choicetypes"]').trigger('change');
             }
         });
 
@@ -243,6 +255,11 @@ $(function () {
             $('#choiceitems, #choicesql').addClass('d-none');
             if (choicetype == 'field_choicetypes_sql') {
                 $('#choicesql').removeClass('d-none');
+
+                // Load danh sách module cho SQL choice nếu chưa có
+                if ($('#choicesql_module select').length == 0) {
+                    window.nv_load_sqlchoice('module', '');
+                }
             } else {
                 $('#choiceitems').removeClass('d-none');
             }

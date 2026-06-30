@@ -654,7 +654,7 @@ if ($nv_Request->isset_request('user_id', 'get')) {
             $key == 'is_sensitive' && $val = $nv_Lang->getModule('is_sensitive_' . $val);
             $key == 'updatetime' && $val = nv_datetime_format($val);
             $key == 'user_id_by_app' && $key = $nv_Lang->getModule($key) . '<br/>' . $row['app_id'];
-            $key == 'phone_code' && $val = $callingcodes[$val][1] . ' +' . $callingcodes[$val][0];
+            $key == 'phone_code' && $val = isset($callingcodes[$val]) ? ($callingcodes[$val][1] . ' +' . $callingcodes[$val][0]) : $val;
             $key == 'city_id' && $val = $provinces[$val][0];
             $key == 'district_id' && !empty($row['city_id']) && $val = $districts[$row['city_id']][$val][0];
             $key == 'tags_info' && $val = implode(', ', array_map(function ($v) {

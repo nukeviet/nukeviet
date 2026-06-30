@@ -17,14 +17,30 @@ if (!$myZalo->isValid()) {
     nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=settings');
 }
 
-// Play file am thanh
-if ($nv_Request->isset_request('player,url', 'get')) {
-    $url = $nv_Request->get_string('url', 'get', '');
+// Play tệp âm thanh của cuộc hội thoại
+if ($nv_Request->isset_request('get_voice', 'post')) {
+    if (!csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
+        nv_htmlOutput($nv_Lang->getGlobal('error_checkss'));
+    }
+
+    $message_id = $nv_Request->get_title('message_id', 'post', '');
+    $stmt = $db->prepare('SELECT * FROM ' . NV_MOD_TABLE . '_conversation WHERE message_id = :message_id');
+    $stmt->bindParam(':message_id', $message_id, PDO::PARAM_STR);
+    $stmt->execute();
+    $conversation = $stmt->fetch();
+
+    if (empty($conversation) or $conversation['type'] != 'voice') {
+        nv_htmlOutput('Message not found');
+    }
+
+    $url = $conversation['url'];
     if (empty($url) or !nv_is_url($url, true)) {
         nv_htmlOutput('Invalid URL');
     }
 
-    $data = file_get_contents($url);
+    $http = new NukeViet\Http\Http($global_config, NV_TEMP_DIR);
+    $response = $http->get($url);
+    $data = (empty(NukeViet\Http\Http::$error) and !empty($response['body'])) ? $response['body'] : '';
     $md5file = md5($url);
     header('Content-Type: audio/AMR');
     header('Cache-Control: private, must-revalidate, post-check=0, pre-check=0, max-age=1');
@@ -32,7 +48,6 @@ if ($nv_Request->isset_request('player,url', 'get')) {
     header('Expires: ' . gmdate('D, d M Y H:i:s', time() - 3600) . ' GMT'); // Date in the past
     header('Last-Modified: ' . gmdate('D, d M Y H:i:s') . ' GMT');
     header('Content-Disposition: inline; filename="' . $md5file . '.amr";');
-    header('access-control-allow-origin: *');
     header('Vary: Accept-Encoding');
     if (empty($_SERVER['HTTP_ACCEPT_ENCODING'])) {
         // the content length may vary if the server is using compression

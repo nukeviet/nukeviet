@@ -9,7 +9,7 @@
 
 var gAudioContext = new AudioContext(),
     playObj = null,
-    playfile = null,
+    playmessage = null, // ID của message đang phát
     refresh_interval = null;
 
 function resizeTextArea(element) {
@@ -17,28 +17,10 @@ function resizeTextArea(element) {
 }
 
 function getFileSize(fileobj) {
-    try {
-        var fileSize = 0;
-        //for IE
-        if (navigator.userAgent.match(/msie/i)) {
-            //before making an object of ActiveXObject,
-            //please make sure ActiveX is enabled in your IE browser
-            var objFSO = new ActiveXObject("Scripting.FileSystemObject");
-            var filePath = $(fileobj)[0].value;
-            var objFile = objFSO.getFile(filePath);
-            var fileSize = objFile.size; //size in b
-            fileSize = fileSize / 1048576; //size in mb
-        }
-        //for FF, Safari, Opeara and Others
-        else {
-            fileSize = $(fileobj)[0].files[0].size //size in b
-            fileSize = fileSize / 1048576; //size in mb
-        }
-        fileSize = fileSize.toFixed(2);
-        return fileSize;
-    } catch (e) {
-        alert("Error is :" + e);
-    }
+    let fileSize = $(fileobj)[0].files[0].size //size in b
+    fileSize = fileSize / 1048576; //size in mb
+    fileSize = fileSize.toFixed(2);
+    return fileSize;
 }
 
 function getAudioContext() {
@@ -48,9 +30,17 @@ function getAudioContext() {
     return gAudioContext;
 }
 
-function fetchBlob(url, callback) {
-    var xhr = new XMLHttpRequest();
-    xhr.open('GET', url);
+function fetchBlob(obj, callback) {
+    const url = script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=conversation&nocache=' + new Date().getTime();
+    const xhr = new XMLHttpRequest();
+    const params = new URLSearchParams();
+    const message = obj.closest('.message');
+
+    params.append('checkss', message.data('checkss'));
+    params.append('message_id', message.data('message-id'));
+    params.append('get_voice', 1);
+
+    xhr.open('POST', url);
     xhr.responseType = 'blob';
     xhr.onload = function() {
         callback(this.response);
@@ -58,7 +48,8 @@ function fetchBlob(url, callback) {
     xhr.onerror = function() {
         alert('Failed to fetch ' + url);
     };
-    xhr.send();
+    xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+    xhr.send(params.toString());
 }
 
 function readBlob(blob, callback) {
@@ -102,7 +93,7 @@ function playPcm(samples) {
     src.connect(ctx.destination);
     src.onended = function() {
         playObj = null;
-        playfile = null;
+        playmessage = null;
         $('.fa-stop').removeClass('fa-stop').addClass('fa-play');
         $('.playing').removeClass('animation')
     };
@@ -110,9 +101,11 @@ function playPcm(samples) {
     playObj = src;
 }
 
-function playerStart(audio) {
-    fetchBlob(audio, function(blob) {
-        playfile = audio;
+function playerStart(obj) {
+    const message = obj.closest('.message');
+    const message_id = message.data('message-id');
+    fetchBlob(obj, function(blob) {
+        playmessage = message_id;
         playAmrBlob(blob);
     });
 }
@@ -122,24 +115,26 @@ function playerStop() {
         playObj.stop()
     }
     playObj = null;
-    playfile = null;
+    playmessage = null;
     $('.fa-stop').removeClass('fa-stop').addClass('fa-play');
     $('.playing').removeClass('animation');
 }
 
-function playerToggle(obj, audio) {
-    if (audio != playfile) {
+function playerToggle(obj) {
+    const message = obj.closest('.message');
+
+    if (message.data('message-id') != playmessage) {
         if (playObj !== null) {
             playerStop();
             setTimeout(() => {
                 $('.fa-play', obj).removeClass('fa-play').addClass('fa-stop');
                 $('.playing', obj).addClass('animation');
-                playerStart(audio)
+                playerStart(obj)
             }, 100);
         } else {
             $('.fa-play', obj).removeClass('fa-play').addClass('fa-stop');
             $('.playing', obj).addClass('animation');
-            playerStart(audio)
+            playerStart(obj)
         }
     } else {
         playerStop()
@@ -180,7 +175,7 @@ function update_message_box(url, user_id, refresh) {
     $.ajax({
         type: 'POST',
         cache: !1,
-        url: url + '&nocache=' + new Date().getTime(),
+        url: `${url}${url.includes('?') ? '&' : '?'}nocache=${Date.now()}`,
         data: {
             'get_conversation': 1,
             'user_id': user_id,
@@ -896,12 +891,10 @@ $(function() {
         nv_open_browse($(this).attr('href'), "otherLink", 900, 600, "resizable=no,scrollbars=1,toolbar=no,location=no,status=no")
     });
 
+    // Phát cuộc hội thoại trong message với follower
     $('body').on('click', '[data-toggle=voice_play]', function(e) {
         e.preventDefault();
-        var fl = $(this).data('file');
-        if (fl) {
-            playerToggle($(this), fl)
-        }
+        playerToggle($(this));
     });
 
     $('body').on('click', '[data-toggle=request_image], [data-toggle=list_image], [data-toggle=video_thumb], [data-toggle=cover_photo_url], [data-toggle=body_photo_url], [data-toggle=body_thumb], [data-toggle=video_avatar]', function(e) {

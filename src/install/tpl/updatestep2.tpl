@@ -9,7 +9,7 @@
 <!-- BEGIN: is_data_backup -->
 <div class="infoalert" id="infodetectedupg">
     {LANG.update_info_dump}<br />
-    <strong><a class="update_dump" href="{URL_DUMP_DB_BACKUP}&amp;type=sql" title="{LANG.update_dump} sql">{LANG.update_dump} sql</a></strong> {LANG.update_or} 
+    <strong><a class="update_dump" href="{URL_DUMP_DB_BACKUP}&amp;type=sql" title="{LANG.update_dump} sql">{LANG.update_dump} sql</a></strong> {LANG.update_or}
     <strong><a class="update_dump" href="{URL_DUMP_DB_BACKUP}&amp;type=gz" title="{LANG.update_dump} gz">{LANG.update_dump} gz</a></strong>
 </div>
 <!-- END: is_data_backup -->
@@ -173,7 +173,7 @@
                         <strong><a href="javascript:void(0);" onclick="NVU.Start();" title="{LANG.update_task_start}">{LANG.update_task_start}</a></strong>
                     </div>
                     <div id="nv-loading" class="hide center">
-                        
+
                     </div>
                     <script type="text/javascript">
                     NVU.NextStepUrl = '{DATA.NextStepUrl}';
@@ -181,7 +181,7 @@
                     NVU.NextFuncs = '{DATA.nextfunction}';
                     NVU.NextFuncsName = '{DATA.nextftitle}';
                     NVU.update_taskiload = '{LANG.update_taskiload}';
-                    
+
                     var update_taskierror = '{LANG.update_taskierror}';
                     var update_taskiwarn = '{LANG.update_taskiwarn}';
                     var update_taskiok = '{LANG.update_taskiok}';
@@ -192,7 +192,7 @@
                     var next_step = '{LANG.next_step}';
                     var update_task_load = '{LANG.update_task_load}';
                     var update_task_load_message = '{LANG.update_task_load_message}';
-                    
+
                     window.onbeforeunload = NVU.ConfirmExit;
                     </script>
                     <!-- END: ConStart -->
@@ -293,18 +293,18 @@
             var ftp_user_name = $('input[name="ftp_user_name"]').val();
             var ftp_user_pass = $('input[name="ftp_user_pass"]').val();
             var ftp_port = $('input[name="ftp_port"]').val();
-            
+
             if( ftp_server == '' || ftp_user_name == '' || ftp_user_pass == '' )
             {
                 alert('{LANG.ftp_error_empty}');
                 return;
             }
-            
+
             $(this).attr('disabled', 'disabled');
-            
+
             var data = 'ftp_server=' + ftp_server + '&ftp_port=' + ftp_port + '&ftp_user_name=' + ftp_user_name + '&ftp_user_pass=' + ftp_user_pass + '&tetectftp=1';
             var url = $('#ftpconfigform').attr('action');
-            
+
             $.ajax({type:"POST", url:url, data:data, success:function(c){
                 c = c.split('|');
                 if( c[0] == 'OK' ){
@@ -346,7 +346,10 @@
                         {PROCESS_MESSAGE}<br />
                         <strong><a href="javascript:NVMF.Start();" title="{LANG.update_move_start}">{LANG.update_move_start}</a></strong>
                     </div>
-                    <div id="nv-message" class="hide"><div>
+                    <div id="nv-message" class="hide"></div>
+                    <!-- BEGIN: note -->
+                    <div class="infoerror">{NOTE_MESSAGE}</div>
+                    <!-- END: note -->
                     <script type="text/javascript">
                     NVMF.NavigateConfirm = '{LANG.update_nav_confirm}';
                     NVMF.OkMessage = '{OK_MESSAGE}';

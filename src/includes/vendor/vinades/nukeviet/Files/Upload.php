@@ -624,7 +624,8 @@ class Upload
         if (preg_match("#([a-z]*)=([\'\"]*)vbscript:#iU", $txt)) {
             return false;
         }
-        if (preg_match('#\bon[a-z]+\s*=#i', $txt)) {
+        if (preg_match('#<\w+[^>]*\bon[a-z]+\s*=#i', $txt)) {
+            // Phát hiện các payload XSS sử dụng các thuộc tính sự kiện của HTML như onload=, onerror=, onclick=,... được chèn lén vào file ảnh
             return false;
         }
         if (preg_match("#(<[^>]+)style=([\`\'\"]*).*expression\([^>]*>#iU", $txt)) {

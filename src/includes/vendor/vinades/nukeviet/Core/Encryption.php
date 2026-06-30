@@ -52,7 +52,7 @@ class Encryption
      * WARNING: Thuật toán sha1 và PBKDF2 với 4 vòng lặp không còn an toàn trước các cuộc tấn công brute-force.
      * @deprecated Chỉ giữ lại cho mục đích tương thích ngược với dữ liệu cũ.
      * @todo Cần thêm cờ cấu hình để dần loại bỏ và bắt buộc chuyển đổi sang thuật toán hiện đại (bcrypt/argon2).
-     * 
+     *
      * @param mixed $data
      * @param bool  $is_salt
      * @return string
@@ -78,15 +78,18 @@ class Encryption
      * WARNING: Vẫn hỗ trợ khởi tạo mã băm MD5 và SHA1 đã lỗi thời.
      * @deprecated Khuyến nghị không sử dụng cho các hệ thống tạo mới. Thay thế bằng password_hash() gốc của PHP.
      * @todo Thêm cấu hình vô hiệu hóa việc tạo mới mật khẩu bằng thuật toán cũ, ép buộc dùng SSHA512 hoặc thuật toán an toàn hơn.
-     * 
+     *
      * @param string $password
      * @param string $hashprefix
      * @return string
      */
-    public function hash_password($password, $hashprefix = '{SSHA}')
+    public function hash_password($password, $hashprefix = '{CRYPT}')
     {
+        if ($hashprefix == '{CRYPT}') {
+            return '{CRYPT}' . password_hash($password, PASSWORD_BCRYPT);
+        }
         if ($hashprefix == '{SSHA512}') {
-            $salt = substr(sha1(microtime() . $this->_key), 0, 4);
+            $salt = random_bytes(16);
 
             return '{SSHA512}' . base64_encode(hash('sha512', $password . $salt, true) . $salt);
         }
@@ -116,14 +119,16 @@ class Encryption
      * Xác thực mật khẩu hỗ trợ các chuẩn băm cũ (MD5, SHA, SSHA).
      * @deprecated Quá trình kiểm tra phụ thuộc vào các thuật toán băm yếu.
      * @todo Thêm cơ chế "needs_rehash" (tương tự password_needs_rehash của PHP) để tự động nâng cấp mật khẩu cũ (MD5/SHA) sang chuẩn mới khi người dùng đăng nhập thành công.
-     * 
+     *
      * @param string $password
      * @param string $hash
      * @return bool
      */
     public function validate_password($password, $hash)
     {
-        if (substr($hash, 0, 9) == '{SSHA512}') {
+        if (substr($hash, 0, 7) == '{CRYPT}') {
+            return password_verify($password, substr($hash, 7));
+        } elseif (substr($hash, 0, 9) == '{SSHA512}') {
             $salt = substr(base64_decode(substr($hash, 9), true), 64);
             $validate_hash = '{SSHA512}' . base64_encode(hash('sha512', $password . $salt, true) . $salt);
         } elseif (substr($hash, 0, 9) == '{SSHA256}') {
@@ -198,7 +203,7 @@ class Encryption
 
     /**
      * decodeJwt()
-     * 
+     *
      * WARNING: Hàm này chỉ thực hiện giải mã (decode) chuỗi JWT để trích xuất dữ liệu (header và payload) mà KHÔNG HỀ XÁC THỰC (verify) chữ ký.
      * TUYỆT ĐỐI KHÔNG dùng hàm này để kiểm tra quyền hạn hay tính hợp lệ của token do kẻ tấn công có thể dễ dàng làm giả payload.
      *

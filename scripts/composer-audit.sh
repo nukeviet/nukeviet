@@ -134,9 +134,9 @@ echo "  Giải nén vào src/includes/..."
 # --- Bước 8: Dọn dẹp vendor bằng clean-vendor.sh ---
 echo ""
 echo "Bước 8: Kiểm tra và chạy clean-vendor.sh..."
-CLEAN_VENDOR_SCRIPT="$DIR_PATH/docs/vinades/technical-regulations/scripts/clean-vendor.sh"
+CLEAN_VENDOR_SCRIPT="$DIR_PATH/scripts/clean-vendor.sh"
 if [ ! -f "$CLEAN_VENDOR_SCRIPT" ]; then
-    error_exit "Không tìm thấy docs/vinades/technical-regulations/scripts/clean-vendor.sh"
+    error_exit "Không tìm thấy scripts/clean-vendor.sh"
 fi
 CLEAN_VENDOR_DEST="$DIR_PATH/src/includes/clean-vendor.sh"
 cp "$CLEAN_VENDOR_SCRIPT" "$CLEAN_VENDOR_DEST" \
