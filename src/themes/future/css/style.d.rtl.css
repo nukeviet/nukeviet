@@ -26773,6 +26773,26 @@ body {
   animation: badge-new-shake 1s infinite ease-in-out;
 }
 
+.border-sm-start {
+  border-right: var(--bs-border-width) var(--bs-border-style) var(--bs-border-color) !important;
+}
+
+.border-md-start {
+  border-right: var(--bs-border-width) var(--bs-border-style) var(--bs-border-color) !important;
+}
+
+.border-lg-start {
+  border-right: var(--bs-border-width) var(--bs-border-style) var(--bs-border-color) !important;
+}
+
+.border-xl-start {
+  border-right: var(--bs-border-width) var(--bs-border-style) var(--bs-border-color) !important;
+}
+
+.border-xxl-start {
+  border-right: var(--bs-border-width) var(--bs-border-style) var(--bs-border-color) !important;
+}
+
 @keyframes badge-new-shake {
   0% {
     transform: rotate(0deg);

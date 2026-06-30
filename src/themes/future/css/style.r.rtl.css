@@ -26203,6 +26203,31 @@ readers do not read off random characters that represent icons */
   animation: badge-new-shake 1s infinite ease-in-out;
 }
 
+@media (min-width: 576px) {
+  .border-sm-start {
+    border-right: var(--bs-border-width) var(--bs-border-style) var(--bs-border-color) !important;
+  }
+}
+@media (min-width: 768px) {
+  .border-md-start {
+    border-right: var(--bs-border-width) var(--bs-border-style) var(--bs-border-color) !important;
+  }
+}
+@media (min-width: 992px) {
+  .border-lg-start {
+    border-right: var(--bs-border-width) var(--bs-border-style) var(--bs-border-color) !important;
+  }
+}
+@media (min-width: 1200px) {
+  .border-xl-start {
+    border-right: var(--bs-border-width) var(--bs-border-style) var(--bs-border-color) !important;
+  }
+}
+@media (min-width: 1400px) {
+  .border-xxl-start {
+    border-right: var(--bs-border-width) var(--bs-border-style) var(--bs-border-color) !important;
+  }
+}
 @keyframes badge-new-shake {
   0% {
     transform: rotate(0deg);
