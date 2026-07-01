@@ -12,8 +12,9 @@ Hiện tại, chúng tôi ưu tiên bản vá bảo mật cho các nhánh đang 
 
 | Version line | Status | Notes |
 | --- | --- | --- |
-| 5.x | Supported | Primary maintained line |
-| 4.5.x | Limited | Best-effort security backports when feasible |
+| 5.x | Development | Upcoming line under active development |
+| 4.6.x | Supported | Current actively maintained line |
+| 4.5.x | Limited | Security maintenance until 07/2027 |
 | < 4.5 | Not supported | Please upgrade to a supported line |
 
 ## Reporting a Vulnerability / Cách báo cáo lỗ hổng
