@@ -40,7 +40,7 @@ if (csrf_check($checkss, $admin_info['admin_id'] . '_' . $module_name . '_main')
     $contents['tables'] = (empty($tables)) ? $tab_list : array_values(array_intersect($tab_list, $tables));
     $contents['type'] = ($type != 'str') ? 'all' : 'str';
     $contents['savetype'] = ($ext != 'sql') ? 'gz' : 'sql';
-    $contents['filename'] = tempnam(NV_ROOTDIR . '/' . NV_TEMP_DIR, NV_TEMPNAM_PREFIX);
+    $contents['filename'] = NV_ROOTDIR . '/' . NV_TEMP_DIR . '/' . NV_TEMPNAM_PREFIX . bin2hex(random_bytes(16)) . '.' . $contents['savetype'];
 
     include NV_ROOTDIR . '/includes/core/dump.php';
 
