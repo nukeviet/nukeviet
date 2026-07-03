@@ -1336,6 +1336,7 @@ class Image
                 $this->error = 'Invalid path';
                 return;
             }
+            $realPath = str_replace('\\', '/', $realPath);
 
             // Chỉ cần đảm bảo path nằm trong NV_ROOTDIR
             $rootDir = realpath(NV_ROOTDIR);
@@ -1343,8 +1344,9 @@ class Image
                 $this->error = 'Invalid root path';
                 return;
             }
+            $rootDir = str_replace('\\', '/', $rootDir);
 
-            if (!str_starts_with($realPath . DIRECTORY_SEPARATOR, $rootDir . DIRECTORY_SEPARATOR)) {
+            if (!str_starts_with($realPath . '/', $rootDir . '/')) {
                 $this->error = 'Path is outside of allowed directory';
                 return;
             }
@@ -1364,7 +1366,7 @@ class Image
                 }
 
                 $newname = self::createFilename($newname);
-                $newname = $realPath . DIRECTORY_SEPARATOR . $newname;
+                $newname = $realPath . '/' . $newname;
 
                 empty($newtype) && $newtype = $this->create_Image_info['type'];
 
