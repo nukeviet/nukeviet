@@ -1188,3 +1188,8 @@ div.radio [type='radio'] {
     --ck-content-font-color: #333;
     --ck-content-line-height: 1.42857143;
 }
+
+/* Fix trình soạn thảo nằm trong table-responsive bị tràn */
+.table-responsive .ck.ck-editor__editable_inline {
+    white-space: normal;
+}
