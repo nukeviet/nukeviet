@@ -14,6 +14,13 @@
   --nv-font-size-xxl: calc(#{$font-size-base} * 1.625);
 }
 
+// Fix ckeditor5 với bootstrap
+.table-responsive {
+  .ck.ck-editor__editable_inline {
+    white-space: normal;
+  }
+}
+
 /* Table */
 figure.table .ck-table-resized {
   table-layout: fixed;
