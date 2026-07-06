@@ -1,27 +1,49 @@
 <!-- BEGIN: main -->
-<form action="{NV_BASE_ADMINURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&{NV_NAME_VARIABLE}={MODULE_NAME}&amp;{NV_OP_VARIABLE}={OP}" method="post">
-	<div class="table-responsive">
-		<table class="table table-striped table-bordered table-hover">
-			<tbody>
-				<tr>
-					<td colspan="2">{ROW.content}</td>
-				</tr>
-                <tr>
-                    <td class="w250">{LANG.attach}</td>
-                    <td class="form-inline">
-                        <input type="text" id="post-file" name="attach" value="{ROW.attach}" class="form-control w300" readonly="readonly">
+<div class="form-group">
+    {ROW.content}
+</div>
+<div class="panel panel-default">
+    <div class="panel-body">
+        <form action="{NV_BASE_ADMINURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&{NV_NAME_VARIABLE}={MODULE_NAME}&amp;{NV_OP_VARIABLE}={OP}" method="post" class="form-horizontal">
+            <div class="form-group">
+                <label class="col-sm-6 control-label" for="select-file">{LANG.attach}:</label>
+                <div class="col-sm-18">
+                    <div class="form-inline">
+                        <div class="form-group">
+                            <div class="col-xs-24">
+                                <input type="text" id="post-file" name="attach" value="{ROW.attach}" class="form-control w300" readonly="readonly">
+                            </div>
+                        </div>
                         <button data-path="{UPLOADS_DIR}" data-currentpath="{CURRENT_DIR}" id="select-file" class="btn btn-default" type="button">{LANG.attach_choose}</button>
                         <button id="post-file-download" class="btn btn-default" type="button">{LANG.attach_view}</button>
                         <button id="post-file-remove" class="btn btn-default" type="button">{GLANG.delete}</button>
-                    </td>
-                </tr>
-				<tr>
-					<td colspan="2"><label><input type="checkbox" name="active" value="1" {ROW.status}/> {LANG.edit_active}</label> &nbsp; <label> <input type="checkbox" name="delete" value="1"/> {LANG.edit_delete} </label>&nbsp;&nbsp; <input type="hidden" value="{CID}" name="cid"/><input type="hidden" name="save" value="1"><input type="submit" value="{LANG.delete_accept}" class="btn btn-primary" /></td>
-				</tr>
-			</tbody>
-		</table>
-	</div>
-</form>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-18 col-lg-10 col-sm-offset-6">
+                    <div class="checkbox">
+                        <label><input type="checkbox" name="active" value="1" {ROW.status}/> {LANG.edit_active}</label>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-18 col-lg-10 col-sm-offset-6">
+                    <div class="checkbox">
+                        <label><input type="checkbox" name="delete" value="1"/> {LANG.edit_delete} </label>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-18 col-sm-offset-6">
+                    <input type="hidden" value="{CID}" name="cid"/>
+                    <input type="hidden" name="save" value="1">
+                    <button type="submit" class="btn btn-primary">{LANG.delete_accept}</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
 <script type="text/javascript">
 $(document).ready(function(){
     $("#select-file").click(function(){
