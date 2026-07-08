@@ -38,15 +38,25 @@ class Ips
 
     private static $ip6_support = false;
 
+    private $trust_proxy = false;
+
+    private $trusted_proxies = [];
+
     /**
      * __construct()
+     *
+     * @param bool  $trust_proxy     Có tin các header IP do proxy đặt hay không
+     * @param array $trusted_proxies Danh sách IP/dải CIDR proxy tin cậy
      */
-    public function __construct()
+    public function __construct($trust_proxy = false, array $trusted_proxies = [])
     {
+        $this->trust_proxy = (bool) $trust_proxy;
+        $this->trusted_proxies = $trusted_proxies;
+
         self::$client_ip = trim(self::nv_get_clientip());
         self::$forward_ip = trim(self::nv_get_forwardip());
         self::$remote_addr = trim(self::nv_get_remote_addr());
-        self::$remote_ip = trim(self::nv_getip());
+        self::$remote_ip = trim($this->nv_getip());
         self::$my_ip2long = self::ip2long();
 
         if (self::$my_ip2long === false) {
@@ -156,22 +166,25 @@ class Ips
     }
 
     /**
-     * nv_getip()
-     * Hàm tĩnh riêng của class
+     * Lấy IP thật của người dùng đang truy cập
      *
      * @return string
      */
-    private static function nv_getip()
+    private function nv_getip()
     {
-        if (($ip = self::getIp('HTTP_CF_CONNECTING_IP')) !== false) {
-            return $ip;
+        // Các header IP chỉ chấp nhận khi nó đến từ một proxy tin cậy hoặc tắt tính năng tin proxy
+        if (!$this->trust_proxy or (self::$remote_addr != 'none' and $this->isTrustedProxy(self::$remote_addr))) {
+            if (($ip = self::getIp('HTTP_CF_CONNECTING_IP')) !== false) {
+                return $ip;
+            }
+            if (self::$client_ip != 'none') {
+                return self::$client_ip;
+            }
+            if (self::$forward_ip != 'none') {
+                return self::$forward_ip;
+            }
         }
-        if (self::$client_ip != 'none') {
-            return self::$client_ip;
-        }
-        if (self::$forward_ip != 'none') {
-            return self::$forward_ip;
-        }
+
         if (self::$remote_addr != 'none') {
             return self::$remote_addr;
         }
@@ -181,6 +194,74 @@ class Ips
         }
 
         return 'none';
+    }
+
+    /**
+     * Kiểm tra một IP có thuộc danh sách proxy tin cậy hay không
+     *
+     * @param string $ip
+     * @return bool
+     */
+    private function isTrustedProxy(string $ip)
+    {
+        foreach ($this->trusted_proxies as $cidr) {
+            if (self::ipInRange($ip, $cidr)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Kiểm tra địa chỉ $ip có nằm trong dải CIDR $cidr không. Hỗ trợ IPv4 và IPv6.
+     *
+     * @param string $ip
+     * @param string $cidr
+     * @return bool
+     */
+    public static function ipInRange(string $ip, string $cidr)
+    {
+        $cidr = trim($cidr);
+        if ($cidr === '') {
+            return false;
+        }
+
+        // IP đơn không có mask thì coi như /32 (IPv4) hoặc /128 (IPv6)
+        if (strpos($cidr, '/') === false) {
+            $cidr .= (strpos($cidr, ':') !== false) ? '/128' : '/32';
+        }
+
+        [$subnet, $bits] = explode('/', $cidr, 2);
+        if (!ctype_digit($bits)) {
+            return false;
+        }
+        $bits = (int) $bits;
+
+        $ip_bin = inet_pton($ip);
+        $subnet_bin = inet_pton($subnet);
+
+        if ($ip_bin === false or $subnet_bin === false or strlen($ip_bin) !== strlen($subnet_bin) or $bits > strlen($ip_bin) * 8) {
+            return false;
+        }
+
+        $bytes = intdiv($bits, 8);
+        $remainder = $bits % 8;
+
+        // So khớp các byte nguyên
+        if ($bytes > 0 and strncmp($ip_bin, $subnet_bin, $bytes) !== 0) {
+            return false;
+        }
+
+        // So khớp phần bit lẻ còn lại
+        if ($remainder > 0) {
+            $mask = ~(0xff >> $remainder) & 0xff;
+            if ((ord($ip_bin[$bytes]) & $mask) !== (ord($subnet_bin[$bytes]) & $mask)) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     /**
@@ -240,6 +321,40 @@ class Ips
     public function isIp6($ip)
     {
         return filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV6);
+    }
+
+    /**
+     * Kiểm tra một chuỗi có phải địa chỉ IP đơn hoặc dải CIDR hợp lệ (IPv4/IPv6) không
+     *
+     * @param string $cidr
+     * @return bool
+     */
+    public static function validCidr($cidr)
+    {
+        $cidr = trim((string) $cidr);
+        if ($cidr === '') {
+            return false;
+        }
+
+        // Trường hợp CIDR: địa_chỉ/số_bit
+        if (strpos($cidr, '/') !== false) {
+            [$ip, $mask] = explode('/', $cidr, 2);
+            if (!ctype_digit($mask) || strlen($mask) > 3) {
+                return false;
+            }
+            $mask = (int) $mask;
+            if (filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4)) {
+                return $mask >= 0 and $mask <= 32;
+            }
+            if (filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV6)) {
+                return $mask >= 0 and $mask <= 128;
+            }
+
+            return false;
+        }
+
+        // Trường hợp chỉ là một địa chỉ IP đơn lẻ
+        return (bool) filter_var($cidr, FILTER_VALIDATE_IP);
     }
 
     /**

@@ -653,3 +653,16 @@ $lang_module['cache_prefix'] = 'Préfixe de clé de cache';
 $lang_module['cache_prefix_note'] = 'Entrez le préfixe si vous utilisez Memcached ou Redis et que plusieurs sites Web utilisent le même serveur de cache pour éviter les conflits de clés de cache entre les sites Web. Le préfixe comprend les lettres a-z, les chiffres 0-9 et le trait de soulignement (_), et doit commencer par une lettre. Le cache de fichiers n\'utilise pas ce préfixe.';
 $lang_module['cache_prefix_invalid'] = 'Préfixe invalide. Accepte uniquement les lettres a-z, les chiffres 0-9 et le trait de soulignement (_) et doit commencer par une lettre.';
 $lang_module['cache_test_error'] = 'Erreur de connexion au serveur de cache. Veuillez vérifier les paramètres de configuration. Détails de l\'erreur: %s';
+
+// Trusted proxies
+$lang_module['trusted_proxy'] = 'Proxys de confiance';
+$lang_module['trusted_proxy_note'] = 'Lorsque le site est derrière un reverse proxy ou un CDN (Cloudflare, Nginx...), l\'IP réelle du visiteur est transmise via des en-têtes tels que X-Forwarded-For ou CF-Connecting-IP. Ces en-têtes ne sont pris en compte que si l\'IP de connexion directe (REMOTE_ADDR) figure dans la liste des proxys de confiance ci-dessous ; sinon un attaquant pourrait usurper l\'IP pour contourner la limitation de débit et la protection anti-force brute.';
+$lang_module['trusted_proxy_enable'] = 'Activer';
+$lang_module['trusted_proxy_enable_des'] = 'Ne faire confiance aux en-têtes d\'IP du proxy que si cette option est activée';
+$lang_module['trusted_proxy_list'] = 'Liste des proxys de confiance';
+$lang_module['trusted_proxy_list_des'] = 'Une adresse IP ou une plage CIDR par ligne (IPv4 et IPv6 pris en charge). Exemple : 127.0.0.1, 10.0.0.0/8, 173.245.48.0/20, 2400:cb00::/32.';
+$lang_module['trusted_proxy_fetch_cf'] = 'Récupérer les plages Cloudflare';
+$lang_module['trusted_proxy_cf_loaded'] = 'Plages Cloudflare ajoutées à la liste. Cliquez sur Enregistrer pour appliquer.';
+$lang_module['trusted_proxy_cf_error'] = 'Impossible de récupérer les plages depuis Cloudflare. Veuillez réessayer ou les saisir manuellement.';
+$lang_module['trusted_proxy_invalid'] = 'Les entrées suivantes ne sont pas des adresses IP ou des plages CIDR valides : %s';
+$lang_module['trusted_proxy_empty_list'] = 'Vous avez activé le proxy de confiance mais la liste est vide. Veuillez saisir au moins une plage de proxy de confiance.';

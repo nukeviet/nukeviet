@@ -42,7 +42,7 @@ if (file_exists(NV_ROOTDIR . '/vendor/autoload.php')) {
 }
 
 // Xac dinh IP cua client
-$ips = new NukeViet\Core\Ips();
+$ips = new NukeViet\Core\Ips(!empty($global_config['trusted_proxy_enable']), $global_config['trusted_proxies'] ?? []);
 define('NV_FORWARD_IP', $ips::$forward_ip);
 define('NV_REMOTE_ADDR', $ips::$remote_addr);
 define('NV_CLIENT_IP', $ips::$remote_ip);

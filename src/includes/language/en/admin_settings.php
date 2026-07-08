@@ -653,3 +653,16 @@ $lang_module['cache_prefix'] = 'Cache prefix';
 $lang_module['cache_prefix_note'] = 'Enter a prefix if you use Memcached or Redis and have multiple websites sharing the same cache server to avoid cache key conflicts between websites. The prefix consists of letters a-z, numbers 0-9 and underscore (_), must start with a letter. File cache does not use this prefix.';
 $lang_module['cache_prefix_invalid'] = 'Invalid prefix. Only accepts letters a-z, numbers 0-9 and underscore (_) and must start with a letter.';
 $lang_module['cache_test_error'] = 'Error connecting to cache server. Please check the configuration parameters. Error details: %s';
+
+// Trusted proxies
+$lang_module['trusted_proxy'] = 'Trusted proxies';
+$lang_module['trusted_proxy_note'] = 'When the website sits behind a reverse proxy or CDN (Cloudflare, Nginx...), the visitor\'s real IP is carried in headers such as X-Forwarded-For or CF-Connecting-IP. These headers are only trusted when the direct connecting IP (REMOTE_ADDR) belongs to the trusted proxy list below; otherwise an attacker could spoof the IP to bypass rate limiting and brute-force protection.';
+$lang_module['trusted_proxy_enable'] = 'Enable';
+$lang_module['trusted_proxy_enable_des'] = 'Only trust proxy IP headers when this option is enabled';
+$lang_module['trusted_proxy_list'] = 'Trusted proxy list';
+$lang_module['trusted_proxy_list_des'] = 'One IP address or CIDR range per line (IPv4 and IPv6 supported). Example: 127.0.0.1, 10.0.0.0/8, 173.245.48.0/20, 2400:cb00::/32.';
+$lang_module['trusted_proxy_fetch_cf'] = 'Fetch Cloudflare ranges';
+$lang_module['trusted_proxy_cf_loaded'] = 'Cloudflare ranges added to the list. Click Save to apply.';
+$lang_module['trusted_proxy_cf_error'] = 'Could not fetch ranges from Cloudflare. Please try again or enter them manually.';
+$lang_module['trusted_proxy_invalid'] = 'The following entries are not valid IP addresses or CIDR ranges: %s';
+$lang_module['trusted_proxy_empty_list'] = 'You enabled trust proxy but the list is empty. Please enter at least one trusted proxy range.';

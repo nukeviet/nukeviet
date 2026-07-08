@@ -1673,4 +1673,42 @@ $(function() {
             $('.redis-settings').addClass('d-none');
         }
     }).trigger('change');
+
+    // Lấy dải IP Cloudflare rồi trộn vào danh sách proxy tin cậy
+    $('body').on('click', '[data-toggle=fetch_cf]', function() {
+        var that = $(this),
+            form = that.closest('form'),
+            ta = $('[name=trusted_proxies]', form);
+        let icon = $('i', that);
+        if (icon.is('.fa-spinner')) {
+            return;
+        }
+        icon.removeClass(icon.data('icon')).addClass('fa-spinner fa-spin-pulse');
+        $.ajax({
+            type: 'POST',
+            cache: !1,
+            url: form.attr('action'),
+            data: {
+                fetch_cloudflare: 1,
+                trusted_proxies: ta.val(),
+                checkss: $('input[name=checkss]', form).val()
+            },
+            dataType: 'json',
+            success: function(a) {
+                icon.removeClass('fa-spinner fa-spin-pulse').addClass(icon.data('icon'));
+                if ('error' == a.status) {
+                    nvToast(a.mess, 'error');
+                } else if ('OK' == a.status) {
+                    ta.val(a.data.join('\n'));
+                    nvToast(that.data('loaded-mess'), 'success');
+                }
+                ta.trigger('keyup');
+            },
+            error: function(xhr, text, err) {
+                icon.removeClass('fa-spinner fa-spin-pulse').addClass(icon.data('icon'));
+                nvToast(err, 'error');
+                console.log(xhr, text, err);
+            }
+        });
+    });
 });

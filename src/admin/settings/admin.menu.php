@@ -39,4 +39,5 @@ if (defined('NV_IS_GODADMIN')) {
     $submenu['ssettings'] = $nv_Lang->getModule('ssettings');
     $submenu['variables'] = $nv_Lang->getModule('variables');
     $submenu['custom'] = $nv_Lang->getModule('custom');
+    $submenu['trusted-proxies'] = $nv_Lang->getModule('trusted_proxy');
 }

@@ -27,6 +27,7 @@ if (defined('NV_IS_GODADMIN')) {
     $allow_func[] = 'ssettings';
     $allow_func[] = 'cdn_backendhost';
     $allow_func[] = 'custom';
+    $allow_func[] = 'trusted-proxies';
 }
 
 $menu_top = [
@@ -40,18 +41,19 @@ unset($page_title, $select_options);
 define('NV_IS_FILE_SETTINGS', true);
 
 // Documents
-$array_url_instruction['main'] = 'https://wiki.nukeviet.vn/nukeviet4:admin:settings';
-$array_url_instruction['system'] = 'https://wiki.nukeviet.vn/nukeviet4:admin:settings:system';
-$array_url_instruction['smtp'] = 'https://wiki.nukeviet.vn/nukeviet4:admin:settings:smtp';
-$array_url_instruction['security'] = 'https://wiki.nukeviet.vn/nukeviet4:admin:settings:security';
-$array_url_instruction['plugin'] = 'https://wiki.nukeviet.vn/nukeviet4:admin:settings:plugin';
-$array_url_instruction['cronjobs'] = 'https://wiki.nukeviet.vn/nukeviet4:admin:settings:cronjobs';
-$array_url_instruction['ftp'] = 'https://wiki.nukeviet.vn/nukeviet4:admin:settings:ftp';
-$array_url_instruction['variables'] = 'https://wiki.nukeviet.vn/nukeviet4:admin:setting:variables';
+$array_url_instruction['main'] = 'https://wiki.nukeviet.vn/nukeviet5:admin:settings';
+$array_url_instruction['system'] = 'https://wiki.nukeviet.vn/nukeviet5:admin:settings:system';
+$array_url_instruction['smtp'] = 'https://wiki.nukeviet.vn/nukeviet5:admin:settings:smtp';
+$array_url_instruction['security'] = 'https://wiki.nukeviet.vn/nukeviet5:admin:settings:security';
+$array_url_instruction['plugin'] = 'https://wiki.nukeviet.vn/nukeviet5:admin:settings:plugin';
+$array_url_instruction['cronjobs'] = 'https://wiki.nukeviet.vn/nukeviet5:admin:settings:cronjobs';
+$array_url_instruction['ftp'] = 'https://wiki.nukeviet.vn/nukeviet5:admin:settings:ftp';
+$array_url_instruction['variables'] = 'https://wiki.nukeviet.vn/nukeviet5:admin:settings:variables';
+$array_url_instruction['trusted-proxies'] = 'https://wiki.nukeviet.vn/nukeviet5:admin:settings:trusted-proxies';
 
 /**
  * Cập nhật lại thời điểm thực hiện tiếp theo của Cronjob
- * @return bool
+ * @return bool|void
  */
 function update_cronjob_next_time()
 {
@@ -100,7 +102,7 @@ function update_cronjob_next_time()
  * Lấy số module ảo+chính của 1 module
  *
  * @param string $module_file
- * @return number
+ * @return int
  */
 function get_num_mod($module_file)
 {
@@ -122,7 +124,7 @@ function get_num_mod($module_file)
  *
  * @param string $hook
  * @param string $receive
- * @return number
+ * @return int
  */
 function get_max_pulgin($hook, $receive)
 {

@@ -653,3 +653,16 @@ $lang_module['cache_prefix'] = 'Tiền tố cache';
 $lang_module['cache_prefix_note'] = 'Nhập tiền tố nếu bạn sử dụng Memcached hoặc Redis và có nhiều website sử dụng chung máy chủ cache để tránh xung đột khóa cache giữa các website. Tiền tố gồm chữ cái a-z, số 0-9 và dấu gạch dưới (_), phải bắt đầu bằng chữ cái. File cache không sử dụng tiền tố này.';
 $lang_module['cache_prefix_invalid'] = 'Tiền tố cache không hợp lệ. Chỉ chấp nhận chữ cái a-z, số 0-9 và dấu gạch dưới (_) và phải bắt đầu bằng chữ cái.';
 $lang_module['cache_test_error'] = 'Lỗi kết nối đến máy chủ cache. Vui lòng kiểm tra lại các thông số cấu hình. Chi tiết lỗi: %s';
+
+// Trusted proxies
+$lang_module['trusted_proxy'] = 'Proxy tin cậy';
+$lang_module['trusted_proxy_note'] = 'Khi website đặt sau reverse proxy hoặc CDN (Cloudflare, Nginx...), IP thật của khách nằm trong các header như X-Forwarded-For, CF-Connecting-IP. Chỉ tin các header này khi IP kết nối trực tiếp (REMOTE_ADDR) thuộc danh sách proxy tin cậy bên dưới, nếu không kẻ tấn công có thể giả mạo IP để vượt qua giới hạn tần suất và chống dò mật khẩu.';
+$lang_module['trusted_proxy_enable'] = 'Kích hoạt';
+$lang_module['trusted_proxy_enable_des'] = 'Chỉ tin các header IP của proxy khi bật tùy chọn này';
+$lang_module['trusted_proxy_list'] = 'Danh sách proxy tin cậy';
+$lang_module['trusted_proxy_list_des'] = 'Mỗi dòng một địa chỉ IP hoặc dải CIDR (hỗ trợ IPv4 và IPv6). Ví dụ: 127.0.0.1, 10.0.0.0/8, 173.245.48.0/20, 2400:cb00::/32.';
+$lang_module['trusted_proxy_fetch_cf'] = 'Lấy dải IP Cloudflare';
+$lang_module['trusted_proxy_cf_loaded'] = 'Đã bổ sung dải IP Cloudflare vào danh sách. Hãy nhấn Lưu để áp dụng.';
+$lang_module['trusted_proxy_cf_error'] = 'Không lấy được dải IP từ Cloudflare. Hãy thử lại hoặc nhập thủ công.';
+$lang_module['trusted_proxy_invalid'] = 'Các mục sau không phải IP hoặc dải CIDR hợp lệ: %s';
+$lang_module['trusted_proxy_empty_list'] = 'Bạn đã bật trust proxy nhưng danh sách đang trống. Hãy nhập ít nhất một dải IP proxy tin cậy.';

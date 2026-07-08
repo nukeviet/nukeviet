@@ -163,7 +163,7 @@ function nv_save_file_config_global()
     $config_variable['error_log_fileext'] = NV_LOGS_EXT;
 
     $config_name_array = ['file_allowed_ext', 'forbid_extensions', 'forbid_mimes', 'allow_sitelangs', 'allow_request_mods', 'config_sso'];
-    $config_name_json = ['crosssite_valid_domains', 'crosssite_valid_ips', 'crosssite_allowed_variables', 'crossadmin_valid_domains', 'crossadmin_valid_ips', 'domains_whitelist', 'ip_allow_null_origin', 'zaloWebhookIPs', 'end_url_variables', 'cdn_url', 'region'];
+    $config_name_json = ['crosssite_valid_domains', 'crosssite_valid_ips', 'crosssite_allowed_variables', 'crossadmin_valid_domains', 'crossadmin_valid_ips', 'domains_whitelist', 'ip_allow_null_origin', 'zaloWebhookIPs', 'end_url_variables', 'cdn_url', 'region', 'trusted_proxies'];
     $config_name_encrypted = ['redis_password', 'fpt_user_pass', 'smtp_password'];
 
     foreach ($config_variable as $c_config_name => $c_config_value) {
