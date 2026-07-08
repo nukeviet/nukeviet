@@ -2310,8 +2310,7 @@ function nv_is_url($url, $isInternal = false)
         return false;
     }
 
-    $sanitizer = new NukeViet\Core\Sanitizer();
-    if (!$sanitizer->xssValid($url)) {
+    if (!NukeViet\Core\Sanitizer::xssValid($url)) {
         return false;
     }
 

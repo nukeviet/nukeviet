@@ -189,21 +189,6 @@ class Request
         'ping' // HTML5 <a ping> sends POST to arbitrary URL on click - SSRF/tracking vector
     ];
 
-    private $disablecomannds = [
-        'base64_decode',
-        'cmd',
-        'passthru',
-        'eval',
-        'exec',
-        'system',
-        'fopen',
-        'fsockopen',
-        'file',
-        'file_get_contents',
-        'readfile',
-        'unlink'
-    ];
-
     /**
      * @var array
      */
@@ -763,20 +748,8 @@ class Request
                     continue;
                 }
 
-                $search = [
-                    'javascript' => '/j\s*a\s*v\s*a\s*s\s*c\s*r\s*i\s*p\s*t/si',
-                    'vbscript' => '/v\s*b\s*s\s*c\s*r\s*i\s*p\s*t/si',
-                    'script' => '/s\s*c\s*r\s*i\s*p\s*t/si',
-                    'applet' => '/a\s*p\s*p\s*l\s*e\s*t/si',
-                    'alert' => '/a\s*l\s*e\s*r\s*t/si',
-                    'document' => '/d\s*o\s*c\s*u\s*m\s*e\s*n\s*t/si',
-                    'write' => '/w\s*r\s*i\s*t\s*e/si',
-                    'cookie' => '/c\s*o\s*o\s*k\s*i\s*e/si',
-                    'window' => '/w\s*i\s*n\s*d\s*o\s*w/si',
-                    'data:' => '/d\s*a\s*t\s*a\s*\:/si',
-                    '@import' => '/@\s*i\s*m\s*p\s*o\s*r\s*t/si' // CSS injection via style attribute
-                ];
-                $value = preg_replace(array_values($search), array_keys($search), $value);
+                // Gom các từ khóa nguy hiểm bị giãn cách ký tự (dùng chung với Sanitizer)
+                $value = Sanitizer::normalizeXssKeywords($value);
 
                 // Giới hạn link từ các tên miền bên ngoài
                 if ($this->isRestrictDomain and isset($this->remoteAttrCheck[$attrSubSet[0]]) and in_array($tagName, $this->remoteAttrCheck[$attrSubSet[0]], true)) {
@@ -796,10 +769,7 @@ class Request
                 if ('param' == $tagName and 'name' == $attrSubSet[0] and preg_match('/^[\r\n\s\t]*(allowscriptaccess|allownetworking)/isu', strtolower($value))) {
                     return [];
                 }
-                if (preg_match('/(expression|javascript|behaviour|vbscript|mocha|livescript)(\:*)/', $value) or preg_match('/@import/i', $value)) {
-                    continue;
-                }
-                if (!empty($this->disablecomannds) and preg_match('#(' . implode('|', $this->disablecomannds) . ')(\s*)\((.*?)\)#si', $value)) {
+                if (Sanitizer::hasDangerousScheme($value) or Sanitizer::hasDisabledCommand($value)) {
                     continue;
                 }
 
@@ -987,7 +957,7 @@ class Request
                 preg_match_all('/<!\[cdata\[(.*?)\]\]>/is', $value, $matches);
                 $value = str_replace($matches[0], $matches[1], $value);
                 $value = strip_tags($value);
-                $value = preg_replace('#(' . implode('|', $this->disablecomannds) . ')(\s*)\((.*?)\)#si', '', $value);
+                $value = preg_replace('#(' . implode('|', Sanitizer::DISABLE_COMMANDS) . ')(\s*)\((.*?)\)#si', '', $value);
                 $value = str_replace(["'", '"', '<', '>'], ['&#039;', '&quot;', '&lt;', '&gt;'], $value);
                 $value = trim($value);
             }
