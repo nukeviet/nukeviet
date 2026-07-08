@@ -2,6 +2,7 @@
     <div class="card">
         <div class="card-body pt-4">
             <div class="alert alert-info">{$LANG->getModule('trusted_proxy_note')}</div>
+            <div class="alert alert-warning">{$LANG->getModule('trusted_proxy_note_strip')}</div>
             <div class="row mb-3">
                 <label class="col-sm-3 col-form-label text-sm-end" for="trusted_proxy_enable">{$LANG->getModule('trusted_proxy_enable')}</label>
                 <div class="col-sm-8 col-lg-6 col-xxl-5 d-flex align-items-center">
@@ -18,7 +19,7 @@
                     <div class="invalid-feedback"></div>
                     <div class="form-text">{$LANG->getModule('trusted_proxy_list_des')}</div>
                     <div class="mt-2">
-                        <button type="button" class="btn btn-outline-secondary btn-sm" data-toggle="fetch_cf" data-loaded-mess="{$LANG->getModule('trusted_proxy_cf_loaded')}">
+                        <button type="button" class="btn btn-secondary btn-sm" data-toggle="fetch_cf" data-loaded-mess="{$LANG->getModule('trusted_proxy_cf_loaded')}">
                             <i class="fa-solid fa-cloud-arrow-down" data-icon="fa-cloud-arrow-down"></i> {$LANG->getModule('trusted_proxy_fetch_cf')}
                         </button>
                     </div>

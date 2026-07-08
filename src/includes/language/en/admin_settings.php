@@ -654,9 +654,9 @@ $lang_module['cache_prefix_note'] = 'Enter a prefix if you use Memcached or Redi
 $lang_module['cache_prefix_invalid'] = 'Invalid prefix. Only accepts letters a-z, numbers 0-9 and underscore (_) and must start with a letter.';
 $lang_module['cache_test_error'] = 'Error connecting to cache server. Please check the configuration parameters. Error details: %s';
 
-// Trusted proxies
 $lang_module['trusted_proxy'] = 'Trusted proxies';
 $lang_module['trusted_proxy_note'] = 'When the website sits behind a reverse proxy or CDN (Cloudflare, Nginx...), the visitor\'s real IP is carried in headers such as X-Forwarded-For or CF-Connecting-IP. These headers are only trusted when the direct connecting IP (REMOTE_ADDR) belongs to the trusted proxy list below; otherwise an attacker could spoof the IP to bypass rate limiting and brute-force protection.';
+$lang_module['trusted_proxy_note_strip'] = 'If the website sits behind an internal proxy or a provider other than Cloudflare, configure the proxy to overwrite or strip client-supplied IP headers; otherwise an attacker can still spoof the IP by sending a forged CF-Connecting-IP header. Example for Nginx: proxy_set_header CF-Connecting-IP ""; and proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;';
 $lang_module['trusted_proxy_enable'] = 'Enable';
 $lang_module['trusted_proxy_enable_des'] = 'Only trust proxy IP headers when this option is enabled';
 $lang_module['trusted_proxy_list'] = 'Trusted proxy list';

@@ -172,8 +172,23 @@ class Ips
      */
     private function nv_getip()
     {
-        // Các header IP chỉ chấp nhận khi nó đến từ một proxy tin cậy hoặc tắt tính năng tin proxy
-        if (!$this->trust_proxy or (self::$remote_addr != 'none' and $this->isTrustedProxy(self::$remote_addr))) {
+        if ($this->trust_proxy) {
+            /**
+             * Bật tính năng tin tưởng proxy thì chỉ đọc các header chuẩn
+             * bỏ qua các header cũ, header không theo chuẩn.
+             */
+            if (self::$remote_addr != 'none' and $this->isTrustedProxy(self::$remote_addr)) {
+                // Cloudflare
+                if (($ip = self::getIp('HTTP_CF_CONNECTING_IP')) !== false) {
+                    return $ip;
+                }
+                // X-Forwarded-For lấy từ phải sang trái bỏ qua chính ip của proxy
+                if (($ip = $this->getForwardedClient()) !== false) {
+                    return $ip;
+                }
+            }
+        } else {
+            // Tắt tin tưởng proxy thì đọc header rộng
             if (($ip = self::getIp('HTTP_CF_CONNECTING_IP')) !== false) {
                 return $ip;
             }
@@ -194,6 +209,34 @@ class Ips
         }
 
         return 'none';
+    }
+
+    /**
+     * Lấy IP client thật từ header X-Forwarded-For khi đứng sau proxy tin cậy.
+     * Duyệt danh sách từ phải sang trái, bỏ qua các IP thuộc danh sách proxy tin cậy,
+     * IP hợp lệ đầu tiên là client IP.
+     *
+     * @return false|string
+     */
+    private function getForwardedClient()
+    {
+        $xff = Site::getEnv('HTTP_X_FORWARDED_FOR');
+        if (empty($xff)) {
+            return false;
+        }
+
+        $parts = explode(',', $xff);
+        for ($i = count($parts) - 1; $i >= 0; $i--) {
+            $ip = trim($parts[$i]);
+            if ($ip === '' or !filter_var($ip, FILTER_VALIDATE_IP)) {
+                continue;
+            }
+            if (!$this->isTrustedProxy($ip)) {
+                return $ip;
+            }
+        }
+
+        return false;
     }
 
     /**

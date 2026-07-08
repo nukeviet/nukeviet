@@ -654,9 +654,9 @@ $lang_module['cache_prefix_note'] = 'Entrez le préfixe si vous utilisez Memcach
 $lang_module['cache_prefix_invalid'] = 'Préfixe invalide. Accepte uniquement les lettres a-z, les chiffres 0-9 et le trait de soulignement (_) et doit commencer par une lettre.';
 $lang_module['cache_test_error'] = 'Erreur de connexion au serveur de cache. Veuillez vérifier les paramètres de configuration. Détails de l\'erreur: %s';
 
-// Trusted proxies
 $lang_module['trusted_proxy'] = 'Proxys de confiance';
 $lang_module['trusted_proxy_note'] = 'Lorsque le site est derrière un reverse proxy ou un CDN (Cloudflare, Nginx...), l\'IP réelle du visiteur est transmise via des en-têtes tels que X-Forwarded-For ou CF-Connecting-IP. Ces en-têtes ne sont pris en compte que si l\'IP de connexion directe (REMOTE_ADDR) figure dans la liste des proxys de confiance ci-dessous ; sinon un attaquant pourrait usurper l\'IP pour contourner la limitation de débit et la protection anti-force brute.';
+$lang_module['trusted_proxy_note_strip'] = 'Si le site est derrière un proxy interne ou un fournisseur autre que Cloudflare, configurez le proxy pour écraser ou supprimer les en-têtes d\'IP envoyés par le client ; sinon un attaquant peut toujours usurper l\'IP en envoyant un en-tête CF-Connecting-IP falsifié. Exemple pour Nginx : proxy_set_header CF-Connecting-IP ""; et proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;';
 $lang_module['trusted_proxy_enable'] = 'Activer';
 $lang_module['trusted_proxy_enable_des'] = 'Ne faire confiance aux en-têtes d\'IP du proxy que si cette option est activée';
 $lang_module['trusted_proxy_list'] = 'Liste des proxys de confiance';
