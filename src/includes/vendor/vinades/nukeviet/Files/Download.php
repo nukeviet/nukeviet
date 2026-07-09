@@ -61,9 +61,18 @@ class Download
 
         $path = $this->real_path($path, $directory);
         $extension = $this->getextension($path);
+
+        // Chuẩn hóa tên file
+        $name = ($name == '') ? substr(strrchr('/' . $path, '/'), 1) : $name;
+        $name = preg_replace('/[\x00-\x1F\x7F\/\\\\:\*\?"<>\|]/', '', (string) $name);
+        $name = trim($name, " .\t\n\r\0\x0B");
+        if ($name === '') {
+            throw new \RuntimeException('Invalid or empty file name');
+        }
+
         $this->properties = [
             'path' => $path,
-            'name' => ($name == '') ? substr(strrchr('/' . $path, '/'), 1) : $name,
+            'name' => $name,
             'extension' => $extension,
             'type' => '',
             'size' => (int) (sprintf('%u', filesize($path))),
