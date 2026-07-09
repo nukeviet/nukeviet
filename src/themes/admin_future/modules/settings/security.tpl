@@ -170,19 +170,6 @@
 
                         <li class="list-group-item">
                             <div class="row g-2">
-                                <label for="proxy_blocker" class="col-sm-5 col-form-label text-sm-end py-only-sm-0"><strong>{$LANG->getModule('proxy_blocker')}</strong></label>
-                                <div class="col-sm-7">
-                                    <select name="proxy_blocker" id="proxy_blocker" class="form-select w-auto mw-100">
-                                        {foreach from=$PROXY_BLOCKER_LIST key=key item=value}
-                                        <option value="{$key}"{if $GDATA.proxy_blocker eq $key} selected{/if}>{$value}</option>
-                                        {/foreach}
-                                    </select>
-                                </div>
-                            </div>
-                        </li>
-
-                        <li class="list-group-item">
-                            <div class="row g-2">
                                 <div class="col-sm-6 col-xxl-5 offset-sm-5">
                                     <div class="form-check form-switch">
                                         <input type="checkbox" class="form-check-input" role="switch" value="1" id="str_referer_blocker" name="str_referer_blocker"{if $GDATA.str_referer_blocker} checked{/if}>

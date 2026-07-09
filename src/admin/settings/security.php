@@ -16,12 +16,6 @@ if (!defined('NV_ADMIN') or !defined('NV_MAINFILE') or !defined('NV_IS_MODADMIN'
 $page_url = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op;
 $page_title = $nv_Lang->getModule('security');
 
-$proxy_blocker_list = [
-    0 => $nv_Lang->getModule('proxy_blocker_0'),
-    1 => $nv_Lang->getModule('proxy_blocker_1'),
-    2 => $nv_Lang->getModule('proxy_blocker_2'),
-    3 => $nv_Lang->getModule('proxy_blocker_3')
-];
 $captcha_opts = ['', 'captcha', 'recaptcha', 'turnstile'];
 $captcha_area_list = ['a', 'l', 'r', 'm', 'p'];
 $recaptcha_vers = [2, 3];
@@ -144,10 +138,6 @@ if (defined('NV_IS_GODADMIN') and $nv_Request->isset_request('basicsave', 'post'
         'passshow_button' => $nv_Request->get_int('passshow_button', 'post', 0),
         'request_uri_check' => $nv_Request->get_title('request_uri_check', 'post', 'page')
     ];
-    $proxy_blocker = $nv_Request->get_int('proxy_blocker', 'post');
-    if (isset($proxy_blocker_list[$proxy_blocker])) {
-        $post['proxy_blocker'] = $proxy_blocker;
-    }
 
     $domains = $nv_Request->get_textarea('domains_whitelist', '', NV_ALLOWED_HTML_TAGS, true);
     $domains = explode('<br />', strip_tags($domains, '<br>'));
@@ -988,7 +978,6 @@ $tpl->assign('DATA', $global_config);
 $passshow_button_opts = [$nv_Lang->getModule('passshow_button_0'), $nv_Lang->getModule('passshow_button_1'), $nv_Lang->getModule('passshow_button_2'), $nv_Lang->getModule('passshow_button_3')];
 $tpl->assign('PASSSHOW_BUTTON_OPTS', $passshow_button_opts);
 $tpl->assign('ADMIN_2STEP_PROVIDERS', $admin_2step_providers);
-$tpl->assign('PROXY_BLOCKER_LIST', $proxy_blocker_list);
 
 $uri_check_values = [
     'page' => $nv_Lang->getModule('request_uri_check_page'),

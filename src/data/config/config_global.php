@@ -106,7 +106,6 @@ $global_config['nv_max_size'] = 2097152;
 $global_config['nv_overflow_size'] = 0;
 $global_config['nv_static_url'] = '';
 $global_config['passshow_button'] = 0;
-$global_config['proxy_blocker'] = 0;
 $global_config['read_type'] = 0;
 $global_config['recaptcha_secretkey'] = '';
 $global_config['recaptcha_sitekey'] = '';

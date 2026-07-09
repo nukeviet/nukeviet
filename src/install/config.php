@@ -70,7 +70,6 @@ $global_config['crossadmin_restrict'] = 1;
 $global_config['crosssite_restrict'] = 1;
 $global_config['domains_restrict'] = 1;
 
-$global_config['proxy_blocker'] = 0;
 $global_config['str_referer_blocker'] = 0;
 
 $global_config['lang_multi'] = 1;

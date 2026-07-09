@@ -874,7 +874,6 @@ if ($step == 1) {
                             ['sys', 'global', 'cookie_prefix', $global_config['cookie_prefix']],
                             ['sys', 'global', 'session_prefix', $global_config['session_prefix']],
                             ['sys', 'global', 'site_timezone', $global_config['site_timezone']],
-                            ['sys', 'global', 'proxy_blocker', $global_config['proxy_blocker']],
                             ['sys', 'global', 'str_referer_blocker', $global_config['str_referer_blocker']],
                             ['sys', 'global', 'lang_multi', $global_config['lang_multi']],
                             ['sys', 'global', 'lang_geo', $global_config['lang_geo']],

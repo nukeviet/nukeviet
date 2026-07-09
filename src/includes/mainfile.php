@@ -167,14 +167,6 @@ if (nv_is_banIp(NV_CLIENT_IP)) {
     throw new \NukeViet\Http\HttpException('Hi and Good-bye!!!', 403);
 }
 
-// Chan proxy
-if ($global_config['proxy_blocker'] != 0) {
-    $client_info['is_proxy'] = $ips::nv_check_proxy();
-    if (nv_is_blocker_proxy($client_info['is_proxy'], $global_config['proxy_blocker'])) {
-        throw new \NukeViet\Http\HttpException('ERROR: You are behind a proxy server. Please disconnect and come again!', 403);
-    }
-}
-
 if (stripos($_SERVER['PHP_SELF'], 'index.php') !== false) {
     defined('NV_SYSTEM') && require NV_ROOTDIR . '/includes/request_uri.php';
     defined('NV_ADMIN') && require NV_ROOTDIR . '/includes/request_uri_admin.php';

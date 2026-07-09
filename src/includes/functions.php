@@ -117,25 +117,6 @@ function nv_is_myreferer($referer = '')
 }
 
 /**
- * nv_is_blocker_proxy()
- *
- * @param string $is_proxy
- * @param int    $proxy_blocker
- * @return bool
- */
-function nv_is_blocker_proxy($is_proxy, $proxy_blocker)
-{
-    if ($proxy_blocker == 1 and $is_proxy == 'Strong') {
-        return true;
-    }
-    if ($proxy_blocker == 2 and ($is_proxy == 'Strong' or $is_proxy == 'Mild')) {
-        return true;
-    }
-
-    return (bool) ($proxy_blocker == 3 and $is_proxy != 'No');
-}
-
-/**
  * nv_is_banIp()
  *
  * @param string $ip
