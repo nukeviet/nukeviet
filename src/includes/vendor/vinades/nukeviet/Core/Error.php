@@ -217,7 +217,7 @@ class Error
     }
 
     /**
-     * format_str()
+     * Chuẩn hóa \ thành / cắt bỏ path tuyệt đối của server
      *
      * @param mixed $str
      * @return string|string[]|null
@@ -226,9 +226,8 @@ class Error
     {
         $str = str_replace('\\', '/', $str);
         $str = preg_replace('/\/{2,}/', '/', $str);
-        $str = str_replace(NV_ROOTDIR, '', $str);
 
-        return str_replace(['[', ']'], ['&lbrack;', '&rbrack;'], $str);
+        return str_replace(NV_ROOTDIR, '', $str);
     }
 
     /**
@@ -316,10 +315,12 @@ class Error
         }
 
         $contents = file_get_contents(NV_ROOTDIR . '/' . NV_ASSETS_DIR . '/tpl/error.tpl');
-        $contents = str_replace('[PAGE_TITLE]', self::$errortype[$this->errno], $contents);
-        $contents = str_replace('[ERRSTR]', nl2br($this->errstr), $contents);
-        $contents = str_replace('[CODE]', $error_code, $contents);
-        $contents = str_replace('[EMAIL]', $email, $contents);
+        $contents = strtr($contents, [
+            '[PAGE_TITLE]' => self::$errortype[$this->errno],
+            '[ERRSTR]' => nl2br(htmlspecialchars($this->errstr, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8')),
+            '[CODE]' => $error_code,
+            '[EMAIL]' => $email
+        ]);
 
         header('Content-Type: text/html; charset=utf-8');
         if (defined('NV_ADMIN') or !defined('NV_ANTI_IFRAME') or NV_ANTI_IFRAME != 0) {
@@ -401,10 +402,10 @@ class Error
         }
 
         if ($display) {
-            $info = nl2br($this->errstr);
+            $info = nl2br(htmlspecialchars($this->errstr, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8'));
             if ($this->errno != E_USER_ERROR and $this->errno != E_USER_WARNING and $this->errno != E_USER_NOTICE) {
                 if (!empty($this->errfile)) {
-                    $info .= ' in file ' . $this->errfile;
+                    $info .= ' in file ' . htmlspecialchars($this->errfile, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
                 }
                 if (!empty($this->errline)) {
                     $info .= ' on line ' . $this->errline;
@@ -492,7 +493,7 @@ class Error
             $this->log_control();
 
             if (NV_DEBUG) {
-                exit('An error occurred while loading the page:<br /><pre><code>' . print_r($error, true) . '</code></pre>');
+                exit('An error occurred while loading the page:<br /><pre><code>' . htmlspecialchars(print_r($error, true), ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') . '</code></pre>');
             }
 
             $this->displayErrorPage();
@@ -530,13 +531,13 @@ class Error
         }
 
         if (NV_DEBUG) {
-            exit('An error occurred while loading the page:<br /><pre><code>' . print_r([
+            exit('An error occurred while loading the page:<br /><pre><code>' . htmlspecialchars(print_r([
                 'type' => get_class($exception),
                 'message' => self::format_str($exception->getMessage()),
                 'file' => self::format_str($exception->getFile()),
                 'line' => $exception->getLine(),
                 'trace' => self::format_str($exception->getTraceAsString())
-            ], true) . '</code></pre>');
+            ], true), ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') . '</code></pre>');
         }
 
         $this->displayErrorPage();
