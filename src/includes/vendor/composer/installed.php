@@ -440,9 +440,9 @@
             'dev_requirement' => false,
         ),
         'web-auth/webauthn-lib' => array(
-            'pretty_version' => '5.2.5',
-            'version' => '5.2.5.0',
-            'reference' => 'c28f27cb8f968d2b84db48587563f03bb451b60a',
+            'pretty_version' => '5.3.5',
+            'version' => '5.3.5.0',
+            'reference' => '9e0986d999f4102e24ac8a598d3a80d98b56c19f',
             'type' => 'library',
             'install_path' => __DIR__ . '/../web-auth/webauthn-lib',
             'aliases' => array(),
