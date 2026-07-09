@@ -18,13 +18,21 @@ $myZalo = new NukeViet\Zalo\MyZalo($global_config);
 if ($nv_Request->isset_request('code', 'get')) {
     $code_verifier = $nv_Request->get_string('code_verifier', 'session', '');
     $nv_Request->unset_request('code_verifier', 'session');
+    $state = $nv_Request->get_string('oauth_state', 'session', '');
+    $nv_Request->unset_request('oauth_state', 'session');
+
+    // Kiểm tra state chống CSRF
+    $state_return = $nv_Request->get_string('state', 'get', '');
+    if (empty($state) or empty($state_return) or !hash_equals($state, $state_return)) {
+        nv_htmlOutput('invalid_state');
+    }
 
     $result = $myZalo->accesstokenGet($code_verifier, 'user');
 
     if (empty($result)) {
         $err = $myZalo->getError();
         $nv_Lang->existsModule($err) && $err = $nv_Lang->getModule($err);
-        exit($err);
+        nv_htmlOutput($err);
     }
 
     $result = $myZalo->getUserInfo($result['access_token']);
@@ -65,7 +73,8 @@ if ($nv_Request->isset_request('code', 'get')) {
 
 $result = $myZalo->permissionURLCreate(NV_MY_DOMAIN . NV_BASE_SITEURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=oauth&server=zalo', 'user');
 if (empty($result['code_verifier']) or empty($result['permission_url'])) {
-    exit('permission_url_error');
+    nv_htmlOutput('permission_url_error');
 }
 $nv_Request->set_Session('code_verifier', $result['code_verifier']);
+$nv_Request->set_Session('oauth_state', $result['state']);
 nv_redirect_location($result['permission_url']);

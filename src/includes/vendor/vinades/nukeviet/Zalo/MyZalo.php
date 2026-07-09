@@ -182,14 +182,14 @@ class MyZalo
     }
 
     /**
-     * stateCreate()
+     * Sinh chuỗi state ngẫu nhiên
      *
-     * @param int $num
+     * @param int $bytes Số byte ngẫu nhiên, độ dài chuỗi hex trả về = $bytes * 2
      * @return string
      */
-    private static function stateCreate($num = 8)
+    private static function stateCreate(int $bytes = 16): string
     {
-        return substr(str_shuffle(str_repeat('ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789', 5)), $num, $num);
+        return bin2hex(random_bytes($bytes));
     }
 
     /**
@@ -336,7 +336,7 @@ class MyZalo
             return false;
         }
 
-        $state = self::stateCreate(8);
+        $state = self::stateCreate();
         [$code_verifier, $code_challenge] = self::codeVerifierCreate();
         $helper = $this->zalo->getRedirectLoginHelper();
         if ($level == 'oa') {
@@ -347,6 +347,7 @@ class MyZalo
 
         return [
             'code_verifier' => $code_verifier,
+            'state' => $state,
             'permission_url' => $url
         ];
     }

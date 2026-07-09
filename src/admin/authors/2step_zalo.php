@@ -15,28 +15,38 @@ if (!defined('NV_ADMIN_2STEP_OAUTH')) {
 
 $myZalo = new NukeViet\Zalo\MyZalo($global_config);
 
-if (!empty($_GET['code'])) {
+if ($nv_Request->isset_request('code', 'get')) {
     try {
-        $code_verifier = !empty($_SESSION['admin_code_verifier']) ? $_SESSION['admin_code_verifier'] : '';
-        unset($_SESSION['admin_code_verifier']);
+        $code_verifier = $nv_Request->get_string('admin_code_verifier', 'session', '');
+        $nv_Request->unset_request('admin_code_verifier', 'session');
 
-        $result = $myZalo->accesstokenGet($code_verifier, 'user');
-        if (empty($result)) {
-            $error = $myZalo->getError();
+        $state = $nv_Request->get_string('admin_oauth_state', 'session', '');
+        $nv_Request->unset_request('admin_oauth_state', 'session');
+
+        $state_return = $nv_Request->get_string('state', 'get', '');
+
+        // Kiểm tra state chống CSRF
+        if (empty($state) or empty($state_return) or !hash_equals($state, $state_return)) {
+            $error = 'invalid_state';
         } else {
-            $result = $myZalo->getUserInfo($result['access_token']);
-            if (empty($result['id'])) {
+            $result = $myZalo->accesstokenGet($code_verifier, 'user');
+            if (empty($result)) {
                 $error = $myZalo->getError();
             } else {
-                // Thành công
-                $attribs = [
-                    'identity' => $result['id'],
-                    'full_identity' => $crypt->hash($result['id']),
-                    'email' => '',
-                    'name' => $result['name'] ?? '',
-                    'first_name' => '',
-                    'last_name' => '',
-                ];
+                $result = $myZalo->getUserInfo($result['access_token']);
+                if (empty($result['id'])) {
+                    $error = $myZalo->getError();
+                } else {
+                    // Thành công
+                    $attribs = [
+                        'identity' => $result['id'],
+                        'full_identity' => $crypt->hash($result['id']),
+                        'email' => '',
+                        'name' => $result['name'] ?? '',
+                        'first_name' => '',
+                        'last_name' => '',
+                    ];
+                }
             }
         }
     } catch (Throwable $e) {
@@ -46,8 +56,9 @@ if (!empty($_GET['code'])) {
 } else {
     $result = $myZalo->permissionURLCreate(NV_MY_DOMAIN . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=2step&auth=zalo', 'user');
     if (empty($result['code_verifier']) or empty($result['permission_url'])) {
-        exit('permission_url_error');
+        nv_htmlOutput('permission_url_error');
     }
-    $_SESSION['admin_code_verifier'] = $result['code_verifier'];
+    $nv_Request->set_Session('admin_code_verifier', $result['code_verifier']);
+    $nv_Request->set_Session('admin_oauth_state', $result['state']);
     nv_redirect_location($result['permission_url']);
 }
