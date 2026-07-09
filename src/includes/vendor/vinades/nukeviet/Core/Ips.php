@@ -308,29 +308,6 @@ class Ips
     }
 
     /**
-     * nv_check_proxy()
-     * Hàm tĩnh công cộng của class
-     *
-     * @return string
-     */
-    public static function nv_check_proxy()
-    {
-        $proxy = 'No';
-        if (self::$client_ip != 'none' or self::$forward_ip != 'none') {
-            $proxy = 'Lite';
-        }
-        $host = @gethostbyaddr(self::$remote_ip);
-        if (stristr($host, 'proxy')) {
-            $proxy = 'Mild';
-        }
-        if (self::$remote_ip == $host) {
-            $proxy = 'Strong';
-        }
-
-        return $proxy;
-    }
-
-    /**
      * nv_validip()
      * Hàm công cộng của class
      *
