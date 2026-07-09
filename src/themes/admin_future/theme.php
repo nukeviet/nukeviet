@@ -96,6 +96,7 @@ function nv_admin_theme(?string $contents, $head_site = 1)
     $tpl->assign('SELECT_OPTIONS', $select_options);
     $tpl->assign('HELP_URLS', $array_url_instruction);
     $tpl->assign('CONFIG_CHECKSS', csrf_create($admin_info['admin_id'] . '_' . $admin_info['admin_theme'] . '_config'));
+    $tpl->assign('UPLOAD_CHECKSS', csrf_create($admin_info['admin_id'] . '_upload'));
 
     // Biến này để sử dụng trên các tệp khác gọi tpl
     $tpl->assign('ADMIN_THEME', $admin_info['admin_theme']);

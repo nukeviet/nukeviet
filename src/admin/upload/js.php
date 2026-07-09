@@ -22,7 +22,6 @@ $tpl->assign('MODULE_NAME', $module_name);
 $tpl->assign('OP', $op);
 $tpl->assign('GCONFIG', $global_config);
 $tpl->assign('DEBUG', (defined('NV_DEBUG') and NV_DEBUG == 1) ? 'true' : 'false');
-$tpl->assign('CHECKSS', csrf_create($_csrf_key));
 
 // Các biến này tạo nhằm mục đích dễ nhìn trong JS, không bị cảnh báo syntax trong js
 $tpl->assign('UPLOAD_ALT_REQUIRE', !empty($global_config['upload_alt_require']) ? 'true' : 'false');

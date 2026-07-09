@@ -185,7 +185,7 @@ var nukeviet = nukeviet || {};
             trigger: 'auto', // auto|manual auto là tự động gắn sự kiện click vào element, manual là gọi hàm show() để mở
             area: '', // ID thẻ đổ src về khi pick.
             alt: '', // ID thẻ đổ alt về khi pick.
-            checkss: '{$CHECKSS}', // Token CSRF
+            checkss: document.body.dataset.uploadCheckss, // Token CSRF
             onSelect: null // Hàm trả về khi select
         }, options);
 
@@ -1547,7 +1547,7 @@ var nukeviet = nukeviet || {};
         self.showLoader();
 
         let pr = {
-            checkss: '{$CHECKSS}',
+            checkss: document.body.dataset.uploadCheckss,
             show_file: file ? 1 : 0,
             show_folder: tree ? 1 : 0,
             path: self.settings.path,

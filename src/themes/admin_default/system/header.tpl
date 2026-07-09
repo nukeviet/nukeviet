@@ -65,4 +65,4 @@
 
         <script type="text/javascript" src="{ASSETS_STATIC_URL}/js/stickytableheaders/jquery.stickytableheaders.min.js"></script>
     </head>
-    <body>
+    <body data-upload-checkss="{UPLOAD_CHECKSS}">
