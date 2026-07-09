@@ -33,7 +33,7 @@ function nv_save_file_admin_config()
         if ($endtime === 0 || $endtime > NV_CURRENTTIME) {
             if ((int) $row['mask'] === -1) {
                 // Cấu hình tài khoản truy cập
-                $content_config_user .= "\$adv_admins['" . md5($row['keyname']) . "'] = ['password' => \"" . trim($row['notice']) . "\", 'begintime' => " . $row['begintime'] . ", 'endtime' => " . $endtime . "];\n";
+                $content_config_user .= "\$adv_admins['" . md5($row['keyname']) . "'] = ['password' => " . var_export(trim($row['notice']), true) . ", 'begintime' => " . $row['begintime'] . ", 'endtime' => " . $endtime . "];\n";
             } elseif ($ips->isIp6($row['keyname'])) {
                 $content_config_ip .= "\$array_adminip['" . $row['keyname'] . "'] = ['ip6' => 1, 'mask' => \"" . $row['keyname'] . '/' . $row['mask'] . "\", 'begintime' => " . $row['begintime'] . ", 'endtime' => " . $endtime . "];\n";
             } else {
@@ -183,7 +183,7 @@ if ($nv_Request->isset_request('submituser', 'post')) {
                 $sth->bindValue(':username', $username, PDO::PARAM_STR);
                 $sth->bindValue(':begintime', $begintime1, PDO::PARAM_INT);
                 $sth->bindValue(':endtime', $endtime1, PDO::PARAM_INT);
-                $sth->bindValue(':notice', md5($password), PDO::PARAM_STR);
+                $sth->bindValue(':notice', password_hash($password, PASSWORD_DEFAULT), PDO::PARAM_STR);
                 $sth->bindValue(':id', $uid, PDO::PARAM_INT);
                 $sth->execute();
 
@@ -202,7 +202,7 @@ if ($nv_Request->isset_request('submituser', 'post')) {
                 $sth->bindValue(':username', $username, PDO::PARAM_STR);
                 $sth->bindValue(':begintime', $begintime1, PDO::PARAM_INT);
                 $sth->bindValue(':endtime', $endtime1, PDO::PARAM_INT);
-                $sth->bindValue(':notice', md5($password), PDO::PARAM_STR);
+                $sth->bindValue(':notice', password_hash($password, PASSWORD_DEFAULT), PDO::PARAM_STR);
                 $sth->execute();
                 nv_insert_logs(NV_LANG_DATA, $module_name, $nv_Lang->getModule('title_username'), $nv_Lang->getModule('username_add') . ' username: ' . $username, $admin_info['userid']);
             }
