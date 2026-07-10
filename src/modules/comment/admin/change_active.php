@@ -16,13 +16,25 @@ if (!defined('NV_IS_FILE_ADMIN')) {
 $cid = $nv_Request->get_int('cid', 'post', 0);
 $_csrf_key = $admin_info['admin_id'] . '_' . $module_name . '_main';
 if (!csrf_check($nv_Request->get_string('checkss', 'post'), $_csrf_key)) {
-    nv_jsonOutput(['status' => 'error', 'mess' => $nv_Lang->getGlobal('error_checkss')]);
+    nv_jsonOutput([
+        'status' => 'error',
+        'mess' => $nv_Lang->getGlobal('error_checkss')
+    ]);
 }
 $sql = 'SELECT id, module FROM ' . NV_PREFIXLANG . '_' . $module_data . ' WHERE cid=' . $cid;
 
 $row = $db->query($sql)->fetch();
 if (empty($row)) {
-    nv_jsonOutput(['status' => 'error', 'mess' => $nv_Lang->getGlobal('error_code_11')]);
+    nv_jsonOutput([
+        'status' => 'error',
+        'mess' => $nv_Lang->getGlobal('error_code_11')
+    ]);
+}
+if (!isset($site_mod_comm[$row['module']]) and !defined('NV_IS_SPADMIN')) {
+    nv_jsonOutput([
+        'status' => 'error',
+        'mess' => 'Not allowed!!!'
+    ]);
 }
 
 $new_status = $nv_Request->get_bool('new_status', 'post');
@@ -45,4 +57,7 @@ if ($new_status) {
 
 $nv_Cache->delMod($module_name);
 
-nv_jsonOutput(['status' => 'ok', 'mess' => $nv_Lang->getModule('update_success')]);
+nv_jsonOutput([
+    'status' => 'ok',
+    'mess' => $nv_Lang->getModule('update_success')
+]);
