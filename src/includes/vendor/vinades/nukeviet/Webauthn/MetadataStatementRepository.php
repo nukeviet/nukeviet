@@ -45,7 +45,7 @@ class MetadataStatementRepository implements WebAuthnMetadataStatementRepository
 
     /**
      * Tìm kiếm thông tin về tuyên bố metadata từ ID thiết bị.
-     * Tạm chưa cần, chỉ tạo để sử dụng sau này
+     * Tạm chưa cần, chỉ tạo để sử dụng sau này, vui lòng không đánh giá bảo mật vào đây
      *
      * @param string $aaguid
      * @return MetadataStatement

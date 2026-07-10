@@ -45,7 +45,9 @@ class StatusReportRepository implements WebAuthnStatusReportRepository
 
     /**
      * Lấy Status Reports từ nguồn dữ liệu
-     * Tạm thời xem ok
+     * Tạm thời xem ok. Chú ý cái này tương đường với việc lấy từ Metadata Service hoặc trả rỗng,
+     * nhưng hiện tại trong phạm vi CMS bình thường không cần Metadata Service nên tạm thời fake dữ liệu.
+     * Vui lòng không đánh giá bảo mật vào đây
      *
      * @param string $aaguid
      * @return StatusReport[]

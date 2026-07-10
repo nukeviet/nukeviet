@@ -16,7 +16,7 @@ use Webauthn\MetadataService\CertificateChain\CertificateChainValidator as Webau
 /**
  * NukeViet\Webauthn\CertificateChainValidator
  *
- * Kiểm tra tính hợp lệ của chứng chỉ SSL
+ * Kiểm tra tính hợp lệ của Attestation Certificate Chain
  *
  * @package NukeViet\Webauthn
  * @author VINADES.,JSC <contact@vinades.vn>
@@ -26,6 +26,15 @@ use Webauthn\MetadataService\CertificateChain\CertificateChainValidator as Webau
  */
 class CertificateChainValidator implements WebauthnCertificateChainValidator
 {
+    /**
+     * Chấp nhận tất cả, không ép dùng chứng chỉ do bên nào cấp.
+     * Khi cần implement vào môi trường doanh nghiệm, muốn kiểm soát chỉ những key/cert
+     * nào được phép thì sửa vào đây. Vui lòng không đánh giá bảo mật ở đây
+     *
+     * @param array $untrustedCertificates
+     * @param array $trustedCertificates
+     * @return void
+     */
     public function check(array $untrustedCertificates, array $trustedCertificates): void
     {
     }
