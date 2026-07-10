@@ -527,13 +527,16 @@ if (!empty($admin_pre_data) and $nv_Request->isset_request('submit2scode', 'post
 
         $step2_isvalid = true;
     } elseif (!empty($nv_backupcodepin)) {
-        $nv_backupcodepin = nv_strtolower($nv_backupcodepin);
-        $sth = $db->prepare('SELECT code FROM ' . NV_USERS_GLOBALTABLE . '_backupcodes WHERE is_used = 0 AND code = :code AND userid = :userid');
-        $sth->bindValue(':code', $nv_backupcodepin, PDO::PARAM_STR);
-        $sth->bindValue(':userid', $admin_pre_data['userid'], PDO::PARAM_INT);
-        $sth->execute();
+        $nv_backupcodepin = $crypt->encrypt(nv_strtolower($nv_backupcodepin));
 
-        if ($sth->rowCount() != 1) {
+        // Cập nhật ngay lượt sử dụng tránh brute-force mã dự phòng
+        $stmt = $db->prepare('UPDATE ' . NV_USERS_GLOBALTABLE . '_backupcodes SET is_used = 1, time_used = :time_used WHERE code = :code AND userid = :userid AND is_used = 0');
+        $stmt->bindValue(':time_used', NV_CURRENTTIME, PDO::PARAM_INT);
+        $stmt->bindValue(':code', $nv_backupcodepin, PDO::PARAM_STR);
+        $stmt->bindValue(':userid', $admin_pre_data['userid'], PDO::PARAM_INT);
+        $stmt->execute();
+
+        if ($stmt->rowCount() != 1) {
             // Ghi nhận lần thử sai để giới hạn brute-force mã dự phòng
             if ($global_config['login_number_tracking']) {
                 $blocker->set_loginFailed($tfa_blocker_key, NV_CURRENTTIME);
@@ -545,13 +548,6 @@ if (!empty($admin_pre_data) and $nv_Request->isset_request('submit2scode', 'post
             ]);
         }
 
-        $code = $sth->fetchColumn();
-
-        $stmt = $db->prepare("UPDATE " . NV_USERS_GLOBALTABLE . "_backupcodes SET is_used=1, time_used=:time_used WHERE code=:code AND userid=:userid");
-        $stmt->bindValue(':time_used', NV_CURRENTTIME, PDO::PARAM_INT);
-        $stmt->bindValue(':code', $code, PDO::PARAM_STR);
-        $stmt->bindValue(':userid', $admin_pre_data['userid'], PDO::PARAM_INT);
-        $stmt->execute();
         $step2_isvalid = true;
     }
 

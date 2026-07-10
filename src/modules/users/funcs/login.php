@@ -1107,12 +1107,16 @@ if ($nv_Request->isset_request('_csrf, nv_login', 'post')) {
         }
 
         if (!empty($nv_backupcodepin)) {
-            $nv_backupcodepin = nv_strtolower($nv_backupcodepin);
-            $sth = $db->prepare('SELECT code FROM ' . NV_MOD_TABLE . '_backupcodes WHERE is_used=0 AND code=:code AND userid=' . $row['userid']);
-            $sth->bindParam(':code', $nv_backupcodepin, PDO::PARAM_STR);
+            $nv_backupcodepin = $crypt->encrypt(nv_strtolower($nv_backupcodepin));
+
+            // Cập nhật ngay lượt sử dụng mã dự phòng để tránh bị brute-force
+            $sth = $db->prepare('UPDATE ' . NV_MOD_TABLE . '_backupcodes SET is_used = 1, time_used = :time_used WHERE code = :code AND userid = :userid AND is_used = 0');
+            $sth->bindValue(':time_used', NV_CURRENTTIME, PDO::PARAM_INT);
+            $sth->bindValue(':code', $nv_backupcodepin, PDO::PARAM_STR);
+            $sth->bindValue(':userid', $row['userid'], PDO::PARAM_INT);
             $sth->execute();
 
-            // Nếu không tìm thấy trong CSDL mã dự phòng
+            // Nếu mã dự phòng không hợp lệ hoặc đã được sử dụng
             if ($sth->rowCount() != 1) {
                 // Ghi nhận lần thử sai để giới hạn brute-force mã dự phòng
                 if ($global_config['login_number_tracking']) {
@@ -1124,10 +1128,6 @@ if ($nv_Request->isset_request('_csrf, nv_login', 'post')) {
                     'mess' => $nv_Lang->getGlobal('2teplogin_error_backup')
                 ]);
             }
-
-            // Nếu mã dự phòng khớp thì đánh dấu trong CSDL là mã này đã được sử dụng
-            $code = $sth->fetchColumn();
-            $db->query('UPDATE ' . NV_MOD_TABLE . '_backupcodes SET is_used=1, time_used=' . NV_CURRENTTIME . " WHERE code='" . $code . "' AND userid=" . $row['userid']);
         }
 
         // Kiểm tra passkey

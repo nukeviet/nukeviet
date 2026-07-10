@@ -36,11 +36,11 @@ $nv_BotManager->setPrivate();
  */
 function nv_creat_backupcodes()
 {
-    global $user_info, $db, $db_config, $site_mods;
+    global $user_info, $db, $db_config, $site_mods, $crypt;
 
     $module_data = $db_config['prefix'] . '_' . $site_mods[NV_BRIDGE_USER_MODULE]['module_data'];
 
-    // Delete existing backup codes
+    // Xóa toàn bộ mã hiện tại
     $stmt = $db->prepare('DELETE FROM ' . $module_data . '_backupcodes WHERE userid = :userid');
     $stmt->bindValue(':userid', $user_info['userid'], PDO::PARAM_INT);
     $stmt->execute();
@@ -57,7 +57,7 @@ function nv_creat_backupcodes()
     $stmt = $db->prepare('INSERT INTO ' . $module_data . '_backupcodes (userid, code, is_used, time_used, time_creat) VALUES (:userid, :code, 0, 0, :time_creat)');
     foreach ($new_code as $code) {
         $stmt->bindValue(':userid', $user_info['userid'], PDO::PARAM_INT);
-        $stmt->bindValue(':code', $code, PDO::PARAM_STR);
+        $stmt->bindValue(':code', $crypt->encrypt($code), PDO::PARAM_STR);
         $stmt->bindValue(':time_creat', NV_CURRENTTIME, PDO::PARAM_INT);
         $stmt->execute();
     }

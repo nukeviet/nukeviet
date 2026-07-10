@@ -118,6 +118,10 @@ if (!empty($array_op[1]) and $array_op[1] == 'complete') {
     $sql = 'SELECT * FROM ' . $db_config['prefix'] . '_' . $site_mods[NV_BRIDGE_USER_MODULE]['module_data'] . '_backupcodes WHERE userid=' . $user_info['userid'];
     $backupcodes = $db->query($sql)->fetchAll();
 
+    foreach ($backupcodes as $key => $code) {
+        $backupcodes[$key]['code'] = $crypt->decrypt($code['code']);
+    }
+
     $array_data = [];
     $array_data['print_url'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=print';
     $array_data['download_url'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;downloadcode=' . md5('downloadcode' . NV_CHECK_SESSION);

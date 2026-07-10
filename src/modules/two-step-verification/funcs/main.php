@@ -177,6 +177,10 @@ $stmt->execute();
 $array_data['backupcodes'] = $stmt->fetchAll();
 $stmt->closeCursor();
 
+foreach ($array_data['backupcodes'] as $key => $code) {
+    $array_data['backupcodes'][$key]['code'] = $crypt->decrypt($code['code']);
+}
+
 $array_data['print_code_url'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=print';
 $array_data['download_code_url'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;downloadcode=' . md5('downloadcode' . NV_CHECK_SESSION);
 $array_data['text_codes'] = [];

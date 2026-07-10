@@ -177,8 +177,8 @@ $sql_create_module[] = 'CREATE TABLE IF NOT EXISTS ' . $db_config['prefix'] . '_
 ) ENGINE=InnoDB";
 
 $sql_create_module[] = 'CREATE TABLE IF NOT EXISTS ' . $db_config['prefix'] . '_' . $module_data . "_backupcodes (
-    userid mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
-    code varchar(20) NOT NULL,
+    userid mediumint(8) unsigned NOT NULL,
+    code varchar(64) NOT NULL,
     is_used tinyint(1) unsigned NOT NULL DEFAULT '0',
     time_used int(11) unsigned NOT NULL DEFAULT '0',
     time_creat int(11) unsigned NOT NULL DEFAULT '0',
