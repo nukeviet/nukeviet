@@ -1247,24 +1247,112 @@ class Upload
 
         $host = strtolower($parts['host']);
 
-        if (filter_var($host, FILTER_VALIDATE_IP)) {
-            $ip = $host;
-        } else {
-            $ip = gethostbyname($host);
-            if ($ip === $host && !filter_var($ip, FILTER_VALIDATE_IP)) {
+        // Xác định toàn bộ bản ghi A/AAAA của host
+        $ips = $this->resolve_host_ips($host);
+        if (empty($ips)) {
+            return false;
+        }
+
+        // Kiểm tra tất cả các IP phải nằm ngoài dải private
+        foreach ($ips as $ip) {
+            if (!$this->is_safe_ip($ip)) {
                 return false;
             }
         }
 
-        /*
-         * Chặn các dải IP riêng (10/8, 172.16/12, 192.168/16, fc00/7, fe80/10)
-         * và các dải IP dành riêng (127/8, 169.254/16 cloud-metadata, ::1, v.v.)
-         */
-        if (!defined('NV_DEVELOPER_MODE') && !filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE)) {
-            return false;
+        // Lấy IP đầu tiên để cố định IP đó cho host ở các request sau tránh SSRF
+        if (isset($this->url_info['host']) && strtolower($this->url_info['host']) === $host) {
+            $this->url_info['pin_ip'] = $ips[0];
         }
 
         return true;
+    }
+
+    /**
+     * Resolve toàn bộ IPv4 (A) và IPv6 (AAAA) của host.
+     *
+     * @param string $host
+     * @return array
+     */
+    private function resolve_host_ips($host)
+    {
+        if (filter_var($host, FILTER_VALIDATE_IP)) {
+            return [$host];
+        }
+
+        $ips = [];
+
+        $ipv4 = gethostbynamel($host);
+        if (is_array($ipv4)) {
+            $ips = $ipv4;
+        }
+
+        if (Site::function_exists('dns_get_record') && defined('DNS_AAAA')) {
+            $aaaa = @dns_get_record($host, DNS_AAAA);
+            if (is_array($aaaa)) {
+                foreach ($aaaa as $record) {
+                    if (!empty($record['ipv6'])) {
+                        $ips[] = $record['ipv6'];
+                    }
+                }
+            }
+        }
+
+        return array_values(array_unique($ips));
+    }
+
+    /**
+     * Kiểm tra một IP có nằm ngoài dải private hay không.
+     * Chặn 10/8, 172.16/12, 192.168/16, fc00/7, fe80/10 (private)
+     * và 127/8, 169.254/16 (cloud-metadata), ::1, v.v. (reserved).
+     *
+     * @param string $ip
+     * @return bool
+     */
+    private function is_safe_ip($ip)
+    {
+        if (!filter_var($ip, FILTER_VALIDATE_IP)) {
+            return false;
+        }
+
+        // NV_DEVELOPER_MODE cho phép trỏ tới IP nội bộ khi phát triển
+        if (defined('NV_DEVELOPER_MODE')) {
+            return true;
+        }
+
+        return (bool) filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE);
+    }
+
+    /**
+     * Cổng kết nối thực tế dùng để pin IP (khớp với cổng client sẽ dùng).
+     *
+     * @return int
+     */
+    private function pin_connect_port()
+    {
+        $port = isset($this->url_info['port']) ? (int) $this->url_info['port'] : 80;
+        if ($port === 80 && isset($this->url_info['scheme']) && strtolower($this->url_info['scheme']) === 'https') {
+            return 443;
+        }
+
+        return $port;
+    }
+
+    /**
+     * Tuỳ chọn CURLOPT_RESOLVE để ghim IP đã kiểm cho host hiện tại,
+     * buộc curl kết nối đúng IP đã validate thay vì resolve lại DNS.
+     *
+     * @return array
+     */
+    private function curl_pin_resolve()
+    {
+        if (empty($this->url_info['pin_ip']) || empty($this->url_info['host'])) {
+            return [];
+        }
+
+        return [
+            $this->url_info['host'] . ':' . $this->pin_connect_port() . ':' . $this->url_info['pin_ip']
+        ];
     }
 
     /**
@@ -1346,66 +1434,56 @@ class Upload
      */
     private function check_url($is_200 = 0)
     {
-        $allow_url_fopen = (ini_get('allow_url_fopen') == '1' or strtolower(ini_get('allow_url_fopen')) == 'on') ? 1 : 0;
-        if (Site::function_exists('curl_init') and Site::function_exists('curl_exec')) {
-            $curl = curl_init($this->url_info['uri']);
-            curl_setopt($curl, CURLOPT_HEADER, false);
-            curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-            curl_setopt($curl, CURLOPT_TIMEOUT, 15);
-            curl_setopt($curl, CURLOPT_USERAGENT, $this->user_agent);
-            curl_setopt($curl, CURLOPT_FOLLOWLOCATION, false);
-
-            $headers = [];
-            curl_setopt($curl, CURLOPT_HEADERFUNCTION, function($curl, $header) use (&$headers) {
-                $headers[] = $header;
-                return strlen($header);
-            });
-
-            curl_setopt($curl, CURLOPT_WRITEFUNCTION, function($curl, $data) {
-                return 0; // Abort download once headers are received
-            });
-
-            curl_exec($curl);
-            unset($curl);
-
-            if (empty($headers)) {
-                return false;
-            }
-
-            $res = array_map(function($h) {
-                return rtrim($h, "\r\n");
-            }, $headers);
-        } elseif (Site::function_exists('get_headers') and $allow_url_fopen == 1) {
-            $context = stream_context_create(['http' => ['follow_location' => 0]]);
-            $res = get_headers($this->url_info['uri'], 0, $context);
-        } elseif (Site::function_exists('fsockopen') and Site::function_exists('fgets')) {
-            $res = [];
-            $url_info = parse_url($this->url_info['uri']);
-            $port = isset($url_info['port']) ? (int) ($url_info['port']) : ((isset($url_info['scheme']) && strtolower($url_info['scheme']) == 'https') ? 443 : 80);
-            $host = $url_info['host'];
-            if ($port == 443 || (isset($url_info['scheme']) && strtolower($url_info['scheme']) == 'https')) {
-                $host = 'ssl://' . $host;
-            }
-            $fp = @fsockopen($host, $port, $errno, $errstr, 15);
-            if ($fp) {
-                $path = !empty($url_info['path']) ? $url_info['path'] : '/';
-                $path .= !empty($url_info['query']) ? '?' . $url_info['query'] : '';
-
-                fwrite($fp, 'HEAD ' . $path . " HTTP/1.0\r\n");
-                fwrite($fp, 'Host: ' . $url_info['host'] . ':' . $port . "\r\n");
-                fwrite($fp, "Connection: close\r\n\r\n");
-
-                while (!feof($fp)) {
-                    if ($header = trim(fgets($fp, 1024))) {
-                        $res[] = $header;
-                    }
-                }
-            } else {
-                return false;
-            }
-        } else {
+        if (!Site::function_exists('curl_init') or !Site::function_exists('curl_exec')) {
             return false;
         }
+
+        $curl = curl_init($this->url_info['uri']);
+        curl_setopt($curl, CURLOPT_HEADER, false);
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($curl, CURLOPT_TIMEOUT, 15);
+        curl_setopt($curl, CURLOPT_USERAGENT, $this->user_agent);
+        curl_setopt($curl, CURLOPT_FOLLOWLOCATION, false);
+
+        $cainfo = ini_get('curl.cainfo');
+        if (empty($cainfo) && file_exists(NV_ROOTDIR . '/' . NV_CERTS_DIR . '/cacert.pem')) {
+            $cainfo = NV_ROOTDIR . '/' . NV_CERTS_DIR . '/cacert.pem';
+        }
+        curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 2);
+        curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, true);
+        if (!empty($cainfo)) {
+            curl_setopt($curl, CURLOPT_CAINFO, $cainfo);
+        }
+
+        // Ghim IP đã kiểm để chống DNS rebinding/TOCTOU
+        $pin = $this->curl_pin_resolve();
+        if (empty($pin)) {
+            unset($curl);
+
+            return false;
+        }
+        curl_setopt($curl, CURLOPT_RESOLVE, $pin);
+
+        $headers = [];
+        curl_setopt($curl, CURLOPT_HEADERFUNCTION, function($curl, $header) use (&$headers) {
+            $headers[] = $header;
+            return strlen($header);
+        });
+
+        curl_setopt($curl, CURLOPT_WRITEFUNCTION, function($curl, $data) {
+            return 0;
+        });
+
+        curl_exec($curl);
+        unset($curl);
+
+        if (empty($headers)) {
+            return false;
+        }
+
+        $res = array_map(function($h) {
+            return rtrim($h, "\r\n");
+        }, $headers);
 
         if (!$res) {
             return false;
@@ -1463,35 +1541,6 @@ class Upload
     }
 
     /**
-     * check_allow_methods()
-     *
-     * @return array
-     */
-    private function check_allow_methods()
-    {
-        $allow_methods = [];
-        if (Site::function_exists('curl', true)) {
-            $allow_methods[] = 'curl';
-        }
-
-        if (ini_get('allow_url_fopen') == '1' or strtolower(ini_get('allow_url_fopen')) == 'on') {
-            if (Site::function_exists('fopen')) {
-                $allow_methods[] = 'fopen';
-            }
-
-            if (Site::function_exists('file_get_contents')) {
-                $allow_methods[] = 'file_get_contents';
-            }
-
-            if (Site::function_exists('file')) {
-                $allow_methods[] = 'file';
-            }
-        }
-
-        return $allow_methods;
-    }
-
-    /**
      * check_mime()
      *
      * @param string $mime
@@ -1536,6 +1585,14 @@ class Upload
         $curlHandle = curl_init();
         curl_setopt($curlHandle, CURLOPT_URL, $this->url_info['uri']);
         curl_setopt_array($curlHandle, $options);
+        // Ghim IP đã kiểm để chống DNS rebinding/TOCTOU
+        $pin = $this->curl_pin_resolve();
+        if (empty($pin)) {
+            unset($curlHandle);
+
+            return false;
+        }
+        curl_setopt($curlHandle, CURLOPT_RESOLVE, $pin);
         if (($fp = fopen($this->temp_file, 'wb')) === false) {
             unset($curlHandle);
 
@@ -1543,8 +1600,8 @@ class Upload
         }
 
         curl_setopt($curlHandle, CURLOPT_FILE, $fp);
-        curl_setopt($curlHandle, CURLOPT_SSL_VERIFYHOST, (!empty($cainfo)) ? 2 : false);
-        curl_setopt($curlHandle, CURLOPT_SSL_VERIFYPEER, !empty($cainfo) ? true : false);
+        curl_setopt($curlHandle, CURLOPT_SSL_VERIFYHOST, 2);
+        curl_setopt($curlHandle, CURLOPT_SSL_VERIFYPEER, true);
         if (!empty($cainfo)) {
             curl_setopt($curlHandle, CURLOPT_CAINFO, $cainfo);
         }
@@ -1557,83 +1614,6 @@ class Upload
         }
         fclose($fp);
         unset($curlHandle);
-
-        return true;
-    }
-
-    /**
-     * fopen_Download()
-     *
-     * @return bool
-     */
-    private function fopen_Download()
-    {
-        $ctx = stream_context_create(['http' => ['follow_location' => 0]]);
-        if (($fp = fopen($this->url_info['uri'], 'rb', false, $ctx)) === false) {
-            return false;
-        }
-        if (($fp2 = fopen($this->temp_file, 'wb')) === false) {
-            fclose($fp);
-
-            return false;
-        }
-
-        while (!feof($fp)) {
-            if (fwrite($fp2, fread($fp, 1024)) === false) {
-                fclose($fp2);
-                fclose($fp);
-
-                return false;
-            }
-        }
-
-        fclose($fp2);
-        fclose($fp);
-
-        return true;
-    }
-
-    /**
-     * file_get_contents_Download()
-     *
-     * @return false|int
-     */
-    private function file_get_contents_Download()
-    {
-        $ctx = stream_context_create(['http' => ['follow_location' => 0]]);
-        $content = file_get_contents($this->url_info['uri'], false, $ctx);
-        if ($content === false) {
-            return false;
-        }
-
-        return @file_put_contents($this->temp_file, $content);
-    }
-
-    /**
-     * file_Download()
-     *
-     * @return bool
-     */
-    private function file_Download()
-    {
-        $ctx = stream_context_create(['http' => ['follow_location' => 0]]);
-        $lines = @file($this->url_info['uri'], 0, $ctx);
-        if ($lines === false) {
-            return false;
-        }
-        if (($fp = fopen($this->temp_file, 'wb')) === false) {
-            return false;
-        }
-
-        foreach ($lines as $line) {
-            if (fwrite($fp, $line) === false) {
-                fclose($fp);
-
-                return false;
-            }
-        }
-
-        fclose($fp);
 
         return true;
     }
@@ -1706,25 +1686,15 @@ class Upload
             }
         }
 
-        $allow_methods = $this->check_allow_methods();
-        if (!Site::function_exists('fopen')) {
-            $allow_methods = [
-                'file_get_contents'
-            ];
+        if (!Site::function_exists('curl_init') or !Site::function_exists('curl_exec')) {
+            $return['error'] = $this->lang['error_upload_no_file'];
+
+            return $return;
         }
 
         $this->temp_file = str_replace('\\', '/', tempnam(NV_ROOTDIR . '/' . NV_TEMP_DIR, NV_TEMPNAM_PREFIX));
 
-        $result = false;
-        foreach ($allow_methods as $method) {
-            $result = call_user_func([
-                &$this,
-                $method . '_Download'
-            ]);
-            if ($result === true) {
-                break;
-            }
-        }
+        $result = $this->curl_Download();
 
         if ($result === false) {
             @unlink($this->temp_file);
