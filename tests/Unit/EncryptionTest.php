@@ -45,6 +45,5 @@ class EncryptionTest extends \Codeception\Test\Unit
         $hashEqual = '5812f339cd1d74816b1f2c6e8486bc00f5d1713a';
 
         $this->assertEquals($hashEqual, $this->crypt->hash($string));
-        $this->crypt->hash($string, true);
     }
 }

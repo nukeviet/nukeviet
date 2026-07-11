@@ -47,29 +47,19 @@ class Encryption
     }
 
     /**
-     * hash()
+     * Tạo mã băm HMAC-SHA1 cho dữ liệu đầu vào, cùng dữ liệu đầu vào sẽ
+     * tạo ra dùng dữ liệu đầu ra. Phụ thuộc vào sitekey của hệ thống. Sitekey mất thì
+     * dữ liệu cũ sẽ không thể giải mã được nữa. Do đó cần lưu trữ sitekey cẩn thận.
      *
-     * WARNING: Thuật toán sha1 và PBKDF2 với 4 vòng lặp không còn an toàn trước các cuộc tấn công brute-force.
-     * @deprecated Chỉ giữ lại cho mục đích tương thích ngược với dữ liệu cũ.
-     * @todo Cần thêm cờ cấu hình để dần loại bỏ và bắt buộc chuyển đổi sang thuật toán hiện đại (bcrypt/argon2).
+     * VUI LÒNG KHÔNG SỬ DỤNG hàm này liên quan đến mật khẩu.
      *
      * @param mixed $data
-     * @param bool  $is_salt
      * @return string
      */
-    public function hash($data, $is_salt = false)
+    public function hash($data)
     {
         $inner = pack('H32', sha1($this->_ipad . $data));
-        $digest = sha1($this->_opad . $inner);
-        if (!$is_salt) {
-            return $digest;
-        }
-
-        $salt = substr(sha1(microtime(true) . $this->_key . random_bytes(8)), 0, 8);
-        $derivedSalt = hash_pbkdf2('sha1', $digest, $salt, 4, 8, true);
-        $finalHash = hash('sha1', $digest . $derivedSalt, true);
-        $encoded = strtr(base64_encode($finalHash . $derivedSalt), '+/=', '-_,');
-        return $encoded;
+        return sha1($this->_opad . $inner);
     }
 
     /**
