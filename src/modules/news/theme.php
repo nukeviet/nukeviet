@@ -1397,13 +1397,13 @@ function content_refresh($data)
  */
 function edit_author_info($data, $base_url)
 {
-    global $module_name, $module_info, $op;
+    global $module_name, $csrf_key, $op;
 
     $xtpl = new XTemplate('content.tpl', get_module_tpl_dir('content.tpl'));
     $xtpl->assign('FORM_ACTION', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;author_info=1');
     $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
     $xtpl->assign('BASE_URL', $base_url);
-    $xtpl->assign('ADD_CONTENT_CHECK_SESSION', md5('0' . NV_CHECK_SESSION));
+    $xtpl->assign('CHECKSS', csrf_create($csrf_key));
     $data['description_br2nl'] = !empty($data['description']) ? nv_htmlspecialchars(nv_br2nl($data['description'])) : '';
     $xtpl->assign('DATA', $data);
     $xtpl->parse('author_info');
@@ -1425,19 +1425,19 @@ function edit_author_info($data, $base_url)
  */
 function content_add($rowcontent, $htmlbodyhtml, $catidList, $topicList, $post_status, $layouts, $base_url)
 {
-    global $global_config, $module_name, $module_info, $module_config, $nv_Lang, $module_captcha;
+    global $global_config, $module_name, $module_info, $module_config, $nv_Lang, $module_captcha, $csrf_key;
 
     $xtpl = new XTemplate('content.tpl', get_module_tpl_dir('content.tpl'));
     $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
     $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
     $xtpl->assign('BASE_URL', $base_url);
-    $xtpl->assign('ADD_CONTENT_CHECK_SESSION', md5('0' . NV_CHECK_SESSION));
+    $xtpl->assign('CHECKSS', csrf_create($csrf_key));
     $xtpl->assign('ADD_OR_UPDATE', $rowcontent['id'] ? $nv_Lang->getModule('update_content') : $nv_Lang->getModule('add_content'));
     $xtpl->assign('OP', $module_info['alias']['content']);
     $xtpl->assign('DATA', $rowcontent);
     $xtpl->assign('HTMLBODYTEXT', $htmlbodyhtml);
     $xtpl->assign('LANG_EXTERNAL_AUTHOR', defined('NV_IS_USER') ? $nv_Lang->getModule('external_author') : $nv_Lang->getModule('author'));
-    $xtpl->assign('CONTENT_URL', $base_url . '&contentid=' . $rowcontent['id'] . '&checkss=' . md5($rowcontent['id'] . NV_CHECK_SESSION));
+    $xtpl->assign('CONTENT_URL', $base_url . '&amp;contentid=' . $rowcontent['id']);
 
     if (defined('NV_IS_USER')) {
         if ($rowcontent['id']) {
@@ -1552,15 +1552,15 @@ function content_add($rowcontent, $htmlbodyhtml, $catidList, $topicList, $post_s
  */
 function content_list($articles, $my_author_detail, $base_url, $generate_page)
 {
-    global $module_name, $module_info, $module_config, $nv_Lang;
+    global $module_name, $module_config, $csrf_key;
 
     $xtpl = new XTemplate('content.tpl', get_module_tpl_dir('content.tpl'));
     $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
     $xtpl->assign('LANG_GLOBAL', \NukeViet\Core\Language::$lang_global);
     $xtpl->assign('BASE_URL', $base_url);
-    $xtpl->assign('ADD_CONTENT_CHECK_SESSION', md5('0' . NV_CHECK_SESSION));
     $xtpl->assign('AUTHOR_PAGE_URL', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=author/' . $my_author_detail['alias']);
     $xtpl->assign('IMGWIDTH1', $module_config[$module_name]['homewidth']);
+    $xtpl->assign('CHECKSS', csrf_create($csrf_key));
 
     foreach ($articles as $array_row_i) {
         $xtpl->assign('CONTENT', $array_row_i);
@@ -1573,23 +1573,13 @@ function content_list($articles, $my_author_detail, $base_url, $generate_page)
             $xtpl->parse('your_articles.news.title_link');
         }
 
-        $checkss = md5($array_row_i['id'] . NV_CHECK_SESSION);
-        $array_link_content = [];
-        if ($array_row_i['is_edit_content']) {
-            $array_link_content[] = '<a href="' . $base_url . '&amp;contentid=' . $array_row_i['id'] . '&amp;checkss=' . $checkss . '"><em class="fa fa-edit fa-lg"></em>&nbsp;' . $nv_Lang->getGlobal('edit') . '</a>';
-        }
-        if ($array_row_i['is_del_content']) {
-            $array_link_content[] = '<a onclick="return confirm(nv_is_del_confirm[0]);" href="' . $base_url . '&amp;contentid=' . $array_row_i['id'] . '&amp;delcontent=1&amp;checkss=' . $checkss . '"><em class="fa fa-trash-o fa-lg"></em>&nbsp;' . $nv_Lang->getGlobal('delete') . '</a>';
-        }
-
-        if (!empty($array_link_content)) {
-            $xtpl->assign('ADMINLINK', implode('&nbsp;-&nbsp;', $array_link_content));
+        if ($array_row_i['is_edit_content'] || $array_row_i['is_del_content']) {
             if ($array_row_i['is_edit_content']) {
-                $xtpl->assign('EDITLINK', $base_url . '&amp;contentid=' . $array_row_i['id'] . '&amp;checkss=' . $checkss);
+                $xtpl->assign('EDITLINK', $base_url . '&amp;contentid=' . $array_row_i['id']);
                 $xtpl->parse('your_articles.news.adminlink.edit');
             }
             if ($array_row_i['is_del_content']) {
-                $xtpl->assign('DELLINK', $base_url . '&amp;contentid=' . $array_row_i['id'] . '&amp;delcontent=1&amp;checkss=' . $checkss);
+                $xtpl->assign('DELLINK', $base_url . '&amp;contentid=' . $array_row_i['id'] . '&amp;delcontent=1');
                 $xtpl->parse('your_articles.news.adminlink.del');
             }
             $xtpl->parse('your_articles.news.adminlink');

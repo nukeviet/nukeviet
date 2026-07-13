@@ -111,6 +111,14 @@ if (defined('NV_IS_USER') and $nv_Request->isset_request('author_info', 'get')) 
     $page_title = $nv_Lang->getModule('author_info');
 
     if ($nv_Request->isset_request('save', 'post')) {
+        if (!csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
+            nv_jsonOutput([
+                'status' => 'error',
+                'input' => '',
+                'mess' => $nv_Lang->getGlobal('error_checkss')
+            ]);
+        }
+
         $pseudonym = $nv_Request->get_title('pseudonym', 'post', '');
         if (empty($pseudonym)) {
             nv_jsonOutput([
@@ -174,16 +182,9 @@ if ($nv_Request->isset_request('get_alias', 'post')) {
 }
 
 // Thêm/sửa/xóa bài viết
-if ($nv_Request->isset_request('contentid,checkss', 'get')) {
+if ($nv_Request->isset_request('contentid', 'get')) {
     $contentid = $nv_Request->get_int('contentid', 'get', 0);
-    $fcheckss = $nv_Request->get_title('checkss', 'get', '');
-    $checkss = md5($contentid . NV_CHECK_SESSION);
-    $page_url .= '&amp;contentid=' . $contentid . '&amp;checkss=' . $fcheckss;
-
-    if ($fcheckss != $checkss) {
-        nv_redirect_location($base_url);
-    }
-
+    $page_url .= '&amp;contentid=' . $contentid;
     $post_status = [];
 
     if ($contentid) {
@@ -201,6 +202,14 @@ if ($nv_Request->isset_request('contentid,checkss', 'get')) {
 
         // Xóa bài viết
         if ($nv_Request->get_int('delcontent', 'get')) {
+            if (!csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
+                nv_jsonOutput([
+                    'status' => 'error',
+                    'input' => '',
+                    'mess' => $nv_Lang->getGlobal('error_checkss')
+                ]);
+            }
+
             if (empty($rowcontent['status']) or $post_level['delcontent']) {
                 nv_del_content_module($contentid);
                 nv_fix_weight_content($rowcontent['weight']);
@@ -211,7 +220,11 @@ if ($nv_Request->isset_request('contentid,checkss', 'get')) {
                 }
             }
 
-            nv_redirect_location($base_url);
+            nv_jsonOutput([
+                'status' => 'OK',
+                'input' => '',
+                'mess' => 'Success!!!'
+            ]);
         }
 
         // Nếu không được phép sửa bài viết thì chuyển đến trang chính
@@ -392,7 +405,9 @@ if ($nv_Request->isset_request('contentid,checkss', 'get')) {
         $data_permission_confirm = !empty($global_config['data_warning']) ? (int) $nv_Request->get_bool('data_permission_confirm', 'post', false) : -1;
         $antispam_confirm = !empty($global_config['antispam_warning']) ? (int) $nv_Request->get_bool('antispam_confirm', 'post', false) : -1;
 
-        if (empty($rowcontent['title'])) {
+        if (!csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
+            $error = $nv_Lang->getGlobal('error_checkss');
+        } elseif (empty($rowcontent['title'])) {
             $error = $nv_Lang->getModule('error_title');
         } elseif (empty($rowcontent['listcatid'])) {
             $error = $nv_Lang->getModule('error_cat');
@@ -642,7 +657,7 @@ if ($nv_Request->isset_request('contentid,checkss', 'get')) {
 }
 
 if (!defined('NV_IS_USER')) {
-    nv_redirect_location(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&contentid=0&checkss=' . md5('0' . NV_CHECK_SESSION));
+    nv_redirect_location(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&contentid=0');
 }
 
 // Danh sách bài viết

@@ -376,10 +376,34 @@ $(document).ready(function() {
     // Người dùng xóa tin
     $('body').on('click', '[data-toggle=author_del_content]', function(e) {
         e.preventDefault();
-        if (!confirm(nv_is_del_confirm[0])) {
-            return;
-        }
-        window.location = $(this).data('href');
+
+        const btn = $(this);
+        const icon = $('i', btn);
+
+        nvConfirm(nv_is_del_confirm[0], function () {
+            if (icon.is('.fa-spinner')) return;
+            icon.removeClass(icon.data('icon')).addClass('fa-spinner fa-spin');
+            $.ajax({
+                type: 'POST',
+                dataType: 'json',
+                url: $(btn).data('href'),
+                data: {
+                    checkss: btn.data('checkss')
+                },
+                success: function (respon) {
+                    icon.removeClass('fa-spinner fa-spin').addClass(icon.data('icon'));
+                    if (respon.status !== 'OK') {
+                        nvToast(respon.mess || nv_is_del_confirm[2], 'error');
+                    } else {
+                        location.reload();
+                    }
+                },
+                error: function (xhr, text) {
+                    icon.removeClass('fa-spinner fa-spin').addClass(icon.data('icon'));
+                    nvToast(text, 'error');
+                }
+            });
+        });
     });
 
     if ($('[data-toggle=rating]').length) {

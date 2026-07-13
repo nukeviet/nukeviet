@@ -8,11 +8,12 @@
 <!-- BEGIN: author_info -->
 <div class="margin-top margin-bottom">
     <a class="btn btn-primary" href="{BASE_URL}">{LANG.your_content}</a>&nbsp;
-    <a class="btn btn-primary" href="{BASE_URL}&amp;contentid=0&checkss={ADD_CONTENT_CHECK_SESSION}">{LANG.add_content}</a>
+    <a class="btn btn-primary" href="{BASE_URL}&amp;contentid=0">{LANG.add_content}</a>
 </div>
 <h2 class="text-center">{LANG.author_info}</h2>
 <form action="{FORM_ACTION}" method="post" data-toggle="authorEditSubmit">
     <input type="hidden" name="save" value="1" />
+    <input type="hidden" name="checkss" value="{CHECKSS}">
     <div class="table-responsive">
         <table id="edit" class="table table-striped table-bordered table-hover">
             <tfoot>
@@ -82,7 +83,7 @@ $(function() {
 
 <!-- BEGIN: your_articles -->
 <div class="margin-top margin-bottom">
-    <a class="btn btn-primary" href="{BASE_URL}&amp;contentid=0&checkss={ADD_CONTENT_CHECK_SESSION}">{LANG.add_content}</a>&nbsp;
+    <a class="btn btn-primary" href="{BASE_URL}&amp;contentid=0">{LANG.add_content}</a>&nbsp;
     <a class="btn btn-primary" href="{BASE_URL}&amp;author_info=1">{LANG.author_info}</a>
 </div>
 <div>
@@ -116,7 +117,7 @@ $(function() {
             <!-- BEGIN: adminlink -->
             <p class="text-right">
                 <!-- BEGIN: edit --><a class="btn btn-primary btn-xs" href="{EDITLINK}"><em class="fa fa-edit"></em> {LANG_GLOBAL.edit}</a><!-- END: edit -->
-                <!-- BEGIN: del --><a class="btn btn-danger btn-xs" href="#" data-toggle="author_del_content" data-href="{DELLINK}"><em class="fa fa-trash-o"></em> {LANG_GLOBAL.delete}</a><!-- END: del -->
+                <!-- BEGIN: del --><a class="btn btn-danger btn-xs" href="#" data-toggle="author_del_content" data-href="{DELLINK}" data-checkss="{CHECKSS}"><i class="fa fa-trash-o" data-icon="fa-trash-o"></i> {LANG_GLOBAL.delete}</a><!-- END: del -->
             </p>
             <!-- END: adminlink -->
         </div>
@@ -135,7 +136,7 @@ $(function() {
 <!-- BEGIN: if_user -->
 <div class="margin-top margin-bottom">
     <a class="btn btn-primary" href="{BASE_URL}">{LANG.your_content}</a>&nbsp;
-    <!-- BEGIN: add_content --><a class="btn btn-primary" href="{BASE_URL}&amp;contentid=0&checkss={ADD_CONTENT_CHECK_SESSION}">{LANG.add_content}</a>&nbsp;
+    <!-- BEGIN: add_content --><a class="btn btn-primary" href="{BASE_URL}&amp;contentid=0">{LANG.add_content}</a>&nbsp;
     <!-- END: add_content -->
     <a class="btn btn-primary" href="{BASE_URL}&amp;author_info=1">{LANG.author_info}</a>
 </div>
@@ -280,6 +281,7 @@ $(function() {
                 <!-- END: save_status -->
             </select>
             <input type="hidden" name="save" value="1" />
+            <input type="hidden" name="checkss" value="{CHECKSS}">
             <input type="submit" class="btn btn-primary" value="{GLANG.submit}"/>
         </div>
     </div>
