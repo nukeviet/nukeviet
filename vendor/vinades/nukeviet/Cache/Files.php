@@ -43,10 +43,6 @@ class Files
      */
     public function __construct($CacheDir, $Lang, $Cache_Prefix)
     {
-        $realDir = realpath($CacheDir);
-        if ($realDir === false || !is_dir($realDir)) {
-            throw new \NukeViet\Http\HttpException('Invalid cache directory: ' . $CacheDir, 500);
-        }
         $this->_CacheDir = $CacheDir;
         $this->_Lang = $Lang;
         $this->_Cache_Prefix = $Cache_Prefix;
