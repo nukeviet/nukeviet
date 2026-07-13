@@ -31,7 +31,13 @@ do {
     WHERE CHAR_LENGTH(code) <= 20 LIMIT ' . $batch_size)->fetchAll();
 
     foreach ($rows as $row) {
-        $stmt_update->bindValue(':newcode', $crypt->encrypt($row['code']), PDO::PARAM_STR);
+        // Nếu có encryptDeterministic (cập nhật cả 2 lượt đồng bộ) thì dùng, không thì dùng encrypt (cập nhật theo từng step)
+        if (method_exists($crypt, 'encryptDeterministic')) {
+            $stmt_update->bindValue(':newcode', $crypt->encryptDeterministic($row['code']), PDO::PARAM_STR);
+        } else {
+            $stmt_update->bindValue(':newcode', $crypt->encrypt($row['code']), PDO::PARAM_STR);
+        }
+
         $stmt_update->bindValue(':userid', $row['userid'], PDO::PARAM_INT);
         $stmt_update->bindValue(':oldcode', $row['code'], PDO::PARAM_STR);
         $stmt_update->execute();

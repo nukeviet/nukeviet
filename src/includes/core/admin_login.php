@@ -527,7 +527,7 @@ if (!empty($admin_pre_data) and $nv_Request->isset_request('submit2scode', 'post
 
         $step2_isvalid = true;
     } elseif (!empty($nv_backupcodepin)) {
-        $nv_backupcodepin = $crypt->encrypt(nv_strtolower($nv_backupcodepin));
+        $nv_backupcodepin = $crypt->encryptDeterministic(nv_strtolower($nv_backupcodepin));
 
         // Cập nhật ngay lượt sử dụng tránh brute-force mã dự phòng
         $stmt = $db->prepare('UPDATE ' . NV_USERS_GLOBALTABLE . '_backupcodes SET is_used = 1, time_used = :time_used WHERE code = :code AND userid = :userid AND is_used = 0');

@@ -166,7 +166,7 @@ if (!empty($row['active2step'])) {
         $stmt = $db->prepare('INSERT INTO ' . NV_MOD_TABLE . '_backupcodes (userid, code, is_used, time_used, time_creat) VALUES (:userid, :code, 0, 0, :time_creat)');
         foreach ($new_code as $code) {
             $stmt->bindValue(':userid', $row['userid'], PDO::PARAM_INT);
-            $stmt->bindValue(':code', $crypt->encrypt($code), PDO::PARAM_STR);
+            $stmt->bindValue(':code', $crypt->encryptDeterministic($code), PDO::PARAM_STR);
             $stmt->bindValue(':time_creat', NV_CURRENTTIME, PDO::PARAM_INT);
             $stmt->execute();
             $stmt->closeCursor();
@@ -209,7 +209,7 @@ if (!empty($row['active2step'])) {
     $stmt->bindValue(':userid', $row['userid'], PDO::PARAM_INT);
     $stmt->execute();
     while ($code = $stmt->fetch()) {
-        $code['code'] = $crypt->decrypt($code['code']);
+        $code['code'] = $crypt->decryptDeterministic($code['code']);
         $code['status_label'] = $nv_Lang->getModule('user_2step_codes_s' . $code['is_used']);
         $codes[] = $code;
     }

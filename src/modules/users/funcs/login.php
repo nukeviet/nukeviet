@@ -1107,7 +1107,7 @@ if ($nv_Request->isset_request('_csrf, nv_login', 'post')) {
         }
 
         if (!empty($nv_backupcodepin)) {
-            $nv_backupcodepin = $crypt->encrypt(nv_strtolower($nv_backupcodepin));
+            $nv_backupcodepin = $crypt->encryptDeterministic(nv_strtolower($nv_backupcodepin));
 
             // Cập nhật ngay lượt sử dụng mã dự phòng để tránh bị brute-force
             $sth = $db->prepare('UPDATE ' . NV_MOD_TABLE . '_backupcodes SET is_used = 1, time_used = :time_used WHERE code = :code AND userid = :userid AND is_used = 0');

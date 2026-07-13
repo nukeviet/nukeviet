@@ -178,7 +178,7 @@ $array_data['backupcodes'] = $stmt->fetchAll();
 $stmt->closeCursor();
 
 foreach ($array_data['backupcodes'] as $key => $code) {
-    $array_data['backupcodes'][$key]['code'] = $crypt->decrypt($code['code']);
+    $array_data['backupcodes'][$key]['code'] = $crypt->decryptDeterministic($code['code']);
 }
 
 $array_data['print_code_url'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=print';

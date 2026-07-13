@@ -139,33 +139,79 @@ class Encryption
     }
 
     /**
-     * encrypt()
+     * Mã hóa dữ liệu bằng thuật toán AES-256-GCM,
+     * Cùng một dữ liệu đầu vào mỗi lần mã hóa cho ra kết quả khác nhau
+     * Định dạng kết quả: base64url(iv[12] | tag[16] | ciphertext).
+     *
+     * KHÔNG dùng cho việc so khớp chuỗi mã hóa, dùng an toàn cho dữ liệu mà người dùng tiếp cận được như
+     * cookie, url, header, html...
      *
      * @param mixed  $data
-     * @param string $iv
-     * @return string
+     * @param string $aad Dữ liệu xác thực bổ sung để ràng buộc ngữ cảnh
+     * @return false|string
      */
-    public function encrypt($data, $iv = '')
+    public function encrypt($data, $aad = '')
     {
-        $iv = empty($iv) ? substr($this->_key, 0, 16) : substr($iv, 0, 16);
+        $iv = random_bytes(12);
+        $tag = '';
+        $ciphertext = openssl_encrypt((string) $data, 'aes-256-gcm', $this->_key, OPENSSL_RAW_DATA, $iv, $tag, (string) $aad, 16);
+        if ($ciphertext === false) {
+            return false;
+        }
 
-        $data = openssl_encrypt($data, 'aes-256-cbc', $this->_key, 0, $iv);
+        return strtr(base64_encode($iv . $tag . $ciphertext), '+/=', '-_,');
+    }
+
+    /**
+     * Giải mã dữ liệu tạo bởi encrypt() (AES-256-GCM)
+     *
+     * @param mixed  $data
+     * @param string $aad Dữ liệu xác thực bổ sung, phải trùng với lúc mã hóa
+     * @return false|string
+     */
+    public function decrypt($data, $aad = '')
+    {
+        $raw = base64_decode(strtr((string) $data, '-_,', '+/='), true);
+        if ($raw === false or strlen($raw) < 28) {
+            return false;
+        }
+        $iv = substr($raw, 0, 12);
+        $tag = substr($raw, 12, 16);
+        $ciphertext = substr($raw, 28);
+
+        return openssl_decrypt($ciphertext, 'aes-256-gcm', $this->_key, OPENSSL_RAW_DATA, $iv, $tag, (string) $aad);
+    }
+
+    /**
+     * Mã hóa so khớp, cùng dữ liệu đầu vào cho ra cùng dữ liệu mã hóa.
+     * Không sử dụng cho dữ liệu xuất hiện trên url/cookie/html nơi người dùng nhìn thấy được.
+     * Chỉ dùng cho dữ liệu nội bộ với yêu cầu so khớp, dữ liệu nội bộ không bắt buộc so khớp
+     * cũng nên dùng encrypt() để tăng tính bảo mật.
+     *
+     * @param mixed $data
+     * @return false|string
+     */
+    public function encryptDeterministic($data)
+    {
+        $iv = substr($this->_key, 0, 16);
+        $data = openssl_encrypt((string) $data, 'aes-256-cbc', $this->_key, 0, $iv);
+        if ($data === false) {
+            return false;
+        }
 
         return strtr($data, '+/=', '-_,');
     }
 
     /**
-     * decrypt()
+     * Giải mã dữ liệu tạo bởi encryptDeterministic().
      *
-     * @param mixed  $data
-     * @param string $iv
+     * @param mixed $data
      * @return false|string
      */
-    public function decrypt($data, $iv = '')
+    public function decryptDeterministic($data)
     {
-        $iv = empty($iv) ? substr($this->_key, 0, 16) : substr($iv, 0, 16);
-
-        $data = strtr($data, '-_,', '+/=');
+        $iv = substr($this->_key, 0, 16);
+        $data = strtr((string) $data, '-_,', '+/=');
 
         return openssl_decrypt($data, 'aes-256-cbc', $this->_key, 0, $iv);
     }

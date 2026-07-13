@@ -57,7 +57,7 @@ function nv_creat_backupcodes()
     $stmt = $db->prepare('INSERT INTO ' . $module_data . '_backupcodes (userid, code, is_used, time_used, time_creat) VALUES (:userid, :code, 0, 0, :time_creat)');
     foreach ($new_code as $code) {
         $stmt->bindValue(':userid', $user_info['userid'], PDO::PARAM_INT);
-        $stmt->bindValue(':code', $crypt->encrypt($code), PDO::PARAM_STR);
+        $stmt->bindValue(':code', $crypt->encryptDeterministic($code), PDO::PARAM_STR);
         $stmt->bindValue(':time_creat', NV_CURRENTTIME, PDO::PARAM_INT);
         $stmt->execute();
     }

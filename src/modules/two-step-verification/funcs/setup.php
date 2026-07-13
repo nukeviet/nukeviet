@@ -119,7 +119,7 @@ if (!empty($array_op[1]) and $array_op[1] == 'complete') {
     $backupcodes = $db->query($sql)->fetchAll();
 
     foreach ($backupcodes as $key => $code) {
-        $backupcodes[$key]['code'] = $crypt->decrypt($code['code']);
+        $backupcodes[$key]['code'] = $crypt->decryptDeterministic($code['code']);
     }
 
     $array_data = [];
