@@ -5,7 +5,7 @@ NUKEVIET 4.6.00
 - Updated the password hashing and cookie encryption mechanisms
 - Use CSPRNG (random_int) for TOTP and nv_genpass security tokens
 - Fix second-order SQL injection in users sql_choices custom field
-- Harden deserialization and TLS verification across the system
+- Harden deserialization and TLS verification across the system (CVE-2026-61832)
 - Fixed issues related to HTML popovers
 - Fix PHP code injection in robots.php via unfiltered filename keys
 - Update guzzlehttp/guzzle 7.12.1, guzzlehttp/psr7 2.12.1
@@ -14,10 +14,10 @@ NUKEVIET 4.6.00
 - Require PHP >=7.4.00
 
 NUKEVIET 4.5.09
-- Improve the strict domain checking mechanism. Thanks g03m0n from WhiteHub#4533
-- Fix Path Traversal to Arbitrary File. Thanks g03m0n from WhiteHub#4529
-- Enhanced XSS prevention: strip hex/decimal ASCII control character entities from HTML attributes and entity names. Thanks g03m0n from WhiteHub#4521
-- Fixed security vulnerabilities in comment functionality and SVG file upload. Thanks Nguyen Hung (Mitchell) from WhiteHub#4445
+- Improve the strict domain checking mechanism (CVE-2026-55372). Thanks g03m0n from WhiteHub#4533
+- Fix Path Traversal to Arbitrary File (CVE-2026-54065). Thanks g03m0n from WhiteHub#4529
+- Enhanced XSS prevention (CVE-2026-49259, CVE-2026-54064): strip hex/decimal ASCII control character entities from HTML attributes and entity names. Thanks g03m0n from WhiteHub#4521
+- Fixed security vulnerabilities in comment functionality (CVE-2026-48118) and SVG file upload. Thanks Nguyen Hung (Mitchell) from WhiteHub#4445
 - Added SSRF protection: validate URL schemes and block private IP ranges
 - Reduced file permissions in dump and upload functions
 - Refactored upload/extension validation for improved security. Thanks Dung.nhv from WhiteHub#4436
