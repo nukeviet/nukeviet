@@ -1,5 +1,8 @@
 CHANGE LOG: NUKEVIET CMS
 http://nukeviet.vn
+NUKEVIET 4.6.01
+- Prevent SSRF DNS rebinding in Files\Upload URL import
+
 NUKEVIET 4.6.00
 - Fixed an issue where figure tags were removed from tables in the editor.
 - Updated the password hashing and cookie encryption mechanisms
