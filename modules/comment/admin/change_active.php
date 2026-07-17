@@ -21,6 +21,9 @@ $row = $db->query($sql)->fetch();
 if (empty($row)) {
     exit('NO_' . $cid);
 }
+if (!isset($site_mod_comm[$row['module']]) and !defined('NV_IS_SPADMIN')) {
+    exit('NO_' . $cid);
+}
 
 $new_status = $nv_Request->get_bool('new_status', 'post');
 $new_status = (int) $new_status;
