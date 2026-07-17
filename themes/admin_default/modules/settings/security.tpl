@@ -85,16 +85,6 @@
                                     <td><input type="checkbox" value="1" name="nv_anti_agent" {ANTI_AGENT} /></td>
                                 </tr>
                                 <tr>
-                                    <td><strong>{LANG.proxy_blocker}</strong></td>
-                                    <td>
-                                        <select name="proxy_blocker" class="form-control w200">
-                                            <!-- BEGIN: proxy_blocker -->
-                                            <option value="{PROXYOP}" {PROXYSELECTED}>{PROXYVALUE} </option>
-                                            <!-- END: proxy_blocker -->
-                                        </select>
-                                    </td>
-                                </tr>
-                                <tr>
                                     <td><strong>{LANG.str_referer_blocker}</strong></td>
                                     <td><input type="checkbox" value="1" name="str_referer_blocker" {REFERER_BLOCKER} /></td>
                                 </tr>

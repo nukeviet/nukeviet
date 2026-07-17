@@ -79,7 +79,7 @@ require NV_ROOTDIR . '/includes/ini.php';
 require NV_ROOTDIR . '/includes/xtemplate.class.php';
 
 // Xac dinh IP cua client
-$ips = new NukeViet\Core\Ips($sys_info);
+$ips = new NukeViet\Core\Ips($sys_info, !empty($global_config['trusted_proxy_enable']), $global_config['trusted_proxies'] ?? []);
 // define( 'NV_SERVER_IP', $ips->server_ip );
 define('NV_FORWARD_IP', $ips->forward_ip);
 define('NV_REMOTE_ADDR', $ips->remote_addr);
@@ -137,14 +137,6 @@ require NV_ROOTDIR . '/includes/core/theme_functions.php';
 // IP Ban
 if (nv_is_banIp(NV_CLIENT_IP)) {
     throw new \NukeViet\Http\HttpException('Hi and Good-bye!!!', 403);
-}
-
-// Chan proxy
-if ($global_config['proxy_blocker'] != 0) {
-    $client_info['is_proxy'] = $ips->nv_check_proxy();
-    if (nv_is_blocker_proxy($client_info['is_proxy'], $global_config['proxy_blocker'])) {
-        throw new \NukeViet\Http\HttpException('ERROR: You are behind a proxy server. Please disconnect and come again!', 403);
-    }
 }
 
 if (defined('NV_SYSTEM') and stripos($_SERVER['PHP_SELF'], 'index.php') !== false) {

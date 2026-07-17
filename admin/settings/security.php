@@ -13,13 +13,6 @@ if (!defined('NV_ADMIN') or !defined('NV_MAINFILE') or !defined('NV_IS_MODADMIN'
     exit('Stop!!!');
 }
 
-$proxy_blocker_array = [
-    0 => $lang_module['proxy_blocker_0'],
-    1 => $lang_module['proxy_blocker_1'],
-    2 => $lang_module['proxy_blocker_2'],
-    3 => $lang_module['proxy_blocker_3']
-];
-
 $captcha_opts = ['', 'captcha', 'recaptcha'];
 $captcha_area_list = ['a', 'l', 'r', 'm', 'p'];
 $recaptcha_vers = [2, 3];
@@ -52,11 +45,6 @@ $checkss = md5(NV_CHECK_SESSION . '_' . $module_name . '_' . $op . '_' . $admin_
 
 // Xử lý các thiết lập cơ bản
 if (defined('NV_IS_GODADMIN') and $nv_Request->isset_request('submitbasic', 'post') and $checkss == $nv_Request->get_string('checkss', 'post')) {
-    $proxy_blocker = $nv_Request->get_int('proxy_blocker', 'post');
-    if (isset($proxy_blocker_array[$proxy_blocker])) {
-        $array_config_global['proxy_blocker'] = $proxy_blocker;
-    }
-
     $array_config_global['str_referer_blocker'] = (int) $nv_Request->get_bool('str_referer_blocker', 'post');
     $array_config_global['is_login_blocker'] = (int) $nv_Request->get_bool('is_login_blocker', 'post', false);
     $array_config_global['login_number_tracking'] = $nv_Request->get_int('login_number_tracking', 'post', 0);
@@ -618,12 +606,6 @@ $xtpl->assign('MAX_REQUESTS_60', $array_config_flood['max_requests_60']);
 $xtpl->assign('MAX_REQUESTS_300', $array_config_flood['max_requests_300']);
 
 $xtpl->assign('ANTI_AGENT', $array_config_define['nv_anti_agent'] ? ' checked="checked"' : '');
-foreach ($proxy_blocker_array as $proxy_blocker_i => $proxy_blocker_v) {
-    $xtpl->assign('PROXYSELECTED', ($array_config_global['proxy_blocker'] == $proxy_blocker_i) ? ' selected="selected"' : '');
-    $xtpl->assign('PROXYOP', $proxy_blocker_i);
-    $xtpl->assign('PROXYVALUE', $proxy_blocker_v);
-    $xtpl->parse('main.tabcontent_0.proxy_blocker');
-}
 $xtpl->assign('REFERER_BLOCKER', ($array_config_global['str_referer_blocker']) ? ' checked="checked"' : '');
 $xtpl->assign('ANTI_IFRAME', $array_config_define['nv_anti_iframe'] ? ' checked="checked"' : '');
 

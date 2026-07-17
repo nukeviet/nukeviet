@@ -143,11 +143,6 @@ $lang_module['current_time'] = 'Heure: %s';
 $lang_module['date_pattern'] = 'Format de la date';
 $lang_module['time_pattern'] = 'Type d\'affichage: Heure Minute';
 $lang_module['gzip_method'] = 'Activer gzip';
-$lang_module['proxy_blocker'] = 'Contrôler et bloquer les ordiateurs utilisant le proxy';
-$lang_module['proxy_blocker_0'] = 'Sans contrôle';
-$lang_module['proxy_blocker_1'] = 'Contrôle léger';
-$lang_module['proxy_blocker_2'] = 'Contrôle moyen';
-$lang_module['proxy_blocker_3'] = 'Contrôle strict';
 $lang_module['str_referer_blocker'] = 'Activer le contrôle des liens vers le site depuis l\'exterieur';
 $lang_module['my_domains'] = 'Les domaines du site';
 $lang_module['searchEngineUniqueID'] = 'ID de moteur de recherche Google<br />(forma 000329275761967753447:sr7yxqgv294 , <a href="https://nukeviet.vn/vi/faq/Su-dung-Google-Custom-Search-tren-NukeViet/" target="_blank">voir détails</a>)';
@@ -442,3 +437,17 @@ $lang_module['pp_window_management'] = 'Contrôle si le document actuel est auto
 $lang_module['pp_xr_spatial_tracking'] = 'Contrôle si le document actuel est autorisé ou non à utiliser l\'API du périphérique WebXR pour interagir avec une session WebXR.';
 
 $lang_module['fp_act'] = 'PP actif';
+
+// Trusted proxies
+$lang_module['trusted_proxy'] = 'Proxys de confiance';
+$lang_module['trusted_proxy_note'] = 'Lorsque le site est derrière un reverse proxy ou un CDN (Cloudflare, Nginx...), l\'IP réelle du visiteur est transmise via des en-têtes tels que X-Forwarded-For ou CF-Connecting-IP. Ces en-têtes ne sont pris en compte que si l\'IP de connexion directe (REMOTE_ADDR) figure dans la liste des proxys de confiance ci-dessous ; sinon un attaquant pourrait usurper l\'IP pour contourner la limitation de débit et la protection anti-force brute.';
+$lang_module['trusted_proxy_note_strip'] = 'Si le site est derrière un proxy interne ou un fournisseur autre que Cloudflare, configurez le proxy pour écraser ou supprimer les en-têtes d\'IP envoyés par le client ; sinon un attaquant peut toujours usurper l\'IP en envoyant un en-tête CF-Connecting-IP falsifié. Exemple pour Nginx : proxy_set_header CF-Connecting-IP ""; et proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;';
+$lang_module['trusted_proxy_enable'] = 'Activer';
+$lang_module['trusted_proxy_enable_des'] = 'Ne faire confiance aux en-têtes d\'IP du proxy que si cette option est activée';
+$lang_module['trusted_proxy_list'] = 'Liste des proxys de confiance';
+$lang_module['trusted_proxy_list_des'] = 'Une adresse IP ou une plage CIDR par ligne (IPv4 et IPv6 pris en charge). Exemple : 127.0.0.1, 10.0.0.0/8, 173.245.48.0/20, 2400:cb00::/32.';
+$lang_module['trusted_proxy_fetch_cf'] = 'Récupérer les plages Cloudflare';
+$lang_module['trusted_proxy_cf_loaded'] = 'Plages Cloudflare ajoutées à la liste. Cliquez sur Enregistrer pour appliquer.';
+$lang_module['trusted_proxy_cf_error'] = 'Impossible de récupérer les plages depuis Cloudflare. Veuillez réessayer ou les saisir manuellement.';
+$lang_module['trusted_proxy_invalid'] = 'Les entrées suivantes ne sont pas des adresses IP ou des plages CIDR valides : %s';
+$lang_module['trusted_proxy_empty_list'] = 'Vous avez activé le proxy de confiance mais la liste est vide. Veuillez saisir au moins une plage de proxy de confiance.';

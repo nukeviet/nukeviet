@@ -145,4 +145,71 @@ $(document).ready(function() {
             return;
         }
     });
+
+    // Lấy dải IP Cloudflare rồi trộn vào danh sách proxy tin cậy
+    $('body').on('click', '[data-toggle=fetch_cf]', function() {
+        var that = $(this),
+            form = that.closest('form'),
+            ta = $('[name=trusted_proxies]', form);
+        let icon = $('i', that);
+        if (icon.is('.fa-spinner')) {
+            return;
+        }
+        icon.removeClass(icon.data('icon')).addClass('fa-spinner fa-spin');
+        $.ajax({
+            type: 'POST',
+            cache: !1,
+            url: form.attr('action'),
+            data: {
+                fetch_cloudflare: 1,
+                trusted_proxies: ta.val(),
+                checkss: $('input[name=checkss]', form).val()
+            },
+            dataType: 'json',
+            success: function(a) {
+                icon.removeClass('fa-spinner fa-spin').addClass(icon.data('icon'));
+                if ('error' == a.status) {
+                    alert(a.mess);
+                } else if ('OK' == a.status) {
+                    ta.val(a.data.join('\n'));
+                    alert(that.data('loaded-mess'));
+                }
+                ta.trigger('keyup');
+            },
+            error: function(xhr, text, err) {
+                icon.removeClass('fa-spinner fa-spin').addClass(icon.data('icon'));
+                alert(err);
+                console.log(xhr, text, err);
+            }
+        });
+    });
+
+    // Lưu cấu hình proxy tin cậy
+    $('body').on('submit', '#trusted-proxies-form', function(e) {
+        e.preventDefault();
+        var form = $(this);
+        $.ajax({
+            type: 'POST',
+            cache: !1,
+            url: form.attr('action'),
+            data: form.serialize() + '&save=1',
+            dataType: 'json',
+            success: function(a) {
+                $('.form-group', form).removeClass('has-error');
+                if ('error' == a.status) {
+                    if (a.input) {
+                        $('[name=' + a.input + ']', form).closest('.form-group').addClass('has-error');
+                        $('[name=' + a.input + ']', form).focus();
+                    }
+                    alert(a.mess);
+                    return;
+                }
+                location.reload();
+            },
+            error: function(xhr, text, err) {
+                alert(err);
+                console.log(xhr, text, err);
+            }
+        });
+    });
 });

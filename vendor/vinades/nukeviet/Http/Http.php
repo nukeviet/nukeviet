@@ -114,7 +114,7 @@ class Http extends Server
             'compress' => false,
             'decompress' => true,
             'sslverify' => true,
-            'sslcertificates' => $this->root_dir . '/includes/certificates/ca-bundle.crt',
+            'sslcertificates' => $this->root_dir . '/' . NV_CERTS_DIR . '/cacert.pem',
             'stream' => false,
             'filename' => null,
             'limit_response_size' => null,

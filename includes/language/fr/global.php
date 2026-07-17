@@ -350,6 +350,7 @@ $lang_global['cookie_notice'] = 'Nous utilisons des cookies pour vous offrir la 
 $lang_global['on'] = 'On';
 $lang_global['off'] = 'De';
 $lang_global['share'] = 'Partager';
+$lang_global['save_success'] = 'Sauvegardé avec succès';
 $lang_global['country_AD'] = 'Andorre';
 $lang_global['country_AE'] = 'Arabes Unis';
 $lang_global['country_AF'] = 'Afghanistan';

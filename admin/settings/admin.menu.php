@@ -37,4 +37,5 @@ if (defined('NV_IS_GODADMIN')) {
     $submenu['cronjobs'] = $lang_global['mod_cronjobs'];
     $submenu['ftp'] = $lang_module['ftp_config'];
     $submenu['variables'] = $lang_module['variables'];
+    $submenu['trusted-proxies'] = $lang_module['trusted_proxy'];
 }

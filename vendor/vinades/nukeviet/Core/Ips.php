@@ -34,19 +34,36 @@ class Ips
 
     private $ip6_support = false;
 
+    private $trust_proxy = false;
+
+    private $trusted_proxies = [];
+
     /**
      * __construct()
      *
      * @param array $sys
+     * @param bool  $trust_proxy     Có tin các header IP do proxy đặt hay không
+     * @param array $trusted_proxies Danh sách IP/dải CIDR proxy tin cậy
      */
-    public function __construct($sys = [])
+    public function __construct($sys = [], $trust_proxy = false, array $trusted_proxies = [])
     {
+        $this->trust_proxy = (bool) $trust_proxy;
+        $this->trusted_proxies = $trusted_proxies;
         $this->client_ip = trim($this->nv_get_clientip());
         $this->forward_ip = trim($this->nv_get_forwardip());
         $this->remote_addr = trim($this->nv_get_remote_addr());
         $this->remote_ip = trim($this->nv_getip());
+        $this->ip6_support = !empty($sys['ip6_support']);
+    }
 
-        $this->ip6_support = (bool) $sys['ip6_support'];
+    /**
+     * @param string $variable_name
+     * @return string|false
+     */
+    private function getIp($variable_name)
+    {
+        $ip = $this->nv_getenv($variable_name);
+        return ($ip and filter_var($ip, FILTER_VALIDATE_IP)) ? $ip : false;
     }
 
     /**
@@ -197,18 +214,68 @@ class Ips
     }
 
     /**
-     * nv_getip()
+     * Lấy IP client thật từ header X-Forwarded-For khi đứng sau proxy tin cậy.
+     * Duyệt danh sách từ phải sang trái, bỏ qua các IP thuộc danh sách proxy tin cậy,
+     * IP hợp lệ đầu tiên là client IP.
+     *
+     * @return false|string
+     */
+    private function getForwardedClient()
+    {
+        $xff = isset($_SERVER['HTTP_X_FORWARDED_FOR']) ? (string) $_SERVER['HTTP_X_FORWARDED_FOR'] : '';
+        if (empty($xff)) {
+            return false;
+        }
+
+        $parts = explode(',', $xff);
+        for ($i = count($parts) - 1; $i >= 0; $i--) {
+            $ip = trim($parts[$i]);
+            if ($ip === '' or !filter_var($ip, FILTER_VALIDATE_IP)) {
+                continue;
+            }
+            if (!$this->isTrustedProxy($ip)) {
+                return $ip;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Lấy IP thật của người dùng đang truy cập
      *
      * @return string
      */
     private function nv_getip()
     {
-        if ($this->client_ip != 'none') {
-            return $this->client_ip;
+        if ($this->trust_proxy) {
+            /**
+             * Bật tính năng tin tưởng proxy thì chỉ đọc các header chuẩn
+             * bỏ qua các header cũ, header không theo chuẩn.
+             */
+            if ($this->remote_addr != 'none' and $this->isTrustedProxy($this->remote_addr)) {
+                // Cloudflare
+                if (($ip = $this->getIp('HTTP_CF_CONNECTING_IP')) !== false) {
+                    return $ip;
+                }
+                // X-Forwarded-For lấy từ phải sang trái bỏ qua chính ip của proxy
+                if (($ip = $this->getForwardedClient()) !== false) {
+                    return $ip;
+                }
+            }
+        } else {
+            // Tắt tin tưởng proxy thì đọc header rộng
+            if (($ip = $this->getIp('HTTP_CF_CONNECTING_IP')) !== false) {
+                return $ip;
+            }
+            if ($this->client_ip != 'none') {
+                return $this->client_ip;
+            }
+            if ($this->forward_ip != 'none') {
+                return $this->forward_ip;
+            }
         }
-        if ($this->forward_ip != 'none') {
-            return $this->forward_ip;
-        }
+
         if ($this->remote_addr != 'none') {
             return $this->remote_addr;
         }
@@ -221,25 +288,71 @@ class Ips
     }
 
     /**
-     * nv_check_proxy()
+     * Kiểm tra một IP có thuộc danh sách proxy tin cậy hay không
      *
-     * @return string
+     * @param string $ip
+     * @return bool
      */
-    public function nv_check_proxy()
+    private function isTrustedProxy(string $ip)
     {
-        $proxy = 'No';
-        if ($this->client_ip != 'none' or $this->forward_ip != 'none') {
-            $proxy = 'Lite';
-        }
-        $host = @gethostbyaddr($this->remote_ip);
-        if (stristr($host, 'proxy')) {
-            $proxy = 'Mild';
-        }
-        if ($this->remote_ip == $host) {
-            $proxy = 'Strong';
+        foreach ($this->trusted_proxies as $cidr) {
+            if (self::ipInRange($ip, $cidr)) {
+                return true;
+            }
         }
 
-        return $proxy;
+        return false;
+    }
+
+    /**
+     * Kiểm tra địa chỉ $ip có nằm trong dải CIDR $cidr không. Hỗ trợ IPv4 và IPv6.
+     *
+     * @param string $ip
+     * @param string $cidr
+     * @return bool
+     */
+    public static function ipInRange(string $ip, string $cidr)
+    {
+        $cidr = trim($cidr);
+        if ($cidr === '') {
+            return false;
+        }
+
+        // IP đơn không có mask thì coi như /32 (IPv4) hoặc /128 (IPv6)
+        if (strpos($cidr, '/') === false) {
+            $cidr .= (strpos($cidr, ':') !== false) ? '/128' : '/32';
+        }
+
+        [$subnet, $bits] = explode('/', $cidr, 2);
+        if (!ctype_digit($bits)) {
+            return false;
+        }
+        $bits = (int) $bits;
+
+        $ip_bin = inet_pton($ip);
+        $subnet_bin = inet_pton($subnet);
+
+        if ($ip_bin === false or $subnet_bin === false or strlen($ip_bin) !== strlen($subnet_bin) or $bits > strlen($ip_bin) * 8) {
+            return false;
+        }
+
+        $bytes = intdiv($bits, 8);
+        $remainder = $bits % 8;
+
+        // So khớp các byte nguyên
+        if ($bytes > 0 and strncmp($ip_bin, $subnet_bin, $bytes) !== 0) {
+            return false;
+        }
+
+        // So khớp phần bit lẻ còn lại
+        if ($remainder > 0) {
+            $mask = ~(0xff >> $remainder) & 0xff;
+            if ((ord($ip_bin[$bytes]) & $mask) !== (ord($subnet_bin[$bytes]) & $mask)) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     /**
@@ -304,5 +417,39 @@ class Ips
         }
 
         return substr($ip, 0, 4) == '127.' or $ip == '::1';
+    }
+
+    /**
+     * Kiểm tra một chuỗi có phải địa chỉ IP đơn hoặc dải CIDR hợp lệ (IPv4/IPv6) không
+     *
+     * @param string $cidr
+     * @return bool
+     */
+    public static function validCidr($cidr)
+    {
+        $cidr = trim((string) $cidr);
+        if ($cidr === '') {
+            return false;
+        }
+
+        // Trường hợp CIDR: địa_chỉ/số_bit
+        if (strpos($cidr, '/') !== false) {
+            [$ip, $mask] = explode('/', $cidr, 2);
+            if (!ctype_digit($mask) || strlen($mask) > 3) {
+                return false;
+            }
+            $mask = (int) $mask;
+            if (filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4)) {
+                return $mask >= 0 and $mask <= 32;
+            }
+            if (filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV6)) {
+                return $mask >= 0 and $mask <= 128;
+            }
+
+            return false;
+        }
+
+        // Trường hợp chỉ là một địa chỉ IP đơn lẻ
+        return (bool) filter_var($cidr, FILTER_VALIDATE_IP);
     }
 }

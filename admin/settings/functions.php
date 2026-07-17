@@ -27,6 +27,7 @@ if (defined('NV_IS_GODADMIN')) {
     $allow_func[] = 'cronjobs_act';
     $allow_func[] = 'plugin';
     $allow_func[] = 'variables';
+    $allow_func[] = 'trusted-proxies';
 }
 if (defined('NV_IS_GODADMIN') or (defined('NV_IS_SPADMIN') and $global_config['idsite'] > 0)) {
     $allow_func[] = 'security';
@@ -52,6 +53,7 @@ $array_url_instruction['plugin'] = 'https://wiki.nukeviet.vn/nukeviet4:admin:set
 $array_url_instruction['cronjobs'] = 'https://wiki.nukeviet.vn/nukeviet4:admin:settings:cronjobs';
 $array_url_instruction['ftp'] = 'https://wiki.nukeviet.vn/nukeviet4:admin:settings:ftp';
 $array_url_instruction['variables'] = 'https://wiki.nukeviet.vn/nukeviet4:admin:setting:variables';
+$array_url_instruction['trusted-proxies'] = 'https://wiki.nukeviet.vn/nukeviet4:admin:setting:trusted-proxies';
 
 /**
  * nv_admin_add_theme()
@@ -160,7 +162,7 @@ function main_theme($contents)
 
 /**
  * Cập nhật lại thời điểm thực hiện tiếp theo của Cronjob
- * @return bool
+ * @return bool|void
  */
 function update_cronjob_next_time()
 {

@@ -144,28 +144,6 @@ function nv_is_myreferer($referer = '')
 }
 
 /**
- * nv_is_blocker_proxy()
- *
- * @param string $is_proxy
- * @param int    $proxy_blocker
- * @return bool
- */
-function nv_is_blocker_proxy($is_proxy, $proxy_blocker)
-{
-    if ($proxy_blocker == 1 and $is_proxy == 'Strong') {
-        return true;
-    }
-    if ($proxy_blocker == 2 and ($is_proxy == 'Strong' or $is_proxy == 'Mild')) {
-        return true;
-    }
-    if ($proxy_blocker == 3 and $is_proxy != 'No') {
-        return true;
-    }
-
-    return false;
-}
-
-/**
  * nv_is_banIp()
  *
  * @param string $ip
@@ -2362,6 +2340,46 @@ function nv_check_url($url, $isTriggerError = true, $is_200 = 0)
     }
 
     return false;
+}
+
+/**
+ * url_get_contents()
+ *
+ * @param mixed $url
+ * @return mixed
+ */
+function url_get_contents($url)
+{
+    global $global_config;
+
+    if (!nv_is_url($url)) {
+        return false;
+    }
+
+    $userAgents = [
+        'Mozilla/5.0 (Windows; U; Windows NT 5.1; pl; rv:1.9) Gecko/2008052906 Firefox/3.0',
+        'Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)',
+        'Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 6.0)',
+        'Mozilla/4.8 [en] (Windows NT 6.0; U)',
+        'Opera/9.25 (Windows NT 6.0; U; en)'
+    ];
+    $agent = $userAgents[array_rand($userAgents)];
+
+    $args = [
+        'headers' => [
+            'Referer' => $url,
+            'User-Agent' => $agent
+        ]
+    ];
+
+    $Http = new NukeViet\Http\Http($global_config, NV_TEMP_DIR);
+    $Http->reset();
+    $result = $Http->get($url, $args);
+    if (!empty(NukeViet\Http\Http::$error) or !isset($result['body'])) {
+        return false;
+    }
+
+    return $result['body'];
 }
 
 /**
