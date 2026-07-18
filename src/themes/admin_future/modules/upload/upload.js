@@ -679,10 +679,19 @@ var nukeviet = nukeviet || {};
                 },
                 Error: (up, err) => {
                     self.debug && console.log('Plupload Error', up, err);
-                    const msg = '[' + err.code + '] ' + err.status + ': ' + err.message;
+                    let msg;
+                    if (typeof err.status != 'undefined') {
+                        msg = '[' + err.code + '] ' + err.status + ': ' + err.message
+                    } else {
+                        msg = '[' + err.code + '] ' + err.message
+                    }
+                    const queue = $('[data-toggle="queue-items"]', self.fms);
                     if (err.file) {
-                        self.upStatusFile(err.file, null, msg);
-                        return;
+                        const fi = $('#' + err.file.id, queue);
+                        if (fi.length == 1) {
+                            self.upStatusFile(err.file, null, msg);
+                            return;
+                        }
                     }
                     nvToast(msg, 'error');
                 },
