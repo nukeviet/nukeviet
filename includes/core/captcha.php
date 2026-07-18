@@ -70,9 +70,9 @@ if ($len > 0) {
         $y = mt_rand(22, NV_GFX_HEIGHT - 2);
 
         if (file_exists($font) and nv_function_exists('imagettftext')) {
-            imagettftext($image, $size, $angle, $x, $y, $text_color, $font, $code[$i]);
+            imagettftext($image, $size, $angle, (int) round($x), $y, $text_color, $font, $code[$i]);
         } else {
-            imagestring($image, 5, $x, mt_rand(4, 10), $code[$i], $text_color);
+            imagestring($image, 5, (int) round($x), mt_rand(4, 10), $code[$i], $text_color);
         }
 
         // Cập nhật tọa độ X cho ký tự tiếp theo với khoảng cách vừa phải
