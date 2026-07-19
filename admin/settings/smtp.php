@@ -221,7 +221,7 @@ if ($nv_Request->isset_request('smimeadd', 'post') and $checkss == $nv_Request->
     $passphrase = $nv_Request->get_string('passphrase', 'post', '');
     $upload = new NukeViet\Files\Upload(['certificate'], $global_config['forbid_extensions'], $global_config['forbid_mimes']);
     $upload->setLanguage($lang_global);
-    $upload_info = $upload->save_file($_FILES['pkcs12'], NV_ROOTDIR . '/' . NV_CERTS_DIR, true);
+    $upload_info = $upload->save_file($_FILES['pkcs12'], NV_ROOTDIR . '/' . NV_TEMP_DIR, false);
 
     if (is_file($_FILES['pkcs12']['tmp_name'])) {
         @unlink($_FILES['pkcs12']['tmp_name']);
@@ -265,8 +265,17 @@ if ($nv_Request->isset_request('smimeadd', 'post') and $checkss == $nv_Request->
         ]);
     }
 
-    $email = trim($certPriv['subject']['CN']);
-    $email_name = str_replace('@', '__', $email);
+    $cn = is_array($certPriv['subject']['CN'] ?? '') ? '' : ($certPriv['subject']['CN'] ?? '');
+    $check_email = nv_check_valid_email($cn, true);
+    if (!empty($check_email[0])) {
+        @unlink($upload_info['name']);
+        nv_jsonOutput([
+            'status' => 'error',
+            'mess' => $lang_module['smime_pkcs12_cn_invalid']
+        ]);
+    }
+    $email = $check_email[1];
+    $email_name = basename(str_replace('@', '__', $email));
     $cert_key = NV_ROOTDIR . '/' . NV_CERTS_DIR . '/' . $email_name . '.key';
     $cert_crt = NV_ROOTDIR . '/' . NV_CERTS_DIR . '/' . $email_name . '.crt';
     $certchain_pem = NV_ROOTDIR . '/' . NV_CERTS_DIR . '/' . $email_name . '.pem';

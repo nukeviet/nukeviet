@@ -1,7 +1,8 @@
 CHANGE LOG: NUKEVIET CMS
 http://nukeviet.vn
 NUKEVIET 4.6.01
-- Fixed a permission issue when changing comment status
+- Fix arbitrary file write via S/MIME certificate CN in SMTP settings. Thanks Jace from GitHub @manus-use
+- Fix a permission issue when changing comment status
 - Prevent SSRF DNS rebinding in Files\Upload URL import
 
 NUKEVIET 4.6.00
