@@ -1,5 +1,8 @@
 CHANGE LOG: NUKEVIET CMS
 http://nukeviet.vn
+NUKEVIET 4.5.10
+- Fix arbitrary file write via S/MIME certificate CN in SMTP settings. Thanks Jace from GitHub @manus-use
+
 NUKEVIET 4.5.09
 - Improve the strict domain checking mechanism. Thanks g03m0n from WhiteHub#4533
 - Fix Path Traversal to Arbitrary File. Thanks g03m0n from WhiteHub#4529

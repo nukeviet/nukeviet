@@ -351,6 +351,7 @@ $lang_module['smime_download_passphrase'] = 'Tạo mới mật khẩu mở khóa
 $lang_module['smime_pkcs12_ext_error'] = 'File chứng chỉ phải có phần mở rộng là pfx hoặc p12';
 $lang_module['smime_pkcs12_cannot_be_read'] = 'Lỗi: Không thể đọc chứng chỉ';
 $lang_module['smime_pkcs12_smimesign_error'] = 'Lỗi: Chứng chỉ không hỗ trợ chữ ký email S/MIME';
+$lang_module['smime_pkcs12_cn_invalid'] = 'Lỗi: Tên chung (CN) của chứng chỉ không phải là một địa chỉ email hợp lệ';
 $lang_module['smime_pkcs12_overwrite'] = 'Chứng chỉ đã có trên máy chủ. Bạn muốn ghi đè lên bằng file chứng chỉ mới này?';
 $lang_module['smime_note'] = 'Chữ ký số S/MIME sẽ được gửi cùng với thư nếu email của người gửi có tệp chứng chỉ được lưu trữ trên máy chủ.';
 $lang_module['DKIM_signature'] = 'Chữ ký số của miền gửi thư DKIM';

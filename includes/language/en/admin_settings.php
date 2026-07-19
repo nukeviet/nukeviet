@@ -340,6 +340,7 @@ $lang_module['smime_download_passphrase'] = 'Generate a new password for unlocki
 $lang_module['smime_pkcs12_ext_error'] = 'The certificate file must have a pfx or p12 extension';
 $lang_module['smime_pkcs12_cannot_be_read'] = 'The certificate cannot be read';
 $lang_module['smime_pkcs12_smimesign_error'] = 'Certificate does not support S/MIME email signature';
+$lang_module['smime_pkcs12_cn_invalid'] = 'Error: The certificate Common Name (CN) is not a valid email address';
 $lang_module['smime_pkcs12_overwrite'] = 'The certificate is already on the server. Do you want to overwrite it with this new certificate file?';
 $lang_module['smime_note'] = 'The S/MIME digital signature will be sent along with the message if the sender\'s email has a certificate file stored on the server.';
 $lang_module['DKIM_signature'] = 'Domain Keys Identified Mail DKIM';
