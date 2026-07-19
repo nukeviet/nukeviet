@@ -263,7 +263,7 @@ if ($nv_Request->isset_request('smimeadd', 'post') and csrf_check($nv_Request->g
         $passphrase = $nv_Request->get_string('passphrase', 'post', '');
         $upload = new NukeViet\Files\Upload(['certificate'], $global_config['forbid_extensions'], $global_config['forbid_mimes']);
         $upload->setLanguage(\NukeViet\Core\Language::$lang_global);
-        $upload_info = $upload->save_file($_FILES['pkcs12'], NV_ROOTDIR . '/' . NV_CERTS_DIR, true);
+        $upload_info = $upload->save_file($_FILES['pkcs12'], NV_ROOTDIR . '/' . NV_TEMP_DIR, false);
 
         if (is_file($_FILES['pkcs12']['tmp_name'])) {
             @unlink($_FILES['pkcs12']['tmp_name']);
@@ -307,8 +307,17 @@ if ($nv_Request->isset_request('smimeadd', 'post') and csrf_check($nv_Request->g
             ]);
         }
 
-        $email = trim($certPriv['subject']['CN']);
-        $email_name = str_replace('@', '__', $email);
+        $cn = is_array($certPriv['subject']['CN'] ?? '') ? '' : ($certPriv['subject']['CN'] ?? '');
+        $check_email = nv_check_valid_email($cn, true);
+        if (!empty($check_email[0])) {
+            @unlink($upload_info['name']);
+            nv_jsonOutput([
+                'status' => 'error',
+                'mess' => $nv_Lang->getModule('smime_pkcs12_cn_invalid')
+            ]);
+        }
+        $email = $check_email[1];
+        $email_name = basename(str_replace('@', '__', $email));
         $cert_key = NV_ROOTDIR . '/' . NV_CERTS_DIR . '/' . $email_name . '.key';
         $cert_crt = NV_ROOTDIR . '/' . NV_CERTS_DIR . '/' . $email_name . '.crt';
         $certchain_pem = NV_ROOTDIR . '/' . NV_CERTS_DIR . '/' . $email_name . '.pem';
@@ -367,7 +376,7 @@ if ($nv_Request->isset_request('smimeadd', 'post') and csrf_check($nv_Request->g
             'mess' => $nv_Lang->getModule('smime_pkcs12_smimesign_error')
         ]);
     }
-    $email = trim($certPriv['subject']['CN']);
+    $email = is_array($certPriv['subject']['CN'] ?? '') ? '' : ($certPriv['subject']['CN'] ?? '');
     $check_valid_email = nv_check_valid_email($email, true);
     if (!empty($check_valid_email[0])) {
         nv_jsonOutput([
@@ -375,6 +384,7 @@ if ($nv_Request->isset_request('smimeadd', 'post') and csrf_check($nv_Request->g
             'mess' => $check_valid_email[0]
         ]);
     }
+    $email = $check_valid_email[1];
     $email_name = str_replace('@', '__', $email);
     $cert_key = NV_ROOTDIR . '/' . NV_CERTS_DIR . '/' . $email_name . '.key';
     $cert_crt = NV_ROOTDIR . '/' . NV_CERTS_DIR . '/' . $email_name . '.crt';
@@ -408,6 +418,7 @@ if ($nv_Request->isset_request('smimeadd', 'post') and csrf_check($nv_Request->g
         foreach ($matches[0] as $cert_crt) {
             $openSSLCertificate = openssl_x509_read($cert_crt);
             if ($openSSLCertificate) {
+                /** @disregard P1026 */
                 openssl_x509_export($openSSLCertificate, $extracerts[], true);
             }
         }
@@ -544,7 +555,7 @@ if ($nv_Request->isset_request('submitsave', 'post') and csrf_check($nv_Request-
         if ($array_config['smtp_ssl'] == 1) {
             require_once NV_ROOTDIR . '/includes/core/phpinfo.php';
             $array_phpmod = phpinfo_array(8, 1);
-            if (!empty($array_phpmod) and !array_key_exists('openssl', $array_phpmod)) {
+            if (!empty($array_phpmod) and !array_key_exists('openssl', (array) $array_phpmod)) {
                 nv_jsonOutput([
                     'status' => 'error',
                     'mess' => $nv_Lang->getModule('smtp_error_openssl')

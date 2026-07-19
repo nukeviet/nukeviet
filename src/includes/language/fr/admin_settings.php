@@ -362,6 +362,7 @@ $lang_module['smime_download_passphrase'] = 'Générer un nouveau mot de passe p
 $lang_module['smime_pkcs12_ext_error'] = 'Le fichier de certificat doit avoir une extension pfx ou p12';
 $lang_module['smime_pkcs12_cannot_be_read'] = 'Le certificat ne peut pas être lu';
 $lang_module['smime_pkcs12_smimesign_error'] = 'Le certificat ne prend pas en charge la signature électronique S/MIME';
+$lang_module['smime_pkcs12_cn_invalid'] = 'Erreur : le nom commun (CN) du certificat n\'est pas une adresse e-mail valide';
 $lang_module['smime_pkcs12_overwrite'] = 'Le certificat est déjà sur le serveur. Voulez-vous l\'écraser avec ce nouveau fichier de certificat?';
 $lang_module['smime_self_declare'] = 'Ou auto-déclarer le contenu du certificat';
 $lang_module['smime_certificate_content'] = 'Certificat';
