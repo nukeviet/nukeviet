@@ -46,17 +46,17 @@ require NV_ROOTDIR . '/includes/xtemplate.class.php';
 
 $nv_Server = new NukeViet\Core\Server();
 
-define('NV_SERVER_NAME', $nv_Server->getServerHost());
-define('NV_SERVER_PROTOCOL', $nv_Server->getServerProtocol());
-define('NV_SERVER_PORT', $nv_Server->getServerPort());
+require_once realpath(NV_ROOTDIR . '/install/config.php');
+
+define('NV_SERVER_NAME', $nv_Server->getOriginalHost());
+define('NV_SERVER_PROTOCOL', $nv_Server->getOriginalProtocol());
+define('NV_SERVER_PORT', $nv_Server->getOriginalPort());
 
 define('NV_MY_DOMAIN', $nv_Server->getOriginalDomain());
 define('NV_BASE_SITEURL', $nv_Server->getWebsitePath() . '/');
 
-require_once realpath(NV_ROOTDIR . '/install/config.php');
-
 $global_config['my_domains'] = [
-    $_SERVER['SERVER_NAME']
+    NV_SERVER_NAME
 ];
 
 // Xac dinh cac tags cho phep

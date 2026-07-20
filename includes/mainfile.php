@@ -33,15 +33,6 @@ require NV_ROOTDIR . '/vendor/autoload.php';
 
 $nv_Server = new NukeViet\Core\Server();
 
-define('NV_SERVER_NAME', $nv_Server->getServerHost());
-define('NV_SERVER_PROTOCOL', $nv_Server->getServerProtocol());
-define('NV_SERVER_PORT', $nv_Server->getServerPort());
-
-define('NV_CLIENT_HOST', $nv_Server->getOriginalHost());
-define('NV_CLIENT_PROTOCOL', $nv_Server->getOriginalProtocol());
-define('NV_CLIENT_PORT', $nv_Server->getOriginalPort());
-
-define('NV_MY_DOMAIN', $nv_Server->getOriginalDomain());
 define('NV_BASE_SITEURL', $nv_Server->getWebsitePath() . '/');
 
 if (file_exists(NV_ROOTDIR . '/' . NV_CONFIG_FILENAME)) {
@@ -61,8 +52,15 @@ if (empty($global_config['my_domains'])) {
 }
 
 $global_config['my_domains'] = array_map('trim', explode(',', strtolower($global_config['my_domains'])));
-// Nếu domain truy cập không đúng sẽ chuyển đến domain đúng (Báo mã 301)
-if (!in_array(NV_CLIENT_HOST, $global_config['my_domains'], true)) {
+
+// Host, giao thức, cổng của website, là giá trị mà người dùng nhìn thấy trên url
+define('NV_SERVER_NAME', $nv_Server->getOriginalHost());
+define('NV_SERVER_PROTOCOL', $nv_Server->getOriginalProtocol());
+define('NV_SERVER_PORT', $nv_Server->getOriginalPort());
+define('NV_MY_DOMAIN', $nv_Server->getOriginalDomain());
+
+// Nếu domain truy cập không đúng sẽ chuyển đến domain đúng, header mã 301
+if (!in_array(NV_SERVER_NAME, $global_config['my_domains'], true)) {
     $location = $nv_Server->getOriginalProtocol() . '://' . $global_config['my_domains'][0] . $_SERVER['REQUEST_URI'];
     if (in_array(substr(php_sapi_name(), 0, 3), ['cgi', 'fpm'], true)) {
         header('Location: ' . $location);
@@ -168,9 +166,6 @@ require NV_ROOTDIR . '/includes/language.php';
 require NV_ROOTDIR . '/includes/language/' . NV_LANG_INTERFACE . '/global.php';
 require NV_ROOTDIR . '/includes/language/' . NV_LANG_INTERFACE . '/functions.php';
 
-if (!in_array(NV_SERVER_NAME, $global_config['my_domains'], true)) {
-    nv_info_die($lang_global['error_404_title'], $lang_global['error_404_title'], $lang_global['error_404_content'], 400, '', '', '', '');
-}
 // Ket noi Cache
 if ($global_config['cached'] == 'memcached') {
     $nv_Cache = new NukeViet\Cache\Memcached(NV_MEMCACHED_HOST, NV_MEMCACHED_PORT, NV_LANG_DATA, NV_CACHE_PREFIX);

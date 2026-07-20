@@ -378,15 +378,8 @@ function set_ini_file(&$sys_info)
     $content_config .= '$iniSaveTime = ' . NV_CURRENTTIME . ';';
 
     if (file_put_contents($config_ini_file, $content_config . "\n", LOCK_EX)) {
-        if ($sys_info['curl_support']) {
-            $host = NV_SERVER_NAME;
-            if (!in_array($host, $global_config['my_domains'], true)) {
-                $host = $global_config['my_domains'][0];
-            }
-            if (filter_var($host, FILTER_VALIDATE_IP, FILTER_FLAG_IPV6) !== false) {
-                $host = '[' . $host . ']';
-            }
-            $url = NV_SERVER_PROTOCOL . '://' . $host . NV_SERVER_PORT . NV_BASE_SITEURL . 'index.php';
+        if ($sys_info['curl_support'] and in_array(NV_SERVER_NAME, $global_config['my_domains'], true)) {
+            $url = NV_SERVER_PROTOCOL . '://' . NV_SERVER_NAME . NV_SERVER_PORT . NV_BASE_SITEURL . 'index.php';
             $ch = curl_init($url);
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
             curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
