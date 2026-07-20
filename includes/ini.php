@@ -379,12 +379,20 @@ function set_ini_file(&$sys_info)
 
     if (file_put_contents($config_ini_file, $content_config . "\n", LOCK_EX)) {
         if ($sys_info['curl_support']) {
-            $url = NV_SERVER_PROTOCOL . '://' . NV_SERVER_NAME . NV_SERVER_PORT . NV_BASE_SITEURL . 'index.php';
+            $host = NV_SERVER_NAME;
+            if (!in_array($host, $global_config['my_domains'], true)) {
+                $host = $global_config['my_domains'][0];
+            }
+            if (filter_var($host, FILTER_VALIDATE_IP, FILTER_FLAG_IPV6) !== false) {
+                $host = '[' . $host . ']';
+            }
+            $url = NV_SERVER_PROTOCOL . '://' . $host . NV_SERVER_PORT . NV_BASE_SITEURL . 'index.php';
             $ch = curl_init($url);
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
             curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
             curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-            curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
+            curl_setopt($ch, CURLOPT_FOLLOWLOCATION, false);
+            curl_setopt($ch, CURLOPT_MAXREDIRS, 0);
             curl_setopt($ch, CURLOPT_HEADER, false);
             curl_setopt($ch, CURLOPT_POST, true);
             curl_setopt($ch, CURLOPT_POSTFIELDS, '__serverInfoUpdate=1');

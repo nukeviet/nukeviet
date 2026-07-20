@@ -1,6 +1,7 @@
 CHANGE LOG: NUKEVIET CMS
 http://nukeviet.vn
 NUKEVIET 4.6.01
+- Fix pre-auth SSRF via spoofed Host header in set_ini_file server info request. Thanks prat1kz from GitHub @prat1kz
 - Fix arbitrary file write via S/MIME certificate CN in SMTP settings. Thanks Jace from GitHub @manus-use
 - Fix a permission issue when changing comment status
 - Prevent SSRF DNS rebinding in Files\Upload URL import
