@@ -882,7 +882,9 @@ if ($step == 1) {
                             ['sys', 'global', 'ftp_user_name', $global_config['ftp_user_name']],
                             ['sys', 'global', 'ftp_user_pass', $crypt->encrypt($global_config['ftp_user_pass'])],
                             ['sys', 'global', 'ftp_path', $global_config['ftp_path']],
-                            ['sys', 'global', 'ftp_check_login', $global_config['ftp_check_login']]
+                            ['sys', 'global', 'ftp_check_login', $global_config['ftp_check_login']],
+                            ['sys', 'global', 'trusted_proxies', json_encode($global_config['trusted_proxies'], NV_JSON_ENCODE)],
+                            ['sys', 'global', 'trusted_proxy_enable', $global_config['trusted_proxy_enable']],
                         ];
                         foreach ($configs as $conf) {
                             $stmt->bindValue(':lang', $conf[0], PDO::PARAM_STR);

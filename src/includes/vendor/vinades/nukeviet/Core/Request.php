@@ -393,17 +393,17 @@ class Request
         if (defined('NV_SERVER_NAME')) {
             $this->server_name = NV_SERVER_NAME;
         } else {
-            $this->server_name = self::$Server->getServerHost();
+            $this->server_name = self::$Server->getOriginalHost();
         }
         if (defined('NV_SERVER_PROTOCOL')) {
             $this->server_protocol = NV_SERVER_PROTOCOL;
         } else {
-            $this->server_protocol = self::$Server->getServerProtocol();
+            $this->server_protocol = self::$Server->getOriginalProtocol();
         }
         if (defined('NV_SERVER_PORT')) {
             $this->server_port = NV_SERVER_PORT;
         } else {
-            $this->server_port = self::$Server->getServerPort();
+            $this->server_port = self::$Server->getOriginalPort();
         }
 
         $this->base_siteurl = $base_siteurl;
