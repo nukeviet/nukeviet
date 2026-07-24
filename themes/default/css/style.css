@@ -2207,15 +2207,6 @@ a.btn {
     padding: 10px;
 }
 
-.page .nv-list-item li {
-    display: flex;
-}
-
-.page .nv-list-item li em {
-    position: relative;
-    top: 2px;
-}
-
 /* sub-list-icon */
 
 .sub-list-icon > li:first-child > *:before,
