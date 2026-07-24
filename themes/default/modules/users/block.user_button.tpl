@@ -30,7 +30,7 @@ function loginFormLoad() {
 <div id="userBlock_{BLOCKID}" class="hidden">
     <div class="nv-info" style="display: none;"></div>
     <div class="userBlock clearfix">
-        <h3 class="text-center"><span class="lev-{LEVEL} text-normal">{WELCOME}:</span> {USER.full_name}</h3>
+        <div class="text-center h3"><span class="lev-{LEVEL} text-normal">{WELCOME}:</span> {USER.full_name}</div>
         <div class="row">
             <div class="col-xs-8 text-center">
                 <a title="{LANG.edituser}" href="javascript:void(0)" onclick="changeAvatar('{URL_AVATAR}')"><img src="{AVATA}" alt="{USER.full_name}" class="img-thumbnail bg-gainsboro" /></a>

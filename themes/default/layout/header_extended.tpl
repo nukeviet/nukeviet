@@ -29,13 +29,12 @@
                     <div class="logo">
                         <a title="{SITE_NAME}" href="{THEME_SITE_HREF}"><img src="{LOGO_SRC}" alt="{SITE_NAME}"></a>
                         <!-- BEGIN: site_name_h1 -->
-                        <h1>{SITE_NAME}</h1>
-                        <h2>{SITE_DESCRIPTION}</h2>
+                        <h1 class="sr-only">{SITE_NAME}</h1>
                         <!-- END: site_name_h1 -->
                         <!-- BEGIN: site_name_span -->
-                        <span class="site_name">{SITE_NAME}</span>
-                        <span class="site_description">{SITE_DESCRIPTION}</span>
+                        <span class="sr-only">{SITE_NAME}</span>
                         <!-- END: site_name_span -->
+                        <span class="site_description">{SITE_DESCRIPTION}</span>
                     </div>
                     <div class="right-ads">
                         [HEAD_RIGHT]

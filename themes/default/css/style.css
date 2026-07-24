@@ -146,7 +146,7 @@
 }
 
 .text-bold {
-    font-weight: 800;
+    font-weight: 700;
 }
 
 /* Fix bootstrap */
@@ -1198,12 +1198,6 @@ a.btn {
     width: auto;
 }
 
-#header .logo h1,
-#header .logo .site_name {
-    display: none;
-}
-
-#header .logo h2,
 #header .logo .site_description {
     color: #707070;
     font-size: 18px;
@@ -1737,8 +1731,8 @@ a.btn {
     margin: 10px -15px -15px;
 }
 
-#tip h3,
-#ftip h3 {
+#tip .h3,
+#ftip .h3 {
     font-size: 13px;
     font-weight: 700;
     margin-bottom: 15px;
@@ -2012,7 +2006,7 @@ a.btn {
     color: #dcdcdc;
 }
 
-#footer h3 {
+#footer .h3 {
     font-weight: 700;
     font-size: 15px;
     letter-spacing: 0.5px;
@@ -2021,7 +2015,7 @@ a.btn {
     color: #dcdcdc;
 }
 
-#footer h3 a {
+#footer .h3 a {
     color: inherit;
 }
 

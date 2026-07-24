@@ -1,6 +1,6 @@
 <!-- BEGIN: mainblock -->
 <div class="panel-body">
-    <h3>{BLOCK_TITLE}</h3>
+    <div class="h3">{BLOCK_TITLE}</div>
     <section>{BLOCK_CONTENT}</section>
 </div>
 <!--  END: mainblock -->
