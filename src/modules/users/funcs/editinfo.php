@@ -395,7 +395,6 @@ if ((int) $row['safemode'] > 0) {
 
             nv_jsonOutput([
                 'status' => 'ok',
-                'input' => '',
                 'mess' => $nv_Lang->getModule('safe_send_ok', $ss_safesend)
             ]);
         }
@@ -757,7 +756,7 @@ if ($checkss == $array_data['checkss'] and $array_data['type'] == 'basic') {
     }
     nv_jsonOutput([
         'status' => 'ok',
-        'input' => nv_url_rewrite($page_url . '/langinterface', true),
+        'redirect' => nv_url_rewrite($page_url . '/langinterface', true),
         'mess' => $nv_Lang->getModule('editinfo_ok')
     ]);
 } elseif ($checkss == $array_data['checkss'] and $array_data['type'] == 'username') {
@@ -817,7 +816,7 @@ if ($checkss == $array_data['checkss'] and $array_data['type'] == 'basic') {
 
     nv_jsonOutput([
         'status' => 'ok',
-        'input' => nv_url_rewrite($page_url . '/username', true),
+        'redirect' => nv_url_rewrite($page_url . '/username', true),
         'mess' => $mess
     ]);
 } elseif ($checkss == $array_data['checkss'] and $array_data['type'] == 'email') {
@@ -981,7 +980,7 @@ if ($checkss == $array_data['checkss'] and $array_data['type'] == 'basic') {
 
         nv_jsonOutput([
             'status' => 'ok',
-            'input' => nv_url_rewrite($page_url . '/email', true),
+            'redirect' => nv_url_rewrite($page_url . '/email', true),
             'mess' => $mess
         ]);
     }
@@ -1067,7 +1066,7 @@ if ($checkss == $array_data['checkss'] and $array_data['type'] == 'basic') {
 
     nv_jsonOutput([
         'status' => 'ok',
-        'input' => nv_url_rewrite($page_url . '/basic', true),
+        'redirect' => nv_url_rewrite($page_url . '/basic', true),
         'mess' => $mess
     ]);
 } elseif ($checkss == $array_data['checkss'] and $array_data['type'] == 'passkey' and $array_data['confirmed_pass']) {
@@ -1162,7 +1161,7 @@ if ($checkss == $array_data['checkss'] and $array_data['type'] == 'basic') {
 
     nv_jsonOutput([
         'status' => 'ok',
-        'input' => nv_url_rewrite($page_url . '/openid', true),
+        'redirect' => nv_url_rewrite($page_url . '/openid', true),
         'mess' => $nv_Lang->getModule('openid_deleted')
     ]);
 } elseif ($checkss == $array_data['checkss'] and $array_data['type'] == 'group') {
@@ -1273,7 +1272,7 @@ if ($checkss == $array_data['checkss'] and $array_data['type'] == 'basic') {
     $db->query('UPDATE ' . NV_MOD_TABLE . " SET in_groups='" . implode(',', $in_groups) . "', last_update=" . NV_CURRENTTIME . ' WHERE userid=' . $edit_userid);
     nv_jsonOutput([
         'status' => 'ok',
-        'input' => nv_url_rewrite($page_url . '/group', true),
+        'redirect' => nv_url_rewrite($page_url . '/group', true),
         'mess' => $nv_Lang->getModule('in_group_ok')
     ]);
 } elseif ($checkss == $array_data['checkss'] and $array_data['type'] == 'others') {
@@ -1334,7 +1333,7 @@ if ($checkss == $array_data['checkss'] and $array_data['type'] == 'basic') {
 
         nv_jsonOutput([
             'status' => 'ok',
-            'input' => nv_url_rewrite($page_url . '/others', true),
+            'redirect' => nv_url_rewrite($page_url . '/others', true),
             'mess' => $nv_Lang->getModule('editinfo_okcensor')
         ]);
     } else {
@@ -1343,7 +1342,7 @@ if ($checkss == $array_data['checkss'] and $array_data['type'] == 'basic') {
 
         nv_jsonOutput([
             'status' => 'ok',
-            'input' => nv_url_rewrite($page_url . '/others', true),
+            'redirect' => nv_url_rewrite($page_url . '/others', true),
             'mess' => $nv_Lang->getModule('editinfo_ok')
         ]);
     }
@@ -1396,7 +1395,6 @@ if ($checkss == $array_data['checkss'] and $array_data['type'] == 'basic') {
 
         nv_jsonOutput([
             'status' => 'ok',
-            'input' => '',
             'mess' => $nv_Lang->getModule('safe_send_ok', $ss_safesend)
         ]);
     }
@@ -1419,7 +1417,7 @@ if ($checkss == $array_data['checkss'] and $array_data['type'] == 'basic') {
 
     nv_jsonOutput([
         'status' => 'ok',
-        'input' => nv_url_rewrite($page_url, true),
+        'redirect' => nv_url_rewrite($page_url, true),
         'mess' => $nv_Lang->getModule('safe_activate_ok')
     ]);
 }

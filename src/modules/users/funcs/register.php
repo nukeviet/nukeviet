@@ -97,7 +97,7 @@ function reg_result($array)
 {
     global $nv_redirect;
 
-    $array['redirect'] = nv_redirect_decrypt($nv_redirect);
+    $array['redirect'] ??= nv_redirect_decrypt($nv_redirect);
     nv_jsonOutput($array);
 }
 
@@ -387,7 +387,7 @@ if ($checkss == $array_register['checkss']) {
 
             $array = [
                 'status' => 'ok',
-                'input' => nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name, true),
+                'redirect' => nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name, true),
                 'mess' => $info,
                 'timeout' => 0
             ];
@@ -395,7 +395,7 @@ if ($checkss == $array_register['checkss']) {
                 $sso_redirect_users = $nv_Request->get_title('sso_redirect_' . $module_data, 'session', '');
                 $sso_redirect_users = NukeViet\Client\Sso::decrypt($sso_redirect_users);
                 if (!empty($sso_redirect_users)) {
-                    $array['input'] = $sso_redirect_users;
+                    $array['redirect'] = $sso_redirect_users;
                 }
             }
             nv_jsonOutput($array);
@@ -479,9 +479,10 @@ if ($checkss == $array_register['checkss']) {
             nv_sendmail_template_async([$module_name, Emails::NEW_INFO], $send_data, NV_LANG_INTERFACE);
 
             if (defined('ACCESS_ADDUS')) {
+                // Trưởng nhóm thêm thành viên thì chuyển về trang nhóm
                 $url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=groups/' . $group_id;
             } elseif (!empty($global_config['auto_login_after_reg'])) {
-                // Auto login
+                // Auto login, chuyển hướng về trang trước
                 $array_user = [
                     'userid' => $userid,
                     'username' => $array_register['username'],
@@ -496,6 +497,7 @@ if ($checkss == $array_register['checkss']) {
                 $nv_redirect = nv_redirect_decrypt($nv_redirect);
                 $url = !empty($nv_redirect) ? $nv_redirect : NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name;
             } else {
+                // Tài khoản sẵn sàng login thì chuyển hướng về trang đăng nhập
                 $url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=login';
                 if (!empty($nv_redirect)) {
                     $url .= '&nv_redirect=' . $nv_redirect;
@@ -509,10 +511,9 @@ if ($checkss == $array_register['checkss']) {
                 nv_user_register_callback($userid); // phpcs:ignore
             }
 
-            $nv_redirect = '';
             reg_result([
                 'status' => 'ok',
-                'input' => nv_url_rewrite($url, true),
+                'redirect' => nv_url_rewrite($url, true),
                 'mess' => $nv_Lang->getModule('register_ok')
             ]);
         }

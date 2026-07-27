@@ -416,14 +416,14 @@ $(function() {
                 }
                 if (response.status == '2steprequire') {
                     $('[data-area="info"]', form).html(`
-                        <a href="${response.input}">${response.mess}</a>
+                        <a href="${response.redirect}">${response.mess}</a>
                     `).addClass('alert alert-info');
                     $('[data-area="form"]', form).hide();
                     $('[data-area="other-form"]', form).hide();
                     return;
                 }
                 if (response.status == 'remove2step') {
-                    window.location.href = response.input;;
+                    window.location.href = response.redirect;
                     return;
                 }
                 if (response.status == '2step') {
@@ -460,7 +460,7 @@ $(function() {
                 }
                 if (response.status == 'activation') {
                     $('[data-area="info"]', form).html(`
-                        <a href="${response.input}">${response.mess}</a>
+                        <a href="${response.redirect}">${response.mess}</a>
                     `).addClass('alert alert-info');
                     return;
                 }
@@ -766,8 +766,8 @@ function userRegisterCallback(respon, form) {
     // Máy chủ trả timeout = 0 khi muốn giữ nguyên thông báo, không chuyển trang
     if (timeout > 0) {
         setTimeout(function() {
-            if (respon.input) {
-                window.location.href = respon.input;
+            if (respon.redirect) {
+                window.location.href = respon.redirect;
             } else {
                 location.reload();
             }

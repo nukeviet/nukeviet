@@ -169,7 +169,7 @@ if ($checkss == $data['checkss']) {
 
         nv_jsonOutput([
             'status' => 'ok',
-            'input' => nv_url_rewrite($url, true),
+            'redirect' => nv_url_rewrite($url, true),
             'step' => '',
             'mess' => $nv_Lang->getModule('openid_lostpass_info')
         ]);
@@ -185,7 +185,7 @@ if ($checkss == $data['checkss']) {
 
         nv_jsonOutput([
             'status' => 'ok',
-            'input' => nv_url_rewrite($url, true),
+            'redirect' => nv_url_rewrite($url, true),
             'step' => '',
             'mess' => $nv_Lang->getModule('lostpass_question_empty')
         ]);
@@ -341,7 +341,7 @@ if ($checkss == $data['checkss']) {
     $url = !empty($redirect) ? $redirect : nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name, true);
     nv_jsonOutput([
         'status' => 'ok',
-        'input' => $url,
+        'redirect' => $url,
         'step' => '',
         'mess' => $nv_Lang->getModule('editinfo_ok')
     ]);

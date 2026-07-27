@@ -261,9 +261,9 @@ function login_validForm(a) {
                     }, 3E3)
             } else if (d.status == "2steprequire") {
                 $(".form-detail", a).hide(), $("#other_form").hide();
-                $(".nv-info", a).html("<a href=\"" + d.input + "\">" + d.mess + "</a>").removeClass("error").removeClass("success").addClass("info").show();
+                $(".nv-info", a).html("<a href=\"" + d.redirect + "\">" + d.mess + "</a>").removeClass("error").removeClass("success").addClass("info").show();
             } else if (d.status == 'remove2step') {
-                window.location.href = d.input
+                window.location.href = d.redirect
             } else if (d.status == "2step") {
                 $(a).removeAttr('data-captcha data-recaptcha2 data-recaptcha3');
                 $("input,button", a).prop("disabled", !1);
@@ -294,7 +294,7 @@ function login_validForm(a) {
 
                 $('.loginstep1, .loginstep2, .loginCaptcha', a).toggleClass('hidden');
             } else if (d.status == 'activation') {
-                $(".nv-info", a).html("<a href=\"" + d.input + "\">" + d.mess + "</a>").removeClass("error").removeClass("success").addClass("info").show();
+                $(".nv-info", a).html("<a href=\"" + d.redirect + "\">" + d.mess + "</a>").removeClass("error").removeClass("success").addClass("info").show();
             }
         }
     });
@@ -365,8 +365,8 @@ function reg_validForm(a) {
                 scrollTop: $(".nv-info", a).offset().top
             }, 800);
             b.timeout > 0 && setTimeout(function() {
-                if ("" != b.input) {
-                    window.location.href = b.input;
+                if (b.redirect) {
+                    window.location.href = b.redirect;
                     return;
                 }
                 location.reload();
@@ -442,7 +442,7 @@ function lostpass_validForm(a) {
                 } else {
                     $(".nv-info", a).html(b.mess + '<span class="load-bar"></span>').removeClass("error").addClass("success").show();
                     setTimeout(function() {
-                        window.location.href = b.input;
+                        window.location.href = b.redirect;
                     }, 6E3);
                 }
             }
@@ -533,7 +533,7 @@ function changemail_validForm(a) {
                     b.mess);
                 validErrorShow(this)
             })) : ($(".nv-info", a).html(b.mess + '<span class="load-bar"></span>').removeClass("error").addClass("success").show(), $(".form-detail", a).hide(), setTimeout(function() {
-                window.location.href = "" != b.input ? b.input : window.location.href
+                window.location.href = b.redirect ? b.redirect : window.location.href
             }, 6E3))
         }
     }));

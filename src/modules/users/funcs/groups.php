@@ -611,7 +611,7 @@ if (count($array_op) == 3 and $array_op[0] == 'groups' and $array_op[1] and $arr
 
         nv_jsonOutput([
             'status' => 'ok',
-            'input' => nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '/' . $group_id, true),
+            'redirect' => nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '/' . $group_id, true),
             'mess' => $nv_Lang->getModule('group_edit_saved')
         ]);
     }

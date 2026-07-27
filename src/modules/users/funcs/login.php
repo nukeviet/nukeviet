@@ -139,7 +139,7 @@ function signin_result($array)
         }
     }
 
-    $array['redirect'] = $redirect;
+    $array['redirect'] ??= $redirect;
     nv_jsonOutput($array);
 }
 
@@ -978,7 +978,6 @@ if ($nv_Request->isset_request('_csrf, nv_login', 'post')) {
 
         signin_result([
             'status' => 'ok',
-            'input' => '',
             'mess' => $nv_Lang->getModule('login_ok')
         ]);
     }
@@ -999,7 +998,7 @@ if ($nv_Request->isset_request('_csrf, nv_login', 'post')) {
         ], NV_JSON_ENCODE));
         signin_result([
             'status' => 'activation',
-            'input' => nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=lostactivelink&autosubmit=1' . (!empty($nv_redirect) ? '&nv_redirect=' . $nv_redirect : ''), true),
+            'redirect' => nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=lostactivelink&autosubmit=1' . (!empty($nv_redirect) ? '&nv_redirect=' . $nv_redirect : ''), true),
             'mess' => $nv_Lang->getModule('account_waiting_activation')
         ]);
     }
@@ -1041,7 +1040,7 @@ if ($nv_Request->isset_request('_csrf, nv_login', 'post')) {
             $nv_Request->set_Session('cant_do_2step', $row['userid'] . '.' . NV_CURRENTTIME . '.0.');
             signin_result([
                 'status' => 'remove2step',
-                'input' => nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=r2s' . (!empty($nv_redirect) ? '&nv_redirect=' . $nv_redirect : ''), true),
+                'redirect' => nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=r2s' . (!empty($nv_redirect) ? '&nv_redirect=' . $nv_redirect : ''), true),
                 'mess' => $nv_Lang->getGlobal('remove2step_info')
             ]);
         }
@@ -1271,7 +1270,7 @@ if ($nv_Request->isset_request('_csrf, nv_login', 'post')) {
             }
             signin_result([
                 'status' => '2steprequire',
-                'input' => nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . NV_2STEP_VERIFICATION_MODULE . '&' . NV_OP_VARIABLE . '=setup&nv_redirect=' . $nv_redirect, true),
+                'redirect' => nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . NV_2STEP_VERIFICATION_MODULE . '&' . NV_OP_VARIABLE . '=setup&nv_redirect=' . $nv_redirect, true),
                 'mess' => $nv_Lang->getGlobal('2teplogin_require')
             ]);
         }
@@ -1280,7 +1279,6 @@ if ($nv_Request->isset_request('_csrf, nv_login', 'post')) {
     // Trả kết quả OK
     signin_result([
         'status' => 'ok',
-        'input' => '',
         'mess' => $nv_Lang->getModule('login_ok')
     ]);
 }
