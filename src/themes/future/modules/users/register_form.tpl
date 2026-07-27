@@ -1,7 +1,6 @@
 <form class="w-100" action="{$USER_REGISTER}" method="post" data-toggle="ajax-form"
-    data-form="userRegister" data-precheck="nv_precheck_form" data-callback="userRegisterCallback"
-    data-reset-extend="userRegisterReset" autocomplete="off"
-    novalidate{$CAPTCHA_ATTRS}
+    data-form="userRegister" data-precheck="nv_precheck_form"
+    autocomplete="off" novalidate{$CAPTCHA_ATTRS}
 >
     <div class="alert alert-info py-2 mb-3" data-area="info" data-default="{$LANG->getModule('info')}">{$LANG->getModule('info')}</div>
     <div data-area="form">

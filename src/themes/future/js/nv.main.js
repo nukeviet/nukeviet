@@ -656,8 +656,13 @@ $(function() {
             }
         }
 
+        const formInfo = $('[data-area="info"]', form);
+        const formElements = $('[data-area="form"]', form);
+        const formTypeInfo = (formInfo.length == 1 && formElements.length == 1);
+
         const processSuccess = (respon) => {
             if (respon.status == 'OK' || respon.status == 'ok' || respon.status == 'success') {
+                // Callback tùy biến ưu tiên cao nhất
                 let cb;
                 const callback = form.data('callback');
                 if ('function' === typeof callback) {
@@ -668,6 +673,37 @@ $(function() {
                 if (cb === 0 || cb === false) {
                     return;
                 }
+
+                // Xử lý form có 2 vùng riêng biệt, info và form
+                if (formTypeInfo) {
+                    formChangeCaptcha(form);
+                    formInfo.html(respon.mess)
+                        .removeClass('alert-info alert-warning alert-danger alert-success')
+                        .addClass(respon.warning ? 'alert-warning' : 'alert-success');
+
+                    formElements.hide();
+
+                    // Nếu đang cuộn quá thì phải cuộn trang lên để thấy thông báo
+                    if (formInfo.offset().top < $(window).scrollTop() || formInfo.offset().top > $(window).scrollTop() + $(window).height()) {
+                        $('html, body').animate({
+                            scrollTop: formInfo.offset().top - 20
+                        }, 200);
+                    }
+
+                    // Máy chủ trả timeout = 0 khi muốn giữ nguyên thông báo, không chuyển trang
+                    const timeout = typeof respon.timeout === 'undefined' ? 6000 : respon.timeout;
+                    if (timeout > 0) {
+                        setTimeout(function() {
+                            if (respon.redirect) {
+                                window.location.href = respon.redirect;
+                            } else {
+                                location.reload();
+                            }
+                        }, timeout);
+                    }
+                    return;
+                }
+
                 let timeout = 0;
                 if (respon.mess) {
                     nukeviet.toast(respon.mess, respon.warning ? 'warning' : 'success');
@@ -758,9 +794,20 @@ $(function() {
         });
 
         // Reset trạng thái validate
-        $('[data-valid]', form).each(function() {
+        $('.is-invalid, .is-valid', form).each(function() {
             nv_validate_reset($(this));
         });
+
+        const formInfo = $('[data-area="info"]', form);
+        const formElements = $('[data-area="form"]', form);
+        const formTypeInfo = (formInfo.length == 1 && formElements.length == 1);
+        // Reset riêng cho form có 2 vùng riêng biệt, info và form
+        if (formTypeInfo) {
+            formInfo.html(formInfo.data('default'))
+                .removeClass('alert-success alert-warning alert-danger')
+                .addClass('alert-info');
+            formElements.show();
+        }
 
         // Hàm reset riêng nếu có
         const resetExtend = form.data('reset-extend');
