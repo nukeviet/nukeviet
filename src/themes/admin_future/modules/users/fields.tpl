@@ -18,8 +18,9 @@
             <div class="row mb-3" id="row_field_id">
                 <label for="field_id" class="col-sm-4 col-lg-3 col-form-label text-sm-end">{$LANG->getModule('field_id')} <span class="text-danger">(*)</span></label>
                 <div class="col-sm-8 col-lg-6 col-xxl-5">
-                    <input class="form-control" type="text" value="{$DATAFORM.field}" name="field" id="field_id" maxlength="50" required autocomplete="off">
-                    <div class="form-text">{$LANG->getModule('field_id_note')}</div>
+                    <input class="form-control" type="text" value="{$DATAFORM.field}" name="field" id="field_id" maxlength="50" required autocomplete="off"
+                        pattern="[a-zA-Z][a-zA-Z0-9_]*" title="{$LANG->getModule('field_error_start')}">
+                    <div class="form-text">{$LANG->getModule('field_id_note')}. {$LANG->getModule('field_error_start')}</div>
                     <div class="invalid-feedback"></div>
                 </div>
             </div>

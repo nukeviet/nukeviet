@@ -218,6 +218,88 @@ function delete_userfile($file_save_info)
 }
 
 /**
+ * Sinh câu thông báo lỗi ràng buộc cho một trường dữ liệu tùy biến,
+ * dùng cho validate phía máy chủ và hiển thị mô tả ràng buộc ở giao diện.
+ *
+ * @param array $row Một phần tử cấu hình lấy từ nv_get_users_field_config()
+ * @return string
+ */
+function fieldErrorMessage(array $row): string
+{
+    global $nv_Lang;
+
+    $title = !empty($row['title']) ? $row['title'] : ($row['field'] ?? '');
+    $type = $row['field_type'] ?? 'textbox';
+    $min = (int) ($row['min_length'] ?? 0);
+    $max = (int) ($row['max_length'] ?? 0);
+
+    // Các mệnh đề ràng buộc, ghép lại theo đúng thứ tự thêm vào
+    $parts = [];
+
+    // Mệnh đề bắt buộc theo nhóm nhập, chọn, upload
+    if (!empty($row['required'])) {
+        if (in_array($type, ['date', 'select', 'radio', 'checkbox', 'multiselect'], true)) {
+            $parts[] = $nv_Lang->getModule('field_error_req_choice');
+        } elseif ($type == 'file') {
+            $parts[] = $nv_Lang->getModule('field_error_req_file');
+        } else {
+            $parts[] = $nv_Lang->getModule('field_error_req_input');
+        }
+    }
+
+    if ($type == 'textbox' or $type == 'textarea' or $type == 'editor') {
+        // Giới hạn số ký tự, min và max có thể khai báo lệch nhau
+        if ($min > 0 and $max > 0) {
+            $parts[] = ($min == $max) ? $nv_Lang->getModule('field_error_len_exact', $min) : $nv_Lang->getModule('field_error_len_range', $min, $max);
+        } elseif ($min > 0) {
+            $parts[] = $nv_Lang->getModule('field_error_len_min', $min);
+        } elseif ($max > 0) {
+            $parts[] = $nv_Lang->getModule('field_error_len_max', $max);
+        }
+
+        // Quy tắc định dạng, riêng regex và callback không mô tả được nên dùng mệnh đề chung
+        if ($row['match_type'] == 'alphanumeric') {
+            $parts[] = $nv_Lang->getModule('field_error_rule_alphanumeric');
+        } elseif ($row['match_type'] == 'unicodename') {
+            $parts[] = $nv_Lang->getModule('field_error_rule_unicodename');
+        } elseif ($row['match_type'] == 'email') {
+            $parts[] = $nv_Lang->getModule('field_error_rule_email');
+        } elseif ($row['match_type'] == 'url') {
+            $parts[] = $nv_Lang->getModule('field_error_rule_url');
+        } elseif ($row['match_type'] == 'regex' or $row['match_type'] == 'callback') {
+            $parts[] = $nv_Lang->getModule('field_error_rule_regex');
+        }
+    } elseif ($type == 'number') {
+        $number_type = (int) ($row['field_choices']['number_type'] ?? 1);
+        $parts[] = $nv_Lang->getModule($number_type == 1 ? 'field_error_rule_integer' : 'field_error_rule_decimal');
+        if ($min < $max) {
+            $parts[] = $nv_Lang->getModule('field_error_val_range', $min, $max);
+        }
+    } elseif ($type == 'date') {
+        // Đối với kiểu ngày mô tả khoảng ngày được phép
+        if ($min > 0 and $max > $min) {
+            $parts[] = $nv_Lang->getModule('field_error_date_range', nv_u2d_post($min), nv_u2d_post($max));
+        }
+    } elseif ($type == 'file') {
+        // limited_values có thể còn là chuỗi JSON hoặc đã được decode trước đó
+        $limited_values = $row['limited_values'] ?? [];
+        if (is_string($limited_values)) {
+            $limited_values = !empty($limited_values) ? json_decode($limited_values, true) : [];
+        }
+        $maxnum = (int) ($limited_values['maxnum'] ?? 0);
+        if ($maxnum > 0) {
+            $parts[] = $nv_Lang->getModule('field_error_file_maxnum', $maxnum);
+        }
+    }
+
+    if (empty($parts)) {
+        return '';
+    }
+
+    return $title . ' ' . implode(', ', $parts);
+}
+
+/**
  * fieldsCheck()
  *
  * @param mixed $custom_fields

@@ -507,4 +507,285 @@ $(function() {
     $(document).off('click.users', '[data-toggle="validReset2fa"]').on('click.users', '[data-toggle="validReset2fa"]', function() {
         location.reload();
     });
+
+    // Xử lý cho form đăng ký tài khoản
+    /**
+     * Hiển thị lịch chọn ngày cho một trường
+     *
+     * @param {JQuery} el
+     */
+    function userRegDatepicker(el) {
+        el = $(el);
+        if (!el.length || typeof $.datepicker !== 'object') {
+            return;
+        }
+        if (!el.data('dp-init')) {
+            const options = {
+                dateFormat: nv_jsdate_post.replace('yyyy', 'yy'),
+                changeMonth: true,
+                changeYear: true,
+                showOtherMonths: true,
+                showOn: 'focus',
+                yearRange: '-200:+0'
+            };
+            // Khoảng ngày cho phép khai báo ở cấu hình trường dữ liệu
+            if (el.data('min-date')) {
+                options.minDate = el.data('min-date');
+            }
+            if (el.data('max-date')) {
+                options.maxDate = el.data('max-date');
+                options.yearRange = '-200:+200';
+            }
+            el.datepicker(options);
+            el.data('dp-init', true);
+        }
+        el.datepicker('show');
+    }
+    const regForm = $('form[data-form="userRegister"]');
+    regForm.each(function() {
+        const form = $(this);
+        if (form.data('initialized')) {
+            return;
+        }
+        form.data('initialized', true);
+
+        // Chọn câu hỏi bảo mật từ danh sách gợi ý
+        $(form).on('click', '[data-toggle="addQuestion"]', function(e) {
+            e.preventDefault();
+            const q = $('[name="question"]', form);
+            q.val($(this).text());
+            nv_validate_reset(q);
+        });
+
+        // Hiển thị lịch chọn ngày
+        $(form).on('focus', '[data-provide="datepicker"]', function() {
+            userRegDatepicker(this);
+        });
+        $(form).on('click', '[data-toggle="datepickerBtn"]', function() {
+            userRegDatepicker($(this).closest('.input-group').find('[data-provide="datepicker"]'));
+        });
+
+        // Hiển thị điều khoản sử dụng trong modal
+        $(form).on('click', '[data-toggle="usageTermsShow"]', function(e) {
+            e.preventDefault();
+            const title = $(this).data('title');
+            $.ajax({
+                type: 'POST',
+                cache: true,
+                url: nv_base_siteurl + 'index.php?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=users&' + nv_fc_variable + '=register&nocache=' + new Date().getTime(),
+                data: 'get_usage_terms=1',
+                dataType: 'html',
+                success: function(html) {
+                    let modalEl = document.getElementById('sitemodalTerm');
+                    if (!modalEl) {
+                        const wrap = document.createElement('div');
+                        wrap.innerHTML = `<div id="sitemodalTerm" class="modal fade" tabindex="-1">
+                            <div class="modal-dialog modal-dialog-scrollable">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title"></h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="${nukeviet.i18n.close}"></button>
+                                    </div>
+                                    <div class="modal-body"></div>
+                                </div>
+                            </div>
+                        </div>`;
+                        document.body.appendChild(wrap.firstElementChild);
+                        modalEl = document.getElementById('sitemodalTerm');
+                    }
+                    $('.modal-title', modalEl).html(title);
+                    $('.modal-body', modalEl).html(html);
+                    bootstrap.Modal.getOrCreateInstance(modalEl).show();
+                }
+            });
+        });
+    });
+
+    // Thêm file cho trường dữ liệu kiểu file
+    $(document).off('click.users', '[data-form="userRegister"] [data-toggle="addfilebtn"]')
+    .on('click.users', '[data-form="userRegister"] [data-toggle="addfilebtn"]', function() {
+        const btn = $(this);
+        const filelist = btn.closest('.filelist');
+        const maxnum = parseInt(filelist.data('maxnum')) || 0;
+        let filenum = $('[name^="custom_fields"]', filelist).length;
+        const modalEl = document.getElementById(btn.data('modal'));
+        const modalObj = $(modalEl);
+        const fileAccept = modalObj.data('accept');
+        const maxsize = parseInt(modalObj.data('maxsize'));
+        const bsModal = bootstrap.Modal.getOrCreateInstance(modalEl);
+
+        const setAddFileBtn = (num) => {
+            (maxnum && num >= maxnum) ? btn.hide() : btn.show();
+        };
+
+        const updateFileInput = () => {
+            const input = $('<input type="file" class="form-control">');
+            if (fileAccept) {
+                input.attr('accept', fileAccept);
+            }
+            input.on('change', function() {
+                const sFileName = $(this).val();
+                if (!sFileName.length) {
+                    return;
+                }
+                // Kiểm tra phần mở rộng
+                if (fileAccept) {
+                    const arr = fileAccept.split(',');
+                    let okExt = false;
+                    for (let j = 0; j < arr.length; j++) {
+                        const ext = arr[j];
+                        if (sFileName.substr(sFileName.length - ext.length).toLowerCase() === ext.toLowerCase()) {
+                            okExt = true;
+                            break;
+                        }
+                    }
+                    if (!okExt) {
+                        updateFileInput();
+                        nukeviet.toast(modalObj.data('ext-error') + ' ' + arr.join(', '), 'error');
+                        return;
+                    }
+                }
+                // Kiểm tra dung lượng
+                if (typeof this.files !== 'undefined') {
+                    if (this.files[0].size > maxsize) {
+                        const maxKB = (maxsize / 1024).toFixed(2);
+                        const curKB = (this.files[0].size / 1024).toFixed(2);
+                        updateFileInput();
+                        nukeviet.toast(modalObj.data('size-error') + ' (' + curKB + ' KB) ' + modalObj.data('size-error2') + ' (' + maxKB + ' KB)', 'error');
+                        return;
+                    }
+
+                    const data = new FormData();
+                    data.append('file', this.files[0]);
+                    data.append('field', modalObj.data('field'));
+                    data.append('_csrf', modalObj.data('csrf'));
+                    data.append('field_fileupload', 1);
+                    $.ajax({
+                        type: 'POST',
+                        url: modalObj.data('url'),
+                        data: data,
+                        cache: false,
+                        processData: false,
+                        contentType: false,
+                        dataType: 'json'
+                    }).done(function(a) {
+                        if (a.status === 'error') {
+                            updateFileInput();
+                            nukeviet.toast(a.mess, 'error');
+                            return;
+                        }
+                        if (a.status === 'OK') {
+                            const newfile = $('<li class="mt-1"><input type="checkbox" name="custom_fields[' + filelist.data('field') + '][]" value="' + a.file_key + '" class="' + filelist.data('oclass') + '" checked> ' + a.file_value + ' (<a href="javascript:void(0)" data-toggle="userfile_del">' + modalObj.data('delete') + '</a>)</li>');
+                            $('[data-toggle="userfile_del"]', newfile).on('click', function() {
+                                $.ajax({
+                                    type: 'POST',
+                                    cache: false,
+                                    url: modalObj.data('url'),
+                                    data: {
+                                        file: a.file_key,
+                                        _csrf: a.csrf,
+                                        field_filedel: 1
+                                    },
+                                    dataType: 'json',
+                                    success: function(e) {
+                                        if (e.status === 'OK') {
+                                            newfile.remove();
+                                            --filenum;
+                                            setAddFileBtn(filenum);
+                                        } else {
+                                            nukeviet.toast(e.mess || a.mess, 'error');
+                                        }
+                                    }
+                                });
+                            });
+                            $('.items', filelist).append(newfile);
+                            bsModal.hide();
+                            ++filenum;
+                            setAddFileBtn(filenum);
+                        }
+                    });
+                }
+            });
+            $('.fileinput', modalObj).html(input);
+        };
+
+        updateFileInput();
+        bsModal.show();
+    });
 });
+
+/**
+ * Kiểm tra tên đăng nhập theo kiểu ký tự cho phép, độ dài do minlength/maxlength lo
+ * Được gọi qua data-valid-callback của ô tên đăng nhập form đăng ký
+ *
+ * @param {String} val
+ * @param {JQuery} ipt
+ * @returns {Boolean}
+ */
+function userRegLoginCheck(val, ipt) {
+    const type = ipt.data('login-type');
+
+    if (type == '1' && !/^[0-9]+$/.test(val)) {
+        return false;
+    }
+    if (type == '2' && !/^[a-z0-9]+$/i.test(val)) {
+        return false;
+    }
+    if (type == '3' && !/^[a-z0-9]+[a-z0-9\-\_\s]+[a-z0-9]+$/i.test(val)) {
+        return false;
+    }
+    if (type == '4' && typeof nv_unicode_login_pattern !== 'undefined' && !nv_unicode_login_pattern.test(val)) {
+        return false;
+    }
+    return true;
+}
+
+/**
+ * Xử lý phản hồi thành công của form đăng ký (được gọi qua data-callback của ajax-form)
+ * Trả về false để handler chung dừng phần xử lý mặc định
+ *
+ * @param {Object} respon
+ * @param {JQuery} form
+ * @returns {Boolean}
+ */
+function userRegisterCallback(respon, form) {
+    const info = $('[data-area="info"]', form);
+    const timeout = typeof respon.timeout === 'undefined' ? 6000 : respon.timeout;
+
+    formChangeCaptcha(form);
+    info.html(respon.mess).removeClass('alert-info alert-danger').addClass('alert-success');
+    $('[data-area="form"]', form).hide();
+
+    // Nếu đang cuộn quá thì phải cuộn trang lên để thấy thông báo
+    if (info.offset().top < $(window).scrollTop() || info.offset().top > $(window).scrollTop() + $(window).height()) {
+        $('html, body').animate({
+            scrollTop: info.offset().top - 20
+        }, 500);
+    }
+
+    // Máy chủ trả timeout = 0 khi muốn giữ nguyên thông báo, không chuyển trang
+    if (timeout > 0) {
+        setTimeout(function() {
+            if (respon.input) {
+                window.location.href = respon.input;
+            } else {
+                location.reload();
+            }
+        }, timeout);
+    }
+    return false;
+}
+
+/**
+ * Reset bổ sung khi bấm nút làm lại form đăng ký (được gọi qua data-reset-extend)
+ *
+ * @param {JQuery} form
+ */
+function userRegisterReset(form) {
+    form = $(form);
+    $('.is-invalid', form).removeClass('is-invalid');
+    $('.invalid-feedback', form).text('');
+    const info = $('[data-area="info"]', form);
+    info.html(info.data('default')).removeClass('alert-success alert-danger').addClass('alert-info');
+    $('[data-area="form"]', form).show();
+}

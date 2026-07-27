@@ -1505,4 +1505,487 @@ class SampleDataTest extends \Codeception\Test\Unit
 
         $this->assertTrue(true);
     }
+
+    /**
+     * Danh sách trường tùy biến mẫu cho module users
+     *
+     * Phủ đủ 10 field_type của cột enum trong _users_field và đủ 7 match_type,
+     * mỗi loại đều có cả biến thể bắt buộc lẫn không bắt buộc để test form.
+     * Toàn bộ đặt show_register = show_profile = user_editable = 1 nên xuất hiện
+     * ở cả trang đăng ký lẫn trang thông tin tài khoản.
+     *
+     * Khóa của mỗi phần tử là tên cột sẽ thêm vào _users_info.
+     *
+     * @return array
+     */
+    private function sampleCustomFields(): array
+    {
+        $year = (int) date('Y');
+
+        return [
+            // textbox — không ràng buộc định dạng, bắt buộc
+            'noi_cong_tac' => [
+                'title' => 'Nơi công tác',
+                'description' => 'Tên cơ quan hoặc doanh nghiệp bạn đang làm việc',
+                'field_type' => 'textbox',
+                'match_type' => 'none',
+                'required' => 1,
+                'min_length' => 5,
+                'max_length' => 150,
+            ],
+            // textbox — alphanumeric, không bắt buộc
+            'ma_nhan_vien' => [
+                'title' => 'Mã nhân viên',
+                'description' => 'Chỉ gồm chữ cái không dấu, chữ số và dấu gạch dưới',
+                'field_type' => 'textbox',
+                'match_type' => 'alphanumeric',
+                'required' => 0,
+                'min_length' => 3,
+                'max_length' => 20,
+            ],
+            // textbox — unicodename, bắt buộc
+            'nguoi_dai_dien' => [
+                'title' => 'Người đại diện',
+                'description' => 'Họ tên đầy đủ, có thể dùng chữ có dấu',
+                'field_type' => 'textbox',
+                'match_type' => 'unicodename',
+                'required' => 1,
+                'min_length' => 2,
+                'max_length' => 100,
+            ],
+            // textbox — email, không bắt buộc
+            'email_lien_he' => [
+                'title' => 'Email liên hệ',
+                'description' => 'Email dùng để liên hệ công việc, khác email đăng nhập',
+                'field_type' => 'textbox',
+                'match_type' => 'email',
+                'required' => 0,
+                'min_length' => 0,
+                'max_length' => 100,
+            ],
+            // textbox — url, không bắt buộc
+            'website_ca_nhan' => [
+                'title' => 'Website cá nhân',
+                'description' => 'Địa chỉ đầy đủ, ví dụ https://nukeviet.vn',
+                'field_type' => 'textbox',
+                'match_type' => 'url',
+                'required' => 0,
+                'min_length' => 0,
+                'max_length' => 200,
+            ],
+            // textbox — regex, bắt buộc
+            'so_dien_thoai' => [
+                'title' => 'Số điện thoại',
+                'description' => 'Số di động 10 chữ số, bắt đầu bằng 03, 05, 07, 08 hoặc 09',
+                'field_type' => 'textbox',
+                'match_type' => 'regex',
+                'match_regex' => '/^0[35789][0-9]{8}$/',
+                'required' => 1,
+                'min_length' => 10,
+                'max_length' => 10,
+            ],
+            // textbox — callback, không bắt buộc
+            'ma_so_thue' => [
+                'title' => 'Mã số thuế',
+                'description' => 'Chỉ gồm chữ số, 10 hoặc 13 ký tự',
+                'field_type' => 'textbox',
+                'match_type' => 'callback',
+                'func_callback' => 'ctype_digit',
+                'required' => 0,
+                'min_length' => 10,
+                'max_length' => 13,
+            ],
+            // textarea — không bắt buộc
+            'gioi_thieu' => [
+                'title' => 'Giới thiệu bản thân',
+                'description' => 'Mô tả ngắn gọn về bạn',
+                'field_type' => 'textarea',
+                'match_type' => 'none',
+                'required' => 0,
+                'min_length' => 0,
+                'max_length' => 1000,
+            ],
+            // editor — bắt buộc, class lưu theo dạng rộng@cao
+            'kinh_nghiem' => [
+                'title' => 'Kinh nghiệm làm việc',
+                'description' => 'Trình bày quá trình công tác, có định dạng',
+                'field_type' => 'editor',
+                'match_type' => 'none',
+                'required' => 1,
+                'min_length' => 20,
+                'max_length' => 5000,
+                'class' => '100%@300px',
+            ],
+            // number — số nguyên, bắt buộc
+            'so_nam_kn' => [
+                'title' => 'Số năm kinh nghiệm',
+                'description' => 'Nhập số nguyên từ 0 đến 50',
+                'field_type' => 'number',
+                'match_type' => 'none',
+                'required' => 1,
+                'min_length' => 0,
+                'max_length' => 50,
+                'number_type' => 1,
+                'default_value' => 1,
+            ],
+            // number — số thập phân, không bắt buộc
+            'muc_luong' => [
+                'title' => 'Mức lương mong muốn',
+                'description' => 'Đơn vị triệu đồng, được nhập số lẻ',
+                'field_type' => 'number',
+                'match_type' => 'none',
+                'required' => 0,
+                'min_length' => 0,
+                'max_length' => 500,
+                'number_type' => 2,
+                'default_value' => 0,
+            ],
+            // date — có giới hạn khoảng ngày, bắt buộc
+            'ngay_vao_lam' => [
+                'title' => 'Ngày vào làm',
+                'description' => 'Chọn ngày bắt đầu công việc hiện tại',
+                'field_type' => 'date',
+                'match_type' => 'none',
+                'required' => 1,
+                'min_length' => mktime(0, 0, 0, 1, 1, 2000),
+                'max_length' => mktime(0, 0, 0, 12, 31, $year + 1),
+                'current_date' => 0,
+            ],
+            // date — mặc định là ngày hiện tại, không bắt buộc
+            'ngay_cap_nhat' => [
+                'title' => 'Ngày cập nhật hồ sơ',
+                'description' => 'Mặc định lấy ngày hiện tại',
+                'field_type' => 'date',
+                'match_type' => 'none',
+                'required' => 0,
+                'min_length' => 0,
+                'max_length' => 0,
+                'current_date' => 1,
+            ],
+            // select — bắt buộc, mặc định chọn mục thứ 2
+            'trinh_do' => [
+                'title' => 'Trình độ học vấn',
+                'description' => '',
+                'field_type' => 'select',
+                'match_type' => 'none',
+                'required' => 1,
+                'choices' => [
+                    'thpt' => 'Trung học phổ thông',
+                    'caodang' => 'Cao đẳng',
+                    'daihoc' => 'Đại học',
+                    'thacsi' => 'Thạc sĩ',
+                    'tiensi' => 'Tiến sĩ',
+                ],
+                'default_value' => 3,
+            ],
+            // radio — không bắt buộc
+            'hon_nhan' => [
+                'title' => 'Tình trạng hôn nhân',
+                'description' => '',
+                'field_type' => 'radio',
+                'match_type' => 'none',
+                'required' => 0,
+                'choices' => [
+                    'docthan' => 'Độc thân',
+                    'ketthon' => 'Đã kết hôn',
+                    'khac' => 'Khác',
+                ],
+            ],
+            // checkbox — không bắt buộc, chọn được nhiều mục
+            'so_thich' => [
+                'title' => 'Sở thích',
+                'description' => 'Có thể chọn nhiều mục',
+                'field_type' => 'checkbox',
+                'match_type' => 'none',
+                'required' => 0,
+                'choices' => [
+                    'docsach' => 'Đọc sách',
+                    'thethao' => 'Thể thao',
+                    'dulich' => 'Du lịch',
+                    'amnhac' => 'Âm nhạc',
+                    'nauan' => 'Nấu ăn',
+                ],
+            ],
+            // multiselect — bắt buộc, chọn được nhiều mục
+            'ky_nang' => [
+                'title' => 'Kỹ năng chuyên môn',
+                'description' => 'Giữ Ctrl để chọn nhiều mục',
+                'field_type' => 'multiselect',
+                'match_type' => 'none',
+                'required' => 1,
+                'choices' => [
+                    'php' => 'PHP',
+                    'javascript' => 'JavaScript',
+                    'mysql' => 'MySQL',
+                    'linux' => 'Linux',
+                    'docker' => 'Docker',
+                ],
+            ],
+            // file — chỉ nhận ảnh, 1 tệp, bắt buộc
+            'anh_chan_dung' => [
+                'title' => 'Ảnh chân dung',
+                'description' => 'Ảnh nền trắng, tối đa 1 tệp',
+                'field_type' => 'file',
+                'match_type' => 'none',
+                'required' => 1,
+                'filetype' => ['images'],
+                'mime' => ['png', 'jpg', 'jpeg', 'webp'],
+                'maxnum' => 1,
+                'widthlimit' => ['equal' => 0, 'greater' => 200, 'less' => 0],
+                'heightlimit' => ['equal' => 0, 'greater' => 200, 'less' => 0],
+            ],
+            // file — nhận tài liệu, nhiều tệp, không bắt buộc
+            'tai_lieu' => [
+                'title' => 'Tài liệu đính kèm',
+                'description' => 'Bằng cấp, chứng chỉ, tối đa 5 tệp',
+                'field_type' => 'file',
+                'match_type' => 'none',
+                'required' => 0,
+                'filetype' => ['documents', 'adobe'],
+                'mime' => ['pdf', 'doc', 'docx'],
+                'maxnum' => 5,
+            ],
+        ];
+    }
+
+    /**
+     * Dữ liệu mẫu trường tùy biến (custom field) cho module users
+     *
+     * Tạo bộ trường trong _users_field rồi thêm cột tương ứng vào _users_info,
+     * mô phỏng đúng những gì admin/fields.php sinh ra khi thêm trường qua giao diện.
+     * Trường đã tồn tại sẽ được bỏ qua nên chạy lại nhiều lần vẫn an toàn.
+     *
+     * @group sample-data
+     */
+    public function testInsertSampleDataForUsersCustomFields()
+    {
+        global $db, $db_config;
+
+        $fieldTable = $db_config['prefix'] . '_users_field';
+        $infoTable = $db_config['prefix'] . '_users_info';
+
+        // Trường và cột đã có, dùng để bỏ qua khi chạy lại
+        $existingFields = $db->query('SELECT field FROM ' . $fieldTable)->fetchAll(\PDO::FETCH_COLUMN);
+        $existingColumns = $db->query('SHOW COLUMNS FROM ' . $infoTable)->fetchAll(\PDO::FETCH_COLUMN);
+
+        $weight = (int) $db->query('SELECT MAX(weight) FROM ' . $fieldTable)->fetchColumn();
+
+        $created = 0;
+
+        foreach ($this->sampleCustomFields() as $field => $spec) {
+            if (in_array($field, $existingFields, true)) {
+                continue;
+            }
+
+            $type = $spec['field_type'];
+            $minLength = (int) ($spec['min_length'] ?? 0);
+            $maxLength = (int) ($spec['max_length'] ?? 0);
+            $fieldChoices = '';
+            $limitedValues = '';
+            $defaultValue = '';
+
+            if ($type == 'number') {
+                $fieldChoices = serialize(['number_type' => (int) $spec['number_type']]);
+                $defaultValue = (string) ($spec['default_value'] ?? 0);
+            } elseif ($type == 'date') {
+                $fieldChoices = serialize(['current_date' => (int) $spec['current_date']]);
+                // current_date = 1 thì giá trị mặc định luôn là thời điểm hiện tại
+                $defaultValue = '0';
+            } elseif ($type == 'file') {
+                $limitedValues = json_encode([
+                    'filetype' => $spec['filetype'],
+                    'mime' => $spec['mime'],
+                    'file_max_size' => 41943040,
+                    'maxnum' => (int) $spec['maxnum'],
+                    'widthlimit' => $spec['widthlimit'] ?? ['equal' => 0, 'greater' => 0, 'less' => 0],
+                    'heightlimit' => $spec['heightlimit'] ?? ['equal' => 0, 'greater' => 0, 'less' => 0],
+                ], JSON_UNESCAPED_UNICODE);
+            } elseif (!empty($spec['choices'])) {
+                // Nhóm chọn lưu nhãn theo ngôn ngữ, min/max giống hệt admin sinh ra
+                $choices = [];
+                foreach ($spec['choices'] as $key => $label) {
+                    $choices[$key] = [NV_LANG_DATA => $label];
+                }
+                $fieldChoices = serialize($choices);
+                $minLength = 0;
+                $maxLength = 255;
+                $defaultValue = (string) ($spec['default_value'] ?? 0);
+            } else {
+                // Nhóm nhập chữ lưu giá trị mặc định theo ngôn ngữ dưới dạng JSON
+                $defaultValue = json_encode([NV_LANG_DATA => ''], JSON_UNESCAPED_UNICODE);
+            }
+
+            $stmt = $db->prepare('INSERT INTO ' . $fieldTable . ' (
+                field, weight, field_type, field_choices, sql_choices, match_type,
+                match_regex, func_callback, min_length, max_length, limited_values,
+                for_admin, required, show_register, user_editable,
+                show_profile, class, language, default_value, is_system
+            ) VALUES (
+                :field, :weight, :field_type, :field_choices, \'\', :match_type,
+                :match_regex, :func_callback, :min_length, :max_length, :limited_values,
+                0, :required, 1, 1,
+                1, :class, :language, :default_value, 0
+            )');
+
+            $stmt->bindValue(':field', $field, \PDO::PARAM_STR);
+            $stmt->bindValue(':weight', ++$weight, \PDO::PARAM_INT);
+            $stmt->bindValue(':field_type', $type, \PDO::PARAM_STR);
+            $stmt->bindValue(':field_choices', $fieldChoices, \PDO::PARAM_STR);
+            $stmt->bindValue(':match_type', $spec['match_type'], \PDO::PARAM_STR);
+            $stmt->bindValue(':match_regex', $spec['match_regex'] ?? '', \PDO::PARAM_STR);
+            $stmt->bindValue(':func_callback', $spec['func_callback'] ?? '', \PDO::PARAM_STR);
+            $stmt->bindValue(':min_length', $minLength, \PDO::PARAM_INT);
+            $stmt->bindValue(':max_length', $maxLength, \PDO::PARAM_INT);
+            $stmt->bindValue(':limited_values', $limitedValues, \PDO::PARAM_STR);
+            $stmt->bindValue(':required', (int) $spec['required'], \PDO::PARAM_INT);
+            $stmt->bindValue(':class', $spec['class'] ?? 'input', \PDO::PARAM_STR);
+            $stmt->bindValue(':language', serialize([NV_LANG_DATA => [$spec['title'], $spec['description']]]), \PDO::PARAM_STR);
+            $stmt->bindValue(':default_value', $defaultValue, \PDO::PARAM_STR);
+            $stmt->execute();
+
+            // Thêm cột vào _users_info, kiểu cột suy ra giống admin/fields.php
+            if (!in_array($field, $existingColumns, true)) {
+                if ($type == 'number' or $type == 'date') {
+                    $columnType = "DOUBLE NOT NULL DEFAULT '" . (float) $defaultValue . "'";
+                } elseif ($type == 'file' or $maxLength > 65536) {
+                    $columnType = 'TEXT NOT NULL';
+                } elseif ($maxLength <= 255) {
+                    $columnType = 'VARCHAR(' . $maxLength . ") NOT NULL DEFAULT ''";
+                } else {
+                    $columnType = 'TEXT NOT NULL';
+                }
+
+                $db->query('ALTER TABLE ' . $infoTable . ' ADD ' . $field . ' ' . $columnType
+                    . ' COMMENT ' . $db->quote($spec['title']));
+            }
+
+            ++$created;
+        }
+
+        $total = (int) $db->query('SELECT COUNT(*) FROM ' . $fieldTable . ' WHERE is_system = 0')->fetchColumn();
+
+        $this->assertGreaterThan(0, $total, 'Không có trường tùy biến nào trong ' . $fieldTable);
+        $this->assertTrue($created >= 0);
+    }
+
+    /**
+     * Dữ liệu mẫu giá trị các trường tùy biến trong _users_info
+     *
+     * Điền giá trị hợp lệ cho mọi user hiện có để trang thông tin tài khoản và
+     * trang sửa thông tin có dữ liệu hiển thị. Giá trị sinh ra tôn trọng đúng
+     * ràng buộc của từng trường (regex, khoảng số, khoảng ngày, danh sách chọn).
+     *
+     * @group sample-data
+     */
+    public function testInsertSampleDataForUsersCustomFieldValues()
+    {
+        global $db, $db_config;
+
+        $fieldTable = $db_config['prefix'] . '_users_field';
+        $infoTable = $db_config['prefix'] . '_users_info';
+
+        $users = $db->query('SELECT userid FROM ' . $db_config['prefix'] . '_users ORDER BY userid ASC')
+            ->fetchAll(\PDO::FETCH_COLUMN);
+
+        if (empty($users)) {
+            $this->markTestSkipped('Không có user nào trong bảng ' . $db_config['prefix'] . '_users.');
+        }
+
+        // Chỉ điền cho các trường mẫu do test này tạo và đang thực sự có cột
+        $samples = $this->sampleCustomFields();
+        $fields = $db->query('SELECT field FROM ' . $fieldTable . ' WHERE is_system = 0')
+            ->fetchAll(\PDO::FETCH_COLUMN);
+        $columns = $db->query('SHOW COLUMNS FROM ' . $infoTable)->fetchAll(\PDO::FETCH_COLUMN);
+        $fields = array_intersect($fields, array_keys($samples), $columns);
+
+        if (empty($fields)) {
+            $this->markTestSkipped('Chưa có trường tùy biến mẫu nào, chạy testInsertSampleDataForUsersCustomFields trước.');
+        }
+
+        $congTy = ['Công ty CP VINADES', 'Trung tâm CNTT Hà Nội', 'Đại học Bách khoa', 'Công ty TNHH Ánh Dương'];
+        $hoTen = ['Nguyễn Văn An', 'Trần Thị Bình', 'Lê Hoàng Cường', 'Phạm Ngọc Dung'];
+        $gioiThieu = [
+            'Lập trình viên PHP với nhiều năm gắn bó cùng mã nguồn mở NukeViet.',
+            'Quản trị hệ thống, quan tâm tới bảo mật và tối ưu hiệu năng.',
+            'Chuyên viên phân tích nghiệp vụ, yêu thích công việc với dữ liệu.',
+        ];
+        $kinhNghiem = [
+            '<p>2019 - 2022: Lập trình viên tại <strong>VINADES</strong>, phát triển module cho NukeViet.</p><p>2022 - nay: Trưởng nhóm kỹ thuật.</p>',
+            '<p>2020 - nay: Quản trị hệ thống máy chủ Linux, triển khai CI/CD cho các dự án nội bộ.</p>',
+        ];
+
+        $updated = 0;
+
+        foreach ($users as $index => $userid) {
+            $userid = (int) $userid;
+            $data = [];
+
+            foreach ($fields as $field) {
+                $spec = $samples[$field];
+                $type = $spec['field_type'];
+
+                if ($type == 'file') {
+                    // Không sinh tệp thật, để rỗng cho an toàn
+                    $data[$field] = '';
+                } elseif ($type == 'number') {
+                    $data[$field] = ((int) $spec['number_type'] == 1)
+                        ? (string) rand((int) $spec['min_length'], (int) $spec['max_length'])
+                        : (string) round(rand((int) $spec['min_length'] * 100, (int) $spec['max_length'] * 100) / 100, 2);
+                } elseif ($type == 'date') {
+                    $min = (int) $spec['min_length'];
+                    $max = (int) $spec['max_length'];
+                    // Trường không giới hạn khoảng thì lấy quanh thời điểm hiện tại
+                    $data[$field] = ($min > 0 and $max > $min)
+                        ? (string) rand($min, $max)
+                        : (string) (NV_CURRENTTIME - rand(0, 86400 * 365));
+                } elseif (!empty($spec['choices'])) {
+                    $keys = array_keys($spec['choices']);
+                    if ($type == 'checkbox' or $type == 'multiselect') {
+                        shuffle($keys);
+                        $data[$field] = implode(',', array_slice($keys, 0, rand(1, min(3, count($keys)))));
+                    } else {
+                        $data[$field] = $keys[array_rand($keys)];
+                    }
+                } elseif ($spec['match_type'] == 'alphanumeric') {
+                    $data[$field] = 'NV' . str_pad((string) ($userid + 1000), 5, '0', STR_PAD_LEFT);
+                } elseif ($spec['match_type'] == 'unicodename') {
+                    $data[$field] = $hoTen[$index % count($hoTen)];
+                } elseif ($spec['match_type'] == 'email') {
+                    $data[$field] = 'lienhe' . $userid . '@nukeviet.vn';
+                } elseif ($spec['match_type'] == 'url') {
+                    $data[$field] = 'https://nukeviet.vn/thanh-vien-' . $userid;
+                } elseif ($spec['match_type'] == 'regex') {
+                    // Khớp /^0[35789][0-9]{8}$/
+                    $data[$field] = '09' . str_pad((string) rand(0, 99999999), 8, '0', STR_PAD_LEFT);
+                } elseif ($spec['match_type'] == 'callback') {
+                    // ctype_digit, độ dài trong khoảng min/max
+                    $data[$field] = str_pad((string) rand(0, 999999999), (int) $spec['min_length'], '0', STR_PAD_LEFT);
+                } elseif ($type == 'editor') {
+                    $data[$field] = $kinhNghiem[$index % count($kinhNghiem)];
+                } elseif ($type == 'textarea') {
+                    $data[$field] = $gioiThieu[$index % count($gioiThieu)];
+                } else {
+                    $data[$field] = $congTy[$index % count($congTy)];
+                }
+            }
+
+            $assign = [];
+            foreach (array_keys($data) as $field) {
+                $assign[] = $field . ' = :' . $field;
+            }
+
+            // User có thể chưa có dòng trong _users_info nên chèn trước rồi mới cập nhật
+            $db->exec('INSERT IGNORE INTO ' . $infoTable . ' (userid) VALUES (' . $userid . ')');
+
+            $stmt = $db->prepare('UPDATE ' . $infoTable . ' SET ' . implode(', ', $assign) . ' WHERE userid = ' . $userid);
+            foreach ($data as $field => $value) {
+                $stmt->bindValue(':' . $field, $value, \PDO::PARAM_STR);
+            }
+            $stmt->execute();
+
+            ++$updated;
+        }
+
+        $this->assertGreaterThan(0, $updated, 'Không cập nhật được dòng nào trong ' . $infoTable);
+    }
 }

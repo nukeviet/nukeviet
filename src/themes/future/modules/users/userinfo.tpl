@@ -168,7 +168,7 @@
 {if not empty($NAVBARS)}
 <ul class="list-inline">
     {foreach from=$NAVBARS item=nav}
-    <li class="list-inline-item text-nowrap me-3"><a href="{$nav.href}"><i class="fa-solid fa-angle-right"></i> {$nav.title}</a></li>
+    <li class="list-inline-item text-nowrap me-3"><a href="{$nav.href}"><i class="fa-solid fa-caret-right"></i> {$nav.title}</a></li>
     {/foreach}
 </ul>
 {/if}

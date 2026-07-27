@@ -39,9 +39,11 @@ function _make_check_invalid(ipt, data, message) {
         element = $(`<div class="invalid-${data.errType}"></div>`).insertAfter(eleBeforeInvalid);
     }
     element.text(message);
-    if (data.type === 'editor') {
+    if (data.type === 'editor' || !ipt.attr('name')) {
+        // Trình soạn thảo và tệp tải lên
         ipt.addClass('is-invalid');
     } else {
+        // Các loại input khác
         $(_get_input_name(ipt), form).addClass('is-invalid');
     }
     hasInputGroup && iptGroup.addClass('is-invalid');
@@ -91,12 +93,22 @@ function _check_invalid(ipt, customMess, specialType) {
         type: ($(ipt).data('valid') || $(ipt).attr('type') || 'text').toLowerCase(),
         empty: $(ipt).data('empty') !== undefined ? $(ipt).data('empty') : '',
         allowedEmpty: !!$(ipt).data('allowed-empty'),
+        // Min và max radio, checkbox - số lượng chọn
         min: $(ipt).data('min') !== undefined ? $(ipt).data('min') : 1,
         max: $(ipt).data('max') !== undefined ? $(ipt).data('max') : 1,
+        // Length dành cho kiểu text
         minLen: $(ipt).attr('minlength') !== undefined ? parseFloat($(ipt).attr('minlength')) : -1,
         maxLen: $(ipt).attr('maxlength') !== undefined ? parseFloat($(ipt).attr('maxlength')) : -1,
+        // Khoảng giá trị cho số
+        minValue: $(ipt).data('min-value') !== undefined ? parseFloat($(ipt).data('min-value')) : null,
+        maxValue: $(ipt).data('max-value') !== undefined ? parseFloat($(ipt).data('max-value')) : null,
+        // Khoảng ngày cho kiểu date
+        minDate: $(ipt).data('min-date') || '',
+        maxDate: $(ipt).data('max-date') || '',
         errMess: errMess.length > 0 ? errMess : null,
-        errType: $(ipt).data('error-type') || 'tooltip'
+        errType: $(ipt).data('error-type') || 'tooltip',
+        pattern: $(ipt).attr('data-pattern') || '',
+        callback: $(ipt).attr('data-valid-callback') || ''
     };
     if (valid.type === 'editor') {
         valid.editorId = baseIpt.attr('id');
@@ -106,25 +118,39 @@ function _check_invalid(ipt, customMess, specialType) {
     if (customMess && customMess.length > 0) {
         return _make_check_invalid(ipt, valid, customMess);
     }
-    // Check bắt buộc dạng nhập
-    if (!valid.allowedEmpty && (valid.type == 'email' || valid.type == 'text' || valid.type == 'password' || valid.type == 'phone' || valid.type == 'tel') && (
-        trim(ipt.val()) == valid.empty ||
-        (valid.minLen >= 0 && trim(ipt.val()).length < valid.minLen) ||
-        (valid.maxLen >= 0 && trim(ipt.val()).length > valid.maxLen)
-    )) {
-        let mess = nv_required;
-        if (valid.minLen >=0 && valid.maxLen >= 0) {
-            if (valid.minLen == valid.maxLen) {
-                mess = nv_exactlength.replace('{0}', valid.minLen);
-            } else {
-                mess = nv_rangelength.replace('{0}', valid.minLen).replace('{1}', valid.maxLen);
-            }
-        } else if (valid.minLen >= 0) {
-            mess = nv_minlength.replace('{0}', valid.minLen);
-        } else if (valid.maxLen >= 0) {
-            mess = nv_maxlength.replace('{0}', valid.maxLen);
+    // Check bắt buộc với thẻ select, kể cả select nhiều lựa chọn trả về mảng hoặc null
+    if (!valid.allowedEmpty && ipt.is('select')) {
+        const selVal = ipt.val();
+        if (selVal === null || selVal === '' || (Array.isArray(selVal) && selVal.length === 0)) {
+            return _make_check_invalid(ipt, valid, valid.errMess || nv_required);
         }
-        return _make_check_invalid(ipt, valid, valid.errMess || mess);
+    }
+    // Check bắt buộc và độ dài dạng nhập
+    if (valid.type == 'email' || valid.type == 'text' || valid.type == 'password' || valid.type == 'phone' || valid.type == 'tel') {
+        const sVal = trim(ipt.val());
+        const isEmpty = sVal == valid.empty;
+        if (!valid.allowedEmpty && isEmpty) {
+            return _make_check_invalid(ipt, valid, valid.errMess || nv_required);
+        }
+        // Độ dài chỉ xét khi đã có giá trị, trường được phép rỗng nếu đã nhập vẫn phải đúng độ dài
+        if (!isEmpty && (
+            (valid.minLen >= 0 && sVal.length < valid.minLen) ||
+            (valid.maxLen >= 0 && sVal.length > valid.maxLen)
+        )) {
+            let mess = nv_required;
+            if (valid.minLen >= 0 && valid.maxLen >= 0) {
+                if (valid.minLen == valid.maxLen) {
+                    mess = nv_exactlength.replace('{0}', valid.minLen);
+                } else {
+                    mess = nv_rangelength.replace('{0}', valid.minLen).replace('{1}', valid.maxLen);
+                }
+            } else if (valid.minLen >= 0) {
+                mess = nv_minlength.replace('{0}', valid.minLen);
+            } else if (valid.maxLen >= 0) {
+                mess = nv_maxlength.replace('{0}', valid.maxLen);
+            }
+            return _make_check_invalid(ipt, valid, valid.errMess || mess);
+        }
     }
     // Check bắt buộc dạng chọn checkbox, radio trên item cuối của cùng nhóm name
     if ((valid.type === 'radio' || valid.type === 'checkbox')) {
@@ -141,11 +167,59 @@ function _check_invalid(ipt, customMess, specialType) {
             return _make_check_invalid(ipt, valid, valid.errMess || mess);
         }
     }
-    // Check rule
+    // Check email
     if (valid.type == 'email' && !nv_mailfilter.test(trim(ipt.val()))) {
         return _make_check_invalid(ipt, valid, valid.errMess || nv_email);
     }
-    // Check editor
+    // Check regex qua data-pattern, bỏ qua khi rỗng và được phép rỗng
+    if (valid.pattern.length > 0 && !(valid.allowedEmpty && trim(ipt.val()) === valid.empty)) {
+        let regex = null;
+        try {
+            const matches = valid.pattern.match(/^\/(.*)\/([gimsuy]*)$/);
+            regex = matches ? new RegExp(matches[1], matches[2]) : new RegExp(valid.pattern);
+        } catch (e) {
+            // Biểu thức viết theo cú pháp PHP có thể không hợp lệ trong JS,
+            // bỏ qua ở đây và để máy chủ kiểm tra thay vì làm hỏng cả form
+            regex = null;
+        }
+        if (regex && !regex.test(ipt.val())) {
+            return _make_check_invalid(ipt, valid, valid.errMess || nv_required);
+        }
+    }
+
+    // Check khoảng giá trị số qua data-min-value, data-max-value
+    if (valid.minValue !== null || valid.maxValue !== null) {
+        const sNum = trim(ipt.val()).replace(',', '.');
+        if (!(valid.allowedEmpty && sNum === valid.empty)) {
+            const num = parseFloat(sNum);
+            if (isNaN(num) ||
+                (valid.minValue !== null && num < valid.minValue) ||
+                (valid.maxValue !== null && num > valid.maxValue)
+            ) {
+                return _make_check_invalid(ipt, valid, valid.errMess || nv_required);
+            }
+        }
+    }
+
+    // Check khoảng ngày qua data-min-date, data-max-date
+    if (valid.minDate.length > 0 || valid.maxDate.length > 0) {
+        const sDate = trim(ipt.val());
+        if (!(valid.allowedEmpty && sDate === valid.empty)) {
+            const cur = _parse_post_date(sDate);
+            const from = _parse_post_date(valid.minDate);
+            const to = _parse_post_date(valid.maxDate);
+            if (cur === null || (from !== null && cur < from) || (to !== null && cur > to)) {
+                return _make_check_invalid(ipt, valid, valid.errMess || nv_required);
+            }
+        }
+    }
+    // Check hàm kiểm tra riêng khai báo qua data-valid-callback
+    if (valid.callback.length > 0 && !(valid.allowedEmpty && trim(ipt.val()) === valid.empty)) {
+        if (typeof window[valid.callback] === 'function' && !window[valid.callback](ipt.val(), ipt)) {
+            return _make_check_invalid(ipt, valid, valid.errMess || nv_required);
+        }
+    }
+    // Check trình soạn thảo
     if (valid.type == 'editor') {
         if (window.nveditor && window.nveditor[valid.editorId]) {
             // Trường hợp có trình soạn thảo được render ra
@@ -170,22 +244,62 @@ function _check_invalid(ipt, customMess, specialType) {
 }
 
 /**
- * Xác định name thẻ input trong trường hợp có multiple
+ * Đổi chuỗi ngày theo định dạng nhập liệu của site thành số để so sánh
+ * Thứ tự ngày, tháng, năm lấy từ nv_jsdate_post theo cấu hình
+ *
+ * @param {String} value
+ * @returns {Number | null} Dạng yyyymmdd, null nếu không đọc được
+ */
+function _parse_post_date(value) {
+    if (typeof value !== 'string' || value.length < 1) {
+        return null;
+    }
+    const parts = value.split(/[^0-9]+/).filter((s) => s.length > 0);
+    if (parts.length < 3) {
+        return null;
+    }
+    const format = (typeof nv_jsdate_post !== 'undefined' ? nv_jsdate_post : 'dd/mm/yyyy').toLowerCase();
+    const order = format.split(/[^a-z]+/).filter((s) => s.length > 0);
+    const pos = {
+        d: order.indexOf('dd'),
+        m: order.indexOf('mm'),
+        y: order.indexOf('yyyy')
+    };
+    // Định dạng lạ thì quay về mặc định ngày, tháng, năm
+    const d = parseInt(parts[pos.d >= 0 ? pos.d : 0], 10);
+    const m = parseInt(parts[pos.m >= 0 ? pos.m : 1], 10);
+    const y = parseInt(parts[pos.y >= 0 ? pos.y : 2], 10);
+    if (isNaN(d) || isNaN(m) || isNaN(y)) {
+        return null;
+    }
+
+    return y * 10000 + m * 100 + d;
+}
+
+/**
+ * Xác định selector gom mọi thẻ input cùng thuộc một trường dữ liệu
+ *
+ * Phân loại theo nội dung cặp ngoặc vuông cuối cùng của name, không theo số lượng ngoặc:
+ * - Rỗng hoặc là số thứ tự thì các thẻ là phần tử của cùng một mảng, phải gom
+ *   lại theo tiền tố. Ví dụ gender[], option[5] và option[6], hay
+ *   custom_fields[so_thich][].
+ * - Là khóa chữ thì đó là một trường riêng đặt trong namespace, chỉ gom chính
+ *   nó. Ví dụ custom_fields[noi_cong_tac] hay message[vi].
  *
  * @param {JQuery} ipt
  * @returns {String}
  */
 function _get_input_name(ipt) {
     const name = ipt.attr('name');
-    const matches = name.match(/\[/g);
-    const groupCount = matches ? matches.length : 0;
+    const matches = name.match(/^(.*)\[([^\]]*)\]$/);
 
-    if (groupCount > 1) {
-        return `[name^="${name.replace(/\[[^\]]*\]$/, '')}"]`;
+    if (!matches) {
+        return `[name="${name}"]`;
     }
-    if (groupCount === 1) {
-        return `[name^="${name.split('[')[0]}["]`;
+    if (matches[2] === '' || /^[0-9]+$/.test(matches[2])) {
+        return `[name^="${matches[1]}["]`;
     }
+
     return `[name="${name}"]`;
 }
 
@@ -279,7 +393,7 @@ function nv_precheck_form(form) {
         _check_invalid($(sName, form).last());
     });
     // Các cấu trúc đặc biệt như trình soạn thảo
-    $('[data-valid][data-name]:visible', form).each(function() {
+    $('[data-valid="editor"][data-name]:visible', form).each(function() {
         const ipt = $(this);
         const sName = `[name="${ipt.data('name')}"]`;
         if (processedNames.has(sName)) {
@@ -287,6 +401,16 @@ function nv_precheck_form(form) {
         }
         processedNames.add(sName);
         _check_invalid($(sName, form).last(), null, ipt.data('valid'));
+    });
+    // Vùng tải tệp, hợp lệ khi danh sách có ít nhất một tệp
+    $('[data-valid="filelist"][data-name]:visible', form).each(function() {
+        const box = $(this);
+        if (box.data('allowed-empty') || $(`[name^="${box.data('name')}"]`, box).length > 0) {
+            return;
+        }
+        _make_check_invalid(box, {
+            errType: box.data('error-type') || 'feedback'
+        }, box.data('error-mess') || nv_required);
     });
 
     return _focus_error(form);
@@ -569,8 +693,9 @@ $(function() {
                 }
                 return;
             }
-            // Gửi form thất bại
+            // Gửi form thất bại, đổi captcha mới để người dùng nhập lại
             $('input, textarea, select, button', form).prop('disabled', false);
+            formChangeCaptcha(form);
             if (respon.tab) {
                 bootstrap.Tab.getOrCreateInstance(document.getElementById(respon.tab)).show();
             }

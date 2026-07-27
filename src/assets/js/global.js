@@ -1208,3 +1208,23 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 });
+
+/**
+ * Kiểm tra tên người hợp lệ
+ *
+ * @param {String} val
+ * @returns {Boolean}
+ */
+function person_name_check(val) {
+    return val === '' || nv_uname_filter.test(val);
+}
+
+/**
+ * Kiểm tra bắt buộc tên người hợp lệ
+ *
+ * @param {String} val
+ * @returns {Boolean}
+ */
+function required_person_name_check(val) {
+    return val !== '' && nv_uname_filter.test(val);
+}

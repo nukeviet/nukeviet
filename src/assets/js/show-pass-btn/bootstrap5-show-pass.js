@@ -21,7 +21,7 @@ var resetPass,
         $('[type=password].form-control:not(.btn-eye-added)').each(function() {
             $(this).addClass('btn-eye-added');
             var that = $(this),
-                $btn = $('<button type="button" class="btn btn-secondary btn-eye"></button>'),
+                $btn = $('<button type="button" class="btn btn-secondary btn-eye" tabindex="-1"></button>'),
                 $igroup = $('<div class="input-group input-group-password"></div>'),
                 $copy;
             if (that.parent().is('.input-group')) {

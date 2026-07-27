@@ -104,11 +104,65 @@ Tuân thủ toàn bộ quy tắc trong `docs/knowledge/xtemplate-to-smarty.md` (
   - `{$timestamp|ddatetime}` → `nv_datetime_format()`
   - `{$number|dnumber}` → `nv_number_format()`
 - **CSRF** chỉ dùng khi tpl có form POST thực sự (VD: bình luận, đăng ký). Không thêm CSRF vào tpl chỉ hiển thị nội dung.
-- **Form submit AJAX** trong frontend dùng `data-toggle="ajax-form"` — **KHÔNG** dùng `class="ajax-submit"` (class đó chỉ dành cho admin_future):
-  ```html
-  <form action="..." method="post" data-toggle="ajax-form" novalidate>
-  ```
-- **Form submit AJAX cần validation**: sử dụng `data-precheck="nv_precheck_form"` để kiểm tra trước khi gửi form.
+### Form AJAX — BẮT BUỘC dùng handler và validator chung
+
+**KHÔNG viết handler submit riêng hay hàm validate riêng cho từng module.** Toàn bộ hạ tầng đã có sẵn trong `src/themes/future/js/nv.main.js` và `src/assets/js/site.js`. Viết riêng sẽ tạo ra hai hệ thống validate song song, lệch thông báo lỗi và bỏ sót các tính năng dùng chung (đồng bộ CKEditor, upload file qua FormData, đổi captcha, xử lý `name` dạng mảng).
+
+Luồng chuẩn khi bấm nút submit:
+
+```
+click [type=submit]:not([name])   (site.js)
+  → btnClickSubmit()              đồng bộ editor → XSSsanitize → data-precheck → captcha
+  → $(form).submit()
+  → handler [data-toggle="ajax-form"]  (nv.main.js) gửi ajax, xử lý phản hồi
+```
+
+**Khai báo form:**
+
+```html
+<form action="..." method="post" data-toggle="ajax-form" data-precheck="nv_precheck_form" novalidate>
+```
+
+- `data-toggle="ajax-form"` — **KHÔNG** dùng `class="ajax-submit"` (class đó chỉ dành cho admin_future)
+- `data-precheck="nv_precheck_form"` — validator chung
+- `data-callback="tenHam"` — *chỉ khi* phản hồi thành công cần UX riêng. Hàm nhận `(respon, form)`; **trả `false` để handler chung dừng xử lý mặc định**. Đây là điểm mở rộng duy nhất được phép, không được thay bằng handler submit riêng.
+- `data-reset-extend="tenHam"` — chạy thêm khi bấm `[data-toggle="nv-reset-form"]`
+- `data-form="tenForm"` — marker để JS module scope selector riêng của mình (datepicker, dropdown gợi ý...), thay cho việc đặt `data-toggle` riêng làm mất handler chung
+
+**Khai báo validate trên input** — dùng thuộc tính, không viết hàm duyệt field:
+
+| Thuộc tính | Ý nghĩa |
+|---|---|
+| `data-valid` | bật validate cho field (bắt buộc phải có `name`) |
+| `data-error-type="feedback"` | hiện lỗi trong `.invalid-feedback` (mặc định là `tooltip`) |
+| `data-error-mess="..."` | thông báo lỗi tùy chỉnh |
+| `data-allowed-empty="1"` | cho phép bỏ trống (vẫn chạy rule khác khi có nhập) |
+| `minlength` / `maxlength` | giới hạn độ dài, tự sinh thông báo chuẩn |
+| `data-min` / `data-max` | số lượng được chọn của nhóm radio/checkbox cùng `name` |
+| `data-pattern="/^.../"` | rule biểu thức chính quy |
+| `data-valid-callback="tenHam"` | rule hàm riêng, nhận `(val, ipt)` trả về boolean |
+| `data-valid="editor"` | validate nội dung trình soạn thảo |
+
+Kiểu `email`, `radio`, `checkbox`, `select`, `file` được nhận diện tự động qua `type`/tag.
+
+**Vị trí thẻ báo lỗi rất quan trọng** — `_make_check_invalid()` tìm theo phần tử liền sau input:
+
+- Input thường: `.invalid-feedback` là **sibling ngay sau** input
+- Dạng `form-check` (input → label): `.invalid-feedback` đặt **sau label**
+- Trong `.input-group`: `.invalid-feedback` đặt **sau** cả div `.input-group`, không nằm trong
+
+Nếu không có sẵn thẻ, JS tự chèn — nên đặt sẵn để kiểm soát vị trí, tránh thẻ chèn vào giữa layout làm vỡ giao diện.
+
+**Phản hồi JSON từ PHP** mà handler chung hiểu:
+
+```php
+// Thành công
+['status' => 'ok', 'mess' => '...', 'redirect' => '...']   // hoặc 'refresh' => true
+// Lỗi
+['status' => 'error', 'input' => 'ten_field', 'mess' => '...']
+```
+
+`status` chấp nhận `OK`/`ok`/`success`. Khi có `input`, lỗi được gắn đúng vào field đó (hỗ trợ cả `name` dạng `custom_fields[x]`); `input` rỗng thì hiện toast.
 
 ### 5B. Cập nhật hàm theme trong `theme.php`
 
@@ -171,6 +225,8 @@ $tpl->assign('MCONFIG', $module_config[$module_name]);
 - **Không** `onclick=`, `onchange=`, `javascript:` trong tpl — sự kiện đặt trong `src/themes/future/js/{MODULE}.js` (tạo nếu chưa có)
 - Tham số truyền qua `data-*`
 - Nếu tpl cũ có JS inline → port sang `data-toggle` / event delegation trong `src/themes/future/js/{MODULE}.js`
+- **Không viết lại thứ đã có dùng chung**: submit ajax, validate field, reset trạng thái lỗi (`nv_validate_reset`), hiện lỗi (`nv_validate_show`), reset form (`[data-toggle="nv-reset-form"]`), đổi captcha (`formChangeCaptcha`). Chỉ viết JS cho phần đặc thù của module.
+- Nếu handler/validator chung **thật sự** thiếu tính năng cần thiết → **báo Dev và đề xuất bổ sung vào `nv.main.js`** theo hướng cộng thêm (form không khai báo thuộc tính mới thì hành vi không đổi). Không fork logic sang file JS của module.
 - Dùng `let`/`const` thay vì `var`
 - Nếu không có thay đổi gì JS: **không** thêm comment vào file
 - Kiểm tra cú pháp khi port JS từ tpl: tpl có thể chứa thẻ HTML không hợp lệ gây lỗi JS
@@ -208,10 +264,13 @@ Báo cáo:
 - [ ] Icons dùng Font Awesome 6 (`fa-solid fa-*`)
 - [ ] CSRF chỉ có trong tpl có form POST thực sự; không thêm thừa vào tpl chỉ hiển thị
 - [ ] Form submit AJAX dùng `data-toggle="ajax-form"` — không dùng `class="ajax-submit"`
+- [ ] Form có validate khai báo `data-precheck="nv_precheck_form"`; field dùng `data-valid` + `data-error-*`, không dùng class/thuộc tính tự chế
+- [ ] `.invalid-feedback` đặt đúng vị trí: sau input, sau label với `form-check`, sau `.input-group` nếu có
 
 **JavaScript:**
 - [ ] Không có JS inline (`onclick=`, `onchange=`, `javascript:`)
 - [ ] Sự kiện bắt qua `data-toggle` / event delegation trong `src/themes/future/js/{MODULE}.js`
+- [ ] **Không** có handler `submit` riêng cho form ajax, **không** có hàm validate riêng — dùng handler + validator chung; UX riêng khi thành công đi qua `data-callback`
 - [ ] Dùng `let`/`const`, không dùng `var`; cú pháp JS hợp lệ sau khi port từ tpl
 
 **Routing & cache:**

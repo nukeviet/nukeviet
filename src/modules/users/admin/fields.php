@@ -265,6 +265,11 @@ if ($nv_Request->isset_request('save', 'post')) {
             $error = $nv_Lang->getModule('field_error_empty');
             $error_input = 'field';
             $error_input_parent = 'row_field_id';
+        } elseif (!preg_match('/^[a-z][a-z0-9_]*$/', $dataform['field'])) {
+            // Bắt buộc field phải bắt đầu bằng chữ cái thường.
+            $error = $nv_Lang->getModule('field_error_start');
+            $error_input = 'field';
+            $error_input_parent = 'row_field_id';
         } else {
             // Kiểm tra trùng trường dữ liệu
             $stmt = $db->prepare('SELECT * FROM ' . NV_MOD_TABLE . '_field WHERE field= :field');
