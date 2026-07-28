@@ -206,7 +206,7 @@ $(function () {
 
         // Datepicker initialization
         if ($('.datepicker').length > 0) {
-            $('.datepicker').datepicker({
+            $('.datepicker').attr('autocomplete', 'off').datepicker({
                 dateFormat: nv_jsdate_post.replace('yyyy', 'yy'),
                 changeMonth: true,
                 changeYear: true,
@@ -672,7 +672,7 @@ $(function () {
 
         // Pick ngày tháng ô ngày hết hạn nhóm
         if ($('[name="exp_time"]').length) {
-            $('[name="exp_time"]').datepicker({
+            $('[name="exp_time"]').attr('autocomplete', 'off').datepicker({
                 showOn: "both",
                 dateFormat: nv_jsdate_post.replace('yyyy', 'yy'),
                 changeMonth: true,
@@ -1176,12 +1176,12 @@ $(function () {
         // Chọn câu hỏi bảo mật từ dropdown
         $(document).on('click', 'a.question', function (e) {
             e.preventDefault();
-            $('[name="question"]').val($(this).text());
+            $('[name="question"]').val($(this).text()).trigger('change');
         });
 
         // Khởi tạo datepicker cho các trường ngày tháng
         if ($('.datepicker').length > 0) {
-            $('.datepicker').datepicker({
+            $('.datepicker').attr('autocomplete', 'off').datepicker({
                 showOn: 'focus',
                 dateFormat: nv_jsdate_post.replace('yyyy', 'yy'),
                 changeMonth: true,
@@ -1223,9 +1223,9 @@ $(function () {
                     if (res.status === 'error') {
                         return nukeviet.toast(res.mess, 'error');
                     }
-                    field1.val(res.value);
+                    field1.val(res.value).trigger('change');
                     if (field2.length) {
-                        field2.val(res.value);
+                        field2.val(res.value).trigger('change');
                     }
                 },
                 error: function (xhr, text, err) {
@@ -1512,12 +1512,12 @@ $(function () {
         // Chọn câu hỏi bảo mật từ dropdown
         $(document).on('click', 'a.question', function (e) {
             e.preventDefault();
-            $('[name="question"]').val($(this).text());
+            $('[name="question"]').val($(this).text()).trigger('change');
         });
 
         // Khởi tạo datepicker cho các trường ngày tháng
         if ($('.datepicker').length > 0) {
-            $('.datepicker').datepicker({
+            $('.datepicker').attr('autocomplete', 'off').datepicker({
                 showOn: 'focus',
                 dateFormat: nv_jsdate_post.replace('yyyy', 'yy'),
                 changeMonth: true,
@@ -1559,9 +1559,9 @@ $(function () {
                     if (res.status === 'error') {
                         return nukeviet.toast(res.mess, 'error');
                     }
-                    field1.val(res.value);
+                    field1.val(res.value).trigger('change');
                     if (field2.length) {
-                        field2.val(res.value);
+                        field2.val(res.value).trigger('change');
                     }
                 },
                 error: function (xhr, text, err) {
@@ -1855,7 +1855,7 @@ $(function () {
 
         // Khởi tạo datepicker cho ô lọc ngày đăng ký
         if ($('.datepicker-search').length > 0) {
-            $('.datepicker-search').datepicker({
+            $('.datepicker-search').attr('autocomplete', 'off').datepicker({
                 showOn: 'focus',
                 dateFormat: nv_jsdate_post.replace('yyyy', 'yy'),
                 changeMonth: true,
@@ -2335,7 +2335,7 @@ $(function () {
 
         // Khởi tạo datepicker cho các trường ngày tháng
         if ($('.datepicker').length > 0) {
-            $('.datepicker').datepicker({
+            $('.datepicker').attr('autocomplete', 'off').datepicker({
                 showOn: 'focus',
                 dateFormat: nv_jsdate_post.replace('yyyy', 'yy'),
                 changeMonth: true,
@@ -2470,7 +2470,7 @@ $(function () {
     if (nv_func_name === 'getuserid') {
         // Khởi tạo datepicker cho các ô ngày tháng
         if ($('.datepicker-get').length > 0) {
-            $('.datepicker-get').datepicker({
+            $('.datepicker-get').attr('autocomplete', 'off').datepicker({
                 dateFormat: nv_jsdate_get.replace('yyyy', 'yy'),
                 changeMonth: true,
                 changeYear: true,
