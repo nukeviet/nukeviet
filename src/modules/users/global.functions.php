@@ -218,67 +218,64 @@ function delete_userfile($file_save_info)
 }
 
 /**
- * Sinh câu thông báo lỗi ràng buộc cho một trường dữ liệu tùy biến,
- * dùng cho validate phía máy chủ và hiển thị mô tả ràng buộc ở giao diện.
+ * Sinh các mệnh đề mô tả ràng buộc của một trường dữ liệu, tách riêng theo từng khóa.
  *
  * @param array $row Một phần tử cấu hình lấy từ nv_get_users_field_config()
- * @return string
+ * @return array Mảng mệnh đề theo khóa, thứ tự phần tử chính là thứ tự hiển thị.
  */
-function fieldErrorMessage(array $row): string
+function fieldConstraintParts(array $row): array
 {
     global $nv_Lang;
 
-    $title = !empty($row['title']) ? $row['title'] : ($row['field'] ?? '');
     $type = $row['field_type'] ?? 'textbox';
     $min = (int) ($row['min_length'] ?? 0);
     $max = (int) ($row['max_length'] ?? 0);
 
-    // Các mệnh đề ràng buộc, ghép lại theo đúng thứ tự thêm vào
     $parts = [];
 
     // Mệnh đề bắt buộc theo nhóm nhập, chọn, upload
     if (!empty($row['required'])) {
         if (in_array($type, ['date', 'select', 'radio', 'checkbox', 'multiselect'], true)) {
-            $parts[] = $nv_Lang->getModule('field_error_req_choice');
+            $parts['required'] = $nv_Lang->getModule('field_error_req_choice');
         } elseif ($type == 'file') {
-            $parts[] = $nv_Lang->getModule('field_error_req_file');
+            $parts['required'] = $nv_Lang->getModule('field_error_req_file');
         } else {
-            $parts[] = $nv_Lang->getModule('field_error_req_input');
+            $parts['required'] = $nv_Lang->getModule('field_error_req_input');
         }
     }
 
     if ($type == 'textbox' or $type == 'textarea' or $type == 'editor') {
         // Giới hạn số ký tự, min và max có thể khai báo lệch nhau
         if ($min > 0 and $max > 0) {
-            $parts[] = ($min == $max) ? $nv_Lang->getModule('field_error_len_exact', $min) : $nv_Lang->getModule('field_error_len_range', $min, $max);
+            $parts['length'] = ($min == $max) ? $nv_Lang->getModule('field_error_len_exact', $min) : $nv_Lang->getModule('field_error_len_range', $min, $max);
         } elseif ($min > 0) {
-            $parts[] = $nv_Lang->getModule('field_error_len_min', $min);
+            $parts['length'] = $nv_Lang->getModule('field_error_len_min', $min);
         } elseif ($max > 0) {
-            $parts[] = $nv_Lang->getModule('field_error_len_max', $max);
+            $parts['length'] = $nv_Lang->getModule('field_error_len_max', $max);
         }
 
         // Quy tắc định dạng, riêng regex và callback không mô tả được nên dùng mệnh đề chung
         if ($row['match_type'] == 'alphanumeric') {
-            $parts[] = $nv_Lang->getModule('field_error_rule_alphanumeric');
+            $parts['rule'] = $nv_Lang->getModule('field_error_rule_alphanumeric');
         } elseif ($row['match_type'] == 'unicodename') {
-            $parts[] = $nv_Lang->getModule('field_error_rule_unicodename');
+            $parts['rule'] = $nv_Lang->getModule('field_error_rule_unicodename');
         } elseif ($row['match_type'] == 'email') {
-            $parts[] = $nv_Lang->getModule('field_error_rule_email');
+            $parts['rule'] = $nv_Lang->getModule('field_error_rule_email');
         } elseif ($row['match_type'] == 'url') {
-            $parts[] = $nv_Lang->getModule('field_error_rule_url');
+            $parts['rule'] = $nv_Lang->getModule('field_error_rule_url');
         } elseif ($row['match_type'] == 'regex' or $row['match_type'] == 'callback') {
-            $parts[] = $nv_Lang->getModule('field_error_rule_regex');
+            $parts['rule'] = $nv_Lang->getModule('field_error_rule_regex');
         }
     } elseif ($type == 'number') {
         $number_type = (int) ($row['field_choices']['number_type'] ?? 1);
-        $parts[] = $nv_Lang->getModule($number_type == 1 ? 'field_error_rule_integer' : 'field_error_rule_decimal');
+        $parts['rule'] = $nv_Lang->getModule($number_type == 1 ? 'field_error_rule_integer' : 'field_error_rule_decimal');
         if ($min < $max) {
-            $parts[] = $nv_Lang->getModule('field_error_val_range', $min, $max);
+            $parts['range'] = $nv_Lang->getModule('field_error_val_range', $min, $max);
         }
     } elseif ($type == 'date') {
         // Đối với kiểu ngày mô tả khoảng ngày được phép
         if ($min > 0 and $max > $min) {
-            $parts[] = $nv_Lang->getModule('field_error_date_range', nv_u2d_post($min), nv_u2d_post($max));
+            $parts['range'] = $nv_Lang->getModule('field_error_date_range', nv_u2d_post($min), nv_u2d_post($max));
         }
     } elseif ($type == 'file') {
         // limited_values có thể còn là chuỗi JSON hoặc đã được decode trước đó
@@ -288,15 +285,51 @@ function fieldErrorMessage(array $row): string
         }
         $maxnum = (int) ($limited_values['maxnum'] ?? 0);
         if ($maxnum > 0) {
-            $parts[] = $nv_Lang->getModule('field_error_file_maxnum', $maxnum);
+            $parts['file_maxnum'] = $nv_Lang->getModule('field_error_file_maxnum', $maxnum);
         }
     }
 
+    return $parts;
+}
+
+/**
+ * Sinh câu mô tả đầy đủ ràng buộc của một trường dữ liệu tùy biến,
+ * dùng để hiển thị ở giao diện và làm thông báo cho validate phía trình duyệt.
+ *
+ * @param array $row Một phần tử cấu hình lấy từ nv_get_users_field_config()
+ * @return string Rỗng khi trường không có ràng buộc nào
+ */
+function fieldErrorMessage(array $row): string
+{
+    $parts = fieldConstraintParts($row);
     if (empty($parts)) {
         return '';
     }
 
+    $title = !empty($row['title']) ? $row['title'] : ($row['field'] ?? '');
+
     return $title . ' ' . implode(', ', $parts);
+}
+
+/**
+ * Dựng mảng kết quả lỗi cho fieldsCheck().
+ *
+ * @param array  $row          Một phần tử cấu hình lấy từ nv_get_users_field_config()
+ * @param string $mess         Mệnh đề ràng buộc bị vi phạm lấy từ fieldConstraintParts(),
+ *                             hoặc một thông báo hoàn chỉnh khi $prefix_title = false
+ * @param bool   $prefix_title Ghép tiêu đề trường vào trước $mess, mặc định bật. Tắt khi
+ *                             $mess đã là câu hoàn chỉnh: lỗi email, lỗi độ tuổi, lỗi lập trình
+ * @return array ['status' => 'error', 'input' => tên field bị lỗi, 'mess' => thông báo lỗi]
+ */
+function fieldError(array $row, string $mess, bool $prefix_title = true): array
+{
+    $title = !empty($row['title']) ? $row['title'] : ($row['field'] ?? '');
+
+    return [
+        'status' => 'error',
+        'input' => empty($row['system']) ? 'custom_fields[' . $row['field'] . ']' : $row['field'],
+        'mess' => $prefix_title ? trim($title . ' ' . $mess) : $mess
+    ];
 }
 
 /**
@@ -343,44 +376,31 @@ function fieldsCheck(&$custom_fields, &$array_data, &$query_field, &$valid_field
 
     foreach ($array_field_config as $row_f) {
         $value = (isset($custom_fields[$row_f['field']])) ? $custom_fields[$row_f['field']] : '';
-        $field_input_name = empty($row_f['system']) ? 'custom_fields[' . $row_f['field'] . ']' : $row_f['field'];
+        // Nhóm mô tả ràng buộc, dùng chung với phần mô tả hiển thị ngoài giao diện
+        $parts = fieldConstraintParts($row_f);
         if (!empty($value)) {
             if ($row_f['field_type'] == 'number') {
                 $pattern = ($row_f['field_choices']['number_type'] == 1) ? '/^[0-9]+$/' : '/^[0-9\.]+$/';
 
                 if (!preg_match($pattern, $value)) {
-                    return [
-                        'status' => 'error',
-                        'input' => $field_input_name,
-                        'mess' => $nv_Lang->getModule('field_match_type_error', $row_f['title'])
-                    ];
+                    return fieldError($row_f, $parts['rule']);
                 }
 
                 $value = ($row_f['field_choices']['number_type'] == 1) ? (int) $value : (float) $value;
 
                 if ($value < $row_f['min_length'] or $value > $row_f['max_length']) {
-                    return [
-                        'status' => 'error',
-                        'input' => $field_input_name,
-                        'mess' => $nv_Lang->getModule('field_min_max_value', $row_f['title'], $row_f['min_length'], $row_f['max_length'])
-                    ];
+                    // Khoảng giá trị chỉ nằm trong $parts khi min < max
+                    return fieldError($row_f, $parts['range'] ?? $nv_Lang->getModule('field_error_val_range', $row_f['min_length'], $row_f['max_length']));
                 }
             } elseif ($row_f['field_type'] == 'date') {
                 $value = nv_d2u_post($value);
                 if (empty($value)) {
-                    return [
-                        'status' => 'error',
-                        'input' => $field_input_name,
-                        'mess' => $nv_Lang->getModule('field_match_type_error', $row_f['title'])
-                    ];
+                    return fieldError($row_f, $nv_Lang->getModule('field_error_rule_date'));
                 }
 
                 if ($row_f['min_length'] > 0 and ($value < $row_f['min_length'] or $value > $row_f['max_length'])) {
-                    return [
-                        'status' => 'error',
-                        'input' => $field_input_name,
-                        'mess' => $nv_Lang->getModule('field_min_max_value_date', $row_f['title'], nv_u2d_post($row_f['min_length']), nv_u2d_post($row_f['max_length']))
-                    ];
+                    // Khoảng ngày chỉ nằm trong $parts khi min < max
+                    return fieldError($row_f, $parts['range'] ?? $nv_Lang->getModule('field_error_date_range', nv_u2d_post($row_f['min_length']), nv_u2d_post($row_f['max_length'])));
                 }
 
                 $dd = intval(date('j', $value));
@@ -388,79 +408,46 @@ function fieldsCheck(&$custom_fields, &$array_data, &$query_field, &$valid_field
                 $yy = intval(date('Y', $value));
 
                 if ($row_f['field'] == 'birthday' and !empty($global_users_config['min_old_user']) and ($yy > (date('Y') - $global_users_config['min_old_user']) or ($yy == (date('Y') - $global_users_config['min_old_user']) and ($mm > date('n') or ($mm == date('n') and $dd > date('j')))))) {
-                    return [
-                        'status' => 'error',
-                        'input' => $field_input_name,
-                        'mess' => $nv_Lang->getModule('old_min_user_error', $global_users_config['min_old_user'])
-                    ];
+                    // Luật độ tuổi đăng ký, chỉ riêng cho birthday
+                    return fieldError($row_f, $nv_Lang->getModule('old_min_user_error', $global_users_config['min_old_user']), false);
                 }
             } elseif ($row_f['field_type'] == 'textbox') {
                 if ($row_f['match_type'] == 'alphanumeric') {
                     if (!preg_match('/^[a-zA-Z0-9\_]+$/', $value)) {
-                        return [
-                            'status' => 'error',
-                            'input' => $field_input_name,
-                            'mess' => $nv_Lang->getModule('field_match_type_error', $row_f['title'])
-                        ];
+                        return fieldError($row_f, $parts['rule']);
                     }
                 } elseif ($row_f['match_type'] == 'unicodename') {
                     if (!preg_match('/^([\p{L}\p{Mn}\p{Pd}\'][\p{L}\p{Mn}\p{Pd}\',\s]*)*$/u', str_replace('&#039;', "'", $value))) {
-                        return [
-                            'status' => 'error',
-                            'input' => $field_input_name,
-                            'mess' => $nv_Lang->getModule('field_match_type_error', $row_f['title'])
-                        ];
+                        return fieldError($row_f, $parts['rule']);
                     }
                 } elseif ($row_f['match_type'] == 'email') {
                     [$errorContent, $value] = nv_check_valid_email($value, true);
                     if (!empty($errorContent)) {
-                        return [
-                            'status' => 'error',
-                            'input' => $field_input_name,
-                            'mess' => $errorContent
-                        ];
+                        // Báo lỗi nguyên văn của nv_check_valid_email
+                        return fieldError($row_f, $errorContent, false);
                     }
                 } elseif ($row_f['match_type'] == 'url') {
                     if (!nv_is_url($value)) {
-                        return [
-                            'status' => 'error',
-                            'input' => $field_input_name,
-                            'mess' => $nv_Lang->getModule('field_match_type_error', $row_f['title'])
-                        ];
+                        return fieldError($row_f, $parts['rule']);
                     }
                 } elseif ($row_f['match_type'] == 'regex') {
                     $value_t = str_replace(['&#039;', '&quot;', '&lt;', '&gt;'], ["'", '"', '<', '>'], $value);
-                    if (@preg_match($row_f['match_regex'], '') !== false) {
+                    if (preg_match($row_f['match_regex'], '') !== false) {
                         if (!preg_match($row_f['match_regex'], $value_t)) {
-                            return [
-                                'status' => 'error',
-                                'input' => $field_input_name,
-                                'mess' => $nv_Lang->getModule('field_match_type_error', $row_f['title'])
-                            ];
+                            return fieldError($row_f, $parts['rule']);
                         }
                     } else {
                         if (!preg_match('/' . $row_f['match_regex'] . '/', $value_t)) {
-                            return [
-                                'status' => 'error',
-                                'input' => $field_input_name,
-                                'mess' => $nv_Lang->getModule('field_match_type_error', $row_f['title'])
-                            ];
+                            return fieldError($row_f, $parts['rule']);
                         }
                     }
                 } elseif ($row_f['match_type'] == 'callback') {
                     if (!function_exists($row_f['func_callback'])) {
-                        return [
-                            'status' => 'error',
-                            'input' => $field_input_name,
-                            'mess' => 'error function not exists ' . $row_f['func_callback']
-                        ];
+                        // Lỗi lập trình, không phải lỗi nhập liệu nên giữ nguyên văn
+                        return fieldError($row_f, 'error function not exists ' . $row_f['func_callback'], false);
                     }
                     if (!call_user_func($row_f['func_callback'], $value)) {
-                        return [
-                            'status' => 'error',
-                            'input' => $field_input_name,
-                            'mess' => $nv_Lang->getModule('field_match_type_error', $row_f['title'])
-                        ];
+                        return fieldError($row_f, $parts['rule']);
                     }
                 } else {
                     $value = nv_htmlspecialchars($value);
@@ -469,11 +456,7 @@ function fieldsCheck(&$custom_fields, &$array_data, &$query_field, &$valid_field
                 $strlen = nv_strlen($value);
 
                 if ($strlen < $row_f['min_length'] or $strlen > $row_f['max_length']) {
-                    return [
-                        'status' => 'error',
-                        'input' => $field_input_name,
-                        'mess' => $nv_Lang->getModule('field_min_max_error', $row_f['title'], $row_f['min_length'], $row_f['max_length'])
-                    ];
+                    return fieldError($row_f, $parts['length'] ?? $nv_Lang->getModule('field_error_len_range', $row_f['min_length'], $row_f['max_length']));
                 }
             } elseif ($row_f['field_type'] == 'textarea' or $row_f['field_type'] == 'editor') {
                 $allowed_html_tags = array_map('trim', explode(',', NV_ALLOWED_HTML_TAGS));
@@ -481,26 +464,15 @@ function fieldsCheck(&$custom_fields, &$array_data, &$query_field, &$valid_field
                 $value = strip_tags($value, $allowed_html_tags);
                 if ($row_f['match_type'] == 'regex') {
                     if (!preg_match('/' . $row_f['match_regex'] . '/', $value)) {
-                        return [
-                            'status' => 'error',
-                            'input' => $field_input_name,
-                            'mess' => $nv_Lang->getModule('field_match_type_error', $row_f['title'])
-                        ];
+                        return fieldError($row_f, $parts['rule']);
                     }
                 } elseif ($row_f['match_type'] == 'callback') {
                     if (!function_exists($row_f['func_callback'])) {
-                        return [
-                            'status' => 'error',
-                            'input' => $field_input_name,
-                            'mess' => 'error function not exists ' . $row_f['func_callback']
-                        ];
+                        // Lỗi lập trình, không phải lỗi nhập liệu nên giữ nguyên văn
+                        return fieldError($row_f, 'error function not exists ' . $row_f['func_callback'], false);
                     }
                     if (!call_user_func($row_f['func_callback'], $value)) {
-                        return [
-                            'status' => 'error',
-                            'input' => $field_input_name,
-                            'mess' => $nv_Lang->getModule('field_match_type_error', $row_f['title'])
-                        ];
+                        return fieldError($row_f, $parts['rule']);
                     }
                 }
 
@@ -508,11 +480,7 @@ function fieldsCheck(&$custom_fields, &$array_data, &$query_field, &$valid_field
                 $strlen = nv_strlen($value);
 
                 if ($strlen < $row_f['min_length'] or $strlen > $row_f['max_length']) {
-                    return [
-                        'status' => 'error',
-                        'input' => $field_input_name,
-                        'mess' => $nv_Lang->getModule('field_min_max_error', $row_f['title'], $row_f['min_length'], $row_f['max_length'])
-                    ];
+                    return fieldError($row_f, $parts['length'] ?? $nv_Lang->getModule('field_error_len_range', $row_f['min_length'], $row_f['max_length']));
                 }
             } elseif ($row_f['field_type'] == 'checkbox' or $row_f['field_type'] == 'multiselect') {
                 $temp_value = [];
@@ -525,11 +493,8 @@ function fieldsCheck(&$custom_fields, &$array_data, &$query_field, &$valid_field
                 $value = implode(',', $temp_value);
             } elseif ($row_f['field_type'] == 'select' or $row_f['field_type'] == 'radio') {
                 if (!isset($row_f['field_choices'][$value])) {
-                    return [
-                        'status' => 'error',
-                        'input' => $field_input_name,
-                        'mess' => $nv_Lang->getModule('field_match_type_error', $row_f['title'])
-                    ];
+                    // Mệnh đề này chỉ dùng khi báo lỗi, không đưa vào phần mô tả ở giao diện
+                    return fieldError($row_f, $nv_Lang->getModule('field_error_rule_choice'));
                 }
             } elseif ($row_f['field_type'] == 'file') {
                 $temp_value = [];
@@ -565,11 +530,7 @@ function fieldsCheck(&$custom_fields, &$array_data, &$query_field, &$valid_field
         }
 
         if (empty($value) and $row_f['required']) {
-            return [
-                'status' => 'error',
-                'input' => $field_input_name,
-                'mess' => $nv_Lang->getModule('field_match_type_required', $row_f['title'])
-            ];
+            return fieldError($row_f, $parts['required']);
         }
 
         if ($row_f['field_type'] == 'number' or $row_f['field_type'] == 'date') {
