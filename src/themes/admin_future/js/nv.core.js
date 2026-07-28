@@ -738,7 +738,7 @@ $(function() {
                         } else {
                             eleCtn = that;
                         }
-                        let ele = $('[name^=' + a.input + ']', eleCtn);
+                        let ele = $('[name^="' + String(a.input).replace(/(["\\])/g, '\\$1') + '"]', eleCtn);
                         if (ele.length) {
                             let pr = ele.parent();
                             if (pr.is('.input-group')) {
