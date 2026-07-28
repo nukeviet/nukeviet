@@ -174,7 +174,7 @@ function get_file_save_info($value)
 }
 
 /**
- * get_other_fields()
+ * Loại bỏ các trường hệ thống khỏi mảng cấu hình trường, chỉ còn các trường tùy biến
  *
  * @param mixed $array_field_config
  * @return mixed
@@ -300,13 +300,31 @@ function fieldErrorMessage(array $row): string
 }
 
 /**
- * fieldsCheck()
+ * Kiểm tra, chuẩn hóa và phân loại dữ liệu các trường thông tin thành viên.
  *
- * @param mixed $custom_fields
- * @param mixed $array_data
- * @param mixed $query_field
- * @param mixed $valid_field
- * @return array
+ * Hàm duyệt giá trị từ global $array_field_config, nếu không có thì gọi lấy
+ * các trường dữ liệu tùy biến get_other_fields(nv_get_users_field_config())
+ *
+ * @param array $custom_fields Vào/Ra. Đầu vào: dữ liệu thô người dùng gửi từ form lên, gồm cả trường
+ *                             hệ thống lẫn trường tùy biến. Đầu ra: được ghi đè bằng giá trị đã
+ *                             chuẩn hóa: date thành timestamp, checkbox/multiselect/file thành
+ *                             chuỗi phân tách bởi dấu phẩy, textbox qua nv_htmlspecialchars(),
+ *                             textarea qua strip_tags() + nv_nl2br().
+ * @param array $array_data    Ra. Nhận giá trị đã chuẩn hóa của các trường hệ thống,
+ *                             tức các cột nằm trong bảng _users: first_name, last_name,
+ *                             gender, birthday, sig, question, answer. Nơi gọi thường truyền vào
+ *                             mảng dữ liệu chung của request ($array_register, $_user, $post);
+ *                             hàm chỉ ghi đè đúng các key hệ thống, không đụng các key khác.
+ * @param array $query_field   Ra. Nhận giá trị đã chuẩn hóa của các trường tùy biến, dùng để ghi
+ *                             xuống bảng users_info qua userInfoTabDb(). Nơi gọi sẽ chèn
+ *                             thêm key 'userid' vào mảng này (trước hoặc sau khi gọi) để dựng câu
+ *                             lệnh SQL. Nếu truyền vào mảng đã có sẵn phần tử, nội dung đó được giữ.
+ * @param array $valid_field   Ra. Nội dung giống hệt $query_field để json_encode() lưu vào cột info_custom
+*                              của bảng users_edit khi thông tin cần chờ kiểm duyệt.
+ * @return array Khi hợp lệ: ['status' => 'OK'].
+ *               Khi lỗi: ['status' => 'error', 'input' => tên field bị lỗi, 'mess' => thông báo lỗi]
+ *               Với trường tùy biến, 'input' có dạng 'custom_fields[ten_truong]'; với trường hệ
+ *               thống, 'input' là tên trường.
  */
 function fieldsCheck(&$custom_fields, &$array_data, &$query_field, &$valid_field)
 {
