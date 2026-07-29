@@ -544,17 +544,7 @@ function my_author_detail($userid)
         $sql = 'SELECT * FROM ' . NV_USERS_GLOBALTABLE . ' WHERE userid =' . $userid;
         $result = $db->query($sql);
         $row = $result->fetch();
-        $pseudonym = '';
-        if (!empty($row['first_name'])) {
-            $pseudonym .= $row['first_name'];
-            if (!empty($row['last_name'])) {
-                $pseudonym .= ' ' . $row['last_name'];
-            }
-        }
-        if (empty($pseudonym)) {
-            $pseudonym = $row['username'];
-        }
-
+        $pseudonym = nv_show_name_user($row['first_name'], $row['last_name'], $row['username']);
         $alias = get_pseudonym_alias($pseudonym, 0);
         if (!$alias) {
             $alias = change_alias($pseudonym) . '-' . $userid;
