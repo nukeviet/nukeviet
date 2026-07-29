@@ -311,6 +311,7 @@ $lang_module['field_match_type_date'] = 'Enter the date in the format dd/mm/yyyy
 $lang_module['field_match_type_url'] = 'Url';
 $lang_module['field_match_type_regex'] = 'Regular expression';
 $lang_module['field_match_type_callback'] = 'Func callback';
+$lang_module['field_match_type_callback_note'] = 'For security reasons, a function name is only accepted if it is declared in <code>$global_config[\'user_field_callbacks\']</code> in the <code>config.php</code> file. Example: <code>$global_config[\'user_field_callbacks\'] = [\'func_1\', \'func_2\'];</code>. The function must exist and return true/false.';
 $lang_module['field_default_value'] = 'Default Value';
 $lang_module['field_min_length'] = 'Min Length';
 $lang_module['field_max_length'] = 'Max Length';

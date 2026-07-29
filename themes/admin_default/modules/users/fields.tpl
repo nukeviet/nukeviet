@@ -124,13 +124,16 @@
                 <tr>
                     <td>{LANG.field_match_type}</td>
                     <td>
-                    <ul style="list-style: none;">
+                    <ul class="list-unstyled mb-0">
                         <!-- BEGIN: match_type -->
                         <li id="li_{MATCH_TYPE.key}">
                             <label for="m_{MATCH_TYPE.key}"> <input type="radio" {MATCH_TYPE.checked} id="m_{MATCH_TYPE.key}" value="{MATCH_TYPE.key}" name="match_type"> {MATCH_TYPE.value}</label>
                             <!-- BEGIN: match_input -->
                             <input class="form-control" type="text" value="{MATCH_TYPE.match_value}" name="match_{MATCH_TYPE.key}" {MATCH_TYPE.match_disabled}>
                             <!-- END: match_input -->
+                            <!-- BEGIN: match_callback_note -->
+                            <div class="help-block mt-1 mb-0"><i class="fa fa-info-circle"></i> {LANG.field_match_type_callback_note}</div>
+                            <!-- END: match_callback_note -->
                         </li>
                         <!-- END: match_type -->
                     </ul></td>

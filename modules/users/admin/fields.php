@@ -233,8 +233,10 @@ if ($nv_Request->isset_request('save', 'post')) {
         $dataform['match_type'] = nv_substr($nv_Request->get_title('match_type', 'post', '', 0, $preg_replace), 0, 50);
         $dataform['match_regex'] = ($dataform['match_type'] == 'regex') ? $nv_Request->get_string('match_regex', 'post', '', false) : '';
         $dataform['func_callback'] = ($dataform['match_type'] == 'callback') ? $nv_Request->get_string('match_callback', 'post', '', false) : '';
-        if ($dataform['func_callback'] != '' and !function_exists($dataform['func_callback'])) {
+        $allowed_callbacks = (isset($global_config['user_field_callbacks']) and is_array($global_config['user_field_callbacks'])) ? $global_config['user_field_callbacks'] : [];
+        if ($dataform['func_callback'] != '' and (!function_exists($dataform['func_callback']) or !in_array($dataform['func_callback'], $allowed_callbacks, true))) {
             $dataform['func_callback'] = '';
+            $dataform['match_type'] = 'none';
         }
 
         if ($dataform['field_type'] == 'editor') {
@@ -798,6 +800,9 @@ if ($nv_Request->isset_request('qlist', 'get')) {
 
         if ($key == 'regex' or $key == 'callback') {
             $xtpl->parse('main.load.match_type.match_input');
+        }
+        if ($key == 'callback') {
+            $xtpl->parse('main.load.match_type.match_callback_note');
         }
         $xtpl->parse('main.load.match_type');
     }
