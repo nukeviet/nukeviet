@@ -756,7 +756,7 @@ if (empty($admin_pre_data) and $nv_Request->isset_request('nv_login,nv_password'
     $row = check_admin_login($nv_username);
     if (empty($row) or !$crypt->validate_password($nv_password, $row['password'])) {
         // Đăng nhập bước đầu thất bại
-        nv_insert_logs(NV_LANG_DATA, 'login', '[' . $nv_username . '] ' . $nv_Lang->getGlobal('loginsubmit') . ' ' . $nv_Lang->getGlobal('fail'), ' Client IP:' . NV_CLIENT_IP, 0);
+        nv_insert_logs(NV_LANG_DATA, 'login', '[' . $nv_username . '] ' . $nv_Lang->getGlobal('loginsubmit') . ' ' . $nv_Lang->getGlobal('fail'), '', 0);
         $blocker->set_loginFailed($nv_username, NV_CURRENTTIME);
 
         nv_jsonOutput([
@@ -814,7 +814,7 @@ if (empty($admin_pre_data) and $nv_Request->isset_request('nv_login,nv_password'
 
     if ($_2step_require or $row['active2step']) {
         // Ghi nhận thông tin bước 1, lưu lại và chuyển đến bước 2
-        nv_insert_logs(NV_LANG_DATA, 'Pre login', '[' . $nv_username . '] ' . $nv_Lang->getGlobal('loginsubmit'), ' Client IP:' . NV_CLIENT_IP, 0);
+        nv_insert_logs(NV_LANG_DATA, 'Pre login', '[' . $nv_username . '] ' . $nv_Lang->getGlobal('loginsubmit'), '', 0);
         $admin_id = (int) ($row['admin_id']);
         $checknum = md5(nv_genpass(10));
         $array_admin = [
@@ -858,7 +858,7 @@ if (empty($admin_pre_data) and $nv_Request->isset_request('nv_login,nv_password'
 
 // Đăng nhập admin hoàn toàn thành công
 if ($admin_login_success === true) {
-    nv_insert_logs(NV_LANG_DATA, 'login', '[' . $row['username'] . '] ' . $nv_Lang->getGlobal('loginsubmit'), ' Client IP:' . NV_CLIENT_IP, 0);
+    nv_insert_logs(NV_LANG_DATA, 'login', '[' . $row['username'] . '] ' . $nv_Lang->getGlobal('loginsubmit'), '', 0);
     $admin_id = (int) ($row['admin_id']);
     $checknum = md5(nv_genpass(10));
     $array_admin = [

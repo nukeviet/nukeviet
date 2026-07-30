@@ -57,11 +57,16 @@ $array_search['lang'] = $nv_Request->get_title('lang', 'get', '');
 $array_search['module'] = $nv_Request->get_title('module', 'get', '');
 $array_search['user'] = $nv_Request->get_title('user', 'get', '');
 
-$check_like = false;
+$keyword_binds = [];
 if (!empty($array_search['q'])) {
     $base_url .= '&amp;q=' . urlencode($array_search['q']);
-    $where[] = '( name_key LIKE :keyword1 OR note_action LIKE :keyword2 )';
-    $check_like = true;
+    $where[] = '(
+        name_key LIKE :keyword1 OR
+        note_action LIKE :keyword2 OR
+        log_ip LIKE :keyword3 OR
+        log_remote_addr LIKE :keyword4
+    )';
+    $keyword_binds = [':keyword1', ':keyword2', ':keyword3', ':keyword4'];
 }
 
 $from = nv_d2u_get($array_search['from']);
@@ -107,10 +112,11 @@ if (defined('NV_IS_GODADMIN') and $nv_Request->isset_request('truncate', 'post')
     }
 
     $sth = $db->prepare($sql);
-    if ($check_like) {
+    if (!empty($keyword_binds)) {
         $keyword = '%' . addcslashes($array_search['q'], '_%') . '%';
-        $sth->bindValue(':keyword1', $keyword, PDO::PARAM_STR);
-        $sth->bindValue(':keyword2', $keyword, PDO::PARAM_STR);
+        foreach ($keyword_binds as $keyword_bind) {
+            $sth->bindValue($keyword_bind, $keyword, PDO::PARAM_STR);
+        }
     }
     if ($from != 0) {
         $sth->bindValue(':from_time', $from, PDO::PARAM_INT);
@@ -159,10 +165,11 @@ if (!empty($where)) {
 }
 
 $sth = $db->prepare($sql);
-if ($check_like) {
+if (!empty($keyword_binds)) {
     $keyword = '%' . addcslashes($array_search['q'], '_%') . '%';
-    $sth->bindValue(':keyword1', $keyword, PDO::PARAM_STR);
-    $sth->bindValue(':keyword2', $keyword, PDO::PARAM_STR);
+    foreach ($keyword_binds as $keyword_bind) {
+        $sth->bindValue($keyword_bind, $keyword, PDO::PARAM_STR);
+    }
 }
 if ($from != 0) {
     $sth->bindValue(':from_time', $from, PDO::PARAM_INT);
@@ -195,10 +202,11 @@ if (!empty($where)) {
 $sql .= ' ORDER BY ' . $order . ' LIMIT ' . $per_page . ' OFFSET ' . (($page - 1) * $per_page);
 
 $sth = $db->prepare($sql);
-if ($check_like) {
+if (!empty($keyword_binds)) {
     $keyword = '%' . addcslashes($array_search['q'], '_%') . '%';
-    $sth->bindValue(':keyword1', $keyword, PDO::PARAM_STR);
-    $sth->bindValue(':keyword2', $keyword, PDO::PARAM_STR);
+    foreach ($keyword_binds as $keyword_bind) {
+        $sth->bindValue($keyword_bind, $keyword, PDO::PARAM_STR);
+    }
 }
 if ($from != 0) {
     $sth->bindValue(':from_time', $from, PDO::PARAM_INT);

@@ -276,6 +276,8 @@ $sql_create_table[] = 'CREATE TABLE ' . $db_config['prefix'] . "_logs (
   note_action text NOT NULL,
   link_acess varchar(255) DEFAULT '',
   userid mediumint(8) unsigned NOT NULL,
+  log_ip varchar(45) NOT NULL DEFAULT '' COMMENT 'IP người dùng sau khi xử lý proxy',
+  log_remote_addr varchar(45) NOT NULL DEFAULT '' COMMENT 'IP kết nối trực tiếp, chỉ ghi khi khác log_ip',
   log_time int(11) NOT NULL,
   PRIMARY KEY (id)
 ) ENGINE=InnoDB COMMENT 'Nhật kí hệ thống'";

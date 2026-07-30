@@ -2903,15 +2903,18 @@ function nv_insert_logs($lang = '', $module_name = '', $name_key = '', $note_act
 {
     global $db_config, $db;
 
+    $log_remote_addr = NV_REMOTE_ADDR !== NV_CLIENT_IP ? NV_REMOTE_ADDR : '';
     $sth = $db->prepare('INSERT INTO ' . $db_config['prefix'] . '_logs
-        (lang, module_name, name_key, note_action, link_acess, userid, log_time) VALUES
-        (:lang, :module_name, :name_key, :note_action, :link_acess, :userid, :log_time)');
+        (lang, module_name, name_key, note_action, link_acess, userid, log_ip, log_remote_addr, log_time) VALUES
+        (:lang, :module_name, :name_key, :note_action, :link_acess, :userid, :log_ip, :log_remote_addr, :log_time)');
     $sth->bindValue(':lang', $lang, PDO::PARAM_STR);
     $sth->bindValue(':module_name', $module_name, PDO::PARAM_STR);
     $sth->bindValue(':name_key', $name_key, PDO::PARAM_STR);
     $sth->bindValue(':note_action', $note_action, PDO::PARAM_STR);
     $sth->bindValue(':link_acess', $link_acess, PDO::PARAM_STR);
     $sth->bindValue(':userid', $userid, PDO::PARAM_INT);
+    $sth->bindValue(':log_ip', NV_CLIENT_IP, PDO::PARAM_STR);
+    $sth->bindValue(':log_remote_addr', $log_remote_addr, PDO::PARAM_STR);
     $sth->bindValue(':log_time', NV_CURRENTTIME, PDO::PARAM_INT);
 
     return (bool) ($sth->execute());

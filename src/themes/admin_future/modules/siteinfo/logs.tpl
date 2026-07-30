@@ -74,10 +74,11 @@
                                 {if $ARRAY_ORDER.field neq 'module_name' or empty($ARRAY_ORDER.value)}<i class="fa-solid fa-sort"></i>{elseif $ARRAY_ORDER.value eq 'asc'}<i class="fa-solid fa-sort-up"></i>{else}<i class="fa-solid fa-sort-down"></i>{/if}
                             </a>
                         </th>
-                        <th class="text-nowrap" style="width: 19.6%;">{$LANG->getModule('log_name_key')}</th>
-                        <th class="text-nowrap" style="width: 19.6%;">{$LANG->getModule('log_note')}</th>
-                        <th class="text-nowrap" style="width: 19.6%;">{$LANG->getModule('log_username')}</th>
-                        <th class="text-nowrap" style="width: 19.6%;">
+                        <th class="text-nowrap" style="width: 18%;">{$LANG->getModule('log_name_key')}</th>
+                        <th class="text-nowrap" style="width: 18%;">{$LANG->getModule('log_note')}</th>
+                        <th class="text-nowrap" style="width: 13%;">{$LANG->getModule('log_username')}</th>
+                        <th class="text-nowrap" style="width: 12%;">{$LANG->getGlobal('ip')}</th>
+                        <th class="text-nowrap" style="width: 16%;">
                             <a href="{$BASE_URL_ORDER}{if $ARRAY_ORDER.field neq 'log_time' or $ARRAY_ORDER.value neq 'desc'}&amp;of=log_time{if $ARRAY_ORDER.field neq 'log_time' or empty($ARRAY_ORDER.value)}&amp;ov=asc{else}&amp;ov=desc{/if}{/if}" class="d-flex align-items-center justify-content-between">
                                 <span class="me-1">{$LANG->getModule('log_time')}</span>
                                 {if $ARRAY_ORDER.field neq 'log_time' or empty($ARRAY_ORDER.value)}<i class="fa-solid fa-sort"></i>{elseif $ARRAY_ORDER.value eq 'asc'}<i class="fa-solid fa-sort-up"></i>{else}<i class="fa-solid fa-sort-down"></i>{/if}
@@ -99,6 +100,14 @@
                         <td class="text-break">{$row.name_key}</td>
                         <td class="text-break">{$row.note_action}</td>
                         <td>{$row.username}</td>
+                        <td class="text-nowrap">
+                            {$row.log_ip}
+                            {if $row.log_remote_addr}
+                            <span class="d-block text-muted small" title="{$LANG->getModule('log_remote_addr_help')}"
+                                data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-title="{$LANG->getModule('log_remote_addr_help')}"
+                            >{$LANG->getModule('log_remote_addr')}: {$row.log_remote_addr}</span>
+                            {/if}
+                        </td>
                         <td>{$row.time}</td>
                         {if $ALLOWED_DELETE}
                         <td class="text-nowrap text-center">

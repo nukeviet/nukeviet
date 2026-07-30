@@ -151,7 +151,7 @@ function validUserLog($array_user, $remember, $mode_data = [], $current_mode = 0
         } else {
             $log_message = $nv_Lang->getModule('st_login');
         }
-        nv_insert_logs(NV_LANG_DATA, $module_name, '[' . $array_user['username'] . '] ' . $log_message, ' Client IP:' . NV_CLIENT_IP, 0);
+        nv_insert_logs(NV_LANG_DATA, $module_name, '[' . $array_user['username'] . '] ' . $log_message, '', 0);
     }
 }
 
