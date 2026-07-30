@@ -149,6 +149,25 @@
                         {if $mt.has_input}
                         <input class="form-control mt-1" type="text" value="{$mt.match_value}" name="match_{$mt.key}"{if not $mt.checked} disabled{/if} autocomplete="off">
                         {/if}
+                        {if $mt.key eq 'callback'}
+                        <div class="form-text">
+                            {$LANG->getModule('field_match_type_callback_note')}.
+                            <a href="#" data-toggle="modalShowByObj" data-obj="#li_{$mt.key}_view">{$LANG->getModule('field_match_type_callback_view')}</a>
+                            <div class="d-none" id="li_{$mt.key}_view" title="{$LANG->getModule('field_match_type_callback_list')}">
+                                {if empty($CALLBACK_FUNCTION_LIST)}
+                                <div class="alert alert-warning mb-0" role="alert">{$LANG->getModule('field_match_type_callback_list_empty')}</div>
+                                {else}
+                                <div class="row">
+                                    {foreach from=$CALLBACK_FUNCTION_LIST item=func}
+                                    <div class="col-6 text-break">
+                                        <code>{$func}</code>
+                                    </div>
+                                    {/foreach}
+                                </div>
+                                {/if}
+                            </div>
+                        </div>
+                        {/if}
                     </div>
                     {/foreach}
                 </div>

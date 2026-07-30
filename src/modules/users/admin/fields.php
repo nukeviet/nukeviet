@@ -299,8 +299,10 @@ if ($nv_Request->isset_request('save', 'post')) {
         $dataform['match_type'] = $nv_Request->get_title('match_type', 'post', '', 50, $preg_replace);
         $dataform['match_regex'] = ($dataform['match_type'] == 'regex') ? $nv_Request->get_string('match_regex', 'post', '', false) : '';
         $dataform['func_callback'] = ($dataform['match_type'] == 'callback') ? $nv_Request->get_string('match_callback', 'post', '', false) : '';
-        if ($dataform['func_callback'] != '' and !function_exists($dataform['func_callback'])) {
+        $allowed_callbacks = (isset($global_config['user_field_callbacks']) and is_array($global_config['user_field_callbacks'])) ? $global_config['user_field_callbacks'] : [];
+        if ($dataform['func_callback'] != '' and (!function_exists($dataform['func_callback']) or !in_array($dataform['func_callback'], $allowed_callbacks, true))) {
             $dataform['func_callback'] = '';
+            $dataform['match_type'] = 'none';
         }
 
         if ($dataform['field_type'] == 'editor') {
@@ -1074,6 +1076,10 @@ if ($nv_Request->isset_request('qlist', 'get')) {
         ];
     }
     $tpl->assign('MATCH_TYPE_LIST', $match_type_list);
+
+    $callback_function_list = (isset($global_config['user_field_callbacks']) and is_array($global_config['user_field_callbacks'])) ? $global_config['user_field_callbacks'] : [];
+    $callback_function_list = array_map('nv_htmlspecialchars', $callback_function_list);
+    $tpl->assign('CALLBACK_FUNCTION_LIST', $callback_function_list);
 
     // File types và MIME types
     $tpl->assign('DATAFILE', $datafile);

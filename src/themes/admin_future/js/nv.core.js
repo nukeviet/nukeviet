@@ -865,6 +865,14 @@ $(function() {
         }, 210);
     });
 
+    // modalShowByObj
+    $('body').on('click', '[data-toggle=modalShowByObj]', function(e) {
+        e.preventDefault();
+        var obj = $(this).data('obj') ? $(this).data('obj') : this,
+            callback = $(this).data('callback');
+        callback ? modalShowByObj(obj, callback) : modalShowByObj(obj);
+    });
+
     // Tooltip
     ([...document.querySelectorAll('[data-bs-toggle="tooltip"]')].map(tipEle => new bootstrap.Tooltip(tipEle)));
 
