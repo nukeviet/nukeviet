@@ -3,6 +3,7 @@
         <div class="card-body pt-4">
             <div class="alert alert-info">{$LANG->getModule('trusted_proxy_note')}</div>
             <div class="alert alert-warning">{$LANG->getModule('trusted_proxy_note_strip')}</div>
+            {if $WARNING}<div class="alert alert-danger"><i class="fa-solid fa-triangle-exclamation"></i> {$WARNING}</div>{/if}
             <div class="row mb-3">
                 <label class="col-sm-3 col-form-label text-sm-end" for="trusted_proxy_enable">{$LANG->getModule('trusted_proxy_enable')}</label>
                 <div class="col-sm-8 col-lg-6 col-xxl-5 d-flex align-items-center">

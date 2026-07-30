@@ -26,8 +26,38 @@ class Ips
 {
     const INCORRECT_IP = 'Incorrect IP address specified';
 
+    /**
+     * Các header cho biết request đi qua reverse proxy hoặc CDN đặt trước máy chủ
+     *
+     * Chỉ gồm các header mà reverse proxy/CDN thực tế đặt. Không đưa vào HTTP_VIA hay
+     * HTTP_CLIENT_IP: chúng thường do proxy phía client (proxy doanh nghiệp, ISP) đặt,
+     * mà loại proxy đó kết nối trực tiếp tới máy chủ nên website không hề đứng sau proxy.
+     * Nhận diện lẫn sẽ dẫn tới khuyên người quản trị thêm dải IP proxy công cộng vào
+     * danh sách tin cậy, tự tạo ra lỗ hổng giả mạo IP.
+     */
+    private const PROXY_HEADERS = [
+        'HTTP_CF_CONNECTING_IP',
+        'HTTP_X_FORWARDED_FOR',
+        'HTTP_FORWARDED',
+        'HTTP_X_REAL_IP'
+    ];
+
+    /**
+     * IP đọc từ các header không chuẩn (HTTP_CLIENT_IP, HTTP_VIA...).
+     * Dữ liệu thô do client gửi, có thể giả mạo tùy ý.
+     *
+     * @deprecated Không dùng để chặn IP, phân quyền hay giới hạn tần suất. Hãy dùng self::$remote_ip
+     * @var string
+     */
     public static $client_ip;
 
+    /**
+     * IP đọc từ các header chuyển tiếp (X-Forwarded-For, Forwarded...).
+     * Dữ liệu thô do client gửi, chưa qua kiểm tra proxy tin cậy, có thể giả mạo tùy ý.
+     *
+     * @deprecated Không dùng để chặn IP, phân quyền hay giới hạn tần suất. Hãy dùng self::$remote_ip
+     * @var string
+     */
     public static $forward_ip;
 
     public static $remote_addr;
@@ -172,11 +202,11 @@ class Ips
      */
     private function nv_getip()
     {
+        /**
+         * Bật tính năng tin tưởng proxy thì chỉ đọc các header chuẩn
+         * bỏ qua các header cũ, header không theo chuẩn.
+         */
         if ($this->trust_proxy) {
-            /**
-             * Bật tính năng tin tưởng proxy thì chỉ đọc các header chuẩn
-             * bỏ qua các header cũ, header không theo chuẩn.
-             */
             if (self::$remote_addr != 'none' and $this->isTrustedProxy(self::$remote_addr)) {
                 // Cloudflare
                 if (($ip = self::getIp('HTTP_CF_CONNECTING_IP')) !== false) {
@@ -187,19 +217,12 @@ class Ips
                     return $ip;
                 }
             }
-        } else {
-            // Tắt tin tưởng proxy thì đọc header rộng
-            if (($ip = self::getIp('HTTP_CF_CONNECTING_IP')) !== false) {
-                return $ip;
-            }
-            if (self::$client_ip != 'none') {
-                return self::$client_ip;
-            }
-            if (self::$forward_ip != 'none') {
-                return self::$forward_ip;
-            }
         }
 
+        /**
+         * Tắt tin tưởng proxy, hoặc IP kết nối trực tiếp không thuộc danh sách proxy tin cậy
+         * thì bỏ qua toàn bộ header IP do client gửi, chỉ dùng IP do máy chủ cung cấp.
+         */
         if (self::$remote_addr != 'none') {
             return self::$remote_addr;
         }
@@ -237,6 +260,36 @@ class Ips
         }
 
         return false;
+    }
+
+    /**
+     * Kiểm tra request hiện tại có dấu hiệu đi qua proxy hoặc CDN hay không, dựa vào
+     * sự hiện diện của các header IP do proxy đặt.
+     * Đây chỉ là dấu hiệu, chưa biết có tin cậy hay không, client tự gửi được các header này.
+     *
+     * @return bool
+     */
+    public function isBehindProxy()
+    {
+        foreach (self::PROXY_HEADERS as $header) {
+            if (Site::getEnv($header) != '') {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Header IP do proxy đặt có thực sự được tin trong request hiện tại hay không:
+     * tùy chọn tin cậy proxy đang bật và IP kết nối trực tiếp thuộc danh sách proxy tin cậy.
+     * Trả về false nghĩa là hệ thống đang bỏ qua mọi header IP và dùng REMOTE_ADDR.
+     *
+     * @return bool
+     */
+    public function isProxyHeaderTrusted()
+    {
+        return ($this->trust_proxy and self::$remote_addr != 'none' and $this->isTrustedProxy(self::$remote_addr));
     }
 
     /**

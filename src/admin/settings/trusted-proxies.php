@@ -169,6 +169,16 @@ while ($row = $stmt->fetch()) {
     }
 }
 
+// Các cảnh báo cấu hình
+$warning = '';
+if ($ips->isBehindProxy() and !$ips->isProxyHeaderTrusted()) {
+    if (empty($data['trusted_proxy_enable'])) {
+        $warning = $nv_Lang->getModule('trusted_proxy_warn_disabled', NV_CLIENT_IP);
+    } else {
+        $warning = $nv_Lang->getModule('trusted_proxy_warn_untrusted', NV_REMOTE_ADDR);
+    }
+}
+
 $tpl = new \NukeViet\Template\NVSmarty();
 $tpl->setTemplateDir(get_module_tpl_dir('trusted-proxies.tpl'));
 $tpl->assign('LANG', $nv_Lang);
@@ -176,6 +186,7 @@ $tpl->assign('MODULE_NAME', $module_name);
 $tpl->assign('OP', $op);
 $tpl->assign('CHECKSS', csrf_create($csrf_key));
 $tpl->assign('DATA', $data);
+$tpl->assign('WARNING', $warning);
 
 $contents = $tpl->fetch('trusted-proxies.tpl');
 
