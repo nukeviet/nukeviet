@@ -315,6 +315,7 @@ $lang_module['field_match_type_date'] = 'Ngày tháng cần nhập theo định 
 $lang_module['field_match_type_url'] = 'Url';
 $lang_module['field_match_type_regex'] = 'Biểu thức quy tắc';
 $lang_module['field_match_type_callback'] = 'Sử dụng hàm';
+$lang_module['field_match_type_callback_note'] = 'Vì lý do bảo mật, tên hàm chỉ được chấp nhận khi đã khai báo trong <code>$global_config[\'user_field_callbacks\']</code> tại tệp <code>config.php</code>. Ví dụ: <code>$global_config[\'user_field_callbacks\'] = [\'ten_ham_1\', \'ten_ham_2\'];</code>. Hàm phải tồn tại và trả về true/false.';
 $lang_module['field_default_value'] = 'Giá trị mặc định';
 $lang_module['field_min_length'] = 'Chiều dài ký tự ít nhất';
 $lang_module['field_max_length'] = 'Chiều dài ký tự nhiều nhất';

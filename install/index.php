@@ -1349,7 +1349,8 @@ function nv_save_file_config()
         $content .= "\$global_config['extension_setup'] = 3; // 0: No, 1: Upload, 2: NukeViet Store, 3: Upload + NukeViet Store\n";
         $content .= "\$global_config['extension_setup_ips'] = [];\n";
         $content .= "\$global_config['nat_ports'] = [];\n";
-        $content .= '// Readmore: https://wiki.nukeviet.vn/nukeviet4:advanced_setting:file_config';
+        $content .= "\$global_config['user_field_callbacks'] = [];\n";
+        $content .= "// Readmore: https://wiki.nukeviet.vn/nukeviet4:advanced_setting:file_config\n";
 
         if ($step < 7) {
             $content .= "\$global_config['cookie_prefix'] = '" . $global_config['cookie_prefix'] . "';\n";
