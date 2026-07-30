@@ -365,17 +365,11 @@ function my_author_detail($userid)
         $row = $stmt->fetch();
         $stmt->closeCursor();
 
-        $pseudonym = '';
-        if (!empty($row['first_name'])) {
-            $pseudonym .= $row['first_name'];
-            if (!empty($row['last_name'])) {
-                $pseudonym .= ' ' . $row['last_name'];
-            }
-        }
-        if (empty($pseudonym)) {
-            $pseudonym = $row['username'];
+        if (!$row) {
+            return [];
         }
 
+        $pseudonym = nv_show_name_user($row['first_name'], $row['last_name'], $row['username']);
         $alias = get_pseudonym_alias($pseudonym, 0);
         if (!$alias) {
             $alias = change_alias($pseudonym) . '-' . $userid;
