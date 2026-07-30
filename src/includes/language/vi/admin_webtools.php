@@ -98,6 +98,7 @@ $lang_module['errorlog_id'] = 'ID';
 $lang_module['errorlog_time'] = 'Thời gian xảy ra lỗi';
 $lang_module['errorlog_server'] = 'Máy chủ';
 $lang_module['errorlog_ip'] = 'IP khách';
+$lang_module['errorlog_remote_addr'] = 'Kết nối từ';
 $lang_module['errorlog_errno'] = 'Mã lỗi';
 $lang_module['errorlog_errstr'] = 'Nội dung lỗi';
 $lang_module['errorlog_file'] = 'File xảy ra lỗi';

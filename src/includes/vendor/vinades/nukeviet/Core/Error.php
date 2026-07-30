@@ -126,7 +126,8 @@ class Error
             'day' => gmdate('Y-m-d', NV_CURRENTTIME), // Prefix của file log, Lấy cố định GMT, không theo múi giờ
             'error_date' => date('r', NV_CURRENTTIME), // Thời gian xảy ra lỗi, Lấy theo múi giờ của client (tùy cấu hình)
             'month' => gmdate('Y-m', NV_CURRENTTIME), // Prefix theo tháng log 256, Lấy cố định GMT, không theo múi giờ,
-            'ip' => Ips::$remote_ip,
+            'ip' => Ips::$remote_ip, // IP thật của khách
+            'remote_addr' => Ips::$remote_addr, // IP kết nối trực tiếp, không giả mạo được bằng header
             'request' => substr(Site::getEnv(['UNENCODED_URL', 'REQUEST_URI']), 0, 500),
             'useragent' => trim(substr(Site::getEnv('HTTP_USER_AGENT'), 0, 500)),
             'server_name' => preg_replace('/(\:[0-9]+)$/', '', preg_replace('/^[a-z]+\:\/\//i', '', trim(Site::getEnv(['HTTP_HOST', 'SERVER_NAME', 'Host'])))),
@@ -262,6 +263,12 @@ class Error
         $content['time'] = $this->cl['error_date'];
         $content['server'] = $this->cl['server_name'];
         $content['ip'] = $this->cl['ip'];
+
+        // Ghi thêm IP kết nối trực tiếp khi nó khác IP khách
+        if ($this->cl['remote_addr'] !== $this->cl['ip']) {
+            $content['remote_addr'] = $this->cl['remote_addr'];
+        }
+
         $content['errno'] = $this->errno . ' (' . self::$errortype[$this->errno] . ')';
         $content['errstr'] = $this->errstr;
         if (!empty($this->errfile)) {

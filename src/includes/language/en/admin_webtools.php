@@ -98,6 +98,7 @@ $lang_module['errorlog_id'] = 'ID';
 $lang_module['errorlog_time'] = 'Error time';
 $lang_module['errorlog_server'] = 'Server';
 $lang_module['errorlog_ip'] = 'Client IP';
+$lang_module['errorlog_remote_addr'] = 'Connected from';
 $lang_module['errorlog_errno'] = 'Error Code';
 $lang_module['errorlog_errstr'] = 'Error content';
 $lang_module['errorlog_file'] = 'File where error occurs';
