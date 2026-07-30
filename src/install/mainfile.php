@@ -70,7 +70,6 @@ if ($client_info['ip'] == 'none') {
 
 // Neu khong co IP
 // define( 'NV_SERVER_IP', $ips->server_ip );
-define('NV_FORWARD_IP', $ips::$forward_ip);
 define('NV_REMOTE_ADDR', $ips::$remote_addr);
 define('NV_CLIENT_IP', $client_info['ip']);
 

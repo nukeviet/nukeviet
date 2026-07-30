@@ -652,7 +652,7 @@ $lang_module['cache_test_error'] = 'Lỗi kết nối đến máy chủ cache. V
 
 $lang_module['trusted_proxy'] = 'Quản lý proxy tin cậy';
 $lang_module['trusted_proxy_note'] = 'Khi website đặt sau reverse proxy hoặc CDN (Cloudflare, Nginx...), IP thật của khách nằm trong các header như X-Forwarded-For, CF-Connecting-IP. Chỉ tin các header này khi IP kết nối trực tiếp (REMOTE_ADDR) thuộc danh sách proxy tin cậy bên dưới, nếu không kẻ tấn công có thể giả mạo IP để vượt qua giới hạn tần suất và chống dò mật khẩu.';
-$lang_module['trusted_proxy_note_strip'] = 'Nếu website đứng sau proxy nội bộ hoặc nhà cung cấp khác không phải Cloudflare, hãy cấu hình proxy ghi đè hoặc xóa các header IP do client gửi; nếu không, kẻ tấn công vẫn có thể giả mạo IP bằng cách tự gửi header CF-Connecting-IP. Ví dụ với Nginx: proxy_set_header CF-Connecting-IP ""; và proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;';
+$lang_module['trusted_proxy_note_strip'] = 'Nếu website đứng sau proxy nội bộ hoặc nhà cung cấp khác không phải Cloudflare, hãy cấu hình proxy ghi đè hoặc xóa toàn bộ header IP do client gửi; nếu không, kẻ tấn công vẫn có thể giả mạo IP bằng cách tự gửi các header này. Hệ thống đọc bốn header: CF-Connecting-IP, X-Forwarded-For, Forwarded và X-Real-IP. Ví dụ với Nginx: proxy_set_header CF-Connecting-IP ""; proxy_set_header Forwarded ""; proxy_set_header X-Real-IP $remote_addr; và proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;';
 $lang_module['trusted_proxy_enable'] = 'Kích hoạt';
 $lang_module['trusted_proxy_enable_des'] = 'Chỉ tin các header IP của proxy khi bật tùy chọn này. Khi tắt, hệ thống luôn dùng IP kết nối trực tiếp (REMOTE_ADDR) và bỏ qua mọi header IP do client gửi';
 $lang_module['trusted_proxy_list'] = 'Danh sách proxy tin cậy';

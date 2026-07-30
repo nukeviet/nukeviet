@@ -42,24 +42,6 @@ class Ips
         'HTTP_X_REAL_IP'
     ];
 
-    /**
-     * IP đọc từ các header không chuẩn (HTTP_CLIENT_IP, HTTP_VIA...).
-     * Dữ liệu thô do client gửi, có thể giả mạo tùy ý.
-     *
-     * @deprecated Không dùng để chặn IP, phân quyền hay giới hạn tần suất. Hãy dùng self::$remote_ip
-     * @var string
-     */
-    public static $client_ip;
-
-    /**
-     * IP đọc từ các header chuyển tiếp (X-Forwarded-For, Forwarded...).
-     * Dữ liệu thô do client gửi, chưa qua kiểm tra proxy tin cậy, có thể giả mạo tùy ý.
-     *
-     * @deprecated Không dùng để chặn IP, phân quyền hay giới hạn tần suất. Hãy dùng self::$remote_ip
-     * @var string
-     */
-    public static $forward_ip;
-
     public static $remote_addr;
 
     public static $remote_ip;
@@ -83,8 +65,6 @@ class Ips
         $this->trust_proxy = (bool) $trust_proxy;
         $this->trusted_proxies = $trusted_proxies;
 
-        self::$client_ip = trim(self::nv_get_clientip());
-        self::$forward_ip = trim(self::nv_get_forwardip());
         self::$remote_addr = trim(self::nv_get_remote_addr());
         self::$remote_ip = trim($this->nv_getip());
         self::$my_ip2long = self::ip2long();
@@ -132,54 +112,6 @@ class Ips
     }
 
     /**
-     * nv_get_clientip()
-     * Hàm tĩnh riêng của class
-     *
-     * @return string
-     */
-    private static function nv_get_clientip()
-    {
-        if (($ip = self::getIp('HTTP_CLIENT_IP')) !== false) {
-            return $ip;
-        }
-        if (($ip = self::getIp('HTTP_VIA')) !== false) {
-            return $ip;
-        }
-        if (($ip = self::getIp('HTTP_X_COMING_FROM')) !== false) {
-            return $ip;
-        }
-        if (($ip = self::getIp('HTTP_COMING_FROM')) !== false) {
-            return $ip;
-        }
-
-        return 'none';
-    }
-
-    /**
-     * nv_get_forwardip()
-     * Hàm tĩnh riêng của class
-     *
-     * @return string
-     */
-    private static function nv_get_forwardip()
-    {
-        if (($ip = self::getIp('HTTP_X_FORWARDED_FOR')) !== false) {
-            return $ip;
-        }
-        if (($ip = self::getIp('HTTP_X_FORWARDED')) !== false) {
-            return $ip;
-        }
-        if (($ip = self::getIp('HTTP_FORWARDED_FOR')) !== false) {
-            return $ip;
-        }
-        if (($ip = self::getIp('HTTP_FORWARDED')) !== false) {
-            return $ip;
-        }
-
-        return 'none';
-    }
-
-    /**
      * nv_get_remote_addr()
      * Hàm tĩnh riêng của class
      * Địa chỉ IP người dùng đang truy cập do máy chủ cung cấp
@@ -216,6 +148,14 @@ class Ips
                 if (($ip = $this->getForwardedClient()) !== false) {
                     return $ip;
                 }
+                // Forwarded theo RFC 7239, cũng duyệt từ phải sang trái
+                if (($ip = $this->getRfc7239Client()) !== false) {
+                    return $ip;
+                }
+                // X-Real-IP: proxy ghi thẳng IP khách, chỉ một giá trị
+                if (($ip = self::getIp('HTTP_X_REAL_IP')) !== false) {
+                    return $ip;
+                }
             }
         }
 
@@ -236,8 +176,6 @@ class Ips
 
     /**
      * Lấy IP client thật từ header X-Forwarded-For khi đứng sau proxy tin cậy.
-     * Duyệt danh sách từ phải sang trái, bỏ qua các IP thuộc danh sách proxy tin cậy,
-     * IP hợp lệ đầu tiên là client IP.
      *
      * @return false|string
      */
@@ -248,9 +186,80 @@ class Ips
             return false;
         }
 
-        $parts = explode(',', $xff);
-        for ($i = count($parts) - 1; $i >= 0; $i--) {
-            $ip = trim($parts[$i]);
+        return $this->pickClientFromChain(explode(',', $xff));
+    }
+
+    /**
+     * Lấy IP client thật từ header Forwarded (RFC 7239) khi đứng sau proxy tin cậy.
+     * Mỗi chặng có dạng for=192.0.2.60;proto=http;by=203.0.113.43, các chặng ngăn nhau
+     * bởi dấu phẩy. Chỉ quan tâm tham số for, bỏ qua proto, by, host.
+     *
+     * @return false|string
+     */
+    private function getRfc7239Client()
+    {
+        $forwarded = Site::getEnv('HTTP_FORWARDED');
+        if (empty($forwarded)) {
+            return false;
+        }
+
+        $chain = [];
+        foreach (explode(',', $forwarded) as $element) {
+            foreach (explode(';', $element) as $param) {
+                [$name, $value] = array_pad(explode('=', $param, 2), 2, '');
+                if (strtolower(trim($name)) !== 'for') {
+                    continue;
+                }
+                $chain[] = self::normalizeForwardedFor($value);
+                break;
+            }
+        }
+
+        return $this->pickClientFromChain($chain);
+    }
+
+    /**
+     * Chuẩn hóa giá trị tham số for của header Forwarded về địa chỉ IP.
+     * Theo RFC 7239 giá trị có thể nằm trong dấu nháy kép, kèm cổng, riêng IPv6 còn
+     * bọc trong dấu ngoặc vuông: "[2001:db8::1]:4711", "192.0.2.43:47011".
+     * Các định danh ẩn danh (_hidden, unknown) trả về nguyên trạng rồi bị loại ở bước
+     * kiểm tra IP hợp lệ.
+     *
+     * @param string $value
+     * @return string
+     */
+    private static function normalizeForwardedFor($value)
+    {
+        $value = trim(trim($value), '"');
+
+        // IPv6 bọc trong ngoặc vuông, phần sau dấu ] là cổng nên bỏ đi
+        if (str_starts_with($value, '[')) {
+            $end = strpos($value, ']');
+
+            return ($end === false) ? '' : substr($value, 1, $end - 1);
+        }
+
+        // Đúng một dấu hai chấm nghĩa là IPv4 kèm cổng. Nhiều dấu hai chấm là IPv6 trần
+        if (substr_count($value, ':') === 1) {
+            $value = substr($value, 0, strpos($value, ':'));
+        }
+
+        return $value;
+    }
+
+    /**
+     * Duyệt chuỗi IP chuyển tiếp từ phải sang trái, bỏ qua các giá trị không phải IP
+     * hợp lệ và các IP thuộc danh sách proxy tin cậy. IP tìm được đầu tiên là IP khách.
+     * Duyệt từ phải sang vì phần bên trái do client tự gửi nên giả mạo được, phần bên
+     * phải mới là do các proxy tin cậy ghi thêm.
+     *
+     * @param array $chain
+     * @return false|string
+     */
+    private function pickClientFromChain(array $chain)
+    {
+        for ($i = count($chain) - 1; $i >= 0; $i--) {
+            $ip = trim($chain[$i]);
             if ($ip === '' or !filter_var($ip, FILTER_VALIDATE_IP)) {
                 continue;
             }

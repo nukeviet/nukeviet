@@ -38,14 +38,10 @@ class IpsTest extends \Codeception\Test\Unit
         'REMOTE_ADDR',
         'HTTP_CF_CONNECTING_IP',
         'HTTP_X_FORWARDED_FOR',
-        'HTTP_X_FORWARDED',
-        'HTTP_FORWARDED_FOR',
         'HTTP_FORWARDED',
-        'HTTP_CLIENT_IP',
-        'HTTP_VIA',
         'HTTP_X_REAL_IP',
-        'HTTP_X_COMING_FROM',
-        'HTTP_COMING_FROM'
+        'HTTP_CLIENT_IP',
+        'HTTP_VIA'
     ];
 
     /**
@@ -105,8 +101,9 @@ class IpsTest extends \Codeception\Test\Unit
             'REMOTE_ADDR' => '203.0.113.9',
             'HTTP_CF_CONNECTING_IP' => '1.2.3.4',
             'HTTP_X_FORWARDED_FOR' => '5.6.7.8',
-            'HTTP_CLIENT_IP' => '9.10.11.12',
-            'HTTP_FORWARDED_FOR' => '13.14.15.16'
+            'HTTP_FORWARDED' => 'for=9.10.11.12',
+            'HTTP_X_REAL_IP' => '13.14.15.16',
+            'HTTP_CLIENT_IP' => '17.18.19.20'
         ], false);
 
         $this->assertSame('203.0.113.9', $ip, 'Tắt trust proxy nhưng IP vẫn lấy từ header do client gửi');
@@ -220,6 +217,106 @@ class IpsTest extends \Codeception\Test\Unit
         $ip = $this->detect([
             'REMOTE_ADDR' => '10.1.2.3',
             'HTTP_X_FORWARDED_FOR' => 'not-an-ip, 999.999.999.999'
+        ], true);
+
+        $this->assertSame('10.1.2.3', $ip);
+    }
+
+    /**
+     * X-Real-IP: header rất phổ biến với Nginx, phải được đọc khi đứng sau proxy tin cậy.
+     * Trước đây header này nằm trong danh sách dấu hiệu proxy nhưng không được phân tích,
+     * khiến quản trị bật tin tưởng proxy mà IP vẫn ra IP của chính proxy.
+     *
+     * @group all
+     */
+    public function testRealIpTrustedFromTrustedProxy()
+    {
+        $ip = $this->detect([
+            'REMOTE_ADDR' => '10.1.2.3',
+            'HTTP_X_REAL_IP' => '198.51.100.7'
+        ], true);
+
+        $this->assertSame('198.51.100.7', $ip);
+    }
+
+    /**
+     * X-Forwarded-For được ưu tiên hơn X-Real-IP khi có cả hai
+     *
+     * @group all
+     */
+    public function testForwardedForTakesPrecedenceOverRealIp()
+    {
+        $ip = $this->detect([
+            'REMOTE_ADDR' => '10.1.2.3',
+            'HTTP_X_FORWARDED_FOR' => '198.51.100.7',
+            'HTTP_X_REAL_IP' => '203.0.113.50'
+        ], true);
+
+        $this->assertSame('198.51.100.7', $ip);
+    }
+
+    /**
+     * Header Forwarded theo RFC 7239: đọc tham số for, bỏ qua proto/by/host,
+     * xử lý được dấu nháy, cổng và IPv6 bọc ngoặc vuông.
+     *
+     * @group all
+     */
+    public function testRfc7239ForwardedTrustedFromTrustedProxy()
+    {
+        $cases = [
+            'for=198.51.100.7' => '198.51.100.7',
+            'for=198.51.100.7;proto=http;by=203.0.113.43' => '198.51.100.7',
+            'For="198.51.100.7"' => '198.51.100.7',
+            'proto=https;for=198.51.100.7' => '198.51.100.7',
+            'for="198.51.100.7:47011"' => '198.51.100.7',
+            'for="[2001:db8::99]:4711"' => '2001:db8::99',
+            'for=2001:db8::99' => '2001:db8::99'
+        ];
+
+        foreach ($cases as $header => $expected) {
+            $ip = $this->detect([
+                'REMOTE_ADDR' => '10.1.2.3',
+                'HTTP_FORWARDED' => $header
+            ], true);
+
+            $this->assertSame($expected, $ip, 'Phân tích sai header Forwarded: ' . $header);
+        }
+    }
+
+    /**
+     * Forwarded nhiều chặng: duyệt từ phải sang trái, bỏ qua chặng của proxy tin cậy
+     * và các định danh ẩn danh theo RFC 7239 (unknown, _hidden).
+     *
+     * @group all
+     * @group security
+     */
+    public function testRfc7239ForwardedMultiHopSkipsTrustedProxies()
+    {
+        $ip = $this->detect([
+            'REMOTE_ADDR' => '10.1.2.3',
+            'HTTP_FORWARDED' => 'for=1.1.1.1, for=198.51.100.7, for=10.9.9.9;proto=http'
+        ], true);
+
+        $this->assertSame('198.51.100.7', $ip, 'Không bỏ qua chặng proxy tin cậy trong Forwarded');
+
+        $ip = $this->detect([
+            'REMOTE_ADDR' => '10.1.2.3',
+            'HTTP_FORWARDED' => 'for=198.51.100.7, for=unknown, for=_hidden'
+        ], true);
+
+        $this->assertSame('198.51.100.7', $ip, 'Không bỏ qua định danh ẩn danh trong Forwarded');
+    }
+
+    /**
+     * Forwarded không có tham số for hợp lệ thì bỏ qua, quay về REMOTE_ADDR
+     *
+     * @group all
+     */
+    public function testInvalidRfc7239ForwardedFallsBackToRemoteAddr()
+    {
+        $ip = $this->detect([
+            'REMOTE_ADDR' => '10.1.2.3',
+            'HTTP_FORWARDED' => 'proto=https;by=203.0.113.43'
         ], true);
 
         $this->assertSame('10.1.2.3', $ip);
