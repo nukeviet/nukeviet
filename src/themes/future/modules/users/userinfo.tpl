@@ -12,7 +12,11 @@
     <div class="fh-60 text-bg-primary rounded-top-4 px-2 px-lg-3 pt-2 pt-lg-3">
         <div class="position-relative h-100 text-white">
             <div class="position-absolute top-100 start-0 translate-middle-y">
-                <img src="{$IMG.src}" alt="{$USER.username}" title="{$USER.username}" width="80" height="80" class="rounded-circle">
+                {if $IMG.src}
+                <img src="{$IMG.src}" alt="{$USER.username}" title="{$USER.username}" width="80" height="80" class="fw-80 fh-80 rounded-circle object-fit-cover">
+                {else}
+                <span class="avatar-letters avatar-letters-lg fw-80 fh-80" title="{$USER.username}" style="background-color:{$USER.avatar_color}" aria-hidden="true">{$USER.avatar_letters}</span>
+                {/if}
                 <a href="#" data-toggle="changeAvatar" data-url="{$URL_AVATAR}" class="position-absolute end-0 bottom-0 d-flex align-items-center justify-content-center fw-25 fh-25 bg-body rounded-circle text-center text-decoration-none text-muted shadow-sm" title="{$LANG->getModule('change_avatar')}" aria-label="{$LANG->getModule('change_avatar')}">
                     <i class="fa-solid fa-pencil small"></i>
                 </a>

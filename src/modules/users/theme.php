@@ -1227,9 +1227,8 @@ function user_welcome(array $array_field_config, array $custom_fields): string
 {
     global $module_info, $global_config, $nv_Lang, $module_name, $user_info, $op, $language_array;
 
-    [$template, $dir] = get_module_tpl_dir('userinfo.tpl', true);
     $tpl = new \NukeViet\Template\NVSmarty();
-    $tpl->setTemplateDir($dir);
+    $tpl->setTemplateDir(get_module_tpl_dir('userinfo.tpl'));
 
     $tpl->assign('LANG', $nv_Lang);
     $tpl->assign('MODULE_NAME', $module_name);
@@ -1240,13 +1239,17 @@ function user_welcome(array $array_field_config, array $custom_fields): string
     $tpl->assign('CHANGEPASS_INFO', (int) $user_info['pass_reset_request'] === 2 ? $nv_Lang->getModule('pass_reset2_info', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=editinfo/password') : '');
     $tpl->assign('CHANGEEMAIL_INFO', (int) $user_info['email_reset_request'] === 2 ? $nv_Lang->getModule('email_reset2_info', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=editinfo/email') : '');
 
-    $img_src = !empty($user_info['avata']) ? $user_info['avata'] : NV_STATIC_URL . 'themes/' . $template . '/images/' . $module_info['module_theme'] . '/no_avatar.png';
+    // src rỗng tpl sẽ chuyển sang dạng avatar chữ
     $tpl->assign('IMG', [
-        'src' => $img_src,
+        'src' => $user_info['avata'] ?? '',
         'title' => !empty($user_info['avata']) ? $nv_Lang->getModule('img_size_title') : $nv_Lang->getModule('change_avatar')
     ]);
 
     $_user_info = $user_info;
+
+    // Tính lại phòng trường hợp tài khoản diễn đàn hoặc SSO
+    $_user_info['avatar_letters'] = $user_info['avatar_letters'] ?? nv_user_avatar_letters($user_info['first_name'] ?? '', $user_info['last_name'] ?? '', $user_info['username'] ?? '');
+    $_user_info['avatar_color'] = $user_info['avatar_color'] ?? nv_user_avatar_color($user_info['username'] ?? '');
 
     $_user_info['gender'] = ($user_info['gender'] == 'M') ? $nv_Lang->getModule('male') : ($user_info['gender'] == 'F' ? $nv_Lang->getModule('female') : '');
     $_user_info['birthday'] = empty($user_info['birthday']) ? '' : nv_date_format(1, $user_info['birthday']);
