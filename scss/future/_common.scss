@@ -83,6 +83,31 @@
   }
 }
 
+// Ảnh đại diện dạng chữ khi tài khoản chưa tải lên ảnh
+.avatar-letters {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  border-radius: 50%;
+  color: $white;
+  font-weight: $font-weight-semibold;
+  line-height: 1;
+  text-transform: uppercase;
+  user-select: none;
+  font-size: 1rem;
+
+  // Vòng tròn từ 80px trở lên
+  &.avatar-letters-lg {
+    font-size: 2rem;
+  }
+
+  // Vòng tròn cỡ 25px đến 30px
+  &.avatar-letters-sm {
+    font-size: .75rem;
+  }
+}
+
 .ps-with-fw-icon {
   padding-left: calc(1.25em + 1rem - 2px);
 }

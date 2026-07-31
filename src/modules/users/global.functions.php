@@ -736,6 +736,26 @@ function get_value_by_lang2($key, $value)
     return $return;
 }
 
+/**
+ * Lấy nhãn hiển thị của một lựa chọn thuộc trường dữ liệu tùy biến.
+ * Hỗ trợ dạng cũ (chuỗi) và dạng mới (mảng theo ngôn ngữ).
+ *
+ * @param array|string $choice_config
+ * @param string       $default
+ * @return string
+ */
+function nv_users_field_choice($choice_config, $default)
+{
+    if (is_string($choice_config) and $choice_config !== '') {
+        return $choice_config;
+    }
+    if (is_array($choice_config) and isset($choice_config[NV_LANG_DATA])) {
+        return $choice_config[NV_LANG_DATA];
+    }
+
+    return $default;
+}
+
 // Xác định cấu hình module
 $global_users_config = [];
 $cacheFile = 'config_' . NV_CACHE_PREFIX . '.cache';

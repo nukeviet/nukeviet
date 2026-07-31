@@ -28344,6 +28344,28 @@ body {
   max-height: 400px !important;
 }
 
+.avatar-letters {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  border-radius: 50%;
+  color: #fff;
+  font-weight: 600;
+  line-height: 1;
+  text-transform: uppercase;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  user-select: none;
+  font-size: 1rem;
+}
+.avatar-letters.avatar-letters-lg {
+  font-size: 2rem;
+}
+.avatar-letters.avatar-letters-sm {
+  font-size: 0.75rem;
+}
+
 .ps-with-fw-icon {
   padding-left: calc(1.25em + 1rem - 2px);
 }

@@ -63,6 +63,11 @@ if (defined('NV_IS_ADMIN')) {
                         if ($checknum) {
                             $user_info['full_name'] = nv_show_name_user($user_info['first_name'], $user_info['last_name'], $user_info['username']);
                             $user_info['avata'] = !empty($user_info['photo']) ? NV_STATIC_URL . $user_info['photo'] : '';
+
+                            // Dữ liệu dựng ảnh đại diện dạng chữ khi tài khoản chưa có ảnh
+                            $user_info['avatar_letters'] = nv_user_avatar_letters($user_info['first_name'], $user_info['last_name'], $user_info['username']);
+                            $user_info['avatar_color'] = nv_user_avatar_color($user_info['username']);
+
                             $check_in_groups = nv_user_groups($user_info['in_groups'], true);
                             $user_info['in_groups'] = $check_in_groups[0];
                             $user_info['2step_require'] = $check_in_groups[1] || !empty($user_cookie['admin_prelogin']);
