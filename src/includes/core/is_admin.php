@@ -159,6 +159,10 @@ if (!empty($admin_cookie)) {
     if (defined('SSO_REGISTER_DOMAIN') and !empty($admin_info['photo'])) {
         $admin_info['avata'] = SSO_REGISTER_DOMAIN . NV_BASE_SITEURL . $admin_info['photo'];
     }
+
+    // Dữ liệu dựng ảnh đại diện dạng chữ khi tài khoản chưa có ảnh
+    $admin_info['avatar_letters'] = nv_user_avatar_letters($admin_info['first_name'], $admin_info['last_name'], $admin_info['username']);
+    $admin_info['avatar_color'] = nv_user_avatar_color($admin_info['username']);
 }
 
 unset($admin_cookie, $admin_online);

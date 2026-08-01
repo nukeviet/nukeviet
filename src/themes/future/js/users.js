@@ -712,6 +712,45 @@ $(function() {
         updateFileInput();
         bsModal.show();
     });
+
+    // Quản trị xóa tài khoản ngay tại trang chi tiết thành viên
+    $('body').off('click', '[data-toggle="admindeluser"]')
+    .on('click', '[data-toggle="admindeluser"]', function(e) {
+        e.preventDefault();
+
+        const btn = $(this);
+        const icon = $('i', btn);
+        if (icon.is('.fa-spinner')) {
+            return;
+        }
+
+        nukeviet.confirm(nv_is_del_confirm[0], () => {
+            const orig = icon.data('icon');
+            icon.removeClass(orig).addClass('fa-spinner fa-spin-pulse');
+            $.ajax({
+                type: 'POST',
+                cache: false,
+                url: btn.data('url'),
+                data: {
+                    userid: btn.data('userid'),
+                    checkss: btn.data('checkss')
+                },
+                dataType: 'json',
+                success: function(res) {
+                    if (res.status === 'error') {
+                        icon.removeClass('fa-spinner fa-spin-pulse').addClass(orig);
+                        return nukeviet.toast(res.mess || nv_is_del_confirm[2], 'error');
+                    }
+                    window.location.href = btn.data('back');
+                },
+                error: function(xhr, text, err) {
+                    icon.removeClass('fa-spinner fa-spin-pulse').addClass(orig);
+                    nukeviet.toast(err || text, 'error');
+                    console.log(xhr, text, err);
+                }
+            });
+        });
+    });
 });
 
 /**

@@ -945,6 +945,104 @@ function nv_show_name_user($first_name, $last_name, $user_name = '', $lang = '')
 }
 
 /**
+ * Lấy tối đa 2 ký tự làm ảnh đại diện dạng chữ
+ *
+ * @param string $first_name Tên
+ * @param string $last_name  Họ
+ * @param string $user_name
+ * @return string
+ */
+function nv_user_avatar_letters($first_name, $last_name, $user_name = '')
+{
+    global $global_config;
+
+    $first_name = nv_user_avatar_words((string) $first_name);
+    $last_name = nv_user_avatar_words((string) $last_name);
+
+    // Trường hợp đầy đủ họ và tên
+    if ($first_name !== '' and $last_name !== '') {
+        $first_words = explode(' ', $first_name);
+        $last_words = explode(' ', $last_name);
+
+        if (!empty($global_config['name_show'])) {
+            // Hiển thị Tên - Họ: chữ đầu của tên rồi chữ đầu của họ
+            $letters = nv_substr($first_words[0], 0, 1) . nv_substr($last_words[0], 0, 1);
+        } else {
+            // Hiển thị Họ - Tên: chữ đầu của họ rồi chữ đầu của tên gọi
+            $letters = nv_substr($last_words[0], 0, 1) . nv_substr(end($first_words), 0, 1);
+        }
+
+        return nv_strtoupper($letters);
+    }
+
+    // Khuyết họ hoặc tên
+    $source = $first_name !== '' ? $first_name : $last_name;
+    if ($source !== '') {
+        $words = explode(' ', $source);
+        if (count($words) > 1) {
+            // Nhiều từ: ký tự đầu của từ đầu ghép với ký tự đầu của từ cuối
+            $letters = nv_substr($words[0], 0, 1) . nv_substr(end($words), 0, 1);
+        } else {
+            // Họ tên chỉ có một từ thì chỉ lấy một ký tự
+            $letters = nv_substr($source, 0, 1);
+        }
+
+        return nv_strtoupper($letters);
+    }
+
+    // Không khai báo họ tên thì lùi về tên đăng nhập
+    $source = nv_user_avatar_words((string) $user_name);
+    if ($source === '') {
+        return '';
+    }
+
+    $words = explode(' ', $source);
+    if (count($words) > 1) {
+        $letters = nv_substr($words[0], 0, 1) . nv_substr(end($words), 0, 1);
+    } else {
+        // Tên đăng nhập một từ vẫn lấy hai ký tự đầu
+        $letters = nv_substr($source, 0, 2);
+    }
+
+    return nv_strtoupper($letters);
+}
+
+/**
+ * Chuẩn hóa chuỗi về dạng chỉ còn chữ và số an toàn
+ *
+ * @param string $string
+ * @return string
+ */
+function nv_user_avatar_words($string)
+{
+    $string = strip_tags(html_entity_decode($string, ENT_QUOTES, 'UTF-8'));
+    $words = preg_replace('/[^\p{L}\p{N}]+/u', ' ', $string);
+    if ($words === null) {
+        // Chuỗi không phải UTF-8 hợp lệ, lùi về bộ ký tự ASCII
+        $words = preg_replace('/[^a-zA-Z0-9]+/', ' ', $string);
+    }
+
+    return trim((string) $words);
+}
+
+/**
+ * Sinh màu nền cố định theo tài khoản cho ảnh đại diện dạng chữ. Độ bão hòa và
+ * độ sáng được giữ nguyên để chữ màu trắng luôn đủ tương phản
+ *
+ * @param string $seed
+ * @return string
+ */
+function nv_user_avatar_color($seed)
+{
+    $seed = trim((string) $seed);
+    if ($seed === '') {
+        $seed = 'nukeviet';
+    }
+
+    return 'hsl(' . (abs(crc32(nv_strtolower($seed))) % 360) . ', 60%, 42%)';
+}
+
+/**
  * greeting_for_user_create()
  * Function tạo lời chào trong email
  *
