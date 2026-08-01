@@ -972,7 +972,7 @@ function nv_html_site_js($html = true, $other_js = [], $language_js = true, $glo
         $return[] = [
             'type' => 'application/ld+json',
             'ext' => 0,
-            'content' => json_encode(nv_unhtmlspecialchars($schemas), NV_JSON_ENCODE)
+            'content' => json_encode(nv_unhtmlspecialchars($schemas), NV_JSON_ENCODE_LDJSON)
         ];
     }
 

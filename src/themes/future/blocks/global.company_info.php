@@ -126,7 +126,7 @@ if (!nv_function_exists('nv_company_info')) {
         $tpl->setTemplateDir($block_config['real_path']);
         $tpl->assign('LANG', $nv_Lang);
         $tpl->assign('DATA', $block_config);
-        $tpl->assign('LD_JSON', json_encode($ld_json, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT));
+        $tpl->assign('LD_JSON', json_encode($ld_json, NV_JSON_ENCODE_LDJSON));
         return $tpl->fetch('global.company_info.tpl');
     }
 }

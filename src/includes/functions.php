@@ -2780,7 +2780,7 @@ function nv_change_buffer($buffer)
                 if (count($strdata) == 1) {
                     $strdata = $strdata[0];
                 }
-                $strdata = json_encode($strdata, NV_JSON_ENCODE_SCRIPT);
+                $strdata = json_encode($strdata, NV_JSON_ENCODE_LDJSON);
                 $strdata = '<script type="application/ld+json">' . PHP_EOL . $strdata . PHP_EOL . '</script>';
                 $buffer = preg_replace('/(<\/head[^>]*>)/', PHP_EOL . $strdata . '$1', $buffer, 1);
             }

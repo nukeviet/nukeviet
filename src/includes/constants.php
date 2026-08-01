@@ -210,6 +210,9 @@ define('NV_JSON_ENCODE', JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
 // JSON encode nhúng trong <script> tag HTML
 define('NV_JSON_ENCODE_SCRIPT', JSON_HEX_TAG | JSON_HEX_AMP | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
 
+// JSON encode cho JSON-LD (schema.org) nhúng trong <script type="application/ld+json">
+define('NV_JSON_ENCODE_LDJSON', NV_JSON_ENCODE_SCRIPT | JSON_PRETTY_PRINT);
+
 //Browser Names
 define('BROWSER_OPERA', 'Opera');
 define('BROWSER_OPERAMINI', 'Opera Mini');
