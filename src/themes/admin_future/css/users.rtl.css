@@ -11,4 +11,9 @@
   overflow-y: hidden;
   position: relative;
 }
+
+.user-avatar {
+  width: 32px;
+  height: 32px;
+}
 /*# sourceMappingURL=users.rtl.css.map */

@@ -155,20 +155,29 @@
                         {/if}
                         <td class="text-center text-nowrap">{$u.userid}</td>
                         <td>
-                            {if $u.is_admin}
-                            <span class="badge bg-secondary me-1" title="{$u.level}">{$u.level}</span>
-                            {/if}
-                            {if $u.is_pending_deletion}
-                            <span class="d-inline-flex align-items-center justify-content-center text-danger me-1" data-bs-toggle="tooltip" title="{$u.delete_at_display}">
-                                <i class="fa-solid fa-user-slash"></i>
-                            </span>
-                            {/if}
-                            {if $VIEW_USER_ALLOWED}
-                            <a href="#" data-toggle="view-user" data-link="{$u.link}">{$u.username|escape}</a>
-                            {else}
-                            {$u.username|escape}
-                            {/if}
-                            <div class="mt-1 text-muted small">{$u.full_name|escape}</div>
+                            <div class="d-flex align-items-center gap-2">
+                                {if $u.avata}
+                                <img src="{$u.avata}" alt="{$u.username|escape}" width="32" height="32" class="user-avatar flex-shrink-0 rounded-circle object-fit-cover">
+                                {else}
+                                <span class="avatar-letters avatar-letters-sm user-avatar" style="background-color:{$u.avatar_color}" aria-hidden="true">{$u.avatar_letters}</span>
+                                {/if}
+                                <div class="flex-grow-1">
+                                    {if $u.is_admin}
+                                    <span class="badge bg-secondary me-1" title="{$u.level}">{$u.level}</span>
+                                    {/if}
+                                    {if $u.is_pending_deletion}
+                                    <span class="d-inline-flex align-items-center justify-content-center text-danger me-1" data-bs-toggle="tooltip" title="{$u.delete_at_display}">
+                                        <i class="fa-solid fa-user-slash"></i>
+                                    </span>
+                                    {/if}
+                                    {if $VIEW_USER_ALLOWED}
+                                    <a href="#" data-toggle="view-user" data-link="{$u.link}">{$u.username|escape}</a>
+                                    {else}
+                                    {$u.username|escape}
+                                    {/if}
+                                    <div class="mt-1 text-muted small">{$u.full_name|escape}</div>
+                                </div>
+                            </div>
                         </td>
                         <td>
                             <a href="mailto:{$u.email|escape}">{$u.email|escape}</a>

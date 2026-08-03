@@ -199,6 +199,10 @@
     width: #{$i * 25}px !important;
   }
 
+  .fh-#{$i * 25} {
+    height: #{$i * 25}px !important;
+  }
+
   .maxw-#{$i * 25} {
     max-width: #{$i * 25}px !important;
   }

@@ -12,4 +12,9 @@
   position: relative;
 }
 
+.user-avatar {
+  width: 32px;
+  height: 32px;
+}
+
 /*# sourceMappingURL=users.css.map */
