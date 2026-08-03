@@ -557,9 +557,8 @@ if ($nv_Request->isset_request('field_fileupload,field,_csrf', 'post')) {
             'mess' => 'Stop!!!'
         ]);
     }
-    $checkss = md5(NV_CHECK_SESSION . '_' . $module_name . $field);
     $csrf = $nv_Request->get_title('_csrf', 'post', '');
-    if (!hash_equals($checkss, $csrf)) {
+    if (!csrf_check($csrf, $module_name . '_field_' . $field)) {
         nv_jsonOutput([
             'status' => 'error',
             'mess' => 'Stop!!!'

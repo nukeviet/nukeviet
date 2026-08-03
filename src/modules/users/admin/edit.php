@@ -837,7 +837,7 @@ foreach ($array_field_config as $row_f) {
             $row_f['filemaxsize'] = $row_f['limited_values']['file_max_size'] ?? 0;
             $row_f['filemaxsize_format'] = nv_convertfromBytes($row_f['limited_values']['file_max_size'] ?? 0);
             $row_f['filemaxnum'] = $row_f['limited_values']['maxnum'] ?? 0;
-            $row_f['csrf'] = csrf_create($admin_info['admin_id'] . '_' . $module_name . '_' . $row_f['field']);
+            $row_f['csrf'] = csrf_create($module_name . '_field_' . $row_f['field']);
             $row_f['url_module'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name;
             $row_f['widthlimit'] = image_size_info($row_f['limited_values']['widthlimit'] ?? '', 'width');
             $row_f['heightlimit'] = image_size_info($row_f['limited_values']['heightlimit'] ?? '', 'height');

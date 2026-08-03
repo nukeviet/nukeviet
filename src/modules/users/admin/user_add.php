@@ -551,7 +551,7 @@ foreach ($array_field_config as $row) {
             $row['filemaxsize'] = $row['limited_values']['file_max_size'] ?? 0;
             $row['filemaxsize_format'] = nv_convertfromBytes($row['limited_values']['file_max_size'] ?? 0);
             $row['filemaxnum'] = $row['limited_values']['maxnum'] ?? 0;
-            $row['csrf'] = csrf_create($admin_info['admin_id'] . '_' . $module_name . '_' . $row['field']);
+            $row['csrf'] = csrf_create($module_name . '_field_' . $row['field']);
             $row['url_module'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name;
             $row['widthlimit'] = image_size_info($row['limited_values']['widthlimit'] ?? '', 'width');
             $row['heightlimit'] = image_size_info($row['limited_values']['heightlimit'] ?? '', 'height');

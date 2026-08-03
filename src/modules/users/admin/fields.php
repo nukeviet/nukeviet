@@ -755,7 +755,7 @@ if ($nv_Request->isset_request('del', 'post')) {
 
                 nv_jsonOutput([
                     'status' => 'success',
-                    'mess' => $nv_Lang->getGlobal('delete_success')
+                    'mess' => $nv_Lang->getGlobal('success_level')
                 ]);
             }
         }
@@ -763,7 +763,7 @@ if ($nv_Request->isset_request('del', 'post')) {
 
     nv_jsonOutput([
         'status' => 'error',
-        'mess' => $nv_Lang->getGlobal('error_delete')
+        'mess' => $nv_Lang->getGlobal('danger_level')
     ]);
 }
 
