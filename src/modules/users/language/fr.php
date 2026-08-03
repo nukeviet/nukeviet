@@ -697,6 +697,7 @@ $lang_module['field_sql_choices_empty'] = 'Erreur: Le choix des données à part
 $lang_module['field_options_file'] = 'Options de fichier';
 $lang_module['field_file_exts'] = 'Types de fichiers autorisés à télécharger';
 $lang_module['field_file_exts_error'] = 'Veuillez sélectionner au moins un type de fichier dont le téléchargement est autorisé';
+$lang_module['field_file_max_size_error'] = 'La taille maximale du fichier téléchargé doit être supérieure à 0';
 $lang_module['field_file_maxnum'] = 'Nombre maximum de fichiers autorisés à télécharger';
 $lang_module['field_photo_max_size'] = 'Télécharger les limites de taille des photos';
 $lang_module['field_photo_max_size_note'] = 'Laisser les cases ci-dessus vides est interprété comme une taille d\'image illimitée<br />= la taille doit être absolument correcte<br />≥ taille supérieure ou égale à<br />≤ taille inférieure ou égale à';

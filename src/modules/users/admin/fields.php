@@ -397,8 +397,13 @@ if ($nv_Request->isset_request('save', 'post')) {
             'widthlimit' => $nv_Request->get_typed_array('widthlimit', 'post', 'int', []),
             'heightlimit' => $nv_Request->get_typed_array('heightlimit', 'post', 'int', [])
         ];
+        $datafile['file_max_size'] = min($datafile['file_max_size'], (int) $global_config['nv_max_size']);
+
         if (empty($datafile['filetype'])) {
             !$error && $error = $nv_Lang->getModule('field_file_exts_error');
+        } elseif ($datafile['file_max_size'] < 1) {
+            !$error && $error = $nv_Lang->getModule('field_file_max_size_error');
+            $error_input = 'file_max_size';
         } else {
             if (!empty($datafile['filetype']) and in_array('images', $datafile['filetype'], true)) {
                 if ($datafile['widthlimit']['equal'] > 0) {
@@ -1105,7 +1110,10 @@ if ($nv_Request->isset_request('qlist', 'get')) {
     $p_size = $global_config['nv_max_size'] / 100;
     $size_list = [];
     for ($index = 100; $index > 0; --$index) {
-        $size = floor($index * $p_size);
+        $size = (int) floor($index * $p_size);
+        if ($size < 1) {
+            break;
+        }
         $size_list[] = [
             'key' => $size,
             'name' => nv_convertfromBytes($size),

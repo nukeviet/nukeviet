@@ -565,7 +565,12 @@ if ($nv_Request->isset_request('field_fileupload,field,_csrf', 'post')) {
         ]);
     }
 
-    $result = $db->query('SELECT * FROM ' . NV_MOD_TABLE . '_field WHERE user_editable = 1 AND field=' . $db->quote($field));
+    $where = 'field = ' . $db->quote($field);
+    if (!defined('NV_IS_MODADMIN')) {
+        // Ngoài site: chỉ trường thành viên tự sửa được hoặc trường hiện lúc đăng ký
+        $where .= ' AND for_admin = 0 AND (user_editable = 1 OR show_register = 1)';
+    }
+    $result = $db->query('SELECT * FROM ' . NV_MOD_TABLE . '_field WHERE ' . $where);
     $row_field = $result->fetch();
     if (empty($row_field) or $row_field['field_type'] != 'file') {
         nv_jsonOutput([
@@ -583,7 +588,15 @@ if ($nv_Request->isset_request('field_fileupload,field,_csrf', 'post')) {
 
     $limited_values = !empty($row_field['limited_values']) ? json_decode($row_field['limited_values'], true) : [];
     $file_allowed_ext = !empty($limited_values['filetype']) ? $limited_values['filetype'] : $global_config['file_allowed_ext'];
-    $file_max_size = !empty($limited_values['file_max_size']) ? min($limited_values['file_max_size'], NV_UPLOAD_MAX_FILESIZE) : NV_UPLOAD_MAX_FILESIZE;
+    // Dung lượng tối đa phải > 0, bằng 0 là cấu hình sai nên chặn luôn
+    $file_max_size = (int) ($limited_values['file_max_size'] ?? 0);
+    if ($file_max_size < 1) {
+        nv_jsonOutput([
+            'status' => 'error',
+            'mess' => $nv_Lang->getModule('field_file_max_size_error')
+        ]);
+    }
+    $file_max_size = min($file_max_size, NV_UPLOAD_MAX_FILESIZE);
     $upload = new NukeViet\Files\Upload($file_allowed_ext, $global_config['forbid_extensions'], $global_config['forbid_mimes'], $file_max_size);
     $upload->setLanguage(\NukeViet\Core\Language::$lang_global);
     $upload_info = $upload->save_file($_FILES['file'], NV_ROOTDIR . '/' . NV_TEMP_DIR, false);
@@ -604,7 +617,7 @@ if ($nv_Request->isset_request('field_fileupload,field,_csrf', 'post')) {
         ]);
     }
 
-    if (!in_array($upload_info['ext'], $limited_values['mime'], true)) {
+    if (!empty($limited_values['mime']) and !in_array($upload_info['ext'], $limited_values['mime'], true)) {
         @unlink($upload_info['name']);
         nv_jsonOutput([
             'status' => 'error',

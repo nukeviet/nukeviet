@@ -697,6 +697,7 @@ $lang_module['field_sql_choices_empty'] = 'Lỗi : Lựa chọn lấy dữ liệ
 $lang_module['field_options_file'] = 'Các tùy chọn file';
 $lang_module['field_file_exts'] = 'Các loại file được phép tải lên';
 $lang_module['field_file_exts_error'] = 'Hãy chọn ít nhất một loại file được phép tải lên';
+$lang_module['field_file_max_size_error'] = 'Dung lượng tối đa của file tải lên phải lớn hơn 0';
 $lang_module['field_file_maxnum'] = 'Số file tối đa được phép tải lên';
 $lang_module['field_photo_max_size'] = 'Các giới hạn kích thước ảnh tải lên';
 $lang_module['field_photo_max_size_note'] = 'Để trống các ô trên được hiểu là không giới hạn kích thước hình ảnh<br />= kích thước cần đúng tuyệt đối<br />&#8805; kích thước lớn hơn hoặc bằng<br />&#8804; kích thước nhỏ hơn hoặc bằng';

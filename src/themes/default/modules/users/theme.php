@@ -273,9 +273,9 @@ function user_register($gfx_chk, $checkss, $data_questions, $array_field_config,
                 } elseif ($row['field_type'] == 'file') {
                     $row['limited_values'] = !empty($row['limited_values']) ? json_decode($row['limited_values'], true) : [];
                     $xtpl->assign('FILEACCEPT', !empty($row['limited_values']['mime']) ? '.' . implode(',.', $row['limited_values']['mime']) : '');
-                    $xtpl->assign('FILEMAXSIZE', $row['limited_values']['file_max_size']);
-                    $xtpl->assign('FILEMAXSIZE_FORMAT', nv_convertfromBytes($row['limited_values']['file_max_size']));
-                    $xtpl->assign('FILEMAXNUM', $row['limited_values']['maxnum']);
+                    $xtpl->assign('FILEMAXSIZE', $row['limited_values']['file_max_size'] ?? 0);
+                    $xtpl->assign('FILEMAXSIZE_FORMAT', nv_convertfromBytes($row['limited_values']['file_max_size'] ?? 0));
+                    $xtpl->assign('FILEMAXNUM', $row['limited_values']['maxnum'] ?? 0);
                     $xtpl->assign('CSRF', csrf_create($module_name . '_field_' . $row['field']));
                     $xtpl->assign('URL_MODULE', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name);
                     $widthlimit = image_size_info($row['limited_values']['widthlimit'], 'width');
@@ -1262,9 +1262,9 @@ function user_info($data, $array_field_config, $custom_fields, $types, $data_que
                         $xtpl->parse('main.tab_edit_others.loop.file.loop');
                     }
                     $xtpl->assign('FILEACCEPT', !empty($row['limited_values']['mime']) ? '.' . implode(',.', $row['limited_values']['mime']) : '');
-                    $xtpl->assign('FILEMAXSIZE', $row['limited_values']['file_max_size']);
-                    $xtpl->assign('FILEMAXSIZE_FORMAT', nv_convertfromBytes($row['limited_values']['file_max_size']));
-                    $xtpl->assign('FILEMAXNUM', $row['limited_values']['maxnum']);
+                    $xtpl->assign('FILEMAXSIZE', $row['limited_values']['file_max_size'] ?? 0);
+                    $xtpl->assign('FILEMAXSIZE_FORMAT', nv_convertfromBytes($row['limited_values']['file_max_size'] ?? 0));
+                    $xtpl->assign('FILEMAXNUM', $row['limited_values']['maxnum'] ?? 0);
                     $xtpl->assign('CSRF', csrf_create($module_name . '_field_' . $row['field']));
                     $widthlimit = image_size_info($row['limited_values']['widthlimit'], 'width');
                     $heightlimit = image_size_info($row['limited_values']['heightlimit'], 'height');

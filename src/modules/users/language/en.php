@@ -697,6 +697,7 @@ $lang_module['field_sql_choices_empty'] = 'Error: Selection retrieve data from t
 $lang_module['field_options_file'] = 'File options';
 $lang_module['field_file_exts'] = 'File types allowed to upload';
 $lang_module['field_file_exts_error'] = 'Please select at least one file type that is allowed to be uploaded';
+$lang_module['field_file_max_size_error'] = 'Maximum size of uploaded file must be greater than 0';
 $lang_module['field_file_maxnum'] = 'Maximum number of files allowed to upload';
 $lang_module['field_photo_max_size'] = 'Upload photo size limits';
 $lang_module['field_photo_max_size_note'] = 'Leaving the above boxes blank is interpreted as unlimited image size<br />= size needs to be absolutely correct<br />&#8805; size greater than or equal to<br />&#8804; size less than or equal to';
