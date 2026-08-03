@@ -34,7 +34,9 @@ $tpl->assign('MODULE', $block_config['module']);
 
 /** @disregard P1011 */
 if (defined('NV_IS_USER')) {
-    $user_info['chars'] = nv_strtoupper(nv_substr(trim($user_info['full_name'] . ' ' . $user_info['username']), 0, 1));
+    // Dữ liệu dựng ảnh đại diện dạng chữ, tính lại phòng trường hợp tài khoản diễn đàn hoặc SSO
+    $user_info['avatar_letters'] = $user_info['avatar_letters'] ?? nv_user_avatar_letters($user_info['first_name'] ?? '', $user_info['last_name'] ?? '', $user_info['username'] ?? '');
+    $user_info['avatar_color'] = $user_info['avatar_color'] ?? nv_user_avatar_color($user_info['username'] ?? '');
 
     $tpl->assign('USER', $user_info);
     $tpl->assign('ADMIN', $admin_info);

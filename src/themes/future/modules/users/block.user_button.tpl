@@ -9,7 +9,7 @@
     {* Đã đăng nhập *}
     <a class="user-button" title="{$USER.full_name}" href="#" data-bs-toggle="dropdown" data-bs-auto-close="outside" data-bs-offset="8,0" aria-expanded="false">
         {if empty($USER.avata)}
-        <span class="no-avatar d-flex align-items-center justify-content-center text-bg-primary rounded-circle w-100 h-100"><span>{$USER.chars}</span></span>
+        <span class="avatar-letters no-avatar w-100 h-100" style="background-color:{$USER.avatar_color}" aria-hidden="true">{$USER.avatar_letters}</span>
         {else}
         <img src="{$USER.avata}" alt="{$USER.full_name}">
         {/if}
@@ -28,7 +28,7 @@
                             data-url="{$smarty.const.NV_BASE_SITEURL}index.php?{$smarty.const.NV_LANG_VARIABLE}={$smarty.const.NV_LANG_DATA}&amp;{$smarty.const.NV_NAME_VARIABLE}={$MODULE}&amp;{$smarty.const.NV_OP_VARIABLE}=avatar/upd"
                         >
                             {if empty($USER.avata)}
-                            <span class="no-avatar d-flex align-items-center justify-content-center text-bg-primary"><span class="fs-1">{$USER.chars}</span></span>
+                            <span class="avatar-letters avatar-letters-lg no-avatar" style="background-color:{$USER.avatar_color}" aria-hidden="true">{$USER.avatar_letters}</span>
                             {else}
                             <img src="{$USER.avata}" alt="{$USER.full_name}" width="80" height="80">
                             {/if}

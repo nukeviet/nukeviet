@@ -76,6 +76,8 @@
                             <img alt="{$ADMIN_INFO.full_name}" src="{$ADMIN_INFO.avata}">
                             {elseif not empty($ADMIN_INFO.photo)}
                             <img alt="{$ADMIN_INFO.full_name}" src="{$smarty.const.NV_BASE_SITEURL}{$ADMIN_INFO.photo}">
+                            {elseif not empty($ADMIN_INFO.avatar_letters)}
+                            <span class="avatar-letters" style="background-color:{$ADMIN_INFO.avatar_color}" aria-hidden="true">{$ADMIN_INFO.avatar_letters}</span>
                             {else}
                             <i class="fa-solid fa-circle-user ico-vc"></i>
                             {/if}

@@ -26443,6 +26443,28 @@ textarea.form-control-lg {
   transform: translate(-50%, -50%);
 }
 
+.avatar-letters {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  border-radius: 50%;
+  color: #fff;
+  font-weight: 600;
+  line-height: 1;
+  text-transform: uppercase;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  user-select: none;
+  font-size: 1rem;
+}
+.avatar-letters.avatar-letters-lg {
+  font-size: 2rem;
+}
+.avatar-letters.avatar-letters-sm {
+  font-size: 0.75rem;
+}
+
 .nv-offcanvas {
   position: fixed;
   top: 0;
@@ -27038,6 +27060,13 @@ textarea.form-control-lg {
   overflow: hidden;
   border-radius: 50%;
   display: block;
+  height: 100%;
+}
+.header-right .admin-info .admin-icon .avatar-letters {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  font-size: 1.125rem;
 }
 .header-right .admin-info .admin-icon:hover {
   color: var(--nv-header-link-hover-color);
