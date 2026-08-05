@@ -47,7 +47,7 @@ if (defined('NV_ADMIN') or !defined('NV_ANTI_IFRAME') or NV_ANTI_IFRAME != 0) {
     $html_headers['X-Frame-Options'] = 'SAMEORIGIN';
 }
 
-if (!defined('NV_ADMIN') and !empty($global_config['nv_csp_act']) and !empty($global_config['nv_csp'])) {
+if (!empty($global_config['nv_csp_act']) and !empty($global_config['nv_csp'])) {
     $html_headers['Content-Security-Policy'] = nv_unhtmlspecialchars($global_config['nv_csp']);
 }
 if (!empty($global_config['nv_rp_act']) and !empty($global_config['nv_rp'])) {
