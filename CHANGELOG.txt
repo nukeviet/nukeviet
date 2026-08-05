@@ -1,6 +1,7 @@
 CHANGE LOG: NUKEVIET CMS
 http://nukeviet.vn
 NUKEVIET 4.6.01
+- Fix numeric-entity leading-zero bypass in Request XSS sanitizer. Thanks Mai Đăng Khoa from GitHub @dkoazw
 - Restrict users custom field callback to prevent RCE. Thanks Nguyễn Hồng Giáp from GitHub @PinkArmor
 - Fix pre-auth SSRF via spoofed Host header in set_ini_file server info request. Thanks prat1kz from GitHub @prat1kz
 - Fix arbitrary file write via S/MIME certificate CN in SMTP settings. Thanks Jace from GitHub @manus-use
