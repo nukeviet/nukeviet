@@ -162,6 +162,31 @@ class Request
     protected $htmlContentAttributes = ['srcdoc'];
 
     /**
+     * Các attribute có giá trị là một URL đơn lẻ.
+     *
+     * Với chúng, chỉ scheme đứng đầu giá trị mới quyết định trình duyệt có thực thi hay
+     * không, nên xét scheme theo allowlist thay vì tìm từ khóa ở mọi vị trí. Nhờ vậy
+     * "/uploads/javascript-logo.png" hay "?q=javascript" không còn bị gỡ oan.
+     *
+     * Các attribute URL nguy hiểm khác (action, formaction, data, poster, background,
+     * codebase, dynsrc, lowsrc, usemap, classid) đã nằm trong $disabledattributes nên
+     * không bao giờ đi tới bước này.
+     *
+     * Cố ý không đưa srcset vào đây: nó là danh sách URL ngăn bởi dấu phẩy nên scheme
+     * có thể nằm giữa giá trị, phải giữ phép kiểm tra chặt.
+     */
+    protected $urlValueAttributes = ['href', 'src', 'cite', 'longdesc'];
+
+    /**
+     * Các attribute có giá trị là văn bản thuần.
+     *
+     * Trình duyệt không bao giờ diễn giải chúng thành URL hay CSS nên từ khóa kiểu
+     * "javascript" trong đó chỉ là chữ. Bỏ qua phép kiểm tra scheme để không xóa oan
+     * class="javascript-highlight" hay title="Bài viết về JavaScript".
+     */
+    protected $textValueAttributes = ['title', 'alt', 'class', 'id', 'label', 'placeholder', 'summary'];
+
+    /**
      * Các attr bị cấm, sẽ bị lọc bỏ.
      * - Tất cả các arrt bắt đầu bằng on
      * - Các attr bên dưới
@@ -702,7 +727,18 @@ class Request
             $attrSubSet[0] = preg_replace('/&#0*(?:3[01]|[12][0-9]|[0-9])(?![0-9]);?/', '', $attrSubSet[0]);
             $attrSubSet[0] = preg_replace('/[\x00-\x20]/', '', html_entity_decode($attrSubSet[0], ENT_QUOTES | ENT_HTML5, 'UTF-8'));
 
-            if (!preg_match('/[a-z]+/i', $attrSubSet[0]) or in_array($attrSubSet[0], $this->disabledattributes, true) or preg_match('/^on/i', $attrSubSet[0])) {
+            if (!preg_match('/[a-z]+/i', $attrSubSet[0])) {
+                continue;
+            }
+
+            /*
+             * Attribute bị gỡ vì lý do bảo mật (event handler on*, attribute nằm trong danh sách cấm)
+             * phải đánh dấu nội dung là không hợp lệ. Nếu không, khi filterTags() được gọi đệ quy để soi
+             * payload của srcdoc / data: URL, việc gỡ bỏ attribute nguy hiểm sẽ không được báo lên trên
+             * và attribute chứa payload vẫn được giữ nguyên.
+             */
+            if (in_array($attrSubSet[0], $this->disabledattributes, true) or preg_match('/^on/i', $attrSubSet[0])) {
+                $isvalid = false;
                 continue;
             }
 
@@ -712,15 +748,18 @@ class Request
                 $attrSubSet[1] = preg_replace("/^\'(.*)\'$/", '\\1', $attrSubSet[1]);
                 $attrSubSet[1] = str_replace(['"', '&quot;'], "'", $attrSubSet[1]);
 
-                $value = Site::unhtmlentities($attrSubSet[1]);
+                // Là thứ trình duyệt sẽ đọc. Dùng khi cần lọc rồi ghi ngược ra HTML
+                $browserValue = Sanitizer::canonicalize($attrSubSet[1]);
+
+                // Đã bóc mọi lớp che giấu. Chỉ dùng để ra quyết định chặn/không chặn
+                $value = Sanitizer::deobfuscate($attrSubSet[1]);
 
                 /*
                  * Lọc đệ quy attribute có giá trị là nội dung HTML (VD: srcdoc của iframe)
                  */
                 if (in_array($attrSubSet[0], $this->htmlContentAttributes, true)) {
                     $htmlValid = true;
-                    $decodedValue = html_entity_decode($value, ENT_QUOTES | ENT_HTML5, 'UTF-8');
-                    $filteredHtml = $this->filterTags($decodedValue, $htmlValid);
+                    $filteredHtml = $this->filterTags($browserValue, $htmlValid);
                     if (!$htmlValid) {
                         $isvalid = false;
                     }
@@ -732,7 +771,13 @@ class Request
                 // Security check Data URLs
                 if (preg_match('/^[\r\n\s\t]*d\s*a\s*t\s*a\s*\:([^\,]*?)\;*[\r\n\s\t]*(base64)*?[\r\n\s\t]*\,[\r\n\s\t]*(.*?)[\r\n\s\t]*$/isu', $value, $m)) {
                     if (empty($m[2])) {
-                        $dataURLs = urldecode($m[3]);
+                        /*
+                         * Browser giải mã HTML entity của attribute value trước khi diễn giải data: URL,
+                         * nên payload phải được giải mã giống hệt trước khi đem đi lọc. Nếu chỉ urldecode(),
+                         * payload dạng "data:text/html,&lt;script&gt;..." sẽ không có tag nào cho filterTags()
+                         * nhìn thấy và attribute độc hại được giữ nguyên (cùng cách xử lý với srcdoc ở trên).
+                         */
+                        $dataURLs = html_entity_decode(urldecode($m[3]), ENT_QUOTES | ENT_HTML5, 'UTF-8');
                     } else {
                         $dataURLs = (string) base64_decode($m[3], true);
                     }
@@ -740,11 +785,13 @@ class Request
                     $checkValid = true;
                     $this->filterTags($dataURLs, $checkValid);
                     if (!$checkValid) {
+                        $isvalid = false;
                         continue;
                     }
                 }
 
                 if (preg_match('/\<\s*s\s*c\s*r\s*i\s*p\s*t([^\>]*)\>(.*)\<\s*\/\s*s\s*c\s*r\s*i\s*p\s*t\s*\>/isU', $value)) {
+                    $isvalid = false;
                     continue;
                 }
 
@@ -769,7 +816,17 @@ class Request
                 if ('param' == $tagName and 'name' == $attrSubSet[0] and preg_match('/^[\r\n\s\t]*(allowscriptaccess|allownetworking)/isu', strtolower($value))) {
                     return [];
                 }
-                if (Sanitizer::hasDangerousScheme($value) or Sanitizer::hasDisabledCommand($value)) {
+                // Kiểm tra nghiêm theo vai trò của attribute
+                if (in_array($attrSubSet[0], $this->textValueAttributes, true)) {
+                    $hasDangerousValue = false;
+                } elseif (in_array($attrSubSet[0], $this->urlValueAttributes, true)) {
+                    $hasDangerousValue = Sanitizer::hasDangerousUrlScheme($value);
+                } else {
+                    $hasDangerousValue = Sanitizer::hasDangerousScheme($value);
+                }
+
+                if ($hasDangerousValue or Sanitizer::hasDisabledCommand($value)) {
+                    $isvalid = false;
                     continue;
                 }
 
@@ -952,7 +1009,7 @@ class Request
                 }
 
                 $value = str_replace(["\t", "\r", "\n", '../'], '', $value);
-                $value = Site::unhtmlentities($value);
+                $value = Sanitizer::canonicalize($value);
                 unset($matches);
                 preg_match_all('/<!\[cdata\[(.*?)\]\]>/is', $value, $matches);
                 $value = str_replace($matches[0], $matches[1], $value);

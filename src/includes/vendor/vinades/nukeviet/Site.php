@@ -54,54 +54,6 @@ class Site
     }
 
     /**
-     * unhtmlentities()
-     *
-     * @param string $value
-     * @return string
-     */
-    public static function unhtmlentities($value)
-    {
-        $value = preg_replace('/%3A%2F%2F/', '', $value); // :// to empty
-
-        // Gom class đúng cú pháp: Loại bỏ các Control Characters (Null Byte, Vertical Tab...) an toàn
-        $value = preg_replace('/([\x00-\x08\x0b-\x0c\x0e-\x1f])/', '', $value);
-
-        // Loại bỏ HTML entity thập phân của ký tự điều khiển ASCII (0–31)
-        // Negative lookahead ngăn việc khớp một phần của entity dài hơn (ví dụ: &#300;).
-        $value = preg_replace('/&#0*(?:3[01]|[12][0-9]|[0-9])(?![0-9]);?/', '', $value);
-        // Loại bỏ HTML entity hex của ký tự điều khiển ASCII (0x00–0x1F)
-        // Negative lookahead đảm bảo chỉ khớp entity hoàn chỉnh, tránh nhầm một phần của giá trị dài hơn (ví dụ: &#x3c;).
-        $value = preg_replace('/&#[xX]0*(?:1[0-9a-fA-F]|[0-9a-fA-F])(?![0-9a-fA-F]);?/i', '', $value);
-
-        $value = preg_replace('/%u0([a-z0-9]{3})/i', '&#x\1;', $value);
-        $value = preg_replace('/%([a-z0-9]{2})/i', '&#x\1;', $value);
-
-        // Loại bỏ các comment và ký tự ngắt dòng
-        $value = str_ireplace(['/*', '*/', '<!--', '-->', '<!-- -->'], '', $value);
-        $value = str_replace(['&colon;', '&lpar;', '&rpar;', '&Tab;', '&NewLine;'], [':', '(', ')', '', ''], $value);
-
-        // Ngăn chặn mã hóa SCRIPT/JAVASCRIPT với regex linh hoạt: Bắt tùy chọn dấu chấm phẩy và không giới hạn số 0
-        $value = preg_replace('/(&#[xX]0*53;?|&#0*83;?)(&#[xX]0*43;?|&#0*67;?)(&#[xX]0*52;?|&#0*82;?)(&#[xX]0*49;?|&#0*73;?)(&#[xX]0*50;?|&#0*80;?)(&#[xX]0*54;?|&#0*84;?)/i', '', $value);
-        $value = preg_replace('/(&#[xX]0*6a;?|&#0*106;?)(&#[xX]0*61;?|&#0*97;?)(&#[xX]0*76;?|&#0*118;?)(&#[xX]0*61;?|&#0*97;?)(&#[xX]0*73;?|&#0*115;?)(&#[xX]0*63;?|&#0*99;?)(&#[xX]0*72;?|&#0*114;?)(&#[xX]0*69;?|&#0*105;?)(&#[xX]0*70;?|&#0*112;?)(&#[xX]0*74;?|&#0*116;?)/i', '', $value);
-
-        // Hỗ trợ giải mã không giới hạn số 0 (0*) thay vì giới hạn 0{0,8}
-        $searchHex = '/&#[xX]0*(21|22|23|24|25|26|27|28|29|2a|2b|2d|2f|30|31|32|33|34|35|36|37|38|39|3a|3b|3d|3f|40|41|42|43|44|45|46|47|48|49|4a|4b|4c|4d|4e|4f|50|51|52|53|54|55|56|57|58|59|5a|5b|5c|5d|5e|5f|60|61|62|63|64|65|66|67|68|69|6a|6b|6c|6d|6e|6f|70|71|72|73|74|75|76|77|78|79|7a|7b|7c|7d|7e);?/i';
-        $value = preg_replace_callback($searchHex, function ($m) {
-            return chr(hexdec($m[1]));
-        }, $value);
-
-        $searchDec = '/&#0*(33|34|35|36|37|38|39|40|41|42|43|45|47|48|49|50|51|52|53|54|55|56|57|58|59|61|63|64|65|66|67|68|69|70|71|72|73|74|75|76|77|78|79|80|81|82|83|84|85|86|87|88|89|90|91|92|93|94|95|96|97|98|99|100|101|102|103|104|105|106|107|108|109|110|111|112|113|114|115|116|117|118|119|120|121|122|123|124|125|126);?/i';
-        $value = preg_replace_callback($searchDec, function ($m) {
-            return chr($m[1]);
-        }, $value);
-
-        // Thay thế toàn bộ mảng thay thế '<' tĩnh khổng lồ bằng regex thông minh xử lý mọi định dạng
-        $value = preg_replace('/(&#[xX]0*3c;?|&#0*60;?|\\\\x3c|\\\\u003c)/i', '<', $value);
-
-        return $value;
-    }
-
-    /**
      * unhtmlspecialchars()
      *
      * @param mixed $string
