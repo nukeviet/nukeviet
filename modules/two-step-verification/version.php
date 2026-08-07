@@ -19,8 +19,8 @@ $module_version = [
     'submenu' => 'main,setup,confirm',
     'is_sysmod' => 1,
     'virtual' => 0,
-    'version' => '4.5.09',
-    'date' => 'Saturday, June 27, 2026 at 4:00:00 PM UTC+07:00',
+    'version' => '4.5.10',
+    'date' => 'Friday, August 7, 2026 at 4:00:00 PM UTC+07:00',
     'author' => 'VINADES.,JSC <contact@vinades.vn>',
     'note' => 'Two-Step Verification'
 ];
