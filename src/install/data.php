@@ -73,7 +73,8 @@ $csp = [
             '*.facebook.com',
             'tawk.link',
             '*.tawk.to',
-            'static.nukeviet.vn'
+            'nukeviet.vn',
+            '*.nukeviet.vn'
         ]
     ],
     'font-src' => [
