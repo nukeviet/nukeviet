@@ -474,7 +474,6 @@ class Image
 
         $res = imagecreatetruecolor($BMP['width'], $BMP['height']);
         if ($res === false) {
-            imagedestroy($res);
             fclose($f1);
             return false;
         }
@@ -793,22 +792,29 @@ class Image
                 $this->get_createImage();
             }
 
+            $imgW = (int) $this->create_Image_info['width'];
+            $imgH = (int) $this->create_Image_info['height'];
+
             $leftX = (int) $leftX;
             $leftY = (int) $leftY;
             $newwidth = (int) $newwidth;
             $newheight = (int) $newheight;
-            if ($leftX < 0 or $leftX >= $this->create_Image_info['width']) {
-                $leftX = 0;
-            }
-            if ($leftY < 0 or $leftY >= $this->create_Image_info['height']) {
-                $leftY = 0;
-            }
-            if ($newwidth <= 0 or ($newwidth + $leftX > $this->create_Image_info['width'])) {
-                $newwidth = $this->create_Image_info['width'] - $leftX;
-            }
-            if ($newheight <= 0 or ($newheight + $leftY > $this->create_Image_info['height'])) {
-                $newheight = $this->create_Image_info['height'] - $leftY;
-            }
+
+            // Gốc cắt phải nằm trong ảnh
+            $leftX = max(0, min($leftX, $imgW - 1));
+            $leftY = max(0, min($leftY, $imgH - 1));
+
+            // Kích thước <= 0 nghĩa là lấy hết phần còn lại tính từ gốc
+            $newwidth = $newwidth <= 0 ? $imgW - $leftX : min($newwidth, $imgW);
+            $newheight = $newheight <= 0 ? $imgH - $leftY : min($newheight, $imgH);
+
+            /*
+             * Khung tràn mép thì giữ nguyên kích thước khung và trượt gốc vào
+             * trong, không co khung. Co khung làm mất tỉ lệ vùng cắt nên ảnh
+             * đích bị méo sau khi resize.
+             */
+            $leftX = min($leftX, $imgW - $newwidth);
+            $leftY = min($leftY, $imgH - $newheight);
             if ($newwidth != $this->create_Image_info['width'] or $newheight != $this->create_Image_info['height']) {
                 $workingImage = Site::function_exists('ImageCreateTrueColor') ? imagecreatetruecolor($newwidth, $newheight) : imagecreate($newwidth, $newheight);
                 if ($workingImage != false) {
@@ -840,6 +846,99 @@ class Image
                     }
                 }
             }
+        }
+    }
+
+    /**
+     * Cắt một vùng của ảnh rồi thu/phóng thẳng về kích thước đích trong cùng
+     * một lần lấy mẫu. Dùng thay cho cropFromLeft() + resizeXY() để ảnh đích
+     * không bị resample hai lần và không phải cấp phát canvas trung gian to
+     * bằng vùng cắt. Kích thước đích lấy đúng như truyền vào, không tự giữ
+     * tỉ lệ - phía gọi chịu trách nhiệm truyền cho khớp tỉ lệ vùng cắt.
+     *
+     * @param int $srcX
+     * @param int $srcY
+     * @param int $srcW
+     * @param int $srcH
+     * @param int $dstW
+     * @param int $dstH
+     */
+    public function cropResize($srcX, $srcY, $srcW, $srcH, $dstW = 0, $dstH = 0)
+    {
+        if (!empty($this->error)) {
+            return;
+        }
+        if ($this->is_destroy) {
+            $this->get_createImage();
+        }
+
+        $imgW = (int) $this->create_Image_info['width'];
+        $imgH = (int) $this->create_Image_info['height'];
+
+        $srcX = (int) $srcX;
+        $srcY = (int) $srcY;
+        $srcW = (int) $srcW;
+        $srcH = (int) $srcH;
+        $dstW = (int) $dstW;
+        $dstH = (int) $dstH;
+
+        // Kẹp vùng nguồn theo cùng quy tắc với cropFromLeft()
+        $srcX = max(0, min($srcX, $imgW - 1));
+        $srcY = max(0, min($srcY, $imgH - 1));
+        $srcW = $srcW <= 0 ? $imgW - $srcX : min($srcW, $imgW);
+        $srcH = $srcH <= 0 ? $imgH - $srcY : min($srcH, $imgH);
+        $srcX = min($srcX, $imgW - $srcW);
+        $srcY = min($srcY, $imgH - $srcH);
+
+        // Không truyền kích thước đích thì giữ nguyên cỡ vùng cắt
+        $dstW <= 0 && $dstW = $srcW;
+        $dstH <= 0 && $dstH = $srcH;
+
+        // Tôn trọng giới hạn chung của đối tượng, thu cả hai chiều để giữ tỉ lệ
+        if ($this->gmaxX > 0 and $dstW > $this->gmaxX) {
+            $dstH = max(1, (int) round($dstH * $this->gmaxX / $dstW));
+            $dstW = $this->gmaxX;
+        }
+        if ($this->gmaxY > 0 and $dstH > $this->gmaxY) {
+            $dstW = max(1, (int) round($dstW * $this->gmaxY / $dstH));
+            $dstH = $this->gmaxY;
+        }
+
+        if ($srcX == 0 and $srcY == 0 and $srcW == $imgW and $srcH == $imgH and $dstW == $imgW and $dstH == $imgH) {
+            return; // Không có gì để làm
+        }
+
+        $workingImage = Site::function_exists('ImageCreateTrueColor') ? imagecreatetruecolor($dstW, $dstH) : imagecreate($dstW, $dstH);
+        if ($workingImage == false) {
+            return;
+        }
+
+        $this->is_createWorkingImage = true;
+        self::set_memory_limit($this->fileinfo);
+
+        $transparent_index = imagecolortransparent($this->createImage);
+        $color_count = imagecolorstotal($this->createImage);
+        if ($transparent_index >= 0 and $color_count > 0) {
+            $t_c = imagecolorsforindex($this->createImage, min($transparent_index, $color_count - 1));
+            $transparent_index = imagecolorallocate($workingImage, $t_c['red'], $t_c['green'], $t_c['blue']);
+            if (false !== $transparent_index and imagefill($workingImage, 0, 0, $transparent_index)) {
+                imagecolortransparent($workingImage, $transparent_index);
+            }
+        }
+
+        if ($this->fileinfo['type'] == IMAGETYPE_PNG or (defined('IMAGETYPE_WEBP') and $this->fileinfo['type'] == IMAGETYPE_WEBP)) {
+            if (imagealphablending($workingImage, false)) {
+                $transparency = imagecolorallocatealpha($workingImage, 0, 0, 0, 127);
+                if (false !== $transparency and imagefill($workingImage, 0, 0, $transparency)) {
+                    imagesavealpha($workingImage, true);
+                }
+            }
+        }
+
+        if (imagecopyresampled($workingImage, $this->createImage, 0, 0, $srcX, $srcY, $dstW, $dstH, $srcW, $srcH)) {
+            $this->createImage = $workingImage;
+            $this->create_Image_info['width'] = $dstW;
+            $this->create_Image_info['height'] = $dstH;
         }
     }
 
@@ -1136,7 +1235,9 @@ class Image
     /**
      * rotate()
      *
-     * @param int $direction
+     * Góc tính theo chiều kim đồng hồ để khớp với CSS transform rotate()
+     *
+     * @param float $direction
      */
     public function rotate($direction)
     {
@@ -1145,8 +1246,7 @@ class Image
                 $this->get_createImage();
             }
 
-            $direction = (int) $direction;
-            $direction = 360 - $direction % 360;
+            $direction = 360 - fmod((float) $direction, 360);
             if ($direction != 0 and $direction != 360) {
                 self::set_memory_limit($this->fileinfo);
                 $transColor = imagecolorallocatealpha($this->createImage, 255, 255, 255, 127);
@@ -1295,7 +1395,6 @@ class Image
     /**
      * createFilename()
      *
-     * @param mixed  $path
      * @param mixed  $name
      * @param string $ext
      * @return string
