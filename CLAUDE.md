@@ -40,7 +40,7 @@ Phát hiện mình làm hỏng gì thì nói ngay, nêu đúng cơ chế và ph�
 
 ## Stack & Lệnh thường dùng
 
-- **Runtime:** PHP 8.2–8.5, Node.js v18.17+, NPM v10.5+, Composer v2.6+
+- **Runtime:** PHP 8.2-8.5, Node.js v18.17+, NPM v10.5+, Composer v2.6+
 - **Infrastructure:** MariaDB/MySQL, Linux (AlmaLinux/RockyLinux/Ubuntu), Nginx + PHP-FPM
 
 ```bash
@@ -68,6 +68,9 @@ npm run core-css   # Build CSS Core
 ### Kiến trúc & Conventions
 
 - Code style: 4 spaces, `camelCase` (biến/hàm), `PascalCase` (Class/PSR-4), PHPDoc + comment tiếng Việt
+- Văn phong mô tả, docs, comment, commit message:
+  - Không viết in hoa cả cụm từ để nhấn mạnh (không "PHẢI", "KHÔNG ĐƯỢC", "LƯU Ý"), cứ viết bình thường. In hoa chỉ dùng cho tên hằng, tên viết tắt, tên riêng kỹ thuật (`NV_IS_ADMIN`, SQL, CSRF, PSR-12)
+  - Chỉ dùng dấu gạch ngang ngắn `-`, không dùng gạch ngang dài `—` hay gạch nối trung `–`
 - Core Namespace: Composer PSR-4 tại `src/includes/vendor/vinades/nukeviet/` (`NukeViet\Core\Request`, v.v.)
 - Strict Types: dùng `declare(strict_types=1)` cho các class thư viện mới
 - Frontend Assets: SCSS qua NPM - không chỉnh sửa file `.css` đã compile trực tiếp
@@ -80,7 +83,7 @@ npm run core-css   # Build CSS Core
 
 ## Quy tắc Bảo mật (không được vi phạm)
 
-1. **Input:** PHẢI qua `$nv_Request`. không dùng `$_GET`/`$_POST`/`$_REQUEST` trực tiếp
+1. **Input:** Phải qua `$nv_Request`. không dùng `$_GET`/`$_POST`/`$_REQUEST` trực tiếp
 2. **SQL:** Chuỗi user → `prepare()` + `bindParam()`. Số nguyên → cast `(int)` nối thẳng
 3. **Output HTML:** Raw DB/user data → `nv_htmlspecialchars()`. Data từ `get_title()` đã escape - không escape lại (tránh double-encode)
 4. **CSRF:**
