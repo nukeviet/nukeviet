@@ -233,9 +233,9 @@
             'dev_requirement' => false,
         ),
         'smarty/smarty' => array(
-            'pretty_version' => 'v5.8.0',
-            'version' => '5.8.0.0',
-            'reference' => '78d259d3b971c59a0cd719c270cc5cbb740c36a7',
+            'pretty_version' => 'v5.8.4',
+            'version' => '5.8.4.0',
+            'reference' => '94a27cbbc7820198d7adc17a2be8d457fb267753',
             'type' => 'library',
             'install_path' => __DIR__ . '/../smarty/smarty',
             'aliases' => array(),
