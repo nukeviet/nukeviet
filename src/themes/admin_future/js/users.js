@@ -102,12 +102,6 @@ $(function () {
         $('input', $(this).parent()).focus();
     });
 
-    // Nút chọn ảnh đại diện
-    $('[data-toggle="pick-user-photo"]').on('click', function(e) {
-        e.preventDefault();
-        nv_open_browse(nv_base_siteurl + 'index.php?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=avatar/opener', "NVImg", 650, 430, "resizable=no,scrollbars=1,toolbar=no,location=no,status=no");
-    });
-
     // Trang trường dữ liệu tùy biến
     if (nv_func_name == 'fields') {
         // Thay đổi thứ tự field

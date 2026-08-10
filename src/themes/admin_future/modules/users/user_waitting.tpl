@@ -351,7 +351,12 @@
                     <div class="input-group">
                         <input type="text" class="form-control" id="avatar" name="photo" value="" readonly autocomplete="off">
                         <button class="btn btn-outline-secondary" type="button"
-                            data-toggle="pick-user-photo"
+                            data-toggle="changeAvatar"
+                            data-admin="1"
+                            data-url="{$smarty.const.NV_BASE_SITEURL}index.php?{$smarty.const.NV_LANG_VARIABLE}={$smarty.const.NV_LANG_DATA}&amp;{$smarty.const.NV_NAME_VARIABLE}={$MODULE_NAME}&amp;{$smarty.const.NV_OP_VARIABLE}=avatar/opener"
+                            data-action="value"
+                            data-target="#avatar"
+                            data-title="{$LANG->getModule('avatar')}"
                             aria-label="{$LANG->getModule('avatar')}"
                             title="{$LANG->getModule('avatar')}">
                             <i class="fa-solid fa-folder-open"></i>

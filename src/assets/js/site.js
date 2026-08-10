@@ -13,6 +13,8 @@
  * ở riêng giao diện đó.
  */
 
+'use strict';
+
 var myTimerPage = '', myTimersecField = '';
 
 /**
@@ -1033,7 +1035,7 @@ $(function() {
         }
     });
 
-    //Alerts
+    // Alerts
     $("[data-dismiss=alert]").on("click", function() {
         $(this).is(".close") && $(this).parent().remove()
     });

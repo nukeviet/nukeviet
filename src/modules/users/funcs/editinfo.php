@@ -312,6 +312,7 @@ function nv_groups_list_pub2($edit_userid)
 $array_data = [];
 // checkss khớp với modules/two-step-verification/funcs/main.php thay đổi cần cập nhật
 $array_data['checkss'] = md5(NV_CHECK_SESSION . '_' . $module_name . '_' . $op . '_' . $user_info['userid']);
+$array_data['checkss_avatar'] = csrf_create($g_csrf_key['avatar']);
 $array_data['awaitinginfo'] = [];
 $array_data['editcensor'] = $global_users_config['active_editinfo_censor'];
 $array_data['confirmed_pass'] = is_verified_password('passkey');

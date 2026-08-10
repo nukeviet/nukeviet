@@ -26,6 +26,8 @@
                     <div class="u-avatar mt-2">
                         <a title="{$LANG->getModule('avatar')}" href="#" data-toggle="changeAvatar"
                             data-url="{$smarty.const.NV_BASE_SITEURL}index.php?{$smarty.const.NV_LANG_VARIABLE}={$smarty.const.NV_LANG_DATA}&amp;{$smarty.const.NV_NAME_VARIABLE}={$MODULE}&amp;{$smarty.const.NV_OP_VARIABLE}=avatar/upd"
+                            data-action="upd"
+                            data-title="{$LANG->getModule('change_avatar')}"
                         >
                             {if empty($USER.avata)}
                             <span class="avatar-letters avatar-letters-lg no-avatar" style="background-color:{$USER.avatar_color}" aria-hidden="true">{$USER.avatar_letters}</span>

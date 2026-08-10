@@ -32,10 +32,10 @@ function safekeySend(a) {
     return !1
 }
 
-function changeAvatar(url) {
-    if (nv_safemode) return !1;
-    nv_open_browse(url, "NVImg", 650, 430, "resizable=no,scrollbars=1,toolbar=no,location=no,status=no");
-    return !1;
+function changeAvatar(data) {
+    const src = data.src + (data.src.indexOf('?') === -1 ? '?' : '&') + 't=' + Date.now();
+    $("#myavatar").attr('src', src);
+    $("#delavatar").prop("disabled", false);
 }
 
 function deleteAvatar(a, b, c) {
@@ -741,11 +741,6 @@ $(function() {
         e.preventDefault();
         e.stopImmediatePropagation();
         login2step_change(this)
-    });
-
-    $('body').on('click', '[data-toggle=changeAvatar][data-url]', function(e) {
-        e.preventDefault();
-        changeAvatar($(this).data('url'))
     });
 
     $('body').on('click', '[data-toggle=deleteAvatar][data-obj][data-ss]', function(e) {

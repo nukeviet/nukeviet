@@ -90,14 +90,6 @@ $(function() {
         });
     });
 
-    // Nút đổi ảnh đại diện
-    $(document).off('click.users', '[data-toggle="changeAvatar"][data-url]').on('click.users', '[data-toggle="changeAvatar"][data-url]', function(e) {
-        e.preventDefault();
-        if (!nv_safemode) {
-            nv_open_browse($(this).data('url'), 'ChangeAvatar', 650, 430, 'resizable=no,scrollbars=1,toolbar=no,location=no,status=no');
-        }
-    });
-
     // Xử lý cảnh báo của sổ WebView trên tất cả các form đăng nhập
     if (isInAppBrowser()) {
         $('form[data-toggle="userLogin"]').each(function() {

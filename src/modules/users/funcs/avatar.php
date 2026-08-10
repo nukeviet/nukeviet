@@ -28,6 +28,18 @@ if (!defined('NV_IS_ADMIN')) {
     }
 }
 
+$array = [];
+$array['u'] = (isset($array_op[1]) and ($array_op[1] == 'upd' or $array_op[1] == 'opener' or $array_op[1] == 'src')) ? $array_op[1] : '';
+$array['checkss'] = csrf_create($g_csrf_key['avatar']);
+
+// Kiểm tra CSRF ngay khi có checkss post
+if (isset($_POST['checkss']) && !csrf_check($nv_Request->get_string('checkss', 'post', ''), $g_csrf_key['avatar'])) {
+    nv_jsonOutput([
+        'status' => 'error',
+        'mess' => $nv_Lang->getGlobal('error_checkss')
+    ]);
+}
+
 /**
  * updateAvatar()
  *
@@ -93,17 +105,11 @@ function deleteAvatar()
 $page_title = $nv_Lang->getModule('avatar_pagetitle');
 $page_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op;
 
-$array = [];
-$array['success'] = 0;
-$array['error'] = '';
-$array['u'] = (isset($array_op[1]) and ($array_op[1] == 'upd' or $array_op[1] == 'opener' or $array_op[1] == 'src')) ? $array_op[1] : '';
-$array['checkss'] = md5(NV_CHECK_SESSION . '_' . $module_name . '_editinfo_' . $user_info['userid']);
-$checkss = $nv_Request->get_title('checkss', 'post', '');
-
 if (!empty($array['u'])) {
     $page_url .= '/' . $array['u'];
 }
 
+$array['client'] = '';
 if (defined('SSO_CLIENT_DOMAIN')) {
     $allowed_client_origin = explode(',', SSO_CLIENT_DOMAIN);
     $array['client'] = $nv_Request->get_title('client', 'get,post', '');
@@ -113,8 +119,8 @@ if (defined('SSO_CLIENT_DOMAIN')) {
     }
 }
 
-//Xoa avatar
-if ($checkss == $array['checkss'] and $nv_Request->isset_request('del', 'post')) {
+// Xóa ảnh avatar, cần isset($_POST['checkss']) để đảm bảo đã kiểm tra CSRF
+if (isset($_POST['checkss']) && $nv_Request->isset_request('del', 'post')) {
     deleteAvatar();
     nv_jsonOutput([
         'status' => 'ok',
@@ -126,67 +132,147 @@ if ($checkss == $array['checkss'] and $nv_Request->isset_request('del', 'post'))
 $global_config['avatar_width'] = $global_users_config['avatar_width'];
 $global_config['avatar_height'] = $global_users_config['avatar_height'];
 
-if (isset($_FILES['image_file']) and is_uploaded_file($_FILES['image_file']['tmp_name']) and !empty($array['u'])) {
-    // Get post data
+// Xử lý upload ảnh avatar lên
+if (isset($_POST['checkss'], $_FILES['image_file']) and is_uploaded_file($_FILES['image_file']['tmp_name']) and !empty($array['u'])) {
+    // Tọa độ x,y bắt đầu cắt
     $array['crop_x'] = $nv_Request->get_int('crop_x', 'post', 0);
     $array['crop_y'] = $nv_Request->get_int('crop_y', 'post', 0);
-    $array['crop_width'] = $array['avatar_width'] = $nv_Request->get_int('crop_width', 'post', 0);
-    $array['crop_height'] = $array['avatar_height'] = $nv_Request->get_int('crop_height', 'post', 0);
 
-    if ($array['avatar_width'] < $global_config['avatar_width'] or $array['avatar_height'] < $global_config['avatar_height']) {
-        $array['error'] = $nv_Lang->getModule('avatar_error_data');
-    } else {
-        $upload = new NukeViet\Files\Upload([
-            'images'
-        ], $global_config['forbid_extensions'], $global_config['forbid_mimes'], NV_UPLOAD_MAX_FILESIZE);
-        $upload->setLanguage(\NukeViet\Core\Language::$lang_global);
+    // Kích thước rộng, cao của vùng cắt
+    $array['crop_width'] = $nv_Request->get_int('crop_width', 'post', 0);
+    $array['crop_height'] = $nv_Request->get_int('crop_height', 'post', 0);
 
-        // Storage in temp dir
-        $upload_info = $upload->save_file($_FILES['image_file'], NV_ROOTDIR . '/' . NV_TEMP_DIR, false);
+    // Xoay và kích thước ảnh sau khi xoay
+    $array['crop_rotate'] = $nv_Request->get_float('crop_rotate', 'post', 0);
+    $array['rotated_width'] = $nv_Request->get_int('rotated_width', 'post', 0);
+    $array['rotated_height'] = $nv_Request->get_int('rotated_height', 'post', 0);
 
-        // Delete upload tmp
-        @unlink($_FILES['image_file']['tmp_name']);
+    // Kích thước ảnh gốc
+    $array['source_width'] = $nv_Request->get_int('source_width', 'post', 0);
+    $array['source_height'] = $nv_Request->get_int('source_height', 'post', 0);
 
-        if (empty($upload_info['error'])) {
-            $basename = $upload_info['basename'];
-            $basename = preg_replace('/(.*)(\.[a-zA-Z]+)$/', '\1_' . nv_genpass(8) . '_' . $user_info['userid'] . '\2', $basename);
-
-            $image = new NukeViet\Files\Image($upload_info['name']);
-
-            // Resize image, crop image
-            //$image->resizeXY($array['avatar_width'], $array['avatar_height']);
-            $image->cropFromLeft($array['crop_x'], $array['crop_y'], $array['avatar_width'], $array['avatar_height']);
-            $image->resizeXY($global_config['avatar_width'], $global_config['avatar_height']);
-
-            // Save new image
-            $image->save(NV_ROOTDIR . '/' . NV_TEMP_DIR, $basename);
-            $image->close();
-
-            if (file_exists($image->create_Image_info['src'])) {
-                $array['filename'] = str_replace(NV_ROOTDIR . '/' . NV_TEMP_DIR . '/', '', $image->create_Image_info['src']);
-
-                if ($array['u'] == 'upd') {
-                    updateAvatar($array['filename']);
-                    $array['success'] = 2;
-                } elseif ($array['u'] == 'src') {
-                    updateAvatar($array['filename']);
-                    $array['filename'] = NV_BASE_SITEURL . SYSTEM_UPLOADS_DIR . '/' . $module_upload . '/' . $array['filename'];
-                    $array['success'] = 3;
-                } else {
-                    $array['success'] = 1;
-                }
-            } else {
-                $array['error'] = $nv_Lang->getModule('avatar_error_save');
-            }
-            @nv_deletefile($upload_info['name']);
-        } else {
-            $array['error'] = $upload_info['error'];
-        }
+    // Kiểm tra dữ liệu cắt ảnh có hợp lệ không
+    if (
+        $array['crop_width'] < 1 or $array['crop_height'] < 1
+        or $array['rotated_width'] < 1 or $array['rotated_height'] < 1
+        or $array['source_width'] < 1 or $array['source_height'] < 1
+    ) {
+        nv_jsonOutput([
+            'status' => 'error',
+            'mess' => $nv_Lang->getModule('avatar_error_data')
+        ]);
     }
+
+    $upload = new NukeViet\Files\Upload([
+        'images'
+    ], $global_config['forbid_extensions'], $global_config['forbid_mimes'], NV_UPLOAD_MAX_FILESIZE);
+    $upload->setLanguage(\NukeViet\Core\Language::$lang_global);
+
+    // Storage in temp dir
+    $upload_info = $upload->save_file($_FILES['image_file'], NV_ROOTDIR . '/' . NV_TEMP_DIR, false);
+
+    // Delete upload tmp
+    if (file_exists($_FILES['image_file']['tmp_name'])) {
+        unlink($_FILES['image_file']['tmp_name']);
+    }
+
+    // Lỗi upload
+    if (!empty($upload_info['error'])) {
+        nv_jsonOutput([
+            'status' => 'error',
+            'mess' => $upload_info['error']
+        ]);
+    }
+
+    $basename = $upload_info['basename'];
+    $basename = preg_replace('/(.*)(\.[a-zA-Z]+)$/', '\1_' . nv_genpass(8) . '_' . $user_info['userid'] . '\2', $basename);
+
+    $image = new NukeViet\Files\Image($upload_info['name']);
+
+    /*
+    * Trình duyệt tự áp EXIF orientation khi đo ảnh, Upload::save_file cũng
+    * xoay lại file theo EXIF. Hai bên lệch nhau thì toạ độ cắt vô nghĩa nên
+    * dừng lại thay vì cắt sai.
+    */
+    if (
+        (int) $image->create_Image_info['width'] !== $array['source_width']
+        or (int) $image->create_Image_info['height'] !== $array['source_height']
+    ) {
+        nv_deletefile($upload_info['name']);
+        nv_jsonOutput([
+            'status' => 'error',
+            'mess' => $nv_Lang->getModule('avatar_error_data')
+        ]);
+    }
+
+    // Xoay 0 độ thì trong này đã bỏ qua
+    $image->rotate($array['crop_rotate']);
+
+    /*
+     * imagerotate làm tròn hộp bao khác công thức của JS nên lệch được
+     * 1-2px, phải quy đổi toạ độ theo kích thước thật sau khi xoay.
+     */
+    $kx = $image->create_Image_info['width'] / $array['rotated_width'];
+    $ky = $image->create_Image_info['height'] / $array['rotated_height'];
+
+    $crop_sx = (int) round($array['crop_x'] * $kx);
+    $crop_sy = (int) round($array['crop_y'] * $ky);
+    $crop_sw = (int) round($array['crop_width'] * $kx);
+    $crop_sh = (int) round($array['crop_height'] * $ky);
+
+    /*
+     * Quanh góc 45 độ khung cắt chạm đúng biên vùng ảnh nên chỉ cần sai
+     * số làm tròn 1px là lọt điểm nền mà imagerotate() đổ vào góc. Thu
+     * vào 1px mỗi cạnh, mắt không thấy nhưng chắc chắn không lộ nền.
+     */
+    if ($crop_sw > 4 and $crop_sh > 4 and abs(fmod($array['crop_rotate'], 360)) > 0.001) {
+        $crop_sx += 1;
+        $crop_sy += 1;
+        $crop_sw -= 2;
+        $crop_sh -= 2;
+    }
+
+    $image->cropResize(
+        $crop_sx,
+        $crop_sy,
+        $crop_sw,
+        $crop_sh,
+        $global_config['avatar_width'],
+        $global_config['avatar_height']
+    );
+
+    // Save new image
+    $image->save(NV_ROOTDIR . '/' . NV_TEMP_DIR, $basename);
+    $image->close();
+
+    // Lỗi tạo ảnh
+    if (!file_exists($image->create_Image_info['src'])) {
+        nv_deletefile($upload_info['name']);
+        nv_jsonOutput([
+            'status' => 'error',
+            'mess' => $nv_Lang->getModule('avatar_error_save')
+        ]);
+    }
+
+    $array['filename'] = str_replace(NV_ROOTDIR . '/' . NV_TEMP_DIR . '/', '', $image->create_Image_info['src']);
+    $array['avatar_src'] = $array['filename'];
+    if ($array['u'] == 'upd' or $array['u'] == 'src') {
+        updateAvatar($array['filename']);
+        $array['avatar_src'] = NV_BASE_SITEURL . SYSTEM_UPLOADS_DIR . '/' . $module_upload . '/' . $array['filename'];
+    }
+
+    nv_deletefile($upload_info['name']);
+
+    nv_jsonOutput([
+        'status' => 'ok',
+        'src' => $array['avatar_src'],
+        'filename' => $array['filename'],
+        'action' => $array['u'],
+        'client' => $array['client']
+    ]);
 }
 
 $canonicalUrl = getCanonicalUrl($page_url);
-
 $contents = nv_avatar($array);
 
 include NV_ROOTDIR . '/includes/header.php';

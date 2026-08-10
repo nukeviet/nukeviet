@@ -771,3 +771,7 @@ if (($cache = $nv_Cache->getItem($module_name, $cacheFile, ttl: $cacheTTL)) != f
     $cache = serialize($global_users_config);
     $nv_Cache->setItem($module_name, $cacheFile, $cache, ttl: $cacheTTL);
 }
+
+$g_csrf_key = [
+    'avatar' => ((defined('NV_ADMIN') ? ($admin_info['admin_id'] . '_') : (defined('NV_IS_USER') ? ($user_info['userid'] . '_') : '')) . $module_name . '_avatar'),
+];

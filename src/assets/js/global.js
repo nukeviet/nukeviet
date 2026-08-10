@@ -584,26 +584,111 @@ function isAppleDevice() {
 nv_check_timezone();
 
 nukeviet.WebAuthnSupported = 'PublicKeyCredential' in window && 'credentials' in navigator && 'create' in navigator.credentials && 'get' in navigator.credentials;
-nukeviet.getScrollbarWidth = () => {
-    const outer = document.createElement('div');
-    outer.style.visibility = 'hidden';
-    outer.style.overflow = 'scroll';
-    outer.style.msOverflowStyle = 'scrollbar';
-    outer.style.position = 'fixed';
-    document.body.appendChild(outer);
-
-    const inner = document.createElement('div');
-    outer.appendChild(inner);
-
-    const scrollbarWidth = outer.offsetWidth - inner.offsetWidth;
-
-    outer.parentNode.removeChild(outer);
-
-    return scrollbarWidth;
-};
 nukeviet.cr = {};
 nukeviet.turnstileIDs = [];
 nukeviet.reCapIDs = [];
+
+/**
+ * Chiều rộng thanh cuộn của trình duyệt (px).
+ *
+ * @returns
+ */
+nukeviet.getScrollbarWidth = (() => {
+    let cached = null;
+
+    return (force) => {
+        if (cached !== null && !force) {
+            return cached;
+        }
+        if (!document.body) {
+            return 0;
+        }
+
+        const outer = document.createElement('div');
+        outer.style.cssText =
+            'position:absolute;top:-9999px;left:-9999px;' +
+            'width:100px;height:100px;overflow:scroll;' +
+            'visibility:hidden;pointer-events:none;';
+        outer.style.msOverflowStyle = 'scrollbar';
+
+        document.body.appendChild(outer);
+        cached = outer.offsetWidth - outer.clientWidth;
+        outer.parentNode.removeChild(outer);
+
+        return cached;
+    };
+})();
+
+/**
+ * Bề dày thanh cuộn của trình duyệt (px).
+ *
+ * @param {boolean} [force] Bỏ qua cache, đo lại
+ * @returns {number}
+ */
+nukeviet.getScrollbarHeight = (() => {
+    let cached = null;
+
+    return (force) => {
+        if (cached !== null && !force) {
+            return cached;
+        }
+        if (!document.body) {
+            return 0;
+        }
+
+        const outer = document.createElement('div');
+        outer.style.cssText =
+            'position:absolute;top:-9999px;left:-9999px;' +
+            'width:100px;height:100px;overflow:scroll;' +
+            'visibility:hidden;pointer-events:none;';
+        outer.style.msOverflowStyle = 'scrollbar';
+
+        document.body.appendChild(outer);
+        cached = outer.offsetHeight - outer.clientHeight;
+        outer.parentNode.removeChild(outer);
+
+        return cached;
+    };
+})();
+
+/**
+ * Đo chiều cao thực của nội dung, loại bỏ ảnh hưởng của thanh cuộn
+ * @returns {number} chiều cao (px) cần thiết để hiển thị hết nội dung, không cần cuộn
+ */
+nukeviet.getExactContentHeight = () => {
+    const html = document.documentElement;
+    const body = document.body;
+    const prevOverflow = html.style.overflow;
+
+    let height = 0;
+    let hasHScroll = false;
+
+    /**
+     * Chỉ tác động lên <html> (scrolling element), không đụng vào <body>
+     * để tránh làm thay đổi BFC / margin collapsing của nội dung
+     */
+    html.style.overflow = 'hidden';
+
+    try {
+        const cs = window.getComputedStyle(body);
+        const margins = (parseFloat(cs.marginTop) || 0) + (parseFloat(cs.marginBottom) || 0);
+
+        height = Math.max(
+            body.scrollHeight,
+            body.getBoundingClientRect().height
+        ) + margins;
+
+        hasHScroll = html.scrollWidth > html.clientWidth;
+    } finally {
+        html.style.overflow = prevOverflow;
+    }
+
+    if (hasHScroll) {
+        height += nukeviet.getScrollbarHeight();
+    }
+
+    return Math.ceil(height);
+};
 
 // Ap dung trinh nghe thu dong cho touchstart
 // https://web.dev/uses-passive-event-listeners/?utm_source=lighthouse&utm_medium=devtools
@@ -1228,3 +1313,77 @@ function person_name_check(val) {
 function required_person_name_check(val) {
     return val !== '' && nv_uname_filter.test(val);
 }
+
+document.addEventListener('click', function (e) {
+    const btn = e.target.closest('[data-toggle]');
+    if (!btn) {
+        return;
+    }
+
+    // Thay đổi ảnh đại diện
+    if (btn.dataset.toggle === 'changeAvatar') {
+        e.preventDefault();
+
+        const isAdmin = btn.dataset.admin === '1';
+        if (nv_safemode && !isAdmin) {
+            return;
+        }
+
+        const url = btn.dataset.url;
+        const action = btn.dataset.action || 'upd';
+        const ct = `<div class="cr-avatar-container">
+            <iframe src="${url}" allowfullscreen></iframe>
+        </div>`;
+        // Xử lý các sự kiện gửi từ khung change avatar
+        const onMessage = (event) => {
+            if (event.origin !== new URL(url, location.origin).origin) {
+                return;
+            }
+            const data = event.data;
+            if (data.type === 'nv.avatar.setHeight') {
+                // Cập nhật chiều cao của iframe để phù hợp với nội dung bên trong
+                const iframe = document.querySelector('.cr-avatar-container iframe');
+                if (iframe) {
+                    iframe.style.height = data.height + 'px';
+                }
+            } else if (data.type === 'nv.avatar.done') {
+                // Trả về dữ liệu từ khung change avatar
+                const callback = btn.dataset.callback || null;
+                if (callback && typeof window[callback] === 'function') {
+                    // Hành động tùy chỉnh
+                    window[callback](data);
+                } else if (action === 'upd') {
+                    // Hành động reload trang để tự cập nhật ảnh mới
+                    location.reload();
+                    return;
+                } else if (action === 'value') {
+                    // Hành động cập nhật lại value của input
+                    const selector = btn.dataset.target || null;
+                    if (selector) {
+                        const input = document.querySelector(selector);
+                        if (input && data.src) {
+                            input.value = data.src;
+                        }
+                    }
+                } else if (action === 'src') {
+                    // Hành động cập nhật lại src của ảnh selector khác
+                    const selector = btn.dataset.target || null;
+                    if (selector) {
+                        const img = document.querySelector(selector);
+                        if (img && data.src) {
+                            // Thêm tham số thời gian để không dính ảnh cũ trong cache
+                            img.src = data.src + (data.src.indexOf('?') === -1 ? '?' : '&') + 't=' + Date.now();
+                        }
+                    }
+                }
+                modalHide();
+            }
+        };
+
+        window.addEventListener('message', onMessage);
+        // Gỡ listener khi đóng khung, nếu không mỗi lần mở lại chồng thêm một cái
+        modalShow(btn.dataset.title, ct, null, () => {
+            window.removeEventListener('message', onMessage);
+        });
+    }
+});

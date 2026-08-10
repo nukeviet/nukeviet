@@ -156,8 +156,14 @@
                 <img id="myavatar" class="img-thumbnail bg-gainsboro" src="{DATA.photo}" width="{DATA.photoWidth}" height="{DATA.photoHeight}" data-default="{AVATAR_DEFAULT}" />
             </div>
             <div>
-                <button type="button" class="btn btn-primary btn-xs margin-right-sm" data-toggle="changeAvatar" data-url="{URL_AVATAR}">{LANG.change_avatar}</button>
-                <button type="button" class="btn btn-danger btn-xs" id="delavatar" data-toggle="deleteAvatar" data-obj="#myavatar" data-ss="{DATA.checkss}"{DATA.imgDisabled}>{GLANG.delete}</button>
+                <button type="button" class="btn btn-primary btn-xs margin-right-sm"
+                    data-toggle="changeAvatar"
+                    data-url="{URL_AVATAR}"
+                    data-action="src"
+                    data-title="{LANG.change_avatar}"
+                    data-callback="changeAvatar"
+                >{LANG.change_avatar}</button>
+                <button type="button" class="btn btn-danger btn-xs" id="delavatar" data-toggle="deleteAvatar" data-obj="#myavatar" data-ss="{DATA.checkss_avatar}"{DATA.imgDisabled}>{GLANG.delete}</button>
             </div>
         </div>
         <!-- END: tab_edit_avatar -->

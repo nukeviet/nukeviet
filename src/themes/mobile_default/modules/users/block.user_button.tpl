@@ -41,7 +41,7 @@ function loginFormLoad() {
         <div class="h3 margin-bottom"><span class="lev-{LEVEL} text-normal">{WELCOME}:</span> <strong>{USER.full_name}</strong></div>
         <div class="row">
             <div class="col-xs-8 text-center">
-                <a title="{LANG.edituser}" href="#" data-toggle="changeAvatar" data-url="{URL_AVATAR}"><img src="{AVATA}" alt="{USER.full_name}" class="img-thumbnail bg-gainsboro" /></a>
+                <a title="{LANG.edituser}" href="#" data-toggle="changeAvatar" data-action="upd" data-title="{LANG.change_avatar}" data-url="{URL_AVATAR}"><img src="{AVATA}" alt="{USER.full_name}" class="img-thumbnail bg-gainsboro" /></a>
             </div>
             <div class="col-xs-16">
                 <ul class="nv-list-item sm">

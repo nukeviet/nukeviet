@@ -1851,9 +1851,6 @@ function nv_avatar($array)
 
     $xtpl->assign('NV_AVATAR_WIDTH', $global_config['avatar_width']);
     $xtpl->assign('NV_AVATAR_HEIGHT', $global_config['avatar_height']);
-    $xtpl->assign('NV_MAX_WIDTH', NV_MAX_WIDTH);
-    $xtpl->assign('NV_MAX_HEIGHT', NV_MAX_HEIGHT);
-    $xtpl->assign('NV_UPLOAD_MAX_FILESIZE', NV_UPLOAD_MAX_FILESIZE);
     $xtpl->assign('DATA', $array);
 
     $form_action = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=avatar';
@@ -1869,24 +1866,7 @@ function nv_avatar($array)
     $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
     $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
 
-    if ($array['error']) {
-        $xtpl->assign('ERROR', $array['error']);
-        $xtpl->parse('main.error');
-    }
-    if ($array['success'] == 1) {
-        $xtpl->assign('FILENAME', $array['filename']);
-        $xtpl->parse('main.complete');
-    } elseif ($array['success'] == 2) {
-        $xtpl->parse('main.complete2');
-    } elseif ($array['success'] == 3) {
-        $xtpl->assign('FILENAME', $array['filename']);
-        $xtpl->parse('main.complete3');
-    } else {
-        $xtpl->parse('main.init');
-    }
-
     $xtpl->parse('main');
-
     return $xtpl->text('main');
 }
 

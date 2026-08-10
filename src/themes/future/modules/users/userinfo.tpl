@@ -17,7 +17,7 @@
                 {else}
                 <span class="avatar-letters avatar-letters-lg fw-80 fh-80" title="{$USER.username}" style="background-color:{$USER.avatar_color}" aria-hidden="true">{$USER.avatar_letters}</span>
                 {/if}
-                <a href="#" data-toggle="changeAvatar" data-url="{$URL_AVATAR}" class="position-absolute end-0 bottom-0 d-flex align-items-center justify-content-center fw-25 fh-25 bg-body rounded-circle text-center text-decoration-none text-muted shadow-sm" title="{$LANG->getModule('change_avatar')}" aria-label="{$LANG->getModule('change_avatar')}">
+                <a href="#" data-toggle="changeAvatar" data-url="{$URL_AVATAR}" data-action="upd" data-title="{$LANG->getModule('change_avatar')}" class="position-absolute end-0 bottom-0 d-flex align-items-center justify-content-center fw-25 fh-25 bg-body rounded-circle text-center text-decoration-none text-muted shadow-sm" title="{$LANG->getModule('change_avatar')}" aria-label="{$LANG->getModule('change_avatar')}">
                     <i class="fa-solid fa-pencil small"></i>
                 </a>
             </div>
