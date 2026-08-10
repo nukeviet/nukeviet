@@ -1336,16 +1336,18 @@ document.addEventListener('click', function (e) {
         </div>`;
         // Xử lý các sự kiện gửi từ khung change avatar
         const onMessage = (event) => {
-            if (event.origin !== (/^(?:https?:)?\/\//i.test(url) ? new URL(url).origin : location.origin)) {
+            const iframe = document.querySelector('.cr-avatar-container iframe');
+            if (!iframe || event.source !== iframe.contentWindow) {
                 return;
             }
             const data = event.data;
+            if (!data || typeof data.type !== 'string') {
+                return;
+            }
+
             if (data.type === 'nv.avatar.setHeight') {
                 // Cập nhật chiều cao của iframe để phù hợp với nội dung bên trong
-                const iframe = document.querySelector('.cr-avatar-container iframe');
-                if (iframe) {
-                    iframe.style.height = data.height + 'px';
-                }
+                iframe.style.height = data.height + 'px';
             } else if (data.type === 'nv.avatar.done') {
                 // Trả về dữ liệu từ khung change avatar
                 const callback = btn.dataset.callback || null;
