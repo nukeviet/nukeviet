@@ -8,6 +8,7 @@
     overflow: hidden;
 }
 </style>
+<script src="{NV_STATIC_URL}themes/{TEMPLATE}/js/avatar.js"></script>
 <div class="usravt-upload-wraper" data-area="avatar"
     data-upload-url="{NV_AVATAR_UPLOAD}"
     data-checkss="{DATA.checkss}"
@@ -94,7 +95,4 @@
         <button class="btn btn-primary btn-block margin-top-lg" type="button" data-toggle="save">{GLANG.save}</button>
     </div>
 </div>
-<script>
-getFiles(['{NV_STATIC_URL}themes/{TEMPLATE}/js/avatar.js']);
-</script>
 <!-- END: main -->
