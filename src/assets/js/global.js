@@ -1336,7 +1336,7 @@ document.addEventListener('click', function (e) {
         </div>`;
         // Xử lý các sự kiện gửi từ khung change avatar
         const onMessage = (event) => {
-            if (event.origin !== new URL(url, location.origin).origin) {
+            if (event.origin !== (/^(?:https?:)?\/\//i.test(url) ? new URL(url).origin : location.origin)) {
                 return;
             }
             const data = event.data;
