@@ -117,6 +117,81 @@ function nv_is_myreferer($referer = '')
 }
 
 /**
+ * Kiểm tra trang cha đang nhúng site này bằng iframe
+ * có nằm trong danh sách nguồn của chỉ thị frame-ancestors không.
+ * Trang cha được xác định qua referer của lần tải tài liệu iframe đầu tiên, nên trình duyệt
+ * không gửi referer thì coi như không hợp lệ.
+ *
+ * @param array $sources Danh sách nguồn lấy từ cấu hình frame_ancestors_hosts
+ * @return bool
+ */
+function nv_is_allowed_ancestor($sources = [])
+{
+    global $nv_Request;
+
+    if (empty($sources) or empty($nv_Request->referer_host)) {
+        return false;
+    }
+
+    $ref = parse_url($nv_Request->ref_origin);
+    $ref_scheme = isset($ref['scheme']) ? strtolower($ref['scheme']) : '';
+    $ref_host = strtolower($nv_Request->referer_host);
+    // ref_origin đã lược bỏ port mặc định nên phải suy ra lại từ scheme
+    if (isset($ref['port'])) {
+        $ref_port = (string) $ref['port'];
+    } else {
+        $ref_port = $ref_scheme == 'https' ? '443' : ($ref_scheme == 'http' ? '80' : '');
+    }
+
+    foreach ($sources as $source) {
+        $source = strtolower(trim($source));
+        if ($source === '' or substr($source, 0, 1) == "'") {
+            // Bỏ qua các từ khóa dạng 'self', 'none'
+            continue;
+        }
+        if ($source === '*') {
+            return true;
+        }
+        // Nguồn chỉ khai báo scheme, ví dụ https:
+        if (preg_match('/^([a-z][a-z0-9\+\-\.]*):$/', $source, $m)) {
+            if ($m[1] === $ref_scheme) {
+                return true;
+            }
+            continue;
+        }
+        // Tách scheme nếu nguồn có khai báo
+        if (preg_match('/^([a-z][a-z0-9\+\-\.]*):\/\/(.+)$/', $source, $m)) {
+            if ($m[1] !== $ref_scheme) {
+                continue;
+            }
+            $source = $m[2];
+        }
+        // frame-ancestors không so khớp phần path
+        $source = explode('/', $source)[0];
+        // Tách port nếu nguồn có khai báo
+        if (preg_match('/^(.+):([0-9]+|\*)$/', $source, $m)) {
+            $source = $m[1];
+            if ($m[2] !== '*' and $m[2] !== $ref_port) {
+                continue;
+            }
+        }
+        // Ký tự đại diện chỉ khớp tên miền con, không khớp chính tên miền đó
+        if (substr($source, 0, 2) == '*.') {
+            $base = substr($source, 2);
+            if ($base !== '' and substr($ref_host, -strlen($base) - 1) === '.' . $base) {
+                return true;
+            }
+            continue;
+        }
+        if ($source === $ref_host) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+/**
  * nv_is_banIp()
  *
  * @param string $ip
@@ -2789,8 +2864,15 @@ function nv_change_buffer($buffer)
         $buffer = preg_replace('/(<body[^>]*>)/', '$1' . PHP_EOL . '<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=' . $global_config['google_tag_manager'] . '" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>' . PHP_EOL, $buffer, 1);
     }
 
-    if (NV_ANTI_IFRAME and empty($client_info['is_myreferer'])) {
-        $buffer = preg_replace('/(<body[^>]*>)/', '$1' . PHP_EOL . '<' . $script . '>if(window.top!==window.self){document.write="";window.top.location=window.self.location;setTimeout(function(){document.body.innerHTML=""},1);window.self.onload=function(){document.body.innerHTML=""}};</script>', $buffer, 1);
+    if (NV_ANTI_IFRAME) {
+        // Trang cha là chính site thì luôn hợp lệ, ngoài ra chỉ tha khi khớp danh sách của frame-ancestors
+        $is_allowed_ancestor = $client_info['is_myreferer'] === 1;
+        if (!$is_allowed_ancestor and ($global_config['frame_ancestors'] ?? 0) == 2) {
+            $is_allowed_ancestor = nv_is_allowed_ancestor(explode(' ', $global_config['frame_ancestors_hosts'] ?? ''));
+        }
+        if (!$is_allowed_ancestor) {
+            $buffer = preg_replace('/(<body[^>]*>)/', '$1' . PHP_EOL . '<' . $script . '>if(window.top!==window.self){document.write="";window.top.location=window.self.location;setTimeout(function(){document.body.innerHTML=""},1);window.self.onload=function(){document.body.innerHTML=""}};</script>', $buffer, 1);
+        }
     }
 
     /**
@@ -2902,7 +2984,9 @@ function parse_csp($json_csp)
     $md5 = 'static_domains-' . $global_config['cdn_url'] . $global_config['nv_static_url'] . $global_config['assets_cdn_url'];
     $md5 = md5($md5);
 
-    $cacheFile = 'csp_' . NV_CACHE_PREFIX . '.cache';
+    // Khu vực quản trị dùng chính sách riêng nên phải tách cache
+    $is_admin = defined('NV_ADMIN');
+    $cacheFile = 'csp_' . ($is_admin ? 'admin_' : '') . NV_CACHE_PREFIX . '.cache';
     if (($cache = $nv_Cache->getItem('settings', $cacheFile)) != false) {
         $_info = unserialize($cache, NV_UNSERIALIZE_SAFE);
         if (!empty($_info['md5']) and $_info['md5'] == $md5) {
@@ -2959,6 +3043,15 @@ function parse_csp($json_csp)
         }
     }
     !empty($static_csp) && $_csp = array_merge_recursive($_csp, $static_csp);
+
+    /**
+     * Khu vực quản trị không bao giờ được phép nhúng từ tên miền khác,
+     * bất kể cấu hình frame-ancestors ngoài site mở tới đâu
+     */
+    if ($is_admin) {
+        $_csp['frame-ancestors'] = ['self' => 1];
+    }
+
     $csp = [];
     if (!empty($_csp)) {
         foreach ($_csp as $directive => $sources) {
