@@ -21,7 +21,6 @@
     }
     const opts = { ...avatarWraper.dataset }; // Copy sang object để dùng độc lập
 
-    const parentOrigin = opts.client || window.location.origin;
     const avatarCropper = avatarWraper.querySelector('[data-area="cropper"]');
     const frameCropper = avatarWraper.querySelector('[data-area="frame"]');
     const actionsCropper = avatarWraper.querySelector('[data-toggle="actions"]');
@@ -471,7 +470,7 @@
                     type: 'nv.avatar.done',
                     src: res.src,
                     name: res.filename
-                }, parentOrigin);
+                }, window.location.origin);
             })
             .catch(function (err) {
                 console.error(err);
@@ -654,7 +653,7 @@
         window.parent.postMessage({
             type: 'nv.avatar.setHeight',
             height: height
-        }, parentOrigin);
+        }, window.location.origin);
     }
 
     window.addEventListener('load', setContainerHeight);

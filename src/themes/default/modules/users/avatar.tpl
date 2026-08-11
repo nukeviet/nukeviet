@@ -12,7 +12,6 @@
 <div class="usravt-upload-wraper" data-area="avatar"
     data-upload-url="{NV_AVATAR_UPLOAD}"
     data-checkss="{DATA.checkss}"
-    data-client="{DATA.client}"
     data-max-size="{NV_UPLOAD_MAX_FILESIZE}"
     data-max-width="{NV_MAX_WIDTH}"
     data-max-height="{NV_MAX_HEIGHT}"
