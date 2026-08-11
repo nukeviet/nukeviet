@@ -767,7 +767,6 @@ function user_info($data, $array_field_config, $custom_fields, $types, $data_que
     }
 
     $xtpl->assign('AVATAR_DEFAULT', NV_STATIC_URL . 'themes/' . $template . '/images/' . $module_info['module_theme'] . '/no_avatar.png');
-    $xtpl->assign('URL_AVATAR', nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=avatar/src', true));
     $xtpl->assign('TEMPLATE', $template);
     $xtpl->assign('TEMPLATE_JS', $template_js);
     $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
@@ -1298,6 +1297,12 @@ function user_info($data, $array_field_config, $custom_fields, $types, $data_que
 
     // Tab đổi ảnh đại diện
     if (in_array('avatar', $types, true)) {
+        $xtpl->assign('URL_AVATAR', $data['url_avatar']);
+
+        if (!empty($data['avatar_direct_change']) and $data['type'] == 'avatar') {
+            $xtpl->parse('main.tab_edit_avatar.direct_trigger');
+        }
+
         $xtpl->parse('main.edit_avatar');
         $xtpl->parse('main.tab_edit_avatar');
     }
@@ -1404,7 +1409,9 @@ function openid_callback($openid_info)
  */
 function user_welcome($array_field_config, $custom_fields)
 {
-    global $module_info, $global_config, $nv_Lang, $module_name, $user_info, $op, $language_array;
+    global $module_info, $global_config, $nv_Lang, $module_name, $user_info, $op, $language_array, $page_url;
+
+    $redirect_url = empty($page_url) ? urlRewriteWithDomain(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA, NV_MY_DOMAIN) : urlRewriteWithDomain($page_url, NV_MY_DOMAIN);
 
     [$template, $dir] = get_module_tpl_dir('userinfo.tpl', true);
     $xtpl = new XTemplate('userinfo.tpl', $dir);
@@ -1412,7 +1419,7 @@ function user_welcome($array_field_config, $custom_fields)
     $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
     $xtpl->assign('URL_HREF', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=');
     $xtpl->assign('URL_MODULE', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name);
-    $xtpl->assign('URL_AVATAR', nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=avatar/upd', true));
+    $xtpl->assign('URL_AVATAR', nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=avatar/upd&amp;nv_redirect=' . nv_redirect_encrypt($redirect_url), true));
     $xtpl->assign('URL_GROUPS', nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=groups', true));
     $xtpl->assign('URL_2STEP', nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=two-step-verification', true));
 

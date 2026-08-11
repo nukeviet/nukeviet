@@ -318,7 +318,28 @@ $array_data['editcensor'] = $global_users_config['active_editinfo_censor'];
 $array_data['confirmed_pass'] = is_verified_password('passkey');
 
 $checkss = $nv_Request->get_title('checkss', 'post', '');
-$nv_redirect = nv_get_redirect();
+$nv_redirect = $sso_redirect = '';
+if ($nv_Request->isset_request('nv_redirect', 'post,get')) {
+    $nv_redirect = nv_get_redirect();
+    if ($nv_Request->isset_request('nv_redirect', 'get') and !empty($nv_redirect)) {
+        $nv_Request->set_Session('nv_redirect_' . $module_data, $nv_redirect);
+    }
+} elseif ($nv_Request->isset_request('sso_redirect', 'get')) {
+    $sso_redirect = $nv_Request->get_title('sso_redirect', 'get', '');
+    if (!empty($sso_redirect)) {
+        $nv_Request->set_Session('sso_redirect_' . $module_data, $sso_redirect);
+    }
+}
+
+$array_data['client'] = '';
+if (defined('SSO_CLIENT_DOMAIN')) {
+    $allowed_client_origin = explode(',', SSO_CLIENT_DOMAIN);
+    $array_data['client'] = $nv_Request->get_title('client', 'get,post', '');
+    if (!empty($array_data['client']) and !in_array($array_data['client'], $allowed_client_origin, true)) {
+        // 406 Not Acceptable
+        nv_info_die($nv_Lang->getGlobal('error_404_title'), $nv_Lang->getGlobal('error_404_title'), $nv_Lang->getGlobal('error_404_content'), 406);
+    }
+}
 
 if (isset($array_op[2]) and !defined('ACCESS_EDITUS')) {
     if (empty($_POST)) {
@@ -514,6 +535,9 @@ if (defined('ACCESS_EDITUS')) {
 } else {
     $array_data['type'] = (isset($array_op[1]) and !empty($array_op[1]) and in_array($array_op[1], $types, true)) ? $array_op[1] : 'basic';
     $page_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=editinfo';
+}
+if (!empty($nv_redirect)) {
+    $page_url .= '&amp;nv_redirect=' . $nv_redirect;
 }
 
 $data_openid = [];
@@ -1421,6 +1445,16 @@ if ($checkss == $array_data['checkss'] and $array_data['type'] == 'basic') {
         'redirect' => nv_url_rewrite($page_url, true),
         'mess' => $nv_Lang->getModule('safe_activate_ok')
     ]);
+}
+
+if ($array_data['type'] == 'avatar') {
+    $array_data['avatar_direct_change'] = (int) $nv_Request->get_bool('avatar_direct_change', 'post,get', false);
+}
+if (in_array('avatar', $types, true)) {
+    $array_data['url_avatar'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=avatar/src';
+    if (!empty($array_data['client'])) {
+        $array_data['url_avatar'] .= '&amp;client=' . $array_data['client'];
+    }
 }
 
 $page_title = $nv_Lang->getModule('editinfo_pagetitle');

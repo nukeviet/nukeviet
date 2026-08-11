@@ -93,7 +93,7 @@ $sender = $array_op[1] ?? '';
 if ($sender == 'facebook') {
     /**
      * @param mixed $code
-     * @return never
+     * @return void
      */
     function jsonConfirmSuccess($code)
     {

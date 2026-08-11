@@ -175,6 +175,14 @@
                     data-callback="changeAvatar"
                 >{LANG.change_avatar}</button>
                 <button type="button" class="btn btn-danger btn-xs" id="delavatar" data-toggle="deleteAvatar" data-obj="#myavatar" data-ss="{DATA.checkss_avatar}"{DATA.imgDisabled}>{GLANG.delete}</button>
+                <!-- BEGIN: direct_trigger -->
+                <script>
+                document.addEventListener('DOMContentLoaded', () => {
+                    const tab = document.querySelector('#edit_avatar');
+                    tab.querySelector('[data-toggle="changeAvatar"]').click();
+                });
+                </script>
+                <!-- END: direct_trigger -->
             </div>
         </div>
         <!-- END: tab_edit_avatar -->

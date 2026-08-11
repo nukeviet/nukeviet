@@ -1350,6 +1350,10 @@ document.addEventListener('click', function (e) {
                 iframe.style.height = data.height + 'px';
             } else if (data.type === 'nv.avatar.done') {
                 // Trả về dữ liệu từ khung change avatar
+                if (data.redirect) {
+                    window.top.location.href = data.redirect;
+                    return;
+                }
                 const callback = btn.dataset.callback || null;
                 if (callback && typeof window[callback] === 'function') {
                     // Hành động tùy chỉnh

@@ -13,8 +13,36 @@ if (!defined('NV_IS_MOD_USER')) {
     exit('Stop!!!');
 }
 
+$array = [];
+$array['u'] = (isset($array_op[1]) and ($array_op[1] == 'upd' or $array_op[1] == 'opener' or $array_op[1] == 'src')) ? $array_op[1] : '';
+
+$page_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op;
+
+if (!empty($array['u'])) {
+    $page_url .= '/' . $array['u'];
+}
+
+// Chuyển hướng sau khi đổi avatar. Chỉ dùng cho forum
+$nv_redirect = '';
+if ($nv_Request->isset_request('nv_redirect', 'post,get')) {
+    // Luồng nv_redirect dùng báo cáo chuyển hướng sang forum
+    $nv_redirect = nv_get_redirect();
+    if ($nv_Request->isset_request('nv_redirect', 'get') and !empty($nv_redirect)) {
+        $nv_Request->set_Session('nv_redirect_' . $module_data, $nv_redirect);
+    }
+} elseif ($nv_Request->isset_request('sso_redirect', 'get')) {
+    // Luồng sso báo cáo chuyển hướng sang client sau khi đổi avatar
+    $sso_redirect = $nv_Request->get_title('sso_redirect', 'get', '');
+    if (!empty($sso_redirect)) {
+        $nv_Request->set_Session('sso_redirect_' . $module_data, $sso_redirect);
+    }
+}
+if (!empty($nv_redirect)) {
+    $page_url .= '&amp;nv_redirect=' . $nv_redirect;
+}
+
 if (defined('NV_IS_USER_FORUM')) {
-    require_once NV_ROOTDIR . '/' . $global_config['dir_forum'] . '/nukeviet/avatar.php';
+    require NV_ROOTDIR . '/' . $global_config['dir_forum'] . '/nukeviet/avatar.php';
     exit();
 }
 
@@ -28,8 +56,6 @@ if (!defined('NV_IS_ADMIN')) {
     }
 }
 
-$array = [];
-$array['u'] = (isset($array_op[1]) and ($array_op[1] == 'upd' or $array_op[1] == 'opener' or $array_op[1] == 'src')) ? $array_op[1] : '';
 $array['checkss'] = csrf_create($g_csrf_key['avatar']);
 
 // Kiểm tra CSRF ngay khi có checkss post
@@ -103,11 +129,6 @@ function deleteAvatar()
 }
 
 $page_title = $nv_Lang->getModule('avatar_pagetitle');
-$page_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op;
-
-if (!empty($array['u'])) {
-    $page_url .= '/' . $array['u'];
-}
 
 $array['client'] = '';
 if (defined('SSO_CLIENT_DOMAIN')) {
@@ -263,12 +284,25 @@ if (isset($_POST['checkss'], $_FILES['image_file']) and is_uploaded_file($_FILES
 
     nv_deletefile($upload_info['name']);
 
+    $redirect = '';
+    if (defined('SSO_REGISTER_SECRET')) {
+        $redirect = $nv_Request->get_title('sso_redirect_' . $module_data, 'session', '');
+        $redirect = NukeViet\Client\Sso::decrypt($redirect);
+        $nv_Request->unset_request('sso_redirect_' . $module_data, 'session');
+
+        // Redirect phải bắt đầu bằng $array['client'] để tránh redirect sang domain khác
+        if (!empty($redirect) && (empty($array['client']) || !str_starts_with($redirect, $array['client']))) {
+            $redirect = '';
+        }
+    }
+
     nv_jsonOutput([
         'status' => 'ok',
         'src' => $array['avatar_src'],
         'filename' => $array['filename'],
         'action' => $array['u'],
-        'client' => $array['client']
+        'client' => $array['client'],
+        'redirect' => $redirect
     ]);
 }
 

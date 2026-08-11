@@ -51,6 +51,8 @@ if ($global_config['allowuserlogin']) {
 
     $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
 
+    $redirect_url = empty($page_url) ? urlRewriteWithDomain(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA, NV_MY_DOMAIN) : urlRewriteWithDomain($page_url, NV_MY_DOMAIN);
+
     if (defined('NV_IS_USER')) {
         $js_dir = get_tpl_dir([$global_config['module_theme'], $global_config['site_theme']], 'default', '/js/users.js');
         $xtpl->assign('BLOCK_JS', $js_dir);
@@ -61,7 +63,7 @@ if ($global_config['allowuserlogin']) {
         $xtpl->assign('WELCOME', defined('NV_IS_ADMIN') ? $nv_Lang->getGlobal('admin_account') : $nv_Lang->getGlobal('your_account'));
         $xtpl->assign('LEVEL', defined('NV_IS_ADMIN') ? $admin_info['level'] : 'user');
         $xtpl->assign('URL_MODULE', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=users');
-        $xtpl->assign('URL_AVATAR', nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=users&amp;' . NV_OP_VARIABLE . '=avatar/upd', true));
+        $xtpl->assign('URL_AVATAR', nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=users&amp;' . NV_OP_VARIABLE . '=avatar/upd&amp;nv_redirect=' . nv_redirect_encrypt($redirect_url), true));
         $xtpl->assign('URL_HREF', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=users&amp;' . NV_OP_VARIABLE . '=');
 
         if (defined('NV_OPENID_ALLOWED')) {
@@ -90,14 +92,14 @@ if ($global_config['allowuserlogin']) {
         $xtpl->parse('signed');
         $content = $xtpl->text('signed');
     } elseif (defined('SSO_SERVER') and (defined('NV_IS_USER_FORUM') or NV_MY_DOMAIN != SSO_REGISTER_DOMAIN)) {
-        $url = NukeViet\Client\Sso::getLoginUrl(empty($page_url) ? urlRewriteWithDomain(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA, NV_MY_DOMAIN) : urlRewriteWithDomain($page_url, NV_MY_DOMAIN));
+        $url = NukeViet\Client\Sso::getLoginUrl($redirect_url);
         $url = nv_apply_hook('', 'modify_sso_login_url', [$url], $url);
         $xtpl->assign('LINK_LOGIN', $url);
         $xtpl->parse('sso');
         $content = $xtpl->text('sso');
     } else {
         $xtpl->assign('LOAD_FORM_URL', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=users&amp;' . NV_OP_VARIABLE . '=login');
-        $xtpl->assign('NV_REDIRECT', nv_redirect_encrypt(empty($page_url) ? urlRewriteWithDomain(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA, NV_MY_DOMAIN) : urlRewriteWithDomain($page_url, NV_MY_DOMAIN)));
+        $xtpl->assign('NV_REDIRECT', nv_redirect_encrypt($redirect_url));
         $xtpl->parse('main');
         $content = $xtpl->text('main');
     }
