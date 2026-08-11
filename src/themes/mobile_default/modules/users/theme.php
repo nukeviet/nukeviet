@@ -1860,12 +1860,6 @@ function nv_avatar($array)
     $xtpl->assign('NV_AVATAR_HEIGHT', $global_config['avatar_height']);
     $xtpl->assign('DATA', $array);
 
-    $form_action = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=avatar';
-    if (!empty($array['u'])) {
-        $form_action .= '/' . $array['u'];
-    }
-    $xtpl->assign('NV_AVATAR_UPLOAD', $form_action);
-
     $nv_Lang->setModule('avatar_bigfile', $nv_Lang->getModule('avatar_bigfile', nv_convertfromBytes(NV_UPLOAD_MAX_FILESIZE)));
     $nv_Lang->setModule('avatar_bigsize', $nv_Lang->getModule('avatar_bigsize', NV_MAX_WIDTH, NV_MAX_HEIGHT));
     $nv_Lang->setModule('avatar_smallsize', $nv_Lang->getModule('avatar_smallsize', $global_config['avatar_width'], $global_config['avatar_height']));

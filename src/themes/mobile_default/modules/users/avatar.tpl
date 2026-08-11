@@ -10,7 +10,7 @@
 </style>
 <script src="{NV_STATIC_URL}themes/{TEMPLATE}/js/avatar.js"></script>
 <div class="usravt-upload-wraper" data-area="avatar"
-    data-upload-url="{NV_AVATAR_UPLOAD}"
+    data-upload-url="{DATA.form_action}"
     data-checkss="{DATA.checkss}"
     data-max-size="{NV_UPLOAD_MAX_FILESIZE}"
     data-max-width="{NV_MAX_WIDTH}"

@@ -139,6 +139,10 @@ if (defined('SSO_CLIENT_DOMAIN')) {
         nv_info_die($nv_Lang->getGlobal('error_404_title'), $nv_Lang->getGlobal('error_404_title'), $nv_Lang->getGlobal('error_404_content'), 406);
     }
 }
+if (!empty($array['client'])) {
+    $page_url .= '&amp;client=' . urlencode($array['client']);
+}
+$array['form_action'] = $page_url;
 
 // Xóa ảnh avatar, cần isset($_POST['checkss']) để đảm bảo đã kiểm tra CSRF
 if (isset($_POST['checkss']) && $nv_Request->isset_request('del', 'post')) {

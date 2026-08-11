@@ -469,7 +469,8 @@
                 window.parent.postMessage({
                     type: 'nv.avatar.done',
                     src: res.src,
-                    name: res.filename
+                    name: res.filename,
+                    redirect: res.redirect
                 }, window.location.origin);
             })
             .catch(function (err) {
