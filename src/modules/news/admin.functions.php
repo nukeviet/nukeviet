@@ -385,6 +385,7 @@ function nv_get_mod_tags($content)
 {
     global $db, $module_data;
 
+    $content = preg_replace('/<[^>]*>/', ' ', $content);
     $content = strip_tags($content);
     $content = nv_unhtmlspecialchars($content);
     $content = strip_punctuation($content);

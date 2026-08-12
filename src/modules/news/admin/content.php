@@ -137,7 +137,7 @@ if ($nv_Request->isset_request('id', 'post') and $nv_Request->isset_request('che
 
 // Lấy keywords từ nội dung bài viết
 if ($nv_Request->isset_request('getKeywordsFromContent', 'post') and csrf_check($nv_Request->get_string('checkss', 'post', ''), $csrf_key)) {
-    $content = $nv_Request->get_title('content', 'post', '');
+    $content = $nv_Request->get_string('content', 'post', '');
     $keywords = nv_get_mod_tags($content);
     $size = count($keywords);
     if ($size < 20) {

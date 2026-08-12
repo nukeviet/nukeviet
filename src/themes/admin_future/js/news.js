@@ -21,6 +21,21 @@ function get_alias(mod, id) {
     return false;
 }
 
+/**
+ * Lọc bớt các thẻ không cần thiết để lấy từ khóa, tag
+ *
+ * @param {string} html Nội dung HTML
+ * @returns {string} Nội dung đã lọc
+ */
+function nv_content_for_tags(html) {
+    if (typeof html != 'string') {
+        return '';
+    }
+    return html
+        .replace(/<(script|style)[^>]*>[\s\S]*?<\/\1>/gi, ' ')
+        .replace(/\ssrc\s*=\s*("data:[^"]*"|'data:[^']*'|data:[^\s>]*)/gi, '');
+}
+
 $(function () {
     // Select 2
     if ($('.select2').length) {
@@ -687,24 +702,24 @@ $(function () {
         // Lấy mô tả ngắn gọn
         if (form.data('editor-hometext')) {
             if (typeof CKEDITOR != 'undefined' && CKEDITOR.instances[mdata + '_hometext']) {
-                text += strip_tags(CKEDITOR.instances[mdata + '_hometext'].getData());
+                text += nv_content_for_tags(CKEDITOR.instances[mdata + '_hometext'].getData());
             } else if (typeof window.nveditor != "undefined" && window.nveditor[mdata + '_hometext']) {
-                text += strip_tags(window.nveditor[mdata + '_hometext'].getData());
+                text += nv_content_for_tags(window.nveditor[mdata + '_hometext'].getData());
             }
         } else {
-            text += strip_tags($('[name=hometext]', form).val());
+            text += nv_content_for_tags($('[name=hometext]', form).val());
         }
 
         // Lấy nội dung bài đăng
         text += ' ';
         if (form.data('editor')) {
             if (typeof CKEDITOR != 'undefined' && CKEDITOR.instances[mdata + '_bodyhtml']) {
-                text += strip_tags(CKEDITOR.instances[mdata + '_bodyhtml'].getData());
+                text += nv_content_for_tags(CKEDITOR.instances[mdata + '_bodyhtml'].getData());
             } else if (typeof window.nveditor != "undefined" && window.nveditor[mdata + '_bodyhtml']) {
-                text += strip_tags(window.nveditor[mdata + '_bodyhtml'].getData());
+                text += nv_content_for_tags(window.nveditor[mdata + '_bodyhtml'].getData());
             }
         } else {
-            text += strip_tags($('[name=bodyhtml]', form).val());
+            text += nv_content_for_tags($('[name=bodyhtml]', form).val());
         }
         text = trim(text.replace(/\n|\r/g, ' '));
         if (text != '') {
@@ -751,24 +766,24 @@ $(function () {
         // Lấy mô tả ngắn gọn
         if (form.data('editor-hometext')) {
             if (typeof CKEDITOR != 'undefined' && CKEDITOR.instances[mdata + '_hometext']) {
-                text += strip_tags(CKEDITOR.instances[mdata + '_hometext'].getData());
+                text += nv_content_for_tags(CKEDITOR.instances[mdata + '_hometext'].getData());
             } else if (typeof window.nveditor != "undefined" && window.nveditor[mdata + '_hometext']) {
-                text += strip_tags(window.nveditor[mdata + '_hometext'].getData());
+                text += nv_content_for_tags(window.nveditor[mdata + '_hometext'].getData());
             }
         } else {
-            text += strip_tags($('[name=hometext]', form).val());
+            text += nv_content_for_tags($('[name=hometext]', form).val());
         }
 
         // Lấy nội dung bài đăng
         text += ' ';
         if (form.data('editor')) {
             if (typeof CKEDITOR != 'undefined' && CKEDITOR.instances[mdata + '_bodyhtml']) {
-                text += strip_tags(CKEDITOR.instances[mdata + '_bodyhtml'].getData());
+                text += nv_content_for_tags(CKEDITOR.instances[mdata + '_bodyhtml'].getData());
             } else if (typeof window.nveditor != "undefined" && window.nveditor[mdata + '_bodyhtml']) {
-                text += strip_tags(window.nveditor[mdata + '_bodyhtml'].getData());
+                text += nv_content_for_tags(window.nveditor[mdata + '_bodyhtml'].getData());
             }
         } else {
-            text += strip_tags($('[name=bodyhtml]', form).val());
+            text += nv_content_for_tags($('[name=bodyhtml]', form).val());
         }
         text = trim(text.replace(/\n|\r/g, ' '));
         if (text != '') {

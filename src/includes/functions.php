@@ -1516,6 +1516,7 @@ function nv_tag2nl($str, $tag = 'p')
  */
 function nv_get_keywords($content, $keyword_limit = 20, $isArr = false)
 {
+    $content = preg_replace('/<[^>]*>/', ' ', $content);
     $content = strip_tags($content);
     $content = nv_unhtmlspecialchars($content);
     $content = strip_punctuation($content);
@@ -4254,11 +4255,11 @@ function nv_parse_phone($phone)
 
     $_phones = explode('|', nv_unhtmlspecialchars($phone));
     $phones = [];
-    foreach ($_phones as $phone) {
-        if (preg_match("/^(.*)\s*\[([0-9\+\.\,\;\*\#]+)\]$/", $phone, $m)) {
+    foreach ($_phones as $_phone) {
+        if (preg_match("/^(.*)\s*\[([0-9\+\.\,\;\*\#]+)\]$/", $_phone, $m)) {
             $phones[] = [nv_htmlspecialchars($m[1]), $m[2]];
         } else {
-            $phones[] = [nv_htmlspecialchars(preg_replace("/\[[^\]]*\]/", '', $phone))];
+            $phones[] = [nv_htmlspecialchars(preg_replace("/\[[^\]]*\]/", '', $_phone))];
         }
     }
 
@@ -4537,7 +4538,7 @@ function nv_currency_format(float $num, string $lang = '')
 /**
  * @param string $key
  * @param string $lang
- * @return null|string|number
+ * @return null|string|int
  */
 function nv_region_config(string $key, string $lang = '')
 {

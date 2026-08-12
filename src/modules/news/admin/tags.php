@@ -17,7 +17,7 @@ $page_title = $nv_Lang->getModule('tags_manage');
 
 // Lấy tags từ nội dung bài viết
 if ($nv_Request->isset_request('getTagsFromContent', 'post') and csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
-    $content = $nv_Request->get_title('content', 'post', '');
+    $content = $nv_Request->get_string('content', 'post', '');
     $tags = nv_get_mod_tags($content);
     nv_jsonOutput($tags);
 }
