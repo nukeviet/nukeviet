@@ -375,7 +375,6 @@ function nv_get_mod_countrows()
 }
 
 /**
- * nv_get_mod_tags()
  * Tìm tags cho bài viết dựa vào thư viện tags
  *
  * @param mixed $content
@@ -398,34 +397,61 @@ function nv_get_mod_tags($content)
     $ts = array_map(function ($t) {
         return preg_replace('/([\W])/u', '\\\\$1', $t);
     }, $ts);
-    $ts = implode('|', $ts);
 
-    $stmt = $db->prepare("SELECT keywords FROM " . NV_PREFIXLANG . "_" . $module_data . "_tags WHERE keywords REGEXP :p1 OR keywords REGEXP :p2 OR keywords REGEXP :p3 OR keywords REGEXP :p4");
-    $stmt->bindValue(':p1', '^' . $ts . '$', PDO::PARAM_STR);
-    $stmt->bindValue(':p2', '^' . $ts . ',', PDO::PARAM_STR);
-    $stmt->bindValue(':p3', ',' . $ts . ',', PDO::PARAM_STR);
-    $stmt->bindValue(':p4', ',' . $ts . '$', PDO::PARAM_STR);
-    $stmt->execute();
-
-    $ts = [];
-    while ($_row_tag = $stmt->fetch()) {
-        $keyword = array_map('trim', explode(',', $_row_tag['keywords']));
-        $keyword = array_map('nv_preg_quote', $keyword);
-        $ts = array_merge($ts, $keyword);
-    }
-    $stmt->closeCursor();
-
-    $tags = [];
-    if (!empty($ts)) {
-        $ts = implode('|', $ts);
-        unset($matches);
-        preg_match_all('/(' . $ts . ')/', $content, $matches);
-        if (!empty($matches[1])) {
-            $tags = array_unique($matches[1]);
+    /**
+     * Lấy các tag có chứa ít nhất một từ của bài viết.
+     * Chia các từ của bài viết thành nhiều chunks, mỗi chunk dài tối đa 2000 ký tự.
+     * keywords trong bảng tags có thể là cụm nhiều từ, còn $ts chỉ là một từ đơn.
+     */
+    $patterns = [];
+    $batch = [];
+    $length = 0;
+    foreach ($ts as $t) {
+        if (!empty($batch) and $length + strlen($t) > 2000) {
+            $patterns[] = implode('|', $batch);
+            $batch = [];
+            $length = 0;
         }
+        $batch[] = $t;
+        $length += strlen($t) + 1;
+    }
+    if (!empty($batch)) {
+        $patterns[] = implode('|', $batch);
     }
 
-    return !empty($tags) ? array_values($tags) : [];
+    if (empty($patterns)) {
+        return [];
+    }
+
+    /**
+     * Với những tag tìm được, phân tách từ khóa của nó bởi dấu phảy ra,
+     * và xác nhận bằng cách kiểm tra từ khóa đó xuất hiện trong nội dung bài viết.
+     */
+    $tags = [];
+    $stmt = $db->prepare('SELECT keywords FROM ' . NV_PREFIXLANG . '_' . $module_data . '_tags WHERE keywords REGEXP :p');
+    foreach ($patterns as $pattern) {
+        $stmt->bindValue(':p', $pattern, PDO::PARAM_STR);
+        $stmt->execute();
+
+        while ($_row_tag = $stmt->fetch()) {
+            foreach (explode(',', $_row_tag['keywords']) as $keyword) {
+                $keyword = trim($keyword);
+                if ($keyword === '' or isset($tags[$keyword])) {
+                    continue;
+                }
+                $pos = strpos($content, $keyword);
+                if ($pos !== false) {
+                    $tags[$keyword] = $pos;
+                }
+            }
+        }
+        $stmt->closeCursor();
+    }
+
+    // Sắp xếp theo thứ tự xuất hiện trong nội dung bài viết, từ đầu đến cuối
+    asort($tags, SORT_NUMERIC);
+
+    return array_map('strval', array_keys($tags));
 }
 
 /**
