@@ -1,7 +1,8 @@
 CHANGE LOG: NUKEVIET CMS
 http://nukeviet.vn
 NUKEVIET 4.6.01
-- Select2 v4.1.0, DOMPurify v3.4.13
+- Fix XSS in class Request. Thanks mrlihd from GitHub @mrlihd
+- Select2 v4.1.0, DOMPurify v3.4.13.
 - guzzlehttp/guzzle v7.15.2
 - Fix numeric-entity leading-zero bypass in Request XSS sanitizer. Thanks Mai Đăng Khoa from GitHub @dkoazw
 - Restrict users custom field callback to prevent RCE. Thanks Nguyễn Hồng Giáp from GitHub @PinkArmor
