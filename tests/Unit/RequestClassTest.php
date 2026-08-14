@@ -408,7 +408,7 @@ class RequestClassTest extends \Codeception\Test\Unit
     }
 
     /**
-     * data: URL với nội dung an toàn không được lọc nhầm.
+     * data: URL media hợp lệ không được lọc nhầm, còn kiểu MIME không được phép phải bị gỡ.
      *
      * Chốt chặn false positive cho test soi payload data: URL ở trên.
      *
@@ -424,12 +424,28 @@ class RequestClassTest extends \Codeception\Test\Unit
             'Ảnh PNG nhúng dạng data: URL bị lọc nhầm. Output: ' . $result
         );
 
-        // data: URL chứa HTML nhưng hoàn toàn vô hại
-        $result = $this->filterEditor('<iframe src="data:text/html,&lt;p&gt;Xin chào&lt;/p&gt;"></iframe>');
+        // SVG nhúng trực tiếp vẫn phải cho qua ở media tag hợp lệ
+        $result = $this->filterEditor('<img src="data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\'%3E%3C/svg%3E" alt="svg">');
         $this->assertStringContainsString(
+            'data:image/svg+xml',
+            $result,
+            'SVG nhúng dạng data: URL bị lọc nhầm trên tag img. Output: ' . $result
+        );
+
+        // data:text/html không còn được phép dù payload an toàn
+        $result = $this->filterEditor('<iframe src="data:text/html,&lt;p&gt;Xin chào&lt;/p&gt;"></iframe>');
+        $this->assertStringNotContainsStringIgnoringCase(
             'data:text/html',
             $result,
-            'data: URL chứa HTML an toàn bị lọc nhầm. Output: ' . $result
+            'data:text/html phải bị loại bỏ khỏi iframe. Output: ' . $result
+        );
+
+        // SVG không được phép trên tag không phải media
+        $result = $this->filterEditor('<iframe src="data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\'%3E%3C/svg%3E"></iframe>');
+        $this->assertStringNotContainsStringIgnoringCase(
+            'data:image/svg+xml',
+            $result,
+            'SVG dạng data: URL phải bị loại bỏ khỏi iframe. Output: ' . $result
         );
     }
 
