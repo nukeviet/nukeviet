@@ -727,27 +727,6 @@ class Request
     }
 
     /**
-     * color_hex2rgb_callback()
-     *
-     * @param array $hex
-     * @return mixed
-     */
-    private function color_hex2rgb_callback($hex)
-    {
-        if (preg_match('/[^0-9ABCDEFabcdef]/', $hex[1])) {
-            return $hex[0];
-        }
-        $color = $hex[1];
-        $l = strlen($color);
-        if ($l != 3 and $l != 6) {
-            return $hex[0];
-        }
-        $l = $l / 3;
-
-        return 'rgb(' . (hexdec(substr($color, 0, 1 * $l))) . ', ' . (hexdec(substr($color, 1 * $l, 1 * $l))) . ', ' . (hexdec(substr($color, 2 * $l, 1 * $l))) . ');';
-    }
-
-    /**
      * unhtmlentities()
      *
      * @param string $value
@@ -819,14 +798,15 @@ class Request
             $attrSubSet[0] = preg_replace('/&#0*(?:3[01]|[12][0-9]|[0-9])(?![0-9]);?/', '', $attrSubSet[0]);
             $attrSubSet[0] = preg_replace('/[\x00-\x20]/', '', html_entity_decode($attrSubSet[0], ENT_QUOTES | ENT_HTML5, 'UTF-8'));
 
-            if (!preg_match('/[a-z]+/i', $attrSubSet[0]) or in_array($attrSubSet[0], $this->disabledattributes, true) or preg_match('/^on/i', $attrSubSet[0])) {
+            // Loại bỏ attr không hợp lệ
+            if (!preg_match('/^[a-z][a-z0-9:._-]*$/', $attrSubSet[0]) or in_array($attrSubSet[0], $this->disabledattributes, true) or preg_match('/^on/i', $attrSubSet[0])) {
                 continue;
             }
 
             if (!empty($attrSubSet[1])) {
                 $attrSubSet[1] = preg_replace('/[ ]+/', ' ', $attrSubSet[1]);
-                $attrSubSet[1] = preg_replace('/^"(.*)"$/', '\\1', $attrSubSet[1]);
-                $attrSubSet[1] = preg_replace("/^\'(.*)\'$/", '\\1', $attrSubSet[1]);
+                $attrSubSet[1] = preg_replace('/^"(.*)"$/s', '\\1', $attrSubSet[1]);
+                $attrSubSet[1] = preg_replace("/^\'(.*)\'$/s", '\\1', $attrSubSet[1]);
                 $attrSubSet[1] = str_replace(['"', '&quot;'], "'", $attrSubSet[1]);
 
                 $value = $this->unhtmlentities($attrSubSet[1]);
@@ -848,6 +828,17 @@ class Request
 
                 // Security check Data URLs
                 if (preg_match('/^[\r\n\s\t]*d\s*a\s*t\s*a\s*\:([^\,]*?)\;*[\r\n\s\t]*(base64)*?[\r\n\s\t]*\,[\r\n\s\t]*(.*?)[\r\n\s\t]*$/isu', $value, $m)) {
+                    $dataMime = explode(';', $m[1], 2);
+                    $dataMime = strtolower(preg_replace('/[\x00-\x20]/', '', $dataMime[0]));
+
+                    if ('image/svg+xml' === $dataMime) {
+                        if (!in_array($tagName, ['img', 'source', 'video', 'audio', 'track'], true)) {
+                            continue;
+                        }
+                    } elseif (!preg_match('#^(?:image|video|audio|font)/[a-z0-9.+-]+$#', $dataMime)) {
+                        continue;
+                    }
+
                     if (empty($m[2])) {
                         $dataURLs = urldecode($m[3]);
                     } else {
@@ -909,10 +900,6 @@ class Request
                 $browserValue = preg_replace('/[\x00-\x20]+/', '', $browserValue);
                 if (preg_match('/(?:javascript|vbscript|livescript|mocha|behaviou?r|expression)\s*:/i', $browserValue)) {
                     continue;
-                }
-
-                if ('href' != $attrSubSet[0]) {
-                    $attrSubSet[1] = preg_replace_callback('/\#([0-9ABCDEFabcdef]{3,6})[\;]*/', [$this, 'color_hex2rgb_callback'], $attrSubSet[1]);
                 }
             } elseif ($attrSubSet[1] !== '0') {
                 $attrSubSet[1] = $attrSubSet[0];

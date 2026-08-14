@@ -1,5 +1,8 @@
 CHANGE LOG: NUKEVIET CMS
 http://nukeviet.vn
+NUKEVIET 4.5.11
+- Fix XSS in class Request. Thanks mrlihd from GitHub @mrlihd
+
 NUKEVIET 4.5.10
 - Fix numeric-entity leading-zero bypass in Request XSS sanitizer. Thanks Mai Đăng Khoa from GitHub @dkoazw
 - Restrict users custom field callback to prevent RCE. Thanks Nguyễn Hồng Giáp from GitHub @PinkArmor
