@@ -324,7 +324,6 @@ function user_login(bool $is_ajax = false): string
 /**
  * user_openid_login()
  *
- * @param mixed $gfx_chk
  * @param mixed $attribs
  * @param array $op_process
  * @return string
@@ -1600,58 +1599,30 @@ function user_info_exit_redirect($info, $nv_redirect)
 }
 
 /**
- * nv_avatar()
+ * Giao diện trang đổi ảnh đại diện
  *
  * @param array $array
  * @return string
  */
 function nv_avatar($array)
 {
-    global $module_info, $module_name, $nv_Lang, $global_config;
+    global $nv_Lang, $global_config;
 
-    $xtpl = new XTemplate('avatar.tpl', get_module_tpl_dir('avatar.tpl'));
-    $xtpl->assign('TEMPLATE', $global_config['module_theme']);
-    $xtpl->assign('MODULE_FILE', $module_info['module_file']);
+    $tpl = new \NukeViet\Template\NVSmarty();
+    $tpl->setTemplateDir(get_module_tpl_dir('avatar.tpl'));
 
-    $xtpl->assign('NV_AVATAR_WIDTH', $global_config['avatar_width']);
-    $xtpl->assign('NV_AVATAR_HEIGHT', $global_config['avatar_height']);
-    $xtpl->assign('NV_MAX_WIDTH', NV_MAX_WIDTH);
-    $xtpl->assign('NV_MAX_HEIGHT', NV_MAX_HEIGHT);
-    $xtpl->assign('NV_UPLOAD_MAX_FILESIZE', NV_UPLOAD_MAX_FILESIZE);
-    $xtpl->assign('DATA', $array);
+    // Xác định giao diện avatar.js
+    $jsDir = get_tpl_dir([$global_config['module_theme'], $global_config['site_theme']], 'default', '/js/avatar.js');
 
-    $form_action = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=avatar';
-    if (!empty($array['u'])) {
-        $form_action .= '/' . $array['u'];
-    }
-    $xtpl->assign('NV_AVATAR_UPLOAD', $form_action);
+    $tpl->assign('LANG', $nv_Lang);
+    $tpl->assign('GCONFIG', $global_config);
+    $tpl->assign('DATA', $array);
+    $tpl->assign('JS_DIR', $jsDir);
 
-    $nv_Lang->setModule('avatar_bigfile', $nv_Lang->getModule('avatar_bigfile', nv_convertfromBytes(NV_UPLOAD_MAX_FILESIZE)));
-    $nv_Lang->setModule('avatar_bigsize', $nv_Lang->getModule('avatar_bigsize', NV_MAX_WIDTH, NV_MAX_HEIGHT));
-    $nv_Lang->setModule('avatar_smallsize', $nv_Lang->getModule('avatar_smallsize', $global_config['avatar_width'], $global_config['avatar_height']));
+    // Dung lượng tối đa của file tải lên, dạng chuỗi dễ đọc
+    $tpl->assign('UPLOAD_MAX_FILESIZE_TEXT', nv_convertfromBytes(NV_UPLOAD_MAX_FILESIZE));
 
-    $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
-    $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
-
-    if ($array['error']) {
-        $xtpl->assign('ERROR', $array['error']);
-        $xtpl->parse('main.error');
-    }
-    if ($array['success'] == 1) {
-        $xtpl->assign('FILENAME', $array['filename']);
-        $xtpl->parse('main.complete');
-    } elseif ($array['success'] == 2) {
-        $xtpl->parse('main.complete2');
-    } elseif ($array['success'] == 3) {
-        $xtpl->assign('FILENAME', $array['filename']);
-        $xtpl->parse('main.complete3');
-    } else {
-        $xtpl->parse('main.init');
-    }
-
-    $xtpl->parse('main');
-
-    return $xtpl->text('main');
+    return $tpl->fetch('avatar.tpl');
 }
 
 /**
@@ -1699,6 +1670,12 @@ function safe_deactivate($data)
     return $xtpl->text('main');
 }
 
+/**
+ * @param int $pass_timeout
+ * @param bool $pass_empty
+ * @param string $checkss
+ * @return string
+ */
 function theme_changePass($pass_timeout, $pass_empty, $checkss)
 {
     global $module_info, $module_name, $nv_Lang, $global_config;

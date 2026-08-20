@@ -15,3 +15,264 @@
     @include button-variant($value, $value);
   }
 }
+
+// Khung tải lên và cắt ảnh đại diện
+.usravt-upload-wraper {
+  .picker-zone {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    padding: 32px 24px 28px;
+    border: 2px dashed var(--#{$prefix}border-color);
+    border-radius: $border-radius-lg;
+    cursor: pointer;
+    text-align: center;
+    transition: border-color 0.18s ease, background-color 0.18s ease, transform 0.18s ease;
+    -webkit-tap-highlight-color: transparent;
+
+    [type="file"] {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip-path: inset(50%);
+      border: 0;
+    }
+
+    &.is-dragging {
+      border-color: var(--#{$prefix}primary);
+      border-style: solid;
+
+      .overlay {
+        opacity: 1;
+      }
+    }
+
+    .ic {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 48px;
+      height: 48px;
+      border-radius: $border-radius-lg;
+      background-color: var(--#{$prefix}secondary-bg);
+      font-size: 24px;
+    }
+
+    .hint {
+      font-weight: $font-weight-bold;
+    }
+
+    .overlay {
+      position: absolute;
+      inset: 0;
+      display: grid;
+      place-items: center;
+      border-radius: $border-radius;
+      background: var(--#{$prefix}secondary-bg);
+      font-weight: $font-weight-bold;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.15s ease;
+    }
+  }
+
+  .cropper-zone {
+    .stage {
+      display: flex;
+      justify-content: center;
+    }
+
+    .stage-frame {
+      position: relative;
+      width: 100%;
+      max-width: 300px;
+      aspect-ratio: 1 / 1;
+      overflow: hidden;
+      border-radius: $border-radius-lg;
+      background: repeating-conic-gradient(var(--#{$prefix}secondary-bg) 0 25%, var(--#{$prefix}tertiary-bg) 0 50%) 50% / 18px 18px;
+      cursor: grab;
+      touch-action: none;
+
+      &:focus-visible {
+        outline: 3px solid var(--#{$prefix}primary);
+        outline-offset: 3px;
+      }
+
+      img {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform-origin: 50% 50%;
+        transition: opacity 0.2s ease;
+        -webkit-user-drag: none;
+        pointer-events: none;
+      }
+    }
+
+    .frame-mask {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      box-shadow: 0 0 0 9999px rgba(var(--#{$prefix}body-bg-rgb), 0.62);
+      pointer-events: none;
+    }
+
+    .frame-ring {
+      position: absolute;
+      inset: 0;
+      border: 2px solid rgba(var(--#{$prefix}emphasis-color-rgb), 0.3);
+      border-radius: 50%;
+      pointer-events: none;
+
+      &::before {
+        content: "";
+        position: absolute;
+        left: 50%;
+        top: -1px;
+        width: 2px;
+        height: 9px;
+        margin-left: -1px;
+        background: rgba(var(--#{$prefix}emphasis-color-rgb), 0.3);
+        border-radius: 1px;
+      }
+
+      &::after {
+        content: "";
+        position: absolute;
+        inset: -2px;
+        border: 2px dashed rgba(var(--#{$prefix}emphasis-color-rgb), 0.15);
+        border-radius: $border-radius-lg;
+      }
+    }
+
+    .frame-angle {
+      position: absolute;
+      left: 50%;
+      bottom: 8px;
+      transform: translateX(-50%);
+      padding: 3px 10px;
+      font-size: $font-size-sm;
+      font-weight: $font-weight-bold;
+      font-variant-numeric: tabular-nums;
+      color: $white;
+      background: rgba($black, 0.7);
+      border-radius: 999px;
+      opacity: 0;
+      transition: opacity 0.15s ease;
+      pointer-events: none;
+
+      &.is-on {
+        opacity: 1;
+      }
+    }
+
+    .controls {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      max-width: 300px;
+      margin: 16px auto 0;
+
+      svg {
+        width: 17px;
+        height: 17px;
+      }
+
+      .control-btn {
+        flex: none;
+        display: grid;
+        place-items: center;
+        width: 34px;
+        height: 34px;
+        color: var(--#{$prefix}body-color);
+        background: var(--#{$prefix}secondary-bg);
+        border: 0;
+        border-radius: 50%;
+        cursor: pointer;
+        transition: background-color 0.15s ease;
+
+        &:hover {
+          background: var(--#{$prefix}primary);
+          color: $white;
+        }
+
+        &:active {
+          transform: scale(0.94);
+        }
+      }
+
+      .control-slider {
+        flex: 1 1 auto;
+        min-width: 0;
+        height: 4px;
+        margin: 0;
+        padding: 0;
+        background: var(--#{$prefix}secondary-bg);
+        border-radius: 999px;
+        cursor: pointer;
+        appearance: none;
+
+        &:focus-visible {
+          outline: 3px solid var(--#{$prefix}primary);
+          outline-offset: 6px;
+        }
+
+        &::-webkit-slider-thumb {
+          appearance: none;
+          width: 18px;
+          height: 18px;
+          background: var(--#{$prefix}primary);
+          border: 3px solid var(--#{$prefix}body-bg);
+          border-radius: 50%;
+          box-shadow: 0 1px 4px rgba($black, 0.35);
+          cursor: grab;
+        }
+
+        &::-moz-range-thumb {
+          width: 12px;
+          height: 12px;
+          background: var(--#{$prefix}primary);
+          border: 3px solid var(--#{$prefix}body-bg);
+          border-radius: 50%;
+          box-shadow: 0 1px 4px rgba($black, 0.35);
+          cursor: grab;
+        }
+
+        &::-moz-range-track {
+          height: 4px;
+          background: var(--#{$prefix}secondary-bg);
+          border-radius: 999px;
+        }
+      }
+    }
+
+    .actions {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      justify-content: center;
+      margin-top: 16px;
+      touch-action: manipulation;
+
+      .btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+        line-height: 1rem;
+
+        svg {
+          width: 16px;
+          height: 16px;
+        }
+      }
+    }
+  }
+}
