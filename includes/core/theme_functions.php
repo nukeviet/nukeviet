@@ -117,7 +117,7 @@ function nv_error_info()
         $xtpl->assign('TPL_E_ALT', $errortype[$value['errno']][0]);
         $xtpl->assign('TPL_E_SRC', $image_path . $errortype[$value['errno']][1]);
         $xtpl->assign('TPL_E_ERRNO', $errortype[$value['errno']][0]);
-        $xtpl->assign('TPL_E_MESS', $value['info']);
+        $xtpl->assign('TPL_E_MESS', nv_htmlspecialchars($value['info'], 'attribute'));
         $xtpl->set_autoreset();
         $xtpl->parse('error_info.error_item');
         ++$a;
@@ -386,7 +386,7 @@ function nv_xmlOutput($content, $lastModified)
 /**
  * nv_rss_generate()
  *
- * @param string $channel
+ * @param array $channel
  * @param array  $items
  * @param string $atomlink
  * @param string $timemode

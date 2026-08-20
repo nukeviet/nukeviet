@@ -58,6 +58,7 @@ class Error
     private $errstr = false;
     private $errfile = false;
     private $errline = false;
+    private $errtrace = false;
     private $ip = false;
     private $server_name = false;
     private $useragent = false;
@@ -166,7 +167,7 @@ class Error
 
         $request = $this->get_request();
         if (!empty($request)) {
-            $this->request = substr($request, 500);
+            $this->request = substr($request, 0, 500);
         }
 
         $useragent = $this->get_Env('HTTP_USER_AGENT');
@@ -332,9 +333,8 @@ class Error
             }
 
             $value = strip_tags(stripslashes($value));
-            $value = preg_replace("/[\'|\"|\t|\r|\n|\.\.\/]+/", '', $value);
 
-            return str_replace(["'", '"', '&'], ['&rsquo;', '&quot;', '&amp;'], $value);
+            return preg_replace("/[\'|\"|\t|\r|\n|\.\.\/]+/", '', $value);
         }
 
         return false;
@@ -396,7 +396,7 @@ class Error
         $_info .= "</head>\n\n";
         $_info .= "<body>\n";
         $_info .= '	<div style="width: 400px; margin-right: auto; margin-left: auto; margin-top: 20px; margin-bottom: 20px; color: #dd3e31; text-align: center;"><span style="font-weight: bold;">' . $this->errortype[$this->errno] . "</span><br />\n";
-        $_info .= '	<span style="color: #1a264e;font-weight: bold;">' . htmlspecialchars($this->errstr, ENT_QUOTES, 'UTF-8') . "</span><br />\n";
+        $_info .= '	<span style="color: #1a264e;font-weight: bold;">' . htmlspecialchars($this->errstr, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') . "</span><br />\n";
         $_info .= '	<span style="color: #1a264e;">(Code: ' . $error_code2 . ")</span></div>\n";
         $_info .= "	<div style=\"width: 400px; margin-right: auto; margin-left: auto;text-align:center\">\n";
         $_info .= '	If you have any questions about this site,<br />please <a href="mailto:' . $strEncodedEmail . "\">contact</a> the site administrator for more information</div>\n";
@@ -425,7 +425,9 @@ class Error
             $content .= ' [REQUEST: ' . $this->request . ']';
         }
 
-        if (NV_DEBUG) {
+        if (!empty($this->errtrace)) {
+            $content .= " [TRACE:]\n" . $this->errtrace . "\n";
+        } elseif (NV_DEBUG) {
             $backtrace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS);
             if (isset($backtrace[3])) {
                 $content .= " [TRACE:]\n";
@@ -512,6 +514,7 @@ class Error
     {
         $this->errno = $errno;
         $this->errstr = $errstr;
+        $this->errtrace = false;
 
         if (!empty($errfile)) {
             $this->errfile = str_replace(NV_ROOTDIR, '', str_replace('\\', '/', $errfile));
@@ -542,6 +545,7 @@ class Error
             $this->errstr = $error['message'];
             $this->errfile = str_replace(NV_ROOTDIR, '', str_replace('\\', '/', $error['file']));
             $this->errline = $error['line'];
+            $this->errtrace = false;
 
             foreach ($this->track_fatal_error as $track_fatal) {
                 if ($track_fatal['file'] == $file) {
@@ -565,8 +569,8 @@ class Error
                 $this->info_die();
             } else {
                 if (NV_DEBUG) {
-                    echo 'Error on file ' . $this->errfile . ' line ' . $this->errline . ':<br /><pre><code>';
-                    echo $error['message'];
+                    echo 'Error on file ' . htmlspecialchars($this->errfile, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') . ' line ' . $this->errline . ':<br /><pre><code>';
+                    echo htmlspecialchars($error['message'], ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
                     exit('</code></pre>');
                 }
                 exit(chr(0));
@@ -595,6 +599,7 @@ class Error
         $this->errstr = $exception->getMessage();
         $this->errfile = str_replace(NV_ROOTDIR, '', str_replace('\\', '/', $exception->getFile()));
         $this->errline = $exception->getLine();
+        $this->errtrace = str_replace([NV_ROOTDIR, str_replace('/', '\\', NV_ROOTDIR)], '', $exception->getTraceAsString());
 
         $this->log_control();
 
@@ -608,8 +613,8 @@ class Error
                 'message' => $exception->getMessage(),
                 'file' => $exception->getFile(),
                 'line' => $exception->getLine(),
-                'trace' => $exception->getTraceAsString()
-            ], true)) . '</code></pre>');
+                'trace' => $this->errtrace
+            ], true), ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') . '</code></pre>');
         }
 
         exit(chr(0));
