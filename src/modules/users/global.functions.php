@@ -774,4 +774,5 @@ if (($cache = $nv_Cache->getItem($module_name, $cacheFile, ttl: $cacheTTL)) != f
 
 $g_csrf_key = [
     'avatar' => ((defined('NV_ADMIN') ? ($admin_info['admin_id'] . '_') : (defined('NV_IS_USER') ? ($user_info['userid'] . '_') : '')) . $module_name . '_avatar'),
+    'groups' => ((defined('NV_ADMIN') ? ($admin_info['admin_id'] . '_') : (defined('NV_IS_USER') ? ($user_info['userid'] . '_') : '')) . $module_name . '_groups'),
 ];

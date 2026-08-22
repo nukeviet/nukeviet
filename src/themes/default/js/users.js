@@ -1415,4 +1415,376 @@ $(function() {
             }
         });
     }
+
+    /**
+     * Các chức năng của trang quản lý nhóm
+     */
+    if (nv_func_name == 'groups') {
+        // Duyệt vào nhóm
+        $('[data-toggle="approved"]').click(function(e) {
+            e.preventDefault();
+
+            const btn = $(this);
+            const icon = $('i', btn);
+            const page = btn.closest('[data-area="page"]');
+            if (icon.is('.fa-spinner')) {
+                return;
+            }
+
+            nukeviet.confirm(nv_is_add_user_confirm[0], () => {
+                icon.removeClass(icon.data('icon')).addClass('fa-spinner fa-pulse');
+                $.ajax({
+                    url: nv_base_siteurl + 'index.php?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=' + nv_func_name + '&nocache=' + new Date().getTime(),
+                    type: 'POST',
+                    data: {
+                        checkss: page.data('checkss'),
+                        gid: page.data('gid'),
+                        approved: btn.data('id')
+                    },
+                    dataType: 'json',
+                    cache: false,
+                    success: function (response) {
+                        icon.removeClass('fa-spinner fa-pulse').addClass(icon.data('icon'));
+                        if (response.status != 'ok') {
+                            return nukeviet.toast(response.mess, 'error');
+                        }
+                        nukeviet.toast(response.mess, 'success');
+                        setTimeout(() => {
+                            location.reload();
+                        }, 1500);
+                    },
+                    error: function (xhr, status, error) {
+                        console.log(xhr, status, error);
+                        nukeviet.toast(error, 'error');
+                        icon.removeClass('fa-spinner fa-pulse').addClass(icon.data('icon'));
+                    }
+                });
+            });
+        });
+
+        // Từ chối duyệt
+        $('[data-toggle="denied"]').click(function(e) {
+            e.preventDefault();
+
+            const btn = $(this);
+            const icon = $('i', btn);
+            const page = btn.closest('[data-area="page"]');
+            if (icon.is('.fa-spinner')) {
+                return;
+            }
+
+            nukeviet.confirm(nv_is_exclude_user_confirm[0], () => {
+                icon.removeClass(icon.data('icon')).addClass('fa-spinner fa-pulse');
+                $.ajax({
+                    url: nv_base_siteurl + 'index.php?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=' + nv_func_name + '&nocache=' + new Date().getTime(),
+                    type: 'POST',
+                    data: {
+                        checkss: page.data('checkss'),
+                        gid: page.data('gid'),
+                        denied: btn.data('id')
+                    },
+                    dataType: 'json',
+                    cache: false,
+                    success: function (response) {
+                        icon.removeClass('fa-spinner fa-pulse').addClass(icon.data('icon'));
+                        if (response.status != 'ok') {
+                            return nukeviet.toast(response.mess, 'error');
+                        }
+                        nukeviet.toast(response.mess, 'success');
+                        setTimeout(() => {
+                            location.reload();
+                        }, 1500);
+                    },
+                    error: function (xhr, status, error) {
+                        console.log(xhr, status, error);
+                        nukeviet.toast(error, 'error');
+                        icon.removeClass('fa-spinner fa-pulse').addClass(icon.data('icon'));
+                    }
+                });
+            });
+        });
+
+        // Xóa hẳn tài khoản
+        $('[data-toggle="deluser"]').click(function(e) {
+            e.preventDefault();
+
+            const btn = $(this);
+            const icon = $('i', btn);
+            const page = btn.closest('[data-area="page"]');
+            if (icon.is('.fa-spinner')) {
+                return;
+            }
+
+            nukeviet.confirm(nv_is_del_confirm[0], () => {
+                icon.removeClass(icon.data('icon')).addClass('fa-spinner fa-pulse');
+                $.ajax({
+                    url: nv_base_siteurl + 'index.php?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=' + nv_func_name + '&nocache=' + new Date().getTime(),
+                    type: 'POST',
+                    data: {
+                        checkss: page.data('checkss'),
+                        gid: page.data('gid'),
+                        del: btn.data('id')
+                    },
+                    dataType: 'json',
+                    cache: false,
+                    success: function (response) {
+                        icon.removeClass('fa-spinner fa-pulse').addClass(icon.data('icon'));
+                        if (response.status != 'ok') {
+                            return nukeviet.toast(response.mess, 'error');
+                        }
+                        nukeviet.toast(response.mess, 'success');
+                        setTimeout(() => {
+                            location.reload();
+                        }, 1500);
+                    },
+                    error: function (xhr, status, error) {
+                        console.log(xhr, status, error);
+                        nukeviet.toast(error, 'error');
+                        icon.removeClass('fa-spinner fa-pulse').addClass(icon.data('icon'));
+                    }
+                });
+            });
+        });
+
+        // Xóa thành viên khỏi nhóm
+        $('[data-toggle="deletemember"]').click(function(e) {
+            e.preventDefault();
+
+            const btn = $(this);
+            const icon = $('i', btn);
+            const page = btn.closest('[data-area="page"]');
+            if (icon.is('.fa-spinner')) {
+                return;
+            }
+
+            nukeviet.confirm(nv_is_exclude_user_confirm[0], () => {
+                icon.removeClass(icon.data('icon')).addClass('fa-spinner fa-pulse');
+                $.ajax({
+                    url: nv_base_siteurl + 'index.php?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=' + nv_func_name + '&nocache=' + new Date().getTime(),
+                    type: 'POST',
+                    data: {
+                        checkss: page.data('checkss'),
+                        gid: page.data('gid'),
+                        exclude: btn.data('id')
+                    },
+                    dataType: 'json',
+                    cache: false,
+                    success: function (response) {
+                        icon.removeClass('fa-spinner fa-pulse').addClass(icon.data('icon'));
+                        if (response.status != 'ok') {
+                            return nukeviet.toast(response.mess, 'error');
+                        }
+                        nukeviet.toast(response.mess, 'success');
+                        setTimeout(() => {
+                            location.reload();
+                        }, 1500);
+                    },
+                    error: function (xhr, status, error) {
+                        console.log(xhr, status, error);
+                        nukeviet.toast(error, 'error');
+                        icon.removeClass('fa-spinner fa-pulse').addClass(icon.data('icon'));
+                    }
+                });
+            });
+        });
+
+        // Select2 tìm kiếm thành viên để thêm vào nhóm
+        function formatRepo(repo) {
+        if (repo.loading) return repo.text;
+            return '<div>' + repo.username + '<br/>(' + repo.fullname + ')</div>';
+        }
+
+        function formatRepoSelection(repo) {
+            return repo.username || repo.text;
+        }
+
+        const uidEle = $("#uid");
+        uidEle.length && uidEle.select2({
+            placeholder: uidEle.data('placeholder'),
+            ajax: {
+                url: nv_base_siteurl + 'index.php?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=' + nv_func_name + '&get_user_json=1&gid=' + uidEle.data('gid') + '&checkss=' + uidEle.data('checkss') + '&nocache=' + new Date().getTime(),
+                dataType: 'json',
+                delay: 250,
+                data: function(params) {
+                    return {
+                        q: params.term,
+                        page: params.page
+                    };
+                },
+                processResults: function(data, params) {
+                    params.page = params.page || 1;
+                    return {
+                        results: data,
+                        pagination: {
+                            more: (params.page * 30) < data.total_count
+                        }
+                    };
+                },
+                cache: true
+            },
+            escapeMarkup: function(markup) { return markup; },
+            minimumInputLength: 3,
+            templateResult: formatRepo,
+            templateSelection: formatRepoSelection,
+            language: {
+                inputTooShort: function(args) {
+                    return uidEle.data('min-search');
+                }
+            }
+        });
+
+        // Ấn nút thêm thành viên vào nhóm
+        $('[name="addUser"]').click(function(e) {
+            e.preventDefault();
+
+            const btn = $(this);
+            const icon = $('i', btn);
+            const page = btn.closest('[data-area="page"]');
+            if (icon.is('.fa-spinner')) {
+                return;
+            }
+            icon.removeClass(icon.data('icon')).addClass('fa-spinner fa-pulse');
+
+            let uid = $("#ablist select[name=uid]").val();
+            uid = intval(uid);
+            if (uid == 0) {
+                uid = '';
+            }
+            if (uid == '') {
+                return nukeviet.alert(btn.data('msg-nochoice'), () => {
+                    $("#ablist select[name=uid]").select2('open');
+                });
+            }
+
+            $.ajax({
+                url: nv_base_siteurl + 'index.php?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=' + nv_func_name + '&nocache=' + new Date().getTime(),
+                type: 'POST',
+                data: {
+                    checkss: page.data('checkss'),
+                    gid: page.data('gid'),
+                    uid: uid
+                },
+                dataType: 'json',
+                cache: false,
+                success: function (response) {
+                    icon.removeClass('fa-spinner fa-pulse').addClass(icon.data('icon'));
+                    if (response.status != 'ok') {
+                        return nukeviet.toast(response.mess, 'error');
+                    }
+                    nukeviet.toast(response.mess, 'success');
+                    setTimeout(() => {
+                        location.reload();
+                    }, 1500);
+                },
+                error: function (xhr, status, error) {
+                    console.log(xhr, status, error);
+                    nukeviet.toast(error, 'error');
+                    icon.removeClass('fa-spinner fa-pulse').addClass(icon.data('icon'));
+                }
+            });
+        });
+
+        // Xem danh sách thành viên đang chờ duyệt
+        $('button[name="user_waiting"]').click(function(e) {
+            e.preventDefault();
+
+            const btn = $(this);
+            const icon = $('i', btn);
+            const page = btn.closest('[data-area="page"]');
+            if (icon.is('.fa-spinner')) {
+                return;
+            }
+            icon.removeClass(icon.data('icon')).addClass('fa-spinner fa-pulse');
+
+            $.ajax({
+                url: nv_base_siteurl + 'index.php?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=' + nv_func_name + '&nocache=' + new Date().getTime(),
+                type: 'POST',
+                data: {
+                    checkss: page.data('checkss'),
+                    gid: page.data('gid'),
+                    getuserid: 1
+                },
+                dataType: 'json',
+                cache: false,
+                success: function (response) {
+                    icon.removeClass('fa-spinner fa-pulse').addClass(icon.data('icon'));
+                    if (response.status != 'ok') {
+                        return nukeviet.toast(response.mess, 'error');
+                    }
+                    modalShow(btn.data('title'), response.html);
+                },
+                error: function (xhr, status, error) {
+                    console.log(xhr, status, error);
+                    nukeviet.toast(error, 'error');
+                    icon.removeClass('fa-spinner fa-pulse').addClass(icon.data('icon'));
+                }
+            });
+        });
+
+        // Submit form tìm thành viên chờ duyệt
+        $('body').on('submit', '#formgetuid', function(e) {
+            e.preventDefault();
+
+            const form = $(this);
+            const btn = $('[type="submit"]', form);
+            const icon = $('i', btn);
+
+            if (icon.is('.fa-spinner')) {
+                return;
+            }
+            icon.removeClass(icon.data('icon')).addClass('fa-spinner fa-pulse');
+
+            let action = form.attr('action');
+            action += '&' + form.serialize() + '&fsubmit=1';
+            $('input, select', form).prop('disabled', true);
+
+            $.ajax({
+                type: 'GET',
+                url: action,
+                success: function(c) {
+                    $("#resultdata").html(c);
+                    $('input, select', form).prop('disabled', false);
+                    icon.removeClass('fa-spinner fa-pulse').addClass(icon.data('icon'));
+                }
+            });
+        });
+
+        // Kích hoạt tài khoản từ danh sách chờ duyệt
+        $('body').on('click', '[data-toggle=nv_active][data-userid]', function(e) {
+            e.preventDefault();
+
+            const btn = $(this);
+            const icon = $('i', btn);
+            const form = $('#formgetuid');
+            if (icon.is('.fa-spinner')) {
+                return;
+            }
+            icon.removeClass(icon.data('icon')).addClass('fa-spinner fa-pulse');
+
+            $.ajax({
+                url: form.attr('action'),
+                type: 'POST',
+                data: {
+                    checkss: $('[name="checkss"]', form).val(),
+                    act: 1,
+                    userid: btn.data('userid')
+                },
+                dataType: 'json',
+                cache: false,
+                success: function (response) {
+                    icon.removeClass('fa-spinner fa-pulse').addClass(icon.data('icon'));
+                    if (response.status != 'ok') {
+                        return nukeviet.toast(response.mess, 'error');
+                    }
+                    $('[type="submit"]', form).trigger('click');
+                    nukeviet.toast(response.mess, 'success');
+                },
+                error: function (xhr, status, error) {
+                    console.log(xhr, status, error);
+                    nukeviet.toast(error, 'error');
+                    icon.removeClass('fa-spinner fa-pulse').addClass(icon.data('icon'));
+                }
+            });
+        });
+    }
 });

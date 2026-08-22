@@ -341,8 +341,12 @@ function new_openid_user_save($reg_username, $reg_email, $reg_password, $attribs
 
         // Luu vao bang OpenID
         $user_id = (int) ($row['userid']);
-        $stmt = $db->prepare('INSERT INTO ' . NV_MOD_TABLE . '_openid VALUES (' . $user_id . ', :server, :opid , :id, :email)');
-        $stmt->bindParam(':server', $reg_attribs['server'], PDO::PARAM_STR);
+        $stmt = $db->prepare('INSERT INTO ' . NV_MOD_TABLE . '_openid (
+            userid, openid, opid, id, email
+        ) VALUES (
+            ' . $user_id . ', :openid, :opid , :id, :email
+        )');
+        $stmt->bindParam(':openid', $reg_attribs['server'], PDO::PARAM_STR);
         $stmt->bindParam(':opid', $reg_attribs['opid'], PDO::PARAM_STR);
         $stmt->bindParam(':id', $reg_attribs['openid'], PDO::PARAM_STR);
         $stmt->bindParam(':email', $reg_attribs['email'], PDO::PARAM_STR);
@@ -636,8 +640,12 @@ if (defined('NV_OPENID_ALLOWED') and $nv_Request->isset_request('server', 'get')
             }
 
             $user_id = (int) $nv_row['userid'];
-            $stmt = $db->prepare('INSERT INTO ' . NV_MOD_TABLE . '_openid VALUES (' . $user_id . ', :server, :opid, :id, :email )');
-            $stmt->bindParam(':server', $attribs['server'], PDO::PARAM_STR);
+            $stmt = $db->prepare('INSERT INTO ' . NV_MOD_TABLE . '_openid (
+                userid, openid, opid, id, email
+            ) VALUES (
+                ' . $user_id . ', :openid, :opid, :id, :email
+            )');
+            $stmt->bindParam(':openid', $attribs['server'], PDO::PARAM_STR);
             $stmt->bindParam(':opid', $opid, PDO::PARAM_STR);
             $stmt->bindParam(':id', $attribs['id'], PDO::PARAM_STR);
             $stmt->bindParam(':email', $email, PDO::PARAM_STR);
@@ -746,8 +754,12 @@ if (defined('NV_OPENID_ALLOWED') and $nv_Request->isset_request('server', 'get')
             validUserLog($row, 1);
         }
 
-        $stmt = $db->prepare('INSERT INTO ' . NV_MOD_TABLE . '_openid VALUES (' . (int) $row['userid'] . ', :server, :opid, :id, :email )');
-        $stmt->bindParam(':server', $attribs['server'], PDO::PARAM_STR);
+        $stmt = $db->prepare('INSERT INTO ' . NV_MOD_TABLE . '_openid (
+            userid, openid, opid, id, email
+        ) VALUES (
+            ' . (int) $row['userid'] . ', :openid, :opid, :id, :email
+        )');
+        $stmt->bindParam(':openid', $attribs['server'], PDO::PARAM_STR);
         $stmt->bindParam(':opid', $opid, PDO::PARAM_STR);
         $stmt->bindParam(':id', $attribs['id'], PDO::PARAM_STR);
         $stmt->bindParam(':email', $email, PDO::PARAM_STR);

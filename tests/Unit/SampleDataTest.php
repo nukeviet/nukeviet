@@ -1988,4 +1988,616 @@ class SampleDataTest extends \Codeception\Test\Unit
 
         $this->assertGreaterThan(0, $updated, 'Không cập nhật được dòng nào trong ' . $infoTable);
     }
+
+    /**
+     * Dữ liệu mẫu 100 tài khoản và phân bổ vào nhóm group_id = 10
+     *
+     * Sinh 100 user sample_user_001..sample_user_100 rồi đưa vào nhóm 10 với đủ
+     * ba trạng thái: trưởng nhóm, thành viên đã duyệt và thành viên chờ duyệt.
+     * Trạng thái gán theo thứ tự cố định nên chạy lại nhiều lần không tạo dữ liệu
+     * mâu thuẫn, kết hợp INSERT IGNORE và các khóa UNIQUE để không nhân bản.
+     *
+     * Mật khẩu chung của mọi tài khoản mẫu: SampleUser@123
+     *
+     * @group sample-data
+     */
+    public function testInsertSampleDataForUsersGroups()
+    {
+        global $db, $db_config, $global_config;
+
+        $groupId = 10;
+        $total = 100;
+        $numLeader = 2;   // is_leader = 1, approved = 1
+        $numMember = 80;  // is_leader = 0, approved = 1
+        // Số còn lại (18) ở trạng thái chờ duyệt: approved = 0
+
+        $userTable = $db_config['prefix'] . '_users';
+        $infoTable = $db_config['prefix'] . '_users_info';
+        $groupTable = $db_config['prefix'] . '_users_groups';
+        $groupUserTable = $db_config['prefix'] . '_users_groups_users';
+
+        // Nhóm đích phải tồn tại, không thì bỏ qua để tránh sinh dữ liệu mồ côi
+        $exists = $db->query('SELECT COUNT(*) FROM ' . $groupTable . ' WHERE group_id = ' . $groupId)->fetchColumn();
+        if (!$exists) {
+            $this->markTestSkipped('Không tìm thấy nhóm group_id = ' . $groupId . ' trong bảng ' . $groupTable . '.');
+        }
+
+        $idsite = (int) ($global_config['idsite'] ?? 0);
+        $crypt = new \NukeViet\Core\Encryption($global_config['sitekey']);
+        $password = $crypt->hash_password('SampleUser@123', $global_config['hashprefix']);
+
+        $ho = ['Nguyễn', 'Trần', 'Lê', 'Phạm', 'Hoàng', 'Vũ', 'Đặng', 'Bùi', 'Đỗ', 'Ngô'];
+        $dem = ['Văn', 'Thị', 'Hoàng', 'Ngọc', 'Minh', 'Thanh', 'Quang', 'Hữu'];
+        $ten = ['An', 'Bình', 'Cường', 'Dung', 'Giang', 'Hà', 'Khánh', 'Linh', 'Nam', 'Oanh', 'Phúc', 'Quân', 'Sơn', 'Trang', 'Vinh', 'Yến'];
+        $genders = ['M', 'F', 'N'];
+
+        $esc = fn (string $s) => str_replace(["\\", "'"], ["\\\\", "\\'"], $s);
+
+        // Trạng thái trong nhóm gán theo thứ tự: 2 trưởng nhóm, 80 thành viên, phần còn lại chờ duyệt
+        $statusOf = function (int $index) use ($numLeader, $numMember): string {
+            if ($index <= $numLeader) {
+                return 'leader';
+            }
+
+            return ($index <= $numLeader + $numMember) ? 'member' : 'pending';
+        };
+
+        $usernames = [];
+        $values = [];
+
+        for ($i = 1; $i <= $total; $i++) {
+            $seq = str_pad((string) $i, 3, '0', STR_PAD_LEFT);
+            $username = 'sample_user_' . $seq;
+            $usernames[$i] = $username;
+
+            // Chờ duyệt thì chưa được tính vào nhóm 10
+            $inGroups = ($statusOf($i) == 'pending') ? '4' : '4,' . $groupId;
+
+            // regdate rải trong 2 năm gần đây, birthday trong khoảng 1975-2005
+            $regdate = NV_CURRENTTIME - rand(0, 86400 * 730);
+            $birthday = mktime(0, 0, 0, rand(1, 12), rand(1, 28), rand(1975, 2005));
+
+            $values[] = sprintf(
+                "(4, '%s', '%s', '%s', '%s', '%s', '%s', '%s', %d, %d, '', '', %d, 1, '%s', 1, %d, %d, %d, %d, -1, 'SYSTEM', '')",
+                $esc($username),
+                md5(strtolower($username)), // nv_md5safe(), username thuần ASCII nên không cần nv_strtolower()
+                $esc($password),
+                $esc('sample.user.' . $seq . '@example.com'),
+                $esc($dem[array_rand($dem)] . ' ' . $ten[array_rand($ten)]),
+                $esc($ho[array_rand($ho)]),
+                $genders[array_rand($genders)],
+                $birthday,
+                $regdate,
+                rand(0, 1),
+                $inGroups,
+                $idsite,
+                $regdate,
+                $regdate,
+                $regdate
+            );
+        }
+
+        $db->exec(
+            'INSERT IGNORE INTO ' . $userTable . ' ('
+            . 'group_id, username, md5username, password, email, first_name, last_name, gender,'
+            . ' birthday, regdate, question, answer, view_mail, remember, in_groups, active,'
+            . ' idsite, pass_creation_time, last_update, email_creation_time, email_verification_time,'
+            . ' active_obj, language'
+            . ') VALUES ' . implode(',', $values)
+        );
+
+        // Lấy lại userid thật, kể cả các tài khoản đã tồn tại từ lần chạy trước
+        $stmt = $db->prepare('SELECT username, userid FROM ' . $userTable . ' WHERE username LIKE :prefix');
+        $stmt->bindValue(':prefix', 'sample\_user\_%', \PDO::PARAM_STR);
+        $stmt->execute();
+        $userids = $stmt->fetchAll(\PDO::FETCH_KEY_PAIR);
+
+        $rows = [];
+        $infoRows = [];
+
+        foreach ($usernames as $index => $username) {
+            if (!isset($userids[$username])) {
+                continue;
+            }
+
+            $userid = (int) $userids[$username];
+            $status = $statusOf($index);
+            $requested = NV_CURRENTTIME - rand(86400, 86400 * 180);
+
+            $rows[] = sprintf(
+                "(%d, %d, %d, %d, '%d', %d, %d)",
+                $groupId,
+                $userid,
+                $status == 'leader' ? 1 : 0,
+                $status == 'pending' ? 0 : 1,
+                $idsite,
+                $requested,
+                $status == 'pending' ? 0 : $requested
+            );
+            $infoRows[] = '(' . $userid . ')';
+        }
+
+        if (empty($rows)) {
+            $this->markTestSkipped('Không lấy được userid của các tài khoản mẫu vừa tạo.');
+        }
+
+        $db->exec(
+            'INSERT IGNORE INTO ' . $groupUserTable
+            . ' (group_id, userid, is_leader, approved, data, time_requested, time_approved)'
+            . ' VALUES ' . implode(',', $rows)
+        );
+
+        // Bảo đảm mỗi tài khoản mẫu đều có dòng trong bảng thông tin mở rộng
+        $db->exec('INSERT IGNORE INTO ' . $infoTable . ' (userid) VALUES ' . implode(',', $infoRows));
+
+        // Tính lại numbers từ dữ liệu thật thay vì cộng dồn, tránh lệch khi chạy lại
+        $db->exec(
+            'UPDATE ' . $groupTable . ' SET numbers = ('
+            . 'SELECT COUNT(*) FROM ' . $groupUserTable . ' WHERE group_id = ' . $groupId . ' AND approved = 1'
+            . ') WHERE group_id = ' . $groupId
+        );
+        // Nhóm 4 (thành viên chính thức) đếm theo in_groups, không theo cột group_id
+        $db->exec(
+            'UPDATE ' . $groupTable . ' SET numbers = ('
+            . "SELECT COUNT(*) FROM " . $userTable . " WHERE FIND_IN_SET('4', in_groups)"
+            . ') WHERE group_id = 4'
+        );
+
+        $inserted = $db->query(
+            'SELECT COUNT(*) FROM ' . $groupUserTable . ' WHERE group_id = ' . $groupId
+        )->fetchColumn();
+
+        $this->assertGreaterThanOrEqual($total, (int) $inserted, 'Nhóm ' . $groupId . ' chưa đủ ' . $total . ' thành viên mẫu.');
+    }
+
+    /**
+     * Sinh giá trị hợp lệ cho các trường tùy biến của module users
+     *
+     * Giá trị tôn trọng đúng ràng buộc khai báo trong sampleCustomFields():
+     * regex, khoảng số, khoảng ngày và danh sách lựa chọn.
+     *
+     * @param array $fields Tên các trường cần sinh giá trị
+     * @param int   $index  Số thứ tự bản ghi, dùng để xoay vòng dữ liệu mẫu
+     * @return array Mảng tên trường => giá trị dạng chuỗi
+     */
+    private function sampleUserInfoValues(array $fields, int $index): array
+    {
+        $samples = $this->sampleCustomFields();
+
+        $congTy = ['Công ty CP VINADES', 'Trung tâm CNTT Hà Nội', 'Đại học Bách khoa', 'Công ty TNHH Ánh Dương'];
+        $hoTen = ['Nguyễn Văn An', 'Trần Thị Bình', 'Lê Hoàng Cường', 'Phạm Ngọc Dung'];
+        $gioiThieu = [
+            'Lập trình viên PHP với nhiều năm gắn bó cùng mã nguồn mở NukeViet.',
+            'Quản trị hệ thống, quan tâm tới bảo mật và tối ưu hiệu năng.',
+            'Chuyên viên phân tích nghiệp vụ, yêu thích công việc với dữ liệu.',
+        ];
+        $kinhNghiem = [
+            '<p>2019 - 2022: Lập trình viên tại <strong>VINADES</strong>, phát triển module cho NukeViet.</p><p>2022 - nay: Trưởng nhóm kỹ thuật.</p>',
+            '<p>2020 - nay: Quản trị hệ thống máy chủ Linux, triển khai CI/CD cho các dự án nội bộ.</p>',
+        ];
+
+        $data = [];
+
+        foreach ($fields as $field) {
+            if (!isset($samples[$field])) {
+                continue;
+            }
+
+            $spec = $samples[$field];
+            $type = $spec['field_type'];
+
+            if ($type == 'file') {
+                // Không sinh tệp thật, để rỗng cho an toàn
+                $data[$field] = '';
+            } elseif ($type == 'number') {
+                $data[$field] = ((int) $spec['number_type'] == 1)
+                    ? (string) rand((int) $spec['min_length'], (int) $spec['max_length'])
+                    : (string) round(rand((int) $spec['min_length'] * 100, (int) $spec['max_length'] * 100) / 100, 2);
+            } elseif ($type == 'date') {
+                $min = (int) $spec['min_length'];
+                $max = (int) $spec['max_length'];
+                // Trường không giới hạn khoảng thì lấy quanh thời điểm hiện tại
+                $data[$field] = ($min > 0 and $max > $min)
+                    ? (string) rand($min, $max)
+                    : (string) (NV_CURRENTTIME - rand(0, 86400 * 365));
+            } elseif (!empty($spec['choices'])) {
+                $keys = array_keys($spec['choices']);
+                if ($type == 'checkbox' or $type == 'multiselect') {
+                    shuffle($keys);
+                    $data[$field] = implode(',', array_slice($keys, 0, rand(1, min(3, count($keys)))));
+                } else {
+                    $data[$field] = $keys[array_rand($keys)];
+                }
+            } elseif ($spec['match_type'] == 'alphanumeric') {
+                $data[$field] = 'NV' . str_pad((string) ($index + 1000), 5, '0', STR_PAD_LEFT);
+            } elseif ($spec['match_type'] == 'unicodename') {
+                $data[$field] = $hoTen[$index % count($hoTen)];
+            } elseif ($spec['match_type'] == 'email') {
+                $data[$field] = 'lienhe' . $index . '@nukeviet.vn';
+            } elseif ($spec['match_type'] == 'url') {
+                $data[$field] = 'https://nukeviet.vn/thanh-vien-' . $index;
+            } elseif ($spec['match_type'] == 'regex') {
+                // Khớp /^0[35789][0-9]{8}$/
+                $data[$field] = '09' . str_pad((string) rand(0, 99999999), 8, '0', STR_PAD_LEFT);
+            } elseif ($spec['match_type'] == 'callback') {
+                // ctype_digit, độ dài trong khoảng min/max
+                $data[$field] = str_pad((string) rand(0, 999999999), (int) $spec['min_length'], '0', STR_PAD_LEFT);
+            } elseif ($type == 'editor') {
+                $data[$field] = $kinhNghiem[$index % count($kinhNghiem)];
+            } elseif ($type == 'textarea') {
+                $data[$field] = $gioiThieu[$index % count($gioiThieu)];
+            } else {
+                $data[$field] = $congTy[$index % count($congTy)];
+            }
+        }
+
+        return $data;
+    }
+
+    /**
+     * Dữ liệu mẫu tài khoản đăng ký đang chờ kích hoạt trong _users_reg
+     *
+     * Sinh 30 tài khoản sample_reg_NNN nằm ở bảng chờ, phục vụ test khối
+     * getuserid của users/groups.php: xem danh sách chờ, tìm kiếm và kích hoạt.
+     * Cột users_info chứa sẵn giá trị hợp lệ cho mọi trường tùy biến nên khi
+     * trưởng nhóm bấm kích hoạt, userInfoTabDb() ghi được và tài khoản vừa tạo
+     * không bị xóa ngược lại. Cứ 5 tài khoản thì 1 tài khoản có openid_info để
+     * chạm luôn nhánh ghi bảng _users_openid.
+     *
+     * Mỗi lần chạy đều cấp dải số thứ tự mới, tính cả những tài khoản đã kích
+     * hoạt và chuyển sang _users, nên không đụng khóa UNIQUE của cả hai bảng.
+     *
+     * regdate rải trong cửa sổ register_active_time còn hiệu lực, vì
+     * delOldRegAccount() xóa hết tài khoản chờ quá hạn mỗi khi mở trang chờ
+     * kích hoạt. Cấu hình đó càng ngắn thì dữ liệu mẫu càng sớm hết hạn, muốn
+     * giữ lâu thì tăng "Thời gian tài khoản chờ kích hoạt" bên admin users.
+     *
+     * Mật khẩu chung của mọi tài khoản mẫu: SampleUser@123
+     *
+     * @group sample-data
+     */
+    public function testInsertSampleDataForUsersRegWaiting()
+    {
+        global $db, $db_config, $global_config;
+
+        $total = 30;
+        $prefix = 'sample_reg_';
+
+        $regTable = $db_config['prefix'] . '_users_reg';
+        $userTable = $db_config['prefix'] . '_users';
+        $infoTable = $db_config['prefix'] . '_users_info';
+        $fieldTable = $db_config['prefix'] . '_users_field';
+        $configTable = $db_config['prefix'] . '_users_config';
+
+        // Số thứ tự lớn nhất đã dùng, tính cả tài khoản đã kích hoạt nằm ở _users
+        $likePrefix = str_replace('_', '\_', $prefix) . '%';
+        $maxSeq = 0;
+        foreach ([$regTable, $userTable] as $table) {
+            $stmt = $db->prepare('SELECT username FROM ' . $table . ' WHERE username LIKE :prefix');
+            $stmt->bindValue(':prefix', $likePrefix, \PDO::PARAM_STR);
+            $stmt->execute();
+            foreach ($stmt->fetchAll(\PDO::FETCH_COLUMN) as $username) {
+                $seq = (int) substr($username, strlen($prefix));
+                if ($seq > $maxSeq) {
+                    $maxSeq = $seq;
+                }
+            }
+        }
+
+        // Chỉ điền những trường tùy biến mẫu đang thực sự có cột trong _users_info
+        $fields = $db->query('SELECT field FROM ' . $fieldTable . ' WHERE is_system = 0')
+            ->fetchAll(\PDO::FETCH_COLUMN);
+        $columns = $db->query('SHOW COLUMNS FROM ' . $infoTable)->fetchAll(\PDO::FETCH_COLUMN);
+        $fields = array_values(array_intersect($fields, array_keys($this->sampleCustomFields()), $columns));
+
+        // delOldRegAccount() xóa mọi dòng có regdate < NV_CURRENTTIME - register_active_time,
+        // nên regdate phải nằm trong cửa sổ còn hiệu lực, không thì dữ liệu mẫu bay sạch ngay
+        // lần đầu mở trang chờ kích hoạt bên admin. Chỉ dùng 80% cửa sổ để còn thời gian test.
+        $activeTime = (int) $db->query(
+            'SELECT content FROM ' . $configTable . " WHERE config = 'register_active_time'"
+        )->fetchColumn();
+        // Giá trị 0 nghĩa là không tự xóa, khi đó rải thoải mái trong 30 ngày cho giống thật
+        $regRange = ($activeTime > 0) ? (int) ($activeTime * 0.8) : 86400 * 30;
+
+        $idsite = (int) ($global_config['idsite'] ?? 0);
+        $crypt = new \NukeViet\Core\Encryption($global_config['sitekey']);
+        $password = $crypt->hash_password('SampleUser@123', $global_config['hashprefix']);
+
+        $ho = ['Nguyễn', 'Trần', 'Lê', 'Phạm', 'Hoàng', 'Vũ', 'Đặng', 'Bùi', 'Đỗ', 'Ngô'];
+        $dem = ['Văn', 'Thị', 'Hoàng', 'Ngọc', 'Minh', 'Thanh', 'Quang', 'Hữu'];
+        $ten = ['An', 'Bình', 'Cường', 'Dung', 'Giang', 'Hà', 'Khánh', 'Linh', 'Nam', 'Oanh', 'Phúc', 'Quân', 'Sơn', 'Trang', 'Vinh', 'Yến'];
+        $genders = ['M', 'F', 'N'];
+        $questions = ['Món ăn bạn thích nhất?', 'Tên trường cấp ba của bạn?', 'Thành phố bạn sinh ra?'];
+        $answers = ['Phở bò', 'Chu Văn An', 'Hà Nội'];
+
+        $esc = fn (string $s) => str_replace(["\\", "'"], ["\\\\", "\\'"], $s);
+
+        $values = [];
+
+        for ($i = 1; $i <= $total; $i++) {
+            $seq = str_pad((string) ($maxSeq + $i), 3, '0', STR_PAD_LEFT);
+            $username = $prefix . $seq;
+            $email = 'sample.reg.' . $seq . '@example.com';
+
+            $firstName = $dem[array_rand($dem)] . ' ' . $ten[array_rand($ten)];
+            $lastName = $ho[array_rand($ho)];
+            $gender = $genders[array_rand($genders)];
+
+            $regdate = NV_CURRENTTIME - rand(0, $regRange);
+            $birthday = mktime(0, 0, 0, rand(1, 12), rand(1, 28), rand(1975, 2005));
+            $qIndex = $i % count($questions);
+
+            // Cứ 5 tài khoản thì 1 tài khoản mô phỏng đăng ký qua OAuth. Bộ key phải khớp
+            // set_reg_attribs() trong users/funcs/login.php, vì luồng kích hoạt lấy 'server'
+            // cho cột openid và 'openid' cho cột id của bảng _users_openid, thiếu key nào là
+            // câu INSERT đó hỏng. Để photo rỗng cho lúc kích hoạt khỏi tải ảnh từ Internet.
+            $openidInfo = '';
+            if ($i % 5 == 0) {
+                $rawOpenid = (string) rand(1000000000, 2147483647) . rand(100000000, 999999999);
+                $openidInfo = json_encode([
+                    'server' => 'google',
+                    'email' => $email,
+                    'first_name' => $firstName,
+                    'last_name' => $lastName,
+                    'gender' => $gender,
+                    'openid' => $rawOpenid,
+                    'photo' => '',
+                    'opid' => $crypt->hash($rawOpenid),
+                ], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+            }
+
+            $usersInfo = json_encode(
+                $this->sampleUserInfoValues($fields, $i),
+                JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES
+            );
+
+            $values[] = sprintf(
+                "('%s','%s','%s','%s','%s','%s','%s',%d,'',%d,'%s','%s','%s','%s','%s',%d,0)",
+                $esc($username),
+                md5(strtolower($username)), // nv_md5safe(), username thuần ASCII nên không cần nv_strtolower()
+                $esc($password),
+                $esc($email),
+                $esc($firstName),
+                $esc($lastName),
+                $gender,
+                $birthday,
+                $regdate,
+                $esc($questions[$qIndex]),
+                $esc($answers[$qIndex]),
+                md5($username . $regdate), // checknum, mô phỏng mã trong link kích hoạt
+                $esc((string) $usersInfo),
+                $esc($openidInfo),
+                $idsite
+            );
+        }
+
+        $db->exec(
+            'INSERT IGNORE INTO ' . $regTable . ' ('
+            . 'username, md5username, password, email, first_name, last_name, gender,'
+            . ' birthday, sig, regdate, question, answer, checknum, users_info, openid_info,'
+            . ' idsite, lostactivelink'
+            . ') VALUES ' . implode(',', $values)
+        );
+
+        $stmt = $db->prepare('SELECT COUNT(*) FROM ' . $regTable . ' WHERE username LIKE :prefix');
+        $stmt->bindValue(':prefix', $likePrefix, \PDO::PARAM_STR);
+        $stmt->execute();
+        $waiting = (int) $stmt->fetchColumn();
+
+        $this->assertGreaterThanOrEqual($total, $waiting, 'Bảng ' . $regTable . ' chưa đủ ' . $total . ' tài khoản chờ kích hoạt.');
+    }
+
+    /**
+     * Dữ liệu mẫu thông báo của nhóm cho trang users/groups/ID/inform ngoài site
+     *
+     * Trang đó chỉ là khung, danh sách nạp qua ajax từ inform/funcs/main.php với
+     * filter=active và phân trang 20 dòng mỗi trang, nên phải có tối thiểu 41 dòng
+     * active mới ra 3 trang. Hàm sinh 50 dòng active, kèm ít dòng waiting và expired
+     * để hai tab lọc còn lại cũng có dữ liệu.
+     *
+     * Chạy lại nhiều lần không nhân bản dữ liệu: mỗi trạng thái mang một dấu seed cố
+     * định, hàm đếm số dòng đang có đúng theo điều kiện lọc của module rồi chỉ bù
+     * phần còn thiếu. Dòng active để exp_time = 0 hoặc hạn rất xa nên không tự hết
+     * hạn giữa các lần chạy, chạy lại ngay sau đó sẽ không thêm dòng nào.
+     *
+     * @group sample-data
+     */
+    public function testInsertSampleDataForUsersGroupInform()
+    {
+        global $db, $db_config;
+
+        $groupId = 10;
+        $perPage = 20; // Trùng với $per_page trong inform/funcs/main.php
+        $targets = [
+            'active' => 50, // 50 dòng cho ra 3 trang
+            'waiting' => 8,
+            'expired' => 8,
+        ];
+
+        $informTable = $db_config['prefix'] . '_inform';
+        $statusTable = $db_config['prefix'] . '_inform_status';
+        $groupTable = $db_config['prefix'] . '_users_groups';
+        $groupUserTable = $db_config['prefix'] . '_users_groups_users';
+
+        // Nhóm đích phải tồn tại, không thì bỏ qua để tránh sinh dữ liệu mồ côi
+        $exists = $db->query('SELECT COUNT(*) FROM ' . $groupTable . ' WHERE group_id = ' . $groupId)->fetchColumn();
+        if (!$exists) {
+            $this->markTestSkipped('Không tìm thấy nhóm group_id = ' . $groupId . ' trong bảng ' . $groupTable . '.');
+        }
+
+        // Người nhận phải là thành viên nhóm thì userlist_by_ids() bên inform mới hiện được tên
+        $memberIds = $db->query(
+            'SELECT userid FROM ' . $groupUserTable
+            . ' WHERE group_id = ' . $groupId . ' AND approved = 1 ORDER BY userid ASC LIMIT 30'
+        )->fetchAll(\PDO::FETCH_COLUMN);
+
+        if (empty($memberIds)) {
+            $this->markTestSkipped('Nhóm ' . $groupId . ' chưa có thành viên nào đã duyệt.');
+        }
+
+        // Điều kiện lọc lấy nguyên theo inform/funcs/main.php để đếm đúng cái module sẽ hiển thị
+        $stateWhere = [
+            'active' => '(add_time <= :now1 AND (exp_time = 0 OR exp_time > :now2))',
+            'waiting' => '(add_time > :now1)',
+            'expired' => '(exp_time != 0 AND exp_time < :now1)',
+        ];
+
+        $esc = fn (string $s) => str_replace(["\\", "'"], ["\\\\", "\\'"], $s);
+        $now = time();
+        $memberCount = count($memberIds);
+        $totalInserted = 0;
+
+        foreach ($targets as $state => $target) {
+            // Dấu seed cố định, không kèm thời gian, để lần chạy sau đếm lại được
+            $seedMark = 'seed-group-inform-' . $groupId . '-' . $state;
+
+            $sql = 'SELECT COUNT(*) FROM ' . $informTable
+                . " WHERE sender_role = 'group' AND sender_group = :group_id"
+                . ' AND message LIKE :seed AND ' . $stateWhere[$state];
+            $stmt = $db->prepare($sql);
+            $stmt->bindValue(':group_id', $groupId, \PDO::PARAM_INT);
+            $stmt->bindValue(':seed', '%' . $seedMark . '%', \PDO::PARAM_STR);
+            $stmt->bindValue(':now1', $now, \PDO::PARAM_INT);
+            if ($state === 'active') {
+                $stmt->bindValue(':now2', $now, \PDO::PARAM_INT);
+            }
+            $stmt->execute();
+            $current = (int) $stmt->fetchColumn();
+
+            $values = [];
+            for ($index = $current + 1; $index <= $target; $index++) {
+                switch ($state) {
+                    case 'waiting':
+                        $addTime = $now + rand(2, 30) * 86400;
+                        $expTime = $addTime + rand(30, 90) * 86400;
+                        break;
+                    case 'expired':
+                        $addTime = $now - rand(30, 120) * 86400;
+                        // Chỉ vừa hết hạn, chưa tới lượt cronjob inform_exp_del dọn đi
+                        $expTime = $now - rand(1, 5) * 86400;
+                        break;
+                    default:
+                        $addTime = $now - rand(1, 90) * 86400;
+                        // Một nửa không hạn, nửa còn lại hạn rất xa, để lần chạy sau vẫn còn active
+                        $expTime = ($index % 2 === 0) ? 0 : $now + rand(60, 180) * 86400;
+                        break;
+                }
+
+                // Cứ 3 dòng thì 1 dòng gửi cả nhóm, còn lại gửi đích danh vài thành viên
+                $receiverIds = '';
+                if ($index % 3 !== 0) {
+                    $picked = [
+                        (int) $memberIds[($index - 1) % $memberCount],
+                        (int) $memberIds[$index % $memberCount],
+                    ];
+                    if ($index % 5 === 0) {
+                        $picked[] = (int) $memberIds[($index + 1) % $memberCount];
+                    }
+                    $receiverIds = implode(',', array_values(array_unique($picked)));
+                }
+
+                $messageJson = $esc(json_encode([
+                    'isdef' => 'vi',
+                    'contents' => [
+                        'vi' => '[' . $seedMark . '] Thông báo mẫu #' . $index . ' của nhóm gửi tới thành viên',
+                        'en' => '[' . $seedMark . '] Sample group notification #' . $index,
+                    ],
+                ], JSON_UNESCAPED_UNICODE));
+
+                // Cứ 6 dòng thì 1 dòng không kèm liên kết
+                $linkJson = '';
+                if ($index % 6 !== 0) {
+                    $linkJson = $esc(json_encode([
+                        'isdef' => 'vi',
+                        'contents' => [
+                            'vi' => 'index.php?' . $seedMark . '&item=' . $index,
+                            'en' => 'https://example.com/' . $seedMark . '/' . $index,
+                        ],
+                    ], JSON_UNESCAPED_UNICODE));
+                }
+
+                $values[] = sprintf(
+                    "('','%s','group',%d,0,'%s','%s',%d,%d)",
+                    $esc($receiverIds),
+                    $groupId,
+                    $messageJson,
+                    $linkJson,
+                    $addTime,
+                    $expTime
+                );
+            }
+
+            if (!empty($values)) {
+                $totalInserted += (int) $db->exec(
+                    'INSERT INTO ' . $informTable
+                    . ' (receiver_grs, receiver_ids, sender_role, sender_group, sender_admin, message, link, add_time, exp_time)'
+                    . ' VALUES ' . implode(',', $values)
+                );
+            }
+        }
+
+        // Trạng thái đọc để cột lượt xem trong danh sách không trống. Khóa UNIQUE
+        // (pid, userid) cộng INSERT IGNORE nên chạy lại không nhân bản.
+        $stmt = $db->prepare(
+            'SELECT id FROM ' . $informTable
+            . " WHERE sender_role = 'group' AND sender_group = :group_id AND message LIKE :seed"
+            . ' ORDER BY id ASC LIMIT 30'
+        );
+        $stmt->bindValue(':group_id', $groupId, \PDO::PARAM_INT);
+        $stmt->bindValue(':seed', '%seed-group-inform-' . $groupId . '-active%', \PDO::PARAM_STR);
+        $stmt->execute();
+        $activeIds = $stmt->fetchAll(\PDO::FETCH_COLUMN);
+
+        $statusValues = [];
+        $statusUsers = array_slice($memberIds, 0, min(6, $memberCount));
+        foreach ($activeIds as $order => $pid) {
+            foreach ($statusUsers as $offset => $userId) {
+                // Người thứ ba chỉ được hiện chứ chưa xem, để lượt xem không bằng nhau
+                $shownTime = $now - rand(600, 20 * 86400);
+                $viewedTime = ($offset === 2) ? 0 : $shownTime + rand(60, 7200);
+
+                $statusValues[] = sprintf(
+                    '(%d,%d,%d,%d,%d,%d)',
+                    (int) $pid,
+                    (int) $userId,
+                    $shownTime,
+                    $viewedTime,
+                    ($order % 4 === 0 && $offset === 0) ? $shownTime + rand(120, 3600) : 0,
+                    ($order % 5 === 0 && $offset === 1) ? $shownTime + rand(180, 5400) : 0
+                );
+            }
+        }
+
+        if (!empty($statusValues)) {
+            $db->exec(
+                'INSERT IGNORE INTO ' . $statusTable
+                . ' (pid, userid, shown_time, viewed_time, favorite_time, hidden_time) VALUES '
+                . implode(',', $statusValues)
+            );
+        }
+
+        // Đếm lại đúng theo bộ lọc active của module để chắc chắn đủ số trang
+        $stmt = $db->prepare(
+            'SELECT COUNT(*) FROM ' . $informTable
+            . " WHERE sender_role = 'group' AND sender_group = :group_id"
+            . ' AND ' . $stateWhere['active']
+        );
+        $stmt->bindValue(':group_id', $groupId, \PDO::PARAM_INT);
+        $stmt->bindValue(':now1', $now, \PDO::PARAM_INT);
+        $stmt->bindValue(':now2', $now, \PDO::PARAM_INT);
+        $stmt->execute();
+        $activeCount = (int) $stmt->fetchColumn();
+
+        $this->assertGreaterThanOrEqual(
+            $targets['active'],
+            $activeCount,
+            'Nhóm ' . $groupId . ' chưa đủ ' . $targets['active'] . ' thông báo đang hiệu lực.'
+        );
+        $this->assertGreaterThanOrEqual(
+            3,
+            (int) ceil($activeCount / $perPage),
+            'Số thông báo đang hiệu lực chưa đủ để phân trang 3 trang.'
+        );
+        $this->assertGreaterThanOrEqual(0, $totalInserted);
+    }
 }

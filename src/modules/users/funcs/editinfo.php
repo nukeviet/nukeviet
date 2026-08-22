@@ -623,7 +623,11 @@ if (in_array('openid', $types, true) and $nv_Request->isset_request('server', 'g
         }
     }
 
-    $stmt = $db->prepare('INSERT INTO ' . NV_MOD_TABLE . '_openid VALUES (' . $edit_userid . ', :openid, :opid, :id, :email )');
+    $stmt = $db->prepare('INSERT INTO ' . NV_MOD_TABLE . '_openid (
+        userid, openid, opid, id, email
+    ) VALUES (
+        ' . $edit_userid . ', :openid, :opid, :id, :email
+    )');
     $stmt->bindParam(':openid', $server, PDO::PARAM_STR);
     $stmt->bindParam(':opid', $opid, PDO::PARAM_STR);
     $stmt->bindParam(':id', $attribs['id'], PDO::PARAM_STR);
