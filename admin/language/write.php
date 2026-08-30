@@ -24,6 +24,10 @@ function nv_admin_write_lang($dirlang, $idfile)
 {
     global $db, $language_array, $global_config, $include_lang, $lang_module;
 
+    if (!preg_match('/^([a-z]{2})$/', $dirlang) or !isset($language_array[$dirlang])) {
+        return $lang_module['nv_error_exit_module'];
+    }
+
     list($module, $admin_file, $langtype, $author_lang) = $db->query('SELECT module, admin_file, langtype, author_' . $dirlang . ' FROM ' . NV_LANGUAGE_GLOBALTABLE . '_file WHERE idfile =' . (int) $idfile)->fetch(3);
 
     if (!empty($dirlang) and !empty($module)) {
@@ -125,6 +129,10 @@ function nv_admin_write_lang($dirlang, $idfile)
     }
 
     return $lang_module['nv_error_exit_module'] . ' : ' . $module;
+}
+
+if (!preg_match('/^([a-z]{2})$/', $dirlang) or !isset($language_array[$dirlang])) {
+    nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=main');
 }
 
 $xtpl = new XTemplate('write.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
