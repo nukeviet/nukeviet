@@ -1,5 +1,8 @@
 CHANGE LOG: NUKEVIET CMS
 http://nukeviet.vn
+NUKEVIET 4.5.12
+- Fix a security vulnerability in the module language write functionality. Thanks phuongmai1212 from GitHub @phuongmai1212 and AuQuangDuc from GitHub @AuQuangDuc
+
 NUKEVIET 4.5.11
 - Fix XSS in class Request. Thanks mrlihd from GitHub @mrlihd
 
