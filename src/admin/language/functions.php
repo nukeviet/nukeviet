@@ -127,12 +127,16 @@ function nv_update_config_allow_sitelangs($allow_sitelangs = [])
  */
 function nv_admin_write_lang($dirlang, $idfile)
 {
-    global $db, $global_config, $include_lang, $nv_Lang;
+    global $db, $global_config, $include_lang, $nv_Lang, $language_array;
+
+    if (!preg_match('/^([a-z]{2})$/', $dirlang) or !isset($language_array[$dirlang])) {
+        return $nv_Lang->getModule('nv_error_exit_module');
+    }
 
     $stmt = $db->prepare('SELECT module, admin_file, langtype, author_' . $dirlang . ' FROM ' . NV_LANGUAGE_GLOBALTABLE . '_file WHERE idfile = :idfile');
     $stmt->bindValue(':idfile', $idfile, PDO::PARAM_INT);
     $stmt->execute();
-    
+
     $_row = $stmt->fetch();
     $module = $_row ? $_row['module'] : '';
     $admin_file = $_row ? $_row['admin_file'] : 0;
@@ -202,7 +206,7 @@ function nv_admin_write_lang($dirlang, $idfile)
     $stmt_lang = $db->prepare('SELECT langtype, lang_key, lang_' . $dirlang . ' FROM ' . NV_LANGUAGE_GLOBALTABLE . ' WHERE idfile = :idfile ORDER BY langtype ASC, weight ASC');
     $stmt_lang->bindValue(':idfile', $idfile, PDO::PARAM_INT);
     $stmt_lang->execute();
-    
+
     while ($_row = $stmt_lang->fetch()) {
         $langtype_row = $_row['langtype'];
         $lang_key = $_row['lang_key'];

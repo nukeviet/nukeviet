@@ -13,6 +13,10 @@ if (!defined('NV_IS_FILE_LANG')) {
     exit('Stop!!!');
 }
 
+if (!preg_match('/^([a-z]{2})$/', $dirlang) or !isset($language_array[$dirlang])) {
+    nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
+}
+
 $include_lang = '';
 $page_title = $language_array[$dirlang]['name'];
 
