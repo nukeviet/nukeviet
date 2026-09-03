@@ -74,6 +74,7 @@ $xtpl = new XTemplate('main.tpl', NV_ROOTDIR . '/themes/' . $global_config['modu
 $xtpl->assign('LANG', $lang_module);
 $xtpl->assign('GLANG', $lang_global);
 $xtpl->assign('MODULE_NAME', $module_name);
+$xtpl->assign('DEL_CHECKSS', csrf_create($g_csrf_key['del']));
 
 $contact_allowed = nv_getAllowed();
 

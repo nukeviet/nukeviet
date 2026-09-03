@@ -13,11 +13,25 @@ if (!defined('NV_IS_FILE_ADMIN')) {
     exit('Stop!!!');
 }
 
-$t = $nv_Request->get_int('t', 'get', 0);
+if (!csrf_check($nv_Request->get_string('checkss', 'post', ''), $g_csrf_key[$op])) {
+    nv_jsonOutput([
+        'status' => 'error',
+        'mess' => 'Security check failed!!!'
+    ]);
+}
 
-nv_insert_logs(NV_LANG_DATA, $module_name, 'log_del', 'id ' . $t, $admin_info['userid']);
+$t = $nv_Request->get_int('t', 'post', 0);
+if (!in_array($t, [1, 2, 3], true)) {
+    nv_jsonOutput([
+        'status' => 'error',
+        'mess' => 'Invalid action!!!'
+    ]);
+}
+
+nv_insert_logs(NV_LANG_DATA, $module_name, 'log_del', 'Type: ' . $t, $admin_info['userid']);
 
 if ($t == 3) {
+    // Xóa toàn bộ liên hệ
     $result = $db->query('SELECT id FROM ' . NV_PREFIXLANG . '_' . $module_data . '_send');
     while ($_scratch = $result->fetch(3)) {
         list($id) = $_scratch;
@@ -27,6 +41,7 @@ if ($t == 3) {
     $db->query('TRUNCATE TABLE ' . NV_PREFIXLANG . '_' . $module_data . '_send');
     $db->query('TRUNCATE TABLE ' . NV_PREFIXLANG . '_' . $module_data . '_reply');
 } elseif ($t == 2) {
+    // Xóa các liên hệ được chọn
     $sends = $nv_Request->get_typed_array('sends', 'post', 'int', []);
 
     if (!empty($sends)) {
@@ -38,7 +53,8 @@ if ($t == 3) {
         }
     }
 } else {
-    $id = $nv_Request->get_int('id', 'get', 0);
+    // Xóa một liên hệ cụ thể
+    $id = $nv_Request->get_int('id', 'post', 0);
 
     if ($id) {
         $db->query('DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_send WHERE id = ' . $id);
@@ -49,4 +65,8 @@ if ($t == 3) {
 
 $nv_Cache->delMod($module_name);
 
-nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
+nv_jsonOutput([
+    'status' => 'ok',
+    'mess' => 'Delete successful!!!',
+    'redirect' => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name
+]);
