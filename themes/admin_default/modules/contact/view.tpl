@@ -41,7 +41,7 @@
 				<!-- BEGIN: reply -->
 				<a class="btn btn-default" href="{URL_REPLY}">{LANG.send_title}</a>&nbsp;
 				<!-- END: reply -->
-				<a class="btn btn-default" href="javascript:void(0);" onclick="nv_del_mess({DATA.id});">{GLANG.delete}</a>&nbsp;
+				<a class="btn btn-default" href="javascript:void(0);" onclick="nv_del_mess({DATA.id}, '{DEL_CHECKSS}');">{GLANG.delete}</a>&nbsp;
 				<a class="btn btn-default" href="{DATA.url_back}">{LANG.back_title}</a>&nbsp;
                 <a class="btn btn-default" href="javascript:void(0);" onclick="mark_as_unread();">{LANG.mark_as_unread}</a>&nbsp;
                 <a class="btn btn-default" href="javascript:void(0);" onclick="mark_toogle_process();">{MARK_PROCESS}</a>&nbsp;
@@ -57,7 +57,7 @@
     <colgroup>
         <col class="w150">
         <col>
-    </colgroup>	
+    </colgroup>
     <tbody>
         <tr>
             <td>{LANG.processed_by}</td>
@@ -66,8 +66,8 @@
         <tr>
             <td>{LANG.processed_time}</td>
             <td>{PROCESSED_DATA.time}</td>
-        </tr> 
-    </tbody>		
+        </tr>
+    </tbody>
 </table>
 <!-- END: data_processed -->
 <!-- BEGIN: data_reply -->

@@ -13,10 +13,13 @@ if (!defined('NV_IS_FILE_ADMIN')) {
     exit('Stop!!!');
 }
 
-$id = $nv_Request->get_string('list', 'post,get');
+$id = $nv_Request->get_string('list', 'post');
 $arr_id = array_map('intval', array_unique(array_filter(explode(',', $id))));
 
 foreach ($arr_id as $id) {
+    if ($id < 1) {
+        continue;
+    }
     $db->query('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_rows SET topicid=0 WHERE id = ' . $id);
 }
 

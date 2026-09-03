@@ -13,11 +13,15 @@ if (!defined('NV_IS_FILE_ADMIN')) {
     exit('Stop!!!');
 }
 
-$listcid = $nv_Request->get_string('list', 'post,get');
+$listcid = $nv_Request->get_string('list', 'post');
 
 if (!empty($listcid)) {
     $cid_array = explode(',', $listcid);
     $cid_array = array_map('intval', $cid_array);
+    $cid_array = array_filter(array_unique($cid_array));
+    if (empty($cid_array)) {
+        nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
+    }
     $listcid = implode(', ', $cid_array);
 
     // Duyệt các bình luận từ sau ra trước theo thứ tự pid

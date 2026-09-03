@@ -92,26 +92,86 @@ function nv_del_department(a) {
 }
 
 function nv_del_submit(a, b) {
-    var c = 0;
-    if (a[b].length)
-        for (var d = 0; d < a[b].length; d++) {
-            if (1 == a[b][d].checked) {
-                c = 1;
-                break
+    var form = $(a);
+    var ids = new Array();
+    form.find('input[name="' + b + '"]:checked').each(function() {
+        ids.push($(this).val());
+    });
+    if (ids.length < 1) {
+        return !1;
+    }
+    confirm(nv_is_del_confirm[0]) && $.ajax({
+        type: 'POST',
+        url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=del&nocache=' + new Date().getTime(),
+        data: {
+            checkss: form.data('checkss'),
+            t: 2,
+            sends: ids
+        },
+        dataType: 'json',
+        cache: false,
+        success: function(respon) {
+            if (respon.status !== 'ok') {
+                alert(respon.mess);
+                return;
             }
-        } else 1 == a[b].checked && (c = 1);
-    c && confirm(nv_is_del_confirm[0]) && a.submit();
-    return !1
+            window.location.href = respon.redirect;
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+            alert('Request Error!!!');
+            console.log(jqXHR, textStatus, errorThrown);
+        }
+    });
 }
 
-function nv_delall_submit() {
-    confirm(nv_is_del_confirm[0]) && (window.location.href = script_name + "?" + nv_lang_variable + "=" + nv_lang_data + "&" + nv_name_variable + "=" + nv_module_name + "&" + nv_fc_variable + "=del&t=3");
-    return !1
+function nv_delall_submit(btn) {
+    var form = $(btn).closest('form');
+    confirm(nv_is_del_confirm[0]) && $.ajax({
+        type: 'POST',
+        url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=del&nocache=' + new Date().getTime(),
+        data: {
+            checkss: form.data('checkss'),
+            t: 3,
+        },
+        dataType: 'json',
+        cache: false,
+        success: function(respon) {
+            if (respon.status !== 'ok') {
+                alert(respon.mess);
+                return;
+            }
+            window.location.href = respon.redirect;
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+            alert('Request Error!!!');
+            console.log(jqXHR, textStatus, errorThrown);
+        }
+    });
 }
 
-function nv_del_mess(a) {
-    confirm(nv_is_del_confirm[0]) && (window.location.href = script_name + "?" + nv_lang_variable + "=" + nv_lang_data + "&" + nv_name_variable + "=" + nv_module_name + "&" + nv_fc_variable + "=del&t=1&id=" + a);
-    return !1
+function nv_del_mess(a, checkss) {
+    confirm(nv_is_del_confirm[0]) && $.ajax({
+        type: 'POST',
+        url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=del&nocache=' + new Date().getTime(),
+        data: {
+            checkss: checkss,
+            t: 1,
+            id: a
+        },
+        dataType: 'json',
+        cache: false,
+        success: function(respon) {
+            if (respon.status !== 'ok') {
+                alert(respon.mess);
+                return;
+            }
+            window.location.href = respon.redirect;
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+            alert('Request Error!!!');
+            console.log(jqXHR, textStatus, errorThrown);
+        }
+    });
 }
 
 function nv_chang_weight(a) {

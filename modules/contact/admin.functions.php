@@ -109,3 +109,7 @@ function nv_getAllowed()
 }
 
 define('NV_IS_FILE_ADMIN', true);
+
+$g_csrf_key = [
+    'del' => $admin_info['admin_id'] . '_' . $module_name . '_del'
+];

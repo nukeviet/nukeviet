@@ -66,6 +66,7 @@ $page_title = $module_info['site_title'];
 $xtpl = new XTemplate('view.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
 $xtpl->assign('LANG', $lang_module);
 $xtpl->assign('GLANG', $lang_global);
+$xtpl->assign('DEL_CHECKSS', csrf_create($g_csrf_key['del']));
 
 $sender_name = $row['sender_name'];
 $sender_id = (int) ($row['sender_id']);
