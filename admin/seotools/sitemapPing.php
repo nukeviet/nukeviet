@@ -14,13 +14,14 @@ if (!defined('NV_IS_FILE_SEOTOOLS')) {
 }
 
 /**
- * nv_is_safe_url()
- *
  * @param string $url
+ * @param array|null $pin (out) Thông tin IP đã kiểm để ghim kết nối chống DNS rebinding
  * @return bool
  */
-function nv_is_safe_url($url)
+function nv_is_safe_url($url, &$pin = null)
 {
+    $pin = null;
+
     if (!nv_is_url($url)) {
         return false;
     }
@@ -42,19 +43,20 @@ function nv_is_safe_url($url)
         return false;
     }
 
-    if (filter_var($host, FILTER_VALIDATE_IP)) {
-        $ip = $host;
-    } else {
-        $ip = gethostbyname($host);
-        if ($ip === $host && !filter_var($ip, FILTER_VALIDATE_IP)) {
-            return false;
-        }
-    }
-
-    // Block private and reserved IP ranges (unless in developer mode)
-    if (!defined('NV_DEVELOPER_MODE') && !filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE)) {
+    /*
+     * Resolve tất cả bản ghi A và AAAA rồi yêu cầu mọi IP đều nằm ngoài dải
+     * nội bộ/dành riêng, trả về IP đã kiểm để ghim kết nối chống DNS rebinding.
+     */
+    $pin_ip = null;
+    if (!\NukeViet\Core\Ips::is_safe_host($host, $pin_ip, defined('NV_DEVELOPER_MODE'))) {
         return false;
     }
+
+    $pin = [
+        'host' => $host,
+        'ip' => (string) $pin_ip,
+        'port' => isset($parts['port']) ? (int) $parts['port'] : (strtolower($parts['scheme']) === 'https' ? 443 : 80),
+    ];
 
     return true;
 }
@@ -70,7 +72,8 @@ function nv_sitemapPing($module, $link)
 {
     global $sys_info, $lang_module, $global_config;
 
-    if (!nv_is_safe_url($link)) {
+    $pin = null;
+    if (!nv_is_safe_url($link, $pin)) {
         return $lang_module['searchEngineFailed'];
     }
 
@@ -92,13 +95,16 @@ function nv_sitemapPing($module, $link)
     $result = false;
     $c = curl_init();
     curl_setopt($c, CURLOPT_RETURNTRANSFER, 1);
-    $open_basedir = @ini_get('open_basedir') ? true : false;
-    if (!$open_basedir) {
-        curl_setopt($c, CURLOPT_FOLLOWLOCATION, true);
-        curl_setopt($c, CURLOPT_MAXREDIRS, 20);
-    }
+
+    // Tắt follow redirect để tránh SSRF qua chuyển hướng tới host nội bộ
+    curl_setopt($c, CURLOPT_FOLLOWLOCATION, false);
     curl_setopt($c, CURLOPT_TIMEOUT, 30);
     curl_setopt($c, CURLOPT_URL, $link);
+
+    // Ghim host vào IP đã xác minh để chống DNS rebinding
+    if (!empty($pin['ip'])) {
+        curl_setopt($c, CURLOPT_RESOLVE, [$pin['host'] . ':' . $pin['port'] . ':' . $pin['ip']]);
+    }
     curl_exec($c);
     if (!curl_errno($c)) {
         $response = curl_getinfo($c);
@@ -111,49 +117,6 @@ function nv_sitemapPing($module, $link)
         curl_close($c);
     } else {
         unset($c);
-    }
-
-    if (!$result and nv_function_exists('fsockopen')) {
-        $url_parts = parse_url($link);
-        if (!$url_parts) {
-            return $lang_module['searchEngineFailed'];
-        }
-        if (!isset($url_parts['host'])) {
-            return $lang_module['searchEngineFailed'];
-        }
-        if (!isset($url_parts['path'])) {
-            $url_parts['path'] = '/';
-        }
-
-        // Prevent CRLF injection in fsockopen request
-        if (strpbrk($url_parts['path'], "\r\n") !== false or (isset($url_parts['query']) and strpbrk($url_parts['query'], "\r\n") !== false)) {
-            return $lang_module['searchEngineFailed'];
-        }
-
-        $sock = fsockopen($url_parts['host'], (isset($url_parts['port']) ? (int) $url_parts['port'] : 80), $errno, $errstr, 3);
-        if (!$sock) {
-            return $lang_module['PingNotSupported'];
-        }
-
-        $request = 'GET ' . $url_parts['path'] . (isset($url_parts['query']) ? '?' . $url_parts['query'] : '') . " HTTP/1.1\r\n";
-        $request .= 'Host: ' . $url_parts['host'] . "\r\n";
-        $request .= "Connection: Close\r\n\r\n";
-        fwrite($sock, $request);
-        $response = '';
-        while (!feof($sock)) {
-            $response .= @fgets($sock, 4096);
-        }
-        fclose($sock);
-        list($header, $result) = preg_split("/\r?\n\r?\n/", $response, 2);
-        unset($matches);
-        preg_match("/^HTTP\/[0-9\.]+\s+(\d+)\s+/", $header, $matches);
-        if ($matches == []) {
-            return $lang_module['searchEngineFailed'];
-        }
-        if ($matches[1] != 200) {
-            return $lang_module['searchEngineFailed'];
-        }
-        $result = true;
     }
 
     if ($result) {

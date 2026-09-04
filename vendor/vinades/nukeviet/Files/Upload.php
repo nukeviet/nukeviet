@@ -1345,7 +1345,7 @@ class Upload
             return true;
         }
 
-        return (bool) filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE);
+        return \NukeViet\Core\Ips::is_safe_public_ip($ip);
     }
 
     /**
