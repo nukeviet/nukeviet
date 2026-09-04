@@ -535,4 +535,193 @@ class Ips
 
         return $ip2long;
     }
+
+    /**
+     * Danh sách các dải IP nội bộ/dành riêng (private, loopback, link-local,
+     * cloud-metadata, CGNAT, benchmarking, documentation, multicast, reserved...)
+     * dùng cho việc chống SSRF. Bất kỳ IP nằm trong các dải này đều bị coi là không an toàn.
+     *
+     * @return array
+     */
+    public static function unsafe_ranges()
+    {
+        return [
+            // IPv4
+            '0.0.0.0/8',        // "this host"
+            '10.0.0.0/8',       // private (RFC1918)
+            '100.64.0.0/10',    // CGNAT (RFC6598)
+            '127.0.0.0/8',      // loopback
+            '169.254.0.0/16',   // link-local / cloud-metadata (169.254.169.254)
+            '172.16.0.0/12',    // private (RFC1918)
+            '192.0.0.0/24',     // IETF protocol assignments
+            '192.0.2.0/24',     // TEST-NET-1
+            '192.168.0.0/16',   // private (RFC1918)
+            '198.18.0.0/15',    // benchmarking
+            '198.51.100.0/24',  // TEST-NET-2
+            '203.0.113.0/24',   // TEST-NET-3
+            '224.0.0.0/4',      // multicast
+            '240.0.0.0/4',      // reserved + 255.255.255.255 broadcast
+            // IPv6
+            '::/128',           // unspecified
+            '::1/128',          // loopback
+            '::ffff:0:0/96',    // IPv4-mapped (belt-and-suspenders, đã canonicalize trước)
+            '64:ff9b::/96',     // NAT64
+            '100::/64',         // discard-only
+            '2001:db8::/32',    // documentation
+            '2002::/16',        // 6to4
+            'fc00::/7',         // unique local (ULA)
+            'fe80::/10',        // link-local
+            'ff00::/8',         // multicast
+        ];
+    }
+
+    /**
+     * Nếu $bin (16 byte IPv6 nhị phân) là địa chỉ IPv6 có nhúng IPv4
+     * (IPv4-mapped, IPv4-compatible, NAT64, 6to4) thì trả về địa chỉ IPv4
+     * dạng chuỗi để kiểm tra theo dải IPv4. Ngược lại trả về null.
+     *
+     * @param string $bin
+     * @return string|null
+     */
+    private static function extract_embedded_ipv4($bin)
+    {
+        if (strlen($bin) !== 16) {
+            return null;
+        }
+
+        // IPv4-mapped: ::ffff:0:0/96 -> IPv4 nằm ở 32 bit cuối
+        if (strncmp($bin, str_repeat("\0", 10) . "\xff\xff", 12) === 0) {
+            return inet_ntop(substr($bin, 12, 4));
+        }
+
+        // IPv4-compatible (deprecated): ::/96 -> IPv4 ở 32 bit cuối
+        // Bỏ qua :: và ::1 để chúng được xử lý bởi dải IPv6 dành riêng.
+        if (strncmp($bin, str_repeat("\0", 12), 12) === 0) {
+            $tail = substr($bin, 12, 4);
+            if ($tail !== "\0\0\0\0" and $tail !== "\0\0\0\1") {
+                return inet_ntop($tail);
+            }
+        }
+
+        // NAT64: 64:ff9b::/96 -> IPv4 ở 32 bit cuối
+        if (strncmp($bin, "\x00\x64\xff\x9b" . str_repeat("\0", 8), 12) === 0) {
+            return inet_ntop(substr($bin, 12, 4));
+        }
+
+        // 6to4: 2002::/16 -> IPv4 nằm ở 32 bit kế tiếp prefix
+        if (strncmp($bin, "\x20\x02", 2) === 0) {
+            return inet_ntop(substr($bin, 2, 4));
+        }
+
+        return null;
+    }
+
+    /**
+     * Kiểm tra một IP có phải IP công khai an toàn (không thuộc dải nội bộ/dành riêng)
+     * để chống SSRF. Chuẩn hóa các địa chỉ IPv6 có nhúng IPv4
+     * (::ffff:127.0.0.1, ::a.b.c.d, 64:ff9b::a.b.c.d, 2002:...) về IPv4 trước khi kiểm tra.
+     *
+     * @param string $ip
+     * @return bool
+     */
+    public static function is_safe_public_ip($ip)
+    {
+        $ip = trim((string) $ip);
+        if ($ip === '' or !filter_var($ip, FILTER_VALIDATE_IP)) {
+            return false;
+        }
+
+        $bin = inet_pton($ip);
+        if ($bin === false) {
+            return false;
+        }
+
+        // Nếu là IPv6 chứa IPv4 nhúng thì kiểm tra IPv4 tương ứng
+        if (strlen($bin) === 16) {
+            $embedded = self::extract_embedded_ipv4($bin);
+            if ($embedded !== null and $embedded !== false) {
+                return self::is_safe_public_ip($embedded);
+            }
+        }
+
+        foreach (self::unsafe_ranges() as $cidr) {
+            if (self::ipInRange($ip, $cidr)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * Resolve toàn bộ IPv4 (A) và IPv6 (AAAA) của một host.
+     * Nếu $host đã là IP thì trả về chính nó.
+     *
+     * @param string $host
+     * @return array
+     */
+    public static function resolve_host_ips($host)
+    {
+        $host = strtolower(trim((string) $host));
+        if ($host === '') {
+            return [];
+        }
+
+        if (filter_var($host, FILTER_VALIDATE_IP)) {
+            return [$host];
+        }
+
+        $ips = [];
+
+        $ipv4 = gethostbynamel($host);
+        if (is_array($ipv4)) {
+            $ips = $ipv4;
+        }
+
+        if (Site::function_exists('dns_get_record') and defined('DNS_AAAA')) {
+            $aaaa = @dns_get_record($host, DNS_AAAA);
+            if (is_array($aaaa)) {
+                foreach ($aaaa as $record) {
+                    if (!empty($record['ipv6'])) {
+                        $ips[] = $record['ipv6'];
+                    }
+                }
+            }
+        }
+
+        return array_values(array_unique($ips));
+    }
+
+    /**
+     * Kiểm tra một host có an toàn để fetch (chống SSRF) hay không.
+     * Resolve tất cả bản ghi A và AAAA rồi yêu cầu mọi IP đều nằm ngoài
+     * dải nội bộ/dành riêng (đã canonicalize IPv4-mapped/NAT64/6to4).
+     * Trả về IP đầu tiên qua $pin_ip để ghim kết nối chống DNS rebinding.
+     *
+     * @param string      $host           Tên miền hoặc IP
+     * @param string|null $pin_ip         (out) IP đã kiểm để ghim kết nối
+     * @param bool        $allow_internal Cho phép IP nội bộ hay không
+     * @return bool
+     */
+    public static function is_safe_host($host, &$pin_ip = null, $allow_internal = false)
+    {
+        $pin_ip = null;
+
+        $ips = self::resolve_host_ips($host);
+        if (empty($ips)) {
+            return false;
+        }
+
+        if (!$allow_internal) {
+            foreach ($ips as $ip) {
+                if (!self::is_safe_public_ip($ip)) {
+                    return false;
+                }
+            }
+        }
+
+        $pin_ip = $ips[0];
+
+        return true;
+    }
 }

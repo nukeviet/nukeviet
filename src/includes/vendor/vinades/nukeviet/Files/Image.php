@@ -12,6 +12,7 @@
 namespace NukeViet\Files;
 
 use GdImage;
+use NukeViet\Core\Ips;
 use NukeViet\Site;
 
 /**
@@ -47,6 +48,11 @@ class Image
     public $is_destroy = false;
     public $is_createWorkingImage = false;
 
+    // Thông tin ghim IP đã kiểm (chống SSRF/DNS rebinding) cho fetch URL
+    private $pin_host = '';
+    private $pin_ip = '';
+    private $pin_port = 0;
+
     const ERROR_IMAGE1 = 'The file is not a known image format';
     const ERROR_IMAGE2 = 'The file is not readable';
     const ERROR_IMAGE3 = 'File is not supplied or is not a file';
@@ -69,7 +75,7 @@ class Image
                 $this->error = 'URL target is not allowed';
                 return;
             }
-            $this->filename = self::set_tempnam($filename);
+            $this->filename = $this->set_tempnam($filename);
         } else {
             $this->filename = $filename;
         }
@@ -247,42 +253,75 @@ class Image
      * @param string $filename
      * @return false|string
      */
-    private static function set_tempnam($filename)
+    private function set_tempnam($filename)
     {
+        // Bắt buộc phải có curl
+        if (!Site::function_exists('curl_init') or !Site::function_exists('curl_exec')) {
+            return false;
+        }
+        // Bắt buộc phải xác minh host và trích xuất IP đã ghim để chống DNS rebinding
+        if (empty($this->pin_ip)) {
+            return false;
+        }
+
         $tmpfname = tempnam(NV_ROOTDIR . '/' . NV_TEMP_DIR, 'tmp');
         if ($tmpfname === false) {
             return false;
         }
 
-        $context = stream_context_create([
-            'http' => ['timeout' => 10],
-            'https' => ['timeout' => 10],
-            'ftp' => ['timeout' => 10],
-        ]);
-
-        $input = @fopen($filename, 'rb', false, $context);
-        if ($input === false) {
-            unlink($tmpfname);
-            return false;
-        }
+        $maxSize = 10 * 1024 * 1024;
 
         $output = @fopen($tmpfname, 'wb');
         if ($output === false) {
-            fclose($input);
-            unlink($tmpfname);
+            @unlink($tmpfname);
             return false;
         }
 
-        // ← THÊM: giới hạn kích thước tối đa 10MB
-        $maxSize = 10 * 1024 * 1024;
-        $copied = stream_copy_to_stream($input, $output, $maxSize + 1);
+        $written = 0;
+        $overflow = false;
 
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $filename);
+
+        // Không follow redirect để tránh SSRF qua chuyển hướng tới host nội bộ
+        curl_setopt($ch, CURLOPT_FOLLOWLOCATION, false);
+
+        curl_setopt($ch, CURLOPT_TIMEOUT, 15);
+        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 10);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 2);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, true);
+        curl_setopt($ch, CURLOPT_PROTOCOLS, CURLPROTO_HTTP | CURLPROTO_HTTPS);
+
+        // Ghim host vào IP đã xác minh để chống DNS rebinding
+        curl_setopt($ch, CURLOPT_RESOLVE, [
+            $this->pin_host . ':' . $this->pin_port . ':' . $this->pin_ip
+        ]);
+
+        $cainfo = ini_get('curl.cainfo');
+        if (empty($cainfo) and defined('NV_CERTS_DIR') and file_exists(NV_ROOTDIR . '/' . NV_CERTS_DIR . '/cacert.pem')) {
+            $cainfo = NV_ROOTDIR . '/' . NV_CERTS_DIR . '/cacert.pem';
+        }
+        if (!empty($cainfo)) {
+            curl_setopt($ch, CURLOPT_CAINFO, $cainfo);
+        }
+        curl_setopt($ch, CURLOPT_WRITEFUNCTION, function ($ch, $data) use ($output, &$written, &$overflow, $maxSize) {
+            $len = strlen($data);
+            $written += $len;
+            if ($written > $maxSize) {
+                $overflow = true;
+
+                return -1; // hủy tải khi vượt quá giới hạn
+            }
+
+            return fwrite($output, $data);
+        });
+
+        $ok = curl_exec($ch);
+        unset($ch);
         fclose($output);
-        fclose($input);
 
-        // Nếu copy nhiều hơn giới hạn → file quá lớn → xóa và từ chối
-        if ($copied > $maxSize) {
-            unlink($tmpfname);
+        if ($ok === false or $overflow or $written === 0) {
+            @unlink($tmpfname);
             return false;
         }
 
@@ -309,22 +348,23 @@ class Image
 
         $host = strtolower($parts['host']);
 
-        if (filter_var($host, FILTER_VALIDATE_IP)) {
-            $ip = $host;
-        } else {
-            $ip = gethostbyname($host);
-            if ($ip === $host && !filter_var($ip, FILTER_VALIDATE_IP)) {
-                return false;
-            }
+        // Chặn CRLF trong host
+        if (strpbrk($host, "\r\n") !== false) {
+            return false;
         }
 
         /*
-         * Chặn các dải IP riêng (10/8, 172.16/12, 192.168/16, fc00/7, fe80/10)
-         * và các dải IP dành riêng (127/8, 169.254/16 cloud-metadata, ::1, v.v.)
+         * Resolve tất cả bản ghi A và AAAA rồi yêu cầu mọi IP đều nằm ngoài dải
+         * nội bộ/dành riêng, lấy IP đã kiểm để ghim kết nối chống DNS rebinding.
          */
-        if (!defined('NV_DEVELOPER_MODE') && !filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE)) {
+        $pin = null;
+        if (!Ips::is_safe_host($host, $pin, defined('NV_DEVELOPER_MODE'))) {
             return false;
         }
+
+        $this->pin_host = $host;
+        $this->pin_ip = (string) $pin;
+        $this->pin_port = isset($parts['port']) ? (int) $parts['port'] : (strtolower($parts['scheme']) === 'https' ? 443 : 80);
 
         return true;
     }
@@ -1156,7 +1196,7 @@ class Image
                     return;
                 }
                 // Tải về file tạm, dùng file tạm thay vì URL trực tiếp
-                $logo = self::set_tempnam($logo);
+                $logo = $this->set_tempnam($logo);
                 if ($logo === false) {
                     return;
                 }

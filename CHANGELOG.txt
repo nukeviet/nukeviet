@@ -1,6 +1,7 @@
 CHANGE LOG: NUKEVIET CMS
 http://nukeviet.vn
 NUKEVIET 5.0.00
+- Fix SSRF vulnerabilities in the upload functions, the Image class, and sitemap ping. Thanks canhieu from GitHub @canhieu.
 - Fix a security vulnerability in the module language write functionality. Thanks phuongmai1212 from GitHub @phuongmai1212 and AuQuangDuc from GitHub @AuQuangDuc
 - Restrict users custom field callback to prevent RCE. Thanks Nguyễn Hồng Giáp from GitHub @PinkArmor
 - Fix arbitrary file write via S/MIME certificate CN in SMTP settings. Thanks Jace from GitHub @manus-use
