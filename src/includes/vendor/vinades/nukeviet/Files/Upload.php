@@ -810,6 +810,14 @@ class Upload
             return $this->lang['error_upload_not_image'];
         }
 
+        /**
+         * Từ chối mọi SVG có khai báo DOCTYPE,
+         * trong này chứa các thực thể có thể gây nguy hiểm không kiểm soát được
+         */
+        if ($dom->doctype !== null) {
+            return $this->lang['error_upload_image_failed'];
+        }
+
         $root = $dom->documentElement;
         if (!$root || strtolower($root->localName) !== 'svg') {
             return $this->lang['error_upload_not_image'];
@@ -845,6 +853,17 @@ class Upload
         }
 
         if (!$this->sanitize_svg_dom($dom)) {
+            return $this->lang['error_upload_image_failed'];
+        }
+
+        // Ghi lại DOM đã được chuẩn hóa
+        $clean = $dom->saveXML();
+        if ($clean === false or file_put_contents($tmp_name, $clean) === false) {
+            return $this->lang['error_upload_image_failed'];
+        }
+
+        // Kiểm lại lần nữa
+        if (!$this->verify_image($tmp_name, true)) {
             return $this->lang['error_upload_image_failed'];
         }
 
