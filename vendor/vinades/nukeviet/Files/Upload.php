@@ -836,12 +836,17 @@ class Upload
     {
         $this->img_info = [];
 
+        $content = file_get_contents($tmp_name);
+        if ($content === false) {
+            return $this->lang['error_upload_not_image'];
+        }
+
         $dom = new \DOMDocument();
         $prev_use_errors = libxml_use_internal_errors(true);
         if (PHP_MAJOR_VERSION < 8) {
             $prev_loader = libxml_disable_entity_loader(true);
         }
-        $loaded = $dom->load($tmp_name, LIBXML_NONET);
+        $loaded = $dom->loadXML($content, LIBXML_NONET);
         if (PHP_MAJOR_VERSION < 8) {
             libxml_disable_entity_loader($prev_loader);
         }
@@ -850,6 +855,14 @@ class Upload
 
         if (!$loaded) {
             return $this->lang['error_upload_not_image'];
+        }
+
+        /**
+         * Từ chối mọi SVG có khai báo DOCTYPE,
+         * trong này chứa các thực thể có thể gây nguy hiểm không kiểm soát được
+         */
+        if ($dom->doctype !== null) {
+            return $this->lang['error_upload_image_failed'];
         }
 
         $root = $dom->documentElement;
@@ -887,6 +900,17 @@ class Upload
         }
 
         if (!$this->sanitize_svg_dom($dom)) {
+            return $this->lang['error_upload_image_failed'];
+        }
+
+        // Ghi lại DOM đã được chuẩn hóa
+        $clean = $dom->saveXML();
+        if ($clean === false or file_put_contents($tmp_name, $clean) === false) {
+            return $this->lang['error_upload_image_failed'];
+        }
+
+        // Kiểm lại lần nữa
+        if (!$this->verify_image($tmp_name, true)) {
             return $this->lang['error_upload_image_failed'];
         }
 
