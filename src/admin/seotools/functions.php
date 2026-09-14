@@ -40,8 +40,8 @@ $menu_top = [
 define('NV_IS_FILE_SEOTOOLS', true);
 
 // Document
-$array_url_instruction['pagetitle'] = 'https://wiki.nukeviet.vn/nukeviet4:admin:seotools:pagetitle';
-$array_url_instruction['sitemapPing'] = 'https://wiki.nukeviet.vn/nukeviet4:admin:seotools:sitemapPing';
-$array_url_instruction['metatags'] = 'https://wiki.nukeviet.vn/nukeviet4:admin:seotools';
-$array_url_instruction['robots'] = 'https://wiki.nukeviet.vn/nukeviet4:admin:seotools:robots';
-$array_url_instruction['rpc'] = 'https://wiki.nukeviet.vn/nukeviet4:admin:seotools:rpc';
+$array_url_instruction['pagetitle'] = 'https://wiki.nukeviet.vn/nukeviet5:admin:seotools:pagetitle';
+$array_url_instruction['sitemapPing'] = 'https://wiki.nukeviet.vn/nukeviet5:admin:seotools:sitemapPing';
+$array_url_instruction['metatags'] = 'https://wiki.nukeviet.vn/nukeviet5:admin:seotools';
+$array_url_instruction['robots'] = 'https://wiki.nukeviet.vn/nukeviet5:admin:seotools:robots';
+$array_url_instruction['rpc'] = 'https://wiki.nukeviet.vn/nukeviet5:admin:seotools:rpc';

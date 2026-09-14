@@ -52,11 +52,11 @@ define('NV_ALLOWED_HTML_LANG', $allowed_html_tags);
 define('NV_IS_FILE_LANG', true);
 
 //Document
-$array_url_instruction['main'] = 'https://wiki.nukeviet.vn/nukeviet4:admin:language';
-$array_url_instruction['countries'] = 'https://wiki.nukeviet.vn/nukeviet4:admin:language:countries';
-$array_url_instruction['interface'] = 'https://wiki.nukeviet.vn/nukeviet4:admin:language:interface';
-$array_url_instruction['check'] = 'https://wiki.nukeviet.vn/nukeviet4:admin:language:check';
-$array_url_instruction['setting'] = 'https://wiki.nukeviet.vn/nukeviet4:admin:language:setting';
+$array_url_instruction['main'] = 'https://wiki.nukeviet.vn/nukeviet5:admin:language';
+$array_url_instruction['countries'] = 'https://wiki.nukeviet.vn/nukeviet5:admin:language:countries';
+$array_url_instruction['interface'] = 'https://wiki.nukeviet.vn/nukeviet5:admin:language:interface';
+$array_url_instruction['check'] = 'https://wiki.nukeviet.vn/nukeviet5:admin:language:check';
+$array_url_instruction['setting'] = 'https://wiki.nukeviet.vn/nukeviet5:admin:language:setting';
 
 $dirlang = $nv_Request->get_title('dirlang', 'get', '');
 

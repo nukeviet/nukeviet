@@ -22,10 +22,10 @@ $menu_top = [
 define('NV_IS_FILE_ADMIN', true);
 
 // Document
-$array_url_instruction['main'] = 'https://wiki.nukeviet.vn/nukeviet4:admin:upload';
-$array_url_instruction['thumbconfig'] = 'https://wiki.nukeviet.vn/nukeviet4:admin:upload:thumbconfig';
-$array_url_instruction['config'] = 'https://wiki.nukeviet.vn/nukeviet4:admin:upload:config';
-$array_url_instruction['uploadconfig'] = 'https://wiki.nukeviet.vn/nukeviet4:admin:upload:uploadconfig';
+$array_url_instruction['main'] = 'https://wiki.nukeviet.vn/nukeviet5:admin:upload';
+$array_url_instruction['thumbconfig'] = 'https://wiki.nukeviet.vn/nukeviet5:admin:upload:thumbconfig';
+$array_url_instruction['config'] = 'https://wiki.nukeviet.vn/nukeviet5:admin:upload:config';
+$array_url_instruction['uploadconfig'] = 'https://wiki.nukeviet.vn/nukeviet5:admin:upload:uploadconfig';
 
 $allow_func = [
     'main', 'delimg', 'createimg',
