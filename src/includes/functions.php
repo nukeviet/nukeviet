@@ -2654,6 +2654,18 @@ function nv_url_rewrite_callback($matches)
 {
     global $global_config;
 
+    // Tách phần #fragment ra để xử lý cho đúng
+    $fragment = '';
+    if (preg_match('/(?<!&)#/', $matches[2], $m, PREG_OFFSET_CAPTURE)) {
+        $fragment = substr($matches[2], $m[0][1]);
+        $matches[2] = substr($matches[2], 0, $m[0][1]);
+    }
+
+    // Url không hợp lệ, kết quả của nv_htmlspecialchars thì giữ nguyên URL gốc
+    if (str_contains($matches[2], '&#')) {
+        return $matches[0];
+    }
+
     $query_string = NV_LANG_VARIABLE . '=' . $matches[2];
     $query_array = [];
     $is_amp = str_contains($query_string, '&amp;');
@@ -2721,7 +2733,7 @@ function nv_url_rewrite_callback($matches)
             $rewrite_string .= '?' . http_build_query($query_array, '', $is_amp ? '&amp;' : '&');
         }
 
-        return '"' . $rewrite_string . '"';
+        return '"' . $rewrite_string . $fragment . '"';
     }
 
     return $matches[0];
