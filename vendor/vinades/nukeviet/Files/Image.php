@@ -183,7 +183,7 @@ class Image
             $imageinfo['mime'] = $file['mime'];
             $imageinfo['type'] = $typeflag[$file[2]]['type'];
             $imageinfo['ext'] = $typeflag[$file[2]]['ext'];
-            $imageinfo['bits'] = $file['bits'];
+            $imageinfo['bits'] = isset($file['bits']) ? (int) ($file['bits']) : 0;
             $imageinfo['channels'] = isset($file['channels']) ? (int) ($file['channels']) : 0;
         }
 
