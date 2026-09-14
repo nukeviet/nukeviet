@@ -2982,8 +2982,10 @@ function parse_csp($json_csp)
     global $nv_Cache, $global_config;
 
     $script_nonce = defined('NV_SCRIPT_NONCE') ? NV_SCRIPT_NONCE : '';
+
+    // Mã MD5 cần gồm cả nội dung và giá trị nonce tránh lỗi không tự cập nhật khi lưu cấu hình CSP mới
     $md5 = 'static_domains-' . $global_config['cdn_url'] . $global_config['nv_static_url'] . $global_config['assets_cdn_url'];
-    $md5 = md5($md5);
+    $md5 = md5($md5 . '|' . $json_csp . '|' . (empty($script_nonce) ? 0 : 1));
 
     // Khu vực quản trị dùng chính sách riêng nên phải tách cache
     $is_admin = defined('NV_ADMIN');
