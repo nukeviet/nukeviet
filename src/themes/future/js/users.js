@@ -743,6 +743,289 @@ $(function() {
             });
         });
     });
+
+    /**
+     * Địa chỉ xử lý ajax của trang quản lý nhóm
+     * Tệp này được load ở các module khác tuy nhiên trang quản lý nhóm
+     * chỉ có tại module users, vì vậy sử dụng nv_module_name, nv_func_name luôn đúng.
+     */
+    const groupsUrl = () => nv_base_siteurl + 'index.php?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=' + nv_func_name + '&nocache=' + new Date().getTime();
+
+    /**
+     * Gửi một thao tác quản lý thành viên nhóm rồi tải lại trang
+     *
+     * @param {JQuery} btn
+     * @param {Object} postData
+     * @param {String} confirmMess
+     */
+    const groupsPostAction = (btn, postData, confirmMess) => {
+        const icon = $('i', btn);
+        if (icon.is('.fa-spinner')) {
+            return;
+        }
+
+        nukeviet.confirm(confirmMess, () => {
+            const orig = icon.data('icon');
+            icon.removeClass(orig).addClass('fa-spinner fa-spin-pulse');
+            $.ajax({
+                url: groupsUrl(),
+                type: 'POST',
+                data: postData,
+                dataType: 'json',
+                cache: false,
+                success: function(res) {
+                    icon.removeClass('fa-spinner fa-spin-pulse').addClass(orig);
+                    if (res.status != 'ok') {
+                        return nukeviet.toast(res.mess, 'error');
+                    }
+                    nukeviet.toast(res.mess, 'success');
+                    setTimeout(() => {
+                        location.reload();
+                    }, 1500);
+                },
+                error: function(xhr, text, err) {
+                    icon.removeClass('fa-spinner fa-spin-pulse').addClass(orig);
+                    nukeviet.toast(err || text, 'error');
+                    console.log(xhr, text, err);
+                }
+            });
+        });
+    };
+
+    // Duyệt, từ chối, loại khỏi nhóm và xóa hẳn tài khoản, mỗi thao tác gửi một tham số riêng
+    const groupsUserActions = {
+        groupApproved: 'approved',
+        groupDenied: 'denied',
+        groupExclude: 'exclude',
+        groupDelUser: 'del'
+    };
+    const groupsUserActionsSelector = '[data-toggle="groupApproved"], [data-toggle="groupDenied"], [data-toggle="groupExclude"], [data-toggle="groupDelUser"]';
+    $(document).off('click.users', groupsUserActionsSelector)
+    .on('click.users', groupsUserActionsSelector, function(e) {
+        e.preventDefault();
+
+        const btn = $(this);
+        const toggle = btn.data('toggle');
+        const page = btn.closest('[data-area="page"]');
+        if (typeof groupsUserActions[toggle] === 'undefined') {
+            return;
+        }
+
+        const postData = {
+            checkss: page.data('checkss'),
+            gid: page.data('gid')
+        };
+        postData[groupsUserActions[toggle]] = btn.data('id');
+
+        let confirmMess = nv_is_exclude_user_confirm[0];
+        if (toggle === 'groupApproved') {
+            confirmMess = nv_is_add_user_confirm[0];
+        } else if (toggle === 'groupDelUser') {
+            confirmMess = nv_is_del_confirm[0];
+        }
+
+        groupsPostAction(btn, postData, confirmMess);
+    });
+
+    // Ô tìm và chọn tài khoản để thêm vào nhóm
+    $('[data-toggle="groupAddUserSelect"]').each(function() {
+        if ($(this).data('event-inited') || typeof $.fn.select2 === 'undefined') {
+            return;
+        }
+        $(this).data('event-inited', true);
+
+        const ele = $(this);
+        ele.select2({
+            placeholder: ele.data('placeholder'),
+            minimumInputLength: 3,
+            ajax: {
+                url: nv_base_siteurl + 'index.php?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=' + nv_func_name + '&get_user_json=1&gid=' + ele.data('gid') + '&checkss=' + ele.data('checkss'),
+                dataType: 'json',
+                delay: 250,
+                cache: true,
+                data: (params) => ({
+                    q: params.term,
+                    page: params.page
+                }),
+                processResults: (data, params) => {
+                    params.page = params.page || 1;
+                    return {
+                        results: data,
+                        pagination: {
+                            more: (params.page * 30) < data.total_count
+                        }
+                    };
+                }
+            },
+            // Trả về đối tượng DOM để select2 không phải chèn HTML thô từ dữ liệu tài khoản
+            templateResult: (repo) => {
+                if (repo.loading) {
+                    return repo.text;
+                }
+                return $('<div></div>')
+                    .append($('<span></span>').text(repo.username))
+                    .append('<br>')
+                    .append($('<small class="text-muted"></small>').text('(' + repo.fullname + ')'));
+            },
+            templateSelection: (repo) => repo.username || repo.text,
+            language: {
+                inputTooShort: () => ele.data('min-search')
+            }
+        });
+    });
+
+    // Thêm tài khoản đã chọn vào nhóm
+    $(document).off('click.users', '[data-toggle="groupAddUser"]').on('click.users', '[data-toggle="groupAddUser"]', function(e) {
+        e.preventDefault();
+
+        const btn = $(this);
+        const page = btn.closest('[data-area="page"]');
+        const select = $('[data-toggle="groupAddUserSelect"]', page);
+        const uid = parseInt(select.val(), 10) || 0;
+
+        if (uid < 1) {
+            return nukeviet.alert(btn.data('msg-nochoice'), () => {
+                select.select2('open');
+            });
+        }
+
+        groupsPostAction(btn, {
+            checkss: page.data('checkss'),
+            gid: page.data('gid'),
+            uid: uid
+        }, nv_is_add_user_confirm[0]);
+    });
+
+    // Mở modal danh sách tài khoản đợi kích hoạt
+    $(document).off('click.users', '[data-toggle="groupUserWaiting"]').on('click.users', '[data-toggle="groupUserWaiting"]', function(e) {
+        e.preventDefault();
+
+        const btn = $(this);
+        const icon = $('i', btn);
+        const page = btn.closest('[data-area="page"]');
+        if (icon.is('.fa-spinner')) {
+            return;
+        }
+
+        const orig = icon.data('icon');
+        icon.removeClass(orig).addClass('fa-spinner fa-spin-pulse');
+        $.ajax({
+            url: groupsUrl(),
+            type: 'POST',
+            data: {
+                checkss: page.data('checkss'),
+                gid: page.data('gid'),
+                getuserid: 1
+            },
+            dataType: 'json',
+            cache: false,
+            success: function(res) {
+                icon.removeClass('fa-spinner fa-spin-pulse').addClass(orig);
+                if (res.status != 'ok') {
+                    return nukeviet.toast(res.mess, 'error');
+                }
+                modalShow(btn.data('title'), res.html);
+            },
+            error: function(xhr, text, err) {
+                icon.removeClass('fa-spinner fa-spin-pulse').addClass(orig);
+                nukeviet.toast(err || text, 'error');
+                console.log(xhr, text, err);
+            }
+        });
+    });
+
+    // Tìm tài khoản đợi kích hoạt, máy chủ trả về HTML nên không dùng được handler ajax-form chung
+    $(document).off('submit.users', '[data-form="groupGetUid"]').on('submit.users', '[data-form="groupGetUid"]', function(e) {
+        e.preventDefault();
+
+        const form = $(this);
+        const btn = $('[type="submit"]', form);
+        const icon = $('i', btn);
+        if (icon.is('.fa-spinner')) {
+            return;
+        }
+
+        const orig = icon.data('icon');
+        const action = form.attr('action') + '&' + form.serialize();
+        icon.removeClass(orig).addClass('fa-spinner fa-spin-pulse');
+        $('input, button', form).prop('disabled', true);
+
+        $.ajax({
+            type: 'GET',
+            url: action,
+            cache: false,
+            success: function(html) {
+                $('#resultdata').html(html);
+            },
+            error: function(xhr, text, err) {
+                nukeviet.toast(err || text, 'error');
+                console.log(xhr, text, err);
+            },
+            complete: function() {
+                $('input, button', form).prop('disabled', false);
+                icon.removeClass('fa-spinner fa-spin-pulse').addClass(orig);
+            }
+        });
+    });
+
+    // Kích hoạt một tài khoản trong danh sách đợi kích hoạt
+    $(document).off('click.users', '[data-toggle="groupActiveUser"]').on('click.users', '[data-toggle="groupActiveUser"]', function(e) {
+        e.preventDefault();
+
+        const btn = $(this);
+        const icon = $('i', btn);
+        const form = $('[data-form="groupGetUid"]');
+        if (icon.is('.fa-spinner') || form.length < 1) {
+            return;
+        }
+
+        const orig = icon.data('icon');
+        icon.removeClass(orig).addClass('fa-spinner fa-spin-pulse');
+        $.ajax({
+            url: form.attr('action'),
+            type: 'POST',
+            data: {
+                checkss: $('[name="checkss"]', form).val(),
+                act: 1,
+                userid: btn.data('userid')
+            },
+            dataType: 'json',
+            cache: false,
+            success: function(res) {
+                icon.removeClass('fa-spinner fa-spin-pulse').addClass(orig);
+                if (res.status != 'ok') {
+                    return nukeviet.toast(res.mess, 'error');
+                }
+                nukeviet.toast(res.mess, 'success');
+                form.trigger('submit');
+            },
+            error: function(xhr, text, err) {
+                icon.removeClass('fa-spinner fa-spin-pulse').addClass(orig);
+                nukeviet.toast(err || text, 'error');
+                console.log(xhr, text, err);
+            }
+        });
+    });
+
+    // Tải danh sách thông báo của nhóm
+    $('[data-toggle="groupInform"]').each(function() {
+        if ($(this).data('event-inited')) {
+            return;
+        }
+        $(this).data('event-inited', true);
+
+        const ctn = $(this);
+        $.ajax({
+            type: 'GET',
+            url: ctn.data('ajax-url'),
+            success: function(html) {
+                ctn.html(html);
+            },
+            error: function(xhr, text, err) {
+                console.log(xhr, text, err);
+            }
+        });
+    });
 });
 
 /**
