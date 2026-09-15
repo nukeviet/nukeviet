@@ -1768,31 +1768,20 @@ function user_security_privacy(array $array, array $array_logins): string
  */
 function user_verify_password(array $array): string
 {
-    global $module_captcha, $checkss, $global_config;
+    global $checkss, $module_name, $nv_Lang;
 
-    $xtpl = new XTemplate('verify_password.tpl', get_module_tpl_dir('verify_password.tpl'));
-    $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
-    $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
-    $xtpl->assign('CHECKSS', $checkss);
+    $tpl = new \NukeViet\Template\NVSmarty();
+    $tpl->setTemplateDir(get_module_tpl_dir('verify_password.tpl'));
 
-    $xtpl->assign('DATA', $array);
+    $tpl->assign('LANG', $nv_Lang);
+    $tpl->assign('MODULE_NAME', $module_name);
+    $tpl->assign('CHECKSS', $checkss);
+    $tpl->assign('DATA', $array);
 
-    if ($module_captcha == 'recaptcha' and $global_config['recaptcha_ver'] == 3) {
-        // Nếu dùng reCaptcha v3
-        $xtpl->parse('main.recaptcha3');
-    } elseif ($module_captcha == 'recaptcha' and $global_config['recaptcha_ver'] == 2) {
-        // Nếu dùng reCaptcha v2
-        $xtpl->parse('main.recaptcha');
-    } elseif ($module_captcha == 'turnstile') {
-        // Nếu dùng Turnstile
-        $xtpl->parse('main.turnstile');
-    } elseif ($module_captcha == 'captcha') {
-        // Captcha mặc định
-        $xtpl->parse('main.captcha');
-    }
+    // Thuộc tính captcha gắn lên form
+    $tpl->assign('CAPTCHA_ATTRS', nv_captcha_form_attrs('nv_seccode'));
 
-    $xtpl->parse('main');
-    return $xtpl->text('main');
+    return $tpl->fetch('verify_password.tpl');
 }
 
 /**
