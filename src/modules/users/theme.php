@@ -419,14 +419,16 @@ function user_openid_login($attribs, $op_process)
  */
 function user_lostpass($data)
 {
-    global $module_info, $global_config, $nv_Lang, $module_name, $module_captcha, $op, $nv_redirect;
+    global $module_info, $global_config, $nv_Lang, $module_name, $op, $nv_redirect;
 
-    $xtpl = new XTemplate('lostpass.tpl', get_module_tpl_dir('lostpass.tpl'));
+    $tpl = new \NukeViet\Template\NVSmarty();
+    $tpl->setTemplateDir(get_module_tpl_dir('lostpass.tpl'));
 
-    $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
-    $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
-    $xtpl->assign('DATA', $data);
-    $xtpl->assign('FORM_ACTION', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=lostpass');
+    $tpl->assign('LANG', $nv_Lang);
+    $tpl->assign('MODULE_NAME', $module_name);
+    $tpl->assign('GCONFIG', $global_config);
+    $tpl->assign('DATA', array_merge(['checkss' => ''], $data));
+    $tpl->assign('NV_REDIRECT', $nv_redirect);
 
     $password_rule = empty($global_config['nv_upass_type']) ? $nv_Lang->getGlobal('password_rule_nolimit', $global_config['nv_upassmin'], $global_config['nv_upassmax']) : $nv_Lang->getGlobal('password_rule_limit', $nv_Lang->getGlobal('upass_type_' . $global_config['nv_upass_type']), $global_config['nv_upassmin'], $global_config['nv_upassmax']);
     $password_pattern = '/^';
@@ -441,37 +443,18 @@ function user_lostpass($data)
     }
     $password_pattern .= '(.){' . $global_config['nv_upassmin'] . ',' . $global_config['nv_upassmax'] . '}$/';
 
-    $xtpl->assign('PASSWORD_PATTERN', $password_pattern);
-    $xtpl->assign('PASSWORD_RULE', $password_rule);
-    $xtpl->assign('PASS_MAXLENGTH', $global_config['nv_upassmax']);
+    $tpl->assign('PASSWORD_PATTERN', $password_pattern);
+    $tpl->assign('PASSWORD_RULE', $password_rule);
 
+    // Thuộc tính captcha gắn lên form
     $array_gfx_chk = !empty($global_config['captcha_area']) ? explode(',', $global_config['captcha_area']) : [];
+    $gfx_chk = (!empty($array_gfx_chk) and in_array('p', $array_gfx_chk, true)) ? 1 : 0;
+    $tpl->assign('CAPTCHA_ATTRS', $gfx_chk ? nv_captcha_form_attrs('nv_seccode') : '');
 
-    if (!empty($array_gfx_chk) and in_array('p', $array_gfx_chk, true)) {
-        // Nếu dùng reCaptcha v3
-        if ($module_captcha == 'recaptcha' and $global_config['recaptcha_ver'] == 3) {
-            $xtpl->parse('main.recaptcha3');
-        }
-        // Nếu dùng reCaptcha v2
-        elseif ($module_captcha == 'recaptcha' and $global_config['recaptcha_ver'] == 2) {
-            $xtpl->assign('RECAPTCHA_ELEMENT', 'recaptcha' . nv_genpass(8));
-            $xtpl->assign('N_CAPTCHA', $nv_Lang->getGlobal('securitycode1'));
-            $xtpl->parse('main.recaptcha');
-        } elseif ($module_captcha == 'turnstile') {
-            $xtpl->parse('main.turnstile');
-        } elseif ($module_captcha == 'captcha') {
-            $xtpl->assign('N_CAPTCHA', $nv_Lang->getGlobal('securitycode'));
-            $xtpl->parse('main.captcha');
-        }
-    }
-
-    if (!empty($nv_redirect)) {
-        $xtpl->assign('REDIRECT', $nv_redirect);
-        $xtpl->parse('main.redirect');
-    }
-
+    // Các liên kết chức năng khác cuối form
     $_lis = \NukeViet\Module\users\Shared\Navs::getNavs($module_info['funcs']);
     $_alias = $module_info['alias'];
+    $navs = [];
     foreach ($_lis as $_li) {
         if ($_li['func_name'] == $op) {
             continue;
@@ -481,17 +464,14 @@ function user_lostpass($data)
         if (!empty($nv_redirect)) {
             $href .= '&nv_redirect=' . $nv_redirect;
         }
-        $li = [
+        $navs[] = [
             'href' => $href,
             'title' => $_li['func_name'] == 'main' ? $module_info['custom_title'] : $_li['func_custom_name']
         ];
-        $xtpl->assign('NAVBAR', $li);
-        $xtpl->parse('main.navbar');
     }
+    $tpl->assign('NAVS', $navs);
 
-    $xtpl->parse('main');
-
-    return $xtpl->text('main');
+    return $tpl->fetch('lostpass.tpl');
 }
 
 /**

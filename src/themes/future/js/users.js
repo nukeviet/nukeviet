@@ -500,6 +500,83 @@ $(function() {
         location.reload();
     });
 
+    // Lưu thuộc tính captcha ban đầu của form quên mật khẩu để khôi phục khi quay về bước 1
+    $('form[data-toggle="usersLostPass"]').each(function() {
+        const attrs = {};
+        ['data-captcha', 'data-recaptcha2', 'data-recaptcha3', 'data-turnstile'].forEach(name => {
+            if (this.hasAttribute(name)) {
+                attrs[name] = this.getAttribute(name);
+            }
+        });
+        $(this).data('captcha-attrs', attrs);
+    });
+
+    // Xử lý submit form quên mật khẩu nhiều bước
+    $(document).off('submit.users', '[data-toggle="usersLostPass"]').on('submit.users', '[data-toggle="usersLostPass"]', function(e) {
+        e.preventDefault();
+        const form = $(this);
+        const data = form.serialize();
+        const selTor = 'input,button,select,textarea';
+        $(selTor, form).prop('disabled', true);
+
+        $.ajax({
+            url: form.attr('action'),
+            type: 'POST',
+            data: data,
+            dataType: 'json',
+            cache: false,
+            success: function(response) {
+                const info = $('[data-area="info"]', form);
+                if (response.status == 'ok') {
+                    info.html(`
+                        ${response.mess}
+                        <div class="spinner-border text-success spinner-border-sm" role="status"></div>
+                    `).removeClass('alert-info').addClass('alert-success');
+                    $('[data-area="form"]', form).hide();
+                    setTimeout(() => {
+                        if (response.redirect) {
+                            window.location.href = response.redirect;
+                        } else {
+                            location.reload();
+                        }
+                    }, 6000);
+                    return;
+                }
+
+                $(selTor, form).prop('disabled', false);
+                userLostpassStep(form, response.step, response.info);
+
+                if (response.status == 'error') {
+                    if (response.input) {
+                        const ipt = $('[name="' + response.input + '"]:visible', form);
+                        if (ipt.length > 0) {
+                            nv_validate_show(ipt.first(), response.mess, 'tooltip');
+                            ipt.first().focus();
+                            return;
+                        }
+                    }
+                    nukeviet.toast(response.mess, 'error');
+                    if (response.redirect) {
+                        setTimeout(() => {
+                            window.location.href = response.redirect;
+                        }, 3000);
+                    }
+                    return;
+                }
+
+                // Chuyển sang bước tiếp theo: answer, verify, new_password
+                if (response.input) {
+                    $('[name="' + response.input + '"]', form).val('').focus();
+                }
+            },
+            error: function(xhr, status, error) {
+                console.log(xhr, status, error);
+                $(selTor, form).prop('disabled', false);
+                nukeviet.toast(error || status, 'error');
+            }
+        });
+    });
+
     // Xử lý cho form đăng ký tài khoản
     /**
      * Hiển thị lịch chọn ngày cho một trường
@@ -1027,6 +1104,47 @@ $(function() {
         });
     });
 });
+
+/**
+ * Hiển thị đúng bước của form quên mật khẩu theo phản hồi máy chủ
+ * Bước 1 cần captcha, các bước sau dùng lại mã captcha đã xác thực lưu trong session
+ *
+ * @param {JQuery} form
+ * @param {String} step
+ * @param {String} info
+ */
+function userLostpassStep(form, step, info) {
+    step = step || 'step1';
+    $('[name="step"]', form).val(step);
+    $('[data-step]', form).addClass('d-none');
+    $('[data-step="' + step + '"]', form).removeClass('d-none');
+
+    const infoEl = $('[data-area="info"]', form);
+    infoEl.html(info ? info : infoEl.data('default'));
+
+    const attrs = form.data('captcha-attrs') || {};
+    if (step == 'step1') {
+        // Mã captcha cũ đã bị hủy, khôi phục để lần gửi sau xác thực lại
+        Object.keys(attrs).forEach(name => {
+            form.attr(name, attrs[name]);
+        });
+        formChangeCaptcha(form);
+    } else if (Object.keys(attrs).length > 0) {
+        form.removeAttr(Object.keys(attrs).join(' '));
+    }
+}
+
+/**
+ * Kiểm tra nhập lại mật khẩu mới trùng với mật khẩu mới
+ * Được gọi qua data-valid-callback của form quên mật khẩu
+ *
+ * @param {String} val
+ * @param {JQuery} ipt
+ * @returns {Boolean}
+ */
+function userLostpassRepassCheck(val, ipt) {
+    return val === $('[name="new_password"]', ipt.closest('form')).val();
+}
 
 /**
  * Kiểm tra tên đăng nhập theo kiểu ký tự cho phép, độ dài do minlength/maxlength lo
