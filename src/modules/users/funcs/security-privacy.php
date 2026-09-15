@@ -49,12 +49,12 @@ function _getRow(array $login): array
 }
 
 $array = [];
-$checkss = md5('security_privacy.' . NV_CHECK_SESSION);
+$checkss = csrf_create($csrf_key);
 $array['loadmorelogins'] = (bool) $nv_Request->get_bool('loadmorelogins', 'post', false);
 $array['dellogin'] = (bool) $nv_Request->get_bool('dellogin', 'post', false);
 $array['idlogin'] = $nv_Request->get_absint('idlogin', 'post', 0);
 $array['delloginall'] = (bool) $nv_Request->get_bool('delloginall', 'post', false);
-$array['checkss'] = $nv_Request->get_title('checkss', 'post', '');
+$array['checkss'] = $nv_Request->get_string('checkss', 'post', '');
 $array['page'] = $nv_Request->get_page('page', 'get,post', 1);
 $array['checkss_auto'] = false;
 $array['auto_toast'] = '';
@@ -68,7 +68,7 @@ $pending_action = $pending_action ? json_decode($pending_action, true) : [];
 if (
     $confirm_pwd and is_array($pending_action) and ($pending_action['module'] ?? '') == $module_name and
     ($pending_action['area'] ?? '') == 'security_privacy' and isset($pending_action['time']) and
-    (NV_CURRENTTIME - $pending_action['time'] < 1800) and hash_equals($checkss, $pending_action['checkss'] ?? '')
+    (NV_CURRENTTIME - $pending_action['time'] < 1800) and csrf_check((string) ($pending_action['checkss'] ?? ''), $csrf_key)
 ) {
     if (!empty($pending_action['delloginall'])) {
         $array['delloginall'] = 1;
@@ -86,10 +86,10 @@ if (
 }
 
 // Kiểm tra CSRF
-if (($array['loadmorelogins'] or $array['dellogin'] or $array['delloginall']) and !$array['checkss_auto'] and !hash_equals($checkss, $array['checkss'])) {
+if (($array['loadmorelogins'] or $array['dellogin'] or $array['delloginall']) and !$array['checkss_auto'] and !csrf_check($array['checkss'], $csrf_key)) {
     nv_jsonOutput([
         'status' => 'error',
-        'mess' => 'Wrong session!!!'
+        'mess' => $nv_Lang->getGlobal('error_checkss')
     ]);
 }
 // Kiểm tra xác nhận mật khẩu
@@ -98,7 +98,7 @@ if (($array['dellogin'] or $array['delloginall']) and !$confirm_pwd) {
         'module' => $module_name,
         'area' => 'security_privacy',
         'time' => NV_CURRENTTIME,
-        'checkss' => $checkss,
+        'checkss' => $array['checkss'],
         'dellogin' => $array['dellogin'],
         'idlogin' => $array['idlogin'],
         'delloginall' => $array['delloginall'],

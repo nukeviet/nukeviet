@@ -1736,83 +1736,28 @@ function user_data_deletion(array $data): string
  */
 function user_security_privacy(array $array, array $array_logins): string
 {
-    global $checkss, $limit;
+    global $checkss, $limit, $module_name, $nv_Lang;
 
-    $xtpl = new XTemplate('security_privacy.tpl', get_module_tpl_dir('security_privacy.tpl'));
-    $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
-    $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
-    $xtpl->assign('CHECKSS', $checkss);
-    $xtpl->assign('DATA', $array);
+    $tpl = new \NukeViet\Template\NVSmarty();
+    $tpl->setTemplateDir(get_module_tpl_dir('security_privacy.tpl'));
 
-    $browser_icons = [
-        'opera' => 'fa-opera',
-        'operamini' => 'fa-opera',
-        'explorer' => 'fa-internet-explorer',
-        'edge' => 'fa-edge',
-        'firefox' => 'fa-firefox',
-        'mozilla' => 'fa-firefox',
-        'safari' => 'fa-safari',
-        'iphone' => 'fa-safari',
-        'ipod' => 'fa-safari',
-        'ipad' => 'fa-safari',
-        'chrome' => 'fa-chrome',
-        'android' => 'fa-android'
-    ];
-    $os_icons = [
-        'win' => 'fa-windows',
-        'apple' => 'fa-apple',
-        'linux' => 'fa-linux',
-        'android' => 'fa-android'
-    ];
+    $tpl->assign('LANG', $nv_Lang);
+    $tpl->assign('MODULE_NAME', $module_name);
+    // Phần tử thứ $limit chỉ dùng để xác định còn phiên đăng nhập để tải thêm
+    $tpl->assign('LOGINS', array_slice($array_logins, 0, max(0, $limit - 1)));
 
-    if (empty($array_logins)) {
-        $xtpl->parse('main.no_logins');
-    } else {
-        $stt = 0;
-        $next_id = 0;
-        foreach ($array_logins as $login) {
-            if (++$stt >= $limit) {
-                $next_id = $login['id'];
-                break;
-            }
-
-            $login['icon_browser'] = $browser_icons[$login['browser_key']] ?? 'fa-globe';
-            $login['icon_os'] = $os_icons[$login['os_family']] ?? 'fa-server';
-
-            $xtpl->assign('LOGIN', $login);
-
-            if ($login['is_current']) {
-                $xtpl->parse('main.has_logins.ctn_loop.loop.current1');
-                $xtpl->parse('main.has_logins.ctn_loop.loop.current2');
-            } else {
-                $xtpl->parse('main.has_logins.ctn_loop.loop.logout');
-            }
-            if ($login['is_admin']) {
-                $xtpl->parse('main.has_logins.ctn_loop.loop.is_admin');
-            }
-
-            $xtpl->parse('main.has_logins.ctn_loop.loop');
-        }
-
-        $xtpl->parse('main.has_logins.ctn_loop');
-        if ($array['loadmorelogins']) {
-            return $xtpl->text('main.has_logins.ctn_loop');
-        }
-
-        $xtpl->assign('NEXT_OFFSET', $next_id);
-
-        if (count($array_logins) > ($limit - 1)) {
-            $xtpl->parse('main.has_logins.more');
-        }
-        if (count($array_logins) > 1) {
-            $xtpl->parse('main.has_logins.logout_all');
-        }
-
-        $xtpl->parse('main.has_logins');
+    // Tải thêm phiên đăng nhập chỉ trả về danh sách
+    if ($array['loadmorelogins']) {
+        return $tpl->fetch('security_privacy_logins.tpl');
     }
 
-    $xtpl->parse('main');
-    return $xtpl->text('main');
+    $tpl->assign('CHECKSS', $checkss);
+    $tpl->assign('DATA', $array);
+    $tpl->assign('NEXT_OFFSET', $array_logins[$limit - 1]['id'] ?? 0);
+    $tpl->assign('HAS_MORE', count($array_logins) > ($limit - 1));
+    $tpl->assign('HAS_LOGOUT_ALL', count($array_logins) > 1);
+
+    return $tpl->fetch('security_privacy.tpl');
 }
 
 /**

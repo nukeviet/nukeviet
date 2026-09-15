@@ -1103,6 +1103,142 @@ $(function() {
             }
         });
     });
+
+    /**
+     * Địa chỉ xử lý ajax của trang bảo mật và quyền riêng tư
+     * Trang chỉ có tại module users nên nv_module_name, nv_func_name luôn đúng
+     */
+    const privacyUrl = () => nv_base_siteurl + 'index.php?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=' + nv_func_name + '&nocache=' + new Date().getTime();
+
+    /**
+     * Gửi thao tác đăng xuất phiên đăng nhập, chuyển sang trang xác nhận mật khẩu nếu cần
+     *
+     * @param {JQuery} btn
+     * @param {Object} postData
+     */
+    const privacyLogoutAction = (btn, postData) => {
+        const icon = $('i', btn);
+        if (icon.is('.fa-spinner')) {
+            return;
+        }
+
+        nukeviet.confirm(nukeviet.i18n.confirmAction, () => {
+            const orig = icon.data('icon');
+            icon.removeClass(orig).addClass('fa-spinner fa-spin-pulse');
+            $.ajax({
+                url: privacyUrl(),
+                type: 'POST',
+                data: postData,
+                dataType: 'json',
+                cache: false,
+                success: function(res) {
+                    if (res.status == 'not_verified') {
+                        window.location.href = res.redirect;
+                        return;
+                    }
+                    if (res.status != 'ok') {
+                        icon.removeClass('fa-spinner fa-spin-pulse').addClass(orig);
+                        return nukeviet.toast(res.mess, 'error');
+                    }
+                    nukeviet.toast(res.mess, 'success');
+                    setTimeout(() => {
+                        res.redirect ? window.location.href = res.redirect : location.reload();
+                    }, 2000);
+                },
+                error: function(xhr, text, err) {
+                    icon.removeClass('fa-spinner fa-spin-pulse').addClass(orig);
+                    nukeviet.toast(err || text, 'error');
+                    console.log(xhr, text, err);
+                }
+            });
+        });
+    };
+
+    // Thông báo kết quả thao tác được thực hiện tự động sau khi xác nhận mật khẩu
+    $('[data-area="usersSecurityPrivacy"]').each(function() {
+        if ($(this).data('event-inited')) {
+            return;
+        }
+        $(this).data('event-inited', true);
+
+        const autoToast = $(this).data('auto-toast');
+        if (autoToast) {
+            nukeviet.toast(autoToast, 'success');
+        }
+    });
+
+    // Tải thêm phiên đăng nhập
+    $(document).off('click.users', '[data-toggle="usersLoginMore"]').on('click.users', '[data-toggle="usersLoginMore"]', function(e) {
+        e.preventDefault();
+
+        const btn = $(this);
+        const icon = $('i', btn);
+        const page = btn.closest('[data-area="usersSecurityPrivacy"]');
+        if (icon.is('.fa-spinner')) {
+            return;
+        }
+
+        const orig = icon.data('icon');
+        icon.removeClass(orig).addClass('fa-spinner fa-spin-pulse');
+        page.data('page', (parseInt(page.data('page'), 10) || 1) + 1);
+        $.ajax({
+            url: privacyUrl(),
+            type: 'POST',
+            data: {
+                checkss: page.data('checkss'),
+                loadmorelogins: 1,
+                login_offset: page.data('next-offset'),
+                page: page.data('page')
+            },
+            dataType: 'json',
+            cache: false,
+            success: function(res) {
+                icon.removeClass('fa-spinner fa-spin-pulse').addClass(orig);
+                if (res.status != 'ok') {
+                    return nukeviet.toast(res.mess, 'error');
+                }
+
+                $('[data-area="loginsCtn"]', page).append(res.contents);
+                if (res.more) {
+                    page.data('next-offset', res.next_offset);
+                } else {
+                    $('[data-area="loginMoreCtn"]', page).remove();
+                    page.data('next-offset', 0);
+                }
+            },
+            error: function(xhr, text, err) {
+                icon.removeClass('fa-spinner fa-spin-pulse').addClass(orig);
+                nukeviet.toast(err || text, 'error');
+                console.log(xhr, text, err);
+            }
+        });
+    });
+
+    // Đăng xuất khỏi một phiên đăng nhập
+    $(document).off('click.users', '[data-toggle="usersLoginRemove"]').on('click.users', '[data-toggle="usersLoginRemove"]', function(e) {
+        e.preventDefault();
+
+        const btn = $(this);
+        const page = btn.closest('[data-area="usersSecurityPrivacy"]');
+        privacyLogoutAction(btn, {
+            checkss: page.data('checkss'),
+            dellogin: 1,
+            idlogin: btn.data('idlogin'),
+            page: page.data('page')
+        });
+    });
+
+    // Đăng xuất khỏi tất cả các phiên khác
+    $(document).off('click.users', '[data-toggle="usersLoginRemoveAll"]').on('click.users', '[data-toggle="usersLoginRemoveAll"]', function(e) {
+        e.preventDefault();
+
+        const btn = $(this);
+        const page = btn.closest('[data-area="usersSecurityPrivacy"]');
+        privacyLogoutAction(btn, {
+            checkss: page.data('checkss'),
+            delloginall: 1
+        });
+    });
 });
 
 /**
