@@ -1555,30 +1555,6 @@ function nv_memberslist_detail_theme($item, $array_field_config, $custom_fields,
 }
 
 /**
- * user_info_exit_redirect()
- *
- * @param mixed  $info
- * @param string $nv_redirect
- */
-function user_info_exit_redirect($info, $nv_redirect)
-{
-    global $module_info;
-
-    $xtpl = new XTemplate('info_exit_redirect.tpl', get_module_tpl_dir('info_exit_redirect.tpl'));
-    $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
-    $xtpl->assign('INFO', $info);
-    $xtpl->assign('NV_REDIRECT', $nv_redirect);
-
-    $xtpl->parse('main');
-
-    $contents = $xtpl->text('main');
-
-    include NV_ROOTDIR . '/includes/header.php';
-    echo nv_site_theme($contents);
-    include NV_ROOTDIR . '/includes/footer.php';
-}
-
-/**
  * Giao diện trang đổi ảnh đại diện
  *
  * @param array $array
