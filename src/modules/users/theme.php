@@ -1681,19 +1681,17 @@ function theme_changePass($pass_timeout, $pass_empty, $checkss)
  */
 function user_r2s($data, $page_url)
 {
-    $xtpl = new XTemplate('r2s.tpl', get_module_tpl_dir('r2s.tpl'));
-    $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
-    $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
-    $xtpl->assign('FORM_ACTION', $page_url);
-    $xtpl->assign('DATA', $data);
+    global $module_name, $nv_Lang;
 
-    if (!empty($data['question'])) {
-        $xtpl->parse('main.sec_question');
-    }
+    $tpl = new \NukeViet\Template\NVSmarty();
+    $tpl->setTemplateDir(get_module_tpl_dir('r2s.tpl'));
 
-    $xtpl->parse('main');
+    $tpl->assign('LANG', $nv_Lang);
+    $tpl->assign('MODULE_NAME', $module_name);
+    $tpl->assign('FORM_ACTION', $page_url);
+    $tpl->assign('DATA', $data);
 
-    return $xtpl->text('main');
+    return $tpl->fetch('r2s.tpl');
 }
 
 /**

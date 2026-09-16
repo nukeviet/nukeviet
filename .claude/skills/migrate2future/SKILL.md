@@ -190,7 +190,20 @@ function ten_ham_cu($param1, $param2, ...)  // <-- GIỮ NGUYÊN chữ ký hàm
 }
 ```
 
-Lưu ý: collect array rồi assign một lần — không `parse()` từng item. Tất cả biến assign cần có giá trị mặc định.
+Lưu ý: collect array rồi assign một lần — không `parse()` từng item.
+
+**Giá trị mặc định - chỉ thêm khi nguồn dữ liệu thật sự có thể thiếu key.** Trước khi bọc một mảng bằng `array_merge([...defaults], $data)`, đọc lại controller xem mảng đó được dựng thế nào:
+
+- Controller gán key vô điều kiện (`$data['checkss'] = ...;` chạy mọi lần) → key luôn tồn tại, **không thêm mặc định**. Bọc thêm chỉ là code chết và che mất lỗi thật nếu sau này controller quên gán.
+- Key chỉ gán trong một nhánh `if`, hoặc mảng là row lấy thẳng từ CSDL / hàm ngoài → mới cần mặc định.
+
+```php
+// Controller: $data['checkss'] và $data['question'] đều gán vô điều kiện
+// Sai - mặc định thừa:
+$tpl->assign('DATA', array_merge(['checkss' => '', 'question' => ''], $data));
+// Đúng:
+$tpl->assign('DATA', $data);
+```
 
 **Nguyên tắc assign mảng — không assign từng phần tử rời:**
 
@@ -251,7 +264,7 @@ Báo cáo:
 - [ ] Collect array, không parse từng item
 - [ ] Assign đủ: `LANG` (dùng `$nv_Lang`), `MODULE_NAME`
 - [ ] Assign nguyên mảng thay vì từng phần tử rời: `$module_config[$module_name]` → `MCONFIG`, `$global_config` → `GCONFIG`
-- [ ] Tất cả biến assign có giá trị mặc định (tránh undefined key)
+- [ ] Biến assign chỉ thêm giá trị mặc định khi controller thật sự có thể không gán key đó - đã đọc controller để xác nhận, không bọc `array_merge` theo phản xạ
 - [ ] Không tạo chuỗi `checked="checked"` / `selected="selected"` từ PHP
 - [ ] `PDOException` đã đổi thành `Throwable` (nếu có)
 - [ ] `nv_date()` đã đổi thành `nv_datetime_format()` / `nv_date_format()` (nếu có)

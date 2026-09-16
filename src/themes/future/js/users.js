@@ -577,6 +577,66 @@ $(function() {
         });
     });
 
+    // Xử lý submit form tắt xác thực 2 bước
+    $(document).off('submit.users', '[data-toggle="usersR2s"]').on('submit.users', '[data-toggle="usersR2s"]', function(e) {
+        e.preventDefault();
+        const form = $(this);
+        const data = form.serialize();
+        const selTor = 'input,button,select,textarea';
+        const info = $('[data-area="info"]', form);
+        $(selTor, form).prop('disabled', true);
+
+        $.ajax({
+            url: form.attr('action'),
+            type: 'POST',
+            data: data,
+            dataType: 'json',
+            cache: false,
+            success: function(response) {
+                // Xử lý xong hoặc phiên làm việc kết thúc: báo kết quả rồi chuyển trang
+                if (response.status == 'OK' || response.status == 'failed' || (response.status == 'error' && response.redirect)) {
+                    const success = (response.status == 'OK');
+                    info.html(`
+                        ${response.mess}
+                        <div class="spinner-border spinner-border-sm ${success ? 'text-success' : 'text-danger'}" role="status"></div>
+                    `).removeClass('alert-info alert-success alert-danger').addClass(success ? 'alert-success' : 'alert-danger');
+                    $('[data-area="form"]', form).hide();
+                    setTimeout(() => {
+                        window.location.href = response.redirect;
+                    }, 5000);
+                    return;
+                }
+
+                $(selTor, form).prop('disabled', false);
+
+                // Mã xác minh đã gửi qua email, chuyển sang bước nhập mã
+                if (response.status == 'step2') {
+                    $('[name="email_sent"]', form).val(1);
+                    $('[data-step="step1"]', form).addClass('d-none');
+                    $('[data-step="step2"]', form).removeClass('d-none');
+                    info.html(response.mess).removeClass('alert-success alert-danger').addClass('alert-info');
+                    $('[name="verifykey"]', form).focus();
+                    return;
+                }
+
+                if (response.input) {
+                    const ipt = $('[name="' + response.input + '"]:visible', form);
+                    if (ipt.length > 0) {
+                        nv_validate_show(ipt.first(), response.mess, 'tooltip');
+                        ipt.first().focus();
+                        return;
+                    }
+                }
+                nukeviet.toast(response.mess, 'error');
+            },
+            error: function(xhr, status, error) {
+                console.log(xhr, status, error);
+                $(selTor, form).prop('disabled', false);
+                nukeviet.toast(error || status, 'error');
+            }
+        });
+    });
+
     // Xử lý cho form đăng ký tài khoản
     /**
      * Hiển thị lịch chọn ngày cho một trường
