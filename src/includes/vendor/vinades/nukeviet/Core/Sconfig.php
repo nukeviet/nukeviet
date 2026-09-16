@@ -951,7 +951,7 @@ class Sconfig
                     } elseif ($key == 'include_exec_files') {
                         $start = 'RewriteCond %{REQUEST_URI} ^/';
                         $exec_files = self::contentsImplode($this->server_configs['exec_files']);
-                        $end = "/.*\.(" . $exec_files . ')($|\?|\/)';
+                        $end = "/.*\.(" . $exec_files . ')($|\?|\/|\.)';
                     }
                     if (!empty($start)) {
                         if ($key == 'include_dirs' and $this->admin_rewrite) {
