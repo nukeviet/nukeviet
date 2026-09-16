@@ -89,29 +89,39 @@ if ($nv_Request->isset_request('nv_redirect', 'post,get')) {
 $array_gfx_chk = !empty($global_config['captcha_area']) ? explode(',', $global_config['captcha_area']) : [];
 $gfx_chk = (!empty($array_gfx_chk) and in_array('p', $array_gfx_chk, true)) ? 1 : 0;
 
-$data = [];
-$data['checkss'] = md5(NV_CHECK_SESSION . '_' . $module_name . '_' . $op);
-$checkss = $nv_Request->get_title('checkss', 'post', '');
+if ($nv_Request->isset_request('checkss', 'post')) {
+    if (!csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
+        nv_jsonOutput([
+            'status' => 'error',
+            'input' => '',
+            'step' => 'step1',
+            'mess' => $nv_Lang->getGlobal('error_checkss')
+        ]);
+    }
 
-if ($checkss == $data['checkss']) {
+    $data = [];
     $data['step'] = $nv_Request->get_title('step', 'post', '');
     if ($data['step'] != 'step2' and $data['step'] != 'step3' and $data['step'] != 'step4') {
         $data['step'] = 'step1';
     }
 
-    $seccode = $nv_Request->get_string('lostpass_seccode', 'session', '');
+    // Session lưu md5(mã captcha đã tin cậy)|userid, chỉ dùng lại được cho đúng tài khoản đó
+    [$seccode, $seccode_userid] = array_pad(explode('|', $nv_Request->get_string('lostpass_seccode', 'session', ''), 2), 2, '');
 
     if ($module_captcha == 'recaptcha') {
-        $data['nv_seccode'] = $nv_Request->get_title('gcaptcha_session', 'post', '');
+        $data['nv_seccode'] = $nv_Request->get_title('g-recaptcha-response', 'post', '');
     } elseif ($module_captcha == 'turnstile') {
         $data['nv_seccode'] = $nv_Request->get_title('cf-turnstile-response', 'post', '');
     } elseif ($module_captcha == 'captcha') {
         $data['nv_seccode'] = $nv_Request->get_title('nv_seccode', 'post', '');
     }
 
+    $captcha_mess = ($module_captcha == 'recaptcha') ? $nv_Lang->getGlobal('securitycodeincorrect1') : (($module_captcha == 'turnstile') ? $nv_Lang->getGlobal('securitycodeincorrect2') : $nv_Lang->getGlobal('securitycodeincorrect'));
     $check_seccode = true;
-    if ($gfx_chk and ($module_captcha == 'captcha' or $module_captcha == 'recaptcha')) {
-        $check_seccode = ((!empty($seccode) and md5($data['nv_seccode']) == $seccode) or nv_capcha_txt($data['nv_seccode'], $module_captcha));
+    $captcha_reused = false;
+    if ($gfx_chk and isset($data['nv_seccode'])) {
+        $captcha_reused = (!empty($seccode) and hash_equals($seccode, md5($data['nv_seccode'])));
+        $check_seccode = ($captcha_reused or nv_capcha_txt($data['nv_seccode'], $module_captcha));
     }
 
     if (!$check_seccode) {
@@ -120,7 +130,7 @@ if ($checkss == $data['checkss']) {
             'status' => 'error',
             'input' => '',
             'step' => 'step1',
-            'mess' => ($module_captcha == 'recaptcha') ? $nv_Lang->getGlobal('securitycodeincorrect1') : (($module_captcha == 'turnstile') ? $nv_Lang->getGlobal('securitycodeincorrect2') : $nv_Lang->getGlobal('securitycodeincorrect'))
+            'mess' => $captcha_mess
         ]);
     }
 
@@ -154,6 +164,17 @@ if ($checkss == $data['checkss']) {
             'input' => 'userField',
             'step' => 'step1',
             'mess' => $nv_Lang->getModule('lostpass_no_info2')
+        ]);
+    }
+
+    // Mã captcha tin cậy ở bước 1 không được dùng cho tài khoản khác
+    if ($captcha_reused and $seccode_userid !== (string) $row['userid']) {
+        $nv_Request->set_Session('lostpass_seccode', '');
+        nv_jsonOutput([
+            'status' => 'error',
+            'input' => '',
+            'step' => 'step1',
+            'mess' => $captcha_mess
         ]);
     }
 
@@ -192,7 +213,9 @@ if ($checkss == $data['checkss']) {
     }
 
     if (isset($data['nv_seccode'])) {
-        $nv_Request->set_Session('lostpass_seccode', md5($data['nv_seccode']));
+        $nv_Request->set_Session('lostpass_seccode', md5($data['nv_seccode']) . '|' . $row['userid']);
+        // Captcha vừa xác thực mới thì đếm lại số lần trả lời sai từ đầu
+        !$captcha_reused && $nv_Request->set_Session('lostpass_answer_failed', 0);
     }
 
     if ($data['step'] == 'step1') {
@@ -218,7 +241,23 @@ if ($checkss == $data['checkss']) {
 
     if ($global_config['allowquestion']) {
         $data['answer'] = $nv_Request->get_title('answer', 'post', '');
-        if ($data['answer'] != $row['answer']) {
+        if (!hash_equals((string) $row['answer'], $data['answer'])) {
+            // Có captcha thì sai đủ 5 lần phải xác thực lại từ bước 1
+            if ($gfx_chk and isset($data['nv_seccode'])) {
+                $answer_failed = $nv_Request->get_int('lostpass_answer_failed', 'session', 0) + 1;
+                if ($answer_failed >= 5) {
+                    $nv_Request->set_Session('lostpass_seccode', '');
+                    $nv_Request->set_Session('lostpass_answer_failed', 0);
+                    nv_jsonOutput([
+                        'status' => 'error',
+                        'input' => '',
+                        'step' => 'step1',
+                        'info' => $nv_Lang->getModule('lostpass_info1'),
+                        'mess' => $nv_Lang->getModule('answer_failed')
+                    ]);
+                }
+                $nv_Request->set_Session('lostpass_answer_failed', $answer_failed);
+            }
             nv_jsonOutput([
                 'status' => 'error',
                 'input' => 'answer',
@@ -359,7 +398,9 @@ $key_words = $module_info['keywords'];
 
 $canonicalUrl = getCanonicalUrl($page_url);
 
-$contents = user_lostpass($data);
+$contents = user_lostpass([
+    'checkss' => csrf_create($csrf_key)
+]);
 
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_site_theme($contents);

@@ -905,7 +905,7 @@ if (count($array_op) == 2 and $array_op[0] == 'groups' and $array_op[1]) {
     $group_data['exp'] = !empty($group_data['exp_time']) ? nv_date_format(1, $group_data['exp_time']) : $nv_Lang->getModule('group_exp_unlimited');
     $group_data['group_avatar'] = !empty($group_data['group_avatar']) ? NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $group_data['group_avatar'] : NV_BASE_SITEURL . NV_ASSETS_DIR . '/images/user-group.jpg';
     $group_data['group_type_mess'] = $nv_Lang->getModule('group_type_' . $group_data['group_type']);
-    $group_data['group_type_note'] = !empty($nv_Lang->getModule('group_type_' . $group_data['group_type'] . '_note')) ? $nv_Lang->getModule('group_type_' . $group_data['group_type'] . '_note') : '';
+    $group_data['group_type_note'] = $nv_Lang->existsModule('group_type_' . $group_data['group_type'] . '_note') ? $nv_Lang->getModule('group_type_' . $group_data['group_type'] . '_note') : '';
     $group_data['in_idsite'] = ($global_config['idsite'] == $group_data['idsite']) ? 0 : $global_config['idsite'];
     $group_data['viewuser_allowed'] = nv_user_in_groups($global_config['whoviewuser']);
     $group_data['link_types'] = [];

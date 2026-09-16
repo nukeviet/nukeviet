@@ -419,14 +419,16 @@ function user_openid_login($attribs, $op_process)
  */
 function user_lostpass($data)
 {
-    global $module_info, $global_config, $nv_Lang, $module_name, $module_captcha, $op, $nv_redirect;
+    global $module_info, $global_config, $nv_Lang, $module_name, $op, $nv_redirect;
 
-    $xtpl = new XTemplate('lostpass.tpl', get_module_tpl_dir('lostpass.tpl'));
+    $tpl = new \NukeViet\Template\NVSmarty();
+    $tpl->setTemplateDir(get_module_tpl_dir('lostpass.tpl'));
 
-    $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
-    $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
-    $xtpl->assign('DATA', $data);
-    $xtpl->assign('FORM_ACTION', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=lostpass');
+    $tpl->assign('LANG', $nv_Lang);
+    $tpl->assign('MODULE_NAME', $module_name);
+    $tpl->assign('GCONFIG', $global_config);
+    $tpl->assign('DATA', array_merge(['checkss' => ''], $data));
+    $tpl->assign('NV_REDIRECT', $nv_redirect);
 
     $password_rule = empty($global_config['nv_upass_type']) ? $nv_Lang->getGlobal('password_rule_nolimit', $global_config['nv_upassmin'], $global_config['nv_upassmax']) : $nv_Lang->getGlobal('password_rule_limit', $nv_Lang->getGlobal('upass_type_' . $global_config['nv_upass_type']), $global_config['nv_upassmin'], $global_config['nv_upassmax']);
     $password_pattern = '/^';
@@ -441,37 +443,18 @@ function user_lostpass($data)
     }
     $password_pattern .= '(.){' . $global_config['nv_upassmin'] . ',' . $global_config['nv_upassmax'] . '}$/';
 
-    $xtpl->assign('PASSWORD_PATTERN', $password_pattern);
-    $xtpl->assign('PASSWORD_RULE', $password_rule);
-    $xtpl->assign('PASS_MAXLENGTH', $global_config['nv_upassmax']);
+    $tpl->assign('PASSWORD_PATTERN', $password_pattern);
+    $tpl->assign('PASSWORD_RULE', $password_rule);
 
+    // Thuộc tính captcha gắn lên form
     $array_gfx_chk = !empty($global_config['captcha_area']) ? explode(',', $global_config['captcha_area']) : [];
+    $gfx_chk = (!empty($array_gfx_chk) and in_array('p', $array_gfx_chk, true)) ? 1 : 0;
+    $tpl->assign('CAPTCHA_ATTRS', $gfx_chk ? nv_captcha_form_attrs('nv_seccode') : '');
 
-    if (!empty($array_gfx_chk) and in_array('p', $array_gfx_chk, true)) {
-        // Nếu dùng reCaptcha v3
-        if ($module_captcha == 'recaptcha' and $global_config['recaptcha_ver'] == 3) {
-            $xtpl->parse('main.recaptcha3');
-        }
-        // Nếu dùng reCaptcha v2
-        elseif ($module_captcha == 'recaptcha' and $global_config['recaptcha_ver'] == 2) {
-            $xtpl->assign('RECAPTCHA_ELEMENT', 'recaptcha' . nv_genpass(8));
-            $xtpl->assign('N_CAPTCHA', $nv_Lang->getGlobal('securitycode1'));
-            $xtpl->parse('main.recaptcha');
-        } elseif ($module_captcha == 'turnstile') {
-            $xtpl->parse('main.turnstile');
-        } elseif ($module_captcha == 'captcha') {
-            $xtpl->assign('N_CAPTCHA', $nv_Lang->getGlobal('securitycode'));
-            $xtpl->parse('main.captcha');
-        }
-    }
-
-    if (!empty($nv_redirect)) {
-        $xtpl->assign('REDIRECT', $nv_redirect);
-        $xtpl->parse('main.redirect');
-    }
-
+    // Các liên kết chức năng khác cuối form
     $_lis = \NukeViet\Module\users\Shared\Navs::getNavs($module_info['funcs']);
     $_alias = $module_info['alias'];
+    $navs = [];
     foreach ($_lis as $_li) {
         if ($_li['func_name'] == $op) {
             continue;
@@ -481,17 +464,14 @@ function user_lostpass($data)
         if (!empty($nv_redirect)) {
             $href .= '&nv_redirect=' . $nv_redirect;
         }
-        $li = [
+        $navs[] = [
             'href' => $href,
             'title' => $_li['func_name'] == 'main' ? $module_info['custom_title'] : $_li['func_custom_name']
         ];
-        $xtpl->assign('NAVBAR', $li);
-        $xtpl->parse('main.navbar');
     }
+    $tpl->assign('NAVS', $navs);
 
-    $xtpl->parse('main');
-
-    return $xtpl->text('main');
+    return $tpl->fetch('lostpass.tpl');
 }
 
 /**
@@ -1575,30 +1555,6 @@ function nv_memberslist_detail_theme($item, $array_field_config, $custom_fields,
 }
 
 /**
- * user_info_exit_redirect()
- *
- * @param mixed  $info
- * @param string $nv_redirect
- */
-function user_info_exit_redirect($info, $nv_redirect)
-{
-    global $module_info;
-
-    $xtpl = new XTemplate('info_exit_redirect.tpl', get_module_tpl_dir('info_exit_redirect.tpl'));
-    $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
-    $xtpl->assign('INFO', $info);
-    $xtpl->assign('NV_REDIRECT', $nv_redirect);
-
-    $xtpl->parse('main');
-
-    $contents = $xtpl->text('main');
-
-    include NV_ROOTDIR . '/includes/header.php';
-    echo nv_site_theme($contents);
-    include NV_ROOTDIR . '/includes/footer.php';
-}
-
-/**
  * Giao diện trang đổi ảnh đại diện
  *
  * @param array $array
@@ -1780,83 +1736,28 @@ function user_data_deletion(array $data): string
  */
 function user_security_privacy(array $array, array $array_logins): string
 {
-    global $checkss, $limit;
+    global $checkss, $limit, $module_name, $nv_Lang;
 
-    $xtpl = new XTemplate('security_privacy.tpl', get_module_tpl_dir('security_privacy.tpl'));
-    $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
-    $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
-    $xtpl->assign('CHECKSS', $checkss);
-    $xtpl->assign('DATA', $array);
+    $tpl = new \NukeViet\Template\NVSmarty();
+    $tpl->setTemplateDir(get_module_tpl_dir('security_privacy.tpl'));
 
-    $browser_icons = [
-        'opera' => 'fa-opera',
-        'operamini' => 'fa-opera',
-        'explorer' => 'fa-internet-explorer',
-        'edge' => 'fa-edge',
-        'firefox' => 'fa-firefox',
-        'mozilla' => 'fa-firefox',
-        'safari' => 'fa-safari',
-        'iphone' => 'fa-safari',
-        'ipod' => 'fa-safari',
-        'ipad' => 'fa-safari',
-        'chrome' => 'fa-chrome',
-        'android' => 'fa-android'
-    ];
-    $os_icons = [
-        'win' => 'fa-windows',
-        'apple' => 'fa-apple',
-        'linux' => 'fa-linux',
-        'android' => 'fa-android'
-    ];
+    $tpl->assign('LANG', $nv_Lang);
+    $tpl->assign('MODULE_NAME', $module_name);
+    // Phần tử thứ $limit chỉ dùng để xác định còn phiên đăng nhập để tải thêm
+    $tpl->assign('LOGINS', array_slice($array_logins, 0, max(0, $limit - 1)));
 
-    if (empty($array_logins)) {
-        $xtpl->parse('main.no_logins');
-    } else {
-        $stt = 0;
-        $next_id = 0;
-        foreach ($array_logins as $login) {
-            if (++$stt >= $limit) {
-                $next_id = $login['id'];
-                break;
-            }
-
-            $login['icon_browser'] = $browser_icons[$login['browser_key']] ?? 'fa-globe';
-            $login['icon_os'] = $os_icons[$login['os_family']] ?? 'fa-server';
-
-            $xtpl->assign('LOGIN', $login);
-
-            if ($login['is_current']) {
-                $xtpl->parse('main.has_logins.ctn_loop.loop.current1');
-                $xtpl->parse('main.has_logins.ctn_loop.loop.current2');
-            } else {
-                $xtpl->parse('main.has_logins.ctn_loop.loop.logout');
-            }
-            if ($login['is_admin']) {
-                $xtpl->parse('main.has_logins.ctn_loop.loop.is_admin');
-            }
-
-            $xtpl->parse('main.has_logins.ctn_loop.loop');
-        }
-
-        $xtpl->parse('main.has_logins.ctn_loop');
-        if ($array['loadmorelogins']) {
-            return $xtpl->text('main.has_logins.ctn_loop');
-        }
-
-        $xtpl->assign('NEXT_OFFSET', $next_id);
-
-        if (count($array_logins) > ($limit - 1)) {
-            $xtpl->parse('main.has_logins.more');
-        }
-        if (count($array_logins) > 1) {
-            $xtpl->parse('main.has_logins.logout_all');
-        }
-
-        $xtpl->parse('main.has_logins');
+    // Tải thêm phiên đăng nhập chỉ trả về danh sách
+    if ($array['loadmorelogins']) {
+        return $tpl->fetch('security_privacy_logins.tpl');
     }
 
-    $xtpl->parse('main');
-    return $xtpl->text('main');
+    $tpl->assign('CHECKSS', $checkss);
+    $tpl->assign('DATA', $array);
+    $tpl->assign('NEXT_OFFSET', $array_logins[$limit - 1]['id'] ?? 0);
+    $tpl->assign('HAS_MORE', count($array_logins) > ($limit - 1));
+    $tpl->assign('HAS_LOGOUT_ALL', count($array_logins) > 1);
+
+    return $tpl->fetch('security_privacy.tpl');
 }
 
 /**
@@ -1867,31 +1768,20 @@ function user_security_privacy(array $array, array $array_logins): string
  */
 function user_verify_password(array $array): string
 {
-    global $module_captcha, $checkss, $global_config;
+    global $checkss, $module_name, $nv_Lang;
 
-    $xtpl = new XTemplate('verify_password.tpl', get_module_tpl_dir('verify_password.tpl'));
-    $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
-    $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
-    $xtpl->assign('CHECKSS', $checkss);
+    $tpl = new \NukeViet\Template\NVSmarty();
+    $tpl->setTemplateDir(get_module_tpl_dir('verify_password.tpl'));
 
-    $xtpl->assign('DATA', $array);
+    $tpl->assign('LANG', $nv_Lang);
+    $tpl->assign('MODULE_NAME', $module_name);
+    $tpl->assign('CHECKSS', $checkss);
+    $tpl->assign('DATA', $array);
 
-    if ($module_captcha == 'recaptcha' and $global_config['recaptcha_ver'] == 3) {
-        // Nếu dùng reCaptcha v3
-        $xtpl->parse('main.recaptcha3');
-    } elseif ($module_captcha == 'recaptcha' and $global_config['recaptcha_ver'] == 2) {
-        // Nếu dùng reCaptcha v2
-        $xtpl->parse('main.recaptcha');
-    } elseif ($module_captcha == 'turnstile') {
-        // Nếu dùng Turnstile
-        $xtpl->parse('main.turnstile');
-    } elseif ($module_captcha == 'captcha') {
-        // Captcha mặc định
-        $xtpl->parse('main.captcha');
-    }
+    // Thuộc tính captcha gắn lên form
+    $tpl->assign('CAPTCHA_ATTRS', nv_captcha_form_attrs('nv_seccode'));
 
-    $xtpl->parse('main');
-    return $xtpl->text('main');
+    return $tpl->fetch('verify_password.tpl');
 }
 
 /**
@@ -2002,49 +1892,50 @@ function user_pending_deletion(array $array): string
  */
 function user_groups(array $groupsList): string
 {
-    global $global_config, $op, $module_name, $module_info, $nv_Lang;
+    global $global_config, $op, $module_name, $module_info, $nv_Lang, $nv_redirect;
 
-    $xtpl = new XTemplate('groups.tpl', get_module_tpl_dir('groups.tpl'));
-    $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
-    $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
-    $xtpl->assign('TEMPLATE', $global_config['module_theme']);
-    $xtpl->assign('MODULE_URL', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE);
-    $xtpl->assign('OP', $op);
+    $tpl = new \NukeViet\Template\NVSmarty();
+    $tpl->setTemplateDir(get_module_tpl_dir('groups.tpl'));
+    $tpl->registerPlugin('modifier', 'ddatetime', 'nv_datetime_format');
+    $tpl->registerPlugin('modifier', 'dnumber', 'nv_number_format');
 
-    // Xuất danh sách nhóm
+    $tpl->assign('LANG', $nv_Lang);
+    $tpl->assign('MODULE_NAME', $module_name);
+    $tpl->assign('GCONFIG', $global_config);
+    $tpl->assign('OP', $op);
+    $tpl->assign('MODULE_URL', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE);
+
+    // Danh sách nhóm
+    $groups = [];
     foreach ($groupsList as $group_id => $values) {
-        $xtpl->assign('GROUP_ID', $group_id);
-
-        $loop = [
+        $groups[$group_id] = [
+            'group_id' => $group_id,
             'title' => $values['title'],
-            'add_time' => nv_datetime_format($values['add_time']),
-            'exp_time' => !empty($values['exp_time']) ? nv_datetime_format($values['exp_time']) : $nv_Lang->getGlobal('indefinitely'),
-            'number' => nv_number_format($values['numbers']),
+            'add_time' => (int) $values['add_time'],
+            'exp_time' => (int) $values['exp_time'],
+            'numbers' => (int) $values['numbers'],
             'link_userlist' => nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '/' . $group_id, true)
         ];
-
-        $xtpl->assign('LOOP', $loop);
-        $xtpl->parse('main.loop');
     }
+    $tpl->assign('GROUPS', $groups);
 
-    // Nav cuối
+    // Menu điều hướng cuối trang
+    $navs = [];
     $_lis = \NukeViet\Module\users\Shared\Navs::getNavs($module_info['funcs']);
     $_alias = $module_info['alias'];
     foreach ($_lis as $_li) {
-        $href = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $_alias[$_li['func_name']];
+        $href = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $_alias[$_li['func_name']];
         if (!empty($nv_redirect)) {
-            $href .= '&nv_redirect=' . $nv_redirect;
+            $href .= '&amp;nv_redirect=' . $nv_redirect;
         }
-        $li = [
+        $navs[] = [
             'href' => $href,
             'title' => $_li['func_name'] == 'main' ? $nv_Lang->getModule('user_info') : $_li['func_custom_name']
         ];
-        $xtpl->assign('NAVBAR', $li);
-        $xtpl->parse('main.navbar');
     }
+    $tpl->assign('NAVS', $navs);
 
-    $xtpl->parse('main');
-    return $xtpl->text('main');
+    return $tpl->fetch('groups.tpl');
 }
 
 /**
@@ -2060,108 +1951,29 @@ function user_groups_list_users(array $group_data, array $group_users, array $ar
 {
     global $global_config, $op, $module_name, $per_page, $nv_Lang;
 
-    $xtpl = new XTemplate('groups_users.tpl', get_module_tpl_dir('groups_users.tpl'));
-    $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
-    $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
-    $xtpl->assign('TEMPLATE', $global_config['module_theme']);
-    $xtpl->assign('MODULE_URL', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE);
-    $xtpl->assign('OP', $op);
+    $tpl = new \NukeViet\Template\NVSmarty();
+    $tpl->setTemplateDir(get_module_tpl_dir('groups_users.tpl'));
+    $tpl->registerPlugin('modifier', 'dnumber', 'nv_number_format');
 
-    $group_data['data_number_view'] = array_map('nv_number_format', $group_data['data_number']);
+    $tpl->assign('LANG', $nv_Lang);
+    $tpl->assign('MODULE_NAME', $module_name);
+    $tpl->assign('GCONFIG', $global_config);
+    $tpl->assign('OP', $op);
+    $tpl->assign('MODULE_URL', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE);
 
-    $xtpl->assign('GID', $group_data['group_id']);
-    $xtpl->assign('DATA', $group_data);
-    $xtpl->assign('MIN_SEARCH', $nv_Lang->getModule('min_search', NV_MIN_SEARCH_LENGTH));
-    $xtpl->assign('EDIT_GROUP_URL', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '/' . $group_data['group_id'] . '/edit');
+    // Công cụ quản lý nhóm chỉ dành cho nhóm tự tạo
+    $show_tools = $group_data['group_id'] > 9;
 
-    if ($group_data['group_id'] > 9) {
-        if (!empty($global_config['inform_active'])) {
-            $xtpl->assign('INFORM_NOTIFICATIONS_URL', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '/' . $group_data['group_id'] . '/inform');
-            $xtpl->parse('main.tools.inform_notifications');
-        }
-        if ($group_data['config']['access_groups_add'] != 0) {
-            $xtpl->parse('main.tools.addUserGroup');
-        }
-        if ($group_data['config']['access_addus'] != 0) {
-            $xtpl->parse('main.tools.add_user');
-        }
-        if ($group_data['config']['access_waiting'] != 0) {
-            $xtpl->parse('main.tools.user_waiting');
-        }
-        $xtpl->parse('main.tools');
-    }
+    $tpl->assign('DATA', $group_data);
+    $tpl->assign('GROUP_USERS', $group_users);
+    $tpl->assign('PER_PAGE', $per_page);
+    $tpl->assign('SHOW_TOOLS', $show_tools);
+    $tpl->assign('SHOW_ADD_MEMBER', $show_tools && !empty($group_data['config']['access_groups_add']));
+    $tpl->assign('MIN_SEARCH', $nv_Lang->getModule('min_search', NV_MIN_SEARCH_LENGTH));
+    $tpl->assign('EDIT_GROUP_URL', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '/' . $group_data['group_id'] . '/edit');
+    $tpl->assign('INFORM_NOTIFICATIONS_URL', ($show_tools && !empty($global_config['inform_active'])) ? NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '/' . $group_data['group_id'] . '/inform' : '');
 
-    if (!empty($group_data['description'])) {
-        $xtpl->parse('main.group_desc');
-    }
-
-    if (!empty($group_data['group_type_note'])) {
-        $xtpl->parse('main.group_type_note');
-    }
-
-    if (!empty($group_data['content'])) {
-        $xtpl->parse('main.group_content');
-    }
-
-    // Xuất danh sách người dùng
-    if (empty($group_users)) {
-        $xtpl->parse('main.no_users');
-    } else {
-        foreach ($group_users as $_type => $arr_users) {
-            $xtpl->assign('PTITLE', $nv_Lang->getModule($_type . '_in_group_caption'));
-
-            $stt = 1;
-            foreach ($arr_users as $row) {
-                $xtpl->assign('STT', $stt);
-                $xtpl->assign('LOOP', $row);
-
-                // Quyền xem chi tiết thông tin thành viên
-                if ($group_data['viewuser_allowed'] and $_type != 'pending') {
-                    $xtpl->parse('main.users.' . $_type . '.loop.linkuser');
-                } else {
-                    $xtpl->parse('main.users.' . $_type . '.loop.textuser');
-                }
-
-                // Các công cụ quản lý thành viên
-                if ($row['tools_allowed']) {
-                    if ($group_data['config']['access_groups_del']) {
-                        $xtpl->parse('main.users.' . $_type . '.loop.tools.deletemember');
-                    }
-
-                    if (!$row['is_admin']) {
-                        if ($group_data['config']['access_editus']) {
-                            $xtpl->parse('main.users.' . $_type . '.loop.tools.edituser');
-                        }
-
-                        if ($group_data['config']['access_delus'] and $row['group_count'] == 1) {
-                            $xtpl->parse('main.users.' . $_type . '.loop.tools.deluser');
-                        }
-                    }
-
-                    $xtpl->parse('main.users.' . $_type . '.loop.tools');
-                }
-
-                $xtpl->parse('main.users.' . $_type . '.loop');
-                ++$stt;
-            }
-
-            if (!empty($group_data['generate_page'])) {
-                // Phân trang
-                $xtpl->assign('PAGE', $group_data['generate_page']);
-                $xtpl->parse('main.users.' . $_type . '.page');
-            } elseif ($group_data['data_number'][$_type] > $per_page) {
-                // Hiển thị nút xem thêm
-                $xtpl->parse('main.users.' . $_type . '.viewmore');
-            }
-
-            $xtpl->parse('main.users.' . $_type);
-        }
-
-        $xtpl->parse('main.users');
-    }
-
-    $xtpl->parse('main');
-    return $xtpl->text('main');
+    return $tpl->fetch('groups_users.tpl');
 }
 
 /**
@@ -2172,21 +1984,19 @@ function user_groups_list_users(array $group_data, array $group_users, array $ar
  */
 function user_groups_getuserid(int $gid): string
 {
-    global $global_config, $op, $module_name, $module_file, $g_csrf_key, $op_file;
+    global $global_config, $op, $module_name, $nv_Lang, $g_csrf_key, $op_file;
 
-    $xtpl = new XTemplate('groups_getuserid.tpl', get_module_tpl_dir('groups_users.tpl'));
-    $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
-    $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
-    $xtpl->assign('TEMPLATE', $global_config['module_theme']);
-    $xtpl->assign('GLOBAL_CONFIG', $global_config);
-    $xtpl->assign('OP', $op);
-    $xtpl->assign('MODULE_NAME', $module_name);
-    $xtpl->assign('MODULE_FILE', $module_file);
-    $xtpl->assign('CHECKSS', csrf_create($g_csrf_key[$op_file]));
-    $xtpl->assign('FORM_ACTION', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;gid=' . $gid . '&amp;getuserid=1');
+    $tpl = new \NukeViet\Template\NVSmarty();
+    $tpl->setTemplateDir(get_module_tpl_dir('groups_getuserid.tpl'));
 
-    $xtpl->parse('main');
-    return $xtpl->text('main');
+    $tpl->assign('LANG', $nv_Lang);
+    $tpl->assign('MODULE_NAME', $module_name);
+    $tpl->assign('GCONFIG', $global_config);
+    $tpl->assign('OP', $op);
+    $tpl->assign('CHECKSS', csrf_create($g_csrf_key[$op_file]));
+    $tpl->assign('FORM_ACTION', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;gid=' . $gid . '&amp;getuserid=1');
+
+    return $tpl->fetch('groups_getuserid.tpl');
 }
 
 /**
@@ -2198,30 +2008,17 @@ function user_groups_getuserid(int $gid): string
  */
 function user_groups_getuserid_result(array $array, array $array_user): string
 {
-    $xtpl = new XTemplate('groups_getuserid_result.tpl', get_module_tpl_dir('groups_users.tpl'));
-    $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
-    $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
-    $xtpl->assign('ARRAY', $array);
-    $xtpl->assign('ARRAY_USER', $array_user);
+    global $nv_Lang;
 
-    if (!empty($array_user)) {
-        foreach ($array_user as $row) {
-            $xtpl->assign('ROW', $row);
-            $xtpl->parse('main.data.row');
-        }
+    $tpl = new \NukeViet\Template\NVSmarty();
+    $tpl->setTemplateDir(get_module_tpl_dir('groups_getuserid_result.tpl'));
 
-        if (!empty($array['generate_page'])) {
-            $xtpl->assign('GENERATE_PAGE', $array['generate_page']);
-            $xtpl->parse('main.data.generate_page');
-        }
+    $tpl->assign('LANG', $nv_Lang);
+    $tpl->assign('SEARCH', $array);
+    $tpl->assign('USERS', $array_user);
+    $tpl->assign('GENERATE_PAGE', !empty($array_user) ? ($array['generate_page'] ?? '') : '');
 
-        $xtpl->parse('main.data');
-    } else {
-        $xtpl->parse('main.nodata');
-    }
-
-    $xtpl->parse('main');
-    return $xtpl->text('main');
+    return $tpl->fetch('groups_getuserid_result.tpl');
 }
 
 /**
@@ -2232,18 +2029,19 @@ function user_groups_getuserid_result(array $array, array $array_user): string
  */
 function user_groups_edit(array $group_data): string
 {
-    global $global_config, $op, $module_name, $module_info, $nv_Lang;
+    global $global_config, $op, $module_name, $nv_Lang;
 
-    $xtpl = new XTemplate('groups_edit.tpl', get_module_tpl_dir('groups_edit.tpl'));
-    $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
-    $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
-    $xtpl->assign('TEMPLATE', $global_config['module_theme']);
-    $xtpl->assign('OP', $op);
-    $xtpl->assign('FORM_ACTION', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '/' . $group_data['group_id'] . '/edit');
-    $xtpl->assign('DATA', $group_data);
+    $tpl = new \NukeViet\Template\NVSmarty();
+    $tpl->setTemplateDir(get_module_tpl_dir('groups_edit.tpl'));
 
-    $xtpl->parse('main');
-    return $xtpl->text('main');
+    $tpl->assign('LANG', $nv_Lang);
+    $tpl->assign('MODULE_NAME', $module_name);
+    $tpl->assign('GCONFIG', $global_config);
+    $tpl->assign('OP', $op);
+    $tpl->assign('DATA', $group_data);
+    $tpl->assign('FORM_ACTION', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '/' . $group_data['group_id'] . '/edit');
+
+    return $tpl->fetch('groups_edit.tpl');
 }
 
 /**
@@ -2254,17 +2052,18 @@ function user_groups_edit(array $group_data): string
  */
 function user_groups_inform(array $group_data): string
 {
-    global $global_config, $op, $module_name, $module_info, $nv_Lang;
+    global $global_config, $op, $module_name, $nv_Lang;
 
-    $xtpl = new XTemplate('groups_inform.tpl', get_module_tpl_dir('groups_inform.tpl'));
-    $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
-    $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
-    $xtpl->assign('TEMPLATE', $global_config['module_theme']);
-    $xtpl->assign('OP', $op);
-    $xtpl->assign('DATA', $group_data);
-    $xtpl->assign('GROUP_MANAGER_URL', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '/' . $group_data['group_id']);
-    $xtpl->assign('INFORM_MANAGER_URL', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=inform&amp;manager=' . $group_data['group_id'] . '&amp;filter=active');
+    $tpl = new \NukeViet\Template\NVSmarty();
+    $tpl->setTemplateDir(get_module_tpl_dir('groups_inform.tpl'));
 
-    $xtpl->parse('main');
-    return $xtpl->text('main');
+    $tpl->assign('LANG', $nv_Lang);
+    $tpl->assign('MODULE_NAME', $module_name);
+    $tpl->assign('GCONFIG', $global_config);
+    $tpl->assign('OP', $op);
+    $tpl->assign('DATA', $group_data);
+    $tpl->assign('GROUP_MANAGER_URL', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '/' . $group_data['group_id']);
+    $tpl->assign('INFORM_MANAGER_URL', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=inform&amp;manager=' . $group_data['group_id'] . '&amp;filter=active');
+
+    return $tpl->fetch('groups_inform.tpl');
 }

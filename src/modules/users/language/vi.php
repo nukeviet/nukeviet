@@ -94,7 +94,6 @@ $lang_module['logout_ok'] = 'Bạn đã đăng xuất thành công khỏi tài k
 $lang_module['login_no_active'] = 'Tài khoản của bạn đã bị khóa. Vui lòng liên hệ bộ phận hỗ trợ để biết thêm chi tiết';
 $lang_module['redirect_to_back'] = 'Bấm vào đây để chuyển tới trang vừa xem';
 $lang_module['redirect_to_login'] = 'Bấm vào đây để chuyển tới trang đăng nhập';
-$lang_module['redirect_to_home'] = 'Bấm vào đây để chuyển tới trang chủ';
 $lang_module['lostpass'] = 'Quên mật khẩu?';
 $lang_module['lostpass_info'] = 'Bạn đã quên mật khẩu?';
 $lang_module['lostpass_info1'] = 'Vui lòng nhập <strong>tên đăng nhập</strong> hoặc <strong>email</strong> đã đăng ký của bạn để khôi phục mật khẩu. Sau khi kiểm tra tính hợp lệ, chúng tôi sẽ giúp bạn tạo mật khẩu mới.';

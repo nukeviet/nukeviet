@@ -94,7 +94,6 @@ $lang_module['logout_ok'] = 'Logout successfully';
 $lang_module['login_no_active'] = 'Your account has been locked. Please contact support for more details';
 $lang_module['redirect_to_back'] = 'Click here to go back previous page';
 $lang_module['redirect_to_login'] = 'Click here to go to login page';
-$lang_module['redirect_to_home'] = 'Click here to go to home page';
 $lang_module['lostpass'] = 'Forgot password?';
 $lang_module['lostpass_info'] = 'Are you realy forgot your password?';
 $lang_module['lostpass_info1'] = 'Please enter your registered <strong>username</strong> or <strong>email</strong> to recover your password. After verifying the validity, we will help you create a new password.';

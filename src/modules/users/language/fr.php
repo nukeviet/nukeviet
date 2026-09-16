@@ -94,7 +94,6 @@ $lang_module['logout_ok'] = 'Toutes les informations de votre session est suppri
 $lang_module['login_no_active'] = 'Votre compte a été verrouillé. Veuillez contacter le support pour plus de détails';
 $lang_module['redirect_to_back'] = 'Cliquez ici pour retourner';
 $lang_module['redirect_to_login'] = 'Cliquez ici pour vous connecter';
-$lang_module['redirect_to_home'] = 'Cliquez ici pour retourner à l\'Accueil';
 $lang_module['lostpass'] = 'Mot de passe oublié?';
 $lang_module['lostpass_info'] = 'Vous avez oublié le mot de passe?';
 $lang_module['lostpass_info1'] = 'Veuillez saisir votre <strong>nom d\'utilisateur</strong> ou votre <strong>email</strong> enregistré pour récupérer votre mot de passe. Après vérification de la validité, nous vous aiderons à créer un nouveau mot de passe.';

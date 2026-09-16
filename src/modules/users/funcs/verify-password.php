@@ -16,7 +16,6 @@ if (!defined('NV_IS_MOD_USER')) {
 $page_title = $nv_Lang->getModule('verify_password_title');
 $description = $keywords = 'no';
 $page_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op;
-$checkss = md5('verify_password.' . NV_CHECK_SESSION);
 
 $array = [];
 $array['redirect'] = nv_get_redirect();
@@ -29,11 +28,11 @@ if (empty($array['area']) or empty($array['area']) or empty($array['nv_redirect'
 $array['form_action'] = $page_url;
 
 if ($nv_Request->isset_request('_csrf', 'post')) {
-    $_csrf = $nv_Request->get_title('_csrf', 'post', '');
-    if (!hash_equals($checkss, $_csrf)) {
+    if (!csrf_check($nv_Request->get_string('_csrf', 'post', ''), $csrf_key)) {
         nv_jsonOutput([
             'status' => 'error',
-            'mess' => 'Error session!!!'
+            'input' => '',
+            'mess' => $nv_Lang->getGlobal('error_checkss')
         ]);
     }
 
@@ -112,6 +111,7 @@ if ($nv_Request->isset_request('_csrf', 'post')) {
 }
 
 $canonicalUrl = getCanonicalUrl($page_url);
+$checkss = csrf_create($csrf_key);
 $contents = user_verify_password($array);
 
 include NV_ROOTDIR . '/includes/header.php';

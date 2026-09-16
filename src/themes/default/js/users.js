@@ -390,9 +390,6 @@ function lostpass_validForm(a) {
         if (!validCheck(this)) return d++, $(".tooltip-current", a).removeClass("tooltip-current"), $(this).addClass("tooltip-current").attr("data-current-mess", $(this).attr("data-mess")), validErrorShow(this), !1
     });
     if (!d) {
-        if (($('[data-toggle=recaptcha]', $(a)).length || $("[data-recaptcha2], [data-recaptcha3]", $(a).parent()).length) && $("[name=step]", a).val() == 'step1') {
-            $("[name=gcaptcha_session]", a).val($("[name=g-recaptcha-response]", a).val());
-        }
         c.type = $(a).prop("method"), c.url = $(a).prop("action"), c.data = $(a).serialize(), formErrorHidden(a), $(a).find("input,button,select,textarea").prop("disabled", !0);
         $.ajax({
             type: c.type,
@@ -428,16 +425,14 @@ function lostpass_validForm(a) {
                         }
                     }
                     if (b.step == 'step1') {
+                        // Step1 phải làm mới captcha
+                        $.each($(a).data('captcha-attrs') || {}, function(name, value) {
+                            $(a).attr(name, value);
+                        });
                         formChangeCaptcha(a);
-                        $("[name=gcaptcha_session]", a).length && $("[name=gcaptcha_session]", a).val('');
-                    } else if ($('[data-toggle=recaptcha]', a).length) {
-                        $('[data-toggle=recaptcha]', a).remove()
-                    } else if ($('[data-captcha]', $(a).parent()).length) {
-                        $(a).data('captcha', null);
-                    } else if ($('[data-recaptcha2]', $(a).parent()).length) {
-                        $(a).data('recaptcha2', null);
-                    } else if ($('[data-recaptcha3]', $(a).parent()).length) {
-                        $(a).data('recaptcha3', null);
+                    } else {
+                        // Các bước sau không yêu cầu captcha nữa, gửi lại giá trị ở step1
+                        $(a).removeAttr('data-captcha data-recaptcha2 data-recaptcha3 data-turnstile');
                     }
                 } else {
                     $(".nv-info", a).html(b.mess + '<span class="load-bar"></span>').removeClass("error").addClass("success").show();
@@ -682,6 +677,16 @@ $(function() {
     $('body').on('submit', '[data-toggle=reg_validForm]', function(e) {
         e.preventDefault();
         reg_validForm(this)
+    });
+
+    // Lưu thuộc tính captcha ban đầu của form quên mật khẩu để khôi phục khi quay về bước 1
+    $('[data-toggle=lostPass]').each(function() {
+        var form = this,
+            attrs = {};
+        $.each(['data-captcha', 'data-recaptcha2', 'data-recaptcha3', 'data-turnstile'], function(i, name) {
+            form.hasAttribute(name) && (attrs[name] = form.getAttribute(name));
+        });
+        $(form).data('captcha-attrs', attrs);
     });
 
     $('body').on('submit', '[data-toggle=lostPass]', function() {
