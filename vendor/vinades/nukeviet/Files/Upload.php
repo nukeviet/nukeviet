@@ -677,9 +677,16 @@ class Upload
         if ($svg and preg_match('#</*(applet|link|script|iframe|frame|frameset)[^>]*>#i', $txt)) {
             return false;
         }
-        if (preg_match_all('#<\?(php\b|=)(.*?)(\?>|$)#is', $txt, $matches)) {
+        if (preg_match_all('#<\?(php\b|=|\s)(.*?)(\?>|$)#is', $txt, $matches)) {
             foreach ($matches[0] as $match) {
                 $snippet = substr($match, 0, 10000); // Giới hạn 10KB để tối ưu bộ nhớ
+
+                /**
+                 * Chuẩn hóa đoạn mở php từ short tag thành "<?php " để token_get_all luôn phân tích đúng
+                 * Có tỷ lệ chặn nhầm đối với các file ảnh chứa dữ liệu nhị phân giống mã PHP
+                 * tuy nhiên tỷ lệ này rất thấp và chấp nhận đặt biện pháp bảo mật lên cao hơn
+                 */
+                $snippet = preg_replace('/^<\?(?!php\b|=)/i', '<?php ', $snippet);
                 $tokens = @token_get_all($snippet);
                 $is_bad = true; // Giả định đoạn text này là mã độc PHP hợp lệ
                 foreach ($tokens as $token) {
@@ -1069,7 +1076,13 @@ class Upload
         }
 
         $word = rawurldecode($word);
-        $word = preg_replace('/[^a-z0-9\.\-\_ ]/i', '', $word);
+
+        /**
+         * Cấm dấu chấm trong tên file tránh việc sinh ra file dạng .php.ext bị Apache với config cũ
+         * kiểu AddHandler application/x-httpd-php .php nhận là tệp thực thi php
+         */
+        $word = preg_replace('/[^a-z0-9\-\_ ]/i', '', $word);
+
         $word = preg_replace('/^\W+|\W+$/', '', $word);
         $word = preg_replace('/[ ]+/', '-', $word);
 
